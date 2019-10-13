@@ -14,8 +14,7 @@ FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
 	: cfg(c)
 	, file(url_file)
 	, api(a)
-{
-}
+{}
 
 FeedHqUrlReader::~FeedHqUrlReader() {}
 

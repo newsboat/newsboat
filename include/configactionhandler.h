@@ -18,4 +18,3 @@ public:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_CONFIGACTIONHANDLER_H_ */
-

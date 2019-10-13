@@ -21,8 +21,7 @@ namespace podboat {
 QueueLoader::QueueLoader(const std::string& file, PbController* c)
 	: queuefile(file)
 	, ctrl(c)
-{
-}
+{}
 
 void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 {
@@ -83,14 +82,34 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 
 				if (fields.empty()) {
 					if (!comments_ignored) {
-						std::cout << strprintf::fmt(
-							     _("WARNING: Comment found "
-							       "in %s. The queue file is regenerated "
-							       "when podboat exits and comments will "
-							       "be deleted. Press enter to continue or "
-							       "Ctrl+C to abort"),
-							     queuefile)
-							  << std::endl;
+						std::cout
+							<< strprintf::fmt(
+								   _("WARNING: "
+								     "Comment "
+								     "found "
+								     "in %s. "
+								     "The "
+								     "queue "
+								     "file is "
+								     "regenerat"
+								     "ed "
+								     "when "
+								     "podboat "
+								     "exits "
+								     "and "
+								     "comments "
+								     "will "
+								     "be "
+								     "deleted. "
+								     "Press "
+								     "enter to "
+								     "continue "
+								     "or "
+								     "Ctrl+C "
+								     "to "
+								     "abort"),
+								   queuefile)
+							<< std::endl;
 						std::cin.ignore();
 						comments_ignored = true;
 					}

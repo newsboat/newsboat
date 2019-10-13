@@ -74,7 +74,7 @@ void append_escapes(std::string& str, char c)
 		break;
 	}
 }
-}
+} // namespace utils
 
 std::string utils::strip_comments(const std::string& line)
 {
@@ -247,8 +247,8 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	return tokens;
 }
 
-std::string utils::consolidate_whitespace(const std::string& str) {
-
+std::string utils::consolidate_whitespace(const std::string& str)
+{
 	return RustString(rs_consolidate_whitespace(str.c_str()));
 }
 
@@ -261,8 +261,8 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	unsigned int i;
 
 	LOG(Level::DEBUG,
-			"utils::tokenize_nl: last_pos = %" PRIu64,
-			static_cast<uint64_t>(last_pos));
+		"utils::tokenize_nl: last_pos = %" PRIu64,
+		static_cast<uint64_t>(last_pos));
 	if (last_pos != std::string::npos) {
 		for (i = 0; i < last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
@@ -338,7 +338,7 @@ std::string utils::translit(const std::string& tocode,
 	}
 
 	return ((state == TranslitState::SUPPORTED) ? (tocode + tlit)
-						     : (tocode));
+						    : (tocode));
 }
 
 std::string utils::convert_text(const std::string& text,
@@ -508,15 +508,19 @@ std::string utils::resolve_tilde(const std::string& str)
 	return RustString(rs_resolve_tilde(str.c_str()));
 }
 
-std::string utils::resolve_relative(const std::string& reference, const std::string &fname) {
-	return RustString(rs_resolve_relative(reference.c_str(), fname.c_str()));
+std::string utils::resolve_relative(const std::string& reference,
+	const std::string& fname)
+{
+	return RustString(
+		rs_resolve_relative(reference.c_str(), fname.c_str()));
 }
 
 std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
 {
-	return RustString( rs_replace_all(str.c_str(), from.c_str(), to.c_str()) );
+	return RustString(
+		rs_replace_all(str.c_str(), from.c_str(), to.c_str()));
 }
 
 std::wstring utils::str2wstr(const std::string& str)
@@ -899,7 +903,7 @@ std::string utils::unescape_url(const std::string& url)
 {
 	char* ptr = rs_unescape_url(url.c_str());
 	if (ptr == nullptr) {
-		LOG(Level::DEBUG, "Rust failed to unescape url: %s", url );
+		LOG(Level::DEBUG, "Rust failed to unescape url: %s", url);
 		throw std::runtime_error("unescaping url failed");
 	} else {
 		return RustString(ptr);
@@ -973,14 +977,14 @@ bool utils::is_valid_podcast_type(const std::string& mimetype)
 	return rs_is_valid_podcast_type(mimetype.c_str());
 }
 
-	/*
-	 * See
-	 * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
-	 * for a reason why we do this.
-	 *
-	 * These callbacks are deprecated as of OpenSSL 1.1.0; see the
-	 * changelog: https://www.openssl.org/news/changelog.html#x6
-	 */
+/*
+ * See
+ * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
+ * for a reason why we do this.
+ *
+ * These callbacks are deprecated as of OpenSSL 1.1.0; see the
+ * changelog: https://www.openssl.org/news/changelog.html#x6
+ */
 
 #if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 static std::mutex* openssl_mutexes = nullptr;

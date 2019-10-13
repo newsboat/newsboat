@@ -28,4 +28,3 @@ private:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_NEWSBLURURLREADER_H_ */
-

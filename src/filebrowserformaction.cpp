@@ -69,7 +69,8 @@ void FileBrowserFormAction::process_operation(Operation op,
 
 					FmtStrFormatter fmt;
 					fmt.register_fmt('N', PROGRAM_NAME);
-					fmt.register_fmt('V', utils::program_version());
+					fmt.register_fmt(
+						'V', utils::program_version());
 					fmt.register_fmt('f', filename);
 					f->set("head",
 						fmt.do_format(
@@ -275,12 +276,11 @@ std::string FileBrowserFormAction::add_file(std::string filename)
 		std::string formattedfilename =
 			get_formatted_filename(filename, ftype, sb.st_mode);
 
-		std::string sizestr = strprintf::fmt(
-				"%12" PRIi64,
-				// `st_size` is `off_t`, which is a signed integer type of
-				// unspecified size. We'll have to bet it's no larger than 64
-				// bits.
-				static_cast<int64_t>(sb.st_size));
+		std::string sizestr = strprintf::fmt("%12" PRIi64,
+			// `st_size` is `off_t`, which is a signed integer type
+			// of unspecified size. We'll have to bet it's no larger
+			// than 64 bits.
+			static_cast<int64_t>(sb.st_size));
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
 			ftype,
 			rwxbits,

@@ -31,7 +31,8 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 					return a->get_firsttag().length() >
 						b->get_firsttag().length();
 				}
-				return utils::strnaturalcmp(a->get_firsttag().c_str(),
+				return utils::strnaturalcmp(
+					       a->get_firsttag().c_str(),
 					       b->get_firsttag().c_str()) < 0;
 			});
 		break;
@@ -72,11 +73,10 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 					return a->items().size() >
 						b->items().size();
 				}
-				auto cmp =
-					[](std::shared_ptr<RssItem> a,
-						std::shared_ptr<RssItem> b) {
-						return *a < *b;
-					};
+				auto cmp = [](std::shared_ptr<RssItem> a,
+						   std::shared_ptr<RssItem> b) {
+					return *a < *b;
+				};
 				auto& a_item =
 					*std::min_element(a->items().begin(),
 						a->items().end(),
@@ -162,20 +162,22 @@ unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
 	return count;
 }
 
-unsigned int FeedContainer::get_unread_feed_count_per_tag(const std::string& tag)
+unsigned int FeedContainer::get_unread_feed_count_per_tag(
+	const std::string& tag)
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (const auto& feed : feeds) {
 		if (feed->matches_tag(tag) && feed->unread_item_count() > 0) {
-		      count++;
+			count++;
 		}
 	}
 
 	return count;
 }
 
-unsigned int FeedContainer::get_unread_item_count_per_tag(const std::string& tag)
+unsigned int FeedContainer::get_unread_item_count_per_tag(
+	const std::string& tag)
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);

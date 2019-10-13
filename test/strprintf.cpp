@@ -179,12 +179,12 @@ TEST_CASE("strprintf::fmt() formats null pointers the same", "[strprintf]")
 		strprintf::fmt("%p", static_cast<const unsigned int*>(nullptr));
 	const auto long_ptr_fmt =
 		strprintf::fmt("%p", static_cast<const long*>(nullptr));
-	const auto ulong_ptr_fmt =
-		strprintf::fmt("%p", static_cast<const unsigned long*>(nullptr));
+	const auto ulong_ptr_fmt = strprintf::fmt(
+		"%p", static_cast<const unsigned long*>(nullptr));
 	const auto llong_ptr_fmt =
 		strprintf::fmt("%p", static_cast<const long long*>(nullptr));
-	const auto ullong_ptr_fmt =
-		strprintf::fmt("%p", static_cast<const unsigned long long*>(nullptr));
+	const auto ullong_ptr_fmt = strprintf::fmt(
+		"%p", static_cast<const unsigned long long*>(nullptr));
 	REQUIRE_FALSE(int_ptr_fmt.empty());
 	REQUIRE(int_ptr_fmt == uint_ptr_fmt);
 	REQUIRE(uint_ptr_fmt == long_ptr_fmt);

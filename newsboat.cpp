@@ -18,7 +18,7 @@
 #include "xlicense.h"
 
 extern "C" {
-	void rs_setup_human_panic(void);
+void rs_setup_human_panic(void);
 }
 
 using namespace newsboat;
@@ -103,49 +103,45 @@ void print_version(const std::string& argv0, unsigned int level)
 	if (level <= 1) {
 		std::stringstream ss;
 		ss << PROGRAM_NAME << " " << utils::program_version() << " - "
-			  << PROGRAM_URL << std::endl;
-		ss << "Copyright (C) 2006-2015 Andreas Krennmair"
-			  << std::endl;
+		   << PROGRAM_URL << std::endl;
+		ss << "Copyright (C) 2006-2015 Andreas Krennmair" << std::endl;
 		ss << "Copyright (C) 2015-2019 Alexander Batischev"
-			  << std::endl;
+		   << std::endl;
 		ss << "Copyright (C) 2006-2017 Newsbeuter contributors"
-			  << std::endl;
+		   << std::endl;
 		ss << "Copyright (C) 2017-2019 Newsboat contributors"
-			  << std::endl;
+		   << std::endl;
 		ss << std::endl;
 
-		ss << strprintf::fmt(
-				     _("Newsboat is free software licensed "
+		ss << strprintf::fmt(_("Newsboat is free software licensed "
 				       "under the MIT License. (Type `%s -vv' "
 				       "to see the full text.)"),
-				     argv0)
-			  << std::endl;
+			      argv0)
+		   << std::endl;
 		ss << _("It bundles JSON for Modern C++ library, "
-			       "licensed under the MIT License: "
-			       "https://github.com/nlohmann/json")
-			  << std::endl;
+			"licensed under the MIT License: "
+			"https://github.com/nlohmann/json")
+		   << std::endl;
 		ss << std::endl;
 
 		struct utsname xuts;
 		uname(&xuts);
 		ss << PROGRAM_NAME << " " << utils::program_version()
-			  << std::endl;
-		ss << "System: " << xuts.sysname << " " << xuts.release
-			  << " (" << xuts.machine << ")" << std::endl;
+		   << std::endl;
+		ss << "System: " << xuts.sysname << " " << xuts.release << " ("
+		   << xuts.machine << ")" << std::endl;
 #if defined(__GNUC__) && defined(__VERSION__)
 		ss << "Compiler: g++ " << __VERSION__ << std::endl;
 #endif
-		ss << "ncurses: " << curses_version()
-			  << " (compiled with " << NCURSES_VERSION << ")"
-			  << std::endl;
+		ss << "ncurses: " << curses_version() << " (compiled with "
+		   << NCURSES_VERSION << ")" << std::endl;
 		ss << "libcurl: " << curl_version() << " (compiled with "
-			  << LIBCURL_VERSION << ")" << std::endl;
-		ss << "SQLite: " << sqlite3_libversion()
-			  << " (compiled with " << SQLITE_VERSION << ")"
-			  << std::endl;
+		   << LIBCURL_VERSION << ")" << std::endl;
+		ss << "SQLite: " << sqlite3_libversion() << " (compiled with "
+		   << SQLITE_VERSION << ")" << std::endl;
 		ss << "libxml2: compiled with " << LIBXML_DOTTED_VERSION
-			  << std::endl
-			  << std::endl;
+		   << std::endl
+		   << std::endl;
 		std::cout << ss.str();
 	} else {
 		std::cout << LICENSE_str << std::endl;

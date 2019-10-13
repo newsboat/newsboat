@@ -75,17 +75,20 @@ void PbView::run(bool auto_download)
 				"PbView::run: updating view... "
 				"downloads().size() "
 				"= %" PRIu64,
-				static_cast<uint64_t>(ctrl->downloads().size()));
+				static_cast<uint64_t>(
+					ctrl->downloads().size()));
 
 			std::string code = "{list";
 			std::string formatstring = ctrl->get_formatstr();
 
 			dllist_form.run(-3); // compute all widget dimensions
-			unsigned int width = utils::to_u(dllist_form.get("dls:w"));
+			unsigned int width =
+				utils::to_u(dllist_form.get("dls:w"));
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
-				auto lbuf = format_line(formatstring, dl, i, width);
+				auto lbuf =
+					format_line(formatstring, dl, i, width);
 				code.append(
 					strprintf::fmt("{listitem[%u] text:%s}",
 						i,
@@ -360,8 +363,8 @@ std::string PbView::format_line(const std::string& podlist_format,
 	FmtStrFormatter fmt;
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
-	fmt.register_fmt('d',
-		strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
+	fmt.register_fmt(
+		'd', strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
 	fmt.register_fmt(
 		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
 	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));

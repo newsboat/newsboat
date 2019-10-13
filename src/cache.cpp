@@ -57,8 +57,7 @@ void Cache::run_sql_nothrow(const std::string& query,
 struct CbHandler {
 	CbHandler()
 		: c(-1)
-	{
-	}
+	{}
 	void set_count(int i)
 	{
 		c = i;
@@ -147,10 +146,10 @@ static int lastmodified_callback(void* handler,
 	}
 	LOG(Level::INFO,
 		"lastmodified_callback: lastmodified = %" PRId64 " etag = %s",
-		// On GCC, `time_t` is `long int`, which is at least 32 bits long
-		// according to the spec. On x86_64, it's actually 64 bits. Thus,
-		// casting to int64_t is either a no-op, or an up-cast which are always
-		// safe.
+		// On GCC, `time_t` is `long int`, which is at least 32 bits
+		// long according to the spec. On x86_64, it's actually 64 bits.
+		// Thus, casting to int64_t is either a no-op, or an up-cast
+		// which are always safe.
 		static_cast<int64_t>(result->lastmodified),
 		result->etag);
 	return 0;
@@ -429,8 +428,8 @@ void Cache::fetch_lastmodified(const std::string& feedurl,
 	LOG(Level::DEBUG,
 		"Cache::fetch_lastmodified: t = %" PRId64 " etag = %s",
 		// On GCC, `time_t` is `long int`, which is at least 32 bits. On
-		// x86_64, it's 64 bits. Thus, this cast is either a no-op, or an
-		// up-cast which is always safe.
+		// x86_64, it's 64 bits. Thus, this cast is either a no-op, or
+		// an up-cast which is always safe.
 		static_cast<int64_t>(t),
 		etag);
 }
@@ -600,15 +599,15 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	if (ign != nullptr) {
 		auto& items = feed->items();
 		items.erase(
-			std::remove_if(
-				items.begin(),
+			std::remove_if(items.begin(),
 				items.end(),
 				[&](std::shared_ptr<RssItem> item) -> bool {
 					try {
 						return ign->matches(item.get());
 					} catch (const MatcherException& ex) {
 						LOG(Level::DEBUG,
-							"oops, Matcher exception: %s",
+							"oops, Matcher "
+							"exception: %s",
 							ex.what());
 						return false;
 					}
@@ -1078,10 +1077,10 @@ void Cache::clean_old_articles()
 		LOG(Level::DEBUG,
 			"Cache::clean_old_articles: about to delete articles "
 			"with a pubDate older than %" PRId64,
-			// On GCC, `time_t` is `long int`, which is at least 32 bits long
-			// according to the spec. On x86_64, it's actually 64 bits. Thus,
-			// casting to int64_t is either a no-op, or an up-cast which are
-			// always safe.
+			// On GCC, `time_t` is `long int`, which is at least 32
+			// bits long according to the spec. On x86_64, it's
+			// actually 64 bits. Thus, casting to int64_t is either
+			// a no-op, or an up-cast which are always safe.
 			static_cast<int64_t>(old_date));
 		run_sql(query);
 	} else {

@@ -25,8 +25,7 @@ SelectFormAction::SelectFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, type(SelectionType::TAG)
-{
-}
+{}
 
 SelectFormAction::~SelectFormAction() {}
 
@@ -99,16 +98,17 @@ void SelectFormAction::prepare()
 	if (do_redraw) {
 		ListFormatter listfmt;
 		unsigned int i = 0;
-		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
+		const auto selecttag_format =
+			cfg->get_configvalue("selecttag-format");
 		const auto width = utils::to_u(f->get("tags:w"));
 
 		switch (type) {
 		case SelectionType::TAG:
 			for (const auto& tag : tags) {
 				listfmt.add_line(format_line(selecttag_format,
-						tag,
-						i + 1,
-						width),
+							 tag,
+							 i + 1,
+							 width),
 					i);
 				i++;
 			}

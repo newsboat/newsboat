@@ -80,7 +80,8 @@ void RegexManager::remove_last_regex(const std::string& location)
 
 std::string RegexManager::extract_outer_marker(std::string str, const int index)
 {
-	// Non-zero number of non-angle bracket characters, enclosed in angle brackets
+	// Non-zero number of non-angle bracket characters, enclosed in angle
+	// brackets
 	std::regex regex("<[^<>]+>", std::regex::extended);
 	const std::string close = "</>";
 	std::string tmptag;
@@ -92,19 +93,19 @@ std::string RegexManager::extract_outer_marker(std::string str, const int index)
 	}
 
 	std::smatch sm;
-	while ( std::regex_search( str, sm, regex )) {
+	while (std::regex_search(str, sm, regex)) {
 		// Get found tag
 		tmptag = sm.str();
 		// If the found tag is after the spot we're looking for
-		if (sm.position(0) + offset > index ){
-			if (!tagstack.empty() ) {
+		if (sm.position(0) + offset > index) {
+			if (!tagstack.empty()) {
 				return tagstack.top();
 			} else {
 				return "";
 			}
 		}
 		if (tmptag == close) {
-			//If a tag is closed without a partner error out
+			// If a tag is closed without a partner error out
 			if (tagstack.empty()) {
 				return "";
 			} else {
@@ -140,15 +141,16 @@ void RegexManager::quote_and_highlight(std::string& str,
 		while (err == 0) {
 			std::string outer_marker = "";
 			if (pmatch.rm_so != pmatch.rm_eo) {
-				outer_marker = extract_outer_marker(str, offset + pmatch.rm_so);
-				const std::string marker = strprintf::fmt("<%u>", i);
+				outer_marker = extract_outer_marker(
+					str, offset + pmatch.rm_so);
+				const std::string marker =
+					strprintf::fmt("<%u>", i);
 				str.insert(offset + pmatch.rm_eo,
-						std::string("</>") + outer_marker);
+					std::string("</>") + outer_marker);
 				str.insert(offset + pmatch.rm_so, marker);
 				offset += pmatch.rm_eo + marker.length() +
 					strlen("</>") + outer_marker.length();
-			}
-			else {
+			} else {
 				offset++;
 			}
 			if (offset >= str.length()) {
@@ -161,7 +163,8 @@ void RegexManager::quote_and_highlight(std::string& str,
 	}
 }
 
-void RegexManager::handle_highlight_action(const std::vector<std::string>& params)
+void RegexManager::handle_highlight_action(
+	const std::vector<std::string>& params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(
@@ -177,9 +180,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 
 	regex_t* rx = new regex_t;
 	int err;
-	if ((err = regcomp(rx,
-			 params[1].c_str(),
-			 REG_EXTENDED | REG_ICASE)) != 0) {
+	if ((err = regcomp(rx, params[1].c_str(), REG_EXTENDED | REG_ICASE)) !=
+		0) {
 		char buf[1024];
 		regerror(err, rx, buf, sizeof(buf));
 		delete rx;
@@ -195,8 +197,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 			regfree(rx);
 			delete rx;
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				params[2]));
+				_("`%s' is not a valid color"), params[2]));
 		}
 		colorstr.append(params[2]);
 	}
@@ -210,9 +211,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 				regfree(rx);
 				delete rx;
 				throw ConfigHandlerException(
-					strprintf::fmt(
-						_("`%s' is not a valid "
-						  "color"),
+					strprintf::fmt(_("`%s' is not a valid "
+							 "color"),
 						params[3]));
 			}
 			colorstr.append(params[3]);
@@ -223,15 +223,13 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 					colorstr.append(",");
 				}
 				colorstr.append("attr=");
-				if (!utils::is_valid_attribute(
-						params[i])) {
+				if (!utils::is_valid_attribute(params[i])) {
 					regfree(rx);
 					delete rx;
 					throw ConfigHandlerException(
-						strprintf::fmt(
-							_("`%s' is not "
-							  "a valid "
-							  "attribute"),
+						strprintf::fmt(_("`%s' is not "
+								 "a valid "
+								 "attribute"),
 							params[i]));
 				}
 				colorstr.append(params[i]);
@@ -276,7 +274,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 	cheat_store_for_dump_config.push_back(line);
 }
 
-void RegexManager::handle_highlight_article_action(const std::vector<std::string>& params)
+void RegexManager::handle_highlight_article_action(
+	const std::vector<std::string>& params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(
@@ -292,8 +291,7 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 		colorstr.append("fg=");
 		if (!utils::is_valid_color(fgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				fgcolor));
+				_("`%s' is not a valid color"), fgcolor));
 		}
 		colorstr.append(fgcolor);
 	}
@@ -304,8 +302,7 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 		colorstr.append("bg=");
 		if (!utils::is_valid_color(bgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				bgcolor));
+				_("`%s' is not a valid color"), bgcolor));
 		}
 		colorstr.append(bgcolor);
 	}
@@ -318,9 +315,8 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 			colorstr.append("attr=");
 			if (!utils::is_valid_attribute(params[i])) {
 				throw ConfigHandlerException(
-					strprintf::fmt(
-						_("`%s' is not a valid "
-						  "attribute"),
+					strprintf::fmt(_("`%s' is not a valid "
+							 "attribute"),
 						params[i]));
 			}
 			colorstr.append(params[i]);
@@ -340,8 +336,7 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 	locations["articlelist"].first.push_back(nullptr);
 	locations["articlelist"].second.push_back(colorstr);
 
-	matchers.push_back(
-		std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+	matchers.push_back(std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 }
 
 } // namespace newsboat

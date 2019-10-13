@@ -8,8 +8,7 @@ namespace newsboat {
 
 Exception::Exception(unsigned int error_code)
 	: ecode(error_code)
-{
-}
+{}
 
 Exception::~Exception() throw() {}
 

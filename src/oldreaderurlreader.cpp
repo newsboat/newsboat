@@ -14,8 +14,7 @@ OldReaderUrlReader::OldReaderUrlReader(ConfigContainer* c,
 	: cfg(c)
 	, file(url_file)
 	, api(a)
-{
-}
+{}
 
 OldReaderUrlReader::~OldReaderUrlReader() {}
 

@@ -29,7 +29,8 @@ static OpDesc opdescs[] = {
 		"ENTER",
 		_("Open feed/article"),
 		KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_TAGSELECT |
-			KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS | KM_DIRBROWSER},
+			KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS |
+			KM_DIRBROWSER},
 	{OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH},
 	{OP_HARDQUIT,
 		"hard-quit",

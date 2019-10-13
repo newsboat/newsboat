@@ -15,8 +15,7 @@ struct Rss09xParser : public RssParser {
 	explicit Rss09xParser(xmlDocPtr doc)
 		: RssParser(doc)
 		, ns(nullptr)
-	{
-	}
+	{}
 	~Rss09xParser() override;
 
 protected:

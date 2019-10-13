@@ -27,4 +27,3 @@ private:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_OLDREADERURLREADER_H_ */
-

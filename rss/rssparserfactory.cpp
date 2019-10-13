@@ -10,8 +10,7 @@
 
 namespace rsspp {
 
-std::shared_ptr<RssParser> RssParserFactory::get_object(Feed& f,
-	xmlDocPtr doc)
+std::shared_ptr<RssParser> RssParserFactory::get_object(Feed& f, xmlDocPtr doc)
 {
 	switch (f.rss_version) {
 	case Feed::RSS_0_91:

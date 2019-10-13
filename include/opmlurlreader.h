@@ -24,6 +24,6 @@ private:
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
 };
 
-}
+} // namespace newsboat
 
 #endif /* NEWSBOAT_OPMLURLREADER_H_ */

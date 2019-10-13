@@ -25,8 +25,7 @@ TagSoupPullParser::TagSoupPullParser()
 	: inputstream(0)
 	, current_event(Event::START_DOCUMENT)
 	, c('\0')
-{
-}
+{}
 
 TagSoupPullParser::~TagSoupPullParser() {}
 
@@ -536,7 +535,8 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 	unsigned int count = 0;
 
 	LOG(Level::DEBUG,
-		"parse_tag: parsing '%s', pos = %" PRIu64 ", last_pos = %" PRIu64,
+		"parse_tag: parsing '%s', pos = %" PRIu64
+		", last_pos = %" PRIu64,
 		tagstr,
 		static_cast<uint64_t>(pos),
 		static_cast<uint64_t>(last_pos));
@@ -571,7 +571,8 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 							"parse_tag: finding "
 							"ending "
 							"quote, pos = %" PRIu64,
-							static_cast<uint64_t>(pos));
+							static_cast<uint64_t>(
+								pos));
 					} else {
 						pos = tagstr.find_first_of(
 							" \r\n\t", pos + 1);

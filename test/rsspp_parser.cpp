@@ -49,9 +49,10 @@ TEST_CASE("Extracts data from RSS 0.91", "[rsspp::Parser]")
 	REQUIRE(f.items[0].guid == "");
 }
 
-TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
-		"an empty author tag",
-		"[rsspp::Parser][issue542]")
+TEST_CASE(
+	"Doesn't crash or garble data if an item in RSS 0.9x contains "
+	"an empty author tag",
+	"[rsspp::Parser][issue542]")
 {
 	rsspp::Parser p;
 	rsspp::Feed f;
@@ -70,27 +71,35 @@ TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
 		REQUIRE(f.items[0].author == "");
 		REQUIRE(f.items[0].guid == "");
 
-		REQUIRE(f.items[1].title == "This one has en empty author tag as well");
+		REQUIRE(f.items[1].title ==
+			"This one has en empty author tag as well");
 		REQUIRE(f.items[1].link == "http://example.com/test_2.html");
-		REQUIRE(f.items[1].description == "Non-empty description though.");
+		REQUIRE(f.items[1].description ==
+			"Non-empty description though.");
 		REQUIRE(f.items[1].author == "");
 		REQUIRE(f.items[1].guid == "");
 	};
 
-	SECTION("RSS 0.91") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_091_with_empty_author.xml"));
+	SECTION("RSS 0.91")
+	{
+		REQUIRE_NOTHROW(
+			f = p.parse_file("data/rss_091_with_empty_author.xml"));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_91);
 		check();
 	}
 
-	SECTION("RSS 0.92") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_092_with_empty_author.xml"));
+	SECTION("RSS 0.92")
+	{
+		REQUIRE_NOTHROW(
+			f = p.parse_file("data/rss_092_with_empty_author.xml"));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_92);
 		check();
 	}
 
-	SECTION("RSS 0.94") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_094_with_empty_author.xml"));
+	SECTION("RSS 0.94")
+	{
+		REQUIRE_NOTHROW(
+			f = p.parse_file("data/rss_094_with_empty_author.xml"));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_94);
 		check();
 	}

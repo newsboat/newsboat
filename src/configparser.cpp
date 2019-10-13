@@ -39,7 +39,8 @@ void ConfigParser::handle_action(const std::string& action,
 
 		std::string tilde_expanded = utils::resolve_tilde(params[0]);
 		std::string current_fpath = included_files.back();
-		if (!this->parse(utils::resolve_relative(current_fpath, tilde_expanded)))
+		if (!this->parse(utils::resolve_relative(
+			    current_fpath, tilde_expanded)))
 			throw ConfigHandlerException(
 				ActionHandlerStatus::FILENOTFOUND);
 	} else
@@ -64,11 +65,14 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	 *   - if an error happens, react accordingly.
 	 */
 
-	// It would be nice if this function was only give absolute paths, but the
-	// tests are easier as relative paths
-	const std::string filename = (tmp_filename.front() == '/') ? tmp_filename : utils::getcwd() + '/' + tmp_filename;
+	// It would be nice if this function was only give absolute paths, but
+	// the tests are easier as relative paths
+	const std::string filename = (tmp_filename.front() == '/')
+		? tmp_filename
+		: utils::getcwd() + '/' + tmp_filename;
 
-	if (std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
+	if (std::find(included_files.begin(), included_files.end(), filename) !=
+		included_files.end()) {
 		LOG(Level::WARN,
 			"ConfigParser::parse: file %s has already been "
 			"included",
@@ -94,7 +98,8 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 
 		auto stripped = utils::strip_comments(line);
 		auto evaluated = evaluate_backticks(std::move(stripped));
-		std::vector<std::string> tokens = utils::tokenize_quoted(std::move(evaluated));
+		std::vector<std::string> tokens =
+			utils::tokenize_quoted(std::move(evaluated));
 
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];

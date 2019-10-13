@@ -80,8 +80,7 @@ Controller::Controller()
 	, refresh_on_start(false)
 	, api(0)
 	, queueManager(&cfg, &configpaths)
-{
-}
+{}
 
 Controller::~Controller()
 {
@@ -609,7 +608,8 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	feedcontainer.feeds[pos] = feed;
 	queueManager.autoenqueue(feed);
 	for (const auto& item : feed->items()) {
-		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
+		rsscache->update_rssitem_unread_and_enqueued(
+			item, feed->rssurl());
 	}
 
 	oldfeed->clear_items();
@@ -857,7 +857,8 @@ void Controller::update_config()
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
 		try {
-			Logger::set_user_error_logfile(cfg.get_configvalue("error-log"));
+			Logger::set_user_error_logfile(
+				cfg.get_configvalue("error-log"));
 		} catch (const Exception& e) {
 			const std::string msg =
 				strprintf::fmt("Couldn't open %s: %s",

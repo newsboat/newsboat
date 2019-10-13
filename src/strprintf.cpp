@@ -16,8 +16,8 @@ std::string strprintf::fmt(const std::string& format)
 	// we're calling snprintf at all is to process these escaped
 	// percent signs, if any. So we don't need additional
 	// parameters.
-	unsigned int len = 1 +
-		snprintf(buffer, sizeof(buffer), format.c_str(), "");
+	unsigned int len =
+		1 + snprintf(buffer, sizeof(buffer), format.c_str(), "");
 	if (len <= sizeof(buffer)) {
 		result = buffer;
 	} else {
@@ -28,7 +28,6 @@ std::string strprintf::fmt(const std::string& format)
 	return result;
 }
 
-
 /* Splits a printf-like format string into two parts, where first part contains
  * at most one format while the second part contains the rest of the input
  * string:
@@ -37,7 +36,7 @@ std::string strprintf::fmt(const std::string& format)
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
 std::pair<std::string, std::string> strprintf::split_format(
-		const std::string& printf_format)
+	const std::string& printf_format)
 {
 	std::string first_format, rest;
 

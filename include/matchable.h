@@ -16,4 +16,3 @@ public:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_MATCHABLE_H_ */
-

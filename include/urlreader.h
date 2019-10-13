@@ -21,8 +21,8 @@ public:
 
 	/// \brief Re-read the input file.
 	///
-	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`, so
-	/// make sure to save your modifications with `write_config()`.
+	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`,
+	/// so make sure to save your modifications with `write_config()`.
 	virtual void reload() = 0;
 
 	/// \brief User-visible description of where URLs come from.

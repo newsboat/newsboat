@@ -17,8 +17,8 @@ ReloadThread::ReloadThread(Controller* c, ConfigContainer* cf)
 	LOG(Level::INFO,
 		"ReloadThread: waiting %" PRIi64 " seconds between reloads",
 		// In GCC, `time t` is `long int`, which is at least 32 bits. On
-		// x86_64, it's 64 bits. Thus, this cast is either a no-op, or an
-		// up-cast which are always safe.
+		// x86_64, it's 64 bits. Thus, this cast is either a no-op, or
+		// an up-cast which are always safe.
 		static_cast<int64_t>(waittime_sec));
 }
 

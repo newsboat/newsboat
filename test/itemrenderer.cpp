@@ -32,7 +32,8 @@ static const auto ITEM_ENCLOSURE_TYPE = std::string("audio/mpeg");
 static const auto ITEM_FLAGS = std::string("wasdhjkl");
 // Flags are sorted for rendering.
 static const auto ITEM_FLAGS_RENDERED = std::string("adhjklsw");
-std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> create_test_item(Cache* c)
+std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> create_test_item(
+	Cache* c)
 {
 	const auto feed = create_test_feed(c);
 
@@ -48,16 +49,17 @@ std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> create_test_item(C
 	return {item, feed};
 }
 
-TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
-		"of an RSS item, ready to be displayed to the user",
-		"[item_renderer]")
+TEST_CASE(
+	"item_renderer::to_plain_text() produces a rendered representation "
+	"of an RSS item, ready to be displayed to the user",
+	"[item_renderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
-	// item_renderer uses that setting, so let's fix its value to make the test
-	// reproducible
+	// item_renderer uses that setting, so let's fix its value to make the
+	// test reproducible
 	cfg.set_configvalue("text-width", "80");
 
 	Cache rsscache(":memory:", &cfg);
@@ -66,95 +68,89 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	std::shared_ptr<RssFeed> feed;
 	std::tie(item, feed) = create_test_item(&rsscache);
 
-	SECTION("Item without an enclosure") {
+	SECTION("Item without an enclosure")
+	{
 		item->set_description(ITEM_DESCRIPTON);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n" +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item with an enclosure") {
+	SECTION("Item with an enclosure")
+	{
 		item->set_description(ITEM_DESCRIPTON);
 		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
 			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			"Podcast Download URL: " + ITEM_ENCLOSURE_URL + '\n' +
-			" \n" +
-			ITEM_DESCRIPTON_RENDERED + '\n';
+			" \n" + ITEM_DESCRIPTON_RENDERED + '\n';
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item with an enclosure that has a MIME type") {
+	SECTION("Item with an enclosure that has a MIME type")
+	{
 		item->set_description(ITEM_DESCRIPTON);
 		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
 		item->set_enclosure_type(ITEM_ENCLOSURE_TYPE);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
 			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			"Podcast Download URL: " + ITEM_ENCLOSURE_URL
-				+ " (type: " + ITEM_ENCLOSURE_TYPE + ")\n" +
-			" \n" +
+			"Podcast Download URL: " + ITEM_ENCLOSURE_URL +
+			" (type: " + ITEM_ENCLOSURE_TYPE + ")\n" + " \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item with some links in the description") {
-		item->set_description(
-				ITEM_DESCRIPTON +
-				"<p>See also <a href='https://example.com'>this site</a>.</p>");
+	SECTION("Item with some links in the description")
+	{
+		item->set_description(ITEM_DESCRIPTON +
+			"<p>See also <a href='https://example.com'>this "
+			"site</a>.</p>");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n" +
-			ITEM_DESCRIPTON_RENDERED + '\n' +
-			" \n" +
-			"See also this site[1].\n" +
-			" \n" +
-			"Links: \n" +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
+			ITEM_DESCRIPTON_RENDERED + '\n' + " \n" +
+			"See also this site[1].\n" + " \n" + "Links: \n" +
 			"[1]: https://example.com/ (link)\n";
 
 		REQUIRE(result == expected);
 	}
 }
 
-TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
-		"in `text-width` setting",
-		"[item_renderer]")
+TEST_CASE(
+	"item_renderer::to_plain_text() renders text to the width specified "
+	"in `text-width` setting",
+	"[item_renderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
@@ -168,45 +164,54 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 	std::tie(item, feed) = create_test_item(&rsscache);
 
 	item->set_description(
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-			"Pellentesque nisl massa, luctus ut ligula vitae, suscipit tempus "
-			"velit. Vivamus sodales, quam in convallis posuere, libero nisi "
-			"ultricies orci, nec lobortis.");
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+		"Pellentesque nisl massa, luctus ut ligula vitae, suscipit "
+		"tempus "
+		"velit. Vivamus sodales, quam in convallis posuere, libero "
+		"nisi "
+		"ultricies orci, nec lobortis.");
 
-	const auto header = std::string() +
-		"Feed: " + FEED_TITLE + '\n' +
-		"Title: " + ITEM_TITLE + '\n' +
-		"Author: " + ITEM_AUTHOR + '\n' +
-		"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
-		"Link: " + ITEM_LINK + '\n' +
-		"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-		" \n";
+	const auto header = std::string() + "Feed: " + FEED_TITLE + '\n' +
+		"Title: " + ITEM_TITLE + '\n' + "Author: " + ITEM_AUTHOR +
+		'\n' + "Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+		"Link: " + ITEM_LINK + '\n' + "Flags: " + ITEM_FLAGS_RENDERED +
+		'\n' + " \n";
 
-	SECTION("If `text-width` is not set, text is rendered in 80 columns") {
+	SECTION("If `text-width` is not set, text is rendered in 80 columns")
+	{
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
 		const auto expected = header +
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
-			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n" +
-			"convallis posuere, libero nisi ultricies orci, nec lobortis.\n";
+			"Lorem ipsum dolor sit amet, consectetur adipiscing "
+			"elit. Pellentesque nisl \n" +
+			"massa, luctus ut ligula vitae, suscipit tempus velit. "
+			"Vivamus sodales, quam in \n" +
+			"convallis posuere, libero nisi ultricies orci, nec "
+			"lobortis.\n";
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("If `text-width` is set to zero, text is rendered in 80 columns") {
+	SECTION("If `text-width` is set to zero, text is rendered in 80 "
+		"columns")
+	{
 		cfg.set_configvalue("text-width", "0");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
 		const auto expected = header +
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
-			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n" +
-			"convallis posuere, libero nisi ultricies orci, nec lobortis.\n";
+			"Lorem ipsum dolor sit amet, consectetur adipiscing "
+			"elit. Pellentesque nisl \n" +
+			"massa, luctus ut ligula vitae, suscipit tempus velit. "
+			"Vivamus sodales, quam in \n" +
+			"convallis posuere, libero nisi ultricies orci, nec "
+			"lobortis.\n";
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Text is rendered in 37 columns") {
+	SECTION("Text is rendered in 37 columns")
+	{
 		cfg.set_configvalue("text-width", "37");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
@@ -223,16 +228,20 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Text is rendered in 120 columns") {
+	SECTION("Text is rendered in 120 columns")
+	{
 		cfg.set_configvalue("text-width", "120");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
 		const auto expected = header +
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-			"Pellentesque nisl massa, luctus ut ligula vitae, suscipit \n"
+			"Lorem ipsum dolor sit amet, consectetur adipiscing "
+			"elit. "
+			"Pellentesque nisl massa, luctus ut ligula vitae, "
+			"suscipit \n"
 
-			"tempus velit. Vivamus sodales, quam in convallis posuere, libero "
+			"tempus velit. Vivamus sodales, quam in convallis "
+			"posuere, libero "
 			"nisi ultricies orci, nec lobortis.\n";
 
 		REQUIRE(result == expected);
@@ -245,8 +254,8 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
-	// item_renderer uses that setting, so let's fix its value to make the test
-	// reproducible
+	// item_renderer uses that setting, so let's fix its value to make the
+	// test reproducible
 	cfg.set_configvalue("text-width", "80");
 
 	Cache rsscache(":memory:", &cfg);
@@ -255,107 +264,101 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	std::shared_ptr<RssFeed> feed;
 	std::tie(item, feed) = create_test_item(&rsscache);
 
-	SECTION("Item without a feed title") {
+	SECTION("Item without a feed title")
+	{
 		item->get_feedptr()->set_title("");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Title: " + ITEM_TITLE + '\n' +
-			"Author: " + ITEM_AUTHOR + '\n' +
+		const auto expected = std::string() + "Title: " + ITEM_TITLE +
+			'\n' + "Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n";
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n";
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item without a title") {
+	SECTION("Item without a title")
+	{
 		item->set_title("");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Author: " + ITEM_AUTHOR + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n";
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n";
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item without an author") {
+	SECTION("Item without an author")
+	{
 		item->set_author("");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n";
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n";
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item without a link") {
+	SECTION("Item without a link")
+	{
 		item->set_link("");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n";
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n";
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item without an enclosure") {
+	SECTION("Item without an enclosure")
+	{
 		item->set_description(ITEM_DESCRIPTON);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
-			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			" \n" +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item without flags") {
+	SECTION("Item without flags")
+	{
 		item->set_flags("");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
-		const auto expected = std::string() +
-			"Feed: " + FEED_TITLE + '\n' +
-			"Title: " + ITEM_TITLE + '\n' +
+		const auto expected = std::string() + "Feed: " + FEED_TITLE +
+			'\n' + "Title: " + ITEM_TITLE + '\n' +
 			"Author: " + ITEM_AUTHOR + '\n' +
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
-			"Link: " + ITEM_LINK + '\n' +
-			" \n";
+			"Link: " + ITEM_LINK + '\n' + " \n";
 
 		REQUIRE(result == expected);
 	}
 }
 
 TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
-		"[item_renderer][broken]")
+	"[item_renderer][broken]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
@@ -369,16 +372,19 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 	std::shared_ptr<RssFeed> feed;
 	std::tie(item, feed) = create_test_item(&rsscache);
 
-	SECTION("Single-paragraph description") {
+	SECTION("Single-paragraph description")
+	{
 		const auto description = std::string() +
 			"<p>Hello, world! Check out "
 			"<a href='https://example.com'>our site</a>.</p>";
 		item->set_description(description);
 
-		SECTION("internal renderer") {
+		SECTION("internal renderer")
+		{
 			cfg.set_configvalue("html-renderer", "internal");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result =
+				item_renderer::to_plain_text(cfg, item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -386,22 +392,23 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 				"Author: " + ITEM_AUTHOR + '\n' +
 				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 				"Link: " + ITEM_LINK + '\n' +
-				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-				" \n" +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
 				"Hello, world! Check out our site[1].\n" +
-				" \n" +
-				"Links: \n" +
+				" \n" + "Links: \n" +
 				"[1]: https://example.com/ (link)\n";
 
 			REQUIRE(result == expected);
 		}
 
 		// cat is pretty much guaranteed to be present in any Unix-like
-		// environment, so let's use that instead of the less common w3m.
-		SECTION("/bin/cat as a renderer") {
+		// environment, so let's use that instead of the less common
+		// w3m.
+		SECTION("/bin/cat as a renderer")
+		{
 			cfg.set_configvalue("html-renderer", "/bin/cat");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result =
+				item_renderer::to_plain_text(cfg, item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -409,25 +416,27 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 				"Author: " + ITEM_AUTHOR + '\n' +
 				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 				"Link: " + ITEM_LINK + '\n' +
-				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-				" \n" +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
 				description + '\n';
 
 			REQUIRE(result == expected);
 		}
 	}
 
-
-	SECTION("Multi-paragraph description") {
+	SECTION("Multi-paragraph description")
+	{
 		const auto description = std::string() +
 			"<p>Hello, world!</p>\n\n"
-			"<p>Check out <a href='https://example.com'>our site</a>.</p>";
+			"<p>Check out <a href='https://example.com'>our "
+			"site</a>.</p>";
 		item->set_description(description);
 
-		SECTION("internal renderer") {
+		SECTION("internal renderer")
+		{
 			cfg.set_configvalue("html-renderer", "internal");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result =
+				item_renderer::to_plain_text(cfg, item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -435,12 +444,9 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 				"Author: " + ITEM_AUTHOR + '\n' +
 				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 				"Link: " + ITEM_LINK + '\n' +
-				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-				" \n" +
-				"Hello, world!\n" +
-				" \n" +
-				"Check out our site[1].\n" +
-				" \n" +
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
+				"Hello, world!\n" + " \n" +
+				"Check out our site[1].\n" + " \n" +
 				"Links: \n" +
 				"[1]: https://example.com/ (link)\n";
 
@@ -448,11 +454,14 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		}
 
 		// cat is pretty much guaranteed to be present in any Unix-like
-		// environment, so let's use that instead of the less common w3m.
-		SECTION("/bin/cat as a renderer") {
+		// environment, so let's use that instead of the less common
+		// w3m.
+		SECTION("/bin/cat as a renderer")
+		{
 			cfg.set_configvalue("html-renderer", "/bin/cat");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result =
+				item_renderer::to_plain_text(cfg, item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -460,20 +469,21 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 				"Author: " + ITEM_AUTHOR + '\n' +
 				"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 				"Link: " + ITEM_LINK + '\n' +
-				"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-				" \n" +
-				"<p>Hello, world!</p>\n" +
-				" \n" +
-				"<p>Check out <a href='https://example.com'>our site</a>.</p>\n";
+				"Flags: " + ITEM_FLAGS_RENDERED + '\n' + " \n" +
+				"<p>Hello, world!</p>\n" + " \n" +
+				"<p>Check out <a "
+				"href='https://example.com'>our "
+				"site</a>.</p>\n";
 
 			REQUIRE(result == expected);
 		}
 	}
 }
 
-TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
-		"soft hyphens if that's available",
-		"[item_renderer]")
+TEST_CASE(
+	"item_renderer::get_feedtitle() returns item's feed title without "
+	"soft hyphens if that's available",
+	"[item_renderer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -487,20 +497,24 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 		REQUIRE(result == "Welcome, lovely strangers!");
 	};
 
-	SECTION("Title without soft hyphens") {
+	SECTION("Title without soft hyphens")
+	{
 		feed->set_title("Welcome, lovely strangers!");
 		check();
 	}
 
-	SECTION("Title containing soft hyphens") {
-		feed->set_title("Wel\u00ADcome, lo\u00ADve\u00ADly stran\u00ADgers!");
+	SECTION("Title containing soft hyphens")
+	{
+		feed->set_title(
+			"Wel\u00ADcome, lo\u00ADve\u00ADly stran\u00ADgers!");
 		check();
 	}
 }
 
-TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
-		"if its title is empty",
-		"[item_renderer]")
+TEST_CASE(
+	"item_renderer::get_feedtitle() returns item's feed self-link "
+	"if its title is empty",
+	"[item_renderer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -518,9 +532,10 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
 	REQUIRE(result == feedlink);
 }
 
-TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
-		"if both the title and self-link are empty",
-		"[item_renderer]")
+TEST_CASE(
+	"item_renderer::get_feedtitle() returns item's feed URL "
+	"if both the title and self-link are empty",
+	"[item_renderer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -529,7 +544,8 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	std::shared_ptr<RssFeed> feed;
 	std::tie(item, feed) = create_test_item(&rsscache);
 
-	const auto feedurl = std::string("https://example.com/~joe/entries.rss");
+	const auto feedurl =
+		std::string("https://example.com/~joe/entries.rss");
 
 	feed->set_title("");
 	feed->set_link("");

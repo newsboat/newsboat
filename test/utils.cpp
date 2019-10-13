@@ -150,9 +150,10 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 	REQUIRE(tokens[1] == "\\`foobar `bla`\\`");
 }
 
-TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
-		"(outside of double quotes)",
-		"[utils]")
+TEST_CASE(
+	"tokenize_quoted stops tokenizing once it found a # character "
+	"(outside of double quotes)",
+	"[utils]")
 {
 	std::vector<std::string> tokens;
 
@@ -164,14 +165,16 @@ TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
 
 	SECTION("A string with one quoted substring")
 	{
-		tokens = utils::tokenize_quoted(R"#("a test substring" # !!!)#");
+		tokens =
+			utils::tokenize_quoted(R"#("a test substring" # !!!)#");
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "a test substring");
 	}
 
 	SECTION("A string with two quoted substrings")
 	{
-		tokens = utils::tokenize_quoted(R"#("first sub" "snd" # comment)#");
+		tokens = utils::tokenize_quoted(
+			R"#("first sub" "snd" # comment)#");
 		REQUIRE(tokens.size() == 2);
 		REQUIRE(tokens[0] == "first sub");
 		REQUIRE(tokens[1] == "snd");
@@ -179,14 +182,16 @@ TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
 
 	SECTION("A comment containing # character")
 	{
-		tokens = utils::tokenize_quoted(R"#(one # a comment with # char)#");
+		tokens = utils::tokenize_quoted(
+			R"#(one # a comment with # char)#");
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "one");
 	}
 
 	SECTION("A # character inside quoted substring is ignored")
 	{
-		tokens = utils::tokenize_quoted(R"#(this "will # be" ignored)#");
+		tokens =
+			utils::tokenize_quoted(R"#(this "will # be" ignored)#");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "this");
 		REQUIRE(tokens[1] == "will # be");
@@ -194,11 +199,13 @@ TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
 	}
 }
 
-TEST_CASE("tokenize_quoted does not consider escaped pound sign (\\#) "
-		"a beginning of a comment",
-		"[utils]")
+TEST_CASE(
+	"tokenize_quoted does not consider escaped pound sign (\\#) "
+	"a beginning of a comment",
+	"[utils]")
 {
-	const auto tokens = utils::tokenize_quoted(R"#(one \# two three # ???)#");
+	const auto tokens =
+		utils::tokenize_quoted(R"#(one \# two three # ???)#");
 	REQUIRE(tokens.size() == 4);
 	REQUIRE(tokens[0] == "one");
 	REQUIRE(tokens[1] == "\\#");
@@ -240,7 +247,7 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 
 	SECTION("custom delimiter")
 	{
-		tokens = utils::tokenize_nl("first\nsecond\nthird","i");
+		tokens = utils::tokenize_nl("first\nsecond\nthird", "i");
 
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "f");
@@ -250,14 +257,16 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 }
 
 TEST_CASE(
-	"strip_comments returns only the part of the line before first # character",
+	"strip_comments returns only the part of the line before first # "
+	"character",
 	"[utils]")
 {
 	SECTION("no comments in line")
 	{
 		REQUIRE(utils::strip_comments("") == "");
 		REQUIRE(utils::strip_comments("\t\n") == "\t\n");
-		REQUIRE(utils::strip_comments("some directive ") == "some directive ");
+		REQUIRE(utils::strip_comments("some directive ") ==
+			"some directive ");
 	}
 
 	SECTION("fully commented line")
@@ -269,40 +278,44 @@ TEST_CASE(
 
 	SECTION("partially commented line")
 	{
-		REQUIRE(utils::strip_comments("directive # comment") == "directive ");
-		REQUIRE(utils::strip_comments("directive # comment # another") == "directive ");
-		REQUIRE(utils::strip_comments("directive#comment") == "directive");
+		REQUIRE(utils::strip_comments("directive # comment") ==
+			"directive ");
+		REQUIRE(utils::strip_comments(
+				"directive # comment # another") ==
+			"directive ");
+		REQUIRE(utils::strip_comments("directive#comment") ==
+			"directive");
 	}
 }
 
 TEST_CASE("strip_comments ignores escaped # characters (\\#)")
 {
-	const auto expected =
-		std::string(R"#(one two \# three four)#");
+	const auto expected = std::string(R"#(one two \# three four)#");
 	const auto input = expected + "# and a comment";
 	REQUIRE(utils::strip_comments(input) == expected);
 }
 
 TEST_CASE("strip_comments ignores # characters inside double quotes",
-		"[utils][issue652]")
+	"[utils][issue652]")
 {
-	SECTION("Real-world cases from issue 652") {
-		const auto expected1 =
-			std::string(R"#(highlight article "[-=+#_*~]{3,}.*" green default)#");
+	SECTION("Real-world cases from issue 652")
+	{
+		const auto expected1 = std::string(
+			R"#(highlight article "[-=+#_*~]{3,}.*" green default)#");
 		const auto input1 = expected1 + "# this is a comment";
 		REQUIRE(utils::strip_comments(input1) == expected1);
 
-		const auto expected2 =
-			std::string(R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
+		const auto expected2 = std::string(
+			R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
 		const auto input2 = expected2 + "#heresacomment";
 		REQUIRE(utils::strip_comments(input2) == expected2);
 	}
 
 	SECTION("Escaped double quote inside double quotes is not treated "
-			"as closing quote")
+		"as closing quote")
 	{
-		const auto expected =
-			std::string(R"#(test "here \"goes # nothing\" etc" hehe)#");
+		const auto expected = std::string(
+			R"#(test "here \"goes # nothing\" etc" hehe)#");
 		const auto input = expected + "# and here is a comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
@@ -310,8 +323,10 @@ TEST_CASE("strip_comments ignores # characters inside double quotes",
 
 TEST_CASE("strip_comments ignores # characters inside backticks", "[utils]")
 {
-	SECTION("Simple case") {
-		const auto expected = std::string(R"#(one `two # three` four)#");
+	SECTION("Simple case")
+	{
+		const auto expected =
+			std::string(R"#(one `two # three` four)#");
 		const auto input = expected + "# and a comment, of course";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
@@ -325,8 +340,9 @@ TEST_CASE("strip_comments ignores # characters inside backticks", "[utils]")
 	}
 }
 
-TEST_CASE("strip_comments is not confused by nested double quotes and backticks",
-		"[utils]")
+TEST_CASE(
+	"strip_comments is not confused by nested double quotes and backticks",
+	"[utils]")
 {
 	{
 		const auto expected = std::string(R"#("`" ... ` `"` ")#");
@@ -335,16 +351,17 @@ TEST_CASE("strip_comments is not confused by nested double quotes and backticks"
 	}
 
 	{
-		const auto expected = std::string(R"#(aaa ` bbb "ccc ddd" e` dd)#");
+		const auto expected =
+			std::string(R"#(aaa ` bbb "ccc ddd" e` dd)#");
 		const auto input = expected + "# a comment string";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 
 	{
-        const auto expected =
-			std::string(R"#(option "this `weird " command` for value")#");
-        const auto input = expected + "#and a comment";
-        REQUIRE(utils::strip_comments(input) == expected);
+		const auto expected = std::string(
+			R"#(option "this `weird " command` for value")#");
+		const auto input = expected + "#and a comment";
+		REQUIRE(utils::strip_comments(input) == expected);
 	}
 }
 
@@ -386,7 +403,8 @@ TEST_CASE("extract_filter()", "[utils]")
 	std::string filter;
 	std::string url;
 
-	utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org", filter, url);
+	utils::extract_filter(
+		"filter:~/bin/script.sh:https://newsboat.org", filter, url);
 
 	REQUIRE(filter == "~/bin/script.sh");
 	REQUIRE(url == "https://newsboat.org");
@@ -413,13 +431,14 @@ TEST_CASE("run_program()", "[utils]")
 }
 
 TEST_CASE("run_command() executes the given command with a given argument",
-		"[utils]")
+	"[utils]")
 {
 	TestHelpers::TempFile sentry;
 	const auto argument = sentry.get_path();
 
 	{
-		INFO("File shouldn't exist, because TempFile doesn't create it");
+		INFO("File shouldn't exist, because TempFile doesn't create "
+		     "it");
 
 		struct stat sb;
 		const int result = ::stat(argument.c_str(), &sb);
@@ -434,10 +453,10 @@ TEST_CASE("run_command() executes the given command with a given argument",
 	struct stat sb;
 	int result = 0;
 
-	// Busy-wait for 10 tries of 10 milliseconds each, waiting for `touch` to
-	// create the file. Usually it happens quickly, and the loop exists on the
-	// first try; but sometimes on CI it takes longer for `touch` to finish, so
-	// we need a slightly longer wait.
+	// Busy-wait for 10 tries of 10 milliseconds each, waiting for `touch`
+	// to create the file. Usually it happens quickly, and the loop exists
+	// on the first try; but sometimes on CI it takes longer for `touch` to
+	// finish, so we need a slightly longer wait.
 	int tries = 10;
 	while (tries-- > 0) {
 		::usleep(10 * 1000);
@@ -452,8 +471,7 @@ TEST_CASE("run_command() executes the given command with a given argument",
 	REQUIRE(result == 0);
 }
 
-TEST_CASE("run_command() doesn't wait for the command to finish",
-		"[utils]")
+TEST_CASE("run_command() doesn't wait for the command to finish", "[utils]")
 {
 	using namespace std::chrono;
 
@@ -470,7 +488,8 @@ TEST_CASE("run_command() doesn't wait for the command to finish",
 	REQUIRE(runtime.count() < 1000);
 }
 
-TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[utils]")
+TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory",
+	"[utils]")
 {
 	TestHelpers::EnvVar envVar("HOME");
 	envVar.set("test");
@@ -480,16 +499,20 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[u
 	REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
 }
 
-TEST_CASE("resolve_relative() returns an absolute file path relative to another", "[utils]")
+TEST_CASE(
+	"resolve_relative() returns an absolute file path relative to another",
+	"[utils]")
 {
 	SECTION("Nothing - absolute path")
 	{
 		REQUIRE(utils::resolve_relative("/foo/bar", "/baz") == "/baz");
-		REQUIRE(utils::resolve_relative("/config", "/config/baz") == "/config/baz");
+		REQUIRE(utils::resolve_relative("/config", "/config/baz") ==
+			"/config/baz");
 	}
 	SECTION("Reference path")
 	{
-		REQUIRE(utils::resolve_relative("/foo/bar", "baz") == "/foo/baz");
+		REQUIRE(utils::resolve_relative("/foo/bar", "baz") ==
+			"/foo/baz");
 		REQUIRE(utils::resolve_relative("/config", "baz") == "/baz");
 	}
 }
@@ -600,7 +623,8 @@ TEST_CASE("censor_url()", "[utils]")
 	REQUIRE(utils::censor_url("https://foobar") == "https://foobar/");
 
 	REQUIRE(utils::censor_url("http://aschas@host") == "http://*:*@host/");
-	REQUIRE(utils::censor_url("https://aschas@host") == "https://*:*@host/");
+	REQUIRE(utils::censor_url("https://aschas@host") ==
+		"https://*:*@host/");
 
 	REQUIRE(utils::censor_url("query:name:age between 1:10") ==
 		"query:name:age between 1:10");
@@ -982,8 +1006,8 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 
 	SECTION("Returns empty string if current directory doesn't exist")
 	{
-		// Create a temporary directory, change to it and delete it. This leads
-		// getcwd to fail.
+		// Create a temporary directory, change to it and delete it.
+		// This leads getcwd to fail.
 		TestHelpers::TempDir tempdir;
 
 		const std::string tempdir_path = tempdir.get_path();
@@ -998,32 +1022,32 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 }
 
 TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
-	  "[utils]")
+	"[utils]")
 {
 	// Tests copied over from 3rd-party/alphanum.hpp
-	REQUIRE(utils::strnaturalcmp("","") == 0);
-	REQUIRE(utils::strnaturalcmp("","a") < 0);
-	REQUIRE(utils::strnaturalcmp("a","") > 0);
-	REQUIRE(utils::strnaturalcmp("a","a") == 0);
-	REQUIRE(utils::strnaturalcmp("","9") < 0);
-	REQUIRE(utils::strnaturalcmp("9","") > 0);
-	REQUIRE(utils::strnaturalcmp("1","1") == 0);
-	REQUIRE(utils::strnaturalcmp("1","2") < 0);
-	REQUIRE(utils::strnaturalcmp("3","2") > 0);
-	REQUIRE(utils::strnaturalcmp("a1","a1") == 0);
-	REQUIRE(utils::strnaturalcmp("a1","a2") < 0);
-	REQUIRE(utils::strnaturalcmp("a2","a1") > 0);
-	REQUIRE(utils::strnaturalcmp("a1a2","a1a3") < 0);
-	REQUIRE(utils::strnaturalcmp("a1a2","a1a0") > 0);
-	REQUIRE(utils::strnaturalcmp("134","122") > 0);
-	REQUIRE(utils::strnaturalcmp("12a3","12a3") == 0);
-	REQUIRE(utils::strnaturalcmp("12a1","12a0") > 0);
-	REQUIRE(utils::strnaturalcmp("12a1","12a2") < 0);
-	REQUIRE(utils::strnaturalcmp("a","aa") < 0);
-	REQUIRE(utils::strnaturalcmp("aaa","aa") > 0);
-	REQUIRE(utils::strnaturalcmp("Alpha 2","Alpha 2") == 0);
-	REQUIRE(utils::strnaturalcmp("Alpha 2","Alpha 2A") < 0);
-	REQUIRE(utils::strnaturalcmp("Alpha 2 B","Alpha 2") > 0);
+	REQUIRE(utils::strnaturalcmp("", "") == 0);
+	REQUIRE(utils::strnaturalcmp("", "a") < 0);
+	REQUIRE(utils::strnaturalcmp("a", "") > 0);
+	REQUIRE(utils::strnaturalcmp("a", "a") == 0);
+	REQUIRE(utils::strnaturalcmp("", "9") < 0);
+	REQUIRE(utils::strnaturalcmp("9", "") > 0);
+	REQUIRE(utils::strnaturalcmp("1", "1") == 0);
+	REQUIRE(utils::strnaturalcmp("1", "2") < 0);
+	REQUIRE(utils::strnaturalcmp("3", "2") > 0);
+	REQUIRE(utils::strnaturalcmp("a1", "a1") == 0);
+	REQUIRE(utils::strnaturalcmp("a1", "a2") < 0);
+	REQUIRE(utils::strnaturalcmp("a2", "a1") > 0);
+	REQUIRE(utils::strnaturalcmp("a1a2", "a1a3") < 0);
+	REQUIRE(utils::strnaturalcmp("a1a2", "a1a0") > 0);
+	REQUIRE(utils::strnaturalcmp("134", "122") > 0);
+	REQUIRE(utils::strnaturalcmp("12a3", "12a3") == 0);
+	REQUIRE(utils::strnaturalcmp("12a1", "12a0") > 0);
+	REQUIRE(utils::strnaturalcmp("12a1", "12a2") < 0);
+	REQUIRE(utils::strnaturalcmp("a", "aa") < 0);
+	REQUIRE(utils::strnaturalcmp("aaa", "aa") > 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2", "Alpha 2") == 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2", "Alpha 2A") < 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2 B", "Alpha 2") > 0);
 
 	REQUIRE(utils::strnaturalcmp("aa10", "aa2") > 0);
 }
@@ -1137,31 +1161,35 @@ TEST_CASE(
 {
 	SECTION("return basename in the presence of GET parameters")
 	{
-		REQUIRE(utils::get_basename("https://example.org/path/to/file.mp3?param=value#fragment")
-			== "file.mp3");
-		REQUIRE(utils::get_basename("https://example.org/file.mp3") == "file.mp3");
+		REQUIRE(utils::get_basename(
+				"https://example.org/path/to/"
+				"file.mp3?param=value#fragment") == "file.mp3");
+		REQUIRE(utils::get_basename("https://example.org/file.mp3") ==
+			"file.mp3");
 	}
 
 	SECTION("return empty string when basename is unavailable")
 	{
-		REQUIRE(utils::get_basename("https://example.org/?param=value#fragment")
-				== "");
-		REQUIRE(utils::get_basename("https://example.org/path/to/?param=value#fragment")
-				== "");
+		REQUIRE(utils::get_basename(
+				"https://example.org/?param=value#fragment") ==
+			"");
+		REQUIRE(utils::get_basename("https://example.org/path/to/"
+					    "?param=value#fragment") == "");
 	}
 }
 
 TEST_CASE(
-		"get_auth_method() returns enumerated constant "
-		"on defined values and undefined values",
-		"[utils]")
+	"get_auth_method() returns enumerated constant "
+	"on defined values and undefined values",
+	"[utils]")
 {
 	REQUIRE(utils::get_auth_method("any") == CURLAUTH_ANY);
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
 	REQUIRE(utils::get_auth_method("basic") == CURLAUTH_BASIC);
 	REQUIRE(utils::get_auth_method("digest") == CURLAUTH_DIGEST);
 	REQUIRE(utils::get_auth_method("digest_ie") == CURLAUTH_DIGEST_IE);
-	REQUIRE(utils::get_auth_method("gssnegotiate") == CURLAUTH_GSSNEGOTIATE);
+	REQUIRE(utils::get_auth_method("gssnegotiate") ==
+		CURLAUTH_GSSNEGOTIATE);
 	REQUIRE(utils::get_auth_method("anysafe") == CURLAUTH_ANYSAFE);
 
 	REQUIRE(utils::get_auth_method("") == CURLAUTH_ANY);
@@ -1169,9 +1197,9 @@ TEST_CASE(
 }
 
 TEST_CASE(
-		"get_proxy_type() returns enumerated constant "
-		"on defined values and undefined values",
-		"[utils]")
+	"get_proxy_type() returns enumerated constant "
+	"on defined values and undefined values",
+	"[utils]")
 {
 	REQUIRE(utils::get_proxy_type("http") == CURLPROXY_HTTP);
 	REQUIRE(utils::get_proxy_type("socks4") == CURLPROXY_SOCKS4);
@@ -1182,21 +1210,16 @@ TEST_CASE(
 	REQUIRE(utils::get_proxy_type("test") == CURLPROXY_HTTP);
 }
 
-TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute",
-		"[utils]")
+TEST_CASE(
+	"is_valid_attribute returns true if given string is an STFL attribute",
+	"[utils]")
 {
-	const std::vector<std::string> invalid = {
-		"foo",
-		"bar",
-		"baz",
-		"quux"
-	};
+	const std::vector<std::string> invalid = {"foo", "bar", "baz", "quux"};
 	for (const auto& attr : invalid) {
 		REQUIRE_FALSE(utils::is_valid_attribute(attr));
 	}
 
-	const std::vector<std::string> valid = {
-		"standout",
+	const std::vector<std::string> valid = {"standout",
 		"underline",
 		"reverse",
 		"blink",
@@ -1204,23 +1227,21 @@ TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute"
 		"bold",
 		"protect",
 		"invis",
-		"default"
-	};
+		"default"};
 	for (const auto& attr : valid) {
 		REQUIRE(utils::is_valid_attribute(attr));
 	}
 }
 
-TEST_CASE("unescape_url() takes a percent-encoded string and returns the string "
-		"with a precent escaped string",
-		"[utils]")
+TEST_CASE(
+	"unescape_url() takes a percent-encoded string and returns the string "
+	"with a precent escaped string",
+	"[utils]")
 {
 	REQUIRE(utils::unescape_url("foo%20bar") == "foo bar");
-	REQUIRE(utils::unescape_url(
-			"%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D") ==
-			"!#$&'()*+,/:;=?@[]");
+	REQUIRE(utils::unescape_url("%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%"
+				    "3D%3F%40%5B%5D") == "!#$&'()*+,/:;=?@[]");
 	REQUIRE(utils::unescape_url("%00") == "");
-
 }
 
 TEST_CASE("gentabs() calculates padding tabs based on stringwidth", "[utils]")
@@ -1231,9 +1252,10 @@ TEST_CASE("gentabs() calculates padding tabs based on stringwidth", "[utils]")
 	REQUIRE(utils::gentabs("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") == 1);
 }
 
-TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
-		"the path now exists",
-		"[utils]")
+TEST_CASE(
+	"mkdir_parents() creates all paths components and returns 0 if "
+	"the path now exists",
+	"[utils]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1242,77 +1264,99 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
 	};
 
-	SECTION("Simple test on temporary dir itself") {
+	SECTION("Simple test on temporary dir itself")
+	{
 		const auto path = tmp.get_path();
 		INFO("Path is " << path);
 		require_return_zero(path);
 	}
 
-	SECTION("Zero intermediate directories") {
+	SECTION("Zero intermediate directories")
+	{
 		const auto path = tmp.get_path() + std::to_string(rand());
 		INFO("Path is " << path);
 
-		SECTION("Target doesn't yet exist") {
+		SECTION("Target doesn't yet exist")
+		{
 			require_return_zero(path);
 		}
 
-		SECTION("Target already exists") {
+		SECTION("Target already exists")
+		{
 			REQUIRE(::mkdir(path.c_str(), 0700) == 0);
 			require_return_zero(path);
 		}
 	}
 
-	SECTION("One intermediate directory") {
-		const auto intermediate_path = tmp.get_path() + std::to_string(rand());
-		const auto path = intermediate_path + "/" + std::to_string(rand());
+	SECTION("One intermediate directory")
+	{
+		const auto intermediate_path =
+			tmp.get_path() + std::to_string(rand());
+		const auto path =
+			intermediate_path + "/" + std::to_string(rand());
 		INFO("Path is " << path);
 
-		SECTION("Which doesn't exist") {
+		SECTION("Which doesn't exist")
+		{
 			require_return_zero(path);
 		}
 
-		SECTION("Which exists") {
+		SECTION("Which exists")
+		{
 			REQUIRE(::mkdir(intermediate_path.c_str(), 0700) == 0);
 
-			SECTION("Target doesn't exist") {
+			SECTION("Target doesn't exist")
+			{
 				require_return_zero(path);
 			}
 
-			SECTION("Target exists") {
+			SECTION("Target exists")
+			{
 				REQUIRE(::mkdir(path.c_str(), 0700) == 0);
 				require_return_zero(path);
 			}
 		}
 	}
 
-	SECTION("Two intermediate directories") {
-		const auto intermediate_path1 = tmp.get_path() + std::to_string(rand());
+	SECTION("Two intermediate directories")
+	{
+		const auto intermediate_path1 =
+			tmp.get_path() + std::to_string(rand());
 		const auto intermediate_path2 =
 			intermediate_path1 + "/" + std::to_string(rand());
-		const auto path = intermediate_path2 + "/" + std::to_string(rand());
+		const auto path =
+			intermediate_path2 + "/" + std::to_string(rand());
 		INFO("Path is " << path);
 
-		SECTION("Which don't exist") {
+		SECTION("Which don't exist")
+		{
 			require_return_zero(path);
 		}
 
-		SECTION("First one exists") {
+		SECTION("First one exists")
+		{
 			REQUIRE(::mkdir(intermediate_path1.c_str(), 0700) == 0);
 
-			SECTION("Second one exists") {
-				REQUIRE(::mkdir(intermediate_path2.c_str(), 0700) == 0);
+			SECTION("Second one exists")
+			{
+				REQUIRE(::mkdir(intermediate_path2.c_str(),
+						0700) == 0);
 
-				SECTION("Target exists") {
-					REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+				SECTION("Target exists")
+				{
+					REQUIRE(::mkdir(path.c_str(), 0700) ==
+						0);
 					require_return_zero(path);
 				}
 
-				SECTION("Target doesn't exist") {
+				SECTION("Target doesn't exist")
+				{
 					require_return_zero(path);
 				}
 			}
 
-			SECTION("Second one doesn't exist") {
+			SECTION("Second one doesn't exist")
+			{
 				require_return_zero(path);
 			}
 		}
@@ -1320,7 +1364,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 }
 
 TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
-		"[utils]")
+	"[utils]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1331,11 +1375,13 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
 	};
 
-	SECTION("Path doesn't end in slash => directory created") {
+	SECTION("Path doesn't end in slash => directory created")
+	{
 		check(path);
 	}
 
-	SECTION("Path ends in slash => directory created") {
+	SECTION("Path ends in slash => directory created")
+	{
 		check(path + "/");
 	}
 }

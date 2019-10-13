@@ -8,8 +8,8 @@
 #include <iostream>
 #include <langinfo.h>
 #include <sstream>
-#include <sys/utsname.h>
 #include <string.h>
+#include <sys/utsname.h>
 #include <time.h>
 
 #include "cache.h"

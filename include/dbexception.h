@@ -11,8 +11,7 @@ class DbException : public std::exception {
 public:
 	explicit DbException(sqlite3* h)
 		: msg(sqlite3_errmsg(h))
-	{
-	}
+	{}
 	~DbException() throw() override {}
 	const char* what() const throw() override
 	{
@@ -26,4 +25,3 @@ private:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_DBEXCEPTION_H_ */
-

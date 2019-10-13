@@ -81,14 +81,13 @@ public:
 	/// \brief Notify in various ways that there are new unread feeds or
 	/// articles.
 	///
-	/// The type of notification is based on "notify-screen", "notify-xterm",
-	/// "notify-beep" and "notify-program" settings chosen in Newsboat's config
-	/// file.
+	/// The type of notification is based on "notify-screen",
+	/// "notify-xterm", "notify-beep" and "notify-program" settings chosen
+	/// in Newsboat's config file.
 	///
-	/// If "notify-screen", "notify-xterm" or "notify-program" is chosen, the
-	/// notification will contain \a msg passed.
+	/// If "notify-screen", "notify-xterm" or "notify-program" is chosen,
+	/// the notification will contain \a msg passed.
 	void notify(const std::string& msg);
-
 };
 
 } // namespace newsboat

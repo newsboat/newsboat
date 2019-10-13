@@ -9,8 +9,7 @@ ListFormAction::ListFormAction(View* v,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(v, formstr, cfg)
-{
-}
+{}
 
 void ListFormAction::process_operation(Operation op,
 	bool,

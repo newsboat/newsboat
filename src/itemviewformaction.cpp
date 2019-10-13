@@ -51,11 +51,9 @@ void ItemViewFormAction::init()
 	} else {
 		const size_t min_field_width = 6;
 		f->set("percentwidth",
-			std::to_string(
-				std::max({
-					min_field_width,
-					strlen(_("Top")),
-					strlen(_("Bottom"))})));
+			std::to_string(std::max({min_field_width,
+				strlen(_("Top")),
+				strlen(_("Bottom"))})));
 		update_percent();
 	}
 	set_keymap_hints();
@@ -89,7 +87,8 @@ void ItemViewFormAction::prepare()
 	if (do_redraw) {
 		{
 			ScopeMeasure("itemview::prepare: rendering");
-			// XXX HACK: render once so that we get a proper widget width
+			// XXX HACK: render once so that we get a proper widget
+			// width
 			f->run(-3);
 		}
 
@@ -110,8 +109,7 @@ void ItemViewFormAction::prepare()
 		std::string formatted_text;
 		if (show_source) {
 			std::tie(formatted_text, num_lines) =
-				item_renderer::source_to_stfl_list(
-					item,
+				item_renderer::source_to_stfl_list(item,
 					text_width,
 					window_width,
 					rxman,
@@ -119,8 +117,9 @@ void ItemViewFormAction::prepare()
 		} else {
 			std::tie(formatted_text, num_lines) =
 				item_renderer::to_stfl_list(
-					// cfg can't be nullptr because that's a long-lived object
-					// created at the very start of the program.
+					// cfg can't be nullptr because that's a
+					// long-lived object created at the very
+					// start of the program.
 					*cfg,
 					item,
 					text_width,
@@ -169,7 +168,9 @@ void ItemViewFormAction::process_operation(Operation op,
 
 	switch (op) {
 	case OP_TOGGLESOURCEVIEW:
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: toggling "
+			"source view");
 		show_source = !show_source;
 		do_redraw = true;
 		break;
@@ -186,7 +187,9 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 	} break;
 	case OP_SAVE: {
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: saving "
+			"article");
 		std::string filename;
 		if (automatic) {
 			if (args->size() > 0)
@@ -211,7 +214,9 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 	} break;
 	case OP_OPENINBROWSER:
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: starting "
+			"browser");
 		v->set_status(_("Starting browser..."));
 		v->open_in_browser(item->link());
 		v->set_status("");
@@ -273,7 +278,8 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_SHOWURLS: {
 		std::string urlviewer =
 			cfg->get_configvalue("external-url-viewer");
-		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
+		LOG(Level::DEBUG,
+			"ItemViewFormAction::process_operation: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
 				v->push_urlview(links, feed);
@@ -288,13 +294,15 @@ void ItemViewFormAction::process_operation(Operation op,
 	} break;
 	case OP_DELETE:
 		LOG(Level::INFO,
-			"ItemViewFormAction::process_operation: deleting current article");
+			"ItemViewFormAction::process_operation: deleting "
+			"current article");
 		item->set_deleted(true);
 		rsscache->mark_item_deleted(guid, true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
 		LOG(Level::INFO,
-			"ItemViewFormAction::process_operation: jumping to next unread article");
+			"ItemViewFormAction::process_operation: jumping to "
+			"next unread article");
 		if (v->get_next_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -304,7 +312,8 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_PREVUNREAD:
 		LOG(Level::INFO,
-			"ItemViewFormAction::process_operation: jumping to previous unread "
+			"ItemViewFormAction::process_operation: jumping to "
+			"previous unread "
 			"article");
 		if (v->get_previous_unread(itemlist.get(), this)) {
 			do_redraw = true;
@@ -314,7 +323,9 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_NEXT:
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: jumping to next article");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: jumping to "
+			"next article");
 		if (v->get_next(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -324,7 +335,8 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_PREV:
 		LOG(Level::INFO,
-			"ItemViewFormAction::process_operation: jumping to previous article");
+			"ItemViewFormAction::process_operation: jumping to "
+			"previous article");
 		if (v->get_previous(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -334,7 +346,8 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_RANDOMUNREAD:
 		LOG(Level::INFO,
-			"ItemViewFormAction::process_operation: jumping to random unread article");
+			"ItemViewFormAction::process_operation: jumping to "
+			"random unread article");
 		if (v->get_random_unread(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -344,7 +357,8 @@ void ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_TOGGLEITEMREAD:
 		LOG(Level::INFO,
-			"ItemViewFormAction::process_operation: setting unread and quitting");
+			"ItemViewFormAction::process_operation: setting unread "
+			"and quitting");
 		v->set_status(_("Toggling read flag for article..."));
 		try {
 			item->set_unread(true);
@@ -358,11 +372,13 @@ void ItemViewFormAction::process_operation(Operation op,
 		quit = true;
 		break;
 	case OP_QUIT:
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: quitting");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: quitting");
 		quit = true;
 		break;
 	case OP_HARDQUIT:
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: hard quitting");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: hard quitting");
 		hardquit = true;
 		break;
 	case OP_HELP:
@@ -380,7 +396,8 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_0: {
 		unsigned int idx = op - OP_1;
 		LOG(Level::DEBUG,
-			"ItemViewFormAction::process_operation: OP_1 = %d op = %d idx = %u",
+			"ItemViewFormAction::process_operation: OP_1 = %d op = "
+			"%d idx = %u",
 			OP_1,
 			op,
 			idx);

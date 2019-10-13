@@ -13,12 +13,10 @@ struct Rss10Parser : public RssParser {
 	void parse_feed(Feed& f, xmlNode* rootNode) override;
 	explicit Rss10Parser(xmlDocPtr doc)
 		: RssParser(doc)
-	{
-	}
+	{}
 	~Rss10Parser() override {}
 };
 
 } // namespace rsspp
 
 #endif /* NEWSBOAT_RSSPP_RSS10PARSER_H_ */
-

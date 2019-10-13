@@ -19,8 +19,8 @@ void ScopeMeasure::stopover(const std::string& son)
 		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
 		tv1.tv_usec;
 	LOG(lvl,
-		"ScopeMeasure: function `%s' (stop over `%s') took %" PRIu64 ".%06"
-		PRIu64 " s so far",
+		"ScopeMeasure: function `%s' (stop over `%s') took %" PRIu64
+		".%06" PRIu64 " s so far",
 		funcname,
 		son,
 		diff / 1000000,

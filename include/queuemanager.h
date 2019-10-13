@@ -29,7 +29,6 @@ private:
 		std::shared_ptr<RssFeed> feed);
 };
 
-}
+} // namespace newsboat
 
 #endif /* NEWSBOAT_QUEUEMANAGER_H_ */
-

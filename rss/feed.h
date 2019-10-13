@@ -27,8 +27,7 @@ public:
 
 	Feed()
 		: rss_version(UNKNOWN)
-	{
-	}
+	{}
 
 	std::string encoding;
 

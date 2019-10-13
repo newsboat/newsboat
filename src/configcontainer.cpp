@@ -8,8 +8,8 @@
 #include <sys/types.h>
 
 #include "config.h"
-#include "configparser.h"
 #include "confighandlerexception.h"
+#include "configparser.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -67,13 +67,16 @@ ConfigContainer::ConfigContainer()
 		  {"feedhq-show-special-feeds",
 			  ConfigData("true", ConfigDataType::BOOL)},
 		  {"feedhq-url",
-			  ConfigData("https://feedhq.org/", ConfigDataType::STR)},
+			  ConfigData("https://feedhq.org/",
+				  ConfigDataType::STR)},
 		  {"feedlist-format",
 			  ConfigData("%4i %n %11u %t", ConfigDataType::STR)},
-		  {"goto-first-unread", ConfigData("true", ConfigDataType::BOOL)},
+		  {"goto-first-unread",
+			  ConfigData("true", ConfigDataType::BOOL)},
 		  {"goto-next-feed", ConfigData("yes", ConfigDataType::BOOL)},
 		  {"history-limit", ConfigData("100", ConfigDataType::INT)},
-		  {"html-renderer", ConfigData("internal", ConfigDataType::PATH)},
+		  {"html-renderer",
+			  ConfigData("internal", ConfigDataType::PATH)},
 		  {"http-auth-method",
 			  ConfigData("any",
 				  std::unordered_set<std::string>({"any",
@@ -91,12 +94,14 @@ ConfigContainer::ConfigContainer()
 		  {"inoreader-password", ConfigData("", ConfigDataType::STR)},
 		  {"inoreader-passwordfile",
 			  ConfigData("", ConfigDataType::PATH)},
-		  {"inoreader-passwordeval", ConfigData("", ConfigDataType::STR)},
+		  {"inoreader-passwordeval",
+			  ConfigData("", ConfigDataType::STR)},
 		  {"inoreader-show-special-feeds",
 			  ConfigData("true", ConfigDataType::BOOL)},
 		  {"inoreader-flag-share", ConfigData("", ConfigDataType::STR)},
 		  {"inoreader-flag-star", ConfigData("", ConfigDataType::STR)},
-		  {"inoreader-min-items", ConfigData("20", ConfigDataType::INT)},
+		  {"inoreader-min-items",
+			  ConfigData("20", ConfigDataType::INT)},
 		  {"keep-articles-days", ConfigData("0", ConfigDataType::INT)},
 		  {"mark-as-read-on-hover",
 			  ConfigData("false", ConfigDataType::BOOL)},
@@ -109,8 +114,10 @@ ConfigContainer::ConfigContainer()
 		  {"newsblur-login", ConfigData("", ConfigDataType::STR)},
 		  {"newsblur-min-items", ConfigData("20", ConfigDataType::INT)},
 		  {"newsblur-password", ConfigData("", ConfigDataType::STR)},
-		  {"newsblur-passwordfile", ConfigData("", ConfigDataType::PATH)},
-		  {"newsblur-passwordeval", ConfigData("", ConfigDataType::STR)},
+		  {"newsblur-passwordfile",
+			  ConfigData("", ConfigDataType::PATH)},
+		  {"newsblur-passwordeval",
+			  ConfigData("", ConfigDataType::STR)},
 		  {"newsblur-url",
 			  ConfigData("https://newsblur.com",
 				  ConfigDataType::STR)},
@@ -126,11 +133,13 @@ ConfigContainer::ConfigContainer()
 		  {"oldreader-flag-share", ConfigData("", ConfigDataType::STR)},
 		  {"oldreader-flag-star", ConfigData("", ConfigDataType::STR)},
 		  {"oldreader-login", ConfigData("", ConfigDataType::STR)},
-		  {"oldreader-min-items", ConfigData("20", ConfigDataType::INT)},
+		  {"oldreader-min-items",
+			  ConfigData("20", ConfigDataType::INT)},
 		  {"oldreader-password", ConfigData("", ConfigDataType::STR)},
 		  {"oldreader-passwordfile",
 			  ConfigData("", ConfigDataType::PATH)},
-		  {"oldreader-passwordeval", ConfigData("", ConfigDataType::STR)},
+		  {"oldreader-passwordeval",
+			  ConfigData("", ConfigDataType::STR)},
 		  {"oldreader-show-special-feeds",
 			  ConfigData("true", ConfigDataType::BOOL)},
 		  {"openbrowser-and-mark-jumps-to-next-unread",
@@ -141,7 +150,9 @@ ConfigContainer::ConfigContainer()
 		  {"podcast-auto-enqueue",
 			  ConfigData("no", ConfigDataType::BOOL)},
 		  {"podlist-format",
-			  ConfigData( "%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] %-20S %u -> %F", ConfigDataType::STR)},
+			  ConfigData("%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] "
+				     "%-20S %u -> %F",
+				  ConfigDataType::STR)},
 		  {"prepopulate-query-feeds",
 			  ConfigData("false", ConfigDataType::BOOL)},
 		  {"ssl-verifyhost", ConfigData("true", ConfigDataType::BOOL)},
@@ -164,7 +175,8 @@ ConfigContainer::ConfigContainer()
 					  "socks4a",
 					  "socks5",
 					  "socks5h"}))},
-		  {"refresh-on-startup", ConfigData("no", ConfigDataType::BOOL)},
+		  {"refresh-on-startup",
+			  ConfigData("no", ConfigDataType::BOOL)},
 		  {"reload-only-visible-feeds",
 			  ConfigData("false", ConfigDataType::BOOL)},
 		  {"reload-threads", ConfigData("1", ConfigDataType::INT)},
@@ -177,8 +189,9 @@ ConfigContainer::ConfigContainer()
 		  {"selecttag-format",
 			  ConfigData("%4i  %T (%u)", ConfigDataType::STR)},
 		  {"show-keymap-hint", ConfigData("yes", ConfigDataType::BOOL)},
-	          {"show-title-bar", ConfigData("yes", ConfigDataType::BOOL)},
-		  {"show-read-articles", ConfigData("yes", ConfigDataType::BOOL)},
+		  {"show-title-bar", ConfigData("yes", ConfigDataType::BOOL)},
+		  {"show-read-articles",
+			  ConfigData("yes", ConfigDataType::BOOL)},
 		  {"show-read-feeds", ConfigData("yes", ConfigDataType::BOOL)},
 		  {"suppress-first-reload",
 			  ConfigData("no", ConfigDataType::BOOL)},
@@ -224,7 +237,8 @@ ConfigContainer::ConfigContainer()
 				       "total) - %U"),
 				  ConfigDataType::STR)},
 		  {"dialogs-title-format",
-			  ConfigData(_("%N %V - Dialogs"), ConfigDataType::STR)},
+			  ConfigData(_("%N %V - Dialogs"),
+				  ConfigDataType::STR)},
 		  {"feedlist-title-format",
 			  ConfigData(_("%N %V - Your feeds (%u unread, %t "
 				       "total)%?T? - "
@@ -233,8 +247,9 @@ ConfigContainer::ConfigContainer()
 		  {"filebrowser-title-format",
 			  ConfigData(_("%N %V - %?O?Open File&Save File? - %f"),
 				  ConfigDataType::STR)},
-          {"dirbrowser-title-format",
-			  ConfigData(_("%N %V - %?O?Open Directory&Save File? - %f"),
+		  {"dirbrowser-title-format",
+			  ConfigData(_("%N %V - %?O?Open Directory&Save File? "
+				       "- %f"),
 				  ConfigDataType::STR)},
 		  {"help-title-format",
 			  ConfigData(_("%N %V - Help"), ConfigDataType::STR)},
@@ -254,8 +269,7 @@ ConfigContainer::ConfigContainer()
 				  ConfigDataType::STR)},
 		  {"urlview-title-format",
 			  ConfigData(_("%N %V - URLs"), ConfigDataType::STR)}}
-{
-}
+{}
 
 ConfigContainer::~ConfigContainer() {}
 
@@ -335,8 +349,8 @@ void ConfigContainer::handle_action(const std::string& action,
 
 bool ConfigContainer::is_bool(const std::string& s)
 {
-	const auto bool_values = std::vector<std::string>(
-			{"yes", "no", "true", "false"});
+	const auto bool_values =
+		std::vector<std::string>({"yes", "no", "true", "false"});
 	return (std::find(bool_values.begin(), bool_values.end(), s) !=
 		bool_values.end());
 }

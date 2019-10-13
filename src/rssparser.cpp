@@ -118,8 +118,7 @@ std::string RssParser::render_xhtml_title(const std::string& title,
 	return "";
 }
 
-void RssParser::set_rtl(std::shared_ptr<RssFeed> feed,
-	const std::string& lang)
+void RssParser::set_rtl(std::shared_ptr<RssFeed> feed, const std::string& lang)
 {
 	// we implement right-to-left support for the languages listed in
 	// http://blogs.msdn.com/rssteam/archive/2007/05/17/reading-feeds-in-right-to-left-order.aspx
@@ -219,11 +218,13 @@ void RssParser::download_http(const std::string& uri)
 				cfgcont->get_configvalue("cookie-cache"),
 				easyhandle ? easyhandle->ptr() : 0);
 			LOG(Level::DEBUG,
-				"RssParser::download_http: lm = %" PRId64 " etag = %s",
-				// On GCC, `time_t` is `long int`, which is at least 32 bits
-				// long according to the spec. On x86_64, it's actually 64
-				// bits. Thus, casting to int64_t is either a no-op, or an
-				// up-cast which are always safe.
+				"RssParser::download_http: lm = %" PRId64
+				" etag = %s",
+				// On GCC, `time_t` is `long int`, which is at
+				// least 32 bits long according to the spec. On
+				// x86_64, it's actually 64 bits. Thus, casting
+				// to int64_t is either a no-op, or an up-cast
+				// which are always safe.
 				static_cast<int64_t>(p.get_last_modified()),
 				p.get_etag());
 			if (p.get_last_modified() != 0 ||
@@ -232,12 +233,15 @@ void RssParser::download_http(const std::string& uri)
 					"RssParser::download_http: "
 					"lastmodified "
 					"old: %" PRId64 " new: %" PRId64,
-					// On GCC, `time_t` is `long int`, which is at least 32
-					// bits long according to the spec. On x86_64, it's
-					// actually 64 bits. Thus, casting to int64_t is either
-					// a no-op, or an up-cast which are always safe.
+					// On GCC, `time_t` is `long int`, which
+					// is at least 32 bits long according to
+					// the spec. On x86_64, it's actually 64
+					// bits. Thus, casting to int64_t is
+					// either a no-op, or an up-cast which
+					// are always safe.
 					static_cast<int64_t>(lm),
-					static_cast<int64_t>(p.get_last_modified()));
+					static_cast<int64_t>(
+						p.get_last_modified()));
 				LOG(Level::DEBUG,
 					"RssParser::download_http: etag old: "
 					"%s "
@@ -382,8 +386,8 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 		x->set_feedurl(feed->rssurl());
 		x->set_feedptr(feed);
 
-		// TODO: replace this with a switch to get compiler errors when new
-		// entry is added to the enum.
+		// TODO: replace this with a switch to get compiler errors when
+		// new entry is added to the enum.
 		if ((f.rss_version == rsspp::Feed::ATOM_1_0 ||
 			    f.rss_version == rsspp::Feed::TTRSS_JSON ||
 			    f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
@@ -454,10 +458,10 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 			x->title(),
 			x->link(),
 			x->pubDate(),
-			// On GCC, `time_t` is `long int`, which is at least 32 bits long
-			// according to the spec. On x86_64, it's actually 64 bits. Thus,
-			// casting to int64_t is either a no-op, or an up-cast which are
-			// always safe.
+			// On GCC, `time_t` is `long int`, which is at least 32
+			// bits long according to the spec. On x86_64, it's
+			// actually 64 bits. Thus, casting to int64_t is either
+			// a no-op, or an up-cast which are always safe.
 			static_cast<int64_t>(x->pubDate_timestamp()),
 			x->description());
 
@@ -600,8 +604,7 @@ void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 	if (item.content_encoded != "") {
 		x->set_description(item.content_encoded);
 	} else {
-		LOG(Level::DEBUG,
-			"RssParser::parse: found no content:encoded");
+		LOG(Level::DEBUG, "RssParser::parse: found no content:encoded");
 	}
 }
 

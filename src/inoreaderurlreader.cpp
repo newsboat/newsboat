@@ -14,8 +14,7 @@ InoreaderUrlReader::InoreaderUrlReader(ConfigContainer* c,
 	: cfg(c)
 	, file(url_file)
 	, api(a)
-{
-}
+{}
 
 InoreaderUrlReader::~InoreaderUrlReader() {}
 

@@ -25,8 +25,7 @@ UrlViewFormAction::UrlViewFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, feed(feed)
-{
-}
+{}
 
 UrlViewFormAction::~UrlViewFormAction() {}
 

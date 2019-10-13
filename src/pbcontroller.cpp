@@ -101,9 +101,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	// create data directory if it doesn't exist
 	int ret = utils::mkdir_parents(xdg_data_dir, 0700);
 	if (ret == -1) {
-		LOG(Level::CRITICAL,
-			"Couldn't create `%s'",
-			xdg_data_dir);
+		LOG(Level::CRITICAL, "Couldn't create `%s'", xdg_data_dir);
 		::exit(EXIT_FAILURE);
 	}
 
@@ -242,8 +240,9 @@ int PbController::run(int argc, char* argv[])
 		}
 	};
 
-	std::cout << strprintf::fmt(
-			     _("Starting %s %s..."), "podboat", utils::program_version())
+	std::cout << strprintf::fmt(_("Starting %s %s..."),
+			     "podboat",
+			     utils::program_version())
 		  << std::endl;
 
 	fslock = std::unique_ptr<FsLock>(new FsLock());

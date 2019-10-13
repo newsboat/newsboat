@@ -1,8 +1,8 @@
 #ifndef NEWSBOAT_FILEBROWSERFORMACTION_H_
 #define NEWSBOAT_FILEBROWSERFORMACTION_H_
 
-#include <sys/stat.h>
 #include <grp.h>
+#include <sys/stat.h>
 
 #include "configcontainer.h"
 #include "formaction.h"
@@ -51,7 +51,6 @@ private:
 	std::string cwd;
 	std::string dir;
 	std::string default_filename;
-
 };
 
 } // namespace newsboat

@@ -14,8 +14,7 @@ class test_api : public RemoteApi {
 public:
 	test_api(ConfigContainer* c)
 		: RemoteApi(c)
-	{
-	}
+	{}
 	std::string get_user(const std::string& scope, const std::string& name)
 	{
 		return get_credentials(scope, name).user;

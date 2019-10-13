@@ -9,7 +9,8 @@
 
 namespace newsboat {
 
-std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
+std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
+{
 	const std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
 
 	if (!feedptr) {
@@ -29,22 +30,18 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item) {
 	return feedtitle;
 }
 
-void prepare_header(
-	std::shared_ptr<RssItem> item,
+void prepare_header(std::shared_ptr<RssItem> item,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& /*links*/)
 {
-	const auto add_line =
-		[&lines]
-		(const std::string& value,
-		 const std::string& name,
-		 LineType lineType = LineType::wrappable)
-		{
-			if (!value.empty()) {
-				const auto line = strprintf::fmt("%s%s", name, value);
-				lines.push_back(std::make_pair(lineType, line));
-			}
-		};
+	const auto add_line = [&lines](const std::string& value,
+				      const std::string& name,
+				      LineType lineType = LineType::wrappable) {
+		if (!value.empty()) {
+			const auto line = strprintf::fmt("%s%s", name, value);
+			lines.push_back(std::make_pair(lineType, line));
+		}
+	};
 
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
 	add_line(feedtitle, _("Feed: "));
@@ -55,15 +52,13 @@ void prepare_header(
 	add_line(item->flags(), _("Flags: "));
 
 	if (!item->enclosure_url().empty()) {
-		auto dlurl = strprintf::fmt(
-			"%s%s",
+		auto dlurl = strprintf::fmt("%s%s",
 			_("Podcast Download URL: "),
 			utils::censor_url(item->enclosure_url()));
 		if (!item->enclosure_type().empty()) {
-			dlurl.append(
-					strprintf::fmt(" (%s%s)",
-						_("type: "),
-						item->enclosure_type()));
+			dlurl.append(strprintf::fmt(" (%s%s)",
+				_("type: "),
+				item->enclosure_type()));
 		}
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}
@@ -80,8 +75,7 @@ std::string get_item_base_link(const std::shared_ptr<RssItem>& item)
 	}
 }
 
-void render_html(
-	ConfigContainer& cfg,
+void render_html(ConfigContainer& cfg,
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& thelinks,
@@ -113,14 +107,14 @@ void render_html(
 			if (!raw) {
 				line = utils::quote_for_stfl(line);
 			}
-			lines.push_back(std::make_pair(LineType::softwrappable, line));
+			lines.push_back(
+				std::make_pair(LineType::softwrappable, line));
 		}
 	}
 }
 
-std::string item_renderer::to_plain_text(
-		ConfigContainer& cfg,
-		std::shared_ptr<RssItem> item)
+std::string item_renderer::to_plain_text(ConfigContainer& cfg,
+	std::shared_ptr<RssItem> item)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
@@ -140,14 +134,13 @@ std::string item_renderer::to_plain_text(
 	return txtfmt.format_text_plain(width);
 }
 
-std::pair<std::string, size_t> item_renderer::to_stfl_list(
-		ConfigContainer& cfg,
-		std::shared_ptr<RssItem> item,
-		unsigned int text_width,
-		unsigned int window_width,
-		RegexManager* rxman,
-		const std::string& location,
-		std::vector<LinkPair>& links)
+std::pair<std::string, size_t> item_renderer::to_stfl_list(ConfigContainer& cfg,
+	std::shared_ptr<RssItem> item,
+	unsigned int text_width,
+	unsigned int window_width,
+	RegexManager* rxman,
+	const std::string& location,
+	std::vector<LinkPair>& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 
@@ -159,11 +152,11 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
 
-	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
+	return txtfmt.format_text_to_list(
+		rxman, location, text_width, window_width);
 }
 
-void render_source(
-	std::vector<std::pair<LineType, std::string>>& lines,
+void render_source(std::vector<std::pair<LineType, std::string>>& lines,
 	std::string source)
 {
 	/*
@@ -185,11 +178,11 @@ void render_source(
 }
 
 std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
-		std::shared_ptr<RssItem> item,
-		unsigned int text_width,
-		unsigned int window_width,
-		RegexManager* rxman,
-		const std::string& location)
+	std::shared_ptr<RssItem> item,
+	unsigned int text_width,
+	unsigned int window_width,
+	RegexManager* rxman,
+	const std::string& location)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
@@ -200,7 +193,8 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
 
-	return txtfmt.format_text_to_list(rxman, location, text_width, window_width);
+	return txtfmt.format_text_to_list(
+		rxman, location, text_width, window_width);
 }
 
-}
+} // namespace newsboat

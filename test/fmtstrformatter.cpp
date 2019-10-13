@@ -91,7 +91,8 @@ TEST_CASE("do_format replaces variables with values", "[FmtStrFormatter]")
 	}
 }
 
-TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]") {
+TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]")
+{
 	FmtStrFormatter fmt;
 
 	SECTION("One format variable")
@@ -128,7 +129,8 @@ TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]") {
 						"АБВбукваещё одна переменная");
 					REQUIRE(fmt.do_format(
 							"%%%a%%%b%%%c%%") ==
-						"%АБВ%буква%ещё одна переменная%");
+						"%АБВ%буква%ещё одна "
+						"переменная%");
 				}
 
 				SECTION("Alignment")
@@ -154,7 +156,8 @@ TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]") {
 					REQUIRE(fmt.do_format("asdf | %a | "
 							      "%?c?%a%b&%b%a? "
 							      "| qwert") ==
-						"asdf | АБВ | АБВбуква | qwert");
+						"asdf | АБВ | АБВбуква | "
+						"qwert");
 				}
 
 				SECTION("Format string fillers")
@@ -177,26 +180,30 @@ TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]") {
 	}
 }
 
-TEST_CASE("do_format ignores \"%?\" at the end of the format string (which "
-		"looks like a conditional but really isn't",
-		"[FmtStrFormatter]")
+TEST_CASE(
+	"do_format ignores \"%?\" at the end of the format string (which "
+	"looks like a conditional but really isn't",
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 	REQUIRE(fmt.do_format("%?") == "");
 }
 
-TEST_CASE("do_format replaces %Nx with the value of \"x\", padded "
-		"with spaces on the left to fit N columns",
-		"[FmtStrFormatter]")
+TEST_CASE(
+	"do_format replaces %Nx with the value of \"x\", padded "
+	"with spaces on the left to fit N columns",
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
-	SECTION("Undefined format char") {
+	SECTION("Undefined format char")
+	{
 		REQUIRE(fmt.do_format("%4a") == "    ");
 		REQUIRE(fmt.do_format("%8a") == "        ");
 	}
 
-	SECTION("Defined format char") {
+	SECTION("Defined format char")
+	{
 		fmt.register_fmt('a', "hello");
 		fmt.register_fmt('r', "привет");
 
@@ -206,8 +213,9 @@ TEST_CASE("do_format replaces %Nx with the value of \"x\", padded "
 		REQUIRE(fmt.do_format("%6r") == "привет");
 
 		{
-			INFO("If the value is bigger than the padding, only first N "
-					"characters are used");
+			INFO("If the value is bigger than the padding, only "
+			     "first N "
+			     "characters are used");
 			REQUIRE(fmt.do_format("%4a") == "hell");
 			REQUIRE(fmt.do_format("%2a") == "he");
 			REQUIRE(fmt.do_format("%4r") == "прив");
@@ -216,18 +224,21 @@ TEST_CASE("do_format replaces %Nx with the value of \"x\", padded "
 	}
 }
 
-TEST_CASE("do_format replaces %-Nx with the value of \"x\", padded "
-		"with spaces on the right to fit N columns",
-		"[FmtStrFormatter]")
+TEST_CASE(
+	"do_format replaces %-Nx with the value of \"x\", padded "
+	"with spaces on the right to fit N columns",
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
-	SECTION("Undefined format char") {
+	SECTION("Undefined format char")
+	{
 		REQUIRE(fmt.do_format("%-4a") == "    ");
 		REQUIRE(fmt.do_format("%-8a") == "        ");
 	}
 
-	SECTION("Defined format char") {
+	SECTION("Defined format char")
+	{
 		fmt.register_fmt('a', "hello");
 		fmt.register_fmt('r', "привет");
 
@@ -237,8 +248,9 @@ TEST_CASE("do_format replaces %-Nx with the value of \"x\", padded "
 		REQUIRE(fmt.do_format("%-6r") == "привет");
 
 		{
-			INFO("If the value is bigger than the padding, only first N "
-					"characters are used");
+			INFO("If the value is bigger than the padding, only "
+			     "first N "
+			     "characters are used");
 			REQUIRE(fmt.do_format("%-4a") == "hell");
 			REQUIRE(fmt.do_format("%-2a") == "he");
 			REQUIRE(fmt.do_format("%-4r") == "прив");
@@ -247,71 +259,85 @@ TEST_CASE("do_format replaces %-Nx with the value of \"x\", padded "
 	}
 }
 
-TEST_CASE("%>[char] pads consecutive text to the right, using [char] for "
-		"the padding",
-		"[FmtStrFormatter]")
+TEST_CASE(
+	"%>[char] pads consecutive text to the right, using [char] for "
+	"the padding",
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
 	fmt.register_fmt('x', "example string");
 	fmt.register_fmt('y', "пример строки");
 
-	SECTION("The total length of the string is specified in the argument to do_format") {
+	SECTION("The total length of the string is specified in the argument "
+		"to do_format")
+	{
 		{
-			INFO("Default (zero) is \"as long as needed to fit all the values\"");
-			REQUIRE(fmt.do_format("%x%> %y") == "example string пример строки");
-			REQUIRE(fmt.do_format("%x%> %y", 0) == "example string пример строки");
+			INFO("Default (zero) is \"as long as needed to fit all "
+			     "the values\"");
+			REQUIRE(fmt.do_format("%x%> %y") ==
+				"example string пример строки");
+			REQUIRE(fmt.do_format("%x%> %y", 0) ==
+				"example string пример строки");
 		}
 
-		REQUIRE(fmt.do_format("%x%> %y", 30) == "example string   пример строки");
-		REQUIRE(fmt.do_format("%x%> %y", 45)
-				== "example string                  пример строки");
+		REQUIRE(fmt.do_format("%x%> %y", 30) ==
+			"example string   пример строки");
+		REQUIRE(fmt.do_format("%x%> %y", 45) ==
+			"example string                  пример строки");
 	}
 
-	SECTION("[char] is used for padding") {
-		REQUIRE(fmt.do_format("%x%>m%y") == "example stringmпример строки");
-		REQUIRE(fmt.do_format("%x%>f%y", 0) == "example stringfпример строки");
-		REQUIRE(fmt.do_format("%x%>k%y", 30) == "example stringkkkпример строки");
-		REQUIRE(fmt.do_format("%x%>i%y", 45)
-				== "example stringiiiiiiiiiiiiiiiiiiпример строки");
+	SECTION("[char] is used for padding")
+	{
+		REQUIRE(fmt.do_format("%x%>m%y") ==
+			"example stringmпример строки");
+		REQUIRE(fmt.do_format("%x%>f%y", 0) ==
+			"example stringfпример строки");
+		REQUIRE(fmt.do_format("%x%>k%y", 30) ==
+			"example stringkkkпример строки");
+		REQUIRE(fmt.do_format("%x%>i%y", 45) ==
+			"example stringiiiiiiiiiiiiiiiiiiпример строки");
 	}
 
 	SECTION("If multiple %>[char] specifiers are used, the first one has a "
-			"maximal width and the others have the width of one column")
+		"maximal width and the others have the width of one column")
 	{
 		fmt.register_fmt('s', "_short_");
 
 		const auto format = std::string("%s%>a%s%>b%s");
 		REQUIRE(fmt.do_format(format) == "_short_a_short_b_short_");
-		REQUIRE(fmt.do_format(format, 30) == "_short_aaaaaaaa_short_b_short_");
+		REQUIRE(fmt.do_format(format, 30) ==
+			"_short_aaaaaaaa_short_b_short_");
 	}
 }
 
-TEST_CASE("%?[char]?[then-format]&[else-format]? is replaced by "
-		"\"then-format\" if \"[char]\" has non-empty value, otherwise it's "
-		"replaced by \"else-format\"",
-		"[FmtStrFormatter]")
+TEST_CASE(
+	"%?[char]?[then-format]&[else-format]? is replaced by "
+	"\"then-format\" if \"[char]\" has non-empty value, otherwise it's "
+	"replaced by \"else-format\"",
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
 	fmt.register_fmt('t', "this is a non-empty string");
 	fmt.register_fmt('m', "");
 
-	SECTION("Standard case") {
+	SECTION("Standard case")
+	{
 		REQUIRE(fmt.do_format("%?t?non-empty&empty?") == "non-empty");
 		REQUIRE(fmt.do_format("%?m?non-empty&empty?") == "empty");
 		REQUIRE(fmt.do_format("%?t?непустое&пустое?") == "непустое");
 		REQUIRE(fmt.do_format("%?m?непустое&пустое?") == "пустое");
 	}
 
-	SECTION("Else-format is optional") {
+	SECTION("Else-format is optional")
+	{
 		REQUIRE(fmt.do_format("%?t?непустое?") == "непустое");
 		REQUIRE(fmt.do_format("%?m?непустое?") == "");
 	}
 }
 
-TEST_CASE("do_format replaces \"%%\" with a percent sign",
-		"[FmtStrFormatter]")
+TEST_CASE("do_format replaces \"%%\" with a percent sign", "[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
@@ -319,19 +345,19 @@ TEST_CASE("do_format replaces \"%%\" with a percent sign",
 }
 
 TEST_CASE("Ampersand is treated literally outside of conditionals",
-		"[FmtStrFormatter]")
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
 	fmt.register_fmt('a', "A");
 	fmt.register_fmt('b', "B");
 
-	REQUIRE(fmt.do_format("%a & %b were sitting on a pipe")
-			== "A & B were sitting on a pipe");
+	REQUIRE(fmt.do_format("%a & %b were sitting on a pipe") ==
+		"A & B were sitting on a pipe");
 }
 
 TEST_CASE("Question mark is treated literally outside of conditionals",
-		"[FmtStrFormatter]")
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 

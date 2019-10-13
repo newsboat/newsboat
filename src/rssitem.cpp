@@ -21,8 +21,7 @@ RssItem::RssItem(Cache* c)
 	, enqueued_(false)
 	, deleted_(0)
 	, override_unread_(false)
-{
-}
+{}
 
 RssItem::~RssItem() {}
 

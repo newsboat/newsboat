@@ -285,12 +285,11 @@ std::string DirBrowserFormAction::add_directory(std::string dirname)
 		std::string formatteddirname =
 			get_formatted_dirname(dirname, ftype, sb.st_mode);
 
-		std::string sizestr = strprintf::fmt(
-				"%12" PRIi64,
-				// `st_size` is `off_t`, which is a signed integer type of
-				// unspecified size. We'll have to bet it's no larger than 64
-				// bits.
-				static_cast<int64_t>(sb.st_size));
+		std::string sizestr = strprintf::fmt("%12" PRIi64,
+			// `st_size` is `off_t`, which is a signed integer type
+			// of unspecified size. We'll have to bet it's no larger
+			// than 64 bits.
+			static_cast<int64_t>(sb.st_size));
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
 			ftype,
 			rwxbits,

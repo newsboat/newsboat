@@ -386,8 +386,8 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	}
 
 	LOG(Level::DEBUG,
-			"TtRssApi::fetch_feed: %" PRIu64 " items",
-			static_cast<uint64_t>(content.size()));
+		"TtRssApi::fetch_feed: %" PRIu64 " items",
+		static_cast<uint64_t>(content.size()));
 
 	try {
 		for (const auto& item_obj : content) {

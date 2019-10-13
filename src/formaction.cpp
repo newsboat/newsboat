@@ -30,7 +30,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 		}
 		if (cfg->get_configvalue_as_bool("show-title-bar") == false) {
 			f->set("showtitle", "0");
- 		}
+		}
 		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
 			true) {
 			std::string hints = f->dump("hints", "", 0);

@@ -17,54 +17,54 @@
 #include "rs_utils.h"
 
 extern "C" {
-	void* create_rs_configpaths();
+void* create_rs_configpaths();
 
-	void destroy_rs_configpaths(void* rs_configpaths);
+void destroy_rs_configpaths(void* rs_configpaths);
 
-	bool rs_configpaths_initialized(void* rs_configpaths);
+bool rs_configpaths_initialized(void* rs_configpaths);
 
-	char* rs_configpaths_error_message(void* rs_configpaths);
+char* rs_configpaths_error_message(void* rs_configpaths);
 
-	void rs_configpaths_process_args(void* rs_configpaths, void* rs_cliargsparser);
+void rs_configpaths_process_args(void* rs_configpaths, void* rs_cliargsparser);
 
-	bool rs_configpaths_try_migrate_from_newsbeuter(void* rs_configpaths);
+bool rs_configpaths_try_migrate_from_newsbeuter(void* rs_configpaths);
 
-	bool rs_configpaths_create_dirs(void* rs_configpaths);
+bool rs_configpaths_create_dirs(void* rs_configpaths);
 
-	char* rs_configpaths_url_file(void* rs_configpaths);
+char* rs_configpaths_url_file(void* rs_configpaths);
 
-	char* rs_configpaths_cache_file(void* rs_configpaths);
+char* rs_configpaths_cache_file(void* rs_configpaths);
 
-	void rs_configpaths_set_cache_file(void* rs_configpaths, const char*);
+void rs_configpaths_set_cache_file(void* rs_configpaths, const char*);
 
-	char* rs_configpaths_config_file(void* rs_configpaths);
+char* rs_configpaths_config_file(void* rs_configpaths);
 
-	char* rs_configpaths_lock_file(void* rs_configpaths);
+char* rs_configpaths_lock_file(void* rs_configpaths);
 
-	char* rs_configpaths_queue_file(void* rs_configpaths);
+char* rs_configpaths_queue_file(void* rs_configpaths);
 
-	char* rs_configpaths_search_file(void* rs_configpaths);
+char* rs_configpaths_search_file(void* rs_configpaths);
 
-	char* rs_configpaths_cmdline_file(void* rs_configpaths);
+char* rs_configpaths_cmdline_file(void* rs_configpaths);
 }
 
-#define SIMPLY_RUN(NAME) \
-	if (rs_configpaths) { \
-		rs_configpaths_ ## NAME (rs_configpaths); \
+#define SIMPLY_RUN(NAME)                               \
+	if (rs_configpaths) {                          \
+		rs_configpaths_##NAME(rs_configpaths); \
 	}
 
-#define GET_VALUE(NAME, DEFAULT) \
-	if (rs_configpaths) { \
-		return rs_configpaths_ ## NAME (rs_configpaths); \
-	} else { \
-		return DEFAULT; \
+#define GET_VALUE(NAME, DEFAULT)                              \
+	if (rs_configpaths) {                                 \
+		return rs_configpaths_##NAME(rs_configpaths); \
+	} else {                                              \
+		return DEFAULT;                               \
 	}
 
-#define GET_STRING(NAME) \
-	if (rs_configpaths) { \
-		return RustString(rs_configpaths_ ## NAME (rs_configpaths)); \
-	} else { \
-		return {}; \
+#define GET_STRING(NAME)                                                  \
+	if (rs_configpaths) {                                             \
+		return RustString(rs_configpaths_##NAME(rs_configpaths)); \
+	} else {                                                          \
+		return {};                                                \
 	}
 
 namespace newsboat {
@@ -94,7 +94,8 @@ std::string ConfigPaths::error_message() const
 void ConfigPaths::process_args(const CliArgsParser& args)
 {
 	if (rs_configpaths) {
-		rs_configpaths_process_args(rs_configpaths, args.get_rust_pointer());
+		rs_configpaths_process_args(
+			rs_configpaths, args.get_rust_pointer());
 	}
 }
 
@@ -111,7 +112,8 @@ bool ConfigPaths::create_dirs() const
 void ConfigPaths::set_cache_file(const std::string& new_cachefile)
 {
 	if (rs_configpaths) {
-		rs_configpaths_set_cache_file(rs_configpaths, new_cachefile.c_str());
+		rs_configpaths_set_cache_file(
+			rs_configpaths, new_cachefile.c_str());
 	}
 }
 

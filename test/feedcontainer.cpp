@@ -462,7 +462,7 @@ TEST_CASE("Sorting by firsttag-asc puts empty tags on top", "[FeedContainer]")
 }
 
 TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
-		"[FeedContainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -584,7 +584,7 @@ TEST_CASE(
 }
 
 TEST_CASE("clear_feeds_items() removes all items from all feeds",
-		"[FeedContainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -648,19 +648,25 @@ TEST_CASE("unread_item_count() returns number of unread items in all feeds",
 	REQUIRE(feedcontainer.unread_item_count() == 4);
 }
 
-TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
-		"with given tag",
-		"[FeedContainer]")
+TEST_CASE(
+	"get_unread_feed_count_per_tag returns 0 if there are no feeds "
+	"with given tag",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
-	SECTION("Empty FeedContainer") {
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("unknown") == 0);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") == 0);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("with space") == 0);
+	SECTION("Empty FeedContainer")
+	{
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				"unknown") == 0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") ==
+			0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				"with space") == 0);
 	}
 
-	SECTION("Non-empty FeedContainer, but no feeds are tagged") {
+	SECTION("Non-empty FeedContainer, but no feeds are tagged")
+	{
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
@@ -668,12 +674,17 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
 
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("unknown") == 0);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") == 0);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("with space") == 0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				"unknown") == 0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") ==
+			0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				"with space") == 0);
 	}
 
-	SECTION("Non-empty FeedContainer, no feeds are tagged with our desired tag") {
+	SECTION("Non-empty FeedContainer, no feeds are tagged with our desired "
+		"tag")
+	{
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
@@ -689,15 +700,19 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 		feed->set_tags({"here's one with spaces"});
 		feedcontainer.add_feed(feed);
 
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("unknown") == 0);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") == 0);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("with space") == 0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				"unknown") == 0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") ==
+			0);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				"with space") == 0);
 	}
 }
 
-TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
-		"contain no unread items",
-		"[FeedContainer]")
+TEST_CASE(
+	"get_unread_feed_count_per_tag returns 0 if feeds with given tag "
+	"contain no unread items",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -733,9 +748,10 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
 	REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag) == 0);
 }
 
-TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
-		"a given tag and also have unread items",
-		"[FeedContainer]")
+TEST_CASE(
+	"get_unread_feed_count_per_tag returns the number of feeds that have "
+	"a given tag and also have unread items",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -746,68 +762,79 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 	const auto different_tag = std::string("something else entirely");
 
 	const auto add_feed_with_tag_and_unreads =
-		[&feedcontainer, &rsscache]
-		(std::string tag, unsigned int unreads) {
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		[&feedcontainer, &rsscache](
+			std::string tag, unsigned int unreads) {
+			auto feed = std::make_shared<RssFeed>(&rsscache);
 
-		feed->set_tags({tag});
+			feed->set_tags({tag});
 
-		for (unsigned int i = 0; i < unreads; ++i) {
-			auto item = std::make_shared<RssItem>(&rsscache);
-			item->set_unread(true);
-			feed->add_item(item);
-		}
-		for (int i = 0; i < 10; ++i) {
-			auto item = std::make_shared<RssItem>(&rsscache);
-			item->set_unread(false);
-			feed->add_item(item);
-		}
+			for (unsigned int i = 0; i < unreads; ++i) {
+				auto item =
+					std::make_shared<RssItem>(&rsscache);
+				item->set_unread(true);
+				feed->add_item(item);
+			}
+			for (int i = 0; i < 10; ++i) {
+				auto item =
+					std::make_shared<RssItem>(&rsscache);
+				item->set_unread(false);
+				feed->add_item(item);
+			}
 
-		feedcontainer.add_feed(std::move(feed));
-	};
+			feedcontainer.add_feed(std::move(feed));
+		};
 
-	SECTION("One feed") {
+	SECTION("One feed")
+	{
 		add_feed_with_tag_and_unreads(different_tag, 1);
 		add_feed_with_tag_and_unreads(desired_tag, 1);
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag)
-				== 1);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				desired_tag) == 1);
 	}
 
-	SECTION("Two feeds") {
+	SECTION("Two feeds")
+	{
 		add_feed_with_tag_and_unreads(different_tag, 4);
 
 		add_feed_with_tag_and_unreads(desired_tag, 5);
 		add_feed_with_tag_and_unreads(desired_tag, 8);
 
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag)
-				== 2);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				desired_tag) == 2);
 	}
 
-	SECTION("Three feeds") {
+	SECTION("Three feeds")
+	{
 		add_feed_with_tag_and_unreads(different_tag, 4);
 
 		add_feed_with_tag_and_unreads(desired_tag, 5);
 		add_feed_with_tag_and_unreads(desired_tag, 8);
 		add_feed_with_tag_and_unreads(desired_tag, 11);
 
-		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag)
-				== 3);
+		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(
+				desired_tag) == 3);
 	}
 }
 
-TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
-		"with given tag",
-		"[FeedContainer]")
+TEST_CASE(
+	"get_unread_item_count_per_tag returns 0 if there are no feeds "
+	"with given tag",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
-	SECTION("Empty FeedContainer") {
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("unknown") == 0);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") == 0);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("with space") == 0);
+	SECTION("Empty FeedContainer")
+	{
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				"unknown") == 0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") ==
+			0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				"with space") == 0);
 	}
 
-	SECTION("Non-empty FeedContainer, but no feeds are tagged") {
+	SECTION("Non-empty FeedContainer, but no feeds are tagged")
+	{
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
@@ -815,12 +842,17 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
 
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("unknown") == 0);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") == 0);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("with space") == 0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				"unknown") == 0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") ==
+			0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				"with space") == 0);
 	}
 
-	SECTION("Non-empty FeedContainer, no feeds are tagged with our desired tag") {
+	SECTION("Non-empty FeedContainer, no feeds are tagged with our desired "
+		"tag")
+	{
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
@@ -836,15 +868,19 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 		feed->set_tags({"here's one with spaces"});
 		feedcontainer.add_feed(feed);
 
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("unknown") == 0);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") == 0);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag("with space") == 0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				"unknown") == 0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") ==
+			0);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				"with space") == 0);
 	}
 }
 
-TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
-		"contain no unread items",
-		"[FeedContainer]")
+TEST_CASE(
+	"get_unread_item_count_per_tag returns 0 if feeds with given tag "
+	"contain no unread items",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -880,9 +916,10 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
 	REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag) == 0);
 }
 
-TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
-		"in feeds that have a given tag",
-		"[FeedContainer]")
+TEST_CASE(
+	"get_unread_item_count_per_tag returns the number of unread items "
+	"in feeds that have a given tag",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -893,51 +930,56 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 	const auto different_tag = std::string("something else entirely");
 
 	const auto add_feed_with_tag_and_unreads =
-		[&feedcontainer, &rsscache]
-		(std::string tag, unsigned int unreads) {
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		[&feedcontainer, &rsscache](
+			std::string tag, unsigned int unreads) {
+			auto feed = std::make_shared<RssFeed>(&rsscache);
 
-		feed->set_tags({tag});
+			feed->set_tags({tag});
 
-		for (unsigned int i = 0; i < unreads; ++i) {
-			auto item = std::make_shared<RssItem>(&rsscache);
-			item->set_unread(true);
-			feed->add_item(item);
-		}
-		for (int i = 0; i < 10; ++i) {
-			auto item = std::make_shared<RssItem>(&rsscache);
-			item->set_unread(false);
-			feed->add_item(item);
-		}
+			for (unsigned int i = 0; i < unreads; ++i) {
+				auto item =
+					std::make_shared<RssItem>(&rsscache);
+				item->set_unread(true);
+				feed->add_item(item);
+			}
+			for (int i = 0; i < 10; ++i) {
+				auto item =
+					std::make_shared<RssItem>(&rsscache);
+				item->set_unread(false);
+				feed->add_item(item);
+			}
 
-		feedcontainer.add_feed(std::move(feed));
-	};
+			feedcontainer.add_feed(std::move(feed));
+		};
 
-	SECTION("One feed, one unread") {
+	SECTION("One feed, one unread")
+	{
 		add_feed_with_tag_and_unreads(different_tag, 1);
 		add_feed_with_tag_and_unreads(desired_tag, 1);
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
-				== 1);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				desired_tag) == 1);
 	}
 
-	SECTION("Two feeds, 13 unreads") {
+	SECTION("Two feeds, 13 unreads")
+	{
 		add_feed_with_tag_and_unreads(different_tag, 4);
 
 		add_feed_with_tag_and_unreads(desired_tag, 5);
 		add_feed_with_tag_and_unreads(desired_tag, 8);
 
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
-				== 13);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				desired_tag) == 13);
 	}
 
-	SECTION("Three feeds, 24 unreads") {
+	SECTION("Three feeds, 24 unreads")
+	{
 		add_feed_with_tag_and_unreads(different_tag, 4);
 
 		add_feed_with_tag_and_unreads(desired_tag, 5);
 		add_feed_with_tag_and_unreads(desired_tag, 8);
 		add_feed_with_tag_and_unreads(desired_tag, 11);
 
-		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
-				== 24);
+		REQUIRE(feedcontainer.get_unread_item_count_per_tag(
+				desired_tag) == 24);
 	}
 }

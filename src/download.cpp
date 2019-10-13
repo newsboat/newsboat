@@ -19,8 +19,7 @@ Download::Download(PbController* c)
 	, curkbps(0.0)
 	, offs(0)
 	, ctrl(c)
-{
-}
+{}
 
 Download::~Download() {}
 
@@ -34,7 +33,7 @@ const std::string Download::basename() const
 	std::string::size_type start = fn.rfind('/');
 
 	if (start != std::string::npos) {
-		return fn.substr(start+1);
+		return fn.substr(start + 1);
 	}
 	return fn;
 }

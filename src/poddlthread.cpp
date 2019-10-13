@@ -94,10 +94,11 @@ void PodDlThread::run()
 		resumed_download = false;
 	} else {
 		LOG(Level::INFO,
-			"PodDlThread::run: stat ok: starting download from %" PRIi64,
-			// That field is `long int`, which is at least 32 bits. On x86_64,
-			// it's 64 bits. Thus, this cast is either a no-op, or an up-cast
-			// which are always safe.
+			"PodDlThread::run: stat ok: starting download from "
+			"%" PRIi64,
+			// That field is `long int`, which is at least 32 bits.
+			// On x86_64, it's 64 bits. Thus, this cast is either a
+			// no-op, or an up-cast which are always safe.
 			static_cast<int64_t>(sb.st_size));
 		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);

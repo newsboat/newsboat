@@ -10,8 +10,7 @@ class XmlException : public std::exception {
 public:
 	explicit XmlException(const std::string& errmsg)
 		: msg(errmsg)
-	{
-	}
+	{}
 	~XmlException() throw() override {}
 	const char* what() const throw() override
 	{
@@ -25,4 +24,3 @@ private:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_XMLEXCEPTION_H_ */
-

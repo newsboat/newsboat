@@ -22,13 +22,13 @@ public:
 
 	std::string importfile() const;
 
-	/// If `do_read_import()` is `true`, Newsboat should import read articles
-	/// info from  `readinfo_import_file()`.
+	/// If `do_read_import()` is `true`, Newsboat should import read
+	/// articles info from  `readinfo_import_file()`.
 	bool do_read_import() const;
 	std::string readinfo_import_file() const;
 
-	/// If `do_read_export()` is `true`, Newsboat should export read articles
-	/// info to `readinfo_export_file()`.
+	/// If `do_read_export()` is `true`, Newsboat should export read
+	/// articles info to `readinfo_export_file()`.
 	bool do_read_export() const;
 	std::string readinfo_export_file() const;
 
@@ -40,16 +40,16 @@ public:
 
 	bool using_nonstandard_configs() const;
 
-	/// If `should_return()` is `true`, the creator of `CliArgsParser` object
-	/// should call `exit(return_code())`.
+	/// If `should_return()` is `true`, the creator of `CliArgsParser`
+	/// object should call `exit(return_code())`.
 	bool should_return() const;
 	int return_code() const;
 
-	/// If `display_msg()` is not empty, the creator of `CliArgsParser` should
-	/// print its contents to stderr.
+	/// If `display_msg()` is not empty, the creator of `CliArgsParser`
+	/// should print its contents to stderr.
 	///
-	/// \note The contents of this string should be checked before processing
-	/// `should_return`.
+	/// \note The contents of this string should be checked before
+	/// processing `should_return`.
 	std::string display_msg() const;
 
 	/// If `should_print_usage()` is `true`, the creator of `CliArgsParser`
@@ -61,7 +61,8 @@ public:
 
 	bool refresh_on_start() const;
 
-	/// `url_file()` should only be called if `set_url_file()` returned `true`.
+	/// `url_file()` should only be called if `set_url_file()` returned
+	/// `true`.
 	bool set_url_file() const;
 	std::string url_file() const;
 
@@ -87,11 +88,13 @@ public:
 	bool execute_cmds() const;
 	std::vector<std::string> cmds_to_execute() const;
 
-	/// `log_file()` should only be called if `set_log_file()` returned `true`.
+	/// `log_file()` should only be called if `set_log_file()` returned
+	/// `true`.
 	bool set_log_file() const;
 	std::string log_file() const;
 
-	/// `log_level()` should only be called if `set_log_level` returned `true`.
+	/// `log_level()` should only be called if `set_log_level` returned
+	/// `true`.
 	bool set_log_level() const;
 	Level log_level() const;
 

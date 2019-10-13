@@ -31,12 +31,16 @@ const std::string RemoteApi::eval_password(const std::string& cmd)
 {
 	LOG(Level::DEBUG, "RemoteApi::eval_password: running `%s`", cmd);
 	std::string pass = utils::get_command_output(cmd);
-	LOG(Level::DEBUG, "RemoteApi::eval_password: command printed out `%s'", pass);
+	LOG(Level::DEBUG,
+		"RemoteApi::eval_password: command printed out `%s'",
+		pass);
 	const auto pos = pass.find_first_of("\n\r");
 
 	if (pos != std::string::npos) {
 		pass.resize(pos);
-		LOG(Level::DEBUG, "RemoteApi::eval_password: ...clipping that to `%s'", pass);
+		LOG(Level::DEBUG,
+			"RemoteApi::eval_password: ...clipping that to `%s'",
+			pass);
 	}
 
 	return pass;

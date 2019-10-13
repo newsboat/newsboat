@@ -50,7 +50,8 @@ bool Matcher::parse(const std::string& expr)
 		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
 		tv1.tv_usec;
 	LOG(Level::DEBUG,
-		"Matcher::parse: parsing `%s' took %" PRIu64 " µs (success = %d)",
+		"Matcher::parse: parsing `%s' took %" PRIu64
+		" µs (success = %d)",
 		expr,
 		diff,
 		b ? 1 : 0);

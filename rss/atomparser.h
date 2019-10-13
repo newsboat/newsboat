@@ -15,8 +15,7 @@ struct AtomParser : public RssParser {
 	explicit AtomParser(xmlDocPtr doc)
 		: RssParser(doc)
 		, ns(0)
-	{
-	}
+	{}
 	~AtomParser() override {}
 
 private:
@@ -27,4 +26,3 @@ private:
 } // namespace rsspp
 
 #endif /* NEWSBOAT_RSSPP_ATOMPARSER_H_ */
-

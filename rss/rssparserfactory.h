@@ -1,8 +1,8 @@
 #ifndef NEWSBOAT_RSSPP_RSSPARSERFACTORY_H_
 #define NEWSBOAT_RSSPP_RSSPARSERFACTORY_H_
 
-#include <memory>
 #include <libxml/tree.h>
+#include <memory>
 
 #include "rssparser.h"
 

@@ -7,12 +7,10 @@
 
 namespace newsboat {
 
-NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file,
-	RemoteApi* a)
+NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file, RemoteApi* a)
 	: file(url_file)
 	, api(a)
-{
-}
+{}
 
 NewsBlurUrlReader::~NewsBlurUrlReader() {}
 

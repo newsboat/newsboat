@@ -19,8 +19,7 @@ HelpFormAction::HelpFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
-{
-}
+{}
 
 HelpFormAction::~HelpFormAction() {}
 

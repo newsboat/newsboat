@@ -13,8 +13,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "utils.h"
 #include "3rd-party/catch.hpp"
+#include "utils.h"
 
 namespace TestHelpers {
 
@@ -80,8 +80,9 @@ public:
 
 	~MainTempDir()
 	{
-		// Try to remove the tempdir, but don't try *too* hard: there might be
-		// other objects still using it. The last one will hopefully delete it.
+		// Try to remove the tempdir, but don't try *too* hard: there
+		// might be other objects still using it. The last one will
+		// hopefully delete it.
 		::rmdir(tempdir.c_str());
 	}
 
@@ -103,29 +104,33 @@ class TempFile {
 public:
 	TempFile()
 	{
-		const auto filepath_template = tempdir.get_path() + "tmp.XXXXXX";
+		const auto filepath_template =
+			tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> filepath_template_c(
-				filepath_template.cbegin(), filepath_template.cend());
+			filepath_template.cbegin(), filepath_template.cend());
 		filepath_template_c.push_back('\0');
 
 		const auto fd = ::mkstemp(filepath_template_c.data());
 		if (fd == -1) {
 			const auto saved_errno = errno;
-			std::string msg("TempFile: failed to generate unique filename: (");
+			std::string msg(
+				"TempFile: failed to generate unique filename: "
+				"(");
 			msg += std::to_string(saved_errno);
 			msg += ") ";
 			msg += ::strerror(saved_errno);
 			throw MainTempDir::tempfileexception(msg);
 		}
 
-		// cend()-1 so we don't copy the terminating null byte - std::string
-		// doesn't need it
-		filepath = std::string(
-				filepath_template_c.cbegin(), filepath_template_c.cend() - 1);
+		// cend()-1 so we don't copy the terminating null byte -
+		// std::string doesn't need it
+		filepath = std::string(filepath_template_c.cbegin(),
+			filepath_template_c.cend() - 1);
 
 		::close(fd);
-		// `TempFile` is supposed to only *generate* the name, not create the
-		// file. Since mkstemp does create a file, we have to remove it.
+		// `TempFile` is supposed to only *generate* the name, not
+		// create the file. Since mkstemp does create a file, we have to
+		// remove it.
 		::unlink(filepath.c_str());
 	}
 
@@ -152,13 +157,15 @@ public:
 	{
 		const auto dirpath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> dirpath_template_c(
-				dirpath_template.cbegin(), dirpath_template.cend());
+			dirpath_template.cbegin(), dirpath_template.cend());
 		dirpath_template_c.push_back('\0');
 
 		const auto result = ::mkdtemp(dirpath_template_c.data());
 		if (result == nullptr) {
 			const auto saved_errno = errno;
-			std::string msg("TempDir: failed to generate unique directory: (");
+			std::string msg(
+				"TempDir: failed to generate unique directory: "
+				"(");
 			msg += std::to_string(saved_errno);
 			msg += ") ";
 			msg += ::strerror(saved_errno);
@@ -167,8 +174,8 @@ public:
 
 		// cned()-1 so we don't copy terminating null byte - std::string
 		// doesn't need it
-		dirpath = std::string(
-				dirpath_template_c.cbegin(), dirpath_template_c.cend() - 1);
+		dirpath = std::string(dirpath_template_c.cbegin(),
+			dirpath_template_c.cend() - 1);
 		dirpath.push_back('/');
 	}
 
@@ -176,18 +183,22 @@ public:
 	{
 		const pid_t pid = ::fork();
 		if (pid == -1) {
-			// Failed to fork. Oh well, we're in a destructor, so can't throw
-			// or do anything else of use. Just give up.
+			// Failed to fork. Oh well, we're in a destructor, so
+			// can't throw or do anything else of use. Just give up.
 		} else if (pid > 0) {
 			// In parent
-			// Wait for the child to finish. We don't care about child's exit
-			// status, thus nullptr.
+			// Wait for the child to finish. We don't care about
+			// child's exit status, thus nullptr.
 			::waitpid(pid, nullptr, 0);
 		} else {
 			// In child
-			// Ignore the return value, because even if the call failed, we
-			// can't do anything useful.
-			::execlp("rm", "rm", "-rf", dirpath.c_str(), (char*)nullptr);
+			// Ignore the return value, because even if the call
+			// failed, we can't do anything useful.
+			::execlp("rm",
+				"rm",
+				"-rf",
+				dirpath.c_str(),
+				(char*)nullptr);
 		}
 	}
 
@@ -260,13 +271,11 @@ class ExceptionWithMsg : public Catch::MatcherBase<Exception> {
 public:
 	explicit ExceptionWithMsg(std::string&& msg)
 		: expected_msg(std::move(msg))
-	{
-	}
+	{}
 
 	explicit ExceptionWithMsg(const std::string& msg)
 		: expected_msg(msg)
-	{
-	}
+	{}
 
 	bool match(const Exception& e) const override
 	{
@@ -307,9 +316,9 @@ public:
 	/// \brief Safekeeps the value of environment variable \a name.
 	///
 	/// \note Accepts a string by value since you'll probably pass it
-	/// a temporary or a string literal anyway. Just do it, and use set() and
-	/// unset() methods, instead of keeping a local variable with a name in it
-	/// and calling setenv(3) and unsetenv(3).
+	/// a temporary or a string literal anyway. Just do it, and use set()
+	/// and unset() methods, instead of keeping a local variable with a name
+	/// in it and calling setenv(3) and unsetenv(3).
 	EnvVar(std::string name_)
 		: name(std::move(name_))
 	{
@@ -359,11 +368,11 @@ public:
 		}
 	}
 
-	/// \brief Specifies a function that should be ran after each call to set()
-	/// or unset() methods, and also during object destruction.
+	/// \brief Specifies a function that should be ran after each call to
+	/// set() or unset() methods, and also during object destruction.
 	///
-	/// In other words, the function will be ran after each change done via or
-	/// by this class.
+	/// In other words, the function will be ran after each change done via
+	/// or by this class.
 	void on_change(std::function<void(void)> fn)
 	{
 		on_change_fn = std::move(fn);
@@ -382,7 +391,7 @@ class Opts {
 	/// Individual elements of argv.
 	std::vector<std::unique_ptr<char[]>> m_opts;
 	/// This is argv as main() knows it.
-	std::unique_ptr<char* []> m_data;
+	std::unique_ptr<char*[]> m_data;
 	/// This is argc as main() knows it.
 	std::size_t m_argc = 0;
 
@@ -409,7 +418,7 @@ public:
 		}
 
 		// Copy out intermediate argv vector into its final storage.
-		m_data = std::unique_ptr<char* []>(new char*[m_argc + 1]);
+		m_data = std::unique_ptr<char*[]>(new char*[m_argc + 1]);
 		int i = 0;
 		for (const auto& ptr : m_opts) {
 			m_data.get()[i++] = ptr.get();
@@ -440,14 +449,11 @@ public:
 	{
 		const auto throw_error = [this](std::string msg) {
 			const auto saved_errno = errno;
-			const auto message = std::string("TestHelpers::Chmod: ")
-				+ msg
-				+ " `"
-				+ this->m_path
-				+ "': ("
-				+ std::to_string(saved_errno)
-				+ ") "
-				+ strerror(saved_errno);
+			const auto message =
+				std::string("TestHelpers::Chmod: ") + msg +
+				" `" + this->m_path + "': (" +
+				std::to_string(saved_errno) + ") " +
+				strerror(saved_errno);
 			throw std::runtime_error(msg);
 		};
 
@@ -463,17 +469,15 @@ public:
 		}
 	}
 
-	~Chmod() {
+	~Chmod()
+	{
 		if (0 != ::chmod(m_path.c_str(), m_originalMode)) {
 			const auto saved_errno = errno;
-			std::cerr
-				<< "TestHelpers::Chmod: couldn't change back the mode for `"
-				<< m_path
-				<< "': ("
-				<< std::to_string(saved_errno)
-				<< ") "
-				<< strerror(saved_errno)
-				<< std::endl;
+			std::cerr << "TestHelpers::Chmod: couldn't change back "
+				     "the mode for `"
+				  << m_path << "': ("
+				  << std::to_string(saved_errno) << ") "
+				  << strerror(saved_errno) << std::endl;
 			::abort();
 		}
 	}
@@ -483,24 +487,24 @@ public:
 /// destroyed.
 class Chdir {
 	std::string m_old_path;
+
 public:
-	Chdir(const std::string& path) {
+	Chdir(const std::string& path)
+	{
 		m_old_path = newsboat::utils::getcwd();
 		const int result = ::chdir(path.c_str());
 		if (result != 0) {
 			const auto saved_errno = errno;
-			auto msg = std::string("TestHelpers::Chdir: ")
-				+ "couldn't change current directory to `"
-				+ path
-				+ "': ("
-				+ std::to_string(saved_errno)
-				+ ") "
-				+ strerror(saved_errno);
+			auto msg = std::string("TestHelpers::Chdir: ") +
+				"couldn't change current directory to `" +
+				path + "': (" + std::to_string(saved_errno) +
+				") " + strerror(saved_errno);
 			throw std::runtime_error(msg);
 		}
 	}
 
-	~Chdir() {
+	~Chdir()
+	{
 		// Ignore the return value, because even if the call failed, we
 		// can't do anything useful.
 		const int result = ::chdir(m_old_path.c_str());

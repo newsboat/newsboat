@@ -9,7 +9,7 @@
 #include "utils.h"
 
 extern "C" {
-	void rs_setup_human_panic(void);
+void rs_setup_human_panic(void);
 }
 
 using namespace podboat;

@@ -12,8 +12,7 @@ class ConfigHandlerException : public std::exception {
 public:
 	explicit ConfigHandlerException(const std::string& emsg)
 		: msg(emsg)
-	{
-	}
+	{}
 	explicit ConfigHandlerException(ActionHandlerStatus e);
 	~ConfigHandlerException() throw() override {}
 	const char* what() const throw() override
@@ -33,4 +32,3 @@ private:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_CONFIGHANDLEREXCEPTION_H_ */
-

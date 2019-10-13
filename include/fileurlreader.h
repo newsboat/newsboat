@@ -19,6 +19,6 @@ private:
 	std::string filename;
 };
 
-}
+} // namespace newsboat
 
 #endif /* NEWSBOAT_FILEURLREADER_H_ */

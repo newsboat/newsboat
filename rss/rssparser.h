@@ -12,8 +12,7 @@ struct RssParser {
 	virtual void parse_feed(Feed& f, xmlNode* rootNode) = 0;
 	explicit RssParser(xmlDocPtr d)
 		: doc(d)
-	{
-	}
+	{}
 	virtual ~RssParser() {}
 	static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
 

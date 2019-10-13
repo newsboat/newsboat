@@ -2,8 +2,8 @@
 #define NEWSBOAT_REGEXMANAGER_H_
 
 #include <memory>
-#include <regex>
 #include <regex.h>
+#include <regex>
 #include <sys/types.h>
 #include <utility>
 #include <vector>
@@ -34,7 +34,7 @@ private:
 
 	void handle_highlight_action(const std::vector<std::string>& params);
 	void handle_highlight_article_action(
-			const std::vector<std::string>& params);
+		const std::vector<std::string>& params);
 
 public:
 	std::vector<std::string>& get_attrs(const std::string& loc)

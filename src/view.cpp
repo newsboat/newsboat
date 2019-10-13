@@ -635,9 +635,10 @@ std::string View::run_filebrowser(const std::string& default_filename,
 	return run_modal(filebrowser, "filenametext");
 }
 
-std::string View::run_dirbrowser(const std::string &dir) {
+std::string View::run_dirbrowser(const std::string& dir)
+{
 	std::shared_ptr<DirBrowserFormAction> dirbrowser(
-			new DirBrowserFormAction(this, filebrowser_str, cfg));
+		new DirBrowserFormAction(this, filebrowser_str, cfg));
 	set_bindings(dirbrowser);
 	apply_colors(dirbrowser);
 	dirbrowser->set_dir(dir);

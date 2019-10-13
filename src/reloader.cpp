@@ -26,8 +26,7 @@ Reloader::Reloader(Controller* c, Cache* cc, ConfigContainer* cfg)
 	: ctrl(c)
 	, rsscache(cc)
 	, cfg(cfg)
-{
-}
+{}
 
 void Reloader::spawn_reloadthread()
 {
@@ -186,11 +185,11 @@ void Reloader::reload_all(bool unattended)
 	t2 = time(nullptr);
 	dt = t2 - t1;
 	// On GCC, `time_t` is `long int`, which is at least 32 bits. On x86_64,
-	// it's 64 bits. Thus, this cast is either a no-op, or an up-cast which are
-	// always safe.
+	// it's 64 bits. Thus, this cast is either a no-op, or an up-cast which
+	// are always safe.
 	LOG(Level::INFO,
-			"Reloader::reload_all: reload took %" PRId64 " seconds",
-			static_cast<int64_t>(dt));
+		"Reloader::reload_all: reload took %" PRId64 " seconds",
+		static_cast<int64_t>(dt));
 
 	const auto unread_feeds2 =
 		ctrl->get_feedcontainer()->unread_feed_count();

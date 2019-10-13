@@ -112,10 +112,12 @@ void ItemListFormAction::process_operation(Operation op,
 			}
 			if (feed->is_query_feed()) {
 				for (const auto& pair : visible_items) {
-					rsscache->mark_item_deleted(pair.first->guid(), true);
+					rsscache->mark_item_deleted(
+						pair.first->guid(), true);
 				}
 			} else {
-				rsscache->mark_feed_items_deleted(feed->rssurl());
+				rsscache->mark_feed_items_deleted(
+					feed->rssurl());
 			}
 			invalidate_everything();
 		}
@@ -498,15 +500,17 @@ void ItemListFormAction::process_operation(Operation op,
 				    "markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
 			} else { // reposition to first/last item
-				std::string sortorder =
-					cfg->get_configvalue("article-sort-order");
+				std::string sortorder = cfg->get_configvalue(
+					"article-sort-order");
 
 				if (sortorder == "date-desc") {
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to last");
 					f->set("itempos",
-						std::to_string(visible_items.size() - 1));
+						std::to_string(
+							visible_items.size() -
+							1));
 				}
 				if (sortorder == "date-asc") {
 					LOG(Level::DEBUG,
@@ -653,19 +657,20 @@ void ItemListFormAction::process_operation(Operation op,
 		/// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 		/// messages
 		std::string input_options = _("dtfalgr");
-		char c = v->confirm(
-			_("Sort by "
-			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
+		char c = v->confirm(_("Sort by "
+				      "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/"
+				      "(g)uid/(r)andom?"),
 			input_options);
 		if (!c) {
 			break;
 		}
 
-		// Check that the number of translated answers is the same as the
-		// number of answers we expect to handle. If it doesn't, just give up.
-		// That'll prevent this function from sorting anything, so users will
-		// complain, and we'll ask them to update the translation. A bit lame,
-		// but it's better than mishandling the answer.
+		// Check that the number of translated answers is the same as
+		// the number of answers we expect to handle. If it doesn't,
+		// just give up. That'll prevent this function from sorting
+		// anything, so users will complain, and we'll ask them to
+		// update the translation. A bit lame, but it's better than
+		// mishandling the answer.
 		const auto n_options = ((std::string) "dtfalgr").length();
 		if (input_options.length() < n_options) {
 			break;
@@ -690,19 +695,20 @@ void ItemListFormAction::process_operation(Operation op,
 	} break;
 	case OP_REVSORT: {
 		std::string input_options = _("dtfalgr");
-		char c = v->confirm(
-			_("Reverse Sort by "
-			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
+		char c = v->confirm(_("Reverse Sort by "
+				      "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/"
+				      "(g)uid/(r)andom?"),
 			input_options);
 		if (!c) {
 			break;
 		}
 
-		// Check that the number of translated answers is the same as the
-		// number of answers we expect to handle. If it doesn't, just give up.
-		// That'll prevent this function from sorting anything, so users will
-		// complain, and we'll ask them to update the translation. A bit lame,
-		// but it's better than mishandling the answer.
+		// Check that the number of translated answers is the same as
+		// the number of answers we expect to handle. If it doesn't,
+		// just give up. That'll prevent this function from sorting
+		// anything, so users will complain, and we'll ask them to
+		// update the translation. A bit lame, but it's better than
+		// mishandling the answer.
 		const auto n_options = ((std::string) "dtfalgr").length();
 		if (input_options.length() < n_options) {
 			break;
@@ -836,8 +842,7 @@ void ItemListFormAction::qna_start_search()
 			searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult)
 			feed->set_rssurl("search:");
-		items = v->get_ctrl()->search_for_items(
-				utf8searchphrase, feed);
+		items = v->get_ctrl()->search_for_items(utf8searchphrase, feed);
 	} catch (const DbException& e) {
 		v->show_error(
 			strprintf::fmt(_("Error while searching for `%s': %s"),
@@ -885,7 +890,7 @@ void ItemListFormAction::do_update_visible_items()
 	for (const auto& item : items) {
 		item->set_index(i + 1);
 		if ((show_read || item->unread()) &&
-		    (!apply_filter || matcher.matches(item.get()))) {
+			(!apply_filter || matcher.matches(item.get()))) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
@@ -943,18 +948,15 @@ void ItemListFormAction::prepare()
 	}
 
 	auto datetime_format = cfg->get_configvalue("datetime-format");
-	auto itemlist_format =
-		cfg->get_configvalue("articlelist-format");
+	auto itemlist_format = cfg->get_configvalue("articlelist-format");
 
 	switch (invalidation_mode) {
 	case InvalidationMode::COMPLETE:
 		listfmt.clear();
 
 		for (const auto& item : visible_items) {
-			auto line = item2formatted_line(item,
-				width,
-				itemlist_format,
-				datetime_format);
+			auto line = item2formatted_line(
+				item, width, itemlist_format, datetime_format);
 			listfmt.add_line(line, item.second);
 		}
 		break;
@@ -962,10 +964,8 @@ void ItemListFormAction::prepare()
 	case InvalidationMode::PARTIAL:
 		for (const auto& itempos : invalidated_itempos) {
 			auto item = visible_items[itempos];
-			auto line = item2formatted_line(item,
-				width,
-				itemlist_format,
-				datetime_format);
+			auto line = item2formatted_line(
+				item, width, itemlist_format, datetime_format);
 			listfmt.set_line(itempos, line, item.second);
 		}
 		break;
@@ -1409,9 +1409,9 @@ std::string ItemListFormAction::title()
 	}
 }
 
-void ItemListFormAction::handle_op_saveall() {
-	LOG(Level::INFO,
-		"ItemListFormAction: saving all items");
+void ItemListFormAction::handle_op_saveall()
+{
+	LOG(Level::INFO, "ItemListFormAction: saving all items");
 
 	if (visible_items.empty()) {
 		return;
@@ -1428,26 +1428,30 @@ void ItemListFormAction::handle_op_saveall() {
 	}
 
 	if (visible_items.size() == 1) {
-		const std::string filename = v->get_filename_suggestion(visible_items[0].first->title());
+		const std::string filename = v->get_filename_suggestion(
+			visible_items[0].first->title());
 		const std::string fpath = directory + filename;
 
 		struct stat sbuf;
 		if (::stat(fpath.c_str(), &sbuf) != -1) {
 			std::string input_options = _("yn");
-			char c = v->confirm(strprintf::fmt(
-					_("Overwrite `%s' in `%s?' "
-					  "(y:Yes n:No)"),
-					filename, directory),
-					input_options);
+			char c = v->confirm(
+				strprintf::fmt(_("Overwrite `%s' in `%s?' "
+						 "(y:Yes n:No)"),
+					filename,
+					directory),
+				input_options);
 			if (!c) {
 				return;
 			}
 
-			// Check that the number of translated answers is the same as the
-			// number of answers we expect to handle. If it doesn't, just give
-			// up. That'll prevent this function from saving anything, so users
-			// will complain, and we'll ask them to update the translation.
-			// A bit lame, but it's better than mishandling the answer.
+			// Check that the number of translated answers is the
+			// same as the number of answers we expect to handle. If
+			// it doesn't, just give up. That'll prevent this
+			// function from saving anything, so users will
+			// complain, and we'll ask them to update the
+			// translation. A bit lame, but it's better than
+			// mishandling the answer.
 			const auto n_options = ((std::string) "yn").length();
 			if (input_options.length() < n_options) {
 				return;
@@ -1464,14 +1468,13 @@ void ItemListFormAction::handle_op_saveall() {
 		}
 	} else {
 		std::vector<std::string> filenames;
-		for (const auto &item : visible_items) {
-			filenames.emplace_back(
-					v->get_filename_suggestion(item.first->title()));
+		for (const auto& item : visible_items) {
+			filenames.emplace_back(v->get_filename_suggestion(
+				item.first->title()));
 		}
 
 		const auto unique_filenames = std::set<std::string>(
-				std::begin(filenames),
-				std::end(filenames));
+			std::begin(filenames), std::end(filenames));
 
 		int nfiles_exist = filenames.size() - unique_filenames.size();
 		for (const auto& filename : unique_filenames) {
@@ -1482,11 +1485,12 @@ void ItemListFormAction::handle_op_saveall() {
 			}
 		}
 
-		// Check that the number of translated answers is the same as the
-		// number of answers we expect to handle. If it doesn't, just give up.
-		// That'll prevent this function from saving anything, so users will
-		// complain, and we'll ask them to update the translation. A bit lame,
-		// but it's better than mishandling the answer.
+		// Check that the number of translated answers is the same as
+		// the number of answers we expect to handle. If it doesn't,
+		// just give up. That'll prevent this function from saving
+		// anything, so users will complain, and we'll ask them to
+		// update the translation. A bit lame, but it's better than
+		// mishandling the answer.
 		const std::string input_options = _("yanq");
 		const auto n_options = ((std::string) "yanq").length();
 		if (input_options.length() < n_options) {
@@ -1494,7 +1498,8 @@ void ItemListFormAction::handle_op_saveall() {
 		}
 
 		bool overwrite_all = false;
-		for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
+		for (size_t item_idx = 0; item_idx < filenames.size();
+			++item_idx) {
 			const auto filename = filenames[item_idx];
 			const auto filepath = directory + filename;
 			auto item = visible_items[item_idx].first;
@@ -1508,19 +1513,30 @@ void ItemListFormAction::handle_op_saveall() {
 
 				char c;
 				if (nfiles_exist > 1) {
-					c = v->confirm(strprintf::fmt(
-							_("Overwrite `%s' in `%s'? "
-							  "There are %d more conflicts like this "
-							  "(y:Yes a:Yes to all n:No q:No to all)"),
-							  filename, directory, --nfiles_exist),
-							  input_options);
+					c = v->confirm(
+						strprintf::fmt(
+							_("Overwrite `%s' in "
+							  "`%s'? "
+							  "There are %d more "
+							  "conflicts like this "
+							  "(y:Yes a:Yes to all "
+							  "n:No q:No to all)"),
+							filename,
+							directory,
+							--nfiles_exist),
+						input_options);
 				} else {
-					c = v->confirm(strprintf::fmt(
-							_("Overwrite `%s' in `%s'? "
-							  "There are no more conflicts like this "
-							  "(y:Yes a:Yes to all n:No q:No to all)"),
-							  filename, directory),
-							  input_options);
+					c = v->confirm(
+						strprintf::fmt(
+							_("Overwrite `%s' in "
+							  "`%s'? "
+							  "There are no more "
+							  "conflicts like this "
+							  "(y:Yes a:Yes to all "
+							  "n:No q:No to all)"),
+							filename,
+							directory),
+						input_options);
 				}
 				if (!c) {
 					break;

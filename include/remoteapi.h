@@ -21,8 +21,7 @@ class RemoteApi {
 public:
 	explicit RemoteApi(ConfigContainer* c)
 		: cfg(c)
-	{
-	}
+	{}
 	virtual ~RemoteApi() {}
 	virtual bool authenticate() = 0;
 	virtual std::vector<TaggedFeedUrl> get_subscribed_urls() = 0;

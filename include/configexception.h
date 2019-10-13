@@ -10,8 +10,7 @@ class ConfigException : public std::exception {
 public:
 	explicit ConfigException(const std::string& errmsg)
 		: msg(errmsg)
-	{
-	}
+	{}
 	~ConfigException() throw() override {}
 	const char* what() const throw() override
 	{
@@ -25,4 +24,3 @@ private:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_CONFIGEXCEPTION_H_ */
-

@@ -154,11 +154,12 @@ REDO:
 			break;
 		}
 
-		// Check that the number of translated answers is the same as the
-		// number of answers we expect to handle. If it doesn't, just give up.
-		// That'll prevent this function from sorting anything, so users will
-		// complain, and we'll ask them to update the translation. A bit lame,
-		// but it's better than mishandling the answer.
+		// Check that the number of translated answers is the same as
+		// the number of answers we expect to handle. If it doesn't,
+		// just give up. That'll prevent this function from sorting
+		// anything, so users will complain, and we'll ask them to
+		// update the translation. A bit lame, but it's better than
+		// mishandling the answer.
 		const auto n_options = ((std::string) "ftaun").length();
 		if (input_options.length() < n_options) {
 			break;
@@ -193,11 +194,12 @@ REDO:
 			break;
 		}
 
-		// Check that the number of translated answers is the same as the
-		// number of answers we expect to handle. If it doesn't, just give up.
-		// That'll prevent this function from sorting anything, so users will
-		// complain, and we'll ask them to update the translation. A bit lame,
-		// but it's better than mishandling the answer.
+		// Check that the number of translated answers is the same as
+		// the number of answers we expect to handle. If it doesn't,
+		// just give up. That'll prevent this function from sorting
+		// anything, so users will complain, and we'll ask them to
+		// update the translation. A bit lame, but it's better than
+		// mishandling the answer.
 		const auto n_options = ((std::string) "ftaun").length();
 		if (input_options.length() < n_options) {
 			break;
@@ -234,17 +236,26 @@ REDO:
 						feedpos,
 						feed->link());
 					if (!feed->link().empty()) {
-						v->open_in_browser(feed->link());
+						v->open_in_browser(
+							feed->link());
 					} else if (!feed->rssurl().empty()) {
-						v->open_in_browser(feed->rssurl());
+						v->open_in_browser(
+							feed->rssurl());
 					} else {
-						// rssurl can't be empty, so if we got to this branch,
-						// something is clearly wrong with Newsboat internals.
-						// That's why we write a message to the log, and not
-						// just display it to the user.
+						// rssurl can't be empty, so if
+						// we got to this branch,
+						// something is clearly wrong
+						// with Newsboat internals.
+						// That's why we write a message
+						// to the log, and not just
+						// display it to the user.
 						LOG(Level::INFO,
-							"FeedListFormAction: cannot open feed in browser "
-							"because both `link' and `rssurl' fields are "
+							"FeedListFormAction: "
+							"cannot open feed in "
+							"browser "
+							"because both `link' "
+							"and `rssurl' fields "
+							"are "
 							"empty");
 					}
 				} else {
@@ -316,7 +327,8 @@ REDO:
 				v->get_ctrl()->mark_all_read(pos);
 				do_redraw = true;
 				v->set_status("");
-				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
+				bool show_read = cfg->get_configvalue_as_bool(
+					"show-read-feeds");
 				if (feeds_shown > (pos + 1) && show_read) {
 					f->set("feedpos",
 						std::to_string(pos + 1));

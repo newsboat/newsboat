@@ -8,8 +8,7 @@ namespace newsboat {
 
 FileUrlReader::FileUrlReader(const std::string& file)
 	: filename(file)
-{
-}
+{}
 
 std::string FileUrlReader::get_source()
 {
@@ -75,4 +74,4 @@ void FileUrlReader::write_config()
 	}
 }
 
-}
+} // namespace newsboat

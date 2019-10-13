@@ -12,8 +12,7 @@ ReloadRangeThread::ReloadRangeThread(Reloader& r,
 	, end(e)
 	, size(ss)
 	, unattended(u)
-{
-}
+{}
 
 void ReloadRangeThread::operator()()
 {

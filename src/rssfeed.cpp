@@ -9,8 +9,8 @@
 #include <iostream>
 #include <langinfo.h>
 #include <sstream>
-#include <sys/utsname.h>
 #include <string.h>
+#include <sys/utsname.h>
 #include <time.h>
 
 #include "cache.h"
@@ -36,8 +36,7 @@ RssFeed::RssFeed(Cache* c)
 	, idx(0)
 	, order(0)
 	, status_(DlStatus::SUCCESS)
-{
-}
+{}
 
 RssFeed::~RssFeed()
 {
@@ -128,7 +127,8 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	LOG(Level::DEBUG,
 		"RssFeed::get_item_by_guid_unlocked: hit dummy item!");
 	LOG(Level::DEBUG,
-		"RssFeed::get_item_by_guid_unlocked: items_guid_map.size = %" PRIu64,
+		"RssFeed::get_item_by_guid_unlocked: items_guid_map.size = "
+		"%" PRIu64,
 		static_cast<uint64_t>(items_guid_map.size()));
 
 	// should never happen!
@@ -193,7 +193,9 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 		}
 		for (const auto& item : feed->items()) {
 			if (!item->deleted() && m.matches(item.get())) {
-				LOG(Level::DEBUG, "RssFeed::update_items: Matcher matches!");
+				LOG(Level::DEBUG,
+					"RssFeed::update_items: Matcher "
+					"matches!");
 				item->set_feedptr(feed);
 				items_.push_back(item);
 				items_guid_map[item->guid()] = item;
@@ -264,11 +266,12 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 				const std::shared_ptr<RssItem>& b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
-					? (utils::strnaturalcmp(a->title().c_str(),
+				return sort_strategy.sd == SortDirection::DESC
+					? (utils::strnaturalcmp(
+						   a->title().c_str(),
 						   b->title().c_str()) > 0)
-					: (utils::strnaturalcmp(a->title().c_str(),
+					: (utils::strnaturalcmp(
+						   a->title().c_str(),
 						   b->title().c_str()) < 0);
 			});
 		break;
@@ -277,8 +280,7 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 				const std::shared_ptr<RssItem>& b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
+				return sort_strategy.sd == SortDirection::DESC
 					? (strcmp(a->flags().c_str(),
 						   b->flags().c_str()) > 0)
 					: (strcmp(a->flags().c_str(),
@@ -290,8 +292,7 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 				const std::shared_ptr<RssItem>& b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
+				return sort_strategy.sd == SortDirection::DESC
 					? (strcmp(a->author().c_str(),
 						   b->author().c_str()) > 0)
 					: (strcmp(a->author().c_str(),
@@ -303,8 +304,7 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 				const std::shared_ptr<RssItem>& b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
+				return sort_strategy.sd == SortDirection::DESC
 					? (strcmp(a->link().c_str(),
 						   b->link().c_str()) > 0)
 					: (strcmp(a->link().c_str(),
@@ -316,8 +316,7 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 				const std::shared_ptr<RssItem>& b) {
-				return sort_strategy.sd ==
-						SortDirection::DESC
+				return sort_strategy.sd == SortDirection::DESC
 					? (strcmp(a->guid().c_str(),
 						   b->guid().c_str()) > 0)
 					: (strcmp(a->guid().c_str(),

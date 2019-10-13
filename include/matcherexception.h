@@ -16,8 +16,7 @@ public:
 		: type_(et)
 		, addinfo(info)
 		, addinfo2(info2)
-	{
-	}
+	{}
 
 	~MatcherException() throw() override {}
 	const char* what() const throw() override;

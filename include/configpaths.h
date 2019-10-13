@@ -31,13 +31,13 @@ public:
 
 	/// If user didn't specify paths to configs on the command line, and the
 	/// config file wasn't found in the standard directories, looks for
-	/// Newsbeuter's directories, and copies their contents if found. Returns
-	/// true if copied something, false otherwise.
+	/// Newsbeuter's directories, and copies their contents if found.
+	/// Returns true if copied something, false otherwise.
 	bool try_migrate_from_newsbeuter();
 
-	/// Creates Newsboat's dotdir or XDG config & data dirs (depending on what
-	/// was configured during initialization, when processing CLI args, and if
-	/// migration found anything).
+	/// Creates Newsboat's dotdir or XDG config & data dirs (depending on
+	/// what was configured during initialization, when processing CLI args,
+	/// and if migration found anything).
 	bool create_dirs() const;
 
 	/// Path to the URLs file.

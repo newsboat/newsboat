@@ -8,8 +8,7 @@ namespace newsboat {
 
 OpmlUrlReader::OpmlUrlReader(ConfigContainer* c)
 	: cfg(c)
-{
-}
+{}
 
 void OpmlUrlReader::write_config()
 {
@@ -37,7 +36,8 @@ void OpmlUrlReader::reload()
 		if (doc == nullptr) {
 			LOG(Level::ERROR,
 				"OpmlUrlReader::reload: parsing XML file `%s'"
-				"failed", url);
+				"failed",
+				url);
 			continue;
 		}
 
@@ -115,4 +115,4 @@ std::string OpmlUrlReader::get_source()
 	return cfg->get_configvalue("opml-url");
 }
 
-}
+} // namespace newsboat

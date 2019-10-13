@@ -5,8 +5,8 @@
 #include <libxml/parser.h>
 #include <string>
 
-#include "remoteapi.h"
 #include "feed.h"
+#include "remoteapi.h"
 
 namespace rsspp {
 

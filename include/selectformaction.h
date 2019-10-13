@@ -35,7 +35,7 @@ public:
 	std::string id() const override
 	{
 		return (type == SelectionType::TAG) ? "tagselection"
-						     : "filterselection";
+						    : "filterselection";
 	}
 	std::string title() override;
 

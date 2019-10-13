@@ -35,4 +35,3 @@ public:
 } // namespace newsboat
 
 #endif /* NEWSBOAT_CURLHANDLE_H_ */
-

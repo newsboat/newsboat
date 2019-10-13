@@ -351,7 +351,8 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, const std::vector<std::string>& cmds) {
+	auto check = [](TestHelpers::Opts opts,
+			     const std::vector<std::string>& cmds) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.cmds_to_execute() == cmds);
@@ -379,7 +380,8 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 			{"reload", "print-unread"});
 	}
 
-	SECTION("Multiple occurrences of the option") {
+	SECTION("Multiple occurrences of the option")
+	{
 		check({"newsboat", "-x", "print-unread", "--execute", "reload"},
 			{"print-unread", "reload"});
 	}
@@ -577,7 +579,7 @@ TEST_CASE(
 }
 
 TEST_CASE("Sets `program_name` to the first string of the options list",
-		"[CliArgsParser]")
+	"[CliArgsParser]")
 {
 	auto check = [](TestHelpers::Opts opts, std::string expected) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -588,7 +590,7 @@ TEST_CASE("Sets `program_name` to the first string of the options list",
 	check({"newsboat"}, "newsboat");
 	check({"podboat", "-h"}, "podboat");
 	check({"something else entirely", "--foo", "--bar", "--baz"},
-			"something else entirely");
+		"something else entirely");
 	check({"/usr/local/bin/app-with-a-path"},
-			"/usr/local/bin/app-with-a-path");
+		"/usr/local/bin/app-with-a-path");
 }
