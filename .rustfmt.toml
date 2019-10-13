@@ -1,0 +1,14 @@
+edition = "2015"
+fn_args_layout = "Tall"
+force_explicit_abi = true
+hard_tabs = false
+max_width = 100
+merge_derives = true
+newline_style = "Auto"
+remove_nested_parens = true
+reorder_imports = true
+reorder_modules = true
+tab_spaces = 4
+use_field_init_shorthand = false
+use_small_heuristics = "Default"
+use_try_shorthand = false
