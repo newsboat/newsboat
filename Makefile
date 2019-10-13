@@ -23,7 +23,7 @@ LDFLAGS+=-L.
 
 PACKAGE=newsboat
 
-ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector))
+ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector fmt))
 include config.mk
 endif
 
