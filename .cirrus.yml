@@ -87,3 +87,12 @@ macos_task:
               CC: gcc
               CXX: g++
               RUST: 1.26.0
+
+formatting_task:
+    name: Code formatting
+    container:
+        dockerfile: docker/newsboat-tools.dockerfile
+    script:
+        - make fmt
+          # --exit-code forces git-diff to exit with code 1 if there were changes. This will fail the build
+        - git diff --exit-code

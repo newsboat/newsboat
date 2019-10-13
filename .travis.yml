@@ -335,13 +335,6 @@ matrix:
             - i18nspector
       env:
         - CHECKS=i18nspector
-    - addons:
-        apt:
-          packages: []
-      env:
-        - CHECKS="cargo-fmt"
-      before_install:
-        - rustup component add rustfmt
 
 install:
   - export CXX=$COMPILER
@@ -359,7 +352,6 @@ script:
   # exit code and chain it to Rust's in the end.
   - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"   ; fi
   - if [ "$CHECKS" = "i18nspector" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
-  - if [ "$CHECKS" = "cargo-fmt" ]; then cargo fmt -- --check; fi
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
