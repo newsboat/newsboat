@@ -4,9 +4,46 @@ Newsboat Code Style Guide
 These are guidelines, not laws. You are free to deviate, but make sure you have
 a good argument for doing so.
 
+
+
+## Automation
+
 Guidelines that could be easily automated, have been. Please install:
+
 - [EditorConfig plugin][editorconfig], so your editor can apply some of the
-  formatting right as you type.
+  formatting right as you type;
+
+- `clang-format` version 8, so you can format C++ code;
+
+- `rustfmt` from the current stable Rust, so you can format Rust code:
+
+        $ rustup default stable
+        $ rustup update
+        $ rustup component add rustfmt
+
+You can then run `make fmt` to format C++ and Rust source.
+
+If you can't or won't install `clang-format` and `rustfmt` on your system, you
+can build a Docker image with those tools, and use that instead:
+
+    $ docker build \
+        --tag=newsboat-tools \
+        --file=docker/newsboat-tools.dockerfile \
+        docker
+    $ docker run \
+        --rm \
+        --volume $(pwd):/workspace \
+        newsboat-tools \
+        make fmt
+
+Note that you'll have to rebuild the image every time we update the Dockerfile,
+which is every time new stable Rust comes out. See also [how to build Newsboat
+in Docker](docker.md).
+
+If Docker isn't your jam either, you can rely on our continuous integration
+pipeline. Submit your pull request, and wait. One of the CI jobs checks
+formatting, and if it fails, it'll print out a diff. You can copy that and
+apply it as a patch.
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
 
