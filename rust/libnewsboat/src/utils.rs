@@ -16,7 +16,6 @@ use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
 use logger::{self, Level};
-use std::cmp::max;
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
@@ -934,7 +933,17 @@ mod tests {
 
         run_command("touch", filepath.to_str().unwrap());
 
-        thread::sleep(time::Duration::from_millis(10));
+        // Busy-wait for 10 tries of 10 milliseconds each, waiting for `touch` to
+        // create the file. Usually it happens quickly, and the loop exists on the
+        // first try; but sometimes on CI it takes longer for `touch` to finish, so
+        // we need a slightly longer wait.
+        for _ in 0..10 {
+            thread::sleep(time::Duration::from_millis(10));
+
+            if (filepath.exists()) {
+                break;
+            }
+        }
 
         assert!(filepath.exists());
     }

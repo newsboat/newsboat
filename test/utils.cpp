@@ -431,16 +431,25 @@ TEST_CASE("run_command() executes the given command with a given argument",
 
 	utils::run_command("touch", argument);
 
-	// Sleep for 10 milliseconds, waiting for `touch` to create the file
-	::usleep(10 * 1000);
+	struct stat sb;
+	int result = 0;
 
-	{
-		INFO("File should have been created by the `touch`");
+	// Busy-wait for 10 tries of 10 milliseconds each, waiting for `touch` to
+	// create the file. Usually it happens quickly, and the loop exists on the
+	// first try; but sometimes on CI it takes longer for `touch` to finish, so
+	// we need a slightly longer wait.
+	int tries = 10;
+	while (tries-- > 0) {
+		::usleep(10 * 1000);
 
-		struct stat sb;
-		const int result = ::stat(argument.c_str(), &sb);
-		REQUIRE(result == 0);
+		result = ::stat(argument.c_str(), &sb);
+		if (result == 0) {
+			break;
+		}
 	}
+
+	INFO("File should have been created by the `touch`");
+	REQUIRE(result == 0);
 }
 
 TEST_CASE("run_command() doesn't wait for the command to finish",
