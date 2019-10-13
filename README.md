@@ -89,7 +89,7 @@ Development
 -----------
 
 Decided to work on an issue, fix a bug or add a feature? Great! Be sure to
-check out [our style guide](doc/code-style.markdown).
+check out [our style guide](doc/internal/code-style.markdown).
 
 You'll probably want to run the tests; here's how:
 
