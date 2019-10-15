@@ -201,10 +201,12 @@ public:
 
 	void reset_status()
 	{
+		std::lock_guard<std::mutex> guard(status_mutex_);
 		status_ = DlStatus::TO_BE_DOWNLOADED;
 	}
 	void set_status(DlStatus st)
 	{
+		std::lock_guard<std::mutex> guard(status_mutex_);
 		status_ = st;
 	}
 
@@ -234,8 +236,10 @@ private:
 	bool is_rtl_;
 	unsigned int idx;
 	unsigned int order;
-	DlStatus status_;
 	std::mutex items_guid_map_mutex;
+
+	DlStatus status_;
+	std::mutex status_mutex_;
 };
 
 } // namespace newsboat

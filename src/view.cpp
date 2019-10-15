@@ -1324,10 +1324,10 @@ void View::dump_current_form()
 	std::string formtext =
 		formaction_stack[current_formaction]->get_form()->dump(
 			"", "", 0);
-	char fnbuf[128];
 	time_t t = time(nullptr);
-	struct tm* stm = localtime(&t);
-	strftime(fnbuf, sizeof(fnbuf), "dumpform-%Y%m%d-%H%M%S.stfl", stm);
+	const auto fnbuf = utils::mt_strf_localtime(
+			"dumpform-%Y%m%d-%H%M%S.stfl",
+			t);
 	std::fstream f(fnbuf, std::ios_base::out);
 	if (!f.is_open()) {
 		show_error(strprintf::fmt("Error: couldn't open file %s: %s",

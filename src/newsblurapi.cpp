@@ -314,12 +314,9 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 					json_object_get_string(node);
 				item.pubDate_ts = parse_date(pub_date);
 
-				char rfc822_date[128];
-				strftime(rfc822_date,
-					sizeof(rfc822_date),
-					"%a, %d %b %Y %H:%M:%S %z",
-					gmtime(&item.pubDate_ts));
-				item.pubDate = rfc822_date;
+				item.pubDate = utils::mt_strf_localtime(
+						"%a, %d %b %Y %H:%M:%S %z",
+						item.pubDate_ts);
 			}
 
 			f.items.push_back(item);

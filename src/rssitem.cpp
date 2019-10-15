@@ -118,12 +118,7 @@ void RssItem::set_unread(bool u)
 
 std::string RssItem::pubDate() const
 {
-	char text[1024];
-	strftime(text,
-		sizeof(text),
-		_("%a, %d %b %Y %T %z"),
-		localtime(&pubDate_));
-	return std::string(text);
+	return utils::mt_strf_localtime(_("%a, %d %b %Y %T %z"), pubDate_);
 }
 
 void RssItem::set_enclosure_url(const std::string& url)

@@ -1042,4 +1042,24 @@ unsigned int utils::newsboat_version_major()
 	return rs_newsboat_version_major();
 }
 
+std::string utils::mt_strf_localtime(const std::string& format, time_t t)
+{
+	// localtime() returns a pointer to static memory, so we need to protect
+	// its caller with a mutex to ensure that no two threads concurrently
+	// access that static memory. In Newsboat, the only caller for localtime()
+	// is strftime(), that's why this function bakes the two together.
+
+	static std::mutex mtx;
+	std::lock_guard<std::mutex> guard(mtx);
+
+	const size_t BUFFER_SIZE = 4096;
+	char buffer[BUFFER_SIZE];
+	const size_t written = strftime(buffer,
+		BUFFER_SIZE,
+		format.c_str(),
+		localtime(&t));
+
+	return std::string(buffer, written);
+}
+
 } // namespace newsboat

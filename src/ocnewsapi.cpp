@@ -270,12 +270,10 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 
 		json_object_object_get_ex(item_j, "pubDate", &node);
 		time_t updated = (time_t)json_object_get_int(node);
-		char rfc822_date[128];
-		strftime(rfc822_date,
-			sizeof(rfc822_date),
-			"%a, %d %b %Y %H:%M:%S %z",
-			gmtime(&updated));
-		item.pubDate = rfc822_date;
+
+		item.pubDate = utils::mt_strf_localtime(
+				"%a, %d %b %Y %H:%M:%S %z",
+				updated);
 
 		feed.items.push_back(item);
 	}
