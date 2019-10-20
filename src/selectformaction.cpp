@@ -36,8 +36,8 @@ void SelectFormAction::handle_cmdline(const std::string& cmd)
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		if (idx > 0 &&
 			idx <= ((type == SelectionType::TAG)
-					       ? tags.size()
-					       : filters.size())) {
+				? tags.size()
+				: filters.size())) {
 			f->set("tagpos", std::to_string(idx - 1));
 		}
 	} else {
@@ -69,18 +69,21 @@ void SelectFormAction::process_operation(Operation op,
 					value = tags[pos];
 					quit = true;
 				}
-			} break;
+			}
+			break;
 			case SelectionType::FILTER: {
 				if (pos < filters.size()) {
 					value = filters[pos].second;
 					quit = true;
 				}
-			} break;
+			}
+			break;
 			default:
 				assert(0); // should never happen
 			}
 		}
-	} break;
+	}
+	break;
 	default:
 		break;
 	}
@@ -116,7 +119,7 @@ void SelectFormAction::prepare()
 		case SelectionType::FILTER:
 			for (const auto& filter : filters) {
 				std::string tagstr = strprintf::fmt(
-					"%4u  %s", i + 1, filter.first);
+						"%4u  %s", i + 1, filter.first);
 				listfmt.add_line(tagstr, i);
 				i++;
 			}
@@ -149,12 +152,12 @@ void SelectFormAction::init()
 	switch (type) {
 	case SelectionType::TAG:
 		title = fmt.do_format(
-			cfg->get_configvalue("selecttag-title-format"), width);
+				cfg->get_configvalue("selecttag-title-format"), width);
 		break;
 	case SelectionType::FILTER:
 		title = fmt.do_format(
-			cfg->get_configvalue("selectfilter-title-format"),
-			width);
+				cfg->get_configvalue("selectfilter-title-format"),
+				width);
 		break;
 	default:
 		assert(0); // should never happen
@@ -192,10 +195,12 @@ KeyMapHintEntry* SelectFormAction::get_keymap_hint()
 {
 	static KeyMapHintEntry hints_tag[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Select Tag")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	static KeyMapHintEntry hints_filter[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Select Filter")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	switch (type) {
 	case SelectionType::TAG:
 		return hints_tag;

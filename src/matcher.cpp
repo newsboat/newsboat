@@ -143,8 +143,8 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 		e->regex = new regex_t;
 		int err;
 		if ((err = regcomp(e->regex,
-			     e->literal.c_str(),
-			     REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
+						e->literal.c_str(),
+						REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
 			delete e->regex;
 			e->regex = nullptr;
 			char buf[1024];
@@ -156,11 +156,12 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 		}
 	}
 	if (regexec(e->regex,
-		    item->get_attribute(e->name).c_str(),
-		    0,
-		    nullptr,
-		    0) == 0)
+			item->get_attribute(e->name).c_str(),
+			0,
+			nullptr,
+			0) == 0) {
 		return true;
+	}
 	return false;
 }
 
@@ -201,10 +202,10 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 		case LOGOP_AND:
 			return matches_r(e->l, item) &&
 				matches_r(e->r, item); // short-circuit
-						       // evaulation in C ->
-						       // short circuit
-						       // evaluation in the
-						       // filter language
+		// evaulation in C ->
+		// short circuit
+		// evaluation in the
+		// filter language
 
 		case LOGOP_OR:
 			return matches_r(e->l, item) ||

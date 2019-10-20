@@ -105,7 +105,7 @@ public:
 	{
 		const auto filepath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> filepath_template_c(
-				filepath_template.cbegin(), filepath_template.cend());
+			filepath_template.cbegin(), filepath_template.cend());
 		filepath_template_c.push_back('\0');
 
 		const auto fd = ::mkstemp(filepath_template_c.data());
@@ -152,7 +152,7 @@ public:
 	{
 		const auto dirpath_template = tempdir.get_path() + "tmp.XXXXXX";
 		std::vector<char> dirpath_template_c(
-				dirpath_template.cbegin(), dirpath_template.cend());
+			dirpath_template.cbegin(), dirpath_template.cend());
 		dirpath_template_c.push_back('\0');
 
 		const auto result = ::mkdtemp(dirpath_template_c.data());
@@ -397,7 +397,7 @@ public:
 			// Copy string into separate char[], managed by
 			// unique_ptr.
 			auto ptr = std::unique_ptr<char[]>(
-				new char[option.size() + 1]);
+					new char[option.size() + 1]);
 			std::copy(option.cbegin(), option.cend(), ptr.get());
 			// C and C++ require argv to be NULL-terminated:
 			// https://stackoverflow.com/questions/18547114/why-do-we-need-argc-while-there-is-always-a-null-at-the-end-of-argv
@@ -409,7 +409,7 @@ public:
 		}
 
 		// Copy out intermediate argv vector into its final storage.
-		m_data = std::unique_ptr<char* []>(new char*[m_argc + 1]);
+		m_data = std::unique_ptr<char* []>(new char* [m_argc + 1]);
 		int i = 0;
 		for (const auto& ptr : m_opts) {
 			m_data.get()[i++] = ptr.get();
@@ -463,17 +463,18 @@ public:
 		}
 	}
 
-	~Chmod() {
+	~Chmod()
+	{
 		if (0 != ::chmod(m_path.c_str(), m_originalMode)) {
 			const auto saved_errno = errno;
 			std::cerr
-				<< "TestHelpers::Chmod: couldn't change back the mode for `"
-				<< m_path
-				<< "': ("
-				<< std::to_string(saved_errno)
-				<< ") "
-				<< strerror(saved_errno)
-				<< std::endl;
+					<< "TestHelpers::Chmod: couldn't change back the mode for `"
+						<< m_path
+						<< "': ("
+						<< std::to_string(saved_errno)
+						<< ") "
+						<< strerror(saved_errno)
+						<< std::endl;
 			::abort();
 		}
 	}
@@ -484,7 +485,8 @@ public:
 class Chdir {
 	std::string m_old_path;
 public:
-	Chdir(const std::string& path) {
+	Chdir(const std::string& path)
+	{
 		m_old_path = newsboat::utils::getcwd();
 		const int result = ::chdir(path.c_str());
 		if (result != 0) {
@@ -500,7 +502,8 @@ public:
 		}
 	}
 
-	~Chdir() {
+	~Chdir()
+	{
 		// Ignore the return value, because even if the call failed, we
 		// can't do anything useful.
 		const int result = ::chdir(m_old_path.c_str());

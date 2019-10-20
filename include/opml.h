@@ -9,10 +9,10 @@
 namespace newsboat {
 
 namespace opml {
-	xmlDocPtr generate(const FeedContainer& feedcontainer);
-	bool import(
-			const std::string& filename,
-			UrlReader* urlcfg);
+xmlDocPtr generate(const FeedContainer& feedcontainer);
+bool import(
+	const std::string& filename,
+	UrlReader* urlcfg);
 }
 
 } // namespace newsboat

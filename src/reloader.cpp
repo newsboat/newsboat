@@ -93,19 +93,19 @@ void Reloader::reload(unsigned int pos,
 			ctrl->get_view()->set_status("");
 		} catch (const DbException& e) {
 			errmsg = strprintf::fmt(
-				_("Error while retrieving %s: %s"),
-				utils::censor_url(oldfeed->rssurl()),
-				e.what());
+					_("Error while retrieving %s: %s"),
+					utils::censor_url(oldfeed->rssurl()),
+					e.what());
 		} catch (const std::string& emsg) {
 			errmsg = strprintf::fmt(
-				_("Error while retrieving %s: %s"),
-				utils::censor_url(oldfeed->rssurl()),
-				emsg);
+					_("Error while retrieving %s: %s"),
+					utils::censor_url(oldfeed->rssurl()),
+					emsg);
 		} catch (rsspp::Exception& e) {
 			errmsg = strprintf::fmt(
-				_("Error while retrieving %s: %s"),
-				utils::censor_url(oldfeed->rssurl()),
-				e.what());
+					_("Error while retrieving %s: %s"),
+					utils::censor_url(oldfeed->rssurl()),
+					e.what());
 		}
 		if (errmsg != "") {
 			oldfeed->set_status(DlStatus::DL_ERROR);
@@ -149,16 +149,16 @@ void Reloader::reload_all(bool unattended)
 		reload_range(0, num_feeds - 1, num_feeds, unattended);
 	} else {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions =
-			utils::partition_indexes(0, num_feeds - 1, num_threads);
+				utils::partition_indexes(0, num_feeds - 1, num_threads);
 		std::vector<std::thread> threads;
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: starting reload threads...");
 		for (int i = 0; i < num_threads - 1; i++) {
 			threads.push_back(std::thread(ReloadRangeThread(*this,
-				partitions[i].first,
-				partitions[i].second,
-				num_feeds,
-				unattended)));
+						partitions[i].first,
+						partitions[i].second,
+						num_feeds,
+						unattended)));
 		}
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: starting my own reload...");
@@ -189,8 +189,8 @@ void Reloader::reload_all(bool unattended)
 	// it's 64 bits. Thus, this cast is either a no-op, or an up-cast which are
 	// always safe.
 	LOG(Level::INFO,
-			"Reloader::reload_all: reload took %" PRId64 " seconds",
-			static_cast<int64_t>(dt));
+		"Reloader::reload_all: reload took %" PRId64 " seconds",
+		static_cast<int64_t>(dt));
 
 	const auto unread_feeds2 =
 		ctrl->get_feedcontainer()->unread_feed_count();

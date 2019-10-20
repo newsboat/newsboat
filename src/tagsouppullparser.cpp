@@ -142,8 +142,8 @@ std::string TagSoupPullParser::read_tag()
 	if (inputstream->eof()) {
 		throw XmlException(
 			_("EOF found while reading XML tag")); // TODO: test
-							       // whether this
-							       // works reliably
+		// whether this
+		// works reliably
 	}
 	return s;
 }
@@ -453,7 +453,8 @@ static struct {
 	{"clubs", 9827},
 	{"hearts", 9829},
 	{"diams", 9830},
-	{0, 0}};
+	{0, 0}
+};
 
 std::string TagSoupPullParser::decode_entity(std::string s)
 {
@@ -569,8 +570,8 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 					if (tagstr[pos + 1] == '\'' ||
 						tagstr[pos + 1] == '"') {
 						pos = tagstr.find_first_of(
-							tagstr[pos + 1],
-							pos + 2);
+								tagstr[pos + 1],
+								pos + 2);
 						if (pos != std::string::npos) {
 							pos++;
 						}
@@ -581,7 +582,7 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 							static_cast<uint64_t>(pos));
 					} else {
 						pos = tagstr.find_first_of(
-							" \r\n\t", pos + 1);
+								" \r\n\t", pos + 1);
 						LOG(Level::DEBUG,
 							"parse_tag: finding "
 							"end of "

@@ -24,7 +24,7 @@ extern "C" {
 	void rs_history_save_to_file(
 		void* fmt,
 		const char* file,
-                unsigned int limit);
+		unsigned int limit);
 }
 
 namespace newsboat {

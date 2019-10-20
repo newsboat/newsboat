@@ -10,10 +10,11 @@ TEST_CASE(
 	"[rss]")
 {
 	RssIgnores ignores;
-	ignores.handle_action("always-download",
-		{"http://newsboat.org",
-			"www.cool-website.com",
-			"www.example.com"});
+	ignores.handle_action("always-download", {
+		"http://newsboat.org",
+		"www.cool-website.com",
+		"www.example.com"
+	});
 
 	REQUIRE(ignores.matches_lastmodified("www.example.com"));
 	REQUIRE(ignores.matches_lastmodified("http://newsboat.org"));
@@ -27,10 +28,11 @@ TEST_CASE(
 	"[rss]")
 {
 	RssIgnores ignores;
-	ignores.handle_action("reset-unread-on-update",
-		{"http://newsboat.org",
-			"www.cool-website.com",
-			"www.example.com"});
+	ignores.handle_action("reset-unread-on-update", {
+		"http://newsboat.org",
+		"www.cool-website.com",
+		"www.example.com"
+	});
 
 	REQUIRE(ignores.matches_resetunread("www.example.com"));
 	REQUIRE(ignores.matches_resetunread("http://newsboat.org"));

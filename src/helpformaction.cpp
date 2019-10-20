@@ -40,7 +40,8 @@ void HelpFormAction::process_operation(Operation op,
 		std::vector<QnaPair> qna;
 		qna.push_back(QnaPair(_("Search for: "), ""));
 		this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
-	} break;
+	}
+	break;
 	case OP_CLEARFILTER:
 		apply_search = false;
 		do_redraw = true;
@@ -77,7 +78,7 @@ void HelpFormAction::prepare()
 		std::string highlighted_searchphrase =
 			strprintf::fmt("<hl>%s</>", searchphrase);
 		std::vector<std::string> colors = utils::tokenize(
-			cfg->get_configvalue("search-highlight-colors"), " ");
+				cfg->get_configvalue("search-highlight-colors"), " ");
 		f->set("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
 
@@ -90,7 +91,7 @@ void HelpFormAction::prepare()
 				switch (i) {
 				case 0:
 					condition = (desc.key.length() == 0 ||
-						desc.flags & KM_SYSKEYS);
+							desc.flags & KM_SYSKEYS);
 					if (desc.key.length() == 0) {
 						unbound_count++;
 					}
@@ -103,7 +104,7 @@ void HelpFormAction::prepare()
 					break;
 				case 2:
 					condition = (desc.key.length() > 0 ||
-						desc.flags & KM_SYSKEYS);
+							desc.flags & KM_SYSKEYS);
 					break;
 				default:
 					condition = true;
@@ -116,13 +117,13 @@ void HelpFormAction::prepare()
 				if (!apply_search ||
 					strcasestr(desc.key.c_str(),
 						searchphrase.c_str()) !=
-						nullptr ||
+					nullptr ||
 					strcasestr(desc.cmd.c_str(),
 						searchphrase.c_str()) !=
-						nullptr ||
+					nullptr ||
 					strcasestr(desc.desc.c_str(),
 						searchphrase.c_str()) !=
-						nullptr) {
+					nullptr) {
 					char tabs_1[] = "                ";
 					char tabs_2[] =
 						"                        ";
@@ -143,20 +144,20 @@ void HelpFormAction::prepare()
 					case 0:
 					case 1:
 						line = strprintf::fmt(
-							"%s%s%s%s%s",
-							desc.key,
-							tabs_1,
-							desc.cmd,
-							tabs_2,
-							desc.desc);
+								"%s%s%s%s%s",
+								desc.key,
+								tabs_1,
+								desc.cmd,
+								tabs_2,
+								desc.desc);
 						break;
 					case 2:
 						line = strprintf::fmt(
-							"%s%s%s%s",
-							desc.cmd,
-							tabs_1,
-							tabs_2,
-							desc.desc);
+								"%s%s%s%s",
+								desc.cmd,
+								tabs_1,
+								tabs_2,
+								desc.desc);
 						break;
 					}
 					LOG(Level::DEBUG,
@@ -173,8 +174,8 @@ void HelpFormAction::prepare()
 					if (apply_search &&
 						searchphrase.length() > 0) {
 						line = utils::replace_all(line,
-							searchphrase,
-							highlighted_searchphrase);
+								searchphrase,
+								highlighted_searchphrase);
 						LOG(Level::DEBUG,
 							"HelpFormAction::"
 							"prepare: "
@@ -221,7 +222,8 @@ KeyMapHintEntry* HelpFormAction::get_keymap_hint()
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_SEARCH, _("Search")},
 		{OP_CLEARFILTER, _("Clear")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	return hints;
 }
 

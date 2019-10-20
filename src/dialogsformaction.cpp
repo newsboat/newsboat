@@ -49,8 +49,8 @@ void DialogsFormAction::prepare()
 					i,
 					(v->get_formaction(fa.first).get() ==
 						get_parent_formaction().get())
-						? "*"
-						: " ",
+					? "*"
+					: " ",
 					fa.second),
 				fa.first);
 			i++;
@@ -67,7 +67,8 @@ KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Close")},
 		{OP_OPEN, _("Goto Dialog")},
 		{OP_CLOSEDIALOG, _("Close Dialog")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	return hints;
 }
 
@@ -83,7 +84,8 @@ void DialogsFormAction::process_operation(Operation op,
 		} else {
 			v->show_error(_("No item selected!"));
 		}
-	} break;
+	}
+	break;
 	case OP_CLOSEDIALOG: {
 		std::string dialogposname = f->get("dialogpos");
 		if (dialogposname.length() > 0) {
@@ -94,12 +96,13 @@ void DialogsFormAction::process_operation(Operation op,
 			} else {
 				v->show_error(
 					_("Error: you can't remove the feed "
-					  "list!"));
+						"list!"));
 			}
 		} else {
 			v->show_error(_("No item selected!"));
 		}
-	} break;
+	}
+	break;
 	case OP_QUIT:
 		v->pop_current_formaction();
 		break;

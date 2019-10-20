@@ -43,8 +43,8 @@ bool OldReaderApi::authenticate()
 	return auth != "";
 }
 
-static size_t
-my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
+static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
+	void* userp)
 {
 	std::string* pbuf = static_cast<std::string*>(userp);
 	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
@@ -63,12 +63,12 @@ std::string OldReaderApi::retrieve_auth()
 	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
 	std::string postcontent = strprintf::fmt(
-		"service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType="
-		"HOSTED_OR_GOOGLE&continue=http://www.google.com/",
-		username,
-		password,
-		PROGRAM_NAME,
-		utils::program_version());
+			"service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType="
+			"HOSTED_OR_GOOGLE&continue=http://www.google.com/",
+			username,
+			password,
+			PROGRAM_NAME,
+			utils::program_version());
 
 	curl_free(username);
 	curl_free(password);
@@ -174,10 +174,10 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 			}
 
 			auto url = strprintf::fmt("%s%s?n=%u",
-				OLDREADER_FEED_PREFIX,
-				id,
-				cfg->get_configvalue_as_int(
-					"oldreader-min-items"));
+					OLDREADER_FEED_PREFIX,
+					id,
+					cfg->get_configvalue_as_int(
+						"oldreader-min-items"));
 			urls.push_back(TaggedFeedUrl(url, tags));
 		}
 	}
@@ -191,7 +191,7 @@ void OldReaderApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
 		auth_header = strprintf::fmt(
-			"Authorization: GoogleLogin auth=%s", auth);
+				"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(Level::DEBUG,
 		"OldReaderApi::add_custom_headers header = %s",
@@ -203,7 +203,7 @@ void OldReaderApi::add_custom_headers(curl_slist** custom_headers)
 bool OldReaderApi::mark_all_read(const std::string& feedurl)
 {
 	std::string real_feedurl = feedurl.substr(strlen(OLDREADER_FEED_PREFIX),
-		feedurl.length() - strlen(OLDREADER_FEED_PREFIX));
+			feedurl.length() - strlen(OLDREADER_FEED_PREFIX));
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
 	try {
 		real_feedurl = utils::unescape_url(elems[0]);
@@ -241,17 +241,17 @@ bool OldReaderApi::mark_article_read_with_token(const std::string& guid,
 
 	if (read) {
 		postcontent = strprintf::fmt(
-			"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
-			"com.google/kept-unread&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
+				"com.google/kept-unread&ac=edit&T=%s",
+				guid,
+				token);
 	} else {
 		postcontent = strprintf::fmt(
-			"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
-			"com.google/kept-unread&a=user/-/state/com.google/"
-			"tracking-kept-unread&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
+				"com.google/kept-unread&a=user/-/state/com.google/"
+				"tracking-kept-unread&ac=edit&T=%s",
+				guid,
+				token);
 	}
 
 	std::string result =
@@ -325,14 +325,14 @@ bool OldReaderApi::star_article(const std::string& guid, bool star)
 
 	if (star) {
 		postcontent = strprintf::fmt(
-			"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
+				guid,
+				token);
 	} else {
 		postcontent = strprintf::fmt(
-			"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
+				guid,
+				token);
 	}
 
 	std::string result =
@@ -348,14 +348,14 @@ bool OldReaderApi::share_article(const std::string& guid, bool share)
 
 	if (share) {
 		postcontent = strprintf::fmt(
-			"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
+				guid,
+				token);
 	} else {
 		postcontent = strprintf::fmt(
-			"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
+				guid,
+				token);
 	}
 
 	std::string result =

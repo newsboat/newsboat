@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 2) {
 		std::cerr << "usage: " << argv[0]
-			  << " <dsv-file> [<link-prefix>]\n";
+			<< " <dsv-file> [<link-prefix>]\n";
 		return 1;
 	}
 
@@ -31,17 +31,17 @@ int main(int argc, char* argv[])
 			const std::string example = matches[4];
 
 			std::cout << "[[" << linkprefix << option << "]] '"
-				  << option << "' ";
+				<< option << "' ";
 			std::cout << "(parameters: " << syntax << "; ";
 			std::cout << "default value: '" << defaultparam
-				  << "')::\n";
+				<< "')::\n";
 			std::cout << "         " << desc;
 			std::cout << " (example: " << example << ")\n\n";
 		} else {
 			std::cerr << "expected exactly 5 cells in " << argv[1]
-				  << ":" << lineno;
+				<< ":" << lineno;
 			std::cerr << ", but got " << matches.size()
-				  << " instead\n";
+				<< " instead\n";
 			return 1;
 		}
 	}

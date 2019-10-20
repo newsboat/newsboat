@@ -24,7 +24,7 @@ void TextFormatter::add_line(LineType type, std::string line)
 		static_cast<unsigned int>(type));
 
 	auto clean_line = utils::wstr2str(
-		utils::clean_nonprintable_characters(utils::str2wstr(line)));
+			utils::clean_nonprintable_characters(utils::str2wstr(line)));
 	lines.push_back(std::make_pair(type, clean_line));
 }
 
@@ -50,10 +50,10 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 	size_t prefix_width = 0;
 	auto iswhitespace = [](const std::string& input) {
 		return std::all_of(input.cbegin(),
-			input.cend(),
-			[](std::string::value_type c) {
-				return std::isspace(c);
-			});
+				input.cend(),
+		[](std::string::value_type c) {
+			return std::isspace(c);
+		});
 	};
 	if (iswhitespace(words[0])) {
 		prefix = utils::substr_with_width(words[0], width);
@@ -196,14 +196,14 @@ std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 	const size_t total_width)
 {
 	auto formatted = format_text_plain_helper(
-		lines, rxman, location, wrap_width, total_width);
+			lines, rxman, location, wrap_width, total_width);
 
 	auto format_cache = std::string("{list");
 	for (auto& line : formatted) {
 		if (line != "") {
 			utils::trim_end(line);
 			format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", Stfl::quote(line)));
+					"{listitem text:%s}", Stfl::quote(line)));
 		}
 	}
 	format_cache.append(1, '}');
@@ -218,7 +218,7 @@ std::string TextFormatter::format_text_plain(const size_t width,
 {
 	std::string result;
 	auto formatted = format_text_plain_helper(
-		lines, nullptr, "", width, total_width);
+			lines, nullptr, "", width, total_width);
 	for (const auto& line : formatted) {
 		result += line + "\n";
 	}

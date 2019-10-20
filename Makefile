@@ -235,7 +235,7 @@ doc/keycmds-linked.dsv: doc/keycmds.dsv
 	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
-	clang-format --style=file -i *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
+	astyle --project *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
 	$(CARGO) fmt
 
 cppcheck:

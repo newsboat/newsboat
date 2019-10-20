@@ -66,11 +66,11 @@ std::string RssParser::get_prop(xmlNode* node,
 		xmlChar* value = nullptr;
 		if (ns.empty()) {
 			value = xmlGetProp(node,
-				reinterpret_cast<const xmlChar*>(prop.c_str()));
+					reinterpret_cast<const xmlChar*>(prop.c_str()));
 		} else {
 			value = xmlGetNsProp(node,
-				reinterpret_cast<const xmlChar*>(prop.c_str()),
-				reinterpret_cast<const xmlChar*>(ns.c_str()));
+					reinterpret_cast<const xmlChar*>(prop.c_str()),
+					reinterpret_cast<const xmlChar*>(ns.c_str()));
 		}
 		if (value) {
 			retval = reinterpret_cast<const char*>(value);
@@ -137,7 +137,8 @@ std::string RssParser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
 	// https://github.com/akrennmair/newsbeuter/issues/369
 	stm.tm_isdst = -1;
 	time_t gmttime = mktime(&stm) + offs;
-	return newsboat::utils::mt_strf_localtime("%a, %d %b %Y %H:%M:%S +0000", gmttime);
+	return newsboat::utils::mt_strf_localtime("%a, %d %b %Y %H:%M:%S +0000",
+			gmttime);
 }
 
 bool RssParser::node_is(xmlNode* node, const char* name, const char* ns_uri)

@@ -11,21 +11,18 @@ TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
 
 	REQUIRE(fmt.get_lines_count() == 0);
 
-	SECTION("add_line() adds a line")
-	{
+	SECTION("add_line() adds a line") {
 		fmt.add_line("one");
 		REQUIRE(fmt.get_lines_count() == 1);
 
 		fmt.add_line("two");
 		REQUIRE(fmt.get_lines_count() == 2);
 
-		SECTION("add_lines() adds multiple lines")
-		{
+		SECTION("add_lines() adds multiple lines") {
 			fmt.add_lines({"three", "four"});
 			REQUIRE(fmt.get_lines_count() == 4);
 
-			SECTION("clear() removes all lines")
-			{
+			SECTION("clear() removes all lines") {
 				fmt.clear();
 				REQUIRE(fmt.get_lines_count() == 0);
 			}
@@ -38,8 +35,7 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 {
 	ListFormatter fmt;
 
-	SECTION("ordinary text")
-	{
+	SECTION("ordinary text") {
 		fmt.add_line("123456789_", UINT_MAX, 10);
 		fmt.add_line("_987654321", UINT_MAX, 10);
 		fmt.add_line("ListFormatter doesn't care about word boundaries",
@@ -58,8 +54,7 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 		REQUIRE(fmt.format_list(nullptr, "") == expected);
 	}
 
-	SECTION("numbered list")
-	{
+	SECTION("numbered list") {
 		fmt.add_line("123456789_", 1, 10);
 		fmt.add_line("_987654321", 2, 10);
 		fmt.add_line("ListFormatter doesn't care about word boundaries",

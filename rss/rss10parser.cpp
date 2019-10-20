@@ -30,12 +30,12 @@ void Rss10Parser::parse_feed(Feed& f, xmlNode* rootNode)
 				} else if (node_is(cnode, "link", RSS_1_0_NS)) {
 					f.link = get_content(cnode);
 				} else if (node_is(cnode,
-						   "description",
-						   RSS_1_0_NS)) {
+						"description",
+						RSS_1_0_NS)) {
 					f.description = get_content(cnode);
 				} else if (node_is(cnode, "date", DC_URI)) {
 					f.pubDate = w3cdtf_to_rfc822(
-						get_content(cnode));
+							get_content(cnode));
 				} else if (node_is(cnode, "creator", DC_URI)) {
 					f.dc_creator = get_content(cnode);
 				}
@@ -50,24 +50,24 @@ void Rss10Parser::parse_feed(Feed& f, xmlNode* rootNode)
 					it.title = get_content(itnode);
 					it.title_type = "text";
 				} else if (node_is(itnode,
-						   "link",
-						   RSS_1_0_NS)) {
+						"link",
+						RSS_1_0_NS)) {
 					it.link = get_content(itnode);
 				} else if (node_is(itnode,
-						   "description",
-						   RSS_1_0_NS)) {
+						"description",
+						RSS_1_0_NS)) {
 					it.description = get_content(itnode);
 				} else if (node_is(itnode, "date", DC_URI)) {
 					it.pubDate = w3cdtf_to_rfc822(
-						get_content(itnode));
+							get_content(itnode));
 				} else if (node_is(itnode,
-						   "encoded",
-						   CONTENT_URI)) {
+						"encoded",
+						CONTENT_URI)) {
 					it.content_encoded =
 						get_content(itnode);
 				} else if (node_is(itnode,
-						   "summary",
-						   ITUNES_URI)) {
+						"summary",
+						ITUNES_URI)) {
 					it.itunes_summary = get_content(itnode);
 				} else if (node_is(itnode, "creator", DC_URI)) {
 					it.author = get_content(itnode);

@@ -41,15 +41,15 @@ void ReloadThread::operator()()
 			} else {
 				suppressed_first = true;
 				if (!cfg->get_configvalue_as_bool(
-					    "suppress-first-reload")) {
+						"suppress-first-reload")) {
 					ctrl->get_reloader()
-						->start_reload_all_thread();
+					->start_reload_all_thread();
 				}
 			}
 		} else {
 			waittime_sec = 60; // if auto-reload is disabled, we
-					   // poll every 60 seconds whether it
-					   // changed.
+			// poll every 60 seconds whether it
+			// changed.
 		}
 
 		time_t seconds_to_wait = 0;

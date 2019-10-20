@@ -24,263 +24,359 @@ struct OpDesc {
  * keybindings), default key, description, and where it's valid
  */
 static OpDesc opdescs[] = {
-	{OP_OPEN,
+	{
+		OP_OPEN,
 		"open",
 		"ENTER",
 		_("Open feed/article"),
 		KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_TAGSELECT |
-			KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS | KM_DIRBROWSER},
+		KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS | KM_DIRBROWSER
+	},
 	{OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH},
-	{OP_HARDQUIT,
+	{
+		OP_HARDQUIT,
 		"hard-quit",
 		"Q",
 		_("Quit program, no confirmation"),
-		KM_BOTH},
-	{OP_RELOAD,
+		KM_BOTH
+	},
+	{
+		OP_RELOAD,
 		"reload",
 		"r",
 		_("Reload currently selected feed"),
-		KM_FEEDLIST | KM_ARTICLELIST},
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
 	{OP_RELOADALL, "reload-all", "R", _("Reload all feeds"), KM_FEEDLIST},
-	{OP_MARKFEEDREAD,
+	{
+		OP_MARKFEEDREAD,
 		"mark-feed-read",
 		"A",
 		_("Mark feed read"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_MARKALLFEEDSREAD,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_MARKALLFEEDSREAD,
 		"mark-all-feeds-read",
 		"C",
 		_("Mark all feeds read"),
-		KM_FEEDLIST},
-	{OP_MARKALLABOVEASREAD,
+		KM_FEEDLIST
+	},
+	{
+		OP_MARKALLABOVEASREAD,
 		"mark-all-above-as-read",
 		"",
 		_("Mark all above as read"),
-		KM_ARTICLELIST},
+		KM_ARTICLELIST
+	},
 	{OP_SAVE, "save", "s", _("Save article"), KM_ARTICLELIST | KM_ARTICLE},
 	{OP_SAVEALL, "save-all", "", _("Save articles"), KM_ARTICLELIST},
-	{OP_NEXT,
+	{
+		OP_NEXT,
 		"next",
 		"J",
 		_("Go to next article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE},
-	{OP_PREV,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_PREV,
 		"prev",
 		"K",
 		_("Go to previous article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE},
-	{OP_NEXTUNREAD,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_NEXTUNREAD,
 		"next-unread",
 		"n",
 		_("Go to next unread article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE},
-	{OP_PREVUNREAD,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_PREVUNREAD,
 		"prev-unread",
 		"p",
 		_("Go to previous unread article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE},
-	{OP_RANDOMUNREAD,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_RANDOMUNREAD,
 		"random-unread",
 		"^K",
 		_("Go to a random unread article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE},
-	{OP_OPENBROWSER_AND_MARK,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_OPENBROWSER_AND_MARK,
 		"open-in-browser-and-mark-read",
 		"O",
 		_("Open article in browser and mark read"),
-		KM_ARTICLELIST},
-	{OP_OPENALLUNREADINBROWSER,
+		KM_ARTICLELIST
+	},
+	{
+		OP_OPENALLUNREADINBROWSER,
 		"open-all-unread-in-browser",
 		"",
 		_("Open all unread items of selected feed in browser"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_OPENALLUNREADINBROWSER_AND_MARK,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_OPENALLUNREADINBROWSER_AND_MARK,
 		"open-all-unread-in-browser-and-mark-read",
 		"",
 		_("Open all unread items of selected feed in browser and mark "
-		  "read"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_OPENINBROWSER,
+			"read"),
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_OPENINBROWSER,
 		"open-in-browser",
 		"o",
 		_("Open article in browser"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE},
-	{OP_HELP,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_HELP,
 		"help",
 		"?",
 		_("Open help dialog"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBOAT},
-	{OP_TOGGLESOURCEVIEW,
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBOAT
+	},
+	{
+		OP_TOGGLESOURCEVIEW,
 		"toggle-source-view",
 		"^U",
 		_("Toggle source view"),
-		KM_ARTICLE},
-	{OP_TOGGLEITEMREAD,
+		KM_ARTICLE
+	},
+	{
+		OP_TOGGLEITEMREAD,
 		"toggle-article-read",
 		"N",
 		_("Toggle read status for article"),
-		KM_ARTICLELIST | KM_ARTICLE},
-	{OP_TOGGLESHOWREAD,
+		KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_TOGGLESHOWREAD,
 		"toggle-show-read-feeds",
 		"l",
 		_("Toggle show read feeds/articles"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_SHOWURLS,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_SHOWURLS,
 		"show-urls",
 		"u",
 		_("Show URLs in current article"),
-		KM_ARTICLE | KM_ARTICLELIST},
+		KM_ARTICLE | KM_ARTICLELIST
+	},
 	{OP_CLEARTAG, "clear-tag", "^T", _("Clear current tag"), KM_FEEDLIST},
 	{OP_SETTAG, "set-tag", "t", _("Select tag"), KM_FEEDLIST},
 	{OP_SETTAG, "select-tag", "t", _("Select tag"), KM_FEEDLIST},
-	{OP_SEARCH,
+	{
+		OP_SEARCH,
 		"open-search",
 		"/",
 		_("Open search dialog"),
-		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST | KM_ARTICLE},
+		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST | KM_ARTICLE
+	},
 	{OP_GOTO_URL, "goto-url", "#", _("Goto URL #"), KM_ARTICLE},
 	{OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_ARTICLE},
-	{OP_RELOADURLS,
+	{
+		OP_RELOADURLS,
 		"reload-urls",
 		"^R",
 		_("Reload the list of URLs from the configuration"),
-		KM_FEEDLIST},
+		KM_FEEDLIST
+	},
 	{OP_PB_DOWNLOAD, "pb-download", "d", _("Download file"), KM_PODBOAT},
 	{OP_PB_CANCEL, "pb-cancel", "c", _("Cancel download"), KM_PODBOAT},
-	{OP_PB_DELETE,
+	{
+		OP_PB_DELETE,
 		"pb-delete",
 		"D",
 		_("Mark download as deleted"),
-		KM_PODBOAT},
-	{OP_PB_PURGE,
+		KM_PODBOAT
+	},
+	{
+		OP_PB_PURGE,
 		"pb-purge",
 		"P",
 		_("Purge finished and deleted downloads from queue"),
-		KM_PODBOAT},
-	{OP_PB_TOGGLE_DLALL,
+		KM_PODBOAT
+	},
+	{
+		OP_PB_TOGGLE_DLALL,
 		"pb-toggle-download-all",
 		"a",
 		_("Toggle automatic download on/off"),
-		KM_PODBOAT},
-	{OP_PB_PLAY,
+		KM_PODBOAT
+	},
+	{
+		OP_PB_PLAY,
 		"pb-play",
 		"p",
 		_("Start player with currently selected download"),
-		KM_PODBOAT},
-	{OP_PB_MARK_FINISHED,
+		KM_PODBOAT
+	},
+	{
+		OP_PB_MARK_FINISHED,
 		"pb-mark-as-finished",
 		"m",
 		_("Mark file as finished (not played)"),
-		KM_PODBOAT},
-	{OP_PB_MOREDL,
+		KM_PODBOAT
+	},
+	{
+		OP_PB_MOREDL,
 		"pb-increase-max-dls",
 		"+",
 		_("Increase the number of concurrent downloads"),
-		KM_PODBOAT},
-	{OP_PB_LESSDL,
+		KM_PODBOAT
+	},
+	{
+		OP_PB_LESSDL,
 		"pb-decreate-max-dls",
 		"-",
 		_("Decrease the number of concurrent downloads"),
-		KM_PODBOAT},
+		KM_PODBOAT
+	},
 	{OP_REDRAW, "redraw", "^L", _("Redraw screen"), KM_SYSKEYS},
 	{OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBOAT},
-	{OP_SETFILTER,
+	{
+		OP_SETFILTER,
 		"set-filter",
 		"F",
 		_("Set a filter"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_SELECTFILTER,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_SELECTFILTER,
 		"select-filter",
 		"f",
 		_("Select a predefined filter"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_CLEARFILTER,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_CLEARFILTER,
 		"clear-filter",
 		"^F",
 		_("Clear currently set filter"),
-		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST},
-	{OP_BOOKMARK,
+		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST
+	},
+	{
+		OP_BOOKMARK,
 		"bookmark",
 		"^B",
 		_("Bookmark current link/article"),
-		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW},
-	{OP_EDITFLAGS,
+		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
+	},
+	{
+		OP_EDITFLAGS,
 		"edit-flags",
 		"^E",
 		_("Edit flags"),
-		KM_ARTICLELIST | KM_ARTICLE},
+		KM_ARTICLELIST | KM_ARTICLE
+	},
 	{OP_NEXTFEED, "next-feed", "j", _("Go to next feed"), KM_ARTICLELIST},
-	{OP_PREVFEED,
+	{
+		OP_PREVFEED,
 		"prev-feed",
 		"k",
 		_("Go to previous feed"),
-		KM_ARTICLELIST},
-	{OP_NEXTUNREADFEED,
+		KM_ARTICLELIST
+	},
+	{
+		OP_NEXTUNREADFEED,
 		"next-unread-feed",
 		"^N",
 		_("Go to next unread feed"),
-		KM_ARTICLELIST},
-	{OP_PREVUNREADFEED,
+		KM_ARTICLELIST
+	},
+	{
+		OP_PREVUNREADFEED,
 		"prev-unread-feed",
 		"^P",
 		_("Go to previous unread feed"),
-		KM_ARTICLELIST},
+		KM_ARTICLELIST
+	},
 	{OP_MACROPREFIX, "macro-prefix", ",", _("Call a macro"), KM_NEWSBOAT},
-	{OP_DELETE,
+	{
+		OP_DELETE,
 		"delete-article",
 		"D",
 		_("Delete article"),
-		KM_ARTICLELIST | KM_ARTICLE},
-	{OP_DELETE_ALL,
+		KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
+		OP_DELETE_ALL,
 		"delete-all-articles",
 		"^D",
 		_("Delete all articles"),
-		KM_ARTICLELIST},
-	{OP_PURGE_DELETED,
+		KM_ARTICLELIST
+	},
+	{
+		OP_PURGE_DELETED,
 		"purge-deleted",
 		"$",
 		_("Purge deleted articles"),
-		KM_ARTICLELIST},
-	{OP_EDIT_URLS,
+		KM_ARTICLELIST
+	},
+	{
+		OP_EDIT_URLS,
 		"edit-urls",
 		"E",
 		_("Edit subscribed URLs"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_CLOSEDIALOG,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_CLOSEDIALOG,
 		"close-dialog",
 		"^X",
 		_("Close currently selected dialog"),
-		KM_DIALOGS},
-	{OP_VIEWDIALOGS,
+		KM_DIALOGS
+	},
+	{
+		OP_VIEWDIALOGS,
 		"view-dialogs",
 		"v",
 		_("View list of open dialogs"),
-		KM_NEWSBOAT},
-	{OP_NEXTDIALOG,
+		KM_NEWSBOAT
+	},
+	{
+		OP_NEXTDIALOG,
 		"next-dialog",
 		"^V",
 		_("Go to next dialog"),
-		KM_NEWSBOAT},
-	{OP_PREVDIALOG,
+		KM_NEWSBOAT
+	},
+	{
+		OP_PREVDIALOG,
 		"prev-dialog",
 		"^G",
 		_("Go to previous dialog"),
-		KM_NEWSBOAT},
-	{OP_PIPE_TO,
+		KM_NEWSBOAT
+	},
+	{
+		OP_PIPE_TO,
 		"pipe-to",
 		"|",
 		_("Pipe article to command"),
-		KM_ARTICLE | KM_ARTICLELIST},
-	{OP_SORT,
+		KM_ARTICLE | KM_ARTICLELIST
+	},
+	{
+		OP_SORT,
 		"sort",
 		"g",
 		_("Sort current list"),
-		KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_REVSORT,
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
+	{
+		OP_REVSORT,
 		"rev-sort",
 		"G",
 		_("Sort current list (reverse)"),
-		KM_FEEDLIST | KM_ARTICLELIST},
+		KM_FEEDLIST | KM_ARTICLELIST
+	},
 
 	{OP_0, "zero", "0", _("Open URL 10"), KM_URLVIEW | KM_ARTICLE},
 	{OP_1, "one", "1", _("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
@@ -295,71 +391,89 @@ static OpDesc opdescs[] = {
 
 	{OP_SK_UP, "up", "UP", _("Move to the previous entry"), KM_SYSKEYS},
 	{OP_SK_DOWN, "down", "DOWN", _("Move to the next entry"), KM_SYSKEYS},
-	{OP_SK_PGUP,
+	{
+		OP_SK_PGUP,
 		"pageup",
 		"PAGEUP",
 		_("Move to the previous page"),
-		KM_SYSKEYS},
-	{OP_SK_PGDOWN,
+		KM_SYSKEYS
+	},
+	{
+		OP_SK_PGDOWN,
 		"pagedown",
 		"PAGEDOWN",
 		_("Move to the next page"),
-		KM_SYSKEYS},
+		KM_SYSKEYS
+	},
 
-	{OP_SK_HOME,
+	{
+		OP_SK_HOME,
 		"home",
 		"HOME",
 		_("Move to the start of page/list"),
-		KM_SYSKEYS},
-	{OP_SK_END,
+		KM_SYSKEYS
+	},
+	{
+		OP_SK_END,
 		"end",
 		"END",
 		_("Move to the end of page/list"),
-		KM_SYSKEYS},
+		KM_SYSKEYS
+	},
 
-	{OP_INT_END_QUESTION,
+	{
+		OP_INT_END_QUESTION,
 		"XXXNOKEY-end-question",
 		"end-question",
 		nullptr,
-		KM_INTERNAL},
-	{OP_INT_CANCEL_QNA,
+		KM_INTERNAL
+	},
+	{
+		OP_INT_CANCEL_QNA,
 		"XXXNOKEY-cancel-qna",
 		"cancel-qna",
 		nullptr,
-		KM_INTERNAL},
-	{OP_INT_QNA_NEXTHIST,
+		KM_INTERNAL
+	},
+	{
+		OP_INT_QNA_NEXTHIST,
 		"XXXNOKEY-qna-next-history",
 		"qna-next-history",
 		nullptr,
-		KM_INTERNAL},
-	{OP_INT_QNA_PREVHIST,
+		KM_INTERNAL
+	},
+	{
+		OP_INT_QNA_PREVHIST,
 		"XXXNOKEY-qna-prev-history",
 		"qna-prev-history",
 		nullptr,
-		KM_INTERNAL},
+		KM_INTERNAL
+	},
 
 	{OP_INT_RESIZE, "RESIZE", "internal-resize", nullptr, KM_INTERNAL},
 	{OP_INT_SET, "set", "internal-set", nullptr, KM_INTERNAL},
 
 	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", nullptr, KM_INTERNAL},
 
-	{OP_NIL, nullptr, nullptr, nullptr, 0}};
+	{OP_NIL, nullptr, nullptr, nullptr, 0}
+};
 
 // "all" must be first, the following positions must be the same as the KM_*
 // flag definitions (get_flag_from_context() relies on this).
 static const char* contexts[] = {"all",
-	"feedlist",
-	"filebrowser",
-	"help",
-	"articlelist",
-	"article",
-	"tagselection",
-	"filterselection",
-	"urlview",
-	"podbeuter",
-	"dialogs",
-	"dirbrowser",
-	nullptr};
+		"feedlist",
+		"filebrowser",
+		"help",
+		"articlelist",
+		"article",
+		"tagselection",
+		"filterselection",
+		"urlview",
+		"podbeuter",
+		"dialogs",
+		"dirbrowser",
+		nullptr
+	};
 
 KeyMap::KeyMap(unsigned flags)
 {
@@ -409,10 +523,10 @@ void KeyMap::get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
 						if (!already_added) {
 							desc.cmd =
 								opdescs[j]
-									.opstr;
+								.opstr;
 							if (opdescs[j].help_text)
 								desc.desc = gettext(
-									opdescs[j]
+										opdescs[j]
 										.help_text);
 							already_added = true;
 						}
@@ -436,7 +550,7 @@ void KeyMap::get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
 					desc.cmd = opdescs[j].opstr;
 					if (opdescs[j].help_text)
 						desc.desc = gettext(
-							opdescs[j].help_text);
+								opdescs[j].help_text);
 					desc.flags = opdescs[j].flags;
 					descs.push_back(desc);
 				}
@@ -591,12 +705,12 @@ void KeyMap::handle_action(const std::string& action,
 		}
 		if (!is_valid_context(context))
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid context"), context));
+					_("`%s' is not a valid context"), context));
 		Operation op = get_opcode(params[1]);
 		if (op == OP_NIL) {
 			throw ConfigHandlerException(
 				strprintf::fmt(_("`%s' is not a valid "
-						 "key command"),
+						"key command"),
 					params[1]));
 		}
 		if (op > OP_SK_MIN && op < OP_SK_MAX) {
@@ -642,7 +756,7 @@ void KeyMap::handle_action(const std::string& action,
 					throw ConfigHandlerException(
 						strprintf::fmt(
 							_("`%s' is not a valid "
-							  "key command"),
+								"key command"),
 							*it));
 				first = false;
 			} else {

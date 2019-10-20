@@ -115,8 +115,7 @@ public:
 	void set_cache(Cache* c);
 	void set_filters(FilterContainer* f);
 
-	std::vector<std::pair<unsigned int, std::string>>
-	get_formaction_names();
+	std::vector<std::pair<unsigned int, std::string>> get_formaction_names();
 
 	std::shared_ptr<FormAction> get_current_formaction();
 

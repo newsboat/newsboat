@@ -9,7 +9,7 @@
 using namespace newsboat;
 
 TEST_CASE("URL reader remembers the file name from which it read the URLs",
-		"[FileUrlReader]")
+	"[FileUrlReader]")
 {
 	const std::string url("data/test-urls.txt");
 
@@ -52,7 +52,7 @@ TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
 }
 
 TEST_CASE("URL reader writes files that it can understand later",
-		"[FileUrlReader]")
+	"[FileUrlReader]")
 {
 	const std::string testDataPath("data/test-urls.txt");
 

@@ -3,8 +3,8 @@
 #include "3rd-party/catch.hpp"
 
 TEST_CASE("EnvVar object restores the environment variable to its original "
-		"state when the object is destroyed",
-		"[test-helpers]")
+	"state when the object is destroyed",
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -35,7 +35,7 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 }
 
 TEST_CASE("EnvVar::set() changes the current state of the environment variable",
-		"[test-helpers]")
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -55,8 +55,8 @@ TEST_CASE("EnvVar::set() changes the current state of the environment variable",
 }
 
 TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
-		"variable is restored",
-		"[test-helpers]")
+	"variable is restored",
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -81,8 +81,8 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 }
 
 TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
-		"the environment variable",
-		"[test-helpers]")
+	"the environment variable",
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -105,7 +105,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto valueChanged = false;
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&valueChanged, &newValue, &var](){
+		envVar.on_change([&valueChanged, &newValue, &var]() {
 			valueChanged = newValue == ::getenv(var);
 		});
 
@@ -118,7 +118,9 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto counter = unsigned{};
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter](){ counter++; });
+		envVar.on_change([&counter]() {
+			counter++;
+		});
 
 		REQUIRE(counter == 0);
 		envVar.set("new value");
@@ -135,7 +137,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 }
 
 TEST_CASE("EnvVar::unset() completely removes the variable from the environment",
-		"[test-helpers]")
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -172,8 +174,8 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 }
 
 TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
-		"variable is restored",
-		"[test-helpers]")
+	"variable is restored",
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -215,8 +217,8 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 }
 
 TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
-		"the environment variable",
-		"[test-helpers]")
+	"the environment variable",
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -259,8 +261,8 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 }
 
 TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
-		"restoring the varibale to its original state",
-		"[test-helpers]")
+	"restoring the varibale to its original state",
+	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -275,7 +277,9 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 		{
 			TestHelpers::EnvVar envVar(var);
-			envVar.on_change([&counter](){ counter++; });
+			envVar.on_change([&counter]() {
+				counter++;
+			});
 		}
 
 		REQUIRE(counter == 1);

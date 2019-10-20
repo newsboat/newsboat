@@ -12,16 +12,14 @@ TEST_CASE("RssItem::sort_flags() cleans up flags", "[rss]")
 	Cache rsscache(":memory:", &cfg);
 	RssItem item(&rsscache);
 
-	SECTION("Repeated letters do not erase other letters")
-	{
+	SECTION("Repeated letters do not erase other letters") {
 		std::string inputflags = "Abcdecf";
 		std::string result = "Abcdef";
 		item.set_flags(inputflags);
 		REQUIRE(result == item.flags());
 	}
 
-	SECTION("Non alpha characters in input flags are ignored")
-	{
+	SECTION("Non alpha characters in input flags are ignored") {
 		std::string inputflags = "Abcd";
 		item.set_flags(inputflags + "1234568790^\"#'é(£");
 		REQUIRE(inputflags == item.flags());

@@ -136,9 +136,9 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 
 	std::sort(++begin(result),
 		end(result),
-		[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
-			return a.first < b.first;
-		});
+	[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
+		return a.first < b.first;
+	});
 
 	return result;
 }
@@ -305,12 +305,12 @@ bool OcNewsApi::query(const std::string& query,
 	utils::set_common_curl_options(handle, cfg);
 
 	static auto write_fn =
-		[](void* buffer, size_t size, size_t nmemb, void* userp) {
-			std::string* pbuf = static_cast<std::string*>(userp);
-			pbuf->append(
-				static_cast<const char*>(buffer), size * nmemb);
-			return size * nmemb;
-		};
+	[](void* buffer, size_t size, size_t nmemb, void* userp) {
+		std::string* pbuf = static_cast<std::string*>(userp);
+		pbuf->append(
+			static_cast<const char*>(buffer), size * nmemb);
+		return size * nmemb;
+	};
 	std::string buff;
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, *write_fn);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &buff);

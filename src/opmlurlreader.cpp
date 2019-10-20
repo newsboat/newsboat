@@ -95,7 +95,7 @@ void OpmlUrlReader::rec_find_rss_outlines(xmlNode* node, std::string tag)
 				xmlFree(type);
 			} else {
 				char* text = (char*)xmlGetProp(
-					node, (const xmlChar*)"title");
+						node, (const xmlChar*)"title");
 				if (text) {
 					if (newtag.length() > 0) {
 						newtag.append("/");

@@ -40,9 +40,9 @@ private:
 
 	std::string prepare_keymaphint(KeyMapHintEntry* hints);
 	std::string format_line(const std::string& podlist_format,
-			const Download& dl,
-			unsigned int pos,
-			unsigned int width);
+		const Download& dl,
+		unsigned int pos,
+		unsigned int width);
 	PbController* ctrl;
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;

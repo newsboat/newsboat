@@ -79,7 +79,7 @@ TEST_CASE("read_password() returns the first line of the file", "[RemoteApi]")
 {
 	REQUIRE(RemoteApi::read_password("/dev/null") == "");
 	REQUIRE_NOTHROW(RemoteApi::read_password(
-		"a-passwordfile-that-is-guaranteed-to-not-exist.txt"));
+			"a-passwordfile-that-is-guaranteed-to-not-exist.txt"));
 	REQUIRE(RemoteApi::read_password(
 			"a-passwordfile-that-is-guaranteed-to-not-exist.txt") ==
 		"");
@@ -100,7 +100,7 @@ TEST_CASE("eval_password() returns the first line of command's output",
 	REQUIRE(RemoteApi::eval_password("echo ' aaa \naaa'") == " aaa ");
 	REQUIRE(RemoteApi::eval_password("echo '\naaa'") == "");
 	REQUIRE_NOTHROW(RemoteApi::eval_password(
-		"a-program-that-is-guaranteed-to-not-exists"));
+			"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(RemoteApi::eval_password(
 			"a-program-that-is-guaranteed-to-not-exists") == "");
 	REQUIRE_NOTHROW(

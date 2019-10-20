@@ -106,9 +106,10 @@ TEST_CASE("<br>, <br/> and <br /> result in a line break", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
-	for (std::string tag : {"<br>", "<br/>", "<br />"}) {
-		SECTION(tag)
-		{
+	for (std::string tag : {
+			"<br>", "<br/>", "<br />"
+		}) {
+		SECTION(tag) {
 			auto input = "hello" + tag + "world!";
 			rnd.render(input, lines, links, "");
 			REQUIRE(lines.size() == 2);
@@ -156,22 +157,19 @@ TEST_CASE("format_ol_count formats list count in specified format",
 {
 	HtmlRenderer r;
 
-	SECTION("format to digit")
-	{
+	SECTION("format to digit") {
 		REQUIRE(r.format_ol_count(1, '1') == " 1");
 		REQUIRE(r.format_ol_count(3, '1') == " 3");
 	}
 
-	SECTION("format to alphabetic")
-	{
+	SECTION("format to alphabetic") {
 		REQUIRE(r.format_ol_count(3, 'a') == "c");
 		REQUIRE(r.format_ol_count(26 + 3, 'a') == "ac");
 		REQUIRE(r.format_ol_count(3 * 26 * 26 + 5 * 26 + 2, 'a') ==
 			"ceb");
 	}
 
-	SECTION("format to alphabetic uppercase")
-	{
+	SECTION("format to alphabetic uppercase") {
 		REQUIRE(r.format_ol_count(3, 'A') == "C");
 		REQUIRE(r.format_ol_count(26 + 5, 'A') == "AE");
 		REQUIRE(r.format_ol_count(27, 'A') == "AA");
@@ -181,8 +179,7 @@ TEST_CASE("format_ol_count formats list count in specified format",
 			"YZZ");
 	}
 
-	SECTION("format to roman numerals")
-	{
+	SECTION("format to roman numerals") {
 		REQUIRE(r.format_ol_count(1, 'i') == "i");
 		REQUIRE(r.format_ol_count(2, 'i') == "ii");
 		REQUIRE(r.format_ol_count(5, 'i') == "v");
@@ -194,8 +191,7 @@ TEST_CASE("format_ol_count formats list count in specified format",
 		REQUIRE(r.format_ol_count(1972, 'i') == "mcmlxxii");
 	}
 
-	SECTION("format to uppercase roman numerals")
-	{
+	SECTION("format to uppercase roman numerals") {
 		REQUIRE(r.format_ol_count(2011, 'I') == "MMXI");
 	}
 }
@@ -560,8 +556,7 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
-	SECTION("<h1> is rendered with setext-style underlining")
-	{
+	SECTION("<h1> is rendered with setext-style underlining") {
 		const std::string input = "<h1>Why are we here?</h1>";
 
 		REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -571,10 +566,11 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 		REQUIRE(links.size() == 0);
 	}
 
-	for (auto tag : {"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"}) {
+	for (auto tag : {
+			"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"
+		}) {
 		SECTION(std::string("When alone, ") + tag +
-			" generates only one line")
-		{
+			" generates only one line") {
 			std::string closing_tag = tag;
 			closing_tag.insert(1, "/");
 
@@ -589,10 +585,8 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 	}
 
 	SECTION("There's always an empty line between header/paragraph/list "
-		"and paragraph")
-	{
-		SECTION("<h1>")
-		{
+		"and paragraph") {
+		SECTION("<h1>") {
 			const std::string input =
 				"<h1>header</h1><p>paragraph</p>";
 			REQUIRE_NOTHROW(r.render(input, lines, links, url));
@@ -601,10 +595,10 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 			REQUIRE(links.size() == 0);
 		}
 
-		for (auto tag :
-			{"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"}) {
-			SECTION(tag)
-			{
+		for (auto tag : {
+				"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"
+			}) {
+			SECTION(tag) {
 				std::string closing_tag = tag;
 				closing_tag.insert(1, "/");
 
@@ -620,8 +614,7 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 			}
 		}
 
-		SECTION("<ul>")
-		{
+		SECTION("<ul>") {
 			const std::string input =
 				"<ul><li>one</li><li>two</li></"
 				"ul><p>paragraph</p>";
@@ -631,8 +624,7 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 			REQUIRE(links.size() == 0);
 		}
 
-		SECTION("<ol>")
-		{
+		SECTION("<ol>") {
 			const std::string input =
 				"<ol><li>one</li><li>two</li></"
 				"ol><p>paragraph</p>";
@@ -707,8 +699,7 @@ TEST_CASE("default style for <ol> is Arabic numerals", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
-	SECTION("no `type' attribute")
-	{
+	SECTION("no `type' attribute") {
 		const std::string input =
 			"<ol>"
 			"<li>one</li>"
@@ -722,8 +713,7 @@ TEST_CASE("default style for <ol> is Arabic numerals", "[HtmlRenderer]")
 		REQUIRE(links.size() == 0);
 	}
 
-	SECTION("invalid `type' attribute")
-	{
+	SECTION("invalid `type' attribute") {
 		const std::string input =
 			"<ol type='invalid value'>"
 			"<li>one</li>"
@@ -744,8 +734,7 @@ TEST_CASE("default starting number for <ol> is 1", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
-	SECTION("no `start' attribute")
-	{
+	SECTION("no `start' attribute") {
 		const std::string input =
 			"<ol>"
 			"<li>one</li>"
@@ -759,8 +748,7 @@ TEST_CASE("default starting number for <ol> is 1", "[HtmlRenderer]")
 		REQUIRE(links.size() == 0);
 	}
 
-	SECTION("invalid `start' attribute")
-	{
+	SECTION("invalid `start' attribute") {
 		const std::string input =
 			"<ol start='whatever'>"
 			"<li>one</li>"
@@ -925,8 +913,7 @@ TEST_CASE("header rows of tables are in bold", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
-	SECTION("one column")
-	{
+	SECTION("one column") {
 		const std::string input =
 			"<table>"
 			"<tr>"
@@ -940,8 +927,7 @@ TEST_CASE("header rows of tables are in bold", "[HtmlRenderer]")
 		REQUIRE(links.size() == 0);
 	}
 
-	SECTION("two columns")
-	{
+	SECTION("two columns") {
 		const std::string input =
 			"<table>"
 			"<tr>"
@@ -990,8 +976,7 @@ TEST_CASE(
 	std::vector<LinkPair> links;
 
 	for (auto border_width = 1; border_width < 10; ++border_width) {
-		SECTION(strprintf::fmt("`border' = %u", border_width))
-		{
+		SECTION(strprintf::fmt("`border' = %u", border_width)) {
 			const std::string input_template =
 				"<table border='%u'>"
 				"<tr>"

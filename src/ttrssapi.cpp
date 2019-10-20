@@ -23,8 +23,8 @@ TtRssApi::TtRssApi(ConfigContainer* c)
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
 	if (single) {
 		auth_info = strprintf::fmt("%s:%s",
-			cfg->get_configvalue("ttrss-login"),
-			cfg->get_configvalue("ttrss-password"));
+				cfg->get_configvalue("ttrss-login"),
+				cfg->get_configvalue("ttrss-password"));
 	} else {
 		auth_info = "";
 	}
@@ -152,7 +152,7 @@ json TtRssApi::run_op(const std::string& op,
 	}
 
 	std::string result = utils::retrieve_url(
-		url, cfg, auth_info, &req_data, cached_handle);
+			url, cfg, auth_info, &req_data, cached_handle);
 
 	LOG(Level::DEBUG,
 		"TtRssApi::run_op(%s,...): post=%s reply = %s",
@@ -261,7 +261,7 @@ std::vector<TaggedFeedUrl> TtRssApi::get_subscribed_urls()
 
 		std::map<std::string, std::string> args;
 		args["cat_id"] = "-3"; // All feeds, excluding virtual feeds
-				       // (e.g. Labels and such)
+		// (e.g. Labels and such)
 		json feedlist = run_op("getFeeds", args);
 
 		if (feedlist.is_null()) {
@@ -323,7 +323,8 @@ bool TtRssApi::mark_article_read(const std::string& guid, bool read)
 {
 	// Do this in a thread, as we don't care about the result enough to wait
 	// for it.
-	std::thread t{[=]() {
+	std::thread t{[=]()
+	{
 		LOG(Level::DEBUG,
 			"TtRssApi::mark_article_read: inside thread, marking "
 			"thread as read...");
@@ -358,7 +359,7 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 			strchr(newflags.c_str(), publish_flag[0]) != nullptr) {
 			success = publish_article(guid, true);
 		} else if (strchr(oldflags.c_str(), publish_flag[0]) !=
-				nullptr &&
+			nullptr &&
 			strchr(newflags.c_str(), publish_flag[0]) == nullptr) {
 			success = publish_article(guid, false);
 		}
@@ -390,8 +391,8 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	}
 
 	LOG(Level::DEBUG,
-			"TtRssApi::fetch_feed: %" PRIu64 " items",
-			static_cast<uint64_t>(content.size()));
+		"TtRssApi::fetch_feed: %" PRIu64 " items",
+		static_cast<uint64_t>(content.size()));
 
 	try {
 		for (const auto& item_obj : content) {
@@ -456,9 +457,9 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
 	std::sort(f.items.begin(),
 		f.items.end(),
-		[](const rsspp::Item& a, const rsspp::Item& b) {
-			return a.pubDate_ts > b.pubDate_ts;
-		});
+	[](const rsspp::Item& a, const rsspp::Item& b) {
+		return a.pubDate_ts > b.pubDate_ts;
+	});
 
 	return f;
 }

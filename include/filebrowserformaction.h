@@ -44,8 +44,8 @@ private:
 	char get_filetype(mode_t mode);
 	std::string get_owner(uid_t uid);
 	std::string get_group(gid_t gid);
-	std::string
-	get_formatted_filename(std::string filename, char ftype, mode_t mode);
+	std::string get_formatted_filename(std::string filename, char ftype,
+		mode_t mode);
 
 	bool quit;
 	std::string cwd;

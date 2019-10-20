@@ -37,10 +37,10 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, old_width(0)
 	, old_itempos(-1)
 	, old_sort_strategy({ArtSortMethod::TITLE, SortDirection::DESC})
-	, invalidated(false)
-	, invalidation_mode(InvalidationMode::COMPLETE)
-	, rsscache(cc)
-	, filters(f)
+, invalidated(false)
+, invalidation_mode(InvalidationMode::COMPLETE)
+, rsscache(cc)
+, filters(f)
 {
 	search_dummy_feed->set_search_feed(true);
 }
@@ -80,7 +80,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(
 				_("No item selected!")); // should not happen
 		}
-	} break;
+	}
+	break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
@@ -102,7 +103,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(
 				_("No item selected!")); // should not happen
 		}
-	} break;
+	}
+	break;
 	case OP_DELETE_ALL: {
 		ScopeMeasure m1("OP_DELETE_ALL");
 		if (visible_items.size() > 0) {
@@ -119,12 +121,14 @@ void ItemListFormAction::process_operation(Operation op,
 			}
 			invalidate_everything();
 		}
-	} break;
+	}
+	break;
 	case OP_PURGE_DELETED: {
 		ScopeMeasure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
 		invalidate_everything();
-	} break;
+	}
+	break;
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO,
 			"ItemListFormAction: opening item at pos `%s'",
@@ -138,8 +142,8 @@ void ItemListFormAction::process_operation(Operation op,
 				v->open_in_browser(
 					visible_items[itempos].first->link());
 				if (!cfg->get_configvalue_as_bool(
-					    "openbrowser-and-mark-jumps-to-"
-					    "next-unread")) {
+						"openbrowser-and-mark-jumps-to-"
+						"next-unread")) {
 					if (itempos <
 						visible_items.size() - 1) {
 						f->set("itempos",
@@ -155,7 +159,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(
 				_("No item selected!")); // should not happen
 		}
-	} break;
+	}
+	break;
 	case OP_OPENINBROWSER: {
 		LOG(Level::INFO,
 			"ItemListFormAction: opening item at pos `%s'",
@@ -170,7 +175,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(
 				_("No item selected!")); // should not happen
 		}
-	} break;
+	}
+	break;
 	case OP_OPENALLUNREADINBROWSER: {
 		if (feed) {
 			LOG(Level::INFO,
@@ -179,7 +185,8 @@ void ItemListFormAction::process_operation(Operation op,
 				"browser");
 			open_unread_items_in_browser(feed, false);
 		}
-	} break;
+	}
+	break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK: {
 		if (feed) {
 			LOG(Level::INFO,
@@ -189,7 +196,8 @@ void ItemListFormAction::process_operation(Operation op,
 			open_unread_items_in_browser(feed, true);
 			invalidate_everything();
 		}
-	} break;
+	}
+	break;
 	case OP_TOGGLEITEMREAD: {
 		LOG(Level::INFO,
 			"ItemListFormAction: toggling item read at pos `%s'",
@@ -200,48 +208,48 @@ void ItemListFormAction::process_operation(Operation op,
 				if (automatic && args->size() > 0) {
 					if ((*args)[0] == "read") {
 						visible_items[itempos]
-							.first->set_unread(
-								false);
+						.first->set_unread(
+							false);
 						v->get_ctrl()->mark_article_read(
 							visible_items[itempos]
-								.first->guid(),
+							.first->guid(),
 							true);
 					} else if ((*args)[0] == "unread") {
 						visible_items[itempos]
-							.first->set_unread(
-								true);
+						.first->set_unread(
+							true);
 						v->get_ctrl()->mark_article_read(
 							visible_items[itempos]
-								.first->guid(),
+							.first->guid(),
 							false);
 					}
 					v->set_status("");
 				} else {
 					// mark as undeleted
 					visible_items[itempos]
-						.first->set_deleted(false);
+					.first->set_deleted(false);
 					rsscache->mark_item_deleted(
 						visible_items[itempos]
-							.first->guid(),
+						.first->guid(),
 						false);
 					// toggle read
 					bool unread = visible_items[itempos]
-							      .first->unread();
+						.first->unread();
 					visible_items[itempos]
-						.first->set_unread(!unread);
+					.first->set_unread(!unread);
 					v->get_ctrl()->mark_article_read(
 						visible_items[itempos]
-							.first->guid(),
+						.first->guid(),
 						unread);
 					v->set_status("");
 				}
 			} catch (const DbException& e) {
 				v->set_status(strprintf::fmt(
-					_("Error while toggling read flag: %s"),
-					e.what()));
+						_("Error while toggling read flag: %s"),
+						e.what()));
 			}
 			if (!cfg->get_configvalue_as_bool(
-				    "toggleitemread-jumps-to-next-unread")) {
+					"toggleitemread-jumps-to-next-unread")) {
 				if (itempos < visible_items.size() - 1)
 					f->set("itempos",
 						strprintf::fmt(
@@ -251,30 +259,31 @@ void ItemListFormAction::process_operation(Operation op,
 			}
 			invalidate(itempos);
 		}
-	} break;
+	}
+	break;
 	case OP_SHOWURLS:
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				std::string urlviewer = cfg->get_configvalue(
-					"external-url-viewer");
+						"external-url-viewer");
 				if (urlviewer == "") {
 					std::vector<LinkPair> links;
 					std::vector<std::pair<LineType,
-						std::string>>
-						lines;
+					    std::string>>
+					    lines;
 					HtmlRenderer rnd;
 					std::string baseurl =
 						visible_items[itempos]
-								.first
-								->get_base() !=
-							""
+						.first
+						->get_base() !=
+						""
 						? visible_items[itempos]
-							  .first->get_base()
+						.first->get_base()
 						: visible_items[itempos]
-							  .first->feedurl();
+						.first->feedurl();
 					rnd.render(
 						visible_items[itempos]
-							.first->description(),
+						.first->description(),
 						lines,
 						links,
 						baseurl);
@@ -305,21 +314,21 @@ void ItemListFormAction::process_operation(Operation op,
 					qna_responses.clear();
 					qna_responses.push_back(
 						visible_items[itempos]
-							.first->link());
+						.first->link());
 					qna_responses.push_back(
 						visible_items[itempos]
-							.first->title());
+						.first->title());
 					qna_responses.push_back(args->size() > 0
-							? (*args)[0]
-							: "");
+						? (*args)[0]
+						: "");
 					qna_responses.push_back(feed->title());
 					this->finished_qna(OP_INT_BM_END);
 				} else {
 					this->start_bookmark_qna(
 						visible_items[itempos]
-							.first->title(),
+						.first->title(),
 						visible_items[itempos]
-							.first->link(),
+						.first->link(),
 						"",
 						feed->title());
 				}
@@ -328,7 +337,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(
 				_("No item selected!")); // should not happen
 		}
-	} break;
+	}
+	break;
 	case OP_EDITFLAGS: {
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
@@ -343,7 +353,7 @@ void ItemListFormAction::process_operation(Operation op,
 				} else {
 					std::vector<QnaPair> qna;
 					qna.push_back(QnaPair(_("Flags: "),
-						visible_items[itempos]
+							visible_items[itempos]
 							.first->flags()));
 					this->start_qna(
 						qna, OP_INT_EDITFLAGS_END);
@@ -353,7 +363,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->show_error(
 				_("No item selected!")); // should not happen
 		}
-	} break;
+	}
+	break;
 	case OP_SAVE: {
 		LOG(Level::INFO,
 			"ItemListFormAction: saving item at pos `%s'",
@@ -366,15 +377,16 @@ void ItemListFormAction::process_operation(Operation op,
 				}
 			} else {
 				filename = v->run_filebrowser(
-					v->get_filename_suggestion(
-						visible_items[itempos]
+						v->get_filename_suggestion(
+							visible_items[itempos]
 							.first->title()));
 			}
 			save_article(filename, visible_items[itempos].first);
 		} else {
 			v->show_error(_("Error: no item selected!"));
 		}
-	} break;
+	}
+	break;
 	case OP_SAVEALL:
 		handle_op_saveall();
 		break;
@@ -487,15 +499,15 @@ void ItemListFormAction::process_operation(Operation op,
 						item->set_unread_nowrite_notify(
 							false,
 							true); // TODO: do we
-							       // need to call
-							       // mark_article_read
-							       // here, too?
+						// need to call
+						// mark_article_read
+						// here, too?
 					}
 				}
 				v->get_ctrl()->mark_all_read(feed);
 			}
 			if (cfg->get_configvalue_as_bool(
-				    "markfeedread-jumps-to-next-unread")) {
+					"markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
 			} else { // reposition to first/last item
 				std::string sortorder =
@@ -519,8 +531,8 @@ void ItemListFormAction::process_operation(Operation op,
 			v->set_status("");
 		} catch (const DbException& e) {
 			v->show_error(strprintf::fmt(
-				_("Error: couldn't mark feed read: %s"),
-				e.what()));
+					_("Error: couldn't mark feed read: %s"),
+					e.what()));
 		}
 		break;
 	case OP_MARKALLABOVEASREAD:
@@ -539,7 +551,7 @@ void ItemListFormAction::process_operation(Operation op,
 				}
 			}
 			if (!cfg->get_configvalue_as_bool(
-				    "show-read-articles")) {
+					"show-read-articles")) {
 				f->set("itempos", "0");
 			}
 			invalidate_everything();
@@ -568,7 +580,7 @@ void ItemListFormAction::process_operation(Operation op,
 				}
 			} else {
 				qna.push_back(QnaPair(
-					_("Pipe article to command: "), ""));
+						_("Pipe article to command: "), ""));
 				this->start_qna(
 					qna, OP_PIPE_TO, &cmdlinehistory);
 			}
@@ -589,7 +601,8 @@ void ItemListFormAction::process_operation(Operation op,
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
-	} break;
+	}
+	break;
 	case OP_EDIT_URLS:
 		v->get_ctrl()->edit_urls_file();
 		break;
@@ -602,7 +615,7 @@ void ItemListFormAction::process_operation(Operation op,
 				}
 			} else {
 				newfilter = v->select_filter(
-					filters->get_filters());
+						filters->get_filters());
 				LOG(Level::DEBUG,
 					"ItemListFormAction::run: newfilters "
 					"= %s",
@@ -613,11 +626,11 @@ void ItemListFormAction::process_operation(Operation op,
 				if (newfilter.length() > 0) {
 					if (!matcher.parse(newfilter)) {
 						v->show_error(strprintf::fmt(
-							_("Error: couldn't "
-							  "parse filter "
-							  "command `%s': %s"),
-							newfilter,
-							matcher.get_parse_error()));
+								_("Error: couldn't "
+									"parse filter "
+									"command `%s': %s"),
+								newfilter,
+								matcher.get_parse_error()));
 					} else {
 						apply_filter = true;
 						invalidate_everything();
@@ -655,9 +668,9 @@ void ItemListFormAction::process_operation(Operation op,
 		/// messages
 		std::string input_options = _("dtfalgr");
 		char c = v->confirm(
-			_("Sort by "
-			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
-			input_options);
+				_("Sort by "
+					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
+				input_options);
 		if (!c) {
 			break;
 		}
@@ -688,13 +701,14 @@ void ItemListFormAction::process_operation(Operation op,
 		} else if (c == input_options.at(6)) {
 			cfg->set_configvalue("article-sort-order", "random");
 		}
-	} break;
+	}
+	break;
 	case OP_REVSORT: {
 		std::string input_options = _("dtfalgr");
 		char c = v->confirm(
-			_("Reverse Sort by "
-			  "(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
-			input_options);
+				_("Reverse Sort by "
+					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
+				input_options);
 		if (!c) {
 			break;
 		}
@@ -727,7 +741,8 @@ void ItemListFormAction::process_operation(Operation op,
 		} else if (c == input_options.at(6)) {
 			cfg->set_configvalue("article-sort-order", "random");
 		}
-	} break;
+	}
+	break;
 	case OP_INT_RESIZE:
 		invalidate_everything();
 		break;
@@ -779,7 +794,8 @@ void ItemListFormAction::finished_qna(Operation op)
 			}
 			v->pop_current_formaction();
 		}
-	} break;
+	}
+	break;
 
 	default:
 		break;
@@ -835,7 +851,7 @@ void ItemListFormAction::qna_start_search()
 	std::vector<std::shared_ptr<RssItem>> items;
 	try {
 		std::string utf8searchphrase = utils::convert_text(
-			searchphrase, "utf-8", nl_langinfo(CODESET));
+				searchphrase, "utf-8", nl_langinfo(CODESET));
 		if (show_searchresult) {
 			feed->set_rssurl("search:");
 		}
@@ -889,7 +905,7 @@ void ItemListFormAction::do_update_visible_items()
 	for (const auto& item : items) {
 		item->set_index(i + 1);
 		if ((show_read || item->unread()) &&
-		    (!apply_filter || matcher.matches(item.get()))) {
+			(!apply_filter || matcher.matches(item.get()))) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
@@ -917,7 +933,7 @@ void ItemListFormAction::prepare()
 		do_update_visible_items();
 	} catch (MatcherException& e) {
 		v->show_error(strprintf::fmt(
-			_("Error: applying the filter failed: %s"), e.what()));
+				_("Error: applying the filter failed: %s"), e.what()));
 		return;
 	}
 
@@ -956,9 +972,9 @@ void ItemListFormAction::prepare()
 
 		for (const auto& item : visible_items) {
 			auto line = item2formatted_line(item,
-				width,
-				itemlist_format,
-				datetime_format);
+					width,
+					itemlist_format,
+					datetime_format);
 			listfmt.add_line(line, item.second);
 		}
 		break;
@@ -967,9 +983,9 @@ void ItemListFormAction::prepare()
 		for (const auto& itempos : invalidated_itempos) {
 			auto item = visible_items[itempos];
 			auto line = item2formatted_line(item,
-				width,
-				itemlist_format,
-				datetime_format);
+					width,
+					itemlist_format,
+					datetime_format);
 			listfmt.set_line(itempos, line, item.second);
 		}
 		break;
@@ -1005,7 +1021,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	if (feed->rssurl() != item.first->feedurl() &&
 		item.first->get_feedptr() != nullptr) {
 		auto feedtitle = utils::quote_for_stfl(
-			item.first->get_feedptr()->title());
+				item.first->get_feedptr()->title());
 		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('T', feedtitle);
 	}
@@ -1076,10 +1092,10 @@ void ItemListFormAction::set_head(const std::string& s,
 
 	if (!show_searchresult) {
 		title = fmt.do_format(
-			cfg->get_configvalue("articlelist-title-format"));
+				cfg->get_configvalue("articlelist-title-format"));
 	} else {
 		title = fmt.do_format(
-			cfg->get_configvalue("searchresult-title-format"));
+				cfg->get_configvalue("searchresult-title-format"));
 	}
 	f->set("head", title);
 }
@@ -1216,7 +1232,8 @@ KeyMapHintEntry* ItemListFormAction::get_keymap_hint()
 		{OP_MARKFEEDREAD, _("Mark All Read")},
 		{OP_SEARCH, _("Search")},
 		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	return hints;
 }
 
@@ -1305,11 +1322,11 @@ void ItemListFormAction::save_article(const std::string& filename,
 		try {
 			v->get_ctrl()->write_item(item, filename);
 			v->show_error(strprintf::fmt(
-				_("Saved article to %s"), filename));
+					_("Saved article to %s"), filename));
 		} catch (...) {
 			v->show_error(strprintf::fmt(
-				_("Error: couldn't save article to %s"),
-				filename));
+					_("Error: couldn't save article to %s"),
+					filename));
 		}
 	}
 }
@@ -1337,10 +1354,10 @@ void ItemListFormAction::set_regexmanager(RegexManager* r)
 		i++;
 	}
 	std::string textview = strprintf::fmt(
-		"{list[items] .expand:vh style_normal[listnormal]: "
-		"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
-		"pos_name[itemposname]: pos[itempos]:0 %s richtext:1}",
-		attrstr);
+			"{list[items] .expand:vh style_normal[listnormal]: "
+			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
+			"pos_name[itemposname]: pos[itempos]:0 %s richtext:1}",
+			attrstr);
 	f->modify("items", "replace", textview);
 }
 
@@ -1397,18 +1414,19 @@ std::string ItemListFormAction::title()
 	} else {
 		if (feed->is_query_feed()) {
 			return strprintf::fmt(_("Query Feed - %s"),
-				feed->rssurl().substr(
-					6, feed->rssurl().length() - 6));
+					feed->rssurl().substr(
+						6, feed->rssurl().length() - 6));
 		} else {
 			auto feedtitle = feed->title();
 			utils::remove_soft_hyphens(feedtitle);
 			return strprintf::fmt(
-				_("Article List - %s"), feedtitle);
+					_("Article List - %s"), feedtitle);
 		}
 	}
 }
 
-void ItemListFormAction::handle_op_saveall() {
+void ItemListFormAction::handle_op_saveall()
+{
 	LOG(Level::INFO,
 		"ItemListFormAction: saving all items");
 
@@ -1427,16 +1445,17 @@ void ItemListFormAction::handle_op_saveall() {
 	}
 
 	if (visible_items.size() == 1) {
-		const std::string filename = v->get_filename_suggestion(visible_items[0].first->title());
+		const std::string filename = v->get_filename_suggestion(
+				visible_items[0].first->title());
 		const std::string fpath = directory + filename;
 
 		struct stat sbuf;
 		if (::stat(fpath.c_str(), &sbuf) != -1) {
 			std::string input_options = _("yn");
 			char c = v->confirm(strprintf::fmt(
-					_("Overwrite `%s' in `%s?' "
-					  "(y:Yes n:No)"),
-					filename, directory),
+						_("Overwrite `%s' in `%s?' "
+							"(y:Yes n:No)"),
+						filename, directory),
 					input_options);
 			if (!c) {
 				return;
@@ -1463,9 +1482,9 @@ void ItemListFormAction::handle_op_saveall() {
 		}
 	} else {
 		std::vector<std::string> filenames;
-		for (const auto &item : visible_items) {
+		for (const auto& item : visible_items) {
 			filenames.emplace_back(
-					v->get_filename_suggestion(item.first->title()));
+				v->get_filename_suggestion(item.first->title()));
 		}
 
 		const auto unique_filenames = std::set<std::string>(
@@ -1508,18 +1527,18 @@ void ItemListFormAction::handle_op_saveall() {
 				char c;
 				if (nfiles_exist > 1) {
 					c = v->confirm(strprintf::fmt(
-							_("Overwrite `%s' in `%s'? "
-							  "There are %d more conflicts like this "
-							  "(y:Yes a:Yes to all n:No q:No to all)"),
-							  filename, directory, --nfiles_exist),
-							  input_options);
+								_("Overwrite `%s' in `%s'? "
+									"There are %d more conflicts like this "
+									"(y:Yes a:Yes to all n:No q:No to all)"),
+								filename, directory, --nfiles_exist),
+							input_options);
 				} else {
 					c = v->confirm(strprintf::fmt(
-							_("Overwrite `%s' in `%s'? "
-							  "There are no more conflicts like this "
-							  "(y:Yes a:Yes to all n:No q:No to all)"),
-							  filename, directory),
-							  input_options);
+								_("Overwrite `%s' in `%s'? "
+									"There are no more conflicts like this "
+									"(y:Yes a:Yes to all n:No q:No to all)"),
+								filename, directory),
+							input_options);
 				}
 				if (!c) {
 					break;

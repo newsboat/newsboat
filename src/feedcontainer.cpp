@@ -17,76 +17,76 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
-				std::shared_ptr<RssFeed> b) {
-				return a->get_order() < b->get_order();
-			});
+		std::shared_ptr<RssFeed> b) {
+			return a->get_order() < b->get_order();
+		});
 		break;
 	case FeedSortMethod::FIRST_TAG:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
-				std::shared_ptr<RssFeed> b) {
-				if (a->get_firsttag().length() == 0 ||
-					b->get_firsttag().length() == 0) {
-					return a->get_firsttag().length() >
-						b->get_firsttag().length();
-				}
-				return utils::strnaturalcmp(a->get_firsttag().c_str(),
-					       b->get_firsttag().c_str()) < 0;
-			});
+		std::shared_ptr<RssFeed> b) {
+			if (a->get_firsttag().length() == 0 ||
+				b->get_firsttag().length() == 0) {
+				return a->get_firsttag().length() >
+					b->get_firsttag().length();
+			}
+			return utils::strnaturalcmp(a->get_firsttag().c_str(),
+					b->get_firsttag().c_str()) < 0;
+		});
 		break;
 	case FeedSortMethod::TITLE:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
-				std::shared_ptr<RssFeed> b) {
-				return utils::strnaturalcmp(a->title().c_str(),
-					       b->title().c_str()) < 0;
-			});
+		std::shared_ptr<RssFeed> b) {
+			return utils::strnaturalcmp(a->title().c_str(),
+					b->title().c_str()) < 0;
+		});
 		break;
 	case FeedSortMethod::ARTICLE_COUNT:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
-				std::shared_ptr<RssFeed> b) {
-				return a->total_item_count() <
-					b->total_item_count();
-			});
+		std::shared_ptr<RssFeed> b) {
+			return a->total_item_count() <
+				b->total_item_count();
+		});
 		break;
 	case FeedSortMethod::UNREAD_ARTICLE_COUNT:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
-				std::shared_ptr<RssFeed> b) {
-				return a->unread_item_count() <
-					b->unread_item_count();
-			});
+		std::shared_ptr<RssFeed> b) {
+			return a->unread_item_count() <
+				b->unread_item_count();
+		});
 		break;
 	case FeedSortMethod::LAST_UPDATED:
 		std::stable_sort(feeds.begin(),
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
-				std::shared_ptr<RssFeed> b) {
-				if (a->items().size() == 0 ||
-					b->items().size() == 0) {
-					return a->items().size() >
-						b->items().size();
-				}
-				auto cmp =
-					[](std::shared_ptr<RssItem> a,
-						std::shared_ptr<RssItem> b) {
-						return *a < *b;
-					};
-				auto& a_item =
-					*std::min_element(a->items().begin(),
-						a->items().end(),
-						cmp);
-				auto& b_item =
-					*std::min_element(b->items().begin(),
-						b->items().end(),
-						cmp);
-				return cmp(a_item, b_item);
-			});
+		std::shared_ptr<RssFeed> b) {
+			if (a->items().size() == 0 ||
+				b->items().size() == 0) {
+				return a->items().size() >
+					b->items().size();
+			}
+			auto cmp =
+				[](std::shared_ptr<RssItem> a,
+			std::shared_ptr<RssItem> b) {
+				return *a < *b;
+			};
+			auto& a_item =
+				*std::min_element(a->items().begin(),
+					a->items().end(),
+					cmp);
+			auto& b_item =
+				*std::min_element(b->items().begin(),
+					b->items().end(),
+					cmp);
+			return cmp(a_item, b_item);
+		});
 		break;
 	}
 
@@ -162,20 +162,22 @@ unsigned int FeedContainer::get_feed_count_per_tag(const std::string& tag)
 	return count;
 }
 
-unsigned int FeedContainer::get_unread_feed_count_per_tag(const std::string& tag)
+unsigned int FeedContainer::get_unread_feed_count_per_tag(
+	const std::string& tag)
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (const auto& feed : feeds) {
 		if (feed->matches_tag(tag) && feed->unread_item_count() > 0) {
-		      count++;
+			count++;
 		}
 	}
 
 	return count;
 }
 
-unsigned int FeedContainer::get_unread_item_count_per_tag(const std::string& tag)
+unsigned int FeedContainer::get_unread_item_count_per_tag(
+	const std::string& tag)
 {
 	unsigned int count = 0;
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -256,20 +258,20 @@ void FeedContainer::clear_feeds_items()
 unsigned int FeedContainer::unread_feed_count() const
 {
 	return std::count_if(feeds.begin(),
-		feeds.end(),
-		[](const std::shared_ptr<RssFeed> feed) {
-			return feed->unread_item_count() > 0;
-		});
+			feeds.end(),
+	[](const std::shared_ptr<RssFeed> feed) {
+		return feed->unread_item_count() > 0;
+	});
 }
 
 unsigned int FeedContainer::unread_item_count() const
 {
 	return std::accumulate(feeds.begin(),
-		feeds.end(),
-		0,
-		[](unsigned int sum, const std::shared_ptr<RssFeed> feed) {
-			return sum += feed->unread_item_count();
-		});
+			feeds.end(),
+			0,
+	[](unsigned int sum, const std::shared_ptr<RssFeed> feed) {
+		return sum += feed->unread_item_count();
+	});
 }
 
 } // namespace newsboat

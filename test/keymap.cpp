@@ -15,8 +15,7 @@ TEST_CASE("get_operation()", "[KeyMap]")
 	REQUIRE(k.get_operation("", "feedlist") == OP_NIL);
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
 
-	SECTION("Returns OP_NIL after unset_key()")
-	{
+	SECTION("Returns OP_NIL after unset_key()") {
 		k.unset_key("ENTER", "all");
 		REQUIRE(k.get_operation("ENTER", "all") == OP_NIL);
 	}
@@ -29,13 +28,11 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
 	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
 
-	SECTION("unset_key() removes the mapping")
-	{
+	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
 		REQUIRE(k.get_operation("ENTER", "all") == OP_NIL);
 
-		SECTION("set_key() sets the mapping")
-		{
+		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
 			REQUIRE(k.get_operation("ENTER", "all") == OP_OPEN);
 			REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
@@ -52,9 +49,9 @@ TEST_CASE(
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			if (i == OP_OPENALLUNREADINBROWSER ||
-					i == OP_MARKALLABOVEASREAD ||
-					i == OP_OPENALLUNREADINBROWSER_AND_MARK ||
-					i == OP_SAVEALL) {
+				i == OP_MARKALLABOVEASREAD ||
+				i == OP_OPENALLUNREADINBROWSER_AND_MARK ||
+				i == OP_SAVEALL) {
 				continue;
 			}
 			REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
@@ -83,8 +80,9 @@ TEST_CASE(
 
 	SECTION("Contexts don't have their internal keybindings cleared") {
 		const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
-			"article", "tagselection", "filterselection", "urlview", "podbeuter",
-			"dialogs", "dirbrowser" };
+				   "article", "tagselection", "filterselection", "urlview", "podbeuter",
+				   "dialogs", "dirbrowser"
+			   };
 		KeyMap default_keymap(KM_NEWSBOAT);
 
 		for (const auto& context : contexts) {
@@ -126,22 +124,19 @@ TEST_CASE("getkey()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	SECTION("Retrieves general bindings")
-	{
+	SECTION("Retrieves general bindings") {
 		REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
 		REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
 	}
 
-	SECTION("Returns context-specific bindings only in that context")
-	{
+	SECTION("Returns context-specific bindings only in that context") {
 		k.unset_key("q", "article");
 		k.set_key(OP_QUIT, "O", "article");
 		REQUIRE(k.getkey(OP_QUIT, "article") == "O");
 		REQUIRE(k.getkey(OP_QUIT, "all") == "q");
 	}
 
-	SECTION("Returns context-specific binding if asked to search in all contexts")
-	{
+	SECTION("Returns context-specific binding if asked to search in all contexts") {
 		k.unset_all_keys("all");
 		REQUIRE(k.getkey(OP_QUIT, "all") == "<none>");
 		k.set_key(OP_QUIT, "O", "article");
@@ -167,8 +162,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 	std::vector<std::string> params;
 
-	SECTION("without parameters")
-	{
+	SECTION("without parameters") {
 		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
 			ConfigHandlerException);
 		REQUIRE_THROWS_AS(k.handle_action("unbind-key", params),
@@ -177,8 +171,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 			ConfigHandlerException);
 	}
 
-	SECTION("with one parameter")
-	{
+	SECTION("with one parameter") {
 		params.push_back("r");
 
 		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
@@ -186,8 +179,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE_NOTHROW(k.handle_action("unbind-key", params));
 	}
 
-	SECTION("with two parameters")
-	{
+	SECTION("with two parameters") {
 		params.push_back("r");
 		params.push_back("open");
 		REQUIRE_NOTHROW(k.handle_action("bind-key", params));
@@ -195,8 +187,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 			ConfigHandlerException);
 	}
 
-	SECTION("invalid-op throws exception")
-	{
+	SECTION("invalid-op throws exception") {
 		params.push_back("I");
 		params.push_back("invalid-op");
 

@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 2) {
 		std::cerr << "usage: " << argv[0]
-			  << " <dsv-file> [<link-prefix>]\n";
+			<< " <dsv-file> [<link-prefix>]\n";
 		return 1;
 	}
 
@@ -31,9 +31,9 @@ int main(int argc, char* argv[])
 			std::cout << "         " << desc << "\n\n";
 		} else {
 			std::cerr << "expected exactly 3 cells in " << argv[1]
-				  << ":" << lineno;
+				<< ":" << lineno;
 			std::cerr << ", but got " << matches.size()
-				  << " instead\n";
+				<< " instead\n";
 			return 1;
 		}
 	}

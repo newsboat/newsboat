@@ -249,7 +249,8 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	return tokens;
 }
 
-std::string utils::consolidate_whitespace(const std::string& str) {
+std::string utils::consolidate_whitespace(const std::string& str)
+{
 
 	return RustString(rs_consolidate_whitespace(str.c_str()));
 }
@@ -263,8 +264,8 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	unsigned int i;
 
 	LOG(Level::DEBUG,
-			"utils::tokenize_nl: last_pos = %" PRIu64,
-			static_cast<uint64_t>(last_pos));
+		"utils::tokenize_nl: last_pos = %" PRIu64,
+		static_cast<uint64_t>(last_pos));
 	if (last_pos != std::string::npos) {
 		for (i = 0; i < last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
@@ -307,12 +308,12 @@ std::string utils::translit(const std::string& tocode,
 
 	if (state == TranslitState::UNKNOWN) {
 		iconv_t cd = ::iconv_open(
-			(tocode + "//TRANSLIT").c_str(), fromcode.c_str());
+				(tocode + "//TRANSLIT").c_str(), fromcode.c_str());
 
 		if (cd == reinterpret_cast<iconv_t>(-1)) {
 			if (errno == EINVAL) {
 				iconv_t cd = ::iconv_open(
-					tocode.c_str(), fromcode.c_str());
+						tocode.c_str(), fromcode.c_str());
 				if (cd != reinterpret_cast<iconv_t>(-1)) {
 					state = TranslitState::UNSUPPORTED;
 				} else {
@@ -341,7 +342,7 @@ std::string utils::translit(const std::string& tocode,
 	}
 
 	return ((state == TranslitState::SUPPORTED) ? (tocode + tlit)
-						     : (tocode));
+			: (tocode));
 }
 
 std::string utils::convert_text(const std::string& text,
@@ -355,7 +356,7 @@ std::string utils::convert_text(const std::string& text,
 	}
 
 	iconv_t cd = ::iconv_open(
-		translit(tocode, fromcode).c_str(), fromcode.c_str());
+			translit(tocode, fromcode).c_str(), fromcode.c_str());
 
 	if (cd == reinterpret_cast<iconv_t>(-1)) {
 		return result;
@@ -380,13 +381,13 @@ std::string utils::convert_text(const std::string& text,
 
 	outbytesleft = sizeof(outbuf);
 	inbufp = const_cast<char*>(
-		text.c_str()); // evil, but spares us some trouble
+			text.c_str()); // evil, but spares us some trouble
 	inbytesleft = strlen(inbufp);
 
 	do {
 		char* old_outbufp = outbufp;
 		int rc = ::iconv(
-			cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
+				cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
 		if (-1 == rc) {
 			switch (errno) {
 			case E2BIG:
@@ -439,8 +440,8 @@ void utils::extract_filter(const std::string& line,
 		url);
 }
 
-static size_t
-my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
+static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
+	void* userp)
 {
 	std::string* pbuf = static_cast<std::string*>(userp);
 	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
@@ -513,7 +514,9 @@ std::string utils::resolve_tilde(const std::string& str)
 	return RustString(rs_resolve_tilde(str.c_str()));
 }
 
-std::string utils::resolve_relative(const std::string& reference, const std::string &fname) {
+std::string utils::resolve_relative(const std::string& reference,
+	const std::string& fname)
+{
 	return RustString(rs_resolve_relative(reference.c_str(), fname.c_str()));
 }
 
@@ -563,15 +566,15 @@ std::string utils::get_useragent(ConfigContainer* cfgcont)
 				PROCESSOR = "Intel ";
 			}
 			return strprintf::fmt("%s/%s (Macintosh; %sMac OS X)",
-				PROGRAM_NAME,
-				utils::program_version(),
-				PROCESSOR);
+					PROGRAM_NAME,
+					utils::program_version(),
+					PROCESSOR);
 		}
 		return strprintf::fmt("%s/%s (%s %s)",
-			PROGRAM_NAME,
-			utils::program_version(),
-			buf.sysname,
-			buf.machine);
+				PROGRAM_NAME,
+				utils::program_version(),
+				buf.sysname,
+				buf.machine);
 	}
 	return ua_pref;
 }
@@ -593,9 +596,9 @@ bool utils::is_valid_attribute(const std::string& attrib)
 }
 
 std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
-	unsigned int start,
-	unsigned int end,
-	unsigned int parts)
+		unsigned int start,
+		unsigned int end,
+		unsigned int parts)
 {
 	std::vector<std::pair<unsigned int, unsigned int>> partitions;
 	unsigned int count = end - start + 1;
@@ -603,7 +606,7 @@ std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 
 	for (unsigned int i = 0; i < parts - 1; i++) {
 		partitions.push_back(std::pair<unsigned int, unsigned int>(
-			start, start + size - 1));
+				start, start + size - 1));
 		start += size;
 	}
 
@@ -984,21 +987,21 @@ bool utils::is_valid_podcast_type(const std::string& mimetype)
 	return rs_is_valid_podcast_type(mimetype.c_str());
 }
 
-	/*
-	 * See
-	 * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
-	 * for a reason why we do this.
-	 *
-	 * These callbacks are deprecated as of OpenSSL 1.1.0; see the
-	 * changelog: https://www.openssl.org/news/changelog.html#x6
-	 */
+/*
+ * See
+ * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
+ * for a reason why we do this.
+ *
+ * These callbacks are deprecated as of OpenSSL 1.1.0; see the
+ * changelog: https://www.openssl.org/news/changelog.html#x6
+ */
 
 #if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
 static std::mutex* openssl_mutexes = nullptr;
 static int openssl_mutexes_size = 0;
 
-static void
-openssl_mth_locking_function(int mode, int n, const char* file, int line)
+static void openssl_mth_locking_function(int mode, int n, const char* file,
+	int line)
 {
 	if (n < 0 || n >= openssl_mutexes_size) {
 		LOG(Level::ERROR,
@@ -1066,9 +1069,9 @@ std::string utils::mt_strf_localtime(const std::string& format, time_t t)
 	const size_t BUFFER_SIZE = 4096;
 	char buffer[BUFFER_SIZE];
 	const size_t written = strftime(buffer,
-		BUFFER_SIZE,
-		format.c_str(),
-		localtime(&t));
+			BUFFER_SIZE,
+			format.c_str(),
+			localtime(&t));
 
 	return std::string(buffer, written);
 }

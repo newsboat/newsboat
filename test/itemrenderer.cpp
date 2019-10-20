@@ -22,7 +22,10 @@ std::shared_ptr<RssFeed> create_test_feed(Cache* c)
 static const auto ITEM_TITLE = std::string("A frivolous test item");
 static const auto ITEM_AUTHOR = std::string("Johnny Doe Jr.");
 // Sun Sep 30 19:34:25 UTC 2018
-static const auto ITEM_PUBDATE = time_t{1538336065};
+static const auto ITEM_PUBDATE = time_t
+{
+	1538336065
+};
 static const auto ITEM_LINK = std::string("https://example.com/see-more");
 static const auto ITEM_DESCRIPTON = std::string("<p>Hello, world!</p>");
 static const auto ITEM_DESCRIPTON_RENDERED = std::string("Hello, world!");
@@ -32,7 +35,8 @@ static const auto ITEM_ENCLOSURE_TYPE = std::string("audio/mpeg");
 static const auto ITEM_FLAGS = std::string("wasdhjkl");
 // Flags are sorted for rendering.
 static const auto ITEM_FLAGS_RENDERED = std::string("adhjklsw");
-std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> create_test_item(Cache* c)
+std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> create_test_item(
+		Cache* c)
 {
 	const auto feed = create_test_feed(c);
 
@@ -49,8 +53,8 @@ std::pair<std::shared_ptr<RssItem>, std::shared_ptr<RssFeed>> create_test_item(C
 }
 
 TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
-		"of an RSS item, ready to be displayed to the user",
-		"[item_renderer]")
+	"of an RSS item, ready to be displayed to the user",
+	"[item_renderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
@@ -119,7 +123,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 			"Link: " + ITEM_LINK + '\n' +
 			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
 			"Podcast Download URL: " + ITEM_ENCLOSURE_URL
-				+ " (type: " + ITEM_ENCLOSURE_TYPE + ")\n" +
+			+ " (type: " + ITEM_ENCLOSURE_TYPE + ")\n" +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
@@ -128,8 +132,8 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 
 	SECTION("Item with some links in the description") {
 		item->set_description(
-				ITEM_DESCRIPTON +
-				"<p>See also <a href='https://example.com'>this site</a>.</p>");
+			ITEM_DESCRIPTON +
+			"<p>See also <a href='https://example.com'>this site</a>.</p>");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -153,8 +157,8 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 }
 
 TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
-		"in `text-width` setting",
-		"[item_renderer]")
+	"in `text-width` setting",
+	"[item_renderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
@@ -168,10 +172,10 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 	std::tie(item, feed) = create_test_item(&rsscache);
 
 	item->set_description(
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-			"Pellentesque nisl massa, luctus ut ligula vitae, suscipit tempus "
-			"velit. Vivamus sodales, quam in convallis posuere, libero nisi "
-			"ultricies orci, nec lobortis.");
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+		"Pellentesque nisl massa, luctus ut ligula vitae, suscipit tempus "
+		"velit. Vivamus sodales, quam in convallis posuere, libero nisi "
+		"ultricies orci, nec lobortis.");
 
 	const auto header = std::string() +
 		"Feed: " + FEED_TITLE + '\n' +
@@ -186,8 +190,10 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
 		const auto expected = header +
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
-			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n" +
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n"
+			+
+			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n"
+			+
 			"convallis posuere, libero nisi ultricies orci, nec lobortis.\n";
 
 		REQUIRE(result == expected);
@@ -199,8 +205,10 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
 		const auto expected = header +
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n" +
-			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n" +
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n"
+			+
+			"massa, luctus ut ligula vitae, suscipit tempus velit. Vivamus sodales, quam in \n"
+			+
 			"convallis posuere, libero nisi ultricies orci, nec lobortis.\n";
 
 		REQUIRE(result == expected);
@@ -355,7 +363,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 }
 
 TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
-		"[item_renderer][broken]")
+	"[item_renderer][broken]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
@@ -472,8 +480,8 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 }
 
 TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
-		"soft hyphens if that's available",
-		"[item_renderer]")
+	"soft hyphens if that's available",
+	"[item_renderer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -499,8 +507,8 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 }
 
 TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
-		"if its title is empty",
-		"[item_renderer]")
+	"if its title is empty",
+	"[item_renderer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -519,8 +527,8 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
 }
 
 TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
-		"if both the title and self-link are empty",
-		"[item_renderer]")
+	"if both the title and self-link are empty",
+	"[item_renderer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);

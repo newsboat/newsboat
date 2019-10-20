@@ -30,7 +30,7 @@ TEST_CASE(
 
 	{
 		INFO("Processing more \"color\" actions doesn't affect the "
-		     "return value");
+			"return value");
 
 		c.handle_action("color", {"listfocus", "default", "default"});
 		REQUIRE(c.colors_loaded());
@@ -56,7 +56,7 @@ TEST_CASE(
 
 	{
 		INFO("Each processed action adds corresponding entry to return "
-		     "value");
+			"value");
 
 		c.handle_action("color", {"listnormal", "default", "default"});
 		results expected{{"listnormal", "default"}};
@@ -88,7 +88,7 @@ TEST_CASE(
 
 	{
 		INFO("Each processed action adds corresponding entry to return "
-		     "value");
+			"value");
 
 		c.handle_action("color", {"listnormal", "default", "default"});
 		results expected{{"listnormal", "default"}};
@@ -142,8 +142,8 @@ TEST_CASE(
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(c.handle_action("color",
-					{"listfocus", color, "default"}),
-			ConfigHandlerException);
+		{"listfocus", color, "default"}),
+		ConfigHandlerException);
 	}
 }
 
@@ -158,8 +158,8 @@ TEST_CASE(
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(c.handle_action("color",
-					{"listfocus", "default", color}),
-			ConfigHandlerException);
+		{"listfocus", "default", color}),
+		ConfigHandlerException);
 	}
 }
 
@@ -174,8 +174,8 @@ TEST_CASE(
 		{"awesome", "but", "nonexistent", "attributes"}};
 	for (const auto& attr : non_attributes) {
 		CHECK_THROWS_AS(c.handle_action("color",
-					{"listfocus", "red", "red", attr}),
-			ConfigHandlerException);
+		{"listfocus", "red", "red", attr}),
+		ConfigHandlerException);
 	}
 }
 
@@ -222,7 +222,8 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 	// and nothing more.
 	auto equivalent = [&]() -> bool {
 		std::size_t found = 0;
-		for (const auto& line : config) {
+		for (const auto& line : config)
+		{
 			if (expected.find(line) == expected.end()) {
 				return false;
 			}
@@ -256,7 +257,7 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 
 	expected.emplace("color listnormal black yellow underline standout");
 	c.handle_action("color",
-		{"listnormal", "black", "yellow", "underline", "standout"});
+	{"listnormal", "black", "yellow", "underline", "standout"});
 	config.clear();
 	c.dump_config(config);
 	REQUIRE(config.size() == 3);

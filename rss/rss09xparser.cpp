@@ -39,7 +39,7 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 			f.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
 			f.link = utils::absolute_url(
-				globalbase, get_content(node));
+					globalbase, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
 		} else if (node_is(node, "language", ns)) {
@@ -104,7 +104,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 					start--) {
 				}
 				it.author = authorfield.substr(
-					start + 1, end - start);
+						start + 1, end - start);
 			} else {
 				it.author_email = authorfield;
 				it.author = authorfield;
@@ -130,7 +130,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 					const std::string type =
 						get_prop(mnode, "type");
 					if (utils::is_valid_podcast_type(
-						    type)) {
+							type)) {
 						it.enclosure_url =
 							get_prop(mnode, "url");
 						it.enclosure_type =

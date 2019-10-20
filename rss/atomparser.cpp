@@ -49,7 +49,7 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
 				f.link = newsboat::utils::absolute_url(
-					globalbase, get_prop(node, "href"));
+						globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
@@ -118,11 +118,11 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
 				it.link = newsboat::utils::absolute_url(
-					base, get_prop(node, "href"));
+						base, get_prop(node, "href"));
 			} else if (rel == "enclosure") {
 				const std::string type = get_prop(node, "type");
 				if (newsboat::utils::is_valid_podcast_type(
-					    type)) {
+						type)) {
 					it.enclosure_url =
 						get_prop(node, "href");
 					it.enclosure_type = std::move(type);
@@ -146,7 +146,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			}
 		} else if (node_is(node, "category", ns) &&
 			get_prop(node, "scheme") ==
-				"http://www.google.com/reader/") {
+			"http://www.google.com/reader/") {
 			it.labels.push_back(get_prop(node, "label"));
 		}
 	} // for

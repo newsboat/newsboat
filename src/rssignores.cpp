@@ -38,11 +38,11 @@ void RssIgnores::handle_action(const std::string& action,
 		Matcher m;
 		if (!m.parse(ignore_expr))
 			throw ConfigHandlerException(strprintf::fmt(
-				_("couldn't parse filter expression `%s': %s"),
-				ignore_expr,
-				m.get_parse_error()));
+					_("couldn't parse filter expression `%s': %s"),
+					ignore_expr,
+					m.get_parse_error()));
 		ignores.push_back(FeedUrlExprPair(
-			ignore_rssurl, new Matcher(ignore_expr)));
+				ignore_rssurl, new Matcher(ignore_expr)));
 	} else if (action == "always-download") {
 		for (const auto& param : params) {
 			ignores_lastmodified.push_back(param);
@@ -71,11 +71,11 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output)
 	}
 	for (const auto& ign_lm : ignores_lastmodified) {
 		config_output.push_back(strprintf::fmt(
-			"always-download %s", utils::quote(ign_lm)));
+				"always-download %s", utils::quote(ign_lm)));
 	}
 	for (const auto& rf : resetflag) {
 		config_output.push_back(strprintf::fmt(
-			"reset-unread-on-update %s", utils::quote(rf)));
+				"reset-unread-on-update %s", utils::quote(rf)));
 	}
 }
 
@@ -109,17 +109,21 @@ bool RssIgnores::matches(RssItem* item)
 bool RssIgnores::matches_lastmodified(const std::string& url)
 {
 	return std::find_if(ignores_lastmodified.begin(),
-		       ignores_lastmodified.end(),
-		       [&](const std::string& u) { return u == url; }) !=
-		ignores_lastmodified.end();
+			ignores_lastmodified.end(),
+	[&](const std::string& u) {
+		return u == url;
+	}) !=
+	ignores_lastmodified.end();
 }
 
 bool RssIgnores::matches_resetunread(const std::string& url)
 {
 	return std::find_if(resetflag.begin(),
-		       resetflag.end(),
-		       [&](const std::string& u) { return u == url; }) !=
-		resetflag.end();
+			resetflag.end(),
+	[&](const std::string& u) {
+		return u == url;
+	}) !=
+	resetflag.end();
 }
 
 } // namespace newsboat

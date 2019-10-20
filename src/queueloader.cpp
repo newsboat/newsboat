@@ -31,9 +31,9 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 
 	for (const auto& dl : downloads) {
 		if (dl.status() == DlStatus::DOWNLOADING) { // we are not
-							    // allowed to reload
-							    // if a download is
-							    // in progress!
+			// allowed to reload
+			// if a download is
+			// in progress!
 			LOG(Level::INFO,
 				"QueueLoader::reload: aborting reload due to "
 				"DlStatus::DOWNLOADING status");
@@ -84,13 +84,13 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 				if (fields.empty()) {
 					if (!comments_ignored) {
 						std::cout << strprintf::fmt(
-							     _("WARNING: Comment found "
-							       "in %s. The queue file is regenerated "
-							       "when podboat exits and comments will "
-							       "be deleted. Press enter to continue or "
-							       "Ctrl+C to abort"),
-							     queuefile)
-							  << std::endl;
+								_("WARNING: Comment found "
+									"in %s. The queue file is regenerated "
+									"when podboat exits and comments will "
+									"be deleted. Press enter to continue or "
+									"Ctrl+C to abort"),
+								queuefile)
+							<< std::endl;
 						std::cin.ignore();
 						comments_ignored = true;
 					}
@@ -149,20 +149,20 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 								"downloaded")
 								d.set_status(
 									DlStatus::
-										READY);
+									READY);
 							if (fields[2] ==
 								"played")
 								d.set_status(
 									DlStatus::
-										PLAYED);
+									PLAYED);
 						} else
 							d.set_status(DlStatus::
-									ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
+								ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
 					} else if (
 						access((fn +
-							       ConfigContainer::
-								       PARTIAL_FILE_SUFFIX)
-								.c_str(),
+								ConfigContainer::
+								PARTIAL_FILE_SUFFIX)
+							.c_str(),
 							F_OK) == 0) {
 						LOG(Level::INFO,
 							"QueueLoader::reload: "
@@ -171,10 +171,10 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 							"-> mark as partially "
 							"downloaded",
 							fn +
-								ConfigContainer::
-									PARTIAL_FILE_SUFFIX);
+							ConfigContainer::
+							PARTIAL_FILE_SUFFIX);
 						d.set_status(DlStatus::
-								ALREADY_DOWNLOADED);
+							ALREADY_DOWNLOADED);
 					}
 
 					d.set_url(fields[0]);

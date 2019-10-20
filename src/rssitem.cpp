@@ -139,7 +139,7 @@ std::string RssItem::title() const
 	std::string retval;
 	if (title_.length() > 0)
 		retval = utils::convert_text(
-			title_, nl_langinfo(CODESET), "utf-8");
+				title_, nl_langinfo(CODESET), "utf-8");
 	return retval;
 }
 
@@ -197,7 +197,7 @@ std::string RssItem::get_attribute(const std::string& attribname)
 		return flags();
 	} else if (attribname == "age")
 		return std::to_string(
-			(time(nullptr) - pubDate_timestamp()) / 86400);
+				(time(nullptr) - pubDate_timestamp()) / 86400);
 	else if (attribname == "articleindex") {
 		return std::to_string(idx);
 	}
@@ -231,9 +231,11 @@ void RssItem::sort_flags()
 
 	// Erase non-alpha characters
 	flags_.erase(std::remove_if(flags_.begin(),
-			     flags_.end(),
-			     [](const char c) { return !isalpha(c); }),
-		flags_.end());
+			flags_.end(),
+	[](const char c) {
+		return !isalpha(c);
+	}),
+	flags_.end());
 
 	// Erase doubled characters
 	flags_.erase(std::unique(flags_.begin(), flags_.end()), flags_.end());

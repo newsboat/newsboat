@@ -30,7 +30,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 		}
 		if (cfg->get_configvalue_as_bool("show-title-bar") == false) {
 			f->set("showtitle", "0");
- 		}
+		}
 		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
 			true) {
 			std::string hints = f->dump("hints", "", 0);
@@ -115,7 +115,7 @@ void FormAction::process_op(Operation op,
 			if (args) {
 				for (const auto& arg : *args) {
 					cmdline.append(strprintf::fmt(
-						"%s ", Stfl::quote(arg)));
+							"%s ", Stfl::quote(arg)));
 				}
 			}
 			LOG(Level::DEBUG,
@@ -198,7 +198,7 @@ std::vector<std::string> FormAction::get_suggestions(
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
 					std::vector<std::string>
-						variable_suggestions;
+					variable_suggestions;
 					std::string variable_fragment;
 					if (tokens.size() > 1) {
 						variable_fragment = tokens[1];
@@ -211,10 +211,10 @@ std::vector<std::string> FormAction::get_suggestions(
 						std::string line = fragment +
 							suggestion.substr(
 								variable_fragment
-									.length(),
+								.length(),
 								suggestion.length() -
-									variable_fragment
-										.length());
+								variable_fragment
+								.length());
 						result.push_back(line);
 						LOG(Level::DEBUG,
 							"FormAction::get_"
@@ -267,10 +267,10 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 						set_redraw(true);
 					}
 					v->set_status(strprintf::fmt("  %s=%s",
-						var,
-						utils::quote_if_necessary(
-							cfg->get_configvalue(
-								var))));
+							var,
+							utils::quote_if_necessary(
+								cfg->get_configvalue(
+									var))));
 				}
 			} else if (tokens.size() == 2) {
 				std::string result =
@@ -279,8 +279,8 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 				utils::trim_end(result);
 				cfg->set_configvalue(tokens[0], result);
 				set_redraw(true); // because some configuration
-						  // value might have changed
-						  // something UI-related
+				// value might have changed
+				// something UI-related
 			} else {
 				v->show_error(
 					_("usage: set <variable>[=<value>]"));
@@ -311,14 +311,14 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 				v->get_ctrl()->dump_config(
 					utils::resolve_tilde(tokens[0]));
 				v->show_error(strprintf::fmt(
-					_("Saved configuration to %s"),
-					tokens[0]));
+						_("Saved configuration to %s"),
+						tokens[0]));
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
 		} else {
 			v->show_error(strprintf::fmt(
-				_("Not a command: %s"), cmdline));
+					_("Not a command: %s"), cmdline));
 		}
 	}
 }
@@ -370,9 +370,9 @@ void FormAction::finished_qna(Operation op)
 			qna_prompts.size() == 0); // everything must be answered
 		v->set_status(_("Saving bookmark..."));
 		std::string retval = bookmark(qna_responses[0],
-			qna_responses[1],
-			qna_responses[2],
-			qna_responses[3]);
+				qna_responses[1],
+				qna_responses[2],
+				qna_responses[3]);
 		if (retval.length() == 0) {
 			v->set_status(_("Saved bookmark."));
 		} else {
@@ -383,14 +383,16 @@ void FormAction::finished_qna(Operation op)
 				"bookmark, retval = `%s'",
 				retval);
 		}
-	} break;
+	}
+	break;
 	case OP_INT_END_CMDLINE: {
 		f->set_focus("feeds");
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
 		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);
 		this->handle_cmdline(cmdline);
-	} break;
+	}
+	break;
 	default:
 		break;
 	}
@@ -416,8 +418,8 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		cfg->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(QnaPair(_("URL: "), default_url));
 	if (default_title.empty()) { // call the function to figure out title
-				     // from url only if the default_title is no
-				     // good
+		// from url only if the default_title is no
+		// good
 		new_title = utils::make_title(default_url);
 		prompts.push_back(QnaPair(_("Title: "), new_title));
 	} else {
@@ -427,14 +429,14 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	prompts.push_back(QnaPair(_("Feed title: "), default_feed_title));
 
 	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't
-			       // prompt for url, title, desc
+		// prompt for url, title, desc
 		if (default_title.empty()) {
 			new_title = utils::make_title(
-				default_url); // try to make the title from url
+					default_url); // try to make the title from url
 		} else {
 			new_title = default_title; // assignment just to make
-						   // the call to bookmark()
-						   // below easier
+			// the call to bookmark()
+			// below easier
 		}
 
 		// if url or title is missing, abort autopilot and ask user
@@ -444,9 +446,9 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		} else {
 			v->set_status(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
-				new_title,
-				default_desc,
-				default_feed_title);
+					new_title,
+					default_desc,
+					default_feed_title);
 			if (retval.length() == 0) {
 				v->set_status(_("Saved bookmark."));
 			} else {
@@ -529,11 +531,11 @@ std::string FormAction::bookmark(const std::string& url,
 		cfg->get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
 		std::string cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
-			bookmark_cmd,
-			utils::replace_all(url, "'", "%27"),
-			utils::replace_all(title, "'", "%27"),
-			utils::replace_all(description, "'", "%27"),
-			utils::replace_all(feed_title, "'", "%27"));
+				bookmark_cmd,
+				utils::replace_all(url, "'", "%27"),
+				utils::replace_all(title, "'", "%27"),
+				utils::replace_all(description, "'", "%27"),
+				utils::replace_all(feed_title, "'", "%27"));
 
 		LOG(Level::DEBUG, "FormAction::bookmark: cmd = %s", cmdline);
 
@@ -554,8 +556,8 @@ std::string FormAction::bookmark(const std::string& url,
 		}
 	} else {
 		return _(
-			"bookmarking support is not configured. Please set the "
-			"configuration variable `bookmark-cmd' accordingly.");
+				"bookmarking support is not configured. Please set the "
+				"configuration variable `bookmark-cmd' accordingly.");
 	}
 }
 

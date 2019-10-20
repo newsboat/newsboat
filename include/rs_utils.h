@@ -6,9 +6,9 @@ extern "C" {
 #endif
 
 char* rs_replace_all(
-		const char* str,
-		const char* from,
-		const char* to);
+	const char* str,
+	const char* from,
+	const char* to);
 
 char* rs_consolidate_whitespace(const char* str);
 
@@ -32,7 +32,7 @@ bool rs_is_exec_url(const char* str);
 
 char* rs_censor_url(const char* str);
 
-char* rs_quote_for_stfl(const char *str);
+char* rs_quote_for_stfl(const char* str);
 
 char* rs_trim(const char* str);
 
@@ -52,7 +52,7 @@ char* rs_make_title(const char* str);
 
 char* rs_getcwd();
 
-int rs_strnaturalcmp(const char* a, const char *b);
+int rs_strnaturalcmp(const char* a, const char* b);
 
 void rs_cstring_free(char* str);
 

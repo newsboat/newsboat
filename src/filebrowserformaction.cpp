@@ -104,14 +104,16 @@ void FileBrowserFormAction::process_operation(Operation op,
 					}
 					f->set("filenametext", fn);
 					do_redraw = true;
-				} break;
+				}
+				break;
 				case '-': {
 					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
 					fn.append(filename);
 					f->set("filenametext", fn);
 					f->set_focus("filename");
-				} break;
+				}
+				break;
 				default:
 					// TODO: show error message
 					break;
@@ -128,13 +130,13 @@ void FileBrowserFormAction::process_operation(Operation op,
 				if (::stat(fn.c_str(), &sbuf) != -1) {
 					f->set_focus("files");
 					if (v->confirm(
-						    strprintf::fmt(
-							    _("Do you really "
-							      "want to "
-							      "overwrite `%s' "
-							      "(y:Yes n:No)? "),
-							    fn),
-						    _("yn")) == *_("n")) {
+							strprintf::fmt(
+								_("Do you really "
+									"want to "
+									"overwrite `%s' "
+									"(y:Yes n:No)? "),
+								fn),
+							_("yn")) == *_("n")) {
 						do_pop = false;
 					}
 					f->set_focus("filenametext");
@@ -145,7 +147,8 @@ void FileBrowserFormAction::process_operation(Operation op,
 				}
 			}
 		}
-	} break;
+	}
+	break;
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::filebrowser: quitting");
 		curs_set(0);
@@ -260,7 +263,8 @@ KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
 {
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Save")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	return hints;
 }
 
@@ -284,16 +288,16 @@ std::string FileBrowserFormAction::add_file(std::string filename)
 				// bits.
 				static_cast<int64_t>(sb.st_size));
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
-			ftype,
-			rwxbits,
-			owner,
-			group,
-			sizestr,
-			formattedfilename);
+				ftype,
+				rwxbits,
+				owner,
+				group,
+				sizestr,
+				formattedfilename);
 		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
-			ftype,
-			Stfl::quote(filename),
-			Stfl::quote(line));
+				ftype,
+				Stfl::quote(filename),
+				Stfl::quote(line));
 	}
 	return retval;
 }
@@ -330,7 +334,8 @@ std::string FileBrowserFormAction::get_rwx(unsigned short val)
 {
 	std::string str;
 	const char* bitstrs[] = {
-		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"};
+		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
+	};
 	for (int i = 0; i < 3; ++i) {
 		unsigned char bits = val % 8;
 		val /= 8;
@@ -351,7 +356,8 @@ char FileBrowserFormAction::get_filetype(mode_t mode)
 		{S_IFIFO, 'p'},
 		{S_IFLNK, 'l'},
 		{S_IFSOCK, 's'},
-		{0, 0}};
+		{0, 0}
+	};
 	for (unsigned int i = 0; flags[i].flag != 0; i++) {
 		if ((mode & S_IFMT) == flags[i].flag) {
 			return flags[i].ftype;

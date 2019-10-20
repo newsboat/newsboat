@@ -86,9 +86,10 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 	TagSoupPullParser Parser;
 	TagSoupPullParser::Event event;
 
-	for (auto input : {"<br>", "<br/>", "<br />"}) {
-		SECTION(input)
-		{
+	for (auto input : {
+			"<br>", "<br/>", "<br />"
+		}) {
+		SECTION(input) {
 			input_stream.str(input);
 			Parser.set_input(input_stream);
 
