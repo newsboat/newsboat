@@ -739,8 +739,8 @@ void Cache::do_vacuum()
 
 void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>>& feeds)
 {
-	mtx.lock(); // we don't use the std::lock_guard<> here... see comments
-	// below
+	// we don't use the std::lock_guard<> here... see comments below
+	mtx.lock();
 
 	/*
 	 * cache cleanup means that all entries in both the RssFeed and

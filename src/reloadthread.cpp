@@ -47,9 +47,8 @@ void ReloadThread::operator()()
 				}
 			}
 		} else {
-			waittime_sec = 60; // if auto-reload is disabled, we
-			// poll every 60 seconds whether it
-			// changed.
+			// if auto-reload is disabled, we poll every 60 seconds whether it changed.
+			waittime_sec = 60;
 		}
 
 		time_t seconds_to_wait = 0;

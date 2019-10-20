@@ -140,10 +140,9 @@ std::string TagSoupPullParser::read_tag()
 	std::string s;
 	getline(*inputstream, s, '>');
 	if (inputstream->eof()) {
+		// TODO: test whether this works reliably
 		throw XmlException(
-			_("EOF found while reading XML tag")); // TODO: test
-		// whether this
-		// works reliably
+			_("EOF found while reading XML tag"));
 	}
 	return s;
 }

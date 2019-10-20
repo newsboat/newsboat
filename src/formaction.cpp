@@ -278,9 +278,8 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 						tokens[1]);
 				utils::trim_end(result);
 				cfg->set_configvalue(tokens[0], result);
-				set_redraw(true); // because some configuration
-				// value might have changed
-				// something UI-related
+				// because some configuration value might have changed something UI-related
+				set_redraw(true);
 			} else {
 				v->show_error(
 					_("usage: set <variable>[=<value>]"));
@@ -417,9 +416,8 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	bool is_bm_autopilot =
 		cfg->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(QnaPair(_("URL: "), default_url));
-	if (default_title.empty()) { // call the function to figure out title
-		// from url only if the default_title is no
-		// good
+	// call the function to figure out title from url only if the default_title is no good
+	if (default_title.empty()) {
 		new_title = utils::make_title(default_url);
 		prompts.push_back(QnaPair(_("Title: "), new_title));
 	} else {
@@ -434,9 +432,8 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			new_title = utils::make_title(
 					default_url); // try to make the title from url
 		} else {
-			new_title = default_title; // assignment just to make
-			// the call to bookmark()
-			// below easier
+			// assignment just to make the call to bookmark() below easier
+			new_title = default_title;
 		}
 
 		// if url or title is missing, abort autopilot and ask user

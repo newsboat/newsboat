@@ -30,10 +30,8 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 	std::fstream f;
 
 	for (const auto& dl : downloads) {
-		if (dl.status() == DlStatus::DOWNLOADING) { // we are not
-			// allowed to reload
-			// if a download is
-			// in progress!
+		// we are not allowed to reload if a download is in progress!
+		if (dl.status() == DlStatus::DOWNLOADING) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: aborting reload due to "
 				"DlStatus::DOWNLOADING status");

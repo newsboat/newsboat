@@ -211,12 +211,8 @@ int View::run()
 			fa->process_op(
 				macrocmds[0].op, true, &macrocmds[0].args);
 
-			macrocmds.erase(macrocmds.begin()); // remove first
-			// macro command,
-			// since it has
-			// already been
-			// processed
-
+			// remove first macro command, since it has already been processed
+			macrocmds.erase(macrocmds.begin());
 		} else {
 			// we then receive the event and ignore timeouts.
 			const char* event = fa->get_form()->run(60000);
@@ -1031,11 +1027,9 @@ void View::pop_current_formaction()
 	}
 	formaction_stack.erase(it);
 	if (f == nullptr) {
+		// XXX TODO this is not correct... we'd need to return to the previous one, but nullptr formactions have no parent
 		current_formaction = formaction_stack_size() -
-			1; // XXX TODO this is not correct...
-		// we'd need to return to the previous
-		// one, but nullptr formactions have
-		// no parent
+			1;
 	} else if (formaction_stack.size() > 0) {
 		// first, we set back the parent formactions of those who
 		// reference the formaction we just removed
@@ -1322,8 +1316,8 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 			"for "
 			"`%s'",
 			fragment);
-		::beep(); // direct call to ncurses - we beep to signal that
-		// there is no suggestion available, just like vim
+		// direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
+		::beep();
 		return;
 	case 1:
 		suggestion = suggestions[0];

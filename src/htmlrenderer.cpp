@@ -668,15 +668,15 @@ void HtmlRenderer::render(std::istream& input,
 					render_table(tables.back(), table_text);
 					tables.pop_back();
 
-					if (!tables.empty()) { // still a table
-						// on the
-						// outside?
+					// still a table on the outside?
+					if (!tables.empty()) {
 						for (size_t idx = 0;
 							idx < table_text.size();
 							++idx)
+							// add rendered table to current cell
 							tables.back().add_text(
 								table_text[idx]
-								.second); // add rendered table to current cell
+								.second);
 					} else {
 						for (size_t idx = 0;
 							idx < table_text.size();
@@ -993,11 +993,10 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 			}
 			if (table.rows[row].cells[cell].span > 1) {
 				width += table.rows[row].cells[cell].span;
+				// divide size evenly on columns (can be done better, I know)
 				width /= table.rows[row]
 					.cells[cell]
-					.span; // devide size evenly on
-				// columns (can be done
-				// better, I know)
+					.span;
 			}
 			cell_widths[cell] = std::max(cell_widths[cell], width);
 		}

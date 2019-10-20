@@ -117,9 +117,8 @@ REDO:
 			if (feeds_shown > 0 && feedpos.length() > 0) {
 				v->push_itemlist(pos);
 			} else {
-				v->show_error(_("No feed selected!")); // should
-				// not
-				// happen
+				// should not happen
+				v->show_error(_("No feed selected!"));
 			}
 		}
 	}

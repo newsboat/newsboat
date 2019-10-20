@@ -215,8 +215,9 @@ public:
 
 	void mark_all_items_read();
 
-	std::mutex item_mutex; // this is ugly, but makes it possible to lock
-	// items use e.g. from the Cache class
+	// this is ugly, but makes it possible to lock items use e.g. from the Cache class
+	std::mutex item_mutex;
+
 private:
 	std::string title_;
 	std::string description_;

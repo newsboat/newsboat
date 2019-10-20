@@ -260,8 +260,8 @@ std::vector<TaggedFeedUrl> TtRssApi::get_subscribed_urls()
 		}
 
 		std::map<std::string, std::string> args;
-		args["cat_id"] = "-3"; // All feeds, excluding virtual feeds
-		// (e.g. Labels and such)
+		// All feeds, excluding virtual feeds (e.g. Labels and such)
+		args["cat_id"] = "-3";
 		json feedlist = run_op("getFeeds", args);
 
 		if (feedlist.is_null()) {

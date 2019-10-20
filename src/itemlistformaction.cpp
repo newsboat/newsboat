@@ -498,10 +498,8 @@ void ItemListFormAction::process_operation(Operation op,
 					for (const auto& item : feed->items()) {
 						item->set_unread_nowrite_notify(
 							false,
-							true); // TODO: do we
-						// need to call
-						// mark_article_read
-						// here, too?
+							true);
+						// TODO: do we need to call mark_article_read here, too?
 					}
 				}
 				v->get_ctrl()->mark_all_read(feed);

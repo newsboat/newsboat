@@ -200,12 +200,9 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 		/* the operator "and" and "or" simply connect two different
 		 * subexpressions */
 		case LOGOP_AND:
+			// short-circuit evaluation in C -> short circuit evaluation in the filter language
 			return matches_r(e->l, item) &&
-				matches_r(e->r, item); // short-circuit
-		// evaulation in C ->
-		// short circuit
-		// evaluation in the
-		// filter language
+				matches_r(e->r, item);
 
 		case LOGOP_OR:
 			return matches_r(e->l, item) ||
