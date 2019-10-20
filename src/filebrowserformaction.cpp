@@ -175,8 +175,9 @@ std::vector<std::string> get_sorted_filelist()
 		struct dirent* de = ::readdir(dirp);
 		while (de) {
 			if (strcmp(de->d_name, ".") != 0 &&
-				strcmp(de->d_name, "..") != 0)
+				strcmp(de->d_name, "..") != 0) {
 				ret.push_back(de->d_name);
+			}
 			de = ::readdir(dirp);
 		}
 		::closedir(dirp);
@@ -184,8 +185,9 @@ std::vector<std::string> get_sorted_filelist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != "/")
+	if (cwdtmp != "/") {
 		ret.insert(ret.begin(), "..");
+	}
 
 	return ret;
 }
@@ -316,8 +318,9 @@ std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
 		suffix = '|';
 		break;
 	default:
-		if (mode & S_IXUSR)
+		if (mode & S_IXUSR) {
 			suffix = '*';
+		}
 	}
 
 	return strprintf::fmt("%s%c", filename, suffix);
@@ -350,8 +353,9 @@ char FileBrowserFormAction::get_filetype(mode_t mode)
 		{S_IFSOCK, 's'},
 		{0, 0}};
 	for (unsigned int i = 0; flags[i].flag != 0; i++) {
-		if ((mode & S_IFMT) == flags[i].flag)
+		if ((mode & S_IFMT) == flags[i].flag) {
 			return flags[i].ftype;
+		}
 	}
 	return '?';
 }

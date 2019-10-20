@@ -555,8 +555,9 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 				configline.append(" ");
 				configline.append(utils::quote(arg));
 			}
-			if (i < (macro.second.size() - 1))
+			if (i < (macro.second.size() - 1)) {
 				configline.append(" ; ");
+			}
 		}
 		config_output.push_back(configline);
 	}
@@ -565,8 +566,9 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 std::string KeyMap::getopname(Operation op)
 {
 	for (unsigned int i = 0; opdescs[i].op != OP_NIL; i++) {
-		if (opdescs[i].op == op)
+		if (opdescs[i].op == op) {
 			return opdescs[i].opstr;
+		}
 	}
 	return "<none>";
 }
@@ -584,8 +586,9 @@ void KeyMap::handle_action(const std::string& action,
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		std::string context = "all";
-		if (params.size() >= 3)
+		if (params.size() >= 3) {
 			context = params[2];
+		}
 		if (!is_valid_context(context))
 			throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid context"), context));
@@ -596,8 +599,9 @@ void KeyMap::handle_action(const std::string& action,
 						 "key command"),
 					params[1]));
 		}
-		if (op > OP_SK_MIN && op < OP_SK_MAX)
+		if (op > OP_SK_MIN && op < OP_SK_MAX) {
 			unset_key(getkey(op, context), context);
+		}
 		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
 		if (params.size() < 1) {
@@ -643,8 +647,9 @@ void KeyMap::handle_action(const std::string& action,
 				first = false;
 			} else {
 				if (*it == ";") {
-					if (tmpcmd.op != OP_NIL)
+					if (tmpcmd.op != OP_NIL) {
 						cmds.push_back(tmpcmd);
+					}
 					tmpcmd.op = OP_NIL;
 					tmpcmd.args.clear();
 					first = true;
@@ -659,8 +664,9 @@ void KeyMap::handle_action(const std::string& action,
 			}
 			++it;
 		}
-		if (tmpcmd.op != OP_NIL)
+		if (tmpcmd.op != OP_NIL) {
 			cmds.push_back(tmpcmd);
+		}
 
 		macros_[macrokey] = cmds;
 	} else
@@ -674,14 +680,16 @@ std::string KeyMap::getkey(Operation op, const std::string& context)
 		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 			std::string ctx(contexts[i]);
 			for (const auto& keymap : keymap_[ctx]) {
-				if (keymap.second == op)
+				if (keymap.second == op) {
 					return keymap.first;
+				}
 			}
 		}
 	} else {
 		for (const auto& keymap : keymap_[context]) {
-			if (keymap.second == op)
+			if (keymap.second == op) {
 				return keymap.first;
+			}
 		}
 	}
 	return "<none>";
@@ -701,8 +709,9 @@ std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 bool KeyMap::is_valid_context(const std::string& context)
 {
 	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-		if (context == contexts[i])
+		if (context == contexts[i]) {
 			return true;
+		}
 	}
 	return false;
 }
@@ -721,8 +730,9 @@ std::map<std::string, Operation> KeyMap::get_internal_operations() const
 unsigned short KeyMap::get_flag_from_context(const std::string& context)
 {
 	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
-		if (context == contexts[i])
+		if (context == contexts[i]) {
 			return (1 << (i - 1)) | KM_SYSKEYS;
+		}
 	}
 	return 0; // shouldn't happen
 }

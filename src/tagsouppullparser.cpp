@@ -100,20 +100,23 @@ void TagSoupPullParser::skip_whitespace()
 	do {
 		inputstream->read(&c, 1);
 		if (!inputstream->eof()) {
-			if (!isspace(c))
+			if (!isspace(c)) {
 				break;
-			else
+			} else {
 				ws.append(1, c);
+			}
 		}
 	} while (!inputstream->eof() && !inputstream->fail());
 }
 
 void TagSoupPullParser::add_attribute(std::string s)
 {
-	if (s.length() > 0 && s[s.length() - 1] == '/')
+	if (s.length() > 0 && s[s.length() - 1] == '/') {
 		s.erase(s.length() - 1, 1);
-	if (s.length() == 0)
+	}
+	if (s.length() == 0) {
 		return;
+	}
 	std::string::size_type equalpos = s.find_first_of("=", 0);
 	std::string attribname, attribvalue;
 
@@ -159,10 +162,12 @@ std::string TagSoupPullParser::decode_attribute(const std::string& s)
 	std::string s1 = s;
 	if ((s1[0] == '"' && s1[s1.length() - 1] == '"') ||
 		(s1[0] == '\'' && s1[s1.length() - 1] == '\'')) {
-		if (s1.length() > 0)
+		if (s1.length() > 0) {
 			s1.erase(0, 1);
-		if (s1.length() > 0)
+		}
+		if (s1.length() > 0) {
 			s1.erase(s1.length() - 1, 1);
+		}
 	}
 	return decode_entities(s1);
 }
@@ -544,8 +549,9 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 	while (last_pos != std::string::npos) {
 		if (count == 0) {
 			// first token: tag name
-			if (pos == std::string::npos)
+			if (pos == std::string::npos) {
 				pos = tagstr.length();
+			}
 			text = tagstr.substr(last_pos, pos - last_pos);
 			if (text[text.length() - 1] == '/') {
 				// a kludge for <br/>
@@ -565,8 +571,9 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 						pos = tagstr.find_first_of(
 							tagstr[pos + 1],
 							pos + 2);
-						if (pos != std::string::npos)
+						if (pos != std::string::npos) {
 							pos++;
+						}
 						LOG(Level::DEBUG,
 							"parse_tag: finding "
 							"ending "
@@ -615,8 +622,9 @@ void TagSoupPullParser::handle_tag()
 
 void TagSoupPullParser::handle_text()
 {
-	if (current_event != Event::START_DOCUMENT)
+	if (current_event != Event::START_DOCUMENT) {
 		text.append(ws);
+	}
 	text.append(1, c);
 	std::string tmp;
 	getline(*inputstream, tmp, '<');

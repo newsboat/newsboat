@@ -156,8 +156,9 @@ PbController::PbController()
 	}
 	config_dir = cfgdir;
 
-	if (setup_dirs_xdg(cfgdir))
+	if (setup_dirs_xdg(cfgdir)) {
 		return;
+	}
 
 	config_dir.append(NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
@@ -289,8 +290,9 @@ int PbController::run(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (colorman->colors_loaded())
+	if (colorman->colors_loaded()) {
 		colorman->set_pb_colors(v);
+	}
 	delete colorman;
 
 	max_dls = cfg->get_configvalue_as_int("max-downloads");
@@ -382,8 +384,9 @@ unsigned int PbController::downloads_in_progress()
 {
 	unsigned int count = 0;
 	for (const auto& dl : downloads_) {
-		if (dl.status() == DlStatus::DOWNLOADING)
+		if (dl.status() == DlStatus::DOWNLOADING) {
 			++count;
+		}
 	}
 	return count;
 }
@@ -415,8 +418,9 @@ void PbController::start_downloads()
 {
 	int dl2start = get_maxdownloads() - downloads_in_progress();
 	for (auto& download : downloads_) {
-		if (dl2start == 0)
+		if (dl2start == 0) {
 			break;
+		}
 
 		if (download.status() == DlStatus::QUEUED) {
 			std::thread t{PodDlThread(&download, cfg)};
@@ -433,16 +437,18 @@ void PbController::increase_parallel_downloads()
 
 void PbController::decrease_parallel_downloads()
 {
-	if (max_dls > 1)
+	if (max_dls > 1) {
 		--max_dls;
+	}
 }
 
 void PbController::play_file(const std::string& file)
 {
 	std::string cmdline;
 	std::string player = cfg->get_configvalue("player");
-	if (player == "")
+	if (player == "") {
 		return;
+	}
 	cmdline.append(player);
 	cmdline.append(" '");
 	cmdline.append(utils::replace_all(file, "'", "'\\''"));

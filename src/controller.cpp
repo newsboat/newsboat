@@ -175,8 +175,9 @@ int Controller::run(const CliArgsParser& args)
 		}
 	}
 
-	if (!args.silent())
+	if (!args.silent()) {
 		std::cout << _("Loading configuration...");
+	}
 	std::cout.flush();
 
 	cfg.register_commands(cfgparser);
@@ -209,8 +210,9 @@ int Controller::run(const CliArgsParser& args)
 
 	update_config();
 
-	if (!args.silent())
+	if (!args.silent()) {
 		std::cout << _("done.") << std::endl;
+	}
 
 	// create cache object
 	std::string cachefilepath = cfg.get_configvalue("cache-file");
@@ -364,10 +366,12 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.do_export() && !args.do_vacuum() && !args.silent())
+	if (!args.do_export() && !args.do_vacuum() && !args.silent()) {
 		std::cout << _("Loading articles from cache...");
-	if (args.do_vacuum())
+	}
+	if (args.do_vacuum()) {
 		std::cout << _("Opening cache...");
+	}
 	std::cout.flush();
 
 	if (args.do_vacuum()) {
@@ -410,8 +414,9 @@ int Controller::run(const CliArgsParser& args)
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
-	if (!args.do_export() && !args.silent())
+	if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
+	}
 
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
@@ -727,10 +732,12 @@ void Controller::edit_urls_file()
 	const char* editor;
 
 	editor = getenv("VISUAL");
-	if (!editor)
+	if (!editor) {
 		editor = getenv("EDITOR");
-	if (!editor)
+	}
+	if (!editor) {
 		editor = "vi";
+	}
 
 	std::string cmdline = strprintf::fmt("%s \"%s\"",
 		editor,
@@ -748,8 +755,9 @@ void Controller::edit_urls_file()
 
 int Controller::execute_commands(const std::vector<std::string>& cmds)
 {
-	if (v->formaction_stack_size() > 0)
+	if (v->formaction_stack_size() > 0) {
 		v->pop_current_formaction();
+	}
 	for (const auto& cmd : cmds) {
 		LOG(Level::DEBUG,
 			"Controller::execute_commands: executing `%s'",

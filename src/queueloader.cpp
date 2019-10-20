@@ -130,10 +130,11 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 						line);
 					Download d(ctrl);
 					std::string fn;
-					if (fields.size() == 1)
+					if (fields.size() == 1) {
 						fn = get_filename(fields[0]);
-					else
+					} else {
 						fn = fields[1];
+					}
 					d.set_filename(fn);
 					if (access(fn.c_str(), F_OK) == 0) {
 						LOG(Level::INFO,
@@ -188,10 +189,12 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 	if (f.is_open()) {
 		for (const auto& dl : dltemp) {
 			f << dl.url() << " " << utils::quote(dl.filename());
-			if (dl.status() == DlStatus::READY)
+			if (dl.status() == DlStatus::READY) {
 				f << " downloaded";
-			if (dl.status() == DlStatus::PLAYED)
+			}
+			if (dl.status() == DlStatus::PLAYED) {
 				f << " played";
+			}
 			f << std::endl;
 		}
 		f.close();
@@ -204,8 +207,9 @@ std::string QueueLoader::get_filename(const std::string& str)
 {
 	std::string fn = ctrl->get_dlpath();
 
-	if (fn[fn.length() - 1] != NEWSBEUTER_PATH_SEP[0])
+	if (fn[fn.length() - 1] != NEWSBEUTER_PATH_SEP[0]) {
 		fn.append(NEWSBEUTER_PATH_SEP);
+	}
 	char buf[1024];
 	snprintf(buf, sizeof(buf), "%s", str.c_str());
 	char* base = basename(buf);

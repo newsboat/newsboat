@@ -106,8 +106,9 @@ bool Matcher::matchop_between(expression* e, Matchable* item)
 	std::istringstream isatt(item->get_attribute(e->name));
 	int att;
 	isatt >> att;
-	if (lit.size() < 2)
+	if (lit.size() < 2) {
 		return false;
+	}
 	std::istringstream is1(lit[0]), is2(lit[1]);
 	int i1, i2;
 	is1 >> i1;

@@ -119,14 +119,16 @@ void ColorManager::set_pb_colors(podboat::PbView* v)
 			colorattr.append(fgcit->second);
 		}
 		if (bgcit->second != "default") {
-			if (colorattr.length() > 0)
+			if (colorattr.length() > 0) {
 				colorattr.append(",");
+			}
 			colorattr.append("bg=");
 			colorattr.append(bgcit->second);
 		}
 		for (const auto& attr : attit->second) {
-			if (colorattr.length() > 0)
+			if (colorattr.length() > 0) {
 				colorattr.append(",");
+			}
 			colorattr.append("attr=");
 			colorattr.append(attr);
 		}
@@ -146,8 +148,9 @@ void ColorManager::set_pb_colors(podboat::PbView* v)
 				styleend_str.append("bg=");
 				styleend_str.append(bgcit->second);
 			}
-			if (styleend_str.length() > 0)
+			if (styleend_str.length() > 0) {
 				styleend_str.append(",");
+			}
 			styleend_str.append("attr=bold");
 
 			v->help_form.set("styleend", styleend_str.c_str());

@@ -109,8 +109,9 @@ void PbView::run(bool auto_download)
 			}
 		}
 
-		if (!event || strcmp(event, "TIMEOUT") == 0)
+		if (!event || strcmp(event, "TIMEOUT") == 0) {
 			continue;
+		}
 
 		Operation op = keys->get_operation(event, "podbeuter");
 
@@ -300,8 +301,9 @@ void PbView::run_help()
 
 	do {
 		const char* event = help_form.run(0);
-		if (!event)
+		if (!event) {
 			continue;
+		}
 
 		Operation op = keys->get_operation(event, "help");
 

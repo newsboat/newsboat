@@ -17,8 +17,9 @@ namespace rsspp {
 
 void Rss20Parser::parse_feed(Feed& f, xmlNode* rootNode)
 {
-	if (!rootNode)
+	if (!rootNode) {
 		throw Exception(_("XML root node is NULL"));
+	}
 
 	if (rootNode->ns) {
 		const char* ns = (const char*)rootNode->ns->href;

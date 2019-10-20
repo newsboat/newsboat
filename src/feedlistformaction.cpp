@@ -508,8 +508,9 @@ REDO:
 		break;
 	}
 	if (quit) {
-		while (v->formaction_stack_size() > 0)
+		while (v->formaction_stack_size() > 0) {
 			v->pop_current_formaction();
+		}
 	}
 }
 
@@ -554,8 +555,9 @@ void FeedListFormAction::set_feedlist(
 	update_visible_feeds(feeds);
 
 	for (const auto& feed : visible_feeds) {
-		if (feed.first->unread_item_count() > 0)
+		if (feed.first->unread_item_count() > 0) {
 			++unread_feeds;
+		}
 
 		listfmt.add_line(format_line(feedlist_format,
 					 feed.first,
@@ -779,8 +781,9 @@ std::shared_ptr<RssFeed> FeedListFormAction::get_feed()
 int FeedListFormAction::get_pos(unsigned int realidx)
 {
 	for (unsigned int i = 0; i < visible_feeds.size(); ++i) {
-		if (visible_feeds[i].second == realidx)
+		if (visible_feeds[i].second == realidx) {
 			return i;
+		}
 	}
 	return -1;
 }
@@ -987,10 +990,12 @@ std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 {
 	std::string title = feed->title();
 	utils::remove_soft_hyphens(title);
-	if (title.length() == 0)
+	if (title.length() == 0) {
 		title = utils::censor_url(feed->rssurl());
-	if (title.length() == 0)
+	}
+	if (title.length() == 0) {
 		title = "<no title>";
+	}
 	return title;
 }
 

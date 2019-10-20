@@ -96,7 +96,7 @@ std::string RegexManager::extract_outer_marker(std::string str, const int index)
 		// Get found tag
 		tmptag = sm.str();
 		// If the found tag is after the spot we're looking for
-		if (sm.position(0) + offset > index ){
+		if (sm.position(0) + offset > index ) {
 			if (!tagstack.empty() ) {
 				return tagstack.top();
 			} else {

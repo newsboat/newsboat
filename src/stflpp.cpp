@@ -34,10 +34,12 @@ Stfl::Form::Form(const std::string& text)
 
 Stfl::Form::~Form()
 {
-	if (f)
+	if (f) {
 		stfl_free(f);
-	if (ipool)
+	}
+	if (ipool) {
 		stfl_ipool_destroy(ipool);
+	}
 }
 
 const char* Stfl::Form::run(int timeout)
@@ -50,8 +52,9 @@ std::string Stfl::Form::get(const std::string& name)
 	const char* text = stfl_ipool_fromwc(
 		ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
 	std::string retval;
-	if (text)
+	if (text) {
 		retval = text;
+	}
 	stfl_ipool_flush(ipool);
 	return retval;
 }
@@ -68,8 +71,9 @@ std::string Stfl::Form::get_focus()
 {
 	const char* focus = stfl_ipool_fromwc(ipool, stfl_get_focus(f));
 	std::string retval;
-	if (focus)
+	if (focus) {
 		retval = focus;
+	}
 	stfl_ipool_flush(ipool);
 	return retval;
 }
@@ -119,8 +123,9 @@ Stfl::Form::dump(const std::string& name, const std::string& prefix, int focus)
 			stfl_ipool_towc(ipool, prefix.c_str()),
 			focus));
 	std::string retval;
-	if (text)
+	if (text) {
 		retval = text;
+	}
 	stfl_ipool_flush(ipool);
 	return retval;
 }

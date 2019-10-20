@@ -19,8 +19,9 @@ public:
 		: h(0)
 	{
 		h = curl_easy_init();
-		if (!h)
+		if (!h) {
 			throw std::runtime_error("Can't obtain curl handle");
+		}
 	}
 	~CurlHandle()
 	{

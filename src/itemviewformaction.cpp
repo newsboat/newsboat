@@ -189,8 +189,9 @@ void ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
 		if (automatic) {
-			if (args->size() > 0)
+			if (args->size() > 0) {
 				filename = (*args)[0];
+			}
 		} else {
 			filename = v->run_filebrowser(
 				v->get_filename_suggestion(item->title()));
@@ -556,10 +557,11 @@ void ItemViewFormAction::update_percent()
 		unsigned int percent = 0;
 		unsigned int offset = utils::to_u(f->get("articleoffset"), 0);
 
-		if (num_lines > 0)
+		if (num_lines > 0) {
 			percent = (100 * (offset + 1)) / num_lines;
-		else
+		} else {
 			percent = 0;
+		}
 
 		LOG(Level::DEBUG,
 			"ItemViewFormAction::update_percent: offset = %u "
@@ -593,8 +595,9 @@ void ItemViewFormAction::set_highlightphrase(const std::string& text)
 void ItemViewFormAction::do_search()
 {
 	std::string searchphrase = qna_responses[0];
-	if (searchphrase.length() == 0)
+	if (searchphrase.length() == 0) {
 		return;
+	}
 
 	searchhistory.add_line(searchphrase);
 

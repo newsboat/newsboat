@@ -200,8 +200,9 @@ std::vector<std::string> FormAction::get_suggestions(
 					std::vector<std::string>
 						variable_suggestions;
 					std::string variable_fragment;
-					if (tokens.size() > 1)
+					if (tokens.size() > 1) {
 						variable_fragment = tokens[1];
+					}
 					variable_suggestions =
 						cfg->get_suggestions(
 							variable_fragment);

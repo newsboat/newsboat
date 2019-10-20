@@ -65,8 +65,9 @@ std::string TtRssApi::retrieve_sid()
 	}
 	json content = run_op("login", args);
 
-	if (content.is_null())
+	if (content.is_null()) {
 		return "";
+	}
 
 	std::string sid;
 	try {
@@ -191,10 +192,11 @@ json TtRssApi::run_op(const std::string& op,
 
 	if (status != 0) {
 		if (content["error"] == "NOT_LOGGED_IN" && try_login) {
-			if (authenticate())
+			if (authenticate()) {
 				return run_op(op, args, false, cached_handle);
-			else
+			} else {
 				return json(nullptr);
+			}
 		} else {
 			LOG(Level::ERROR,
 				"TtRssApi::run_op: status: %d, error: '%s'",
@@ -310,8 +312,9 @@ bool TtRssApi::mark_all_read(const std::string& feed_url)
 	args["feed_id"] = url_to_id(feed_url);
 	json content = run_op("catchupFeed", args);
 
-	if (content.is_null())
+	if (content.is_null()) {
 		return false;
+	}
 
 	return true;
 }
@@ -376,8 +379,9 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	args["include_attachments"] = "1";
 	json content = run_op("getHeadlines", args, true, cached_handle);
 
-	if (content.is_null())
+	if (content.is_null()) {
 		return f;
+	}
 
 	if (!content.is_array()) {
 		LOG(Level::ERROR,
@@ -483,8 +487,9 @@ void TtRssApi::fetch_feeds_per_category(const json& cat,
 	}
 
 	// ignore special categories, for now
-	if (std::stoi(cat_id) < 0)
+	if (std::stoi(cat_id) < 0) {
 		return;
+	}
 
 	cat_name = cat["title"];
 	LOG(Level::DEBUG,
@@ -498,8 +503,9 @@ void TtRssApi::fetch_feeds_per_category(const json& cat,
 
 	json feed_list_obj = run_op("getFeeds", args);
 
-	if (feed_list_obj.is_null())
+	if (feed_list_obj.is_null()) {
 		return;
+	}
 
 	// Automatically provide the category as a tag
 	std::vector<std::string> tags;
@@ -530,8 +536,9 @@ bool TtRssApi::update_article(const std::string& guid, int field, int mode)
 	args["mode"] = std::to_string(mode);
 	json content = run_op("updateArticle", args);
 
-	if (content.is_null())
+	if (content.is_null()) {
 		return false;
+	}
 
 	return true;
 }

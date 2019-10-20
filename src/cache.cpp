@@ -447,8 +447,9 @@ void Cache::update_lastmodified(const std::string& feedurl,
 	}
 	std::lock_guard<std::mutex> lock(mtx);
 	std::string query = "UPDATE rss_feed SET ";
-	if (t > 0)
+	if (t > 0) {
 		query.append(prepare_query("lastmodified = '%d'", t));
+	}
 	if (etag.length() > 0) {
 		query.append(prepare_query("%c etag = %s",
 			(t > 0 ? ',' : ' '),

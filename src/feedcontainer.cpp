@@ -192,8 +192,9 @@ std::shared_ptr<RssFeed> FeedContainer::get_feed_by_url(
 	const std::string& feedurl)
 {
 	for (const auto& feed : feeds) {
-		if (feedurl == feed->rssurl())
+		if (feedurl == feed->rssurl()) {
 			return feed;
+		}
 	}
 	LOG(Level::ERROR,
 		"FeedContainer:get_feed_by_url failed for %s",
@@ -205,8 +206,9 @@ unsigned int FeedContainer::get_pos_of_next_unread(unsigned int pos)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (pos++; pos < feeds.size(); pos++) {
-		if (feeds[pos]->unread_item_count() > 0)
+		if (feeds[pos]->unread_item_count() > 0) {
 			break;
+		}
 	}
 	return pos;
 }

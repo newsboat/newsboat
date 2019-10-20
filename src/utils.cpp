@@ -112,8 +112,9 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	std::string::size_type pos = last_pos;
 
 	while (pos != std::string::npos && last_pos != std::string::npos) {
-		if (str[last_pos] == '#') // stop as soon as we found a comment
+		if (str[last_pos] == '#') { // stop as soon as we found a comment
 			break;
+		}
 
 		if (str[last_pos] == '"') {
 			++last_pos;
@@ -239,8 +240,9 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	while (std::string::npos != pos || std::string::npos != last_pos) {
 		tokens.push_back(str.substr(last_pos, pos - last_pos));
 		last_pos = str.find_first_not_of(delimiters, pos);
-		if (last_pos > pos)
+		if (last_pos > pos) {
 			tokens.push_back(str.substr(pos, last_pos - pos));
+		}
 		pos = str.find_first_of(delimiters, last_pos);
 	}
 
@@ -299,8 +301,9 @@ std::string utils::translit(const std::string& tocode,
 	static TranslitState state = TranslitState::UNKNOWN;
 
 	// TRANSLIT is not needed when converting to unicode encodings
-	if (tocode == "utf-8" || tocode == "WCHAR_T")
+	if (tocode == "utf-8" || tocode == "WCHAR_T") {
 		return tocode;
+	}
 
 	if (state == TranslitState::UNKNOWN) {
 		iconv_t cd = ::iconv_open(
@@ -347,14 +350,16 @@ std::string utils::convert_text(const std::string& text,
 {
 	std::string result;
 
-	if (strcasecmp(tocode.c_str(), fromcode.c_str()) == 0)
+	if (strcasecmp(tocode.c_str(), fromcode.c_str()) == 0) {
 		return text;
+	}
 
 	iconv_t cd = ::iconv_open(
 		translit(tocode, fromcode).c_str(), fromcode.c_str());
 
-	if (cd == reinterpret_cast<iconv_t>(-1))
+	if (cd == reinterpret_cast<iconv_t>(-1)) {
 		return result;
+	}
 
 	size_t inbytesleft;
 	size_t outbytesleft;
@@ -874,17 +879,22 @@ unsigned long utils::get_auth_method(const std::string& type)
 
 curl_proxytype utils::get_proxy_type(const std::string& type)
 {
-	if (type == "http")
+	if (type == "http") {
 		return CURLPROXY_HTTP;
-	if (type == "socks4")
+	}
+	if (type == "socks4") {
 		return CURLPROXY_SOCKS4;
-	if (type == "socks5")
+	}
+	if (type == "socks5") {
 		return CURLPROXY_SOCKS5;
-	if (type == "socks5h")
+	}
+	if (type == "socks5h") {
 		return CURLPROXY_SOCKS5_HOSTNAME;
+	}
 #ifdef CURLPROXY_SOCKS4A
-	if (type == "socks4a")
+	if (type == "socks4a") {
 		return CURLPROXY_SOCKS4A;
+	}
 #endif
 
 	if (type != "") {
@@ -909,8 +919,9 @@ std::string utils::unescape_url(const std::string& url)
 std::wstring utils::clean_nonprintable_characters(std::wstring text)
 {
 	for (size_t idx = 0; idx < text.size(); ++idx) {
-		if (!iswprint(text[idx]))
+		if (!iswprint(text[idx])) {
 			text[idx] = L'\uFFFD';
+		}
 	}
 	return text;
 }

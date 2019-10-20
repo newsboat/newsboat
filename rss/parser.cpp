@@ -47,8 +47,9 @@ Parser::Parser(unsigned int timeout,
 
 Parser::~Parser()
 {
-	if (doc)
+	if (doc) {
 		xmlFreeDoc(doc);
+	}
 }
 
 struct HeaderValues {
@@ -140,11 +141,13 @@ Feed Parser::parse_url(const std::string& url,
 		curl_easy_setopt(
 			easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
 	}
-	if (to != 0)
+	if (to != 0) {
 		curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, to);
+	}
 
-	if (!prx.empty())
+	if (!prx.empty()) {
 		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx.c_str());
+	}
 
 	if (!prxauth.empty()) {
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
@@ -211,8 +214,9 @@ Feed Parser::parse_url(const std::string& url,
 			easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
 	}
 
-	if (!ehandle)
+	if (!ehandle) {
 		curl_easy_cleanup(easyhandle);
+	}
 
 	if (ret != 0) {
 		LOG(Level::ERROR,
@@ -310,18 +314,18 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 					xmlFree((void*)version);
 					throw Exception(_("no RSS version"));
 				}
-				if (strcmp(version, "0.91") == 0)
+				if (strcmp(version, "0.91") == 0) {
 					f.rss_version = Feed::RSS_0_91;
-				else if (strcmp(version, "0.92") == 0)
+				} else if (strcmp(version, "0.92") == 0) {
 					f.rss_version = Feed::RSS_0_92;
-				else if (strcmp(version, "0.94") == 0)
+				} else if (strcmp(version, "0.94") == 0) {
 					f.rss_version = Feed::RSS_0_94;
-				else if (strcmp(version, "2.0") == 0 ||
-					strcmp(version, "2") == 0)
+				} else if (strcmp(version, "2.0") == 0 ||
+					strcmp(version, "2") == 0) {
 					f.rss_version = Feed::RSS_2_0;
-				else if (strcmp(version, "1.0") == 0)
+				} else if (strcmp(version, "1.0") == 0) {
 					f.rss_version = Feed::RSS_0_91;
-				else {
+				} else {
 					xmlFree((void*)version);
 					throw Exception(
 						_("invalid RSS version"));

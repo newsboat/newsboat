@@ -597,8 +597,9 @@ void ItemListFormAction::process_operation(Operation op,
 		if (filters->size() > 0) {
 			std::string newfilter;
 			if (automatic) {
-				if (args->size() > 0)
+				if (args->size() > 0) {
 					newfilter = (*args)[0];
+				}
 			} else {
 				newfilter = v->select_filter(
 					filters->get_filters());
@@ -825,8 +826,9 @@ void ItemListFormAction::qna_end_editflags()
 void ItemListFormAction::qna_start_search()
 {
 	searchphrase = qna_responses[0];
-	if (searchphrase.length() == 0)
+	if (searchphrase.length() == 0) {
 		return;
+	}
 
 	v->set_status(_("Searching..."));
 	searchhistory.add_line(searchphrase);
@@ -834,8 +836,9 @@ void ItemListFormAction::qna_start_search()
 	try {
 		std::string utf8searchphrase = utils::convert_text(
 			searchphrase, "utf-8", nl_langinfo(CODESET));
-		if (show_searchresult)
+		if (show_searchresult) {
 			feed->set_rssurl("search:");
+		}
 		items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, feed);
 	} catch (const DbException& e) {
@@ -865,8 +868,9 @@ void ItemListFormAction::qna_start_search()
 
 void ItemListFormAction::do_update_visible_items()
 {
-	if (!(invalidated && invalidation_mode == InvalidationMode::COMPLETE))
+	if (!(invalidated && invalidation_mode == InvalidationMode::COMPLETE)) {
 		return;
+	}
 
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<RssItem>>& items = feed->items();
@@ -1238,8 +1242,9 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		handle_cmdline_num(idx);
 	} else {
 		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
-		if (tokens.empty())
+		if (tokens.empty()) {
 			return;
+		}
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
 			std::string itemposname = f->get("itempos");
@@ -1265,8 +1270,9 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 int ItemListFormAction::get_pos(unsigned int realidx)
 {
 	for (unsigned int i = 0; i < visible_items.size(); ++i) {
-		if (visible_items[i].second == realidx)
+		if (visible_items[i].second == realidx) {
 			return i;
+		}
 	}
 	return -1;
 }

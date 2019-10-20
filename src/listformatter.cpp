@@ -78,8 +78,9 @@ std::string ListFormatter::format_list(RegexManager* rxman,
 	format_cache = "{list";
 	for (const auto& line : lines) {
 		std::string str = line.first;
-		if (rxman)
+		if (rxman) {
 			rxman->quote_and_highlight(str, location);
+		}
 		if (line.second == UINT_MAX) {
 			format_cache.append(strprintf::fmt(
 				"{listitem text:%s}", Stfl::quote(str)));

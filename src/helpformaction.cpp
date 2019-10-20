@@ -91,10 +91,12 @@ void HelpFormAction::prepare()
 				case 0:
 					condition = (desc.key.length() == 0 ||
 						desc.flags & KM_SYSKEYS);
-					if (desc.key.length() == 0)
+					if (desc.key.length() == 0) {
 						unbound_count++;
-					if (desc.flags & KM_SYSKEYS)
+					}
+					if (desc.flags & KM_SYSKEYS) {
 						syskey_count++;
+					}
 					break;
 				case 1:
 					condition = !(desc.flags & KM_SYSKEYS);
@@ -108,8 +110,9 @@ void HelpFormAction::prepare()
 					break;
 				}
 				if (context.length() > 0 &&
-					(desc.ctx != context || condition))
+					(desc.ctx != context || condition)) {
 					continue;
+				}
 				if (!apply_search ||
 					strcasestr(desc.key.c_str(),
 						searchphrase.c_str()) !=
@@ -127,10 +130,12 @@ void HelpFormAction::prepare()
 						desc.key.length();
 					int how_often_2 = strlen(tabs_2) -
 						desc.cmd.length();
-					if (how_often_1 <= 0)
+					if (how_often_1 <= 0) {
 						how_often_1 = 1;
-					if (how_often_2 <= 0)
+					}
+					if (how_often_2 <= 0) {
 						how_often_2 = 1;
+					}
 					tabs_1[how_often_1] = '\0';
 					tabs_2[how_often_2] = '\0';
 					std::string line;
@@ -258,15 +263,17 @@ std::string HelpFormAction::make_colorstring(
 		}
 		if (colors.size() > 1) {
 			if (colors[1] != "default") {
-				if (result.length() > 0)
+				if (result.length() > 0) {
 					result.append(",");
+				}
 				result.append("bg=");
 				result.append(colors[1]);
 			}
 		}
 		for (unsigned int i = 2; i < colors.size(); i++) {
-			if (result.length() > 0)
+			if (result.length() > 0) {
 				result.append(",");
+			}
 			result.append("attr=");
 			result.append(colors[i]);
 		}

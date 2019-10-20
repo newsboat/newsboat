@@ -318,8 +318,9 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		const char* event = fa->get_form()->run(1000);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
-		if (!event || strcmp(event, "TIMEOUT") == 0)
+		if (!event || strcmp(event, "TIMEOUT") == 0) {
 			continue;
+		}
 
 		Operation op = keys->get_operation(event, fa->id());
 
@@ -331,10 +332,11 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 		fa->process_op(op);
 	}
 
-	if (value == "")
+	if (value == "") {
 		return "";
-	else
+	} else {
 		return f->get_value(value);
+	}
 }
 
 std::string View::get_filename_suggestion(const std::string& s)
@@ -345,16 +347,18 @@ std::string View::get_filename_suggestion(const std::string& s)
 	 */
 	std::string retval;
 	for (unsigned int i = 0; i < s.length(); ++i) {
-		if (isalnum(s[i]))
+		if (isalnum(s[i])) {
 			retval.append(1, s[i]);
-		else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
-			s[i] == '\n')
+		} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
+			s[i] == '\n') {
 			retval.append(1, '_');
+		}
 	}
-	if (retval.length() == 0)
+	if (retval.length() == 0) {
 		retval = "article.txt";
-	else
+	} else {
 		retval.append(".txt");
+	}
 	LOG(Level::DEBUG, "View::get_filename_suggestion: %s -> %s", s, retval);
 	return retval;
 }
@@ -377,12 +381,13 @@ void View::open_in_pager(const std::string& filename)
 		cmdline = fmt.do_format(pager, 0);
 	} else {
 		const char* env_pager = nullptr;
-		if (pager != "")
+		if (pager != "") {
 			cmdline.append(pager);
-		else if ((env_pager = getenv("PAGER")) != nullptr)
+		} else if ((env_pager = getenv("PAGER")) != nullptr) {
 			cmdline.append(env_pager);
-		else
+		} else {
 			cmdline.append("more");
+		}
 		cmdline.append(" ");
 		cmdline.append(filename);
 	}
@@ -406,10 +411,11 @@ void View::open_in_browser(const std::string& url)
 		fmt.register_fmt('u', newurl);
 		cmdline = fmt.do_format(browser, 0);
 	} else {
-		if (browser != "")
+		if (browser != "") {
 			cmdline.append(browser);
-		else
+		} else {
 			cmdline.append("lynx");
+		}
 		cmdline.append(" '");
 		cmdline.append(utils::replace_all(url, "'", "%27"));
 		cmdline.append("'");
@@ -552,8 +558,9 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
 		itemview->set_parent_formaction(fa);
-		if (searchphrase.length() > 0)
+		if (searchphrase.length() > 0) {
 			itemview->set_highlightphrase(searchphrase);
+		}
 		apply_colors(itemview);
 		itemview->init();
 		formaction_stack.push_back(itemview);
@@ -689,8 +696,9 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	do {
 		const char* event = f->get_form()->run(0);
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
-		if (!event)
+		if (!event) {
 			continue;
+		}
 		if (strcmp(event, "ESC") == 0 || strcmp(event, "ENTER") == 0) {
 			result = 0;
 			LOG(Level::DEBUG,
@@ -1017,8 +1025,9 @@ void View::pop_current_formaction()
 {
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	auto it = formaction_stack.begin();
-	for (unsigned int i = 0; i < current_formaction; i++)
+	for (unsigned int i = 0; i < current_formaction; i++) {
 		++it;
+	}
 	formaction_stack.erase(it);
 	if (f == nullptr) {
 		current_formaction = formaction_stack_size() -
@@ -1064,8 +1073,9 @@ void View::remove_formaction(unsigned int pos)
 {
 	std::shared_ptr<FormAction> f = formaction_stack[pos];
 	auto it = formaction_stack.begin();
-	for (unsigned int i = 0; i < pos; i++)
+	for (unsigned int i = 0; i < pos; i++) {
 		++it;
+	}
 	formaction_stack.erase(it);
 	current_formaction--;
 	if (f != nullptr && formaction_stack.size() > 0) {
@@ -1117,14 +1127,16 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 			colorattr.append(fgcit->second);
 		}
 		if (bgcit->second != "default") {
-			if (colorattr.length() > 0)
+			if (colorattr.length() > 0) {
 				colorattr.append(",");
+			}
 			colorattr.append("bg=");
 			colorattr.append(bgcit->second);
 		}
 		for (const auto& attr : attit->second) {
-			if (colorattr.length() > 0)
+			if (colorattr.length() > 0) {
 				colorattr.append(",");
+			}
 			colorattr.append("attr=");
 			colorattr.append(attr);
 		}
@@ -1134,10 +1146,12 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 			if (fa->id() == "article") {
 				std::string bold = article_colorstr;
 				std::string ul = article_colorstr;
-				if (bold.length() > 0)
+				if (bold.length() > 0) {
 					bold.append(",");
-				if (ul.length() > 0)
+				}
+				if (ul.length() > 0) {
 					ul.append(",");
+				}
 				bold.append("attr=bold");
 				ul.append("attr=underline");
 				fa->get_form()->set("color_bold", bold.c_str());
@@ -1161,8 +1175,9 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 					styleend_str.append("bg=");
 					styleend_str.append(bgcit->second);
 				}
-				if (styleend_str.length() > 0)
+				if (styleend_str.length() > 0) {
 					styleend_str.append(",");
+				}
 				styleend_str.append("attr=bold");
 
 				fa->get_form()->set(
@@ -1214,8 +1229,9 @@ std::vector<std::pair<unsigned int, std::string>> View::get_formaction_names()
 void View::goto_next_dialog()
 {
 	current_formaction++;
-	if (current_formaction >= formaction_stack.size())
+	if (current_formaction >= formaction_stack.size()) {
 		current_formaction = 0;
+	}
 }
 
 void View::goto_prev_dialog()
@@ -1269,8 +1285,9 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
-		if (firstpos != 0 && firstpos >= val.length())
+		if (firstpos != 0 && firstpos >= val.length()) {
 			firstpos = val.length() - 1;
+		}
 		while (firstpos > 0 && ::isspace(val[firstpos])) {
 			--firstpos;
 		}
@@ -1278,8 +1295,9 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	while (firstpos > 0 && !::isspace(val[firstpos])) {
 		--firstpos;
 	}
-	if (firstpos != 0)
+	if (firstpos != 0) {
 		firstpos++;
+	}
 	val.erase(firstpos, curpos - firstpos);
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
 	fa->get_form()->set("qna_value", val);

@@ -148,8 +148,9 @@ void ConfigParser::evaluate_backticks(std::vector<std::string>& tokens)
 std::string::size_type find_non_escaped_backtick(std::string& input,
 	const std::string::size_type startpos)
 {
-	if (startpos == std::string::npos)
+	if (startpos == std::string::npos) {
 		return startpos;
+	}
 
 	std::string::size_type result = startpos;
 	result = input.find_first_of("`", result);

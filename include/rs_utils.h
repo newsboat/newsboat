@@ -117,7 +117,7 @@ public:
 
 	operator std::string()
 	{
-		if (str != nullptr){
+		if (str != nullptr) {
 			return std::string(str);
 		}
 		return std::string();

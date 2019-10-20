@@ -325,10 +325,11 @@ void ConfigContainer::handle_action(const std::string& action,
 	// fall-through
 	case ConfigDataType::STR:
 	case ConfigDataType::PATH:
-		if (cfgdata.multi_option)
+		if (cfgdata.multi_option) {
 			cfgdata.value = utils::join(params, " ");
-		else
+		} else {
 			cfgdata.value = params[0];
+		}
 		break;
 
 	case ConfigDataType::INVALID:
@@ -454,8 +455,9 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 	std::vector<std::string> result;
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		if (cfg.first.substr(0, fragment.length()) == fragment)
+		if (cfg.first.substr(0, fragment.length()) == fragment) {
 			result.push_back(cfg.first);
+		}
 	}
 	std::sort(result.begin(), result.end());
 	return result;

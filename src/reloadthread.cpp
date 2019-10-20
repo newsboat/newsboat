@@ -31,8 +31,9 @@ void ReloadThread::operator()()
 		LOG(Level::INFO, "ReloadThread: starting reload");
 
 		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
-		if (waittime_sec == 0)
+		if (waittime_sec == 0) {
 			waittime_sec = 60;
+		}
 
 		if (cfg->get_configvalue_as_bool("auto-reload")) {
 			if (suppressed_first) {

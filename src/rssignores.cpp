@@ -60,10 +60,11 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& ign : ignores) {
 		std::string configline = "ignore-article ";
-		if (ign.first == "*")
+		if (ign.first == "*") {
 			configline.append("*");
-		else
+		} else {
 			configline.append(utils::quote(ign.first));
+		}
 		configline.append(" ");
 		configline.append(utils::quote(ign.second->get_expression()));
 		config_output.push_back(configline);

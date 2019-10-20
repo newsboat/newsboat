@@ -141,24 +141,25 @@ bool RssFeed::has_attribute(const std::string& attribname)
 		attribname == "feedlink" || attribname == "feeddate" ||
 		attribname == "rssurl" || attribname == "unread_count" ||
 		attribname == "total_count" || attribname == "tags" ||
-		attribname == "feedindex")
+		attribname == "feedindex") {
 		return true;
+	}
 	return false;
 }
 
 std::string RssFeed::get_attribute(const std::string& attribname)
 {
-	if (attribname == "feedtitle")
+	if (attribname == "feedtitle") {
 		return title();
-	else if (attribname == "description")
+	} else if (attribname == "description") {
 		return description();
-	else if (attribname == "feedlink")
+	} else if (attribname == "feedlink") {
 		return title();
-	else if (attribname == "feeddate")
+	} else if (attribname == "feeddate") {
 		return pubDate();
-	else if (attribname == "rssurl")
+	} else if (attribname == "rssurl") {
 		return rssurl();
-	else if (attribname == "unread_count") {
+	} else if (attribname == "unread_count") {
 		return std::to_string(unread_item_count());
 	} else if (attribname == "total_count") {
 		return std::to_string(items_.size());

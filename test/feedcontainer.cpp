@@ -187,10 +187,11 @@ TEST_CASE("Correctly returns pos of next unread item", "[FeedContainer]")
 	int i = 0;
 	for (const auto& feed : feeds) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
-		if ((i % 2) == 0)
+		if ((i % 2) == 0) {
 			item->set_unread_nowrite(true);
-		else
+		} else {
 			item->set_unread_nowrite(false);
+		}
 		feed->add_item(item);
 		i++;
 	}

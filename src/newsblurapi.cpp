@@ -133,7 +133,9 @@ std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
 			// describing folders but also numbers, which are IDs of
 			// feeds that don't belong to any folder. This check
 			// skips these IDs.
+		{
 			continue;
+		}
 
 		json_object_object_foreach(
 			tag_to_feed_ids, key, feeds_with_tag_obj)
@@ -234,8 +236,9 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 		json_object* query_result = query_api(
 			"/reader/feed/" + id + "?page=" + page, nullptr);
 
-		if (!query_result)
+		if (!query_result) {
 			return f;
+		}
 
 		json_object* stories{};
 		if (json_object_object_get_ex(

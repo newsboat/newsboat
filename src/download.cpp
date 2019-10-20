@@ -91,8 +91,9 @@ void Download::set_url(const std::string& u)
 
 void Download::set_progress(double downloaded, double total)
 {
-	if (downloaded > cursize)
+	if (downloaded > cursize) {
 		ctrl->set_view_update_necessary(true);
+	}
 	cursize = downloaded;
 	totalsize = total;
 }
