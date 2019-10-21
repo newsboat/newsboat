@@ -11,15 +11,15 @@ RUN dpkg --add-architecture i386 \
     && apt-get upgrade --assume-yes
 
 RUN apt-get install --assume-yes \
-        build-essential g++-multilib pkg-config:i386 libsqlite3-0:i386 \
-        libsqlite3-dev:i386 libcurl4-openssl-dev:i386 libxml2-dev:i386 \
-        libstfl-dev:i386 libjson-c-dev:i386 libssl-dev:i386 gettext \
+        build-essential gettext g++-multilib libcurl4-openssl-dev:i386 \
+        libjson-c-dev:i386 libsqlite3-0:i386 libsqlite3-dev:i386 \
+        libssl-dev:i386 libstfl-dev:i386 libxml2-dev:i386 pkg-config:i386 \
         # `curl` would be enough for our needs, but it pulls in amd64 versions
         # of libraries we use, interfering with the build environment. So
         # `wget` it is.
         wget \
     && apt-get install --assume-yes --no-install-recommends \
-        asciidoc docbook-xml docbook-xsl xsltproc libxml2-utils \
+        asciidoc docbook-xml docbook-xsl libxml2-utils xsltproc \
     && apt-get autoremove \
     && apt-get clean
 
