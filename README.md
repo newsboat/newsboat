@@ -99,13 +99,6 @@ You'll probably want to run the tests; here's how:
 Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
 slows them down if `TMPDIR` is on HDD or even SSD.
 
-We check the formatting of the Rust code during CI using
-[rust-fmt](https://github.com/rust-lang/rustfmt).  To make sure your code is
-properly formatted, install and run rust-fmt:
-
-	$ rustup component add rustfmt
-	$ cargo fmt
-
 Newsboat can also be [built in Docker](doc/internal/docker.md).
 
 License
