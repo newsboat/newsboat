@@ -7,8 +7,8 @@
 using namespace newsboat;
 
 TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
-		"exist",
-		"[ConfigPaths]")
+	"exist",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 	const auto newsboat_dir = tmp.get_path() + ".newsboat";
@@ -36,8 +36,8 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 }
 
 TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
-		"the dotdir doesn't",
-		"[ConfigPaths]")
+	"the dotdir doesn't",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 	const auto config_dir = tmp.get_path() + ".config/newsboat";
@@ -103,8 +103,8 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 }
 
 TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
-		"CliArgsParser",
-		"[ConfigPaths]")
+	"CliArgsParser",
+	"[ConfigPaths]")
 {
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
@@ -120,11 +120,11 @@ TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
 	const auto lock_file = cache_file + ".lock";
 	const auto config_file = std::string("this is a/config");
 	TestHelpers::Opts opts({
-			"newsboat",
-			"-u", url_file,
-			"-c", cache_file,
-			"-C", config_file,
-			"-q"});
+		"newsboat",
+		"-u", url_file,
+		"-c", cache_file,
+		"-C", config_file,
+		"-q"});
 	CliArgsParser parser(opts.argc(), opts.argv());
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
@@ -136,7 +136,7 @@ TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
 }
 
 TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
-		"[ConfigPaths]")
+	"[ConfigPaths]")
 {
 	const auto test_dir = std::string("some/dir/we/use/as/home");
 	const auto newsboat_dir = test_dir + "/.newsboat/";
@@ -164,7 +164,7 @@ TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
 }
 
 TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs "
-		"were successfully created or already existed", "[ConfigPaths]")
+	"were successfully created or already existed", "[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -184,7 +184,7 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		REQUIRE(paths.initialized());
 
 		const auto starts_with =
-		[]
+			[]
 		(const std::string& input, const std::string& prefix) -> bool {
 			return input.substr(0, prefix.size()) == prefix;
 		};
@@ -410,8 +410,8 @@ struct FileSentries {
 };
 
 void mock_newsbeuter_dotdir(
-		const TestHelpers::TempDir& tmp,
-		const FileSentries& sentries)
+	const TestHelpers::TempDir& tmp,
+	const FileSentries& sentries)
 {
 	const auto dotdir_path = tmp.get_path() + ".newsbeuter/";
 	REQUIRE(::mkdir(dotdir_path.c_str(), 0700) == 0);
@@ -424,9 +424,9 @@ void mock_newsbeuter_dotdir(
 }
 
 void mock_newsbeuter_xdg_dirs(
-		const std::string& config_dir_path,
-		const std::string& data_dir_path,
-		const FileSentries& sentries)
+	const std::string& config_dir_path,
+	const std::string& data_dir_path,
+	const FileSentries& sentries)
 {
 	REQUIRE(utils::mkdir_parents(config_dir_path, 0700) == 0);
 	REQUIRE(create_file(config_dir_path + "config", sentries.config));
@@ -440,8 +440,8 @@ void mock_newsbeuter_xdg_dirs(
 }
 
 void mock_newsbeuter_xdg_dirs(
-		const TestHelpers::TempDir& tmp,
-		const FileSentries& sentries)
+	const TestHelpers::TempDir& tmp,
+	const FileSentries& sentries)
 {
 	const auto config_dir_path = tmp.get_path() + ".config/newsbeuter/";
 	const auto data_dir_path = tmp.get_path() + ".local/share/newsbeuter/";
@@ -449,8 +449,8 @@ void mock_newsbeuter_xdg_dirs(
 }
 
 void mock_newsboat_dotdir(
-		const TestHelpers::TempDir& tmp,
-		const FileSentries& sentries)
+	const TestHelpers::TempDir& tmp,
+	const FileSentries& sentries)
 {
 	const auto dotdir_path = tmp.get_path() + ".newsboat/";
 	REQUIRE(::mkdir(dotdir_path.c_str(), 0700) == 0);
@@ -460,9 +460,9 @@ void mock_newsboat_dotdir(
 }
 
 void mock_newsboat_xdg_dirs(
-		const std::string& config_dir_path,
-		const std::string& /*data_dir_path*/,
-		const FileSentries& sentries)
+	const std::string& config_dir_path,
+	const std::string& /*data_dir_path*/,
+	const FileSentries& sentries)
 {
 	REQUIRE(utils::mkdir_parents(config_dir_path, 0700) == 0);
 
@@ -471,8 +471,8 @@ void mock_newsboat_xdg_dirs(
 }
 
 void mock_newsboat_xdg_dirs(
-		const TestHelpers::TempDir& tmp,
-		const FileSentries& sentries)
+	const TestHelpers::TempDir& tmp,
+	const FileSentries& sentries)
 {
 	const auto config_dir_path = tmp.get_path() + ".config/newsboat/";
 	const auto data_dir_path = tmp.get_path() + ".local/share/newsboat/";
@@ -480,8 +480,8 @@ void mock_newsboat_xdg_dirs(
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
-		"were specified on the command line",
-		"[ConfigPaths]")
+	"were specified on the command line",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -511,11 +511,11 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 		REQUIRE(create_file(config_file, boat_sentries.config));
 
 		TestHelpers::Opts opts({
-				"newsboat",
-				"-u", url_file,
-				"-c", cache_file,
-				"-C", config_file,
-				"-q"});
+			"newsboat",
+			"-u", url_file,
+			"-c", cache_file,
+			"-C", config_file,
+			"-q"});
 		CliArgsParser parser(opts.argc(), opts.argv());
 		ConfigPaths paths;
 		REQUIRE(paths.initialized());
@@ -546,8 +546,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
-		"already exists",
-		"[ConfigPaths]")
+	"already exists",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -596,9 +596,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 				xdg_config.set(config_dir);
 				const auto newsboat_config_dir = config_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
-						newsboat_config_dir,
-						tmp.get_path() + ".local/share/newsboat/",
-						boat_sentries);
+					newsboat_config_dir,
+					tmp.get_path() + ".local/share/newsboat/",
+					boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 
@@ -607,12 +607,12 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 				REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
 				xdg_data.set(data_dir);
 				const auto newsboat_config_dir =
-						tmp.get_path() + ".config/newsboat/";
+					tmp.get_path() + ".config/newsboat/";
 				const auto newsboat_data_dir = data_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
-						newsboat_config_dir,
-						newsboat_data_dir,
-						boat_sentries);
+					newsboat_config_dir,
+					newsboat_data_dir,
+					boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 
@@ -629,9 +629,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 				const auto newsboat_data_dir = data_dir + "newsboat/";
 
 				mock_newsboat_xdg_dirs(
-						newsboat_config_dir,
-						newsboat_data_dir,
-						boat_sentries);
+					newsboat_config_dir,
+					newsboat_data_dir,
+					boat_sentries);
 
 				check(newsboat_config_dir + "urls");
 			}
@@ -658,9 +658,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			REQUIRE(::mkdir(config_dir.c_str(), 0700) == 0);
 			xdg_config.set(config_dir);
 			mock_newsbeuter_xdg_dirs(
-					config_dir + "newsbeuter/",
-					tmp.get_path() + ".local/share/newsbeuter/",
-					beuter_sentries);
+				config_dir + "newsbeuter/",
+				tmp.get_path() + ".local/share/newsbeuter/",
+				beuter_sentries);
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
@@ -670,9 +670,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			SECTION("Newsboat uses XDG") {
 				const auto newsboat_config_dir = config_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
-						newsboat_config_dir,
-						tmp.get_path() + ".local/share/newsboat/",
-						boat_sentries);
+					newsboat_config_dir,
+					tmp.get_path() + ".local/share/newsboat/",
+					boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 		}
@@ -682,9 +682,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
 			xdg_data.set(data_dir);
 			mock_newsbeuter_xdg_dirs(
-					tmp.get_path() + ".config/newsbeuter/",
-					data_dir,
-					beuter_sentries);
+				tmp.get_path() + ".config/newsbeuter/",
+				data_dir,
+				beuter_sentries);
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
@@ -695,9 +695,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 				const auto newsboat_config_dir =
 					tmp.get_path() + ".config/newsboat/";
 				mock_newsboat_xdg_dirs(
-						newsboat_config_dir,
-						data_dir + "newsboat/",
-						boat_sentries);
+					newsboat_config_dir,
+					data_dir + "newsboat/",
+					boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 		}
@@ -712,9 +712,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			xdg_data.set(data_dir);
 
 			mock_newsbeuter_xdg_dirs(
-					config_dir + "newsbeuter/",
-					data_dir + "newsbeuter/",
-					beuter_sentries);
+				config_dir + "newsbeuter/",
+				data_dir + "newsbeuter/",
+				beuter_sentries);
 
 			SECTION("Newsboat uses dotdir") {
 				mock_newsboat_dotdir(tmp, boat_sentries);
@@ -724,9 +724,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 			SECTION("Newsboat uses XDG") {
 				const auto newsboat_config_dir = config_dir + "newsboat/";
 				mock_newsboat_xdg_dirs(
-						newsboat_config_dir,
-						data_dir + "newsboat/",
-						boat_sentries);
+					newsboat_config_dir,
+					data_dir + "newsboat/",
+					boat_sentries);
 				check(newsboat_config_dir + "urls");
 			}
 		}
@@ -734,8 +734,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
-		"default location to default location of Newsboat dotdir",
-		"[ConfigPaths]")
+	"default location to default location of Newsboat dotdir",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -771,8 +771,8 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
-		"their default location to default locations of Newsboat XDG dirs",
-		"[ConfigPaths]")
+	"their default location to default locations of Newsboat XDG dirs",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -790,7 +790,7 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 	FileSentries sentries;
 
 	const auto check =
-	[&]
+		[&]
 	(const std::string& config_dir, const std::string& data_dir) {
 		ConfigPaths paths;
 		REQUIRE(paths.initialized());
@@ -819,12 +819,12 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 		REQUIRE(::mkdir(config_dir.c_str(), 0700) == 0);
 		xdg_config.set(config_dir);
 		mock_newsbeuter_xdg_dirs(
-				config_dir + "newsbeuter/",
-				tmp.get_path() + ".local/share/newsbeuter/",
-				sentries);
+			config_dir + "newsbeuter/",
+			tmp.get_path() + ".local/share/newsbeuter/",
+			sentries);
 
 		check(config_dir + "newsboat/",
-				tmp.get_path() + ".local/share/newsboat/");
+			tmp.get_path() + ".local/share/newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
@@ -832,12 +832,12 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 		REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
 		xdg_data.set(data_dir);
 		mock_newsbeuter_xdg_dirs(
-				tmp.get_path() + ".config/newsbeuter/",
-				data_dir + "newsbeuter/",
-				sentries);
+			tmp.get_path() + ".config/newsbeuter/",
+			data_dir + "newsbeuter/",
+			sentries);
 
 		check(tmp.get_path() + ".config/newsboat/",
-				data_dir + "newsboat/");
+			data_dir + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -850,17 +850,17 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 		xdg_data.set(data_dir);
 
 		mock_newsbeuter_xdg_dirs(
-				config_dir + "newsbeuter/",
-				data_dir + "newsbeuter/",
-				sentries);
+			config_dir + "newsbeuter/",
+			data_dir + "newsbeuter/",
+			sentries);
 
 		check(config_dir + "newsboat/", data_dir + "newsboat/");
 	}
 }
 
 void verify_xdg_not_migrated(
-		const std::string& config_dir,
-		const std::string& data_dir)
+	const std::string& config_dir,
+	const std::string& data_dir)
 {
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
@@ -878,8 +878,8 @@ void verify_xdg_not_migrated(
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
-		"Newsboat XDG config dir already exists",
-		"[ConfigPaths]")
+	"Newsboat XDG config dir already exists",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -911,9 +911,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		REQUIRE(::mkdir(config_home.c_str(), 0700) == 0);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				tmp.get_path() + ".local/share/newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			tmp.get_path() + ".local/share/newsbeuter/",
+			sentries);
 
 		const auto config_dir = config_home + "newsboat/";
 		REQUIRE(::mkdir(config_dir.c_str(), 0700) == 0);
@@ -925,9 +925,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
 		xdg_data.set(data_dir);
 		mock_newsbeuter_xdg_dirs(
-				tmp.get_path() + ".config/newsbeuter/",
-				data_dir + "newsbeuter/",
-				sentries);
+			tmp.get_path() + ".config/newsbeuter/",
+			data_dir + "newsbeuter/",
+			sentries);
 
 		const auto config_dir = tmp.get_path() + ".config/newsboat/";
 		REQUIRE(::mkdir(config_dir.c_str(), 0700) == 0);
@@ -944,9 +944,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		xdg_data.set(data_dir);
 
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				data_dir + "newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			data_dir + "newsbeuter/",
+			sentries);
 
 		const auto config_dir = config_home + "newsboat/";
 		REQUIRE(::mkdir(config_dir.c_str(), 0700) == 0);
@@ -955,8 +955,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
-		"Newsboat XDG data dir already exists",
-		"[ConfigPaths]")
+	"Newsboat XDG data dir already exists",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -987,9 +987,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		REQUIRE(::mkdir(config_home.c_str(), 0700) == 0);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				tmp.get_path() + ".local/share/newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			tmp.get_path() + ".local/share/newsbeuter/",
+			sentries);
 
 		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
 		REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
@@ -1001,9 +1001,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		REQUIRE(::mkdir(data_home.c_str(), 0700) == 0);
 		xdg_data.set(data_home);
 		mock_newsbeuter_xdg_dirs(
-				tmp.get_path() + ".config/newsbeuter/",
-				data_home + "newsbeuter/",
-				sentries);
+			tmp.get_path() + ".config/newsbeuter/",
+			data_home + "newsbeuter/",
+			sentries);
 
 		const auto data_dir = data_home + "newsboat/";
 		REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
@@ -1020,9 +1020,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 		xdg_data.set(data_home);
 
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				data_home + "newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			data_home + "newsbeuter/",
+			sentries);
 
 		const auto data_dir = data_home + "newsboat/";
 		REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
@@ -1031,8 +1031,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
-		"config dir couldn't be created",
-		"[ConfigPaths]")
+	"config dir couldn't be created",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1067,17 +1067,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		REQUIRE(::mkdir(config_home.c_str(), 0700) == 0);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				tmp.get_path() + ".local/share/newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			tmp.get_path() + ".local/share/newsbeuter/",
+			sentries);
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
 		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				config_home + "newsboat/",
-				tmp.get_path() + ".local/share/newsboat/");
+			config_home + "newsboat/",
+			tmp.get_path() + ".local/share/newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
@@ -1085,9 +1085,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		REQUIRE(::mkdir(data_dir.c_str(), 0700) == 0);
 		xdg_data.set(data_dir);
 		mock_newsbeuter_xdg_dirs(
-				tmp.get_path() + ".config/newsbeuter/",
-				data_dir + "newsbeuter/",
-				sentries);
+			tmp.get_path() + ".config/newsbeuter/",
+			data_dir + "newsbeuter/",
+			sentries);
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
@@ -1095,8 +1095,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				config_home + "newsboat/",
-				data_dir + "newsboat/");
+			config_home + "newsboat/",
+			data_dir + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -1109,23 +1109,23 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		xdg_data.set(data_dir);
 
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				data_dir + "newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			data_dir + "newsbeuter/",
+			sentries);
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
 		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				config_home + "newsboat/",
-				data_dir + "newsboat/");
+			config_home + "newsboat/",
+			data_dir + "newsboat/");
 	}
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
-		"data dir couldn't be created",
-		"[ConfigPaths]")
+	"data dir couldn't be created",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1160,9 +1160,9 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		REQUIRE(::mkdir(config_home.c_str(), 0700) == 0);
 		xdg_config.set(config_home);
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				tmp.get_path() + ".local/share/newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			tmp.get_path() + ".local/share/newsbeuter/",
+			sentries);
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
@@ -1170,8 +1170,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				config_home + "newsboat/",
-				data_home + "newsboat/");
+			config_home + "newsboat/",
+			data_home + "newsboat/");
 	}
 
 	SECTION("XDG_DATA_HOME redefined") {
@@ -1179,17 +1179,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		REQUIRE(::mkdir(data_home.c_str(), 0700) == 0);
 		xdg_data.set(data_home);
 		mock_newsbeuter_xdg_dirs(
-				tmp.get_path() + ".config/newsbeuter/",
-				data_home + "newsbeuter/",
-				sentries);
+			tmp.get_path() + ".config/newsbeuter/",
+			data_home + "newsbeuter/",
+			sentries);
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
 		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				tmp.get_path() + ".config/newsboat/",
-				data_home + "newsboat/");
+			tmp.get_path() + ".config/newsboat/",
+			data_home + "newsboat/");
 	}
 
 	SECTION("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -1202,17 +1202,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		xdg_data.set(data_home);
 
 		mock_newsbeuter_xdg_dirs(
-				config_home + "newsbeuter/",
-				data_home + "newsbeuter/",
-				sentries);
+			config_home + "newsbeuter/",
+			data_home + "newsbeuter/",
+			sentries);
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
 		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
-				config_home + "newsboat/",
-				data_home + "newsboat/");
+			config_home + "newsboat/",
+			data_home + "newsboat/");
 	}
 }
 
@@ -1234,8 +1234,8 @@ void verify_dotdir_not_migrated(const std::string& dotdir)
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
-		"Newsboat dotdir already exists",
-		"[ConfigPaths]")
+	"Newsboat dotdir already exists",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1261,8 +1261,8 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 }
 
 TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat "
-		"dotdir couldn't be created",
-		"[ConfigPaths]")
+	"dotdir couldn't be created",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1299,8 +1299,8 @@ void verify_create_dirs_returns_false(const TestHelpers::TempDir& tmp)
 }
 
 TEST_CASE("create_dirs() returns false if dotdir doesn't exist and couldn't "
-		"be created",
-		"[ConfigPaths]")
+	"be created",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1319,8 +1319,8 @@ TEST_CASE("create_dirs() returns false if dotdir doesn't exist and couldn't "
 }
 
 TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
-		"doesn't exist and couldn't be created",
-		"[ConfigPaths]")
+	"doesn't exist and couldn't be created",
+	"[ConfigPaths]")
 {
 	TestHelpers::TempDir tmp;
 

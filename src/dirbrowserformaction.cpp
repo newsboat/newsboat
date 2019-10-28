@@ -49,7 +49,8 @@ char get_filetype(mode_t mode)
 		{S_IFIFO, 'p'},
 		{S_IFLNK, 'l'},
 		{S_IFSOCK, 's'},
-		{0, 0}};
+		{0, 0}
+	};
 
 	for (unsigned int i = 0; flags[i].flag != 0; i++) {
 		if ((mode & S_IFMT) == flags[i].flag) {
@@ -126,14 +127,16 @@ void DirBrowserFormAction::process_operation(Operation op,
 					}
 					f->set("filenametext", fn);
 					do_redraw = true;
-				} break;
+				}
+				break;
 				case '-': {
 					std::string fn = utils::getcwd();
 					fn.append(NEWSBEUTER_PATH_SEP);
 					fn.append(filename);
 					f->set("filenametext", fn);
 					f->set_focus("filename");
-				} break;
+				}
+				break;
 				default:
 					// TODO: show error message
 					break;
@@ -143,7 +146,8 @@ void DirBrowserFormAction::process_operation(Operation op,
 				v->pop_current_formaction();
 			}
 		}
-	} break;
+	}
+	break;
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);
@@ -176,7 +180,7 @@ std::vector<std::string> get_sorted_dirlist()
 				strcmp(de->d_name, "..") != 0) {
 				struct stat sb;
 				auto dpath = strprintf::fmt(
-					"%s/%s", cwdtmp, de->d_name);
+						"%s/%s", cwdtmp, de->d_name);
 				if (::lstat(dpath.c_str(), &sb) == 0) {
 					char ftype = get_filetype(sb.st_mode);
 					if (ftype == 'd') {
@@ -267,7 +271,8 @@ KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()
 {
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Save")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 
 	return hints;
 }
@@ -292,16 +297,16 @@ std::string DirBrowserFormAction::add_directory(std::string dirname)
 				// bits.
 				static_cast<int64_t>(sb.st_size));
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
-			ftype,
-			rwxbits,
-			owner,
-			group,
-			sizestr,
-			formatteddirname);
+				ftype,
+				rwxbits,
+				owner,
+				group,
+				sizestr,
+				formatteddirname);
 		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
-			ftype,
-			Stfl::quote(dirname),
-			Stfl::quote(line));
+				ftype,
+				Stfl::quote(dirname),
+				Stfl::quote(line));
 	}
 	return retval;
 }
@@ -338,7 +343,8 @@ std::string DirBrowserFormAction::get_rwx(unsigned short val)
 {
 	std::string str;
 	const char* bitstrs[] = {
-		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"};
+		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
+	};
 
 	for (int i = 0; i < 3; ++i) {
 		unsigned char bits = val % 8;

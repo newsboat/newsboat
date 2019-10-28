@@ -17,13 +17,13 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 	xmlDocSetRootElement(root, opml_node);
 
 	xmlNodePtr head = xmlNewTextChild(
-		opml_node, nullptr, (const xmlChar*)"head", nullptr);
+			opml_node, nullptr, (const xmlChar*)"head", nullptr);
 	xmlNewTextChild(head,
 		nullptr,
 		(const xmlChar*)"title",
 		(const xmlChar*)PROGRAM_NAME " - Exported Feeds");
 	xmlNodePtr body = xmlNewTextChild(
-		opml_node, nullptr, (const xmlChar*)"body", nullptr);
+			opml_node, nullptr, (const xmlChar*)"body", nullptr);
 
 	for (const auto& feed : feedcontainer.feeds) {
 		if (!utils::is_special_url(feed->rssurl())) {
@@ -32,9 +32,9 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 			std::string title = feed->title();
 
 			xmlNodePtr outline = xmlNewTextChild(body,
-				nullptr,
-				(const xmlChar*)"outline",
-				nullptr);
+					nullptr,
+					(const xmlChar*)"outline",
+					nullptr);
 			xmlSetProp(outline,
 				(const xmlChar*)"type",
 				(const xmlChar*)"rss");
@@ -54,19 +54,19 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 }
 
 void rec_find_rss_outlines(
-		UrlReader* urlcfg,
-		xmlNode* node,
-		std::string tag)
+	UrlReader* urlcfg,
+	xmlNode* node,
+	std::string tag)
 {
 	while (node) {
 		std::string newtag = tag;
 
 		if (strcmp((const char*)node->name, "outline") == 0) {
 			char* url = (char*)xmlGetProp(
-				node, (const xmlChar*)"xmlUrl");
+					node, (const xmlChar*)"xmlUrl");
 			if (!url) {
 				url = (char*)xmlGetProp(
-					node, (const xmlChar*)"url");
+						node, (const xmlChar*)"url");
 			}
 
 			if (url) {
@@ -83,7 +83,7 @@ void rec_find_rss_outlines(
 				// them to our syntax.
 				if (*url == '|') {
 					nurl = strprintf::fmt(
-						"exec:%s", url + 1);
+							"exec:%s", url + 1);
 					LOG(Level::DEBUG,
 						"opml::import: liferea-style "
 						"url %s "
@@ -94,7 +94,7 @@ void rec_find_rss_outlines(
 
 				// Handle OPML filters.
 				char* filtercmd = (char*)xmlGetProp(
-					node, (const xmlChar*)"filtercmd");
+						node, (const xmlChar*)"filtercmd");
 				if (filtercmd) {
 					LOG(Level::DEBUG,
 						"opml::import: adding filter "
@@ -112,9 +112,9 @@ void rec_find_rss_outlines(
 				// quote them when needed.
 				// TODO: get rid of xmlStrdup, it's useless
 				url = (char*)xmlStrdup(
-					(const xmlChar*)
+						(const xmlChar*)
 						utils::quote_if_necessary(nurl)
-							.c_str());
+						.c_str());
 				assert(url);
 
 				bool found = false;
@@ -158,10 +158,10 @@ void rec_find_rss_outlines(
 				xmlFree(url);
 			} else {
 				char* text = (char*)xmlGetProp(
-					node, (const xmlChar*)"text");
+						node, (const xmlChar*)"text");
 				if (!text) {
 					text = (char*)xmlGetProp(
-						node, (const xmlChar*)"title");
+							node, (const xmlChar*)"title");
 				}
 				if (text) {
 					if (newtag.length() > 0) {
@@ -179,8 +179,8 @@ void rec_find_rss_outlines(
 }
 
 bool opml::import(
-		const std::string& filename,
-		UrlReader* urlcfg)
+	const std::string& filename,
+	UrlReader* urlcfg)
 {
 	xmlDoc* doc = xmlReadFile(filename.c_str(), nullptr, 0);
 	if (doc == nullptr) {

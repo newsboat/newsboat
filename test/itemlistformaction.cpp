@@ -82,14 +82,12 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
-	SECTION("No items to purge")
-	{
+	SECTION("No items to purge") {
 		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED));
 		REQUIRE(feed->total_item_count() == 1);
 	}
 
-	SECTION("Deleted items are purged")
-	{
+	SECTION("Deleted items are purged") {
 		item->set_deleted(true);
 		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED));
 		REQUIRE(feed->total_item_count() == 0);
@@ -199,8 +197,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
-	SECTION("unread >= max-browser-tabs")
-	{
+	SECTION("unread >= max-browser-tabs") {
 		int maxItemsToOpen = 4;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
@@ -213,8 +210,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
-				     "Erase urls after first match to fail if "
-				     "an item opens twice.")
+					"Erase urls after first match to fail if "
+					"an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -223,8 +220,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		REQUIRE(openedItemsCount == maxItemsToOpen);
 	}
 
-	SECTION("unread < max-browser-tabs")
-	{
+	SECTION("unread < max-browser-tabs") {
 		int maxItemsToOpen = 9;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
@@ -236,8 +232,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
-				     "Erase urls after first match to fail if "
-				     "an item opens twice.")
+					"Erase urls after first match to fail if "
+					"an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -283,8 +279,7 @@ TEST_CASE(
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 	itemlist.set_feed(feed);
 
-	SECTION("unread >= max-browser-tabs")
-	{
+	SECTION("unread >= max-browser-tabs") {
 		int maxItemsToOpen = 4;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
@@ -296,8 +291,8 @@ TEST_CASE(
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
-				     "Erase urls after first match to fail if "
-				     "an item opens twice.")
+					"Erase urls after first match to fail if "
+					"an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -308,8 +303,7 @@ TEST_CASE(
 			itemCount - maxItemsToOpen);
 	}
 
-	SECTION("unread < max-browser-tabs")
-	{
+	SECTION("unread < max-browser-tabs") {
 		int maxItemsToOpen = 9;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
@@ -321,8 +315,8 @@ TEST_CASE(
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
-				     "Erase urls after first match to fail if "
-				     "an item opens twice.")
+					"Erase urls after first match to fail if "
+					"an item opens twice.")
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -366,8 +360,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	item->set_pubDate(test_pubDate);
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
 
-	SECTION("with external-url-viewer")
-	{
+	SECTION("with external-url-viewer") {
 		feed->add_item(item);
 		itemlist.set_feed(feed);
 		cfg.set_configvalue(
@@ -383,15 +376,13 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 			test_description);
 	}
 
-	SECTION("internal url viewer")
-	{
+	SECTION("internal url viewer") {
 		feed->add_item(item);
 		itemlist.set_feed(feed);
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 	}
 
-	SECTION("no feed in formaction")
-	{
+	SECTION("no feed in formaction") {
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 	}
 }
@@ -440,7 +431,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line ==
 		test_url + separator + test_title + separator + extra_arg +
-			separator + feed_title);
+		separator + feed_title);
 }
 
 TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
@@ -465,8 +456,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	SECTION("Single flag")
-	{
+	SECTION("Single flag") {
 		std::string flags = "G";
 		op_args.push_back(flags);
 
@@ -475,8 +465,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		REQUIRE(item->flags() == flags);
 	}
 
-	SECTION("Unordered flags")
-	{
+	SECTION("Unordered flags") {
 		std::string flags = "abdefc";
 		std::string ordered_flags = "abcdef";
 		op_args.push_back(flags);
@@ -486,8 +475,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		REQUIRE(item->flags() == ordered_flags);
 	}
 
-	SECTION("Duplicate flag in argument")
-	{
+	SECTION("Duplicate flag in argument") {
 		std::string flags = "Abd";
 		op_args.push_back(flags + "ddd");
 
@@ -496,38 +484,33 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		REQUIRE(item->flags() == flags);
 	}
 
-	SECTION("Unauthorized values in arguments")
-	{
+	SECTION("Unauthorized values in arguments") {
 		std::string flags = "Abd";
-		SECTION("Numbers")
-		{
+		SECTION("Numbers") {
 			op_args.push_back(flags + "1236");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-				OP_EDITFLAGS, true, &op_args));
+					OP_EDITFLAGS, true, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
-		SECTION("Symbols")
-		{
+		SECTION("Symbols") {
 			op_args.push_back(flags +
 				"%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-				OP_EDITFLAGS, true, &op_args));
+					OP_EDITFLAGS, true, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
-		SECTION("Accents")
-		{
+		SECTION("Accents") {
 			op_args.push_back(flags + "¨^");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-				OP_EDITFLAGS, true, &op_args));
+					OP_EDITFLAGS, true, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
 	}
 
-	SECTION("All possible flags at once")
-	{
+	SECTION("All possible flags at once") {
 		std::string flags =
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		op_args.push_back(flags);
@@ -727,19 +710,17 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	itemlist.set_feed(feed);
 	v.push_itemlist(feed);
 
-	SECTION("True to False")
-	{
+	SECTION("True to False") {
 		v.get_cfg()->set_configvalue("show-read-articles", "yes");
 		REQUIRE_NOTHROW(itemlist.process_op(OP_TOGGLESHOWREAD));
 		REQUIRE_FALSE(v.get_cfg()->get_configvalue_as_bool(
-			"show-read-articles"));
+				"show-read-articles"));
 	}
-	SECTION("False to True")
-	{
+	SECTION("False to True") {
 		v.get_cfg()->set_configvalue("show-read-articles", "no");
 		REQUIRE_NOTHROW(itemlist.process_op(OP_TOGGLESHOWREAD));
 		REQUIRE(v.get_cfg()->get_configvalue_as_bool(
-			"show-read-articles"));
+				"show-read-articles"));
 	}
 }
 

@@ -34,7 +34,7 @@ private:
 
 	void handle_highlight_action(const std::vector<std::string>& params);
 	void handle_highlight_article_action(
-			const std::vector<std::string>& params);
+		const std::vector<std::string>& params);
 
 public:
 	std::vector<std::string>& get_attrs(const std::string& loc)

@@ -17,17 +17,20 @@ namespace rsspp {
 
 void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 {
-	if (!rootNode)
+	if (!rootNode) {
 		throw Exception(_("XML root node is NULL"));
+	}
 
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
 	xmlNode* channel = rootNode->children;
-	while (channel && strcmp((const char*)channel->name, "channel") != 0)
+	while (channel && strcmp((const char*)channel->name, "channel") != 0) {
 		channel = channel->next;
+	}
 
-	if (!channel)
+	if (!channel) {
 		throw Exception(_("no RSS channel found"));
+	}
 
 	for (xmlNode* node = channel->children; node != nullptr;
 		node = node->next) {
@@ -36,7 +39,7 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 			f.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
 			f.link = utils::absolute_url(
-				globalbase, get_content(node));
+					globalbase, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
 		} else if (node_is(node, "language", ns)) {
@@ -56,8 +59,9 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 	std::string dc_date;
 
 	std::string base = get_prop(itemNode, "base", XML_URI);
-	if (base.empty())
+	if (base.empty()) {
 		base = globalbase;
+	}
 
 	for (xmlNode* node = itemNode->children; node != nullptr;
 		node = node->next) {
@@ -68,8 +72,9 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 			it.link = utils::absolute_url(base, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			it.base = get_prop(node, "base", XML_URI);
-			if (it.base.empty())
+			if (it.base.empty()) {
 				it.base = base;
+			}
 			it.description = get_content(node);
 		} else if (node_is(node, "encoded", CONTENT_URI)) {
 			it.content_encoded = get_content(node);
@@ -99,7 +104,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 					start--) {
 				}
 				it.author = authorfield.substr(
-					start + 1, end - start);
+						start + 1, end - start);
 			} else {
 				it.author_email = authorfield;
 				it.author = authorfield;
@@ -125,7 +130,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 					const std::string type =
 						get_prop(mnode, "type");
 					if (utils::is_valid_podcast_type(
-						    type)) {
+							type)) {
 						it.enclosure_url =
 							get_prop(mnode, "url");
 						it.enclosure_type =

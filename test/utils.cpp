@@ -14,8 +14,7 @@ TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 {
 	std::vector<std::string> tokens;
 
-	SECTION("Default delimiters")
-	{
+	SECTION("Default delimiters") {
 		tokens = utils::tokenize("as df qqq");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "as");
@@ -33,8 +32,7 @@ TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 		REQUIRE(tokens.size() == 0);
 	}
 
-	SECTION("Splitting by tabulation characters")
-	{
+	SECTION("Splitting by tabulation characters") {
 		tokens = utils::tokenize("hello world\thow are you?", "\t");
 		REQUIRE(tokens.size() == 2);
 		REQUIRE(tokens[0] == "hello world");
@@ -49,8 +47,7 @@ TEST_CASE(
 {
 	std::vector<std::string> tokens;
 
-	SECTION("Default delimiters include space and tab")
-	{
+	SECTION("Default delimiters include space and tab") {
 		tokens = utils::tokenize_spaced("a b");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[1] == " ");
@@ -64,8 +61,7 @@ TEST_CASE(
 		REQUIRE(tokens[4] == " ");
 	}
 
-	SECTION("Comma-separated values containing spaces and tabs")
-	{
+	SECTION("Comma-separated values containing spaces and tabs") {
 		tokens = utils::tokenize_spaced("123,John Doe,\t\t$8", ",");
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "123");
@@ -83,10 +79,9 @@ TEST_CASE(
 {
 	std::vector<std::string> tokens;
 
-	SECTION("Default delimiters include spaces, newlines and tabs")
-	{
+	SECTION("Default delimiters include spaces, newlines and tabs") {
 		tokens = utils::tokenize_quoted(
-			"asdf \"foobar bla\" \"foo\\r\\n\\tbar\"");
+				"asdf \"foobar bla\" \"foo\\r\\n\\tbar\"");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "asdf");
 		REQUIRE(tokens[1] == "foobar bla");
@@ -151,41 +146,36 @@ TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 }
 
 TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
-		"(outside of double quotes)",
-		"[utils]")
+	"(outside of double quotes)",
+	"[utils]")
 {
 	std::vector<std::string> tokens;
 
-	SECTION("A string consisting of just a comment")
-	{
+	SECTION("A string consisting of just a comment") {
 		tokens = utils::tokenize_quoted("# just a comment");
 		REQUIRE(tokens.empty());
 	}
 
-	SECTION("A string with one quoted substring")
-	{
+	SECTION("A string with one quoted substring") {
 		tokens = utils::tokenize_quoted(R"#("a test substring" # !!!)#");
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "a test substring");
 	}
 
-	SECTION("A string with two quoted substrings")
-	{
+	SECTION("A string with two quoted substrings") {
 		tokens = utils::tokenize_quoted(R"#("first sub" "snd" # comment)#");
 		REQUIRE(tokens.size() == 2);
 		REQUIRE(tokens[0] == "first sub");
 		REQUIRE(tokens[1] == "snd");
 	}
 
-	SECTION("A comment containing # character")
-	{
+	SECTION("A comment containing # character") {
 		tokens = utils::tokenize_quoted(R"#(one # a comment with # char)#");
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "one");
 	}
 
-	SECTION("A # character inside quoted substring is ignored")
-	{
+	SECTION("A # character inside quoted substring is ignored") {
 		tokens = utils::tokenize_quoted(R"#(this "will # be" ignored)#");
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "this");
@@ -195,8 +185,8 @@ TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
 }
 
 TEST_CASE("tokenize_quoted does not consider escaped pound sign (\\#) "
-		"a beginning of a comment",
-		"[utils]")
+	"a beginning of a comment",
+	"[utils]")
 {
 	const auto tokens = utils::tokenize_quoted(R"#(one \# two three # ???)#");
 	REQUIRE(tokens.size() == 4);
@@ -210,8 +200,7 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 {
 	std::vector<std::string> tokens;
 
-	SECTION("a few words separated by newlines")
-	{
+	SECTION("a few words separated by newlines") {
 		tokens = utils::tokenize_nl("first\nsecond\nthird");
 
 		REQUIRE(tokens.size() == 5);
@@ -220,16 +209,14 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 		REQUIRE(tokens[4] == "third");
 	}
 
-	SECTION("several preceding delimiters")
-	{
+	SECTION("several preceding delimiters") {
 		tokens = utils::tokenize_nl("\n\n\nonly");
 
 		REQUIRE(tokens.size() == 4);
 		REQUIRE(tokens[3] == "only");
 	}
 
-	SECTION("redundant internal delimiters")
-	{
+	SECTION("redundant internal delimiters") {
 		tokens = utils::tokenize_nl("first\nsecond\n\nthird");
 
 		REQUIRE(tokens.size() == 6);
@@ -238,8 +225,7 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 		REQUIRE(tokens[5] == "third");
 	}
 
-	SECTION("custom delimiter")
-	{
+	SECTION("custom delimiter") {
 		tokens = utils::tokenize_nl("first\nsecond\nthird","i");
 
 		REQUIRE(tokens.size() == 5);
@@ -253,22 +239,19 @@ TEST_CASE(
 	"strip_comments returns only the part of the line before first # character",
 	"[utils]")
 {
-	SECTION("no comments in line")
-	{
+	SECTION("no comments in line") {
 		REQUIRE(utils::strip_comments("") == "");
 		REQUIRE(utils::strip_comments("\t\n") == "\t\n");
 		REQUIRE(utils::strip_comments("some directive ") == "some directive ");
 	}
 
-	SECTION("fully commented line")
-	{
+	SECTION("fully commented line") {
 		REQUIRE(utils::strip_comments("#") == "");
 		REQUIRE(utils::strip_comments("# #") == "");
 		REQUIRE(utils::strip_comments("# comment") == "");
 	}
 
-	SECTION("partially commented line")
-	{
+	SECTION("partially commented line") {
 		REQUIRE(utils::strip_comments("directive # comment") == "directive ");
 		REQUIRE(utils::strip_comments("directive # comment # another") == "directive ");
 		REQUIRE(utils::strip_comments("directive#comment") == "directive");
@@ -284,7 +267,7 @@ TEST_CASE("strip_comments ignores escaped # characters (\\#)")
 }
 
 TEST_CASE("strip_comments ignores # characters inside double quotes",
-		"[utils][issue652]")
+	"[utils][issue652]")
 {
 	SECTION("Real-world cases from issue 652") {
 		const auto expected1 =
@@ -293,14 +276,14 @@ TEST_CASE("strip_comments ignores # characters inside double quotes",
 		REQUIRE(utils::strip_comments(input1) == expected1);
 
 		const auto expected2 =
-			std::string(R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
+			std::string(
+				R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
 		const auto input2 = expected2 + "#heresacomment";
 		REQUIRE(utils::strip_comments(input2) == expected2);
 	}
 
 	SECTION("Escaped double quote inside double quotes is not treated "
-			"as closing quote")
-	{
+		"as closing quote") {
 		const auto expected =
 			std::string(R"#(test "here \"goes # nothing\" etc" hehe)#");
 		const auto input = expected + "# and here is a comment";
@@ -316,8 +299,7 @@ TEST_CASE("strip_comments ignores # characters inside backticks", "[utils]")
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 
-	SECTION("Escaped backtick inside backticks is not treated as closing")
-	{
+	SECTION("Escaped backtick inside backticks is not treated as closing") {
 		const auto expected =
 			std::string(R"#(some `other \` tricky # test` hehe)#");
 		const auto input = expected + "#here goescomment";
@@ -326,7 +308,7 @@ TEST_CASE("strip_comments ignores # characters inside backticks", "[utils]")
 }
 
 TEST_CASE("strip_comments is not confused by nested double quotes and backticks",
-		"[utils]")
+	"[utils]")
 {
 	{
 		const auto expected = std::string(R"#("`" ... ` `"` ")#");
@@ -341,10 +323,10 @@ TEST_CASE("strip_comments is not confused by nested double quotes and backticks"
 	}
 
 	{
-        const auto expected =
+		const auto expected =
 			std::string(R"#(option "this `weird " command` for value")#");
-        const auto input = expected + "#and a comment";
-        REQUIRE(utils::strip_comments(input) == expected);
+		const auto input = expected + "#and a comment";
+		REQUIRE(utils::strip_comments(input) == expected);
 	}
 }
 
@@ -375,7 +357,7 @@ TEST_CASE("get_command_output()", "[utils]")
 {
 	REQUIRE(utils::get_command_output("ls /dev/null") == "/dev/null\n");
 	REQUIRE_NOTHROW(utils::get_command_output(
-		"a-program-that-is-guaranteed-to-not-exists"));
+			"a-program-that-is-guaranteed-to-not-exists"));
 	REQUIRE(utils::get_command_output(
 			"a-program-that-is-guaranteed-to-not-exists") == "");
 	REQUIRE(utils::get_command_output("echo c\" d e") == "");
@@ -386,7 +368,8 @@ TEST_CASE("extract_filter()", "[utils]")
 	std::string filter;
 	std::string url;
 
-	utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org", filter, url);
+	utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org", filter,
+		url);
 
 	REQUIRE(filter == "~/bin/script.sh");
 	REQUIRE(url == "https://newsboat.org");
@@ -413,7 +396,7 @@ TEST_CASE("run_program()", "[utils]")
 }
 
 TEST_CASE("run_command() executes the given command with a given argument",
-		"[utils]")
+	"[utils]")
 {
 	TestHelpers::TempFile sentry;
 	const auto argument = sentry.get_path();
@@ -453,7 +436,7 @@ TEST_CASE("run_command() executes the given command with a given argument",
 }
 
 TEST_CASE("run_command() doesn't wait for the command to finish",
-		"[utils]")
+	"[utils]")
 {
 	using namespace std::chrono;
 
@@ -470,7 +453,8 @@ TEST_CASE("run_command() doesn't wait for the command to finish",
 	REQUIRE(runtime.count() < 1000);
 }
 
-TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[utils]")
+TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory",
+	"[utils]")
 {
 	TestHelpers::EnvVar envVar("HOME");
 	envVar.set("test");
@@ -480,15 +464,14 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory", "[u
 	REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
 }
 
-TEST_CASE("resolve_relative() returns an absolute file path relative to another", "[utils]")
+TEST_CASE("resolve_relative() returns an absolute file path relative to another",
+	"[utils]")
 {
-	SECTION("Nothing - absolute path")
-	{
+	SECTION("Nothing - absolute path") {
 		REQUIRE(utils::resolve_relative("/foo/bar", "/baz") == "/baz");
 		REQUIRE(utils::resolve_relative("/config", "/config/baz") == "/config/baz");
 	}
-	SECTION("Reference path")
-	{
+	SECTION("Reference path") {
 		REQUIRE(utils::resolve_relative("/foo/bar", "baz") == "/foo/baz");
 		REQUIRE(utils::resolve_relative("/config", "baz") == "/baz");
 	}
@@ -518,8 +501,7 @@ TEST_CASE("partition_index()", "[utils]")
 {
 	std::vector<std::pair<unsigned int, unsigned int>> partitions;
 
-	SECTION("[0, 9] into 2")
-	{
+	SECTION("[0, 9] into 2") {
 		partitions = utils::partition_indexes(0, 9, 2);
 		REQUIRE(partitions.size() == 2);
 		REQUIRE(partitions[0].first == 0);
@@ -528,8 +510,7 @@ TEST_CASE("partition_index()", "[utils]")
 		REQUIRE(partitions[1].second == 9);
 	}
 
-	SECTION("[0, 10] into 3")
-	{
+	SECTION("[0, 10] into 3") {
 		partitions = utils::partition_indexes(0, 10, 3);
 		REQUIRE(partitions.size() == 3);
 		REQUIRE(partitions[0].first == 0);
@@ -540,8 +521,7 @@ TEST_CASE("partition_index()", "[utils]")
 		REQUIRE(partitions[2].second == 10);
 	}
 
-	SECTION("[0, 11] into 3")
-	{
+	SECTION("[0, 11] into 3") {
 		partitions = utils::partition_indexes(0, 11, 3);
 		REQUIRE(partitions.size() == 3);
 		REQUIRE(partitions[0].first == 0);
@@ -552,14 +532,12 @@ TEST_CASE("partition_index()", "[utils]")
 		REQUIRE(partitions[2].second == 11);
 	}
 
-	SECTION("[0, 199] into 200")
-	{
+	SECTION("[0, 199] into 200") {
 		partitions = utils::partition_indexes(0, 199, 200);
 		REQUIRE(partitions.size() == 200);
 	}
 
-	SECTION("[0, 103] into 1")
-	{
+	SECTION("[0, 103] into 1") {
 		partitions = utils::partition_indexes(0, 103, 1);
 		REQUIRE(partitions.size() == 1);
 		REQUIRE(partitions[0].first == 0);
@@ -680,14 +658,12 @@ TEST_CASE("join()", "[utils]")
 	REQUIRE(utils::join(str, "") == "");
 	REQUIRE(utils::join(str, "-") == "");
 
-	SECTION("Join of one element")
-	{
+	SECTION("Join of one element") {
 		str.push_back("foobar");
 		REQUIRE(utils::join(str, "") == "foobar");
 		REQUIRE(utils::join(str, "-") == "foobar");
 
-		SECTION("Join of two elements")
-		{
+		SECTION("Join of two elements") {
 			str.push_back("quux");
 			REQUIRE(utils::join(str, "") == "foobarquux");
 			REQUIRE(utils::join(str, "-") == "foobar-quux");
@@ -723,93 +699,76 @@ TEST_CASE("trim_end()", "[utils]")
 
 TEST_CASE("utils::make_title extracts possible title from URL", "[utils]")
 {
-	SECTION("Uses last part of URL as title")
-	{
+	SECTION("Uses last part of URL as title") {
 		auto input = "http://example.com/Item";
 		REQUIRE(utils::make_title(input) == "Item");
 	}
 
-	SECTION("Replaces dashes and underscores with spaces")
-	{
+	SECTION("Replaces dashes and underscores with spaces") {
 		std::string input;
 
-		SECTION("Dashes")
-		{
+		SECTION("Dashes") {
 			input = "http://example.com/This-is-the-title";
 		}
 
-		SECTION("Underscores")
-		{
+		SECTION("Underscores") {
 			input = "http://example.com/This_is_the_title";
 		}
 
-		SECTION("Mix of dashes and underscores")
-		{
+		SECTION("Mix of dashes and underscores") {
 			input = "http://example.com/This_is-the_title";
 		}
 
-		SECTION("Eliminate .php extension")
-		{
+		SECTION("Eliminate .php extension") {
 			input = "http://example.com/This_is-the_title.php";
 		}
 
-		SECTION("Eliminate .html extension")
-		{
+		SECTION("Eliminate .html extension") {
 			input = "http://example.com/This_is-the_title.html";
 		}
 
-		SECTION("Eliminate .htm extension")
-		{
+		SECTION("Eliminate .htm extension") {
 			input = "http://example.com/This_is-the_title.htm";
 		}
 
-		SECTION("Eliminate .aspx extension")
-		{
+		SECTION("Eliminate .aspx extension") {
 			input = "http://example.com/This_is-the_title.aspx";
 		}
 
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 
-	SECTION("Capitalizes first letter of extracted title")
-	{
+	SECTION("Capitalizes first letter of extracted title") {
 		auto input = "http://example.com/this-is-the-title";
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 
-	SECTION("Only cares about last component of the URL")
-	{
+	SECTION("Only cares about last component of the URL") {
 		auto input = "http://example.com/items/misc/this-is-the-title";
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 
-	SECTION("Strips out trailing slashes")
-	{
+	SECTION("Strips out trailing slashes") {
 		std::string input;
 
-		SECTION("One slash")
-		{
+		SECTION("One slash") {
 			input = "http://example.com/item/";
 		}
 
-		SECTION("Numerous slashes")
-		{
+		SECTION("Numerous slashes") {
 			input = "http://example.com/item/////////////";
 		}
 
 		REQUIRE(utils::make_title(input) == "Item");
 	}
 
-	SECTION("Doesn't mind invalid URL scheme")
-	{
+	SECTION("Doesn't mind invalid URL scheme") {
 		auto input = "blahscheme://example.com/this-is-the-title";
 		REQUIRE(utils::make_title(input) == "This is the title");
 	}
 
-	SECTION("Strips out URL query parameters")
-	{
-		SECTION("Single parameter")
-		{
+	SECTION("Strips out URL query parameters") {
+		SECTION("Single parameter") {
 			auto input =
 				"http://example.com/story/aug/"
 				"title-with-dashes?a=b";
@@ -817,8 +776,7 @@ TEST_CASE("utils::make_title extracts possible title from URL", "[utils]")
 				"Title with dashes");
 		}
 
-		SECTION("Multiple parameters")
-		{
+		SECTION("Multiple parameters") {
 			auto input =
 				"http://example.com/"
 				"title-with-dashes?a=b&x=y&utf8=✓";
@@ -827,20 +785,17 @@ TEST_CASE("utils::make_title extracts possible title from URL", "[utils]")
 		}
 	}
 
-	SECTION("Decodes percent-encoded characters")
-	{
+	SECTION("Decodes percent-encoded characters") {
 		auto input = "https://example.com/It%27s%202017%21";
 		REQUIRE(utils::make_title(input) == "It's 2017!");
 	}
 
-	SECTION("Deal with an empty last component")
-	{
+	SECTION("Deal with an empty last component") {
 		auto input = "https://example.com/?format=rss";
 		REQUIRE(utils::make_title(input) == "");
 	}
 
-	SECTION("Deal with an empty input")
-	{
+	SECTION("Deal with an empty input") {
 		auto input = "";
 		REQUIRE(utils::make_title(input) == "");
 	}
@@ -849,37 +804,32 @@ TEST_CASE("utils::make_title extracts possible title from URL", "[utils]")
 TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
 	"[utils]")
 {
-	SECTION("doesn't do anything if input has no soft hyphens in it")
-	{
+	SECTION("doesn't do anything if input has no soft hyphens in it") {
 		std::string data = "hello world!";
 		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
 		REQUIRE(data == "hello world!");
 	}
 
-	SECTION("removes *all* soft hyphens")
-	{
+	SECTION("removes *all* soft hyphens") {
 		std::string data = "hy\u00ADphen\u00ADa\u00ADtion";
 		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
 		REQUIRE(data == "hyphenation");
 	}
 
-	SECTION("removes consequtive soft hyphens")
-	{
+	SECTION("removes consequtive soft hyphens") {
 		std::string data =
 			"don't know why any\u00AD\u00ADone would do that";
 		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
 		REQUIRE(data == "don't know why anyone would do that");
 	}
 
-	SECTION("removes soft hyphen at the beginning of the line")
-	{
+	SECTION("removes soft hyphen at the beginning of the line") {
 		std::string data = "\u00ADtion";
 		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
 		REQUIRE(data == "tion");
 	}
 
-	SECTION("removes soft hyphen at the end of the line")
-	{
+	SECTION("removes soft hyphen at the end of the line") {
 		std::string data = "over\u00AD";
 		REQUIRE_NOTHROW(utils::remove_soft_hyphens(data));
 		REQUIRE(data == "over");
@@ -898,28 +848,24 @@ TEST_CASE(
 	REQUIRE(utils::substr_with_width("A\u3042B\u3044C\u3046", 5) ==
 		"A\u3042B");
 
-	SECTION("returns an empty string if the given string is empty")
-	{
+	SECTION("returns an empty string if the given string is empty") {
 		REQUIRE(utils::substr_with_width("", 0).empty());
 		REQUIRE(utils::substr_with_width("", 1).empty());
 	}
 
-	SECTION("returns an empty string if the given width is zero")
-	{
+	SECTION("returns an empty string if the given width is zero") {
 		REQUIRE(utils::substr_with_width("world", 0).empty());
 		REQUIRE(utils::substr_with_width("", 0).empty());
 	}
 
-	SECTION("doesn't split single codepoint in two")
-	{
+	SECTION("doesn't split single codepoint in two") {
 		std::string data = "\u3042\u3044\u3046";
 		REQUIRE(utils::substr_with_width(data, 1) == "");
 		REQUIRE(utils::substr_with_width(data, 3) == "\u3042");
 		REQUIRE(utils::substr_with_width(data, 5) == "\u3042\u3044");
 	}
 
-	SECTION("doesn't count a width of STFL tag")
-	{
+	SECTION("doesn't count a width of STFL tag") {
 		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9) ==
 			"ＡＢＣ<b>Ｄ");
 		REQUIRE(utils::substr_with_width("<foobar>ＡＢＣ", 4) ==
@@ -932,16 +878,14 @@ TEST_CASE(
 			"a</>b</>");
 	}
 
-	SECTION("count a width of escaped less-than mark")
-	{
+	SECTION("count a width of escaped less-than mark") {
 		REQUIRE(utils::substr_with_width("<><><>", 2) == "<><>");
 		REQUIRE(utils::substr_with_width("a<>b<>c", 3) == "a<>b");
 	}
 
-	SECTION("treat non-printable has zero width")
-	{
+	SECTION("treat non-printable has zero width") {
 		REQUIRE(utils::substr_with_width("\x01\x02"
-						 "abc",
+				"abc",
 				1) ==
 			"\x01\x02"
 			"a");
@@ -950,13 +894,11 @@ TEST_CASE(
 
 TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 {
-	SECTION("Returns non-empty string")
-	{
+	SECTION("Returns non-empty string") {
 		REQUIRE(utils::getcwd().length() > 0);
 	}
 
-	SECTION("Value depends on current directory")
-	{
+	SECTION("Value depends on current directory") {
 		const std::string maindir = utils::getcwd();
 		// Other tests already rely on the presense of "data" directory
 		// next to the executable, so it's okay to use that dependency
@@ -980,8 +922,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 			subdir);
 	}
 
-	SECTION("Returns empty string if current directory doesn't exist")
-	{
+	SECTION("Returns empty string if current directory doesn't exist") {
 		// Create a temporary directory, change to it and delete it. This leads
 		// getcwd to fail.
 		TestHelpers::TempDir tempdir;
@@ -998,7 +939,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 }
 
 TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
-	  "[utils]")
+	"[utils]")
 {
 	// Tests copied over from 3rd-party/alphanum.hpp
 	REQUIRE(utils::strnaturalcmp("","") == 0);
@@ -1135,26 +1076,24 @@ TEST_CASE(
 	" then an empty string",
 	"[utils]")
 {
-	SECTION("return basename in the presence of GET parameters")
-	{
+	SECTION("return basename in the presence of GET parameters") {
 		REQUIRE(utils::get_basename("https://example.org/path/to/file.mp3?param=value#fragment")
 			== "file.mp3");
 		REQUIRE(utils::get_basename("https://example.org/file.mp3") == "file.mp3");
 	}
 
-	SECTION("return empty string when basename is unavailable")
-	{
+	SECTION("return empty string when basename is unavailable") {
 		REQUIRE(utils::get_basename("https://example.org/?param=value#fragment")
-				== "");
+			== "");
 		REQUIRE(utils::get_basename("https://example.org/path/to/?param=value#fragment")
-				== "");
+			== "");
 	}
 }
 
 TEST_CASE(
-		"get_auth_method() returns enumerated constant "
-		"on defined values and undefined values",
-		"[utils]")
+	"get_auth_method() returns enumerated constant "
+	"on defined values and undefined values",
+	"[utils]")
 {
 	REQUIRE(utils::get_auth_method("any") == CURLAUTH_ANY);
 	REQUIRE(utils::get_auth_method("ntlm") == CURLAUTH_NTLM);
@@ -1169,9 +1108,9 @@ TEST_CASE(
 }
 
 TEST_CASE(
-		"get_proxy_type() returns enumerated constant "
-		"on defined values and undefined values",
-		"[utils]")
+	"get_proxy_type() returns enumerated constant "
+	"on defined values and undefined values",
+	"[utils]")
 {
 	REQUIRE(utils::get_proxy_type("http") == CURLPROXY_HTTP);
 	REQUIRE(utils::get_proxy_type("socks4") == CURLPROXY_SOCKS4);
@@ -1183,7 +1122,7 @@ TEST_CASE(
 }
 
 TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute",
-		"[utils]")
+	"[utils]")
 {
 	const std::vector<std::string> invalid = {
 		"foo",
@@ -1212,13 +1151,13 @@ TEST_CASE("is_valid_attribute returns true if given string is an STFL attribute"
 }
 
 TEST_CASE("unescape_url() takes a percent-encoded string and returns the string "
-		"with a precent escaped string",
-		"[utils]")
+	"with a precent escaped string",
+	"[utils]")
 {
 	REQUIRE(utils::unescape_url("foo%20bar") == "foo bar");
 	REQUIRE(utils::unescape_url(
 			"%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D") ==
-			"!#$&'()*+,/:;=?@[]");
+		"!#$&'()*+,/:;=?@[]");
 	REQUIRE(utils::unescape_url("%00") == "");
 
 }
@@ -1232,8 +1171,8 @@ TEST_CASE("gentabs() calculates padding tabs based on stringwidth", "[utils]")
 }
 
 TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
-		"the path now exists",
-		"[utils]")
+	"the path now exists",
+	"[utils]")
 {
 	TestHelpers::TempDir tmp;
 
@@ -1320,7 +1259,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 }
 
 TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
-		"[utils]")
+	"[utils]")
 {
 	TestHelpers::TempDir tmp;
 

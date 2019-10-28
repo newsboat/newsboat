@@ -37,7 +37,7 @@ std::string strprintf::fmt(const std::string& format)
  * "a 100%% rel%iable e%xamp%le"  =>  { "a 100%% rel%iable e", "%xamp%le" }
  */
 std::pair<std::string, std::string> strprintf::split_format(
-		const std::string& printf_format)
+	const std::string& printf_format)
 {
 	std::string first_format, rest;
 

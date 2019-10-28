@@ -31,7 +31,7 @@ private:
 	json_object* query_api(const std::string& url,
 		const std::string* postdata);
 	std::map<std::string, std::vector<std::string>> mk_feeds_to_tags(
-		json_object*);
+			json_object*);
 	std::string api_location;
 	FeedMap known_feeds;
 	unsigned int min_pages;

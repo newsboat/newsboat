@@ -106,8 +106,9 @@ bool Matcher::matchop_between(expression* e, Matchable* item)
 	std::istringstream isatt(item->get_attribute(e->name));
 	int att;
 	isatt >> att;
-	if (lit.size() < 2)
+	if (lit.size() < 2) {
 		return false;
+	}
 	std::istringstream is1(lit[0]), is2(lit[1]);
 	int i1, i2;
 	is1 >> i1;
@@ -142,8 +143,8 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 		e->regex = new regex_t;
 		int err;
 		if ((err = regcomp(e->regex,
-			     e->literal.c_str(),
-			     REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
+						e->literal.c_str(),
+						REG_EXTENDED | REG_ICASE | REG_NOSUB)) != 0) {
 			delete e->regex;
 			e->regex = nullptr;
 			char buf[1024];
@@ -155,11 +156,12 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 		}
 	}
 	if (regexec(e->regex,
-		    item->get_attribute(e->name).c_str(),
-		    0,
-		    nullptr,
-		    0) == 0)
+			item->get_attribute(e->name).c_str(),
+			0,
+			nullptr,
+			0) == 0) {
 		return true;
+	}
 	return false;
 }
 
@@ -198,12 +200,9 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 		/* the operator "and" and "or" simply connect two different
 		 * subexpressions */
 		case LOGOP_AND:
+			// short-circuit evaluation in C -> short circuit evaluation in the filter language
 			return matches_r(e->l, item) &&
-				matches_r(e->r, item); // short-circuit
-						       // evaulation in C ->
-						       // short circuit
-						       // evaluation in the
-						       // filter language
+				matches_r(e->r, item);
 
 		case LOGOP_OR:
 			return matches_r(e->l, item) ||

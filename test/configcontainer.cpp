@@ -17,25 +17,21 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 
 	REQUIRE_NOTHROW(cfgparser.parse("data/test-config.txt"));
 
-	SECTION("bool value")
-	{
+	SECTION("bool value") {
 		REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
 		REQUIRE_FALSE(cfg.get_configvalue_as_bool("show-read-feeds"));
 	}
 
-	SECTION("string value")
-	{
+	SECTION("string value") {
 		REQUIRE(cfg.get_configvalue("browser") == "firefox");
 	}
 
-	SECTION("integer value")
-	{
+	SECTION("integer value") {
 		REQUIRE(cfg.get_configvalue("max-items") == "100");
 		REQUIRE(cfg.get_configvalue_as_int("max-items") == 100);
 	}
 
-	SECTION("Tilde got expanded into path to user's home directory")
-	{
+	SECTION("Tilde got expanded into path to user's home directory") {
 		std::string cachefilecomp = ::getenv("HOME");
 		cachefilecomp.append("/foo");
 		REQUIRE(cfg.get_configvalue("cache-file") == cachefilecomp);
@@ -51,15 +47,13 @@ TEST_CASE(
 	cfg.register_commands(cfgparser);
 
 	REQUIRE_NOTHROW(cfgparser.parse(
-		"data/test-config-without-newline-at-the-end.txt"));
+			"data/test-config-without-newline-at-the-end.txt"));
 
-	SECTION("first line")
-	{
+	SECTION("first line") {
 		REQUIRE(cfg.get_configvalue("browser") == "firefox");
 	}
 
-	SECTION("last line")
-	{
+	SECTION("last line") {
 		REQUIRE(cfg.get_configvalue("download-path") == "whatever");
 	}
 }
@@ -69,8 +63,8 @@ TEST_CASE("Throws if invalid command is encountered", "[ConfigContainer]")
 	ConfigContainer cfg;
 
 	CHECK_THROWS_AS(cfg.handle_action("command-that-surely-does-not-exist",
-				{"and", "its", "arguments"}),
-		ConfigHandlerException);
+	{"and", "its", "arguments"}),
+	ConfigHandlerException);
 }
 
 TEST_CASE("Throws if there are no arguments", "[ConfigContainer]")
@@ -85,22 +79,19 @@ TEST_CASE("Throws if command argument has invalid type", "[ConfigContainer]")
 {
 	ConfigContainer cfg;
 
-	SECTION("bool")
-	{
+	SECTION("bool") {
 		CHECK_THROWS_AS(cfg.handle_action("always-display-description",
-					{"whatever"}),
-			ConfigHandlerException);
+		{"whatever"}),
+		ConfigHandlerException);
 	}
 
-	SECTION("int")
-	{
+	SECTION("int") {
 		CHECK_THROWS_AS(
 			cfg.handle_action("download-retries", {"whatever"}),
 			ConfigHandlerException);
 	}
 
-	SECTION("enum")
-	{
+	SECTION("enum") {
 		CHECK_THROWS_AS(cfg.handle_action("proxy-type", {"whatever"}),
 			ConfigHandlerException);
 	}
@@ -140,8 +131,7 @@ TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 	cfg.set_configvalue("show-read-feeds", "no");
 	cfg.set_configvalue("bookmark-interactive", "false");
 
-	SECTION("\"yes\" and \"true\"")
-	{
+	SECTION("\"yes\" and \"true\"") {
 		REQUIRE(cfg.get_configvalue("cleanup-on-quit") == "yes");
 		REQUIRE(cfg.get_configvalue_as_bool("cleanup-on-quit"));
 
@@ -149,8 +139,7 @@ TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 		REQUIRE(cfg.get_configvalue_as_bool("auto-reload"));
 	}
 
-	SECTION("\"no\" and \"false\"")
-	{
+	SECTION("\"no\" and \"false\"") {
 		REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
 		REQUIRE_FALSE(cfg.get_configvalue_as_bool("show-read-feeds"));
 
@@ -166,15 +155,13 @@ TEST_CASE("toggle() inverts the value of a boolean setting",
 	ConfigContainer cfg;
 
 	const std::string key("always-display-description");
-	SECTION("\"true\" becomes \"false\"")
-	{
+	SECTION("\"true\" becomes \"false\"") {
 		cfg.set_configvalue(key, "true");
 		REQUIRE_NOTHROW(cfg.toggle(key));
 		REQUIRE(cfg.get_configvalue_as_bool(key) == false);
 	}
 
-	SECTION("\"false\" becomes \"true\"")
-	{
+	SECTION("\"false\" becomes \"true\"") {
 		cfg.set_configvalue(key, "false");
 		REQUIRE_NOTHROW(cfg.toggle(key));
 		REQUIRE(cfg.get_configvalue_as_bool(key) == true);
@@ -211,21 +198,20 @@ TEST_CASE(
 
 	auto all_values_found =
 		[](std::unordered_set<std::string>& expected,
-			const std::vector<std::string>& result) {
-			for (const auto& line : result) {
-				auto it = expected.find(line);
-				if (it != expected.end()) {
-					expected.erase(it);
-				}
+	const std::vector<std::string>& result) {
+		for (const auto& line : result) {
+			auto it = expected.find(line);
+			if (it != expected.end()) {
+				expected.erase(it);
 			}
+		}
 
-			return expected.empty();
-		};
+		return expected.empty();
+	};
 
 	std::vector<std::string> result;
 
-	SECTION("By default, simply enumerates all settings")
-	{
+	SECTION("By default, simply enumerates all settings") {
 		std::unordered_set<std::string> expected{
 			"always-display-description false",
 			"download-timeout 30",
@@ -238,14 +224,13 @@ TEST_CASE(
 		REQUIRE_NOTHROW(cfg.dump_config(result));
 		{
 			INFO("Checking that all the expected values were "
-			     "found");
+				"found");
 			REQUIRE(all_values_found(expected, result));
 		}
 	}
 
 	SECTION("If setting was changed, dump_config() will mention "
-		"its default value")
-	{
+		"its default value") {
 		cfg.set_configvalue("download-timeout", "100");
 		cfg.set_configvalue("http-auth-method", "digest");
 
@@ -257,7 +242,7 @@ TEST_CASE(
 		REQUIRE_NOTHROW(cfg.dump_config(result));
 		{
 			INFO("Checking that all the expected values were "
-			     "found");
+				"found");
 			REQUIRE(all_values_found(expected, result));
 		}
 	}
@@ -336,8 +321,7 @@ TEST_CASE(
 	ConfigContainer cfg;
 	FeedSortStrategy sort_strategy;
 
-	SECTION("none")
-	{
+	SECTION("none") {
 		cfg.set_configvalue("feed-sort-order", "none");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm == FeedSortMethod::NONE);
@@ -354,8 +338,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::ASC);
 	}
 
-	SECTION("firsttag")
-	{
+	SECTION("firsttag") {
 		cfg.set_configvalue("feed-sort-order", "firsttag");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm == FeedSortMethod::FIRST_TAG);
@@ -372,8 +355,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::ASC);
 	}
 
-	SECTION("title")
-	{
+	SECTION("title") {
 		cfg.set_configvalue("feed-sort-order", "title");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm == FeedSortMethod::TITLE);
@@ -390,8 +372,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::ASC);
 	}
 
-	SECTION("articlecount")
-	{
+	SECTION("articlecount") {
 		cfg.set_configvalue("feed-sort-order", "articlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm == FeedSortMethod::ARTICLE_COUNT);
@@ -408,8 +389,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::ASC);
 	}
 
-	SECTION("unreadarticlecount")
-	{
+	SECTION("unreadarticlecount") {
 		cfg.set_configvalue("feed-sort-order", "unreadarticlecount");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm ==
@@ -431,8 +411,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::ASC);
 	}
 
-	SECTION("lastupdated")
-	{
+	SECTION("lastupdated") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm == FeedSortMethod::LAST_UPDATED);
@@ -458,8 +437,7 @@ TEST_CASE(
 	ConfigContainer cfg;
 	ArticleSortStrategy sort_strategy;
 
-	SECTION("title")
-	{
+	SECTION("title") {
 		cfg.set_configvalue("article-sort-order", "title");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::TITLE);
@@ -476,8 +454,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 
-	SECTION("flags")
-	{
+	SECTION("flags") {
 		cfg.set_configvalue("article-sort-order", "flags");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::FLAGS);
@@ -494,8 +471,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 
-	SECTION("author")
-	{
+	SECTION("author") {
 		cfg.set_configvalue("article-sort-order", "author");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::AUTHOR);
@@ -512,8 +488,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 
-	SECTION("link")
-	{
+	SECTION("link") {
 		cfg.set_configvalue("article-sort-order", "link");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::LINK);
@@ -530,8 +505,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 
-	SECTION("guid")
-	{
+	SECTION("guid") {
 		cfg.set_configvalue("article-sort-order", "guid");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::GUID);
@@ -548,8 +522,7 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 
-	SECTION("date")
-	{
+	SECTION("date") {
 		cfg.set_configvalue("article-sort-order", "date");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);

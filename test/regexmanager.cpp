@@ -12,8 +12,7 @@ TEST_CASE("RegexManager throws on invalid command", "[RegexManager]")
 	RegexManager rxman;
 	std::vector<std::string> params;
 
-	SECTION("on invalid command")
-	{
+	SECTION("on invalid command") {
 		REQUIRE_THROWS_AS(
 			rxman.handle_action("an-invalid-command", params),
 			ConfigHandlerException);
@@ -26,21 +25,18 @@ TEST_CASE("RegexManager throws on invalid `highlight' definition",
 	RegexManager rxman;
 	std::vector<std::string> params;
 
-	SECTION("on `highlight' without parameters")
-	{
+	SECTION("on `highlight' without parameters") {
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on invalid location")
-	{
+	SECTION("on invalid location") {
 		params = {"invalidloc", "foo", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on invalid regex")
-	{
+	SECTION("on invalid regex") {
 		params = {"feedlist", "*", "blue", "red"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
 			ConfigHandlerException);
@@ -91,8 +87,8 @@ TEST_CASE("RegexManager highlights according to definition", "[RegexManager]")
 // context, which would've crashed the program if it were to be dereferenced.
 // This test checks that those nullptrs are skipped.
 TEST_CASE("RegexManager::quote_and_highlight works fine even if there were "
-		"`highlight-article` commands",
-		"[RegexManager]")
+	"`highlight-article` commands",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 
@@ -128,9 +124,10 @@ TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
 	std::string input = "xxfooyy";
 
-	for (auto location : {"article", "articlelist", "feedlist"}) {
-		SECTION(location)
-		{
+	for (auto location : {
+			"article", "articlelist", "feedlist"
+		}) {
+		SECTION(location) {
 			rxman.quote_and_highlight(input, location);
 			REQUIRE(input == "xx<0>foo</>yy");
 		}
@@ -138,7 +135,7 @@ TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 }
 
 TEST_CASE("RegexManager does not hang on regexes that can match empty strings",
-		"[RegexManager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::string input = "The quick brown fox jumps over the lazy dog";
@@ -149,28 +146,25 @@ TEST_CASE("RegexManager does not hang on regexes that can match empty strings",
 }
 
 TEST_CASE("RegexManager does not hang on regexes that match empty strings",
-		"[RegexManager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::string input = "The quick brown fox jumps over the lazy dog";
 	const std::string compare = input;
 
-	SECTION("testing end of line empty.")
-	{
+	SECTION("testing end of line empty.") {
 		rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
 	}
 
-	SECTION("testing beginning of line empty")
-	{
+	SECTION("testing beginning of line empty") {
 		rxman.handle_action("highlight", {"feedlist", "^", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
 	}
 
-	SECTION("testing empty line")
-	{
+	SECTION("testing empty line") {
 		rxman.handle_action("highlight", {"feedlist", "^$", "blue", "red"});
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == compare);
@@ -178,32 +172,32 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings",
 }
 
 TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
-		"[RegexManager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::string input =  "The quick brown fox jumps over the lazy dog";
 
-	SECTION("Beginning of line match first")
-	{
-		const std::string output = "<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
+	SECTION("Beginning of line match first") {
+		const std::string output =
+			"<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "the", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
 
-	SECTION("Beginning of line match second")
-	{
-		const std::string output = "<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
+	SECTION("Beginning of line match second") {
+		const std::string output =
+			"<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.handle_action("highlight", {"article", "the", "red"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
 
-	SECTION("2 non-overlapping highlights")
-	{
-		const std::string output = "The <0>quick</> <1>brown</> fox jumps over the lazy dog";
+	SECTION("2 non-overlapping highlights") {
+		const std::string output =
+			"The <0>quick</> <1>brown</> fox jumps over the lazy dog";
 		rxman.handle_action("highlight", {"article", "quick", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.quote_and_highlight(input, "article");
@@ -212,8 +206,8 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 }
 
 TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
-		"string is empty",
-		"[RegexManager]")
+	"string is empty",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	REQUIRE(rxman.extract_outer_marker("", 0) == "");
@@ -221,38 +215,34 @@ TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
 }
 
 TEST_CASE("RegexManager::extract_outer_marker finds the innermost tag "
-		"relative to given position in the text",
-		"[RegexManager]")
+	"relative to given position in the text",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::string out;
 
-	SECTION("Find outer tag basic")
-	{
+	SECTION("Find outer tag basic") {
 		std::string input = "<1>TestString</>";
 		out = rxman.extract_outer_marker(input, 7);
 
 		REQUIRE(out == "<1>");
 	}
 
-	SECTION("Find nested tag")
-	{
+	SECTION("Find nested tag") {
 		std::string input = "<1>Nested<2>Test</>String</>";
 		out = rxman.extract_outer_marker(input, 14);
 
 		REQUIRE(out == "<2>");
 	}
 
-	SECTION("Find outer tag with second set")
-	{
+	SECTION("Find outer tag with second set") {
 		std::string input = "<1>Nested<2>Test</>String</>";
 		out = rxman.extract_outer_marker(input, 21);
 
 		REQUIRE(out == "<1>");
 	}
 
-	SECTION("Find unclosed nested tag")
-	{
+	SECTION("Find unclosed nested tag") {
 		std::string input = "<1>Nested<2>Test</>String";
 		out = rxman.extract_outer_marker(input, 21);
 
@@ -262,17 +252,17 @@ TEST_CASE("RegexManager::extract_outer_marker finds the innermost tag "
 }
 
 TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
-		"string contains closing tag without a pairing opening one, before "
-		"the position we're looking at",
-		"[RegexManager]")
+	"string contains closing tag without a pairing opening one, before "
+	"the position we're looking at",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	REQUIRE(rxman.extract_outer_marker("hello</>world", 10) == "");
 }
 
 TEST_CASE("RegexManager::dump_config turns each `highlight` rule into a string, "
-		"and appends them onto a vector",
-		"[RegexManager]")
+	"and appends them onto a vector",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	std::vector<std::string> result;
@@ -292,8 +282,8 @@ TEST_CASE("RegexManager::dump_config turns each `highlight` rule into a string, 
 	SECTION("Two rules, one of them a `highlight-article`") {
 		rxman.handle_action("highlight", {"all", "keywords", "red", "blue"});
 		rxman.handle_action(
-				"highlight-article",
-				{"title==\"\"", "green", "black"});
+			"highlight-article",
+		{"title==\"\"", "green", "black"});
 		REQUIRE_NOTHROW(rxman.dump_config(result));
 		REQUIRE(result.size() == 1);
 		REQUIRE(result[0] == R"#(highlight "all" "keywords" "red" "blue")#");
@@ -316,92 +306,92 @@ TEST_CASE("RegexManager::dump_config appends to given vector", "[RegexManager]")
 }
 
 TEST_CASE("RegexManager::handle_action throws ConfigHandlerException "
-		"on invalid foreground color",
-		"[RegexManager]")
+	"on invalid foreground color",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action("highlight", {"all", "keyword", "whatever"}),
-			ConfigHandlerException);
+		rxman.handle_action("highlight", {"all", "keyword", "whatever"}),
+		ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action("highlight", {"feedlist", "keyword", ""}),
-			ConfigHandlerException);
+		rxman.handle_action("highlight", {"feedlist", "keyword", ""}),
+		ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight-article",
-				{"author == \"\"", "whatever", "white"}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight-article",
+	{"author == \"\"", "whatever", "white"}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight-article",
-				{"title =~ \"k\"", "", "white"}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight-article",
+	{"title =~ \"k\"", "", "white"}),
+	ConfigHandlerException);
 }
 
 TEST_CASE("RegexManager::handle_action throws ConfigHandlerException "
-		"on invalid background color",
-		"[RegexManager]")
+	"on invalid background color",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight",
-				{"all", "keyword", "red", "whatever"}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight",
+	{"all", "keyword", "red", "whatever"}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight",
-				{"feedlist", "keyword", "green", ""}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight",
+	{"feedlist", "keyword", "green", ""}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight-article",
-				{"title == \"keyword\"", "red", "whatever"}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight-article",
+	{"title == \"keyword\"", "red", "whatever"}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight-article",
-				{"content == \"\"", "green", ""}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight-article",
+	{"content == \"\"", "green", ""}),
+	ConfigHandlerException);
 }
 
 TEST_CASE("RegexManager::handle_action throws ConfigHandlerException "
-		"on invalid attribute",
-		"[RegexManager]")
+	"on invalid attribute",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight",
-				{"all", "keyword", "red", "green", "sparkles"}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight",
+	{"all", "keyword", "red", "green", "sparkles"}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight",
-				{"feedlist", "keyword", "green", "red", ""}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight",
+	{"feedlist", "keyword", "green", "red", ""}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight-article",
-				{"title==\"\"", "red", "green", "sparkles"}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight-article",
+	{"title==\"\"", "red", "green", "sparkles"}),
+	ConfigHandlerException);
 
 	REQUIRE_THROWS_AS(
-			rxman.handle_action(
-				"highlight-article",
-				{"title==\"\"", "green", "red", ""}),
-			ConfigHandlerException);
+		rxman.handle_action(
+			"highlight-article",
+	{"title==\"\"", "green", "red", ""}),
+	ConfigHandlerException);
 }
 
 TEST_CASE("RegexManager throws on invalid `highlight-article' definition",
@@ -410,28 +400,24 @@ TEST_CASE("RegexManager throws on invalid `highlight-article' definition",
 	RegexManager rxman;
 	std::vector<std::string> params;
 
-	SECTION("on `highlight-article' without parameters")
-	{
+	SECTION("on `highlight-article' without parameters") {
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight-article", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on invalid filter expression")
-	{
+	SECTION("on invalid filter expression") {
 		params = {"a = b", "red", "green"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight-article", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on missing colors")
-	{
+	SECTION("on missing colors") {
 		params = {"title==\"\""};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight-article", params),
 			ConfigHandlerException);
 	}
 
-	SECTION("on missing background color")
-	{
+	SECTION("on missing background color") {
 		params = {"title==\"\"", "white"};
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight-article", params),
 			ConfigHandlerException);
@@ -474,8 +460,8 @@ public:
 };
 
 TEST_CASE("RegexManager::article_matches returns position of the Matcher "
-		"that matches a given Matchable",
-		"[RegexManager]")
+	"that matches a given Matchable",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	RegexManagerMockMatchable mock;
@@ -499,8 +485,8 @@ TEST_CASE("RegexManager::article_matches returns position of the Matcher "
 }
 
 TEST_CASE("RegexManager::article_matches returns -1 if there are no Matcher "
-		"to match a given Matchable",
-		"[RegexManager]")
+	"to match a given Matchable",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 	RegexManagerMockMatchable mock;
@@ -527,7 +513,7 @@ TEST_CASE("RegexManager::article_matches returns -1 if there are no Matcher "
 }
 
 TEST_CASE("RegexManager::remove_last_regex removes last added `highlight` rule",
-		"[RegexManager]")
+	"[RegexManager]")
 {
 	RegexManager rxman;
 
@@ -556,8 +542,8 @@ TEST_CASE("RegexManager::remove_last_regex removes last added `highlight` rule",
 }
 
 TEST_CASE("RegexManager::remove_last_regex does not crash if there are "
-		"no regexes to remove",
-		"[RegexManager]")
+	"no regexes to remove",
+	"[RegexManager]")
 {
 	RegexManager rxman;
 

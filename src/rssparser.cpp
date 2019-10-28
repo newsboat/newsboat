@@ -86,8 +86,8 @@ time_t RssParser::parse_date(const std::string& datestr)
 			"out "
 			"W3CDTF parser...");
 		t = curl_getdate(
-			rsspp::RssParser::__w3cdtf_to_rfc822(datestr).c_str(),
-			nullptr);
+				rsspp::RssParser::__w3cdtf_to_rfc822(datestr).c_str(),
+				nullptr);
 	}
 	if (t == -1) {
 		LOG(Level::INFO,
@@ -113,8 +113,9 @@ std::string RssParser::render_xhtml_title(const std::string& title,
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links; // not needed
 	rnd.render(title, lines, links, link);
-	if (!lines.empty())
+	if (!lines.empty()) {
 		return lines[0].second;
+	}
 	return "";
 }
 
@@ -174,8 +175,9 @@ void RssParser::retrieve_uri(const std::string& uri)
 		skip_parsing = true;
 	} else if (my_uri.substr(0, 7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length() - 7));
-	} else
+	} else {
 		throw strprintf::fmt(_("Error: unsupported URL: %s"), my_uri);
+	}
 }
 
 void RssParser::download_http(const std::string& uri)
@@ -200,7 +202,7 @@ void RssParser::download_http(const std::string& uri)
 				"RssParser::download_http: user-agent = %s",
 				useragent);
 			rsspp::Parser p(cfgcont->get_configvalue_as_int(
-						"download-timeout"),
+					"download-timeout"),
 				useragent.c_str(),
 				proxy.c_str(),
 				proxy_auth.c_str(),
@@ -213,11 +215,11 @@ void RssParser::download_http(const std::string& uri)
 				ch->fetch_lastmodified(uri, lm, etag);
 			}
 			f = p.parse_url(uri,
-				lm,
-				etag,
-				api,
-				cfgcont->get_configvalue("cookie-cache"),
-				easyhandle ? easyhandle->ptr() : 0);
+					lm,
+					etag,
+					api,
+					cfgcont->get_configvalue("cookie-cache"),
+					easyhandle ? easyhandle->ptr() : 0);
 			LOG(Level::DEBUG,
 				"RssParser::download_http: lm = %" PRId64 " etag = %s",
 				// On GCC, `time_t` is `long int`, which is at least 32 bits
@@ -246,10 +248,10 @@ void RssParser::download_http(const std::string& uri)
 					p.get_etag());
 				ch->update_lastmodified(uri,
 					(p.get_last_modified() != lm)
-						? p.get_last_modified()
-						: 0,
+					? p.get_last_modified()
+					: 0,
 					(etag != p.get_etag()) ? p.get_etag()
-							       : "");
+					: "");
 			}
 			is_valid = true;
 		} catch (rsspp::Exception& e) {
@@ -304,9 +306,10 @@ void RssParser::download_filterplugin(const std::string& filter,
 	std::string buf = utils::retrieve_url(uri, cfgcont);
 
 	char* argv[4] = {const_cast<char*>("/bin/sh"),
-		const_cast<char*>("-c"),
-		const_cast<char*>(filter.c_str()),
-		nullptr};
+			const_cast<char*>("-c"),
+			const_cast<char*>(filter.c_str()),
+			nullptr
+		};
 	std::string result = utils::run_program(argv, buf);
 	LOG(Level::DEBUG,
 		"RssParser::parse: output of `%s' is: %s",
@@ -343,10 +346,11 @@ void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
 
 	feed->set_link(utils::absolute_url(my_uri, f.link));
 
-	if (f.pubDate != "")
+	if (f.pubDate != "") {
 		feed->set_pubDate(parse_date(f.pubDate));
-	else
+	} else {
 		feed->set_pubDate(::time(nullptr));
+	}
 
 	set_rtl(feed, f.language);
 
@@ -385,9 +389,9 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 		// TODO: replace this with a switch to get compiler errors when new
 		// entry is added to the enum.
 		if ((f.rss_version == rsspp::Feed::ATOM_1_0 ||
-			    f.rss_version == rsspp::Feed::TTRSS_JSON ||
-			    f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
-			    f.rss_version == rsspp::Feed::OCNEWS_JSON) &&
+				f.rss_version == rsspp::Feed::TTRSS_JSON ||
+				f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
+				f.rss_version == rsspp::Feed::OCNEWS_JSON) &&
 			item.labels.size() > 0) {
 			auto start = item.labels.begin();
 			auto finish = item.labels.end();
@@ -436,10 +440,11 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 
 		set_item_content(x, item);
 
-		if (item.pubDate != "")
+		if (item.pubDate != "") {
 			x->set_pubDate(parse_date(item.pubDate));
-		else
+		} else {
 			x->set_pubDate(::time(nullptr));
+		}
 
 		x->set_guid(get_guid(item));
 
@@ -491,9 +496,9 @@ void RssParser::set_item_author(std::shared_ptr<RssItem> x,
 	 * item's author if there is no item-specific one available.
 	 */
 	if (item.author == "") {
-		if (f.managingeditor != "")
+		if (f.managingeditor != "") {
 			x->set_author(f.managingeditor);
-		else {
+		} else {
 			x->set_author(f.dc_creator);
 		}
 	} else {
@@ -512,7 +517,7 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 		x->set_description(item.description);
 	} else {
 		if (cfgcont->get_configvalue_as_bool(
-			    "always-display-description") &&
+				"always-display-description") &&
 			item.description != "")
 			x->set_description(
 				x->description() + "<hr>" + item.description);
@@ -540,16 +545,17 @@ std::string RssParser::get_guid(const rsspp::Item& item) const
 	 * is suboptimal, of course, because it makes it impossible to recognize
 	 * duplicates when the title or the link changes.
 	 */
-	if (item.guid != "")
+	if (item.guid != "") {
 		return item.guid;
-	else if (item.link != "" && item.pubDate != "")
+	} else if (item.link != "" && item.pubDate != "") {
 		return item.link + item.pubDate;
-	else if (item.link != "")
+	} else if (item.link != "") {
 		return item.link;
-	else if (item.title != "")
+	} else if (item.title != "") {
 		return item.title;
-	else
-		return ""; // too bad.
+	} else {
+		return "";        // too bad.
+	}
 }
 
 void RssParser::set_item_enclosure(std::shared_ptr<RssItem> x,
@@ -592,8 +598,9 @@ void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
 void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item) const
 {
-	if (x->description() != "")
+	if (x->description() != "") {
 		return;
+	}
 
 	/* here we handle content:encoded tags that are an extension but very
 	 * widespread */
@@ -608,8 +615,9 @@ void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item)
 {
-	if (x->description() != "")
+	if (x->description() != "") {
 		return;
+	}
 
 	std::string summary = item.itunes_summary;
 	if (summary != "") {
@@ -623,7 +631,7 @@ void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 bool RssParser::is_html_type(const std::string& type)
 {
 	return (type == "html" || type == "xhtml" ||
-		type == "application/xhtml+xml");
+			type == "application/xhtml+xml");
 }
 
 void RssParser::fetch_ttrss(const std::string& feed_id)
@@ -631,7 +639,7 @@ void RssParser::fetch_ttrss(const std::string& feed_id)
 	TtRssApi* tapi = dynamic_cast<TtRssApi*>(api);
 	if (tapi) {
 		f = tapi->fetch_feed(
-			feed_id, easyhandle ? easyhandle->ptr() : nullptr);
+				feed_id, easyhandle ? easyhandle->ptr() : nullptr);
 		is_valid = true;
 	}
 	LOG(Level::DEBUG,

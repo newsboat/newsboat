@@ -48,7 +48,7 @@ int main()
 			std::cout << "# Syntax: " << syntax << '\n';
 			std::cout << "#\n";
 			std::cout << "# Default value: " << defaultparam
-				  << '\n';
+				<< '\n';
 			std::cout << "#\n";
 			std::cout << "# " << example << '\n';
 			std::cout << '\n';

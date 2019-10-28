@@ -19,245 +19,294 @@ namespace newsboat {
 const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
 ConfigContainer::ConfigContainer()
-	// create the config options and set their resp. default value and type
+// create the config options and set their resp. default value and type
 	: config_data{{"always-display-description",
-			      ConfigData("false", ConfigDataType::BOOL)},
-		  {"article-sort-order",
-			  ConfigData("date-asc", ConfigDataType::STR)},
-		  {"articlelist-format",
-			  ConfigData("%4i %f %D %6L  %?T?|%-17T|  &?%t",
-				  ConfigDataType::STR)},
-		  {"auto-reload", ConfigData("no", ConfigDataType::BOOL)},
-		  {"bookmark-autopilot",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"bookmark-cmd", ConfigData("", ConfigDataType::STR)},
-		  {"bookmark-interactive",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"browser",
-			  ConfigData(utils::get_default_browser(),
-				  ConfigDataType::PATH)},
-		  {"cache-file", ConfigData("", ConfigDataType::PATH)},
-		  {"cleanup-on-quit", ConfigData("yes", ConfigDataType::BOOL)},
-		  {"confirm-exit", ConfigData("no", ConfigDataType::BOOL)},
-		  {"cookie-cache", ConfigData("", ConfigDataType::PATH)},
-		  {"datetime-format", ConfigData("%b %d", ConfigDataType::STR)},
-		  {"delete-read-articles-on-quit",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"display-article-progress",
-			  ConfigData("yes", ConfigDataType::BOOL)},
-		  {"download-filename-format",
-			  ConfigData("%?u?%u&%Y-%b-%d-%H%M%S.unknown?",
-				  ConfigDataType::STR)},
-		  {"download-full-page",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"download-path", ConfigData("~/", ConfigDataType::PATH)},
-		  {"download-retries", ConfigData("1", ConfigDataType::INT)},
-		  {"download-timeout", ConfigData("30", ConfigDataType::INT)},
-		  {"error-log", ConfigData("", ConfigDataType::PATH)},
-		  {"external-url-viewer", ConfigData("", ConfigDataType::PATH)},
-		  {"feed-sort-order",
-			  ConfigData("none-desc", ConfigDataType::STR)},
-		  {"feedhq-flag-share", ConfigData("", ConfigDataType::STR)},
-		  {"feedhq-flag-star", ConfigData("", ConfigDataType::STR)},
-		  {"feedhq-login", ConfigData("", ConfigDataType::STR)},
-		  {"feedhq-min-items", ConfigData("20", ConfigDataType::INT)},
-		  {"feedhq-password", ConfigData("", ConfigDataType::STR)},
-		  {"feedhq-passwordfile", ConfigData("", ConfigDataType::PATH)},
-		  {"feedhq-passwordeval", ConfigData("", ConfigDataType::STR)},
-		  {"feedhq-show-special-feeds",
-			  ConfigData("true", ConfigDataType::BOOL)},
-		  {"feedhq-url",
-			  ConfigData("https://feedhq.org/", ConfigDataType::STR)},
-		  {"feedlist-format",
-			  ConfigData("%4i %n %11u %t", ConfigDataType::STR)},
-		  {"goto-first-unread", ConfigData("true", ConfigDataType::BOOL)},
-		  {"goto-next-feed", ConfigData("yes", ConfigDataType::BOOL)},
-		  {"history-limit", ConfigData("100", ConfigDataType::INT)},
-		  {"html-renderer", ConfigData("internal", ConfigDataType::PATH)},
-		  {"http-auth-method",
-			  ConfigData("any",
-				  std::unordered_set<std::string>({"any",
-					  "basic",
-					  "digest",
-					  "digest_ie",
-					  "gssnegotiate",
-					  "ntlm",
-					  "anysafe"}))},
-		  {"ignore-mode",
-			  ConfigData("download",
-				  std::unordered_set<std::string>(
-					  {"download", "display"}))},
-		  {"inoreader-login", ConfigData("", ConfigDataType::STR)},
-		  {"inoreader-password", ConfigData("", ConfigDataType::STR)},
-		  {"inoreader-passwordfile",
-			  ConfigData("", ConfigDataType::PATH)},
-		  {"inoreader-passwordeval", ConfigData("", ConfigDataType::STR)},
-		  {"inoreader-show-special-feeds",
-			  ConfigData("true", ConfigDataType::BOOL)},
-		  {"inoreader-flag-share", ConfigData("", ConfigDataType::STR)},
-		  {"inoreader-flag-star", ConfigData("", ConfigDataType::STR)},
-		  {"inoreader-min-items", ConfigData("20", ConfigDataType::INT)},
-		  {"keep-articles-days", ConfigData("0", ConfigDataType::INT)},
-		  {"mark-as-read-on-hover",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"max-browser-tabs", ConfigData("10", ConfigDataType::INT)},
-		  {"markfeedread-jumps-to-next-unread",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"max-download-speed", ConfigData("0", ConfigDataType::INT)},
-		  {"max-downloads", ConfigData("1", ConfigDataType::INT)},
-		  {"max-items", ConfigData("0", ConfigDataType::INT)},
-		  {"newsblur-login", ConfigData("", ConfigDataType::STR)},
-		  {"newsblur-min-items", ConfigData("20", ConfigDataType::INT)},
-		  {"newsblur-password", ConfigData("", ConfigDataType::STR)},
-		  {"newsblur-passwordfile", ConfigData("", ConfigDataType::PATH)},
-		  {"newsblur-passwordeval", ConfigData("", ConfigDataType::STR)},
-		  {"newsblur-url",
-			  ConfigData("https://newsblur.com",
-				  ConfigDataType::STR)},
-		  {"notify-always", ConfigData("no", ConfigDataType::BOOL)},
-		  {"notify-beep", ConfigData("no", ConfigDataType::BOOL)},
-		  {"notify-format",
-			  ConfigData(_("newsboat: finished reload, %f unread "
-				       "feeds (%n unread articles total)"),
-				  ConfigDataType::STR)},
-		  {"notify-program", ConfigData("", ConfigDataType::PATH)},
-		  {"notify-screen", ConfigData("no", ConfigDataType::BOOL)},
-		  {"notify-xterm", ConfigData("no", ConfigDataType::BOOL)},
-		  {"oldreader-flag-share", ConfigData("", ConfigDataType::STR)},
-		  {"oldreader-flag-star", ConfigData("", ConfigDataType::STR)},
-		  {"oldreader-login", ConfigData("", ConfigDataType::STR)},
-		  {"oldreader-min-items", ConfigData("20", ConfigDataType::INT)},
-		  {"oldreader-password", ConfigData("", ConfigDataType::STR)},
-		  {"oldreader-passwordfile",
-			  ConfigData("", ConfigDataType::PATH)},
-		  {"oldreader-passwordeval", ConfigData("", ConfigDataType::STR)},
-		  {"oldreader-show-special-feeds",
-			  ConfigData("true", ConfigDataType::BOOL)},
-		  {"openbrowser-and-mark-jumps-to-next-unread",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"opml-url", ConfigData("", ConfigDataType::STR, true)},
-		  {"pager", ConfigData("internal", ConfigDataType::PATH)},
-		  {"player", ConfigData("", ConfigDataType::PATH)},
-		  {"podcast-auto-enqueue",
-			  ConfigData("no", ConfigDataType::BOOL)},
-		  {"podlist-format",
-			  ConfigData( "%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] %-20S %u -> %F", ConfigDataType::STR)},
-		  {"prepopulate-query-feeds",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"ssl-verifyhost", ConfigData("true", ConfigDataType::BOOL)},
-		  {"ssl-verifypeer", ConfigData("true", ConfigDataType::BOOL)},
-		  {"proxy", ConfigData("", ConfigDataType::STR)},
-		  {"proxy-auth", ConfigData("", ConfigDataType::STR)},
-		  {"proxy-auth-method",
-			  ConfigData("any",
-				  std::unordered_set<std::string>({"any",
-					  "basic",
-					  "digest",
-					  "digest_ie",
-					  "gssnegotiate",
-					  "ntlm",
-					  "anysafe"}))},
-		  {"proxy-type",
-			  ConfigData("http",
-				  std::unordered_set<std::string>({"http",
-					  "socks4",
-					  "socks4a",
-					  "socks5",
-					  "socks5h"}))},
-		  {"refresh-on-startup", ConfigData("no", ConfigDataType::BOOL)},
-		  {"reload-only-visible-feeds",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"reload-threads", ConfigData("1", ConfigDataType::INT)},
-		  {"reload-time", ConfigData("60", ConfigDataType::INT)},
-		  {"save-path", ConfigData("~/", ConfigDataType::PATH)},
-		  {"search-highlight-colors",
-			  ConfigData("black yellow bold",
-				  ConfigDataType::STR,
-				  true)},
-		  {"selecttag-format",
-			  ConfigData("%4i  %T (%u)", ConfigDataType::STR)},
-		  {"show-keymap-hint", ConfigData("yes", ConfigDataType::BOOL)},
-	          {"show-title-bar", ConfigData("yes", ConfigDataType::BOOL)},
-		  {"show-read-articles", ConfigData("yes", ConfigDataType::BOOL)},
-		  {"show-read-feeds", ConfigData("yes", ConfigDataType::BOOL)},
-		  {"suppress-first-reload",
-			  ConfigData("no", ConfigDataType::BOOL)},
-		  {"swap-title-and-hints",
-			  ConfigData("no", ConfigDataType::BOOL)},
-		  {"text-width", ConfigData("0", ConfigDataType::INT)},
-		  {"toggleitemread-jumps-to-next-unread",
-			  ConfigData("false", ConfigDataType::BOOL)},
-		  {"ttrss-flag-publish", ConfigData("", ConfigDataType::STR)},
-		  {"ttrss-flag-star", ConfigData("", ConfigDataType::STR)},
-		  {"ttrss-login", ConfigData("", ConfigDataType::STR)},
-		  {"ttrss-mode",
-			  ConfigData("multi",
-				  std::unordered_set<std::string>(
-					  {"single", "multi"}))},
-		  {"ttrss-password", ConfigData("", ConfigDataType::STR)},
-		  {"ttrss-passwordfile", ConfigData("", ConfigDataType::PATH)},
-		  {"ttrss-passwordeval", ConfigData("", ConfigDataType::STR)},
-		  {"ttrss-url", ConfigData("", ConfigDataType::STR)},
-		  {"ocnews-login", ConfigData("", ConfigDataType::STR)},
-		  {"ocnews-password", ConfigData("", ConfigDataType::STR)},
-		  {"ocnews-passwordfile", ConfigData("", ConfigDataType::PATH)},
-		  {"ocnews-passwordeval", ConfigData("", ConfigDataType::STR)},
-		  {"ocnews-flag-star", ConfigData("", ConfigDataType::STR)},
-		  {"ocnews-url", ConfigData("", ConfigDataType::STR)},
-		  {"urls-source",
-			  ConfigData("local",
-				  std::unordered_set<std::string>({"local",
-					  "opml",
-					  "oldreader",
-					  "ttrss",
-					  "newsblur",
-					  "feedhq",
-					  "ocnews",
-					  "inoreader"}))},
-		  {"use-proxy", ConfigData("no", ConfigDataType::BOOL)},
-		  {"user-agent", ConfigData("", ConfigDataType::STR)},
+		ConfigData("false", ConfigDataType::BOOL)},
+	{
+		"article-sort-order",
+		ConfigData("date-asc", ConfigDataType::STR)},
+	{
+		"articlelist-format",
+		ConfigData("%4i %f %D %6L  %?T?|%-17T|  &?%t",
+			ConfigDataType::STR)},
+	{"auto-reload", ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"bookmark-autopilot",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"bookmark-cmd", ConfigData("", ConfigDataType::STR)},
+	{
+		"bookmark-interactive",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{
+		"browser",
+		ConfigData(utils::get_default_browser(),
+			ConfigDataType::PATH)},
+	{"cache-file", ConfigData("", ConfigDataType::PATH)},
+	{"cleanup-on-quit", ConfigData("yes", ConfigDataType::BOOL)},
+	{"confirm-exit", ConfigData("no", ConfigDataType::BOOL)},
+	{"cookie-cache", ConfigData("", ConfigDataType::PATH)},
+	{"datetime-format", ConfigData("%b %d", ConfigDataType::STR)},
+	{
+		"delete-read-articles-on-quit",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{
+		"display-article-progress",
+		ConfigData("yes", ConfigDataType::BOOL)},
+	{
+		"download-filename-format",
+		ConfigData("%?u?%u&%Y-%b-%d-%H%M%S.unknown?",
+			ConfigDataType::STR)},
+	{
+		"download-full-page",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"download-path", ConfigData("~/", ConfigDataType::PATH)},
+	{"download-retries", ConfigData("1", ConfigDataType::INT)},
+	{"download-timeout", ConfigData("30", ConfigDataType::INT)},
+	{"error-log", ConfigData("", ConfigDataType::PATH)},
+	{"external-url-viewer", ConfigData("", ConfigDataType::PATH)},
+	{
+		"feed-sort-order",
+		ConfigData("none-desc", ConfigDataType::STR)},
+	{"feedhq-flag-share", ConfigData("", ConfigDataType::STR)},
+	{"feedhq-flag-star", ConfigData("", ConfigDataType::STR)},
+	{"feedhq-login", ConfigData("", ConfigDataType::STR)},
+	{"feedhq-min-items", ConfigData("20", ConfigDataType::INT)},
+	{"feedhq-password", ConfigData("", ConfigDataType::STR)},
+	{"feedhq-passwordfile", ConfigData("", ConfigDataType::PATH)},
+	{"feedhq-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{
+		"feedhq-show-special-feeds",
+		ConfigData("true", ConfigDataType::BOOL)},
+	{
+		"feedhq-url",
+		ConfigData("https://feedhq.org/", ConfigDataType::STR)},
+	{
+		"feedlist-format",
+		ConfigData("%4i %n %11u %t", ConfigDataType::STR)},
+	{"goto-first-unread", ConfigData("true", ConfigDataType::BOOL)},
+	{"goto-next-feed", ConfigData("yes", ConfigDataType::BOOL)},
+	{"history-limit", ConfigData("100", ConfigDataType::INT)},
+	{"html-renderer", ConfigData("internal", ConfigDataType::PATH)},
+	{
+		"http-auth-method",
+		ConfigData("any",
+		std::unordered_set<std::string>({"any",
+			"basic",
+			"digest",
+			"digest_ie",
+			"gssnegotiate",
+			"ntlm",
+			"anysafe"}))},
+	{
+		"ignore-mode",
+		ConfigData("download",
+			std::unordered_set<std::string>(
+		{"download", "display"}))},
+	{"inoreader-login", ConfigData("", ConfigDataType::STR)},
+	{"inoreader-password", ConfigData("", ConfigDataType::STR)},
+	{
+		"inoreader-passwordfile",
+		ConfigData("", ConfigDataType::PATH)},
+	{"inoreader-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{
+		"inoreader-show-special-feeds",
+		ConfigData("true", ConfigDataType::BOOL)},
+	{"inoreader-flag-share", ConfigData("", ConfigDataType::STR)},
+	{"inoreader-flag-star", ConfigData("", ConfigDataType::STR)},
+	{"inoreader-min-items", ConfigData("20", ConfigDataType::INT)},
+	{"keep-articles-days", ConfigData("0", ConfigDataType::INT)},
+	{
+		"mark-as-read-on-hover",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"max-browser-tabs", ConfigData("10", ConfigDataType::INT)},
+	{
+		"markfeedread-jumps-to-next-unread",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"max-download-speed", ConfigData("0", ConfigDataType::INT)},
+	{"max-downloads", ConfigData("1", ConfigDataType::INT)},
+	{"max-items", ConfigData("0", ConfigDataType::INT)},
+	{"newsblur-login", ConfigData("", ConfigDataType::STR)},
+	{"newsblur-min-items", ConfigData("20", ConfigDataType::INT)},
+	{"newsblur-password", ConfigData("", ConfigDataType::STR)},
+	{"newsblur-passwordfile", ConfigData("", ConfigDataType::PATH)},
+	{"newsblur-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{
+		"newsblur-url",
+		ConfigData("https://newsblur.com",
+			ConfigDataType::STR)},
+	{"notify-always", ConfigData("no", ConfigDataType::BOOL)},
+	{"notify-beep", ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"notify-format",
+		ConfigData(_("newsboat: finished reload, %f unread "
+				"feeds (%n unread articles total)"),
+			ConfigDataType::STR)},
+	{"notify-program", ConfigData("", ConfigDataType::PATH)},
+	{"notify-screen", ConfigData("no", ConfigDataType::BOOL)},
+	{"notify-xterm", ConfigData("no", ConfigDataType::BOOL)},
+	{"oldreader-flag-share", ConfigData("", ConfigDataType::STR)},
+	{"oldreader-flag-star", ConfigData("", ConfigDataType::STR)},
+	{"oldreader-login", ConfigData("", ConfigDataType::STR)},
+	{"oldreader-min-items", ConfigData("20", ConfigDataType::INT)},
+	{"oldreader-password", ConfigData("", ConfigDataType::STR)},
+	{
+		"oldreader-passwordfile",
+		ConfigData("", ConfigDataType::PATH)},
+	{"oldreader-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{
+		"oldreader-show-special-feeds",
+		ConfigData("true", ConfigDataType::BOOL)},
+	{
+		"openbrowser-and-mark-jumps-to-next-unread",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"opml-url", ConfigData("", ConfigDataType::STR, true)},
+	{"pager", ConfigData("internal", ConfigDataType::PATH)},
+	{"player", ConfigData("", ConfigDataType::PATH)},
+	{
+		"podcast-auto-enqueue",
+		ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"podlist-format",
+		ConfigData( "%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] %-20S %u -> %F", ConfigDataType::STR)},
+	{
+		"prepopulate-query-feeds",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"ssl-verifyhost", ConfigData("true", ConfigDataType::BOOL)},
+	{"ssl-verifypeer", ConfigData("true", ConfigDataType::BOOL)},
+	{"proxy", ConfigData("", ConfigDataType::STR)},
+	{"proxy-auth", ConfigData("", ConfigDataType::STR)},
+	{
+		"proxy-auth-method",
+		ConfigData("any",
+		std::unordered_set<std::string>({"any",
+			"basic",
+			"digest",
+			"digest_ie",
+			"gssnegotiate",
+			"ntlm",
+			"anysafe"}))},
+	{
+		"proxy-type",
+		ConfigData("http",
+		std::unordered_set<std::string>({"http",
+			"socks4",
+			"socks4a",
+			"socks5",
+			"socks5h"}))},
+	{"refresh-on-startup", ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"reload-only-visible-feeds",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"reload-threads", ConfigData("1", ConfigDataType::INT)},
+	{"reload-time", ConfigData("60", ConfigDataType::INT)},
+	{"save-path", ConfigData("~/", ConfigDataType::PATH)},
+	{
+		"search-highlight-colors",
+		ConfigData("black yellow bold",
+			ConfigDataType::STR,
+			true)},
+	{
+		"selecttag-format",
+		ConfigData("%4i  %T (%u)", ConfigDataType::STR)},
+	{"show-keymap-hint", ConfigData("yes", ConfigDataType::BOOL)},
+	{"show-title-bar", ConfigData("yes", ConfigDataType::BOOL)},
+	{"show-read-articles", ConfigData("yes", ConfigDataType::BOOL)},
+	{"show-read-feeds", ConfigData("yes", ConfigDataType::BOOL)},
+	{
+		"suppress-first-reload",
+		ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"swap-title-and-hints",
+		ConfigData("no", ConfigDataType::BOOL)},
+	{"text-width", ConfigData("0", ConfigDataType::INT)},
+	{
+		"toggleitemread-jumps-to-next-unread",
+		ConfigData("false", ConfigDataType::BOOL)},
+	{"ttrss-flag-publish", ConfigData("", ConfigDataType::STR)},
+	{"ttrss-flag-star", ConfigData("", ConfigDataType::STR)},
+	{"ttrss-login", ConfigData("", ConfigDataType::STR)},
+	{
+		"ttrss-mode",
+		ConfigData("multi",
+			std::unordered_set<std::string>(
+		{"single", "multi"}))},
+	{"ttrss-password", ConfigData("", ConfigDataType::STR)},
+	{"ttrss-passwordfile", ConfigData("", ConfigDataType::PATH)},
+	{"ttrss-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{"ttrss-url", ConfigData("", ConfigDataType::STR)},
+	{"ocnews-login", ConfigData("", ConfigDataType::STR)},
+	{"ocnews-password", ConfigData("", ConfigDataType::STR)},
+	{"ocnews-passwordfile", ConfigData("", ConfigDataType::PATH)},
+	{"ocnews-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{"ocnews-flag-star", ConfigData("", ConfigDataType::STR)},
+	{"ocnews-url", ConfigData("", ConfigDataType::STR)},
+	{
+		"urls-source",
+		ConfigData("local",
+		std::unordered_set<std::string>({"local",
+			"opml",
+			"oldreader",
+			"ttrss",
+			"newsblur",
+			"feedhq",
+			"ocnews",
+			"inoreader"}))},
+	{"use-proxy", ConfigData("no", ConfigDataType::BOOL)},
+	{"user-agent", ConfigData("", ConfigDataType::STR)},
 
-		  /* title formats: */
-		  {"articlelist-title-format",
-			  ConfigData(_("%N %V - Articles in feed '%T' (%u "
-				       "unread, %t "
-				       "total) - %U"),
-				  ConfigDataType::STR)},
-		  {"dialogs-title-format",
-			  ConfigData(_("%N %V - Dialogs"), ConfigDataType::STR)},
-		  {"feedlist-title-format",
-			  ConfigData(_("%N %V - Your feeds (%u unread, %t "
-				       "total)%?T? - "
-				       "tag `%T'&?"),
-				  ConfigDataType::STR)},
-		  {"filebrowser-title-format",
-			  ConfigData(_("%N %V - %?O?Open File&Save File? - %f"),
-				  ConfigDataType::STR)},
-          {"dirbrowser-title-format",
-			  ConfigData(_("%N %V - %?O?Open Directory&Save File? - %f"),
-				  ConfigDataType::STR)},
-		  {"help-title-format",
-			  ConfigData(_("%N %V - Help"), ConfigDataType::STR)},
-		  {"itemview-title-format",
-			  ConfigData(_("%N %V - Article '%T' (%u unread, %t "
-				       "total)"),
-				  ConfigDataType::STR)},
-		  {"searchresult-title-format",
-			  ConfigData(_("%N %V - Search result (%u unread, %t "
-				       "total)"),
-				  ConfigDataType::STR)},
-		  {"selectfilter-title-format",
-			  ConfigData(_("%N %V - Select Filter"),
-				  ConfigDataType::STR)},
-		  {"selecttag-title-format",
-			  ConfigData(_("%N %V - Select Tag"),
-				  ConfigDataType::STR)},
-		  {"urlview-title-format",
-			  ConfigData(_("%N %V - URLs"), ConfigDataType::STR)}}
+	/* title formats: */
+	{
+		"articlelist-title-format",
+		ConfigData(_("%N %V - Articles in feed '%T' (%u "
+				"unread, %t "
+				"total) - %U"),
+			ConfigDataType::STR)},
+	{
+		"dialogs-title-format",
+		ConfigData(_("%N %V - Dialogs"), ConfigDataType::STR)},
+	{
+		"feedlist-title-format",
+		ConfigData(_("%N %V - Your feeds (%u unread, %t "
+				"total)%?T? - "
+				"tag `%T'&?"),
+			ConfigDataType::STR)},
+	{
+		"filebrowser-title-format",
+		ConfigData(_("%N %V - %?O?Open File&Save File? - %f"),
+			ConfigDataType::STR)},
+	{
+		"dirbrowser-title-format",
+		ConfigData(_("%N %V - %?O?Open Directory&Save File? - %f"),
+			ConfigDataType::STR)},
+	{
+		"help-title-format",
+		ConfigData(_("%N %V - Help"), ConfigDataType::STR)},
+	{
+		"itemview-title-format",
+		ConfigData(_("%N %V - Article '%T' (%u unread, %t "
+				"total)"),
+			ConfigDataType::STR)},
+	{
+		"searchresult-title-format",
+		ConfigData(_("%N %V - Search result (%u unread, %t "
+				"total)"),
+			ConfigDataType::STR)},
+	{
+		"selectfilter-title-format",
+		ConfigData(_("%N %V - Select Filter"),
+			ConfigDataType::STR)},
+	{
+		"selecttag-title-format",
+		ConfigData(_("%N %V - Select Tag"),
+			ConfigDataType::STR)},
+	{
+		"urlview-title-format",
+		ConfigData(_("%N %V - URLs"), ConfigDataType::STR)}}
 {
 }
 
-ConfigContainer::~ConfigContainer() {
+ConfigContainer::~ConfigContainer()
+{
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 }
 
@@ -303,16 +352,16 @@ void ConfigContainer::handle_action(const std::string& action,
 	case ConfigDataType::BOOL:
 		if (!is_bool(params[0]))
 			throw ConfigHandlerException(strprintf::fmt(
-				_("expected boolean value, found `%s' instead"),
-				params[0]));
+					_("expected boolean value, found `%s' instead"),
+					params[0]));
 		cfgdata.value = params[0];
 		break;
 
 	case ConfigDataType::INT:
 		if (!is_int(params[0]))
 			throw ConfigHandlerException(strprintf::fmt(
-				_("expected integer value, found `%s' instead"),
-				params[0]));
+					_("expected integer value, found `%s' instead"),
+					params[0]));
 		cfgdata.value = params[0];
 		break;
 
@@ -320,15 +369,16 @@ void ConfigContainer::handle_action(const std::string& action,
 		if (cfgdata.enum_values.find(params[0]) ==
 			cfgdata.enum_values.end())
 			throw ConfigHandlerException(strprintf::fmt(
-				_("invalid configuration value `%s'"),
-				params[0]));
+					_("invalid configuration value `%s'"),
+					params[0]));
 	// fall-through
 	case ConfigDataType::STR:
 	case ConfigDataType::PATH:
-		if (cfgdata.multi_option)
+		if (cfgdata.multi_option) {
 			cfgdata.value = utils::join(params, " ");
-		else
+		} else {
 			cfgdata.value = params[0];
+		}
 		break;
 
 	case ConfigDataType::INVALID:
@@ -340,9 +390,9 @@ void ConfigContainer::handle_action(const std::string& action,
 bool ConfigContainer::is_bool(const std::string& s)
 {
 	const auto bool_values = std::vector<std::string>(
-			{"yes", "no", "true", "false"});
+	{"yes", "no", "true", "false"});
 	return (std::find(bool_values.begin(), bool_values.end(), s) !=
-		bool_values.end());
+			bool_values.end());
 }
 
 bool ConfigContainer::is_int(const std::string& s)
@@ -399,7 +449,7 @@ void ConfigContainer::toggle(const std::string& key)
 	if (config_data[key].type == ConfigDataType::BOOL) {
 		set_configvalue(key,
 			std::string(get_configvalue_as_bool(key) ? "false"
-								 : "true"));
+				: "true"));
 	}
 }
 
@@ -434,8 +484,8 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 				if (cfg.second.value !=
 					cfg.second.default_value) {
 					configline.append(strprintf::fmt(
-						" # default: %s",
-						cfg.second.default_value));
+							" # default: %s",
+							cfg.second.default_value));
 				}
 			}
 			break;
@@ -454,8 +504,9 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 	std::vector<std::string> result;
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		if (cfg.first.substr(0, fragment.length()) == fragment)
+		if (cfg.first.substr(0, fragment.length()) == fragment) {
 			result.push_back(cfg.first);
+		}
 	}
 	std::sort(result.begin(), result.end());
 	return result;

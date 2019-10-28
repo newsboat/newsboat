@@ -58,12 +58,15 @@ void RssItem::set_size(unsigned int size)
 std::string RssItem::length() const
 {
 	std::string::size_type l(size_);
-	if (!l)
+	if (!l) {
 		return "";
-	if (l < 1000)
+	}
+	if (l < 1000) {
 		return strprintf::fmt("%" PRIu64 " ", static_cast<uint64_t>(l));
-	if (l < 1024 * 1000)
+	}
+	if (l < 1024 * 1000) {
 		return strprintf::fmt("%.1fK", l / 1024.0);
+	}
 
 	return strprintf::fmt("%.1fM", l / 1024.0 / 1024.0);
 }
@@ -136,7 +139,7 @@ std::string RssItem::title() const
 	std::string retval;
 	if (title_.length() > 0)
 		retval = utils::convert_text(
-			title_, nl_langinfo(CODESET), "utf-8");
+				title_, nl_langinfo(CODESET), "utf-8");
 	return retval;
 }
 
@@ -157,49 +160,53 @@ bool RssItem::has_attribute(const std::string& attribname)
 		attribname == "date" || attribname == "guid" ||
 		attribname == "unread" || attribname == "enclosure_url" ||
 		attribname == "enclosure_type" || attribname == "flags" ||
-		attribname == "age" || attribname == "articleindex")
+		attribname == "age" || attribname == "articleindex") {
 		return true;
+	}
 
 	// if we have a feed, then forward the request
 	std::shared_ptr<RssFeed> feedptr = feedptr_.lock();
-	if (feedptr)
+	if (feedptr) {
 		return feedptr->RssFeed::has_attribute(attribname);
+	}
 
 	return false;
 }
 
 std::string RssItem::get_attribute(const std::string& attribname)
 {
-	if (attribname == "title")
+	if (attribname == "title") {
 		return title();
-	else if (attribname == "link")
+	} else if (attribname == "link") {
 		return link();
-	else if (attribname == "author")
+	} else if (attribname == "author") {
 		return author();
-	else if (attribname == "content")
+	} else if (attribname == "content") {
 		return description();
-	else if (attribname == "date")
+	} else if (attribname == "date") {
 		return pubDate();
-	else if (attribname == "guid")
+	} else if (attribname == "guid") {
 		return guid();
-	else if (attribname == "unread")
+	} else if (attribname == "unread") {
 		return unread_ ? "yes" : "no";
-	else if (attribname == "enclosure_url")
+	} else if (attribname == "enclosure_url") {
 		return enclosure_url();
-	else if (attribname == "enclosure_type")
+	} else if (attribname == "enclosure_type") {
 		return enclosure_type();
-	else if (attribname == "flags")
+	} else if (attribname == "flags") {
 		return flags();
-	else if (attribname == "age")
+	} else if (attribname == "age")
 		return std::to_string(
-			(time(nullptr) - pubDate_timestamp()) / 86400);
-	else if (attribname == "articleindex")
+				(time(nullptr) - pubDate_timestamp()) / 86400);
+	else if (attribname == "articleindex") {
 		return std::to_string(idx);
+	}
 
 	// if we have a feed, then forward the request
 	std::shared_ptr<RssFeed> feedptr = feedptr_.lock();
-	if (feedptr)
+	if (feedptr) {
 		return feedptr->RssFeed::get_attribute(attribname);
+	}
 
 	return "";
 }
@@ -224,9 +231,11 @@ void RssItem::sort_flags()
 
 	// Erase non-alpha characters
 	flags_.erase(std::remove_if(flags_.begin(),
-			     flags_.end(),
-			     [](const char c) { return !isalpha(c); }),
-		flags_.end());
+			flags_.end(),
+	[](const char c) {
+		return !isalpha(c);
+	}),
+	flags_.end());
 
 	// Erase doubled characters
 	flags_.erase(std::unique(flags_.begin(), flags_.end()), flags_.end());

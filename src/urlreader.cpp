@@ -16,8 +16,9 @@ std::vector<std::string> UrlReader::get_alltags()
 {
 	std::vector<std::string> tmptags;
 	for (const auto& t : alltags) {
-		if (t.substr(0, 1) != "~")
+		if (t.substr(0, 1) != "~") {
 			tmptags.push_back(t);
+		}
 	}
 	return tmptags;
 }

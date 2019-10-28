@@ -31,8 +31,9 @@ void ReloadThread::operator()()
 		LOG(Level::INFO, "ReloadThread: starting reload");
 
 		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
-		if (waittime_sec == 0)
+		if (waittime_sec == 0) {
 			waittime_sec = 60;
+		}
 
 		if (cfg->get_configvalue_as_bool("auto-reload")) {
 			if (suppressed_first) {
@@ -40,15 +41,14 @@ void ReloadThread::operator()()
 			} else {
 				suppressed_first = true;
 				if (!cfg->get_configvalue_as_bool(
-					    "suppress-first-reload")) {
+						"suppress-first-reload")) {
 					ctrl->get_reloader()
-						->start_reload_all_thread();
+					->start_reload_all_thread();
 				}
 			}
 		} else {
-			waittime_sec = 60; // if auto-reload is disabled, we
-					   // poll every 60 seconds whether it
-					   // changed.
+			// if auto-reload is disabled, we poll every 60 seconds whether it changed.
+			waittime_sec = 60;
 		}
 
 		time_t seconds_to_wait = 0;

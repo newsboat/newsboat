@@ -41,8 +41,8 @@ bool FeedHqApi::authenticate()
 	return auth != "";
 }
 
-static size_t
-my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
+static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
+	void* userp)
 {
 	std::string* pbuf = static_cast<std::string*>(userp);
 	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
@@ -61,12 +61,12 @@ std::string FeedHqApi::retrieve_auth()
 	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
 	std::string postcontent = strprintf::fmt(
-		"service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType="
-		"HOSTED_OR_GOOGLE&continue=http://www.google.com/",
-		username,
-		password,
-		PROGRAM_NAME,
-		utils::program_version());
+			"service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType="
+			"HOSTED_OR_GOOGLE&continue=http://www.google.com/",
+			username,
+			password,
+			PROGRAM_NAME,
+			utils::program_version());
 
 	curl_free(username);
 	curl_free(password);
@@ -110,7 +110,7 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 	curl_easy_setopt(handle,
 		CURLOPT_URL,
 		(cfg->get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST)
-			.c_str());
+		.c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 	curl_slist_free_all(custom_headers);
@@ -154,10 +154,10 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 		char* escaped_id = curl_easy_escape(handle, id, 0);
 
 		auto url = strprintf::fmt("%s%s%s?n=%u",
-			cfg->get_configvalue("feedhq-url"),
-			FEEDHQ_FEED_PREFIX,
-			escaped_id,
-			cfg->get_configvalue_as_int("feedhq-min-items"));
+				cfg->get_configvalue("feedhq-url"),
+				FEEDHQ_FEED_PREFIX,
+				escaped_id,
+				cfg->get_configvalue_as_int("feedhq-min-items"));
 		urls.push_back(TaggedFeedUrl(url, tags));
 
 		curl_free(escaped_id);
@@ -172,7 +172,7 @@ void FeedHqApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
 		auth_header = strprintf::fmt(
-			"Authorization: GoogleLogin auth=%s", auth);
+				"Authorization: GoogleLogin auth=%s", auth);
 	}
 	LOG(Level::DEBUG,
 		"FeedHqApi::add_custom_headers header = %s",
@@ -186,7 +186,7 @@ bool FeedHqApi::mark_all_read(const std::string& feedurl)
 	std::string prefix =
 		cfg->get_configvalue("feedhq-url") + FEEDHQ_FEED_PREFIX;
 	std::string real_feedurl = feedurl.substr(
-		prefix.length(), feedurl.length() - prefix.length());
+			prefix.length(), feedurl.length() - prefix.length());
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
 	try {
 		real_feedurl = utils::unescape_url(elems[0]);
@@ -205,7 +205,7 @@ bool FeedHqApi::mark_all_read(const std::string& feedurl)
 
 	std::string result = post_content(cfg->get_configvalue("feedhq-url") +
 			FEEDHQ_API_MARK_ALL_READ_URL,
-		postcontent);
+			postcontent);
 
 	return result == "OK";
 }
@@ -224,22 +224,22 @@ bool FeedHqApi::mark_article_read_with_token(const std::string& guid,
 
 	if (read) {
 		postcontent = strprintf::fmt(
-			"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
-			"com.google/kept-unread&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
+				"com.google/kept-unread&ac=edit&T=%s",
+				guid,
+				token);
 	} else {
 		postcontent = strprintf::fmt(
-			"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
-			"com.google/kept-unread&a=user/-/state/com.google/"
-			"tracking-kept-unread&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
+				"com.google/kept-unread&a=user/-/state/com.google/"
+				"tracking-kept-unread&ac=edit&T=%s",
+				guid,
+				token);
 	}
 
 	std::string result = post_content(
-		cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
-		postcontent);
+			cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
+			postcontent);
 
 	LOG(Level::DEBUG,
 		"FeedHqApi::mark_article_read_with_token: postcontent = %s "
@@ -265,7 +265,7 @@ std::string FeedHqApi::get_new_token()
 	curl_easy_setopt(handle,
 		CURLOPT_URL,
 		(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL)
-			.c_str());
+		.c_str());
 	curl_easy_perform(handle);
 	curl_easy_cleanup(handle);
 	curl_slist_free_all(custom_headers);
@@ -313,19 +313,19 @@ bool FeedHqApi::star_article(const std::string& guid, bool star)
 
 	if (star) {
 		postcontent = strprintf::fmt(
-			"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
+				guid,
+				token);
 	} else {
 		postcontent = strprintf::fmt(
-			"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
+				guid,
+				token);
 	}
 
 	std::string result = post_content(
-		cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
-		postcontent);
+			cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
+			postcontent);
 
 	return result == "OK";
 }
@@ -337,19 +337,19 @@ bool FeedHqApi::share_article(const std::string& guid, bool share)
 
 	if (share) {
 		postcontent = strprintf::fmt(
-			"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
+				guid,
+				token);
 	} else {
 		postcontent = strprintf::fmt(
-			"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
-			guid,
-			token);
+				"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
+				guid,
+				token);
 	}
 
 	std::string result = post_content(
-		cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
-		postcontent);
+			cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
+			postcontent);
 
 	return result == "OK";
 }

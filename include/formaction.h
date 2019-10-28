@@ -55,7 +55,7 @@ public:
 	std::string get_qna_response(unsigned int i)
 	{
 		return (qna_responses.size() >= (i + 1)) ? qna_responses[i]
-							 : "";
+			: "";
 	}
 	void start_qna(const std::vector<QnaPair>& prompts,
 		Operation finish_op,

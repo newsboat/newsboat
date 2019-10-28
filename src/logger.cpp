@@ -1,9 +1,9 @@
 #include "logger.h"
 
 extern "C" {
-void rs_set_logfile(const char* logfile);
-void rs_set_user_error_logfile(const char* logfile);
-void rs_set_loglevel(newsboat::Level level);
+	void rs_set_logfile(const char* logfile);
+	void rs_set_user_error_logfile(const char* logfile);
+	void rs_set_loglevel(newsboat::Level level);
 }
 
 namespace newsboat {

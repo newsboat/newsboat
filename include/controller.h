@@ -36,8 +36,8 @@ public:
 	int run(const CliArgsParser& args);
 
 	std::vector<std::shared_ptr<RssItem>> search_for_items(
-		const std::string& query,
-		std::shared_ptr<RssFeed> feed);
+			const std::string& query,
+			std::shared_ptr<RssFeed> feed);
 
 	void update_feedlist();
 	void update_visible_feeds();

@@ -11,13 +11,13 @@ const char* MatcherException::what() const throw()
 	switch (type_) {
 	case Type::ATTRIB_UNAVAIL:
 		errmsg = strprintf::fmt(
-			_("attribute `%s' is not available."), addinfo);
+				_("attribute `%s' is not available."), addinfo);
 		break;
 	case Type::INVALID_REGEX:
 		errmsg = strprintf::fmt(
-			_("regular expression '%s' is invalid: %s"),
-			addinfo,
-			addinfo2);
+				_("regular expression '%s' is invalid: %s"),
+				addinfo,
+				addinfo2);
 		break;
 	}
 	return errmsg.c_str();

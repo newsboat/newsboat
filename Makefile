@@ -23,7 +23,7 @@ LDFLAGS+=-L.
 
 PACKAGE=newsboat
 
-ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector))
+ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector fmt))
 include config.mk
 endif
 
@@ -235,7 +235,8 @@ doc/keycmds-linked.dsv: doc/keycmds.dsv
 	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
-	clang-format --style=file -i *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
+	astyle --project *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
+	$(CARGO) fmt
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \

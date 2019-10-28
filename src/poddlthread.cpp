@@ -17,8 +17,8 @@ using namespace newsboat;
 
 namespace podboat {
 
-static size_t
-my_write_data(void* buffer, size_t size, size_t nmemb, void* userp);
+static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
+	void* userp);
 static int progress_callback(void* clientp,
 	double dltotal,
 	double dlnow,
@@ -140,8 +140,8 @@ void PodDlThread::run()
 	curl_easy_cleanup(easyhandle);
 }
 
-static size_t
-my_write_data(void* buffer, size_t size, size_t nmemb, void* userp)
+static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
+	void* userp)
 {
 	PodDlThread* thread = static_cast<PodDlThread*>(userp);
 	return thread->write_data(buffer, size, nmemb);
@@ -159,8 +159,9 @@ static int progress_callback(void* clientp,
 
 size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 {
-	if (dl->status() == DlStatus::CANCELLED)
+	if (dl->status() == DlStatus::CANCELLED) {
 		return 0;
+	}
 	f->write(static_cast<char*>(buffer), size * nmemb);
 	bytecount += (size * nmemb);
 	LOG(Level::DEBUG,
@@ -172,8 +173,9 @@ size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 
 int PodDlThread::progress(double dlnow, double dltotal)
 {
-	if (dl->status() == DlStatus::CANCELLED)
+	if (dl->status() == DlStatus::CANCELLED) {
 		return -1;
+	}
 	gettimeofday(&tv2, nullptr);
 	double kbps = compute_kbps();
 	if (kbps > 9999.99) {

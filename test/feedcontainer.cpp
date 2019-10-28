@@ -187,10 +187,11 @@ TEST_CASE("Correctly returns pos of next unread item", "[FeedContainer]")
 	int i = 0;
 	for (const auto& feed : feeds) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
-		if ((i % 2) == 0)
+		if ((i % 2) == 0) {
 			item->set_unread_nowrite(true);
-		else
+		} else {
 			item->set_unread_nowrite(false);
+		}
 		feed->add_item(item);
 		i++;
 	}
@@ -226,8 +227,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[3]->set_order(33);
 	feeds[4]->set_order(10);
 
-	SECTION("by none asc")
-	{
+	SECTION("by none asc") {
 		cfg.set_configvalue("feed-sort-order", "none-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -238,8 +238,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->get_order() == 1);
 	}
 
-	SECTION("by none desc")
-	{
+	SECTION("by none desc") {
 		cfg.set_configvalue("feed-sort-order", "none-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -256,8 +255,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[3]->set_tags({"taggy"});
 	feeds[4]->set_tags({"tag2"});
 
-	SECTION("by firsttag asc")
-	{
+	SECTION("by firsttag asc") {
 		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -268,8 +266,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->get_firsttag() == "Taggy");
 	}
 
-	SECTION("by firsttag desc")
-	{
+	SECTION("by firsttag desc") {
 		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -286,8 +283,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[3]->set_title("taggy");
 	feeds[4]->set_title("tag2");
 
-	SECTION("by title asc")
-	{
+	SECTION("by title asc") {
 		cfg.set_configvalue("feed-sort-order", "title-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -298,8 +294,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->title() == "Taggy");
 	}
 
-	SECTION("by title desc")
-	{
+	SECTION("by title desc") {
 		cfg.set_configvalue("feed-sort-order", "title-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -318,8 +313,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[2]->add_item(std::make_shared<RssItem>(&rsscache));
 	feeds[3]->add_item(std::make_shared<RssItem>(&rsscache));
 
-	SECTION("by articlecount asc")
-	{
+	SECTION("by articlecount asc") {
 		cfg.set_configvalue("feed-sort-order", "articlecount-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -330,8 +324,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->total_item_count() == 0);
 	}
 
-	SECTION("by articlecount desc")
-	{
+	SECTION("by articlecount desc") {
 		cfg.set_configvalue("feed-sort-order", "articlecount-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -351,8 +344,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	item->set_unread_nowrite(false);
 	feeds[4]->add_item(item);
 
-	SECTION("by unreadarticlecount asc")
-	{
+	SECTION("by unreadarticlecount asc") {
 		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
@@ -364,8 +356,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->unread_item_count() == 0);
 	}
 
-	SECTION("by unreadarticlecount desc")
-	{
+	SECTION("by unreadarticlecount desc") {
 		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
@@ -397,8 +388,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	item->set_pubDate(1);
 	feeds[4]->add_item(item);
 
-	SECTION("by lastupdated asc")
-	{
+	SECTION("by lastupdated asc") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -409,8 +399,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4] == feeds[0]);
 	}
 
-	SECTION("by lastupdated desc")
-	{
+	SECTION("by lastupdated desc") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -436,8 +425,7 @@ TEST_CASE("Sorting by firsttag-asc puts empty tags on top", "[FeedContainer]")
 	feeds[3]->set_tags({"taggy"});
 	feeds[4]->set_tags({"tag2"});
 
-	SECTION("by firsttag asc, empty tag is first")
-	{
+	SECTION("by firsttag asc, empty tag is first") {
 		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -448,8 +436,7 @@ TEST_CASE("Sorting by firsttag-asc puts empty tags on top", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->get_firsttag() == "Taggy");
 	}
 
-	SECTION("by firsttag desc, empty tag is last")
-	{
+	SECTION("by firsttag desc, empty tag is last") {
 		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -462,7 +449,7 @@ TEST_CASE("Sorting by firsttag-asc puts empty tags on top", "[FeedContainer]")
 }
 
 TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
-		"[FeedContainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -488,8 +475,7 @@ TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
 
 	// feeds[4] is empty
 
-	SECTION("by lastupdated asc")
-	{
+	SECTION("by lastupdated asc") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -500,8 +486,7 @@ TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
 		REQUIRE(sorted_feeds[4] == feeds[0]);
 	}
 
-	SECTION("by lastupdated desc")
-	{
+	SECTION("by lastupdated desc") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -584,7 +569,7 @@ TEST_CASE(
 }
 
 TEST_CASE("clear_feeds_items() removes all items from all feeds",
-		"[FeedContainer]")
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -649,8 +634,8 @@ TEST_CASE("unread_item_count() returns number of unread items in all feeds",
 }
 
 TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
-		"with given tag",
-		"[FeedContainer]")
+	"with given tag",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -696,8 +681,8 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 }
 
 TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
-		"contain no unread items",
-		"[FeedContainer]")
+	"contain no unread items",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -734,8 +719,8 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
 }
 
 TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
-		"a given tag and also have unread items",
-		"[FeedContainer]")
+	"a given tag and also have unread items",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -747,7 +732,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 
 	const auto add_feed_with_tag_and_unreads =
 		[&feedcontainer, &rsscache]
-		(std::string tag, unsigned int unreads) {
+	(std::string tag, unsigned int unreads) {
 		auto feed = std::make_shared<RssFeed>(&rsscache);
 
 		feed->set_tags({tag});
@@ -770,7 +755,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 		add_feed_with_tag_and_unreads(different_tag, 1);
 		add_feed_with_tag_and_unreads(desired_tag, 1);
 		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag)
-				== 1);
+			== 1);
 	}
 
 	SECTION("Two feeds") {
@@ -780,7 +765,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 		add_feed_with_tag_and_unreads(desired_tag, 8);
 
 		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag)
-				== 2);
+			== 2);
 	}
 
 	SECTION("Three feeds") {
@@ -791,13 +776,13 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 		add_feed_with_tag_and_unreads(desired_tag, 11);
 
 		REQUIRE(feedcontainer.get_unread_feed_count_per_tag(desired_tag)
-				== 3);
+			== 3);
 	}
 }
 
 TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
-		"with given tag",
-		"[FeedContainer]")
+	"with given tag",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -843,8 +828,8 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 }
 
 TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
-		"contain no unread items",
-		"[FeedContainer]")
+	"contain no unread items",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -881,8 +866,8 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
 }
 
 TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
-		"in feeds that have a given tag",
-		"[FeedContainer]")
+	"in feeds that have a given tag",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 
@@ -894,7 +879,7 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 
 	const auto add_feed_with_tag_and_unreads =
 		[&feedcontainer, &rsscache]
-		(std::string tag, unsigned int unreads) {
+	(std::string tag, unsigned int unreads) {
 		auto feed = std::make_shared<RssFeed>(&rsscache);
 
 		feed->set_tags({tag});
@@ -917,7 +902,7 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 		add_feed_with_tag_and_unreads(different_tag, 1);
 		add_feed_with_tag_and_unreads(desired_tag, 1);
 		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
-				== 1);
+			== 1);
 	}
 
 	SECTION("Two feeds, 13 unreads") {
@@ -927,7 +912,7 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 		add_feed_with_tag_and_unreads(desired_tag, 8);
 
 		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
-				== 13);
+			== 13);
 	}
 
 	SECTION("Three feeds, 24 unreads") {
@@ -938,6 +923,6 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 		add_feed_with_tag_and_unreads(desired_tag, 11);
 
 		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
-				== 24);
+			== 24);
 	}
 }

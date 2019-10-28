@@ -4,11 +4,32 @@ Newsboat Code Style Guide
 These are guidelines, not laws. You are free to deviate, but make sure you have
 a good argument for doing so.
 
+
+
+## Automation
+
 Guidelines that could be easily automated, have been. Please install:
+
 - [EditorConfig plugin][editorconfig], so your editor can apply some of the
-  formatting right as you type.
+  formatting right as you type;
+
+- [Artistic Style][astyle], so you can format C++ code;
+
+- [rustfmt][rustfmt] from the current stable Rust, so you can format Rust code:
+
+        $ rustup default stable
+        $ rustup update
+        $ rustup component add rustfmt
+
+You can then run `make fmt` to format both C++ and Rust code.
 
 [editorconfig]: http://editorconfig.org/ "EditorConfig"
+
+[astyle]: http://astyle.sourceforge.net/ "Artistic Style"
+
+[rustfmt]: https://github.com/rust-lang/rustfmt "rustfmt - GitHub"
+
+
 
 ## The Boy Scout Rule
 
@@ -19,12 +40,10 @@ guidelines without a reason, make a separate commit that cleans up that code.
 *Rationale*: it's impossible to automatically upgrade the whole codebase to
 follow these guidelines, but doing it bit by bit is very feasible.
 
-## Rust
 
-Install `rustfmt` and run `cargo fmt` to format the code according to [Rust
-style guide](https://github.com/rust-dev-tools/fmt-rfcs).
 
 ## C++
+
 
 ### Order of Includes
 
@@ -44,9 +63,11 @@ Put your `#include` statements in the following order:
 - visually distinguishing between outside and inside headers makes it easier to
   understand the dependencies and navigate the code.
 
+
 ### Namespaces
 
 Use snake case, e.g. "newsboat_utils".
+
 
 ### Struct and class names
 
@@ -61,9 +82,11 @@ For names of services and such, try to preserve their capitalization, e.g.
 Drop hyphens, e.g. a class dealing with TT-RSS service would be named
 "TtRssReader".
 
+
 ### Method names
 
 Use snake case, e.g. "do_the_work".
+
 
 ### File hierarchy
 

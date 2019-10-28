@@ -47,7 +47,8 @@ void UrlViewFormAction::process_operation(Operation op,
 		} else {
 			v->show_error(_("No link selected!"));
 		}
-	} break;
+	}
+	break;
 	case OP_BOOKMARK: {
 		std::string posstr = f->get("feedpos");
 		if (posstr.length() > 0) {
@@ -59,7 +60,8 @@ void UrlViewFormAction::process_operation(Operation op,
 		} else {
 			v->show_error(_("No link selected!"));
 		}
-	} break;
+	}
+	break;
 	case OP_1:
 	case OP_2:
 	case OP_3:
@@ -77,7 +79,8 @@ void UrlViewFormAction::process_operation(Operation op,
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
 		}
-	} break;
+	}
+	break;
 	case OP_QUIT:
 		quit = true;
 		break;
@@ -135,7 +138,8 @@ KeyMapHintEntry* UrlViewFormAction::get_keymap_hint()
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open in Browser")},
 		{OP_BOOKMARK, _("Save Bookmark")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	return hints;
 }
 

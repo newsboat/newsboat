@@ -61,7 +61,7 @@ void PbView::run(bool auto_download)
 			snprintf(buf,
 				sizeof(buf),
 				_("Queue (%u downloads in progress, %u total) "
-				  "- %.2f kb/s total%s"),
+					"- %.2f kb/s total%s"),
 				static_cast<unsigned int>(
 					ctrl->downloads_in_progress()),
 				static_cast<unsigned int>(
@@ -109,8 +109,9 @@ void PbView::run(bool auto_download)
 			}
 		}
 
-		if (!event || strcmp(event, "TIMEOUT") == 0)
+		if (!event || strcmp(event, "TIMEOUT") == 0) {
 			continue;
+		}
 
 		Operation op = keys->get_operation(event, "podbeuter");
 
@@ -128,7 +129,7 @@ void PbView::run(bool auto_download)
 			if (ctrl->downloads_in_progress() > 0) {
 				dllist_form.set("msg",
 					_("Error: can't quit: download(s) in "
-					  "progress."));
+						"progress."));
 				ctrl->set_view_update_necessary(true);
 			} else {
 				quit = true;
@@ -148,12 +149,13 @@ void PbView::run(bool auto_download)
 				if (ctrl->downloads()[idx].status() !=
 					DlStatus::DOWNLOADING) {
 					std::thread t{PodDlThread(
-						&ctrl->downloads()[idx],
-						ctrl->get_cfgcont())};
+							&ctrl->downloads()[idx],
+							ctrl->get_cfgcont())};
 					t.detach();
 				}
 			}
-		} break;
+		}
+		break;
 		case OP_PB_PLAY: {
 			std::istringstream os(dllist_form.get("dlposname"));
 			int idx = -1;
@@ -165,17 +167,18 @@ void PbView::run(bool auto_download)
 					status == DlStatus::PLAYED ||
 					status == DlStatus::READY) {
 					ctrl->play_file(ctrl->downloads()[idx]
-								.filename());
+						.filename());
 					ctrl->downloads()[idx].set_status(
 						DlStatus::PLAYED);
 				} else {
 					dllist_form.set("msg",
 						_("Error: download needs to be "
-						  "finished before the file "
-						  "can be played."));
+							"finished before the file "
+							"can be played."));
 				}
 			}
-		} break;
+		}
+		break;
 		case OP_PB_MARK_FINISHED: {
 			std::istringstream os(dllist_form.get("dlposname"));
 			int idx = -1;
@@ -188,7 +191,8 @@ void PbView::run(bool auto_download)
 						DlStatus::FINISHED);
 				}
 			}
-		} break;
+		}
+		break;
 		case OP_PB_CANCEL: {
 			std::istringstream os(dllist_form.get("dlposname"));
 			int idx = -1;
@@ -200,7 +204,8 @@ void PbView::run(bool auto_download)
 						DlStatus::CANCELLED);
 				}
 			}
-		} break;
+		}
+		break;
 		case OP_PB_DELETE: {
 			std::istringstream os(dllist_form.get("dlposname"));
 			int idx = -1;
@@ -212,12 +217,13 @@ void PbView::run(bool auto_download)
 						DlStatus::DELETED);
 				}
 			}
-		} break;
+		}
+		break;
 		case OP_PB_PURGE:
 			if (ctrl->downloads_in_progress() > 0) {
 				dllist_form.set("msg",
 					_("Error: unable to perform operation: "
-					  "download(s) in progress."));
+						"download(s) in progress."));
 			} else {
 				ctrl->reload_queue(true);
 			}
@@ -300,8 +306,9 @@ void PbView::run_help()
 
 	do {
 		const char* event = help_form.run(0);
-		if (!event)
+		if (!event) {
 			continue;
+		}
 
 		Operation op = keys->get_operation(event, "help");
 
@@ -346,7 +353,8 @@ void PbView::set_dllist_keymap_hint()
 		{OP_PB_PLAY, _("Play")},
 		{OP_PB_MARK_FINISHED, _("Mark as Finished")},
 		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 
 	std::string keymap_hint = prepare_keymaphint(hints);
 	dllist_form.set("help", keymap_hint);

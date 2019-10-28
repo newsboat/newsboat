@@ -26,11 +26,11 @@ using namespace newsboat;
 void print_usage(const std::string& argv0)
 {
 	auto msg = strprintf::fmt(
-		_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
-		  "[-c <cachefile>] [-x <command> ...] [-h]\n"),
-		PROGRAM_NAME,
-		utils::program_version(),
-		argv0);
+			_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
+				"[-c <cachefile>] [-x <command> ...] [-h]\n"),
+			PROGRAM_NAME,
+			utils::program_version(),
+			argv0);
 	std::cout << msg;
 
 	struct arg {
@@ -44,44 +44,61 @@ void print_usage(const std::string& argv0)
 		{'e', "export-to-opml", "", _s("export OPML feed to stdout")},
 		{'r', "refresh-on-start", "", _s("refresh feeds on start")},
 		{'i', "import-from-opml", _s("<file>"), _s("import OPML file")},
-		{'u',
+		{
+			'u',
 			"url-file",
 			_s("<urlfile>"),
-			_s("read RSS feed URLs from <urlfile>")},
-		{'c',
+			_s("read RSS feed URLs from <urlfile>")
+		},
+		{
+			'c',
 			"cache-file",
 			_s("<cachefile>"),
-			_s("use <cachefile> as cache file")},
-		{'C',
+			_s("use <cachefile> as cache file")
+		},
+		{
+			'C',
 			"config-file",
 			_s("<configfile>"),
-			_s("read configuration from <configfile>")},
+			_s("read configuration from <configfile>")
+		},
 		{'X', "vacuum", "", _s("compact the cache")},
-		{'x',
+		{
+			'x',
 			"execute",
 			_s("<command>..."),
-			_s("execute list of commands")},
+			_s("execute list of commands")
+		},
 		{'q', "quiet", "", _s("quiet startup")},
 		{'v', "version", "", _s("get version information")},
-		{'l',
+		{
+			'l',
 			"log-level",
 			_s("<loglevel>"),
 			_s("write a log with a certain loglevel (valid values: "
-			   "1 to "
-			   "6)")},
-		{'d',
+				"1 to "
+				"6)")
+		},
+		{
+			'd',
 			"log-file",
 			_s("<logfile>"),
-			_s("use <logfile> as output log file")},
-		{'E',
+			_s("use <logfile> as output log file")
+		},
+		{
+			'E',
 			"export-to-file",
 			_s("<file>"),
-			_s("export list of read articles to <file>")},
-		{'I',
+			_s("export list of read articles to <file>")
+		},
+		{
+			'I',
 			"import-from-file",
 			_s("<file>"),
-			_s("import list of read articles from <file>")},
-		{'h', "help", "", _s("this help")}};
+			_s("import list of read articles from <file>")
+		},
+		{'h', "help", "", _s("this help")}
+	};
 
 	std::stringstream ss;
 	for (const auto& a : args) {
@@ -103,49 +120,49 @@ void print_version(const std::string& argv0, unsigned int level)
 	if (level <= 1) {
 		std::stringstream ss;
 		ss << PROGRAM_NAME << " " << utils::program_version() << " - "
-			  << PROGRAM_URL << std::endl;
+			<< PROGRAM_URL << std::endl;
 		ss << "Copyright (C) 2006-2015 Andreas Krennmair"
-			  << std::endl;
+			<< std::endl;
 		ss << "Copyright (C) 2015-2019 Alexander Batischev"
-			  << std::endl;
+			<< std::endl;
 		ss << "Copyright (C) 2006-2017 Newsbeuter contributors"
-			  << std::endl;
+			<< std::endl;
 		ss << "Copyright (C) 2017-2019 Newsboat contributors"
-			  << std::endl;
+			<< std::endl;
 		ss << std::endl;
 
 		ss << strprintf::fmt(
-				     _("Newsboat is free software licensed "
-				       "under the MIT License. (Type `%s -vv' "
-				       "to see the full text.)"),
-				     argv0)
-			  << std::endl;
+				_("Newsboat is free software licensed "
+					"under the MIT License. (Type `%s -vv' "
+					"to see the full text.)"),
+				argv0)
+			<< std::endl;
 		ss << _("It bundles JSON for Modern C++ library, "
-			       "licensed under the MIT License: "
-			       "https://github.com/nlohmann/json")
-			  << std::endl;
+				"licensed under the MIT License: "
+				"https://github.com/nlohmann/json")
+			<< std::endl;
 		ss << std::endl;
 
 		struct utsname xuts;
 		uname(&xuts);
 		ss << PROGRAM_NAME << " " << utils::program_version()
-			  << std::endl;
+			<< std::endl;
 		ss << "System: " << xuts.sysname << " " << xuts.release
-			  << " (" << xuts.machine << ")" << std::endl;
+			<< " (" << xuts.machine << ")" << std::endl;
 #if defined(__GNUC__) && defined(__VERSION__)
 		ss << "Compiler: g++ " << __VERSION__ << std::endl;
 #endif
 		ss << "ncurses: " << curses_version()
-			  << " (compiled with " << NCURSES_VERSION << ")"
-			  << std::endl;
+			<< " (compiled with " << NCURSES_VERSION << ")"
+			<< std::endl;
 		ss << "libcurl: " << curl_version() << " (compiled with "
-			  << LIBCURL_VERSION << ")" << std::endl;
+			<< LIBCURL_VERSION << ")" << std::endl;
 		ss << "SQLite: " << sqlite3_libversion()
-			  << " (compiled with " << SQLITE_VERSION << ")"
-			  << std::endl;
+			<< " (compiled with " << SQLITE_VERSION << ")"
+			<< std::endl;
 		ss << "libxml2: compiled with " << LIBXML_DOTTED_VERSION
-			  << std::endl
-			  << std::endl;
+			<< std::endl
+			<< std::endl;
 		std::cout << ss.str();
 	} else {
 		std::cout << LICENSE_str << std::endl;
@@ -185,23 +202,23 @@ int main(int argc, char* argv[])
 		ret = c.run(args);
 	} catch (const newsboat::DbException& e) {
 		std::cerr << strprintf::fmt(
-				     _("Caught newsboat::DbException with "
-				       "message: %s"),
-				     e.what())
-			  << std::endl;
+				_("Caught newsboat::DbException with "
+					"message: %s"),
+				e.what())
+			<< std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::MatcherException& e) {
 		std::cerr << strprintf::fmt(
-				     _("Caught newsboat::MatcherException with "
-				       "message: %s"),
-				     e.what())
-			  << std::endl;
+				_("Caught newsboat::MatcherException with "
+					"message: %s"),
+				e.what())
+			<< std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::Exception& e) {
 		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
-					      "message: %s"),
-				     e.what())
-			  << std::endl;
+					"message: %s"),
+				e.what())
+			<< std::endl;
 		::exit(EXIT_FAILURE);
 	}
 

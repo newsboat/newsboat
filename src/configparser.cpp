@@ -66,9 +66,11 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
-	const std::string filename = (tmp_filename.front() == '/') ? tmp_filename : utils::getcwd() + '/' + tmp_filename;
+	const std::string filename = (tmp_filename.front() == '/') ? tmp_filename :
+		utils::getcwd() + '/' + tmp_filename;
 
-	if (std::find(included_files.begin(), included_files.end(), filename) != included_files.end()) {
+	if (std::find(included_files.begin(), included_files.end(),
+			filename) != included_files.end()) {
 		LOG(Level::WARN,
 			"ConfigParser::parse: file %s has already been "
 			"included",
@@ -106,17 +108,17 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 					handler->handle_action(cmd, tokens);
 				} catch (const ConfigHandlerException& e) {
 					throw ConfigException(strprintf::fmt(
-						_("Error while processing "
-						  "command `%s' (%s line %u): "
-						  "%s"),
-						line,
-						filename,
-						linecounter,
-						e.what()));
+							_("Error while processing "
+								"command `%s' (%s line %u): "
+								"%s"),
+							line,
+							filename,
+							linecounter,
+							e.what()));
 				}
 			} else {
 				throw ConfigException(strprintf::fmt(
-					_("unknown command `%s'"), cmd));
+						_("unknown command `%s'"), cmd));
 			}
 		}
 	}
@@ -148,8 +150,9 @@ void ConfigParser::evaluate_backticks(std::vector<std::string>& tokens)
 std::string::size_type find_non_escaped_backtick(std::string& input,
 	const std::string::size_type startpos)
 {
-	if (startpos == std::string::npos)
+	if (startpos == std::string::npos) {
 		return startpos;
+	}
 
 	std::string::size_type result = startpos;
 	result = input.find_first_of("`", result);
@@ -181,7 +184,7 @@ std::string ConfigParser::evaluate_backticks(std::string token)
 		token.insert(pos1, result);
 
 		pos1 = find_non_escaped_backtick(
-			token, pos1 + result.length() + 1);
+				token, pos1 + result.length() + 1);
 		pos2 = find_non_escaped_backtick(token, pos1 + 1);
 	}
 

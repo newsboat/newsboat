@@ -1,0 +1,14 @@
+--suffix=none
+--style=1tbs
+--indent=force-tab=8
+--attach-namespaces
+--attach-classes
+--pad-header
+--align-pointer=type
+--align-reference=type
+--break-one-line-headers
+--add-braces
+--attach-return-type
+--attach-return-type-decl
+--max-code-length=80
+--indent-after-parens

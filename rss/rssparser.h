@@ -25,8 +25,7 @@ protected:
 		const std::string& prop,
 		const std::string& ns = "");
 	std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
-	bool
-	node_is(xmlNode* node, const char* name, const char* ns_uri = nullptr);
+	bool node_is(xmlNode* node, const char* name, const char* ns_uri = nullptr);
 	xmlDocPtr doc;
 	std::string globalbase;
 };

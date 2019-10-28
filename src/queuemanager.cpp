@@ -59,8 +59,9 @@ std::string get_hostname_from_url(const std::string& url)
 	return hostname;
 }
 
-std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem> item,
-		std::shared_ptr<RssFeed> feed)
+std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
+	item,
+	std::shared_ptr<RssFeed> feed)
 {
 	const std::string& url = item->enclosure_url();
 	const std::string& title = item->title();
@@ -100,12 +101,12 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem> ite
 	if (feed->rssurl() != item->feedurl() &&
 		item->get_feedptr() != nullptr) {
 		std::string feedtitle = utils::quote_for_stfl(
-			item->get_feedptr()->title());
+				item->get_feedptr()->title());
 		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('N', feedtitle);
 	} else {
 		fmt.register_fmt('N', feed->title());
-    }
+	}
 
 	const std::string dlpath = fmt.do_format(dlformat);
 	return dlpath;

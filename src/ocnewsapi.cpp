@@ -56,13 +56,15 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 	std::map<long, std::string> folders_map;
 
 	json_object* feeds_query;
-	if (!query("feeds", &feeds_query))
+	if (!query("feeds", &feeds_query)) {
 		return result;
+	}
 	JsonUptr feeds_uptr(feeds_query, json_object_put);
 
 	json_object* folders_query;
-	if (!query("folders", &folders_query))
+	if (!query("folders", &folders_query)) {
 		return result;
+	}
 	JsonUptr folders_uptr(folders_query, json_object_put);
 
 	json_object* folders;
@@ -115,8 +117,9 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 		current_feed.link = json_object_get_string(node);
 
 		while (known_feeds.find(current_feed.title) !=
-			known_feeds.end())
+			known_feeds.end()) {
 			current_feed.title += "*";
+		}
 		known_feeds[current_feed.title] =
 			std::make_pair(current_feed, feed_id);
 
@@ -124,17 +127,18 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 		long folder_id = json_object_get_int(node);
 
 		std::vector<std::string> tags;
-		if (folder_id != 0)
+		if (folder_id != 0) {
 			tags.push_back(folders_map[folder_id]);
+		}
 
 		result.push_back(TaggedFeedUrl(current_feed.title, tags));
 	}
 
 	std::sort(++begin(result),
 		end(result),
-		[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
-			return a.first < b.first;
-		});
+	[](const TaggedFeedUrl& a, const TaggedFeedUrl& b) {
+		return a.first < b.first;
+	});
 
 	return result;
 }
@@ -155,10 +159,11 @@ bool OcNewsApi::mark_article_read(const std::string& guid, bool read)
 	std::string query = "items/";
 	query += guid.substr(0, guid.find_first_of(":"));
 
-	if (read)
+	if (read) {
 		query += "/read";
-	else
+	} else {
 		query += "/unread";
+	}
 
 	return this->query(query, nullptr, "{}");
 }
@@ -195,8 +200,9 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 	query += "&id=" + std::to_string(known_feeds[feed_id].second);
 
 	json_object* response;
-	if (!this->query(query, &response))
+	if (!this->query(query, &response)) {
 		return feed;
+	}
 	JsonUptr response_uptr(response, json_object_put);
 
 	json_object* items;
@@ -299,12 +305,12 @@ bool OcNewsApi::query(const std::string& query,
 	utils::set_common_curl_options(handle, cfg);
 
 	static auto write_fn =
-		[](void* buffer, size_t size, size_t nmemb, void* userp) {
-			std::string* pbuf = static_cast<std::string*>(userp);
-			pbuf->append(
-				static_cast<const char*>(buffer), size * nmemb);
-			return size * nmemb;
-		};
+	[](void* buffer, size_t size, size_t nmemb, void* userp) {
+		std::string* pbuf = static_cast<std::string*>(userp);
+		pbuf->append(
+			static_cast<const char*>(buffer), size * nmemb);
+		return size * nmemb;
+	};
 	std::string buff;
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, *write_fn);
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &buff);
@@ -342,8 +348,9 @@ bool OcNewsApi::query(const std::string& query,
 		return false;
 	}
 
-	if (result)
+	if (result) {
 		*result = json_tokener_parse(buff.c_str());
+	}
 	return true;
 }
 

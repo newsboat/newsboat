@@ -52,10 +52,10 @@ void ItemViewFormAction::init()
 		const size_t min_field_width = 6;
 		f->set("percentwidth",
 			std::to_string(
-				std::max({
-					min_field_width,
-					strlen(_("Top")),
-					strlen(_("Bottom"))})));
+		std::max({
+			min_field_width,
+			strlen(_("Top")),
+			strlen(_("Bottom"))})));
 		update_percent();
 	}
 	set_keymap_hints();
@@ -163,8 +163,8 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 	} catch (const DbException& e) {
 		v->show_error(strprintf::fmt(
-			_("Error while marking article as read: %s"),
-			e.what()));
+				_("Error while marking article as read: %s"),
+				e.what()));
 	}
 
 	switch (op) {
@@ -182,18 +182,20 @@ void ItemViewFormAction::process_operation(Operation op,
 					item->enclosure_url()));
 		} else {
 			v->set_status(strprintf::fmt(
-				_("Invalid URL: '%s'"), item->enclosure_url()));
+					_("Invalid URL: '%s'"), item->enclosure_url()));
 		}
-	} break;
+	}
+	break;
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
 		if (automatic) {
-			if (args->size() > 0)
+			if (args->size() > 0) {
 				filename = (*args)[0];
+			}
 		} else {
 			filename = v->run_filebrowser(
-				v->get_filename_suggestion(item->title()));
+					v->get_filename_suggestion(item->title()));
 		}
 		if (filename == "") {
 			v->show_error(_("Aborted saving."));
@@ -201,15 +203,16 @@ void ItemViewFormAction::process_operation(Operation op,
 			try {
 				v->get_ctrl()->write_item(item, filename);
 				v->show_error(strprintf::fmt(
-					_("Saved article to %s."), filename));
+						_("Saved article to %s."), filename));
 			} catch (...) {
 				v->show_error(strprintf::fmt(
-					_("Error: couldn't write article to "
-					  "file %s"),
-					filename));
+						_("Error: couldn't write article to "
+							"file %s"),
+						filename));
 			}
 		}
-	} break;
+	}
+	break;
 	case OP_OPENINBROWSER:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
@@ -242,7 +245,8 @@ void ItemViewFormAction::process_operation(Operation op,
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
-	} break;
+	}
+	break;
 	case OP_PIPE_TO: {
 		std::vector<QnaPair> qna;
 		if (automatic) {
@@ -256,7 +260,8 @@ void ItemViewFormAction::process_operation(Operation op,
 				QnaPair(_("Pipe article to command: "), ""));
 			this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 		}
-	} break;
+	}
+	break;
 	case OP_EDITFLAGS:
 		if (automatic) {
 			qna_responses.clear();
@@ -285,7 +290,8 @@ void ItemViewFormAction::process_operation(Operation op,
 			qna_responses.push_back(urlviewer);
 			this->finished_qna(OP_PIPE_TO);
 		}
-	} break;
+	}
+	break;
 	case OP_DELETE:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: deleting current article");
@@ -314,7 +320,8 @@ void ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_NEXT:
-		LOG(Level::INFO, "ItemViewFormAction::process_operation: jumping to next article");
+		LOG(Level::INFO,
+			"ItemViewFormAction::process_operation: jumping to next article");
 		if (v->get_next(itemlist.get(), this)) {
 			do_redraw = true;
 		} else {
@@ -351,8 +358,8 @@ void ItemViewFormAction::process_operation(Operation op,
 			v->get_ctrl()->mark_article_read(item->guid(), false);
 		} catch (const DbException& e) {
 			v->show_error(strprintf::fmt(
-				_("Error while marking article as unread: %s"),
-				e.what()));
+					_("Error while marking article as unread: %s"),
+					e.what()));
 		}
 		v->set_status("");
 		quit = true;
@@ -389,7 +396,8 @@ void ItemViewFormAction::process_operation(Operation op,
 			v->open_in_browser(links[idx].first);
 			v->set_status("");
 		}
-	} break;
+	}
+	break;
 	case OP_GOTO_URL: {
 		std::vector<QnaPair> qna;
 		if (automatic) {
@@ -402,7 +410,8 @@ void ItemViewFormAction::process_operation(Operation op,
 			qna.push_back(QnaPair(_("Goto URL #"), ""));
 			this->start_qna(qna, OP_INT_GOTO_URL);
 		}
-	} break;
+	}
+	break;
 	default:
 		break;
 	}
@@ -424,7 +433,8 @@ KeyMapHintEntry* ItemViewFormAction::get_keymap_hint()
 		{OP_OPENINBROWSER, _("Open in Browser")},
 		{OP_ENQUEUE, _("Enqueue")},
 		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}};
+		{OP_NIL, nullptr}
+	};
 	return hints;
 }
 
@@ -470,13 +480,13 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 					v->get_ctrl()->write_item(
 						item, filename);
 					v->show_error(strprintf::fmt(
-						_("Saved article to %s"),
-						filename));
+							_("Saved article to %s"),
+							filename));
 				} catch (...) {
 					v->show_error(strprintf::fmt(
-						_("Error: couldn't save "
-						  "article to %s"),
-						filename));
+							_("Error: couldn't save "
+								"article to %s"),
+							filename));
 				}
 			}
 
@@ -513,7 +523,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 			pclose(f);
 		}
 		v->pop_current_formaction();
-	} break;
+	}
+	break;
 	case OP_INT_GOTO_URL: {
 		unsigned int idx = 0;
 		sscanf(qna_responses[0].c_str(), "%u", &idx);
@@ -522,7 +533,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 			v->open_in_browser(links[idx - 1].first);
 			v->set_status("");
 		}
-	} break;
+	}
+	break;
 	default:
 		break;
 	}
@@ -543,10 +555,10 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 		"@style_b_normal[color_bold]:attr=bold "
 		"@style_u_normal[color_underline]:attr=underline ");
 	std::string textview = strprintf::fmt(
-		"{textview[article] style_normal[article]: "
-		"style_end[styleend]:fg=blue,attr=bold %s .expand:vh "
-		"offset[articleoffset]:0 richtext:1}",
-		attrstr);
+			"{textview[article] style_normal[article]: "
+			"style_end[styleend]:fg=blue,attr=bold %s .expand:vh "
+			"offset[articleoffset]:0 richtext:1}",
+			attrstr);
 	f->modify("article", "replace", textview);
 }
 
@@ -556,10 +568,11 @@ void ItemViewFormAction::update_percent()
 		unsigned int percent = 0;
 		unsigned int offset = utils::to_u(f->get("articleoffset"), 0);
 
-		if (num_lines > 0)
+		if (num_lines > 0) {
 			percent = (100 * (offset + 1)) / num_lines;
-		else
+		} else {
 			percent = 0;
+		}
 
 		LOG(Level::DEBUG,
 			"ItemViewFormAction::update_percent: offset = %u "
@@ -593,8 +606,9 @@ void ItemViewFormAction::set_highlightphrase(const std::string& text)
 void ItemViewFormAction::do_search()
 {
 	std::string searchphrase = qna_responses[0];
-	if (searchphrase.length() == 0)
+	if (searchphrase.length() == 0) {
 		return;
+	}
 
 	searchhistory.add_line(searchphrase);
 
@@ -612,7 +626,7 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 	params.push_back(searchphrase);
 
 	std::vector<std::string> colors = utils::tokenize(
-		cfg->get_configvalue("search-highlight-colors"), " ");
+			cfg->get_configvalue("search-highlight-colors"), " ");
 	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
 
 	try {

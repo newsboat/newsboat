@@ -96,7 +96,7 @@ std::string RegexManager::extract_outer_marker(std::string str, const int index)
 		// Get found tag
 		tmptag = sm.str();
 		// If the found tag is after the spot we're looking for
-		if (sm.position(0) + offset > index ){
+		if (sm.position(0) + offset > index ) {
 			if (!tagstack.empty() ) {
 				return tagstack.top();
 			} else {
@@ -143,25 +143,25 @@ void RegexManager::quote_and_highlight(std::string& str,
 				outer_marker = extract_outer_marker(str, offset + pmatch.rm_so);
 				const std::string marker = strprintf::fmt("<%u>", i);
 				str.insert(offset + pmatch.rm_eo,
-						std::string("</>") + outer_marker);
+					std::string("</>") + outer_marker);
 				str.insert(offset + pmatch.rm_so, marker);
 				offset += pmatch.rm_eo + marker.length() +
 					strlen("</>") + outer_marker.length();
-			}
-			else {
+			} else {
 				offset++;
 			}
 			if (offset >= str.length()) {
 				break;
 			}
 			err = regexec(
-				regex, str.c_str() + offset, 1, &pmatch, 0);
+					regex, str.c_str() + offset, 1, &pmatch, 0);
 		}
 		i++;
 	}
 }
 
-void RegexManager::handle_highlight_action(const std::vector<std::string>& params)
+void RegexManager::handle_highlight_action(const std::vector<std::string>&
+	params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(
@@ -172,21 +172,21 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 	if (location != "all" && location != "article" &&
 		location != "articlelist" && location != "feedlist") {
 		throw ConfigHandlerException(strprintf::fmt(
-			_("`%s' is an invalid dialog type"), location));
+				_("`%s' is an invalid dialog type"), location));
 	}
 
 	regex_t* rx = new regex_t;
 	int err;
 	if ((err = regcomp(rx,
-			 params[1].c_str(),
-			 REG_EXTENDED | REG_ICASE)) != 0) {
+					params[1].c_str(),
+					REG_EXTENDED | REG_ICASE)) != 0) {
 		char buf[1024];
 		regerror(err, rx, buf, sizeof(buf));
 		delete rx;
 		throw ConfigHandlerException(strprintf::fmt(
-			_("`%s' is not a valid regular expression: %s"),
-			params[1],
-			buf));
+				_("`%s' is not a valid regular expression: %s"),
+				params[1],
+				buf));
 	}
 	std::string colorstr;
 	if (params[2] != "default") {
@@ -195,8 +195,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 			regfree(rx);
 			delete rx;
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				params[2]));
+					_("`%s' is not a valid color"),
+					params[2]));
 		}
 		colorstr.append(params[2]);
 	}
@@ -212,7 +212,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 				throw ConfigHandlerException(
 					strprintf::fmt(
 						_("`%s' is not a valid "
-						  "color"),
+							"color"),
 						params[3]));
 			}
 			colorstr.append(params[3]);
@@ -230,8 +230,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 					throw ConfigHandlerException(
 						strprintf::fmt(
 							_("`%s' is not "
-							  "a valid "
-							  "attribute"),
+								"a valid "
+								"attribute"),
 							params[i]));
 				}
 				colorstr.append(params[i]);
@@ -276,7 +276,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>& param
 	cheat_store_for_dump_config.push_back(line);
 }
 
-void RegexManager::handle_highlight_article_action(const std::vector<std::string>& params)
+void RegexManager::handle_highlight_article_action(const
+	std::vector<std::string>& params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(
@@ -292,8 +293,8 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 		colorstr.append("fg=");
 		if (!utils::is_valid_color(fgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				fgcolor));
+					_("`%s' is not a valid color"),
+					fgcolor));
 		}
 		colorstr.append(fgcolor);
 	}
@@ -304,8 +305,8 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 		colorstr.append("bg=");
 		if (!utils::is_valid_color(bgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid color"),
-				bgcolor));
+					_("`%s' is not a valid color"),
+					bgcolor));
 		}
 		colorstr.append(bgcolor);
 	}
@@ -320,7 +321,7 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 				throw ConfigHandlerException(
 					strprintf::fmt(
 						_("`%s' is not a valid "
-						  "attribute"),
+							"attribute"),
 						params[i]));
 			}
 			colorstr.append(params[i]);
@@ -330,9 +331,9 @@ void RegexManager::handle_highlight_article_action(const std::vector<std::string
 	std::shared_ptr<Matcher> m(new Matcher());
 	if (!m->parse(params[0])) {
 		throw ConfigHandlerException(strprintf::fmt(
-			_("couldn't parse filter expression `%s': %s"),
-			params[0],
-			m->get_parse_error()));
+				_("couldn't parse filter expression `%s': %s"),
+				params[0],
+				m->get_parse_error()));
 	}
 
 	int pos = locations["articlelist"].first.size();

@@ -87,3 +87,13 @@ macos_task:
               CC: gcc
               CXX: g++
               RUST: 1.26.0
+
+formatting_task:
+    name: Code formatting
+    container:
+        dockerfile: docker/code-formatting-tools.dockerfile
+    script:
+        - make fmt
+          # --exit-code forces git-diff to exit with code 1 if there were
+          # changes; that'll fail the build, which is exactly what we need
+        - git diff --exit-code

@@ -8,23 +8,21 @@
 using namespace newsboat;
 
 TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
-		"[rss]")
+	"[rss]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	RssFeed f(&rsscache);
 
-	SECTION("invalid query results in exception")
-	{
+	SECTION("invalid query results in exception") {
 		REQUIRE_THROWS(f.set_rssurl("query:a title:unread ="));
 		REQUIRE_THROWS(f.set_rssurl("query:a title:between 1:3"));
 	}
 
-	SECTION("valid query doesn't throw an exception")
-	{
+	SECTION("valid query doesn't throw an exception") {
 		REQUIRE_NOTHROW(f.set_rssurl("query:a title:unread = \"yes\""));
 		REQUIRE_NOTHROW(f.set_rssurl(
-			"query:Title:unread = \"yes\" and age between 0:7"));
+				"query:Title:unread = \"yes\" and age between 0:7"));
 	}
 }
 
@@ -39,8 +37,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		f.add_item(item);
 	}
 
-	SECTION("title")
-	{
+	SECTION("title") {
 		auto articles = f.items();
 		articles[0]->set_title("Read me");
 		articles[1]->set_title("Wow tests are great");
@@ -69,8 +66,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[4]->title_raw() == "Article 1: A boring article");
 	}
 
-	SECTION("flags")
-	{
+	SECTION("flags") {
 		auto articles = f.items();
 		articles[0]->set_flags("Aabde");
 		articles[1]->set_flags("Zadel");
@@ -99,8 +95,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[4]->flags() == "Aabde");
 	}
 
-	SECTION("author")
-	{
+	SECTION("author") {
 		auto articles = f.items();
 		articles[0]->set_author("Anonymous");
 		articles[1]->set_author("Socrates");
@@ -129,8 +124,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[4]->author() == "Anonymous");
 	}
 
-	SECTION("link")
-	{
+	SECTION("link") {
 		auto articles = f.items();
 		articles[0]->set_link("www.example.com");
 		articles[1]->set_link("www.anotherexample.org");
@@ -159,8 +153,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[4]->link() == "withoutwww.org");
 	}
 
-	SECTION("guid")
-	{
+	SECTION("guid") {
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::GUID;
 		ss.sd = SortDirection::ASC;
@@ -182,8 +175,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		REQUIRE(articles[4]->guid() == "0");
 	}
 
-	SECTION("date")
-	{
+	SECTION("date") {
 		auto articles = f.items();
 		articles[0]->set_pubDate(93);
 		articles[1]->set_pubDate(42);

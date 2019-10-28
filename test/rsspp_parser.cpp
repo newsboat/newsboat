@@ -50,8 +50,8 @@ TEST_CASE("Extracts data from RSS 0.91", "[rsspp::Parser]")
 }
 
 TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
-		"an empty author tag",
-		"[rsspp::Parser][issue542]")
+	"an empty author tag",
+	"[rsspp::Parser][issue542]")
 {
 	rsspp::Parser p;
 	rsspp::Feed f;

@@ -10,16 +10,15 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	TextFormatter fmt;
 
 	fmt.add_lines({std::make_pair(LineType::wrappable,
-			       "this one is going to be wrapped"),
-		std::make_pair(LineType::softwrappable,
-			"this one is going to be wrapped at the window "
-			"border"),
-		std::make_pair(LineType::nonwrappable,
-			"this one is going to be preserved even though "
-			"it's much longer")});
+				"this one is going to be wrapped"),
+			std::make_pair(LineType::softwrappable,
+				"this one is going to be wrapped at the window "
+				"border"),
+			std::make_pair(LineType::nonwrappable,
+				"this one is going to be preserved even though "
+				"it's much longer")});
 
-	SECTION("formatting to plain text")
-	{
+	SECTION("formatting to plain text") {
 		const std::string expected =
 			"this one \n"
 			"is going \n"
@@ -32,8 +31,7 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 		REQUIRE(fmt.format_text_plain(10, 40) == expected);
 	}
 
-	SECTION("formatting to list")
-	{
+	SECTION("formatting to list") {
 		const std::string expected_text =
 			"{list"
 			"{listitem text:\"this one \"}"
@@ -61,29 +59,26 @@ TEST_CASE("line wrapping works for non-space-separeted text", "[TextFormatter]")
 	TextFormatter fmt;
 
 	fmt.add_lines({std::make_pair(LineType::wrappable,
-		"    つれづれなるままに、ひぐらしすずりにむかいて、")});
+				"    つれづれなるままに、ひぐらしすずりにむかいて、")});
 
-	SECTION("preserve indent and doesn't return broken UTF-8")
-	{
+	SECTION("preserve indent and doesn't return broken UTF-8") {
 		const std::string expected =
 			("    つれづれなるまま\n"
-			 "    に、ひぐらしすず\n"
-			 "    りにむかいて、\n");
+				"    に、ひぐらしすず\n"
+				"    りにむかいて、\n");
 		REQUIRE(fmt.format_text_plain(20) == expected);
 		// +1 is not enough to store single wide-width char
 		REQUIRE(fmt.format_text_plain(20 + 1) == expected);
 	}
 
-	SECTION("truncate indent if given window width is too narrow")
-	{
+	SECTION("truncate indent if given window width is too narrow") {
 		REQUIRE(fmt.format_text_plain(1) == (" \n"));
 		REQUIRE(fmt.format_text_plain(2) == ("  \n"));
 		REQUIRE(fmt.format_text_plain(3) == ("   \n"));
 	}
 
 	SECTION("discard current word if there's not enough space to put "
-		"single char")
-	{
+		"single char") {
 		REQUIRE(fmt.format_text_plain(4) == ("    \n"));
 		REQUIRE(fmt.format_text_plain(5) == ("    \n"));
 	}
@@ -121,8 +116,7 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 
 	fmt.add_line(LineType::hr, "");
 
-	SECTION("width = 3")
-	{
+	SECTION("width = 3") {
 		const std::string expected =
 			"\n"
 			" - "
@@ -131,8 +125,7 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 		REQUIRE(fmt.format_text_plain(3) == expected);
 	}
 
-	SECTION("width = 10")
-	{
+	SECTION("width = 10") {
 		const std::string expected =
 			"\n"
 			" -------- "
@@ -141,8 +134,7 @@ TEST_CASE("<hr> is rendered as a string of dashes framed with newlines",
 		REQUIRE(fmt.format_text_plain(10) == expected);
 	}
 
-	SECTION("width = 72")
-	{
+	SECTION("width = 72") {
 		const std::string expected =
 			"\n"
 			" -----------------------------------------------------"
@@ -225,8 +217,7 @@ TEST_CASE(
 	RegexManager* rxman = nullptr;
 	const std::string location = "";
 
-	SECTION("total_width == 4")
-	{
+	SECTION("total_width == 4") {
 		const std::string expected_text =
 			"{list"
 			"{listitem text:\"just\"}"
@@ -242,8 +233,7 @@ TEST_CASE(
 		REQUIRE(result.second == expected_count);
 	}
 
-	SECTION("total_width == 0")
-	{
+	SECTION("total_width == 0") {
 		const std::string expected_text =
 			"{list"
 			"{listitem text:\"just a test\"}"

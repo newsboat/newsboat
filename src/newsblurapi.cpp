@@ -18,7 +18,7 @@ NewsBlurApi::NewsBlurApi(ConfigContainer* c)
 {
 	api_location = cfg->get_configvalue("newsblur-url");
 	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") +
-			    (NEWSBLUR_ITEMS_PER_PAGE + 1)) /
+			(NEWSBLUR_ITEMS_PER_PAGE + 1)) /
 		NEWSBLUR_ITEMS_PER_PAGE;
 
 	if (cfg->get_configvalue("cookie-cache").empty()) {
@@ -83,7 +83,7 @@ std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
 	json_object_object_get_ex(response, "folders", &folders);
 
 	std::map<std::string, std::vector<std::string>> feeds_to_tags =
-		mk_feeds_to_tags(folders);
+			mk_feeds_to_tags(folders);
 
 	while (!json_object_iter_equal(&it, &itEnd)) {
 		const char* feed_id = json_object_iter_peek_name(&it);
@@ -119,7 +119,7 @@ std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
 }
 
 std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
-	json_object* folders)
+		json_object* folders)
 {
 	std::map<std::string, std::vector<std::string>> result;
 	array_list* tags = json_object_get_array(folders);
@@ -133,11 +133,12 @@ std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
 			// describing folders but also numbers, which are IDs of
 			// feeds that don't belong to any folder. This check
 			// skips these IDs.
+		{
 			continue;
+		}
 
 		json_object_object_foreach(
-			tag_to_feed_ids, key, feeds_with_tag_obj)
-		{
+			tag_to_feed_ids, key, feeds_with_tag_obj) {
 			std::string std_key(key);
 			array_list* feeds_with_tag_arr =
 				json_object_get_array(feeds_with_tag_obj);
@@ -232,14 +233,15 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 		std::string page = std::to_string(i);
 
 		json_object* query_result = query_api(
-			"/reader/feed/" + id + "?page=" + page, nullptr);
+				"/reader/feed/" + id + "?page=" + page, nullptr);
 
-		if (!query_result)
+		if (!query_result) {
 			return f;
+		}
 
 		json_object* stories{};
 		if (json_object_object_get_ex(
-			    query_result, "stories", &stories) == FALSE) {
+				query_result, "stories", &stories) == FALSE) {
 			LOG(Level::ERROR,
 				"NewsBlurApi::fetch_feed: request returned no "
 				"stories");
@@ -268,23 +270,23 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 			json_object* node{};
 
 			if (json_object_object_get_ex(
-				    item_obj, "story_title", &node) == TRUE) {
+					item_obj, "story_title", &node) == TRUE) {
 				item.title = json_object_get_string(node);
 			}
 
 			if (json_object_object_get_ex(
-				    item_obj, "story_authors", &node) == TRUE) {
+					item_obj, "story_authors", &node) == TRUE) {
 				item.author = json_object_get_string(node);
 			}
 
 			if (json_object_object_get_ex(item_obj,
-				    "story_permalink",
-				    &node) == TRUE) {
+					"story_permalink",
+					&node) == TRUE) {
 				item.link = json_object_get_string(node);
 			}
 
 			if (json_object_object_get_ex(
-				    item_obj, "story_content", &node) == TRUE) {
+					item_obj, "story_content", &node) == TRUE) {
 				item.content_encoded =
 					json_object_get_string(node);
 			}
@@ -298,9 +300,9 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 				(article_id ? article_id : "");
 
 			if (json_object_object_get_ex(
-				    item_obj, "read_status", &node) == TRUE) {
+					item_obj, "read_status", &node) == TRUE) {
 				if (!static_cast<bool>(
-					    json_object_get_int(node))) {
+						json_object_get_int(node))) {
 					item.labels.push_back(
 						"newsblur:unread");
 				} else {
@@ -309,7 +311,7 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 			}
 
 			if (json_object_object_get_ex(
-				    item_obj, "story_date", &node) == TRUE) {
+					item_obj, "story_date", &node) == TRUE) {
 				const char* pub_date =
 					json_object_get_string(node);
 				item.pubDate_ts = parse_date(pub_date);
@@ -325,9 +327,9 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 
 	std::sort(f.items.begin(),
 		f.items.end(),
-		[](const rsspp::Item& a, const rsspp::Item& b) {
-			return a.pubDate_ts > b.pubDate_ts;
-		});
+	[](const rsspp::Item& a, const rsspp::Item& b) {
+		return a.pubDate_ts > b.pubDate_ts;
+	});
 
 	return f;
 }

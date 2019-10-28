@@ -132,7 +132,7 @@ int Controller::run(const CliArgsParser& args)
 	const auto migrated = configpaths.try_migrate_from_newsbeuter();
 	if (migrated) {
 		std::cerr << "\nPlease check the results and press Enter to "
-			     "continue.";
+			"continue.";
 		std::cin.ignore();
 	}
 
@@ -155,28 +155,29 @@ int Controller::run(const CliArgsParser& args)
 	if (!args.do_export()) {
 		if (!args.silent())
 			std::cout << strprintf::fmt(_("Starting %s %s..."),
-					     PROGRAM_NAME,
-					     utils::program_version())
-				  << std::endl;
+					PROGRAM_NAME,
+					utils::program_version())
+				<< std::endl;
 
 		fslock = std::unique_ptr<FsLock>(new FsLock());
 		pid_t pid;
 		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
 			if (!args.execute_cmds()) {
 				std::cout << strprintf::fmt(
-						     _("Error: an instance of "
-						       "%s is already running "
-						       "(PID: %u)"),
-						     PROGRAM_NAME,
-						     pid)
-					  << std::endl;
+						_("Error: an instance of "
+							"%s is already running "
+							"(PID: %u)"),
+						PROGRAM_NAME,
+						pid)
+					<< std::endl;
 			}
 			return EXIT_FAILURE;
 		}
 	}
 
-	if (!args.silent())
+	if (!args.silent()) {
 		std::cout << _("Loading configuration...");
+	}
 	std::cout.flush();
 
 	cfg.register_commands(cfgparser);
@@ -209,8 +210,9 @@ int Controller::run(const CliArgsParser& args)
 
 	update_config();
 
-	if (!args.silent())
+	if (!args.silent()) {
 		std::cout << _("done.") << std::endl;
+	}
 
 	// create cache object
 	std::string cachefilepath = cfg.get_configvalue("cache-file");
@@ -220,11 +222,11 @@ int Controller::run(const CliArgsParser& args)
 		pid_t pid;
 		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
 			std::cout << strprintf::fmt(
-					     _("Error: an instance of %s is "
-					       "already running (PID: %u)"),
-					     PROGRAM_NAME,
-					     pid)
-				  << std::endl;
+					_("Error: an instance of %s is "
+						"already running (PID: %u)"),
+					PROGRAM_NAME,
+					pid)
+				<< std::endl;
 			return EXIT_FAILURE;
 		}
 	}
@@ -237,19 +239,19 @@ int Controller::run(const CliArgsParser& args)
 		rsscache = new Cache(configpaths.cache_file(), &cfg);
 	} catch (const DbException& e) {
 		std::cerr << strprintf::fmt(
-				     _("Error: opening the cache file `%s' "
-				       "failed: %s"),
-				     configpaths.cache_file(),
-				     e.what())
-			  << std::endl;
+				_("Error: opening the cache file `%s' "
+					"failed: %s"),
+				configpaths.cache_file(),
+				e.what())
+			<< std::endl;
 		return EXIT_FAILURE;
 	} catch (const std::runtime_error& e) {
 		std::cerr << strprintf::fmt(
-				     _("Error: opening the cache file `%s' "
-				       "failed: %s"),
-				     configpaths.cache_file(),
-				     e.what())
-			  << std::endl;
+				_("Error: opening the cache file `%s' "
+					"failed: %s"),
+				configpaths.cache_file(),
+				e.what())
+			<< std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -276,16 +278,16 @@ int Controller::run(const CliArgsParser& args)
 		const auto cookies = cfg.get_configvalue("cookie-cache");
 		if (cookies.empty()) {
 			std::cout << strprintf::fmt(
-				_("ERROR: You must set `cookie-cache` to use "
-				  "NewsBlur.\n"));
+					_("ERROR: You must set `cookie-cache` to use "
+						"NewsBlur.\n"));
 			return EXIT_FAILURE;
 		}
 
 		std::ofstream check(cookies);
 		if (!check.is_open()) {
 			std::cout << strprintf::fmt(
-				_("%s is inaccessible and can't be created\n"),
-				cookies);
+					_("%s is inaccessible and can't be created\n"),
+					cookies);
 			return EXIT_FAILURE;
 		}
 
@@ -309,7 +311,7 @@ int Controller::run(const CliArgsParser& args)
 
 	if (!args.do_export() && !args.silent()) {
 		std::cout << strprintf::fmt(
-			_("Loading URLs from %s..."), urlcfg->get_source());
+				_("Loading URLs from %s..."), urlcfg->get_source());
 		std::cout.flush();
 	}
 	if (api) {
@@ -328,35 +330,35 @@ int Controller::run(const CliArgsParser& args)
 		std::string msg;
 		if (type == "local") {
 			msg = strprintf::fmt(
-				_("Error: no URLs configured. Please fill the "
-				  "file %s with RSS feed URLs or import an "
-				  "OPML file."),
-				configpaths.url_file());
+					_("Error: no URLs configured. Please fill the "
+						"file %s with RSS feed URLs or import an "
+						"OPML file."),
+					configpaths.url_file());
 		} else if (type == "opml") {
 			msg = strprintf::fmt(
-				_("It looks like the OPML feed you subscribed "
-				  "contains no feeds. Please fill it with "
-				  "feeds, and try again."));
+					_("It looks like the OPML feed you subscribed "
+						"contains no feeds. Please fill it with "
+						"feeds, and try again."));
 		} else if (type == "oldreader") {
 			msg = strprintf::fmt(
-				_("It looks like you haven't configured any "
-				  "feeds in your The Old Reader account. "
-				  "Please do so, and try again."));
+					_("It looks like you haven't configured any "
+						"feeds in your The Old Reader account. "
+						"Please do so, and try again."));
 		} else if (type == "ttrss") {
 			msg = strprintf::fmt(
-				_("It looks like you haven't configured any "
-				  "feeds in your Tiny Tiny RSS account. Please "
-				  "do so, and try again."));
+					_("It looks like you haven't configured any "
+						"feeds in your Tiny Tiny RSS account. Please "
+						"do so, and try again."));
 		} else if (type == "newsblur") {
 			msg = strprintf::fmt(
-				_("It looks like you haven't configured any "
-				  "feeds in your NewsBlur account. Please do "
-				  "so, and try again."));
+					_("It looks like you haven't configured any "
+						"feeds in your NewsBlur account. Please do "
+						"so, and try again."));
 		} else if (type == "inoreader") {
 			msg = strprintf::fmt(
-				_("It looks like you haven't configured any "
-				  "feeds in your Inoreader account. Please do "
-				  "so, and try again."));
+					_("It looks like you haven't configured any "
+						"feeds in your Inoreader account. Please do "
+						"so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
 		}
@@ -364,10 +366,12 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.do_export() && !args.do_vacuum() && !args.silent())
+	if (!args.do_export() && !args.do_vacuum() && !args.silent()) {
 		std::cout << _("Loading articles from cache...");
-	if (args.do_vacuum())
+	}
+	if (args.do_vacuum()) {
 		std::cout << _("Opening cache...");
+	}
 	std::cout.flush();
 
 	if (args.do_vacuum()) {
@@ -393,16 +397,16 @@ int Controller::run(const CliArgsParser& args)
 			feedcontainer.add_feed(feed);
 		} catch (const DbException& e) {
 			std::cout << _("Error while loading feeds from "
-				       "database: ")
-				  << e.what() << std::endl;
+					"database: ")
+				<< e.what() << std::endl;
 			return EXIT_FAILURE;
 		} catch (const std::string& str) {
 			std::cout << strprintf::fmt(
-					     _("Error while loading feed '%s': "
-					       "%s"),
-					     url,
-					     str)
-				  << std::endl;
+					_("Error while loading feed '%s': "
+						"%s"),
+					url,
+					str)
+				<< std::endl;
 			return EXIT_FAILURE;
 		}
 		i++;
@@ -410,8 +414,9 @@ int Controller::run(const CliArgsParser& args)
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
-	if (!args.do_export() && !args.silent())
+	if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
+	}
 
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
@@ -528,8 +533,8 @@ void Controller::mark_all_read(const std::string& feedurl)
 		rsscache->mark_all_read(feedurl);
 	} catch (const DbException& e) {
 		v->show_error(strprintf::fmt(
-			_("Error: couldn't mark all feeds read: %s"),
-			e.what()));
+				_("Error: couldn't mark all feeds read: %s"),
+				e.what()));
 		return;
 	}
 
@@ -600,7 +605,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 
 	bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 	std::shared_ptr<RssFeed> feed = rsscache->internalize_rssfeed(
-		oldfeed->rssurl(), ignore_disp ? &ign : nullptr);
+			oldfeed->rssurl(), ignore_disp ? &ign : nullptr);
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after internalize_rssfeed");
 
@@ -624,14 +629,14 @@ void Controller::import_opml(const std::string& filename)
 {
 	if (!opml::import(filename, urlcfg)) {
 		std::cout << strprintf::fmt(
-				     _("An error occurred while parsing %s."),
-				     filename)
-			  << std::endl;
+				_("An error occurred while parsing %s."),
+				filename)
+			<< std::endl;
 		return;
 	} else {
 		std::cout << strprintf::fmt(
-				     _("Import of %s finished."), filename)
-			  << std::endl;
+				_("Import of %s finished."), filename)
+			<< std::endl;
 	}
 }
 
@@ -647,8 +652,8 @@ void Controller::export_opml()
 }
 
 std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
-	const std::string& query,
-	std::shared_ptr<RssFeed> feed)
+		const std::string& query,
+		std::shared_ptr<RssFeed> feed)
 {
 	std::vector<std::shared_ptr<RssItem>> items;
 	if (feed && (feed->is_query_feed() || feed->is_search_feed())) {
@@ -666,7 +671,7 @@ std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
 		}
 	} else {
 		items = rsscache->search_for_items(
-			query, (feed != nullptr ? feed->rssurl() : ""));
+				query, (feed != nullptr ? feed->rssurl() : ""));
 		for (const auto& item : items) {
 			item->set_feedptr(
 				feedcontainer.get_feed_by_url(item->feedurl()));
@@ -727,14 +732,16 @@ void Controller::edit_urls_file()
 	const char* editor;
 
 	editor = getenv("VISUAL");
-	if (!editor)
+	if (!editor) {
 		editor = getenv("EDITOR");
-	if (!editor)
+	}
+	if (!editor) {
 		editor = "vi";
+	}
 
 	std::string cmdline = strprintf::fmt("%s \"%s\"",
-		editor,
-		utils::replace_all(configpaths.url_file(), "\"", "\\\""));
+			editor,
+			utils::replace_all(configpaths.url_file(), "\"", "\\\""));
 
 	v->push_empty_formaction();
 	Stfl::reset();
@@ -748,8 +755,9 @@ void Controller::edit_urls_file()
 
 int Controller::execute_commands(const std::vector<std::string>& cmds)
 {
-	if (v->formaction_stack_size() > 0)
+	if (v->formaction_stack_size() > 0) {
 		v->pop_current_formaction();
+	}
 	for (const auto& cmd : cmds) {
 		LOG(Level::DEBUG,
 			"Controller::execute_commands: executing `%s'",
@@ -758,14 +766,14 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 			reloader->reload_all(true);
 		} else if (cmd == "print-unread") {
 			std::cout << strprintf::fmt(_("%u unread articles"),
-					     rsscache->get_unread_count())
-				  << std::endl;
+					rsscache->get_unread_count())
+				<< std::endl;
 		} else {
 			std::cerr
-				<< strprintf::fmt(_("%s: %s: unknown command"),
-					   "newsboat",
-					   cmd)
-				<< std::endl;
+					<< strprintf::fmt(_("%s: %s: unknown command"),
+							"newsboat",
+							cmd)
+						<< std::endl;
 			return EXIT_FAILURE;
 		}
 	}
@@ -875,8 +883,8 @@ void Controller::load_configfile(const std::string& filename)
 		update_config();
 	} else {
 		v->show_error(strprintf::fmt(
-			_("Error: couldn't open configuration file `%s'!"),
-			filename));
+				_("Error: couldn't open configuration file `%s'!"),
+				filename));
 	}
 }
 

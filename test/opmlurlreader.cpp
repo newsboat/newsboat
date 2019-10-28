@@ -10,7 +10,7 @@
 using namespace newsboat;
 
 TEST_CASE("OPML URL reader gets the path to input file from \"opml-url\" "
-		"setting", "[OpmlUrlReader]")
+	"setting", "[OpmlUrlReader]")
 {
 	ConfigContainer cfg;
 	OpmlUrlReader reader(&cfg);
@@ -27,12 +27,12 @@ TEST_CASE("OPML URL reader gets the path to input file from \"opml-url\" "
 }
 
 TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
-		"[OpmlUrlReader]")
+	"[OpmlUrlReader]")
 {
 	ConfigContainer cfg;
 	cfg.set_configvalue(
-			"opml-url",
-			"file://" + utils::getcwd() + "/data/example.opml");
+		"opml-url",
+		"file://" + utils::getcwd() + "/data/example.opml");
 
 	OpmlUrlReader reader(&cfg);
 
@@ -66,8 +66,8 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 	std::set<Tag> expected_tags;
 	for (const auto& entry : expected) {
 		expected_tags.insert(
-				entry.second.cbegin(),
-				entry.second.cend());
+			entry.second.cbegin(),
+			entry.second.cend());
 	}
 	std::set<Tag> tags;
 	const auto alltags = reader.get_alltags();
@@ -76,15 +76,15 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 }
 
 TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
-		"[OpmlUrlReader]")
+	"[OpmlUrlReader]")
 {
 	const auto cwd = utils::getcwd();
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url",
-			"file://" + cwd + "/data/example.opml"
-			+ " "
-			+ "file://" + cwd + "/data/example2.opml");
+		"file://" + cwd + "/data/example.opml"
+		+ " "
+		+ "file://" + cwd + "/data/example2.opml");
 
 	OpmlUrlReader reader(&cfg);
 
@@ -125,8 +125,8 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 	std::set<Tag> expected_tags;
 	for (const auto& entry : expected) {
 		expected_tags.insert(
-				entry.second.cbegin(),
-				entry.second.cend());
+			entry.second.cbegin(),
+			entry.second.cend());
 	}
 	std::set<Tag> tags;
 	const auto alltags = reader.get_alltags();
@@ -135,19 +135,19 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 }
 
 TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
-		"[OpmlUrlReader]")
+	"[OpmlUrlReader]")
 {
 	const auto cwd = utils::getcwd();
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url",
-			"file://" + cwd + "/data/example.opml"
-			+ " "
-			+ "file:///dev/null" // empty file
-			+ " "
-			+ "file://" + cwd + "/data/guaranteed-not-to-exist.xml"
-			+ " "
-			+ "file://" + cwd + "/data/example2.opml");
+		"file://" + cwd + "/data/example.opml"
+		+ " "
+		+ "file:///dev/null" // empty file
+		+ " "
+		+ "file://" + cwd + "/data/guaranteed-not-to-exist.xml"
+		+ " "
+		+ "file://" + cwd + "/data/example2.opml");
 
 	OpmlUrlReader reader(&cfg);
 
@@ -188,8 +188,8 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 	std::set<Tag> expected_tags;
 	for (const auto& entry : expected) {
 		expected_tags.insert(
-				entry.second.cbegin(),
-				entry.second.cend());
+			entry.second.cbegin(),
+			entry.second.cend());
 	}
 	std::set<Tag> tags;
 	const auto alltags = reader.get_alltags();
@@ -198,7 +198,7 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 }
 
 TEST_CASE("OpmlUrlReader::write_config() doesn't change the input file",
-		"[OpmlUrlReader]")
+	"[OpmlUrlReader]")
 {
 	const std::string testDataPath("data/example.opml");
 
