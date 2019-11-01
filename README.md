@@ -1,9 +1,8 @@
 Newsboat [![Travis CI Build Status](https://travis-ci.org/newsboat/newsboat.svg?branch=master)](https://travis-ci.org/newsboat/newsboat) [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/newsboat/newsboat.svg)](https://cirrus-ci.com/github/newsboat/newsboat) [![Coverage Status](https://coveralls.io/repos/github/newsboat/newsboat/badge.svg?branch=master)](https://coveralls.io/github/newsboat/newsboat?branch=master) [![Coverity Scan Build Status](https://scan.coverity.com/projects/15567/badge.svg)](https://scan.coverity.com/projects/newsboat-newsboat)
 ========
 
-Newsboat is a fork of Newsbeuter, an RSS/Atom feed reader for the text console.
-The only difference is that Newsboat is actively maintained while Newsbeuter
-isn't.
+Newsboat is an RSS/Atom feed reader for the text console. It's an actively
+maintained fork of Newsbeuter.
 
 Downloading
 -----------
