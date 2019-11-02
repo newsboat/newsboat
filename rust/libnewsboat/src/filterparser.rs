@@ -98,7 +98,7 @@ fn range(input: CompleteStr) -> IResult<CompleteStr, Value> {
 fn condition(input: CompleteStr) -> IResult<CompleteStr, Expression>{
     do_parse!(
         input,
-        attr: ws!(alt!(tag!("feedtitle") | tag!("feedurl")))
+        attr: ws!(take_while!(|c| is_alphanumeric(c as u8) || c == '_'))
         >> op: ws!(operators)
         >> value: ws!(alt!(quoted_string | range | number))
         >> (attr, op, value)
