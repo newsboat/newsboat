@@ -6,7 +6,7 @@ use filterparser::Expression::*;
 
 pub trait Matchable {
     fn has_attribute(&self, attr: &str) -> bool;
-    fn get_attribute(&self, attr: &str) -> &str;
+    fn get_attribute(&self, attr: &str) -> String;
 }
 
 pub struct Matcher {
