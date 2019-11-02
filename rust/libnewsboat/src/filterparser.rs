@@ -5,6 +5,21 @@ use nom::*;
 use nom::types::CompleteStr;
 
 #[derive(Debug, Clone)]
+pub enum Operation {
+    Equal,
+    NotEqual,
+    RegEqual,
+    NotRegEqual,
+    LessThan,
+    GreaterThan,
+    LessThanOrEqual,
+    GreaterThanOrEqual,
+    Between,
+    Contains,
+    NotContains,
+}
+
+#[derive(Debug, Clone)]
 pub enum Value {
     Str(String),
     Int(i32),
@@ -14,7 +29,7 @@ pub enum Value {
 #[derive(Debug, Clone)]
 pub struct Condition {
     pub attribute: String,
-    pub op: String,
+    pub op: Operation,
     pub value: Value
 }
 
@@ -25,21 +40,21 @@ pub enum Expression {
     Condition(Condition)
 }
 
-named!(operators<CompleteStr, CompleteStr>,
+named!(operators<CompleteStr, Operation>,
     do_parse!(
         tag: alt!(
-            tag!("==") |
-            tag!("!=") |
-            tag!("=~") |
-            tag!("=") |
-            tag!("!~") |
-            tag!("<") |
-            tag!(">") |
-            tag!("<=") |
-            tag!(">=") |
-            tag!("between") |
-            tag!("#") |
-            tag!("!#")
+            map!(tag!("=="), |_| Operation::Equal) |
+            map!(tag!("!="), |_| Operation::NotEqual) |
+            map!(tag!("=~"), |_| Operation::RegEqual) |
+            map!(tag!("=") , |_| Operation::Equal) |
+            map!(tag!("!~"), |_| Operation::NotRegEqual) |
+            map!(tag!("<") , |_| Operation::LessThan) |
+            map!(tag!(">") , |_| Operation::GreaterThan) |
+            map!(tag!("<="), |_| Operation::LessThanOrEqual) |
+            map!(tag!(">="), |_| Operation::GreaterThanOrEqual) |
+            map!(tag!("between"), |_| Operation::Between) |
+            map!(tag!("#"), |_| Operation::Contains) |
+            map!(tag!("!#"), |_| Operation::NotContains)
         ) >>
         (tag)
     )
@@ -105,7 +120,7 @@ fn condition(input: CompleteStr) -> IResult<CompleteStr, Expression>{
     ).map(|result| {
         let tuple = result.1;
         let attribute = tuple.0.to_string();
-        let op = tuple.1.to_string();
+        let op = tuple.1;
         let value: Value = tuple.2;
 
         (
