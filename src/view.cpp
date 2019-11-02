@@ -391,7 +391,7 @@ void View::open_in_pager(const std::string& filename)
 	pop_current_formaction();
 }
 
-void View::open_in_browser(const std::string& url)
+int View::open_in_browser(const std::string& url)
 {
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
 	current_formaction = formaction_stack_size() - 1;
@@ -415,8 +415,9 @@ void View::open_in_browser(const std::string& url)
 		cmdline.append("'");
 	}
 	Stfl::reset();
-	utils::run_interactively(cmdline, "View::open_in_browser");
+	int ret = utils::run_interactively(cmdline, "View::open_in_browser");
 	pop_current_formaction();
+	return ret;
 }
 
 void View::update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds)
