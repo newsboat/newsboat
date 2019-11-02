@@ -13,9 +13,9 @@ pub enum Value {
 
 #[derive(Debug, Clone)]
 pub struct Condition {
-    attribute: String,
-    op: String,
-    value: Value
+    pub attribute: String,
+    pub op: String,
+    pub value: Value
 }
 
 #[derive(Debug, Clone)]
