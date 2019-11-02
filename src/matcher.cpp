@@ -16,6 +16,12 @@
 
 namespace newsboat {
 
+extern "C" {
+	void* rs_matcher_parse(const char *expr);
+	bool rs_matcher_matches(void *matcher, const void *matchable);
+	void rs_matcher_destroy(void *matcher);
+}
+
 Matchable::Matchable() {}
 Matchable::~Matchable() {}
 
@@ -25,6 +31,10 @@ Matcher::Matcher(const std::string& expr)
 	: exp(expr)
 {
 	parse(expr);
+}
+
+Matcher::~Matcher() {
+	rs_matcher_destroy(rs_matcher);
 }
 
 const std::string& Matcher::get_expression()
@@ -39,11 +49,8 @@ bool Matcher::parse(const std::string& expr)
 
 	errmsg = "";
 
-	bool b = p.parse_string(expr);
-
-	if (!b) {
-		errmsg = utils::wstr2str(p.get_error());
-	}
+	void *m = rs_matcher_parse(expr.c_str());
+	rs_matcher = m;
 
 	gettimeofday(&tv2, nullptr);
 	const uint64_t diff =
@@ -53,9 +60,9 @@ bool Matcher::parse(const std::string& expr)
 		"Matcher::parse: parsing `%s' took %" PRIu64 " µs (success = %d)",
 		expr,
 		diff,
-		b ? 1 : 0);
+		m != nullptr);
 
-	return b;
+	return m != nullptr;
 }
 
 bool Matcher::matches(Matchable* item)
@@ -79,7 +86,7 @@ bool Matcher::matches(Matchable* item)
 	bool retval = false;
 	if (item) {
 		ScopeMeasure m1("Matcher::matches");
-		retval = matches_r(p.get_root(), item);
+		retval = rs_matcher_matches(rs_matcher, item);
 	}
 	return retval;
 }

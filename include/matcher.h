@@ -10,6 +10,7 @@ class Matchable;
 class Matcher {
 public:
 	Matcher();
+	~Matcher();
 	explicit Matcher(const std::string& expr);
 	bool parse(const std::string& expr);
 	bool matches(Matchable* item);
@@ -17,6 +18,7 @@ public:
 	const std::string& get_expression();
 
 private:
+	void *rs_matcher;
 	bool matches_r(expression* e, Matchable* item);
 
 	bool matchop_lt(expression* e, Matchable* item);
