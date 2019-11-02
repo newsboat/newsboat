@@ -152,13 +152,15 @@ fn expression(input: CompleteStr) -> IResult<CompleteStr, Expression> {
     })
 }
 
-pub fn parse(input: &str) -> Result<Expression, Err<CompleteStr>> {
+pub fn parse(input: &str) -> Result<Expression, &str> {
     let result = do_parse!(CompleteStr(input),
         parse: alt!(expression | parens | condition) >>
         (parse)
     );
     match result {
         Ok(expr) => Ok(expr.1),
-        Err(result) => Err(result)
+        Err(result) => {
+            Err("Error parsing expression")
+        }
     }
 }

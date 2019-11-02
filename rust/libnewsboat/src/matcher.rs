@@ -6,10 +6,10 @@ struct Matcher {
 }
 
 impl Matcher {
-    fn parse(expr: &str) -> Matcher {
-        let expr = filterparser::parse(expr).unwrap();
-        Matcher {
+    pub fn parse(expr: &str) -> Result<Matcher, &str> {
+        let expr = filterparser::parse(expr)?;
+        Ok(Matcher {
             expr
-        }
+        })
     }
 }
