@@ -131,7 +131,9 @@ void ItemListFormAction::process_operation(Operation op,
 			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
-				if (v->open_in_browser(visible_items[itempos].first->link())) {
+				int err;
+				if ((err = v->open_in_browser(visible_items[itempos].first->link()))) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
 					break;
 				}
 				visible_items[itempos].first->set_unread(false);
