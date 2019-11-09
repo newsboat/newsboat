@@ -185,7 +185,11 @@ void ItemListFormAction::process_operation(Operation op,
 				"ItemListFormAction: opening all unread items "
 				"in "
 				"browser");
-			open_unread_items_in_browser(feed, false);
+			int err;
+			if ((err = open_unread_items_in_browser(feed, false))) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				break;
+			}
 		}
 	} break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK: {
@@ -194,7 +198,11 @@ void ItemListFormAction::process_operation(Operation op,
 				"ItemListFormAction: opening all unread items "
 				"in "
 				"browser and marking read");
-			open_unread_items_in_browser(feed, true);
+			int err;
+			if ((err = open_unread_items_in_browser(feed, true))) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				break;
+			}
 			invalidate_everything();
 		}
 	} break;

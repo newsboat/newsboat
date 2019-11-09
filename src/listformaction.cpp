@@ -49,7 +49,7 @@ void ListFormAction::process_operation(Operation op,
 	}
 }
 
-void ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
+int ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 	bool markread)
 {
 	int tabcount = 0;
@@ -57,7 +57,10 @@ void ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		if (tabcount <
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
-				v->open_in_browser(item->link());
+				int err;
+				if ((err = v->open_in_browser(item->link()))) {
+					return err;
+				}
 				tabcount += 1;
 				item->set_unread(!markread);
 			}
@@ -65,6 +68,7 @@ void ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 			break;
 		}
 	}
+	return 0;
 }
 
 } // namespace newsboat
