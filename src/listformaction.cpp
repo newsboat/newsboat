@@ -57,8 +57,7 @@ int ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		if (tabcount <
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
-				int err;
-				if ((err = v->open_in_browser(item->link()))) {
+				if (int err = v->open_in_browser(item->link())) {
 					return err;
 				}
 				tabcount += 1;
