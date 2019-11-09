@@ -132,7 +132,8 @@ void ItemListFormAction::process_operation(Operation op,
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				int err;
-				if ((err = v->open_in_browser(visible_items[itempos].first->link()))) {
+				auto link = visible_items[itempos].first->link();
+				if ((err = v->open_in_browser(link))) {
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
 					break;
 				}
@@ -166,7 +167,8 @@ void ItemListFormAction::process_operation(Operation op,
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
 				int err;
-				if ((err = v->open_in_browser(visible_items[itempos].first->link()))) {
+				auto link = visible_items[itempos].first->link();
+				if ((err = v->open_in_browser(link))) {
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
 					break;
 				}
