@@ -133,6 +133,37 @@ TEST_CASE(
 	REQUIRE(feed->unread_item_count() == 0);
 }
 
+TEST_CASE(
+	"OP_OPENBROWSER_AND_MARK does not mark read when browser fails",
+	"[ItemListFormAction]")
+{
+	Controller c;
+	newsboat::View v(&c);
+
+	std::string test_url = "http://test_url";
+
+	ConfigContainer cfg;
+	cfg.set_configvalue("browser", "false %u");
+
+	Cache rsscache(":memory:", &cfg);
+	FilterContainer filters;
+
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
+	item->set_link(test_url);
+	item->set_unread(true);
+	feed->add_item(item);
+
+	v.set_config_container(&cfg);
+	c.set_view(&v);
+
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg);
+	itemlist.set_feed(feed);
+	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
+
+	REQUIRE(feed->unread_item_count() == 1);
+}
+
 TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	"[ItemListFormAction]")
 {
