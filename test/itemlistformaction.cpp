@@ -20,7 +20,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	newsboat::View v(&c);
 	TestHelpers::TempFile pagerfile;
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
 	std::string test_author = "Article Author";
 	std::string test_description = "Article Description";
@@ -104,7 +104,7 @@ TEST_CASE(
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string line;
 
 	ConfigContainer cfg;
@@ -140,7 +140,7 @@ TEST_CASE(
 	Controller c;
 	newsboat::View v(&c);
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "false %u");
@@ -170,7 +170,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	Controller c;
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string line;
 
 	ConfigContainer cfg;
@@ -203,7 +203,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string line;
 	int itemCount = 6;
 
@@ -287,7 +287,7 @@ TEST_CASE(
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string line;
 	int itemCount = 6;
 
@@ -373,7 +373,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	FilterContainer filters;
 	TestHelpers::TempFile urlFile;
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
 	std::string test_author = "Article Author";
 	std::string test_description = "Article Description";
@@ -439,7 +439,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	std::string line;
 	std::vector<std::string> bookmark_args;
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
 	std::string feed_title = "Feed Title";
 	std::string separator = " ";
@@ -582,7 +582,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	std::vector<std::string> op_args;
 	op_args.push_back(saveFile.get_path());
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
 	std::string test_author = "Article Author";
 	std::string test_description = "Article Description";
@@ -787,7 +787,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	std::vector<std::string> op_args;
 	op_args.push_back("tee > " + articleFile.get_path());
 
-	std::string test_url = "http://test_url";
+	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
 	std::string test_author = "Article Author";
 	std::string test_description = "Article Description";
