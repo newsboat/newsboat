@@ -135,12 +135,15 @@ void ItemListFormAction::process_operation(Operation op,
 			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
+				auto link = visible_items[itempos].first->link();
+				if (int err = v->open_in_browser(link)) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+					break;
+				}
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(
 					visible_items[itempos].first->guid(),
 					true);
-				v->open_in_browser(
-					visible_items[itempos].first->link());
 				if (!cfg->get_configvalue_as_bool(
 						"openbrowser-and-mark-jumps-to-"
 						"next-unread")) {
@@ -167,8 +170,11 @@ void ItemListFormAction::process_operation(Operation op,
 			itemposname);
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
 			if (itempos < visible_items.size()) {
-				v->open_in_browser(
-					visible_items[itempos].first->link());
+				auto link = visible_items[itempos].first->link();
+				if (int err = v->open_in_browser(link)) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+					break;
+				}
 				invalidate(itempos);
 			}
 		} else {
@@ -183,7 +189,10 @@ void ItemListFormAction::process_operation(Operation op,
 				"ItemListFormAction: opening all unread items "
 				"in "
 				"browser");
-			open_unread_items_in_browser(feed, false);
+			if (int err = open_unread_items_in_browser(feed, false)) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				break;
+			}
 		}
 	}
 	break;
@@ -193,7 +202,10 @@ void ItemListFormAction::process_operation(Operation op,
 				"ItemListFormAction: opening all unread items "
 				"in "
 				"browser and marking read");
-			open_unread_items_in_browser(feed, true);
+			if (int err = open_unread_items_in_browser(feed, true)) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				break;
+			}
 			invalidate_everything();
 		}
 	}
