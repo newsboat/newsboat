@@ -940,7 +940,7 @@ mod tests {
         for _ in 0..10 {
             thread::sleep(time::Duration::from_millis(10));
 
-            if (filepath.exists()) {
+            if filepath.exists() {
                 break;
             }
         }
