@@ -17,7 +17,7 @@ public:
 
 extern "C" {
 bool matchable_has_attribute(const void *ptr, const char *attr);
-const char* matchable_get_attribute(const void *ptr, const char *attr);
+char* matchable_get_attribute(const void *ptr, const char *attr);
 }
 
 #endif /* NEWSBOAT_MATCHABLE_H_ */

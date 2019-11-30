@@ -19,6 +19,7 @@ pub struct Matcher {
 impl Matcher {
     pub fn parse(expr: &str) -> Result<Matcher, &str> {
         let expr = filterparser::parse(expr)?;
+        log!(Level::Debug, "expr: {:#?}", expr);
         Ok(Matcher {
             expr
         })
