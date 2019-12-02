@@ -27,7 +27,7 @@ pub enum Value {
 }
 
 #[derive(Debug, Clone)]
-pub struct Condition {
+pub struct Comparison {
     pub attribute: String,
     pub op: Operation,
     pub value: Value
@@ -37,7 +37,7 @@ pub struct Condition {
 pub enum Expression {
     And(Box<Expression>, Box<Expression>),
     Or(Box<Expression>, Box<Expression>),
-    Condition(Condition)
+    Comparison(Comparison)
 }
 
 named!(operators<CompleteStr, Operation>,
@@ -125,8 +125,8 @@ fn condition(input: CompleteStr) -> IResult<CompleteStr, Expression>{
 
         (
             result.0,
-            Expression::Condition(
-                Condition {
+            Expression::Comparison(
+                Comparison {
                     attribute, op, value
                 }
             )

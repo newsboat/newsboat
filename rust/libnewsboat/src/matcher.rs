@@ -1,6 +1,6 @@
 use filterparser;
 use filterparser::Operation;
-use filterparser::Condition;
+use filterparser::Comparison;
 use filterparser::Value;
 use filterparser::Expression;
 use filterparser::Expression::*;
@@ -87,13 +87,13 @@ impl Operation {
 
 fn evaluate_expression(expr: &Expression, item: &impl Matchable) -> bool {
     match expr {
-        Condition(cond) => check_condition(cond, item),
+        Comparison(cond) => check_comparison(cond, item),
         And(left, right) => evaluate_expression(left, item) && evaluate_expression(right, item),
         Or(left, right) => evaluate_expression(left, item) || evaluate_expression(right, item),
     }
 }
 
-fn check_condition(cond: &Condition, item: &impl Matchable) -> bool{
+fn check_comparison(cond: &Comparison, item: &impl Matchable) -> bool{
     if !item.has_attribute(&cond.attribute) {
         return false;
     }
