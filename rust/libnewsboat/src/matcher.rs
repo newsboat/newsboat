@@ -61,7 +61,7 @@ impl Operation {
             Operation::Between => match value {
                 Value::Range(a,b) => {
                     let i = attr.parse::<i32>().unwrap();
-                    i > *a && i < *b
+                    i >= *a && i <= *b
                 }
                 _ => false
             },
