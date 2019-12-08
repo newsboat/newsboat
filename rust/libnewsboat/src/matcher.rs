@@ -32,16 +32,16 @@ impl Matcher {
 impl Operation {
     fn apply(&self, attr: &str, value: &Value) -> bool {
         match self {
-            Operation::Equal => match value {
+            Operation::Equals => match value {
                 Value::Str(ref s) => attr == s,
                 _ => false
             },
-            Operation::NotEqual => !Operation::Equal.apply(attr, value),
-            Operation::RegEqual => match value {
+            Operation::NotEquals => !Operation::Equals.apply(attr, value),
+            Operation::RegEquals => match value {
                 Value::Str(ref s) => false, // TODO: Implement,
                 _ => false
             },
-            Operation::NotRegEqual => !Operation::RegEqual.apply(attr, value),
+            Operation::NotRegEquals => !Operation::RegEquals.apply(attr, value),
             Operation::LessThan => match value {
                 Value::Int(i) => attr.parse::<i32>().unwrap() < *i,
                 _ => false
@@ -50,11 +50,11 @@ impl Operation {
                 Value::Int(i) => attr.parse::<i32>().unwrap() > *i,
                 _ => false
             },
-            Operation::LessThanOrEqual => match value {
+            Operation::LessThanOrEquals => match value {
                 Value::Int(i) => attr.parse::<i32>().unwrap() <= *i,
                 _ => false
             },
-            Operation::GreaterThanOrEqual => match value {
+            Operation::GreaterThanOrEquals => match value {
                 Value::Int(i) => attr.parse::<i32>().unwrap() >= *i,
                 _ => false
             },

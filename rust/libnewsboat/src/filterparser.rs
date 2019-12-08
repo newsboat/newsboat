@@ -6,14 +6,14 @@ use nom::types::CompleteStr;
 
 #[derive(Debug, Clone)]
 pub enum Operation {
-    Equal,
-    NotEqual,
-    RegEqual,
-    NotRegEqual,
+    Equals,
+    NotEquals,
+    RegEquals,
+    NotRegEquals,
     LessThan,
     GreaterThan,
-    LessThanOrEqual,
-    GreaterThanOrEqual,
+    LessThanOrEquals,
+    GreaterThanOrEquals,
     Between,
     Contains,
     NotContains,
@@ -43,15 +43,15 @@ pub enum Expression {
 named!(operators<CompleteStr, Operation>,
     do_parse!(
         tag: alt!(
-            map!(tag!("=="), |_| Operation::Equal) |
-            map!(tag!("!="), |_| Operation::NotEqual) |
-            map!(tag!("=~"), |_| Operation::RegEqual) |
-            map!(tag!("=") , |_| Operation::Equal) |
-            map!(tag!("!~"), |_| Operation::NotRegEqual) |
+            map!(tag!("=="), |_| Operation::Equals) |
+            map!(tag!("!="), |_| Operation::NotEquals) |
+            map!(tag!("=~"), |_| Operation::RegEquals) |
+            map!(tag!("=") , |_| Operation::Equals) |
+            map!(tag!("!~"), |_| Operation::NotRegEquals) |
+            map!(tag!("<="), |_| Operation::LessThanOrEquals) |
+            map!(tag!(">="), |_| Operation::GreaterThanOrEquals) |
             map!(tag!("<") , |_| Operation::LessThan) |
             map!(tag!(">") , |_| Operation::GreaterThan) |
-            map!(tag!("<="), |_| Operation::LessThanOrEqual) |
-            map!(tag!(">="), |_| Operation::GreaterThanOrEqual) |
             map!(tag!("between"), |_| Operation::Between) |
             map!(tag!("#"), |_| Operation::Contains) |
             map!(tag!("!#"), |_| Operation::NotContains)
