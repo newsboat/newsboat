@@ -1,8 +1,20 @@
 Newsboat [![Travis CI Build Status](https://travis-ci.org/newsboat/newsboat.svg?branch=master)](https://travis-ci.org/newsboat/newsboat) [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/newsboat/newsboat.svg)](https://cirrus-ci.com/github/newsboat/newsboat) [![Coverage Status](https://coveralls.io/repos/github/newsboat/newsboat/badge.svg?branch=master)](https://coveralls.io/github/newsboat/newsboat?branch=master) [![Coverity Scan Build Status](https://scan.coverity.com/projects/15567/badge.svg)](https://scan.coverity.com/projects/newsboat-newsboat)
 ========
 
+<a href="https://newsboat.org">
+<img
+    src="https://newsboat.org/logo.svg"
+    alt="Newsboat logo"
+    align="left"
+    height="60"
+    width="60"
+    vspace="6" /></a>
+
 Newsboat is an RSS/Atom feed reader for the text console. It's an actively
 maintained fork of Newsbeuter.
+
+Logo [by noobilanderi](https://groups.google.com/forum/#!topic/newsboat/Xm5pTsbeMEk),
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Downloading
 -----------
