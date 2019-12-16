@@ -97,13 +97,13 @@ fn number(input: CompleteStr) -> IResult<CompleteStr, Value> {
 
 fn range(input: CompleteStr) -> IResult<CompleteStr, Value> {
     do_parse!(input,
-        low: number >>
+        a: number >>
         tag!(":") >>
-        high: number >>
-        (low, high)
+        b: number >>
+        (a, b)
     ).map(|result| {
-        if let (Value::Int(low), Value::Int(high)) = result.1 {
-            (result.0, Value::Range(low, high))
+        if let (Value::Int(a), Value::Int(b)) = result.1 {
+            (result.0, Value::Range(a, b))
         } else {
             panic!("This should not happen");
         }
