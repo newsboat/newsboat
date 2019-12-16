@@ -46,7 +46,7 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBOAT=newsboat
 NEWSBOAT_SOURCES:=$(shell cat mk/newsboat.deps)
 NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SOURCES))
-NEWSBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -lrsspp -ldl
+NEWSBOAT_LIBS=-lboat -lnewsboat -lboat -lfilter -lpthread -lrsspp -ldl
 
 RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
@@ -75,7 +75,7 @@ endif
 PODBOAT=podboat
 PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
 PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SOURCES))
-PODBOAT_LIBS=-lboat -lnewsboat -lpthread -ldl
+PODBOAT_LIBS=-lboat -lnewsboat -lboat -lpthread -ldl
 
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBOAT_LIBS+=-liconv -lintl
