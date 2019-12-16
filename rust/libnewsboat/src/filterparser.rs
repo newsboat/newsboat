@@ -83,7 +83,7 @@ fn number(input: CompleteStr) -> IResult<CompleteStr, Value> {
         num: recognize!(
             do_parse!(
                 opt!(tag!("-")) >>
-                digit >>
+                take_while1!(|c| is_digit(c as u8)) >>
                 ()
             )
         ) >> (num)
