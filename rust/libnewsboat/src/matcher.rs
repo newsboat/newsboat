@@ -102,3 +102,97 @@ fn check_comparison(cond: &Comparison, item: &impl Matchable) -> bool{
 
     cond.op.apply(attr, &cond.value)
 }
+
+mod tests {
+    use super::*;
+
+    struct MockMatchable{}
+    impl Matchable for MockMatchable {
+        fn has_attribute(&self, attr: &str) -> bool {
+            attr == "abcd" || attr == "AAAA" || attr == "tags"
+        }
+        fn get_attribute(&self, attr: &str) -> String {
+            match attr {
+                "abcd" => "xyz".to_string(),
+                "AAAA" => "12345".to_string(),
+                "tags" => "foo bar baz quux".to_string(),
+                _ => "".to_string()
+            }
+        }
+    }
+
+    fn parse_and_match(expr: &str) -> Result<bool, String> {
+        let m = Matcher::parse(expr)?.matches(MockMatchable{});
+        Ok(m)
+    }
+
+    #[test]
+    fn t_test_operators() {
+        assert!(parse_and_match("abcd = \"xyz\"").unwrap());
+        assert!(!parse_and_match("abcd = \"uiop\"").unwrap());
+
+        assert!(parse_and_match("abcd != \"uiop\"").unwrap());
+        assert!(!parse_and_match("abcd != \"xyz\"").unwrap());
+
+        assert!(parse_and_match("AAAA =~ \".\"").unwrap());
+        assert!(parse_and_match("AAAA =~ \"123\"").unwrap());
+        assert!(parse_and_match("AAAA =~ \"234\"").unwrap());
+        assert!(parse_and_match("AAAA =~ \"45\"").unwrap());
+        assert!(parse_and_match("AAAA =~ \"^12345$\"").unwrap());
+        assert!(parse_and_match("AAAA =~ \"^123456$\"").unwrap());
+    }
+
+    #[test]
+    fn t_test_undefined_fields() {
+        assert!(parse_and_match("BBBB =~ \"foo\"").is_err());
+        assert!(parse_and_match("BBBB # \"foo\"").is_err());
+        assert!(parse_and_match("BBBB < 0").is_err());
+        assert!(parse_and_match("BBBB > 0").is_err());
+        assert!(parse_and_match("BBBB between 1:23").is_err());
+    }
+
+    #[test]
+    fn t_test_invalid_regex() {
+        assert!(parse_and_match("AAAA =~ \"[[\"").is_err());
+        assert!(parse_and_match("AAAA !~ \"[[\"").is_err());
+    }
+
+    #[test]
+    fn t_test_regex_match() {
+        assert!(parse_and_match("AAAA !~ \".\"").unwrap());
+        assert!(parse_and_match("AAAA !~ \"123\"").unwrap());
+        assert!(parse_and_match("AAAA !~ \"234\"").unwrap());
+        assert!(parse_and_match("AAAA !~ \"45\"").unwrap());
+        assert!(parse_and_match("AAAA !~ \"^12345$\"").unwrap());
+    }
+
+    #[test]
+    fn t_test_contains() {
+        assert!(parse_and_match("tags # \"foo\"").unwrap());
+        assert!(parse_and_match("tags # \"baz\"").unwrap());
+        assert!(parse_and_match("tags # \"quux\"").unwrap());
+        assert!(!parse_and_match("tags # \"xyz\"").unwrap());
+        assert!(!parse_and_match("tags # \"foo bar\"").unwrap());
+        assert!(parse_and_match("tags # \"foo\" and tags # \"bar\"").unwrap());
+        assert!(!parse_and_match("tags # \"foo\" and tags # \"xyz\"").unwrap());
+        assert!(parse_and_match("tags # \"foo\" or tags # \"xyz\"").unwrap());
+
+        assert!(parse_and_match("tags !# \"nein\"").unwrap());
+        assert!(!parse_and_match("tags !# \"foo\"").unwrap());
+    }
+
+    #[test]
+    fn t_test_comparisons() {
+        assert!(parse_and_match("AAAA > 12344").unwrap());
+        assert!(!parse_and_match("AAAA > 12345").unwrap());
+        assert!(parse_and_match("AAAA >= 12345").unwrap());
+        assert!(!parse_and_match("AAAA < 12345").unwrap());
+        assert!(parse_and_match("AAAA <= 12345").unwrap());
+
+        assert!(parse_and_match("AAAA between 0:12345").unwrap());
+        assert!(parse_and_match("AAAA between 12345:12345").unwrap());
+        assert!(!parse_and_match("AAAA between 23:12344").unwrap());
+        assert!(!parse_and_match("AAAA between 0").unwrap());
+        assert!(parse_and_match("AAAA between 12346:12344").unwrap());
+    }
+}

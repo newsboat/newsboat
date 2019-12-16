@@ -179,3 +179,34 @@ pub fn parse(input: &str) -> Result<Expression, &str> {
         }
     }
 }
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn t_error_on_invalid_queries() {
+        assert!(parse("title =¯ \"foo\"").is_err());
+        assert!(parse("a = \"b").is_err());
+        assert!(parse("a = b").is_err());
+        //assert!(parse("((a=\"b\")))").is_err());
+        assert!(parse("a !! \"b\"").is_err());
+    }
+
+    #[test]
+    fn t_ok_on_valid_queries() {
+        assert!(parse("a = \"b\"").is_ok());
+        assert!(parse("(a=\"b\")").is_ok());
+        assert!(parse("((a=\"b\"))").is_ok());
+
+        assert!(parse("a != \"b\"").is_ok());
+        assert!(parse("a =~ \"b\"").is_ok());
+        assert!(parse("a !~ \"b\"").is_ok());
+
+        assert!(parse(
+            "( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""
+        ).is_ok());
+
+        assert!(parse("a = \"abc\"").is_ok());
+        assert!(parse("a == \"abc\"").is_ok());
+    }
+}
