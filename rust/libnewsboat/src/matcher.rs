@@ -60,8 +60,10 @@ impl Operation {
             },
             Operation::Between => match value {
                 Value::Range(a,b) => {
+                    let low = std::cmp::min(*a, *b);
+                    let high = std::cmp::max(*a,*b);
                     let i = attr.parse::<i32>().unwrap();
-                    i >= *a && i <= *b
+                    i >= low && i <= high
                 }
                 _ => false
             },
