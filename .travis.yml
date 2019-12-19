@@ -274,7 +274,8 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-9
-    - compiler: clang-8
+    - name: "Test Coverage"
+      compiler: clang-8
       os: linux
       dist: bionic
       rust: nightly
@@ -295,7 +296,8 @@ matrix:
           # Can't have these in the `env` section above, because these settings break `cargo install`
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
-    - addons:
+    - name: "i18nspector"
+      addons:
         apt:
           packages:
             - i18nspector
