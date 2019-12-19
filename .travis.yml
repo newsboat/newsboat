@@ -22,9 +22,6 @@ addons:
     - *global_deps
     - g++ # required for some niceties in C++ standard library
 
-install_coveralls_commands: &install_coveralls
-  - pip install --user cpp-coveralls
-
 newsboat_brew_commands: &osx_deps
   - brew update
   - brew install gcc || brew link --overwrite gcc
@@ -36,12 +33,6 @@ newsboat_brew_commands: &osx_deps
   - brew outdated "json-c" || brew upgrade "json-c"
   - brew install "asciidoc"
   - brew install "docbook-xsl"
-  - brew unlink python@2
-  - brew outdated "python" || brew upgrade "python"
-  - brew install "pyenv" || brew upgrade "pyenv"
-  - eval "$(pyenv init -)"
-  - pip3 install cpp-coveralls
-  - pyenv rehash
 
 env:
   - CXXFLAGS='-fstack-clash-protection -D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2'
@@ -54,7 +45,6 @@ matrix:
       rust: 1.26.0
       env:
         - COMPILER=g++
-        - GCOV=/usr/bin/gcov
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
@@ -64,7 +54,6 @@ matrix:
       os: osx
       env:
         - COMPILER=g++
-        - GCOV=/usr/bin/gcov
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
@@ -74,7 +63,6 @@ matrix:
       os: osx
       env:
         - COMPILER=clang++
-        - GCOV=/usr/bin/gcov
         # a2x will run xmllint on generated files, so we have to pass the path
         # to AsciiDoc's catalog files
         - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
@@ -92,7 +80,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-8
-        - GCOV=/usr/bin/gcov-8
       script: &release_build_script
         - CXXFLAGS="$CXXFLAGS -Wnull-dereference -Wdouble-promotion -O3" make -j2 --keep-going all test
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
@@ -109,7 +96,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-8
-        - GCOV="llvm-cov-8 gcov"
       script: *release_build_script
     - compiler: gcc-4.9
       os: linux
@@ -124,9 +110,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-4.9
-        - GCOV=/usr/bin/gcov-4.9
-      before_install:
-        *install_coveralls
     - compiler: gcc-4.9
       os: linux
       dist: xenial
@@ -139,9 +122,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-4.9
-        - GCOV=/usr/bin/gcov-4.9
-      before_install:
-        *install_coveralls
     - compiler: gcc-5
       os: linux
       dist: bionic
@@ -154,9 +134,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-5
-        - GCOV=/usr/bin/gcov-5
-      before_install:
-        *install_coveralls
     - compiler: gcc-6
       os: linux
       dist: bionic
@@ -169,9 +146,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-6
-        - GCOV=/usr/bin/gcov-6
-      before_install:
-        *install_coveralls
     - compiler: gcc-7
       os: linux
       dist: bionic
@@ -184,9 +158,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-7
-        - GCOV=/usr/bin/gcov-7
-      before_install:
-        *install_coveralls
     - compiler: gcc-8
       os: linux
       dist: bionic
@@ -199,9 +170,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-8
-        - GCOV=/usr/bin/gcov-8
-      before_install:
-        *install_coveralls
     - compiler: gcc-9
       os: linux
       dist: bionic
@@ -214,9 +182,6 @@ matrix:
             - *global_deps
       env:
         - COMPILER=g++-9
-        - GCOV=/usr/bin/gcov-9
-      before_install:
-        *install_coveralls
     - compiler: clang
       os: linux
       dist: bionic
@@ -228,9 +193,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++
-        - GCOV="llvm-cov gcov"
-      before_install:
-        *install_coveralls
     - compiler: clang-4.0
       os: linux
       dist: xenial
@@ -245,9 +207,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-4.0
-        - GCOV="llvm-cov-4.0 gcov"
-      before_install:
-        *install_coveralls
     - compiler: clang-5.0
       os: linux
       dist: bionic
@@ -261,9 +220,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-5.0
-        - GCOV="llvm-cov-5.0 gcov"
-      before_install:
-        *install_coveralls
     - compiler: clang-6.0
       os: linux
       dist: bionic
@@ -277,9 +233,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-6.0
-        - GCOV="llvm-cov-6.0 gcov"
-      before_install:
-        *install_coveralls
     - compiler: clang-7
       os: linux
       dist: bionic
@@ -293,9 +246,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-7
-        - GCOV="llvm-cov-7 gcov"
-      before_install:
-        *install_coveralls
     - compiler: clang-8
       os: linux
       dist: bionic
@@ -309,9 +259,6 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-8
-        - GCOV="llvm-cov-8 gcov"
-      before_install:
-        *install_coveralls
     - compiler: clang-9
       os: linux
       dist: bionic
@@ -327,9 +274,27 @@ matrix:
             - *clang_deps
       env:
         - COMPILER=clang++-9
-        - GCOV="llvm-cov-9 gcov"
+    - compiler: clang-8
+      os: linux
+      dist: bionic
+      rust: nightly
+      addons:
+        apt:
+          sources:
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
+          packages:
+            - clang-8
+            - llvm-8
+            - *clang_deps
+      env:
+        - COMPILER=clang++-8
+        - REPORT_COVERAGE=yes
       before_install:
-        *install_coveralls
+        - cargo install grcov
+
+          # Can't have these in the `env` section above, because these settings break `cargo install`
+        - export CARGO_INCREMENTAL=0
+        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
     - addons:
         apt:
           packages:
@@ -356,4 +321,4 @@ script:
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
-  - if [ -z "$CHECKS" ]; then   ./submit-to-coveralls.sh   ; fi
+  - if [ -n "${REPORT_COVERAGE}" ]; then   ./submit-to-coveralls.sh   ; fi
