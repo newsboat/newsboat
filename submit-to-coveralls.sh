@@ -17,6 +17,13 @@ else
     branch="${TRAVIS_BRANCH}"
 fi
 
+if [ "${TRAVIS_PULL_REQUEST}" = "false" ]
+then
+    service_pull_request=""
+else
+    service_pull_request="--service-pull-request ${TRAVIS_PULL_REQUEST}"
+fi
+
 ${HOME}/.cargo/bin/grcov \
     . \
     --service-name "travis-ci" \
@@ -25,6 +32,7 @@ ${HOME}/.cargo/bin/grcov \
     --token "${COVERALLS_REPO_TOKEN}" \
     --commit-sha "${TRAVIS_COMMIT}" \
     --vcs-branch "${branch}" \
+    ${service_pull_request} \
     --ignore-not-existing \
     --ignore='/*' \
     --ignore='3rd-party/*' \
