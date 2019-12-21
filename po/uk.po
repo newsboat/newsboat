@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-12-21 13:04+0300\n"
-"PO-Revision-Date: 2018-08-01 22:39+0300\n"
+"PO-Revision-Date: 2019-12-21 13:12+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,6 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: newsboat.cpp:29
 #, c-format
@@ -132,19 +133,19 @@ msgstr ""
 "https://github.com/nlohmann/json"
 
 #: newsboat.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr "Впіймали newsboat::dbexception із повідомленням: %s"
+msgstr "Впіймали newsboat::DbException із повідомленням: %s"
 
 #: newsboat.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr "Впіймали newsboat::matcherexception із повідомленням: %s"
+msgstr "Впіймали newsboat::MatcherException із повідомленням: %s"
 
 #: newsboat.cpp:218 podboat.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr "Впіймали newsboat::exception із повідомленням: %s"
+msgstr "Впіймали newsboat::Exception із повідомленням: %s"
 
 #: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:198
 #: src/regexmanager.cpp:214 src/regexmanager.cpp:296 src/regexmanager.cpp:308
@@ -155,7 +156,7 @@ msgstr "`%s' недійсний колір"
 #: src/colormanager.cpp:65 src/regexmanager.cpp:232 src/regexmanager.cpp:323
 #, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "атрибут `%s' не доступний."
+msgstr "атрибут `%s' не доступний"
 
 #: src/colormanager.cpp:82
 #, c-format
@@ -186,9 +187,8 @@ msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Відкрити Файл&Зберегти Файл? - %f"
 
 #: src/configcontainer.cpp:279
-#, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
-msgstr "%N %V - %?O?Відкрити Файл&Зберегти Файл? - %f"
+msgstr "%N %V - %?O?Відкрити директорію&Зберегти файл? - %f"
 
 #: src/configcontainer.cpp:283
 msgid "%N %V - Help"
@@ -231,11 +231,11 @@ msgstr "невірне значення налаштунку %s"
 
 #: src/confighandlerexception.cpp:16
 msgid "invalid parameters."
-msgstr "Параметри невірні."
+msgstr "параметри невірні."
 
 #: src/confighandlerexception.cpp:18
 msgid "too few parameters."
-msgstr "замало параметрів"
+msgstr "замало параметрів."
 
 #: src/confighandlerexception.cpp:20
 msgid "unknown command (bug)."
@@ -393,12 +393,12 @@ msgstr "невдало: "
 #: src/controller.cpp:536
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Помилка: не можу позначити всі теми як прочитані: %s "
+msgstr "Помилка: не вдалось позначити всі теми як прочитані: %s"
 
 #: src/controller.cpp:632
 #, c-format
 msgid "An error occurred while parsing %s."
-msgstr "Виникла помилка при парсуванні %s"
+msgstr "Виникла помилка при розборі %s."
 
 #: src/controller.cpp:638
 #, c-format
@@ -443,7 +443,7 @@ msgstr "Не вибрано нічого!"
 
 #: src/dialogsformaction.cpp:98
 msgid "Error: you can't remove the feed list!"
-msgstr "Помилка: ви не можете видаляти список тем"
+msgstr "Помилка: не можна видаляти список тем!"
 
 #: src/dialogsformaction.cpp:126 src/feedlistformaction.cpp:977
 #: src/itemlistformaction.cpp:1261 src/urlviewformaction.cpp:151
@@ -452,12 +452,12 @@ msgstr "Непрацездатна позиція!"
 
 #: src/dirbrowserformaction.cpp:240
 msgid "Directory: "
-msgstr ""
+msgstr "Директорія: "
 
 #: src/dirbrowserformaction.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Save Files - %s"
-msgstr "%s %s - Зберегти файл - %s"
+msgstr "%s %s - Зберегти файли - %s"
 
 #: src/dirbrowserformaction.cpp:272 src/filebrowserformaction.cpp:264
 #: src/pbview.cpp:349 src/selectformaction.cpp:196 src/selectformaction.cpp:200
@@ -470,9 +470,9 @@ msgid "Save"
 msgstr "Зберегти"
 
 #: src/dirbrowserformaction.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Save Files - %s"
-msgstr "Зберегти Файл - %s"
+msgstr "Зберегти файли - %s"
 
 #: src/download.cpp:65
 msgid "queued"
@@ -525,11 +525,11 @@ msgstr "Люди, котрих ви читаєте"
 #: src/feedhqurlreader.cpp:54 src/inoreaderurlreader.cpp:54
 #: src/oldreaderurlreader.cpp:55
 msgid "Starred items"
-msgstr "Відмічені статті."
+msgstr "Відмічені статті"
 
 #: src/feedhqurlreader.cpp:55 src/oldreaderurlreader.cpp:56
 msgid "Shared items"
-msgstr "Загальні статті."
+msgstr "Розшарені статті"
 
 #: src/feedlistformaction.cpp:121 src/feedlistformaction.cpp:134
 #: src/feedlistformaction.cpp:260 src/feedlistformaction.cpp:277
@@ -610,7 +610,7 @@ msgstr "Фільтр: "
 
 #: src/feedlistformaction.cpp:504 src/view.cpp:225
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Ви впевнені, що хочете вийти (y:Так n:Ні)?"
+msgstr "Ви впевнені, що хочете вийти (y:Так n:Ні)? "
 
 #: src/feedlistformaction.cpp:505 src/filebrowserformaction.cpp:139
 #: src/itemlistformaction.cpp:1464 src/view.cpp:227
@@ -692,7 +692,7 @@ msgstr "Список Тем - %u непрочитано, загалом - %u"
 #: src/filebrowserformaction.cpp:134
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Ви впевнені, що хочете перезаписати `%s' (y:Так n:Ні)?"
+msgstr "Ви впевнені, що хочете перезаписати `%s' (y:Так n:Ні)? "
 
 #: src/filebrowserformaction.cpp:139
 msgid "n"
@@ -781,11 +781,11 @@ msgstr ""
 
 #: src/helpformaction.cpp:193
 msgid "Generic bindings:"
-msgstr "Загальні клавіші"
+msgstr "Загальні клавіші:"
 
 #: src/helpformaction.cpp:201
 msgid "Unbound functions:"
-msgstr "Незастосовані функції"
+msgstr "Незастосовані функції:"
 
 #: src/helpformaction.cpp:224
 msgid "Clear"
@@ -831,7 +831,7 @@ msgstr "Збережені веб-сторінки"
 #: src/itemlistformaction.cpp:193 src/itemlistformaction.cpp:206
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Браузер повернув код помилки %i"
 
 #: src/itemlistformaction.cpp:218 src/itemviewformaction.cpp:355
 msgid "Toggling read flag for article..."
@@ -857,7 +857,7 @@ msgstr "Помилка: нічого не вибрано!"
 
 #: src/itemlistformaction.cpp:416
 msgid "Error: you can't reload search results."
-msgstr "Помилка: ви не можете перезавантажувати результати пошуку"
+msgstr "Помилка: не можна перезавантажувати результати пошуку."
 
 #: src/itemlistformaction.cpp:437 src/itemlistformaction.cpp:446
 #: src/itemlistformaction.cpp:470 src/itemviewformaction.cpp:308
@@ -892,22 +892,20 @@ msgstr "Пайпувати статтю до каманди: "
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
 #: src/itemlistformaction.cpp:679 src/itemlistformaction.cpp:717
-#, fuzzy
 msgid "dtfalgr"
-msgstr "dtfalg"
+msgstr "dtfalgr"
 
 #: src/itemlistformaction.cpp:681
-#, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
-"Сортувати за (d)датою/(t)назвою/(f)флагами/(a)автором/(l)посиланням/(g)uid?"
+"Сортувати за (d)датою/(t)назвою/(f)флагами/(a)автором/(l)посиланням/(g)uid/"
+"(r)випадково?"
 
 #: src/itemlistformaction.cpp:719
-#, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Сортувати реверсно за (d)датою/(t)назвою/(f)флагами/(a)автором/(l)посиланням/"
-"(g)uid?"
+"(g)uid/(r)випадково?"
 
 #: src/itemlistformaction.cpp:845 src/itemviewformaction.cpp:507
 msgid "Flags updated."
@@ -951,11 +949,11 @@ msgstr "Список Статей - %s"
 #: src/itemlistformaction.cpp:1466
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr ""
+msgstr "Перезаписати `%s' в `%s'? (y:Так n:Ні)"
 
 #: src/itemlistformaction.cpp:1518
 msgid "yanq"
-msgstr ""
+msgstr "yanq"
 
 #: src/itemlistformaction.cpp:1540
 #, c-format
@@ -963,6 +961,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Перезаписати `%s' в `%s'? Залишилось таких конфліктів: %d (y:Так a:"
+"Перезаписати усі n:Ні q:Не перезаписувати нічого)"
 
 #: src/itemlistformaction.cpp:1547
 #, c-format
@@ -970,6 +970,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Перезаписати `%s' в `%s'? Більше таких конфліктів немає (y:Так a:"
+"Перезаписати усі n:Ні q:Не перезаписувати нічого)"
 
 #: src/itemrenderer.cpp:50
 msgid "Feed: "
@@ -1097,9 +1099,8 @@ msgid "Save article"
 msgstr "Зберегти статтю"
 
 #: src/keymap.cpp:73
-#, fuzzy
 msgid "Save articles"
-msgstr "Зберегти статтю"
+msgstr "Зберегти статті"
 
 #: src/keymap.cpp:78
 msgid "Go to next article"
@@ -1455,7 +1456,7 @@ msgstr "Черга (%u активних завантажень, всього %u)
 
 #: src/pbview.cpp:131
 msgid "Error: can't quit: download(s) in progress."
-msgstr "Помилка: неможливо вийти: активне(і) завантаження"
+msgstr "Помилка: неможливо вийти: активне(і) завантаження."
 
 #: src/pbview.cpp:175
 msgid "Error: download needs to be finished before the file can be played."
@@ -1497,6 +1498,9 @@ msgid ""
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
+"ПОПЕРЕДЖЕННЯ: У %s знайдено коментарі. При завершенні Podboat перезаписує "
+"файл черги, стираючи коментарі. Натисніть Enter, щоб продовжити, чи Ctrl+C "
+"для відміни"
 
 #: src/regexmanager.cpp:175
 #, c-format
@@ -1566,7 +1570,7 @@ msgstr "Зберегти закладку"
 
 #: src/urlviewformaction.cpp:162
 msgid "URLs"
-msgstr "URLs: "
+msgstr "URLs"
 
 #: src/view.cpp:493 src/view.cpp:519
 msgid "Error: feed contains no items!"
@@ -1621,9 +1625,8 @@ msgstr "не знайдено каналу RSS"
 msgid "unsupported feed format"
 msgstr "формат теми не підтримується"
 
-#, fuzzy
 msgid "%s: %s: invalid loglevel value"
-msgstr "%s: %d: неправильний рівень логування"
+msgstr "%s: %s: неправильний рівень логування"
 
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
@@ -1634,18 +1637,10 @@ msgstr ""
 "UID %u!"
 
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr ""
+msgstr "Переношу конфіги і дані з XDG-директорій Newsbeuter..."
 
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr ""
+msgstr "Переношу конфіги і дані з ~/.newsbeuter/..."
 
-#, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
-msgstr "Помилка: при відкритті файлу кеша `%s' виникла %s"
-
-#~ msgid ""
-#~ "It bundles an alphanum algorithm implementation licensed under the MIT "
-#~ "license: http://www.davekoelle.com/alphanum.html"
-#~ msgstr ""
-#~ "Програма включає в себе реалізацію алгоритму alphanum за ліцензією MIT: "
-#~ "http://www.davekoelle.com/alphanum.html"
+msgstr "Міграція відмінена: mkdir для `%s' повернув помилку: %s"

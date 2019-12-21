@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-12-21 13:04+0300\n"
-"PO-Revision-Date: 2019-08-18 15:34+0300\n"
+"PO-Revision-Date: 2019-12-21 13:11+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,9 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Russian\n"
-"X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: newsboat.cpp:29
 #, c-format
@@ -135,19 +134,19 @@ msgstr ""
 "MIT: https://github.com/nlohmann/json"
 
 #: newsboat.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr "Поймали newsboat::dbexception с сообщением: %s"
+msgstr "Поймали newsboat::DbException с сообщением: %s"
 
 #: newsboat.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr "Поймали newsboat::matcherexception с сообщением: %s"
+msgstr "Поймали newsboat::MatcherException с сообщением: %s"
 
 #: newsboat.cpp:218 podboat.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr "Поймали newsboat::exception с сообщением: %s"
+msgstr "Поймали newsboat::Exception с сообщением: %s"
 
 #: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:198
 #: src/regexmanager.cpp:214 src/regexmanager.cpp:296 src/regexmanager.cpp:308
@@ -189,9 +188,8 @@ msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Открыть файл&Сохранить файл? - %f"
 
 #: src/configcontainer.cpp:279
-#, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
-msgstr "%N %V - %?O?Открыть файл&Сохранить файл? - %f"
+msgstr "%N %V - %?O?Открыть директорию&Сохранить файл? - %f"
 
 #: src/configcontainer.cpp:283
 msgid "%N %V - Help"
@@ -454,12 +452,12 @@ msgstr "Неверная позиция!"
 
 #: src/dirbrowserformaction.cpp:240
 msgid "Directory: "
-msgstr ""
+msgstr "Директория: "
 
 #: src/dirbrowserformaction.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s - Save Files - %s"
-msgstr "%s %s - Сохранить файл - %s"
+msgstr "%s %s - Сохранить файлы - %s"
 
 #: src/dirbrowserformaction.cpp:272 src/filebrowserformaction.cpp:264
 #: src/pbview.cpp:349 src/selectformaction.cpp:196 src/selectformaction.cpp:200
@@ -472,9 +470,9 @@ msgid "Save"
 msgstr "Сохранить"
 
 #: src/dirbrowserformaction.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Save Files - %s"
-msgstr "Сохранить файл - %s"
+msgstr "Сохранить файлы - %s"
 
 #: src/download.cpp:65
 msgid "queued"
@@ -811,7 +809,7 @@ msgstr "ссылка"
 
 #: src/htmlrenderer.cpp:841
 msgid "embedded flash"
-msgstr "встроенный flash:"
+msgstr "встроенный flash"
 
 #: src/htmlrenderer.cpp:843
 msgid "unknown (bug)"
@@ -833,7 +831,7 @@ msgstr "Сохранённые веб-страницы"
 #: src/itemlistformaction.cpp:193 src/itemlistformaction.cpp:206
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Браузер вернул код ошибки %i"
 
 #: src/itemlistformaction.cpp:218 src/itemviewformaction.cpp:355
 msgid "Toggling read flag for article..."
@@ -894,23 +892,20 @@ msgstr "Обработать заметку командой: "
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
 #: src/itemlistformaction.cpp:679 src/itemlistformaction.cpp:717
-#, fuzzy
 msgid "dtfalgr"
-msgstr "dtfalg"
+msgstr "dtfalgr"
 
 #: src/itemlistformaction.cpp:681
-#, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Сортировать по дате (d)/заголовку (t)/флагам (f)/автору (a)/ссылке (l)/"
-"(g)uid?"
+"(g)uid/(r)случайно?"
 
 #: src/itemlistformaction.cpp:719
-#, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Сортировать в обратном порядке по дате (d)/заголовку (t)/флагам (f)/автору "
-"(a)/ссылке (l)/(g)uid?"
+"(a)/ссылке (l)/(g)uid/(r)случайно?"
 
 #: src/itemlistformaction.cpp:845 src/itemviewformaction.cpp:507
 msgid "Flags updated."
@@ -954,11 +949,11 @@ msgstr "Список заметок - %s"
 #: src/itemlistformaction.cpp:1466
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr ""
+msgstr "Перезаписать `%s' в `%s'? (y:Да n:Нет)"
 
 #: src/itemlistformaction.cpp:1518
 msgid "yanq"
-msgstr ""
+msgstr "yanq"
 
 #: src/itemlistformaction.cpp:1540
 #, c-format
@@ -966,6 +961,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Перезаписать `%s' в `%s'? Осталось таких конфликтов: %d (y:Да a:Да для всех "
+"n:Нет q:Нет для всех)"
 
 #: src/itemlistformaction.cpp:1547
 #, c-format
@@ -973,6 +970,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Перезаписать `%s' в `%s'? Больше таких конфликтов не осталось (y:Да a:Да для "
+"всех n:Нет q:Нет для всех)"
 
 #: src/itemrenderer.cpp:50
 msgid "Feed: "
@@ -1100,9 +1099,8 @@ msgid "Save article"
 msgstr "Сохранить заметку"
 
 #: src/keymap.cpp:73
-#, fuzzy
 msgid "Save articles"
-msgstr "Сохранить заметку"
+msgstr "Сохранить заметки"
 
 #: src/keymap.cpp:78
 msgid "Go to next article"
@@ -1500,6 +1498,9 @@ msgid ""
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
+"ПРЕДУПРЕЖДЕНИЕ: В %s обнаружены комментарии. При закрытии Podboat "
+"пересоздаёт файл очереди, и комментарии будут утеряны. Нажмите Enter для "
+"продолжения, или Ctrl+C для отмены"
 
 #: src/regexmanager.cpp:175
 #, c-format
@@ -1624,9 +1625,8 @@ msgstr "RSS-лента не найдена"
 msgid "unsupported feed format"
 msgstr "неизвестный тип ленты"
 
-#, fuzzy
 msgid "%s: %s: invalid loglevel value"
-msgstr "%s: %d: некорректный уровень логирования"
+msgstr "%s: %s: некорректный уровень логирования"
 
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
@@ -1637,18 +1637,10 @@ msgstr ""
 "подходящего пользователя для UID %u!"
 
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr ""
+msgstr "Переношу конфиги и данные из XDG-директорий Newsbeuter..."
 
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr ""
+msgstr "Переношу конфиги и данные из ~/.newsbeuter/..."
 
-#, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
-msgstr "Ошибка: попытка открыть файл кэша `%s' завершилась неудачей: %s"
-
-#~ msgid ""
-#~ "It bundles an alphanum algorithm implementation licensed under the MIT "
-#~ "license: http://www.davekoelle.com/alphanum.html"
-#~ msgstr ""
-#~ "Программа включает в себя реализацию алгоритма alphanum под лицензией "
-#~ "MIT: http://www.davekoelle.com/alphanum.html"
+msgstr "Отменяю миграцию, потому что mkdir для `%s' вернула ошибку: %s"
