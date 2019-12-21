@@ -85,7 +85,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 								_("WARNING: Comment found "
 									"in %s. The queue file is regenerated "
 									"when podboat exits and comments will "
-									"be deleted. Press enter to continue or "
+									"be deleted. Press Enter to continue or "
 									"Ctrl+C to abort"),
 								queuefile)
 							<< std::endl;

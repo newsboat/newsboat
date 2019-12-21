@@ -1463,7 +1463,7 @@ void ItemListFormAction::handle_op_saveall()
 		if (::stat(fpath.c_str(), &sbuf) != -1) {
 			std::string input_options = _("yn");
 			char c = v->confirm(strprintf::fmt(
-						_("Overwrite `%s' in `%s?' "
+						_("Overwrite `%s' in `%s'? "
 							"(y:Yes n:No)"),
 						filename, directory),
 					input_options);
