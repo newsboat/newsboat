@@ -187,7 +187,7 @@ impl ConfigPaths {
         if !self.silent {
             eprintln!(
                 "{}",
-                &gettext("Migrating configs and data from Newsbeuter's dotdir...")
+                &gettext("Migrating configs and data from ~/.newsbeuter/...")
             );
         }
 
