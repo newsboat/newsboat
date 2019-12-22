@@ -1,14 +1,31 @@
 # Changes for Newsboat
 
 
-## Unreleased - expected 2019-12-22
+## 2.18 - 2019-12-22
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Simon Schuster, and seanBE.
 
 ### Added
+- Logo by noobilanderi
+
 ### Changed
-### Deprecated
-### Removed
+- `open-in-browser-and-mark-read` no longer marks item read if browser returned
+    a non-zero exit code. Similarly, `open-all-unread-in-browser` and
+    `open-all-unread-in-browser-and-mark-read` abort on non-zero exit code
+    (Marco Sirabella)
+- Update vendored version of Catch3 to 2.11.0
+- Update vendored version of nlohmann/json to 3.7.3
+- Update translations: German (Lysander Trischler), Russian, Ukrainian
+    (Alexander Batischev)
+
 ### Fixed
+- `unbind-key -a` breaking cmdline, search and goto-url (#454) (kmws)
+- Flaky `run_command()` test (Alexander Batischev)
+
 ### Security
+- smallvec crate bumped to 0.6.10, to get fixes for RUSTSEC-2019-0009 and
+    RUSTSEC-2019-0012
 
 
 
