@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2019-12-21 13:04+0300\n"
-"PO-Revision-Date: 2019-09-28 21:27+0200\n"
+"PO-Revision-Date: 2019-12-22 10:40+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -832,7 +832,7 @@ msgstr "gespeicherte Webseiten"
 #: src/itemlistformaction.cpp:193 src/itemlistformaction.cpp:206
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Browser brach mit Rückgabestatus %i ab"
 
 #: src/itemlistformaction.cpp:218 src/itemviewformaction.cpp:355
 msgid "Toggling read flag for article..."
@@ -947,7 +947,7 @@ msgid "Article List - %s"
 msgstr "Artikelliste - %s"
 
 #: src/itemlistformaction.cpp:1466
-#, fuzzy, c-format
+#, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
 msgstr "„%s“ in „%s“ überschreiben (j:Ja n:Nein)"
 
@@ -1497,7 +1497,7 @@ msgid "Mark as Finished"
 msgstr "als fertig markieren"
 
 #: src/queueloader.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
@@ -1645,7 +1645,6 @@ msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
 "Migriere Konfigurationen und Daten aus Newsbeuters XDG-Verzeichnissen..."
 
-#, fuzzy
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr "Migriere Konfigurationen und Daten aus „~/.newsbeuter/“..."
 
