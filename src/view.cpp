@@ -532,7 +532,9 @@ void View::push_itemlist(unsigned int pos)
 		std::shared_ptr<ItemListFormAction> itemlist =
 			std::dynamic_pointer_cast<ItemListFormAction,
 			FormAction>(get_current_formaction());
-		itemlist->set_pos(pos);
+		if (itemlist) {
+			itemlist->set_pos(pos);
+		}
 	}
 }
 
