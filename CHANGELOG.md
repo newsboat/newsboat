@@ -1,5 +1,15 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2020-03-21
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
 
 ## 2.18 - 2019-12-22
 
@@ -14,7 +24,7 @@ acknowledge contributions from the following people: Simon Schuster, and seanBE.
     a non-zero exit code. Similarly, `open-all-unread-in-browser` and
     `open-all-unread-in-browser-and-mark-read` abort on non-zero exit code
     (Marco Sirabella)
-- Update vendored version of Catch3 to 2.11.0
+- Update vendored version of Catch2 to 2.11.0
 - Update vendored version of nlohmann/json to 3.7.3
 - Update translations: German (Lysander Trischler), Russian, Ukrainian
     (Alexander Batischev)
