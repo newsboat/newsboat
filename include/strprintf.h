@@ -65,13 +65,15 @@ std::string fmt(const std::string& format, const std::nullptr_t argument,
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const double argument, Args... args)
+std::string fmt(const std::string& format, const float argument, Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	// Variadic functions (like snprintf) do not accept `float`, so let's
+	// convert that.
+	return fmt_impl(format, static_cast<double>(argument), args...);
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const float argument, Args... args)
+std::string fmt(const std::string& format, const double argument, Args... args)
 {
 	return fmt_impl(format, argument, args...);
 }

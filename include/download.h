@@ -53,8 +53,8 @@ private:
 	std::string fn;
 	std::string url_;
 	DlStatus download_status;
-	float cursize;
-	float totalsize;
+	double cursize;
+	double totalsize;
 	double curkbps;
 	unsigned long offs;
 	PbController* ctrl;

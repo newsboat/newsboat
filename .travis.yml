@@ -93,7 +93,7 @@ matrix:
         - COMPILER=g++-8
         - GCOV=/usr/bin/gcov-8
       script: &release_build_script
-        - CXXFLAGS="$CXXFLAGS -Wnull-dereference -O3" make -j2 --keep-going all test
+        - CXXFLAGS="$CXXFLAGS -Wnull-dereference -Wdouble-promotion -O3" make -j2 --keep-going all test
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
     - compiler: clang-8
       os: linux
