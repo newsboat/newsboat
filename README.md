@@ -56,9 +56,6 @@ Newsboat can be compiled.
     UPDATE doc/newsboat.txt IF YOU CHANGE THIS LIST
 -->
 
-Developers will also need [`xtr`](https://github.com/woboq/tr) (can be installed
-with `cargo install xtr`).
-
 Developers will also need:
 
 - [`xtr`](https://github.com/woboq/tr) (can be installed with `cargo install
