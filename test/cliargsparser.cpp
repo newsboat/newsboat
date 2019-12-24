@@ -60,6 +60,33 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("Resolves tilde to homedir in -i/--import-from-opml",
+	"[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("feedlist.opml");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.do_import());
+		REQUIRE(args.importfile() == tmp.get_path() + filename);
+	};
+
+	SECTION("-i") {
+		check({"newsboat", "-i", arg});
+	}
+
+	SECTION("--import-from-opml") {
+		check({"newsboat", "--import-from-opml", arg});
+	}
+}
+
 TEST_CASE(
 	"Asks to print usage and exit with failure if both "
 	"-i/--import-from-opml and -e/--export-to-opml are provided",
@@ -175,6 +202,32 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("urlfile");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.set_url_file());
+		REQUIRE(args.url_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("-u") {
+		check({"newsboat", "-u", arg});
+	}
+
+	SECTION("--url-file") {
+		check({"newsboat", "--url-file", arg});
+	}
+}
+
 TEST_CASE(
 	"Sets `cache_file`, `lock_file`, `set_cache_file`, `set_lock_file`, "
 	"and "
@@ -202,6 +255,34 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("mycache.db");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.set_cache_file());
+		REQUIRE(args.cache_file() == tmp.get_path() + filename);
+		REQUIRE(args.set_lock_file());
+		REQUIRE(args.lock_file() == tmp.get_path() + filename + ".lock");
+	};
+
+	SECTION("-c") {
+		check({"newsboat", "-c", arg});
+	}
+
+	SECTION("--cache-file") {
+		check({"newsboat", "--cache-file", arg});
+	}
+}
+
 TEST_CASE(
 	"Sets `config_file`, `set_config_file`, and "
 	"`using_nonstandard_configs` if -C/--config-file is provided",
@@ -223,6 +304,33 @@ TEST_CASE(
 
 	SECTION("--config-file") {
 		check({"newsboat", "--config-file=" + filename});
+	}
+}
+
+TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("newsboat-config");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.set_config_file());
+		REQUIRE(args.config_file() == tmp.get_path() + filename);
+		REQUIRE(args.using_nonstandard_configs());
+	};
+
+	SECTION("-C") {
+		check({"newsboat", "-C", arg});
+	}
+
+	SECTION("--config-file") {
+		check({"newsboat", "--config-file", arg});
 	}
 }
 
@@ -388,6 +496,33 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
+	"[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("read.txt");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.do_read_import());
+		REQUIRE(args.readinfo_import_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("-I") {
+		check({"newsboat", "-I", arg});
+	}
+
+	SECTION("--import-from-file") {
+		check({"newsboat", "--import-from-file", arg});
+	}
+}
+
 TEST_CASE(
 	"Sets `do_read_export` and `readinfofile` if -E/--export-to-file "
 	"is provided",
@@ -408,6 +543,32 @@ TEST_CASE(
 
 	SECTION("--export-from-file") {
 		check({"newsboat", "--export-to-file=" + filename});
+	}
+}
+
+TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("read.txt");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.do_read_export());
+		REQUIRE(args.readinfo_export_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("-E") {
+		check({"newsboat", "-E", arg});
+	}
+
+	SECTION("--export-to-file") {
+		check({"newsboat", "--export-to-file", arg});
 	}
 }
 
@@ -454,6 +615,32 @@ TEST_CASE("Sets `set_log_file` and `log_file` if -d/--log-file is provided",
 
 	SECTION("--log-file") {
 		check({"newsboat", "--log-file=" + filename});
+	}
+}
+
+TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
+{
+	TestHelpers::TempDir tmp;
+
+	TestHelpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("newsboat.log");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.set_log_file());
+		REQUIRE(args.log_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("-d") {
+		check({"newsboat", "-d", arg});
+	}
+
+	SECTION("--log-file") {
+		check({"newsboat", "--log-file", arg});
 	}
 }
 
