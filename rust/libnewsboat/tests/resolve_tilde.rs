@@ -8,6 +8,8 @@ fn t_resolve_tilde() {
     env::set_var("HOME", "test");
     assert_eq!(utils::resolve_tilde(String::from("~")), "test");
     assert_eq!(utils::resolve_tilde(String::from("~/")), "test/");
+    assert_eq!(utils::resolve_tilde(String::from("~/dir")), "test/dir");
+    assert_eq!(utils::resolve_tilde(String::from("/home/~")), "/home/~");
     assert_eq!(
         utils::resolve_tilde(String::from("~/foo/bar")),
         "test/foo/bar"
