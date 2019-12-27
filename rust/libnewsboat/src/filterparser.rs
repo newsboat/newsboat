@@ -137,9 +137,9 @@ fn condition(input: CompleteStr) -> IResult<CompleteStr, Expression>{
 fn parens(input: CompleteStr) -> IResult<CompleteStr, Expression> {
     do_parse!(
         input,
-        tag!("(")
-        >> ret: alt!(expression | parens | condition)
-        >> tag!(")")
+        ws!(tag!("("))
+        >> ret: ws!(alt!(expression | parens | condition))
+        >> ws!(tag!(")"))
         >> (ret)
     ).map(|result| {
         let ret = result.1;
