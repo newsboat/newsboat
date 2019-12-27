@@ -83,6 +83,9 @@ TEST_CASE("Matcher throws if expression contains undefined fields", "[Matcher]")
 	MatcherMockMatchable mock;
 	Matcher m;
 
+	m.parse("BBBB = 1");
+	REQUIRE_THROWS_AS(m.matches(&mock), MatcherException);
+
 	m.parse("BBBB =~ \"foo\"");
 	REQUIRE_THROWS_AS(m.matches(&mock), MatcherException);
 

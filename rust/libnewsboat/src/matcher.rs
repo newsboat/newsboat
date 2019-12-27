@@ -146,6 +146,7 @@ mod tests {
 
     #[test]
     fn t_test_undefined_fields() {
+        assert!(parse_and_match("BBBB = 1").is_err());
         assert!(parse_and_match("BBBB =~ \"foo\"").is_err());
         assert!(parse_and_match("BBBB # \"foo\"").is_err());
         assert!(parse_and_match("BBBB < 0").is_err());
