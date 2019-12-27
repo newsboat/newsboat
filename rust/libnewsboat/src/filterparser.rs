@@ -182,6 +182,18 @@ pub fn parse(input: &str) -> Result<Expression, &str> {
 
 mod tests {
     use super::*;
+    use super::Expression::*;
+    use super::Operation::*;
+
+    use std::mem;
+
+    impl PartialEq<Expression> for Expression {
+        fn eq(&self, other: &Expression) -> bool {
+            let a = self;
+            let b = other;
+            mem::discriminant(a) == mem::discriminant(b)
+        }
+    }
 
     #[test]
     fn t_error_on_invalid_queries() {
@@ -208,5 +220,72 @@ mod tests {
 
         assert!(parse("a = \"abc\"").is_ok());
         assert!(parse("a == \"abc\"").is_ok());
+    }
+
+    #[test]
+    fn t_test_syntax_trees() {
+        assert_eq!(parse("a = \"b\" and b = \"c\" or c = \"d\"").unwrap(),
+            And(
+                Box::new(Comparison(super::Comparison {
+                    attribute: "a".to_string(),
+                    op: Operation::Equals,
+                    value: Value::Str("b".to_string())
+                })),
+                Box::new(Or(
+                    Box::new(Comparison(super::Comparison {
+                        attribute: "b".to_string(),
+                        op: Operation::Equals,
+                        value: Value::Str("c".to_string())
+                    })),
+                    Box::new(Comparison(super::Comparison {
+                        attribute: "c".to_string(),
+                        op: Operation::Equals,
+                        value: Value::Str("d".to_string())
+                    })),
+                ))
+            )
+        );
+        assert_eq!(parse("a = \"b\" or b = \"c\" and c = \"d\"").unwrap(),
+            Or(
+                Box::new(Comparison(super::Comparison {
+                    attribute: "a".to_string(),
+                    op: Operation::Equals,
+                    value: Value::Str("b".to_string())
+                })),
+                Box::new(And(
+                    Box::new(Comparison(super::Comparison {
+                        attribute: "b".to_string(),
+                        op: Operation::Equals,
+                        value: Value::Str("c".to_string())
+                    })),
+                    Box::new(Comparison(super::Comparison {
+                        attribute: "c".to_string(),
+                        op: Operation::Equals,
+                        value: Value::Str("d".to_string())
+                    })),
+                ))
+            )
+        );
+        assert_eq!(parse("(a = \"b\" or b = \"c\") and c = \"d\"").unwrap(),
+            And(
+                Box::new(Or(
+                    Box::new(Comparison(super::Comparison {
+                        attribute: "a".to_string(),
+                        op: Operation::Equals,
+                        value: Value::Str("b".to_string())
+                    })),
+                    Box::new(Comparison(super::Comparison {
+                        attribute: "b".to_string(),
+                        op: Operation::Equals,
+                        value: Value::Str("c".to_string())
+                    })),
+                )),
+                Box::new(Comparison(super::Comparison {
+                    attribute: "c".to_string(),
+                    op: Operation::Equals,
+                    value: Value::Str("d".to_string())
+                }))
+            )
+        );
     }
 }
