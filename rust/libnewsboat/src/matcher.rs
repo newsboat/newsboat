@@ -1,3 +1,5 @@
+extern crate std;
+
 use filterparser;
 use filterparser::Operation;
 use filterparser::Comparison;
