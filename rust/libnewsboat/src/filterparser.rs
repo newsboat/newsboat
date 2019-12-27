@@ -4,7 +4,7 @@ use std::io::{self, Read, BufRead};
 use nom::*;
 use nom::types::CompleteStr;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Operation {
     Equals,
     NotEquals,
@@ -19,21 +19,21 @@ pub enum Operation {
     NotContains,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Value {
     Str(String),
     Int(i32),
     Range(i32, i32)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Comparison {
     pub attribute: String,
     pub op: Operation,
     pub value: Value
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Expression {
     And(Box<Expression>, Box<Expression>),
     Or(Box<Expression>, Box<Expression>),
@@ -190,16 +190,6 @@ mod tests {
     use super::*;
     use super::Expression::*;
     use super::Operation::*;
-
-    use std::mem;
-
-    impl PartialEq<Expression> for Expression {
-        fn eq(&self, other: &Expression) -> bool {
-            let a = self;
-            let b = other;
-            mem::discriminant(a) == mem::discriminant(b)
-        }
-    }
 
     #[test]
     fn t_error_on_invalid_queries() {
