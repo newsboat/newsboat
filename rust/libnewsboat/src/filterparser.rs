@@ -173,7 +173,13 @@ pub fn parse(input: &str) -> Result<Expression, &str> {
         (parse)
     );
     match result {
-        Ok(expr) => Ok(expr.1),
+        Ok(expr) => {
+            if (expr.0.is_empty()) {
+                Ok(expr.1)
+            } else {
+                Err("Trailing characters")
+            }
+        },
         Err(result) => {
             Err("Error parsing expression")
         }
