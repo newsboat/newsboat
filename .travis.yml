@@ -36,6 +36,7 @@ newsboat_brew_commands: &osx_deps
   - brew outdated "json-c" || brew upgrade "json-c"
   - brew install "asciidoc"
   - brew install "docbook-xsl"
+  - brew unlink python@2
   - brew outdated "python" || brew upgrade "python"
   - brew install "pyenv" || brew upgrade "pyenv"
   - eval "$(pyenv init -)"
