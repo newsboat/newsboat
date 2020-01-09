@@ -16,7 +16,7 @@ podboat - a podcast download manager for text terminals
 
 _podboat_ is a podcast manager for text terminals. It is a helper program to
 _newsboat_ which queues podcast downloads into a file. These queued downloads
-can then be download with _newsboat_.
+can then be download with _podboat_.
 
 
 == OPTIONS
