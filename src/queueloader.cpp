@@ -153,6 +153,11 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 								d.set_status(
 									DlStatus::
 									PLAYED);
+							if (fields[2] ==
+								"finished")
+								d.set_status(
+									DlStatus::
+									FINISHED);
 						} else
 							d.set_status(DlStatus::
 								ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
@@ -192,6 +197,9 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 			}
 			if (dl.status() == DlStatus::PLAYED) {
 				f << " played";
+			}
+			if (dl.status() == DlStatus::FINISHED) {
+				f << " finished";
 			}
 			f << std::endl;
 		}
