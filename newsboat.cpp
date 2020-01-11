@@ -123,11 +123,11 @@ void print_version(const std::string& argv0, unsigned int level)
 			<< PROGRAM_URL << std::endl;
 		ss << "Copyright (C) 2006-2015 Andreas Krennmair"
 			<< std::endl;
-		ss << "Copyright (C) 2015-2019 Alexander Batischev"
+		ss << "Copyright (C) 2015-2020 Alexander Batischev"
 			<< std::endl;
 		ss << "Copyright (C) 2006-2017 Newsbeuter contributors"
 			<< std::endl;
-		ss << "Copyright (C) 2017-2019 Newsboat contributors"
+		ss << "Copyright (C) 2017-2020 Newsboat contributors"
 			<< std::endl;
 		ss << std::endl;
 
