@@ -458,10 +458,15 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory",
 {
 	TestHelpers::EnvVar envVar("HOME");
 	envVar.set("test");
-	REQUIRE(utils::resolve_tilde("~") == "test");
+	REQUIRE(utils::resolve_tilde("~") == "test/");
 	REQUIRE(utils::resolve_tilde("~/") == "test/");
 	REQUIRE(utils::resolve_tilde("~/dir") == "test/dir");
 	REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
+	REQUIRE(
+		utils::resolve_tilde("~/foo/bar") ==
+		"test/foo/bar"
+	);
+	REQUIRE(utils::resolve_tilde("/foo/bar") == "/foo/bar");
 }
 
 TEST_CASE("resolve_relative() returns an absolute file path relative to another",

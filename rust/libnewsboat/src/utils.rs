@@ -86,28 +86,15 @@ pub fn absolute_url(base_url: &str, link: &str) -> String {
         .to_owned()
 }
 
-pub fn resolve_tilde(path: String) -> String {
-    let mut file_path: String = path;
-    let home_path = dirs::home_dir();
-
-    if let Some(home_path) = home_path {
-        let home_path_string = home_path.to_string_lossy().into_owned();
-
-        if file_path == "~" {
-            file_path = home_path_string;
-        } else {
-            let tmp_file_path = file_path.clone();
-
-            if tmp_file_path.len() > 1 {
-                let (tilde, remaining) = tmp_file_path.split_at(2);
-
-                if tilde == "~/" {
-                    file_path = home_path_string + "/" + remaining;
-                }
-            }
-        }
+/// Replaces tilde (`~`) at the beginning of the path with the path to user's home directory.
+pub fn resolve_tilde(path: PathBuf) -> PathBuf {
+    if let (Some(home), Ok(suffix)) = (dirs::home_dir(), path.strip_prefix("~")) {
+        return home.join(suffix);
     }
-    file_path
+
+    // Either the `path` doesn't start with tilde, or we couldn't figure out the path to the
+    // home directory -- either way, it's no big deal. Let's return the original string.
+    path
 }
 
 pub fn resolve_relative(reference: &Path, path: &Path) -> PathBuf {

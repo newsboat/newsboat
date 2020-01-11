@@ -4,6 +4,7 @@ use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 use std::path::PathBuf;
 
 use logger::Level;
+use utils;
 
 #[derive(Default)]
 pub struct CliArgsParser {
@@ -207,21 +208,23 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.importfile = Some(PathBuf::from(importfile));
+                args.importfile = Some(utils::resolve_tilde(PathBuf::from(importfile)));
             }
         }
 
         if let Some(url_file) = matches.value_of(URL_FILE) {
-            args.url_file = Some(PathBuf::from(url_file));
+            args.url_file = Some(utils::resolve_tilde(PathBuf::from(url_file)));
         }
 
         if let Some(cache_file) = matches.value_of(CACHE_FILE) {
-            args.cache_file = Some(PathBuf::from(cache_file));
-            args.lock_file = Some(PathBuf::from(cache_file.to_string() + LOCK_SUFFIX));
+            args.cache_file = Some(utils::resolve_tilde(PathBuf::from(cache_file)));
+            args.lock_file = Some(utils::resolve_tilde(PathBuf::from(
+                cache_file.to_string() + LOCK_SUFFIX,
+            )));
         }
 
         if let Some(config_file) = matches.value_of(CONFIG_FILE) {
-            args.config_file = Some(PathBuf::from(config_file));
+            args.config_file = Some(utils::resolve_tilde(PathBuf::from(config_file)));
         }
 
         // Casting u64 to usize. Highly unlikely that the user will hit the limit, even if we were
@@ -243,7 +246,7 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.readinfo_import_file = Some(PathBuf::from(importfile));
+                args.readinfo_import_file = Some(utils::resolve_tilde(PathBuf::from(importfile)));
             }
         }
 
@@ -252,12 +255,12 @@ impl CliArgsParser {
                 args.should_print_usage = true;
                 args.return_code = Some(EXIT_FAILURE);
             } else {
-                args.readinfo_export_file = Some(PathBuf::from(exportfile));
+                args.readinfo_export_file = Some(utils::resolve_tilde(PathBuf::from(exportfile)));
             }
         }
 
         if let Some(log_file) = matches.value_of(LOG_FILE) {
-            args.log_file = Some(PathBuf::from(log_file));
+            args.log_file = Some(utils::resolve_tilde(PathBuf::from(log_file)));
         }
 
         if let Some(log_level_str) = matches.value_of(LOG_LEVEL) {

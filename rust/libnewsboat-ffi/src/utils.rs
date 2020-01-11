@@ -54,9 +54,12 @@ pub unsafe extern "C" fn rs_consolidate_whitespace(input: *const c_char) -> *mut
 pub unsafe extern "C" fn rs_resolve_tilde(path: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_path = CStr::from_ptr(path);
+        // We simply assume that all the paths are in UTF-8 -- hence to_string_lossy().
         let rs_path = rs_path.to_string_lossy().into_owned();
 
-        let result = utils::resolve_tilde(rs_path);
+        let result = utils::resolve_tilde(path::PathBuf::from(rs_path));
+        // We simply assume that all the paths are in UTF-8 -- hence to_string_lossy().
+        let result = result.to_string_lossy().into_owned();
 
         let result = CString::new(result).unwrap();
         result.into_raw()
