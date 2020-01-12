@@ -27,6 +27,7 @@ QueueLoader::QueueLoader(const std::string& file, PbController* c)
 void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 {
 	std::vector<Download> dltemp;
+	std::vector<Download> deletion_list;
 	std::fstream f;
 
 	for (const auto& dl : downloads) {
@@ -37,6 +38,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 				"DlStatus::DOWNLOADING status");
 			return;
 		}
+		bool keep_entry = false;
 		switch (dl.status()) {
 		case DlStatus::QUEUED:
 		case DlStatus::CANCELLED:
@@ -46,7 +48,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 			LOG(Level::DEBUG,
 				"QueueLoader::reload: storing %s to new vector",
 				dl.url());
-			dltemp.push_back(dl);
+			keep_entry = true;
 			break;
 		case DlStatus::PLAYED:
 		case DlStatus::FINISHED:
@@ -56,11 +58,17 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 					"new "
 					"vector",
 					dl.url());
-				dltemp.push_back(dl);
+				keep_entry = true;
 			}
 			break;
 		default:
 			break;
+		}
+
+		if (keep_entry) {
+			dltemp.push_back(dl);
+		} else {
+			deletion_list.push_back(dl);
 		}
 	}
 
@@ -107,13 +115,13 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 					}
 				}
 
-				for (const auto& dl : downloads) {
+				for (const auto& dl : deletion_list) {
 					if (fields[0] == dl.url()) {
 						LOG(Level::INFO,
 							"QueueLoader::reload: "
-							"found `%s' in new "
+							"found `%s' in scheduled for deletion "
 							"vector",
-							line);
+							fields[0]);
 						url_found = true;
 						break;
 					}
