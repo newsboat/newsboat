@@ -215,16 +215,18 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 		f.close();
 	}
 
-	for (const auto& dl : deletion_list) {
-		std::string filename = dl.filename();
-		if (access(filename.c_str(), F_OK) == 0) {
-			LOG(Level::INFO,
-				"Deleting file %s",
-				filename);
-			if (std::remove(filename.c_str()) != 0) {
-				LOG(Level::ERROR,
-					"Failed to delete file %s",
+	if (ctrl->get_cfgcont()->get_configvalue_as_bool("delete-downloaded-files")) {
+		for (const auto& dl : deletion_list) {
+			std::string filename = dl.filename();
+			if (access(filename.c_str(), F_OK) == 0) {
+				LOG(Level::INFO,
+					"Deleting file %s",
 					filename);
+				if (std::remove(filename.c_str()) != 0) {
+					LOG(Level::ERROR,
+						"Failed to delete file %s",
+						filename);
+				}
 			}
 		}
 	}
