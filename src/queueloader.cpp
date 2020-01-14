@@ -1,5 +1,6 @@
 #include "queueloader.h"
 
+#include <cerrno>
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
@@ -217,15 +218,15 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 
 	if (ctrl->get_cfgcont()->get_configvalue_as_bool("delete-downloaded-files")) {
 		for (const auto& dl : deletion_list) {
-			std::string filename = dl.filename();
-			if (access(filename.c_str(), F_OK) == 0) {
-				LOG(Level::INFO,
-					"Deleting file %s",
-					filename);
-				if (std::remove(filename.c_str()) != 0) {
+			const std::string filename = dl.filename();
+			LOG(Level::INFO,
+				"Deleting file %s",
+				filename);
+			if (std::remove(filename.c_str()) != 0) {
+				if (errno != ENOENT) {
 					LOG(Level::ERROR,
-						"Failed to delete file %s",
-						filename);
+						"Failed to delete file %s, error code: %d (%s)",
+						filename, errno, strerror(errno));
 				}
 			}
 		}
