@@ -216,7 +216,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 		f.close();
 	}
 
-	if (ctrl->get_cfgcont()->get_configvalue_as_bool("delete-downloaded-files")) {
+	if (ctrl->get_cfgcont()->get_configvalue_as_bool("delete-played-files")) {
 		for (const auto& dl : deletion_list) {
 			const std::string filename = dl.filename();
 			LOG(Level::INFO,
