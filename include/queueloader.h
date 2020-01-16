@@ -1,23 +1,26 @@
 #ifndef PODBOAT_QUEUELOADER_H_
 #define PODBOAT_QUEUELOADER_H_
 
+#include <functional>
 #include <vector>
 
+#include "configcontainer.h"
 #include "download.h"
-#include "pbcontroller.h"
 
 namespace podboat {
 
 class QueueLoader {
 public:
-	QueueLoader(const std::string& file, PbController* c = 0);
+	QueueLoader(const std::string& file, newsboat::ConfigContainer& cfg,
+		std::function<void()> cb_require_view_update);
 	void reload(std::vector<Download>& downloads,
 		bool remove_unplayed = false);
 
 private:
 	std::string get_filename(const std::string& str);
 	std::string queuefile;
-	PbController* ctrl;
+	newsboat::ConfigContainer& cfg;
+	std::function<void()> cb_require_view_update;
 };
 
 } // namespace podboat

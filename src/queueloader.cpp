@@ -20,9 +20,11 @@ using namespace newsboat;
 
 namespace podboat {
 
-QueueLoader::QueueLoader(const std::string& file, PbController* c)
+QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
+	std::function<void()> cb_require_view_update_)
 	: queuefile(file)
-	, ctrl(c)
+	, cfg(cfg_)
+	, cb_require_view_update(cb_require_view_update_)
 {
 }
 
@@ -136,7 +138,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 						"nowhere -> storing to new "
 						"vector",
 						line);
-					Download d(ctrl);
+					Download d(cb_require_view_update);
 					std::string fn;
 					if (fields.size() == 1) {
 						fn = get_filename(fields[0]);
@@ -216,7 +218,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 		f.close();
 	}
 
-	if (ctrl->get_cfgcont()->get_configvalue_as_bool("delete-played-files")) {
+	if (cfg.get_configvalue_as_bool("delete-played-files")) {
 		for (const auto& dl : deletion_list) {
 			const std::string filename = dl.filename();
 			LOG(Level::INFO,
@@ -237,7 +239,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 
 std::string QueueLoader::get_filename(const std::string& str)
 {
-	std::string fn = ctrl->get_dlpath();
+	std::string fn = cfg.get_configvalue("download-path");
 
 	if (fn[fn.length() - 1] != NEWSBEUTER_PATH_SEP[0]) {
 		fn.append(NEWSBEUTER_PATH_SEP);

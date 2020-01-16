@@ -1,6 +1,7 @@
 #ifndef PODBOAT_DOWNLOAD_H_
 #define PODBOAT_DOWNLOAD_H_
 
+#include <functional>
 #include <string>
 
 namespace podboat {
@@ -21,7 +22,7 @@ class PbController;
 
 class Download {
 public:
-	explicit Download(PbController* c = 0);
+	explicit Download(std::function<void()> cb_require_view_update);
 	~Download();
 	double percents_finished() const;
 	const std::string status_text() const;
@@ -57,7 +58,7 @@ private:
 	double totalsize;
 	double curkbps;
 	unsigned long offs;
-	PbController* ctrl;
+	std::function<void()> cb_require_view_update;
 };
 
 } // namespace podboat
