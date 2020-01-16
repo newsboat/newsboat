@@ -258,6 +258,7 @@ TEST_CASE(
 	const std::string key1("d");
 	const std::unordered_set<std::string> expected1{
 		"datetime-format",
+		"delete-played-files",
 		"delete-read-articles-on-quit",
 		"dialogs-title-format",
 		"display-article-progress",

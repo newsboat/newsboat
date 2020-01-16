@@ -49,6 +49,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"delete-read-articles-on-quit",
 		ConfigData("false", ConfigDataType::BOOL)},
+	{"delete-played-files", ConfigData("false", ConfigDataType::BOOL)},
 	{
 		"display-article-progress",
 		ConfigData("yes", ConfigDataType::BOOL)},
