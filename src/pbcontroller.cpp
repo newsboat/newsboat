@@ -301,7 +301,8 @@ int PbController::run(int argc, char* argv[])
 
 	std::cout << _("done.") << std::endl;
 
-	ql = new QueueLoader(queue_file, this);
+	ql = new QueueLoader(queue_file, *cfg,
+		std::bind(&PbController::set_view_update_necessary, this, true));
 	ql->reload(downloads_);
 
 	v->set_keymap(&keys);
@@ -379,11 +380,6 @@ void PbController::print_usage(const char* argv0)
 		}
 		std::cout << a.desc << std::endl;
 	}
-}
-
-std::string PbController::get_dlpath()
-{
-	return cfg->get_configvalue("download-path");
 }
 
 std::string PbController::get_formatstr()
