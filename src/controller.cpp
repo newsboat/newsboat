@@ -766,7 +766,7 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 			reloader->reload_all(true);
 		} else if (cmd == "print-unread") {
 			std::cout << strprintf::fmt(_("%u unread articles"),
-					rsscache->get_unread_count())
+					feedcontainer.unread_item_count())
 				<< std::endl;
 		} else {
 			std::cerr

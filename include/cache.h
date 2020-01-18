@@ -68,7 +68,6 @@ public:
 	void update_lastmodified(const std::string& uri,
 		time_t t,
 		const std::string& etag);
-	unsigned int get_unread_count();
 	void mark_item_deleted(const std::string& guid, bool b);
 	void mark_feed_items_deleted(const std::string& feedurl);
 	void remove_old_deleted_items(RssFeed* feed);

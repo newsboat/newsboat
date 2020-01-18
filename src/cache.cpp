@@ -1030,19 +1030,6 @@ void Cache::remove_old_deleted_items(RssFeed* feed)
 	run_sql(query);
 }
 
-unsigned int Cache::get_unread_count()
-{
-	std::lock_guard<std::mutex> lock(mtx);
-
-	std::string countquery =
-		"SELECT count(id) FROM rss_item WHERE unread = 1;";
-	CbHandler count_cbh;
-	run_sql(countquery, count_callback, &count_cbh);
-	unsigned int count = static_cast<unsigned int>(count_cbh.count());
-	LOG(Level::DEBUG, "Cache::get_unread_count: count = %u", count);
-	return count;
-}
-
 void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 {
 	ScopeMeasure m1("Cache::mark_items_read_by_guid");
