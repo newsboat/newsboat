@@ -55,30 +55,16 @@ TEST_CASE("URL reader writes files that it can understand later",
 	"[FileUrlReader]")
 {
 	const std::string testDataPath("data/test-urls.txt");
-
 	TestHelpers::TempFile urlsFile;
 
-	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.get_path());
-	REQUIRE(urlsFileStream.is_open());
-
-	std::ifstream testData;
-	testData.open(testDataPath);
-	REQUIRE(testData.is_open());
-
-	for (std::string line; std::getline(testData, line); ) {
-		urlsFileStream << line << '\n';
-	}
-
-	urlsFileStream.close();
-	testData.close();
+	TestHelpers::CopyFile(testDataPath, urlsFile.get_path());
 
 	FileUrlReader u(urlsFile.get_path());
 	u.reload();
 	REQUIRE_FALSE(u.get_urls().empty());
 	REQUIRE_FALSE(u.get_alltags().empty());
 
-	urlsFileStream.open(urlsFile.get_path());
+	std::ofstream urlsFileStream(urlsFile.get_path());
 	REQUIRE(urlsFileStream.is_open());
 	urlsFileStream << std::string();
 	urlsFileStream.close();

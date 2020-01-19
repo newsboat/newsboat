@@ -243,6 +243,19 @@ inline void AssertArticleFileContent(const std::string& path,
 	REQUIRE(line == "");
 };
 
+/* \brief Copy a file
+ */
+inline void CopyFile(const std::string& source, const std::string& destination)
+{
+	std::ifstream  src(source, std::ios::binary);
+	std::ofstream  dst(destination, std::ios::binary);
+
+	REQUIRE(src.is_open());
+	REQUIRE(dst.is_open());
+
+	dst << src.rdbuf();
+}
+
 /* \brief Matcher for an exception with specified message.
  *
  * This helper class can be used with assertion macros like
