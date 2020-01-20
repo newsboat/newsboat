@@ -245,7 +245,7 @@ inline void AssertArticleFileContent(const std::string& path,
 
 /* \brief Copy a file
  */
-inline void CopyFile(const std::string& source, const std::string& destination)
+inline void copy_file(const std::string& source, const std::string& destination)
 {
 	std::ifstream  src(source, std::ios::binary);
 	std::ofstream  dst(destination, std::ios::binary);

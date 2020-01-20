@@ -203,7 +203,7 @@ TEST_CASE("OpmlUrlReader::write_config() doesn't change the input file",
 	const std::string testDataPath("data/example.opml");
 	TestHelpers::TempFile urlsFile;
 
-	TestHelpers::CopyFile(testDataPath, urlsFile.get_path());
+	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url", "file://" + urlsFile.get_path());

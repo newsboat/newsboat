@@ -91,7 +91,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
-	TestHelpers::CopyFile("data/test-urls.txt", urlsFile.get_path());
+	TestHelpers::copy_file("data/test-urls.txt", urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -223,7 +223,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 {
 	TestHelpers::TempFile urlsFile;
 
-	TestHelpers::CopyFile("data/test-urls.txt", urlsFile.get_path());
+	TestHelpers::copy_file("data/test-urls.txt", urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;

@@ -57,7 +57,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 	const std::string testDataPath("data/test-urls.txt");
 	TestHelpers::TempFile urlsFile;
 
-	TestHelpers::CopyFile(testDataPath, urlsFile.get_path());
+	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
 
 	FileUrlReader u(urlsFile.get_path());
 	u.reload();
