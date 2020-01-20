@@ -56,7 +56,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
 
-	TestHelpers::AssertArticleFileContent(pagerfile.get_path(),
+	TestHelpers::assert_article_file_content(pagerfile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -399,7 +399,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 
-		TestHelpers::AssertArticleFileContent(urlFile.get_path(),
+		TestHelpers::assert_article_file_content(urlFile.get_path(),
 			test_title,
 			test_author,
 			test_pubDate_str,
@@ -595,7 +595,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(saveFile.get_path(),
+	TestHelpers::assert_article_file_content(saveFile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -798,7 +798,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, true, &op_args));
 
-	TestHelpers::AssertArticleFileContent(articleFile.get_path(),
+	TestHelpers::assert_article_file_content(articleFile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,

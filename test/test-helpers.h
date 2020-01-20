@@ -202,12 +202,12 @@ private:
 };
 
 /*
- * The AssertArticleFileContent opens a file where the content of an article
+ * The assert_article_file_content opens a file where the content of an article
  * was previously dumped (using for example OP_SHOWURL, or OP_OPEN with an
- * appropriate "pager" config value ) and checks its content according
- * to the expected values passed as parameters.
+ * appropriate "pager" config value ) and checks its content according to the
+ * expected values passed as parameters.
  */
-inline void AssertArticleFileContent(const std::string& path,
+inline void assert_article_file_content(const std::string& path,
 	const std::string& title,
 	const std::string& author,
 	const std::string& date,
