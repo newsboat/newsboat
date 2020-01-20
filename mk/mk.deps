@@ -663,6 +663,7 @@ test/opmlurlreader.o: test/opmlurlreader.cpp include/opmlurlreader.h \
  include/configactionhandler.h include/urlreader.h 3rd-party/catch.hpp \
  test/test-helpers.h include/utils.h include/logger.h config.h \
  include/strprintf.h
+test/download.o: test/download.cpp include/download.h
 test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
  filter/FilterParser.h 3rd-party/catch.hpp \
