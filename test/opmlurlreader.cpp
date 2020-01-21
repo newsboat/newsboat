@@ -201,23 +201,9 @@ TEST_CASE("OpmlUrlReader::write_config() doesn't change the input file",
 	"[OpmlUrlReader]")
 {
 	const std::string testDataPath("data/example.opml");
-
 	TestHelpers::TempFile urlsFile;
 
-	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.get_path());
-	REQUIRE(urlsFileStream.is_open());
-
-	std::ifstream testData;
-	testData.open(testDataPath);
-	REQUIRE(testData.is_open());
-
-	for (std::string line; std::getline(testData, line); ) {
-		urlsFileStream << line << '\n';
-	}
-
-	urlsFileStream.close();
-	testData.close();
+	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url", "file://" + urlsFile.get_path());
@@ -226,7 +212,7 @@ TEST_CASE("OpmlUrlReader::write_config() doesn't change the input file",
 	REQUIRE_NOTHROW(u.reload());
 
 	const std::string sentry("wasn't touched by OpmlUrlReader at all");
-	urlsFileStream.open(urlsFile.get_path());
+	std::ofstream urlsFileStream(urlsFile.get_path());
 	REQUIRE(urlsFileStream.is_open());
 	urlsFileStream << sentry;
 	urlsFileStream.close();

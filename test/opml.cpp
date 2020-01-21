@@ -91,20 +91,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
 	TestHelpers::TempFile urlsFile;
 
-	std::ifstream urlsExampleFile;
-	urlsExampleFile.open("data/test-urls.txt");
-	REQUIRE(urlsExampleFile.is_open());
-
-	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.get_path());
-	REQUIRE(urlsFileStream.is_open());
-
-	for (std::string line; std::getline(urlsExampleFile, line); ) {
-		urlsFileStream << line << '\n';
-	}
-
-	urlsExampleFile.close();
-	urlsFileStream.close();
+	TestHelpers::copy_file("data/test-urls.txt", urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -236,20 +223,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 {
 	TestHelpers::TempFile urlsFile;
 
-	std::ifstream urlsExampleFile;
-	urlsExampleFile.open("data/test-urls.txt");
-	REQUIRE(urlsExampleFile.is_open());
-
-	std::ofstream urlsFileStream;
-	urlsFileStream.open(urlsFile.get_path());
-	REQUIRE(urlsFileStream.is_open());
-
-	for (std::string line; std::getline(urlsExampleFile, line); ) {
-		urlsFileStream << line << '\n';
-	}
-
-	urlsExampleFile.close();
-	urlsFileStream.close();
+	TestHelpers::copy_file("data/test-urls.txt", urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;
