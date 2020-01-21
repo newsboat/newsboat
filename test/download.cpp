@@ -53,3 +53,27 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 		}
 	}
 }
+
+TEST_CASE("Filename returns configured filename", "[Download]")
+{
+	auto emptyCallback = [](){};
+
+	Download d(emptyCallback);
+
+	SECTION("filename returns empty string by default") {
+		REQUIRE(d.filename() == "");
+	}
+
+
+	SECTION("filename returns same string which is set via set_filename") {
+		d.set_filename("abc");
+		REQUIRE(d.filename() == "abc");
+	}
+
+	SECTION("filename will return the latest configured filename") {
+		d.set_filename("abc");
+		d.set_filename("def");
+
+		REQUIRE(d.filename() == "def");
+	}
+}
