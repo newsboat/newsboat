@@ -324,37 +324,6 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 	}
 }
 
-TEST_CASE("get_unread_count returns number of yet unread articles", "[Cache]")
-{
-	TestHelpers::TempFile dbfile;
-	ConfigContainer cfg;
-	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
-	std::unique_ptr<RssParser> parser(new RssParser(
-			"file://data/rss.xml", rsscache.get(), &cfg, nullptr));
-	std::shared_ptr<RssFeed> feed = parser->parse();
-	// Marking one article as read to make sure get_unread_count() really
-	// counts only unread articles
-	feed->items()[0]->set_unread(false);
-	rsscache->externalize_rssfeed(feed, false);
-
-	REQUIRE(rsscache->get_unread_count() == 7);
-
-	// Let's add another article to make sure get_unread_count looks at all
-	// feeds present in the cache
-	parser.reset(new RssParser(
-			"file://data/atom10_1.xml", rsscache.get(), &cfg, nullptr));
-	feed = parser->parse();
-	feed->items()[0]->set_unread(false);
-	feed->items()[2]->set_unread(false);
-	rsscache->externalize_rssfeed(feed, false);
-	REQUIRE(rsscache->get_unread_count() == 8);
-
-	// Lastly, let's make sure the info is indeed retrieved from the
-	// database and isn't just stored in the Cache object
-	rsscache.reset(new Cache(dbfile.get_path(), &cfg));
-	REQUIRE(rsscache->get_unread_count() == 8);
-}
-
 TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 	"[Cache]")
 {
