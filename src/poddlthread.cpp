@@ -87,6 +87,7 @@ void PodDlThread::run()
 		// get a char* pointer. std::string::c_str() won't do because it
 		// returns const char*, whereas ::dirname() needs non-const.
 		std::vector<char> directory(filename.begin(), filename.end());
+		directory.push_back('\0');
 		utils::mkdir_parents(dirname(&directory[0]));
 
 		f->open(filename, std::fstream::out);
