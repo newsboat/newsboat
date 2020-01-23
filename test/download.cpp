@@ -4,7 +4,8 @@
 
 using namespace podboat;
 
-TEST_CASE("Require-view-update callback gets called when download progress or status changes", "[Download]")
+TEST_CASE("Require-view-update callback gets called when download progress or status changes",
+	"[Download]")
 {
 	GIVEN("A Download object") {
 		bool got_called = false;
@@ -56,7 +57,7 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 
 TEST_CASE("Filename returns configured filename", "[Download]")
 {
-	auto emptyCallback = [](){};
+	auto emptyCallback = []() {};
 
 	Download d(emptyCallback);
 
