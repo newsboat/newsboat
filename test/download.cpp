@@ -18,7 +18,6 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 		REQUIRE(d.status() == DlStatus::QUEUED);
 
 		WHEN("its progress is updated (increased)") {
-			got_called = false;
 			d.set_progress(1.0, 1.0);
 
 			THEN("the require-view-update callback gets called") {
@@ -27,7 +26,6 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 		}
 
 		WHEN("its progress has not changed") {
-			got_called = false;
 			d.set_progress(0.0, 1.0);
 
 			THEN("the require-view-update callback does not get called") {
@@ -36,7 +34,6 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 		}
 
 		WHEN("its status is changed") {
-			got_called = false;
 			d.set_status(DlStatus::DOWNLOADING);
 
 			THEN("the require-view-update callback gets called") {
@@ -45,7 +42,6 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 		}
 
 		WHEN("when its status is not changed") {
-			got_called = false;
 			d.set_status(DlStatus::QUEUED);
 
 			THEN("the require-view-update callback does not get called") {
