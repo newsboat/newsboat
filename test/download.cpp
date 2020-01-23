@@ -51,14 +51,14 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 	}
 }
 
-TEST_CASE("Filename returns configured filename", "[Download]")
+TEST_CASE("Filename returns download's target filename", "[Download]")
 {
 	auto emptyCallback = []() {};
 
 	Download d(emptyCallback);
 
 	SECTION("filename returns empty string by default") {
-		REQUIRE(d.filename() == "");
+		REQUIRE(d.filename().empty());
 	}
 
 
