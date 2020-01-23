@@ -51,7 +51,7 @@ TEST_CASE("Require-view-update callback gets called when download progress or st
 	}
 }
 
-TEST_CASE("Filename returns download's target filename", "[Download]")
+TEST_CASE("filename() returns download's target filename", "[Download]")
 {
 	auto emptyCallback = []() {};
 
