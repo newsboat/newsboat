@@ -117,12 +117,12 @@ void DirBrowserFormAction::process_operation(Operation op,
 					std::string fnstr =
 						f->get("filenametext");
 					std::string::size_type base =
-						fnstr.find_first_of('/');
+						fnstr.find_last_of('/');
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
 						fn.append(fnstr,
-							base,
+							base + 1,
 							std::string::npos);
 					}
 					f->set("filenametext", fn);
