@@ -491,6 +491,13 @@ void HtmlRenderer::render(std::istream& input,
 			}
 
 			case HtmlTag::VIDEO: {
+				if (inside_video || inside_audio) {
+					inside_video = false;
+					inside_audio = false;
+					LOG(Level::WARN,
+						"HtmlRenderer::render media element left unclosed");
+				}
+
 				std::string videourl;
 				try {
 					videourl = xpp.get_attribute_value("src");
@@ -505,6 +512,13 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 			case HtmlTag::AUDIO: {
+				if (inside_video || inside_audio) {
+					inside_video = false;
+					inside_audio = false;
+					LOG(Level::WARN,
+						"HtmlRenderer::render media element left unclosed");
+				}
+
 				std::string audiourl;
 				try {
 					audiourl = xpp.get_attribute_value("src");
