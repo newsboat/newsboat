@@ -97,18 +97,11 @@ void DirBrowserFormAction::process_operation(Operation op,
 					f->set("head",
 						fmt.do_format(
 							cfg->get_configvalue(
-								"dir"
-								"brow"
-								"ser-"
-								"title-"
-								"forma"
-								"t"),
+								"dirbrowser-title-format"),
 							width));
 					int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
-						"DirBrowserFormAction:OP_"
-						"OPEN: "
-						"chdir(%s) = %i",
+						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
 					f->set("listpos", "0");
