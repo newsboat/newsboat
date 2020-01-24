@@ -74,18 +74,11 @@ void FileBrowserFormAction::process_operation(Operation op,
 					f->set("head",
 						fmt.do_format(
 							cfg->get_configvalue(
-								"filebr"
-								"o"
-								"wser-"
-								"title-"
-								"forma"
-								"t"),
+								"filebrowser-title-format"),
 							width));
 					int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
-						"FileBrowserFormAction:OP_"
-						"OPEN: "
-						"chdir(%s) = %i",
+						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
 					f->set("listpos", "0");
@@ -131,9 +124,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 					f->set_focus("files");
 					if (v->confirm(
 							strprintf::fmt(
-								_("Do you really "
-									"want to "
-									"overwrite `%s' "
+								_("Do you really want to overwrite `%s' "
 									"(y:Yes n:No)? "),
 								fn),
 							_("yn")) == *_("n")) {
