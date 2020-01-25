@@ -291,7 +291,7 @@ matrix:
         - COMPILER=clang++-8
         - REPORT_COVERAGE=yes
       before_install:
-        - cargo install grcov
+        - cargo install --git https://github.com/Minoru/grcov --branch bugfix/373-rename-service_job_number-to-service_job_id
 
           # Can't have these in the `env` section above, because these settings break `cargo install`
         - export CARGO_INCREMENTAL=0
