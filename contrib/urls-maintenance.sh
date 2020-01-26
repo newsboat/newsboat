@@ -7,6 +7,7 @@
 # urls file and cache.db are automatically backed up with timestamp before proceeding
 
 # TODO
+# address remaining feedback from https://github.com/newsboat/newsboat/pull/647
 # implement additional checks on active feeds:
 # 	https://www.linuxjournal.com/content/parsing-rss-news-feed-bash-script
 #	is it returning valid rss?
