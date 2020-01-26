@@ -55,7 +55,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_config_dir = env_xdg_config;
 	} else {
 		xdg_config_dir = env_home;
-		xdg_config_dir.append(NEWSBEUTER_PATH_SEP);
+		xdg_config_dir.append(1, NEWSBEUTER_PATH_SEP);
 		xdg_config_dir.append(".config");
 	}
 
@@ -64,16 +64,16 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_data_dir = env_xdg_data;
 	} else {
 		xdg_data_dir = env_home;
-		xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
+		xdg_data_dir.append(1, NEWSBEUTER_PATH_SEP);
 		xdg_data_dir.append(".local");
-		xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
+		xdg_data_dir.append(1, NEWSBEUTER_PATH_SEP);
 		xdg_data_dir.append("share");
 	}
 
-	xdg_config_dir.append(NEWSBEUTER_PATH_SEP);
+	xdg_config_dir.append(1, NEWSBEUTER_PATH_SEP);
 	xdg_config_dir.append(NEWSBOAT_SUBDIR_XDG);
 
-	xdg_data_dir.append(NEWSBEUTER_PATH_SEP);
+	xdg_data_dir.append(1, NEWSBEUTER_PATH_SEP);
 	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists =
@@ -108,20 +108,20 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	}
 
 	/* in config */
-	url_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + url_file;
+	url_file = config_dir + NEWSBEUTER_PATH_SEP + url_file;
 	config_file =
-		config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
+		config_dir + NEWSBEUTER_PATH_SEP + config_file;
 
 	/* in data */
 	cache_file =
-		xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + cache_file;
+		xdg_data_dir + NEWSBEUTER_PATH_SEP + cache_file;
 	lock_file = cache_file + LOCK_SUFFIX;
 	queue_file =
-		xdg_data_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
+		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
 	searchfile = strprintf::fmt(
-			"%s%shistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+			"%s%chistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 	cmdlinefile = strprintf::fmt(
-			"%s%shistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
+			"%s%chistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }
@@ -160,7 +160,7 @@ PbController::PbController()
 		return;
 	}
 
-	config_dir.append(NEWSBEUTER_PATH_SEP);
+	config_dir.append(1, NEWSBEUTER_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
 	// create configuration directory if it doesn't exist
@@ -177,9 +177,9 @@ PbController::PbController()
 	}
 
 	config_file =
-		config_dir + std::string(NEWSBEUTER_PATH_SEP) + config_file;
-	queue_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + queue_file;
-	lock_file = config_dir + std::string(NEWSBEUTER_PATH_SEP) + lock_file;
+		config_dir + NEWSBEUTER_PATH_SEP + config_file;
+	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
+	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
 }
 
 PbController::~PbController()

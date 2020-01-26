@@ -84,7 +84,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 					f->set("listpos", "0");
 					std::string fn = utils::getcwd();
 					if (fn.back() != '/') {
-						fn.append(NEWSBEUTER_PATH_SEP);
+						fn.append(1, NEWSBEUTER_PATH_SEP);
 					}
 					std::string fnstr =
 						f->get("filenametext");
@@ -104,7 +104,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 				case '-': {
 					std::string fn = utils::getcwd();
 					if (fn.back() != '/') {
-						fn.append(NEWSBEUTER_PATH_SEP);
+						fn.append(1, NEWSBEUTER_PATH_SEP);
 					}
 					fn.append(filename);
 					f->set("filenametext", fn);
