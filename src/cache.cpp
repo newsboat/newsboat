@@ -769,12 +769,12 @@ void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>>& feeds)
 		std::string cleanup_rss_feeds_statement(
 			"DELETE FROM rss_feed WHERE rssurl NOT IN ");
 		cleanup_rss_feeds_statement.append(list);
-		cleanup_rss_feeds_statement.append(1, ';');
+		cleanup_rss_feeds_statement.push_back(';');
 
 		std::string cleanup_rss_items_statement(
 			"DELETE FROM rss_item WHERE feedurl NOT IN ");
 		cleanup_rss_items_statement.append(list);
-		cleanup_rss_items_statement.append(1, ';');
+		cleanup_rss_items_statement.push_back(';');
 
 		std::string cleanup_read_items_statement(
 			"UPDATE rss_item SET deleted = 1 WHERE unread = 0");

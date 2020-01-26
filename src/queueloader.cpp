@@ -242,7 +242,7 @@ std::string QueueLoader::get_filename(const std::string& str)
 	std::string fn = cfg.get_configvalue("download-path");
 
 	if (fn[fn.length() - 1] != NEWSBEUTER_PATH_SEP) {
-		fn.append(1, NEWSBEUTER_PATH_SEP);
+		fn.push_back(NEWSBEUTER_PATH_SEP);
 	}
 	char buf[1024];
 	snprintf(buf, sizeof(buf), "%s", str.c_str());

@@ -91,7 +91,7 @@ std::string ListFormatter::format_list(RegexManager* rxman,
 					Stfl::quote(str)));
 		}
 	}
-	format_cache.append(1, '}');
+	format_cache.push_back('}');
 	return format_cache;
 }
 

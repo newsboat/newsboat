@@ -344,10 +344,10 @@ std::string View::get_filename_suggestion(const std::string& s)
 	std::string retval;
 	for (unsigned int i = 0; i < s.length(); ++i) {
 		if (isalnum(s[i])) {
-			retval.append(1, s[i]);
+			retval.push_back(s[i]);
 		} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
 			s[i] == '\n') {
-			retval.append(1, '_');
+			retval.push_back('_');
 		}
 	}
 	if (retval.length() == 0) {

@@ -70,7 +70,7 @@ void append_escapes(std::string& str, char c)
 	case '\\':
 		break;
 	default:
-		str.append(1, c);
+		str.push_back(c);
 		break;
 	}
 }
@@ -147,8 +147,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 							append_escapes(token,
 								str[last_pos]);
 						} else {
-							token.append(1,
-								str[last_pos]);
+							token.push_back(str[last_pos]);
 						}
 					}
 					++last_pos;
@@ -171,8 +170,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 							append_escapes(token,
 								str[last_pos]);
 						} else {
-							token.append(1,
-								str[last_pos]);
+							token.push_back(str[last_pos]);
 						}
 					}
 					++last_pos;
