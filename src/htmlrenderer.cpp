@@ -54,6 +54,9 @@ HtmlRenderer::HtmlRenderer(bool raw)
 	tags["th"] = HtmlTag::TH;
 	tags["tr"] = HtmlTag::TR;
 	tags["td"] = HtmlTag::TD;
+	tags["video"] = HtmlTag::VIDEO;
+	tags["audio"] = HtmlTag::AUDIO;
+	tags["source"] = HtmlTag::SOURCE;
 }
 
 void HtmlRenderer::render(const std::string& source,
@@ -91,12 +94,16 @@ void HtmlRenderer::render(std::istream& input,
 	const std::string& url)
 {
 	unsigned int image_count = 0;
+	unsigned int video_count = 0;
+	unsigned int audio_count = 0;
 	std::string curline;
 	int indent_level = 0;
 	bool inside_li = false, is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	size_t inside_script = 0;
 	size_t inside_style = 0;
+	bool inside_video = false;
+	bool inside_audio = false;
 	std::vector<unsigned int> ol_counts;
 	std::vector<char> ol_types;
 	HtmlTag current_tag;
@@ -482,6 +489,55 @@ void HtmlRenderer::render(std::istream& input,
 				}
 				break;
 			}
+
+			case HtmlTag::VIDEO: {
+				std::string videourl;
+				try {
+					videourl = xpp.get_attribute_value("src");
+				} catch (const std::invalid_argument&) {
+					videourl = "";
+				}
+				video_count++;
+				inside_video = true;
+				add_media_link(curline, links, url, videourl,
+					video_count, LinkType::VIDEO);
+			}
+			break;
+
+			case HtmlTag::AUDIO: {
+				std::string audiourl;
+				try {
+					audiourl = xpp.get_attribute_value("src");
+				} catch (const std::invalid_argument&) {
+					audiourl = "";
+				}
+				audio_count++;
+				inside_audio = true;
+				add_media_link(curline, links, url, audiourl,
+					audio_count, LinkType::AUDIO);
+			}
+			break;
+
+			case HtmlTag::SOURCE: {
+				std::string sourceurl;
+				try {
+					sourceurl = xpp.get_attribute_value("src");
+				} catch (const std::invalid_argument&) {
+					LOG(Level::WARN,
+						"HtmlRenderer::render: found source tag with no src attribute");
+					sourceurl = "";
+				}
+				if (inside_video) {
+					add_media_link(curline, links, url,
+						sourceurl, video_count,
+						LinkType::VIDEO);
+				}
+				if (inside_audio) {
+					add_media_link(curline, links, url,
+						sourceurl, audio_count,
+						LinkType::AUDIO);
+				}
+			}
 			}
 			break;
 
@@ -636,6 +692,7 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::ITUNESHACK:
 			case HtmlTag::IMG:
 			case HtmlTag::HR:
+			case HtmlTag::SOURCE:
 				// ignore closing tags
 				break;
 
@@ -730,6 +787,14 @@ void HtmlRenderer::render(std::istream& input,
 					tables.back().complete_cell();
 				}
 				break;
+
+			case HtmlTag::VIDEO:
+				inside_video = false;
+				break;
+
+			case HtmlTag::AUDIO:
+				inside_audio = false;
+				break;
 			}
 			break;
 
@@ -764,8 +829,8 @@ void HtmlRenderer::render(std::istream& input,
 						curline.append(paragraph);
 					}
 				}
-			} else if (inside_script || inside_style) {
-				// skip scripts and CSS styles
+			} else if (inside_script || inside_style || inside_video || inside_audio) {
+				// skip scripts, CSS styles and fallback text for media elements
 			} else {
 				// strip leading whitespace
 				bool had_whitespace = false;
@@ -821,6 +886,23 @@ void HtmlRenderer::render(std::istream& input,
 	}
 }
 
+void HtmlRenderer::add_media_link(std::string& curline,
+	std::vector<LinkPair>& links, const std::string& url,
+	const std::string& media_url, unsigned int media_count, LinkType type)
+{
+	if (media_url.empty()) {
+		return;
+	}
+
+	std::string type_str = type2str(type);
+	unsigned int link_num = add_link(links,
+			utils::censor_url(utils::absolute_url(url, media_url)),
+			type);
+
+	curline.append(strprintf::fmt("[%s %u (%s #%u)]", _(type_str.c_str()),
+			media_count, _("link"), link_num));
+}
+
 std::string HtmlRenderer::render_hr(const unsigned int width)
 {
 	std::string result = "\n ";
@@ -839,6 +921,10 @@ std::string HtmlRenderer::type2str(LinkType type)
 		return _("image");
 	case LinkType::EMBED:
 		return _("embedded flash");
+	case LinkType::VIDEO:
+		return _("video");
+	case LinkType::AUDIO:
+		return _("audio");
 	default:
 		return _("unknown (bug)");
 	}
