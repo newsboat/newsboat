@@ -176,8 +176,7 @@ PbController::PbController()
 		::exit(EXIT_FAILURE);
 	}
 
-	config_file =
-		config_dir + NEWSBEUTER_PATH_SEP + config_file;
+	config_file = config_dir + NEWSBEUTER_PATH_SEP + config_file;
 	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
 	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
 }
