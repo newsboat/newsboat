@@ -24,12 +24,17 @@ else
     service_pull_request="--service-pull-request ${TRAVIS_PULL_REQUEST}"
 fi
 
+if [ -z "${COVERALLS_REPO_TOKEN}" ]
+then
+    auth="--service-name travis-ci --service-job-number \"${TRAVIS_JOB_ID}\""
+else
+    auth="--token \"${COVERALLS_REPO_TOKEN}\""
+fi
+
 ${HOME}/.cargo/bin/grcov \
     . \
-    --service-name "travis-ci" \
+    ${auth} \
     --service-number "${TRAVIS_BUILD_ID}" \
-    --service-job-number "${TRAVIS_JOB_ID}" \
-    --token "${COVERALLS_REPO_TOKEN}" \
     --commit-sha "${TRAVIS_COMMIT}" \
     --vcs-branch "${branch}" \
     ${service_pull_request} \
