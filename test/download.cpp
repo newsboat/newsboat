@@ -74,3 +74,43 @@ TEST_CASE("filename() returns download's target filename", "[Download]")
 		REQUIRE(d.filename() == "def");
 	}
 }
+
+TEST_CASE("percents_finished() takes current progress into account",
+	"[Download]")
+{
+	auto emptyCallback = []() {};
+
+	Download d(emptyCallback);
+
+	SECTION("percents_finished() returns 0 by default") {
+		REQUIRE(d.percents_finished() == 0);
+	}
+
+	SECTION("percents_finished() updates according to set_progress's arguments") {
+		double downloaded = 3.0;
+		double total = 7.0;
+		d.set_progress(downloaded, total);
+
+		REQUIRE(d.percents_finished() == Approx(100.0 * (downloaded / total)));
+	}
+
+	SECTION("percents_finished() takes offset into account") {
+		double offset = 5.0;
+		double downloaded = 3.0;
+		double total = 12.0;
+
+		d.set_offset(offset);
+		d.set_progress(downloaded, total);
+
+		auto expected = Approx(100.0 * ((downloaded + offset) / (total + offset)));
+		REQUIRE(d.percents_finished() == expected);
+	}
+
+	SECTION("percents_finished() returns 0 if total is unknown (0)") {
+		double downloaded = 3.0;
+		double total = 0.0;
+		d.set_progress(downloaded, total);
+
+		REQUIRE(d.percents_finished() == 0);
+	}
+}
