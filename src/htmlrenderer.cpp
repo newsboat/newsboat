@@ -1100,7 +1100,7 @@ std::string HtmlRenderer::get_char_numbering(unsigned int count)
 	std::string result;
 	do {
 		count--;
-		result.append(1, 'a' + (count % 26));
+		result.push_back('a' + (count % 26));
 		count /= 26;
 	} while (count > 0);
 	std::reverse(result.begin(), result.end());

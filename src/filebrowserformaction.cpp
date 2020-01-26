@@ -74,32 +74,27 @@ void FileBrowserFormAction::process_operation(Operation op,
 					f->set("head",
 						fmt.do_format(
 							cfg->get_configvalue(
-								"filebr"
-								"o"
-								"wser-"
-								"title-"
-								"forma"
-								"t"),
+								"filebrowser-title-format"),
 							width));
 					int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
-						"FileBrowserFormAction:OP_"
-						"OPEN: "
-						"chdir(%s) = %i",
+						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
 					f->set("listpos", "0");
 					std::string fn = utils::getcwd();
-					fn.append(NEWSBEUTER_PATH_SEP);
+					if (fn.back() != NEWSBEUTER_PATH_SEP) {
+						fn.push_back(NEWSBEUTER_PATH_SEP);
+					}
 					std::string fnstr =
 						f->get("filenametext");
 					std::string::size_type base =
-						fnstr.find_first_of('/');
+						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
 						fn.append(fnstr,
-							base,
+							base + 1,
 							std::string::npos);
 					}
 					f->set("filenametext", fn);
@@ -108,7 +103,9 @@ void FileBrowserFormAction::process_operation(Operation op,
 				break;
 				case '-': {
 					std::string fn = utils::getcwd();
-					fn.append(NEWSBEUTER_PATH_SEP);
+					if (fn.back() != NEWSBEUTER_PATH_SEP) {
+						fn.push_back(NEWSBEUTER_PATH_SEP);
+					}
 					fn.append(filename);
 					f->set("filenametext", fn);
 					f->set_focus("filename");
@@ -131,9 +128,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 					f->set_focus("files");
 					if (v->confirm(
 							strprintf::fmt(
-								_("Do you really "
-									"want to "
-									"overwrite `%s' "
+								_("Do you really want to overwrite `%s' "
 									"(y:Yes n:No)? "),
 								fn),
 							_("yn")) == *_("n")) {

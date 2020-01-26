@@ -97,32 +97,27 @@ void DirBrowserFormAction::process_operation(Operation op,
 					f->set("head",
 						fmt.do_format(
 							cfg->get_configvalue(
-								"dir"
-								"brow"
-								"ser-"
-								"title-"
-								"forma"
-								"t"),
+								"dirbrowser-title-format"),
 							width));
 					int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
-						"DirBrowserFormAction:OP_"
-						"OPEN: "
-						"chdir(%s) = %i",
+						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
 					f->set("listpos", "0");
 					std::string fn = utils::getcwd();
-					fn.append(NEWSBEUTER_PATH_SEP);
+					if (fn.back() != NEWSBEUTER_PATH_SEP) {
+						fn.push_back(NEWSBEUTER_PATH_SEP);
+					}
 					std::string fnstr =
 						f->get("filenametext");
 					std::string::size_type base =
-						fnstr.find_first_of('/');
+						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
 						fn.append(fnstr,
-							base,
+							base + 1,
 							std::string::npos);
 					}
 					f->set("filenametext", fn);
@@ -131,7 +126,9 @@ void DirBrowserFormAction::process_operation(Operation op,
 				break;
 				case '-': {
 					std::string fn = utils::getcwd();
-					fn.append(NEWSBEUTER_PATH_SEP);
+					if (fn.back() != NEWSBEUTER_PATH_SEP) {
+						fn.push_back(NEWSBEUTER_PATH_SEP);
+					}
 					fn.append(filename);
 					f->set("filenametext", fn);
 					f->set_focus("filename");

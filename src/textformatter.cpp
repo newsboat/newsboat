@@ -206,7 +206,7 @@ std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 					"{listitem text:%s}", Stfl::quote(line)));
 		}
 	}
-	format_cache.append(1, '}');
+	format_cache.push_back('}');
 
 	auto line_count = formatted.size();
 

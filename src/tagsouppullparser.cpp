@@ -103,7 +103,7 @@ void TagSoupPullParser::skip_whitespace()
 			if (!isspace(c)) {
 				break;
 			} else {
-				ws.append(1, c);
+				ws.push_back(c);
 			}
 		}
 	} while (!inputstream->eof() && !inputstream->fail());
@@ -625,7 +625,7 @@ void TagSoupPullParser::handle_text()
 	if (current_event != Event::START_DOCUMENT) {
 		text.append(ws);
 	}
-	text.append(1, c);
+	text.push_back(c);
 	std::string tmp;
 	getline(*inputstream, tmp, '<');
 	text.append(tmp);

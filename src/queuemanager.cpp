@@ -68,8 +68,8 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
 	const time_t pubDate = item->pubDate_timestamp();
 
 	std::string dlformat = cfg->get_configvalue("download-path");
-	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP[0]) {
-		dlformat.append(NEWSBEUTER_PATH_SEP);
+	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP) {
+		dlformat.push_back(NEWSBEUTER_PATH_SEP);
 	}
 
 	const std::string filemask = cfg->get_configvalue("download-filename-format");
