@@ -1450,8 +1450,8 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	if (directory.back() != '/') {
-		directory = directory + "/";
+	if (directory.back() != NEWSBEUTER_PATH_SEP) {
+		directory.append(1, NEWSBEUTER_PATH_SEP);
 	}
 
 	if (visible_items.size() == 1) {

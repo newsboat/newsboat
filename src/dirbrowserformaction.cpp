@@ -106,13 +106,13 @@ void DirBrowserFormAction::process_operation(Operation op,
 						status);
 					f->set("listpos", "0");
 					std::string fn = utils::getcwd();
-					if (fn.back() != '/') {
+					if (fn.back() != NEWSBEUTER_PATH_SEP) {
 						fn.append(1, NEWSBEUTER_PATH_SEP);
 					}
 					std::string fnstr =
 						f->get("filenametext");
 					std::string::size_type base =
-						fnstr.find_last_of('/');
+						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
@@ -126,7 +126,7 @@ void DirBrowserFormAction::process_operation(Operation op,
 				break;
 				case '-': {
 					std::string fn = utils::getcwd();
-					if (fn.back() != '/') {
+					if (fn.back() != NEWSBEUTER_PATH_SEP) {
 						fn.append(1, NEWSBEUTER_PATH_SEP);
 					}
 					fn.append(filename);
