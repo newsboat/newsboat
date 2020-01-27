@@ -1,5 +1,8 @@
 #include "download.h"
 
+#include <set>
+#include <vector>
+
 #include "test-helpers.h"
 
 using namespace podboat;
@@ -140,5 +143,43 @@ TEST_CASE("basename() returns all text after last slash in the filename",
 		d.set_filename(filename);
 
 		REQUIRE(d.basename() == basename);
+	}
+}
+
+TEST_CASE("status_text() does not contain obvious copy-paste errors",
+	"[Download]")
+{
+	auto emptyCallback = []() {};
+
+	Download d(emptyCallback);
+
+	std::vector<DlStatus> status_values {
+		DlStatus::QUEUED,
+		DlStatus::DOWNLOADING,
+		DlStatus::CANCELLED,
+		DlStatus::DELETED,
+		DlStatus::FINISHED,
+		DlStatus::FAILED,
+		DlStatus::ALREADY_DOWNLOADED,
+		DlStatus::READY,
+		DlStatus::PLAYED
+	};
+
+	SECTION("status_text returns a non-empty string for each possible status") {
+		for (const DlStatus& status : status_values) {
+			d.set_status(status);
+
+			REQUIRE_FALSE(d.status_text().empty());
+		}
+	}
+
+	SECTION("status_text() returns a unique text for each of the possible status values") {
+		std::set<std::string> status_texts;
+		for (const DlStatus& status : status_values) {
+			d.set_status(status);
+			status_texts.insert(d.status_text());
+		}
+
+		REQUIRE(status_values.size() == status_texts.size());
 	}
 }
