@@ -114,3 +114,31 @@ TEST_CASE("percents_finished() takes current progress into account",
 		REQUIRE(d.percents_finished() == 0);
 	}
 }
+
+TEST_CASE("basename() returns all text after last slash in the filename",
+	"[Download]")
+{
+	auto emptyCallback = []() {};
+
+	Download d(emptyCallback);
+
+	SECTION("basename() returns empty string by default") {
+		REQUIRE(d.basename().empty());
+	}
+
+	SECTION("basename() returns full filename if it does not contain slashes") {
+		std::string filename = "lorem_ipsum.txt";
+		d.set_filename(filename);
+
+		REQUIRE(d.basename() == filename);
+	}
+
+	SECTION("basename() returns only text after the last slash in the filename") {
+		std::string basename = "lorem_ipsum.txt";
+		std::string path = "/test/path/";
+		std::string filename = path + basename;
+		d.set_filename(filename);
+
+		REQUIRE(d.basename() == basename);
+	}
+}
