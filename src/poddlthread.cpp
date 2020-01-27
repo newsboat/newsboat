@@ -178,12 +178,7 @@ int PodDlThread::progress(double dlnow, double dltotal)
 		return -1;
 	}
 	gettimeofday(&tv2, nullptr);
-	double kbps = compute_kbps();
-	if (kbps > 9999.99) {
-		kbps = 0.0;
-		gettimeofday(&tv1, nullptr);
-		bytecount = 0;
-	}
+	const double kbps = compute_kbps();
 	dl->set_kbps(kbps);
 	dl->set_progress(dlnow, dltotal);
 	return 0;
