@@ -21,6 +21,21 @@ TEST_CASE("W3CDTF parser extracts date and time from any valid string",
 			"Tue, 30 Dec 2008 00:00:00 +0000");
 	}
 
+	SECTION("date and hours") {
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("2008-12-30T13") ==
+			"Tue, 30 Dec 2008 13:00:00 +0000");
+	}
+
+	SECTION("date, hours, and minutes") {
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("2008-12-30T13:21") ==
+			"Tue, 30 Dec 2008 13:21:00 +0000");
+	}
+
+	SECTION("date and time, without timezone") {
+		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822("2008-12-30T13:21:59") ==
+			"Tue, 30 Dec 2008 13:21:59 +0000");
+	}
+
 	SECTION("date and time with Z timezone") {
 		REQUIRE(rsspp::RssParser::__w3cdtf_to_rfc822(
 				"2008-12-30T13:03:15Z") ==
