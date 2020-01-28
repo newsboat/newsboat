@@ -37,7 +37,7 @@ freebsd_task:
 
 macos_task:
     osx_instance:
-        image: mojave-base
+        image: catalina-base
 
     install_script:
         - brew update
