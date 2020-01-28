@@ -15,7 +15,7 @@ struct RssParser {
 	{
 	}
 	virtual ~RssParser() {}
-	static std::string __w3cdtf_to_rfc822(const std::string& w3cdtf);
+	static std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
 
 protected:
 	std::string get_content(xmlNode* node);
@@ -24,7 +24,6 @@ protected:
 	std::string get_prop(xmlNode* node,
 		const std::string& prop,
 		const std::string& ns = "");
-	std::string w3cdtf_to_rfc822(const std::string& w3cdtf);
 	bool node_is(xmlNode* node, const char* name, const char* ns_uri = nullptr);
 	xmlDocPtr doc;
 	std::string globalbase;

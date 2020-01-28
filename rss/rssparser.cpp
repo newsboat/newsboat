@@ -82,11 +82,6 @@ std::string RssParser::get_prop(xmlNode* node,
 
 std::string RssParser::w3cdtf_to_rfc822(const std::string& w3cdtf)
 {
-	return __w3cdtf_to_rfc822(w3cdtf);
-}
-
-std::string RssParser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
-{
 	if (w3cdtf.empty()) {
 		return "";
 	}
