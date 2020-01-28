@@ -86,7 +86,7 @@ time_t RssParser::parse_date(const std::string& datestr)
 			"out "
 			"W3CDTF parser...");
 		t = curl_getdate(
-				rsspp::RssParser::__w3cdtf_to_rfc822(datestr).c_str(),
+				rsspp::RssParser::w3cdtf_to_rfc822(datestr).c_str(),
 				nullptr);
 	}
 	if (t == -1) {

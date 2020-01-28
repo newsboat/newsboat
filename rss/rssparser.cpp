@@ -82,11 +82,6 @@ std::string RssParser::get_prop(xmlNode* node,
 
 std::string RssParser::w3cdtf_to_rfc822(const std::string& w3cdtf)
 {
-	return __w3cdtf_to_rfc822(w3cdtf);
-}
-
-std::string RssParser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
-{
 	if (w3cdtf.empty()) {
 		return "";
 	}
@@ -136,7 +131,13 @@ std::string RssParser::__w3cdtf_to_rfc822(const std::string& w3cdtf)
 	// then the offset will be zeroed out, since that was manually added
 	// https://github.com/akrennmair/newsbeuter/issues/369
 	stm.tm_isdst = -1;
-	time_t gmttime = mktime(&stm) + offs;
+
+	const time_t local_time = mktime(&stm);
+	if (local_time == -1) {
+		return "";
+	}
+
+	const time_t gmttime = local_time + offs;
 	return newsboat::utils::mt_strf_localtime("%a, %d %b %Y %H:%M:%S +0000",
 			gmttime);
 }
