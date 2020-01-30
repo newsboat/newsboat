@@ -90,28 +90,29 @@ TEST_CASE("percents_finished() takes current progress into account",
 	}
 
 	SECTION("percents_finished() updates according to set_progress's arguments") {
-		double downloaded = 3.0;
-		double total = 7.0;
+		const double downloaded = 3.0;
+		const double total = 7.0;
 		d.set_progress(downloaded, total);
 
 		REQUIRE(d.percents_finished() == Approx(100.0 * (downloaded / total)));
 	}
 
 	SECTION("percents_finished() takes offset into account") {
-		double offset = 5.0;
-		double downloaded = 3.0;
-		double total = 12.0;
+		const double offset = 5.0;
+		const double downloaded = 3.0;
+		const double total = 12.0;
 
 		d.set_offset(offset);
 		d.set_progress(downloaded, total);
 
-		auto expected = Approx(100.0 * ((downloaded + offset) / (total + offset)));
+		const auto expected = Approx(100.0 * ((downloaded + offset) /
+					(total + offset)));
 		REQUIRE(d.percents_finished() == expected);
 	}
 
 	SECTION("percents_finished() returns 0 if total is unknown (0)") {
-		double downloaded = 3.0;
-		double total = 0.0;
+		const double downloaded = 3.0;
+		const double total = 0.0;
 		d.set_progress(downloaded, total);
 
 		REQUIRE(d.percents_finished() == 0);
@@ -130,16 +131,16 @@ TEST_CASE("basename() returns all text after last slash in the filename",
 	}
 
 	SECTION("basename() returns full filename if it does not contain slashes") {
-		std::string filename = "lorem_ipsum.txt";
+		const std::string filename = "lorem_ipsum.txt";
 		d.set_filename(filename);
 
 		REQUIRE(d.basename() == filename);
 	}
 
 	SECTION("basename() returns only text after the last slash in the filename") {
-		std::string basename = "lorem_ipsum.txt";
-		std::string path = "/test/path/";
-		std::string filename = path + basename;
+		const std::string basename = "lorem_ipsum.txt";
+		const std::string path = "/test/path/";
+		const std::string filename = path + basename;
 		d.set_filename(filename);
 
 		REQUIRE(d.basename() == basename);
@@ -153,7 +154,7 @@ TEST_CASE("status_text() does not contain obvious copy-paste errors",
 
 	Download d(emptyCallback);
 
-	std::vector<DlStatus> status_values {
+	const std::vector<DlStatus> status_values {
 		DlStatus::QUEUED,
 		DlStatus::DOWNLOADING,
 		DlStatus::CANCELLED,
