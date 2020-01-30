@@ -1370,3 +1370,55 @@ TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
 	REQUIRE(links[4].first == "http://example.com/audio2.mp3");
 	REQUIRE(links[4].second == LinkType::AUDIO);
 }
+
+TEST_CASE("Empty <source> tags do not increase the link count",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<video>"
+		"	<source src='http://example.com/video.avi'>"
+		"	<source>"
+		"	<source src='http://example.com/video.mkv'>"
+		"</video>"
+		"<video></video>"
+		"<audio>"
+		"	<source src='http://example.com/audio.mp3'>"
+		"	<source>"
+		"	<source src='http://example.com/audio.oga'>"
+		"</audio>"
+		"<audio></audio>";
+
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 7);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
+			"[video 1 (link #2)][audio 1 (link #3)]"
+			"[audio 1 (link #4)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/video.avi (video)"));
+	REQUIRE(lines[4] ==
+		p(LineType::softwrappable,
+			"[2]: http://example.com/video.mkv (video)"));
+	REQUIRE(lines[5] ==
+		p(LineType::softwrappable,
+			"[3]: http://example.com/audio.mp3 (audio)"));
+	REQUIRE(lines[6] ==
+		p(LineType::softwrappable,
+			"[4]: http://example.com/audio.oga (audio)"));
+	REQUIRE(links.size() == 4);
+	REQUIRE(links[0].first == "http://example.com/video.avi");
+	REQUIRE(links[0].second == LinkType::VIDEO);
+	REQUIRE(links[1].first == "http://example.com/video.mkv");
+	REQUIRE(links[1].second == LinkType::VIDEO);
+	REQUIRE(links[2].first == "http://example.com/audio.mp3");
+	REQUIRE(links[2].second == LinkType::AUDIO);
+	REQUIRE(links[3].first == "http://example.com/audio.oga");
+	REQUIRE(links[3].second == LinkType::AUDIO);
+}
