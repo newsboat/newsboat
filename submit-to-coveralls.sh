@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# test
+
 # For pull requests, TRAVIS_BRANCH is the *target* branch, usually "master".
 # This leads to mis-assigned coverage reports: they aren't assigned to PR's
 # source branch. To combat this, we detect if the build is triggered by a PR,
