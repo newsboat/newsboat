@@ -96,6 +96,7 @@ void HtmlRenderer::render(std::istream& input,
 	unsigned int image_count = 0;
 	unsigned int video_count = 0;
 	unsigned int audio_count = 0;
+	unsigned int source_count = 0;
 	std::string curline;
 	int indent_level = 0;
 	bool inside_li = false, is_ol = false, inside_pre = false;
@@ -491,19 +492,31 @@ void HtmlRenderer::render(std::istream& input,
 			}
 
 			case HtmlTag::VIDEO: {
+				std::string videourl;
+
+				if (inside_video && source_count == 0) {
+					video_count--;
+				}
+
+				if (inside_audio && source_count == 0) {
+					audio_count--;
+				}
+
 				if (inside_video || inside_audio) {
+					source_count = 0;
 					inside_video = false;
 					inside_audio = false;
 					LOG(Level::WARN,
 						"HtmlRenderer::render media element left unclosed");
 				}
 
-				std::string videourl;
 				try {
 					videourl = xpp.get_attribute_value("src");
+					source_count++;
 				} catch (const std::invalid_argument&) {
 					videourl = "";
 				}
+
 				video_count++;
 				inside_video = true;
 				add_media_link(curline, links, url, videourl,
@@ -512,19 +525,31 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 			case HtmlTag::AUDIO: {
+				std::string audiourl;
+
+				if (inside_video && source_count == 0) {
+					video_count--;
+				}
+
+				if (inside_audio && source_count == 0) {
+					audio_count--;
+				}
+
 				if (inside_video || inside_audio) {
+					source_count = 0;
 					inside_video = false;
 					inside_audio = false;
 					LOG(Level::WARN,
 						"HtmlRenderer::render media element left unclosed");
 				}
 
-				std::string audiourl;
 				try {
 					audiourl = xpp.get_attribute_value("src");
+					source_count++;
 				} catch (const std::invalid_argument&) {
 					audiourl = "";
 				}
+
 				audio_count++;
 				inside_audio = true;
 				add_media_link(curline, links, url, audiourl,
@@ -534,18 +559,22 @@ void HtmlRenderer::render(std::istream& input,
 
 			case HtmlTag::SOURCE: {
 				std::string sourceurl;
+
 				try {
 					sourceurl = xpp.get_attribute_value("src");
+					source_count++;
 				} catch (const std::invalid_argument&) {
 					LOG(Level::WARN,
 						"HtmlRenderer::render: found source tag with no src attribute");
 					sourceurl = "";
 				}
+
 				if (inside_video) {
 					add_media_link(curline, links, url,
 						sourceurl, video_count,
 						LinkType::VIDEO);
 				}
+
 				if (inside_audio) {
 					add_media_link(curline, links, url,
 						sourceurl, audio_count,
@@ -803,11 +832,21 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::VIDEO:
+				if (inside_video && source_count == 0) {
+					video_count--;
+				}
+
 				inside_video = false;
+				source_count = 0;
 				break;
 
 			case HtmlTag::AUDIO:
+				if (inside_audio && source_count == 0) {
+					audio_count--;
+				}
+
 				inside_audio = false;
+				source_count = 0;
 				break;
 			}
 			break;

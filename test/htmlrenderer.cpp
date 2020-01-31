@@ -1371,24 +1371,25 @@ TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
 	REQUIRE(links[4].second == LinkType::AUDIO);
 }
 
-TEST_CASE("Empty <source> tags do not increase the link count",
+TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
+	"without valid sources do not increase the element count",
 	"[HtmlRenderer]")
 {
 	HtmlRenderer r;
 
 	const std::string input =
+		"<video></video>"
 		"<video>"
 		"	<source src='http://example.com/video.avi'>"
 		"	<source>"
 		"	<source src='http://example.com/video.mkv'>"
 		"</video>"
-		"<video></video>"
+		"<audio></audio>"
 		"<audio>"
 		"	<source src='http://example.com/audio.mp3'>"
 		"	<source>"
 		"	<source src='http://example.com/audio.oga'>"
-		"</audio>"
-		"<audio></audio>";
+		"</audio>";
 
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
