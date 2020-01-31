@@ -26,11 +26,8 @@ else
     service_pull_request="--service-pull-request ${TRAVIS_PULL_REQUEST}"
 fi
 
-if [ -z "${COVERALLS_REPO_TOKEN}" ]
+if [ -n "${COVERALLS_REPO_TOKEN}" ]
 then
-    echo "COVERALLS_REPO_TOKEN is empty, using service-name and job-number (${TRAVIS_JOB_ID}) to authenticate"
-    auth="--service-name travis-ci --service-job-number ${TRAVIS_JOB_ID}"
-else
     length=$(echo -n ${COVERALLS_REPO_TOKEN} | wc -c)
     echo "COVERALLS_REPO_TOKEN is non-empty (${length} characters), using it to authenticate"
     auth="--token ${COVERALLS_REPO_TOKEN}"
@@ -39,6 +36,8 @@ fi
 ${HOME}/.cargo/bin/grcov \
     . \
     ${auth} \
+    --service-name travis-ci \
+    --service-job-number ${TRAVIS_JOB_ID} \
     --service-number "${TRAVIS_BUILD_ID}" \
     --commit-sha "${TRAVIS_COMMIT}" \
     --vcs-branch "${branch}" \
