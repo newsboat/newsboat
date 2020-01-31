@@ -27,11 +27,11 @@ fi
 if [ -z "${COVERALLS_REPO_TOKEN}" ]
 then
     echo "COVERALLS_REPO_TOKEN is empty, using service-name and job-number (${TRAVIS_JOB_ID}) to authenticate"
-    auth="--service-name travis-ci --service-job-number \"${TRAVIS_JOB_ID}\""
+    auth="--service-name travis-ci --service-job-number ${TRAVIS_JOB_ID}"
 else
     length=$(echo -n ${COVERALLS_REPO_TOKEN} | wc -c)
     echo "COVERALLS_REPO_TOKEN is non-empty (${length} characters), using it to authenticate"
-    auth="--token \"${COVERALLS_REPO_TOKEN}\""
+    auth="--token ${COVERALLS_REPO_TOKEN}"
 fi
 
 ${HOME}/.cargo/bin/grcov \
