@@ -1204,3 +1204,222 @@ TEST_CASE("When rendeing text, HtmlRenderer strips leading whitespace",
 		p(LineType::wrappable, "Text preceded by whitespace."));
 	REQUIRE(links.size() == 0);
 }
+
+TEST_CASE("<video> results in a placeholder and a link for each valid source",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<video src='http://example.com/video.avi'></video>"
+		"<video>"
+		"	<source src='http://example.com/video2.avi'>"
+		"	<source src='http://example.com/video2.mkv'>"
+		"</video>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 6);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
+			"[video 2 (link #2)]"
+			"[video 2 (link #3)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/video.avi (video)"));
+	REQUIRE(lines[4] ==
+		p(LineType::softwrappable,
+			"[2]: http://example.com/video2.avi (video)"));
+	REQUIRE(lines[5] ==
+		p(LineType::softwrappable,
+			"[3]: http://example.com/video2.mkv (video)"));
+	REQUIRE(links.size() == 3);
+	REQUIRE(links[0].first == "http://example.com/video.avi");
+	REQUIRE(links[0].second == LinkType::VIDEO);
+	REQUIRE(links[1].first == "http://example.com/video2.avi");
+	REQUIRE(links[1].second == LinkType::VIDEO);
+	REQUIRE(links[2].first == "http://example.com/video2.mkv");
+	REQUIRE(links[2].second == LinkType::VIDEO);
+}
+
+TEST_CASE("<video>s without valid sources are ignored", "[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input = "<video></video>"
+		"<video><source><source></video>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 0);
+	REQUIRE(links.size() == 0);
+}
+
+TEST_CASE("<audio> results in a placeholder and a link for each valid source",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<audio src='http://example.com/audio.oga'></audio>"
+		"<audio>"
+		"	<source src='http://example.com/audio2.mp3'>"
+		"	<source src='http://example.com/audio2.m4a'>"
+		"</audio>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 6);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[audio 1 (link #1)]"
+			"[audio 2 (link #2)]"
+			"[audio 2 (link #3)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/audio.oga (audio)"));
+	REQUIRE(lines[4] ==
+		p(LineType::softwrappable,
+			"[2]: http://example.com/audio2.mp3 (audio)"));
+	REQUIRE(lines[5] ==
+		p(LineType::softwrappable,
+			"[3]: http://example.com/audio2.m4a (audio)"));
+	REQUIRE(links.size() == 3);
+	REQUIRE(links[0].first == "http://example.com/audio.oga");
+	REQUIRE(links[0].second == LinkType::AUDIO);
+	REQUIRE(links[1].first == "http://example.com/audio2.mp3");
+	REQUIRE(links[1].second == LinkType::AUDIO);
+	REQUIRE(links[2].first == "http://example.com/audio2.m4a");
+	REQUIRE(links[2].second == LinkType::AUDIO);
+}
+
+TEST_CASE("<audio>s without valid sources are ignored", "[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input = "<audio></audio>"
+		"<audio><source><source></audio>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 0);
+	REQUIRE(links.size() == 0);
+}
+
+TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
+	"new media element", "[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<video src='http://example.com/video.avi'>"
+		"	This is fallback text for `the video` element"
+		"<video>"
+		"	<source src='http://example.com/video2.avi'>"
+		"This maybe isn't fallback text, but the spec says that"
+		" anything before the closing tag is transparent content"
+		"<audio>"
+		"	<source src='http://example.com/audio.oga'>"
+		"	<source src='http://example.com/audio.m4a'>"
+		"	This text should also be interpreted as fallback"
+		"<audio src='http://example.com/audio2.mp3'>"
+		"	This is additional fallback text"
+		"<audio></audio>"
+		"Here comes the text!";
+
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 8);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
+			"[video 2 (link #2)][audio 1 (link #3)]"
+			"[audio 1 (link #4)][audio 2 (link #5)]"
+			"Here comes the text!"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/video.avi (video)"));
+	REQUIRE(lines[4] ==
+		p(LineType::softwrappable,
+			"[2]: http://example.com/video2.avi (video)"));
+	REQUIRE(lines[5] ==
+		p(LineType::softwrappable,
+			"[3]: http://example.com/audio.oga (audio)"));
+	REQUIRE(lines[6] ==
+		p(LineType::softwrappable,
+			"[4]: http://example.com/audio.m4a (audio)"));
+	REQUIRE(lines[7] ==
+		p(LineType::softwrappable,
+			"[5]: http://example.com/audio2.mp3 (audio)"));
+	REQUIRE(links.size() == 5);
+	REQUIRE(links[0].first == "http://example.com/video.avi");
+	REQUIRE(links[0].second == LinkType::VIDEO);
+	REQUIRE(links[1].first == "http://example.com/video2.avi");
+	REQUIRE(links[1].second == LinkType::VIDEO);
+	REQUIRE(links[2].first == "http://example.com/audio.oga");
+	REQUIRE(links[2].second == LinkType::AUDIO);
+	REQUIRE(links[3].first == "http://example.com/audio.m4a");
+	REQUIRE(links[3].second == LinkType::AUDIO);
+	REQUIRE(links[4].first == "http://example.com/audio2.mp3");
+	REQUIRE(links[4].second == LinkType::AUDIO);
+}
+
+TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
+	"without valid sources do not increase the element count",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<video></video>"
+		"<video>"
+		"	<source src='http://example.com/video.avi'>"
+		"	<source>"
+		"	<source src='http://example.com/video.mkv'>"
+		"</video>"
+		"<audio></audio>"
+		"<audio>"
+		"	<source src='http://example.com/audio.mp3'>"
+		"	<source>"
+		"	<source src='http://example.com/audio.oga'>"
+		"</audio>";
+
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 7);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
+			"[video 1 (link #2)][audio 1 (link #3)]"
+			"[audio 1 (link #4)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] ==
+		p(LineType::softwrappable,
+			"[1]: http://example.com/video.avi (video)"));
+	REQUIRE(lines[4] ==
+		p(LineType::softwrappable,
+			"[2]: http://example.com/video.mkv (video)"));
+	REQUIRE(lines[5] ==
+		p(LineType::softwrappable,
+			"[3]: http://example.com/audio.mp3 (audio)"));
+	REQUIRE(lines[6] ==
+		p(LineType::softwrappable,
+			"[4]: http://example.com/audio.oga (audio)"));
+	REQUIRE(links.size() == 4);
+	REQUIRE(links[0].first == "http://example.com/video.avi");
+	REQUIRE(links[0].second == LinkType::VIDEO);
+	REQUIRE(links[1].first == "http://example.com/video.mkv");
+	REQUIRE(links[1].second == LinkType::VIDEO);
+	REQUIRE(links[2].first == "http://example.com/audio.mp3");
+	REQUIRE(links[2].second == LinkType::AUDIO);
+	REQUIRE(links[3].first == "http://example.com/audio.oga");
+	REQUIRE(links[3].second == LinkType::AUDIO);
+}

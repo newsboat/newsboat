@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-enum class LinkType { HREF, IMG, EMBED };
+enum class LinkType { HREF, IMG, EMBED, VIDEO, AUDIO };
 enum class HtmlTag {
 	A = 1,
 	EMBED,
@@ -43,7 +43,10 @@ enum class HtmlTag {
 	TABLE,
 	TH,
 	TR,
-	TD
+	TD,
+	VIDEO,
+	AUDIO,
+	SOURCE
 };
 
 typedef std::pair<std::string, LinkType> LinkPair;
@@ -130,6 +133,9 @@ private:
 	void add_hr(std::vector<std::pair<LineType, std::string>>& lines);
 	std::string get_char_numbering(unsigned int count);
 	std::string get_roman_numbering(unsigned int count);
+	void add_media_link(std::string& line, std::vector<LinkPair>& links,
+		const std::string& url, const std::string& media_url,
+		unsigned int media_count, LinkType type);
 	bool raw_;
 };
 
