@@ -53,6 +53,7 @@ use utils;
 /// Doe` etc. would be "values". The term "format specifiers" will be reserved to things like `%a`,
 /// and "format strings" would mean a collection of format specifiers, with optional text in
 /// between.
+#[derive(Default)]
 pub struct FmtStrFormatter {
     /// Stores keys and their values.
     fmts: BTreeMap<char, String>,

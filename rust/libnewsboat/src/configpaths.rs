@@ -23,7 +23,7 @@ const QUEUE_FILENAME: &str = "queue";
 const SEARCH_HISTORY_FILENAME: &str = "history.search";
 const CMDLINE_HISTORY_FILENAME: &str = "history.cmdline";
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ConfigPaths {
     env_home: PathBuf,
     error_message: String,

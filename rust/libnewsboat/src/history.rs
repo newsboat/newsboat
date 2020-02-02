@@ -2,6 +2,7 @@ use std::fs::OpenOptions;
 use std::io::{self, BufRead, BufReader, BufWriter, Write};
 use std::path::Path;
 
+#[derive(Default)]
 pub struct History {
     idx: usize,
     lines: Vec<String>,

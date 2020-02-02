@@ -279,6 +279,12 @@ impl Logger {
     }
 }
 
+impl Default for Logger {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::INIT;
 
 /// Returns a global logger instance.
