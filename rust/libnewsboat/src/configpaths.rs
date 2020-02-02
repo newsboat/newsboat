@@ -345,7 +345,7 @@ impl ConfigPaths {
         self.lock_file = {
             let current_extension = path
                 .extension()
-                .and_then(|p| Some(p.to_string_lossy().into_owned()))
+                .map(|p| p.to_string_lossy().into_owned())
                 .unwrap_or_else(|| String::new());
             path.set_extension(current_extension + LOCK_SUFFIX);
             path
