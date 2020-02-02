@@ -8,6 +8,7 @@
 #include "cache.h"
 #include "cliargsparser.h"
 #include "config.h"
+#include "configpaths.h"
 #include "controller.h"
 #include "dbexception.h"
 #include "exception.h"
@@ -23,7 +24,8 @@ extern "C" {
 
 using namespace newsboat;
 
-void print_usage(const std::string& argv0)
+void print_usage(const std::string& argv0, const std::string& config_path,
+	const std::string& urls_path, const std::string& cache_path)
 {
 	auto msg = strprintf::fmt(
 			_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
@@ -113,6 +115,24 @@ void print_usage(const std::string& argv0)
 		ss << a.desc << std::endl;
 	}
 	std::cout << ss.str();
+
+	std::cout << '\n';
+
+	std::cout << _("Files:") << '\n';
+	const std::string tr_config = _("config");
+	const std::string tr_urls = _("urls");
+	const std::string tr_cache = _("cache");
+	const auto widest = std::max({tr_config.length(), tr_urls.length(), tr_cache.length()});
+
+	const auto print_filepath = [widest](const std::string& name,
+	const std::string& value) {
+		std::cout << "\t- " << name << ":  " << std::string(
+				widest - name.length(), ' ') << value << '\n';
+	};
+
+	print_filepath(tr_config, config_path);
+	print_filepath(tr_urls, urls_path);
+	print_filepath(tr_cache, cache_path);
 }
 
 void print_version(const std::string& argv0, unsigned int level)
@@ -182,13 +202,22 @@ int main(int argc, char* argv[])
 
 	rsspp::Parser::global_init();
 
-	Controller c;
+	ConfigPaths configpaths;
+	if (!configpaths.initialized()) {
+		std::cerr << configpaths.error_message() << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	Controller c(configpaths);
 	newsboat::View v(&c);
 	c.set_view(&v);
 	CliArgsParser args(argc, argv);
 
+	configpaths.process_args(args);
+
 	if (args.should_print_usage()) {
-		print_usage(args.program_name());
+		print_usage(args.program_name(), configpaths.config_file(),
+			configpaths.url_file(), configpaths.cache_file());
 		if (args.should_return()) {
 			return args.return_code();
 		}
