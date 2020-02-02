@@ -40,7 +40,7 @@ impl History {
             len if self.idx < len => {
                 let line = self.lines[self.idx].clone();
                 self.idx += 1;
-                return line;
+                line
             }
             _ => self.lines[self.idx - 1].clone(),
         }

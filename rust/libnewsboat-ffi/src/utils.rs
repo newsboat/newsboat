@@ -277,7 +277,7 @@ pub unsafe extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
             let result = CString::new(result.unwrap()).unwrap();
             return result.into_raw();
         }
-        return ptr::null_mut();
+        ptr::null_mut()
     })
 }
 
