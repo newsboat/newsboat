@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-02-02 16:53+0300\n"
-"PO-Revision-Date: 2019-12-21 13:11+0300\n"
+"PO-Revision-Date: 2020-02-02 16:58+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -117,23 +117,20 @@ msgid "this help"
 msgstr "эта помощь"
 
 #: newsboat.cpp:120
-#, fuzzy
 msgid "Files:"
-msgstr "Файл: "
+msgstr "Файли"
 
 #: newsboat.cpp:121
-#, fuzzy
 msgid "config"
-msgstr "<файл настроек>"
+msgstr "настройки"
 
 #: newsboat.cpp:122
 msgid "urls"
-msgstr ""
+msgstr "ссылки"
 
 #: newsboat.cpp:123
-#, fuzzy
 msgid "cache"
-msgstr "<файл кэша>"
+msgstr "кэш"
 
 #: newsboat.cpp:154
 #, c-format
@@ -832,11 +829,11 @@ msgstr "встроенный flash"
 
 #: src/htmlrenderer.cpp:978
 msgid "video"
-msgstr ""
+msgstr "видео"
 
 #: src/htmlrenderer.cpp:980
 msgid "audio"
-msgstr ""
+msgstr "аудио"
 
 #: src/htmlrenderer.cpp:982
 msgid "unknown (bug)"
