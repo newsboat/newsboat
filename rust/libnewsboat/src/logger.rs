@@ -244,7 +244,7 @@ impl Logger {
                 let _ = logfile.write_all(timestamp.as_bytes());
                 let _ = logfile.write_all(level.as_bytes());
                 let _ = logfile.write_all(data);
-                let _ = logfile.write_all("\n".as_bytes());
+                let _ = logfile.write_all(b"\n");
             }
         }
 
@@ -253,7 +253,7 @@ impl Logger {
                 // Ignoring the error since checking every log() call will be too bothersome.
                 let _ = user_error_logfile.write_all(timestamp.as_bytes());
                 let _ = user_error_logfile.write_all(data);
-                let _ = user_error_logfile.write_all("\n".as_bytes());
+                let _ = user_error_logfile.write_all(b"\n");
             }
         }
     }
