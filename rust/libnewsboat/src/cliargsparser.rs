@@ -169,7 +169,7 @@ impl CliArgsParser {
 
         let mut args = CliArgsParser::default();
 
-        if let Some(program_name) = opts.get(0).map(|s| s.clone()) {
+        if let Some(program_name) = opts.get(0).cloned() {
             args.program_name = program_name;
         }
 
