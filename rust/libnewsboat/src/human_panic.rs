@@ -75,14 +75,10 @@ use std::panic::{self, PanicInfo};
 ///
 /// See module description for details.
 pub fn setup() {
-    match ::std::env::var("RUST_BACKTRACE") {
-        Err(_) => {
-            panic::set_hook(Box::new(move |panic_info: &PanicInfo| {
-                print_panic_msg(panic_info)
-                    .expect("An error occurred while preparing a crash report");
-            }));
-        }
-        Ok(_) => {}
+    if ::std::env::var("RUST_BACKTRACE").is_err() {
+        panic::set_hook(Box::new(move |panic_info: &PanicInfo| {
+            print_panic_msg(panic_info).expect("An error occurred while preparing a crash report");
+        }));
     }
 }
 
