@@ -55,7 +55,7 @@ impl History {
         Ok(())
     }
     pub fn save_to_file<P: AsRef<Path>>(&self, path: P, limit: usize) -> io::Result<()> {
-        if limit == 0 || self.lines.len() == 0 {
+        if limit == 0 || self.lines.is_empty() {
             return Ok(());
         }
 
