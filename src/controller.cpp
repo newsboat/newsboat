@@ -29,6 +29,7 @@
 #include "configcontainer.h"
 #include "configexception.h"
 #include "configparser.h"
+#include "configpaths.h"
 #include "dbexception.h"
 #include "downloadthread.h"
 #include "exception.h"
@@ -73,12 +74,13 @@ void ignore_signal(int sig)
 	LOG(Level::WARN, "caught signal %d but ignored it", sig);
 }
 
-Controller::Controller()
+Controller::Controller(ConfigPaths& configpaths)
 	: v(0)
 	, urlcfg(0)
 	, rsscache(0)
 	, refresh_on_start(false)
 	, api(0)
+	, configpaths(configpaths)
 	, queueManager(&cfg, &configpaths)
 {
 }
@@ -104,11 +106,6 @@ int Controller::run(const CliArgsParser& args)
 	::signal(SIGPIPE, ignore_signal);
 	::signal(SIGHUP, sighup_action);
 
-	if (!configpaths.initialized()) {
-		std::cerr << configpaths.error_message() << std::endl;
-		return EXIT_FAILURE;
-	}
-
 	refresh_on_start = args.refresh_on_start();
 
 	if (args.set_log_file()) {
@@ -126,8 +123,6 @@ int Controller::run(const CliArgsParser& args)
 	if (args.should_return()) {
 		return args.return_code();
 	}
-
-	configpaths.process_args(args);
 
 	const auto migrated = configpaths.try_migrate_from_newsbeuter();
 	if (migrated) {

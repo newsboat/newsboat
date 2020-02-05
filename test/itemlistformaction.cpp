@@ -4,6 +4,7 @@
 
 #include "3rd-party/catch.hpp"
 #include "cache.h"
+#include "configpaths.h"
 #include "feedlistformaction.h"
 #include "itemlist.h"
 #include "keymap.h"
@@ -16,7 +17,8 @@ using namespace newsboat;
 TEST_CASE("OP_OPEN displays article using an external pager",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile pagerfile;
 
@@ -67,7 +69,8 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -98,7 +101,8 @@ TEST_CASE(
 	"OP_OPENBROWSER_AND_MARK passes the url to the browser and marks read",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 
@@ -135,7 +139,8 @@ TEST_CASE(
 	"OP_OPENBROWSER_AND_MARK does not mark read when browser fails",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 
 	const std::string test_url = "http://test_url";
@@ -165,7 +170,8 @@ TEST_CASE(
 TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
@@ -197,7 +203,8 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
@@ -279,7 +286,8 @@ TEST_CASE(
 	"and marks them read",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
@@ -360,7 +368,8 @@ TEST_CASE(
 
 TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -421,7 +430,8 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -468,7 +478,8 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -555,7 +566,8 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile saveFile;
 	ConfigContainer cfg;
@@ -605,7 +617,8 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 
 TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
@@ -633,7 +646,8 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 
 TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
@@ -663,7 +677,8 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	// We are using the OP_SHOWURLS command to print the current
 	// article'attibutes to a file, and assert the position was indeed
 	// updated.
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	TestHelpers::TempFile articleFile;
 	RegexManager regman;
 	newsboat::View v(&c);
@@ -718,7 +733,8 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
@@ -758,7 +774,8 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	"[ItemListFormAction]")
 {
-	Controller c;
+	ConfigPaths paths;
+	Controller c(paths);
 	newsboat::View v(&c);
 	TestHelpers::TempFile articleFile;
 	ConfigContainer cfg;
