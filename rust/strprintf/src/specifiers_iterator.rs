@@ -29,7 +29,7 @@ fn find_percent_signs(input: &str) -> Option<(usize, usize)> {
     input.find('%').and_then(|first| {
         input[first + 1..]
             .find('%')
-            .and_then(|second| Some((first, first + 1 + second)))
+            .map(|second| (first, first + 1 + second))
     })
 }
 
@@ -40,9 +40,8 @@ impl<'a> Iterator for SpecifiersIterator<'a> {
         let mut pair;
         let mut current_offset = 0usize;
         loop {
-            pair = find_percent_signs(&self.current_string[current_offset..]).and_then(
-                |(first, second)| Some((first + current_offset, second + current_offset)),
-            );
+            pair = find_percent_signs(&self.current_string[current_offset..])
+                .map(|(first, second)| (first + current_offset, second + current_offset));
             match pair {
                 Some((first, second)) if second - first == 1 => {
                     // Found an escaped percent sign; continue the search after it

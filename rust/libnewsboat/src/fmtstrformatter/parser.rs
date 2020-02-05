@@ -135,7 +135,7 @@ fn parser(input: CompleteStr) -> IResult<CompleteStr, Vec<Specifier>> {
 
 fn sanitize(mut input: Vec<Specifier>) -> Vec<Specifier> {
     input.retain(|s| {
-        if let &Specifier::Format(c, ref _b) = s {
+        if let Specifier::Format(c, ref _b) = *s {
             c.is_ascii()
         } else {
             true

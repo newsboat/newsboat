@@ -23,7 +23,7 @@ const QUEUE_FILENAME: &str = "queue";
 const SEARCH_HISTORY_FILENAME: &str = "history.search";
 const CMDLINE_HISTORY_FILENAME: &str = "history.cmdline";
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct ConfigPaths {
     env_home: PathBuf,
     error_message: String,
@@ -114,7 +114,7 @@ impl ConfigPaths {
                     path
                 );
             }
-            return exists;
+            exists
         }
 
         if exists(&newsboat_config_dir) {
@@ -163,7 +163,7 @@ impl ConfigPaths {
             CMDLINE_HISTORY_FILENAME,
         );
 
-        return true;
+        true
     }
 
     fn migrate_data_from_newsbeuter_simple(&self) -> bool {
@@ -217,7 +217,7 @@ impl ConfigPaths {
         let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, SEARCH_HISTORY_FILENAME);
         let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CMDLINE_HISTORY_FILENAME);
 
-        return true;
+        true
     }
 
     fn migrate_data_from_newsbeuter(&mut self) -> bool {
@@ -234,7 +234,7 @@ impl ConfigPaths {
     }
 
     pub fn create_dirs(&self) -> bool {
-        return try_mkdir(&self.config_dir) && try_mkdir(&self.data_dir);
+        try_mkdir(&self.config_dir) && try_mkdir(&self.data_dir)
     }
 
     fn find_dirs(&mut self) {
@@ -345,8 +345,8 @@ impl ConfigPaths {
         self.lock_file = {
             let current_extension = path
                 .extension()
-                .and_then(|p| Some(p.to_string_lossy().into_owned()))
-                .unwrap_or_else(|| String::new());
+                .map(|p| p.to_string_lossy().into_owned())
+                .unwrap_or_else(String::new);
             path.set_extension(current_extension + LOCK_SUFFIX);
             path
         };

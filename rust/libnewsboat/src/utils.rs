@@ -198,7 +198,7 @@ pub fn censor_url(url: &str) -> String {
 /// assert_eq!(&quote_for_stfl("test"), "test");
 /// ```
 pub fn quote_for_stfl(string: &str) -> String {
-    return string.replace("<", "<>");
+    string.replace("<", "<>")
 }
 
 /// Get basename from a URL if available else return an empty string

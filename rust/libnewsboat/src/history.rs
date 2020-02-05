@@ -2,6 +2,7 @@ use std::fs::OpenOptions;
 use std::io::{self, BufRead, BufReader, BufWriter, Write};
 use std::path::Path;
 
+#[derive(Default)]
 pub struct History {
     idx: usize,
     lines: Vec<String>,
@@ -40,7 +41,7 @@ impl History {
             len if self.idx < len => {
                 let line = self.lines[self.idx].clone();
                 self.idx += 1;
-                return line;
+                line
             }
             _ => self.lines[self.idx - 1].clone(),
         }
@@ -54,7 +55,7 @@ impl History {
         Ok(())
     }
     pub fn save_to_file<P: AsRef<Path>>(&self, path: P, limit: usize) -> io::Result<()> {
-        if limit == 0 || self.lines.len() == 0 {
+        if limit == 0 || self.lines.is_empty() {
             return Ok(());
         }
 

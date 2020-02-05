@@ -6,19 +6,19 @@
 /// `printf` format specifiers for 64-bit platforms.
 
 /// `printf`'s format conversion specifier to output an `i32` (equivalent to `PRIi32`).
-pub const PRId32: &'static str = "d";
+pub const PRId32: &str = "d";
 
 /// `printf`'s format conversion specifier to output an `i32` (equivalent to `PRId32`).
-pub const PRIi32: &'static str = "i";
+pub const PRIi32: &str = "i";
 
 /// `printf`'s format conversion specifier to output an `u32`.
-pub const PRIu32: &'static str = "u";
+pub const PRIu32: &str = "u";
 
 /// `printf`'s format conversion specifier to output an `i64` (equivalent to `PRIi64`).
-pub const PRId64: &'static str = "ld";
+pub const PRId64: &str = "ld";
 
 /// `printf`'s format conversion specifier to output an `i64` (equivalent to `PRId64`).
-pub const PRIi64: &'static str = "li";
+pub const PRIi64: &str = "li";
 
 /// `printf`'s format conversion specifier to output an `u64`.
-pub const PRIu64: &'static str = "lu";
+pub const PRIu64: &str = "lu";

@@ -53,6 +53,7 @@ use utils;
 /// Doe` etc. would be "values". The term "format specifiers" will be reserved to things like `%a`,
 /// and "format strings" would mean a collection of format specifiers, with optional text in
 /// between.
+#[derive(Default)]
 pub struct FmtStrFormatter {
     /// Stores keys and their values.
     fmts: BTreeMap<char, String>,
@@ -100,10 +101,10 @@ impl FmtStrFormatter {
     fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
-        match padding {
-            &Padding::None => result.push_str(value),
+        match *padding {
+            Padding::None => result.push_str(value),
 
-            &Padding::Left(total_width) => {
+            Padding::Left(total_width) => {
                 let padding_width = total_width - min(total_width, utils::graphemes_count(value));
                 let stripping_width = total_width - padding_width;
                 let padding = String::from(" ").repeat(padding_width);
@@ -111,7 +112,7 @@ impl FmtStrFormatter {
                 result.push_str(&utils::take_graphemes(value, stripping_width));
             }
 
-            &Padding::Right(total_width) => {
+            Padding::Right(total_width) => {
                 let padding_width = total_width - min(total_width, utils::graphemes_count(value));
                 let stripping_width = total_width - padding_width;
                 let padding = String::from(" ").repeat(padding_width);
@@ -134,7 +135,7 @@ impl FmtStrFormatter {
                 result.push_str(&self.formatting_helper(then, width))
             }
             _ => {
-                if let &Some(ref els) = els {
+                if let Some(ref els) = *els {
                     result.push_str(&self.formatting_helper(&els, width))
                 }
             }
@@ -149,19 +150,19 @@ impl FmtStrFormatter {
         });
 
         for (i, specifier) in format_ast.iter().enumerate() {
-            match specifier {
-                &Specifier::Spacing(c) => {
+            match *specifier {
+                Specifier::Spacing(c) => {
                     let rest = &format_ast[i + 1..];
                     self.format_spacing(c, rest, width, &mut result);
                     // format_spacing will also format the rest of the string, so quit the loop
                     break;
                 }
 
-                &Specifier::Format(c, ref padding) => {
+                Specifier::Format(c, ref padding) => {
                     self.format_format(c, &padding, width, &mut result);
                 }
 
-                &Specifier::Text(s) => {
+                Specifier::Text(s) => {
                     if width == 0 {
                         result.push_str(s);
                     } else {
@@ -175,7 +176,7 @@ impl FmtStrFormatter {
                     }
                 }
 
-                &Specifier::Conditional(cond, ref then, ref els) => {
+                Specifier::Conditional(cond, ref then, ref els) => {
                     self.format_conditional(cond, &then, &els, width, &mut result)
                 }
             }
