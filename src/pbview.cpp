@@ -47,7 +47,8 @@ void PbView::run(bool auto_download)
 
 	do {
 		if (ctrl->view_update_necessary()) {
-			double total_kbps = ctrl->get_total_kbps();
+			const double total_kbps = ctrl->get_total_kbps();
+			const auto speed = get_speed_human_readable(total_kbps);
 
 			char parbuf[128] = "";
 			if (ctrl->get_maxdownloads() > 1) {
@@ -61,12 +62,13 @@ void PbView::run(bool auto_download)
 			snprintf(buf,
 				sizeof(buf),
 				_("Queue (%u downloads in progress, %u total) "
-					"- %.2f kb/s total%s"),
+					"- %.2f %s total%s"),
 				static_cast<unsigned int>(
 					ctrl->downloads_in_progress()),
 				static_cast<unsigned int>(
 					ctrl->downloads().size()),
-				total_kbps,
+				speed.first,
+				speed.second.c_str(),
 				parbuf);
 
 			dllist_form.set("head", buf);
