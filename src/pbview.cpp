@@ -271,6 +271,17 @@ void PbView::set_bindings()
 	}
 }
 
+std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)
+{
+	if (kbps < 1024) {
+		return std::make_pair(kbps, _("KB/s"));
+	} else if (kbps < 1024 * 1024) {
+		return std::make_pair(kbps / 1024, _("MB/s"));
+	} else {
+		return std::make_pair(kbps / 1024 / 1024, _("GB/s"));
+	}
+}
+
 void PbView::run_help()
 {
 	set_help_keymap_hint();
@@ -367,13 +378,16 @@ std::string PbView::format_line(const std::string& podlist_format,
 {
 	FmtStrFormatter fmt;
 
+	const double speed_kbps = dl.kbps();
+	const auto speed = get_speed_human_readable(speed_kbps);
+
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('d',
 		strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
 	fmt.register_fmt(
 		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
 	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));
-	fmt.register_fmt('k', strprintf::fmt("%.2f", dl.kbps()));
+	fmt.register_fmt('k', strprintf::fmt("%.2f %s", speed.first, speed.second));
 	fmt.register_fmt('S', strprintf::fmt("%s", dl.status_text()));
 	fmt.register_fmt('u', strprintf::fmt("%s", dl.url()));
 	fmt.register_fmt('F', strprintf::fmt("%s", dl.filename()));
