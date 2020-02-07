@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-02-07 23:58+0100\n"
-"PO-Revision-Date: 2020-02-04 22:01+0100\n"
+"PO-Revision-Date: 2020-02-08 00:10+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -1474,9 +1474,9 @@ msgid " - %u parallel downloads"
 msgstr " - %u gelijktijdige downloads"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total%s"
-msgstr "Wachtrij (%u download bezig, %u totaal) - %.2f kb/s totaal%s"
+msgstr "Wachtrij (%u downloads bezig, %u totaal) - %.2f %s totaal%s"
 
 #: src/pbview.cpp:133
 msgid "Error: can't quit: download(s) in progress."
@@ -1493,15 +1493,15 @@ msgstr "Fout: opdracht uitvoeren is mislukt: download(s) zijn bezig."
 
 #: src/pbview.cpp:279
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: src/pbview.cpp:281
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: src/pbview.cpp:283
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: src/pbview.cpp:361
 msgid "Download"
