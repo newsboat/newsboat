@@ -1,5 +1,5 @@
 = Newsboat FAQ
-:toc:
+:toc: left
 :sectnums:
 
 == I get errors like "`color01' is not a valid color"
