@@ -85,11 +85,10 @@ endif
 # additional commands
 MKDIR=mkdir -p
 INSTALL=install
-A2X=a2x
+ASCIIDOCTOR=asciidoctor
 MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
-CHMOD=chmod
 CARGO=cargo
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
@@ -177,21 +176,11 @@ doc/xhtml/newsboat.html: doc/newsboat.txt doc/chapter-firststeps.txt doc/configc
 		doc/chapter-cmdline.txt doc/chapter-podcasts.txt doc/podboat-cmds-linked.dsv \
 		doc/chapter-password.txt doc/chapter-environment-variables.txt
 	$(MKDIR) doc/xhtml
-	$(A2X) -f xhtml -D doc/xhtml doc/newsboat.txt
-	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
-	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
-	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
-	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
-	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
+	$(ASCIIDOCTOR) --backend=html5 --destination-dir=doc/xhtml doc/newsboat.txt
 
 doc/xhtml/faq.html: doc/faq.txt
 	$(MKDIR) doc/xhtml
-	$(A2X) -f xhtml -D doc/xhtml doc/faq.txt
-	$(CHMOD) u+w doc/xhtml/docbook-xsl.css
-	echo "/* AsciiDoc's new tables have <p> inside <td> which wastes vertical space, so fix it */" >> doc/xhtml/docbook-xsl.css
-	echo "td > p { margin: 0; }" >> doc/xhtml/docbook-xsl.css
-	echo "td > p + p { margin-top: 0.5em; }" >> doc/xhtml/docbook-xsl.css
-	echo "td > pre { margin: 0; white-space: pre-wrap; }" >> doc/xhtml/docbook-xsl.css
+	$(ASCIIDOCTOR) --backend=html5 --destination-dir=doc/xhtml doc/faq.txt
 
 doc/generate: doc/generate.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
@@ -208,14 +197,14 @@ doc/newsboat-keycmds.txt: doc/generate2 doc/keycmds.dsv
 doc/newsboat.1: doc/manpage-newsboat.txt doc/chapter-firststeps.txt doc/newsboat-cfgcmds.txt \
 		doc/newsboat-keycmds.txt doc/chapter-tagging.txt doc/chapter-snownews.txt \
 		doc/chapter-cmdline.txt doc/chapter-environment-variables.txt
-	$(A2X) -f manpage doc/manpage-newsboat.txt
+	$(ASCIIDOCTOR) --backend=manpage doc/manpage-newsboat.txt
 
 doc/podboat-cfgcmds.txt: doc/generate doc/podboat-cmds.dsv
 	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.txt
 
 doc/podboat.1: doc/manpage-podboat.txt doc/chapter-podcasts.txt doc/podboat-cfgcmds.txt \
 		doc/chapter-environment-variables.txt
-	$(A2X) -f manpage doc/manpage-podboat.txt
+	$(ASCIIDOCTOR) --backend=manpage doc/manpage-podboat.txt
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/gen-example-config doc/gen-example-config.cpp
