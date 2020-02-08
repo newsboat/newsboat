@@ -168,7 +168,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("no", ConfigDataType::BOOL)},
 	{
 		"podlist-format",
-		ConfigData( "%4i [%6dMB/%6tMB] [%5p %%] [%7k kb/s] %-20S %u -> %F", ConfigDataType::STR)},
+		ConfigData( "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F", ConfigDataType::STR)},
 	{
 		"prepopulate-query-feeds",
 		ConfigData("false", ConfigDataType::BOOL)},
