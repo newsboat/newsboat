@@ -3,7 +3,14 @@
 ## Unreleased - expected 2020-03-21
 
 ### Added
+- `%K` format for  `podlist-format`. This format specifier is replaced by the
+  human readable download speed (automatically switches between KB/s, MB/s, and
+  GB/s)
+
 ### Changed
+- `podlist-format` which now uses `%K` instead of `%k` by default (shows human
+  readable speed instead of always using KB/s)
+
 ### Deprecated
 ### Removed
 ### Fixed

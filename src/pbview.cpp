@@ -389,7 +389,8 @@ std::string PbView::format_line(const std::string& podlist_format,
 	fmt.register_fmt(
 		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
 	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));
-	fmt.register_fmt('k', strprintf::fmt("%.2f %s", speed.first, speed.second));
+	fmt.register_fmt('k', strprintf::fmt("%.2f", speed_kbps));
+	fmt.register_fmt('K', strprintf::fmt("%.2f %s", speed.first, speed.second));
 	fmt.register_fmt('S', strprintf::fmt("%s", dl.status_text()));
 	fmt.register_fmt('u', strprintf::fmt("%s", dl.url()));
 	fmt.register_fmt('F', strprintf::fmt("%s", dl.filename()));
