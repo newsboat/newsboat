@@ -1,27 +1,26 @@
-Podboat(1)
-===========
+= Podboat(1)
 Alexander Batischev <eual.jp@gmail.com>
 
 
-NAME
-----
+== NAME
+
 podboat - a podcast download manager for text terminals
 
 
-SYNOPSIS
---------
+== SYNOPSIS
+
 'podboat' [-C configfile] [-q queuefile] [-a] [-h]
 
 
-DESCRIPTION
------------
+== DESCRIPTION
+
 'podboat' is a podcast manager for text terminals. It is a helper program to
 'newsboat' which queues podcast downloads into a file. These queued downloads
 can then be download with 'newsboat'.
 
 
-OPTIONS
--------
+== OPTIONS
+
 -h, --help::
         Display help
 
@@ -42,20 +41,17 @@ OPTIONS
        Use this logfile as output when logging debug messages. Please note that this
        only works when providing a loglevel.
 
-PODCAST SUPPORT
----------------
+== PODCAST SUPPORT
 
 include::chapter-podcasts.asciidoc[]
 
 
-CONFIGURATION COMMANDS
-----------------------
+== CONFIGURATION COMMANDS
 
 include::podboat-cfgcmds.asciidoc[]
 
 
-XDG Base Directory Support
---------------------------
+== XDG Base Directory Support
 
 Podboat defaults to storing everything in '$HOME/.newsboat' directory. If
 you prefer XDG, create '$HOME/.config/newsboat' and
@@ -68,8 +64,7 @@ If you already have some files in '$HOME/.newsboat/', move the 'queue' file to
 See also a corresponding section in newsboat(1).
 
 
-FILES
------
+== FILES
 
 dotfiles::
         '$HOME/.newsboat/config'
@@ -82,12 +77,11 @@ XDG::
         '$HOME/.local/share/newsboat/queue'
 
 
-ENVIRONMENT
------------
+== ENVIRONMENT
 
 include::chapter-environment-variables.asciidoc[]
 
 
-SEE ALSO
---------
+== SEE ALSO
+
 newsboat(1)

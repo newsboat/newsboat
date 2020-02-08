@@ -1,28 +1,27 @@
-NEWSBOAT(1)
-===========
+= NEWSBOAT(1)
 Alexander Batischev <eual.jp@gmail.com>
 
 
-NAME
-----
+== NAME
+
 newsboat - an RSS/Atom feed reader for text terminals
 
 
-SYNOPSIS
---------
+== SYNOPSIS
+
 'newsboat' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-X] [-o] [-x <command> ...] [-h]
 
 
-DESCRIPTION
------------
+== DESCRIPTION
+
 'newsboat' is an RSS/Atom feed reader for text terminals. RSS and Atom are a 
 number of widely-used XML formats to transmit, publish and syndicate articles, 
 for example news or blog articles.  Newsboat is designed to be used on text 
 terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
 
 
-OPTIONS
--------
+== OPTIONS
+
 -h, --help::
         Display help
 
@@ -74,37 +73,31 @@ OPTIONS
       Import a list of read articles and mark them as read if they are held in the
       cache. This is to be used in conjunction with the -E commandline parameter.
 
-FIRST STEPS
------------
+== FIRST STEPS
 
 include::chapter-firststeps.asciidoc[]
 
-CONFIGURATION COMMANDS
-----------------------
+== CONFIGURATION COMMANDS
 
 include::newsboat-cfgcmds.asciidoc[]
 
 
-AVAILABLE OPERATIONS
-----------------------
+== AVAILABLE OPERATIONS
 
 include::newsboat-keycmds.asciidoc[]
 
 
-TAGGING
--------
+== TAGGING
 
 include::chapter-tagging.asciidoc[]
 
 
-SCRIPTS AND FILTERS
--------------------
+== SCRIPTS AND FILTERS
 
 include::chapter-snownews.asciidoc[]
 
 
-COMMAND LINE
-------------
+== COMMAND LINE
 
 include::chapter-cmdline.asciidoc[]
 
@@ -135,8 +128,7 @@ include::chapter-cmdline.asciidoc[]
         Jump to the <number>th entry in the current dialog
 
 
-XDG Base Directory Support
---------------------------
+== XDG Base Directory Support
 
 Newsboat defaults to storing everything in '$HOME/.newsboat' directory. If
 you prefer XDG, create '$HOME/.config/newsboat' and
@@ -154,8 +146,7 @@ If you already have some files in '$HOME/.newsboat/', move them as follows:
 See also a corresponding section in podboat(1).
 
 
-FILES
------
+== FILES
 
 dotfiles::
         '$HOME/.newsboat/config'
@@ -168,12 +159,11 @@ XDG::
         '$HOME/.config/newsboat/urls'
 
 
-ENVIRONMENT
------------
+== ENVIRONMENT
 
 include::chapter-environment-variables.asciidoc[]
 
 
-SEE ALSO
---------
+== SEE ALSO
+
 podboat(1)

@@ -1,8 +1,7 @@
-Newsboat FAQ
-============
+= Newsboat FAQ
 
-I get errors like "`color01' is not a valid color"
---------------------------------------------------
+
+== I get errors like "`color01' is not a valid color"
 
 Numbers that start with zero are treated as octal; starting with Newsboat
 2.10, these are not allowed since
@@ -11,8 +10,7 @@ https://github.com/akrennmair/newsbeuter/issues/186[they only add confusion].
 Convert octal numbers to decimal, and drop the leading zero. For example,
 `color01` should be replaced with `color1`, `color016` with `color14` etc.
 
-I want to have a feed that contains all unread articles of all feeds
---------------------------------------------------------------------
+== I want to have a feed that contains all unread articles of all feeds
 
 This is supported since Newsbeuter 0.7. All you need to do is add the following
 line to your +~/.newsboat/urls+ file:
@@ -22,8 +20,7 @@ line to your +~/.newsboat/urls+ file:
 For details, refer to the link:newsboat.html#_query_feeds[documentation on
 query feeds].
 
-After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
--------------------------------------------------------------------------------------------
+== After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
 
 Newsboat has to behave like that in order to accomodate users of text-based
 browsers like lynx and w3m. It has to relinquish the terminal and stay out of

@@ -1,23 +1,21 @@
-The Newsboat RSS Feedreader
-===========================
+= The Newsboat RSS Feedreader
 
-Introduction
-------------
+== Introduction
+
 Newsboat is an RSS/Atom feedreader. RSS and Atom are a number of widely-used
 XML formats to transmit, publish and syndicate articles, for example news or
 blog articles.  Newsboat is designed to be used on text terminals on Unix or
 Unix-like systems such as GNU/Linux, FreeBSD or macOS.
 
-Platforms
-~~~~~~~~~
+=== Platforms
 
 Newsboat has been tested on Linux (with glibc and musl-libc), FreeBSD and macOS.
 
 NetBSD is currently not supported, due to technical limitations in the `iconv()`
 implementation.
 
-Why "Newsboat"?
-~~~~~~~~~~~~~~~
+=== Why "Newsboat"?
+
 "Newsboat" is a play on the name of its ancestor, "Newsbeuter". They're spelled
 quite differently, but sound similar. ("Newsbeuter" is a pun on German word
 "wildbeuter"; "newsboat" is an English word.)
@@ -26,12 +24,11 @@ Newsboats were the vessels that collected and delivered news shuffling between
 boats in the port. Newsboat the program will collect the news for you, just
 like its namesakes did back in the day.
 
-Installation
-------------
+== Installation
+
 This chapter describes how to compile and install newsboat from source.
 
-Downloading Newsboat
-~~~~~~~~~~~~~~~~~~~~~~
+=== Downloading Newsboat
 
 Newsboat is available as source package. Simply go to
 https://newsboat.org/[] and download the latest source package, which is
@@ -41,8 +38,8 @@ by running the following command on the commandline:
 
 	git clone git://github.com/newsboat/newsboat.git
 
-Dependencies
-~~~~~~~~~~~~
+=== Dependencies
+
 Newsboat depends on a number of libraries, which need to be installed before
 Newsboat can be compiled.
 
@@ -74,8 +71,8 @@ Developers will also need:
   filter language parser using `regenerate-parser` target.
 
 
-Compiling and Installing
-~~~~~~~~~~~~~~~~~~~~~~~~
+=== Compiling and Installing
+
 After you've downloaded and installed the dependencies mentioned above, you can
 start compiling and installing newsboat. To compile newsboat, simply run
 `make` in the source tree. After a short time, this should complete
@@ -86,8 +83,7 @@ parameter, e.g. running `make install prefix=/opt/newsboat` will install the
 binary to the directory '/opt/newsboat/bin'.
 
 
-First Steps
------------
+== First Steps
 
 include::chapter-firststeps.asciidoc[]
 
@@ -127,8 +123,7 @@ in uppercase. The following identifiers for keys are supported:
 
 The "Tab" key can't be bound due to technical limitations of STFL.
 
-Example Configuration
-~~~~~~~~~~~~~~~~~~~~~
+=== Example Configuration
 
 	# a comment
 	max-items        100 # such comments are possible, too
@@ -138,8 +133,7 @@ Example Configuration
 	unbind-key       R
 	bind-key         ^R    reload-all
 
-Configuring Colors
-~~~~~~~~~~~~~~~~~~
+=== Configuring Colors
 
 It is possible to configure custom color settings in newsboat. The basic configuration
 syntax is:
@@ -203,13 +197,12 @@ The default color configuration of newsboat looks like this:
 	color article             white   black
 
 
-Migrating from other RSS Feed Readers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Migrating from other RSS Feed Readers
+
 It is very likely that you have used other RSS feed readers before. In this
 case, it is practical to migrate the previous configuration to newsboat.
 
-Newsbeuter (automatic migration)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Newsbeuter (automatic migration)
 
 Newsboat is a fork of Newsbeuter, so the migration from the latter is partially
 automated. Simple enough configurations will be transferred without any user
@@ -253,8 +246,7 @@ for Newsbeuter, '\~/.newsboat/' exists and '~/.newsboat/urls' doesn't exist, the
 Newsboat will migrate XDG files and proceed, ignoring the dotdir. Please don't
 confuse the poor program like that!
 
-Other readers (via OPML)
-^^^^^^^^^^^^^^^^^^^^^^^^
+==== Other readers (via OPML)
 
 The vast amount of RSS feed readers allows the export of subscriptions via OPML
 files. OPML is an XML file format that was designed to save outlines, and has
@@ -316,8 +308,7 @@ before. This means that you will lose virtually nothing of your previously
 configured structure.
 
 
-Newsboat as a Client for Newsreading Services
----------------------------------------------
+== Newsboat as a Client for Newsreading Services
 
 Newsboat is a perfectly capable feedreader in its own right, but it can’t cover
 _all_ the use-cases. For example, you might want to synchronize your news
@@ -326,8 +317,7 @@ feeds. In such cases, you might register with some online feedreader, and use
 Newsboat as a client. The next few sections provide configuration instructions
 for each supported service.
 
-The Old Reader
-~~~~~~~~~~~~~~
+=== The Old Reader
 
 http://theoldreader.com/[The Old Reader] is a successor to Google Reader. In
 order to use it, you first need to configure the proper URL source:
@@ -383,8 +373,7 @@ You can disable these feeds by setting the following configuration variable:
 The Old Reader's folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
-NewsBlur
-~~~~~~~~
+=== NewsBlur
 
 https://newsblur.com/[NewsBlur] is a successor to Google Reader. To use it, set
 your <<urls-source,`urls-source`>>:
@@ -415,8 +404,7 @@ you can configure in Newsboat regarding NewsBlur.
 NewsBlur's folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
-FeedHQ
-~~~~~~
+=== FeedHQ
 
 https://feedhq.org/[FeedHQ] is a successor to Google Reader. Configuration
 basically works the same as with <<_the_old_reader,The Old Reader>>.
@@ -449,8 +437,7 @@ you can configure in Newsboat regarding FeedHQ.
 FeedHQ's folders are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
-Tiny Tiny RSS
-~~~~~~~~~~~~~
+=== Tiny Tiny RSS
 
 Newsboat can be used to synchronize with https://tt-rss.org/[Tiny Tiny RSS]
 installations. Tiny Tiny RSS is a web-based and (optionally) multi-user feed
@@ -512,8 +499,7 @@ will be starred resp. published.
 TT-RSS folders are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
-ownCloud News and nextCloud News
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== ownCloud News and nextCloud News
 
 https://github.com/owncloudarchive/news[ownCloud News] and
 https://github.com/nextcloud/news[nextCloud News] implement the same protocol,
@@ -556,8 +542,7 @@ In order to use this mapping, you need to configure the flag that shall be used:
 OwnCloud News' folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
-Inoreader
-~~~~~~~~~
+=== Inoreader
 
 http://inoreader.com/[Inoreader] is a successor to Google Reader.
 
@@ -618,8 +603,7 @@ You can disable these feeds by setting the following configuration variable:
 
 	inoreader-show-special-feeds no
 
-OPML Online Subscription Mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== OPML Online Subscription Mode
 
 This mode provides one-way synchronization of subscriptions from the online
 service to Newsboat. In other words, Newsboat will know what feeds you've
@@ -635,28 +619,23 @@ Newsboat where to get the OPML file(s):
 	urls-source "opml"
 	opml-url "http://example.com/feeds.opml" "http://example.com/more.opml"
 
-Passwords for external APIs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Passwords for external APIs
 
 include::chapter-password.asciidoc[]
 
 
-Advanced Features
------------------
+== Advanced Features
 
-Tagging
-~~~~~~~
+=== Tagging
 
 include::chapter-tagging.asciidoc[]
 
 
-Scripts and Filters (Snownews Extensions)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Scripts and Filters (Snownews Extensions)
 
 include::chapter-snownews.asciidoc[]
 
-Bookmarking
-~~~~~~~~~~~
+=== Bookmarking
 
 Newsboat contains a plugin-based bookmarking system. When a user bookmarks a link (possible
 in the article list, in the article view, and in the URL view), they are asked for the URL to bookmark (already
@@ -673,8 +652,7 @@ Newsboat comes with an example plugin, which implements a simple tab-separated b
 example can be found in the 'contrib' subdirectory.
 
 
-Command Line
-~~~~~~~~~~~~
+=== Command Line
 
 include::chapter-cmdline.asciidoc[]
 
@@ -695,8 +673,7 @@ Command:Syntax:Description:Example
 |=============================================================================
 
 
-Filter Language
-~~~~~~~~~~~~~~~
+=== Filter Language
 
 Newsboat provides a powerful filter language that enables the user to
 filter the content of many dialogs, such as the feed list or the article
@@ -777,8 +754,7 @@ article attributes. This is because every article is internally linked to the
 feed from which it was downloaded.
 
 
-Killfiles
-~~~~~~~~~
+=== Killfiles
 
 Sometimes, a user is confronted with certain content they don't want to read,
 e.g. on topics the user is not interested in or articles written by certain people.
@@ -822,8 +798,7 @@ configuration file:
 	ignore-mode "display"
 
 
-Query Feeds
-~~~~~~~~~~~
+=== Query Feeds
 
 Query feeds are a mechanism of newsboat to define custom "meta feeds" by using
 newsboat's built-in filter language. A query feed is a feed that is aggregated
@@ -871,8 +846,7 @@ Basically, the possibility of what can be realized with query feeds is only
 limited by what can be queried from articles and feeds with the filter language
 and by your creativity.
 
-Flagging Articles
-~~~~~~~~~~~~~~~~~
+=== Flagging Articles
 
 To support custom categorization of articles by the user, it is possible to
 flag an article. A valid flag is any character from 'A' to 'Z' and from 'a' to
@@ -890,8 +864,7 @@ articles via the filter language.
 If an article contains one or more flags, it is marked with an "!" in the
 article list. In the article view, all flags (if available) are listed.
 
-Macro Support
-~~~~~~~~~~~~~
+=== Macro Support
 
 In newsboat, it's possible to define macros to execute more than one command
 at once. A macro is configured using the <<macro,`macro`>> configuration command. The
@@ -922,8 +895,7 @@ podboat's download queue:
 
 	macro E set browser "echo %u >> ~/.newsboat/queue" ; open-in-browser ; set browser "elinks %u"
 
-Commandline Commands
-~~~~~~~~~~~~~~~~~~~~
+=== Commandline Commands
 
 Newsboat comes with a `-x` option that indicates that commands added as arguments
 to the command line shall be executed. Currently, the following commands are
@@ -937,8 +909,7 @@ available:
   system.
 
 
-Format Strings
-~~~~~~~~~~~~~~
+=== Format Strings
 
 Newsboat contains a powerful format string system to make it possible for the
 user to configure the format of various aspects of the application, such as
@@ -1065,8 +1036,7 @@ Identifier:Meaning
 [[download-filename-format-Y]]<<download-filename-format-Y,+Y+>>:Year when podcast episode was published formatted as yyyy
 |======================================================================
 
-Dialog Titles
-^^^^^^^^^^^^^
+==== Dialog Titles
 
 You can customize
 the title format of all available dialogs. Here is a list of dialogs with their
@@ -1141,8 +1111,7 @@ Identifier:Meaning
 [[articleview-title-format-F]]<<articleview-title-format-F,+F+>>:Feed title
 |======================================================================
 
-Highlighting Text
-~~~~~~~~~~~~~~~~~
+=== Highlighting Text
 
 Newsboat supports the highlighting of text in the feed
 list, the article list and the article view, using regular expressions to
@@ -1164,8 +1133,7 @@ Examples for possible highlighting configurations are:
 	highlight feedlist "https?://[^ ]+" yellow red bold
 
 
-Highlighting Articles in the Article List
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==== Highlighting Articles in the Article List
 
 In addition to generally highlighting text, there is also a specific way to
 highlight articles in the article list based on whether they match a certain
@@ -1183,8 +1151,7 @@ Example:
 	highlight-article "author =~ \"Andreas Krennmair\"" white red bold
 
 
-Advanced Dialog Management
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Advanced Dialog Management
 
 Newsboat supports an advanced concept of dialogs.
 Previously, all dialogs (feed list, article list, article view) were internally
@@ -1199,8 +1166,7 @@ dialog by selecting the appropriate entry and pressing "Enter", or can close
 open dialogs by selecting them and pressing "Ctrl-X".
 
 
-XDG Base Directory Support
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== XDG Base Directory Support
 
 Newsboat implements limited support for the
 http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
@@ -1224,8 +1190,7 @@ directories, you should move the files as follows:
         to '$HOME/.local/share/newsboat/'
 
 
-Podcast Support
-~~~~~~~~~~~~~~~
+=== Podcast Support
 
 include::chapter-podcasts.asciidoc[]
 
@@ -1256,8 +1221,7 @@ newsboat, and after that, uses podboat to view the current queue, and
 either selectively download certain files or automatically download them all
 together by pressing "a" within podboat.
 
-Running multiple copies of Newsboat simultaneously
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Running multiple copies of Newsboat simultaneously
 
 During development and testing, you might want to run a second copy of
 Newsboat, operating with different config, URLs list or cache file. This can
@@ -1298,8 +1262,7 @@ environment, e.g.:
 
 As already said: not beautiful, but gets the job done.
 
-Using SQLite Triggers with newsboat
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=== Using SQLite Triggers with newsboat
 
 This section was written by mailto:elrond+newsbeuter(at)samba-tng.org[Elrond],
 originally for Newsbeuter.
@@ -1315,8 +1278,7 @@ hack. The real answer should be to use application logic (do it inside
 newsboat, not in the db). So: Don't use this, unless you know, what you're
 doing, and unless you have some sort of backup.
 
-Example
-^^^^^^^
+==== Example
 
 So after the "don't use it" you still want to know, what one can do? So here's an example.
 
@@ -1355,13 +1317,11 @@ title changes. And nicely enough this works all inside newsboat, no need to
 restart it so that it rereads the cache, that magically modifies itself. It
 just works.
 
-Environment variables
-~~~~~~~~~~~~~~~~~~~~~
+=== Environment variables
 
 include::chapter-environment-variables.asciidoc[]
 
-Feedback
---------
+== Feedback
 
 If you want to tell us something related to newsboat, don't hesitate to send
 an email to our mailing list: newsboat@googlegroups.com
@@ -1372,8 +1332,8 @@ Alternatively, you can reach the newsboat developers on IRC: channel
 If you want to report newsboat bugs, please use this issue tracker:
 https://github.com/newsboat/newsboat/issues/[]
 
-License
--------
+== License
+
 MIT License
 
 Copyright 2006-2015 Andreas Krennmair <ak@newsbeuter.org>
