@@ -1,6 +1,8 @@
 = Newsboat FAQ
 :toc: left
 :sectnums:
+:sectanchors:
+:sectlinks:
 
 == I get errors like "`color01' is not a valid color"
 
