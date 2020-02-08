@@ -89,7 +89,7 @@ binary to the directory '/opt/newsboat/bin'.
 First Steps
 -----------
 
-include::chapter-firststeps.txt[]
+include::chapter-firststeps.asciidoc[]
 
 
 
@@ -638,7 +638,7 @@ Newsboat where to get the OPML file(s):
 Passwords for external APIs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-include::chapter-password.txt[]
+include::chapter-password.asciidoc[]
 
 
 Advanced Features
@@ -647,13 +647,13 @@ Advanced Features
 Tagging
 ~~~~~~~
 
-include::chapter-tagging.txt[]
+include::chapter-tagging.asciidoc[]
 
 
 Scripts and Filters (Snownews Extensions)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-include::chapter-snownews.txt[]
+include::chapter-snownews.asciidoc[]
 
 Bookmarking
 ~~~~~~~~~~~
@@ -676,7 +676,7 @@ example can be found in the 'contrib' subdirectory.
 Command Line
 ~~~~~~~~~~~~
 
-include::chapter-cmdline.txt[]
+include::chapter-cmdline.asciidoc[]
 
 .Available Commandline Commands
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,40,20l"]
@@ -1227,7 +1227,7 @@ directories, you should move the files as follows:
 Podcast Support
 ~~~~~~~~~~~~~~~
 
-include::chapter-podcasts.txt[]
+include::chapter-podcasts.asciidoc[]
 
 .Podboat Configuration Commands
 [frame="all", grid="all", format="dsv", separator="\|\||\n", options="header", cols="10,15,15l,40,20l"]
@@ -1358,7 +1358,7 @@ just works.
 Environment variables
 ~~~~~~~~~~~~~~~~~~~~~
 
-include::chapter-environment-variables.txt[]
+include::chapter-environment-variables.asciidoc[]
 
 Feedback
 --------

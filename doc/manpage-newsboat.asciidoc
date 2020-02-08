@@ -77,36 +77,36 @@ OPTIONS
 FIRST STEPS
 -----------
 
-include::chapter-firststeps.txt[]
+include::chapter-firststeps.asciidoc[]
 
 CONFIGURATION COMMANDS
 ----------------------
 
-include::newsboat-cfgcmds.txt[]
+include::newsboat-cfgcmds.asciidoc[]
 
 
 AVAILABLE OPERATIONS
 ----------------------
 
-include::newsboat-keycmds.txt[]
+include::newsboat-keycmds.asciidoc[]
 
 
 TAGGING
 -------
 
-include::chapter-tagging.txt[]
+include::chapter-tagging.asciidoc[]
 
 
 SCRIPTS AND FILTERS
 -------------------
 
-include::chapter-snownews.txt[]
+include::chapter-snownews.asciidoc[]
 
 
 COMMAND LINE
 ------------
 
-include::chapter-cmdline.txt[]
+include::chapter-cmdline.asciidoc[]
 
 'quit'::
         Quit newsboat
@@ -171,7 +171,7 @@ XDG::
 ENVIRONMENT
 -----------
 
-include::chapter-environment-variables.txt[]
+include::chapter-environment-variables.asciidoc[]
 
 
 SEE ALSO

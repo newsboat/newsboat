@@ -45,13 +45,13 @@ OPTIONS
 PODCAST SUPPORT
 ---------------
 
-include::chapter-podcasts.txt[]
+include::chapter-podcasts.asciidoc[]
 
 
 CONFIGURATION COMMANDS
 ----------------------
 
-include::podboat-cfgcmds.txt[]
+include::podboat-cfgcmds.asciidoc[]
 
 
 XDG Base Directory Support
@@ -85,7 +85,7 @@ XDG::
 ENVIRONMENT
 -----------
 
-include::chapter-environment-variables.txt[]
+include::chapter-environment-variables.asciidoc[]
 
 
 SEE ALSO
