@@ -592,7 +592,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 
-	LOG(Level::DEBUG, "Controller::replace_feed: feed is nonempty, saving");
+	LOG(Level::DEBUG, "Controller::replace_feed: saving");
 	rsscache->externalize_rssfeed(
 		newfeed, ign.matches_resetunread(newfeed->rssurl()));
 	LOG(Level::DEBUG,
