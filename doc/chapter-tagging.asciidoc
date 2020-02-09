@@ -3,7 +3,7 @@ RSS feeds. Every RSS feed can be assigned 0 or more tags. Within newsboat, you
 can then select to only show RSS feeds that match a certain tag. That makes it
 easy to categorize your feeds in a flexible and powerful way.
 
-Usually, the _\~/.newsboat/urls_ file contains one RSS feed URL per line. To
+Usually, the _~/.newsboat/urls_ file contains one RSS feed URL per line. To
 assign a tag to an RSS feed, simply attach it as a single word, separated by
 blanks such as space or tab. If the tag needs to contain spaces, you must use
 quotes (`"`) around the tag (see example below). An example _~/.newsboat/urls_

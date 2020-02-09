@@ -27,7 +27,7 @@ position) were added.
 
 Please be aware that the input history of both the command line and the search
 functions are saved to the filesystems, to the files
-_\~/.newsboat/history.cmdline_ resp. _~/.newsboat/history.search_. By default,
+_~/.newsboat/history.cmdline_ resp. _~/.newsboat/history.search_. By default,
 the last 100 entries are saved, but this can be configured (configuration
 variable <<history-limit,`history-limit`>>) and also totally disabled (by setting said variable to
 `0`).
