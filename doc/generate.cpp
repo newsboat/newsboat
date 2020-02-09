@@ -30,11 +30,11 @@ int main(int argc, char* argv[])
 			const std::string desc = matches[3];
 			const std::string example = matches[4];
 
-			std::cout << "[[" << linkprefix << option << "]] '"
-				<< option << "' ";
+			std::cout << "[[" << linkprefix << option << "]]_"
+				<< option << "_ ";
 			std::cout << "(parameters: " << syntax << "; ";
-			std::cout << "default value: '" << defaultparam
-				<< "')::\n";
+			std::cout << "default value: _" << defaultparam
+				<< "_)::\n";
 			std::cout << "         " << desc;
 			std::cout << " (example: " << example << ")\n\n";
 		} else {
