@@ -35,5 +35,5 @@ In both cases, the tagging feature as described above is still available:
 If you need to write your own extension, see
 https://web.archive.org/web/20090724045314/http://kiza.kcore.de/software/snownews/snowscripts/writing[this
 short guide] for an introduction.
-https://archive.kiza.eu/software/snownews/snowscripts/extensions/[A collection
+https://github.com/kouya/snownews/tree/master/contrib[A collection
 of existing scripts] might also help.
