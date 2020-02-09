@@ -3,6 +3,7 @@
 :sectnums:
 :sectanchors:
 :sectlinks:
+:nofooter:
 
 == Introduction
 

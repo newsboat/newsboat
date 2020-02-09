@@ -3,6 +3,7 @@
 :sectnums:
 :sectanchors:
 :sectlinks:
+:nofooter:
 
 == I get errors like "`color01' is not a valid color"
 
