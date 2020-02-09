@@ -9,12 +9,12 @@ newsboat - an RSS/Atom feed reader for text terminals
 
 == SYNOPSIS
 
-'newsboat' [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-X] [-o] [-x <command> ...] [-h]
+*newsboat* [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-X] [-o] [-x <command> ...] [-h]
 
 
 == DESCRIPTION
 
-'newsboat' is an RSS/Atom feed reader for text terminals. RSS and Atom are a 
+_newsboat_ is an RSS/Atom feed reader for text terminals. RSS and Atom are a
 number of widely-used XML formats to transmit, publish and syndicate articles, 
 for example news or blog articles.  Newsboat is designed to be used on text 
 terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
@@ -34,8 +34,8 @@ terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
 -X, --vacuum::
         Compact the cache by: 1) reclaiming the space that was left empty when
         data was deleted; and 2) defragmenting the entries in the cache. This
-        *doesn't* delete the entries; for that, see 'cleanup-on-quit',
-        'delete-read-articles-on-quit', 'keep-articles-days', and 'max-items'
+        *doesn't* delete the entries; for that, see _cleanup-on-quit_,
+        _delete-read-articles-on-quit_, _keep-articles-days_, and _max-items_
         settings.
 
 -v, -V, --version::
@@ -101,47 +101,47 @@ include::chapter-snownews.asciidoc[]
 
 include::chapter-cmdline.asciidoc[]
 
-'quit'::
+_quit_::
         Quit newsboat
-'q'::
-        Alias for 'quit'
+_q_::
+        Alias for _quit_
 
-'save' <filename>::
+_save_ <filename>::
         Save current article to <filename>
 
-[[cmd-set]] 'set' <variable>[=<value>|&|!]::
-        Set (or get) configuration variable value. Specifying a '!' after the name of a boolean configuration variable toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.
+[[cmd-set]] _set_ <variable>[=<value>|&|!]::
+        Set (or get) configuration variable value. Specifying a _!_ after the name of a boolean configuration variable toggles their values, a _&_ directly after the name of a configuration variable of any type resets its value to the documented default value.
 
-'tag' <tagname>::
+_tag_ <tagname>::
         Select a certain tag
 
-'goto' <case-insensitive substring>::
+_goto_ <case-insensitive substring>::
         Go to the next feed whose name contains the case-insensitive substring.
 
-'source' <filename> [...]::
+_source_ <filename> [...]::
         Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.
 
-'dumpconfig' <filename>::
+_dumpconfig_ <filename>::
        Save current internal state of configuration to file, so that it can be instantly reused as configuration file.
 
-'<number>'::
+_<number>_::
         Jump to the <number>th entry in the current dialog
 
 
 == XDG Base Directory Support
 
-Newsboat defaults to storing everything in '$HOME/.newsboat' directory. If
-you prefer XDG, create '$HOME/.config/newsboat' and
-'$HOME/.local/share/newsboat' directories, and Newsboat will use them
+Newsboat defaults to storing everything in _$HOME/.newsboat_ directory. If
+you prefer XDG, create _$HOME/.config/newsboat_ and
+_$HOME/.local/share/newsboat_ directories, and Newsboat will use them
 from there on.
 
-If you already have some files in '$HOME/.newsboat/', move them as follows:
+If you already have some files in _$HOME/.newsboat/_, move them as follows:
 
-'config', 'urls'::
-        to '$HOME/.config/newsboat/'
+_config_, _urls_::
+        to _$HOME/.config/newsboat/_
 
-'cache.db', 'history.search', 'history.cmdline'::
-        to '$HOME/.local/share/newsboat/'
+_cache.db_, _history.search_, _history.cmdline_::
+        to _$HOME/.local/share/newsboat/_
 
 See also a corresponding section in podboat(1).
 
@@ -149,14 +149,14 @@ See also a corresponding section in podboat(1).
 == FILES
 
 dotfiles::
-        '$HOME/.newsboat/config'
+        _$HOME/.newsboat/config_
         +
-        '$HOME/.newsboat/urls'
+        _$HOME/.newsboat/urls_
 
 XDG::
-        '$HOME/.config/newsboat/config'
+        _$HOME/.config/newsboat/config_
         +
-        '$HOME/.config/newsboat/urls'
+        _$HOME/.config/newsboat/urls_
 
 
 == ENVIRONMENT

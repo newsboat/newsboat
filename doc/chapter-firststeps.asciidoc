@@ -23,7 +23,7 @@ After you've installed newsboat, you can run it for the first time by typing
 
 This means that newsboat can't start without any configured feeds. To add
 feeds to newsboat, you can either add URLs to the configuration file
-'$HOME/.newsboat/urls' or you can import an OPML file by running `newsboat -i
+_$HOME/.newsboat/urls_ or you can import an OPML file by running `newsboat -i
 blogroll.opml`. To manually add URLs, open the file with your favorite text
 editor and add the URLs, one per line:
 
@@ -36,17 +36,17 @@ provide the username/password in the following way:
 	http://username:password@hostname.domain.tld/feed.rss
 
 In order to protect username and password, make sure that
-'$HOME/.newsboat/urls' is only readable by you and, optionally, your group:
+_$HOME/.newsboat/urls_ is only readable by you and, optionally, your group:
 
     $ chmod u=rw,g=r,o= ~/.newsboat/urls
 
 Newsboat also makes sure that usernames and passwords within URLs aren't
-displayed in its user interface. In case there is a '@' in the username, you
-need to write it as '%40' instead so that it can be distinguished from the '@'
+displayed in its user interface. In case there is a _@_ in the username, you
+need to write it as _%40_ instead so that it can be distinguished from the _@_
 that separates the username/password part from the hostname part.
 
 You can also configure local files as feeds, by prefixing the local path with
-`file://` and adding it to the '$HOME/.newsboat/urls' file:
+`file://` and adding it to the _$HOME/.newsboat/urls_ file:
 
 	file:///var/log/rss_eventlog.xml
 
@@ -86,7 +86,7 @@ Conditional HTTP downloading can be optionally disabled per feed by using the
 <<always-download,`always-download`>> configuration command.
 
 Several aspects of newsboat's behaviour can be configured via a configuration
-file, by default '$HOME/.newsboat/config'. This configuration file contains
+file, by default _$HOME/.newsboat/config_. This configuration file contains
 lines in the form `<config-command> <arg1> ...`.  The configuration file can
 also contain comments, which start with the `#` character and go as far as the
 end of line. If you need to enter a configuration argument that contains
@@ -107,7 +107,7 @@ feed, only the articles of the currently viewed feed are searched. When opening
 an article from a search result dialog, the search phrase is highlighted.
 
 The history of all your searches is saved to the filesystem, to
-'~/.newsboat/history.search'. By default, the last 100 search phrases are
+_~/.newsboat/history.search_. By default, the last 100 search phrases are
 stored, but this limited can be influenced through the <<history-limit,`history-limit`>>
 configuration variable. To disable search history saving, simply set the
 `history-limit` to `0`.

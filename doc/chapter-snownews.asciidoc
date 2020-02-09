@@ -8,7 +8,7 @@ interpreted as RSS feed, while "filter" scripts are fed with the content of a
 configured URL and whose output is interpreted as RSS feed.
 
 The configuration is simple and straight-forward. Just add to your
-'~/.newsboat/urls' file configuration lines like the following ones:
+_~/.newsboat/urls_ file configuration lines like the following ones:
 
 	exec:~/bin/execurl-script
 	filter:~/bin/filter-script:http://some.test/url

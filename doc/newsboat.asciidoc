@@ -77,10 +77,10 @@ After you've downloaded and installed the dependencies mentioned above, you can
 start compiling and installing newsboat. To compile newsboat, simply run
 `make` in the source tree. After a short time, this should complete
 successfully, and you can go on with installation by running `make install`. By
-default, this will install the `newsboat` binary to the '/usr/local/bin'
+default, this will install the `newsboat` binary to the _/usr/local/bin_
 directory. You can provide an alternative installation path using the `prefix`
 parameter, e.g. running `make install prefix=/opt/newsboat` will install the
-binary to the directory '/opt/newsboat/bin'.
+binary to the directory _/opt/newsboat/bin_.
 
 
 == First Steps
@@ -219,8 +219,8 @@ are met:
 
 * none of `-u`, `-c`, `-C` options were specified; and
 
-* the urls file doesn't exist (neither '~/.newsboat/urls' nor
-  '$XDG_CONFIG_DIR/newsboat/urls').
+* the urls file doesn't exist (neither _~/.newsboat/urls_ nor
+  _$XDG_CONFIG_DIR/newsboat/urls_).
 
 Newsboat first tries to migrate an XDG configuration, and if that fails, it
 tries the dotdir one. If that fails as well, Newsboat proceeds with the startup
@@ -228,21 +228,21 @@ as usual.
 
 XDG migration checks that:
 
-* '$XDG_CONFIG_DIR/newsbeuter/' is readable and executable; and
+* _$XDG_CONFIG_DIR/newsbeuter/_ is readable and executable; and
 
-* neither '$XDG_CONFIG_DIR/newsboat/' nor '$XDG_DATA_DIR/newsboat/' exist.
+* neither _$XDG_CONFIG_DIR/newsboat/_ nor _$XDG_DATA_DIR/newsboat/_ exist.
 
 If both conditions are met, Newsboat tries to create its XDG dirs (aborting the
-migration if that fails), then copies the following files: 'urls' and 'config' from
-config dir; 'cache.db', 'queue', 'history.search', 'history.cmdline' from data dir.
+migration if that fails), then copies the following files: _urls_ and _config_ from
+config dir; _cache.db_, _queue_, _history.search_, _history.cmdline_ from data dir.
 
-Dotdir migration checks that '\~/.newsbeuter/' is readable and executable, and
-'\~/.newsboat/' doesn't exist. If those conditions are met, it tries to create
-'~/.newsboat/' (aborting the migration if that fails), then copies the following
-files: 'urls', 'cache.db', 'config', 'queue', 'history.search', 'history.cmdline'.
+Dotdir migration checks that _\~/.newsbeuter/_ is readable and executable, and
+_\~/.newsboat/_ doesn't exist. If those conditions are met, it tries to create
+_~/.newsboat/_ (aborting the migration if that fails), then copies the following
+files: _urls_, _cache.db_, _config_, _queue_, _history.search_, _history.cmdline_.
 
 There's one scenario where the process breaks: if you have an XDG configuration
-for Newsbeuter, '\~/.newsboat/' exists and '~/.newsboat/urls' doesn't exist, then
+for Newsbeuter, _\~/.newsboat/_ exists and _~/.newsboat/urls_ doesn't exist, then
 Newsboat will migrate XDG files and proceed, ignoring the dotdir. Please don't
 confuse the poor program like that!
 
@@ -262,7 +262,7 @@ OPML file:
 
 	snow2opml > ~/blogroll.opml
 
-This command creates from your Snownews configuration a file 'blogroll.opml' in
+This command creates from your Snownews configuration a file _blogroll.opml_ in
 your home directory. To export the subscription list from raggle, the
 following command is necessary:
 
@@ -649,7 +649,7 @@ In case something goes wrong while saving the bookmark, it writes out an error m
 This error message is then presented to the user from within newsboat.
 
 Newsboat comes with an example plugin, which implements a simple tab-separated bookmark file. This
-example can be found in the 'contrib' subdirectory.
+example can be found in the _contrib_ subdirectory.
 
 
 === Command Line
@@ -663,7 +663,7 @@ Command:Syntax:Description:Example
 [[cmd-quit]]<<cmd-quit,+quit+>>:quit:Quit newsboat.:quit
 [[cmd-q]]<<cmd-q,+q+>>:q:Alias for quit.:quit
 [[cmd-save]]<<cmd-save,+save+>>:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
-[[cmd-set]]<<cmd-set,+set+>>:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a '!' after the name of boolean configuration variables toggles their values, a '&' directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
+[[cmd-set]]<<cmd-set,+set+>>:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a _!_ after the name of boolean configuration variables toggles their values, a _&_ directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
 [[cmd-tag]]<<cmd-tag,+tag+>>:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
 [[cmd-goto]]<<cmd-goto,+goto+>>:goto <case-insensitive substring>:Search for a feed whose name contains the case-insensitive substring.:goto foo
 [[cmd-source]]<<cmd-source,+source+>>:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsboat/colors
@@ -812,7 +812,7 @@ article was originally fetched. If you want query feeds to be updated at
 startup, set <<prepopulate-query-feeds,`prepopulate-query-feeds`>> to `yes`.
 
 To define a query feed, the user has to add a line to the file
-'~/.newsboat/urls' in the following format:
+_~/.newsboat/urls_ in the following format:
 
 	query:<name of feed>:<filter expression> [<tag> ...]
 
@@ -849,8 +849,8 @@ and by your creativity.
 === Flagging Articles
 
 To support custom categorization of articles by the user, it is possible to
-flag an article. A valid flag is any character from 'A' to 'Z' and from 'a' to
-'z'. Every article can be flagged with up to 52 different flags, i.e. every
+flag an article. A valid flag is any character from _A_ to _Z_ and from _a_ to
+_z_. Every article can be flagged with up to 52 different flags, i.e. every
 letter from the Roman alphabet in upper and lower case. Flagging is easy: just
 select an article in the article list, or enter the article view, and press "Ctrl-E".
 This will start the flag editor. By pressing "Enter", the new flags are saved.
@@ -916,7 +916,7 @@ user to configure the format of various aspects of the application, such as
 the format of entries in the feed list or in the article list.
 
 Format strings are similar to those that are found in the `printf` function in
-the C programming language. A format sequence begins with the '%' character,
+the C programming language. A format sequence begins with the _%_ character,
 followed by optional alignment indication: positive numbers indicate that the
 text that is inserted for the sequence shall be padded on the left to a total
 width that is specified by the number, while negative number specify padding on
@@ -1173,21 +1173,21 @@ http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
 Directory Specification]. It needs to be set up manually by creating the
 following directories:
 
-- '~/.local/share/newsboat/'
-- '~/.config/newsboat/'
+- _~/.local/share/newsboat/_
+- _~/.config/newsboat/_
 
 If these directories exist or the environment variables `$XDG_CONFIG_HOME` and
 `$XDG_DATA_HOME` are set, newsboat will use these directories, otherwise it
-will default to '~/.newsboat' as its configuration directory.
+will default to _~/.newsboat_ as its configuration directory.
 
-If you're currently using '~/.newsboat/' but wish to migrate to XDG
+If you're currently using _~/.newsboat/_ but wish to migrate to XDG
 directories, you should move the files as follows:
 
-'config', 'urls'::
-        to '$HOME/.config/newsboat/'
+_config_, _urls_::
+        to _$HOME/.config/newsboat/_
 
-'cache.db', 'history.search', 'history.cmdline', 'queue'::
-        to '$HOME/.local/share/newsboat/'
+_cache.db_, _history.search_, _history.cmdline_, _queue_::
+        to _$HOME/.local/share/newsboat/_
 
 
 === Podcast Support
@@ -1229,16 +1229,16 @@ be achieved by creative use of XDG environment variables. This approach is not
 beautiful, but it works.
 
 First of all, you will need to create a directory to store the data. Let's call
-it 'test':
+it _test_:
 
 	$ mkdir -p test/newsboat
 
-Note that we also create a subdirectory called 'newsboat'; this is required
+Note that we also create a subdirectory called _newsboat_; this is required
 to satisfy XDG specification. **ATTENTION**: if this subdirectory is absent,
 Newsboat will attempt to run on your live data!
 
-You can now create 'config' and 'urls' files inside 'test/newsboat'; you can
-also copy 'cache.db' if you don't want to start with a fresh one.
+You can now create _config_ and _urls_ files inside _test/newsboat_; you can
+also copy _cache.db_ if you don't want to start with a fresh one.
 
 When the files are ready, you can invoke Newsboat as follows:
 
@@ -1252,7 +1252,7 @@ environments of all the programs that Newsboat starts; that includes filters
 and external HTML renderers. If they rely on +XDG_*+ variables, they will look
 for things in +test+ directory and might fail.
 
-For filters, you should either copy the files they need to 'test', or invoke
+For filters, you should either copy the files they need to _test_, or invoke
 them in such a way that they don't look in XDG directories at all.
 
 For renderers, you can work around the issue by undoing the modifications to
