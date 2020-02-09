@@ -37,11 +37,7 @@ parts:
       - libstfl-dev
       - libjson-c-dev
       - libncursesw5-dev
-      - asciidoc
-      - libxml2-utils
-      - xsltproc
-      - docbook-xml
-      - docbook-xsl
+      - asciidoctor
       - libssl-dev
       - gettext
       - cargo

@@ -7,7 +7,7 @@ freebsd_task:
           freebsd_instance:
             image: freebsd-12-0-release-amd64
 
-    install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools
+    install_script: pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools libxml2
     setup_script:
         - pw groupadd testgroup
         - pw useradd testuser -g testgroup -w none -m
@@ -51,8 +51,7 @@ macos_task:
         - brew outdated "curl" || brew upgrade "curl"
         - brew install "libstfl"
         - brew install "json-c"
-        - brew install "asciidoc"
-        - brew install "docbook-xsl"
+        - brew install "asciidoctor"
         - brew install "libxml2"
         - brew install "pyenv" || brew upgrade "pyenv"
         - rustup-init -y --default-toolchain $RUST
