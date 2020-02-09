@@ -90,16 +90,17 @@ Conditional HTTP downloading can be optionally disabled per feed by using the
 Several aspects of newsboat's behaviour can be configured via a configuration
 file, by default _$HOME/.newsboat/config_. This configuration file contains
 lines in the form `<config-command> <arg1> ...`.  The configuration file can
-also contain comments, which start with the `#` character and go as far as the
-end of line. If you need to enter a configuration argument that contains
+also contain comments, which start with the `+#+` character and go as far as
+the end of line. If you need to enter a configuration argument that contains
 spaces, use quotes (`"`) around the whole argument. It's even possible to
 integrate the output of external commands into the configuration. The text
-between two backticks (+&#96;+) is evaluated as shell command, and its output
-is put on its place instead. This works like backtick evaluation in
+between two backticks (`{backtick}`) is evaluated as shell command, and its
+output is put on its place instead. This works like backtick evaluation in
 Bourne-compatible shells and allows users to use external information from the
-system within the configuration. Backticks and `#` characters can be escaped
-with a backslash (e.g. `\`` and `\#`); in that case, they'll be replaced with
-literal +&#96;+ or `#` in the configuration.
+system within the configuration. Backticks and `+#+` characters can be escaped
+with a backslash (e.g. `{backslash}{backtick}` and `{backslash}#`); in that
+case, they'll be replaced with literal `{backtick}` or `+#+` in the
+configuration.
 
 Searching for articles is possible in newsboat, too. Just press the "/" key,
 enter your search phrase, and the title and content of all articles are
