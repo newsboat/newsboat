@@ -61,6 +61,14 @@ void Reloader::reload(unsigned int pos,
 	if (pos < ctrl->get_feedcontainer()->feeds.size()) {
 		std::shared_ptr<RssFeed> oldfeed =
 			ctrl->get_feedcontainer()->feeds[pos];
+
+		// Query feed reloading should be handled by the calling functions
+		// (e.g.  Reloader::reload_all() calling View::prepare_query_feed())
+		if (oldfeed->is_query_feed()) {
+			LOG(Level::DEBUG, "Reloader::reload: skipping query feed");
+			return;
+		}
+
 		std::string errmsg;
 		if (!unattended) {
 			ctrl->get_view()->set_status(
@@ -82,10 +90,8 @@ void Reloader::reload(unsigned int pos,
 		try {
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
 			std::shared_ptr<RssFeed> newfeed = parser.parse();
-			if (!newfeed->is_query_feed()) {
-				ctrl->replace_feed(
-					oldfeed, newfeed, pos, unattended);
-			}
+			ctrl->replace_feed(
+				oldfeed, newfeed, pos, unattended);
 			if (newfeed->total_item_count() == 0) {
 				LOG(Level::DEBUG,
 					"Reloader::reload: feed is empty");
