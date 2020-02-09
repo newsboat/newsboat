@@ -125,13 +125,15 @@ The "Tab" key can't be bound due to technical limitations of STFL.
 
 === Example Configuration
 
-	# a comment
-	max-items        100 # such comments are possible, too
-	browser          links
-	show-read-feeds  no
+----
+# a comment
+max-items        100 # such comments are possible, too
+browser          links
+show-read-feeds  no
 
-	unbind-key       R
-	bind-key         ^R    reload-all
+unbind-key       R
+bind-key         ^R    reload-all
+----
 
 === Configuring Colors
 

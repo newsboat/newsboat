@@ -1,25 +1,27 @@
 After you've installed newsboat, you can run it for the first time by typing
 `newsboat` on your command prompt. This will bring you the following message:
 
-	Error: no URLs configured. Please fill the file /home/ak/.newsboat/urls with RSS feed URLs or import an OPML file.
+----
+Error: no URLs configured. Please fill the file /home/ak/.newsboat/urls with RSS feed URLs or import an OPML file.
 
-	newsboat 2.10
-	usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
-		-e, --export-to-opml            export OPML feed to stdout
-		-r, --refresh-on-start          refresh feeds on start
-		-i, --import-from-opml=<file>   import OPML file
-		-u, --url-file=<urlfile>        read RSS feed URLs from <urlfile>
-		-c, --cache-file=<cachefile>    use <cachefile> as cache file
-		-C, --config-file=<configfile>  read configuration from <configfile>
-		-X, --vacuum                    compact the cache
-		-x, --execute=<command>...      execute list of commands
-		-q, --quiet                     quiet startup
-		-v, --version                   get version information
-		-l, --log-level=<loglevel>      write a log with a certain loglevel (valid values: 1 to 6)
-		-d, --log-file=<logfile>        use <logfile> as output log file
-		-E, --export-to-file=<file>     export list of read articles to <file>
-		-I, --import-from-file=<file>   import list of read articles from <file>
-		-h, --help                      this help
+newsboat 2.10
+usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
+    -e, --export-to-opml            export OPML feed to stdout
+    -r, --refresh-on-start          refresh feeds on start
+    -i, --import-from-opml=<file>   import OPML file
+    -u, --url-file=<urlfile>        read RSS feed URLs from <urlfile>
+    -c, --cache-file=<cachefile>    use <cachefile> as cache file
+    -C, --config-file=<configfile>  read configuration from <configfile>
+    -X, --vacuum                    compact the cache
+    -x, --execute=<command>...      execute list of commands
+    -q, --quiet                     quiet startup
+    -v, --version                   get version information
+    -l, --log-level=<loglevel>      write a log with a certain loglevel (valid values: 1 to 6)
+    -d, --log-file=<logfile>        use <logfile> as output log file
+    -E, --export-to-file=<file>     export list of read articles to <file>
+    -I, --import-from-file=<file>   import list of read articles from <file>
+    -h, --help                      this help
+----
 
 This means that newsboat can't start without any configured feeds. To add
 feeds to newsboat, you can either add URLs to the configuration file
