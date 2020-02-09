@@ -82,8 +82,10 @@ void Reloader::reload(unsigned int pos,
 		try {
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
 			std::shared_ptr<RssFeed> newfeed = parser.parse();
-			ctrl->replace_feed(
-				oldfeed, newfeed, pos, unattended);
+			if (!newfeed->is_query_feed()) {
+				ctrl->replace_feed(
+					oldfeed, newfeed, pos, unattended);
+			}
 			if (newfeed->total_item_count() == 0) {
 				LOG(Level::DEBUG,
 					"Reloader::reload: feed is empty");
