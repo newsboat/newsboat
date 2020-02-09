@@ -1,4 +1,8 @@
 = The Newsboat RSS Feedreader
+:toc: left
+:sectnums:
+:sectanchors:
+:sectlinks:
 
 == Introduction
 
