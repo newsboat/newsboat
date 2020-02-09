@@ -68,13 +68,13 @@ See also a corresponding section in newsboat(1).
 
 dotfiles::
         _$HOME/.newsboat/config_
-        +
-        _$HOME/.newsboat/queue_
++
+_$HOME/.newsboat/queue_
 
 XDG::
         _$HOME/.config/newsboat/config_
-        +
-        _$HOME/.local/share/newsboat/queue_
++
+_$HOME/.local/share/newsboat/queue_
 
 
 == ENVIRONMENT

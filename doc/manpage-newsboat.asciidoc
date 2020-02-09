@@ -150,13 +150,13 @@ See also a corresponding section in podboat(1).
 
 dotfiles::
         _$HOME/.newsboat/config_
-        +
-        _$HOME/.newsboat/urls_
++
+_$HOME/.newsboat/urls_
 
 XDG::
         _$HOME/.config/newsboat/config_
-        +
-        _$HOME/.config/newsboat/urls_
++
+_$HOME/.config/newsboat/urls_
 
 
 == ENVIRONMENT
