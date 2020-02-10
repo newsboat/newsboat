@@ -11,7 +11,7 @@ use URI::Escape;
 # are working as expected. Needs the
 # Proc::Daemon Perl module
 # set to '0' if not needed
-my $daemon = 0;
+my $daemon = 1;
 
 
 # Change the tag value to what you 
