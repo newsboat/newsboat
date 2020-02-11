@@ -80,7 +80,6 @@ private:
 	Cache* ch;
 	ConfigContainer* cfgcont;
 	bool skip_parsing;
-	bool is_valid;
 	RssIgnores* ign;
 	rsspp::Feed f;
 	RemoteApi* api;
