@@ -24,6 +24,7 @@ addons:
 
 newsboat_brew_commands: &osx_deps
   - brew update
+  - brew unlink python@2 # to prevent conflict with Python 3, see https://travis-ci.org/newsboat/newsboat/jobs/649475862#L1510
   - brew install gcc || brew link --overwrite gcc
   - brew outdated "pkg-config" || brew upgrade "pkg-config"
   - brew install "gettext" && brew link --force "gettext"
