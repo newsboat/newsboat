@@ -77,7 +77,7 @@ void Reloader::reload(unsigned int pos,
 					utils::censor_url(oldfeed->rssurl())));
 		}
 
-		bool ignore_dl =
+		const bool ignore_dl =
 			(cfg->get_configvalue("ignore-mode") == "download");
 
 		RssParser parser(oldfeed->rssurl(),
@@ -90,11 +90,13 @@ void Reloader::reload(unsigned int pos,
 		try {
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
 			std::shared_ptr<RssFeed> newfeed = parser.parse();
-			ctrl->replace_feed(
-				oldfeed, newfeed, pos, unattended);
-			if (newfeed->total_item_count() == 0) {
-				LOG(Level::DEBUG,
-					"Reloader::reload: feed is empty");
+			if (newfeed != nullptr) {
+				ctrl->replace_feed(
+					oldfeed, newfeed, pos, unattended);
+				if (newfeed->total_item_count() == 0) {
+					LOG(Level::DEBUG,
+						"Reloader::reload: feed is empty");
+				}
 			}
 			oldfeed->set_status(DlStatus::SUCCESS);
 			ctrl->get_view()->set_status("");
@@ -114,7 +116,7 @@ void Reloader::reload(unsigned int pos,
 					utils::censor_url(oldfeed->rssurl()),
 					e.what());
 		}
-		if (errmsg != "") {
+		if (!errmsg.empty()) {
 			oldfeed->set_status(DlStatus::DL_ERROR);
 			ctrl->get_view()->set_status(errmsg);
 			LOG(Level::USERERROR, "%s", errmsg);
