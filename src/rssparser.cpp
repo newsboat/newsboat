@@ -317,7 +317,7 @@ void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
 
 	feed->set_link(utils::absolute_url(my_uri, f.link));
 
-	if (f.pubDate != "") {
+	if (!f.pubDate.empty()) {
 		feed->set_pubDate(parse_date(f.pubDate));
 	} else {
 		feed->set_pubDate(::time(nullptr));
@@ -343,7 +343,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 
 		set_item_title(feed, x, item);
 
-		if (item.link != "") {
+		if (!item.link.empty()) {
 			x->set_link(
 				utils::absolute_url(feed->link(), item.link));
 		}
@@ -411,7 +411,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 
 		set_item_content(x, item);
 
-		if (item.pubDate != "") {
+		if (!item.pubDate.empty()) {
 			x->set_pubDate(parse_date(item.pubDate));
 		} else {
 			x->set_pubDate(::time(nullptr));
@@ -466,8 +466,8 @@ void RssParser::set_item_author(std::shared_ptr<RssItem> x,
 	 * some feeds only have a feed-wide managingEditor, which we use as an
 	 * item's author if there is no item-specific one available.
 	 */
-	if (item.author == "") {
-		if (f.managingeditor != "") {
+	if (item.author.empty()) {
+		if (!f.managingeditor.empty()) {
 			x->set_author(f.managingeditor);
 		} else {
 			x->set_author(f.dc_creator);
@@ -484,21 +484,21 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 
 	handle_itunes_summary(x, item);
 
-	if (x->description() == "") {
+	if (x->description().empty()) {
 		x->set_description(item.description);
 	} else {
 		if (cfgcont->get_configvalue_as_bool(
 				"always-display-description") &&
-			item.description != "")
+			!item.description.empty())
 			x->set_description(
 				x->description() + "<hr>" + item.description);
 	}
 
 	/* if it's still empty and we shall download the full page, then we do
 	 * so. */
-	if (x->description() == "" &&
+	if (x->description().empty() &&
 		cfgcont->get_configvalue_as_bool("download-full-page") &&
-		x->link() != "") {
+		!x->link().empty()) {
 		x->set_description(utils::retrieve_url(x->link(), cfgcont));
 	}
 
@@ -516,13 +516,13 @@ std::string RssParser::get_guid(const rsspp::Item& item) const
 	 * is suboptimal, of course, because it makes it impossible to recognize
 	 * duplicates when the title or the link changes.
 	 */
-	if (item.guid != "") {
+	if (!item.guid.empty()) {
 		return item.guid;
-	} else if (item.link != "" && item.pubDate != "") {
+	} else if (!item.link.empty() && !item.pubDate.empty()) {
 		return item.link + item.pubDate;
-	} else if (item.link != "") {
+	} else if (!item.link.empty()) {
 		return item.link;
-	} else if (item.title != "") {
+	} else if (!item.title.empty()) {
 		return item.title;
 	} else {
 		return "";        // too bad.
@@ -569,13 +569,13 @@ void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
 void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item) const
 {
-	if (x->description() != "") {
+	if (!x->description().empty()) {
 		return;
 	}
 
 	/* here we handle content:encoded tags that are an extension but very
 	 * widespread */
-	if (item.content_encoded != "") {
+	if (!item.content_encoded.empty()) {
 		x->set_description(item.content_encoded);
 	} else {
 		LOG(Level::DEBUG,
@@ -586,12 +586,12 @@ void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item)
 {
-	if (x->description() != "") {
+	if (!x->description().empty()) {
 		return;
 	}
 
 	std::string summary = item.itunes_summary;
-	if (summary != "") {
+	if (!summary.empty()) {
 		std::string desc = "<ituneshack>";
 		desc.append(summary);
 		desc.append("</ituneshack>");
