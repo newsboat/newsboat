@@ -79,7 +79,6 @@ private:
 	std::string my_uri;
 	Cache* ch;
 	ConfigContainer* cfgcont;
-	bool skip_parsing;
 	RssIgnores* ign;
 	rsspp::Feed f;
 	RemoteApi* api;

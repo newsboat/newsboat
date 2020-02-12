@@ -34,7 +34,6 @@ RssParser::RssParser(const std::string& uri,
 	: my_uri(uri)
 	, ch(c)
 	, cfgcont(cfg)
-	, skip_parsing(false)
 	, ign(ii)
 	, api(a)
 	, easyhandle(0)
@@ -54,7 +53,7 @@ std::shared_ptr<RssFeed> RssParser::parse()
 
 	retrieve_uri(my_uri);
 
-	if (!skip_parsing && f.rss_version != rsspp::Feed::Version::UNKNOWN) {
+	if (f.rss_version != rsspp::Feed::Version::UNKNOWN) {
 		/*
 		 * After parsing is done, we fill our feed object with title,
 		 * description, etc.  It's important to note that all data that
@@ -171,7 +170,7 @@ void RssParser::retrieve_uri(const std::string& uri)
 		utils::extract_filter(uri, filter, url);
 		download_filterplugin(filter, url);
 	} else if (utils::is_query_url(my_uri)) {
-		skip_parsing = true;
+		f.rss_version = rsspp::Feed::Version::UNKNOWN;
 	} else if (my_uri.substr(0, 7) == "file://") {
 		parse_file(my_uri.substr(7, my_uri.length() - 7));
 	} else {
