@@ -360,6 +360,32 @@ pub fn get_command_output(cmd: &str) -> String {
         .unwrap_or_else(|_| String::from(""))
 }
 
+/// Extract the `filter` portion line
+/// ```
+/// use libnewsboat::utils::extract_filter;
+/// let mut filter = String::new();
+/// let mut url = String::new();
+/// extract_filter("filter:~/bin/script.sh:https://newsboat.org", &mut filter, &mut url);
+/// assert_eq!(filter, "~/bin/script.sh");
+/// assert_eq!(url, "https://newsboat.org");
+/// ```
+pub fn extract_filter(line: &str, filter: &mut String, url: &mut String) {
+    let pos = line.find(':').map(|p| p + 1);
+    let pos1 = pos.and_then(|p| line[p..].find(':').map(|p1| p1 + p));
+    println!("{}", line);
+    println!("{:?} {:?}", pos, pos1);
+    match (pos, pos1) {
+        (Some(pos), Some(pos1)) => {
+            *filter = String::from(&line[pos..pos1]);
+            *url = String::from(&line[pos1 + 1..]);
+        },
+        _ => {
+            *filter = String::new();
+            *url = String::from(line);
+        }
+    }
+}
+
 // This function assumes that the user is not interested in command's output (not even errors on
 // stderr!), so it redirects everything to /dev/null.
 pub fn run_command(cmd: &str, param: &str) {
