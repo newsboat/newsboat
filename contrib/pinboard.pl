@@ -27,15 +27,17 @@ my $API_token='***REPLACE***';
 
 # $ARGV[0] is the URL of the article
 # $ARGV[1] is the title of the article
+# $ARGV[2] is the description of the article
+# $ARGV[3] is the feed title (not used by Pinboard)
 
-if ($daemon){
-    eval{
+if ($daemon) {
+    eval {
         require Proc::Daemon;
         Proc::Damoen->import();
     };
-    if($@){
+    if($@) {
         warn();
-    }else{
+    } else {
         Proc::Daemon::Init();
     }
 }
@@ -50,21 +52,22 @@ my $ua = LWP::UserAgent->new(
 
 my $res = $ua->get($ARGV[0]);
 
-if ($res->status_line == 301){
+if ($res->status_line == 301) {
 	$bkmrk_url = $res->header( 'location');
-}else{
+} else {
     $bkmrk_url = $ARGV[0];
 }
 
 my $safe_bkmrk_url = uri_escape($bkmrk_url);
-my $safe_desc=uri_escape($ARGV[1]);
+my $safe_title = uri_escape($ARGV[1]);
+my $safe_description = uri_escape($ARGV[2]);
 
-my $pinboard_url = $API_URL . "auth_token=$API_token&url=$safe_bkmrk_url&tags=$tag&shared=no&toread=yes&description=$safe_desc";
+my $pinboard_url = $API_URL . "auth_token=$API_token&url=$safe_bkmrk_url&tags=$tag&shared=no&toread=yes&description=$safe_title&extended=$safe_description";
 my $content = `curl -s \"$pinboard_url\"`;
 
-if ($content =~ m!<result code="done" />!){
+if ($content =~ m!<result code="done" />!) {
 #    print "Added to Pinboard\n";
-}else{
-    print " Opps $content" if $content;
-    print " Bookmark not added! URL: $pinboard_url";
+} else {
+    print STDERR " Opps $content" if $content;
+    print STDERR " Bookmark not added! URL: $pinboard_url";
 }
