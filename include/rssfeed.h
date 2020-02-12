@@ -138,15 +138,6 @@ public:
 		query = s;
 	}
 
-	bool is_empty()
-	{
-		return empty;
-	}
-	void set_empty(bool t)
-	{
-		empty = t;
-	}
-
 	bool is_query_feed() const
 	{
 		return rssurl_.substr(0, 6) == "query:";
@@ -231,7 +222,6 @@ private:
 
 	Cache* ch;
 
-	bool empty;
 	bool search_feed;
 	bool is_rtl_;
 	unsigned int idx;

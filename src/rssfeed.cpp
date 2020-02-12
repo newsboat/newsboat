@@ -30,7 +30,6 @@ namespace newsboat {
 RssFeed::RssFeed(Cache* c)
 	: pubDate_(0)
 	, ch(c)
-	, empty(true)
 	, search_feed(false)
 	, is_rtl_(false)
 	, idx(0)
