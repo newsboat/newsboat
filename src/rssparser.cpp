@@ -47,28 +47,29 @@ RssParser::~RssParser() {}
 
 std::shared_ptr<RssFeed> RssParser::parse()
 {
-	std::shared_ptr<RssFeed> feed(new RssFeed(ch));
-
-	feed->set_rssurl(my_uri);
-
 	retrieve_uri(my_uri);
 
-	if (f.rss_version != rsspp::Feed::Version::UNKNOWN) {
-		/*
-		 * After parsing is done, we fill our feed object with title,
-		 * description, etc.  It's important to note that all data that
-		 * comes from rsspp must be converted to UTF-8 before, because
-		 * all data is internally stored as UTF-8, and converted
-		 * on-the-fly in case some other encoding is required. This is
-		 * because UTF-8 can hold all available Unicode characters,
-		 * unlike other non-Unicode encodings.
-		 */
-
-		fill_feed_fields(feed);
-		fill_feed_items(feed);
-
-		ch->remove_old_deleted_items(feed.get());
+	if (f.rss_version == rsspp::Feed::Version::UNKNOWN) {
+		return nullptr;
 	}
+
+	std::shared_ptr<RssFeed> feed(new RssFeed(ch));
+	feed->set_rssurl(my_uri);
+
+	/*
+	 * After parsing is done, we fill our feed object with title,
+	 * description, etc.  It's important to note that all data that
+	 * comes from rsspp must be converted to UTF-8 before, because
+	 * all data is internally stored as UTF-8, and converted
+	 * on-the-fly in case some other encoding is required. This is
+	 * because UTF-8 can hold all available Unicode characters,
+	 * unlike other non-Unicode encodings.
+	 */
+
+	fill_feed_fields(feed);
+	fill_feed_items(feed);
+
+	ch->remove_old_deleted_items(feed.get());
 
 	feed->set_empty(false);
 
