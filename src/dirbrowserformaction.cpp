@@ -153,15 +153,15 @@ void DirBrowserFormAction::process_operation(Operation op,
 
 void DirBrowserFormAction::update_title(const std::string& working_directory)
 {
-	std::string fileswidth = f->get("files:w");
-	unsigned int width = utils::to_u(fileswidth);
+	const std::string fileswidth = f->get("files:w");
+	const unsigned int width = utils::to_u(fileswidth);
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('f', working_directory);
 
-	std::string title = fmt.do_format(
+	const std::string title = fmt.do_format(
 			cfg->get_configvalue("dirbrowser-title-format"), width);
 
 	f->set("head", title);
