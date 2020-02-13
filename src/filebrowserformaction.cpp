@@ -171,7 +171,7 @@ std::vector<std::string> get_sorted_filelist()
 {
 	std::vector<std::string> ret;
 
-	auto cwdtmp = utils::getcwd();
+	const std::string cwdtmp = utils::getcwd();
 
 	DIR* dirp = ::opendir(cwdtmp.c_str());
 	if (dirp) {
@@ -244,7 +244,7 @@ void FileBrowserFormAction::init()
 	int status = ::chdir(dir.c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
 
-	auto cwdtmp = utils::getcwd();
+	const std::string cwdtmp = utils::getcwd();
 
 	f->set("filenametext", default_filename);
 
