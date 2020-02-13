@@ -32,6 +32,7 @@ private:
 	void process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
+	void update_title(const std::string& working_directory);
 
 	std::string add_directory(std::string dirname);
 	std::string get_rwx(unsigned short val);
