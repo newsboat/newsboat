@@ -463,7 +463,7 @@ pub unsafe extern "C" fn rs_run_command(command: *const c_char, param: *const c_
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_run_program(
-    argv: *mut *mut c_char,
+    argv: *const *mut c_char,
     input: *const c_char,
 ) -> *mut c_char {
     abort_on_panic(|| {

@@ -76,7 +76,7 @@ char* rs_get_basename(const char* str);
 
 void rs_run_command(const char* command, const char* param);
 
-char* rs_run_program(char* argv[], const char* input);
+char* rs_run_program(const char* argv[], const char* input);
 
 char* rs_program_version();
 

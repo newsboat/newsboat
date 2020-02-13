@@ -46,7 +46,7 @@ std::string retrieve_url(const std::string& url,
 	CURL* easyhandle = nullptr);
 void run_command(const std::string& cmd,
 	const std::string& param); // used for notifications only
-std::string run_program(char* argv[], const std::string& input);
+std::string run_program(const char* argv[], const std::string& input);
 
 std::string resolve_tilde(const std::string&);
 std::string resolve_relative(const std::string&, const std::string&);

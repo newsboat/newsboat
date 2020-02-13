@@ -93,10 +93,10 @@ void render_html(
 		HtmlRenderer rnd(raw);
 		rnd.render(source, lines, thelinks, url);
 	} else {
-		char* argv[4];
-		argv[0] = const_cast<char*>("/bin/sh");
-		argv[1] = const_cast<char*>("-c");
-		argv[2] = const_cast<char*>(renderer.c_str());
+		const char* argv[4];
+		argv[0] = "/bin/sh";
+		argv[1] = "-c";
+		argv[2] = renderer.c_str();
 		argv[3] = nullptr;
 		LOG(Level::DEBUG,
 			"item_renderer::render_html: source = %s",

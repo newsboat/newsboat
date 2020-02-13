@@ -502,7 +502,7 @@ void utils::run_command(const std::string& cmd, const std::string& input)
 	rs_run_command(cmd.c_str(), input.c_str());
 }
 
-std::string utils::run_program(char* argv[], const std::string& input)
+std::string utils::run_program(const char* argv[], const std::string& input)
 {
 	return RustString(rs_run_program(argv, input.c_str()));
 }
