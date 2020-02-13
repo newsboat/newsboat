@@ -36,6 +36,7 @@ private:
 	void process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
+	void update_title(const std::string& working_directory);
 
 	std::string add_file(std::string filename);
 	std::string get_filename_suggestion(const std::string& s);

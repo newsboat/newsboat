@@ -62,20 +62,6 @@ void FileBrowserFormAction::process_operation(Operation op,
 				std::string filename(selection);
 				switch (filetype) {
 				case 'd': {
-					std::string fileswidth =
-						f->get("files:w");
-					unsigned int width =
-						utils::to_u(fileswidth);
-
-					FmtStrFormatter fmt;
-					fmt.register_fmt('N', PROGRAM_NAME);
-					fmt.register_fmt('V', utils::program_version());
-					fmt.register_fmt('f', filename);
-					f->set("head",
-						fmt.do_format(
-							cfg->get_configvalue(
-								"filebrowser-title-format"),
-							width));
 					int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
 						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
@@ -83,9 +69,12 @@ void FileBrowserFormAction::process_operation(Operation op,
 						status);
 					f->set("listpos", "0");
 					std::string fn = utils::getcwd();
+					update_title(fn);
+
 					if (fn.back() != NEWSBEUTER_PATH_SEP) {
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
+
 					std::string fnstr =
 						f->get("filenametext");
 					std::string::size_type base =
@@ -160,6 +149,22 @@ void FileBrowserFormAction::process_operation(Operation op,
 	default:
 		break;
 	}
+}
+
+void FileBrowserFormAction::update_title(const std::string& working_directory)
+{
+	std::string fileswidth = f->get("files:w");
+	unsigned int width = utils::to_u(fileswidth);
+
+	FmtStrFormatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+	fmt.register_fmt('f', working_directory);
+
+	std::string title = fmt.do_format(
+			cfg->get_configvalue("filebrowser-title-format"), width);
+
+	f->set("head", title);
 }
 
 std::vector<std::string> get_sorted_filelist()
@@ -247,11 +252,7 @@ void FileBrowserFormAction::init()
 	f->run(-1);
 	f->set("filenametext_pos", std::to_string(default_filename.length()));
 
-	f->set("head",
-		strprintf::fmt(_("%s %s - Save File - %s"),
-			PROGRAM_NAME,
-			utils::program_version(),
-			cwdtmp));
+	update_title(cwdtmp);
 }
 
 KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
