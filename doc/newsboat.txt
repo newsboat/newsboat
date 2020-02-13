@@ -1120,7 +1120,7 @@ Identifier:Meaning
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[filebrowser-title-format-f]]<<filebrowser-title-format-f,+f+>>:Filename
+[[filebrowser-title-format-f]]<<filebrowser-title-format-f,+f+>>:Current path
 [[filebrowser-title-format-O]]<<filebrowser-title-format-O,+O+>>:Non-empty if file browser is in open mode, empty if in save mode
 |======================================================================
 
@@ -1128,7 +1128,7 @@ Identifier:Meaning
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[dirbrowser-title-format-f]]<<dirbrowser-title-format-f,+f+>>:Directory
+[[dirbrowser-title-format-f]]<<dirbrowser-title-format-f,+f+>>:Current path
 [[dirbrowser-title-format-O]]<<dirbrowser-title-format-O,+O+>>:Non-empty if directory browser is in open mode, empty if in save mode
 |======================================================================
 
