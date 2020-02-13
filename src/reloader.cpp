@@ -185,7 +185,10 @@ void Reloader::reload_all(bool unattended)
 	// refresh query feeds (update and sort)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
 	for (const auto& feed : ctrl->get_feedcontainer()->feeds) {
-		ctrl->get_view()->prepare_query_feed(feed);
+		if (feed->is_query_feed()) {
+			ctrl->get_view()->prepare_query_feed(feed);
+			feed->set_status(DlStatus::SUCCESS);
+		}
 	}
 	ctrl->get_view()->force_redraw();
 
