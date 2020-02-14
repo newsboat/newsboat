@@ -15,7 +15,7 @@ vbox
     richtext:1
     style_hl_normal[highlight]:
     style_normal[article]:
-    style_end[styleend]:fg=blue,attr=bold
+    style_end[end-of-text-marker]:fg=blue,attr=bold
     .expand:vh
     offset[helpoffset]:0
   vbox[hints]

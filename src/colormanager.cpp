@@ -72,7 +72,8 @@ void ColorManager::handle_action(const std::string& action,
 		if (element == "listnormal" || element == "listfocus" ||
 			element == "listnormal_unread" ||
 			element == "listfocus_unread" || element == "info" ||
-			element == "background" || element == "article") {
+			element == "background" || element == "article" ||
+			element == "end-of-text-marker") {
 			fg_colors[element] = fgcolor;
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;
@@ -140,21 +141,6 @@ void ColorManager::set_pb_colors(podboat::PbView* v)
 
 		v->dllist_form.set(fgcit->first, colorattr);
 		v->help_form.set(fgcit->first, colorattr);
-
-		if (fgcit->first == "article") {
-			std::string styleend_str;
-
-			if (bgcit->second != "default") {
-				styleend_str.append("bg=");
-				styleend_str.append(bgcit->second);
-			}
-			if (styleend_str.length() > 0) {
-				styleend_str.append(",");
-			}
-			styleend_str.append("attr=bold");
-
-			v->help_form.set("styleend", styleend_str.c_str());
-		}
 	}
 }
 

@@ -190,6 +190,7 @@ Currently, the following elements are supported:
 - `info`: the info bars on top and bottom
 - `background`: the application background
 - `article`: the article text
+- `end-of-text-marker`: filler lines (~) below blocks of text
 
 The default color configuration of newsboat looks like this:
 

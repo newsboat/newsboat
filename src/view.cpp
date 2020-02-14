@@ -1165,23 +1165,6 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 			colorattr);
 
 		fa->get_form()->set(fgcit->first, colorattr);
-
-		if (fgcit->first == "article") {
-			if (fa->id() == "article" || fa->id() == "help") {
-				std::string styleend_str;
-				if (bgcit->second != "default") {
-					styleend_str.append("bg=");
-					styleend_str.append(bgcit->second);
-				}
-				if (styleend_str.length() > 0) {
-					styleend_str.append(",");
-				}
-				styleend_str.append("attr=bold");
-
-				fa->get_form()->set(
-					"styleend", styleend_str.c_str());
-			}
-		}
 	}
 }
 
