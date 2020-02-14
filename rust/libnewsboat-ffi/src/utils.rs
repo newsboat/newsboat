@@ -6,6 +6,12 @@ use std::ffi::{CStr, CString};
 use std::path;
 use std::ptr;
 
+#[repr(C)]
+pub struct FilterUrl {
+    filter: *mut char,
+    url: *mut char,
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn rs_replace_all(
     input: *const c_char,
@@ -529,5 +535,27 @@ pub unsafe extern "C" fn rs_strip_comments(line: *const c_char) -> *mut c_char {
         // `result` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
         let result = CString::new(result).unwrap();
         result.into_raw()
+    })
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn rs_extract_filter(line: *const c_char) -> FilterUrl {
+    abort_on_panic(|| {
+        let line = CStr::from_ptr(line);
+        // `line` is a valid pointer from C string.
+        let line = line.to_str().expect("line contained invalid UTF-8");
+
+        let (filter, url) = utils::extract_filter(line);
+        // `rfilter` contains a subset of `line`, which is a C string. Thus, we conclude that
+        // `rfilter` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
+        let filter = CString::new(filter).unwrap();
+        // `rurl` contains a subset of `line`, which is a C string. Thus, we conclude that
+        // `rurl` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
+        let url = CString::new(url).unwrap();
+
+        FilterUrl {
+            filter: filter.into_raw() as *mut char,
+            url: url.into_raw() as *mut char,
+        }
     })
 }

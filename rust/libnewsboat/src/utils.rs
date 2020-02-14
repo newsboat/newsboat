@@ -620,6 +620,23 @@ pub fn strip_comments(line: &str) -> &str {
     &line[0..first_pound_chr_idx]
 }
 
+/// Extract filter and url from line separated by ':'.
+pub fn extract_filter(line: &str) -> (&str, &str) {
+    debug_assert!(line.starts_with("filter:"));
+    // line must start with "filter:"
+    let line = line.get("filter:".len()..).unwrap();
+    let (filter, url) = line.split_at(line.find(':').unwrap_or(0));
+    let url = url.get(1..).unwrap_or("");
+    log!(
+        Level::Debug,
+        "utils::extract_filter: {} -> filter: {} url: {}",
+        line,
+        filter,
+        url
+    );
+    (filter, url)
+}
+
 #[cfg(test)]
 mod tests {
     extern crate tempfile;
@@ -1178,5 +1195,28 @@ mod tests {
         let expected = r#"one two \# three four"#;
         let input = expected.to_owned() + "# and a comment";
         assert_eq!(strip_comments(&input), expected);
+    }
+
+    #[test]
+    fn t_extract_filter() {
+        let expected = ("~/bin/script.sh", "https://newsboat.org");
+        let input = "filter:~/bin/script.sh:https://newsboat.org";
+        assert_eq!(extract_filter(input), expected);
+
+        let expected = ("", "https://newsboat.org");
+        let input = "filter::https://newsboat.org";
+        assert_eq!(extract_filter(input), expected);
+
+        let expected = ("https", "//newsboat.org");
+        let input = "filter:https://newsboat.org";
+        assert_eq!(extract_filter(input), expected);
+
+        let expected = ("foo", "");
+        let input = "filter:foo:";
+        assert_eq!(extract_filter(input), expected);
+
+        let expected = ("", "");
+        let input = "filter:";
+        assert_eq!(extract_filter(input), expected);
     }
 }

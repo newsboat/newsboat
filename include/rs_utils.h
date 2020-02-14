@@ -5,6 +5,11 @@
 extern "C" {
 #endif
 
+struct FilterUrl {
+	char* filter;
+	char* url;
+};
+
 char* rs_replace_all(
 	const char* str,
 	const char* from,
@@ -87,6 +92,8 @@ unsigned int rs_gentabs(const char* path);
 int rs_mkdir_parents(const char* path, const std::uint32_t mode);
 
 char* rs_strip_comments(const char* line);
+
+FilterUrl rs_extract_filter(const char* line);
 
 class RustString {
 private:
