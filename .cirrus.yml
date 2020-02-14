@@ -1,3 +1,7 @@
+cargo_cache:
+    folder: $CARGO_HOME/registry
+    fingerprint_script: cat Cargo.lock
+
 freebsd_task:
     matrix:
         - name: FreeBSD 11.2
@@ -21,6 +25,7 @@ freebsd_task:
     # Running three jobs because by default, VMs have 2 cores.
     build_script: su testuser -c 'cd ~ && RUST_BACKTRACE=1 gmake --jobs=3 --keep-going all test'
     test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"'
+    before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 32bit_ubuntu_task:
     name: Linux i686
@@ -34,6 +39,7 @@ freebsd_task:
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
+    before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 macos_task:
     osx_instance:
@@ -70,6 +76,7 @@ macos_task:
 
     build_script: *build_script
     test_script: *test_script
+    before_cache_script: rm -rf $CARGO_HOME/registry/index
 
     matrix:
         - name: macOS Clang Rust stable
