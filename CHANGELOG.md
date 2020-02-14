@@ -10,6 +10,10 @@
 ### Changed
 - `podlist-format` which now uses `%K` instead of `%k` by default (shows human
   readable speed instead of always using KB/s)
+- The EOT markers ("~" characters below blocks of text) no longer inherit their
+  style (colors + attributes) from the "article" style. Instead, they can be
+  configured separately allowing to hide them without hiding the article text
+  (example config line: `color styleend default default invis`)
 
 ### Deprecated
 ### Removed
