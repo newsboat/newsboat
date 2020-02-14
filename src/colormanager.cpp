@@ -72,7 +72,8 @@ void ColorManager::handle_action(const std::string& action,
 		if (element == "listnormal" || element == "listfocus" ||
 			element == "listnormal_unread" ||
 			element == "listfocus_unread" || element == "info" ||
-			element == "background" || element == "article" || element == "eot-tildes") {
+			element == "background" || element == "article" ||
+			element == "end-of-text-marker") {
 			fg_colors[element] = fgcolor;
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;

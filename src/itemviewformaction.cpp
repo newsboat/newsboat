@@ -556,7 +556,7 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 		"@style_u_normal[color_underline]:attr=underline ");
 	std::string textview = strprintf::fmt(
 			"{textview[article] style_normal[article]: "
-			"style_end[eot-tildes]:fg=blue,attr=bold %s .expand:vh "
+			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "
 			"offset[articleoffset]:0 richtext:1}",
 			attrstr);
 	f->modify("article", "replace", textview);
