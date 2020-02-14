@@ -13,7 +13,7 @@
 - The EOT markers ("~" characters below blocks of text) no longer inherit their
   style (colors + attributes) from the "article" style. Instead, they can be
   configured separately allowing to hide them without hiding the article text
-  (example config line: `color styleend default default invis`)
+  (example config line: `color eot-tildes default default invis`)
 
 ### Deprecated
 ### Removed
