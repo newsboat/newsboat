@@ -45,10 +45,6 @@ public:
 	{
 		return locations[loc].second;
 	}
-	std::vector<regex_t*>& get_regexes(const std::string& loc)
-	{
-		return locations[loc].first;
-	}
 };
 
 } // namespace newsboat
