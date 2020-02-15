@@ -449,6 +449,27 @@ pub unsafe extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_c
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_extract_filter(
+    line: *const c_char,
+    filter: *mut *mut c_char,
+    url: *mut *mut c_char,
+) {
+    abort_on_panic(|| {
+        let rs_line = CStr::from_ptr(line);
+        let rs_line = rs_line.to_string_lossy();
+        let mut rs_filter = String::new();
+        let mut rs_url = String::new();
+        utils::extract_filter(&rs_line, &mut rs_filter, &mut rs_url);
+        // String::from_utf8_lossy() will replace invalid unicode (including null bytes) with U+FFFD,
+        // so this shouldn't be able to panic
+        let rs_filter = CString::new(rs_filter).unwrap();
+        let rs_url = CString::new(rs_url).unwrap();
+        *filter = rs_filter.into_raw();
+        *url = rs_url.into_raw();
+    })
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_run_command(command: *const c_char, param: *const c_char) {
     abort_on_panic(|| {
         let command = CStr::from_ptr(command);
