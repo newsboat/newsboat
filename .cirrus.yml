@@ -3,9 +3,11 @@ freebsd_task:
         - name: FreeBSD 11.2
           freebsd_instance:
             image: freebsd-11-2-release-amd64
+            memory: 2GB
         - name: FreeBSD 12.0
           freebsd_instance:
             image: freebsd-12-0-release-amd64
+            memory: 2GB
 
     install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools
     setup_script:
@@ -92,6 +94,8 @@ formatting_task:
     name: Code formatting
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
+        cpu: 1
+        memory: 256MB
     script:
         - make fmt
           # --exit-code forces git-diff to exit with code 1 if there were
