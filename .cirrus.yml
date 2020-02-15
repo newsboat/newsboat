@@ -62,7 +62,6 @@ macos_task:
 
     env:
         GCOV: /usr/bin/gcov
-        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
         PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
         RUST_BACKTRACE: 1
         PATH: $HOME/.cargo/bin:$PATH
