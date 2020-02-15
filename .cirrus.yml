@@ -1,6 +1,3 @@
-cargo_cache:
-    folder: $CARGO_HOME/registry
-    fingerprint_script: cat Cargo.lock
 
 freebsd_task:
     matrix:
@@ -12,6 +9,10 @@ freebsd_task:
           freebsd_instance:
             image: freebsd-12-0-release-amd64
             memory: 2GB
+
+    cargo_cache:
+        folder: $HOME/.cargo/registry
+        fingerprint_script: cat Cargo.lock
 
     install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools
     setup_script:
@@ -27,13 +28,16 @@ freebsd_task:
     # Running three jobs because by default, VMs have 2 cores.
     build_script: su testuser -c 'cd ~ && RUST_BACKTRACE=1 gmake --jobs=3 --keep-going all test'
     test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"'
-    before_cache_script: rm -rf $CARGO_HOME/registry/index
+    before_cache_script: rm -rf $HOME/.cargo/registry/index
 
 32bit_ubuntu_task:
     name: Linux i686
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
         memory: 8GB
+    cargo_cache:
+        folder: $HOME/.cargo/registry
+        fingerprint_script: cat Cargo.lock
     build_script: &build_script
         - make -j3 --keep-going all test
     test_script: &test_script
@@ -41,11 +45,15 @@ freebsd_task:
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
         - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
-    before_cache_script: rm -rf $CARGO_HOME/registry/index
+    before_cache_script: rm -rf $HOME/.cargo/registry/index
 
 macos_task:
     osx_instance:
         image: catalina-base
+
+    cargo_cache:
+        folder: $HOME/.cargo/registry
+        fingerprint_script: cat Cargo.lock
 
     install_script:
         - brew update
@@ -78,7 +86,7 @@ macos_task:
 
     build_script: *build_script
     test_script: *test_script
-    before_cache_script: rm -rf $CARGO_HOME/registry/index
+    before_cache_script: rm -rf $HOME/.cargo/registry/index
 
     matrix:
         - name: macOS Clang Rust stable
