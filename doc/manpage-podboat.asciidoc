@@ -1,0 +1,87 @@
+= Podboat(1)
+Alexander Batischev <eual.jp@gmail.com>
+
+
+== NAME
+
+podboat - a podcast download manager for text terminals
+
+
+== SYNOPSIS
+
+*podboat* [-C configfile] [-q queuefile] [-a] [-h]
+
+
+== DESCRIPTION
+
+_podboat_ is a podcast manager for text terminals. It is a helper program to
+_newsboat_ which queues podcast downloads into a file. These queued downloads
+can then be download with _newsboat_.
+
+
+== OPTIONS
+
+-h, --help::
+        Display help
+
+-C configfile, --config-file=configfile::
+       Use an alternative configuration file
+
+-q queuefile, --queue-file=queuefile::
+       Use an alternative queue file
+
+-a, --autodownload::
+       Start automatic download of all queued files on startup
+
+-l loglevel, --log-level=loglevel::
+       Generate a logfile with a certain loglevel. Valid loglevels are 1 to 6. An
+       actual logfile will only be written when you provide a logfile name.
+
+-d logfile, --log-file=logfile::
+       Use this logfile as output when logging debug messages. Please note that this
+       only works when providing a loglevel.
+
+== PODCAST SUPPORT
+
+include::chapter-podcasts.asciidoc[]
+
+
+== CONFIGURATION COMMANDS
+
+include::podboat-cfgcmds.asciidoc[]
+
+
+== XDG Base Directory Support
+
+Podboat defaults to storing everything in _$HOME/.newsboat_ directory. If
+you prefer XDG, create _$HOME/.config/newsboat_ and
+_$HOME/.local/share/newsboat_ directories, and Podboat will use them from
+there on.
+
+If you already have some files in _$HOME/.newsboat/_, move the _queue_ file to
+_$HOME/.local/share/newsboat/_, and that should be it.
+
+See also a corresponding section in newsboat(1).
+
+
+== FILES
+
+dotfiles::
+        _$HOME/.newsboat/config_
++
+_$HOME/.newsboat/queue_
+
+XDG::
+        _$HOME/.config/newsboat/config_
++
+_$HOME/.local/share/newsboat/queue_
+
+
+== ENVIRONMENT
+
+include::chapter-environment-variables.asciidoc[]
+
+
+== SEE ALSO
+
+newsboat(1)

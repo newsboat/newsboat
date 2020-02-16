@@ -18,8 +18,7 @@ RUN apt-get install --assume-yes \
         # of libraries we use, interfering with the build environment. So
         # `wget` it is.
         wget \
-    && apt-get install --assume-yes --no-install-recommends \
-        asciidoc docbook-xml docbook-xsl libxml2-utils xsltproc \
+    && apt-get install --assume-yes --no-install-recommends asciidoctor \
     && apt-get autoremove \
     && apt-get clean
 

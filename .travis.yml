@@ -11,11 +11,7 @@ addons:
     - libstfl-dev
     - libjson-c-dev
     - libncursesw5-dev
-    - asciidoc
-    - libxml2-utils
-    - xsltproc
-    - docbook-xml
-    - docbook-xsl
+    - asciidoctor
 addons:
   apt:
     packages: &clang_deps
@@ -32,8 +28,7 @@ newsboat_brew_commands: &osx_deps
   - brew outdated "curl" || brew upgrade "curl"
   - brew install "libstfl"
   - brew outdated "json-c" || brew upgrade "json-c"
-  - brew install "asciidoc"
-  - brew install "docbook-xsl"
+  - brew install "asciidoctor"
 
 env:
   - CXXFLAGS='-fstack-clash-protection -D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2'
@@ -46,27 +41,18 @@ matrix:
       rust: 1.26.0
       env:
         - COMPILER=g++
-        # a2x will run xmllint on generated files, so we have to pass the path
-        # to AsciiDoc's catalog files
-        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
       before_install:
         *osx_deps
     - compiler: gcc
       os: osx
       env:
         - COMPILER=g++
-        # a2x will run xmllint on generated files, so we have to pass the path
-        # to AsciiDoc's catalog files
-        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
       before_install:
         *osx_deps
     - compiler: clang
       os: osx
       env:
         - COMPILER=clang++
-        # a2x will run xmllint on generated files, so we have to pass the path
-        # to AsciiDoc's catalog files
-        - XML_CATALOG_FILES=/usr/local/etc/xml/catalog
       before_install:
         *osx_deps
     - compiler: gcc-8

@@ -14,7 +14,7 @@ freebsd_task:
         folder: $HOME/.cargo/registry
         fingerprint_script: cat Cargo.lock
 
-    install_script: pkg install -y rust gmake asciidoc pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools
+    install_script: pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools libxml2
     setup_script:
         - pw groupadd testgroup
         - pw useradd testuser -g testgroup -w none -m
@@ -67,8 +67,7 @@ macos_task:
         - brew outdated "curl" || brew upgrade "curl"
         - brew install "libstfl"
         - brew install "json-c"
-        - brew install "asciidoc"
-        - brew install "docbook-xsl"
+        - brew install "asciidoctor"
         - brew install "libxml2"
         - brew install "pyenv" || brew upgrade "pyenv"
         - rustup-init -y --default-toolchain $RUST
@@ -79,7 +78,6 @@ macos_task:
 
     env:
         GCOV: /usr/bin/gcov
-        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
         PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
         RUST_BACKTRACE: 1
         PATH: $HOME/.cargo/bin:$PATH

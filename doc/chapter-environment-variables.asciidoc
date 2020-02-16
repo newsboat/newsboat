@@ -7,9 +7,9 @@ CURL_CA_BUNDLE::
         Tells Newsboat to use the specified certificate file to verify the peer.
         The file may contain multiple certificates. The certificate(s) must be
         in PEM format.
-        +
-        This option is useful if your libcurl is built without useful
-        certificate information, and you can't rebuild the library yourself.
++
+This option is useful if your libcurl is built without useful
+certificate information, and you can't rebuild the library yourself.
 
 TMPDIR::
         Tells Newsboat to use the specified directory for storing temporary files.

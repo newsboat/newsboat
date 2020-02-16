@@ -44,9 +44,9 @@ master repository and shell access to newsboat.org.
         * Move tarball and its signature:
             `mv newsboat-VERSION* newsboat/releases/VERSION/`
         * Prepare docs:
-            `gzip --keep --best docbook-xsl.css faq.html newsboat.html`
+            `gzip --keep --best faq.html newsboat.html`
         * Move docs:
-            `mv docbook-xsl.css* faq.html* newsboat.html* newsboat/releases/VERSION/docs/`
+            `mv faq.html* newsboat.html* newsboat/releases/VERSION/docs/`
         * Edit `newsboat/index.html`
             * Move current release to the list of previous releases
             * Update current release version

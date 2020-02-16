@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
 			const std::string key = matches[1];
 			const std::string desc = matches[2];
 
-			std::cout << "'" << cmd << "' ";
-			std::cout << "(default key: '" << key << "')::\n";
+			std::cout << "_" << cmd << "_ ";
+			std::cout << "(default key: _" << key << "_)::\n";
 			std::cout << "         " << desc << "\n\n";
 		} else {
 			std::cerr << "expected exactly 3 cells in " << argv[1]

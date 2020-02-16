@@ -9,7 +9,7 @@ information for every podcast item it finds in an RSS feed. Since version 2.0,
 it also recognizes and handles the Yahoo Media RSS extensions. What the user
 then can do is to add the podcast download URL to a download queue.
 Alternatively, newsboat can be configured to automatically do that. This
-queue is stored in the file '$HOME/.newsboat/queue'.
+queue is stored in the file _$HOME/.newsboat/queue_.
 
 The user can then use the download manager `podboat` to download these files
 to a directory on the local filesystem. Podboat comes with the newsboat
