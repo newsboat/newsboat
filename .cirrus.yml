@@ -26,8 +26,8 @@ freebsd_task:
     # re-submitting the code to CI, which should increase throughput.
     #
     # Running three jobs because by default, VMs have 2 cores.
-    build_script: su testuser -c 'cd ~ && RUST_BACKTRACE=1 gmake --jobs=3 --keep-going all test'
-    test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"'
+    build_script: su testuser -c 'cd ~ && gmake --jobs=3 --keep-going all test'
+    test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test) && sh -c "exit $ret"'
     before_cache_script: rm -rf $HOME/.cargo/registry/index
 
 32bit_ubuntu_task:
@@ -44,7 +44,7 @@ freebsd_task:
         # We want to run both C++ and Rust tests, but we also want this entire
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
-        - ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"
+        - ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test) && sh -c "exit $ret"
     before_cache_script: rm -rf $HOME/.cargo/registry/index
 
 macos_task:
@@ -79,7 +79,6 @@ macos_task:
     env:
         GCOV: /usr/bin/gcov
         PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
-        RUST_BACKTRACE: 1
         PATH: $HOME/.cargo/bin:$PATH
 
     build_script: *build_script
