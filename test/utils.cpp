@@ -377,20 +377,16 @@ TEST_CASE("extract_filter()", "[utils]")
 
 TEST_CASE("run_program()", "[utils]")
 {
-	char* argv[4];
-	char cat[] = "cat";
-	argv[0] = cat;
+	const char* argv[4];
+	argv[0] = "cat";
 	argv[1] = nullptr;
 	REQUIRE(utils::run_program(
 			argv, "this is a multine-line\ntest string") ==
 		"this is a multine-line\ntest string");
 
-	char echo[] = "echo";
-	char dashn[] = "-n";
-	char helloworld[] = "hello world";
-	argv[0] = echo;
-	argv[1] = dashn;
-	argv[2] = helloworld;
+	argv[0] = "echo";
+	argv[1] = "-n";
+	argv[2] = "hello world";
 	argv[3] = nullptr;
 	REQUIRE(utils::run_program(argv, "") == "hello world");
 }

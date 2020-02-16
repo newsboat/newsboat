@@ -284,9 +284,9 @@ void RssParser::download_filterplugin(const std::string& filter,
 {
 	std::string buf = utils::retrieve_url(uri, cfgcont);
 
-	char* argv[4] = {const_cast<char*>("/bin/sh"),
-			const_cast<char*>("-c"),
-			const_cast<char*>(filter.c_str()),
+	const char* argv[4] = {"/bin/sh",
+			"-c",
+			filter.c_str(),
 			nullptr
 		};
 	std::string result = utils::run_program(argv, buf);

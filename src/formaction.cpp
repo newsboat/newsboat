@@ -544,10 +544,10 @@ std::string FormAction::bookmark(const std::string& url,
 			v->pop_current_formaction();
 			return "";
 		} else {
-			char* my_argv[4];
-			my_argv[0] = const_cast<char*>("/bin/sh");
-			my_argv[1] = const_cast<char*>("-c");
-			my_argv[2] = const_cast<char*>(cmdline.c_str());
+			const char* my_argv[4];
+			my_argv[0] = "/bin/sh";
+			my_argv[1] = "-c";
+			my_argv[2] = cmdline.c_str();
 			my_argv[3] = nullptr;
 			return utils::run_program(my_argv, "");
 		}
