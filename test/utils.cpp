@@ -373,6 +373,26 @@ TEST_CASE("extract_filter()", "[utils]")
 
 	REQUIRE(filter == "~/bin/script.sh");
 	REQUIRE(url == "https://newsboat.org");
+
+	utils::extract_filter("filter::https://newsboat.org", filter, url);
+
+	REQUIRE(filter == "");
+	REQUIRE(url == "https://newsboat.org");
+
+	utils::extract_filter("filter:https://newsboat.org", filter, url);
+
+	REQUIRE(filter == "https");
+	REQUIRE(url == "//newsboat.org");
+
+	utils::extract_filter("filter:foo:", filter, url);
+
+	REQUIRE(filter == "foo");
+	REQUIRE(url == "");
+
+	utils::extract_filter("filter:", filter, url);
+
+	REQUIRE(filter == "");
+	REQUIRE(url == "");
 }
 
 TEST_CASE("run_program()", "[utils]")

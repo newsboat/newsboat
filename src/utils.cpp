@@ -426,16 +426,10 @@ void utils::extract_filter(const std::string& line,
 	std::string& filter,
 	std::string& url)
 {
-	std::string::size_type pos = line.find_first_of(":", 0);
-	std::string::size_type pos1 = line.find_first_of(":", pos + 1);
-	filter = line.substr(pos + 1, pos1 - pos - 1);
-	pos = pos1;
-	url = line.substr(pos + 1, line.length() - pos);
-	LOG(Level::DEBUG,
-		"utils::extract_filter: %s -> filter: %s url: %s",
-		line,
-		filter,
-		url);
+	FilterUrl filterUrl = rs_extract_filter(line.c_str());
+
+	filter = RustString(filterUrl.filter);
+	url = RustString(filterUrl.url);
 }
 
 static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
