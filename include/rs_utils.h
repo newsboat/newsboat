@@ -114,7 +114,9 @@ public:
 	RustString& operator=(RustString&& rs) noexcept
 	{
 		if (&rs != this) {
+			rs_cstring_free(str);
 			str = std::move(rs.str);
+			rs.str = nullptr;
 		}
 		return *this;
 	}
