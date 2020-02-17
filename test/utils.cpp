@@ -7,6 +7,7 @@
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"
+#include "rs_utils.h"
 
 using namespace newsboat;
 
@@ -1298,4 +1299,11 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 	SECTION("Path ends in slash => directory created") {
 		check(path + "/");
 	}
+}
+
+TEST_CASE("RustString should be able to move assign", "[utils]")
+{
+	RustString foo = RustString(rs_get_string("foo"));
+	RustString bar = RustString(rs_get_string("bar"));
+	foo = std::move(bar);
 }

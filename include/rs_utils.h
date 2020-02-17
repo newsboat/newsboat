@@ -95,6 +95,8 @@ char* rs_strip_comments(const char* line);
 
 FilterUrl rs_extract_filter(const char* line);
 
+char* rs_get_string(const char* line);
+
 class RustString {
 private:
 	char* str;

@@ -559,3 +559,10 @@ pub unsafe extern "C" fn rs_extract_filter(line: *const c_char) -> FilterUrl {
         }
     })
 }
+
+#[no_mangle]
+pub unsafe extern "C" fn rs_get_string(line: *const c_char) -> *mut c_char {
+    let line = CStr::from_ptr(line);
+    let result = CString::from(line);
+    result.into_raw()
+}
