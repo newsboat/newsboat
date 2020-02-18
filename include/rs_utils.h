@@ -95,6 +95,8 @@ char* rs_strip_comments(const char* line);
 
 FilterUrl rs_extract_filter(const char* line);
 
+char* rs_get_string(const char* line);
+
 class RustString {
 private:
 	char* str;
@@ -102,20 +104,8 @@ private:
 public:
 	RustString() = delete;
 	RustString(const RustString&) = delete;
-
-	RustString(RustString&& rs)
-		: str(std::move(rs.str))
-	{
-		rs.str = nullptr;
-	}
-
-	RustString& operator=(RustString&& rs) noexcept
-	{
-		if (&rs != this) {
-			str = std::move(rs.str);
-		}
-		return *this;
-	}
+	RustString(RustString&& rs) = delete;
+	RustString& operator=(RustString&& rs) noexcept = delete;
 
 	explicit RustString(char* ptr)
 	{
