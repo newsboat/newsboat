@@ -104,22 +104,8 @@ private:
 public:
 	RustString() = delete;
 	RustString(const RustString&) = delete;
-
-	RustString(RustString&& rs)
-		: str(std::move(rs.str))
-	{
-		rs.str = nullptr;
-	}
-
-	RustString& operator=(RustString&& rs) noexcept
-	{
-		if (&rs != this) {
-			rs_cstring_free(str);
-			str = std::move(rs.str);
-			rs.str = nullptr;
-		}
-		return *this;
-	}
+	RustString(RustString&& rs) = delete;
+	RustString& operator=(RustString&& rs) noexcept = delete;
 
 	explicit RustString(char* ptr)
 	{

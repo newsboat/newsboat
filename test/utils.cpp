@@ -1301,9 +1301,11 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 	}
 }
 
-TEST_CASE("RustString should be able to move assign", "[utils]")
+TEST_CASE("RustString constructor and conversion to std::string", "[utils]")
 {
-	RustString foo = RustString(rs_get_string("foo"));
-	RustString bar = RustString(rs_get_string("bar"));
-	foo = std::move(bar);
+	RustString foo(rs_get_string("foo"));
+	REQUIRE(std::string(foo) == std::string("foo"));
+
+	RustString bar(nullptr);
+	REQUIRE(std::string(bar) == std::string());
 }
