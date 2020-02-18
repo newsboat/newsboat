@@ -105,7 +105,7 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
 
 $(NEWSBOATLIB_OUTPUT): $(RUST_SRCS)
-	$(CARGO) build --package libnewsboat-ffi $(CARGO_FLAGS)
+	+$(CARGO) build --package libnewsboat-ffi $(CARGO_FLAGS)
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -338,7 +338,7 @@ uninstall-mo:
 test: test/test rust-test
 
 rust-test:
-	$(CARGO) test --no-run
+	+$(CARGO) test --no-run
 
 TEST_SRCS:=$(wildcard test/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
