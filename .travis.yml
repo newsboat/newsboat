@@ -2,6 +2,13 @@ language: rust
 
 rust: stable
 
+cache:
+  directories:
+    - $HOME/.cargo/registry
+
+before_cache:
+  - rm -rf $HOME/.cargo/registry/index
+
 addons:
   apt:
     packages: &global_deps
