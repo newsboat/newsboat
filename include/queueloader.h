@@ -14,7 +14,7 @@ public:
 	QueueLoader(const std::string& file, newsboat::ConfigContainer& cfg,
 		std::function<void()> cb_require_view_update);
 	void reload(std::vector<Download>& downloads,
-		bool remove_unplayed = false);
+		bool also_remove_finished = false);
 
 private:
 	std::string get_filename(const std::string& str);

@@ -28,7 +28,8 @@ QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
 {
 }
 
-void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
+void QueueLoader::reload(std::vector<Download>& downloads,
+	bool also_remove_finished)
 {
 	std::vector<Download> dltemp;
 	std::vector<Download> deletion_list;
@@ -56,7 +57,7 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 			keep_entry = true;
 			break;
 		case DlStatus::FINISHED:
-			if (!remove_unplayed) {
+			if (!also_remove_finished) {
 				LOG(Level::DEBUG,
 					"QueueLoader::reload: storing %s to "
 					"new "
