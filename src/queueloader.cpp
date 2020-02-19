@@ -49,12 +49,12 @@ void QueueLoader::reload(std::vector<Download>& downloads, bool remove_unplayed)
 		case DlStatus::FAILED:
 		case DlStatus::ALREADY_DOWNLOADED:
 		case DlStatus::READY:
+		case DlStatus::PLAYED:
 			LOG(Level::DEBUG,
 				"QueueLoader::reload: storing %s to new vector",
 				dl.url());
 			keep_entry = true;
 			break;
-		case DlStatus::PLAYED:
 		case DlStatus::FINISHED:
 			if (!remove_unplayed) {
 				LOG(Level::DEBUG,
