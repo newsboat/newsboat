@@ -636,7 +636,6 @@ TEST_CASE(
 			REQUIRE((*fst_it)->title_raw() ==
 				(*snd_it)->title_raw());
 			REQUIRE((*fst_it)->link() == (*snd_it)->link());
-			REQUIRE((*fst_it)->author() == (*snd_it)->author());
 			REQUIRE((*fst_it)->author_raw() ==
 				(*snd_it)->author_raw());
 			REQUIRE((*fst_it)->description() ==

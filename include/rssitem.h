@@ -30,7 +30,6 @@ public:
 	}
 	void set_link(const std::string& l);
 
-	std::string author() const;
 	std::string author_raw() const
 	{
 		return author_;

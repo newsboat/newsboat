@@ -1038,7 +1038,8 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	utils::remove_soft_hyphens(itemtitle);
 	fmt.register_fmt('t', itemtitle);
 
-	auto itemauthor = utils::quote_for_stfl(item.first->author());
+	auto itemauthor = utils::quote_for_stfl(utils::utf8_to_locale(
+				item.first->author_raw()));
 	utils::remove_soft_hyphens(itemauthor);
 	fmt.register_fmt('a', itemauthor);
 

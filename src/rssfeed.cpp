@@ -290,12 +290,10 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->author().c_str(),
-						b->author().c_str()) > 0)
-				: (strcmp(a->author().c_str(),
-						b->author().c_str()) < 0);
+			const auto author_a = utils::utf8_to_locale(a->author_raw());
+			const auto author_b = utils::utf8_to_locale(b->author_raw());
+			const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
+			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
 		});
 		break;
 	case ArtSortMethod::LINK:

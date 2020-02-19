@@ -108,20 +108,20 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->author() == "Anonymous");
-		REQUIRE(articles[1]->author() == "Platon");
-		REQUIRE(articles[2]->author() == "Sartre");
-		REQUIRE(articles[3]->author() == "Socrates");
-		REQUIRE(articles[4]->author() == "Spinoza");
+		REQUIRE(articles[0]->author_raw() == "Anonymous");
+		REQUIRE(articles[1]->author_raw() == "Platon");
+		REQUIRE(articles[2]->author_raw() == "Sartre");
+		REQUIRE(articles[3]->author_raw() == "Socrates");
+		REQUIRE(articles[4]->author_raw() == "Spinoza");
 
 		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->author() == "Spinoza");
-		REQUIRE(articles[1]->author() == "Socrates");
-		REQUIRE(articles[2]->author() == "Sartre");
-		REQUIRE(articles[3]->author() == "Platon");
-		REQUIRE(articles[4]->author() == "Anonymous");
+		REQUIRE(articles[0]->author_raw() == "Spinoza");
+		REQUIRE(articles[1]->author_raw() == "Socrates");
+		REQUIRE(articles[2]->author_raw() == "Sartre");
+		REQUIRE(articles[3]->author_raw() == "Platon");
+		REQUIRE(articles[4]->author_raw() == "Anonymous");
 	}
 
 	SECTION("link") {

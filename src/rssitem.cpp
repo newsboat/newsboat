@@ -134,11 +134,6 @@ void RssItem::set_enclosure_type(const std::string& type)
 	enclosure_type_ = type;
 }
 
-std::string RssItem::author() const
-{
-	return utils::utf8_to_locale(author_);
-}
-
 std::string RssItem::description() const
 {
 	return utils::utf8_to_locale(description_);
@@ -171,7 +166,7 @@ std::string RssItem::get_attribute(const std::string& attribname)
 	} else if (attribname == "link") {
 		return link();
 	} else if (attribname == "author") {
-		return author();
+		return utils::utf8_to_locale(author_raw());
 	} else if (attribname == "content") {
 		return description();
 	} else if (attribname == "date") {
