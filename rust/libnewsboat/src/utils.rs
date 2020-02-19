@@ -11,7 +11,7 @@ extern crate url;
 
 use self::regex::Regex;
 use self::unicode_segmentation::UnicodeSegmentation;
-use self::unicode_width::UnicodeWidthStr;
+use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use self::url::percent_encoding::*;
 use self::url::Url;
 use libc::c_ulong;
@@ -301,6 +301,60 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
     } else {
         width - reduce
     }
+}
+
+/// Returns a longest substring fits to the given width.
+/// Returns an empty string if `str` is an empty string or `max_width` is zero.
+///
+/// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
+/// returns None, the character width is treated as 0. A STFL tag (e.g. `<b>`, `<foobar>`, `</>`)
+/// width is treated as 0, but escaped less-than (`<>`) width is treated as 1.
+/// ```
+/// use libnewsboat::utils::substr_with_width;
+/// assert_eq!(substr_with_width("a", 1), "a");
+/// assert_eq!(substr_with_width("a", 2), "a");
+/// assert_eq!(substr_with_width("ab", 1), "a");
+/// assert_eq!(substr_with_width("abc", 1), "a");
+/// assert_eq!(substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
+///```
+pub fn substr_with_width(string: &str, max_width: usize) -> String {
+    let mut result = String::new();
+    let mut in_bracket = false;
+    let mut tagbuf = Vec::<char>::new();
+    let mut width = 0;
+    for c in string.chars() {
+        if in_bracket {
+            tagbuf.push(c);
+            if c == '>' {
+                in_bracket = false;
+                if tagbuf == ['<', '>'] {
+                    if width + 1 > max_width {
+                        break;
+                    }
+                    result += "<>"; // escaped less-than
+                    tagbuf.clear();
+                    width += 1;
+                } else {
+                    result += &tagbuf.iter().collect::<String>();
+                    tagbuf.clear();
+                }
+            }
+        } else {
+            if c == '<' {
+                in_bracket = true;
+                tagbuf.push(c);
+            } else {
+                // Control chars count as width 0
+                let w = UnicodeWidthChar::width(c).unwrap_or(0);
+                if width + w > max_width {
+                    break;
+                }
+                width += w;
+                result.push(c);
+            }
+        }
+    }
+    result
 }
 
 /// Remove all soft-hyphens as they can behave unpredictably (see
@@ -841,6 +895,47 @@ mod tests {
         assert_eq!(strwidth_stfl("\u{F91F}"), 2);
         assert_eq!(strwidth_stfl("\u{0007}"), 0);
         assert_eq!(strwidth_stfl("<a"), 0); // #415
+    }
+
+    #[test]
+    fn t_substr_with_width_given_string_empty() {
+        assert!(substr_with_width("", 0).is_empty());
+        assert!(substr_with_width("", 1).is_empty());
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_zero() {
+        assert!(substr_with_width("world", 0).is_empty());
+        assert!(substr_with_width("", 0).is_empty());
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_dont_split_codepoints() {
+        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
+        assert_eq!(substr_with_width("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
+        assert_eq!(substr_with_width("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
+        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
+        assert_eq!(substr_with_width("a</>b</>c</>", 2), "a</>b</>");
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_do_not_count_stfl_tag() {
+        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
+        assert_eq!(substr_with_width("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
+        assert_eq!(substr_with_width("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
+        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
+        assert_eq!(substr_with_width("a</>b</>c</>", 2), "a</>b</>");
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_count_escaped_less_than_mark() {
+        assert_eq!(substr_with_width("<><><>", 2), "<><>");
+        assert_eq!(substr_with_width("a<>b<>c", 3), "a<>b");
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_non_printable() {
+        assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01\x02a");
     }
 
     #[test]
