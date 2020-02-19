@@ -17,7 +17,6 @@ public:
 	explicit RssItem(Cache* c);
 	~RssItem() override;
 
-	std::string title() const;
 	std::string title_raw() const
 	{
 		return title_;

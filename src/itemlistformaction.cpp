@@ -327,9 +327,8 @@ void ItemListFormAction::process_operation(Operation op,
 					qna_responses.push_back(
 						visible_items[itempos]
 						.first->link());
-					qna_responses.push_back(
-						visible_items[itempos]
-						.first->title());
+					qna_responses.push_back(utils::utf8_to_locale(
+							visible_items[itempos].first->title_raw()));
 					qna_responses.push_back(args->size() > 0
 						? (*args)[0]
 						: "");
@@ -337,10 +336,8 @@ void ItemListFormAction::process_operation(Operation op,
 					this->finished_qna(OP_INT_BM_END);
 				} else {
 					this->start_bookmark_qna(
-						visible_items[itempos]
-						.first->title(),
-						visible_items[itempos]
-						.first->link(),
+						visible_items[itempos].first->title_raw(),
+						visible_items[itempos].first->link(),
 						"",
 						feed->title());
 				}
@@ -388,10 +385,10 @@ void ItemListFormAction::process_operation(Operation op,
 					filename = (*args)[0];
 				}
 			} else {
-				filename = v->run_filebrowser(
-						v->get_filename_suggestion(
-							visible_items[itempos]
-							.first->title()));
+				const auto title = utils::utf8_to_locale(
+						visible_items[itempos].first->title_raw());
+				const auto suggestion = v->get_filename_suggestion(title);
+				filename = v->run_filebrowser(suggestion);
 			}
 			save_article(filename, visible_items[itempos].first);
 		} else {
@@ -1036,7 +1033,8 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 		fmt.register_fmt('T', feedtitle);
 	}
 
-	auto itemtitle = utils::quote_for_stfl(item.first->title());
+	auto itemtitle = utils::quote_for_stfl(utils::utf8_to_locale(
+				item.first->title_raw()));
 	utils::remove_soft_hyphens(itemtitle);
 	fmt.register_fmt('t', itemtitle);
 
@@ -1456,7 +1454,7 @@ void ItemListFormAction::handle_op_saveall()
 
 	if (visible_items.size() == 1) {
 		const std::string filename = v->get_filename_suggestion(
-				visible_items[0].first->title());
+				utils::utf8_to_locale(visible_items[0].first->title_raw()));
 		const std::string fpath = directory + filename;
 
 		struct stat sbuf;
@@ -1494,7 +1492,7 @@ void ItemListFormAction::handle_op_saveall()
 		std::vector<std::string> filenames;
 		for (const auto& item : visible_items) {
 			filenames.emplace_back(
-				v->get_filename_suggestion(item.first->title()));
+				utils::utf8_to_locale(v->get_filename_suggestion(item.first->title_raw())));
 		}
 
 		const auto unique_filenames = std::set<std::string>(

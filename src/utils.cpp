@@ -417,7 +417,7 @@ std::string utils::convert_text(const std::string& text,
 	return result;
 }
 
-std::string utf8_to_locale(const std::string& text)
+std::string utils::utf8_to_locale(const std::string& text)
 {
 	if (text.empty()) {
 		return {};

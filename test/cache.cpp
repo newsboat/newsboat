@@ -633,7 +633,6 @@ TEST_CASE(
 		for (; fst_it != fst_end && snd_it != snd_end;
 			++fst_it, ++snd_it) {
 			REQUIRE((*fst_it)->guid() == (*snd_it)->guid());
-			REQUIRE((*fst_it)->title() == (*snd_it)->title());
 			REQUIRE((*fst_it)->title_raw() ==
 				(*snd_it)->title_raw());
 			REQUIRE((*fst_it)->link() == (*snd_it)->link());

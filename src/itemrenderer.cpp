@@ -48,7 +48,7 @@ void prepare_header(
 
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
 	add_line(feedtitle, _("Feed: "));
-	add_line(item->title(), _("Title: "));
+	add_line(utils::utf8_to_locale(item->title_raw()), _("Title: "));
 	add_line(item->author(), _("Author: "));
 	add_line(item->pubDate(), _("Date: "));
 	add_line(item->link(), _("Link: "), LineType::softwrappable);

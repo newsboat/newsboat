@@ -72,7 +72,7 @@ void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
 	if (item->unread()) {
 		unread_item_count--;
 	}
-	set_head(item->title(),
+	set_head(utils::utf8_to_locale(item->title_raw()),
 		feedtitle,
 		unread_item_count,
 		feed->total_item_count());
@@ -195,7 +195,7 @@ void ItemViewFormAction::process_operation(Operation op,
 			}
 		} else {
 			filename = v->run_filebrowser(
-					v->get_filename_suggestion(item->title()));
+					utils::utf8_to_locale(v->get_filename_suggestion(item->title_raw())));
 		}
 		if (filename == "") {
 			v->show_error(_("Aborted saving."));
@@ -223,13 +223,13 @@ void ItemViewFormAction::process_operation(Operation op,
 		if (automatic) {
 			qna_responses.clear();
 			qna_responses.push_back(item->link());
-			qna_responses.push_back(item->title());
+			qna_responses.push_back(utils::utf8_to_locale(item->title_raw()));
 			qna_responses.push_back(
 				args->size() > 0 ? (*args)[0] : "");
 			qna_responses.push_back(feed->title());
 		} else {
 			this->start_bookmark_qna(
-				item->title(), item->link(), "", feed->title());
+				utils::utf8_to_locale(item->title_raw()), item->link(), "", feed->title());
 		}
 		break;
 	case OP_SEARCH: {
@@ -593,9 +593,9 @@ void ItemViewFormAction::update_percent()
 
 std::string ItemViewFormAction::title()
 {
-	auto title = item->title();
+	auto title = item->title_raw();
 	utils::remove_soft_hyphens(title);
-	return strprintf::fmt(_("Article - %s"), title);
+	return strprintf::fmt(_("Article - %s"), utils::utf8_to_locale(title));
 }
 
 void ItemViewFormAction::set_highlightphrase(const std::string& text)

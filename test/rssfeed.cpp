@@ -366,12 +366,12 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 		nullptr);
 	auto feed = p.parse();
 
-	REQUIRE(feed->items()[0]->title() ==
+	REQUIRE(feed->items()[0]->title_raw() ==
 		"A gentle introduction to testing");
-	REQUIRE(feed->items()[1]->title() == "A missing rel attribute");
-	REQUIRE(feed->items()[2]->title() == "Alternate link isnt first");
-	REQUIRE(feed->items()[3]->title() == "A test for htm extension");
-	REQUIRE(feed->items()[4]->title() == "Alternate link isn't first");
+	REQUIRE(feed->items()[1]->title_raw() == "A missing rel attribute");
+	REQUIRE(feed->items()[2]->title_raw() == "Alternate link isnt first");
+	REQUIRE(feed->items()[3]->title_raw() == "A test for htm extension");
+	REQUIRE(feed->items()[4]->title_raw() == "Alternate link isn't first");
 }
 
 TEST_CASE(

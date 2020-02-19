@@ -428,7 +428,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 			"RssParser::parse: item title = `%s' link = `%s' "
 			"pubDate "
 			"= `%s' (%" PRId64 ") description = `%s'",
-			x->title(),
+			x->title_raw(),
 			x->link(),
 			x->pubDate(),
 			// On GCC, `time_t` is `long int`, which is at least 32 bits long
@@ -554,7 +554,7 @@ void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
 			"RssParser::parse: added article title = `%s' link = "
 			"`%s' "
 			"ign = %p",
-			item->title(),
+			item->title_raw(),
 			item->link(),
 			ign);
 	} else {
@@ -562,7 +562,7 @@ void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
 			"RssParser::parse: ignored article title = `%s' link "
 			"= "
 			"`%s'",
-			item->title(),
+			item->title_raw(),
 			item->link());
 	}
 }

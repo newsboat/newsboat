@@ -267,12 +267,9 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (utils::strnaturalcmp(a->title().c_str(),
-						b->title().c_str()) > 0)
-				: (utils::strnaturalcmp(a->title().c_str(),
-						b->title().c_str()) < 0);
+			const auto cmp = utils::strnaturalcmp(utils::utf8_to_locale(a->title_raw()),
+					utils::utf8_to_locale(b->title_raw()));
+			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
 		});
 		break;
 	case ArtSortMethod::FLAGS:
