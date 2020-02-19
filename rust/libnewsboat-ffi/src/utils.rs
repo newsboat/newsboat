@@ -419,6 +419,22 @@ pub unsafe extern "C" fn rs_strwidth_stfl(input: *const c_char) -> usize {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_substr_with_width(
+    string: *const c_char,
+    max_width: usize,
+) -> *mut c_char {
+    abort_on_panic(|| {
+        let rs_str = CStr::from_ptr(string);
+        let rs_str = rs_str.to_string_lossy().into_owned();
+        let output = utils::substr_with_width(&rs_str, max_width);
+        // `output` contains a subset of `string`, which is a C string. Thus, we conclude that
+        // `output` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
+        let result = CString::new(output).unwrap();
+        result.into_raw()
+    })
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_remove_soft_hyphens(text: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_text = CStr::from_ptr(text);
