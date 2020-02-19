@@ -36,7 +36,6 @@ public:
 	}
 	void set_author(const std::string& a);
 
-	std::string description() const;
 	std::string description_raw() const
 	{
 		return description_;

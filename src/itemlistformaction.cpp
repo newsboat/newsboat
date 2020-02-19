@@ -294,8 +294,7 @@ void ItemListFormAction::process_operation(Operation op,
 						: visible_items[itempos]
 						.first->feedurl();
 					rnd.render(
-						visible_items[itempos]
-						.first->description(),
+						utils::utf8_to_locale(visible_items[itempos].first->description_raw()),
 						lines,
 						links,
 						baseurl);

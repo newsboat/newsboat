@@ -134,11 +134,6 @@ void RssItem::set_enclosure_type(const std::string& type)
 	enclosure_type_ = type;
 }
 
-std::string RssItem::description() const
-{
-	return utils::utf8_to_locale(description_);
-}
-
 bool RssItem::has_attribute(const std::string& attribname)
 {
 	if (attribname == "title" || attribname == "link" ||
@@ -168,7 +163,7 @@ std::string RssItem::get_attribute(const std::string& attribname)
 	} else if (attribname == "author") {
 		return utils::utf8_to_locale(author_raw());
 	} else if (attribname == "content") {
-		return description();
+		return utils::utf8_to_locale(description_raw());
 	} else if (attribname == "date") {
 		return pubDate();
 	} else if (attribname == "guid") {

@@ -127,7 +127,8 @@ std::string item_renderer::to_plain_text(
 
 	prepare_header(item, lines, links);
 	const auto base = get_item_base_link(item);
-	render_html(cfg, item->description(), lines, links, base, true);
+	render_html(cfg, utils::utf8_to_locale(item->description_raw()), lines, links,
+		base, true);
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -153,7 +154,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);
-	const auto body = item->description();
+	const auto body = utils::utf8_to_locale(item->description_raw());
 	render_html(cfg, body, lines, links, baseurl, false);
 
 	TextFormatter txtfmt;
@@ -195,7 +196,8 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	std::vector<LinkPair> links;
 
 	prepare_header(item, lines, links);
-	render_source(lines, utils::quote_for_stfl(item->description()));
+	render_source(lines, utils::quote_for_stfl(utils::utf8_to_locale(
+				item->description_raw())));
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

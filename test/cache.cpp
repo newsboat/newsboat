@@ -320,7 +320,7 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 	REQUIRE_NOTHROW(rsscache.fetch_descriptions(feed.get()));
 
 	for (auto& item : feed->items()) {
-		REQUIRE(item->description() != "your test failed!");
+		REQUIRE(item->description_raw() != "your test failed!");
 	}
 }
 
@@ -638,8 +638,6 @@ TEST_CASE(
 			REQUIRE((*fst_it)->link() == (*snd_it)->link());
 			REQUIRE((*fst_it)->author_raw() ==
 				(*snd_it)->author_raw());
-			REQUIRE((*fst_it)->description() ==
-				(*snd_it)->description());
 			REQUIRE((*fst_it)->description_raw() ==
 				(*snd_it)->description_raw());
 			REQUIRE((*fst_it)->size() == (*snd_it)->size());

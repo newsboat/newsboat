@@ -436,7 +436,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 			// casting to int64_t is either a no-op, or an up-cast which are
 			// always safe.
 			static_cast<int64_t>(x->pubDate_timestamp()),
-			x->description());
+			x->description_raw());
 
 		add_item_to_feed(feed, x);
 	}
@@ -485,19 +485,19 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 
 	handle_itunes_summary(x, item);
 
-	if (x->description().empty()) {
+	if (x->description_raw().empty()) {
 		x->set_description(item.description);
 	} else {
 		if (cfgcont->get_configvalue_as_bool(
 				"always-display-description") &&
 			!item.description.empty())
 			x->set_description(
-				x->description() + "<hr>" + item.description);
+				x->description_raw() + "<hr>" + item.description);
 	}
 
 	/* if it's still empty and we shall download the full page, then we do
 	 * so. */
-	if (x->description().empty() &&
+	if (x->description_raw().empty() &&
 		cfgcont->get_configvalue_as_bool("download-full-page") &&
 		!x->link().empty()) {
 		x->set_description(utils::retrieve_url(x->link(), cfgcont));
@@ -505,7 +505,7 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 
 	LOG(Level::DEBUG,
 		"RssParser::set_item_content: content = %s",
-		x->description());
+		x->description_raw());
 }
 
 std::string RssParser::get_guid(const rsspp::Item& item) const
@@ -570,7 +570,7 @@ void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
 void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item) const
 {
-	if (!x->description().empty()) {
+	if (!x->description_raw().empty()) {
 		return;
 	}
 
@@ -587,7 +587,7 @@ void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item)
 {
-	if (!x->description().empty()) {
+	if (!x->description_raw().empty()) {
 		return;
 	}
 
