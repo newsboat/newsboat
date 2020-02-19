@@ -48,8 +48,8 @@ void prepare_header(
 
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
 	add_line(feedtitle, _("Feed: "));
-	add_line(utils::utf8_to_locale(item->title_raw()), _("Title: "));
-	add_line(utils::utf8_to_locale(item->author_raw()), _("Author: "));
+	add_line(utils::utf8_to_locale(item->title()), _("Title: "));
+	add_line(utils::utf8_to_locale(item->author()), _("Author: "));
 	add_line(item->pubDate(), _("Date: "));
 	add_line(item->link(), _("Link: "), LineType::softwrappable);
 	add_line(item->flags(), _("Flags: "));
@@ -127,7 +127,7 @@ std::string item_renderer::to_plain_text(
 
 	prepare_header(item, lines, links);
 	const auto base = get_item_base_link(item);
-	render_html(cfg, utils::utf8_to_locale(item->description_raw()), lines, links,
+	render_html(cfg, utils::utf8_to_locale(item->description()), lines, links,
 		base, true);
 
 	TextFormatter txtfmt;
@@ -154,7 +154,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);
-	const auto body = utils::utf8_to_locale(item->description_raw());
+	const auto body = utils::utf8_to_locale(item->description());
 	render_html(cfg, body, lines, links, baseurl, false);
 
 	TextFormatter txtfmt;
@@ -197,7 +197,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 
 	prepare_header(item, lines, links);
 	render_source(lines, utils::quote_for_stfl(utils::utf8_to_locale(
-				item->description_raw())));
+				item->description())));
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

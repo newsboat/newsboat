@@ -50,20 +50,20 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->title_raw() == "Article 1: A boring article");
-		REQUIRE(articles[1]->title_raw() == "Article 2: Article you must read");
-		REQUIRE(articles[2]->title_raw() == "Article 10: Another great article");
-		REQUIRE(articles[3]->title_raw() == "Read me");
-		REQUIRE(articles[4]->title_raw() == "Wow tests are great");
+		REQUIRE(articles[0]->title() == "Article 1: A boring article");
+		REQUIRE(articles[1]->title() == "Article 2: Article you must read");
+		REQUIRE(articles[2]->title() == "Article 10: Another great article");
+		REQUIRE(articles[3]->title() == "Read me");
+		REQUIRE(articles[4]->title() == "Wow tests are great");
 
 		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->title_raw() == "Wow tests are great");
-		REQUIRE(articles[1]->title_raw() == "Read me");
-		REQUIRE(articles[2]->title_raw() == "Article 10: Another great article");
-		REQUIRE(articles[3]->title_raw() == "Article 2: Article you must read");
-		REQUIRE(articles[4]->title_raw() == "Article 1: A boring article");
+		REQUIRE(articles[0]->title() == "Wow tests are great");
+		REQUIRE(articles[1]->title() == "Read me");
+		REQUIRE(articles[2]->title() == "Article 10: Another great article");
+		REQUIRE(articles[3]->title() == "Article 2: Article you must read");
+		REQUIRE(articles[4]->title() == "Article 1: A boring article");
 	}
 
 	SECTION("flags") {
@@ -108,20 +108,20 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->author_raw() == "Anonymous");
-		REQUIRE(articles[1]->author_raw() == "Platon");
-		REQUIRE(articles[2]->author_raw() == "Sartre");
-		REQUIRE(articles[3]->author_raw() == "Socrates");
-		REQUIRE(articles[4]->author_raw() == "Spinoza");
+		REQUIRE(articles[0]->author() == "Anonymous");
+		REQUIRE(articles[1]->author() == "Platon");
+		REQUIRE(articles[2]->author() == "Sartre");
+		REQUIRE(articles[3]->author() == "Socrates");
+		REQUIRE(articles[4]->author() == "Spinoza");
 
 		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->author_raw() == "Spinoza");
-		REQUIRE(articles[1]->author_raw() == "Socrates");
-		REQUIRE(articles[2]->author_raw() == "Sartre");
-		REQUIRE(articles[3]->author_raw() == "Platon");
-		REQUIRE(articles[4]->author_raw() == "Anonymous");
+		REQUIRE(articles[0]->author() == "Spinoza");
+		REQUIRE(articles[1]->author() == "Socrates");
+		REQUIRE(articles[2]->author() == "Sartre");
+		REQUIRE(articles[3]->author() == "Platon");
+		REQUIRE(articles[4]->author() == "Anonymous");
 	}
 
 	SECTION("link") {
@@ -366,12 +366,12 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 		nullptr);
 	auto feed = p.parse();
 
-	REQUIRE(feed->items()[0]->title_raw() ==
+	REQUIRE(feed->items()[0]->title() ==
 		"A gentle introduction to testing");
-	REQUIRE(feed->items()[1]->title_raw() == "A missing rel attribute");
-	REQUIRE(feed->items()[2]->title_raw() == "Alternate link isnt first");
-	REQUIRE(feed->items()[3]->title_raw() == "A test for htm extension");
-	REQUIRE(feed->items()[4]->title_raw() == "Alternate link isn't first");
+	REQUIRE(feed->items()[1]->title() == "A missing rel attribute");
+	REQUIRE(feed->items()[2]->title() == "Alternate link isnt first");
+	REQUIRE(feed->items()[3]->title() == "A test for htm extension");
+	REQUIRE(feed->items()[4]->title() == "Alternate link isn't first");
 }
 
 TEST_CASE(

@@ -157,13 +157,13 @@ bool RssItem::has_attribute(const std::string& attribname)
 std::string RssItem::get_attribute(const std::string& attribname)
 {
 	if (attribname == "title") {
-		return utils::utf8_to_locale(title_raw());
+		return utils::utf8_to_locale(title());
 	} else if (attribname == "link") {
 		return link();
 	} else if (attribname == "author") {
-		return utils::utf8_to_locale(author_raw());
+		return utils::utf8_to_locale(author());
 	} else if (attribname == "content") {
-		return utils::utf8_to_locale(description_raw());
+		return utils::utf8_to_locale(description());
 	} else if (attribname == "date") {
 		return pubDate();
 	} else if (attribname == "guid") {

@@ -812,13 +812,13 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"'%q';",
 					item->guid());
 			run_sql(query, single_string_callback, &content);
-			if (content != item->description_raw()) {
+			if (content != item->description()) {
 				LOG(Level::DEBUG,
 					"Cache::update_rssitem_unlocked: '%s' "
 					"is "
 					"different from '%s'",
 					content,
-					item->description_raw());
+					item->description());
 				query = prepare_query(
 						"UPDATE rss_item SET unread = 1 WHERE "
 						"guid = '%q';",
@@ -836,11 +836,11 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"enclosure_type = '%q', base = '%q', unread = "
 					"'%d' "
 					"WHERE guid = '%q'",
-					item->title_raw(),
-					item->author_raw(),
+					item->title(),
+					item->author(),
 					item->link(),
 					feedurl,
-					item->description_raw(),
+					item->description(),
 					item->enclosure_url(),
 					item->enclosure_type(),
 					item->get_base(),
@@ -854,11 +854,11 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"content = '%q', enclosure_url = '%q', "
 					"enclosure_type = '%q', base = '%q' "
 					"WHERE guid = '%q'",
-					item->title_raw(),
-					item->author_raw(),
+					item->title(),
+					item->author(),
 					item->link(),
 					feedurl,
-					item->description_raw(),
+					item->description(),
 					item->enclosure_url(),
 					item->enclosure_type(),
 					item->get_base(),
@@ -876,12 +876,12 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 				" "
 				"'%q')",
 				item->guid(),
-				item->title_raw(),
-				item->author_raw(),
+				item->title(),
+				item->author(),
 				item->link(),
 				feedurl,
 				item->pubDate_timestamp(),
-				item->description_raw(),
+				item->description(),
 				(item->unread() ? 1 : 0),
 				item->enclosure_url(),
 				item->enclosure_type(),

@@ -149,7 +149,7 @@ std::string RssFeed::get_attribute(const std::string& attribname)
 	if (attribname == "feedtitle") {
 		return title();
 	} else if (attribname == "description") {
-		return utils::utf8_to_locale(description_raw());
+		return utils::utf8_to_locale(description());
 	} else if (attribname == "feedlink") {
 		return title();
 	} else if (attribname == "feeddate") {
@@ -262,8 +262,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 		const std::shared_ptr<RssItem>& b) {
-			const auto cmp = utils::strnaturalcmp(utils::utf8_to_locale(a->title_raw()),
-					utils::utf8_to_locale(b->title_raw()));
+			const auto cmp = utils::strnaturalcmp(utils::utf8_to_locale(a->title()),
+					utils::utf8_to_locale(b->title()));
 			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
 		});
 		break;
@@ -285,8 +285,8 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 		const std::shared_ptr<RssItem>& b) {
-			const auto author_a = utils::utf8_to_locale(a->author_raw());
-			const auto author_b = utils::utf8_to_locale(b->author_raw());
+			const auto author_a = utils::utf8_to_locale(a->author());
+			const auto author_b = utils::utf8_to_locale(b->author());
 			const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
 			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
 		});

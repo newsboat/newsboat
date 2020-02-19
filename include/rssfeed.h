@@ -33,7 +33,7 @@ public:
 		utils::trim(title_);
 	}
 
-	std::string description_raw() const
+	std::string description() const
 	{
 		return description_;
 	}

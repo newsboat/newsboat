@@ -320,7 +320,7 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 	REQUIRE_NOTHROW(rsscache.fetch_descriptions(feed.get()));
 
 	for (auto& item : feed->items()) {
-		REQUIRE(item->description_raw() != "your test failed!");
+		REQUIRE(item->description() != "your test failed!");
 	}
 }
 
@@ -616,7 +616,7 @@ TEST_CASE(
 	feed2) {
 		REQUIRE(feed1->title_raw() == feed2->title_raw());
 		REQUIRE(feed1->title() == feed2->title());
-		REQUIRE(feed1->description_raw() == feed2->description_raw());
+		REQUIRE(feed1->description() == feed2->description());
 		REQUIRE(feed1->link() == feed2->link());
 		REQUIRE(feed1->rssurl() == feed2->rssurl());
 		REQUIRE(feed1->unread_item_count() ==
@@ -632,13 +632,10 @@ TEST_CASE(
 		for (; fst_it != fst_end && snd_it != snd_end;
 			++fst_it, ++snd_it) {
 			REQUIRE((*fst_it)->guid() == (*snd_it)->guid());
-			REQUIRE((*fst_it)->title_raw() ==
-				(*snd_it)->title_raw());
+			REQUIRE((*fst_it)->title() == (*snd_it)->title());
 			REQUIRE((*fst_it)->link() == (*snd_it)->link());
-			REQUIRE((*fst_it)->author_raw() ==
-				(*snd_it)->author_raw());
-			REQUIRE((*fst_it)->description_raw() ==
-				(*snd_it)->description_raw());
+			REQUIRE((*fst_it)->author() == (*snd_it)->author());
+			REQUIRE((*fst_it)->description() == (*snd_it)->description());
 			REQUIRE((*fst_it)->size() == (*snd_it)->size());
 			REQUIRE((*fst_it)->length() == (*snd_it)->length());
 			REQUIRE((*fst_it)->pubDate() == (*snd_it)->pubDate());

@@ -1031,7 +1031,7 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('T', feed->get_firsttag());
 	fmt.register_fmt('l', utils::censor_url(feed->link()));
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
-	fmt.register_fmt('d', utils::utf8_to_locale(feed->description_raw()));
+	fmt.register_fmt('d', utils::utf8_to_locale(feed->description()));
 
 	auto formattedLine = fmt.do_format(feedlist_format, width);
 	if (unread_count > 0) {

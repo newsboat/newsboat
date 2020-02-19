@@ -64,7 +64,7 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
 	std::shared_ptr<RssFeed> feed)
 {
 	const std::string& url = item->enclosure_url();
-	const std::string& title = utils::utf8_to_locale(item->title_raw());
+	const std::string& title = utils::utf8_to_locale(item->title());
 	const time_t pubDate = item->pubDate_timestamp();
 
 	std::string dlformat = cfg->get_configvalue("download-path");

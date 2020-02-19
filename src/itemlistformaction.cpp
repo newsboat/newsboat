@@ -294,7 +294,7 @@ void ItemListFormAction::process_operation(Operation op,
 						: visible_items[itempos]
 						.first->feedurl();
 					rnd.render(
-						utils::utf8_to_locale(visible_items[itempos].first->description_raw()),
+						utils::utf8_to_locale(visible_items[itempos].first->description()),
 						lines,
 						links,
 						baseurl);
@@ -327,7 +327,7 @@ void ItemListFormAction::process_operation(Operation op,
 						visible_items[itempos]
 						.first->link());
 					qna_responses.push_back(utils::utf8_to_locale(
-							visible_items[itempos].first->title_raw()));
+							visible_items[itempos].first->title()));
 					qna_responses.push_back(args->size() > 0
 						? (*args)[0]
 						: "");
@@ -335,7 +335,7 @@ void ItemListFormAction::process_operation(Operation op,
 					this->finished_qna(OP_INT_BM_END);
 				} else {
 					this->start_bookmark_qna(
-						visible_items[itempos].first->title_raw(),
+						visible_items[itempos].first->title(),
 						visible_items[itempos].first->link(),
 						"",
 						feed->title());
@@ -384,8 +384,7 @@ void ItemListFormAction::process_operation(Operation op,
 					filename = (*args)[0];
 				}
 			} else {
-				const auto title = utils::utf8_to_locale(
-						visible_items[itempos].first->title_raw());
+				const auto title = utils::utf8_to_locale(visible_items[itempos].first->title());
 				const auto suggestion = v->get_filename_suggestion(title);
 				filename = v->run_filebrowser(suggestion);
 			}
@@ -1033,12 +1032,12 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	}
 
 	auto itemtitle = utils::quote_for_stfl(utils::utf8_to_locale(
-				item.first->title_raw()));
+				item.first->title()));
 	utils::remove_soft_hyphens(itemtitle);
 	fmt.register_fmt('t', itemtitle);
 
 	auto itemauthor = utils::quote_for_stfl(utils::utf8_to_locale(
-				item.first->author_raw()));
+				item.first->author()));
 	utils::remove_soft_hyphens(itemauthor);
 	fmt.register_fmt('a', itemauthor);
 
@@ -1453,8 +1452,8 @@ void ItemListFormAction::handle_op_saveall()
 	}
 
 	if (visible_items.size() == 1) {
-		const std::string filename = v->get_filename_suggestion(
-				utils::utf8_to_locale(visible_items[0].first->title_raw()));
+		const std::string filename = v->get_filename_suggestion( utils::utf8_to_locale(
+					visible_items[0].first->title()));
 		const std::string fpath = directory + filename;
 
 		struct stat sbuf;
@@ -1491,8 +1490,8 @@ void ItemListFormAction::handle_op_saveall()
 	} else {
 		std::vector<std::string> filenames;
 		for (const auto& item : visible_items) {
-			filenames.emplace_back(
-				utils::utf8_to_locale(v->get_filename_suggestion(item.first->title_raw())));
+			filenames.emplace_back( utils::utf8_to_locale(v->get_filename_suggestion(
+						item.first->title())));
 		}
 
 		const auto unique_filenames = std::set<std::string>(
