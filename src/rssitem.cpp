@@ -137,20 +137,20 @@ void RssItem::set_enclosure_type(const std::string& type)
 std::string RssItem::title() const
 {
 	std::string retval;
-	if (title_.length() > 0)
-		retval = utils::convert_text(
-				title_, nl_langinfo(CODESET), "utf-8");
+	if (!title_.empty()) {
+		retval = utils::utf8_to_locale( title_);
+	}
 	return retval;
 }
 
 std::string RssItem::author() const
 {
-	return utils::convert_text(author_, nl_langinfo(CODESET), "utf-8");
+	return utils::utf8_to_locale(author_);
 }
 
 std::string RssItem::description() const
 {
-	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
+	return utils::utf8_to_locale(description_);
 }
 
 bool RssItem::has_attribute(const std::string& attribname)

@@ -417,6 +417,15 @@ std::string utils::convert_text(const std::string& text,
 	return result;
 }
 
+std::string utf8_to_locale(const std::string& text)
+{
+	if (text.empty()) {
+		return {};
+	}
+
+	return utils::convert_text(text, nl_langinfo(CODESET), "utf-8");
+}
+
 std::string utils::get_command_output(const std::string& cmd)
 {
 	return RustString(rs_get_command_output(cmd.c_str()));

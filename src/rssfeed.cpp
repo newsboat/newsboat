@@ -97,12 +97,12 @@ std::string RssFeed::title() const
 	}
 	return found_title
 		? alt_title
-		: utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
+		: utils::utf8_to_locale(title_);
 }
 
 std::string RssFeed::description() const
 {
-	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
+	return utils::utf8_to_locale(description_);
 }
 
 bool RssFeed::hidden() const
