@@ -100,11 +100,6 @@ std::string RssFeed::title() const
 		: utils::utf8_to_locale(title_);
 }
 
-std::string RssFeed::description() const
-{
-	return utils::utf8_to_locale(description_);
-}
-
 bool RssFeed::hidden() const
 {
 	return std::any_of(tags_.begin(),
@@ -154,7 +149,7 @@ std::string RssFeed::get_attribute(const std::string& attribname)
 	if (attribname == "feedtitle") {
 		return title();
 	} else if (attribname == "description") {
-		return description();
+		return utils::utf8_to_locale(description_raw());
 	} else if (attribname == "feedlink") {
 		return title();
 	} else if (attribname == "feeddate") {

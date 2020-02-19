@@ -617,7 +617,6 @@ TEST_CASE(
 		REQUIRE(feed1->title_raw() == feed2->title_raw());
 		REQUIRE(feed1->title() == feed2->title());
 		REQUIRE(feed1->description_raw() == feed2->description_raw());
-		REQUIRE(feed1->description() == feed2->description());
 		REQUIRE(feed1->link() == feed2->link());
 		REQUIRE(feed1->rssurl() == feed2->rssurl());
 		REQUIRE(feed1->unread_item_count() ==

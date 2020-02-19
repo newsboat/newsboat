@@ -37,7 +37,6 @@ public:
 	{
 		return description_;
 	}
-	std::string description() const;
 	void set_description(const std::string& d)
 	{
 		description_ = d;
