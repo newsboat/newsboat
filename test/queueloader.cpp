@@ -9,7 +9,7 @@
 
 using namespace podboat;
 
-bool contains_download_with_status(std::vector<Download>& downloads,
+bool contains_download_with_status(const std::vector<Download>& downloads,
 	DlStatus status)
 {
 	for (const Download& d : downloads) {
@@ -29,7 +29,7 @@ TEST_CASE("reload removes downloads iff they are marked as finished or deleted",
 
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
-	std::vector<DlStatus> possible_statuses = {
+	const std::vector<DlStatus> possible_statuses = {
 		DlStatus::QUEUED,
 		DlStatus::CANCELLED,
 		DlStatus::DELETED,
