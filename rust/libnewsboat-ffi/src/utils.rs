@@ -23,9 +23,11 @@ pub unsafe extern "C" fn rs_replace_all(
         let rs_input = rs_input.to_string_lossy().into_owned();
 
         let rs_from = CStr::from_ptr(from);
+        // This won't panic because all strings in Newsboat are in UTF-8
         let rs_from = rs_from.to_str().expect("rs_from contained invalid UTF-8");
 
         let rs_to = CStr::from_ptr(to);
+        // This won't panic because all strings in Newsboat are in UTF-8
         let rs_to = rs_to.to_str().expect("rs_to contained invalid UTF-8");
 
         let result = utils::replace_all(rs_input, rs_from, rs_to);
@@ -67,6 +69,14 @@ pub unsafe extern "C" fn rs_resolve_tilde(path: *const c_char) -> *mut c_char {
         // We simply assume that all the paths are in UTF-8 -- hence to_string_lossy().
         let result = result.to_string_lossy().into_owned();
 
+        // `result` consists of:
+        // 1. a path to the home dir, which can't contain NUL bytes, since it has to be handled by
+        //    C APIs;
+        // 2. a path delimiter, which is a slash and not a NUL byte;
+        // 3. the original input, `path`, which came here as a C string, so doesn't contain NUL
+        //    bytes.
+        //
+        // Thus, `unwrap` won't panic.
         let result = CString::new(result).unwrap();
         result.into_raw()
     })
@@ -121,6 +131,9 @@ pub unsafe extern "C" fn rs_absolute_url(
         let rs_link = rs_link.to_string_lossy();
 
         let ret = utils::absolute_url(&rs_base_url, &rs_link);
+        // `ret` is either the same as `rs_link`, or a combination of `rs_base_url`, `rs_link`, and
+        // a slash. `rs_base_url` and `rs_link` came here as C strings, so they are guaranteed not
+        // to contain NUL. The slash is obviously not a NUL. Thus, `unwrap` won't panic.
         CString::new(ret).unwrap().into_raw()
     })
 }
@@ -175,6 +188,9 @@ pub unsafe extern "C" fn rs_censor_url(url: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_url = CStr::from_ptr(url);
         let rs_url = rs_url.to_string_lossy();
+        // `censor_url` replaces part of `rs_url` with `*`. Since `rs_url` came here as a C string,
+        // it doesn't contain NUL bytes. Thus, the result of `censor_url` won't contain NUL either,
+        // and `unwrap` won't panic.
         CString::new(utils::censor_url(&rs_url)).unwrap().into_raw()
     })
 }
@@ -202,6 +218,7 @@ pub unsafe extern "C" fn rs_trim_end(input: *const c_char) -> *mut c_char {
 
         let result = utils::trim_end(rs_input);
 
+        // `result` is a subset of `rs_input`, which is a C string; thus, `unwrap` won't panic.
         let result = CString::new(result).unwrap();
         result.into_raw()
     })
@@ -215,6 +232,7 @@ pub unsafe extern "C" fn rs_trim(input: *const c_char) -> *mut c_char {
 
         let result = utils::trim(rs_input);
 
+        // `result` is a subset of `rs_input`, which is a C string; thus, `unwrap` won't panic.
         let result = CString::new(result).unwrap();
         result.into_raw()
     })
@@ -365,6 +383,8 @@ pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
         let rs_input = CStr::from_ptr(input);
         let rs_input = rs_input.to_string_lossy();
         let output = utils::get_basename(&rs_input);
+        // `output` is a subset of `rs_input`, which is a C string. `output` can also be an empty
+        // string, which obviously doesn't contain NUL. Thus, `unwrap` here won't panic.
         let result = CString::new(output).unwrap();
         result.into_raw()
     })
@@ -474,9 +494,11 @@ pub unsafe extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_c
 pub unsafe extern "C" fn rs_run_command(command: *const c_char, param: *const c_char) {
     abort_on_panic(|| {
         let command = CStr::from_ptr(command);
+        // This won't panic because all strings in Newsboat are in UTF-8
         let command = command.to_str().expect("command contained invalid UTF-8");
 
         let param = CStr::from_ptr(param);
+        // This won't panic because all strings in Newsboat are in UTF-8
         let param = param.to_str().expect("param contained invalid UTF-8");
 
         utils::run_command(command, param);
@@ -510,6 +532,7 @@ pub unsafe extern "C" fn rs_run_program(
         };
 
         let input = CStr::from_ptr(input);
+        // This won't panic because all strings in Newsboat are in UTF-8
         let input = input.to_str().expect("input contained invalid UTF-8");
 
         let output = utils::run_program(&argv, input);
@@ -543,6 +566,7 @@ pub extern "C" fn rs_newsboat_version_major() -> u32 {
 pub unsafe extern "C" fn rs_strip_comments(line: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let line = CStr::from_ptr(line);
+        // This won't panic because all strings in Newsboat are in UTF-8
         let line = line.to_str().expect("line contained invalid UTF-8");
 
         let result = utils::strip_comments(line);
@@ -558,7 +582,7 @@ pub unsafe extern "C" fn rs_strip_comments(line: *const c_char) -> *mut c_char {
 pub unsafe extern "C" fn rs_extract_filter(line: *const c_char) -> FilterUrl {
     abort_on_panic(|| {
         let line = CStr::from_ptr(line);
-        // `line` is a valid pointer from C string.
+        // This won't panic because all strings in Newsboat are in UTF-8
         let line = line.to_str().expect("line contained invalid UTF-8");
 
         let (filter, url) = utils::extract_filter(line);
