@@ -215,3 +215,30 @@ linux_task:
     build_script: *build_script
     test_script: *test_script
     before_cache_script: *before_cache_script
+
+address_sanitizer_task:
+    name: AddressSanitizer
+
+    container:
+      dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+      docker_arguments:
+          # We need llvm-symbolizer from llvm-9-tools to demangle symbols in
+          # sanitizer's reports
+          cxx_package: "clang-9 llvm-9"
+          cc: clang-9
+          cxx: clang++-9
+
+    env:
+      CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
+      ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
+
+    cargo_cache:
+        folder: $HOME/.cargo/registry
+        fingerprint_script: cat Cargo.lock
+
+    # Sanitizers only apply to C++, so we only build and run C++ tests. Also,
+    # we don't pass --keep-going to the build: failures can be debugged with
+    # logs of other jobs.
+    build_script: make -j3 test/test
+    test_script: cd test && ./test --order rand
+    before_cache_script: *before_cache_script
