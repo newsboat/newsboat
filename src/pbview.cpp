@@ -227,7 +227,7 @@ void PbView::run(bool auto_download)
 					_("Error: unable to perform operation: "
 						"download(s) in progress."));
 			} else {
-				ctrl->reload_queue(true);
+				ctrl->purge_queue();
 			}
 			ctrl->set_view_update_necessary(true);
 			break;
