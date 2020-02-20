@@ -9,10 +9,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get upgrade --assume-yes
 
-ARG rust_version=1.41.0
 ARG cxx_package
-ARG cc
-ARG cxx
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -38,6 +35,8 @@ ENV LC_ALL en_US.UTF-8
 USER builder
 WORKDIR /home/builder/src
 
+ARG rust_version=1.41.0
+
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
     && $HOME/rustup.sh -y \
@@ -48,5 +47,9 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod a+w $HOME/.cargo
 
 ENV HOME /home/builder
+
+ARG cc
+ARG cxx
+
 ENV CC=$cc
 ENV CXX=$cxx
