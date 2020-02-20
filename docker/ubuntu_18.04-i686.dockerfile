@@ -10,7 +10,8 @@ RUN dpkg --add-architecture i386 \
     && apt-get update \
     && apt-get upgrade --assume-yes
 
-RUN apt-get install --assume-yes \
+RUN apt-get update \
+    && apt-get install --assume-yes \
         build-essential gettext g++-multilib libcurl4-openssl-dev:i386 \
         libjson-c-dev:i386 libsqlite3-0:i386 libsqlite3-dev:i386 \
         libssl-dev:i386 libstfl-dev:i386 libxml2-dev:i386 pkg-config:i386 \
@@ -28,7 +29,8 @@ RUN addgroup --gid 1000 builder \
     && mkdir -p /home/builder/src \
     && chown -R builder:builder /home/builder
 
-RUN apt-get install locales \
+RUN apt-get update \
+    && apt-get install locales \
     && echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen \
     && locale-gen
 ENV LANG en_US.UTF-8

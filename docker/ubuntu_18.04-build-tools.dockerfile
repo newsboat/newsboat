@@ -14,7 +14,8 @@ ARG cxx_package
 ARG cc
 ARG cxx
 
-RUN apt-get install --assume-yes --no-install-recommends \
+RUN apt-get update \
+    && apt-get install --assume-yes --no-install-recommends \
         build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
         libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext \
         asciidoctor wget \
