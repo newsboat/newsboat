@@ -42,7 +42,7 @@ public:
 	std::string get_formatstr();
 
 	unsigned int downloads_in_progress();
-	void reload_queue(bool also_remove_finished = false);
+	void purge_queue();
 
 	unsigned int get_maxdownloads();
 	void start_downloads();

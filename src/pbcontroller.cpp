@@ -402,10 +402,10 @@ unsigned int PbController::get_maxdownloads()
 	return max_dls;
 }
 
-void PbController::reload_queue(bool also_remove_finished)
+void PbController::purge_queue()
 {
 	if (ql) {
-		ql->reload(downloads_, also_remove_finished);
+		ql->reload(downloads_, true);
 	}
 }
 
