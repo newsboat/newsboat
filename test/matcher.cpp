@@ -238,3 +238,27 @@ TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
 	Matcher m2("AAAA between 1:30000");
 	REQUIRE(m2.get_expression() == "AAAA between 1:30000");
 }
+
+TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
+{
+	// Inspired by https://github.com/newsboat/newsboat/issues/642
+
+	const auto require_matches = [](std::string regex) {
+		MatcherMockMatchable mock;
+		Matcher m;
+
+		m.parse("abcd =~ \"" + regex + "\"");
+		REQUIRE(m.matches(&mock));
+	};
+
+	require_matches("xyz");
+	require_matches("xYz");
+	require_matches("xYZ");
+	require_matches("Xyz");
+	require_matches("yZ");
+	require_matches("^xYZ");
+	require_matches("xYz$");
+	require_matches("^Xyz$");
+	require_matches("^xY");
+	require_matches("yZ$");
+}
