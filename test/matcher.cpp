@@ -179,7 +179,7 @@ TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
 }
 
 TEST_CASE(
-	"Operators `>`, `>=`, `<` and `<=` comparee field's value to given "
+	"Operators `>`, `>=`, `<` and `<=` compare field's value to given "
 	"value",
 	"[Matcher]")
 {
