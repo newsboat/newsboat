@@ -326,4 +326,6 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 		m.parse(R"#(attr !~ "\b")#");
 		REQUIRE(m.matches(&mock));
 	}
+
+	// If you add more checks to this test, consider adding the same to RegexManager tests
 }
