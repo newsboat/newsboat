@@ -421,7 +421,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		new_title = utils::make_title(default_url);
 		prompts.push_back(QnaPair(_("Title: "), new_title));
 	} else {
-		prompts.push_back(QnaPair(_("Title: "), default_title));
+		prompts.push_back(QnaPair(_("Title: "), utils::utf8_to_locale(default_title)));
 	}
 	prompts.push_back(QnaPair(_("Description: "), default_desc));
 	prompts.push_back(QnaPair(_("Feed title: "), default_feed_title));
@@ -433,7 +433,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 					default_url); // try to make the title from url
 		} else {
 			// assignment just to make the call to bookmark() below easier
-			new_title = default_title;
+			new_title = utils::utf8_to_locale(default_title);
 		}
 
 		// if url or title is missing, abort autopilot and ask user

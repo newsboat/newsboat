@@ -50,20 +50,20 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->title_raw() == "Article 1: A boring article");
-		REQUIRE(articles[1]->title_raw() == "Article 2: Article you must read");
-		REQUIRE(articles[2]->title_raw() == "Article 10: Another great article");
-		REQUIRE(articles[3]->title_raw() == "Read me");
-		REQUIRE(articles[4]->title_raw() == "Wow tests are great");
+		REQUIRE(articles[0]->title() == "Article 1: A boring article");
+		REQUIRE(articles[1]->title() == "Article 2: Article you must read");
+		REQUIRE(articles[2]->title() == "Article 10: Another great article");
+		REQUIRE(articles[3]->title() == "Read me");
+		REQUIRE(articles[4]->title() == "Wow tests are great");
 
 		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
-		REQUIRE(articles[0]->title_raw() == "Wow tests are great");
-		REQUIRE(articles[1]->title_raw() == "Read me");
-		REQUIRE(articles[2]->title_raw() == "Article 10: Another great article");
-		REQUIRE(articles[3]->title_raw() == "Article 2: Article you must read");
-		REQUIRE(articles[4]->title_raw() == "Article 1: A boring article");
+		REQUIRE(articles[0]->title() == "Wow tests are great");
+		REQUIRE(articles[1]->title() == "Read me");
+		REQUIRE(articles[2]->title() == "Article 10: Another great article");
+		REQUIRE(articles[3]->title() == "Article 2: Article you must read");
+		REQUIRE(articles[4]->title() == "Article 1: A boring article");
 	}
 
 	SECTION("flags") {

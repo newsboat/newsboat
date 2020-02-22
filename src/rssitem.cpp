@@ -134,25 +134,6 @@ void RssItem::set_enclosure_type(const std::string& type)
 	enclosure_type_ = type;
 }
 
-std::string RssItem::title() const
-{
-	std::string retval;
-	if (title_.length() > 0)
-		retval = utils::convert_text(
-				title_, nl_langinfo(CODESET), "utf-8");
-	return retval;
-}
-
-std::string RssItem::author() const
-{
-	return utils::convert_text(author_, nl_langinfo(CODESET), "utf-8");
-}
-
-std::string RssItem::description() const
-{
-	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
-}
-
 bool RssItem::has_attribute(const std::string& attribname)
 {
 	if (attribname == "title" || attribname == "link" ||
@@ -176,13 +157,13 @@ bool RssItem::has_attribute(const std::string& attribname)
 std::string RssItem::get_attribute(const std::string& attribname)
 {
 	if (attribname == "title") {
-		return title();
+		return utils::utf8_to_locale(title());
 	} else if (attribname == "link") {
 		return link();
 	} else if (attribname == "author") {
-		return author();
+		return utils::utf8_to_locale(author());
 	} else if (attribname == "content") {
-		return description();
+		return utils::utf8_to_locale(description());
 	} else if (attribname == "date") {
 		return pubDate();
 	} else if (attribname == "guid") {

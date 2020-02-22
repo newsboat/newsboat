@@ -97,12 +97,7 @@ std::string RssFeed::title() const
 	}
 	return found_title
 		? alt_title
-		: utils::convert_text(title_, nl_langinfo(CODESET), "utf-8");
-}
-
-std::string RssFeed::description() const
-{
-	return utils::convert_text(description_, nl_langinfo(CODESET), "utf-8");
+		: utils::utf8_to_locale(title_);
 }
 
 bool RssFeed::hidden() const
@@ -154,7 +149,7 @@ std::string RssFeed::get_attribute(const std::string& attribname)
 	if (attribname == "feedtitle") {
 		return title();
 	} else if (attribname == "description") {
-		return description();
+		return utils::utf8_to_locale(description());
 	} else if (attribname == "feedlink") {
 		return title();
 	} else if (attribname == "feeddate") {
@@ -267,12 +262,9 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (utils::strnaturalcmp(a->title().c_str(),
-						b->title().c_str()) > 0)
-				: (utils::strnaturalcmp(a->title().c_str(),
-						b->title().c_str()) < 0);
+			const auto cmp = utils::strnaturalcmp(utils::utf8_to_locale(a->title()),
+					utils::utf8_to_locale(b->title()));
+			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
 		});
 		break;
 	case ArtSortMethod::FLAGS:
@@ -293,12 +285,10 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 			items_.end(),
 			[&](const std::shared_ptr<RssItem>& a,
 		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->author().c_str(),
-						b->author().c_str()) > 0)
-				: (strcmp(a->author().c_str(),
-						b->author().c_str()) < 0);
+			const auto author_a = utils::utf8_to_locale(a->author());
+			const auto author_b = utils::utf8_to_locale(b->author());
+			const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
+			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
 		});
 		break;
 	case ArtSortMethod::LINK:

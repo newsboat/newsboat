@@ -35,6 +35,10 @@ std::string convert_text(const std::string& text,
 	const std::string& tocode,
 	const std::string& fromcode);
 
+/// Converts input string from UTF-8 to the locale's encoding (as detected by
+/// nl_langinfo(CODESET)).
+std::string utf8_to_locale(const std::string& text);
+
 std::string get_command_output(const std::string& cmd);
 void extract_filter(const std::string& line,
 	std::string& filter,
