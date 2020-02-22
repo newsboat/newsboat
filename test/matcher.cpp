@@ -270,3 +270,60 @@ TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
 	require_matches("^xY");
 	require_matches("yZ$");
 }
+
+TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
+{
+	// This syntax is documented in The Open Group Base Specifications Issue 7,
+	// IEEE Std 1003.1-2008 Section 9, "Regular Expressions":
+	// https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html
+
+	// Since POSIX extended regular expressions are pretty basic, it's hard to
+	// find stuff that they support but other engines don't. So in order to
+	// ensure that we're using EREs, these tests try stuff that's *not*
+	// supported by EREs.
+	//
+	// Ideas gleaned from https://www.regular-expressions.info/refcharacters.html
+
+	Matcher m;
+
+	// Supported by Perl, PCRE, PHP and others
+	SECTION("No support for escape sequence") {
+		MatcherMockMatchable mock({{"attr", "*]+"}});
+
+		m.parse(R"#(attr =~ "\Q*]+\E")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "\Q*]+\E")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	SECTION("No support for hexadecimal escape") {
+		MatcherMockMatchable mock({{"attr", "value"}});
+
+		m.parse(R"#(attr =~ "^va\x6Cue")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "^va\x6Cue")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	SECTION("No support for \\a as alert/bell control character") {
+		MatcherMockMatchable mock({{"attr", "\x07"}});
+
+		m.parse(R"#(attr =~ "\a")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "\a")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	SECTION("No support for \\b as backspace control character") {
+		MatcherMockMatchable mock({{"attr", "\x08"}});
+
+		m.parse(R"#(attr =~ "\b")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "\b")#");
+		REQUIRE(m.matches(&mock));
+	}
+}

@@ -717,7 +717,7 @@ article list.
 Operator:Meaning
 +=+ / +==+:test for equality
 +!=+:test for inequality; logical negation of the +=+ operator
-+=~+:test whether regular expression matches, case-insensitively
++=~+:test whether https\://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html[POSIX extended regular expression] matches, case-insensitively
 +!~+:logical negation of the +=~+ operator
 +<+:less than
 +>+:greater than
