@@ -443,6 +443,20 @@ you can configure in Newsboat regarding FeedHQ.
 FeedHQ's folders are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
+=== Bazqux
+
+https://bazqux.com/[Bazqux] uses "Google Reader API", which is also used by
+other readers like FeedHQ. Thus, one can leverage Newsboat's support for FeedHQ
+(described above) to synchronize with Bazqux:
+
+    urls-source "feedhq"
+    feedhq-url "https://bazqux.com/"
+    feedhq-login "username"
+    feedhq-password "password"
+
+See <<_passwords_for_external_apis>> for other, more secure ways to store your
+password.
+
 === Tiny Tiny RSS
 
 Newsboat can be used to synchronize with https://tt-rss.org/[Tiny Tiny RSS]
