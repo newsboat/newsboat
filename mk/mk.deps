@@ -700,12 +700,12 @@ test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
  include/tagsouppullparser.h 3rd-party/catch.hpp
-test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
- include/strprintf.h
 test/test-helpers.o: test/test-helpers.cpp test/test-helpers.h \
  include/utils.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h 3rd-party/catch.hpp
+test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
+ include/strprintf.h
 test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
