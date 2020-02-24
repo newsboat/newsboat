@@ -14,7 +14,7 @@ ARG cxx_package
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
         build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
-        libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext \
+        libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext git \
         asciidoctor wget \
     && apt-get autoremove \
     && apt-get clean
