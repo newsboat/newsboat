@@ -248,7 +248,7 @@ depslist_task:
 
     container:
       cpu: 1
-      memory: 256MB
+      memory: 512MB
       dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
       docker_arguments:
           cxx_package: g++-9
@@ -258,5 +258,6 @@ depslist_task:
     script:
         - make depslist
           # --exit-code forces git-diff to exit with code 1 if there were
-          # changes; that'll fail the task, which is exactly what we need
-        - git diff --exit-code || echo 'WARNING: the above diff is produced by GCC. Copy it if you only have Clang installed; otherwise just run `make depslist` and commit the result'
+          # changes. If it does, we print a warning, and propagate the error.
+          # Otherwise this whole script exits with 0
+        - git diff --exit-code || (echo 'WARNING: the above diff is produced by GCC. Copy it if you only have Clang installed; otherwise just run `make depslist` and commit the result'; false)
