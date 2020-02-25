@@ -67,15 +67,14 @@ private:
 };
 
 
-TEST_CASE("try_lock() returns an error if lock-file location is invalid",
+TEST_CASE("try_lock() returns an error if lock-file permissions or location are invalid",
 	"[FsLock]")
 {
-	const TestHelpers::TempDir test_directory;
-	const std::string non_existing_dir = test_directory.get_path() +
-		"does-not-exist/";
-
 
 	GIVEN("An invalid lock location") {
+		const TestHelpers::TempDir test_directory;
+		const std::string non_existing_dir = test_directory.get_path() +
+			"does-not-exist/";
 		std::string lock_location = non_existing_dir + "lockfile";
 
 		THEN("try_lock() will fail and return pid == 0") {
@@ -84,6 +83,19 @@ TEST_CASE("try_lock() returns an error if lock-file location is invalid",
 
 			// try_lock() is expected to fail as the relevant directory does not exist
 			REQUIRE_FALSE(lock.try_lock(lock_location, pid));
+			REQUIRE(pid == 0);
+		}
+	}
+
+	GIVEN("A lock file which does not grant write access") {
+		const TestHelpers::TempFile lock_location;
+		const int fd = ::open(lock_location.get_path().c_str(), O_RDWR | O_CREAT, 0400);
+		::close(fd);
+
+		THEN("try_lock() will fail and return pid == 0") {
+			FsLock lock;
+			pid_t pid = -1;
+			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid));
 			REQUIRE(pid == 0);
 		}
 	}
