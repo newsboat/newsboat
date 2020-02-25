@@ -1,3 +1,22 @@
+# Tools for cross-building Newsboat to i686.
+#
+# Build with defaults:
+#
+#   docker build \
+#       --tag=newsboat-i686-build-tools \
+#       --file=docker/ubuntu_18.04-i686.dockerfile \
+#       docker
+#
+# Run on your local files:
+#
+#   docker run \
+#       --rm \
+#       --mount type=bind,source=$(pwd),target=/home/builder/src \
+#       --mount type=bind,source=$HOME/.cargo,target=/home/builder/.cargo \
+#       --user $(id -u):$(id -g) \
+#       newsboat-i686-build-tools \
+#       make
+
 FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
