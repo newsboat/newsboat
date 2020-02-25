@@ -2,37 +2,45 @@
 
 #include "3rd-party/catch.hpp"
 
+#include <map>
+
 #include "matchable.h"
 #include "matcherexception.h"
 
 using namespace newsboat;
 
-struct MatcherMockMatchable : public Matchable {
+class MatcherMockMatchable : public Matchable {
+public:
+	MatcherMockMatchable() = default;
+
+	MatcherMockMatchable(
+		std::initializer_list<std::pair<const std::string, std::string>>
+		data)
+		: m_data(data)
+	{}
+
 	virtual bool has_attribute(const std::string& attribname)
 	{
-		if (attribname == "abcd" || attribname == "AAAA" ||
-			attribname == "tags") {
-			return true;
-		}
-		return false;
+		return m_data.find(attribname) != m_data.cend();
 	}
 
 	virtual std::string get_attribute(const std::string& attribname)
 	{
-		if (attribname == "abcd") {
-			return "xyz";
-		} else if (attribname == "AAAA") {
-			return "12345";
-		} else if (attribname == "tags") {
-			return "foo bar baz quux";
+		const auto it = m_data.find(attribname);
+		if (it != m_data.cend()) {
+			return it->second;
 		}
+
 		return "";
 	}
+
+private:
+	std::map<std::string, std::string> m_data;
 };
 
 TEST_CASE("Operator `=` checks if field has given value", "[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"abcd", "xyz"}});
 	Matcher m;
 
 	m.parse("abcd = \"xyz\"");
@@ -44,7 +52,7 @@ TEST_CASE("Operator `=` checks if field has given value", "[Matcher]")
 
 TEST_CASE("Operator `!=` checks if field doesn't have given value", "[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"abcd", "xyz"}});
 	Matcher m;
 
 	m.parse("abcd != \"uiop\"");
@@ -56,7 +64,7 @@ TEST_CASE("Operator `!=` checks if field doesn't have given value", "[Matcher]")
 
 TEST_CASE("Operator `=~` checks if field matches given regex", "[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"AAAA", "12345"}});
 	Matcher m;
 
 	m.parse("AAAA =~ \".\"");
@@ -102,7 +110,7 @@ TEST_CASE("Matcher throws if expression contains undefined fields", "[Matcher]")
 TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
 	"[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"AAAA", "12345"}});
 	Matcher m;
 
 	m.parse("AAAA =~ \"[[\"");
@@ -115,7 +123,7 @@ TEST_CASE("Matcher throws if regex passed to `=~` or `!~` is invalid",
 TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 	"[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"AAAA", "12345"}});
 	Matcher m;
 
 	m.parse("AAAA !~ \".\"");
@@ -137,7 +145,7 @@ TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
 	"[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"tags", "foo bar baz quux"}});
 	Matcher m;
 
 	m.parse("tags # \"foo\"");
@@ -168,7 +176,7 @@ TEST_CASE("Operator `#` checks if \"tags\" field contains given value",
 TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
 	"[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"tags", "foo bar baz quux"}});
 	Matcher m;
 
 	m.parse("tags !# \"nein\"");
@@ -179,11 +187,11 @@ TEST_CASE("Operator `!#` checks if \"tags\" field doesn't contain given value",
 }
 
 TEST_CASE(
-	"Operators `>`, `>=`, `<` and `<=` comparee field's value to given "
+	"Operators `>`, `>=`, `<` and `<=` compare field's value to given "
 	"value",
 	"[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"AAAA", "12345"}});
 	Matcher m;
 
 	m.parse("AAAA > 12344");
@@ -205,7 +213,7 @@ TEST_CASE(
 TEST_CASE("Operator `between` checks if field's value is in given range",
 	"[Matcher]")
 {
-	MatcherMockMatchable mock;
+	MatcherMockMatchable mock({{"AAAA", "12345"}});
 	Matcher m;
 
 	m.parse("AAAA between 0:12345");
@@ -237,4 +245,87 @@ TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
 {
 	Matcher m2("AAAA between 1:30000");
 	REQUIRE(m2.get_expression() == "AAAA between 1:30000");
+}
+
+TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
+{
+	// Inspired by https://github.com/newsboat/newsboat/issues/642
+
+	const auto require_matches = [](std::string regex) {
+		MatcherMockMatchable mock({{"abcd", "xyz"}});
+		Matcher m;
+
+		m.parse("abcd =~ \"" + regex + "\"");
+		REQUIRE(m.matches(&mock));
+	};
+
+	require_matches("xyz");
+	require_matches("xYz");
+	require_matches("xYZ");
+	require_matches("Xyz");
+	require_matches("yZ");
+	require_matches("^xYZ");
+	require_matches("xYz$");
+	require_matches("^Xyz$");
+	require_matches("^xY");
+	require_matches("yZ$");
+}
+
+TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
+{
+	// This syntax is documented in The Open Group Base Specifications Issue 7,
+	// IEEE Std 1003.1-2008 Section 9, "Regular Expressions":
+	// https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html
+
+	// Since POSIX extended regular expressions are pretty basic, it's hard to
+	// find stuff that they support but other engines don't. So in order to
+	// ensure that we're using EREs, these tests try stuff that's *not*
+	// supported by EREs.
+	//
+	// Ideas gleaned from https://www.regular-expressions.info/refcharacters.html
+
+	Matcher m;
+
+	// Supported by Perl, PCRE, PHP and others
+	SECTION("No support for escape sequence") {
+		MatcherMockMatchable mock({{"attr", "*]+"}});
+
+		m.parse(R"#(attr =~ "\Q*]+\E")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "\Q*]+\E")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	SECTION("No support for hexadecimal escape") {
+		MatcherMockMatchable mock({{"attr", "value"}});
+
+		m.parse(R"#(attr =~ "^va\x6Cue")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "^va\x6Cue")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	SECTION("No support for \\a as alert/bell control character") {
+		MatcherMockMatchable mock({{"attr", "\x07"}});
+
+		m.parse(R"#(attr =~ "\a")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "\a")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	SECTION("No support for \\b as backspace control character") {
+		MatcherMockMatchable mock({{"attr", "\x08"}});
+
+		m.parse(R"#(attr =~ "\b")#");
+		REQUIRE_FALSE(m.matches(&mock));
+
+		m.parse(R"#(attr !~ "\b")#");
+		REQUIRE(m.matches(&mock));
+	}
+
+	// If you add more checks to this test, consider adding the same to RegexManager tests
 }

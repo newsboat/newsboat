@@ -731,7 +731,7 @@ article list.
 Operator:Meaning
 +=+ / +==+:test for equality
 +!=+:test for inequality; logical negation of the +=+ operator
-+=~+:test whether regular expression matches
++=~+:test whether https\://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html[POSIX extended regular expression] matches, case-insensitively
 +!~+:logical negation of the +=~+ operator
 +<+:less than
 +>+:greater than
@@ -1141,10 +1141,12 @@ describe patterns to be highlighted. The command syntax goes like this:
 
 Valid values for `<target>` are `feedlist`, `articlelist`, `article` and `all`.
 When specifying `all`, the matching will be done in all three views. The
-`<regex>` must be regular expression, which will be matched case-insensitive
-against the text. `<fgcolor>` and `<bgcolor>` specify the foreground color resp.
-the background color of the matches. You can also specify 0 or more attributes.
-You can find a list of valid colors and attributes in the <<_configuring_colors>>.
+`<regex>` must be
+a https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html[POSIX
+extended regular expression], which will be matched case-insensitive against
+the text. `<fgcolor>` and `<bgcolor>` specify the foreground color resp. the
+background color of the matches. You can also specify 0 or more attributes. You
+can find a list of valid colors and attributes in the <<_configuring_colors>>.
 
 Examples for possible highlighting configurations are:
 

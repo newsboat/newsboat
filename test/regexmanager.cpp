@@ -579,3 +579,55 @@ TEST_CASE("RegexManager::remove_last_regex does not crash if there are "
 		}
 	}
 }
+
+TEST_CASE("RegexManager uses POSIX extended regex syntax",
+	"[RegexManager]")
+{
+	// This syntax is documented in The Open Group Base Specifications Issue 7,
+	// IEEE Std 1003.1-2008 Section 9, "Regular Expressions":
+	// https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html
+
+	// Since POSIX extended regular expressions are pretty basic, it's hard to
+	// find stuff that they support but other engines don't. So in order to
+	// ensure that we're using EREs, these tests try stuff that's *not*
+	// supported by EREs.
+	//
+	// Ideas gleaned from https://www.regular-expressions.info/refcharacters.html
+
+	RegexManager rxman;
+
+	// Supported by Perl, PCRE, PHP and others
+	SECTION("No support for escape sequence") {
+		rxman.handle_action("highlight", {"articlelist", R"#(\Q*]+\E)#", "red"});
+
+		std::string input = "*]+";
+		rxman.quote_and_highlight(input, "articlelist");
+		REQUIRE(input == "*]+");
+	}
+
+	SECTION("No support for hexadecimal escape") {
+		rxman.handle_action("highlight", {"articlelist", R"#(^va\x6Cue)#", "red"});
+
+		std::string input = "value";
+		rxman.quote_and_highlight(input, "articlelist");
+		REQUIRE(input == "value");
+	}
+
+	SECTION("No support for \\a as alert/bell control character") {
+		rxman.handle_action("highlight", {"articlelist", R"#(\a)#", "red"});
+
+		std::string input = "\x07";
+		rxman.quote_and_highlight(input, "articlelist");
+		REQUIRE(input == "\x07");
+	}
+
+	SECTION("No support for \\b as backspace control character") {
+		rxman.handle_action("highlight", {"articlelist", R"#(\b)#", "red"});
+
+		std::string input = "\x08";
+		rxman.quote_and_highlight(input, "articlelist");
+		REQUIRE(input == "\x08");
+	}
+
+	// If you add more checks to this test, consider adding the same to Matcher tests
+}
