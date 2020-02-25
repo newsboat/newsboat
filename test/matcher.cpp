@@ -330,7 +330,6 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 	// If you add more checks to this test, consider adding the same to RegexManager tests
 }
 
-
 TEST_CASE("get_parse_error() returns textual description of last "
 	"filter-expression parsing error",
 	"[Matcher]")
@@ -339,4 +338,47 @@ TEST_CASE("get_parse_error() returns textual description of last "
 
 	REQUIRE_FALSE(m.parse("=!"));
 	REQUIRE(m.get_parse_error() != "");
+}
+
+TEST_CASE("Space characters in filter expression don't affect parsing",
+	"[Matcher]")
+{
+	const auto check = [](std::string expression) {
+		INFO("input expression: " << expression);
+
+		MatcherMockMatchable mock({{"array", "foo bar baz"}});
+		Matcher m;
+
+		m.parse(expression);
+		REQUIRE(m.get_parse_error() == "");
+		REQUIRE(m.matches(&mock));
+	};
+
+	check("array # \"bar\"");
+	check("   array # \"bar\"");
+	check("array   # \"bar\"");
+	check("array #   \"bar\"");
+	check("array # \"bar\"     ");
+	check("array#  \"bar\"  ");
+	check("     array         #         \"bar\"      ");
+}
+
+TEST_CASE("Only space characters are considered whitespace by filter parser",
+	"[Matcher]")
+{
+	const auto check = [](std::string expression) {
+		INFO("input expression: " << expression);
+
+		MatcherMockMatchable mock({{"attr", "value"}});
+		Matcher m;
+
+		m.parse(expression);
+		REQUIRE_FALSE(m.get_parse_error() == "");
+	};
+
+	check("attr\t= \"value\"");
+	check("attr =\t\"value\"");
+	check("attr\n=\t\"value\"");
+	check("attr\v=\"value\"");
+	check("attr=\"value\"\r\n");
 }
