@@ -2,7 +2,9 @@
 
 #include <fcntl.h>
 #include <semaphore.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #include "3rd-party/catch.hpp"
 #include "test-helpers.h"
@@ -117,5 +119,22 @@ TEST_CASE("try_lock() succeeds if lock file location is valid and not locked by 
 	pid_t pid = 0;
 
 	REQUIRE(lock.try_lock(lock_location.get_path(), pid));
+
+	SECTION("The lock file exists after a call to try_lock()") {
+		REQUIRE(0 == ::access(lock_location.get_path().c_str(), F_OK));
+	}
+
+	SECTION("Calling try_lock() a second time for the same location succeeds") {
+		REQUIRE(lock.try_lock(lock_location.get_path(), pid));
+	}
+
+	SECTION("Calling try_lock() a second time with a different location succeeds and cleans up old lock file") {
+		const TestHelpers::TempFile new_lock_location;
+
+		REQUIRE(0 == ::access(lock_location.get_path().c_str(), F_OK));
+		REQUIRE(lock.try_lock(new_lock_location.get_path(), pid));
+		REQUIRE(0 != ::access(lock_location.get_path().c_str(), F_OK));
+		REQUIRE(0 == ::access(new_lock_location.get_path().c_str(), F_OK));
+	}
 }
 
