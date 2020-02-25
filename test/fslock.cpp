@@ -1,0 +1,121 @@
+#include "fslock.h"
+
+#include <fcntl.h>
+#include <semaphore.h>
+#include <sys/types.h>
+
+#include "3rd-party/catch.hpp"
+#include "test-helpers.h"
+
+using namespace newsboat;
+
+// Forks and calls FsLock::try_lock() in the child process.
+class LockProcess {
+public:
+	LockProcess(std::string lock_location)
+	{
+		sem_start = sem_open(sem_start_name, O_CREAT, 0644, 0);
+		sem_stop = sem_open(sem_stop_name, O_CREAT, 0644, 0);
+
+		pid = ::fork();
+		if (pid == -1) {
+			FAIL("LockProcess: fork() failed");
+		} else if (pid > 0) {
+			// Parent process: Wait until child process has finished calling try_lock
+			sem_wait(sem_start);
+		} else {
+			// Child process: Call try_lock, signal parent to continue, wait for parent process signal to stop
+			pid_t ignore_pid;
+			FsLock lock;
+			lock.try_lock(lock_location, ignore_pid);
+			sem_post(sem_start);
+
+			sem_wait(sem_stop);
+			// Exit directly without running destructors (making sure we don't interfere with the original process)
+			_exit(0);
+		}
+	}
+
+	pid_t get_child_pid()
+	{
+		return pid;
+	}
+
+	~LockProcess()
+	{
+		if (pid > 0) {
+			// Parent process: Signal child process to exit and wait for it to finish
+			sem_post(sem_stop);
+			::waitpid(pid, nullptr, 0);
+
+			REQUIRE(sem_unlink(sem_start_name) == 0);
+			REQUIRE(sem_unlink(sem_stop_name) == 0);
+			REQUIRE(sem_close(sem_start) == 0);
+			REQUIRE(sem_close(sem_stop) == 0);
+		}
+	}
+
+private:
+	const char* sem_start_name = "/newsboat-test-fslock-start";
+	const char* sem_stop_name = "/newsboat-test-fslock-stop";
+
+	pid_t pid;
+	sem_t* sem_start;
+	sem_t* sem_stop;
+};
+
+
+TEST_CASE("try_lock() returns an error if lock-file location is invalid",
+	"[FsLock]")
+{
+	const TestHelpers::TempDir test_directory;
+	const std::string non_existing_dir = test_directory.get_path() +
+		"does-not-exist/";
+
+
+	GIVEN("An invalid lock location") {
+		std::string lock_location = non_existing_dir + "lockfile";
+
+		THEN("try_lock() will fail and return pid == 0") {
+			FsLock lock;
+			pid_t pid = -1;
+
+			// try_lock() is expected to fail as the relevant directory does not exist
+			REQUIRE_FALSE(lock.try_lock(lock_location, pid));
+			REQUIRE(pid == 0);
+		}
+	}
+}
+
+TEST_CASE("try_lock() fails if lock was already created", "[FsLock]")
+{
+	const TestHelpers::TempFile lock_location;
+
+	WHEN("A different process has called try_lock()") {
+		LockProcess lock_process(lock_location.get_path());
+
+		FsLock lock;
+		pid_t pid = 0;
+
+		THEN("Calling try_lock() for the same lock location will fail") {
+			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid));
+		}
+
+		THEN("try_lock() returns the pid of the process holding the lock") {
+			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid));
+
+			REQUIRE(pid == lock_process.get_child_pid());
+		}
+	}
+}
+
+TEST_CASE("try_lock() succeeds if lock file location is valid and not locked by a different process",
+	"[FsLock]")
+{
+	const TestHelpers::TempFile lock_location;
+	FsLock lock;
+	pid_t pid = 0;
+
+	REQUIRE(lock.try_lock(lock_location.get_path(), pid));
+}
+
