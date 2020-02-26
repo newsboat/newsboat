@@ -75,7 +75,7 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 		const TestHelpers::TempDir test_directory;
 		const std::string non_existing_dir = test_directory.get_path() +
 			"does-not-exist/";
-		std::string lock_location = non_existing_dir + "lockfile";
+		const std::string lock_location = non_existing_dir + "lockfile";
 
 		THEN("try_lock() will fail and return pid == 0") {
 			FsLock lock;
