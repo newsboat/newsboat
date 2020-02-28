@@ -653,6 +653,8 @@ TEST_CASE("Invalid expression results in parsing error", "[Matcher]")
 	Matcher m;
 
 	REQUIRE_FALSE(m.parse("AAAA between 0:15:30"));
+	REQUIRE_FALSE(m.parse("x = 42andy=0"));
+	REQUIRE_FALSE(m.parse("x = 42 andy=0"));
 }
 
 TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
@@ -793,4 +795,19 @@ TEST_CASE("Only space characters are considered whitespace by filter parser",
 	check("attr\n=\t\"value\"");
 	check("attr\v=\"value\"");
 	check("attr=\"value\"\r\n");
+}
+
+TEST_CASE("Whitespace before and/or is not required", "[Matcher]")
+{
+	MatcherMockMatchable mock({{"x", "42"}, {"y", "0"}});
+	Matcher m;
+
+	REQUIRE(m.parse("x = 42and y=0"));
+	REQUIRE(m.matches(&mock));
+
+	REQUIRE(m.parse("x = \"42\"and y=0"));
+	REQUIRE(m.matches(&mock));
+
+	REQUIRE(m.parse("x = \"42\"or y=42"));
+	REQUIRE(m.matches(&mock));
 }
