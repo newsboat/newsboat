@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-02-07 23:58+0100\n"
+"POT-Creation-Date: 2020-02-29 14:15+0100\n"
 "PO-Revision-Date: 2019-12-22 10:40+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
@@ -117,23 +117,20 @@ msgid "this help"
 msgstr "diese Hilfe anzeigen"
 
 #: newsboat.cpp:121
-#, fuzzy
 msgid "Files:"
-msgstr "Datei: "
+msgstr "Dateien:"
 
 #: newsboat.cpp:122
-#, fuzzy
 msgid "config"
-msgstr "<configdatei>"
+msgstr "Konfiguration"
 
 #: newsboat.cpp:123
 msgid "urls"
-msgstr ""
+msgstr "URLs"
 
 #: newsboat.cpp:124
-#, fuzzy
 msgid "cache"
-msgstr "<cachedatei>"
+msgstr "Zwischenspeicher"
 
 #: newsboat.cpp:155
 #, c-format
@@ -500,7 +497,7 @@ msgstr "in Warteschlange"
 
 #: src/download.cpp:67
 msgid "downloading"
-msgstr "wird herunterladen"
+msgstr "wird heruntergeladen"
 
 #: src/download.cpp:69
 msgid "cancelled"
@@ -833,11 +830,11 @@ msgstr "eingebettetes Flash"
 
 #: src/htmlrenderer.cpp:978
 msgid "video"
-msgstr ""
+msgstr "Video"
 
 #: src/htmlrenderer.cpp:980
 msgid "audio"
-msgstr ""
+msgstr "Audio"
 
 #: src/htmlrenderer.cpp:982
 msgid "unknown (bug)"
@@ -1480,10 +1477,10 @@ msgid " - %u parallel downloads"
 msgstr " - %u parallele Downloads"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total%s"
 msgstr ""
-"Warteschlange (%u Download im Gange, %u insgesamt) - %.2f kb/s insgesamt%s"
+"Warteschlange (%u Downloads im Gange, %u insgesamt) - %.2f %s insgesamt%s"
 
 #: src/pbview.cpp:133
 msgid "Error: can't quit: download(s) in progress."
@@ -1501,15 +1498,15 @@ msgstr "Fehler: Kann Vorgang nicht durchführen: Download(s) im Gange."
 
 #: src/pbview.cpp:279
 msgid "KB/s"
-msgstr ""
+msgstr "KiB/s"
 
 #: src/pbview.cpp:281
 msgid "MB/s"
-msgstr ""
+msgstr "MiB/s"
 
 #: src/pbview.cpp:283
 msgid "GB/s"
-msgstr ""
+msgstr "GiB/s"
 
 #: src/pbview.cpp:361
 msgid "Download"
