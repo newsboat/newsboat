@@ -685,4 +685,15 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 			REQUIRE(input == output);
 		}
 	}
+
+	WHEN("matching text which contains `<u>...</>` markers (added by HTML renderer)") {
+		input = "Some<u>thing</> is underlined";
+		rxman.handle_action("highlight", {"article", "Something", "red"});
+
+		THEN("the tags should be ignored when matching text with a regular expression") {
+			const std::string output = "<0>Some<u>thing</></> is underlined";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
 }
