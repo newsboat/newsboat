@@ -631,3 +631,31 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 
 	// If you add more checks to this test, consider adding the same to Matcher tests
 }
+
+TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input =  "<unread>This entry is unread now</>";
+
+	WHEN("matching `read`") {
+		const std::string output = "<unread>This entry is un<0>read</> now</>";
+		rxman.handle_action("highlight", {"article", "read", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	WHEN("matching `unread`") {
+		const std::string output = "<unread>This entry is <0>unread</> now</>";
+		rxman.handle_action("highlight", {"article", "unread", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	WHEN("matching the full line") {
+		const std::string output = "<unread><0>This entry is unread now</></>";
+		rxman.handle_action("highlight", {"article", "^.*$", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+}
