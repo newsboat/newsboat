@@ -136,8 +136,7 @@ void RegexManager::quote_and_highlight(std::string& str,
 		}
 		regmatch_t pmatch;
 		unsigned int offset = 0;
-		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
-		while (err == 0) {
+		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
 			std::string outer_marker = "";
 			if (pmatch.rm_so != pmatch.rm_eo) {
 				outer_marker = extract_outer_marker(str, offset + pmatch.rm_so);
@@ -153,8 +152,6 @@ void RegexManager::quote_and_highlight(std::string& str,
 			if (offset >= str.length()) {
 				break;
 			}
-			err = regexec(
-					regex, str.c_str() + offset, 1, &pmatch, 0);
 		}
 		i++;
 	}
