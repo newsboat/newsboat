@@ -636,27 +636,30 @@ TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input =  "<unread>This entry is unread now</>";
+	std::string input =  "<unread>This entry is unread</>";
 
 	WHEN("matching `read`") {
-		const std::string output = "<unread>This entry is un<0>read</> now</>";
+		const std::string output = "<unread>This entry is un<0>read</>";
 		rxman.handle_action("highlight", {"article", "read", "red"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
 
 	WHEN("matching `unread`") {
-		const std::string output = "<unread>This entry is <0>unread</> now</>";
+		const std::string output = "<unread>This entry is <0>unread</>";
 		rxman.handle_action("highlight", {"article", "unread", "red"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
 
 	WHEN("matching the full line") {
-		const std::string output = "<unread><0>This entry is unread now</></>";
 		rxman.handle_action("highlight", {"article", "^.*$", "red"});
-		rxman.quote_and_highlight(input, "article");
-		REQUIRE(input == output);
+
+		THEN("the <unread> tag is overwritten") {
+			const std::string output = "<0>This entry is unread</>";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
 	}
 }
 
@@ -664,23 +667,23 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input =  "<unread>This entry is unread now</>";
+	std::string input =  "<unread>This entry is unread</>";
 
 	WHEN("matching text at the start of the line") {
 		rxman.handle_action("highlight", {"article", "^This", "red"});
 
 		THEN("the <unread> tag should be ignored") {
-			const std::string output = "<unread><0>This</> entry is unread now</>";
+			const std::string output = "<0>This<unread> entry is unread</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
 	}
 
 	WHEN("matching text at the end of the line") {
-		rxman.handle_action("highlight", {"article", "now$", "red"});
+		rxman.handle_action("highlight", {"article", "unread$", "red"});
 
 		THEN("the closing tag `</>` (related to <unread>) should be ignored") {
-			const std::string output = "<unread>This entry is unread <0>now</></>";
+			const std::string output = "<unread>This entry is <0>unread</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
@@ -691,7 +694,7 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 		rxman.handle_action("highlight", {"article", "Something", "red"});
 
 		THEN("the tags should be ignored when matching text with a regular expression") {
-			const std::string output = "<0>Some<u>thing</></> is underlined";
+			const std::string output = "<0>Something</> is underlined";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
