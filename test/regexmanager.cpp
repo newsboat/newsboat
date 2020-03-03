@@ -700,3 +700,71 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 		}
 	}
 }
+
+TEST_CASE("quote_and_highlight() generates a sensible output when multiple matches overlap",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "The quick brown fox jumps over the lazy dog";
+
+	WHEN("a second match is completely inside of the first match") {
+		rxman.handle_action("highlight", {"article", "The quick brown", "red"});
+		rxman.handle_action("highlight", {"article", "quick", "red"});
+
+		THEN("the first style should be restored at the end of the second match") {
+			const std::string output =
+				"<0>The <1>quick<0> brown</> fox jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("a second match completely encloses the first match") {
+		rxman.handle_action("highlight", {"article", "quick", "red"});
+		rxman.handle_action("highlight", {"article", "The quick brown", "red"});
+
+		THEN("the first style should not be present anymore") {
+			const std::string output =
+				"<1>The quick brown</> fox jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("a second match starts somewhere in the first match") {
+		rxman.handle_action("highlight", {"article", "quick brown", "red"});
+		rxman.handle_action("highlight", {"article", "brown fox", "red"});
+
+		THEN("the first style should only be overwritten for the part where the matches intersect") {
+			const std::string output =
+				"The <0>quick <1>brown fox</> jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("a second match ends somewhere in the first match") {
+		rxman.handle_action("highlight", {"article", "brown fox", "red"});
+		rxman.handle_action("highlight", {"article", "quick brown", "red"});
+
+		THEN("the first style should only be overwritten for the part where the matches intersect") {
+			const std::string output =
+				"The <1>quick brown<0> fox</> jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("there are three overlapping matches") {
+		rxman.handle_action("highlight", {"article", "quick.*dog", "red"});
+		rxman.handle_action("highlight", {"article", "fox jumps over", "red"});
+		rxman.handle_action("highlight", {"article", "brown fox", "red"});
+
+		THEN("") {
+			const std::string output =
+				"The <0>quick <2>brown fox<1> jumps over<0> the lazy dog</>";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+}
