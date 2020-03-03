@@ -205,61 +205,6 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	}
 }
 
-TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
-	"string is empty",
-	"[RegexManager]")
-{
-	RegexManager rxman;
-	REQUIRE(rxman.extract_outer_marker("", 0) == "");
-	REQUIRE(rxman.extract_outer_marker("", 10) == "");
-}
-
-TEST_CASE("RegexManager::extract_outer_marker finds the innermost tag "
-	"relative to given position in the text",
-	"[RegexManager]")
-{
-	RegexManager rxman;
-	std::string out;
-
-	SECTION("Find outer tag basic") {
-		std::string input = "<1>TestString</>";
-		out = rxman.extract_outer_marker(input, 7);
-
-		REQUIRE(out == "<1>");
-	}
-
-	SECTION("Find nested tag") {
-		std::string input = "<1>Nested<2>Test</>String</>";
-		out = rxman.extract_outer_marker(input, 14);
-
-		REQUIRE(out == "<2>");
-	}
-
-	SECTION("Find outer tag with second set") {
-		std::string input = "<1>Nested<2>Test</>String</>";
-		out = rxman.extract_outer_marker(input, 21);
-
-		REQUIRE(out == "<1>");
-	}
-
-	SECTION("Find unclosed nested tag") {
-		std::string input = "<1>Nested<2>Test</>String";
-		out = rxman.extract_outer_marker(input, 21);
-
-		REQUIRE(out == "<1>");
-	}
-
-}
-
-TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
-	"string contains closing tag without a pairing opening one, before "
-	"the position we're looking at",
-	"[RegexManager]")
-{
-	RegexManager rxman;
-	REQUIRE(rxman.extract_outer_marker("hello</>world", 10) == "");
-}
-
 TEST_CASE("RegexManager::dump_config turns each `highlight` rule into a string, "
 	"and appends them onto a vector",
 	"[RegexManager]")

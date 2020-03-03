@@ -78,52 +78,6 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.erase(it);
 }
 
-std::string RegexManager::extract_outer_marker(std::string str, const int index)
-{
-	// Non-zero number of non-angle bracket characters, enclosed in angle brackets
-	std::regex regex("<[^<>]+>", std::regex::extended);
-	const std::string close = "</>";
-	std::string tmptag;
-	std::stack<std::string> tagstack;
-	int offset = 0;
-
-	if (str.empty()) {
-		return "";
-	}
-
-	std::smatch sm;
-	while ( std::regex_search( str, sm, regex )) {
-		// Get found tag
-		tmptag = sm.str();
-		// If the found tag is after the spot we're looking for
-		if (sm.position(0) + offset > index ) {
-			if (!tagstack.empty() ) {
-				return tagstack.top();
-			} else {
-				return "";
-			}
-		}
-		if (tmptag == close) {
-			//If a tag is closed without a partner error out
-			if (tagstack.empty()) {
-				return "";
-			} else {
-				tagstack.pop();
-			}
-		} else {
-			tagstack.push(tmptag);
-		}
-		offset += sm.position(0) + sm.length(0);
-		str = sm.suffix().str();
-	}
-
-	if (!tagstack.empty()) {
-		return tagstack.top();
-	}
-
-	return "";
-}
-
 void RegexManager::quote_and_highlight(std::string& str,
 	const std::string& location)
 {
@@ -137,15 +91,13 @@ void RegexManager::quote_and_highlight(std::string& str,
 		regmatch_t pmatch;
 		unsigned int offset = 0;
 		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
-			std::string outer_marker = "";
 			if (pmatch.rm_so != pmatch.rm_eo) {
-				outer_marker = extract_outer_marker(str, offset + pmatch.rm_so);
 				const std::string marker = strprintf::fmt("<%u>", i);
 				str.insert(offset + pmatch.rm_eo,
-					std::string("</>") + outer_marker);
+					std::string("</>"));
 				str.insert(offset + pmatch.rm_so, marker);
 				offset += pmatch.rm_eo + marker.length() +
-					strlen("</>") + outer_marker.length();
+					strlen("</>");
 			} else {
 				offset++;
 			}
