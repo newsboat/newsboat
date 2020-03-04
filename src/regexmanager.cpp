@@ -65,6 +65,19 @@ int RegexManager::article_matches(Matchable* item)
 	return -1;
 }
 
+void RegexManager::remove_last_regex(const std::string& location)
+{
+	auto& regexes = locations[location].first;
+	if (regexes.empty()) {
+		return;
+	}
+
+	auto it = regexes.end() - 1;
+	regfree(*it);
+	delete *it;
+	regexes.erase(it);
+}
+
 std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
 {
 	std::map<int, std::string> tags;
@@ -135,19 +148,6 @@ void RegexManager::merge_style_tag(std::map<int, std::string>& tags,
 			++it;
 		}
 	}
-}
-
-void RegexManager::remove_last_regex(const std::string& location)
-{
-	auto& regexes = locations[location].first;
-	if (regexes.empty()) {
-		return;
-	}
-
-	auto it = regexes.end() - 1;
-	regfree(*it);
-	delete *it;
-	regexes.erase(it);
 }
 
 void RegexManager::quote_and_highlight(std::string& str,
