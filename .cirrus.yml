@@ -119,7 +119,7 @@ formatting_task:
 
 linux_task:
     matrix:
-        - name: Rust 1.41.0, GCC 5
+        - name: Rust 1.41.1, GCC 5
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -127,7 +127,7 @@ linux_task:
                 cc: gcc-5
                 cxx: g++-5
             memory: 3GB
-        - name: Rust 1.41.0, GCC 6
+        - name: Rust 1.41.1, GCC 6
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -135,7 +135,7 @@ linux_task:
                 cc: gcc-6
                 cxx: g++-6
             memory: 3GB
-        - name: Rust 1.41.0, GCC 7
+        - name: Rust 1.41.1, GCC 7
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -143,7 +143,7 @@ linux_task:
                 cc: gcc-7
                 cxx: g++-7
             memory: 3GB
-        - name: Rust 1.41.0, GCC 8
+        - name: Rust 1.41.1, GCC 8
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -151,7 +151,7 @@ linux_task:
                 cc: gcc-8
                 cxx: g++-8
             memory: 3GB
-        - name: Rust 1.41.0, GCC 9
+        - name: Rust 1.41.1, GCC 9
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -159,7 +159,7 @@ linux_task:
                 cc: gcc-9
                 cxx: g++-9
             memory: 3GB
-        - name: Rust 1.41.0, Clang 4.0
+        - name: Rust 1.41.1, Clang 4.0
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -167,7 +167,7 @@ linux_task:
                 cc: clang-4.0
                 cxx: clang++-4.0
             memory: 3GB
-        - name: Rust 1.41.0, Clang 5.0
+        - name: Rust 1.41.1, Clang 5.0
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -175,7 +175,7 @@ linux_task:
                 cc: clang-5.0
                 cxx: clang++-5.0
             memory: 3GB
-        - name: Rust 1.41.0, Clang 6.0
+        - name: Rust 1.41.1, Clang 6.0
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -183,7 +183,7 @@ linux_task:
                 cc: clang-6.0
                 cxx: clang++-6.0
             memory: 3GB
-        - name: Rust 1.41.0, Clang 7
+        - name: Rust 1.41.1, Clang 7
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -191,7 +191,7 @@ linux_task:
                 cc: clang-7
                 cxx: clang++-7
             memory: 3GB
-        - name: Rust 1.41.0, Clang 8
+        - name: Rust 1.41.1, Clang 8
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
@@ -199,7 +199,7 @@ linux_task:
                 cc: clang-8
                 cxx: clang++-8
             memory: 3GB
-        - name: Rust 1.41.0, Clang 9
+        - name: Rust 1.41.1, Clang 9
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
