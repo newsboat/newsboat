@@ -822,7 +822,7 @@ TEST_CASE("insert_style_tags() adds tags into string at correct positions",
 	}
 
 	SECTION("tags are added at the correct location") {
-		std::map<int, std::string> tags = {
+		std::map<size_t, std::string> tags = {
 			{0, "<0>"},
 			{1, "<1>"},
 			{10, "<hello>"},
@@ -847,7 +847,7 @@ TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input str
 	}
 
 	SECTION("brackets are stfl-encoded and tags are inserted") {
-		std::map<int, std::string> tags = {
+		std::map<size_t, std::string> tags = {
 			{0, "<0>"},
 			{1, "<1>"},
 			{6, "<hello>"},
@@ -855,6 +855,24 @@ TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input str
 		};
 		const std::string output =
 			"<0>><1>>This<hello> <>is> a sentence with brackets<><></>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("insert_style_tags() does not crash on invalid input",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "test this";
+
+	SECTION("tags with a position outside  of the string are ignored") {
+		std::map<size_t, std::string> tags = {
+			{0, "<test>"},
+			{9, "<in>"},
+			{10, "<out>"},
+		};
+		const std::string output = "<test>test this<in>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}

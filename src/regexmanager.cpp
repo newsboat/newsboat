@@ -78,9 +78,9 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.erase(it);
 }
 
-std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
+std::map<size_t, std::string> RegexManager::extract_style_tags(std::string& str)
 {
-	std::map<int, std::string> tags;
+	std::map<size_t, std::string> tags;
 
 	size_t pos = 0;
 	while (pos < str.size()) {
@@ -116,7 +116,7 @@ std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
 }
 
 void RegexManager::insert_style_tags(std::string& str,
-	std::map<int, std::string> tags)
+	std::map<size_t, std::string> tags)
 {
 	// Expand "<" into "<>" (reverse of what happened in extract_style_tags()
 	size_t pos = 0;
@@ -127,22 +127,27 @@ void RegexManager::insert_style_tags(std::string& str,
 		}
 		pos = bracket + 1;
 		// Add to strings in the `tags` map so we don't have to shift all the positions in that map
+		// (would be necessary if inserting directly into `str`
 		tags[pos] = ">" + tags[pos];
 	}
 
 	for (auto it = tags.rbegin(); it != tags.rend(); ++it) {
+		if (it->first > str.length()) {
+			// Ignore tags outside of string
+			continue;
+		}
 		str.insert(it->first, it->second);
 	}
 }
 
-void RegexManager::merge_style_tag(std::map<int, std::string>& tags,
-	std::string tag, int start, int end)
+void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
+	std::string tag, size_t start, size_t end)
 {
 	// Find the latest tag occurring before `end`.
 	// It is important that looping executes in ascending order of location.
 	std::string latest_tag = "</>";
 	for (auto location_tag : tags) {
-		int location = location_tag.first;
+		size_t location = location_tag.first;
 		if (location > end) {
 			break;
 		}
