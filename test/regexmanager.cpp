@@ -877,3 +877,84 @@ TEST_CASE("insert_style_tags() does not crash on invalid input",
 		REQUIRE(input == output);
 	}
 }
+
+TEST_CASE("merge_style_tag() removes tags between start and end",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	const std::string new_tag = "<test>";
+	std::map<size_t, std::string> tags = {
+		{0, "<0>"},
+		{5, "<1>"},
+		{7, "<2>"},
+		{10, "<3>"},
+		{15, "</>"},
+	};
+
+	rxman.merge_style_tag(tags, new_tag, 2, 10);
+	REQUIRE(tags[0] == "<0>");
+	REQUIRE(tags[2] == new_tag);
+	REQUIRE(tags[10] == "<3>");
+	REQUIRE(tags[15] == "</>");
+	REQUIRE(tags.size() == 4);
+}
+
+TEST_CASE("merge_style_tag() restores tag at end when necessary",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	const std::string new_tag = "<test>";
+	std::map<size_t, std::string> tags = {
+		{0, "<0>"},
+		{5, "<1>"},
+		{10, "</>"},
+	};
+
+	SECTION("end before tag switch so restore first tag") {
+		rxman.merge_style_tag(tags, new_tag, 0, 4);
+		REQUIRE(tags[0] == new_tag);
+		REQUIRE(tags[4] == "<0>");
+		REQUIRE(tags[5] == "<1>");
+		REQUIRE(tags[10] == "</>");
+		REQUIRE(tags.size() == 4);
+	}
+
+	SECTION("end on tag switch so restore second tag") {
+		rxman.merge_style_tag(tags, new_tag, 0, 5);
+		REQUIRE(tags[0] == new_tag);
+		REQUIRE(tags[5] == "<1>");
+		REQUIRE(tags[10] == "</>");
+		REQUIRE(tags.size() == 3);
+	}
+
+	SECTION("end after a closing tag (</>) so close at the end") {
+		SECTION("on the closing tag") {
+			rxman.merge_style_tag(tags, new_tag, 0, 10);
+			REQUIRE(tags[0] == new_tag);
+			REQUIRE(tags[10] == "</>");
+			REQUIRE(tags.size() == 2);
+		}
+
+		SECTION("after the closing tag") {
+			rxman.merge_style_tag(tags, new_tag, 0, 11);
+			REQUIRE(tags[0] == new_tag);
+			REQUIRE(tags[11] == "</>");
+			REQUIRE(tags.size() == 2);
+		}
+	}
+}
+
+TEST_CASE("merge_style_tag() does not crash on invalid input",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::map<size_t, std::string> tags;
+	const std::string new_tag = "<test>";
+
+	SECTION("ignore tag merging if `end <= start`") {
+		rxman.merge_style_tag(tags, new_tag, 0, 0);
+		rxman.merge_style_tag(tags, new_tag, 1, 0);
+		rxman.merge_style_tag(tags, new_tag, 5, 4);
+		REQUIRE(tags.size() == 0);
+	}
+}

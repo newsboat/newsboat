@@ -143,6 +143,10 @@ void RegexManager::insert_style_tags(std::string& str,
 void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
 	std::string tag, size_t start, size_t end)
 {
+	if (end <= start) {
+		return;
+	}
+
 	// Find the latest tag occurring before `end`.
 	// It is important that looping executes in ascending order of location.
 	std::string latest_tag = "</>";
