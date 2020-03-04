@@ -805,3 +805,53 @@ TEST_CASE("extract_style_tags() ignores invalid characters",
 		REQUIRE(tags.size() == 2);
 	}
 }
+
+TEST_CASE("insert_style_tags() adds tags into string at correct positions",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "This is a sentence";
+
+	SECTION("string does not change if no tags are specified") {
+		const std::string output = "This is a sentence";
+		rxman.insert_style_tags(input, {});
+		REQUIRE(input == output);
+	}
+
+	SECTION("tags are added at the correct location") {
+		std::map<int, std::string> tags = {
+			{0, "<0>"},
+			{1, "<1>"},
+			{10, "<hello>"},
+			{18, "</>"},
+		};
+		const std::string output = "<0>T<1>his is a <hello>sentence</>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input string",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = ">>This <is> a sentence< with brackets<<";
+	
+	SECTION("brackets are stfl-encoded") {
+		const std::string output = ">>This <>is> a sentence< with brackets<><>";
+		rxman.insert_style_tags(input, {});
+		REQUIRE(input == output);
+	}
+	
+	SECTION("brackets are stfl-encoded and tags are inserted") {
+		std::map<int, std::string> tags = {
+			{0, "<0>"},
+			{1, "<1>"},
+			{6, "<hello>"},
+			{39, "</>"},
+		};
+		const std::string output = "<0>><1>>This<hello> <>is> a sentence< with brackets<><></>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+}
