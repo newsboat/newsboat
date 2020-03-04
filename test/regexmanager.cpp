@@ -469,7 +469,7 @@ TEST_CASE("RegexManager::remove_last_regex removes last added `highlight` rule",
 
 	auto input = INPUT;
 	rxman.quote_and_highlight(input, "articlelist");
-	REQUIRE(input == "x<0>foo</><1>bar</>x");
+	REQUIRE(input == "x<0>foo<1>bar</>x");
 
 	input = INPUT;
 	rxman.quote_and_highlight(input, "feedlist");
