@@ -102,11 +102,38 @@ std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
 	return tags;
 }
 
-void RegexManager::insert_style_tags(std::string& str, std::map<int, std::string> tags)
+void RegexManager::insert_style_tags(std::string& str,
+	std::map<int, std::string> tags)
 {
 	// TODO(densch): Expand "<" into "<>" (reverse of what happened in extract_style_tags()
 	for (auto it = tags.rbegin(); it != tags.rend(); ++it) {
 		str.insert(it->first, it->second);
+	}
+}
+
+void RegexManager::merge_style_tag(std::map<int, std::string>& tags,
+	std::string tag, int start, int end)
+{
+	// Find the latest tag occurring before `end`.
+	// It is important that looping executes in ascending order of location.
+	std::string latest_tag = "</>";
+	for (auto location_tag : tags) {
+		int location = location_tag.first;
+		if (location > end) {
+			break;
+		}
+		latest_tag = location_tag.second;
+	}
+	tags[start] = tag;
+	tags[end] = latest_tag;
+
+	// Remove any old tags between the start and end marker
+	for (auto it = tags.begin(); it != tags.end(); ) {
+		if (it->first > start && it->first < end) {
+			it = tags.erase(it);
+		} else {
+			++it;
+		}
 	}
 }
 
@@ -140,10 +167,10 @@ void RegexManager::quote_and_highlight(std::string& str,
 		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
 			if (pmatch.rm_so != pmatch.rm_eo) {
 				const std::string marker = strprintf::fmt("<%u>", i);
-				// TODO(densch): Handle tag reopening on overwrite
-				tag_locations[offset + pmatch.rm_eo] = "</>";
-				tag_locations[offset + pmatch.rm_so] = marker;
-				offset += pmatch.rm_eo;
+				int match_start = offset + pmatch.rm_so;
+				int match_end = offset + pmatch.rm_eo;
+				merge_style_tag(tag_locations, marker, match_start, match_end);
+				offset = match_end;
 			} else {
 				offset++;
 			}

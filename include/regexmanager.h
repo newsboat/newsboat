@@ -25,6 +25,8 @@ public:
 	int article_matches(Matchable* item);
 	std::map<int, std::string> extract_style_tags(std::string& str);
 	void insert_style_tags(std::string& str, std::map<int, std::string> tags);
+	void merge_style_tag(std::map<int, std::string>& tags, std::string tag,
+		int start, int end);
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>
