@@ -108,13 +108,15 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == "xbarx");
 
-	input = "<";
-	rxman.quote_and_highlight(input, "feedlist");
-	REQUIRE(input == "<");
-
 	input = "a<b>";
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == "a<b>");
+
+	SECTION("encode `<` as `<>` for stfl") {
+		input = "<";
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == "<>");
+	}
 }
 
 TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
