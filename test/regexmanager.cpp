@@ -705,12 +705,32 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		rxman.handle_action("highlight", {"article", "fox jumps over", "red"});
 		rxman.handle_action("highlight", {"article", "brown fox", "red"});
 
-		THEN("") {
+		THEN("newer matches overwrite older matches") {
 			const std::string output =
 				"The <0>quick <2>brown fox<1> jumps over<0> the lazy dog</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
+	}
+}
+
+TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows matching them directly",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "<unread>title with <>literal> angle brackets</>";
+
+	SECTION("stfl-encoded angle brackets are kept/restored") {
+		const std::string output = "<unread>title with <>literal> angle brackets</>";
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	SECTION("angle brackets can be matched directly") {
+		const std::string output = "<unread>title with <0><>literal><unread> angle brackets</>";
+		rxman.handle_action("highlight", {"article", "<literal>", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
 	}
 }
 
@@ -746,7 +766,7 @@ TEST_CASE("extract_style_tags() keeps stfl-encoded angle brackets in string",
 {
 	RegexManager rxman;
 
-	SECTION("tag locations are calculated correctly") {
+	SECTION("stfl-encoded angle brackets should be preserved") {
 		std::string input = "<unread>title with <>literal> angle brackets</>";
 		const std::string output = "title with <literal> angle brackets";
 		auto tags = rxman.extract_style_tags(input);
