@@ -727,7 +727,8 @@ TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows ma
 	}
 
 	SECTION("angle brackets can be matched directly") {
-		const std::string output = "<unread>title with <0><>literal><unread> angle brackets</>";
+		const std::string output =
+			"<unread>title with <0><>literal><unread> angle brackets</>";
 		rxman.handle_action("highlight", {"article", "<literal>", "red"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
@@ -835,22 +836,23 @@ TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input str
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = ">>This <is> a sentence< with brackets<<";
-	
+	std::string input = ">>This <is> a sentence with brackets<<";
+
 	SECTION("brackets are stfl-encoded") {
-		const std::string output = ">>This <>is> a sentence< with brackets<><>";
+		const std::string output = ">>This <>is> a sentence with brackets<><>";
 		rxman.insert_style_tags(input, {});
 		REQUIRE(input == output);
 	}
-	
+
 	SECTION("brackets are stfl-encoded and tags are inserted") {
 		std::map<int, std::string> tags = {
 			{0, "<0>"},
 			{1, "<1>"},
 			{6, "<hello>"},
-			{39, "</>"},
+			{38, "</>"},
 		};
-		const std::string output = "<0>><1>>This<hello> <>is> a sentence< with brackets<><></>";
+		const std::string output =
+			"<0>><1>>This<hello> <>is> a sentence with brackets<><></>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}

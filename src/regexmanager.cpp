@@ -118,7 +118,18 @@ std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
 void RegexManager::insert_style_tags(std::string& str,
 	std::map<int, std::string> tags)
 {
-	// TODO(densch): Expand "<" into "<>" (reverse of what happened in extract_style_tags()
+	// Expand "<" into "<>" (reverse of what happened in extract_style_tags()
+	size_t pos = 0;
+	while (pos < str.size()) {
+		auto bracket = str.find_first_of("<", pos);
+		if (bracket == std::string::npos) {
+			break;
+		}
+		pos = bracket + 1;
+		// Add to strings in the `tags` map so we don't have to shift all the positions in that map
+		tags[pos] = ">" + tags[pos];
+	}
+
 	for (auto it = tags.rbegin(); it != tags.rend(); ++it) {
 		str.insert(it->first, it->second);
 	}
