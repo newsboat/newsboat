@@ -65,6 +65,43 @@ int RegexManager::article_matches(Matchable* item)
 	return -1;
 }
 
+std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
+{
+	std::map<int, std::string> tags;
+
+	size_t pos = 0;
+	while (pos < str.size()) {
+		auto tag_start = str.find_first_of("<>", pos);
+		if (tag_start == std::string::npos) {
+			break;
+		}
+		if (str[tag_start] == '>') {
+			// Keep unmatched '>' (stfl way of encoding a literal '>')
+			pos = tag_start + 1;
+			continue;
+		}
+		auto tag_end = str.find_first_of("<>", tag_start + 1);
+		if (tag_end == std::string::npos) {
+			break;
+		}
+		if (str[tag_end] == '<') {
+			// First '<' bracket is unmatched, ignoring it
+			pos = tag_start + 1;
+			continue;
+		}
+		if (tag_end - tag_start == 1) {
+			// Convert "<>" into "<" (stfl way of encoding a literal '<')
+			str.erase(tag_end, 1);
+			pos = tag_start + 1;
+			continue;
+		}
+		tags[tag_start] = str.substr(tag_start, tag_end - tag_start + 1);
+		str.erase(tag_start, tag_end - tag_start + 1);
+		pos = tag_start;
+	}
+	return tags;
+}
+
 void RegexManager::remove_last_regex(const std::string& location)
 {
 	auto& regexes = locations[location].first;
@@ -92,6 +129,7 @@ void RegexManager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
 			if (pmatch.rm_so != pmatch.rm_eo) {
+				//auto tag_locations = extract_style_tags(str);
 				const std::string marker = strprintf::fmt("<%u>", i);
 				str.insert(offset + pmatch.rm_eo,
 					std::string("</>"));

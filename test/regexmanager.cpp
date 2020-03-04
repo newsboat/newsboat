@@ -713,3 +713,75 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		}
 	}
 }
+
+TEST_CASE("extract_style_tags() returns vector with tags from input string",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+
+	SECTION("input with no tags at all") {
+		std::string input = "The quick brown fox jumps over the lazy dog";
+		const std::string output = "The quick brown fox jumps over the lazy dog";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags.size() == 0);
+	}
+
+	SECTION("input with various tags") {
+		std::string input = "<unread>title <0>with <u>underline<0> and style</>";
+		const std::string output = "title with underline and style";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[0]  == "<unread>");
+		REQUIRE(tags[6]  == "<0>");
+		REQUIRE(tags[11] == "<u>");
+		REQUIRE(tags[20] == "<0>");
+		REQUIRE(tags[30] == "</>");
+		REQUIRE(tags.size() == 5);
+	}
+}
+
+TEST_CASE("extract_style_tags() keeps stfl-encoded angle brackets in string",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+
+	SECTION("tag locations are calculated correctly") {
+		std::string input = "<unread>title with <>literal> angle brackets</>";
+		const std::string output = "title with <literal> angle brackets";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[0]  == "<unread>");
+		REQUIRE(tags[35] == "</>");
+		REQUIRE(tags.size() == 2);
+	}
+}
+
+TEST_CASE("extract_style_tags() ignores invalid characters",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	// Different output might be acceptable as this input would/should be
+	// invalid but it makes sense to keep a consistent result when refactoring.
+
+	SECTION("double tag open") {
+		std::string input = "<unread>title <with <u>repeated tag opening bracket</>";
+		const std::string output = "title <with repeated tag opening bracket";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[0]  == "<unread>");
+		REQUIRE(tags[12] == "<u>");
+		REQUIRE(tags[40] == "</>");
+		REQUIRE(tags.size() == 3);
+	}
+
+	SECTION("unmatched '<' at end of line") {
+		std::string input = "some <u>underlining</>, nothing else<";
+		const std::string output = "some underlining, nothing else<";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[5]  == "<u>");
+		REQUIRE(tags[16]  == "</>");
+		REQUIRE(tags.size() == 2);
+	}
+}
