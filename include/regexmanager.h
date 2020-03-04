@@ -24,6 +24,7 @@ public:
 	void remove_last_regex(const std::string& location);
 	int article_matches(Matchable* item);
 	std::map<int, std::string> extract_style_tags(std::string& str);
+	void insert_style_tags(std::string& str, std::map<int, std::string> tags);
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>

@@ -102,6 +102,14 @@ std::map<int, std::string> RegexManager::extract_style_tags(std::string& str)
 	return tags;
 }
 
+void RegexManager::insert_style_tags(std::string& str, std::map<int, std::string> tags)
+{
+	// TODO(densch): Expand "<" into "<>" (reverse of what happened in extract_style_tags()
+	for (auto it = tags.rbegin(); it != tags.rend(); ++it) {
+		str.insert(it->first, it->second);
+	}
+}
+
 void RegexManager::remove_last_regex(const std::string& location)
 {
 	auto& regexes = locations[location].first;
@@ -120,6 +128,8 @@ void RegexManager::quote_and_highlight(std::string& str,
 {
 	auto& regexes = locations[location].first;
 
+	auto tag_locations = extract_style_tags(str);
+
 	unsigned int i = 0;
 	for (const auto& regex : regexes) {
 		if (regex == nullptr) {
@@ -129,13 +139,11 @@ void RegexManager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
 			if (pmatch.rm_so != pmatch.rm_eo) {
-				//auto tag_locations = extract_style_tags(str);
 				const std::string marker = strprintf::fmt("<%u>", i);
-				str.insert(offset + pmatch.rm_eo,
-					std::string("</>"));
-				str.insert(offset + pmatch.rm_so, marker);
-				offset += pmatch.rm_eo + marker.length() +
-					strlen("</>");
+				// TODO(densch): Handle tag reopening on overwrite
+				tag_locations[offset + pmatch.rm_eo] = "</>";
+				tag_locations[offset + pmatch.rm_so] = marker;
+				offset += pmatch.rm_eo;
 			} else {
 				offset++;
 			}
@@ -145,6 +153,8 @@ void RegexManager::quote_and_highlight(std::string& str,
 		}
 		i++;
 	}
+
+	insert_style_tags(str, tag_locations);
 }
 
 void RegexManager::handle_highlight_action(const std::vector<std::string>&
