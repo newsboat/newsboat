@@ -116,7 +116,7 @@ std::map<size_t, std::string> RegexManager::extract_style_tags(std::string& str)
 }
 
 void RegexManager::insert_style_tags(std::string& str,
-	std::map<size_t, std::string> tags)
+	std::map<size_t, std::string>& tags)
 {
 	// Expand "<" into "<>" (reverse of what happened in extract_style_tags()
 	size_t pos = 0;
@@ -141,7 +141,7 @@ void RegexManager::insert_style_tags(std::string& str,
 }
 
 void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
-	std::string tag, size_t start, size_t end)
+	const std::string& tag, size_t start, size_t end)
 {
 	if (end <= start) {
 		return;
@@ -187,8 +187,8 @@ void RegexManager::quote_and_highlight(std::string& str,
 		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
 			if (pmatch.rm_so != pmatch.rm_eo) {
 				const std::string marker = strprintf::fmt("<%u>", i);
-				int match_start = offset + pmatch.rm_so;
-				int match_end = offset + pmatch.rm_eo;
+				const int match_start = offset + pmatch.rm_so;
+				const int match_end = offset + pmatch.rm_eo;
 				merge_style_tag(tag_locations, marker, match_start, match_end);
 				offset = match_end;
 			} else {

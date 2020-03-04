@@ -737,7 +737,7 @@ TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows ma
 	}
 }
 
-TEST_CASE("extract_style_tags() returns vector with tags from input string",
+TEST_CASE("extract_style_tags() returns map which links locations to tags from input string",
 	"[RegexManager]")
 {
 	RegexManager rxman;
@@ -816,8 +816,9 @@ TEST_CASE("insert_style_tags() adds tags into string at correct positions",
 	std::string input = "This is a sentence";
 
 	SECTION("string does not change if no tags are specified") {
+		std::map<size_t, std::string> tags;
 		const std::string output = "This is a sentence";
-		rxman.insert_style_tags(input, {});
+		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}
 
@@ -841,8 +842,9 @@ TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input str
 	std::string input = ">>This <is> a sentence with brackets<<";
 
 	SECTION("brackets are stfl-encoded") {
+		std::map<size_t, std::string> tags;
 		const std::string output = ">>This <>is> a sentence with brackets<><>";
-		rxman.insert_style_tags(input, {});
+		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}
 
