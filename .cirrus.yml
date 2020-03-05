@@ -3,11 +3,9 @@ freebsd_task:
         - name: FreeBSD 11.2
           freebsd_instance:
             image: freebsd-11-2-release-amd64
-            memory: 3GB
         - name: FreeBSD 12.0
           freebsd_instance:
             image: freebsd-12-0-release-amd64
-            memory: 3GB
 
     cargo_cache:
         folder: $HOME/.cargo/registry
@@ -37,7 +35,6 @@ freebsd_task:
     name: Linux i686
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
-        memory: 3GB
     cargo_cache:
         folder: $HOME/.cargo/registry
         fingerprint_script: cat Cargo.lock
@@ -126,7 +123,6 @@ linux_task:
                 cxx_package: g++-5
                 cc: gcc-5
                 cxx: g++-5
-            memory: 3GB
         - name: Rust 1.41.1, GCC 6
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -134,7 +130,6 @@ linux_task:
                 cxx_package: g++-6
                 cc: gcc-6
                 cxx: g++-6
-            memory: 3GB
         - name: Rust 1.41.1, GCC 7
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -142,7 +137,6 @@ linux_task:
                 cxx_package: g++-7
                 cc: gcc-7
                 cxx: g++-7
-            memory: 3GB
         - name: Rust 1.41.1, GCC 8
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -150,7 +144,6 @@ linux_task:
                 cxx_package: g++-8
                 cc: gcc-8
                 cxx: g++-8
-            memory: 3GB
         - name: Rust 1.41.1, GCC 9
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -158,7 +151,6 @@ linux_task:
                 cxx_package: g++-9
                 cc: gcc-9
                 cxx: g++-9
-            memory: 3GB
         - name: Rust 1.41.1, Clang 4.0
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -166,7 +158,6 @@ linux_task:
                 cxx_package: clang-4.0
                 cc: clang-4.0
                 cxx: clang++-4.0
-            memory: 3GB
         - name: Rust 1.41.1, Clang 5.0
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -174,7 +165,6 @@ linux_task:
                 cxx_package: clang-5.0
                 cc: clang-5.0
                 cxx: clang++-5.0
-            memory: 3GB
         - name: Rust 1.41.1, Clang 6.0
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -182,7 +172,6 @@ linux_task:
                 cxx_package: clang-6.0
                 cc: clang-6.0
                 cxx: clang++-6.0
-            memory: 3GB
         - name: Rust 1.41.1, Clang 7
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -190,7 +179,6 @@ linux_task:
                 cxx_package: clang-7
                 cc: clang-7
                 cxx: clang++-7
-            memory: 3GB
         - name: Rust 1.41.1, Clang 8
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -198,7 +186,6 @@ linux_task:
                 cxx_package: clang-8
                 cc: clang-8
                 cxx: clang++-8
-            memory: 3GB
         - name: Rust 1.41.1, Clang 9
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -206,7 +193,6 @@ linux_task:
                 cxx_package: clang-9
                 cc: clang-9
                 cxx: clang++-9
-            memory: 3GB
 
     cargo_cache:
         folder: $HOME/.cargo/registry
