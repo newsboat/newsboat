@@ -64,18 +64,51 @@ Developers will also need:
 Installation
 ------------
 
-First, you'll have to get the dependencies. Make sure to install the header
-files for the libraries (on Debian and derivatives, headers are in `-dev`
-packages, e.g. `libsqlite3-dev`.) After that, compiling and installing newsboat
-is as simple as:
+<!--
+    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+-->
 
-	$ make
-	$ sudo make install
+There are numerous ways:
 
-And if you ever need to uninstall it, use `make uninstall`.
+- install from your distribution's repository ([a lot of distros have
+    a package](https://repology.org/project/newsboat));
+
+- install via [Snap](https://snapcraft.io/docs/installing-snapd):
+
+        $ sudo snap install newsboat
+
+- [build from source with Docker](doc/docker.md). Note that the resulting binary
+    might not run outside of that same Docker container if your system doesn't
+    have all the necessary libraries, or if their versions are too old;
+
+- build from source in a chroot: to avoid polluting your system with developer
+    packages, or to avoid upgrading, you might use a tool like
+    [`debootstrap`](https://wiki.debian.org/Debootstrap) to create an isolated
+    environment. Once that's done, just build from source as outlined in the
+    next item;
+
+- build from source.
+
+    Install everything that's listed in the "Dependencies" section above. Make
+    sure to install the header files as well (on Debian and derivatives, headers
+    are in `-dev` packages, e.g. `libsqlite3-dev`.)
+
+    Then compile and install with:
+
+        $ make                   #  pass -jN to use N CPU cores, e.g. -j8
+        $ sudo make install      #  install everything under /usr/local
+
+    To install to a different directory, pass `prefix` like so: `sudo make
+    prefix=/opt/newsboat install`.
+
+    To uninstall, run `sudo make uninstall`.
 
 Cross-compilers need to set `CARGO_BUILD_TARGET`; see [cargo
 documentation](https://doc.rust-lang.org/cargo/reference/config.html#environment-variables).
+
+<!--
+    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+-->
 
 Support
 -------

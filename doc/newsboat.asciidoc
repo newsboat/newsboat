@@ -31,22 +31,39 @@ like its namesakes did back in the day.
 
 == Installation
 
-This chapter describes how to compile and install newsboat from source.
+=== Pre-built binaries
 
-=== Downloading Newsboat
+Newsboat binaries are available in a number of repositories:
 
-Newsboat is available as source package. Simply go to
-https://newsboat.org/[] and download the latest source package, which is
-usually in the .tar.gz file format. Alternatively, you can check out the latest
-development source tree from the newsboat Git repository
-by running the following command on the commandline:
+// UPDATE README.md IF YOU CHANGE THIS LIST
 
-	git clone git://github.com/newsboat/newsboat.git
+- various Linux and BSD distributions, Homebrew etc.;
+  https://repology.org/project/newsboat[here's a non-exclusive list];
 
-=== Dependencies
+- distribution-independent https://snapcraft.io/docs/installing-snapd[Snap]
+  store:
+
+        $ sudo snap install newsboat
+
+// UPDATE README.md IF YOU CHANGE THIS LIST
+
+=== From source
+
+==== Download the source code
+
+The most up-to-date source code can always be downloaded from the Git
+repository:
+
+	$ git clone git://github.com/newsboat/newsboat.git
+
+There are also signed release tarballs available from https://newsboat.org/[our
+website].
+
+==== Install dependencies
 
 Newsboat depends on a number of libraries, which need to be installed before
-Newsboat can be compiled.
+Newsboat can be compiled. Make sure to install the header files as well (on
+Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 
 // UPDATE README.md IF YOU CHANGE THIS LIST
 - GCC 4.9 or newer, or Clang 3.6 or newer
@@ -73,18 +90,38 @@ Developers will also need:
 - http://www.ssw.uni-linz.ac.at/coco/[Coco/R for C++], needed to re-generate
   filter language parser using `regenerate-parser` target.
 
+==== Compile and install
 
-=== Compiling and Installing
+// UPDATE README.md IF YOU CHANGE THIS LIST
 
-After you've downloaded and installed the dependencies mentioned above, you can
-start compiling and installing newsboat. To compile newsboat, simply run
-`make` in the source tree. After a short time, this should complete
-successfully, and you can go on with installation by running `make install`. By
-default, this will install the `newsboat` binary to the _/usr/local/bin_
-directory. You can provide an alternative installation path using the `prefix`
-parameter, e.g. running `make install prefix=/opt/newsboat` will install the
-binary to the directory _/opt/newsboat/bin_.
+There are a few different ways:
 
+- build inside Docker. For that, check out _doc/docker.md_ in the source tree.
+  Note that the resulting binary might not run outside of that same Docker
+  container if your system doesn't have all the necessary libraries, or if
+  their versions are too old;
+
+- build in a chroot: to avoid polluting your system with developer packages, or
+  to avoid upgrading, you might use a tool like
+  https://wiki.debian.org/Debootstrap[`debootstrap`] to create an isolated
+  environment. Once that's done, just build from source as outlined in the next
+  item;
+
+- build from source:
+
+  $ make                   #  pass -jN to use N CPU cores, e.g. -j8
+  $ sudo make install      #  install everything under /usr/local
++
+To install to a different directory, pass `prefix` like so: `sudo make
+prefix=/opt/newsboat install`.
++
+To uninstall, run `sudo make uninstall`.
+
+Cross-compilers need to set `CARGO_BUILD_TARGET`; see
+https://doc.rust-lang.org/cargo/reference/config.html#environment-variables[cargo
+documentation].
+
+// UPDATE README.md IF YOU CHANGE THIS LIST
 
 == First Steps
 

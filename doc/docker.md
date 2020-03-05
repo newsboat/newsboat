@@ -11,16 +11,17 @@ Each Docker container is described by a "Dockerfile". We keep ours in the
 "docker" directory.
 
 To use a container, you need to build its image first. For example, let's create
-one that we use for cross-compiling from amd64 to i686:
+one that we use for Continuous Integration:
 
     # In the root of Newsboat's repository
     $ docker build \
-        --tag=newsboat-ubuntu18.04-i686 \
-        --file=docker/ubuntu_18.04-i686.dockerfile \
+        --tag=newsboat-build-tools \
+        --file=docker/ubuntu_18.04-build-tools.dockerfile \
         docker
 
-This will use the description from "docker/ubuntu_18.04-i686.dockerfile" to
-build an image named "newsboat-ubuntu18.04-i686".
+This will use the description from "docker/ubuntu_18.04-build-tools.dockerfile"
+to build an image named "newsboat-build-tools". That image contains all the
+compilers and libraries that one needs to build Newsboat from source.
 
 You can now create a container from that image, and run commands inside it. But
 the coolest thing is: you can run those commands *on the files in your host
@@ -32,7 +33,7 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
         --mount type=bind,source=$(pwd),target=/home/builder/src \
         --mount type=bind,source=$HOME/.cargo,target=/home/builder/.cargo \
         --user $(id -u):$(id -g) \
-        newsboat-ubuntu18.04-i686 \
+        newsboat-build-tools \
         make -j9
 
 `--rm` deletes the container once it finished, by default it is kept and will
@@ -41,6 +42,12 @@ just litter up your system. The first `--mount` links your current directory to
 crate cache with the container, letting it avoid re-downloading everything all
 the time. `--user` specifies the user and the group that will own the newly
 created files (object files, docs, and the final executable); `id` determines
-your current user and group IDs. "newsboat-ubuntu18.04-i686" is the image from
-which we're creating the container, and `make -j9` is the command we're running
-inside of it.
+your current user and group IDs. "newsboat-build-tools" is the image from which
+we're creating the container, and `make -j9` is the command we're running inside
+of it.
+
+That's all the basics that you'll need to e.g. build Newsboat in Docker, or to
+reproduce an issue with CI. If you want to dive deeper, take a look at files in
+docker/ directory. All of them have a short description of what they're for, how
+to build them, and how to run them. Our Cirrus CI config (.cirrus.yml) shows how
+we use those to build and test Newsboat on every commit.
