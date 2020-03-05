@@ -555,6 +555,24 @@ pub fn make_title(rs_str: String) -> String {
     }
 }
 
+pub fn run_interactively(command: &str, caller: &str) -> i32 {
+    log!(Level::Debug, &format!("{}: running `{}'", caller, command));
+    Command::new("sh")
+        .arg("-c")
+        .arg(command)
+        .status()
+        .map_err(|err| {
+            log!(
+                Level::Warn,
+                &format!("{}: Couldn't create child process: {}", caller, err)
+            )
+        })
+        .ok()
+        .and_then(|exit_status| exit_status.code())
+        // return -1 if command got killed by signal
+        .unwrap_or(-1)
+}
+
 /// Get the current working directory.
 pub fn getcwd() -> Result<PathBuf, io::Error> {
     use std::env;

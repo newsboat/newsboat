@@ -324,6 +324,18 @@ pub unsafe extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_run_interactively(
+    command: *const c_char,
+    caller: *const c_char,
+) -> i32 {
+    abort_on_panic(|| {
+        let rs_command = CStr::from_ptr(command).to_string_lossy();
+        let rs_caller = CStr::from_ptr(caller).to_string_lossy();
+        utils::run_interactively(&rs_command, &rs_caller)
+    })
+}
+
+#[no_mangle]
 /// Gets the current working directory or an empty string on error.
 pub extern "C" fn rs_getcwd() -> *mut c_char {
     use std::os::unix::ffi::OsStringExt;

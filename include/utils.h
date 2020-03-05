@@ -130,7 +130,7 @@ int mkdir_parents(const std::string& pathname,
 
 std::string make_title(const std::string& url);
 
-int run_interactively(const std::string& command,
+int32_t run_interactively(const std::string& command,
 	const std::string& caller);
 
 std::string getcwd();
