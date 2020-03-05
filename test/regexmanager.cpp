@@ -108,13 +108,15 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == "xbarx");
 
-	input = "<";
-	rxman.quote_and_highlight(input, "feedlist");
-	REQUIRE(input == "<");
-
 	input = "a<b>";
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == "a<b>");
+
+	SECTION("encode `<` as `<>` for stfl") {
+		input = "<";
+		rxman.quote_and_highlight(input, "feedlist");
+		REQUIRE(input == "<>");
+	}
 }
 
 TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
@@ -203,61 +205,6 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
-}
-
-TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
-	"string is empty",
-	"[RegexManager]")
-{
-	RegexManager rxman;
-	REQUIRE(rxman.extract_outer_marker("", 0) == "");
-	REQUIRE(rxman.extract_outer_marker("", 10) == "");
-}
-
-TEST_CASE("RegexManager::extract_outer_marker finds the innermost tag "
-	"relative to given position in the text",
-	"[RegexManager]")
-{
-	RegexManager rxman;
-	std::string out;
-
-	SECTION("Find outer tag basic") {
-		std::string input = "<1>TestString</>";
-		out = rxman.extract_outer_marker(input, 7);
-
-		REQUIRE(out == "<1>");
-	}
-
-	SECTION("Find nested tag") {
-		std::string input = "<1>Nested<2>Test</>String</>";
-		out = rxman.extract_outer_marker(input, 14);
-
-		REQUIRE(out == "<2>");
-	}
-
-	SECTION("Find outer tag with second set") {
-		std::string input = "<1>Nested<2>Test</>String</>";
-		out = rxman.extract_outer_marker(input, 21);
-
-		REQUIRE(out == "<1>");
-	}
-
-	SECTION("Find unclosed nested tag") {
-		std::string input = "<1>Nested<2>Test</>String";
-		out = rxman.extract_outer_marker(input, 21);
-
-		REQUIRE(out == "<1>");
-	}
-
-}
-
-TEST_CASE("RegexManager::extract_outer_marker returns empty string if input "
-	"string contains closing tag without a pairing opening one, before "
-	"the position we're looking at",
-	"[RegexManager]")
-{
-	RegexManager rxman;
-	REQUIRE(rxman.extract_outer_marker("hello</>world", 10) == "");
 }
 
 TEST_CASE("RegexManager::dump_config turns each `highlight` rule into a string, "
@@ -524,7 +471,7 @@ TEST_CASE("RegexManager::remove_last_regex removes last added `highlight` rule",
 
 	auto input = INPUT;
 	rxman.quote_and_highlight(input, "articlelist");
-	REQUIRE(input == "x<0>foo</><1>bar</>x");
+	REQUIRE(input == "x<0>foo<1>bar</>x");
 
 	input = INPUT;
 	rxman.quote_and_highlight(input, "feedlist");
@@ -630,4 +577,386 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 	}
 
 	// If you add more checks to this test, consider adding the same to Matcher tests
+}
+
+TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input =  "<unread>This entry is unread</>";
+
+	WHEN("matching `read`") {
+		const std::string output = "<unread>This entry is un<0>read</>";
+		rxman.handle_action("highlight", {"article", "read", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	WHEN("matching `unread`") {
+		const std::string output = "<unread>This entry is <0>unread</>";
+		rxman.handle_action("highlight", {"article", "unread", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	WHEN("matching the full line") {
+		rxman.handle_action("highlight", {"article", "^.*$", "red"});
+
+		THEN("the <unread> tag is overwritten") {
+			const std::string output = "<0>This entry is unread</>";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+}
+
+TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressions",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input =  "<unread>This entry is unread</>";
+
+	WHEN("matching text at the start of the line") {
+		rxman.handle_action("highlight", {"article", "^This", "red"});
+
+		THEN("the <unread> tag should be ignored") {
+			const std::string output = "<0>This<unread> entry is unread</>";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("matching text at the end of the line") {
+		rxman.handle_action("highlight", {"article", "unread$", "red"});
+
+		THEN("the closing tag `</>` (related to <unread>) should be ignored") {
+			const std::string output = "<unread>This entry is <0>unread</>";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("matching text which contains `<u>...</>` markers (added by HTML renderer)") {
+		input = "Some<u>thing</> is underlined";
+		rxman.handle_action("highlight", {"article", "Something", "red"});
+
+		THEN("the tags should be ignored when matching text with a regular expression") {
+			const std::string output = "<0>Something</> is underlined";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+}
+
+TEST_CASE("quote_and_highlight() generates a sensible output when multiple matches overlap",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "The quick brown fox jumps over the lazy dog";
+
+	WHEN("a second match is completely inside of the first match") {
+		rxman.handle_action("highlight", {"article", "The quick brown", "red"});
+		rxman.handle_action("highlight", {"article", "quick", "red"});
+
+		THEN("the first style should be restored at the end of the second match") {
+			const std::string output =
+				"<0>The <1>quick<0> brown</> fox jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("a second match completely encloses the first match") {
+		rxman.handle_action("highlight", {"article", "quick", "red"});
+		rxman.handle_action("highlight", {"article", "The quick brown", "red"});
+
+		THEN("the first style should not be present anymore") {
+			const std::string output =
+				"<1>The quick brown</> fox jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("a second match starts somewhere in the first match") {
+		rxman.handle_action("highlight", {"article", "quick brown", "red"});
+		rxman.handle_action("highlight", {"article", "brown fox", "red"});
+
+		THEN("the first style should only be overwritten for the part where the matches intersect") {
+			const std::string output =
+				"The <0>quick <1>brown fox</> jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("a second match ends somewhere in the first match") {
+		rxman.handle_action("highlight", {"article", "brown fox", "red"});
+		rxman.handle_action("highlight", {"article", "quick brown", "red"});
+
+		THEN("the first style should only be overwritten for the part where the matches intersect") {
+			const std::string output =
+				"The <1>quick brown<0> fox</> jumps over the lazy dog";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+
+	WHEN("there are three overlapping matches") {
+		rxman.handle_action("highlight", {"article", "quick.*dog", "red"});
+		rxman.handle_action("highlight", {"article", "fox jumps over", "red"});
+		rxman.handle_action("highlight", {"article", "brown fox", "red"});
+
+		THEN("newer matches overwrite older matches") {
+			const std::string output =
+				"The <0>quick <2>brown fox<1> jumps over<0> the lazy dog</>";
+			rxman.quote_and_highlight(input, "article");
+			REQUIRE(input == output);
+		}
+	}
+}
+
+TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows matching them directly",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "<unread>title with <>literal> angle brackets</>";
+
+	SECTION("stfl-encoded angle brackets are kept/restored") {
+		const std::string output = "<unread>title with <>literal> angle brackets</>";
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+
+	SECTION("angle brackets can be matched directly") {
+		const std::string output =
+			"<unread>title with <0><>literal><unread> angle brackets</>";
+		rxman.handle_action("highlight", {"article", "<literal>", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("extract_style_tags() returns map which links locations to tags from input string",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+
+	SECTION("input with no tags at all") {
+		std::string input = "The quick brown fox jumps over the lazy dog";
+		const std::string output = "The quick brown fox jumps over the lazy dog";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags.size() == 0);
+	}
+
+	SECTION("input with various tags") {
+		std::string input = "<unread>title <0>with <u>underline<0> and style</>";
+		const std::string output = "title with underline and style";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[0]  == "<unread>");
+		REQUIRE(tags[6]  == "<0>");
+		REQUIRE(tags[11] == "<u>");
+		REQUIRE(tags[20] == "<0>");
+		REQUIRE(tags[30] == "</>");
+		REQUIRE(tags.size() == 5);
+	}
+}
+
+TEST_CASE("extract_style_tags() keeps stfl-encoded angle brackets in string",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+
+	SECTION("stfl-encoded angle brackets should be preserved") {
+		std::string input = "<unread>title with <>literal> angle brackets</>";
+		const std::string output = "title with <literal> angle brackets";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[0]  == "<unread>");
+		REQUIRE(tags[35] == "</>");
+		REQUIRE(tags.size() == 2);
+	}
+}
+
+TEST_CASE("extract_style_tags() ignores invalid characters",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	// Different output might be acceptable as this input would/should be
+	// invalid but it makes sense to keep a consistent result when refactoring.
+
+	SECTION("double tag open") {
+		std::string input = "<unread>title <with <u>repeated tag opening bracket</>";
+		const std::string output = "title <with repeated tag opening bracket";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[0]  == "<unread>");
+		REQUIRE(tags[12] == "<u>");
+		REQUIRE(tags[40] == "</>");
+		REQUIRE(tags.size() == 3);
+	}
+
+	SECTION("unmatched '<' at end of line") {
+		std::string input = "some <u>underlining</>, nothing else<";
+		const std::string output = "some underlining, nothing else<";
+		auto tags = rxman.extract_style_tags(input);
+		REQUIRE(input == output);
+		REQUIRE(tags[5]  == "<u>");
+		REQUIRE(tags[16]  == "</>");
+		REQUIRE(tags.size() == 2);
+	}
+}
+
+TEST_CASE("insert_style_tags() adds tags into string at correct positions",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "This is a sentence";
+
+	SECTION("string does not change if no tags are specified") {
+		std::map<size_t, std::string> tags;
+		const std::string output = "This is a sentence";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+
+	SECTION("tags are added at the correct location") {
+		std::map<size_t, std::string> tags = {
+			{0, "<0>"},
+			{1, "<1>"},
+			{10, "<hello>"},
+			{18, "</>"},
+		};
+		const std::string output = "<0>T<1>his is a <hello>sentence</>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input string",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = ">>This <is> a sentence with brackets<<";
+
+	SECTION("brackets are stfl-encoded") {
+		std::map<size_t, std::string> tags;
+		const std::string output = ">>This <>is> a sentence with brackets<><>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+
+	SECTION("brackets are stfl-encoded and tags are inserted") {
+		std::map<size_t, std::string> tags = {
+			{0, "<0>"},
+			{1, "<1>"},
+			{6, "<hello>"},
+			{38, "</>"},
+		};
+		const std::string output =
+			"<0>><1>>This<hello> <>is> a sentence with brackets<><></>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("insert_style_tags() does not crash on invalid input",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "test this";
+
+	SECTION("tags with a position outside  of the string are ignored") {
+		std::map<size_t, std::string> tags = {
+			{0, "<test>"},
+			{9, "<in>"},
+			{10, "<out>"},
+		};
+		const std::string output = "<test>test this<in>";
+		rxman.insert_style_tags(input, tags);
+		REQUIRE(input == output);
+	}
+}
+
+TEST_CASE("merge_style_tag() removes tags between start and end positions",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	const std::string new_tag = "<test>";
+	std::map<size_t, std::string> tags = {
+		{0, "<0>"},
+		{5, "<1>"},
+		{7, "<2>"},
+		{10, "<3>"},
+		{15, "</>"},
+	};
+
+	rxman.merge_style_tag(tags, new_tag, 2, 10);
+	REQUIRE(tags[0] == "<0>");
+	REQUIRE(tags[2] == new_tag);
+	REQUIRE(tags[10] == "<3>");
+	REQUIRE(tags[15] == "</>");
+	REQUIRE(tags.size() == 4);
+}
+
+TEST_CASE("merge_style_tag() restores previous tag after the inserted tag if necessary",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	const std::string new_tag = "<test>";
+	std::map<size_t, std::string> tags = {
+		{0, "<0>"},
+		{5, "<1>"},
+		{10, "</>"},
+	};
+
+	SECTION("end before tag switch so restore first tag") {
+		rxman.merge_style_tag(tags, new_tag, 0, 4);
+		REQUIRE(tags[0] == new_tag);
+		REQUIRE(tags[4] == "<0>");
+		REQUIRE(tags[5] == "<1>");
+		REQUIRE(tags[10] == "</>");
+		REQUIRE(tags.size() == 4);
+	}
+
+	SECTION("end on tag switch so no need to restore anything") {
+		rxman.merge_style_tag(tags, new_tag, 0, 5);
+		REQUIRE(tags[0] == new_tag);
+		REQUIRE(tags[5] == "<1>");
+		REQUIRE(tags[10] == "</>");
+		REQUIRE(tags.size() == 3);
+	}
+
+	SECTION("end after a closing tag (</>) so close at the end") {
+		SECTION("on the closing tag") {
+			rxman.merge_style_tag(tags, new_tag, 0, 10);
+			REQUIRE(tags[0] == new_tag);
+			REQUIRE(tags[10] == "</>");
+			REQUIRE(tags.size() == 2);
+		}
+
+		SECTION("after the closing tag") {
+			rxman.merge_style_tag(tags, new_tag, 0, 11);
+			REQUIRE(tags[0] == new_tag);
+			REQUIRE(tags[11] == "</>");
+			REQUIRE(tags.size() == 2);
+		}
+	}
+}
+
+TEST_CASE("merge_style_tag() does not crash on invalid input",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::map<size_t, std::string> tags;
+	const std::string new_tag = "<test>";
+
+	SECTION("ignore tag merging if `end <= start`") {
+		rxman.merge_style_tag(tags, new_tag, 0, 0);
+		rxman.merge_style_tag(tags, new_tag, 1, 0);
+		rxman.merge_style_tag(tags, new_tag, 5, 4);
+		REQUIRE(tags.size() == 0);
+	}
 }

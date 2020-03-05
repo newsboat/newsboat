@@ -23,7 +23,11 @@ public:
 	void quote_and_highlight(std::string& str, const std::string& location);
 	void remove_last_regex(const std::string& location);
 	int article_matches(Matchable* item);
-	std::string extract_outer_marker(std::string str, const int index);
+	std::map<size_t, std::string> extract_style_tags(std::string& str);
+	void insert_style_tags(std::string& str, std::map<size_t, std::string>& tags);
+	void merge_style_tag(std::map<size_t, std::string>& tags,
+		const std::string& tag,
+		size_t start, size_t end);
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>

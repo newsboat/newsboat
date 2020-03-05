@@ -1181,9 +1181,11 @@ When specifying `all`, the matching will be done in all three views. The
 `<regex>` must be
 a https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html[POSIX
 extended regular expression], which will be matched case-insensitive against
-the text. `<fgcolor>` and `<bgcolor>` specify the foreground color resp. the
-background color of the matches. You can also specify 0 or more attributes. You
-can find a list of valid colors and attributes in the <<_configuring_colors>>.
+the text. If multiple highlight matches overlap, the style of the later
+specified highlight rule will be applied. `<fgcolor>` and `<bgcolor>` specify
+the foreground color resp. the background color of the matches. You can also
+specify 0 or more attributes. You can find a list of valid colors and
+attributes in the <<_configuring_colors>>.
 
 Examples for possible highlighting configurations are:
 

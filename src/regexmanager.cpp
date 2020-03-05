@@ -78,56 +78,104 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.erase(it);
 }
 
-std::string RegexManager::extract_outer_marker(std::string str, const int index)
+std::map<size_t, std::string> RegexManager::extract_style_tags(std::string& str)
 {
-	// Non-zero number of non-angle bracket characters, enclosed in angle brackets
-	std::regex regex("<[^<>]+>", std::regex::extended);
-	const std::string close = "</>";
-	std::string tmptag;
-	std::stack<std::string> tagstack;
-	int offset = 0;
+	std::map<size_t, std::string> tags;
 
-	if (str.empty()) {
-		return "";
+	size_t pos = 0;
+	while (pos < str.size()) {
+		auto tag_start = str.find_first_of("<>", pos);
+		if (tag_start == std::string::npos) {
+			break;
+		}
+		if (str[tag_start] == '>') {
+			// Keep unmatched '>' (stfl way of encoding a literal '>')
+			pos = tag_start + 1;
+			continue;
+		}
+		auto tag_end = str.find_first_of("<>", tag_start + 1);
+		if (tag_end == std::string::npos) {
+			break;
+		}
+		if (str[tag_end] == '<') {
+			// First '<' bracket is unmatched, ignoring it
+			pos = tag_start + 1;
+			continue;
+		}
+		if (tag_end - tag_start == 1) {
+			// Convert "<>" into "<" (stfl way of encoding a literal '<')
+			str.erase(tag_end, 1);
+			pos = tag_start + 1;
+			continue;
+		}
+		tags[tag_start] = str.substr(tag_start, tag_end - tag_start + 1);
+		str.erase(tag_start, tag_end - tag_start + 1);
+		pos = tag_start;
+	}
+	return tags;
+}
+
+void RegexManager::insert_style_tags(std::string& str,
+	std::map<size_t, std::string>& tags)
+{
+	// Expand "<" into "<>" (reverse of what happened in extract_style_tags()
+	size_t pos = 0;
+	while (pos < str.size()) {
+		auto bracket = str.find_first_of("<", pos);
+		if (bracket == std::string::npos) {
+			break;
+		}
+		pos = bracket + 1;
+		// Add to strings in the `tags` map so we don't have to shift all the positions in that map
+		// (would be necessary if inserting directly into `str`
+		tags[pos] = ">" + tags[pos];
 	}
 
-	std::smatch sm;
-	while ( std::regex_search( str, sm, regex )) {
-		// Get found tag
-		tmptag = sm.str();
-		// If the found tag is after the spot we're looking for
-		if (sm.position(0) + offset > index ) {
-			if (!tagstack.empty() ) {
-				return tagstack.top();
-			} else {
-				return "";
-			}
+	for (auto it = tags.rbegin(); it != tags.rend(); ++it) {
+		if (it->first > str.length()) {
+			// Ignore tags outside of string
+			continue;
 		}
-		if (tmptag == close) {
-			//If a tag is closed without a partner error out
-			if (tagstack.empty()) {
-				return "";
-			} else {
-				tagstack.pop();
-			}
+		str.insert(it->first, it->second);
+	}
+}
+
+void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
+	const std::string& tag, size_t start, size_t end)
+{
+	if (end <= start) {
+		return;
+	}
+
+	// Find the latest tag occurring before `end`.
+	// It is important that looping executes in ascending order of location.
+	std::string latest_tag = "</>";
+	for (const auto& location_tag : tags) {
+		size_t location = location_tag.first;
+		if (location > end) {
+			break;
+		}
+		latest_tag = location_tag.second;
+	}
+	tags[start] = tag;
+	tags[end] = latest_tag;
+
+	// Remove any old tags between the start and end marker
+	for (auto it = tags.begin(); it != tags.end(); ) {
+		if (it->first > start && it->first < end) {
+			it = tags.erase(it);
 		} else {
-			tagstack.push(tmptag);
+			++it;
 		}
-		offset += sm.position(0) + sm.length(0);
-		str = sm.suffix().str();
 	}
-
-	if (!tagstack.empty()) {
-		return tagstack.top();
-	}
-
-	return "";
 }
 
 void RegexManager::quote_and_highlight(std::string& str,
 	const std::string& location)
 {
 	auto& regexes = locations[location].first;
+
+	auto tag_locations = extract_style_tags(str);
 
 	unsigned int i = 0;
 	for (const auto& regex : regexes) {
@@ -136,28 +184,24 @@ void RegexManager::quote_and_highlight(std::string& str,
 		}
 		regmatch_t pmatch;
 		unsigned int offset = 0;
-		int err = regexec(regex, str.c_str(), 1, &pmatch, 0);
-		while (err == 0) {
-			std::string outer_marker = "";
+		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
 			if (pmatch.rm_so != pmatch.rm_eo) {
-				outer_marker = extract_outer_marker(str, offset + pmatch.rm_so);
 				const std::string marker = strprintf::fmt("<%u>", i);
-				str.insert(offset + pmatch.rm_eo,
-					std::string("</>") + outer_marker);
-				str.insert(offset + pmatch.rm_so, marker);
-				offset += pmatch.rm_eo + marker.length() +
-					strlen("</>") + outer_marker.length();
+				const int match_start = offset + pmatch.rm_so;
+				const int match_end = offset + pmatch.rm_eo;
+				merge_style_tag(tag_locations, marker, match_start, match_end);
+				offset = match_end;
 			} else {
 				offset++;
 			}
 			if (offset >= str.length()) {
 				break;
 			}
-			err = regexec(
-					regex, str.c_str() + offset, 1, &pmatch, 0);
 		}
 		i++;
 	}
+
+	insert_style_tags(str, tag_locations);
 }
 
 void RegexManager::handle_highlight_action(const std::vector<std::string>&
