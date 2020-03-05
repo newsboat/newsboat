@@ -82,6 +82,25 @@ TEST_CASE("RegexManager highlights according to definition", "[RegexManager]")
 	}
 }
 
+TEST_CASE("quote_and_highlight() only matches `^` at the start of the line",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::string input = "This is a test";
+
+	SECTION("^.") {
+		rxman.handle_action("highlight", {"article", "^.", "blue", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == "<0>T</>his is a test");
+	}
+
+	SECTION("(^Th|^is)") {
+		rxman.handle_action("highlight", {"article", "(^Th|^is)", "blue", "red"});
+		rxman.quote_and_highlight(input, "article");
+		REQUIRE(input == "<0>Th</>is is a test");
+	}
+}
+
 // This test might seem totally out of the blue, but we do need it: as of this
 // writing, `highlight-article` add a nullptr for a regex to "articlelist"
 // context, which would've crashed the program if it were to be dereferenced.
