@@ -184,7 +184,9 @@ void RegexManager::quote_and_highlight(std::string& str,
 		}
 		regmatch_t pmatch;
 		unsigned int offset = 0;
-		while (regexec(regex, str.c_str() + offset, 1, &pmatch, 0) == 0) {
+		int eflags = 0;
+		while (regexec(regex, str.c_str() + offset, 1, &pmatch, eflags) == 0) {
+			eflags |= REG_NOTBOL; // Don't match beginning-of-line operator (^) in following checks
 			if (pmatch.rm_so != pmatch.rm_eo) {
 				const std::string marker = strprintf::fmt("<%u>", i);
 				const int match_start = offset + pmatch.rm_so;
