@@ -880,7 +880,7 @@ TEST_CASE("insert_style_tags() does not crash on invalid input",
 	}
 }
 
-TEST_CASE("merge_style_tag() removes tags between start and end",
+TEST_CASE("merge_style_tag() removes tags between start and end positions",
 	"[RegexManager]")
 {
 	RegexManager rxman;
@@ -901,7 +901,7 @@ TEST_CASE("merge_style_tag() removes tags between start and end",
 	REQUIRE(tags.size() == 4);
 }
 
-TEST_CASE("merge_style_tag() restores tag at end when necessary",
+TEST_CASE("merge_style_tag() restores previous tag after the inserted tag if necessary",
 	"[RegexManager]")
 {
 	RegexManager rxman;
@@ -921,7 +921,7 @@ TEST_CASE("merge_style_tag() restores tag at end when necessary",
 		REQUIRE(tags.size() == 4);
 	}
 
-	SECTION("end on tag switch so restore second tag") {
+	SECTION("end on tag switch so no need to restore anything") {
 		rxman.merge_style_tag(tags, new_tag, 0, 5);
 		REQUIRE(tags[0] == new_tag);
 		REQUIRE(tags[5] == "<1>");
