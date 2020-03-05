@@ -150,7 +150,7 @@ void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
 	// Find the latest tag occurring before `end`.
 	// It is important that looping executes in ascending order of location.
 	std::string latest_tag = "</>";
-	for (auto location_tag : tags) {
+	for (const auto& location_tag : tags) {
 		size_t location = location_tag.first;
 		if (location > end) {
 			break;
