@@ -569,8 +569,7 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 	for (auto tag : {
 			"<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"
 		}) {
-		SECTION(std::string("When alone, ") + tag +
-			" generates only one line") {
+		DYNAMIC_SECTION("When alone, " << tag << " generates only one line") {
 			std::string closing_tag = tag;
 			closing_tag.insert(1, "/");
 
@@ -976,7 +975,7 @@ TEST_CASE(
 	std::vector<LinkPair> links;
 
 	for (auto border_width = 1; border_width < 10; ++border_width) {
-		SECTION(strprintf::fmt("`border' = %u", border_width)) {
+		DYNAMIC_SECTION("`border' = " << border_width) {
 			const std::string input_template =
 				"<table border='%u'>"
 				"<tr>"
