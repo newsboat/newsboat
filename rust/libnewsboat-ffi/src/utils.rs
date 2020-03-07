@@ -329,9 +329,15 @@ pub unsafe extern "C" fn rs_run_interactively(
     caller: *const c_char,
 ) -> i32 {
     abort_on_panic(|| {
-        let rs_command = CStr::from_ptr(command).to_string_lossy();
-        let rs_caller = CStr::from_ptr(caller).to_string_lossy();
-        utils::run_interactively(&rs_command, &rs_caller)
+        let command = CStr::from_ptr(command);
+        // This won't panic because all strings in Newsboat are in UTF-8
+        let command = command.to_str().expect("command contained invalid UTF-8");
+
+        let caller = CStr::from_ptr(caller);
+        // This won't panic because all strings in Newsboat are in UTF-8
+        let caller = caller.to_str().expect("caller contained invalid UTF-8");
+
+        utils::run_interactively(&command, &caller)
     })
 }
 
