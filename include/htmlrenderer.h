@@ -113,7 +113,6 @@ private:
 	unsigned int add_link(std::vector<LinkPair>& links,
 		const std::string& link,
 		LinkType type);
-	std::string quote_for_stfl(std::string str);
 	std::string absolute_url(const std::string& url,
 		const std::string& link);
 	std::string type2str(LinkType type);
