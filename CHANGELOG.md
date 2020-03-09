@@ -2,6 +2,9 @@
 
 ## Unreleased - expected 2020-03-21
 
+TODO: mention STFL patch that fixes garbage in empty lines in articles
+https://github.com/newsboat/newsboat/issues/506#issuecomment-596091556
+
 ### Added
 - `%K` format for  `podlist-format`. This format specifier is replaced by the
   human readable download speed (automatically switches between KB/s, MB/s, and
