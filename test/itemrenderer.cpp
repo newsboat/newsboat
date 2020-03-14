@@ -4,6 +4,7 @@
 
 #include "cache.h"
 #include "configcontainer.h"
+#include "regexmanager.h"
 #include "rssfeed.h"
 #include "test-helpers.h"
 
@@ -363,7 +364,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 }
 
 TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
-	"[item_renderer][broken]")
+	"[item_renderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
@@ -545,4 +546,63 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 
 	const auto result = item_renderer::get_feedtitle(item);
 	REQUIRE(result == feedurl);
+}
+
+TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use with stfl",
+	"[item_renderer]")
+{
+	TestHelpers::EnvVar tzEnv("TZ");
+	tzEnv.set("UTC");
+
+	ConfigContainer cfg;
+	RegexManager rxman;
+
+	Cache rsscache(":memory:", &cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = create_test_item(&rsscache);
+
+	feed->set_title("<" + FEED_TITLE + ">");
+	item->set_title("<" + ITEM_TITLE + ">");
+	item->set_author("<" + ITEM_AUTHOR + ">");
+	item->set_description("<html>&lt;test&gt;</html>");
+
+	SECTION("to_stfl_list()") {
+		const auto expected = std::string() +
+			"{list" +
+			"{listitem text:\"Feed: <>" + FEED_TITLE + ">\"}" +
+			"{listitem text:\"Title: <>" + ITEM_TITLE + ">\"}" +
+			"{listitem text:\"Author: <>" + ITEM_AUTHOR + ">\"}" +
+			"{listitem text:\"Date: Sun, 30 Sep 2018 19:34:25 +0000\"}" +
+			"{listitem text:\"Link: " + ITEM_LINK + "\"}" +
+			"{listitem text:\"Flags: " + ITEM_FLAGS_RENDERED + "\"}" +
+			"{listitem text:\" \"}" +
+			"{listitem text:\"<>test>\"}" +
+			"}";
+
+		std::vector<LinkPair> links;
+		const auto result = item_renderer::to_stfl_list(cfg, item, 80, 80, &rxman,
+				"article", links);
+		REQUIRE(result.first == expected);
+	}
+
+	SECTION("source_to_stfl_list()") {
+		const auto expected = std::string() +
+			"{list" +
+			"{listitem text:\"Feed: <>" + FEED_TITLE + ">\"}" +
+			"{listitem text:\"Title: <>" + ITEM_TITLE + ">\"}" +
+			"{listitem text:\"Author: <>" + ITEM_AUTHOR + ">\"}" +
+			"{listitem text:\"Date: Sun, 30 Sep 2018 19:34:25 +0000\"}" +
+			"{listitem text:\"Link: " + ITEM_LINK + "\"}" +
+			"{listitem text:\"Flags: " + ITEM_FLAGS_RENDERED + "\"}" +
+			"{listitem text:\" \"}" +
+			"{listitem text:\"<>html>&lt;test&gt;<>/html>\"}" +
+			"}";
+
+		std::vector<LinkPair> links;
+		const auto result = item_renderer::source_to_stfl_list(item, 80, 80, &rxman,
+				"article");
+		REQUIRE(result.first == expected);
+	}
 }

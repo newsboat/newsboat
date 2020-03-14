@@ -640,9 +640,10 @@ test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
  filter/FilterParser.h 3rd-party/catch.hpp include/cache.h \
- include/configcontainer.h include/configcontainer.h include/rssfeed.h \
- include/matchable.h include/rssitem.h include/utils.h include/logger.h \
- config.h include/strprintf.h test/test-helpers.h include/utils.h
+ include/configcontainer.h include/configcontainer.h \
+ include/regexmanager.h include/rssfeed.h include/matchable.h \
+ include/rssitem.h include/utils.h include/logger.h config.h \
+ include/strprintf.h test/test-helpers.h include/utils.h
 test/keymap.o: test/keymap.cpp include/keymap.h include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/confighandlerexception.h
