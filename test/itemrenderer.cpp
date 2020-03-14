@@ -364,7 +364,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 }
 
 TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
-	"[item_renderer][broken]")
+	"[item_renderer]")
 {
 	TestHelpers::EnvVar tzEnv("TZ");
 	tzEnv.set("UTC");
