@@ -246,6 +246,75 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 
 		REQUIRE(result == expected);
 	}
+
+
+	SECTION("angle brackets are only counted as one character") {
+		cfg.set_configvalue("text-width", "37");
+
+		item->set_description(
+			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
+			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
+			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
+			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;");
+
+		const auto result = item_renderer::to_plain_text(cfg, item);
+
+		const auto expected = header +
+			"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" +
+			"<\n";
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("angle brackets are only counted as one character") {
+		cfg.set_configvalue("text-width", "37");
+
+		item->set_description(
+			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" // 10 characters
+			"&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" // 10 characters
+			"Lorem ipsum dolor sit amet");
+
+		const auto result = item_renderer::to_plain_text(cfg, item);
+
+		const auto expected = header +
+			"<<<<<<<<<<>>>>>>>>>>Lorem ipsum dolor\n"
+			"sit amet\n";
+
+		REQUIRE(result == expected);
+	}
+}
+
+TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
+	"[item_renderer]")
+{
+	TestHelpers::EnvVar tzEnv("TZ");
+	tzEnv.set("UTC");
+
+	ConfigContainer cfg;
+
+	Cache rsscache(":memory:", &cfg);
+
+	std::shared_ptr<RssItem> item;
+	std::shared_ptr<RssFeed> feed;
+	std::tie(item, feed) = create_test_item(&rsscache);
+
+	feed->set_title("<" + FEED_TITLE + ">");
+	item->set_title("<" + ITEM_TITLE + ">");
+	item->set_author("<" + ITEM_AUTHOR + ">");
+	item->set_description("&lt;test&gt;");
+
+	const auto expected = std::string() +
+		"Feed: <" + FEED_TITLE + ">\n" +
+		"Title: <" + ITEM_TITLE + ">\n" +
+		"Author: <" + ITEM_AUTHOR + ">\n" +
+		"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+		"Link: " + ITEM_LINK + '\n' +
+		"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+		" \n" +
+		"<test>\n";
+
+	const auto result = item_renderer::to_plain_text(cfg, item);
+	REQUIRE(result == expected);
 }
 
 TEST_CASE("Empty fields are not rendered", "[item_renderer]")
