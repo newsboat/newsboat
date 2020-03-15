@@ -33,7 +33,7 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
 void prepare_header(
 	std::shared_ptr<RssItem> item,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& /*links*/)
+	std::vector<LinkPair>& /*links*/, bool raw = false)
 {
 	const auto add_line =
 		[&lines]
@@ -46,11 +46,21 @@ void prepare_header(
 		}
 	};
 
+	const auto stfl_quote_if_needed =
+		[raw]
+	(const std::string& str) {
+		if (raw) {
+			return str;
+		} else {
+			return utils::quote_for_stfl(str);
+		};
+	};
+
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
-	add_line(utils::quote_for_stfl(feedtitle), _("Feed: "));
-	add_line(utils::quote_for_stfl(utils::utf8_to_locale(item->title())),
+	add_line(stfl_quote_if_needed(feedtitle), _("Feed: "));
+	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item->title())),
 		_("Title: "));
-	add_line(utils::quote_for_stfl(utils::utf8_to_locale(item->author())),
+	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item->author())),
 		_("Author: "));
 	add_line(item->pubDate(), _("Date: "));
 	add_line(item->link(), _("Link: "), LineType::softwrappable);
@@ -127,7 +137,7 @@ std::string item_renderer::to_plain_text(
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
-	prepare_header(item, lines, links);
+	prepare_header(item, lines, links, true);
 	const auto base = get_item_base_link(item);
 	render_html(cfg, utils::utf8_to_locale(item->description()), lines, links,
 		base, true);
