@@ -37,7 +37,7 @@ void TextFormatter::add_lines(
 	}
 }
 
-std::vector<std::string> wrap_line(const std::string& line, const size_t width)
+std::vector<std::string> wrap_line(const std::string& line, const size_t width, bool raw)
 {
 	if (line.empty()) {
 		return {""};
@@ -55,24 +55,39 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 			return std::isspace(c);
 		});
 	};
+	auto strwidth = [raw](const std::string& str) {
+		if (raw) {
+			return utils::strwidth(str);
+		} else {
+			return utils::strwidth_stfl(str);
+		}
+	};
+	auto substr_with_width = [raw](const std::string& str, const size_t max_width) {
+		if (raw) {
+			return utils::substr_with_width(str, max_width);
+		} else {
+			return utils::substr_with_width_stfl(str, max_width);
+		}
+	};
+
 	if (iswhitespace(words[0])) {
-		prefix = utils::substr_with_width_stfl(words[0], width);
-		prefix_width = utils::strwidth_stfl(prefix);
+		prefix = substr_with_width(words[0], width);
+		prefix_width = strwidth(prefix);
 		words.erase(words.cbegin());
 	}
 
 	std::string curline = prefix;
 
 	for (auto& word : words) {
-		size_t word_width = utils::strwidth_stfl(word);
-		size_t curline_width = utils::strwidth_stfl(curline);
+		size_t word_width = strwidth(word);
+		size_t curline_width = strwidth(curline);
 
 		// for languages (e.g., CJK) don't use a space as a word
 		// boundary
 		while (word_width > (width - prefix_width)) {
 			size_t space_left = width - curline_width;
 			std::string part =
-				utils::substr_with_width_stfl(word, space_left);
+				substr_with_width(word, space_left);
 			curline.append(part);
 			word.erase(0, part.length());
 			result.push_back(curline);
@@ -82,8 +97,8 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 				word.clear();
 			}
 
-			word_width = utils::strwidth_stfl(word);
-			curline_width = utils::strwidth_stfl(curline);
+			word_width = strwidth(word);
+			curline_width = strwidth(curline);
 		}
 
 		if ((curline_width + word_width) > width) {
@@ -112,7 +127,8 @@ std::vector<std::string> format_text_plain_helper(
 	// wrappable lines are wrapped at this width
 	const size_t wrap_width,
 	// if non-zero, softwrappable lines are wrapped at this width
-	const size_t total_width)
+	const size_t total_width,
+	bool raw = false)
 {
 	LOG(Level::DEBUG,
 		"TextFormatter::format_text_plain: rxman = %p, location = "
@@ -156,7 +172,7 @@ std::vector<std::string> format_text_plain_helper(
 				continue;
 			}
 			text = utils::consolidate_whitespace(text);
-			for (const auto& line : wrap_line(text, wrap_width)) {
+			for (const auto& line : wrap_line(text, wrap_width, raw)) {
 				store_line(line);
 			}
 			break;
@@ -170,7 +186,7 @@ std::vector<std::string> format_text_plain_helper(
 				store_line(text);
 			} else {
 				for (const auto& line :
-					wrap_line(text, total_width)) {
+					wrap_line(text, total_width, raw)) {
 					store_line(line);
 				}
 			}
@@ -218,7 +234,7 @@ std::string TextFormatter::format_text_plain(const size_t width,
 {
 	std::string result;
 	auto formatted = format_text_plain_helper(
-			lines, nullptr, "", width, total_width);
+			lines, nullptr, "", width, total_width, true);
 	for (const auto& line : formatted) {
 		result += line + "\n";
 	}
