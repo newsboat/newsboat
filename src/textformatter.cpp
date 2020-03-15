@@ -56,7 +56,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 		});
 	};
 	if (iswhitespace(words[0])) {
-		prefix = utils::substr_with_width(words[0], width);
+		prefix = utils::substr_with_width_stfl(words[0], width);
 		prefix_width = utils::strwidth_stfl(prefix);
 		words.erase(words.cbegin());
 	}
@@ -72,7 +72,7 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width)
 		while (word_width > (width - prefix_width)) {
 			size_t space_left = width - curline_width;
 			std::string part =
-				utils::substr_with_width(word, space_left);
+				utils::substr_with_width_stfl(word, space_left);
 			curline.append(part);
 			word.erase(0, part.length());
 			result.push_back(curline);

@@ -647,10 +647,10 @@ size_t utils::wcswidth_stfl(const std::wstring& str, size_t size)
 	return width - reduce_count;
 }
 
-std::string utils::substr_with_width(const std::string& str,
+std::string utils::substr_with_width_stfl(const std::string& str,
 	const size_t max_width)
 {
-	return RustString(rs_substr_with_width(str.c_str(), max_width));
+	return RustString(rs_substr_with_width_stfl(str.c_str(), max_width));
 }
 
 std::string utils::join(const std::vector<std::string>& strings,

@@ -310,14 +310,14 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
 /// returns None, the character width is treated as 0. A STFL tag (e.g. `<b>`, `<foobar>`, `</>`)
 /// width is treated as 0, but escaped less-than (`<>`) width is treated as 1.
 /// ```
-/// use libnewsboat::utils::substr_with_width;
-/// assert_eq!(substr_with_width("a", 1), "a");
-/// assert_eq!(substr_with_width("a", 2), "a");
-/// assert_eq!(substr_with_width("ab", 1), "a");
-/// assert_eq!(substr_with_width("abc", 1), "a");
-/// assert_eq!(substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
+/// use libnewsboat::utils::substr_with_width_stfl;
+/// assert_eq!(substr_with_width_stfl("a", 1), "a");
+/// assert_eq!(substr_with_width_stfl("a", 2), "a");
+/// assert_eq!(substr_with_width_stfl("ab", 1), "a");
+/// assert_eq!(substr_with_width_stfl("abc", 1), "a");
+/// assert_eq!(substr_with_width_stfl("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
 ///```
-pub fn substr_with_width(string: &str, max_width: usize) -> String {
+pub fn substr_with_width_stfl(string: &str, max_width: usize) -> String {
     let mut result = String::new();
     let mut in_bracket = false;
     let mut tagbuf = Vec::<char>::new();
@@ -898,44 +898,44 @@ mod tests {
     }
 
     #[test]
-    fn t_substr_with_width_given_string_empty() {
-        assert!(substr_with_width("", 0).is_empty());
-        assert!(substr_with_width("", 1).is_empty());
+    fn t_substr_with_width_stfl_given_string_empty() {
+        assert!(substr_with_width_stfl("", 0).is_empty());
+        assert!(substr_with_width_stfl("", 1).is_empty());
     }
 
     #[test]
-    fn t_substr_with_width_max_width_zero() {
-        assert!(substr_with_width("world", 0).is_empty());
-        assert!(substr_with_width("", 0).is_empty());
+    fn t_substr_with_width_stfl_max_width_zero() {
+        assert!(substr_with_width_stfl("world", 0).is_empty());
+        assert!(substr_with_width_stfl("", 0).is_empty());
     }
 
     #[test]
-    fn t_substr_with_width_max_width_dont_split_codepoints() {
-        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
-        assert_eq!(substr_with_width("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
-        assert_eq!(substr_with_width("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
-        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
-        assert_eq!(substr_with_width("a</>b</>c</>", 2), "a</>b</>");
+    fn t_substr_with_width_stfl_max_width_dont_split_codepoints() {
+        assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
+        assert_eq!(substr_with_width_stfl("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
+        assert_eq!(substr_with_width_stfl("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
+        assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
+        assert_eq!(substr_with_width_stfl("a</>b</>c</>", 2), "a</>b</>");
     }
 
     #[test]
-    fn t_substr_with_width_max_width_do_not_count_stfl_tag() {
-        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
-        assert_eq!(substr_with_width("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
-        assert_eq!(substr_with_width("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
-        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
-        assert_eq!(substr_with_width("a</>b</>c</>", 2), "a</>b</>");
+    fn t_substr_with_width_stfl_max_width_do_not_count_stfl_tag() {
+        assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
+        assert_eq!(substr_with_width_stfl("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
+        assert_eq!(substr_with_width_stfl("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
+        assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
+        assert_eq!(substr_with_width_stfl("a</>b</>c</>", 2), "a</>b</>");
     }
 
     #[test]
-    fn t_substr_with_width_max_width_count_escaped_less_than_mark() {
-        assert_eq!(substr_with_width("<><><>", 2), "<><>");
-        assert_eq!(substr_with_width("a<>b<>c", 3), "a<>b");
+    fn t_substr_with_width_stfl_max_width_count_escaped_less_than_mark() {
+        assert_eq!(substr_with_width_stfl("<><><>", 2), "<><>");
+        assert_eq!(substr_with_width_stfl("a<>b<>c", 3), "a<>b");
     }
 
     #[test]
-    fn t_substr_with_width_max_width_non_printable() {
-        assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01\x02a");
+    fn t_substr_with_width_stfl_max_width_non_printable() {
+        assert_eq!(substr_with_width_stfl("\x01\x02abc", 1), "\x01\x02a");
     }
 
     #[test]
