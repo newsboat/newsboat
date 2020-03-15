@@ -307,6 +307,34 @@ pub fn strwidth_stfl(rs_str: &str) -> usize {
 /// Returns an empty string if `str` is an empty string or `max_width` is zero.
 ///
 /// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
+/// returns None, the character width is treated as 0.
+/// ```
+/// use libnewsboat::utils::substr_with_width;
+/// assert_eq!(substr_with_width("a", 1), "a");
+/// assert_eq!(substr_with_width("a", 2), "a");
+/// assert_eq!(substr_with_width("ab", 1), "a");
+/// assert_eq!(substr_with_width("abc", 1), "a");
+/// assert_eq!(substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
+///```
+pub fn substr_with_width(string: &str, max_width: usize) -> String {
+    let mut result = String::new();
+    let mut width = 0;
+    for c in string.chars() {
+        // Control chars count as width 0
+        let w = UnicodeWidthChar::width(c).unwrap_or(0);
+        if width + w > max_width {
+            break;
+        }
+        width += w;
+        result.push(c);
+    }
+    result
+}
+
+/// Returns a longest substring fits to the given width.
+/// Returns an empty string if `str` is an empty string or `max_width` is zero.
+///
+/// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
 /// returns None, the character width is treated as 0. A STFL tag (e.g. `<b>`, `<foobar>`, `</>`)
 /// width is treated as 0, but escaped less-than (`<>`) width is treated as 1.
 /// ```
@@ -895,6 +923,47 @@ mod tests {
         assert_eq!(strwidth_stfl("\u{F91F}"), 2);
         assert_eq!(strwidth_stfl("\u{0007}"), 0);
         assert_eq!(strwidth_stfl("<a"), 0); // #415
+    }
+
+    #[test]
+    fn t_substr_with_width_given_string_empty() {
+        assert!(substr_with_width("", 0).is_empty());
+        assert!(substr_with_width("", 1).is_empty());
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_zero() {
+        assert!(substr_with_width("world", 0).is_empty());
+        assert!(substr_with_width("", 0).is_empty());
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_dont_split_codepoints() {
+        assert_eq!(substr_with_width("ＡＢＣＤＥＦ", 9), "ＡＢＣＤ");
+        assert_eq!(substr_with_width("ＡＢＣ", 4), "ＡＢ");
+        assert_eq!(substr_with_width("a>bcd", 3), "a>b");
+        assert_eq!(substr_with_width("ＡＢＣＤＥ", 10), "ＡＢＣＤＥ");
+        assert_eq!(substr_with_width("abc", 2), "ab");
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_does_count_stfl_tag() {
+        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>");
+        assert_eq!(substr_with_width("<foobar>ＡＢＣ", 4), "<foo");
+        assert_eq!(substr_with_width("a<<xyz>>bcd", 3), "a<<");
+        assert_eq!(substr_with_width("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>");
+        assert_eq!(substr_with_width("a</>b</>c</>", 2), "a<");
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_count_marks_as_regular_characters() {
+        assert_eq!(substr_with_width("<><><>", 2), "<>");
+        assert_eq!(substr_with_width("a<>b<>c", 3), "a<>");
+    }
+
+    #[test]
+    fn t_substr_with_width_max_width_non_printable() {
+        assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01\x02a");
     }
 
     #[test]
