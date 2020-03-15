@@ -37,7 +37,8 @@ void TextFormatter::add_lines(
 	}
 }
 
-std::vector<std::string> wrap_line(const std::string& line, const size_t width, bool raw)
+std::vector<std::string> wrap_line(const std::string& line, const size_t width,
+	bool raw)
 {
 	if (line.empty()) {
 		return {""};

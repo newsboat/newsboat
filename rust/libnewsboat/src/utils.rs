@@ -980,7 +980,10 @@ mod tests {
 
     #[test]
     fn t_substr_with_width_stfl_max_width_dont_split_codepoints() {
-        assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
+        assert_eq!(
+            substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9),
+            "ＡＢＣ<b>Ｄ"
+        );
         assert_eq!(substr_with_width_stfl("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
         assert_eq!(substr_with_width_stfl("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
         assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
@@ -989,7 +992,10 @@ mod tests {
 
     #[test]
     fn t_substr_with_width_stfl_max_width_do_not_count_stfl_tag() {
-        assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9), "ＡＢＣ<b>Ｄ");
+        assert_eq!(
+            substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9),
+            "ＡＢＣ<b>Ｄ"
+        );
         assert_eq!(substr_with_width_stfl("<foobar>ＡＢＣ", 4), "<foobar>ＡＢ");
         assert_eq!(substr_with_width_stfl("a<<xyz>>bcd", 3), "a<<xyz>>b"); // tag: "<<xyz>"
         assert_eq!(substr_with_width_stfl("ＡＢＣ<b>ＤＥ", 10), "ＡＢＣ<b>ＤＥ");
