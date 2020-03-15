@@ -75,6 +75,9 @@ size_t wcswidth_stfl(const std::wstring& str, size_t size);
 std::string substr_with_width(const std::string& str,
 	const size_t max_width);
 
+std::string substr_with_width_stfl(const std::string& str,
+	const size_t max_width);
+
 unsigned int to_u(const std::string& str,
 	const unsigned int default_value = 0);
 

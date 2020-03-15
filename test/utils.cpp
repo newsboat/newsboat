@@ -887,26 +887,79 @@ TEST_CASE(
 		REQUIRE(utils::substr_with_width(data, 5) == "\u3042\u3044");
 	}
 
-	SECTION("doesn't count a width of STFL tag") {
+	SECTION("handles angular brackets as regular characters") {
 		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ</b>Ｆ", 9) ==
-			"ＡＢＣ<b>Ｄ");
+			"ＡＢＣ<b>");
 		REQUIRE(utils::substr_with_width("<foobar>ＡＢＣ", 4) ==
-			"<foobar>ＡＢ");
+			"<foo");
 		REQUIRE(utils::substr_with_width("a<<xyz>>bcd", 3) ==
-			"a<<xyz>>b"); // tag: "<<xyz>"
+			"a<<");
 		REQUIRE(utils::substr_with_width("ＡＢＣ<b>ＤＥ", 10) ==
-			"ＡＢＣ<b>ＤＥ");
+			"ＡＢＣ<b>");
 		REQUIRE(utils::substr_with_width("a</>b</>c</>", 2) ==
-			"a</>b</>");
-	}
-
-	SECTION("count a width of escaped less-than mark") {
-		REQUIRE(utils::substr_with_width("<><><>", 2) == "<><>");
-		REQUIRE(utils::substr_with_width("a<>b<>c", 3) == "a<>b");
+			"a<");
+		REQUIRE(utils::substr_with_width("<><><>", 2) == "<>");
+		REQUIRE(utils::substr_with_width("a<>b<>c", 3) == "a<>");
 	}
 
 	SECTION("treat non-printable has zero width") {
 		REQUIRE(utils::substr_with_width("\x01\x02"
+				"abc",
+				1) ==
+			"\x01\x02"
+			"a");
+	}
+}
+
+TEST_CASE(
+	"substr_with_width_stfl() returns a longest substring fits to the given "
+	"width",
+	"[utils]")
+{
+	REQUIRE(utils::substr_with_width_stfl("a", 1) == "a");
+	REQUIRE(utils::substr_with_width_stfl("a", 2) == "a");
+	REQUIRE(utils::substr_with_width_stfl("ab", 1) == "a");
+	REQUIRE(utils::substr_with_width_stfl("abc", 1) == "a");
+	REQUIRE(utils::substr_with_width_stfl("A\u3042B\u3044C\u3046", 5) ==
+		"A\u3042B");
+
+	SECTION("returns an empty string if the given string is empty") {
+		REQUIRE(utils::substr_with_width_stfl("", 0).empty());
+		REQUIRE(utils::substr_with_width_stfl("", 1).empty());
+	}
+
+	SECTION("returns an empty string if the given width is zero") {
+		REQUIRE(utils::substr_with_width_stfl("world", 0).empty());
+		REQUIRE(utils::substr_with_width_stfl("", 0).empty());
+	}
+
+	SECTION("doesn't split single codepoint in two") {
+		std::string data = "\u3042\u3044\u3046";
+		REQUIRE(utils::substr_with_width_stfl(data, 1) == "");
+		REQUIRE(utils::substr_with_width_stfl(data, 3) == "\u3042");
+		REQUIRE(utils::substr_with_width_stfl(data, 5) == "\u3042\u3044");
+	}
+
+	SECTION("doesn't count a width of STFL tag") {
+		REQUIRE(utils::substr_with_width_stfl("ＡＢＣ<b>ＤＥ</b>Ｆ", 9) ==
+			"ＡＢＣ<b>Ｄ");
+		REQUIRE(utils::substr_with_width_stfl("<foobar>ＡＢＣ", 4) ==
+			"<foobar>ＡＢ");
+		REQUIRE(utils::substr_with_width_stfl("a<<xyz>>bcd", 3) ==
+			"a<<xyz>>b"); // tag: "<<xyz>"
+		REQUIRE(utils::substr_with_width_stfl("ＡＢＣ<b>ＤＥ", 10) ==
+			"ＡＢＣ<b>ＤＥ");
+		REQUIRE(utils::substr_with_width_stfl("a</>b</>c</>", 2) ==
+			"a</>b</>");
+	}
+
+	SECTION("count a width of escaped less-than mark") {
+		REQUIRE(utils::substr_with_width_stfl("<><><>", 2) == "<><>");
+		REQUIRE(utils::substr_with_width_stfl("a<>b<>c", 3) == "a<>b");
+	}
+
+	SECTION("treat non-printable has zero width") {
+		REQUIRE(utils::substr_with_width_stfl("\x01\x02"
 				"abc",
 				1) ==
 			"\x01\x02"

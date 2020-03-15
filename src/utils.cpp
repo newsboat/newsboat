@@ -653,6 +653,12 @@ std::string utils::substr_with_width(const std::string& str,
 	return RustString(rs_substr_with_width(str.c_str(), max_width));
 }
 
+std::string utils::substr_with_width_stfl(const std::string& str,
+	const size_t max_width)
+{
+	return RustString(rs_substr_with_width_stfl(str.c_str(), max_width));
+}
+
 std::string utils::join(const std::vector<std::string>& strings,
 	const std::string& separator)
 {

@@ -852,7 +852,12 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 		case TagSoupPullParser::Event::TEXT: {
-			auto text = utils::quote_for_stfl(xpp.get_text());
+
+			auto text = xpp.get_text();
+			if (!raw_) {
+				text = utils::quote_for_stfl(text);
+			}
+
 			if (itunes_hack) {
 				std::vector<std::string> paragraphs =
 					utils::tokenize_nl(text);
