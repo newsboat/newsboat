@@ -247,25 +247,6 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		REQUIRE(result == expected);
 	}
 
-
-	SECTION("angle brackets are only counted as one character") {
-		cfg.set_configvalue("text-width", "37");
-
-		item->set_description(
-			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
-			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
-			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;"
-			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;");
-
-		const auto result = item_renderer::to_plain_text(cfg, item);
-
-		const auto expected = header +
-			"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n" +
-			"<\n";
-
-		REQUIRE(result == expected);
-	}
-
 	SECTION("angle brackets are only counted as one character") {
 		cfg.set_configvalue("text-width", "37");
 
