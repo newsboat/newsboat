@@ -555,6 +555,7 @@ pub fn make_title(rs_str: String) -> String {
     }
 }
 
+/// Run the given command interactively with inherited stdin and stdout/stderr
 pub fn run_interactively(command: &str, caller: &str) -> i32 {
     log!(Level::Debug, &format!("{}: running `{}'", caller, command));
     Command::new("sh")
