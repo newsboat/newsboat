@@ -556,6 +556,15 @@ pub fn make_title(rs_str: String) -> String {
 }
 
 /// Run the given command interactively with inherited stdin and stdout/stderr
+/// ```
+/// use libnewsboat::utils::run_interactively;
+///
+/// let result = run_interactively("echo true", "test");
+/// assert_eq!(result, 0);
+///
+/// let result = run_interactively("exit 1", "test");
+/// assert_eq!(result, 1);
+/// ```
 pub fn run_interactively(command: &str, caller: &str) -> i32 {
     log!(Level::Debug, &format!("{}: running `{}'", caller, command));
     Command::new("sh")
