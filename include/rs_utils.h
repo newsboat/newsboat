@@ -55,6 +55,8 @@ char* rs_unescape_url(const char* str);
 
 char* rs_make_title(const char* str);
 
+int32_t rs_run_interactively(const char* command, const char* caller);
+
 char* rs_getcwd();
 
 int rs_strnaturalcmp(const char* a, const char* b);

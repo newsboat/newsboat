@@ -324,6 +324,24 @@ pub unsafe extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_run_interactively(
+    command: *const c_char,
+    caller: *const c_char,
+) -> i32 {
+    abort_on_panic(|| {
+        let command = CStr::from_ptr(command);
+        // This won't panic because all strings in Newsboat are in UTF-8
+        let command = command.to_str().expect("command contained invalid UTF-8");
+
+        let caller = CStr::from_ptr(caller);
+        // This won't panic because all strings in Newsboat are in UTF-8
+        let caller = caller.to_str().expect("caller contained invalid UTF-8");
+
+        utils::run_interactively(&command, &caller)
+    })
+}
+
+#[no_mangle]
 /// Gets the current working directory or an empty string on error.
 pub extern "C" fn rs_getcwd() -> *mut c_char {
     use std::os::unix::ffi::OsStringExt;
