@@ -288,6 +288,17 @@ pub fn strwidth(rs_str: &str) -> usize {
     UnicodeWidthStr::width(rs_str)
 }
 
+/// Returns the with of `rs_str` when displayed on screen.
+///
+/// STFL tags (e.g. `<b>`, `<foobar>`, `</>`) are counted as having 0 width.
+/// Escaped less-than sign (`<` escaped as `<>`) is counted as having a width of 1 character.
+/// ```
+/// use libnewsboat::utils::strwidth_stfl;
+/// assert_eq!(strwidth_stfl("a"), 1);
+/// assert_eq!(strwidth_stfl("abc<tag>def"), 6);
+/// assert_eq!(strwidth_stfl("less-than: <>"), 12);
+/// assert_eq!(strwidth_stfl("ＡＢＣＤＥＦ"), 12);
+///```
 pub fn strwidth_stfl(rs_str: &str) -> usize {
     let mut s = &rs_str[..];
     let mut width = 0;
