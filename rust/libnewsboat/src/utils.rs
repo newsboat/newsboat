@@ -289,18 +289,29 @@ pub fn strwidth(rs_str: &str) -> usize {
 }
 
 pub fn strwidth_stfl(rs_str: &str) -> usize {
-    let reduce = 3 * rs_str
-        .chars()
-        .zip(rs_str.chars().skip(1))
-        .filter(|&(c, next_c)| c == '<' && next_c != '>')
-        .count();
-
-    let width = strwidth(rs_str);
-    if width < reduce {
-        0
-    } else {
-        width - reduce
+    let mut s = &rs_str[..];
+    let mut width = 0;
+    loop {
+        if let Some(pos) = s.find('<') {
+            width += strwidth(&s[..pos]);
+            s = &s[pos..];
+            if let Some(endpos) = s.find('>') {
+                if endpos == 1 {
+                    // Found "<>" which stfl uses to encode a literal '<'
+                    width += strwidth("<");
+                }
+                s = &s[endpos + 1..];
+            } else {
+                // '<' without closing '>' so ignore rest of string
+                break;
+            }
+        } else {
+            width += strwidth(s);
+            break;
+        }
     }
+
+    width
 }
 
 /// Returns a longest substring fits to the given width.
