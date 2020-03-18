@@ -71,8 +71,6 @@ std::shared_ptr<RssFeed> RssParser::parse()
 
 	ch->remove_old_deleted_items(feed.get());
 
-	feed->set_empty(false);
-
 	return feed;
 }
 
