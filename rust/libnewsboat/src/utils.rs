@@ -918,8 +918,11 @@ mod tests {
     #[test]
     fn t_strwidth_stfl() {
         assert_eq!(strwidth_stfl(""), 0);
-        assert_eq!(strwidth_stfl("x<hi>x"), 3);
-        assert_eq!(strwidth_stfl("x<>x"), 4);
+        assert_eq!(strwidth_stfl("x<hi>x"), 2);
+        assert_eq!(strwidth_stfl("x<longtag>x</>"), 2);
+        assert_eq!(strwidth_stfl("x<>x"), 3);
+        assert_eq!(strwidth_stfl("x<>y<>z"), 5);
+        assert_eq!(strwidth_stfl("x<>hi>x"), 6);
         assert_eq!(strwidth_stfl("\u{F91F}"), 2);
         assert_eq!(strwidth_stfl("\u{0007}"), 0);
         assert_eq!(strwidth_stfl("<a"), 0); // #415
