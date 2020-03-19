@@ -92,7 +92,8 @@ impl FmtStrFormatter {
                 }
             };
 
-            let padding = format!("{}", c).repeat(padding_width);
+            let paddingValue = utils::quote_for_stfl(&format!("{}", c));
+            let padding = paddingValue.repeat(padding_width);
             result.push_str(&padding);
         };
         result.push_str(&rest);
