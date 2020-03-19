@@ -354,6 +354,40 @@ mod tests {
     }
 
     #[test]
+    fn t_do_format_keeps_wide_characters_within_specified_width() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', "ＡＢＣ".to_string());
+        fmt.register_fmt('b', "def".to_string());
+
+        assert_eq!(fmt.do_format("%a %b", 0), "ＡＢＣ def");
+        assert_eq!(fmt.do_format("%a %b", 10), "ＡＢＣ def");
+        assert_eq!(fmt.do_format("%a %b", 9), "ＡＢＣ de");
+        assert_eq!(fmt.do_format("%a %b", 7), "ＡＢＣ ");
+        assert_eq!(fmt.do_format("%a %b", 6), "ＡＢＣ");
+        assert_eq!(fmt.do_format("%a %b", 4), "ＡＢ");
+    }
+
+    #[test]
+    fn t_do_format_does_not_include_wide_character_if_only_1_column_left() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', "ＡＢＣ".to_string());
+
+        assert_eq!(fmt.do_format("%a", 6), "ＡＢＣ");
+        assert_eq!(fmt.do_format("%a", 5), "ＡＢ");
+        assert_eq!(fmt.do_format("%a", 4), "ＡＢ");
+
+        assert_eq!(fmt.do_format("%-6a", 0), "ＡＢＣ");
+        assert_eq!(fmt.do_format("%-5a", 0), "ＡＢ ");
+        assert_eq!(fmt.do_format("%-4a", 0), "ＡＢ");
+
+        assert_eq!(fmt.do_format("%6a", 0), "ＡＢＣ");
+        assert_eq!(fmt.do_format("%5a", 0), " ＡＢ");
+        assert_eq!(fmt.do_format("%4a", 0), "ＡＢ");
+    }
+
+    #[test]
     fn t_do_format_ignores_start_of_conditional_at_the_end_of_format_string() {
         let fmt = FmtStrFormatter::new();
         assert_eq!(fmt.do_format("%?", 0), "");
@@ -544,7 +578,7 @@ mod tests {
         fn result_is_never_longer_than_specified_width(length in 1u32..10000, ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
             let result = fmt.do_format(&input, length);
-            assert!(utils::graphemes_count(&result) <= length as usize);
+            assert!(utils::strwidth_stfl(&result) <= length as usize);
         }
     }
 }
