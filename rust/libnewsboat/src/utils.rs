@@ -5,12 +5,10 @@ extern crate natord;
 extern crate rand;
 extern crate regex;
 extern crate std;
-extern crate unicode_segmentation;
 extern crate unicode_width;
 extern crate url;
 
 use self::regex::Regex;
-use self::unicode_segmentation::UnicodeSegmentation;
 use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use self::url::percent_encoding::*;
 use self::url::Url;
