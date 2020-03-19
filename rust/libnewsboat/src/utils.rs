@@ -288,7 +288,7 @@ pub fn strwidth(rs_str: &str) -> usize {
     UnicodeWidthStr::width(rs_str)
 }
 
-/// Returns the with of `rs_str` when displayed on screen.
+/// Returns the width of `rs_str` when displayed on screen.
 ///
 /// STFL tags (e.g. `<b>`, `<foobar>`, `</>`) are counted as having 0 width.
 /// Escaped less-than sign (`<` escaped as `<>`) is counted as having a width of 1 character.
