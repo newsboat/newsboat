@@ -634,27 +634,6 @@ pub fn mkdir_parents<R: AsRef<Path>>(p: &R, mode: u32) -> io::Result<()> {
         .create(p.as_ref())
 }
 
-/// Counts graphemes in a given string.
-///
-/// ```
-/// use libnewsboat::utils::graphemes_count;
-///
-/// assert_eq!(graphemes_count("D"), 1);
-/// // len() counts bytes, not characters, but all ASCII symbols are represented by one byte in
-/// // UTF-8, so len() returns 1 in this case
-/// assert_eq!("D".len(), 1);
-///
-/// // Here's a situation where a single grapheme is represented by multiple bytes
-/// assert_eq!(graphemes_count("Ж"), 1);
-/// assert_eq!("Ж".len(), 2);
-///
-/// assert_eq!(graphemes_count("📰"), 1);
-/// assert_eq!("📰".len(), 4);
-/// ```
-pub fn graphemes_count(input: &str) -> usize {
-    UnicodeSegmentation::graphemes(input, true).count()
-}
-
 /// Extracts up to `n` first graphemes from the given string.
 ///
 /// ```
