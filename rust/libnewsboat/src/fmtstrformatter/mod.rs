@@ -390,6 +390,16 @@ mod tests {
     }
 
     #[test]
+    fn t_do_format_escapes_less_than_sign_in_regular_text() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', "AAA".to_string());
+        fmt.register_fmt('b', "BBB".to_string());
+
+        assert_eq!(fmt.do_format("%a <%b>", 0), "AAA <>BBB>");
+    }
+
+    #[test]
     fn t_do_format_ignores_start_of_conditional_at_the_end_of_format_string() {
         let fmt = FmtStrFormatter::new();
         assert_eq!(fmt.do_format("%?", 0), "");
