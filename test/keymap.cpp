@@ -80,7 +80,7 @@ TEST_CASE(
 
 	SECTION("Contexts don't have their internal keybindings cleared") {
 		const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
-				   "article", "tagselection", "filterselection", "urlview", "podbeuter",
+				   "article", "tagselection", "filterselection", "urlview", "podboat",
 				   "dialogs", "dirbrowser"
 			   };
 		KeyMap default_keymap(KM_NEWSBOAT);
