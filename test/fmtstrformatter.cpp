@@ -158,6 +158,66 @@ TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]")
 	}
 }
 
+TEST_CASE("do_format() keeps wide characters within specified width",
+	"[FmtStrFormatter]")
+{
+	FmtStrFormatter fmt;
+
+	fmt.register_fmt('a', "ＡＢＣ");
+	fmt.register_fmt('b', "def");
+
+	REQUIRE(fmt.do_format("%a %b", 0) == "ＡＢＣ def");
+	REQUIRE(fmt.do_format("%a %b", 10) == "ＡＢＣ def");
+	REQUIRE(fmt.do_format("%a %b", 9) == "ＡＢＣ de");
+	REQUIRE(fmt.do_format("%a %b", 7) == "ＡＢＣ ");
+	REQUIRE(fmt.do_format("%a %b", 6) == "ＡＢＣ");
+	REQUIRE(fmt.do_format("%a %b", 4) == "ＡＢ");
+}
+
+TEST_CASE("do_format() does not include wide character if only 1 colum is left",
+	"[FmtStrFormatter]")
+{
+	FmtStrFormatter fmt;
+
+	fmt.register_fmt('a', "ＡＢＣ");
+
+	REQUIRE(fmt.do_format("%a", 6) == "ＡＢＣ");
+	REQUIRE(fmt.do_format("%a", 5) == "ＡＢ");
+	REQUIRE(fmt.do_format("%a", 4) == "ＡＢ");
+
+	REQUIRE(fmt.do_format("%-6a", 0) == "ＡＢＣ");
+	REQUIRE(fmt.do_format("%-5a", 0) == "ＡＢ ");
+	REQUIRE(fmt.do_format("%-4a", 0) == "ＡＢ");
+
+	REQUIRE(fmt.do_format("%6a", 0) == "ＡＢＣ");
+	REQUIRE(fmt.do_format("%5a", 0) == " ＡＢ");
+	REQUIRE(fmt.do_format("%4a", 0) == "ＡＢ");
+}
+
+TEST_CASE("do_format() escapes less-than sign in regular text",
+	"[FmtStrFormatter]")
+{
+	FmtStrFormatter fmt;
+
+	fmt.register_fmt('a', "AAA");
+	fmt.register_fmt('b', "BBB");
+
+	REQUIRE(fmt.do_format("%a <%b>", 0) == "AAA <>BBB>");
+}
+
+TEST_CASE("do_format() escapes less-than sign in filling format",
+	"[FmtStrFormatter]")
+{
+	FmtStrFormatter fmt;
+
+	fmt.register_fmt('a', "AAA");
+	fmt.register_fmt('b', "BBB");
+
+	REQUIRE(fmt.do_format("%a%>.%b", 10) == "AAA....BBB");
+	REQUIRE(fmt.do_format("%a%><%b", 10) == "AAA<><><><>BBB");
+	REQUIRE(fmt.do_format("%a%>>%b", 10) == "AAA>>>>BBB");
+}
+
 TEST_CASE("do_format ignores \"%?\" at the end of the format string (which "
 	"looks like a conditional but really isn't",
 	"[FmtStrFormatter]")
