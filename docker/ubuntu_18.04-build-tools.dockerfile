@@ -76,7 +76,7 @@ ENV LC_ALL en_US.UTF-8
 USER builder
 WORKDIR /home/builder/src
 
-ARG rust_version=1.41.1
+ARG rust_version=1.42.0
 
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
