@@ -634,23 +634,6 @@ pub fn mkdir_parents<R: AsRef<Path>>(p: &R, mode: u32) -> io::Result<()> {
         .create(p.as_ref())
 }
 
-/// Extracts up to `n` first graphemes from the given string.
-///
-/// ```
-/// use libnewsboat::utils::take_graphemes;
-///
-/// let input = "Привет!";
-/// assert_eq!(take_graphemes(input, 1), "П");
-/// assert_eq!(take_graphemes(input, 4), "Прив");
-/// assert_eq!(take_graphemes(input, 6), "Привет");
-/// assert_eq!(take_graphemes(input, 20), input);
-/// ```
-pub fn take_graphemes(input: &str, n: usize) -> String {
-    UnicodeSegmentation::graphemes(input, true)
-        .take(n)
-        .collect::<String>()
-}
-
 /// The tag and Git commit ID the program was built from, or a pre-defined value from config.h if
 /// there is no Git directory.
 pub fn program_version() -> String {
