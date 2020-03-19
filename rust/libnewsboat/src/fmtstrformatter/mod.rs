@@ -105,18 +105,18 @@ impl FmtStrFormatter {
             Padding::None => result.push_str(value),
 
             Padding::Left(total_width) => {
-                let padding_width = total_width - min(total_width, utils::strwidth_stfl(value));
-                let stripping_width = total_width - padding_width;
+                let text = &utils::substr_with_width_stfl(value, total_width);
+                let padding_width = total_width - utils::strwidth_stfl(text);
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(&padding);
-                result.push_str(&utils::substr_with_width_stfl(value, stripping_width));
+                result.push_str(text);
             }
 
             Padding::Right(total_width) => {
-                let padding_width = total_width - min(total_width, utils::strwidth_stfl(value));
-                let stripping_width = total_width - padding_width;
+                let text = &utils::substr_with_width_stfl(value, total_width);
+                let padding_width = total_width - utils::strwidth_stfl(text);
                 let padding = String::from(" ").repeat(padding_width);
-                result.push_str(&utils::substr_with_width_stfl(value, stripping_width));
+                result.push_str(text);
                 result.push_str(&padding);
             }
         }
