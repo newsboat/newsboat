@@ -84,7 +84,7 @@ impl FmtStrFormatter {
             result.push(c);
         } else {
             let padding_width = {
-                let content_width = utils::graphemes_count(&rest) + result.length();
+                let content_width = utils::strwidth_stfl(&rest) + result.length();
                 if content_width > width as usize {
                     0
                 } else {
@@ -105,18 +105,18 @@ impl FmtStrFormatter {
             Padding::None => result.push_str(value),
 
             Padding::Left(total_width) => {
-                let padding_width = total_width - min(total_width, utils::graphemes_count(value));
+                let padding_width = total_width - min(total_width, utils::strwidth_stfl(value));
                 let stripping_width = total_width - padding_width;
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(&padding);
-                result.push_str(&utils::take_graphemes(value, stripping_width));
+                result.push_str(&utils::substr_with_width_stfl(value, stripping_width));
             }
 
             Padding::Right(total_width) => {
-                let padding_width = total_width - min(total_width, utils::graphemes_count(value));
+                let padding_width = total_width - min(total_width, utils::strwidth_stfl(value));
                 let stripping_width = total_width - padding_width;
                 let padding = String::from(" ").repeat(padding_width);
-                result.push_str(&utils::take_graphemes(value, stripping_width));
+                result.push_str(&utils::substr_with_width_stfl(value, stripping_width));
                 result.push_str(&padding);
             }
         }
@@ -167,11 +167,11 @@ impl FmtStrFormatter {
                         result.push_str(s);
                     } else {
                         let remaining = width as usize - result.length();
-                        let count = utils::graphemes_count(&s);
+                        let count = utils::strwidth_stfl(&s);
                         if remaining >= count {
                             result.push_str(&s);
                         } else {
-                            result.push_str(&utils::take_graphemes(s, remaining));
+                            result.push_str(&utils::substr_with_width_stfl(s, remaining));
                         }
                     }
                 }
