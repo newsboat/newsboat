@@ -1097,12 +1097,15 @@ void ItemListFormAction::set_head(const std::string& s,
 
 	fmt.register_fmt('U', utils::censor_url(url));
 
+	const unsigned int width = utils::to_u(f->get("title:w"));
 	if (!show_searchresult) {
 		title = fmt.do_format(
-				cfg->get_configvalue("articlelist-title-format"));
+				cfg->get_configvalue("articlelist-title-format"),
+				width);
 	} else {
 		title = fmt.do_format(
-				cfg->get_configvalue("searchresult-title-format"));
+				cfg->get_configvalue("searchresult-title-format"),
+				width);
 	}
 	f->set("head", title);
 }
