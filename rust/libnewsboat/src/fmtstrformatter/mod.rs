@@ -5,7 +5,6 @@ mod parser;
 
 use self::limited_string::LimitedString;
 use self::parser::{parse, Padding, Specifier};
-use std::cmp::min;
 use std::collections::BTreeMap;
 use utils;
 
@@ -92,8 +91,8 @@ impl FmtStrFormatter {
                 }
             };
 
-            let paddingValue = utils::quote_for_stfl(&format!("{}", c));
-            let padding = paddingValue.repeat(padding_width);
+            let padding_value = utils::quote_for_stfl(&format!("{}", c));
+            let padding = padding_value.repeat(padding_width);
             result.push_str(&padding);
         };
         result.push_str(&rest);
