@@ -56,7 +56,7 @@ TEST_CASE("do_format replaces variables with values", "[FmtStrFormatter]")
 				SECTION("Complex format string") {
 					REQUIRE(fmt.do_format("<%a> <%5b> | "
 							"%-5c%%") ==
-						"<AAA> <  BBB> | CCC  %");
+						"<>AAA> <>  BBB> | CCC  %");
 					REQUIRE(fmt.do_format("asdf | %a | "
 							"%?c?%a%b&%b%a? "
 							"| qwert") ==
@@ -133,7 +133,7 @@ TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]")
 				SECTION("Complex format string") {
 					REQUIRE(fmt.do_format("<%a> <%5b> | "
 							"%-5c%%") ==
-						"<АБВ> <буква> | ещё о%");
+						"<>АБВ> <>буква> | ещё о%");
 					REQUIRE(fmt.do_format("asdf | %a | "
 							"%?c?%a%b&%b%a? "
 							"| qwert") ==

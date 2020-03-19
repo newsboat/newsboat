@@ -163,6 +163,7 @@ impl FmtStrFormatter {
                 }
 
                 Specifier::Text(s) => {
+                    let s = &utils::quote_for_stfl(s);
                     if width == 0 {
                         result.push_str(s);
                     } else {
@@ -238,7 +239,7 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("<%a> <%5b> | %-5c%%", 0),
-            "<AAA> <  BBB> | CCC  %"
+            "<>AAA> <>  BBB> | CCC  %"
         );
         assert_eq!(
             fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
@@ -321,7 +322,7 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("<%a> <%5b> | %-5c%%", 0),
-            "<АБВ> <буква> | ещё о%"
+            "<>АБВ> <>буква> | ещё о%"
         );
         assert_eq!(
             fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
