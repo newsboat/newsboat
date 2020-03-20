@@ -434,11 +434,11 @@ TEST_CASE("run_command() executes the given command with a given argument",
 	struct stat sb;
 	int result = 0;
 
-	// Busy-wait for 10 tries of 10 milliseconds each, waiting for `touch` to
+	// Busy-wait for 100 tries of 10 milliseconds each, waiting for `touch` to
 	// create the file. Usually it happens quickly, and the loop exists on the
 	// first try; but sometimes on CI it takes longer for `touch` to finish, so
 	// we need a slightly longer wait.
-	int tries = 10;
+	int tries = 100;
 	while (tries-- > 0) {
 		::usleep(10 * 1000);
 
