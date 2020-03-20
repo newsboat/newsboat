@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-02-07 23:58+0100\n"
+"POT-Creation-Date: 2020-03-20 17:58+0300\n"
 "PO-Revision-Date: 2020-02-02 16:58+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
@@ -164,18 +164,18 @@ msgstr "Поймали newsboat::MatcherException с сообщением: %s"
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "Поймали newsboat::Exception с сообщением: %s"
 
-#: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:198
-#: src/regexmanager.cpp:214 src/regexmanager.cpp:296 src/regexmanager.cpp:308
+#: src/colormanager.cpp:56 src/colormanager.cpp:59 src/regexmanager.cpp:244
+#: src/regexmanager.cpp:260 src/regexmanager.cpp:342 src/regexmanager.cpp:354
 #, c-format
 msgid "`%s' is not a valid color"
 msgstr "цвета `%s' не существует"
 
-#: src/colormanager.cpp:65 src/regexmanager.cpp:232 src/regexmanager.cpp:323
+#: src/colormanager.cpp:65 src/regexmanager.cpp:278 src/regexmanager.cpp:369
 #, c-format
 msgid "`%s' is not a valid attribute"
 msgstr "атрибута `%s' не существует"
 
-#: src/colormanager.cpp:82
+#: src/colormanager.cpp:83
 #, c-format
 msgid "`%s' is not a valid configuration element"
 msgstr "элемента конфигурации `%s' не существует"
@@ -451,9 +451,9 @@ msgstr "Закрыть диалог"
 #: src/dialogsformaction.cpp:85 src/dialogsformaction.cpp:102
 #: src/itemlistformaction.cpp:81 src/itemlistformaction.cpp:104
 #: src/itemlistformaction.cpp:163 src/itemlistformaction.cpp:182
-#: src/itemlistformaction.cpp:316 src/itemlistformaction.cpp:350
-#: src/itemlistformaction.cpp:376 src/itemlistformaction.cpp:598
-#: src/itemlistformaction.cpp:837
+#: src/itemlistformaction.cpp:315 src/itemlistformaction.cpp:346
+#: src/itemlistformaction.cpp:372 src/itemlistformaction.cpp:593
+#: src/itemlistformaction.cpp:832
 msgid "No item selected!"
 msgstr "Не выбранно ни одного элемента!"
 
@@ -466,21 +466,16 @@ msgstr "Ошибка: невозможно убрать список лент!"
 msgid "Invalid position!"
 msgstr "Неверная позиция!"
 
-#: src/dirbrowserformaction.cpp:237
+#: src/dirbrowserformaction.cpp:241
 msgid "Directory: "
 msgstr "Директория: "
 
-#: src/dirbrowserformaction.cpp:261
-#, c-format
-msgid "%s %s - Save Files - %s"
-msgstr "%s %s - Сохранить файлы - %s"
-
-#: src/dirbrowserformaction.cpp:269 src/filebrowserformaction.cpp:259
-#: src/pbview.cpp:362 src/selectformaction.cpp:196 src/selectformaction.cpp:200
+#: src/dirbrowserformaction.cpp:269 src/filebrowserformaction.cpp:260
+#: src/pbview.cpp:367 src/selectformaction.cpp:196 src/selectformaction.cpp:200
 msgid "Cancel"
 msgstr "Отмена"
 
-#: src/dirbrowserformaction.cpp:270 src/filebrowserformaction.cpp:260
+#: src/dirbrowserformaction.cpp:270 src/filebrowserformaction.cpp:261
 #: src/itemlistformaction.cpp:1239 src/itemviewformaction.cpp:431
 msgid "Save"
 msgstr "Сохранить"
@@ -580,11 +575,11 @@ msgstr ""
 msgid "Cannot open query feeds in the browser!"
 msgstr "Динамические ленты нельзя открывать в браузере!"
 
-#: src/feedlistformaction.cpp:317 src/itemlistformaction.cpp:496
+#: src/feedlistformaction.cpp:317 src/itemlistformaction.cpp:491
 msgid "Marking feed read..."
 msgstr "Отмечаю ленту как прочитанную..."
 
-#: src/feedlistformaction.cpp:329 src/itemlistformaction.cpp:544
+#: src/feedlistformaction.cpp:329 src/itemlistformaction.cpp:539
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Ошибка: невозможно отметить ленту как прочитанную: %s"
@@ -594,11 +589,11 @@ msgstr "Ошибка: невозможно отметить ленту как п
 msgid "No feeds with unread items."
 msgstr "Нет лент с непрочитанными элементами."
 
-#: src/feedlistformaction.cpp:371 src/itemlistformaction.cpp:486
+#: src/feedlistformaction.cpp:371 src/itemlistformaction.cpp:481
 msgid "Already on last feed."
 msgstr "Уже на последней ленте."
 
-#: src/feedlistformaction.cpp:380 src/itemlistformaction.cpp:491
+#: src/feedlistformaction.cpp:380 src/itemlistformaction.cpp:486
 msgid "Already on first feed."
 msgstr "Уже на первой ленте."
 
@@ -606,21 +601,21 @@ msgstr "Уже на первой ленте."
 msgid "Marking all feeds read..."
 msgstr "Отмечаю все ленты как прочитанные..."
 
-#: src/feedlistformaction.cpp:443 src/itemlistformaction.cpp:639
+#: src/feedlistformaction.cpp:443 src/itemlistformaction.cpp:634
 #, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
 msgstr "Ошибка: невозможно разобрать команду фильтрации `%s': %s"
 
-#: src/feedlistformaction.cpp:456 src/itemlistformaction.cpp:652
+#: src/feedlistformaction.cpp:456 src/itemlistformaction.cpp:647
 msgid "No filters defined."
 msgstr "Не определено ни одного фильтра."
 
 #: src/feedlistformaction.cpp:470 src/helpformaction.cpp:41
-#: src/itemlistformaction.cpp:610 src/itemviewformaction.cpp:244
+#: src/itemlistformaction.cpp:605 src/itemviewformaction.cpp:244
 msgid "Search for: "
 msgstr "Искать: "
 
-#: src/feedlistformaction.cpp:487 src/itemlistformaction.cpp:665
+#: src/feedlistformaction.cpp:487 src/itemlistformaction.cpp:660
 msgid "Filter: "
 msgstr "Фильтр: "
 
@@ -628,7 +623,7 @@ msgstr "Фильтр: "
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Вы правда хотите выйти (y:Да n:Нет)? "
 
-#: src/feedlistformaction.cpp:505 src/filebrowserformaction.cpp:134
+#: src/feedlistformaction.cpp:505 src/filebrowserformaction.cpp:123
 #: src/itemlistformaction.cpp:1464 src/view.cpp:227
 msgid "yn"
 msgstr "yn"
@@ -639,7 +634,7 @@ msgstr "y"
 
 #: src/feedlistformaction.cpp:606 src/helpformaction.cpp:222
 #: src/itemlistformaction.cpp:1237 src/itemviewformaction.cpp:430
-#: src/pbview.cpp:353 src/pbview.cpp:360 src/urlviewformaction.cpp:138
+#: src/pbview.cpp:358 src/pbview.cpp:365 src/urlviewformaction.cpp:138
 msgid "Quit"
 msgstr "Выход"
 
@@ -675,24 +670,24 @@ msgstr "Искать"
 
 #: src/feedlistformaction.cpp:614 src/helpformaction.cpp:254
 #: src/itemlistformaction.cpp:1244 src/itemviewformaction.cpp:435
-#: src/pbview.cpp:291 src/pbview.cpp:368
+#: src/pbview.cpp:296 src/pbview.cpp:373
 msgid "Help"
 msgstr "Помощь"
 
-#: src/feedlistformaction.cpp:922 src/itemlistformaction.cpp:823
+#: src/feedlistformaction.cpp:922 src/itemlistformaction.cpp:818
 msgid "Error: couldn't parse filter command!"
 msgstr "Ошибка: невозможно разобрать команду фильтрации!"
 
-#: src/feedlistformaction.cpp:939 src/itemlistformaction.cpp:859
+#: src/feedlistformaction.cpp:939 src/itemlistformaction.cpp:854
 msgid "Searching..."
 msgstr "Ищу..."
 
-#: src/feedlistformaction.cpp:949 src/itemlistformaction.cpp:872
+#: src/feedlistformaction.cpp:949 src/itemlistformaction.cpp:867
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Ошибка во время поиска `%s': %s"
 
-#: src/feedlistformaction.cpp:961 src/itemlistformaction.cpp:879
+#: src/feedlistformaction.cpp:961 src/itemlistformaction.cpp:874
 msgid "No results."
 msgstr "Нет результатов."
 
@@ -705,30 +700,25 @@ msgstr "Позицию не видно!"
 msgid "Feed List - %u unread, %u total"
 msgstr "Список лент - %u непрочитанных, %u всего"
 
-#: src/filebrowserformaction.cpp:131
+#: src/filebrowserformaction.cpp:120
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
 msgstr "Вы правда хотите перезаписать `%s' (y:Да n:Нет)? "
 
-#: src/filebrowserformaction.cpp:134
+#: src/filebrowserformaction.cpp:123
 msgid "n"
 msgstr "n"
 
-#: src/filebrowserformaction.cpp:227
+#: src/filebrowserformaction.cpp:232
 msgid "File: "
 msgstr "Файл: "
 
-#: src/filebrowserformaction.cpp:251
-#, c-format
-msgid "%s %s - Save File - %s"
-msgstr "%s %s - Сохранить файл - %s"
-
-#: src/filebrowserformaction.cpp:392
+#: src/filebrowserformaction.cpp:393
 #, c-format
 msgid "Save File - %s"
 msgstr "Сохранить файл - %s"
 
-#: src/filtercontainer.cpp:29 src/regexmanager.cpp:334 src/rssignores.cpp:41
+#: src/filtercontainer.cpp:29 src/regexmanager.cpp:380 src/rssignores.cpp:41
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
 msgstr "не удалось разобрать команду фильтрации `%s': %s"
@@ -771,7 +761,7 @@ msgstr "Ошибка во время сохранения закладки: "
 msgid "URL: "
 msgstr "Источник: "
 
-#: src/formaction.cpp:422 src/formaction.cpp:424 src/itemrenderer.cpp:51
+#: src/formaction.cpp:422 src/formaction.cpp:424 src/itemrenderer.cpp:62
 msgid "Title: "
 msgstr "Заголовок: "
 
@@ -811,31 +801,31 @@ msgstr "Чистый"
 msgid "embedded flash:"
 msgstr "встроенный flash:"
 
-#: src/htmlrenderer.cpp:271 src/htmlrenderer.cpp:277 src/htmlrenderer.cpp:974
+#: src/htmlrenderer.cpp:271 src/htmlrenderer.cpp:277 src/htmlrenderer.cpp:981
 msgid "image"
 msgstr "изображение"
 
-#: src/htmlrenderer.cpp:931
+#: src/htmlrenderer.cpp:938
 msgid "Links: "
 msgstr "Ссылки: "
 
-#: src/htmlrenderer.cpp:956 src/htmlrenderer.cpp:972
+#: src/htmlrenderer.cpp:963 src/htmlrenderer.cpp:979
 msgid "link"
 msgstr "ссылка"
 
-#: src/htmlrenderer.cpp:976
+#: src/htmlrenderer.cpp:983
 msgid "embedded flash"
 msgstr "встроенный flash"
 
-#: src/htmlrenderer.cpp:978
+#: src/htmlrenderer.cpp:985
 msgid "video"
 msgstr "видео"
 
-#: src/htmlrenderer.cpp:980
+#: src/htmlrenderer.cpp:987
 msgid "audio"
 msgstr "аудио"
 
-#: src/htmlrenderer.cpp:982
+#: src/htmlrenderer.cpp:989
 msgid "unknown (bug)"
 msgstr "неизвестно (сбой)"
 
@@ -866,76 +856,76 @@ msgstr "Переключение флага прочтения у заметки
 msgid "Error while toggling read flag: %s"
 msgstr "Ошибка во время переключения флага прочтения: %s"
 
-#: src/itemlistformaction.cpp:306 src/itemviewformaction.cpp:286
+#: src/itemlistformaction.cpp:305 src/itemviewformaction.cpp:286
 msgid "URL list empty."
 msgstr "Список ссылок пуст."
 
-#: src/itemlistformaction.cpp:367 src/itemrenderer.cpp:55
+#: src/itemlistformaction.cpp:363 src/itemrenderer.cpp:67
 #: src/itemviewformaction.cpp:274
 msgid "Flags: "
 msgstr "Флаги: "
 
-#: src/itemlistformaction.cpp:398 src/itemlistformaction.cpp:1289
+#: src/itemlistformaction.cpp:393 src/itemlistformaction.cpp:1289
 msgid "Error: no item selected!"
 msgstr "Ошибка: не выбранно ни одного элемента!"
 
-#: src/itemlistformaction.cpp:416
+#: src/itemlistformaction.cpp:411
 msgid "Error: you can't reload search results."
 msgstr "Ошибка: вы не можете обновить результаты поиска."
 
-#: src/itemlistformaction.cpp:437 src/itemlistformaction.cpp:446
-#: src/itemlistformaction.cpp:470 src/itemviewformaction.cpp:308
+#: src/itemlistformaction.cpp:432 src/itemlistformaction.cpp:441
+#: src/itemlistformaction.cpp:465 src/itemviewformaction.cpp:308
 #: src/itemviewformaction.cpp:319 src/itemviewformaction.cpp:349
 #: src/view.cpp:797 src/view.cpp:873
 msgid "No unread items."
 msgstr "Непрочитанных элементов нет."
 
-#: src/itemlistformaction.cpp:454 src/itemviewformaction.cpp:329
+#: src/itemlistformaction.cpp:449 src/itemviewformaction.cpp:329
 #: src/view.cpp:946
 msgid "Already on last item."
 msgstr "Уже на последней записи."
 
-#: src/itemlistformaction.cpp:463 src/itemviewformaction.cpp:339
+#: src/itemlistformaction.cpp:458 src/itemviewformaction.cpp:339
 #: src/view.cpp:911
 msgid "Already on first item."
 msgstr "Уже на первой записи."
 
-#: src/itemlistformaction.cpp:476 src/itemlistformaction.cpp:481
+#: src/itemlistformaction.cpp:471 src/itemlistformaction.cpp:476
 msgid "No unread feeds."
 msgstr "Непрочитанных лент нет."
 
-#: src/itemlistformaction.cpp:551
+#: src/itemlistformaction.cpp:546
 msgid "Marking all above as read..."
 msgstr "Отмечаю все, что выше, как прочитанные..."
 
-#: src/itemlistformaction.cpp:593 src/itemviewformaction.cpp:260
+#: src/itemlistformaction.cpp:588 src/itemviewformaction.cpp:260
 msgid "Pipe article to command: "
 msgstr "Обработать заметку командой: "
 
 #. / This string is related to the letters in parentheses in the
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
-#: src/itemlistformaction.cpp:679 src/itemlistformaction.cpp:717
+#: src/itemlistformaction.cpp:674 src/itemlistformaction.cpp:712
 msgid "dtfalgr"
 msgstr "dtfalgr"
 
-#: src/itemlistformaction.cpp:681
+#: src/itemlistformaction.cpp:676
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Сортировать по дате (d)/заголовку (t)/флагам (f)/автору (a)/ссылке (l)/"
 "(g)uid/(r)случайно?"
 
-#: src/itemlistformaction.cpp:719
+#: src/itemlistformaction.cpp:714
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Сортировать в обратном порядке по дате (d)/заголовку (t)/флагам (f)/автору "
 "(a)/ссылке (l)/(g)uid/(r)случайно?"
 
-#: src/itemlistformaction.cpp:845 src/itemviewformaction.cpp:507
+#: src/itemlistformaction.cpp:840 src/itemviewformaction.cpp:507
 msgid "Flags updated."
 msgstr "Флаги обновлены."
 
-#: src/itemlistformaction.cpp:946 src/view.cpp:437 src/view.cpp:463
+#: src/itemlistformaction.cpp:941 src/view.cpp:437 src/view.cpp:463
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Ошибка: применение фильтра завершилось неудачей: %s"
@@ -997,27 +987,27 @@ msgstr ""
 "Перезаписать `%s' в `%s'? Больше таких конфликтов не осталось (y:Да a:Да для "
 "всех n:Нет q:Нет для всех)"
 
-#: src/itemrenderer.cpp:50
+#: src/itemrenderer.cpp:60
 msgid "Feed: "
 msgstr "Лента: "
 
-#: src/itemrenderer.cpp:52
+#: src/itemrenderer.cpp:64
 msgid "Author: "
 msgstr "Автор: "
 
-#: src/itemrenderer.cpp:53
+#: src/itemrenderer.cpp:65
 msgid "Date: "
 msgstr "Дата: "
 
-#: src/itemrenderer.cpp:54
+#: src/itemrenderer.cpp:66
 msgid "Link: "
 msgstr "Ссылка: "
 
-#: src/itemrenderer.cpp:60
+#: src/itemrenderer.cpp:72
 msgid "Podcast Download URL: "
 msgstr "Ссылка загрузки подкаста: "
 
-#: src/itemrenderer.cpp:65
+#: src/itemrenderer.cpp:77
 msgid "type: "
 msgstr "тип: "
 
@@ -1468,66 +1458,66 @@ msgstr "использовать <файл очереди> как файл оч�
 msgid "start download on startup"
 msgstr "начать загрузку сразу после запуска"
 
-#: src/pbview.cpp:57
+#: src/pbview.cpp:62
 #, c-format
 msgid " - %u parallel downloads"
 msgstr " - %u параллельных загрузок"
 
-#: src/pbview.cpp:64
+#: src/pbview.cpp:69
 #, fuzzy, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total%s"
 msgstr "Очередь (активных загрузок %u, всего %u) - %.2f кб/сек всего%s"
 
-#: src/pbview.cpp:133
+#: src/pbview.cpp:138
 msgid "Error: can't quit: download(s) in progress."
 msgstr "Ошибка: не могу выйти: загрузка(и) активна(ы)."
 
-#: src/pbview.cpp:177
+#: src/pbview.cpp:182
 msgid "Error: download needs to be finished before the file can be played."
 msgstr ""
 "Ошибка: загрузка должна закончиться прежде чем файл может быть проигран."
 
-#: src/pbview.cpp:227
+#: src/pbview.cpp:232
 msgid "Error: unable to perform operation: download(s) in progress."
 msgstr "Ошибка: невозможно выполнить действие: загрузка(и) активна(ы)."
 
-#: src/pbview.cpp:279
+#: src/pbview.cpp:284
 msgid "KB/s"
 msgstr ""
 
-#: src/pbview.cpp:281
+#: src/pbview.cpp:286
 msgid "MB/s"
 msgstr ""
 
-#: src/pbview.cpp:283
+#: src/pbview.cpp:288
 msgid "GB/s"
 msgstr ""
 
-#: src/pbview.cpp:361
+#: src/pbview.cpp:366
 msgid "Download"
 msgstr "Загрузить"
 
-#: src/pbview.cpp:363
+#: src/pbview.cpp:368
 msgid "Delete"
 msgstr "Удалить"
 
-#: src/pbview.cpp:364
+#: src/pbview.cpp:369
 msgid "Purge Finished"
 msgstr "Очистить от завершённых"
 
-#: src/pbview.cpp:365
+#: src/pbview.cpp:370
 msgid "Toggle Automatic Download"
 msgstr "Переключить автоматическую загрузку"
 
-#: src/pbview.cpp:366
+#: src/pbview.cpp:371
 msgid "Play"
 msgstr "Проиграть"
 
-#: src/pbview.cpp:367
+#: src/pbview.cpp:372
 msgid "Mark as Finished"
 msgstr "Отметить как завершенную"
 
-#: src/queueloader.cpp:97
+#: src/queueloader.cpp:98
 #, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when podboat "
@@ -1538,35 +1528,35 @@ msgstr ""
 "пересоздаёт файл очереди, и комментарии будут утеряны. Нажмите Enter для "
 "продолжения, или Ctrl+C для отмены"
 
-#: src/regexmanager.cpp:175
+#: src/regexmanager.cpp:221
 #, c-format
 msgid "`%s' is an invalid dialog type"
 msgstr "`%s' - неверный тип диалога"
 
-#: src/regexmanager.cpp:187
+#: src/regexmanager.cpp:233
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
 msgstr "`%s' — неверное регулярное выражение:%s"
 
-#: src/reloader.cpp:67
+#: src/reloader.cpp:75
 #, c-format
 msgid "%sLoading %s..."
 msgstr "%sЗагружается %s..."
 
-#: src/reloader.cpp:96 src/reloader.cpp:101 src/reloader.cpp:106
+#: src/reloader.cpp:105 src/reloader.cpp:110 src/reloader.cpp:115
 #, c-format
 msgid "Error while retrieving %s: %s"
 msgstr "Ошибка во время получения %s: %s"
 
-#: src/reloader.cpp:116
+#: src/reloader.cpp:125
 msgid "Error: invalid feed!"
 msgstr "Ошибка: некорректная лента!"
 
-#: src/rssfeed.cpp:227
+#: src/rssfeed.cpp:221
 msgid "too few arguments"
 msgstr "слишком мало параметров"
 
-#: src/rssfeed.cpp:242
+#: src/rssfeed.cpp:236
 #, c-format
 msgid "`%s' is not a valid filter expression"
 msgstr "`%s' — неверный фильтр"
@@ -1575,7 +1565,7 @@ msgstr "`%s' — неверный фильтр"
 msgid "%a, %d %b %Y %T %z"
 msgstr "%a, %d %b %Y %T %z"
 
-#: src/rssparser.cpp:179
+#: src/rssparser.cpp:176
 #, c-format
 msgid "Error: unsupported URL: %s"
 msgstr "Ошибка: ссылка не поддерживается: %s"
@@ -1680,3 +1670,9 @@ msgstr "Переношу конфиги и данные из ~/.newsbeuter/..."
 
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Отменяю миграцию, потому что mkdir для `%s' вернула ошибку: %s"
+
+#~ msgid "%s %s - Save Files - %s"
+#~ msgstr "%s %s - Сохранить файлы - %s"
+
+#~ msgid "%s %s - Save File - %s"
+#~ msgstr "%s %s - Сохранить файл - %s"
