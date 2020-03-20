@@ -60,7 +60,7 @@ always -- e.g. on Debian and Ubuntu it points to Dash;
 5. `disown -a` detaches all the background jobs from current shell, so it stops
    caring about them.
 
-== I get "Browser returned error code …" every time I `open-in-browser`
+== I get "Browser returned error code …" every time I open something in browser
 
 Since 2.18 (released on 22nd of December 2019), Newsboat checks the exit code
 of the browser. If the exit code is 0, meaning success, Newsboat marks item as
