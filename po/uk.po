@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-03-20 17:58+0300\n"
-"PO-Revision-Date: 2020-02-02 16:57+0300\n"
+"PO-Revision-Date: 2020-03-20 18:00+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -1464,9 +1464,9 @@ msgid " - %u parallel downloads"
 msgstr " - %u паралельних завантажень"
 
 #: src/pbview.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total%s"
-msgstr "Черга (%u активних завантажень, всього %u) - %.2f kb/s всього%s"
+msgstr "Черга (%u активних завантажень, всього %u) - %.2f %s всього%s"
 
 #: src/pbview.cpp:138
 msgid "Error: can't quit: download(s) in progress."
@@ -1483,15 +1483,15 @@ msgstr "Помилка: неможливо виконати операцію: а
 
 #: src/pbview.cpp:284
 msgid "KB/s"
-msgstr ""
+msgstr "Кб/с"
 
 #: src/pbview.cpp:286
 msgid "MB/s"
-msgstr ""
+msgstr "Мб/с"
 
 #: src/pbview.cpp:288
 msgid "GB/s"
-msgstr ""
+msgstr "Гб/с"
 
 #: src/pbview.cpp:366
 msgid "Download"

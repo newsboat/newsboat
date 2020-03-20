@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-03-20 17:58+0300\n"
-"PO-Revision-Date: 2020-02-02 16:58+0300\n"
+"PO-Revision-Date: 2020-03-20 17:59+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -118,7 +118,7 @@ msgstr "эта помощь"
 
 #: newsboat.cpp:121
 msgid "Files:"
-msgstr "Файли"
+msgstr "Файлы"
 
 #: newsboat.cpp:122
 msgid "config"
@@ -1464,9 +1464,9 @@ msgid " - %u parallel downloads"
 msgstr " - %u параллельных загрузок"
 
 #: src/pbview.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total%s"
-msgstr "Очередь (активных загрузок %u, всего %u) - %.2f кб/сек всего%s"
+msgstr "Очередь (активных загрузок %u, всего %u) - %.2f %s всего%s"
 
 #: src/pbview.cpp:138
 msgid "Error: can't quit: download(s) in progress."
@@ -1483,15 +1483,15 @@ msgstr "Ошибка: невозможно выполнить действие: 
 
 #: src/pbview.cpp:284
 msgid "KB/s"
-msgstr ""
+msgstr "Кб/с"
 
 #: src/pbview.cpp:286
 msgid "MB/s"
-msgstr ""
+msgstr "Мб/с"
 
 #: src/pbview.cpp:288
 msgid "GB/s"
-msgstr ""
+msgstr "Гб/с"
 
 #: src/pbview.cpp:366
 msgid "Download"
@@ -1645,7 +1645,7 @@ msgstr "нет версии Atom"
 
 #: rss/rss09xparser.cpp:32
 msgid "no RSS channel found"
-msgstr "RSS-лента не найдена"
+msgstr "канал RSS не найден"
 
 #: rss/rssparserfactory.cpp:31
 msgid "unsupported feed format"
