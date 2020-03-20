@@ -24,6 +24,7 @@ line to your +~/.newsboat/urls+ file:
 For details, refer to the link:newsboat.html#_query_feeds[documentation on
 query feeds].
 
+[[browser-script]]
 == After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
 
 Newsboat has to behave like that in order to accommodate users of text-based
@@ -58,3 +59,17 @@ always -- e.g. on Debian and Ubuntu it points to Dash;
 
 5. `disown -a` detaches all the background jobs from current shell, so it stops
    caring about them.
+
+== I get "Browser returned error code …" every time I `open-in-browser`
+
+Since 2.18 (released on 22nd of December 2019), Newsboat checks the exit code
+of the browser. If the exit code is 0, meaning success, Newsboat marks item as
+read; otherwise it doesn't. This gives users one more way to control Newsboat
+and create streamlined workflows.
+
+Unfortunately, this change breaks a number of configurations. This very FAQ
+used to suggest setting `browser` to `firefox &`. That happened to work at the
+time, but was wrong on multiple levels.
+
+Please see <<browser-script,an answer above>> for our current recommended
+solution.
