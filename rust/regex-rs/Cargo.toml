@@ -1,0 +1,12 @@
+[package]
+name = "regex-rs"
+version = "0.1.0"
+authors = ["Alexander Batischev <eual.jp@gmail.com>"]
+edition = "2018"
+license = "MIT"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bitflags = "1.0"
+libc = ">=0.2.69"
