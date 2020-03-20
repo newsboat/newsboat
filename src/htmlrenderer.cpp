@@ -605,8 +605,10 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::OL:
-				ol_types.pop_back();
-				ol_counts.pop_back();
+				if (!ol_types.empty()) {
+					ol_types.pop_back();
+					ol_counts.pop_back();
+				}
 			// fall-through
 			case HtmlTag::UL:
 				if (inside_li) {
