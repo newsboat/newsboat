@@ -654,9 +654,15 @@ TEST_CASE("strwidth_stfl()", "[utils]")
 {
 	REQUIRE(utils::strwidth_stfl("") == 0);
 
-	REQUIRE(utils::strwidth_stfl("x<hi>x") == 3);
+	REQUIRE(utils::strwidth_stfl("x<hi>x") == 2);
 
-	REQUIRE(utils::strwidth_stfl("x<>x") == 4);
+	REQUIRE(utils::strwidth_stfl("x<longtag>x</>") == 2);
+
+	REQUIRE(utils::strwidth_stfl("x<>x") == 3);
+
+	REQUIRE(utils::strwidth_stfl("x<>hi>x") == 6);
+
+	REQUIRE(utils::strwidth_stfl("x<>y<>z") == 5);
 
 	REQUIRE(utils::strwidth_stfl(utils::wstr2str(L"\uF91F")) == 2);
 	REQUIRE(utils::strwidth_stfl("\07") == 0);
