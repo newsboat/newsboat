@@ -43,6 +43,11 @@ void PbView::run(bool auto_download)
 {
 	bool quit = false;
 
+	// Make sure curses is initialized
+	dllist_form.run(-3);
+	// Hide cursor using curses
+	curs_set(0);
+
 	set_dllist_keymap_hint();
 
 	do {
