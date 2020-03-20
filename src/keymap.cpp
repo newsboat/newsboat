@@ -469,7 +469,7 @@ static const char* contexts[] = {"all",
 		"tagselection",
 		"filterselection",
 		"urlview",
-		"podbeuter",
+		"podboat",
 		"dialogs",
 		"dirbrowser",
 		nullptr
@@ -504,9 +504,9 @@ void KeyMap::get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
 	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
 		std::string ctx(contexts[i]);
 
-		if (flags & KM_PODBOAT && ctx != "podbeuter") {
+		if (flags & KM_PODBOAT && ctx != "podboat") {
 			continue;
-		} else if (flags & KM_NEWSBOAT && ctx == "podbeuter") {
+		} else if (flags & KM_NEWSBOAT && ctx == "podboat") {
 			continue;
 		}
 
