@@ -24,7 +24,6 @@ namespace newsboat {
 TagSoupPullParser::TagSoupPullParser()
 	: inputstream(0)
 	, current_event(Event::START_DOCUMENT)
-	, c('\0')
 {
 }
 
@@ -74,16 +73,18 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	switch (current_event) {
 	case Event::START_DOCUMENT:
 	case Event::START_TAG:
-	case Event::END_TAG:
+	case Event::END_TAG: {
+		char c = 0;
 		inputstream->read(&c, 1);
 		if (inputstream->eof()) {
 			current_event = Event::END_DOCUMENT;
 		} else if (c != '<') {
-			handle_text();
+			handle_text(c);
 		} else {
 			handle_tag();
 		}
 		break;
+	}
 	case Event::TEXT:
 		handle_tag();
 		break;
@@ -604,7 +605,7 @@ void TagSoupPullParser::handle_tag()
 	current_event = determine_tag_type();
 }
 
-void TagSoupPullParser::handle_text()
+void TagSoupPullParser::handle_text(char c)
 {
 	text.push_back(c);
 	std::string tmp;

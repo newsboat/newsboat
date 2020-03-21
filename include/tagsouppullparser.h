@@ -40,9 +40,7 @@ private:
 	std::string decode_entity(std::string s);
 	void parse_tag(const std::string& tagstr);
 	void handle_tag();
-	void handle_text();
-
-	char c;
+	void handle_text(char c);
 };
 
 } // namespace newsboat
