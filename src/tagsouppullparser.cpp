@@ -78,10 +78,10 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 		inputstream->read(&c, 1);
 		if (inputstream->eof()) {
 			current_event = Event::END_DOCUMENT;
-		} else if (c != '<') {
-			handle_text(c);
-		} else {
+		} else if (c == '<') {
 			handle_tag();
+		} else {
+			handle_text(c);
 		}
 		break;
 	}
