@@ -354,7 +354,7 @@ TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, int expected_version) {
+	auto check = [](TestHelpers::Opts opts, unsigned int expected_version) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.show_version() == expected_version);
