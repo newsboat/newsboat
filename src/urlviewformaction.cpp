@@ -118,6 +118,8 @@ void UrlViewFormAction::init()
 {
 	v->set_status("");
 
+	f->run(-3); // compute all widget dimensions
+
 	std::string viewwidth = f->get("urls:w");
 	unsigned int width = utils::to_u(viewwidth, 80);
 

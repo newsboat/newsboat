@@ -25,6 +25,8 @@ void DialogsFormAction::init()
 {
 	set_keymap_hints();
 
+	f->run(-3); // compute all widget dimensions
+
 	unsigned int width = utils::to_u(f->get("dialogs:w"));
 	std::string title_format = cfg->get_configvalue("dialogs-title-format");
 	FmtStrFormatter fmt;
