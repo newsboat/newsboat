@@ -75,7 +75,7 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	case Event::START_DOCUMENT:
 	case Event::START_TAG:
 	case Event::END_TAG:
-		skip_whitespace();
+		inputstream->read(&c, 1);
 		if (inputstream->eof()) {
 			current_event = Event::END_DOCUMENT;
 		} else if (c != '<') {
@@ -91,22 +91,6 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 		break;
 	}
 	return get_event_type();
-}
-
-void TagSoupPullParser::skip_whitespace()
-{
-	c = '\0';
-	ws = "";
-	do {
-		inputstream->read(&c, 1);
-		if (!inputstream->eof()) {
-			if (!isspace(c)) {
-				break;
-			} else {
-				ws.push_back(c);
-			}
-		}
-	} while (!inputstream->eof() && !inputstream->fail());
 }
 
 void TagSoupPullParser::add_attribute(std::string s)
@@ -622,9 +606,6 @@ void TagSoupPullParser::handle_tag()
 
 void TagSoupPullParser::handle_text()
 {
-	if (current_event != Event::START_DOCUMENT) {
-		text.append(ws);
-	}
 	text.push_back(c);
 	std::string tmp;
 	getline(*inputstream, tmp, '<');
