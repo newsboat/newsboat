@@ -24,28 +24,52 @@ line to your +~/.newsboat/urls+ file:
 For details, refer to the link:newsboat.html#_query_feeds[documentation on
 query feeds].
 
+[[browser-script]]
 == After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
 
-Newsboat has to behave like that in order to accomodate users of text-based
+Newsboat has to behave like that in order to accommodate users of text-based
 browsers like lynx and w3m. It has to relinquish the terminal and stay out of
 the way, otherwise people won't be able to see their browsers.
 
-If you're using a GUI browser like Firefox, you can do one of two things:
+If you're using a GUI browser like Firefox, we recommend adding this to your
+Newsboat config:
 
-1. Start your browser beforehand. This way, Newsboat will only wait a fraction
-   of a second (while a new tab is being opened).
+    browser "/usr/bin/env bash -c 'nohup firefox %u &>/dev/null & disown -a'"
 
-2. Wrap your browser in a script and use the script as Newsboat's browser.
+For the curious, here's what's going on in that line:
+
+1. `/usr/bin/env bash -c 'CMD'` executes `CMD` in BASH shell.
 +
-Put this in `~/bin/newsboat-browser.sh`:
-+
-    #/bin/sh
-    /usr/bin/firefox "$@" &
-+
-Make it executable:
-+
-    $ chmod +x ~/bin/newsboat-browser.sh
-+
-Then add the following line to your Newsboat's config:
-+
-    browser "~/bin/newsboat-browser.sh"
+This is important, since our `CMD` uses BASH-specific `&>` and `disown`. By
+default, `browser` is executed using +/bin/sh+, which only guarantees POSIX
+features. Even though in practice +/bin/sh+ often points to BASH, it doesn't
+always -- e.g. on Debian and Ubuntu it points to Dash;
+
+2. `&>/dev/null` redirects stdout and stderr to +/dev/null+ -- i.e. it ignores
+   all text output and all errors. This prevents `nohup` from redirecting that
+   output to +nohup.out+;
+
+3. `nohup CMD` runs `CMD` with "fake" stdin. That isolates `CMD` from the
+   terminal it was started from. It _doesn't_ run the `CMD` in the background
+   though;
+
+4. `CMD &` starts the `CMD` in the background. Note that it doesn't completely
+   detach `CMD` from the current shell -- it only makes it so we can run more
+   commands;
+
+5. `disown -a` detaches all the background jobs from current shell, so it stops
+   caring about them.
+
+== I get "Browser returned error code …" every time I open something in browser
+
+Since 2.18 (released on 22nd of December 2019), Newsboat checks the exit code
+of the browser. If the exit code is 0, meaning success, Newsboat marks item as
+read; otherwise it doesn't. This gives users one more way to control Newsboat
+and create streamlined workflows.
+
+Unfortunately, this change breaks a number of configurations. This very FAQ
+used to suggest setting `browser` to `firefox &`. That happened to work at the
+time, but was wrong on multiple levels.
+
+Please see <<browser-script,an answer above>> for our current recommended
+solution.
