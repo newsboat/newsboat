@@ -32,7 +32,6 @@ private:
 	std::istream* inputstream;
 	Event current_event;
 
-	void skip_whitespace();
 	void add_attribute(std::string s);
 	std::string read_tag();
 	Event determine_tag_type();
@@ -41,10 +40,7 @@ private:
 	std::string decode_entity(std::string s);
 	void parse_tag(const std::string& tagstr);
 	void handle_tag();
-	void handle_text();
-
-	std::string ws;
-	char c;
+	void handle_text(char c);
 };
 
 } // namespace newsboat

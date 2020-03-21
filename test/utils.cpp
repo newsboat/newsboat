@@ -234,6 +234,24 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 		REQUIRE(tokens[2] == "rst\nsecond\nth");
 		REQUIRE(tokens[4] == "rd");
 	}
+
+	SECTION("no non-delimiter text") {
+		SECTION("single newline") {
+			tokens = utils::tokenize_nl("\n");
+
+			REQUIRE(tokens.size() == 1);
+			REQUIRE(tokens[0] == "\n");
+		}
+
+		SECTION("multiple newlines") {
+			tokens = utils::tokenize_nl("\n\n\n");
+
+			REQUIRE(tokens.size() == 3);
+			REQUIRE(tokens[0] == "\n");
+			REQUIRE(tokens[1] == "\n");
+			REQUIRE(tokens[2] == "\n");
+		}
+	}
 }
 
 TEST_CASE(

@@ -268,6 +268,10 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 		for (i = 0; i < last_pos; ++i) {
 			tokens.push_back(std::string("\n"));
 		}
+	} else {
+		for (i = 0; i < str.length(); ++i) {
+			tokens.push_back(std::string("\n"));
+		}
 	}
 
 	while (std::string::npos != pos || std::string::npos != last_pos) {
