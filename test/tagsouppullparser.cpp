@@ -107,3 +107,63 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 		}
 	}
 }
+
+TEST_CASE("Tagsoup pull parser emits whitespace as is",
+	"[TagSoupPullParser]")
+{
+	std::istringstream input_stream(
+		"<test>    &lt;4 spaces\n"
+		"<pre>\n"
+		"    <span>should have seen spaces</span>"
+		"</pre>"
+		"</test>");
+
+	TagSoupPullParser xpp;
+	TagSoupPullParser::Event e;
+	xpp.set_input(input_stream);
+
+	e = xpp.get_event_type();
+	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
+	REQUIRE(xpp.get_text() == "test");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::TEXT);
+	REQUIRE(xpp.get_text() == "    <4 spaces\n");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
+	REQUIRE(xpp.get_text() == "pre");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::TEXT);
+	REQUIRE(xpp.get_text() == "\n    ");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
+	REQUIRE(xpp.get_text() == "span");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::TEXT);
+	REQUIRE(xpp.get_text() == "should have seen spaces");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
+	REQUIRE(xpp.get_text() == "span");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
+	REQUIRE(xpp.get_text() == "pre");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
+	REQUIRE(xpp.get_text() == "test");
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+
+	e = xpp.next();
+	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+}
