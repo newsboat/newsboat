@@ -25,43 +25,12 @@ addons:
     - *global_deps
     - g++ # required for some niceties in C++ standard library
 
-newsboat_brew_commands: &osx_deps
-  - brew update
-  - brew unlink python@2 # to prevent conflict with Python 3, see https://travis-ci.org/newsboat/newsboat/jobs/649475862#L1510
-  - brew install gcc || brew link --overwrite gcc
-  - brew outdated "pkg-config" || brew upgrade "pkg-config"
-  - brew install "gettext" && brew link --force "gettext"
-  - brew outdated "sqlite" || brew upgrade "sqlite"
-  - brew outdated "curl" || brew upgrade "curl"
-  - brew install "libstfl"
-  - brew outdated "json-c" || brew upgrade "json-c"
-  - brew install "asciidoctor"
-
 env:
   - CXXFLAGS='-fstack-clash-protection -D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2'
 
 matrix:
   fast_finish: true
   include:
-    - compiler: gcc
-      os: osx
-      rust: 1.26.0
-      env:
-        - COMPILER=g++
-      before_install:
-        *osx_deps
-    - compiler: gcc
-      os: osx
-      env:
-        - COMPILER=g++
-      before_install:
-        *osx_deps
-    - compiler: clang
-      os: osx
-      env:
-        - COMPILER=clang++
-      before_install:
-        *osx_deps
     - compiler: gcc-8
       os: linux
       dist: bionic
