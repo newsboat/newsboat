@@ -1,27 +1,101 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2020-03-21
+## 2.19 - 2020-03-22
 
-TODO: mention STFL patch that fixes garbage in empty lines in articles
-https://github.com/newsboat/newsboat/issues/506#issuecomment-596091556
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people: Ivan Tham, Merlin Büge,
+Raphael Nestler, and Tobias Kortkamp.
+
+This is the last release to support Rust 1.26.0. Starting with Newsboat 2.20,
+we will be supporting only the last five stable Rust compilers (at the time of
+the release), e.g. Newsboat 2.20 will only support Rust 1.40, 1.41, 1.42, 1.43,
+1.44 (which should be the current stable at the time of Newsboat 2.20 release).
+Please see https://github.com/newsboat/newsboat/issues/709 for more details on
+this decision.
 
 ### Added
+- contrib/urls-maintenance.sh: a script that converts HTTP to HTTPS, updates
+    URLs according to HTTP redirects etc. (velaja)
+- `delete-played-files` setting (#669) (Dennis van der Schagt)
 - `%K` format for  `podlist-format`. This format specifier is replaced by the
   human readable download speed (automatically switches between KB/s, MB/s, and
-  GB/s)
+  GB/s) (Dennis van der Schagt)
+- Docs on how to synchronize with Bazqux (Jonathan Siddle, Alexander Batischev)
+- Document that regexes use POSIX extended regular expressions
+- Document that regexes in filter language are case-insensitive
 
 ### Changed
-- `podlist-format` which now uses `%K` instead of `%k` by default (shows human
-  readable speed instead of always using KB/s)
+- Dependency: we now use Asciidoctor instead of Asciidoc
+- Dependency on Rust: we now have a schedule for bumping the minimum supported
+    Rust version (#709)
+- Update vendored version of Catch2 to 2.11.3
+- Display `<audio>` and `<video>` tags in article view (Ignacio Losiggio)
+- Update translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Russian, Ukrainian (Alexander Batischev)
+- `podlist-format` now uses `%K` instead of `%k` by default (shows human
+    readable speed instead of always using KB/s) (#727) (Dennis van der Schagt)
+- contrib/pinboard.pl: save description of the article (Donald Merand)
 - The EOT markers ("~" characters below blocks of text) no longer inherit their
   style (colors + attributes) from the "article" style. Instead, they can be
-  configured separately allowing to hide them without hiding the article text
-  (example config line: `color end-of-text-marker default default invis`)
+  configured separately, allowing to hide them without hiding the article text
+  (example config line: `color end-of-text-marker default default invis`) (#507)
+  (Dennis van der Schagt)
 
-### Deprecated
-### Removed
 ### Fixed
-### Security
+- **Breaking change**: `bind-key` context `podbeuter` renamed to `podboat`
+    (Alexander Batischev) (Kudos to Marcos Cruz)
+- Garbage displayed in empty lines turned out to be a bug in libstfl. Dennis van
+    der Schagt created a patch and submitted it upstream on 7 March 2020, but
+    the upstream maintainer haven't responded. Please apply the patch yourself:
+    https://github.com/newsboat/newsboat/issues/506#issuecomment-596091556
+    (#273, #506) (Dennis van der Schagt)
+- Podboat now saves and restores "finished" state of the podcast (#714) (Dennis
+    van der Schagt)
+- Command-line options that take paths as arguments (--cache-file, --url-file
+    etc.) now resolve tilde as path to the home directory (#524) (Alexander
+    Batischev)
+- `--execute print-unread` now takes `ignore-article` into account (#484)
+    (@Brn9hrd7)
+- Podboat no longer spuriously creates .part directories (#725) (Dennis van der
+    Schagt)
+- Incorrect paths in filebrowser and dirbrowser when navigating with arrow keys
+    and Enter (#547) (Dennis van der Schagt)
+- Incorrect dates parsing on macOS 10.15 Catalina (Alexander Batischev)
+- `--help` now displays paths to config, urls file, and cache file (#294)
+    (Alexander Batischev)
+- Documentation now correctly explains that positive padding values add padding
+    on the left (Dennis van der Schagt)
+- Newsboat not displaying titles of empty feeds (#732) (Dennis van der Schagt)
+- Newsboat forgetting feed titles if reload brought no new items (#748)
+    (Alexander Batischev)
+- filebrowser and dirbrowser displaying ".." instead of an actual directory path
+    (#731) (Dennis van der Schagt)
+- `make -jN` now *really* limits the number of jobs to N (#768) (Anatoly Sablin,
+    Alexander Batischev)
+- `pb-purge` (`P` in Podboat) no longer removes played files, just as
+    documentation claims (Dennis van der Schagt)
+- `highlight` in feedlist being overridden after reload (#37) (Dennis van der
+    Schagt)
+- `highlight` regexes unable to match beginning-of-line (#242, #535) (Dennis van
+    der Schagt)
+- Search not extending into and across hyperlinks (#331) (Dennis van der Schagt)
+- `highlight` in articles extending beyond the text that the regex matched
+    (#488) (Dennis van der Schagt)
+- `highlight` that matches beginning-of-line matching again after the first
+    match (#796) (Dennis van der Schagt)
+- Feed/article titles are now sanitized, to prevent HTML markup from breaking
+    formatting (#796) (Dennis van der Schagt)
+- Plain-text rendition of an article no longer contains STFL markup (Dennis van
+    der Schagt)
+- "Filler sequence" (`%>`) not working in format strings for articlelist,
+    dialogs, help, select-tag, select-filter and urls dialogs (#88) (Dennis van
+    der Schagt)
+- Cursor in Podboat is hidden (Dennis van der Schagt)
+- Crash when displaying an article that has double-closed `<ol>` tags (#659)
+    (Dennis van der Schagt)
+- Alignment of feed- and articlelist broken by wide characters like CJK and
+    emojis (#139, #683) (Dennis van der Schagt)
+- Whitespace ignored if followed by an HTML tag (#512) (Dennis van der Schagt)
 
 
 
