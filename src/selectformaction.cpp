@@ -140,6 +140,8 @@ void SelectFormAction::init()
 	quit = false;
 	value = "";
 
+	f->run(-3); // compute all widget dimensions
+
 	std::string viewwidth = f->get("taglist:w");
 	unsigned int width = utils::to_u(viewwidth, 80);
 
