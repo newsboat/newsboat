@@ -1,5 +1,19 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2020-06-20
+
+Lists below only mention user-visible changes, but I would also like to
+acknowledge contributions from the following people:
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.19 - 2020-03-22
 
 Lists below only mention user-visible changes, but I would also like to
