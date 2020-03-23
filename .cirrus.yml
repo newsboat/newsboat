@@ -107,7 +107,7 @@ formatting_task:
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
         cpu: 1
-        memory: 256MB
+        memory: 512MB
     script:
         - make fmt
           # --exit-code forces git-diff to exit with code 1 if there were
