@@ -170,7 +170,7 @@ clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clea
 distclean: clean clean-mo clean-test profclean
 	$(RM) core *.core core.* config.mk
 
-doc: doc/newsboat.1 doc/podboat.1 doc/xhtml/newsboat.html doc/xhtml/faq.html
+doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html
 
 doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/configcommands-linked.dsv doc/keycmds-linked.dsv \
@@ -197,7 +197,7 @@ doc/generate2: doc/generate2.cpp
 doc/newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
 	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
 
-doc/newsboat.1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
+doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/newsboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc \
@@ -207,7 +207,7 @@ doc/newsboat.1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
 	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
 
-doc/podboat.1: doc/manpage-podboat.asciidoc doc/chapter-podcasts.asciidoc \
+doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/podboat-cfgcmds.asciidoc \
 		doc/chapter-environment-variables.asciidoc
 	$(ASCIIDOCTOR) --backend=manpage doc/manpage-podboat.asciidoc
