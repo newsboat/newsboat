@@ -63,7 +63,7 @@ matrix:
     - compiler: gcc-4.9
       os: linux
       dist: xenial
-      rust: 1.26.0
+      rust: 1.33.0
       addons:
         apt:
           sources:
