@@ -242,17 +242,13 @@ cppcheck:
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 
-install-newsboat: $(NEWSBOAT) doc/$(NEWSBOAT).1
+install-newsboat: $(NEWSBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
-	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
-install-podboat: $(PODBOAT) doc/$(PODBOAT).1
+install-podboat: $(PODBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBOAT) $(DESTDIR)$(prefix)/bin
-	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
 install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
@@ -267,6 +263,9 @@ install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib/getpocket.com
 	$(INSTALL) -m 755 contrib/getpocket.com/*.sh $(DESTDIR)$(docdir)/contrib/getpocket.com || true
 	$(INSTALL) -m 644 contrib/getpocket.com/*.md $(DESTDIR)$(docdir)/contrib/getpocket.com || true
+	$(MKDIR) $(DESTDIR)$(mandir)/man1
+	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 
 install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
