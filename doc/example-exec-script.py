@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 # This script can be used by adding a line like the following to the Newsboat urls file:
-# "exec:~/generate-rss.py \"first argument\" \"<argument> containing \\\"literal\\\" quote\"" "this-is-a-tag" "generated-with-python"
-# Update `~/generate-rss.py` to the actual location where you placed this script.
+# "exec:~/example-exec-script.py \"first argument\" \"<argument> containing \\\"literal\\\" quote\"" "this-is-a-tag" "generated-with-python"
+# Update `~/example-exec-script.py` to the actual location where you placed this script.
 
 import sys
 import xml.etree.ElementTree as ET
