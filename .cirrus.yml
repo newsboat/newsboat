@@ -96,11 +96,11 @@ macos_task:
               CC: gcc
               CXX: g++
               RUST: stable
-        - name: macOS GCC Rust 1.26.0
+        - name: macOS GCC Rust 1.33.0
           env:
               CC: gcc
               CXX: g++
-              RUST: 1.26.0
+              RUST: 1.33.0
 
 formatting_task:
     name: Code formatting
