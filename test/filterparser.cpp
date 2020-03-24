@@ -64,3 +64,21 @@ TEST_CASE("Both = and == are accepted", "[FilterParser]")
 	REQUIRE(fp.parse_string("a = \"abc\""));
 	REQUIRE(fp.parse_string("a == \"abc\""));
 }
+
+TEST_CASE("FilterParser disallows NUL byte inside filter expressions",
+	"[FilterParser]")
+{
+	FilterParser fp;
+
+	REQUIRE_FALSE(fp.parse_string(std::string("attri\0bute = 0", 14)));
+	REQUIRE_FALSE(fp.parse_string(std::string("attribute\0= 0", 13)));
+	REQUIRE_FALSE(fp.parse_string(std::string("attribute = \0", 13)));
+	REQUIRE_FALSE(fp.parse_string(std::string("attribute = \\\"\0\\\"", 17)));
+
+	// The following shouldn't pass, but it does. Further REQUIREs explain why:
+	// the NUL byte silently terminates parsing.
+	REQUIRE(fp.parse_string(std::string("attribute = \"hello\0world\"", 25)));
+	REQUIRE(fp.get_root()->op == MATCHOP_EQ);
+	REQUIRE(fp.get_root()->name == "attribute");
+	REQUIRE(fp.get_root()->literal == "\"hello");
+}
