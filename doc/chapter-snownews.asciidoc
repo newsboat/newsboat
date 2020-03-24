@@ -37,3 +37,8 @@ https://web.archive.org/web/20090724045314/http://kiza.kcore.de/software/snownew
 short guide] for an introduction.
 https://github.com/kouya/snownews/tree/master/contrib[A collection
 of existing scripts] might also help.
+
+Newsboat comes with an example exec script which shows one way to generate an
+RSS channel. It also includes a way to see which exact arguments are passed to
+the script by Newsboat. This example can be found in the _doc/examples_
+subdirectory.
