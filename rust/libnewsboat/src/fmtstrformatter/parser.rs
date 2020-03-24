@@ -1,4 +1,7 @@
-use nom::{types::CompleteStr, IResult};
+use nom::branch::alt;
+use nom::bytes::complete::{tag, take, take_till1, take_while};
+use nom::multi::many0;
+use nom::IResult;
 use std::str;
 
 /// Describes how formats should be padded: on the left, on the right, or not at all.
@@ -28,109 +31,106 @@ pub enum Specifier<'a> {
     Conditional(char, Vec<Specifier<'a>>, Option<Vec<Specifier<'a>>>),
 }
 
-fn escaped_percent_sign(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
-    tag!(input, "%%").map(|result| {
-        let CompleteStr(s) = result.1;
-        (result.0, Specifier::Text(&s[0..1]))
-    })
+fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier> {
+    tag("%%")(input).map(|result| (result.0, Specifier::Text(&result.1[0..1])))
 }
 
-fn spacing(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
-    do_parse!(input, tag!("%>") >> c: take!(1) >> (c)).map(|result| {
-        let CompleteStr(chr) = result.1;
-        // unwrap() won't panic because we use take!(1) in parser above
-        let chr = chr.chars().next().unwrap();
+fn spacing(input: &str) -> IResult<&str, Specifier> {
+    let (input, _) = tag("%>")(input)?;
+    let (input, c) = take(1usize)(input)?;
 
-        (result.0, Specifier::Spacing(chr))
-    })
+    // unwrap() won't panic because we use take!(1) in parser above
+    let chr = c.chars().next().unwrap();
+
+    Ok((input, Specifier::Spacing(chr)))
 }
 
-fn padded_format(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
-    do_parse!(
-        input,
-        tag!("%")
-            >> width: take_while!(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))
-            >> format: take!(1)
-            >> (format, width)
-    )
-    .map(|result| {
-        let (c, w) = result.1;
+fn padded_format(input: &str) -> IResult<&str, Specifier> {
+    let (input, _) = tag("%")(input)?;
+    let (input, width) =
+        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))(input)?;
+    let (input, format) = take(1usize)(input)?;
 
-        let CompleteStr(format) = c;
-        // unwrap() won't fail because parser uses take!(1) to get exactly one character
-        let format = format.chars().next().unwrap();
+    // unwrap() won't fail because parser uses take!(1) to get exactly one character
+    let format = format.chars().next().unwrap();
 
-        let CompleteStr(width) = w;
-        let width = width.parse::<isize>().unwrap_or(0);
-        let padding = if width == 0isize {
-            Padding::None
-        } else if width > 0isize {
-            Padding::Left(width.abs() as usize)
-        } else {
-            Padding::Right(width.abs() as usize)
-        };
+    let width = width.parse::<isize>().unwrap_or(0);
+    let padding = if width == 0isize {
+        Padding::None
+    } else if width > 0isize {
+        Padding::Left(width.abs() as usize)
+    } else {
+        Padding::Right(width.abs() as usize)
+    };
 
-        (result.0, Specifier::Format(format, padding))
-    })
+    Ok((input, Specifier::Format(format, padding)))
 }
 
-fn text_outside_conditional(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
-    take_till!(input, |chr: char| chr == '%').map(|result| {
-        let CompleteStr(s) = result.1;
-        (result.0, Specifier::Text(s))
-    })
+fn text_outside_conditional(input: &str) -> IResult<&str, Specifier> {
+    let (input, text) = take_till1(|chr: char| chr == '%')(input)?;
+
+    Ok((input, Specifier::Text(text)))
 }
 
-fn text_inside_conditional(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
-    take_till!(input, |chr: char| chr == '%' || chr == '&' || chr == '?').map(|result| {
-        let CompleteStr(s) = result.1;
-        (result.0, Specifier::Text(s))
-    })
+fn text_inside_conditional(input: &str) -> IResult<&str, Specifier> {
+    let (input, text) = take_till1(|chr: char| chr == '%' || chr == '&' || chr == '?')(input)?;
+
+    Ok((input, Specifier::Text(text)))
 }
 
-fn conditional(input: CompleteStr) -> IResult<CompleteStr, Specifier> {
-    do_parse!(
-        input,
-        tag!("%?")
-            >> cond: take!(1)
-            >> tag!("?")
-            >> then: conditional_branch
-            >> els: alt!(
-            do_parse!(
-                tag!("&") >>
-                els: conditional_branch >>
-                tag!("?") >>
+fn conditional(input: &str) -> IResult<&str, Specifier> {
+    // Prepared partial parsers
+    let start_tag = tag("%?");
+    let condition = take(1usize);
+    let then_tag = tag("?");
+    let then_branch = conditional_branch;
+    let else_tag = tag("&");
+    let end_tag = tag("?");
 
-                (Some(els))) |
+    let some_else_branch = |input| {
+        let (input, _) = else_tag(input)?;
+        let (input, els) = conditional_branch(input)?;
+        let (input, _) = end_tag(input)?;
+        Ok((input, Some(els)))
+    };
+    let none_else_branch = |input| {
+        let (input, _) = end_tag(input)?;
+        Ok((input, None))
+    };
+    let else_branch = alt((some_else_branch, none_else_branch));
 
-            tag!("?") => { |_| None})
-            >> (cond, then, els)
-    )
-    .map(|result| {
-        let (cond, then, els) = result.1;
+    // Input parsing
+    let (input, _) = start_tag(input)?;
+    let (input, cond) = condition(input)?;
+    let (input, _) = then_tag(input)?;
+    let (input, then) = then_branch(input)?;
+    let (input, els) = else_branch(input)?;
 
-        let CompleteStr(cond) = cond;
-        // unwrap() won't panic because we're using take!(1) to get exactly one character
-        let cond = cond.chars().next().unwrap();
+    // unwrap() won't panic because we're using take!(1) to get exactly one character
+    let cond = cond.chars().next().unwrap();
 
-        (result.0, Specifier::Conditional(cond, then, els))
-    })
+    Ok((input, Specifier::Conditional(cond, then, els)))
 }
 
-fn conditional_branch(input: CompleteStr) -> IResult<CompleteStr, Vec<Specifier>> {
-    many0!(
-        input,
-        alt!(escaped_percent_sign | spacing | padded_format | text_inside_conditional)
-    )
+fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
+    let alternatives = (
+        escaped_percent_sign,
+        spacing,
+        padded_format,
+        text_inside_conditional,
+    );
+    many0(alt(alternatives))(input)
 }
 
-fn parser(input: CompleteStr) -> IResult<CompleteStr, Vec<Specifier>> {
-    many0!(
-        input,
-        alt!(
-            conditional | escaped_percent_sign | spacing | padded_format | text_outside_conditional
-        )
-    )
+fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
+    let alternatives = (
+        conditional,
+        escaped_percent_sign,
+        spacing,
+        padded_format,
+        text_outside_conditional,
+    );
+    many0(alt(alternatives))(input)
 }
 
 fn sanitize(mut input: Vec<Specifier>) -> Vec<Specifier> {
@@ -145,7 +145,7 @@ fn sanitize(mut input: Vec<Specifier>) -> Vec<Specifier> {
 }
 
 pub fn parse(input: &str) -> Vec<Specifier> {
-    match parser(CompleteStr(input)) {
+    match parser(input) {
         Ok((_leftovers, ast)) => sanitize(ast),
         Err(_) => vec![Specifier::Text("")],
     }
@@ -158,24 +158,24 @@ mod tests {
     #[test]
     fn t_parses_formats_without_specifiers() {
         let input = "Hello, world!";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
-        assert_eq!(leftovers, CompleteStr(""));
+        let (leftovers, result) = parser(input).unwrap();
+        assert_eq!(leftovers, "");
         assert_eq!(result, vec![Specifier::Text("Hello, world!")]);
     }
 
     #[test]
     fn t_replaces_double_percent_with_a_single_percent() {
         let input = "%%";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
-        assert_eq!(leftovers, CompleteStr(""));
+        let (leftovers, result) = parser(input).unwrap();
+        assert_eq!(leftovers, "");
         assert_eq!(result, vec![Specifier::Text("%")]);
     }
 
     #[test]
     fn t_parses_sequences_of_specifiers() {
         let input = "100%% pure Ceylon tea";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
-        assert_eq!(leftovers, CompleteStr(""));
+        let (leftovers, result) = parser(input).unwrap();
+        assert_eq!(leftovers, "");
 
         let expected = vec![
             Specifier::Text("100"),
@@ -188,9 +188,9 @@ mod tests {
     #[test]
     fn t_parses_formats_with_letters() {
         let input = "%t (%a)";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
+        let (leftovers, result) = parser(input).unwrap();
 
-        assert_eq!(leftovers, CompleteStr(""));
+        assert_eq!(leftovers, "");
 
         let expected = vec![
             Specifier::Format('t', Padding::None),
@@ -204,9 +204,9 @@ mod tests {
     #[test]
     fn t_parses_formats_with_positive_padding() {
         let input = "%8a%4b%13x";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
+        let (leftovers, result) = parser(input).unwrap();
 
-        assert_eq!(leftovers, CompleteStr(""));
+        assert_eq!(leftovers, "");
 
         let expected = vec![
             Specifier::Format('a', Padding::Left(8)),
@@ -219,9 +219,9 @@ mod tests {
     #[test]
     fn t_parses_formats_with_negative_padding() {
         let input = "%-8a%-4b%-13x";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
+        let (leftovers, result) = parser(input).unwrap();
 
-        assert_eq!(leftovers, CompleteStr(""));
+        assert_eq!(leftovers, "");
 
         let expected = vec![
             Specifier::Format('a', Padding::Right(8)),
@@ -234,9 +234,9 @@ mod tests {
     #[test]
     fn t_parses_spacing_format() {
         let input = "%-8a%>m%4b%> %-13x";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
+        let (leftovers, result) = parser(input).unwrap();
 
-        assert_eq!(leftovers, CompleteStr(""));
+        assert_eq!(leftovers, "");
 
         let expected = vec![
             Specifier::Format('a', Padding::Right(8)),
@@ -251,9 +251,9 @@ mod tests {
     #[test]
     fn t_parses_conditionals() {
         let input = "%?x?success&failure?";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
+        let (leftovers, result) = parser(input).unwrap();
 
-        assert_eq!(leftovers, CompleteStr(""));
+        assert_eq!(leftovers, "");
 
         let expected = vec![Specifier::Conditional(
             'x',
@@ -266,9 +266,9 @@ mod tests {
     #[test]
     fn t_parses_conditionals_without_else_branch() {
         let input = "%?x?success?";
-        let (leftovers, result) = parser(CompleteStr(input)).unwrap();
+        let (leftovers, result) = parser(input).unwrap();
 
-        assert_eq!(leftovers, CompleteStr(""));
+        assert_eq!(leftovers, "");
 
         let expected = vec![Specifier::Conditional(
             'x',
