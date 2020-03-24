@@ -28,6 +28,7 @@
 
 #include "config.h"
 #include "logger.h"
+#include "ruststring.h"
 #include "strprintf.h"
 
 #if HAVE_GCRYPT

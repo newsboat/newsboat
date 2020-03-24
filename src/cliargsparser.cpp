@@ -4,9 +4,8 @@
 #include <cstdlib>
 
 #include "globals.h"
+#include "ruststring.h"
 #include "strprintf.h"
-
-#include "rs_utils.h"
 
 extern "C" {
 	void* create_rs_cliargsparser(int argc, char* argv[]);

@@ -11,10 +11,8 @@
 
 #include "config.h"
 #include "globals.h"
+#include "ruststring.h"
 #include "strprintf.h"
-#include "utils.h"
-
-#include "rs_utils.h"
 
 extern "C" {
 	void* create_rs_configpaths();

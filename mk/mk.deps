@@ -49,7 +49,7 @@ src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  include/utils.h
 src/cliargsparser.o: src/cliargsparser.cpp include/cliargsparser.h \
  include/logger.h config.h include/strprintf.h include/globals.h \
- include/strprintf.h include/rs_utils.h
+ include/ruststring.h include/strprintf.h
 src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/configparser.h include/configactionhandler.h config.h \
  include/confighandlerexception.h include/feedlistformaction.h \
@@ -84,9 +84,7 @@ src/configparser.o: src/configparser.cpp include/configparser.h \
  include/utils.h include/configcontainer.h include/logger.h
 src/configpaths.o: src/configpaths.cpp include/configpaths.h \
  include/cliargsparser.h include/logger.h config.h include/strprintf.h \
- include/globals.h include/strprintf.h include/utils.h \
- include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/rs_utils.h
+ include/globals.h include/ruststring.h include/strprintf.h
 src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/colormanager.h \
@@ -206,9 +204,7 @@ src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
  include/strprintf.h include/utils.h include/configcontainer.h \
  include/logger.h include/strprintf.h
 src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
- include/logger.h config.h include/strprintf.h include/rs_utils.h \
- include/utils.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/logger.h
+ include/logger.h config.h include/strprintf.h include/ruststring.h
 src/formaction.o: src/formaction.cpp include/formaction.h \
  include/history.h include/keymap.h include/configparser.h \
  include/configactionhandler.h include/stflpp.h config.h \
@@ -239,7 +235,7 @@ src/helpformaction.o: src/helpformaction.cpp include/helpformaction.h \
  include/rssignores.h include/rssitem.h include/matchable.h \
  include/filebrowserformaction.h include/dirbrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h
-src/history.o: src/history.cpp include/history.h include/rs_utils.h
+src/history.o: src/history.cpp include/history.h include/ruststring.h
 src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
@@ -475,6 +471,7 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/utils.h include/logger.h include/rssignores.h \
  include/strprintf.h include/ttrssapi.h 3rd-party/json.hpp \
  include/cache.h include/utils.h
+src/ruststring.o: src/ruststring.cpp include/ruststring.h
 src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
  include/logger.h config.h include/strprintf.h
 src/selectformaction.o: src/selectformaction.cpp \
@@ -535,8 +532,8 @@ src/urlviewformaction.o: src/urlviewformaction.cpp \
  include/filebrowserformaction.h include/dirbrowserformaction.h
 src/utils.o: src/utils.cpp include/utils.h include/configcontainer.h \
  include/configparser.h include/configactionhandler.h include/logger.h \
- config.h include/strprintf.h include/logger.h include/strprintf.h \
- include/rs_utils.h
+ config.h include/strprintf.h include/logger.h include/ruststring.h \
+ include/strprintf.h include/rs_utils.h
 src/view.o: src/view.cpp include/view.h include/colormanager.h \
  include/configparser.h include/configactionhandler.h \
  include/configcontainer.h include/controller.h include/cache.h \
@@ -699,6 +696,8 @@ test/rsspp_parser.o: test/rsspp_parser.cpp rss/parser.h \
  rss/exception.h test/test-helpers/exceptionwithmsg.h
 test/rsspp_rssparser.o: test/rsspp_rssparser.cpp rss/rssparser.h \
  3rd-party/catch.hpp test/test-helpers/envvar.h
+test/ruststring.o: test/ruststring.cpp include/ruststring.h \
+ 3rd-party/catch.hpp
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
