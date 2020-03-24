@@ -271,8 +271,8 @@ install-docs: doc
 install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
 	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
-	$(INSTALL) -m 755 doc/example-bookmark-plugin.sh $(DESTDIR)$(docdir)/examples/example-bookmark-plugin.sh || true
-	$(INSTALL) -m 755 doc/example-exec-script.py $(DESTDIR)$(docdir)/examples/example-exec-script.py || true
+	$(INSTALL) -m 755 doc/examples/example-bookmark-plugin.sh $(DESTDIR)$(docdir)/examples/example-bookmark-plugin.sh || true
+	$(INSTALL) -m 755 doc/examples/example-exec-script.py $(DESTDIR)$(docdir)/examples/example-exec-script.py || true
 
 
 install: install-newsboat install-podboat install-docs install-examples install-mo

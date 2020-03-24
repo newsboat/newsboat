@@ -706,7 +706,7 @@ In case something goes wrong while saving the bookmark, it writes out an error m
 This error message is then presented to the user from within newsboat.
 
 Newsboat comes with an example plugin, which implements a simple tab-separated bookmark file. This
-example can be found in the _contrib_ subdirectory.
+example can be found in the _doc/examples_ subdirectory.
 
 
 === Command Line
