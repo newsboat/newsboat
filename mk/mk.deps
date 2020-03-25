@@ -323,7 +323,8 @@ src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/utils.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h
 src/matcherexception.o: src/matcherexception.cpp \
- include/matcherexception.h config.h include/strprintf.h
+ include/matcherexception.h config.h include/ruststring.h \
+ include/strprintf.h
 src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/remoteapi.h \
@@ -648,6 +649,8 @@ test/listformatter.o: test/listformatter.cpp include/listformatter.h \
  3rd-party/catch.hpp
 test/matcher.o: test/matcher.cpp include/matcher.h filter/FilterParser.h \
  3rd-party/catch.hpp include/matchable.h include/matcherexception.h
+test/matcherexception.o: test/matcherexception.cpp \
+ include/matcherexception.h 3rd-party/catch.hpp
 test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/urlreader.h 3rd-party/catch.hpp \
