@@ -92,3 +92,51 @@ TEST_CASE("FilterParser parses empty string literals", "[FilterParser]")
 	REQUIRE(fp.get_root()->name == "title");
 	REQUIRE(fp.get_root()->literal == "");
 }
+
+TEST_CASE("Logical operators require space or paren after them",
+	"[FilterParser]")
+{
+	FilterParser fp;
+
+	const auto verify_tree = [&fp](int op) {
+		REQUIRE(fp.get_root()->op == op);
+
+		REQUIRE(fp.get_root()->l->op == MATCHOP_EQ);
+		REQUIRE(fp.get_root()->l->name == "a");
+		REQUIRE(fp.get_root()->l->literal == "42");
+
+		REQUIRE(fp.get_root()->r->op == MATCHOP_EQ);
+		REQUIRE(fp.get_root()->r->name == "y");
+		REQUIRE(fp.get_root()->r->literal == "0");
+	};
+
+	SECTION("`and`") {
+		REQUIRE_FALSE(fp.parse_string("a=42andy=0"));
+		REQUIRE_FALSE(fp.parse_string("(a=42)andy=0"));
+		REQUIRE_FALSE(fp.parse_string("a=42 andy=0"));
+
+		REQUIRE(fp.parse_string("a=42and(y=0)"));
+		verify_tree(LOGOP_AND);
+
+		REQUIRE(fp.parse_string("(a=42)and(y=0)"));
+		verify_tree(LOGOP_AND);
+
+		REQUIRE(fp.parse_string("a=42and y=0"));
+		verify_tree(LOGOP_AND);
+	}
+
+	SECTION("`or`") {
+		REQUIRE_FALSE(fp.parse_string("a=42ory=0"));
+		REQUIRE_FALSE(fp.parse_string("(a=42)ory=0"));
+		REQUIRE_FALSE(fp.parse_string("a=42 ory=0"));
+
+		REQUIRE(fp.parse_string("a=42or(y=0)"));
+		verify_tree(LOGOP_OR);
+
+		REQUIRE(fp.parse_string("(a=42)or(y=0)"));
+		verify_tree(LOGOP_OR);
+
+		REQUIRE(fp.parse_string("a=42or y=0"));
+		verify_tree(LOGOP_OR);
+	}
+}
