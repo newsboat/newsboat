@@ -82,3 +82,13 @@ TEST_CASE("FilterParser disallows NUL byte inside filter expressions",
 	REQUIRE(fp.get_root()->name == "attribute");
 	REQUIRE(fp.get_root()->literal == "\"hello");
 }
+
+TEST_CASE("FilterParser parses empty string literals", "[FilterParser]")
+{
+	FilterParser fp;
+
+	REQUIRE(fp.parse_string("title==\"\""));
+	REQUIRE(fp.get_root()->op == MATCHOP_EQ);
+	REQUIRE(fp.get_root()->name == "title");
+	REQUIRE(fp.get_root()->literal == "");
+}
