@@ -490,7 +490,10 @@ KeyMap::KeyMap(unsigned flags)
 
 		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
 			std::string context(contexts[j]);
-			keymap_[context][op_desc.default_key] = op_desc.op;
+			uint32_t context_flag = (1 << (j - 1));
+			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
+				keymap_[context][op_desc.default_key] = op_desc.op;
+			}
 		}
 	}
 }
