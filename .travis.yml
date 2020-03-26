@@ -102,7 +102,7 @@ matrix:
         - COMPILER=clang++-8
         - REPORT_COVERAGE=yes
       before_install:
-        - cargo install --git https://github.com/Minoru/grcov --branch newsboat-testing-ground
+        - cargo install grcov
 
           # Can't have these in the `env` section above, because these settings break `cargo install`
         - export CARGO_INCREMENTAL=0
