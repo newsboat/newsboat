@@ -483,14 +483,14 @@ KeyMap::KeyMap(unsigned flags)
 	 */
 	LOG(Level::DEBUG, "KeyMap::KeyMap: flags = %x", flags);
 	for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		OpDesc op_desc = opdescs[i];
+		const OpDesc op_desc = opdescs[i];
 		if (!(op_desc.flags & (flags | KM_INTERNAL | KM_SYSKEYS))) {
 			continue;
 		}
 
 		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
-			std::string context(contexts[j]);
-			uint32_t context_flag = (1 << (j - 1));
+			const std::string context(contexts[j]);
+			const uint32_t context_flag = (1 << (j - 1));
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				keymap_[context][op_desc.default_key] = op_desc.op;
 			}
