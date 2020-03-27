@@ -585,7 +585,8 @@ pub unsafe extern "C" fn rs_podcast_mime_to_link_type(
 pub unsafe extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy();
+        // This won't panic because all strings in Newsboat are in UTF-8
+        let rs_input = rs_input.to_str().expect("input contained invalid UTF-8");
         let output = utils::get_command_output(&rs_input);
         // String::from_utf8_lossy() will replace invalid unicode (including null bytes) with U+FFFD,
         // so this shouldn't be able to panic
