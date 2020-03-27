@@ -277,4 +277,41 @@ mod tests {
         )];
         assert_eq!(result, expected);
     }
+
+    #[test]
+    fn t_parses_conditionals_with_empty_then_branch() {
+        let input = "%?x??";
+        let (leftovers, result) = parser(input).unwrap();
+
+        assert_eq!(leftovers, "");
+
+        let expected = vec![Specifier::Conditional('x', vec![], None)];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn t_parses_conditionals_with_empty_then_nonempty_else_branches() {
+        let input = "%?x?&nonempty?";
+        let (leftovers, result) = parser(input).unwrap();
+
+        assert_eq!(leftovers, "");
+
+        let expected = vec![Specifier::Conditional(
+            'x',
+            vec![],
+            Some(vec![Specifier::Text("nonempty")]),
+        )];
+        assert_eq!(result, expected);
+    }
+
+    #[test]
+    fn t_parses_conditionals_with_empty_then_and_else_branches() {
+        let input = "%?x?&?";
+        let (leftovers, result) = parser(input).unwrap();
+
+        assert_eq!(leftovers, "");
+
+        let expected = vec![Specifier::Conditional('x', vec![], Some(vec![]))];
+        assert_eq!(result, expected);
+    }
 }
