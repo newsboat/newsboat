@@ -92,7 +92,8 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		cfgparser.parse("data/config-unbind-all");
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
-			REQUIRE(keys.getkeys(static_cast<Operation>(i), "all").empty());
+			REQUIRE(keys.getkeys(static_cast<Operation>(i), "feedlist").empty());
+			REQUIRE(keys.getkeys(static_cast<Operation>(i), "podboat").empty());
 		}
 	}
 

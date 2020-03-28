@@ -6,6 +6,11 @@
 
 using namespace newsboat;
 
+static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
+	"article", "tagselection", "filterselection", "urlview", "podboat",
+	"dialogs", "dirbrowser"
+};
+
 std::vector<std::string> get_single_string_vector(const std::string& value)
 {
 	std::vector<std::string> vec;
@@ -33,16 +38,16 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-	REQUIRE(k.getkeys(OP_OPEN, "all") == get_single_string_vector("ENTER"));
+	REQUIRE(k.getkeys(OP_OPEN, "feedlist") == get_single_string_vector("ENTER"));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "all") == OP_NIL);
+		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
 
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
-			REQUIRE(k.get_operation("ENTER", "all") == OP_OPEN);
-			REQUIRE(k.getkeys(OP_OPEN, "all") == get_single_string_vector("ENTER"));
+			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+			REQUIRE(k.getkeys(OP_OPEN, "feedlist") == get_single_string_vector("ENTER"));
 		}
 	}
 }
@@ -61,7 +66,13 @@ TEST_CASE(
 				i == OP_SAVEALL) {
 				continue;
 			}
-			REQUIRE_FALSE(k.getkeys(static_cast<Operation>(i), "all").empty());
+			bool used_in_some_context = false;
+			for (const auto& context : contexts) {
+				if (!k.getkeys(static_cast<Operation>(i), context).empty()) {
+					used_in_some_context = true;
+				}
+			}
+			REQUIRE(used_in_some_context);
 		}
 	}
 
@@ -70,7 +81,13 @@ TEST_CASE(
 		k.unset_all_keys("all");
 
 		for (int i = OP_NB_MIN; i < OP_SK_MAX; ++i) {
-			REQUIRE(k.getkeys(static_cast<Operation>(i), "all").empty());
+			bool used_in_some_context = false;
+			for (const auto& context : contexts) {
+				if (!k.getkeys(static_cast<Operation>(i), context).empty()) {
+					used_in_some_context = true;
+				}
+			}
+			REQUIRE_FALSE(used_in_some_context);
 		}
 	}
 
@@ -80,16 +97,12 @@ TEST_CASE(
 		unset_keymap.unset_all_keys("all");
 
 		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.getkeys(static_cast<Operation>(i), "all")
-				== unset_keymap.getkeys(static_cast<Operation>(i), "all"));
+			REQUIRE(default_keymap.getkeys(static_cast<Operation>(i), "feedlist")
+				== unset_keymap.getkeys(static_cast<Operation>(i), "feedlist"));
 		}
 	}
 
 	SECTION("Contexts don't have their internal keybindings cleared") {
-		const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
-				   "article", "tagselection", "filterselection", "urlview", "podboat",
-				   "dialogs", "dirbrowser"
-			   };
 		KeyMap default_keymap(KM_NEWSBOAT);
 
 		for (const auto& context : contexts) {
@@ -97,8 +110,8 @@ TEST_CASE(
 			unset_keymap.unset_all_keys(context);
 
 			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.getkeys(static_cast<Operation>(i), "all")
-					== unset_keymap.getkeys(static_cast<Operation>(i), "all"));
+				REQUIRE(default_keymap.getkeys(static_cast<Operation>(i), context)
+					== unset_keymap.getkeys(static_cast<Operation>(i), context));
 			}
 		}
 	}
@@ -132,22 +145,16 @@ TEST_CASE("getkeys()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	SECTION("Retrieves general bindings") {
-		REQUIRE(k.getkeys(OP_OPEN, "all") == get_single_string_vector("ENTER"));
-		REQUIRE(k.getkeys(OP_TOGGLEITEMREAD, "all") == get_single_string_vector("N"));
+		REQUIRE(k.getkeys(OP_OPEN, "feedlist") == get_single_string_vector("ENTER"));
+		REQUIRE(k.getkeys(OP_TOGGLEITEMREAD,
+				"articlelist") == get_single_string_vector("N"));
 	}
 
 	SECTION("Returns context-specific bindings only in that context") {
 		k.unset_key("q", "article");
 		k.set_key(OP_QUIT, "O", "article");
 		REQUIRE(k.getkeys(OP_QUIT, "article") == get_single_string_vector("O"));
-		REQUIRE(k.getkeys(OP_QUIT, "all") == get_single_string_vector("q"));
-	}
-
-	SECTION("Returns context-specific binding if asked to search in all contexts") {
-		k.unset_all_keys("all");
-		REQUIRE(k.getkeys(OP_QUIT, "all") == get_single_string_vector("<none>"));
-		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.getkeys(OP_QUIT, "all") == get_single_string_vector("O"));
+		REQUIRE(k.getkeys(OP_QUIT, "feedlist") == get_single_string_vector("q"));
 	}
 }
 
