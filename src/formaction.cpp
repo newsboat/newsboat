@@ -75,8 +75,12 @@ std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 	 */
 	std::string keymap_hint;
 	for (int i = 0; hints[i].op != OP_NIL; ++i) {
-		keymap_hint.append(
-			v->get_keys()->getkey(hints[i].op, this->id()));
+		std::string bound_keys = utils::join(v->get_keys()->getkeys(hints[i].op,
+					this->id()), ",");
+		if (bound_keys.empty()) {
+			bound_keys = "<none>";
+		}
+		keymap_hint.append(bound_keys);
 		keymap_hint.append(":");
 		keymap_hint.append(hints[i].text);
 		keymap_hint.append(" ");

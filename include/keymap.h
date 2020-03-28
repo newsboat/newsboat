@@ -172,7 +172,7 @@ public:
 		const std::string& context);
 	std::vector<MacroCmd> get_macro(const std::string& key);
 	char get_key(const std::string& keycode);
-	std::string getkey(Operation op, const std::string& context);
+	std::vector<std::string> getkeys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;

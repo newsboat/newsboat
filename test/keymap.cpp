@@ -6,6 +6,13 @@
 
 using namespace newsboat;
 
+std::vector<std::string> get_single_string_vector(const std::string& value)
+{
+	std::vector<std::string> vec;
+	vec.push_back(value);
+	return vec;
+}
+
 TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -26,7 +33,7 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
+	REQUIRE(k.getkeys(OP_OPEN, "all") == get_single_string_vector("ENTER"));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
@@ -35,7 +42,7 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
 			REQUIRE(k.get_operation("ENTER", "all") == OP_OPEN);
-			REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
+			REQUIRE(k.getkeys(OP_OPEN, "all") == get_single_string_vector("ENTER"));
 		}
 	}
 }
@@ -54,7 +61,7 @@ TEST_CASE(
 				i == OP_SAVEALL) {
 				continue;
 			}
-			REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
+			REQUIRE_FALSE(k.getkeys(static_cast<Operation>(i), "all").empty());
 		}
 	}
 
@@ -63,7 +70,7 @@ TEST_CASE(
 		k.unset_all_keys("all");
 
 		for (int i = OP_NB_MIN; i < OP_SK_MAX; ++i) {
-			REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+			REQUIRE(k.getkeys(static_cast<Operation>(i), "all").empty());
 		}
 	}
 
@@ -73,8 +80,8 @@ TEST_CASE(
 		unset_keymap.unset_all_keys("all");
 
 		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.getkey(static_cast<Operation>(i), "all")
-				== unset_keymap.getkey(static_cast<Operation>(i), "all"));
+			REQUIRE(default_keymap.getkeys(static_cast<Operation>(i), "all")
+				== unset_keymap.getkeys(static_cast<Operation>(i), "all"));
 		}
 	}
 
@@ -90,8 +97,8 @@ TEST_CASE(
 			unset_keymap.unset_all_keys(context);
 
 			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.getkey(static_cast<Operation>(i), "all")
-					== unset_keymap.getkey(static_cast<Operation>(i), "all"));
+				REQUIRE(default_keymap.getkeys(static_cast<Operation>(i), "all")
+					== unset_keymap.getkeys(static_cast<Operation>(i), "all"));
 			}
 		}
 	}
@@ -101,13 +108,13 @@ TEST_CASE(
 		k.unset_all_keys("articlelist");
 
 		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
-			REQUIRE(k.getkey(static_cast<Operation>(i), "articlelist") == "<none>");
+			REQUIRE(k.getkeys(static_cast<Operation>(i), "articlelist").empty());
 		}
 
 		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			const auto op = static_cast<Operation>(i);
-			REQUIRE(k.getkey(op, "feedlist") == default_keys.getkey(op, "feedlist"));
+			REQUIRE(k.getkeys(op, "feedlist") == default_keys.getkeys(op, "feedlist"));
 		}
 	}
 }
@@ -120,27 +127,27 @@ TEST_CASE("get_opcode()", "[KeyMap]")
 	REQUIRE(k.get_opcode("some-noexistent-operation") == OP_NIL);
 }
 
-TEST_CASE("getkey()", "[KeyMap]")
+TEST_CASE("getkeys()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
 	SECTION("Retrieves general bindings") {
-		REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
-		REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
+		REQUIRE(k.getkeys(OP_OPEN, "all") == get_single_string_vector("ENTER"));
+		REQUIRE(k.getkeys(OP_TOGGLEITEMREAD, "all") == get_single_string_vector("N"));
 	}
 
 	SECTION("Returns context-specific bindings only in that context") {
 		k.unset_key("q", "article");
 		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.getkey(OP_QUIT, "article") == "O");
-		REQUIRE(k.getkey(OP_QUIT, "all") == "q");
+		REQUIRE(k.getkeys(OP_QUIT, "article") == get_single_string_vector("O"));
+		REQUIRE(k.getkeys(OP_QUIT, "all") == get_single_string_vector("q"));
 	}
 
 	SECTION("Returns context-specific binding if asked to search in all contexts") {
 		k.unset_all_keys("all");
-		REQUIRE(k.getkey(OP_QUIT, "all") == "<none>");
+		REQUIRE(k.getkeys(OP_QUIT, "all") == get_single_string_vector("<none>"));
 		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.getkey(OP_QUIT, "all") == "O");
+		REQUIRE(k.getkeys(OP_QUIT, "all") == get_single_string_vector("O"));
 	}
 }
 
