@@ -215,5 +215,5 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 	REQUIRE(f.items[2].description == "some content");
 	REQUIRE(f.items[2].base ==
 		"http://example.com/content/atom_testing.html");
-	REQUIRE(f.items[2].author == "A Person");
+	REQUIRE(f.items[2].author == "Person A, Person B");
 }
