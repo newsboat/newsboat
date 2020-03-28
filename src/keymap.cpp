@@ -793,20 +793,9 @@ std::vector<std::string> KeyMap::getkeys(Operation op,
 	const std::string& context)
 {
 	std::vector<std::string> keys;
-	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			std::string ctx(contexts[i]);
-			for (const auto& keymap : keymap_[ctx]) {
-				if (keymap.second == op) {
-					keys.push_back(keymap.first);
-				}
-			}
-		}
-	} else {
-		for (const auto& keymap : keymap_[context]) {
-			if (keymap.second == op) {
-				keys.push_back(keymap.first);
-			}
+	for (const auto& keymap : keymap_[context]) {
+		if (keymap.second == op) {
+			keys.push_back(keymap.first);
 		}
 	}
 	return keys;
