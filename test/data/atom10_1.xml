@@ -21,7 +21,7 @@
 
 <entry xml:base="http://example.com/entry/atom_testing.html">
 <author>
-<name>A Person</name>
+<name>A different Person</name>
 <uri>http://example.com/</uri>
 </author>
 <title type="html"><![CDATA[A missing rel attribute]]></title>
@@ -34,8 +34,12 @@
 
 <entry>
 <author>
-<name>A Person</name>
-<uri>http://example.com/</uri>
+<name>Person A</name>
+<uri>http://example.com/A</uri>
+</author>
+<author>
+<name>Person B</name>
+<uri>http://example.com/B</uri>
 </author>
 <title type="html"><![CDATA[alternate link isn't first]]></title>
 <link rel="comments" type="text/html" href="http://example.com/atom_bad.html" />

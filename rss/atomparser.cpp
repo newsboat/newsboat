@@ -78,7 +78,10 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 				authornode != nullptr;
 				authornode = authornode->next) {
 				if (node_is(authornode, "name", ns)) {
-					it.author = get_content(authornode);
+					if (!it.author.empty()) {
+						it.author += ", ";
+					}
+					it.author += get_content(authornode);
 				} // TODO: is there more?
 			}
 		} else if (node_is(node, "title", ns)) {

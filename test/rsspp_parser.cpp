@@ -197,6 +197,7 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 	REQUIRE(f.items[0].guid == "tag:example.com,2008-12-30:/atom_testing");
 	REQUIRE(f.items[0].description == "some content");
 	REQUIRE(f.items[0].base == "http://example.com/feed/atom_testing.html");
+	REQUIRE(f.items[0].author == "A Person");
 
 	REQUIRE(f.items[1].title == "A missing rel attribute");
 	REQUIRE(f.items[1].title_type == "html");
@@ -205,6 +206,7 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 	REQUIRE(f.items[1].description == "some content");
 	REQUIRE(f.items[1].base ==
 		"http://example.com/entry/atom_testing.html");
+	REQUIRE(f.items[1].author == "A different Person");
 
 	REQUIRE(f.items[2].title == "alternate link isn't first");
 	REQUIRE(f.items[2].title_type == "html");
@@ -213,4 +215,5 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 	REQUIRE(f.items[2].description == "some content");
 	REQUIRE(f.items[2].base ==
 		"http://example.com/content/atom_testing.html");
+	REQUIRE(f.items[2].author == "Person A, Person B");
 }
