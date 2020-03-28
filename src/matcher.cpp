@@ -16,9 +16,6 @@
 
 namespace newsboat {
 
-Matchable::Matchable() {}
-Matchable::~Matchable() {}
-
 Matcher::Matcher() {}
 
 Matcher::Matcher(const std::string& expr)
