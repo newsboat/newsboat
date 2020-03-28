@@ -21,7 +21,7 @@
 
 <entry xml:base="http://example.com/entry/atom_testing.html">
 <author>
-<name>A Person</name>
+<name>A different Person</name>
 <uri>http://example.com/</uri>
 </author>
 <title type="html"><![CDATA[A missing rel attribute]]></title>
