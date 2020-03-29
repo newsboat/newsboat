@@ -6,7 +6,8 @@
 #include "configcontainer.h"
 #include "feedcontainer.h"
 #include "rssfeed.h"
-#include "test-helpers.h"
+
+#include "3rd-party/catch.hpp"
 
 using namespace newsboat;
 

@@ -5,7 +5,7 @@
 #include "3rd-party/catch.hpp"
 #include "configcontainer.h"
 #include "download.h"
-#include "test-helpers.h"
+#include "test-helpers/tempfile.h"
 
 using namespace podboat;
 

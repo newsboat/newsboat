@@ -1,7 +1,13 @@
 #include "configpaths.h"
 
+#include <fstream>
+#include <unistd.h>
+
 #include "3rd-party/catch.hpp"
-#include "test-helpers.h"
+#include "test-helpers/chmod.h"
+#include "test-helpers/envvar.h"
+#include "test-helpers/opts.h"
+#include "test-helpers/tempdir.h"
 #include "utils.h"
 
 using namespace newsboat;

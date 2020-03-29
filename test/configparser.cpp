@@ -1,8 +1,11 @@
 #include "configparser.h"
 
+#include <fstream>
+
 #include "3rd-party/catch.hpp"
-#include "test-helpers.h"
 #include "keymap.h"
+#include "test-helpers/envvar.h"
+#include "test-helpers/tempfile.h"
 
 using namespace newsboat;
 

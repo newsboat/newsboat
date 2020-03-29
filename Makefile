@@ -230,15 +230,16 @@ doc/keycmds-linked.dsv: doc/keycmds.dsv
 	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
-	astyle --project *.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp test/*.h test/*.cpp
+	astyle --project \
+		*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp \
+		test/*.cpp test/test-helpers/*.h test/test-helpers/*.cpp
 	$(CARGO) fmt
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
 		-DDEBUG=1 \
 		$(INCLUDES) $(DEFINES) \
-		include filter newsboat.cpp podboat.cpp rss src stfl \
-		test/*.cpp test/*.h \
+		include filter newsboat.cpp podboat.cpp rss src stfl test \
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 
@@ -340,13 +341,13 @@ test: test/test rust-test
 rust-test:
 	+$(CARGO) test --no-run
 
-TEST_SRCS:=$(wildcard test/*.cpp)
+TEST_SRCS:=$(wildcard test/*.cpp test/test-helpers/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
-test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) test/test-helpers.h
+test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
 	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 clean-test:
-	$(RM) test/test test/*.o
+	$(RM) test/test test/*.o test/test-helpers/*.o
 
 profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
@@ -362,11 +363,11 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-ALL_SRCS:=$(wildcard filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp)
-ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
+ALL_SRCS:=$(wildcard filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
+ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test-helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
 depslist: $(ALL_SRCS) $(ALL_HDRS)
 	> mk/mk.deps
-	for dir in filter rss src test ; do \
+	for dir in filter rss src test test/test-helpers ; do \
 		for file in $$dir/*.cpp ; do \
 			target=`echo $$file | sed 's/cpp$$/o/'`; \
 			$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \

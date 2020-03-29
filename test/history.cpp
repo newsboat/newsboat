@@ -1,7 +1,9 @@
 #include "history.h"
 
+#include <unistd.h>
+
 #include "3rd-party/catch.hpp"
-#include "test-helpers.h"
+#include "test-helpers/tempdir.h"
 
 using namespace newsboat;
 

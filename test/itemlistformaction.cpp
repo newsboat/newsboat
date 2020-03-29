@@ -1,5 +1,6 @@
 #include "itemlistformaction.h"
 
+#include <fstream>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
@@ -10,7 +11,8 @@
 #include "keymap.h"
 #include "regexmanager.h"
 #include "rssfeed.h"
-#include "test-helpers.h"
+#include "test-helpers/misc.h"
+#include "test-helpers/tempfile.h"
 
 using namespace newsboat;
 

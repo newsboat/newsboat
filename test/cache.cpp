@@ -7,7 +7,7 @@
 #include "rssfeed.h"
 #include "rssignores.h"
 #include "rssparser.h"
-#include "test-helpers.h"
+#include "test-helpers/tempfile.h"
 
 using namespace newsboat;
 

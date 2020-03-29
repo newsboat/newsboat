@@ -3,7 +3,7 @@
 #include <set>
 #include <vector>
 
-#include "test-helpers.h"
+#include "3rd-party/catch.hpp"
 
 using namespace podboat;
 
