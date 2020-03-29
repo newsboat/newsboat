@@ -15,7 +15,9 @@ freebsd_task:
         HOME: /home/testuser
 
     install_script:
-        - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf
+        - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf        
+        - pkg update -f
+        - pkg upgrade -y
         - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools libxml2
     setup_script:
         - pw groupadd testgroup
