@@ -14,7 +14,9 @@ freebsd_task:
     env:
         HOME: /home/testuser
 
-    install_script: pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl111 sqlite3 gettext-tools libxml2
+    install_script:
+        - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf
+        - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools libxml2
     setup_script:
         - pw groupadd testgroup
         - pw useradd testuser -g testgroup -w none -m
