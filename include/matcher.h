@@ -13,8 +13,8 @@ public:
 	explicit Matcher(const std::string& expr);
 	bool parse(const std::string& expr);
 	bool matches(Matchable* item);
-	const std::string& get_parse_error();
-	const std::string& get_expression();
+	std::string get_parse_error();
+	std::string get_expression();
 
 private:
 	bool matches_r(expression* e, Matchable* item);
