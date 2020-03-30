@@ -74,8 +74,8 @@ void HelpFormAction::prepare()
 				width));
 
 		std::vector<KeyMapDesc> descs;
-		v->get_keys()->get_keymap_descriptions(
-			descs, v->get_keys()->get_flag_from_context(context));
+		v->get_keymap()->get_keymap_descriptions(
+			descs, v->get_keymap()->get_flag_from_context(context));
 
 		std::string highlighted_searchphrase =
 			strprintf::fmt("<hl>%s</>", searchphrase);

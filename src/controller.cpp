@@ -888,7 +888,7 @@ void Controller::dump_config(const std::string& filename)
 	std::vector<std::string> configlines;
 	cfg.dump_config(configlines);
 	if (v) {
-		v->get_keys()->dump_config(configlines);
+		v->get_keymap()->dump_config(configlines);
 	}
 	ign.dump_config(configlines);
 	filters.dump_config(configlines);
