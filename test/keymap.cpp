@@ -81,13 +81,12 @@ TEST_CASE(
 		k.unset_all_keys("all");
 
 		for (int i = OP_NB_MIN; i < OP_SK_MAX; ++i) {
-			bool used_in_some_context = false;
 			for (const auto& context : contexts) {
-				if (!k.get_keys(static_cast<Operation>(i), context).empty()) {
-					used_in_some_context = true;
-				}
+				INFO("Operation: " << i);
+				INFO("used in context: " << context);
+				REQUIRE(k.get_keys(static_cast<Operation>(i),
+						context) == std::vector<std::string>());
 			}
-			REQUIRE_FALSE(used_in_some_context);
 		}
 	}
 
@@ -121,7 +120,8 @@ TEST_CASE(
 		k.unset_all_keys("articlelist");
 
 		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
-			REQUIRE(k.get_keys(static_cast<Operation>(i), "articlelist").empty());
+			REQUIRE(k.get_keys(static_cast<Operation>(i),
+					"articlelist") == std::vector<std::string>());
 		}
 
 		KeyMap default_keys(KM_NEWSBOAT);
