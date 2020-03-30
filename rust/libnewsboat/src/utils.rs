@@ -940,14 +940,14 @@ mod tests {
 
     #[test]
     fn t_substr_with_width_given_string_empty() {
-        assert!(substr_with_width("", 0).is_empty());
-        assert!(substr_with_width("", 1).is_empty());
+        assert_eq!(substr_with_width("", 0), "");
+        assert_eq!(substr_with_width("", 1), "");
     }
 
     #[test]
     fn t_substr_with_width_max_width_zero() {
-        assert!(substr_with_width("world", 0).is_empty());
-        assert!(substr_with_width("", 0).is_empty());
+        assert_eq!(substr_with_width("world", 0), "");
+        assert_eq!(substr_with_width("", 0), "");
     }
 
     #[test]
@@ -981,14 +981,14 @@ mod tests {
 
     #[test]
     fn t_substr_with_width_stfl_given_string_empty() {
-        assert!(substr_with_width_stfl("", 0).is_empty());
-        assert!(substr_with_width_stfl("", 1).is_empty());
+        assert_eq!(substr_with_width_stfl("", 0), "");
+        assert_eq!(substr_with_width_stfl("", 1), "");
     }
 
     #[test]
     fn t_substr_with_width_stfl_max_width_zero() {
-        assert!(substr_with_width_stfl("world", 0).is_empty());
-        assert!(substr_with_width_stfl("", 0).is_empty());
+        assert_eq!(substr_with_width_stfl("world", 0), "");
+        assert_eq!(substr_with_width_stfl("", 0), "");
     }
 
     #[test]

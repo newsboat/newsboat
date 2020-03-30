@@ -61,7 +61,7 @@ TEST_CASE("filename() returns download's target filename", "[Download]")
 	Download d(emptyCallback);
 
 	SECTION("filename returns empty string by default") {
-		REQUIRE(d.filename().empty());
+		REQUIRE(d.filename() == "");
 	}
 
 
@@ -127,7 +127,7 @@ TEST_CASE("basename() returns all text after last slash in the filename",
 	Download d(emptyCallback);
 
 	SECTION("basename() returns empty string by default") {
-		REQUIRE(d.basename().empty());
+		REQUIRE(d.basename() == "");
 	}
 
 	SECTION("basename() returns full filename if it does not contain slashes") {
@@ -170,7 +170,7 @@ TEST_CASE("status_text() does not contain obvious copy-paste errors",
 		for (const DlStatus& status : status_values) {
 			d.set_status(status);
 
-			REQUIRE_FALSE(d.status_text().empty());
+			REQUIRE_FALSE(d.status_text() == "");
 		}
 	}
 

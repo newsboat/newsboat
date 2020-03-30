@@ -689,7 +689,7 @@ TEST_CASE(
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE_FALSE(args.display_msg().empty());
+		REQUIRE_FALSE(args.display_msg() == "");
 		REQUIRE(args.should_return());
 		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};

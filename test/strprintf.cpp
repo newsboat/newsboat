@@ -160,7 +160,7 @@ TEST_CASE("strprintf::fmt() formats pointers", "[strprintf]")
 	const auto x_ptr_void = reinterpret_cast<const void*>(x_ptr);
 	const auto x_ptr_void_formatted = strprintf::fmt("%p", x_ptr_void);
 
-	REQUIRE_FALSE(x_ptr_formatted.empty());
+	REQUIRE_FALSE(x_ptr_formatted == "");
 	REQUIRE(x_ptr_formatted == x_ptr_void_formatted);
 }
 
@@ -178,7 +178,7 @@ TEST_CASE("strprintf::fmt() formats null pointers the same", "[strprintf]")
 		strprintf::fmt("%p", static_cast<const long long*>(nullptr));
 	const auto ullong_ptr_fmt =
 		strprintf::fmt("%p", static_cast<const unsigned long long*>(nullptr));
-	REQUIRE_FALSE(int_ptr_fmt.empty());
+	REQUIRE_FALSE(int_ptr_fmt == "");
 	REQUIRE(int_ptr_fmt == uint_ptr_fmt);
 	REQUIRE(uint_ptr_fmt == long_ptr_fmt);
 	REQUIRE(long_ptr_fmt == ulong_ptr_fmt);

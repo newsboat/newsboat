@@ -907,13 +907,13 @@ TEST_CASE(
 		"A\u3042B");
 
 	SECTION("returns an empty string if the given string is empty") {
-		REQUIRE(utils::substr_with_width("", 0).empty());
-		REQUIRE(utils::substr_with_width("", 1).empty());
+		REQUIRE(utils::substr_with_width("", 0) == "");
+		REQUIRE(utils::substr_with_width("", 1) == "");
 	}
 
 	SECTION("returns an empty string if the given width is zero") {
-		REQUIRE(utils::substr_with_width("world", 0).empty());
-		REQUIRE(utils::substr_with_width("", 0).empty());
+		REQUIRE(utils::substr_with_width("world", 0) == "");
+		REQUIRE(utils::substr_with_width("", 0) == "");
 	}
 
 	SECTION("doesn't split single codepoint in two") {
@@ -960,13 +960,13 @@ TEST_CASE(
 		"A\u3042B");
 
 	SECTION("returns an empty string if the given string is empty") {
-		REQUIRE(utils::substr_with_width_stfl("", 0).empty());
-		REQUIRE(utils::substr_with_width_stfl("", 1).empty());
+		REQUIRE(utils::substr_with_width_stfl("", 0) == "");
+		REQUIRE(utils::substr_with_width_stfl("", 1) == "");
 	}
 
 	SECTION("returns an empty string if the given width is zero") {
-		REQUIRE(utils::substr_with_width_stfl("world", 0).empty());
-		REQUIRE(utils::substr_with_width_stfl("", 0).empty());
+		REQUIRE(utils::substr_with_width_stfl("world", 0) == "");
+		REQUIRE(utils::substr_with_width_stfl("", 0) == "");
 	}
 
 	SECTION("doesn't split single codepoint in two") {
