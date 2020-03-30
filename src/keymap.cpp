@@ -789,7 +789,7 @@ void KeyMap::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_PARAMS);
 }
 
-std::vector<std::string> KeyMap::getkeys(Operation op,
+std::vector<std::string> KeyMap::get_keys(Operation op,
 	const std::string& context)
 {
 	std::vector<std::string> keys;

@@ -250,17 +250,17 @@ void PbView::set_bindings()
 {
 	if (keys) {
 		std::string upkey("** ");
-		upkey.append(utils::join(keys->getkeys(OP_SK_UP, "podboat"), " "));
+		upkey.append(utils::join(keys->get_keys(OP_SK_UP, "podboat"), " "));
 		std::string downkey("** ");
-		downkey.append(utils::join(keys->getkeys(OP_SK_DOWN, "podboat"), " "));
+		downkey.append(utils::join(keys->get_keys(OP_SK_DOWN, "podboat"), " "));
 		std::string pgupkey("** ");
-		pgupkey.append(utils::join(keys->getkeys(OP_SK_PGUP, "podboat"), " "));
+		pgupkey.append(utils::join(keys->get_keys(OP_SK_PGUP, "podboat"), " "));
 		std::string pgdownkey("** ");
-		pgdownkey.append(utils::join(keys->getkeys(OP_SK_PGDOWN, "podboat"), " "));
+		pgdownkey.append(utils::join(keys->get_keys(OP_SK_PGDOWN, "podboat"), " "));
 		std::string homekey("** ");
-		homekey.append(utils::join(keys->getkeys(OP_SK_HOME, "podboat"), " "));
+		homekey.append(utils::join(keys->get_keys(OP_SK_HOME, "podboat"), " "));
 		std::string endkey("** ");
-		endkey.append(utils::join(keys->getkeys(OP_SK_END, "podboat"), " "));
+		endkey.append(utils::join(keys->get_keys(OP_SK_END, "podboat"), " "));
 
 		dllist_form.set("bind_up", upkey);
 		dllist_form.set("bind_down", downkey);
@@ -345,7 +345,7 @@ std::string PbView::prepare_keymaphint(KeyMapHintEntry* hints)
 {
 	std::string keymap_hint;
 	for (int i = 0; hints[i].op != OP_NIL; ++i) {
-		std::string bound_keys = utils::join(keys->getkeys(hints[i].op, "podboat"),
+		std::string bound_keys = utils::join(keys->get_keys(hints[i].op, "podboat"),
 				",");
 		if (bound_keys.empty()) {
 			bound_keys = "<none>";

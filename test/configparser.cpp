@@ -92,8 +92,8 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		cfgparser.parse("data/config-unbind-all");
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
-			REQUIRE(keys.getkeys(static_cast<Operation>(i), "feedlist").empty());
-			REQUIRE(keys.getkeys(static_cast<Operation>(i), "podboat").empty());
+			REQUIRE(keys.get_keys(static_cast<Operation>(i), "feedlist").empty());
+			REQUIRE(keys.get_keys(static_cast<Operation>(i), "podboat").empty());
 		}
 	}
 
@@ -106,11 +106,11 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			const auto op = static_cast<Operation>(i);
-			REQUIRE(keys.getkeys(op, "help") == default_keys.getkeys(op, "help"));
+			REQUIRE(keys.get_keys(op, "help") == default_keys.get_keys(op, "help"));
 		}
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
-			REQUIRE(keys.getkeys(static_cast<Operation>(i), "article").empty());
+			REQUIRE(keys.get_keys(static_cast<Operation>(i), "article").empty());
 		}
 	}
 }
