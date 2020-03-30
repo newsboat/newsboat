@@ -2,6 +2,8 @@ freebsd_task:
     matrix:
         - name: FreeBSD 11.3
           freebsd_instance:
+            # There is no freebsd-11-3-release image. Use one of the snapshots
+            # for the upcoming 11.4-RELEASE instead.
             image: freebsd-11-3-stable-amd64-v20200326
         - name: FreeBSD 12.1
           freebsd_instance:
@@ -15,6 +17,8 @@ freebsd_task:
         HOME: /home/testuser
 
     install_script:
+        # Make sure we use the same package repository for all images. Snapshots
+        # (like 11.3-STABLE) default to latest, while releases default to quarterly.
         - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf        
         - pkg update -f
         - pkg upgrade -y
