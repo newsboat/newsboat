@@ -11,13 +11,6 @@ static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
 	"dialogs", "dirbrowser"
 };
 
-std::vector<std::string> get_single_string_vector(const std::string& value)
-{
-	std::vector<std::string> vec;
-	vec.push_back(value);
-	return vec;
-}
-
 TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -38,7 +31,7 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == get_single_string_vector("ENTER"));
+	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
@@ -47,7 +40,7 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
 			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == get_single_string_vector("ENTER"));
+			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 		}
 	}
 }
@@ -145,16 +138,16 @@ TEST_CASE("get_keys()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	SECTION("Retrieves general bindings") {
-		REQUIRE(k.get_keys(OP_OPEN, "feedlist") == get_single_string_vector("ENTER"));
+		REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 		REQUIRE(k.get_keys(OP_TOGGLEITEMREAD,
-				"articlelist") == get_single_string_vector("N"));
+				"articlelist") == std::vector<std::string>({"N"}));
 	}
 
 	SECTION("Returns context-specific bindings only in that context") {
 		k.unset_key("q", "article");
 		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.get_keys(OP_QUIT, "article") == get_single_string_vector("O"));
-		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == get_single_string_vector("q"));
+		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<std::string>({"O"}));
+		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == std::vector<std::string>({"q"}));
 	}
 
 	SECTION("Returns all keys bound to an operation (both default and added)") {
