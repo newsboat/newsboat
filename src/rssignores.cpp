@@ -90,9 +90,7 @@ bool RssIgnores::matches(RssItem* item)
 {
 	for (const auto& ign : ignores) {
 		LOG(Level::DEBUG,
-			"RssIgnores::matches: ign.first = `%s' item->feedurl "
-			"= "
-			"`%s'",
+			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
 			ign.first,
 			item->feedurl());
 		if (ign.first == "*" || item->feedurl() == ign.first) {
