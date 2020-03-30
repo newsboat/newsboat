@@ -209,4 +209,12 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE_THROWS_AS(k.handle_action("macro", params),
 			ConfigHandlerException);
 	}
+
+	SECTION("allows binding multiple keys to OP_SK_xxx operations") {
+		REQUIRE_NOTHROW(k.handle_action("bind-key", {"u", "pageup"}));
+		REQUIRE_NOTHROW(k.handle_action("bind-key", {"p", "pageup"}));
+
+		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
+			== std::vector<std::string>({"PAGEUP", "p", "u"}));
+	}
 }
