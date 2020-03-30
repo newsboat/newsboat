@@ -363,16 +363,14 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-ALL_SRCS:=$(wildcard filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
+ALL_SRCS:=$(shell ls -1 filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
 ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test-helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
 depslist: $(ALL_SRCS) $(ALL_HDRS)
 	> mk/mk.deps
-	for dir in filter rss src test test/test-helpers ; do \
-		for file in $$dir/*.cpp ; do \
-			target=`echo $$file | sed 's/cpp$$/o/'`; \
-			$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
-			echo $$file ; \
-		done; \
-	done
+	for file in $(ALL_SRCS) ; do \
+		target=`echo $$file | sed 's/cpp$$/o/'`; \
+		$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
+		echo $$file ; \
+	done;
 
 include mk/mk.deps
