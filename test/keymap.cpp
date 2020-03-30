@@ -6,6 +6,11 @@
 
 using namespace newsboat;
 
+static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
+	"article", "tagselection", "filterselection", "urlview", "podboat",
+	"dialogs", "dirbrowser"
+};
+
 TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -26,16 +31,16 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-	REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
+	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "all") == OP_NIL);
+		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
 
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
-			REQUIRE(k.get_operation("ENTER", "all") == OP_OPEN);
-			REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
+			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 		}
 	}
 }
@@ -54,7 +59,13 @@ TEST_CASE(
 				i == OP_SAVEALL) {
 				continue;
 			}
-			REQUIRE(k.getkey(static_cast<Operation>(i), "all") != "<none>");
+			bool used_in_some_context = false;
+			for (const auto& context : contexts) {
+				if (!k.get_keys(static_cast<Operation>(i), context).empty()) {
+					used_in_some_context = true;
+				}
+			}
+			REQUIRE(used_in_some_context);
 		}
 	}
 
@@ -63,7 +74,12 @@ TEST_CASE(
 		k.unset_all_keys("all");
 
 		for (int i = OP_NB_MIN; i < OP_SK_MAX; ++i) {
-			REQUIRE(k.getkey(static_cast<Operation>(i), "all") == "<none>");
+			for (const auto& context : contexts) {
+				INFO("Operation: " << i);
+				INFO("used in context: " << context);
+				REQUIRE(k.get_keys(static_cast<Operation>(i),
+						context) == std::vector<std::string>());
+			}
 		}
 	}
 
@@ -73,16 +89,12 @@ TEST_CASE(
 		unset_keymap.unset_all_keys("all");
 
 		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.getkey(static_cast<Operation>(i), "all")
-				== unset_keymap.getkey(static_cast<Operation>(i), "all"));
+			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist")
+				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist"));
 		}
 	}
 
 	SECTION("Contexts don't have their internal keybindings cleared") {
-		const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
-				   "article", "tagselection", "filterselection", "urlview", "podboat",
-				   "dialogs", "dirbrowser"
-			   };
 		KeyMap default_keymap(KM_NEWSBOAT);
 
 		for (const auto& context : contexts) {
@@ -90,8 +102,8 @@ TEST_CASE(
 			unset_keymap.unset_all_keys(context);
 
 			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.getkey(static_cast<Operation>(i), "all")
-					== unset_keymap.getkey(static_cast<Operation>(i), "all"));
+				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context)
+					== unset_keymap.get_keys(static_cast<Operation>(i), context));
 			}
 		}
 	}
@@ -101,13 +113,14 @@ TEST_CASE(
 		k.unset_all_keys("articlelist");
 
 		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
-			REQUIRE(k.getkey(static_cast<Operation>(i), "articlelist") == "<none>");
+			REQUIRE(k.get_keys(static_cast<Operation>(i),
+					"articlelist") == std::vector<std::string>());
 		}
 
 		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			const auto op = static_cast<Operation>(i);
-			REQUIRE(k.getkey(op, "feedlist") == default_keys.getkey(op, "feedlist"));
+			REQUIRE(k.get_keys(op, "feedlist") == default_keys.get_keys(op, "feedlist"));
 		}
 	}
 }
@@ -120,27 +133,27 @@ TEST_CASE("get_opcode()", "[KeyMap]")
 	REQUIRE(k.get_opcode("some-noexistent-operation") == OP_NIL);
 }
 
-TEST_CASE("getkey()", "[KeyMap]")
+TEST_CASE("get_keys()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
 	SECTION("Retrieves general bindings") {
-		REQUIRE(k.getkey(OP_OPEN, "all") == "ENTER");
-		REQUIRE(k.getkey(OP_TOGGLEITEMREAD, "all") == "N");
+		REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
+		REQUIRE(k.get_keys(OP_TOGGLEITEMREAD,
+				"articlelist") == std::vector<std::string>({"N"}));
 	}
 
 	SECTION("Returns context-specific bindings only in that context") {
 		k.unset_key("q", "article");
 		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.getkey(OP_QUIT, "article") == "O");
-		REQUIRE(k.getkey(OP_QUIT, "all") == "q");
+		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<std::string>({"O"}));
+		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == std::vector<std::string>({"q"}));
 	}
 
-	SECTION("Returns context-specific binding if asked to search in all contexts") {
-		k.unset_all_keys("all");
-		REQUIRE(k.getkey(OP_QUIT, "all") == "<none>");
-		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.getkey(OP_QUIT, "all") == "O");
+	SECTION("Returns all keys bound to an operation (both default and added)") {
+		k.set_key(OP_QUIT, "a", "article");
+		k.set_key(OP_QUIT, "d", "article");
+		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<std::string>({"a", "d", "q"}));
 	}
 }
 
@@ -195,5 +208,13 @@ TEST_CASE("handle_action()", "[KeyMap]")
 			ConfigHandlerException);
 		REQUIRE_THROWS_AS(k.handle_action("macro", params),
 			ConfigHandlerException);
+	}
+
+	SECTION("allows binding multiple keys to OP_SK_xxx operations") {
+		REQUIRE_NOTHROW(k.handle_action("bind-key", {"u", "pageup"}));
+		REQUIRE_NOTHROW(k.handle_action("bind-key", {"p", "pageup"}));
+
+		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
+			== std::vector<std::string>({"PAGEUP", "p", "u"}));
 	}
 }

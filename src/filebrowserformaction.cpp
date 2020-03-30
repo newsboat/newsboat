@@ -31,7 +31,7 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 {
 	// In filebrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog
-	KeyMap* keys = vv->get_keys();
+	KeyMap* keys = vv->get_keymap();
 	keys->set_key(OP_QUIT, "ESC", id());
 	vv->set_keymap(keys);
 }

@@ -7,6 +7,8 @@ acknowledge contributions from the following people:
 
 ### Added
 ### Changed
+- Allow binding multiple keys to general operations: up, down, pageup, pagedown,
+  home, end (#847) (Dennis van der Schagt)
 ### Deprecated
 ### Removed
 ### Fixed

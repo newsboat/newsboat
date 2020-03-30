@@ -717,9 +717,6 @@ void KeyMap::handle_action(const std::string& action,
 						"key command"),
 					params[1]));
 		}
-		if (op > OP_SK_MIN && op < OP_SK_MAX) {
-			unset_key(getkey(op, context), context);
-		}
 		set_key(op, params[0], context);
 	} else if (action == "unbind-key") {
 		if (params.size() < 1) {
@@ -792,25 +789,16 @@ void KeyMap::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_PARAMS);
 }
 
-std::string KeyMap::getkey(Operation op, const std::string& context)
+std::vector<std::string> KeyMap::get_keys(Operation op,
+	const std::string& context)
 {
-	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			std::string ctx(contexts[i]);
-			for (const auto& keymap : keymap_[ctx]) {
-				if (keymap.second == op) {
-					return keymap.first;
-				}
-			}
-		}
-	} else {
-		for (const auto& keymap : keymap_[context]) {
-			if (keymap.second == op) {
-				return keymap.first;
-			}
+	std::vector<std::string> keys;
+	for (const auto& keymap : keymap_[context]) {
+		if (keymap.second == op) {
+			keys.push_back(keymap.first);
 		}
 	}
-	return "<none>";
+	return keys;
 }
 
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)

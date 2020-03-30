@@ -44,7 +44,7 @@ public:
 	{
 		return cfg;
 	}
-	KeyMap* get_keys()
+	KeyMap* get_keymap()
 	{
 		return keys;
 	}

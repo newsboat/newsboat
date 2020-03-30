@@ -103,9 +103,9 @@ void View::update_bindings()
 void View::set_bindings(std::shared_ptr<FormAction> fa)
 {
 	std::string upkey("** ");
-	upkey.append(keys->getkey(OP_SK_UP, fa->id()));
+	upkey.append(utils::join(keys->get_keys(OP_SK_UP, fa->id()), " "));
 	std::string downkey("** ");
-	downkey.append(keys->getkey(OP_SK_DOWN, fa->id()));
+	downkey.append(utils::join(keys->get_keys(OP_SK_DOWN, fa->id()), " "));
 	fa->get_form()->set("bind_up", upkey);
 	fa->get_form()->set("bind_down", downkey);
 
@@ -119,16 +119,16 @@ void View::set_bindings(std::shared_ptr<FormAction> fa)
 		pgdownkey.append("** ");
 	}
 
-	pgupkey.append(keys->getkey(OP_SK_PGUP, fa->id()));
-	pgdownkey.append(keys->getkey(OP_SK_PGDOWN, fa->id()));
+	pgupkey.append(utils::join(keys->get_keys(OP_SK_PGUP, fa->id()), " "));
+	pgdownkey.append(utils::join(keys->get_keys(OP_SK_PGDOWN, fa->id()), " "));
 
 	fa->get_form()->set("bind_page_up", pgupkey);
 	fa->get_form()->set("bind_page_down", pgdownkey);
 
 	std::string homekey("** ");
-	homekey.append(keys->getkey(OP_SK_HOME, fa->id()));
+	homekey.append(utils::join(keys->get_keys(OP_SK_HOME, fa->id()), " "));
 	std::string endkey("** ");
-	endkey.append(keys->getkey(OP_SK_END, fa->id()));
+	endkey.append(utils::join(keys->get_keys(OP_SK_END, fa->id()), " "));
 	fa->get_form()->set("bind_home", homekey);
 	fa->get_form()->set("bind_end", endkey);
 }
