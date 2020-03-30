@@ -156,6 +156,12 @@ TEST_CASE("get_keys()", "[KeyMap]")
 		REQUIRE(k.get_keys(OP_QUIT, "article") == get_single_string_vector("O"));
 		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == get_single_string_vector("q"));
 	}
+
+	SECTION("Returns all keys bound to an operation (both default and added)") {
+		k.set_key(OP_QUIT, "a", "article");
+		k.set_key(OP_QUIT, "d", "article");
+		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<std::string>({"a", "d", "q"}));
+	}
 }
 
 TEST_CASE("get_key()", "[KeyMap]")
