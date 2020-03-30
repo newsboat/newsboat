@@ -6,7 +6,7 @@
 #include "configcontainer.h"
 #include "regexmanager.h"
 #include "rssfeed.h"
-#include "test-helpers.h"
+#include "test-helpers/envvar.h"
 
 using namespace newsboat;
 

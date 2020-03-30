@@ -4,10 +4,12 @@
 #include <semaphore.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers.h"
+#include "test-helpers/tempdir.h"
+#include "test-helpers/tempfile.h"
 
 using namespace newsboat;
 

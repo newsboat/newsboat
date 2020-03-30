@@ -565,11 +565,11 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/rssitem.h include/matcher.h filter/FilterParser.h \
  include/utils.h include/logger.h config.h include/strprintf.h \
  include/rssignores.h include/rssparser.h include/remoteapi.h rss/feed.h \
- rss/item.h test/test-helpers.h include/utils.h
+ rss/item.h test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
  include/cliargsparser.h include/logger.h config.h include/strprintf.h \
- test/test-helpers.h include/utils.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h
+ test/test-helpers/envvar.h test/test-helpers/opts.h \
+ test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
  include/configparser.h include/configactionhandler.h 3rd-party/catch.hpp \
  include/confighandlerexception.h
@@ -578,42 +578,35 @@ test/configcontainer.o: test/configcontainer.cpp \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/confighandlerexception.h include/configparser.h include/keymap.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
- include/configactionhandler.h 3rd-party/catch.hpp test/test-helpers.h \
- include/utils.h include/configcontainer.h include/configparser.h \
- include/logger.h config.h include/strprintf.h include/keymap.h
+ include/configactionhandler.h 3rd-party/catch.hpp include/keymap.h \
+ include/configparser.h test/test-helpers/envvar.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
  include/cliargsparser.h include/logger.h config.h include/strprintf.h \
- 3rd-party/catch.hpp test/test-helpers.h include/utils.h \
+ 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
+ test/test-helpers/opts.h test/test-helpers/tempdir.h \
+ test/test-helpers/maintempdir.h include/utils.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h
-test/download.o: test/download.cpp include/download.h test/test-helpers.h \
- include/utils.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/logger.h config.h \
- include/strprintf.h 3rd-party/catch.hpp
+test/download.o: test/download.cpp include/download.h 3rd-party/catch.hpp
 test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/configcontainer.h \
  include/feedcontainer.h include/rssfeed.h include/matchable.h \
  include/rssitem.h include/matcher.h filter/FilterParser.h \
- include/utils.h include/logger.h config.h include/strprintf.h \
- test/test-helpers.h include/utils.h
+ include/utils.h include/logger.h config.h include/strprintf.h
 test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
- include/urlreader.h 3rd-party/catch.hpp test/test-helpers.h \
- include/utils.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/logger.h config.h \
- include/strprintf.h
+ include/urlreader.h 3rd-party/catch.hpp test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/filterparser.o: test/filterparser.cpp filter/FilterParser.h \
  3rd-party/catch.hpp
 test/fmtstrformatter.o: test/fmtstrformatter.cpp \
  include/fmtstrformatter.h 3rd-party/catch.hpp
 test/fslock.o: test/fslock.cpp include/fslock.h 3rd-party/catch.hpp \
- test/test-helpers.h include/utils.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h include/logger.h \
- config.h include/strprintf.h
+ test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
+ test/test-helpers/tempfile.h
 test/history.o: test/history.cpp include/history.h 3rd-party/catch.hpp \
- test/test-helpers.h include/utils.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h include/logger.h \
- config.h include/strprintf.h
+ test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
 test/htmlrenderer.o: test/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
@@ -635,7 +628,8 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  include/configpaths.h include/cliargsparser.h include/logger.h config.h \
  include/strprintf.h include/feedlistformaction.h stfl/itemlist.h \
  include/keymap.h include/regexmanager.h include/rssfeed.h \
- include/utils.h test/test-helpers.h include/utils.h
+ include/utils.h test/test-helpers/misc.h test/test-helpers/tempfile.h \
+ test/test-helpers/maintempdir.h
 test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
@@ -643,7 +637,7 @@ test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
  include/configcontainer.h include/configcontainer.h \
  include/regexmanager.h include/rssfeed.h include/matchable.h \
  include/rssitem.h include/utils.h include/logger.h config.h \
- include/strprintf.h test/test-helpers.h include/utils.h
+ include/strprintf.h test/test-helpers/envvar.h
 test/keymap.o: test/keymap.cpp include/keymap.h include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/confighandlerexception.h
@@ -659,17 +653,19 @@ test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  include/cache.h include/fileurlreader.h include/rssfeed.h \
  include/matchable.h include/rssitem.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
- include/strprintf.h test/test-helpers.h include/utils.h
+ include/strprintf.h test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/opmlurlreader.o: test/opmlurlreader.cpp include/opmlurlreader.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/urlreader.h 3rd-party/catch.hpp \
- test/test-helpers.h include/utils.h include/logger.h config.h \
- include/strprintf.h
+ test/test-helpers/misc.h test/test-helpers/tempfile.h \
+ test/test-helpers/maintempdir.h include/utils.h include/logger.h \
+ config.h include/strprintf.h
 test/queueloader.o: test/queueloader.cpp include/queueloader.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/download.h 3rd-party/catch.hpp \
- include/configcontainer.h include/download.h test/test-helpers.h \
- include/utils.h include/logger.h config.h include/strprintf.h
+ include/configcontainer.h include/download.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configparser.h include/configactionhandler.h include/matcher.h \
  filter/FilterParser.h 3rd-party/catch.hpp \
@@ -694,28 +690,40 @@ test/rssitem.o: test/rssitem.cpp include/rssitem.h include/matchable.h \
 test/rsspp_parser.o: test/rsspp_parser.cpp rss/parser.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h 3rd-party/catch.hpp \
- rss/exception.h test/test-helpers.h include/utils.h include/logger.h \
- config.h include/strprintf.h
+ rss/exception.h test/test-helpers/exceptionwithmsg.h
 test/rsspp_rssparser.o: test/rsspp_rssparser.cpp rss/rssparser.h \
- 3rd-party/catch.hpp test/test-helpers.h include/utils.h \
- include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/logger.h config.h \
- include/strprintf.h
+ 3rd-party/catch.hpp test/test-helpers/envvar.h
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
  include/tagsouppullparser.h 3rd-party/catch.hpp
-test/test-helpers.o: test/test-helpers.cpp test/test-helpers.h \
- include/utils.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/logger.h config.h \
- include/strprintf.h 3rd-party/catch.hpp
 test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
  include/strprintf.h
+test/test-helpers/chdir.o: test/test-helpers/chdir.cpp \
+ test/test-helpers/chdir.h include/utils.h include/configcontainer.h \
+ include/configparser.h include/configactionhandler.h include/logger.h \
+ config.h include/strprintf.h
+test/test-helpers/chmod.o: test/test-helpers/chmod.cpp \
+ test/test-helpers/chmod.h
+test/test-helpers/envvar.o: test/test-helpers/envvar.cpp \
+ test/test-helpers/envvar.h 3rd-party/catch.hpp
+test/test-helpers/maintempdir.o: test/test-helpers/maintempdir.cpp \
+ test/test-helpers/maintempdir.h
+test/test-helpers/misc.o: test/test-helpers/misc.cpp \
+ test/test-helpers/misc.h 3rd-party/catch.hpp
+test/test-helpers/opts.o: test/test-helpers/opts.cpp \
+ test/test-helpers/opts.h
+test/test-helpers/tempdir.o: test/test-helpers/tempdir.cpp \
+ test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
+test/test-helpers/tempfile.o: test/test-helpers/tempfile.cpp \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  3rd-party/catch.hpp
 test/utils.o: test/utils.cpp include/utils.h include/configcontainer.h \
  include/configparser.h include/configactionhandler.h include/logger.h \
- config.h include/strprintf.h 3rd-party/catch.hpp test/test-helpers.h \
- include/rs_utils.h
+ config.h include/strprintf.h 3rd-party/catch.hpp include/rs_utils.h \
+ test/test-helpers/chdir.h test/test-helpers/envvar.h \
+ test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
+ test/test-helpers/tempfile.h

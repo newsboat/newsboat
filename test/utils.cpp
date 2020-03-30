@@ -6,8 +6,11 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers.h"
 #include "rs_utils.h"
+#include "test-helpers/chdir.h"
+#include "test-helpers/envvar.h"
+#include "test-helpers/tempdir.h"
+#include "test-helpers/tempfile.h"
 
 using namespace newsboat;
 

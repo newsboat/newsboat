@@ -1,6 +1,48 @@
-#include "test-helpers.h"
+#include "envvar.h"
 
 #include "3rd-party/catch.hpp"
+
+TestHelpers::EnvVar::EnvVar(std::string name_)
+	: name(std::move(name_))
+{
+	const char* original = ::getenv(name.c_str());
+	was_set = original != nullptr;
+	if (was_set) {
+		value = std::string(original);
+	}
+}
+
+TestHelpers::EnvVar::~EnvVar()
+{
+	if (was_set) {
+		set(value);
+	} else {
+		unset();
+	}
+}
+
+void TestHelpers::EnvVar::set(std::string new_value) const
+{
+	const auto overwrite = true;
+	::setenv(name.c_str(), new_value.c_str(), overwrite);
+	if (on_change_fn) {
+		on_change_fn();
+	}
+}
+
+void TestHelpers::EnvVar::unset() const
+{
+	::unsetenv(name.c_str());
+	if (on_change_fn) {
+		on_change_fn();
+	}
+}
+
+void TestHelpers::EnvVar::on_change(std::function<void(void)> fn)
+{
+	on_change_fn = std::move(fn);
+}
+
 
 TEST_CASE("EnvVar object restores the environment variable to its original "
 	"state when the object is destroyed",
