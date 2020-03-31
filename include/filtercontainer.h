@@ -9,7 +9,7 @@ typedef std::pair<std::string, std::string> FilterNameExprPair;
 
 class FilterContainer : public ConfigActionHandler {
 public:
-	FilterContainer() {}
+	FilterContainer() = default;
 	~FilterContainer() override;
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
