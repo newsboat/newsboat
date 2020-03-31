@@ -86,10 +86,10 @@ TEST_CASE("FilterContainer::get_filters() gives direct access to stored filters"
 	filters.handle_action(action, {name2, filter2});
 
 	REQUIRE(filters.get_filters().size() == 2);
-	REQUIRE(filters.get_filters()[0].first == name1);
-	REQUIRE(filters.get_filters()[0].second == filter1);
-	REQUIRE(filters.get_filters()[1].first == name2);
-	REQUIRE(filters.get_filters()[1].second == filter2);
+	REQUIRE(filters.get_filters()[0].name == name1);
+	REQUIRE(filters.get_filters()[0].expr == filter1);
+	REQUIRE(filters.get_filters()[1].name == name2);
+	REQUIRE(filters.get_filters()[1].expr == filter2);
 
 	filters.get_filters().clear();
 	REQUIRE(filters.size() == 0);

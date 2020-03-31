@@ -5,7 +5,15 @@
 
 namespace newsboat {
 
-typedef std::pair<std::string, std::string> FilterNameExprPair;
+/// Stores the name of the filter and the filter expression that user added via
+/// `define-filter` configuration option
+struct FilterNameExprPair {
+	/// Name of the filter
+	std::string name;
+
+	/// Filter expression for this named filter
+	std::string expr;
+};
 
 class FilterContainer : public ConfigActionHandler {
 public:

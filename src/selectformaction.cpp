@@ -73,7 +73,7 @@ void SelectFormAction::process_operation(Operation op,
 			break;
 			case SelectionType::FILTER: {
 				if (pos < filters.size()) {
-					value = filters[pos].second;
+					value = filters[pos].expr;
 					quit = true;
 				}
 			}
@@ -119,7 +119,7 @@ void SelectFormAction::prepare()
 		case SelectionType::FILTER:
 			for (const auto& filter : filters) {
 				std::string tagstr = strprintf::fmt(
-						"%4u  %s", i + 1, filter.first);
+						"%4u  %s", i + 1, filter.name);
 				listfmt.add_line(tagstr, i);
 				i++;
 			}
