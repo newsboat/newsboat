@@ -30,30 +30,39 @@ void RssIgnores::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	if (action == "ignore-article") {
-		if (params.size() < 2)
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+		if (params.size() < 2) {
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
 		std::string ignore_rssurl = params[0];
 		std::string ignore_expr = params[1];
 		Matcher m;
-		if (!m.parse(ignore_expr))
+		if (!m.parse(ignore_expr)) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("couldn't parse filter expression `%s': %s"),
 					ignore_expr,
 					m.get_parse_error()));
-		ignores.push_back(FeedUrlExprPair(
-				ignore_rssurl, new Matcher(ignore_expr)));
+		}
+		ignores.push_back(FeedUrlExprPair(ignore_rssurl, new Matcher(ignore_expr)));
 	} else if (action == "always-download") {
+		if (params.empty()) {
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
+
 		for (const auto& param : params) {
 			ignores_lastmodified.push_back(param);
 		}
 	} else if (action == "reset-unread-on-update") {
+		if (params.empty()) {
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
+
 		for (const auto& param : params) {
 			resetflag.push_back(param);
 		}
-	} else
+	} else {
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 void RssIgnores::dump_config(std::vector<std::string>& config_output)

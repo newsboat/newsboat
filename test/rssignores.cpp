@@ -75,8 +75,11 @@ TEST_CASE("RssIgnores::handle_action() handles `always-download`",
 
 	const std::string action = "always-download";
 
-	SECTION("Doesn't throw, regardless of how many params are passed") {
-		REQUIRE_NOTHROW(ignores.handle_action(action, {}));
+	SECTION("Throws ConfigHandlerException if given zero parameters") {
+		REQUIRE_THROWS_AS(ignores.handle_action(action, {}), ConfigHandlerException);
+	}
+
+	SECTION("Doesn't trow if given one or more parameters") {
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url1"}));
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url1", "url2"}));
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url1", "url2", "url3", "url4", "url5"}));
@@ -90,8 +93,11 @@ TEST_CASE("RssIgnores::handle_action() handles `reset-unread-on-update`",
 
 	const std::string action = "reset-unread-on-update";
 
-	SECTION("Doesn't throw, regardless of how many params are passed") {
-		REQUIRE_NOTHROW(ignores.handle_action(action, {}));
+	SECTION("Throws ConfigHandlerException if given zero parameters") {
+		REQUIRE_THROWS_AS(ignores.handle_action(action, {}), ConfigHandlerException);
+	}
+
+	SECTION("Doesn't throw if given one or more parameters") {
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url1"}));
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url1", "url2"}));
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url1", "url2", "url3", "url4", "url5"}));
@@ -145,7 +151,6 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 		const std::string action = "always-download";
 
 		ignores.handle_action(action, {"url1"});
-		ignores.handle_action(action, {});
 		ignores.handle_action(action, {"url2", "url3", "url4"});
 
 		std::vector<std::string> config;
@@ -167,7 +172,6 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 		const std::string action = "reset-unread-on-update";
 
 		ignores.handle_action(action, {"url1"});
-		ignores.handle_action(action, {});
 		ignores.handle_action(action, {"url2", "url3", "url4"});
 
 		std::vector<std::string> config;

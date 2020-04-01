@@ -9,6 +9,8 @@ acknowledge contributions from the following people:
 ### Changed
 - Allow binding multiple keys to general operations: up, down, pageup, pagedown,
   home, end (#847) (Dennis van der Schagt)
+- It's now an error to have `always-download` or `reset-unread-on-update`
+    without parameters (Alexander Batischev)
 ### Deprecated
 ### Removed
 ### Fixed
