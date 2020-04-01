@@ -185,8 +185,8 @@ TEST_CASE("Operator `=~` checks if field matches given regex", "[Matcher]")
 		REQUIRE_FALSE(m.matches(&mock));
 	}
 
-	SECTION("Doesn't work with ranges") {
-		MatcherMockMatchable mock({{"AAAA", "12345"}});
+	SECTION("Treats ranges as strings") {
+		MatcherMockMatchable mock({{"AAAA", "12345"}, {"range", "0:123"}});
 
 		REQUIRE(m.parse("AAAA =~ 0:123456"));
 		REQUIRE_FALSE(m.matches(&mock));
@@ -195,6 +195,15 @@ TEST_CASE("Operator `=~` checks if field matches given regex", "[Matcher]")
 		REQUIRE_FALSE(m.matches(&mock));
 
 		REQUIRE(m.parse("AAAA =~ 0:12345"));
+		REQUIRE_FALSE(m.matches(&mock));
+
+		REQUIRE(m.parse("range =~ 0:123"));
+		REQUIRE(m.matches(&mock));
+
+		REQUIRE(m.parse("range =~ 0:12"));
+		REQUIRE(m.matches(&mock));
+
+		REQUIRE(m.parse("range =~ 0:1234"));
 		REQUIRE_FALSE(m.matches(&mock));
 	}
 }
@@ -255,6 +264,12 @@ TEST_CASE("Operator `!~` checks if field doesn't match given regex",
 
 		REQUIRE(m.parse("AAAA !~ \"^12345$\""));
 		REQUIRE_FALSE(m.matches(&mock));
+
+		REQUIRE(m.parse("AAAA !~ \"567\""));
+		REQUIRE(m.matches(&mock));
+
+		REQUIRE(m.parse("AAAA !~ \"number\""));
+		REQUIRE(m.matches(&mock));
 	}
 
 	SECTION("Converts numbers into strings and uses them as regexes") {
@@ -303,6 +318,9 @@ TEST_CASE("Operator `#` checks if space-separated list contains given value",
 
 		REQUIRE(m.parse("tags # \"quux\""));
 		REQUIRE(m.matches(&mock));
+
+		REQUIRE(m.parse("tags # \"uu\""));
+		REQUIRE_FALSE(m.matches(&mock));
 
 		REQUIRE(m.parse("tags # \"xyz\""));
 		REQUIRE_FALSE(m.matches(&mock));
@@ -609,16 +627,13 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 		REQUIRE(m.parse("AAAA between 23:12344"));
 		REQUIRE_FALSE(m.matches(&mock));
 
-		REQUIRE(m.parse("AAAA between 0"));
-		REQUIRE_FALSE(m.matches(&mock));
-
 		REQUIRE(m.parse("AAAA between 12346:12344"));
 		REQUIRE(m.matches(&mock));
 
 		SECTION("...converting numering prefix of the attribute if necessary") {
 			MatcherMockMatchable mock({{"value", "123four"}, {"practically_zero", "sure"}});
 
-			REQUIRE(m.parse("value between 0:124"));
+			REQUIRE(m.parse("value between 122:124"));
 			REQUIRE(m.matches(&mock));
 
 			REQUIRE(m.parse("value between 124:130"));
