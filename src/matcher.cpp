@@ -16,9 +16,6 @@
 
 namespace newsboat {
 
-Matchable::Matchable() {}
-Matchable::~Matchable() {}
-
 Matcher::Matcher() {}
 
 Matcher::Matcher(const std::string& expr)
@@ -27,7 +24,7 @@ Matcher::Matcher(const std::string& expr)
 	parse(expr);
 }
 
-const std::string& Matcher::get_expression()
+std::string Matcher::get_expression()
 {
 	return exp;
 }
@@ -248,7 +245,7 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 	}
 }
 
-const std::string& Matcher::get_parse_error()
+std::string Matcher::get_parse_error()
 {
 	return errmsg;
 }

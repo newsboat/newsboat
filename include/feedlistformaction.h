@@ -78,7 +78,7 @@ private:
 	std::string tag;
 	std::vector<std::string> tags;
 
-	Matcher m;
+	Matcher matcher;
 	bool apply_filter;
 
 	History filterhistory;

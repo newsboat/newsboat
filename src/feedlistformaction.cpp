@@ -438,13 +438,13 @@ REDO:
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
-					if (!m.parse(newfilter)) {
+					if (!matcher.parse(newfilter)) {
 						v->show_error(strprintf::fmt(
 								_("Error: couldn't "
 									"parse filter "
 									"command `%s': %s"),
 								newfilter,
-								m.get_parse_error()));
+								matcher.get_parse_error()));
 					} else {
 						save_filterpos();
 						apply_filter = true;
@@ -538,7 +538,7 @@ void FeedListFormAction::update_visible_feeds(
 		feed->set_index(i + 1);
 		if ((tag == "" || feed->matches_tag(tag)) &&
 			(show_read || feed->unread_item_count() > 0) &&
-			(!apply_filter || m.matches(feed.get())) &&
+			(!apply_filter || matcher.matches(feed.get())) &&
 			!feed->hidden()) {
 			visible_feeds.push_back(FeedPtrPosPair(feed, i));
 		}
@@ -917,7 +917,7 @@ void FeedListFormAction::op_end_setfilter()
 	std::string filtertext = qna_responses[0];
 	filterhistory.add_line(filtertext);
 	if (filtertext.length() > 0) {
-		if (!m.parse(filtertext)) {
+		if (!matcher.parse(filtertext)) {
 			v->show_error(
 				_("Error: couldn't parse filter command!"));
 		} else {

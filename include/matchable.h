@@ -7,8 +7,8 @@ namespace newsboat {
 
 class Matchable {
 public:
-	Matchable();
-	virtual ~Matchable();
+	Matchable() = default;
+	virtual ~Matchable() = default;
 	virtual bool has_attribute(const std::string& attribname) = 0;
 	virtual std::string get_attribute(const std::string& attribname) = 0;
 };

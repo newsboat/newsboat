@@ -329,3 +329,14 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 
 	// If you add more checks to this test, consider adding the same to RegexManager tests
 }
+
+
+TEST_CASE("get_parse_error() returns textual description of last "
+	"filter-expression parsing error",
+	"[Matcher]")
+{
+	Matcher m;
+
+	REQUIRE_FALSE(m.parse("=!"));
+	REQUIRE(m.get_parse_error() != "");
+}
