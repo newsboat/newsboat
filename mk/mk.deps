@@ -686,7 +686,9 @@ test/rssfeed.o: test/rssfeed.cpp include/rssfeed.h include/matchable.h \
  rss/feed.h rss/item.h
 test/rssignores.o: test/rssignores.cpp include/rssignores.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
- include/rssitem.h include/matchable.h 3rd-party/catch.hpp
+ include/rssitem.h include/matchable.h 3rd-party/catch.hpp \
+ include/cache.h include/configcontainer.h include/configparser.h \
+ include/confighandlerexception.h include/rssitem.h
 test/rssitem.o: test/rssitem.cpp include/rssitem.h include/matchable.h \
  include/matcher.h filter/FilterParser.h 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configparser.h \
