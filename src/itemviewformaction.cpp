@@ -9,6 +9,7 @@
 #include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "itemrenderer.h"
+#include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
@@ -117,6 +118,19 @@ void ItemViewFormAction::prepare()
 					rxman,
 					"article");
 		} else {
+			// Add enclosure url to link list.
+			if (item->enclosure_type() != "") {
+				LinkType type;
+
+				if(item->enclosure_type().find("audio")) type = LinkType::AUDIO;
+				else if(item->enclosure_type().find("image")) type = LinkType::IMG;
+				else if(item->enclosure_type().find("embedded")) type = LinkType::EMBED;
+				else if(item->enclosure_type().find("video")) type = LinkType::VIDEO;
+				else type = LinkType::HREF;
+
+				links.push_back(LinkPair(item->enclosure_url(), type));
+			}
+
 			std::tie(formatted_text, num_lines) =
 				item_renderer::to_stfl_list(
 					// cfg can't be nullptr because that's a long-lived object
