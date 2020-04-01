@@ -20,27 +20,36 @@ void FilterContainer::handle_action(const std::string& action,
 	 * their name.
 	 */
 	if (action == "define-filter") {
-		if (params.size() < 2)
+		if (params.size() < 2) {
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
+
+		FilterNameExprPair filter;
+		filter.name = params[0];
+		filter.expr = params[1];
+
 		Matcher m;
-		if (!m.parse(params[1]))
+		if (!m.parse(filter.expr)) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("couldn't parse filter expression `%s': %s"),
-					params[1],
+					filter.expr,
 					m.get_parse_error()));
-		filters.push_back(FilterNameExprPair(params[0], params[1]));
-	} else
+		}
+
+		filters.emplace_back(std::move(filter));
+	} else {
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 void FilterContainer::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& filter : filters) {
 		config_output.push_back(strprintf::fmt("define-filter %s %s",
-				utils::quote(filter.first),
-				utils::quote(filter.second)));
+				utils::quote(filter.name),
+				utils::quote(filter.expr)));
 	}
 }
 
