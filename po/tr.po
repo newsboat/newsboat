@@ -1,4 +1,4 @@
-# H.Gökhan SARI <hsa2@difuzyon.net>, 2008
+# H. Gökhan SARI <hsa2@difuzyon.net>, 2008
 # Emir SARI <bitigchi@me.com>, 2020
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "POT-Creation-Date: 2020-03-20 17:58+0300\n"
 "PO-Revision-Date: 2020-04-03 19:00+0300\n"
 "Last-Translator: Emir SARI <bitigchi@me.com>, 2020\n"
-"Language-Team: Türkçe <en@li.org>\n"
+"Language-Team: H. Gökhan SARI <hsa2@difuzyon.net>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -337,7 +337,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Görünüşe göre The Old Reader hesabınızda herhangi bir besleme "
-" ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
+"ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:344
 msgid ""
@@ -345,7 +345,7 @@ msgid ""
 "account. Please do so, and try again."
 msgstr ""
 "Görünüşe göre Tiny Tiny RSS hesabınızda herhangi bir besleme "
-" ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
+"ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:349
 msgid ""
@@ -353,7 +353,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Görünüşe göre NewsBlur hesabınızda herhangi bir besleme "
-" ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
+"ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:354
 msgid ""
@@ -361,7 +361,7 @@ msgid ""
 "Please do so, and try again."
 msgstr ""
 "Görünüşe göre Inoreader hesabınızda herhangi bir besleme "
-" ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
+"ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:365
 msgid "Loading articles from cache..."
@@ -1635,7 +1635,7 @@ msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
-"Onulmaz hata: Ev dizini bulunamadı!\n
+"Onulmaz hata: Ev dizini bulunamadı!\n"
 "HOME değişkenini ayarlayın veya %u UID için geçerli bir kullanıcı ekleyin!"
 
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
@@ -1646,15 +1646,3 @@ msgstr ""
 
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Göç iptal ediliyor çünkü `%s' üzerinde mkdir başarısız oldu: %s"
-
-#~ msgid "%s %s - Save Files - %s"
-#~ msgstr "%s %s - Dosyaları Kaydet - %s"
-
-#~ msgid "%s %s - Save File - %s"
-#~ msgstr "%s %s - Dosyayı Kaydet - %s"
-
-#~ msgid "'%s' is not a valid key command"
-#~ msgstr "`%s' geçerli bir anahtar komut değil"
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "önbelleği bütünüyle temizle"
