@@ -2,6 +2,8 @@
 
 #include "3rd-party/catch.hpp"
 
+#include <cstring>
+
 using namespace newsboat;
 
 extern "C" {
@@ -18,6 +20,7 @@ TEST_CASE("Can be constructed from Rust error returned over FFI",
 		REQUIRE(e.type() == MatcherException::Type::ATTRIB_UNAVAIL);
 		REQUIRE(e.info() == "test_attribute");
 		REQUIRE(e.info2().empty());
+		REQUIRE_FALSE(strlen(e.what()) == 0);
 	}
 
 	SECTION("Invalid regex") {
@@ -26,5 +29,6 @@ TEST_CASE("Can be constructed from Rust error returned over FFI",
 		REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
 		REQUIRE(e.info() == "?!");
 		REQUIRE(e.info2() == "inconceivable happened!");
+		REQUIRE_FALSE(strlen(e.what()) == 0);
 	}
 }
