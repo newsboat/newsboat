@@ -61,8 +61,6 @@ char* rs_getcwd();
 
 int rs_strnaturalcmp(const char* a, const char* b);
 
-void rs_cstring_free(char* str);
-
 char* rs_get_default_browser();
 
 bool rs_is_valid_color(const char* str);
@@ -100,38 +98,6 @@ int rs_mkdir_parents(const char* path, const std::uint32_t mode);
 char* rs_strip_comments(const char* line);
 
 FilterUrl rs_extract_filter(const char* line);
-
-char* rs_get_string(const char* line);
-
-class RustString {
-private:
-	char* str;
-
-public:
-	RustString() = delete;
-	RustString(const RustString&) = delete;
-	RustString(RustString&& rs) = delete;
-	RustString& operator=(RustString&& rs) noexcept = delete;
-
-	explicit RustString(char* ptr)
-	{
-		str = ptr;
-	}
-
-	operator std::string()
-	{
-		if (str != nullptr) {
-			return std::string(str);
-		}
-		return std::string();
-	}
-
-	~RustString()
-	{
-		// This pointer is checked for nullptr on the rust side.
-		rs_cstring_free(str);
-	}
-};
 
 #ifdef __cplusplus
 }

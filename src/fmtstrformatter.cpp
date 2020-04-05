@@ -5,8 +5,7 @@
 #include <vector>
 
 #include "logger.h"
-#include "rs_utils.h"
-#include "utils.h"
+#include "ruststring.h"
 
 extern "C" {
 	void* rs_fmtstrformatter_new();

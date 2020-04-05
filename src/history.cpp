@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include "rs_utils.h"
+#include "ruststring.h"
 
 extern "C" {
 	void* rs_history_new();

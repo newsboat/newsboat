@@ -25,3 +25,4 @@ pub mod cliargsparser;
 pub mod configpaths;
 pub mod fmtstrformatter;
 pub mod history;
+pub mod matchererror;
