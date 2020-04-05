@@ -1085,13 +1085,15 @@ TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
 
 TEST_CASE(
 	"is_valid_podcast_type() returns true if supplied MIME type "
-	"is audio or a container",
+	"is audio, video, or a container",
 	"[utils]")
 {
 	REQUIRE(utils::is_valid_podcast_type("audio/mpeg"));
 	REQUIRE(utils::is_valid_podcast_type("audio/mp3"));
 	REQUIRE(utils::is_valid_podcast_type("audio/x-mp3"));
 	REQUIRE(utils::is_valid_podcast_type("audio/ogg"));
+	REQUIRE(utils::is_valid_podcast_type("video/x-matroska"));
+	REQUIRE(utils::is_valid_podcast_type("video/webm"));
 	REQUIRE(utils::is_valid_podcast_type("application/ogg"));
 
 	REQUIRE_FALSE(utils::is_valid_podcast_type("image/jpeg"));

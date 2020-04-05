@@ -1032,6 +1032,8 @@ mod tests {
         assert!(is_valid_podcast_type("audio/mp3"));
         assert!(is_valid_podcast_type("audio/x-mp3"));
         assert!(is_valid_podcast_type("audio/ogg"));
+        assert!(is_valid_podcast_type("video/x-matroska"));
+        assert!(is_valid_podcast_type("video/webm"));
         assert!(is_valid_podcast_type("application/ogg"));
 
         assert!(!is_valid_podcast_type("image/jpeg"));
