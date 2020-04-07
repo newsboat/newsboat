@@ -45,7 +45,7 @@ matrix:
   include:
     - compiler: gcc
       os: osx
-      rust: 1.26.0
+      rust: 1.40.0
       env:
         - COMPILER=g++
       before_install:
