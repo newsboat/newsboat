@@ -56,6 +56,9 @@ freebsd_task:
     before_cache_script: *before_cache_script
 
 macos_task:
+    # Temporary solution while deps fail to install. See https://github.com/newsboat/newsboat/issues/866 for details.
+    allow_failures: true
+
     osx_instance:
         image: catalina-base
 
