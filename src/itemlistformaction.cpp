@@ -1019,6 +1019,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	FmtStrFormatter fmt;
 	fmt.register_fmt('i', strprintf::fmt("%u", item.second + 1));
 	fmt.register_fmt('f', gen_flags(item.first));
+	fmt.register_fmt('N', item.first->unread() ? "N" : "");
 	fmt.register_fmt('D',
 		utils::mt_strf_localtime(
 			datetime_format,
