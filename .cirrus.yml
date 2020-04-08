@@ -56,9 +56,6 @@ freebsd_task:
     before_cache_script: *before_cache_script
 
 macos_task:
-    # Temporary solution while deps fail to install. See https://github.com/newsboat/newsboat/issues/866 for details.
-    allow_failures: true
-
     osx_instance:
         image: catalina-base
 
@@ -72,6 +69,7 @@ macos_task:
         - brew install gcc || brew link --overwrite gcc
         - brew install python
         - export PATH=/usr/local/opt/python/libexec/bin:$PATH
+        - brew uninstall rbenv ruby-build # ...so that it won't be upgraded when pkg-config is upgraded, because upgrading ruby-build fails; see https://github.com/newsboat/newsboat/issues/866
         - brew outdated "pkg-config" || brew upgrade "pkg-config"
         - brew install "gettext" && brew link --force "gettext"
         - brew outdated "sqlite" || brew upgrade "sqlite"
