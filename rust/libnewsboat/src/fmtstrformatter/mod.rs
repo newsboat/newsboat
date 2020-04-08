@@ -131,7 +131,7 @@ impl FmtStrFormatter {
         result: &mut LimitedString,
     ) {
         match self.fmts.get(&cond) {
-            Some(value) if !value.is_empty() => {
+            Some(value) if !value.trim().is_empty() => {
                 result.push_str(&self.formatting_helper(then, width))
             }
             _ => {
