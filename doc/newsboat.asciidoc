@@ -1022,7 +1022,10 @@ by " ") and "download error" (indicated by "x").
 Identifier:Meaning
 [[articlelist-format-a]]<<articlelist-format-a,+a+>>:Article author
 [[articlelist-format-D]]<<articlelist-format-D,+D+>>:Publication date. This can be tweaked further with <<datetime-format,+datetime-format+>>
-[[articlelist-format-f]]<<articlelist-format-f,+f+>>:Article flags
+[[articlelist-format-f]]<<articlelist-format-f,+f+>>:Combination of unread/deleted fields and article flags
+[[articlelist-format-n]]<<articlelist-format-n,+n+>>:"unread" field
+[[articlelist-format-d]]<<articlelist-format-d,+d+>>:"deleted" field
+[[articlelist-format-F]]<<articlelist-format-F,+F+>>:Article flags
 [[articlelist-format-i]]<<articlelist-format-i,+i+>>:Article index
 [[articlelist-format-t]]<<articlelist-format-t,+t+>>:Article title
 [[articlelist-format-T]]<<articlelist-format-T,+T+>>:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
