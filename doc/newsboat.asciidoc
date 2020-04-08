@@ -1002,7 +1002,8 @@ Identifier:Meaning
 [[feedlist-format-i]]<<feedlist-format-i,+i+>>:Feed index
 [[feedlist-format-l]]<<feedlist-format-l,+l+>>:Feed link
 [[feedlist-format-L]]<<feedlist-format-L,+L+>>:Feed RSS URL
-[[feedlist-format-n]]<<feedlist-format-n,+n+>>:"unread" flag field
+[[feedlist-format-n]]<<feedlist-format-n,+n+>>:"unread" flag field ("N" if unread, " " if read)
+[[feedlist-format-N]]<<feedlist-format-N,+N+>>:"unread" flag field ("N" if unread, empty if read). Can be used with the conditional sequence (e.g. "%?N?unread&  read?")
 [[feedlist-format-S]]<<feedlist-format-S,+S+>>:download status
 [[feedlist-format-t]]<<feedlist-format-t,+t+>>:Feed title
 [[feedlist-format-T]]<<feedlist-format-T,+T+>>:First tag of a feed in the URLs file

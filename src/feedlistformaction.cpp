@@ -1026,6 +1026,7 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('U', std::to_string(unread_count));
 	fmt.register_fmt('c', std::to_string(feed->total_item_count()));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
+	fmt.register_fmt('N', unread_count > 0 ? "N" : "");
 	fmt.register_fmt('S', feed->get_status());
 	fmt.register_fmt('t', utils::quote_for_stfl(get_title(feed)));
 	fmt.register_fmt('T', feed->get_firsttag());
