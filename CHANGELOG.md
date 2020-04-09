@@ -6,6 +6,9 @@ Lists below only mention user-visible changes, but I would also like to
 acknowledge contributions from the following people:
 
 ### Added
+- New format specifiers (%n, %d, and %F) for articlelist-format which
+  correspond respectively to article fields "unread", "deleted", and article
+  flags (#869) (Dennis van der Schagt)
 ### Changed
 - Allow binding multiple keys to general operations: up, down, pageup, pagedown,
   home, end (#847) (Dennis van der Schagt)
