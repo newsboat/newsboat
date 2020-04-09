@@ -791,8 +791,8 @@ Attribute:Context:Meaning
 [[attr-date]]<<attr-date,+date+>>:article:publication date of the article
 [[attr-guid]]<<attr-guid,+guid+>>:article:a unique identifier of the article
 [[attr-unread]]<<attr-unread,+unread+>>:article:indicates whether the article has been read
-[[attr-enclosure_url]]<<attr-enclosure_url,+enclosure_url+>>:article:the URL of a possible enclosure (e.g. podcast file)
-[[attr-enclosure_type]]<<attr-enclosure_type,+enclosure_type+>>:article:the MIME type of the enclosure URL
+[[attr-enclosure_url]]<<attr-enclosure_url,+enclosure_url+>>:article:the URL of an enclosure (e.g. podcast file), empty if there is no enclosure
+[[attr-enclosure_type]]<<attr-enclosure_type,+enclosure_type+>>:article:the MIME type of the enclosure, empty if there is no enclosure
 [[attr-flags]]<<attr-flags,+flags+>>:article:The set of flags of the article
 [[attr-age]]<<attr-age,+age+>>:article:Age of an article (in days)
 [[attr-articleindex]]<<attr-articleindex,+articleindex+>>:article:Index of an article in an article list
