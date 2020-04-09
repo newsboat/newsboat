@@ -3,15 +3,14 @@ extern crate dirs;
 extern crate libc;
 extern crate natord;
 extern crate rand;
-extern crate regex;
 extern crate std;
 extern crate unicode_width;
 extern crate url;
 
-use self::regex::Regex;
 use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use self::url::percent_encoding::*;
 use self::url::Url;
+use htmlrenderer;
 use libc::c_ulong;
 use logger::{self, Level};
 use std::fs::DirBuilder;
@@ -412,14 +411,36 @@ pub fn remove_soft_hyphens(text: &mut String) {
     text.retain(|c| c != '\u{00AD}')
 }
 
+/// An array of "MIME matchers" and their associated LinkTypes
+///
+/// This is used for two tasks:
+///
+/// 1. checking if a MIME type is a podcast type (`utils::is_valid_podcast_type`). That involves
+///    running all matching functions on given input and checking if any of them returned `true`;
+///
+/// 2. figuring out the `LinkType` for a particular enclosure, given its MIME type
+///    (`utils::podcast_mime_to_link_type`).
+const PODCAST_MIME_TO_LINKTYPE: [(fn(&str) -> bool, htmlrenderer::LinkType); 2] = [
+    (
+        |mime| {
+            // RFC 5334, section 10.1 says "historically, some implementations expect .ogg files to be
+            // solely Vorbis-encoded audio", so let's assume it's audio, not video.
+            // https://tools.ietf.org/html/rfc5334#section-10.1
+            mime.starts_with("audio/") || mime == "application/ogg"
+        },
+        htmlrenderer::LinkType::Audio,
+    ),
+    (
+        |mime| mime.starts_with("video/"),
+        htmlrenderer::LinkType::Video,
+    ),
+];
+
+/// Returns `true` if given MIME type is considered to be a podcast by Newsboat.
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
-    let re = Regex::new(r"(audio|video)/.*").unwrap();
-    let matches = re.is_match(mimetype);
-
-    let acceptable = ["application/ogg"];
-    let found = acceptable.contains(&mimetype);
-
-    matches || found
+    PODCAST_MIME_TO_LINKTYPE
+        .iter()
+        .any(|(matcher, _)| matcher(mimetype))
 }
 
 pub fn get_auth_method(method: &str) -> c_ulong {
