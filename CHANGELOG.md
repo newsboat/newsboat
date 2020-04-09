@@ -14,6 +14,10 @@ acknowledge contributions from the following people:
   home, end (#847) (Dennis van der Schagt)
 - It's now an error to have `always-download` or `reset-unread-on-update`
     without parameters (Alexander Batischev)
+- The conditional sequence now acts the same for strings with only whitespace
+  as it does for empty strings.  This allows changing the formatting of, for
+  example, "unread" and "deleted" fields in articlelist-format (#869) (Dennis
+  van der Schagt)
 ### Deprecated
 ### Removed
 ### Fixed

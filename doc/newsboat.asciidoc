@@ -986,10 +986,10 @@ In addition, newsboat provides other, more powerful sequences, such as
 right on the screen, and characters between the text on the left and the text
 on the right will be filled by `[char]`. Another powerful format is the
 conditional sequence, `%?[char]?[format 1]&[format 2]?`: if the text of the
-sequence identifier `[char]` is non-empty, then `[format 1]` will be evaluated
-and inserted, otherwise `[format 2]` will be evaluated and inserted. The `&` and
-`[format 2]` are optional, i.e. if the identifier's text is empty, then an
-empty string will be inserted.
+sequence identifier `[char]` contains any non-whitespace characters, then
+`[format 1]` will be evaluated and inserted, otherwise `[format 2]` will be
+evaluated and inserted. The `&` and `[format 2]` are optional, i.e. if the
+identifier's text is empty, then an empty string will be inserted.
 
 The following tables show what sequence identifiers are available for which
 format:

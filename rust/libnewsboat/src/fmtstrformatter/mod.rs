@@ -548,6 +548,17 @@ mod tests {
     }
 
     #[test]
+    fn t_conditional_whitespace_is_handled_as_empty() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', " \t ".to_string());
+        fmt.register_fmt('b', "  some whitespace  ".to_string());
+
+        assert_eq!(fmt.do_format("%?a?non-empty&empty?", 0), "empty");
+        assert_eq!(fmt.do_format("%?b?non-empty&empty?", 0), "non-empty");
+    }
+
+    #[test]
     fn t_do_format_replaces_double_percent_sign_with_a_percent_sign() {
         let fmt = FmtStrFormatter::new();
         assert_eq!(fmt.do_format("%%", 0), "%");
