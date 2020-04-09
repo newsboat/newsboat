@@ -1,5 +1,5 @@
 /// Types of links that HtmlRenderer collects while rendering
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum LinkType {
     /// Ordinary HTML `<a href="...">...</a>` link
     Href,

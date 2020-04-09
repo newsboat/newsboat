@@ -287,16 +287,16 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/stflpp.h include/htmlrenderer.h include/textformatter.h \
  include/regexmanager.h include/matcher.h filter/FilterParser.h config.h \
  include/confighandlerexception.h include/dbexception.h \
- include/fmtstrformatter.h include/itemrenderer.h include/logger.h \
- include/strprintf.h include/rssfeed.h include/matchable.h \
- include/rssitem.h include/utils.h include/configcontainer.h \
- include/logger.h include/scopemeasure.h include/strprintf.h \
- include/textformatter.h include/utils.h include/view.h \
- include/colormanager.h include/controller.h include/cache.h \
- include/feedcontainer.h include/filtercontainer.h include/fslock.h \
- include/opml.h include/fileurlreader.h include/urlreader.h \
- include/queuemanager.h include/reloader.h include/remoteapi.h \
- include/rssignores.h include/filebrowserformaction.h \
+ include/fmtstrformatter.h include/itemrenderer.h include/htmlrenderer.h \
+ include/logger.h include/strprintf.h include/rssfeed.h \
+ include/matchable.h include/rssitem.h include/utils.h \
+ include/configcontainer.h include/logger.h include/scopemeasure.h \
+ include/strprintf.h include/textformatter.h include/utils.h \
+ include/view.h include/colormanager.h include/controller.h \
+ include/cache.h include/feedcontainer.h include/filtercontainer.h \
+ include/fslock.h include/opml.h include/fileurlreader.h \
+ include/urlreader.h include/queuemanager.h include/reloader.h \
+ include/remoteapi.h include/rssignores.h include/filebrowserformaction.h \
  include/dirbrowserformaction.h
 src/keymap.o: src/keymap.cpp include/keymap.h include/configparser.h \
  include/configactionhandler.h config.h include/confighandlerexception.h \
@@ -539,7 +539,9 @@ src/urlviewformaction.o: src/urlviewformaction.cpp \
  include/dirbrowserformaction.h
 src/utils.o: src/utils.cpp include/utils.h include/configcontainer.h \
  include/configparser.h include/configactionhandler.h include/logger.h \
- config.h include/strprintf.h include/logger.h include/ruststring.h \
+ config.h include/strprintf.h include/htmlrenderer.h \
+ include/textformatter.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/logger.h include/ruststring.h \
  include/strprintf.h include/rs_utils.h
 src/view.o: src/view.cpp include/view.h include/colormanager.h \
  include/configparser.h include/configactionhandler.h \
@@ -739,7 +741,8 @@ test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  3rd-party/catch.hpp
 test/utils.o: test/utils.cpp include/utils.h include/configcontainer.h \
  include/configparser.h include/configactionhandler.h include/logger.h \
- config.h include/strprintf.h 3rd-party/catch.hpp include/rs_utils.h \
- test/test-helpers/chdir.h test/test-helpers/envvar.h \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
- test/test-helpers/tempfile.h
+ config.h include/strprintf.h 3rd-party/catch.hpp include/htmlrenderer.h \
+ include/textformatter.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/rs_utils.h test/test-helpers/chdir.h \
+ test/test-helpers/envvar.h test/test-helpers/tempdir.h \
+ test/test-helpers/maintempdir.h test/test-helpers/tempfile.h

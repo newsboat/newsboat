@@ -27,6 +27,7 @@
 #include <unordered_set>
 
 #include "config.h"
+#include "htmlrenderer.h"
 #include "logger.h"
 #include "ruststring.h"
 #include "strprintf.h"
@@ -932,6 +933,16 @@ void utils::remove_soft_hyphens(std::string& text)
 bool utils::is_valid_podcast_type(const std::string& mimetype)
 {
 	return rs_is_valid_podcast_type(mimetype.c_str());
+}
+
+LinkType utils::podcast_mime_to_link_type(const std::string& mimetype, bool& ok)
+{
+	const auto result = rs_podcast_mime_to_link_type(mimetype.c_str(), &ok);
+	if (ok) {
+		return static_cast<LinkType>(result);
+	}
+
+	return LinkType::AUDIO;
 }
 
 /*

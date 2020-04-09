@@ -443,6 +443,21 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
         .any(|(matcher, _)| matcher(mimetype))
 }
 
+/// Converts podcast's MIME type into an HtmlRenderer's "link type"
+///
+/// Returns None if given MIME type is not a podcast type. See `is_valid_podcast_type()`.
+pub fn podcast_mime_to_link_type(mime_type: &str) -> Option<htmlrenderer::LinkType> {
+    PODCAST_MIME_TO_LINKTYPE
+        .iter()
+        .find_map(|(matcher, link_type)| {
+            if matcher(mime_type) {
+                Some(*link_type)
+            } else {
+                None
+            }
+        })
+}
+
 pub fn get_auth_method(method: &str) -> c_ulong {
     match method {
         "basic" => curl_sys::CURLAUTH_BASIC,
@@ -1061,6 +1076,24 @@ mod tests {
         assert!(!is_valid_podcast_type("image/png"));
         assert!(!is_valid_podcast_type("text/plain"));
         assert!(!is_valid_podcast_type("application/zip"));
+    }
+
+    #[test]
+    fn t_podcast_mime_to_link_type() {
+        use htmlrenderer::LinkType::*;
+
+        assert_eq!(podcast_mime_to_link_type("audio/mpeg"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("audio/mp3"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("audio/x-mp3"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("audio/ogg"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("video/x-matroska"), Some(Video));
+        assert_eq!(podcast_mime_to_link_type("video/webm"), Some(Video));
+        assert_eq!(podcast_mime_to_link_type("application/ogg"), Some(Audio));
+
+        assert_eq!(podcast_mime_to_link_type("image/jpeg"), None);
+        assert_eq!(podcast_mime_to_link_type("image/png"), None);
+        assert_eq!(podcast_mime_to_link_type("text/plain"), None);
+        assert_eq!(podcast_mime_to_link_type("application/zip"), None);
     }
 
     #[test]

@@ -13,6 +13,9 @@
 
 namespace newsboat {
 
+// Forward declaration for a type from htmlrenderer.h
+enum class LinkType;
+
 namespace utils {
 std::string strip_comments(const std::string& line);
 std::vector<std::string> tokenize(const std::string& str,
@@ -140,6 +143,8 @@ int strnaturalcmp(const std::string& a, const std::string& b);
 void remove_soft_hyphens(std::string& text);
 
 bool is_valid_podcast_type(const std::string& mimetype);
+
+LinkType podcast_mime_to_link_type(const std::string& mimetype, bool& ok);
 
 std::string get_default_browser();
 
