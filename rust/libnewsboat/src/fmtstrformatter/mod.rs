@@ -131,7 +131,7 @@ impl FmtStrFormatter {
         result: &mut LimitedString,
     ) {
         match self.fmts.get(&cond) {
-            Some(value) if !value.is_empty() => {
+            Some(value) if !value.trim().is_empty() => {
                 result.push_str(&self.formatting_helper(then, width))
             }
             _ => {
@@ -545,6 +545,17 @@ mod tests {
 
         assert_eq!(fmt.do_format("%?t?непустое?", 0), "непустое");
         assert_eq!(fmt.do_format("%?m?непустое?", 0), "");
+    }
+
+    #[test]
+    fn t_conditional_whitespace_is_handled_as_empty() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('a', " \t ".to_string());
+        fmt.register_fmt('b', "  some whitespace  ".to_string());
+
+        assert_eq!(fmt.do_format("%?a?non-empty&empty?", 0), "empty");
+        assert_eq!(fmt.do_format("%?b?non-empty&empty?", 0), "non-empty");
     }
 
     #[test]

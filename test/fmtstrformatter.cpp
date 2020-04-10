@@ -353,6 +353,14 @@ TEST_CASE("%?[char]?[then-format]&[else-format]? is replaced by "
 		REQUIRE(fmt.do_format("%?t?непустое?") == "непустое");
 		REQUIRE(fmt.do_format("%?m?непустое?") == "");
 	}
+
+	SECTION("Whitespace on its own is handled same as empty") {
+		fmt.register_fmt('a', " \t ");
+		fmt.register_fmt('b', "  some whitespace  ");
+
+		REQUIRE(fmt.do_format("%?a?non-empty&empty?") == "empty");
+		REQUIRE(fmt.do_format("%?b?non-empty&empty?") == "non-empty");
+	}
 }
 
 TEST_CASE("do_format replaces \"%%\" with a percent sign",
