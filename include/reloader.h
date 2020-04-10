@@ -71,6 +71,7 @@ public:
 		unsigned int size,
 		bool unattended = false);
 
+private:
 	/// \brief Notify in various ways that there are new unread feeds or
 	/// articles.
 	///
@@ -82,7 +83,6 @@ public:
 	/// notification will contain \a msg passed.
 	void notify(const std::string& msg);
 
-private:
 	Controller* ctrl;
 	Cache* rsscache;
 	ConfigContainer* cfg;
