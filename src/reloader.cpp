@@ -300,6 +300,9 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 
 	if (notify_always || unread_feeds > unread_feeds_before ||
 		unread_articles > unread_articles_before) {
+		// TODO: Determine what should be done if `unread_articles < unread_articles_before`.
+		// It is expected this can happen if the user marks an article as read
+		// while a reload is in progress.
 		const int article_count = unread_articles - unread_articles_before;
 		const int feed_count = unread_feeds - unread_feeds_before;
 
