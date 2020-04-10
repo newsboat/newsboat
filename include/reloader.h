@@ -14,13 +14,6 @@ class CurlHandle;
 
 /// \brief Updates feeds (fetches, parses, puts results into Controller).
 class Reloader {
-	Controller* ctrl;
-	Cache* rsscache;
-	ConfigContainer* cfg;
-	std::mutex reload_mutex;
-
-	std::string prepare_message(unsigned int pos, unsigned int max);
-
 public:
 	Reloader(Controller* c, Cache* cc, ConfigContainer* cfg);
 
@@ -88,6 +81,15 @@ public:
 	/// If "notify-screen", "notify-xterm" or "notify-program" is chosen, the
 	/// notification will contain \a msg passed.
 	void notify(const std::string& msg);
+
+private:
+	Controller* ctrl;
+	Cache* rsscache;
+	ConfigContainer* cfg;
+	std::mutex reload_mutex;
+
+	std::string prepare_message(unsigned int pos, unsigned int max);
+
 
 };
 
