@@ -216,7 +216,11 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_OPENINBROWSER:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
-		v->open_in_browser(item->link());
+		if (int err = v->open_in_browser(item->link())) {
+			v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+			return false;
+		}
+
 		v->set_status("");
 		break;
 	case OP_BOOKMARK:
@@ -393,7 +397,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 			idx);
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+
+			if (int err = v->open_in_browser(links[idx].first)) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				return false;
+			}
+
 			v->set_status("");
 		}
 	}
