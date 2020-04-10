@@ -83,6 +83,9 @@ private:
 	/// notification will contain \a msg passed.
 	void notify(const std::string& msg);
 
+	void notify_reload_finished(unsigned int unread_feeds_before,
+		unsigned int unread_articles_before);
+
 	Controller* ctrl;
 	Cache* rsscache;
 	ConfigContainer* cfg;

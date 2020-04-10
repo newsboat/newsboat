@@ -204,28 +204,7 @@ void Reloader::reload_all(bool unattended)
 		"Reloader::reload_all: reload took %" PRId64 " seconds",
 		static_cast<int64_t>(dt));
 
-	const auto unread_feeds2 =
-		ctrl->get_feedcontainer()->unread_feed_count();
-	const auto unread_articles2 =
-		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 > unread_feeds ||
-		unread_articles2 > unread_articles) {
-		int article_count = unread_articles2 - unread_articles;
-		int feed_count = unread_feeds2 - unread_feeds;
-
-		LOG(Level::DEBUG, "unread article count: %d", article_count);
-		LOG(Level::DEBUG, "unread feed count: %d", feed_count);
-
-		FmtStrFormatter fmt;
-		fmt.register_fmt('f', std::to_string(unread_feeds2));
-		fmt.register_fmt('n', std::to_string(unread_articles2));
-		fmt.register_fmt('d',
-			std::to_string(article_count >= 0 ? article_count : 0));
-		fmt.register_fmt(
-			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
-		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
-	}
+	notify_reload_finished(unread_feeds, unread_articles);
 }
 
 void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
@@ -241,22 +220,8 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 		reload(idx, size, unattended);
 	}
 
-	const auto unread_feeds2 =
-		ctrl->get_feedcontainer()->unread_feed_count();
-	const auto unread_articles2 =
-		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 != unread_feeds ||
-		unread_articles2 != unread_articles) {
-		FmtStrFormatter fmt;
-		fmt.register_fmt('f', std::to_string(unread_feeds2));
-		fmt.register_fmt('n', std::to_string(unread_articles2));
-		fmt.register_fmt('d',
-			std::to_string(unread_articles2 - unread_articles));
-		fmt.register_fmt(
-			'D', std::to_string(unread_feeds2 - unread_feeds));
-		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
-	}
+	notify_reload_finished(unread_feeds, unread_articles);
+
 	if (!unattended) {
 		ctrl->get_view()->set_status("");
 	}
@@ -321,6 +286,34 @@ void Reloader::notify(const std::string& msg)
 			"reloader:notify: notifying external program `%s'",
 			prog);
 		utils::run_command(prog, msg);
+	}
+}
+
+void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
+	unsigned int unread_articles_before)
+{
+	const auto unread_feeds =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles =
+		ctrl->get_feedcontainer()->unread_item_count();
+	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
+
+	if (notify_always || unread_feeds > unread_feeds_before ||
+		unread_articles > unread_articles_before) {
+		int article_count = unread_articles - unread_articles_before;
+		int feed_count = unread_feeds - unread_feeds_before;
+
+		LOG(Level::DEBUG, "unread article count: %d", article_count);
+		LOG(Level::DEBUG, "unread feed count: %d", feed_count);
+
+		FmtStrFormatter fmt;
+		fmt.register_fmt('f', std::to_string(unread_feeds));
+		fmt.register_fmt('n', std::to_string(unread_articles));
+		fmt.register_fmt('d',
+			std::to_string(article_count >= 0 ? article_count : 0));
+		fmt.register_fmt(
+			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
+		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
 	}
 }
 
