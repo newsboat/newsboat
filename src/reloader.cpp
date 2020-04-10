@@ -136,12 +136,13 @@ std::string Reloader::prepare_message(unsigned int pos, unsigned int max)
 
 void Reloader::reload_all(bool unattended)
 {
+	ScopeMeasure sm("Reloader::reload_all");
+
 	const auto unread_feeds =
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
 	int num_threads = cfg->get_configvalue_as_int("reload-threads");
-	time_t t1, t2, dt;
 
 	ctrl->get_feedcontainer()->reset_feeds_status();
 	const auto num_feeds = ctrl->get_feedcontainer()->feeds_size();
@@ -150,8 +151,6 @@ void Reloader::reload_all(bool unattended)
 	const int min_threads = 1;
 	const int max_threads = num_feeds;
 	num_threads = std::max(min_threads, std::min(num_threads, max_threads));
-
-	t1 = time(nullptr);
 
 	LOG(Level::DEBUG, "Reloader::reload_all: starting with reload all...");
 	if (num_threads == 1) {
@@ -194,15 +193,6 @@ void Reloader::reload_all(bool unattended)
 
 	ctrl->get_feedcontainer()->sort_feeds(cfg->get_feed_sort_strategy());
 	ctrl->update_feedlist();
-
-	t2 = time(nullptr);
-	dt = t2 - t1;
-	// On GCC, `time_t` is `long int`, which is at least 32 bits. On x86_64,
-	// it's 64 bits. Thus, this cast is either a no-op, or an up-cast which are
-	// always safe.
-	LOG(Level::INFO,
-		"Reloader::reload_all: reload took %" PRId64 " seconds",
-		static_cast<int64_t>(dt));
 
 	notify_reload_finished(unread_feeds, unread_articles);
 }
