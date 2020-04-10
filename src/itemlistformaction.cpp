@@ -173,7 +173,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				auto link = visible_items[itempos].first->link();
 				if (int err = v->open_in_browser(link)) {
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
-					break;
+					return false;
 				}
 				invalidate(itempos);
 			}
@@ -191,7 +191,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				"browser");
 			if (int err = open_unread_items_in_browser(feed, false)) {
 				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
-				break;
+				return false;
 			}
 		}
 	}
@@ -204,7 +204,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				"browser and marking read");
 			if (int err = open_unread_items_in_browser(feed, true)) {
 				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
-				break;
+				return false;
 			}
 			invalidate_everything();
 		}
