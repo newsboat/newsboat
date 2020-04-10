@@ -208,11 +208,17 @@ int View::run()
 			// so
 
 			fa->get_form()->run(-1);
-			fa->process_op(
-				macrocmds[0].op, true, &macrocmds[0].args);
+			if (fa->process_op(
+				macrocmds[0].op, true, &macrocmds[0].args)) {
 
-			// remove first macro command, since it has already been processed
-			macrocmds.erase(macrocmds.begin());
+				// Operation failed, abort
+				macrocmds.clear();
+				show_error(strprintf::fmt(_("Macro execution failed!")));
+
+			} else {
+				// remove first macro command, since it has already been processed
+				macrocmds.erase(macrocmds.begin());
+			}
 		} else {
 			// we then receive the event and ignore timeouts.
 			const char* event = fa->get_form()->run(60000);
