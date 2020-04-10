@@ -296,12 +296,12 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
+	const bool notify_always = cfg->get_configvalue_as_bool("notify-always");
 
 	if (notify_always || unread_feeds > unread_feeds_before ||
 		unread_articles > unread_articles_before) {
-		int article_count = unread_articles - unread_articles_before;
-		int feed_count = unread_feeds - unread_feeds_before;
+		const int article_count = unread_articles - unread_articles_before;
+		const int feed_count = unread_feeds - unread_feeds_before;
 
 		LOG(Level::DEBUG, "unread article count: %d", article_count);
 		LOG(Level::DEBUG, "unread feed count: %d", feed_count);
