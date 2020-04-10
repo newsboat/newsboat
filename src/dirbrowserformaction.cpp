@@ -60,7 +60,7 @@ char get_filetype(mode_t mode)
 	return '?';
 }
 
-void DirBrowserFormAction::process_operation(Operation op,
+bool DirBrowserFormAction::process_operation(Operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -149,6 +149,7 @@ void DirBrowserFormAction::process_operation(Operation op,
 	default:
 		break;
 	}
+	return true;
 }
 
 void DirBrowserFormAction::update_title(const std::string& working_directory)

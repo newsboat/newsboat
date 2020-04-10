@@ -142,7 +142,7 @@ void ItemViewFormAction::prepare()
 	}
 }
 
-void ItemViewFormAction::process_operation(Operation op,
+bool ItemViewFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -423,6 +423,7 @@ void ItemViewFormAction::process_operation(Operation op,
 	} else if (quit) {
 		v->pop_current_formaction();
 	}
+	return true;
 }
 
 KeyMapHintEntry* ItemViewFormAction::get_keymap_hint()

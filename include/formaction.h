@@ -42,7 +42,7 @@ public:
 
 	virtual void handle_cmdline(const std::string& cmd);
 
-	void process_op(Operation op,
+	bool process_op(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr);
 
@@ -87,7 +87,7 @@ public:
 		const std::string& feed_title);
 
 protected:
-	virtual void process_operation(Operation op,
+	virtual bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();

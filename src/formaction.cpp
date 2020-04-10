@@ -101,7 +101,7 @@ void FormAction::start_cmdline(std::string default_value)
 	this->start_qna(qna, OP_INT_END_CMDLINE, &FormAction::cmdlinehistory);
 }
 
-void FormAction::process_op(Operation op,
+bool FormAction::process_op(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -176,6 +176,7 @@ void FormAction::process_op(Operation op,
 	default:
 		this->process_operation(op, automatic, args);
 	}
+	return true;
 }
 
 std::vector<std::string> FormAction::get_suggestions(

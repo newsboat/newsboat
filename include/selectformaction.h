@@ -40,7 +40,7 @@ public:
 	std::string title() override;
 
 private:
-	void process_operation(Operation op,
+	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	bool quit;

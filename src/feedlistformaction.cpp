@@ -97,7 +97,7 @@ void FeedListFormAction::prepare()
 	}
 }
 
-void FeedListFormAction::process_operation(Operation op,
+bool FeedListFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -522,6 +522,7 @@ REDO:
 			v->pop_current_formaction();
 		}
 	}
+	return true;
 }
 
 void FeedListFormAction::update_visible_feeds(

@@ -77,7 +77,7 @@ public:
 	void set_regexmanager(RegexManager* r);
 
 private:
-	void process_operation(Operation op,
+	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	void set_head(const std::string& s,

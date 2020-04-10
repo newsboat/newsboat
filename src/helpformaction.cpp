@@ -24,7 +24,7 @@ HelpFormAction::HelpFormAction(View* vv,
 
 HelpFormAction::~HelpFormAction() {}
 
-void HelpFormAction::process_operation(Operation op,
+bool HelpFormAction::process_operation(Operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -56,6 +56,7 @@ void HelpFormAction::process_operation(Operation op,
 	} else if (quit) {
 		v->pop_current_formaction();
 	}
+	return true;
 }
 
 void HelpFormAction::prepare()

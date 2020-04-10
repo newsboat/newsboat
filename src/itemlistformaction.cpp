@@ -47,7 +47,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 
 ItemListFormAction::~ItemListFormAction() {}
 
-void ItemListFormAction::process_operation(Operation op,
+bool ItemListFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -762,6 +762,7 @@ void ItemListFormAction::process_operation(Operation op,
 	} else if (quit) {
 		v->pop_current_formaction();
 	}
+	return true;
 }
 
 void ItemListFormAction::finished_qna(Operation op)

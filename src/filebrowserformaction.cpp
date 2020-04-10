@@ -38,7 +38,7 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 
 FileBrowserFormAction::~FileBrowserFormAction() {}
 
-void FileBrowserFormAction::process_operation(Operation op,
+bool FileBrowserFormAction::process_operation(Operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -149,6 +149,7 @@ void FileBrowserFormAction::process_operation(Operation op,
 	default:
 		break;
 	}
+	return true;
 }
 
 void FileBrowserFormAction::update_title(const std::string& working_directory)

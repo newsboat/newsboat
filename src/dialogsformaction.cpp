@@ -74,7 +74,7 @@ KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
 	return hints;
 }
 
-void DialogsFormAction::process_operation(Operation op,
+bool DialogsFormAction::process_operation(Operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -111,6 +111,7 @@ void DialogsFormAction::process_operation(Operation op,
 	default:
 		break;
 	}
+	return true;
 }
 
 std::string DialogsFormAction::title()
