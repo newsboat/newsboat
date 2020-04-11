@@ -30,7 +30,7 @@ UrlViewFormAction::UrlViewFormAction(View* vv,
 
 UrlViewFormAction::~UrlViewFormAction() {}
 
-void UrlViewFormAction::process_operation(Operation op,
+bool UrlViewFormAction::process_operation(Operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -97,6 +97,7 @@ void UrlViewFormAction::process_operation(Operation op,
 	} else if (quit) {
 		v->pop_current_formaction();
 	}
+	return true;
 }
 
 void UrlViewFormAction::prepare()

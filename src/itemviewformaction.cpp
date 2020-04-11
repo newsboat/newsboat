@@ -142,7 +142,7 @@ void ItemViewFormAction::prepare()
 	}
 }
 
-void ItemViewFormAction::process_operation(Operation op,
+bool ItemViewFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -216,7 +216,11 @@ void ItemViewFormAction::process_operation(Operation op,
 	case OP_OPENINBROWSER:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
-		v->open_in_browser(item->link());
+		if (int err = v->open_in_browser(item->link())) {
+			v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+			return false;
+		}
+
 		v->set_status("");
 		break;
 	case OP_BOOKMARK:
@@ -393,7 +397,12 @@ void ItemViewFormAction::process_operation(Operation op,
 			idx);
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+
+			if (int err = v->open_in_browser(links[idx].first)) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				return false;
+			}
+
 			v->set_status("");
 		}
 	}
@@ -423,6 +432,7 @@ void ItemViewFormAction::process_operation(Operation op,
 	} else if (quit) {
 		v->pop_current_formaction();
 	}
+	return true;
 }
 
 KeyMapHintEntry* ItemViewFormAction::get_keymap_hint()

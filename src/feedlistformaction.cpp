@@ -97,7 +97,7 @@ void FeedListFormAction::prepare()
 	}
 }
 
-void FeedListFormAction::process_operation(Operation op,
+bool FeedListFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
@@ -237,9 +237,16 @@ REDO:
 						feedpos,
 						feed->link());
 					if (!feed->link().empty()) {
-						v->open_in_browser(feed->link());
+						if (int err = v->open_in_browser(feed->link())) {
+							v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+							return false;
+						}
 					} else if (!feed->rssurl().empty()) {
-						v->open_in_browser(feed->rssurl());
+						if (int err = v->open_in_browser(feed->rssurl())) {
+							v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+							return false;
+						}
+
 					} else {
 						// rssurl can't be empty, so if we got to this branch,
 						// something is clearly wrong with Newsboat internals.
@@ -271,7 +278,11 @@ REDO:
 					"unread "
 					"items in feed at position `%s'",
 					feedpos.c_str());
-				open_unread_items_in_browser(feed, false);
+				if (int err = open_unread_items_in_browser(feed, false)) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+					return false;
+				}
+
 			}
 		} else {
 			v->show_error(_("No feed selected!"));
@@ -289,7 +300,12 @@ REDO:
 					"items in feed at position `%s' and "
 					"marking read",
 					feedpos.c_str());
-				open_unread_items_in_browser(feed, true);
+
+				if (int err = open_unread_items_in_browser(feed, true)) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+					return false;
+				}
+
 				do_redraw = true;
 			}
 		}
@@ -522,6 +538,7 @@ REDO:
 			v->pop_current_formaction();
 		}
 	}
+	return true;
 }
 
 void FeedListFormAction::update_visible_feeds(

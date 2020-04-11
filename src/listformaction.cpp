@@ -12,7 +12,7 @@ ListFormAction::ListFormAction(View* v,
 {
 }
 
-void ListFormAction::process_operation(Operation op,
+bool ListFormAction::process_operation(Operation op,
 	bool,
 	std::vector<std::string>*)
 {
@@ -47,6 +47,7 @@ void ListFormAction::process_operation(Operation op,
 	default:
 		break;
 	}
+	return true;
 }
 
 int ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,

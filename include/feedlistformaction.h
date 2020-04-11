@@ -49,7 +49,7 @@ public:
 
 private:
 	int get_pos(unsigned int realidx);
-	void process_operation(Operation op,
+	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 

@@ -45,7 +45,7 @@ void SelectFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-void SelectFormAction::process_operation(Operation op,
+bool SelectFormAction::process_operation(Operation op,
 	bool /* automatic */,
 	std::vector<std::string>* /* args */)
 {
@@ -95,6 +95,7 @@ void SelectFormAction::process_operation(Operation op,
 	} else if (quit) {
 		v->pop_current_formaction();
 	}
+	return true;
 }
 
 void SelectFormAction::prepare()

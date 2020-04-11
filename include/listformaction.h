@@ -10,7 +10,7 @@ public:
 	ListFormAction(View*, std::string formstr, ConfigContainer* cfg);
 
 protected:
-	void process_operation(Operation op,
+	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	int open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
