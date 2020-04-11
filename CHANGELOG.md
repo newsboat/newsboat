@@ -18,6 +18,9 @@ acknowledge contributions from the following people:
   as it does for empty strings.  This allows changing the formatting of, for
   example, "unread" and "deleted" fields in articlelist-format (#869) (Dennis
   van der Schagt)
+- `open-in-browser-and-mark-read` in feedlist no longer marks articles read if
+  the browser fails. (#873) (Nikos Tsipinakis)
+- Macro execution halts if one of the operations fail. (#873) (Nikos Tsipinakis)
 ### Deprecated
 ### Removed
 ### Fixed
