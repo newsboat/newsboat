@@ -49,5 +49,6 @@ features = [ "gettext-system" ]
 
 [dev-dependencies]
 tempfile = "3"
-proptest = "0.7"
+# 0.9.6 fixes build failures on Nightly >=2020-04-08: https://github.com/newsboat/newsboat/issues/870
+proptest = ">=0.9.6"
 section_testing = "0.0.4"
