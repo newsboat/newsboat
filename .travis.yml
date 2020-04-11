@@ -89,7 +89,7 @@ matrix:
       compiler: clang-8
       os: linux
       dist: bionic
-      rust: nightly-2020-04-07
+      rust: nightly
       addons:
         apt:
           sources:
