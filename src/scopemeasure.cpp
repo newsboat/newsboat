@@ -33,7 +33,7 @@ ScopeMeasure::~ScopeMeasure()
 	const uint64_t diff =
 		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
 		tv1.tv_usec;
-	LOG(Level::INFO,
+	LOG(lvl,
 		"ScopeMeasure: function `%s' took %" PRIu64 ".%06" PRIu64 " s",
 		funcname,
 		diff / 1000000,
