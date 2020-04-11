@@ -174,7 +174,7 @@ bool FormAction::process_op(Operation op,
 		v->goto_prev_dialog();
 		break;
 	default:
-		this->process_operation(op, automatic, args);
+		return this->process_operation(op, automatic, args);
 	}
 	return true;
 }

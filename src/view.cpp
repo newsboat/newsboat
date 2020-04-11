@@ -208,7 +208,7 @@ int View::run()
 			// so
 
 			fa->get_form()->run(-1);
-			if (fa->process_op(
+			if (!fa->process_op(
 					macrocmds[0].op, true, &macrocmds[0].args)) {
 
 				// Operation failed, abort
