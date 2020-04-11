@@ -213,8 +213,6 @@ int View::run()
 
 				// Operation failed, abort
 				macrocmds.clear();
-				show_error(strprintf::fmt(_("Macro execution failed!")));
-
 			} else {
 				// remove first macro command, since it has already been processed
 				macrocmds.erase(macrocmds.begin());
