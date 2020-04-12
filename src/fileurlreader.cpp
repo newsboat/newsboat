@@ -23,7 +23,7 @@ void FileUrlReader::reload()
 	alltags.clear();
 
 	std::fstream f;
-	f.open(filename.c_str(), std::fstream::in);
+	f.open(filename, std::fstream::in);
 	if (!f.is_open()) {
 		return;
 	}
@@ -61,7 +61,7 @@ void FileUrlReader::load_config(const std::string& file)
 void FileUrlReader::write_config()
 {
 	std::fstream f;
-	f.open(filename.c_str(), std::fstream::out);
+	f.open(filename, std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& url : urls) {
 			f << url;
