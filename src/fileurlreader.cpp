@@ -25,7 +25,7 @@ void FileUrlReader::reload()
 	alltags.clear();
 
 	std::fstream f;
-	f.open(filename.c_str(), std::fstream::in);
+	f.open(filename, std::fstream::in);
 	if (!f.is_open()) {
 		throw std::system_error(errno, std::system_category(),
 			strprintf::fmt(_("failed to open urls file (%s)"), filename));
@@ -64,7 +64,7 @@ void FileUrlReader::load_config(const std::string& file)
 void FileUrlReader::write_config()
 {
 	std::fstream f;
-	f.open(filename.c_str(), std::fstream::out);
+	f.open(filename, std::fstream::out);
 	if (!f.is_open()) {
 		throw std::system_error(errno, std::system_category(),
 			strprintf::fmt(_("failed to open urls file (%s)"), filename));
