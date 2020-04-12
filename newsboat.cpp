@@ -249,6 +249,11 @@ int main(int argc, char* argv[])
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
+	} catch (const std::exception& e) {
+		std::cerr << strprintf::fmt(_("Caught std::exception with message: %s"),
+				e.what())
+			<< std::endl;
+		::exit(EXIT_FAILURE);
 	}
 
 	rsspp::Parser::global_cleanup();

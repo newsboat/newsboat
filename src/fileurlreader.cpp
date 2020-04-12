@@ -1,6 +1,8 @@
 #include "fileurlreader.h"
 
+#include <cerrno>
 #include <fstream>
+#include <system_error>
 
 #include "utils.h"
 
@@ -25,7 +27,8 @@ void FileUrlReader::reload()
 	std::fstream f;
 	f.open(filename.c_str(), std::fstream::in);
 	if (!f.is_open()) {
-		return;
+		throw std::system_error(errno, std::system_category(),
+			strprintf::fmt(_("failed to open urls file (%s)"), filename));
 	}
 
 	for (std::string line; std::getline(f, line); /* nothing */) {
@@ -62,16 +65,19 @@ void FileUrlReader::write_config()
 {
 	std::fstream f;
 	f.open(filename.c_str(), std::fstream::out);
-	if (f.is_open()) {
-		for (const auto& url : urls) {
-			f << url;
-			if (tags[url].size() > 0) {
-				for (const auto& tag : tags[url]) {
-					f << " \"" << tag << "\"";
-				}
+	if (!f.is_open()) {
+		throw std::system_error(errno, std::system_category(),
+			strprintf::fmt(_("failed to open urls file (%s)"), filename));
+	}
+
+	for (const auto& url : urls) {
+		f << url;
+		if (tags[url].size() > 0) {
+			for (const auto& tag : tags[url]) {
+				f << " \"" << tag << "\"";
 			}
-			f << std::endl;
 		}
+		f << std::endl;
 	}
 }
 
