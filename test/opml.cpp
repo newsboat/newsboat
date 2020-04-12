@@ -156,7 +156,6 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	TestHelpers::TempFile urlsFile;
 
 	FileUrlReader urlcfg(urlsFile.get_path());
-	urlcfg.reload();
 
 	REQUIRE_NOTHROW(
 		opml::import(
@@ -191,7 +190,6 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	TestHelpers::TempFile urlsFile;
 
 	FileUrlReader urlcfg(urlsFile.get_path());
-	urlcfg.reload();
 
 	REQUIRE_NOTHROW(
 		opml::import(
