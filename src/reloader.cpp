@@ -136,12 +136,13 @@ std::string Reloader::prepare_message(unsigned int pos, unsigned int max)
 
 void Reloader::reload_all(bool unattended)
 {
+	ScopeMeasure sm("Reloader::reload_all");
+
 	const auto unread_feeds =
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
 	int num_threads = cfg->get_configvalue_as_int("reload-threads");
-	time_t t1, t2, dt;
 
 	ctrl->get_feedcontainer()->reset_feeds_status();
 	const auto num_feeds = ctrl->get_feedcontainer()->feeds_size();
@@ -150,8 +151,6 @@ void Reloader::reload_all(bool unattended)
 	const int min_threads = 1;
 	const int max_threads = num_feeds;
 	num_threads = std::max(min_threads, std::min(num_threads, max_threads));
-
-	t1 = time(nullptr);
 
 	LOG(Level::DEBUG, "Reloader::reload_all: starting with reload all...");
 	if (num_threads == 1) {
@@ -195,37 +194,7 @@ void Reloader::reload_all(bool unattended)
 	ctrl->get_feedcontainer()->sort_feeds(cfg->get_feed_sort_strategy());
 	ctrl->update_feedlist();
 
-	t2 = time(nullptr);
-	dt = t2 - t1;
-	// On GCC, `time_t` is `long int`, which is at least 32 bits. On x86_64,
-	// it's 64 bits. Thus, this cast is either a no-op, or an up-cast which are
-	// always safe.
-	LOG(Level::INFO,
-		"Reloader::reload_all: reload took %" PRId64 " seconds",
-		static_cast<int64_t>(dt));
-
-	const auto unread_feeds2 =
-		ctrl->get_feedcontainer()->unread_feed_count();
-	const auto unread_articles2 =
-		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 > unread_feeds ||
-		unread_articles2 > unread_articles) {
-		int article_count = unread_articles2 - unread_articles;
-		int feed_count = unread_feeds2 - unread_feeds;
-
-		LOG(Level::DEBUG, "unread article count: %d", article_count);
-		LOG(Level::DEBUG, "unread feed count: %d", feed_count);
-
-		FmtStrFormatter fmt;
-		fmt.register_fmt('f', std::to_string(unread_feeds2));
-		fmt.register_fmt('n', std::to_string(unread_articles2));
-		fmt.register_fmt('d',
-			std::to_string(article_count >= 0 ? article_count : 0));
-		fmt.register_fmt(
-			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
-		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
-	}
+	notify_reload_finished(unread_feeds, unread_articles);
 }
 
 void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
@@ -241,22 +210,8 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 		reload(idx, size, unattended);
 	}
 
-	const auto unread_feeds2 =
-		ctrl->get_feedcontainer()->unread_feed_count();
-	const auto unread_articles2 =
-		ctrl->get_feedcontainer()->unread_item_count();
-	bool notify_always = cfg->get_configvalue_as_bool("notify-always");
-	if (notify_always || unread_feeds2 != unread_feeds ||
-		unread_articles2 != unread_articles) {
-		FmtStrFormatter fmt;
-		fmt.register_fmt('f', std::to_string(unread_feeds2));
-		fmt.register_fmt('n', std::to_string(unread_articles2));
-		fmt.register_fmt('d',
-			std::to_string(unread_articles2 - unread_articles));
-		fmt.register_fmt(
-			'D', std::to_string(unread_feeds2 - unread_feeds));
-		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
-	}
+	notify_reload_finished(unread_feeds, unread_articles);
+
 	if (!unattended) {
 		ctrl->get_view()->set_status("");
 	}
@@ -321,6 +276,37 @@ void Reloader::notify(const std::string& msg)
 			"reloader:notify: notifying external program `%s'",
 			prog);
 		utils::run_command(prog, msg);
+	}
+}
+
+void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
+	unsigned int unread_articles_before)
+{
+	const auto unread_feeds =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles =
+		ctrl->get_feedcontainer()->unread_item_count();
+	const bool notify_always = cfg->get_configvalue_as_bool("notify-always");
+
+	if (notify_always || unread_feeds > unread_feeds_before ||
+		unread_articles > unread_articles_before) {
+		// TODO: Determine what should be done if `unread_articles < unread_articles_before`.
+		// It is expected this can happen if the user marks an article as read
+		// while a reload is in progress.
+		const int article_count = unread_articles - unread_articles_before;
+		const int feed_count = unread_feeds - unread_feeds_before;
+
+		LOG(Level::DEBUG, "unread article count: %d", article_count);
+		LOG(Level::DEBUG, "unread feed count: %d", feed_count);
+
+		FmtStrFormatter fmt;
+		fmt.register_fmt('f', std::to_string(unread_feeds));
+		fmt.register_fmt('n', std::to_string(unread_articles));
+		fmt.register_fmt('d',
+			std::to_string(article_count >= 0 ? article_count : 0));
+		fmt.register_fmt(
+			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
+		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
 	}
 }
 
