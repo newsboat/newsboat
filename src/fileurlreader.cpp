@@ -52,12 +52,6 @@ void FileUrlReader::reload()
 	};
 }
 
-void FileUrlReader::load_config(const std::string& file)
-{
-	filename = file;
-	reload();
-}
-
 void FileUrlReader::write_config()
 {
 	std::fstream f;

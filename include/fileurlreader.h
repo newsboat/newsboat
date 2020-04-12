@@ -12,11 +12,10 @@ public:
 	explicit FileUrlReader(const std::string& file = "");
 	void write_config() override;
 	void reload() override;
-	void load_config(const std::string& file);
 	std::string get_source() override;
 
 private:
-	std::string filename;
+	const std::string filename;
 };
 
 }
