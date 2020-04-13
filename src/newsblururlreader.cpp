@@ -49,6 +49,5 @@ std::string NewsBlurUrlReader::get_source()
 {
 	return "NewsBlur";
 }
-// TODO
 
 } // namespace newsboat
