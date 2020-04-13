@@ -88,7 +88,11 @@ macos_task:
     env:
         GCOV: /usr/bin/gcov
         PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
-        PATH: $HOME/.cargo/bin:$PATH
+        PATH: $HOME/.cargo/bin:/usr/local/opt/gettext/bin:$PATH
+        LDFLAGS: -L/usr/local/opt/gettext/lib
+        CFLAGS: -I/usr/local/opt/gettext/include
+        CXXFLAGS: -I/usr/local/opt/gettext/include
+        GETTEXT_DIR: /usr/local/opt/gettext
 
     build_script: *build_script
     test_script: *test_script
