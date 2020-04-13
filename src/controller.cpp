@@ -299,9 +299,9 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = new InoreaderUrlReader(
 			&cfg, configpaths.url_file(), api);
 	} else {
-		LOG(Level::ERROR,
-			"unknown urls-source `%s'",
-			urlcfg->get_source());
+		std::cerr << strprintf::fmt("ERROR: Unknown urls-source `%s'",
+				type) << std::endl;
+		return EXIT_FAILURE;
 	}
 
 	if (!args.do_export() && !args.silent()) {
