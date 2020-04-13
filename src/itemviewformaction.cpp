@@ -118,17 +118,13 @@ void ItemViewFormAction::prepare()
 					rxman,
 					"article");
 		} else {
-			// Add enclosure url to link list.
-			if (item->enclosure_type() != "") {
-				LinkType type;
-
-				if(item->enclosure_type().find("audio")) type = LinkType::AUDIO;
-				else if(item->enclosure_type().find("image")) type = LinkType::IMG;
-				else if(item->enclosure_type().find("embedded")) type = LinkType::EMBED;
-				else if(item->enclosure_type().find("video")) type = LinkType::VIDEO;
-				else type = LinkType::HREF;
-
-				links.push_back(LinkPair(item->enclosure_url(), type));
+			if (!item->enclosure_url().empty()) {
+				bool ok = false;
+				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type(),
+						ok);
+				if (ok) {
+					links.push_back(LinkPair(item->enclosure_url(), link_type));
+				}
 			}
 
 			std::tie(formatted_text, num_lines) =
