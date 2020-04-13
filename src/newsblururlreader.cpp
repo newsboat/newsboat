@@ -16,11 +16,6 @@ NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file,
 
 NewsBlurUrlReader::~NewsBlurUrlReader() {}
 
-void NewsBlurUrlReader::write_config()
-{
-	// NOTHING
-}
-
 void NewsBlurUrlReader::reload()
 {
 	urls.clear();

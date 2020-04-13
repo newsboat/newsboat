@@ -10,9 +10,14 @@ namespace newsboat {
 class FileUrlReader : public UrlReader {
 public:
 	explicit FileUrlReader(const std::string& file = "");
-	void write_config() override;
+
 	void reload() override;
 	std::string get_source() override;
+
+	/// \brief Write URLs back to the input file.
+	///
+	/// This method is used after importing feeds from OPML.
+	void write_config();
 
 private:
 	const std::string filename;

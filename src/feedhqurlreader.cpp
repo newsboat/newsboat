@@ -19,11 +19,6 @@ FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
 
 FeedHqUrlReader::~FeedHqUrlReader() {}
 
-void FeedHqUrlReader::write_config()
-{
-	// NOTHING
-}
-
 #define BROADCAST_FRIENDS_URL                                    \
 	"http://feedhq.org/reader/atom/user/-/state/com.google/" \
 	"broadcast-friends"

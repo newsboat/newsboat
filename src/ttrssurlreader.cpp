@@ -15,11 +15,6 @@ TtRssUrlReader::TtRssUrlReader(const std::string& url_file, RemoteApi* a)
 
 TtRssUrlReader::~TtRssUrlReader() {}
 
-void TtRssUrlReader::write_config()
-{
-	// NOTHING
-}
-
 void TtRssUrlReader::reload()
 {
 	urls.clear();

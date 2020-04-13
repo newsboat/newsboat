@@ -15,11 +15,6 @@ OcNewsUrlReader::OcNewsUrlReader(const std::string& url_file, RemoteApi* a)
 
 OcNewsUrlReader::~OcNewsUrlReader() {}
 
-void OcNewsUrlReader::write_config()
-{
-	// NOTHING
-}
-
 void OcNewsUrlReader::reload()
 {
 	urls.clear();

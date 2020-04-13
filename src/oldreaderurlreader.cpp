@@ -19,11 +19,6 @@ OldReaderUrlReader::OldReaderUrlReader(ConfigContainer* c,
 
 OldReaderUrlReader::~OldReaderUrlReader() {}
 
-void OldReaderUrlReader::write_config()
-{
-	// NOTHING
-}
-
 #define BROADCAST_FRIENDS_URL                                           \
 	"https://theoldreader.com/reader/atom/user/-/state/com.google/" \
 	"broadcast-friends"

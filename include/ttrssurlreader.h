@@ -11,7 +11,6 @@ class TtRssUrlReader : public UrlReader {
 public:
 	TtRssUrlReader(const std::string& url_file, RemoteApi* a);
 	~TtRssUrlReader() override;
-	void write_config() override;
 	void reload() override;
 	std::string get_source() override;
 

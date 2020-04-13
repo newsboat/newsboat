@@ -14,11 +14,6 @@ public:
 	UrlReader() = default;
 	virtual ~UrlReader() = default;
 
-	/// \brief Write URLs back to the input file.
-	///
-	/// This method is used after importing feeds from OPML.
-	virtual void write_config() = 0;
-
 	/// \brief Re-read the input file.
 	///
 	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`, so
