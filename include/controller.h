@@ -97,7 +97,7 @@ public:
 	}
 
 private:
-	void import_opml(const std::string& filename);
+	void import_opml(const std::string& opmlFile, const std::string& urlFile);
 	void export_opml();
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
 	int execute_commands(const std::vector<std::string>& cmds);

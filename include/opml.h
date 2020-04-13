@@ -4,7 +4,7 @@
 #include <libxml/tree.h>
 
 #include "feedcontainer.h"
-#include "urlreader.h"
+#include "fileurlreader.h"
 
 namespace newsboat {
 
@@ -12,7 +12,7 @@ namespace opml {
 xmlDocPtr generate(const FeedContainer& feedcontainer);
 bool import(
 	const std::string& filename,
-	UrlReader* urlcfg);
+	FileUrlReader& urlcfg);
 }
 
 } // namespace newsboat

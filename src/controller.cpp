@@ -136,12 +136,8 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	if (args.do_import()) {
-		LOG(Level::INFO,
-			"Importing OPML file from %s",
-			args.importfile());
-		urlcfg = new FileUrlReader(configpaths.url_file());
-		urlcfg->reload();
-		import_opml(args.importfile());
+		LOG(Level::INFO, "Importing OPML file from %s", args.importfile());
+		import_opml(args.importfile(), configpaths.url_file());
 		return EXIT_SUCCESS;
 	}
 
@@ -620,17 +616,20 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	}
 }
 
-void Controller::import_opml(const std::string& filename)
+void Controller::import_opml(const std::string& opmlFile,
+	const std::string& urlFile)
 {
-	if (!opml::import(filename, urlcfg)) {
+	auto urlReader = FileUrlReader(urlFile);
+	urlReader.reload(); // Load existing URLs
+
+	if (!opml::import(opmlFile, urlReader)) {
 		std::cout << strprintf::fmt(
-				_("An error occurred while parsing %s."),
-				filename)
+				_("An error occurred while parsing %s."), opmlFile)
 			<< std::endl;
 		return;
 	} else {
 		std::cout << strprintf::fmt(
-				_("Import of %s finished."), filename)
+				_("Import of %s finished."), opmlFile)
 			<< std::endl;
 	}
 }
