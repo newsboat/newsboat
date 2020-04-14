@@ -11,11 +11,6 @@ OpmlUrlReader::OpmlUrlReader(ConfigContainer* c)
 {
 }
 
-void OpmlUrlReader::write_config()
-{
-	// do nothing.
-}
-
 void OpmlUrlReader::reload()
 {
 	urls.clear();

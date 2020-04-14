@@ -198,33 +198,3 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 	tags.insert(alltags.cbegin(), alltags.cend());
 	REQUIRE(tags == expected_tags);
 }
-
-TEST_CASE("OpmlUrlReader::write_config() doesn't change the input file",
-	"[OpmlUrlReader]")
-{
-	const std::string testDataPath("data/example.opml");
-	TestHelpers::TempFile urlsFile;
-
-	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
-
-	ConfigContainer cfg;
-	cfg.set_configvalue("opml-url", "file://" + urlsFile.get_path());
-
-	OpmlUrlReader u(&cfg);
-	REQUIRE_NOTHROW(u.reload());
-
-	const std::string sentry("wasn't touched by OpmlUrlReader at all");
-	std::ofstream urlsFileStream(urlsFile.get_path());
-	REQUIRE(urlsFileStream.is_open());
-	urlsFileStream << sentry;
-	urlsFileStream.close();
-
-	REQUIRE_NOTHROW(u.write_config());
-
-	std::ifstream urlsFileReadStream;
-	urlsFileReadStream.open(urlsFile.get_path());
-	REQUIRE(urlsFileReadStream.is_open());
-	std::string line;
-	std::getline(urlsFileReadStream, line);
-	REQUIRE(line == sentry);
-}

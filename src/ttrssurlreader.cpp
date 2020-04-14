@@ -15,11 +15,6 @@ TtRssUrlReader::TtRssUrlReader(const std::string& url_file, RemoteApi* a)
 
 TtRssUrlReader::~TtRssUrlReader() {}
 
-void TtRssUrlReader::write_config()
-{
-	// NOTHING
-}
-
 void TtRssUrlReader::reload()
 {
 	urls.clear();
@@ -29,7 +24,6 @@ void TtRssUrlReader::reload()
 	FileUrlReader ur(file);
 	ur.reload();
 
-	// std::vector<std::string>& file_urls(ur.get_urls());
 	auto& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
@@ -59,6 +53,5 @@ std::string TtRssUrlReader::get_source()
 {
 	return "Tiny Tiny RSS";
 }
-// TODO
 
 } // namespace newsboat

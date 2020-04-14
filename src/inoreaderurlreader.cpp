@@ -19,11 +19,6 @@ InoreaderUrlReader::InoreaderUrlReader(ConfigContainer* c,
 
 InoreaderUrlReader::~InoreaderUrlReader() {}
 
-void InoreaderUrlReader::write_config()
-{
-	// NOTHING
-}
-
 #define STARRED_ITEMS_URL \
 	"http://inoreader.com/reader/atom/user/-/state/com.google/starred"
 #define BROADCAST_ITEMS_URL \

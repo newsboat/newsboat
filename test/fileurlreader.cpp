@@ -15,16 +15,16 @@ TEST_CASE("URL reader remembers the file name from which it read the URLs",
 {
 	const std::string url("data/test-urls.txt");
 
-	FileUrlReader u;
-	REQUIRE(u.get_source() != url);
-	u.load_config(url);
+	FileUrlReader u(url);
+	REQUIRE(u.get_source() == url);
+	u.reload();
 	REQUIRE(u.get_source() == url);
 }
 
 TEST_CASE("URL reader extracts all URLs from the file", "[FileUrlReader]")
 {
-	FileUrlReader u;
-	u.load_config("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt");
+	u.reload();
 
 	REQUIRE(u.get_urls().size() == 3);
 	REQUIRE(u.get_urls()[0] == "http://test1.url.cc/feed.xml");
@@ -34,8 +34,8 @@ TEST_CASE("URL reader extracts all URLs from the file", "[FileUrlReader]")
 
 TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 {
-	FileUrlReader u;
-	u.load_config("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt");
+	u.reload();
 
 	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml").size() == 2);
 	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[0] == "tag1");
@@ -47,8 +47,8 @@ TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 
 TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
 {
-	FileUrlReader u;
-	u.load_config("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt");
+	u.reload();
 
 	REQUIRE(u.get_alltags().size() == 3);
 }

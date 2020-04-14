@@ -54,7 +54,7 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 }
 
 void rec_find_rss_outlines(
-	UrlReader* urlcfg,
+	FileUrlReader& urlcfg,
 	xmlNode* node,
 	std::string tag)
 {
@@ -121,11 +121,11 @@ void rec_find_rss_outlines(
 
 				LOG(Level::DEBUG,
 					"opml::import: size = %" PRIu64,
-					static_cast<uint64_t>(urlcfg->get_urls().size()));
+					static_cast<uint64_t>(urlcfg.get_urls().size()));
 				// TODO: replace with algorithm::any or something
-				if (urlcfg->get_urls().size() > 0) {
+				if (urlcfg.get_urls().size() > 0) {
 					for (const auto& u :
-						urlcfg->get_urls()) {
+						urlcfg.get_urls()) {
 						if (u == url) {
 							found = true;
 						}
@@ -136,7 +136,7 @@ void rec_find_rss_outlines(
 					LOG(Level::DEBUG,
 						"opml::import: added url = %s",
 						url);
-					urlcfg->get_urls().push_back(
+					urlcfg.get_urls().push_back(
 						std::string(url));
 					if (tag.length() > 0) {
 						LOG(Level::DEBUG,
@@ -145,7 +145,7 @@ void rec_find_rss_outlines(
 							"tag %s to url %s",
 							tag,
 							url);
-						urlcfg->get_tags(url).push_back(
+						urlcfg.get_tags(url).push_back(
 							tag);
 					}
 				} else {
@@ -180,7 +180,7 @@ void rec_find_rss_outlines(
 
 bool opml::import(
 	const std::string& filename,
-	UrlReader* urlcfg)
+	FileUrlReader& urlcfg)
 {
 	xmlDoc* doc = xmlReadFile(filename.c_str(), nullptr, 0);
 	if (doc == nullptr) {
@@ -194,7 +194,7 @@ bool opml::import(
 		if (strcmp((const char*)node->name, "body") == 0) {
 			LOG(Level::DEBUG, "opml::import: found body");
 			rec_find_rss_outlines(urlcfg, node->children, "");
-			urlcfg->write_config();
+			urlcfg.write_config();
 		}
 	}
 
