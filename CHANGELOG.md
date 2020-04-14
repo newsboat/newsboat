@@ -24,6 +24,10 @@ acknowledge contributions from the following people:
 ### Deprecated
 ### Removed
 ### Fixed
+- The wrong feed being opened (#72) turned out to be caused by a bug in
+  libstfl. A patch for that library is available at
+  https://github.com/dennisschagt/stfl/pull/4#issuecomment-613640246 (Dennis
+  van der Schagt)
 ### Security
 
 
