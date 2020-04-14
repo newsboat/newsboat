@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
+#include "htmlrenderer.h"
 #include "rs_utils.h"
 #include "test-helpers/chdir.h"
 #include "test-helpers/envvar.h"
@@ -1085,19 +1086,55 @@ TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
 
 TEST_CASE(
 	"is_valid_podcast_type() returns true if supplied MIME type "
-	"is audio or a container",
+	"is audio, video, or a container",
 	"[utils]")
 {
 	REQUIRE(utils::is_valid_podcast_type("audio/mpeg"));
 	REQUIRE(utils::is_valid_podcast_type("audio/mp3"));
 	REQUIRE(utils::is_valid_podcast_type("audio/x-mp3"));
 	REQUIRE(utils::is_valid_podcast_type("audio/ogg"));
+	REQUIRE(utils::is_valid_podcast_type("video/x-matroska"));
+	REQUIRE(utils::is_valid_podcast_type("video/webm"));
 	REQUIRE(utils::is_valid_podcast_type("application/ogg"));
 
 	REQUIRE_FALSE(utils::is_valid_podcast_type("image/jpeg"));
 	REQUIRE_FALSE(utils::is_valid_podcast_type("image/png"));
 	REQUIRE_FALSE(utils::is_valid_podcast_type("text/plain"));
 	REQUIRE_FALSE(utils::is_valid_podcast_type("application/zip"));
+}
+
+TEST_CASE("podcast_mime_to_link_type() returns HtmlRenderer's LinkType that "
+	"corresponds to the given podcast MIME type",
+	"[utils]")
+{
+	SECTION("Valid podcast MIME types") {
+		const auto check = [](std::string mime, LinkType expected) {
+			bool ok = false;
+			REQUIRE(utils::podcast_mime_to_link_type(mime, ok) == expected);
+			REQUIRE(ok);
+		};
+
+		check("audio/mpeg", LinkType::AUDIO);
+		check("audio/mp3", LinkType::AUDIO);
+		check("audio/x-mp3", LinkType::AUDIO);
+		check("audio/ogg", LinkType::AUDIO);
+		check("video/x-matroska", LinkType::VIDEO);
+		check("video/webm", LinkType::VIDEO);
+		check("application/ogg", LinkType::AUDIO);
+	}
+
+	SECTION("Sets `ok` to `false` if given MIME type is not a podcast type") {
+		const auto check = [](std::string mime) {
+			bool ok = true;
+			utils::podcast_mime_to_link_type(mime, ok);
+			REQUIRE_FALSE(ok);
+		};
+
+		check("image/jpeg");
+		check("image/png");
+		check("text/plain");
+		check("application/zip");
+	}
 }
 
 TEST_CASE(

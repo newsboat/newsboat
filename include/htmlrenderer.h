@@ -10,7 +10,9 @@
 
 namespace newsboat {
 
+// This enum has to be kept in sync with enum LinkType in rust/libnewsboat/src/htmlrenderer.rs
 enum class LinkType { HREF, IMG, EMBED, VIDEO, AUDIO };
+
 enum class HtmlTag {
 	A = 1,
 	EMBED,

@@ -3,15 +3,14 @@ extern crate dirs;
 extern crate libc;
 extern crate natord;
 extern crate rand;
-extern crate regex;
 extern crate std;
 extern crate unicode_width;
 extern crate url;
 
-use self::regex::Regex;
 use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use self::url::percent_encoding::*;
 use self::url::Url;
+use htmlrenderer;
 use libc::c_ulong;
 use logger::{self, Level};
 use std::fs::DirBuilder;
@@ -412,14 +411,51 @@ pub fn remove_soft_hyphens(text: &mut String) {
     text.retain(|c| c != '\u{00AD}')
 }
 
+/// An array of "MIME matchers" and their associated LinkTypes
+///
+/// This is used for two tasks:
+///
+/// 1. checking if a MIME type is a podcast type (`utils::is_valid_podcast_type`). That involves
+///    running all matching functions on given input and checking if any of them returned `true`;
+///
+/// 2. figuring out the `LinkType` for a particular enclosure, given its MIME type
+///    (`utils::podcast_mime_to_link_type`).
+const PODCAST_MIME_TO_LINKTYPE: [(fn(&str) -> bool, htmlrenderer::LinkType); 2] = [
+    (
+        |mime| {
+            // RFC 5334, section 10.1 says "historically, some implementations expect .ogg files to be
+            // solely Vorbis-encoded audio", so let's assume it's audio, not video.
+            // https://tools.ietf.org/html/rfc5334#section-10.1
+            mime.starts_with("audio/") || mime == "application/ogg"
+        },
+        htmlrenderer::LinkType::Audio,
+    ),
+    (
+        |mime| mime.starts_with("video/"),
+        htmlrenderer::LinkType::Video,
+    ),
+];
+
+/// Returns `true` if given MIME type is considered to be a podcast by Newsboat.
 pub fn is_valid_podcast_type(mimetype: &str) -> bool {
-    let re = Regex::new(r"(audio|video)/.*").unwrap();
-    let matches = re.is_match(mimetype);
+    PODCAST_MIME_TO_LINKTYPE
+        .iter()
+        .any(|(matcher, _)| matcher(mimetype))
+}
 
-    let acceptable = ["application/ogg"];
-    let found = acceptable.contains(&mimetype);
-
-    matches || found
+/// Converts podcast's MIME type into an HtmlRenderer's "link type"
+///
+/// Returns None if given MIME type is not a podcast type. See `is_valid_podcast_type()`.
+pub fn podcast_mime_to_link_type(mime_type: &str) -> Option<htmlrenderer::LinkType> {
+    PODCAST_MIME_TO_LINKTYPE
+        .iter()
+        .find_map(|(matcher, link_type)| {
+            if matcher(mime_type) {
+                Some(*link_type)
+            } else {
+                None
+            }
+        })
 }
 
 pub fn get_auth_method(method: &str) -> c_ulong {
@@ -1032,12 +1068,32 @@ mod tests {
         assert!(is_valid_podcast_type("audio/mp3"));
         assert!(is_valid_podcast_type("audio/x-mp3"));
         assert!(is_valid_podcast_type("audio/ogg"));
+        assert!(is_valid_podcast_type("video/x-matroska"));
+        assert!(is_valid_podcast_type("video/webm"));
         assert!(is_valid_podcast_type("application/ogg"));
 
         assert!(!is_valid_podcast_type("image/jpeg"));
         assert!(!is_valid_podcast_type("image/png"));
         assert!(!is_valid_podcast_type("text/plain"));
         assert!(!is_valid_podcast_type("application/zip"));
+    }
+
+    #[test]
+    fn t_podcast_mime_to_link_type() {
+        use htmlrenderer::LinkType::*;
+
+        assert_eq!(podcast_mime_to_link_type("audio/mpeg"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("audio/mp3"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("audio/x-mp3"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("audio/ogg"), Some(Audio));
+        assert_eq!(podcast_mime_to_link_type("video/x-matroska"), Some(Video));
+        assert_eq!(podcast_mime_to_link_type("video/webm"), Some(Video));
+        assert_eq!(podcast_mime_to_link_type("application/ogg"), Some(Audio));
+
+        assert_eq!(podcast_mime_to_link_type("image/jpeg"), None);
+        assert_eq!(podcast_mime_to_link_type("image/png"), None);
+        assert_eq!(podcast_mime_to_link_type("text/plain"), None);
+        assert_eq!(podcast_mime_to_link_type("application/zip"), None);
     }
 
     #[test]

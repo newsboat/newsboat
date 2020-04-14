@@ -9,6 +9,7 @@
 #include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "itemrenderer.h"
+#include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
@@ -117,6 +118,15 @@ void ItemViewFormAction::prepare()
 					rxman,
 					"article");
 		} else {
+			if (!item->enclosure_url().empty()) {
+				bool ok = false;
+				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type(),
+						ok);
+				if (ok) {
+					links.push_back(LinkPair(item->enclosure_url(), link_type));
+				}
+			}
+
 			std::tie(formatted_text, num_lines) =
 				item_renderer::to_stfl_list(
 					// cfg can't be nullptr because that's a long-lived object
