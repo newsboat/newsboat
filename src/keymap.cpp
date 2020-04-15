@@ -787,13 +787,10 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
-	for (const auto& macro : macros_) {
-		if (macro.first == key) {
-			return macro.second;
-		}
+	if (macros_.count(key) >= 1) {
+		return macros_.at(key);
 	}
-	std::vector<MacroCmd> dummyvector;
-	return dummyvector;
+	return {};
 }
 
 bool KeyMap::is_valid_context(const std::string& context)
