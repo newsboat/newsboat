@@ -192,6 +192,8 @@ int View::run()
 
 	curs_set(0);
 
+	macrocmds = keys->get_macro("startup");
+
 	/*
 	 * This is the main "event" loop of newsboat.
 	 */
