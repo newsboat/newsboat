@@ -106,6 +106,30 @@ pub struct Match {
     pub end_pos: usize,
 }
 
+/// A wrapper around `libc::regerror()`.
+unsafe fn regex_error_to_str(errcode: libc::c_int, regex: &regex_t) -> Option<String> {
+    // Find out the size of the buffer needed to hold the error message
+    let errmsg_length = regerror(errcode, regex, ptr::null_mut(), 0);
+
+    // Allocate the buffer and get the message.
+    // Casting u64 to usize is safe since the error message is unlikely to hit usize's
+    // upper bound.
+    let mut errmsg: Vec<u8> = vec![0; errmsg_length as usize];
+    // Casting `*mut u8` to `*mut c_char` should be safe since C doesn't really care:
+    // it can store any ASCII symbol in a `char`, disregarding signedness.
+    regerror(
+        errcode,
+        regex,
+        errmsg.as_mut_ptr() as *mut std::os::raw::c_char,
+        errmsg_length,
+    );
+
+    // Drop the trailing NUL byte that C uses to terminate strings
+    errmsg.pop();
+
+    OsString::from_vec(errmsg).into_string().ok()
+}
+
 impl Regex {
     /// Compiles pattern as a regular expression.
     ///
@@ -127,29 +151,10 @@ impl Regex {
             if errcode == 0 {
                 Ok(Regex { regex })
             } else {
-                // Find out the size of the buffer needed to hold the error message
-                let errmsg_length = regerror(errcode, &regex, ptr::null_mut(), 0);
+                match regex_error_to_str(errcode, &regex) {
+                    Some(errmsg) => Err(format!("regcomp returned code {}: {}", errcode, errmsg)),
 
-                // Allocate the buffer and get the message.
-                // Casting u64 to usize is safe since the error message is unlikely to hit usize's
-                // upper bound.
-                let mut errmsg: Vec<u8> = vec![0; errmsg_length as usize];
-                // Casting `*mut u8` to `*mut c_char` should be safe since C doesn't really care:
-                // it can store any ASCII symbol in a `char`, disregarding signedness.
-                regerror(
-                    errcode,
-                    &regex,
-                    errmsg.as_mut_ptr() as *mut std::os::raw::c_char,
-                    errmsg_length,
-                );
-
-                // Drop the trailing NUL byte that C uses to terminate strings
-                errmsg.pop();
-
-                match OsString::from_vec(errmsg).into_string() {
-                    Ok(errmsg) => Err(format!("regcomp returned code {}: {}", errcode, errmsg)),
-
-                    Err(_errmsg_ostring) => Err(format!("regcomp returned code {}", errcode)),
+                    None => Err(format!("regcomp returned code {}", errcode)),
                 }
             }
         }
@@ -226,7 +231,12 @@ impl Regex {
 
             // POSIX only specifies two return codes for regexec(), but implementations are free to
             // extend that.
-            _ => Err(format!("regexec returned code {}", errcode)),
+            _ => unsafe {
+                match regex_error_to_str(errcode, &self.regex) {
+                    Some(errmsg) => Err(format!("regexec returned code {}: {}", errcode, errmsg)),
+                    None => Err(format!("regexec returned code {}", errcode)),
+                }
+            },
         }
     }
 }
