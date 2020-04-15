@@ -208,9 +208,6 @@ int View::run()
 
 			LOG(Level::DEBUG, "View::run: event = %s", event);
 
-			// retrieve operation code through the keymap
-			Operation op;
-
 			if (have_macroprefix) {
 				have_macroprefix = false;
 				LOG(Level::DEBUG,
@@ -219,7 +216,7 @@ int View::run()
 				macrocmds = keys->get_macro(event);
 				set_status("");
 			} else {
-				op = keys->get_operation(event, fa->id());
+				const Operation op = keys->get_operation(event, fa->id());
 
 				LOG(Level::DEBUG,
 					"View::run: event = %s op = %u",
