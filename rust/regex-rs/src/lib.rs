@@ -29,11 +29,13 @@
 //! ```
 
 use bitflags::bitflags;
+use gettextrs::gettext;
 use libc::{regcomp, regerror, regex_t, regexec, regfree, regmatch_t};
 use std::ffi::{CString, OsString};
 use std::mem;
 use std::os::unix::ffi::OsStringExt;
 use std::ptr;
+use strprintf::fmt;
 
 /// POSIX regular expression.
 pub struct Regex {
@@ -152,9 +154,13 @@ impl Regex {
                 Ok(Regex { regex })
             } else {
                 match regex_error_to_str(errcode, &regex) {
-                    Some(errmsg) => Err(format!("regcomp returned code {}: {}", errcode, errmsg)),
+                    Some(regcomp_errmsg) => {
+                        let msg = fmt!(&gettext("regcomp returned code %i"), errcode);
+                        let msg = format!("{}: {}", msg, regcomp_errmsg);
+                        Err(msg)
+                    }
 
-                    None => Err(format!("regcomp returned code {}", errcode)),
+                    None => Err(fmt!(&gettext("regcomp returned code %i"), errcode)),
                 }
             }
         }
@@ -233,8 +239,12 @@ impl Regex {
             // extend that.
             _ => unsafe {
                 match regex_error_to_str(errcode, &self.regex) {
-                    Some(errmsg) => Err(format!("regexec returned code {}: {}", errcode, errmsg)),
-                    None => Err(format!("regexec returned code {}", errcode)),
+                    Some(regexec_errmsg) => {
+                        let msg = fmt!(&gettext("regexec returned code %i"), errcode);
+                        let msg = format!("{}: {}", msg, regexec_errmsg);
+                        Err(msg)
+                    }
+                    None => Err(fmt!(&gettext("regexec returned code %i"), errcode)),
                 }
             },
         }

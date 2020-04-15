@@ -608,7 +608,9 @@ name = "regex-rs"
 version = "0.1.0"
 dependencies = [
  "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gettext-rs 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.69 (registry+https://github.com/rust-lang/crates.io-index)",
+ "strprintf 0.1.0",
 ]
 
 [[package]]
