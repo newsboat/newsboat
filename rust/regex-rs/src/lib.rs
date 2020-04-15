@@ -147,9 +147,9 @@ impl Regex {
                 errmsg.pop();
 
                 match OsString::from_vec(errmsg).into_string() {
-                    Ok(errmsg) => Err(format!("({}) {}", errcode, errmsg)),
+                    Ok(errmsg) => Err(format!("regcomp returned code {}: {}", errcode, errmsg)),
 
-                    Err(_errmsg_ostring) => Err(format!("({})", errcode)),
+                    Err(_errmsg_ostring) => Err(format!("regcomp returned code {}", errcode)),
                 }
             }
         }
@@ -226,7 +226,7 @@ impl Regex {
 
             // POSIX only specifies two return codes for regexec(), but implementations are free to
             // extend that.
-            _ => Err(format!("({}) match failure", errcode)),
+            _ => Err(format!("regexec returned code {}", errcode)),
         }
     }
 }
