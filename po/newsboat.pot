@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-04-14 01:37+0200\n"
+"POT-Creation-Date: 2020-04-16 00:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,7 +460,7 @@ msgid "Cancel"
 msgstr ""
 
 #: src/dirbrowserformaction.cpp:271 src/filebrowserformaction.cpp:262
-#: src/itemlistformaction.cpp:1243 src/itemviewformaction.cpp:441
+#: src/itemlistformaction.cpp:1243 src/itemviewformaction.cpp:451
 msgid "Save"
 msgstr ""
 
@@ -555,7 +555,7 @@ msgstr ""
 #: src/feedlistformaction.cpp:282 src/feedlistformaction.cpp:305
 #: src/itemlistformaction.cpp:140 src/itemlistformaction.cpp:175
 #: src/itemlistformaction.cpp:193 src/itemlistformaction.cpp:206
-#: src/itemviewformaction.cpp:220 src/itemviewformaction.cpp:402
+#: src/itemviewformaction.cpp:230 src/itemviewformaction.cpp:412
 #, c-format
 msgid "Browser returned error code %i"
 msgstr ""
@@ -600,7 +600,7 @@ msgid "No filters defined."
 msgstr ""
 
 #: src/feedlistformaction.cpp:486 src/helpformaction.cpp:41
-#: src/itemlistformaction.cpp:605 src/itemviewformaction.cpp:248
+#: src/itemlistformaction.cpp:605 src/itemviewformaction.cpp:258
 msgid "Search for: "
 msgstr ""
 
@@ -622,7 +622,7 @@ msgid "y"
 msgstr ""
 
 #: src/feedlistformaction.cpp:623 src/helpformaction.cpp:225
-#: src/itemlistformaction.cpp:1241 src/itemviewformaction.cpp:440
+#: src/itemlistformaction.cpp:1241 src/itemviewformaction.cpp:450
 #: src/pbview.cpp:363 src/pbview.cpp:370 src/urlviewformaction.cpp:141
 msgid "Quit"
 msgstr ""
@@ -632,7 +632,7 @@ msgid "Open"
 msgstr ""
 
 #: src/feedlistformaction.cpp:625 src/itemlistformaction.cpp:1245
-#: src/itemviewformaction.cpp:442
+#: src/itemviewformaction.cpp:452
 msgid "Next Unread"
 msgstr ""
 
@@ -658,7 +658,7 @@ msgid "Search"
 msgstr ""
 
 #: src/feedlistformaction.cpp:631 src/helpformaction.cpp:257
-#: src/itemlistformaction.cpp:1248 src/itemviewformaction.cpp:445
+#: src/itemlistformaction.cpp:1248 src/itemviewformaction.cpp:455
 #: src/pbview.cpp:296 src/pbview.cpp:378
 msgid "Help"
 msgstr ""
@@ -828,7 +828,7 @@ msgstr ""
 msgid "Saved web pages"
 msgstr ""
 
-#: src/itemlistformaction.cpp:218 src/itemviewformaction.cpp:359
+#: src/itemlistformaction.cpp:218 src/itemviewformaction.cpp:369
 msgid "Toggling read flag for article..."
 msgstr ""
 
@@ -837,12 +837,12 @@ msgstr ""
 msgid "Error while toggling read flag: %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:305 src/itemviewformaction.cpp:290
+#: src/itemlistformaction.cpp:305 src/itemviewformaction.cpp:300
 msgid "URL list empty."
 msgstr ""
 
 #: src/itemlistformaction.cpp:363 src/itemrenderer.cpp:67
-#: src/itemviewformaction.cpp:278
+#: src/itemviewformaction.cpp:288
 msgid "Flags: "
 msgstr ""
 
@@ -855,18 +855,18 @@ msgid "Error: you can't reload search results."
 msgstr ""
 
 #: src/itemlistformaction.cpp:432 src/itemlistformaction.cpp:441
-#: src/itemlistformaction.cpp:465 src/itemviewformaction.cpp:312
-#: src/itemviewformaction.cpp:323 src/itemviewformaction.cpp:353
+#: src/itemlistformaction.cpp:465 src/itemviewformaction.cpp:322
+#: src/itemviewformaction.cpp:333 src/itemviewformaction.cpp:363
 #: src/view.cpp:801 src/view.cpp:877
 msgid "No unread items."
 msgstr ""
 
-#: src/itemlistformaction.cpp:449 src/itemviewformaction.cpp:333
+#: src/itemlistformaction.cpp:449 src/itemviewformaction.cpp:343
 #: src/view.cpp:950
 msgid "Already on last item."
 msgstr ""
 
-#: src/itemlistformaction.cpp:458 src/itemviewformaction.cpp:343
+#: src/itemlistformaction.cpp:458 src/itemviewformaction.cpp:353
 #: src/view.cpp:915
 msgid "Already on first item."
 msgstr ""
@@ -879,7 +879,7 @@ msgstr ""
 msgid "Marking all above as read..."
 msgstr ""
 
-#: src/itemlistformaction.cpp:588 src/itemviewformaction.cpp:264
+#: src/itemlistformaction.cpp:588 src/itemviewformaction.cpp:274
 msgid "Pipe article to command: "
 msgstr ""
 
@@ -898,7 +898,7 @@ msgstr ""
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 
-#: src/itemlistformaction.cpp:841 src/itemviewformaction.cpp:517
+#: src/itemlistformaction.cpp:841 src/itemviewformaction.cpp:527
 msgid "Flags updated."
 msgstr ""
 
@@ -907,17 +907,17 @@ msgstr ""
 msgid "Error: applying the filter failed: %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1334 src/itemviewformaction.cpp:201
-#: src/itemviewformaction.cpp:487
+#: src/itemlistformaction.cpp:1334 src/itemviewformaction.cpp:211
+#: src/itemviewformaction.cpp:497
 msgid "Aborted saving."
 msgstr ""
 
-#: src/itemlistformaction.cpp:1339 src/itemviewformaction.cpp:493
+#: src/itemlistformaction.cpp:1339 src/itemviewformaction.cpp:503
 #, c-format
 msgid "Saved article to %s"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1342 src/itemviewformaction.cpp:497
+#: src/itemlistformaction.cpp:1342 src/itemviewformaction.cpp:507
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr ""
@@ -984,68 +984,68 @@ msgstr ""
 msgid "type: "
 msgstr ""
 
-#: src/itemviewformaction.cpp:57 src/itemviewformaction.cpp:595
+#: src/itemviewformaction.cpp:58 src/itemviewformaction.cpp:605
 msgid "Top"
 msgstr ""
 
-#: src/itemviewformaction.cpp:58 src/itemviewformaction.cpp:597
+#: src/itemviewformaction.cpp:59 src/itemviewformaction.cpp:607
 msgid "Bottom"
 msgstr ""
 
-#: src/itemviewformaction.cpp:166 src/view.cpp:584
+#: src/itemviewformaction.cpp:176 src/view.cpp:584
 #, c-format
 msgid "Error while marking article as read: %s"
 msgstr ""
 
-#: src/itemviewformaction.cpp:181
+#: src/itemviewformaction.cpp:191
 #, c-format
 msgid "Added %s to download queue."
 msgstr ""
 
-#: src/itemviewformaction.cpp:185
+#: src/itemviewformaction.cpp:195
 #, c-format
 msgid "Invalid URL: '%s'"
 msgstr ""
 
-#: src/itemviewformaction.cpp:206
+#: src/itemviewformaction.cpp:216
 #, c-format
 msgid "Saved article to %s."
 msgstr ""
 
-#: src/itemviewformaction.cpp:209
+#: src/itemviewformaction.cpp:219
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr ""
 
-#: src/itemviewformaction.cpp:218 src/itemviewformaction.cpp:399
-#: src/itemviewformaction.cpp:542 src/urlviewformaction.cpp:44
+#: src/itemviewformaction.cpp:228 src/itemviewformaction.cpp:409
+#: src/itemviewformaction.cpp:552 src/urlviewformaction.cpp:44
 #: src/urlviewformaction.cpp:78
 msgid "Starting browser..."
 msgstr ""
 
-#: src/itemviewformaction.cpp:365
+#: src/itemviewformaction.cpp:375
 #, c-format
 msgid "Error while marking article as unread: %s"
 msgstr ""
 
-#: src/itemviewformaction.cpp:419 src/keymap.cpp:183
+#: src/itemviewformaction.cpp:429 src/keymap.cpp:183
 msgid "Goto URL #"
 msgstr ""
 
-#: src/itemviewformaction.cpp:443 src/urlviewformaction.cpp:142
+#: src/itemviewformaction.cpp:453 src/urlviewformaction.cpp:142
 msgid "Open in Browser"
 msgstr ""
 
-#: src/itemviewformaction.cpp:444
+#: src/itemviewformaction.cpp:454
 msgid "Enqueue"
 msgstr ""
 
-#: src/itemviewformaction.cpp:608
+#: src/itemviewformaction.cpp:618
 #, c-format
 msgid "Article - %s"
 msgstr ""
 
-#: src/itemviewformaction.cpp:658
+#: src/itemviewformaction.cpp:668
 msgid "Error: invalid regular expression!"
 msgstr ""
 
@@ -1614,18 +1614,31 @@ msgstr ""
 msgid "unsupported feed format"
 msgstr ""
 
+#: rust/libnewsboat/src/cliargsparser.rs:288
 msgid "%s: %s: invalid loglevel value"
 msgstr ""
 
+#: rust/libnewsboat/src/configpaths.rs:73
 msgid "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 
+#: rust/libnewsboat/src/configpaths.rs:134
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
 
+#: rust/libnewsboat/src/configpaths.rs:190
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr ""
 
+#: rust/libnewsboat/src/configpaths.rs:202
 msgid "Aborting migration because mkdir on `%s' failed: %s"
+msgstr ""
+
+#: rust/regex-rs/src/lib.rs:158 rust/regex-rs/src/lib.rs:163
+msgid "regcomp returned code %i"
+msgstr ""
+
+#: rust/regex-rs/src/lib.rs:243 rust/regex-rs/src/lib.rs:247
+msgid "regexec returned code %i"
 msgstr ""

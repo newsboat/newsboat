@@ -3,4 +3,5 @@ members = [
     "rust/libnewsboat",
     "rust/libnewsboat-ffi",
     "rust/strprintf",
+    "rust/regex-rs",
 ]
