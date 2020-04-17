@@ -1084,7 +1084,7 @@ Identifier:Meaning
 [[download-filename-format-n]]<<download-filename-format-n,+n+>>:Name of the podcast feed
 [[download-filename-format-N]]<<download-filename-format-N,+N+>>:Name of the podcast feed. Contains the original feed's name, even when selected through a query feed
 [[download-filename-format-h]]<<download-filename-format-h,+h+>>:Name of the podcast feed's hostname
-[[download-filename-format-t]]<<download-filename-format-t,+t+>>:Title of the podcast
+[[download-filename-format-t]]<<download-filename-format-t,+t+>>:Title of the podcast episode
 [[download-filename-format-e]]<<download-filename-format-e,+e+>>:Extension of the podcast episode
 [[download-filename-format-F]]<<download-filename-format-F,+F+>>:Publication date of the podcast episode formatted as yyyy-mm-dd
 [[download-filename-format-m]]<<download-filename-format-m,+m+>>:Month when podcast episode was published
