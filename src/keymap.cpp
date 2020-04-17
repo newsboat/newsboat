@@ -32,6 +32,13 @@ static OpDesc opdescs[] = {
 		KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_TAGSELECT |
 		KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS | KM_DIRBROWSER
 	},
+	{
+		OP_SWITCH_FOCUS,
+		"switch-focus",
+		"TAB",
+		_("Switch focus between widgets"),
+		KM_FILEBROWSER | KM_DIRBROWSER
+	},
 	{OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH},
 	{
 		OP_HARDQUIT,
