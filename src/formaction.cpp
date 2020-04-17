@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <ncurses.h>
 
 #include "config.h"
 #include "configexception.h"
@@ -172,6 +173,36 @@ bool FormAction::process_op(Operation op,
 		break;
 	case OP_PREVDIALOG:
 		v->goto_prev_dialog();
+		break;
+	case OP_SK_UP:
+		if (ungetch(KEY_UP) == OK) {
+			get_form()->run(0);
+		}
+		break;
+	case OP_SK_DOWN:
+		if (ungetch(KEY_DOWN) == OK) {
+			get_form()->run(0);
+		}
+		break;
+	case OP_SK_PGUP:
+		if (ungetch(KEY_PPAGE) == OK) {
+			get_form()->run(0);
+		}
+		break;
+	case OP_SK_PGDOWN:
+		if (ungetch(KEY_NPAGE) == OK) {
+			get_form()->run(0);
+		}
+		break;
+	case OP_SK_HOME:
+		if (ungetch(KEY_HOME) == OK) {
+			get_form()->run(0);
+		}
+		break;
+	case OP_SK_END:
+		if (ungetch(KEY_END) == OK) {
+			get_form()->run(0);
+		}
 		break;
 	default:
 		return this->process_operation(op, automatic, args);
