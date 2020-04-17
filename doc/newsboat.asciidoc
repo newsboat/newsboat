@@ -147,11 +147,12 @@ include::keycmds-linked.dsv[]
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
-The "Enter" key is written as `ENTER`, while the "Esc" key is written as `ESC`. The
-function keys "F1" to "F12" are written as `F1` to `F12`. The "Space" key is written
-as `SPACE`. Key combinations with the "Ctrl" key, such as "Ctrl-R", are written as
-`^R`. Please be aware that all Ctrl-related key combinations need to be written
-in uppercase. The following identifiers for keys are supported:
+The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
+written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.
+The "Space" key is written as `SPACE`. Key combinations with the "Ctrl" key,
+such as "Ctrl-R", are written as `^R`. Please be aware that all Ctrl-related
+key combinations need to be written in uppercase. The following identifiers for
+keys are supported:
 
 - `ENTER` (Enter key)
 - `BACKSPACE` (backspace key)
@@ -162,8 +163,7 @@ in uppercase. The following identifiers for keys are supported:
 - `NPAGE` (page down cursor)
 - `DOWN` (down cursor)
 - `ESC` (Esc key)
-
-The "Tab" key can't be bound due to technical limitations of STFL.
+- `TAB` (Tab key)
 
 === Example Configuration
 

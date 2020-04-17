@@ -5,6 +5,7 @@ vbox
   @bind_down[bind_down]:**
   @bind_page_up[bind_page_up]:**
   @bind_page_down[bind_page_down]:**
+  @on_TAB:"TAB"
   label#info[title]
     text[head]:"Dialogs"
     .expand:h
