@@ -27,4 +27,6 @@ pub mod filterparser;
 pub mod fmtstrformatter;
 pub mod history;
 pub mod htmlrenderer;
+pub mod matchable;
+pub mod matcher;
 pub mod matchererror;
