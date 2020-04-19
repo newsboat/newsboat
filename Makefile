@@ -288,7 +288,7 @@ uninstall: uninstall-mo
 	$(RM) -rf $(DESTDIR)$(docdir)
 	$(RM) -r $(DESTDIR)$(docdir)
 
-.PHONY: doc clean distclean all test test-rss extract install uninstall regenerate-parser clean-newsboat \
+.PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-newsboat \
 	clean-podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
 	clean-test config cppcheck
 
