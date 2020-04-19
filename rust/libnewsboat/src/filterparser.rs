@@ -452,4 +452,425 @@ mod tests {
             ))
         );
     }
+
+    // Additional tests not present in C++ suite
+
+    #[test]
+    fn t_parses_simple_queries() {
+        assert_eq!(
+            parse("a = \"b\""),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Str("b".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("(a!=\"b\")"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::NotEquals,
+                value: Value::Str("b".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("((a=~\"b\"))"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::RegexMatches,
+                value: Value::Str("b".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("a !~ \"b\""),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::NotRegexMatches,
+                value: Value::Str("b".to_string())
+            })
+        );
+
+        // This is nonsensical, but it's a syntactically valid expression, so we parse it. Matcher
+        // will sort it out during evaluation.
+        assert_eq!(
+            parse("a < \"b\""),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::LessThan,
+                value: Value::Str("b".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("a <= \"b\""),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::LessThanOrEquals,
+                value: Value::Str("b".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("a > \"abc\""),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::GreaterThan,
+                value: Value::Str("abc".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("a == \"abc\""),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Str("abc".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("a >= 3"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::GreaterThanOrEquals,
+                value: Value::Int(3)
+            })
+        );
+
+        assert_eq!(
+            parse("some_value between 0:-1"),
+            Ok(Comparison {
+                attribute: "some_value".to_string(),
+                op: Operator::Between,
+                value: Value::Range(0, -1)
+            })
+        );
+
+        assert_eq!(
+            parse("other_string between \"impossible\""),
+            Ok(Comparison {
+                attribute: "other_string".to_string(),
+                op: Operator::Between,
+                value: Value::Str("impossible".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("array # \"name\""),
+            Ok(Comparison {
+                attribute: "array".to_string(),
+                op: Operator::Contains,
+                value: Value::Str("name".to_string())
+            })
+        );
+
+        assert_eq!(
+            parse("answers !# 42"),
+            Ok(Comparison {
+                attribute: "answers".to_string(),
+                op: Operator::NotContains,
+                value: Value::Int(42)
+            })
+        );
+
+        assert_eq!(
+            parse("author =~ \"\\s*Doe$\""),
+            Ok(Comparison {
+                attribute: "author".to_string(),
+                op: Operator::RegexMatches,
+                value: Value::Str("\\s*Doe$".to_string())
+            })
+        );
+    }
+
+    #[test]
+    fn t_parses_complex_queries() {
+        assert_eq!(
+            parse("a = \"b\" and b = \"c\" or c = \"d\"").unwrap(),
+            And(
+                Box::new(Comparison {
+                    attribute: "a".to_string(),
+                    op: Operator::Equals,
+                    value: Value::Str("b".to_string())
+                }),
+                Box::new(Or(
+                    Box::new(Comparison {
+                        attribute: "b".to_string(),
+                        op: Operator::Equals,
+                        value: Value::Str("c".to_string())
+                    }),
+                    Box::new(Comparison {
+                        attribute: "c".to_string(),
+                        op: Operator::Equals,
+                        value: Value::Str("d".to_string())
+                    }),
+                ))
+            )
+        );
+
+        assert_eq!(
+            parse("a = \"b\" or b = \"c\" and c = \"d\"").unwrap(),
+            Or(
+                Box::new(Comparison {
+                    attribute: "a".to_string(),
+                    op: Operator::Equals,
+                    value: Value::Str("b".to_string())
+                }),
+                Box::new(And(
+                    Box::new(Comparison {
+                        attribute: "b".to_string(),
+                        op: Operator::Equals,
+                        value: Value::Str("c".to_string())
+                    }),
+                    Box::new(Comparison {
+                        attribute: "c".to_string(),
+                        op: Operator::Equals,
+                        value: Value::Str("d".to_string())
+                    }),
+                ))
+            )
+        );
+
+        assert_eq!(
+            parse("(a = \"b\" or b = \"c\") and c = \"d\"").unwrap(),
+            And(
+                Box::new(Or(
+                    Box::new(Comparison {
+                        attribute: "a".to_string(),
+                        op: Operator::Equals,
+                        value: Value::Str("b".to_string())
+                    }),
+                    Box::new(Comparison {
+                        attribute: "b".to_string(),
+                        op: Operator::Equals,
+                        value: Value::Str("c".to_string())
+                    }),
+                )),
+                Box::new(Comparison {
+                    attribute: "c".to_string(),
+                    op: Operator::Equals,
+                    value: Value::Str("d".to_string())
+                })
+            )
+        );
+
+        assert!(parse(
+            "( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""
+        ).is_ok());
+    }
+
+    #[test]
+    fn t_only_i32_numbers_are_parsed() {
+        assert_eq!(
+            parse("a = 0"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(0)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 127"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(127)
+            })
+        );
+
+        assert_eq!(
+            parse("a = -128"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(-128)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 128"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(128)
+            })
+        );
+
+        assert_eq!(
+            parse("a = -129"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(-129)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 255"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(255)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 256"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(256)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 32767"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(32767)
+            })
+        );
+
+        assert_eq!(
+            parse("a = -32768"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(-32768)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 32768"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(32768)
+            })
+        );
+
+        assert_eq!(
+            parse("a = -32769"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(-32769)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 65535"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(65535)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 65536"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(65536)
+            })
+        );
+
+        assert_eq!(
+            parse("a = 2147483647"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(2147483647)
+            })
+        );
+
+        assert_eq!(
+            parse("a = -2147483648"),
+            Ok(Comparison {
+                attribute: "a".to_string(),
+                op: Operator::Equals,
+                value: Value::Int(-2147483648)
+            })
+        );
+
+        assert_eq!(parse("a = 2147483648"), Err(Error::AtPos(4)));
+        assert_eq!(parse("a = -2147483649"), Err(Error::AtPos(4)));
+        assert_eq!(parse("abba = -9999999999999"), Err(Error::AtPos(7)));
+        assert_eq!(parse("another = 98979695999999999"), Err(Error::AtPos(10)));
+    }
+
+    #[test]
+    fn t_ranges_accept_negative_numbers() {
+        assert_eq!(
+            parse("value between -100:-1"),
+            Ok(Comparison {
+                attribute: "value".to_string(),
+                op: Operator::Between,
+                value: Value::Range(-100, -1)
+            })
+        );
+
+        assert_eq!(
+            parse("value between -100:100500"),
+            Ok(Comparison {
+                attribute: "value".to_string(),
+                op: Operator::Between,
+                value: Value::Range(-100, 100500)
+            })
+        );
+
+        assert_eq!(
+            parse("value between 123:-10"),
+            Ok(Comparison {
+                attribute: "value".to_string(),
+                op: Operator::Between,
+                value: Value::Range(123, -10)
+            })
+        );
+    }
+
+    proptest! {
+        #[test]
+        fn does_not_crash_on_any_input(ref input in "\\PC*") {
+            // Result explicitly ignored because we just want to make sure this call doesn't panic.
+            let _ = parse(&input);
+        }
+
+        #[test]
+        fn whitespace_doesnt_affect_results_1(ref input in r#" *a *!= *"b" *"#) {
+            assert_eq!(
+                parse(&input),
+                Ok(Comparison {
+                    attribute: "a".to_string(),
+                    op: Operator::NotEquals,
+                    value: Value::Str("b".to_string())
+                })
+            );
+        }
+
+        #[test]
+        fn whitespace_doesnt_affect_results_2(ref input in r#" *( *a *!= *"b" *) *"#) {
+            assert_eq!(
+                parse(&input),
+                Ok(Comparison {
+                    attribute: "a".to_string(),
+                    op: Operator::NotEquals,
+                    value: Value::Str("b".to_string())
+                })
+            );
+        }
+
+        #[test]
+        fn attribute_names_can_contain_alphanumerics_underscore_dash_and_dot(ref input in r#"[-A-Za-z0-9_.]+ == 0"#) {
+            assert!(
+                parse(&input).is_ok(),
+            );
+        }
+    }
 }
