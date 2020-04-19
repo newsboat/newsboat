@@ -290,6 +290,44 @@ mod tests {
     }
 
     #[test]
+    fn returns_empty_when_regex_valid_but_no_match() {
+        let regex = Regex::new("abc", CompFlags::empty()).unwrap();
+        let matches = regex.matches("cba", 1, MatchFlags::empty()).unwrap();
+
+        assert_eq!(matches.len(), 0);
+    }
+
+    #[test]
+    fn returns_no_more_results_than_max_matches() {
+        let regex = Regex::new("(a)(b)(c)", CompFlags::EXTENDED).unwrap();
+        let max_matches = 2;
+        let matches = regex
+            .matches("abc", max_matches, MatchFlags::empty())
+            .unwrap();
+
+        assert_eq!(matches.len(), 2);
+
+        assert_eq!(matches[0].start_pos, 0);
+        assert_eq!(matches[0].end_pos, 3);
+        assert_eq!(matches[1].start_pos, 0);
+        assert_eq!(matches[1].end_pos, 1);
+    }
+
+    #[test]
+    fn returns_no_more_results_than_available() {
+        let regex = Regex::new("abc", CompFlags::EXTENDED).unwrap();
+        let max_matches = 10;
+        let matches = regex
+            .matches("abc", max_matches, MatchFlags::empty())
+            .unwrap();
+
+        assert_eq!(matches.len(), 1);
+
+        assert_eq!(matches[0].start_pos, 0);
+        assert_eq!(matches[0].end_pos, 3);
+    }
+
+    #[test]
     fn new_returns_error_on_invalid_regex() {
         let result = Regex::new("(abc", CompFlags::EXTENDED);
 
