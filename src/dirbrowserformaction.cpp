@@ -133,6 +133,16 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_SWITCH_FOCUS: {
+		LOG(Level::DEBUG, "view::dirbrowser: focusing different widget");
+		const std::string focus = f->get_focus();
+		if (focus == "files") {
+			f->set_focus("filename");
+		} else {
+			f->set_focus("files");
+		}
+		break;
+	}
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);

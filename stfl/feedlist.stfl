@@ -9,6 +9,7 @@ vbox
   @bind_end[bind_end]:**
   @style_unread_normal[listnormal_unread]:attr=bold
   @style_unread_focus[listfocus_unread]:fg=yellow,bg=blue,attr=bold
+  @on_TAB:"TAB"
   label#info[title]
     text[head]:"Your feeds"
     .expand:h
