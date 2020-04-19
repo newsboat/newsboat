@@ -142,17 +142,15 @@ fn evaluate_expression(expr: &Expression, item: &impl Matchable) -> Result<bool,
             attribute,
             op,
             value,
-        } => {
-            if !item.has_attribute(&attribute) {
+        } => match item.attribute_value(&attribute) {
+            None => {
                 return Err(MatcherError::AttributeUnavailable {
                     attr: attribute.clone(),
-                });
+                })
             }
 
-            let ref attr = item.get_attribute(&attribute);
-
-            op.apply(attr, &value)
-        }
+            Some(ref attr) => op.apply(attr, &value),
+        },
         And(left, right) => evaluate_expression(left, item).and_then(|result| {
             if result {
                 evaluate_expression(right, item)
@@ -192,15 +190,8 @@ mod tests {
     }
 
     impl Matchable for MockMatchable {
-        fn has_attribute(&self, attr: &str) -> bool {
-            self.values.contains_key(attr)
-        }
-
-        fn get_attribute(&self, attr: &str) -> String {
-            self.values
-                .get(attr)
-                .map(|x| x.clone())
-                .unwrap_or_else(|| String::new())
+        fn attribute_value(&self, attr: &str) -> Option<String> {
+            self.values.get(attr).cloned()
         }
     }
 
