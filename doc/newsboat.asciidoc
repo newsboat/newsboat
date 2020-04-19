@@ -773,7 +773,7 @@ Operator:Meaning
 +!~+:logical negation of the +=~+ operator
 +<+:less than
 +>+:greater than
-+\<=+:less than or equal
++<=+:less than or equal
 +>=+:greater than or equal
 +between+:within a range of integer values, where the two integer values are separated by a colon (see above for an example)
 +#+:contains; this operator matches if a word is contained in a list of space-separated words (useful for matching tags, see below)
