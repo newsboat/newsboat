@@ -177,8 +177,7 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	void get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
-		unsigned short flags);
+	std::vector<KeyMapDesc> get_keymap_descriptions(unsigned short flags);
 	unsigned short get_flag_from_context(const std::string& context);
 
 private:
