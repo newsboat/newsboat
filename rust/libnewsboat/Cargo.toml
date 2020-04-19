@@ -5,6 +5,7 @@ authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 
 [dependencies]
 strprintf = { path="../strprintf" }
+regex-rs = { path="../regex-rs" }
 
 chrono = "0.4"
 rand = "0.5"
