@@ -1,4 +1,4 @@
-/// Errors produced by `Matcher::matches`
+/// Errors produced by `Matcher::matches`.
 ///
 /// These correspond to `MatcherException` on the C++ side.
 pub enum MatcherError {
