@@ -1,5 +1,7 @@
 #include "keymap.h"
 
+#include <algorithm>
+
 #include "3rd-party/catch.hpp"
 
 #include "confighandlerexception.h"
@@ -216,5 +218,123 @@ TEST_CASE("handle_action()", "[KeyMap]")
 
 		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
 			== std::vector<std::string>({"PAGEUP", "p", "u"}));
+	}
+}
+
+TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws",
+	"[KeyMap]")
+{
+	WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
+		KeyMap k(KM_NEWSBOAT);
+		const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+
+		THEN("the descriptions do not include any entries with context \"podboat\"") {
+			REQUIRE(descriptions.size() > 0);
+			for (const auto& description : descriptions) {
+				REQUIRE(description.ctx != "podboat");
+			}
+		}
+
+		THEN("the descriptions include entries with different contexts") {
+			REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+			[](const KeyMapDesc& x) {
+				return x.ctx == "feedlist";
+			}));
+
+			REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+			[](const KeyMapDesc& x) {
+				return x.ctx == "articlelist";
+			}));
+		}
+	}
+
+	WHEN("calling get_keymap_descriptions(KM_PODBOAT)") {
+		KeyMap k(KM_PODBOAT);
+		const auto descriptions = k.get_keymap_descriptions(KM_PODBOAT);
+
+		THEN("the descriptions only include entries with context \"podboat\"") {
+			REQUIRE(descriptions.size() > 0);
+			for (const auto& description : descriptions) {
+				REQUIRE(description.ctx == "podboat");
+			}
+		}
+	}
+
+	WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
+		KeyMap k(KM_NEWSBOAT);
+		const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+
+		THEN("by default it does always set .cmd (command) and .desc (command description)") {
+			for (const auto& description : descriptions) {
+				REQUIRE(description.cmd != "");
+				REQUIRE(description.desc != "");
+			}
+		}
+	}
+
+	GIVEN("that multiple keys are bound to the same operation (\"quit\")") {
+		KeyMap k(KM_NEWSBOAT);
+		k.set_key(OP_QUIT, "a", "feedlist");
+		k.set_key(OP_QUIT, "b", "feedlist");
+
+		WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
+			const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+
+			THEN("some entries have no description and command configured") {
+				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+				[](const KeyMapDesc& x) {
+					return x.cmd == "" && x.desc == "";
+				}));
+			}
+
+			THEN("all entries with non-empty command also have non-empty description") {
+				for (const auto& description : descriptions) {
+					if (!description.cmd.empty()) {
+						REQUIRE(description.desc != "");
+					}
+				}
+			}
+		}
+	}
+
+	GIVEN("that a key is bound to an operation which by default has no key configured") {
+		KeyMap k(KM_NEWSBOAT);
+		const std::string key = "O";
+		k.set_key(OP_OPENALLUNREADINBROWSER_AND_MARK, key, "feedlist");
+
+		WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
+			const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+
+			THEN("there is an entry with the configured key") {
+				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+				[&key](const KeyMapDesc& x) {
+					return x.key == key;
+				}));
+			}
+
+			THEN("the entry for the configured key has empty command and description fields") {
+				for (const auto& description : descriptions) {
+					if (description.key == key) {
+						REQUIRE(description.cmd == "");
+						REQUIRE(description.desc == "");
+					}
+				}
+			}
+
+			THEN("there is an entry with the configured command") {
+				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+				[&key](const KeyMapDesc& x) {
+					return x.cmd == "open-all-unread-in-browser-and-mark-read";
+				}));
+			}
+
+			THEN("there is an entry for the configured operation with an empty key") {
+				for (const auto& description : descriptions) {
+					if (description.cmd == "open-all-unread-in-browser-and-mark-read") {
+						REQUIRE(description.key == "");
+					}
+				}
+			}
+		}
 	}
 }
