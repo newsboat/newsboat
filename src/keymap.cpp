@@ -530,20 +530,12 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 				Operation op = keymap.second;
 				if (op != OP_NIL) {
 					if (opdesc.op == op) {
-						KeyMapDesc desc;
-						desc.key = keymap.first;
-						desc.ctx = ctx;
 						if (!already_added) {
-							desc.cmd =
-								opdesc
-								.opstr;
-							if (opdesc.help_text) {
-								desc.desc = opdesc.help_text;
-							}
+							descs.push_back({keymap.first, opdesc.opstr, opdesc.help_text, ctx, opdesc.flags});
 							already_added = true;
+						} else {
+							descs.push_back({keymap.first, "", "", ctx, opdesc.flags});
 						}
-						desc.flags = opdesc.flags;
-						descs.push_back(desc);
 					}
 				}
 			}
@@ -556,14 +548,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 					"%s",
 					opdesc.opstr,
 					ctx);
-				KeyMapDesc desc;
-				desc.ctx = ctx;
-				desc.cmd = opdesc.opstr;
-				if (opdesc.help_text) {
-					desc.desc = opdesc.help_text;
-				}
-				desc.flags = opdesc.flags;
-				descs.push_back(desc);
+				descs.push_back({"", opdesc.opstr, opdesc.help_text, ctx, opdesc.flags});
 			}
 		}
 	}
