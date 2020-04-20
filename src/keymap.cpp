@@ -508,48 +508,39 @@ KeyMap::KeyMap(unsigned flags)
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
 	unsigned short flags = get_flag_from_context(context);
-	std::vector<KeyMapDesc> descs;
-	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
-		std::string ctx(contexts[i]);
 
-		if (flags & KM_PODBOAT && ctx != "podboat") {
-			continue;
-		} else if (flags & KM_NEWSBOAT && ctx == "podboat") {
+	std::vector<KeyMapDesc> descs;
+	for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
+		const OpDesc& opdesc = opdescs[j];
+		if (!(opdesc.flags & flags)) {
+			// Ignore operation if it is not valid in this context
 			continue;
 		}
 
-		for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
-			const OpDesc& opdesc = opdescs[j];
-			if (!(opdesc.flags & flags)) {
-				// Ignore operation if it is not valid in this context
-				continue;
-			}
-
-			bool already_added = false;
-			for (const auto& keymap : keymap_[ctx]) {
-				Operation op = keymap.second;
-				if (op != OP_NIL) {
-					if (opdesc.op == op) {
-						if (!already_added) {
-							descs.push_back({keymap.first, opdesc.opstr, opdesc.help_text, ctx, opdesc.flags});
-							already_added = true;
-						} else {
-							descs.push_back({keymap.first, "", "", ctx, opdesc.flags});
-						}
+		bool already_added = false;
+		for (const auto& keymap : keymap_[context]) {
+			Operation op = keymap.second;
+			if (op != OP_NIL) {
+				if (opdesc.op == op) {
+					if (!already_added) {
+						descs.push_back({keymap.first, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+						already_added = true;
+					} else {
+						descs.push_back({keymap.first, "", "", context, opdesc.flags});
 					}
 				}
 			}
-			if (!already_added) {
-				LOG(Level::DEBUG,
-					"KeyMap::get_keymap_"
-					"descriptions: "
-					"found unbound function: %s "
-					"ctx = "
-					"%s",
-					opdesc.opstr,
-					ctx);
-				descs.push_back({"", opdesc.opstr, opdesc.help_text, ctx, opdesc.flags});
-			}
+		}
+		if (!already_added) {
+			LOG(Level::DEBUG,
+				"KeyMap::get_keymap_"
+				"descriptions: "
+				"found unbound function: %s "
+				"context = "
+				"%s",
+				opdesc.opstr,
+				context);
+			descs.push_back({"", opdesc.opstr, opdesc.help_text, context, opdesc.flags});
 		}
 	}
 	return descs;

@@ -1,6 +1,7 @@
 #include "keymap.h"
 
 #include <algorithm>
+#include <set>
 
 #include "3rd-party/catch.hpp"
 
@@ -235,15 +236,10 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 			}
 		}
 
-		THEN("the descriptions include entries with different contexts") {
-			REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+		THEN("the descriptions include only entries with the specified context") {
+			REQUIRE(std::all_of(descriptions.begin(), descriptions.end(),
 			[](const KeyMapDesc& x) {
 				return x.ctx == "feedlist";
-			}));
-
-			REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
-			[](const KeyMapDesc& x) {
-				return x.ctx == "articlelist";
 			}));
 		}
 	}
@@ -335,6 +331,30 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 					}
 				}
 			}
+		}
+	}
+}
+
+TEST_CASE("get_keymap_descriptions() returns at most one entry per key",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	const auto descriptions = k.get_keymap_descriptions("feedlist");
+
+	std::set<std::string> keys;
+	for (const auto& description : descriptions) {
+		if (description.cmd == "set-tag" || description.cmd == "select-tag") {
+			// Ignore set-tag/select-tag as these have the same operation-enum value
+			continue;
+		}
+
+		const std::string& key = description.key;
+		INFO("key: \"" << key << "\"");
+
+		if (!key.empty()) {
+			REQUIRE(keys.count(key) == 0);
+			keys.insert(key);
 		}
 	}
 }
