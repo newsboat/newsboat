@@ -512,33 +512,26 @@ KeyMap::KeyMap(unsigned flags)
 
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
-	unsigned short flags = get_flag_from_context(context);
-
 	std::vector<KeyMapDesc> descs;
-	for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
-		const OpDesc& opdesc = opdescs[j];
-		if (!(opdesc.flags & flags)) {
+	for (unsigned int i = 0; opdescs[i].op != OP_NIL; ++i) {
+		const OpDesc& opdesc = opdescs[i];
+		if (!(opdesc.flags & get_flag_from_context(context))) {
 			// Ignore operation if it is not valid in this context
 			continue;
 		}
 
-		bool already_added = false;
+		bool bound_to_key = false;
 		for (const auto& keymap : keymap_[context]) {
-			Operation op = keymap.second;
-			if (op != OP_NIL) {
-				if (opdesc.op == op) {
-					descs.push_back({keymap.first, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
-					already_added = true;
-				}
+			const std::string& key = keymap.first;
+			const Operation op = keymap.second;
+			if (opdesc.op == op) {
+				descs.push_back({key, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+				bound_to_key = true;
 			}
 		}
-		if (!already_added) {
+		if (!bound_to_key) {
 			LOG(Level::DEBUG,
-				"KeyMap::get_keymap_"
-				"descriptions: "
-				"found unbound function: %s "
-				"context = "
-				"%s",
+				"KeyMap::get_keymap_descriptions: found unbound function: %s context = %s",
 				opdesc.opstr,
 				context);
 			descs.push_back({"", opdesc.opstr, opdesc.help_text, context, opdesc.flags});
