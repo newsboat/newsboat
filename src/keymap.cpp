@@ -532,10 +532,9 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 							desc.cmd =
 								opdescs[j]
 								.opstr;
-							if (opdescs[j].help_text)
-								desc.desc = gettext(
-										opdescs[j]
-										.help_text);
+							if (opdescs[j].help_text) {
+								desc.desc = opdescs[j].help_text;
+							}
 							already_added = true;
 						}
 						desc.flags = opdescs[j].flags;
@@ -556,9 +555,9 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 					KeyMapDesc desc;
 					desc.ctx = ctx;
 					desc.cmd = opdescs[j].opstr;
-					if (opdescs[j].help_text)
-						desc.desc = gettext(
-								opdescs[j].help_text);
+					if (opdescs[j].help_text) {
+						desc.desc = opdescs[j].help_text;
+					}
 					desc.flags = opdescs[j].flags;
 					descs.push_back(desc);
 				}
