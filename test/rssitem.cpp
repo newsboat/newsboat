@@ -6,7 +6,7 @@
 
 using namespace newsboat;
 
-TEST_CASE("RssItem::sort_flags() cleans up flags", "[rss]")
+TEST_CASE("RssItem::sort_flags() cleans up flags", "[RssItem]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
