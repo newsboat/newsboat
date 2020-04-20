@@ -47,6 +47,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	valid_cmds.push_back("source");
 	valid_cmds.push_back("dumpconfig");
 	valid_cmds.push_back("dumpform");
+	valid_cmds.push_back("exec");
 }
 
 void FormAction::set_keymap_hints()
@@ -229,6 +230,10 @@ std::vector<std::string> FormAction::get_suggestions(
 							line);
 					}
 				}
+			} else if (tokens[0] == "exec") {
+				if (tokens.size() <= 2) {
+					// TODO: handle suggestions
+				}
 			}
 		}
 	}
@@ -321,6 +326,12 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
+		} else if (cmd == "exec") {
+			if (tokens.size() != 1) {
+				v->show_error(_("usage: exec <cmd>"));
+			} else {
+				process_op(v->get_keymap()->get_opcode(tokens[0]));
+			}
 		} else {
 			v->show_error(strprintf::fmt(
 					_("Not a command: %s"), cmdline));
