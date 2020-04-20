@@ -295,7 +295,7 @@ void PbView::run_help()
 
 	help_form.set("head", _("Help"));
 
-	const auto descs = keys->get_keymap_descriptions(KM_PODBOAT);
+	const auto descs = keys->get_keymap_descriptions("podboat");
 
 	std::string code = "{list";
 

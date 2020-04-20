@@ -505,12 +505,9 @@ KeyMap::KeyMap(unsigned flags)
 	}
 }
 
-std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(unsigned short flags)
+std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
-	/*
-	 * Here we return the keymap descriptions for the specified application
-	 * (handed to us via flags) This is used for the help screen.
-	 */
+	unsigned short flags = get_flag_from_context(context);
 	std::vector<KeyMapDesc> descs;
 	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
 		std::string ctx(contexts[i]);

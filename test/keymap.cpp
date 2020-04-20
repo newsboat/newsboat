@@ -224,9 +224,9 @@ TEST_CASE("handle_action()", "[KeyMap]")
 TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws",
 	"[KeyMap]")
 {
-	WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
+	WHEN("calling get_keymap_descriptions(\"feedlist\")") {
 		KeyMap k(KM_NEWSBOAT);
-		const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+		const auto descriptions = k.get_keymap_descriptions("feedlist");
 
 		THEN("the descriptions do not include any entries with context \"podboat\"") {
 			REQUIRE(descriptions.size() > 0);
@@ -250,7 +250,7 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 
 	WHEN("calling get_keymap_descriptions(KM_PODBOAT)") {
 		KeyMap k(KM_PODBOAT);
-		const auto descriptions = k.get_keymap_descriptions(KM_PODBOAT);
+		const auto descriptions = k.get_keymap_descriptions("podboat");
 
 		THEN("the descriptions only include entries with context \"podboat\"") {
 			REQUIRE(descriptions.size() > 0);
@@ -260,9 +260,9 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 		}
 	}
 
-	WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
+	WHEN("calling get_keymap_descriptions(\"feedlist\")") {
 		KeyMap k(KM_NEWSBOAT);
-		const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+		const auto descriptions = k.get_keymap_descriptions("feedlist");
 
 		THEN("by default it does always set .cmd (command) and .desc (command description)") {
 			for (const auto& description : descriptions) {
@@ -277,8 +277,8 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 		k.set_key(OP_QUIT, "a", "feedlist");
 		k.set_key(OP_QUIT, "b", "feedlist");
 
-		WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
-			const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
+			const auto descriptions = k.get_keymap_descriptions("feedlist");
 
 			THEN("some entries have no description and command configured") {
 				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
@@ -302,8 +302,8 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 		const std::string key = "O";
 		k.set_key(OP_OPENALLUNREADINBROWSER_AND_MARK, key, "feedlist");
 
-		WHEN("calling get_keymap_descriptions(KM_FEEDLIST)") {
-			const auto descriptions = k.get_keymap_descriptions(KM_FEEDLIST);
+		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
+			const auto descriptions = k.get_keymap_descriptions("feedlist");
 
 			THEN("there is an entry with the configured key") {
 				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
