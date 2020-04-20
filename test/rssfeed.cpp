@@ -8,7 +8,7 @@
 using namespace newsboat;
 
 TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -26,7 +26,7 @@ TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
 	}
 }
 
-TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
+TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -206,7 +206,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 }
 
 TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -236,7 +236,7 @@ TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
 }
 
 TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -252,7 +252,7 @@ TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
 	REQUIRE_FALSE(f.matches_tag("Five"));
 }
 
-TEST_CASE("RssFeed::get_firsttag() returns first tag", "[rss]")
+TEST_CASE("RssFeed::get_firsttag() returns first tag", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -279,7 +279,7 @@ TEST_CASE("RssFeed::get_firsttag() returns first tag", "[rss]")
 
 TEST_CASE(
 	"RssFeed::hidden() returns true if feed has a tag starting with \"!\"",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -302,7 +302,7 @@ TEST_CASE(
 
 TEST_CASE(
 	"RssFeed::mark_all_items_read() marks all items within a feed as read",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -320,7 +320,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[rss]")
+TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -337,7 +337,7 @@ TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[rss]")
 TEST_CASE(
 	"RssFeed::purge_deleted_items() deletes all items that have "
 	"\"deleted\" property set up",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -355,7 +355,7 @@ TEST_CASE(
 }
 
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -377,7 +377,7 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 TEST_CASE(
 	"RssFeed::is_query_feed() return true if feed is a query feed, i.e. "
 	"its \"rssurl\" starts with \"query:\" string",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
