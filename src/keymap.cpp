@@ -495,6 +495,11 @@ KeyMap::KeyMap(unsigned flags)
 			continue;
 		}
 
+		// Skip operations without a default key
+		if (!op_desc.default_key || std::string() == op_desc.default_key) {
+			continue;
+		}
+
 		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
 			const std::string context(contexts[j]);
 			const uint32_t context_flag = (1 << (j - 1));
@@ -505,69 +510,34 @@ KeyMap::KeyMap(unsigned flags)
 	}
 }
 
-void KeyMap::get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
-	unsigned short flags)
+std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
-	/*
-	 * Here we return the keymap descriptions for the specified application
-	 * (handed to us via flags) This is used for the help screen.
-	 */
-	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
-		std::string ctx(contexts[i]);
-
-		if (flags & KM_PODBOAT && ctx != "podboat") {
-			continue;
-		} else if (flags & KM_NEWSBOAT && ctx == "podboat") {
+	std::vector<KeyMapDesc> descs;
+	for (unsigned int i = 0; opdescs[i].op != OP_NIL; ++i) {
+		const OpDesc& opdesc = opdescs[i];
+		if (!(opdesc.flags & get_flag_from_context(context))) {
+			// Ignore operation if it is not valid in this context
 			continue;
 		}
 
-		for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
-			bool already_added = false;
-			for (const auto& keymap : keymap_[ctx]) {
-				Operation op = keymap.second;
-				if (op != OP_NIL) {
-					if (opdescs[j].op == op &&
-						opdescs[j].flags & flags) {
-						KeyMapDesc desc;
-						desc.key = keymap.first;
-						desc.ctx = ctx;
-						if (!already_added) {
-							desc.cmd =
-								opdescs[j]
-								.opstr;
-							if (opdescs[j].help_text)
-								desc.desc = gettext(
-										opdescs[j]
-										.help_text);
-							already_added = true;
-						}
-						desc.flags = opdescs[j].flags;
-						descs.push_back(desc);
-					}
-				}
+		bool bound_to_key = false;
+		for (const auto& keymap : keymap_[context]) {
+			const std::string& key = keymap.first;
+			const Operation op = keymap.second;
+			if (opdesc.op == op) {
+				descs.push_back({key, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+				bound_to_key = true;
 			}
-			if (!already_added) {
-				if (opdescs[j].flags & flags) {
-					LOG(Level::DEBUG,
-						"KeyMap::get_keymap_"
-						"descriptions: "
-						"found unbound function: %s "
-						"ctx = "
-						"%s",
-						opdescs[j].opstr,
-						ctx);
-					KeyMapDesc desc;
-					desc.ctx = ctx;
-					desc.cmd = opdescs[j].opstr;
-					if (opdescs[j].help_text)
-						desc.desc = gettext(
-								opdescs[j].help_text);
-					desc.flags = opdescs[j].flags;
-					descs.push_back(desc);
-				}
-			}
+		}
+		if (!bound_to_key) {
+			LOG(Level::DEBUG,
+				"KeyMap::get_keymap_descriptions: found unbound function: %s context = %s",
+				opdesc.opstr,
+				context);
+			descs.push_back({"", opdesc.opstr, opdesc.help_text, context, opdesc.flags});
 		}
 	}
+	return descs;
 }
 
 KeyMap::~KeyMap() {}

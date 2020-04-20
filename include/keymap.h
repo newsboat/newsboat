@@ -177,12 +177,11 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	void get_keymap_descriptions(std::vector<KeyMapDesc>& descs,
-		unsigned short flags);
-	unsigned short get_flag_from_context(const std::string& context);
+	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 
 private:
 	bool is_valid_context(const std::string& context);
+	unsigned short get_flag_from_context(const std::string& context);
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op);
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
