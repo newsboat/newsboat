@@ -222,7 +222,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 	}
 }
 
-TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws",
+TEST_CASE("verify get_keymap_descriptions() behavior",
 	"[KeyMap]")
 {
 	WHEN("calling get_keymap_descriptions(\"feedlist\")") {
@@ -309,11 +309,12 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 				}
 			}
 
-			THEN("there is an entry with the configured command which has no key configured") {
-				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
-				[&key](const KeyMapDesc& x) {
-					return x.cmd == "open-all-unread-in-browser-and-mark-read" && x.key == "";
-				}));
+			THEN("all entries for the operation have non-empty key") {
+				for (const auto& description : descriptions) {
+					if (description.cmd == "open-all-unread-in-browser-and-mark-read") {
+						REQUIRE(description.key != "");
+					}
+				}
 			}
 		}
 	}
@@ -359,4 +360,28 @@ TEST_CASE("get_keymap_descriptions() does not return empty commands or descripti
 		REQUIRE(description.cmd != "");
 		REQUIRE(description.desc != "");
 	}
+}
+
+TEST_CASE("get_keymap_descriptions() includes entries which include different keys bound to same operation",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	const std::string operation = "open-all-unread-in-browser-and-mark-read";
+
+	REQUIRE_NOTHROW(k.handle_action("bind-key", {"a", operation}));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", {"b", operation}));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", {"c", operation}));
+
+	const auto descriptions = k.get_keymap_descriptions("feedlist");
+
+	std::set<std::string> keys;
+	for (const auto& description : descriptions) {
+		if (description.cmd == operation) {
+			CHECK(description.key != "");
+			keys.insert(description.key);
+		}
+	}
+
+	REQUIRE(keys == std::set<std::string>({"a", "b", "c"}));
 }

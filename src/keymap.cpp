@@ -495,6 +495,11 @@ KeyMap::KeyMap(unsigned flags)
 			continue;
 		}
 
+		// Skip operations without a default key
+		if (!op_desc.default_key || std::string() == op_desc.default_key) {
+			continue;
+		}
+
 		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
 			const std::string context(contexts[j]);
 			const uint32_t context_flag = (1 << (j - 1));
