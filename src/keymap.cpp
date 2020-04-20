@@ -520,12 +520,16 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 
 		for (unsigned int j = 0; opdescs[j].op != OP_NIL; ++j) {
 			const OpDesc& opdesc = opdescs[j];
+			if (!(opdesc.flags & flags)) {
+				// Ignore operation if it is not valid in this context
+				continue;
+			}
+
 			bool already_added = false;
 			for (const auto& keymap : keymap_[ctx]) {
 				Operation op = keymap.second;
 				if (op != OP_NIL) {
-					if (opdesc.op == op &&
-						opdesc.flags & flags) {
+					if (opdesc.op == op) {
 						KeyMapDesc desc;
 						desc.key = keymap.first;
 						desc.ctx = ctx;
@@ -544,24 +548,22 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 				}
 			}
 			if (!already_added) {
-				if (opdesc.flags & flags) {
-					LOG(Level::DEBUG,
-						"KeyMap::get_keymap_"
-						"descriptions: "
-						"found unbound function: %s "
-						"ctx = "
-						"%s",
-						opdesc.opstr,
-						ctx);
-					KeyMapDesc desc;
-					desc.ctx = ctx;
-					desc.cmd = opdesc.opstr;
-					if (opdesc.help_text) {
-						desc.desc = opdesc.help_text;
-					}
-					desc.flags = opdesc.flags;
-					descs.push_back(desc);
+				LOG(Level::DEBUG,
+					"KeyMap::get_keymap_"
+					"descriptions: "
+					"found unbound function: %s "
+					"ctx = "
+					"%s",
+					opdesc.opstr,
+					ctx);
+				KeyMapDesc desc;
+				desc.ctx = ctx;
+				desc.cmd = opdesc.opstr;
+				if (opdesc.help_text) {
+					desc.desc = opdesc.help_text;
 				}
+				desc.flags = opdesc.flags;
+				descs.push_back(desc);
 			}
 		}
 	}
