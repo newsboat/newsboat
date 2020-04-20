@@ -522,12 +522,8 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 			Operation op = keymap.second;
 			if (op != OP_NIL) {
 				if (opdesc.op == op) {
-					if (!already_added) {
-						descs.push_back({keymap.first, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
-						already_added = true;
-					} else {
-						descs.push_back({keymap.first, "", "", context, opdesc.flags});
-					}
+					descs.push_back({keymap.first, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+					already_added = true;
 				}
 			}
 		}

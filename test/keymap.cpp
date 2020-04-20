@@ -276,19 +276,11 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
 			const auto descriptions = k.get_keymap_descriptions("feedlist");
 
-			THEN("some entries have no description and command configured") {
-				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
+			THEN("all entries have both description and command configured") {
+				REQUIRE(std::all_of(descriptions.begin(), descriptions.end(),
 				[](const KeyMapDesc& x) {
-					return x.cmd == "" && x.desc == "";
+					return x.cmd != "" && x.desc != "";
 				}));
-			}
-
-			THEN("all entries with non-empty command also have non-empty description") {
-				for (const auto& description : descriptions) {
-					if (!description.cmd.empty()) {
-						REQUIRE(description.desc != "");
-					}
-				}
 			}
 		}
 	}
@@ -308,28 +300,20 @@ TEST_CASE("test current get_keymap_descriptions() behavior, including its flaws"
 				}));
 			}
 
-			THEN("the entry for the configured key has empty command and description fields") {
+			THEN("the entry for the configured key has non-empty command and description fields") {
 				for (const auto& description : descriptions) {
 					if (description.key == key) {
-						REQUIRE(description.cmd == "");
-						REQUIRE(description.desc == "");
+						REQUIRE(description.cmd != "");
+						REQUIRE(description.desc != "");
 					}
 				}
 			}
 
-			THEN("there is an entry with the configured command") {
+			THEN("there is an entry with the configured command which has no key configured") {
 				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
 				[&key](const KeyMapDesc& x) {
-					return x.cmd == "open-all-unread-in-browser-and-mark-read";
+					return x.cmd == "open-all-unread-in-browser-and-mark-read" && x.key == "";
 				}));
-			}
-
-			THEN("there is an entry for the configured operation with an empty key") {
-				for (const auto& description : descriptions) {
-					if (description.cmd == "open-all-unread-in-browser-and-mark-read") {
-						REQUIRE(description.key == "");
-					}
-				}
 			}
 		}
 	}
@@ -356,5 +340,23 @@ TEST_CASE("get_keymap_descriptions() returns at most one entry per key",
 			REQUIRE(keys.count(key) == 0);
 			keys.insert(key);
 		}
+	}
+}
+
+TEST_CASE("get_keymap_descriptions() does not return empty commands or descriptions",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	const std::string operation = "open-all-unread-in-browser-and-mark-read";
+
+	REQUIRE_NOTHROW(k.handle_action("bind-key", {"a", operation}));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", {"b", operation}));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", {"c", operation}));
+
+	const auto descriptions = k.get_keymap_descriptions("feedlist");
+	for (const auto& description : descriptions) {
+		REQUIRE(description.cmd != "");
+		REQUIRE(description.desc != "");
 	}
 }
