@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-03-20 17:58+0300\n"
-"PO-Revision-Date: 2020-04-14 17:58+0200\n"
+"PO-Revision-Date: 2020-04-21 23:43+0200\n"
 "Last-Translator: Marcos Cruz (programandala.net)\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, José Manuel García-Patos <josemanuel@gesaku.es>\n"
 "Language: es\n"
@@ -116,17 +116,14 @@ msgid "Files:"
 msgstr "Archivos:"
 
 #: newsboat.cpp:122
-#. TRANSLATORS: This is the 'config' filename description used in a table.
 msgid "config"
 msgstr "Configuración"
 
 #: newsboat.cpp:123
-#. TRANSLATORS: This is the 'urls' filename description used in a table.
 msgid "urls"
 msgstr "Las URL"
 
 #: newsboat.cpp:124
-#. TRANSLATORS: This is the 'cache' filename description used in a table.
 msgid "cache"
 msgstr "Caché"
 
@@ -182,7 +179,7 @@ msgstr "`%s' no es un elemento de configuración válido"
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: recarga finalizada, %f fuentes no leídas (%n de artículos no "
+"newsboat: recarga finalizada, %f fuentes no leídas (%n artículos no "
 "leídos en total)"
 
 #: src/configcontainer.cpp:261
@@ -238,7 +235,7 @@ msgstr "se esperaba un valor lógico, pero se encontró `%s' en su lugar"
 #: src/configcontainer.cpp:364
 #, c-format
 msgid "expected integer value, found `%s' instead"
-msgstr "se esperaba un valor entero, se encontró `%s' en su lugar"
+msgstr "se esperaba un valor entero, pero se encontró `%s' en su lugar"
 
 #: src/configcontainer.cpp:373
 #, c-format
@@ -774,7 +771,7 @@ msgstr "Título de la fuente: "
 
 #: src/formaction.cpp:444
 msgid "Saving bookmark on autopilot..."
-msgstr "Guardando marcador automáticamente... "
+msgstr "Guardando marcador automáticamente..."
 
 #: src/formaction.cpp:556
 msgid ""
@@ -822,7 +819,7 @@ msgstr "vídeo"
 
 #: src/htmlrenderer.cpp:987
 msgid "audio"
-msgstr ""
+msgstr "audio"
 
 #: src/htmlrenderer.cpp:989
 msgid "unknown (bug)"
@@ -858,7 +855,7 @@ msgstr "Error cambiando la marca de lectura: %s"
 
 #: src/itemlistformaction.cpp:305 src/itemviewformaction.cpp:286
 msgid "URL list empty."
-msgstr "Lista de URL vacía."
+msgstr "Lista de las URL vacía."
 
 #: src/itemlistformaction.cpp:363 src/itemrenderer.cpp:67
 #: src/itemviewformaction.cpp:274
@@ -930,7 +927,7 @@ msgstr "Error: la aplicación del filtro falló: %s"
 #: src/itemlistformaction.cpp:1330 src/itemviewformaction.cpp:201
 #: src/itemviewformaction.cpp:477
 msgid "Aborted saving."
-msgstr "Guardado abortado."
+msgstr "Abortada la operación de guardar."
 
 #: src/itemlistformaction.cpp:1335 src/itemviewformaction.cpp:483
 #, c-format
@@ -945,7 +942,7 @@ msgstr "Error: no se pudo guardar el artículo como %s"
 #: src/itemlistformaction.cpp:1423
 #, c-format
 msgid "Search Result - '%s'"
-msgstr "Resultado de la búsqueda - '%s'"
+msgstr "Resultado de la búsqueda - «%s»"
 
 #: src/itemlistformaction.cpp:1426
 #, c-format
@@ -972,7 +969,7 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
-"Sobreescribir `%s' en `%s'? Hay %d conflictos más como este (s:Sí t:Todos "
+"¿Sobreescribir `%s' en `%s'? Hay %d conflictos más como este (s:Sí t:Todos "
 "n:No g:Ninguno)"
 
 #: src/itemlistformaction.cpp:1547
@@ -981,7 +978,7 @@ msgid ""
 "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
-"Sobreescribir `%s' en `%s'? No hay más conflictos como este (s:Sí t:Todos "
+"¿Sobreescribir `%s' en `%s'? No hay más conflictos como este (s:Sí t:Todos "
 "n:No g:Ninguno)"
 
 #: src/itemrenderer.cpp:60
@@ -1029,7 +1026,7 @@ msgstr "Se añadió %s a la cola de descargas."
 #: src/itemviewformaction.cpp:185
 #, c-format
 msgid "Invalid URL: '%s'"
-msgstr "URL incorrecta: «%s»"
+msgstr "URL incorrecta: %s"
 
 #: src/itemviewformaction.cpp:206
 #, c-format
@@ -1166,7 +1163,7 @@ msgstr "Conmutar la marca de lectura del artículo"
 
 #: src/keymap.cpp:163
 msgid "Toggle show read feeds/articles"
-msgstr "Conmutar la visualización de fuentes/artículos leídos"
+msgstr "Conmutar la visualización de fuentes y artículos leídos"
 
 #: src/keymap.cpp:170
 msgid "Show URLs in current article"
@@ -1190,7 +1187,7 @@ msgstr "Añadir descarga a la cola"
 
 #: src/keymap.cpp:189
 msgid "Reload the list of URLs from the configuration"
-msgstr "Recargar la lista de URL desde la configuración"
+msgstr "Recargar la lista de las URL desde la configuración"
 
 #: src/keymap.cpp:192
 msgid "Download file"
@@ -1230,7 +1227,7 @@ msgstr "Reducir el número de descargas simultáneas"
 
 #: src/keymap.cpp:243
 msgid "Redraw screen"
-msgstr "Redibujar pantalla"
+msgstr "Redibujar la pantalla"
 
 #: src/keymap.cpp:244
 msgid "Open the commandline"
@@ -1250,7 +1247,7 @@ msgstr "Borrar el filtro actual"
 
 #: src/keymap.cpp:270
 msgid "Bookmark current link/article"
-msgstr "Añadir el artículo/enlace actual a los marcadores"
+msgstr "Añadir el artículo o enlace actual a los marcadores"
 
 #: src/keymap.cpp:277
 msgid "Edit flags"
@@ -1318,7 +1315,7 @@ msgstr "Ordenar la lista actual"
 
 #: src/keymap.cpp:377
 msgid "Sort current list (reverse)"
-msgstr "Ordenar (al revés) la lista actual"
+msgstr "Ordenar decrecientemente la lista actual"
 
 #: src/keymap.cpp:381
 msgid "Open URL 10"
@@ -1378,11 +1375,11 @@ msgstr "Ir a la página siguiente"
 
 #: src/keymap.cpp:413
 msgid "Move to the start of page/list"
-msgstr "Ir al comienzo de la página/lista"
+msgstr "Ir al comienzo de la página o lista"
 
 #: src/keymap.cpp:420
 msgid "Move to the end of page/list"
-msgstr "Ir al final de la página/lista"
+msgstr "Ir al final de la página o lista"
 
 #: src/keymap.cpp:708
 #, c-format
@@ -1513,7 +1510,6 @@ msgid "Play"
 msgstr "Reproducir"
 
 #: src/pbview.cpp:372
-#. XXX FIXME --
 msgid "Mark as Finished"
 msgstr "Marcar como terminada"
 
