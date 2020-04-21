@@ -58,7 +58,7 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 
 	const auto overwrite = true;
 
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 	REQUIRE(expected == ::getenv(var));
 
 	{
@@ -66,14 +66,14 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 		REQUIRE(expected == ::getenv(var));
 
 		const auto newValue = std::string("totally new value");
-		::setenv(var, newValue.c_str(), overwrite);
+		REQUIRE(::setenv(var, newValue.c_str(), overwrite) == 0);
 
 		REQUIRE_FALSE(expected == ::getenv(var));
 	}
 
 	REQUIRE(expected == ::getenv(var));
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::set() changes the current state of the environment variable",
@@ -109,7 +109,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 	REQUIRE(expected == ::getenv(var));
 
 	{
@@ -119,7 +119,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 
 	REQUIRE(expected == ::getenv(var));
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
@@ -135,7 +135,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	SECTION("The function is ran *after* the change") {
 		// It's important to declare `newValue` before declaring `envVar`,
@@ -175,7 +175,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		REQUIRE(counter == 3);
 	}
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::unset() completely removes the variable from the environment",
@@ -190,7 +190,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	char* value = ::getenv(var);
 	REQUIRE_FALSE(value == nullptr);
@@ -212,7 +212,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 		value = nullptr;
 	}
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
@@ -228,7 +228,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	char* value = ::getenv(var);
 	REQUIRE_FALSE(value == nullptr);
@@ -255,7 +255,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	REQUIRE(expected == value);
 	value = nullptr;
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
@@ -271,7 +271,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	char* value = ::getenv(var);
 	REQUIRE_FALSE(value == nullptr);
@@ -299,7 +299,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 		REQUIRE(counter == 1);
 	}
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
@@ -343,13 +343,13 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 	SECTION("Variable was set before EnvVar is created") {
 		const auto overwrite = true;
-		::setenv(var, expected.c_str(), overwrite);
+		REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 		check();
 	}
 
 	// It's a no-op if the variable is absent from the environment, so we don't
 	// need to put this inside a conditional to match SECTIONs above.
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
