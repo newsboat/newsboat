@@ -21,6 +21,7 @@ acknowledge contributions from the following people:
 - `open-in-browser-and-mark-read` in feedlist no longer marks articles read if
   the browser fails. (#873) (Nikos Tsipinakis)
 - Macro execution halts if one of the operations fail. (#873) (Nikos Tsipinakis)
+- Update vendored version of Catch2 to 2.12.0
 ### Deprecated
 ### Removed
 ### Fixed
