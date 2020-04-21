@@ -47,7 +47,7 @@ public:
 	/// restore the variable when the test finished running. The variable is
 	/// always restored to the state it was in when EnvVar object was
 	/// constructed.
-	void set(std::string new_value) const;
+	void set(const std::string& new_value) const;
 
 	/// \brief Unsets the environment variable.
 	///

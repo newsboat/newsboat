@@ -21,7 +21,7 @@ TestHelpers::EnvVar::~EnvVar()
 	}
 }
 
-void TestHelpers::EnvVar::set(std::string new_value) const
+void TestHelpers::EnvVar::set(const std::string& new_value) const
 {
 	const auto overwrite = true;
 	::setenv(name.c_str(), new_value.c_str(), overwrite);
@@ -303,7 +303,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 }
 
 TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
-	"restoring the varibale to its original state",
+	"restoring the variable to its original state",
 	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
