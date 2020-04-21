@@ -393,3 +393,164 @@ TEST_CASE(
 	f.set_rssurl("query:Title:unread = \"yes\" and age between 0:7");
 	REQUIRE(f.is_query_feed());
 }
+
+TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
+
+	SECTION("`feedtitle`, containing feed's title") {
+		const auto title = std::string("Example feed");
+		f.set_title(title);
+
+		const auto attr = "feedtitle";
+		REQUIRE(f.has_attribute(attr));
+		REQUIRE(f.get_attribute(attr) == title);
+	}
+
+	SECTION("description") {
+		const auto desc = std::string("A temporary empty feed, used for testing.");
+		f.set_description(desc);
+
+		const auto attr = "description";
+		REQUIRE(f.has_attribute(attr));
+		REQUIRE(f.get_attribute(attr) == desc);
+
+		// TODO: check that the result is in the locale charset
+	}
+
+	SECTION("feedlink, feed's notion of its own location") {
+		const auto feedlink = std::string("https://example.com/feed.xml");
+		f.set_link(feedlink);
+		// The implementation of this attribute was buggy ever since its
+		// inception in b094a4e260f74b37e4a8e366452046c02cb2a91a (committed
+		// 2007). It returns feed title instead. Let's test for that, too
+		f.set_title("bug sentry");
+
+		const auto attr = "feedlink";
+		REQUIRE(f.has_attribute(attr));
+		REQUIRE(f.get_attribute(attr) != feedlink); // != because it's buggy
+		REQUIRE(f.get_attribute(attr) == "bug sentry");
+	}
+
+	SECTION("feeddate, feed's publication date") {
+		const time_t pubdate = 1; // one second into the Unix epoch
+		f.set_pubDate(pubdate);
+		// The implementation of this attribute was broken in
+		// 48a9fdc1a37bf5eff1c35fa168f372f4258f31ef (2006), when it started
+		// returning "TODO" instead of actual date.
+
+		const auto attr = "feeddate";
+		REQUIRE(f.has_attribute(attr));
+		REQUIRE(f.get_attribute(attr) == "TODO"); // it's buggy so it returns "TODO"
+	}
+
+	SECTION("rssurl, the URL by which this feed is fetched (specified in the urls file)") {
+		const auto url = std::string("https://example.com/news.atom");
+		f.set_rssurl(url);
+
+		const auto attr = "rssurl";
+		REQUIRE(f.has_attribute(attr));
+		REQUIRE(f.get_attribute(attr) == url);
+	}
+
+	SECTION("unread_count, the number of items in the feed that aren't read yet") {
+		const auto attr = "unread_count";
+
+		SECTION("empty feed => unread_count == 0") {
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == "0");
+		}
+
+		SECTION("feed with two items") {
+			auto item1 = std::make_shared<RssItem>(&rsscache);
+			auto item2 = std::make_shared<RssItem>(&rsscache);
+
+			f.add_item(item1);
+			f.add_item(item2);
+
+			SECTION("all unread => unread_count == 2") {
+				item1->set_unread(true);
+				item2->set_unread(true);
+
+				REQUIRE(f.has_attribute(attr));
+				REQUIRE(f.get_attribute(attr) == "2");
+			}
+
+			SECTION("one unread => unread_count == 1") {
+				item1->set_unread(false);
+
+				REQUIRE(f.has_attribute(attr));
+				REQUIRE(f.get_attribute(attr) == "1");
+			}
+
+			SECTION("all read => unread_count == 0") {
+				item1->set_unread(false);
+				item2->set_unread(false);
+
+				REQUIRE(f.has_attribute(attr));
+				REQUIRE(f.get_attribute(attr) == "0");
+			}
+		}
+	}
+
+	SECTION("total_count, the number of items in the feed") {
+		const auto attr = "total_count";
+
+		SECTION("empty feed => total_count == 0") {
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == "0");
+		}
+
+		SECTION("feed with two items => total_count == 2") {
+			auto item1 = std::make_shared<RssItem>(&rsscache);
+			auto item2 = std::make_shared<RssItem>(&rsscache);
+
+			f.add_item(item1);
+			f.add_item(item2);
+
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == "2");
+		}
+	}
+
+	SECTION("tags") {
+		const auto attr = "tags";
+
+		SECTION("no tags => attribute empty") {
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == "");
+		}
+
+		SECTION("multiple tags => a space-separated list of tags, ending with space") {
+			f.set_tags({"first", "second", "third", "tags"});
+
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == "first second third tags ");
+		}
+
+		SECTION("spaces inside tags are not escaped") {
+			f.set_tags({"first", "another with spaces", "final"});
+
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == "first another with spaces final ");
+		}
+	}
+
+	SECTION("feedindex, feed's position in the feedlist") {
+		const auto attr = "feedindex";
+
+		const auto check = [&attr, &f](unsigned int index) {
+			f.set_index(index);
+
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE(f.get_attribute(attr) == std::to_string(index));
+		};
+
+		check(1);
+		check(100);
+		check(65536);
+		check(100500);
+	}
+}
