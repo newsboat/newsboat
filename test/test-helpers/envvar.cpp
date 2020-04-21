@@ -26,7 +26,7 @@ void TestHelpers::EnvVar::set(const std::string& new_value) const
 	const auto overwrite = true;
 	::setenv(name.c_str(), new_value.c_str(), overwrite);
 	if (on_change_fn) {
-		on_change_fn();
+		on_change_fn(new_value);
 	}
 }
 
@@ -34,11 +34,12 @@ void TestHelpers::EnvVar::unset() const
 {
 	::unsetenv(name.c_str());
 	if (on_change_fn) {
-		on_change_fn();
+		on_change_fn(nonstd::nullopt);
 	}
 }
 
-void TestHelpers::EnvVar::on_change(std::function<void(void)> fn)
+void TestHelpers::EnvVar::on_change(
+	std::function<void(nonstd::optional<std::string>)> fn)
 {
 	on_change_fn = std::move(fn);
 }
@@ -147,8 +148,9 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto valueChanged = false;
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&valueChanged, &newValue, &var]() {
-			valueChanged = newValue == ::getenv(var);
+		envVar.on_change([&valueChanged,
+		&var](nonstd::optional<std::string> new_value) {
+			valueChanged = new_value.has_value() && (new_value.value() == ::getenv(var));
 		});
 
 		envVar.set(newValue);
@@ -160,7 +162,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto counter = unsigned{};
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter]() {
+		envVar.on_change([&counter](nonstd::optional<std::string>) {
 			counter++;
 		});
 
@@ -173,6 +175,21 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		INFO("Same value as before, but function should still be called");
 		envVar.set("some other value");
 		REQUIRE(counter == 3);
+	}
+
+	SECTION("Function is passed a non-empty `optional`") {
+		const auto expected_new_value = std::string("test sentry");
+		auto checks_ok = false;
+
+		TestHelpers::EnvVar envVar(var);
+		envVar.on_change([&expected_new_value,
+		&checks_ok](nonstd::optional<std::string> new_value) {
+			checks_ok = new_value.has_value() && (new_value.value() == expected_new_value);
+		});
+
+		envVar.set(expected_new_value);
+
+		REQUIRE(checks_ok);
 	}
 
 	REQUIRE(::unsetenv(var) == 0);
@@ -277,8 +294,8 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 		auto value_unset = false;
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&value_unset, &var]() {
-			value_unset = (nullptr == ::getenv(var));
+		envVar.on_change([&value_unset, &var](nonstd::optional<std::string> new_value) {
+			value_unset = !new_value.has_value() && (nullptr == ::getenv(var));
 		});
 
 		envVar.unset();
@@ -290,7 +307,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 		auto counter = unsigned{};
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter]() {
+		envVar.on_change([&counter](nonstd::optional<std::string>) {
 			counter++;
 		});
 
@@ -302,6 +319,20 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 
 		REQUIRE(counter == 2);
 	}
+
+	SECTION("Function is passed `nullopt`") {
+		auto checks_ok = false;
+
+		TestHelpers::EnvVar envVar(var);
+		envVar.on_change([&checks_ok](nonstd::optional<std::string> new_value) {
+			checks_ok = !new_value.has_value();
+		});
+
+		envVar.unset();
+
+		REQUIRE(checks_ok);
+	}
+
 
 	REQUIRE(::unsetenv(var) == 0);
 }
@@ -323,7 +354,7 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 		{
 			TestHelpers::EnvVar envVar(var);
-			envVar.on_change([&counter]() {
+			envVar.on_change([&counter](nonstd::optional<std::string>) {
 				counter++;
 			});
 		}
