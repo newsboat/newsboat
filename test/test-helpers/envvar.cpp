@@ -273,30 +273,34 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	const auto overwrite = true;
 	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
-	char* value = ::getenv(var);
-	REQUIRE_FALSE(value == nullptr);
-	REQUIRE(expected == value);
-	value = nullptr;
-
-	{
-		auto counter = unsigned{};
-		auto as_expected = false;
+	SECTION("The function is ran *after* the change") {
+		auto value_unset = false;
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter, &as_expected, var]() {
-			as_expected = nullptr == ::getenv(var);
-			counter++;
+		envVar.on_change([&value_unset, &var]() {
+			value_unset = (nullptr == ::getenv(var));
 		});
-
-		value = ::getenv(var);
-		REQUIRE_FALSE(value == nullptr);
-		REQUIRE(expected == value);
-		value = nullptr;
 
 		envVar.unset();
 
-		REQUIRE(as_expected);
+		REQUIRE(value_unset);
+	}
+
+	SECTION("The function is run *once* per change") {
+		auto counter = unsigned{};
+
+		TestHelpers::EnvVar envVar(var);
+		envVar.on_change([&counter]() {
+			counter++;
+		});
+
+		envVar.unset();
+
 		REQUIRE(counter == 1);
+
+		envVar.unset();
+
+		REQUIRE(counter == 2);
 	}
 
 	REQUIRE(::unsetenv(var) == 0);
