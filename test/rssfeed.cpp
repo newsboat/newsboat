@@ -6,6 +6,7 @@
 #include "rssparser.h"
 
 #include "test-helpers/envvar.h"
+#include "test-helpers/stringmaker/optional.h"
 
 using namespace newsboat;
 
@@ -407,8 +408,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		f.set_title(title);
 
 		const auto attr = "feedtitle";
-		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) == title);
+		REQUIRE(f.attribute_value(attr) == title);
 
 		SECTION("it is encoded to the locale's charset") {
 			// Due to differences in how platforms handle //TRANSLIT in iconv,
@@ -429,8 +429,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 			const auto title = "こんにちは";// "good afternoon" in Japanese
 			f.set_title(title);
 
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE_FALSE(f.get_attribute(attr) == title);
+			REQUIRE_FALSE(f.attribute_value(attr) == title);
 		}
 	}
 
@@ -439,8 +438,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		f.set_description(desc);
 
 		const auto attr = "description";
-		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) == desc);
+		REQUIRE(f.attribute_value(attr) == desc);
 
 		SECTION("it is encoded to the locale's charset") {
 			// Due to differences in how platforms handle //TRANSLIT in iconv,
@@ -461,8 +459,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 			const auto description = "こんにちは";// "good afternoon" in Japanese
 			f.set_description(description);
 
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE_FALSE(f.get_attribute(attr) == description);
+			REQUIRE_FALSE(f.attribute_value(attr) == description);
 		}
 	}
 
@@ -471,8 +468,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		f.set_link(feedlink);
 
 		const auto attr = "feedlink";
-		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) == feedlink);
+		REQUIRE(f.attribute_value(attr) == feedlink);
 	}
 
 	SECTION("feeddate, feed's publication date") {
@@ -482,8 +478,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		f.set_pubDate(1); // one second into the Unix epoch
 
 		const auto attr = "feeddate";
-		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) == "Thu, 01 Jan 1970 00:00:01 +0000");
+		REQUIRE(f.attribute_value(attr) == "Thu, 01 Jan 1970 00:00:01 +0000");
 	}
 
 	SECTION("rssurl, the URL by which this feed is fetched (specified in the urls file)") {
@@ -491,16 +486,14 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		f.set_rssurl(url);
 
 		const auto attr = "rssurl";
-		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) == url);
+		REQUIRE(f.attribute_value(attr) == url);
 	}
 
 	SECTION("unread_count, the number of items in the feed that aren't read yet") {
 		const auto attr = "unread_count";
 
 		SECTION("empty feed => unread_count == 0") {
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == "0");
+			REQUIRE(f.attribute_value(attr) == "0");
 		}
 
 		SECTION("feed with two items") {
@@ -514,23 +507,20 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 				item1->set_unread(true);
 				item2->set_unread(true);
 
-				REQUIRE(f.has_attribute(attr));
-				REQUIRE(f.get_attribute(attr) == "2");
+				REQUIRE(f.attribute_value(attr) == "2");
 			}
 
 			SECTION("one unread => unread_count == 1") {
 				item1->set_unread(false);
 
-				REQUIRE(f.has_attribute(attr));
-				REQUIRE(f.get_attribute(attr) == "1");
+				REQUIRE(f.attribute_value(attr) == "1");
 			}
 
 			SECTION("all read => unread_count == 0") {
 				item1->set_unread(false);
 				item2->set_unread(false);
 
-				REQUIRE(f.has_attribute(attr));
-				REQUIRE(f.get_attribute(attr) == "0");
+				REQUIRE(f.attribute_value(attr) == "0");
 			}
 		}
 	}
@@ -539,8 +529,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		const auto attr = "total_count";
 
 		SECTION("empty feed => total_count == 0") {
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == "0");
+			REQUIRE(f.attribute_value(attr) == "0");
 		}
 
 		SECTION("feed with two items => total_count == 2") {
@@ -550,8 +539,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 			f.add_item(item1);
 			f.add_item(item2);
 
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == "2");
+			REQUIRE(f.attribute_value(attr) == "2");
 		}
 	}
 
@@ -559,22 +547,19 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		const auto attr = "tags";
 
 		SECTION("no tags => attribute empty") {
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == "");
+			REQUIRE(f.attribute_value(attr) == "");
 		}
 
 		SECTION("multiple tags => a space-separated list of tags, ending with space") {
 			f.set_tags({"first", "second", "third", "tags"});
 
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == "first second third tags ");
+			REQUIRE(f.attribute_value(attr) == "first second third tags ");
 		}
 
 		SECTION("spaces inside tags are not escaped") {
 			f.set_tags({"first", "another with spaces", "final"});
 
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == "first another with spaces final ");
+			REQUIRE(f.attribute_value(attr) == "first another with spaces final ");
 		}
 	}
 
@@ -584,8 +569,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		const auto check = [&attr, &f](unsigned int index) {
 			f.set_index(index);
 
-			REQUIRE(f.has_attribute(attr));
-			REQUIRE(f.get_attribute(attr) == std::to_string(index));
+			REQUIRE(f.attribute_value(attr) == std::to_string(index));
 		};
 
 		check(1);

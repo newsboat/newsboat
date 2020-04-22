@@ -128,8 +128,7 @@ public:
 	std::string get_tags();
 	std::string get_firsttag();
 
-	bool has_attribute(const std::string& attribname) override;
-	std::string get_attribute(const std::string& attribname) override;
+	nonstd::optional<std::string> attribute_value(const std::string& attr) override;
 
 	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
 

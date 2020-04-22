@@ -8,6 +8,7 @@
 #include "rssfeed.h"
 
 #include "test-helpers/envvar.h"
+#include "test-helpers/stringmaker/optional.h"
 
 using namespace newsboat;
 
@@ -43,8 +44,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto title = "Example title";
 		item.set_title(title);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == title);
+		REQUIRE(item.attribute_value(attr) == title);
 
 		SECTION("it is encoded to the locale's charset") {
 			// Due to differences in how platforms handle //TRANSLIT in iconv,
@@ -66,8 +66,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 
 			item.set_title(title);
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE_FALSE(item.get_attribute(attr) == title);
+			REQUIRE_FALSE(item.attribute_value(attr) == title);
 		}
 	}
 
@@ -77,8 +76,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto url = "http://example.com/newest-update.html";
 		item.set_link(url);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == url);
+		REQUIRE(item.attribute_value(attr) == url);
 	}
 
 	SECTION("author") {
@@ -87,8 +85,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto name = "John Doe";
 		item.set_author(name);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == name);
+		REQUIRE(item.attribute_value(attr) == name);
 
 		SECTION("it is encoded to the locale's charset") {
 			// Due to differences in how platforms handle //TRANSLIT in iconv,
@@ -110,8 +107,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 
 			item.set_author(author);
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE_FALSE(item.get_attribute(attr) == author);
+			REQUIRE_FALSE(item.attribute_value(attr) == author);
 		}
 	}
 
@@ -121,8 +117,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto description = "First line.\nSecond one.\nAnd finally the third";
 		item.set_description(description);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == description);
+		REQUIRE(item.attribute_value(attr) == description);
 
 		SECTION("it is encoded to the locale's charset") {
 			// Due to differences in how platforms handle //TRANSLIT in iconv,
@@ -144,8 +139,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 
 			item.set_description(description);
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE_FALSE(item.get_attribute(attr) == description);
+			REQUIRE_FALSE(item.attribute_value(attr) == description);
 		}
 	}
 
@@ -157,8 +151,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 
 		item.set_pubDate(1); // 1 second into the Unix epoch
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == "Thu, 01 Jan 1970 00:00:01 +0000");
+		REQUIRE(item.attribute_value(attr) == "Thu, 01 Jan 1970 00:00:01 +0000");
 	}
 
 	SECTION("guid") {
@@ -167,8 +160,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto guid = "unique-identifier-of-this-item";
 		item.set_guid(guid);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == guid);
+		REQUIRE(item.attribute_value(attr) == guid);
 	}
 
 	SECTION("unread") {
@@ -177,15 +169,13 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		SECTION("for read items, attribute equals \"no\"") {
 			item.set_unread(false);
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE(item.get_attribute(attr) == "no");
+			REQUIRE(item.attribute_value(attr) == "no");
 		}
 
 		SECTION("for unread items, attribute equals \"yes\"") {
 			item.set_unread(true);
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE(item.get_attribute(attr) == "yes");
+			REQUIRE(item.attribute_value(attr) == "yes");
 		}
 	}
 
@@ -195,8 +185,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto url = "https://example.com/podcast-ep-01.mp3";
 		item.set_enclosure_url(url);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == url);
+		REQUIRE(item.attribute_value(attr) == url);
 	}
 
 	SECTION("enclosure_type, MIME type of the enclosure") {
@@ -205,8 +194,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto type = "audio/ogg";
 		item.set_enclosure_type(type);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == type);
+		REQUIRE(item.attribute_value(attr) == type);
 	}
 
 	SECTION("flags") {
@@ -215,8 +203,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto flags = "abcdefg";
 		item.set_flags(flags);
 
-		REQUIRE(item.has_attribute(attr));
-		REQUIRE(item.get_attribute(attr) == flags);
+		REQUIRE(item.attribute_value(attr) == flags);
 	}
 
 	SECTION("age, the number of days since publication") {
@@ -230,12 +217,11 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 			const auto seconds_per_day = 24 * 60 * 60;
 			const auto unix_days = current_time / seconds_per_day;
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE(item.get_attribute(attr) == std::to_string(unix_days));
+			REQUIRE(item.attribute_value(attr) == std::to_string(unix_days));
 		};
 
 		// check() evaluates current time twice: once explicitly by calling
-		// time(), once implicitly by calling get_attribute("age"). On
+		// time(), once implicitly by calling attribute_value("age"). On
 		// a midnight, it's possible for the first call to execute on one day,
 		// and the second call to execute on the next day. That'll lead to the
 		// test failing. To avoid that, we perform a dirty trick: we run the
@@ -258,8 +244,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto check = [&attr, &item](unsigned int index) {
 			item.set_index(index);
 
-			REQUIRE(item.has_attribute(attr));
-			REQUIRE(item.get_attribute(attr) == std::to_string(index));
+			REQUIRE(item.attribute_value(attr) == std::to_string(index));
 		};
 
 		check(1);
@@ -279,14 +264,13 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto attr = "feedindex";
 
 		SECTION("no parent feed => attribute unavailable") {
-			REQUIRE_FALSE(item->has_attribute(attr));
+			REQUIRE(item->attribute_value(attr) == nonstd::nullopt);
 		}
 
 		SECTION("request forwarded to parent feed") {
 			item->set_feedptr(feed);
 
-			REQUIRE(item->has_attribute(attr));
-			REQUIRE(item->get_attribute(attr) == std::to_string(feedindex));
+			REQUIRE(item->attribute_value(attr) == std::to_string(feedindex));
 		}
 	}
 }

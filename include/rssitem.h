@@ -123,8 +123,7 @@ public:
 	void update_flags();
 	void sort_flags();
 
-	bool has_attribute(const std::string& attribname) override;
-	std::string get_attribute(const std::string& attribname) override;
+	nonstd::optional<std::string> attribute_value(const std::string& attr) override;
 
 	void set_feedptr(std::shared_ptr<RssFeed> ptr);
 	void set_feedptr(const std::weak_ptr<RssFeed>& ptr);

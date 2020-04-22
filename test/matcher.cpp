@@ -6,6 +6,7 @@
 
 #include "matchable.h"
 #include "matcherexception.h"
+#include "test-helpers/stringmaker/optional.h"
 
 using namespace newsboat;
 
@@ -19,19 +20,15 @@ public:
 		: m_data(data)
 	{}
 
-	virtual bool has_attribute(const std::string& attribname)
-	{
-		return m_data.find(attribname) != m_data.cend();
-	}
-
-	virtual std::string get_attribute(const std::string& attribname)
+	nonstd::optional<std::string> attribute_value(const std::string& attribname)
+	override
 	{
 		const auto it = m_data.find(attribname);
 		if (it != m_data.cend()) {
 			return it->second;
 		}
 
-		return "";
+		return nonstd::nullopt;
 	}
 
 private:

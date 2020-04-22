@@ -411,17 +411,13 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight-article' definition",
 
 struct RegexManagerMockMatchable : public Matchable {
 public:
-	bool has_attribute(const std::string& attribname) override
-	{
-		return attribname == "attr";
-	}
-
-	std::string get_attribute(const std::string& attribname) override
+	nonstd::optional<std::string> attribute_value(const std::string& attribname)
+	override
 	{
 		if (attribname == "attr") {
 			return "val";
 		}
-		return "";
+		return nonstd::nullopt;
 	}
 };
 
