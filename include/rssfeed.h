@@ -53,7 +53,7 @@ public:
 
 	std::string pubDate() const
 	{
-		return "TODO";
+		return utils::mt_strf_localtime(_("%a, %d %b %Y %T %z"), pubDate_);
 	}
 	void set_pubDate(time_t t)
 	{

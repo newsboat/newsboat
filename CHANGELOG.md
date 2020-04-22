@@ -31,6 +31,8 @@ acknowledge contributions from the following people:
   van der Schagt)
 - "feedlink" attribute containing feed title instead of feed URL (Alexander
     Batischev)
+- "date" attribute containing fixed string instead of item's publication date
+    and time (Alexander Batischev)
 ### Security
 
 

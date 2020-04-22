@@ -476,15 +476,14 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 	}
 
 	SECTION("feeddate, feed's publication date") {
-		const time_t pubdate = 1; // one second into the Unix epoch
-		f.set_pubDate(pubdate);
-		// The implementation of this attribute was broken in
-		// 48a9fdc1a37bf5eff1c35fa168f372f4258f31ef (2006), when it started
-		// returning "TODO" instead of actual date.
+		TestHelpers::EnvVar tzEnv("TZ");
+		tzEnv.set("UTC");
+
+		f.set_pubDate(1); // one second into the Unix epoch
 
 		const auto attr = "feeddate";
 		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) == "TODO"); // it's buggy so it returns "TODO"
+		REQUIRE(f.get_attribute(attr) == "Thu, 01 Jan 1970 00:00:01 +0000");
 	}
 
 	SECTION("rssurl, the URL by which this feed is fetched (specified in the urls file)") {
