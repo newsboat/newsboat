@@ -221,8 +221,8 @@ int main(int argc, char* argv[])
 	if (args.should_print_usage()) {
 		print_usage(args.program_name(), configpaths.config_file(),
 			configpaths.url_file(), configpaths.cache_file());
-		if (args.should_return()) {
-			return args.return_code();
+		if (args.return_code().has_value()) {
+			return args.return_code().value();
 		}
 	} else if (args.show_version()) {
 		print_version(args.program_name(), args.show_version());

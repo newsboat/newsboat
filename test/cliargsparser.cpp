@@ -5,6 +5,7 @@
 #include "cliargsparser.h"
 #include "test-helpers/envvar.h"
 #include "test-helpers/opts.h"
+#include "test-helpers/stringmaker/optional.h"
 #include "test-helpers/tempdir.h"
 
 using namespace newsboat;
@@ -18,7 +19,6 @@ TEST_CASE(
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
-		REQUIRE(args.should_return());
 		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
@@ -101,7 +101,6 @@ TEST_CASE(
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
-		REQUIRE(args.should_return());
 		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
@@ -167,7 +166,6 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
-		REQUIRE(args.should_return());
 		REQUIRE(args.return_code() == EXIT_SUCCESS);
 	};
 
@@ -181,8 +179,8 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 }
 
 TEST_CASE(
-	"Sets `url_file`, `set_url_file`, and "
-	"`using_nonstandard_configs` if -u/--url-file is provided",
+	"Sets `url_file` and `using_nonstandard_configs` if -u/--url-file "
+	"is provided",
 	"[CliArgsParser]")
 {
 	const std::string filename("urlfile");
@@ -190,7 +188,6 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_url_file());
 		REQUIRE(args.url_file() == filename);
 		REQUIRE(args.using_nonstandard_configs());
 	};
@@ -217,7 +214,6 @@ TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_url_file());
 		REQUIRE(args.url_file() == tmp.get_path() + filename);
 	};
 
@@ -231,9 +227,8 @@ TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 }
 
 TEST_CASE(
-	"Sets `cache_file`, `lock_file`, `set_cache_file`, `set_lock_file`, "
-	"and "
-	"`using_nonstandard_configs` if -c/--cache-file is provided",
+	"Sets `cache_file`, `lock_file`, and `using_nonstandard_configs` "
+	"if -c/--cache-file is provided",
 	"[CliArgsParser]")
 {
 	const std::string filename("cache.db");
@@ -241,9 +236,7 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_cache_file());
 		REQUIRE(args.cache_file() == filename);
-		REQUIRE(args.set_lock_file());
 		REQUIRE(args.lock_file() == filename + ".lock");
 		REQUIRE(args.using_nonstandard_configs());
 	};
@@ -270,9 +263,7 @@ TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_cache_file());
 		REQUIRE(args.cache_file() == tmp.get_path() + filename);
-		REQUIRE(args.set_lock_file());
 		REQUIRE(args.lock_file() == tmp.get_path() + filename + ".lock");
 	};
 
@@ -286,8 +277,8 @@ TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 }
 
 TEST_CASE(
-	"Sets `config_file`, `set_config_file`, and "
-	"`using_nonstandard_configs` if -C/--config-file is provided",
+	"Sets `config_file` and `using_nonstandard_configs` if -C/--config-file "
+	"is provided",
 	"[CliArgsParser]")
 {
 	const std::string filename("config file");
@@ -295,7 +286,6 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_config_file());
 		REQUIRE(args.config_file() == filename);
 		REQUIRE(args.using_nonstandard_configs());
 	};
@@ -322,7 +312,6 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_config_file());
 		REQUIRE(args.config_file() == tmp.get_path() + filename);
 		REQUIRE(args.using_nonstandard_configs());
 	};
@@ -413,7 +402,8 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.execute_cmds());
+		REQUIRE_FALSE(args.cmds_to_execute() == nonstd::nullopt);
+		REQUIRE_FALSE(args.cmds_to_execute().value().empty());
 	};
 
 	SECTION("-x") {
@@ -476,8 +466,7 @@ TEST_CASE("Requests silent mode if -q/--quiet is provided", "[CliArgsParser]")
 }
 
 TEST_CASE(
-	"Sets `do_read_import` and `readinfofile` if -I/--import-from-file "
-	"is provided",
+	"Sets `readinfofile` if -I/--import-from-file is provided",
 	"[CliArgsParser]")
 {
 	const std::string filename("filename");
@@ -485,7 +474,6 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_read_import());
 		REQUIRE(args.readinfo_import_file() == filename);
 	};
 
@@ -512,7 +500,6 @@ TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_read_import());
 		REQUIRE(args.readinfo_import_file() == tmp.get_path() + filename);
 	};
 
@@ -526,8 +513,7 @@ TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 }
 
 TEST_CASE(
-	"Sets `do_read_export` and `readinfofile` if -E/--export-to-file "
-	"is provided",
+	"Sets `readinfofile` if -E/--export-to-file is provided",
 	"[CliArgsParser]")
 {
 	const std::string filename("filename");
@@ -535,7 +521,6 @@ TEST_CASE(
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_read_export());
 		REQUIRE(args.readinfo_export_file() == filename);
 	};
 
@@ -561,7 +546,6 @@ TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.do_read_export());
 		REQUIRE(args.readinfo_export_file() == tmp.get_path() + filename);
 	};
 
@@ -586,7 +570,6 @@ TEST_CASE(
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
-		REQUIRE(args.should_return());
 		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
@@ -599,7 +582,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("Sets `set_log_file` and `log_file` if -d/--log-file is provided",
+TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 	"[CliArgsParser]")
 {
 	const std::string filename("log file.txt");
@@ -607,7 +590,6 @@ TEST_CASE("Sets `set_log_file` and `log_file` if -d/--log-file is provided",
 	auto check = [&filename](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_log_file());
 		REQUIRE(args.log_file() == filename);
 	};
 
@@ -633,7 +615,6 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_log_file());
 		REQUIRE(args.log_file() == tmp.get_path() + filename);
 	};
 
@@ -647,14 +628,12 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 }
 
 TEST_CASE(
-	"Sets `set_log_level` and `log_level` if argument to "
-	"-l/--log-level is in range of [1; 6]",
+	"Sets `log_level` if argument to -l/--log-level is in range of [1; 6]",
 	"[CliArgsParser]")
 {
 	auto check = [](TestHelpers::Opts opts, Level expected) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.set_log_level());
 		REQUIRE(args.log_level() == expected);
 	};
 
@@ -692,7 +671,6 @@ TEST_CASE(
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE_FALSE(args.display_msg() == "");
-		REQUIRE(args.should_return());
 		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
