@@ -150,7 +150,7 @@ std::string RssFeed::get_attribute(const std::string& attribname)
 	} else if (attribname == "description") {
 		return utils::utf8_to_locale(description());
 	} else if (attribname == "feedlink") {
-		return title();
+		return link();
 	} else if (attribname == "feeddate") {
 		return pubDate();
 	} else if (attribname == "rssurl") {

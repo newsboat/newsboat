@@ -469,15 +469,10 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 	SECTION("feedlink, feed's notion of its own location") {
 		const auto feedlink = std::string("https://example.com/feed.xml");
 		f.set_link(feedlink);
-		// The implementation of this attribute was buggy ever since its
-		// inception in b094a4e260f74b37e4a8e366452046c02cb2a91a (committed
-		// 2007). It returns feed title instead. Let's test for that, too
-		f.set_title("bug sentry");
 
 		const auto attr = "feedlink";
 		REQUIRE(f.has_attribute(attr));
-		REQUIRE(f.get_attribute(attr) != feedlink); // != because it's buggy
-		REQUIRE(f.get_attribute(attr) == "bug sentry");
+		REQUIRE(f.get_attribute(attr) == feedlink);
 	}
 
 	SECTION("feeddate, feed's publication date") {

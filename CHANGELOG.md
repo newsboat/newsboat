@@ -29,6 +29,8 @@ acknowledge contributions from the following people:
   libstfl. A patch for that library is available at
   https://github.com/dennisschagt/stfl/pull/4#issuecomment-613640246 (Dennis
   van der Schagt)
+- "feedlink" attribute containing feed title instead of feed URL (Alexander
+    Batischev)
 ### Security
 
 
