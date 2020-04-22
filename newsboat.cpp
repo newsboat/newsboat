@@ -160,9 +160,12 @@ void print_version(const std::string& argv0, unsigned int level)
 					"to see the full text.)"),
 				argv0)
 			<< std::endl;
-		ss << _("It bundles JSON for Modern C++ library, "
-				"licensed under the MIT License: "
+		ss << _("It bundles:") << std::endl;
+		ss << _("- JSON for Modern C++ library, licensed under the MIT License: "
 				"https://github.com/nlohmann/json")
+			<< std::endl;
+		ss << _("- optional-lite library, licensed under the Boost Software "
+				"License: https://github.com/martinmoene/optional-lite")
 			<< std::endl;
 		ss << std::endl;
 
