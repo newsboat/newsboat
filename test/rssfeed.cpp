@@ -5,6 +5,8 @@
 #include "configcontainer.h"
 #include "rssparser.h"
 
+#include "test-helpers/envvar.h"
+
 using namespace newsboat;
 
 TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
@@ -407,6 +409,29 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		const auto attr = "feedtitle";
 		REQUIRE(f.has_attribute(attr));
 		REQUIRE(f.get_attribute(attr) == title);
+
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto title = "こんにちは";// "good afternoon" in Japanese
+			f.set_title(title);
+
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE_FALSE(f.get_attribute(attr) == title);
+		}
 	}
 
 	SECTION("description") {
@@ -417,7 +442,28 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		REQUIRE(f.has_attribute(attr));
 		REQUIRE(f.get_attribute(attr) == desc);
 
-		// TODO: check that the result is in the locale charset
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto description = "こんにちは";// "good afternoon" in Japanese
+			f.set_description(description);
+
+			REQUIRE(f.has_attribute(attr));
+			REQUIRE_FALSE(f.get_attribute(attr) == description);
+		}
 	}
 
 	SECTION("feedlink, feed's notion of its own location") {

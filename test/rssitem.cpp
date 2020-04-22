@@ -46,7 +46,29 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		REQUIRE(item.has_attribute(attr));
 		REQUIRE(item.get_attribute(attr) == title);
 
-		// TODO: check that the result is in the locale charset
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto title = "こんにちは"; // "good afternoon"
+
+			item.set_title(title);
+
+			REQUIRE(item.has_attribute(attr));
+			REQUIRE_FALSE(item.get_attribute(attr) == title);
+		}
 	}
 
 	SECTION("link") {
@@ -68,7 +90,29 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		REQUIRE(item.has_attribute(attr));
 		REQUIRE(item.get_attribute(attr) == name);
 
-		// TODO: check that the result is in the locale charset
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto author = "李白"; // "Li Bai"
+
+			item.set_author(author);
+
+			REQUIRE(item.has_attribute(attr));
+			REQUIRE_FALSE(item.get_attribute(attr) == author);
+		}
 	}
 
 	SECTION("content") {
@@ -80,7 +124,29 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		REQUIRE(item.has_attribute(attr));
 		REQUIRE(item.get_attribute(attr) == description);
 
-		// TODO: check that the result is in the locale charset
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto description = "こんにちは"; // "good afternoon"
+
+			item.set_description(description);
+
+			REQUIRE(item.has_attribute(attr));
+			REQUIRE_FALSE(item.get_attribute(attr) == description);
+		}
 	}
 
 	SECTION("date") {
