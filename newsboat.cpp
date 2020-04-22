@@ -119,11 +119,11 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 	std::cout << '\n';
 
 	std::cout << _("Files:") << '\n';
-	/// This string is the 'config' file description used in a table.
-	const std::string tr_config = _("config");
-	/// This string is the 'urls' file description used in a table.
-	const std::string tr_urls = _("urls");
-	/// This string is the 'cache' file description used in a table.
+	/// This is printed out by --help before the path to the config file
+	const std::string tr_config = _("configuration");
+	/// This is printed out by --help before the path to the urls file
+	const std::string tr_urls = _("feed URLs");
+	/// This is printed out by --help before the path to the cache file
 	const std::string tr_cache = _("cache");
 	const auto widest = std::max({tr_config.length(), tr_urls.length(), tr_cache.length()});
 
