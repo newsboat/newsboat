@@ -401,14 +401,14 @@ static OpDesc opdescs[] = {
 	{
 		OP_SK_PGUP,
 		"pageup",
-		"PAGEUP",
+		"PPAGE",
 		_("Move to the previous page"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_PGDOWN,
 		"pagedown",
-		"PAGEDOWN",
+		"NPAGE",
 		_("Move to the next page"),
 		KM_SYSKEYS
 	},
