@@ -935,14 +935,16 @@ bool utils::is_valid_podcast_type(const std::string& mimetype)
 	return rs_is_valid_podcast_type(mimetype.c_str());
 }
 
-LinkType utils::podcast_mime_to_link_type(const std::string& mimetype, bool& ok)
+nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
+	const std::string& mimetype)
 {
+	bool ok = false;
 	const auto result = rs_podcast_mime_to_link_type(mimetype.c_str(), &ok);
 	if (ok) {
 		return static_cast<LinkType>(result);
 	}
 
-	return LinkType::AUDIO;
+	return nonstd::nullopt;
 }
 
 /*

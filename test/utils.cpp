@@ -10,6 +10,7 @@
 #include "rs_utils.h"
 #include "test-helpers/chdir.h"
 #include "test-helpers/envvar.h"
+#include "test-helpers/stringmaker/optional.h"
 #include "test-helpers/tempdir.h"
 #include "test-helpers/tempfile.h"
 
@@ -1109,9 +1110,7 @@ TEST_CASE("podcast_mime_to_link_type() returns HtmlRenderer's LinkType that "
 {
 	SECTION("Valid podcast MIME types") {
 		const auto check = [](std::string mime, LinkType expected) {
-			bool ok = false;
-			REQUIRE(utils::podcast_mime_to_link_type(mime, ok) == expected);
-			REQUIRE(ok);
+			REQUIRE(utils::podcast_mime_to_link_type(mime) == expected);
 		};
 
 		check("audio/mpeg", LinkType::AUDIO);
@@ -1125,9 +1124,7 @@ TEST_CASE("podcast_mime_to_link_type() returns HtmlRenderer's LinkType that "
 
 	SECTION("Sets `ok` to `false` if given MIME type is not a podcast type") {
 		const auto check = [](std::string mime) {
-			bool ok = true;
-			utils::podcast_mime_to_link_type(mime, ok);
-			REQUIRE_FALSE(ok);
+			REQUIRE(utils::podcast_mime_to_link_type(mime) == nonstd::nullopt);
 		};
 
 		check("image/jpeg");
