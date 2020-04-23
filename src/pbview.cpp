@@ -246,38 +246,6 @@ void PbView::run(bool auto_download)
 	} while (!quit);
 }
 
-void PbView::set_bindings()
-{
-	if (keys) {
-		std::string upkey("** ");
-		upkey.append(utils::join(keys->get_keys(OP_SK_UP, "podboat"), " "));
-		std::string downkey("** ");
-		downkey.append(utils::join(keys->get_keys(OP_SK_DOWN, "podboat"), " "));
-		std::string pgupkey("** ");
-		pgupkey.append(utils::join(keys->get_keys(OP_SK_PGUP, "podboat"), " "));
-		std::string pgdownkey("** ");
-		pgdownkey.append(utils::join(keys->get_keys(OP_SK_PGDOWN, "podboat"), " "));
-		std::string homekey("** ");
-		homekey.append(utils::join(keys->get_keys(OP_SK_HOME, "podboat"), " "));
-		std::string endkey("** ");
-		endkey.append(utils::join(keys->get_keys(OP_SK_END, "podboat"), " "));
-
-		dllist_form.set("bind_up", upkey);
-		dllist_form.set("bind_down", downkey);
-		dllist_form.set("bind_page_up", pgupkey);
-		dllist_form.set("bind_page_down", pgdownkey);
-		dllist_form.set("bind_home", homekey);
-		dllist_form.set("bind_end", endkey);
-
-		help_form.set("bind_up", upkey);
-		help_form.set("bind_down", downkey);
-		help_form.set("bind_page_up", pgupkey);
-		help_form.set("bind_page_down", pgdownkey);
-		help_form.set("bind_home", homekey);
-		help_form.set("bind_end", endkey);
-	}
-}
-
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)
 {
 	if (kbps < 1024) {

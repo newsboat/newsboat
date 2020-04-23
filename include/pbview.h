@@ -22,7 +22,6 @@ public:
 	void set_keymap(newsboat::KeyMap* k)
 	{
 		keys = k;
-		set_bindings();
 	}
 
 private:
@@ -36,7 +35,6 @@ private:
 	void run_help();
 	void set_dllist_keymap_hint();
 	void set_help_keymap_hint();
-	void set_bindings();
 	std::pair<double, std::string> get_speed_human_readable(double kbps);
 
 	std::string prepare_keymaphint(KeyMapHintEntry* hints);

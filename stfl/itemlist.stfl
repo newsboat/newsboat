@@ -1,12 +1,12 @@
 vbox
   @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
-  @bind_up[bind_up]:**
-  @bind_down[bind_down]:**
-  @bind_page_up[bind_page_up]:**
-  @bind_page_down[bind_page_down]:**
-  @bind_home[bind_home]:**
-  @bind_end[bind_end]:**
+  @bind_up[bind_up]:
+  @bind_down[bind_down]:
+  @bind_page_up[bind_page_up]:
+  @bind_page_down[bind_page_down]:
+  @bind_home[bind_home]:
+  @bind_end[bind_end]:
   @style_unread_normal[listnormal_unread]:attr=bold
   @style_unread_focus[listfocus_unread]:fg=yellow,bg=blue,attr=bold
   @on_TAB:"TAB"

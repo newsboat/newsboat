@@ -91,48 +91,6 @@ void View::set_keymap(KeyMap* k)
 	keys = k;
 }
 
-void View::update_bindings()
-{
-	for (const auto& form : formaction_stack) {
-		if (form) {
-			set_bindings(form);
-		}
-	}
-}
-
-void View::set_bindings(std::shared_ptr<FormAction> fa)
-{
-	std::string upkey("** ");
-	upkey.append(utils::join(keys->get_keys(OP_SK_UP, fa->id()), " "));
-	std::string downkey("** ");
-	downkey.append(utils::join(keys->get_keys(OP_SK_DOWN, fa->id()), " "));
-	fa->get_form()->set("bind_up", upkey);
-	fa->get_form()->set("bind_down", downkey);
-
-	std::string pgupkey;
-	std::string pgdownkey;
-	if (fa->id() == "article" || fa->id() == "help") {
-		pgupkey.append("** b ");
-		pgdownkey.append("** SPACE ");
-	} else {
-		pgupkey.append("** ");
-		pgdownkey.append("** ");
-	}
-
-	pgupkey.append(utils::join(keys->get_keys(OP_SK_PGUP, fa->id()), " "));
-	pgdownkey.append(utils::join(keys->get_keys(OP_SK_PGDOWN, fa->id()), " "));
-
-	fa->get_form()->set("bind_page_up", pgupkey);
-	fa->get_form()->set("bind_page_down", pgdownkey);
-
-	std::string homekey("** ");
-	homekey.append(utils::join(keys->get_keys(OP_SK_HOME, fa->id()), " "));
-	std::string endkey("** ");
-	endkey.append(utils::join(keys->get_keys(OP_SK_END, fa->id()), " "));
-	fa->get_form()->set("bind_home", homekey);
-	fa->get_form()->set("bind_end", endkey);
-}
-
 std::shared_ptr<FormAction> View::get_current_formaction()
 {
 	if (formaction_stack.size() > 0 &&
@@ -179,7 +137,6 @@ int View::run()
 	// create feedlist
 	auto feedlist = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg);
-	set_bindings(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
 	apply_colors(feedlist);
@@ -483,7 +440,6 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 		std::shared_ptr<ItemListFormAction> searchresult(
 			new ItemListFormAction(
 				this, itemlist_str, rsscache, filters, cfg));
-		set_bindings(searchresult);
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
@@ -510,7 +466,6 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 		std::shared_ptr<ItemListFormAction> itemlist(
 			new ItemListFormAction(
 				this, itemlist_str, rsscache, filters, cfg));
-		set_bindings(itemlist);
 		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
@@ -556,7 +511,6 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		std::shared_ptr<ItemViewFormAction> itemview(
 			new ItemViewFormAction(
 				this, itemlist, itemview_str, rsscache, cfg));
-		set_bindings(itemview);
 		itemview->set_regexmanager(rxman);
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
@@ -595,7 +549,6 @@ void View::view_dialogs()
 		std::shared_ptr<DialogsFormAction> dialogs(
 			new DialogsFormAction(this, dialogs_str, cfg));
 		dialogs->set_parent_formaction(fa);
-		set_bindings(dialogs);
 		apply_colors(dialogs);
 		dialogs->init();
 		formaction_stack.push_back(dialogs);
@@ -609,7 +562,6 @@ void View::push_help()
 
 	std::shared_ptr<HelpFormAction> helpview(
 		new HelpFormAction(this, help_str, cfg));
-	set_bindings(helpview);
 	apply_colors(helpview);
 	helpview->set_context(fa->id());
 	helpview->set_parent_formaction(fa);
@@ -623,7 +575,6 @@ void View::push_urlview(const std::vector<LinkPair>& links,
 {
 	std::shared_ptr<UrlViewFormAction> urlview(
 		new UrlViewFormAction(this, feed, urlview_str, cfg));
-	set_bindings(urlview);
 	apply_colors(urlview);
 	urlview->set_parent_formaction(get_current_formaction());
 	urlview->init();
@@ -637,7 +588,6 @@ std::string View::run_filebrowser(const std::string& default_filename,
 {
 	std::shared_ptr<FileBrowserFormAction> filebrowser(
 		new FileBrowserFormAction(this, filebrowser_str, cfg));
-	set_bindings(filebrowser);
 	apply_colors(filebrowser);
 	filebrowser->set_dir(dir);
 	filebrowser->set_default_filename(default_filename);
@@ -649,7 +599,6 @@ std::string View::run_dirbrowser(const std::string& dir)
 {
 	std::shared_ptr<DirBrowserFormAction> dirbrowser(
 		new DirBrowserFormAction(this, filebrowser_str, cfg));
-	set_bindings(dirbrowser);
 	apply_colors(dirbrowser);
 	dirbrowser->set_dir(dir);
 	dirbrowser->set_parent_formaction(get_current_formaction());
@@ -665,7 +614,6 @@ std::string View::select_tag()
 	std::shared_ptr<SelectFormAction> selecttag(
 		new SelectFormAction(this, selecttag_str, cfg));
 	selecttag->set_type(SelectFormAction::SelectionType::TAG);
-	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_tags(tags);
@@ -678,7 +626,6 @@ std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 	std::shared_ptr<SelectFormAction> selecttag(
 		new SelectFormAction(this, selecttag_str, cfg));
 	selecttag->set_type(SelectFormAction::SelectionType::FILTER);
-	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_filters(filters);
