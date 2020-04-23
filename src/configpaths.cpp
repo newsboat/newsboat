@@ -44,6 +44,10 @@ extern "C" {
 	char* rs_configpaths_search_file(void* rs_configpaths);
 
 	char* rs_configpaths_cmdline_file(void* rs_configpaths);
+
+	char* rs_configpaths_expected_urls_paths_path1(void* rs_configpaths);
+
+	char* rs_configpaths_expected_urls_paths_path2(void* rs_configpaths);
 }
 
 #define SIMPLY_RUN(NAME) \
@@ -146,6 +150,19 @@ std::string ConfigPaths::search_file() const
 std::string ConfigPaths::cmdline_file() const
 {
 	GET_STRING(cmdline_file);
+}
+
+std::pair<std::string, std::string> ConfigPaths::expected_urls_paths() const
+{
+	if (rs_configpaths) {
+		std::string first = RustString(rs_configpaths_expected_urls_paths_path1(
+					rs_configpaths));
+		std::string second = RustString(rs_configpaths_expected_urls_paths_path2(
+					rs_configpaths));
+		return std::make_pair(std::move(first), std::move(second));
+	}
+
+	return {};
 }
 
 } // namespace newsboat

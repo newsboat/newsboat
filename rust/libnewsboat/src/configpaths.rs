@@ -407,6 +407,22 @@ impl ConfigPaths {
     pub fn cmdline_file(&self) -> &Path {
         &self.cmdline_file
     }
+
+    /// Two possible absolute paths at which the urls file can be stored.
+    ///
+    /// The urls file can be either in the dotdir (~/.newsboat) or in the XDG config dir
+    /// ($XDG_CONFIG_HOME/newsboat, or ~/.config/newsboat if XDG_CONFIG_HOME is undefined).
+    pub fn expected_urls_paths(&self) -> (PathBuf, PathBuf) {
+        let dotdir = self
+            .env_home
+            .join(NEWSBOAT_CONFIG_SUBDIR)
+            .join(URLS_FILENAME);
+        let xdgdir = self
+            .config_home
+            .join(NEWSBOAT_SUBDIR_XDG)
+            .join(URLS_FILENAME);
+        (dotdir, xdgdir)
+    }
 }
 
 fn try_mkdir<R: AsRef<Path>>(path: R) -> bool {
