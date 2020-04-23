@@ -1233,10 +1233,12 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 === XDG Base Directory Support
 
-Newsboat implements limited support for the
-http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
-Directory Specification]. It needs to be set up manually by creating the
-following directories:
+By default, Newsboat stores all the files in a traditional Unix fashion, i.e.
+in the "dotdir" located at _~/.newsboat_. However, it also supports a modern
+way,
+https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG
+Base Directory Specification], which splits the files between the following
+locations:
 
 - _~/.local/share/newsboat/_
 - _~/.config/newsboat/_

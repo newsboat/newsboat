@@ -1,44 +1,36 @@
-After you've installed newsboat, you can run it for the first time by typing
-`newsboat` on your command prompt. This will bring you the following message:
+After installing newsboat, open a terminal and type `newsboat`. You'll see
+something like this:
 
 ----
-Error: no URLs configured. Please fill the file /home/ak/.newsboat/urls with RSS feed URLs or import an OPML file.
+'urls' file not found. Please create it at one of the following locations:
+- /home/user/.newsboat/urls
+- /home/user/.config/newsboat/urls
 
-newsboat 2.10
-usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
-    -e, --export-to-opml            export OPML feed to stdout
-    -r, --refresh-on-start          refresh feeds on start
-    -i, --import-from-opml=<file>   import OPML file
-    -u, --url-file=<urlfile>        read RSS feed URLs from <urlfile>
-    -c, --cache-file=<cachefile>    use <cachefile> as cache file
-    -C, --config-file=<configfile>  read configuration from <configfile>
-    -X, --vacuum                    compact the cache
-    -x, --execute=<command>...      execute list of commands
-    -q, --quiet                     quiet startup
-    -v, --version                   get version information
-    -l, --log-level=<loglevel>      write a log with a certain loglevel (valid values: 1 to 6)
-    -d, --log-file=<logfile>        use <logfile> as output log file
-    -E, --export-to-file=<file>     export list of read articles to <file>
-    -I, --import-from-file=<file>   import list of read articles from <file>
-    -h, --help                      this help
+Newsboat will store the rest of the files accordingly.
 ----
 
-This means that newsboat can't start without any configured feeds. To add
-feeds to newsboat, you can either add URLs to the configuration file
-_$HOME/.newsboat/urls_ or you can import an OPML file by running `newsboat -i
-blogroll.opml`. To manually add URLs, open the file with your favorite text
-editor and add the URLs, one per line:
+Newsboat requires a list of feed URLs, and it supports both traditional
+"dotdirs" and the modern XDG Base Directory locations
+(<<_xdg_base_directory_support,more on that later>>). The placement of the
+_urls_ file indicates the location you want to use.
 
+Pick a location. Create intermediate directories and an empty _urls_ file, then
+start filling it with feed URLs, one per line:
+
+	https://newsboat.org/news.atom
 	http://rss.cnn.com/rss/cnn_topstories.rss
 	http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
+
+You can also import URLs from your previous reader; see
+<<_other_readers_via_opml,the OPML section for details>>.
 
 If you need to add URLs that have restricted access via username/password, simply
 provide the username/password in the following way:
 
 	http://username:password@hostname.domain.tld/feed.rss
 
-In order to protect username and password, make sure that
-_$HOME/.newsboat/urls_ is only readable by you and, optionally, your group:
+In order to protect username and password, make sure that the _urls_ file is
+only readable by you and, optionally, your group:
 
     $ chmod u=rw,g=r,o= ~/.newsboat/urls
 

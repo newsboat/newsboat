@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-04-22 18:35+0300\n"
+"POT-Creation-Date: 2020-04-23 22:18+0300\n"
 "PO-Revision-Date: 2017-07-19 20:19+0300\n"
 "Last-Translator: Alejandro Gallo <aamsgallo@gmail.com>\n"
 "Language-Team: Alejandro Gallo <aamsgallo@gmail.com>, OmeGa <omega@mailoo."
@@ -291,56 +291,66 @@ msgstr "Error al processar el comando `%s' (%s línea %u): %s"
 msgid "unknown command `%s'"
 msgstr "comando invàlid `%s'"
 
-#: src/controller.cpp:148 src/pbcontroller.cpp:248
+#: src/controller.cpp:134 src/controller.cpp:179 src/pbcontroller.cpp:248
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Iniciant %s %s..."
 
-#: src/controller.cpp:158 src/controller.cpp:214 src/pbcontroller.cpp:255
+#: src/controller.cpp:143
+#, c-format
+msgid ""
+"'urls' file not found. Please create it at one of the following locations:\n"
+"- %s\n"
+"- %s\n"
+"\n"
+"Newsboat will store the rest of the files accordingly."
+msgstr ""
+
+#: src/controller.cpp:189 src/controller.cpp:245 src/pbcontroller.cpp:255
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Error: una instància de %s ja s'està executant (PID: %u)"
 
-#: src/controller.cpp:168 src/pbcontroller.cpp:263
+#: src/controller.cpp:199 src/pbcontroller.cpp:263
 msgid "Loading configuration..."
 msgstr "Carregant configuració..."
 
-#: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:314
-#: src/controller.cpp:367 src/controller.cpp:371 src/controller.cpp:407
-#: src/controller.cpp:421 src/controller.cpp:439 src/controller.cpp:450
-#: src/controller.cpp:494 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
+#: src/controller.cpp:234 src/controller.cpp:279 src/controller.cpp:345
+#: src/controller.cpp:398 src/controller.cpp:402 src/controller.cpp:438
+#: src/controller.cpp:452 src/controller.cpp:470 src/controller.cpp:481
+#: src/controller.cpp:525 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
 msgid "done."
 msgstr "fet."
 
-#: src/controller.cpp:224 src/controller.cpp:362
+#: src/controller.cpp:255 src/controller.cpp:393
 msgid "Opening cache..."
 msgstr "Obrint caché..."
 
-#: src/controller.cpp:231 src/controller.cpp:239
+#: src/controller.cpp:262 src/controller.cpp:270
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Error: l'apertura de l'arxiu de caché `%s' va fallar: %s"
 
-#: src/controller.cpp:270
+#: src/controller.cpp:301
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
 
-#: src/controller.cpp:278
+#: src/controller.cpp:309
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr ""
 
-#: src/controller.cpp:296
+#: src/controller.cpp:327
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:303
+#: src/controller.cpp:334
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Carregant URLs desde %s..."
 
-#: src/controller.cpp:322
+#: src/controller.cpp:353
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -349,7 +359,7 @@ msgstr ""
 "Error: no hi ha URLs configurades. Per favor omple l'arxiu %s amb URLs de "
 "fonts RSS, o importa un arxiu OPML."
 
-#: src/controller.cpp:328
+#: src/controller.cpp:359
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -357,7 +367,7 @@ msgstr ""
 "Sembla que la font OPML a la cual et vas subscriure no conté fonts. Por "
 "favor llénala amb fonts, e intenta-ho de nou."
 
-#: src/controller.cpp:333
+#: src/controller.cpp:364
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
@@ -366,7 +376,7 @@ msgstr ""
 "Sembla que no has configurat cap font en el teu compte de The Old Reader. Si "
 "us plau fes-ho i intenta-ho de nou."
 
-#: src/controller.cpp:338
+#: src/controller.cpp:369
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
@@ -375,7 +385,7 @@ msgstr ""
 "Sembla que no has configurat cap font en el teu compte de Tiny Tiny RSS. Si "
 "us plau fes-ho e intenta-ho de nou."
 
-#: src/controller.cpp:343
+#: src/controller.cpp:374
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
@@ -384,7 +394,7 @@ msgstr ""
 "Sembla que no has configurat cap font en el teu compte de NewsBlur Reader. "
 "Si us plau fes-ho e intenta-ho de nou."
 
-#: src/controller.cpp:348
+#: src/controller.cpp:379
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
@@ -393,69 +403,69 @@ msgstr ""
 "Sembla que no has configurat cap font en el teu compte de The Old Reader. Si "
 "us plau fes-ho i intenta-ho de nou."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:390
 msgid "Loading articles from cache..."
 msgstr "Carregant articles des del caché..."
 
-#: src/controller.cpp:368
+#: src/controller.cpp:399
 msgid "Cleaning up cache thoroughly..."
 msgstr "Netejant el caché totalment..."
 
-#: src/controller.cpp:388
+#: src/controller.cpp:419
 msgid "Error while loading feeds from database: "
 msgstr "Error al carregar les fonts desde la base de dades: "
 
-#: src/controller.cpp:394
+#: src/controller.cpp:425
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Error al carregar la font «%s»: %s"
 
-#: src/controller.cpp:414
+#: src/controller.cpp:445
 msgid "Prepopulating query feeds..."
 msgstr "Omplint les fonts de consulta..."
 
-#: src/controller.cpp:436
+#: src/controller.cpp:467
 msgid "Importing list of read articles..."
 msgstr "Important la llista d'articles llegits..."
 
-#: src/controller.cpp:447
+#: src/controller.cpp:478
 msgid "Exporting list of read articles..."
 msgstr "Exportant la llista d'articles llegits..."
 
-#: src/controller.cpp:487
+#: src/controller.cpp:518
 msgid "Cleaning up cache..."
 msgstr "Netejant el caché..."
 
-#: src/controller.cpp:499
+#: src/controller.cpp:530
 msgid "failed: "
 msgstr "va fallar: "
 
-#: src/controller.cpp:525
+#: src/controller.cpp:556
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Error: no es van poder marcar com llegides totes les fonts: %s"
 
-#: src/controller.cpp:625
+#: src/controller.cpp:656
 #, fuzzy, c-format
 msgid "An error occurred while parsing %s."
 msgstr "Ocurrió un error al processar %s."
 
-#: src/controller.cpp:630
+#: src/controller.cpp:661
 #, c-format
 msgid "Import of %s finished."
 msgstr "Importació de %s finalitzada."
 
-#: src/controller.cpp:760
+#: src/controller.cpp:791
 #, c-format
 msgid "%u unread articles"
 msgstr "%u articles no llegits"
 
-#: src/controller.cpp:765
+#: src/controller.cpp:796
 #, fuzzy, c-format
 msgid "%s: %s: unknown command"
 msgstr "comando invàlid `%s'"
 
-#: src/controller.cpp:878
+#: src/controller.cpp:909
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Error: no es va poder obrir l'arxiu de configuració `%s'!"
@@ -1696,7 +1706,7 @@ msgstr "format de font no suportat"
 msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %d: valor de loglevel invàlid"
 
-#: rust/libnewsboat/src/configpaths.rs:73
+#: rust/libnewsboat/src/configpaths.rs:102
 #, fuzzy
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
@@ -1705,15 +1715,15 @@ msgstr ""
 "Per favor defineix la variable d'entorn HOME, o afegeix un usuari vàlid per "
 "la UID %u!"
 
-#: rust/libnewsboat/src/configpaths.rs:134
+#: rust/libnewsboat/src/configpaths.rs:163
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:190
+#: rust/libnewsboat/src/configpaths.rs:219
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:202
+#: rust/libnewsboat/src/configpaths.rs:231
 #, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Error: l'apertura de l'arxiu de caché `%s' va fallar: %s"
