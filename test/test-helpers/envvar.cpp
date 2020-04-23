@@ -21,12 +21,12 @@ TestHelpers::EnvVar::~EnvVar()
 	}
 }
 
-void TestHelpers::EnvVar::set(std::string new_value) const
+void TestHelpers::EnvVar::set(const std::string& new_value) const
 {
 	const auto overwrite = true;
 	::setenv(name.c_str(), new_value.c_str(), overwrite);
 	if (on_change_fn) {
-		on_change_fn();
+		on_change_fn(new_value);
 	}
 }
 
@@ -34,11 +34,12 @@ void TestHelpers::EnvVar::unset() const
 {
 	::unsetenv(name.c_str());
 	if (on_change_fn) {
-		on_change_fn();
+		on_change_fn(nonstd::nullopt);
 	}
 }
 
-void TestHelpers::EnvVar::on_change(std::function<void(void)> fn)
+void TestHelpers::EnvVar::on_change(
+	std::function<void(nonstd::optional<std::string>)> fn)
 {
 	on_change_fn = std::move(fn);
 }
@@ -58,7 +59,7 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 
 	const auto overwrite = true;
 
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 	REQUIRE(expected == ::getenv(var));
 
 	{
@@ -66,14 +67,14 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 		REQUIRE(expected == ::getenv(var));
 
 		const auto newValue = std::string("totally new value");
-		::setenv(var, newValue.c_str(), overwrite);
+		REQUIRE(::setenv(var, newValue.c_str(), overwrite) == 0);
 
 		REQUIRE_FALSE(expected == ::getenv(var));
 	}
 
 	REQUIRE(expected == ::getenv(var));
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::set() changes the current state of the environment variable",
@@ -109,7 +110,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 	REQUIRE(expected == ::getenv(var));
 
 	{
@@ -119,7 +120,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 
 	REQUIRE(expected == ::getenv(var));
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
@@ -135,7 +136,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	SECTION("The function is ran *after* the change") {
 		// It's important to declare `newValue` before declaring `envVar`,
@@ -147,8 +148,9 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto valueChanged = false;
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&valueChanged, &newValue, &var]() {
-			valueChanged = newValue == ::getenv(var);
+		envVar.on_change([&valueChanged,
+		&var](nonstd::optional<std::string> new_value) {
+			valueChanged = new_value.has_value() && (new_value.value() == ::getenv(var));
 		});
 
 		envVar.set(newValue);
@@ -160,7 +162,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto counter = unsigned{};
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter]() {
+		envVar.on_change([&counter](nonstd::optional<std::string>) {
 			counter++;
 		});
 
@@ -175,7 +177,22 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		REQUIRE(counter == 3);
 	}
 
-	::unsetenv(var);
+	SECTION("Function is passed a non-empty `optional`") {
+		const auto expected_new_value = std::string("test sentry");
+		auto checks_ok = false;
+
+		TestHelpers::EnvVar envVar(var);
+		envVar.on_change([&expected_new_value,
+		&checks_ok](nonstd::optional<std::string> new_value) {
+			checks_ok = new_value.has_value() && (new_value.value() == expected_new_value);
+		});
+
+		envVar.set(expected_new_value);
+
+		REQUIRE(checks_ok);
+	}
+
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::unset() completely removes the variable from the environment",
@@ -190,7 +207,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	char* value = ::getenv(var);
 	REQUIRE_FALSE(value == nullptr);
@@ -212,7 +229,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 		value = nullptr;
 	}
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
@@ -228,7 +245,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 	char* value = ::getenv(var);
 	REQUIRE_FALSE(value == nullptr);
@@ -255,7 +272,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	REQUIRE(expected == value);
 	value = nullptr;
 
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
@@ -271,39 +288,57 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	const auto expected = std::string("let's try this out, shall we?");
 
 	const auto overwrite = true;
-	::setenv(var, expected.c_str(), overwrite);
+	REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
-	char* value = ::getenv(var);
-	REQUIRE_FALSE(value == nullptr);
-	REQUIRE(expected == value);
-	value = nullptr;
-
-	{
-		auto counter = unsigned{};
-		auto as_expected = false;
+	SECTION("The function is ran *after* the change") {
+		auto value_unset = false;
 
 		TestHelpers::EnvVar envVar(var);
-		envVar.on_change([&counter, &as_expected, var]() {
-			as_expected = nullptr == ::getenv(var);
-			counter++;
+		envVar.on_change([&value_unset, &var](nonstd::optional<std::string> new_value) {
+			value_unset = !new_value.has_value() && (nullptr == ::getenv(var));
 		});
-
-		value = ::getenv(var);
-		REQUIRE_FALSE(value == nullptr);
-		REQUIRE(expected == value);
-		value = nullptr;
 
 		envVar.unset();
 
-		REQUIRE(as_expected);
-		REQUIRE(counter == 1);
+		REQUIRE(value_unset);
 	}
 
-	::unsetenv(var);
+	SECTION("The function is run *once* per change") {
+		auto counter = unsigned{};
+
+		TestHelpers::EnvVar envVar(var);
+		envVar.on_change([&counter](nonstd::optional<std::string>) {
+			counter++;
+		});
+
+		envVar.unset();
+
+		REQUIRE(counter == 1);
+
+		envVar.unset();
+
+		REQUIRE(counter == 2);
+	}
+
+	SECTION("Function is passed `nullopt`") {
+		auto checks_ok = false;
+
+		TestHelpers::EnvVar envVar(var);
+		envVar.on_change([&checks_ok](nonstd::optional<std::string> new_value) {
+			checks_ok = !new_value.has_value();
+		});
+
+		envVar.unset();
+
+		REQUIRE(checks_ok);
+	}
+
+
+	REQUIRE(::unsetenv(var) == 0);
 }
 
 TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
-	"restoring the varibale to its original state",
+	"restoring the variable to its original state",
 	"[test-helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
@@ -319,7 +354,7 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 		{
 			TestHelpers::EnvVar envVar(var);
-			envVar.on_change([&counter]() {
+			envVar.on_change([&counter](nonstd::optional<std::string>) {
 				counter++;
 			});
 		}
@@ -343,13 +378,13 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 	SECTION("Variable was set before EnvVar is created") {
 		const auto overwrite = true;
-		::setenv(var, expected.c_str(), overwrite);
+		REQUIRE(::setenv(var, expected.c_str(), overwrite) == 0);
 
 		check();
 	}
 
 	// It's a no-op if the variable is absent from the environment, so we don't
 	// need to put this inside a conditional to match SECTIONs above.
-	::unsetenv(var);
+	REQUIRE(::unsetenv(var) == 0);
 }
 

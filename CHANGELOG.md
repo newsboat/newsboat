@@ -9,6 +9,7 @@ acknowledge contributions from the following people:
 - New format specifiers (%n, %d, and %F) for articlelist-format which
   correspond respectively to article fields "unread", "deleted", and article
   flags (#869) (Dennis van der Schagt)
+- Dependency on martinmoene/optional-lite library, which we vendor
 ### Changed
 - Allow binding multiple keys to general operations: up, down, pageup, pagedown,
   home, end (#847) (Dennis van der Schagt)
@@ -29,6 +30,10 @@ acknowledge contributions from the following people:
   libstfl. A patch for that library is available at
   https://github.com/dennisschagt/stfl/pull/4#issuecomment-613640246 (Dennis
   van der Schagt)
+- "feedlink" attribute containing feed title instead of feed URL (Alexander
+    Batischev)
+- "date" attribute containing fixed string instead of item's publication date
+    and time (Alexander Batischev)
 ### Security
 
 

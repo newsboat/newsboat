@@ -131,26 +131,15 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	return std::shared_ptr<RssItem>(new RssItem(ch));
 }
 
-bool RssFeed::has_attribute(const std::string& attribname)
-{
-	if (attribname == "feedtitle" || attribname == "description" ||
-		attribname == "feedlink" || attribname == "feeddate" ||
-		attribname == "rssurl" || attribname == "unread_count" ||
-		attribname == "total_count" || attribname == "tags" ||
-		attribname == "feedindex") {
-		return true;
-	}
-	return false;
-}
-
-std::string RssFeed::get_attribute(const std::string& attribname)
+nonstd::optional<std::string> RssFeed::attribute_value(const std::string&
+	attribname)
 {
 	if (attribname == "feedtitle") {
 		return title();
 	} else if (attribname == "description") {
 		return utils::utf8_to_locale(description());
 	} else if (attribname == "feedlink") {
-		return title();
+		return link();
 	} else if (attribname == "feeddate") {
 		return pubDate();
 	} else if (attribname == "rssurl") {
@@ -164,7 +153,7 @@ std::string RssFeed::get_attribute(const std::string& attribname)
 	} else if (attribname == "feedindex") {
 		return std::to_string(idx);
 	}
-	return "";
+	return nonstd::nullopt;
 }
 
 void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)

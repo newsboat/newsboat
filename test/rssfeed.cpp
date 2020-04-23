@@ -5,10 +5,13 @@
 #include "configcontainer.h"
 #include "rssparser.h"
 
+#include "test-helpers/envvar.h"
+#include "test-helpers/stringmaker/optional.h"
+
 using namespace newsboat;
 
 TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -26,7 +29,7 @@ TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
 	}
 }
 
-TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
+TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -206,7 +209,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[rss]")
 }
 
 TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -236,7 +239,7 @@ TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
 }
 
 TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -252,7 +255,7 @@ TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
 	REQUIRE_FALSE(f.matches_tag("Five"));
 }
 
-TEST_CASE("RssFeed::get_firsttag() returns first tag", "[rss]")
+TEST_CASE("RssFeed::get_firsttag() returns first tag", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -279,7 +282,7 @@ TEST_CASE("RssFeed::get_firsttag() returns first tag", "[rss]")
 
 TEST_CASE(
 	"RssFeed::hidden() returns true if feed has a tag starting with \"!\"",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -302,7 +305,7 @@ TEST_CASE(
 
 TEST_CASE(
 	"RssFeed::mark_all_items_read() marks all items within a feed as read",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -320,7 +323,7 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[rss]")
+TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -337,7 +340,7 @@ TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[rss]")
 TEST_CASE(
 	"RssFeed::purge_deleted_items() deletes all items that have "
 	"\"deleted\" property set up",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -355,7 +358,7 @@ TEST_CASE(
 }
 
 TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -377,7 +380,7 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 TEST_CASE(
 	"RssFeed::is_query_feed() return true if feed is a query feed, i.e. "
 	"its \"rssurl\" starts with \"query:\" string",
-	"[rss]")
+	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -392,4 +395,186 @@ TEST_CASE(
 	REQUIRE(f.is_query_feed());
 	f.set_rssurl("query:Title:unread = \"yes\" and age between 0:7");
 	REQUIRE(f.is_query_feed());
+}
+
+TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache);
+
+	SECTION("`feedtitle`, containing feed's title") {
+		const auto title = std::string("Example feed");
+		f.set_title(title);
+
+		const auto attr = "feedtitle";
+		REQUIRE(f.attribute_value(attr) == title);
+
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto title = "こんにちは";// "good afternoon" in Japanese
+			f.set_title(title);
+
+			REQUIRE_FALSE(f.attribute_value(attr) == title);
+		}
+	}
+
+	SECTION("description") {
+		const auto desc = std::string("A temporary empty feed, used for testing.");
+		f.set_description(desc);
+
+		const auto attr = "description";
+		REQUIRE(f.attribute_value(attr) == desc);
+
+		SECTION("it is encoded to the locale's charset") {
+			// Due to differences in how platforms handle //TRANSLIT in iconv,
+			// we can't compare results to a known-good value. Instead, we
+			// merely check that the result is *not* UTF-8.
+
+			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+				if (new_charset.has_value()) {
+					::setlocale(LC_CTYPE, new_charset.value().c_str());
+				} else {
+					::setlocale(LC_CTYPE, "");
+				}
+			});
+
+			lc_ctype.set("C"); // This means ASCII
+
+			const auto description = "こんにちは";// "good afternoon" in Japanese
+			f.set_description(description);
+
+			REQUIRE_FALSE(f.attribute_value(attr) == description);
+		}
+	}
+
+	SECTION("feedlink, feed's notion of its own location") {
+		const auto feedlink = std::string("https://example.com/feed.xml");
+		f.set_link(feedlink);
+
+		const auto attr = "feedlink";
+		REQUIRE(f.attribute_value(attr) == feedlink);
+	}
+
+	SECTION("feeddate, feed's publication date") {
+		TestHelpers::EnvVar tzEnv("TZ");
+		tzEnv.set("UTC");
+
+		f.set_pubDate(1); // one second into the Unix epoch
+
+		const auto attr = "feeddate";
+		REQUIRE(f.attribute_value(attr) == "Thu, 01 Jan 1970 00:00:01 +0000");
+	}
+
+	SECTION("rssurl, the URL by which this feed is fetched (specified in the urls file)") {
+		const auto url = std::string("https://example.com/news.atom");
+		f.set_rssurl(url);
+
+		const auto attr = "rssurl";
+		REQUIRE(f.attribute_value(attr) == url);
+	}
+
+	SECTION("unread_count, the number of items in the feed that aren't read yet") {
+		const auto attr = "unread_count";
+
+		SECTION("empty feed => unread_count == 0") {
+			REQUIRE(f.attribute_value(attr) == "0");
+		}
+
+		SECTION("feed with two items") {
+			auto item1 = std::make_shared<RssItem>(&rsscache);
+			auto item2 = std::make_shared<RssItem>(&rsscache);
+
+			f.add_item(item1);
+			f.add_item(item2);
+
+			SECTION("all unread => unread_count == 2") {
+				item1->set_unread(true);
+				item2->set_unread(true);
+
+				REQUIRE(f.attribute_value(attr) == "2");
+			}
+
+			SECTION("one unread => unread_count == 1") {
+				item1->set_unread(false);
+
+				REQUIRE(f.attribute_value(attr) == "1");
+			}
+
+			SECTION("all read => unread_count == 0") {
+				item1->set_unread(false);
+				item2->set_unread(false);
+
+				REQUIRE(f.attribute_value(attr) == "0");
+			}
+		}
+	}
+
+	SECTION("total_count, the number of items in the feed") {
+		const auto attr = "total_count";
+
+		SECTION("empty feed => total_count == 0") {
+			REQUIRE(f.attribute_value(attr) == "0");
+		}
+
+		SECTION("feed with two items => total_count == 2") {
+			auto item1 = std::make_shared<RssItem>(&rsscache);
+			auto item2 = std::make_shared<RssItem>(&rsscache);
+
+			f.add_item(item1);
+			f.add_item(item2);
+
+			REQUIRE(f.attribute_value(attr) == "2");
+		}
+	}
+
+	SECTION("tags") {
+		const auto attr = "tags";
+
+		SECTION("no tags => attribute empty") {
+			REQUIRE(f.attribute_value(attr) == "");
+		}
+
+		SECTION("multiple tags => a space-separated list of tags, ending with space") {
+			f.set_tags({"first", "second", "third", "tags"});
+
+			REQUIRE(f.attribute_value(attr) == "first second third tags ");
+		}
+
+		SECTION("spaces inside tags are not escaped") {
+			f.set_tags({"first", "another with spaces", "final"});
+
+			REQUIRE(f.attribute_value(attr) == "first another with spaces final ");
+		}
+	}
+
+	SECTION("feedindex, feed's position in the feedlist") {
+		const auto attr = "feedindex";
+
+		const auto check = [&attr, &f](unsigned int index) {
+			f.set_index(index);
+
+			REQUIRE(f.attribute_value(attr) == std::to_string(index));
+		};
+
+		check(1);
+		check(100);
+		check(65536);
+		check(100500);
+	}
 }

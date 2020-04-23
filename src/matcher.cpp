@@ -65,8 +65,7 @@ bool Matcher::matches(Matchable* item)
 	 * This makes it easy to use the Matcher virtually everywhere, since C++
 	 * allows multiple inheritance (i.e. deriving from Matchable can even be
 	 * used in class hierarchies), and deriving from Matchable means that
-	 * you only have to implement two methods has_attribute() and
-	 * get_attribute().
+	 * you only have to implement the method attribute_value().
 	 *
 	 * The whole matching code is speed-critical, as the matching happens on
 	 * a lot of different occassions, and slow matching can be easily
@@ -81,13 +80,26 @@ bool Matcher::matches(Matchable* item)
 	return retval;
 }
 
+std::string get_attr_or_throw(Matchable* item, const std::string& attr_name)
+{
+	const auto attr = item->attribute_value(attr_name);
+
+	if (!attr.has_value()) {
+		LOG(Level::WARN,
+			"Matcher::matches: attribute %s is not available",
+			attr_name);
+		throw MatcherException(MatcherException::Type::ATTRIB_UNAVAIL, attr_name);
+	}
+
+	return attr.value();
+}
+
 bool Matcher::matchop_lt(expression* e, Matchable* item)
 {
-	if (!item->has_attribute(e->name))
-		throw MatcherException(
-			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
+	const auto attr = get_attr_or_throw(item, e->name);
+
 	std::istringstream islit(e->literal);
-	std::istringstream isatt(item->get_attribute(e->name));
+	std::istringstream isatt(attr);
 	int ilit, iatt;
 	islit >> ilit;
 	isatt >> iatt;
@@ -96,11 +108,10 @@ bool Matcher::matchop_lt(expression* e, Matchable* item)
 
 bool Matcher::matchop_between(expression* e, Matchable* item)
 {
-	if (!item->has_attribute(e->name))
-		throw MatcherException(
-			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
-	std::vector<std::string> lit = utils::tokenize(e->literal, ":");
-	std::istringstream isatt(item->get_attribute(e->name));
+	const auto attr = get_attr_or_throw(item, e->name);
+
+	const std::vector<std::string> lit = utils::tokenize(e->literal, ":");
+	std::istringstream isatt(attr);
 	int att;
 	isatt >> att;
 	if (lit.size() < 2) {
@@ -120,11 +131,10 @@ bool Matcher::matchop_between(expression* e, Matchable* item)
 
 bool Matcher::matchop_gt(expression* e, Matchable* item)
 {
-	if (!item->has_attribute(e->name))
-		throw MatcherException(
-			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
+	const auto attr = get_attr_or_throw(item, e->name);
+
 	std::istringstream islit(e->literal);
-	std::istringstream isatt(item->get_attribute(e->name));
+	std::istringstream isatt(attr);
 	int ilit, iatt;
 	islit >> ilit;
 	isatt >> iatt;
@@ -133,9 +143,8 @@ bool Matcher::matchop_gt(expression* e, Matchable* item)
 
 bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 {
-	if (!item->has_attribute(e->name))
-		throw MatcherException(
-			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
+	const auto attr = get_attr_or_throw(item, e->name);
+
 	if (!e->regex) {
 		e->regex = new regex_t;
 		int err;
@@ -153,7 +162,7 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 		}
 	}
 	if (regexec(e->regex,
-			item->get_attribute(e->name).c_str(),
+			attr.c_str(),
 			0,
 			nullptr,
 			0) == 0) {
@@ -164,12 +173,10 @@ bool Matcher::matchop_rxeq(expression* e, Matchable* item)
 
 bool Matcher::matchop_cont(expression* e, Matchable* item)
 {
-	if (!item->has_attribute(e->name))
-		throw MatcherException(
-			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
-	std::vector<std::string> elements =
-		utils::tokenize(item->get_attribute(e->name), " ");
-	std::string literal = e->literal;
+	const auto attr = get_attr_or_throw(item, e->name);
+
+	const std::vector<std::string> elements = utils::tokenize(attr, " ");
+	const std::string literal = e->literal;
 	for (const auto& elem : elements) {
 		if (literal == elem) {
 			return true;
@@ -180,14 +187,9 @@ bool Matcher::matchop_cont(expression* e, Matchable* item)
 
 bool Matcher::matchop_eq(expression* e, Matchable* item)
 {
-	if (!item->has_attribute(e->name)) {
-		LOG(Level::WARN,
-			"Matcher::matches_r: attribute %s not available",
-			e->name);
-		throw MatcherException(
-			MatcherException::Type::ATTRIB_UNAVAIL, e->name);
-	}
-	return (item->get_attribute(e->name) == e->literal);
+	const auto attr = get_attr_or_throw(item, e->name);
+
+	return (attr == e->literal);
 }
 
 bool Matcher::matches_r(expression* e, Matchable* item)

@@ -108,20 +108,20 @@ int Controller::run(const CliArgsParser& args)
 
 	refresh_on_start = args.refresh_on_start();
 
-	if (args.set_log_file()) {
-		Logger::set_logfile(args.log_file());
+	if (args.log_file().has_value()) {
+		Logger::set_logfile(args.log_file().value());
 	}
 
-	if (args.set_log_level()) {
-		Logger::set_loglevel(args.log_level());
+	if (args.log_level().has_value()) {
+		Logger::set_loglevel(args.log_level().value());
 	}
 
 	if (!args.display_msg().empty()) {
 		std::cerr << args.display_msg() << std::endl;
 	}
 
-	if (args.should_return()) {
-		return args.return_code();
+	if (args.return_code().has_value()) {
+		return args.return_code().value();
 	}
 
 	const auto migrated = configpaths.try_migrate_from_newsbeuter();
@@ -153,11 +153,9 @@ int Controller::run(const CliArgsParser& args)
 		fslock = std::unique_ptr<FsLock>(new FsLock());
 		pid_t pid;
 		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
-			if (!args.execute_cmds()) {
+			if (!args.cmds_to_execute().has_value()) {
 				std::cout << strprintf::fmt(
-						_("Error: an instance of "
-							"%s is already running "
-							"(PID: %u)"),
+						_("Error: an instance of %s is already running (PID: %u)"),
 						PROGRAM_NAME,
 						pid)
 					<< std::endl;
@@ -207,7 +205,7 @@ int Controller::run(const CliArgsParser& args)
 
 	// create cache object
 	std::string cachefilepath = cfg.get_configvalue("cache-file");
-	if (cachefilepath.length() > 0 && !args.set_cache_file()) {
+	if (cachefilepath.length() > 0 && !args.cache_file().has_value()) {
 		configpaths.set_cache_file(cachefilepath);
 		fslock = std::unique_ptr<FsLock>(new FsLock());
 		pid_t pid;
@@ -431,24 +429,24 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_SUCCESS;
 	}
 
-	if (args.do_read_import()) {
+	if (args.readinfo_import_file().has_value()) {
 		LOG(Level::INFO,
 			"Importing read information file from %s",
-			args.readinfo_import_file());
+			args.readinfo_import_file().value());
 		std::cout << _("Importing list of read articles...");
 		std::cout.flush();
-		import_read_information(args.readinfo_import_file());
+		import_read_information(args.readinfo_import_file().value());
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
 
-	if (args.do_read_export()) {
+	if (args.readinfo_export_file().has_value()) {
 		LOG(Level::INFO,
 			"Exporting read information file to %s",
-			args.readinfo_export_file());
+			args.readinfo_export_file().value());
 		std::cout << _("Exporting list of read articles...");
 		std::cout.flush();
-		export_read_information(args.readinfo_export_file());
+		export_read_information(args.readinfo_export_file().value());
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
@@ -460,8 +458,8 @@ int Controller::run(const CliArgsParser& args)
 	v->set_cache(rsscache);
 	v->set_filters(&filters);
 
-	if (args.execute_cmds()) {
-		execute_commands(args.cmds_to_execute());
+	if (args.cmds_to_execute().has_value()) {
+		execute_commands(args.cmds_to_execute().value());
 		return EXIT_SUCCESS;
 	}
 

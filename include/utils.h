@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include "3rd-party/optional.hpp"
+
 #include "configcontainer.h"
 #include "logger.h"
 
@@ -144,7 +146,8 @@ void remove_soft_hyphens(std::string& text);
 
 bool is_valid_podcast_type(const std::string& mimetype);
 
-LinkType podcast_mime_to_link_type(const std::string& mimetype, bool& ok);
+nonstd::optional<LinkType> podcast_mime_to_link_type(const std::string&
+	mimetype);
 
 std::string get_default_browser();
 

@@ -134,27 +134,8 @@ void RssItem::set_enclosure_type(const std::string& type)
 	enclosure_type_ = type;
 }
 
-bool RssItem::has_attribute(const std::string& attribname)
-{
-	if (attribname == "title" || attribname == "link" ||
-		attribname == "author" || attribname == "content" ||
-		attribname == "date" || attribname == "guid" ||
-		attribname == "unread" || attribname == "enclosure_url" ||
-		attribname == "enclosure_type" || attribname == "flags" ||
-		attribname == "age" || attribname == "articleindex") {
-		return true;
-	}
-
-	// if we have a feed, then forward the request
-	std::shared_ptr<RssFeed> feedptr = feedptr_.lock();
-	if (feedptr) {
-		return feedptr->RssFeed::has_attribute(attribname);
-	}
-
-	return false;
-}
-
-std::string RssItem::get_attribute(const std::string& attribname)
+nonstd::optional<std::string> RssItem::attribute_value(const std::string&
+	attribname)
 {
 	if (attribname == "title") {
 		return utils::utf8_to_locale(title());
@@ -186,10 +167,10 @@ std::string RssItem::get_attribute(const std::string& attribname)
 	// if we have a feed, then forward the request
 	std::shared_ptr<RssFeed> feedptr = feedptr_.lock();
 	if (feedptr) {
-		return feedptr->RssFeed::get_attribute(attribname);
+		return feedptr->RssFeed::attribute_value(attribname);
 	}
 
-	return "";
+	return nonstd::nullopt;
 }
 
 void RssItem::update_flags()

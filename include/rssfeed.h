@@ -53,7 +53,7 @@ public:
 
 	std::string pubDate() const
 	{
-		return "TODO";
+		return utils::mt_strf_localtime(_("%a, %d %b %Y %T %z"), pubDate_);
 	}
 	void set_pubDate(time_t t)
 	{
@@ -128,8 +128,7 @@ public:
 	std::string get_tags();
 	std::string get_firsttag();
 
-	bool has_attribute(const std::string& attribname) override;
-	std::string get_attribute(const std::string& attribname) override;
+	nonstd::optional<std::string> attribute_value(const std::string& attr) override;
 
 	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
 

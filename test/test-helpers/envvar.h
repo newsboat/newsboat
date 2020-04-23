@@ -4,6 +4,8 @@
 #include <functional>
 #include <string>
 
+#include "3rd-party/optional.hpp"
+
 namespace TestHelpers {
 
 /* \brief Automatically restores environment variable to its original state
@@ -23,7 +25,7 @@ namespace TestHelpers {
  * thread).
  */
 class EnvVar {
-	std::function<void(void)> on_change_fn;
+	std::function<void(nonstd::optional<std::string>)> on_change_fn;
 	std::string name;
 	std::string value;
 	bool was_set = false;
@@ -47,7 +49,7 @@ public:
 	/// restore the variable when the test finished running. The variable is
 	/// always restored to the state it was in when EnvVar object was
 	/// constructed.
-	void set(std::string new_value) const;
+	void set(const std::string& new_value) const;
 
 	/// \brief Unsets the environment variable.
 	///
@@ -61,7 +63,12 @@ public:
 	///
 	/// In other words, the function will be ran after each change done via or
 	/// by this class.
-	void on_change(std::function<void(void)> fn);
+	///
+	/// The function is passed an argument which can be either:
+	/// - nonstd::nullopt  --  meaning the environment variable is now unset
+	/// - std::string      --  meaning the environment variable is now set to
+	///                        this value
+	void on_change(std::function<void(nonstd::optional<std::string> new_value)> fn);
 };
 
 } // namespace TestHelpers

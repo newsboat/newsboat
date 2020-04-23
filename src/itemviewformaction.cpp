@@ -119,11 +119,9 @@ void ItemViewFormAction::prepare()
 					"article");
 		} else {
 			if (!item->enclosure_url().empty()) {
-				bool ok = false;
-				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type(),
-						ok);
-				if (ok) {
-					links.push_back(LinkPair(item->enclosure_url(), link_type));
+				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type());
+				if (link_type.has_value()) {
+					links.push_back(LinkPair(item->enclosure_url(), link_type.value()));
 				}
 			}
 

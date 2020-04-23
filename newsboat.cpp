@@ -160,9 +160,12 @@ void print_version(const std::string& argv0, unsigned int level)
 					"to see the full text.)"),
 				argv0)
 			<< std::endl;
-		ss << _("It bundles JSON for Modern C++ library, "
-				"licensed under the MIT License: "
+		ss << _("It bundles:") << std::endl;
+		ss << _("- JSON for Modern C++ library, licensed under the MIT License: "
 				"https://github.com/nlohmann/json")
+			<< std::endl;
+		ss << _("- optional-lite library, licensed under the Boost Software "
+				"License: https://github.com/martinmoene/optional-lite")
 			<< std::endl;
 		ss << std::endl;
 
@@ -221,8 +224,8 @@ int main(int argc, char* argv[])
 	if (args.should_print_usage()) {
 		print_usage(args.program_name(), configpaths.config_file(),
 			configpaths.url_file(), configpaths.cache_file());
-		if (args.should_return()) {
-			return args.return_code();
+		if (args.return_code().has_value()) {
+			return args.return_code().value();
 		}
 	} else if (args.show_version()) {
 		print_version(args.program_name(), args.show_version());

@@ -66,7 +66,7 @@ TEST_CASE(
 	auto expected = "Tue, 30 Dec 2008 18:03:15 +0000";
 
 	TestHelpers::EnvVar tzEnv("TZ");
-	tzEnv.on_change([]() {
+	tzEnv.on_change([](nonstd::optional<std::string>) {
 		::tzset();
 	});
 
