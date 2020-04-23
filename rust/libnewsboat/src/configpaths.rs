@@ -33,16 +33,28 @@ pub struct ConfigPaths {
     /// An explanation why `env_home` is empty.
     error_message: String,
 
+    /// Path to user's XDG config home.
+    ///
+    /// This is the value of the XDG_CONFIG_HOME environment variable, otherwise ~/.config (with
+    /// tilde resolved).
+    config_home: PathBuf,
+
+    /// Path to user's XDG data home.
+    ///
+    /// This is the value of the XDG_DATA_HOME environment variable, otherwise ~/.local/share (with
+    /// tilde resolved).
+    data_home: PathBuf,
+
     /// Path to Newsboat's data directory.
     ///
-    /// This can be ~/.newsboat, or ~/.local/share/newsboat, or something else entirely if user
+    /// This can be ~/.newsboat, or ~/.local/share/newsboat, or something else entirely if the user
     /// changed it through the command line parameter.
     data_dir: PathBuf,
 
     /// Path to Newsboat's configuration directory.
     ///
-    /// This can be ~/.newsboat, or ~/.config/newsboat, or something else entirely if user changed
-    /// it through the command line parameter.
+    /// This can be ~/.newsboat, or ~/.config/newsboat, or something else entirely if the user
+    /// changed it through the command line parameter.
     config_dir: PathBuf,
 
     url_file: PathBuf,
@@ -62,6 +74,9 @@ impl ConfigPaths {
         let mut config_paths = ConfigPaths {
             env_home: PathBuf::new(),
             error_message: String::new(),
+
+            config_home: PathBuf::new(),
+            data_home: PathBuf::new(),
 
             data_dir: PathBuf::new(),
             config_dir: PathBuf::new(),
@@ -96,24 +111,25 @@ impl ConfigPaths {
 
         // hitting this branch means we found a home directory
         // we can now safely call unwrap on all other functions in the dirs crate
-
         config_paths.env_home = env_home.unwrap();
+
+        // This can't panic because we've found the home dir.
+        // This should be replaced with proper error handling after this is not used by C++
+        // anymore.
+        let xdg_dirs = xdg::BaseDirectories::new().unwrap();
+        config_paths.config_home = xdg_dirs.get_config_home();
+        config_paths.data_home = xdg_dirs.get_data_home();
+
         config_paths.find_dirs();
         config_paths
     }
 
     fn migrate_data_from_newsbeuter_xdg(&mut self) -> bool {
-        // This can't panic because we've tested we can find the home directory in ConfigPaths::new
-        // This should be replaced with proper error handling after this is not used by c++ anymore
-        let xdg_dirs = xdg::BaseDirectories::new().unwrap();
-        let xdg_config_dir = xdg_dirs.get_config_home();
-        let xdg_data_dir = xdg_dirs.get_data_home();
+        let newsbeuter_config_dir = self.config_home.join(NEWSBEUTER_SUBDIR_XDG);
+        let newsbeuter_data_dir = self.data_home.join(NEWSBEUTER_SUBDIR_XDG);
 
-        let newsbeuter_config_dir = xdg_config_dir.join(NEWSBEUTER_SUBDIR_XDG);
-        let newsbeuter_data_dir = xdg_data_dir.join(NEWSBEUTER_SUBDIR_XDG);
-
-        let newsboat_config_dir = xdg_config_dir.join(NEWSBOAT_SUBDIR_XDG);
-        let newsboat_data_dir = xdg_data_dir.join(NEWSBOAT_SUBDIR_XDG);
+        let newsboat_config_dir = self.config_home.join(NEWSBOAT_SUBDIR_XDG);
+        let newsboat_data_dir = self.data_home.join(NEWSBOAT_SUBDIR_XDG);
 
         if !newsbeuter_config_dir.is_dir() {
             return false;
@@ -273,11 +289,8 @@ impl ConfigPaths {
     }
 
     fn find_dirs_xdg(&mut self) {
-        // This can't panic because we've tested we can find the home directory in ConfigPaths::new
-        // This should be replaced with proper error handling after this is not used by c++ anymore
-        let xdg_dirs = xdg::BaseDirectories::new().unwrap();
-        let config_dir = xdg_dirs.get_config_home().join(NEWSBOAT_SUBDIR_XDG);
-        let data_dir = xdg_dirs.get_data_home().join(NEWSBOAT_SUBDIR_XDG);
+        let config_dir = self.config_home.join(NEWSBOAT_SUBDIR_XDG);
+        let data_dir = self.data_home.join(NEWSBOAT_SUBDIR_XDG);
 
         if !config_dir.is_dir() {
             return;
