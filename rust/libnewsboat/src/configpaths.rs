@@ -25,10 +25,24 @@ const CMDLINE_HISTORY_FILENAME: &str = "history.cmdline";
 
 #[derive(Debug, Default)]
 pub struct ConfigPaths {
+    /// Path to the user's home directory.
+    ///
+    /// Can be empty, in which case `error_message` should contain an explanation.
     env_home: PathBuf,
+
+    /// An explanation why `env_home` is empty.
     error_message: String,
 
+    /// Path to Newsboat's data directory.
+    ///
+    /// This can be ~/.newsboat, or ~/.local/share/newsboat, or something else entirely if user
+    /// changed it through the command line parameter.
     data_dir: PathBuf,
+
+    /// Path to Newsboat's configuration directory.
+    ///
+    /// This can be ~/.newsboat, or ~/.config/newsboat, or something else entirely if user changed
+    /// it through the command line parameter.
     config_dir: PathBuf,
 
     url_file: PathBuf,
