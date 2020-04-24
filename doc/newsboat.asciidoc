@@ -869,8 +869,8 @@ change the unread flag of an article, this is reflected in the feed where the
 article was originally fetched. If you want query feeds to be updated at
 startup, set <<prepopulate-query-feeds,`prepopulate-query-feeds`>> to `yes`.
 
-To define a query feed, the user has to add a line to the file
-_~/.newsboat/urls_ in the following format:
+To define a query feed, the user has to add a line to the _urls_ file in the
+following format:
 
 	query:<name of feed>:<filter expression> [<tag> ...]
 
@@ -949,7 +949,8 @@ something else, such as running an image viewer from the URLs view:
 	macro i set browser "feh %u"; open-in-browser ; set browser "elinks %u"
 
 You can even use this feature to enqueue any of the URLs from the URLs view to
-podboat's download queue:
+podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
+you're using XDG directories):
 
 	macro E set browser "echo %u >> ~/.newsboat/queue" ; open-in-browser ; set browser "elinks %u"
 

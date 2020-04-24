@@ -48,7 +48,7 @@ need to write it as _%40_ instead so that it can be distinguished from the _@_
 that separates the username/password part from the hostname part.
 
 You can also configure local files as feeds, by prefixing the local path with
-`file://` and adding it to the _$HOME/.newsboat/urls_ file:
+`file://` and adding it to the _urls_ file:
 
 	file:///var/log/rss_eventlog.xml
 
@@ -88,12 +88,12 @@ Conditional HTTP downloading can be optionally disabled per feed by using the
 <<always-download,`always-download`>> configuration command.
 
 Several aspects of newsboat's behaviour can be configured via a configuration
-file, by default _$HOME/.newsboat/config_. This configuration file contains
-lines in the form `<config-command> <arg1> ...`.  The configuration file can
-also contain comments, which start with the `+#+` character and go as far as
-the end of line. If you need to enter a configuration argument that contains
-spaces, use quotes (`"`) around the whole argument. It's even possible to
-integrate the output of external commands into the configuration. The text
+file _config_, which is stored next to the _urls_ file. This configuration file
+contains lines in the form `<config-command> <arg1> ...`.  The configuration
+file can also contain comments, which start with the `+#+` character and go as
+far as the end of line. If you need to enter a configuration argument that
+contains spaces, use quotes (`"`) around the whole argument. It's even possible
+to integrate the output of external commands into the configuration. The text
 between two backticks (`{backtick}`) is evaluated as shell command, and its
 output is put on its place instead. This works like backtick evaluation in
 Bourne-compatible shells and allows users to use external information from the
@@ -109,8 +109,8 @@ all feeds will be searched. When you do a search from the article list of a
 feed, only the articles of the currently viewed feed are searched. When opening
 an article from a search result dialog, the search phrase is highlighted.
 
-The history of all your searches is saved to the filesystem, to
-_~/.newsboat/history.search_. By default, the last 100 search phrases are
-stored, but this limited can be influenced through the <<history-limit,`history-limit`>>
-configuration variable. To disable search history saving, simply set the
-`history-limit` to `0`.
+The history of all your searches is saved to the filesystem, to the
+_history.search_ file (stored next to the cache file). By default, the last 100
+search phrases are stored, but this limited can be influenced through the
+<<history-limit,`history-limit`>> configuration variable. To disable search
+history saving, simply set the `history-limit` to `0`.
