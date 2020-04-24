@@ -35,7 +35,7 @@ void log(Level l, const std::string& format, Args... args)
 
 } // namespace newsboat
 
-// see http://kernelnewbies.org/FAQ/DoWhile0
+// see https://kernelnewbies.org/FAQ/DoWhile0
 #ifdef NDEBUG
 #define LOG(x, ...) \
 	do {        \

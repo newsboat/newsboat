@@ -1385,3 +1385,37 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 		verify_create_dirs_returns_false(tmp);
 	}
 }
+
+TEST_CASE("ConfigPaths::expected_urls_paths() returns a pair of possible paths to the urls file",
+	"[ConfigPaths]")
+{
+	TestHelpers::EnvVar envHome("HOME");
+	envHome.set("/absurd/homedir path");
+
+	TestHelpers::EnvVar envXdgConfig("XDG_CONFIG_HOME");
+
+	SECTION("XDG_CONFIG_HOME is set") {
+		envXdgConfig.set("/absurd/homedir path/configurations");
+
+		ConfigPaths paths;
+		REQUIRE(paths.initialized());
+
+		const std::string expected_dotdir = "/absurd/homedir path/.newsboat/urls";
+		const std::string expected_xdg =
+			"/absurd/homedir path/configurations/newsboat/urls";
+		const auto expected = std::make_pair(expected_dotdir, expected_xdg);
+		REQUIRE(paths.expected_urls_paths() == expected);
+	}
+
+	SECTION("XDG_CONFIG_HOME is not set") {
+		envXdgConfig.unset();
+
+		ConfigPaths paths;
+		REQUIRE(paths.initialized());
+
+		const std::string expected_dotdir = "/absurd/homedir path/.newsboat/urls";
+		const std::string expected_xdg = "/absurd/homedir path/.config/newsboat/urls";
+		const auto expected = std::make_pair(expected_dotdir, expected_xdg);
+		REQUIRE(paths.expected_urls_paths() == expected);
+	}
+}
