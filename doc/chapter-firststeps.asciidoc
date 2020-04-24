@@ -27,7 +27,7 @@ You can also import URLs from your previous reader; see
 If you need to add URLs that have restricted access via username/password, simply
 provide the username/password in the following way:
 
-	http://username:password@hostname.domain.tld/feed.rss
+	https://username:password@hostname.domain.tld/feed.rss
 
 In order to protect username and password, make sure that the _urls_ file is
 only readable by you and, optionally, your group:
