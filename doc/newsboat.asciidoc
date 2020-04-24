@@ -71,14 +71,14 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
   manager) (1.40.0 or newer; might work with older versions, but we don't check
   that)
 - http://www.clifford.at/stfl/[STFL (version 0.21 or newer)]
-- http://www.sqlite.org/download.html[SQLite3 (version 3.5 or newer)]
-- http://curl.haxx.se/download.html[libcurl (version 7.21.6 or newer)]
+- https://www.sqlite.org/download.html[SQLite3 (version 3.5 or newer)]
+- https://curl.haxx.se/download.html[libcurl (version 7.21.6 or newer)]
 - Header files for the SSL library that libcurl uses. You can find out which
     library that is from the output of `curl --version`; most often that's
     OpenSSL, sometimes GnuTLS, or maybe something else.
 - GNU gettext (on systems that don't provide gettext in the libc):
   ftp://ftp.gnu.org/gnu/gettext/
-- http://pkg-config.freedesktop.org/wiki/[pkg-config]
+- https://pkg-config.freedesktop.org/wiki/[pkg-config]
 - http://xmlsoft.org/downloads.html[libxml2]
 - https://github.com/json-c/json-c/wiki[json-c (version 0.11 or newer)]
 - https://asciidoctor.org/[Asciidoctor] (1.5.3 or newer)
@@ -205,7 +205,7 @@ can be used if your terminal support 256 colors (e.g. `gnome-terminal`, `xterm`
 with `$TERM` set to `xterm-256color`). Newsboat contains support for 256 color
 terminals since version 2.1. For a complete chart of colors and their
 corresponding numbers, please see
-http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
+https://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
 
 Optionally, you can also add one or more attributes. The following attributes are
 supported:
@@ -363,7 +363,7 @@ for each supported service.
 
 === The Old Reader
 
-http://theoldreader.com/[The Old Reader] is a successor to Google Reader. In
+https://theoldreader.com/[The Old Reader] is a successor to Google Reader. In
 order to use it, you first need to configure the proper URL source:
 
 	urls-source "oldreader"
@@ -509,7 +509,7 @@ Newsboat needs to know that you want to use Tiny Tiny RSS and which
 installation exactly:
 
 	urls-source "ttrss"
-	ttrss-url "http://example.com/ttrss/"
+	ttrss-url "https://example.com/ttrss/"
 
 In addition, it requires username and password for authentication:
 
@@ -535,7 +535,7 @@ additional HTTP-BasicAuth, the required username and password (which may deviate
 from <<ttrss-login,`ttrss-login`>> and <<ttrss-password,`ttrss-password`>>) can
 be specified in the user-part of the url like this:
 
-    ttrss-url "http://htuser:htpasswd@example.com/ttrss/"
+    ttrss-url "https://htuser:htpasswd@example.com/ttrss/"
 
 With these settings, Newsboat should be able to connect to Tiny Tiny RSS and
 download your subscribed feeds. Articles or even complete feeds that you marked
@@ -602,7 +602,7 @@ filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 === Inoreader
 
-http://inoreader.com/[Inoreader] is a successor to Google Reader.
+https://inoreader.com/[Inoreader] is a successor to Google Reader.
 
 In order to use Inoreader support, you first need to configure the proper URL
 source:
@@ -675,7 +675,7 @@ To enable this mode, you need to set an appropriate URLs source and then tell
 Newsboat where to get the OPML file(s):
 
 	urls-source "opml"
-	opml-url "http://example.com/feeds.opml" "http://example.com/more.opml"
+	opml-url "https://example.com/feeds.opml" "https://example.com/more.opml"
 
 === Passwords for external APIs
 
@@ -825,7 +825,7 @@ the configuration file. The most important configuration command for this
 is <<ignore-article,`ignore-article`>>:
 
 	ignore-article "*" "title =~ \"Gentoo\""
-	ignore-article "http://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
+	ignore-article "https://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
 
 It takes two parameters. The first one is either a URL of a feed, or `"*"` to
 match any feed (asterisk is _not_ a pattern, glob or regex—we simply reserve it
@@ -891,14 +891,14 @@ If you want to combine several feeds to one single feed, a good solution is to
 tag the feeds that you want to combine with one certain tag, and then create a
 query feed that only displays articles from feeds with that certain tag:
 
-	http://domain1.tld/feed.xml fun news tag1
-	http://domain2.tld/?feed.rss private jokes tag1
-	http://domain3.tld/feeds.rss news
+	https://domain1.tld/feed.xml fun news tag1
+	https://domain2.tld/?feed.rss private jokes tag1
+	https://domain3.tld/feeds.rss news
 	"query:tag1 Articles:tags # \"tag1\""
 
-In this example, the feeds http://domain1.tld/feed.xml and
-http://domain2.tld/?feed.rss are aggregated into the query feed named "tag1
-Articles", but the feed http://domain3.tld/feeds.rss is not.
+In this example, the feeds https://domain1.tld/feed.xml and
+https://domain2.tld/?feed.rss are aggregated into the query feed named "tag1
+Articles", but the feed https://domain3.tld/feeds.rss is not.
 
 Basically, the possibility of what can be realized with query feeds is only
 limited by what can be queried from articles and feeds with the filter language

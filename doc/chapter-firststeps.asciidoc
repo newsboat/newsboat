@@ -35,7 +35,7 @@ editor and add the URLs, one per line:
 If you need to add URLs that have restricted access via username/password, simply
 provide the username/password in the following way:
 
-	http://username:password@hostname.domain.tld/feed.rss
+	https://username:password@hostname.domain.tld/feed.rss
 
 In order to protect username and password, make sure that
 _$HOME/.newsboat/urls_ is only readable by you and, optionally, your group:
