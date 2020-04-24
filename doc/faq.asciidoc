@@ -49,3 +49,32 @@ Make it executable:
 Then add the following line to your Newsboat's config:
 +
     browser "~/bin/newsboat-browser.sh"
+
+== I can't connect to TT-RSS, Newsboat says: "Loading URLs from Tiny Tiny RSS...Authentication failed."
+
+There are multiple reasons for this:
+
+1. **wrong URL in `ttrss-url` setting, or wrong credentials**. Typos happen.
+   Copy-and-paste the URL into the browser, then copy-and-paste the login and
+   the password, and verify that they work;
+
+2. **`ttrss-url` redirects somewhere**. Please use a URL that points directly
+   at your TT-RSS instance, without any kind of HTTP redirects;
+
+3. **double quotes not escaped in login and/or password**. Use `\"` instead of `"`;
+
+4. **external API is disabled in TT-RSS**. You can enable it in user preferences;
+
+5. **self-signed (or otherwise un-verifiable) SSL certificate**. If your TT-RSS
+   instance is accessible from the Internet, consider
+   https://letsencrypt.org/[Let's Encrypt]. It's a free and completely
+   automated way to get a valid SSL certificate.
++
+If you want to be your own CA, put your root certificate into a bundle
+understood by cURL, save it somewhere, and set the `CURL_CA_BUNDLE` environment
+variable with the path to the bundle.
++
+Finally, if you understand what a "MITM attack" is, and are certain that it
+can't happen in your setup, check out <<newsboat#_first_steps,a list of
+Newsboat's configuration options>> for ways to entirely disable SSL
+verification.
