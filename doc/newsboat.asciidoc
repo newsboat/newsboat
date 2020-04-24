@@ -264,7 +264,7 @@ are met:
 * none of `-u`, `-c`, `-C` options were specified; and
 
 * the urls file doesn't exist (neither _~/.newsboat/urls_ nor
-  _$XDG_CONFIG_DIR/newsboat/urls_).
+  _$XDG_CONFIG_HOME/newsboat/urls_).
 
 Newsboat first tries to migrate an XDG configuration, and if that fails, it
 tries the dotdir one. If that fails as well, Newsboat proceeds with the startup
@@ -272,9 +272,9 @@ as usual.
 
 XDG migration checks that:
 
-* _$XDG_CONFIG_DIR/newsbeuter/_ is readable and executable; and
+* _$XDG_CONFIG_HOME/newsbeuter/_ is readable and executable; and
 
-* neither _$XDG_CONFIG_DIR/newsboat/_ nor _$XDG_DATA_DIR/newsboat/_ exist.
+* neither _$XDG_CONFIG_HOME/newsboat/_ nor _$XDG_DATA_HOME/newsboat/_ exist.
 
 If both conditions are met, Newsboat tries to create its XDG dirs (aborting the
 migration if that fails), then copies the following files: _urls_ and _config_ from

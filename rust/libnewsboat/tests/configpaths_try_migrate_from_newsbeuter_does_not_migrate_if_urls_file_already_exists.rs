@@ -190,11 +190,11 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
         if section!("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
             let config_dir = tmp.path().join("xdg-conf");
             assert!(fs::create_dir(&config_dir).is_ok());
-            env::set_var("XDG_CONFIG_DIR", &config_dir);
+            env::set_var("XDG_CONFIG_HOME", &config_dir);
 
             let data_dir = tmp.path().join("xdg-data");
             assert!(fs::create_dir(&data_dir).is_ok());
-            env::set_var("XDG_DATA_DIR", &data_dir);
+            env::set_var("XDG_DATA_HOME", &data_dir);
 
             let _beuter_sentries = configpaths_helpers::mock_xdg_dirs(
                 &config_dir.join("newsbeuter"),
