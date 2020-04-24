@@ -130,18 +130,7 @@ _<number>_::
 
 == XDG Base Directory Support
 
-Newsboat defaults to storing everything in _$HOME/.newsboat_ directory. If
-you prefer XDG, create _$HOME/.config/newsboat_ and
-_$HOME/.local/share/newsboat_ directories, and Newsboat will use them
-from there on.
-
-If you already have some files in _$HOME/.newsboat/_, move them as follows:
-
-_config_, _urls_::
-        to _$HOME/.config/newsboat/_
-
-_cache.db_, _history.search_, _history.cmdline_::
-        to _$HOME/.local/share/newsboat/_
+include::chapter-xdg-base-directory-support.asciidoc[]
 
 See also a corresponding section in podboat(1).
 
