@@ -2,6 +2,7 @@
 name = "libnewsboat"
 version = "2.19.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
+edition = "2018"
 
 [dependencies]
 strprintf = { path="../strprintf" }
