@@ -110,7 +110,7 @@ feed, only the articles of the currently viewed feed are searched. When opening
 an article from a search result dialog, the search phrase is highlighted.
 
 The history of all your searches is saved to the filesystem, to the
-_history.search_ file (stored next to the cache file). By default, the last 100
-search phrases are stored, but this limited can be influenced through the
-<<history-limit,`history-limit`>> configuration variable. To disable search
+_history.search_ file (stored next to the _cache.db_ file). By default, the
+last 100 search phrases are stored, but this limited can be influenced through
+the <<history-limit,`history-limit`>> configuration variable. To disable search
 history saving, simply set the `history-limit` to `0`.
