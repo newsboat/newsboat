@@ -232,7 +232,21 @@ std::vector<std::string> FormAction::get_suggestions(
 				}
 			} else if (tokens[0] == "exec") {
 				if (tokens.size() <= 2) {
-					// TODO: handle suggestions
+					std::string start;
+					if (tokens.size() == 2) {
+						start = tokens[1];
+					} else {
+						start = "";
+					}
+					const std::vector<KeyMapDesc> descs = v->get_keymap()->get_keymap_descriptions(
+						this->id()
+					);
+					for (const KeyMapDesc& desc: descs) {
+						const std::string cmd = desc.cmd;
+						if (cmd.rfind(start, 0) == 0) {
+							result.push_back(std::string("exec ") + cmd);
+						}
+					}
 				}
 			}
 		}
