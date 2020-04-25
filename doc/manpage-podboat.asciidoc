@@ -51,20 +51,9 @@ include::chapter-podcasts.asciidoc[]
 include::podboat-cfgcmds.asciidoc[]
 
 
-== XDG Base Directory Support
-
-Podboat defaults to storing everything in _$HOME/.newsboat_ directory. If
-you prefer XDG, create _$HOME/.config/newsboat_ and
-_$HOME/.local/share/newsboat_ directories, and Podboat will use them from
-there on.
-
-If you already have some files in _$HOME/.newsboat/_, move the _queue_ file to
-_$HOME/.local/share/newsboat/_, and that should be it.
-
-See also a corresponding section in newsboat(1).
-
-
 == FILES
+
+include::chapter-files.asciidoc[]
 
 dotfiles::
         _$HOME/.newsboat/config_

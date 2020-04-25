@@ -241,6 +241,11 @@ The default color configuration of newsboat looks like this:
 	color article             white   black
 
 
+=== Files
+
+include::chapter-files.asciidoc[]
+
+
 === Migrating from other RSS Feed Readers
 
 It is very likely that you have used other RSS feed readers before. In this
@@ -869,8 +874,8 @@ change the unread flag of an article, this is reflected in the feed where the
 article was originally fetched. If you want query feeds to be updated at
 startup, set <<prepopulate-query-feeds,`prepopulate-query-feeds`>> to `yes`.
 
-To define a query feed, the user has to add a line to the file
-_~/.newsboat/urls_ in the following format:
+To define a query feed, the user has to add a line to the _urls_ file in the
+following format:
 
 	query:<name of feed>:<filter expression> [<tag> ...]
 
@@ -949,7 +954,8 @@ something else, such as running an image viewer from the URLs view:
 	macro i set browser "feh %u"; open-in-browser ; set browser "elinks %u"
 
 You can even use this feature to enqueue any of the URLs from the URLs view to
-podboat's download queue:
+podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
+you're using XDG directories):
 
 	macro E set browser "echo %u >> ~/.newsboat/queue" ; open-in-browser ; set browser "elinks %u"
 
@@ -1229,30 +1235,6 @@ The main dialog for this feature can be reached by pressing the "v" key. This
 opens the list of open dialogs. From there, the user can switch to another
 dialog by selecting the appropriate entry and pressing "Enter", or can close
 open dialogs by selecting them and pressing "Ctrl-X".
-
-
-=== XDG Base Directory Support
-
-Newsboat implements limited support for the
-http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base
-Directory Specification]. It needs to be set up manually by creating the
-following directories:
-
-- _~/.local/share/newsboat/_
-- _~/.config/newsboat/_
-
-If these directories exist or the environment variables `$XDG_CONFIG_HOME` and
-`$XDG_DATA_HOME` are set, newsboat will use these directories, otherwise it
-will default to _~/.newsboat_ as its configuration directory.
-
-If you're currently using _~/.newsboat/_ but wish to migrate to XDG
-directories, you should move the files as follows:
-
-_config_, _urls_::
-        to _$HOME/.config/newsboat/_
-
-_cache.db_, _history.search_, _history.cmdline_, _queue_::
-        to _$HOME/.local/share/newsboat/_
 
 
 === Podcast Support

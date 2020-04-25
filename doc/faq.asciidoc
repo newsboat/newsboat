@@ -17,7 +17,7 @@ Convert octal numbers to decimal, and drop the leading zero. For example,
 == I want to have a feed that contains all unread articles of all feeds
 
 This is supported since Newsbeuter 0.7. All you need to do is add the following
-line to your +~/.newsboat/urls+ file:
+line to your _urls_ file:
 
 	"query:Unread Articles:unread = \"yes\""
 
