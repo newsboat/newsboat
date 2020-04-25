@@ -1,6 +1,6 @@
 #[macro_use]
 extern crate section_testing;
-extern crate tempfile;
+use tempfile;
 
 use self::tempfile::TempDir;
 use std::{env, fs};

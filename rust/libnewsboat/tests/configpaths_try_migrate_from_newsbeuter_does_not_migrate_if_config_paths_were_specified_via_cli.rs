@@ -1,7 +1,7 @@
-extern crate libnewsboat;
+use libnewsboat;
 #[macro_use]
 extern crate section_testing;
-extern crate tempfile;
+use tempfile;
 
 use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use self::tempfile::TempDir;

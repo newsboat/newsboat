@@ -1,5 +1,5 @@
-extern crate libnewsboat;
-extern crate tempfile;
+use libnewsboat;
+use tempfile;
 
 use self::libnewsboat::cliargsparser::CliArgsParser;
 use self::tempfile::TempDir;

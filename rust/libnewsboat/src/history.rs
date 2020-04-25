@@ -77,7 +77,7 @@ impl History {
 
 #[cfg(test)]
 mod tests {
-    extern crate tempfile;
+    use tempfile;
 
     use self::tempfile::TempDir;
     use super::*;

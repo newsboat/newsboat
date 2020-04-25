@@ -1,6 +1,6 @@
 #[macro_use]
 extern crate libnewsboat;
-extern crate tempfile;
+use tempfile;
 
 use self::tempfile::TempDir;
 use libnewsboat::logger::{self, get_instance, Level};

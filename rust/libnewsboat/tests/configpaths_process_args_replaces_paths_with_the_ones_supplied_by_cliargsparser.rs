@@ -1,4 +1,4 @@
-extern crate libnewsboat;
+use libnewsboat;
 
 use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use std::env;

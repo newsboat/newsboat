@@ -1,7 +1,7 @@
 //! Checks if given filter expression is true for a given feed or article.
 
-extern crate regex_rs;
-extern crate std;
+use regex_rs;
+use std;
 
 use self::regex_rs::{CompFlags, MatchFlags, Regex};
 use crate::filterparser::{self, Expression, Expression::*, Operator, Value};

@@ -1,11 +1,11 @@
-extern crate curl_sys;
-extern crate dirs;
-extern crate libc;
-extern crate natord;
-extern crate rand;
-extern crate std;
-extern crate unicode_width;
-extern crate url;
+use curl_sys;
+use dirs;
+use libc;
+use natord;
+use rand;
+use std;
+use unicode_width;
+use url;
 
 use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use self::url::percent_encoding::*;
@@ -767,7 +767,7 @@ pub fn extract_filter(line: &str) -> (&str, &str) {
 
 #[cfg(test)]
 mod tests {
-    extern crate tempfile;
+    use tempfile;
 
     use super::*;
 

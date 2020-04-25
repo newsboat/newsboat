@@ -1,5 +1,4 @@
-extern crate libnewsboat;
-extern crate tempfile;
+use tempfile;
 
 use self::tempfile::TempDir;
 use libnewsboat::utils;

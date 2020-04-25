@@ -1,5 +1,3 @@
-extern crate libnewsboat;
-
 use libnewsboat::utils;
 use std::path::Path;
 

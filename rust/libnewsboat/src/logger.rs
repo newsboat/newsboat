@@ -1,6 +1,6 @@
 //! Keeps a record of what the program did.
 
-extern crate chrono;
+use chrono;
 
 use self::chrono::{offset::Local, Datelike, Timelike};
 use once_cell::sync::OnceCell;
@@ -318,7 +318,7 @@ macro_rules! log {
 
 #[cfg(test)]
 mod tests {
-    extern crate tempfile;
+    use tempfile;
 
     use super::*;
 

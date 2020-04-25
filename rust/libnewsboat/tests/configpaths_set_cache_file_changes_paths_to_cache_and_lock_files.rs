@@ -1,4 +1,4 @@
-extern crate libnewsboat;
+use libnewsboat;
 
 use self::libnewsboat::configpaths::ConfigPaths;
 use std::{env, path};

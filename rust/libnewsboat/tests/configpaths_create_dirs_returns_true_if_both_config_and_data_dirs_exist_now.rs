@@ -1,6 +1,6 @@
-extern crate libnewsboat;
-extern crate rand;
-extern crate tempfile;
+use libnewsboat;
+use rand;
+use tempfile;
 #[macro_use]
 extern crate section_testing;
 
