@@ -178,7 +178,7 @@ doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/chapter-cmdline.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/podboat-cmds-linked.dsv doc/chapter-password.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
-		doc/chapter-xdg-base-directory-support.asciidoc
+		doc/chapter-files.asciidoc
 	$(MKDIR) doc/xhtml
 	$(ASCIIDOCTOR) --backend=html5 --destination-dir=doc/xhtml doc/newsboat.asciidoc
 
@@ -203,7 +203,7 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
-		doc/chapter-xdg-base-directory-support.asciidoc
+		doc/chapter-files.asciidoc
 	$(ASCIIDOCTOR) --backend=manpage doc/manpage-newsboat.asciidoc
 
 doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
@@ -212,7 +212,7 @@ doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
 doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/podboat-cfgcmds.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
-		doc/chapter-xdg-base-directory-support.asciidoc
+		doc/chapter-files.asciidoc
 	$(ASCIIDOCTOR) --backend=manpage doc/manpage-podboat.asciidoc
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h

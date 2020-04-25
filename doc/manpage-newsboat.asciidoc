@@ -128,14 +128,9 @@ _<number>_::
         Jump to the <number>th entry in the current dialog
 
 
-== XDG Base Directory Support
-
-include::chapter-xdg-base-directory-support.asciidoc[]
-
-See also a corresponding section in podboat(1).
-
-
 == FILES
+
+include::chapter-files.asciidoc[]
 
 dotfiles::
         _$HOME/.newsboat/config_

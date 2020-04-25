@@ -51,14 +51,9 @@ include::chapter-podcasts.asciidoc[]
 include::podboat-cfgcmds.asciidoc[]
 
 
-== XDG Base Directory Support
-
-include::chapter-xdg-base-directory-support.asciidoc[]
-
-See also a corresponding section in newsboat(1).
-
-
 == FILES
+
+include::chapter-files.asciidoc[]
 
 dotfiles::
         _$HOME/.newsboat/config_
