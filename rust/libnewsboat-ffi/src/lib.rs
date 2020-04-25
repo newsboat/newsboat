@@ -1,7 +1,3 @@
-extern crate libc;
-#[macro_use]
-extern crate libnewsboat;
-
 use libc::c_char;
 use std::ffi::CString;
 use std::panic::{catch_unwind, UnwindSafe};
