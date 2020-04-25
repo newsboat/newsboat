@@ -1,10 +1,3 @@
-#[macro_use]
-extern crate strprintf;
-
-#[cfg(test)]
-#[macro_use]
-extern crate proptest;
-
 // This module must be declared before the others because it exports a `log!` macro that everyone
 // else uses.
 #[macro_use]

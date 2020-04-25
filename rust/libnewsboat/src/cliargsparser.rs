@@ -5,6 +5,7 @@ use std::path::PathBuf;
 
 use crate::logger::Level;
 use crate::utils;
+use strprintf::fmt;
 
 #[derive(Default)]
 pub struct CliArgsParser {

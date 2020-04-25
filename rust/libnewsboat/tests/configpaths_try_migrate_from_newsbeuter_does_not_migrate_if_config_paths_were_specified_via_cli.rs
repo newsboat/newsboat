@@ -1,6 +1,5 @@
 use libnewsboat;
-#[macro_use]
-extern crate section_testing;
+use section_testing::{enable_sections, section};
 use tempfile;
 
 use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};

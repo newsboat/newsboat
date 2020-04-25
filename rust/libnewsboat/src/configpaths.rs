@@ -8,6 +8,7 @@ use std::fs::{self, DirBuilder};
 use std::io;
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
+use strprintf::fmt;
 use xdg;
 
 pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";

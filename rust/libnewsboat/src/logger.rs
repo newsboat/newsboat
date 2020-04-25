@@ -299,8 +299,7 @@ pub fn get_instance() -> &'static Logger {
 ///
 /// Most of the time, you should just use this. For example:
 /// ```no_run
-/// # #[macro_use] extern crate libnewsboat;
-/// use libnewsboat::logger::{self, Level};
+/// use libnewsboat::{log, logger::{self, Level}};
 ///
 /// fn super_cool_function(value: u32) {
 ///     log!(Level::Debug, "super_cool_function(): value = {}", value);

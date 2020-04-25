@@ -1,5 +1,4 @@
-#[macro_use]
-extern crate section_testing;
+use section_testing::{enable_sections, section};
 use tempfile;
 
 use self::tempfile::TempDir;

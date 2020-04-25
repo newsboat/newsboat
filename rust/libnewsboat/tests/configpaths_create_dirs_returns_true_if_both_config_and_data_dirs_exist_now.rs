@@ -1,8 +1,7 @@
 use libnewsboat;
 use rand;
+use section_testing::{enable_sections, section};
 use tempfile;
-#[macro_use]
-extern crate section_testing;
 
 use self::libnewsboat::configpaths::ConfigPaths;
 use self::rand::random;

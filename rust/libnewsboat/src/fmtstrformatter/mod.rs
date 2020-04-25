@@ -587,7 +587,7 @@ mod tests {
         assert_eq!(fmt.do_format("%x? %y", 0), "What's the ultimate answer? 42");
     }
 
-    proptest! {
+    proptest::proptest! {
         #[test]
         fn does_not_crash_when_formatting_with_no_formats_registered(ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();

@@ -125,7 +125,7 @@ mod tests {
         assert_eq!(s.length(), limit);
     }
 
-    proptest! {
+    proptest::proptest! {
         #[test]
         fn length_never_exceeds_the_limit_one_string(
             limit in 1usize..1024,
