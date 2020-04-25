@@ -3,8 +3,8 @@ use gettextrs::gettext;
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 use std::path::PathBuf;
 
-use logger::Level;
-use utils;
+use crate::logger::Level;
+use crate::utils;
 
 #[derive(Default)]
 pub struct CliArgsParser {

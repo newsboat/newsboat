@@ -5,8 +5,8 @@ mod parser;
 
 use self::limited_string::LimitedString;
 use self::parser::{parse, Padding, Specifier};
+use crate::utils;
 use std::collections::BTreeMap;
-use utils;
 
 /// Produces strings of values in a specified format, strftime(3)-like.
 ///

@@ -10,9 +10,9 @@ extern crate url;
 use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use self::url::percent_encoding::*;
 use self::url::Url;
-use htmlrenderer;
+use crate::htmlrenderer;
+use crate::logger::{self, Level};
 use libc::c_ulong;
-use logger::{self, Level};
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
@@ -1080,7 +1080,7 @@ mod tests {
 
     #[test]
     fn t_podcast_mime_to_link_type() {
-        use htmlrenderer::LinkType::*;
+        use crate::htmlrenderer::LinkType::*;
 
         assert_eq!(podcast_mime_to_link_type("audio/mpeg"), Some(Audio));
         assert_eq!(podcast_mime_to_link_type("audio/mp3"), Some(Audio));
