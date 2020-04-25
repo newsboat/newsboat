@@ -1,15 +1,3 @@
-use curl_sys;
-use dirs;
-use libc;
-use natord;
-use rand;
-use std;
-use unicode_width;
-use url;
-
-use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
-use self::url::percent_encoding::*;
-use self::url::Url;
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
 use libc::c_ulong;
@@ -18,6 +6,9 @@ use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
+use url::percent_encoding::*;
+use url::Url;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -1163,8 +1154,8 @@ mod tests {
 
     #[test]
     fn t_run_command_executes_given_command_with_given_argument() {
-        use self::tempfile::TempDir;
         use std::{thread, time};
+        use tempfile::TempDir;
 
         let tmp = TempDir::new().unwrap();
         let filepath = {
@@ -1333,9 +1324,9 @@ mod tests {
 
     #[test]
     fn t_mkdir_parents() {
-        use self::tempfile::TempDir;
         use std::fs;
         use std::os::unix::fs::PermissionsExt;
+        use tempfile::TempDir;
 
         let mode: u32 = 0o700;
         let tmp_dir = TempDir::new().unwrap();

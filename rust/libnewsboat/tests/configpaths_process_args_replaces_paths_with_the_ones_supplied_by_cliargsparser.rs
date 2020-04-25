@@ -1,6 +1,4 @@
-use libnewsboat;
-
-use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
+use libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use std::env;
 use std::path::Path;
 

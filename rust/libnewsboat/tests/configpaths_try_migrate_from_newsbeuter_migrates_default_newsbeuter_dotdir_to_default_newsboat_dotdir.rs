@@ -1,9 +1,6 @@
-use libnewsboat;
-use tempfile;
-
-use self::libnewsboat::configpaths::ConfigPaths;
-use self::tempfile::TempDir;
+use libnewsboat::configpaths::ConfigPaths;
 use std::env;
+use tempfile::TempDir;
 
 mod configpaths_helpers;
 

@@ -1,7 +1,5 @@
-use tempfile;
-
-use self::tempfile::TempDir;
 use std::env;
+use tempfile::TempDir;
 
 mod configpaths_helpers;
 

@@ -1,6 +1,3 @@
-use tempfile;
-
-use self::tempfile::TempDir;
 use libnewsboat::{
     log,
     logger::{self, get_instance, Level},
@@ -8,6 +5,7 @@ use libnewsboat::{
 use std::fs::File;
 use std::io::{BufRead, BufReader, Result};
 use std::path;
+use tempfile::TempDir;
 
 fn log_contains_n_lines(logfile: &path::Path, n: usize) -> Result<()> {
     let file = File::open(logfile)?;

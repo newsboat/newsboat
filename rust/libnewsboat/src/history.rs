@@ -77,10 +77,8 @@ impl History {
 
 #[cfg(test)]
 mod tests {
-    use tempfile;
-
-    use self::tempfile::TempDir;
     use super::*;
+    use tempfile::TempDir;
 
     #[test]
     fn t_empty_history_returns_nothing() {

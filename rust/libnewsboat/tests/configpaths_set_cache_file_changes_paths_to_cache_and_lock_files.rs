@@ -1,6 +1,4 @@
-use libnewsboat;
-
-use self::libnewsboat::configpaths::ConfigPaths;
+use libnewsboat::configpaths::ConfigPaths;
 use std::{env, path};
 
 #[test]

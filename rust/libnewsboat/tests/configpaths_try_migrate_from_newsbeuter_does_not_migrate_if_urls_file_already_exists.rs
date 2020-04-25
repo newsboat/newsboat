@@ -1,10 +1,7 @@
-use libnewsboat;
+use libnewsboat::configpaths::ConfigPaths;
 use section_testing::{enable_sections, section};
-use tempfile;
-
-use self::libnewsboat::configpaths::ConfigPaths;
-use self::tempfile::TempDir;
 use std::{env, fs, path};
+use tempfile::TempDir;
 
 mod configpaths_helpers;
 

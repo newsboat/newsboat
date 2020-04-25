@@ -1,8 +1,6 @@
-use tempfile;
-
-use self::tempfile::TempDir;
 use libnewsboat::utils;
 use std::env;
+use tempfile::TempDir;
 
 #[test]
 fn t_getcwd_returns_an_error_if_current_directory_doesnt_exist() {

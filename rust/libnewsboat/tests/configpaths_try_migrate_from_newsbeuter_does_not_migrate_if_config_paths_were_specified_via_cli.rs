@@ -1,10 +1,7 @@
-use libnewsboat;
+use libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use section_testing::{enable_sections, section};
-use tempfile;
-
-use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
-use self::tempfile::TempDir;
 use std::env;
+use tempfile::TempDir;
 
 mod configpaths_helpers;
 

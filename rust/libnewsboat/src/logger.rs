@@ -1,8 +1,6 @@
 //! Keeps a record of what the program did.
 
-use chrono;
-
-use self::chrono::{offset::Local, Datelike, Timelike};
+use chrono::{offset::Local, Datelike, Timelike};
 use once_cell::sync::OnceCell;
 use std::fmt;
 use std::fs::{File, OpenOptions};
@@ -317,14 +315,12 @@ macro_rules! log {
 
 #[cfg(test)]
 mod tests {
-    use tempfile;
-
     use super::*;
 
-    use self::chrono::{Duration, TimeZone};
-    use self::tempfile::TempDir;
+    use chrono::{Duration, TimeZone};
     use std::io::{self, BufRead, BufReader};
     use std::path;
+    use tempfile::TempDir;
 
     fn setup_logger() -> io::Result<(TempDir, path::PathBuf, path::PathBuf, Logger)> {
         let tmp = TempDir::new()?;

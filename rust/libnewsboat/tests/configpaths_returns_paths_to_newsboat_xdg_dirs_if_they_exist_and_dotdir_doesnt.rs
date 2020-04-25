@@ -1,10 +1,7 @@
-use libnewsboat;
+use libnewsboat::configpaths::ConfigPaths;
 use section_testing::{enable_sections, section};
-use tempfile;
-
-use self::libnewsboat::configpaths::ConfigPaths;
-use self::tempfile::TempDir;
 use std::{env, fs, path};
+use tempfile::TempDir;
 
 fn assert_paths_are_inside_dirs(config_dir: &path::Path, data_dir: &path::Path) {
     let paths = ConfigPaths::new();
