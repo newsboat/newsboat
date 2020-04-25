@@ -154,21 +154,3 @@ pub unsafe extern "C" fn rs_configpaths_search_file(object: *mut c_void) -> *mut
 pub unsafe extern "C" fn rs_configpaths_cmdline_file(object: *mut c_void) -> *mut c_char {
     with_configpaths_path(object, |o| o.cmdline_file())
 }
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_configpaths_expected_urls_paths_path1(
-    object: *mut c_void,
-) -> *mut c_char {
-    with_configpaths_string(object, |o| {
-        o.expected_urls_paths().0.to_string_lossy().into_owned()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_configpaths_expected_urls_paths_path2(
-    object: *mut c_void,
-) -> *mut c_char {
-    with_configpaths_string(object, |o| {
-        o.expected_urls_paths().1.to_string_lossy().into_owned()
-    })
-}

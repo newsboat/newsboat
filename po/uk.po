@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-04-23 22:18+0300\n"
+"POT-Creation-Date: 2020-04-22 18:35+0300\n"
 "PO-Revision-Date: 2020-03-20 18:00+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
@@ -294,67 +294,57 @@ msgstr "Помилка при виконанні команди `%s' (%s ряд�
 msgid "unknown command `%s'"
 msgstr "невідома команда `%s'"
 
-#: src/controller.cpp:134 src/controller.cpp:179 src/pbcontroller.cpp:248
+#: src/controller.cpp:148 src/pbcontroller.cpp:248
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Запускаю %s %s..."
 
-#: src/controller.cpp:143
-#, c-format
-msgid ""
-"'urls' file not found. Please create it at one of the following locations:\n"
-"- %s\n"
-"- %s\n"
-"\n"
-"Newsboat will store the rest of the files accordingly."
-msgstr ""
-
-#: src/controller.cpp:189 src/controller.cpp:245 src/pbcontroller.cpp:255
+#: src/controller.cpp:158 src/controller.cpp:214 src/pbcontroller.cpp:255
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Помилка: вже працює копія %s (PID: %u)"
 
-#: src/controller.cpp:199 src/pbcontroller.cpp:263
+#: src/controller.cpp:168 src/pbcontroller.cpp:263
 msgid "Loading configuration..."
 msgstr "Завантаження налаштувань..."
 
-#: src/controller.cpp:234 src/controller.cpp:279 src/controller.cpp:345
-#: src/controller.cpp:398 src/controller.cpp:402 src/controller.cpp:438
-#: src/controller.cpp:452 src/controller.cpp:470 src/controller.cpp:481
-#: src/controller.cpp:525 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
+#: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:314
+#: src/controller.cpp:367 src/controller.cpp:371 src/controller.cpp:407
+#: src/controller.cpp:421 src/controller.cpp:439 src/controller.cpp:450
+#: src/controller.cpp:494 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
 msgid "done."
 msgstr "готово."
 
-#: src/controller.cpp:255 src/controller.cpp:393
+#: src/controller.cpp:224 src/controller.cpp:362
 msgid "Opening cache..."
 msgstr "Відкриваю кеш..."
 
-#: src/controller.cpp:262 src/controller.cpp:270
+#: src/controller.cpp:231 src/controller.cpp:239
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Помилка: при відкритті файлу кеша `%s' виникла %s"
 
-#: src/controller.cpp:301
+#: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
 "Помилка: для выкористання NewsBlur потрібно налаштувати `cookie-cache`.\n"
 
-#: src/controller.cpp:309
+#: src/controller.cpp:278
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr "%s недоступний і не може бути створеним\n"
 
-#: src/controller.cpp:327
+#: src/controller.cpp:296
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:334
+#: src/controller.cpp:303
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Завантажую URLs з %s..."
 
-#: src/controller.cpp:353
+#: src/controller.cpp:322
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -363,7 +353,7 @@ msgstr ""
 "Помилка: не вказано URLs. Будь ласка, додайте RSS URLs у файл %s чи "
 "імпортуйте файл OPML."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:328
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -371,7 +361,7 @@ msgstr ""
 "Схоже на те, що OPML тема, на яку ви підписалися не містить тем. Будь ласка, "
 "заповніть її темами та спробуйте знову."
 
-#: src/controller.cpp:364
+#: src/controller.cpp:333
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
@@ -379,7 +369,7 @@ msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті The Old Reader."
 "Будь ласка, зробіть це і спробуйте знову."
 
-#: src/controller.cpp:369
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
@@ -387,7 +377,7 @@ msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті Tiny Tiny RSS."
 "Будь ласка, зробіть це і спробуйте знову."
 
-#: src/controller.cpp:374
+#: src/controller.cpp:343
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
@@ -395,7 +385,7 @@ msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті NewsBlur.Будь "
 "ласка, зробіть це і спробуйте знову."
 
-#: src/controller.cpp:379
+#: src/controller.cpp:348
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
@@ -403,69 +393,69 @@ msgstr ""
 "Схоже не те, що ви не налаштували ні одної теми у аккаунті Inoreader.Будь "
 "ласка, зробіть це і спробуйте знову."
 
-#: src/controller.cpp:390
+#: src/controller.cpp:359
 msgid "Loading articles from cache..."
 msgstr "Завантаження статей з кешу..."
 
-#: src/controller.cpp:399
+#: src/controller.cpp:368
 msgid "Cleaning up cache thoroughly..."
 msgstr "Ретельне очищення кешу..."
 
-#: src/controller.cpp:419
+#: src/controller.cpp:388
 msgid "Error while loading feeds from database: "
 msgstr "Помилка при завантаженні тем з бази даних: "
 
-#: src/controller.cpp:425
+#: src/controller.cpp:394
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Помилка при завантаженні теми `%s': %s"
 
-#: src/controller.cpp:445
+#: src/controller.cpp:414
 msgid "Prepopulating query feeds..."
 msgstr "Підготовлюю динамічні теми..."
 
-#: src/controller.cpp:467
+#: src/controller.cpp:436
 msgid "Importing list of read articles..."
 msgstr "Імпортую список прочитаних статей..."
 
-#: src/controller.cpp:478
+#: src/controller.cpp:447
 msgid "Exporting list of read articles..."
 msgstr "Зберігаю список прочитаних статей..."
 
-#: src/controller.cpp:518
+#: src/controller.cpp:487
 msgid "Cleaning up cache..."
 msgstr "Очищення кешу..."
 
-#: src/controller.cpp:530
+#: src/controller.cpp:499
 msgid "failed: "
 msgstr "невдало: "
 
-#: src/controller.cpp:556
+#: src/controller.cpp:525
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Помилка: не вдалось позначити всі теми як прочитані: %s"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:625
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr "Виникла помилка при розборі %s."
 
-#: src/controller.cpp:661
+#: src/controller.cpp:630
 #, c-format
 msgid "Import of %s finished."
 msgstr "Імпорт %s завершено."
 
-#: src/controller.cpp:791
+#: src/controller.cpp:760
 #, c-format
 msgid "%u unread articles"
 msgstr "%u непрочитаних статей"
 
-#: src/controller.cpp:796
+#: src/controller.cpp:765
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: невідома команда"
 
-#: src/controller.cpp:909
+#: src/controller.cpp:878
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Помилка: не можу відкрити файл конфігурації `%s'!"
@@ -1696,7 +1686,7 @@ msgstr "формат теми не підтримується"
 msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %s: неправильний рівень логування"
 
-#: rust/libnewsboat/src/configpaths.rs:102
+#: rust/libnewsboat/src/configpaths.rs:73
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -1705,15 +1695,15 @@ msgstr ""
 "Будь ласка, налаштуйте змінну HOME, або додайте користувача, що відповідає "
 "UID %u!"
 
-#: rust/libnewsboat/src/configpaths.rs:163
+#: rust/libnewsboat/src/configpaths.rs:134
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr "Переношу конфіги і дані з XDG-директорій Newsbeuter..."
 
-#: rust/libnewsboat/src/configpaths.rs:219
+#: rust/libnewsboat/src/configpaths.rs:190
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr "Переношу конфіги і дані з ~/.newsbeuter/..."
 
-#: rust/libnewsboat/src/configpaths.rs:231
+#: rust/libnewsboat/src/configpaths.rs:202
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Міграція відмінена: mkdir для `%s' повернув помилку: %s"
 

@@ -23,7 +23,7 @@ Guidelines that could be easily automated, have been. Please install:
 
 You can then run `make fmt` to format both C++ and Rust code.
 
-[editorconfig]: https://editorconfig.org/ "EditorConfig"
+[editorconfig]: http://editorconfig.org/ "EditorConfig"
 
 [astyle]: http://astyle.sourceforge.net/ "Artistic Style"
 

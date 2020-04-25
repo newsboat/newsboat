@@ -100,11 +100,6 @@ void Controller::set_view(View* vv)
 	v = vv;
 }
 
-bool can_open(const std::string& filepath)
-{
-	return std::ifstream(filepath).is_open();
-}
-
 int Controller::run(const CliArgsParser& args)
 {
 	::signal(SIGINT, View::ctrl_c_action);
@@ -134,25 +129,6 @@ int Controller::run(const CliArgsParser& args)
 		std::cerr << "\nPlease check the results and press Enter to "
 			"continue.";
 		std::cin.ignore();
-	}
-
-	if (!can_open(configpaths.url_file())) {
-		if (!args.silent()) {
-			const auto locations = configpaths.expected_urls_paths();
-			std::cout << strprintf::fmt(
-					_("'urls' file not found. Please create it at one "
-						"of the following locations:\n"
-						"- %s\n"
-						"- %s\n"
-						"\n"
-						"Newsboat will store the rest of the files "
-						"accordingly."),
-					locations.first,
-					locations.second)
-				<< std::endl;
-		}
-
-		return EXIT_FAILURE;
 	}
 
 	if (!configpaths.create_dirs()) {

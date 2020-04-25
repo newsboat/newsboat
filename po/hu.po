@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-04-23 22:18+0300\n"
+"POT-Creation-Date: 2020-04-22 18:35+0300\n"
 "PO-Revision-Date: 2008-01-28 10:00+0100\n"
 "Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
 "Language-Team: \n"
@@ -287,66 +287,56 @@ msgstr "Hiba a `%s' (%s line %u) parancs végrehajtása közben: %s"
 msgid "unknown command `%s'"
 msgstr "ismeretlen parancs: `%s'"
 
-#: src/controller.cpp:134 src/controller.cpp:179 src/pbcontroller.cpp:248
+#: src/controller.cpp:148 src/pbcontroller.cpp:248
 #, c-format
 msgid "Starting %s %s..."
 msgstr "%s %s indítása..."
 
-#: src/controller.cpp:143
-#, c-format
-msgid ""
-"'urls' file not found. Please create it at one of the following locations:\n"
-"- %s\n"
-"- %s\n"
-"\n"
-"Newsboat will store the rest of the files accordingly."
-msgstr ""
-
-#: src/controller.cpp:189 src/controller.cpp:245 src/pbcontroller.cpp:255
+#: src/controller.cpp:158 src/controller.cpp:214 src/pbcontroller.cpp:255
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Hiba: egy példány már fut %s-ből (PID: %u)"
 
-#: src/controller.cpp:199 src/pbcontroller.cpp:263
+#: src/controller.cpp:168 src/pbcontroller.cpp:263
 msgid "Loading configuration..."
 msgstr "Konfiguráció betöltése..."
 
-#: src/controller.cpp:234 src/controller.cpp:279 src/controller.cpp:345
-#: src/controller.cpp:398 src/controller.cpp:402 src/controller.cpp:438
-#: src/controller.cpp:452 src/controller.cpp:470 src/controller.cpp:481
-#: src/controller.cpp:525 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
+#: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:314
+#: src/controller.cpp:367 src/controller.cpp:371 src/controller.cpp:407
+#: src/controller.cpp:421 src/controller.cpp:439 src/controller.cpp:450
+#: src/controller.cpp:494 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
 msgid "done."
 msgstr "kész."
 
-#: src/controller.cpp:255 src/controller.cpp:393
+#: src/controller.cpp:224 src/controller.cpp:362
 msgid "Opening cache..."
 msgstr "Cache megnyitása..."
 
-#: src/controller.cpp:262 src/controller.cpp:270
+#: src/controller.cpp:231 src/controller.cpp:239
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Hiba `%s' cache-file megnyitása közben: %s"
 
-#: src/controller.cpp:301
+#: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
 
-#: src/controller.cpp:309
+#: src/controller.cpp:278
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr ""
 
-#: src/controller.cpp:327
+#: src/controller.cpp:296
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:334
+#: src/controller.cpp:303
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "URL-ek betöltése %s-ből..."
 
-#: src/controller.cpp:353
+#: src/controller.cpp:322
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -355,7 +345,7 @@ msgstr ""
 "Hiba: nincs URL beállítva. Kérlek töltsd fel a(z) %s file-t RSS URL-ekkel "
 "vagy importálj egy OPML file-ból."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:328
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -363,7 +353,7 @@ msgstr ""
 "Úgy tűnik, az OPML, amit betöltöttél, nem tartalmaz hírforrásokat. Töltsd "
 "fel forrásokkal és próbáld újra!"
 
-#: src/controller.cpp:364
+#: src/controller.cpp:333
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
@@ -372,7 +362,7 @@ msgstr ""
 "Úgy tűnik, még nem konfiguráltál semmilyen forrást a Google Reader "
 "fiókodban. Tedd meg, és próbáld újra!"
 
-#: src/controller.cpp:369
+#: src/controller.cpp:338
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
@@ -381,7 +371,7 @@ msgstr ""
 "Úgy tűnik, még nem konfiguráltál semmilyen forrást a Google Reader "
 "fiókodban. Tedd meg, és próbáld újra!"
 
-#: src/controller.cpp:374
+#: src/controller.cpp:343
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
@@ -390,7 +380,7 @@ msgstr ""
 "Úgy tűnik, még nem konfiguráltál semmilyen forrást a Google Reader "
 "fiókodban. Tedd meg, és próbáld újra!"
 
-#: src/controller.cpp:379
+#: src/controller.cpp:348
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
@@ -399,69 +389,69 @@ msgstr ""
 "Úgy tűnik, még nem konfiguráltál semmilyen forrást a Google Reader "
 "fiókodban. Tedd meg, és próbáld újra!"
 
-#: src/controller.cpp:390
+#: src/controller.cpp:359
 msgid "Loading articles from cache..."
 msgstr "Cikkek töltése a cache-bõl..."
 
-#: src/controller.cpp:399
+#: src/controller.cpp:368
 msgid "Cleaning up cache thoroughly..."
 msgstr "A cache teljes ürítése..."
 
-#: src/controller.cpp:419
+#: src/controller.cpp:388
 msgid "Error while loading feeds from database: "
 msgstr "Nem sikerült betölteni a forrásokat az adatbázisból: "
 
-#: src/controller.cpp:425
+#: src/controller.cpp:394
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Hiba a `%s' forrás betöltése közben: %s"
 
-#: src/controller.cpp:445
+#: src/controller.cpp:414
 msgid "Prepopulating query feeds..."
 msgstr "A lekérdezési mezők kezdeti feltöltése..."
 
-#: src/controller.cpp:467
+#: src/controller.cpp:436
 msgid "Importing list of read articles..."
 msgstr "Olvasott cikkek listájának importálása..."
 
-#: src/controller.cpp:478
+#: src/controller.cpp:447
 msgid "Exporting list of read articles..."
 msgstr "Olvasott cikkek listájának exportálása..."
 
-#: src/controller.cpp:518
+#: src/controller.cpp:487
 msgid "Cleaning up cache..."
 msgstr "A cache takarítása..."
 
-#: src/controller.cpp:530
+#: src/controller.cpp:499
 msgid "failed: "
 msgstr "nem sikerült: "
 
-#: src/controller.cpp:556
+#: src/controller.cpp:525
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Hiba: nem tudtam olvasottnak megjelölni: %s"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:625
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr "Egy hiba lépett fel, miközben %s-t elemeztem."
 
-#: src/controller.cpp:661
+#: src/controller.cpp:630
 #, c-format
 msgid "Import of %s finished."
 msgstr "%s importálása befejeződött."
 
-#: src/controller.cpp:791
+#: src/controller.cpp:760
 #, c-format
 msgid "%u unread articles"
 msgstr "%u olvasatlan hír"
 
-#: src/controller.cpp:796
+#: src/controller.cpp:765
 #, fuzzy, c-format
 msgid "%s: %s: unknown command"
 msgstr "ismeretlen parancs: `%s'"
 
-#: src/controller.cpp:909
+#: src/controller.cpp:878
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Hiba: nem tudtam megnyitni a(z) `%s' konfigurációs fájlt!"
@@ -1703,7 +1693,7 @@ msgstr "nem támogatott forrás formátum"
 msgid "%s: %s: invalid loglevel value"
 msgstr "`%s' érvénytelen dialógus típus"
 
-#: rust/libnewsboat/src/configpaths.rs:102
+#: rust/libnewsboat/src/configpaths.rs:73
 #, fuzzy
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
@@ -1712,15 +1702,15 @@ msgstr ""
 "Kérlek, állítsd be a HOME változót vagy adj valódi felhasználót a(z) %u UID-"
 "hoz!"
 
-#: rust/libnewsboat/src/configpaths.rs:163
+#: rust/libnewsboat/src/configpaths.rs:134
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:219
+#: rust/libnewsboat/src/configpaths.rs:190
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:231
+#: rust/libnewsboat/src/configpaths.rs:202
 #, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Hiba `%s' cache-file megnyitása közben: %s"

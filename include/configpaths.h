@@ -2,7 +2,6 @@
 #define NEWSBOAT_CONFIGPATHS_H_
 
 #include <string>
-#include <utility>
 
 #include "cliargsparser.h"
 
@@ -72,8 +71,6 @@ public:
 
 	/// Path to the file with command-line history.
 	std::string cmdline_file() const;
-
-	std::pair<std::string, std::string> expected_urls_paths() const;
 };
 } // namespace newsboat
 

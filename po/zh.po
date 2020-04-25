@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-04-23 22:18+0300\n"
+"POT-Creation-Date: 2020-04-22 18:35+0300\n"
 "PO-Revision-Date: 2007-11-21 22:51+0100\n"
 "Last-Translator: josh yu <joshyupeng@gmail.com>\n"
 "Language-Team: \n"
@@ -284,79 +284,69 @@ msgstr "当处理命令`%s'(%s 第 %u 行)时出错: %s"
 msgid "unknown command `%s'"
 msgstr "未知的命令 `%s' "
 
-#: src/controller.cpp:134 src/controller.cpp:179 src/pbcontroller.cpp:248
+#: src/controller.cpp:148 src/pbcontroller.cpp:248
 #, c-format
 msgid "Starting %s %s..."
 msgstr "启动 %s %s..."
 
-#: src/controller.cpp:143
-#, c-format
-msgid ""
-"'urls' file not found. Please create it at one of the following locations:\n"
-"- %s\n"
-"- %s\n"
-"\n"
-"Newsboat will store the rest of the files accordingly."
-msgstr ""
-
-#: src/controller.cpp:189 src/controller.cpp:245 src/pbcontroller.cpp:255
+#: src/controller.cpp:158 src/controller.cpp:214 src/pbcontroller.cpp:255
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "错误：%s的一个进程已经在运行中（PID: %u)"
 
-#: src/controller.cpp:199 src/pbcontroller.cpp:263
+#: src/controller.cpp:168 src/pbcontroller.cpp:263
 msgid "Loading configuration..."
 msgstr "加载配置文件..."
 
-#: src/controller.cpp:234 src/controller.cpp:279 src/controller.cpp:345
-#: src/controller.cpp:398 src/controller.cpp:402 src/controller.cpp:438
-#: src/controller.cpp:452 src/controller.cpp:470 src/controller.cpp:481
-#: src/controller.cpp:525 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
+#: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:314
+#: src/controller.cpp:367 src/controller.cpp:371 src/controller.cpp:407
+#: src/controller.cpp:421 src/controller.cpp:439 src/controller.cpp:450
+#: src/controller.cpp:494 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
 msgid "done."
 msgstr "完毕."
 
-#: src/controller.cpp:255 src/controller.cpp:393
+#: src/controller.cpp:224 src/controller.cpp:362
 msgid "Opening cache..."
 msgstr "打开缓存..."
 
-#: src/controller.cpp:262 src/controller.cpp:270
+#: src/controller.cpp:231 src/controller.cpp:239
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "错误:打开缓存文件`%s' 失败:%s"
 
-#: src/controller.cpp:301
+#: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
 
-#: src/controller.cpp:309
+#: src/controller.cpp:278
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr ""
 
-#: src/controller.cpp:327
+#: src/controller.cpp:296
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:334
+#: src/controller.cpp:303
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "从 %s 文件加载链接..."
 
-#: src/controller.cpp:353
+#: src/controller.cpp:322
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr "错误：没有配置链接。请用RSS种子的链接替换 %s 或者导入一个OPML文件."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:328
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr "看起来你订阅的OPML种子没有包含任何种子请更正之后再尝试一下。"
 
-#: src/controller.cpp:364
+#: src/controller.cpp:333
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
@@ -364,7 +354,7 @@ msgid ""
 msgstr ""
 "看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
-#: src/controller.cpp:369
+#: src/controller.cpp:338
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
@@ -372,7 +362,7 @@ msgid ""
 msgstr ""
 "看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
-#: src/controller.cpp:374
+#: src/controller.cpp:343
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
@@ -380,7 +370,7 @@ msgid ""
 msgstr ""
 "看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
-#: src/controller.cpp:379
+#: src/controller.cpp:348
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
@@ -388,70 +378,70 @@ msgid ""
 msgstr ""
 "看起来你还没有在bloglines账户里配置任何种子 请先配置种子，然后再尝试一下。"
 
-#: src/controller.cpp:390
+#: src/controller.cpp:359
 msgid "Loading articles from cache..."
 msgstr "从缓存中加载文章"
 
-#: src/controller.cpp:399
+#: src/controller.cpp:368
 msgid "Cleaning up cache thoroughly..."
 msgstr "彻底清除缓存"
 
-#: src/controller.cpp:419
+#: src/controller.cpp:388
 msgid "Error while loading feeds from database: "
 msgstr "当从数据库中加载种子的时候出错: "
 
-#: src/controller.cpp:425
+#: src/controller.cpp:394
 #, fuzzy, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "当调用`%s'的时候出错: %s"
 
-#: src/controller.cpp:445
+#: src/controller.cpp:414
 #, fuzzy
 msgid "Prepopulating query feeds..."
 msgstr "更新查询种子..."
 
-#: src/controller.cpp:467
+#: src/controller.cpp:436
 msgid "Importing list of read articles..."
 msgstr "导入阅读文章列表"
 
-#: src/controller.cpp:478
+#: src/controller.cpp:447
 msgid "Exporting list of read articles..."
 msgstr "导出阅读文章列表"
 
-#: src/controller.cpp:518
+#: src/controller.cpp:487
 msgid "Cleaning up cache..."
 msgstr "清空缓存..."
 
-#: src/controller.cpp:530
+#: src/controller.cpp:499
 msgid "failed: "
 msgstr "失败: "
 
-#: src/controller.cpp:556
+#: src/controller.cpp:525
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "错误:无法将所有种子都标记为已读: %s"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:625
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr ""
 
-#: src/controller.cpp:661
+#: src/controller.cpp:630
 #, c-format
 msgid "Import of %s finished."
 msgstr "%s 导入完毕"
 
-#: src/controller.cpp:791
+#: src/controller.cpp:760
 #, c-format
 msgid "%u unread articles"
 msgstr "%u 篇未读文章"
 
-#: src/controller.cpp:796
+#: src/controller.cpp:765
 #, fuzzy, c-format
 msgid "%s: %s: unknown command"
 msgstr "未知的命令 `%s' "
 
-#: src/controller.cpp:909
+#: src/controller.cpp:878
 #, fuzzy, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "错误：无法将文章写至 %s"
@@ -1699,22 +1689,22 @@ msgstr ""
 msgid "%s: %s: invalid loglevel value"
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:102
+#: rust/libnewsboat/src/configpaths.rs:73
 #, fuzzy
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr "请设置主目录的环境变量，或者添加一个有效的用户其UID为 %u!"
 
-#: rust/libnewsboat/src/configpaths.rs:163
+#: rust/libnewsboat/src/configpaths.rs:134
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:219
+#: rust/libnewsboat/src/configpaths.rs:190
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr ""
 
-#: rust/libnewsboat/src/configpaths.rs:231
+#: rust/libnewsboat/src/configpaths.rs:202
 #, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "错误:打开缓存文件`%s' 失败:%s"

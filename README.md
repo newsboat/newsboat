@@ -40,14 +40,14 @@ Newsboat can be compiled.
     manager) (1.40.0 or newer; might work with older versions, but we don't
     check that)
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
-- [SQLite3 (version 3.5 or newer)](https://www.sqlite.org/download.html)
-- [libcurl (version 7.21.6 or newer)](https://curl.haxx.se/download.html)
+- [SQLite3 (version 3.5 or newer)](http://www.sqlite.org/download.html)
+- [libcurl (version 7.21.6 or newer)](http://curl.haxx.se/download.html)
 - Header files for the SSL library that libcurl uses. You can find out which
     library that is from the output of `curl --version`; most often that's
     OpenSSL, sometimes GnuTLS, or maybe something else.
 - GNU gettext (on systems that don't provide gettext in the libc):
   ftp://ftp.gnu.org/gnu/gettext/
-- [pkg-config](https://pkg-config.freedesktop.org/wiki/)
+- [pkg-config](http://pkg-config.freedesktop.org/wiki/)
 - [libxml2](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 - [Asciidoctor](https://asciidoctor.org/) (1.5.3 or newer)
@@ -120,7 +120,7 @@ Support
 * Bugs and whatnot should be reported to the
   [issue tracker](https://github.com/newsboat/newsboat/issues)
 * Drop us a line at
-  [newsboat mailing list](https://groups.google.com/group/newsboat)
+  [newsboat mailing list](http://groups.google.com/group/newsboat)
   (newsboat@googlegroups.com)
 * Chat with developers and fellow users on #newsboat at
   [Freenode](https://freenode.net) ([webchat

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-04-23 22:18+0300\n"
+"POT-Creation-Date: 2020-04-22 18:35+0300\n"
 "PO-Revision-Date: 2020-04-21 23:43+0200\n"
 "Last-Translator: Marcos Cruz <github@programandala.net>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
@@ -292,66 +292,56 @@ msgstr "Error al procesar el comando `%s' (%s línea %u): %s"
 msgid "unknown command `%s'"
 msgstr "comando desconocido `%s'"
 
-#: src/controller.cpp:134 src/controller.cpp:179 src/pbcontroller.cpp:248
+#: src/controller.cpp:148 src/pbcontroller.cpp:248
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Iniciando %s %s..."
 
-#: src/controller.cpp:143
-#, c-format
-msgid ""
-"'urls' file not found. Please create it at one of the following locations:\n"
-"- %s\n"
-"- %s\n"
-"\n"
-"Newsboat will store the rest of the files accordingly."
-msgstr ""
-
-#: src/controller.cpp:189 src/controller.cpp:245 src/pbcontroller.cpp:255
+#: src/controller.cpp:158 src/controller.cpp:214 src/pbcontroller.cpp:255
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %u)"
 msgstr "Error: una instancia de %s ya está ejecutándose (PID: %u)"
 
-#: src/controller.cpp:199 src/pbcontroller.cpp:263
+#: src/controller.cpp:168 src/pbcontroller.cpp:263
 msgid "Loading configuration..."
 msgstr "Cargando la configuración..."
 
-#: src/controller.cpp:234 src/controller.cpp:279 src/controller.cpp:345
-#: src/controller.cpp:398 src/controller.cpp:402 src/controller.cpp:438
-#: src/controller.cpp:452 src/controller.cpp:470 src/controller.cpp:481
-#: src/controller.cpp:525 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
+#: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:314
+#: src/controller.cpp:367 src/controller.cpp:371 src/controller.cpp:407
+#: src/controller.cpp:421 src/controller.cpp:439 src/controller.cpp:450
+#: src/controller.cpp:494 src/pbcontroller.cpp:301 src/pbcontroller.cpp:319
 msgid "done."
 msgstr "hecho."
 
-#: src/controller.cpp:255 src/controller.cpp:393
+#: src/controller.cpp:224 src/controller.cpp:362
 msgid "Opening cache..."
 msgstr "Abriendo la caché..."
 
-#: src/controller.cpp:262 src/controller.cpp:270
+#: src/controller.cpp:231 src/controller.cpp:239
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Error: la apertura del archivo de caché `%s' falló: %s"
 
-#: src/controller.cpp:301
+#: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr "ERROR: debe definir `cookie-cache` para usar NewsBlur.\n"
 
-#: src/controller.cpp:309
+#: src/controller.cpp:278
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr "%s es inaccesible y no se puede crear\n"
 
-#: src/controller.cpp:327
+#: src/controller.cpp:296
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:334
+#: src/controller.cpp:303
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Cargando las URL desde %s..."
 
-#: src/controller.cpp:353
+#: src/controller.cpp:322
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -360,7 +350,7 @@ msgstr ""
 "Error: no hay URL configuradas. Por favor, añade URL de fuentes RSS al "
 "archivo %s,o importa un archivo OPML."
 
-#: src/controller.cpp:359
+#: src/controller.cpp:328
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -368,7 +358,7 @@ msgstr ""
 "Parece que la fuente OPML a la que estás suscrito no contiene fuentes. Por "
 "favor, añádelas e inténtalo de nuevo."
 
-#: src/controller.cpp:364
+#: src/controller.cpp:333
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
@@ -376,7 +366,7 @@ msgstr ""
 "Parece que no has configurado fuentes en tu cuenta de The Old Reader. Por "
 "favor, hazlo e inténtalo de nuevo."
 
-#: src/controller.cpp:369
+#: src/controller.cpp:338
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
@@ -384,7 +374,7 @@ msgstr ""
 "Parece que no has configurado fuentes en tu cuenta de Tiny Tiny RSS. Por "
 "favor, hazlo e inténtalo de nuevo."
 
-#: src/controller.cpp:374
+#: src/controller.cpp:343
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
@@ -392,7 +382,7 @@ msgstr ""
 "Parece que no has configurado fuentes en tu cuenta de NewsBlur. Por favor, "
 "hazlo e inténtalo de nuevo."
 
-#: src/controller.cpp:379
+#: src/controller.cpp:348
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
@@ -400,69 +390,69 @@ msgstr ""
 "Parece que no has configurado fuentes en tu cuenta de Inoreader. Por favor, "
 "hazlo e inténtalo de nuevo."
 
-#: src/controller.cpp:390
+#: src/controller.cpp:359
 msgid "Loading articles from cache..."
 msgstr "Cargando artículos desde la caché..."
 
-#: src/controller.cpp:399
+#: src/controller.cpp:368
 msgid "Cleaning up cache thoroughly..."
 msgstr "Limpiando completamente la caché..."
 
-#: src/controller.cpp:419
+#: src/controller.cpp:388
 msgid "Error while loading feeds from database: "
 msgstr "Error al cargar las fuentes desde la base de datos: "
 
-#: src/controller.cpp:425
+#: src/controller.cpp:394
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Error al cargar la fuente «%s»: %s"
 
-#: src/controller.cpp:445
+#: src/controller.cpp:414
 msgid "Prepopulating query feeds..."
 msgstr "Prerrellenando las fuentes de consulta..."
 
-#: src/controller.cpp:467
+#: src/controller.cpp:436
 msgid "Importing list of read articles..."
 msgstr "Importando la lista de artículos leídos..."
 
-#: src/controller.cpp:478
+#: src/controller.cpp:447
 msgid "Exporting list of read articles..."
 msgstr "Exportando la lista de artículos leídos..."
 
-#: src/controller.cpp:518
+#: src/controller.cpp:487
 msgid "Cleaning up cache..."
 msgstr "Limpiando la caché..."
 
-#: src/controller.cpp:530
+#: src/controller.cpp:499
 msgid "failed: "
 msgstr "falló: "
 
-#: src/controller.cpp:556
+#: src/controller.cpp:525
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Error: no se pudo marcar todas las fuentes como leídas: %s"
 
-#: src/controller.cpp:656
+#: src/controller.cpp:625
 #, c-format
 msgid "An error occurred while parsing %s."
 msgstr "Ocurrió un error al procesar %s."
 
-#: src/controller.cpp:661
+#: src/controller.cpp:630
 #, c-format
 msgid "Import of %s finished."
 msgstr "Importación de %s finalizada."
 
-#: src/controller.cpp:791
+#: src/controller.cpp:760
 #, c-format
 msgid "%u unread articles"
 msgstr "%u artículos no leídos"
 
-#: src/controller.cpp:796
+#: src/controller.cpp:765
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: comando desconocido"
 
-#: src/controller.cpp:909
+#: src/controller.cpp:878
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Error: no se pudo abrir el archivo de configuración `%s'."
@@ -1696,7 +1686,7 @@ msgstr "formato de fuente no admitido"
 msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %s: nivel de registro incorrecto"
 
-#: rust/libnewsboat/src/configpaths.rs:102
+#: rust/libnewsboat/src/configpaths.rs:73
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
@@ -1705,17 +1695,17 @@ msgstr ""
 "Por favor, define la variable de entorno HOME o añade un usuario válido para "
 "UID %u."
 
-#: rust/libnewsboat/src/configpaths.rs:163
+#: rust/libnewsboat/src/configpaths.rs:134
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
 "Convirtiendo la configuración y los datos de los directorios XDG de "
 "Newsbeuter..."
 
-#: rust/libnewsboat/src/configpaths.rs:219
+#: rust/libnewsboat/src/configpaths.rs:190
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr "Convirtiendo la configuración y los datos de ~/.newsbeuter/..."
 
-#: rust/libnewsboat/src/configpaths.rs:231
+#: rust/libnewsboat/src/configpaths.rs:202
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Se detiene la conversión porque mkdir ha fallado en `%s': %s"
 
