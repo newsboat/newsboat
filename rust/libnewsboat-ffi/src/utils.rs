@@ -1,4 +1,4 @@
-use abort_on_panic;
+use crate::abort_on_panic;
 use libc::{c_char, c_ulong};
 use libnewsboat::logger::{self, Level};
 use libnewsboat::utils;

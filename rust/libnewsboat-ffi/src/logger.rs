@@ -1,4 +1,4 @@
-use abort_on_panic;
+use crate::abort_on_panic;
 use libc::c_char;
 use libnewsboat::logger;
 use std::ffi::CStr;
