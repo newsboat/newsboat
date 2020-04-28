@@ -232,12 +232,7 @@ std::vector<std::string> FormAction::get_suggestions(
 				}
 			} else if (tokens[0] == "exec") {
 				if (tokens.size() <= 2) {
-					std::string start;
-					if (tokens.size() == 2) {
-						start = tokens[1];
-					} else {
-						start = "";
-					}
+					const std::string start = (tokens.size() == 2) ? tokens[1] : "";
 					const std::vector<KeyMapDesc> descs = v->get_keymap()->get_keymap_descriptions(
 						this->id()
 					);
