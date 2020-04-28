@@ -80,7 +80,7 @@ bool DialogsFormAction::process_operation(Operation op,
 {
 	switch (op) {
 	case OP_OPEN: {
-		std::string dialogposname = f->get("dialogpos");
+		std::string dialogposname = f->get("dialogs_pos");
 		if (dialogposname.length() > 0) {
 			v->set_current_formaction(utils::to_u(dialogposname));
 		} else {
@@ -89,7 +89,7 @@ bool DialogsFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_CLOSEDIALOG: {
-		std::string dialogposname = f->get("dialogpos");
+		std::string dialogposname = f->get("dialogs_pos");
 		if (dialogposname.length() > 0) {
 			unsigned int dialogpos = utils::to_u(dialogposname);
 			if (dialogpos != 0) {
@@ -124,7 +124,7 @@ void DialogsFormAction::handle_cmdline(const std::string& cmd)
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		if (idx <= v->formaction_stack_size()) {
-			f->set("dialogpos", std::to_string(idx - 1));
+			f->set("dialogs_pos", std::to_string(idx - 1));
 		} else {
 			v->show_error(_("Invalid position!"));
 		}

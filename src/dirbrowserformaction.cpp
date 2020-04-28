@@ -89,7 +89,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
-					f->set("listpos", "0");
+					f->set("files_pos", "0");
 					std::string fn = utils::getcwd();
 					update_title(fn);
 

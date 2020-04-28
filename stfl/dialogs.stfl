@@ -17,7 +17,7 @@ vbox
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     .expand:vh
     pos_name[dialogposname]:
-    pos[dialogpos]:0
+    pos[dialogs_pos]:0
   vbox[hints]
     .expand:0
     .display[showhint]:1

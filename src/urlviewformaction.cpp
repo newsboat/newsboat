@@ -38,7 +38,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 	switch (op) {
 	case OP_OPENINBROWSER:
 	case OP_OPEN: {
-		std::string posstr = f->get("feedpos");
+		std::string posstr = f->get("urls_pos");
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
@@ -50,7 +50,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_BOOKMARK: {
-		std::string posstr = f->get("feedpos");
+		std::string posstr = f->get("urls_pos");
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 
@@ -153,7 +153,7 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 		if (idx < 1 || idx > links.size()) {
 			v->show_error(_("Invalid position!"));
 		} else {
-			f->set("feedpos", std::to_string(idx - 1));
+			f->set("urls_pos", std::to_string(idx - 1));
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);
