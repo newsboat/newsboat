@@ -344,7 +344,10 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			if (tokens.size() != 1) {
 				v->show_error(_("usage: exec <cmd>"));
 			} else {
-				process_op(v->get_keymap()->get_opcode(tokens[0]));
+				const auto op = v->get_keymap()->get_opcode(tokens[0]);
+				if (op != OP_NIL) {
+					process_op(op);
+				}
 			}
 		} else {
 			v->show_error(strprintf::fmt(
