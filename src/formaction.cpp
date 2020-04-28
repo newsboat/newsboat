@@ -342,10 +342,12 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			v->dump_current_form();
 		} else if (cmd == "exec") {
 			if (tokens.size() != 1) {
-				v->show_error(_("usage: exec <cmd>"));
+				v->show_error(_("usage: exec <operation>"));
 			} else {
 				const auto op = v->get_keymap()->get_opcode(tokens[0]);
-				if (op != OP_NIL) {
+				if (op == OP_NIL) {
+					v->show_error(_("Operation not found"));
+				} else {
 					process_op(op);
 				}
 			}
