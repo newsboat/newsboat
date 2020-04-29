@@ -16,6 +16,7 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, update_list(true)
+	, dialogs_list("dialogs", FormAction::f)
 {
 }
 
@@ -59,6 +60,7 @@ void DialogsFormAction::prepare()
 		}
 
 		f->modify("dialogs", "replace_inner", listfmt.format_list());
+		dialogs_list.set_lines(listfmt.get_lines_count());
 
 		update_list = false;
 	}
@@ -105,6 +107,24 @@ bool DialogsFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_SK_UP:
+		dialogs_list.move_up();
+		break;
+	case OP_SK_DOWN:
+		dialogs_list.move_down();
+		break;
+	case OP_SK_HOME:
+		dialogs_list.move_to_first();
+		break;
+	case OP_SK_END:
+		dialogs_list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		dialogs_list.move_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		dialogs_list.move_page_down();
+		break;
 	case OP_QUIT:
 		v->pop_current_formaction();
 		break;

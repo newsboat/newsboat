@@ -40,6 +40,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, unread_feeds(0)
 	, total_feeds(0)
 	, filters(f)
+	, feeds_list("feeds", FormAction::f)
 {
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
@@ -140,6 +141,24 @@ REDO:
 		break;
 	case OP_RELOADURLS:
 		v->get_ctrl()->reload_urls_file();
+		break;
+	case OP_SK_UP:
+		feeds_list.move_up();
+		break;
+	case OP_SK_DOWN:
+		feeds_list.move_down();
+		break;
+	case OP_SK_HOME:
+		feeds_list.move_to_first();
+		break;
+	case OP_SK_END:
+		feeds_list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		feeds_list.move_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		feeds_list.move_page_down();
 		break;
 	case OP_SORT: {
 		/// This string is related to the letters in parentheses in the
@@ -599,6 +618,7 @@ void FeedListFormAction::set_feedlist(
 	f->modify("feeds",
 		"replace_inner",
 		listfmt.format_list(rxman, "feedlist"));
+	feeds_list.set_lines(listfmt.get_lines_count());
 
 	std::string title_format =
 		cfg->get_configvalue("feedlist-title-format");
@@ -927,6 +947,7 @@ void FeedListFormAction::set_regexmanager(RegexManager* r)
 			"pos_name[feedposname]: pos[feeds_pos]:0 %s richtext:1}",
 			attrstr);
 	f->modify("feeds", "replace", textview);
+	feeds_list.set_lines(0);
 }
 
 void FeedListFormAction::op_end_setfilter()

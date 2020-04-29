@@ -3,6 +3,7 @@
 
 #include "history.h"
 #include "listformaction.h"
+#include "listwidget.h"
 #include "matcher.h"
 #include "regexmanager.h"
 #include "view.h"
@@ -98,6 +99,8 @@ private:
 	FilterContainer* filters;
 
 	std::string old_sort_order;
+
+	ListWidget feeds_list;
 };
 
 } // namespace newsboat

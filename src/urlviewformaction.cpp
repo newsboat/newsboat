@@ -25,6 +25,7 @@ UrlViewFormAction::UrlViewFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, feed(feed)
+	, urls_list("urls", FormAction::f)
 {
 }
 
@@ -36,6 +37,24 @@ bool UrlViewFormAction::process_operation(Operation op,
 {
 	bool hardquit = false;
 	switch (op) {
+	case OP_SK_UP:
+		urls_list.move_up();
+		break;
+	case OP_SK_DOWN:
+		urls_list.move_down();
+		break;
+	case OP_SK_HOME:
+		urls_list.move_to_first();
+		break;
+	case OP_SK_END:
+		urls_list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		urls_list.move_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		urls_list.move_page_down();
+		break;
 	case OP_OPENINBROWSER:
 	case OP_OPEN: {
 		std::string posstr = f->get("urls_pos");
@@ -112,6 +131,7 @@ void UrlViewFormAction::prepare()
 			i++;
 		}
 		f->modify("urls", "replace_inner", listfmt.format_list());
+		urls_list.set_lines(listfmt.get_lines_count());
 	}
 }
 

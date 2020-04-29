@@ -27,6 +27,7 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
+	, files_list("files", FormAction::f)
 {
 	// In DirBrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog
@@ -143,6 +144,45 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		}
 		break;
 	}
+	case OP_SK_UP:
+		if (f->get_focus() == "files") {
+			files_list.move_up();
+		} else {
+			f->set_focus("files");
+		}
+		break;
+	case OP_SK_DOWN:
+		if (f->get_focus() == "files") {
+			if (!files_list.move_down()) {
+				f->set_focus("filename");
+			}
+		}
+		break;
+	case OP_SK_HOME:
+		if (f->get_focus() == "files") {
+			files_list.move_to_first();
+		} else {
+			f->set("filenametext_pos", "0");
+		}
+		break;
+	case OP_SK_END:
+		if (f->get_focus() == "files") {
+			files_list.move_to_last();
+		} else {
+			uint32_t text_length = f->get("filenametext").length();
+			f->set("filenametext_pos", std::to_string(text_length));
+		}
+		break;
+	case OP_SK_PGUP:
+		if (f->get_focus() == "files") {
+			files_list.move_page_up();
+		}
+		break;
+	case OP_SK_PGDOWN:
+		if (f->get_focus() == "files") {
+			files_list.move_page_down();
+		}
+		break;
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);
@@ -234,6 +274,7 @@ void DirBrowserFormAction::prepare()
 		code.append("}");
 
 		f->modify("files", "replace_inner", code);
+		files_list.set_lines(directories.size());
 		do_redraw = false;
 	}
 

@@ -6,6 +6,7 @@
 #include "history.h"
 #include "listformaction.h"
 #include "listformatter.h"
+#include "listwidget.h"
 #include "regexmanager.h"
 #include "view.h"
 
@@ -156,6 +157,8 @@ private:
 	FilterContainer* filters;
 
 	void handle_op_saveall();
+
+	ListWidget items_list;
 };
 
 } // namespace newsboat

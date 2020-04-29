@@ -25,6 +25,7 @@ SelectFormAction::SelectFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, type(SelectionType::TAG)
+	, tags_list("taglist", FormAction::f)
 {
 }
 
@@ -51,6 +52,24 @@ bool SelectFormAction::process_operation(Operation op,
 {
 	bool hardquit = false;
 	switch (op) {
+	case OP_SK_UP:
+		tags_list.move_up();
+		break;
+	case OP_SK_DOWN:
+		tags_list.move_down();
+		break;
+	case OP_SK_HOME:
+		tags_list.move_to_first();
+		break;
+	case OP_SK_END:
+		tags_list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		tags_list.move_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		tags_list.move_page_down();
+		break;
 	case OP_QUIT:
 		value = "";
 		quit = true;
@@ -129,6 +148,7 @@ void SelectFormAction::prepare()
 			assert(0);
 		}
 		f->modify("taglist", "replace_inner", listfmt.format_list());
+		tags_list.set_lines(listfmt.get_lines_count());
 
 		do_redraw = false;
 	}

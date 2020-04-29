@@ -41,6 +41,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 , invalidation_mode(InvalidationMode::COMPLETE)
 , rsscache(cc)
 , filters(f)
+, items_list("items", FormAction::f)
 {
 	search_dummy_feed->set_search_feed(true);
 }
@@ -82,6 +83,24 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_SK_UP:
+		items_list.move_up();
+		break;
+	case OP_SK_DOWN:
+		items_list.move_down();
+		break;
+	case OP_SK_HOME:
+		items_list.move_to_first();
+		break;
+	case OP_SK_END:
+		items_list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		items_list.move_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		items_list.move_page_down();
+		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");
 		if (itemposname.length() > 0 && visible_items.size() != 0) {
@@ -1000,6 +1019,7 @@ void ItemListFormAction::prepare()
 	f->modify("items",
 		"replace_inner",
 		listfmt.format_list(rxman, "articlelist"));
+	items_list.set_lines(listfmt.get_lines_count());
 
 	invalidated_itempos.clear();
 	invalidated = false;
@@ -1373,6 +1393,7 @@ void ItemListFormAction::set_regexmanager(RegexManager* r)
 			"pos_name[itemposname]: pos[items_pos]:0 %s richtext:1}",
 			attrstr);
 	f->modify("items", "replace", textview);
+	items_list.set_lines(0);
 }
 
 std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)

@@ -3,6 +3,7 @@
 
 #include "formaction.h"
 #include "htmlrenderer.h"
+#include "listwidget.h"
 
 namespace newsboat {
 
@@ -34,6 +35,7 @@ private:
 	std::vector<LinkPair> links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;
+	ListWidget urls_list;
 };
 
 } // namespace newsboat
