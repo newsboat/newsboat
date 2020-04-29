@@ -3,6 +3,8 @@
 
 #include "colormanager.h"
 #include "keymap.h"
+#include "listwidget.h"
+#include "textviewwidget.h"
 #include "stflpp.h"
 
 using namespace newsboat;
@@ -46,6 +48,9 @@ private:
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
 	newsboat::KeyMap* keys;
+
+	ListWidget downloads_list;
+	TextviewWidget help_textview;
 };
 
 } // namespace podboat

@@ -28,6 +28,8 @@ PbView::PbView(PbController* c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
 	, keys(0)
+	, downloads_list("dls", dllist_form)
+	, help_textview("helptext", help_form)
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -103,6 +105,7 @@ void PbView::run(bool auto_download)
 			code.append("}");
 
 			dllist_form.modify("dls", "replace_inner", code);
+			downloads_list.set_lines(i);
 
 			ctrl->set_view_update_necessary(false);
 		}
@@ -128,6 +131,24 @@ void PbView::run(bool auto_download)
 		}
 
 		switch (op) {
+		case OP_SK_UP:
+			downloads_list.move_up();
+			break;
+		case OP_SK_DOWN:
+			downloads_list.move_down();
+			break;
+		case OP_SK_HOME:
+			downloads_list.move_to_first();
+			break;
+		case OP_SK_END:
+			downloads_list.move_to_last();
+			break;
+		case OP_SK_PGUP:
+			downloads_list.move_page_up();
+			break;
+		case OP_SK_PGDOWN:
+			downloads_list.move_page_down();
+			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;
 			break;
@@ -286,6 +307,7 @@ void PbView::run_help()
 	code.append("}");
 
 	help_form.modify("helptext", "replace_inner", code);
+	help_textview.set_lines(descs.size());
 
 	bool quit = false;
 
@@ -298,6 +320,24 @@ void PbView::run_help()
 		Operation op = keys->get_operation(event, "help");
 
 		switch (op) {
+		case OP_SK_UP:
+			help_textview.scroll_up();
+			break;
+		case OP_SK_DOWN:
+			help_textview.scroll_down();
+			break;
+		case OP_SK_HOME:
+			help_textview.scroll_to_top();
+			break;
+		case OP_SK_END:
+			help_textview.scroll_to_bottom();
+			break;
+		case OP_SK_PGUP:
+			help_textview.scroll_page_up();
+			break;
+		case OP_SK_PGDOWN:
+			help_textview.scroll_page_down();
+			break;
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			quit = true;
