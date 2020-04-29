@@ -33,6 +33,7 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 	, itemlist(il)
 	, in_search(false)
 	, rsscache(cc)
+	, textview("article", FormAction::f)
 {
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
@@ -139,7 +140,8 @@ void ItemViewFormAction::prepare()
 		}
 
 		f->modify("article", "replace_inner", formatted_text);
-		f->set("articleoffset", "0");
+		textview.set_lines(num_lines);
+		f->set("article_offset", "0");
 
 		if (in_search) {
 			rxman->remove_last_regex("article");
@@ -176,6 +178,24 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 
 	switch (op) {
+	case OP_SK_UP:
+		textview.scroll_up();
+		break;
+	case OP_SK_DOWN:
+		textview.scroll_down();
+		break;
+	case OP_SK_HOME:
+		textview.scroll_to_top();
+		break;
+	case OP_SK_END:
+		textview.scroll_to_bottom();
+		break;
+	case OP_SK_PGUP:
+		textview.scroll_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		textview.scroll_page_down();
+		break;
 	case OP_TOGGLESOURCEVIEW:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
 		show_source = !show_source;
@@ -572,19 +592,20 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 	attrstr.append(
 		"@style_b_normal[color_bold]:attr=bold "
 		"@style_u_normal[color_underline]:attr=underline ");
-	std::string textview = strprintf::fmt(
+	std::string stfl_textview = strprintf::fmt(
 			"{textview[article] style_normal[article]: "
 			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "
-			"offset[articleoffset]:0 richtext:1}",
+			"offset[article_offset]:0 richtext:1}",
 			attrstr);
-	f->modify("article", "replace", textview);
+	f->modify("article", "replace", stfl_textview);
+	textview.set_lines(0);
 }
 
 void ItemViewFormAction::update_percent()
 {
 	if (cfg->get_configvalue_as_bool("display-article-progress")) {
 		unsigned int percent = 0;
-		unsigned int offset = utils::to_u(f->get("articleoffset"), 0);
+		unsigned int offset = utils::to_u(f->get("article_offset"), 0);
 
 		if (num_lines > 0) {
 			percent = (100 * (offset + 1)) / num_lines;

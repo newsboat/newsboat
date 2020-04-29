@@ -2,6 +2,7 @@
 #define NEWSBOAT_HELPFORMACTION_H_
 
 #include "formaction.h"
+#include "textviewwidget.h"
 
 namespace newsboat {
 
@@ -30,6 +31,7 @@ private:
 	bool apply_search;
 	std::string searchphrase;
 	std::string context;
+	TextviewWidget textview;
 };
 
 } // namespace newsboat

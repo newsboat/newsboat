@@ -19,6 +19,7 @@ HelpFormAction::HelpFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
+	, textview("helptext", FormAction::f)
 {
 }
 
@@ -30,6 +31,24 @@ bool HelpFormAction::process_operation(Operation op,
 {
 	bool hardquit = false;
 	switch (op) {
+	case OP_SK_UP:
+		textview.scroll_up();
+		break;
+	case OP_SK_DOWN:
+		textview.scroll_down();
+		break;
+	case OP_SK_HOME:
+		textview.scroll_to_top();
+		break;
+	case OP_SK_END:
+		textview.scroll_to_bottom();
+		break;
+	case OP_SK_PGUP:
+		textview.scroll_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		textview.scroll_page_down();
+		break;
 	case OP_QUIT:
 		quit = true;
 		break;
@@ -207,6 +226,7 @@ void HelpFormAction::prepare()
 		}
 
 		f->modify("helptext", "replace_inner", listfmt.format_list());
+		textview.set_lines(listfmt.get_lines_count());
 
 		do_redraw = false;
 	}

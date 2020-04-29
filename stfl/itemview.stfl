@@ -16,7 +16,7 @@ vbox
     style_normal[article]:
     style_end[end-of-text-marker]:fg=blue,attr=bold
     .expand:vh
-    offset[articleoffset]:0
+    offset[article_offset]:0
     richtext:1
   vbox[hints]
     .expand:0

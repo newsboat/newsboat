@@ -5,6 +5,7 @@
 #include "htmlrenderer.h"
 #include "regexmanager.h"
 #include "textformatter.h"
+#include "textviewwidget.h"
 
 namespace newsboat {
 
@@ -79,6 +80,7 @@ private:
 	std::shared_ptr<ItemListFormAction> itemlist;
 	bool in_search;
 	Cache* rsscache;
+	TextviewWidget textview;
 };
 
 } // namespace newsboat
