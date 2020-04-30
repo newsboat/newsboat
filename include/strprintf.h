@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_STRPRINTF_H_
 #define NEWSBOAT_STRPRINTF_H_
 
+#include <cstdint>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -32,7 +33,7 @@ std::string fmt(const std::string& format, const int32_t argument, Args... args)
 }
 
 template<typename... Args>
-std::string fmt(const std::string& format, const uint32_t argument,
+std::string fmt(const std::string& format, const std::uint32_t argument,
 	Args... args)
 {
 	return fmt_impl(format, argument, args...);

@@ -169,7 +169,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		if (f.get_focus() == "files") {
 			files_list.move_to_last();
 		} else {
-			uint32_t text_length = f.get("filenametext").length();
+			const std::size_t text_length = f.get("filenametext").length();
 			f.set("filenametext_pos", std::to_string(text_length));
 		}
 		break;

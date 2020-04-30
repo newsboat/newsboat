@@ -502,7 +502,7 @@ KeyMap::KeyMap(unsigned flags)
 
 		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
 			const std::string context(contexts[j]);
-			const uint32_t context_flag = (1 << (j - 1));
+			const std::uint32_t context_flag = (1 << (j - 1));
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				keymap_[context][op_desc.default_key] = op_desc.op;
 			}

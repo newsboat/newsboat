@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_LISTWIDGET_H_
 #define NEWSBOAT_LISTWIDGET_H_
 
+#include <cstdint>
 #include <memory>
 #include <string>
 
@@ -11,7 +12,7 @@ namespace newsboat {
 class ListWidget {
 public:
 	ListWidget(const std::string& list_name, Stfl::Form& form);
-	void set_lines(uint32_t number_of_lines);
+	void set_lines(std::uint32_t number_of_lines);
 
 	bool move_up();
 	bool move_down();
@@ -20,15 +21,15 @@ public:
 	void move_page_up();
 	void move_page_down();
 
-	uint32_t get_position();
-	void set_position(uint32_t pos);
+	std::uint32_t get_position();
+	void set_position(std::uint32_t pos);
 
-	uint32_t get_width();
-	uint32_t get_height();
+	std::uint32_t get_width();
+	std::uint32_t get_height();
 private:
 	const std::string list_name;
 	Stfl::Form& form;
-	uint32_t num_lines;
+	std::uint32_t num_lines;
 };
 
 } // namespace newsboat
