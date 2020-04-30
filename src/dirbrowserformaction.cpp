@@ -273,8 +273,7 @@ void DirBrowserFormAction::prepare()
 
 		code.append("}");
 
-		f.modify("files", "replace_inner", code);
-		files_list.set_lines(directories.size());
+		files_list.stfl_replace_lines(directories.size(), code);
 		do_redraw = false;
 	}
 

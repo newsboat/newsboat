@@ -59,8 +59,8 @@ void DialogsFormAction::prepare()
 			i++;
 		}
 
-		f.modify("dialogs", "replace_inner", listfmt.format_list());
-		dialogs_list.set_lines(listfmt.get_lines_count());
+		dialogs_list.stfl_replace_lines(listfmt.get_lines_count(),
+			listfmt.format_list());
 
 		update_list = false;
 	}

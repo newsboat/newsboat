@@ -104,8 +104,7 @@ void PbView::run(bool auto_download)
 
 			code.append("}");
 
-			dllist_form.modify("dls", "replace_inner", code);
-			downloads_list.set_lines(i);
+			downloads_list.stfl_replace_lines(i, code);
 
 			ctrl->set_view_update_necessary(false);
 		}
@@ -306,8 +305,7 @@ void PbView::run_help()
 
 	code.append("}");
 
-	help_form.modify("helptext", "replace_inner", code);
-	help_textview.set_lines(descs.size());
+	help_textview.stfl_replace_lines(descs.size(), code);
 
 	bool quit = false;
 

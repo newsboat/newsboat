@@ -12,7 +12,8 @@ namespace newsboat {
 class ListWidget {
 public:
 	ListWidget(const std::string& list_name, Stfl::Form& form);
-	void set_lines(std::uint32_t number_of_lines);
+	void stfl_replace_list(std::uint32_t number_of_lines, std::string stfl);
+	void stfl_replace_lines(std::uint32_t number_of_lines, std::string stfl);
 
 	bool move_up();
 	bool move_down();

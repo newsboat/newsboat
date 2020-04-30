@@ -139,8 +139,7 @@ void ItemViewFormAction::prepare()
 					links);
 		}
 
-		f.modify("article", "replace_inner", formatted_text);
-		textview.set_lines(num_lines);
+		textview.stfl_replace_lines(num_lines, formatted_text);
 		f.set("article_offset", "0");
 
 		if (in_search) {
@@ -597,8 +596,7 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "
 			"offset[article_offset]:0 richtext:1}",
 			attrstr);
-	f.modify("article", "replace", stfl_textview);
-	textview.set_lines(0);
+	textview.stfl_replace_textview(0, stfl_textview);
 }
 
 void ItemViewFormAction::update_percent()

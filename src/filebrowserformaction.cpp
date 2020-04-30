@@ -264,8 +264,7 @@ void FileBrowserFormAction::prepare()
 
 		code.append("}");
 
-		f.modify("files", "replace_inner", code);
-		files_list.set_lines(files.size());
+		files_list.stfl_replace_lines(files.size(), code);
 		do_redraw = false;
 	}
 

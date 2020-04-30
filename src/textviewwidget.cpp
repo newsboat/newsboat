@@ -14,9 +14,18 @@ TextviewWidget::TextviewWidget(const std::string& textview_name,
 {
 }
 
-void TextviewWidget::set_lines(std::uint32_t number_of_lines)
+void TextviewWidget::stfl_replace_textview(std::uint32_t number_of_lines,
+	std::string stfl)
 {
 	num_lines = number_of_lines;
+	form.modify(textview_name, "replace", stfl);
+}
+
+void TextviewWidget::stfl_replace_lines(std::uint32_t number_of_lines,
+	std::string stfl)
+{
+	num_lines = number_of_lines;
+	form.modify(textview_name, "replace_inner", stfl);
 }
 
 void TextviewWidget::scroll_up()

@@ -147,8 +147,7 @@ void SelectFormAction::prepare()
 		default:
 			assert(0);
 		}
-		f.modify("taglist", "replace_inner", listfmt.format_list());
-		tags_list.set_lines(listfmt.get_lines_count());
+		tags_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 		do_redraw = false;
 	}

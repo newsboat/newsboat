@@ -1016,10 +1016,8 @@ void ItemListFormAction::prepare()
 		break;
 	}
 
-	f.modify("items",
-		"replace_inner",
+	items_list.stfl_replace_lines(listfmt.get_lines_count(),
 		listfmt.format_list(rxman, "articlelist"));
-	items_list.set_lines(listfmt.get_lines_count());
 
 	invalidated_itempos.clear();
 	invalidated = false;
@@ -1392,8 +1390,7 @@ void ItemListFormAction::set_regexmanager(RegexManager* r)
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos_name[itemposname]: pos[items_pos]:0 %s richtext:1}",
 			attrstr);
-	f.modify("items", "replace", textview);
-	items_list.set_lines(0);
+	items_list.stfl_replace_list(0, textview);
 }
 
 std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)

@@ -615,10 +615,8 @@ void FeedListFormAction::set_feedlist(
 
 	total_feeds = i;
 
-	f.modify("feeds",
-		"replace_inner",
+	feeds_list.stfl_replace_lines(listfmt.get_lines_count(),
 		listfmt.format_list(rxman, "feedlist"));
-	feeds_list.set_lines(listfmt.get_lines_count());
 
 	std::string title_format =
 		cfg->get_configvalue("feedlist-title-format");
@@ -946,8 +944,7 @@ void FeedListFormAction::set_regexmanager(RegexManager* r)
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos_name[feedposname]: pos[feeds_pos]:0 %s richtext:1}",
 			attrstr);
-	f.modify("feeds", "replace", textview);
-	feeds_list.set_lines(0);
+	feeds_list.stfl_replace_list(0, textview);
 }
 
 void FeedListFormAction::op_end_setfilter()

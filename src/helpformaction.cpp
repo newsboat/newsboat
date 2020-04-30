@@ -225,8 +225,7 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		f.modify("helptext", "replace_inner", listfmt.format_list());
-		textview.set_lines(listfmt.get_lines_count());
+		textview.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 		do_redraw = false;
 	}

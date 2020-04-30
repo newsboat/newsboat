@@ -14,9 +14,18 @@ ListWidget::ListWidget(const std::string& list_name,
 {
 }
 
-void ListWidget::set_lines(std::uint32_t number_of_lines)
+void ListWidget::stfl_replace_list(std::uint32_t number_of_lines,
+	std::string stfl)
 {
 	num_lines = number_of_lines;
+	form.modify(list_name, "replace", stfl);
+}
+
+void ListWidget::stfl_replace_lines(std::uint32_t number_of_lines,
+	std::string stfl)
+{
+	num_lines = number_of_lines;
+	form.modify(list_name, "replace_inner", stfl);
 }
 
 bool ListWidget::move_up()

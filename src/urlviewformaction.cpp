@@ -130,8 +130,7 @@ void UrlViewFormAction::prepare()
 				i);
 			i++;
 		}
-		f.modify("urls", "replace_inner", listfmt.format_list());
-		urls_list.set_lines(listfmt.get_lines_count());
+		urls_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 	}
 }
 
