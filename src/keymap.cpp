@@ -508,6 +508,11 @@ KeyMap::KeyMap(unsigned flags)
 			}
 		}
 	}
+
+	keymap_["help"]["b"] = OP_SK_PGUP;
+	keymap_["help"]["SPACE"] = OP_SK_PGDOWN;
+	keymap_["article"]["b"] = OP_SK_PGUP;
+	keymap_["article"]["SPACE"] = OP_SK_PGDOWN;
 }
 
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
