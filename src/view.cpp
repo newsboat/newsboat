@@ -105,16 +105,9 @@ void View::set_status_unlocked(const std::string& msg)
 {
 	auto fa = get_current_formaction();
 	if (fa) {
-		std::shared_ptr<Stfl::Form> form = fa->get_form();
-		if (form) {
-			form->set("msg", msg);
-			form->run(-1);
-		} else {
-			LOG(Level::ERROR,
-				"View::set_status_unlocked: "
-				"form for formaction of type %s is nullptr!",
-				fa->id());
-		}
+		Stfl::Form& form = fa->get_form();
+		form.set("msg", msg);
+		form.run(-1);
 	}
 }
 
@@ -164,7 +157,7 @@ int View::run()
 			// if there is any macro command left to process, we do
 			// so
 
-			fa->get_form()->run(-1);
+			fa->get_form().run(-1);
 			if (!fa->process_op(
 					macrocmds[0].op, true, &macrocmds[0].args)) {
 
@@ -176,7 +169,7 @@ int View::run()
 			}
 		} else {
 			// we then receive the event and ignore timeouts.
-			const char* event = fa->get_form()->run(60000);
+			const char* event = fa->get_form().run(60000);
 
 			if (ctrl_c_hit) {
 				ctrl_c_hit = false;
@@ -273,7 +266,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const char* event = fa->get_form()->run(1000);
+		const char* event = fa->get_form().run(1000);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 		if (!event || strcmp(event, "TIMEOUT") == 0) {
 			continue;
@@ -640,12 +633,12 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
 	current_formaction = formaction_stack_size() - 1;
-	f->get_form()->set("msg", prompt);
+	f->get_form().set("msg", prompt);
 
 	char result = 0;
 
 	do {
-		const char* event = f->get_form()->run(0);
+		const char* event = f->get_form().run(0);
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
 		if (!event) {
 			continue;
@@ -664,8 +657,8 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 			result);
 	} while (!result || strchr(charset.c_str(), result) == nullptr);
 
-	f->get_form()->set("msg", "");
-	f->get_form()->run(-1);
+	f->get_form().set("msg", "");
+	f->get_form().run(-1);
 
 	pop_current_formaction();
 
@@ -968,7 +961,7 @@ void View::force_redraw()
 	if (fa != nullptr) {
 		fa->set_redraw(true);
 		fa->prepare();
-		fa->get_form()->run(-1);
+		fa->get_form().run(-1);
 	}
 }
 
@@ -1006,7 +999,7 @@ void View::pop_current_formaction()
 		std::shared_ptr<FormAction> f = get_current_formaction();
 		if (f) {
 			f->set_redraw(true);
-			f->get_form()->set("msg", "");
+			f->get_form().set("msg", "");
 			f->recalculate_form();
 		}
 	}
@@ -1103,8 +1096,8 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 				}
 				bold.append("attr=bold");
 				ul.append("attr=underline");
-				fa->get_form()->set("color_bold", bold.c_str());
-				fa->get_form()->set(
+				fa->get_form().set("color_bold", bold.c_str());
+				fa->get_form().set(
 					"color_underline", ul.c_str());
 			}
 		}
@@ -1115,7 +1108,7 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 			fgcit->first,
 			colorattr);
 
-		fa->get_form()->set(fgcit->first, colorattr);
+		fa->get_form().set(fgcit->first, colorattr);
 	}
 }
 
@@ -1188,18 +1181,18 @@ void View::inside_cmdline(bool f)
 
 void View::clear_line(std::shared_ptr<FormAction> fa)
 {
-	fa->get_form()->set("qna_value", "");
-	fa->get_form()->set("qna_value_pos", "0");
+	fa->get_form().set("qna_value", "");
+	fa->get_form().set("qna_value_pos", "0");
 	LOG(Level::DEBUG, "View::clear_line: cleared line");
 }
 
 void View::clear_eol(std::shared_ptr<FormAction> fa)
 {
-	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
-	std::string val = fa->get_form()->get("qna_value");
+	unsigned int pos = utils::to_u(fa->get_form().get("qna_value_pos"), 0);
+	std::string val = fa->get_form().get("qna_value");
 	val.erase(pos, val.length());
-	fa->get_form()->set("qna_value", val);
-	fa->get_form()->set("qna_value_pos", std::to_string(val.length()));
+	fa->get_form().set("qna_value", val);
+	fa->get_form().set("qna_value_pos", std::to_string(val.length()));
 	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
 }
 
@@ -1212,8 +1205,8 @@ void View::cancel_input(std::shared_ptr<FormAction> fa)
 void View::delete_word(std::shared_ptr<FormAction> fa)
 {
 	std::string::size_type curpos =
-		utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
-	std::string val = fa->get_form()->get("qna_value");
+		utils::to_u(fa->get_form().get("qna_value_pos"), 0);
+	std::string val = fa->get_form().get("qna_value");
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
@@ -1232,13 +1225,13 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	}
 	val.erase(firstpos, curpos - firstpos);
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
-	fa->get_form()->set("qna_value", val);
-	fa->get_form()->set("qna_value_pos", std::to_string(firstpos));
+	fa->get_form().set("qna_value", val);
+	fa->get_form().set("qna_value_pos", std::to_string(firstpos));
 }
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 {
-	std::string fragment = fa->get_form()->get("qna_value");
+	std::string fragment = fa->get_form().get("qna_value");
 	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = fa->get_suggestions(fragment);
@@ -1263,8 +1256,8 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
 		break;
 	}
-	fa->get_form()->set("qna_value", suggestion);
-	fa->get_form()->set(
+	fa->get_form().set("qna_value", suggestion);
+	fa->get_form().set(
 		"qna_value_pos", std::to_string(suggestion.length()));
 	last_fragment = suggestion;
 }
@@ -1272,7 +1265,7 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 void View::dump_current_form()
 {
 	std::string formtext =
-		formaction_stack[current_formaction]->get_form()->dump(
+		formaction_stack[current_formaction]->get_form().dump(
 			"", "", 0);
 	time_t t = time(nullptr);
 	const auto fnbuf = utils::mt_strf_localtime(

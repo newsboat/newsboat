@@ -20,26 +20,26 @@ History FormAction::cmdlinehistory;
 FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	: v(vv)
 	, cfg(cfg)
-	, f(new Stfl::Form(formstr))
+	, f(formstr)
 	, do_redraw(true)
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
 {
 	if (v) {
 		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
-			f->set("showhint", "0");
+			f.set("showhint", "0");
 		}
 		if (cfg->get_configvalue_as_bool("show-title-bar") == false) {
-			f->set("showtitle", "0");
+			f.set("showtitle", "0");
 		}
 		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
 			true) {
-			std::string hints = f->dump("hints", "", 0);
-			std::string title = f->dump("title", "", 0);
-			f->modify("title", "replace", "label[swap-title]");
-			f->modify("hints", "replace", "label[swap-hints]");
-			f->modify("swap-title", "replace", hints);
-			f->modify("swap-hints", "replace", title);
+			std::string hints = f.dump("hints", "", 0);
+			std::string title = f.dump("title", "", 0);
+			f.modify("title", "replace", "label[swap-title]");
+			f.modify("hints", "replace", "label[swap-hints]");
+			f.modify("swap-title", "replace", hints);
+			f.modify("swap-hints", "replace", title);
 		}
 	}
 	valid_cmds.push_back("set");
@@ -51,17 +51,17 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 
 void FormAction::set_keymap_hints()
 {
-	f->set("help", prepare_keymap_hint(this->get_keymap_hint()));
+	f.set("help", prepare_keymap_hint(this->get_keymap_hint()));
 }
 
 void FormAction::recalculate_form()
 {
-	f->run(-3);
+	f.run(-3);
 }
 
 FormAction::~FormAction() {}
 
-std::shared_ptr<Stfl::Form> FormAction::get_form()
+Stfl::Form& FormAction::get_form()
 {
 	return f;
 }
@@ -91,7 +91,7 @@ std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 
 std::string FormAction::get_value(const std::string& value)
 {
-	return f->get(value);
+	return f.get(value);
 }
 
 void FormAction::start_cmdline(std::string default_value)
@@ -136,7 +136,7 @@ bool FormAction::process_op(Operation op,
 		}
 		break;
 	case OP_INT_CANCEL_QNA:
-		f->modify("lastline",
+		f.modify("lastline",
 			"replace",
 			"{hbox[lastline] .expand:0 {label[msglabel] .expand:h "
 			"text[msg]:\"\"}}");
@@ -146,15 +146,15 @@ bool FormAction::process_op(Operation op,
 	case OP_INT_QNA_NEXTHIST:
 		if (qna_history) {
 			std::string entry = qna_history->next();
-			f->set("qna_value", entry);
-			f->set("qna_value_pos", std::to_string(entry.length()));
+			f.set("qna_value", entry);
+			f.set("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_QNA_PREVHIST:
 		if (qna_history) {
 			std::string entry = qna_history->prev();
-			f->set("qna_value", entry);
-			f->set("qna_value_pos", std::to_string(entry.length()));
+			f.set("qna_value", entry);
+			f.set("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_END_QUESTION:
@@ -162,7 +162,7 @@ bool FormAction::process_op(Operation op,
 		 * An answer has been entered, we save the value, and ask the
 		 * next question.
 		 */
-		qna_responses.push_back(f->get("qna_value"));
+		qna_responses.push_back(f.get("qna_value"));
 		start_next_question();
 		break;
 	case OP_VIEWDIALOGS:
@@ -391,7 +391,7 @@ void FormAction::finished_qna(Operation op)
 	}
 	break;
 	case OP_INT_END_CMDLINE: {
-		f->set_focus("feeds");
+		f.set_focus("feeds");
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
 		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);
@@ -486,12 +486,12 @@ void FormAction::start_next_question()
 		replacestr.append(Stfl::quote(qna_prompts[0].second));
 		replacestr.append(" pos[qna_value_pos]:0");
 		replacestr.append("}}");
-		f->modify("lastline", "replace", replacestr);
-		f->set_focus("qnainput");
+		f.modify("lastline", "replace", replacestr);
+		f.set_focus("qnainput");
 
 		// Set position to 0 and back to ensure that the text is visible
-		f->run(-1);
-		f->set("qna_value_pos",
+		f.run(-1);
+		f.set("qna_value_pos",
 			std::to_string(qna_prompts[0].second.length()));
 
 		qna_prompts.erase(qna_prompts.begin());
@@ -501,7 +501,7 @@ void FormAction::start_next_question()
 		 * usual label, and signal the end of the "Q&A" to the
 		 * finished_qna() method.
 		 */
-		f->modify("lastline",
+		f.modify("lastline",
 			"replace",
 			"{hbox[lastline] .expand:0 {label[msglabel] .expand:h "
 			"text[msg]:\"\"}}");

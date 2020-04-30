@@ -11,7 +11,7 @@ namespace newsboat {
 class TextviewWidget {
 public:
 	TextviewWidget(const std::string& textview_name,
-		std::shared_ptr<Stfl::Form> form);
+		Stfl::Form& form);
 	void set_lines(uint32_t number_of_lines);
 
 	void scroll_up();
@@ -28,7 +28,7 @@ public:
 	uint32_t get_height();
 private:
 	const std::string textview_name;
-	std::shared_ptr<Stfl::Form> form;
+	Stfl::Form& form;
 	uint32_t num_lines;
 };
 

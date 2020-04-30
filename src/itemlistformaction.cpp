@@ -61,7 +61,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	 *   - if an item was selected, then fetch it and do something with it
 	 */
 
-	std::string itemposname = f->get("items_pos");
+	std::string itemposname = f.get("items_pos");
 	unsigned int itempos = utils::to_u(itemposname);
 
 	switch (op) {
@@ -115,7 +115,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				visible_items[itempos].first->guid(),
 				visible_items[itempos].first->deleted());
 			if (itempos < visible_items.size() - 1)
-				f->set("items_pos",
+				f.set("items_pos",
 					strprintf::fmt("%u", itempos + 1));
 			invalidate(itempos);
 		} else {
@@ -168,7 +168,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						"next-unread")) {
 					if (itempos <
 						visible_items.size() - 1) {
-						f->set("items_pos",
+						f.set("items_pos",
 							strprintf::fmt("%u",
 								itempos + 1));
 					}
@@ -282,7 +282,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (!cfg->get_configvalue_as_bool(
 					"toggleitemread-jumps-to-next-unread")) {
 				if (itempos < visible_items.size() - 1)
-					f->set("items_pos",
+					f.set("items_pos",
 						strprintf::fmt(
 							"%u", itempos + 1));
 			} else {
@@ -541,14 +541,14 @@ bool ItemListFormAction::process_operation(Operation op,
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to last");
-					f->set("items_pos",
+					f.set("items_pos",
 						std::to_string(visible_items.size() - 1));
 				}
 				if (sortorder == "date-asc") {
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to first");
-					f->set("items_pos", "0");
+					f.set("items_pos", "0");
 				}
 			}
 			invalidate_everything();
@@ -576,7 +576,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			if (!cfg->get_configvalue_as_bool(
 					"show-read-articles")) {
-				f->set("items_pos", "0");
+				f.set("items_pos", "0");
 			}
 			invalidate_everything();
 		}
@@ -802,7 +802,7 @@ void ItemListFormAction::finished_qna(Operation op)
 		break;
 
 	case OP_PIPE_TO: {
-		std::string itemposname = f->get("items_pos");
+		std::string itemposname = f.get("items_pos");
 		unsigned int itempos = utils::to_u(itemposname);
 		if (itemposname.length() > 0) {
 			std::string cmd = qna_responses[0];
@@ -847,7 +847,7 @@ void ItemListFormAction::qna_end_setfilter()
 
 void ItemListFormAction::qna_end_editflags()
 {
-	std::string itemposname = f->get("items_pos");
+	std::string itemposname = f.get("items_pos");
 	if (itemposname.length() == 0) {
 		v->show_error(_("No item selected!")); // should not happen
 		return;
@@ -963,7 +963,7 @@ void ItemListFormAction::prepare()
 	}
 
 	if (cfg->get_configvalue_as_bool("mark-as-read-on-hover")) {
-		std::string itemposname = f->get("items_pos");
+		std::string itemposname = f.get("items_pos");
 		if (itemposname.length() > 0) {
 			unsigned int itempos = utils::to_u(itemposname);
 			if (visible_items[itempos].first->unread()) {
@@ -976,7 +976,7 @@ void ItemListFormAction::prepare()
 		}
 	}
 
-	unsigned int width = utils::to_u(f->get("items:w"));
+	unsigned int width = utils::to_u(f.get("items:w"));
 
 	if (old_width != width) {
 		invalidate_everything();
@@ -1016,7 +1016,7 @@ void ItemListFormAction::prepare()
 		break;
 	}
 
-	f->modify("items",
+	f.modify("items",
 		"replace_inner",
 		listfmt.format_list(rxman, "articlelist"));
 	items_list.set_lines(listfmt.get_lines_count());
@@ -1086,15 +1086,15 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 
 void ItemListFormAction::init()
 {
-	f->set("items_pos", "0");
-	f->set("msg", "");
+	f.set("items_pos", "0");
+	f.set("msg", "");
 	set_keymap_hints();
 	invalidate_everything();
 	do_update_visible_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
 	}
-	f->run(-3); // FRUN - compute all widget dimensions
+	f.run(-3); // FRUN - compute all widget dimensions
 }
 
 void ItemListFormAction::set_head(const std::string& s,
@@ -1121,7 +1121,7 @@ void ItemListFormAction::set_head(const std::string& s,
 
 	fmt.register_fmt('U', utils::censor_url(url));
 
-	const unsigned int width = utils::to_u(f->get("title:w"));
+	const unsigned int width = utils::to_u(f.get("title:w"));
 	if (!show_searchresult) {
 		title = fmt.do_format(
 				cfg->get_configvalue("articlelist-title-format"),
@@ -1131,13 +1131,13 @@ void ItemListFormAction::set_head(const std::string& s,
 				cfg->get_configvalue("searchresult-title-format"),
 				width);
 	}
-	f->set("head", title);
+	f.set("head", title);
 }
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 {
 	int itempos;
-	std::istringstream is(f->get("items_pos"));
+	std::istringstream is(f.get("items_pos"));
 	is >> itempos;
 	for (int i = (start_with_last ? itempos : (itempos - 1)); i >= 0; --i) {
 		LOG(Level::DEBUG,
@@ -1146,13 +1146,13 @@ bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 			i,
 			visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
-			f->set("items_pos", std::to_string(i));
+			f.set("items_pos", std::to_string(i));
 			return true;
 		}
 	}
 	for (int i = visible_items.size() - 1; i >= itempos; --i) {
 		if (visible_items[i].first->unread()) {
-			f->set("items_pos", std::to_string(i));
+			f.set("items_pos", std::to_string(i));
 			return true;
 		}
 	}
@@ -1173,7 +1173,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 			unsigned int pos =
 				utils::get_random_value(visible_items.size());
 			if (visible_items[pos].first->unread()) {
-				f->set("items_pos", std::to_string(pos));
+				f.set("items_pos", std::to_string(pos));
 				break;
 			}
 		}
@@ -1183,7 +1183,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 
 bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 {
-	unsigned int itempos = utils::to_u(f->get("items_pos"));
+	unsigned int itempos = utils::to_u(f.get("items_pos"));
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_unread_item: itempos = %u "
 		"visible_items.size = %" PRIu64,
@@ -1196,7 +1196,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 			"ItemListFormAction::jump_to_next_unread_item: i = %u",
 			i);
 		if (visible_items[i].first->unread()) {
-			f->set("items_pos", std::to_string(i));
+			f.set("items_pos", std::to_string(i));
 			return true;
 		}
 	}
@@ -1206,7 +1206,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 			"ItemListFormAction::jump_to_next_unread_item: i = %u",
 			i);
 		if (visible_items[i].first->unread()) {
-			f->set("items_pos", std::to_string(i));
+			f.set("items_pos", std::to_string(i));
 			return true;
 		}
 	}
@@ -1216,7 +1216,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 {
 	int itempos;
-	std::istringstream is(f->get("items_pos"));
+	std::istringstream is(f.get("items_pos"));
 	is >> itempos;
 
 	int i = (start_with_last ? itempos : (itempos - 1));
@@ -1225,7 +1225,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 			"ItemListFormAction::jump_to_previous_item: "
 			"visible_items[%u]",
 			i);
-		f->set("items_pos", std::to_string(i));
+		f.set("items_pos", std::to_string(i));
 		return true;
 	}
 	return false;
@@ -1233,7 +1233,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 
 bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 {
-	unsigned int itempos = utils::to_u(f->get("items_pos"));
+	unsigned int itempos = utils::to_u(f.get("items_pos"));
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_item: itempos = %" PRIu64
 		" visible_items.size = %" PRIu64,
@@ -1244,7 +1244,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_next_item: i = %u",
 			i);
-		f->set("items_pos", std::to_string(i));
+		f.set("items_pos", std::to_string(i));
 		return true;
 	}
 	return false;
@@ -1252,7 +1252,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 
 std::string ItemListFormAction::get_guid()
 {
-	unsigned int itempos = utils::to_u(f->get("items_pos"));
+	unsigned int itempos = utils::to_u(f.get("items_pos"));
 	return visible_items[itempos].first->guid();
 }
 
@@ -1279,7 +1279,7 @@ void ItemListFormAction::handle_cmdline_num(unsigned int idx)
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
 		} else {
-			f->set("items_pos", std::to_string(i));
+			f.set("items_pos", std::to_string(i));
 		}
 	} else {
 		v->show_error(_("Invalid position!"));
@@ -1298,7 +1298,7 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		}
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			std::string itemposname = f->get("items_pos");
+			std::string itemposname = f.get("items_pos");
 			LOG(Level::INFO,
 				"ItemListFormAction::handle_cmdline: saving "
 				"item "
@@ -1333,7 +1333,7 @@ void ItemListFormAction::recalculate_form()
 	FormAction::recalculate_form();
 	invalidate_everything();
 
-	std::string itemposname = f->get("items_pos");
+	std::string itemposname = f.get("items_pos");
 	unsigned int itempos = utils::to_u(itemposname);
 
 	// If the old position was set and it is less than the itempos, use it
@@ -1342,7 +1342,7 @@ void ItemListFormAction::recalculate_form()
 	// applies when "show-read-articles" is set to false
 	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
 		!cfg->get_configvalue_as_bool("show-read-articles")) {
-		f->set("items_pos", strprintf::fmt("%u", old_itempos));
+		f.set("items_pos", strprintf::fmt("%u", old_itempos));
 		old_itempos = -1; // Reset
 	}
 }
@@ -1367,7 +1367,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 
 void ItemListFormAction::save_filterpos()
 {
-	unsigned int i = utils::to_u(f->get("items_pos"));
+	unsigned int i = utils::to_u(f.get("items_pos"));
 	if (i < visible_items.size()) {
 		filterpos = visible_items[i].second;
 		set_filterpos = true;
@@ -1392,7 +1392,7 @@ void ItemListFormAction::set_regexmanager(RegexManager* r)
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos_name[itemposname]: pos[items_pos]:0 %s richtext:1}",
 			attrstr);
-	f->modify("items", "replace", textview);
+	f.modify("items", "replace", textview);
 	items_list.set_lines(0);
 }
 
@@ -1421,12 +1421,12 @@ void ItemListFormAction::prepare_set_filterpos()
 		unsigned int i = 0;
 		for (const auto& item : visible_items) {
 			if (item.second == filterpos) {
-				f->set("items_pos", std::to_string(i));
+				f.set("items_pos", std::to_string(i));
 				return;
 			}
 			i++;
 		}
-		f->set("items_pos", "0");
+		f.set("items_pos", "0");
 	}
 }
 

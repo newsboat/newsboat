@@ -54,10 +54,10 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		 * needs to be returned.
 		 */
 		LOG(Level::DEBUG, "FileBrowserFormAction: 'opening' item");
-		std::string focus = f->get_focus();
+		std::string focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
-				std::string selection = f->get("listposname");
+				std::string selection = f.get("listposname");
 				char filetype = selection[0];
 				selection.erase(0, 1);
 				std::string filename(selection);
@@ -68,7 +68,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
-					f->set("files_pos", "0");
+					f.set("files_pos", "0");
 					std::string fn = utils::getcwd();
 					update_title(fn);
 
@@ -77,7 +77,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					}
 
 					std::string fnstr =
-						f->get("filenametext");
+						f.get("filenametext");
 					std::string::size_type base =
 						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
 					if (base == std::string::npos) {
@@ -87,7 +87,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 							base + 1,
 							std::string::npos);
 					}
-					f->set("filenametext", fn);
+					f.set("filenametext", fn);
 					do_redraw = true;
 				}
 				break;
@@ -97,8 +97,8 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
 					fn.append(filename);
-					f->set("filenametext", fn);
-					f->set_focus("filename");
+					f.set("filenametext", fn);
+					f.set_focus("filename");
 				}
 				break;
 				default:
@@ -107,7 +107,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 			} else {
 				bool do_pop = true;
-				std::string fn = f->get("filenametext");
+				std::string fn = f.get("filenametext");
 				struct stat sbuf;
 				/*
 				 * this check is very important, as people will
@@ -115,7 +115,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				 * files with no further warning...
 				 */
 				if (::stat(fn.c_str(), &sbuf) != -1) {
-					f->set_focus("files");
+					f.set_focus("files");
 					if (v->confirm(
 							strprintf::fmt(
 								_("Do you really want to overwrite `%s' "
@@ -124,7 +124,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 							_("yn")) == *_("n")) {
 						do_pop = false;
 					}
-					f->set_focus("filenametext");
+					f.set_focus("filenametext");
 				}
 				if (do_pop) {
 					curs_set(0);
@@ -136,50 +136,50 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	break;
 	case OP_SWITCH_FOCUS: {
 		LOG(Level::DEBUG, "view::filebrowser: focusing different widget");
-		const std::string focus = f->get_focus();
+		const std::string focus = f.get_focus();
 		if (focus == "files") {
-			f->set_focus("filename");
+			f.set_focus("filename");
 		} else {
-			f->set_focus("files");
+			f.set_focus("files");
 		}
 		break;
 	}
 	case OP_SK_UP:
-		if (f->get_focus() == "files") {
+		if (f.get_focus() == "files") {
 			files_list.move_up();
 		} else {
-			f->set_focus("files");
+			f.set_focus("files");
 		}
 		break;
 	case OP_SK_DOWN:
-		if (f->get_focus() == "files") {
+		if (f.get_focus() == "files") {
 			if (!files_list.move_down()) {
-				f->set_focus("filename");
+				f.set_focus("filename");
 			}
 		}
 		break;
 	case OP_SK_HOME:
-		if (f->get_focus() == "files") {
+		if (f.get_focus() == "files") {
 			files_list.move_to_first();
 		} else {
-			f->set("filenametext_pos", "0");
+			f.set("filenametext_pos", "0");
 		}
 		break;
 	case OP_SK_END:
-		if (f->get_focus() == "files") {
+		if (f.get_focus() == "files") {
 			files_list.move_to_last();
 		} else {
-			uint32_t text_length = f->get("filenametext").length();
-			f->set("filenametext_pos", std::to_string(text_length));
+			uint32_t text_length = f.get("filenametext").length();
+			f.set("filenametext_pos", std::to_string(text_length));
 		}
 		break;
 	case OP_SK_PGUP:
-		if (f->get_focus() == "files") {
+		if (f.get_focus() == "files") {
 			files_list.move_page_up();
 		}
 		break;
 	case OP_SK_PGDOWN:
-		if (f->get_focus() == "files") {
+		if (f.get_focus() == "files") {
 			files_list.move_page_down();
 		}
 		break;
@@ -187,14 +187,14 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		LOG(Level::DEBUG, "view::filebrowser: quitting");
 		curs_set(0);
 		v->pop_current_formaction();
-		f->set("filenametext", "");
+		f.set("filenametext", "");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::filebrowser: hard quitting");
 		while (v->formaction_stack_size() > 0) {
 			v->pop_current_formaction();
 		}
-		f->set("filenametext", "");
+		f.set("filenametext", "");
 		break;
 	default:
 		break;
@@ -204,7 +204,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 
 void FileBrowserFormAction::update_title(const std::string& working_directory)
 {
-	const std::string fileswidth = f->get("files:w");
+	const std::string fileswidth = f.get("files:w");
 	const unsigned int width = utils::to_u(fileswidth);
 
 	FmtStrFormatter fmt;
@@ -215,7 +215,7 @@ void FileBrowserFormAction::update_title(const std::string& working_directory)
 	const std::string title = fmt.do_format(
 			cfg->get_configvalue("filebrowser-title-format"), width);
 
-	f->set("head", title);
+	f.set("head", title);
 }
 
 std::vector<std::string> get_sorted_filelist()
@@ -264,12 +264,12 @@ void FileBrowserFormAction::prepare()
 
 		code.append("}");
 
-		f->modify("files", "replace_inner", code);
+		f.modify("files", "replace_inner", code);
 		files_list.set_lines(files.size());
 		do_redraw = false;
 	}
 
-	std::string focus = f->get_focus();
+	std::string focus = f.get_focus();
 	if (focus == "files") {
 		curs_set(0);
 	} else {
@@ -281,7 +281,7 @@ void FileBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	f->set("fileprompt", _("File: "));
+	f.set("fileprompt", _("File: "));
 
 	if (dir == "") {
 		std::string save_path = cfg->get_configvalue("save-path");
@@ -298,11 +298,11 @@ void FileBrowserFormAction::init()
 
 	const std::string cwdtmp = utils::getcwd();
 
-	f->set("filenametext", default_filename);
+	f.set("filenametext", default_filename);
 
 	// Set position to 0 and back to ensure that the text is visible
-	f->run(-1);
-	f->set("filenametext_pos", std::to_string(default_filename.length()));
+	f.run(-1);
+	f.set("filenametext_pos", std::to_string(default_filename.length()));
 
 	update_title(cwdtmp);
 }

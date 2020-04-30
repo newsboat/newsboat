@@ -7,7 +7,7 @@
 namespace newsboat {
 
 ListWidget::ListWidget(const std::string& list_name,
-	std::shared_ptr<Stfl::Form> form)
+	Stfl::Form& form)
 	: list_name(list_name)
 	, form(form)
 	, num_lines(0)
@@ -88,7 +88,7 @@ void ListWidget::move_page_down()
 
 uint32_t ListWidget::get_position()
 {
-	std::string pos = form->get(list_name + "_pos");
+	std::string pos = form.get(list_name + "_pos");
 	if (!pos.empty()) {
 		return std::max(0, std::stoi(pos));
 	}
@@ -97,17 +97,17 @@ uint32_t ListWidget::get_position()
 
 void ListWidget::set_position(uint32_t pos)
 {
-	form->set(list_name + "_pos", std::to_string(pos));
+	form.set(list_name + "_pos", std::to_string(pos));
 }
 
 uint32_t ListWidget::get_width()
 {
-	return utils::to_u(form->get(list_name + ":w"));
+	return utils::to_u(form.get(list_name + ":w"));
 }
 
 uint32_t ListWidget::get_height()
 {
-	return utils::to_u(form->get(list_name + ":h"));
+	return utils::to_u(form.get(list_name + ":h"));
 }
 
 } // namespace newsboat

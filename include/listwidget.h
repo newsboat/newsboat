@@ -10,7 +10,7 @@ namespace newsboat {
 
 class ListWidget {
 public:
-	ListWidget(const std::string& list_name, std::shared_ptr<Stfl::Form> form);
+	ListWidget(const std::string& list_name, Stfl::Form& form);
 	void set_lines(uint32_t number_of_lines);
 
 	bool move_up();
@@ -27,7 +27,7 @@ public:
 	uint32_t get_height();
 private:
 	const std::string list_name;
-	std::shared_ptr<Stfl::Form> form;
+	Stfl::Form& form;
 	uint32_t num_lines;
 };
 

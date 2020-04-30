@@ -7,7 +7,7 @@
 namespace newsboat {
 
 TextviewWidget::TextviewWidget(const std::string& textview_name,
-	std::shared_ptr<Stfl::Form> form)
+	Stfl::Form& form)
 	: textview_name(textview_name)
 	, form(form)
 	, num_lines(0)
@@ -85,7 +85,7 @@ void TextviewWidget::scroll_page_down()
 
 uint32_t TextviewWidget::get_scroll_offset()
 {
-	std::string offset = form->get(textview_name + "_offset");
+	std::string offset = form.get(textview_name + "_offset");
 	if (!offset.empty()) {
 		return std::max(0, std::stoi(offset));
 	}
@@ -94,17 +94,17 @@ uint32_t TextviewWidget::get_scroll_offset()
 
 void TextviewWidget::set_scroll_offset(uint32_t offset)
 {
-	form->set(textview_name + "_offset", std::to_string(offset));
+	form.set(textview_name + "_offset", std::to_string(offset));
 }
 
 uint32_t TextviewWidget::get_width()
 {
-	return utils::to_u(form->get(textview_name + ":w"));
+	return utils::to_u(form.get(textview_name + ":w"));
 }
 
 uint32_t TextviewWidget::get_height()
 {
-	return utils::to_u(form->get(textview_name + ":h"));
+	return utils::to_u(form.get(textview_name + ":h"));
 }
 
 } // namespace newsboat

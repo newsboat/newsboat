@@ -43,16 +43,16 @@ ItemViewFormAction::~ItemViewFormAction() {}
 
 void ItemViewFormAction::init()
 {
-	f->set("msg", "");
+	f.set("msg", "");
 	do_redraw = true;
 	quit = false;
 	links.clear();
 	num_lines = 0;
 	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
-		f->set("percentwidth", "0");
+		f.set("percentwidth", "0");
 	} else {
 		const size_t min_field_width = 6;
-		f->set("percentwidth",
+		f.set("percentwidth",
 			std::to_string(
 		std::max({
 			min_field_width,
@@ -92,12 +92,12 @@ void ItemViewFormAction::prepare()
 		{
 			ScopeMeasure("itemview::prepare: rendering");
 			// XXX HACK: render once so that we get a proper widget width
-			f->run(-3);
+			f.run(-3);
 		}
 
 		update_head(item);
 
-		const std::string widthstr = f->get("article:w");
+		const std::string widthstr = f.get("article:w");
 		const unsigned int window_width = utils::to_u(widthstr, 0);
 
 		unsigned int text_width =
@@ -139,9 +139,9 @@ void ItemViewFormAction::prepare()
 					links);
 		}
 
-		f->modify("article", "replace_inner", formatted_text);
+		f.modify("article", "replace_inner", formatted_text);
 		textview.set_lines(num_lines);
-		f->set("article_offset", "0");
+		f.set("article_offset", "0");
 
 		if (in_search) {
 			rxman->remove_last_regex("article");
@@ -496,10 +496,10 @@ void ItemViewFormAction::set_head(const std::string& s,
 	fmt.register_fmt('u', std::to_string(unread));
 	fmt.register_fmt('t', std::to_string(total));
 
-	std::string listwidth = f->get("article:w");
+	std::string listwidth = f.get("article:w");
 	unsigned int width = utils::to_u(listwidth);
 
-	f->set("head",
+	f.set("head",
 		fmt.do_format(
 			cfg->get_configvalue("itemview-title-format"), width));
 }
@@ -597,7 +597,7 @@ void ItemViewFormAction::set_regexmanager(RegexManager* r)
 			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "
 			"offset[article_offset]:0 richtext:1}",
 			attrstr);
-	f->modify("article", "replace", stfl_textview);
+	f.modify("article", "replace", stfl_textview);
 	textview.set_lines(0);
 }
 
@@ -605,7 +605,7 @@ void ItemViewFormAction::update_percent()
 {
 	if (cfg->get_configvalue_as_bool("display-article-progress")) {
 		unsigned int percent = 0;
-		unsigned int offset = utils::to_u(f->get("article_offset"), 0);
+		unsigned int offset = utils::to_u(f.get("article_offset"), 0);
 
 		if (num_lines > 0) {
 			percent = (100 * (offset + 1)) / num_lines;
@@ -621,11 +621,11 @@ void ItemViewFormAction::update_percent()
 			percent);
 
 		if (offset == 0 || percent == 0) {
-			f->set("percent", _("Top"));
+			f.set("percent", _("Top"));
 		} else if (offset == (num_lines - 1)) {
-			f->set("percent", _("Bottom"));
+			f.set("percent", _("Bottom"));
 		} else {
-			f->set("percent", strprintf::fmt("%3u %% ", percent));
+			f.set("percent", strprintf::fmt("%3u %% ", percent));
 		}
 	}
 }

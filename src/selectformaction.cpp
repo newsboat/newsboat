@@ -39,7 +39,7 @@ void SelectFormAction::handle_cmdline(const std::string& cmd)
 			idx <= ((type == SelectionType::TAG)
 				? tags.size()
 				: filters.size())) {
-			f->set("taglist_pos", std::to_string(idx - 1));
+			f.set("taglist_pos", std::to_string(idx - 1));
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);
@@ -79,7 +79,7 @@ bool SelectFormAction::process_operation(Operation op,
 		hardquit = true;
 		break;
 	case OP_OPEN: {
-		std::string tagposname = f->get("tagposname");
+		std::string tagposname = f.get("tagposname");
 		unsigned int pos = utils::to_u(tagposname);
 		if (tagposname.length() > 0) {
 			switch (type) {
@@ -123,7 +123,7 @@ void SelectFormAction::prepare()
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
-		const auto width = utils::to_u(f->get("tags:w"));
+		const auto width = utils::to_u(f.get("tags:w"));
 
 		switch (type) {
 		case SelectionType::TAG:
@@ -147,7 +147,7 @@ void SelectFormAction::prepare()
 		default:
 			assert(0);
 		}
-		f->modify("taglist", "replace_inner", listfmt.format_list());
+		f.modify("taglist", "replace_inner", listfmt.format_list());
 		tags_list.set_lines(listfmt.get_lines_count());
 
 		do_redraw = false;
@@ -161,9 +161,9 @@ void SelectFormAction::init()
 	quit = false;
 	value = "";
 
-	f->run(-3); // compute all widget dimensions
+	f.run(-3); // compute all widget dimensions
 
-	std::string viewwidth = f->get("taglist:w");
+	std::string viewwidth = f.get("taglist:w");
 	unsigned int width = utils::to_u(viewwidth, 80);
 
 	set_keymap_hints();
@@ -185,7 +185,7 @@ void SelectFormAction::init()
 	default:
 		assert(0); // should never happen
 	}
-	f->set("head", title);
+	f.set("head", title);
 }
 
 std::string SelectFormAction::format_line(const std::string& selecttag_format,

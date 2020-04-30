@@ -81,15 +81,15 @@ bool HelpFormAction::process_operation(Operation op,
 void HelpFormAction::prepare()
 {
 	if (do_redraw) {
-		f->run(-3); // compute all widget dimensions
+		f.run(-3); // compute all widget dimensions
 
-		std::string listwidth = f->get("helptext:w");
+		std::string listwidth = f.get("helptext:w");
 		unsigned int width = utils::to_u(listwidth);
 
 		FmtStrFormatter fmt;
 		fmt.register_fmt('N', PROGRAM_NAME);
 		fmt.register_fmt('V', utils::program_version());
-		f->set("head",
+		f.set("head",
 			fmt.do_format(cfg->get_configvalue("help-title-format"),
 				width));
 
@@ -99,7 +99,7 @@ void HelpFormAction::prepare()
 			strprintf::fmt("<hl>%s</>", searchphrase);
 		std::vector<std::string> colors = utils::tokenize(
 				cfg->get_configvalue("search-highlight-colors"), " ");
-		f->set("highlight", make_colorstring(colors));
+		f.set("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
 
 		unsigned int unbound_count = 0;
@@ -225,7 +225,7 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		f->modify("helptext", "replace_inner", listfmt.format_list());
+		f.modify("helptext", "replace_inner", listfmt.format_list());
 		textview.set_lines(listfmt.get_lines_count());
 
 		do_redraw = false;

@@ -57,7 +57,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 		break;
 	case OP_OPENINBROWSER:
 	case OP_OPEN: {
-		std::string posstr = f->get("urls_pos");
+		std::string posstr = f.get("urls_pos");
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 			v->set_status(_("Starting browser..."));
@@ -69,7 +69,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_BOOKMARK: {
-		std::string posstr = f->get("urls_pos");
+		std::string posstr = f.get("urls_pos");
 		if (posstr.length() > 0) {
 			unsigned int idx = utils::to_u(posstr, 0);
 
@@ -130,7 +130,7 @@ void UrlViewFormAction::prepare()
 				i);
 			i++;
 		}
-		f->modify("urls", "replace_inner", listfmt.format_list());
+		f.modify("urls", "replace_inner", listfmt.format_list());
 		urls_list.set_lines(listfmt.get_lines_count());
 	}
 }
@@ -139,16 +139,16 @@ void UrlViewFormAction::init()
 {
 	v->set_status("");
 
-	f->run(-3); // compute all widget dimensions
+	f.run(-3); // compute all widget dimensions
 
-	std::string viewwidth = f->get("urls:w");
+	std::string viewwidth = f.get("urls:w");
 	unsigned int width = utils::to_u(viewwidth, 80);
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 
-	f->set("head",
+	f.set("head",
 		fmt.do_format(
 			cfg->get_configvalue("urlview-title-format"), width));
 	do_redraw = true;
@@ -173,7 +173,7 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 		if (idx < 1 || idx > links.size()) {
 			v->show_error(_("Invalid position!"));
 		} else {
-			f->set("urls_pos", std::to_string(idx - 1));
+			f.set("urls_pos", std::to_string(idx - 1));
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);

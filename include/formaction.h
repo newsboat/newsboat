@@ -28,7 +28,7 @@ public:
 	virtual ~FormAction();
 	virtual void prepare() = 0;
 	virtual void init() = 0;
-	std::shared_ptr<Stfl::Form> get_form();
+	Stfl::Form& get_form();
 	virtual void set_redraw(bool b)
 	{
 		do_redraw = b;
@@ -101,7 +101,7 @@ protected:
 
 	View* v;
 	ConfigContainer* cfg;
-	std::shared_ptr<Stfl::Form> f;
+	Stfl::Form f;
 	bool do_redraw;
 
 	std::vector<std::string> qna_responses;
