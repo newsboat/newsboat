@@ -1,12 +1,9 @@
-#[macro_use]
-extern crate section_testing;
-extern crate tempfile;
-
-use self::tempfile::TempDir;
+use section_testing::{enable_sections, section};
 use std::{env, fs};
+use tempfile::TempDir;
 
 mod configpaths_helpers;
-use configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
+use crate::configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
 
 enable_sections! {
 #[test]

@@ -1,9 +1,6 @@
-extern crate libnewsboat;
-extern crate tempfile;
-
-use self::libnewsboat::cliargsparser::CliArgsParser;
-use self::tempfile::TempDir;
+use libnewsboat::cliargsparser::CliArgsParser;
 use std::{env, path::PathBuf};
+use tempfile::TempDir;
 
 #[test]
 fn t_cliargsparser_dash_capital_e_resolves_tilde_to_homedir() {

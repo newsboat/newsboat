@@ -14,18 +14,18 @@
 // formatting macro accepts. Everything else will result in a compile-time error. See the docs in
 // `trait` module for more on that.
 
-extern crate libc;
+use libc;
 
 pub mod specifiers_iterator;
 // Re-exporting so that macro can just import the whole crate and get everything it needs.
-pub use specifiers_iterator::SpecifiersIterator;
+pub use crate::specifiers_iterator::SpecifiersIterator;
 
 pub mod traits;
 
+use crate::traits::*;
 use std::ffi::{CStr, CString};
 use std::mem;
 use std::vec::Vec;
-use traits::*;
 
 // Re-exporting platform-specific format specifiers.
 #[cfg(target_pointer_width = "32")]
@@ -36,7 +36,7 @@ pub use format_specifiers_32bit::*;
 #[cfg(target_pointer_width = "64")]
 mod format_specifiers_64bit;
 #[cfg(target_pointer_width = "64")]
-pub use format_specifiers_64bit::*;
+pub use crate::format_specifiers_64bit::*;
 
 /// Helper function to `fmt!`. **Use it only through that macro!**
 ///
@@ -136,7 +136,7 @@ macro_rules! fmt {
 
 #[cfg(test)]
 mod tests {
-    extern crate libc;
+    use libc;
 
     #[test]
     fn returns_first_argument_if_it_is_the_only_one() {

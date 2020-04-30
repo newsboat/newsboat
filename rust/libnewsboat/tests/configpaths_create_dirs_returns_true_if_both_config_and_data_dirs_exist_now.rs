@@ -1,13 +1,8 @@
-extern crate libnewsboat;
-extern crate rand;
-extern crate tempfile;
-#[macro_use]
-extern crate section_testing;
-
-use self::libnewsboat::configpaths::ConfigPaths;
-use self::rand::random;
-use self::tempfile::TempDir;
+use libnewsboat::configpaths::ConfigPaths;
+use rand::random;
+use section_testing::{enable_sections, section};
 use std::{env, fs, path};
+use tempfile::TempDir;
 
 fn assert_dirs_exist_after_create_dirs(dirs: &[&path::Path], tmp: &TempDir) {
     let paths = ConfigPaths::new();

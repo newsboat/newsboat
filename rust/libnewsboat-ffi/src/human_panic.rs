@@ -1,4 +1,4 @@
-use abort_on_panic;
+use crate::abort_on_panic;
 use libnewsboat::human_panic;
 
 #[no_mangle]

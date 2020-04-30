@@ -1,11 +1,7 @@
-extern crate libnewsboat;
-#[macro_use]
-extern crate section_testing;
-extern crate tempfile;
-
-use self::libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
-use self::tempfile::TempDir;
+use libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
+use section_testing::{enable_sections, section};
 use std::env;
+use tempfile::TempDir;
 
 mod configpaths_helpers;
 

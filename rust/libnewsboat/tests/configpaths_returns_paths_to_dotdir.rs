@@ -1,10 +1,7 @@
-extern crate libnewsboat;
-extern crate tempfile;
-
-use self::libnewsboat::configpaths::ConfigPaths;
-use self::tempfile::TempDir;
+use libnewsboat::configpaths::ConfigPaths;
 use std::env;
 use std::fs;
+use tempfile::TempDir;
 
 #[test]
 fn t_returns_paths_to_newsboat_dotdir_if_no_newsboat_dirs_exist() {

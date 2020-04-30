@@ -4,17 +4,14 @@
 
 // `libc` contains file mode constants, like S_IXUSR, which are useful for `struct Chmod`. Thus it
 // makes sense to re-export the crate.
-pub extern crate libc;
-extern crate libnewsboat;
-extern crate rand;
-extern crate tempfile;
+pub use libc;
 
-use self::libnewsboat::configpaths::ConfigPaths;
-use self::rand::random;
-use self::tempfile::TempDir;
+use libnewsboat::configpaths::ConfigPaths;
+use rand::random;
 use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::{fs, path};
+use tempfile::TempDir;
 
 /// Strings that are placed in files before running commands, to see if commands modify those
 /// files.

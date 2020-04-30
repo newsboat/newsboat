@@ -27,7 +27,7 @@
 //! For numeric types, the holder is the same as the type itself, and the values are simply copied.
 //! For example, `u64`'s "holder" is `u64`, which is then borrowed to get a `u64` again.
 
-extern crate libc;
+use libc;
 
 use std::ffi::CString;
 

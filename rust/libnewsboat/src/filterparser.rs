@@ -835,7 +835,7 @@ mod tests {
         );
     }
 
-    proptest! {
+    proptest::proptest! {
         #[test]
         fn does_not_crash_on_any_input(ref input in "\\PC*") {
             // Result explicitly ignored because we just want to make sure this call doesn't panic.

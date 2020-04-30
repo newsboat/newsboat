@@ -4,7 +4,7 @@
 //! This counts the number of "columns" the text would occupy if displayed with a monospace font.
 //! For example, "abc" has length 3, but "ＡＢＣ" has length 6, even though they both contain 3 graphemes.
 
-use utils;
+use crate::utils;
 
 pub struct LimitedString {
     /// Maximum length of this string, counted by "displayed width".
@@ -125,7 +125,7 @@ mod tests {
         assert_eq!(s.length(), limit);
     }
 
-    proptest! {
+    proptest::proptest! {
         #[test]
         fn length_never_exceeds_the_limit_one_string(
             limit in 1usize..1024,

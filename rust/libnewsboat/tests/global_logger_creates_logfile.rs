@@ -1,8 +1,5 @@
-extern crate libnewsboat;
-extern crate tempfile;
-
-use self::tempfile::TempDir;
 use libnewsboat::logger::get_instance;
+use tempfile::TempDir;
 
 #[test]
 fn t_get_instance_returns_valid_logger() {

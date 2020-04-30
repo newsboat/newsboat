@@ -1,4 +1,4 @@
-use abort_on_panic;
+use crate::abort_on_panic;
 use libc::{c_char, c_void};
 use libnewsboat::fmtstrformatter::FmtStrFormatter;
 use std::ffi::{CStr, CString};

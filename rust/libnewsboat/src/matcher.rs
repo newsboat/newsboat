@@ -1,12 +1,9 @@
 //! Checks if given filter expression is true for a given feed or article.
 
-extern crate regex_rs;
-extern crate std;
-
-use self::regex_rs::{CompFlags, MatchFlags, Regex};
-use filterparser::{self, Expression, Expression::*, Operator, Value};
-use matchable::Matchable;
-use matchererror::MatcherError;
+use crate::filterparser::{self, Expression, Expression::*, Operator, Value};
+use crate::matchable::Matchable;
+use crate::matchererror::MatcherError;
+use regex_rs::{CompFlags, MatchFlags, Regex};
 
 /// Checks if given filter expression is true for a given feed or article.
 ///

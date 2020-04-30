@@ -1,23 +1,14 @@
-extern crate curl_sys;
-extern crate dirs;
-extern crate libc;
-extern crate natord;
-extern crate rand;
-extern crate std;
-extern crate unicode_width;
-extern crate url;
-
-use self::unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
-use self::url::percent_encoding::*;
-use self::url::Url;
-use htmlrenderer;
+use crate::htmlrenderer;
+use crate::logger::{self, Level};
 use libc::c_ulong;
-use logger::{self, Level};
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
+use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
+use url::percent_encoding::*;
+use url::Url;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -767,7 +758,7 @@ pub fn extract_filter(line: &str) -> (&str, &str) {
 
 #[cfg(test)]
 mod tests {
-    extern crate tempfile;
+    use tempfile;
 
     use super::*;
 
@@ -1080,7 +1071,7 @@ mod tests {
 
     #[test]
     fn t_podcast_mime_to_link_type() {
-        use htmlrenderer::LinkType::*;
+        use crate::htmlrenderer::LinkType::*;
 
         assert_eq!(podcast_mime_to_link_type("audio/mpeg"), Some(Audio));
         assert_eq!(podcast_mime_to_link_type("audio/mp3"), Some(Audio));
@@ -1163,8 +1154,8 @@ mod tests {
 
     #[test]
     fn t_run_command_executes_given_command_with_given_argument() {
-        use self::tempfile::TempDir;
         use std::{thread, time};
+        use tempfile::TempDir;
 
         let tmp = TempDir::new().unwrap();
         let filepath = {
@@ -1333,9 +1324,9 @@ mod tests {
 
     #[test]
     fn t_mkdir_parents() {
-        use self::tempfile::TempDir;
         use std::fs;
         use std::os::unix::fs::PermissionsExt;
+        use tempfile::TempDir;
 
         let mode: u32 = 0o700;
         let tmp_dir = TempDir::new().unwrap();

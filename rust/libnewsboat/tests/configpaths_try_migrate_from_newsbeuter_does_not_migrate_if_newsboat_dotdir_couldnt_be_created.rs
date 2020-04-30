@@ -1,10 +1,8 @@
-extern crate tempfile;
-
-use self::tempfile::TempDir;
 use std::env;
+use tempfile::TempDir;
 
 mod configpaths_helpers;
-use configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
+use crate::configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
 
 #[test]
 fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_dotdir_couldnt_be_created(

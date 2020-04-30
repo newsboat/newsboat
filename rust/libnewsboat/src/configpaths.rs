@@ -1,13 +1,14 @@
-use cliargsparser::CliArgsParser;
+use crate::cliargsparser::CliArgsParser;
+use crate::logger::{self, Level};
+use crate::utils;
 use dirs;
 use gettextrs::gettext;
 use libc;
-use logger::{self, Level};
 use std::fs::{self, DirBuilder};
 use std::io;
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
-use utils;
+use strprintf::fmt;
 use xdg;
 
 pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";

@@ -1,8 +1,6 @@
 //! Keeps a record of what the program did.
 
-extern crate chrono;
-
-use self::chrono::{offset::Local, Datelike, Timelike};
+use chrono::{offset::Local, Datelike, Timelike};
 use once_cell::sync::OnceCell;
 use std::fmt;
 use std::fs::{File, OpenOptions};
@@ -299,8 +297,7 @@ pub fn get_instance() -> &'static Logger {
 ///
 /// Most of the time, you should just use this. For example:
 /// ```no_run
-/// # #[macro_use] extern crate libnewsboat;
-/// use libnewsboat::logger::{self, Level};
+/// use libnewsboat::{log, logger::{self, Level}};
 ///
 /// fn super_cool_function(value: u32) {
 ///     log!(Level::Debug, "super_cool_function(): value = {}", value);
@@ -318,14 +315,12 @@ macro_rules! log {
 
 #[cfg(test)]
 mod tests {
-    extern crate tempfile;
-
     use super::*;
 
-    use self::chrono::{Duration, TimeZone};
-    use self::tempfile::TempDir;
+    use chrono::{Duration, TimeZone};
     use std::io::{self, BufRead, BufReader};
     use std::path;
+    use tempfile::TempDir;
 
     fn setup_logger() -> io::Result<(TempDir, path::PathBuf, path::PathBuf, Logger)> {
         let tmp = TempDir::new()?;
