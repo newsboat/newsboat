@@ -35,7 +35,6 @@ public:
 	void set_config_container(ConfigContainer* cfgcontainer);
 	void show_error(const std::string& msg);
 	void set_status(const std::string& msg);
-	void set_status_unlocked(const std::string& msg);
 	Controller* get_ctrl()
 	{
 		return ctrl;

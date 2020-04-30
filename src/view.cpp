@@ -101,20 +101,16 @@ std::shared_ptr<FormAction> View::get_current_formaction()
 	}
 }
 
-void View::set_status_unlocked(const std::string& msg)
+void View::set_status(const std::string& msg)
 {
+	std::lock_guard<std::mutex> lock(mtx);
+
 	auto fa = get_current_formaction();
 	if (fa) {
 		Stfl::Form& form = fa->get_form();
 		form.set("msg", msg);
 		form.run(-1);
 	}
-}
-
-void View::set_status(const std::string& msg)
-{
-	std::lock_guard<std::mutex> lock(mtx);
-	set_status_unlocked(msg);
 }
 
 void View::show_error(const std::string& msg)
