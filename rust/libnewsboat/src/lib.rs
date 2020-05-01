@@ -13,6 +13,7 @@ pub mod cliargsparser;
 pub mod configpaths;
 pub mod filterparser;
 pub mod fmtstrformatter;
+pub mod fslock;
 pub mod history;
 pub mod htmlrenderer;
 pub mod matchable;
