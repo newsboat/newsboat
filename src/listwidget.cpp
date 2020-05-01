@@ -30,7 +30,7 @@ void ListWidget::stfl_replace_lines(std::uint32_t number_of_lines,
 
 bool ListWidget::move_up()
 {
-	std::uint32_t curpos = get_position();
+	const std::uint32_t curpos = get_position();
 	if (curpos > 0) {
 		set_position(curpos - 1);
 		return true;
@@ -44,8 +44,8 @@ bool ListWidget::move_down()
 		// Ignore if list is empty
 		return false;
 	}
-	std::uint32_t maxpos = num_lines - 1;
-	std::uint32_t curpos = get_position();
+	const std::uint32_t maxpos = num_lines - 1;
+	const std::uint32_t curpos = get_position();
 	if (curpos + 1 <= maxpos) {
 		set_position(curpos + 1);
 		return true;
@@ -64,14 +64,14 @@ void ListWidget::move_to_last()
 		// Ignore if list is empty
 		return;
 	}
-	std::uint32_t maxpos = num_lines - 1;
+	const std::uint32_t maxpos = num_lines - 1;
 	set_position(maxpos);
 }
 
 void ListWidget::move_page_up()
 {
-	std::uint32_t curpos = get_position();
-	std::uint32_t list_height = get_height();
+	const std::uint32_t curpos = get_position();
+	const std::uint32_t list_height = get_height();
 	if (curpos > list_height) {
 		set_position(curpos - list_height);
 	} else {
@@ -85,9 +85,9 @@ void ListWidget::move_page_down()
 		// Ignore if list is empty
 		return;
 	}
-	std::uint32_t maxpos = num_lines - 1;
-	std::uint32_t curpos = get_position();
-	std::uint32_t list_height = get_height();
+	const std::uint32_t maxpos = num_lines - 1;
+	const std::uint32_t curpos = get_position();
+	const std::uint32_t list_height = get_height();
 	if (curpos + list_height < maxpos) {
 		set_position(curpos + list_height);
 	} else {
@@ -97,7 +97,7 @@ void ListWidget::move_page_down()
 
 std::uint32_t ListWidget::get_position()
 {
-	std::string pos = form.get(list_name + "_pos");
+	const std::string pos = form.get(list_name + "_pos");
 	if (!pos.empty()) {
 		return std::max(0, std::stoi(pos));
 	}

@@ -30,7 +30,7 @@ void TextviewWidget::stfl_replace_lines(std::uint32_t number_of_lines,
 
 void TextviewWidget::scroll_up()
 {
-	std::uint32_t offset = get_scroll_offset();
+	const std::uint32_t offset = get_scroll_offset();
 	if (offset > 0) {
 		set_scroll_offset(offset - 1);
 	}
@@ -41,8 +41,8 @@ void TextviewWidget::scroll_down()
 	if (num_lines == 0) {
 		// Ignore if list is empty
 	}
-	std::uint32_t maxoffset = num_lines - 1;
-	std::uint32_t offset = get_scroll_offset();
+	const std::uint32_t maxoffset = num_lines - 1;
+	const std::uint32_t offset = get_scroll_offset();
 	if (offset < maxoffset) {
 		set_scroll_offset(offset + 1);
 	}
@@ -57,8 +57,8 @@ void TextviewWidget::scroll_to_bottom()
 	if (num_lines == 0) {
 		// Ignore if list is empty
 	}
-	std::uint32_t maxoffset = num_lines - 1;
-	std::uint32_t widget_height = get_height();
+	const std::uint32_t maxoffset = num_lines - 1;
+	const std::uint32_t widget_height = get_height();
 	if (maxoffset + 2 < widget_height) {
 		set_scroll_offset(0);
 	} else {
@@ -68,8 +68,8 @@ void TextviewWidget::scroll_to_bottom()
 
 void TextviewWidget::scroll_page_up()
 {
-	std::uint32_t offset = get_scroll_offset();
-	std::uint32_t widget_height = get_height();
+	const std::uint32_t offset = get_scroll_offset();
+	const std::uint32_t widget_height = get_height();
 	if (offset + 1 > widget_height) {
 		set_scroll_offset((offset + 1) - widget_height);
 	} else {
@@ -82,9 +82,9 @@ void TextviewWidget::scroll_page_down()
 	if (num_lines == 0) {
 		// Ignore if list is empty
 	}
-	std::uint32_t maxoffset = num_lines - 1;
-	std::uint32_t offset = get_scroll_offset();
-	std::uint32_t widget_height = get_height();
+	const std::uint32_t maxoffset = num_lines - 1;
+	const std::uint32_t offset = get_scroll_offset();
+	const std::uint32_t widget_height = get_height();
 	if (offset + widget_height - 1 < maxoffset) {
 		set_scroll_offset(offset + widget_height - 1);
 	} else {
@@ -94,7 +94,7 @@ void TextviewWidget::scroll_page_down()
 
 std::uint32_t TextviewWidget::get_scroll_offset()
 {
-	std::string offset = form.get(textview_name + "_offset");
+	const std::string offset = form.get(textview_name + "_offset");
 	if (!offset.empty()) {
 		return std::max(0, std::stoi(offset));
 	}
