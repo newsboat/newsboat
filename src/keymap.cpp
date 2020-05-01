@@ -401,14 +401,14 @@ static OpDesc opdescs[] = {
 	{
 		OP_SK_PGUP,
 		"pageup",
-		"PAGEUP",
+		"PPAGE",
 		_("Move to the previous page"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_PGDOWN,
 		"pagedown",
-		"PAGEDOWN",
+		"NPAGE",
 		_("Move to the next page"),
 		KM_SYSKEYS
 	},
@@ -502,12 +502,17 @@ KeyMap::KeyMap(unsigned flags)
 
 		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
 			const std::string context(contexts[j]);
-			const uint32_t context_flag = (1 << (j - 1));
+			const std::uint32_t context_flag = (1 << (j - 1));
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				keymap_[context][op_desc.default_key] = op_desc.op;
 			}
 		}
 	}
+
+	keymap_["help"]["b"] = OP_SK_PGUP;
+	keymap_["help"]["SPACE"] = OP_SK_PGDOWN;
+	keymap_["article"]["b"] = OP_SK_PGUP;
+	keymap_["article"]["SPACE"] = OP_SK_PGDOWN;
 }
 
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)

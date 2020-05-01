@@ -27,6 +27,7 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
+	, files_list("files", FormAction::f)
 {
 	// In DirBrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog
@@ -75,10 +76,10 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		 * needs to be returned.
 		 */
 		LOG(Level::DEBUG, "DirBrowserFormAction: 'opening' item");
-		std::string focus = f->get_focus();
+		std::string focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
-				std::string selection = f->get("listposname");
+				std::string selection = f.get("listposname");
 				char filetype = selection[0];
 				selection.erase(0, 1);
 				std::string filename(selection);
@@ -89,7 +90,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
 						status);
-					f->set("listpos", "0");
+					f.set("files_pos", "0");
 					std::string fn = utils::getcwd();
 					update_title(fn);
 
@@ -98,7 +99,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 					}
 
 					std::string fnstr =
-						f->get("filenametext");
+						f.get("filenametext");
 					std::string::size_type base =
 						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
 					if (base == std::string::npos) {
@@ -108,7 +109,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 							base + 1,
 							std::string::npos);
 					}
-					f->set("filenametext", fn);
+					f.set("filenametext", fn);
 					do_redraw = true;
 				}
 				break;
@@ -118,8 +119,8 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
 					fn.append(filename);
-					f->set("filenametext", fn);
-					f->set_focus("filename");
+					f.set("filenametext", fn);
+					f.set_focus("filename");
 				}
 				break;
 				default:
@@ -135,26 +136,65 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	break;
 	case OP_SWITCH_FOCUS: {
 		LOG(Level::DEBUG, "view::dirbrowser: focusing different widget");
-		const std::string focus = f->get_focus();
+		const std::string focus = f.get_focus();
 		if (focus == "files") {
-			f->set_focus("filename");
+			f.set_focus("filename");
 		} else {
-			f->set_focus("files");
+			f.set_focus("files");
 		}
 		break;
 	}
+	case OP_SK_UP:
+		if (f.get_focus() == "files") {
+			files_list.move_up();
+		} else {
+			f.set_focus("files");
+		}
+		break;
+	case OP_SK_DOWN:
+		if (f.get_focus() == "files") {
+			if (!files_list.move_down()) {
+				f.set_focus("filename");
+			}
+		}
+		break;
+	case OP_SK_HOME:
+		if (f.get_focus() == "files") {
+			files_list.move_to_first();
+		} else {
+			f.set("filenametext_pos", "0");
+		}
+		break;
+	case OP_SK_END:
+		if (f.get_focus() == "files") {
+			files_list.move_to_last();
+		} else {
+			const std::size_t text_length = f.get("filenametext").length();
+			f.set("filenametext_pos", std::to_string(text_length));
+		}
+		break;
+	case OP_SK_PGUP:
+		if (f.get_focus() == "files") {
+			files_list.move_page_up();
+		}
+		break;
+	case OP_SK_PGDOWN:
+		if (f.get_focus() == "files") {
+			files_list.move_page_down();
+		}
+		break;
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);
 		v->pop_current_formaction();
-		f->set("filenametext", "");
+		f.set("filenametext", "");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: hard quitting");
 		while (v->formaction_stack_size() > 0) {
 			v->pop_current_formaction();
 		}
-		f->set("filenametext", "");
+		f.set("filenametext", "");
 		break;
 	default:
 		break;
@@ -164,7 +204,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 
 void DirBrowserFormAction::update_title(const std::string& working_directory)
 {
-	const std::string fileswidth = f->get("files:w");
+	const std::string fileswidth = f.get("files:w");
 	const unsigned int width = utils::to_u(fileswidth);
 
 	FmtStrFormatter fmt;
@@ -175,7 +215,7 @@ void DirBrowserFormAction::update_title(const std::string& working_directory)
 	const std::string title = fmt.do_format(
 			cfg->get_configvalue("dirbrowser-title-format"), width);
 
-	f->set("head", title);
+	f.set("head", title);
 }
 
 std::vector<std::string> get_sorted_dirlist()
@@ -233,11 +273,11 @@ void DirBrowserFormAction::prepare()
 
 		code.append("}");
 
-		f->modify("files", "replace_inner", code);
+		files_list.stfl_replace_lines(directories.size(), code);
 		do_redraw = false;
 	}
 
-	std::string focus = f->get_focus();
+	std::string focus = f.get_focus();
 	if (focus == "files") {
 		curs_set(0);
 	} else {
@@ -249,7 +289,7 @@ void DirBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	f->set("fileprompt", _("Directory: "));
+	f.set("fileprompt", _("Directory: "));
 
 	if (dir == "") {
 		std::string save_path = cfg->get_configvalue("save-path");
@@ -266,11 +306,11 @@ void DirBrowserFormAction::init()
 
 	const std::string cwdtmp = utils::getcwd();
 
-	f->set("filenametext", dir);
+	f.set("filenametext", dir);
 
 	// Set position to 0 and back to ensure that the text is visible
-	f->run(-1);
-	f->set("filenametext_pos", std::to_string(dir.length()));
+	f.run(-1);
+	f.set("filenametext_pos", std::to_string(dir.length()));
 
 	update_title(cwdtmp);
 }

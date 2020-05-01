@@ -3,6 +3,7 @@
 
 #include "filtercontainer.h"
 #include "formaction.h"
+#include "listwidget.h"
 
 namespace newsboat {
 
@@ -53,6 +54,8 @@ private:
 		const std::string& tag,
 		unsigned int pos,
 		unsigned int width);
+
+	ListWidget tags_list;
 };
 
 } // namespace newsboat

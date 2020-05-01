@@ -91,48 +91,6 @@ void View::set_keymap(KeyMap* k)
 	keys = k;
 }
 
-void View::update_bindings()
-{
-	for (const auto& form : formaction_stack) {
-		if (form) {
-			set_bindings(form);
-		}
-	}
-}
-
-void View::set_bindings(std::shared_ptr<FormAction> fa)
-{
-	std::string upkey("** ");
-	upkey.append(utils::join(keys->get_keys(OP_SK_UP, fa->id()), " "));
-	std::string downkey("** ");
-	downkey.append(utils::join(keys->get_keys(OP_SK_DOWN, fa->id()), " "));
-	fa->get_form()->set("bind_up", upkey);
-	fa->get_form()->set("bind_down", downkey);
-
-	std::string pgupkey;
-	std::string pgdownkey;
-	if (fa->id() == "article" || fa->id() == "help") {
-		pgupkey.append("** b ");
-		pgdownkey.append("** SPACE ");
-	} else {
-		pgupkey.append("** ");
-		pgdownkey.append("** ");
-	}
-
-	pgupkey.append(utils::join(keys->get_keys(OP_SK_PGUP, fa->id()), " "));
-	pgdownkey.append(utils::join(keys->get_keys(OP_SK_PGDOWN, fa->id()), " "));
-
-	fa->get_form()->set("bind_page_up", pgupkey);
-	fa->get_form()->set("bind_page_down", pgdownkey);
-
-	std::string homekey("** ");
-	homekey.append(utils::join(keys->get_keys(OP_SK_HOME, fa->id()), " "));
-	std::string endkey("** ");
-	endkey.append(utils::join(keys->get_keys(OP_SK_END, fa->id()), " "));
-	fa->get_form()->set("bind_home", homekey);
-	fa->get_form()->set("bind_end", endkey);
-}
-
 std::shared_ptr<FormAction> View::get_current_formaction()
 {
 	if (formaction_stack.size() > 0 &&
@@ -143,27 +101,16 @@ std::shared_ptr<FormAction> View::get_current_formaction()
 	}
 }
 
-void View::set_status_unlocked(const std::string& msg)
-{
-	auto fa = get_current_formaction();
-	if (fa) {
-		std::shared_ptr<Stfl::Form> form = fa->get_form();
-		if (form) {
-			form->set("msg", msg);
-			form->run(-1);
-		} else {
-			LOG(Level::ERROR,
-				"View::set_status_unlocked: "
-				"form for formaction of type %s is nullptr!",
-				fa->id());
-		}
-	}
-}
-
 void View::set_status(const std::string& msg)
 {
 	std::lock_guard<std::mutex> lock(mtx);
-	set_status_unlocked(msg);
+
+	auto fa = get_current_formaction();
+	if (fa) {
+		Stfl::Form& form = fa->get_form();
+		form.set("msg", msg);
+		form.run(-1);
+	}
 }
 
 void View::show_error(const std::string& msg)
@@ -179,7 +126,6 @@ int View::run()
 	// create feedlist
 	auto feedlist = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg);
-	set_bindings(feedlist);
 	feedlist->set_regexmanager(rxman);
 	feedlist->set_tags(tags);
 	apply_colors(feedlist);
@@ -207,7 +153,7 @@ int View::run()
 			// if there is any macro command left to process, we do
 			// so
 
-			fa->get_form()->run(-1);
+			fa->get_form().run(-1);
 			if (!fa->process_op(
 					macrocmds[0].op, true, &macrocmds[0].args)) {
 
@@ -219,7 +165,7 @@ int View::run()
 			}
 		} else {
 			// we then receive the event and ignore timeouts.
-			const char* event = fa->get_form()->run(60000);
+			const char* event = fa->get_form().run(60000);
 
 			if (ctrl_c_hit) {
 				ctrl_c_hit = false;
@@ -316,7 +262,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const char* event = fa->get_form()->run(1000);
+		const char* event = fa->get_form().run(1000);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 		if (!event || strcmp(event, "TIMEOUT") == 0) {
 			continue;
@@ -483,7 +429,6 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 		std::shared_ptr<ItemListFormAction> searchresult(
 			new ItemListFormAction(
 				this, itemlist_str, rsscache, filters, cfg));
-		set_bindings(searchresult);
 		searchresult->set_regexmanager(rxman);
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
@@ -510,7 +455,6 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 		std::shared_ptr<ItemListFormAction> itemlist(
 			new ItemListFormAction(
 				this, itemlist_str, rsscache, filters, cfg));
-		set_bindings(itemlist);
 		itemlist->set_regexmanager(rxman);
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
@@ -556,7 +500,6 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		std::shared_ptr<ItemViewFormAction> itemview(
 			new ItemViewFormAction(
 				this, itemlist, itemview_str, rsscache, cfg));
-		set_bindings(itemview);
 		itemview->set_regexmanager(rxman);
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
@@ -595,7 +538,6 @@ void View::view_dialogs()
 		std::shared_ptr<DialogsFormAction> dialogs(
 			new DialogsFormAction(this, dialogs_str, cfg));
 		dialogs->set_parent_formaction(fa);
-		set_bindings(dialogs);
 		apply_colors(dialogs);
 		dialogs->init();
 		formaction_stack.push_back(dialogs);
@@ -609,7 +551,6 @@ void View::push_help()
 
 	std::shared_ptr<HelpFormAction> helpview(
 		new HelpFormAction(this, help_str, cfg));
-	set_bindings(helpview);
 	apply_colors(helpview);
 	helpview->set_context(fa->id());
 	helpview->set_parent_formaction(fa);
@@ -623,7 +564,6 @@ void View::push_urlview(const std::vector<LinkPair>& links,
 {
 	std::shared_ptr<UrlViewFormAction> urlview(
 		new UrlViewFormAction(this, feed, urlview_str, cfg));
-	set_bindings(urlview);
 	apply_colors(urlview);
 	urlview->set_parent_formaction(get_current_formaction());
 	urlview->init();
@@ -637,7 +577,6 @@ std::string View::run_filebrowser(const std::string& default_filename,
 {
 	std::shared_ptr<FileBrowserFormAction> filebrowser(
 		new FileBrowserFormAction(this, filebrowser_str, cfg));
-	set_bindings(filebrowser);
 	apply_colors(filebrowser);
 	filebrowser->set_dir(dir);
 	filebrowser->set_default_filename(default_filename);
@@ -649,7 +588,6 @@ std::string View::run_dirbrowser(const std::string& dir)
 {
 	std::shared_ptr<DirBrowserFormAction> dirbrowser(
 		new DirBrowserFormAction(this, filebrowser_str, cfg));
-	set_bindings(dirbrowser);
 	apply_colors(dirbrowser);
 	dirbrowser->set_dir(dir);
 	dirbrowser->set_parent_formaction(get_current_formaction());
@@ -665,7 +603,6 @@ std::string View::select_tag()
 	std::shared_ptr<SelectFormAction> selecttag(
 		new SelectFormAction(this, selecttag_str, cfg));
 	selecttag->set_type(SelectFormAction::SelectionType::TAG);
-	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_tags(tags);
@@ -678,7 +615,6 @@ std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 	std::shared_ptr<SelectFormAction> selecttag(
 		new SelectFormAction(this, selecttag_str, cfg));
 	selecttag->set_type(SelectFormAction::SelectionType::FILTER);
-	set_bindings(selecttag);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_filters(filters);
@@ -693,12 +629,12 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
 	current_formaction = formaction_stack_size() - 1;
-	f->get_form()->set("msg", prompt);
+	f->get_form().set("msg", prompt);
 
 	char result = 0;
 
 	do {
-		const char* event = f->get_form()->run(0);
+		const char* event = f->get_form().run(0);
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
 		if (!event) {
 			continue;
@@ -717,8 +653,8 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 			result);
 	} while (!result || strchr(charset.c_str(), result) == nullptr);
 
-	f->get_form()->set("msg", "");
-	f->get_form()->run(-1);
+	f->get_form().set("msg", "");
+	f->get_form().run(-1);
 
 	pop_current_formaction();
 
@@ -1021,7 +957,7 @@ void View::force_redraw()
 	if (fa != nullptr) {
 		fa->set_redraw(true);
 		fa->prepare();
-		fa->get_form()->run(-1);
+		fa->get_form().run(-1);
 	}
 }
 
@@ -1059,7 +995,7 @@ void View::pop_current_formaction()
 		std::shared_ptr<FormAction> f = get_current_formaction();
 		if (f) {
 			f->set_redraw(true);
-			f->get_form()->set("msg", "");
+			f->get_form().set("msg", "");
 			f->recalculate_form();
 		}
 	}
@@ -1156,8 +1092,8 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 				}
 				bold.append("attr=bold");
 				ul.append("attr=underline");
-				fa->get_form()->set("color_bold", bold.c_str());
-				fa->get_form()->set(
+				fa->get_form().set("color_bold", bold.c_str());
+				fa->get_form().set(
 					"color_underline", ul.c_str());
 			}
 		}
@@ -1168,7 +1104,7 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 			fgcit->first,
 			colorattr);
 
-		fa->get_form()->set(fgcit->first, colorattr);
+		fa->get_form().set(fgcit->first, colorattr);
 	}
 }
 
@@ -1241,18 +1177,18 @@ void View::inside_cmdline(bool f)
 
 void View::clear_line(std::shared_ptr<FormAction> fa)
 {
-	fa->get_form()->set("qna_value", "");
-	fa->get_form()->set("qna_value_pos", "0");
+	fa->get_form().set("qna_value", "");
+	fa->get_form().set("qna_value_pos", "0");
 	LOG(Level::DEBUG, "View::clear_line: cleared line");
 }
 
 void View::clear_eol(std::shared_ptr<FormAction> fa)
 {
-	unsigned int pos = utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
-	std::string val = fa->get_form()->get("qna_value");
+	unsigned int pos = utils::to_u(fa->get_form().get("qna_value_pos"), 0);
+	std::string val = fa->get_form().get("qna_value");
 	val.erase(pos, val.length());
-	fa->get_form()->set("qna_value", val);
-	fa->get_form()->set("qna_value_pos", std::to_string(val.length()));
+	fa->get_form().set("qna_value", val);
+	fa->get_form().set("qna_value_pos", std::to_string(val.length()));
 	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
 }
 
@@ -1265,8 +1201,8 @@ void View::cancel_input(std::shared_ptr<FormAction> fa)
 void View::delete_word(std::shared_ptr<FormAction> fa)
 {
 	std::string::size_type curpos =
-		utils::to_u(fa->get_form()->get("qna_value_pos"), 0);
-	std::string val = fa->get_form()->get("qna_value");
+		utils::to_u(fa->get_form().get("qna_value_pos"), 0);
+	std::string val = fa->get_form().get("qna_value");
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
@@ -1285,13 +1221,13 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	}
 	val.erase(firstpos, curpos - firstpos);
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
-	fa->get_form()->set("qna_value", val);
-	fa->get_form()->set("qna_value_pos", std::to_string(firstpos));
+	fa->get_form().set("qna_value", val);
+	fa->get_form().set("qna_value_pos", std::to_string(firstpos));
 }
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 {
-	std::string fragment = fa->get_form()->get("qna_value");
+	std::string fragment = fa->get_form().get("qna_value");
 	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = fa->get_suggestions(fragment);
@@ -1316,8 +1252,8 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
 		break;
 	}
-	fa->get_form()->set("qna_value", suggestion);
-	fa->get_form()->set(
+	fa->get_form().set("qna_value", suggestion);
+	fa->get_form().set(
 		"qna_value_pos", std::to_string(suggestion.length()));
 	last_fragment = suggestion;
 }
@@ -1325,7 +1261,7 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 void View::dump_current_form()
 {
 	std::string formtext =
-		formaction_stack[current_formaction]->get_form()->dump(
+		formaction_stack[current_formaction]->get_form().dump(
 			"", "", 0);
 	time_t t = time(nullptr);
 	const auto fnbuf = utils::mt_strf_localtime(

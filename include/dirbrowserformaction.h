@@ -5,6 +5,7 @@
 #include <grp.h>
 
 #include "configcontainer.h"
+#include "listwidget.h"
 #include "formaction.h"
 
 namespace newsboat {
@@ -44,6 +45,7 @@ private:
 	std::string cwd;
 	std::string dir;
 
+	ListWidget files_list;
 };
 
 } // namespace newsboat

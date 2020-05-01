@@ -35,7 +35,6 @@ public:
 	void set_config_container(ConfigContainer* cfgcontainer);
 	void show_error(const std::string& msg);
 	void set_status(const std::string& msg);
-	void set_status_unlocked(const std::string& msg);
 	Controller* get_ctrl()
 	{
 		return ctrl;
@@ -129,8 +128,6 @@ public:
 
 	void apply_colors_to_all_formactions();
 
-	void update_bindings();
-
 	void inside_qna(bool f);
 	void inside_cmdline(bool f);
 
@@ -139,7 +136,6 @@ public:
 	static void ctrl_c_action(int sig);
 
 protected:
-	void set_bindings(std::shared_ptr<FormAction> fa);
 	void apply_colors(std::shared_ptr<FormAction> fa);
 
 	void handle_cmdline_completion(std::shared_ptr<FormAction> fa);

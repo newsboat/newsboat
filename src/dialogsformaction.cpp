@@ -16,6 +16,7 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, update_list(true)
+	, dialogs_list("dialogs", FormAction::f)
 {
 }
 
@@ -25,14 +26,14 @@ void DialogsFormAction::init()
 {
 	set_keymap_hints();
 
-	f->run(-3); // compute all widget dimensions
+	f.run(-3); // compute all widget dimensions
 
-	unsigned int width = utils::to_u(f->get("dialogs:w"));
+	unsigned int width = utils::to_u(f.get("dialogs:w"));
 	std::string title_format = cfg->get_configvalue("dialogs-title-format");
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	f->set("head", fmt.do_format(title_format, width));
+	f.set("head", fmt.do_format(title_format, width));
 }
 
 void DialogsFormAction::prepare()
@@ -58,7 +59,8 @@ void DialogsFormAction::prepare()
 			i++;
 		}
 
-		f->modify("dialogs", "replace_inner", listfmt.format_list());
+		dialogs_list.stfl_replace_lines(listfmt.get_lines_count(),
+			listfmt.format_list());
 
 		update_list = false;
 	}
@@ -80,7 +82,7 @@ bool DialogsFormAction::process_operation(Operation op,
 {
 	switch (op) {
 	case OP_OPEN: {
-		std::string dialogposname = f->get("dialogpos");
+		std::string dialogposname = f.get("dialogs_pos");
 		if (dialogposname.length() > 0) {
 			v->set_current_formaction(utils::to_u(dialogposname));
 		} else {
@@ -89,7 +91,7 @@ bool DialogsFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_CLOSEDIALOG: {
-		std::string dialogposname = f->get("dialogpos");
+		std::string dialogposname = f.get("dialogs_pos");
 		if (dialogposname.length() > 0) {
 			unsigned int dialogpos = utils::to_u(dialogposname);
 			if (dialogpos != 0) {
@@ -105,6 +107,24 @@ bool DialogsFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_SK_UP:
+		dialogs_list.move_up();
+		break;
+	case OP_SK_DOWN:
+		dialogs_list.move_down();
+		break;
+	case OP_SK_HOME:
+		dialogs_list.move_to_first();
+		break;
+	case OP_SK_END:
+		dialogs_list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		dialogs_list.move_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		dialogs_list.move_page_down();
+		break;
 	case OP_QUIT:
 		v->pop_current_formaction();
 		break;
@@ -124,7 +144,7 @@ void DialogsFormAction::handle_cmdline(const std::string& cmd)
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		if (idx <= v->formaction_stack_size()) {
-			f->set("dialogpos", std::to_string(idx - 1));
+			f.set("dialogs_pos", std::to_string(idx - 1));
 		} else {
 			v->show_error(_("Invalid position!"));
 		}

@@ -2,6 +2,7 @@
 #define NEWSBOAT_DIALOGSFORMACTION_H_
 
 #include "formaction.h"
+#include "listwidget.h"
 
 namespace newsboat {
 
@@ -24,6 +25,7 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	bool update_list;
+	ListWidget dialogs_list;
 };
 
 } // namespace newsboat

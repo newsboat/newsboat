@@ -28,6 +28,8 @@ PbView::PbView(PbController* c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
 	, keys(0)
+	, downloads_list("dls", dllist_form)
+	, help_textview("helptext", help_form)
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -102,7 +104,7 @@ void PbView::run(bool auto_download)
 
 			code.append("}");
 
-			dllist_form.modify("dls", "replace_inner", code);
+			downloads_list.stfl_replace_lines(i, code);
 
 			ctrl->set_view_update_necessary(false);
 		}
@@ -128,6 +130,24 @@ void PbView::run(bool auto_download)
 		}
 
 		switch (op) {
+		case OP_SK_UP:
+			downloads_list.move_up();
+			break;
+		case OP_SK_DOWN:
+			downloads_list.move_down();
+			break;
+		case OP_SK_HOME:
+			downloads_list.move_to_first();
+			break;
+		case OP_SK_END:
+			downloads_list.move_to_last();
+			break;
+		case OP_SK_PGUP:
+			downloads_list.move_page_up();
+			break;
+		case OP_SK_PGDOWN:
+			downloads_list.move_page_down();
+			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;
 			break;
@@ -246,38 +266,6 @@ void PbView::run(bool auto_download)
 	} while (!quit);
 }
 
-void PbView::set_bindings()
-{
-	if (keys) {
-		std::string upkey("** ");
-		upkey.append(utils::join(keys->get_keys(OP_SK_UP, "podboat"), " "));
-		std::string downkey("** ");
-		downkey.append(utils::join(keys->get_keys(OP_SK_DOWN, "podboat"), " "));
-		std::string pgupkey("** ");
-		pgupkey.append(utils::join(keys->get_keys(OP_SK_PGUP, "podboat"), " "));
-		std::string pgdownkey("** ");
-		pgdownkey.append(utils::join(keys->get_keys(OP_SK_PGDOWN, "podboat"), " "));
-		std::string homekey("** ");
-		homekey.append(utils::join(keys->get_keys(OP_SK_HOME, "podboat"), " "));
-		std::string endkey("** ");
-		endkey.append(utils::join(keys->get_keys(OP_SK_END, "podboat"), " "));
-
-		dllist_form.set("bind_up", upkey);
-		dllist_form.set("bind_down", downkey);
-		dllist_form.set("bind_page_up", pgupkey);
-		dllist_form.set("bind_page_down", pgdownkey);
-		dllist_form.set("bind_home", homekey);
-		dllist_form.set("bind_end", endkey);
-
-		help_form.set("bind_up", upkey);
-		help_form.set("bind_down", downkey);
-		help_form.set("bind_page_up", pgupkey);
-		help_form.set("bind_page_down", pgdownkey);
-		help_form.set("bind_home", homekey);
-		help_form.set("bind_end", endkey);
-	}
-}
-
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)
 {
 	if (kbps < 1024) {
@@ -317,7 +305,7 @@ void PbView::run_help()
 
 	code.append("}");
 
-	help_form.modify("helptext", "replace_inner", code);
+	help_textview.stfl_replace_lines(descs.size(), code);
 
 	bool quit = false;
 
@@ -330,6 +318,24 @@ void PbView::run_help()
 		Operation op = keys->get_operation(event, "help");
 
 		switch (op) {
+		case OP_SK_UP:
+			help_textview.scroll_up();
+			break;
+		case OP_SK_DOWN:
+			help_textview.scroll_down();
+			break;
+		case OP_SK_HOME:
+			help_textview.scroll_to_top();
+			break;
+		case OP_SK_END:
+			help_textview.scroll_to_bottom();
+			break;
+		case OP_SK_PGUP:
+			help_textview.scroll_page_up();
+			break;
+		case OP_SK_PGDOWN:
+			help_textview.scroll_page_down();
+			break;
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			quit = true;

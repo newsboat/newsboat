@@ -19,6 +19,7 @@ HelpFormAction::HelpFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
+	, textview("helptext", FormAction::f)
 {
 }
 
@@ -30,6 +31,24 @@ bool HelpFormAction::process_operation(Operation op,
 {
 	bool hardquit = false;
 	switch (op) {
+	case OP_SK_UP:
+		textview.scroll_up();
+		break;
+	case OP_SK_DOWN:
+		textview.scroll_down();
+		break;
+	case OP_SK_HOME:
+		textview.scroll_to_top();
+		break;
+	case OP_SK_END:
+		textview.scroll_to_bottom();
+		break;
+	case OP_SK_PGUP:
+		textview.scroll_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		textview.scroll_page_down();
+		break;
 	case OP_QUIT:
 		quit = true;
 		break;
@@ -62,15 +81,15 @@ bool HelpFormAction::process_operation(Operation op,
 void HelpFormAction::prepare()
 {
 	if (do_redraw) {
-		f->run(-3); // compute all widget dimensions
+		f.run(-3); // compute all widget dimensions
 
-		std::string listwidth = f->get("helptext:w");
+		std::string listwidth = f.get("helptext:w");
 		unsigned int width = utils::to_u(listwidth);
 
 		FmtStrFormatter fmt;
 		fmt.register_fmt('N', PROGRAM_NAME);
 		fmt.register_fmt('V', utils::program_version());
-		f->set("head",
+		f.set("head",
 			fmt.do_format(cfg->get_configvalue("help-title-format"),
 				width));
 
@@ -80,7 +99,7 @@ void HelpFormAction::prepare()
 			strprintf::fmt("<hl>%s</>", searchphrase);
 		std::vector<std::string> colors = utils::tokenize(
 				cfg->get_configvalue("search-highlight-colors"), " ");
-		f->set("highlight", make_colorstring(colors));
+		f.set("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
 
 		unsigned int unbound_count = 0;
@@ -206,7 +225,7 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		f->modify("helptext", "replace_inner", listfmt.format_list());
+		textview.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 		do_redraw = false;
 	}

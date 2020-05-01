@@ -218,7 +218,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE_NOTHROW(k.handle_action("bind-key", {"p", "pageup"}));
 
 		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
-			== std::vector<std::string>({"PAGEUP", "p", "u"}));
+			== std::vector<std::string>({"PPAGE", "p", "u"}));
 	}
 }
 

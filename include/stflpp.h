@@ -16,6 +16,15 @@ public:
 		explicit Form(const std::string& text);
 		~Form();
 
+		// Make sure this class cannot accidentally get copied.
+		// Copying this class would be bad because the `f` and `ipool` member
+		// variables are managed manually.
+		Form(const Form&) = delete;
+		Form& operator=(const Form&) = delete;
+		// The move operations are not needed at the moment but can be added when necessary.
+		Form(Form&&) = delete;
+		Form& operator=(Form&&) = delete;
+
 		const char* run(int timeout);
 
 		std::string get(const std::string& name);

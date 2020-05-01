@@ -113,13 +113,13 @@ TEST_CASE("strprintf::fmt() formats int32_t", "[strprintf]")
 
 TEST_CASE("strprintf::fmt() formats uint32_t", "[strprintf]")
 {
-	const uint32_t input = 42;
+	const std::uint32_t input = 42;
 	REQUIRE(strprintf::fmt("%" PRIu32, input) == "42");
 
-	const uint32_t zero = 0;
+	const std::uint32_t zero = 0;
 	REQUIRE(strprintf::fmt("%" PRIu32, zero) == "0");
 
-	const uint32_t u32_max = std::numeric_limits<uint32_t>::max();
+	const std::uint32_t u32_max = std::numeric_limits<std::uint32_t>::max();
 	REQUIRE(strprintf::fmt("%" PRIu32, u32_max) == "4294967295");
 }
 

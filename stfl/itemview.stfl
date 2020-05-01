@@ -1,12 +1,12 @@
 vbox
   @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
-  @bind_up[bind_up]:**
-  @bind_down[bind_down]:**
-  @bind_page_up[bind_page_up]:"** b"
-  @bind_page_down[bind_page_down]:"** SPACE"
-  @bind_home[bind_home]:**
-  @bind_end[bind_end]:**
+  @bind_up[bind_up]:
+  @bind_down[bind_down]:
+  @bind_page_up[bind_page_up]:
+  @bind_page_down[bind_page_down]:
+  @bind_home[bind_home]:
+  @bind_end[bind_end]:
   @on_TAB:"TAB"
   label#info[title]
     text[head]:"Article '#'"
@@ -16,7 +16,7 @@ vbox
     style_normal[article]:
     style_end[end-of-text-marker]:fg=blue,attr=bold
     .expand:vh
-    offset[articleoffset]:0
+    offset[article_offset]:0
     richtext:1
   vbox[hints]
     .expand:0
