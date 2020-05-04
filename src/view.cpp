@@ -347,27 +347,20 @@ int View::open_in_browser(const std::string& url)
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
 	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
-	std::string browser = cfg->get_configvalue("browser");
+	const std::string browser = cfg->get_configvalue("browser");
+	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
 	if (browser.find("%u") != std::string::npos) {
-		FmtStrFormatter fmt;
-		std::string newurl;
-		newurl = utils::replace_all(url, "'", "%27");
-		newurl.insert(0, "'");
-		newurl.append("'");
-		fmt.register_fmt('u', newurl);
-		cmdline = fmt.do_format(browser, 0);
+		cmdline = utils::replace_all(browser, "%u", escaped_url);
 	} else {
 		if (browser != "") {
 			cmdline.append(browser);
 		} else {
 			cmdline.append("lynx");
 		}
-		cmdline.append(" '");
-		cmdline.append(utils::replace_all(url, "'", "%27"));
-		cmdline.append("'");
+		cmdline.append(" " + escaped_url);
 	}
 	Stfl::reset();
-	int ret = utils::run_interactively(cmdline, "View::open_in_browser");
+	const int ret = utils::run_interactively(cmdline, "View::open_in_browser");
 	pop_current_formaction();
 	return ret;
 }
