@@ -349,13 +349,11 @@ int View::open_in_browser(const std::string& url)
 	std::string cmdline;
 	std::string browser = cfg->get_configvalue("browser");
 	if (browser.find("%u") != std::string::npos) {
-		FmtStrFormatter fmt;
 		std::string newurl;
 		newurl = utils::replace_all(url, "'", "%27");
 		newurl.insert(0, "'");
 		newurl.append("'");
-		fmt.register_fmt('u', newurl);
-		cmdline = fmt.do_format(browser, 0);
+		cmdline = utils::replace_all(browser, "%u", newurl);
 	} else {
 		if (browser != "") {
 			cmdline.append(browser);
