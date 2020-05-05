@@ -140,7 +140,7 @@ You'll probably want to run the tests; here's how:
 Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
 slows them down if `TMPDIR` is on HDD or even SSD.
 
-Newsboat can also be [built in Docker](doc/internal/docker.md).
+Newsboat can also be [built in Docker](doc/docker.md).
 
 License
 -------

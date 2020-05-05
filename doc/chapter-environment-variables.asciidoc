@@ -1,9 +1,9 @@
-BROWSER::
-        Tells Newsboat what browser to use if there is no "browser" setting in
-        the config file. If this variable doesn't exist, a default of lynx(1)
-        will be used.
+[[BROWSER]]<<BROWSER,`BROWSER`>>::
+        Tells Newsboat what browser to use if there is no <<browser,`browser`>>
+        setting in the config file. If this variable doesn't exist, a default
+        of `lynx(1)` will be used.
 
-CURL_CA_BUNDLE::
+[[CURL_CA_BUNDLE]]<<CURL_CA_BUNDLE,`CURL_CA_BUNDLE`>>::
         Tells Newsboat to use the specified certificate file to verify the peer.
         The file may contain multiple certificates. The certificate(s) must be
         in PEM format.
@@ -11,6 +11,29 @@ CURL_CA_BUNDLE::
 This option is useful if your libcurl is built without useful
 certificate information, and you can't rebuild the library yourself.
 
-TMPDIR::
+[[EDITOR]]<<EDITOR,`EDITOR`>>::
+        Tells Newsboat what fallback editor to use when editing the _urls_ file
+        via the <<edit-urls,`edit-urls`>> operation and no <<VISUAL,`VISUAL`>>
+        environment variable is set. If this variable doesn't exist either, a
+        default of `vi(1)` will be used.
+
+[[PAGER]]<<PAGER,`PAGER`>>::
+        Tells Newsboat what pager to use if the <<pager,`pager`>> setting in
+        the config file is explicitly set to an empty string.
+
+[[TMPDIR]]<<TMPDIR,`TMPDIR`>>::
         Tells Newsboat to use the specified directory for storing temporary files.
-        If this variable doesn't exist, a default of /tmp will be used.
+        If this variable doesn't exist, a default of _/tmp_ will be used.
+
+[[VISUAL]]<<VISUAL,`VISUAL`>>::
+        Tells Newsboat what editor to use when editing the _urls_ file via the
+        <<edit-urls,`edit-urls`>> operation. If this variable doesn't exist,
+        the <<EDITOR,`EDITOR`>> environment variable will be used.
+
+[[XDG_CONFIG_HOME]]<<XDG_CONFIG_HOME,`XDG_CONFIG_HOME`>>::
+        Tells Newsboat which base directory to use for the configuration files.
+        See also the <<_files,section on files>> for more information.
+
+[[XDG_DATA_HOME]]<<XDG_DATA_HOME,`XDG_DATA_HOME`>>::
+        Tells Newsboat which base directory to use for the data files. See also
+        the <<_files,section on files>> for more information.
