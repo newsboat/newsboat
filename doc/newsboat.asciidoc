@@ -382,7 +382,7 @@ that it can authenticate with the service:
 Note that double quotes should be escaped, i.e. you should write `\"`
 instead of `"`.
 
-See also <<oldreader-passwordfile,`oldreaader-passwordfile`>>,
+See also <<oldreader-passwordfile,`oldreader-passwordfile`>>,
 <<oldreader-passwordeval,`oldreader-passwordeval`>>, and
 <<_passwords_for_external_apis>>.
 
