@@ -234,8 +234,8 @@ std::vector<std::string> FormAction::get_suggestions(
 				if (tokens.size() <= 2) {
 					const std::string start = (tokens.size() == 2) ? tokens[1] : "";
 					const std::vector<KeyMapDesc> descs = v->get_keymap()->get_keymap_descriptions(
-						this->id()
-					);
+							this->id()
+						);
 					for (const KeyMapDesc& desc: descs) {
 						const std::string cmd = desc.cmd;
 						if (cmd.rfind(start, 0) == 0) {
