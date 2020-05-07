@@ -45,7 +45,9 @@ impl FsLock {
         );
 
         // first we open (and possibly create) the lock file
-        let mut file = match OpenOptions::new().mode(0o600).open(&new_lock_path) {
+        let mut options = OpenOptions::new();
+        options.mode(0o600).truncate(true);
+        let mut file = match options.open(&new_lock_path) {
             Ok(file) => file,
             Err(_) => return false,
         };
