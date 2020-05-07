@@ -43,8 +43,6 @@ impl Drop for FsLock {
 
 impl FsLock {
     pub fn try_lock(&mut self, new_lock_filepath: &Path, pid: &mut libc::pid_t) -> bool {
-        // switched to string as it is easier to work with c ffi later on
-        // Safety: this might fail if the path is not valid utf-8
         if self.locked && self.lock_filepath == new_lock_filepath {
             return true;
         }
