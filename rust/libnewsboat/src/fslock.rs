@@ -1,127 +1,86 @@
 use crate::logger::{self, Level};
-use std::ffi::{CString, OsStr};
-use std::os::unix::ffi::OsStrExt;
+use std::fs::{self, File, OpenOptions};
+use std::io::{Read, Write};
+use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
 use std::process;
 
-fn remove_lock(lock_filepath: &Path) {
-    let os: &OsStr = lock_filepath.as_ref();
-    // Safety: Safe to convert when memory is enough
-    let path = CString::new(os.as_bytes()).unwrap();
-    unsafe { libc::unlink(path.as_ptr()) };
+fn remove_lock(lock_path: &Path) {
+    fs::remove_file(lock_path).ok();
     log!(
         Level::Debug,
         "FsLock: removed lockfile {}",
-        lock_filepath.display()
+        lock_path.display()
     );
 }
 
+#[derive(Default)]
 pub struct FsLock {
-    lock_filepath: PathBuf,
-    fd: i32,
-    locked: bool,
-}
-
-impl Default for FsLock {
-    fn default() -> Self {
-        FsLock {
-            lock_filepath: PathBuf::new(),
-            fd: -1,
-            locked: false,
-        }
-    }
+    lock_path: PathBuf,
+    lock_file: Option<File>,
 }
 
 impl Drop for FsLock {
     fn drop(&mut self) {
-        if self.locked {
-            remove_lock(&self.lock_filepath);
-            let _ = unsafe { libc::close(self.fd) };
+        if self.lock_file.is_some() {
+            remove_lock(&self.lock_path);
         }
     }
 }
 
 impl FsLock {
-    pub fn try_lock(&mut self, new_lock_filepath: &Path, pid: &mut libc::pid_t) -> bool {
-        if self.locked && self.lock_filepath == new_lock_filepath {
+    pub fn try_lock(&mut self, new_lock_path: &Path, pid: &mut libc::pid_t) -> bool {
+        if self.lock_file.is_some() && self.lock_path == new_lock_path {
             return true;
         }
 
         // pid == 0 indicates that something went majorly wrong during locking
         *pid = 0;
 
-        // TODO: move to safe rust later
-        // let openoptions = OpenOptions::new().read(true).write(true).create(true);
-        // let mut file = match openoptions.open(path) {
-        //     Ok(file) => file,
-        //     Err(_) => return false,
-        // };
-
         log!(
             Level::Debug,
             "FsLock: trying to lock `{}'",
-            new_lock_filepath.display()
+            new_lock_path.display()
         );
 
         // first we open (and possibly create) the lock file
-        self.fd = unsafe {
-            let os: &OsStr = new_lock_filepath.as_ref();
-            // Safety: Safe to convert when memory is enough
-            let buf = CString::new(os.as_bytes()).unwrap();
-            libc::open(buf.as_ptr(), libc::O_RDWR | libc::O_CREAT, 0o600)
+        let mut openoptions = OpenOptions::new();
+        openoptions.read(true).write(true).create(true);
+        let mut file = match openoptions.open(&new_lock_path) {
+            Ok(file) => file,
+            Err(_) => return false,
         };
-        if self.fd < 0 {
-            return false;
-        }
 
         // then we lock it (returns immediately if locking is not possible)
-        if unsafe { libc::lockf(self.fd, libc::F_TLOCK, 0) } == 0 {
+        if unsafe { libc::lockf(file.as_raw_fd(), libc::F_TLOCK, 0) } == 0 {
             log!(
                 Level::Debug,
                 "FsLock: locked `{}', writing PID...",
-                new_lock_filepath.display()
+                new_lock_path.display()
             );
-            let pidtext = process::id().to_string();
-            let mut written = 0;
-            if unsafe { libc::ftruncate(self.fd, 0) } == 0 {
-                written = unsafe {
-                    libc::write(
-                        self.fd,
-                        pidtext.as_bytes().as_ptr() as *const libc::c_void,
-                        pidtext.len(),
-                    )
-                };
-            }
-            let success = written != -1 && written as usize == pidtext.len();
+            let pid = process::id().to_string();
+            let buf = pid.as_bytes();
+            let success = file.write_all(&buf).is_ok();
             log!(
                 Level::Debug,
                 "FsLock: PID written successfully: {}",
                 success as usize
             );
             if success {
-                if self.locked {
-                    remove_lock(&self.lock_filepath);
+                if self.lock_file.take().is_some() {
+                    remove_lock(&self.lock_path);
                 }
-                self.locked = true;
-                self.lock_filepath = new_lock_filepath.into();
-            } else {
-                let _ = unsafe { libc::close(self.fd) };
+                self.lock_file = Some(file);
+                self.lock_path = new_lock_path.to_owned();
             }
             success
         } else {
             log!(Level::Error, "FsLock: something went wrong during locking");
 
             // locking was not successful -> read PID of locking process from the file
-            if self.fd >= 0 {
-                let mut buf = [0; 32];
-                let len = unsafe {
-                    libc::read(self.fd, buf.as_mut_ptr() as *mut libc::c_void, buf.len())
-                } as usize;
-                if len > 0 {
-                    let buf = unsafe { std::str::from_utf8_unchecked(buf.get_unchecked(..len)) };
-                    *pid = buf.parse().unwrap_or(0);
-                }
-                let _ = unsafe { libc::close(self.fd) };
+            let mut buf = String::new();
+            if file.read_to_string(&mut buf).is_ok() {
+                *pid = buf.parse().unwrap_or(0);
             }
             log!(
                 Level::Debug,
