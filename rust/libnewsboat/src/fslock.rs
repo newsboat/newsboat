@@ -1,6 +1,7 @@
 use crate::logger::{self, Level};
 use std::fs::{self, File, OpenOptions};
 use std::io::{Read, Write};
+use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
 use std::process;
@@ -44,9 +45,7 @@ impl FsLock {
         );
 
         // first we open (and possibly create) the lock file
-        let mut openoptions = OpenOptions::new();
-        openoptions.read(true).write(true).create(true);
-        let mut file = match openoptions.open(&new_lock_path) {
+        let mut file = match OpenOptions::new().mode(0o600).open(&new_lock_path) {
             Ok(file) => file,
             Err(_) => return false,
         };
