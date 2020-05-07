@@ -9,6 +9,7 @@ strprintf = { path="../strprintf" }
 regex-rs = { path="../regex-rs" }
 
 chrono = "0.4"
+errno = "0.2.5"
 rand = "0.5"
 once_cell = "0.1.6"
 url = "1.7"

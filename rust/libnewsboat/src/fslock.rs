@@ -75,7 +75,11 @@ impl FsLock {
             }
             success
         } else {
-            log!(Level::Error, "FsLock: something went wrong during locking");
+            log!(
+                Level::Error,
+                "FsLock: something went wrong during locking: {}",
+                errno::errno()
+            );
 
             // locking was not successful -> read PID of locking process from the file
             let mut buf = String::new();
