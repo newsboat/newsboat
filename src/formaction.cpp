@@ -47,6 +47,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	valid_cmds.push_back("source");
 	valid_cmds.push_back("dumpconfig");
 	valid_cmds.push_back("dumpform");
+	valid_cmds.push_back("exec");
 }
 
 void FormAction::set_keymap_hints()
@@ -229,6 +230,19 @@ std::vector<std::string> FormAction::get_suggestions(
 							line);
 					}
 				}
+			} else if (tokens[0] == "exec") {
+				if (tokens.size() <= 2) {
+					const std::string start = (tokens.size() == 2) ? tokens[1] : "";
+					const std::vector<KeyMapDesc> descs = v->get_keymap()->get_keymap_descriptions(
+							this->id()
+						);
+					for (const KeyMapDesc& desc: descs) {
+						const std::string cmd = desc.cmd;
+						if (cmd.rfind(start, 0) == 0) {
+							result.push_back(std::string("exec ") + cmd);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -321,6 +335,17 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			}
 		} else if (cmd == "dumpform") {
 			v->dump_current_form();
+		} else if (cmd == "exec") {
+			if (tokens.size() != 1) {
+				v->show_error(_("usage: exec <operation>"));
+			} else {
+				const auto op = v->get_keymap()->get_opcode(tokens[0]);
+				if (op != OP_NIL) {
+					process_op(op);
+				} else {
+					v->show_error(_("Operation not found"));
+				}
+			}
 		} else {
 			v->show_error(strprintf::fmt(
 					_("Not a command: %s"), cmdline));
