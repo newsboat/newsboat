@@ -131,7 +131,7 @@ formatting_task:
 
 linux_task:
     matrix:
-        # This job tests our minimum supported Rust version, so only bump on
+        # These two jobs test our minimum supported Rust version, so only bump on
         # Newsboat release day
         - name: Rust 1.40.0, GCC 4.9 (Ubuntu 16.04)
           container:
@@ -141,8 +141,6 @@ linux_task:
                 cc: gcc-4.9
                 cxx: g++-4.9
                 rust_version: 1.40.0
-        # This job tests our minimum supported Rust version, so only bump on
-        # Newsboat release day
         - name: Rust 1.40.0, GCC 9 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
@@ -151,6 +149,25 @@ linux_task:
                 cc: gcc-9
                 cxx: g++-9
                 rust_version: 1.40.0
+
+        - name: GCC 8, more warnings and checks (Ubuntu 18.04)
+          container:
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: g++-8
+                cc: gcc-8
+                cxx: g++-8
+          env: &extra_warnings_and_checks_env
+            CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
+        - name: Clang 8, more warnings and checks (Ubuntu 18.04)
+          container:
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: clang-8
+                cc: clang-8
+                cxx: clang++-8
+          env: *extra_warnings_and_checks_env
+
         - name: Rust 1.43.1, GCC 4.9 (Ubuntu 16.04)
           container:
             dockerfile: docker/ubuntu_16.04-build-tools.dockerfile
