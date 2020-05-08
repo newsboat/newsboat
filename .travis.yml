@@ -35,7 +35,7 @@ matrix:
       compiler: clang-8
       os: linux
       dist: bionic
-      rust: nightly-2020-04-29
+      rust: nightly
       addons:
         apt:
           sources:
@@ -52,7 +52,8 @@ matrix:
 
           # Can't have these in the `env` section above, because these settings break `cargo install`
         - export CARGO_INCREMENTAL=0
-        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
+        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort"
+        - export RUSTDOCFLAGS="-Cpanic=abort"
     - name: "i18nspector"
       addons:
         apt:
