@@ -135,7 +135,7 @@ linux_task:
         # Newsboat release day
         - name: Rust 1.40.0, GCC 9
           container:
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-9
                 cc: gcc-9
@@ -171,7 +171,7 @@ linux_task:
                 cxx: g++-8
         - name: Rust 1.43.1, GCC 9
           container:
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-9
                 cc: gcc-9
@@ -260,7 +260,7 @@ depslist_task:
     container:
       cpu: 1
       memory: 512MB
-      dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
       docker_arguments:
           cxx_package: g++-9
           cc: gcc-9
