@@ -1,11 +1,11 @@
 # All the programs and libraries necessary to build Newsboat. Contains GCC 9
-# and Rust 1.41.0 by default. It has ubuntu-toolchain-r/test PPA already
+# and Rust 1.43.1 by default. It has ubuntu-toolchain-r/test PPA already
 # connected, so most of the compilers that Newsboat supports are available.
 #
 # Configurable via build-args:
 #
 # - cxx_package -- additional Ubuntu packages to install. Default: g++-9
-# - rust_version -- Rust version to install. Default: 1.41.0
+# - rust_version -- Rust version to install. Default: 1.43.1
 # - cc -- C compiler to use. This gets copied into CC environment variable.
 #       Default: gcc-9
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
