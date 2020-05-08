@@ -60,31 +60,6 @@ matrix:
       env:
         - COMPILER=clang++-8
       script: *release_build_script
-    - compiler: gcc-4.9
-      os: linux
-      dist: xenial
-      rust: 1.40.0
-      addons:
-        apt:
-          sources:
-            - sourceline: "ppa:ubuntu-toolchain-r/test"
-          packages:
-            - g++-4.9
-            - *global_deps
-      env:
-        - COMPILER=g++-4.9
-    - compiler: gcc-4.9
-      os: linux
-      dist: xenial
-      addons:
-        apt:
-          sources:
-            - sourceline: "ppa:ubuntu-toolchain-r/test"
-          packages:
-            - g++-4.9
-            - *global_deps
-      env:
-        - COMPILER=g++-4.9
     - name: "Test Coverage"
       compiler: clang-8
       os: linux
