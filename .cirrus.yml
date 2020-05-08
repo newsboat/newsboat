@@ -210,6 +210,13 @@ linux_task:
                 cxx_package: g++-9
                 cc: gcc-9
                 cxx: g++-9
+        - name: Rust 1.43.1, GCC 10 (Ubuntu 20.04)
+          container:
+            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: g++-10
+                cc: gcc-10
+                cxx: g++-10
         - name: Rust 1.43.1, Clang 4.0 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
