@@ -1,6 +1,5 @@
 # All the programs and libraries necessary to build Newsboat. Contains GCC 8
-# and Rust 1.43.1 by default. It has ubuntu-toolchain-r/test PPA already
-# connected, so most of the compilers that Newsboat supports are available.
+# and Rust 1.43.1 by default.
 #
 # Configurable via build-args:
 #
@@ -45,9 +44,6 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
 
 RUN apt-get update \
-    && apt-get install --assume-yes --no-install-recommends software-properties-common \
-    && add-apt-repository "ppa:ubuntu-toolchain-r/test" \
-    && apt-get update \
     && apt-get upgrade --assume-yes
 
 ARG cxx_package=g++-8
