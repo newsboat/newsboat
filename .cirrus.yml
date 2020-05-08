@@ -259,6 +259,13 @@ linux_task:
                 cxx_package: clang-9
                 cc: clang-9
                 cxx: clang++-9
+        - name: Rust 1.43.1, Clang 10 (Ubuntu 20.04)
+          container:
+            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: clang-10
+                cc: clang-10
+                cxx: clang++-10
 
     cargo_cache:
         folder: $HOME/.cargo/registry
