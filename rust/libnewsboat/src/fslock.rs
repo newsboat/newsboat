@@ -46,7 +46,7 @@ impl FsLock {
 
         // first we open (and possibly create) the lock file
         let mut options = OpenOptions::new();
-        options.mode(0o600).truncate(true);
+        options.create(true).read(true).write(true).mode(0o600);
         let mut file = match options.open(&new_lock_path) {
             Ok(file) => file,
             Err(_) => return false,
@@ -60,8 +60,10 @@ impl FsLock {
                 new_lock_path.display()
             );
             let pid = process::id().to_string();
-            let buf = pid.as_bytes();
-            let success = file.write_all(&buf).is_ok();
+            let success = match unsafe { libc::ftruncate(file.as_raw_fd(), 0) } {
+                0 => file.write_all(&pid.as_bytes()).is_ok(),
+                _ => false,
+            };
             log!(
                 Level::Debug,
                 "FsLock: PID written successfully: {}",
