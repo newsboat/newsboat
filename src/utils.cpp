@@ -138,16 +138,13 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 					if (str[last_pos] == '\\') {
 						if (str[last_pos - 1] == '\\') {
 							if (attach_backslash) {
-								token.append(
-									"\\");
+								token.append("\\");
 							}
-							attach_backslash =
-								!attach_backslash;
+							attach_backslash = !attach_backslash;
 						}
 					} else {
 						if (str[last_pos - 1] == '\\') {
-							append_escapes(token,
-								str[last_pos]);
+							append_escapes(token, str[last_pos]);
 						} else {
 							token.push_back(str[last_pos]);
 						}
@@ -161,16 +158,13 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 					if (str[last_pos] == '\\') {
 						if (str[last_pos - 1] == '\\') {
 							if (attach_backslash) {
-								token.append(
-									"\\");
+								token.append("\\");
 							}
-							attach_backslash =
-								!attach_backslash;
+							attach_backslash = !attach_backslash;
 						}
 					} else {
 						if (str[last_pos - 1] == '\\') {
-							append_escapes(token,
-								str[last_pos]);
+							append_escapes(token, str[last_pos]);
 						} else {
 							token.push_back(str[last_pos]);
 						}
