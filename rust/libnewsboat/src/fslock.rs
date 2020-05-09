@@ -1,6 +1,6 @@
 use crate::logger::{self, Level};
 use std::fs::{self, File, OpenOptions};
-use std::io::{Read, Write};
+use std::io::{Error, Read, Write};
 use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
@@ -78,7 +78,11 @@ impl FsLock {
             }
             success
         } else {
-            log!(Level::Error, "FsLock: something went wrong during locking");
+            log!(
+                Level::Error,
+                "FsLock: something went wrong during locking: {}",
+                Error::last_os_error()
+            );
 
             // locking was not successful -> read PID of locking process from the file
             let mut buf = String::new();
