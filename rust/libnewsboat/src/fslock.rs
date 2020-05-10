@@ -60,10 +60,10 @@ impl FsLock {
                 new_lock_path.display()
             );
             let pid = process::id().to_string();
-            let success = match unsafe { libc::ftruncate(file.as_raw_fd(), 0) } {
-                0 => file.write_all(&pid.as_bytes()).is_ok(),
-                _ => false,
-            };
+            let success = file
+                .set_len(0)
+                .and_then(|_| file.write_all(&pid.as_bytes()))
+                .is_ok();
             log!(
                 Level::Debug,
                 "FsLock: PID written successfully: {}",
