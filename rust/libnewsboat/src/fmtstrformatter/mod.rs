@@ -83,7 +83,7 @@ impl FmtStrFormatter {
             result.push(c);
         } else {
             let padding_width = {
-                let content_width = utils::strwidth_stfl(&rest) + result.length();
+                let content_width = utils::strwidth(&rest) + result.length();
                 if content_width > width as usize {
                     0
                 } else {
@@ -91,7 +91,7 @@ impl FmtStrFormatter {
                 }
             };
 
-            let padding_value = utils::quote_for_stfl(&format!("{}", c));
+            let padding_value = &format!("{}", c);
             let padding = padding_value.repeat(padding_width);
             result.push_str(&padding);
         };
@@ -105,16 +105,16 @@ impl FmtStrFormatter {
             Padding::None => result.push_str(value),
 
             Padding::Left(total_width) => {
-                let text = &utils::substr_with_width_stfl(value, total_width);
-                let padding_width = total_width - utils::strwidth_stfl(text);
+                let text = &utils::substr_with_width(value, total_width);
+                let padding_width = total_width - utils::strwidth(text);
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(&padding);
                 result.push_str(text);
             }
 
             Padding::Right(total_width) => {
-                let text = &utils::substr_with_width_stfl(value, total_width);
-                let padding_width = total_width - utils::strwidth_stfl(text);
+                let text = &utils::substr_with_width(value, total_width);
+                let padding_width = total_width - utils::strwidth(text);
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(text);
                 result.push_str(&padding);
@@ -163,16 +163,15 @@ impl FmtStrFormatter {
                 }
 
                 Specifier::Text(s) => {
-                    let s = &utils::quote_for_stfl(s);
                     if width == 0 {
                         result.push_str(s);
                     } else {
                         let remaining = width as usize - result.length();
-                        let count = utils::strwidth_stfl(&s);
+                        let count = utils::strwidth(&s);
                         if remaining >= count {
                             result.push_str(&s);
                         } else {
-                            result.push_str(&utils::substr_with_width_stfl(s, remaining));
+                            result.push_str(&utils::substr_with_width(s, remaining));
                         }
                     }
                 }
@@ -239,7 +238,7 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("<%a> <%5b> | %-5c%%", 0),
-            "<>AAA> <>  BBB> | CCC  %"
+            "<AAA> <  BBB> | CCC  %"
         );
         assert_eq!(
             fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
@@ -322,7 +321,7 @@ mod tests {
 
         assert_eq!(
             fmt.do_format("<%a> <%5b> | %-5c%%", 0),
-            "<>АБВ> <>буква> | ещё о%"
+            "<АБВ> <буква> | ещё о%"
         );
         assert_eq!(
             fmt.do_format("asdf | %a | %?c?%a%b&%b%a? | qwert", 0),
@@ -389,24 +388,24 @@ mod tests {
     }
 
     #[test]
-    fn t_do_format_escapes_less_than_sign_in_regular_text() {
+    fn t_do_format_does_not_escape_less_than_signs_in_regular_text() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "AAA".to_string());
         fmt.register_fmt('b', "BBB".to_string());
 
-        assert_eq!(fmt.do_format("%a <%b>", 0), "AAA <>BBB>");
+        assert_eq!(fmt.do_format("%a <%b>", 0), "AAA <BBB>");
     }
 
     #[test]
-    fn t_do_format_escapes_less_than_sign_in_filling_format() {
+    fn t_do_format_does_not_escape_less_than_signs_in_filling_format() {
         let mut fmt = FmtStrFormatter::new();
 
         fmt.register_fmt('a', "AAA".to_string());
         fmt.register_fmt('b', "BBB".to_string());
 
         assert_eq!(fmt.do_format("%a%>.%b", 10), "AAA....BBB");
-        assert_eq!(fmt.do_format("%a%><%b", 10), "AAA<><><><>BBB");
+        assert_eq!(fmt.do_format("%a%><%b", 10), "AAA<<<<BBB");
         assert_eq!(fmt.do_format("%a%>>%b", 10), "AAA>>>>BBB");
     }
 
@@ -612,7 +611,7 @@ mod tests {
         fn result_is_never_longer_than_specified_width(length in 1u32..10000, ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
             let result = fmt.do_format(&input, length);
-            assert!(utils::strwidth_stfl(&result) <= length as usize);
+            assert!(utils::strwidth(&result) <= length as usize);
         }
     }
 }

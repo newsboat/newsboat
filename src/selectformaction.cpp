@@ -209,6 +209,7 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 	fmt.register_fmt('u', std::to_string(total_feeds));
 
 	auto formattedLine = fmt.do_format(selecttag_format, width);
+	formattedLine = utils::quote_for_stfl(formattedLine);
 
 	return formattedLine;
 }
