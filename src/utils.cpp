@@ -134,35 +134,25 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 				++pos;
 			}
 
-			if (pos >= str.length()) {
+			// Invariant: pos <= str.length()
+
+			std::string token;
+			while (last_pos < pos) {
+				if (str[last_pos] == '\\') {
+					if (last_pos + 1 < str.length()) {
+						append_escapes(token, str[last_pos + 1]);
+					}
+					last_pos += 2;
+				} else {
+					token.push_back(str[last_pos]);
+					++last_pos;
+				}
+			}
+			tokens.push_back(token);
+
+			if (pos == str.length()) {
 				pos = std::string::npos;
-				std::string token;
-				while (last_pos < str.length()) {
-					if (str[last_pos] == '\\') {
-						if (last_pos + 1 < str.length()) {
-							append_escapes(token, str[last_pos + 1]);
-						}
-						last_pos += 2;
-					} else {
-						token.push_back(str[last_pos]);
-						++last_pos;
-					}
-				}
-				tokens.push_back(token);
 			} else {
-				std::string token;
-				while (last_pos < pos) {
-					if (str[last_pos] == '\\') {
-						if (last_pos + 1 < str.length()) {
-							append_escapes(token, str[last_pos + 1]);
-						}
-						last_pos += 2;
-					} else {
-						token.push_back(str[last_pos]);
-						++last_pos;
-					}
-				}
-				tokens.push_back(token);
 				++pos;
 			}
 		} else {
