@@ -70,6 +70,7 @@ void append_escapes(std::string& str, char c)
 		str.append("\\`");
 		break;
 	case '\\':
+		str.append("\\");
 		break;
 	default:
 		str.push_back(c);
@@ -108,7 +109,6 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	 * know from C/C++ strings.
 	 *
 	 */
-	bool attach_backslash = true;
 	std::vector<std::string> tokens;
 	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
 	std::string::size_type pos = last_pos;
@@ -136,40 +136,28 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 				std::string token;
 				while (last_pos < str.length()) {
 					if (str[last_pos] == '\\') {
-						if (str[last_pos - 1] == '\\') {
-							if (attach_backslash) {
-								token.append("\\");
-							}
-							attach_backslash = !attach_backslash;
+						if (last_pos + 1 < str.length()) {
+							append_escapes(token, str[last_pos + 1]);
 						}
+						last_pos += 2;
 					} else {
-						if (str[last_pos - 1] == '\\') {
-							append_escapes(token, str[last_pos]);
-						} else {
-							token.push_back(str[last_pos]);
-						}
+						token.push_back(str[last_pos]);
+						++last_pos;
 					}
-					++last_pos;
 				}
 				tokens.push_back(token);
 			} else {
 				std::string token;
 				while (last_pos < pos) {
 					if (str[last_pos] == '\\') {
-						if (str[last_pos - 1] == '\\') {
-							if (attach_backslash) {
-								token.append("\\");
-							}
-							attach_backslash = !attach_backslash;
+						if (last_pos + 1 < str.length()) {
+							append_escapes(token, str[last_pos + 1]);
 						}
+						last_pos += 2;
 					} else {
-						if (str[last_pos - 1] == '\\') {
-							append_escapes(token, str[last_pos]);
-						} else {
-							token.push_back(str[last_pos]);
-						}
+						token.push_back(str[last_pos]);
+						++last_pos;
 					}
-					++last_pos;
 				}
 				tokens.push_back(token);
 				++pos;

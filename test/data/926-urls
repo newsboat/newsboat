@@ -1,0 +1,1 @@
+"exec:curl --silent https://feeds.metaebene.me/raumzeit/m4a  | sed 's#\\(</guid>\\|</id>\\)#-M4A&#'"
