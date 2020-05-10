@@ -121,16 +121,19 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 		if (str[last_pos] == '"') {
 			++last_pos;
 			pos = last_pos;
-			int backslash_count = 0;
-			while (pos < str.length() &&
-				(str[pos] != '"' || (backslash_count % 2))) {
+			// Is the character at position `pos` escaped, i.e. is `str[pos-1]
+			// == '\\'`? We can't actually use that char comparison because
+			// `pos` might be zero.
+			bool is_escaped = false;
+			while (pos < str.length() && !(str[pos] == '"' && !is_escaped)) {
 				if (str[pos] == '\\') {
-					++backslash_count;
+					is_escaped = !is_escaped;
 				} else {
-					backslash_count = 0;
+					is_escaped = false;
 				}
 				++pos;
 			}
+
 			if (pos >= str.length()) {
 				pos = std::string::npos;
 				std::string token;
