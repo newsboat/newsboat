@@ -167,6 +167,14 @@ TEST_CASE(
 	tokens = utils::tokenize_quoted(R"("\\bgit\\b")");
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"(\bgit\b)");
+
+	// https://github.com/newsboat/newsboat/issues/536
+	tokens = utils::tokenize_quoted(
+			R"(browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u")");
+	REQUIRE(tokens.size() == 2);
+	REQUIRE(tokens[0] == "browser");
+	REQUIRE(tokens[1] ==
+		R"(/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app %u)");
 }
 
 TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
