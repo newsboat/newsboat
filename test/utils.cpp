@@ -162,6 +162,11 @@ TEST_CASE(
 	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\\"");
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\\\\\");
+
+	// https://github.com/newsboat/newsboat/issues/642
+	tokens = utils::tokenize_quoted(R"("\\bgit\\b")");
+	REQUIRE(tokens.size() == 1);
+	REQUIRE(tokens[0] == R"(\bgit\b)");
 }
 
 TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
