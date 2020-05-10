@@ -170,7 +170,7 @@ clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clea
 distclean: clean clean-mo clean-test profclean
 	$(RM) core *.core core.* config.mk
 
-doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html
+doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html doc/example-config
 
 doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/configcommands-linked.dsv doc/keycmds-linked.dsv \
