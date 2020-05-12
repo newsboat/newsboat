@@ -283,7 +283,7 @@ impl Default for Logger {
     }
 }
 
-static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::INIT;
+static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::new();
 
 /// Returns a global logger instance.
 ///

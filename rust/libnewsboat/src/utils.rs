@@ -1,13 +1,13 @@
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
 use libc::c_ulong;
+use percent_encoding::*;
 use std::fs::DirBuilder;
 use std::io::{self, Write};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
-use url::percent_encoding::*;
 use url::Url;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
