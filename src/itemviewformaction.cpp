@@ -241,6 +241,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENINBROWSER:
+	case OP_OPENBROWSER_AND_MARK:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
 		if (int err = v->open_in_browser(item->link())) {

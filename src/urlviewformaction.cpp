@@ -56,6 +56,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 		urls_list.move_page_down();
 		break;
 	case OP_OPENINBROWSER:
+	case OP_OPENBROWSER_AND_MARK:
 	case OP_OPEN: {
 		std::string posstr = f.get("urls_pos");
 		if (posstr.length() > 0) {
