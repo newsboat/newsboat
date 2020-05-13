@@ -84,10 +84,10 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SK_UP:
-		items_list.move_up();
+		items_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_DOWN:
-		items_list.move_down();
+		items_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HOME:
 		items_list.move_to_first();

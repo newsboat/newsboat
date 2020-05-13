@@ -143,10 +143,10 @@ REDO:
 		v->get_ctrl()->reload_urls_file();
 		break;
 	case OP_SK_UP:
-		feeds_list.move_up();
+		feeds_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_DOWN:
-		feeds_list.move_down();
+		feeds_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HOME:
 		feeds_list.move_to_first();

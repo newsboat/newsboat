@@ -38,10 +38,10 @@ bool UrlViewFormAction::process_operation(Operation op,
 	bool hardquit = false;
 	switch (op) {
 	case OP_SK_UP:
-		urls_list.move_up();
+		urls_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_DOWN:
-		urls_list.move_down();
+		urls_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HOME:
 		urls_list.move_to_first();

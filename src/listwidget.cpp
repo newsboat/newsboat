@@ -28,17 +28,20 @@ void ListWidget::stfl_replace_lines(std::uint32_t number_of_lines,
 	form.modify(list_name, "replace_inner", stfl);
 }
 
-bool ListWidget::move_up()
+bool ListWidget::move_up(bool wrap_scroll)
 {
 	const std::uint32_t curpos = get_position();
 	if (curpos > 0) {
 		set_position(curpos - 1);
 		return true;
+	} else if (wrap_scroll) {
+		move_to_last();
+		return true;
 	}
 	return false;
 }
 
-bool ListWidget::move_down()
+bool ListWidget::move_down(bool wrap_scroll)
 {
 	if (num_lines == 0) {
 		// Ignore if list is empty
@@ -48,6 +51,9 @@ bool ListWidget::move_down()
 	const std::uint32_t curpos = get_position();
 	if (curpos + 1 <= maxpos) {
 		set_position(curpos + 1);
+		return true;
+	} else if (wrap_scroll) {
+		move_to_first();
 		return true;
 	}
 	return false;

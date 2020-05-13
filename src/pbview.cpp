@@ -131,10 +131,10 @@ void PbView::run(bool auto_download)
 
 		switch (op) {
 		case OP_SK_UP:
-			downloads_list.move_up();
+			downloads_list.move_up(false);
 			break;
 		case OP_SK_DOWN:
-			downloads_list.move_down();
+			downloads_list.move_down(false);
 			break;
 		case OP_SK_HOME:
 			downloads_list.move_to_first();

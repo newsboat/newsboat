@@ -302,7 +302,10 @@ ConfigContainer::ConfigContainer()
 			ConfigDataType::STR)},
 	{
 		"urlview-title-format",
-		ConfigData(_("%N %V - URLs"), ConfigDataType::STR)}}
+		ConfigData(_("%N %V - URLs"), ConfigDataType::STR)},
+	{
+		"wrap-scroll",
+		ConfigData("no", ConfigDataType::BOOL)}}
 {
 }
 
