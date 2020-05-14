@@ -34,6 +34,8 @@ acknowledge contributions from the following people:
     Batischev)
 - "date" attribute containing fixed string instead of item's publication date
     and time (Alexander Batischev)
+- Backslash inside double quotes requiring three escapes instead of one, every
+    other time (Alexander Batischev) (#536, #642, #926)
 ### Security
 
 
