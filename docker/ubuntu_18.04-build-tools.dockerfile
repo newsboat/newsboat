@@ -28,6 +28,11 @@
 #       --build-arg rust_version=1.26.1 \
 #       docker
 #
+# Before building in a container, run this to remove any binaries that you
+# might've compiled on your host system (or in another container):
+#
+#   make distclean
+#
 # Run on your local files:
 #
 #   docker run \
@@ -37,6 +42,11 @@
 #       --user $(id -u):$(id -g) \
 #       newsboat-build-tools \
 #       make
+#
+# If you want to build on the host again, run this to remove binary files
+# compiled in the container:
+#
+#   make distclean
 
 FROM ubuntu:18.04
 

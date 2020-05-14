@@ -46,6 +46,13 @@ your current user and group IDs. "newsboat-build-tools" is the image from which
 we're creating the container, and `make -j9` is the command we're running inside
 of it.
 
+Sharing files between host system and the container has a downside: the
+resulting binaries are shared, too. This can lead to linking errors and other
+strange behaviour. When you're switching from container to host, or vice versa,
+remove all binaries with this command:
+
+    $ make distclean
+
 That's all the basics that you'll need to e.g. build Newsboat in Docker, or to
 reproduce an issue with CI. If you want to dive deeper, take a look at files in
 docker/ directory. All of them have a short description of what they're for, how

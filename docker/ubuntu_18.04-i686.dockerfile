@@ -7,6 +7,11 @@
 #       --file=docker/ubuntu_18.04-i686.dockerfile \
 #       docker
 #
+# Before building in a container, run this to remove any binaries that you
+# might've compiled on your host system (or in another container):
+#
+#   make distclean
+#
 # Run on your local files:
 #
 #   docker run \
@@ -16,6 +21,11 @@
 #       --user $(id -u):$(id -g) \
 #       newsboat-i686-build-tools \
 #       make
+#
+# If you want to build on the host again, run this to remove binary files
+# compiled in the container:
+#
+#   make distclean
 
 FROM ubuntu:18.04
 
