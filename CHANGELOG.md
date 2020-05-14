@@ -216,7 +216,8 @@ and seanBE.
 - Processing backticks inside comments (Jan Staněk)
 - Use-after-free crash when opening an article (Juho Pohjala) (#189)
 - Crash on `toggle-item-read` in an empty feed (Nikos Tsipinakis)
-- Un-applying a filter when command is ran (Nikos Tsipinakis) (#607)
+- Un-applying a filter when command is ran or operation is executed (Nikos
+    Tsipinakis) (#607, #227)
 - Numerous memory leaks detected by Clang's AddressSanitizer (Alexander
     Batischev) (#620, #621, #623, #624)
 
