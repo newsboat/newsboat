@@ -159,9 +159,11 @@ keys are supported:
 - `LEFT` (left cursor)
 - `RIGHT` (right cursor)
 - `UP` (up cursor)
+- `DOWN` (down cursor)
 - `PPAGE` (page up cursor)
 - `NPAGE` (page down cursor)
-- `DOWN` (down cursor)
+- `HOME` (cursor to beginning of list/article)
+- `END` (cursor to end of list/article)
 - `ESC` (Esc key)
 - `TAB` (Tab key)
 
