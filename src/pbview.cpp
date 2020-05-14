@@ -41,7 +41,7 @@ PbView::~PbView()
 	Stfl::reset();
 }
 
-void PbView::run(bool auto_download)
+void PbView::run(bool auto_download, bool wrap_scroll)
 {
 	bool quit = false;
 
@@ -131,10 +131,10 @@ void PbView::run(bool auto_download)
 
 		switch (op) {
 		case OP_SK_UP:
-			downloads_list.move_up(false);
+			downloads_list.move_up(wrap_scroll);
 			break;
 		case OP_SK_DOWN:
-			downloads_list.move_down(false);
+			downloads_list.move_down(wrap_scroll);
 			break;
 		case OP_SK_HOME:
 			downloads_list.move_to_first();
@@ -143,10 +143,10 @@ void PbView::run(bool auto_download)
 			downloads_list.move_to_last();
 			break;
 		case OP_SK_PGUP:
-			downloads_list.move_page_up(false);
+			downloads_list.move_page_up(wrap_scroll);
 			break;
 		case OP_SK_PGDOWN:
-			downloads_list.move_page_down(false);
+			downloads_list.move_page_down(wrap_scroll);
 			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;
