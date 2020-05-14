@@ -50,10 +50,10 @@ bool UrlViewFormAction::process_operation(Operation op,
 		urls_list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		urls_list.move_page_up();
+		urls_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		urls_list.move_page_down();
+		urls_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_OPENINBROWSER:
 	case OP_OPEN: {

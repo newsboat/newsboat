@@ -143,10 +143,10 @@ void PbView::run(bool auto_download)
 			downloads_list.move_to_last();
 			break;
 		case OP_SK_PGUP:
-			downloads_list.move_page_up();
+			downloads_list.move_page_up(false);
 			break;
 		case OP_SK_PGDOWN:
-			downloads_list.move_page_down();
+			downloads_list.move_page_down(false);
 			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;

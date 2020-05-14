@@ -19,8 +19,8 @@ public:
 	bool move_down(bool wrap_scroll);
 	void move_to_first();
 	void move_to_last();
-	void move_page_up();
-	void move_page_down();
+	void move_page_up(bool wrap_scroll);
+	void move_page_down(bool wrap_scroll);
 
 	std::uint32_t get_position();
 	void set_position(std::uint32_t pos);

@@ -155,10 +155,10 @@ REDO:
 		feeds_list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		feeds_list.move_page_up();
+		feeds_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		feeds_list.move_page_down();
+		feeds_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SORT: {
 		/// This string is related to the letters in parentheses in the

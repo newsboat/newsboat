@@ -65,10 +65,10 @@ bool SelectFormAction::process_operation(Operation op,
 		tags_list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		tags_list.move_page_up();
+		tags_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		tags_list.move_page_down();
+		tags_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_QUIT:
 		value = "";

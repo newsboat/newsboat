@@ -74,18 +74,20 @@ void ListWidget::move_to_last()
 	set_position(maxpos);
 }
 
-void ListWidget::move_page_up()
+void ListWidget::move_page_up(bool wrap_scroll)
 {
 	const std::uint32_t curpos = get_position();
 	const std::uint32_t list_height = get_height();
 	if (curpos > list_height) {
 		set_position(curpos - list_height);
+	} else if (wrap_scroll && curpos == 0) {
+		move_to_last();
 	} else {
 		set_position(0);
 	}
 }
 
-void ListWidget::move_page_down()
+void ListWidget::move_page_down(bool wrap_scroll)
 {
 	if (num_lines == 0) {
 		// Ignore if list is empty
@@ -96,6 +98,8 @@ void ListWidget::move_page_down()
 	const std::uint32_t list_height = get_height();
 	if (curpos + list_height < maxpos) {
 		set_position(curpos + list_height);
+	} else if (wrap_scroll && curpos == maxpos) {
+		move_to_first();
 	} else {
 		set_position(maxpos);
 	}

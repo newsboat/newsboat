@@ -96,10 +96,10 @@ bool ItemListFormAction::process_operation(Operation op,
 		items_list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		items_list.move_page_up();
+		items_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		items_list.move_page_down();
+		items_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");

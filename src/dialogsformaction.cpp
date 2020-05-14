@@ -120,10 +120,10 @@ bool DialogsFormAction::process_operation(Operation op,
 		dialogs_list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		dialogs_list.move_page_up();
+		dialogs_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		dialogs_list.move_page_down();
+		dialogs_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_QUIT:
 		v->pop_current_formaction();
