@@ -121,31 +121,21 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 		if (str[last_pos] == '"') {
 			++last_pos;
 			pos = last_pos;
-			// Is the character at position `pos` escaped, i.e. is `str[pos-1]
-			// == '\\'`? We can't actually use that char comparison because
-			// `pos` might be zero.
-			bool is_escaped = false;
-			while (pos < str.length() && !(str[pos] == '"' && !is_escaped)) {
-				if (str[pos] == '\\') {
-					is_escaped = !is_escaped;
-				} else {
-					is_escaped = false;
-				}
-				++pos;
-			}
-
-			// Invariant: pos <= str.length()
 
 			std::string token;
-			while (last_pos < pos) {
-				if (str[last_pos] == '\\') {
-					if (last_pos + 1 < str.length()) {
-						append_escapes(token, str[last_pos + 1]);
+			while (pos < str.length()) {
+				if (str[pos] == '"') {
+					// We've reached the end of this quoted token.
+					++pos;
+					break;
+				} else if (str[pos] == '\\') {
+					if (pos + 1 < str.length()) {
+						append_escapes(token, str[pos + 1]);
 					}
-					last_pos += 2;
+					pos += 2;
 				} else {
-					token.push_back(str[last_pos]);
-					++last_pos;
+					token.push_back(str[pos]);
+					++pos;
 				}
 			}
 			tokens.push_back(token);
@@ -159,6 +149,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 			pos = str.find_first_of(delimiters, last_pos);
 			tokens.push_back(str.substr(last_pos, pos - last_pos));
 		}
+
 		last_pos = str.find_first_not_of(delimiters, pos);
 	}
 
