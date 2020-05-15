@@ -16,14 +16,15 @@ configuration lines like the following ones:
 The first line shows how to add an execurl script to your configuration: start
 the line with `exec:` and then immediately append the path of the script that
 shall be executed.  If this script requires additional parameters, simply use
-quotes:
+quotes (see <<_using_double_quotes>> for details):
 
 	"exec:~/bin/execurl-script param1 param2"
 
 The second line shows how to add a filter script to your configuration: start
 the line with `filter:`, then immediately append the path of the script, then
 append a colon (`:`), and then append the URL of the file that shall be fed to
-the script. Again, if the script requires any parameters, simply quote:
+the script. Again, if the script requires any parameters,
+<<_using_double_quotes,simply quote the whole thing>>:
 
 	"filter:~/bin/filter-script param1 param2:https://url/foobar"
 

@@ -83,3 +83,15 @@ TEST_CASE("URL reader writes files that it can understand later",
 		REQUIRE(u.get_tags(url) == u2.get_tags(url));
 	}
 }
+
+TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
+{
+	const std::string testDataPath("data/926-urls");
+
+	FileUrlReader u(testDataPath);
+	u.reload();
+
+	REQUIRE(u.get_urls().size() == 1);
+	REQUIRE(u.get_urls()[0] ==
+		R"_(exec:curl --silent https://feeds.metaebene.me/raumzeit/m4a  | sed 's#\(</guid>\|</id>\)#-M4A&#')_");
+}

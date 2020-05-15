@@ -177,6 +177,34 @@ unbind-key       R
 bind-key         ^R    reload-all
 ----
 
+=== Using Double Quotes
+
+_**TL;DR**: use double quotes for strings that contain spaces or double quotes.
+Escape double quotes (use `\"`) and backslashes (use `\\`). Don't escape stuff
+outside of double quotes, and don't use single quotes for quoting — Newsboat
+doesn't support that._
+
+Many of Newsboat's options expect strings as arguments, be it commands,
+passwords, dialog titles, URLs etc. Some options even take _multiple_ strings
+at once. These strings can contain spaces, which might confuse Newsboat since
+it already uses spaces to separate option names from option arguments.
+
+To help Newsboat understand your intent, put such strings into double quotes:
+
+    browser "firefox --new-tab %u"
+
+What if you need a double quote inside a string? Escape it with a backslash:
+
+    ocnews-password "UnbalancedQuotes\"AreSoFun!"
+
+And what about the backslash itself? Escape it, too! Suppose you have a program
+called `my favourite pager`, and you want to view articles with it. Newsboat
+ultimately passes commands to the shell, and shell expects spaces to be escaped
+if you want them preserved. But since Newsboat interprets backslashes, you have
+to add _another_ layer of escaping. Thus, you end up with a command like this:
+
+    pager "/usr/bin/my\\ favourite\\ pager"
+
 === Configuring Colors
 
 It is possible to configure custom color settings in newsboat. The basic configuration
@@ -836,7 +864,8 @@ is <<ignore-article,`ignore-article`>>:
 It takes two parameters. The first one is either a URL of a feed, or `"*"` to
 match any feed (asterisk is _not_ a pattern, glob or regex—we simply reserve it
 to mean "all feeds").  The second argument is <<_filter_language,a filter
-expression>> for an article. If newsboat hits an article in the specified RSS
+expression>> for an article, probably <<_using_double_quotes,in double quotes
+to preserve spaces inside>>. If newsboat hits an article in the specified RSS
 feed that matches the specified filter expression, then this article is ignored
 and never presented to the user. The configuration itself can contain as many
 <<ignore-article,`ignore-article`>> commands as desired.
@@ -890,8 +919,8 @@ This feature is often used to create a feed that contains all unread articles:
 
 	"query:Unread Articles:unread = \"yes\""
 
-Note the quotes that are necessary around the complete query "URL" and the
-backslashes that are necessary to escape the quotes in the filter expression.
+Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
+the filter expression.
 
 If you want to combine several feeds to one single feed, a good solution is to
 tag the feeds that you want to combine with one certain tag, and then create a
@@ -1204,6 +1233,8 @@ Examples for possible highlighting configurations are:
 	highlight article "^(Feed|Title|Author|Link|Date):" default default underline
 	highlight feedlist "https?://[^ ]+" yellow red bold
 
+Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
+the regular expressions.
 
 ==== Highlighting Articles in the Article List
 
@@ -1222,6 +1253,8 @@ Example:
 
 	highlight-article "author =~ \"Andreas Krennmair\"" white red bold
 
+Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
+the filter expression.
 
 === Advanced Dialog Management
 
