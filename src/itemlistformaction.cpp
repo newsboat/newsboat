@@ -84,10 +84,10 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SK_UP:
-		items_list.move_up();
+		items_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_DOWN:
-		items_list.move_down();
+		items_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HOME:
 		items_list.move_to_first();
@@ -96,10 +96,10 @@ bool ItemListFormAction::process_operation(Operation op,
 		items_list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		items_list.move_page_up();
+		items_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		items_list.move_page_down();
+		items_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");

@@ -20,7 +20,7 @@ class PbView {
 public:
 	explicit PbView(PbController* c = 0);
 	~PbView();
-	void run(bool auto_download);
+	void run(bool auto_download, bool wrap_scroll);
 	void set_keymap(newsboat::KeyMap* k)
 	{
 		keys = k;

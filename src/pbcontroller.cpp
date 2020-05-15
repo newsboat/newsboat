@@ -306,7 +306,7 @@ int PbController::run(int argc, char* argv[])
 
 	v->set_keymap(&keys);
 
-	v->run(automatic_dl);
+	v->run(automatic_dl, cfg->get_configvalue_as_bool("wrap-scroll"));
 
 	Stfl::reset();
 
