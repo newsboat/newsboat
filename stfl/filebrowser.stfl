@@ -15,6 +15,7 @@ vbox
   list[files]
     * this height is only a hack to expand the list correctly (bug?)
     .expand:vh .height:65535
+    richtext:1
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[listposname]:

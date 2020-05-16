@@ -354,7 +354,7 @@ std::string DirBrowserFormAction::add_directory(std::string dirname)
 		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
 				ftype,
 				Stfl::quote(dirname),
-				Stfl::quote(line));
+				Stfl::quote(utils::quote_for_stfl(line)));
 	}
 	return retval;
 }

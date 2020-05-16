@@ -16,6 +16,7 @@ vbox
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     .expand:vh
+    richtext:1
     pos_name[dlposname]:
     pos[dls_pos]:0
   vbox[hints]

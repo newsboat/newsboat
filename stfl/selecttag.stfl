@@ -14,6 +14,7 @@ vbox
     .display[showtitle]:1
   list[taglist]
     .expand:vh
+    richtext:1
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos_name[tagposname]:

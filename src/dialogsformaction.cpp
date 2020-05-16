@@ -48,13 +48,14 @@ void DialogsFormAction::prepare()
 				v->get_formaction(fa.first).get(),
 				get_parent_formaction().get());
 			listfmt.add_line(
-				strprintf::fmt("%4u %s %s",
-					i,
-					(v->get_formaction(fa.first).get() ==
-						get_parent_formaction().get())
-					? "*"
-					: " ",
-					fa.second),
+				utils::quote_for_stfl(
+					strprintf::fmt("%4u %s %s",
+						i,
+						(v->get_formaction(fa.first).get() ==
+							get_parent_formaction().get())
+						? "*"
+						: " ",
+						fa.second)),
 				fa.first);
 			i++;
 		}
