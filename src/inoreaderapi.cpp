@@ -4,6 +4,7 @@
 #include <curl/curl.h>
 #include <json.h>
 #include <vector>
+#include <thread>
 
 #include "config.h"
 #include "strprintf.h"
@@ -214,8 +215,18 @@ bool InoreaderApi::mark_all_read(const std::string& feedurl)
 
 bool InoreaderApi::mark_article_read(const std::string& guid, bool read)
 {
-	std::string token = get_new_token();
-	return mark_article_read_with_token(guid, read, token);
+	// Do this in a thread, as we don't care about the result enough to wait
+	// for it.  borrowed from ttrssapi.cpp
+	std::thread t{[=]()
+	{
+		LOG(Level::DEBUG,
+			"InoreaderApi::mark_article_read: inside thread, marking "
+			"thread as read...");
+		std::string token = get_new_token();
+		mark_article_read_with_token(guid, read, token);
+	}};
+	t.detach();
+	return true;
 }
 
 bool InoreaderApi::mark_article_read_with_token(const std::string& guid,
