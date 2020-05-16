@@ -344,7 +344,7 @@ std::string FileBrowserFormAction::add_file(std::string filename)
 		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
 				ftype,
 				Stfl::quote(filename),
-				Stfl::quote(line));
+				Stfl::quote(utils::quote_for_stfl(line)));
 	}
 	return retval;
 }

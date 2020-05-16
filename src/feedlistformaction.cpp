@@ -1062,13 +1062,14 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('c', std::to_string(feed->total_item_count()));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
 	fmt.register_fmt('S', feed->get_status());
-	fmt.register_fmt('t', utils::quote_for_stfl(get_title(feed)));
+	fmt.register_fmt('t', get_title(feed));
 	fmt.register_fmt('T', feed->get_firsttag());
 	fmt.register_fmt('l', utils::censor_url(feed->link()));
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', utils::utf8_to_locale(feed->description()));
 
 	auto formattedLine = fmt.do_format(feedlist_format, width);
+	formattedLine = utils::quote_for_stfl(formattedLine);
 	if (unread_count > 0) {
 		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
 	}

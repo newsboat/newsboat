@@ -128,10 +128,12 @@ void SelectFormAction::prepare()
 		switch (type) {
 		case SelectionType::TAG:
 			for (const auto& tag : tags) {
-				listfmt.add_line(format_line(selecttag_format,
-						tag,
-						i + 1,
-						width),
+				listfmt.add_line(
+					utils::quote_for_stfl(
+						format_line(selecttag_format,
+							tag,
+							i + 1,
+							width)),
 					i);
 				i++;
 			}
@@ -140,7 +142,7 @@ void SelectFormAction::prepare()
 			for (const auto& filter : filters) {
 				std::string tagstr = strprintf::fmt(
 						"%4u  %s", i + 1, filter.name);
-				listfmt.add_line(tagstr, i);
+				listfmt.add_line(utils::quote_for_stfl(tagstr), i);
 				i++;
 			}
 			break;

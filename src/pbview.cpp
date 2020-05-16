@@ -412,6 +412,7 @@ std::string PbView::format_line(const std::string& podlist_format,
 	fmt.register_fmt('b', strprintf::fmt("%s", dl.basename()));
 
 	auto formattedLine = fmt.do_format(podlist_format, width);
+	formattedLine = utils::quote_for_stfl(formattedLine);
 	return formattedLine;
 }
 

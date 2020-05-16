@@ -24,7 +24,7 @@ impl LimitedString {
 
     /// Returns the "displayed width" of the string
     pub fn length(&self) -> usize {
-        utils::strwidth_stfl(&self.content)
+        utils::strwidth(&self.content)
     }
 
     /// Adds given character to the end of the string, or does nothing if the string length reached
@@ -45,7 +45,7 @@ impl LimitedString {
         if let Some(limit) = self.max_length {
             let remaining_length = limit - self.length();
             self.content
-                .push_str(&utils::substr_with_width_stfl(s, remaining_length));
+                .push_str(&utils::substr_with_width(s, remaining_length));
         } else {
             self.content.push_str(s);
         }
@@ -90,7 +90,7 @@ mod tests {
         assert_eq!(s.length(), expected_length);
 
         let exported_string = s.into_string();
-        assert_eq!(utils::strwidth_stfl(&exported_string), expected_length);
+        assert_eq!(utils::strwidth(&exported_string), expected_length);
     }
 
     #[test]
@@ -102,7 +102,7 @@ mod tests {
         assert_eq!(s.length(), limit);
 
         let exported_string = s.into_string();
-        assert_eq!(utils::strwidth_stfl(&exported_string), limit);
+        assert_eq!(utils::strwidth(&exported_string), limit);
     }
 
     #[test]

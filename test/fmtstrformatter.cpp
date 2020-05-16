@@ -56,7 +56,7 @@ TEST_CASE("do_format replaces variables with values", "[FmtStrFormatter]")
 				SECTION("Complex format string") {
 					REQUIRE(fmt.do_format("<%a> <%5b> | "
 							"%-5c%%") ==
-						"<>AAA> <>  BBB> | CCC  %");
+						"<AAA> <  BBB> | CCC  %");
 					REQUIRE(fmt.do_format("asdf | %a | "
 							"%?c?%a%b&%b%a? "
 							"| qwert") ==
@@ -133,7 +133,7 @@ TEST_CASE("do_format supports multibyte characters", "[FmtStrFormatter]")
 				SECTION("Complex format string") {
 					REQUIRE(fmt.do_format("<%a> <%5b> | "
 							"%-5c%%") ==
-						"<>АБВ> <>буква> | ещё о%");
+						"<АБВ> <буква> | ещё о%");
 					REQUIRE(fmt.do_format("asdf | %a | "
 							"%?c?%a%b&%b%a? "
 							"| qwert") ==
@@ -194,7 +194,7 @@ TEST_CASE("do_format() does not include wide character if only 1 colum is left",
 	REQUIRE(fmt.do_format("%4a", 0) == "ＡＢ");
 }
 
-TEST_CASE("do_format() escapes less-than sign in regular text",
+TEST_CASE("do_format() does not escape less-than signs in regular text",
 	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
@@ -202,10 +202,10 @@ TEST_CASE("do_format() escapes less-than sign in regular text",
 	fmt.register_fmt('a', "AAA");
 	fmt.register_fmt('b', "BBB");
 
-	REQUIRE(fmt.do_format("%a <%b>", 0) == "AAA <>BBB>");
+	REQUIRE(fmt.do_format("%a <%b>", 0) == "AAA <BBB>");
 }
 
-TEST_CASE("do_format() escapes less-than sign in filling format",
+TEST_CASE("do_format() does not escape less-than signs in filling format",
 	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
@@ -214,7 +214,7 @@ TEST_CASE("do_format() escapes less-than sign in filling format",
 	fmt.register_fmt('b', "BBB");
 
 	REQUIRE(fmt.do_format("%a%>.%b", 10) == "AAA....BBB");
-	REQUIRE(fmt.do_format("%a%><%b", 10) == "AAA<><><><>BBB");
+	REQUIRE(fmt.do_format("%a%><%b", 10) == "AAA<<<<BBB");
 	REQUIRE(fmt.do_format("%a%>>%b", 10) == "AAA>>>>BBB");
 }
 

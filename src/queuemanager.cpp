@@ -100,8 +100,7 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
 
 	if (feed->rssurl() != item->feedurl() &&
 		item->get_feedptr() != nullptr) {
-		std::string feedtitle = utils::quote_for_stfl(
-				item->get_feedptr()->title());
+		std::string feedtitle = item->get_feedptr()->title();
 		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('N', feedtitle);
 	} else {
