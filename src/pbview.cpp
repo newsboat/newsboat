@@ -13,6 +13,7 @@
 #include "download.h"
 #include "fmtstrformatter.h"
 #include "help.h"
+#include "listformatter.h"
 #include "logger.h"
 #include "pbcontroller.h"
 #include "poddlthread.h"
@@ -86,7 +87,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				"= %" PRIu64,
 				static_cast<uint64_t>(ctrl->downloads().size()));
 
-			std::string code = "{list";
+			ListFormatter listfmt;
 			std::string formatstring = ctrl->get_formatstr();
 
 			dllist_form.run(-3); // compute all widget dimensions
@@ -95,16 +96,12 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
 				auto lbuf = format_line(formatstring, dl, i, width);
-				code.append(
-					strprintf::fmt("{listitem[%u] text:%s}",
-						i,
-						Stfl::quote(lbuf)));
+				listfmt.add_line(lbuf, std::to_string(i));
 				i++;
 			}
 
-			code.append("}");
-
-			downloads_list.stfl_replace_lines(i, code);
+			downloads_list.stfl_replace_lines(listfmt.get_lines_count(),
+				listfmt.format_list());
 
 			ctrl->set_view_update_necessary(false);
 		}
@@ -285,27 +282,21 @@ void PbView::run_help()
 
 	const auto descs = keys->get_keymap_descriptions("podboat");
 
-	std::string code = "{list";
+	ListFormatter listfmt;
 
 	for (const auto& desc : descs) {
-		std::string line = "{listitem text:";
-
 		std::string descline;
 		descline.append(desc.key);
 		descline.append(8 - desc.key.length(), ' ');
 		descline.append(desc.cmd);
 		descline.append(24 - desc.cmd.length(), ' ');
 		descline.append(desc.desc);
-		line.append(Stfl::quote(descline));
 
-		line.append("}");
-
-		code.append(line);
+		listfmt.add_line(descline);
 	}
 
-	code.append("}");
-
-	help_textview.stfl_replace_lines(descs.size(), code);
+	help_textview.stfl_replace_lines(listfmt.get_lines_count(),
+		listfmt.format_list());
 
 	bool quit = false;
 

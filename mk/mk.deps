@@ -409,11 +409,12 @@ src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/configparser.h include/configactionhandler.h include/keymap.h \
  include/listwidget.h include/stflpp.h include/textviewwidget.h config.h \
  include/configcontainer.h stfl/dllist.h include/download.h \
- include/fmtstrformatter.h stfl/help.h include/logger.h \
- include/strprintf.h include/pbcontroller.h include/configcontainer.h \
- include/download.h include/fslock.h include/queueloader.h \
- include/poddlthread.h include/strprintf.h include/utils.h \
- 3rd-party/optional.hpp include/logger.h
+ include/fmtstrformatter.h stfl/help.h include/listformatter.h \
+ include/regexmanager.h include/matcher.h filter/FilterParser.h \
+ include/logger.h include/strprintf.h include/pbcontroller.h \
+ include/configcontainer.h include/download.h include/fslock.h \
+ include/queueloader.h include/poddlthread.h include/strprintf.h \
+ include/utils.h 3rd-party/optional.hpp include/logger.h
 src/poddlthread.o: src/poddlthread.cpp include/poddlthread.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/download.h config.h \
