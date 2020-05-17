@@ -265,15 +265,13 @@ void DirBrowserFormAction::prepare()
 	if (do_redraw) {
 		std::vector<std::string> directories = get_sorted_dirlist();
 
-		std::string code = "{list";
+		ListFormatter listfmt;
 
 		for (std::string directory : directories) {
-			code.append(add_directory(directory));
+			add_directory(listfmt, directory);
 		}
 
-		code.append("}");
-
-		files_list.stfl_replace_lines(directories.size(), code);
+		files_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 		do_redraw = false;
 	}
 
@@ -325,9 +323,9 @@ KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-std::string DirBrowserFormAction::add_directory(std::string dirname)
+void DirBrowserFormAction::add_directory(ListFormatter& listfmt,
+	std::string dirname)
 {
-	std::string retval;
 	struct stat sb;
 	if (::lstat(dirname.c_str(), &sb) == 0) {
 		char ftype = get_filetype(sb.st_mode);
@@ -351,12 +349,9 @@ std::string DirBrowserFormAction::add_directory(std::string dirname)
 				group,
 				sizestr,
 				formatteddirname);
-		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
-				ftype,
-				Stfl::quote(dirname),
-				Stfl::quote(utils::quote_for_stfl(line)));
+		std::string id = strprintf::fmt("%c%s", ftype, Stfl::quote(dirname));
+		listfmt.add_line(utils::quote_for_stfl(line), id);
 	}
-	return retval;
 }
 
 std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,

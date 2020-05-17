@@ -5,6 +5,7 @@
 #include <grp.h>
 
 #include "configcontainer.h"
+#include "listformatter.h"
 #include "listwidget.h"
 #include "formaction.h"
 
@@ -39,7 +40,7 @@ private:
 		std::vector<std::string>* args = nullptr) override;
 	void update_title(const std::string& working_directory);
 
-	std::string add_file(std::string filename);
+	void add_file(ListFormatter& listfmt, std::string filename);
 	std::string get_filename_suggestion(const std::string& s);
 	std::string get_rwx(unsigned short val);
 
