@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <langinfo.h>
 #include <sstream>
+#include <string>
 #include <sys/stat.h>
 
 #include "config.h"
@@ -1000,7 +1001,7 @@ void ItemListFormAction::prepare()
 					width,
 					itemlist_format,
 					datetime_format);
-			listfmt.add_line(line, item.second);
+			listfmt.add_line(line, std::to_string(item.second));
 		}
 		break;
 
@@ -1011,7 +1012,7 @@ void ItemListFormAction::prepare()
 					width,
 					itemlist_format,
 					datetime_format);
-			listfmt.set_line(itempos, line, item.second);
+			listfmt.set_line(itempos, line, std::to_string(item.second));
 		}
 		break;
 	}

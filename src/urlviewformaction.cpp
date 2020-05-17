@@ -1,6 +1,7 @@
 #include "urlviewformaction.h"
 
 #include <sstream>
+#include <string>
 
 #include "config.h"
 #include "fmtstrformatter.h"
@@ -127,7 +128,7 @@ void UrlViewFormAction::prepare()
 		for (const auto& link : links) {
 			listfmt.add_line(
 				utils::quote_for_stfl(strprintf::fmt("%2u  %s", i + 1, link.first)),
-				i);
+				std::to_string(i));
 			i++;
 		}
 		urls_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());

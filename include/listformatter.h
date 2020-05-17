@@ -11,19 +11,19 @@
 namespace newsboat {
 
 class ListFormatter {
-	typedef std::pair<std::string, unsigned int> LineIdPair;
+	typedef std::pair<std::string, std::string> LineIdPair;
 
 public:
 	ListFormatter();
 	~ListFormatter();
 	void add_line(const std::string& text,
-		unsigned int id = UINT_MAX,
+		const std::string& id = "",
 		unsigned int width = 0);
 	void add_lines(const std::vector<std::string>& lines,
 		unsigned int width = 0);
 	void set_line(const unsigned int itempos,
 		const std::string& text,
-		unsigned int id = UINT_MAX,
+		const std::string& id = "",
 		unsigned int width = 0);
 	void clear()
 	{

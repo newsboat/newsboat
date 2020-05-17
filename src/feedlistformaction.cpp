@@ -609,7 +609,7 @@ void FeedListFormAction::set_feedlist(
 				feed.first,
 				feed.second,
 				width),
-			feed.second);
+			std::to_string(feed.second));
 		i++;
 	}
 
