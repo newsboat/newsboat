@@ -36,10 +36,10 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 	ListFormatter fmt;
 
 	SECTION("ordinary text") {
-		fmt.add_line("123456789_", UINT_MAX, 10);
-		fmt.add_line("_987654321", UINT_MAX, 10);
+		fmt.add_line("123456789_", "", 10);
+		fmt.add_line("_987654321", "", 10);
 		fmt.add_line("ListFormatter doesn't care about word boundaries",
-			UINT_MAX,
+			"",
 			10);
 		std::string expected =
 			"{list"
@@ -55,10 +55,10 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 	}
 
 	SECTION("numbered list") {
-		fmt.add_line("123456789_", 1, 10);
-		fmt.add_line("_987654321", 2, 10);
+		fmt.add_line("123456789_", "1", 10);
+		fmt.add_line("_987654321", "2", 10);
 		fmt.add_line("ListFormatter doesn't care about word boundaries",
-			3,
+			"3",
 			10);
 		std::string expected =
 			"{list"
@@ -78,8 +78,8 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 {
 	ListFormatter fmt;
 
-	fmt.add_line("hello", 1, 5);
-	fmt.add_line("goodbye", 2, 5);
+	fmt.add_line("hello", "1", 5);
+	fmt.add_line("goodbye", "2", 5);
 
 	std::string expected =
 		"{list"
@@ -89,7 +89,7 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 		"}";
 	REQUIRE(fmt.format_list(nullptr, "") == expected);
 
-	fmt.set_line(1, "oh", 3, 3);
+	fmt.set_line(1, "oh", "3", 3);
 
 	expected =
 		"{list"

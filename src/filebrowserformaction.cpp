@@ -16,6 +16,7 @@
 
 #include "config.h"
 #include "fmtstrformatter.h"
+#include "listformatter.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -256,15 +257,13 @@ void FileBrowserFormAction::prepare()
 	if (do_redraw) {
 		std::vector<std::string> files = get_sorted_filelist();
 
-		std::string code = "{list";
+		ListFormatter listfmt;
 
 		for (std::string filename : files) {
-			code.append(add_file(filename));
+			add_file(listfmt, filename);
 		}
 
-		code.append("}");
-
-		files_list.stfl_replace_lines(files.size(), code);
+		files_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 		do_redraw = false;
 	}
 
@@ -315,9 +314,9 @@ KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-std::string FileBrowserFormAction::add_file(std::string filename)
+void FileBrowserFormAction::add_file(ListFormatter& listfmt,
+	std::string filename)
 {
-	std::string retval;
 	struct stat sb;
 	if (::lstat(filename.c_str(), &sb) == 0) {
 		char ftype = get_filetype(sb.st_mode);
@@ -341,12 +340,9 @@ std::string FileBrowserFormAction::add_file(std::string filename)
 				group,
 				sizestr,
 				formattedfilename);
-		retval = strprintf::fmt("{listitem[%c%s] text:%s}",
-				ftype,
-				Stfl::quote(filename),
-				Stfl::quote(utils::quote_for_stfl(line)));
+		std::string id = strprintf::fmt("%c%s", ftype, Stfl::quote(filename));
+		listfmt.add_line(utils::quote_for_stfl(line), id);
 	}
-	return retval;
 }
 
 std::string FileBrowserFormAction::get_formatted_filename(std::string filename,

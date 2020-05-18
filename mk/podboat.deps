@@ -1,1 +1,1 @@
-podboat.cpp src/pbcontroller.cpp src/pbview.cpp src/download.cpp src/queueloader.cpp src/poddlthread.cpp src/listwidget.cpp src/textviewwidget.cpp
+podboat.cpp src/pbcontroller.cpp src/pbview.cpp src/download.cpp src/queueloader.cpp src/poddlthread.cpp src/listwidget.cpp src/textviewwidget.cpp src/listformatter.cpp src/regexmanager.cpp

@@ -75,7 +75,7 @@ endif
 PODBOAT=podboat
 PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
 PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SOURCES))
-PODBOAT_LIBS=-lboat -lnewsboat -lpthread -ldl
+PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
 
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBOAT_LIBS+=-liconv -lintl
@@ -110,7 +110,7 @@ $(NEWSBOATLIB_OUTPUT): $(RUST_SRCS)
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
-$(PODBOAT): $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(PODBOAT_OBJS)
+$(PODBOAT): $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT)
 	$(CXX) $(CXXFLAGS) -o $(PODBOAT) $(PODBOAT_OBJS) $(PODBOAT_LIBS) $(LDFLAGS)
 
 $(LIB_OUTPUT): $(LIB_OBJS)

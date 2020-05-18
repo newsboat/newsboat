@@ -14,7 +14,7 @@ ListFormatter::ListFormatter() {}
 ListFormatter::~ListFormatter() {}
 
 void ListFormatter::add_line(const std::string& text,
-	unsigned int id,
+	const std::string& id,
 	unsigned int width)
 {
 	set_line(UINT_MAX, text, id, width);
@@ -23,7 +23,7 @@ void ListFormatter::add_line(const std::string& text,
 
 void ListFormatter::set_line(const unsigned int itempos,
 	const std::string& text,
-	unsigned int id,
+	const std::string& id,
 	unsigned int width)
 {
 	std::vector<LineIdPair> formatted_text;
@@ -67,7 +67,7 @@ void ListFormatter::add_lines(const std::vector<std::string>& thelines,
 {
 	for (const auto& line : thelines) {
 		add_line(utils::replace_all(line, "\t", "        "),
-			UINT_MAX,
+			"",
 			width);
 	}
 }
@@ -81,12 +81,12 @@ std::string ListFormatter::format_list(RegexManager* rxman,
 		if (rxman) {
 			rxman->quote_and_highlight(str, location);
 		}
-		if (line.second == UINT_MAX) {
+		if (line.second.empty()) {
 			format_cache.append(strprintf::fmt(
 					"{listitem text:%s}", Stfl::quote(str)));
 		} else {
 			format_cache.append(
-				strprintf::fmt("{listitem[%u] text:%s}",
+				strprintf::fmt("{listitem[%s] text:%s}",
 					line.second,
 					Stfl::quote(str)));
 		}

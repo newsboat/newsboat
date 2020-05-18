@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <sstream>
+#include <string>
 
 #include "config.h"
 #include "fmtstrformatter.h"
@@ -134,7 +135,7 @@ void SelectFormAction::prepare()
 							tag,
 							i + 1,
 							width)),
-					i);
+					std::to_string(i));
 				i++;
 			}
 			break;
@@ -142,7 +143,7 @@ void SelectFormAction::prepare()
 			for (const auto& filter : filters) {
 				std::string tagstr = strprintf::fmt(
 						"%4u  %s", i + 1, filter.name);
-				listfmt.add_line(utils::quote_for_stfl(tagstr), i);
+				listfmt.add_line(utils::quote_for_stfl(tagstr), std::to_string(i));
 				i++;
 			}
 			break;

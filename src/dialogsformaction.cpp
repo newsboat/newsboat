@@ -1,6 +1,7 @@
 #include "dialogsformaction.h"
 
 #include <cstdio>
+#include <string>
 
 #include "config.h"
 #include "fmtstrformatter.h"
@@ -56,7 +57,7 @@ void DialogsFormAction::prepare()
 						? "*"
 						: " ",
 						fa.second)),
-				fa.first);
+				std::to_string(fa.first));
 			i++;
 		}
 
