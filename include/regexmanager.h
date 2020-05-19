@@ -32,9 +32,8 @@ public:
 	std::string get_attrs_stfl_string(const std::string& location, bool hasFocus);
 
 private:
-	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>
-		RcPair;
-	std::map<std::string, RcPair> locations;
+	typedef std::vector<std::pair<regex_t*, std::string>> RegexStyleVector;
+	std::map<std::string, RegexStyleVector> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;
 
