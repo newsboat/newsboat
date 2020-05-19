@@ -580,14 +580,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 void ItemViewFormAction::set_regexmanager(RegexManager* r)
 {
 	rxman = r;
-	std::vector<std::string>& attrs = r->get_attrs("article");
-	unsigned int i = 0;
-	std::string attrstr;
-	for (const auto& attribute : attrs) {
-		attrstr.append(
-			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
-		i++;
-	}
+	std::string attrstr = r->get_attrs_stfl_string("article", false);
 	attrstr.append(
 		"@style_b_normal[color_bold]:attr=bold "
 		"@style_u_normal[color_underline]:attr=underline ");

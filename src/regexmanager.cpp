@@ -391,4 +391,19 @@ void RegexManager::handle_highlight_article_action(const
 		std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 }
 
+std::string RegexManager::get_attrs_stfl_string(const std::string& location,
+	bool hasFocus)
+{
+	const auto& attributes = locations[location].second;
+	std::string attrstr;
+	for (unsigned int i = 0; i < attributes.size(); ++i) {
+		const std::string& attribute = attributes[i];
+		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, attribute));
+		if (hasFocus) {
+			attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, attribute));
+		}
+	}
+	return attrstr;
+}
+
 } // namespace newsboat

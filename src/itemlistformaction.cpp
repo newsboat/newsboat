@@ -1374,17 +1374,8 @@ void ItemListFormAction::save_filterpos()
 void ItemListFormAction::set_regexmanager(RegexManager* r)
 {
 	rxman = r;
-	std::vector<std::string>& attrs = r->get_attrs("articlelist");
-	unsigned int i = 0;
-	std::string attrstr;
-	for (const auto& attribute : attrs) {
-		attrstr.append(
-			strprintf::fmt("@style_%u_normal:%s ", i, attribute));
-		attrstr.append(
-			strprintf::fmt("@style_%u_focus:%s ", i, attribute));
-		i++;
-	}
-	std::string textview = strprintf::fmt(
+	const std::string attrstr = r->get_attrs_stfl_string("articlelist", true);
+	const std::string textview = strprintf::fmt(
 			"{list[items] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos_name[itemposname]: pos[items_pos]:0 %s richtext:1}",

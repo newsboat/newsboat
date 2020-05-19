@@ -4,6 +4,7 @@
 #include <memory>
 #include <regex>
 #include <regex.h>
+#include <string>
 #include <sys/types.h>
 #include <utility>
 #include <vector>
@@ -28,6 +29,7 @@ public:
 	void merge_style_tag(std::map<size_t, std::string>& tags,
 		const std::string& tag,
 		size_t start, size_t end);
+	std::string get_attrs_stfl_string(const std::string& location, bool hasFocus);
 
 private:
 	typedef std::pair<std::vector<regex_t*>, std::vector<std::string>>
@@ -39,12 +41,6 @@ private:
 	void handle_highlight_action(const std::vector<std::string>& params);
 	void handle_highlight_article_action(
 		const std::vector<std::string>& params);
-
-public:
-	std::vector<std::string>& get_attrs(const std::string& loc)
-	{
-		return locations[loc].second;
-	}
 };
 
 } // namespace newsboat
