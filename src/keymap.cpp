@@ -118,7 +118,7 @@ static OpDesc opdescs[] = {
 		"open-in-browser-and-mark-read",
 		"O",
 		_("Open article in browser and mark read"),
-		KM_ARTICLELIST
+		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
 		OP_OPENALLUNREADINBROWSER,
@@ -140,7 +140,7 @@ static OpDesc opdescs[] = {
 		"open-in-browser",
 		"o",
 		_("Open article in browser"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
 		OP_HELP,
