@@ -11,13 +11,13 @@
 
 #include "configparser.h"
 #include "matcher.h"
+#include "regexowner.h"
 
 namespace newsboat {
 
 class RegexManager : public ConfigActionHandler {
 public:
 	RegexManager();
-	~RegexManager() override;
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
@@ -32,7 +32,8 @@ public:
 	std::string get_attrs_stfl_string(const std::string& location, bool hasFocus);
 
 private:
-	typedef std::vector<std::pair<regex_t*, std::string>> RegexStyleVector;
+	typedef std::vector<std::pair<std::shared_ptr<Regex>, std::string>>
+		RegexStyleVector;
 	std::map<std::string, RegexStyleVector> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;

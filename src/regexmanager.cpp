@@ -21,18 +21,6 @@ RegexManager::RegexManager()
 	locations["feedlist"];
 }
 
-RegexManager::~RegexManager()
-{
-	for (const auto& location : locations) {
-		for (const auto& regexStyle : location.second) {
-			if (regexStyle.first != nullptr) {
-				regfree(regexStyle.first);
-				delete regexStyle.first;
-			}
-		}
-	}
-}
-
 void RegexManager::dump_config(std::vector<std::string>& config_output)
 {
 	for (const auto& foo : cheat_store_for_dump_config) {
@@ -70,10 +58,7 @@ void RegexManager::remove_last_regex(const std::string& location)
 		return;
 	}
 
-	auto it = regexes.end() - 1;
-	regfree(it->first);
-	delete it->first;
-	regexes.erase(it);
+	regexes.pop_back();
 }
 
 std::map<size_t, std::string> RegexManager::extract_style_tags(std::string& str)
@@ -180,22 +165,23 @@ void RegexManager::quote_and_highlight(std::string& str,
 		if (regex == nullptr) {
 			continue;
 		}
-		regmatch_t pmatch;
 		unsigned int offset = 0;
 		int eflags = 0;
-		while (regexec(regex, str.c_str() + offset, 1, &pmatch, eflags) == 0) {
+		while (offset < str.length()) {
+			const auto matches = regex->matches(str.substr(offset), 1, eflags);
 			eflags |= REG_NOTBOL; // Don't match beginning-of-line operator (^) in following checks
-			if (pmatch.rm_so != pmatch.rm_eo) {
+			if (matches.empty()) {
+				break;
+			}
+			const auto& match = matches[0];
+			if (match.first != match.second) {
 				const std::string marker = strprintf::fmt("<%u>", i);
-				const int match_start = offset + pmatch.rm_so;
-				const int match_end = offset + pmatch.rm_eo;
+				const int match_start = offset + match.first;
+				const int match_end = offset + match.second;
 				merge_style_tag(tag_locations, marker, match_start, match_end);
 				offset = match_end;
 			} else {
 				offset++;
-			}
-			if (offset >= str.length()) {
-				break;
 			}
 		}
 	}
@@ -218,25 +204,18 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 				_("`%s' is an invalid dialog type"), location));
 	}
 
-	regex_t* rx = new regex_t;
-	int err;
-	if ((err = regcomp(rx,
-					params[1].c_str(),
-					REG_EXTENDED | REG_ICASE)) != 0) {
-		char buf[1024];
-		regerror(err, rx, buf, sizeof(buf));
-		delete rx;
+	std::string errorMessage;
+	auto regex = Regex::compile(params[1], REG_EXTENDED | REG_ICASE, errorMessage);
+	if (regex == nullptr) {
 		throw ConfigHandlerException(strprintf::fmt(
 				_("`%s' is not a valid regular expression: %s"),
 				params[1],
-				buf));
+				errorMessage));
 	}
 	std::string colorstr;
 	if (params[2] != "default") {
 		colorstr.append("fg=");
 		if (!utils::is_valid_color(params[2])) {
-			regfree(rx);
-			delete rx;
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"),
 					params[2]));
@@ -250,8 +229,6 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 			}
 			colorstr.append("bg=");
 			if (!utils::is_valid_color(params[3])) {
-				regfree(rx);
-				delete rx;
 				throw ConfigHandlerException(
 					strprintf::fmt(
 						_("`%s' is not a valid "
@@ -268,8 +245,6 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 				colorstr.append("attr=");
 				if (!utils::is_valid_attribute(
 						params[i])) {
-					regfree(rx);
-					delete rx;
 					throw ConfigHandlerException(
 						strprintf::fmt(
 							_("`%s' is not "
@@ -288,10 +263,9 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 			params[1],
 			colorstr,
 			location);
-		locations[location].push_back({rx, colorstr});
+		locations[location].push_back({std::move(regex), colorstr});
 	} else {
-		regfree(rx);
-		delete rx;
+		std::shared_ptr<Regex> sharedRegex(std::move(regex));
 		for (auto& location : locations) {
 			LOG(Level::DEBUG,
 				"RegexManager::handle_action: adding "
@@ -300,13 +274,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 				params[1],
 				colorstr,
 				location.first);
-			rx = new regex_t;
-			// we need to create a new one for each
-			// push_back, otherwise we'd have double frees.
-			regcomp(rx,
-				params[1].c_str(),
-				REG_EXTENDED | REG_ICASE);
-			location.second.push_back({rx, colorstr});
+			location.second.push_back({sharedRegex, colorstr});
 		}
 	}
 	std::string line = "highlight";
