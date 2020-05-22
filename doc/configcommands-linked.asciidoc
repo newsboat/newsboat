@@ -1,145 +1,7 @@
-
-<<always-display-description>> +
-<<always-download>> +
-<<article-sort-order>> +
-<<articlelist-format>> +
-<<articlelist-title-format>> +
-<<auto-reload>> +
-<<bind-key>> +
-<<bookmark-autopilot>> +
-<<bookmark-cmd>> +
-<<bookmark-interactive>> +
-<<browser>> +
-<<cache-file>> +
-<<cleanup-on-quit>> +
-<<color>> +
-<<confirm-exit>> +
-<<cookie-cache>> +
-<<datetime-format>> +
-<<define-filter>> +
-<<delete-read-articles-on-quit>> +
-<<dialogs-title-format>> +
-<<dirbrowser-title-format>> +
-<<display-article-progress>> +
-<<download-full-page>> +
-<<download-retries>> +
-<<download-timeout>> +
-<<error-log>> +
-<<external-url-viewer>> +
-<<feed-sort-order>> +
-<<feedhq-flag-share>> +
-<<feedhq-flag-star>> +
-<<feedhq-login>> +
-<<feedhq-min-items>> +
-<<feedhq-password>> +
-<<feedhq-passwordfile>> +
-<<feedhq-passwordeval>> +
-<<feedhq-show-special-feeds>> +
-<<feedhq-url>> +
-<<feedlist-format>> +
-<<feedlist-title-format>> +
-<<filebrowser-title-format>> +
-<<goto-first-unread>> +
-<<goto-next-feed>> +
-<<help-title-format>> +
-<<highlight>> +
-<<highlight-article>> +
-<<history-limit>> +
-<<html-renderer>> +
-<<http-auth-method>> +
-<<ignore-article>> +
-<<ignore-mode>> +
-<<include>> +
-<<itemview-title-format>> +
-<<inoreader-flag-share>> +
-<<inoreader-flag-star>> +
-<<inoreader-login>> +
-<<inoreader-min-items>> +
-<<inoreader-password>> +
-<<inoreader-passwordfile>> +
-<<inoreader-passwordeval>> +
-<<inoreader-show-special-feeds>> +
-<<keep-articles-days>> +
-<<macro>> +
-<<mark-as-read-on-hover>> +
-<<max-download-speed>> +
-<<max-browser-tabs>> +
-<<max-items>> +
-<<newsblur-login>> +
-<<newsblur-min-items>> +
-<<newsblur-password>> +
-<<newsblur-passwordfile>> +
-<<newsblur-passwordeval>> +
-<<newsblur-url>> +
-<<notify-always>> +
-<<notify-beep>> +
-<<notify-format>> +
-<<notify-program>> +
-<<notify-screen>> +
-<<notify-xterm>> +
-<<ocnews-flag-star>> +
-<<ocnews-login>> +
-<<ocnews-password>> +
-<<ocnews-passwordfile>> +
-<<ocnews-passwordeval>> +
-<<ocnews-url>> +
-<<oldreader-flag-share>> +
-<<oldreader-flag-star>> +
-<<oldreader-login>> +
-<<oldreader-min-items>> +
-<<oldreader-password>> +
-<<oldreader-passwordfile>> +
-<<oldreader-passwordeval>> +
-<<oldreader-show-special-feeds>> +
-<<openbrowser-and-mark-jumps-to-next-unread>> +
-<<opml-url>> +
-<<pager>> +
-<<podcast-auto-enqueue>> +
-<<prepopulate-query-feeds>> +
-<<ssl-verifyhost>> +
-<<ssl-verifypeer>> +
-<<proxy-auth-method>> +
-<<proxy-auth>> +
-<<proxy-type>> +
-<<proxy>> +
-<<refresh-on-startup>> +
-<<reload-only-visible-feeds>> +
-<<reload-threads>> +
-<<reload-time>> +
-<<reset-unread-on-update>> +
-<<save-path>> +
-<<search-highlight-colors>> +
-<<searchresult-title-format>> +
-<<selectfilter-title-format>> +
-<<selecttag-format>> +
-<<selecttag-title-format>> +
-<<show-keymap-hint>> +
-<<show-title-bar>> +
-<<show-read-articles>> +
-<<show-read-feeds>> +
-<<suppress-first-reload>> +
-<<swap-title-and-hints>> +
-<<text-width>> +
-<<toggleitemread-jumps-to-next-unread>> +
-<<ttrss-flag-publish>> +
-<<ttrss-flag-star>> +
-<<ttrss-login>> +
-<<ttrss-mode>> +
-<<ttrss-password>> +
-<<ttrss-passwordfile>> +
-<<ttrss-passwordeval>> +
-<<ttrss-url>> +
-<<unbind-key>> +
-<<urls-source>> +
-<<urlview-title-format>> +
-<<use-proxy>> +
-<<user-agent>> +
-
-
-
 '''
+[[always-display-description]]
 ****
-[[always-display-description]]*Syntax:* always-display-description [yes/no] +
+*Syntax:* <<always-display-description,always-display-description>> [yes/no] +
 *Default:* no +
 *Example:* always-display-description yes +
 ****
@@ -149,8 +11,9 @@ If set to `yes`, then the description will always be displayed even if e.g. a `<
 
 
 '''
+[[always-download]]
 ****
-[[always-download]]*Syntax:* always-download <url> [<url>...] +
+*Syntax:* <<always-download,always-download>> <url> [<url>...] +
 *Default:* n/a +
 *Example:* always-download "http://www.n-tv.de/23.rss" +
 ****
@@ -160,8 +23,9 @@ Specifies one or more feed URLs that should always be downloaded, regardless of 
 
 
 '''
+[[article-sort-order]]
 ****
-[[article-sort-order]]*Syntax:* article-sort-order <sortfield>[-<direction>] +
+*Syntax:* <<article-sort-order,article-sort-order>> <sortfield>[-<direction>] +
 *Default:* date +
 *Example:* article-sort-order author-desc +
 ****
@@ -171,8 +35,9 @@ The <sortfield> specifies which article property shall be used for sorting, curr
 
 
 '''
+[[articlelist-format]]
 ****
-[[articlelist-format]]*Syntax:* articlelist-format <format> +
+*Syntax:* <<articlelist-format,articlelist-format>> <format> +
 *Default:* "%4i %f %D %6L  %?T?|%-17T|  ?%t" +
 *Example:* articlelist-format "%4i %f %D   %?T?|%-17T|  ?%t" +
 ****
@@ -182,8 +47,9 @@ This variable defines the format of entries in the article list. See the respect
 
 
 '''
+[[articlelist-title-format]]
 ****
-[[articlelist-title-format]]*Syntax:* articlelist-title-format <format> +
+*Syntax:* <<articlelist-title-format,articlelist-title-format>> <format> +
 *Default:* "%N %V - Articles in feed '%T' (%u unread, %t total) - %U" +
 *Example:* articlelist-title-format "Articles in feed '%T' (%u unread)" +
 ****
@@ -193,8 +59,9 @@ Format of the title in article list. See "Format Strings" section of Newsboat ma
 
 
 '''
+[[auto-reload]]
 ****
-[[auto-reload]]*Syntax:* auto-reload [yes/no] +
+*Syntax:* <<auto-reload,auto-reload>> [yes/no] +
 *Default:* no +
 *Example:* auto-reload yes +
 ****
@@ -204,8 +71,9 @@ If set to `yes`, all feeds will be automatically reloaded at start up and then c
 
 
 '''
+[[bind-key]]
 ****
-[[bind-key]]*Syntax:* bind-key <key> <operation> [<dialog>] +
+*Syntax:* <<bind-key,bind-key>> <key> <operation> [<dialog>] +
 *Default:* n/a +
 *Example:* bind-key ^R reload-all +
 ****
@@ -215,8 +83,9 @@ Bind key <key> to <operation>. This means that whenever <key> is pressed, then <
 
 
 '''
+[[bookmark-autopilot]]
 ****
-[[bookmark-autopilot]]*Syntax:* bookmark-autopilot [yes/no] +
+*Syntax:* <<bookmark-autopilot,bookmark-autopilot>> [yes/no] +
 *Default:* no +
 *Example:* bookmark-autopilot yes +
 ****
@@ -226,8 +95,9 @@ If set to `yes`, the configured bookmark command is executed without any further
 
 
 '''
+[[bookmark-cmd]]
 ****
-[[bookmark-cmd]]*Syntax:* bookmark-cmd <command> +
+*Syntax:* <<bookmark-cmd,bookmark-cmd>> <command> +
 *Default:* n/a +
 *Example:* bookmark-cmd "~/bin/delicious-bookmark.sh" +
 ****
@@ -237,8 +107,9 @@ If set, then <command> will be used as bookmarking plugin. See the documentation
 
 
 '''
+[[bookmark-interactive]]
 ****
-[[bookmark-interactive]]*Syntax:* bookmark-interactive [yes/no] +
+*Syntax:* <<bookmark-interactive,bookmark-interactive>> [yes/no] +
 *Default:* no +
 *Example:* bookmark-interactive yes +
 ****
@@ -248,8 +119,9 @@ If set to `yes`, then the configured bookmark command is an interactive program.
 
 
 '''
+[[browser]]
 ****
-[[browser]]*Syntax:* browser <command> +
+*Syntax:* <<browser,browser>> <command> +
 *Default:* %BROWSER, otherwise lynx +
 *Example:* browser "w3m %u" +
 ****
@@ -259,8 +131,9 @@ Set the browser command to use when opening an article in the browser. If BROWSE
 
 
 '''
+[[cache-file]]
 ****
-[[cache-file]]*Syntax:* cache-file <path> +
+*Syntax:* <<cache-file,cache-file>> <path> +
 *Default:* "~/.newsboat/cache.db" +
 *Example:* cache-file "/tmp/testcache.db" +
 ****
@@ -270,8 +143,9 @@ This configuration option sets the cache file. This is especially useful if the 
 
 
 '''
+[[cleanup-on-quit]]
 ****
-[[cleanup-on-quit]]*Syntax:* cleanup-on-quit [yes/no] +
+*Syntax:* <<cleanup-on-quit,cleanup-on-quit>> [yes/no] +
 *Default:* yes +
 *Example:* cleanup-on-quit no +
 ****
@@ -281,8 +155,9 @@ If set to `yes`, then the cache gets locked and superfluous feeds and items are 
 
 
 '''
+[[color]]
 ****
-[[color]]*Syntax:* color <element> <fgcolor> <bgcolor> [<attribute> ...] +
+*Syntax:* <<color,color>> <element> <fgcolor> <bgcolor> [<attribute> ...] +
 *Default:* n/a +
 *Example:* color background white black +
 ****
@@ -292,8 +167,9 @@ Set the foreground color, background color and optional attributes for a certain
 
 
 '''
+[[confirm-exit]]
 ****
-[[confirm-exit]]*Syntax:* confirm-exit [yes/no] +
+*Syntax:* <<confirm-exit,confirm-exit>> [yes/no] +
 *Default:* no +
 *Example:* confirm-exit yes +
 ****
@@ -303,8 +179,9 @@ If set to `yes`, then newsboat will ask for confirmation whether the user really
 
 
 '''
+[[cookie-cache]]
 ****
-[[cookie-cache]]*Syntax:* cookie-cache <path> +
+*Syntax:* <<cookie-cache,cookie-cache>> <path> +
 *Default:* n/a +
 *Example:* cookie-cache "~/.newsboat/cookies.txt" +
 ****
@@ -314,8 +191,9 @@ Set a cookie cache. If set, cookies will be cached in (i.e. read from and writte
 
 
 '''
+[[datetime-format]]
 ****
-[[datetime-format]]*Syntax:* datetime-format <date/time format> +
+*Syntax:* <<datetime-format,datetime-format>> <date/time format> +
 *Default:* %b %d +
 *Example:* datetime-format "%D, %R" +
 ****
@@ -325,8 +203,9 @@ This format specifies the date/time format in the article list. For a detailed d
 
 
 '''
+[[define-filter]]
 ****
-[[define-filter]]*Syntax:* define-filter <name> <filterexpr> +
+*Syntax:* <<define-filter,define-filter>> <name> <filterexpr> +
 *Default:* n/a +
 *Example:* define-filter "all feeds with 'fun' tag" "tags # \"fun\"" +
 ****
@@ -336,8 +215,9 @@ With this command, you can predefine filters, which you can later select from a 
 
 
 '''
+[[delete-read-articles-on-quit]]
 ****
-[[delete-read-articles-on-quit]]*Syntax:* delete-read-articles-on-quit [yes/no] +
+*Syntax:* <<delete-read-articles-on-quit,delete-read-articles-on-quit>> [yes/no] +
 *Default:* no +
 *Example:* delete-read-articles-on-quit yes +
 ****
@@ -347,8 +227,9 @@ If set to `yes`, then all read articles will be deleted when you quit newsboat. 
 
 
 '''
+[[dialogs-title-format]]
 ****
-[[dialogs-title-format]]*Syntax:* dialogs-title-format <format> +
+*Syntax:* <<dialogs-title-format,dialogs-title-format>> <format> +
 *Default:* "%N %V - Dialogs" +
 *Example:* dialogs-title-format "%N %V - Dialogs" +
 ****
@@ -358,8 +239,9 @@ Format of the title in dialog list. See "Format Strings" section of Newsboat man
 
 
 '''
+[[dirbrowser-title-format]]
 ****
-[[dirbrowser-title-format]]*Syntax:* dirbrowser-title-format <format> +
+*Syntax:* <<dirbrowser-title-format,dirbrowser-title-format>> <format> +
 *Default:* "%N %V - %?O?Open Directory&Save File? - %f" +
 *Example:* dirbrowser-file-format "%?O?Open Directory&Save File? - %f" +
 ****
@@ -369,8 +251,9 @@ Format of the title in directory browser. See "Format Strings" section of Newsbo
 
 
 '''
+[[display-article-progress]]
 ****
-[[display-article-progress]]*Syntax:* display-article-progress [yes/no] +
+*Syntax:* <<display-article-progress,display-article-progress>> [yes/no] +
 *Default:* yes +
 *Example:* display-article-progress no +
 ****
@@ -380,8 +263,9 @@ If set to `yes`, then a read progress (in percent) is displayed in the article v
 
 
 '''
+[[download-full-page]]
 ****
-[[download-full-page]]*Syntax:* download-full-page [yes/no] +
+*Syntax:* <<download-full-page,download-full-page>> [yes/no] +
 *Default:* no +
 *Example:* download-full-page yes +
 ****
@@ -391,8 +275,9 @@ If set to `yes`, then for all feed items with no content but with a link, the li
 
 
 '''
+[[download-retries]]
 ****
-[[download-retries]]*Syntax:* download-retries <number> +
+*Syntax:* <<download-retries,download-retries>> <number> +
 *Default:* 1 +
 *Example:* download-retries 4 +
 ****
@@ -402,8 +287,9 @@ How many times newsboat shall try to successfully download a feed before giving 
 
 
 '''
+[[download-timeout]]
 ****
-[[download-timeout]]*Syntax:* download-timeout <number> +
+*Syntax:* <<download-timeout,download-timeout>> <number> +
 *Default:* 30 +
 *Example:* download-timeout 60 +
 ****
@@ -413,8 +299,9 @@ The number of seconds newsboat shall wait when downloading a feed before giving 
 
 
 '''
+[[error-log]]
 ****
-[[error-log]]*Syntax:* error-log <path> +
+*Syntax:* <<error-log,error-log>> <path> +
 *Default:* n/a +
 *Example:* error-log "~/.newsboat/error.log" +
 ****
@@ -424,8 +311,9 @@ If set, then user errors (e.g. errors regarding defunct RSS feeds) will be logge
 
 
 '''
+[[external-url-viewer]]
 ****
-[[external-url-viewer]]*Syntax:* external-url-viewer <command> +
+*Syntax:* <<external-url-viewer,external-url-viewer>> <command> +
 *Default:* n/a +
 *Example:* external-url-viewer "urlview" +
 ****
@@ -435,8 +323,9 @@ If set, then `show-urls` will pipe the current article to a specific external to
 
 
 '''
+[[feed-sort-order]]
 ****
-[[feed-sort-order]]*Syntax:* feed-sort-order <sortorder>[-<direction>] +
+*Syntax:* <<feed-sort-order,feed-sort-order>> <sortorder>[-<direction>] +
 *Default:* none +
 *Example:* feed-sort-order firsttag +
 ****
@@ -446,8 +335,9 @@ The <sortfield> specifies which feed property shall be used for sorting; current
 
 
 '''
+[[feedhq-flag-share]]
 ****
-[[feedhq-flag-share]]*Syntax:* feedhq-flag-share <flag> +
+*Syntax:* <<feedhq-flag-share,feedhq-flag-share>> <flag> +
 *Default:* n/a +
 *Example:* feedhq-flag-share "a" +
 ****
@@ -457,8 +347,9 @@ If set and FeedHQ support is used, then all articles that are flagged with the s
 
 
 '''
+[[feedhq-flag-star]]
 ****
-[[feedhq-flag-star]]*Syntax:* feedhq-flag-star <flag> +
+*Syntax:* <<feedhq-flag-star,feedhq-flag-star>> <flag> +
 *Default:* n/a +
 *Example:* feedhq-flag-star "b" +
 ****
@@ -468,8 +359,9 @@ If set and FeedHQ support is used, then all articles that are flagged with the s
 
 
 '''
+[[feedhq-login]]
 ****
-[[feedhq-login]]*Syntax:* feedhq-login <login> +
+*Syntax:* <<feedhq-login,feedhq-login>> <login> +
 *Default:* n/a +
 *Example:* feedhq-login "your-login" +
 ****
@@ -479,8 +371,9 @@ This variable sets your FeedHQ login for FeedHQ support. +
 
 
 '''
+[[feedhq-min-items]]
 ****
-[[feedhq-min-items]]*Syntax:* feedhq-min-items <number> +
+*Syntax:* <<feedhq-min-items,feedhq-min-items>> <number> +
 *Default:* 20 +
 *Example:* feedhq-min-items 100 +
 ****
@@ -490,8 +383,9 @@ This variable sets the number of articles that are loaded from FeedHQ per feed. 
 
 
 '''
+[[feedhq-password]]
 ****
-[[feedhq-password]]*Syntax:* feedhq-password <password> +
+*Syntax:* <<feedhq-password,feedhq-password>> <password> +
 *Default:* n/a +
 *Example:* feedhq-password "here_goesAquote:\"" +
 ****
@@ -501,8 +395,9 @@ This variable sets your FeedHQ password for FeedHQ support. Double quotes should
 
 
 '''
+[[feedhq-passwordfile]]
 ****
-[[feedhq-passwordfile]]*Syntax:* feedhq-passwordfile <path> +
+*Syntax:* <<feedhq-passwordfile,feedhq-passwordfile>> <path> +
 *Default:* n/a +
 *Example:* feedhq-passwordfile "~/.newsboat/feedhq-pw.txt" +
 ****
@@ -512,8 +407,9 @@ A more secure alternative to the above, by storing your password elsewhere in yo
 
 
 '''
+[[feedhq-passwordeval]]
 ****
-[[feedhq-passwordeval]]*Syntax:* feedhq-passwordeval <command> +
+*Syntax:* <<feedhq-passwordeval,feedhq-passwordeval>> <command> +
 *Default:* n/a +
 *Example:* feedhq-passwordeval "gpg --decrypt ~/.newsboat/feedhq-password.gpg" +
 ****
@@ -523,8 +419,9 @@ Another secure alternative, is providing your password from an external command 
 
 
 '''
+[[feedhq-show-special-feeds]]
 ****
-[[feedhq-show-special-feeds]]*Syntax:* feedhq-show-special-feeds [yes/no] +
+*Syntax:* <<feedhq-show-special-feeds,feedhq-show-special-feeds>> [yes/no] +
 *Default:* yes +
 *Example:* feedhq-show-special-feeds "no" +
 ****
@@ -534,8 +431,9 @@ If set and FeedHQ support is used, then "special feeds" like "People you follow"
 
 
 '''
+[[feedhq-url]]
 ****
-[[feedhq-url]]*Syntax:* feedhq-url <url> +
+*Syntax:* <<feedhq-url,feedhq-url>> <url> +
 *Default:* "https://feedhq.org/" +
 *Example:* feedhq-url "https://feedhq.example.com/" +
 ****
@@ -545,8 +443,9 @@ Configures the URL where your FeedHQ instance resides. +
 
 
 '''
+[[feedlist-format]]
 ****
-[[feedlist-format]]*Syntax:* feedlist-format <format> +
+*Syntax:* <<feedlist-format,feedlist-format>> <format> +
 *Default:* "%4i %n %11u %t" +
 *Example:* feedlist-format " %n %4i - %11u -%> %t" +
 ****
@@ -556,8 +455,9 @@ This variable defines the format of entries in the feed list. See the respective
 
 
 '''
+[[feedlist-title-format]]
 ****
-[[feedlist-title-format]]*Syntax:* feedlist-title-format <format> +
+*Syntax:* <<feedlist-title-format,feedlist-title-format>> <format> +
 *Default:* "%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?" +
 *Example:* feedlist-title-format "Feeds (%u unread, %t total)" +
 ****
@@ -567,8 +467,9 @@ Format of the title in feed list. See "Format Strings" section of Newsboat manua
 
 
 '''
+[[filebrowser-title-format]]
 ****
-[[filebrowser-title-format]]*Syntax:* filebrowser-title-format <format> +
+*Syntax:* <<filebrowser-title-format,filebrowser-title-format>> <format> +
 *Default:* "%N %V - %?O?Open File&Save File? - %f" +
 *Example:* filebrowser-title-format "%?O?Open File&Save File? - %f" +
 ****
@@ -578,8 +479,9 @@ Format of the title in file browser. See "Format Strings" section of Newsboat ma
 
 
 '''
+[[goto-first-unread]]
 ****
-[[goto-first-unread]]*Syntax:* goto-first-unread [yes/no] +
+*Syntax:* <<goto-first-unread,goto-first-unread>> [yes/no] +
 *Default:* yes +
 *Example:* goto-first-unread no +
 ****
@@ -589,8 +491,9 @@ If set to `yes`, then the first unread article will be selected whenever a feed 
 
 
 '''
+[[goto-next-feed]]
 ****
-[[goto-next-feed]]*Syntax:* goto-next-feed [yes/no] +
+*Syntax:* <<goto-next-feed,goto-next-feed>> [yes/no] +
 *Default:* yes +
 *Example:* goto-next-feed no +
 ****
@@ -600,8 +503,9 @@ If set to `yes`, then the next-unread, prev-unread and random-unread keys will s
 
 
 '''
+[[help-title-format]]
 ****
-[[help-title-format]]*Syntax:* help-title-format <format> +
+*Syntax:* <<help-title-format,help-title-format>> <format> +
 *Default:* "%N %V - Help" +
 *Example:* help-title-format "%N %V - Help" +
 ****
@@ -611,8 +515,9 @@ Format of the title in help window. See "Format Strings" section of Newsboat man
 
 
 '''
+[[highlight]]
 ****
-[[highlight]]*Syntax:* highlight <target> <regex> <fgcolor> [<bgcolor> [<attribute> ...]] +
+*Syntax:* <<highlight,highlight>> <target> <regex> <fgcolor> [<bgcolor> [<attribute> ...]] +
 *Default:* n/a +
 *Example:* highlight all "newsboat" red +
 ****
@@ -622,8 +527,9 @@ With this command, you can highlight text parts in the feed list, the article li
 
 
 '''
+[[highlight-article]]
 ****
-[[highlight-article]]*Syntax:* highlight-article <filterexpr> <fgcolor> <bgcolor> [<attribute> ...] +
+*Syntax:* <<highlight-article,highlight-article>> <filterexpr> <fgcolor> <bgcolor> [<attribute> ...] +
 *Default:* n/a +
 *Example:* highlight-article "author =~ \"Andreas Krennmair\"" white red bold +
 ****
@@ -633,8 +539,9 @@ With this command, you can highlight articles in the article list if they match 
 
 
 '''
+[[history-limit]]
 ****
-[[history-limit]]*Syntax:* history-limit <number> +
+*Syntax:* <<history-limit,history-limit>> <number> +
 *Default:* 100 +
 *Example:* history-limit 0 +
 ****
@@ -644,8 +551,9 @@ Defines the maximum number of entries of commandline resp. search history to be 
 
 
 '''
+[[html-renderer]]
 ****
-[[html-renderer]]*Syntax:* html-renderer <command> +
+*Syntax:* <<html-renderer,html-renderer>> <command> +
 *Default:* internal +
 *Example:* html-renderer "w3m -dump -T text/html" +
 ****
@@ -655,8 +563,9 @@ If set to `internal`, then the internal HTML renderer will be used. Otherwise, t
 
 
 '''
+[[http-auth-method]]
 ****
-[[http-auth-method]]*Syntax:* http-auth-method <method> +
+*Syntax:* <<http-auth-method,http-auth-method>> <method> +
 *Default:* any +
 *Example:* http-auth-method digest +
 ****
@@ -666,8 +575,9 @@ Set HTTP authentication method. Allowed values: `any`, `basic`, `digest`, `diges
 
 
 '''
+[[ignore-article]]
 ****
-[[ignore-article]]*Syntax:* ignore-article <feed> <filterexpr> +
+*Syntax:* <<ignore-article,ignore-article>> <feed> <filterexpr> +
 *Default:* n/a +
 *Example:* ignore-article "*" "title =~ \"Windows\"" +
 ****
@@ -677,8 +587,9 @@ If a downloaded article from <feed> matches <filterexpr>, then it is ignored and
 
 
 '''
+[[ignore-mode]]
 ****
-[[ignore-mode]]*Syntax:* ignore-mode [download/display] +
+*Syntax:* <<ignore-mode,ignore-mode>> [download/display] +
 *Default:* download +
 *Example:* ignore-mode "display" +
 ****
@@ -688,8 +599,9 @@ This configuration option defines in what way an article is ignored (see `ignore
 
 
 '''
+[[include]]
 ****
-[[include]]*Syntax:* include <path> +
+*Syntax:* <<include,include>> <path> +
 *Default:* n/a +
 *Example:* include "~/.newsboat/colors" +
 ****
@@ -699,8 +611,9 @@ With this command, you can include other files to be interpreted as configuratio
 
 
 '''
+[[itemview-title-format]]
 ****
-[[itemview-title-format]]*Syntax:* itemview-title-format <format> +
+*Syntax:* <<itemview-title-format,itemview-title-format>> <format> +
 *Default:* "%N %V - Article '%T' (%u unread, %t total)" +
 *Example:* itemview-title-format "Article '%T'" +
 ****
@@ -710,8 +623,9 @@ Format of the title in article view. See "Format Strings" section of Newsboat ma
 
 
 '''
+[[inoreader-flag-share]]
 ****
-[[inoreader-flag-share]]*Syntax:* inoreader-flag-share <flag> +
+*Syntax:* <<inoreader-flag-share,inoreader-flag-share>> <flag> +
 *Default:* n/a +
 *Example:* inoreader-flag-share "a" +
 ****
@@ -721,8 +635,9 @@ If set and Inoreader support is used, then all articles that are flagged with th
 
 
 '''
+[[inoreader-flag-star]]
 ****
-[[inoreader-flag-star]]*Syntax:* inoreader-flag-star <flag> +
+*Syntax:* <<inoreader-flag-star,inoreader-flag-star>> <flag> +
 *Default:* n/a +
 *Example:* inoreader-flag-star "b" +
 ****
@@ -732,8 +647,9 @@ If set and Inoreader support is used, then all articles that are flagged with th
 
 
 '''
+[[inoreader-login]]
 ****
-[[inoreader-login]]*Syntax:* inoreader-login <login> +
+*Syntax:* <<inoreader-login,inoreader-login>> <login> +
 *Default:* n/a +
 *Example:* inoreader-login "your-login" +
 ****
@@ -743,8 +659,9 @@ This variable sets your Inoreader login for Inoreader support. +
 
 
 '''
+[[inoreader-min-items]]
 ****
-[[inoreader-min-items]]*Syntax:* inoreader-min-items <number> +
+*Syntax:* <<inoreader-min-items,inoreader-min-items>> <number> +
 *Default:* 20 +
 *Example:* inoreader-min-items 100 +
 ****
@@ -754,8 +671,9 @@ This variable sets the number of articles that are loaded from Inoreader per fee
 
 
 '''
+[[inoreader-password]]
 ****
-[[inoreader-password]]*Syntax:* inoreader-password <password> +
+*Syntax:* <<inoreader-password,inoreader-password>> <password> +
 *Default:* n/a +
 *Example:* inoreader-password "here_goesAquote:\"" +
 ****
@@ -765,8 +683,9 @@ This variable sets your Inoreader password for Inoreader support. Double quotes 
 
 
 '''
+[[inoreader-passwordfile]]
 ****
-[[inoreader-passwordfile]]*Syntax:* inoreader-passwordfile <path> +
+*Syntax:* <<inoreader-passwordfile,inoreader-passwordfile>> <path> +
 *Default:* n/a +
 *Example:* inoreader-passwordfile "~/.newsboat/inoreader-pw.txt" +
 ****
@@ -776,8 +695,9 @@ A more secure alternative to the above, by storing your password elsewhere in yo
 
 
 '''
+[[inoreader-passwordeval]]
 ****
-[[inoreader-passwordeval]]*Syntax:* inoreader-passwordeval <command> +
+*Syntax:* <<inoreader-passwordeval,inoreader-passwordeval>> <command> +
 *Default:* n/a +
 *Example:* inoreader-passwordeval "gpg --decrypt ~/.newsboat/inoreader-password.gpg" +
 ****
@@ -787,8 +707,9 @@ Another secure alternative, is providing your password from an external command 
 
 
 '''
+[[inoreader-show-special-feeds]]
 ****
-[[inoreader-show-special-feeds]]*Syntax:* inoreader-show-special-feeds [yes/no] +
+*Syntax:* <<inoreader-show-special-feeds,inoreader-show-special-feeds>> [yes/no] +
 *Default:* yes +
 *Example:* inoreader-show-special-feeds "no" +
 ****
@@ -798,8 +719,9 @@ If set and Inoreader support is used, then "special feeds" like "Starred items" 
 
 
 '''
+[[keep-articles-days]]
 ****
-[[keep-articles-days]]*Syntax:* keep-articles-days <number> +
+*Syntax:* <<keep-articles-days,keep-articles-days>> <number> +
 *Default:* 0 +
 *Example:* keep-articles-days 30 +
 ****
@@ -809,8 +731,9 @@ If set to a number greater than 0, only articles that were published within the 
 
 
 '''
+[[macro]]
 ****
-[[macro]]*Syntax:* macro <macro key> <command list> +
+*Syntax:* <<macro,macro>> <macro key> <command list> +
 *Default:* n/a +
 *Example:* macro k open ; reload ; quit +
 ****
@@ -820,8 +743,9 @@ With this command, you can define a macro key and specify a list of commands tha
 
 
 '''
+[[mark-as-read-on-hover]]
 ****
-[[mark-as-read-on-hover]]*Syntax:* mark-as-read-on-hover [yes/no] +
+*Syntax:* <<mark-as-read-on-hover,mark-as-read-on-hover>> [yes/no] +
 *Default:* no +
 *Example:* mark-as-read-on-hover yes +
 ****
@@ -831,8 +755,9 @@ If set to `yes`, then all articles that get selected in the article list are mar
 
 
 '''
+[[max-download-speed]]
 ****
-[[max-download-speed]]*Syntax:* max-download-speed <number> +
+*Syntax:* <<max-download-speed,max-download-speed>> <number> +
 *Default:* 0 +
 *Example:* max-download-speed 50 +
 ****
@@ -842,8 +767,9 @@ If set to a number greater than 0, the download speed per download is set to tha
 
 
 '''
+[[max-browser-tabs]]
 ****
-[[max-browser-tabs]]*Syntax:* max-browser-tabs <number> +
+*Syntax:* <<max-browser-tabs,max-browser-tabs>> <number> +
 *Default:* 10 +
 *Example:* max-browser-tabs 4 +
 ****
@@ -853,8 +779,9 @@ Set the maximum number of articles to open in a browser when using the `open-all
 
 
 '''
+[[max-items]]
 ****
-[[max-items]]*Syntax:* max-items <number> +
+*Syntax:* <<max-items,max-items>> <number> +
 *Default:* 0 +
 *Example:* max-items 100 +
 ****
@@ -864,8 +791,9 @@ Set the number of articles to maximally keep per feed. If the number is set to 0
 
 
 '''
+[[newsblur-login]]
 ****
-[[newsblur-login]]*Syntax:* newsblur-login <login> +
+*Syntax:* <<newsblur-login,newsblur-login>> <login> +
 *Default:* n/a +
 *Example:* newsblur-login "your-login" +
 ****
@@ -875,8 +803,9 @@ This variable sets your NewsBlur login for NewsBlur support. +
 
 
 '''
+[[newsblur-min-items]]
 ****
-[[newsblur-min-items]]*Syntax:* newsblur-min-items <number> +
+*Syntax:* <<newsblur-min-items,newsblur-min-items>> <number> +
 *Default:* 20 +
 *Example:* newsblur-min-items 100 +
 ****
@@ -886,8 +815,9 @@ This variable sets the number of articles that are loaded from NewsBlur per feed
 
 
 '''
+[[newsblur-password]]
 ****
-[[newsblur-password]]*Syntax:* newsblur-password <password> +
+*Syntax:* <<newsblur-password,newsblur-password>> <password> +
 *Default:* n/a +
 *Example:* newsblur-password "here_goesAquote:\"" +
 ****
@@ -897,8 +827,9 @@ This variable sets your NewsBlur password for NewsBlur support. Double quotes sh
 
 
 '''
+[[newsblur-passwordfile]]
 ****
-[[newsblur-passwordfile]]*Syntax:* newsblur-passwordfile <path> +
+*Syntax:* <<newsblur-passwordfile,newsblur-passwordfile>> <path> +
 *Default:* n/a +
 *Example:* newsblur-passwordfile "~/.newsboat/newsblur-pw.txt" +
 ****
@@ -908,8 +839,9 @@ A more secure alternative to the above, by storing your password elsewhere in yo
 
 
 '''
+[[newsblur-passwordeval]]
 ****
-[[newsblur-passwordeval]]*Syntax:* newsblur-passwordeval <command> +
+*Syntax:* <<newsblur-passwordeval,newsblur-passwordeval>> <command> +
 *Default:* n/a +
 *Example:* newsblur-passwordeval "gpg --decrypt ~/.newsboat/newsblur-password.gpg" +
 ****
@@ -919,8 +851,9 @@ Another secure alternative, is providing your password from an external command 
 
 
 '''
+[[newsblur-url]]
 ****
-[[newsblur-url]]*Syntax:* newsblur-url <url> +
+*Syntax:* <<newsblur-url,newsblur-url>> <url> +
 *Default:* "https://newsblur.com" +
 *Example:* newsblur-url "https://localhost" +
 ****
@@ -930,8 +863,9 @@ Configures the URL where the NewsBlur instance resides. +
 
 
 '''
+[[notify-always]]
 ****
-[[notify-always]]*Syntax:* notify-always [yes/no] +
+*Syntax:* <<notify-always,notify-always>> [yes/no] +
 *Default:* no +
 *Example:* notify-always yes +
 ****
@@ -941,8 +875,9 @@ If set to `no`, notifications will only be made when there are new feeds or arti
 
 
 '''
+[[notify-beep]]
 ****
-[[notify-beep]]*Syntax:* notify-beep [yes/no] +
+*Syntax:* <<notify-beep,notify-beep>> [yes/no] +
 *Default:* no +
 *Example:* notify-beep yes +
 ****
@@ -952,8 +887,9 @@ If set to `yes`, then the speaker will beep on new articles. +
 
 
 '''
+[[notify-format]]
 ****
-[[notify-format]]*Syntax:* notify-format <string> +
+*Syntax:* <<notify-format,notify-format>> <string> +
 *Default:* "newsboat: finished reload, %f unread feeds (%n unread articles total)" +
 *Example:* notify-format "%d new articles (%n unread articles, %f unread feeds)" +
 ****
@@ -963,8 +899,9 @@ Format string that is used for formatting notifications. See the chapter on form
 
 
 '''
+[[notify-program]]
 ****
-[[notify-program]]*Syntax:* notify-program <command> +
+*Syntax:* <<notify-program,notify-program>> <command> +
 *Default:* n/a +
 *Example:* notify-program "~/bin/my-notifier" +
 ****
@@ -974,8 +911,9 @@ If set, then the configured program will be executed if new articles arrived (th
 
 
 '''
+[[notify-screen]]
 ****
-[[notify-screen]]*Syntax:* notify-screen [yes/no] +
+*Syntax:* <<notify-screen,notify-screen>> [yes/no] +
 *Default:* no +
 *Example:* notify-screen yes +
 ****
@@ -985,8 +923,9 @@ If set to `yes`, then a "privacy message" will be sent to the terminal, containi
 
 
 '''
+[[notify-xterm]]
 ****
-[[notify-xterm]]*Syntax:* notify-xterm [yes/no] +
+*Syntax:* <<notify-xterm,notify-xterm>> [yes/no] +
 *Default:* no +
 *Example:* notify-xterm yes +
 ****
@@ -996,8 +935,9 @@ If set to `yes`, then the xterm window title will be set to a notification messa
 
 
 '''
+[[ocnews-flag-star]]
 ****
-[[ocnews-flag-star]]*Syntax:* ocnews-flag-star <character> +
+*Syntax:* <<ocnews-flag-star,ocnews-flag-star>> <character> +
 *Default:* n/a +
 *Example:* ocnews-flag-star "s" +
 ****
@@ -1007,8 +947,9 @@ If set and ownCloud News support is used, then all articles that are flagged wit
 
 
 '''
+[[ocnews-login]]
 ****
-[[ocnews-login]]*Syntax:* ocnews-login <username> +
+*Syntax:* <<ocnews-login,ocnews-login>> <username> +
 *Default:* n/a +
 *Example:* ocnews-login "user" +
 ****
@@ -1018,8 +959,9 @@ Sets the username to use with the ownCloud instance. +
 
 
 '''
+[[ocnews-password]]
 ****
-[[ocnews-password]]*Syntax:* ocnews-password <password> +
+*Syntax:* <<ocnews-password,ocnews-password>> <password> +
 *Default:* n/a +
 *Example:* ocnews-password "here_goesAquote:\"" +
 ****
@@ -1029,8 +971,9 @@ Configures the password to use with the ownCloud instance. Double quotes should 
 
 
 '''
+[[ocnews-passwordfile]]
 ****
-[[ocnews-passwordfile]]*Syntax:* ocnews-passwordfile <path> +
+*Syntax:* <<ocnews-passwordfile,ocnews-passwordfile>> <path> +
 *Default:* n/a +
 *Example:* ocnews-passwordfile "~/.newsboat/ocnews-pw.txt" +
 ****
@@ -1040,8 +983,9 @@ A more secure alternative to the above, by storing your password elsewhere in yo
 
 
 '''
+[[ocnews-passwordeval]]
 ****
-[[ocnews-passwordeval]]*Syntax:* ocnews-passwordeval <command> +
+*Syntax:* <<ocnews-passwordeval,ocnews-passwordeval>> <command> +
 *Default:* n/a +
 *Example:* ocnews-passwordeval "gpg --decrypt ~/.newsboat/ocnews-password.gpg" +
 ****
@@ -1051,8 +995,9 @@ Another secure alternative, is providing your password from an external command 
 
 
 '''
+[[ocnews-url]]
 ****
-[[ocnews-url]]*Syntax:* ocnews-url <url> +
+*Syntax:* <<ocnews-url,ocnews-url>> <url> +
 *Default:* n/a +
 *Example:* ocnews-url "https://localhost/owncloud" +
 ****
@@ -1062,8 +1007,9 @@ Configures the URL where the ownCloud instance resides. +
 
 
 '''
+[[oldreader-flag-share]]
 ****
-[[oldreader-flag-share]]*Syntax:* oldreader-flag-share <flag> +
+*Syntax:* <<oldreader-flag-share,oldreader-flag-share>> <flag> +
 *Default:* n/a +
 *Example:* oldreader-flag-share "a" +
 ****
@@ -1073,8 +1019,9 @@ If set and The Old Reader support is used, then all articles that are flagged wi
 
 
 '''
+[[oldreader-flag-star]]
 ****
-[[oldreader-flag-star]]*Syntax:* oldreader-flag-star <flag> +
+*Syntax:* <<oldreader-flag-star,oldreader-flag-star>> <flag> +
 *Default:* n/a +
 *Example:* oldreader-flag-star "b" +
 ****
@@ -1084,8 +1031,9 @@ If set and The Old Reader support is used, then all articles that are flagged wi
 
 
 '''
+[[oldreader-login]]
 ****
-[[oldreader-login]]*Syntax:* oldreader-login <login> +
+*Syntax:* <<oldreader-login,oldreader-login>> <login> +
 *Default:* n/a +
 *Example:* oldreader-login "your-login" +
 ****
@@ -1095,8 +1043,9 @@ This variable sets your The Old Reader login for The Older Reader support. +
 
 
 '''
+[[oldreader-min-items]]
 ****
-[[oldreader-min-items]]*Syntax:* oldreader-min-items <number> +
+*Syntax:* <<oldreader-min-items,oldreader-min-items>> <number> +
 *Default:* 20 +
 *Example:* oldreader-min-items 100 +
 ****
@@ -1106,8 +1055,9 @@ This variable sets the number of articles that are loaded from The Old Reader pe
 
 
 '''
+[[oldreader-password]]
 ****
-[[oldreader-password]]*Syntax:* oldreader-password <password> +
+*Syntax:* <<oldreader-password,oldreader-password>> <password> +
 *Default:* n/a +
 *Example:* oldreader-password "here_goesAquote:\"" +
 ****
@@ -1117,8 +1067,9 @@ This variable sets your The Old Reader password for The Old Reader support. Doub
 
 
 '''
+[[oldreader-passwordfile]]
 ****
-[[oldreader-passwordfile]]*Syntax:* oldreader-passwordfile <path> +
+*Syntax:* <<oldreader-passwordfile,oldreader-passwordfile>> <path> +
 *Default:* n/a +
 *Example:* oldreader-passwordfile "~/.newsboat/oldreader-pw.txt" +
 ****
@@ -1128,8 +1079,9 @@ A more secure alternative to the above, by storing your password elsewhere in yo
 
 
 '''
+[[oldreader-passwordeval]]
 ****
-[[oldreader-passwordeval]]*Syntax:* oldreader-passwordeval <command> +
+*Syntax:* <<oldreader-passwordeval,oldreader-passwordeval>> <command> +
 *Default:* n/a +
 *Example:* oldreader-passwordeval "gpg --decrypt ~/.newsboat/oldreader-password.gpg" +
 ****
@@ -1139,8 +1091,9 @@ Another secure alternative, is providing your password from an external command 
 
 
 '''
+[[oldreader-show-special-feeds]]
 ****
-[[oldreader-show-special-feeds]]*Syntax:* oldreader-show-special-feeds [yes/no] +
+*Syntax:* <<oldreader-show-special-feeds,oldreader-show-special-feeds>> [yes/no] +
 *Default:* yes +
 *Example:* oldreader-show-special-feeds "no" +
 ****
@@ -1150,8 +1103,9 @@ If set and The Old reader support is used, then "special feeds" like "People you
 
 
 '''
+[[openbrowser-and-mark-jumps-to-next-unread]]
 ****
-[[openbrowser-and-mark-jumps-to-next-unread]]*Syntax:* openbrowser-and-mark-jumps-to-next-unread [yes/no] +
+*Syntax:* <<openbrowser-and-mark-jumps-to-next-unread,openbrowser-and-mark-jumps-to-next-unread>> [yes/no] +
 *Default:* no +
 *Example:* openbrowser-and-mark-jumps-to-next-unread yes +
 ****
@@ -1161,8 +1115,9 @@ If set to `yes`, jump to the next unread item when an item is opened in the brow
 
 
 '''
+[[opml-url]]
 ****
-[[opml-url]]*Syntax:* opml-url <url> ... +
+*Syntax:* <<opml-url,opml-url>> <url> ... +
 *Default:* n/a +
 *Example:* opml-url "http://host.domain.tld/blogroll.opml" "http://example.com/anotheropmlfile.opml" +
 ****
@@ -1172,8 +1127,9 @@ If the OPML online subscription mode is enabled, then the list of feeds will be 
 
 
 '''
+[[pager]]
 ****
-[[pager]]*Syntax:* pager [<command>/internal] +
+*Syntax:* <<pager,pager>> [<command>/internal] +
 *Default:* internal +
 *Example:* pager "less %f" +
 ****
@@ -1183,8 +1139,9 @@ If set to `internal`, then the internal pager will be used. Otherwise, the artic
 
 
 '''
+[[podcast-auto-enqueue]]
 ****
-[[podcast-auto-enqueue]]*Syntax:* podcast-auto-enqueue [yes/no] +
+*Syntax:* <<podcast-auto-enqueue,podcast-auto-enqueue>> [yes/no] +
 *Default:* no +
 *Example:* podcast-auto-enqueue yes +
 ****
@@ -1194,8 +1151,9 @@ If set to `yes`, then all podcast URLs that are found in articles are added to t
 
 
 '''
+[[prepopulate-query-feeds]]
 ****
-[[prepopulate-query-feeds]]*Syntax:* prepopulate-query-feeds [yes/no] +
+*Syntax:* <<prepopulate-query-feeds,prepopulate-query-feeds>> [yes/no] +
 *Default:* no +
 *Example:* prepopulate-query-feeds yes +
 ****
@@ -1205,8 +1163,9 @@ If set to `yes`, then all query feeds are prepopulated with articles on startup.
 
 
 '''
+[[ssl-verifyhost]]
 ****
-[[ssl-verifyhost]]*Syntax:* ssl-verifyhost [yes/no] +
+*Syntax:* <<ssl-verifyhost,ssl-verifyhost>> [yes/no] +
 *Default:* yes +
 *Example:* ssl-verifyhost no +
 ****
@@ -1216,8 +1175,9 @@ If set to `no`, skip verification of the certificate's name against host. +
 
 
 '''
+[[ssl-verifypeer]]
 ****
-[[ssl-verifypeer]]*Syntax:* ssl-verifypeer [yes/no] +
+*Syntax:* <<ssl-verifypeer,ssl-verifypeer>> [yes/no] +
 *Default:* yes +
 *Example:* ssl-verifypeer no +
 ****
@@ -1227,8 +1187,9 @@ If set to `no`, skip verification of the peer's SSL certificate. +
 
 
 '''
+[[proxy-auth-method]]
 ****
-[[proxy-auth-method]]*Syntax:* proxy-auth-method <method> +
+*Syntax:* <<proxy-auth-method,proxy-auth-method>> <method> +
 *Default:* any +
 *Example:* proxy-auth-method ntlm +
 ****
@@ -1238,8 +1199,9 @@ Set proxy authentication method. Allowed values: `any`, `basic`, `digest`, `dige
 
 
 '''
+[[proxy-auth]]
 ****
-[[proxy-auth]]*Syntax:* proxy-auth <auth> +
+*Syntax:* <<proxy-auth,proxy-auth>> <auth> +
 *Default:* n/a +
 *Example:* proxy-auth user:password +
 ****
@@ -1249,8 +1211,9 @@ Set the proxy authentication string. +
 
 
 '''
+[[proxy-type]]
 ****
-[[proxy-type]]*Syntax:* proxy-type <type> +
+*Syntax:* <<proxy-type,proxy-type>> <type> +
 *Default:* http +
 *Example:* proxy-type socks5 +
 ****
@@ -1260,8 +1223,9 @@ Set proxy type. Allowed values: `http`, `socks4`, `socks4a`, `socks5` and `socks
 
 
 '''
+[[proxy]]
 ****
-[[proxy]]*Syntax:* proxy <server:port> +
+*Syntax:* <<proxy,proxy>> <server:port> +
 *Default:* n/a +
 *Example:* proxy localhost:3128 +
 ****
@@ -1271,8 +1235,9 @@ Set the proxy to use for downloading RSS feeds. (Don't forget to actually enable
 
 
 '''
+[[refresh-on-startup]]
 ****
-[[refresh-on-startup]]*Syntax:* refresh-on-startup [yes/no] +
+*Syntax:* <<refresh-on-startup,refresh-on-startup>> [yes/no] +
 *Default:* no +
 *Example:* refresh-on-startup yes +
 ****
@@ -1282,8 +1247,9 @@ If set to `yes`, then all feeds will be reloaded when newsboat starts up. This i
 
 
 '''
+[[reload-only-visible-feeds]]
 ****
-[[reload-only-visible-feeds]]*Syntax:* reload-only-visible-feeds [yes/no] +
+*Syntax:* <<reload-only-visible-feeds,reload-only-visible-feeds>> [yes/no] +
 *Default:* no +
 *Example:* reload-only-visible-feeds yes +
 ****
@@ -1293,8 +1259,9 @@ If set to `yes`, then manually reloading all feeds will only reload the currentl
 
 
 '''
+[[reload-threads]]
 ****
-[[reload-threads]]*Syntax:* reload-threads <number> +
+*Syntax:* <<reload-threads,reload-threads>> <number> +
 *Default:* 1 +
 *Example:* reload-threads 3 +
 ****
@@ -1304,8 +1271,9 @@ The number of parallel reload threads that shall be started when all feeds are r
 
 
 '''
+[[reload-time]]
 ****
-[[reload-time]]*Syntax:* reload-time <number> +
+*Syntax:* <<reload-time,reload-time>> <number> +
 *Default:* 60 +
 *Example:* reload-time 120 +
 ****
@@ -1315,8 +1283,9 @@ The number of minutes between automatic reloads. +
 
 
 '''
+[[reset-unread-on-update]]
 ****
-[[reset-unread-on-update]]*Syntax:* reset-unread-on-update <url> [<url>...] +
+*Syntax:* <<reset-unread-on-update,reset-unread-on-update>> <url> [<url>...] +
 *Default:* n/a +
 *Example:* reset-unread-on-update "http://blog.fefe.de/rss.xml?html" +
 ****
@@ -1326,8 +1295,9 @@ Specifies one or more feed URLs for whose articles the unread flag will be reset
 
 
 '''
+[[save-path]]
 ****
-[[save-path]]*Syntax:* save-path <path-to-directory> +
+*Syntax:* <<save-path,save-path>> <path-to-directory> +
 *Default:* ~/ +
 *Example:* save-path "~/Saved Articles" +
 ****
@@ -1337,8 +1307,9 @@ The default path where articles shall be saved to. If an invalid path is specifi
 
 
 '''
+[[search-highlight-colors]]
 ****
-[[search-highlight-colors]]*Syntax:* search-highlight-colors <fgcolor> <bgcolor> [<attribute> ...] +
+*Syntax:* <<search-highlight-colors,search-highlight-colors>> <fgcolor> <bgcolor> [<attribute> ...] +
 *Default:* black yellow bold +
 *Example:* search-highlight-colors white black bold +
 ****
@@ -1348,8 +1319,9 @@ This configuration command specifies the highlighting colors when searching for 
 
 
 '''
+[[searchresult-title-format]]
 ****
-[[searchresult-title-format]]*Syntax:* searchresult-title-format <format> +
+*Syntax:* <<searchresult-title-format,searchresult-title-format>> <format> +
 *Default:* "%N %V - Search result (%u unread, %t total)" +
 *Example:* searchresult-title-format "Search result" +
 ****
@@ -1359,8 +1331,9 @@ Format of the title in search result. See "Format Strings" section of Newsboat m
 
 
 '''
+[[selectfilter-title-format]]
 ****
-[[selectfilter-title-format]]*Syntax:* selectfilter-title-format <format> +
+*Syntax:* <<selectfilter-title-format,selectfilter-title-format>> <format> +
 *Default:* "%N %V - Select Filter" +
 *Example:* selectfilter-title-format "Select Filter" +
 ****
@@ -1370,8 +1343,9 @@ Format of the title in filter selection dialog. See "Format Strings" section of 
 
 
 '''
+[[selecttag-format]]
 ****
-[[selecttag-format]]*Syntax:* selecttag-format <format> +
+*Syntax:* <<selecttag-format,selecttag-format>> <format> +
 *Default:* "%4i  %T (%u)" +
 *Example:* selecttag-format "[%2i] %T (%n unread articles in %f feeds, %u feeds total)" +
 ****
@@ -1381,8 +1355,9 @@ Format of the lines in "Select tag" dialog. See the respective section in the do
 
 
 '''
+[[selecttag-title-format]]
 ****
-[[selecttag-title-format]]*Syntax:* selecttag-title-format <format> +
+*Syntax:* <<selecttag-title-format,selecttag-title-format>> <format> +
 *Default:* "%N %V - Select Tag" +
 *Example:* selecttag-title-format "Select Tag" +
 ****
@@ -1392,8 +1367,9 @@ Format of the title in tag selection dialog. See "Format Strings" section of New
 
 
 '''
+[[show-keymap-hint]]
 ****
-[[show-keymap-hint]]*Syntax:* show-keymap-hint [yes/no] +
+*Syntax:* <<show-keymap-hint,show-keymap-hint>> [yes/no] +
 *Default:* yes +
 *Example:* show-keymap-hint no +
 ****
@@ -1403,8 +1379,9 @@ If set to `no`, then the keymap hints on the bottom of screen will not be displa
 
 
 '''
+[[show-title-bar]]
 ****
-[[show-title-bar]]*Syntax:* show-title-bar [yes/no] +
+*Syntax:* <<show-title-bar,show-title-bar>> [yes/no] +
 *Default:* yes +
 *Example:* show-title-bar no +
 ****
@@ -1414,8 +1391,9 @@ If set to `no`, then the title bar on the top of the screen will not be displaye
 
 
 '''
+[[show-read-articles]]
 ****
-[[show-read-articles]]*Syntax:* show-read-articles [yes/no] +
+*Syntax:* <<show-read-articles,show-read-articles>> [yes/no] +
 *Default:* yes +
 *Example:* show-read-articles no +
 ****
@@ -1425,8 +1403,9 @@ If set to `yes`, then all articles of a feed are listed in the article list. If 
 
 
 '''
+[[show-read-feeds]]
 ****
-[[show-read-feeds]]*Syntax:* show-read-feeds [yes/no] +
+*Syntax:* <<show-read-feeds,show-read-feeds>> [yes/no] +
 *Default:* yes +
 *Example:* show-read-feeds no +
 ****
@@ -1436,8 +1415,9 @@ If set to `yes`, then all feeds, including those without unread articles, are li
 
 
 '''
+[[suppress-first-reload]]
 ****
-[[suppress-first-reload]]*Syntax:* suppress-first-reload [yes/no] +
+*Syntax:* <<suppress-first-reload,suppress-first-reload>> [yes/no] +
 *Default:* no +
 *Example:* suppress-first-reload yes +
 ****
@@ -1447,8 +1427,9 @@ If set to `yes`, then the first automatic reload will be suppressed if `auto-rel
 
 
 '''
+[[swap-title-and-hints]]
 ****
-[[swap-title-and-hints]]*Syntax:* swap-title-and-hints [yes/no] +
+*Syntax:* <<swap-title-and-hints,swap-title-and-hints>> [yes/no] +
 *Default:* no +
 *Example:* swap-title-and-hints yes +
 ****
@@ -1458,8 +1439,9 @@ If set to `yes`, then the title at the top of screen and keymap hints at the bot
 
 
 '''
+[[text-width]]
 ****
-[[text-width]]*Syntax:* text-width <number> +
+*Syntax:* <<text-width,text-width>> <number> +
 *Default:* 0 +
 *Example:* text-width 72 +
 ****
@@ -1469,8 +1451,9 @@ If set to a number greater than 0, all HTML will be rendered to this maximum lin
 
 
 '''
+[[toggleitemread-jumps-to-next-unread]]
 ****
-[[toggleitemread-jumps-to-next-unread]]*Syntax:* toggleitemread-jumps-to-next-unread [yes/no] +
+*Syntax:* <<toggleitemread-jumps-to-next-unread,toggleitemread-jumps-to-next-unread>> [yes/no] +
 *Default:* no +
 *Example:* toggleitemread-jumps-to-next-unread yes +
 ****
@@ -1480,8 +1463,9 @@ If set to `yes`, jump to the next unread item when an item's read status is togg
 
 
 '''
+[[ttrss-flag-publish]]
 ****
-[[ttrss-flag-publish]]*Syntax:* ttrss-flag-publish <character> +
+*Syntax:* <<ttrss-flag-publish,ttrss-flag-publish>> <character> +
 *Default:* n/a +
 *Example:* ttrss-flag-publish "b" +
 ****
@@ -1491,8 +1475,9 @@ If set and Tiny Tiny RSS support is used, then all articles that are flagged wit
 
 
 '''
+[[ttrss-flag-star]]
 ****
-[[ttrss-flag-star]]*Syntax:* ttrss-flag-star <character> +
+*Syntax:* <<ttrss-flag-star,ttrss-flag-star>> <character> +
 *Default:* n/a +
 *Example:* ttrss-flag-star "a" +
 ****
@@ -1502,8 +1487,9 @@ If set and Tiny Tiny RSS support is used, then all articles that are flagged wit
 
 
 '''
+[[ttrss-login]]
 ****
-[[ttrss-login]]*Syntax:* ttrss-login <username> +
+*Syntax:* <<ttrss-login,ttrss-login>> <username> +
 *Default:* n/a +
 *Example:* ttrss-login "admin" +
 ****
@@ -1513,8 +1499,9 @@ Sets the username for use with Tiny Tiny RSS. +
 
 
 '''
+[[ttrss-mode]]
 ****
-[[ttrss-mode]]*Syntax:* ttrss-mode [multi/single] +
+*Syntax:* <<ttrss-mode,ttrss-mode>> [multi/single] +
 *Default:* multi +
 *Example:* ttrss-mode "single" +
 ****
@@ -1524,8 +1511,9 @@ Configures the mode in which Tiny Tiny RSS is used. In single-user mode, login a
 
 
 '''
+[[ttrss-password]]
 ****
-[[ttrss-password]]*Syntax:* ttrss-password <password> +
+*Syntax:* <<ttrss-password,ttrss-password>> <password> +
 *Default:* n/a +
 *Example:* ttrss-password "here_goesAquote:\"" +
 ****
@@ -1535,8 +1523,9 @@ Configures the password for use with Tiny Tiny RSS. Double quotes should be esca
 
 
 '''
+[[ttrss-passwordfile]]
 ****
-[[ttrss-passwordfile]]*Syntax:* ttrss-passwordfile <path> +
+*Syntax:* <<ttrss-passwordfile,ttrss-passwordfile>> <path> +
 *Default:* n/a +
 *Example:* ttrss-passwordfile "~/.newsboat/ttrss-pw.txt" +
 ****
@@ -1546,8 +1535,9 @@ A more secure alternative to the above, by storing your password elsewhere in yo
 
 
 '''
+[[ttrss-passwordeval]]
 ****
-[[ttrss-passwordeval]]*Syntax:* ttrss-passwordeval <command> +
+*Syntax:* <<ttrss-passwordeval,ttrss-passwordeval>> <command> +
 *Default:* n/a +
 *Example:* ttrss-passwordeval "gpg --decrypt ~/.newsboat/ttrss-password.gpg" +
 ****
@@ -1557,8 +1547,9 @@ Another secure alternative, is providing your password from an external command 
 
 
 '''
+[[ttrss-url]]
 ****
-[[ttrss-url]]*Syntax:* ttrss-url <url> +
+*Syntax:* <<ttrss-url,ttrss-url>> <url> +
 *Default:* n/a +
 *Example:* ttrss-url "http://example.com/ttrss/" +
 ****
@@ -1568,8 +1559,9 @@ Configures the URL where the Tiny Tiny RSS installation you want to use resides.
 
 
 '''
+[[unbind-key]]
 ****
-[[unbind-key]]*Syntax:* unbind-key <key> [<dialog>] +
+*Syntax:* <<unbind-key,unbind-key>> <key> [<dialog>] +
 *Default:* n/a +
 *Example:* unbind-key R +
 ****
@@ -1579,8 +1571,9 @@ Unbind key <key>. This means that no operation is called when <key> is pressed. 
 
 
 '''
+[[urls-source]]
 ****
-[[urls-source]]*Syntax:* urls-source <source> +
+*Syntax:* <<urls-source,urls-source>> <source> +
 *Default:* "local" +
 *Example:* urls-source "oldreader" +
 ****
@@ -1590,8 +1583,9 @@ This configuration command sets the source where URLs shall be retrieved from. B
 
 
 '''
+[[urlview-title-format]]
 ****
-[[urlview-title-format]]*Syntax:* urlview-title-format <format> +
+*Syntax:* <<urlview-title-format,urlview-title-format>> <format> +
 *Default:* "%N %V - URLs" +
 *Example:* urlview-title-format "URLs" +
 ****
@@ -1601,8 +1595,9 @@ Format of the title in URL view. See "Format Strings" section of Newsboat manual
 
 
 '''
+[[use-proxy]]
 ****
-[[use-proxy]]*Syntax:* use-proxy [yes/no] +
+*Syntax:* <<use-proxy,use-proxy>> [yes/no] +
 *Default:* no +
 *Example:* use-proxy yes +
 ****
@@ -1612,8 +1607,9 @@ If set to `yes`, then the configured proxy will be used for downloading the RSS 
 
 
 '''
+[[user-agent]]
 ****
-[[user-agent]]*Syntax:* user-agent <string> +
+*Syntax:* <<user-agent,user-agent>> <string> +
 *Default:* n/a +
 *Example:* user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14" +
 ****
