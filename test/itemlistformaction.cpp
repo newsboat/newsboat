@@ -621,7 +621,6 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -630,7 +629,6 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
-	v.set_regexmanager(&regman);
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
@@ -650,7 +648,6 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -659,7 +656,6 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
-	v.set_regexmanager(&regman);
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
@@ -682,7 +678,6 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	ConfigPaths paths;
 	Controller c(paths);
 	TestHelpers::TempFile articleFile;
-	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
@@ -698,7 +693,6 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
-	v.set_regexmanager(&regman);
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
@@ -737,7 +731,6 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	RegexManager regman;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -746,7 +739,6 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
 
-	v.set_regexmanager(&regman);
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 

@@ -110,7 +110,6 @@ public:
 
 	void feedlist_mark_pos_if_visible(unsigned int pos);
 
-	void set_regexmanager(RegexManager* r);
 	void set_cache(Cache* c);
 	void set_filters(FilterContainer* f);
 
@@ -157,7 +156,7 @@ protected:
 
 	std::vector<std::string> tags;
 
-	RegexManager* rxman;
+	RegexManager& rxman;
 
 	std::map<std::string, std::string> fg_colors;
 	std::map<std::string, std::string> bg_colors;

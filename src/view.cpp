@@ -64,7 +64,7 @@ View::View(Controller* c)
 	, cfg(0)
 	, keys(0)
 	, current_formaction(0)
-	, rxman(nullptr)
+	, rxman(c->get_regexmanager())
 	, is_inside_qna(false)
 	, is_inside_cmdline(false)
 	, tab_count(0)
@@ -126,7 +126,7 @@ int View::run()
 	// create feedlist
 	auto feedlist = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg);
-	feedlist->set_regexmanager(rxman);
+	feedlist->set_regexmanager(&rxman);
 	feedlist->set_tags(tags);
 	apply_colors(feedlist);
 	formaction_stack.push_back(feedlist);
@@ -417,7 +417,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 		std::shared_ptr<ItemListFormAction> searchresult(
 			new ItemListFormAction(
 				this, itemlist_str, rsscache, filters, cfg));
-		searchresult->set_regexmanager(rxman);
+		searchresult->set_regexmanager(&rxman);
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
 		searchresult->set_searchphrase(phrase);
@@ -443,7 +443,7 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 		std::shared_ptr<ItemListFormAction> itemlist(
 			new ItemListFormAction(
 				this, itemlist_str, rsscache, filters, cfg));
-		itemlist->set_regexmanager(rxman);
+		itemlist->set_regexmanager(&rxman);
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
 		apply_colors(itemlist);
@@ -488,7 +488,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		std::shared_ptr<ItemViewFormAction> itemview(
 			new ItemViewFormAction(
 				this, itemlist, itemview_str, rsscache, cfg));
-		itemview->set_regexmanager(rxman);
+		itemview->set_regexmanager(&rxman);
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
 		itemview->set_parent_formaction(fa);
@@ -1103,11 +1103,6 @@ void View::feedlist_mark_pos_if_visible(unsigned int pos)
 			formaction_stack[0])
 		->mark_pos_if_visible(pos);
 	}
-}
-
-void View::set_regexmanager(RegexManager* r)
-{
-	rxman = r;
 }
 
 void View::set_cache(Cache* c)
