@@ -9,7 +9,7 @@
 namespace newsboat {
 
 namespace strprintf {
-namespace {
+namespace detail {
 template<typename T, typename... Args>
 std::string fmt_impl(const std::string& format, const T& argument,
 	Args... args);
@@ -23,46 +23,46 @@ std::string fmt(const std::string& format);
 template<typename... Args>
 std::string fmt(const std::string& format, const char* argument, Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const int32_t argument, Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const std::uint32_t argument,
 	Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const int64_t argument, Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const uint64_t argument,
 	Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const void* argument, Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const std::nullptr_t argument,
 	Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
@@ -70,13 +70,13 @@ std::string fmt(const std::string& format, const float argument, Args... args)
 {
 	// Variadic functions (like snprintf) do not accept `float`, so let's
 	// convert that.
-	return fmt_impl(format, static_cast<double>(argument), args...);
+	return detail::fmt_impl(format, static_cast<double>(argument), args...);
 }
 
 template<typename... Args>
 std::string fmt(const std::string& format, const double argument, Args... args)
 {
-	return fmt_impl(format, argument, args...);
+	return detail::fmt_impl(format, argument, args...);
 }
 
 template<typename... Args>
@@ -95,7 +95,7 @@ std::string fmt(const std::string& format,
 	return fmt(format, argument->c_str(), args...);
 }
 
-namespace {
+namespace detail {
 template<typename T, typename... Args>
 std::string fmt_impl(const std::string& format, const T& argument, Args... args)
 {
