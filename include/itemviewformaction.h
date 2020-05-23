@@ -19,7 +19,8 @@ public:
 		std::shared_ptr<ItemListFormAction> il,
 		std::string formstr,
 		Cache* cc,
-		ConfigContainer* cfg);
+		ConfigContainer* cfg,
+		RegexManager& r);
 	~ItemViewFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -49,11 +50,11 @@ public:
 		std::vector<LinkPair>& thelinks,
 		const std::string& url);
 
-	void set_regexmanager(RegexManager* r);
-
 	void update_percent();
 
 private:
+	void register_format_styles();
+
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
@@ -75,7 +76,7 @@ private:
 	bool show_source;
 	std::vector<LinkPair> links;
 	bool quit;
-	RegexManager* rxman;
+	RegexManager& rxman;
 	unsigned int num_lines;
 	std::shared_ptr<ItemListFormAction> itemlist;
 	bool in_search;

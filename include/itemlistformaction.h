@@ -14,7 +14,7 @@ namespace newsboat {
 
 typedef std::pair<std::shared_ptr<RssItem>, unsigned int> ItemPtrPosPair;
 
-enum class InvalidationMode { PARTIAL, COMPLETE };
+enum class InvalidationMode { NONE, PARTIAL, COMPLETE };
 
 class ItemListFormAction : public ListFormAction {
 public:
@@ -22,7 +22,8 @@ public:
 		std::string formstr,
 		Cache* cc,
 		FilterContainer* f,
-		ConfigContainer* cfg);
+		ConfigContainer* cfg,
+		RegexManager& r);
 	~ItemListFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -75,9 +76,9 @@ public:
 
 	void recalculate_form() override;
 
-	void set_regexmanager(RegexManager* r);
-
 private:
+	void register_format_styles();
+
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
@@ -104,18 +105,15 @@ private:
 
 	void invalidate_everything()
 	{
-		invalidated = true;
 		invalidation_mode = InvalidationMode::COMPLETE;
 	}
 
 	void invalidate(const unsigned int invalidated_pos)
 	{
-		if (invalidated == true &&
-			invalidation_mode == InvalidationMode::COMPLETE) {
+		if (invalidation_mode == InvalidationMode::COMPLETE) {
 			return;
 		}
 
-		invalidated = true;
 		invalidation_mode = InvalidationMode::PARTIAL;
 		invalidated_itempos.push_back(invalidated_pos);
 	}
@@ -142,13 +140,12 @@ private:
 	bool set_filterpos;
 	unsigned int filterpos;
 
-	RegexManager* rxman;
+	RegexManager& rxman;
 
 	unsigned int old_width;
 	int old_itempos;
 	ArticleSortStrategy old_sort_strategy;
 
-	bool invalidated;
 	InvalidationMode invalidation_mode;
 	std::vector<unsigned int> invalidated_itempos;
 

@@ -271,7 +271,7 @@ void DirBrowserFormAction::prepare()
 			add_directory(listfmt, directory);
 		}
 
-		files_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
+		files_list.stfl_replace_lines(listfmt);
 		do_redraw = false;
 	}
 

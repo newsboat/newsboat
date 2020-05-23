@@ -845,8 +845,6 @@ void Controller::export_read_information(const std::string& readinfofile)
 
 void Controller::update_config()
 {
-	v->set_regexmanager(&rxman);
-
 	if (colorman.colors_loaded()) {
 		v->set_colors(colorman.get_fgcolors(),
 			colorman.get_bgcolors(),

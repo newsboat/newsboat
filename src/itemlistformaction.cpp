@@ -26,7 +26,8 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
 	FilterContainer* f,
-	ConfigContainer* cfg)
+	ConfigContainer* cfg,
+	RegexManager& r)
 	: ListFormAction(vv, formstr, cfg)
 	, pos(0)
 	, apply_filter(false)
@@ -34,17 +35,18 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, search_dummy_feed(new RssFeed(cc))
 	, set_filterpos(false)
 	, filterpos(0)
-	, rxman(0)
+	, rxman(r)
 	, old_width(0)
 	, old_itempos(-1)
 	, old_sort_strategy({ArtSortMethod::TITLE, SortDirection::DESC})
-, invalidated(false)
-, invalidation_mode(InvalidationMode::COMPLETE)
+, invalidation_mode(InvalidationMode::NONE)
+, listfmt(&rxman, "articlelist")
 , rsscache(cc)
 , filters(f)
 , items_list("items", FormAction::f)
 {
 	search_dummy_feed->set_search_feed(true);
+	register_format_styles();
 }
 
 ItemListFormAction::~ItemListFormAction() {}
@@ -910,7 +912,7 @@ void ItemListFormAction::qna_start_search()
 
 void ItemListFormAction::do_update_visible_items()
 {
-	if (!(invalidated && invalidation_mode == InvalidationMode::COMPLETE)) {
+	if (invalidation_mode != InvalidationMode::COMPLETE) {
 		return;
 	}
 
@@ -984,7 +986,7 @@ void ItemListFormAction::prepare()
 		old_width = width;
 	}
 
-	if (!invalidated) {
+	if (invalidation_mode == InvalidationMode::NONE) {
 		return;
 	}
 
@@ -1015,13 +1017,14 @@ void ItemListFormAction::prepare()
 			listfmt.set_line(itempos, line, std::to_string(item.second));
 		}
 		break;
+	case InvalidationMode::NONE:
+		break;
 	}
 
-	items_list.stfl_replace_lines(listfmt.get_lines_count(),
-		listfmt.format_list(rxman, "articlelist"));
+	items_list.stfl_replace_lines(listfmt);
 
 	invalidated_itempos.clear();
-	invalidated = false;
+	invalidation_mode = InvalidationMode::NONE;
 
 	set_head(feed->title(),
 		feed->unread_item_count(),
@@ -1066,12 +1069,9 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	auto formattedLine = fmt.do_format(itemlist_format, width);
 	formattedLine = utils::quote_for_stfl(formattedLine);
 
-	if (rxman) {
-		int id;
-		if ((id = rxman->article_matches(item.first.get())) != -1) {
-			formattedLine =
-				strprintf::fmt("<%d>%s</>", id, formattedLine);
-		}
+	const int id = rxman.article_matches(item.first.get());
+	if (id != -1) {
+		formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
 	}
 
 	if (item.first->unread()) {
@@ -1371,10 +1371,9 @@ void ItemListFormAction::save_filterpos()
 	}
 }
 
-void ItemListFormAction::set_regexmanager(RegexManager* r)
+void ItemListFormAction::register_format_styles()
 {
-	rxman = r;
-	const std::string attrstr = r->get_attrs_stfl_string("articlelist", true);
+	const std::string attrstr = rxman.get_attrs_stfl_string("articlelist", true);
 	const std::string textview = strprintf::fmt(
 			"{list[items] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "

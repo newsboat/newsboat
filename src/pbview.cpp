@@ -100,8 +100,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				i++;
 			}
 
-			downloads_list.stfl_replace_lines(listfmt.get_lines_count(),
-				listfmt.format_list());
+			downloads_list.stfl_replace_lines(listfmt);
 
 			ctrl->set_view_update_necessary(false);
 		}

@@ -24,11 +24,12 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 	std::shared_ptr<ItemListFormAction> il,
 	std::string formstr,
 	Cache* cc,
-	ConfigContainer* cfg)
+	ConfigContainer* cfg,
+	RegexManager& r)
 	: FormAction(vv, formstr, cfg)
 	, show_source(false)
 	, quit(false)
-	, rxman(0)
+	, rxman(r)
 	, num_lines(0)
 	, itemlist(il)
 	, in_search(false)
@@ -37,6 +38,7 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 {
 	valid_cmds.push_back("save");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
+	register_format_styles();
 }
 
 ItemViewFormAction::~ItemViewFormAction() {}
@@ -116,7 +118,7 @@ void ItemViewFormAction::prepare()
 					item,
 					text_width,
 					window_width,
-					rxman,
+					&rxman,
 					"article");
 		} else {
 			if (!item->enclosure_url().empty()) {
@@ -134,7 +136,7 @@ void ItemViewFormAction::prepare()
 					item,
 					text_width,
 					window_width,
-					rxman,
+					&rxman,
 					"article",
 					links);
 		}
@@ -143,7 +145,7 @@ void ItemViewFormAction::prepare()
 		f.set("article_offset", "0");
 
 		if (in_search) {
-			rxman->remove_last_regex("article");
+			rxman.remove_last_regex("article");
 			in_search = false;
 		}
 
@@ -581,10 +583,9 @@ void ItemViewFormAction::finished_qna(Operation op)
 	}
 }
 
-void ItemViewFormAction::set_regexmanager(RegexManager* r)
+void ItemViewFormAction::register_format_styles()
 {
-	rxman = r;
-	std::string attrstr = r->get_attrs_stfl_string("article", false);
+	std::string attrstr = rxman.get_attrs_stfl_string("article", false);
 	attrstr.append(
 		"@style_b_normal[color_bold]:attr=bold "
 		"@style_u_normal[color_underline]:attr=underline ");
@@ -664,13 +665,13 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
 
 	try {
-		rxman->handle_action("highlight", params);
+		rxman.handle_action("highlight", params);
 
 		LOG(Level::DEBUG,
 			"ItemViewFormAction::highlight_text: configuration "
 			"manipulation was successful");
 
-		set_regexmanager(rxman);
+		register_format_styles();
 
 		in_search = true;
 		do_redraw = true;

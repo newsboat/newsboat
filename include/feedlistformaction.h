@@ -18,7 +18,8 @@ public:
 		std::string formstr,
 		Cache* cc,
 		FilterContainer* f,
-		ConfigContainer* cfg);
+		ConfigContainer* cfg,
+		RegexManager& r);
 	~FeedListFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -46,9 +47,9 @@ public:
 
 	void mark_pos_if_visible(unsigned int pos);
 
-	void set_regexmanager(RegexManager* r);
-
 private:
+	void register_format_styles();
+
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
 		bool automatic = false,
@@ -89,7 +90,7 @@ private:
 	unsigned int filterpos;
 	bool set_filterpos;
 
-	RegexManager* rxman;
+	RegexManager& rxman;
 
 	unsigned int old_width;
 

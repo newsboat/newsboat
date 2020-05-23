@@ -96,6 +96,11 @@ public:
 		return api;
 	}
 
+	RegexManager& get_regexmanager()
+	{
+		return rxman;
+	}
+
 private:
 	void import_opml(const std::string& opmlFile, const std::string& urlFile);
 	void export_opml();

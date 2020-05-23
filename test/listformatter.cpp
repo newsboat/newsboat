@@ -51,7 +51,7 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 			"{listitem text:\"ut word bo\"}"
 			"{listitem text:\"undaries\"}"
 			"}";
-		REQUIRE(fmt.format_list(nullptr, "") == expected);
+		REQUIRE(fmt.format_list() == expected);
 	}
 
 	SECTION("numbered list") {
@@ -70,7 +70,7 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 			"{listitem[3] text:\"ut word bo\"}"
 			"{listitem[3] text:\"undaries\"}"
 			"}";
-		REQUIRE(fmt.format_list(nullptr, "") == expected);
+		REQUIRE(fmt.format_list() == expected);
 	}
 }
 
@@ -87,7 +87,7 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 		"{listitem[2] text:\"goodb\"}"
 		"{listitem[2] text:\"ye\"}"
 		"}";
-	REQUIRE(fmt.format_list(nullptr, "") == expected);
+	REQUIRE(fmt.format_list() == expected);
 
 	fmt.set_line(1, "oh", "3", 3);
 
@@ -97,17 +97,17 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 		"{listitem[3] text:\"oh\"}"
 		"{listitem[2] text:\"ye\"}"
 		"}";
-	REQUIRE(fmt.format_list(nullptr, "") == expected);
+	REQUIRE(fmt.format_list() == expected);
 }
 
 TEST_CASE("format_list() uses regex manager if one is passed",
 	"[ListFormatter]")
 {
-	ListFormatter fmt;
+	RegexManager rxmgr;
+	ListFormatter fmt(&rxmgr, "article");
 
 	fmt.add_line("Highlight me please!");
 
-	RegexManager rxmgr;
 	// the choice of green text on red background does not reflect my
 	// personal taste (or lack thereof) :)
 	rxmgr.handle_action(
@@ -118,5 +118,5 @@ TEST_CASE("format_list() uses regex manager if one is passed",
 		"{listitem text:\"Highlight me <0>please</>!\"}"
 		"}";
 
-	REQUIRE(fmt.format_list(&rxmgr, "article") == expected);
+	REQUIRE(fmt.format_list() == expected);
 }

@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 
+#include "listformatter.h"
 #include "stflpp.h"
 
 namespace newsboat {
@@ -13,7 +14,7 @@ class ListWidget {
 public:
 	ListWidget(const std::string& list_name, Stfl::Form& form);
 	void stfl_replace_list(std::uint32_t number_of_lines, std::string stfl);
-	void stfl_replace_lines(std::uint32_t number_of_lines, std::string stfl);
+	void stfl_replace_lines(const ListFormatter& listfmt);
 
 	bool move_up(bool wrap_scroll);
 	bool move_down(bool wrap_scroll);

@@ -26,7 +26,8 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
 	FilterContainer* f,
-	ConfigContainer* cfg)
+	ConfigContainer* cfg,
+	RegexManager& r)
 	: ListFormAction(vv, formstr, cfg)
 	, zero_feedpos(false)
 	, feeds_shown(0)
@@ -35,7 +36,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, search_dummy_feed(new RssFeed(cc))
 	, filterpos(0)
 	, set_filterpos(false)
-	, rxman(0)
+	, rxman(r)
 	, old_width(0)
 	, unread_feeds(0)
 	, total_feeds(0)
@@ -47,6 +48,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	std::sort(valid_cmds.begin(), valid_cmds.end());
 	old_sort_order = cfg->get_configvalue("feed-sort-order");
 	search_dummy_feed->set_search_feed(true);
+	register_format_styles();
 }
 
 void FeedListFormAction::init()
@@ -596,7 +598,7 @@ void FeedListFormAction::set_feedlist(
 
 	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
 
-	ListFormatter listfmt;
+	ListFormatter listfmt(&rxman, "feedlist");
 
 	update_visible_feeds(feeds);
 
@@ -615,8 +617,7 @@ void FeedListFormAction::set_feedlist(
 
 	total_feeds = i;
 
-	feeds_list.stfl_replace_lines(listfmt.get_lines_count(),
-		listfmt.format_list(rxman, "feedlist"));
+	feeds_list.stfl_replace_lines(listfmt);
 
 	std::string title_format =
 		cfg->get_configvalue("feedlist-title-format");
@@ -926,10 +927,9 @@ void FeedListFormAction::save_filterpos()
 	}
 }
 
-void FeedListFormAction::set_regexmanager(RegexManager* r)
+void FeedListFormAction::register_format_styles()
 {
-	rxman = r;
-	const std::string attrstr = r->get_attrs_stfl_string("feedlist", true);
+	const std::string attrstr = rxman.get_attrs_stfl_string("feedlist", true);
 	const std::string textview = strprintf::fmt(
 			"{!list[feeds] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
