@@ -39,8 +39,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, old_width(0)
 	, old_itempos(-1)
 	, old_sort_strategy({ArtSortMethod::TITLE, SortDirection::DESC})
-, invalidated(false)
-, invalidation_mode(InvalidationMode::COMPLETE)
+, invalidation_mode(InvalidationMode::NONE)
 , listfmt(&rxman, "articlelist")
 , rsscache(cc)
 , filters(f)
@@ -913,7 +912,7 @@ void ItemListFormAction::qna_start_search()
 
 void ItemListFormAction::do_update_visible_items()
 {
-	if (!(invalidated && invalidation_mode == InvalidationMode::COMPLETE)) {
+	if (invalidation_mode != InvalidationMode::COMPLETE) {
 		return;
 	}
 
@@ -987,7 +986,7 @@ void ItemListFormAction::prepare()
 		old_width = width;
 	}
 
-	if (!invalidated) {
+	if (invalidation_mode == InvalidationMode::NONE) {
 		return;
 	}
 
@@ -1018,12 +1017,14 @@ void ItemListFormAction::prepare()
 			listfmt.set_line(itempos, line, std::to_string(item.second));
 		}
 		break;
+	case InvalidationMode::NONE:
+		break;
 	}
 
 	items_list.stfl_replace_lines(listfmt);
 
 	invalidated_itempos.clear();
-	invalidated = false;
+	invalidation_mode = InvalidationMode::NONE;
 
 	set_head(feed->title(),
 		feed->unread_item_count(),

@@ -14,7 +14,7 @@ namespace newsboat {
 
 typedef std::pair<std::shared_ptr<RssItem>, unsigned int> ItemPtrPosPair;
 
-enum class InvalidationMode { PARTIAL, COMPLETE };
+enum class InvalidationMode { NONE, PARTIAL, COMPLETE };
 
 class ItemListFormAction : public ListFormAction {
 public:
@@ -105,18 +105,15 @@ private:
 
 	void invalidate_everything()
 	{
-		invalidated = true;
 		invalidation_mode = InvalidationMode::COMPLETE;
 	}
 
 	void invalidate(const unsigned int invalidated_pos)
 	{
-		if (invalidated == true &&
-			invalidation_mode == InvalidationMode::COMPLETE) {
+		if (invalidation_mode == InvalidationMode::COMPLETE) {
 			return;
 		}
 
-		invalidated = true;
 		invalidation_mode = InvalidationMode::PARTIAL;
 		invalidated_itempos.push_back(invalidated_pos);
 	}
@@ -149,7 +146,6 @@ private:
 	int old_itempos;
 	ArticleSortStrategy old_sort_strategy;
 
-	bool invalidated;
 	InvalidationMode invalidation_mode;
 	std::vector<unsigned int> invalidated_itempos;
 
