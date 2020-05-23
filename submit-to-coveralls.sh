@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # For pull requests, TRAVIS_BRANCH is the *target* branch, usually "master".
-# This leads to mis-assigned coverage reports: they aren't assigned to PR's
-# source branch. To combat this, we detect if the build is triggered by a PR,
-# and explicitly use PR's source branch if so. That branch might not actually
-# exist in our main repo, but that's fine -- Coveralls doesn't check.
+# This leads to mis-assigned coverage reports. To combat this, we detect if the
+# build is triggered by a PR, and explicitly use PR's source branch if so. We
+# add PR's slug ("owner_name/repo_name") in front of the branch name, to avoid
+# PRs from "master" branch to affect our master's coverage.
 #
 # Similar distinction exists between TRAVIS_COMMIT and TRAVIS_PULL_REQUEST_SHA,
 # but we don't paper over it there because we *do* want the report to attach to
@@ -12,12 +12,12 @@
 # if the merge commit affected our coverage somehow.
 if [ "${TRAVIS_EVENT_TYPE}" = "pull_request" ]
 then
-    branch="${TRAVIS_PULL_REQUEST_BRANCH}"
+    branch="${TRAVIS_PULL_REQUEST_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH}"
 else
     branch="${TRAVIS_BRANCH}"
 fi
 
-if [ "${TRAVIS_PULL_REQUEST}" = "true" ]
+if [ "${TRAVIS_PULL_REQUEST}" != "false" ]
 then
     service_pull_request="--service-pull-request ${TRAVIS_PULL_REQUEST}"
 fi
