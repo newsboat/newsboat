@@ -125,8 +125,7 @@ int View::run()
 
 	// create feedlist
 	auto feedlist = std::make_shared<FeedListFormAction>(
-			this, feedlist_str, rsscache, filters, cfg);
-	feedlist->set_regexmanager(&rxman);
+			this, feedlist_str, rsscache, filters, cfg, rxman);
 	feedlist->set_tags(tags);
 	apply_colors(feedlist);
 	formaction_stack.push_back(feedlist);
@@ -416,8 +415,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<ItemListFormAction> searchresult(
 			new ItemListFormAction(
-				this, itemlist_str, rsscache, filters, cfg));
-		searchresult->set_regexmanager(&rxman);
+				this, itemlist_str, rsscache, filters, cfg, rxman));
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
 		searchresult->set_searchphrase(phrase);
@@ -442,8 +440,7 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 	if (feed->total_item_count() > 0) {
 		std::shared_ptr<ItemListFormAction> itemlist(
 			new ItemListFormAction(
-				this, itemlist_str, rsscache, filters, cfg));
-		itemlist->set_regexmanager(&rxman);
+				this, itemlist_str, rsscache, filters, cfg, rxman));
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
 		apply_colors(itemlist);
@@ -487,8 +484,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		assert(itemlist != nullptr);
 		std::shared_ptr<ItemViewFormAction> itemview(
 			new ItemViewFormAction(
-				this, itemlist, itemview_str, rsscache, cfg));
-		itemview->set_regexmanager(&rxman);
+				this, itemlist, itemview_str, rsscache, cfg, rxman));
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
 		itemview->set_parent_formaction(fa);

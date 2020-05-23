@@ -22,7 +22,8 @@ public:
 		std::string formstr,
 		Cache* cc,
 		FilterContainer* f,
-		ConfigContainer* cfg);
+		ConfigContainer* cfg,
+		RegexManager& r);
 	~ItemListFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -75,9 +76,9 @@ public:
 
 	void recalculate_form() override;
 
-	void set_regexmanager(RegexManager* r);
-
 private:
+	void register_format_styles();
+
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
@@ -142,7 +143,7 @@ private:
 	bool set_filterpos;
 	unsigned int filterpos;
 
-	RegexManager* rxman;
+	RegexManager& rxman;
 
 	unsigned int old_width;
 	int old_itempos;
