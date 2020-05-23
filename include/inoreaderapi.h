@@ -24,15 +24,11 @@ public:
 
 private:
 	std::vector<std::string> get_tags(xmlNode* node);
-	std::string get_new_token();
 	std::string retrieve_auth();
 	std::string post_content(const std::string& url,
 		const std::string& postdata);
 	bool star_article(const std::string& guid, bool star);
 	bool share_article(const std::string& guid, bool share);
-	bool mark_article_read_with_token(const std::string& guid,
-		bool read,
-		const std::string& token);
 	std::string auth;
 	std::string auth_header;
 };
