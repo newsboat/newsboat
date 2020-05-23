@@ -263,7 +263,7 @@ void FileBrowserFormAction::prepare()
 			add_file(listfmt, filename);
 		}
 
-		files_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
+		files_list.stfl_replace_lines(listfmt);
 		do_redraw = false;
 	}
 

@@ -29,15 +29,14 @@ public:
 	{
 		lines.clear();
 	}
-	std::string format_list();
-	unsigned int get_lines_count()
+	std::string format_list() const;
+	unsigned int get_lines_count() const
 	{
 		return lines.size();
 	}
 
 private:
 	std::vector<LineIdPair> lines;
-	std::string format_cache;
 	RegexManager* rxman;
 	std::string location;
 };

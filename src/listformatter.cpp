@@ -75,9 +75,9 @@ void ListFormatter::add_lines(const std::vector<std::string>& thelines,
 	}
 }
 
-std::string ListFormatter::format_list()
+std::string ListFormatter::format_list() const
 {
-	format_cache = "{list";
+	std::string format_cache = "{list";
 	for (const auto& line : lines) {
 		std::string str = line.first;
 		if (rxman) {

@@ -132,7 +132,7 @@ void UrlViewFormAction::prepare()
 				std::to_string(i));
 			i++;
 		}
-		urls_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
+		urls_list.stfl_replace_lines(listfmt);
 	}
 }
 

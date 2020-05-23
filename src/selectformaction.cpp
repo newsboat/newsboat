@@ -150,7 +150,7 @@ void SelectFormAction::prepare()
 		default:
 			assert(0);
 		}
-		tags_list.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
+		tags_list.stfl_replace_lines(listfmt);
 
 		do_redraw = false;
 	}

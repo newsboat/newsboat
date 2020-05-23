@@ -1020,8 +1020,7 @@ void ItemListFormAction::prepare()
 		break;
 	}
 
-	items_list.stfl_replace_lines(listfmt.get_lines_count(),
-		listfmt.format_list());
+	items_list.stfl_replace_lines(listfmt);
 
 	invalidated_itempos.clear();
 	invalidated = false;

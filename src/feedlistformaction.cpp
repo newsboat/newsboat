@@ -617,8 +617,7 @@ void FeedListFormAction::set_feedlist(
 
 	total_feeds = i;
 
-	feeds_list.stfl_replace_lines(listfmt.get_lines_count(),
-		listfmt.format_list());
+	feeds_list.stfl_replace_lines(listfmt);
 
 	std::string title_format =
 		cfg->get_configvalue("feedlist-title-format");
