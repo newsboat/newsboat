@@ -181,11 +181,6 @@ int View::run()
 			}
 
 			if (!event || strcmp(event, "TIMEOUT") == 0) {
-				if (fa->id() == "article")
-					std::dynamic_pointer_cast<
-					ItemViewFormAction,
-					FormAction>(fa)
-					->update_percent();
 				continue;
 			}
 
