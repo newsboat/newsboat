@@ -17,7 +17,7 @@ else
     branch="${TRAVIS_BRANCH}"
 fi
 
-if [ "${TRAVIS_PULL_REQUEST}" = "true" ]
+if [ "${TRAVIS_PULL_REQUEST}" != "false" ]
 then
     service_pull_request="--service-pull-request ${TRAVIS_PULL_REQUEST}"
 fi
