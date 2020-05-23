@@ -14,7 +14,7 @@ class ListFormatter {
 	typedef std::pair<std::string, std::string> LineIdPair;
 
 public:
-	ListFormatter();
+	ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
 	~ListFormatter();
 	void add_line(const std::string& text,
 		const std::string& id = "",
@@ -29,8 +29,7 @@ public:
 	{
 		lines.clear();
 	}
-	std::string format_list(RegexManager* r = nullptr,
-		const std::string& location = "");
+	std::string format_list();
 	unsigned int get_lines_count()
 	{
 		return lines.size();
@@ -39,6 +38,8 @@ public:
 private:
 	std::vector<LineIdPair> lines;
 	std::string format_cache;
+	RegexManager* rxman;
+	std::string location;
 };
 
 } // namespace newsboat

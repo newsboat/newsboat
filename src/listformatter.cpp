@@ -9,7 +9,10 @@
 
 namespace newsboat {
 
-ListFormatter::ListFormatter() {}
+ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
+	: rxman(r)
+	, location(loc)
+{}
 
 ListFormatter::~ListFormatter() {}
 
@@ -72,8 +75,7 @@ void ListFormatter::add_lines(const std::vector<std::string>& thelines,
 	}
 }
 
-std::string ListFormatter::format_list(RegexManager* rxman,
-	const std::string& location)
+std::string ListFormatter::format_list()
 {
 	format_cache = "{list";
 	for (const auto& line : lines) {

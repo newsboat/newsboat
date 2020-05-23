@@ -41,6 +41,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, old_sort_strategy({ArtSortMethod::TITLE, SortDirection::DESC})
 , invalidated(false)
 , invalidation_mode(InvalidationMode::COMPLETE)
+, listfmt(&rxman, "articlelist")
 , rsscache(cc)
 , filters(f)
 , items_list("items", FormAction::f)
@@ -1020,7 +1021,7 @@ void ItemListFormAction::prepare()
 	}
 
 	items_list.stfl_replace_lines(listfmt.get_lines_count(),
-		listfmt.format_list(&rxman, "articlelist"));
+		listfmt.format_list());
 
 	invalidated_itempos.clear();
 	invalidated = false;
