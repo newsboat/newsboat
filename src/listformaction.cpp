@@ -17,31 +17,31 @@ bool ListFormAction::process_operation(Operation op,
 	std::vector<std::string>*)
 {
 	switch (op) {
-	case OP_1:
+	case OP_CMD_START_1:
 		FormAction::start_cmdline("1");
 		break;
-	case OP_2:
+	case OP_CMD_START_2:
 		FormAction::start_cmdline("2");
 		break;
-	case OP_3:
+	case OP_CMD_START_3:
 		FormAction::start_cmdline("3");
 		break;
-	case OP_4:
+	case OP_CMD_START_4:
 		FormAction::start_cmdline("4");
 		break;
-	case OP_5:
+	case OP_CMD_START_5:
 		FormAction::start_cmdline("5");
 		break;
-	case OP_6:
+	case OP_CMD_START_6:
 		FormAction::start_cmdline("6");
 		break;
-	case OP_7:
+	case OP_CMD_START_7:
 		FormAction::start_cmdline("7");
 		break;
-	case OP_8:
+	case OP_CMD_START_8:
 		FormAction::start_cmdline("8");
 		break;
-	case OP_9:
+	case OP_CMD_START_9:
 		FormAction::start_cmdline("9");
 		break;
 	default:

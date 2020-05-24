@@ -83,17 +83,17 @@ bool UrlViewFormAction::process_operation(Operation op,
 		}
 	}
 	break;
-	case OP_1:
-	case OP_2:
-	case OP_3:
-	case OP_4:
-	case OP_5:
-	case OP_6:
-	case OP_7:
-	case OP_8:
-	case OP_9:
-	case OP_0: {
-		unsigned int idx = op - OP_1;
+	case OP_OPEN_URL_1:
+	case OP_OPEN_URL_2:
+	case OP_OPEN_URL_3:
+	case OP_OPEN_URL_4:
+	case OP_OPEN_URL_5:
+	case OP_OPEN_URL_6:
+	case OP_OPEN_URL_7:
+	case OP_OPEN_URL_8:
+	case OP_OPEN_URL_9:
+	case OP_OPEN_URL_10: {
+		unsigned int idx = op - OP_OPEN_URL_1;
 
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
