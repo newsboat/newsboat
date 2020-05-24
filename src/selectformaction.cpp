@@ -71,6 +71,33 @@ bool SelectFormAction::process_operation(Operation op,
 	case OP_SK_PGDOWN:
 		tags_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
+	case OP_CMD_START_1:
+		FormAction::start_cmdline("1");
+		break;
+	case OP_CMD_START_2:
+		FormAction::start_cmdline("2");
+		break;
+	case OP_CMD_START_3:
+		FormAction::start_cmdline("3");
+		break;
+	case OP_CMD_START_4:
+		FormAction::start_cmdline("4");
+		break;
+	case OP_CMD_START_5:
+		FormAction::start_cmdline("5");
+		break;
+	case OP_CMD_START_6:
+		FormAction::start_cmdline("6");
+		break;
+	case OP_CMD_START_7:
+		FormAction::start_cmdline("7");
+		break;
+	case OP_CMD_START_8:
+		FormAction::start_cmdline("8");
+		break;
+	case OP_CMD_START_9:
+		FormAction::start_cmdline("9");
+		break;
 	case OP_QUIT:
 		value = "";
 		quit = true;
