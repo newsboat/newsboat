@@ -180,11 +180,11 @@ doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc
 	$(MKDIR) doc/xhtml
-	$(ASCIIDOCTOR) --backend=html5 --destination-dir=doc/xhtml doc/newsboat.asciidoc
+	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/newsboat.asciidoc
 
 doc/xhtml/faq.html: doc/faq.asciidoc
 	$(MKDIR) doc/xhtml
-	$(ASCIIDOCTOR) --backend=html5 --destination-dir=doc/xhtml doc/faq.asciidoc
+	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/faq.asciidoc
 
 doc/generate: doc/generate.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
