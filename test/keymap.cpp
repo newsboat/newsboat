@@ -193,6 +193,8 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
 			ConfigHandlerException);
 		REQUIRE_NOTHROW(k.handle_action("unbind-key", params));
+		REQUIRE_THROWS_AS(k.handle_action("macro", params),
+			ConfigHandlerException);
 	}
 
 	SECTION("with two parameters") {

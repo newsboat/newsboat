@@ -715,9 +715,9 @@ void KeyMap::handle_action(const std::string& action,
 			unset_key(params[0], context);
 		}
 	} else if (action == "macro") {
-		if (params.size() < 1)
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+		if (params.size() < 2) {
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
 		auto it = params.begin();
 		std::string macrokey = *it;
 		std::vector<MacroCmd> cmds;
@@ -730,17 +730,15 @@ void KeyMap::handle_action(const std::string& action,
 			if (first && *it != ";") {
 				tmpcmd.op = get_opcode(*it);
 				LOG(Level::DEBUG,
-					"KeyMap::handle_action: new operation "
-					"`%s' "
-					"(op = %u)",
+					"KeyMap::handle_action: new operation `%s' (op = %u)",
 					*it,
 					tmpcmd.op);
-				if (tmpcmd.op == OP_NIL)
+				if (tmpcmd.op == OP_NIL) {
 					throw ConfigHandlerException(
 						strprintf::fmt(
-							_("`%s' is not a valid "
-								"key command"),
+							_("`%s' is not a valid key command"),
 							*it));
+				}
 				first = false;
 			} else {
 				if (*it == ";") {
@@ -752,8 +750,7 @@ void KeyMap::handle_action(const std::string& action,
 					first = true;
 				} else {
 					LOG(Level::DEBUG,
-						"KeyMap::handle_action: new "
-						"parameter `%s' (op = %u)",
+						"KeyMap::handle_action: new parameter `%s' (op = %u)",
 						*it,
 						tmpcmd.op);
 					tmpcmd.args.push_back(*it);
@@ -766,9 +763,9 @@ void KeyMap::handle_action(const std::string& action,
 		}
 
 		macros_[macrokey] = cmds;
-	} else
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_PARAMS);
+	} else {
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
+	}
 }
 
 std::vector<std::string> KeyMap::get_keys(Operation op,
