@@ -715,7 +715,7 @@ void KeyMap::handle_action(const std::string& action,
 			unset_key(params[0], context);
 		}
 	} else if (action == "macro") {
-		if (params.size() < 1)
+		if (params.size() < 2)
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		auto it = params.begin();
