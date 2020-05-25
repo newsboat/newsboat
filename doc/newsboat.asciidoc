@@ -1167,8 +1167,6 @@ Dialog List:<<dialogs-title-format,+dialogs-title-format+>>:%N %V - Dialogs
 Identifier:Meaning
 [[common-title-format-N]]<<common-title-format-N,+N+>>:Name of the program, i.e. "newsboat"
 [[common-title-format-V]]<<common-title-format-V,+V+>>:Program version
-[[common-title-format-u]]<<common-title-format-u,+u+>>:Number of unread articles (if applicable)
-[[common-title-format-t]]<<common-title-format-t,+t+>>:Number of total articles (if applicable)
 |======================================================================
 
 .Feed List Title Format Identifiers
@@ -1176,6 +1174,8 @@ Identifier:Meaning
 |======================================================================
 Identifier:Meaning
 [[feedlist-title-format-T]]<<feedlist-title-format-T,+T+>>:Currently selected tag (empty if none selected)
+[[feedlist-title-format-u]]<<feedlist-title-format-u,+u+>>:Number of unread feeds (in this list)
+[[feedlist-title-format-t]]<<feedlist-title-format-t,+t+>>:Number of feeds (in this list)
 |======================================================================
 
 .Article List Title Format Identifiers
@@ -1184,6 +1184,8 @@ Identifier:Meaning
 Identifier:Meaning
 [[articlelist-title-format-T]]<<articlelist-title-format-T,+T+>>:Feed title
 [[articlelist-title-format-U]]<<articlelist-title-format-U,+U+>>:Feed URL
+[[articlelist-title-format-u]]<<articlelist-title-format-u,+u+>>:Number of unread articles (current feed)
+[[articlelist-title-format-t]]<<articlelist-title-format-t,+t+>>:Number of total articles (current feed)
 |======================================================================
 
 .File Browser Title Format Identifiers
@@ -1208,6 +1210,8 @@ Identifier:Meaning
 Identifier:Meaning
 [[articleview-title-format-T]]<<articleview-title-format-T,+T+>>:Article title
 [[articleview-title-format-F]]<<articleview-title-format-F,+F+>>:Feed title
+[[articleview-title-format-u]]<<articleview-title-format-u,+u+>>:Number of unread articles (current feed)
+[[articleview-title-format-t]]<<articleview-title-format-t,+t+>>:Number of total articles (current feed)
 |======================================================================
 
 === Highlighting Text
