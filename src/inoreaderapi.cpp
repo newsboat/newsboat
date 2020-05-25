@@ -17,7 +17,6 @@
 #define INOREADER_SUBSCRIPTION_LIST INOREADER_API_PREFIX "subscription/list"
 #define INOREADER_API_MARK_ALL_READ_URL INOREADER_API_PREFIX "mark-all-as-read"
 #define INOREADER_API_EDIT_TAG_URL INOREADER_API_PREFIX "edit-tag"
-#define INOREADER_API_TOKEN_URL INOREADER_API_PREFIX "token"
 
 #define INOREADER_APP_ID "AppId: 1000000394"
 #define INOREADER_APP_KEY "AppKey: CWcdJdSDcuxHYoqGa3RsPh7X2DZ2MmO7"
@@ -202,10 +201,8 @@ bool InoreaderApi::mark_all_read(const std::string& feedurl)
 		feedurl.substr(strlen(INOREADER_FEED_PREFIX));
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
 	real_feedurl = utils::unescape_url(elems[0]);
-	std::string token = get_new_token();
 
-	std::string postcontent =
-		strprintf::fmt("s=%s&T=%s", real_feedurl, token);
+	std::string postcontent = strprintf::fmt("s=%s", real_feedurl);
 
 	std::string result =
 		post_content(INOREADER_API_MARK_ALL_READ_URL, postcontent);
@@ -222,65 +219,34 @@ bool InoreaderApi::mark_article_read(const std::string& guid, bool read)
 		LOG(Level::DEBUG,
 			"InoreaderApi::mark_article_read: inside thread, marking "
 			"thread as read...");
-		std::string token = get_new_token();
-		mark_article_read_with_token(guid, read, token);
+
+		std::string postcontent;
+
+		if (read) {
+			postcontent = strprintf::fmt(
+					"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
+					"com.google/kept-unread&ac=edit",
+					guid);
+		} else {
+			postcontent = strprintf::fmt(
+					"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
+					"com.google/kept-unread&a=user/-/state/com.google/"
+					"tracking-kept-unread&ac=edit",
+					guid);
+		}
+
+		std::string result =
+			post_content(INOREADER_API_EDIT_TAG_URL, postcontent);
+
+		LOG(Level::DEBUG,
+			"InoreaderApi::mark_article_read: postcontent = %s result = %s",
+			postcontent,
+			result);
+
+		return result == "OK";
 	}};
 	t.detach();
 	return true;
-}
-
-bool InoreaderApi::mark_article_read_with_token(const std::string& guid,
-	bool read,
-	const std::string& token)
-{
-	std::string postcontent;
-
-	if (read) {
-		postcontent = strprintf::fmt(
-				"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
-				"com.google/kept-unread&ac=edit&T=%s",
-				guid,
-				token);
-	} else {
-		postcontent = strprintf::fmt(
-				"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
-				"com.google/kept-unread&a=user/-/state/com.google/"
-				"tracking-kept-unread&ac=edit&T=%s",
-				guid,
-				token);
-	}
-
-	std::string result =
-		post_content(INOREADER_API_EDIT_TAG_URL, postcontent);
-
-	LOG(Level::DEBUG,
-		"InoreaderApi::mark_article_read_with_token: postcontent = %s "
-		"result = %s",
-		postcontent,
-		result);
-
-	return result == "OK";
-}
-
-std::string InoreaderApi::get_new_token()
-{
-	CURL* handle = curl_easy_init();
-	std::string result;
-	curl_slist* custom_headers{};
-
-	utils::set_common_curl_options(handle, cfg);
-	add_custom_headers(&custom_headers);
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle, CURLOPT_URL, INOREADER_API_TOKEN_URL);
-	curl_easy_perform(handle);
-	curl_easy_cleanup(handle);
-	curl_slist_free_all(custom_headers);
-
-	LOG(Level::DEBUG, "InoreaderApi::get_new_token: token = %s", result);
-
-	return result;
 }
 
 bool InoreaderApi::update_article_flags(const std::string& inoflags,
@@ -316,19 +282,16 @@ bool InoreaderApi::update_article_flags(const std::string& inoflags,
 
 bool InoreaderApi::star_article(const std::string& guid, bool star)
 {
-	std::string token = get_new_token();
 	std::string postcontent;
 
 	if (star) {
 		postcontent = strprintf::fmt(
-				"i=%s&a=user/-/state/com.google/starred&ac=edit&T=%s",
-				guid,
-				token);
+				"i=%s&a=user/-/state/com.google/starred&ac=edit",
+				guid);
 	} else {
 		postcontent = strprintf::fmt(
-				"i=%s&r=user/-/state/com.google/starred&ac=edit&T=%s",
-				guid,
-				token);
+				"i=%s&r=user/-/state/com.google/starred&ac=edit",
+				guid);
 	}
 
 	std::string result =
@@ -339,19 +302,16 @@ bool InoreaderApi::star_article(const std::string& guid, bool star)
 
 bool InoreaderApi::share_article(const std::string& guid, bool share)
 {
-	std::string token = get_new_token();
 	std::string postcontent;
 
 	if (share) {
 		postcontent = strprintf::fmt(
-				"i=%s&a=user/-/state/com.google/broadcast&ac=edit&T=%s",
-				guid,
-				token);
+				"i=%s&a=user/-/state/com.google/broadcast&ac=edit",
+				guid);
 	} else {
 		postcontent = strprintf::fmt(
-				"i=%s&r=user/-/state/com.google/broadcast&ac=edit&T=%s",
-				guid,
-				token);
+				"i=%s&r=user/-/state/com.google/broadcast&ac=edit",
+				guid);
 	}
 
 	std::string result =
