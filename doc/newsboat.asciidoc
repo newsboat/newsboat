@@ -1176,6 +1176,8 @@ Identifier:Meaning
 [[feedlist-title-format-T]]<<feedlist-title-format-T,+T+>>:Currently selected tag (empty if none selected)
 [[feedlist-title-format-u]]<<feedlist-title-format-u,+u+>>:Number of unread feeds (in this list)
 [[feedlist-title-format-t]]<<feedlist-title-format-t,+t+>>:Number of feeds (in this list)
+[[feedlist-title-format-U]]<<feedlist-title-format-U,+U+>>:Number of unread feeds (total)
+[[feedlist-title-format-a]]<<feedlist-title-format-a,+a+>>:Number of feeds (total)
 |======================================================================
 
 .Article List Title Format Identifiers

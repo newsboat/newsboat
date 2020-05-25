@@ -613,6 +613,13 @@ void FeedListFormAction::set_feedlist(
 			std::to_string(feed.second));
 	}
 
+	unsigned int total_unread = 0;
+	for (const auto& feed : feeds) {
+		if (feed->unread_item_count() > 0) {
+			total_unread++;
+		}
+	}
+
 	total_feeds = visible_feeds.size();
 
 	feeds_list.stfl_replace_lines(listfmt);
@@ -626,6 +633,8 @@ void FeedListFormAction::set_feedlist(
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('u', std::to_string(unread_feeds));
 	fmt.register_fmt('t', std::to_string(visible_feeds.size()));
+	fmt.register_fmt('U', std::to_string(total_unread));
+	fmt.register_fmt('a', std::to_string(feeds.size()));
 
 	f.set("head", fmt.do_format(title_format, width));
 }
