@@ -126,6 +126,9 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 
 		switch (op) {
+		case OP_REDRAW:
+			Stfl::reset();
+			break;
 		case OP_SK_UP:
 			downloads_list.move_up(wrap_scroll);
 			break;
