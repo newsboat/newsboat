@@ -593,7 +593,6 @@ void FeedListFormAction::set_feedlist(
 
 	unsigned int width = utils::to_u(f.get("feeds:w"));
 
-	unsigned int i = 0;
 	unread_feeds = 0;
 
 	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
@@ -612,10 +611,9 @@ void FeedListFormAction::set_feedlist(
 				feed.second,
 				width),
 			std::to_string(feed.second));
-		i++;
 	}
 
-	total_feeds = i;
+	total_feeds = visible_feeds.size();
 
 	feeds_list.stfl_replace_lines(listfmt);
 
@@ -627,7 +625,7 @@ void FeedListFormAction::set_feedlist(
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('u', std::to_string(unread_feeds));
-	fmt.register_fmt('t', std::to_string(i));
+	fmt.register_fmt('t', std::to_string(visible_feeds.size()));
 
 	f.set("head", fmt.do_format(title_format, width));
 }
