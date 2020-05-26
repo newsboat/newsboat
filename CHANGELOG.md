@@ -536,7 +536,7 @@ Karlsson, Kamil Wsół, Mike Crute, Niels Kobschätzki, and maiki.
     Makefile (Fredrik Fornwall)
 - Cookies actually get persisted (Simon Schuster, reported and tested by Håkan
     Jerning)
-- CJK text is wrapped at correct code-point boundaries (#71) (nmtake)
+- CJK text is wrapped at correct code-point boundaries (#38, #71) (nmtake)
 - Don't segfault if `error-log` points to non-existent file (Simon Schuster)
 - Spanish translation (José Manuel García-Patos)
 
