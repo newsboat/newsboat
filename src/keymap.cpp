@@ -1,6 +1,8 @@
 #include "keymap.h"
 
 #include <iostream>
+#include <map>
+#include <string>
 #include <vector>
 
 #include "config.h"
@@ -12,18 +14,18 @@
 namespace newsboat {
 
 struct OpDesc {
-	Operation op;
-	const char* opstr;
-	const char* default_key;
-	const char* help_text;
-	unsigned short flags;
+	const Operation op;
+	const std::string opstr;
+	const std::string default_key;
+	const std::string help_text;
+	const unsigned short flags;
 };
 
 /*
  * This is the list of operations, defining operation, operation name (for
  * keybindings), default key, description, and where it's valid
  */
-static OpDesc opdescs[] = {
+static const std::vector<OpDesc> opdescs = {
 	{
 		OP_OPEN,
 		"open",
@@ -442,55 +444,50 @@ static OpDesc opdescs[] = {
 		OP_INT_END_QUESTION,
 		"XXXNOKEY-end-question",
 		"end-question",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 	{
 		OP_INT_CANCEL_QNA,
 		"XXXNOKEY-cancel-qna",
 		"cancel-qna",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 	{
 		OP_INT_QNA_NEXTHIST,
 		"XXXNOKEY-qna-next-history",
 		"qna-next-history",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 	{
 		OP_INT_QNA_PREVHIST,
 		"XXXNOKEY-qna-prev-history",
 		"qna-prev-history",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 
-	{OP_INT_RESIZE, "RESIZE", "internal-resize", nullptr, KM_INTERNAL},
-	{OP_INT_SET, "set", "internal-set", nullptr, KM_INTERNAL},
+	{OP_INT_RESIZE, "RESIZE", "internal-resize", "", KM_INTERNAL},
+	{OP_INT_SET, "set", "internal-set", "", KM_INTERNAL},
 
-	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", nullptr, KM_INTERNAL},
-
-	{OP_NIL, nullptr, nullptr, nullptr, 0}
+	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},
 };
 
-// "all" must be first, the following positions must be the same as the KM_*
-// flag definitions (get_flag_from_context() relies on this).
-static const char* contexts[] = {"all",
-		"feedlist",
-		"filebrowser",
-		"help",
-		"articlelist",
-		"article",
-		"tagselection",
-		"filterselection",
-		"urlview",
-		"podboat",
-		"dialogs",
-		"dirbrowser",
-		nullptr
-	};
+static const std::map<std::string, std::uint32_t> contexts = {
+	{"feedlist", KM_FEEDLIST},
+	{"filebrowser", KM_FILEBROWSER},
+	{"help", KM_HELP},
+	{"articlelist", KM_ARTICLELIST},
+	{"article", KM_ARTICLE},
+	{"tagselection", KM_TAGSELECT},
+	{"filterselection", KM_FILTERSELECT},
+	{"urlview", KM_URLVIEW},
+	{"podboat", KM_PODBOAT},
+	{"dialogs", KM_DIALOGS},
+	{"dirbrowser", KM_DIRBROWSER},
+};
 
 KeyMap::KeyMap(unsigned flags)
 {
@@ -499,20 +496,19 @@ KeyMap::KeyMap(unsigned flags)
 	 * list above.
 	 */
 	LOG(Level::DEBUG, "KeyMap::KeyMap: flags = %x", flags);
-	for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		const OpDesc op_desc = opdescs[i];
+	for (const auto& op_desc : opdescs) {
 		if (!(op_desc.flags & (flags | KM_INTERNAL | KM_SYSKEYS))) {
 			continue;
 		}
 
 		// Skip operations without a default key
-		if (!op_desc.default_key || std::string() == op_desc.default_key) {
+		if (op_desc.default_key.empty()) {
 			continue;
 		}
 
-		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
-			const std::string context(contexts[j]);
-			const std::uint32_t context_flag = (1 << (j - 1));
+		for (const auto& ctx : contexts) {
+			const std::string& context = ctx.first;
+			const std::uint32_t context_flag = ctx.second;
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				keymap_[context][op_desc.default_key] = op_desc.op;
 			}
@@ -528,8 +524,7 @@ KeyMap::KeyMap(unsigned flags)
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
 	std::vector<KeyMapDesc> descs;
-	for (unsigned int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		const OpDesc& opdesc = opdescs[i];
+	for (const auto& opdesc : opdescs) {
 		if (!(opdesc.flags & get_flag_from_context(context))) {
 			// Ignore operation if it is not valid in this context
 			continue;
@@ -563,8 +558,8 @@ void KeyMap::set_key(Operation op,
 {
 	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key);
 	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			keymap_[contexts[i]][key] = op;
+		for (const auto& ctx : contexts) {
+			keymap_[ctx.first][key] = op;
 		}
 	} else {
 		keymap_[context][key] = op;
@@ -575,8 +570,8 @@ void KeyMap::unset_key(const std::string& key, const std::string& context)
 {
 	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key);
 	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			keymap_[contexts[i]][key] = OP_NIL;
+		for (const auto& ctx : contexts) {
+			keymap_[ctx.first][key] = OP_NIL;
 		}
 	} else {
 		keymap_[context][key] = OP_NIL;
@@ -588,8 +583,8 @@ void KeyMap::unset_all_keys(const std::string& context)
 	LOG(Level::DEBUG, "KeyMap::unset_all_keys(%s) called", context);
 	auto internal_ops_only = get_internal_operations();
 	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			keymap_[contexts[i]] = internal_ops_only;
+		for (const auto& ctx : contexts) {
+			keymap_[ctx.first] = internal_ops_only;
 		}
 	} else {
 		keymap_[context] = std::move(internal_ops_only);
@@ -598,9 +593,9 @@ void KeyMap::unset_all_keys(const std::string& context)
 
 Operation KeyMap::get_opcode(const std::string& opstr)
 {
-	for (int i = 0; opdescs[i].opstr; ++i) {
-		if (opstr == opdescs[i].opstr) {
-			return opdescs[i].op;
+	for (const auto& opdesc : opdescs) {
+		if (opstr == opdesc.opstr) {
+			return opdesc.op;
 		}
 	}
 	return OP_NIL;
@@ -639,9 +634,9 @@ Operation KeyMap::get_operation(const std::string& keycode,
 
 void KeyMap::dump_config(std::vector<std::string>& config_output)
 {
-	for (unsigned int i = 1; contexts[i] != nullptr;
-		i++) { // TODO: optimize
-		std::map<std::string, Operation>& x = keymap_[contexts[i]];
+	for (const auto& ctx : contexts) {
+		const std::string& context = ctx.first;
+		std::map<std::string, Operation>& x = keymap_[context];
 		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
@@ -649,7 +644,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 				configline.append(" ");
 				configline.append(getopname(keymap.second));
 				configline.append(" ");
-				configline.append(contexts[i]);
+				configline.append(context);
 				config_output.push_back(configline);
 			}
 		}
@@ -675,9 +670,9 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 
 std::string KeyMap::getopname(Operation op)
 {
-	for (unsigned int i = 0; opdescs[i].op != OP_NIL; i++) {
-		if (opdescs[i].op == op) {
-			return opdescs[i].opstr;
+	for (const auto& opdesc : opdescs) {
+		if (opdesc.op == op) {
+			return opdesc.opstr;
 		}
 	}
 	return "<none>";
@@ -803,20 +798,23 @@ std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 
 bool KeyMap::is_valid_context(const std::string& context)
 {
-	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-		if (context == contexts[i]) {
-			return true;
-		}
+	if (context == "all") {
+		return true;
 	}
+
+	if (contexts.count(context) >= 1) {
+		return true;
+	}
+
 	return false;
 }
 
 std::map<std::string, Operation> KeyMap::get_internal_operations() const
 {
 	std::map<std::string, Operation> internal_ops;
-	for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		if (opdescs[i].flags & KM_INTERNAL) {
-			internal_ops[opdescs[i].default_key] = opdescs[i].op;
+	for (const auto& opdesc : opdescs) {
+		if (opdesc.flags & KM_INTERNAL) {
+			internal_ops[opdesc.default_key] = opdesc.op;
 		}
 	}
 	return internal_ops;
@@ -824,11 +822,10 @@ std::map<std::string, Operation> KeyMap::get_internal_operations() const
 
 unsigned short KeyMap::get_flag_from_context(const std::string& context)
 {
-	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
-		if (context == contexts[i]) {
-			return (1 << (i - 1)) | KM_SYSKEYS;
-		}
+	if (contexts.count(context) >= 1) {
+		return contexts.at(context) | KM_SYSKEYS;
 	}
+
 	return 0; // shouldn't happen
 }
 

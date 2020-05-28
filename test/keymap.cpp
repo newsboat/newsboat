@@ -25,7 +25,7 @@ TEST_CASE("get_operation()", "[KeyMap]")
 
 	SECTION("Returns OP_NIL after unset_key()") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "all") == OP_NIL);
+		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
 	}
 }
 
