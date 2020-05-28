@@ -23,8 +23,8 @@ public:
 	/// \brief Starts a thread that will reload feeds with specified
 	/// indexes.
 	///
-	/// If \a indexes is nullptr, all feeds will be reloaded.
-	void start_reload_all_thread(std::vector<int>* indexes = nullptr);
+	/// If \a indexes is empty, all feeds will be reloaded.
+	void start_reload_all_thread(const std::vector<int>& indexes = {});
 
 	void unlock_reload_mutex()
 	{

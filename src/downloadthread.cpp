@@ -4,13 +4,8 @@
 
 namespace newsboat {
 
-DownloadThread::DownloadThread(Reloader& r, std::vector<int>* idxs)
-	: reloader(r)
-{
-	if (idxs) {
-		indexes = *idxs;
-	}
-}
+DownloadThread::DownloadThread(Reloader& r, const std::vector<int>& idxs)
+	: reloader(r), indexes(idxs) {}
 
 DownloadThread::~DownloadThread() {}
 
