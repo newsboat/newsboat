@@ -25,7 +25,7 @@ struct OpDesc {
  * This is the list of operations, defining operation, operation name (for
  * keybindings), default key, description, and where it's valid
  */
-static OpDesc opdescs[] = {
+static const std::vector<OpDesc> opdescs = {
 	{
 		OP_OPEN,
 		"open",
@@ -473,8 +473,6 @@ static OpDesc opdescs[] = {
 	{OP_INT_SET, "set", "internal-set", nullptr, KM_INTERNAL},
 
 	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", nullptr, KM_INTERNAL},
-
-	{OP_NIL, nullptr, nullptr, nullptr, 0}
 };
 
 static const std::map<std::string, std::uint32_t> contexts = {
@@ -498,8 +496,7 @@ KeyMap::KeyMap(unsigned flags)
 	 * list above.
 	 */
 	LOG(Level::DEBUG, "KeyMap::KeyMap: flags = %x", flags);
-	for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		const OpDesc op_desc = opdescs[i];
+	for (const auto& op_desc : opdescs) {
 		if (!(op_desc.flags & (flags | KM_INTERNAL | KM_SYSKEYS))) {
 			continue;
 		}
@@ -527,8 +524,7 @@ KeyMap::KeyMap(unsigned flags)
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
 	std::vector<KeyMapDesc> descs;
-	for (unsigned int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		const OpDesc& opdesc = opdescs[i];
+	for (const auto& opdesc : opdescs) {
 		if (!(opdesc.flags & get_flag_from_context(context))) {
 			// Ignore operation if it is not valid in this context
 			continue;
@@ -597,9 +593,9 @@ void KeyMap::unset_all_keys(const std::string& context)
 
 Operation KeyMap::get_opcode(const std::string& opstr)
 {
-	for (int i = 0; opdescs[i].opstr; ++i) {
-		if (opstr == opdescs[i].opstr) {
-			return opdescs[i].op;
+	for (const auto& opdesc : opdescs) {
+		if (opstr == opdesc.opstr) {
+			return opdesc.op;
 		}
 	}
 	return OP_NIL;
@@ -674,9 +670,9 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 
 std::string KeyMap::getopname(Operation op)
 {
-	for (unsigned int i = 0; opdescs[i].op != OP_NIL; i++) {
-		if (opdescs[i].op == op) {
-			return opdescs[i].opstr;
+	for (const auto& opdesc : opdescs) {
+		if (opdesc.op == op) {
+			return opdesc.opstr;
 		}
 	}
 	return "<none>";
@@ -816,9 +812,9 @@ bool KeyMap::is_valid_context(const std::string& context)
 std::map<std::string, Operation> KeyMap::get_internal_operations() const
 {
 	std::map<std::string, Operation> internal_ops;
-	for (int i = 0; opdescs[i].op != OP_NIL; ++i) {
-		if (opdescs[i].flags & KM_INTERNAL) {
-			internal_ops[opdescs[i].default_key] = opdescs[i].op;
+	for (const auto& opdesc : opdescs) {
+		if (opdesc.flags & KM_INTERNAL) {
+			internal_ops[opdesc.default_key] = opdesc.op;
 		}
 	}
 	return internal_ops;
