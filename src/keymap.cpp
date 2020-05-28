@@ -1,6 +1,8 @@
 #include "keymap.h"
 
 #include <iostream>
+#include <map>
+#include <string>
 #include <vector>
 
 #include "config.h"
@@ -475,21 +477,18 @@ static OpDesc opdescs[] = {
 	{OP_NIL, nullptr, nullptr, nullptr, 0}
 };
 
-// "all" must be first, the following positions must be the same as the KM_*
-// flag definitions (get_flag_from_context() relies on this).
-static const char* contexts[] = {
-	"feedlist",
-	"filebrowser",
-	"help",
-	"articlelist",
-	"article",
-	"tagselection",
-	"filterselection",
-	"urlview",
-	"podboat",
-	"dialogs",
-	"dirbrowser",
-	nullptr
+static const std::map<std::string, std::uint32_t> contexts = {
+	{"feedlist", KM_FEEDLIST},
+	{"filebrowser", KM_FILEBROWSER},
+	{"help", KM_HELP},
+	{"articlelist", KM_ARTICLELIST},
+	{"article", KM_ARTICLE},
+	{"tagselection", KM_TAGSELECT},
+	{"filterselection", KM_FILTERSELECT},
+	{"urlview", KM_URLVIEW},
+	{"podboat", KM_PODBOAT},
+	{"dialogs", KM_DIALOGS},
+	{"dirbrowser", KM_DIRBROWSER},
 };
 
 KeyMap::KeyMap(unsigned flags)
@@ -510,9 +509,9 @@ KeyMap::KeyMap(unsigned flags)
 			continue;
 		}
 
-		for (unsigned int j = 0; contexts[j] != nullptr; j++) {
-			const std::string context(contexts[j]);
-			const std::uint32_t context_flag = (1 << j);
+		for (const auto& ctx : contexts) {
+			const std::string& context = ctx.first;
+			const std::uint32_t context_flag = ctx.second;
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				keymap_[context][op_desc.default_key] = op_desc.op;
 			}
@@ -563,8 +562,8 @@ void KeyMap::set_key(Operation op,
 {
 	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key);
 	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			keymap_[contexts[i]][key] = op;
+		for (const auto& ctx : contexts) {
+			keymap_[ctx.first][key] = op;
 		}
 	} else {
 		keymap_[context][key] = op;
@@ -575,8 +574,8 @@ void KeyMap::unset_key(const std::string& key, const std::string& context)
 {
 	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key);
 	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			keymap_[contexts[i]][key] = OP_NIL;
+		for (const auto& ctx : contexts) {
+			keymap_[ctx.first][key] = OP_NIL;
 		}
 	} else {
 		keymap_[context][key] = OP_NIL;
@@ -588,8 +587,8 @@ void KeyMap::unset_all_keys(const std::string& context)
 	LOG(Level::DEBUG, "KeyMap::unset_all_keys(%s) called", context);
 	auto internal_ops_only = get_internal_operations();
 	if (context == "all") {
-		for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-			keymap_[contexts[i]] = internal_ops_only;
+		for (const auto& ctx : contexts) {
+			keymap_[ctx.first] = internal_ops_only;
 		}
 	} else {
 		keymap_[context] = std::move(internal_ops_only);
@@ -639,9 +638,9 @@ Operation KeyMap::get_operation(const std::string& keycode,
 
 void KeyMap::dump_config(std::vector<std::string>& config_output)
 {
-	for (unsigned int i = 0; contexts[i] != nullptr;
-		i++) { // TODO: optimize
-		std::map<std::string, Operation>& x = keymap_[contexts[i]];
+	for (const auto& ctx : contexts) {
+		const std::string& context = ctx.first;
+		std::map<std::string, Operation>& x = keymap_[context];
 		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
@@ -649,7 +648,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 				configline.append(" ");
 				configline.append(getopname(keymap.second));
 				configline.append(" ");
-				configline.append(contexts[i]);
+				configline.append(context);
 				config_output.push_back(configline);
 			}
 		}
@@ -806,11 +805,11 @@ bool KeyMap::is_valid_context(const std::string& context)
 	if (context == "all") {
 		return true;
 	}
-	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-		if (context == contexts[i]) {
-			return true;
-		}
+
+	if (contexts.count(context) >= 1) {
+		return true;
 	}
+
 	return false;
 }
 
@@ -827,11 +826,10 @@ std::map<std::string, Operation> KeyMap::get_internal_operations() const
 
 unsigned short KeyMap::get_flag_from_context(const std::string& context)
 {
-	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
-		if (context == contexts[i]) {
-			return (1 << i) | KM_SYSKEYS;
-		}
+	if (contexts.count(context) >= 1) {
+		return contexts.at(context) | KM_SYSKEYS;
 	}
+
 	return 0; // shouldn't happen
 }
 
