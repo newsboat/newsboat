@@ -456,9 +456,9 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 
 				REQUIRE(dumpOutput[0] == R"(bind-key "ENTER" open feedlist)");
 				REQUIRE(dumpOutput[1] == R"(macro 1 open)");
-				REQUIRE(dumpOutput[2] == R"(macro 2 open ; next ; )");
-				REQUIRE(dumpOutput[3] == R"(macro 3 open ; next ; prev ; )");
-				REQUIRE(dumpOutput[4] == R"(macro 4 open ; next ; prev ; quit ; )");
+				REQUIRE(dumpOutput[2] == R"(macro 2 open ; next)");
+				REQUIRE(dumpOutput[3] == R"(macro 3 open ; next ; prev)");
+				REQUIRE(dumpOutput[4] == R"(macro 4 open ; next ; prev ; quit)");
 			}
 		}
 	}
@@ -476,7 +476,7 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 				REQUIRE(dumpOutput.size() == 2);
 
 				REQUIRE(dumpOutput[0] == R"(macro 1 set "arg 1")");
-				REQUIRE(dumpOutput[1] == R"(macro 2 set "arg 1" ; set "arg 2" "arg 3" ; )");
+				REQUIRE(dumpOutput[1] == R"(macro 2 set "arg 1" ; set "arg 2" "arg 3")");
 			}
 		}
 	}

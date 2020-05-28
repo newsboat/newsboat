@@ -653,8 +653,8 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 		std::string configline = "macro ";
 		configline.append(macro.first);
 		configline.append(" ");
-		unsigned int i = 0;
-		for (const auto& cmd : macro.second) {
+		for (unsigned int i = 0; i < macro.second.size(); ++i) {
+			const auto& cmd = macro.second[i];
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
