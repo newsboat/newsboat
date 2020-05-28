@@ -14,11 +14,11 @@
 namespace newsboat {
 
 struct OpDesc {
-	Operation op;
-	const char* opstr;
-	const char* default_key;
-	const char* help_text;
-	unsigned short flags;
+	const Operation op;
+	const std::string opstr;
+	const std::string default_key;
+	const std::string help_text;
+	const unsigned short flags;
 };
 
 /*
@@ -444,35 +444,35 @@ static const std::vector<OpDesc> opdescs = {
 		OP_INT_END_QUESTION,
 		"XXXNOKEY-end-question",
 		"end-question",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 	{
 		OP_INT_CANCEL_QNA,
 		"XXXNOKEY-cancel-qna",
 		"cancel-qna",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 	{
 		OP_INT_QNA_NEXTHIST,
 		"XXXNOKEY-qna-next-history",
 		"qna-next-history",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 	{
 		OP_INT_QNA_PREVHIST,
 		"XXXNOKEY-qna-prev-history",
 		"qna-prev-history",
-		nullptr,
+		"",
 		KM_INTERNAL
 	},
 
-	{OP_INT_RESIZE, "RESIZE", "internal-resize", nullptr, KM_INTERNAL},
-	{OP_INT_SET, "set", "internal-set", nullptr, KM_INTERNAL},
+	{OP_INT_RESIZE, "RESIZE", "internal-resize", "", KM_INTERNAL},
+	{OP_INT_SET, "set", "internal-set", "", KM_INTERNAL},
 
-	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", nullptr, KM_INTERNAL},
+	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},
 };
 
 static const std::map<std::string, std::uint32_t> contexts = {
@@ -502,7 +502,7 @@ KeyMap::KeyMap(unsigned flags)
 		}
 
 		// Skip operations without a default key
-		if (!op_desc.default_key || std::string() == op_desc.default_key) {
+		if (op_desc.default_key.empty()) {
 			continue;
 		}
 
