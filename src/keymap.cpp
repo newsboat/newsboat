@@ -477,20 +477,20 @@ static OpDesc opdescs[] = {
 
 // "all" must be first, the following positions must be the same as the KM_*
 // flag definitions (get_flag_from_context() relies on this).
-static const char* contexts[] = {"all",
-		"feedlist",
-		"filebrowser",
-		"help",
-		"articlelist",
-		"article",
-		"tagselection",
-		"filterselection",
-		"urlview",
-		"podboat",
-		"dialogs",
-		"dirbrowser",
-		nullptr
-	};
+static const char* contexts[] = {
+	"feedlist",
+	"filebrowser",
+	"help",
+	"articlelist",
+	"article",
+	"tagselection",
+	"filterselection",
+	"urlview",
+	"podboat",
+	"dialogs",
+	"dirbrowser",
+	nullptr
+};
 
 KeyMap::KeyMap(unsigned flags)
 {
@@ -510,9 +510,9 @@ KeyMap::KeyMap(unsigned flags)
 			continue;
 		}
 
-		for (unsigned int j = 1; contexts[j] != nullptr; j++) {
+		for (unsigned int j = 0; contexts[j] != nullptr; j++) {
 			const std::string context(contexts[j]);
-			const std::uint32_t context_flag = (1 << (j - 1));
+			const std::uint32_t context_flag = (1 << j);
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				keymap_[context][op_desc.default_key] = op_desc.op;
 			}
@@ -639,7 +639,7 @@ Operation KeyMap::get_operation(const std::string& keycode,
 
 void KeyMap::dump_config(std::vector<std::string>& config_output)
 {
-	for (unsigned int i = 1; contexts[i] != nullptr;
+	for (unsigned int i = 0; contexts[i] != nullptr;
 		i++) { // TODO: optimize
 		std::map<std::string, Operation>& x = keymap_[contexts[i]];
 		for (const auto& keymap : x) {
@@ -803,6 +803,9 @@ std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 
 bool KeyMap::is_valid_context(const std::string& context)
 {
+	if (context == "all") {
+		return true;
+	}
 	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 		if (context == contexts[i]) {
 			return true;
@@ -824,9 +827,9 @@ std::map<std::string, Operation> KeyMap::get_internal_operations() const
 
 unsigned short KeyMap::get_flag_from_context(const std::string& context)
 {
-	for (unsigned int i = 1; contexts[i] != nullptr; i++) {
+	for (unsigned int i = 0; contexts[i] != nullptr; i++) {
 		if (context == contexts[i]) {
-			return (1 << (i - 1)) | KM_SYSKEYS;
+			return (1 << i) | KM_SYSKEYS;
 		}
 	}
 	return 0; // shouldn't happen
