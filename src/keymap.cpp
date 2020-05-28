@@ -741,7 +741,7 @@ void KeyMap::handle_action(const std::string& action,
 				if (tmpcmd.op == OP_NIL) {
 					throw ConfigHandlerException(
 						strprintf::fmt(
-							_("`%s' is not a valid key command"),
+							_("`%s' is not a valid operation"),
 							*it));
 				}
 				first = false;
