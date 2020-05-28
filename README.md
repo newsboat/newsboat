@@ -57,7 +57,7 @@ Newsboat can be compiled.
 
 Developers will also need:
 
-- [`xtr`](https://github.com/woboq/tr) (can be installed with `cargo install
+- [xtr (version 0.1.4 or newer)](https://github.com/woboq/tr) (can be installed with `cargo install
   xtr`)
 - [Coco/R for C++](http://www.ssw.uni-linz.ac.at/coco/), needed to re-generate
     filter language parser using `regenerate-parser` target.
