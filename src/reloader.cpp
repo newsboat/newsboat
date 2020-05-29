@@ -35,7 +35,7 @@ void Reloader::spawn_reloadthread()
 	t.detach();
 }
 
-void Reloader::start_reload_all_thread(std::vector<int>* indexes)
+void Reloader::start_reload_all_thread(const std::vector<int>& indexes)
 {
 	LOG(Level::INFO, "starting reload all thread");
 	std::thread t(DownloadThread(*this, indexes));

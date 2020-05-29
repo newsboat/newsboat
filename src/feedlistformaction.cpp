@@ -338,11 +338,12 @@ REDO:
 				cfg->get_configvalue_as_bool(
 					"reload-only-visible-feeds");
 			std::vector<int> idxs;
-			for (const auto& feed : visible_feeds) {
-				idxs.push_back(feed.second);
+			if (reload_only_visible_feeds) {
+				for (const auto& feed : visible_feeds) {
+					idxs.push_back(feed.second);
+				}
 			}
-			v->get_ctrl()->get_reloader()->start_reload_all_thread(
-				reload_only_visible_feeds ? &idxs : nullptr);
+			v->get_ctrl()->get_reloader()->start_reload_all_thread(idxs);
 		}
 		break;
 	case OP_MARKFEEDREAD: {
