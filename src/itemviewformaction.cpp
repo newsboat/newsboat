@@ -121,6 +121,7 @@ void ItemViewFormAction::prepare()
 					&rxman,
 					"article");
 		} else {
+			links.clear();
 			if (!item->enclosure_url().empty()) {
 				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type());
 				if (link_type.has_value()) {
