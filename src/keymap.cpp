@@ -653,8 +653,8 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 		std::string configline = "macro ";
 		configline.append(macro.first);
 		configline.append(" ");
-		unsigned int i = 0;
-		for (const auto& cmd : macro.second) {
+		for (unsigned int i = 0; i < macro.second.size(); ++i) {
+			const auto& cmd = macro.second[i];
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
@@ -741,7 +741,7 @@ void KeyMap::handle_action(const std::string& action,
 				if (tmpcmd.op == OP_NIL) {
 					throw ConfigHandlerException(
 						strprintf::fmt(
-							_("`%s' is not a valid key command"),
+							_("`%s' is not a valid operation"),
 							*it));
 				}
 				first = false;
@@ -787,13 +787,10 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
-	for (const auto& macro : macros_) {
-		if (macro.first == key) {
-			return macro.second;
-		}
+	if (macros_.count(key) >= 1) {
+		return macros_.at(key);
 	}
-	std::vector<MacroCmd> dummyvector;
-	return dummyvector;
+	return {};
 }
 
 bool KeyMap::is_valid_context(const std::string& context)

@@ -387,3 +387,97 @@ TEST_CASE("get_keymap_descriptions() includes entries which include different ke
 
 	REQUIRE(keys == std::set<std::string>({"a", "b", "c"}));
 }
+
+TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	std::vector<std::string> dumpOutput;
+
+	GIVEN("that all keybindings are removed") {
+		k.unset_all_keys("all");
+
+		WHEN("calling dump_config()") {
+			k.dump_config(dumpOutput);
+
+			THEN("the output is empty") {
+				REQUIRE(dumpOutput.size() == 0);
+			}
+		}
+	}
+
+	GIVEN("the default keybindings") {
+
+		WHEN("calling dump_config()") {
+			k.dump_config(dumpOutput);
+
+			THEN("all lines start with 'bind-key'") {
+				for (const auto& line : dumpOutput) {
+					INFO("processing: " << line);
+					REQUIRE(line.find("bind-key ") == 0);
+				}
+			}
+		}
+	}
+
+	GIVEN("a few keybindings") {
+		k.unset_all_keys("all");
+		k.set_key(OP_OPEN, "ENTER", "feedlist");
+		k.set_key(OP_NEXT, "j", "articlelist");
+		k.set_key(OP_PREV, "k", "articlelist");
+
+		WHEN("calling dump_config()") {
+			k.dump_config(dumpOutput);
+
+			THEN("there is one line per configured binding") {
+				REQUIRE(dumpOutput.size() == 3);
+
+				REQUIRE(dumpOutput[0] == R"(bind-key "j" next articlelist)");
+				REQUIRE(dumpOutput[1] == R"(bind-key "k" prev articlelist)");
+				REQUIRE(dumpOutput[2] == R"(bind-key "ENTER" open feedlist)");
+			}
+		}
+	}
+
+	GIVEN("a few registered macros and one regular keybinding") {
+		k.unset_all_keys("all");
+
+		k.set_key(OP_OPEN, "ENTER", "feedlist");
+		k.handle_action("macro", {"1", "open"});
+		k.handle_action("macro", {"2", "open", ";", "next"});
+		k.handle_action("macro", {"3", "open", ";", "next", ";", "prev"});
+		k.handle_action("macro", {"4", "open", ";", "next", ";", "prev", ";", "quit"});
+
+		WHEN("calling dump_config()") {
+			k.dump_config(dumpOutput);
+
+			THEN("there is one line per configured macro") {
+				REQUIRE(dumpOutput.size() == 5);
+
+				REQUIRE(dumpOutput[0] == R"(bind-key "ENTER" open feedlist)");
+				REQUIRE(dumpOutput[1] == R"(macro 1 open)");
+				REQUIRE(dumpOutput[2] == R"(macro 2 open ; next)");
+				REQUIRE(dumpOutput[3] == R"(macro 3 open ; next ; prev)");
+				REQUIRE(dumpOutput[4] == R"(macro 4 open ; next ; prev ; quit)");
+			}
+		}
+	}
+
+	GIVEN("a few registered macros with arguments") {
+		k.unset_all_keys("all");
+
+		k.handle_action("macro", {"1", "set", "arg 1"});
+		k.handle_action("macro", {"2", "set", "arg 1", ";", "set", "arg 2", "arg 3"});
+
+		WHEN("calling dump_config()") {
+			k.dump_config(dumpOutput);
+
+			THEN("there is one line per configured macro ; all arguments are included") {
+				REQUIRE(dumpOutput.size() == 2);
+
+				REQUIRE(dumpOutput[0] == R"(macro 1 set "arg 1")");
+				REQUIRE(dumpOutput[1] == R"(macro 2 set "arg 1" ; set "arg 2" "arg 3")");
+			}
+		}
+	}
+}
