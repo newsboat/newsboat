@@ -82,14 +82,14 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 - http://xmlsoft.org/downloads.html[libxml2]
 - https://github.com/json-c/json-c/wiki[json-c (version 0.11 or newer)]
 - https://asciidoctor.org/[Asciidoctor] (1.5.3 or newer)
-// UPDATE README.md IF YOU CHANGE THIS LIST
 
 Developers will also need:
 
-- https://github.com/woboq/tr[`xtr`] (can be installed with `cargo install
-  xtr`)
+- https://github.com/woboq/tr[`xtr` (version 0.1.4 or newer)] (can be installed
+  with `cargo install xtr`)
 - http://www.ssw.uni-linz.ac.at/coco/[Coco/R for C++], needed to re-generate
   filter language parser using `regenerate-parser` target.
+// UPDATE README.md IF YOU CHANGE THIS LIST
 
 ==== Compile and install
 

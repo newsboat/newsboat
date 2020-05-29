@@ -51,16 +51,16 @@ Newsboat can be compiled.
 - [libxml2](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 - [Asciidoctor](https://asciidoctor.org/) (1.5.3 or newer)
-<!--
-    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
--->
 
 Developers will also need:
 
-- [xtr (version 0.1.4 or newer)](https://github.com/woboq/tr) (can be installed with `cargo install
-  xtr`)
+- [xtr (version 0.1.4 or newer)](https://github.com/woboq/tr) (can be installed
+    with `cargo install xtr`)
 - [Coco/R for C++](http://www.ssw.uni-linz.ac.at/coco/), needed to re-generate
     filter language parser using `regenerate-parser` target.
+<!--
+    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+-->
 
 Installation
 ------------
