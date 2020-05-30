@@ -267,9 +267,9 @@ ConfigContainer::ConfigContainer()
 		ConfigData(_("%N %V - Dialogs"), ConfigDataType::STR)},
 	{
 		"feedlist-title-format",
-		ConfigData(_("%N %V - Your feeds (%u unread, %t "
-				"total)%?T? - "
-				"tag `%T'&?"),
+		ConfigData(_("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)"
+				"%?F? matching filter `%F'&?"
+				"%?T? - tag `%T'&?"),
 			ConfigDataType::STR)},
 	{
 		"filebrowser-title-format",

@@ -1148,7 +1148,7 @@ title text may vary unless you customize it.
 [frame="all", grid="all", format="dsv", options="header", cols="20,30,50l"]
 |==========================================================================
 Dialog:Configuration Variable:Default Value
-Feed List:<<feedlist-title-format,+feedlist-title-format+>>:%N %V - Your feeds (%u unread, %t total)%?T? - tag `%T'&?
+Feed List:<<feedlist-title-format,+feedlist-title-format+>>:%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `%F'&?%?T? - tag `%T'&?
 Article List:<<articlelist-title-format,+articlelist-title-format+>>:%N %V - Articles in feed '%T' (%u unread, %t total) - %U
 Search Result:<<searchresult-title-format,+searchresult-title-format+>>:%N %V - Search result (%u unread, %t total)
 File Browser:<<filebrowser-title-format,+filebrowser-title-format+>>:%N %V - %?O?Open File&Save File? - %f
@@ -1176,6 +1176,7 @@ Identifier:Meaning
 |======================================================================
 Identifier:Meaning
 [[feedlist-title-format-T]]<<feedlist-title-format-T,+T+>>:Currently selected tag (empty if none selected)
+[[feedlist-title-format-F]]<<feedlist-title-format-F,+F+>>:Current filter expression (empty if no filter is active)
 |======================================================================
 
 .Article List Title Format Identifiers

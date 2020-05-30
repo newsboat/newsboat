@@ -940,6 +940,7 @@ void FeedListFormAction::update_form_title(unsigned int width)
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('u', std::to_string(unread_feeds));
 	fmt.register_fmt('t', std::to_string(total_feeds));
+	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
 
 	f.set("head", fmt.do_format(title_format, width));
 }
