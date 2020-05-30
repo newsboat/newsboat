@@ -1118,6 +1118,8 @@ void ItemListFormAction::set_head(const std::string& s,
 
 	fmt.register_fmt('U', utils::censor_url(url));
 
+	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+
 	const unsigned int width = utils::to_u(f.get("title:w"));
 	if (!show_searchresult) {
 		title = fmt.do_format(

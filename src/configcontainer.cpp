@@ -258,9 +258,9 @@ ConfigContainer::ConfigContainer()
 	/* title formats: */
 	{
 		"articlelist-title-format",
-		ConfigData(_("%N %V - Articles in feed '%T' (%u "
-				"unread, %t "
-				"total) - %U"),
+		ConfigData(_("%N %V - Articles in feed '%T' (%u unread, %t total)"
+				"%?F? matching filter `%F'&?"
+				" - %U"),
 			ConfigDataType::STR)},
 	{
 		"dialogs-title-format",
@@ -289,8 +289,8 @@ ConfigContainer::ConfigContainer()
 			ConfigDataType::STR)},
 	{
 		"searchresult-title-format",
-		ConfigData(_("%N %V - Search result (%u unread, %t "
-				"total)"),
+		ConfigData(_("%N %V - Search results (%u unread, %t total)"
+				"%?F? matching filter `%F'&?"),
 			ConfigDataType::STR)},
 	{
 		"selectfilter-title-format",
