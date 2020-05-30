@@ -38,7 +38,9 @@ bool Matcher::parse(const std::string& expr)
 
 	bool b = p.parse_string(expr);
 
-	if (!b) {
+	if (b) {
+		exp = expr;
+	} else {
 		errmsg = utils::wstr2str(p.get_error());
 	}
 
