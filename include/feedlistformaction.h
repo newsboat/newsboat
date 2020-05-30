@@ -50,6 +50,8 @@ public:
 private:
 	void register_format_styles();
 
+	void update_form_title(unsigned int width);
+
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
 		bool automatic = false,
