@@ -9,6 +9,8 @@ acknowledge contributions from the following people:
 - New format specifiers (%n, %d, and %F) for articlelist-format which
   correspond respectively to article fields "unread", "deleted", and article
   flags (#869) (Dennis van der Schagt)
+- New format specifer (%F) (for titles of feedlist, articlelist, and search
+  results) which shows the filter expression if a filter is active (#946)
 - Dependency on martinmoene/optional-lite library, which we vendor
 ### Changed
 - Allow binding multiple keys to general operations: up, down, pageup, pagedown,

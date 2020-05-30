@@ -620,17 +620,7 @@ void FeedListFormAction::set_feedlist(
 
 	feeds_list.stfl_replace_lines(listfmt);
 
-	std::string title_format =
-		cfg->get_configvalue("feedlist-title-format");
-
-	FmtStrFormatter fmt;
-	fmt.register_fmt('T', tag);
-	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('u', std::to_string(unread_feeds));
-	fmt.register_fmt('t', std::to_string(i));
-
-	f.set("head", fmt.do_format(title_format, width));
+	update_form_title(width);
 }
 
 void FeedListFormAction::set_tags(const std::vector<std::string>& t)
@@ -937,6 +927,22 @@ void FeedListFormAction::register_format_styles()
 			"pos_name[feedposname]: pos[feeds_pos]:0 %s richtext:1}",
 			attrstr);
 	feeds_list.stfl_replace_list(0, textview);
+}
+
+void FeedListFormAction::update_form_title(unsigned int width)
+{
+	std::string title_format =
+		cfg->get_configvalue("feedlist-title-format");
+
+	FmtStrFormatter fmt;
+	fmt.register_fmt('T', tag);
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+	fmt.register_fmt('u', std::to_string(unread_feeds));
+	fmt.register_fmt('t', std::to_string(total_feeds));
+	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+
+	f.set("head", fmt.do_format(title_format, width));
 }
 
 void FeedListFormAction::op_end_setfilter()

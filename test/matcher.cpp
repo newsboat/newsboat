@@ -656,8 +656,13 @@ TEST_CASE("Invalid expression results in parsing error", "[Matcher]")
 
 TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
 {
-	Matcher m2("AAAA between 1:30000");
-	REQUIRE(m2.get_expression() == "AAAA between 1:30000");
+	Matcher m("AAAA between 1:30000");
+	REQUIRE(m.get_expression() == "AAAA between 1:30000");
+
+	SECTION("after parse(), get_expression() returns the latest parsed expression") {
+		REQUIRE(m.parse("AAAA == 42"));
+		REQUIRE(m.get_expression() == "AAAA == 42");
+	}
 }
 
 TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
