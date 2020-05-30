@@ -2,7 +2,7 @@
 
 #include <cstring>
 #include <curl/curl.h>
-#include <json.h>
+#include <json-c/json.h>
 #include <vector>
 #include <thread>
 

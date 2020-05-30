@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_NEWSBLURAPI_H_
 #define NEWSBOAT_NEWSBLURAPI_H_
 
-#include <json.h>
+#include <json-c/json.h>
 
 #include "remoteapi.h"
 #include "rss/feed.h"

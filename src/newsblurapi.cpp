@@ -1,10 +1,10 @@
 #include "newsblurapi.h"
 
 #include <algorithm>
+#include <json-c/json.h>
 #include <string.h>
 #include <time.h>
 
-#include "json.h"
 #include "remoteapi.h"
 #include "strprintf.h"
 #include "utils.h"
