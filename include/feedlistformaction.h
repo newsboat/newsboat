@@ -77,7 +77,6 @@ private:
 
 	bool zero_feedpos;
 	unsigned int feeds_shown;
-	bool quit;
 	std::vector<FeedPtrPosPair> visible_feeds;
 	std::string tag;
 	std::vector<std::string> tags;

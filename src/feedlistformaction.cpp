@@ -31,7 +31,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	: ListFormAction(vv, formstr, cfg)
 	, zero_feedpos(false)
 	, feeds_shown(0)
-	, quit(false)
 	, apply_filter(false)
 	, search_dummy_feed(new RssFeed(cc))
 	, filterpos(0)
@@ -96,6 +95,7 @@ bool FeedListFormAction::process_operation(Operation op,
 {
 	std::string feedpos = f.get("feedposname");
 	unsigned int pos = utils::to_u(feedpos);
+	bool quit = false;
 REDO:
 	switch (op) {
 	case OP_OPEN: {
