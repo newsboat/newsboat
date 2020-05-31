@@ -17,7 +17,7 @@ public:
 	FeedListFormAction(View*,
 		std::string formstr,
 		Cache* cc,
-		FilterContainer* f,
+		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
 	~FeedListFormAction() override;
@@ -97,7 +97,7 @@ private:
 	unsigned int unread_feeds;
 	unsigned int total_feeds;
 
-	FilterContainer* filters;
+	FilterContainer& filters;
 
 	std::string old_sort_order;
 

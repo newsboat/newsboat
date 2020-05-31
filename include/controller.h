@@ -101,6 +101,11 @@ public:
 		return rxman;
 	}
 
+	FilterContainer& get_filtercontainer()
+	{
+		return filters;
+	}
+
 private:
 	void import_opml(const std::string& opmlFile, const std::string& urlFile);
 	void export_opml();

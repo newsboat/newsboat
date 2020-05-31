@@ -21,7 +21,7 @@ public:
 	ItemListFormAction(View*,
 		std::string formstr,
 		Cache* cc,
-		FilterContainer* f,
+		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
 	~ItemListFormAction() override;
@@ -151,7 +151,7 @@ private:
 
 	ListFormatter listfmt;
 	Cache* rsscache;
-	FilterContainer* filters;
+	FilterContainer& filters;
 
 	void handle_op_saveall();
 

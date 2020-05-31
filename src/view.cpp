@@ -69,7 +69,7 @@ View::View(Controller* c)
 	, is_inside_cmdline(false)
 	, tab_count(0)
 	, rsscache(nullptr)
-	, filters(nullptr)
+	, filters(ctrl->get_filtercontainer())
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -1101,11 +1101,6 @@ void View::feedlist_mark_pos_if_visible(unsigned int pos)
 void View::set_cache(Cache* c)
 {
 	rsscache = c;
-}
-
-void View::set_filters(FilterContainer* f)
-{
-	filters = f;
 }
 
 std::vector<std::pair<unsigned int, std::string>> View::get_formaction_names()

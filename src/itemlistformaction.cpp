@@ -25,7 +25,7 @@ namespace newsboat {
 ItemListFormAction::ItemListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
-	FilterContainer* f,
+	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
 	: ListFormAction(vv, formstr, cfg)
@@ -634,7 +634,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		v->get_ctrl()->edit_urls_file();
 		break;
 	case OP_SELECTFILTER:
-		if (filters->size() > 0) {
+		if (filters.size() > 0) {
 			std::string newfilter;
 			if (automatic) {
 				if (args->size() > 0) {
@@ -642,7 +642,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			} else {
 				newfilter = v->select_filter(
-						filters->get_filters());
+						filters.get_filters());
 				LOG(Level::DEBUG,
 					"ItemListFormAction::run: newfilters "
 					"= %s",
