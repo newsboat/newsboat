@@ -37,7 +37,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, filterpos(0)
 	, set_filterpos(false)
 	, rxman(r)
-	, old_width(0)
 	, unread_feeds(0)
 	, total_feeds(0)
 	, filters(f)
@@ -75,15 +74,6 @@ FeedListFormAction::~FeedListFormAction() {}
 
 void FeedListFormAction::prepare()
 {
-	unsigned int width = utils::to_u(f.get("items:w"));
-
-	if (old_width != width) {
-		do_redraw = true;
-		old_width = width;
-		LOG(Level::DEBUG,
-			"FeedListFormAction::prepare: apparent resize");
-	}
-
 	std::string sort_order = cfg->get_configvalue("feed-sort-order");
 	if (sort_order != old_sort_order) {
 		v->get_ctrl()->get_feedcontainer()->sort_feeds(

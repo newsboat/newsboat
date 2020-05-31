@@ -94,8 +94,6 @@ private:
 
 	RegexManager& rxman;
 
-	unsigned int old_width;
-
 	unsigned int unread_feeds;
 	unsigned int total_feeds;
 
