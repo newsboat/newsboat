@@ -30,7 +30,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	RegexManager& r)
 	: ListFormAction(vv, formstr, cfg)
 	, zero_feedpos(false)
-	, feeds_shown(0)
 	, apply_filter(false)
 	, search_dummy_feed(new RssFeed(cc))
 	, filterpos(0)
@@ -107,7 +106,7 @@ REDO:
 				"FeedListFormAction: opening feed at position "
 				"`%s'",
 				feedpos);
-			if (feeds_shown > 0 && feedpos.length() > 0) {
+			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 				v->push_itemlist(pos);
 			} else {
 				// should not happen
@@ -120,7 +119,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: reloading feed at position `%s'",
 			feedpos);
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v->show_error(
@@ -235,7 +234,7 @@ REDO:
 	}
 	break;
 	case OP_OPENINBROWSER:
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
@@ -279,7 +278,7 @@ REDO:
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER:
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
@@ -300,7 +299,7 @@ REDO:
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
@@ -341,14 +340,14 @@ REDO:
 			"FeedListFormAction: marking feed read at position "
 			"`%s'",
 			feedpos);
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			v->set_status(_("Marking feed read..."));
 			try {
 				v->get_ctrl()->mark_all_read(pos);
 				do_redraw = true;
 				v->set_status("");
 				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
-				if (feeds_shown > (pos + 1) && show_read) {
+				if (visible_feeds.size() > (pos + 1) && show_read) {
 					f.set("feeds_pos",
 						std::to_string(pos + 1));
 				}
@@ -573,8 +572,6 @@ void FeedListFormAction::update_visible_feeds(
 		}
 		i++;
 	}
-
-	feeds_shown = visible_feeds.size();
 }
 
 void FeedListFormAction::set_feedlist(

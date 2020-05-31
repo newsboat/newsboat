@@ -76,7 +76,6 @@ private:
 		unsigned int width);
 
 	bool zero_feedpos;
-	unsigned int feeds_shown;
 	std::vector<FeedPtrPosPair> visible_feeds;
 	std::string tag;
 	std::vector<std::string> tags;
