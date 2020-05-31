@@ -192,8 +192,7 @@ void SelectFormAction::init()
 
 	f.run(-3); // compute all widget dimensions
 
-	std::string viewwidth = f.get("taglist:w");
-	unsigned int width = utils::to_u(viewwidth, 80);
+	const unsigned int width = tags_list.get_width();
 
 	set_keymap_hints();
 

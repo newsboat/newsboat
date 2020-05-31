@@ -91,7 +91,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			std::string formatstring = ctrl->get_formatstr();
 
 			dllist_form.run(-3); // compute all widget dimensions
-			unsigned int width = utils::to_u(dllist_form.get("dls:w"));
+			const unsigned int width = downloads_list.get_width();
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {

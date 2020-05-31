@@ -979,7 +979,7 @@ void ItemListFormAction::prepare()
 		}
 	}
 
-	unsigned int width = utils::to_u(f.get("items:w"));
+	const unsigned int width = items_list.get_width();
 
 	if (old_width != width) {
 		invalidate_everything();

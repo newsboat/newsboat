@@ -582,7 +582,7 @@ void FeedListFormAction::set_feedlist(
 {
 	assert(cfg != nullptr); // must not happen
 
-	unsigned int width = utils::to_u(f.get("feeds:w"));
+	const unsigned int width = feeds_list.get_width();
 
 	unsigned int i = 0;
 	unread_feeds = 0;

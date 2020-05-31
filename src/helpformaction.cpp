@@ -83,8 +83,7 @@ void HelpFormAction::prepare()
 	if (do_redraw) {
 		f.run(-3); // compute all widget dimensions
 
-		std::string listwidth = f.get("helptext:w");
-		unsigned int width = utils::to_u(listwidth);
+		const unsigned int width = textview.get_width();
 
 		FmtStrFormatter fmt;
 		fmt.register_fmt('N', PROGRAM_NAME);
