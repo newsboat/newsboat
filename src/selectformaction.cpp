@@ -151,7 +151,7 @@ void SelectFormAction::prepare()
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
-		const auto width = utils::to_u(f.get("tags:w"));
+		const auto width = tags_list.get_width();
 
 		switch (type) {
 		case SelectionType::TAG:
