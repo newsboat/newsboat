@@ -91,7 +91,6 @@ private:
 	RegexManager& rxman;
 
 	unsigned int unread_feeds;
-	unsigned int total_feeds;
 
 	FilterContainer& filters;
 
