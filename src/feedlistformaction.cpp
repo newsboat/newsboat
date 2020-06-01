@@ -25,21 +25,16 @@ namespace newsboat {
 FeedListFormAction::FeedListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
-	FilterContainer* f,
+	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
 	: ListFormAction(vv, formstr, cfg)
 	, zero_feedpos(false)
-	, feeds_shown(0)
-	, quit(false)
 	, apply_filter(false)
 	, search_dummy_feed(new RssFeed(cc))
 	, filterpos(0)
 	, set_filterpos(false)
 	, rxman(r)
-	, old_width(0)
-	, unread_feeds(0)
-	, total_feeds(0)
 	, filters(f)
 	, feeds_list("feeds", FormAction::f)
 {
@@ -75,15 +70,6 @@ FeedListFormAction::~FeedListFormAction() {}
 
 void FeedListFormAction::prepare()
 {
-	unsigned int width = utils::to_u(f.get("items:w"));
-
-	if (old_width != width) {
-		do_redraw = true;
-		old_width = width;
-		LOG(Level::DEBUG,
-			"FeedListFormAction::prepare: apparent resize");
-	}
-
 	std::string sort_order = cfg->get_configvalue("feed-sort-order");
 	if (sort_order != old_sort_order) {
 		v->get_ctrl()->get_feedcontainer()->sort_feeds(
@@ -106,6 +92,7 @@ bool FeedListFormAction::process_operation(Operation op,
 {
 	std::string feedpos = f.get("feedposname");
 	unsigned int pos = utils::to_u(feedpos);
+	bool quit = false;
 REDO:
 	switch (op) {
 	case OP_OPEN: {
@@ -117,7 +104,7 @@ REDO:
 				"FeedListFormAction: opening feed at position "
 				"`%s'",
 				feedpos);
-			if (feeds_shown > 0 && feedpos.length() > 0) {
+			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 				v->push_itemlist(pos);
 			} else {
 				// should not happen
@@ -130,7 +117,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: reloading feed at position `%s'",
 			feedpos);
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v->show_error(
@@ -245,7 +232,7 @@ REDO:
 	}
 	break;
 	case OP_OPENINBROWSER:
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
@@ -289,7 +276,7 @@ REDO:
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER:
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
@@ -310,7 +297,7 @@ REDO:
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
@@ -351,14 +338,14 @@ REDO:
 			"FeedListFormAction: marking feed read at position "
 			"`%s'",
 			feedpos);
-		if (feeds_shown > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			v->set_status(_("Marking feed read..."));
 			try {
 				v->get_ctrl()->mark_all_read(pos);
 				do_redraw = true;
 				v->set_status("");
 				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
-				if (feeds_shown > (pos + 1) && show_read) {
+				if (visible_feeds.size() > (pos + 1) && show_read) {
 					f.set("feeds_pos",
 						std::to_string(pos + 1));
 				}
@@ -465,13 +452,13 @@ REDO:
 	}
 	break;
 	case OP_SELECTFILTER:
-		if (filters->size() > 0) {
+		if (filters.size() > 0) {
 			std::string newfilter;
 			if (automatic && args->size() > 0) {
 				newfilter = (*args)[0];
 			} else {
 				newfilter = v->select_filter(
-						filters->get_filters());
+						filters.get_filters());
 			}
 			if (newfilter != "") {
 				filterhistory.add_line(newfilter);
@@ -583,8 +570,6 @@ void FeedListFormAction::update_visible_feeds(
 		}
 		i++;
 	}
-
-	feeds_shown = visible_feeds.size();
 }
 
 void FeedListFormAction::set_feedlist(
@@ -592,10 +577,7 @@ void FeedListFormAction::set_feedlist(
 {
 	assert(cfg != nullptr); // must not happen
 
-	unsigned int width = utils::to_u(f.get("feeds:w"));
-
-	unsigned int i = 0;
-	unread_feeds = 0;
+	const unsigned int width = feeds_list.get_width();
 
 	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
 
@@ -604,28 +586,16 @@ void FeedListFormAction::set_feedlist(
 	update_visible_feeds(feeds);
 
 	for (const auto& feed : visible_feeds) {
-		if (feed.first->unread_item_count() > 0) {
-			++unread_feeds;
-		}
-
 		listfmt.add_line(format_line(feedlist_format,
 				feed.first,
 				feed.second,
 				width),
 			std::to_string(feed.second));
-		i++;
 	}
-
-	total_feeds = i;
 
 	feeds_list.stfl_replace_lines(listfmt);
 
 	update_form_title(width);
-}
-
-void FeedListFormAction::set_tags(const std::vector<std::string>& t)
-{
-	tags = t;
 }
 
 KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
@@ -938,11 +908,21 @@ void FeedListFormAction::update_form_title(unsigned int width)
 	fmt.register_fmt('T', tag);
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('u', std::to_string(unread_feeds));
-	fmt.register_fmt('t', std::to_string(total_feeds));
+	fmt.register_fmt('u', std::to_string(count_unread_feeds()));
+	fmt.register_fmt('t', std::to_string(visible_feeds.size()));
 	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
 
 	f.set("head", fmt.do_format(title_format, width));
+}
+
+unsigned int FeedListFormAction::count_unread_feeds()
+{
+	return std::count_if(
+			visible_feeds.begin(),
+			visible_feeds.end(),
+	[](const FeedPtrPosPair& feed) {
+		return feed.first->unread_item_count() > 0;
+	});
 }
 
 void FeedListFormAction::op_end_setfilter()
@@ -1078,8 +1058,8 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 std::string FeedListFormAction::title()
 {
 	return strprintf::fmt(_("Feed List - %u unread, %u total"),
-			unread_feeds,
-			total_feeds);
+			count_unread_feeds(),
+			static_cast<unsigned int>(visible_feeds.size()));
 }
 
 } // namespace newsboat

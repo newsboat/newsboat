@@ -56,7 +56,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
@@ -86,7 +86,7 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
 	SECTION("No items to purge") {
@@ -129,7 +129,7 @@ TEST_CASE(
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
 	std::ifstream browserFileStream(browserfile.get_path());
@@ -166,7 +166,7 @@ TEST_CASE(
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
 
@@ -198,7 +198,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 	itemlist.process_op(OP_OPENINBROWSER);
 	std::ifstream browserFileStream(browserfile.get_path());
@@ -240,7 +240,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
 	SECTION("unread >= max-browser-tabs") {
@@ -324,7 +324,7 @@ TEST_CASE(
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
 	SECTION("unread >= max-browser-tabs") {
@@ -408,7 +408,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	item->set_author(test_author);
 	item->set_description(test_description);
 	item->set_pubDate(test_pubDate);
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
 	SECTION("with external-url-viewer") {
 		feed->add_item(item);
@@ -467,7 +467,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	item->set_link(test_url);
 	item->set_title(test_title);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);
@@ -505,7 +505,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);
@@ -613,7 +613,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	item->set_pubDate(test_pubDate);
 	item->set_description(test_description);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);
@@ -647,7 +647,7 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
@@ -674,7 +674,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
 	v.push_itemlist(feed);
@@ -720,7 +720,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	item2->set_title(second_article_title);
 	feed->add_item(item2);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
 	v.push_itemlist(feed);
@@ -762,7 +762,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	feed->add_item(item);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 	v.push_itemlist(feed);
 
@@ -818,7 +818,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	item->set_pubDate(test_pubDate);
 	item->set_description(test_description);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, &filters, &cfg, rxman);
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
 	feed->add_item(item);
 	itemlist.set_feed(feed);

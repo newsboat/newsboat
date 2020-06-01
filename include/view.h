@@ -111,7 +111,6 @@ public:
 	void feedlist_mark_pos_if_visible(unsigned int pos);
 
 	void set_cache(Cache* c);
-	void set_filters(FilterContainer* f);
 
 	std::vector<std::pair<unsigned int, std::string>> get_formaction_names();
 
@@ -168,7 +167,7 @@ protected:
 	std::string last_fragment;
 	unsigned int tab_count;
 	Cache* rsscache;
-	FilterContainer* filters;
+	FilterContainer& filters;
 	std::vector<std::string> suggestions;
 };
 

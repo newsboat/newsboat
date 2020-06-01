@@ -29,7 +29,7 @@ void DialogsFormAction::init()
 
 	f.run(-3); // compute all widget dimensions
 
-	unsigned int width = utils::to_u(f.get("dialogs:w"));
+	const unsigned int width = dialogs_list.get_width();
 	std::string title_format = cfg->get_configvalue("dialogs-title-format");
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);

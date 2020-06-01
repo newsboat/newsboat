@@ -99,8 +99,7 @@ void ItemViewFormAction::prepare()
 
 		update_head(item);
 
-		const std::string widthstr = f.get("article:w");
-		const unsigned int window_width = utils::to_u(widthstr, 0);
+		const unsigned int window_width = textview.get_width();
 
 		unsigned int text_width =
 			cfg->get_configvalue_as_int("text-width");
@@ -502,8 +501,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 	fmt.register_fmt('u', std::to_string(unread));
 	fmt.register_fmt('t', std::to_string(total));
 
-	std::string listwidth = f.get("article:w");
-	unsigned int width = utils::to_u(listwidth);
+	const unsigned int width = textview.get_width();
 
 	f.set("head",
 		fmt.do_format(

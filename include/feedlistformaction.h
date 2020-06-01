@@ -17,7 +17,7 @@ public:
 	FeedListFormAction(View*,
 		std::string formstr,
 		Cache* cc,
-		FilterContainer* f,
+		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
 	~FeedListFormAction() override;
@@ -25,7 +25,6 @@ public:
 	void init() override;
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>>& feeds);
-	void set_tags(const std::vector<std::string>& t);
 	KeyMapHintEntry* get_keymap_hint() override;
 	std::shared_ptr<RssFeed> get_feed();
 
@@ -52,6 +51,8 @@ private:
 
 	void update_form_title(unsigned int width);
 
+	unsigned int count_unread_feeds();
+
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
 		bool automatic = false,
@@ -76,11 +77,8 @@ private:
 		unsigned int width);
 
 	bool zero_feedpos;
-	unsigned int feeds_shown;
-	bool quit;
 	std::vector<FeedPtrPosPair> visible_feeds;
 	std::string tag;
-	std::vector<std::string> tags;
 
 	Matcher matcher;
 	bool apply_filter;
@@ -94,12 +92,7 @@ private:
 
 	RegexManager& rxman;
 
-	unsigned int old_width;
-
-	unsigned int unread_feeds;
-	unsigned int total_feeds;
-
-	FilterContainer* filters;
+	FilterContainer& filters;
 
 	std::string old_sort_order;
 

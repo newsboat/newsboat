@@ -151,7 +151,7 @@ void SelectFormAction::prepare()
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
-		const auto width = utils::to_u(f.get("tags:w"));
+		const auto width = tags_list.get_width();
 
 		switch (type) {
 		case SelectionType::TAG:
@@ -192,8 +192,7 @@ void SelectFormAction::init()
 
 	f.run(-3); // compute all widget dimensions
 
-	std::string viewwidth = f.get("taglist:w");
-	unsigned int width = utils::to_u(viewwidth, 80);
+	const unsigned int width = tags_list.get_width();
 
 	set_keymap_hints();
 
