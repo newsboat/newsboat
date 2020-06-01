@@ -25,7 +25,6 @@ public:
 	void init() override;
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>>& feeds);
-	void set_tags(const std::vector<std::string>& t);
 	KeyMapHintEntry* get_keymap_hint() override;
 	std::shared_ptr<RssFeed> get_feed();
 
@@ -78,7 +77,6 @@ private:
 	bool zero_feedpos;
 	std::vector<FeedPtrPosPair> visible_feeds;
 	std::string tag;
-	std::vector<std::string> tags;
 
 	Matcher matcher;
 	bool apply_filter;

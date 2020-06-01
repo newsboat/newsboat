@@ -610,11 +610,6 @@ void FeedListFormAction::set_feedlist(
 	update_form_title(width);
 }
 
-void FeedListFormAction::set_tags(const std::vector<std::string>& t)
-{
-	tags = t;
-}
-
 KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
 {
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},

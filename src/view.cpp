@@ -126,7 +126,6 @@ int View::run()
 	// create feedlist
 	auto feedlist = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg, rxman);
-	feedlist->set_tags(tags);
 	apply_colors(feedlist);
 	formaction_stack.push_back(feedlist);
 	current_formaction = formaction_stack_size() - 1;
