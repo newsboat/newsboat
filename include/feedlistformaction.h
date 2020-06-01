@@ -51,6 +51,8 @@ private:
 
 	void update_form_title(unsigned int width);
 
+	unsigned int count_unread_feeds();
+
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
 		bool automatic = false,
@@ -89,8 +91,6 @@ private:
 	bool set_filterpos;
 
 	RegexManager& rxman;
-
-	unsigned int unread_feeds;
 
 	FilterContainer& filters;
 

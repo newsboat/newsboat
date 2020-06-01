@@ -35,7 +35,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, filterpos(0)
 	, set_filterpos(false)
 	, rxman(r)
-	, unread_feeds(0)
 	, filters(f)
 	, feeds_list("feeds", FormAction::f)
 {
@@ -580,8 +579,6 @@ void FeedListFormAction::set_feedlist(
 
 	const unsigned int width = feeds_list.get_width();
 
-	unread_feeds = 0;
-
 	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
 
 	ListFormatter listfmt(&rxman, "feedlist");
@@ -589,10 +586,6 @@ void FeedListFormAction::set_feedlist(
 	update_visible_feeds(feeds);
 
 	for (const auto& feed : visible_feeds) {
-		if (feed.first->unread_item_count() > 0) {
-			++unread_feeds;
-		}
-
 		listfmt.add_line(format_line(feedlist_format,
 				feed.first,
 				feed.second,
@@ -915,11 +908,21 @@ void FeedListFormAction::update_form_title(unsigned int width)
 	fmt.register_fmt('T', tag);
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('u', std::to_string(unread_feeds));
+	fmt.register_fmt('u', std::to_string(count_unread_feeds()));
 	fmt.register_fmt('t', std::to_string(visible_feeds.size()));
 	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
 
 	f.set("head", fmt.do_format(title_format, width));
+}
+
+unsigned int FeedListFormAction::count_unread_feeds()
+{
+	return std::count_if(
+			visible_feeds.begin(),
+			visible_feeds.end(),
+	[](const FeedPtrPosPair& feed) {
+		return feed.first->unread_item_count() > 0;
+	});
 }
 
 void FeedListFormAction::op_end_setfilter()
@@ -1055,7 +1058,7 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 std::string FeedListFormAction::title()
 {
 	return strprintf::fmt(_("Feed List - %u unread, %u total"),
-			unread_feeds,
+			count_unread_feeds(),
 			static_cast<unsigned int>(visible_feeds.size()));
 }
 
