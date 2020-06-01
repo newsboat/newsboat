@@ -90,6 +90,7 @@ MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
 CARGO=cargo
+CC2LISTVIEW=doc/CC2ListView/convert.sh
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
@@ -177,8 +178,13 @@ doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/podboat-cmds-linked.dsv doc/chapter-password.asciidoc \
+<<<<<<< HEAD
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc
+=======
+		doc/chapter-environment-variables.asciidoc
+	$(CC2LISTVIEW) doc/configcommands.dsv > doc/configcommands-linked.asciidoc
+>>>>>>> bdd68857... Creating of configuration commands asciidoc file with list view automated.
 	$(MKDIR) doc/xhtml
 	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/newsboat.asciidoc
 
