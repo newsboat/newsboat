@@ -82,6 +82,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 - http://xmlsoft.org/downloads.html[libxml2]
 - https://github.com/json-c/json-c/wiki[json-c (version 0.11 or newer)]
 - https://asciidoctor.org/[Asciidoctor] (1.5.3 or newer)
+- Some implementation of AWK like [GNU AWK](https://www.gnu.org/software/gawk) or [NAWK](https://github.com/onetrueawk/awk).
 
 Developers will also need:
 
