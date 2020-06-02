@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $# -eq 1 ]
 then
