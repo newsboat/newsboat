@@ -90,7 +90,6 @@ MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
 CARGO=cargo
-CC2LISTVIEW=doc/CC2ListView/convert.sh
 
 STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
@@ -180,7 +179,7 @@ doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/podboat-cmds-linked.dsv doc/chapter-password.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc
-	$(CC2LISTVIEW) doc/configcommands.dsv > doc/configcommands-linked.asciidoc
+	sed 's/||/\t/g' doc/configcommands.dsv | awk -f doc/createConfigurationCommandsListView.awk > doc/configcommands-linked.asciidoc
 	$(MKDIR) doc/xhtml
 	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/newsboat.asciidoc
 
