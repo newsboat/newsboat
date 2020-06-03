@@ -91,21 +91,21 @@ public:
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 
-	bool get_configvalue_as_bool(const std::string& key);
-	int get_configvalue_as_int(const std::string& key);
-	std::string get_configvalue(const std::string& key);
+	bool get_configvalue_as_bool(const std::string& key) const;
+	int get_configvalue_as_int(const std::string& key) const;
+	std::string get_configvalue(const std::string& key) const;
 	void set_configvalue(const std::string& key, const std::string& value);
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
-	std::vector<std::string> get_suggestions(const std::string& fragment);
-	FeedSortStrategy get_feed_sort_strategy();
-	ArticleSortStrategy get_article_sort_strategy();
+	std::vector<std::string> get_suggestions(const std::string& fragment) const;
+	FeedSortStrategy get_feed_sort_strategy() const;
+	ArticleSortStrategy get_article_sort_strategy() const;
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 
 private:
 	std::map<std::string, ConfigData> config_data;
-	std::recursive_mutex config_data_mtx;
+	mutable std::recursive_mutex config_data_mtx;
 };
 
 } // namespace newsboat

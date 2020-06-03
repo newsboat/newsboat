@@ -404,30 +404,47 @@ void ConfigContainer::handle_action(const std::string& action,
 	}
 }
 
-std::string ConfigContainer::get_configvalue(const std::string& key)
+std::string ConfigContainer::get_configvalue(const std::string& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	std::string retval = config_data[key].value;
-	if (config_data[key].type == ConfigDataType::PATH) {
-		retval = utils::resolve_tilde(retval);
+	auto it = config_data.find(key);
+	if (it != config_data.cend()) {
+		const auto& entry = it->second;
+		std::string value = entry.value;
+		if (entry.type == ConfigDataType::PATH) {
+			value = utils::resolve_tilde(value);
+		}
+		return value;
 	}
-	return retval;
+
+	return {};
 }
 
-int ConfigContainer::get_configvalue_as_int(const std::string& key)
+int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	std::istringstream is(config_data[key].value);
-	int i;
-	is >> i;
-	return i;
+	auto it = config_data.find(key);
+	if (it != config_data.cend()) {
+		const auto& value = it->second.value;
+		std::istringstream is(value);
+		int i;
+		is >> i;
+		return i;
+	}
+
+	return 0;
 }
 
-bool ConfigContainer::get_configvalue_as_bool(const std::string& key)
+bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	std::string value = config_data[key].value;
-	return (value == "true" || value == "yes");
+	auto it = config_data.find(key);
+	if (it != config_data.cend()) {
+		const auto& value = it->second.value;
+		return (value == "true" || value == "yes");
+	}
+
+	return false;
 }
 
 void ConfigContainer::set_configvalue(const std::string& key,
@@ -503,7 +520,7 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 }
 
 std::vector<std::string> ConfigContainer::get_suggestions(
-	const std::string& fragment)
+	const std::string& fragment) const
 {
 	std::vector<std::string> result;
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
@@ -516,7 +533,7 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 	return result;
 }
 
-FeedSortStrategy ConfigContainer::get_feed_sort_strategy()
+FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
 {
 	FeedSortStrategy ss;
 
@@ -556,7 +573,7 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy()
 	return ss;
 }
 
-ArticleSortStrategy ConfigContainer::get_article_sort_strategy()
+ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 {
 	ArticleSortStrategy ss;
 	const auto methods =
