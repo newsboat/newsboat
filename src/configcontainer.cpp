@@ -16,6 +16,19 @@
 
 namespace newsboat {
 
+bool is_bool(const std::string& s)
+{
+	const auto bool_values = std::vector<std::string>(
+	{"yes", "no", "true", "false"});
+	return (std::find(bool_values.begin(), bool_values.end(), s) !=
+			bool_values.end());
+}
+
+bool is_int(const std::string& s)
+{
+	return std::all_of(s.begin(), s.end(), ::isdigit);
+}
+
 const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
 ConfigContainer::ConfigContainer()
@@ -389,19 +402,6 @@ void ConfigContainer::handle_action(const std::string& action,
 		// we already handled this at the beginning of the function
 		break;
 	}
-}
-
-bool ConfigContainer::is_bool(const std::string& s)
-{
-	const auto bool_values = std::vector<std::string>(
-	{"yes", "no", "true", "false"});
-	return (std::find(bool_values.begin(), bool_values.end(), s) !=
-			bool_values.end());
-}
-
-bool ConfigContainer::is_int(const std::string& s)
-{
-	return std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
 std::string ConfigContainer::get_configvalue(const std::string& key)
