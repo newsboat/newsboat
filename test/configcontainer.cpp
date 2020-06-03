@@ -458,6 +458,59 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("get_feed_sort_strategy() returns \"none\" method if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	const auto check = [&cfg]() {
+		const auto s = cfg.get_feed_sort_strategy();
+		REQUIRE(s.sm == FeedSortMethod::NONE);
+		REQUIRE(s.sd == SortDirection::DESC);
+	};
+
+	SECTION("empty value") {
+		cfg.set_configvalue("feed-sort-order", "");
+		check();
+	}
+
+	SECTION("unknown method") {
+		SECTION("without a direction") {
+			cfg.set_configvalue("feed-sort-order", "funniness");
+			check();
+		}
+
+		SECTION("with an unknown direction") {
+			cfg.set_configvalue("feed-sort-order", "funniness-increasing");
+			check();
+		}
+
+		SECTION("with a valid direction") {
+			cfg.set_configvalue("feed-sort-order", "funniness-asc");
+			const auto s = cfg.get_feed_sort_strategy();
+			REQUIRE(s.sm == FeedSortMethod::NONE);
+			REQUIRE(s.sd == SortDirection::ASC);
+		}
+	}
+}
+
+TEST_CASE("get_feed_sort_strategy() returns descending direction "
+	"if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	SECTION("no direction specified") {
+		cfg.set_configvalue("feed-sort-order", "title");
+		REQUIRE(cfg.get_feed_sort_strategy().sd == SortDirection::DESC);
+	}
+
+	SECTION("unknown direction") {
+		cfg.set_configvalue("feed-sort-order", "title-increasing");
+		REQUIRE(cfg.get_feed_sort_strategy().sd == SortDirection::DESC);
+	}
+}
+
 TEST_CASE(
 	"get_article_sort_strategy() returns correctly filled "
 	"ArticleSortStrategy struct",

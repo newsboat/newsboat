@@ -519,14 +519,14 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 FeedSortStrategy ConfigContainer::get_feed_sort_strategy()
 {
 	FeedSortStrategy ss;
-	const auto sortmethod_info =
-		utils::tokenize(get_configvalue("feed-sort-order"), "-");
-	const std::string sortmethod = sortmethod_info[0];
 
-	std::string direction = "desc";
-	if (sortmethod_info.size() > 1) {
-		direction = sortmethod_info[1];
+	const auto setting = get_configvalue("feed-sort-order");
+	if (setting.empty()) {
+		return ss;
 	}
+
+	const auto sortmethod_info = utils::tokenize(setting, "-");
+	const std::string sortmethod = sortmethod_info[0];
 
 	if (sortmethod == "none") {
 		ss.sm = FeedSortMethod::NONE;
@@ -540,6 +540,11 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy()
 		ss.sm = FeedSortMethod::UNREAD_ARTICLE_COUNT;
 	} else if (sortmethod == "lastupdated") {
 		ss.sm = FeedSortMethod::LAST_UPDATED;
+	}
+
+	std::string direction = "desc";
+	if (sortmethod_info.size() > 1) {
+		direction = sortmethod_info[1];
 	}
 
 	if (direction == "asc") {

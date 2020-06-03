@@ -24,8 +24,8 @@ enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, RANDOM };
 enum class SortDirection { ASC, DESC };
 
 struct FeedSortStrategy {
-	FeedSortMethod sm;
-	SortDirection sd;
+	FeedSortMethod sm = FeedSortMethod::NONE;
+	SortDirection sd = SortDirection::DESC;
 
 	bool operator==(const FeedSortStrategy& other) const
 	{
