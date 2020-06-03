@@ -122,6 +122,13 @@ TEST_CASE("reset_to_default changes setting to its default value",
 	}
 }
 
+TEST_CASE("get_configvalue() returns empty string if settings doesn't exist",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+	REQUIRE(cfg.get_configvalue("nonexistent-key") == "");
+}
+
 TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 	"[ConfigContainer]")
 {
@@ -147,6 +154,27 @@ TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 		REQUIRE_FALSE(
 			cfg.get_configvalue_as_bool("bookmark-interactive"));
 	}
+}
+
+TEST_CASE("get_configvalue_as_int() returns zero if setting doesn't exist",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	REQUIRE(cfg.get_configvalue_as_int("setting-name") == 0);
+}
+
+TEST_CASE("get_configvalue_as_int() returns zero if value can't be parsed as int",
+	"[ConfigContainer]")
+{
+	const auto key = std::string("unparseable-value");
+	const auto value = std::string("is here");
+
+	ConfigContainer cfg;
+	cfg.set_configvalue(key, value);
+
+	REQUIRE(cfg.get_configvalue(key) == value);
+	REQUIRE(cfg.get_configvalue_as_int(key) == 0);
 }
 
 TEST_CASE("toggle() inverts the value of a boolean setting",
@@ -537,6 +565,23 @@ TEST_CASE(
 		cfg.set_configvalue("article-sort-order", "date-desc");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);
+		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+	}
+
+	SECTION("random") {
+		cfg.set_configvalue("article-sort-order", "random");
+		sort_strategy = cfg.get_article_sort_strategy();
+		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
+		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+
+		cfg.set_configvalue("article-sort-order", "random-asc");
+		sort_strategy = cfg.get_article_sort_strategy();
+		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
+		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+
+		cfg.set_configvalue("article-sort-order", "random-desc");
+		sort_strategy = cfg.get_article_sort_strategy();
+		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 }
