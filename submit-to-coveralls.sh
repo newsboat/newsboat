@@ -10,17 +10,28 @@
 # but we don't paper over it there because we *do* want the report to attach to
 # the commit that was actually built: this way, we (theoretically) can notice
 # if the merge commit affected our coverage somehow.
+echo "             TRAVIS_BRANCH: ${TRAVIS_BRANCH}"
+echo "           TRAVIS_BUILD_ID: ${TRAVIS_BUILD_ID}"
+echo "             TRAVIS_COMMIT: ${TRAVIS_COMMIT}"
+echo "         TRAVIS_EVENT_TYPE: ${TRAVIS_EVENT_TYPE}"
+echo "             TRAVIS_JOB_ID: ${TRAVIS_JOB_ID}"
+echo "TRAVIS_PULL_REQUEST_BRANCH: ${TRAVIS_PULL_REQUEST_BRANCH}"
+echo "  TRAVIS_PULL_REQUEST_SLUG: ${TRAVIS_PULL_REQUEST_SLUG}"
+echo "       TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}"
+
 if [ "${TRAVIS_EVENT_TYPE}" = "pull_request" ]
 then
     branch="${TRAVIS_PULL_REQUEST_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH}"
 else
     branch="${TRAVIS_BRANCH}"
 fi
+echo "=== branch = ${branch}"
 
 if [ "${TRAVIS_PULL_REQUEST}" != "false" ]
 then
     service_pull_request="--service-pull-request ${TRAVIS_PULL_REQUEST}"
 fi
+echo "=== service_pull_request = ${service_pull_request}"
 
 if [ -n "${COVERALLS_REPO_TOKEN}" ]
 then
