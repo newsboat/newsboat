@@ -1349,7 +1349,7 @@ void ItemListFormAction::register_format_styles()
 	const std::string textview = strprintf::fmt(
 			"{list[items] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
-			"pos_name[itemposname]: pos[items_pos]:0 %s richtext:1}",
+			"pos[items_pos]:0 %s richtext:1}",
 			attrstr);
 	items_list.stfl_replace_list(0, textview);
 }
