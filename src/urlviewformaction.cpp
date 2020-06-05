@@ -173,7 +173,7 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 		if (idx < 1 || idx > links.size()) {
 			v->show_error(_("Invalid position!"));
 		} else {
-			f.set("urls_pos", std::to_string(idx - 1));
+			urls_list.set_position(idx - 1);
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);

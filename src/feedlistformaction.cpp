@@ -346,8 +346,7 @@ REDO:
 				v->set_status("");
 				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
 				if (visible_feeds.size() > (pos + 1) && show_read) {
-					f.set("feeds_pos",
-						std::to_string(pos + 1));
+					feeds_list.set_position(pos + 1);
 				}
 			} catch (const DbException& e) {
 				v->show_error(strprintf::fmt(
@@ -616,7 +615,7 @@ KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
 
 bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = utils::to_u(f.get("feeds_pos"));
+	const unsigned int curpos = feeds_list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::jump_to_previous_unread_feed: searching "
 		"for "
@@ -633,7 +632,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_previous_unread_"
 				"feed:"
 				" hit");
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -650,7 +649,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_previous_unread_"
 				"feed:"
 				" hit");
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -660,7 +659,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 
 void FeedListFormAction::goto_feed(const std::string& str)
 {
-	unsigned int curpos = utils::to_u(f.get("feeds_pos"));
+	const unsigned int curpos = feeds_list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::goto_feed: curpos = %u str = `%s'",
 		curpos,
@@ -668,14 +667,14 @@ void FeedListFormAction::goto_feed(const std::string& str)
 	for (unsigned int i = curpos + 1; i < visible_feeds.size(); ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(),
 				str.c_str()) != nullptr) {
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 			return;
 		}
 	}
 	for (unsigned int i = 0; i <= curpos; ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(),
 				str.c_str()) != nullptr) {
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 			return;
 		}
 	}
@@ -695,7 +694,7 @@ bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 			unsigned int pos =
 				utils::get_random_value(visible_feeds.size());
 			if (visible_feeds[pos].first->unread_item_count() > 0) {
-				f.set("feeds_pos", std::to_string(pos));
+				feeds_list.set_position(pos);
 				feedpos = visible_feeds[pos].second;
 				break;
 			}
@@ -706,7 +705,7 @@ bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = utils::to_u(f.get("feeds_pos"));
+	const unsigned int curpos = feeds_list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::jump_to_next_unread_feed: searching for "
 		"unread feed");
@@ -722,7 +721,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_next_unread_feed:"
 				" "
 				"hit");
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -738,7 +737,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_next_unread_feed:"
 				" "
 				"hit");
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -748,7 +747,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = utils::to_u(f.get("feeds_pos"));
+	const unsigned int curpos = feeds_list.get_position();
 
 	if (curpos > 0) {
 		unsigned int i = curpos - 1;
@@ -756,7 +755,7 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 			"FeedListFormAction::jump_to_previous_feed: "
 			"visible_feeds[%u]",
 			i);
-		f.set("feeds_pos", std::to_string(i));
+		feeds_list.set_position(i);
 		feedpos = visible_feeds[i].second;
 		return true;
 	}
@@ -765,7 +764,7 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 {
-	unsigned int curpos = utils::to_u(f.get("feeds_pos"));
+	const unsigned int curpos = feeds_list.get_position();
 
 	if ((curpos + 1) < visible_feeds.size()) {
 		unsigned int i = curpos + 1;
@@ -773,7 +772,7 @@ bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 			"FeedListFormAction::jump_to_next_feed: "
 			"visible_feeds[%u]",
 			i);
-		f.set("feeds_pos", std::to_string(i));
+		feeds_list.set_position(i);
 		feedpos = visible_feeds[i].second;
 		return true;
 	}
@@ -782,7 +781,7 @@ bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 
 std::shared_ptr<RssFeed> FeedListFormAction::get_feed()
 {
-	unsigned int curpos = utils::to_u(f.get("feeds_pos"));
+	const unsigned int curpos = feeds_list.get_position();
 	return visible_feeds[curpos].first;
 }
 
@@ -858,7 +857,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 				"match, "
 				"setting position to %u",
 				vpos);
-			f.set("feeds_pos", std::to_string(vpos));
+			feeds_list.set_position(vpos);
 			return;
 		}
 		vpos++;
@@ -872,7 +871,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 				"match "
 				"in 2nd try, setting position to %u",
 				vpos);
-			f.set("feeds_pos", std::to_string(vpos));
+			feeds_list.set_position(vpos);
 			return;
 		}
 		vpos++;
@@ -881,7 +880,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 
 void FeedListFormAction::save_filterpos()
 {
-	unsigned int i = utils::to_u(f.get("feeds_pos"));
+	const unsigned int i = feeds_list.get_position();
 	if (i < visible_feeds.size()) {
 		filterpos = visible_feeds[i].second;
 		set_filterpos = true;
@@ -984,7 +983,7 @@ void FeedListFormAction::handle_cmdline_num(unsigned int idx)
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
 		} else {
-			f.set("feeds_pos", std::to_string(i));
+			feeds_list.set_position(i);
 		}
 	} else {
 		v->show_error(_("Invalid position!"));
@@ -998,14 +997,14 @@ void FeedListFormAction::set_pos()
 		unsigned int i = 0;
 		for (const auto& feed : visible_feeds) {
 			if (feed.second == filterpos) {
-				f.set("feeds_pos", std::to_string(i));
+				feeds_list.set_position(i);
 				return;
 			}
 			i++;
 		}
-		f.set("feeds_pos", "0");
+		feeds_list.set_position(0);
 	} else if (zero_feedpos) {
-		f.set("feeds_pos", "0");
+		feeds_list.set_position(0);
 		zero_feedpos = false;
 	}
 }
