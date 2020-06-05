@@ -83,28 +83,18 @@ bool DialogsFormAction::process_operation(Operation op,
 {
 	switch (op) {
 	case OP_OPEN: {
-		std::string dialogposname = f.get("dialogs_pos");
-		if (dialogposname.length() > 0) {
-			v->set_current_formaction(utils::to_u(dialogposname));
-		} else {
-			v->show_error(_("No item selected!"));
-		}
+		const unsigned int pos = dialogs_list.get_position();
+		v->set_current_formaction(pos);
 	}
 	break;
 	case OP_CLOSEDIALOG: {
-		std::string dialogposname = f.get("dialogs_pos");
-		if (dialogposname.length() > 0) {
-			unsigned int dialogpos = utils::to_u(dialogposname);
-			if (dialogpos != 0) {
-				v->remove_formaction(dialogpos);
-				update_list = true;
-			} else {
-				v->show_error(
-					_("Error: you can't remove the feed "
-						"list!"));
-			}
+		const unsigned int pos = dialogs_list.get_position();
+		if (pos != 0) {
+			v->remove_formaction(pos);
+			update_list = true;
 		} else {
-			v->show_error(_("No item selected!"));
+			v->show_error(
+				_("Error: you can't remove the feed list!"));
 		}
 	}
 	break;

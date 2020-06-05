@@ -64,15 +64,12 @@ bool ItemListFormAction::process_operation(Operation op,
 	 *   - if an item was selected, then fetch it and do something with it
 	 */
 
-	std::string itemposname = f.get("items_pos");
-	unsigned int itempos = utils::to_u(itemposname);
+	const unsigned int itempos = items_list.get_position();
 
 	switch (op) {
 	case OP_OPEN: {
-		LOG(Level::INFO,
-			"ItemListFormAction: opening item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			// no need to mark item as read, the itemview already do
 			// that
 			old_itempos = itempos;
@@ -106,7 +103,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		if (!visible_items.empty()) {
 			// mark as read
 			v->get_ctrl()->mark_article_read(
 				visible_items[itempos].first->guid(), true);
@@ -152,10 +149,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
-		LOG(Level::INFO,
-			"ItemListFormAction: opening item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				auto link = visible_items[itempos].first->link();
 				if (int err = v->open_in_browser(link)) {
@@ -185,10 +180,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENINBROWSER: {
-		LOG(Level::INFO,
-			"ItemListFormAction: opening item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				auto link = visible_items[itempos].first->link();
 				if (int err = v->open_in_browser(link)) {
@@ -231,10 +224,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_TOGGLEITEMREAD: {
-		LOG(Level::INFO,
-			"ItemListFormAction: toggling item read at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: toggling item read at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			v->set_status(_("Toggling read flag for article..."));
 			try {
 				if (automatic && args->size() > 0) {
@@ -293,7 +284,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SHOWURLS:
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				std::string urlviewer = cfg->get_configvalue(
 						"external-url-viewer");
@@ -335,10 +326,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_BOOKMARK: {
-		LOG(Level::INFO,
-			"ItemListFormAction: bookmarking item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: bookmarking item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
 					qna_responses.clear();
@@ -367,7 +356,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_EDITFLAGS: {
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
 					if (args->size() > 0) {
@@ -393,10 +382,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SAVE: {
-		LOG(Level::INFO,
-			"ItemListFormAction: saving item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			std::string filename;
 			if (automatic) {
 				if (args->size() > 0) {
@@ -562,8 +549,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: marking all above as read");
 		v->set_status(_("Marking all above as read..."));
-		if (itemposname.length() > 0 &&
-			itempos < visible_items.size()) {
+		if (itempos < visible_items.size()) {
 			for (unsigned int i = 0; i < itempos; ++i) {
 				if (visible_items[i].first->unread()) {
 					visible_items[i].first->set_unread(
@@ -801,9 +787,8 @@ void ItemListFormAction::finished_qna(Operation op)
 		break;
 
 	case OP_PIPE_TO: {
-		std::string itemposname = f.get("items_pos");
-		unsigned int itempos = utils::to_u(itemposname);
-		if (itemposname.length() > 0) {
+		if (!visible_items.empty()) {
+			unsigned int itempos = items_list.get_position();
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
 			v->get_ctrl()->write_item(
@@ -846,13 +831,12 @@ void ItemListFormAction::qna_end_setfilter()
 
 void ItemListFormAction::qna_end_editflags()
 {
-	std::string itemposname = f.get("items_pos");
-	if (itemposname.length() == 0) {
+	if (visible_items.empty()) {
 		v->show_error(_("No item selected!")); // should not happen
 		return;
 	}
 
-	unsigned int itempos = utils::to_u(itemposname);
+	const unsigned int itempos = items_list.get_position();
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
@@ -962,9 +946,8 @@ void ItemListFormAction::prepare()
 	}
 
 	if (cfg->get_configvalue_as_bool("mark-as-read-on-hover")) {
-		std::string itemposname = f.get("items_pos");
-		if (itemposname.length() > 0) {
-			unsigned int itempos = utils::to_u(itemposname);
+		if (!visible_items.empty()) {
+			const unsigned int itempos = items_list.get_position();
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(
@@ -1289,17 +1272,13 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		}
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			std::string itemposname = f.get("items_pos");
+			const unsigned int itempos = items_list.get_position();
 			LOG(Level::INFO,
-				"ItemListFormAction::handle_cmdline: saving "
-				"item "
-				"at pos `%s' to `%s'",
-				itemposname,
+				"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
+				itempos,
 				filename);
-			if (itemposname.length() > 0) {
-				unsigned int itempos = utils::to_u(itemposname);
-				save_article(
-					filename, visible_items[itempos].first);
+			if (!visible_items.empty()) {
+				save_article(filename, visible_items[itempos].first);
 			} else {
 				v->show_error(_("Error: no item selected!"));
 			}
