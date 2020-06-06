@@ -638,3 +638,57 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 	}
 }
+
+TEST_CASE("get_article_sort_strategy() returns \"date\" method "
+	"if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	const auto check = [&cfg]() {
+		const auto s = cfg.get_article_sort_strategy();
+		REQUIRE(s.sm == ArtSortMethod::DATE);
+		REQUIRE(s.sd == SortDirection::ASC);
+	};
+
+	SECTION("empty value") {
+		cfg.set_configvalue("article-sort-order", "");
+		check();
+	}
+
+	SECTION("unknown method") {
+		SECTION("without a direction") {
+			cfg.set_configvalue("article-sort-order", "funniness");
+			check();
+		}
+
+		SECTION("with an unknown direction") {
+			cfg.set_configvalue("article-sort-order", "funniness-increasing");
+			check();
+		}
+
+		SECTION("with a valid direction") {
+			cfg.set_configvalue("article-sort-order", "funniness-desc");
+			const auto s = cfg.get_article_sort_strategy();
+			REQUIRE(s.sm == ArtSortMethod::DATE);
+			REQUIRE(s.sd == SortDirection::DESC);
+		}
+	}
+}
+
+TEST_CASE("get_article_sort_strategy() returns ascending direction "
+	"if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	SECTION("no direction specified and method is not \"date\"") {
+		cfg.set_configvalue("article-sort-order", "author");
+		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
+	}
+
+	SECTION("unknown direction") {
+		cfg.set_configvalue("article-sort-order", "author-increasing");
+		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
+	}
+}

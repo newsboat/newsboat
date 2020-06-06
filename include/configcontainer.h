@@ -39,8 +39,8 @@ struct FeedSortStrategy {
 };
 
 struct ArticleSortStrategy {
-	ArtSortMethod sm;
-	SortDirection sd;
+	ArtSortMethod sm = ArtSortMethod::DATE;
+	SortDirection sd = SortDirection::ASC;
 
 	bool operator==(const ArticleSortStrategy& other) const
 	{
