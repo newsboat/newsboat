@@ -1,7 +1,8 @@
 #include "scopemeasure.h"
 
 #include <cinttypes>
-#include <sys/time.h>
+
+using fpseconds = std::chrono::duration<double>;
 
 namespace newsboat {
 
@@ -9,35 +10,32 @@ ScopeMeasure::ScopeMeasure(const std::string& func, Level ll)
 	: funcname(func)
 	, lvl(ll)
 {
-	gettimeofday(&tv1, nullptr);
+	start_time = std::chrono::steady_clock::now();
 }
 
 void ScopeMeasure::stopover(const std::string& son)
 {
-	gettimeofday(&tv2, nullptr);
-	const uint64_t diff =
-		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
-		tv1.tv_usec;
+	using namespace std::chrono;
+
+	const auto now = steady_clock::now();
+	const auto diff = duration_cast<fpseconds>(now - start_time).count();
 	LOG(lvl,
-		"ScopeMeasure: function `%s' (stop over `%s') took %" PRIu64 ".%06"
-		PRIu64 " s so far",
+		"ScopeMeasure: function `%s' (stop over `%s') took %.6f s so far",
 		funcname,
 		son,
-		diff / 1000000,
-		diff % 1000000);
+		diff);
 }
 
 ScopeMeasure::~ScopeMeasure()
 {
-	gettimeofday(&tv2, nullptr);
-	const uint64_t diff =
-		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
-		tv1.tv_usec;
+	using namespace std::chrono;
+
+	const auto now = steady_clock::now();
+	const auto diff = duration_cast<fpseconds>(now - start_time).count();
 	LOG(lvl,
-		"ScopeMeasure: function `%s' took %" PRIu64 ".%06" PRIu64 " s",
+		"ScopeMeasure: function `%s' took %.6f s",
 		funcname,
-		diff / 1000000,
-		diff % 1000000);
+		diff);
 }
 
 } // namespace newsboat
