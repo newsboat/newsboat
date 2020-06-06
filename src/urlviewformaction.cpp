@@ -59,27 +59,22 @@ bool UrlViewFormAction::process_operation(Operation op,
 	case OP_OPENINBROWSER:
 	case OP_OPENBROWSER_AND_MARK:
 	case OP_OPEN: {
-		std::string posstr = f.get("urls_pos");
-		if (posstr.length() > 0) {
-			unsigned int idx = utils::to_u(posstr, 0);
+		if (!links.empty()) {
+			const unsigned int pos = urls_list.get_position();
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+			v->open_in_browser(links[pos].first);
 			v->set_status("");
 		} else {
-			v->show_error(_("No link selected!"));
+			v->show_error(_("No links available!"));
 		}
 	}
 	break;
 	case OP_BOOKMARK: {
-		std::string posstr = f.get("urls_pos");
-		if (posstr.length() > 0) {
-			unsigned int idx = utils::to_u(posstr, 0);
-
-			this->start_bookmark_qna(
-				"", links[idx].first, "", feed->title());
-
+		if (!links.empty()) {
+			const unsigned int pos = urls_list.get_position();
+			this->start_bookmark_qna("", links[pos].first, "", feed->title());
 		} else {
-			v->show_error(_("No link selected!"));
+			v->show_error(_("No links available!"));
 		}
 	}
 	break;
@@ -173,7 +168,7 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 		if (idx < 1 || idx > links.size()) {
 			v->show_error(_("Invalid position!"));
 		} else {
-			f.set("urls_pos", std::to_string(idx - 1));
+			urls_list.set_position(idx - 1);
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);

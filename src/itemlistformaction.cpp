@@ -64,15 +64,12 @@ bool ItemListFormAction::process_operation(Operation op,
 	 *   - if an item was selected, then fetch it and do something with it
 	 */
 
-	std::string itemposname = f.get("items_pos");
-	unsigned int itempos = utils::to_u(itemposname);
+	const unsigned int itempos = items_list.get_position();
 
 	switch (op) {
 	case OP_OPEN: {
-		LOG(Level::INFO,
-			"ItemListFormAction: opening item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			// no need to mark item as read, the itemview already do
 			// that
 			old_itempos = itempos;
@@ -106,7 +103,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		if (!visible_items.empty()) {
 			// mark as read
 			v->get_ctrl()->mark_article_read(
 				visible_items[itempos].first->guid(), true);
@@ -117,9 +114,9 @@ bool ItemListFormAction::process_operation(Operation op,
 			rsscache->mark_item_deleted(
 				visible_items[itempos].first->guid(),
 				visible_items[itempos].first->deleted());
-			if (itempos < visible_items.size() - 1)
-				f.set("items_pos",
-					strprintf::fmt("%u", itempos + 1));
+			if (itempos < visible_items.size() - 1) {
+				items_list.set_position(itempos + 1);
+			}
 			invalidate(itempos);
 		} else {
 			v->show_error(
@@ -152,10 +149,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
-		LOG(Level::INFO,
-			"ItemListFormAction: opening item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				auto link = visible_items[itempos].first->link();
 				if (int err = v->open_in_browser(link)) {
@@ -171,9 +166,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						"next-unread")) {
 					if (itempos <
 						visible_items.size() - 1) {
-						f.set("items_pos",
-							strprintf::fmt("%u",
-								itempos + 1));
+						items_list.set_position(itempos + 1);
 					}
 				} else {
 					process_operation(OP_NEXTUNREAD);
@@ -187,10 +180,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENINBROWSER: {
-		LOG(Level::INFO,
-			"ItemListFormAction: opening item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				auto link = visible_items[itempos].first->link();
 				if (int err = v->open_in_browser(link)) {
@@ -233,10 +224,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_TOGGLEITEMREAD: {
-		LOG(Level::INFO,
-			"ItemListFormAction: toggling item read at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: toggling item read at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			v->set_status(_("Toggling read flag for article..."));
 			try {
 				if (automatic && args->size() > 0) {
@@ -284,10 +273,9 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			if (!cfg->get_configvalue_as_bool(
 					"toggleitemread-jumps-to-next-unread")) {
-				if (itempos < visible_items.size() - 1)
-					f.set("items_pos",
-						strprintf::fmt(
-							"%u", itempos + 1));
+				if (itempos < visible_items.size() - 1) {
+					items_list.set_position(itempos + 1);
+				}
 			} else {
 				process_operation(OP_NEXTUNREAD);
 			}
@@ -296,7 +284,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SHOWURLS:
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				std::string urlviewer = cfg->get_configvalue(
 						"external-url-viewer");
@@ -338,10 +326,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_BOOKMARK: {
-		LOG(Level::INFO,
-			"ItemListFormAction: bookmarking item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: bookmarking item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
 					qna_responses.clear();
@@ -370,7 +356,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_EDITFLAGS: {
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				if (automatic) {
 					if (args->size() > 0) {
@@ -396,10 +382,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SAVE: {
-		LOG(Level::INFO,
-			"ItemListFormAction: saving item at pos `%s'",
-			itemposname);
-		if (itemposname.length() > 0 && visible_items.size() != 0) {
+		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
 			std::string filename;
 			if (automatic) {
 				if (args->size() > 0) {
@@ -544,14 +528,13 @@ bool ItemListFormAction::process_operation(Operation op,
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to last");
-					f.set("items_pos",
-						std::to_string(visible_items.size() - 1));
+					items_list.set_position(visible_items.size() - 1);
 				}
 				if (sortorder == "date-asc") {
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to first");
-					f.set("items_pos", "0");
+					items_list.set_position(0);
 				}
 			}
 			invalidate_everything();
@@ -566,8 +549,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: marking all above as read");
 		v->set_status(_("Marking all above as read..."));
-		if (itemposname.length() > 0 &&
-			itempos < visible_items.size()) {
+		if (itempos < visible_items.size()) {
 			for (unsigned int i = 0; i < itempos; ++i) {
 				if (visible_items[i].first->unread()) {
 					visible_items[i].first->set_unread(
@@ -579,7 +561,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			if (!cfg->get_configvalue_as_bool(
 					"show-read-articles")) {
-				f.set("items_pos", "0");
+				items_list.set_position(0);
 			}
 			invalidate_everything();
 		}
@@ -805,9 +787,8 @@ void ItemListFormAction::finished_qna(Operation op)
 		break;
 
 	case OP_PIPE_TO: {
-		std::string itemposname = f.get("items_pos");
-		unsigned int itempos = utils::to_u(itemposname);
-		if (itemposname.length() > 0) {
+		if (!visible_items.empty()) {
+			unsigned int itempos = items_list.get_position();
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
 			v->get_ctrl()->write_item(
@@ -850,13 +831,12 @@ void ItemListFormAction::qna_end_setfilter()
 
 void ItemListFormAction::qna_end_editflags()
 {
-	std::string itemposname = f.get("items_pos");
-	if (itemposname.length() == 0) {
+	if (visible_items.empty()) {
 		v->show_error(_("No item selected!")); // should not happen
 		return;
 	}
 
-	unsigned int itempos = utils::to_u(itemposname);
+	const unsigned int itempos = items_list.get_position();
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
@@ -966,9 +946,8 @@ void ItemListFormAction::prepare()
 	}
 
 	if (cfg->get_configvalue_as_bool("mark-as-read-on-hover")) {
-		std::string itemposname = f.get("items_pos");
-		if (itemposname.length() > 0) {
-			unsigned int itempos = utils::to_u(itemposname);
+		if (!visible_items.empty()) {
+			const unsigned int itempos = items_list.get_position();
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(
@@ -1083,7 +1062,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 
 void ItemListFormAction::init()
 {
-	f.set("items_pos", "0");
+	items_list.set_position(0);
 	f.set("msg", "");
 	set_keymap_hints();
 	invalidate_everything();
@@ -1135,9 +1114,7 @@ void ItemListFormAction::set_head(const std::string& s,
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 {
-	int itempos;
-	std::istringstream is(f.get("items_pos"));
-	is >> itempos;
+	const int itempos =  items_list.get_position();
 	for (int i = (start_with_last ? itempos : (itempos - 1)); i >= 0; --i) {
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_previous_unread_item: "
@@ -1145,13 +1122,13 @@ bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 			i,
 			visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
-			f.set("items_pos", std::to_string(i));
+			items_list.set_position(i);
 			return true;
 		}
 	}
 	for (int i = visible_items.size() - 1; i >= itempos; --i) {
 		if (visible_items[i].first->unread()) {
-			f.set("items_pos", std::to_string(i));
+			items_list.set_position(i);
 			return true;
 		}
 	}
@@ -1172,7 +1149,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 			unsigned int pos =
 				utils::get_random_value(visible_items.size());
 			if (visible_items[pos].first->unread()) {
-				f.set("items_pos", std::to_string(pos));
+				items_list.set_position(pos);
 				break;
 			}
 		}
@@ -1182,7 +1159,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 
 bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 {
-	unsigned int itempos = utils::to_u(f.get("items_pos"));
+	const unsigned int itempos = items_list.get_position();
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_unread_item: itempos = %u "
 		"visible_items.size = %" PRIu64,
@@ -1195,7 +1172,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 			"ItemListFormAction::jump_to_next_unread_item: i = %u",
 			i);
 		if (visible_items[i].first->unread()) {
-			f.set("items_pos", std::to_string(i));
+			items_list.set_position(i);
 			return true;
 		}
 	}
@@ -1205,7 +1182,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 			"ItemListFormAction::jump_to_next_unread_item: i = %u",
 			i);
 		if (visible_items[i].first->unread()) {
-			f.set("items_pos", std::to_string(i));
+			items_list.set_position(i);
 			return true;
 		}
 	}
@@ -1214,9 +1191,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 
 bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 {
-	int itempos;
-	std::istringstream is(f.get("items_pos"));
-	is >> itempos;
+	const unsigned int itempos = items_list.get_position();
 
 	int i = (start_with_last ? itempos : (itempos - 1));
 	if (i >= 0) {
@@ -1224,7 +1199,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 			"ItemListFormAction::jump_to_previous_item: "
 			"visible_items[%u]",
 			i);
-		f.set("items_pos", std::to_string(i));
+		items_list.set_position(i);
 		return true;
 	}
 	return false;
@@ -1232,7 +1207,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 
 bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 {
-	unsigned int itempos = utils::to_u(f.get("items_pos"));
+	const unsigned int itempos = items_list.get_position();
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_item: itempos = %" PRIu64
 		" visible_items.size = %" PRIu64,
@@ -1243,7 +1218,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_next_item: i = %u",
 			i);
-		f.set("items_pos", std::to_string(i));
+		items_list.set_position(i);
 		return true;
 	}
 	return false;
@@ -1251,7 +1226,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 
 std::string ItemListFormAction::get_guid()
 {
-	unsigned int itempos = utils::to_u(f.get("items_pos"));
+	const unsigned int itempos = items_list.get_position();
 	return visible_items[itempos].first->guid();
 }
 
@@ -1278,7 +1253,7 @@ void ItemListFormAction::handle_cmdline_num(unsigned int idx)
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
 		} else {
-			f.set("items_pos", std::to_string(i));
+			items_list.set_position(i);
 		}
 	} else {
 		v->show_error(_("Invalid position!"));
@@ -1297,17 +1272,13 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		}
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			std::string itemposname = f.get("items_pos");
+			const unsigned int itempos = items_list.get_position();
 			LOG(Level::INFO,
-				"ItemListFormAction::handle_cmdline: saving "
-				"item "
-				"at pos `%s' to `%s'",
-				itemposname,
+				"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
+				itempos,
 				filename);
-			if (itemposname.length() > 0) {
-				unsigned int itempos = utils::to_u(itemposname);
-				save_article(
-					filename, visible_items[itempos].first);
+			if (!visible_items.empty()) {
+				save_article(filename, visible_items[itempos].first);
 			} else {
 				v->show_error(_("Error: no item selected!"));
 			}
@@ -1332,8 +1303,7 @@ void ItemListFormAction::recalculate_form()
 	FormAction::recalculate_form();
 	invalidate_everything();
 
-	std::string itemposname = f.get("items_pos");
-	unsigned int itempos = utils::to_u(itemposname);
+	const unsigned int itempos = items_list.get_position();
 
 	// If the old position was set and it is less than the itempos, use it
 	// for the feed's itempos Correct the problem when you open itemview and
@@ -1341,7 +1311,7 @@ void ItemListFormAction::recalculate_form()
 	// applies when "show-read-articles" is set to false
 	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
 		!cfg->get_configvalue_as_bool("show-read-articles")) {
-		f.set("items_pos", strprintf::fmt("%u", old_itempos));
+		items_list.set_position(old_itempos);
 		old_itempos = -1; // Reset
 	}
 }
@@ -1366,7 +1336,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 
 void ItemListFormAction::save_filterpos()
 {
-	unsigned int i = utils::to_u(f.get("items_pos"));
+	const unsigned int i = items_list.get_position();
 	if (i < visible_items.size()) {
 		filterpos = visible_items[i].second;
 		set_filterpos = true;
@@ -1379,7 +1349,7 @@ void ItemListFormAction::register_format_styles()
 	const std::string textview = strprintf::fmt(
 			"{list[items] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
-			"pos_name[itemposname]: pos[items_pos]:0 %s richtext:1}",
+			"pos[items_pos]:0 %s richtext:1}",
 			attrstr);
 	items_list.stfl_replace_list(0, textview);
 }
@@ -1409,12 +1379,12 @@ void ItemListFormAction::prepare_set_filterpos()
 		unsigned int i = 0;
 		for (const auto& item : visible_items) {
 			if (item.second == filterpos) {
-				f.set("items_pos", std::to_string(i));
+				items_list.set_position(i);
 				return;
 			}
 			i++;
 		}
-		f.set("items_pos", "0");
+		items_list.set_position(0);
 	}
 }
 

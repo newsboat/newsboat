@@ -40,7 +40,7 @@ void SelectFormAction::handle_cmdline(const std::string& cmd)
 			idx <= ((type == SelectionType::TAG)
 				? tags.size()
 				: filters.size())) {
-			f.set("taglist_pos", std::to_string(idx - 1));
+			tags_list.set_position(idx - 1);
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);
