@@ -31,9 +31,6 @@ PodDlThread::PodDlThread(Download* dl_, newsboat::ConfigContainer* c)
 	, bytecount(0)
 	, cfg(c)
 {
-	static const timeval zero = {0, 0};
-	tv1 = zero;
-	tv2 = zero;
 }
 
 PodDlThread::~PodDlThread() {}
@@ -48,7 +45,7 @@ void PodDlThread::run()
 	// are we resuming previous download?
 	bool resumed_download = false;
 
-	gettimeofday(&tv1, nullptr);
+	tv1 = std::chrono::steady_clock::now();
 	++bytecount;
 
 	CURL* easyhandle = curl_easy_init();
@@ -177,7 +174,7 @@ int PodDlThread::progress(double dlnow, double dltotal)
 	if (dl->status() == DlStatus::CANCELLED) {
 		return -1;
 	}
-	gettimeofday(&tv2, nullptr);
+	tv2 = std::chrono::steady_clock::now();
 	const double kbps = compute_kbps();
 	dl->set_kbps(kbps);
 	dl->set_progress(dlnow, dltotal);
@@ -186,10 +183,10 @@ int PodDlThread::progress(double dlnow, double dltotal)
 
 double PodDlThread::compute_kbps()
 {
-	double t1 = tv1.tv_sec + (tv1.tv_usec / 1000000.0);
-	double t2 = tv2.tv_sec + (tv2.tv_usec / 1000000.0);
+	using fpseconds = std::chrono::duration<double>;
 
-	double result = (bytecount / (t2 - t1)) / 1024;
+	const double elapsed = std::chrono::duration_cast<fpseconds>(tv2 - tv1).count();
+	const double result = (bytecount / elapsed) / 1024;
 
 	return result;
 }

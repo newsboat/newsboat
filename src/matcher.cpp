@@ -5,7 +5,6 @@
 #include <ctime>
 #include <regex.h>
 #include <sstream>
-#include <sys/time.h>
 #include <vector>
 
 #include "logger.h"
@@ -31,8 +30,7 @@ std::string Matcher::get_expression()
 
 bool Matcher::parse(const std::string& expr)
 {
-	struct timeval tv1, tv2;
-	gettimeofday(&tv1, nullptr);
+	ScopeMeasure measurer("Matcher::parse");
 
 	errmsg = "";
 
@@ -44,14 +42,9 @@ bool Matcher::parse(const std::string& expr)
 		errmsg = utils::wstr2str(p.get_error());
 	}
 
-	gettimeofday(&tv2, nullptr);
-	const uint64_t diff =
-		(((tv2.tv_sec - tv1.tv_sec) * 1000000) + tv2.tv_usec) -
-		tv1.tv_usec;
 	LOG(Level::DEBUG,
-		"Matcher::parse: parsing `%s' took %" PRIu64 " µs (success = %d)",
+		"Matcher::parse: parsing `%s' succeeded: %d",
 		expr,
-		diff,
 		b ? 1 : 0);
 
 	return b;
