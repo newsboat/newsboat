@@ -41,7 +41,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
-	old_sort_order = cfg->get_configvalue("feed-sort-order");
 	search_dummy_feed->set_search_feed(true);
 	register_format_styles();
 }
@@ -70,11 +69,10 @@ FeedListFormAction::~FeedListFormAction() {}
 
 void FeedListFormAction::prepare()
 {
-	std::string sort_order = cfg->get_configvalue("feed-sort-order");
-	if (sort_order != old_sort_order) {
-		v->get_ctrl()->get_feedcontainer()->sort_feeds(
-			cfg->get_feed_sort_strategy());
-		old_sort_order = sort_order;
+	const auto sort_strategy = cfg->get_feed_sort_strategy();
+	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
+		v->get_ctrl()->get_feedcontainer()->sort_feeds(sort_strategy);
+		old_sort_strategy = sort_strategy;
 		do_redraw = true;
 	}
 
