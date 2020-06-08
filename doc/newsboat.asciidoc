@@ -130,18 +130,15 @@ documentation].
 include::chapter-firststeps.asciidoc[]
 
 
-
 === Configuration Commands
 
 include::configcommands-linked.asciidoc[]
 
-[[available-operations]]
-.<<available-operations,Available Operations>>
-[frame="all", grid="all", format="dsv", separator="||", options="header", cols="20,20,60"]
-|=========================================================================
-Operation||Default key||Description
-include::keycmds-linked.dsv[]
-|=========================================================================
+
+=== Available Operations
+
+include::availableoprations-linked.asciidoc[]
+
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.

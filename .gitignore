@@ -21,6 +21,7 @@ doc/generate
 doc/generate2
 doc/configcommands-linked.dsv
 doc/configcommands-linked.asciidoc
+doc/availableoperations-linked.asciidoc
 doc/podboat-cmds-linked.dsv
 doc/keycmds-linked.dsv
 *.gcov
