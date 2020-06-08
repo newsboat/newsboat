@@ -214,7 +214,9 @@ TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
 	REQUIRE(feedcontainer.feeds_size() == feeds.size());
 }
 
-TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
+TEST_CASE("sort_feeds() sorts by position in urls file if `feed-sort-order` "
+	"is \"none\"",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -228,7 +230,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[3]->set_order(33);
 	feeds[4]->set_order(10);
 
-	SECTION("by none asc") {
+	SECTION("`none-asc` -- first in urls file is last in the list") {
 		cfg.set_configvalue("feed-sort-order", "none-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -239,7 +241,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->get_order() == 1);
 	}
 
-	SECTION("by none desc") {
+	SECTION("`none-desc` -- first in the urls file is first in the list") {
 		cfg.set_configvalue("feed-sort-order", "none-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -249,6 +251,17 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[3]->get_order() == 10);
 		REQUIRE(sorted_feeds[4]->get_order() == 33);
 	}
+}
+
+TEST_CASE("sort_feeds() sorts by feed's first tag if `feed-sort-order` "
+	"is \"firsttag\"",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
 
 	feeds[0]->set_tags({"tag1"});
 	feeds[1]->set_tags({"Taggy"});
@@ -256,7 +269,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[3]->set_tags({"taggy"});
 	feeds[4]->set_tags({"tag2"});
 
-	SECTION("by firsttag asc") {
+	SECTION("`firsttag-asc` -- tags in reverse natural order") {
 		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -267,7 +280,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->get_firsttag() == "Taggy");
 	}
 
-	SECTION("by firsttag desc") {
+	SECTION("`firsttag-desc` -- tags in natural order") {
 		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -277,6 +290,17 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[3]->get_firsttag() == "tag10");
 		REQUIRE(sorted_feeds[4]->get_firsttag() == "taggy");
 	}
+}
+
+TEST_CASE("sort_feeds() sorts by feed's title if `feed-sort-order` "
+	"is \"title\"",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
 
 	feeds[0]->set_title("tag1");
 	feeds[1]->set_title("Taggy");
@@ -284,7 +308,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[3]->set_title("taggy");
 	feeds[4]->set_title("tag2");
 
-	SECTION("by title asc") {
+	SECTION("`title-asc` -- titles in reverse natural order") {
 		cfg.set_configvalue("feed-sort-order", "title-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -295,7 +319,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->title() == "Taggy");
 	}
 
-	SECTION("by title desc") {
+	SECTION("`title-desc` -- titles in natural order") {
 		cfg.set_configvalue("feed-sort-order", "title-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -305,6 +329,17 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[3]->title() == "tag10");
 		REQUIRE(sorted_feeds[4]->title() == "taggy");
 	}
+}
+
+TEST_CASE("sort_feeds() sorts by number of articles in a feed "
+	"if `feed-sort-order` is \"articlecount\"",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
 
 	feeds[0]->add_item(std::make_shared<RssItem>(&rsscache));
 	feeds[0]->add_item(std::make_shared<RssItem>(&rsscache));
@@ -314,7 +349,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	feeds[2]->add_item(std::make_shared<RssItem>(&rsscache));
 	feeds[3]->add_item(std::make_shared<RssItem>(&rsscache));
 
-	SECTION("by articlecount asc") {
+	SECTION("`articlecount-asc` -- feed with most items is at the top") {
 		cfg.set_configvalue("feed-sort-order", "articlecount-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -325,7 +360,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->total_item_count() == 0);
 	}
 
-	SECTION("by articlecount desc") {
+	SECTION("`articlecount-desc` -- feed with most items is at the bottom") {
 		cfg.set_configvalue("feed-sort-order", "articlecount-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -335,17 +370,38 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[3]->total_item_count() == 2);
 		REQUIRE(sorted_feeds[4]->total_item_count() == 3);
 	}
+}
+
+TEST_CASE("sort_feeds() sorts by number of unread articles if `feed-sort-order` "
+	"is \"unreadarticlecount\"",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
+
+	feeds[0]->add_item(std::make_shared<RssItem>(&rsscache));
+	feeds[0]->add_item(std::make_shared<RssItem>(&rsscache));
 
 	auto item = std::make_shared<RssItem>(&rsscache);
 	item->set_unread_nowrite(false);
 	feeds[1]->add_item(item);
-	item = std::make_shared<RssItem>(&rsscache);
-	feeds[2]->add_item(item);
+	feeds[1]->add_item(std::make_shared<RssItem>(&rsscache));
+	feeds[1]->add_item(std::make_shared<RssItem>(&rsscache));
+	feeds[1]->add_item(std::make_shared<RssItem>(&rsscache));
+
+	feeds[2]->add_item(std::make_shared<RssItem>(&rsscache));
+	feeds[2]->add_item(std::make_shared<RssItem>(&rsscache));
+
+	feeds[3]->add_item(std::make_shared<RssItem>(&rsscache));
+
 	item = std::make_shared<RssItem>(&rsscache);
 	item->set_unread_nowrite(false);
 	feeds[4]->add_item(item);
 
-	SECTION("by unreadarticlecount asc") {
+	SECTION("`unreadarticlecount-asc` -- feed with most unread items is at the top") {
 		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
@@ -357,7 +413,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4]->unread_item_count() == 0);
 	}
 
-	SECTION("by unreadarticlecount desc") {
+	SECTION("`unreadarticlecount-desc` -- feed with most unread items is at the bottom") {
 		cfg.set_configvalue(
 			"feed-sort-order", "unreadarticlecount-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
@@ -368,8 +424,19 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[3]->unread_item_count() == 2);
 		REQUIRE(sorted_feeds[4]->unread_item_count() == 3);
 	}
+}
 
-	item = std::make_shared<RssItem>(&rsscache);
+TEST_CASE("sort_feeds() sorts by publish date of newest item "
+	"if `feed-sort-order` is \"lastupdated\"",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
+
+	auto item = std::make_shared<RssItem>(&rsscache);
 	item->set_pubDate(93);
 	feeds[0]->add_item(item);
 
@@ -389,7 +456,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 	item->set_pubDate(1);
 	feeds[4]->add_item(item);
 
-	SECTION("by lastupdated asc") {
+	SECTION("`lastupdated-asc` -- most recently updated feed is at the bottom") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
@@ -400,7 +467,7 @@ TEST_CASE("Correctly sorts feeds", "[FeedContainer]")
 		REQUIRE(sorted_feeds[4] == feeds[0]);
 	}
 
-	SECTION("by lastupdated desc") {
+	SECTION("`lastupdated-desc` -- most recently updated feed is at the top") {
 		cfg.set_configvalue("feed-sort-order", "lastupdated-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
