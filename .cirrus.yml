@@ -15,6 +15,7 @@ freebsd_task:
 
     env:
         HOME: /home/testuser
+        RUSTFLAGS: '-D warnings'
 
     install_script:
         # Make sure we use the same package repository for all images. Snapshots
@@ -46,6 +47,8 @@ freebsd_task:
     cargo_cache:
         folder: $HOME/.cargo/registry
         fingerprint_script: cat Cargo.lock
+    env:
+        RUSTFLAGS: '-D warnings'
     build_script: &build_script
         - make -j3 --keep-going all test
     test_script: &test_script
@@ -93,6 +96,7 @@ macos_task:
         CFLAGS: -I/usr/local/opt/gettext/include
         CXXFLAGS: -I/usr/local/opt/gettext/include
         GETTEXT_DIR: /usr/local/opt/gettext
+        RUSTFLAGS: '-D warnings'
 
     build_script: *build_script
     test_script: *test_script
@@ -270,6 +274,9 @@ linux_task:
     cargo_cache:
         folder: $HOME/.cargo/registry
         fingerprint_script: cat Cargo.lock
+
+    env:
+        RUSTFLAGS: '-D warnings'
 
     build_script: *build_script
     test_script: *test_script
