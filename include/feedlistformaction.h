@@ -1,6 +1,9 @@
 #ifndef NEWSBOAT_FEEDLISTFORMACTION_H_
 #define NEWSBOAT_FEEDLISTFORMACTION_H_
 
+#include "3rd-party/optional.hpp"
+
+#include "configcontainer.h"
 #include "history.h"
 #include "listformaction.h"
 #include "listwidget.h"
@@ -94,7 +97,7 @@ private:
 
 	FilterContainer& filters;
 
-	std::string old_sort_order;
+	nonstd::optional<FeedSortStrategy> old_sort_strategy;
 
 	ListWidget feeds_list;
 };

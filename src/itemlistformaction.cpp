@@ -38,12 +38,11 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, rxman(r)
 	, old_width(0)
 	, old_itempos(-1)
-	, old_sort_strategy({ArtSortMethod::TITLE, SortDirection::DESC})
-, invalidation_mode(InvalidationMode::NONE)
-, listfmt(&rxman, "articlelist")
-, rsscache(cc)
-, filters(f)
-, items_list("items", FormAction::f)
+	, invalidation_mode(InvalidationMode::NONE)
+	, listfmt(&rxman, "articlelist")
+	, rsscache(cc)
+	, filters(f)
+	, items_list("items", FormAction::f)
 {
 	search_dummy_feed->set_search_feed(true);
 	register_format_styles();
@@ -931,7 +930,7 @@ void ItemListFormAction::prepare()
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
 	const auto sort_strategy = cfg->get_article_sort_strategy();
-	if (sort_strategy != old_sort_strategy) {
+	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
 		feed->sort(sort_strategy);
 		old_sort_strategy = sort_strategy;
 		invalidate_everything();

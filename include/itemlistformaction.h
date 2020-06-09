@@ -3,6 +3,8 @@
 
 #include <assert.h>
 
+#include "3rd-party/optional.hpp"
+
 #include "history.h"
 #include "listformaction.h"
 #include "listformatter.h"
@@ -144,7 +146,7 @@ private:
 
 	unsigned int old_width;
 	int old_itempos;
-	ArticleSortStrategy old_sort_strategy;
+	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
 
 	InvalidationMode invalidation_mode;
 	std::vector<unsigned int> invalidated_itempos;

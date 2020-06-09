@@ -26,6 +26,16 @@ enum class SortDirection { ASC, DESC };
 struct FeedSortStrategy {
 	FeedSortMethod sm;
 	SortDirection sd;
+
+	bool operator==(const FeedSortStrategy& other) const
+	{
+		return sm == other.sm && sd == other.sd;
+	}
+
+	bool operator!=(const FeedSortStrategy& other) const
+	{
+		return !(*this == other);
+	}
 };
 
 struct ArticleSortStrategy {
