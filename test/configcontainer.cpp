@@ -122,6 +122,13 @@ TEST_CASE("reset_to_default changes setting to its default value",
 	}
 }
 
+TEST_CASE("get_configvalue() returns empty string if settings doesn't exist",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+	REQUIRE(cfg.get_configvalue("nonexistent-key") == "");
+}
+
 TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 	"[ConfigContainer]")
 {
@@ -147,6 +154,27 @@ TEST_CASE("get_configvalue_as_bool() recognizes several boolean formats",
 		REQUIRE_FALSE(
 			cfg.get_configvalue_as_bool("bookmark-interactive"));
 	}
+}
+
+TEST_CASE("get_configvalue_as_int() returns zero if setting doesn't exist",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	REQUIRE(cfg.get_configvalue_as_int("setting-name") == 0);
+}
+
+TEST_CASE("get_configvalue_as_int() returns zero if value can't be parsed as int",
+	"[ConfigContainer]")
+{
+	const auto key = std::string("unparseable-value");
+	const auto value = std::string("is here");
+
+	ConfigContainer cfg;
+	cfg.set_configvalue(key, value);
+
+	REQUIRE(cfg.get_configvalue(key) == value);
+	REQUIRE(cfg.get_configvalue_as_int(key) == 0);
 }
 
 TEST_CASE("toggle() inverts the value of a boolean setting",
@@ -430,6 +458,59 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("get_feed_sort_strategy() returns \"none\" method if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	const auto check = [&cfg]() {
+		const auto s = cfg.get_feed_sort_strategy();
+		REQUIRE(s.sm == FeedSortMethod::NONE);
+		REQUIRE(s.sd == SortDirection::DESC);
+	};
+
+	SECTION("empty value") {
+		cfg.set_configvalue("feed-sort-order", "");
+		check();
+	}
+
+	SECTION("unknown method") {
+		SECTION("without a direction") {
+			cfg.set_configvalue("feed-sort-order", "funniness");
+			check();
+		}
+
+		SECTION("with an unknown direction") {
+			cfg.set_configvalue("feed-sort-order", "funniness-increasing");
+			check();
+		}
+
+		SECTION("with a valid direction") {
+			cfg.set_configvalue("feed-sort-order", "funniness-asc");
+			const auto s = cfg.get_feed_sort_strategy();
+			REQUIRE(s.sm == FeedSortMethod::NONE);
+			REQUIRE(s.sd == SortDirection::ASC);
+		}
+	}
+}
+
+TEST_CASE("get_feed_sort_strategy() returns descending direction "
+	"if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	SECTION("no direction specified") {
+		cfg.set_configvalue("feed-sort-order", "title");
+		REQUIRE(cfg.get_feed_sort_strategy().sd == SortDirection::DESC);
+	}
+
+	SECTION("unknown direction") {
+		cfg.set_configvalue("feed-sort-order", "title-increasing");
+		REQUIRE(cfg.get_feed_sort_strategy().sd == SortDirection::DESC);
+	}
+}
+
 TEST_CASE(
 	"get_article_sort_strategy() returns correctly filled "
 	"ArticleSortStrategy struct",
@@ -538,5 +619,76 @@ TEST_CASE(
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+	}
+
+	SECTION("random") {
+		cfg.set_configvalue("article-sort-order", "random");
+		sort_strategy = cfg.get_article_sort_strategy();
+		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
+		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+
+		cfg.set_configvalue("article-sort-order", "random-asc");
+		sort_strategy = cfg.get_article_sort_strategy();
+		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
+		REQUIRE(sort_strategy.sd == SortDirection::ASC);
+
+		cfg.set_configvalue("article-sort-order", "random-desc");
+		sort_strategy = cfg.get_article_sort_strategy();
+		REQUIRE(sort_strategy.sm == ArtSortMethod::RANDOM);
+		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+	}
+}
+
+TEST_CASE("get_article_sort_strategy() returns \"date\" method "
+	"if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	const auto check = [&cfg]() {
+		const auto s = cfg.get_article_sort_strategy();
+		REQUIRE(s.sm == ArtSortMethod::DATE);
+		REQUIRE(s.sd == SortDirection::ASC);
+	};
+
+	SECTION("empty value") {
+		cfg.set_configvalue("article-sort-order", "");
+		check();
+	}
+
+	SECTION("unknown method") {
+		SECTION("without a direction") {
+			cfg.set_configvalue("article-sort-order", "funniness");
+			check();
+		}
+
+		SECTION("with an unknown direction") {
+			cfg.set_configvalue("article-sort-order", "funniness-increasing");
+			check();
+		}
+
+		SECTION("with a valid direction") {
+			cfg.set_configvalue("article-sort-order", "funniness-desc");
+			const auto s = cfg.get_article_sort_strategy();
+			REQUIRE(s.sm == ArtSortMethod::DATE);
+			REQUIRE(s.sd == SortDirection::DESC);
+		}
+	}
+}
+
+TEST_CASE("get_article_sort_strategy() returns ascending direction "
+	"if it can't parse it",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	SECTION("no direction specified and method is not \"date\"") {
+		cfg.set_configvalue("article-sort-order", "author");
+		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
+	}
+
+	SECTION("unknown direction") {
+		cfg.set_configvalue("article-sort-order", "author-increasing");
+		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
 	}
 }
