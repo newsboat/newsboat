@@ -289,9 +289,16 @@ int Controller::run(const CliArgsParser& args)
 		api = new OcNewsApi(&cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
 	} else if (type == "inoreader") {
+		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
+			&& !cfg.get_configvalue("inoreader-app-key").empty();
+		if (!all_set) {
+			std::cerr <<
+				_("ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use Inoreader.\n");
+			return EXIT_FAILURE;
+		}
+
 		api = new InoreaderApi(&cfg);
-		urlcfg = new InoreaderUrlReader(
-			&cfg, configpaths.url_file(), api);
+		urlcfg = new InoreaderUrlReader(&cfg, configpaths.url_file(), api);
 	} else {
 		std::cerr << strprintf::fmt(_("ERROR: Unknown urls-source `%s'"),
 				type) << std::endl;

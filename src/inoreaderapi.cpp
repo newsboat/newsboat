@@ -18,9 +18,6 @@
 #define INOREADER_API_MARK_ALL_READ_URL INOREADER_API_PREFIX "mark-all-as-read"
 #define INOREADER_API_EDIT_TAG_URL INOREADER_API_PREFIX "edit-tag"
 
-#define INOREADER_APP_ID "AppId: 1000000394"
-#define INOREADER_APP_KEY "AppKey: CWcdJdSDcuxHYoqGa3RsPh7X2DZ2MmO7"
-
 // for reference, see https://inoreader.com/developers
 
 namespace newsboat {
@@ -71,8 +68,7 @@ std::string InoreaderApi::retrieve_auth()
 	std::string result;
 
 	curl_slist* list = NULL;
-	list = curl_slist_append(list, INOREADER_APP_ID);
-	list = curl_slist_append(list, INOREADER_APP_KEY);
+	list = add_app_headers(list);
 
 	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
@@ -191,8 +187,7 @@ void InoreaderApi::add_custom_headers(curl_slist** custom_headers)
 		auth_header);
 	*custom_headers =
 		curl_slist_append(*custom_headers, auth_header.c_str());
-	*custom_headers = curl_slist_append(*custom_headers, INOREADER_APP_ID);
-	*custom_headers = curl_slist_append(*custom_headers, INOREADER_APP_KEY);
+	*custom_headers = add_app_headers(*custom_headers);
 }
 
 bool InoreaderApi::mark_all_read(const std::string& feedurl)
@@ -346,6 +341,21 @@ std::string InoreaderApi::post_content(const std::string& url,
 		result);
 
 	return result;
+}
+
+curl_slist* InoreaderApi::add_app_headers(curl_slist* headers)
+{
+	const auto app_id = strprintf::fmt(
+			"AppId: %s",
+			cfg->get_configvalue("inoreader-app-id"));
+	headers = curl_slist_append(headers, app_id.c_str());
+
+	const auto app_key = strprintf::fmt(
+			"AppKey: %s",
+			cfg->get_configvalue("inoreader-app-key"));
+	headers = curl_slist_append(headers, app_key.c_str());
+
+	return headers;
 }
 
 } // namespace newsboat

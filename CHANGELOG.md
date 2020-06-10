@@ -26,6 +26,10 @@ acknowledge contributions from the following people:
 - Macro execution halts if one of the operations fail. (#873) (Nikos Tsipinakis)
 - Update vendored version of Catch2 to 2.12.1
 ### Deprecated
+- Newsboat's Inoreader API keys. Users need to register their own Inoreader
+    application now. Please see "Inoreader" section in the HTML documentation
+    for details. (Alexander Batischev)
+
 ### Removed
 ### Fixed
 - The wrong feed being opened (#72) turned out to be caused by a bug in

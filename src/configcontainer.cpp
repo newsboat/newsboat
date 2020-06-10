@@ -116,6 +116,8 @@ ConfigContainer::ConfigContainer()
 		ConfigData("download",
 			std::unordered_set<std::string>(
 		{"download", "display"}))},
+	{"inoreader-app-id", ConfigData("", ConfigDataType::STR)},
+	{"inoreader-app-key", ConfigData("", ConfigDataType::STR)},
 	{"inoreader-login", ConfigData("", ConfigDataType::STR)},
 	{"inoreader-password", ConfigData("", ConfigDataType::STR)},
 	{
