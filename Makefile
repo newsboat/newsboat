@@ -277,8 +277,10 @@ install-examples: doc/example-config
 	$(INSTALL) -m 755 doc/examples/example-bookmark-plugin.sh $(DESTDIR)$(docdir)/examples/example-bookmark-plugin.sh || true
 	$(INSTALL) -m 755 doc/examples/example-exec-script.py $(DESTDIR)$(docdir)/examples/example-exec-script.py || true
 
+install-icon:
+	$(INSTALL) -D -m 644 logo.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
 
-install: install-newsboat install-podboat install-docs install-examples install-mo
+install: install-newsboat install-podboat install-docs install-examples install-mo install-icon
 
 uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBOAT)
@@ -287,6 +289,7 @@ uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBOAT).1
 	$(RM) -rf $(DESTDIR)$(docdir)
 	$(RM) -r $(DESTDIR)$(docdir)
+	$(RM) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
 
 .PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-newsboat \
 	clean-podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
