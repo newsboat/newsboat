@@ -29,6 +29,8 @@ private:
 		const std::string& postdata);
 	bool star_article(const std::string& guid, bool star);
 	bool share_article(const std::string& guid, bool share);
+	curl_slist* add_app_headers(curl_slist* headers);
+
 	std::string auth;
 	std::string auth_header;
 };

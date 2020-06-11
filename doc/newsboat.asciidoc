@@ -639,10 +639,20 @@ filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 https://inoreader.com/[Inoreader] is a successor to Google Reader.
 
-In order to use Inoreader support, you first need to configure the proper URL
-source:
+To use Newsboat with Inoreader, you should first
+https://www.inoreader.com/developers/register-app[register your own
+application]. Inoreader's API doesn't provide efficient access to all the data
+Newsboat needs, so the program has to scrape feeds. That generates a lot of API
+requests, which are rate-limited per application. Thus we ask users to register
+their own apps, to avoid interfering with others. Please also be mindful of
+this when enabling <<auto-reload,`auto-reload`>> or lowering
+<<reload-time,`reload-time`>>.
+
+With app ID and key in hand, tell Newsboat you'd like to use Inoreader:
 
 	urls-source "inoreader"
+	inoreader-app-id "INSERT_ID_HERE"
+	inoreader-app-key "INSERT_KEY_HERE"
 
 In addition, Newsboat needs to know your Inoreader username and password so that
 it can authenticate with Inoreader. Note that this is NOT your login with your
