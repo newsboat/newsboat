@@ -1,14 +1,16 @@
 #ifndef NEWSBOAT_CONFIGCONTAINER_H_
 #define NEWSBOAT_CONFIGCONTAINER_H_
 
-#include <unordered_set>
+#include <map>
 #include <mutex>
+#include <string>
+#include <vector>
 
 #include "configparser.h"
 
 namespace newsboat {
 
-enum class ConfigDataType { INVALID, BOOL, INT, STR, PATH, ENUM };
+class ConfigData;
 
 enum class FeedSortMethod {
 	NONE,
@@ -51,35 +53,6 @@ struct ArticleSortStrategy {
 	{
 		return !(*this == other);
 	}
-};
-
-struct ConfigData {
-	ConfigData(const std::string& v = "",
-		ConfigDataType t = ConfigDataType::INVALID,
-		bool m = false)
-		: value(v)
-		, default_value(v)
-		, type(t)
-		, enum_values()
-		, multi_option(m)
-	{
-	}
-
-	ConfigData(const std::string& v,
-		const std::unordered_set<std::string>& values)
-		: value(v)
-		, default_value(v)
-		, type(ConfigDataType::ENUM)
-		, enum_values(values)
-		, multi_option(false)
-	{
-	}
-
-	std::string value;
-	std::string default_value;
-	ConfigDataType type;
-	const std::unordered_set<std::string> enum_values;
-	bool multi_option;
 };
 
 class ConfigContainer : public ConfigActionHandler {

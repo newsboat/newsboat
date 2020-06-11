@@ -1,6 +1,8 @@
 #include "configcontainer.h"
 
 #include "3rd-party/catch.hpp"
+
+#include "configdata.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
 #include "keymap.h"
