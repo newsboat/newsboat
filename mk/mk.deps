@@ -75,11 +75,12 @@ src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/urlviewformaction.h include/utils.h include/logger.h
 src/configcontainer.o: src/configcontainer.cpp include/configcontainer.h \
  include/configparser.h include/configactionhandler.h config.h \
- include/configparser.h include/configdata.h \
+ include/configparser.h include/configdata.h 3rd-party/expected.hpp \
  include/confighandlerexception.h include/logger.h include/strprintf.h \
  include/strprintf.h include/utils.h 3rd-party/optional.hpp \
  include/configcontainer.h include/logger.h
-src/configdata.o: src/configdata.cpp include/configdata.h
+src/configdata.o: src/configdata.cpp include/configdata.h \
+ 3rd-party/expected.hpp config.h include/strprintf.h
 src/confighandlerexception.o: src/confighandlerexception.cpp \
  include/confighandlerexception.h include/configparser.h \
  include/configactionhandler.h config.h
@@ -651,7 +652,10 @@ test/colormanager.o: test/colormanager.cpp include/colormanager.h \
 test/configcontainer.o: test/configcontainer.cpp \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp include/configdata.h \
- include/confighandlerexception.h include/configparser.h include/keymap.h
+ 3rd-party/expected.hpp include/confighandlerexception.h \
+ include/configparser.h include/keymap.h
+test/configdata.o: test/configdata.cpp 3rd-party/catch.hpp \
+ include/configdata.h 3rd-party/expected.hpp
 test/configparser.o: test/configparser.cpp include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp include/keymap.h \
  include/configparser.h test/test-helpers/envvar.h 3rd-party/optional.hpp \

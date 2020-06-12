@@ -17,19 +17,6 @@
 
 namespace newsboat {
 
-bool is_bool(const std::string& s)
-{
-	const auto bool_values = std::vector<std::string>(
-	{"yes", "no", "true", "false"});
-	return (std::find(bool_values.begin(), bool_values.end(), s) !=
-			bool_values.end());
-}
-
-bool is_int(const std::string& s)
-{
-	return std::all_of(s.begin(), s.end(), ::isdigit);
-}
-
 const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
 ConfigContainer::ConfigContainer()
@@ -368,31 +355,15 @@ void ConfigContainer::handle_action(const std::string& action,
 
 	switch (cfgdata.type()) {
 	case ConfigDataType::BOOL:
-		if (!is_bool(params[0])) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("expected boolean value, found `%s' instead"),
-					params[0]));
-		}
-		cfgdata.set_value(params[0]);
-		break;
-
 	case ConfigDataType::INT:
-		if (!is_int(params[0])) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("expected integer value, found `%s' instead"),
-					params[0]));
+	case ConfigDataType::ENUM: {
+		const auto result = cfgdata.set_value(params[0]);
+		if (!result) {
+			throw ConfigHandlerException(result.error());
 		}
-		cfgdata.set_value(params[0]);
-		break;
+	}
+	break;
 
-	case ConfigDataType::ENUM:
-		if (cfgdata.enum_values().find(params[0]) ==
-			cfgdata.enum_values().end()) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("invalid configuration value `%s'"),
-					params[0]));
-		}
-	// fall-through
 	case ConfigDataType::STR:
 	case ConfigDataType::PATH:
 		if (cfgdata.multi_option()) {
@@ -465,7 +436,7 @@ void ConfigContainer::set_configvalue(const std::string& key,
 void ConfigContainer::reset_to_default(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].set_value(config_data[key].default_value());
+	config_data[key].reset_to_default();
 }
 
 void ConfigContainer::toggle(const std::string& key)

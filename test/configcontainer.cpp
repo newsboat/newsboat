@@ -169,8 +169,8 @@ TEST_CASE("get_configvalue_as_int() returns zero if setting doesn't exist",
 TEST_CASE("get_configvalue_as_int() returns zero if value can't be parsed as int",
 	"[ConfigContainer]")
 {
-	const auto key = std::string("unparseable-value");
-	const auto value = std::string("is here");
+	const auto key = std::string("auto-reload");
+	const auto value = std::string("true");
 
 	ConfigContainer cfg;
 	cfg.set_configvalue(key, value);
