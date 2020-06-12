@@ -10,7 +10,8 @@ enum class ConfigDataType { INVALID, BOOL, INT, STR, PATH, ENUM };
 
 /// Data about a setting: its default and current values, its type, and its
 /// allowed values if it's an enum.
-struct ConfigData {
+class ConfigData {
+public:
 	/// Construct a value of type `t` and equal to `v`. If `multi_option` is
 	/// true and config file contains this option multiple times, the values
 	/// will be combined instead of rewritten.
@@ -22,20 +23,48 @@ struct ConfigData {
 	ConfigData(const std::string& v, const std::unordered_set<std::string>& values);
 
 	/// Current value of the setting.
-	std::string value;
+	std::string value() const
+	{
+		return value_;
+	}
+
+	/// Change the setting's value to `new_value`.
+	void set_value(std::string new_value)
+	{
+		value_ = std::move(new_value);
+	}
 
 	/// Default value of the setting.
-	std::string default_value;
+	std::string default_value() const
+	{
+		return default_value_;
+	}
 
 	/// The type of this setting.
-	ConfigDataType type;
+	ConfigDataType type() const
+	{
+		return type_;
+	}
 
 	/// Possible values of this setting if `type` is `ENUM`.
-	const std::unordered_set<std::string> enum_values;
+	const std::unordered_set<std::string>& enum_values() const
+	{
+		return enum_values_;
+	}
 
 	/// If `true`, multiple values of this setting should be combined instead
 	/// of rewritten.
-	bool multi_option;
+	bool multi_option() const
+	{
+		return multi_option_;
+	}
+
+private:
+	std::string value_;
+	std::string default_value_;
+	ConfigDataType type_;
+	std::unordered_set<std::string> enum_values_;
+	bool multi_option_;
 };
 
 } // namespace newsboat
