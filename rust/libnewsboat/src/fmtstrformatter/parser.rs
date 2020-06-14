@@ -46,7 +46,7 @@ fn center(input: &str) -> IResult<&str, Specifier> {
 
     let width: isize = width.parse::<isize>().unwrap_or(0);
     let chr: char = c.chars().next().unwrap();
-    
+
     Ok((input, Specifier::Center(width, chr)))
 }
 
