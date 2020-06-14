@@ -38,14 +38,13 @@ fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier> {
     tag("%%")(input).map(|result| (result.0, Specifier::Text(&result.1[0..1])))
 }
 
-
 fn center(input: &str) -> IResult<&str, Specifier> {
     let (input, _) = tag("%=")(input)?;
     let (input, c) = take(1usize)(input)?;
     let (input, width) =
         take_while(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))(input)?;
 
-    let width : isize= width.parse::<isize>().unwrap_or(0);
+    let width : isize = width.parse::<isize>().unwrap_or(0);
     let chr : char = c.chars().next().unwrap();
     
     Ok((input, Specifier::Center(width, chr)))

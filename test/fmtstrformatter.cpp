@@ -395,10 +395,10 @@ TEST_CASE("Question mark is treated literally outside of conditionals",
 }
 
 TEST_CASE("Center Text with car",
-		"[FmtStrFormatter]")
+	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
 
 	REQUIRE(fmt.do_format("%= 2AAA", 0) == "AAA");
-    REQUIRE(fmt.do_format("%= 7AAA", 0) == "  AAA  ");
+	REQUIRE(fmt.do_format("%= 7AAA", 0) == "  AAA  ");
 }

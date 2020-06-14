@@ -220,10 +220,8 @@ impl FmtStrFormatter {
 mod tests {
     use super::*;
 
-
     #[test]
-    fn t_do_format_center()
-    {
+    fn t_do_format_center() {
         let fmt = FmtStrFormatter::new();
 
         assert_eq!(fmt.do_format("%= 2AAA", 0), "AAA");
