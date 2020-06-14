@@ -393,3 +393,12 @@ TEST_CASE("Question mark is treated literally outside of conditionals",
 
 	REQUIRE(fmt.do_format("%x? %y") == "What's the ultimate answer? 42");
 }
+
+TEST_CASE("Center Text with car",
+		"[FmtStrFormatter]")
+{
+	FmtStrFormatter fmt;
+
+	REQUIRE(fmt.do_format("%= 2AAA", 0) == "AAA");
+    REQUIRE(fmt.do_format("%= 7AAA", 0) == "  AAA  ");
+}

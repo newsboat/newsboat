@@ -98,6 +98,30 @@ impl FmtStrFormatter {
         result.push_str(&rest);
     }
 
+    fn format_center(&self, w: isize, c: char, rest: &[Specifier], width: u32, result : &mut LimitedString) {
+        use std::convert::TryInto;
+        let rest = self.formatting_helper(rest, 0);
+        let size : isize = utils::strwidth(&rest).try_into().unwrap();
+        let mut w = w;
+        if w == 0 {
+            w = width.try_into().unwrap();
+        }
+        let border_t : isize = w-size;
+        if border_t > 0 {
+            let border_t : usize = border_t.try_into().unwrap();
+            let left : usize = border_t/2;
+            let right : usize = border_t - left;
+            let padding_l = c.to_string().repeat(left);
+            let padding_r = c.to_string().repeat(right);
+            result.push_str(&padding_l);
+            result.push_str(&rest);
+            result.push_str(&padding_r);
+        } else {
+            result.push_str(&rest);
+        }
+    }
+
+
     fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
@@ -158,6 +182,12 @@ impl FmtStrFormatter {
                     break;
                 }
 
+                Specifier::Center(w, c) => {
+                    let rest = &format_ast[i + 1..];
+                    self.format_center(w, c, rest, width, &mut result);
+                    break;
+                }
+
                 Specifier::Format(c, ref padding) => {
                     self.format_format(c, &padding, width, &mut result);
                 }
@@ -189,6 +219,16 @@ impl FmtStrFormatter {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+
+    #[test]
+    fn t_do_format_center()
+    {
+        let mut fmt = FmtStrFormatter::new();
+
+        assert_eq!(fmt.do_format("%= 2AAA", 0), "AAA");
+        assert_eq!(fmt.do_format("%= 7AAA", 0), "  AAA  ");
+    }
 
     #[test]
     fn t_do_format_replaces_variables_with_values_one_variable() {

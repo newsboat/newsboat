@@ -22,6 +22,8 @@ pub enum Padding {
 pub enum Specifier<'a> {
     /// Will expand to pad everything that comes next to the right. Given char is used for padding.
     Spacing(char),
+    /// Will center the text in a given width
+    Center(isize, char),
     /// A format to be replaced with a value (`%a`, `%t` etc.), padded to the given width on the
     /// left (if it's positive) or on the right (if it's negative).
     Format(char, Padding),
@@ -34,6 +36,19 @@ pub enum Specifier<'a> {
 
 fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier> {
     tag("%%")(input).map(|result| (result.0, Specifier::Text(&result.1[0..1])))
+}
+
+
+fn center(input: &str) -> IResult<&str, Specifier> {
+    let (input, _) = tag("%=")(input)?;
+    let (input, c) = take(1usize)(input)?;
+    let (input, width) =
+        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))(input)?;
+
+    let width : isize= width.parse::<isize>().unwrap_or(0);
+    let chr : char = c.chars().next().unwrap();
+    
+    Ok((input, Specifier::Center(width, chr)))
 }
 
 fn spacing(input: &str) -> IResult<&str, Specifier> {
@@ -115,6 +130,7 @@ fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
     let alternatives = (
         escaped_percent_sign,
         spacing,
+        center,
         padded_format,
         text_inside_conditional,
     );
@@ -126,6 +142,7 @@ fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
         conditional,
         escaped_percent_sign,
         spacing,
+        center,
         padded_format,
         text_outside_conditional,
     );
