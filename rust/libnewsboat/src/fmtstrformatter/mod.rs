@@ -224,7 +224,7 @@ mod tests {
     #[test]
     fn t_do_format_center()
     {
-        let mut fmt = FmtStrFormatter::new();
+        let fmt = FmtStrFormatter::new();
 
         assert_eq!(fmt.do_format("%= 2AAA", 0), "AAA");
         assert_eq!(fmt.do_format("%= 7AAA", 0), "  AAA  ");
