@@ -44,8 +44,8 @@ fn center(input: &str) -> IResult<&str, Specifier> {
     let (input, width) =
         take_while(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))(input)?;
 
-    let width : isize = width.parse::<isize>().unwrap_or(0);
-    let chr : char = c.chars().next().unwrap();
+    let width: isize = width.parse::<isize>().unwrap_or(0);
+    let chr: char = c.chars().next().unwrap();
     
     Ok((input, Specifier::Center(width, chr)))
 }

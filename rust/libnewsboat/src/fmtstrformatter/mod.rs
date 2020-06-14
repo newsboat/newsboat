@@ -98,19 +98,26 @@ impl FmtStrFormatter {
         result.push_str(&rest);
     }
 
-    fn format_center(&self, w: isize, c: char, rest: &[Specifier], width: u32, result : &mut LimitedString) {
+    fn format_center(
+        &self,
+        w: isize,
+        c: char,
+        rest: &[Specifier],
+        width: u32,
+        result : &mut LimitedString
+        ) {
         use std::convert::TryInto;
         let rest = self.formatting_helper(rest, 0);
-        let size : isize = utils::strwidth(&rest).try_into().unwrap();
+        let size: isize = utils::strwidth(&rest).try_into().unwrap();
         let mut w = w;
         if w == 0 {
             w = width.try_into().unwrap();
         }
-        let border_t : isize = w-size;
+        let border_t: isize = w - size;
         if border_t > 0 {
-            let border_t : usize = border_t.try_into().unwrap();
-            let left : usize = border_t/2;
-            let right : usize = border_t - left;
+            let border_t: usize = border_t.try_into().unwrap();
+            let left: usize = border_t / 2;
+            let right: usize = border_t - left;
             let padding_l = c.to_string().repeat(left);
             let padding_r = c.to_string().repeat(right);
             result.push_str(&padding_l);
@@ -120,7 +127,6 @@ impl FmtStrFormatter {
             result.push_str(&rest);
         }
     }
-
 
     fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
