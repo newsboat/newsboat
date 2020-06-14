@@ -104,7 +104,7 @@ impl FmtStrFormatter {
         c: char,
         rest: &[Specifier],
         width: u32,
-        result: &mut LimitedString
+        result: &mut LimitedString,
     ) {
         use std::convert::TryInto;
         let rest = self.formatting_helper(rest, 0);
