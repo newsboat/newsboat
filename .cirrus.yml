@@ -1,10 +1,8 @@
 freebsd_task:
     matrix:
-        - name: FreeBSD 11.3
+        - name: FreeBSD 11.4
           freebsd_instance:
-            # There is no freebsd-11-3-release image. Use one of the snapshots
-            # for the upcoming 11.4-RELEASE instead.
-            image: freebsd-11-3-stable-amd64-v20200326
+            image: freebsd-11-4-release-amd64
         - name: FreeBSD 12.1
           freebsd_instance:
             image: freebsd-12-1-release-amd64
