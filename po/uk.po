@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-06-15 18:38+0300\n"
-"PO-Revision-Date: 2020-03-20 18:00+0300\n"
+"PO-Revision-Date: 2020-06-16 17:29+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -121,15 +121,13 @@ msgstr "Файли:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:123
-#, fuzzy
 msgid "configuration"
-msgstr "Завантаження налаштувань..."
+msgstr "налаштування"
 
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:125
-#, fuzzy
 msgid "feed URLs"
-msgstr "URLs"
+msgstr "адреси тем"
 
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:127
@@ -147,25 +145,23 @@ msgstr ""
 
 #: newsboat.cpp:163
 msgid "It bundles:"
-msgstr ""
+msgstr "Програма включає в себе:"
 
 #: newsboat.cpp:164
-#, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"Програма включає в себе бібліотеку «JSON for Modern C++» за ліцензією MIT: "
-"https://github.com/nlohmann/json"
+"- бібліотеку «JSON for Modern C++» за ліцензією MIT: https://github.com/"
+"nlohmann/json"
 
 #: newsboat.cpp:167
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Програма включає в себе бібліотеку «JSON for Modern C++» за ліцензією MIT: "
-"https://github.com/nlohmann/json"
+"- бібліотеку «optional-lite» за ліцензією Boost Software License: https://"
+"github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:240
 #, c-format
@@ -206,22 +202,24 @@ msgstr ""
 "непрочитаних статей)"
 
 #: src/configcontainer.cpp:276
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
-msgstr "%N %V - '%T' Статей у темі (%u непрочитано, всього %t) - %U"
+msgstr ""
+"%N %V - Статті у темі '%T' (%u непрочитано, всього %t)%?F? що відповідають фільтру `"
+"%F'&? - %U"
 
 #: src/configcontainer.cpp:282
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Діалоги"
 
 #: src/configcontainer.cpp:285
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
-msgstr "%N %V - Ваші новини (%u непрочитано, всього %t)%?T? - мітка `%T'&?"
+msgstr ""
+"%N %V - %?F?Новини&Ваші новини? (%u непрочитано, всього %t)%?F? що "
+"відповідають фільтру `%F'&?%?T? - мітка `%T'&?"
 
 #: src/configcontainer.cpp:291
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -240,9 +238,10 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Стаття '%T' (%u непрочитано, всього %t)"
 
 #: src/configcontainer.cpp:307
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
-msgstr "%N %V - Результат пошуку (%u непрочитано, всього %t)"
+msgstr ""
+"%N %V - Результат пошуку (%u непрочитано, всього %t)%?F? що відповідають "
+"фільтру `%F'&?"
 
 #: src/configcontainer.cpp:312
 msgid "%N %V - Select Filter"
@@ -346,11 +345,13 @@ msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"Помилка: для використання Inoreader потрібно задати `inoreader-app-id` та "
+"`inoreader-app-key`.\n"
 
 #: src/controller.cpp:303
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "Помилка: невідоме джерело адрес: `%s'"
 
 #: src/controller.cpp:310
 #, c-format
@@ -779,12 +780,11 @@ msgstr "Конфігурацію збережено у %s"
 
 #: src/formaction.cpp:340
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "використання: exec <операція>"
 
 #: src/formaction.cpp:346
-#, fuzzy
 msgid "Operation not found"
-msgstr "атрибут не знайдено"
+msgstr "Операцію не знайдено"
 
 #: src/formaction.cpp:351
 #, c-format
@@ -1130,7 +1130,7 @@ msgstr "Відкрити тему/статтю"
 
 #: src/keymap.cpp:41
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Перемкнути фокус між віджетами"
 
 #: src/keymap.cpp:44
 msgid "Return to previous dialog/Quit"
@@ -1416,39 +1416,39 @@ msgstr "Відкрити URL 9"
 
 #: src/keymap.cpp:401
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Почати команду з одиниці"
 
 #: src/keymap.cpp:402
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Почати команду з двійки"
 
 #: src/keymap.cpp:403
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Почати команду з трійки"
 
 #: src/keymap.cpp:404
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Почати команду з четвірки"
 
 #: src/keymap.cpp:405
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Почати команду з п'ятірки"
 
 #: src/keymap.cpp:406
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Почати команду з шестірки"
 
 #: src/keymap.cpp:407
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Почати команду з семірки"
 
 #: src/keymap.cpp:408
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Почати команду з вісьмірки"
 
 #: src/keymap.cpp:409
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Почати команду з дев'ятки"
 
 #: src/keymap.cpp:411
 msgid "Move to the previous entry"
@@ -1485,9 +1485,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' недійсна ключова команда"
 
 #: src/keymap.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid operation"
-msgstr "`%s' недійсний контекст"
+msgstr "`%s' недійсна операція"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1680,9 +1680,8 @@ msgid "EOF found while reading XML tag"
 msgstr "При читанні мітки з XML був виявлений кінець файлу"
 
 #: src/urlviewformaction.cpp:68 src/urlviewformaction.cpp:77
-#, fuzzy
 msgid "No links available!"
-msgstr "Не вибрано посилання!"
+msgstr "Немає посилань!"
 
 #: src/urlviewformaction.cpp:158
 msgid "Save Bookmark"
@@ -1771,14 +1770,12 @@ msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Міграція відмінена: mkdir для `%s' повернув помилку: %s"
 
 #: rust/regex-rs/src/lib.rs:158 rust/regex-rs/src/lib.rs:163
-#, fuzzy
 msgid "regcomp returned code %i"
-msgstr "Браузер повернув код помилки %i"
+msgstr "regcomp повернула код помилки %i"
 
 #: rust/regex-rs/src/lib.rs:243 rust/regex-rs/src/lib.rs:247
-#, fuzzy
 msgid "regexec returned code %i"
-msgstr "Браузер повернув код помилки %i"
+msgstr "regexec повернула код помилки %i"
 
 #~ msgid "config"
 #~ msgstr "налаштування"
