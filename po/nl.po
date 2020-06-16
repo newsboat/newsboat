@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-06-16 19:51+0300\n"
-"PO-Revision-Date: 2020-02-08 00:10+0100\n"
+"PO-Revision-Date: 2020-06-17 09:45+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.3\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "%s %s\n"
 "gebruik: %s [-i <bestand>|-e] [-u <urlbestand>] [-c <cachebestand>] [-x "
-"<opdracht> …] [-h]\n"
+"<opdracht> ...] [-h]\n"
 
 #: newsboat.cpp:46
 msgid "export OPML feed to stdout"
@@ -73,7 +73,7 @@ msgstr "ruim ongebruikt cache-geheugen op"
 
 #: newsboat.cpp:71
 msgid "<command>..."
-msgstr "<opdracht>…"
+msgstr "<opdracht>..."
 
 #: newsboat.cpp:72
 msgid "execute list of commands"
@@ -121,15 +121,13 @@ msgstr "Bestanden:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:123
-#, fuzzy
 msgid "configuration"
-msgstr "Laden van de configuratie…"
+msgstr "configuratie"
 
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:125
-#, fuzzy
 msgid "feed URLs"
-msgstr "URLs"
+msgstr "feed URLs"
 
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:127
@@ -147,34 +145,31 @@ msgstr ""
 
 #: newsboat.cpp:163
 msgid "It bundles:"
-msgstr ""
+msgstr "Het combineerd:"
 
 #: newsboat.cpp:164
-#, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"Het maakt gebruik van \"JSON for Modern C++\" wat ook gelicenseerd is onder "
-"de MIT-licentie: https://github.com/nlohmann/json"
+"- JSON for Modern C++, gelicenseerd onder de MIT-licentie: https://github."
+"com/nlohmann/json"
 
 #: newsboat.cpp:167
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Het maakt gebruik van \"JSON for Modern C++\" wat ook gelicenseerd is onder "
-"de MIT-licentie: https://github.com/nlohmann/json"
+"- optional-lite, gelicenseerd onder de  Boost Software License: https://"
+"github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:170
-#, fuzzy
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"Het maakt gebruik van \"JSON for Modern C++\" wat ook gelicenseerd is onder "
-"de MIT-licentie: https://github.com/nlohmann/json"
+"- expected-lite, gelicenceerd onder de Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:243
 #, c-format
@@ -215,22 +210,24 @@ msgstr ""
 "in totaal)"
 
 #: src/configcontainer.cpp:264
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
-msgstr "%N %V - Artikelen in feed ‘%T’ (%u ongelezen, %t totaal) - %U"
+msgstr ""
+"%N %V - Artikelen in feed ‘%T’ (%u ongelezen, %t totaal)%?F? gefilterd met `"
+"%F'&? - %U"
 
 #: src/configcontainer.cpp:270
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialogen"
 
 #: src/configcontainer.cpp:273
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
-msgstr "%N %V - Uw feeds (%u ongelezen, %t totaal)%?T? - tag ‘%T’&?"
+msgstr ""
+"%N %V - %?F?Feeds&Uw feeds? (%u ongelezen, %t totaal)%?F? gefilterd met `"
+"%F'&?%?T? - tag `%T'&?"
 
 #: src/configcontainer.cpp:279
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -249,9 +246,9 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel ‘%T’ (%u ongelezen, %t totaal)"
 
 #: src/configcontainer.cpp:295
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
-msgstr "%N %V - Zoekresultaten (%u ongelezen, %t totaal)"
+msgstr ""
+"%N %V - Zoekresultaten (%u ongelezen, %t totaal)%?F? gefilterd met `%F'&?"
 
 #: src/configcontainer.cpp:300
 msgid "%N %V - Select Filter"
@@ -313,7 +310,7 @@ msgstr "onbekende opdracht ‘%s’"
 #: src/controller.cpp:148 src/pbcontroller.cpp:248
 #, c-format
 msgid "Starting %s %s..."
-msgstr "Starten van %s %s…"
+msgstr "Starten van %s %s..."
 
 #: src/controller.cpp:158 src/controller.cpp:214 src/pbcontroller.cpp:255
 #, c-format
@@ -322,7 +319,7 @@ msgstr "Fout: er draait al een instantie van %s (PID: %u)"
 
 #: src/controller.cpp:168 src/pbcontroller.cpp:263
 msgid "Loading configuration..."
-msgstr "Laden van de configuratie…"
+msgstr "Laden van de configuratie..."
 
 #: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:321
 #: src/controller.cpp:374 src/controller.cpp:378 src/controller.cpp:414
@@ -333,7 +330,7 @@ msgstr "klaar."
 
 #: src/controller.cpp:224 src/controller.cpp:369
 msgid "Opening cache..."
-msgstr "Openen van de cache…"
+msgstr "Openen van de cache..."
 
 #: src/controller.cpp:231 src/controller.cpp:239
 #, c-format
@@ -356,16 +353,18 @@ msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"Fout: Om Inoreader te gebruiken moet er een waarde gegeven worden voor "
+"`inoreader-app-id` en `inoreader-app-key`.\n"
 
 #: src/controller.cpp:303
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "Fout: Onbekende waarde voor urls-source: `%s'"
 
 #: src/controller.cpp:310
 #, c-format
 msgid "Loading URLs from %s..."
-msgstr "URLs laden uit %s…"
+msgstr "URLs laden uit %s..."
 
 #: src/controller.cpp:329
 #, c-format
@@ -418,11 +417,11 @@ msgstr ""
 
 #: src/controller.cpp:366
 msgid "Loading articles from cache..."
-msgstr "Laden van artikelen uit de cache…"
+msgstr "Laden van artikelen uit de cache..."
 
 #: src/controller.cpp:375
 msgid "Cleaning up cache thoroughly..."
-msgstr "Grondig opruimen van de cache…"
+msgstr "Grondig opruimen van de cache..."
 
 #: src/controller.cpp:395
 msgid "Error while loading feeds from database: "
@@ -435,19 +434,19 @@ msgstr "Fout tijdens het laden van ‘%s’: %s"
 
 #: src/controller.cpp:421
 msgid "Prepopulating query feeds..."
-msgstr "Feedzoekopdrachten voorinvullen…"
+msgstr "Feedzoekopdrachten voorinvullen..."
 
 #: src/controller.cpp:443
 msgid "Importing list of read articles..."
-msgstr "Importeren van lijst van gelezen artikelen…"
+msgstr "Importeren van lijst van gelezen artikelen..."
 
 #: src/controller.cpp:454
 msgid "Exporting list of read articles..."
-msgstr "Exporteren van lijst van gelezen artikelen…"
+msgstr "Exporteren van lijst van gelezen artikelen..."
 
 #: src/controller.cpp:493
 msgid "Cleaning up cache..."
-msgstr "Opruimen van de cache…"
+msgstr "Opruimen van de cache..."
 
 #: src/controller.cpp:505
 msgid "failed: "
@@ -624,7 +623,7 @@ msgstr "Feed-zoekopdrachten kunnen niet in een browser geopend worden!"
 
 #: src/feedlistformaction.cpp:340 src/itemlistformaction.cpp:496
 msgid "Marking feed read..."
-msgstr "Bezig met feed als gelezen te markeren…"
+msgstr "Bezig met feed als gelezen te markeren..."
 
 #: src/feedlistformaction.cpp:351 src/itemlistformaction.cpp:543
 #, c-format
@@ -646,7 +645,7 @@ msgstr "Dit is reeds de eerste feed."
 
 #: src/feedlistformaction.cpp:417
 msgid "Marking all feeds read..."
-msgstr "Bezig met alle feeds als gelezen te markeren…"
+msgstr "Bezig met alle feeds als gelezen te markeren..."
 
 #: src/feedlistformaction.cpp:465 src/itemlistformaction.cpp:637
 #, c-format
@@ -727,7 +726,7 @@ msgstr "Fout: filteropdracht ontleden is mislukt!"
 
 #: src/feedlistformaction.cpp:949 src/itemlistformaction.cpp:856
 msgid "Searching..."
-msgstr "Bezig met zoeken…"
+msgstr "Bezig met zoeken..."
 
 #: src/feedlistformaction.cpp:959 src/itemlistformaction.cpp:869
 #, c-format
@@ -789,12 +788,11 @@ msgstr "Configuratie opgeslagen in %s"
 
 #: src/formaction.cpp:340
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "gebruik: exec <opdracht>"
 
 #: src/formaction.cpp:346
-#, fuzzy
 msgid "Operation not found"
-msgstr "attribuut niet gevonden"
+msgstr "Opdracht niet gevonden"
 
 #: src/formaction.cpp:351
 #, c-format
@@ -803,7 +801,7 @@ msgstr "Geen opdracht: %s"
 
 #: src/formaction.cpp:401
 msgid "Saving bookmark..."
-msgstr "Bezig met opslaan van bladwijzer…"
+msgstr "Bezig met opslaan van bladwijzer..."
 
 #: src/formaction.cpp:407 src/formaction.cpp:481
 msgid "Saved bookmark."
@@ -831,7 +829,7 @@ msgstr "Feed titel: "
 
 #: src/formaction.cpp:475
 msgid "Saving bookmark on autopilot..."
-msgstr "Automatisch opslaan van bladwijzer…"
+msgstr "Automatisch opslaan van bladwijzer..."
 
 #: src/formaction.cpp:587
 msgid ""
@@ -907,7 +905,7 @@ msgstr "Geen item geselecteerd!"
 
 #: src/itemlistformaction.cpp:228 src/itemviewformaction.cpp:389
 msgid "Toggling read flag for article..."
-msgstr "Gelezen-vlag van artikel omschakelen…"
+msgstr "Gelezen-vlag van artikel omschakelen..."
 
 #: src/itemlistformaction.cpp:270
 #, c-format
@@ -954,7 +952,7 @@ msgstr "Geen ongelezen feeds."
 
 #: src/itemlistformaction.cpp:550
 msgid "Marking all above as read..."
-msgstr "Bezig met alle voorgaande feeds als gelezen te markeren…"
+msgstr "Bezig met alle voorgaande feeds als gelezen te markeren..."
 
 #: src/itemlistformaction.cpp:591 src/itemviewformaction.cpp:294
 msgid "Pipe article to command: "
@@ -1106,7 +1104,7 @@ msgstr "Fout: artikel opslaan in bestand ‘%s’ is mislukt"
 #: src/itemviewformaction.cpp:574 src/urlviewformaction.cpp:64
 #: src/urlviewformaction.cpp:94
 msgid "Starting browser..."
-msgstr "Bezig met starten van browser…"
+msgstr "Bezig met starten van browser..."
 
 #: src/itemviewformaction.cpp:395
 #, c-format
@@ -1140,7 +1138,7 @@ msgstr "Open feed/artikel"
 
 #: src/keymap.cpp:41
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Wissel tussen widgets"
 
 #: src/keymap.cpp:44
 msgid "Return to previous dialog/Quit"
@@ -1424,39 +1422,39 @@ msgstr "Open URL 9"
 
 #: src/keymap.cpp:401
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Open opdrachtregel met 1"
 
 #: src/keymap.cpp:402
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Open opdrachtregel met 2"
 
 #: src/keymap.cpp:403
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Open opdrachtregel met 3"
 
 #: src/keymap.cpp:404
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Open opdrachtregel met 4"
 
 #: src/keymap.cpp:405
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Open opdrachtregel met 5"
 
 #: src/keymap.cpp:406
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Open opdrachtregel met 6"
 
 #: src/keymap.cpp:407
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Open opdrachtregel met 7"
 
 #: src/keymap.cpp:408
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Open opdrachtregel met 8"
 
 #: src/keymap.cpp:409
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Open opdrachtregel met 9"
 
 #: src/keymap.cpp:411
 msgid "Move to the previous entry"
@@ -1493,9 +1491,9 @@ msgid "`%s' is not a valid key command"
 msgstr "‘%s’ is een ongeldige toetsopdracht"
 
 #: src/keymap.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid operation"
-msgstr "‘%s’ is een ongeldige context"
+msgstr "‘%s’ is een ongeldige opdracht"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1537,7 +1535,7 @@ msgstr "%s: %d: logniveau is ongeldig"
 
 #: src/pbcontroller.cpp:313
 msgid "Cleaning up queue..."
-msgstr "Wachtrij opruimen…"
+msgstr "Wachtrij opruimen..."
 
 #: src/pbcontroller.cpp:327
 #, c-format
@@ -1643,7 +1641,7 @@ msgstr "‘%s’ is ongeldige reguliere expressie: %s"
 #: src/reloader.cpp:75
 #, c-format
 msgid "%sLoading %s..."
-msgstr "%sLaden van %s…"
+msgstr "%sLaden van %s..."
 
 #: src/reloader.cpp:105 src/reloader.cpp:110 src/reloader.cpp:115
 #, c-format
@@ -1689,9 +1687,8 @@ msgid "EOF found while reading XML tag"
 msgstr "EOF gevonden tijdens het lezen van XML-tag"
 
 #: src/urlviewformaction.cpp:68 src/urlviewformaction.cpp:77
-#, fuzzy
 msgid "No links available!"
-msgstr "Geen koppeling geselecteerd!"
+msgstr "Geen koppelingen beschikbaar!"
 
 #: src/urlviewformaction.cpp:158
 msgid "Save Bookmark"
@@ -1711,7 +1708,7 @@ msgstr "Geen tags gedefinieerd."
 
 #: src/view.cpp:926
 msgid "Updating query feed..."
-msgstr "Feed-zoekopdracht bijwerken…"
+msgstr "Feed-zoekopdracht bijwerken..."
 
 #: rss/atomparser.cpp:17 rss/parser.cpp:382 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:19 rss/rss20parser.cpp:21
@@ -1783,14 +1780,12 @@ msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Migratie is afgebroken omdat mkdir mislukte voor map `%s': %s"
 
 #: rust/regex-rs/src/lib.rs:158 rust/regex-rs/src/lib.rs:163
-#, fuzzy
 msgid "regcomp returned code %i"
-msgstr "Browser gaf error code %i terug"
+msgstr "regcomp gaf error code %i terug"
 
 #: rust/regex-rs/src/lib.rs:243 rust/regex-rs/src/lib.rs:247
-#, fuzzy
 msgid "regexec returned code %i"
-msgstr "Browser gaf error code %i terug"
+msgstr "regexec gaf error code %i terug"
 
 #~ msgid "config"
 #~ msgstr "configuratie"
