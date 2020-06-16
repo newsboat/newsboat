@@ -9,25 +9,13 @@
 
 #include "config.h"
 #include "configparser.h"
+#include "configdata.h"
 #include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {
-
-bool is_bool(const std::string& s)
-{
-	const auto bool_values = std::vector<std::string>(
-	{"yes", "no", "true", "false"});
-	return (std::find(bool_values.begin(), bool_values.end(), s) !=
-			bool_values.end());
-}
-
-bool is_int(const std::string& s)
-{
-	return std::all_of(s.begin(), s.end(), ::isdigit);
-}
 
 const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
@@ -349,54 +337,39 @@ void ConfigContainer::handle_action(const std::string& action,
 
 	// ConfigDataType::INVALID indicates that the action didn't exist, and
 	// that the returned object was created ad-hoc.
-	if (cfgdata.type == ConfigDataType::INVALID) {
+	if (cfgdata.type() == ConfigDataType::INVALID) {
 		LOG(Level::WARN,
 			"ConfigContainer::handle_action: unknown action %s",
 			action);
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_COMMAND);
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
 	}
 
 	LOG(Level::DEBUG,
 		"ConfigContainer::handle_action: action = %s, type = %u",
 		action,
-		static_cast<unsigned int>(cfgdata.type));
+		static_cast<unsigned int>(cfgdata.type()));
 
 	if (params.size() < 1) {
-		throw ConfigHandlerException(
-			ActionHandlerStatus::TOO_FEW_PARAMS);
+		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
-	switch (cfgdata.type) {
+	switch (cfgdata.type()) {
 	case ConfigDataType::BOOL:
-		if (!is_bool(params[0]))
-			throw ConfigHandlerException(strprintf::fmt(
-					_("expected boolean value, found `%s' instead"),
-					params[0]));
-		cfgdata.value = params[0];
-		break;
-
 	case ConfigDataType::INT:
-		if (!is_int(params[0]))
-			throw ConfigHandlerException(strprintf::fmt(
-					_("expected integer value, found `%s' instead"),
-					params[0]));
-		cfgdata.value = params[0];
-		break;
+	case ConfigDataType::ENUM: {
+		const auto result = cfgdata.set_value(params[0]);
+		if (!result) {
+			throw ConfigHandlerException(result.error());
+		}
+	}
+	break;
 
-	case ConfigDataType::ENUM:
-		if (cfgdata.enum_values.find(params[0]) ==
-			cfgdata.enum_values.end())
-			throw ConfigHandlerException(strprintf::fmt(
-					_("invalid configuration value `%s'"),
-					params[0]));
-	// fall-through
 	case ConfigDataType::STR:
 	case ConfigDataType::PATH:
-		if (cfgdata.multi_option) {
-			cfgdata.value = utils::join(params, " ");
+		if (cfgdata.multi_option()) {
+			cfgdata.set_value(utils::join(params, " "));
 		} else {
-			cfgdata.value = params[0];
+			cfgdata.set_value(params[0]);
 		}
 		break;
 
@@ -412,8 +385,8 @@ std::string ConfigContainer::get_configvalue(const std::string& key) const
 	auto it = config_data.find(key);
 	if (it != config_data.cend()) {
 		const auto& entry = it->second;
-		std::string value = entry.value;
-		if (entry.type == ConfigDataType::PATH) {
+		std::string value = entry.value();
+		if (entry.type() == ConfigDataType::PATH) {
 			value = utils::resolve_tilde(value);
 		}
 		return value;
@@ -427,7 +400,7 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	auto it = config_data.find(key);
 	if (it != config_data.cend()) {
-		const auto& value = it->second.value;
+		const auto& value = it->second.value();
 		std::istringstream is(value);
 		int i;
 		is >> i;
@@ -442,7 +415,7 @@ bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	auto it = config_data.find(key);
 	if (it != config_data.cend()) {
-		const auto& value = it->second.value;
+		const auto& value = it->second.value();
 		return (value == "true" || value == "yes");
 	}
 
@@ -457,19 +430,19 @@ void ConfigContainer::set_configvalue(const std::string& key,
 		key,
 		value);
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].value = value;
+	config_data[key].set_value(value);
 }
 
 void ConfigContainer::reset_to_default(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].value = config_data[key].default_value;
+	config_data[key].reset_to_default();
 }
 
 void ConfigContainer::toggle(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	if (config_data[key].type == ConfigDataType::BOOL) {
+	if (config_data[key].type() == ConfigDataType::BOOL) {
 		set_configvalue(key,
 			std::string(get_configvalue_as_bool(key) ? "false"
 				: "true"));
@@ -481,34 +454,33 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output)
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
 		std::string configline = cfg.first + " ";
-		assert(cfg.second.type != ConfigDataType::INVALID);
-		switch (cfg.second.type) {
+		assert(cfg.second.type() != ConfigDataType::INVALID);
+		switch (cfg.second.type()) {
 		case ConfigDataType::BOOL:
 		case ConfigDataType::INT:
-			configline.append(cfg.second.value);
-			if (cfg.second.value != cfg.second.default_value)
+			configline.append(cfg.second.value());
+			if (cfg.second.value() != cfg.second.default_value()) {
 				configline.append(
-					strprintf::fmt(" # default: %s",
-						cfg.second.default_value));
+					strprintf::fmt(
+						" # default: %s",
+						cfg.second.default_value()));
+			}
 			break;
 		case ConfigDataType::ENUM:
 		case ConfigDataType::STR:
 		case ConfigDataType::PATH:
-			if (cfg.second.multi_option) {
-				std::vector<std::string> tokens =
-					utils::tokenize(cfg.second.value, " ");
+			if (cfg.second.multi_option()) {
+				const std::vector<std::string> tokens = utils::tokenize(cfg.second.value(),
+						" ");
 				for (const auto& token : tokens) {
-					configline.append(
-						utils::quote(token) + " ");
+					configline.append(utils::quote(token) + " ");
 				}
 			} else {
-				configline.append(
-					utils::quote(cfg.second.value));
-				if (cfg.second.value !=
-					cfg.second.default_value) {
+				configline.append(utils::quote(cfg.second.value()));
+				if (cfg.second.value() != cfg.second.default_value()) {
 					configline.append(strprintf::fmt(
 							" # default: %s",
-							cfg.second.default_value));
+							cfg.second.default_value()));
 				}
 			}
 			break;
