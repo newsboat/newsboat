@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-06-16 19:51+0300\n"
-"PO-Revision-Date: 2020-06-16 17:29+0300\n"
+"PO-Revision-Date: 2020-06-16 19:52+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -164,13 +164,12 @@ msgstr ""
 "github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:170
-#, fuzzy
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"- бібліотеку «optional-lite» за ліцензією Boost Software License: https://"
-"github.com/martinmoene/optional-lite"
+"- бібліотеку «expected-lite» за ліцензією Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:243
 #, c-format
