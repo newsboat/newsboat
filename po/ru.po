@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-06-15 18:38+0300\n"
-"PO-Revision-Date: 2020-03-20 17:59+0300\n"
+"POT-Creation-Date: 2020-06-16 19:51+0300\n"
+"PO-Revision-Date: 2020-06-16 19:52+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -118,24 +118,22 @@ msgstr "эта помощь"
 
 #: newsboat.cpp:121
 msgid "Files:"
-msgstr "Файлы"
+msgstr "Файлы:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:123
-#, fuzzy
 msgid "configuration"
-msgstr "Загружаю настройки..."
+msgstr "настройки"
 
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:125
-#, fuzzy
 msgid "feed URLs"
-msgstr "Источники"
+msgstr "адреса лент"
 
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:127
 msgid "cache"
-msgstr "кэш"
+msgstr "кэш лент"
 
 #: newsboat.cpp:158
 #, c-format
@@ -148,37 +146,43 @@ msgstr ""
 
 #: newsboat.cpp:163
 msgid "It bundles:"
-msgstr ""
+msgstr "Программа включает в себя:"
 
 #: newsboat.cpp:164
-#, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"Программа включает в себя библиотеку «JSON for Modern C++» под лицензией "
-"MIT: https://github.com/nlohmann/json"
+"- библиотеку «JSON for Modern C++» под лицензией MIT: https://github.com/"
+"nlohmann/json"
 
 #: newsboat.cpp:167
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Программа включает в себя библиотеку «JSON for Modern C++» под лицензией "
-"MIT: https://github.com/nlohmann/json"
+"- библиотеку «optional-lite» под лицензией Boost Software License: https://"
+"github.com/martinmoene/optional-lite"
 
-#: newsboat.cpp:240
+#: newsboat.cpp:170
+msgid ""
+"- expected-lite library, licensed under the Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
+msgstr ""
+"- библиотеку «expected-lite» под лицензией Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
+
+#: newsboat.cpp:243
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
 msgstr "Поймали newsboat::DbException с сообщением: %s"
 
-#: newsboat.cpp:247
+#: newsboat.cpp:250
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
 msgstr "Поймали newsboat::MatcherException с сообщением: %s"
 
-#: newsboat.cpp:253 podboat.cpp:37
+#: newsboat.cpp:256 podboat.cpp:37
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "Поймали newsboat::Exception с сообщением: %s"
@@ -199,75 +203,78 @@ msgstr "атрибута `%s' не существует"
 msgid "`%s' is not a valid configuration element"
 msgstr "элемента конфигурации `%s' не существует"
 
-#: src/configcontainer.cpp:157
+#: src/configcontainer.cpp:145
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "newsboat: обновление завершено, %f не прочитанных лент (всего %n заметок не "
 "прочитано)"
 
-#: src/configcontainer.cpp:276
-#, fuzzy
+#: src/configcontainer.cpp:264
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
-msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t) - %U"
+msgstr ""
+"%N %V - Заметки в ленте '%T' (непрочитанно %u, всего %t)%?F? соответствующие "
+"фильтру `%F'&? - %U"
 
-#: src/configcontainer.cpp:282
+#: src/configcontainer.cpp:270
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Ссылки"
 
-#: src/configcontainer.cpp:285
-#, fuzzy
+#: src/configcontainer.cpp:273
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
-msgstr "%N %V - Ваши ленты (непрочитанно %u, всего %t)%?T? - метка `%T'&?"
+msgstr ""
+"%N %V - %?F?Ленты&Ваши ленты? (непрочитанно %u, всего %t)%?F? "
+"соответствующие фильтру `%F'&?%?T? - метка `%T'&?"
 
-#: src/configcontainer.cpp:291
+#: src/configcontainer.cpp:279
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Открыть файл&Сохранить файл? - %f"
 
-#: src/configcontainer.cpp:295
+#: src/configcontainer.cpp:283
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr "%N %V - %?O?Открыть директорию&Сохранить файл? - %f"
 
-#: src/configcontainer.cpp:299
+#: src/configcontainer.cpp:287
 msgid "%N %V - Help"
 msgstr "%N %V - Помощь"
 
-#: src/configcontainer.cpp:302
+#: src/configcontainer.cpp:290
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t)"
 
-#: src/configcontainer.cpp:307
-#, fuzzy
+#: src/configcontainer.cpp:295
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
-msgstr "%N %V - Результаты поиска (непрочитанно %u, всего %t)"
+msgstr ""
+"%N %V - Результаты поиска (непрочитанно %u, всего %t)%?F? соответствующие "
+"фильтру `%F'&?"
 
-#: src/configcontainer.cpp:312
+#: src/configcontainer.cpp:300
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Выбрать Фильтр"
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:304
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Выбрать Метку"
 
-#: src/configcontainer.cpp:320
+#: src/configcontainer.cpp:308
 msgid "%N %V - URLs"
 msgstr "%N %V - Ссылки"
 
-#: src/configcontainer.cpp:374
+#: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "ожидалось булево значение, обнаружилось `%s'"
 
-#: src/configcontainer.cpp:382
+#: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "ожидалось целое число, обнаружилось `%s'"
 
-#: src/configcontainer.cpp:391
+#: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "неверное значение конфигурации `%s'"
@@ -346,11 +353,13 @@ msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"ОШИБКА: для использования Inoreader нужно задать `inoreader-app-id` и "
+"`inoreader-app-key`.\n"
 
 #: src/controller.cpp:303
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "ОШИБКА: неизвестный источник URL: `%s'"
 
 #: src/controller.cpp:310
 #, c-format
@@ -779,12 +788,11 @@ msgstr "Конфигурация сохранена в %s"
 
 #: src/formaction.cpp:340
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "использование: exec <операция>"
 
 #: src/formaction.cpp:346
-#, fuzzy
 msgid "Operation not found"
-msgstr "атрибут не найден"
+msgstr "Операция не найдена"
 
 #: src/formaction.cpp:351
 #, c-format
@@ -1130,7 +1138,7 @@ msgstr "Открыть ленту/заметку"
 
 #: src/keymap.cpp:41
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Переключить фокус между виджетами"
 
 #: src/keymap.cpp:44
 msgid "Return to previous dialog/Quit"
@@ -1416,39 +1424,39 @@ msgstr "Открыть ссылку 9"
 
 #: src/keymap.cpp:401
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Начать командную строку с единицы"
 
 #: src/keymap.cpp:402
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Начать командную строку с двойки"
 
 #: src/keymap.cpp:403
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Начать командную строку с тройки"
 
 #: src/keymap.cpp:404
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Начать командную строку с четвёрки"
 
 #: src/keymap.cpp:405
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Начать командную строку с пятёрки"
 
 #: src/keymap.cpp:406
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Начать командную строку с шестёрки"
 
 #: src/keymap.cpp:407
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Начать командную строку с семёрки"
 
 #: src/keymap.cpp:408
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Начать командную строку с восьмёрки"
 
 #: src/keymap.cpp:409
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Начать командную строку с девятки"
 
 #: src/keymap.cpp:411
 msgid "Move to the previous entry"
@@ -1485,9 +1493,9 @@ msgid "`%s' is not a valid key command"
 msgstr "команда `%s' не поддерживается"
 
 #: src/keymap.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid operation"
-msgstr "контекста `%s' не существует"
+msgstr "операция `%s' не является валидной"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1680,9 +1688,8 @@ msgid "EOF found while reading XML tag"
 msgstr "Во время чтения тега XML обнаружен конец файла"
 
 #: src/urlviewformaction.cpp:68 src/urlviewformaction.cpp:77
-#, fuzzy
 msgid "No links available!"
-msgstr "Не выбрано ни одной ссылки!"
+msgstr "Нет ссылок!"
 
 #: src/urlviewformaction.cpp:158
 msgid "Save Bookmark"
@@ -1771,14 +1778,12 @@ msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Отменяю миграцию, потому что mkdir для `%s' вернула ошибку: %s"
 
 #: rust/regex-rs/src/lib.rs:158 rust/regex-rs/src/lib.rs:163
-#, fuzzy
 msgid "regcomp returned code %i"
-msgstr "Браузер вернул код ошибки %i"
+msgstr "regcomp вернула код %i"
 
 #: rust/regex-rs/src/lib.rs:243 rust/regex-rs/src/lib.rs:247
-#, fuzzy
 msgid "regexec returned code %i"
-msgstr "Браузер вернул код ошибки %i"
+msgstr "regexec вернула код %i"
 
 #~ msgid "config"
 #~ msgstr "настройки"

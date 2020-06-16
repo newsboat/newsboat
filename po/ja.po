@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.9\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-06-15 18:38+0300\n"
+"POT-Creation-Date: 2020-06-16 19:51+0300\n"
 "PO-Revision-Date: 2015-04-26 05:55+0900\n"
 "Last-Translator: Grady Martin <GradyMartin@gmail.com>\n"
 "Language-Team: \n"
@@ -156,17 +156,23 @@ msgid ""
 "github.com/martinmoene/optional-lite"
 msgstr ""
 
-#: newsboat.cpp:240
+#: newsboat.cpp:170
+msgid ""
+"- expected-lite library, licensed under the Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
+msgstr ""
+
+#: newsboat.cpp:243
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
 msgstr ""
 
-#: newsboat.cpp:247
+#: newsboat.cpp:250
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
 msgstr ""
 
-#: newsboat.cpp:253 podboat.cpp:37
+#: newsboat.cpp:256 podboat.cpp:37
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
 msgstr ""
@@ -187,73 +193,73 @@ msgstr "「%s」は無効な書体です。"
 msgid "`%s' is not a valid configuration element"
 msgstr ""
 
-#: src/configcontainer.cpp:157
+#: src/configcontainer.cpp:145
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr "newsboat: 同期完了 更新されたフィード%f部 新規記事%n件"
 
-#: src/configcontainer.cpp:276
+#: src/configcontainer.cpp:264
 #, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
 msgstr "%N%V %T %u/%t 未読 %U"
 
-#: src/configcontainer.cpp:282
+#: src/configcontainer.cpp:270
 msgid "%N %V - Dialogs"
 msgstr ""
 
-#: src/configcontainer.cpp:285
+#: src/configcontainer.cpp:273
 #, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr "%N%V 全フィード %u/%t 未読%?T? %T?"
 
-#: src/configcontainer.cpp:291
+#: src/configcontainer.cpp:279
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr ""
 
-#: src/configcontainer.cpp:295
+#: src/configcontainer.cpp:283
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr ""
 
-#: src/configcontainer.cpp:299
+#: src/configcontainer.cpp:287
 msgid "%N %V - Help"
 msgstr ""
 
-#: src/configcontainer.cpp:302
+#: src/configcontainer.cpp:290
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N%V %T %u/%t 未読"
 
-#: src/configcontainer.cpp:307
+#: src/configcontainer.cpp:295
 #, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
 msgstr "%N%V 全フィード %u/%t 未読%?T? %T?"
 
-#: src/configcontainer.cpp:312
+#: src/configcontainer.cpp:300
 msgid "%N %V - Select Filter"
 msgstr ""
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:304
 msgid "%N %V - Select Tag"
 msgstr ""
 
-#: src/configcontainer.cpp:320
+#: src/configcontainer.cpp:308
 msgid "%N %V - URLs"
 msgstr ""
 
-#: src/configcontainer.cpp:374
+#: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "「%s」を真偽値として認識できませんでした。"
 
-#: src/configcontainer.cpp:382
+#: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "「%s」を整数値として認識できませんでした。"
 
-#: src/configcontainer.cpp:391
+#: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr ""
