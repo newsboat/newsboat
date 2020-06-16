@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-06-15 18:38+0300\n"
+"POT-Creation-Date: 2020-06-16 19:51+0300\n"
 "PO-Revision-Date: 2020-04-21 23:43+0200\n"
 "Last-Translator: Marcos Cruz <github@programandala.net>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
@@ -164,17 +164,26 @@ msgstr ""
 "Incluye la librería JSON for Modern C++, con la licencia MIT: https://github."
 "com/nlohmann/json."
 
-#: newsboat.cpp:240
+#: newsboat.cpp:170
+#, fuzzy
+msgid ""
+"- expected-lite library, licensed under the Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
+msgstr ""
+"Incluye la librería JSON for Modern C++, con la licencia MIT: https://github."
+"com/nlohmann/json."
+
+#: newsboat.cpp:243
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
 msgstr "Se atrapó newsboat::DbException con el mensaje: %s"
 
-#: newsboat.cpp:247
+#: newsboat.cpp:250
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
 msgstr "Se atrapó newsboat::MatcherException con el mensaje: %s"
 
-#: newsboat.cpp:253 podboat.cpp:37
+#: newsboat.cpp:256 podboat.cpp:37
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "Se atrapó newsboat::Exception con el mensaje: %s"
@@ -195,76 +204,76 @@ msgstr "`%s' no es un atributo válido"
 msgid "`%s' is not a valid configuration element"
 msgstr "`%s' no es un elemento de configuración válido"
 
-#: src/configcontainer.cpp:157
+#: src/configcontainer.cpp:145
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "newsboat: recarga finalizada, %f fuentes no leídas (%n artículos no leídos "
 "en total)"
 
-#: src/configcontainer.cpp:276
+#: src/configcontainer.cpp:264
 #, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
 msgstr "%N %V - Artículos en la fuente «%T» (%u no leídos, %t en total) - %U"
 
-#: src/configcontainer.cpp:282
+#: src/configcontainer.cpp:270
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Diálogos"
 
-#: src/configcontainer.cpp:285
+#: src/configcontainer.cpp:273
 #, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr "%N %V - Tus fuentes (%u no leídas, %t en total)%?T? - etiqueta «%T»&?"
 
-#: src/configcontainer.cpp:291
+#: src/configcontainer.cpp:279
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Abrir archivo&Guardar archivo? - %f"
 
-#: src/configcontainer.cpp:295
+#: src/configcontainer.cpp:283
 #, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr "%N %V - %?O?Abrir directorio&Guardar archivo? - %f"
 
-#: src/configcontainer.cpp:299
+#: src/configcontainer.cpp:287
 msgid "%N %V - Help"
 msgstr "%N %V - Ayuda"
 
-#: src/configcontainer.cpp:302
+#: src/configcontainer.cpp:290
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artículo «%T» (%u no leídos, %t en total)"
 
-#: src/configcontainer.cpp:307
+#: src/configcontainer.cpp:295
 #, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
 msgstr "%N %V - Resultado de la búsqueda (%u no leídos, %t en total)"
 
-#: src/configcontainer.cpp:312
+#: src/configcontainer.cpp:300
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Seleccionar filtro"
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:304
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Seleccionar etiqueta"
 
-#: src/configcontainer.cpp:320
+#: src/configcontainer.cpp:308
 msgid "%N %V - URLs"
 msgstr "%N %V - URL"
 
-#: src/configcontainer.cpp:374
+#: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "se esperaba un valor lógico, pero se encontró `%s' en su lugar"
 
-#: src/configcontainer.cpp:382
+#: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "se esperaba un valor entero, pero se encontró `%s' en su lugar"
 
-#: src/configcontainer.cpp:391
+#: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "valor de configuración `%s' incorrecto"

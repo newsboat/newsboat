@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2020-06-15 18:38+0300\n"
+"POT-Creation-Date: 2020-06-16 19:51+0300\n"
 "PO-Revision-Date: 2020-02-08 00:10+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
@@ -167,17 +167,26 @@ msgstr ""
 "Het maakt gebruik van \"JSON for Modern C++\" wat ook gelicenseerd is onder "
 "de MIT-licentie: https://github.com/nlohmann/json"
 
-#: newsboat.cpp:240
+#: newsboat.cpp:170
+#, fuzzy
+msgid ""
+"- expected-lite library, licensed under the Boost Software License: https://"
+"github.com/martinmoene/expected-lite"
+msgstr ""
+"Het maakt gebruik van \"JSON for Modern C++\" wat ook gelicenseerd is onder "
+"de MIT-licentie: https://github.com/nlohmann/json"
+
+#: newsboat.cpp:243
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
 msgstr "Fout (newsboat::DbException): %s"
 
-#: newsboat.cpp:247
+#: newsboat.cpp:250
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
 msgstr "Fout (newsboat::MatcherException): %s"
 
-#: newsboat.cpp:253 podboat.cpp:37
+#: newsboat.cpp:256 podboat.cpp:37
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "Fout (newsboat::Exception): %s"
@@ -198,75 +207,75 @@ msgstr "attribuut ‘%s’ is ongeldig"
 msgid "`%s' is not a valid configuration element"
 msgstr "configuratie-element ‘%s’ is ongeldig"
 
-#: src/configcontainer.cpp:157
+#: src/configcontainer.cpp:145
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "newsboat: klaar met vernieuwen, %f ongelezen feeds (%n ongelezen artikelen "
 "in totaal)"
 
-#: src/configcontainer.cpp:276
+#: src/configcontainer.cpp:264
 #, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
 msgstr "%N %V - Artikelen in feed ‘%T’ (%u ongelezen, %t totaal) - %U"
 
-#: src/configcontainer.cpp:282
+#: src/configcontainer.cpp:270
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialogen"
 
-#: src/configcontainer.cpp:285
+#: src/configcontainer.cpp:273
 #, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr "%N %V - Uw feeds (%u ongelezen, %t totaal)%?T? - tag ‘%T’&?"
 
-#: src/configcontainer.cpp:291
+#: src/configcontainer.cpp:279
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Open Bestand&Bestand opslaan? - %f"
 
-#: src/configcontainer.cpp:295
+#: src/configcontainer.cpp:283
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr "%N %V - %?O?Open Map&Bestand opslaan? - %f"
 
-#: src/configcontainer.cpp:299
+#: src/configcontainer.cpp:287
 msgid "%N %V - Help"
 msgstr "%N %V - Hulp"
 
-#: src/configcontainer.cpp:302
+#: src/configcontainer.cpp:290
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel ‘%T’ (%u ongelezen, %t totaal)"
 
-#: src/configcontainer.cpp:307
+#: src/configcontainer.cpp:295
 #, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
 msgstr "%N %V - Zoekresultaten (%u ongelezen, %t totaal)"
 
-#: src/configcontainer.cpp:312
+#: src/configcontainer.cpp:300
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Filter selecteren"
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:304
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Tag selecteren"
 
-#: src/configcontainer.cpp:320
+#: src/configcontainer.cpp:308
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:374
+#: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
 msgstr "verwachtte booleaanse waarde, maar ontving ‘%s'"
 
-#: src/configcontainer.cpp:382
+#: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
 msgstr "verwachtte geheel getal, maar ontving ‘%s'"
 
-#: src/configcontainer.cpp:391
+#: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
 msgstr "configuratiewaarde ‘%s’ is ongeldig"
