@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-06-16 19:51+0300\n"
-"PO-Revision-Date: 2019-12-22 10:40+0100\n"
+"PO-Revision-Date: 2020-06-17 20:03+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -122,15 +122,13 @@ msgstr "Dateien:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:123
-#, fuzzy
 msgid "configuration"
-msgstr "Lade Konfiguration..."
+msgstr "Konfiguration"
 
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:125
-#, fuzzy
 msgid "feed URLs"
-msgstr "URLs"
+msgstr "Feed-URLs"
 
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:127
@@ -148,34 +146,31 @@ msgstr ""
 
 #: newsboat.cpp:163
 msgid "It bundles:"
-msgstr ""
+msgstr "Mitgeliefert wird:"
 
 #: newsboat.cpp:164
-#, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"Es wird die unter der MIT-Lizenz stehende Bibliothek JSON für Modernes C++ "
-"verwendet: https://github.com/nlohmann/json"
+"- JSON für Modernes C++, unter der MIT-Lizenz stehende Bibliothek: https://"
+"github.com/nlohmann/json"
 
 #: newsboat.cpp:167
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Es wird die unter der MIT-Lizenz stehende Bibliothek JSON für Modernes C++ "
-"verwendet: https://github.com/nlohmann/json"
+"- optional-lite, unter der Boost-Software-Lizenz stehende Bibliothek: https://"
+"github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:170
-#, fuzzy
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"Es wird die unter der MIT-Lizenz stehende Bibliothek JSON für Modernes C++ "
-"verwendet: https://github.com/nlohmann/json"
+"- expected-lite, unter der Boost-Software-Lizenz stehende Bibliothek: https://"
+"github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:243
 #, c-format
@@ -216,22 +211,24 @@ msgstr ""
 "insgesamt)"
 
 #: src/configcontainer.cpp:264
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
-msgstr "%N %V - Artikel im Feed '%T' (%u ungelesen, %t gesamt) - %U"
+msgstr ""
+"%N %V - Artikel im Feed '%T' (%u ungelesen, %t gesamt)%?F? passend "
+"auf Filter „%F“&? - %U"
 
 #: src/configcontainer.cpp:270
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialoge"
 
 #: src/configcontainer.cpp:273
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
-msgstr "%N %V - Ihre Feeds (%u ungelesen, %t gesamt)%?T? - Tag `%T'&?"
+msgstr ""
+"%N %V - %?F?Feeds&Ihre Feeds? (%u ungelesen, %t gesamt)%?F? passend auf "
+"Filter „%F“&?%?T? - Tag `%T'&?"
 
 #: src/configcontainer.cpp:279
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -250,9 +247,10 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel '%T' (%u ungelesen, %t gesamt)"
 
 #: src/configcontainer.cpp:295
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
-msgstr "%N %V - Suchergebnisse (%u ungelesen, %t gesamt)"
+msgstr ""
+"%N %V - Suchergebnisse (%u ungelesen, %t gesamt)%?F? passend auf Filter "
+"„%F“&?"
 
 #: src/configcontainer.cpp:300
 msgid "%N %V - Select Filter"
@@ -356,11 +354,13 @@ msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"Fehler: Sie müssen *sowohl* „inoreader-app-id“ als auch „inoreader-app-key“ "
+"setzen, um Inoreader zu verwenden.\n"
 
 #: src/controller.cpp:303
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "Fehler: Unbekannte urls-source „%s“"
 
 #: src/controller.cpp:310
 #, c-format
@@ -789,12 +789,11 @@ msgstr "Konfiguration nach %s gespeichert"
 
 #: src/formaction.cpp:340
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "Verwendung: exec <operation>"
 
 #: src/formaction.cpp:346
-#, fuzzy
 msgid "Operation not found"
-msgstr "Attribut nicht gefunden"
+msgstr "Operation nicht gefunden"
 
 #: src/formaction.cpp:351
 #, c-format
@@ -1139,7 +1138,7 @@ msgstr "Feed/Artikel öffnen"
 
 #: src/keymap.cpp:41
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Fokus zwischen Steuerelementen wechseln"
 
 #: src/keymap.cpp:44
 msgid "Return to previous dialog/Quit"
@@ -1425,39 +1424,39 @@ msgstr "öffne URL 9"
 
 #: src/keymap.cpp:401
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Kommandozeile mit 1 starten"
 
 #: src/keymap.cpp:402
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Kommandozeile mit 2 starten"
 
 #: src/keymap.cpp:403
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Kommandozeile mit 3 starten"
 
 #: src/keymap.cpp:404
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Kommandozeile mit 4 starten"
 
 #: src/keymap.cpp:405
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Kommandozeile mit 5 starten"
 
 #: src/keymap.cpp:406
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Kommandozeile mit 6 starten"
 
 #: src/keymap.cpp:407
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Kommandozeile mit 7 starten"
 
 #: src/keymap.cpp:408
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Kommandozeile mit 8 starten"
 
 #: src/keymap.cpp:409
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Kommandozeile mit 9 starten"
 
 #: src/keymap.cpp:411
 msgid "Move to the previous entry"
@@ -1494,9 +1493,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' ist kein gültiges Tastenkommando"
 
 #: src/keymap.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid operation"
-msgstr "`%s' ist kein gültiger Kontext"
+msgstr "„%s“ ist keine gültige Operation"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1694,9 +1693,8 @@ msgid "EOF found while reading XML tag"
 msgstr "Ende der Datei gefunden beim Lesen eines XML-Tags"
 
 #: src/urlviewformaction.cpp:68 src/urlviewformaction.cpp:77
-#, fuzzy
 msgid "No links available!"
-msgstr "Kein Link ausgewählt!"
+msgstr "Keine Links verfügbar!"
 
 #: src/urlviewformaction.cpp:158
 msgid "Save Bookmark"
@@ -1788,30 +1786,9 @@ msgstr ""
 "„%s“: %s"
 
 #: rust/regex-rs/src/lib.rs:158 rust/regex-rs/src/lib.rs:163
-#, fuzzy
 msgid "regcomp returned code %i"
-msgstr "Browser brach mit Rückgabestatus %i ab"
+msgstr "regcomp brach mit Rückgabestatus %i ab"
 
 #: rust/regex-rs/src/lib.rs:243 rust/regex-rs/src/lib.rs:247
-#, fuzzy
 msgid "regexec returned code %i"
-msgstr "Browser brach mit Rückgabestatus %i ab"
-
-#~ msgid "config"
-#~ msgstr "Konfiguration"
-
-#~ msgid "urls"
-#~ msgstr "URLs"
-
-#~ msgid "%s %s - Save Files - %s"
-#~ msgstr "%s %s - Dateien speichern - %s"
-
-#~ msgid "%s %s - Save File - %s"
-#~ msgstr "%s %s - Datei speichern - %s"
-
-#~ msgid ""
-#~ "It bundles an alphanum algorithm implementation licensed under the MIT "
-#~ "license: http://www.davekoelle.com/alphanum.html"
-#~ msgstr ""
-#~ "Die eingesetzte Implementierung des alphanumerischen Sortieralgorithmuses "
-#~ "steht unter der MIT-Lizenz: http://www.davekoelle.com/alphanum.html"
+msgstr "regexec brach mit Rückgabestatus %i ab"
