@@ -100,7 +100,7 @@ impl FmtStrFormatter {
 
     fn format_center(
         &self,
-        w: isize,
+        w: usize,
         c: char,
         rest: &[Specifier],
         width: u32,
@@ -108,14 +108,13 @@ impl FmtStrFormatter {
     ) {
         use std::convert::TryInto;
         let rest = self.formatting_helper(rest, 0);
-        let size: isize = utils::strwidth(&rest).try_into().unwrap();
+        let size: usize = utils::strwidth(&rest);
         let mut w = w;
         if w == 0 {
             w = width.try_into().unwrap();
         }
-        let border_t: isize = w - size;
-        if border_t > 0 {
-            let border_t: usize = border_t.try_into().unwrap();
+        if w > size {
+            let border_t: usize = w - size;
             let left: usize = border_t / 2;
             let right: usize = border_t - left;
             let padding_l = c.to_string().repeat(left);

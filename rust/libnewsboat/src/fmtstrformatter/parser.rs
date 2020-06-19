@@ -23,7 +23,7 @@ pub enum Specifier<'a> {
     /// Will expand to pad everything that comes next to the right. Given char is used for padding.
     Spacing(char),
     /// Will center the text in a given width
-    Center(isize, char),
+    Center(usize, char),
     /// A format to be replaced with a value (`%a`, `%t` etc.), padded to the given width on the
     /// left (if it's positive) or on the right (if it's negative).
     Format(char, Padding),
@@ -42,9 +42,9 @@ fn center(input: &str) -> IResult<&str, Specifier> {
     let (input, _) = tag("%=")(input)?;
     let (input, c) = take(1usize)(input)?;
     let (input, width) =
-        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))(input)?;
+        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
 
-    let width: isize = width.parse::<isize>().unwrap_or(0);
+    let width: usize = width.parse::<usize>().unwrap_or(0);
     let chr: char = c.chars().next().unwrap();
 
     Ok((input, Specifier::Center(width, chr)))
