@@ -41,8 +41,7 @@ fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier> {
 fn center(input: &str) -> IResult<&str, Specifier> {
     let (input, _) = tag("%=")(input)?;
     let (input, c) = take(1usize)(input)?;
-    let (input, width) =
-        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
+    let (input, width) = take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
 
     let width: usize = width.parse::<usize>().unwrap_or(0);
     let chr: char = c.chars().next().unwrap();
