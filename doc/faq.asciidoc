@@ -78,3 +78,28 @@ Finally, if you understand what a "MITM attack" is, and are certain that it
 can't happen in your setup, check out <<newsboat#_first_steps,a list of
 Newsboat's configuration options>> for ways to entirely disable SSL
 verification.
+
+== Newsboat 2.18 complains that "Browser returned error code <some number>"
+
+That Newsboat version misinterprets the browser's exit code. Please upgrade to
+Newsboat 2.19 or newer.
+
+If upgrading is not an option, wrap the browser in a script to hide its exit
+code from Newsboat:
+
+1. Put this in `~/bin/newsboat-browser.sh`:
++
+    #/bin/sh
+    /usr/bin/firefox "$@"
+    exit 0
++
+Replace `/usr/bin/firefox` with the path to your browser. The last line is the
+important bit.
+
+2. Make it executable:
++
+    $ chmod +x ~/bin/newsboat-browser.sh
+
+3. Add the following to your Newsboat's config:
++
+    browser "~/bin/newsboat-browser.sh"
