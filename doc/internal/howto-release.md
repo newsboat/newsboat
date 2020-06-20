@@ -73,10 +73,7 @@ master repository and shell access to newsboat.org.
     * Send an email to the mailing list
     * Change the topic on #newsboat at Freenode
     * Post something about it on personal Mastodon
-10. Prepare the repo for the next release
-    * Add "Unreleased" section to CHANGELOG
-    * Push it: `git push`
-11. Release the snap
+10. Release the snap
     * Go to https://dashboard.snapcraft.io/ and log in
     * Go to https://dashboard.snapcraft.io/snaps/newsboat/revisions/ and for
         each revision that corresponds to the release:
@@ -84,9 +81,12 @@ master repository and shell access to newsboat.org.
         * In "Channels" row, click "Release"
         * Tick all checkboxes ("stable", "candidate", "beta", and "edge")
         * Click "Release"
-12. Manage milestones https://github.com/newsboat/newsboat/milestones?with_issues=no
+11. Manage milestones https://github.com/newsboat/newsboat/milestones?with_issues=no
     * Add all unassigned issues and pull requests to the current one. Search for
         "no:milestone closed:>=2018-09-20" where "2018-09-20" is the previous
         release date
     * Close the current one
     * Create a new one with a date set to 25-ish of March/June/September/December
+12. Prepare the repo for the next release
+    * Add "Unreleased" section to CHANGELOG
+    * Push it: `git push`
