@@ -1,48 +1,90 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2020-06-20
+## 2.20 - 2020-06-20
 
-Lists below only mention user-visible changes, but I would also like to
-acknowledge contributions from the following people:
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes: Björn Esser, Jan Staněk, Mario Rugiero, Rui
+Chen, and Tobias Kortkamp.
 
 ### Added
-- New format specifiers (%n, %d, and %F) for articlelist-format which
-  correspond respectively to article fields "unread", "deleted", and article
-  flags (#869) (Dennis van der Schagt)
-- New format specifer (%F) (for titles of feedlist, articlelist, and search
-  results) which shows the filter expression if a filter is active (#946)
-- Dependency on martinmoene/optional-lite library, which we vendor
+- An FAQ item on why TT-RSS authentication might fail (#44) (Alexander
+    Batischev)
+- An FAQ item on browser failures in Newsboat 2.18 (Alexander Batischev)
+- Ability to bind multiple keys to the same operation (#110) (Dennis van der
+    Schagt)
+- Ability to bind operations to Tab key (Dennis van der Schagt)
+- New format specifiers for `articlelist-format`: `%n` (article unread), `%d`
+    (article deleted), `%F` (article's flags) (Dennis van der Schagt)
+- New format specifier for `feedlist-title-format`,
+    `articlelist-title-format`, and `searchresult-title-format`: `%F`, which
+    contains current filter expression. That specifier is now included into
+    those settings by default (#946) (Dennis van der Schagt)
+- New setting, `switch-focus`, which specifies a key that moves the cursor
+    between widgets in File- and DirBrowser (Dennis van der Schagt)
+- New setting, `wrap-scroll`, which makes the cursor jump to the last item when
+    scrolling up on the top one, and vice versa (David Pedersen)
+- `exec` command-line command, which allows to run an arbitrary operation (#892)
+    (Marco Sirabella)
+- Dependency on martinmoene/optional-lite and martinmoene/expected-lite
+    libraries, both of which we vendor
+- Include enclosure URL in the article's urlview (#809) (Spacewalker2, Alexander
+    Batischev)
+- Allow `open-in-browser` and `open-in-browser-and-mark-read` operations in the
+    URL view, where they open the selected URL (David Pedersen)
+- Open command line when a number key is pressed in a tag-list (#939) (Dennis
+    van der Schagt)
+- Install Newsboat's SVG icon as part of `install` target (Nikos Tsipinakis)
+
 ### Changed
-- Allow binding multiple keys to general operations: up, down, pageup, pagedown,
-  home, end (#847) (Dennis van der Schagt)
+- Merged es and es_ES translations into one (Marcos Cruz)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Russian (Alexander Batischev), Spanish (Marcos Cruz), Turkish
+    (Emir Sari), Ukrainian (Alexander Batischev)
 - It's now an error to have `always-download` or `reset-unread-on-update`
     without parameters (Alexander Batischev)
-- The conditional sequence now acts the same for strings with only whitespace
-  as it does for empty strings.  This allows changing the formatting of, for
-  example, "unread" and "deleted" fields in articlelist-format (#869) (Dennis
-  van der Schagt)
+- It's now an error to have `macro` without at least two arguments (Alexander
+    Batischev)
+- The conditional format sequence (`%?[char]?[format]&[format]?`) now treats
+    whitespace-only value as empty. This allows changing the formatting of, for
+    example, "unread" and "deleted" fields in articlelist-format (Dennis van der
+    Schagt)
 - `open-in-browser-and-mark-read` in feedlist no longer marks articles read if
-  the browser fails. (#873) (Nikos Tsipinakis)
-- Macro execution halts if one of the operations fail. (#873) (Nikos Tsipinakis)
-- Update vendored version of Catch2 to 2.12.1
-### Deprecated
-- Newsboat's Inoreader API keys. Users need to register their own Inoreader
-    application now. Please see "Inoreader" section in the HTML documentation
-    for details. (Alexander Batischev)
+  the browser fails (Nikos Tsipinakis)
+- Macro execution halts if one of the operations fails (Nikos Tsipinakis)
+- Inoreader now marks articles read on a thread, to hide latency (#710)
+    (pi.scateu.me)
+- Bumped minimum supported Rust version to 1.40.0
+- Updated vendored libraries: Catch2 to 2.12.2, json.hpp to 3.8.0
 
 ### Removed
+- Newsboat's Inoreader API keys. Users need to register their own Inoreader
+    application now, and set them via `inoreader-app-id` and `inoreader-app-key`
+    settings. Please see "Inoreader" section in the HTML documentation for
+    details. (Alexander Batischev)
+
 ### Fixed
-- The wrong feed being opened (#72) turned out to be caused by a bug in
-  libstfl. A patch for that library is available at
-  https://github.com/dennisschagt/stfl/pull/4#issuecomment-613640246 (Dennis
-  van der Schagt)
-- "feedlink" attribute containing feed title instead of feed URL (Alexander
+- Help dialog showing operations as unbound even though they *are* bound to some
+    keys (#843) (Dennis van der Schagt)
+- `feedlink` attribute containing feed title instead of feed URL (Alexander
     Batischev)
-- "date" attribute containing fixed string instead of item's publication date
-    and time (Alexander Batischev)
+- `feeddate` attribute containing fixed string instead of item's publication
+    date and time (Alexander Batischev)
+- `browser` setting not working if it contains `<` (#917) (Dennis van der
+    Schagt)
+- `up`, `down`, `pageup`, `pagedown`, `home`, and `end` now working in macros
+    (#890) (Dennis van der Schagt)
 - Backslash inside double quotes requiring three escapes instead of one, every
-    other time (Alexander Batischev) (#536, #642, #926)
-### Security
+    other time (#536, #642, #926) (Alexander Batischev)
+- Users can bind operations to `UP`, `DOWN`, `HOME`, `END`, `NPAGE`, and `PPAGE`
+    keys (#903) (Dennis van der Schagt)
+- Generate example config as part of `doc` target, so `install-examples` can
+    simply copy it instead of generating (Alexander Batischev)
+- Install manpages via `install-docs` target, not `install-newsboat` and
+    `install-podboat` (#829) (Alexander Batischev)
+- The wrong feed being opened (#72) turned out to be caused by a bug in libstfl.
+    A patch for that library is available at
+    https://github.com/dennisschagt/stfl/pull/4#issuecomment-613640246 (Dennis
+    van der Schagt)
 
 
 

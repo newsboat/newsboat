@@ -21,7 +21,7 @@ master repository and shell access to newsboat.org.
     * rust/libnewsboat-ffi/Cargo.toml
     * `cargo update --package libnewsboat --package libnewsboat-ffi`
 3. Update links to docs and FAQ in README
-4. Commit the changes
+4. Commit the changes with message "Release VERSION"
 5. Create new tag:
     * `git tag --sign -u 'newsboat@googlegroups.com' rVERSION`
     * First line: "Release Newsboat VERSION"
