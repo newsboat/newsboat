@@ -278,7 +278,8 @@ install-examples: doc/example-config
 	$(INSTALL) -m 755 doc/examples/example-exec-script.py $(DESTDIR)$(docdir)/examples/example-exec-script.py || true
 
 install-icon:
-	$(INSTALL) -D -m 644 logo.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
+	$(MKDIR) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps
+	$(INSTALL) -m 644 logo.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
 
 install: install-newsboat install-podboat install-docs install-examples install-mo install-icon
 
