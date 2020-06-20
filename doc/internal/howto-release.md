@@ -82,11 +82,16 @@ master repository and shell access to newsboat.org.
         * Tick all checkboxes ("stable", "candidate", "beta", and "edge")
         * Click "Release"
 11. Manage milestones https://github.com/newsboat/newsboat/milestones?with_issues=no
-    * Add all unassigned issues and pull requests to the current one. Search for
-        "no:milestone closed:>=2018-09-20" where "2018-09-20" is the previous
-        release date
-    * Close the current one
-    * Create a new one with a date set to 25-ish of March/June/September/December
+    * Add all unassigned issues and pull requests to the current one:
+        * Search for "no:milestone closed:>=2020-03-20 is:pr state:merged", set
+            milestone for all
+        * Search for "no:milestone closed:>=2020-03-20 is:pr state:closed",
+            check if any of them are actually merged manually
+        * Search for "no:milestone closed:>=2020-03-20 is:issue", set milestone
+            on those that are actually fixed or at least affected by the release
+    * Close the current milestone
+    * Create a new milestone with a date set to 20-ish of
+        March/June/September/December
 12. Prepare the repo for the next release
     * Add "Unreleased" section to CHANGELOG
     * Push it: `git push`
