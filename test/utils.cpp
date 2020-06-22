@@ -98,6 +98,16 @@ TEST_CASE(
 		REQUIRE(tokens[0] == "foo \\xxx");
 		REQUIRE(tokens[1] == " ");
 	}
+
+	SECTION("Closing double quote marks the end of a token") {
+		tokens = utils::tokenize_quoted(R"(set browser "mpv %u";)");
+
+		REQUIRE(tokens.size() == 4);
+		REQUIRE(tokens[0] == "set");
+		REQUIRE(tokens[1] == "browser");
+		REQUIRE(tokens[2] == "mpv %u");
+		REQUIRE(tokens[3] == ";");
+	}
 }
 
 TEST_CASE("tokenize_quoted() implicitly closes quotes at the end of the string",
