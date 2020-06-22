@@ -73,7 +73,7 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
     && $HOME/rustup.sh -y \
         --default-host i686-unknown-linux-gnu \
-        --default-toolchain 1.43.1 \
+        --default-toolchain 1.44.1 \
         # Install only rustc, rust-std, and cargo
         --profile minimal \
     && chmod a+w $HOME/.cargo
