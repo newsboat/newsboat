@@ -35,6 +35,7 @@ freebsd_task:
     # Running three jobs because by default, VMs have 2 cores.
     build_script: su testuser -c 'cd ~ && gmake --jobs=3 --keep-going all test'
     test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test --jobs=3) && sh -c "exit $ret"'
+    fake_install_script: su testuser -c 'cd ~ && mkdir fakeroot && gmake DESTDIR=fakeroot install'
     before_cache_script: &before_cache_script
         - rm -rf $HOME/.cargo/registry/index
 
@@ -54,6 +55,9 @@ freebsd_task:
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
         - ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test --jobs=3) && sh -c "exit $ret"
+    fake_install_script: &fake_install_script
+        - mkdir fakeroot
+        - make DESTDIR=fakeroot install
     before_cache_script: *before_cache_script
 
 macos_task:
@@ -98,6 +102,7 @@ macos_task:
 
     build_script: *build_script
     test_script: *test_script
+    fake_install_script: *fake_install_script
     before_cache_script: *before_cache_script
 
     matrix:
@@ -278,6 +283,7 @@ linux_task:
 
     build_script: *build_script
     test_script: *test_script
+    fake_install_script: *fake_install_script
     before_cache_script: *before_cache_script
 
 address_sanitizer_task:
