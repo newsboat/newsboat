@@ -193,6 +193,7 @@ unsigned int FeedContainer::get_unread_item_count_per_tag(
 std::shared_ptr<RssFeed> FeedContainer::get_feed_by_url(
 	const std::string& feedurl)
 {
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	for (const auto& feed : feeds) {
 		if (feedurl == feed->rssurl()) {
 			return feed;
@@ -257,6 +258,7 @@ void FeedContainer::clear_feeds_items()
 
 unsigned int FeedContainer::unread_feed_count() const
 {
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	return std::count_if(feeds.begin(),
 			feeds.end(),
 	[](const std::shared_ptr<RssFeed> feed) {
@@ -266,6 +268,7 @@ unsigned int FeedContainer::unread_feed_count() const
 
 unsigned int FeedContainer::unread_item_count() const
 {
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	return std::accumulate(feeds.begin(),
 			feeds.end(),
 			0,
