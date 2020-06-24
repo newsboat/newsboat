@@ -962,17 +962,15 @@ msgstr "Enviar artículo a comando: "
 #. / messages
 #: src/itemlistformaction.cpp:677 src/itemlistformaction.cpp:715
 msgid "dtfalgr"
-msgstr "ftmaeg"
+msgstr ""
 
 #: src/itemlistformaction.cpp:679
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
-msgstr "¿Ordenar por (f)echa/(t)ítulo/(m)arcas/(a)utor/(e)nlace/(g)uid?"
+msgstr ""
 
 #: src/itemlistformaction.cpp:717
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
-"¿Ordenar decrecientemente por (f)echa/(t)ítulo/(m)arcas/(a)utor/(e)nlace/"
-"(g)uid?"
 
 #: src/itemlistformaction.cpp:842 src/itemviewformaction.cpp:549
 msgid "Flags updated."
