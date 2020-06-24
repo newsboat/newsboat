@@ -142,8 +142,6 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 
 			if (pos == str.length()) {
 				pos = std::string::npos;
-			} else {
-				++pos;
 			}
 		} else {
 			pos = str.find_first_of(delimiters, last_pos);
