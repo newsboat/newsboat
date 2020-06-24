@@ -43,7 +43,7 @@ public:
 	std::vector<std::shared_ptr<RssFeed>> feeds;
 
 private:
-	std::mutex feeds_mutex;
+	mutable std::mutex feeds_mutex;
 };
 } // namespace newsboat
 
