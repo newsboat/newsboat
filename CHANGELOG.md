@@ -1,5 +1,15 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2020-09-20
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.20.1 - 2020-06-24
 
 ### Fixed
@@ -11,6 +21,7 @@
     Batischev)
 - Feed sorting in Spanish locale (#1028) (Dennis van der Schagt, Alexander
     Batischev)
+
 
 
 ## 2.20 - 2020-06-20
