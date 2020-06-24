@@ -1,12 +1,16 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2020-09-20
-### Added
-### Changed
-### Deprecated
-### Removed
+## 2.20.1 - 2020-06-24
+
 ### Fixed
-### Security
+- Installation on BSDs (Tobias Kortkamp)
+- Regression that caused Newsboat to require a space before semicolon in macros,
+    which made `set browser "lynx"; open-in-browser` invalid (#1013, #1015,
+    \#1017, #1018) (Alexander Batischev)
+- Possible segfault upon startup (#1025) (Dennis van der Schagt, Alexander
+    Batischev)
+- Feed sorting in Spanish locale (#1028) (Dennis van der Schagt, Alexander
+    Batischev)
 
 
 ## 2.20 - 2020-06-20
