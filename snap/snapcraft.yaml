@@ -46,5 +46,5 @@ parts:
       - libxml2
       - librtmp1
       - locales-all
-      - libcurl3
+      - libcurl4
       - libstfl0
