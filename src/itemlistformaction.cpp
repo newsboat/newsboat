@@ -151,9 +151,13 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				auto link = visible_items[itempos].first->link();
-				if (int err = v->open_in_browser(link)) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				const auto link = visible_items[itempos].first->link();
+				const auto exit_code = v->open_in_browser(link);
+				if (!exit_code.has_value()) {
+					v->show_error(_("Failed to spawn browser"));
+					break;
+				} else if (*exit_code != 0) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 					break;
 				}
 				visible_items[itempos].first->set_unread(false);
@@ -182,9 +186,13 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				auto link = visible_items[itempos].first->link();
-				if (int err = v->open_in_browser(link)) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				const auto link = visible_items[itempos].first->link();
+				const auto exit_code = v->open_in_browser(link);
+				if (!exit_code.has_value()) {
+					v->show_error(_("Failed to spawn browser"));
+					return false;
+				} else if (*exit_code != 0) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 					return false;
 				}
 				invalidate(itempos);
@@ -201,8 +209,12 @@ bool ItemListFormAction::process_operation(Operation op,
 				"ItemListFormAction: opening all unread items "
 				"in "
 				"browser");
-			if (int err = open_unread_items_in_browser(feed, false)) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+			const auto exit_code = open_unread_items_in_browser(feed, false);
+			if (!exit_code.has_value()) {
+				v->show_error(_("Failed to spawn browser"));
+				return false;
+			} else if (*exit_code != 0) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 				return false;
 			}
 		}
@@ -214,8 +226,12 @@ bool ItemListFormAction::process_operation(Operation op,
 				"ItemListFormAction: opening all unread items "
 				"in "
 				"browser and marking read");
-			if (int err = open_unread_items_in_browser(feed, true)) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+			const auto exit_code = open_unread_items_in_browser(feed, true);
+			if (!exit_code.has_value()) {
+				v->show_error(_("Failed to spawn browser"));
+				return false;
+			} else if (*exit_code != 0) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 				return false;
 			}
 			invalidate_everything();

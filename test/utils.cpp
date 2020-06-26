@@ -899,16 +899,19 @@ TEST_CASE("utils::make_title extracts possible title from URL", "[utils]")
 	}
 }
 
-TEST_CASE("run_interactively", "[utils]")
+TEST_CASE("run_interactively runs a command with inherited I/O", "[utils]")
 {
 	SECTION("echo hello should return 0") {
-		int32_t result = utils::run_interactively("echo hello", "test");
+		const auto result = utils::run_interactively("echo hello", "test");
 		REQUIRE(result == 0);
 	}
 	SECTION("exit 1 should return 1") {
-		int32_t result = utils::run_interactively("exit 1", "test");
+		const auto result = utils::run_interactively("exit 1", "test");
 		REQUIRE(result == 1);
 	}
+
+	// Unfortunately, there is no easy way to provoke this function to return
+	// `nonstd::nullopt`, nor to test that it returns just the lower 8 bits.
 }
 
 TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",

@@ -1,10 +1,13 @@
 #ifndef NEWSBOAT_VIEW_H_
 #define NEWSBOAT_VIEW_H_
 
+#include <cstdint>
 #include <list>
 #include <mutex>
 #include <string>
 #include <vector>
+
+#include "3rd-party/optional.hpp"
 
 #include "colormanager.h"
 #include "configcontainer.h"
@@ -77,7 +80,7 @@ public:
 	std::string select_filter(
 		const std::vector<FilterNameExprPair>& filters);
 
-	int open_in_browser(const std::string& url);
+	nonstd::optional<std::uint8_t> open_in_browser(const std::string& url);
 	void open_in_pager(const std::string& filename);
 
 	std::string get_filename_suggestion(const std::string& s);
