@@ -148,13 +148,13 @@ linux_task:
                 cc: gcc-4.9
                 cxx: g++-4.9
                 rust_version: 1.42.0
-        - name: Rust 1.42.0, GCC 9 (Ubuntu 20.04)
+        - name: Rust 1.42.0, GCC 10 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-9
-                cc: gcc-9
-                cxx: g++-9
+                cxx_package: g++-10
+                cc: gcc-10
+                cxx: g++-10
                 rust_version: 1.42.0
 
         - name: GCC 10, more warnings and checks (Ubuntu 20.04)
