@@ -1,10 +1,5 @@
 version: 2
 updates:
-  - package-ecosystem: "docker"
-    directory: "/docker"
-    schedule:
-      interval: "daily"
-
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
