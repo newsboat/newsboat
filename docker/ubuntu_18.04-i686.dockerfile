@@ -27,7 +27,7 @@
 #
 #   make distclean
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
