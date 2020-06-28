@@ -416,15 +416,16 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
 			if (!item_obj["attachments"].is_null()) {
 				if (item_obj["attachments"].size() >= 1) {
-					json a =
-						item_obj["attachments"].front();
-					if (!a["content_url"].is_null()) {
-						item.enclosure_url =
-							a["content_url"];
-					}
-					if (!a["content_type"].is_null()) {
-						item.enclosure_type =
-							a["content_type"];
+					for (auto it = item_obj["attachments"].begin();
+						it != item_obj["attachments"].end(); ++it) {
+						json a = *it;
+						if (!a["content_url"].is_null() && !a["content_type"].is_null()
+							&& newsboat::utils::is_valid_podcast_type(a["content_type"])) {
+							item.enclosure_type =
+								a["content_type"];
+							item.enclosure_url = a["content_url"];
+							break;
+						}
 					}
 				}
 			}
