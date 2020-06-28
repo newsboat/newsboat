@@ -76,7 +76,7 @@ There are numerous ways:
 
 - install via [Snap](https://snapcraft.io/docs/installing-snapd):
 
-        $ sudo snap install newsboat
+      $ sudo snap install newsboat
 
 - [build from source with Docker](doc/docker.md). Note that the resulting binary
     might not run outside of that same Docker container if your system doesn't
@@ -96,8 +96,8 @@ There are numerous ways:
 
     Then compile and install with:
 
-        $ make                   #  pass -jN to use N CPU cores, e.g. -j8
-        $ sudo make install      #  install everything under /usr/local
+      $ make                   #  pass -jN to use N CPU cores, e.g. -j8
+      $ sudo make install      #  install everything under /usr/local
 
     To install to a different directory, pass `prefix` like so: `sudo make
     prefix=/opt/newsboat install`.
