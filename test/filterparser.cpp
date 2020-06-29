@@ -31,6 +31,19 @@ TEST_CASE("FilterParser raises errors on invalid queries", "[FilterParser]")
 	SECTION("non-existent operator") {
 		REQUIRE_FALSE(fp.parse_string("a !! \"b\""));
 	}
+
+	SECTION("incorrect syntax for range") {
+		REQUIRE_FALSE(fp.parse_string("AAAA between 0:15:30"));
+	}
+
+	SECTION("no whitespace after the `and` operator") {
+		REQUIRE_FALSE(fp.parse_string("x = 42andy=0"));
+		REQUIRE_FALSE(fp.parse_string("x = 42 andy=0"));
+	}
+
+	SECTION("operator without arguments") {
+		REQUIRE_FALSE(fp.parse_string("=!"));
+	}
 }
 
 TEST_CASE("FilterParser doesn't raise errors on valid queries",

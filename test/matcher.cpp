@@ -645,15 +645,6 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 	}
 }
 
-TEST_CASE("Invalid expression results in parsing error", "[Matcher]")
-{
-	Matcher m;
-
-	REQUIRE_FALSE(m.parse("AAAA between 0:15:30"));
-	REQUIRE_FALSE(m.parse("x = 42andy=0"));
-	REQUIRE_FALSE(m.parse("x = 42 andy=0"));
-}
-
 TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
 {
 	Matcher m("AAAA between 1:30000");

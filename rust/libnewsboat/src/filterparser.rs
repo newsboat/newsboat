@@ -245,18 +245,24 @@ mod tests {
 
     #[test]
     fn t_error_on_invalid_queries() {
+        // Invalid character in operator
         assert_eq!(parse("title =¯ \"foo\""), Err(Error::AtPos(7)));
+        // Incorrect string quoting
         assert_eq!(parse("a = \"b"), Err(Error::AtPos(4)));
+        // Non-value to the right of equality operator
         assert_eq!(parse("a = b"), Err(Error::AtPos(4)));
+        // Non-existent operator
         assert_eq!(parse("a !! \"b\""), Err(Error::AtPos(2)));
 
+        // Unbalanced parentheses
         assert_eq!(parse("((a=\"b\")))"), Err(Error::TrailingCharacters(")")));
 
-        // From C++ Matcher suite
+        // Incorrect syntax for range
         assert_eq!(
             parse("AAAA between 0:15:30"),
             Err(Error::TrailingCharacters(":30"))
         );
+        // No whitespace after the `and` operator
         assert_eq!(
             parse("x = 42andy=0"),
             Err(Error::TrailingCharacters("andy=0"))
@@ -265,6 +271,7 @@ mod tests {
             parse("x = 42 andy=0"),
             Err(Error::TrailingCharacters("andy=0"))
         );
+        // Operator without arguments
         assert_eq!(parse("=!"), Err(Error::AtPos(0)));
     }
 
@@ -300,7 +307,9 @@ mod tests {
         assert!(parse("attribute = \\\"\0\\\"").is_err());
 
         // Unlike the C++ implementation, Rust is OK with having NUL inside a string literal. In
-        // C++, it terminates the whole expression and implicitly closes the string literal
+        // C++, it terminates the whole expression and implicitly closes the string literal. When
+        // calling Rust through C FFI, we'll automatically get the C behaviour since we're passing
+        // the input as `const char*` without specifying its length.
         assert_eq!(
             parse("attribute = \"hello\0world\""),
             Ok(Expression::Comparison {
