@@ -1,6 +1,10 @@
 #ifndef NEWSBOAT_RS_UTILS_H_
 #define NEWSBOAT_RS_UTILS_H_
 
+#include <cstdint>
+
+#include "3rd-party/optional.hpp"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -55,7 +59,8 @@ char* rs_unescape_url(const char* str);
 
 char* rs_make_title(const char* str);
 
-int32_t rs_run_interactively(const char* command, const char* caller);
+std::uint8_t rs_run_interactively(const char* command, const char* caller,
+	bool* success);
 
 char* rs_getcwd();
 

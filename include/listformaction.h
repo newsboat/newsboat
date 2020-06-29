@@ -1,6 +1,10 @@
 #ifndef NEWSBOAT_LISTFORMACTION_H_
 #define NEWSBOAT_LISTFORMACTION_H_
 
+#include <cstdint>
+
+#include "3rd-party/optional.hpp"
+
 #include "formaction.h"
 
 namespace newsboat {
@@ -13,7 +17,8 @@ protected:
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	int open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
+	nonstd::optional<std::uint8_t> open_unread_items_in_browser(
+		std::shared_ptr<RssFeed> feed,
 		bool markread);
 };
 

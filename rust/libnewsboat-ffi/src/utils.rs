@@ -330,7 +330,8 @@ pub unsafe extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
 pub unsafe extern "C" fn rs_run_interactively(
     command: *const c_char,
     caller: *const c_char,
-) -> i32 {
+    success: *mut bool,
+) -> u8 {
     abort_on_panic(|| {
         let command = CStr::from_ptr(command);
         // This won't panic because all strings in Newsboat are in UTF-8
@@ -340,7 +341,17 @@ pub unsafe extern "C" fn rs_run_interactively(
         // This won't panic because all strings in Newsboat are in UTF-8
         let caller = caller.to_str().expect("caller contained invalid UTF-8");
 
-        utils::run_interactively(&command, &caller)
+        match utils::run_interactively(&command, &caller) {
+            Some(exit_code) => {
+                *success = true;
+                exit_code
+            }
+
+            None => {
+                *success = false;
+                0
+            }
+        }
     })
 }
 

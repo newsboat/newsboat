@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_UTIL_H_
 #define NEWSBOAT_UTIL_H_
 
+#include <cstdint>
 #include <curl/curl.h>
 #include <libxml/parser.h>
 #include <memory>
@@ -135,7 +136,7 @@ int mkdir_parents(const std::string& pathname,
 
 std::string make_title(const std::string& url);
 
-int32_t run_interactively(const std::string& command,
+nonstd::optional<std::uint8_t> run_interactively(const std::string& command,
 	const std::string& caller);
 
 std::string getcwd();

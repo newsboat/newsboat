@@ -243,16 +243,21 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENINBROWSER:
-	case OP_OPENBROWSER_AND_MARK:
+	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
-		if (int err = v->open_in_browser(item->link())) {
-			v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+		const auto exit_code = v->open_in_browser(item->link());
+		if (!exit_code.has_value()) {
+			v->show_error(_("Failed to spawn browser"));
+			return false;
+		} else if (*exit_code != 0) {
+			v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 			return false;
 		}
 
 		v->set_status("");
-		break;
+	}
+	break;
 	case OP_BOOKMARK:
 		if (automatic) {
 			qna_responses.clear();
@@ -428,8 +433,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
 
-			if (int err = v->open_in_browser(links[idx].first)) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+			const auto exit_code = v->open_in_browser(links[idx].first);
+			if (!exit_code.has_value()) {
+				v->show_error(_("Failed to spawn browser"));
+				return false;
+			} else if (*exit_code != 0) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 				return false;
 			}
 

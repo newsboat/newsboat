@@ -50,7 +50,8 @@ bool ListFormAction::process_operation(Operation op,
 	return true;
 }
 
-int ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
+nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
+	std::shared_ptr<RssFeed> feed,
 	bool markread)
 {
 	int tabcount = 0;
@@ -58,9 +59,11 @@ int ListFormAction::open_unread_items_in_browser(std::shared_ptr<RssFeed> feed,
 		if (tabcount <
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
-				if (int err = v->open_in_browser(item->link())) {
-					return err;
+				const auto exit_code = v->open_in_browser(item->link());
+				if (!exit_code.has_value() || *exit_code != 0) {
+					return exit_code;
 				}
+
 				tabcount += 1;
 				item->set_unread(!markread);
 			}

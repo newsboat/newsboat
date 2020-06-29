@@ -870,10 +870,18 @@ std::string utils::make_title(const std::string& const_url)
 	return RustString(rs_make_title(const_url.c_str()));
 }
 
-int32_t utils::run_interactively(const std::string& command,
+nonstd::optional<std::uint8_t> utils::run_interactively(
+	const std::string& command,
 	const std::string& caller)
 {
-	return rs_run_interactively(command.c_str(), caller.c_str());
+	bool success = false;
+	const auto exit_code = rs_run_interactively(command.c_str(), caller.c_str(),
+			&success);
+	if (success) {
+		return exit_code;
+	}
+
+	return nonstd::nullopt;
 }
 
 std::string utils::getcwd()

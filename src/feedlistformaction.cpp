@@ -242,17 +242,12 @@ REDO:
 						"at position `%s': %s",
 						feedpos,
 						feed->link());
-					if (!feed->link().empty()) {
-						if (int err = v->open_in_browser(feed->link())) {
-							v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
-							return false;
-						}
-					} else if (!feed->rssurl().empty()) {
-						if (int err = v->open_in_browser(feed->rssurl())) {
-							v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
-							return false;
-						}
 
+					std::string url;
+					if (!feed->link().empty()) {
+						url = feed->link();
+					} else if (!feed->rssurl().empty()) {
+						url = feed->rssurl();
 					} else {
 						// rssurl can't be empty, so if we got to this branch,
 						// something is clearly wrong with Newsboat internals.
@@ -263,10 +258,19 @@ REDO:
 							"because both `link' and `rssurl' fields are "
 							"empty");
 					}
+
+					if (!url.empty()) {
+						const auto exit_code = v->open_in_browser(url);
+						if (!exit_code.has_value()) {
+							v->show_error(_("Failed to spawn browser"));
+							return false;
+						} else if (*exit_code != 0) {
+							v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+							return false;
+						}
+					}
 				} else {
-					v->show_error(
-						_("Cannot open query feeds in "
-							"the browser!"));
+					v->show_error(_("Cannot open query feeds in the browser!"));
 				}
 			}
 		} else {
@@ -284,11 +288,15 @@ REDO:
 					"unread "
 					"items in feed at position `%s'",
 					feedpos.c_str());
-				if (int err = open_unread_items_in_browser(feed, false)) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+
+				const auto exit_code = open_unread_items_in_browser(feed, false);
+				if (!exit_code.has_value()) {
+					v->show_error(_("Failed to spawn browser"));
+					return false;
+				} else if (*exit_code != 0) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 					return false;
 				}
-
 			}
 		} else {
 			v->show_error(_("No feed selected!"));
@@ -307,8 +315,12 @@ REDO:
 					"marking read",
 					feedpos.c_str());
 
-				if (int err = open_unread_items_in_browser(feed, true)) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), err));
+				const auto exit_code = open_unread_items_in_browser(feed, true);
+				if (!exit_code.has_value()) {
+					v->show_error(_("Failed to spawn browser"));
+					return false;
+				} else if (*exit_code != 0) {
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 					return false;
 				}
 
