@@ -25,7 +25,7 @@ natord = "1.0.9"
 
 # We don't use the following crates, but we pin their versions to make sure
 # that Newsboat builds with Rust 1.25 and later.
-libz-sys = "= 1.0.17"
+libz-sys = "= 1.0.25"
 
 # The following constraints close security holes
 # https://rustsec.org/advisories/RUSTSEC-2019-0009
