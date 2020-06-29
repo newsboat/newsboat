@@ -40,7 +40,7 @@ Newsboat can be compiled.
     manager) (1.42.0 or newer; might work with older versions, but we don't
     check that)
 - [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
-- [SQLite3 (version 3.5 or newer)](https://www.sqlite.org/download.html)
+- [SQLite3 (version 3.32.3 or newer)](https://www.sqlite.org/download.html)
 - [libcurl (version 7.21.6 or newer)](https://curl.haxx.se/download.html)
 - Header files for the SSL library that libcurl uses. You can find out which
     library that is from the output of `curl --version`; most often that's
