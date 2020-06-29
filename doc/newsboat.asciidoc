@@ -137,8 +137,7 @@ include::configcommands-linked.asciidoc[]
 
 === Available Operations
 
-include::availableoprations-linked.asciidoc[]
-
+include::availableoperations-linked.asciidoc[]
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
@@ -1283,12 +1282,9 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 include::chapter-podcasts.asciidoc[]
 
-.Podboat Configuration Commands
-[frame="all", grid="all", format="dsv", separator="||", options="header", cols="10,15,15l,40,20l"]
-|======================================================================================================
-Configuration Command||Argument(s)||Default||Description||Example
-include::podboat-cmds-linked.dsv[]
-|======================================================================================================
+== Podboat Configuration Commands
+
+include::podboat-cmds-linked.asciidoc[]
 
 .Available Operations in Podboat
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
