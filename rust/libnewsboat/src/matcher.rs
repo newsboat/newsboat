@@ -210,7 +210,7 @@ mod tests {
             .unwrap()
             .matches(&mock)
             .unwrap());
-        assert!(Matcher::parse("answer = 0042")
+        assert!(!Matcher::parse("answer = 0042")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -219,7 +219,7 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(Matcher::parse("agent = 7").unwrap().matches(&mock).unwrap());
+        assert!(!Matcher::parse("agent = 7").unwrap().matches(&mock).unwrap());
         assert!(Matcher::parse("agent = 007")
             .unwrap()
             .matches(&mock)
@@ -272,7 +272,7 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(!Matcher::parse("agent != 7")
+        assert!(Matcher::parse("agent != 7")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -334,15 +334,15 @@ mod tests {
     }
 
     #[test]
-    fn t_test_regex_match_doesnt_work_with_numbers() {
+    fn t_test_regex_match_converts_numbers_to_strings_and_uses_them_as_regexes() {
         let mock = MockMatchable::new(&[("AAAA", "12345")]);
 
-        assert!(!Matcher::parse("AAAA =~ 12345")
+        assert!(Matcher::parse("AAAA =~ 12345")
             .unwrap()
             .matches(&mock)
             .unwrap());
-        assert!(!Matcher::parse("AAAA =~ 1").unwrap().matches(&mock).unwrap());
-        assert!(!Matcher::parse("AAAA =~ 45")
+        assert!(Matcher::parse("AAAA =~ 1").unwrap().matches(&mock).unwrap());
+        assert!(Matcher::parse("AAAA =~ 45")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -350,7 +350,7 @@ mod tests {
     }
 
     #[test]
-    fn t_test_regex_match_doesnt_work_with_ranges() {
+    fn t_test_regex_match_treats_ranges_as_strings() {
         let mock = MockMatchable::new(&[("AAAA", "12345"), ("range", "0:123")]);
 
         assert!(!Matcher::parse("AAAA =~ 0:123456")
@@ -366,11 +366,11 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(!Matcher::parse("range =~ 0:123")
+        assert!(Matcher::parse("range =~ 0:123")
             .unwrap()
             .matches(&mock)
             .unwrap());
-        assert!(!Matcher::parse("range =~ 0:12")
+        assert!(Matcher::parse("range =~ 0:12")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -451,15 +451,15 @@ mod tests {
     }
 
     #[test]
-    fn t_test_not_regex_match_doesnt_work_with_numbers() {
+    fn t_test_not_regex_match_converts_numbers_into_strings_and_uses_them_as_regexes() {
         let mock = MockMatchable::new(&[("AAAA", "12345")]);
 
-        assert!(Matcher::parse("AAAA !~ 12345")
+        assert!(!Matcher::parse("AAAA !~ 12345")
             .unwrap()
             .matches(&mock)
             .unwrap());
-        assert!(Matcher::parse("AAAA !~ 1").unwrap().matches(&mock).unwrap());
-        assert!(Matcher::parse("AAAA !~ 45")
+        assert!(!Matcher::parse("AAAA !~ 1").unwrap().matches(&mock).unwrap());
+        assert!(!Matcher::parse("AAAA !~ 45")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -677,7 +677,7 @@ mod tests {
     }
 
     #[test]
-    fn t_test_comparisons_dont_work_with_strings() {
+    fn t_test_comparisons_convert_string_arguments_to_numbers() {
         let mock = MockMatchable::new(&[("AAAA", "12345")]);
 
         assert!(Matcher::parse("AAAA > \"12344\"")
@@ -685,12 +685,12 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(Matcher::parse("AAAA > \"12345\"")
+        assert!(!Matcher::parse("AAAA > \"12345\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
 
-        assert!(Matcher::parse("AAAA > \"123456\"")
+        assert!(!Matcher::parse("AAAA > \"123456\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -700,12 +700,12 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(!Matcher::parse("AAAA < \"12346\"")
+        assert!(Matcher::parse("AAAA < \"12346\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
 
-        assert!(!Matcher::parse("AAAA < \"123456\"")
+        assert!(Matcher::parse("AAAA < \"123456\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -720,7 +720,7 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(Matcher::parse("AAAA >= \"12346\"")
+        assert!(!Matcher::parse("AAAA >= \"12346\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -730,12 +730,76 @@ mod tests {
             .matches(&mock)
             .unwrap());
 
-        assert!(!Matcher::parse("AAAA <= \"12345\"")
+        assert!(Matcher::parse("AAAA <= \"12345\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
 
-        assert!(!Matcher::parse("AAAA <= \"12346\"")
+        assert!(Matcher::parse("AAAA <= \"12346\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+    }
+
+    #[test]
+    fn t_test_comparisons_use_numeric_prefix_of_the_string() {
+        let mock = MockMatchable::new(&[("AAAA", "12345xx")]);
+
+        assert!(Matcher::parse("AAAA >= \"12345\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(Matcher::parse("AAAA > \"1234a\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("AAAA < \"12345a\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("AAAA < \"1234a\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("AAAA < \"9999b\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+    }
+
+    #[test]
+    fn t_test_comparisons_use_zero_if_string_cant_be_converted_to_number() {
+        let mock = MockMatchable::new(&[("zero", "0"), ("same_zero", "yeah")]);
+
+        assert!(!Matcher::parse("zero < \"unknown\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("zero > \"unknown\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(Matcher::parse("zero <= \"unknown\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(Matcher::parse("zero >= \"unknown\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("same_zero < \"0\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("same_zero > \"0\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(Matcher::parse("same_zero <= \"0\"")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(Matcher::parse("same_zero >= \"0\"")
             .unwrap()
             .matches(&mock)
             .unwrap());
@@ -838,6 +902,28 @@ mod tests {
             .matches(&mock)
             .unwrap());
         assert!(Matcher::parse("AAAA between 12346:12344")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+    }
+
+    #[test]
+    fn t_test_operator_between_converts_numeric_prefix_of_the_attribute() {
+        let mock = MockMatchable::new(&[("value", "123four"), ("practically_zero", "sure")]);
+
+        assert!(Matcher::parse("value between 122:124")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("value between 124:130")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(Matcher::parse("practically_zero between 0:1")
+            .unwrap()
+            .matches(&mock)
+            .unwrap());
+        assert!(!Matcher::parse("practically_zero between 1:100")
             .unwrap()
             .matches(&mock)
             .unwrap());

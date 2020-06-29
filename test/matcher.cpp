@@ -627,7 +627,7 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 		REQUIRE(m.parse("AAAA between 12346:12344"));
 		REQUIRE(m.matches(&mock));
 
-		SECTION("...converting numering prefix of the attribute if necessary") {
+		SECTION("...converting numeric prefix of the attribute if necessary") {
 			MatcherMockMatchable mock({{"value", "123four"}, {"practically_zero", "sure"}});
 
 			REQUIRE(m.parse("value between 122:124"));
