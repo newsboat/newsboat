@@ -804,3 +804,27 @@ TEST_CASE("Whitespace before and/or is not required", "[Matcher]")
 	REQUIRE(m.parse("x = \"42\"or y=42"));
 	REQUIRE(m.matches(&mock));
 }
+
+TEST_CASE("string_to_num() converts numeric prefix of the string to int",
+	"[Matcher]")
+{
+	REQUIRE(Matcher::string_to_num("7654") == 7654);
+	REQUIRE(Matcher::string_to_num("123foo") == 123);
+	REQUIRE(Matcher::string_to_num("-999999bar") == -999999);
+
+	REQUIRE(Matcher::string_to_num("-2147483648min") == -2147483648);
+	REQUIRE(Matcher::string_to_num("2147483647 is ok") == 2147483647);
+
+	// On under-/over-flow, returns min/max representable value
+	REQUIRE(Matcher::string_to_num("-2147483649 is too small for i32") ==
+		-2147483648);
+	REQUIRE(Matcher::string_to_num("2147483648 is too large for i32") ==
+		2147483647);
+}
+
+TEST_CASE("string_to_num() returns 0 if there is no numeric prefix",
+	"[Matcher]")
+{
+	REQUIRE(Matcher::string_to_num("hello") == 0);
+	REQUIRE(Matcher::string_to_num("") == 0);
+}

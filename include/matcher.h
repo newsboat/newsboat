@@ -16,6 +16,13 @@ public:
 	std::string get_parse_error();
 	std::string get_expression();
 
+	/// Convert numerical prefix of the string to an `int`.
+	///
+	/// Return 0 if there is no numeric prefix. On underflow, return `int`'s
+	/// minimum. On overflow, return `int`'s maximum.
+	// This is made public so it can be tested. DON'T USE OUTSIDE OF MATCHER.
+	static int string_to_num(const std::string& number);
+
 private:
 	bool matches_r(expression* e, Matchable* item);
 

@@ -91,48 +91,40 @@ std::string get_attr_or_throw(Matchable* item, const std::string& attr_name)
 
 bool Matcher::matchop_lt(expression* e, Matchable* item)
 {
-	const auto attr = get_attr_or_throw(item, e->name);
+	const int ilit = string_to_num(e->literal);
 
-	std::istringstream islit(e->literal);
-	std::istringstream isatt(attr);
-	int ilit, iatt;
-	islit >> ilit;
-	isatt >> iatt;
+	const auto attr = get_attr_or_throw(item, e->name);
+	const int iatt = string_to_num(attr);
+
 	return iatt < ilit;
 }
 
 bool Matcher::matchop_between(expression* e, Matchable* item)
 {
 	const auto attr = get_attr_or_throw(item, e->name);
+	const int att = string_to_num(attr);
 
 	const std::vector<std::string> lit = utils::tokenize(e->literal, ":");
-	std::istringstream isatt(attr);
-	int att;
-	isatt >> att;
 	if (lit.size() < 2) {
 		return false;
 	}
-	std::istringstream is1(lit[0]), is2(lit[1]);
-	int i1, i2;
-	is1 >> i1;
-	is2 >> i2;
+
+	int i1 = string_to_num(lit[0]);
+	int i2 = string_to_num(lit[1]);
 	if (i1 > i2) {
-		int tmp = i1;
-		i1 = i2;
-		i2 = tmp;
+		std::swap(i1, i2);
 	}
+
 	return (att >= i1 && att <= i2);
 }
 
 bool Matcher::matchop_gt(expression* e, Matchable* item)
 {
 	const auto attr = get_attr_or_throw(item, e->name);
+	const int iatt = string_to_num(attr);
 
-	std::istringstream islit(e->literal);
-	std::istringstream isatt(attr);
-	int ilit, iatt;
-	islit >> ilit;
-	isatt >> iatt;
+	const int ilit = string_to_num(e->literal);
+
 	return iatt > ilit;
 }
 
@@ -245,6 +237,13 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 std::string Matcher::get_parse_error()
 {
 	return errmsg;
+}
+
+int Matcher::string_to_num(const std::string& number)
+{
+	int result = 0;
+	std::istringstream(number) >> result;
+	return result;
 }
 
 } // namespace newsboat
