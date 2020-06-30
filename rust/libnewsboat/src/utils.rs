@@ -74,9 +74,20 @@ pub fn absolute_url(base_url: &str, link: &str) -> String {
         .to_owned()
 }
 
+/// Path to the home directory, if known. Doesn't work on Windows.
+#[cfg(not(target_os = "windows"))]
+pub fn home_dir() -> Option<PathBuf> {
+    // This function got deprecated because it examines HOME environment variable even on Windows,
+    // which is wrong. But Newsboat doesn't support Windows, so we're fine using that.
+    //
+    // Cf. https://github.com/rust-lang/rust/issues/28940
+    #[allow(deprecated)]
+    std::env::home_dir()
+}
+
 /// Replaces tilde (`~`) at the beginning of the path with the path to user's home directory.
 pub fn resolve_tilde(path: PathBuf) -> PathBuf {
-    if let (Some(home), Ok(suffix)) = (dirs::home_dir(), path.strip_prefix("~")) {
+    if let (Some(home), Ok(suffix)) = (home_dir(), path.strip_prefix("~")) {
         return home.join(suffix);
     }
 

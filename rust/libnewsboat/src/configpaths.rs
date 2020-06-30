@@ -1,7 +1,6 @@
 use crate::cliargsparser::CliArgsParser;
 use crate::logger::{self, Level};
 use crate::utils;
-use dirs;
 use gettextrs::gettext;
 use libc;
 use std::fs::{self, DirBuilder};
@@ -79,7 +78,7 @@ impl ConfigPaths {
             using_nonstandard_configs: false,
         };
 
-        let env_home = dirs::home_dir();
+        let env_home = utils::home_dir();
         if env_home.is_none() {
             let uid = unsafe { libc::getuid() };
 
