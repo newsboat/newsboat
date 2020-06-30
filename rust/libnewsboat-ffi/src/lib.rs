@@ -10,6 +10,7 @@ pub mod history;
 pub mod human_panic;
 pub mod logger;
 pub mod matchererror;
+pub mod scopemeasure;
 pub mod utils;
 
 /// Runs a Rust function, and if it panics, calls abort(); otherwise returns what function
