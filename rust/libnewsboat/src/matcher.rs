@@ -49,87 +49,90 @@ impl Matcher {
 impl Operator {
     fn apply(&self, attr: &str, value: &Value) -> Result<bool, MatcherError> {
         match self {
-            Operator::Equals => match value {
-                Value::Str(ref s) => Ok(attr == s),
-                Value::Int(i) => match attr.parse::<i32>() {
-                    Ok(attr) => Ok(attr == *i),
-                    _ => Ok(false),
-                },
-                _ => Ok(false),
-            },
+            Operator::Equals => Ok(attr == value.0),
             Operator::NotEquals => Operator::Equals
                 .apply(attr, value)
                 .and_then(|result| Ok(!result)),
-            Operator::RegexMatches => match value {
-                Value::Str(ref pattern) => {
-                    match Regex::new(
-                        pattern,
-                        CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
-                    ) {
-                        Ok(regex) => {
-                            let mut result = false;
-                            let max_matches = 1;
-                            if let Ok(matches) =
-                                regex.matches(attr, max_matches, MatchFlags::empty())
-                            {
-                                // Ok with non-empty Vec inside means a match was found
-                                result = !matches.is_empty();
-                            }
-                            Ok(result)
-                        }
-
-                        Err(errmsg) => Err(MatcherError::InvalidRegex {
-                            regex: pattern.clone(),
-                            errmsg,
-                        }),
+            Operator::RegexMatches => match Regex::new(
+                &value.0,
+                CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
+            ) {
+                Ok(regex) => {
+                    let mut result = false;
+                    let max_matches = 1;
+                    if let Ok(matches) = regex.matches(attr, max_matches, MatchFlags::empty()) {
+                        // Ok with non-empty Vec inside means a match was found
+                        result = !matches.is_empty();
                     }
+                    Ok(result)
                 }
-                _ => Ok(false),
+
+                Err(errmsg) => Err(MatcherError::InvalidRegex {
+                    regex: value.0.clone(),
+                    errmsg,
+                }),
             },
             Operator::NotRegexMatches => Operator::RegexMatches
                 .apply(attr, value)
                 .and_then(|result| Ok(!result)),
-            Operator::LessThan => match value {
-                Value::Int(i) => Ok(attr.parse::<i32>().unwrap() < *i),
-                _ => Ok(false),
-            },
-            Operator::GreaterThan => match value {
-                Value::Int(i) => Ok(attr.parse::<i32>().unwrap() > *i),
-                _ => Ok(true),
-            },
-            Operator::LessThanOrEquals => match value {
-                Value::Int(i) => Ok(attr.parse::<i32>().unwrap() <= *i),
-                _ => Ok(false),
-            },
-            Operator::GreaterThanOrEquals => match value {
-                Value::Int(i) => Ok(attr.parse::<i32>().unwrap() >= *i),
-                _ => Ok(true),
-            },
-            Operator::Between => match value {
-                Value::Range(a, b) => {
-                    let low = std::cmp::min(*a, *b);
-                    let high = std::cmp::max(*a, *b);
-                    let i = attr.parse::<i32>().unwrap();
-                    Ok(i >= low && i <= high)
+            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.0)),
+            Operator::GreaterThan => Ok(dbg!(string_to_num(attr)) > dbg!(string_to_num(&value.0))),
+            Operator::LessThanOrEquals => Ok(string_to_num(attr) <= string_to_num(&value.0)),
+            Operator::GreaterThanOrEquals => Ok(string_to_num(attr) >= string_to_num(&value.0)),
+            Operator::Between => {
+                let fields = value.0.split(':').collect::<Vec<_>>();
+                if fields.len() != 2 {
+                    return Ok(false);
                 }
-                _ => Ok(false),
-            },
-            Operator::Contains => match value {
-                Value::Int(i) => self.apply(attr, &Value::Str(format!("{}", i))),
-                Value::Str(ref s) => {
-                    for token in attr.split(' ') {
-                        if token == s {
-                            return Ok(true);
-                        }
+
+                let a = string_to_num(fields[0]);
+                let b = string_to_num(fields[1]);
+
+                let low = std::cmp::min(a, b);
+                let high = std::cmp::max(a, b);
+                let i = string_to_num(attr);
+                Ok(i >= low && i <= high)
+            }
+            Operator::Contains => {
+                for token in attr.split(' ') {
+                    if token == value.0 {
+                        return Ok(true);
                     }
-                    Ok(false)
                 }
-                _ => Ok(false),
-            },
+                Ok(false)
+            }
             Operator::NotContains => Operator::Contains
                 .apply(attr, value)
                 .and_then(|result| Ok(!result)),
         }
+    }
+}
+
+/// Convert numerical prefix of the string to i32.
+///
+/// Return 0 if there is no numeric prefix. On underflow, return `std::i32::MIN`. On overflow,
+/// return `std::i32::MAX`.
+fn string_to_num(input: &str) -> i32 {
+    let search_start = if input.starts_with('-') { 1 } else { 0 };
+
+    let numerics_end = input[search_start..]
+        .find(|c: char| !c.is_numeric())
+        .unwrap_or_else(|| input.len())
+        + search_start; // Adding the starting offset to get an index inside the original input
+
+    if numerics_end - search_start == 0 {
+        // No numeric prefix
+        return 0;
+    }
+
+    if let Ok(number) = input[..numerics_end].parse::<i32>() {
+        number
+    } else if search_start == 1 {
+        // Number starts with minus and couldn't be parsed => underflow
+        std::i32::MIN
+    } else {
+        // Number doesn't start with minus and couldn't be parsed => overflow
+        std::i32::MAX
     }
 }
 
@@ -1052,5 +1055,28 @@ mod tests {
             .unwrap()
             .matches(&mock)
             .unwrap());
+    }
+
+    #[test]
+    fn t_string_to_num_convers_numeric_prefix_to_i32() {
+        assert_eq!(string_to_num("7654"), 7654);
+        assert_eq!(string_to_num("123foo"), 123);
+        assert_eq!(string_to_num("-999999bar"), -999999);
+
+        assert_eq!(string_to_num("-2147483648min"), -2147483648);
+        assert_eq!(string_to_num("2147483647 is ok"), 2147483647);
+
+        // On under-/over-flow, returns min/max representable value
+        assert_eq!(
+            string_to_num("-2147483649 is too small for i32"),
+            -2147483648
+        );
+        assert_eq!(string_to_num("2147483648 is too large for i32"), 2147483647);
+    }
+
+    #[test]
+    fn t_string_to_num_returns_0_if_there_is_no_numeric_prefix() {
+        assert_eq!(string_to_num("hello"), 0);
+        assert_eq!(string_to_num(""), 0);
     }
 }
