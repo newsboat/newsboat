@@ -148,7 +148,7 @@ mod tests {
     fn replaces_printf_format_with_text_representation_of_an_argument() {
         assert_eq!(fmt!("%i", 42), "42");
         assert_eq!(fmt!("%i", -13), "-13");
-        assert_eq!(fmt!("%.3f", 3.1416), "3.142");
+        assert_eq!(fmt!("%.3f", 1.2468), "1.247");
         assert_eq!(fmt!("%i %i", 100500, -191), "100500 -191");
     }
 
