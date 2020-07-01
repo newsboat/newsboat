@@ -117,7 +117,7 @@ impl Operator {
             Operator::Contains => match value {
                 Value::Int(i) => self.apply(attr, &Value::Str(format!("{}", i))),
                 Value::Str(ref s) => {
-                    for token in attr.split(" ") {
+                    for token in attr.split(' ') {
                         if token == s {
                             return Ok(true);
                         }
