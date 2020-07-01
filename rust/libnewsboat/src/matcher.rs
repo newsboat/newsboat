@@ -122,7 +122,7 @@ impl Operator {
                             return Ok(true);
                         }
                     }
-                    return Ok(false);
+                    Ok(false)
                 }
                 _ => Ok(false),
             },
@@ -140,11 +140,9 @@ fn evaluate_expression(expr: &Expression, item: &impl Matchable) -> Result<bool,
             op,
             value,
         } => match item.attribute_value(&attribute) {
-            None => {
-                return Err(MatcherError::AttributeUnavailable {
-                    attr: attribute.clone(),
-                })
-            }
+            None => Err(MatcherError::AttributeUnavailable {
+                attr: attribute.clone(),
+            }),
 
             Some(ref attr) => op.apply(attr, &value),
         },
