@@ -420,7 +420,8 @@ pub fn remove_soft_hyphens(text: &mut String) {
 ///
 /// 2. figuring out the `LinkType` for a particular enclosure, given its MIME type
 ///    (`utils::podcast_mime_to_link_type`).
-const PODCAST_MIME_TO_LINKTYPE: [(fn(&str) -> bool, htmlrenderer::LinkType); 2] = [
+type MimeMatcher = (fn(&str) -> bool, htmlrenderer::LinkType);
+const PODCAST_MIME_TO_LINKTYPE: [MimeMatcher; 2] = [
     (
         |mime| {
             // RFC 5334, section 10.1 says "historically, some implementations expect .ogg files to be
