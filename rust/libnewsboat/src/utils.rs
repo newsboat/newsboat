@@ -772,8 +772,6 @@ pub fn extract_filter(line: &str) -> (&str, &str) {
 
 #[cfg(test)]
 mod tests {
-    use tempfile;
-
     use super::*;
 
     #[test]
