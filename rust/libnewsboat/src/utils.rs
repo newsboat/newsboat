@@ -388,19 +388,17 @@ pub fn substr_with_width_stfl(string: &str, max_width: usize) -> String {
                     tagbuf.clear();
                 }
             }
+        } else if c == '<' {
+            in_bracket = true;
+            tagbuf.push(c);
         } else {
-            if c == '<' {
-                in_bracket = true;
-                tagbuf.push(c);
-            } else {
-                // Control chars count as width 0
-                let w = UnicodeWidthChar::width(c).unwrap_or(0);
-                if width + w > max_width {
-                    break;
-                }
-                width += w;
-                result.push(c);
+            // Control chars count as width 0
+            let w = UnicodeWidthChar::width(c).unwrap_or(0);
+            if width + w > max_width {
+                break;
             }
+            width += w;
+            result.push(c);
         }
     }
     result
@@ -725,24 +723,30 @@ pub fn strip_comments(line: &str) -> &str {
     let mut first_pound_chr_idx = line.len();
 
     for (idx, chr) in line.char_indices() {
-        if chr == '\\' {
-            prev_was_backslash = true;
-            continue;
-        } else if chr == '"' {
-            // If the quote is escaped or we're inside backticks, do nothing
-            if !prev_was_backslash && !inside_backticks {
-                inside_quotes = !inside_quotes;
+        match chr {
+            '\\' => {
+                prev_was_backslash = true;
+                continue;
             }
-        } else if chr == '`' {
-            // If the backtick is escaped, do nothing
-            if !prev_was_backslash {
-                inside_backticks = !inside_backticks;
+            '"' => {
+                // If the quote is escaped or we're inside backticks, do nothing
+                if !prev_was_backslash && !inside_backticks {
+                    inside_quotes = !inside_quotes;
+                }
             }
-        } else if chr == '#' {
-            if !prev_was_backslash && !inside_quotes && !inside_backticks {
-                first_pound_chr_idx = idx;
-                break;
+            '`' => {
+                // If the backtick is escaped, do nothing
+                if !prev_was_backslash {
+                    inside_backticks = !inside_backticks;
+                }
             }
+            '#' => {
+                if !prev_was_backslash && !inside_quotes && !inside_backticks {
+                    first_pound_chr_idx = idx;
+                    break;
+                }
+            }
+            _ => {}
         }
 
         // We call `continue` when we run into a backslash; here, we handle all the other
