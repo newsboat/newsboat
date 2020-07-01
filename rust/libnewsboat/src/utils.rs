@@ -640,7 +640,7 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
         })
         .ok()
         .and_then(|exit_status| exit_status.code())
-        .and_then(|exit_code| Some(exit_code as u8))
+        .map(|exit_code| exit_code as u8)
 }
 
 /// Get the current working directory.
