@@ -16,17 +16,14 @@ impl History {
         }
     }
     pub fn add_line(&mut self, line: String) {
-        /*
-         * When a line is added, we need to do so and
-         * reset the index so that the next prev/next
-         * operations start from the beginning again.
-         */
+        // When a line is added, we need to do so and reset the index so that the next
+        // previous_line()/next_line() operations start from the beginning again.
         if !line.is_empty() {
             self.lines.insert(0, line)
         }
         self.idx = 0;
     }
-    pub fn next(&mut self) -> String {
+    pub fn next_line(&mut self) -> String {
         match self.idx {
             0 => String::new(),
             _ => {
@@ -35,7 +32,7 @@ impl History {
             }
         }
     }
-    pub fn prev(&mut self) -> String {
+    pub fn previous_line(&mut self) -> String {
         match self.lines.len() {
             0 => String::new(),
             len if self.idx < len => {
@@ -83,20 +80,20 @@ mod tests {
     #[test]
     fn t_empty_history_returns_nothing() {
         let mut h = History::new();
-        assert_eq!(h.prev(), "");
-        assert_eq!(h.prev(), "");
-        assert_eq!(h.next(), "");
-        assert_eq!(h.next(), "");
+        assert_eq!(h.previous_line(), "");
+        assert_eq!(h.previous_line(), "");
+        assert_eq!(h.next_line(), "");
+        assert_eq!(h.next_line(), "");
     }
 
     #[test]
     fn t_one_line_in_history() {
         let mut h = History::new();
         h.add_line("testline".to_string());
-        assert_eq!(h.prev(), "testline");
-        assert_eq!(h.prev(), "testline");
-        assert_eq!(h.next(), "testline");
-        assert_eq!(h.next(), "");
+        assert_eq!(h.previous_line(), "testline");
+        assert_eq!(h.previous_line(), "testline");
+        assert_eq!(h.next_line(), "testline");
+        assert_eq!(h.next_line(), "");
     }
 
     #[test]
@@ -104,14 +101,14 @@ mod tests {
         let mut h = History::new();
         h.add_line("testline".to_string());
         h.add_line("foobar".to_string());
-        assert_eq!(h.prev(), "foobar");
-        assert_eq!(h.prev(), "testline");
-        assert_eq!(h.next(), "testline");
-        assert_eq!(h.prev(), "testline");
-        assert_eq!(h.next(), "testline");
-        assert_eq!(h.next(), "foobar");
-        assert_eq!(h.next(), "");
-        assert_eq!(h.next(), "");
+        assert_eq!(h.previous_line(), "foobar");
+        assert_eq!(h.previous_line(), "testline");
+        assert_eq!(h.next_line(), "testline");
+        assert_eq!(h.previous_line(), "testline");
+        assert_eq!(h.next_line(), "testline");
+        assert_eq!(h.next_line(), "foobar");
+        assert_eq!(h.next_line(), "");
+        assert_eq!(h.next_line(), "");
     }
 
     #[test]
@@ -134,10 +131,10 @@ mod tests {
         // lines are loaded to new History
         let mut loaded_h = History::new();
         loaded_h.load_from_file(file_path).unwrap();
-        assert_eq!(loaded_h.prev(), "foobar");
-        assert_eq!(loaded_h.prev(), "testline");
-        assert_eq!(loaded_h.next(), "testline");
-        assert_eq!(loaded_h.next(), "foobar");
-        assert_eq!(loaded_h.next(), "");
+        assert_eq!(loaded_h.previous_line(), "foobar");
+        assert_eq!(loaded_h.previous_line(), "testline");
+        assert_eq!(loaded_h.next_line(), "testline");
+        assert_eq!(loaded_h.next_line(), "foobar");
+        assert_eq!(loaded_h.next_line(), "");
     }
 }
