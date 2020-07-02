@@ -177,7 +177,7 @@ mod tests {
         pub fn new(values: &[(&str, &str)]) -> MockMatchable {
             MockMatchable {
                 values: values
-                    .into_iter()
+                    .iter()
                     .map(|(a, b)| (String::from(*a), String::from(*b)))
                     .collect::<BTreeMap<_, _>>(),
             }
