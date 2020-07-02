@@ -368,9 +368,9 @@ mod tests {
         check(vec![
             "newsboat".to_string(),
             "-e".to_string(),
-            exportf.clone(),
+            exportf,
             "-i".to_string(),
-            importf.to_string(),
+            importf,
         ]);
     }
 
@@ -692,9 +692,9 @@ mod tests {
         check(vec![
             "newsboat".to_string(),
             "-E".to_string(),
-            exportf.clone(),
+            exportf,
             "-I".to_string(),
-            importf.to_string(),
+            importf,
         ]);
     }
 
