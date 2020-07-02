@@ -34,12 +34,12 @@ impl FileSentries {
     /// Create a new struct with random strings for sentries.
     pub fn new() -> FileSentries {
         FileSentries {
-            config: random::<u32>().to_string() + &"config",
-            urls: random::<u32>().to_string() + &"urls",
-            cache: random::<u32>().to_string() + &"cache",
-            queue: random::<u32>().to_string() + &"queue",
-            search: random::<u32>().to_string() + &"search",
-            cmdline: random::<u32>().to_string() + &"cmdline",
+            config: random::<u32>().to_string() + "config",
+            urls: random::<u32>().to_string() + "urls",
+            cache: random::<u32>().to_string() + "cache",
+            queue: random::<u32>().to_string() + "queue",
+            search: random::<u32>().to_string() + "search",
+            cmdline: random::<u32>().to_string() + "cmdline",
         }
     }
 }

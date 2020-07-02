@@ -342,7 +342,7 @@ mod tests {
         ]);
         check(vec![
             "newsboat".to_string(),
-            "--import-from-opml=".to_string() + &filename,
+            "--import-from-opml=".to_string() + filename,
         ]);
     }
 
@@ -445,7 +445,7 @@ mod tests {
 
         check(vec![
             "newsboat".to_string(),
-            "--url-file=".to_string() + &filename,
+            "--url-file=".to_string() + filename,
         ]);
     }
 
@@ -471,7 +471,7 @@ mod tests {
         ]);
         check(vec![
             "newsboat".to_string(),
-            "--cache-file=".to_string() + &filename,
+            "--cache-file=".to_string() + filename,
         ]);
     }
 
@@ -493,7 +493,7 @@ mod tests {
         ]);
         check(vec![
             "newsboat".to_string(),
-            "--config-file=".to_string() + &filename,
+            "--config-file=".to_string() + filename,
         ]);
     }
 
@@ -645,7 +645,7 @@ mod tests {
         ]);
         check(vec![
             "newsboat".to_string(),
-            "--import-from-file=".to_string() + &filename,
+            "--import-from-file=".to_string() + filename,
         ]);
     }
 
@@ -666,7 +666,7 @@ mod tests {
         ]);
         check(vec![
             "newsboat".to_string(),
-            "--export-to-file=".to_string() + &filename,
+            "--export-to-file=".to_string() + filename,
         ]);
     }
 
@@ -715,7 +715,7 @@ mod tests {
         ]);
         check(vec![
             "newsboat".to_string(),
-            "--log-file=".to_string() + &filename,
+            "--log-file=".to_string() + filename,
         ]);
     }
 
