@@ -89,8 +89,6 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && $HOME/rustup.sh -y \
         --default-host x86_64-unknown-linux-gnu \
         --default-toolchain $rust_version \
-        # Install only rustc, rust-std, and cargo
-        --profile minimal \
     && chmod a+w $HOME/.cargo
 
 ENV HOME /home/builder
