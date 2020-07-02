@@ -28,6 +28,9 @@
 //! assert_eq!(matches[0].end_pos, input.len());
 //! ```
 
+// This lint is nitpicky, I don't think it's really important how the literals are written.
+#![allow(clippy::unreadable_literal)]
+
 use bitflags::bitflags;
 use gettextrs::gettext;
 use libc::{regcomp, regerror, regex_t, regexec, regfree, regmatch_t};

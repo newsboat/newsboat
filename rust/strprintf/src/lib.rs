@@ -14,6 +14,9 @@
 // formatting macro accepts. Everything else will result in a compile-time error. See the docs in
 // `trait` module for more on that.
 
+// This lint is nitpicky, I don't think it's really important how the literals are written.
+#![allow(clippy::unreadable_literal)]
+
 pub mod specifiers_iterator;
 // Re-exporting so that macro can just import the whole crate and get everything it needs.
 pub use crate::specifiers_iterator::SpecifiersIterator;
