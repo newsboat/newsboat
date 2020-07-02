@@ -1146,13 +1146,13 @@ mod tests {
 
     #[test]
     fn t_unescape_url() {
-        assert!(unescape_url(String::from("foo%20bar")).unwrap() == String::from("foo bar"));
+        assert!(unescape_url(String::from("foo%20bar")).unwrap() == "foo bar");
         assert!(
             unescape_url(String::from(
                 "%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D"
             ))
             .unwrap()
-                == String::from("!#$&'()*+,/:;=?@[]")
+                == "!#$&'()*+,/:;=?@[]"
         );
     }
 
