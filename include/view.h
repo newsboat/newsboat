@@ -12,8 +12,9 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "controller.h"
-#include "filebrowserformaction.h"
 #include "dirbrowserformaction.h"
+#include "feedlistformaction.h"
+#include "filebrowserformaction.h"
 #include "htmlrenderer.h"
 #include "keymap.h"
 #include "regexmanager.h"
@@ -23,6 +24,7 @@ namespace newsboat {
 
 class ItemListFormAction;
 class ItemViewFormAction;
+class FeedListFormAction;
 
 class View {
 public:
@@ -156,6 +158,7 @@ protected:
 
 	std::vector<std::shared_ptr<FormAction>> formaction_stack;
 	unsigned int current_formaction;
+	std::shared_ptr<FeedListFormAction> feedlist_form;
 
 	std::vector<std::string> tags;
 

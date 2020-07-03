@@ -29,7 +29,6 @@ extern "C" {
 #include "dialogsformaction.h"
 #include "exception.h"
 #include "feedlist.h"
-#include "feedlistformaction.h"
 #include "filebrowser.h"
 #include "fmtstrformatter.h"
 #include "formaction.h"
@@ -123,11 +122,10 @@ int View::run()
 	bool have_macroprefix = false;
 	std::vector<MacroCmd> macrocmds;
 
-	// create feedlist
-	auto feedlist = std::make_shared<FeedListFormAction>(
+	feedlist_form = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg, rxman);
-	apply_colors(feedlist);
-	formaction_stack.push_back(feedlist);
+	apply_colors(feedlist_form);
+	formaction_stack.push_back(feedlist_form);
 	current_formaction = formaction_stack_size() - 1;
 
 	get_current_formaction()->init();
@@ -233,6 +231,8 @@ int View::run()
 			}
 		}
 	}
+
+	feedlist_form.reset();
 
 	Stfl::reset();
 	return EXIT_SUCCESS;
@@ -358,12 +358,9 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 void View::update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds)
 {
 	try {
-		if (formaction_stack_size() > 0) {
+		if (feedlist_form != nullptr) {
 			std::lock_guard<std::mutex> lock(mtx);
-			std::shared_ptr<FeedListFormAction> feedlist =
-				std::dynamic_pointer_cast<FeedListFormAction,
-				FormAction>(formaction_stack[0]);
-			feedlist->update_visible_feeds(feeds);
+			feedlist_form->update_visible_feeds(feeds);
 		}
 	} catch (const MatcherException& e) {
 		set_status(strprintf::fmt(
@@ -385,11 +382,8 @@ void View::set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds)
 			}
 		}
 
-		if (formaction_stack_size() > 0) {
-			std::shared_ptr<FeedListFormAction> feedlist =
-				std::dynamic_pointer_cast<FeedListFormAction,
-				FormAction>(formaction_stack[0]);
-			feedlist->set_feedlist(feeds);
+		if (feedlist_form != nullptr) {
+			feedlist_form->set_feedlist(feeds);
 		}
 	} catch (const MatcherException& e) {
 		set_status(strprintf::fmt(
@@ -663,18 +657,15 @@ bool View::get_random_unread(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	if (!cfg->get_configvalue_as_bool("goto-next-feed")) {
 		return false;
 	}
-	if (feedlist->jump_to_random_unread_feed(feedpos)) {
+	if (feedlist_form->jump_to_random_unread_feed(feedpos)) {
 		LOG(Level::DEBUG,
 			"View::get_random_unread: found feed with unread "
 			"articles");
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		if (itemlist.jump_to_random_unread_item()) {
@@ -695,9 +686,6 @@ bool View::get_previous_unread(ItemListFormAction& itemlist,
 	unsigned int feedpos;
 	LOG(Level::DEBUG,
 		"View::get_previous_unread: trying to find previous unread");
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	if (itemlist.jump_to_previous_unread_item(false)) {
 		LOG(Level::DEBUG,
 			"View::get_previous_unread: found unread article in "
@@ -713,12 +701,12 @@ bool View::get_previous_unread(ItemListFormAction& itemlist,
 		LOG(Level::DEBUG,
 			"View::get_previous_unread: goto-next-feed = false");
 		show_error(_("No unread items."));
-	} else if (feedlist->jump_to_previous_unread_feed(feedpos)) {
+	} else if (feedlist_form->jump_to_previous_unread_feed(feedpos)) {
 		LOG(Level::DEBUG,
 			"View::get_previous_unread: found feed with unread "
 			"articles");
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		if (itemlist.jump_to_previous_unread_item(true)) {
@@ -735,14 +723,10 @@ bool View::get_previous_unread(ItemListFormAction& itemlist,
 
 bool View::get_next_unread_feed(ItemListFormAction& itemlist)
 {
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != nullptr);
-	if (feedlist->jump_to_next_unread_feed(feedpos)) {
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+	if (feedlist_form->jump_to_next_unread_feed(feedpos)) {
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		return true;
@@ -752,14 +736,10 @@ bool View::get_next_unread_feed(ItemListFormAction& itemlist)
 
 bool View::get_prev_unread_feed(ItemListFormAction& itemlist)
 {
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != nullptr);
-	if (feedlist->jump_to_previous_unread_feed(feedpos)) {
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+	if (feedlist_form->jump_to_previous_unread_feed(feedpos)) {
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		return true;
@@ -771,9 +751,6 @@ bool View::get_next_unread(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	LOG(Level::DEBUG, "View::get_next_unread: trying to find next unread");
 	if (itemlist.jump_to_next_unread_item(false)) {
 		LOG(Level::DEBUG,
@@ -789,12 +766,12 @@ bool View::get_next_unread(ItemListFormAction& itemlist,
 		LOG(Level::DEBUG,
 			"View::get_next_unread: goto-next-feed = false");
 		show_error(_("No unread items."));
-	} else if (feedlist->jump_to_next_unread_feed(feedpos)) {
+	} else if (feedlist_form->jump_to_next_unread_feed(feedpos)) {
 		LOG(Level::DEBUG,
 			"View::get_next_unread: found feed with unread "
 			"articles");
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		if (itemlist.jump_to_next_unread_item(true)) {
@@ -813,9 +790,6 @@ bool View::get_previous(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	if (itemlist.jump_to_previous_item(false)) {
 		LOG(Level::DEBUG, "View::get_previous: article in same feed");
 		if (itemview) {
@@ -827,10 +801,10 @@ bool View::get_previous(ItemListFormAction& itemlist,
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed") == false) {
 		LOG(Level::DEBUG, "View::get_previous: goto-next-feed = false");
 		show_error(_("Already on first item."));
-	} else if (feedlist->jump_to_previous_feed(feedpos)) {
+	} else if (feedlist_form->jump_to_previous_feed(feedpos)) {
 		LOG(Level::DEBUG, "View::get_previous: previous feed");
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		if (itemlist.jump_to_previous_item(true)) {
@@ -848,9 +822,6 @@ bool View::get_previous(ItemListFormAction& itemlist,
 bool View::get_next(ItemListFormAction& itemlist, ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	if (itemlist.jump_to_next_item(false)) {
 		LOG(Level::DEBUG, "View::get_next: article in same feed");
 		if (itemview) {
@@ -862,10 +833,10 @@ bool View::get_next(ItemListFormAction& itemlist, ItemViewFormAction* itemview)
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed") == false) {
 		LOG(Level::DEBUG, "View::get_next: goto-next-feed = false");
 		show_error(_("Already on last item."));
-	} else if (feedlist->jump_to_next_feed(feedpos)) {
+	} else if (feedlist_form->jump_to_next_feed(feedpos)) {
 		LOG(Level::DEBUG, "View::get_next: next feed");
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		if (itemlist.jump_to_next_item(true)) {
@@ -882,14 +853,10 @@ bool View::get_next(ItemListFormAction& itemlist, ItemViewFormAction* itemview)
 
 bool View::get_next_feed(ItemListFormAction& itemlist)
 {
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != nullptr);
-	if (feedlist->jump_to_next_feed(feedpos)) {
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+	if (feedlist_form->jump_to_next_feed(feedpos)) {
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		return true;
@@ -899,14 +866,10 @@ bool View::get_next_feed(ItemListFormAction& itemlist)
 
 bool View::get_prev_feed(ItemListFormAction& itemlist)
 {
-	std::shared_ptr<FeedListFormAction> feedlist =
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0]);
 	unsigned int feedpos;
-	assert(feedlist != nullptr);
-	if (feedlist->jump_to_previous_feed(feedpos)) {
-		prepare_query_feed(feedlist->get_feed());
-		itemlist.set_feed(feedlist->get_feed());
+	if (feedlist_form->jump_to_previous_feed(feedpos)) {
+		prepare_query_feed(feedlist_form->get_feed());
+		itemlist.set_feed(feedlist_form->get_feed());
 		itemlist.set_pos(feedpos);
 		itemlist.init();
 		return true;
@@ -1088,10 +1051,8 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 
 void View::feedlist_mark_pos_if_visible(unsigned int pos)
 {
-	if (formaction_stack_size() > 0) {
-		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
-			formaction_stack[0])
-		->mark_pos_if_visible(pos);
+	if (feedlist_form != nullptr) {
+		feedlist_form->mark_pos_if_visible(pos);
 	}
 }
 
