@@ -34,12 +34,12 @@ impl FileSentries {
     /// Create a new struct with random strings for sentries.
     pub fn new() -> FileSentries {
         FileSentries {
-            config: random::<u32>().to_string() + &"config",
-            urls: random::<u32>().to_string() + &"urls",
-            cache: random::<u32>().to_string() + &"cache",
-            queue: random::<u32>().to_string() + &"queue",
-            search: random::<u32>().to_string() + &"search",
-            cmdline: random::<u32>().to_string() + &"cmdline",
+            config: random::<u32>().to_string() + "config",
+            urls: random::<u32>().to_string() + "urls",
+            cache: random::<u32>().to_string() + "cache",
+            queue: random::<u32>().to_string() + "queue",
+            search: random::<u32>().to_string() + "search",
+            cmdline: random::<u32>().to_string() + "cmdline",
         }
     }
 }
@@ -162,17 +162,15 @@ pub struct Chmod<'a> {
 impl<'a> Chmod<'a> {
     pub fn new(path: &'a path::Path, new_mode: libc::mode_t) -> Chmod<'a> {
         let original_mode = fs::metadata(path)
-            .expect(&format!(
-                "Chmod: couldn't obtain metadata for `{}'",
-                path.display()
-            ))
+            .unwrap_or_else(|_| panic!("Chmod: couldn't obtain metadata for `{}'", path.display()))
             .permissions()
             .mode();
 
-        fs::set_permissions(path, fs::Permissions::from_mode(new_mode.into())).expect(&format!(
-            "Chmod: couldn't change mode for `{}'",
-            path.display()
-        ));
+        // `from_mode` takes `u32`, but `libc::mode_t` is either `u16` (macOS, FreeBSD) or `u32`
+        // (Linux). Suppress the warning to prevent Clippy on Linux from complaining.
+        #[allow(clippy::identity_conversion)]
+        fs::set_permissions(path, fs::Permissions::from_mode(new_mode.into()))
+            .unwrap_or_else(|_| panic!("Chmod: couldn't change mode for `{}'", path.display()));
 
         Chmod {
             path,
@@ -183,12 +181,13 @@ impl<'a> Chmod<'a> {
 
 impl<'a> Drop for Chmod<'a> {
     fn drop(self: &mut Self) {
-        fs::set_permissions(self.path, fs::Permissions::from_mode(self.original_mode)).expect(
-            &format!(
-                "Chmod: couldn't change back the mode for `{}'",
-                self.path.display()
-            ),
-        );
+        fs::set_permissions(self.path, fs::Permissions::from_mode(self.original_mode))
+            .unwrap_or_else(|_| {
+                panic!(
+                    "Chmod: couldn't change back the mode for `{}'",
+                    self.path.display()
+                )
+            });
     }
 }
 

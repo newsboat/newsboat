@@ -12,28 +12,28 @@ TEST_CASE("History can be iterated on in any direction", "[History]")
 	History h;
 
 	SECTION("Empty History returns nothing") {
-		REQUIRE(h.prev() == "");
-		REQUIRE(h.prev() == "");
-		REQUIRE(h.next() == "");
-		REQUIRE(h.next() == "");
+		REQUIRE(h.previous_line() == "");
+		REQUIRE(h.previous_line() == "");
+		REQUIRE(h.next_line() == "");
+		REQUIRE(h.next_line() == "");
 
 		SECTION("One line in History") {
 			h.add_line("testline");
-			REQUIRE(h.prev() == "testline");
-			REQUIRE(h.prev() == "testline");
-			REQUIRE(h.next() == "testline");
-			REQUIRE(h.next() == "");
+			REQUIRE(h.previous_line() == "testline");
+			REQUIRE(h.previous_line() == "testline");
+			REQUIRE(h.next_line() == "testline");
+			REQUIRE(h.next_line() == "");
 
 			SECTION("Two lines in History") {
 				h.add_line("foobar");
-				REQUIRE(h.prev() == "foobar");
-				REQUIRE(h.prev() == "testline");
-				REQUIRE(h.next() == "testline");
-				REQUIRE(h.prev() == "testline");
-				REQUIRE(h.next() == "testline");
-				REQUIRE(h.next() == "foobar");
-				REQUIRE(h.next() == "");
-				REQUIRE(h.next() == "");
+				REQUIRE(h.previous_line() == "foobar");
+				REQUIRE(h.previous_line() == "testline");
+				REQUIRE(h.next_line() == "testline");
+				REQUIRE(h.previous_line() == "testline");
+				REQUIRE(h.next_line() == "testline");
+				REQUIRE(h.next_line() == "foobar");
+				REQUIRE(h.next_line() == "");
+				REQUIRE(h.next_line() == "");
 			}
 		}
 	}
@@ -60,11 +60,11 @@ TEST_CASE("History can be saved and loaded from file", "[History]")
 		SECTION("Load from file") {
 			History loaded_h;
 			loaded_h.load_from_file(filepath);
-			REQUIRE(loaded_h.prev() == "foobar");
-			REQUIRE(loaded_h.prev() == "testline");
-			REQUIRE(loaded_h.next() == "testline");
-			REQUIRE(loaded_h.next() == "foobar");
-			REQUIRE(loaded_h.next() == "");
+			REQUIRE(loaded_h.previous_line() == "foobar");
+			REQUIRE(loaded_h.previous_line() == "testline");
+			REQUIRE(loaded_h.next_line() == "testline");
+			REQUIRE(loaded_h.next_line() == "foobar");
+			REQUIRE(loaded_h.next_line() == "");
 		}
 	}
 }

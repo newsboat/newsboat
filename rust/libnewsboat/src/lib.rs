@@ -1,3 +1,6 @@
+// This lint is nitpicky, I don't think it's really important how the literals are written.
+#![allow(clippy::unreadable_literal)]
+
 // This module must be declared before the others because it exports a `log!` macro that everyone
 // else uses.
 #[macro_use]

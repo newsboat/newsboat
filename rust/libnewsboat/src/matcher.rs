@@ -117,12 +117,12 @@ impl Operator {
             Operator::Contains => match value {
                 Value::Int(i) => self.apply(attr, &Value::Str(format!("{}", i))),
                 Value::Str(ref s) => {
-                    for token in attr.split(" ") {
+                    for token in attr.split(' ') {
                         if token == s {
                             return Ok(true);
                         }
                     }
-                    return Ok(false);
+                    Ok(false)
                 }
                 _ => Ok(false),
             },
@@ -140,11 +140,9 @@ fn evaluate_expression(expr: &Expression, item: &impl Matchable) -> Result<bool,
             op,
             value,
         } => match item.attribute_value(&attribute) {
-            None => {
-                return Err(MatcherError::AttributeUnavailable {
-                    attr: attribute.clone(),
-                })
-            }
+            None => Err(MatcherError::AttributeUnavailable {
+                attr: attribute.clone(),
+            }),
 
             Some(ref attr) => op.apply(attr, &value),
         },
@@ -179,7 +177,7 @@ mod tests {
         pub fn new(values: &[(&str, &str)]) -> MockMatchable {
             MockMatchable {
                 values: values
-                    .into_iter()
+                    .iter()
                     .map(|(a, b)| (String::from(*a), String::from(*b)))
                     .collect::<BTreeMap<_, _>>(),
             }

@@ -388,19 +388,17 @@ pub fn substr_with_width_stfl(string: &str, max_width: usize) -> String {
                     tagbuf.clear();
                 }
             }
+        } else if c == '<' {
+            in_bracket = true;
+            tagbuf.push(c);
         } else {
-            if c == '<' {
-                in_bracket = true;
-                tagbuf.push(c);
-            } else {
-                // Control chars count as width 0
-                let w = UnicodeWidthChar::width(c).unwrap_or(0);
-                if width + w > max_width {
-                    break;
-                }
-                width += w;
-                result.push(c);
+            // Control chars count as width 0
+            let w = UnicodeWidthChar::width(c).unwrap_or(0);
+            if width + w > max_width {
+                break;
             }
+            width += w;
+            result.push(c);
         }
     }
     result
@@ -422,7 +420,8 @@ pub fn remove_soft_hyphens(text: &mut String) {
 ///
 /// 2. figuring out the `LinkType` for a particular enclosure, given its MIME type
 ///    (`utils::podcast_mime_to_link_type`).
-const PODCAST_MIME_TO_LINKTYPE: [(fn(&str) -> bool, htmlrenderer::LinkType); 2] = [
+type MimeMatcher = (fn(&str) -> bool, htmlrenderer::LinkType);
+const PODCAST_MIME_TO_LINKTYPE: [MimeMatcher; 2] = [
     (
         |mime| {
             // RFC 5334, section 10.1 says "historically, some implementations expect .ogg files to be
@@ -641,7 +640,7 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
         })
         .ok()
         .and_then(|exit_status| exit_status.code())
-        .and_then(|exit_code| Some(exit_code as u8))
+        .map(|exit_code| exit_code as u8)
 }
 
 /// Get the current working directory.
@@ -725,24 +724,30 @@ pub fn strip_comments(line: &str) -> &str {
     let mut first_pound_chr_idx = line.len();
 
     for (idx, chr) in line.char_indices() {
-        if chr == '\\' {
-            prev_was_backslash = true;
-            continue;
-        } else if chr == '"' {
-            // If the quote is escaped or we're inside backticks, do nothing
-            if !prev_was_backslash && !inside_backticks {
-                inside_quotes = !inside_quotes;
+        match chr {
+            '\\' => {
+                prev_was_backslash = true;
+                continue;
             }
-        } else if chr == '`' {
-            // If the backtick is escaped, do nothing
-            if !prev_was_backslash {
-                inside_backticks = !inside_backticks;
+            '"' => {
+                // If the quote is escaped or we're inside backticks, do nothing
+                if !prev_was_backslash && !inside_backticks {
+                    inside_quotes = !inside_quotes;
+                }
             }
-        } else if chr == '#' {
-            if !prev_was_backslash && !inside_quotes && !inside_backticks {
-                first_pound_chr_idx = idx;
-                break;
+            '`' => {
+                // If the backtick is escaped, do nothing
+                if !prev_was_backslash {
+                    inside_backticks = !inside_backticks;
+                }
             }
+            '#' => {
+                if !prev_was_backslash && !inside_quotes && !inside_backticks {
+                    first_pound_chr_idx = idx;
+                    break;
+                }
+            }
+            _ => {}
         }
 
         // We call `continue` when we run into a backslash; here, we handle all the other
@@ -772,8 +777,6 @@ pub fn extract_filter(line: &str) -> (&str, &str) {
 
 #[cfg(test)]
 mod tests {
-    use tempfile;
-
     use super::*;
 
     #[test]
@@ -1143,13 +1146,13 @@ mod tests {
 
     #[test]
     fn t_unescape_url() {
-        assert!(unescape_url(String::from("foo%20bar")).unwrap() == String::from("foo bar"));
+        assert!(unescape_url(String::from("foo%20bar")).unwrap() == "foo bar");
         assert!(
             unescape_url(String::from(
                 "%21%23%24%26%27%28%29%2A%2B%2C%2F%3A%3B%3D%3F%40%5B%5D"
             ))
             .unwrap()
-                == String::from("!#$&'()*+,/:;=?@[]")
+                == "!#$&'()*+,/:;=?@[]"
         );
     }
 

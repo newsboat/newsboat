@@ -10,8 +10,8 @@ public:
 	History();
 	~History();
 	void add_line(const std::string& line);
-	std::string prev();
-	std::string next();
+	std::string previous_line();
+	std::string next_line();
 	void load_from_file(const std::string& file);
 	void save_to_file(const std::string& file, unsigned int limit);
 

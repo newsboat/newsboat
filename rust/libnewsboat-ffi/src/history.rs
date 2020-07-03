@@ -41,13 +41,13 @@ pub unsafe extern "C" fn rs_history_add_line(hst: *mut c_void, line: *const c_ch
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_history_prev(hst: *mut c_void) -> *mut c_char {
+pub unsafe extern "C" fn rs_history_previous_line(hst: *mut c_void) -> *mut c_char {
     abort_on_panic(|| {
         let mut hst = {
             assert!(!hst.is_null());
             Box::from_raw(hst as *mut History)
         };
-        let result = hst.prev();
+        let result = hst.previous_line();
         // Panic here can't happen because:
         // 1. panic can only happen if `result` contains null bytes;
         // 2. `result` either contains what `line` in `rs_history_add_line` contained
@@ -64,13 +64,13 @@ pub unsafe extern "C" fn rs_history_prev(hst: *mut c_void) -> *mut c_char {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_history_next(hst: *mut c_void) -> *mut c_char {
+pub unsafe extern "C" fn rs_history_next_line(hst: *mut c_void) -> *mut c_char {
     abort_on_panic(|| {
         let mut hst = {
             assert!(!hst.is_null());
             Box::from_raw(hst as *mut History)
         };
-        let result = hst.next();
+        let result = hst.next_line();
         // Panic here can't happen because:
         // 1. panic can only happen if `result` contains null bytes;
         // 2. `result` either contains what `line` in `rs_history_add_line` contained

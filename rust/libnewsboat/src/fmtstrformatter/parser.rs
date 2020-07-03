@@ -2,6 +2,7 @@ use nom::branch::alt;
 use nom::bytes::complete::{tag, take, take_till1, take_while};
 use nom::multi::many0;
 use nom::IResult;
+use std::cmp::Ordering;
 use std::str;
 
 /// Describes how formats should be padded: on the left, on the right, or not at all.
@@ -55,12 +56,10 @@ fn padded_format(input: &str) -> IResult<&str, Specifier> {
     let format = format.chars().next().unwrap();
 
     let width = width.parse::<isize>().unwrap_or(0);
-    let padding = if width == 0isize {
-        Padding::None
-    } else if width > 0isize {
-        Padding::Left(width.abs() as usize)
-    } else {
-        Padding::Right(width.abs() as usize)
+    let padding = match width.cmp(&0isize) {
+        Ordering::Equal => Padding::None,
+        Ordering::Greater => Padding::Left(width.abs() as usize),
+        Ordering::Less => Padding::Right(width.abs() as usize),
     };
 
     Ok((input, Specifier::Format(format, padding)))

@@ -146,14 +146,14 @@ bool FormAction::process_op(Operation op,
 		break;
 	case OP_INT_QNA_NEXTHIST:
 		if (qna_history) {
-			std::string entry = qna_history->next();
+			std::string entry = qna_history->next_line();
 			f.set("qna_value", entry);
 			f.set("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_QNA_PREVHIST:
 		if (qna_history) {
-			std::string entry = qna_history->prev();
+			std::string entry = qna_history->previous_line();
 			f.set("qna_value", entry);
 			f.set("qna_value_pos", std::to_string(entry.length()));
 		}

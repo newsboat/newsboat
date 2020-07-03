@@ -1,3 +1,10 @@
+// Each function in this crate is used in a single place: a corresponding C++ wrapper. It doesn't
+// make sense to document these functions because they are basically an internal detail and don't
+// stand on their own.
+#![allow(clippy::missing_safety_doc)]
+// This lint is nitpicky, I don't think it's really important how the literals are written.
+#![allow(clippy::unreadable_literal)]
+
 use libc::c_char;
 use std::ffi::CString;
 use std::panic::{catch_unwind, UnwindSafe};

@@ -11,8 +11,8 @@ use std::ptr;
 
 #[repr(C)]
 pub struct FilterUrl {
-    filter: *mut char,
-    url: *mut char,
+    filter: *mut c_char,
+    url: *mut c_char,
 }
 
 #[no_mangle]
@@ -664,8 +664,8 @@ pub unsafe extern "C" fn rs_extract_filter(line: *const c_char) -> FilterUrl {
         let url = CString::new(url).unwrap();
 
         FilterUrl {
-            filter: filter.into_raw() as *mut char,
-            url: url.into_raw() as *mut char,
+            filter: filter.into_raw() as *mut c_char,
+            url: url.into_raw() as *mut c_char,
         }
     })
 }

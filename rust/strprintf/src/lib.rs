@@ -14,7 +14,8 @@
 // formatting macro accepts. Everything else will result in a compile-time error. See the docs in
 // `trait` module for more on that.
 
-use libc;
+// This lint is nitpicky, I don't think it's really important how the literals are written.
+#![allow(clippy::unreadable_literal)]
 
 pub mod specifiers_iterator;
 // Re-exporting so that macro can just import the whole crate and get everything it needs.
@@ -136,8 +137,6 @@ macro_rules! fmt {
 
 #[cfg(test)]
 mod tests {
-    use libc;
-
     #[test]
     fn returns_first_argument_if_it_is_the_only_one() {
         let input = String::from("Hello, world!");
@@ -148,7 +147,7 @@ mod tests {
     fn replaces_printf_format_with_text_representation_of_an_argument() {
         assert_eq!(fmt!("%i", 42), "42");
         assert_eq!(fmt!("%i", -13), "-13");
-        assert_eq!(fmt!("%.3f", 3.1416), "3.142");
+        assert_eq!(fmt!("%.3f", 1.2468), "1.247");
         assert_eq!(fmt!("%i %i", 100500, -191), "100500 -191");
     }
 

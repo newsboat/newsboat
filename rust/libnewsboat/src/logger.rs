@@ -344,7 +344,7 @@ mod tests {
     }
 
     fn parse_log_line(line: &str) -> Option<(&str, &str, &str)> {
-        if !line.starts_with("[") {
+        if !line.starts_with('[') {
             return None;
         }
 
@@ -376,7 +376,7 @@ mod tests {
     }
 
     fn parse_errorlog_line(line: &str) -> Option<(&str, &str)> {
-        if !line.starts_with("[") {
+        if !line.starts_with('[') {
             return None;
         }
 
