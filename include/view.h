@@ -85,21 +85,21 @@ public:
 
 	std::string get_filename_suggestion(const std::string& s);
 
-	bool get_next_unread(ItemListFormAction* itemlist,
+	bool get_next_unread(ItemListFormAction& itemlist,
 		ItemViewFormAction* itemview = nullptr);
-	bool get_previous_unread(ItemListFormAction* itemlist,
+	bool get_previous_unread(ItemListFormAction& itemlist,
 		ItemViewFormAction* itemview = nullptr);
-	bool get_next(ItemListFormAction* itemlist,
+	bool get_next(ItemListFormAction& itemlist,
 		ItemViewFormAction* itemview = nullptr);
-	bool get_previous(ItemListFormAction* itemlist,
+	bool get_previous(ItemListFormAction& itemlist,
 		ItemViewFormAction* itemview = nullptr);
-	bool get_random_unread(ItemListFormAction* itemlist,
+	bool get_random_unread(ItemListFormAction& itemlist,
 		ItemViewFormAction* itemview = nullptr);
 
-	bool get_next_unread_feed(ItemListFormAction* itemlist);
-	bool get_prev_unread_feed(ItemListFormAction* itemlist);
-	bool get_next_feed(ItemListFormAction* itemlist);
-	bool get_prev_feed(ItemListFormAction* itemlist);
+	bool get_next_unread_feed(ItemListFormAction& itemlist);
+	bool get_prev_unread_feed(ItemListFormAction& itemlist);
+	bool get_next_feed(ItemListFormAction& itemlist);
+	bool get_prev_feed(ItemListFormAction& itemlist);
 
 	void prepare_query_feed(std::shared_ptr<RssFeed> feed);
 

@@ -340,7 +340,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_NEXTUNREAD:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to next unread article");
-		if (v->get_next_unread(itemlist.get(), this)) {
+		if (v->get_next_unread(*itemlist, this)) {
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
@@ -351,7 +351,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to previous unread "
 			"article");
-		if (v->get_previous_unread(itemlist.get(), this)) {
+		if (v->get_previous_unread(*itemlist, this)) {
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
@@ -361,7 +361,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_NEXT:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to next article");
-		if (v->get_next(itemlist.get(), this)) {
+		if (v->get_next(*itemlist, this)) {
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
@@ -371,7 +371,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_PREV:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to previous article");
-		if (v->get_previous(itemlist.get(), this)) {
+		if (v->get_previous(*itemlist, this)) {
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
@@ -381,7 +381,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_RANDOMUNREAD:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to random unread article");
-		if (v->get_random_unread(itemlist.get(), this)) {
+		if (v->get_random_unread(*itemlist, this)) {
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();

@@ -449,7 +449,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: jumping to next unread item");
 		if (!jump_to_next_unread_item(false)) {
-			if (!v->get_next_unread(this)) {
+			if (!v->get_next_unread(*this)) {
 				v->show_error(_("No unread items."));
 			}
 		}
@@ -458,7 +458,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: jumping to previous unread item");
 		if (!jump_to_previous_unread_item(false)) {
-			if (!v->get_previous_unread(this)) {
+			if (!v->get_previous_unread(*this)) {
 				v->show_error(_("No unread items."));
 			}
 		}
@@ -466,7 +466,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_NEXT:
 		LOG(Level::INFO, "ItemListFormAction: jumping to next item");
 		if (!jump_to_next_item(false)) {
-			if (!v->get_next(this)) {
+			if (!v->get_next(*this)) {
 				v->show_error(_("Already on last item."));
 			}
 		}
@@ -475,35 +475,35 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemListFormAction: jumping to previous item");
 		if (!jump_to_previous_item(false)) {
-			if (!v->get_previous(this)) {
+			if (!v->get_previous(*this)) {
 				v->show_error(_("Already on first item."));
 			}
 		}
 		break;
 	case OP_RANDOMUNREAD:
 		if (!jump_to_random_unread_item()) {
-			if (!v->get_random_unread(this)) {
+			if (!v->get_random_unread(*this)) {
 				v->show_error(_("No unread items."));
 			}
 		}
 		break;
 	case OP_NEXTUNREADFEED:
-		if (!v->get_next_unread_feed(this)) {
+		if (!v->get_next_unread_feed(*this)) {
 			v->show_error(_("No unread feeds."));
 		}
 		break;
 	case OP_PREVUNREADFEED:
-		if (!v->get_prev_unread_feed(this)) {
+		if (!v->get_prev_unread_feed(*this)) {
 			v->show_error(_("No unread feeds."));
 		}
 		break;
 	case OP_NEXTFEED:
-		if (!v->get_next_feed(this)) {
+		if (!v->get_next_feed(*this)) {
 			v->show_error(_("Already on last feed."));
 		}
 		break;
 	case OP_PREVFEED:
-		if (!v->get_prev_feed(this)) {
+		if (!v->get_prev_feed(*this)) {
 			v->show_error(_("Already on first feed."));
 		}
 		break;
