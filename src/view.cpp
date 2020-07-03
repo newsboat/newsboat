@@ -673,7 +673,7 @@ bool View::get_random_unread(ItemListFormAction* itemlist,
 	}
 	if (feedlist->jump_to_random_unread_feed(feedpos)) {
 		LOG(Level::DEBUG,
-			"View::get_previous_unread: found feed with unread "
+			"View::get_random_unread: found feed with unread "
 			"articles");
 		prepare_query_feed(feedlist->get_feed());
 		itemlist->set_feed(feedlist->get_feed());
