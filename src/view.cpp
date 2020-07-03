@@ -661,7 +661,7 @@ void View::notify_itemlist_change(std::shared_ptr<RssFeed> feed)
 	}
 }
 
-bool View::get_random_unread(ItemListFormAction* itemlist,
+bool View::get_random_unread(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
@@ -676,13 +676,13 @@ bool View::get_random_unread(ItemListFormAction* itemlist,
 			"View::get_random_unread: found feed with unread "
 			"articles");
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
-		if (itemlist->jump_to_random_unread_item()) {
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
+		if (itemlist.jump_to_random_unread_item()) {
 			if (itemview) {
-				itemview->set_feed(itemlist->get_feed());
-				itemview->set_guid(itemlist->get_guid());
+				itemview->set_feed(itemlist.get_feed());
+				itemview->set_guid(itemlist.get_guid());
 				itemview->init();
 			}
 			return true;
@@ -691,7 +691,7 @@ bool View::get_random_unread(ItemListFormAction* itemlist,
 	return false;
 }
 
-bool View::get_previous_unread(ItemListFormAction* itemlist,
+bool View::get_previous_unread(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
@@ -700,14 +700,14 @@ bool View::get_previous_unread(ItemListFormAction* itemlist,
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
 			formaction_stack[0]);
-	if (itemlist->jump_to_previous_unread_item(false)) {
+	if (itemlist.jump_to_previous_unread_item(false)) {
 		LOG(Level::DEBUG,
 			"View::get_previous_unread: found unread article in "
 			"same "
 			"feed");
 		if (itemview) {
-			itemview->set_feed(itemlist->get_feed());
-			itemview->set_guid(itemlist->get_guid());
+			itemview->set_feed(itemlist.get_feed());
+			itemview->set_guid(itemlist.get_guid());
 			itemview->init();
 		}
 		return true;
@@ -720,13 +720,13 @@ bool View::get_previous_unread(ItemListFormAction* itemlist,
 			"View::get_previous_unread: found feed with unread "
 			"articles");
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
-		if (itemlist->jump_to_previous_unread_item(true)) {
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
+		if (itemlist.jump_to_previous_unread_item(true)) {
 			if (itemview) {
-				itemview->set_feed(itemlist->get_feed());
-				itemview->set_guid(itemlist->get_guid());
+				itemview->set_feed(itemlist.get_feed());
+				itemview->set_guid(itemlist.get_guid());
 				itemview->init();
 			}
 			return true;
@@ -735,7 +735,7 @@ bool View::get_previous_unread(ItemListFormAction* itemlist,
 	return false;
 }
 
-bool View::get_next_unread_feed(ItemListFormAction* itemlist)
+bool View::get_next_unread_feed(ItemListFormAction& itemlist)
 {
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
@@ -744,15 +744,15 @@ bool View::get_next_unread_feed(ItemListFormAction* itemlist)
 	assert(feedlist != nullptr);
 	if (feedlist->jump_to_next_unread_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
 		return true;
 	}
 	return false;
 }
 
-bool View::get_prev_unread_feed(ItemListFormAction* itemlist)
+bool View::get_prev_unread_feed(ItemListFormAction& itemlist)
 {
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
@@ -761,15 +761,15 @@ bool View::get_prev_unread_feed(ItemListFormAction* itemlist)
 	assert(feedlist != nullptr);
 	if (feedlist->jump_to_previous_unread_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
 		return true;
 	}
 	return false;
 }
 
-bool View::get_next_unread(ItemListFormAction* itemlist,
+bool View::get_next_unread(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
@@ -777,13 +777,13 @@ bool View::get_next_unread(ItemListFormAction* itemlist,
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
 			formaction_stack[0]);
 	LOG(Level::DEBUG, "View::get_next_unread: trying to find next unread");
-	if (itemlist->jump_to_next_unread_item(false)) {
+	if (itemlist.jump_to_next_unread_item(false)) {
 		LOG(Level::DEBUG,
 			"View::get_next_unread: found unread article in same "
 			"feed");
 		if (itemview) {
-			itemview->set_feed(itemlist->get_feed());
-			itemview->set_guid(itemlist->get_guid());
+			itemview->set_feed(itemlist.get_feed());
+			itemview->set_guid(itemlist.get_guid());
 			itemview->init();
 		}
 		return true;
@@ -796,13 +796,13 @@ bool View::get_next_unread(ItemListFormAction* itemlist,
 			"View::get_next_unread: found feed with unread "
 			"articles");
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
-		if (itemlist->jump_to_next_unread_item(true)) {
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
+		if (itemlist.jump_to_next_unread_item(true)) {
 			if (itemview) {
-				itemview->set_feed(itemlist->get_feed());
-				itemview->set_guid(itemlist->get_guid());
+				itemview->set_feed(itemlist.get_feed());
+				itemview->set_guid(itemlist.get_guid());
 				itemview->init();
 			}
 			return true;
@@ -811,18 +811,18 @@ bool View::get_next_unread(ItemListFormAction* itemlist,
 	return false;
 }
 
-bool View::get_previous(ItemListFormAction* itemlist,
+bool View::get_previous(ItemListFormAction& itemlist,
 	ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
 			formaction_stack[0]);
-	if (itemlist->jump_to_previous_item(false)) {
+	if (itemlist.jump_to_previous_item(false)) {
 		LOG(Level::DEBUG, "View::get_previous: article in same feed");
 		if (itemview) {
-			itemview->set_feed(itemlist->get_feed());
-			itemview->set_guid(itemlist->get_guid());
+			itemview->set_feed(itemlist.get_feed());
+			itemview->set_guid(itemlist.get_guid());
 			itemview->init();
 		}
 		return true;
@@ -832,13 +832,13 @@ bool View::get_previous(ItemListFormAction* itemlist,
 	} else if (feedlist->jump_to_previous_feed(feedpos)) {
 		LOG(Level::DEBUG, "View::get_previous: previous feed");
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
-		if (itemlist->jump_to_previous_item(true)) {
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
+		if (itemlist.jump_to_previous_item(true)) {
 			if (itemview) {
-				itemview->set_feed(itemlist->get_feed());
-				itemview->set_guid(itemlist->get_guid());
+				itemview->set_feed(itemlist.get_feed());
+				itemview->set_guid(itemlist.get_guid());
 				itemview->init();
 			}
 			return true;
@@ -847,17 +847,17 @@ bool View::get_previous(ItemListFormAction* itemlist,
 	return false;
 }
 
-bool View::get_next(ItemListFormAction* itemlist, ItemViewFormAction* itemview)
+bool View::get_next(ItemListFormAction& itemlist, ItemViewFormAction* itemview)
 {
 	unsigned int feedpos;
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
 			formaction_stack[0]);
-	if (itemlist->jump_to_next_item(false)) {
+	if (itemlist.jump_to_next_item(false)) {
 		LOG(Level::DEBUG, "View::get_next: article in same feed");
 		if (itemview) {
-			itemview->set_feed(itemlist->get_feed());
-			itemview->set_guid(itemlist->get_guid());
+			itemview->set_feed(itemlist.get_feed());
+			itemview->set_guid(itemlist.get_guid());
 			itemview->init();
 		}
 		return true;
@@ -867,13 +867,13 @@ bool View::get_next(ItemListFormAction* itemlist, ItemViewFormAction* itemview)
 	} else if (feedlist->jump_to_next_feed(feedpos)) {
 		LOG(Level::DEBUG, "View::get_next: next feed");
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
-		if (itemlist->jump_to_next_item(true)) {
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
+		if (itemlist.jump_to_next_item(true)) {
 			if (itemview) {
-				itemview->set_feed(itemlist->get_feed());
-				itemview->set_guid(itemlist->get_guid());
+				itemview->set_feed(itemlist.get_feed());
+				itemview->set_guid(itemlist.get_guid());
 				itemview->init();
 			}
 			return true;
@@ -882,7 +882,7 @@ bool View::get_next(ItemListFormAction* itemlist, ItemViewFormAction* itemview)
 	return false;
 }
 
-bool View::get_next_feed(ItemListFormAction* itemlist)
+bool View::get_next_feed(ItemListFormAction& itemlist)
 {
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
@@ -891,15 +891,15 @@ bool View::get_next_feed(ItemListFormAction* itemlist)
 	assert(feedlist != nullptr);
 	if (feedlist->jump_to_next_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
 		return true;
 	}
 	return false;
 }
 
-bool View::get_prev_feed(ItemListFormAction* itemlist)
+bool View::get_prev_feed(ItemListFormAction& itemlist)
 {
 	std::shared_ptr<FeedListFormAction> feedlist =
 		std::dynamic_pointer_cast<FeedListFormAction, FormAction>(
@@ -908,9 +908,9 @@ bool View::get_prev_feed(ItemListFormAction* itemlist)
 	assert(feedlist != nullptr);
 	if (feedlist->jump_to_previous_feed(feedpos)) {
 		prepare_query_feed(feedlist->get_feed());
-		itemlist->set_feed(feedlist->get_feed());
-		itemlist->set_pos(feedpos);
-		itemlist->init();
+		itemlist.set_feed(feedlist->get_feed());
+		itemlist.set_pos(feedpos);
+		itemlist.init();
 		return true;
 	}
 	return false;
