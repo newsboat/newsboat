@@ -8,7 +8,8 @@ freebsd_task:
             image: freebsd-12-1-release-amd64
 
     cargo_cache:
-        folder: $HOME/.cargo/registry
+        # This works in conjunction with before_cache_script defined below.
+        folder: $HOME/.cargo
         fingerprint_script: cat Cargo.lock
 
     env:
@@ -42,14 +43,28 @@ freebsd_task:
     # uninstall` cleans up everything that `make install` installed.
     fake_install_script: su testuser -c 'cd ~ && mkdir fakeroot && gmake DESTDIR=fakeroot install && gmake DESTDIR=fakeroot uninstall && [ $(find fakeroot -type f -print | wc -l) -eq 0 ]'
     before_cache_script: &before_cache_script
-        - rm -rf $HOME/.cargo/registry/index
+    # The layout of ~/.cargo is described here:
+        # https://doc.rust-lang.org/cargo/guide/cargo-home.html#caching-the-cargo-home-in-ci
+        #
+        # We don't cache ~/.cargo/bin because the cache is shared between
+        # different builds that run different OSes.
+        #
+        # Some of the directories might not exist, which is okay. We prevent
+        # those errors from breaking the build by ignoring their exit codes
+        # (adding `|| true`).
+        - mkdir -p $HOME/cargo-cache/registry $HOME/cargo-cache/git
+        - mv $HOME/.cargo/registry/index $HOME/.cargo/registry/cache $HOME/cargo-cache/registry || true
+        - mv $HOME/.cargo/git/db $HOME/cargo-cache/git || true
+        - rm -rf $HOME/.cargo
+        - mv $HOME/cargo-cache $HOME/.cargo
 
 32bit_ubuntu_task:
     name: Linux i686 (Ubuntu 18.04)
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
     cargo_cache:
-        folder: $HOME/.cargo/registry
+        # This works in conjunction with before_cache_script.
+        folder: $HOME/.cargo
         fingerprint_script: cat Cargo.lock
     env:
         RUSTFLAGS: '-D warnings'
@@ -76,7 +91,8 @@ macos_task:
         image: catalina-base
 
     cargo_cache:
-        folder: $HOME/.cargo/registry
+        # This works in conjunction with before_cache_script.
+        folder: $HOME/.cargo
         fingerprint_script: cat Cargo.lock
 
     install_script:
@@ -287,7 +303,8 @@ linux_task:
                 cxx: clang++-10
 
     cargo_cache:
-        folder: $HOME/.cargo/registry
+        # This works in conjunction with before_cache_script.
+        folder: $HOME/.cargo
         fingerprint_script: cat Cargo.lock
 
     env:
@@ -316,7 +333,8 @@ address_sanitizer_task:
       ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
 
     cargo_cache:
-        folder: $HOME/.cargo/registry
+        # This works in conjunction with before_cache_script.
+        folder: $HOME/.cargo
         fingerprint_script: cat Cargo.lock
 
     # Sanitizers only apply to C++, so we only build and run C++ tests. Also,
@@ -362,7 +380,8 @@ undefined_behavior_sanitizer_task:
       UBSAN_OPTIONS: "suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1"
 
     cargo_cache:
-        folder: $HOME/.cargo/registry
+        # This works in conjunction with before_cache_script.
+        folder: $HOME/.cargo
         fingerprint_script: cat Cargo.lock
 
     # Sanitizers only apply to C++, so we only build and run C++ tests. Also,
