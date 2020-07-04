@@ -1,41 +1,26 @@
 #include "scopemeasure.h"
 
-#include <cinttypes>
-
-using fpseconds = std::chrono::duration<double>;
+extern "C" {
+	void* create_rs_scopemeasure(const char* scope_name, newsboat::Level log_level);
+	void destroy_rs_scopemeasure(void* object);
+	void rs_scopemeasure_stopover(void* object, const char* stopover_name);
+}
 
 namespace newsboat {
 
 ScopeMeasure::ScopeMeasure(const std::string& func, Level ll)
-	: funcname(func)
-	, lvl(ll)
 {
-	start_time = std::chrono::steady_clock::now();
+	rs_object = create_rs_scopemeasure(func.c_str(), ll);
 }
 
 void ScopeMeasure::stopover(const std::string& son)
 {
-	using namespace std::chrono;
-
-	const auto now = steady_clock::now();
-	const auto diff = duration_cast<fpseconds>(now - start_time).count();
-	LOG(lvl,
-		"ScopeMeasure: function `%s' (stop over `%s') took %.6f s so far",
-		funcname,
-		son,
-		diff);
+	rs_scopemeasure_stopover(rs_object, son.c_str());
 }
 
 ScopeMeasure::~ScopeMeasure()
 {
-	using namespace std::chrono;
-
-	const auto now = steady_clock::now();
-	const auto diff = duration_cast<fpseconds>(now - start_time).count();
-	LOG(lvl,
-		"ScopeMeasure: function `%s' took %.6f s",
-		funcname,
-		diff);
+	destroy_rs_scopemeasure(rs_object);
 }
 
 } // namespace newsboat

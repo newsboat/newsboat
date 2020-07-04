@@ -795,6 +795,10 @@ test/rsspp_rssparser.o: test/rsspp_rssparser.cpp rss/rssparser.h \
  3rd-party/catch.hpp test/test-helpers/envvar.h 3rd-party/optional.hpp
 test/ruststring.o: test/ruststring.cpp include/ruststring.h \
  3rd-party/catch.hpp
+test/scopemeasure.o: test/scopemeasure.cpp include/scopemeasure.h \
+ include/logger.h config.h include/strprintf.h 3rd-party/catch.hpp \
+ test/test-helpers/loggerresetter.h test/test-helpers/tempfile.h \
+ test/test-helpers/maintempdir.h
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
@@ -810,6 +814,9 @@ test/test-helpers/chmod.o: test/test-helpers/chmod.cpp \
  test/test-helpers/chmod.h
 test/test-helpers/envvar.o: test/test-helpers/envvar.cpp \
  test/test-helpers/envvar.h 3rd-party/optional.hpp 3rd-party/catch.hpp
+test/test-helpers/loggerresetter.o: test/test-helpers/loggerresetter.cpp \
+ test/test-helpers/loggerresetter.h include/logger.h config.h \
+ include/strprintf.h
 test/test-helpers/maintempdir.o: test/test-helpers/maintempdir.cpp \
  test/test-helpers/maintempdir.h
 test/test-helpers/misc.o: test/test-helpers/misc.cpp \
