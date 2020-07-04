@@ -627,7 +627,7 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 		REQUIRE(m.parse("AAAA between 12346:12344"));
 		REQUIRE(m.matches(&mock));
 
-		SECTION("...converting numering prefix of the attribute if necessary") {
+		SECTION("...converting numeric prefix of the attribute if necessary") {
 			MatcherMockMatchable mock({{"value", "123four"}, {"practically_zero", "sure"}});
 
 			REQUIRE(m.parse("value between 122:124"));
@@ -643,15 +643,6 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 			REQUIRE_FALSE(m.matches(&mock));
 		}
 	}
-}
-
-TEST_CASE("Invalid expression results in parsing error", "[Matcher]")
-{
-	Matcher m;
-
-	REQUIRE_FALSE(m.parse("AAAA between 0:15:30"));
-	REQUIRE_FALSE(m.parse("x = 42andy=0"));
-	REQUIRE_FALSE(m.parse("x = 42 andy=0"));
 }
 
 TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
@@ -812,4 +803,28 @@ TEST_CASE("Whitespace before and/or is not required", "[Matcher]")
 
 	REQUIRE(m.parse("x = \"42\"or y=42"));
 	REQUIRE(m.matches(&mock));
+}
+
+TEST_CASE("string_to_num() converts numeric prefix of the string to int",
+	"[Matcher]")
+{
+	REQUIRE(Matcher::string_to_num("7654") == 7654);
+	REQUIRE(Matcher::string_to_num("123foo") == 123);
+	REQUIRE(Matcher::string_to_num("-999999bar") == -999999);
+
+	REQUIRE(Matcher::string_to_num("-2147483648min") == -2147483648);
+	REQUIRE(Matcher::string_to_num("2147483647 is ok") == 2147483647);
+
+	// On under-/over-flow, returns min/max representable value
+	REQUIRE(Matcher::string_to_num("-2147483649 is too small for i32") ==
+		-2147483648);
+	REQUIRE(Matcher::string_to_num("2147483648 is too large for i32") ==
+		2147483647);
+}
+
+TEST_CASE("string_to_num() returns 0 if there is no numeric prefix",
+	"[Matcher]")
+{
+	REQUIRE(Matcher::string_to_num("hello") == 0);
+	REQUIRE(Matcher::string_to_num("") == 0);
 }
