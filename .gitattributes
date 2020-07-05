@@ -8,6 +8,5 @@
 /.travis.yml export-ignore
 /.cirrus.yml export-ignore
 /submit-to-coveralls.sh export-ignore
-/docker/ export-ignore
 /.astylerc export-ignore
 /.rustfmt.toml export-ignore
