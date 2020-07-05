@@ -26,7 +26,7 @@ fn stopover_adds_an_extra_line_to_the_log_upon_each_call() {
         {
             logger::get_instance().set_logfile(logfile.to_str().unwrap());
             logger::get_instance().set_loglevel(Level::Debug);
-            let sm = ScopeMeasure::new(String::from("test"), Level::Debug);
+            let sm = ScopeMeasure::new(String::from("test"));
 
             for i in 0..*calls {
                 sm.stopover(&format!("stopover No.{}", i));

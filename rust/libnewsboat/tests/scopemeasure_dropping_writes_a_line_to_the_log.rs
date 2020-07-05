@@ -25,7 +25,7 @@ fn droppping_a_scopemeasure_writes_a_line_to_the_log() {
     {
         logger::get_instance().set_logfile(logfile.to_str().unwrap());
         logger::get_instance().set_loglevel(Level::Debug);
-        let _sm = ScopeMeasure::new(String::from("test"), Level::Debug);
+        let _sm = ScopeMeasure::new(String::from("test"));
     }
 
     assert_eq!(file_lines_count(&logfile).unwrap(), 1);

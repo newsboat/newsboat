@@ -3,13 +3,11 @@
 
 #include <string>
 
-#include "logger.h"
-
 namespace newsboat {
 
 class ScopeMeasure {
 public:
-	ScopeMeasure(const std::string& func, Level ll = Level::DEBUG);
+	ScopeMeasure(const std::string& func);
 	~ScopeMeasure();
 	void stopover(const std::string& son = "");
 

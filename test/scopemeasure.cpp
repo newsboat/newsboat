@@ -4,6 +4,8 @@
 
 #include <fstream>
 
+#include "logger.h"
+
 #include "test-helpers/loggerresetter.h"
 #include "test-helpers/tempfile.h"
 
@@ -31,7 +33,7 @@ TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 		Logger::set_logfile(tmp.get_path());
 		Logger::set_loglevel(Level::DEBUG);
 
-		ScopeMeasure sm("test", Level::DEBUG);
+		ScopeMeasure sm("test");
 	}
 
 	REQUIRE(file_lines_count(tmp.get_path()) == 1);
@@ -51,7 +53,7 @@ TEST_CASE("stopover() adds an extra line to the log upon each call",
 		Logger::set_logfile(tmp.get_path());
 		Logger::set_loglevel(Level::DEBUG);
 
-		ScopeMeasure sm("test", Level::DEBUG);
+		ScopeMeasure sm("test");
 
 		SECTION("one call") {
 			sm.stopover("here");
