@@ -156,8 +156,6 @@ private:
 	FilterContainer& filters;
 
 	void handle_op_saveall();
-
-	ListWidget items_list;
 };
 
 } // namespace newsboat

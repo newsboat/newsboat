@@ -7,8 +7,10 @@ namespace newsboat {
 
 ListFormAction::ListFormAction(View* v,
 	std::string formstr,
+	std::string list_name,
 	ConfigContainer* cfg)
 	: FormAction(v, formstr, cfg)
+	, list(list_name, FormAction::f)
 {
 }
 

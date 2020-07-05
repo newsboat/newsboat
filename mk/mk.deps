@@ -286,8 +286,8 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/itemlistformaction.h 3rd-party/optional.hpp include/history.h \
  include/listformaction.h include/formaction.h include/keymap.h \
  include/configparser.h include/configactionhandler.h include/stflpp.h \
- include/listformatter.h include/regexmanager.h include/matcher.h \
- filter/FilterParser.h include/regexowner.h include/listwidget.h \
+ include/listwidget.h include/listformatter.h include/regexmanager.h \
+ include/matcher.h filter/FilterParser.h include/regexowner.h \
  include/view.h include/colormanager.h include/configcontainer.h \
  include/controller.h include/cache.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/opml.h \
@@ -334,16 +334,16 @@ src/keymap.o: src/keymap.cpp include/keymap.h include/configparser.h \
 src/listformaction.o: src/listformaction.cpp include/listformaction.h \
  3rd-party/optional.hpp include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/configactionhandler.h \
- include/stflpp.h include/rssfeed.h include/matchable.h include/rssitem.h \
- include/matcher.h filter/FilterParser.h include/utils.h \
- include/configcontainer.h include/logger.h config.h include/strprintf.h \
- include/view.h include/colormanager.h include/controller.h \
- include/cache.h include/feedcontainer.h include/filtercontainer.h \
- include/fslock.h include/opml.h include/fileurlreader.h \
- include/urlreader.h include/queuemanager.h include/regexmanager.h \
- include/regexowner.h include/reloader.h include/remoteapi.h \
+ include/stflpp.h include/listwidget.h include/listformatter.h \
+ include/regexmanager.h include/matcher.h filter/FilterParser.h \
+ include/regexowner.h include/rssfeed.h include/matchable.h \
+ include/rssitem.h include/utils.h include/configcontainer.h \
+ include/logger.h config.h include/strprintf.h include/view.h \
+ include/colormanager.h include/controller.h include/cache.h \
+ include/feedcontainer.h include/filtercontainer.h include/fslock.h \
+ include/opml.h include/fileurlreader.h include/urlreader.h \
+ include/queuemanager.h include/reloader.h include/remoteapi.h \
  include/rssignores.h include/filebrowserformaction.h \
- include/listformatter.h include/listwidget.h \
  include/dirbrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h
 src/listformatter.o: src/listformatter.cpp include/listformatter.h \
@@ -700,8 +700,8 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  include/itemlistformaction.h 3rd-party/optional.hpp include/history.h \
  include/listformaction.h include/formaction.h include/keymap.h \
  include/configparser.h include/configactionhandler.h include/stflpp.h \
- include/listformatter.h include/regexmanager.h include/matcher.h \
- filter/FilterParser.h include/regexowner.h include/listwidget.h \
+ include/listwidget.h include/listformatter.h include/regexmanager.h \
+ include/matcher.h filter/FilterParser.h include/regexowner.h \
  include/view.h include/colormanager.h include/configcontainer.h \
  include/controller.h include/cache.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/opml.h \

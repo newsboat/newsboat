@@ -28,7 +28,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ListFormAction(vv, formstr, cfg)
+	: ListFormAction(vv, formstr, "items", cfg)
 	, pos(0)
 	, apply_filter(false)
 	, show_searchresult(false)
@@ -42,7 +42,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, listfmt(&rxman, "articlelist")
 	, rsscache(cc)
 	, filters(f)
-	, items_list("items", FormAction::f)
 {
 	search_dummy_feed->set_search_feed(true);
 	register_format_styles();
@@ -63,7 +62,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	 *   - if an item was selected, then fetch it and do something with it
 	 */
 
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 
 	switch (op) {
 	case OP_OPEN: {
@@ -83,22 +82,22 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_SK_UP:
-		items_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+		list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_DOWN:
-		items_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+		list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HOME:
-		items_list.move_to_first();
+		list.move_to_first();
 		break;
 	case OP_SK_END:
-		items_list.move_to_last();
+		list.move_to_last();
 		break;
 	case OP_SK_PGUP:
-		items_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+		list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_PGDOWN:
-		items_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+		list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");
@@ -114,7 +113,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				visible_items[itempos].first->guid(),
 				visible_items[itempos].first->deleted());
 			if (itempos < visible_items.size() - 1) {
-				items_list.set_position(itempos + 1);
+				list.set_position(itempos + 1);
 			}
 			invalidate(itempos);
 		} else {
@@ -169,7 +168,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						"next-unread")) {
 					if (itempos <
 						visible_items.size() - 1) {
-						items_list.set_position(itempos + 1);
+						list.set_position(itempos + 1);
 					}
 				} else {
 					process_operation(OP_NEXTUNREAD);
@@ -289,7 +288,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (!cfg->get_configvalue_as_bool(
 					"toggleitemread-jumps-to-next-unread")) {
 				if (itempos < visible_items.size() - 1) {
-					items_list.set_position(itempos + 1);
+					list.set_position(itempos + 1);
 				}
 			} else {
 				process_operation(OP_NEXTUNREAD);
@@ -543,13 +542,13 @@ bool ItemListFormAction::process_operation(Operation op,
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to last");
-					items_list.set_position(visible_items.size() - 1);
+					list.set_position(visible_items.size() - 1);
 				}
 				if (sortorder == "date-asc") {
 					LOG(Level::DEBUG,
 						"ItemListFormAction:: "
 						"reset itempos to first");
-					items_list.set_position(0);
+					list.set_position(0);
 				}
 			}
 			invalidate_everything();
@@ -576,7 +575,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			if (!cfg->get_configvalue_as_bool(
 					"show-read-articles")) {
-				items_list.set_position(0);
+				list.set_position(0);
 			}
 			invalidate_everything();
 		}
@@ -803,7 +802,7 @@ void ItemListFormAction::finished_qna(Operation op)
 
 	case OP_PIPE_TO: {
 		if (!visible_items.empty()) {
-			unsigned int itempos = items_list.get_position();
+			unsigned int itempos = list.get_position();
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
 			v->get_ctrl()->write_item(
@@ -851,7 +850,7 @@ void ItemListFormAction::qna_end_editflags()
 		return;
 	}
 
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
@@ -962,7 +961,7 @@ void ItemListFormAction::prepare()
 
 	if (cfg->get_configvalue_as_bool("mark-as-read-on-hover")) {
 		if (!visible_items.empty()) {
-			const unsigned int itempos = items_list.get_position();
+			const unsigned int itempos = list.get_position();
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
 				v->get_ctrl()->mark_article_read(
@@ -973,7 +972,7 @@ void ItemListFormAction::prepare()
 		}
 	}
 
-	const unsigned int width = items_list.get_width();
+	const unsigned int width = list.get_width();
 
 	if (old_width != width) {
 		invalidate_everything();
@@ -1015,7 +1014,7 @@ void ItemListFormAction::prepare()
 		break;
 	}
 
-	items_list.stfl_replace_lines(listfmt);
+	list.stfl_replace_lines(listfmt);
 
 	invalidated_itempos.clear();
 	invalidation_mode = InvalidationMode::NONE;
@@ -1077,7 +1076,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 
 void ItemListFormAction::init()
 {
-	items_list.set_position(0);
+	list.set_position(0);
 	f.set("msg", "");
 	set_keymap_hints();
 	invalidate_everything();
@@ -1129,7 +1128,7 @@ void ItemListFormAction::set_head(const std::string& s,
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 {
-	const int itempos =  items_list.get_position();
+	const int itempos =  list.get_position();
 	for (int i = (start_with_last ? itempos : (itempos - 1)); i >= 0; --i) {
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_previous_unread_item: "
@@ -1137,13 +1136,13 @@ bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 			i,
 			visible_items[i].first->unread() ? "true" : "false");
 		if (visible_items[i].first->unread()) {
-			items_list.set_position(i);
+			list.set_position(i);
 			return true;
 		}
 	}
 	for (int i = visible_items.size() - 1; i >= itempos; --i) {
 		if (visible_items[i].first->unread()) {
-			items_list.set_position(i);
+			list.set_position(i);
 			return true;
 		}
 	}
@@ -1164,7 +1163,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 			unsigned int pos =
 				utils::get_random_value(visible_items.size());
 			if (visible_items[pos].first->unread()) {
-				items_list.set_position(pos);
+				list.set_position(pos);
 				break;
 			}
 		}
@@ -1174,7 +1173,7 @@ bool ItemListFormAction::jump_to_random_unread_item()
 
 bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 {
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_unread_item: itempos = %u "
 		"visible_items.size = %" PRIu64,
@@ -1187,7 +1186,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 			"ItemListFormAction::jump_to_next_unread_item: i = %u",
 			i);
 		if (visible_items[i].first->unread()) {
-			items_list.set_position(i);
+			list.set_position(i);
 			return true;
 		}
 	}
@@ -1197,7 +1196,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 			"ItemListFormAction::jump_to_next_unread_item: i = %u",
 			i);
 		if (visible_items[i].first->unread()) {
-			items_list.set_position(i);
+			list.set_position(i);
 			return true;
 		}
 	}
@@ -1206,7 +1205,7 @@ bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
 
 bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 {
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 
 	int i = (start_with_last ? itempos : (itempos - 1));
 	if (i >= 0) {
@@ -1214,7 +1213,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 			"ItemListFormAction::jump_to_previous_item: "
 			"visible_items[%u]",
 			i);
-		items_list.set_position(i);
+		list.set_position(i);
 		return true;
 	}
 	return false;
@@ -1222,7 +1221,7 @@ bool ItemListFormAction::jump_to_previous_item(bool start_with_last)
 
 bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 {
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 	LOG(Level::DEBUG,
 		"ItemListFormAction::jump_to_next_item: itempos = %" PRIu64
 		" visible_items.size = %" PRIu64,
@@ -1233,7 +1232,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_next_item: i = %u",
 			i);
-		items_list.set_position(i);
+		list.set_position(i);
 		return true;
 	}
 	return false;
@@ -1241,7 +1240,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 
 std::string ItemListFormAction::get_guid()
 {
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 	return visible_items[itempos].first->guid();
 }
 
@@ -1268,7 +1267,7 @@ void ItemListFormAction::handle_cmdline_num(unsigned int idx)
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
 		} else {
-			items_list.set_position(i);
+			list.set_position(i);
 		}
 	} else {
 		v->show_error(_("Invalid position!"));
@@ -1287,7 +1286,7 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		}
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
-			const unsigned int itempos = items_list.get_position();
+			const unsigned int itempos = list.get_position();
 			LOG(Level::INFO,
 				"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
 				itempos,
@@ -1318,7 +1317,7 @@ void ItemListFormAction::recalculate_form()
 	FormAction::recalculate_form();
 	invalidate_everything();
 
-	const unsigned int itempos = items_list.get_position();
+	const unsigned int itempos = list.get_position();
 
 	// If the old position was set and it is less than the itempos, use it
 	// for the feed's itempos Correct the problem when you open itemview and
@@ -1326,7 +1325,7 @@ void ItemListFormAction::recalculate_form()
 	// applies when "show-read-articles" is set to false
 	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
 		!cfg->get_configvalue_as_bool("show-read-articles")) {
-		items_list.set_position(old_itempos);
+		list.set_position(old_itempos);
 		old_itempos = -1; // Reset
 	}
 }
@@ -1351,7 +1350,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 
 void ItemListFormAction::save_filterpos()
 {
-	const unsigned int i = items_list.get_position();
+	const unsigned int i = list.get_position();
 	if (i < visible_items.size()) {
 		filterpos = visible_items[i].second;
 		set_filterpos = true;
@@ -1366,7 +1365,7 @@ void ItemListFormAction::register_format_styles()
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos[items_pos]:0 %s richtext:1}",
 			attrstr);
-	items_list.stfl_replace_list(0, textview);
+	list.stfl_replace_list(0, textview);
 }
 
 std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)
@@ -1394,12 +1393,12 @@ void ItemListFormAction::prepare_set_filterpos()
 		unsigned int i = 0;
 		for (const auto& item : visible_items) {
 			if (item.second == filterpos) {
-				items_list.set_position(i);
+				list.set_position(i);
 				return;
 			}
 			i++;
 		}
-		items_list.set_position(0);
+		list.set_position(0);
 	}
 }
 

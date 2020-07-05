@@ -98,8 +98,6 @@ private:
 	FilterContainer& filters;
 
 	nonstd::optional<FeedSortStrategy> old_sort_strategy;
-
-	ListWidget feeds_list;
 };
 
 } // namespace newsboat
