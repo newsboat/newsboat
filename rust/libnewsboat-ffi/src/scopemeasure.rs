@@ -1,17 +1,14 @@
 use crate::abort_on_panic;
 use libc::{c_char, c_void};
-use libnewsboat::{logger::Level, scopemeasure::ScopeMeasure};
+use libnewsboat::scopemeasure::ScopeMeasure;
 use std::ffi::CStr;
 use std::mem;
 
 #[no_mangle]
-pub unsafe extern "C" fn create_rs_scopemeasure(
-    scope_name: *const c_char,
-    log_level: Level,
-) -> *mut c_void {
+pub unsafe extern "C" fn create_rs_scopemeasure(scope_name: *const c_char) -> *mut c_void {
     abort_on_panic(|| {
         let scope_name = CStr::from_ptr(scope_name).to_string_lossy().into_owned();
-        Box::into_raw(Box::new(ScopeMeasure::new(scope_name, log_level))) as *mut c_void
+        Box::into_raw(Box::new(ScopeMeasure::new(scope_name))) as *mut c_void
     })
 }
 
