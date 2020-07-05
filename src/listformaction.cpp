@@ -46,6 +46,25 @@ bool ListFormAction::process_operation(Operation op,
 	case OP_CMD_START_9:
 		FormAction::start_cmdline("9");
 		break;
+
+	case OP_SK_UP:
+		list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	case OP_SK_DOWN:
+		list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	case OP_SK_HOME:
+		list.move_to_first();
+		break;
+	case OP_SK_END:
+		list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	case OP_SK_PGDOWN:
+		list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
 	default:
 		break;
 	}

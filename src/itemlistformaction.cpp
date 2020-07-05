@@ -81,24 +81,6 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	}
 	break;
-	case OP_SK_UP:
-		list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_DOWN:
-		list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_HOME:
-		list.move_to_first();
-		break;
-	case OP_SK_END:
-		list.move_to_last();
-		break;
-	case OP_SK_PGUP:
-		list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_PGDOWN:
-		list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
 	case OP_DELETE: {
 		ScopeMeasure m1("OP_DELETE");
 		if (!visible_items.empty()) {
