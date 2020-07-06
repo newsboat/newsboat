@@ -20,18 +20,9 @@ impl Matcher {
     /// Prepare a `Matcher` that will check items against the filter expression provided in
     /// `input`.
     ///
-    /// If `input` can't be parsed, returns a user-readable error.
+    /// If `input` can't be parsed, returns an internalized error message.
     pub fn parse(input: &str) -> Result<Matcher, String> {
-        let expr = filterparser::parse(input).map_err(|e| match e {
-            filterparser::Error::TrailingCharacters(tail) => {
-                format!("Parse error: trailing characters: {}", tail)
-            }
-            filterparser::Error::AtPos(pos, expected) => {
-                format!("Parse error at position {}: expected {}", pos, expected)
-            }
-            filterparser::Error::Internal => "Internal parse error".to_string(),
-        })?;
-
+        let expr = filterparser::parse(input)?;
         Ok(Matcher {
             expr,
             text: input.to_string(),

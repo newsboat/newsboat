@@ -1,5 +1,6 @@
 //! Parses filter expressions.
 
+use gettextrs::gettext;
 use nom::{
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
@@ -9,6 +10,7 @@ use nom::{
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset,
 };
+use strprintf::fmt;
 
 /// Operators that can be used in comparisons.
 #[derive(Debug, Clone, PartialEq)]
@@ -47,11 +49,11 @@ pub enum Expression {
 
 /// Errors that may come up during parsing.
 #[derive(PartialEq, Debug)]
-pub enum Error<'a> {
+enum Error<'a> {
     /// Parser finished the work, but the input string still contains some characters.
     TrailingCharacters(&'a str),
 
-    /// Parsing error at given position.
+    /// Parsing error at given position. "Explanation string" is one of `EXPECTED_*` constants.
     AtPos(usize, &'static str),
 
     /// Parse error that has no explanations attached to it.
@@ -212,8 +214,7 @@ fn parser<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Expres
     complete(parsers)(input)
 }
 
-/// Parse a string `expr` as a filter expression.
-pub fn parse(expr: &str) -> Result<Expression, Error> {
+fn internal_parse(expr: &str) -> Result<Expression, Error> {
     match parser::<VerboseError<&str>>(expr) {
         Ok((leftovers, expression)) => {
             if leftovers.is_empty() {
@@ -245,6 +246,31 @@ pub fn parse(expr: &str) -> Result<Expression, Error> {
     }
 }
 
+/// Parse a string `expr` as a filter expression.
+///
+/// If parsing fails, returns an internationalized error message.
+pub fn parse(expr: &str) -> Result<Expression, String> {
+    match internal_parse(expr) {
+        Ok(expression) => Ok(expression),
+        Err(error) => {
+            let err = match error {
+                Error::TrailingCharacters(tail) => {
+                    fmt!(&gettext("Parse error: trailing characters: %s"), tail)
+                }
+                Error::AtPos(pos, expected) => fmt!(
+                    // The "%{}" thing is a number, a zero-based offset into a string.
+                    &gettext("Parse error at position %{}: expected %s"),
+                    PRIu64,
+                    pos as u64,
+                    expected
+                ),
+                Error::Internal => fmt!(&gettext("Internal parse error")),
+            };
+            Err(err)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{Expression::*, *};
@@ -253,49 +279,61 @@ mod tests {
     fn t_error_on_invalid_queries() {
         // Invalid character in operator
         assert_eq!(
-            parse("title =¯ \"foo\""),
+            internal_parse("title =¯ \"foo\""),
             Err(Error::AtPos(7, EXPECTED_VALUE))
         );
         // Incorrect string quoting
-        assert_eq!(parse("a = \"b"), Err(Error::AtPos(4, EXPECTED_VALUE)));
+        assert_eq!(
+            internal_parse("a = \"b"),
+            Err(Error::AtPos(4, EXPECTED_VALUE))
+        );
         // Non-value to the right of equality operator
-        assert_eq!(parse("a = b"), Err(Error::AtPos(4, EXPECTED_VALUE)));
+        assert_eq!(
+            internal_parse("a = b"),
+            Err(Error::AtPos(4, EXPECTED_VALUE))
+        );
         // Non-existent operator
         assert_eq!(
-            parse("a !! \"b\""),
+            internal_parse("a !! \"b\""),
             Err(Error::AtPos(2, EXPECTED_OPERATORS))
         );
 
         // Unbalanced parentheses
-        assert_eq!(parse("((a=\"b\")))"), Err(Error::TrailingCharacters(")")));
+        assert_eq!(
+            internal_parse("((a=\"b\")))"),
+            Err(Error::TrailingCharacters(")"))
+        );
 
         // Incorrect syntax for range
         assert_eq!(
-            parse("AAAA between 0:15:30"),
+            internal_parse("AAAA between 0:15:30"),
             Err(Error::TrailingCharacters(":30"))
         );
         // No whitespace after the `and` operator
         assert_eq!(
-            parse("x = 42andy=0"),
+            internal_parse("x = 42andy=0"),
             Err(Error::TrailingCharacters("andy=0"))
         );
         assert_eq!(
-            parse("x = 42 andy=0"),
+            internal_parse("x = 42 andy=0"),
             Err(Error::TrailingCharacters("andy=0"))
         );
         // Operator without arguments
-        assert_eq!(parse("=!"), Err(Error::AtPos(0, EXPECTED_ATTRIBUTE_NAME)));
+        assert_eq!(
+            internal_parse("=!"),
+            Err(Error::AtPos(0, EXPECTED_ATTRIBUTE_NAME))
+        );
     }
 
     #[test]
     fn t_no_error_on_valid_queries() {
-        assert!(parse("a = \"b\"").is_ok());
-        assert!(parse("(a=\"b\")").is_ok());
-        assert!(parse("((a=\"b\"))").is_ok());
-        assert!(parse("a != \"b\"").is_ok());
-        assert!(parse("a =~ \"b\"").is_ok());
-        assert!(parse("a !~ \"b\"").is_ok());
-        assert!(parse(
+        assert!(internal_parse("a = \"b\"").is_ok());
+        assert!(internal_parse("(a=\"b\")").is_ok());
+        assert!(internal_parse("((a=\"b\"))").is_ok());
+        assert!(internal_parse("a != \"b\"").is_ok());
+        assert!(internal_parse("a =~ \"b\"").is_ok());
+        assert!(internal_parse("a !~ \"b\"").is_ok());
+        assert!(internal_parse(
 				"( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\"").is_ok());
     }
 
@@ -307,23 +345,23 @@ mod tests {
             value: Value("abc".to_string()),
         });
 
-        assert_eq!(parse("a = \"abc\""), expected);
-        assert_eq!(parse("a == \"abc\""), expected);
+        assert_eq!(internal_parse("a = \"abc\""), expected);
+        assert_eq!(internal_parse("a == \"abc\""), expected);
     }
 
     #[test]
     fn t_filterparser_disallows_nul_byte() {
-        assert!(parse("attri\0bute = 0").is_err());
-        assert!(parse("attribute\0= 0").is_err());
-        assert!(parse("attribute = \0").is_err());
-        assert!(parse("attribute = \\\"\0\\\"").is_err());
+        assert!(internal_parse("attri\0bute = 0").is_err());
+        assert!(internal_parse("attribute\0= 0").is_err());
+        assert!(internal_parse("attribute = \0").is_err());
+        assert!(internal_parse("attribute = \\\"\0\\\"").is_err());
 
         // Unlike the C++ implementation, Rust is OK with having NUL inside a string literal. In
         // C++, it terminates the whole expression and implicitly closes the string literal. When
         // calling Rust through C FFI, we'll automatically get the C behaviour since we're passing
         // the input as `const char*` without specifying its length.
         assert_eq!(
-            parse("attribute = \"hello\0world\""),
+            internal_parse("attribute = \"hello\0world\""),
             Ok(Expression::Comparison {
                 attribute: "attribute".to_string(),
                 op: Operator::Equals,
@@ -340,14 +378,14 @@ mod tests {
             value: Value(String::new()),
         });
 
-        assert_eq!(parse("title==\"\""), expected);
+        assert_eq!(internal_parse("title==\"\""), expected);
     }
 
     #[test]
     fn t_and_operator_requires_space_or_paren_after_it() {
-        assert!(parse("a=42andy=0").is_err());
-        assert!(parse("(a=42)andy=0").is_err());
-        assert!(parse("a=42 andy=0").is_err());
+        assert!(internal_parse("a=42andy=0").is_err());
+        assert!(internal_parse("(a=42)andy=0").is_err());
+        assert!(internal_parse("a=42 andy=0").is_err());
 
         let expected_tree = And(
             Box::new(Comparison {
@@ -362,16 +400,16 @@ mod tests {
             }),
         );
 
-        assert_eq!(parse("a=42and(y=0)"), Ok(expected_tree.clone()));
-        assert_eq!(parse("(a=42)and(y=0)"), Ok(expected_tree.clone()));
-        assert_eq!(parse("a=42and y=0"), Ok(expected_tree));
+        assert_eq!(internal_parse("a=42and(y=0)"), Ok(expected_tree.clone()));
+        assert_eq!(internal_parse("(a=42)and(y=0)"), Ok(expected_tree.clone()));
+        assert_eq!(internal_parse("a=42and y=0"), Ok(expected_tree));
     }
 
     #[test]
     fn t_or_operator_requires_space_or_paren_after_it() {
-        assert!(parse("a=42ory=0").is_err());
-        assert!(parse("(a=42)ory=0").is_err());
-        assert!(parse("a=42 ory=0").is_err());
+        assert!(internal_parse("a=42ory=0").is_err());
+        assert!(internal_parse("(a=42)ory=0").is_err());
+        assert!(internal_parse("a=42 ory=0").is_err());
 
         let expected_tree = Or(
             Box::new(Comparison {
@@ -386,9 +424,9 @@ mod tests {
             }),
         );
 
-        assert_eq!(parse("a=42or(y=0)"), Ok(expected_tree.clone()));
-        assert_eq!(parse("(a=42)or(y=0)"), Ok(expected_tree.clone()));
-        assert_eq!(parse("a=42or y=0"), Ok(expected_tree));
+        assert_eq!(internal_parse("a=42or(y=0)"), Ok(expected_tree.clone()));
+        assert_eq!(internal_parse("(a=42)or(y=0)"), Ok(expected_tree.clone()));
+        assert_eq!(internal_parse("a=42or y=0"), Ok(expected_tree));
     }
 
     #[test]
@@ -399,14 +437,14 @@ mod tests {
             value: Value("bar".to_string()),
         };
 
-        assert_eq!(parse("array # \"bar\""), Ok(expected.clone()));
-        assert_eq!(parse("   array # \"bar\""), Ok(expected.clone()));
-        assert_eq!(parse("array   # \"bar\""), Ok(expected.clone()));
-        assert_eq!(parse("array #   \"bar\""), Ok(expected.clone()));
-        assert_eq!(parse("array # \"bar\"     "), Ok(expected.clone()));
-        assert_eq!(parse("array#  \"bar\"  "), Ok(expected.clone()));
+        assert_eq!(internal_parse("array # \"bar\""), Ok(expected.clone()));
+        assert_eq!(internal_parse("   array # \"bar\""), Ok(expected.clone()));
+        assert_eq!(internal_parse("array   # \"bar\""), Ok(expected.clone()));
+        assert_eq!(internal_parse("array #   \"bar\""), Ok(expected.clone()));
+        assert_eq!(internal_parse("array # \"bar\"     "), Ok(expected.clone()));
+        assert_eq!(internal_parse("array#  \"bar\"  "), Ok(expected.clone()));
         assert_eq!(
-            parse("     array         #         \"bar\"      "),
+            internal_parse("     array         #         \"bar\"      "),
             Ok(expected)
         );
     }
@@ -414,23 +452,23 @@ mod tests {
     #[test]
     fn t_only_space_characters_are_considered_whitespace_by_filter_parser() {
         assert_eq!(
-            parse("attr\t= \"value\""),
+            internal_parse("attr\t= \"value\""),
             Err(Error::AtPos(4, EXPECTED_OPERATORS))
         );
         assert_eq!(
-            parse("attr =\t\"value\""),
+            internal_parse("attr =\t\"value\""),
             Err(Error::AtPos(6, EXPECTED_VALUE))
         );
         assert_eq!(
-            parse("attr\n=\t\"value\""),
+            internal_parse("attr\n=\t\"value\""),
             Err(Error::AtPos(4, EXPECTED_OPERATORS))
         );
         assert_eq!(
-            parse("attr\u{b}=\"value\""),
+            internal_parse("attr\u{b}=\"value\""),
             Err(Error::AtPos(4, EXPECTED_OPERATORS))
         );
         assert_eq!(
-            parse("attr=\"value\"\r\n"),
+            internal_parse("attr=\"value\"\r\n"),
             Err(Error::TrailingCharacters("\r\n"))
         );
     }
@@ -438,7 +476,7 @@ mod tests {
     #[test]
     fn t_whitespace_before_and_or_operators_is_not_required() {
         assert_eq!(
-            parse("x = 42and y=0"),
+            internal_parse("x = 42and y=0"),
             Ok(And(
                 Box::new(Comparison {
                     attribute: "x".to_string(),
@@ -454,7 +492,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("x = \"42\"and y=0"),
+            internal_parse("x = \"42\"and y=0"),
             Ok(And(
                 Box::new(Comparison {
                     attribute: "x".to_string(),
@@ -470,7 +508,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("x = \"42\"or y=42"),
+            internal_parse("x = \"42\"or y=42"),
             Ok(Or(
                 Box::new(Comparison {
                     attribute: "x".to_string(),
@@ -491,7 +529,7 @@ mod tests {
     #[test]
     fn t_parses_simple_queries() {
         assert_eq!(
-            parse("a = \"b\""),
+            internal_parse("a = \"b\""),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::Equals,
@@ -500,7 +538,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("(a!=\"b\")"),
+            internal_parse("(a!=\"b\")"),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::NotEquals,
@@ -509,7 +547,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("((a=~\"b\"))"),
+            internal_parse("((a=~\"b\"))"),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::RegexMatches,
@@ -518,7 +556,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("a !~ \"b\""),
+            internal_parse("a !~ \"b\""),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::NotRegexMatches,
@@ -529,7 +567,7 @@ mod tests {
         // This is nonsensical, but it's a syntactically valid expression, so we parse it. Matcher
         // will sort it out during evaluation.
         assert_eq!(
-            parse("a < \"b\""),
+            internal_parse("a < \"b\""),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::LessThan,
@@ -538,7 +576,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("a <= \"b\""),
+            internal_parse("a <= \"b\""),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::LessThanOrEquals,
@@ -547,7 +585,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("a > \"abc\""),
+            internal_parse("a > \"abc\""),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::GreaterThan,
@@ -556,7 +594,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("a == \"abc\""),
+            internal_parse("a == \"abc\""),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::Equals,
@@ -565,7 +603,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("a >= 3"),
+            internal_parse("a >= 3"),
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::GreaterThanOrEquals,
@@ -574,7 +612,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("some_value between 0:-1"),
+            internal_parse("some_value between 0:-1"),
             Ok(Comparison {
                 attribute: "some_value".to_string(),
                 op: Operator::Between,
@@ -583,7 +621,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("other_string between \"impossible\""),
+            internal_parse("other_string between \"impossible\""),
             Ok(Comparison {
                 attribute: "other_string".to_string(),
                 op: Operator::Between,
@@ -592,7 +630,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("array # \"name\""),
+            internal_parse("array # \"name\""),
             Ok(Comparison {
                 attribute: "array".to_string(),
                 op: Operator::Contains,
@@ -601,7 +639,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("answers !# 42"),
+            internal_parse("answers !# 42"),
             Ok(Comparison {
                 attribute: "answers".to_string(),
                 op: Operator::NotContains,
@@ -610,7 +648,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("author =~ \"\\s*Doe$\""),
+            internal_parse("author =~ \"\\s*Doe$\""),
             Ok(Comparison {
                 attribute: "author".to_string(),
                 op: Operator::RegexMatches,
@@ -622,7 +660,7 @@ mod tests {
     #[test]
     fn t_parses_complex_queries() {
         assert_eq!(
-            parse("a = \"b\" and b = \"c\" or c = \"d\"").unwrap(),
+            internal_parse("a = \"b\" and b = \"c\" or c = \"d\"").unwrap(),
             And(
                 Box::new(Comparison {
                     attribute: "a".to_string(),
@@ -645,7 +683,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("a = \"b\" or b = \"c\" and c = \"d\"").unwrap(),
+            internal_parse("a = \"b\" or b = \"c\" and c = \"d\"").unwrap(),
             Or(
                 Box::new(Comparison {
                     attribute: "a".to_string(),
@@ -668,7 +706,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("(a = \"b\" or b = \"c\") and c = \"d\"").unwrap(),
+            internal_parse("(a = \"b\" or b = \"c\") and c = \"d\"").unwrap(),
             And(
                 Box::new(Or(
                     Box::new(Comparison {
@@ -690,7 +728,7 @@ mod tests {
             )
         );
 
-        assert!(parse(
+        assert!(internal_parse(
             "( a = \"b\") and ( b = \"c\" ) or ( ( c != \"d\" ) and ( c !~ \"asdf\" )) or c != \"xx\""
         ).is_ok());
     }
@@ -698,7 +736,7 @@ mod tests {
     #[test]
     fn t_ranges_accept_negative_numbers() {
         assert_eq!(
-            parse("value between -100:-1"),
+            internal_parse("value between -100:-1"),
             Ok(Comparison {
                 attribute: "value".to_string(),
                 op: Operator::Between,
@@ -707,7 +745,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("value between -100:100500"),
+            internal_parse("value between -100:100500"),
             Ok(Comparison {
                 attribute: "value".to_string(),
                 op: Operator::Between,
@@ -716,7 +754,7 @@ mod tests {
         );
 
         assert_eq!(
-            parse("value between 123:-10"),
+            internal_parse("value between 123:-10"),
             Ok(Comparison {
                 attribute: "value".to_string(),
                 op: Operator::Between,
@@ -729,13 +767,13 @@ mod tests {
         #[test]
         fn does_not_crash_on_any_input(ref input in "\\PC*") {
             // Result explicitly ignored because we just want to make sure this call doesn't panic.
-            let _ = parse(&input);
+            let _ = internal_parse(&input);
         }
 
         #[test]
         fn whitespace_doesnt_affect_results_1(ref input in r#" *a *!= *"b" *"#) {
             assert_eq!(
-                parse(&input),
+                internal_parse(&input),
                 Ok(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::NotEquals,
@@ -747,7 +785,7 @@ mod tests {
         #[test]
         fn whitespace_doesnt_affect_results_2(ref input in r#" *( *a *!= *"b" *) *"#) {
             assert_eq!(
-                parse(&input),
+                internal_parse(&input),
                 Ok(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::NotEquals,
@@ -759,7 +797,7 @@ mod tests {
         #[test]
         fn attribute_names_can_contain_alphanumerics_underscore_dash_and_dot(ref input in r#"[-A-Za-z0-9_.]+ == 0"#) {
             assert!(
-                parse(&input).is_ok(),
+                internal_parse(&input).is_ok(),
             );
         }
     }
