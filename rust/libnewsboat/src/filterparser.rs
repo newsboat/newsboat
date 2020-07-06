@@ -5,7 +5,7 @@ use nom::{
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
     character::{is_alphanumeric, is_digit},
     combinator::{complete, map, opt, peek, recognize, value},
-    error::{ParseError, VerboseError},
+    error::{context, ParseError, VerboseError, VerboseErrorKind},
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset,
 };
@@ -52,23 +52,31 @@ pub enum Error<'a> {
     TrailingCharacters(&'a str),
 
     /// Parsing error at given position.
-    AtPos(usize),
+    AtPos(usize, &'static str),
 }
 
+static EXPECTED_ATTRIBUTE_NAME: &str = "attribute name";
+static EXPECTED_OPERATORS: &str = "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#";
+static EXPECTED_UNKNOWN: &str = "unknown error";
+static EXPECTED_VALUE: &str = "one of: quoted string, range, number";
+
 fn operators<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Operator, E> {
-    alt((
-        value(Operator::RegexMatches, tag("=~")),
-        value(Operator::Equals, alt((tag("=="), tag("=")))),
-        value(Operator::NotRegexMatches, tag("!~")),
-        value(Operator::NotEquals, tag("!=")),
-        value(Operator::LessThanOrEquals, tag("<=")),
-        value(Operator::GreaterThanOrEquals, tag(">=")),
-        value(Operator::LessThan, tag("<")),
-        value(Operator::GreaterThan, tag(">")),
-        value(Operator::Between, tag("between")),
-        value(Operator::Contains, tag("#")),
-        value(Operator::NotContains, tag("!#")),
-    ))(input)
+    context(
+        EXPECTED_OPERATORS,
+        alt((
+            value(Operator::RegexMatches, tag("=~")),
+            value(Operator::Equals, alt((tag("=="), tag("=")))),
+            value(Operator::NotRegexMatches, tag("!~")),
+            value(Operator::NotEquals, tag("!=")),
+            value(Operator::LessThanOrEquals, tag("<=")),
+            value(Operator::GreaterThanOrEquals, tag(">=")),
+            value(Operator::LessThan, tag("<")),
+            value(Operator::GreaterThan, tag(">")),
+            value(Operator::Between, tag("between")),
+            value(Operator::Contains, tag("#")),
+            value(Operator::NotContains, tag("!#")),
+        )),
+    )(input)
 }
 
 fn quoted_string<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Value, E> {
@@ -111,16 +119,20 @@ fn space1<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a st
 }
 
 fn comparison<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Expression, E> {
-    let attribute_name =
-        take_while1(|c| is_alphanumeric(c as u8) || c == '_' || c == '-' || c == '.');
+    let attribute_name = context(
+        EXPECTED_ATTRIBUTE_NAME,
+        take_while1(|c| is_alphanumeric(c as u8) || c == '_' || c == '-' || c == '.'),
+    );
 
     let (input, attr) = attribute_name(input)?;
     let attribute = attr.to_string();
     let (input, _) = space0(input)?;
     let (input, op) = operators(input)?;
     let (input, _) = space0(input)?;
-    let (leftovers, value) =
-        alt((quoted_string, range, map(number, |n| Value(n.to_string()))))(input)?;
+    let (leftovers, value) = context(
+        EXPECTED_VALUE,
+        alt((quoted_string, range, map(number, |n| Value(n.to_string())))),
+    )(input)?;
 
     Ok((
         leftovers,
@@ -210,10 +222,14 @@ pub fn parse(expr: &str) -> Result<Expression, Error> {
         }
         Err(error) => {
             let handler = |e: VerboseError<&str>| -> Error {
-                match e.errors.first() {
-                    None => Error::AtPos(0),
-                    Some((s, _kind)) => Error::AtPos(expr.offset(s)),
+                for (chunk, err) in e.errors {
+                    let pos = expr.offset(chunk);
+                    match err {
+                        VerboseErrorKind::Context(expected) => return Error::AtPos(pos, expected),
+                        _ => continue,
+                    }
                 }
+                Error::AtPos(0, EXPECTED_UNKNOWN)
             };
 
             match error {
@@ -234,13 +250,19 @@ mod tests {
     #[test]
     fn t_error_on_invalid_queries() {
         // Invalid character in operator
-        assert_eq!(parse("title =¯ \"foo\""), Err(Error::AtPos(7)));
+        assert_eq!(
+            parse("title =¯ \"foo\""),
+            Err(Error::AtPos(7, EXPECTED_VALUE))
+        );
         // Incorrect string quoting
-        assert_eq!(parse("a = \"b"), Err(Error::AtPos(4)));
+        assert_eq!(parse("a = \"b"), Err(Error::AtPos(4, EXPECTED_VALUE)));
         // Non-value to the right of equality operator
-        assert_eq!(parse("a = b"), Err(Error::AtPos(4)));
+        assert_eq!(parse("a = b"), Err(Error::AtPos(4, EXPECTED_VALUE)));
         // Non-existent operator
-        assert_eq!(parse("a !! \"b\""), Err(Error::AtPos(2)));
+        assert_eq!(
+            parse("a !! \"b\""),
+            Err(Error::AtPos(2, EXPECTED_OPERATORS))
+        );
 
         // Unbalanced parentheses
         assert_eq!(parse("((a=\"b\")))"), Err(Error::TrailingCharacters(")")));
@@ -260,7 +282,7 @@ mod tests {
             Err(Error::TrailingCharacters("andy=0"))
         );
         // Operator without arguments
-        assert_eq!(parse("=!"), Err(Error::AtPos(0)));
+        assert_eq!(parse("=!"), Err(Error::AtPos(0, EXPECTED_ATTRIBUTE_NAME)));
     }
 
     #[test]
@@ -389,10 +411,22 @@ mod tests {
 
     #[test]
     fn t_only_space_characters_are_considered_whitespace_by_filter_parser() {
-        assert_eq!(parse("attr\t= \"value\""), Err(Error::AtPos(4)));
-        assert_eq!(parse("attr =\t\"value\""), Err(Error::AtPos(6)));
-        assert_eq!(parse("attr\n=\t\"value\""), Err(Error::AtPos(4)));
-        assert_eq!(parse("attr\u{b}=\"value\""), Err(Error::AtPos(4)));
+        assert_eq!(
+            parse("attr\t= \"value\""),
+            Err(Error::AtPos(4, EXPECTED_OPERATORS))
+        );
+        assert_eq!(
+            parse("attr =\t\"value\""),
+            Err(Error::AtPos(6, EXPECTED_VALUE))
+        );
+        assert_eq!(
+            parse("attr\n=\t\"value\""),
+            Err(Error::AtPos(4, EXPECTED_OPERATORS))
+        );
+        assert_eq!(
+            parse("attr\u{b}=\"value\""),
+            Err(Error::AtPos(4, EXPECTED_OPERATORS))
+        );
         assert_eq!(
             parse("attr=\"value\"\r\n"),
             Err(Error::TrailingCharacters("\r\n"))

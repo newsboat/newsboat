@@ -26,7 +26,9 @@ impl Matcher {
             filterparser::Error::TrailingCharacters(tail) => {
                 format!("Parse error: trailing characters: {}", tail)
             }
-            filterparser::Error::AtPos(pos) => format!("Parse error at position {}", pos),
+            filterparser::Error::AtPos(pos, expected) => {
+                format!("Parse error at position {}: expected {}", pos, expected)
+            }
         })?;
 
         Ok(Matcher {
