@@ -29,6 +29,7 @@ impl Matcher {
             filterparser::Error::AtPos(pos, expected) => {
                 format!("Parse error at position {}: expected {}", pos, expected)
             }
+            filterparser::Error::Internal => "Internal parse error".to_string(),
         })?;
 
         Ok(Matcher {

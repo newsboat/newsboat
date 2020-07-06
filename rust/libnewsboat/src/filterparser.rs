@@ -53,11 +53,13 @@ pub enum Error<'a> {
 
     /// Parsing error at given position.
     AtPos(usize, &'static str),
+
+    /// Parse error that has no explanations attached to it.
+    Internal,
 }
 
 static EXPECTED_ATTRIBUTE_NAME: &str = "attribute name";
 static EXPECTED_OPERATORS: &str = "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#";
-static EXPECTED_UNKNOWN: &str = "unknown error";
 static EXPECTED_VALUE: &str = "one of: quoted string, range, number";
 
 fn operators<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Operator, E> {
@@ -229,7 +231,7 @@ pub fn parse(expr: &str) -> Result<Expression, Error> {
                         _ => continue,
                     }
                 }
-                Error::AtPos(0, EXPECTED_UNKNOWN)
+                Error::Internal
             };
 
             match error {
