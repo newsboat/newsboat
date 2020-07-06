@@ -38,10 +38,17 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       --mount type=bind,source=$HOME/.cargo,target=/home/builder/.cargo \
 #       --user $(id -u):$(id -g) \
 #       newsboat-build-tools \
 #       make
+#
+# To save on bandwidth, and speed up the build slightly, share the host's Cargo
+# cache with the container:
+#
+#   mkdir -p ~/.cargo/registry
+#   docker run \
+#       --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+#       ... # the rest of the options
 #
 # If you want to build on the host again, run this to remove binary files
 # compiled in the container:

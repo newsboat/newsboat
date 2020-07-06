@@ -31,20 +31,27 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
     $ docker run \
         --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
-        --mount type=bind,source=$HOME/.cargo,target=/home/builder/.cargo \
         --user $(id -u):$(id -g) \
         newsboat-build-tools \
         make -j9
 
 `--rm` deletes the container once it finished, by default it is kept and will
-just litter up your system. The first `--mount` links your current directory to
-"/home/builder/src" inside the container. The other `--mount` shares your local
-crate cache with the container, letting it avoid re-downloading everything all
-the time. `--user` specifies the user and the group that will own the newly
-created files (object files, docs, and the final executable); `id` determines
-your current user and group IDs. "newsboat-build-tools" is the image from which
-we're creating the container, and `make -j9` is the command we're running inside
-of it.
+just litter up your system. `--mount` links your current directory to
+"/home/builder/src" inside the container. `--user` specifies the user and the
+group that will own the newly created files (object files, docs, and the final
+executable); `id` determines your current user and group IDs.
+"newsboat-build-tools" is the image from which we're creating the container, and
+`make -j9` is the command we're running inside of it.
+
+Newsboat depends on a number of Rust packages ("crates"), which it downloads on
+each build using Cargo. To save on bandwidth, and speed up the build, you can
+share your host's Cargo cache with the container:
+
+    # Creating the directory in case it doesn't exist
+    $ mkdir -p ~/.cargo/registry
+    $ docker run \
+        --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+        ... # the rest of the options
 
 Sharing files between host system and the container has a downside: the
 resulting binaries are shared, too. This can lead to linking errors and other
