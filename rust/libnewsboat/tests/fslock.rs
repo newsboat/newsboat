@@ -6,11 +6,11 @@ use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use tempfile::NamedTempFile;
 
-fn get_exe_dir(exe: &str) -> Result<PathBuf, Error> {
-    let mut target_dir = env::current_exe().expect("exe path");
-    while target_dir.pop() {
-        if target_dir.join(exe).exists() {
-            return Ok(target_dir.join(exe));
+fn get_exe_path(exe: &str) -> Result<PathBuf, Error> {
+    let mut p = env::current_exe().expect("exe path");
+    while p.pop() {
+        if p.join(exe).exists() {
+            return Ok(p.join(exe));
         }
     }
     Err(Error::new(ErrorKind::NotFound, exe))
@@ -46,16 +46,16 @@ fn t_returns_an_error_lock_file_without_write_access() {
 fn t_fails_if_lock_was_already_created() {
     let lock_location = NamedTempFile::new().unwrap();
 
-    let target_dir = match env::var("CARGO_BIN_EXE_lock-process") {
+    let cmd = match env::var("CARGO_BIN_EXE_lock-process") {
         Ok(dir) => dir,
-        Err(_) => get_exe_dir("lock-process")
+        Err(_) => get_exe_path("lock-process")
             .unwrap()
             .to_str()
             .unwrap()
             .to_string(),
     };
 
-    let mut child = Command::new(target_dir)
+    let mut child = Command::new(cmd)
         .arg(lock_location.path())
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
