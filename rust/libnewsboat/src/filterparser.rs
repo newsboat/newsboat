@@ -800,5 +800,12 @@ mod tests {
                 internal_parse(&input).is_ok(),
             );
         }
+
+        #[test]
+        fn no_internal_parsing_errors(ref input in "\\PC*") {
+            // We should return either a parsed expression or a descriptive error -- never
+            // a nondescript "internal error".
+            assert_ne!(internal_parse(&input), Err(Error::Internal));
+        }
     }
 }
