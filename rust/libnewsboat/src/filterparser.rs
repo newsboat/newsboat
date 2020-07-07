@@ -50,8 +50,9 @@ pub enum Expression {
 /// Errors that may come up during parsing.
 #[derive(PartialEq, Debug)]
 enum Error<'a> {
-    /// Parser finished the work, but the input string still contains some characters.
-    TrailingCharacters(&'a str),
+    /// Parser finished the work, but the input string still contains some characters (starting at
+    /// given position).
+    TrailingCharacters(usize, &'a str),
 
     /// Parsing error at given position. "Explanation string" is one of `EXPECTED_*` constants.
     AtPos(usize, &'static str),
@@ -220,7 +221,10 @@ fn internal_parse(expr: &str) -> Result<Expression, Error> {
             if leftovers.is_empty() {
                 Ok(expression)
             } else {
-                Err(Error::TrailingCharacters(&leftovers))
+                Err(Error::TrailingCharacters(
+                    expr.offset(leftovers),
+                    &leftovers,
+                ))
             }
         }
         Err(error) => {
@@ -254,9 +258,13 @@ pub fn parse(expr: &str) -> Result<Expression, String> {
         Ok(expression) => Ok(expression),
         Err(error) => {
             let err = match error {
-                Error::TrailingCharacters(tail) => {
-                    fmt!(&gettext("Parse error: trailing characters: %s"), tail)
-                }
+                Error::TrailingCharacters(pos, tail) => fmt!(
+                    // The "%{}" thing is a number, a zero-based offset into a string.
+                    &gettext("Parse error: trailing characters after position %{}: %s"),
+                    PRIu64,
+                    pos as u64,
+                    tail
+                ),
                 Error::AtPos(pos, expected) => fmt!(
                     // The "%{}" thing is a number, a zero-based offset into a string.
                     &gettext("Parse error at position %{}: expected %s"),
@@ -301,22 +309,22 @@ mod tests {
         // Unbalanced parentheses
         assert_eq!(
             internal_parse("((a=\"b\")))"),
-            Err(Error::TrailingCharacters(")"))
+            Err(Error::TrailingCharacters(9, ")"))
         );
 
         // Incorrect syntax for range
         assert_eq!(
             internal_parse("AAAA between 0:15:30"),
-            Err(Error::TrailingCharacters(":30"))
+            Err(Error::TrailingCharacters(17, ":30"))
         );
         // No whitespace after the `and` operator
         assert_eq!(
             internal_parse("x = 42andy=0"),
-            Err(Error::TrailingCharacters("andy=0"))
+            Err(Error::TrailingCharacters(6, "andy=0"))
         );
         assert_eq!(
             internal_parse("x = 42 andy=0"),
-            Err(Error::TrailingCharacters("andy=0"))
+            Err(Error::TrailingCharacters(7, "andy=0"))
         );
         // Operator without arguments
         assert_eq!(
@@ -469,7 +477,7 @@ mod tests {
         );
         assert_eq!(
             internal_parse("attr=\"value\"\r\n"),
-            Err(Error::TrailingCharacters("\r\n"))
+            Err(Error::TrailingCharacters(12, "\r\n"))
         );
     }
 
