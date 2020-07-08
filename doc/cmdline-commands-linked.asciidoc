@@ -1,0 +1,121 @@
+'''
+[[cmd-quit]]
+****
+*Syntax:* <<cmd-quit,quit>>  +
+*Example:* quit +
+****
+
+Quit newsboat. +
+
+
+
+'''
+[[cmd-q]]
+****
+*Syntax:* <<cmd-q,q>>  +
+*Example:* quit +
+****
+
+Alias for quit. +
+
+
+
+'''
+[[cmd-save]]
+****
+*Syntax:* <<cmd-save,save>> <filename> +
+*Example:* save ~/important.txt +
+****
+
+Save the currently select article to disk. This works in the article list and in the article view. +
+
+
+
+'''
+[[cmd-set]]
+****
+*Syntax:* <<cmd-set,set>> <variable>[=<value>|&|!] +
+*Example:* set reload-time=15 +
+****
+
+Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a _!_ after the name of boolean configuration variables toggles their values, a _&_ directly after the name of a configuration variable of any type resets its value to the documented default value. +
+
+
+
+'''
+[[cmd-tag]]
+****
+*Syntax:* <<cmd-tag,tag>> <tagname> +
+*Example:* tag news +
+****
+
+Only display feeds with the tag <tagname>. +
+
+
+
+'''
+[[cmd-goto]]
+****
+*Syntax:* <<cmd-goto,goto>> <case-insensitive substring> +
+*Example:* goto foo +
+****
+
+Search for a feed whose name contains the case-insensitive substring. +
+
+
+
+'''
+[[cmd-source]]
+****
+*Syntax:* <<cmd-source,source>> <filename> [...] +
+*Example:* source ~/.newsboat/colors +
+****
+
+Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem. +
+
+
+
+'''
+[[cmd-dumpconfig]]
+****
+*Syntax:* <<cmd-dumpconfig,dumpconfig>> <filename> +
+*Example:* dumpconfig ~/.newsboat/config.saved +
+****
+
+Save current internal state of configuration to file, so that it can be instantly reused as configuration file. +
+
+
+
+'''
+[[cmd-dumpform]]
+****
+*Syntax:* <<cmd-dumpform,dumpform>>  +
+*Example:* dumpform +
+****
+
+Dump current dialog to text file. This is meant for debugging purposes only. +
+
+
+
+'''
+[[cmd-exec]]
+****
+*Syntax:* <<cmd-exec,exec>> <operation> +
+*Example:* exec open-all-unread-in-browser-and-mark-read +
+****
+
+Run a keybind operation in the current context. +
+
+
+
+'''
+[[cmd-number]]
+****
+*Syntax:* <<cmd-number,number>>  +
+*Example:* 30 +
+****
+
+Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list, article list, tag selection and filter selection forms. +
+
+
+
