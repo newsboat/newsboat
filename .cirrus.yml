@@ -112,9 +112,6 @@ macos_task:
         - brew install "libxml2"
         - brew install "pyenv" || brew upgrade "pyenv"
         - rustup-init -y --default-toolchain $RUST
-        - eval "$(pyenv init -)"
-        - pip3 install cpp-coveralls
-        - pyenv rehash
         - rustc --version && cargo --version
 
     env:
