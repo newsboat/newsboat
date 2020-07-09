@@ -1133,24 +1133,19 @@ bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 
 bool ItemListFormAction::jump_to_random_unread_item()
 {
-	bool has_unread_available = false;
+	std::vector<unsigned int> unread_indexes;
 	for (unsigned int i = 0; i < visible_items.size(); ++i) {
 		if (visible_items[i].first->unread()) {
-			has_unread_available = true;
-			break;
+			unread_indexes.push_back(i);
 		}
 	}
-	if (has_unread_available) {
-		for (;;) {
-			unsigned int pos =
-				utils::get_random_value(visible_items.size());
-			if (visible_items[pos].first->unread()) {
-				list.set_position(pos);
-				break;
-			}
-		}
+	if (!unread_indexes.empty()) {
+		const unsigned int selected = utils::get_random_value(unread_indexes.size());
+		const unsigned int pos = unread_indexes[selected];
+		list.set_position(pos);
+		return true;
 	}
-	return has_unread_available;
+	return false;
 }
 
 bool ItemListFormAction::jump_to_next_unread_item(bool start_with_first)
