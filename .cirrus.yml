@@ -191,6 +191,7 @@ linux_task:
                 cxx: g++-10
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
+            PROFILE: 0
         - name: Clang 10, more warnings and checks (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
@@ -306,6 +307,7 @@ linux_task:
 
     env:
         RUSTFLAGS: '-D warnings'
+        PROFILE: 1
 
     build_script: *build_script
     test_script: *test_script
