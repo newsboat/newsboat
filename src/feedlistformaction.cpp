@@ -673,25 +673,20 @@ void FeedListFormAction::goto_feed(const std::string& str)
 
 bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 {
-	bool unread_feeds_available = false;
+	std::vector<unsigned int> unread_indexes;
 	for (unsigned int i = 0; i < visible_feeds.size(); ++i) {
 		if (visible_feeds[i].first->unread_item_count() > 0) {
-			unread_feeds_available = true;
-			break;
+			unread_indexes.push_back(i);
 		}
 	}
-	if (unread_feeds_available) {
-		for (;;) {
-			unsigned int pos =
-				utils::get_random_value(visible_feeds.size());
-			if (visible_feeds[pos].first->unread_item_count() > 0) {
-				list.set_position(pos);
-				feedpos = visible_feeds[pos].second;
-				break;
-			}
-		}
+	if (!unread_indexes.empty()) {
+		const unsigned int selected = utils::get_random_value(unread_indexes.size());
+		const unsigned int pos = unread_indexes[selected];
+		list.set_position(pos);
+		feedpos = visible_feeds[pos].second;
+		return true;
 	}
-	return unread_feeds_available;
+	return false;
 }
 
 bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)

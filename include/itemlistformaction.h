@@ -8,7 +8,6 @@
 #include "history.h"
 #include "listformaction.h"
 #include "listformatter.h"
-#include "listwidget.h"
 #include "regexmanager.h"
 #include "view.h"
 

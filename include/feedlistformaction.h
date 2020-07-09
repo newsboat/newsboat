@@ -6,7 +6,6 @@
 #include "configcontainer.h"
 #include "history.h"
 #include "listformaction.h"
-#include "listwidget.h"
 #include "matcher.h"
 #include "regexmanager.h"
 #include "view.h"
