@@ -6,12 +6,14 @@
 #include "3rd-party/optional.hpp"
 
 #include "formaction.h"
+#include "listwidget.h"
 
 namespace newsboat {
 
 class ListFormAction : public FormAction {
 public:
-	ListFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	ListFormAction(View*, std::string formstr, std::string list_name,
+		ConfigContainer* cfg);
 
 protected:
 	bool process_operation(Operation op,
@@ -20,6 +22,8 @@ protected:
 	nonstd::optional<std::uint8_t> open_unread_items_in_browser(
 		std::shared_ptr<RssFeed> feed,
 		bool markread);
+
+	ListWidget list;
 };
 
 } // namespace newsboat

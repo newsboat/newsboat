@@ -28,7 +28,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ListFormAction(vv, formstr, cfg)
+	: ListFormAction(vv, formstr, "feeds", cfg)
 	, zero_feedpos(false)
 	, apply_filter(false)
 	, search_dummy_feed(new RssFeed(cc))
@@ -36,7 +36,6 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, set_filterpos(false)
 	, rxman(r)
 	, filters(f)
-	, feeds_list("feeds", FormAction::f)
 {
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
@@ -128,24 +127,6 @@ REDO:
 		break;
 	case OP_RELOADURLS:
 		v->get_ctrl()->reload_urls_file();
-		break;
-	case OP_SK_UP:
-		feeds_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_DOWN:
-		feeds_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_HOME:
-		feeds_list.move_to_first();
-		break;
-	case OP_SK_END:
-		feeds_list.move_to_last();
-		break;
-	case OP_SK_PGUP:
-		feeds_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_PGDOWN:
-		feeds_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SORT: {
 		/// This string is related to the letters in parentheses in the
@@ -356,7 +337,7 @@ REDO:
 				v->set_status("");
 				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
 				if (visible_feeds.size() > (pos + 1) && show_read) {
-					feeds_list.set_position(pos + 1);
+					list.set_position(pos + 1);
 				}
 			} catch (const DbException& e) {
 				v->show_error(strprintf::fmt(
@@ -586,7 +567,7 @@ void FeedListFormAction::set_feedlist(
 {
 	assert(cfg != nullptr); // must not happen
 
-	const unsigned int width = feeds_list.get_width();
+	const unsigned int width = list.get_width();
 
 	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
 
@@ -602,7 +583,7 @@ void FeedListFormAction::set_feedlist(
 			std::to_string(feed.second));
 	}
 
-	feeds_list.stfl_replace_lines(listfmt);
+	list.stfl_replace_lines(listfmt);
 
 	update_form_title(width);
 }
@@ -625,7 +606,7 @@ KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
 
 bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 {
-	const unsigned int curpos = feeds_list.get_position();
+	const unsigned int curpos = list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::jump_to_previous_unread_feed: searching "
 		"for "
@@ -642,7 +623,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_previous_unread_"
 				"feed:"
 				" hit");
-			feeds_list.set_position(i);
+			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -659,7 +640,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_previous_unread_"
 				"feed:"
 				" hit");
-			feeds_list.set_position(i);
+			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -669,7 +650,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 
 void FeedListFormAction::goto_feed(const std::string& str)
 {
-	const unsigned int curpos = feeds_list.get_position();
+	const unsigned int curpos = list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::goto_feed: curpos = %u str = `%s'",
 		curpos,
@@ -677,14 +658,14 @@ void FeedListFormAction::goto_feed(const std::string& str)
 	for (unsigned int i = curpos + 1; i < visible_feeds.size(); ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(),
 				str.c_str()) != nullptr) {
-			feeds_list.set_position(i);
+			list.set_position(i);
 			return;
 		}
 	}
 	for (unsigned int i = 0; i <= curpos; ++i) {
 		if (strcasestr(visible_feeds[i].first->title().c_str(),
 				str.c_str()) != nullptr) {
-			feeds_list.set_position(i);
+			list.set_position(i);
 			return;
 		}
 	}
@@ -704,7 +685,7 @@ bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 			unsigned int pos =
 				utils::get_random_value(visible_feeds.size());
 			if (visible_feeds[pos].first->unread_item_count() > 0) {
-				feeds_list.set_position(pos);
+				list.set_position(pos);
 				feedpos = visible_feeds[pos].second;
 				break;
 			}
@@ -715,7 +696,7 @@ bool FeedListFormAction::jump_to_random_unread_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 {
-	const unsigned int curpos = feeds_list.get_position();
+	const unsigned int curpos = list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::jump_to_next_unread_feed: searching for "
 		"unread feed");
@@ -731,7 +712,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_next_unread_feed:"
 				" "
 				"hit");
-			feeds_list.set_position(i);
+			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -747,7 +728,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 				"FeedListFormAction::jump_to_next_unread_feed:"
 				" "
 				"hit");
-			feeds_list.set_position(i);
+			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
@@ -757,7 +738,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 {
-	const unsigned int curpos = feeds_list.get_position();
+	const unsigned int curpos = list.get_position();
 
 	if (curpos > 0) {
 		unsigned int i = curpos - 1;
@@ -765,7 +746,7 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 			"FeedListFormAction::jump_to_previous_feed: "
 			"visible_feeds[%u]",
 			i);
-		feeds_list.set_position(i);
+		list.set_position(i);
 		feedpos = visible_feeds[i].second;
 		return true;
 	}
@@ -774,7 +755,7 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 
 bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 {
-	const unsigned int curpos = feeds_list.get_position();
+	const unsigned int curpos = list.get_position();
 
 	if ((curpos + 1) < visible_feeds.size()) {
 		unsigned int i = curpos + 1;
@@ -782,7 +763,7 @@ bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 			"FeedListFormAction::jump_to_next_feed: "
 			"visible_feeds[%u]",
 			i);
-		feeds_list.set_position(i);
+		list.set_position(i);
 		feedpos = visible_feeds[i].second;
 		return true;
 	}
@@ -791,7 +772,7 @@ bool FeedListFormAction::jump_to_next_feed(unsigned int& feedpos)
 
 std::shared_ptr<RssFeed> FeedListFormAction::get_feed()
 {
-	const unsigned int curpos = feeds_list.get_position();
+	const unsigned int curpos = list.get_position();
 	return visible_feeds[curpos].first;
 }
 
@@ -867,7 +848,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 				"match, "
 				"setting position to %u",
 				vpos);
-			feeds_list.set_position(vpos);
+			list.set_position(vpos);
 			return;
 		}
 		vpos++;
@@ -881,7 +862,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 				"match "
 				"in 2nd try, setting position to %u",
 				vpos);
-			feeds_list.set_position(vpos);
+			list.set_position(vpos);
 			return;
 		}
 		vpos++;
@@ -890,7 +871,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 
 void FeedListFormAction::save_filterpos()
 {
-	const unsigned int i = feeds_list.get_position();
+	const unsigned int i = list.get_position();
 	if (i < visible_feeds.size()) {
 		filterpos = visible_feeds[i].second;
 		set_filterpos = true;
@@ -905,7 +886,7 @@ void FeedListFormAction::register_format_styles()
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos_name[feedposname]: pos[feeds_pos]:0 %s richtext:1}",
 			attrstr);
-	feeds_list.stfl_replace_list(0, textview);
+	list.stfl_replace_list(0, textview);
 }
 
 void FeedListFormAction::update_form_title(unsigned int width)
@@ -993,7 +974,7 @@ void FeedListFormAction::handle_cmdline_num(unsigned int idx)
 		if (i == -1) {
 			v->show_error(_("Position not visible!"));
 		} else {
-			feeds_list.set_position(i);
+			list.set_position(i);
 		}
 	} else {
 		v->show_error(_("Invalid position!"));
@@ -1007,14 +988,14 @@ void FeedListFormAction::set_pos()
 		unsigned int i = 0;
 		for (const auto& feed : visible_feeds) {
 			if (feed.second == filterpos) {
-				feeds_list.set_position(i);
+				list.set_position(i);
 				return;
 			}
 			i++;
 		}
-		feeds_list.set_position(0);
+		list.set_position(0);
 	} else if (zero_feedpos) {
-		feeds_list.set_position(0);
+		list.set_position(0);
 		zero_feedpos = false;
 	}
 }
