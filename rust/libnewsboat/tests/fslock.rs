@@ -68,14 +68,14 @@ fn t_fails_if_lock_was_already_created() {
 
     // wait for locked signal
     let stdout = child.stdout.as_mut().unwrap();
-    stdout.read(&mut [0]).unwrap();
+    stdout.read_exact(&mut [0]).unwrap();
 
     assert!(!lock.try_lock(lock_location.as_ref(), &mut pid));
     assert_eq!(pid, cid, "pid should be process holding the lock");
 
     // notify child to exit and drop lock
     let stdin = child.stdin.as_mut().unwrap();
-    stdin.write(b"\n").unwrap();
+    stdin.write_all(b"\n").unwrap();
 }
 
 #[test]

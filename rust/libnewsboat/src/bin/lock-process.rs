@@ -2,7 +2,7 @@
 use libnewsboat::fslock::FsLock;
 
 fn main() {
-    let lock_location = std::env::args().skip(1).next().unwrap();
+    let lock_location = std::env::args().nth(1).unwrap();
 
     let mut lock = FsLock::default();
     assert!(lock.try_lock(lock_location.as_ref(), &mut 0));
