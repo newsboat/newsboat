@@ -68,3 +68,31 @@ TEST_CASE("History can be saved and loaded from file", "[History]")
 		}
 	}
 }
+
+TEST_CASE("Only the most recent lines are saved when limiting history",
+	"[History]")
+{
+	TestHelpers::TempDir tmp;
+	const auto filepath = tmp.get_path() + "history.cmdline";
+	const int max_lines = 3;
+
+	History h;
+	h.add_line("1");
+	h.add_line("2");
+	h.add_line("3");
+	h.add_line("4");
+
+	SECTION("file with history lines is created") {
+		h.save_to_file(filepath, max_lines);
+		REQUIRE(0 == ::access(filepath.c_str(), R_OK | W_OK));
+
+		SECTION("when loading, only a limited number of lines are returned") {
+			History loaded_h;
+			loaded_h.load_from_file(filepath);
+			REQUIRE(loaded_h.previous_line() == "4");
+			REQUIRE(loaded_h.previous_line() == "3");
+			REQUIRE(loaded_h.previous_line() == "2");
+			REQUIRE(loaded_h.previous_line() == "2");
+		}
+	}
+}
