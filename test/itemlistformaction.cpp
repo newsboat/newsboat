@@ -635,8 +635,6 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	FilterContainer filters;
-	RegexManager rxman;
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
@@ -647,13 +645,11 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	feed->add_item(item);
-	itemlist.set_feed(feed);
 
-	v.push_itemlist(feed);
+	std::shared_ptr<ItemListFormAction> itemlist = v.push_itemlist(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_HELP));
+	REQUIRE_NOTHROW(itemlist->process_op(OP_HELP));
 }
 
 TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
@@ -677,8 +673,6 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
-	v.push_itemlist(feed);
-
 	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT));
 }
 
@@ -696,8 +690,6 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	cfg.set_configvalue(
 		"external-url-viewer", "tee > " + articleFile.get_path());
 	Cache rsscache(":memory:", &cfg);
-	FilterContainer filters;
-	RegexManager rxman;
 	std::string line;
 
 	std::string first_article_title = "First_Article";
@@ -720,20 +712,17 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
 	item2->set_title(second_article_title);
 	feed->add_item(item2);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
-	itemlist.set_feed(feed);
+	std::shared_ptr<ItemListFormAction> itemlist = v.push_itemlist(feed);
 
-	v.push_itemlist(feed);
-
-	REQUIRE_NOTHROW(itemlist.process_op(OP_NEXT));
-	itemlist.process_op(OP_SHOWURLS);
+	REQUIRE_NOTHROW(itemlist->process_op(OP_NEXT));
+	itemlist->process_op(OP_SHOWURLS);
 
 	std::ifstream fileStream(articleFile.get_path());
 	std::getline(fileStream, line);
 	REQUIRE(line == prefix_title + second_article_title);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_PREV));
-	itemlist.process_op(OP_SHOWURLS);
+	REQUIRE_NOTHROW(itemlist->process_op(OP_PREV));
+	itemlist->process_op(OP_SHOWURLS);
 
 	fileStream.seekg(0);
 	std::getline(fileStream, line);
@@ -748,8 +737,6 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	FilterContainer filters;
-	RegexManager rxman;
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
@@ -762,19 +749,17 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	feed->add_item(item);
 
-	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
-	itemlist.set_feed(feed);
-	v.push_itemlist(feed);
+	std::shared_ptr<ItemListFormAction> itemlist = v.push_itemlist(feed);
 
 	SECTION("True to False") {
 		v.get_cfg()->set_configvalue("show-read-articles", "yes");
-		REQUIRE_NOTHROW(itemlist.process_op(OP_TOGGLESHOWREAD));
+		REQUIRE_NOTHROW(itemlist->process_op(OP_TOGGLESHOWREAD));
 		REQUIRE_FALSE(v.get_cfg()->get_configvalue_as_bool(
 				"show-read-articles"));
 	}
 	SECTION("False to True") {
 		v.get_cfg()->set_configvalue("show-read-articles", "no");
-		REQUIRE_NOTHROW(itemlist.process_op(OP_TOGGLESHOWREAD));
+		REQUIRE_NOTHROW(itemlist->process_op(OP_TOGGLESHOWREAD));
 		REQUIRE(v.get_cfg()->get_configvalue_as_bool(
 				"show-read-articles"));
 	}
