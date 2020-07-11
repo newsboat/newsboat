@@ -425,7 +425,8 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 	}
 }
 
-void View::push_itemlist(std::shared_ptr<RssFeed> feed)
+std::shared_ptr<ItemListFormAction> View::push_itemlist(
+	std::shared_ptr<RssFeed> feed)
 {
 	assert(feed != nullptr);
 
@@ -444,8 +445,10 @@ void View::push_itemlist(std::shared_ptr<RssFeed> feed)
 		itemlist->init();
 		formaction_stack.push_back(itemlist);
 		current_formaction = formaction_stack_size() - 1;
+		return itemlist;
 	} else {
 		show_error(_("Error: feed contains no items!"));
+		return nullptr;
 	}
 }
 
@@ -456,14 +459,9 @@ void View::push_itemlist(unsigned int pos)
 	LOG(Level::DEBUG,
 		"View::push_itemlist: retrieved feed at position %d",
 		pos);
-	push_itemlist(feed);
-	if (feed->total_item_count() > 0) {
-		std::shared_ptr<ItemListFormAction> itemlist =
-			std::dynamic_pointer_cast<ItemListFormAction,
-			FormAction>(get_current_formaction());
-		if (itemlist) {
-			itemlist->set_pos(pos);
-		}
+	auto itemlist = push_itemlist(feed);
+	if (itemlist) {
+		itemlist->set_pos(pos);
 	}
 }
 

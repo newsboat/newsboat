@@ -62,7 +62,8 @@ public:
 	char confirm(const std::string& prompt, const std::string& charset);
 
 	void push_itemlist(unsigned int pos);
-	void push_itemlist(std::shared_ptr<RssFeed> feed);
+	std::shared_ptr<ItemListFormAction> push_itemlist(std::shared_ptr<RssFeed>
+		feed);
 	void push_itemview(std::shared_ptr<RssFeed> f,
 		const std::string& guid,
 		const std::string& searchphrase = "");
