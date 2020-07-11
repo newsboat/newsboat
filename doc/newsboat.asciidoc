@@ -1105,12 +1105,12 @@ Identifier:Meaning
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[podlist-format-i]]<<podlist-format-i,+i+>>:Dowload index
+[[podlist-format-i]]<<podlist-format-i,+i+>>:Download index
 [[podlist-format-d]]<<podlist-format-d,+d+>>:Currently downloaded size in megabytes, displays one digit of precision
-[[podlist-format-t]]<<podlist-format-t,+t+>>:Total dowload size in megabytes, displays one digit of precision
-[[podlist-format-p]]<<podlist-format-p,+p+>>:Dowloaded precentage, displays one digit of precision
-[[podlist-format-k]]<<podlist-format-k,+k+>>:Dowload speed, displays two digit of precision, always in KB/s (does not include the "KB/s" text)
-[[podlist-format-K]]<<podlist-format-K,+K+>>:Dowload speed, displays two digit of precision, human readable (automatically switches between KB/s, MB/s, and GB/s)
+[[podlist-format-t]]<<podlist-format-t,+t+>>:Total download size in megabytes, displays one digit of precision
+[[podlist-format-p]]<<podlist-format-p,+p+>>:Downloaded precentage, displays one digit of precision
+[[podlist-format-k]]<<podlist-format-k,+k+>>:Download speed, displays two digit of precision, always in KB/s (does not include the "KB/s" text)
+[[podlist-format-K]]<<podlist-format-K,+K+>>:Download speed, displays two digit of precision, human readable (automatically switches between KB/s, MB/s, and GB/s)
 [[podlist-format-S]]<<podlist-format-S,+S+>>:Status of download, displays one of the folowing; "queued", "downloading", "ready", "canceled", "deleted", "incomplete", "played", "finished" or "failed"
 [[podlist-format-u]]<<podlist-format-u,+u+>>:Url of the download
 [[podlist-format-F]]<<podlist-format-F,+F+>>:Absolute filename of the download from the root directory (e.g. ~/downloads/podcast.mp3 -> /home/name/downloads/podcast.mp3)
