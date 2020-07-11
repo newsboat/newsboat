@@ -65,8 +65,8 @@ impl History {
 
         self.lines
             .iter()
-            .rev()
             .take(limit)
+            .rev()
             .map(|ln| writeln!(f, "{}", ln).map(|_| ()))
             .collect()
     }
@@ -136,5 +136,30 @@ mod tests {
         assert_eq!(loaded_h.next_line(), "testline");
         assert_eq!(loaded_h.next_line(), "foobar");
         assert_eq!(loaded_h.next_line(), "");
+    }
+
+    #[test]
+    fn t_save_and_load_limited_history() {
+        let tmp_dir = TempDir::new().unwrap();
+        let file_path = tmp_dir.path().join("history.cmdline");
+        let max_lines = 3;
+
+        let mut h = History::new();
+        h.add_line("1".to_string());
+        h.add_line("2".to_string());
+        h.add_line("3".to_string());
+        h.add_line("4".to_string());
+
+        // lines are written to file
+        h.save_to_file(file_path.clone(), max_lines).unwrap();
+        assert!(file_path.exists());
+
+        // lines are loaded to new History
+        let mut loaded_h = History::new();
+        loaded_h.load_from_file(file_path).unwrap();
+        assert_eq!(loaded_h.previous_line(), "4");
+        assert_eq!(loaded_h.previous_line(), "3");
+        assert_eq!(loaded_h.previous_line(), "2");
+        assert_eq!(loaded_h.previous_line(), "2");
     }
 }
