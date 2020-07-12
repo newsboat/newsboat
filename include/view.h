@@ -12,8 +12,9 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "controller.h"
-#include "filebrowserformaction.h"
 #include "dirbrowserformaction.h"
+#include "feedlistformaction.h"
+#include "filebrowserformaction.h"
 #include "htmlrenderer.h"
 #include "keymap.h"
 #include "regexmanager.h"
@@ -23,6 +24,7 @@ namespace newsboat {
 
 class ItemListFormAction;
 class ItemViewFormAction;
+class FeedListFormAction;
 
 class View {
 public:
@@ -62,7 +64,8 @@ public:
 	char confirm(const std::string& prompt, const std::string& charset);
 
 	void push_itemlist(unsigned int pos);
-	void push_itemlist(std::shared_ptr<RssFeed> feed);
+	std::shared_ptr<ItemListFormAction> push_itemlist(std::shared_ptr<RssFeed>
+		feed);
 	void push_itemview(std::shared_ptr<RssFeed> f,
 		const std::string& guid,
 		const std::string& searchphrase = "");
@@ -155,6 +158,7 @@ protected:
 
 	std::vector<std::shared_ptr<FormAction>> formaction_stack;
 	unsigned int current_formaction;
+	std::shared_ptr<FeedListFormAction> feedlist_form;
 
 	std::vector<std::string> tags;
 
