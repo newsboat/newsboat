@@ -107,7 +107,11 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_DELETE_ALL: {
 		ScopeMeasure m1("OP_DELETE_ALL");
 		if (visible_items.size() > 0) {
-			v->get_ctrl()->mark_all_read(pos);
+			if (!feed->is_search_feed()) {
+				v->get_ctrl()->mark_all_read(pos);
+			} else {
+				v->get_ctrl()->mark_all_read(feed);
+			}
 			for (const auto& pair : visible_items) {
 				pair.first->set_deleted(true);
 			}
