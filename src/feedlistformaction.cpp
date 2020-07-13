@@ -31,16 +31,15 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	: ListFormAction(vv, formstr, "feeds", cfg)
 	, zero_feedpos(false)
 	, apply_filter(false)
-	, search_dummy_feed(new RssFeed(cc))
 	, filterpos(0)
 	, set_filterpos(false)
 	, rxman(r)
 	, filters(f)
+	, cache(cc)
 {
 	valid_cmds.push_back("tag");
 	valid_cmds.push_back("goto");
 	std::sort(valid_cmds.begin(), valid_cmds.end());
-	search_dummy_feed->set_search_feed(true);
 	register_format_styles();
 }
 
@@ -950,10 +949,9 @@ void FeedListFormAction::op_start_search()
 			return;
 		}
 		if (!items.empty()) {
-			search_dummy_feed->item_mutex.lock();
-			search_dummy_feed->clear_items();
+			std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache));
+			search_dummy_feed->set_search_feed(true);
 			search_dummy_feed->add_items(items);
-			search_dummy_feed->item_mutex.unlock();
 			v->push_searchresult(search_dummy_feed, searchphrase);
 		} else {
 			v->show_error(_("No results."));
