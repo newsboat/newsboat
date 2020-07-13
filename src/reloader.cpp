@@ -189,10 +189,10 @@ void Reloader::reload_all(bool unattended)
 			feed->set_status(DlStatus::SUCCESS);
 		}
 	}
-	ctrl->get_view()->force_redraw();
 
 	ctrl->get_feedcontainer()->sort_feeds(cfg->get_feed_sort_strategy());
 	ctrl->update_feedlist();
+	ctrl->get_view()->force_redraw();
 
 	notify_reload_finished(unread_feeds, unread_articles);
 }
