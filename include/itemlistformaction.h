@@ -72,7 +72,7 @@ public:
 	}
 	void set_searchphrase(const std::string& s)
 	{
-		searchphrase = s;
+		search_phrase = s;
 	}
 
 	void recalculate_form() override;
@@ -130,7 +130,7 @@ private:
 	Matcher matcher;
 	std::vector<ItemPtrPosPair> visible_items;
 	bool show_searchresult;
-	std::string searchphrase;
+	std::string search_phrase;
 
 	History filterhistory;
 

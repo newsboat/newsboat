@@ -73,7 +73,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			old_itempos = itempos;
 			v->push_itemview(feed,
 				visible_items[itempos].first->guid(),
-				show_searchresult ? searchphrase : "");
+				show_searchresult ? search_phrase : "");
 			invalidate(itempos);
 		} else {
 			v->show_error(
@@ -849,7 +849,7 @@ void ItemListFormAction::qna_end_editflags()
 
 void ItemListFormAction::qna_start_search()
 {
-	searchphrase = qna_responses[0];
+	const std::string searchphrase = qna_responses[0];
 	if (searchphrase.length() == 0) {
 		return;
 	}
@@ -1395,7 +1395,7 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 std::string ItemListFormAction::title()
 {
 	if (feed->rssurl() == "") {
-		return strprintf::fmt(_("Search Result - '%s'"), searchphrase);
+		return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
 	} else {
 		if (feed->is_query_feed()) {
 			return strprintf::fmt(_("Query Feed - %s"),
