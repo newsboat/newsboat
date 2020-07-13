@@ -32,7 +32,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, pos(0)
 	, apply_filter(false)
 	, show_searchresult(false)
-	, search_dummy_feed(new RssFeed(cc))
 	, set_filterpos(false)
 	, filterpos(0)
 	, rxman(r)
@@ -43,7 +42,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, rsscache(cc)
 	, filters(f)
 {
-	search_dummy_feed->set_search_feed(true);
 	register_format_styles();
 }
 
@@ -874,11 +872,9 @@ void ItemListFormAction::qna_start_search()
 		return;
 	}
 
-	{
-		std::lock_guard<std::mutex> lock(search_dummy_feed->item_mutex);
-		search_dummy_feed->clear_items();
-		search_dummy_feed->add_items(items);
-	}
+	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(rsscache));
+	search_dummy_feed->set_search_feed(true);
+	search_dummy_feed->add_items(items);
 
 	if (show_searchresult) {
 		v->pop_current_formaction();

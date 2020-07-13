@@ -134,8 +134,6 @@ private:
 
 	History filterhistory;
 
-	std::shared_ptr<RssFeed> search_dummy_feed;
-
 	std::mutex redraw_mtx;
 
 	bool set_filterpos;

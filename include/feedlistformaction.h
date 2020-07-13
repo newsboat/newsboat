@@ -87,8 +87,6 @@ private:
 
 	History filterhistory;
 
-	std::shared_ptr<RssFeed> search_dummy_feed;
-
 	unsigned int filterpos;
 	bool set_filterpos;
 
@@ -97,6 +95,8 @@ private:
 	FilterContainer& filters;
 
 	nonstd::optional<FeedSortStrategy> old_sort_strategy;
+
+	Cache* cache;
 };
 
 } // namespace newsboat
