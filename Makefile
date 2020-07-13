@@ -158,7 +158,7 @@ clean-libnewsboat:
 
 clean-doc:
 	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.asciidoc \
+	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
 		doc/example-config doc/generate doc/generate2 \
 		doc/gen-example-config
