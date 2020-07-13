@@ -82,6 +82,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 - http://xmlsoft.org/downloads.html[libxml2]
 - https://github.com/json-c/json-c/wiki[json-c (version 0.11 or newer)]
 - https://asciidoctor.org/[Asciidoctor] (1.5.3 or newer)
+- Some implementation of AWK like https://www.gnu.org/software/gawk[GNU AWK] or https://github.com/onetrueawk/awk[NAWK].
 
 Developers will also need:
 
@@ -129,21 +130,14 @@ documentation].
 include::chapter-firststeps.asciidoc[]
 
 
+=== Configuration Commands
 
-.Configuration Commands
-[frame="all", grid="all", format="dsv", separator="||", options="header", cols="10,15,15l,40,20l"]
-|======================================================================================================
-Configuration Command||Argument(s)||Default||Description||Example
-include::configcommands-linked.dsv[]
-|======================================================================================================
+include::configcommands-linked.asciidoc[]
 
-[[available-operations]]
-.<<available-operations,Available Operations>>
-[frame="all", grid="all", format="dsv", separator="||", options="header", cols="20,20,60"]
-|=========================================================================
-Operation||Default key||Description
-include::keycmds-linked.dsv[]
-|=========================================================================
+
+=== Available Operations
+
+include::availableoperations-linked.asciidoc[]
 
 Keys, as used in the bind-key configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
@@ -759,22 +753,7 @@ example can be found in the _doc/examples_ subdirectory.
 
 include::chapter-cmdline.asciidoc[]
 
-.Available Commandline Commands
-[frame="all", grid="all", format="dsv", options="header", cols="20,20,40,20l"]
-|=============================================================================
-Command:Syntax:Description:Example
-[[cmd-quit]]<<cmd-quit,+quit+>>:quit:Quit newsboat.:quit
-[[cmd-q]]<<cmd-q,+q+>>:q:Alias for quit.:quit
-[[cmd-save]]<<cmd-save,+save+>>:save <filename>:Save the currently select article to disk. This works in the article list and in the article view.:save ~/important.txt
-[[cmd-set]]<<cmd-set,+set+>>:set <variable>[=<value>|&|!]:Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a _!_ after the name of boolean configuration variables toggles their values, a _&_ directly after the name of a configuration variable of any type resets its value to the documented default value.:set reload-time=15
-[[cmd-tag]]<<cmd-tag,+tag+>>:tag <tagname>:Only display feeds with the tag <tagname>.:tag news
-[[cmd-goto]]<<cmd-goto,+goto+>>:goto <case-insensitive substring>:Search for a feed whose name contains the case-insensitive substring.:goto foo
-[[cmd-source]]<<cmd-source,+source+>>:source <filename> [...]:Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.:source ~/.newsboat/colors
-[[cmd-dumpconfig]]<<cmd-dumpconfig,+dumpconfig+>>:dumpconfig <filename>:Save current internal state of configuration to file, so that it can be instantly reused as configuration file.:dumpconfig ~/.newsboat/config.saved
-[[cmd-dumpform]]<<cmd-dumpform,+dumpform+>>:dumpform:Dump current dialog to text file. This is meant for debugging purposes only.:dumpform
-[[cmd-exec]]<<cmd-exec,+exec+>>:exec <operation>:Run a keybind operation in the current context.:exec open-all-unread-in-browser-and-mark-read
-[[cmd-number]]<<cmd-number,n/a>>:<number>:Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list, article list, tag selection and filter selection forms.:30
-|=============================================================================
+include::cmdline-commands-linked.asciidoc[]
 
 
 === Filter Language
@@ -1288,12 +1267,9 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 include::chapter-podcasts.asciidoc[]
 
-.Podboat Configuration Commands
-[frame="all", grid="all", format="dsv", separator="||", options="header", cols="10,15,15l,40,20l"]
-|======================================================================================================
-Configuration Command||Argument(s)||Default||Description||Example
-include::podboat-cmds-linked.dsv[]
-|======================================================================================================
+== Podboat Configuration Commands
+
+include::podboat-cmds-linked.asciidoc[]
 
 .Available Operations in Podboat
 [frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]

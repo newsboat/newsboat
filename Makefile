@@ -158,11 +158,10 @@ clean-libnewsboat:
 
 clean-doc:
 	$(RM) -r doc/xhtml 
-	$(RM) doc/*.xml doc/*.1 doc/newsboat-cfgcmds.asciidoc \
+	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
-		doc/configcommands-linked.dsv doc/podboat-cmds-linked.dsv \
-		doc/keycmds-linked.dsv doc/gen-example-config \
-		doc/example-config doc/generate doc/generate2
+		doc/example-config doc/generate doc/generate2 \
+		doc/gen-example-config
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp clean-libnewsboat
 	$(RM) $(STFLHDRS) xlicense.h
@@ -173,12 +172,14 @@ distclean: clean clean-mo clean-test profclean
 doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html doc/example-config
 
 doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
-		doc/configcommands-linked.dsv doc/keycmds-linked.dsv \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc doc/chapter-podcasts.asciidoc \
-		doc/podboat-cmds-linked.dsv doc/chapter-password.asciidoc \
-		doc/chapter-environment-variables.asciidoc \
-		doc/chapter-files.asciidoc
+		doc/chapter-files.asciidoc doc/chapter-password.asciidoc \
+		doc/chapter-environment-variables.asciidoc doc/cmdline-commands.dsv
+	sed 's/||/\t/g' doc/configcommands.dsv | awk -f doc/createConfigurationCommandsListView.awk > doc/configcommands-linked.asciidoc
+	sed 's/||/\t/g' doc/keycmds.dsv | awk -f doc/createAvailableOperationsListView.awk > doc/availableoperations-linked.asciidoc
+	sed 's/||/\t/g' doc/podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/podboat-cmds-linked.asciidoc
+	sed 's/||/\t/g' doc/cmdline-commands.dsv | awk -f doc/createAvailableCommandlineCommandsListView.awk > doc/cmdline-commands-linked.asciidoc
 	$(MKDIR) doc/xhtml
 	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/newsboat.asciidoc
 
@@ -220,17 +221,6 @@ doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 
 doc/example-config: doc/gen-example-config doc/configcommands.dsv
 	sed 's/+{backslash}"+/`\\"`/g' doc/configcommands.dsv | doc/gen-example-config > doc/example-config
-
-# add hyperlinks for every configuration command
-doc/configcommands-linked.dsv: doc/configcommands.dsv
-	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/configcommands.dsv > doc/configcommands-linked.dsv
-
-# add hyperlinks for every configuration command
-doc/podboat-cmds-linked.dsv: doc/podboat-cmds.dsv
-	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/podboat-cmds.dsv > doc/podboat-cmds-linked.dsv
-
-doc/keycmds-linked.dsv: doc/keycmds.dsv
-	sed -E 's/^([^|]+)/[[\1]]<<\1,`\1`>>/' doc/keycmds.dsv > doc/keycmds-linked.dsv
 
 fmt:
 	astyle --project \

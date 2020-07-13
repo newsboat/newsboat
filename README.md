@@ -51,6 +51,7 @@ Newsboat can be compiled.
 - [libxml2](http://xmlsoft.org/downloads.html)
 - [json-c (version 0.11 or newer)](https://github.com/json-c/json-c/wiki)
 - [Asciidoctor](https://asciidoctor.org/) (1.5.3 or newer)
+- Some implementation of AWK like [GNU AWK](https://www.gnu.org/software/gawk) or [NAWK](https://github.com/onetrueawk/awk).
 
 Developers will also need:
 
