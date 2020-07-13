@@ -115,7 +115,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			for (const auto& pair : visible_items) {
 				pair.first->set_deleted(true);
 			}
-			if (feed->is_query_feed()) {
+			if (feed->is_query_feed() || feed->is_search_feed()) {
 				for (const auto& pair : visible_items) {
 					rsscache->mark_item_deleted(pair.first->guid(), true);
 				}
