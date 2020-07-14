@@ -134,7 +134,7 @@ void DialogsFormAction::handle_cmdline(const std::string& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
-		if (idx <= v->formaction_stack_size()) {
+		if (idx >= 1 && idx <= v->formaction_stack_size()) {
 			dialogs_list.set_position(idx - 1);
 		} else {
 			v->show_error(_("Invalid position!"));

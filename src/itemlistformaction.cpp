@@ -71,7 +71,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			old_itempos = itempos;
 			v->push_itemview(feed,
 				visible_items[itempos].first->guid(),
-				show_searchresult ? searchphrase : "");
+				show_searchresult ? search_phrase : "");
 			invalidate(itempos);
 		} else {
 			v->show_error(
@@ -105,11 +105,15 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_DELETE_ALL: {
 		ScopeMeasure m1("OP_DELETE_ALL");
 		if (visible_items.size() > 0) {
-			v->get_ctrl()->mark_all_read(pos);
+			if (!feed->is_search_feed()) {
+				v->get_ctrl()->mark_all_read(pos);
+			} else {
+				v->get_ctrl()->mark_all_read(feed);
+			}
 			for (const auto& pair : visible_items) {
 				pair.first->set_deleted(true);
 			}
-			if (feed->is_query_feed()) {
+			if (feed->is_query_feed() || feed->is_search_feed()) {
 				for (const auto& pair : visible_items) {
 					rsscache->mark_item_deleted(pair.first->guid(), true);
 				}
@@ -843,7 +847,7 @@ void ItemListFormAction::qna_end_editflags()
 
 void ItemListFormAction::qna_start_search()
 {
-	searchphrase = qna_responses[0];
+	const std::string searchphrase = qna_responses[0];
 	if (searchphrase.length() == 0) {
 		return;
 	}
@@ -854,9 +858,6 @@ void ItemListFormAction::qna_start_search()
 	try {
 		std::string utf8searchphrase = utils::convert_text(
 				searchphrase, "utf-8", nl_langinfo(CODESET));
-		if (show_searchresult) {
-			feed->set_rssurl("search:");
-		}
 		items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, feed);
 	} catch (const DbException& e) {
@@ -1390,7 +1391,7 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 std::string ItemListFormAction::title()
 {
 	if (feed->rssurl() == "") {
-		return strprintf::fmt(_("Search Result - '%s'"), searchphrase);
+		return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
 	} else {
 		if (feed->is_query_feed()) {
 			return strprintf::fmt(_("Query Feed - %s"),
