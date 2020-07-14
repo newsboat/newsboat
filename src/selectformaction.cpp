@@ -53,9 +53,11 @@ bool SelectFormAction::process_operation(Operation op,
 {
 	bool hardquit = false;
 	switch (op) {
+	case OP_PREV:
 	case OP_SK_UP:
 		tags_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
+	case OP_NEXT:
 	case OP_SK_DOWN:
 		tags_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;

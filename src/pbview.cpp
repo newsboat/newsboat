@@ -129,9 +129,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_REDRAW:
 			Stfl::reset();
 			break;
+		case OP_PREV:
 		case OP_SK_UP:
 			downloads_list.move_up(wrap_scroll);
 			break;
+		case OP_NEXT:
 		case OP_SK_DOWN:
 			downloads_list.move_down(wrap_scroll);
 			break;

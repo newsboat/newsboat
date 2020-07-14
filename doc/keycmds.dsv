@@ -10,8 +10,8 @@ save||s||Save the currently selected article to a file.
 save-all||n/a||Save all articles from currently selected feed.
 next-unread||n||Jump to the next unread article.
 prev-unread||p||Jump to the previous unread article.
-next||J||Jump to next article.
-prev||K||Jump to previous article.
+next||J||Jump to next list entry.
+prev||K||Jump to previous list entry.
 random-unread||^K||Jump to a random unread article.
 open-in-browser||o||Open the URL associated with the current article, or selection when in the URL view.
 open-in-browser-and-mark-read||O||Open the URL associated with the current article, or selection when in the URL view. When used in the article view, it will also mark the article as read.

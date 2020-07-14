@@ -676,7 +676,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT));
 }
 
-TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREVIOUS",
+TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	"[ItemListFormAction]")
 {
 	// We are using the OP_SHOWURLS command to print the current
