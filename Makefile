@@ -175,7 +175,8 @@ doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/chapter-files.asciidoc doc/chapter-password.asciidoc \
-		doc/chapter-environment-variables.asciidoc doc/cmdline-commands.dsv
+		doc/chapter-environment-variables.asciidoc doc/configcommands.dsv \
+		doc/keycmds.dsv doc/podboat-cmds.dsv doc/cmdline-commands.dsv
 	sed 's/||/\t/g' doc/configcommands.dsv | awk -f doc/createConfigurationCommandsListView.awk > doc/configcommands-linked.asciidoc
 	sed 's/||/\t/g' doc/keycmds.dsv | awk -f doc/createAvailableOperationsListView.awk > doc/availableoperations-linked.asciidoc
 	sed 's/||/\t/g' doc/podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/podboat-cmds-linked.asciidoc
