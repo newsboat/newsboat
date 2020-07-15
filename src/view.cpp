@@ -599,8 +599,6 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	LOG(Level::DEBUG, "View::confirm: charset = %s", charset);
 
 	std::shared_ptr<FormAction> f = get_current_formaction();
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
 	f->get_form().set("msg", prompt);
 
 	char result = 0;
@@ -627,8 +625,6 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 
 	f->get_form().set("msg", "");
 	f->get_form().run(-1);
-
-	pop_current_formaction();
 
 	return result;
 }
