@@ -171,21 +171,22 @@ distclean: clean clean-mo clean-test profclean
 
 doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html doc/example-config
 
+doc/xhtml:
+	$(MKDIR) doc/xhtml
+
 doc/xhtml/newsboat.html: doc/newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/chapter-files.asciidoc doc/chapter-password.asciidoc \
 		doc/chapter-environment-variables.asciidoc doc/configcommands.dsv \
-		doc/keycmds.dsv doc/podboat-cmds.dsv doc/cmdline-commands.dsv
+		doc/keycmds.dsv doc/podboat-cmds.dsv doc/cmdline-commands.dsv | doc/xhtml
 	sed 's/||/\t/g' doc/configcommands.dsv | awk -f doc/createConfigurationCommandsListView.awk > doc/configcommands-linked.asciidoc
 	sed 's/||/\t/g' doc/keycmds.dsv | awk -f doc/createAvailableOperationsListView.awk > doc/availableoperations-linked.asciidoc
 	sed 's/||/\t/g' doc/podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/podboat-cmds-linked.asciidoc
 	sed 's/||/\t/g' doc/cmdline-commands.dsv | awk -f doc/createAvailableCommandlineCommandsListView.awk > doc/cmdline-commands-linked.asciidoc
-	$(MKDIR) doc/xhtml
 	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/newsboat.asciidoc
 
-doc/xhtml/faq.html: doc/faq.asciidoc
-	$(MKDIR) doc/xhtml
+doc/xhtml/faq.html: doc/faq.asciidoc | doc/xhtml
 	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml doc/faq.asciidoc
 
 doc/generate: doc/generate.cpp doc/split.h
