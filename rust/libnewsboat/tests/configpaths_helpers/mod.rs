@@ -168,7 +168,7 @@ impl<'a> Chmod<'a> {
 
         // `from_mode` takes `u32`, but `libc::mode_t` is either `u16` (macOS, FreeBSD) or `u32`
         // (Linux). Suppress the warning to prevent Clippy on Linux from complaining.
-        #[allow(clippy::identity_conversion)]
+        #[allow(clippy::useless_conversion)]
         fs::set_permissions(path, fs::Permissions::from_mode(new_mode.into()))
             .unwrap_or_else(|_| panic!("Chmod: couldn't change mode for `{}'", path.display()));
 
