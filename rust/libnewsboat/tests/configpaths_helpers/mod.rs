@@ -123,10 +123,10 @@ pub fn create_file(path: &path::Path, content: &str) -> bool {
 
 pub fn file_contents(path: &path::Path) -> String {
     fs::File::open(path)
-        .and_then(|mut f| {
+        .map(|mut f| {
             let mut buf = String::new();
             let _ = f.read_to_string(&mut buf);
-            Ok(buf)
+            buf
         })
         // If failed to open/read file, return an empty string
         .unwrap_or_else(|_| String::new())
@@ -168,7 +168,7 @@ impl<'a> Chmod<'a> {
 
         // `from_mode` takes `u32`, but `libc::mode_t` is either `u16` (macOS, FreeBSD) or `u32`
         // (Linux). Suppress the warning to prevent Clippy on Linux from complaining.
-        #[allow(clippy::identity_conversion)]
+        #[allow(clippy::useless_conversion)]
         fs::set_permissions(path, fs::Permissions::from_mode(new_mode.into()))
             .unwrap_or_else(|_| panic!("Chmod: couldn't change mode for `{}'", path.display()));
 
