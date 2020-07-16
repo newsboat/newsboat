@@ -1017,7 +1017,7 @@ sequence identifier `[char]` contains any non-whitespace characters, then
 `[format 1]` will be evaluated and inserted, otherwise `[format 2]` will be
 evaluated and inserted. The `&` and `[format 2]` are optional, i.e. if the
 identifier's text is empty, then an empty string will be inserted.
-Newsboat also provides a way center a string in a given width and with any given whitespace character with `%=[char][width]`. If width it = 0 the whole width of the window will be used.
+Newsboat also provides a way to center a string in a given width followed by the actual sequence identifier, which is usually a single letter. It is done through `%=[width][identifier]`. If width it = 0 the whole width of the window will be used.
 
 The following tables show what sequence identifiers are available for which
 format:

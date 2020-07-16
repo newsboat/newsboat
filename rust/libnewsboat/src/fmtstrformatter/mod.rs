@@ -98,7 +98,7 @@ impl FmtStrFormatter {
         result.push_str(&rest);
     }
 
-    fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut LimitedString) {
+    fn format_format(&self, c: char, padding: &Padding, width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
         match *padding {
@@ -123,7 +123,7 @@ impl FmtStrFormatter {
             Padding::Center(total_width) => {
                 let mut w = total_width;
                 if total_width == 0 {
-                    w = _width as usize;
+                    w = width as usize;
                 }
                 let text = &utils::substr_with_width(value, w);
                 let padding_width = w - utils::strwidth(text);
@@ -133,10 +133,10 @@ impl FmtStrFormatter {
                     let padding_l = String::from(" ").repeat(left);
                     let padding_r = String::from(" ").repeat(right);
                     result.push_str(&padding_l);
-                    result.push_str(value);
+                    result.push_str(text);
                     result.push_str(&padding_r);
                 } else {
-                    result.push_str(value);
+                    result.push_str(text);
                 }
             }
         }
@@ -216,6 +216,7 @@ mod tests {
         fmt.register_fmt('T', "whatever".to_string());
         assert_eq!(fmt.do_format("%=20T", 0), "      whatever      ");
         assert_eq!(fmt.do_format("%=19T", 0), "     whatever      ");
+        assert_eq!(fmt.do_format("%=3T", 0), "wha");
     }
 
     #[test]
