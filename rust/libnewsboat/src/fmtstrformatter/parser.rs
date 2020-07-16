@@ -49,8 +49,7 @@ fn spacing(input: &str) -> IResult<&str, Specifier> {
 
 fn center_format(input: &str) -> IResult<&str, Specifier> {
     let (input, _) = tag("%=")(input)?;
-    let (input, width) =
-        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
+    let (input, width) = take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
     let (input, format) = take(1usize)(input)?;
 
     let format = format.chars().next().unwrap();

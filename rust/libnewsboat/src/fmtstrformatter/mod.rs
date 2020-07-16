@@ -128,8 +128,8 @@ impl FmtStrFormatter {
                 let text = &utils::substr_with_width(value, w);
                 let padding_width = w - utils::strwidth(text);
                 if padding_width > 0 {
-                    let left : usize = padding_width /2;
-                    let right : usize = padding_width - left;
+                    let left: usize = padding_width / 2;
+                    let right: usize = padding_width - left;
                     let padding_l = String::from(" ").repeat(left);
                     let padding_r = String::from(" ").repeat(right);
                     result.push_str(&padding_l);
