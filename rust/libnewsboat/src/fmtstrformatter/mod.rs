@@ -217,6 +217,7 @@ mod tests {
         assert_eq!(fmt.do_format("%=20T", 0), "      whatever      ");
         assert_eq!(fmt.do_format("%=19T", 0), "     whatever      ");
         assert_eq!(fmt.do_format("%=3T", 0), "wha");
+        assert_eq!(fmt.do_format("%=0T", 20), "      whatever      ");
     }
 
     #[test]
