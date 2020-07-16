@@ -14,6 +14,7 @@ pub enum Padding {
     Left(usize),
     /// Pad the value on the right until it reaches specified width.
     Right(usize),
+    Center(usize),
 }
 
 /// Describes all the different "format specifiers" we support, plus a chunk of text that would be
@@ -22,8 +23,6 @@ pub enum Padding {
 pub enum Specifier<'a> {
     /// Will expand to pad everything that comes next to the right. Given char is used for padding.
     Spacing(char),
-    /// Will center the text in a given width
-    Center(usize, char),
     /// A format to be replaced with a value (`%a`, `%t` etc.), padded to the given width on the
     /// left (if it's positive) or on the right (if it's negative).
     Format(char, Padding),
@@ -38,17 +37,6 @@ fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier> {
     tag("%%")(input).map(|result| (result.0, Specifier::Text(&result.1[0..1])))
 }
 
-fn center(input: &str) -> IResult<&str, Specifier> {
-    let (input, _) = tag("%=")(input)?;
-    let (input, c) = take(1usize)(input)?;
-    let (input, width) = take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
-
-    let width: usize = width.parse::<usize>().unwrap_or(0);
-    let chr: char = c.chars().next().unwrap();
-
-    Ok((input, Specifier::Center(width, chr)))
-}
-
 fn spacing(input: &str) -> IResult<&str, Specifier> {
     let (input, _) = tag("%>")(input)?;
     let (input, c) = take(1usize)(input)?;
@@ -57,6 +45,18 @@ fn spacing(input: &str) -> IResult<&str, Specifier> {
     let chr = c.chars().next().unwrap();
 
     Ok((input, Specifier::Spacing(chr)))
+}
+
+fn center_format(input: &str) -> IResult<&str, Specifier> {
+    let (input, _) = tag("%=")(input)?;
+    let (input, width) =
+        take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
+    let (input, format) = take(1usize)(input)?;
+
+    let format = format.chars().next().unwrap();
+    let width = width.parse::<usize>().unwrap_or(0);
+
+    Ok((input, Specifier::Format(format, Padding::Center(width))))
 }
 
 fn padded_format(input: &str) -> IResult<&str, Specifier> {
@@ -128,7 +128,7 @@ fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
     let alternatives = (
         escaped_percent_sign,
         spacing,
-        center,
+        center_format,
         padded_format,
         text_inside_conditional,
     );
@@ -140,7 +140,7 @@ fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
         conditional,
         escaped_percent_sign,
         spacing,
-        center,
+        center_format,
         padded_format,
         text_outside_conditional,
     );

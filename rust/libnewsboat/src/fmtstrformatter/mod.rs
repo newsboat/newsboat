@@ -98,34 +98,6 @@ impl FmtStrFormatter {
         result.push_str(&rest);
     }
 
-    fn format_center(
-        &self,
-        w: usize,
-        c: char,
-        rest: &[Specifier],
-        width: u32,
-        result: &mut LimitedString,
-    ) {
-        let rest = self.formatting_helper(rest, 0);
-        let size: usize = utils::strwidth(&rest);
-        let mut w = w;
-        if w == 0 {
-            w = width as usize;
-        }
-        if w > size {
-            let border_t: usize = w - size;
-            let left: usize = border_t / 2;
-            let right: usize = border_t - left;
-            let padding_l = c.to_string().repeat(left);
-            let padding_r = c.to_string().repeat(right);
-            result.push_str(&padding_l);
-            result.push_str(&rest);
-            result.push_str(&padding_r);
-        } else {
-            result.push_str(&rest);
-        }
-    }
-
     fn format_format(&self, c: char, padding: &Padding, _width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
@@ -146,6 +118,26 @@ impl FmtStrFormatter {
                 let padding = String::from(" ").repeat(padding_width);
                 result.push_str(text);
                 result.push_str(&padding);
+            }
+
+            Padding::Center(total_width) => {
+                let mut w = total_width;
+                if total_width == 0 {
+                    w = _width as usize;
+                }
+                let text = &utils::substr_with_width(value, w);
+                let padding_width = w - utils::strwidth(text);
+                if padding_width > 0 {
+                    let left : usize = padding_width /2;
+                    let right : usize = padding_width - left;
+                    let padding_l = String::from(" ").repeat(left);
+                    let padding_r = String::from(" ").repeat(right);
+                    result.push_str(&padding_l);
+                    result.push_str(value);
+                    result.push_str(&padding_r);
+                } else {
+                    result.push_str(value);
+                }
             }
         }
     }
@@ -186,12 +178,6 @@ impl FmtStrFormatter {
                     break;
                 }
 
-                Specifier::Center(w, c) => {
-                    let rest = &format_ast[i + 1..];
-                    self.format_center(w, c, rest, width, &mut result);
-                    break;
-                }
-
                 Specifier::Format(c, ref padding) => {
                     self.format_format(c, &padding, width, &mut result);
                 }
@@ -226,10 +212,10 @@ mod tests {
 
     #[test]
     fn t_do_format_center() {
-        let fmt = FmtStrFormatter::new();
-
-        assert_eq!(fmt.do_format("%= 2AAA", 0), "AAA");
-        assert_eq!(fmt.do_format("%= 7AAA", 0), "  AAA  ");
+        let mut fmt = FmtStrFormatter::new();
+        fmt.register_fmt('T', "whatever".to_string());
+        assert_eq!(fmt.do_format("%=20T", 0), "      whatever      ");
+        assert_eq!(fmt.do_format("%=19T", 0), "     whatever      ");
     }
 
     #[test]
