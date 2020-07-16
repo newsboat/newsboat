@@ -106,12 +106,11 @@ impl FmtStrFormatter {
         width: u32,
         result: &mut LimitedString,
     ) {
-        use std::convert::TryInto;
         let rest = self.formatting_helper(rest, 0);
         let size: usize = utils::strwidth(&rest);
         let mut w = w;
         if w == 0 {
-            w = width.try_into().unwrap();
+            w = width as usize;
         }
         if w > size {
             let border_t: usize = w - size;
