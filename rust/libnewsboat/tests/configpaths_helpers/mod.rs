@@ -123,10 +123,10 @@ pub fn create_file(path: &path::Path, content: &str) -> bool {
 
 pub fn file_contents(path: &path::Path) -> String {
     fs::File::open(path)
-        .and_then(|mut f| {
+        .map(|mut f| {
             let mut buf = String::new();
             let _ = f.read_to_string(&mut buf);
-            Ok(buf)
+            buf
         })
         // If failed to open/read file, return an empty string
         .unwrap_or_else(|_| String::new())

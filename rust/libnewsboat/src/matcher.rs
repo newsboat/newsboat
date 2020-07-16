@@ -44,9 +44,7 @@ impl Operator {
     fn apply(&self, attr: &str, value: &Value) -> Result<bool, MatcherError> {
         match self {
             Operator::Equals => Ok(attr == value.0),
-            Operator::NotEquals => Operator::Equals
-                .apply(attr, value)
-                .and_then(|result| Ok(!result)),
+            Operator::NotEquals => Operator::Equals.apply(attr, value).map(|result| !result),
             Operator::RegexMatches => match Regex::new(
                 &value.0,
                 CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
@@ -68,7 +66,7 @@ impl Operator {
             },
             Operator::NotRegexMatches => Operator::RegexMatches
                 .apply(attr, value)
-                .and_then(|result| Ok(!result)),
+                .map(|result| !result),
             Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.0)),
             Operator::GreaterThan => Ok(dbg!(string_to_num(attr)) > dbg!(string_to_num(&value.0))),
             Operator::LessThanOrEquals => Ok(string_to_num(attr) <= string_to_num(&value.0)),
@@ -95,9 +93,7 @@ impl Operator {
                 }
                 Ok(false)
             }
-            Operator::NotContains => Operator::Contains
-                .apply(attr, value)
-                .and_then(|result| Ok(!result)),
+            Operator::NotContains => Operator::Contains.apply(attr, value).map(|result| !result),
         }
     }
 }
