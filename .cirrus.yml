@@ -76,7 +76,7 @@ freebsd_task:
         # the C++'s exit code and chain it to Rust's in the end.
         - ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test --jobs=3) && sh -c "exit $ret"
     clippy_script: &clippy_script
-        - cargo clippy --all-targets --all-features -- -D warnings
+        - test "x$DONT_RUN_CLIPPY" = "x1" || cargo clippy --all-targets --all-features -- -D warnings
     # For explanation of what this script does, please see the FreeBSD job
     # above.
     fake_install_script: &fake_install_script
@@ -148,6 +148,10 @@ macos_task:
               CC: gcc
               CXX: g++
               RUST: 1.42.0
+              # Older Rust contains older Clippy, which might not support the
+              # newer lints. It doesn't make much sense to run multiple
+              # versions of the linter, so we disable the older version.
+              DONT_RUN_CLIPPY: 1
 
 formatting_task:
     name: Code formatting
@@ -173,6 +177,8 @@ linux_task:
                 cc: gcc-4.9
                 cxx: g++-4.9
                 rust_version: 1.42.0
+          env:
+              DONT_RUN_CLIPPY: 1
         - name: Rust 1.42.0, GCC 10 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
@@ -181,6 +187,8 @@ linux_task:
                 cc: gcc-10
                 cxx: g++-10
                 rust_version: 1.42.0
+          env:
+              DONT_RUN_CLIPPY: 1
 
         - name: GCC 10, more warnings and checks (Ubuntu 20.04)
           container:
