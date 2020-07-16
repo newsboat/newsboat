@@ -84,15 +84,15 @@ static const std::vector<OpDesc> opdescs = {
 		OP_NEXT,
 		"next",
 		"J",
-		_("Go to next article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+		_("Go to next entry"),
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_DIALOGS | KM_DIRBROWSER | KM_FILEBROWSER | KM_FILTERSELECT | KM_TAGSELECT | KM_URLVIEW | KM_PODBOAT
 	},
 	{
 		OP_PREV,
 		"prev",
 		"K",
-		_("Go to previous article"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
+		_("Go to previous entry"),
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_DIALOGS | KM_DIRBROWSER | KM_FILEBROWSER | KM_FILTERSELECT | KM_TAGSELECT | KM_URLVIEW | KM_PODBOAT
 	},
 	{
 		OP_NEXTUNREAD,

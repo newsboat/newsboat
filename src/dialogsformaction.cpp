@@ -98,9 +98,11 @@ bool DialogsFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_PREV:
 	case OP_SK_UP:
 		dialogs_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
+	case OP_NEXT:
 	case OP_SK_DOWN:
 		dialogs_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;

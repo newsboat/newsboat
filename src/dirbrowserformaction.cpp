@@ -144,6 +144,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		}
 		break;
 	}
+	case OP_PREV:
 	case OP_SK_UP:
 		if (f.get_focus() == "files") {
 			files_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
@@ -151,6 +152,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 			f.set_focus("files");
 		}
 		break;
+	case OP_NEXT:
 	case OP_SK_DOWN:
 		if (f.get_focus() == "files") {
 			if (!files_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"))) {
