@@ -398,8 +398,8 @@ TEST_CASE("Center Text formatting",
 	"[FmtStrFormatter]")
 {
 	FmtStrFormatter fmt;
-
-    fmt.register_fmt('T', "whatever");
+	
+	fmt.register_fmt('T', "whatever");
 
 	REQUIRE(fmt.do_format("%=20T", 0) ==  "      whatever      ");
 	REQUIRE(fmt.do_format("%=19T", 0) == "     whatever      ");
