@@ -598,7 +598,11 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 {
 	LOG(Level::DEBUG, "View::confirm: charset = %s", charset);
 
+	const auto old_formaction_index = current_formaction;
 	std::shared_ptr<FormAction> f = get_current_formaction();
+
+	// Add a nullptr formaction to make View::set_status() a noop (otherwise,
+	// other threads, e.g. reloader, might overwrite the "msg" field)
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
 	current_formaction = formaction_stack_size() - 1;
 	f->get_form().set("msg", prompt);
@@ -629,6 +633,8 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	f->get_form().run(-1);
 
 	pop_current_formaction();
+
+	current_formaction = old_formaction_index;
 
 	return result;
 }
