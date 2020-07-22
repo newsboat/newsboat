@@ -20,6 +20,7 @@ vbox
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
     pos[items_pos]:0
+    offset[items_offset]:0
   vbox[hints]
     .expand:0
     .display[showhint]:1
