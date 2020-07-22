@@ -6,11 +6,12 @@
 
 namespace newsboat {
 
-ListWidget::ListWidget(const std::string& list_name,
-	Stfl::Form& form)
+ListWidget::ListWidget(const std::string& list_name, Stfl::Form& form,
+	std::uint32_t scrolloff)
 	: list_name(list_name)
 	, form(form)
 	, num_lines(0)
+	, num_context_lines(scrolloff)
 {
 }
 
@@ -116,6 +117,7 @@ std::uint32_t ListWidget::get_position()
 void ListWidget::set_position(std::uint32_t pos)
 {
 	form.set(list_name + "_pos", std::to_string(pos));
+	update_scroll_offset(pos);
 }
 
 std::uint32_t ListWidget::get_width()
@@ -126,6 +128,52 @@ std::uint32_t ListWidget::get_width()
 std::uint32_t ListWidget::get_height()
 {
 	return utils::to_u(form.get(list_name + ":h"));
+}
+
+std::uint32_t ListWidget::get_scroll_offset()
+{
+	const std::string offset = form.get(list_name + "_offset");
+	if (!offset.empty()) {
+		return std::max(0, std::stoi(offset));
+	}
+	return 0;
+}
+
+void ListWidget::set_scroll_offset(std::uint32_t offset)
+{
+	form.set(list_name + "_offset", std::to_string(offset));
+}
+
+void ListWidget::update_scroll_offset(std::uint32_t pos)
+{
+	const auto h = get_height();
+	const auto cur_scroll_offset = get_scroll_offset();
+	const std::uint32_t max_offset = (num_lines >= h ? num_lines - h : 0);
+
+	if (2 * num_context_lines < h) {
+		if (pos + num_context_lines >= cur_scroll_offset + h) { // Need to scroll down
+			if (pos + num_context_lines >= h) {
+				const std::uint32_t target_offset = pos + num_context_lines - h + 1;
+				set_scroll_offset(std::min(target_offset, max_offset));
+			} else {
+				set_scroll_offset(0);
+			}
+		}
+		if (pos < cur_scroll_offset + num_context_lines) { // Need to scroll up
+			if (pos >= num_context_lines) {
+				set_scroll_offset(pos - num_context_lines);
+			} else {
+				set_scroll_offset(0);
+			}
+		}
+	} else { // Keep selected item in the middle
+		if (pos > h / 2) {
+			const std::uint32_t target_offset = pos - h / 2;
+			set_scroll_offset(std::min(target_offset, max_offset));
+		} else {
+			set_scroll_offset(0);
+		}
+	}
 }
 
 } // namespace newsboat

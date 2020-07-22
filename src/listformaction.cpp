@@ -10,7 +10,7 @@ ListFormAction::ListFormAction(View* v,
 	std::string list_name,
 	ConfigContainer* cfg)
 	: FormAction(v, formstr, cfg)
-	, list(list_name, FormAction::f)
+	, list(list_name, FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
 
