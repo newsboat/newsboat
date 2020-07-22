@@ -12,12 +12,10 @@
 #include <thread>
 #include <unistd.h>
 
-#include "colormanager.h"
 #include "config.h"
 #include "configcontainer.h"
 #include "configexception.h"
 #include "globals.h"
-#include "keymap.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "nullconfigactionhandler.h"
@@ -135,6 +133,7 @@ PbController::PbController()
 	, max_dls(1)
 	, ql(0)
 	, lock_file("pb-lock.pid")
+	, keys(KM_PODBOAT)
 {
 	char* cfgdir;
 	if (!(cfgdir = ::getenv("HOME"))) {
@@ -186,10 +185,9 @@ PbController::~PbController()
 	delete cfg;
 }
 
-int PbController::run(int argc, char* argv[])
+int PbController::initialize(int argc, char* argv[])
 {
 	int c;
-	bool automatic_dl = false;
 
 	::signal(SIGINT, ctrl_c_action);
 
@@ -266,10 +264,8 @@ int PbController::run(int argc, char* argv[])
 	ConfigParser cfgparser;
 	cfg = new ConfigContainer();
 	cfg->register_commands(cfgparser);
-	ColorManager* colorman = new ColorManager();
-	colorman->register_commands(cfgparser);
+	colorman.register_commands(cfgparser);
 
-	KeyMap keys(KM_PODBOAT);
 	cfgparser.register_handler("bind-key", &keys);
 	cfgparser.register_handler("unbind-key", &keys);
 
@@ -287,14 +283,17 @@ int PbController::run(int argc, char* argv[])
 		cfgparser.parse(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
-		delete colorman;
 		return EXIT_FAILURE;
 	}
 
-	if (colorman->colors_loaded()) {
-		colorman->set_pb_colors(v);
+	return EXIT_SUCCESS;
+}
+
+int PbController::run()
+{
+	if (colorman.colors_loaded()) {
+		colorman.set_pb_colors(v);
 	}
-	delete colorman;
 
 	max_dls = cfg->get_configvalue_as_int("max-downloads");
 
