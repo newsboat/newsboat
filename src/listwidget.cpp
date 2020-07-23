@@ -146,23 +146,43 @@ void ListWidget::set_scroll_offset(std::uint32_t offset)
 
 void ListWidget::update_scroll_offset(std::uint32_t pos)
 {
+	// In STFL, "offset" is how many items at the beginning of the list are
+	// hidden off-screen. That's how scrolling is implemented: to scroll down,
+	// you increase "offset", hiding items at the top and showing more at the
+	// bottom. By manipulating "offset" here, we can keep the cursor within the
+	// bounds we set.
+	//
+	// All the lines that are visible because of "scrolloff" setting are called
+	// "context" here. They include the current line under cursor (which has
+	// position "pos"), "cur_scroll_offset" lines above it, and
+	// "cur_scroll_offset" lines below it.
+
 	const auto h = get_height();
 	const auto cur_scroll_offset = get_scroll_offset();
+	// An offset at which the last item of the list is at the bottom of the
+	// widget. We shouldn't set "offset" to more than this value, otherwise
+	// we'll have an empty "gap" at the bottom of the list. That's only
+	// acceptable if the list is shorter than the widget's height.
 	const std::uint32_t max_offset = (num_lines >= h ? num_lines - h : 0);
 
 	if (2 * num_context_lines < h) {
-		if (pos + num_context_lines >= cur_scroll_offset + h) { // Need to scroll down
+		// Check if items at the bottom of the "context" are visible. If not,
+		// we'll have to scroll down.
+		if (pos + num_context_lines >= cur_scroll_offset + h) {
 			if (pos + num_context_lines >= h) {
 				const std::uint32_t target_offset = pos + num_context_lines - h + 1;
 				set_scroll_offset(std::min(target_offset, max_offset));
-			} else {
+			} else { // "pos" is towards the beginning of the list; don't scroll
 				set_scroll_offset(0);
 			}
 		}
-		if (pos < cur_scroll_offset + num_context_lines) { // Need to scroll up
+
+		// Check if items at the top of the "context" are visible. If not,
+		// we'll have to scroll up.
+		if (pos < cur_scroll_offset + num_context_lines) {
 			if (pos >= num_context_lines) {
 				set_scroll_offset(pos - num_context_lines);
-			} else {
+			} else { // "pos" is towards the beginning of the list; don't scroll
 				set_scroll_offset(0);
 			}
 		}
@@ -170,7 +190,7 @@ void ListWidget::update_scroll_offset(std::uint32_t pos)
 		if (pos > h / 2) {
 			const std::uint32_t target_offset = pos - h / 2;
 			set_scroll_offset(std::min(target_offset, max_offset));
-		} else {
+		} else { // "pos" is towards the beginning of the list; don't scroll
 			set_scroll_offset(0);
 		}
 	}
