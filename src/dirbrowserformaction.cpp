@@ -27,7 +27,7 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, files_list("files", FormAction::f)
+	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 	// In DirBrowser, keyboard focus is at the input field, so user can't
 	// possibly use 'q' key to exit the dialog

@@ -881,7 +881,7 @@ void FeedListFormAction::register_format_styles()
 	const std::string textview = strprintf::fmt(
 			"{!list[feeds] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
-			"pos_name[feedposname]: pos[feeds_pos]:0 %s richtext:1}",
+			"pos_name[feedposname]: pos[feeds_pos]:0 offset[feeds_offset]:0 %s richtext:1}",
 			attrstr);
 	list.stfl_replace_list(0, textview);
 }

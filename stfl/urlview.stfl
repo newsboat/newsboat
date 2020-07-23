@@ -19,6 +19,7 @@ vbox
     richtext:1
     pos_name[feedposname]:
     pos[urls_pos]:0
+    offset[urls_offset]:0
   vbox[hints]
     .expand:0
     .display[showhint]:1

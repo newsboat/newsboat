@@ -29,7 +29,8 @@ PbView::PbView(PbController* c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
 	, keys(0)
-	, downloads_list("dls", dllist_form)
+	, downloads_list("dls", dllist_form,
+		  ctrl->get_cfgcont()->get_configvalue_as_int("scrolloff"))
 	, help_textview("helptext", help_form)
 {
 	if (getenv("ESCDELAY") == nullptr) {

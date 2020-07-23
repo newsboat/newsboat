@@ -26,7 +26,7 @@ SelectFormAction::SelectFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, type(SelectionType::TAG)
-	, tags_list("taglist", FormAction::f)
+	, tags_list("taglist", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
 

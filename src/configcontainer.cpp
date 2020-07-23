@@ -204,6 +204,7 @@ ConfigContainer::ConfigContainer()
 	{"reload-threads", ConfigData("1", ConfigDataType::INT)},
 	{"reload-time", ConfigData("60", ConfigDataType::INT)},
 	{"save-path", ConfigData("~/", ConfigDataType::PATH)},
+	{"scrolloff", ConfigData("0", ConfigDataType::INT)},
 	{
 		"search-highlight-colors",
 		ConfigData("black yellow bold",

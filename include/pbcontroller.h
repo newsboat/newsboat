@@ -5,9 +5,11 @@
 #include <string>
 #include <vector>
 
+#include "colormanager.h"
 #include "configcontainer.h"
 #include "download.h"
 #include "fslock.h"
+#include "keymap.h"
 #include "queueloader.h"
 
 namespace podboat {
@@ -24,7 +26,8 @@ public:
 	{
 		v = vv;
 	}
-	int run(int argc, char* argv[] = 0);
+	int initialize(int argc, char* argv[]);
+	int run();
 
 	bool view_update_necessary() const
 	{
@@ -82,6 +85,10 @@ private:
 
 	std::string lock_file;
 	std::unique_ptr<newsboat::FsLock> fslock;
+
+	bool automatic_dl = false;
+	newsboat::ColorManager colorman;
+	newsboat::KeyMap keys;
 };
 
 } // namespace podboat

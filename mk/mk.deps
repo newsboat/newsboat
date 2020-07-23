@@ -159,8 +159,9 @@ src/dirbrowserformaction.o: src/dirbrowserformaction.cpp \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h
 src/download.o: src/download.cpp include/download.h config.h \
- include/pbcontroller.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/download.h include/fslock.h \
+ include/pbcontroller.h include/colormanager.h include/configparser.h \
+ include/configactionhandler.h include/configcontainer.h \
+ include/download.h include/fslock.h include/keymap.h \
  include/queueloader.h
 src/downloadthread.o: src/downloadthread.cpp include/downloadthread.h \
  include/reloader.h include/configcontainer.h include/configparser.h \
@@ -422,18 +423,18 @@ src/opmlurlreader.o: src/opmlurlreader.cpp include/opmlurlreader.h \
  include/configactionhandler.h include/urlreader.h include/utils.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h
 src/pbcontroller.o: src/pbcontroller.cpp include/pbcontroller.h \
- include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/download.h include/fslock.h \
- include/queueloader.h include/colormanager.h config.h \
- include/configcontainer.h include/configexception.h include/globals.h \
- include/keymap.h include/logger.h include/strprintf.h \
- include/matcherexception.h include/nullconfigactionhandler.h \
- include/pbview.h include/colormanager.h include/keymap.h \
- include/listwidget.h include/listformatter.h include/regexmanager.h \
- include/matcher.h filter/FilterParser.h include/regexowner.h \
- include/stflpp.h include/textviewwidget.h include/poddlthread.h \
- include/queueloader.h include/strprintf.h include/utils.h \
- 3rd-party/optional.hpp include/logger.h
+ include/colormanager.h include/configparser.h \
+ include/configactionhandler.h include/configcontainer.h \
+ include/download.h include/fslock.h include/keymap.h \
+ include/queueloader.h config.h include/configcontainer.h \
+ include/configexception.h include/globals.h include/logger.h \
+ include/strprintf.h include/matcherexception.h \
+ include/nullconfigactionhandler.h include/pbview.h include/listwidget.h \
+ include/listformatter.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/stflpp.h \
+ include/textviewwidget.h include/poddlthread.h include/queueloader.h \
+ include/strprintf.h include/utils.h 3rd-party/optional.hpp \
+ include/logger.h
 src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/configparser.h include/configactionhandler.h include/keymap.h \
  include/listwidget.h include/listformatter.h include/regexmanager.h \

@@ -17,7 +17,8 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, update_list(true)
-	, dialogs_list("dialogs", FormAction::f)
+	, dialogs_list("dialogs", FormAction::f,
+		  cfg->get_configvalue_as_int("scrolloff"))
 {
 }
 

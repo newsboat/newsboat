@@ -27,12 +27,16 @@ int main(int argc, char* argv[])
 
 	PbController c;
 
-	int ret;
 	try {
+		int ret = c.initialize(argc, argv);
+		if (ret != EXIT_SUCCESS) {
+			return ret;
+		}
+
 		podboat::PbView v(&c);
 		c.set_view(&v);
 
-		ret = c.run(argc, argv);
+		return c.run();
 	} catch (const newsboat::Exception& e) {
 		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
 					"message: %s"),
@@ -40,6 +44,4 @@ int main(int argc, char* argv[])
 			<< std::endl;
 		::exit(EXIT_FAILURE);
 	}
-
-	return ret;
 }
