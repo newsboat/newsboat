@@ -99,7 +99,7 @@ dependencies = [
 
 [[package]]
 name = "curl-sys"
-version = "0.4.32+curl-7.70.0"
+version = "0.4.33+curl-7.71.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "cc 1.0.57 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -187,7 +187,7 @@ dependencies = [
  "backtrace 0.3.49 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.13 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 2.33.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "curl-sys 0.4.32+curl-7.70.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "curl-sys 0.4.33+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "gettext-rs 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "gettext-sys 0.19.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.73 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -604,7 +604,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)" = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
 "checksum chrono 0.4.13 (registry+https://github.com/rust-lang/crates.io-index)" = "c74d84029116787153e02106bf53e66828452a4b325cc8652b788b5967c0a0b6"
 "checksum clap 2.33.1 (registry+https://github.com/rust-lang/crates.io-index)" = "bdfa80d47f954d53a35a64987ca1422f495b8d6483c0fe9f7117b36c2a792129"
-"checksum curl-sys 0.4.32+curl-7.70.0 (registry+https://github.com/rust-lang/crates.io-index)" = "834425a2f22fdd621434196965bf99fbfd9eaed96348488e27b7ac40736c560b"
+"checksum curl-sys 0.4.33+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3e9818ea018327f79c811612f29b9834d2abddbe7db81460a2d5c7e12946b337"
 "checksum fnv 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)" = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 "checksum getrandom 0.1.14 (registry+https://github.com/rust-lang/crates.io-index)" = "7abc8dd8451921606d809ba32e95b6111925cd2906060d2dcc29c070220503eb"
 "checksum gettext-rs 0.4.4 (registry+https://github.com/rust-lang/crates.io-index)" = "df454a42d8a718280c78666efe0707c120873736961ae91ead898f17ac66ce7c"
