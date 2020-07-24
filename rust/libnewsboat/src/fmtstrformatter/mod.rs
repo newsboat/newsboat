@@ -121,10 +121,11 @@ impl FmtStrFormatter {
             }
 
             Padding::Center(total_width) => {
-                let mut w = total_width;
-                if total_width == 0 {
-                    w = width as usize;
-                }
+                let w = if total_width == 0 {
+                    width as usize
+                } else {
+                    total_width
+                };
                 let text = &utils::substr_with_width(value, w);
                 let padding_width = w - utils::strwidth(text);
                 if padding_width > 0 {
