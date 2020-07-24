@@ -1005,8 +1005,9 @@ the C programming language. A format sequence begins with the _%_ character,
 followed by optional alignment indication: positive numbers indicate that the
 text that is inserted for the sequence shall be padded on the left to a total
 width that is specified by the number, while negative number specify padding on
-the right.  Followed by the padding indication comes the actual sequence
-identifier, which is usually a single letter.
+the right. Followed by the padding indication comes the actual sequence
+identifier, which is usually a single letter. `%=[width][identifier]` centers
+the sequence, where if w=0 the whole width of the window is used.
 
 In addition, newsboat provides other, more powerful sequences, such as
 `%>[char]`, which indicates that the text right to the sequence will be aligned

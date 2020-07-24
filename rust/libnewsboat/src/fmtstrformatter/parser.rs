@@ -14,6 +14,8 @@ pub enum Padding {
     Left(usize),
     /// Pad the value on the right until it reaches specified width.
     Right(usize),
+    /// Pad the value on the left and right equally until it reaches specified width.
+    Center(usize),
 }
 
 /// Describes all the different "format specifiers" we support, plus a chunk of text that would be
@@ -44,6 +46,18 @@ fn spacing(input: &str) -> IResult<&str, Specifier> {
     let chr = c.chars().next().unwrap();
 
     Ok((input, Specifier::Spacing(chr)))
+}
+
+fn center_format(input: &str) -> IResult<&str, Specifier> {
+    let (input, _) = tag("%=")(input)?;
+    let (input, width) = take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
+    let (input, format) = take(1usize)(input)?;
+
+    // unwrap() won't fail because parser uses take!(1) to get exactly one character
+    let format = format.chars().next().unwrap();
+    let width = width.parse::<usize>().unwrap_or(0);
+
+    Ok((input, Specifier::Format(format, Padding::Center(width))))
 }
 
 fn padded_format(input: &str) -> IResult<&str, Specifier> {
@@ -115,6 +129,7 @@ fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
     let alternatives = (
         escaped_percent_sign,
         spacing,
+        center_format,
         padded_format,
         text_inside_conditional,
     );
@@ -126,6 +141,7 @@ fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
         conditional,
         escaped_percent_sign,
         spacing,
+        center_format,
         padded_format,
         text_outside_conditional,
     );
