@@ -219,14 +219,11 @@ bool InoreaderApi::mark_article_read(const std::string& guid, bool read)
 
 		if (read) {
 			postcontent = strprintf::fmt(
-					"i=%s&a=user/-/state/com.google/read&r=user/-/state/"
-					"com.google/kept-unread&ac=edit",
+					"i=%s&a=user/-/state/com.google/read",
 					guid);
 		} else {
 			postcontent = strprintf::fmt(
-					"i=%s&r=user/-/state/com.google/read&a=user/-/state/"
-					"com.google/kept-unread&a=user/-/state/com.google/"
-					"tracking-kept-unread&ac=edit",
+					"i=%s&r=user/-/state/com.google/read",
 					guid);
 		}
 
