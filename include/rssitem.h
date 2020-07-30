@@ -38,7 +38,7 @@ public:
 
 	std::string description() const
 	{
-		return description_;
+		return description_.value_or("");
 	}
 	void set_description(const std::string& d);
 
@@ -170,14 +170,14 @@ public:
 
 	void unload()
 	{
-		description_.clear();
+		description_.reset();
 	}
 
 private:
 	std::string title_;
 	std::string link_;
 	std::string author_;
-	std::string description_;
+	nonstd::optional<std::string> description_;
 	std::string guid_;
 	std::string feedurl_;
 	Cache* ch;

@@ -144,7 +144,15 @@ nonstd::optional<std::string> RssItem::attribute_value(const std::string&
 	} else if (attribname == "author") {
 		return utils::utf8_to_locale(author());
 	} else if (attribname == "content") {
-		return utils::utf8_to_locale(description());
+		if (description_.has_value()) {
+			return utils::utf8_to_locale(description_.value());
+		} else if (ch) {
+			ch->fetch_description(this);
+			auto result = utils::utf8_to_locale(description_.value());
+			description_.reset();
+			return result;
+		}
+		return "";
 	} else if (attribname == "date") {
 		return pubDate();
 	} else if (attribname == "guid") {
