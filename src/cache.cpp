@@ -613,6 +613,13 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 			rssurl);
 	run_sql(query, rssitem_callback, &feed);
 
+	auto feed_weak_ptr = std::weak_ptr<RssFeed>(feed);
+	for (const auto& item : feed->items()) {
+		item->set_cache(this);
+		item->set_feedptr(feed_weak_ptr);
+		item->set_feedurl(feed->rssurl());
+	}
+
 	if (ign != nullptr) {
 		auto& items = feed->items();
 		items.erase(
@@ -632,13 +639,6 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 			}
 		}),
 		items.end());
-	}
-
-	auto feed_weak_ptr = std::weak_ptr<RssFeed>(feed);
-	for (const auto& item : feed->items()) {
-		item->set_cache(this);
-		item->set_feedptr(feed_weak_ptr);
-		item->set_feedurl(feed->rssurl());
 	}
 
 	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
