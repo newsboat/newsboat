@@ -42,6 +42,7 @@ parts:
       - libssl-dev
       - gettext
       - cargo
+      - g++
     stage-packages:
       - libxml2
       - librtmp1
