@@ -47,6 +47,7 @@ void RssItem::set_author(const std::string& a)
 
 void RssItem::set_description(const std::string& d)
 {
+	std::lock_guard<std::mutex> guard(description_mutex);
 	description_ = d;
 }
 
@@ -144,13 +145,12 @@ nonstd::optional<std::string> RssItem::attribute_value(const std::string&
 	} else if (attribname == "author") {
 		return utils::utf8_to_locale(author());
 	} else if (attribname == "content") {
+		std::lock_guard<std::mutex> guard(description_mutex);
 		if (description_.has_value()) {
 			return utils::utf8_to_locale(description_.value());
 		} else if (ch) {
-			ch->fetch_description(this);
-			auto result = utils::utf8_to_locale(description_.value());
-			description_.reset();
-			return result;
+			std::string description = ch->fetch_description(this);
+			return utils::utf8_to_locale(description);
 		}
 		return "";
 	} else if (attribname == "date") {

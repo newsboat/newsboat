@@ -216,17 +216,6 @@ static int fill_content_callback(void* myfeed,
 	return 0;
 }
 
-static int fill_content_callback_single_item(void* myitem,
-	int argc,
-	char** argv,
-	char** /* azColName */)
-{
-	RssItem* item = static_cast<RssItem*>(myitem);
-	assert(argc == 1);
-	item->set_description(argv[0] ? argv[0] : "");
-	return 0;
-}
-
 static int search_item_callback(void* myfeed,
 	int argc,
 	char** argv,
@@ -1111,7 +1100,7 @@ void Cache::fetch_descriptions(RssFeed* feed)
 	run_sql(query, fill_content_callback, feed);
 }
 
-void Cache::fetch_description(RssItem* item)
+std::string Cache::fetch_description(RssItem* item)
 {
 	std::string in_clause = prepare_query("'%q'", item->guid());
 
@@ -1119,7 +1108,15 @@ void Cache::fetch_description(RssItem* item)
 			"SELECT content FROM rss_item WHERE guid = %s;",
 			in_clause);
 
-	run_sql(query, fill_content_callback_single_item, item);
+	std::string description;
+	auto store_description = [](void* d, int, char** argv, char**) -> int {
+		auto& desc = *static_cast<std::string*>(d);
+		desc = argv[0] ? argv[0] : "";
+		return 0;
+	};
+
+	run_sql(query, store_description, &description);
+	return description;
 }
 
 SchemaVersion Cache::get_schema_version()

@@ -2,6 +2,7 @@
 #define NEWSBOAT_RSSITEM_H_
 
 #include <memory>
+#include <mutex>
 #include <string>
 
 #include "matchable.h"
@@ -38,6 +39,7 @@ public:
 
 	std::string description() const
 	{
+		std::lock_guard<std::mutex> guard(description_mutex);
 		return description_.value_or("");
 	}
 	void set_description(const std::string& d);
@@ -170,6 +172,7 @@ public:
 
 	void unload()
 	{
+		std::lock_guard<std::mutex> guard(description_mutex);
 		description_.reset();
 	}
 
@@ -177,7 +180,6 @@ private:
 	std::string title_;
 	std::string link_;
 	std::string author_;
-	nonstd::optional<std::string> description_;
 	std::string guid_;
 	std::string feedurl_;
 	Cache* ch;
@@ -194,6 +196,9 @@ private:
 	bool enqueued_;
 	bool deleted_;
 	bool override_unread_;
+
+	mutable std::mutex description_mutex;
+	nonstd::optional<std::string> description_;
 };
 
 } // namespace newsboat
