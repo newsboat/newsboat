@@ -133,18 +133,6 @@ void ConfigParser::register_handler(const std::string& cmd,
 	action_handlers[cmd] = handler;
 }
 
-void ConfigParser::unregister_handler(const std::string& cmd)
-{
-	action_handlers[cmd] = 0;
-}
-
-void ConfigParser::evaluate_backticks(std::vector<std::string>& tokens)
-{
-	for (auto& token : tokens) {
-		token = evaluate_backticks(token);
-	}
-}
-
 /* Note that this function not only finds next backtick that isn't prefixed
  * with a backslash, but also un-escapes all the escaped backticks it finds in
  * the process */

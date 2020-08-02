@@ -21,7 +21,6 @@ public:
 	~ConfigParser() override;
 	void register_handler(const std::string& cmd,
 		ConfigActionHandler* handler);
-	void unregister_handler(const std::string& cmd);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>&) override
@@ -32,7 +31,6 @@ public:
 	static std::string evaluate_backticks(std::string token);
 
 private:
-	void evaluate_backticks(std::vector<std::string>& tokens);
 	static std::string evaluate_cmd(const std::string& cmd);
 	std::vector<std::vector<std::string>> parsed_content;
 	std::map<std::string, ConfigActionHandler*> action_handlers;
