@@ -28,7 +28,7 @@ ColorManager::~ColorManager() {}
 
 void ColorManager::register_commands(ConfigParser& cfgparser)
 {
-	cfgparser.register_handler("color", this);
+	cfgparser.register_handler("color", *this);
 }
 
 void ColorManager::handle_action(const std::string& action,

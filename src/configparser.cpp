@@ -19,7 +19,7 @@ namespace newsboat {
 
 ConfigParser::ConfigParser()
 {
-	register_handler("include", this);
+	register_handler("include", *this);
 }
 
 ConfigParser::~ConfigParser() {}
@@ -101,25 +101,22 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 
 		if (!tokens.empty()) {
 			std::string cmd = tokens[0];
-			ConfigActionHandler* handler = action_handlers[cmd];
-			if (handler) {
-				tokens.erase(
-					tokens.begin()); // delete first element
-				try {
-					handler->handle_action(cmd, tokens);
-				} catch (const ConfigHandlerException& e) {
-					throw ConfigException(strprintf::fmt(
-							_("Error while processing "
-								"command `%s' (%s line %u): "
-								"%s"),
-							line,
-							filename,
-							linecounter,
-							e.what()));
-				}
-			} else {
+			if (action_handlers.count(cmd) < 1) {
+				throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
+			}
+			ConfigActionHandler& handler = action_handlers.at(cmd);
+			tokens.erase(tokens.begin()); // delete first element
+			try {
+				handler.handle_action(cmd, tokens);
+			} catch (const ConfigHandlerException& e) {
 				throw ConfigException(strprintf::fmt(
-						_("unknown command `%s'"), cmd));
+						_("Error while processing "
+							"command `%s' (%s line %u): "
+							"%s"),
+						line,
+						filename,
+						linecounter,
+						e.what()));
 			}
 		}
 	}
@@ -128,9 +125,10 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 }
 
 void ConfigParser::register_handler(const std::string& cmd,
-	ConfigActionHandler* handler)
+	ConfigActionHandler& handler)
 {
-	action_handlers[cmd] = handler;
+	action_handlers.erase(cmd);
+	action_handlers.insert({cmd, handler});
 }
 
 /* Note that this function not only finds next backtick that isn't prefixed

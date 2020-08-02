@@ -53,7 +53,7 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 	SECTION("commands with space are evaluated by backticks") {
 		ConfigParser cfgparser;
 		KeyMap keys(KM_NEWSBOAT);
-		cfgparser.register_handler("bind-key", &keys);
+		cfgparser.register_handler("bind-key", keys);
 		REQUIRE_NOTHROW(cfgparser.parse("data/config-space-backticks"));
 		REQUIRE(keys.get_operation("s", "feedlist") == OP_SORT);
 	}
@@ -91,7 +91,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 	SECTION("In all contexts by default") {
 		KeyMap keys(KM_NEWSBOAT);
-		cfgparser.register_handler("unbind-key", &keys);
+		cfgparser.register_handler("unbind-key", keys);
 		cfgparser.parse("data/config-unbind-all");
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
@@ -104,7 +104,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 	SECTION("For a specific context") {
 		KeyMap keys(KM_NEWSBOAT);
-		cfgparser.register_handler("unbind-key", &keys);
+		cfgparser.register_handler("unbind-key", keys);
 		cfgparser.parse("data/config-unbind-all-context");
 
 		INFO("it doesn't affect the help dialog");

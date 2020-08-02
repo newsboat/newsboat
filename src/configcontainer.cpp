@@ -326,7 +326,7 @@ void ConfigContainer::register_commands(ConfigParser& cfgparser)
 	// ConfigContainer
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		cfgparser.register_handler(cfg.first, this);
+		cfgparser.register_handler(cfg.first, *this);
 	}
 }
 

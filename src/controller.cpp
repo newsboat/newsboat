@@ -173,17 +173,17 @@ int Controller::run(const CliArgsParser& args)
 	colorman.register_commands(cfgparser);
 
 	KeyMap keys(KM_NEWSBOAT);
-	cfgparser.register_handler("bind-key", &keys);
-	cfgparser.register_handler("unbind-key", &keys);
-	cfgparser.register_handler("macro", &keys);
+	cfgparser.register_handler("bind-key", keys);
+	cfgparser.register_handler("unbind-key", keys);
+	cfgparser.register_handler("macro", keys);
 
-	cfgparser.register_handler("ignore-article", &ign);
-	cfgparser.register_handler("always-download", &ign);
-	cfgparser.register_handler("reset-unread-on-update", &ign);
+	cfgparser.register_handler("ignore-article", ign);
+	cfgparser.register_handler("always-download", ign);
+	cfgparser.register_handler("reset-unread-on-update", ign);
 
-	cfgparser.register_handler("define-filter", &filters);
-	cfgparser.register_handler("highlight", &rxman);
-	cfgparser.register_handler("highlight-article", &rxman);
+	cfgparser.register_handler("define-filter", filters);
+	cfgparser.register_handler("highlight", rxman);
+	cfgparser.register_handler("highlight-article", rxman);
 
 	try {
 		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
