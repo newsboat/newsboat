@@ -7,6 +7,7 @@
 #include "cache.h"
 #include "dbexception.h"
 #include "rssfeed.h"
+#include "scopemeasure.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -145,6 +146,7 @@ nonstd::optional<std::string> RssItem::attribute_value(const std::string&
 	} else if (attribname == "author") {
 		return utils::utf8_to_locale(author());
 	} else if (attribname == "content") {
+		ScopeMeasure sm("RssItem::attribute_value(\"content\")");
 		std::lock_guard<std::mutex> guard(description_mutex);
 		if (description_.has_value()) {
 			return utils::utf8_to_locale(description_.value());
