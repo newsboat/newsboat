@@ -186,8 +186,8 @@ int Controller::run(const CliArgsParser& args)
 	cfgparser.register_handler("highlight-article", rxman);
 
 	try {
-		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
-		cfgparser.parse(configpaths.config_file());
+		cfgparser.parse_file("/etc/" PROGRAM_NAME "/config");
+		cfgparser.parse_file(configpaths.config_file());
 	} catch (const ConfigException& ex) {
 		LOG(Level::ERROR,
 			"an exception occurred while parsing the configuration "
@@ -874,7 +874,7 @@ void Controller::update_config()
 
 void Controller::load_configfile(const std::string& filename)
 {
-	if (cfgparser.parse(filename)) {
+	if (cfgparser.parse_file(filename)) {
 		update_config();
 	} else {
 		v->show_error(strprintf::fmt(

@@ -39,7 +39,7 @@ void ConfigParser::handle_action(const std::string& action,
 
 		std::string tilde_expanded = utils::resolve_tilde(params[0]);
 		std::string current_fpath = included_files.back();
-		if (!this->parse(utils::resolve_relative(current_fpath, tilde_expanded)))
+		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded)))
 			throw ConfigHandlerException(
 				ActionHandlerStatus::FILENOTFOUND);
 	} else
@@ -47,7 +47,7 @@ void ConfigParser::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-bool ConfigParser::parse(const std::string& tmp_filename)
+bool ConfigParser::parse_file(const std::string& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -73,7 +73,7 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {
 		LOG(Level::WARN,
-			"ConfigParser::parse: file %s has already been "
+			"ConfigParser::parse_file: file %s has already been "
 			"included",
 			filename);
 		return true;
@@ -85,7 +85,7 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	std::string line;
 	if (!f.is_open()) {
 		LOG(Level::WARN,
-			"ConfigParser::parse: file %s couldn't be opened",
+			"ConfigParser::parse_file: file %s couldn't be opened",
 			filename);
 		return false;
 	}
@@ -93,7 +93,7 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	while (f.is_open() && !f.eof()) {
 		getline(f, line);
 		++linecounter;
-		LOG(Level::DEBUG, "ConfigParser::parse: tokenizing %s", line);
+		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
 
 		auto stripped = utils::strip_comments(line);
 		auto evaluated = evaluate_backticks(std::move(stripped));

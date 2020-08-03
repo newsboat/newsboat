@@ -279,8 +279,8 @@ int PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("reset-unread-on-update", null_cah);
 
 	try {
-		cfgparser.parse("/etc/newsboat/config");
-		cfgparser.parse(config_file);
+		cfgparser.parse_file("/etc/newsboat/config");
+		cfgparser.parse_file(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
 		return EXIT_FAILURE;

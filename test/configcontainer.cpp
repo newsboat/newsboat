@@ -17,7 +17,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	KeyMap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", k);
 
-	REQUIRE_NOTHROW(cfgparser.parse("data/test-config.txt"));
+	REQUIRE_NOTHROW(cfgparser.parse_file("data/test-config.txt"));
 
 	SECTION("bool value") {
 		REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
@@ -48,7 +48,7 @@ TEST_CASE(
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
 
-	REQUIRE_NOTHROW(cfgparser.parse(
+	REQUIRE_NOTHROW(cfgparser.parse_file(
 			"data/test-config-without-newline-at-the-end.txt"));
 
 	SECTION("first line") {

@@ -113,7 +113,7 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
 	REQUIRE_FALSE(clr.colors_loaded());
-	cfg.parse("data/config-with-colors");
+	cfg.parse_file("data/config-with-colors");
 	REQUIRE(clr.colors_loaded());
 }
 
