@@ -721,52 +721,30 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 			unset_key(tokens[0], context);
 		}
 	} else if (action == "macro") {
-		auto tokens = utils::tokenize_quoted(params);
-		if (tokens.size() < 2) {
+		std::string remaining_params = params;
+		auto token = utils::extract_token_quoted(remaining_params);
+		const auto operations = utils::tokenize_quoted(remaining_params, ";");
+		if (!token.has_value() || operations.size() < 1) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		auto it = tokens.begin();
-		std::string macrokey = *it;
-		std::vector<MacroCmd> cmds;
-		MacroCmd tmpcmd;
-		tmpcmd.op = OP_NIL;
-		bool first = true;
-		++it;
+		const std::string macrokey = token.value();
 
-		while (it != tokens.end()) {
-			if (first && *it != ";") {
-				tmpcmd.op = get_opcode(*it);
-				LOG(Level::DEBUG,
-					"KeyMap::handle_action: new operation `%s' (op = %u)",
-					*it,
-					tmpcmd.op);
-				if (tmpcmd.op == OP_NIL) {
-					throw ConfigHandlerException(
-						strprintf::fmt(
-							_("`%s' is not a valid operation"),
-							*it));
-				}
-				first = false;
-			} else {
-				if (*it == ";") {
-					if (tmpcmd.op != OP_NIL) {
-						cmds.push_back(tmpcmd);
-					}
-					tmpcmd.op = OP_NIL;
-					tmpcmd.args.clear();
-					first = true;
-				} else {
-					LOG(Level::DEBUG,
-						"KeyMap::handle_action: new parameter `%s' (op = %u)",
-						*it,
-						tmpcmd.op);
-					tmpcmd.args.push_back(*it);
-				}
+		std::vector<MacroCmd> cmds;
+		for (auto operation : operations) {
+			auto command_name = utils::extract_token_quoted(operation);
+			if (!command_name.has_value()) {
+				continue;
 			}
-			++it;
-		}
-		if (tmpcmd.op != OP_NIL) {
-			cmds.push_back(tmpcmd);
+			auto arguments = utils::tokenize_quoted(operation);
+			MacroCmd cmd;
+			cmd.op = get_opcode(command_name.value());
+			if (cmd.op == OP_NIL) {
+				throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
+						command_name.value()));
+			}
+			cmd.args = arguments;
+
+			cmds.push_back(cmd);
 		}
 
 		macros_[macrokey] = cmds;
