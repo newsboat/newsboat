@@ -95,33 +95,38 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 		++linecounter;
 		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
 
-		auto stripped = utils::strip_comments(line);
-		auto evaluated = evaluate_backticks(std::move(stripped));
-		std::vector<std::string> tokens = utils::tokenize_quoted(std::move(evaluated));
+		std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
 
-		if (!tokens.empty()) {
-			std::string cmd = tokens[0];
-			if (action_handlers.count(cmd) < 1) {
-				throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
-			}
-			ConfigActionHandler& handler = action_handlers.at(cmd);
-			tokens.erase(tokens.begin()); // delete first element
-			try {
-				handler.handle_action(cmd, tokens);
-			} catch (const ConfigHandlerException& e) {
-				throw ConfigException(strprintf::fmt(
-						_("Error while processing "
-							"command `%s' (%s line %u): "
-							"%s"),
-						line,
-						filename,
-						linecounter,
-						e.what()));
-			}
-		}
+		parse_line(line, location);
 	}
 	included_files.pop_back();
 	return true;
+}
+
+void ConfigParser::parse_line(const std::string& line,
+	const std::string& location)
+{
+	auto stripped = utils::strip_comments(line);
+	auto evaluated = evaluate_backticks(std::move(stripped));
+	std::vector<std::string> tokens = utils::tokenize_quoted(std::move(evaluated));
+
+	if (!tokens.empty()) {
+		std::string cmd = tokens[0];
+		if (action_handlers.count(cmd) < 1) {
+			throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
+		}
+		ConfigActionHandler& handler = action_handlers.at(cmd);
+		tokens.erase(tokens.begin()); // delete first element
+		try {
+			handler.handle_action(cmd, tokens);
+		} catch (const ConfigHandlerException& e) {
+			throw ConfigException(strprintf::fmt(
+					_("Error while processing command `%s' (%s): %s"),
+					line,
+					location,
+					e.what()));
+		}
+	}
 }
 
 void ConfigParser::register_handler(const std::string& cmd,

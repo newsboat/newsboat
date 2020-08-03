@@ -29,6 +29,7 @@ public:
 		/* nothing because ConfigParser itself only handles include */
 	}
 	bool parse_file(const std::string& filename);
+	void parse_line(const std::string& line, const std::string& location);
 	static std::string evaluate_backticks(std::string token);
 
 private:
