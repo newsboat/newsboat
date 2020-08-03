@@ -1,6 +1,8 @@
 #include "configparser.h"
 
 #include <fstream>
+#include <utility>
+#include <vector>
 
 #include "3rd-party/catch.hpp"
 #include "keymap.h"
@@ -8,6 +10,74 @@
 #include "test-helpers/tempfile.h"
 
 using namespace newsboat;
+
+class DummyConfigHandler : public ConfigActionHandler {
+public:
+	void handle_action(const std::string& action,
+		const std::vector<std::string>& params) override
+	{
+		history.emplace_back(action, params);
+	};
+
+	void dump_config(std::vector<std::string>&) override {};
+
+	std::vector<std::pair<std::string, std::vector<std::string>>> history;
+};
+
+TEST_CASE("parse_line(): Handles both lines with and without quoting",
+	"[ConfigParser]")
+{
+	ConfigParser cfgParser;
+
+	DummyConfigHandler handler;
+	cfgParser.register_handler("command-name", handler);
+
+	const std::string location = "dummy-location";
+
+	SECTION("no quoting") {
+		cfgParser.parse_line("command-name", location);
+		cfgParser.parse_line("command-name arg1", location);
+		cfgParser.parse_line("command-name arg1 arg2", location);
+
+		REQUIRE(handler.history.size() == 3);
+		REQUIRE(handler.history[0].second == std::vector<std::string>({}));
+		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg1"}));
+		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg1", "arg2"}));
+	}
+
+	SECTION("argument quoting") {
+		cfgParser.parse_line(R"(command-name)", location);
+		cfgParser.parse_line(R"(command-name "arg 1")", location);
+		cfgParser.parse_line(R"(command-name "arg 1" "arg 2")", location);
+
+		REQUIRE(handler.history.size() == 3);
+		REQUIRE(handler.history[0].second == std::vector<std::string>({}));
+		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg 1"}));
+		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg 1", "arg 2"}));
+	}
+
+	SECTION("command quoting") {
+		cfgParser.parse_line(R"("command-name")", location);
+		cfgParser.parse_line(R"("command-name" "arg 1")", location);
+		cfgParser.parse_line(R"("command-name" "arg 1" "arg 2")", location);
+
+		REQUIRE(handler.history.size() == 3);
+		REQUIRE(handler.history[0].second == std::vector<std::string>({}));
+		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg 1"}));
+		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg 1", "arg 2"}));
+	}
+
+	SECTION("omitable spaces") {
+		cfgParser.parse_line(R"("command-name""arg 1")", location);
+		cfgParser.parse_line(R"("command-name" "arg 1""arg 2")", location);
+		cfgParser.parse_line(R"("command-name" "arg 1"; "arg 2")", location);
+
+		REQUIRE(handler.history.size() == 3);
+		REQUIRE(handler.history[0].second == std::vector<std::string>({"arg 1"}));
+		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg 1", "arg 2"}));
+		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg 1", ";", "arg 2"}));
+	}
+}
 
 TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 	"[ConfigParser]")
