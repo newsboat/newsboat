@@ -29,7 +29,7 @@ inline void Cache::run_sql_impl(const std::string& query,
 	bool do_throw)
 {
 	LOG(Level::DEBUG, "running query: %s", query);
-	int rc = sqlite3_exec(
+	const int rc = sqlite3_exec(
 			db, query.c_str(), callback, callback_argument, nullptr);
 	if (rc != SQLITE_OK) {
 		const std::string message = "query \"%s\" failed: (%d) %s";
@@ -262,7 +262,7 @@ Cache::Cache(const std::string& cachefile, ConfigContainer* c)
 	: db(0)
 	, cfg(c)
 {
-	int error = sqlite3_open(cachefile.c_str(), &db);
+	const int error = sqlite3_open(cachefile.c_str(), &db);
 	if (error != SQLITE_OK) {
 		LOG(Level::ERROR,
 			"couldn't sqlite3_open(%s): error = %d",
@@ -502,7 +502,7 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 			feed->rssurl());
 	run_sql(query, count_callback, &count_cbh);
 
-	int count = count_cbh.count();
+	const int count = count_cbh.count();
 	LOG(Level::DEBUG,
 		"Cache::externalize_rss_feed: rss_feeds with rssurl = '%s': "
 		"found "
@@ -510,7 +510,7 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 		feed->rssurl(),
 		count);
 	if (count > 0) {
-		std::string updatequery = prepare_query(
+		const std::string updatequery = prepare_query(
 				"UPDATE rss_feed "
 				"SET title = '%q', url = '%q', is_rtl = %u "
 				"WHERE rssurl = '%q';",
@@ -520,7 +520,7 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 				feed->rssurl());
 		run_sql(updatequery);
 	} else {
-		std::string insertquery = prepare_query(
+		const std::string insertquery = prepare_query(
 				"INSERT INTO rss_feed (rssurl, url, title, is_rtl) "
 				"VALUES ( '%q', '%q', '%q', %u );",
 				feed->rssurl(),
@@ -530,7 +530,7 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 		run_sql(insertquery);
 	}
 
-	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+	const unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
 	LOG(Level::INFO,
 		"Cache::externalize_feed: max_items = %u "
@@ -544,8 +544,8 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 			feed->items().begin() + max_items, feed->items().end());
 	}
 
-	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
-	time_t old_time = time(nullptr) - days * 24 * 60 * 60;
+	const unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
+	const time_t old_time = time(nullptr) - days * 24 * 60 * 60;
 
 	// the reverse iterator is there for the sorting foo below (think about
 	// it)
@@ -630,7 +630,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		items.end());
 	}
 
-	unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+	const unsigned int max_items = cfg->get_configvalue_as_int("max-items");
 
 	if (max_items > 0 && feed->total_item_count() > max_items) {
 		std::vector<std::shared_ptr<RssItem>> flagged_items;
@@ -726,7 +726,7 @@ std::unordered_set<std::string> Cache::search_in_items(
 
 void Cache::delete_item(const std::shared_ptr<RssItem>& item)
 {
-	std::string query = prepare_query(
+	const std::string query = prepare_query(
 			"DELETE FROM rss_item WHERE guid = '%q';", item->guid());
 	run_sql(query);
 }
@@ -935,7 +935,7 @@ void Cache::update_rssitem_unread_and_enqueued(RssItem* item,
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	auto query = prepare_query(
+	const auto query = prepare_query(
 			"UPDATE rss_item "
 			"SET unread = '%d', enqueued = '%d' "
 			"WHERE guid = '%q'",
@@ -988,7 +988,7 @@ void Cache::update_rssitem_flags(RssItem* item)
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	std::string update = prepare_query(
+	const std::string update = prepare_query(
 			"UPDATE rss_item SET flags = '%q' WHERE guid = '%q';",
 			item->flags(),
 			item->guid());
@@ -1020,7 +1020,7 @@ void Cache::remove_old_deleted_items(RssFeed* feed)
 		guidset.append(prepare_query("'%q', ", guid));
 	}
 	guidset.append("'')");
-	std::string query = prepare_query(
+	const std::string query = prepare_query(
 			"DELETE FROM rss_item "
 			"WHERE feedurl = '%q' "
 			"AND deleted = 1 "
@@ -1039,7 +1039,7 @@ void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 	}
 	guidset.append("'')");
 
-	std::string updatequery = prepare_query(
+	const std::string updatequery = prepare_query(
 			"UPDATE rss_item SET unread = 0 WHERE unread = 1 AND guid IN "
 			"%s;",
 			guidset);
@@ -1051,7 +1051,7 @@ void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 std::vector<std::string> Cache::get_read_item_guids()
 {
 	std::vector<std::string> guids;
-	std::string query = "SELECT guid FROM rss_item WHERE unread = 0;";
+	const std::string query = "SELECT guid FROM rss_item WHERE unread = 0;";
 
 	std::lock_guard<std::mutex> lock(mtx);
 	run_sql(query, vectorofstring_callback, &guids);
@@ -1063,11 +1063,11 @@ void Cache::clean_old_articles()
 {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
+	const unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
 	if (days > 0) {
-		time_t old_date = time(nullptr) - days * 24 * 60 * 60;
+		const time_t old_date = time(nullptr) - days * 24 * 60 * 60;
 
-		std::string query(prepare_query(
+		const std::string query(prepare_query(
 				"DELETE FROM rss_item WHERE pubDate < %d", old_date));
 		LOG(Level::DEBUG,
 			"Cache::clean_old_articles: about to delete articles "
@@ -1091,9 +1091,9 @@ void Cache::fetch_descriptions(RssFeed* feed)
 	for (const auto& item : feed->items()) {
 		guids.push_back(prepare_query("'%q'", item->guid()));
 	}
-	std::string in_clause = utils::join(guids, ", ");
+	const std::string in_clause = utils::join(guids, ", ");
 
-	std::string query = prepare_query(
+	const std::string query = prepare_query(
 			"SELECT guid, content FROM rss_item WHERE guid IN (%s);",
 			in_clause);
 
@@ -1102,9 +1102,9 @@ void Cache::fetch_descriptions(RssFeed* feed)
 
 std::string Cache::fetch_description(RssItem* item)
 {
-	std::string in_clause = prepare_query("'%q'", item->guid());
+	const std::string in_clause = prepare_query("'%q'", item->guid());
 
-	std::string query = prepare_query(
+	const std::string query = prepare_query(
 			"SELECT content FROM rss_item WHERE guid = %s;",
 			in_clause);
 
