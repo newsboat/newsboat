@@ -24,7 +24,7 @@ public:
 	std::vector<std::pair<std::string, std::vector<std::string>>> history;
 };
 
-TEST_CASE("parse_line(): Handles both lines with and without quoting",
+TEST_CASE("parse_line() Handles both lines with and without quoting",
 	"[ConfigParser]")
 {
 	ConfigParser cfgParser;
@@ -34,48 +34,98 @@ TEST_CASE("parse_line(): Handles both lines with and without quoting",
 
 	const std::string location = "dummy-location";
 
-	SECTION("no quoting") {
-		cfgParser.parse_line("command-name", location);
+	SECTION("unknown command results in exception") {
+		REQUIRE_THROWS(cfgParser.parse_line("foo", location));
+		REQUIRE_THROWS(cfgParser.parse_line("foo arg1 arg2", location));
+	}
+
+	SECTION("different combinations of (un)quoted commands/arguments have the same result") {
+		const std::vector<std::string> inputs = {
+			R"(command-name arg1 arg2)",
+			R"("command-name" "arg1" "arg2")",
+			R"(command-name "arg1" arg2)",
+			R"("command-name" arg1 arg2)",
+			R"("command-name""arg1""arg2")", // whitespace can be omitted between quoted arguments
+		};
+
+		for (std::string input : inputs) {
+			DYNAMIC_SECTION("input: " << input) {
+				cfgParser.parse_line(input, location);
+
+				REQUIRE(handler.history.size() == 1);
+				REQUIRE(handler.history[0].first == "command-name");
+				REQUIRE(handler.history[0].second == std::vector<std::string>({"arg1", "arg2"}));
+			}
+		}
+	}
+}
+
+TEST_CASE("parse_line() does not care about whitespace at start or end of line",
+	"[ConfigParser]")
+{
+	ConfigParser cfgParser;
+
+	DummyConfigHandler handler;
+	cfgParser.register_handler("command-name", handler);
+
+	const std::string location = "dummy-location";
+
+	SECTION("no whitespace") {
 		cfgParser.parse_line("command-name arg1", location);
-		cfgParser.parse_line("command-name arg1 arg2", location);
 
-		REQUIRE(handler.history.size() == 3);
-		REQUIRE(handler.history[0].second == std::vector<std::string>({}));
-		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg1"}));
-		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg1", "arg2"}));
+		REQUIRE(handler.history.size() == 1);
+		REQUIRE(handler.history[0].first == "command-name");
+		REQUIRE(handler.history[0].second == std::vector<std::string>({"arg1"}));
 	}
 
-	SECTION("argument quoting") {
-		cfgParser.parse_line(R"(command-name)", location);
-		cfgParser.parse_line(R"(command-name "arg 1")", location);
-		cfgParser.parse_line(R"(command-name "arg 1" "arg 2")", location);
+	SECTION("some whitespace") {
+		const std::vector<std::string> inputs = {
+			"\r\n\t command-name arg1",
+			"command-name arg1\r\n\t ",
+			"\r\n\t command-name\t\targ1\r\n\t ",
+		};
 
-		REQUIRE(handler.history.size() == 3);
-		REQUIRE(handler.history[0].second == std::vector<std::string>({}));
-		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg 1"}));
-		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg 1", "arg 2"}));
+		for (std::string input : inputs) {
+			DYNAMIC_SECTION("input: " << input) {
+				cfgParser.parse_line(input, location);
+
+				REQUIRE(handler.history.size() == 1);
+				REQUIRE(handler.history[0].first == "command-name");
+				REQUIRE(handler.history[0].second == std::vector<std::string>({"arg1"}));
+			}
+		}
+	}
+}
+
+TEST_CASE("parse_line() processes backslash escapes in quoted commands and arguments",
+	"[ConfigParser]")
+{
+	ConfigParser cfgParser;
+
+	DummyConfigHandler handler;
+	cfgParser.register_handler("command", handler);
+
+	const std::string location = "dummy-location";
+
+	auto check_output = [&](const std::string& input,
+			const std::string& expected_command,
+	const std::vector<std::string>& expected_arguments) {
+		cfgParser.parse_line(input, location);
+		REQUIRE(handler.history.size() >= 1);
+		REQUIRE(handler.history.back().first == expected_command);
+		REQUIRE(handler.history.back().second == expected_arguments);
+	};
+
+	SECTION("escapes are handled when inside quoted string") {
+		check_output(R"(command "arg")", "command", {"arg"});
+		check_output(R"(command "arg\n")", "command", {"arg\n"});
+		check_output(R"(command "a\"r\"g")", "command", {R"(a"r"g)"});
 	}
 
-	SECTION("command quoting") {
-		cfgParser.parse_line(R"("command-name")", location);
-		cfgParser.parse_line(R"("command-name" "arg 1")", location);
-		cfgParser.parse_line(R"("command-name" "arg 1" "arg 2")", location);
-
-		REQUIRE(handler.history.size() == 3);
-		REQUIRE(handler.history[0].second == std::vector<std::string>({}));
-		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg 1"}));
-		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg 1", "arg 2"}));
-	}
-
-	SECTION("omitable spaces") {
-		cfgParser.parse_line(R"("command-name""arg 1")", location);
-		cfgParser.parse_line(R"("command-name" "arg 1""arg 2")", location);
-		cfgParser.parse_line(R"("command-name" "arg 1"; "arg 2")", location);
-
-		REQUIRE(handler.history.size() == 3);
-		REQUIRE(handler.history[0].second == std::vector<std::string>({"arg 1"}));
-		REQUIRE(handler.history[1].second == std::vector<std::string>({"arg 1", "arg 2"}));
-		REQUIRE(handler.history[2].second == std::vector<std::string>({"arg 1", ";", "arg 2"}));
+	SECTION("no escape handling outside of quoted parts of string") {
+		check_output(R"(command arg)", "command", {"arg"});
+		check_output(R"(command arg\n)", "command", {R"(arg\n)"});
+		check_output(R"(command \"arg)", "command", {R"(\"arg)"});
 	}
 }
 
