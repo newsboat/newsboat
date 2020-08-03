@@ -11,4 +11,9 @@ void ConfigActionHandler::handle_action(const std::string& action,
 	handle_action(action, tokens);
 }
 
+void ConfigActionHandler::handle_action(const std::string&,
+	const std::vector<std::string>&)
+{
+}
+
 } // namespace newsboat

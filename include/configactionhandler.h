@@ -19,7 +19,7 @@ public:
 private:
 	// Derived classes should override either of the handle_action() overloads
 	virtual void handle_action(const std::string& action,
-		const std::vector<std::string>& params) = 0;
+		const std::vector<std::string>& params);
 };
 
 } // namespace newsboat

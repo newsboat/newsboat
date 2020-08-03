@@ -176,48 +176,40 @@ TEST_CASE("get_key()", "[KeyMap]")
 TEST_CASE("handle_action()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
-	std::vector<std::string> params;
 
 	SECTION("without parameters") {
-		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", ""),
 			ConfigHandlerException);
-		REQUIRE_THROWS_AS(k.handle_action("unbind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("unbind-key", ""),
 			ConfigHandlerException);
-		REQUIRE_THROWS_AS(k.handle_action("macro", params),
+		REQUIRE_THROWS_AS(k.handle_action("macro", ""),
 			ConfigHandlerException);
 	}
 
 	SECTION("with one parameter") {
-		params.push_back("r");
-
-		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", "r"),
 			ConfigHandlerException);
-		REQUIRE_NOTHROW(k.handle_action("unbind-key", params));
-		REQUIRE_THROWS_AS(k.handle_action("macro", params),
+		REQUIRE_NOTHROW(k.handle_action("unbind-key", "r"));
+		REQUIRE_THROWS_AS(k.handle_action("macro", "r"),
 			ConfigHandlerException);
 	}
 
 	SECTION("with two parameters") {
-		params.push_back("r");
-		params.push_back("open");
-		REQUIRE_NOTHROW(k.handle_action("bind-key", params));
-		REQUIRE_THROWS_AS(k.handle_action("an-invalid-action", params),
+		REQUIRE_NOTHROW(k.handle_action("bind-key", "r open"));
+		REQUIRE_THROWS_AS(k.handle_action("an-invalid-action", "r open"),
 			ConfigHandlerException);
 	}
 
 	SECTION("invalid-op throws exception") {
-		params.push_back("I");
-		params.push_back("invalid-op");
-
-		REQUIRE_THROWS_AS(k.handle_action("bind-key", params),
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", "I invalid-op"),
 			ConfigHandlerException);
-		REQUIRE_THROWS_AS(k.handle_action("macro", params),
+		REQUIRE_THROWS_AS(k.handle_action("macro", "I invalid-op"),
 			ConfigHandlerException);
 	}
 
 	SECTION("allows binding multiple keys to OP_SK_xxx operations") {
-		REQUIRE_NOTHROW(k.handle_action("bind-key", {"u", "pageup"}));
-		REQUIRE_NOTHROW(k.handle_action("bind-key", {"p", "pageup"}));
+		REQUIRE_NOTHROW(k.handle_action("bind-key", "u pageup"));
+		REQUIRE_NOTHROW(k.handle_action("bind-key", "p pageup"));
 
 		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
 			== std::vector<std::string>({"PPAGE", "p", "u"}));
@@ -353,9 +345,9 @@ TEST_CASE("get_keymap_descriptions() does not return empty commands or descripti
 
 	const std::string operation = "open-all-unread-in-browser-and-mark-read";
 
-	REQUIRE_NOTHROW(k.handle_action("bind-key", {"a", operation}));
-	REQUIRE_NOTHROW(k.handle_action("bind-key", {"b", operation}));
-	REQUIRE_NOTHROW(k.handle_action("bind-key", {"c", operation}));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", "a " +  operation));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", "b " +  operation));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", "c " +  operation));
 
 	const auto descriptions = k.get_keymap_descriptions("feedlist");
 	for (const auto& description : descriptions) {
@@ -371,9 +363,9 @@ TEST_CASE("get_keymap_descriptions() includes entries which include different ke
 
 	const std::string operation = "open-all-unread-in-browser-and-mark-read";
 
-	REQUIRE_NOTHROW(k.handle_action("bind-key", {"a", operation}));
-	REQUIRE_NOTHROW(k.handle_action("bind-key", {"b", operation}));
-	REQUIRE_NOTHROW(k.handle_action("bind-key", {"c", operation}));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", "a " +  operation));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", "b " +  operation));
+	REQUIRE_NOTHROW(k.handle_action("bind-key", "c " +  operation));
 
 	const auto descriptions = k.get_keymap_descriptions("feedlist");
 
@@ -443,10 +435,10 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 		k.unset_all_keys("all");
 
 		k.set_key(OP_OPEN, "ENTER", "feedlist");
-		k.handle_action("macro", {"1", "open"});
-		k.handle_action("macro", {"2", "open", ";", "next"});
-		k.handle_action("macro", {"3", "open", ";", "next", ";", "prev"});
-		k.handle_action("macro", {"4", "open", ";", "next", ";", "prev", ";", "quit"});
+		k.handle_action("macro", "1 open");
+		k.handle_action("macro", "2 open ; next");
+		k.handle_action("macro", "3 open ; next ; prev");
+		k.handle_action("macro", "4 open ; next ; prev ; quit");
 
 		WHEN("calling dump_config()") {
 			k.dump_config(dumpOutput);
@@ -466,8 +458,8 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	GIVEN("a few registered macros with arguments") {
 		k.unset_all_keys("all");
 
-		k.handle_action("macro", {"1", "set", "arg 1"});
-		k.handle_action("macro", {"2", "set", "arg 1", ";", "set", "arg 2", "arg 3"});
+		k.handle_action("macro", "1 set \"arg 1\"");
+		k.handle_action("macro", "2 set \"arg 1\" ; set \"arg 2\" \"arg 3\"");
 
 		WHEN("calling dump_config()") {
 			k.dump_config(dumpOutput);

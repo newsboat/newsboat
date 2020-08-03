@@ -678,8 +678,7 @@ std::string KeyMap::getopname(Operation op)
 	return "<none>";
 }
 
-void KeyMap::handle_action(const std::string& action,
-	const std::vector<std::string>& params)
+void KeyMap::handle_action(const std::string& action, const std::string& params)
 {
 	/*
 	 * The keymap acts as ConfigActionHandler so that all the key-related
@@ -687,43 +686,46 @@ void KeyMap::handle_action(const std::string& action,
 	 */
 	LOG(Level::DEBUG, "KeyMap::handle_action(%s, ...) called", action);
 	if (action == "bind-key") {
-		if (params.size() < 2)
+		auto tokens = utils::tokenize_quoted(params);
+		if (tokens.size() < 2)
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		std::string context = "all";
-		if (params.size() >= 3) {
-			context = params[2];
+		if (tokens.size() >= 3) {
+			context = tokens[2];
 		}
 		if (!is_valid_context(context))
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid context"), context));
-		Operation op = get_opcode(params[1]);
+		Operation op = get_opcode(tokens[1]);
 		if (op == OP_NIL) {
 			throw ConfigHandlerException(
 				strprintf::fmt(_("`%s' is not a valid "
 						"key command"),
-					params[1]));
+					tokens[1]));
 		}
-		set_key(op, params[0], context);
+		set_key(op, tokens[0], context);
 	} else if (action == "unbind-key") {
-		if (params.size() < 1) {
+		auto tokens = utils::tokenize_quoted(params);
+		if (tokens.size() < 1) {
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 		std::string context = "all";
-		if (params.size() >= 2) {
-			context = params[1];
+		if (tokens.size() >= 2) {
+			context = tokens[1];
 		}
-		if (params[0] == "-a") {
+		if (tokens[0] == "-a") {
 			unset_all_keys(context);
 		} else {
-			unset_key(params[0], context);
+			unset_key(tokens[0], context);
 		}
 	} else if (action == "macro") {
-		if (params.size() < 2) {
+		auto tokens = utils::tokenize_quoted(params);
+		if (tokens.size() < 2) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		auto it = params.begin();
+		auto it = tokens.begin();
 		std::string macrokey = *it;
 		std::vector<MacroCmd> cmds;
 		MacroCmd tmpcmd;
@@ -731,7 +733,7 @@ void KeyMap::handle_action(const std::string& action,
 		bool first = true;
 		++it;
 
-		while (it != params.end()) {
+		while (it != tokens.end()) {
 			if (first && *it != ";") {
 				tmpcmd.op = get_opcode(*it);
 				LOG(Level::DEBUG,
