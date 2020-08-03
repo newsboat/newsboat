@@ -8,11 +8,18 @@ namespace newsboat {
 
 class ConfigActionHandler {
 public:
+	// Derived classes can override this function to handle the `params` string without the default tokenization
 	virtual void handle_action(const std::string& action,
-		const std::vector<std::string>& params) = 0;
+		const std::string& params);
+
 	virtual void dump_config(std::vector<std::string>& config_output) = 0;
 	ConfigActionHandler() {}
 	virtual ~ConfigActionHandler() {}
+
+private:
+	// Derived classes should override either of the handle_action() overloads
+	virtual void handle_action(const std::string& action,
+		const std::vector<std::string>& params) = 0;
 };
 
 } // namespace newsboat

@@ -108,17 +108,17 @@ void ConfigParser::parse_line(const std::string& line,
 {
 	auto stripped = utils::strip_comments(line);
 	auto evaluated = evaluate_backticks(std::move(stripped));
-	std::vector<std::string> tokens = utils::tokenize_quoted(std::move(evaluated));
+	const auto token = utils::extract_token_quoted(evaluated);
+	if (token.has_value()) {
+		std::string cmd = token.value();
+		const std::string params = evaluated;
 
-	if (!tokens.empty()) {
-		std::string cmd = tokens[0];
 		if (action_handlers.count(cmd) < 1) {
 			throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
 		}
 		ConfigActionHandler& handler = action_handlers.at(cmd);
-		tokens.erase(tokens.begin()); // delete first element
 		try {
-			handler.handle_action(cmd, tokens);
+			handler.handle_action(cmd, params);
 		} catch (const ConfigHandlerException& e) {
 			throw ConfigException(strprintf::fmt(
 					_("Error while processing command `%s' (%s): %s"),

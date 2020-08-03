@@ -74,6 +74,11 @@ src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/matcherexception.h include/pbview.h include/selectformaction.h \
  include/strprintf.h include/urlviewformaction.h include/utils.h \
  include/logger.h
+src/configactionhandler.o: src/configactionhandler.cpp \
+ include/configactionhandler.h include/utils.h 3rd-party/optional.hpp \
+ include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/logger.h config.h \
+ include/strprintf.h
 src/configcontainer.o: src/configcontainer.cpp include/configcontainer.h \
  include/configparser.h include/configactionhandler.h config.h \
  include/configparser.h include/configdata.h 3rd-party/expected.hpp \
