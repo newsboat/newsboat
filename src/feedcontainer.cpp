@@ -273,7 +273,13 @@ unsigned int FeedContainer::unread_item_count() const
 			feeds.end(),
 			0,
 	[](unsigned int sum, const std::shared_ptr<RssFeed> feed) {
-		return sum += feed->unread_item_count();
+		// Query feed contain copies of items from other feeds, so we skip them
+		// to avoid double-counting the copied items.
+		if (!feed->is_query_feed()) {
+			sum += feed->unread_item_count();
+		}
+
+		return sum;
 	});
 }
 

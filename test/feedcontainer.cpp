@@ -685,18 +685,55 @@ TEST_CASE("unread_item_count() returns number of unread items in all feeds",
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	const auto feeds = get_five_empty_feeds(&rsscache);
-	for (int j = 0; j < 5; ++j) {
-		const auto item = std::make_shared<RssItem>(&rsscache);
-		const auto item2 = std::make_shared<RssItem>(&rsscache);
-		if ((j % 2) == 0) {
-			item->set_unread_nowrite(false);
-			item2->set_unread_nowrite(false);
+
+	SECTION("No query feeds") {
+		const auto feeds = get_five_empty_feeds(&rsscache);
+		for (int j = 0; j < 5; ++j) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			const auto item2 = std::make_shared<RssItem>(&rsscache);
+			if ((j % 2) == 0) {
+				item->set_unread_nowrite(false);
+				item2->set_unread_nowrite(false);
+			}
+			feeds[j]->add_item(item);
+			feeds[j]->add_item(item2);
 		}
-		feeds[j]->add_item(item);
-		feeds[j]->add_item(item2);
+		feedcontainer.set_feeds(feeds);
 	}
-	feedcontainer.set_feeds(feeds);
+
+	SECTION("Query feeds don't affect the total count (since they contain copies of existing items)") {
+		// This is a regression test for https://github.com/newsboat/newsboat/issues/1120
+
+		auto feeds = get_five_empty_feeds(&rsscache);
+
+		auto query1 = std::make_shared<RssFeed>(&rsscache);
+		query1->set_rssurl("query:Title contains word:title # \"word\"");
+		auto query2 = std::make_shared<RssFeed>(&rsscache);
+		query2->set_rssurl("query:Posts by John Doe:author = \"John Doe\"");
+
+		feeds.push_back(query1);
+		feeds.push_back(query2);
+
+		for (int j = 0; j < 5; ++j) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			item->set_title("All titles contain word");
+			item->set_author("John Doe");
+			const auto item2 = std::make_shared<RssItem>(&rsscache);
+			item2->set_title("All titles contain word");
+			item2->set_author("John Doe");
+			if ((j % 2) == 0) {
+				item->set_unread_nowrite(false);
+				item2->set_unread_nowrite(false);
+			}
+			feeds[j]->add_item(item);
+			feeds[j]->add_item(item2);
+		}
+
+		query1->update_items(feeds);
+		query2->update_items(feeds);
+
+		feedcontainer.set_feeds(feeds);
+	}
 
 	REQUIRE(feedcontainer.unread_item_count() == 4);
 }
