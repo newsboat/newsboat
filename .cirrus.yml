@@ -7,15 +7,23 @@ freebsd_task:
           freebsd_instance:
             image: freebsd-12-1-release-amd64
 
-    cargo_cache:
-        # This works in conjunction with before_cache_script defined below.
-        folder: $HOME/.cargo
-        fingerprint_script: cat Cargo.lock
+    cargo_cache: &cargo_cache
+        # This works in conjunction with after_cache_script and
+        # before_cache_script defined below.
+        folder: $HOME/cargo-cache
+        fingerprint_script:
+          # We include the cache name in the fingerprint to avoid re-using old
+          # caches that contained ~/.cargo
+          - echo cargo-cache
+          - cat Cargo.lock
 
     env:
         HOME: /home/testuser
         RUSTFLAGS: '-D warnings'
 
+    after_cache_script: &after_cache_script
+      - mkdir $HOME/.cargo || true
+      - mv $HOME/cargo-cache/registry/ $HOME/cargo-cache/git/ $HOME/.cargo/ || true
     install_script:
         # Make sure we use the same package repository for all images. Snapshots
         # (like 11.3-STABLE) default to latest, while releases default to quarterly.
@@ -43,31 +51,25 @@ freebsd_task:
     # uninstall` cleans up everything that `make install` installed.
     fake_install_script: su testuser -c 'cd ~ && mkdir fakeroot && gmake DESTDIR=fakeroot install && gmake DESTDIR=fakeroot uninstall && [ $(find fakeroot -type f -print | wc -l) -eq 0 ]'
     before_cache_script: &before_cache_script
-    # The layout of ~/.cargo is described here:
-        # https://doc.rust-lang.org/cargo/guide/cargo-home.html#caching-the-cargo-home-in-ci
+        # Cirrus CI sometimes fails to unpack the cache. In that case, it
+        # removes the "cache folder" and tries again.
         #
-        # We don't cache ~/.cargo/bin because the cache is shared between
-        # different builds that run different OSes.
-        #
-        # Some of the directories might not exist, which is okay. We prevent
-        # those errors from breaking the build by ignoring their exit codes
-        # (adding `|| true`).
-        - mkdir -p $HOME/cargo-cache/registry $HOME/cargo-cache/git
-        - mv $HOME/.cargo/registry/index $HOME/.cargo/registry/cache $HOME/cargo-cache/registry || true
-        - mv $HOME/.cargo/git/db $HOME/cargo-cache/git || true
-        - rm -rf $HOME/.cargo
-        - mv $HOME/cargo-cache $HOME/.cargo
+        # We used to use ~/.cargo as a "cache folder", but Cirrus then
+        # sometimes removed ~/.cargo/bin and broke the build. To work around
+        # that, we're storing the cacheble stuff in a separate directory which
+        # we move in/out of ~/.cargo before/after the build.
+        - mkdir -p $HOME/cargo-cache/git/
+        - mv $HOME/.cargo/registry/ $HOME/cargo-cache/ || true
+        - mv $HOME/.cargo/git/db/ $HOME/cargo-cache/git/ || true
 
 32bit_ubuntu_task:
     name: Linux i686 (Ubuntu 18.04)
     container:
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
-    cargo_cache:
-        # This works in conjunction with before_cache_script.
-        folder: $HOME/.cargo
-        fingerprint_script: cat Cargo.lock
+    cargo_cache: *cargo_cache
     env:
         RUSTFLAGS: '-D warnings'
+    after_cache_script: *after_cache_script
     build_script: &build_script
         - make -j3 --keep-going all test
     test_script: &test_script
@@ -90,11 +92,9 @@ macos_task:
     osx_instance:
         image: catalina-base
 
-    cargo_cache:
-        # This works in conjunction with before_cache_script.
-        folder: $HOME/.cargo
-        fingerprint_script: cat Cargo.lock
+    cargo_cache: *cargo_cache
 
+    after_cache_script: *after_cache_script
     install_script:
         - brew update
         - brew install rustup-init
@@ -300,15 +300,13 @@ linux_task:
                 cc: clang-10
                 cxx: clang++-10
 
-    cargo_cache:
-        # This works in conjunction with before_cache_script.
-        folder: $HOME/.cargo
-        fingerprint_script: cat Cargo.lock
+    cargo_cache: *cargo_cache
 
     env:
         RUSTFLAGS: '-D warnings'
         PROFILE: 1
 
+    after_cache_script: *after_cache_script
     build_script: *build_script
     test_script: *test_script
     clippy_script: *clippy_script
@@ -331,14 +329,12 @@ address_sanitizer_task:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
       ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
 
-    cargo_cache:
-        # This works in conjunction with before_cache_script.
-        folder: $HOME/.cargo
-        fingerprint_script: cat Cargo.lock
+    cargo_cache: *cargo_cache
 
     # Sanitizers only apply to C++, so we only build and run C++ tests. Also,
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
+    after_cache_script: *after_cache_script
     build_script: make -j3 test/test
     test_script: cd test && ./test --order rand
     before_cache_script: *before_cache_script
@@ -378,14 +374,12 @@ undefined_behavior_sanitizer_task:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
       UBSAN_OPTIONS: "suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1"
 
-    cargo_cache:
-        # This works in conjunction with before_cache_script.
-        folder: $HOME/.cargo
-        fingerprint_script: cat Cargo.lock
+    cargo_cache: *cargo_cache
 
     # Sanitizers only apply to C++, so we only build and run C++ tests. Also,
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
+    after_cache_script: *after_cache_script
     build_script: make -j3 test/test
     test_script: cd test && ./test --order rand
     before_cache_script: *before_cache_script
