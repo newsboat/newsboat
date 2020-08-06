@@ -247,7 +247,7 @@ void MinifluxApi::add_custom_headers(curl_slist** /* custom_headers */)
 
 json MinifluxApi::run_op(const std::string& path,
 	const json& args,
-	const std::string& method, /* = POST */
+	const std::string& method, /* = GET */
 	CURL* cached_handle /* = nullptr */)
 {
 	std::string url = server + path;
@@ -257,13 +257,10 @@ json MinifluxApi::run_op(const std::string& path,
 		req_data = args.dump();
 	}
 
-	LOG(Level::DEBUG,
-		"Running operation %s", url);
-
 	std::string result = utils::retrieve_url(
 			url, cfg, auth_info,
 			args.empty() ? nullptr : &req_data,
-			cached_handle, method);
+			method, cached_handle);
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s,...): post=%s reply = %s",

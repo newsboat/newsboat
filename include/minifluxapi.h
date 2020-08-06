@@ -28,7 +28,7 @@ public:
 private:
 	virtual nlohmann::json run_op(const std::string& path,
 		const nlohmann::json& req_data,
-		const std::string& method = "POST",
+		const std::string& method = "GET",
 		CURL* cached_handle = nullptr);
 	TaggedFeedUrl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);

@@ -438,8 +438,8 @@ std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
-	CURL* cached_handle,
-	const std::string& method /* = POST */)
+	const std::string& method, /* = GET */
+	CURL* cached_handle)
 {
 	std::string buf;
 
@@ -454,12 +454,13 @@ std::string utils::retrieve_url(const std::string& url,
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
-	if (body != nullptr || method != "POST") {
-		if (method == "PUT") {
-			curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "PUT");
-		} else {
+	if (method != "GET") {
+		if (method == "POST") {
 			curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
+		} else {
+			curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "PUT");
 		}
+
 		if (body != nullptr) {
 			curl_easy_setopt(
 				easyhandle, CURLOPT_POSTFIELDS, body->c_str());

@@ -351,7 +351,7 @@ json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	const std::string* postdata)
 {
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, cfg, "", postdata);
+	std::string data = utils::retrieve_url(url, cfg, "", postdata, "POST");
 
 	json_object* result = json_tokener_parse(data.c_str());
 	if (!result)

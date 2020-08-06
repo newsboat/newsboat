@@ -56,8 +56,8 @@ std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
-	CURL* easyhandle = nullptr,
-	const std::string& method = "POST");
+	const std::string& method = "GET",
+	CURL* easyhandle = nullptr);
 void run_command(const std::string& cmd,
 	const std::string& param); // used for notifications only
 std::string run_program(const char* argv[], const std::string& input);
