@@ -79,8 +79,8 @@ std::vector<TaggedFeedUrl> MinifluxApi::get_subscribed_urls()
 	json feed_list = run_op("/v1/feeds", json());
 	if (feed_list.is_null()) {
 		LOG(Level::ERROR,
-				"MinifluxApi::get_subscribed_urls: Failed to "
-				"retrieve feedlist");
+			"MinifluxApi::get_subscribed_urls: Failed to "
+			"retrieve feedlist");
 		return feeds;
 	}
 
@@ -133,8 +133,8 @@ bool MinifluxApi::mark_article_read(const std::string& guid, bool read)
 }
 
 bool MinifluxApi::flag_changed(const std::string& oldflags,
-		const std::string& newflags,
-		const std::string& flagstr)
+	const std::string& newflags,
+	const std::string& flagstr)
 {
 	if (flagstr.length() == 0) {
 		return false;
@@ -253,11 +253,12 @@ json MinifluxApi::run_op(const std::string& path,
 	std::string url = server + path;
 
 	std::string req_data;
-	if (!args.empty())
+	if (!args.empty()) {
 		req_data = args.dump();
+	}
 
 	LOG(Level::DEBUG,
-			"Running operation %s", url);
+		"Running operation %s", url);
 
 	std::string result = utils::retrieve_url(
 			url, cfg, auth_info,
@@ -294,7 +295,7 @@ bool MinifluxApi::toggle_star_article(const std::string& guid)
 }
 
 bool MinifluxApi::update_articles(const std::vector<std::string> guids,
-		json& args)
+	json& args)
 {
 	std::vector<int> entry_ids;
 	for (const std::string& guid : guids) {
@@ -308,7 +309,7 @@ bool MinifluxApi::update_articles(const std::vector<std::string> guids,
 }
 
 bool MinifluxApi::update_article(const std::string& guid,
-		json& args)
+	json& args)
 {
 	std::vector<std::string> guids;
 	guids.push_back(guid);

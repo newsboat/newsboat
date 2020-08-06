@@ -462,7 +462,7 @@ std::string utils::retrieve_url(const std::string& url,
 		}
 		if (body != nullptr) {
 			curl_easy_setopt(
-					easyhandle, CURLOPT_POSTFIELDS, body->c_str());
+				easyhandle, CURLOPT_POSTFIELDS, body->c_str());
 		}
 	}
 

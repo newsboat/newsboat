@@ -33,10 +33,11 @@ private:
 	TaggedFeedUrl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);
 	bool flag_changed(const std::string& oldflags,
-			const std::string& newflags,
-			const std::string& flagstr);
+		const std::string& newflags,
+		const std::string& flagstr);
 	bool toggle_star_article(const std::string& guid);
-	bool update_articles(const std::vector<std::string> guids, nlohmann::json& args);
+	bool update_articles(const std::vector<std::string> guids,
+		nlohmann::json& args);
 	bool update_article(const std::string& guid, nlohmann::json& args);
 	std::string auth_info;
 	std::string server;
