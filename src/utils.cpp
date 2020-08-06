@@ -437,8 +437,9 @@ static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
-	const std::string* postdata,
-	CURL* cached_handle)
+	const std::string* body,
+	CURL* cached_handle,
+	const std::string& method /* = POST */)
 {
 	std::string buf;
 
@@ -453,10 +454,16 @@ std::string utils::retrieve_url(const std::string& url,
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
-	if (postdata != nullptr) {
-		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
-		curl_easy_setopt(
-			easyhandle, CURLOPT_POSTFIELDS, postdata->c_str());
+	if (body != nullptr || method != "POST") {
+		if (method == "PUT") {
+			curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "PUT");
+		} else {
+			curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
+		}
+		if (body != nullptr) {
+			curl_easy_setopt(
+					easyhandle, CURLOPT_POSTFIELDS, body->c_str());
+		}
 	}
 
 	if (!authinfo.empty()) {
@@ -472,11 +479,11 @@ std::string utils::retrieve_url(const std::string& url,
 		curl_easy_cleanup(easyhandle);
 	}
 
-	if (postdata != nullptr) {
+	if (body != nullptr) {
 		LOG(Level::DEBUG,
 			"utils::retrieve_url(%s)[%s]: %s",
 			url,
-			postdata,
+			body,
 			buf);
 	} else {
 		LOG(Level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url, buf);

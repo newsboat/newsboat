@@ -55,8 +55,9 @@ void extract_filter(const std::string& line,
 std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,
 	const std::string& authinfo = "",
-	const std::string* postdata = nullptr,
-	CURL* easyhandle = nullptr);
+	const std::string* body = nullptr,
+	CURL* easyhandle = nullptr,
+	const std::string& method = "POST");
 void run_command(const std::string& cmd,
 	const std::string& param); // used for notifications only
 std::string run_program(const char* argv[], const std::string& input);
