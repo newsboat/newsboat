@@ -116,15 +116,16 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/feedhqapi.h include/feedhqurlreader.h include/fileurlreader.h \
  include/globals.h include/inoreaderapi.h include/inoreaderurlreader.h \
  include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
- include/logger.h include/newsblurapi.h rss/feed.h rss/item.h \
+ include/logger.h include/minifluxapi.h 3rd-party/json.hpp rss/feed.h \
+ rss/item.h include/minifluxurlreader.h include/newsblurapi.h \
  include/newsblururlreader.h include/ocnewsapi.h \
  include/ocnewsurlreader.h include/oldreaderapi.h \
  include/oldreaderurlreader.h include/opmlurlreader.h \
  include/regexmanager.h include/remoteapi.h include/rssfeed.h \
  include/utils.h include/rssparser.h include/scopemeasure.h \
  include/stflpp.h include/strprintf.h include/ttrssapi.h \
- 3rd-party/json.hpp include/ttrssurlreader.h include/utils.h \
- include/view.h include/controller.h include/dirbrowserformaction.h \
+ include/ttrssurlreader.h include/utils.h include/view.h \
+ include/controller.h include/dirbrowserformaction.h \
  include/listformatter.h include/listwidget.h include/stflpp.h \
  include/formaction.h include/history.h include/keymap.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
@@ -384,17 +385,18 @@ src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
 src/matcherexception.o: src/matcherexception.cpp \
  include/matcherexception.h config.h include/ruststring.h \
  include/strprintf.h
-src/minifluxapi.o: src/minifluxapi.cpp include/minifluxapi.h 3rd-party/json.hpp \
- include/cache.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/remoteapi.h include/logger.h \
- config.h include/strprintf.h include/remoteapi.h rss/feed.h rss/item.h \
- include/strprintf.h include/utils.h 3rd-party/optional.hpp \
- include/logger.h
-src/minifluxurlreader.o: src/minifluxurlreader.cpp include/minifluxurlreader.h \
- include/urlreader.h include/fileurlreader.h include/logger.h config.h \
- include/strprintf.h include/remoteapi.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h include/utils.h \
+src/minifluxapi.o: src/minifluxapi.cpp include/minifluxapi.h \
+ 3rd-party/json.hpp include/cache.h include/configcontainer.h \
+ include/configparser.h include/configactionhandler.h include/remoteapi.h \
+ rss/feed.h rss/item.h include/logger.h config.h include/strprintf.h \
+ include/remoteapi.h include/strprintf.h include/utils.h \
  3rd-party/optional.hpp include/logger.h
+src/minifluxurlreader.o: src/minifluxurlreader.cpp \
+ include/minifluxurlreader.h include/urlreader.h include/fileurlreader.h \
+ include/logger.h config.h include/strprintf.h include/remoteapi.h \
+ include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/utils.h 3rd-party/optional.hpp \
+ include/logger.h
 src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/remoteapi.h \
@@ -555,12 +557,13 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  config.h include/configcontainer.h include/curlhandle.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  include/matcher.h filter/FilterParser.h include/regexowner.h \
- include/logger.h include/strprintf.h include/newsblurapi.h \
+ include/logger.h include/strprintf.h include/minifluxapi.h \
+ 3rd-party/json.hpp include/cache.h include/newsblurapi.h \
  include/ocnewsapi.h rss/exception.h rss/parser.h include/remoteapi.h \
  rss/feed.h rss/rssparser.h include/rssfeed.h include/matchable.h \
  3rd-party/optional.hpp include/rssitem.h include/utils.h \
  include/logger.h include/rssignores.h include/strprintf.h \
- include/ttrssapi.h 3rd-party/json.hpp include/cache.h include/utils.h
+ include/ttrssapi.h include/utils.h
 src/ruststring.o: src/ruststring.cpp include/ruststring.h
 src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h
 src/selectformaction.o: src/selectformaction.cpp \
@@ -834,8 +837,6 @@ test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
  include/tagsouppullparser.h 3rd-party/catch.hpp
-test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
- include/strprintf.h
 test/test-helpers/chdir.o: test/test-helpers/chdir.cpp \
  test/test-helpers/chdir.h include/utils.h 3rd-party/optional.hpp \
  include/configcontainer.h include/configparser.h \
@@ -858,6 +859,8 @@ test/test-helpers/tempdir.o: test/test-helpers/tempdir.cpp \
  test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
 test/test-helpers/tempfile.o: test/test-helpers/tempfile.cpp \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
+test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
+ include/strprintf.h
 test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
