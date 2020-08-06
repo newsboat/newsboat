@@ -253,20 +253,20 @@ json MinifluxApi::run_op(const std::string& path,
 {
 	std::string url = server + path;
 
-	std::string req_data;
+	std::string* body = nullptr;
+	std::string arg_dump;
 	if (!args.empty()) {
-		req_data = args.dump();
+		arg_dump = args.dump();
+		body = &arg_dump;
 	}
 
 	std::string result = utils::retrieve_url(
-			url, cfg, auth_info,
-			args.empty() ? nullptr : &req_data,
-			method, cached_handle);
+			url, cfg, auth_info, body, method, cached_handle);
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s,...): post=%s reply = %s",
 		path,
-		req_data,
+		arg_dump,
 		result);
 
 	json content;
