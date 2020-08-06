@@ -700,6 +700,45 @@ You can disable these feeds by setting the following configuration variable:
 
 	inoreader-show-special-feeds no
 
+=== Miniflux
+
+https://miniflux.app[Miniflux] is a "minimalist and opinionated feed reader"
+that is self-hostable.
+
+Newsboat can synchronize with Miniflux installations as an alternative to the
+web front-end.
+
+To configure Miniflux support, set the urls-source option and provide the url to
+the Miniflux instance to be used:
+
+	urls-source "miniflux"
+	miniflux-url "https://example.com/miniflux/"
+
+In addition, Miniflux requires username and password for authentication:
+
+	miniflux-login "myusername"
+	miniflux-password "mypassword"
+
+Note that double quotes should be escaped, i.e. you should write `\"`
+instead of `"`.
+
+See also <<miniflux-passwordfile,`miniflux-passwordfile`>>,
+<<miniflux-passwordeval,`miniflux-passwordeval`>>, and
+<<_passwords_for_external_apis>>.
+
+Miniflux provides the ability to "star"/"bookmark" articles. Newsboat can map a
+specific flagging operation to Miniflux's "star" option.
+
+In order to use this mapping, you need to configure the flag that shall be used:
+
+	miniflux-flag-star "s"
+
+After that, toggling the respective flag on an article will also star it in
+Miniflux.
+
+Miniflux categories are converted into Newsboat tags. You can select and filter
+feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+
 === OPML Online Subscription Mode
 
 This mode provides one-way synchronization of subscriptions from the online
