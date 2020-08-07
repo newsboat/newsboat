@@ -6,6 +6,9 @@
 #include "3rd-party/json.hpp"
 #include "remoteapi.h"
 #include "rss/feed.h"
+#include "utils.h"
+
+using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
 
@@ -26,7 +29,7 @@ public:
 private:
 	virtual nlohmann::json run_op(const std::string& path,
 		const nlohmann::json& req_data,
-		const std::string& method = "GET",
+		const HTTPMethod method = HTTPMethod::GET,
 		CURL* cached_handle = nullptr);
 	TaggedFeedUrl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);

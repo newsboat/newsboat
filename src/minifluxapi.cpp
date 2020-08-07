@@ -12,9 +12,9 @@
 #include "utils.h"
 
 using json = nlohmann::json;
+using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
-
 MinifluxApi::MinifluxApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
@@ -162,7 +162,7 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	const std::string query =
 		strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc", id);
 
-	const json content = run_op(query, json(), "GET", cached_handle);
+	const json content = run_op(query, json(), HTTPMethod::GET, cached_handle);
 	if (content.is_null()) {
 		return feed;
 	}
@@ -233,7 +233,7 @@ void MinifluxApi::add_custom_headers(curl_slist** /* custom_headers */)
 
 json MinifluxApi::run_op(const std::string& path,
 	const json& args,
-	const std::string& method, /* = GET */
+	const HTTPMethod method, /* = GET */
 	CURL* cached_handle /* = nullptr */)
 {
 	const std::string url = server + path;
@@ -273,7 +273,7 @@ bool MinifluxApi::toggle_star_article(const std::string& guid)
 {
 	const std::string query = strprintf::fmt("/v1/entries/%s/bookmark", guid);
 
-	const json content = run_op(query, json(), "PUT");
+	const json content = run_op(query, json(), HTTPMethod::PUT);
 	return content.is_null();
 }
 
@@ -286,7 +286,7 @@ bool MinifluxApi::update_articles(const std::vector<std::string> guids,
 	}
 
 	args["entry_ids"] = entry_ids;
-	const json content = run_op("/v1/entries", args, "PUT");
+	const json content = run_op("/v1/entries", args, HTTPMethod::PUT);
 
 	return content.is_null();
 }

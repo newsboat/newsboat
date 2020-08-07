@@ -46,6 +46,8 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 #include "rs_utils.h"
 
+using HTTPMethod = newsboat::utils::HTTPMethod;
+
 namespace newsboat {
 
 namespace utils {
@@ -438,7 +440,7 @@ std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
-	const std::string& method, /* = GET */
+	const HTTPMethod method, /* = GET */
 	CURL* cached_handle)
 {
 	std::string buf;
@@ -454,17 +456,23 @@ std::string utils::retrieve_url(const std::string& url,
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
-	if (method != "GET") {
-		if (method == "POST") {
-			curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
-		} else {
-			curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "PUT");
-		}
+	switch (method) {
+	case HTTPMethod::GET:
+		break;
+	case HTTPMethod::POST:
+		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
+		break;
+	case HTTPMethod::PUT:
+		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "PUT");
+		break;
+	case HTTPMethod::DELETE:
+		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "DELETE");
+		break;
+	}
 
-		if (body != nullptr) {
-			curl_easy_setopt(
-				easyhandle, CURLOPT_POSTFIELDS, body->c_str());
-		}
+	if (body != nullptr) {
+		curl_easy_setopt(
+			easyhandle, CURLOPT_POSTFIELDS, body->c_str());
 	}
 
 	if (!authinfo.empty()) {

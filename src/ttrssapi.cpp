@@ -152,7 +152,7 @@ json TtRssApi::run_op(const std::string& op,
 	}
 
 	std::string result = utils::retrieve_url(
-			url, cfg, auth_info, &req_data, "POST", cached_handle);
+			url, cfg, auth_info, &req_data, utils::HTTPMethod::POST, cached_handle);
 
 	LOG(Level::DEBUG,
 		"TtRssApi::run_op(%s,...): post=%s reply = %s",
