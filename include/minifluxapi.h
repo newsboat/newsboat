@@ -2,10 +2,8 @@
 #define NEWSBOAT_MINIFLUXAPI_H_
 
 #include <json-c/json.h>
-#include <map>
 
 #include "3rd-party/json.hpp"
-#include "cache.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
 

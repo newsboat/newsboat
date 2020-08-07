@@ -1,12 +1,7 @@
 #include "minifluxapi.h"
 
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
 #include <curl/curl.h>
 #include <json-c/json.h>
-#include <memory>
-#include <time.h>
 #include <thread>
 
 #include "3rd-party/json.hpp"
