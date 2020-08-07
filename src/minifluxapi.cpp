@@ -19,25 +19,15 @@ MinifluxApi::MinifluxApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
 	server = cfg->get_configvalue("miniflux-url");
-
-	if (server.empty())
-		LOG(Level::CRITICAL,
-			"MinifluxApi::MinifluxApi: No Miniflux server configured");
 }
 
 MinifluxApi::~MinifluxApi() {}
 
 bool MinifluxApi::authenticate()
 {
-	auth_info = "";
-
+	// error check handled in Controller
 	const Credentials creds = get_credentials("miniflux", "");
-	if (creds.user.empty() || creds.pass.empty()) {
-		LOG(Level::CRITICAL,
-			"Miniflux::retrieve_auth: No user and/or password configured");
-	} else {
-		auth_info = strprintf::fmt("%s:%s", creds.user, creds.pass);
-	}
+	auth_info = strprintf::fmt("%s:%s", creds.user, creds.pass);
 	return true;
 }
 

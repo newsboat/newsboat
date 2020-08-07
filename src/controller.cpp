@@ -291,6 +291,27 @@ int Controller::run(const CliArgsParser& args)
 		api = new OcNewsApi(&cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
 	} else if (type == "miniflux") {
+		const auto miniflux_url = cfg.get_configvalue("miniflux-url");
+		if (miniflux_url.empty()) {
+			std::cerr <<
+				_("ERROR: You must set `miniflux-url` to use Miniflux\n");
+			return EXIT_FAILURE;
+		}
+
+		const std::string user = cfg.get_configvalue("miniflux-login");
+		const std::string pass = cfg.get_configvalue("miniflux-password");
+		const std::string pass_file = cfg.get_configvalue("miniflux-passwordfile");
+		const std::string pass_eval = cfg.get_configvalue("miniflux-passwordeval");
+		const bool creds_set = !user.empty() &&
+			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+		if (!creds_set) {
+			std::cerr <<
+				_("ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
+					"`miniflux-passwordfile` or `miniflux-passwordeval` to use "
+					"Miniflux\n");
+			return EXIT_FAILURE;
+		}
+
 		api = new MinifluxApi(&cfg);
 		urlcfg = new MinifluxUrlReader(configpaths.url_file(), api);
 	} else if (type == "inoreader") {
