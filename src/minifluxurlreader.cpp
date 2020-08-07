@@ -24,14 +24,14 @@ void MinifluxUrlReader::reload()
 	FileUrlReader ur(file);
 	ur.reload();
 
-	std::vector<std::string>& file_urls(ur.get_urls());
+	const std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
 		}
 	}
 
-	std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
+	const std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 
 	for (const auto& url : feedurls) {
 		LOG(Level::INFO, "added %s to URL list", url.first);

@@ -31,7 +31,7 @@ bool MinifluxApi::authenticate()
 {
 	auth_info = "";
 
-	Credentials creds = get_credentials("miniflux", "");
+	const Credentials creds = get_credentials("miniflux", "");
 	if (creds.user.empty() || creds.pass.empty()) {
 		LOG(Level::CRITICAL,
 			"Miniflux::retrieve_auth: No user and/or password configured");
@@ -63,7 +63,7 @@ std::vector<TaggedFeedUrl> MinifluxApi::get_subscribed_urls()
 {
 	std::vector<TaggedFeedUrl> feeds;
 
-	json categories = run_op("/v1/categories", json());
+	const json categories = run_op("/v1/categories", json());
 	std::map<int, std::string> category_names;
 	for (const auto& category : categories) {
 		std::string name = category["title"];
@@ -71,7 +71,7 @@ std::vector<TaggedFeedUrl> MinifluxApi::get_subscribed_urls()
 		category_names[id] = name;
 	}
 
-	json feed_list = run_op("/v1/feeds", json());
+	const json feed_list = run_op("/v1/feeds", json());
 	if (feed_list.is_null()) {
 		LOG(Level::ERROR,
 			"MinifluxApi::get_subscribed_urls: Failed to "
@@ -95,7 +95,7 @@ bool MinifluxApi::mark_all_read(const std::string& id)
 {
 	// TODO create Miniflux PR to add endpoint for marking all entries in feed
 	// as read
-	rsspp::Feed feed = fetch_feed(id, nullptr);
+	const rsspp::Feed feed = fetch_feed(id, nullptr);
 
 	std::vector<std::string> guids;
 	for (const auto& item : feed.items) {
@@ -153,8 +153,8 @@ bool MinifluxApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("miniflux-flag-star");
-	bool starred_flag_changed = flag_changed(oldflags, newflags, star_flag);
+	const std::string star_flag = cfg->get_configvalue("miniflux-flag-star");
+	const bool starred_flag_changed = flag_changed(oldflags, newflags, star_flag);
 
 	bool success = true;
 	if (starred_flag_changed) {
@@ -169,15 +169,15 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	rsspp::Feed feed;
 	feed.rss_version = rsspp::Feed::MINIFLUX_JSON;
 
-	std::string query =
+	const std::string query =
 		strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc", id);
 
-	json content = run_op(query, json(), "GET", cached_handle);
+	const json content = run_op(query, json(), "GET", cached_handle);
 	if (content.is_null()) {
 		return feed;
 	}
 
-	json entries = content["entries"];
+	const json entries = content["entries"];
 	if (!entries.is_array()) {
 		LOG(Level::ERROR,
 			"MinifluxApi::fetch_feed: items is not an array");
@@ -207,12 +207,12 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CURL* cached_handle)
 				item.content_encoded = entry["content"];
 			}
 
-			int entry_id = entry["id"];
+			const int entry_id = entry["id"];
 			item.guid = std::to_string(entry_id);
 
 			item.pubDate = entry["published_at"];
 
-			std::string status = entry["status"];
+			const std::string status = entry["status"];
 			if (status == "unread") {
 				item.labels.push_back("miniflux:unread");
 			} else {
@@ -246,7 +246,7 @@ json MinifluxApi::run_op(const std::string& path,
 	const std::string& method, /* = GET */
 	CURL* cached_handle /* = nullptr */)
 {
-	std::string url = server + path;
+	const std::string url = server + path;
 
 	std::string* body = nullptr;
 	std::string arg_dump;
@@ -255,7 +255,7 @@ json MinifluxApi::run_op(const std::string& path,
 		body = &arg_dump;
 	}
 
-	std::string result = utils::retrieve_url(
+	const std::string result = utils::retrieve_url(
 			url, cfg, auth_info, body, method, cached_handle);
 
 	LOG(Level::DEBUG,
@@ -272,7 +272,7 @@ json MinifluxApi::run_op(const std::string& path,
 			LOG(Level::ERROR,
 				"MinifluxApi::run_op: reply failed to parse: %s",
 				result);
-			return json(nullptr);
+			content = json(nullptr);
 		}
 	}
 
@@ -281,9 +281,9 @@ json MinifluxApi::run_op(const std::string& path,
 
 bool MinifluxApi::toggle_star_article(const std::string& guid)
 {
-	std::string query = strprintf::fmt("/v1/entries/%s/bookmark", guid);
+	const std::string query = strprintf::fmt("/v1/entries/%s/bookmark", guid);
 
-	json content = run_op(query, json(), "PUT");
+	const json content = run_op(query, json(), "PUT");
 	return content.is_null();
 }
 
@@ -296,7 +296,7 @@ bool MinifluxApi::update_articles(const std::vector<std::string> guids,
 	}
 
 	args["entry_ids"] = entry_ids;
-	json content = run_op("/v1/entries", args, "PUT");
+	const json content = run_op("/v1/entries", args, "PUT");
 
 	return content.is_null();
 }
