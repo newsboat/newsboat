@@ -436,6 +436,28 @@ static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 	return size * nmemb;
 }
 
+std::string utils::http_method_str(const HTTPMethod method)
+{
+	std::string str = "";
+
+	switch (method) {
+	case HTTPMethod::GET:
+		str = "GET";
+		break;
+	case HTTPMethod::POST:
+		str = "POST";
+		break;
+	case HTTPMethod::PUT:
+		str = "PUT";
+		break;
+	case HTTPMethod::DELETE:
+		str = "DELETE";
+		break;
+	}
+
+	return str;
+}
+
 std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
@@ -463,10 +485,8 @@ std::string utils::retrieve_url(const std::string& url,
 		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
 		break;
 	case HTTPMethod::PUT:
-		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "PUT");
-		break;
 	case HTTPMethod::DELETE:
-		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, "DELETE");
+		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, http_method_str(method));
 		break;
 	}
 
@@ -490,7 +510,8 @@ std::string utils::retrieve_url(const std::string& url,
 
 	if (body != nullptr) {
 		LOG(Level::DEBUG,
-			"utils::retrieve_url(%s)[%s]: %s",
+			"utils::retrieve_url(%s %s)[%s]: %s",
+			http_method_str(method),
 			url,
 			body,
 			buf);

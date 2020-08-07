@@ -249,7 +249,8 @@ json MinifluxApi::run_op(const std::string& path,
 			url, cfg, auth_info, body, method, cached_handle);
 
 	LOG(Level::DEBUG,
-		"MinifluxApi::run_op(%s,...): post=%s reply = %s",
+		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",
+		utils::http_method_str(method),
 		path,
 		arg_dump,
 		result);

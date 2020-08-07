@@ -60,6 +60,7 @@ std::string get_command_output(const std::string& cmd);
 void extract_filter(const std::string& line,
 	std::string& filter,
 	std::string& url);
+std::string http_method_str(const HTTPMethod method);
 std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,
 	const std::string& authinfo = "",
