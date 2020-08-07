@@ -473,3 +473,43 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 		}
 	}
 }
+
+// Related to https://github.com/newsboat/newsboat/issues/702
+TEST_CASE("Regression test for macro configuration semicolon handling",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	SECTION("semicolon following quoted argument") {
+		k.handle_action("macro", R"(a set browser "firefox"; open-in-browser)");
+
+		const auto macros = k.get_macro("a");
+		REQUIRE(macros.size() == 2);
+		REQUIRE(macros[0].op == OP_INT_SET);
+		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
+		REQUIRE(macros[1].op == OP_OPENINBROWSER);
+		REQUIRE(macros[1].args == std::vector<std::string>({}));
+	}
+
+	SECTION("semicolon following unquoted argument") {
+		k.handle_action("macro", R"(b set browser firefox; open-in-browser)");
+
+		const auto macros = k.get_macro("b");
+		REQUIRE(macros.size() == 2);
+		REQUIRE(macros[0].op == OP_INT_SET);
+		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
+		REQUIRE(macros[1].op == OP_OPENINBROWSER);
+		REQUIRE(macros[1].args == std::vector<std::string>({}));
+	}
+
+	SECTION("semicolon following unquoted operation") {
+		k.handle_action("macro", R"(c open-in-browser; quit)");
+
+		const auto macros = k.get_macro("c");
+		REQUIRE(macros.size() == 2);
+		REQUIRE(macros[0].op == OP_OPENINBROWSER);
+		REQUIRE(macros[0].args == std::vector<std::string>({}));
+		REQUIRE(macros[1].op == OP_QUIT);
+		REQUIRE(macros[1].args == std::vector<std::string>({}));
+	}
+}
