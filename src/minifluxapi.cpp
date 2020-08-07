@@ -256,7 +256,7 @@ json MinifluxApi::run_op(const std::string& path,
 		result);
 
 	json content;
-	if (result.length() > 0) {
+	if (!result.empty()) {
 		try {
 			content = json::parse(result);
 		} catch (json::parse_error& e) {
