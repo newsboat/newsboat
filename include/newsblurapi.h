@@ -5,8 +5,11 @@
 
 #include "remoteapi.h"
 #include "rss/feed.h"
+#include "utils.h"
 
 #define ID_SEPARATOR "/////"
+
+using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
 
@@ -29,7 +32,8 @@ public:
 private:
 	std::string retrieve_auth();
 	json_object* query_api(const std::string& url,
-		const std::string* postdata);
+		const std::string* body,
+		const HTTPMethod method = HTTPMethod::GET);
 	std::map<std::string, std::vector<std::string>> mk_feeds_to_tags(
 			json_object*);
 	std::string api_location;

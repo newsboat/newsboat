@@ -24,6 +24,8 @@
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
 
+using HTTPMethod = newsboat::utils::HTTPMethod;
+
 namespace newsboat {
 
 NewsBlurApi::NewsBlurApi(ConfigContainer* c)
@@ -53,7 +55,7 @@ bool NewsBlurApi::authenticate()
 		return false;
 	}
 
-	response = NewsBlurApi::query_api("/api/login", &auth);
+	response = NewsBlurApi::query_api("/api/login", &auth, HTTPMethod::POST);
 	json_object_object_get_ex(response, "authenticated", &status);
 	bool result = json_object_get_boolean(status);
 
@@ -189,7 +191,7 @@ bool NewsBlurApi::mark_all_read(const std::string& feed_url)
 {
 	std::string post_data = strprintf::fmt("feed_id=%s", feed_url);
 	json_object* query_result =
-		query_api("/reader/mark_feed_as_read", &post_data);
+		query_api("/reader/mark_feed_as_read", &post_data, HTTPMethod::POST);
 	return request_successfull(query_result);
 }
 
@@ -213,7 +215,7 @@ bool NewsBlurApi::mark_article_read(const std::string& guid, bool read)
 		endpoint = "/reader/mark_story_as_unread";
 	}
 
-	json_object* query_result = query_api(endpoint, &post_data);
+	json_object* query_result = query_api(endpoint, &post_data, HTTPMethod::POST);
 	return request_successfull(query_result);
 }
 
@@ -348,11 +350,11 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 }
 
 json_object* NewsBlurApi::query_api(const std::string& endpoint,
-	const std::string* postdata)
+	const std::string* body,
+	const HTTPMethod method /* = GET */)
 {
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, cfg, "", postdata,
-			utils::HTTPMethod::POST);
+	std::string data = utils::retrieve_url(url, cfg, "", body, method);
 
 	json_object* result = json_tokener_parse(data.c_str());
 	if (!result)
