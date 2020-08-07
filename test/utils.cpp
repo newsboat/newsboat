@@ -3,6 +3,7 @@
 #include <chrono>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <tuple>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
@@ -247,6 +248,99 @@ TEST_CASE("tokenize_quoted does not consider escaped pound sign (\\#) "
 	REQUIRE(tokens[1] == "\\#");
 	REQUIRE(tokens[2] == "two");
 	REQUIRE(tokens[3] == "three");
+}
+
+TEST_CASE("extract_token_quoted() returns no result if it finds a comment (signaled by '#')",
+	"[utils]")
+{
+	SECTION("actual comment") {
+		std::string str = "\t\t  # commented out";
+		auto token = utils::extract_token_quoted(str);
+		REQUIRE_FALSE(token.has_value());
+		REQUIRE(str == "");
+	}
+
+	SECTION("ignores '#' if it is inside quotes") {
+		std::string str = R"("# in quoted token" other tokens)";
+		auto token = utils::extract_token_quoted(str);
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "# in quoted token");
+		REQUIRE(str == " other tokens");
+	}
+
+	SECTION("token before start of comment") {
+		std::string str = "some-token # some comment";
+		auto token = utils::extract_token_quoted(str);
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "some-token");
+		REQUIRE(str == " # some comment");
+	}
+}
+
+TEST_CASE("extract_token_quoted() ignores configured `delimiters` in front of tokens",
+	"[utils]")
+{
+	SECTION("default delimiters") {
+		std::string str = "\n\r\t \n\t\r token-name";
+		auto token = utils::extract_token_quoted(str);
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "token-name");
+		REQUIRE(str == "");
+	}
+
+	SECTION("empty delimiters") {
+		std::string str = "\n\r\t \n\t\r token-name";
+		auto token = utils::extract_token_quoted(str, "");
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "\n\r\t \n\t\r token-name");
+		REQUIRE(str == "");
+	}
+
+	SECTION("single delimiter") {
+		std::string str = "--token name--";
+		auto token = utils::extract_token_quoted(str, "-");
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "token name");
+		REQUIRE(str == "--");
+	}
+
+	SECTION("two delimiters") {
+		std::string str = "--token name--";
+		auto token = utils::extract_token_quoted(str, " -");
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "token");
+		REQUIRE(str == " name--");
+	}
+}
+
+TEST_CASE("extract_token_quoted() ignores delimiter characters within quoted strings",
+	"[utils]")
+{
+	SECTION("default delimiters") {
+		std::string str = R"(  "token name"  )";
+		auto token = utils::extract_token_quoted(str);
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "token name");
+		REQUIRE(str == "  ");
+	}
+
+	SECTION("two delimiters") {
+		std::string str = R"(--"token name"--)";
+		auto token = utils::extract_token_quoted(str, " -");
+		REQUIRE(token.has_value());
+		REQUIRE(token.value() == "token name");
+		REQUIRE(str == "--");
+	}
+}
+
+TEST_CASE("extract_token_quoted() processes escape sequences within quoted strings",
+	"[utils]")
+{
+	std::string str = R"(  "\n \r \t \" \` \\ " remainder)";
+	auto token = utils::extract_token_quoted(str);
+	REQUIRE(token.has_value());
+	REQUIRE(token.value() == "\n \r \t \" \\` \\ ");
+	REQUIRE(str == " remainder");
 }
 
 TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")

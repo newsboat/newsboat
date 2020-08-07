@@ -19,7 +19,7 @@ namespace newsboat {
 
 ConfigParser::ConfigParser()
 {
-	register_handler("include", this);
+	register_handler("include", *this);
 }
 
 ConfigParser::~ConfigParser() {}
@@ -39,7 +39,7 @@ void ConfigParser::handle_action(const std::string& action,
 
 		std::string tilde_expanded = utils::resolve_tilde(params[0]);
 		std::string current_fpath = included_files.back();
-		if (!this->parse(utils::resolve_relative(current_fpath, tilde_expanded)))
+		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded)))
 			throw ConfigHandlerException(
 				ActionHandlerStatus::FILENOTFOUND);
 	} else
@@ -47,7 +47,7 @@ void ConfigParser::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-bool ConfigParser::parse(const std::string& tmp_filename)
+bool ConfigParser::parse_file(const std::string& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -73,7 +73,7 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {
 		LOG(Level::WARN,
-			"ConfigParser::parse: file %s has already been "
+			"ConfigParser::parse_file: file %s has already been "
 			"included",
 			filename);
 		return true;
@@ -85,7 +85,7 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	std::string line;
 	if (!f.is_open()) {
 		LOG(Level::WARN,
-			"ConfigParser::parse: file %s couldn't be opened",
+			"ConfigParser::parse_file: file %s couldn't be opened",
 			filename);
 		return false;
 	}
@@ -93,56 +93,48 @@ bool ConfigParser::parse(const std::string& tmp_filename)
 	while (f.is_open() && !f.eof()) {
 		getline(f, line);
 		++linecounter;
-		LOG(Level::DEBUG, "ConfigParser::parse: tokenizing %s", line);
+		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
 
-		auto stripped = utils::strip_comments(line);
-		auto evaluated = evaluate_backticks(std::move(stripped));
-		std::vector<std::string> tokens = utils::tokenize_quoted(std::move(evaluated));
+		const std::string location = strprintf::fmt(_("%s line %u"), filename,
+				linecounter);
 
-		if (!tokens.empty()) {
-			std::string cmd = tokens[0];
-			ConfigActionHandler* handler = action_handlers[cmd];
-			if (handler) {
-				tokens.erase(
-					tokens.begin()); // delete first element
-				try {
-					handler->handle_action(cmd, tokens);
-				} catch (const ConfigHandlerException& e) {
-					throw ConfigException(strprintf::fmt(
-							_("Error while processing "
-								"command `%s' (%s line %u): "
-								"%s"),
-							line,
-							filename,
-							linecounter,
-							e.what()));
-				}
-			} else {
-				throw ConfigException(strprintf::fmt(
-						_("unknown command `%s'"), cmd));
-			}
-		}
+		parse_line(line, location);
 	}
 	included_files.pop_back();
 	return true;
 }
 
-void ConfigParser::register_handler(const std::string& cmd,
-	ConfigActionHandler* handler)
+void ConfigParser::parse_line(const std::string& line,
+	const std::string& location)
 {
-	action_handlers[cmd] = handler;
-}
+	auto stripped = utils::strip_comments(line);
+	auto evaluated = evaluate_backticks(std::move(stripped));
+	const auto token = utils::extract_token_quoted(evaluated);
+	if (token.has_value()) {
+		std::string cmd = token.value();
+		const std::string params = evaluated;
 
-void ConfigParser::unregister_handler(const std::string& cmd)
-{
-	action_handlers[cmd] = 0;
-}
-
-void ConfigParser::evaluate_backticks(std::vector<std::string>& tokens)
-{
-	for (auto& token : tokens) {
-		token = evaluate_backticks(token);
+		if (action_handlers.count(cmd) < 1) {
+			throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
+		}
+		ConfigActionHandler& handler = action_handlers.at(cmd);
+		try {
+			handler.handle_action(cmd, params);
+		} catch (const ConfigHandlerException& e) {
+			throw ConfigException(strprintf::fmt(
+					_("Error while processing command `%s' (%s): %s"),
+					line,
+					location,
+					e.what()));
+		}
 	}
+}
+
+void ConfigParser::register_handler(const std::string& cmd,
+	ConfigActionHandler& handler)
+{
+	action_handlers.erase(cmd);
+	action_handlers.insert({cmd, handler});
 }
 
 /* Note that this function not only finds next backtick that isn't prefixed

@@ -7,6 +7,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "3rd-party/optional.hpp"
@@ -28,6 +29,8 @@ std::vector<std::string> tokenize_spaced(const std::string& str,
 std::vector<std::string> tokenize_nl(const std::string& str,
 	std::string delimiters = "\r\n");
 std::vector<std::string> tokenize_quoted(const std::string& str,
+	std::string delimiters = " \r\n\t");
+nonstd::optional<std::string> extract_token_quoted(std::string& str,
 	std::string delimiters = " \r\n\t");
 
 std::string consolidate_whitespace(const std::string& str);

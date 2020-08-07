@@ -266,21 +266,21 @@ int PbController::initialize(int argc, char* argv[])
 	cfg->register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
-	cfgparser.register_handler("bind-key", &keys);
-	cfgparser.register_handler("unbind-key", &keys);
+	cfgparser.register_handler("bind-key", keys);
+	cfgparser.register_handler("unbind-key", keys);
 
 	NullConfigActionHandler null_cah;
-	cfgparser.register_handler("macro", &null_cah);
-	cfgparser.register_handler("ignore-article", &null_cah);
-	cfgparser.register_handler("always-download", &null_cah);
-	cfgparser.register_handler("define-filter", &null_cah);
-	cfgparser.register_handler("highlight", &null_cah);
-	cfgparser.register_handler("highlight-article", &null_cah);
-	cfgparser.register_handler("reset-unread-on-update", &null_cah);
+	cfgparser.register_handler("macro", null_cah);
+	cfgparser.register_handler("ignore-article", null_cah);
+	cfgparser.register_handler("always-download", null_cah);
+	cfgparser.register_handler("define-filter", null_cah);
+	cfgparser.register_handler("highlight", null_cah);
+	cfgparser.register_handler("highlight-article", null_cah);
+	cfgparser.register_handler("reset-unread-on-update", null_cah);
 
 	try {
-		cfgparser.parse("/etc/newsboat/config");
-		cfgparser.parse(config_file);
+		cfgparser.parse_file("/etc/newsboat/config");
+		cfgparser.parse_file(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
 		return EXIT_FAILURE;

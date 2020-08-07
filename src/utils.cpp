@@ -110,48 +110,63 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	 *
 	 */
 	std::vector<std::string> tokens;
-	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
-	std::string::size_type pos = last_pos;
-
-	while (pos != std::string::npos && last_pos != std::string::npos) {
-		if (str[last_pos] == '#') { // stop as soon as we found a comment
-			break;
+	std::string remaining = str;
+	while (!remaining.empty()) {
+		auto token = extract_token_quoted(remaining, delimiters);
+		if (token.has_value()) {
+			tokens.push_back(token.value());
 		}
-
-		if (str[last_pos] == '"') {
-			++last_pos;
-			pos = last_pos;
-
-			std::string token;
-			while (pos < str.length()) {
-				if (str[pos] == '"') {
-					// We've reached the end of this quoted token.
-					++pos;
-					break;
-				} else if (str[pos] == '\\') {
-					if (pos + 1 < str.length()) {
-						append_escapes(token, str[pos + 1]);
-					}
-					pos += 2;
-				} else {
-					token.push_back(str[pos]);
-					++pos;
-				}
-			}
-			tokens.push_back(token);
-
-			if (pos == str.length()) {
-				pos = std::string::npos;
-			}
-		} else {
-			pos = str.find_first_of(delimiters, last_pos);
-			tokens.push_back(str.substr(last_pos, pos - last_pos));
-		}
-
-		last_pos = str.find_first_not_of(delimiters, pos);
 	}
 
 	return tokens;
+}
+
+nonstd::optional<std::string> utils::extract_token_quoted(std::string& str,
+	std::string delimiters)
+{
+	auto first_non_delimiter = str.find_first_not_of(delimiters, 0);
+	if (first_non_delimiter == std::string::npos) {
+		str = "";
+		return {};
+	}
+	str = str.substr(first_non_delimiter);
+
+	if (str[0] == '#') { // stop as soon as we find a comment
+		str = "";
+		return {};
+	}
+
+	std::string token;
+	if (str[0] == '"') {
+		std::string::size_type pos = 1;
+		while (pos < str.length()) {
+			if (str[pos] == '"') {
+				// We've reached the end of this quoted token.
+				++pos;
+				break;
+			} else if (str[pos] == '\\') {
+				pos += 1;
+				if (pos < str.length()) {
+					append_escapes(token, str[pos]);
+					pos += 1;
+				}
+			} else {
+				token.push_back(str[pos]);
+				++pos;
+			}
+		}
+		str = str.substr(pos);
+	} else {
+		auto end_of_token = str.find_first_of(delimiters);
+		token = str.substr(0, end_of_token);
+		if (end_of_token == std::string::npos) {
+			str = "";
+		} else {
+			str = str.substr(end_of_token);
+		}
+	}
+
+	return token;
 }
 
 std::vector<std::string> utils::tokenize(const std::string& str,

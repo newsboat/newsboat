@@ -185,7 +185,7 @@ public:
 	char get_key(const std::string& keycode);
 	std::vector<std::string> get_keys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
-		const std::vector<std::string>& params) override;
+		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 

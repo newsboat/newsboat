@@ -173,21 +173,21 @@ int Controller::run(const CliArgsParser& args)
 	colorman.register_commands(cfgparser);
 
 	KeyMap keys(KM_NEWSBOAT);
-	cfgparser.register_handler("bind-key", &keys);
-	cfgparser.register_handler("unbind-key", &keys);
-	cfgparser.register_handler("macro", &keys);
+	cfgparser.register_handler("bind-key", keys);
+	cfgparser.register_handler("unbind-key", keys);
+	cfgparser.register_handler("macro", keys);
 
-	cfgparser.register_handler("ignore-article", &ign);
-	cfgparser.register_handler("always-download", &ign);
-	cfgparser.register_handler("reset-unread-on-update", &ign);
+	cfgparser.register_handler("ignore-article", ign);
+	cfgparser.register_handler("always-download", ign);
+	cfgparser.register_handler("reset-unread-on-update", ign);
 
-	cfgparser.register_handler("define-filter", &filters);
-	cfgparser.register_handler("highlight", &rxman);
-	cfgparser.register_handler("highlight-article", &rxman);
+	cfgparser.register_handler("define-filter", filters);
+	cfgparser.register_handler("highlight", rxman);
+	cfgparser.register_handler("highlight-article", rxman);
 
 	try {
-		cfgparser.parse("/etc/" PROGRAM_NAME "/config");
-		cfgparser.parse(configpaths.config_file());
+		cfgparser.parse_file("/etc/" PROGRAM_NAME "/config");
+		cfgparser.parse_file(configpaths.config_file());
 	} catch (const ConfigException& ex) {
 		LOG(Level::ERROR,
 			"an exception occurred while parsing the configuration "
@@ -874,7 +874,7 @@ void Controller::update_config()
 
 void Controller::load_configfile(const std::string& filename)
 {
-	if (cfgparser.parse(filename)) {
+	if (cfgparser.parse_file(filename)) {
 		update_config();
 	} else {
 		v->show_error(strprintf::fmt(
