@@ -95,7 +95,8 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 		++linecounter;
 		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
 
-		std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
+		const std::string location = strprintf::fmt(_("%s line %u"), filename,
+				linecounter);
 
 		parse_line(line, location);
 	}

@@ -686,7 +686,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	 */
 	LOG(Level::DEBUG, "KeyMap::handle_action(%s, ...) called", action);
 	if (action == "bind-key") {
-		auto tokens = utils::tokenize_quoted(params);
+		const auto tokens = utils::tokenize_quoted(params);
 		if (tokens.size() < 2)
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -697,7 +697,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (!is_valid_context(context))
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid context"), context));
-		Operation op = get_opcode(tokens[1]);
+		const Operation op = get_opcode(tokens[1]);
 		if (op == OP_NIL) {
 			throw ConfigHandlerException(
 				strprintf::fmt(_("`%s' is not a valid "
@@ -706,7 +706,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		}
 		set_key(op, tokens[0], context);
 	} else if (action == "unbind-key") {
-		auto tokens = utils::tokenize_quoted(params);
+		const auto tokens = utils::tokenize_quoted(params);
 		if (tokens.size() < 1) {
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -722,7 +722,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		}
 	} else if (action == "macro") {
 		std::string remaining_params = params;
-		auto token = utils::extract_token_quoted(remaining_params);
+		const auto token = utils::extract_token_quoted(remaining_params);
 		const auto operations = utils::tokenize_quoted(remaining_params, ";");
 		if (!token.has_value() || operations.size() < 1) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -735,7 +735,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 			if (!command_name.has_value()) {
 				continue;
 			}
-			auto arguments = utils::tokenize_quoted(operation);
+			const auto arguments = utils::tokenize_quoted(operation);
 			MacroCmd cmd;
 			cmd.op = get_opcode(command_name.value());
 			if (cmd.op == OP_NIL) {
