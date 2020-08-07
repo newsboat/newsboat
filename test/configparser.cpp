@@ -11,7 +11,9 @@
 
 using namespace newsboat;
 
-class DummyConfigHandler : public ConfigActionHandler {
+namespace {
+
+class ConfigHandlerHistoryDummy : public ConfigActionHandler {
 public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override
@@ -24,12 +26,14 @@ public:
 	std::vector<std::pair<std::string, std::vector<std::string>>> history;
 };
 
+} // Anonymous namespace
+
 TEST_CASE("parse_line() Handles both lines with and without quoting",
 	"[ConfigParser]")
 {
 	ConfigParser cfgParser;
 
-	DummyConfigHandler handler;
+	ConfigHandlerHistoryDummy handler;
 	cfgParser.register_handler("command-name", handler);
 
 	const std::string location = "dummy-location";
@@ -65,7 +69,7 @@ TEST_CASE("parse_line() does not care about whitespace at start or end of line",
 {
 	ConfigParser cfgParser;
 
-	DummyConfigHandler handler;
+	ConfigHandlerHistoryDummy handler;
 	cfgParser.register_handler("command-name", handler);
 
 	const std::string location = "dummy-location";
@@ -102,7 +106,7 @@ TEST_CASE("parse_line() processes backslash escapes in quoted commands and argum
 {
 	ConfigParser cfgParser;
 
-	DummyConfigHandler handler;
+	ConfigHandlerHistoryDummy handler;
 	cfgParser.register_handler("command", handler);
 
 	const std::string location = "dummy-location";
