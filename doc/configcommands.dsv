@@ -66,7 +66,6 @@ mark-as-read-on-hover||[yes/no]||no||If set to `yes`, then all articles that get
 max-download-speed||<number>||0||If set to a number greater than 0, the download speed per download is set to that limit (in KB/s).||max-download-speed 50
 max-browser-tabs||<number>||10||Set the maximum number of articles to open in a browser when using the `open-all-unread-in-browser` or `open-all-unread-in-browser-and-mark-read` commands.||max-browser-tabs 4
 max-items||<number>||0||Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.||max-items 100
-miniflux-flag-star||<character>||""||If set and Miniflux support is used, then all articles that are flagged with the specified flag are "starred" in Miniflux.||miniflux-flag-star "a"
 miniflux-login||<username>||""||Sets the username for use with Miniflux.||miniflux-login "admin"
 miniflux-password||<password>||""||Configures the password for use with Miniflux. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||miniflux-password "here_goesAquote:\""
 miniflux-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||miniflux-passwordfile "~/.newsboat/miniflux-pw.txt"

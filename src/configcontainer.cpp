@@ -249,7 +249,6 @@ ConfigContainer::ConfigContainer()
 	{"miniflux-password", ConfigData("", ConfigDataType::STR)},
 	{"miniflux-passwordfile", ConfigData("", ConfigDataType::PATH)},
 	{"miniflux-passwordeval", ConfigData("", ConfigDataType::STR)},
-	{"miniflux-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"miniflux-url", ConfigData("", ConfigDataType::STR)},
 	{
 		"urls-source",

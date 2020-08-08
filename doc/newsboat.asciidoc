@@ -726,14 +726,8 @@ See also <<miniflux-passwordfile,`miniflux-passwordfile`>>,
 <<miniflux-passwordeval,`miniflux-passwordeval`>>, and
 <<_passwords_for_external_apis>>.
 
-Miniflux provides the ability to "star"/"bookmark" articles. Newsboat can map a
-specific flag to Miniflux's "star" option. In order to use this mapping, you
-need to configure the flag that shall be used:
-
-	miniflux-flag-star "s"
-
-After that, toggling the respective flag on an article will also star/unstar it
-in Miniflux.
+Unlike with other backends, Miniflux's starring/bookmarking feature is not
+currently supported in Newsboat.
 
 Miniflux categories are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.

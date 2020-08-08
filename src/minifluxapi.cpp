@@ -117,41 +117,11 @@ bool MinifluxApi::mark_article_read(const std::string& guid, bool read)
 	return true;
 }
 
-bool MinifluxApi::flag_changed(const std::string& oldflags,
-	const std::string& newflags,
-	const std::string& flagstr)
+bool MinifluxApi::update_article_flags(const std::string& /* oldflags */,
+	const std::string& /* newflags */,
+	const std::string& /* guid */)
 {
-	if (flagstr.length() == 0) {
-		return false;
-	}
-
-	const char flag = flagstr[0];
-	const char* oldptr = strchr(oldflags.c_str(), flag);
-	const char* newptr = strchr(newflags.c_str(), flag);
-
-	if (oldptr == nullptr && newptr != nullptr) {
-		return true;
-	}
-	if (oldptr != nullptr && newptr == nullptr) {
-		return true;
-	}
-
 	return false;
-}
-
-bool MinifluxApi::update_article_flags(const std::string& oldflags,
-	const std::string& newflags,
-	const std::string& guid)
-{
-	const std::string star_flag = cfg->get_configvalue("miniflux-flag-star");
-	const bool starred_flag_changed = flag_changed(oldflags, newflags, star_flag);
-
-	bool success = true;
-	if (starred_flag_changed) {
-		success = toggle_star_article(guid);
-	}
-
-	return success;
 }
 
 rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CURL* cached_handle)
@@ -268,14 +238,6 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	return content;
-}
-
-bool MinifluxApi::toggle_star_article(const std::string& guid)
-{
-	const std::string query = strprintf::fmt("/v1/entries/%s/bookmark", guid);
-
-	const json content = run_op(query, json(), HTTPMethod::PUT);
-	return content.is_null();
 }
 
 bool MinifluxApi::update_articles(const std::vector<std::string> guids,
