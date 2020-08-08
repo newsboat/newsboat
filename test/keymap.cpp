@@ -214,6 +214,12 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
 			== std::vector<std::string>({"PPAGE", "p", "u"}));
 	}
+
+	SECTION("macro without commands results in exception") {
+		REQUIRE_NOTHROW(k.handle_action("macro", "r ; ; ; ; open"));
+		REQUIRE_THROWS_AS(k.handle_action("macro", "r ; ; ; ;"),
+			ConfigHandlerException);
+	}
 }
 
 TEST_CASE("verify get_keymap_descriptions() behavior",

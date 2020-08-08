@@ -189,6 +189,8 @@ public:
 	void dump_config(std::vector<std::string>& config_output) override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 
+	std::vector<MacroCmd> parse_operation_sequence(const std::string& line);
+
 private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);

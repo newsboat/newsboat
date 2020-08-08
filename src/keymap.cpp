@@ -723,34 +723,42 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
-		const auto operations = utils::tokenize_quoted(remaining_params, ";");
-		if (!token.has_value() || operations.size() < 1) {
+		const std::vector<MacroCmd> cmds = parse_operation_sequence(remaining_params);
+		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 		const std::string macrokey = token.value();
-
-		std::vector<MacroCmd> cmds;
-		for (auto operation : operations) {
-			auto command_name = utils::extract_token_quoted(operation);
-			if (!command_name.has_value()) {
-				continue;
-			}
-			const auto arguments = utils::tokenize_quoted(operation);
-			MacroCmd cmd;
-			cmd.op = get_opcode(command_name.value());
-			if (cmd.op == OP_NIL) {
-				throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
-						command_name.value()));
-			}
-			cmd.args = arguments;
-
-			cmds.push_back(cmd);
-		}
 
 		macros_[macrokey] = cmds;
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
 	}
+}
+
+
+std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
+{
+	const auto operations = utils::tokenize_quoted(line, ";");
+
+	std::vector<MacroCmd> cmds;
+	for (auto operation : operations) {
+		const auto command_name = utils::extract_token_quoted(operation);
+		if (!command_name.has_value()) {
+			continue;
+		}
+		const auto arguments = utils::tokenize_quoted(operation);
+		MacroCmd cmd;
+		cmd.op = get_opcode(command_name.value());
+		if (cmd.op == OP_NIL) {
+			throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
+					command_name.value()));
+		}
+		cmd.args = arguments;
+
+		cmds.push_back(cmd);
+	}
+
+	return cmds;
 }
 
 std::vector<std::string> KeyMap::get_keys(Operation op,
