@@ -19,6 +19,13 @@ MinifluxApi::MinifluxApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
 	server = cfg->get_configvalue("miniflux-url");
+	const std::string http_auth_method = cfg->get_configvalue("http-auth-method");
+	if (http_auth_method == "any") {
+		// default to basic HTTP auth to prevent Newsboat from doubling up on HTTP
+		// requests, since it doesn't "guess" the correct auth type on the first
+		// try.
+		cfg->set_configvalue("http-auth-method", "basic");
+	}
 }
 
 MinifluxApi::~MinifluxApi() {}
