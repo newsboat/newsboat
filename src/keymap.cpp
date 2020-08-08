@@ -730,6 +730,8 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		const std::string macrokey = token.value();
 
 		macros_[macrokey] = cmds;
+	} else if (action == "run-on-startup") {
+		startup_operations_sequence = parse_operation_sequence(params);
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
 	}
@@ -759,6 +761,11 @@ std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
 	}
 
 	return cmds;
+}
+
+std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()
+{
+	return startup_operations_sequence;
 }
 
 std::vector<std::string> KeyMap::get_keys(Operation op,

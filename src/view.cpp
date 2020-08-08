@@ -120,7 +120,7 @@ void View::show_error(const std::string& msg)
 int View::run()
 {
 	bool have_macroprefix = false;
-	std::vector<MacroCmd> macrocmds;
+	std::vector<MacroCmd> macrocmds = keys->get_startup_operation_sequence();
 
 	feedlist_form = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg, rxman);
