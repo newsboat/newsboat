@@ -56,8 +56,8 @@ std::vector<TaggedFeedUrl> MinifluxApi::get_subscribed_urls()
 	const json categories = run_op("/v1/categories", json());
 	std::map<int, std::string> category_names;
 	for (const auto& category : categories) {
-		std::string name = category["title"];
-		int id = category["id"];
+		const std::string name = category["title"];
+		const int id = category["id"];
 		category_names[id] = name;
 	}
 

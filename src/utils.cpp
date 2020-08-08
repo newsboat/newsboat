@@ -486,7 +486,7 @@ std::string utils::retrieve_url(const std::string& url,
 		break;
 	case HTTPMethod::PUT:
 	case HTTPMethod::DELETE:
-		std::string method_str = http_method_str(method);
+		const std::string method_str = http_method_str(method);
 		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, method_str.c_str());
 		break;
 	}
