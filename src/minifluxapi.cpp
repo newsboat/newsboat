@@ -1,7 +1,7 @@
 #include "minifluxapi.h"
 
+#include <cinttypes>
 #include <curl/curl.h>
-#include <json-c/json.h>
 #include <thread>
 
 #include "3rd-party/json.hpp"
