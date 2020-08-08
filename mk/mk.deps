@@ -836,6 +836,8 @@ test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
  include/tagsouppullparser.h 3rd-party/catch.hpp
+test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
+ include/strprintf.h
 test/test-helpers/chdir.o: test/test-helpers/chdir.cpp \
  test/test-helpers/chdir.h include/utils.h 3rd-party/optional.hpp \
  include/configcontainer.h include/configparser.h \
@@ -858,8 +860,6 @@ test/test-helpers/tempdir.o: test/test-helpers/tempdir.cpp \
  test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
 test/test-helpers/tempfile.o: test/test-helpers/tempfile.cpp \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
-test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
- include/strprintf.h
 test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  include/regexmanager.h include/configparser.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
