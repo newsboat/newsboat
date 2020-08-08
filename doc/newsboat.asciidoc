@@ -726,6 +726,13 @@ See also <<miniflux-passwordfile,`miniflux-passwordfile`>>,
 <<miniflux-passwordeval,`miniflux-passwordeval`>>, and
 <<_passwords_for_external_apis>>.
 
+It is also recommended to explicitly specify the type of HTTP authentication
+that should be used when connecting to Miniflux, since Newsboat fails to guess
+the correct type on the first try, resulting in extra HTTP requests. This can be
+fixed by setting the following option in the configuration file:
+
+	http-auth-method basic
+
 Unlike with other backends, Miniflux's starring/bookmarking feature is not
 currently supported in Newsboat.
 
