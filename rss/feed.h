@@ -22,7 +22,8 @@ public:
 		ATOM_0_3_NONS,
 		TTRSS_JSON,
 		NEWSBLUR_JSON,
-		OCNEWS_JSON
+		OCNEWS_JSON,
+		MINIFLUX_JSON
 	};
 
 	Feed()

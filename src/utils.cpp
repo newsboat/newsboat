@@ -46,6 +46,8 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 #include "rs_utils.h"
 
+using HTTPMethod = newsboat::utils::HTTPMethod;
+
 namespace newsboat {
 
 namespace utils {
@@ -434,10 +436,33 @@ static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 	return size * nmemb;
 }
 
+std::string utils::http_method_str(const HTTPMethod method)
+{
+	std::string str = "";
+
+	switch (method) {
+	case HTTPMethod::GET:
+		str = "GET";
+		break;
+	case HTTPMethod::POST:
+		str = "POST";
+		break;
+	case HTTPMethod::PUT:
+		str = "PUT";
+		break;
+	case HTTPMethod::DELETE:
+		str = "DELETE";
+		break;
+	}
+
+	return str;
+}
+
 std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
-	const std::string* postdata,
+	const std::string* body,
+	const HTTPMethod method, /* = GET */
 	CURL* cached_handle)
 {
 	std::string buf;
@@ -453,10 +478,22 @@ std::string utils::retrieve_url(const std::string& url,
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
 
-	if (postdata != nullptr) {
+	switch (method) {
+	case HTTPMethod::GET:
+		break;
+	case HTTPMethod::POST:
 		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
+		break;
+	case HTTPMethod::PUT:
+	case HTTPMethod::DELETE:
+		const std::string method_str = http_method_str(method);
+		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, method_str.c_str());
+		break;
+	}
+
+	if (body != nullptr) {
 		curl_easy_setopt(
-			easyhandle, CURLOPT_POSTFIELDS, postdata->c_str());
+			easyhandle, CURLOPT_POSTFIELDS, body->c_str());
 	}
 
 	if (!authinfo.empty()) {
@@ -472,11 +509,12 @@ std::string utils::retrieve_url(const std::string& url,
 		curl_easy_cleanup(easyhandle);
 	}
 
-	if (postdata != nullptr) {
+	if (body != nullptr) {
 		LOG(Level::DEBUG,
-			"utils::retrieve_url(%s)[%s]: %s",
+			"utils::retrieve_url(%s %s)[%s]: %s",
+			http_method_str(method),
 			url,
-			postdata,
+			body,
 			buf);
 	} else {
 		LOG(Level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url, buf);

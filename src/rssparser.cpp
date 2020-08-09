@@ -13,6 +13,7 @@
 #include "curlhandle.h"
 #include "htmlrenderer.h"
 #include "logger.h"
+#include "minifluxapi.h"
 #include "newsblurapi.h"
 #include "ocnewsapi.h"
 #include "rss/exception.h"
@@ -41,6 +42,7 @@ RssParser::RssParser(const std::string& uri,
 	is_ttrss = cfgcont->get_configvalue("urls-source") == "ttrss";
 	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
 	is_ocnews = cfgcont->get_configvalue("urls-source") == "ocnews";
+	is_miniflux = cfgcont->get_configvalue("urls-source") == "miniflux";
 }
 
 RssParser::~RssParser() {}
@@ -160,6 +162,8 @@ void RssParser::retrieve_uri(const std::string& uri)
 		fetch_newsblur(uri);
 	} else if (is_ocnews) {
 		fetch_ocnews(uri);
+	} else if (is_miniflux) {
+		fetch_miniflux(uri);
 	} else if (utils::is_http_url(uri)) {
 		download_http(uri);
 	} else if (utils::is_exec_url(uri)) {
@@ -361,7 +365,8 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 		if ((f.rss_version == rsspp::Feed::ATOM_1_0 ||
 				f.rss_version == rsspp::Feed::TTRSS_JSON ||
 				f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
-				f.rss_version == rsspp::Feed::OCNEWS_JSON) &&
+				f.rss_version == rsspp::Feed::OCNEWS_JSON ||
+				f.rss_version == rsspp::Feed::MINIFLUX_JSON) &&
 			item.labels.size() > 0) {
 			auto start = item.labels.begin();
 			auto finish = item.labels.end();
@@ -403,6 +408,15 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 				x->set_override_unread(true);
 			}
 			if (std::find(start, finish, "ocnews:read") != finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "miniflux:unread") !=
+				finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "miniflux:read") != finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}
@@ -635,6 +649,17 @@ void RssParser::fetch_ocnews(const std::string& feed_id)
 	}
 	LOG(Level::INFO,
 		"RssParser::fetch_ocnews: f.items.size = %" PRIu64,
+		static_cast<uint64_t>(f.items.size()));
+}
+
+void RssParser::fetch_miniflux(const std::string& feed_id)
+{
+	MinifluxApi* mapi = dynamic_cast<MinifluxApi*>(api);
+	if (mapi) {
+		f = mapi->fetch_feed(feed_id, easyhandle ? easyhandle->ptr() : nullptr);
+	}
+	LOG(Level::INFO,
+		"RssParser::fetch_miniflux: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
 }
 

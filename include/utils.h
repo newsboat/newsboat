@@ -21,6 +21,14 @@ namespace newsboat {
 enum class LinkType;
 
 namespace utils {
+
+enum class HTTPMethod {
+	GET = 0,
+	POST,
+	PUT,
+	DELETE
+};
+
 std::string strip_comments(const std::string& line);
 std::vector<std::string> tokenize(const std::string& str,
 	std::string delimiters = " \r\n\t");
@@ -52,10 +60,12 @@ std::string get_command_output(const std::string& cmd);
 void extract_filter(const std::string& line,
 	std::string& filter,
 	std::string& url);
+std::string http_method_str(const HTTPMethod method);
 std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,
 	const std::string& authinfo = "",
-	const std::string* postdata = nullptr,
+	const std::string* body = nullptr,
+	const HTTPMethod method = HTTPMethod::GET,
 	CURL* easyhandle = nullptr);
 void run_command(const std::string& cmd,
 	const std::string& param); // used for notifications only

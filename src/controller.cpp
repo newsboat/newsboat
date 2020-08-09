@@ -41,6 +41,8 @@
 #include "inoreaderurlreader.h"
 #include "itemrenderer.h"
 #include "logger.h"
+#include "minifluxapi.h"
+#include "minifluxurlreader.h"
 #include "newsblurapi.h"
 #include "newsblururlreader.h"
 #include "ocnewsapi.h"
@@ -288,6 +290,30 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "ocnews") {
 		api = new OcNewsApi(&cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
+	} else if (type == "miniflux") {
+		const auto miniflux_url = cfg.get_configvalue("miniflux-url");
+		if (miniflux_url.empty()) {
+			std::cerr <<
+				_("ERROR: You must set `miniflux-url` to use Miniflux\n");
+			return EXIT_FAILURE;
+		}
+
+		const std::string user = cfg.get_configvalue("miniflux-login");
+		const std::string pass = cfg.get_configvalue("miniflux-password");
+		const std::string pass_file = cfg.get_configvalue("miniflux-passwordfile");
+		const std::string pass_eval = cfg.get_configvalue("miniflux-passwordeval");
+		const bool creds_set = !user.empty() &&
+			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+		if (!creds_set) {
+			std::cerr <<
+				_("ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
+					"`miniflux-passwordfile` or `miniflux-passwordeval` to use "
+					"Miniflux\n");
+			return EXIT_FAILURE;
+		}
+
+		api = new MinifluxApi(&cfg);
+		urlcfg = new MinifluxUrlReader(configpaths.url_file(), api);
 	} else if (type == "inoreader") {
 		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
 			&& !cfg.get_configvalue("inoreader-app-key").empty();
@@ -354,6 +380,11 @@ int Controller::run(const CliArgsParser& args)
 			msg = strprintf::fmt(
 					_("It looks like you haven't configured any "
 						"feeds in your Inoreader account. Please do "
+						"so, and try again."));
+		} else if (type == "miniflux") {
+			msg = strprintf::fmt(
+					_("It looks like you haven't configured any "
+						"feeds in your Miniflux account. Please do "
 						"so, and try again."));
 		} else {
 			assert(0); // shouldn't happen
