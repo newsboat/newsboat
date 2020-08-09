@@ -86,8 +86,12 @@ bool FeedListFormAction::process_operation(Operation op,
 	bool automatic,
 	std::vector<std::string>* args)
 {
-	std::string feedpos = f.get("feedposname");
-	unsigned int pos = utils::to_u(feedpos);
+	unsigned int pos = 0;
+	if (visible_feeds.size() >= 1) {
+		const auto selected_pos = list.get_position();
+		pos = visible_feeds[selected_pos].second;
+	}
+	const std::string feedpos = std::to_string(pos);
 	bool quit = false;
 REDO:
 	switch (op) {
@@ -581,8 +585,7 @@ void FeedListFormAction::set_feedlist(
 		listfmt.add_line(format_line(feedlist_format,
 				feed.first,
 				feed.second,
-				width),
-			std::to_string(feed.second));
+				width));
 	}
 
 	list.stfl_replace_lines(listfmt);
@@ -881,7 +884,7 @@ void FeedListFormAction::register_format_styles()
 	const std::string textview = strprintf::fmt(
 			"{!list[feeds] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
-			"pos_name[feedposname]: pos[feeds_pos]:0 offset[feeds_offset]:0 %s richtext:1}",
+			"pos[feeds_pos]:0 offset[feeds_offset]:0 %s richtext:1}",
 			attrstr);
 	list.stfl_replace_list(0, textview);
 }
