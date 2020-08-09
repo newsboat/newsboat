@@ -87,7 +87,7 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 		"}";
 	REQUIRE(fmt.format_list() == expected);
 
-	fmt.set_line(1, "oh", "3", 3);
+	fmt.set_line(1, "oh", 3);
 
 	expected =
 		"{list"

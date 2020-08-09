@@ -986,7 +986,7 @@ void ItemListFormAction::prepare()
 					width,
 					itemlist_format,
 					datetime_format);
-			listfmt.set_line(itempos, line, std::to_string(item.second));
+			listfmt.set_line(itempos, line);
 		}
 		break;
 	case InvalidationMode::NONE:

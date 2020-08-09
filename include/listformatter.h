@@ -21,7 +21,6 @@ public:
 		unsigned int width = 0);
 	void set_line(const unsigned int itempos,
 		const std::string& text,
-		const std::string& id = "",
 		unsigned int width = 0);
 	void clear()
 	{

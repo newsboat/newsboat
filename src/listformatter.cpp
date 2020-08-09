@@ -18,13 +18,12 @@ ListFormatter::~ListFormatter() {}
 
 void ListFormatter::add_line(const std::string& text, unsigned int width)
 {
-	set_line(UINT_MAX, text, "", width);
+	set_line(UINT_MAX, text, width);
 	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text);
 }
 
 void ListFormatter::set_line(const unsigned int itempos,
 	const std::string& text,
-	const std::string& id,
 	unsigned int width)
 {
 	std::vector<LineIdPair> formatted_text;
@@ -44,14 +43,13 @@ void ListFormatter::set_line(const unsigned int itempos,
 				}
 			}
 			formatted_text.push_back(LineIdPair(
-					utils::wstr2str(mytext.substr(0, size)), id));
+					utils::wstr2str(mytext.substr(0, size)), ""));
 			mytext.erase(0, size);
 		}
 	} else {
 		formatted_text.push_back(LineIdPair(
 				utils::wstr2str(utils::clean_nonprintable_characters(
-						utils::str2wstr(text))),
-				id));
+						utils::str2wstr(text))), ""));
 	}
 
 	if (itempos == UINT_MAX) {
