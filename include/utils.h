@@ -79,7 +79,6 @@ std::string get_useragent(ConfigContainer* cfgcont);
 
 size_t strwidth(const std::string& s);
 size_t strwidth_stfl(const std::string& str);
-size_t wcswidth_stfl(const std::wstring& str, size_t size);
 
 std::string substr_with_width(const std::string& str,
 	const size_t max_width);

@@ -610,28 +610,6 @@ size_t utils::strwidth_stfl(const std::string& str)
 	return rs_strwidth_stfl(str.c_str());
 }
 
-size_t utils::wcswidth_stfl(const std::wstring& str, size_t size)
-{
-	size_t reduce_count = 0;
-	size_t len = std::min(str.length(), size);
-	if (len > 1) {
-		for (size_t idx = 0; idx < len - 1; ++idx) {
-			if (str[idx] == L'<' && str[idx + 1] != L'>') {
-				reduce_count += 3;
-				idx += 3;
-			}
-		}
-	}
-
-	int width = wcswidth(str.c_str(), size);
-	if (width < 0) {
-		LOG(Level::ERROR, "oh, oh, wcswidth just failed");
-		return str.length() - reduce_count;
-	}
-
-	return width - reduce_count;
-}
-
 std::string utils::substr_with_width(const std::string& str,
 	const size_t max_width)
 {
