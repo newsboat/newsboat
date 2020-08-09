@@ -58,10 +58,11 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		std::string focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
-				std::string selection = f.get("listposname");
-				char filetype = selection[0];
+				const auto selected_position = files_list.get_position();
+				std::string selection = id_at_position[selected_position];
+				const char filetype = selection[0];
 				selection.erase(0, 1);
-				std::string filename(selection);
+				const std::string filename(selection);
 				switch (filetype) {
 				case 'd': {
 					int status = ::chdir(filename.c_str());
@@ -260,8 +261,12 @@ void FileBrowserFormAction::prepare()
 
 		ListFormatter listfmt;
 
+		id_at_position.clear();
 		for (std::string filename : files) {
-			add_file(listfmt, filename);
+			const auto id = add_file(listfmt, filename);
+			if (id.has_value()) {
+				id_at_position.push_back(id.value());
+			}
 		}
 
 		files_list.stfl_replace_lines(listfmt);
@@ -315,7 +320,8 @@ KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-void FileBrowserFormAction::add_file(ListFormatter& listfmt,
+nonstd::optional<std::string> FileBrowserFormAction::add_file(
+	ListFormatter& listfmt,
 	std::string filename)
 {
 	struct stat sb;
@@ -341,9 +347,11 @@ void FileBrowserFormAction::add_file(ListFormatter& listfmt,
 				group,
 				sizestr,
 				formattedfilename);
-		std::string id = strprintf::fmt("%c%s", ftype, Stfl::quote(filename));
-		listfmt.add_line(utils::quote_for_stfl(line), id);
+		listfmt.add_line(utils::quote_for_stfl(line));
+		const std::string id = strprintf::fmt("%c%s", ftype, filename);
+		return id;
 	}
+	return {};
 }
 
 std::string FileBrowserFormAction::get_formatted_filename(std::string filename,

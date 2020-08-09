@@ -18,7 +18,6 @@ vbox
     richtext:1
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
-    pos_name[listposname]:
     pos[files_pos]:0
     offset[files_offset]:0
   hbox[hints]
