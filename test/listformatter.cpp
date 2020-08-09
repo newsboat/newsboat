@@ -25,54 +25,13 @@ TEST_CASE("add_line(), get_lines_count() and clear()",
 	}
 }
 
-TEST_CASE("add_line() splits overly long sequences to fit width",
-	"[ListFormatter]")
-{
-	ListFormatter fmt;
-
-	SECTION("ordinary text") {
-		fmt.add_line("123456789_", 10);
-		fmt.add_line("_987654321", 10);
-		fmt.add_line("ListFormatter doesn't care about word boundaries",
-			10);
-		std::string expected =
-			"{list"
-			"{listitem text:\"123456789_\"}"
-			"{listitem text:\"_987654321\"}"
-			"{listitem text:\"ListFormat\"}"
-			"{listitem text:\"ter doesn'\"}"
-			"{listitem text:\"t care abo\"}"
-			"{listitem text:\"ut word bo\"}"
-			"{listitem text:\"undaries\"}"
-			"}";
-		REQUIRE(fmt.format_list() == expected);
-	}
-
-	SECTION("numbered list") {
-		fmt.add_line("123456789_", 10);
-		fmt.add_line("_987654321", 10);
-		fmt.add_line("ListFormatter doesn't care about word boundaries",
-			10);
-		std::string expected =
-			"{list"
-			"{listitem text:\"123456789_\"}"
-			"{listitem text:\"_987654321\"}"
-			"{listitem text:\"ListFormat\"}"
-			"{listitem text:\"ter doesn'\"}"
-			"{listitem text:\"t care abo\"}"
-			"{listitem text:\"ut word bo\"}"
-			"{listitem text:\"undaries\"}"
-			"}";
-		REQUIRE(fmt.format_list() == expected);
-	}
-}
-
 TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 {
 	ListFormatter fmt;
 
-	fmt.add_line("hello", 5);
-	fmt.add_line("goodbye", 5);
+	fmt.add_line("hello");
+	fmt.add_line("goodb");
+	fmt.add_line("ye");
 
 	std::string expected =
 		"{list"

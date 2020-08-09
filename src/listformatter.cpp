@@ -16,9 +16,9 @@ ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
 
 ListFormatter::~ListFormatter() {}
 
-void ListFormatter::add_line(const std::string& text, unsigned int width)
+void ListFormatter::add_line(const std::string& text)
 {
-	set_line(UINT_MAX, text, width);
+	set_line(UINT_MAX, text, 0);
 	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text);
 }
 
