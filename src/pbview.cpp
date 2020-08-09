@@ -97,7 +97,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
 				auto lbuf = format_line(formatstring, dl, i, width);
-				listfmt.add_line(lbuf, std::to_string(i));
+				listfmt.add_line(lbuf);
 				i++;
 			}
 
@@ -171,10 +171,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			ctrl->decrease_parallel_downloads();
 			break;
 		case OP_PB_DOWNLOAD: {
-			std::istringstream os(dllist_form.get("dlposname"));
-			int idx = -1;
-			os >> idx;
-			if (idx != -1) {
+			if (ctrl->downloads().size() >= 1) {
+				const auto idx = downloads_list.get_position();
 				if (ctrl->downloads()[idx].status() !=
 					DlStatus::DOWNLOADING) {
 					std::thread t{PodDlThread(
@@ -186,10 +184,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_PLAY: {
-			std::istringstream os(dllist_form.get("dlposname"));
-			int idx = -1;
-			os >> idx;
-			if (idx != -1) {
+			if (ctrl->downloads().size() >= 1) {
+				const auto idx = downloads_list.get_position();
 				DlStatus status =
 					ctrl->downloads()[idx].status();
 				if (status == DlStatus::FINISHED ||
@@ -209,10 +205,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_MARK_FINISHED: {
-			std::istringstream os(dllist_form.get("dlposname"));
-			int idx = -1;
-			os >> idx;
-			if (idx != -1) {
+			if (ctrl->downloads().size() >= 1) {
+				const auto idx = downloads_list.get_position();
 				DlStatus status =
 					ctrl->downloads()[idx].status();
 				if (status == DlStatus::PLAYED) {
@@ -223,10 +217,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_CANCEL: {
-			std::istringstream os(dllist_form.get("dlposname"));
-			int idx = -1;
-			os >> idx;
-			if (idx != -1) {
+			if (ctrl->downloads().size() >= 1) {
+				const auto idx = downloads_list.get_position();
 				if (ctrl->downloads()[idx].status() ==
 					DlStatus::DOWNLOADING) {
 					ctrl->downloads()[idx].set_status(
@@ -236,10 +228,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_DELETE: {
-			std::istringstream os(dllist_form.get("dlposname"));
-			int idx = -1;
-			os >> idx;
-			if (idx != -1) {
+			if (ctrl->downloads().size() >= 1) {
+				const auto idx = downloads_list.get_position();
 				if (ctrl->downloads()[idx].status() !=
 					DlStatus::DOWNLOADING) {
 					ctrl->downloads()[idx].set_status(
