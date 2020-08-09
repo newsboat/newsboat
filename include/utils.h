@@ -35,9 +35,6 @@ nonstd::optional<std::string> extract_token_quoted(std::string& str,
 
 std::string consolidate_whitespace(const std::string& str);
 
-std::vector<std::wstring> wtokenize(const std::wstring& str,
-	std::wstring delimiters = L" \r\n\t");
-
 std::string translit(const std::string& tocode,
 	const std::string& fromcode);
 std::string convert_text(const std::string& text,

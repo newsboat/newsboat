@@ -187,24 +187,6 @@ std::vector<std::string> utils::tokenize(const std::string& str,
 	return tokens;
 }
 
-std::vector<std::wstring> utils::wtokenize(const std::wstring& str,
-	std::wstring delimiters)
-{
-	/*
-	 * This function tokenizes a string by the delimiters. Plain and simple.
-	 */
-	std::vector<std::wstring> tokens;
-	std::wstring::size_type last_pos = str.find_first_not_of(delimiters, 0);
-	std::wstring::size_type pos = str.find_first_of(delimiters, last_pos);
-
-	while (std::string::npos != pos || std::string::npos != last_pos) {
-		tokens.push_back(str.substr(last_pos, pos - last_pos));
-		last_pos = str.find_first_not_of(delimiters, pos);
-		pos = str.find_first_of(delimiters, last_pos);
-	}
-	return tokens;
-}
-
 std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	std::string delimiters)
 {
