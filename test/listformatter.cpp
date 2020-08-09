@@ -4,7 +4,7 @@
 
 using namespace newsboat;
 
-TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
+TEST_CASE("add_line(), get_lines_count() and clear()",
 	"[ListFormatter]")
 {
 	ListFormatter fmt;
@@ -18,14 +18,9 @@ TEST_CASE("add_line(), add_lines(), get_lines_count() and clear()",
 		fmt.add_line("two");
 		REQUIRE(fmt.get_lines_count() == 2);
 
-		SECTION("add_lines() adds multiple lines") {
-			fmt.add_lines({"three", "four"});
-			REQUIRE(fmt.get_lines_count() == 4);
-
-			SECTION("clear() removes all lines") {
-				fmt.clear();
-				REQUIRE(fmt.get_lines_count() == 0);
-			}
+		SECTION("clear() removes all lines") {
+			fmt.clear();
+			REQUIRE(fmt.get_lines_count() == 0);
 		}
 	}
 }

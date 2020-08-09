@@ -59,14 +59,6 @@ void ListFormatter::set_line(const unsigned int itempos,
 	}
 }
 
-void ListFormatter::add_lines(const std::vector<std::string>& thelines,
-	unsigned int width)
-{
-	for (const auto& line : thelines) {
-		add_line(utils::replace_all(line, "\t", "        "), width);
-	}
-}
-
 std::string ListFormatter::format_list() const
 {
 	std::string format_cache = "{list";
