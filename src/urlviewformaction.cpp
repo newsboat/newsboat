@@ -124,9 +124,8 @@ void UrlViewFormAction::prepare()
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		for (const auto& link : links) {
-			listfmt.add_line(
-				utils::quote_for_stfl(strprintf::fmt("%2u  %s", i + 1, link.first)),
-				std::to_string(i));
+			listfmt.add_line(utils::quote_for_stfl(strprintf::fmt("%2u  %s", i + 1,
+						link.first)));
 			i++;
 		}
 		urls_list.stfl_replace_lines(listfmt);

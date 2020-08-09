@@ -36,10 +36,9 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 	ListFormatter fmt;
 
 	SECTION("ordinary text") {
-		fmt.add_line("123456789_", "", 10);
-		fmt.add_line("_987654321", "", 10);
+		fmt.add_line("123456789_", 10);
+		fmt.add_line("_987654321", 10);
 		fmt.add_line("ListFormatter doesn't care about word boundaries",
-			"",
 			10);
 		std::string expected =
 			"{list"
@@ -55,20 +54,19 @@ TEST_CASE("add_line() splits overly long sequences to fit width",
 	}
 
 	SECTION("numbered list") {
-		fmt.add_line("123456789_", "1", 10);
-		fmt.add_line("_987654321", "2", 10);
+		fmt.add_line("123456789_", 10);
+		fmt.add_line("_987654321", 10);
 		fmt.add_line("ListFormatter doesn't care about word boundaries",
-			"3",
 			10);
 		std::string expected =
 			"{list"
-			"{listitem[1] text:\"123456789_\"}"
-			"{listitem[2] text:\"_987654321\"}"
-			"{listitem[3] text:\"ListFormat\"}"
-			"{listitem[3] text:\"ter doesn'\"}"
-			"{listitem[3] text:\"t care abo\"}"
-			"{listitem[3] text:\"ut word bo\"}"
-			"{listitem[3] text:\"undaries\"}"
+			"{listitem text:\"123456789_\"}"
+			"{listitem text:\"_987654321\"}"
+			"{listitem text:\"ListFormat\"}"
+			"{listitem text:\"ter doesn'\"}"
+			"{listitem text:\"t care abo\"}"
+			"{listitem text:\"ut word bo\"}"
+			"{listitem text:\"undaries\"}"
 			"}";
 		REQUIRE(fmt.format_list() == expected);
 	}
@@ -78,14 +76,14 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 {
 	ListFormatter fmt;
 
-	fmt.add_line("hello", "1", 5);
-	fmt.add_line("goodbye", "2", 5);
+	fmt.add_line("hello", 5);
+	fmt.add_line("goodbye", 5);
 
 	std::string expected =
 		"{list"
-		"{listitem[1] text:\"hello\"}"
-		"{listitem[2] text:\"goodb\"}"
-		"{listitem[2] text:\"ye\"}"
+		"{listitem text:\"hello\"}"
+		"{listitem text:\"goodb\"}"
+		"{listitem text:\"ye\"}"
 		"}";
 	REQUIRE(fmt.format_list() == expected);
 
@@ -93,9 +91,9 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 
 	expected =
 		"{list"
-		"{listitem[1] text:\"hello\"}"
-		"{listitem[3] text:\"oh\"}"
-		"{listitem[2] text:\"ye\"}"
+		"{listitem text:\"hello\"}"
+		"{listitem text:\"oh\"}"
+		"{listitem text:\"ye\"}"
 		"}";
 	REQUIRE(fmt.format_list() == expected);
 }
