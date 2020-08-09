@@ -11,8 +11,6 @@
 namespace newsboat {
 
 class ListFormatter {
-	typedef std::pair<std::string, std::string> LineIdPair;
-
 public:
 	ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
 	~ListFormatter();
@@ -33,7 +31,7 @@ public:
 	}
 
 private:
-	std::vector<LineIdPair> lines;
+	std::vector<std::string> lines;
 	RegexManager* rxman;
 	std::string location;
 };

@@ -26,7 +26,7 @@ void ListFormatter::set_line(const unsigned int itempos,
 	const std::string& text,
 	unsigned int width)
 {
-	std::vector<LineIdPair> formatted_text;
+	std::vector<std::string> formatted_text;
 
 	if (width > 0 && text.length() > 0) {
 		std::wstring mytext = utils::clean_nonprintable_characters(
@@ -42,14 +42,12 @@ void ListFormatter::set_line(const unsigned int itempos,
 					size--;
 				}
 			}
-			formatted_text.push_back(LineIdPair(
-					utils::wstr2str(mytext.substr(0, size)), ""));
+			formatted_text.push_back(utils::wstr2str(mytext.substr(0, size)));
 			mytext.erase(0, size);
 		}
 	} else {
-		formatted_text.push_back(LineIdPair(
-				utils::wstr2str(utils::clean_nonprintable_characters(
-						utils::str2wstr(text))), ""));
+		formatted_text.push_back(utils::wstr2str(utils::clean_nonprintable_characters(
+					utils::str2wstr(text))));
 	}
 
 	if (itempos == UINT_MAX) {
@@ -72,20 +70,12 @@ void ListFormatter::add_lines(const std::vector<std::string>& thelines,
 std::string ListFormatter::format_list() const
 {
 	std::string format_cache = "{list";
-	for (const auto& line : lines) {
-		std::string str = line.first;
+	for (auto str : lines) {
 		if (rxman) {
 			rxman->quote_and_highlight(str, location);
 		}
-		if (line.second.empty()) {
-			format_cache.append(strprintf::fmt(
-					"{listitem text:%s}", Stfl::quote(str)));
-		} else {
-			format_cache.append(
-				strprintf::fmt("{listitem[%s] text:%s}",
-					line.second,
-					Stfl::quote(str)));
-		}
+		format_cache.append(strprintf::fmt(
+				"{listitem text:%s}", Stfl::quote(str)));
 	}
 	format_cache.push_back('}');
 	return format_cache;
