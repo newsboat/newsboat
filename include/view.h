@@ -140,6 +140,8 @@ public:
 	static void ctrl_c_action(int sig);
 
 protected:
+	bool run_commands(const std::vector<MacroCmd>& commands);
+
 	void apply_colors(std::shared_ptr<FormAction> fa);
 
 	void handle_cmdline_completion(std::shared_ptr<FormAction> fa);
