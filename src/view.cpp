@@ -120,6 +120,9 @@ void View::show_error(const std::string& msg)
 bool View::run_commands(const std::vector<MacroCmd>& commands)
 {
 	for (auto command : commands) {
+		if (formaction_stack_size() == 0) {
+			return true;
+		}
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
 		fa->get_form().run(-1);
