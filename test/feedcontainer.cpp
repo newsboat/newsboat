@@ -566,6 +566,44 @@ TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
 	}
 }
 
+TEST_CASE("Sorting by firsttag-asc reverses the order of feeds with the same first tag",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+	feedcontainer.set_feeds(feeds);
+
+	feeds[0]->set_tags({""});
+	feeds[1]->set_tags({"Taggy"});
+	feeds[2]->set_tags({"~tag10"});
+	feeds[3]->set_tags({"~AAA", "Taggy"});
+	feeds[4]->set_tags({"tag2"});
+
+	SECTION("by firsttag asc, feeds with the same first tag are sorted in reverse") {
+		cfg.set_configvalue("feed-sort-order", "firsttag-asc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0] == feeds[2]);
+		REQUIRE(sorted_feeds[1] == feeds[0]);
+		REQUIRE(sorted_feeds[2] == feeds[4]);
+		REQUIRE(sorted_feeds[3] == feeds[3]);
+		REQUIRE(sorted_feeds[4] == feeds[1]);
+	}
+
+	SECTION("by firsttag desc, feeds with the same first tag are sorted in order") {
+		cfg.set_configvalue("feed-sort-order", "firsttag-desc");
+		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+		REQUIRE(sorted_feeds[0] == feeds[1]);
+		REQUIRE(sorted_feeds[1] == feeds[3]);
+		REQUIRE(sorted_feeds[2] == feeds[4]);
+		REQUIRE(sorted_feeds[3] == feeds[0]);
+		REQUIRE(sorted_feeds[4] == feeds[2]);
+	}
+}
+
 TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 	"[FeedContainer]")
 {

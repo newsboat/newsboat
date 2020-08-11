@@ -261,23 +261,29 @@ TEST_CASE("RssFeed::get_firsttag() returns first tag", "[RssFeed]")
 	Cache rsscache(":memory:", &cfg);
 	RssFeed f(&rsscache);
 
-	REQUIRE(f.get_firsttag() == "");
+	SECTION("Empty tag array") {
+		REQUIRE(f.get_firsttag() == "");
+	}
 
-	std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
-	f.set_tags(tags);
-	REQUIRE(f.get_firsttag() == "One");
+	SECTION("Ordinary tags") {
+		f.set_tags({"One", "Two", "Three", "Four"});
+		REQUIRE(f.get_firsttag() == "One");
+	}
 
-	tags = {"Five", "Six", "Seven", "Eight"};
-	f.set_tags(tags);
-	REQUIRE(f.get_firsttag() == "Five");
+	SECTION("Title tag exclusion") {
+		f.set_tags({"~Five", "Six", "Seven", "Eight"});
+		REQUIRE(f.get_firsttag() == "Six");
+	}
 
-	tags = {"Nine", "Ten", "Eleven", "Twelve"};
-	f.set_tags(tags);
-	REQUIRE(f.get_firsttag() == "Nine");
+	SECTION("Non exclusion of tag prefixed by a special character other than tilde") {
+		f.set_tags({"~Nine", "!Ten", "Eleven", "Twelve"});
+		REQUIRE(f.get_firsttag() == "!Ten");
+	}
 
-	tags = {"Orange", "Apple", "Kiwi", "Banana"};
-	f.set_tags(tags);
-	REQUIRE(f.get_firsttag() == "Orange");
+	SECTION("Array with only title tags") {
+		f.set_tags({"~Orange", "~Apple", "~Kiwi", "~Banana"});
+		REQUIRE(f.get_firsttag() == "");
+	}
 }
 
 TEST_CASE(
