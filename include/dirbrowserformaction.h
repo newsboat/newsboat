@@ -4,8 +4,6 @@
 #include <sys/stat.h>
 #include <grp.h>
 
-#include "3rd-party/optional.hpp"
-
 #include "configcontainer.h"
 #include "listformatter.h"
 #include "listwidget.h"
@@ -38,7 +36,8 @@ private:
 		std::vector<std::string>* args = nullptr) override;
 	void update_title(const std::string& working_directory);
 
-	nonstd::optional<std::string> add_directory(ListFormatter& listfmt,
+	void add_directory(ListFormatter& listfmt,
+		std::vector<std::string>& id_at_position,
 		std::string dirname);
 	std::string get_rwx(unsigned short val);
 	std::vector<std::string> id_at_position;

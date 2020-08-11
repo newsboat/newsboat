@@ -271,10 +271,7 @@ void DirBrowserFormAction::prepare()
 
 		id_at_position.clear();
 		for (std::string directory : directories) {
-			const auto id = add_directory(listfmt, directory);
-			if (id.has_value()) {
-				id_at_position.push_back(id.value());
-			}
+			add_directory(listfmt, id_at_position, directory);
 		}
 
 		files_list.stfl_replace_lines(listfmt);
@@ -329,8 +326,9 @@ KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-nonstd::optional<std::string> DirBrowserFormAction::add_directory(
+void DirBrowserFormAction::add_directory(
 	ListFormatter& listfmt,
+	std::vector<std::string>& id_at_position,
 	std::string dirname)
 {
 	struct stat sb;
@@ -358,9 +356,8 @@ nonstd::optional<std::string> DirBrowserFormAction::add_directory(
 				formatteddirname);
 		listfmt.add_line(utils::quote_for_stfl(line));
 		const std::string id = strprintf::fmt("%c%s", ftype, dirname);
-		return id;
+		id_at_position.push_back(id);
 	}
-	return {};
 }
 
 std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,

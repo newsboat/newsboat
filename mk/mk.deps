@@ -147,22 +147,22 @@ src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h
 src/dirbrowserformaction.o: src/dirbrowserformaction.cpp \
- include/dirbrowserformaction.h 3rd-party/optional.hpp \
- include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/listformatter.h \
- include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/listwidget.h include/stflpp.h \
- include/formaction.h include/history.h include/keymap.h config.h \
- include/fmtstrformatter.h include/logger.h include/strprintf.h \
- include/strprintf.h include/utils.h include/logger.h include/view.h \
- include/colormanager.h include/controller.h include/cache.h \
- include/feedcontainer.h include/filtercontainer.h include/fslock.h \
- include/opml.h include/fileurlreader.h include/urlreader.h \
- include/queuemanager.h include/reloader.h include/remoteapi.h \
- include/rssignores.h include/rssitem.h include/matchable.h \
- include/dirbrowserformaction.h include/feedlistformaction.h \
- include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h
+ include/dirbrowserformaction.h include/configcontainer.h \
+ include/configparser.h include/configactionhandler.h \
+ include/listformatter.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/listwidget.h \
+ include/stflpp.h include/formaction.h include/history.h include/keymap.h \
+ config.h include/fmtstrformatter.h include/logger.h include/strprintf.h \
+ include/strprintf.h include/utils.h 3rd-party/optional.hpp \
+ include/logger.h include/view.h include/colormanager.h \
+ include/controller.h include/cache.h include/feedcontainer.h \
+ include/filtercontainer.h include/fslock.h include/opml.h \
+ include/fileurlreader.h include/urlreader.h include/queuemanager.h \
+ include/reloader.h include/remoteapi.h include/rssignores.h \
+ include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
+ include/feedlistformaction.h include/listformaction.h include/view.h \
+ include/filebrowserformaction.h include/htmlrenderer.h \
+ include/textformatter.h
 src/download.o: src/download.cpp include/download.h config.h \
  include/pbcontroller.h include/colormanager.h include/configparser.h \
  include/configactionhandler.h include/configcontainer.h \
@@ -211,23 +211,22 @@ src/feedlistformaction.o: src/feedlistformaction.cpp \
  include/scopemeasure.h include/strprintf.h include/utils.h \
  include/view.h
 src/filebrowserformaction.o: src/filebrowserformaction.cpp \
- include/filebrowserformaction.h 3rd-party/optional.hpp \
- include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/listformatter.h \
- include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/listwidget.h include/stflpp.h \
- include/formaction.h include/history.h include/keymap.h config.h \
- include/fmtstrformatter.h include/listformatter.h include/logger.h \
- include/strprintf.h include/strprintf.h include/utils.h include/logger.h \
- include/view.h include/colormanager.h include/controller.h \
- include/cache.h include/feedcontainer.h include/filtercontainer.h \
- include/fslock.h include/opml.h include/fileurlreader.h \
- include/urlreader.h include/queuemanager.h include/reloader.h \
- include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h include/dirbrowserformaction.h \
- include/feedlistformaction.h include/listformaction.h include/view.h \
- include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h
+ include/filebrowserformaction.h include/configcontainer.h \
+ include/configparser.h include/configactionhandler.h \
+ include/listformatter.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/listwidget.h \
+ include/stflpp.h include/formaction.h include/history.h include/keymap.h \
+ config.h include/fmtstrformatter.h include/listformatter.h \
+ include/logger.h include/strprintf.h include/strprintf.h include/utils.h \
+ 3rd-party/optional.hpp include/logger.h include/view.h \
+ include/colormanager.h include/controller.h include/cache.h \
+ include/feedcontainer.h include/filtercontainer.h include/fslock.h \
+ include/opml.h include/fileurlreader.h include/urlreader.h \
+ include/queuemanager.h include/reloader.h include/remoteapi.h \
+ include/rssignores.h include/rssitem.h include/matchable.h \
+ include/dirbrowserformaction.h include/feedlistformaction.h \
+ include/listformaction.h include/view.h include/filebrowserformaction.h \
+ include/htmlrenderer.h include/textformatter.h
 src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h include/utils.h 3rd-party/optional.hpp \
  include/configcontainer.h include/configparser.h \

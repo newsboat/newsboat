@@ -263,10 +263,7 @@ void FileBrowserFormAction::prepare()
 
 		id_at_position.clear();
 		for (std::string filename : files) {
-			const auto id = add_file(listfmt, filename);
-			if (id.has_value()) {
-				id_at_position.push_back(id.value());
-			}
+			add_file(listfmt, id_at_position, filename);
 		}
 
 		files_list.stfl_replace_lines(listfmt);
@@ -320,8 +317,9 @@ KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-nonstd::optional<std::string> FileBrowserFormAction::add_file(
+void FileBrowserFormAction::add_file(
 	ListFormatter& listfmt,
+	std::vector<std::string>& id_at_position,
 	std::string filename)
 {
 	struct stat sb;
@@ -349,9 +347,8 @@ nonstd::optional<std::string> FileBrowserFormAction::add_file(
 				formattedfilename);
 		listfmt.add_line(utils::quote_for_stfl(line));
 		const std::string id = strprintf::fmt("%c%s", ftype, filename);
-		return id;
+		id_at_position.push_back(id);
 	}
-	return {};
 }
 
 std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
