@@ -3,6 +3,8 @@
 ## Unreleased - expected 2020-09-20
 ### Added
 ### Changed
+- It is now an error if a macro is configured with 0 operations.
+
 ### Deprecated
 ### Removed
 ### Fixed

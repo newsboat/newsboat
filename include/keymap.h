@@ -189,6 +189,9 @@ public:
 	void dump_config(std::vector<std::string>& config_output) override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 
+	std::vector<MacroCmd> parse_operation_sequence(const std::string& line);
+	std::vector<MacroCmd> get_startup_operation_sequence();
+
 private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
@@ -196,6 +199,7 @@ private:
 	std::string getopname(Operation op);
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, std::vector<MacroCmd>> macros_;
+	std::vector<MacroCmd> startup_operations_sequence;
 };
 
 } // namespace newsboat

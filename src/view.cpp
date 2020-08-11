@@ -117,10 +117,26 @@ void View::show_error(const std::string& msg)
 	set_status(msg);
 }
 
+bool View::run_commands(const std::vector<MacroCmd>& commands)
+{
+	for (auto command : commands) {
+		if (formaction_stack_size() == 0) {
+			return true;
+		}
+		std::shared_ptr<FormAction> fa = get_current_formaction();
+		fa->prepare();
+		fa->get_form().run(-1);
+		if (!fa->process_op(command.op, true, &command.args)) {
+			// Operation failed, abort
+			return false;
+		}
+	}
+	return true;
+}
+
 int View::run()
 {
 	bool have_macroprefix = false;
-	std::vector<MacroCmd> macrocmds;
 
 	feedlist_form = std::make_shared<FeedListFormAction>(
 			this, feedlist_str, rsscache, filters, cfg, rxman);
@@ -134,6 +150,12 @@ int View::run()
 
 	curs_set(0);
 
+	if (!run_commands(keys->get_startup_operation_sequence())) {
+		Stfl::reset();
+		std::cerr << _("Error: Failed to execute startup commands") << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	/*
 	 * This is the main "event" loop of newsboat.
 	 */
@@ -145,90 +167,74 @@ int View::run()
 		// we signal "oh, you will receive an operation soon"
 		fa->prepare();
 
-		if (!macrocmds.empty()) {
-			// if there is any macro command left to process, we do
-			// so
+		// we then receive the event and ignore timeouts.
+		const char* event = fa->get_form().run(60000);
 
-			fa->get_form().run(-1);
-			if (!fa->process_op(
-					macrocmds[0].op, true, &macrocmds[0].args)) {
-
-				// Operation failed, abort
-				macrocmds.clear();
-			} else {
-				// remove first macro command, since it has already been processed
-				macrocmds.erase(macrocmds.begin());
+		if (ctrl_c_hit) {
+			ctrl_c_hit = false;
+			cancel_input(fa);
+			if (!get_cfg()->get_configvalue_as_bool(
+					"confirm-exit") ||
+				confirm(_("Do you really want to quit "
+						"(y:Yes n:No)? "),
+					_("yn")) == *_("y")) {
+				Stfl::reset();
+				return EXIT_FAILURE;
 			}
-		} else {
-			// we then receive the event and ignore timeouts.
-			const char* event = fa->get_form().run(60000);
+		}
 
-			if (ctrl_c_hit) {
-				ctrl_c_hit = false;
-				cancel_input(fa);
-				if (!get_cfg()->get_configvalue_as_bool(
-						"confirm-exit") ||
-					confirm(_("Do you really want to quit "
-							"(y:Yes n:No)? "),
-						_("yn")) == *_("y")) {
-					Stfl::reset();
-					return EXIT_FAILURE;
-				}
-			}
+		if (!event || strcmp(event, "TIMEOUT") == 0) {
+			continue;
+		}
 
-			if (!event || strcmp(event, "TIMEOUT") == 0) {
+		if (is_inside_qna) {
+			LOG(Level::DEBUG,
+				"View::run: we're inside QNA input");
+			if (is_inside_cmdline &&
+				strcmp(event, "TAB") == 0) {
+				handle_cmdline_completion(fa);
 				continue;
 			}
+			if (strcmp(event, "^U") == 0) {
+				clear_line(fa);
+				continue;
+			} else if (strcmp(event, "^K") == 0) {
+				clear_eol(fa);
+				continue;
+			} else if (strcmp(event, "^G") == 0) {
+				cancel_input(fa);
+				continue;
+			} else if (strcmp(event, "^W") == 0) {
+				delete_word(fa);
+				continue;
+			}
+		}
 
-			if (is_inside_qna) {
-				LOG(Level::DEBUG,
-					"View::run: we're inside QNA input");
-				if (is_inside_cmdline &&
-					strcmp(event, "TAB") == 0) {
-					handle_cmdline_completion(fa);
-					continue;
-				}
-				if (strcmp(event, "^U") == 0) {
-					clear_line(fa);
-					continue;
-				} else if (strcmp(event, "^K") == 0) {
-					clear_eol(fa);
-					continue;
-				} else if (strcmp(event, "^G") == 0) {
-					cancel_input(fa);
-					continue;
-				} else if (strcmp(event, "^W") == 0) {
-					delete_word(fa);
-					continue;
-				}
+		LOG(Level::DEBUG, "View::run: event = %s", event);
+
+		if (have_macroprefix) {
+			have_macroprefix = false;
+			LOG(Level::DEBUG,
+				"View::run: running macro `%s'",
+				event);
+			run_commands(keys->get_macro(event));
+			set_status("");
+		} else {
+			const Operation op = keys->get_operation(event, fa->id());
+
+			LOG(Level::DEBUG,
+				"View::run: event = %s op = %u",
+				event,
+				op);
+
+			if (OP_MACROPREFIX == op) {
+				have_macroprefix = true;
+				set_status("macro-");
 			}
 
-			LOG(Level::DEBUG, "View::run: event = %s", event);
-
-			if (have_macroprefix) {
-				have_macroprefix = false;
-				LOG(Level::DEBUG,
-					"View::run: running macro `%s'",
-					event);
-				macrocmds = keys->get_macro(event);
-				set_status("");
-			} else {
-				const Operation op = keys->get_operation(event, fa->id());
-
-				LOG(Level::DEBUG,
-					"View::run: event = %s op = %u",
-					event,
-					op);
-
-				if (OP_MACROPREFIX == op) {
-					have_macroprefix = true;
-					set_status("macro-");
-				}
-
-				// now we handle the operation to the
-				// formaction.
-				fa->process_op(op);
-			}
+			// now we handle the operation to the
+			// formaction.
+			fa->process_op(op);
 		}
 	}
 

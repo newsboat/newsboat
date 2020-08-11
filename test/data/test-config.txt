@@ -9,7 +9,7 @@ cache-file "~/foo" # yet another comment
 
 macro k open ; reload ; reload-all ; mark-feed-read ; save ; next-unread
 macro j open "foo" "bar" baz ; "save" blafasel
-macro l ; ; ; 
+macro l open
 macro m quit ;
 
 # and here's one more comment
