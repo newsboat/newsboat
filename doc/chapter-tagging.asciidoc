@@ -20,6 +20,7 @@ and again shows all RSS feeds, regardless of their assigned tags.
 
 A special type of tag are tags that start with the tilde character (`~`). When such
 a tag is found, the feed title is set to the tag name (excluding the `~` character).
+These type of tags are ignored when any kind of "first tag" property is used.
 With this feature, you can give feeds any title you want in your feed list:
 
 	https://rss.orf.at/news.xml "~ORF News"

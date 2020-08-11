@@ -63,7 +63,12 @@ bool RssFeed::matches_tag(const std::string& tag)
 
 std::string RssFeed::get_firsttag()
 {
-	return tags_.empty() ? "" : tags_.front();
+	for (const auto& t : tags_) {
+		if (t.substr(0, 1) != "~") {
+			return t;
+		}
+	}
+	return "";
 }
 
 std::string RssFeed::get_tags()
