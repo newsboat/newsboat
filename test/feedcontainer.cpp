@@ -717,26 +717,113 @@ TEST_CASE(
 	REQUIRE(feedcontainer.unread_feed_count() == 2);
 }
 
-TEST_CASE("unread_item_count() returns number of unread items in all feeds",
+TEST_CASE("unread_item_count() returns number of distinct unread items "
+	"in non-hidden feeds",
 	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	const auto feeds = get_five_empty_feeds(&rsscache);
-	for (int j = 0; j < 5; ++j) {
-		const auto item = std::make_shared<RssItem>(&rsscache);
-		const auto item2 = std::make_shared<RssItem>(&rsscache);
-		if ((j % 2) == 0) {
-			item->set_unread_nowrite(false);
-			item2->set_unread_nowrite(false);
-		}
-		feeds[j]->add_item(item);
-		feeds[j]->add_item(item2);
-	}
-	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedcontainer.unread_item_count() == 4);
+	SECTION("No query feeds") {
+		const auto feeds = get_five_empty_feeds(&rsscache);
+		for (int j = 0; j < 5; ++j) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			item->set_guid(std::to_string(j) + "item1");
+			const auto item2 = std::make_shared<RssItem>(&rsscache);
+			item2->set_guid(std::to_string(j) + "item2");
+			if ((j % 2) == 0) {
+				item->set_unread_nowrite(false);
+				item2->set_unread_nowrite(false);
+			}
+			feeds[j]->add_item(item);
+			feeds[j]->add_item(item2);
+		}
+		feedcontainer.set_feeds(feeds);
+
+		REQUIRE(feedcontainer.unread_item_count() == 4);
+	}
+
+	SECTION("Query feeds do not affect the total count") {
+		// This is a regression test for https://github.com/newsboat/newsboat/issues/1120
+
+		auto feeds = get_five_empty_feeds(&rsscache);
+
+		auto query1 = std::make_shared<RssFeed>(&rsscache);
+		query1->set_rssurl("query:Title contains word:title # \"word\"");
+		auto query2 = std::make_shared<RssFeed>(&rsscache);
+		query2->set_rssurl("query:Posts by John Doe:author = \"John Doe\"");
+
+		feeds.push_back(query1);
+		feeds.push_back(query2);
+
+		for (int j = 0; j < 5; ++j) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			item->set_title("All titles contain word");
+			item->set_author("John Doe");
+			item->set_guid(std::to_string(j) + "item1");
+			const auto item2 = std::make_shared<RssItem>(&rsscache);
+			item2->set_title("All titles contain word");
+			item2->set_author("John Doe");
+			item2->set_guid(std::to_string(j) + "item2");
+			if ((j % 2) == 0) {
+				item->set_unread_nowrite(false);
+				item2->set_unread_nowrite(false);
+			}
+			feeds[j]->add_item(item);
+			feeds[j]->add_item(item2);
+		}
+
+		feedcontainer.set_feeds(feeds);
+		feedcontainer.populate_query_feeds();
+
+		REQUIRE(feedcontainer.unread_item_count() == 4);
+	}
+
+	SECTION("Items in hidden feeds are not counted") {
+		// This is a regression test for https://github.com/newsboat/newsboat/issues/444
+
+		auto feeds = get_five_empty_feeds(&rsscache);
+
+		// First feed is hidden and contains five unread items
+		feeds[0]->set_tags({"!hidden"});
+		for (int i = 0; i < 5; ++i) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			item->set_guid(std::to_string(i) + "feed1");
+			item->set_unread(true);
+			feeds[0]->add_item(item);
+		}
+
+		// Second feed is **not** hidden and contains two unread items
+		for (int i = 0; i < 2; ++i) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			item->set_guid(std::to_string(i) + "feed2");
+			item->set_unread(true);
+			feeds[1]->add_item(item);
+		}
+
+		// Third feed contains three read items -- they shouldn't affect the count
+		for (int i = 0; i < 3; ++i) {
+			const auto item = std::make_shared<RssItem>(&rsscache);
+			item->set_guid(std::to_string(i) + "feed3");
+			item->set_unread(false);
+			feeds[2]->add_item(item);
+		}
+
+		feedcontainer.set_feeds(feeds);
+
+		// Only the two items of the second feed are counted
+		REQUIRE(feedcontainer.unread_item_count() == 2);
+
+		SECTION("...unless they are also in some query feed(s)") {
+			feeds[3]->set_rssurl("query:Posts from the hidden feed:guid =~ \".*feed1\"");
+			feedcontainer.set_feeds(feeds);
+			feedcontainer.populate_query_feeds();
+
+			// Two items from the second feeds plus five items from the first (hidden) feed
+			REQUIRE(feedcontainer.unread_item_count() == 7);
+		}
+	}
 }
 
 TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "

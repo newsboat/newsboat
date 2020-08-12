@@ -2,6 +2,7 @@
 
 #include <algorithm> // stable_sort
 #include <numeric>   // accumulate
+#include <unordered_set>
 
 #include "rssfeed.h"
 #include "utils.h"
@@ -269,12 +270,32 @@ unsigned int FeedContainer::unread_feed_count() const
 unsigned int FeedContainer::unread_item_count() const
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	return std::accumulate(feeds.begin(),
+
+	using guid_set = std::unordered_set<std::string>;
+	const auto unread_guids =
+		std::accumulate(feeds.begin(),
 			feeds.end(),
-			0,
-	[](unsigned int sum, const std::shared_ptr<RssFeed> feed) {
-		return sum += feed->unread_item_count();
+			guid_set(),
+	[](guid_set guids, const std::shared_ptr<RssFeed> feed) {
+		// Hidden feeds can't be viewed. The only way to read their articles is
+		// via a query feed; items that aren't in query feeds are completely
+		// inaccessible. Thus, we skip hidden feeds altogether to avoid
+		// counting items that can't be accessed.
+		if (feed->hidden()) {
+			return guids;
+		}
+
+		std::lock_guard<std::mutex> itemslock(feed->item_mutex);
+		for (const auto& item : feed->items()) {
+			if (item->unread()) {
+				guids.insert(item->guid());
+			}
+		}
+
+		return guids;
 	});
+
+	return unread_guids.size();
 }
 
 } // namespace newsboat
