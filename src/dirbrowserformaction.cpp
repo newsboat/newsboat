@@ -79,10 +79,11 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		std::string focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
-				std::string selection = f.get("listposname");
-				char filetype = selection[0];
+				const auto selected_position = files_list.get_position();
+				std::string selection = id_at_position[selected_position];
+				const char filetype = selection[0];
 				selection.erase(0, 1);
-				std::string filename(selection);
+				const std::string filename(selection);
 				switch (filetype) {
 				case 'd': {
 					int status = ::chdir(filename.c_str());
@@ -268,8 +269,9 @@ void DirBrowserFormAction::prepare()
 
 		ListFormatter listfmt;
 
+		id_at_position.clear();
 		for (std::string directory : directories) {
-			add_directory(listfmt, directory);
+			add_directory(listfmt, id_at_position, directory);
 		}
 
 		files_list.stfl_replace_lines(listfmt);
@@ -324,7 +326,9 @@ KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()
 	return hints;
 }
 
-void DirBrowserFormAction::add_directory(ListFormatter& listfmt,
+void DirBrowserFormAction::add_directory(
+	ListFormatter& listfmt,
+	std::vector<std::string>& id_at_position,
 	std::string dirname)
 {
 	struct stat sb;
@@ -350,8 +354,9 @@ void DirBrowserFormAction::add_directory(ListFormatter& listfmt,
 				group,
 				sizestr,
 				formatteddirname);
-		std::string id = strprintf::fmt("%c%s", ftype, Stfl::quote(dirname));
-		listfmt.add_line(utils::quote_for_stfl(line), id);
+		listfmt.add_line(utils::quote_for_stfl(line));
+		const std::string id = strprintf::fmt("%c%s", ftype, dirname);
+		id_at_position.push_back(id);
 	}
 }
 

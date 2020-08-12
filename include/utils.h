@@ -43,9 +43,6 @@ nonstd::optional<std::string> extract_token_quoted(std::string& str,
 
 std::string consolidate_whitespace(const std::string& str);
 
-std::vector<std::wstring> wtokenize(const std::wstring& str,
-	std::wstring delimiters = L" \r\n\t");
-
 std::string translit(const std::string& tocode,
 	const std::string& fromcode);
 std::string convert_text(const std::string& text,
@@ -89,7 +86,6 @@ std::string get_useragent(ConfigContainer* cfgcont);
 
 size_t strwidth(const std::string& s);
 size_t strwidth_stfl(const std::string& str);
-size_t wcswidth_stfl(const std::wstring& str, size_t size);
 
 std::string substr_with_width(const std::string& str,
 	const size_t max_width);

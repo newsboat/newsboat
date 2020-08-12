@@ -19,7 +19,6 @@ vbox
     richtext:1
     style_normal[listnormal]:
     style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
-    pos_name[feedposname]:
     pos[feeds_pos]:0
     offset[feeds_offset]:0
   vbox[hints]

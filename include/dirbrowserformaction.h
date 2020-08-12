@@ -36,8 +36,11 @@ private:
 		std::vector<std::string>* args = nullptr) override;
 	void update_title(const std::string& working_directory);
 
-	void add_directory(ListFormatter& listfmt, std::string dirname);
+	void add_directory(ListFormatter& listfmt,
+		std::vector<std::string>& id_at_position,
+		std::string dirname);
 	std::string get_rwx(unsigned short val);
+	std::vector<std::string> id_at_position;
 
 	std::string get_owner(uid_t uid);
 	std::string get_group(gid_t gid);

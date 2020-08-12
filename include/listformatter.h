@@ -11,20 +11,12 @@
 namespace newsboat {
 
 class ListFormatter {
-	typedef std::pair<std::string, std::string> LineIdPair;
-
 public:
 	ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
 	~ListFormatter();
-	void add_line(const std::string& text,
-		const std::string& id = "",
-		unsigned int width = 0);
-	void add_lines(const std::vector<std::string>& lines,
-		unsigned int width = 0);
+	void add_line(const std::string& text);
 	void set_line(const unsigned int itempos,
-		const std::string& text,
-		const std::string& id = "",
-		unsigned int width = 0);
+		const std::string& text);
 	void clear()
 	{
 		lines.clear();
@@ -36,7 +28,7 @@ public:
 	}
 
 private:
-	std::vector<LineIdPair> lines;
+	std::vector<std::string> lines;
 	RegexManager* rxman;
 	std::string location;
 };

@@ -109,27 +109,25 @@ bool SelectFormAction::process_operation(Operation op,
 		hardquit = true;
 		break;
 	case OP_OPEN: {
-		std::string tagposname = f.get("tagposname");
-		unsigned int pos = utils::to_u(tagposname);
-		if (tagposname.length() > 0) {
-			switch (type) {
-			case SelectionType::TAG: {
-				if (pos < tags.size()) {
-					value = tags[pos];
-					quit = true;
-				}
+		switch (type) {
+		case SelectionType::TAG: {
+			if (tags.size() >= 1) {
+				const auto pos = tags_list.get_position();
+				value = tags[pos];
+				quit = true;
 			}
-			break;
-			case SelectionType::FILTER: {
-				if (pos < filters.size()) {
-					value = filters[pos].expr;
-					quit = true;
-				}
+		}
+		break;
+		case SelectionType::FILTER: {
+			if (filters.size() >= 1) {
+				const auto pos = tags_list.get_position();
+				value = filters[pos].expr;
+				quit = true;
 			}
-			break;
-			default:
-				assert(0); // should never happen
-			}
+		}
+		break;
+		default:
+			assert(0); // should never happen
 		}
 	}
 	break;
@@ -163,8 +161,7 @@ void SelectFormAction::prepare()
 						format_line(selecttag_format,
 							tag,
 							i + 1,
-							width)),
-					std::to_string(i));
+							width)));
 				i++;
 			}
 			break;
@@ -172,7 +169,7 @@ void SelectFormAction::prepare()
 			for (const auto& filter : filters) {
 				std::string tagstr = strprintf::fmt(
 						"%4u  %s", i + 1, filter.name);
-				listfmt.add_line(utils::quote_for_stfl(tagstr), std::to_string(i));
+				listfmt.add_line(utils::quote_for_stfl(tagstr));
 				i++;
 			}
 			break;
