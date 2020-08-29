@@ -9,22 +9,6 @@ cache:
 before_cache:
   - rm -rf $HOME/.cargo/registry/index
 
-addons:
-  apt:
-    packages: &global_deps
-    - libsqlite3-dev
-    - libcurl4-openssl-dev
-    - libxml2-dev
-    - libstfl-dev
-    - libjson-c-dev
-    - libncursesw5-dev
-    - asciidoctor
-addons:
-  apt:
-    packages: &clang_deps
-    - *global_deps
-    - g++ # required for some niceties in C++ standard library
-
 env:
   - CXXFLAGS='-fstack-clash-protection -D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2'
 
@@ -32,20 +16,27 @@ matrix:
   fast_finish: true
   include:
     - name: "Test Coverage"
-      compiler: clang-8
+      compiler: clang-11
       os: linux
       dist: bionic
       rust: nightly
       addons:
         apt:
           sources:
-            - sourceline: "ppa:ubuntu-toolchain-r/test"
+            - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-11 main"
+              key_url: https://apt.llvm.org/llvm-snapshot.gpg.key
+          update: true
           packages:
-            - clang-8
-            - llvm-8
-            - *clang_deps
+            - clang-11
+            - libsqlite3-dev
+            - libcurl4-openssl-dev
+            - libxml2-dev
+            - libstfl-dev
+            - libjson-c-dev
+            - libncursesw5-dev
+            - asciidoctor
       env:
-        - COMPILER=clang++-8
+        - COMPILER=clang++-11
         - REPORT_COVERAGE=yes
       before_install:
         - cargo install grcov
