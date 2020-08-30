@@ -99,7 +99,8 @@ void HtmlRenderer::render(std::istream& input,
 	unsigned int source_count = 0;
 	std::string curline;
 	int indent_level = 0;
-	bool inside_li = false, is_ol = false, inside_pre = false;
+	std::vector<HtmlTag> list_elements_stack;
+	bool is_ol = false, inside_pre = false;
 	bool itunes_hack = false;
 	size_t inside_script = 0;
 	size_t inside_style = 0;
@@ -360,7 +361,9 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::LI:
-				if (inside_li) {
+				if (list_elements_stack.size() >= 1
+					&& list_elements_stack.back() == HtmlTag::LI) {
+					list_elements_stack.pop_back();
 					indent_level -= 2;
 					if (indent_level < 0) {
 						indent_level = 0;
@@ -371,7 +374,7 @@ void HtmlRenderer::render(std::istream& input,
 						tables.size() ? 0
 						: indent_level);
 				}
-				inside_li = true;
+				list_elements_stack.push_back(HtmlTag::LI);
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);
@@ -611,7 +614,9 @@ void HtmlRenderer::render(std::istream& input,
 				}
 			// fall-through
 			case HtmlTag::UL:
-				if (inside_li) {
+				if (list_elements_stack.size() >= 1
+					&& list_elements_stack.back() == HtmlTag::LI) {
+					list_elements_stack.pop_back();
 					indent_level -= 2;
 					if (indent_level < 0) {
 						indent_level = 0;
@@ -655,7 +660,10 @@ void HtmlRenderer::render(std::istream& input,
 				if (indent_level < 0) {
 					indent_level = 0;
 				}
-				inside_li = false;
+				if (list_elements_stack.size() >= 1
+					&& list_elements_stack.back() == HtmlTag::LI) {
+					list_elements_stack.pop_back();
+				}
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);
