@@ -138,12 +138,12 @@ macos_task:
           env:
               CC: clang
               CXX: clang++
-              RUST: 1.45.0
+              RUST: 1.46.0
         - name: macOS GCC Rust stable
           env:
               CC: gcc
               CXX: g++
-              RUST: 1.45.0
+              RUST: 1.46.0
         # This job tests our minimum supported Rust version, so only bump on
         # Newsboat release day
         - name: macOS GCC Rust 1.42.0
