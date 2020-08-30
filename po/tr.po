@@ -1771,6 +1771,3 @@ msgstr "regcomp %i kodunu döndürdü"
 #: rust/regex-rs/src/lib.rs:243 rust/regex-rs/src/lib.rs:247
 msgid "regexec returned code %i"
 msgstr "regexec %i kodunu döndürdü"
-
-#~ msgid "config"
-#~ msgstr "yapılandırma"
