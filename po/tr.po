@@ -1022,8 +1022,8 @@ msgstr "evha"
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
-msgstr "`%s' üzerine yaz (`%s' içinde)? (e:Evet v:Tümüne evet h:Hayır "
-"a:Tümüne hayır)"
+msgstr "`%s' üzerine yaz (`%s' içinde)? Bunun gibi %d çakışma daha var (e:Evet "
+"v:Tümüne evet h:Hayır a:Tümüne hayır)"
 
 #: src/itemlistformaction.cpp:1529
 #, c-format
