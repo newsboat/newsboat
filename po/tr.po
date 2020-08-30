@@ -591,16 +591,16 @@ msgstr "ibyosh"
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
-msgstr "Sırala: (i)lketiket/(b)aşlıksayısı/(y)azısayısı/(o)kunmamışyazısayısı"
-"(s)ongüncelleme/(h)içbiri"
+msgstr "Sırala: (i)lketiket/(b)aşlıksayısı/(y)azısayısı/(o)kunmamışyazısayısı/"
+"(s)ongüncelleme/(h)içbiri?"
 
 #: src/feedlistformaction.cpp:196
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
 msgstr ""
-msgstr "Ters Sırala: (i)lketiket/(b)aşlıksayısı/(y)azısayısı/(o)kunmamışyazısayısı"
-"(s)ongüncelleme/(h)içbiri"
+"Ters Sırala: (i)lketiket/(b)aşlıksayısı/(y)azısayısı/(o)kunmamışyazısayısı/"
+"(s)ongüncelleme/(h)içbiri?"
 
 #: src/feedlistformaction.cpp:247 src/feedlistformaction.cpp:252
 #: src/feedlistformaction.cpp:288 src/feedlistformaction.cpp:311
@@ -962,12 +962,12 @@ msgstr "tbaylgr"
 #: src/itemlistformaction.cpp:679
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr "Sırala: (t)arih/(b)aşlık/b(a)yraklar/(y)azar/bağ(l)antı/(g)uid/"
-"(r)astgele"
+"(r)astgele?"
 
 #: src/itemlistformaction.cpp:717
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr "Ters Sırala: (t)arih/(b)aşlık/b(a)yraklar/(y)azar/bağ(l)antı/(g)uid/"
-"(r)astgele"
+"(r)astgele?"
 
 #: src/itemlistformaction.cpp:842 src/itemviewformaction.cpp:549
 msgid "Flags updated."
