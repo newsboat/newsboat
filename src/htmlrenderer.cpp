@@ -99,7 +99,8 @@ void HtmlRenderer::render(std::istream& input,
 	unsigned int source_count = 0;
 	std::string curline;
 	int indent_level = 0;
-	bool inside_li = false, is_ol = false, inside_pre = false;
+	std::vector<HtmlTag> list_elements_stack;
+	bool inside_pre = false;
 	bool itunes_hack = false;
 	size_t inside_script = 0;
 	size_t inside_style = 0;
@@ -314,7 +315,7 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 			case HtmlTag::OL:
-				is_ol = true;
+				list_elements_stack.push_back(HtmlTag::OL);
 				{
 					unsigned int ol_count = 1;
 					std::string ol_count_str;
@@ -352,15 +353,17 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::UL:
-				is_ol = false;
+				list_elements_stack.push_back(HtmlTag::UL);
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);
 				break;
 
-			case HtmlTag::LI:
-				if (inside_li) {
+			case HtmlTag::LI: {
+				if (list_elements_stack.size() >= 1
+					&& list_elements_stack.back() == HtmlTag::LI) {
+					list_elements_stack.pop_back();
 					indent_level -= 2;
 					if (indent_level < 0) {
 						indent_level = 0;
@@ -371,12 +374,21 @@ void HtmlRenderer::render(std::istream& input,
 						tables.size() ? 0
 						: indent_level);
 				}
-				inside_li = true;
+				list_elements_stack.push_back(HtmlTag::LI);
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);
 				indent_level += 2;
-				if (is_ol && ol_counts.size() != 0) {
+
+				const auto latest_list = std::find_if(list_elements_stack.rbegin(),
+				list_elements_stack.rend(), [](const HtmlTag& tag) {
+					return (tag == HtmlTag::OL || tag == HtmlTag::UL);
+				});
+				bool inside_ordered_list = false;
+				if (latest_list != list_elements_stack.rend() && *latest_list == HtmlTag::OL) {
+					inside_ordered_list = true;
+				}
+				if (inside_ordered_list && ol_counts.size() != 0) {
 					curline.append(strprintf::fmt("%s. ",
 							format_ol_count(
 								ol_counts[ol_counts
@@ -388,7 +400,8 @@ void HtmlRenderer::render(std::istream& input,
 				} else {
 					curline.append("  * ");
 				}
-				break;
+			}
+			break;
 
 			case HtmlTag::DT:
 				add_nonempty_line(curline, tables, lines);
@@ -611,7 +624,9 @@ void HtmlRenderer::render(std::istream& input,
 				}
 			// fall-through
 			case HtmlTag::UL:
-				if (inside_li) {
+				if (list_elements_stack.size() >= 1
+					&& list_elements_stack.back() == HtmlTag::LI) {
+					list_elements_stack.pop_back();
 					indent_level -= 2;
 					if (indent_level < 0) {
 						indent_level = 0;
@@ -622,6 +637,7 @@ void HtmlRenderer::render(std::istream& input,
 						tables.size() ? 0
 						: indent_level);
 				}
+				list_elements_stack.pop_back();
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
 				prepare_new_line(curline,
@@ -655,7 +671,10 @@ void HtmlRenderer::render(std::istream& input,
 				if (indent_level < 0) {
 					indent_level = 0;
 				}
-				inside_li = false;
+				if (list_elements_stack.size() >= 1
+					&& list_elements_stack.back() == HtmlTag::LI) {
+					list_elements_stack.pop_back();
+				}
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);

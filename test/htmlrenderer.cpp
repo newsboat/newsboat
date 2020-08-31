@@ -1422,3 +1422,46 @@ TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
 	REQUIRE(links[3].first == "http://example.com/audio.oga");
 	REQUIRE(links[3].second == LinkType::AUDIO);
 }
+
+TEST_CASE("Ordered list can contain unordered list in its items",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	const auto input = std::string(
+			"<ol>"
+			"	<li>"
+			"		<ul>"
+			"			<li>first item of sublist A</li>"
+			"			<li>second item of sublist A</li>"
+			"		</ul>"
+			"	</li>"
+			"	<li>"
+			"		<ul>"
+			"			<li>first item of sublist B</li>"
+			"			<li>second item of sublist B</li>"
+			"			<li>third item of sublist B</li>"
+			"		</ul>"
+			"	</li>"
+			"</ol>");
+	rnd.render(input, lines, links, "");
+
+	REQUIRE(lines.size() == 13);
+	REQUIRE(lines[0] == p(LineType::wrappable, ""));
+	REQUIRE(lines[1] == p(LineType::wrappable, " 1.  "));
+	REQUIRE(lines[2] == p(LineType::wrappable, ""));
+	REQUIRE(lines[3] == p(LineType::wrappable, "      * first item of sublist A"));
+	REQUIRE(lines[4] == p(LineType::wrappable, "      * second item of sublist A"));
+	REQUIRE(lines[5] == p(LineType::wrappable, ""));
+	REQUIRE(lines[6] == p(LineType::wrappable, " 2.  "));
+	REQUIRE(lines[7] == p(LineType::wrappable, ""));
+	REQUIRE(lines[8] == p(LineType::wrappable, "      * first item of sublist B"));
+	REQUIRE(lines[9] == p(LineType::wrappable, "      * second item of sublist B"));
+	REQUIRE(lines[10] == p(LineType::wrappable, "      * third item of sublist B"));
+	REQUIRE(lines[11] == p(LineType::wrappable, ""));
+	REQUIRE(lines[12] == p(LineType::wrappable, ""));
+
+	REQUIRE(links.size() == 0);
+}
