@@ -84,13 +84,6 @@ public:
 		add_items(items);
 	}
 
-	void clear_items()
-	{
-		LOG(Level::DEBUG, "RssFeed: clearing items");
-		items_.clear();
-		items_guid_map.clear();
-	}
-
 	void erase_items(std::vector<std::shared_ptr<RssItem>>::iterator begin,
 		std::vector<std::shared_ptr<RssItem>>::iterator end)
 	{

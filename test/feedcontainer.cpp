@@ -674,24 +674,6 @@ TEST_CASE(
 	}
 }
 
-TEST_CASE("clear_feeds_items() removes all items from all feeds",
-	"[FeedContainer]")
-{
-	FeedContainer feedcontainer;
-	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
-	feedcontainer.set_feeds({});
-	const auto feed = std::make_shared<RssFeed>(&rsscache);
-	for (int j = 0; j < 5; ++j) {
-		feed->add_item(std::make_shared<RssItem>(&rsscache));
-	}
-	feedcontainer.add_feed(feed);
-
-	REQUIRE(feed->items().size() == 5);
-	feedcontainer.clear_feeds_items();
-	REQUIRE(feed->items().size() == 0);
-}
-
 TEST_CASE(
 	"unread_feed_count() returns number of feeds that have unread items in "
 	"them",

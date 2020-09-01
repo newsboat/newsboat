@@ -248,15 +248,6 @@ std::vector<std::shared_ptr<RssFeed>> FeedContainer::get_all_feeds()
 	return tmpfeeds;
 }
 
-void FeedContainer::clear_feeds_items()
-{
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feeds) {
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-		feed->clear_items();
-	}
-}
-
 unsigned int FeedContainer::unread_feed_count() const
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);

@@ -92,9 +92,6 @@ Controller::~Controller()
 	delete rsscache;
 	delete urlcfg;
 	delete api;
-
-	feedcontainer.clear_feeds_items();
-	feedcontainer.feeds.clear();
 }
 
 void Controller::set_view(View* vv)
@@ -643,8 +640,6 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	for (const auto& item : feed->items()) {
 		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 	}
-
-	oldfeed->clear_items();
 
 	v->notify_itemlist_change(feedcontainer.feeds[pos]);
 	if (!unattended) {
