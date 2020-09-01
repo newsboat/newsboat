@@ -41,9 +41,8 @@ public:
 
 	void replace_feed(unsigned int pos, std::shared_ptr<RssFeed> feed);
 
-	std::vector<std::shared_ptr<RssFeed>> feeds;
-
 private:
+	std::vector<std::shared_ptr<RssFeed>> feeds;
 	mutable std::mutex feeds_mutex;
 };
 } // namespace newsboat

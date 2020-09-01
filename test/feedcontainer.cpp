@@ -105,7 +105,7 @@ TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 
 	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedcontainer.feeds == feeds);
+	REQUIRE(feedcontainer.get_all_feeds() == feeds);
 }
 
 TEST_CASE("get_feed_by_url() returns feed by its URL", "[FeedContainer]")
