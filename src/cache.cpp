@@ -737,7 +737,7 @@ void Cache::do_vacuum()
 	run_sql("VACUUM;");
 }
 
-void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>>& feeds)
+void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds)
 {
 	// we don't use the std::lock_guard<> here... see comments below
 	mtx.lock();
