@@ -1101,3 +1101,29 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 			== 24);
 	}
 }
+
+TEST_CASE("replace_feed() puts given feed into the specified position",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+
+	const auto first_feed = *feeds.begin();
+	const auto four_feeds = std::vector<std::shared_ptr<RssFeed>>(feeds.begin() + 1,
+			feeds.end());
+
+	feedcontainer.set_feeds(four_feeds);
+
+	const auto position = 2;
+	const auto feed_before_replacement = feedcontainer.get_feed(position);
+	REQUIRE(feed_before_replacement != first_feed);
+
+	feedcontainer.replace_feed(position, first_feed);
+	const auto feed_after_replacement = feedcontainer.get_feed(position);
+
+	REQUIRE(feed_before_replacement != feed_after_replacement);
+	REQUIRE(feed_after_replacement == first_feed);
+}

@@ -635,7 +635,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 
 	feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
 	feed->set_order(oldfeed->get_order());
-	feedcontainer.feeds[pos] = feed;
+	feedcontainer.replace_feed(pos, feed);
 	queueManager.autoenqueue(feed);
 	for (const auto& item : feed->items()) {
 		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());

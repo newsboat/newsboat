@@ -39,6 +39,8 @@ public:
 	unsigned int unread_feed_count() const;
 	unsigned int unread_item_count() const;
 
+	void replace_feed(unsigned int pos, std::shared_ptr<RssFeed> feed);
+
 	std::vector<std::shared_ptr<RssFeed>> feeds;
 
 private:

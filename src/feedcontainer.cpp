@@ -289,4 +289,12 @@ unsigned int FeedContainer::unread_item_count() const
 	return unread_guids.size();
 }
 
+void FeedContainer::replace_feed(unsigned int pos,
+	std::shared_ptr<RssFeed> feed)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	assert(pos < feeds.size());
+	feeds[pos] = feed;
+}
+
 } // namespace newsboat
