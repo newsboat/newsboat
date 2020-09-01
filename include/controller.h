@@ -128,7 +128,6 @@ private:
 	ColorManager colorman;
 	RegexManager rxman;
 	RemoteApi* api;
-	std::mutex feeds_mutex;
 
 	std::unique_ptr<FsLock> fslock;
 
