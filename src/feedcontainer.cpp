@@ -238,14 +238,10 @@ void FeedContainer::set_feeds(
 	feeds = new_feeds;
 }
 
-std::vector<std::shared_ptr<RssFeed>> FeedContainer::get_all_feeds()
+std::vector<std::shared_ptr<RssFeed>> FeedContainer::get_all_feeds() const
 {
-	std::vector<std::shared_ptr<RssFeed>> tmpfeeds;
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		tmpfeeds = feeds;
-	}
-	return tmpfeeds;
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	return feeds;
 }
 
 unsigned int FeedContainer::unread_feed_count() const

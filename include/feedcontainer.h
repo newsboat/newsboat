@@ -35,7 +35,7 @@ public:
 	unsigned int feeds_size();
 	void reset_feeds_status();
 	void set_feeds(const std::vector<std::shared_ptr<RssFeed>> new_feeds);
-	std::vector<std::shared_ptr<RssFeed>> get_all_feeds();
+	std::vector<std::shared_ptr<RssFeed>> get_all_feeds() const;
 	unsigned int unread_feed_count() const;
 	unsigned int unread_item_count() const;
 
