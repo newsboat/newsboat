@@ -69,6 +69,7 @@ View::View(Controller* c)
 	, tab_count(0)
 	, rsscache(nullptr)
 	, filters(ctrl->get_filtercontainer())
+	, colorman(ctrl->get_colormanager())
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -975,11 +976,6 @@ void View::remove_formaction(unsigned int pos)
 	}
 }
 
-void View::set_text_styles(std::map<std::string, TextStyle> styles)
-{
-	text_styles = styles;
-}
-
 void View::apply_colors_to_all_formactions()
 {
 	for (const auto& form : formaction_stack) {
@@ -996,6 +992,7 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
 
 	std::string article_colorstr;
+	const auto text_styles = colorman.get_styles();
 
 	for (const auto& text_style : text_styles) {
 		const std::string& element = text_style.first;

@@ -883,7 +883,6 @@ void Controller::export_read_information(const std::string& readinfofile)
 
 void Controller::update_config()
 {
-	v->set_text_styles(colorman.get_styles());
 	v->apply_colors_to_all_formactions();
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
