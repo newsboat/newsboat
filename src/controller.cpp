@@ -883,12 +883,10 @@ void Controller::export_read_information(const std::string& readinfofile)
 
 void Controller::update_config()
 {
-	if (colorman.colors_loaded()) {
-		v->set_colors(colorman.get_fgcolors(),
-			colorman.get_bgcolors(),
-			colorman.get_attributes());
-		v->apply_colors_to_all_formactions();
-	}
+	v->set_colors(colorman.get_fgcolors(),
+		colorman.get_bgcolors(),
+		colorman.get_attributes());
+	v->apply_colors_to_all_formactions();
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
 		try {

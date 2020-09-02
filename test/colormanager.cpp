@@ -10,37 +10,6 @@
 using namespace newsboat;
 
 TEST_CASE(
-	"colors_loaded() signals if any \"color\" actions have been processed",
-	"[ColorManager]")
-{
-	ColorManager c;
-
-	{
-		INFO("By default, no colors are loaded");
-
-		REQUIRE_FALSE(c.colors_loaded());
-	}
-
-	{
-		INFO("Processing \"color\" action makes it return `true`");
-
-		c.handle_action("color", {"listnormal", "default", "default"});
-		REQUIRE(c.colors_loaded());
-	}
-
-	{
-		INFO("Processing more \"color\" actions doesn't affect the "
-			"return value");
-
-		c.handle_action("color", {"listfocus", "default", "default"});
-		REQUIRE(c.colors_loaded());
-		c.handle_action(
-			"color", {"listfocus_unread", "default", "cyan"});
-		REQUIRE(c.colors_loaded());
-	}
-}
-
-TEST_CASE(
 	"get_fgcolors() returns foreground colors for each element that "
 	"was processed",
 	"[ColorManager]")
@@ -112,9 +81,15 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
-	REQUIRE_FALSE(clr.colors_loaded());
+	REQUIRE(clr.get_fgcolors().size() == 0);
+	REQUIRE(clr.get_bgcolors().size() == 0);
+	REQUIRE(clr.get_attributes().size() == 0);
+
 	cfg.parse_file("data/config-with-colors");
-	REQUIRE(clr.colors_loaded());
+
+	REQUIRE(clr.get_fgcolors().size() == 2);
+	REQUIRE(clr.get_bgcolors().size() == 2);
+	REQUIRE(clr.get_attributes().size() == 2);
 }
 
 TEST_CASE(

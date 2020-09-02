@@ -22,10 +22,6 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	bool colors_loaded()
-	{
-		return colors_loaded_;
-	}
 	void set_pb_colors(podboat::PbView* v);
 	std::map<std::string, std::string>& get_fgcolors()
 	{
@@ -41,7 +37,6 @@ public:
 	}
 
 private:
-	bool colors_loaded_;
 	std::map<std::string, std::string> fg_colors;
 	std::map<std::string, std::string> bg_colors;
 	std::map<std::string, std::vector<std::string>> attributes;

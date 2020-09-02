@@ -291,9 +291,7 @@ int PbController::initialize(int argc, char* argv[])
 
 int PbController::run()
 {
-	if (colorman.colors_loaded()) {
-		colorman.set_pb_colors(v);
-	}
+	colorman.set_pb_colors(v);
 
 	max_dls = cfg->get_configvalue_as_int("max-downloads");
 

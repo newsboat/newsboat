@@ -20,7 +20,6 @@ using namespace podboat;
 namespace newsboat {
 
 ColorManager::ColorManager()
-	: colors_loaded_(false)
 {
 }
 
@@ -77,7 +76,6 @@ void ColorManager::handle_action(const std::string& action,
 			fg_colors[element] = fgcolor;
 			bg_colors[element] = bgcolor;
 			attributes[element] = attribs;
-			colors_loaded_ = true;
 		} else
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid configuration element"),
