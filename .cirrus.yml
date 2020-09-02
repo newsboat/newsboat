@@ -3,9 +3,6 @@ freebsd_task:
         - name: FreeBSD 11.4
           freebsd_instance:
             image: freebsd-11-4-release-amd64
-          # We expect this build to fail because "latest" repo for 11.4 is currently missing Rust.
-          allow_failures: true
-          skip_notifications: true
         - name: FreeBSD 12.1
           freebsd_instance:
             image: freebsd-12-1-release-amd64
