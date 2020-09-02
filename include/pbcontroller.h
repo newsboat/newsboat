@@ -62,7 +62,7 @@ public:
 		return cfg;
 	}
 
-	newsboat::ColorManager& get_colormanager()
+	const newsboat::ColorManager& get_colormanager()
 	{
 		return colorman;
 	}

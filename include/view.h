@@ -169,7 +169,7 @@ protected:
 	unsigned int tab_count;
 	Cache* rsscache;
 	FilterContainer& filters;
-	ColorManager& colorman;
+	const ColorManager& colorman;
 	std::vector<std::string> suggestions;
 };
 

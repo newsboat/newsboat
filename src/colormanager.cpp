@@ -101,7 +101,7 @@ void ColorManager::dump_config(std::vector<std::string>& config_output)
 	}
 }
 
-void ColorManager::apply_colors(Stfl::Form& form)
+void ColorManager::apply_colors(Stfl::Form& form) const
 {
 	for (const auto& element_style : element_styles) {
 		const std::string& element = element_style.first;

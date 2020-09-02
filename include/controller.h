@@ -106,7 +106,7 @@ public:
 		return filters;
 	}
 
-	ColorManager& get_colormanager()
+	const ColorManager& get_colormanager()
 	{
 		return colorman;
 	}
