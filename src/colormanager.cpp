@@ -101,11 +101,7 @@ void ColorManager::dump_config(std::vector<std::string>& config_output)
 	}
 }
 
-/*
- * this is podboat-specific color management
- * TODO: refactor this
- */
-void ColorManager::set_pb_colors(podboat::PbView* v)
+void ColorManager::apply_colors(Stfl::Form& form)
 {
 	for (const auto& element_style : element_styles) {
 		const std::string& element = element_style.first;
@@ -135,8 +131,7 @@ void ColorManager::set_pb_colors(podboat::PbView* v)
 			element,
 			colorattr);
 
-		v->dllist_form.set(element, colorattr);
-		v->help_form.set(element, colorattr);
+		form.set(element, colorattr);
 	}
 }
 

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "configparser.h"
+#include "stflpp.h"
 
 namespace podboat {
 class PbView;
@@ -28,7 +29,7 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
-	void set_pb_colors(podboat::PbView* v);
+	void apply_colors(Stfl::Form& form);
 	std::map<std::string, TextStyle> get_styles()
 	{
 		return element_styles;

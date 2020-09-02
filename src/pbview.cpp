@@ -259,9 +259,10 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 	} while (!quit);
 }
 
-void PbView::apply_colors_to_all_formactions()
+void PbView::apply_colors_to_all_forms()
 {
-	colorman.set_pb_colors(this);
+	colorman.apply_colors(dllist_form);
+	colorman.apply_colors(help_form);
 }
 
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)

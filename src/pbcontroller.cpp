@@ -291,7 +291,7 @@ int PbController::initialize(int argc, char* argv[])
 
 int PbController::run()
 {
-	v->apply_colors_to_all_formactions();
+	v->apply_colors_to_all_forms();
 
 	max_dls = cfg->get_configvalue_as_int("max-downloads");
 

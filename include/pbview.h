@@ -25,11 +25,9 @@ public:
 	{
 		keys = k;
 	}
-	void apply_colors_to_all_formactions();
+	void apply_colors_to_all_forms();
 
 private:
-	friend class newsboat::ColorManager;
-
 	struct KeyMapHintEntry {
 		Operation op;
 		char* text;
