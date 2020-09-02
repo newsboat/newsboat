@@ -29,6 +29,7 @@ PbView::PbView(PbController* c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
 	, keys(0)
+	, colorman(ctrl->get_colormanager())
 	, downloads_list("dls", dllist_form,
 		  ctrl->get_cfgcont()->get_configvalue_as_int("scrolloff"))
 	, help_textview("helptext", help_form)
@@ -256,6 +257,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 
 	} while (!quit);
+}
+
+void PbView::apply_colors_to_all_formactions()
+{
+	colorman.set_pb_colors(this);
 }
 
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)

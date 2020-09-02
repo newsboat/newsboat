@@ -25,6 +25,7 @@ public:
 	{
 		keys = k;
 	}
+	void apply_colors_to_all_formactions();
 
 private:
 	friend class newsboat::ColorManager;
@@ -48,6 +49,7 @@ private:
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
 	newsboat::KeyMap* keys;
+	newsboat::ColorManager& colorman;
 
 	ListWidget downloads_list;
 	TextviewWidget help_textview;
