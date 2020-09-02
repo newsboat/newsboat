@@ -991,59 +991,7 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 {
 	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
 
-	std::string article_colorstr;
-	const auto text_styles = colorman.get_styles();
-
-	for (const auto& text_style : text_styles) {
-		const std::string& element = text_style.first;
-		const TextStyle& style = text_style.second;
-		std::string colorattr;
-		if (style.fg_color != "default") {
-			colorattr.append("fg=");
-			colorattr.append(style.fg_color);
-		}
-		if (style.bg_color != "default") {
-			if (colorattr.length() > 0) {
-				colorattr.append(",");
-			}
-			colorattr.append("bg=");
-			colorattr.append(style.bg_color);
-		}
-		for (const auto& attr : style.attributes) {
-			if (colorattr.length() > 0) {
-				colorattr.append(",");
-			}
-			colorattr.append("attr=");
-			colorattr.append(attr);
-		}
-
-		if (element == "article") {
-			article_colorstr = colorattr;
-			if (fa->id() == "article") {
-				std::string bold = article_colorstr;
-				std::string ul = article_colorstr;
-				if (bold.length() > 0) {
-					bold.append(",");
-				}
-				if (ul.length() > 0) {
-					ul.append(",");
-				}
-				bold.append("attr=bold");
-				ul.append("attr=underline");
-				fa->get_form().set("color_bold", bold.c_str());
-				fa->get_form().set(
-					"color_underline", ul.c_str());
-			}
-		}
-
-		LOG(Level::DEBUG,
-			"View::apply_colors: %s %s %s\n",
-			fa->id(),
-			element,
-			colorattr);
-
-		fa->get_form().set(element, colorattr);
-	}
+	colorman.apply_colors(fa->get_form());
 }
 
 void View::feedlist_mark_pos_if_visible(unsigned int pos)

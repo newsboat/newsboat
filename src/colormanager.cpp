@@ -132,6 +132,23 @@ void ColorManager::apply_colors(Stfl::Form& form)
 			colorattr);
 
 		form.set(element, colorattr);
+
+		if (element == "article") {
+			std::string bold = colorattr;
+			std::string ul = colorattr;
+			if (bold.length() > 0) {
+				bold.append(",");
+			}
+			if (ul.length() > 0) {
+				ul.append(",");
+			}
+			bold.append("attr=bold");
+			ul.append("attr=underline");
+			// STFL will just ignore those in forms which don't have the
+			// `color_bold` and `color_underline` variables.
+			form.set("color_bold", bold.c_str());
+			form.set("color_underline", ul.c_str());
+		}
 	}
 }
 
