@@ -14,6 +14,12 @@ class View;
 
 namespace newsboat {
 
+struct TextStyle {
+	std::string fg_color;
+	std::string bg_color;
+	std::vector<std::string> attributes;
+};
+
 class ColorManager : public ConfigActionHandler {
 public:
 	ColorManager();
@@ -23,23 +29,13 @@ public:
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) override;
 	void set_pb_colors(podboat::PbView* v);
-	std::map<std::string, std::string>& get_fgcolors()
+	std::map<std::string, TextStyle> get_styles()
 	{
-		return fg_colors;
-	}
-	std::map<std::string, std::string>& get_bgcolors()
-	{
-		return bg_colors;
-	}
-	std::map<std::string, std::vector<std::string>>& get_attributes()
-	{
-		return attributes;
+		return element_styles;
 	}
 
 private:
-	std::map<std::string, std::string> fg_colors;
-	std::map<std::string, std::string> bg_colors;
-	std::map<std::string, std::vector<std::string>> attributes;
+	std::map<std::string, TextStyle> element_styles;
 };
 
 } // namespace newsboat

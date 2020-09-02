@@ -73,9 +73,7 @@ void ColorManager::handle_action(const std::string& action,
 			element == "listfocus_unread" || element == "info" ||
 			element == "background" || element == "article" ||
 			element == "end-of-text-marker") {
-			fg_colors[element] = fgcolor;
-			bg_colors[element] = bgcolor;
-			attributes[element] = attribs;
+			element_styles[element] = {fgcolor, bgcolor, attribs};
 		} else
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid configuration element"),
@@ -88,12 +86,14 @@ void ColorManager::handle_action(const std::string& action,
 
 void ColorManager::dump_config(std::vector<std::string>& config_output)
 {
-	for (const auto& color : fg_colors) {
+	for (const auto& element_style : element_styles) {
+		const std::string& element = element_style.first;
+		const TextStyle& style = element_style.second;
 		std::string configline = strprintf::fmt("color %s %s %s",
-				color.first,
-				color.second,
-				bg_colors[color.first]);
-		for (const auto& attrib : attributes[color.first]) {
+				element,
+				style.fg_color,
+				style.bg_color);
+		for (const auto& attrib : style.attributes) {
 			configline.append(" ");
 			configline.append(attrib);
 		}
@@ -107,24 +107,22 @@ void ColorManager::dump_config(std::vector<std::string>& config_output)
  */
 void ColorManager::set_pb_colors(podboat::PbView* v)
 {
-	auto fgcit = fg_colors.begin();
-	auto bgcit = bg_colors.begin();
-	auto attit = attributes.begin();
-
-	for (; fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+	for (const auto& element_style : element_styles) {
+		const std::string& element = element_style.first;
+		const TextStyle& style = element_style.second;
 		std::string colorattr;
-		if (fgcit->second != "default") {
+		if (style.fg_color != "default") {
 			colorattr.append("fg=");
-			colorattr.append(fgcit->second);
+			colorattr.append(style.fg_color);
 		}
-		if (bgcit->second != "default") {
+		if (style.bg_color != "default") {
 			if (colorattr.length() > 0) {
 				colorattr.append(",");
 			}
 			colorattr.append("bg=");
-			colorattr.append(bgcit->second);
+			colorattr.append(style.bg_color);
 		}
-		for (const auto& attr : attit->second) {
+		for (const auto& attr : style.attributes) {
 			if (colorattr.length() > 0) {
 				colorattr.append(",");
 			}
@@ -134,11 +132,11 @@ void ColorManager::set_pb_colors(podboat::PbView* v)
 
 		LOG(Level::DEBUG,
 			"ColorManager::set_pb_colors: %s %s\n",
-			fgcit->first,
+			element,
 			colorattr);
 
-		v->dllist_form.set(fgcit->first, colorattr);
-		v->help_form.set(fgcit->first, colorattr);
+		v->dllist_form.set(element, colorattr);
+		v->help_form.set(element, colorattr);
 	}
 }
 

@@ -975,13 +975,9 @@ void View::remove_formaction(unsigned int pos)
 	}
 }
 
-void View::set_colors(std::map<std::string, std::string>& fgc,
-	std::map<std::string, std::string>& bgc,
-	std::map<std::string, std::vector<std::string>>& attribs)
+void View::set_text_styles(std::map<std::string, TextStyle> styles)
 {
-	fg_colors = fgc;
-	bg_colors = bgc;
-	attributes = attribs;
+	text_styles = styles;
 }
 
 void View::apply_colors_to_all_formactions()
@@ -997,28 +993,26 @@ void View::apply_colors_to_all_formactions()
 
 void View::apply_colors(std::shared_ptr<FormAction> fa)
 {
-	auto fgcit = fg_colors.begin();
-	auto bgcit = bg_colors.begin();
-	auto attit = attributes.begin();
-
 	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
 
 	std::string article_colorstr;
 
-	for (; fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
+	for (const auto& text_style : text_styles) {
+		const std::string& element = text_style.first;
+		const TextStyle& style = text_style.second;
 		std::string colorattr;
-		if (fgcit->second != "default") {
+		if (style.fg_color != "default") {
 			colorattr.append("fg=");
-			colorattr.append(fgcit->second);
+			colorattr.append(style.fg_color);
 		}
-		if (bgcit->second != "default") {
+		if (style.bg_color != "default") {
 			if (colorattr.length() > 0) {
 				colorattr.append(",");
 			}
 			colorattr.append("bg=");
-			colorattr.append(bgcit->second);
+			colorattr.append(style.bg_color);
 		}
-		for (const auto& attr : attit->second) {
+		for (const auto& attr : style.attributes) {
 			if (colorattr.length() > 0) {
 				colorattr.append(",");
 			}
@@ -1026,7 +1020,7 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 			colorattr.append(attr);
 		}
 
-		if (fgcit->first == "article") {
+		if (element == "article") {
 			article_colorstr = colorattr;
 			if (fa->id() == "article") {
 				std::string bold = article_colorstr;
@@ -1048,10 +1042,10 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 		LOG(Level::DEBUG,
 			"View::apply_colors: %s %s %s\n",
 			fa->id(),
-			fgcit->first,
+			element,
 			colorattr);
 
-		fa->get_form().set(fgcit->first, colorattr);
+		fa->get_form().set(element, colorattr);
 	}
 }
 

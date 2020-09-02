@@ -108,9 +108,7 @@ public:
 
 	void force_redraw();
 
-	void set_colors(std::map<std::string, std::string>& fg_colors,
-		std::map<std::string, std::string>& bg_colors,
-		std::map<std::string, std::vector<std::string>>& attributes);
+	void set_text_styles(std::map<std::string, TextStyle> styles);
 
 	void notify_itemlist_change(std::shared_ptr<RssFeed> feed);
 
@@ -166,9 +164,7 @@ protected:
 
 	RegexManager& rxman;
 
-	std::map<std::string, std::string> fg_colors;
-	std::map<std::string, std::string> bg_colors;
-	std::map<std::string, std::vector<std::string>> attributes;
+	std::map<std::string, TextStyle> text_styles;
 
 	bool is_inside_qna;
 	bool is_inside_cmdline;
