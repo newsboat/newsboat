@@ -10,48 +10,15 @@
 using namespace newsboat;
 
 TEST_CASE(
-	"colors_loaded() signals if any \"color\" actions have been processed",
+	"get_styles() returns foreground/background colors and attributes for each "
+	"element that was processed",
 	"[ColorManager]")
 {
-	ColorManager c;
-
-	{
-		INFO("By default, no colors are loaded");
-
-		REQUIRE_FALSE(c.colors_loaded());
-	}
-
-	{
-		INFO("Processing \"color\" action makes it return `true`");
-
-		c.handle_action("color", {"listnormal", "default", "default"});
-		REQUIRE(c.colors_loaded());
-	}
-
-	{
-		INFO("Processing more \"color\" actions doesn't affect the "
-			"return value");
-
-		c.handle_action("color", {"listfocus", "default", "default"});
-		REQUIRE(c.colors_loaded());
-		c.handle_action(
-			"color", {"listfocus_unread", "default", "cyan"});
-		REQUIRE(c.colors_loaded());
-	}
-}
-
-TEST_CASE(
-	"get_fgcolors() returns foreground colors for each element that "
-	"was processed",
-	"[ColorManager]")
-{
-	using results = std::map<std::string, std::string>;
-
 	ColorManager c;
 
 	{
 		INFO("By default, the list is empty");
-		REQUIRE(c.get_fgcolors().empty());
+		REQUIRE(c.get_styles().size() == 0);
 	}
 
 	{
@@ -59,48 +26,30 @@ TEST_CASE(
 			"value");
 
 		c.handle_action("color", {"listnormal", "default", "default"});
-		results expected{{"listnormal", "default"}};
-		REQUIRE(c.get_fgcolors() == expected);
+		REQUIRE(c.get_styles().size() == 1);
+		REQUIRE(c.get_styles().count("listnormal") == 1);
 
-		c.handle_action("color", {"listfocus", "cyan", "default"});
-		expected.emplace("listfocus", "cyan");
-		REQUIRE(c.get_fgcolors() == expected);
+		c.handle_action("color", {"listfocus", "cyan", "default", "bold", "underline"});
+		REQUIRE(c.get_styles().size() == 2);
+		REQUIRE(c.get_styles().count("listfocus") == 1);
 
-		c.handle_action("color", {"background", "red", "default"});
-		expected.emplace("background", "red");
-		REQUIRE(c.get_fgcolors() == expected);
-	}
-}
+		c.handle_action("color", {"background", "red", "yellow"});
+		REQUIRE(c.get_styles().size() == 3);
+		REQUIRE(c.get_styles().count("background") == 1);
 
-TEST_CASE(
-	"get_bgcolors() returns foreground colors for each element that "
-	"was processed",
-	"[ColorManager]")
-{
-	using results = std::map<std::string, std::string>;
+		REQUIRE(c.get_styles()["listnormal"].fg_color == "default");
+		REQUIRE(c.get_styles()["listnormal"].bg_color == "default");
+		REQUIRE(c.get_styles()["listnormal"].attributes.size() == 0);
 
-	ColorManager c;
+		REQUIRE(c.get_styles()["listfocus"].fg_color == "cyan");
+		REQUIRE(c.get_styles()["listfocus"].bg_color == "default");
+		REQUIRE(c.get_styles()["listfocus"].attributes.size() == 2);
+		REQUIRE(c.get_styles()["listfocus"].attributes[0] == "bold");
+		REQUIRE(c.get_styles()["listfocus"].attributes[1] == "underline");
 
-	{
-		INFO("By default, the list is empty");
-		REQUIRE(c.get_bgcolors().empty());
-	}
-
-	{
-		INFO("Each processed action adds corresponding entry to return "
-			"value");
-
-		c.handle_action("color", {"listnormal", "default", "default"});
-		results expected{{"listnormal", "default"}};
-		REQUIRE(c.get_bgcolors() == expected);
-
-		c.handle_action("color", {"listfocus", "cyan", "yellow"});
-		expected.emplace("listfocus", "yellow");
-		REQUIRE(c.get_bgcolors() == expected);
-
-		c.handle_action("color", {"background", "red", "green"});
-		expected.emplace("background", "green");
-		REQUIRE(c.get_bgcolors() == expected);
+		REQUIRE(c.get_styles()["background"].fg_color == "red");
+		REQUIRE(c.get_styles()["background"].bg_color == "yellow");
+		REQUIRE(c.get_styles()["background"].attributes.size() == 0);
 	}
 }
 
@@ -112,9 +61,11 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
-	REQUIRE_FALSE(clr.colors_loaded());
+	REQUIRE(clr.get_styles().size() == 0);
+
 	cfg.parse_file("data/config-with-colors");
-	REQUIRE(clr.colors_loaded());
+
+	REQUIRE(clr.get_styles().size() == 2);
 }
 
 TEST_CASE(

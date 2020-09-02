@@ -62,6 +62,11 @@ public:
 		return cfg;
 	}
 
+	const newsboat::ColorManager& get_colormanager()
+	{
+		return colorman;
+	}
+
 private:
 	void print_usage(const char* argv0);
 	bool setup_dirs_xdg(const char* env_home);

@@ -69,6 +69,7 @@ View::View(Controller* c)
 	, tab_count(0)
 	, rsscache(nullptr)
 	, filters(ctrl->get_filtercontainer())
+	, colorman(ctrl->get_colormanager())
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -975,15 +976,6 @@ void View::remove_formaction(unsigned int pos)
 	}
 }
 
-void View::set_colors(std::map<std::string, std::string>& fgc,
-	std::map<std::string, std::string>& bgc,
-	std::map<std::string, std::vector<std::string>>& attribs)
-{
-	fg_colors = fgc;
-	bg_colors = bgc;
-	attributes = attribs;
-}
-
 void View::apply_colors_to_all_formactions()
 {
 	for (const auto& form : formaction_stack) {
@@ -997,62 +989,9 @@ void View::apply_colors_to_all_formactions()
 
 void View::apply_colors(std::shared_ptr<FormAction> fa)
 {
-	auto fgcit = fg_colors.begin();
-	auto bgcit = bg_colors.begin();
-	auto attit = attributes.begin();
-
 	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
 
-	std::string article_colorstr;
-
-	for (; fgcit != fg_colors.end(); ++fgcit, ++bgcit, ++attit) {
-		std::string colorattr;
-		if (fgcit->second != "default") {
-			colorattr.append("fg=");
-			colorattr.append(fgcit->second);
-		}
-		if (bgcit->second != "default") {
-			if (colorattr.length() > 0) {
-				colorattr.append(",");
-			}
-			colorattr.append("bg=");
-			colorattr.append(bgcit->second);
-		}
-		for (const auto& attr : attit->second) {
-			if (colorattr.length() > 0) {
-				colorattr.append(",");
-			}
-			colorattr.append("attr=");
-			colorattr.append(attr);
-		}
-
-		if (fgcit->first == "article") {
-			article_colorstr = colorattr;
-			if (fa->id() == "article") {
-				std::string bold = article_colorstr;
-				std::string ul = article_colorstr;
-				if (bold.length() > 0) {
-					bold.append(",");
-				}
-				if (ul.length() > 0) {
-					ul.append(",");
-				}
-				bold.append("attr=bold");
-				ul.append("attr=underline");
-				fa->get_form().set("color_bold", bold.c_str());
-				fa->get_form().set(
-					"color_underline", ul.c_str());
-			}
-		}
-
-		LOG(Level::DEBUG,
-			"View::apply_colors: %s %s %s\n",
-			fa->id(),
-			fgcit->first,
-			colorattr);
-
-		fa->get_form().set(fgcit->first, colorattr);
-	}
+	colorman.apply_colors(fa->get_form());
 }
 
 void View::feedlist_mark_pos_if_visible(unsigned int pos)

@@ -108,10 +108,6 @@ public:
 
 	void force_redraw();
 
-	void set_colors(std::map<std::string, std::string>& fg_colors,
-		std::map<std::string, std::string>& bg_colors,
-		std::map<std::string, std::vector<std::string>>& attributes);
-
 	void notify_itemlist_change(std::shared_ptr<RssFeed> feed);
 
 	void feedlist_mark_pos_if_visible(unsigned int pos);
@@ -156,8 +152,6 @@ protected:
 	KeyMap* keys;
 	std::mutex mtx;
 
-	friend class ColorManager;
-
 	std::vector<std::shared_ptr<FormAction>> formaction_stack;
 	unsigned int current_formaction;
 	std::shared_ptr<FeedListFormAction> feedlist_form;
@@ -166,9 +160,7 @@ protected:
 
 	RegexManager& rxman;
 
-	std::map<std::string, std::string> fg_colors;
-	std::map<std::string, std::string> bg_colors;
-	std::map<std::string, std::vector<std::string>> attributes;
+	std::map<std::string, TextStyle> text_styles;
 
 	bool is_inside_qna;
 	bool is_inside_cmdline;
@@ -177,6 +169,7 @@ protected:
 	unsigned int tab_count;
 	Cache* rsscache;
 	FilterContainer& filters;
+	const ColorManager& colorman;
 	std::vector<std::string> suggestions;
 };
 

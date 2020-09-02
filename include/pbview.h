@@ -25,10 +25,9 @@ public:
 	{
 		keys = k;
 	}
+	void apply_colors_to_all_forms();
 
 private:
-	friend class newsboat::ColorManager;
-
 	struct KeyMapHintEntry {
 		Operation op;
 		char* text;
@@ -48,6 +47,7 @@ private:
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
 	newsboat::KeyMap* keys;
+	const newsboat::ColorManager& colorman;
 
 	ListWidget downloads_list;
 	TextviewWidget help_textview;
