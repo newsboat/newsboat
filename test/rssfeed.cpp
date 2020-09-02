@@ -26,6 +26,8 @@ TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
 		REQUIRE_NOTHROW(f.set_rssurl("query:a title:unread = \"yes\""));
 		REQUIRE_NOTHROW(f.set_rssurl(
 				"query:Title:unread = \"yes\" and age between 0:7"));
+
+		REQUIRE_NOTHROW(f.set_rssurl(R"_(query:a title:title =~ "media:")_"));
 	}
 }
 

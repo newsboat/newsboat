@@ -208,8 +208,7 @@ void RssFeed::set_rssurl(const std::string& u)
 		 * query:Title:unread = "yes" and age between 0:7
 		 *
 		 * So we split by colons to get title and the query itself. */
-		std::vector<std::string> tokens =
-			utils::tokenize_quoted(u, ":");
+		const auto tokens = utils::tokenize(u, ":");
 
 		if (tokens.size() < 3) {
 			throw _s("too few arguments");
