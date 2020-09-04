@@ -40,7 +40,6 @@ RssFeed::RssFeed(Cache* c)
 
 RssFeed::~RssFeed()
 {
-	clear_items();
 }
 
 unsigned int RssFeed::unread_item_count()

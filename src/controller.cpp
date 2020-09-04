@@ -92,9 +92,6 @@ Controller::~Controller()
 	delete rsscache;
 	delete urlcfg;
 	delete api;
-
-	feedcontainer.clear_feeds_items();
-	feedcontainer.feeds.clear();
 }
 
 void Controller::set_view(View* vv)
@@ -526,8 +523,7 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		rsscache->cleanup_cache(feedcontainer.feeds);
+		rsscache->cleanup_cache(feedcontainer.get_all_feeds());
 		if (!args.silent()) {
 			std::cout << _("done.") << std::endl;
 		}
@@ -544,14 +540,12 @@ int Controller::run(const CliArgsParser& args)
 
 void Controller::update_feedlist()
 {
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	v->set_feedlist(feedcontainer.feeds);
+	v->set_feedlist(feedcontainer.get_all_feeds());
 }
 
 void Controller::update_visible_feeds()
 {
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	v->update_visible_feeds(feedcontainer.feeds);
+	v->update_visible_feeds(feedcontainer.get_all_feeds());
 }
 
 void Controller::mark_all_read(const std::string& feedurl)
@@ -567,14 +561,12 @@ void Controller::mark_all_read(const std::string& feedurl)
 
 	if (feedurl.empty()) { // Mark all feeds as read
 		if (api) {
-			std::lock_guard<std::mutex> feedslock(feeds_mutex);
-			for (const auto& feed : feedcontainer.feeds) {
+			for (const auto& feed : feedcontainer.get_all_feeds()) {
 				api->mark_all_read(feed->rssurl());
 			}
 		}
 		feedcontainer.mark_all_feeds_read();
 	} else { // Mark a specific feed as read
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
 		const auto feed = feedcontainer.get_feed_by_url(feedurl);
 		if (!feed) {
 			return;
@@ -597,24 +589,25 @@ void Controller::mark_article_read(const std::string& guid, bool read)
 
 void Controller::mark_all_read(unsigned int pos)
 {
-	if (pos < feedcontainer.feeds.size()) {
-		ScopeMeasure m("Controller::mark_all_read");
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		const auto feed = feedcontainer.get_feed(pos);
-		if (feed->is_query_feed()) {
-			rsscache->mark_all_read(feed);
-		} else {
-			rsscache->mark_all_read(feed->rssurl());
-			if (api) {
-				api->mark_all_read(feed->rssurl());
-			}
-		}
-		m.stopover(
-			"after rsscache->mark_all_read, before iteration over "
-			"items");
-
-		feedcontainer.mark_all_feed_items_read(pos);
+	ScopeMeasure m("Controller::mark_all_read");
+	const auto feed = feedcontainer.get_feed(pos);
+	if (feed == nullptr) {
+		return;
 	}
+
+	if (feed->is_query_feed()) {
+		rsscache->mark_all_read(feed);
+	} else {
+		rsscache->mark_all_read(feed->rssurl());
+		if (api) {
+			api->mark_all_read(feed->rssurl());
+		}
+	}
+	m.stopover(
+		"after rsscache->mark_all_read, before iteration over "
+		"items");
+
+	feedcontainer.mark_all_feed_items_read(feed);
 }
 
 void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
@@ -622,8 +615,6 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	unsigned int pos,
 	bool unattended)
 {
-	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-
 	LOG(Level::DEBUG, "Controller::replace_feed: saving");
 	rsscache->externalize_rssfeed(
 		newfeed, ign.matches_resetunread(newfeed->rssurl()));
@@ -638,17 +629,15 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 
 	feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
 	feed->set_order(oldfeed->get_order());
-	feedcontainer.feeds[pos] = feed;
+	feedcontainer.replace_feed(pos, feed);
 	queueManager.autoenqueue(feed);
 	for (const auto& item : feed->items()) {
 		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 	}
 
-	oldfeed->clear_items();
-
-	v->notify_itemlist_change(feedcontainer.feeds[pos]);
+	v->notify_itemlist_change(feed);
 	if (!unattended) {
-		v->set_feedlist(feedcontainer.feeds);
+		v->set_feedlist(feedcontainer.get_all_feeds());
 	}
 }
 

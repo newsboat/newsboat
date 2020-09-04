@@ -103,16 +103,14 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 std::shared_ptr<RssFeed> FeedContainer::get_feed(const unsigned int pos)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	if (pos >= feeds.size()) {
-		throw std::out_of_range(_("invalid feed index (bug)"));
+	if (pos < feeds.size()) {
+		return feeds[pos];
 	}
-	std::shared_ptr<RssFeed> feed = feeds[pos];
-	return feed;
+	return nullptr;
 }
 
-void FeedContainer::mark_all_feed_items_read(const unsigned int feed_pos)
+void FeedContainer::mark_all_feed_items_read(std::shared_ptr<RssFeed> feed)
 {
-	const auto feed = get_feed(feed_pos);
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<RssItem>>& items = feed->items();
 	if (items.size() > 0) {
@@ -238,23 +236,10 @@ void FeedContainer::set_feeds(
 	feeds = new_feeds;
 }
 
-std::vector<std::shared_ptr<RssFeed>> FeedContainer::get_all_feeds()
-{
-	std::vector<std::shared_ptr<RssFeed>> tmpfeeds;
-	{
-		std::lock_guard<std::mutex> feedslock(feeds_mutex);
-		tmpfeeds = feeds;
-	}
-	return tmpfeeds;
-}
-
-void FeedContainer::clear_feeds_items()
+std::vector<std::shared_ptr<RssFeed>> FeedContainer::get_all_feeds() const
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	for (const auto& feed : feeds) {
-		std::lock_guard<std::mutex> lock(feed->item_mutex);
-		feed->clear_items();
-	}
+	return feeds;
 }
 
 unsigned int FeedContainer::unread_feed_count() const
@@ -296,6 +281,14 @@ unsigned int FeedContainer::unread_item_count() const
 	});
 
 	return unread_guids.size();
+}
+
+void FeedContainer::replace_feed(unsigned int pos,
+	std::shared_ptr<RssFeed> feed)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	assert(pos < feeds.size());
+	feeds[pos] = feed;
 }
 
 } // namespace newsboat

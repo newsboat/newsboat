@@ -25,7 +25,7 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 	xmlNodePtr body = xmlNewTextChild(
 			opml_node, nullptr, (const xmlChar*)"body", nullptr);
 
-	for (const auto& feed : feedcontainer.feeds) {
+	for (const auto& feed : feedcontainer.get_all_feeds()) {
 		if (!utils::is_special_url(feed->rssurl())) {
 			std::string rssurl = feed->rssurl();
 			std::string link = feed->link();

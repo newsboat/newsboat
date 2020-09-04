@@ -105,7 +105,7 @@ TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 
 	feedcontainer.set_feeds(feeds);
 
-	REQUIRE(feedcontainer.feeds == feeds);
+	REQUIRE(feedcontainer.get_all_feeds() == feeds);
 }
 
 TEST_CASE("get_feed_by_url() returns feed by its URL", "[FeedContainer]")
@@ -149,7 +149,8 @@ TEST_CASE(
 	REQUIRE(feed == nullptr);
 }
 
-TEST_CASE("Throws on get_feed() with pos out of range", "[FeedContainer]")
+TEST_CASE("get_feed() returns nullptr if pos is out of range",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -157,8 +158,8 @@ TEST_CASE("Throws on get_feed() with pos out of range", "[FeedContainer]")
 	feedcontainer.set_feeds(get_five_empty_feeds(&rsscache));
 
 	REQUIRE_NOTHROW(feedcontainer.get_feed(4));
-	CHECK_THROWS_AS(feedcontainer.get_feed(5), std::out_of_range);
-	CHECK_THROWS_AS(feedcontainer.get_feed(-1), std::out_of_range);
+	REQUIRE(feedcontainer.get_feed(5) == nullptr);
+	REQUIRE(feedcontainer.get_feed(-1) == nullptr);
 }
 
 TEST_CASE("Returns correct number using get_feed_count_by_tag()",
@@ -619,7 +620,7 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 	}
 	feedcontainer.set_feeds(feeds);
 
-	feedcontainer.mark_all_feed_items_read(0);
+	feedcontainer.mark_all_feed_items_read(feed);
 
 	for (const auto& item : feed->items()) {
 		REQUIRE_FALSE(item->unread());
@@ -672,24 +673,6 @@ TEST_CASE(
 	for (const auto& feed : feeds) {
 		REQUIRE(feed->get_status() == "_");
 	}
-}
-
-TEST_CASE("clear_feeds_items() removes all items from all feeds",
-	"[FeedContainer]")
-{
-	FeedContainer feedcontainer;
-	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
-	feedcontainer.set_feeds({});
-	const auto feed = std::make_shared<RssFeed>(&rsscache);
-	for (int j = 0; j < 5; ++j) {
-		feed->add_item(std::make_shared<RssItem>(&rsscache));
-	}
-	feedcontainer.add_feed(feed);
-
-	REQUIRE(feed->items().size() == 5);
-	feedcontainer.clear_feeds_items();
-	REQUIRE(feed->items().size() == 0);
 }
 
 TEST_CASE(
@@ -1118,4 +1101,30 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 		REQUIRE(feedcontainer.get_unread_item_count_per_tag(desired_tag)
 			== 24);
 	}
+}
+
+TEST_CASE("replace_feed() puts given feed into the specified position",
+	"[FeedContainer]")
+{
+	FeedContainer feedcontainer;
+
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	const auto feeds = get_five_empty_feeds(&rsscache);
+
+	const auto first_feed = *feeds.begin();
+	const auto four_feeds = std::vector<std::shared_ptr<RssFeed>>(feeds.begin() + 1,
+			feeds.end());
+
+	feedcontainer.set_feeds(four_feeds);
+
+	const auto position = 2;
+	const auto feed_before_replacement = feedcontainer.get_feed(position);
+	REQUIRE(feed_before_replacement != first_feed);
+
+	feedcontainer.replace_feed(position, first_feed);
+	const auto feed_after_replacement = feedcontainer.get_feed(position);
+
+	REQUIRE(feed_before_replacement != feed_after_replacement);
+	REQUIRE(feed_after_replacement == first_feed);
 }

@@ -58,10 +58,8 @@ void Reloader::reload(unsigned int pos,
 	CurlHandle* easyhandle)
 {
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u max = %u", pos, max);
-	if (pos < ctrl->get_feedcontainer()->feeds.size()) {
-		std::shared_ptr<RssFeed> oldfeed =
-			ctrl->get_feedcontainer()->feeds[pos];
-
+	std::shared_ptr<RssFeed> oldfeed = ctrl->get_feedcontainer()->get_feed(pos);
+	if (oldfeed) {
 		// Query feed reloading should be handled by the calling functions
 		// (e.g.  Reloader::reload_all() calling View::prepare_query_feed())
 		if (oldfeed->is_query_feed()) {
@@ -183,7 +181,7 @@ void Reloader::reload_all(bool unattended)
 
 	// refresh query feeds (update and sort)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
-	for (const auto& feed : ctrl->get_feedcontainer()->feeds) {
+	for (const auto& feed : ctrl->get_feedcontainer()->get_all_feeds()) {
 		if (feed->is_query_feed()) {
 			ctrl->get_view()->prepare_query_feed(feed);
 			feed->set_status(DlStatus::SUCCESS);
@@ -235,10 +233,12 @@ void Reloader::reload_range(unsigned int start,
 		s = suff.substr(0, p);
 	};
 
+	const auto feeds = ctrl->get_feedcontainer()->get_all_feeds();
+
 	std::sort(v.begin(), v.end(), [&](unsigned int a, unsigned int b) {
 		std::string domain1, domain2;
-		extract(domain1, ctrl->get_feedcontainer()->feeds[a]->rssurl());
-		extract(domain2, ctrl->get_feedcontainer()->feeds[b]->rssurl());
+		extract(domain1, feeds[a]->rssurl());
+		extract(domain2, feeds[b]->rssurl());
 		std::reverse(domain1.begin(), domain1.end());
 		std::reverse(domain2.begin(), domain2.end());
 		return domain1 < domain2;
