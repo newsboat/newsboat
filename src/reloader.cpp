@@ -58,10 +58,8 @@ void Reloader::reload(unsigned int pos,
 	CurlHandle* easyhandle)
 {
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u max = %u", pos, max);
-	if (pos < ctrl->get_feedcontainer()->feeds_size()) {
-		std::shared_ptr<RssFeed> oldfeed =
-			ctrl->get_feedcontainer()->get_feed(pos);
-
+	std::shared_ptr<RssFeed> oldfeed = ctrl->get_feedcontainer()->get_feed(pos);
+	if (oldfeed) {
 		// Query feed reloading should be handled by the calling functions
 		// (e.g.  Reloader::reload_all() calling View::prepare_query_feed())
 		if (oldfeed->is_query_feed()) {

@@ -103,16 +103,19 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 std::shared_ptr<RssFeed> FeedContainer::get_feed(const unsigned int pos)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	if (pos >= feeds.size()) {
-		throw std::out_of_range(_("invalid feed index (bug)"));
+	if (pos < feeds.size()) {
+		return feeds[pos];
 	}
-	std::shared_ptr<RssFeed> feed = feeds[pos];
-	return feed;
+	return nullptr;
 }
 
 void FeedContainer::mark_all_feed_items_read(const unsigned int feed_pos)
 {
 	const auto feed = get_feed(feed_pos);
+	if (feed == nullptr) {
+		return;
+	}
+
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<RssItem>>& items = feed->items();
 	if (items.size() > 0) {

@@ -149,7 +149,8 @@ TEST_CASE(
 	REQUIRE(feed == nullptr);
 }
 
-TEST_CASE("Throws on get_feed() with pos out of range", "[FeedContainer]")
+TEST_CASE("get_feed() returns nullptr if pos is out of range",
+	"[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
@@ -157,8 +158,8 @@ TEST_CASE("Throws on get_feed() with pos out of range", "[FeedContainer]")
 	feedcontainer.set_feeds(get_five_empty_feeds(&rsscache));
 
 	REQUIRE_NOTHROW(feedcontainer.get_feed(4));
-	CHECK_THROWS_AS(feedcontainer.get_feed(5), std::out_of_range);
-	CHECK_THROWS_AS(feedcontainer.get_feed(-1), std::out_of_range);
+	REQUIRE(feedcontainer.get_feed(5) == nullptr);
+	REQUIRE(feedcontainer.get_feed(-1) == nullptr);
 }
 
 TEST_CASE("Returns correct number using get_feed_count_by_tag()",
