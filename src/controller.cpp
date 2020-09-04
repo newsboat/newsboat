@@ -589,23 +589,25 @@ void Controller::mark_article_read(const std::string& guid, bool read)
 
 void Controller::mark_all_read(unsigned int pos)
 {
-	if (pos < feedcontainer.feeds_size()) {
-		ScopeMeasure m("Controller::mark_all_read");
-		const auto feed = feedcontainer.get_feed(pos);
-		if (feed->is_query_feed()) {
-			rsscache->mark_all_read(feed);
-		} else {
-			rsscache->mark_all_read(feed->rssurl());
-			if (api) {
-				api->mark_all_read(feed->rssurl());
-			}
-		}
-		m.stopover(
-			"after rsscache->mark_all_read, before iteration over "
-			"items");
-
-		feedcontainer.mark_all_feed_items_read(feed);
+	ScopeMeasure m("Controller::mark_all_read");
+	const auto feed = feedcontainer.get_feed(pos);
+	if (feed == nullptr) {
+		return;
 	}
+
+	if (feed->is_query_feed()) {
+		rsscache->mark_all_read(feed);
+	} else {
+		rsscache->mark_all_read(feed->rssurl());
+		if (api) {
+			api->mark_all_read(feed->rssurl());
+		}
+	}
+	m.stopover(
+		"after rsscache->mark_all_read, before iteration over "
+		"items");
+
+	feedcontainer.mark_all_feed_items_read(feed);
 }
 
 void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
