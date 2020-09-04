@@ -109,13 +109,8 @@ std::shared_ptr<RssFeed> FeedContainer::get_feed(const unsigned int pos)
 	return nullptr;
 }
 
-void FeedContainer::mark_all_feed_items_read(const unsigned int feed_pos)
+void FeedContainer::mark_all_feed_items_read(std::shared_ptr<RssFeed> feed)
 {
-	const auto feed = get_feed(feed_pos);
-	if (feed == nullptr) {
-		return;
-	}
-
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	std::vector<std::shared_ptr<RssItem>>& items = feed->items();
 	if (items.size() > 0) {
