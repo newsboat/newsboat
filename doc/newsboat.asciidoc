@@ -1434,16 +1434,19 @@ just works.
 
 include::chapter-environment-variables.asciidoc[]
 
-== Feedback
+== Feedback and security
 
-If you want to tell us something related to newsboat, don't hesitate to send
-an email to our mailing list: newsboat@googlegroups.com
+Please report vulnerabilities to security@newsboat.org, encrypting your
+emails to https://newsboat.org/newsboat.pgp[PGP key 4ED6CD61932B9EBE] if at all
+possible.
 
-Alternatively, you can reach the newsboat developers on IRC: channel
-#newsboat on irc.freenode.net.
+Non-security issues and general questions can be discussed on
+https://github.com/newsboat/newsboat/issues/[the issue tracker] and
+mailto:newsboat@googlegroups.com[the mailing list].
 
-If you want to report newsboat bugs, please use this issue tracker:
-https://github.com/newsboat/newsboat/issues/[]
+You can also chat with developers and fellow users on #newsboat at Freenode
+(irc.freenode.net or https://webchat.freenode.net/?channels=newsboat[via
+webchat]).
 
 == License
 
