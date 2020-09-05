@@ -25,7 +25,17 @@ show-urls||u||Show all URLs in the article in a list (similar to urlview).
 clear-tag||^T||Clear current tag.
 set-tag||t||Select tag.
 open-search||/||Open the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
-goto-url||#||Open the URL dialog and then open a specified URL.
+goto-url||#||Open the URL dialog and then open a specified URL in the browser.
+one||1||Open URL 1 in the browser.
+two||2||Open URL 2 in the browser.
+three||3||Open URL 3 in the browser.
+four||4||Open URL 4 in the browser.
+five||5||Open URL 5 in the browser.
+six||6||Open URL 6 in the browser.
+seven||7||Open URL 7 in the browser.
+eight||8||Open URL 8 in the browser.
+nine||9||Open URL 9 in the browser.
+zero||0||Open URL 10 in the browser.
 enqueue||e||Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support).
 edit-urls||E||Edit the list of subscribed URLs. newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, newsboat will reload the URLs file.
 reload-urls||^R||Reload the URLs configuration file.
