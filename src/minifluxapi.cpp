@@ -213,6 +213,16 @@ json MinifluxApi::run_op(const std::string& path,
 	const HTTPMethod method, /* = GET */
 	CURL* cached_handle /* = nullptr */)
 {
+	CURL* easyhandle;
+	if (cached_handle) {
+		easyhandle = cached_handle;
+	} else {
+		easyhandle = curl_easy_init();
+	}
+	// follow redirects and keep the same request type
+	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+
 	const std::string url = server + path;
 
 	std::string* body = nullptr;
@@ -223,7 +233,11 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	const std::string result = utils::retrieve_url(
-			url, cfg, auth_info, body, method, cached_handle);
+			url, cfg, auth_info, body, method, easyhandle);
+
+	if (!cached_handle) {
+		curl_easy_cleanup(easyhandle);
+	}
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",
