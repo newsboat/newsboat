@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-09-17 16:02+0300\n"
-"PO-Revision-Date: 2020-06-16 19:52+0300\n"
+"PO-Revision-Date: 2020-09-17 16:25+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -301,7 +301,7 @@ msgstr "невідома помилка (помилка)."
 #: src/configparser.cpp:98
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s рядок %u"
 
 #: src/configparser.cpp:118
 #, c-format
@@ -309,9 +309,9 @@ msgid "unknown command `%s'"
 msgstr "невідома команда `%s'"
 
 #: src/configparser.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "Помилка при виконанні команди `%s' (%s рядок %u): %s"
+msgstr "Помилка при виконанні команди `%s' (%s): %s"
 
 #: src/controller.cpp:147 src/pbcontroller.cpp:246
 #, c-format
@@ -346,7 +346,7 @@ msgstr "Помилка: при відкритті файлу кеша `%s' ви�
 #: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
-"Помилка: для выкористання NewsBlur потрібно налаштувати `cookie-cache`.\n"
+"Помилка: для використання NewsBlur потрібно налаштувати `cookie-cache`.\n"
 
 #: src/controller.cpp:278
 #, c-format
@@ -354,16 +354,17 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s недоступний і не може бути створеним\n"
 
 #: src/controller.cpp:295
-#, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
 msgstr ""
-"Помилка: для выкористання NewsBlur потрібно налаштувати `cookie-cache`.\n"
+"Помилка: для використання Miniflux потрібно налаштувати `miniflux-url`\n"
 
 #: src/controller.cpp:307
 msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
+"Помилка: для використання Miniflux потрібно задати `miniflux-login` та одне "
+"із: `miniflux-password`, `miniflux-passwordfile` чи `miniflux-passwordeval`\n"
 
 #: src/controller.cpp:320
 msgid ""
@@ -433,12 +434,11 @@ msgstr ""
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті NewsBlur.Будь "
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті Miniflux.Будь "
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:395
@@ -635,9 +635,8 @@ msgstr ""
 #: src/itemlistformaction.cpp:175 src/itemlistformaction.cpp:197
 #: src/itemlistformaction.cpp:214 src/itemviewformaction.cpp:251
 #: src/itemviewformaction.cpp:438
-#, fuzzy
 msgid "Failed to spawn browser"
-msgstr "Відкрити статтю у браузері"
+msgstr "Не вдалося запустити браузер"
 
 #: src/feedlistformaction.cpp:251 src/feedlistformaction.cpp:279
 #: src/feedlistformaction.cpp:304 src/itemlistformaction.cpp:143
@@ -675,9 +674,8 @@ msgid "Already on first feed."
 msgstr "Вже на першій темі."
 
 #: src/feedlistformaction.cpp:409
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "Ви впевнені, що хочете перезаписати `%s' (y:Так n:Ні)? "
+msgstr "Ви впевнені, що хочете відмітити усі теми як прочитані (y:Так n:Ні)? "
 
 #: src/feedlistformaction.cpp:410 src/feedlistformaction.cpp:523
 #: src/filebrowserformaction.cpp:126 src/itemlistformaction.cpp:1435
@@ -1215,12 +1213,10 @@ msgid "Save articles"
 msgstr "Зберегти статті"
 
 #: src/keymap.cpp:87
-#, fuzzy
 msgid "Go to next entry"
-msgstr "Перемістити до наступного рядка"
+msgstr "Перейти до наступного рядка"
 
 #: src/keymap.cpp:94
-#, fuzzy
 msgid "Go to previous entry"
 msgstr "Перейти до попереднього рядка"
 
@@ -1741,7 +1737,7 @@ msgstr "URLs"
 
 #: src/view.cpp:156
 msgid "Error: Failed to execute startup commands"
-msgstr ""
+msgstr "Помилка: Не вдалося виконати стартові команди"
 
 #: src/view.cpp:425 src/view.cpp:451
 msgid "Error: feed contains no items!"
@@ -1824,16 +1820,16 @@ msgstr "Міграція відмінена: mkdir для `%s' повернув 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:263
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Помилка парсеру: зайві символи після позиції %{}: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:270
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "Помилка парсеру на позиціїї %{}: очікувалося %s"
 
 #: rust/libnewsboat/src/filterparser.rs:275
 msgid "Internal parse error"
-msgstr ""
+msgstr "Внутрішня помилка парсеру"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
