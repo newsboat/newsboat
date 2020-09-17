@@ -26,7 +26,7 @@ public:
 	{
 		v = vv;
 	}
-	int initialize(int argc, char* argv[]);
+	void initialize(int argc, char* argv[]);
 	int run();
 
 	bool view_update_necessary() const
