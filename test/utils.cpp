@@ -621,17 +621,17 @@ TEST_CASE("run_command() doesn't wait for the command to finish",
 {
 	using namespace std::chrono;
 
-	const auto start = high_resolution_clock::now();
+	const auto start = steady_clock::now();
 
-	const std::string argument("5");
-	utils::run_command("sleep", argument);
+	// Using a big timeout value of 60 seconds to overcome any slowdowns that
+	// Cirrus CI sometimes exhibits, e.g. here waiting for `sleep 5` took 19
+	// seconds: https://cirrus-ci.com/task/6641382309756928?command=test#L64
+	utils::run_command("sleep", "60");
 
-	const auto finish = high_resolution_clock::now();
+	const auto finish = steady_clock::now();
 	const auto runtime = duration_cast<milliseconds>(finish - start);
 
-	// run_command finished under a second, meaning it didn't wait for
-	// a five-second sleep to finish
-	REQUIRE(runtime.count() < 1000);
+	REQUIRE(runtime.count() < 60000);
 }
 
 TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory",
