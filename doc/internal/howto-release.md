@@ -92,7 +92,9 @@ master repository and shell access to newsboat.org.
     * Close the current milestone
     * Create a new milestone with a date set to 20-ish of
         March/June/September/December
-12. Prepare the repo for the next release
+12. Add a TaskWarrior reminder to myself to update POT file and ask for updated
+    translations two weeks before the next release
+13. Prepare the repo for the next release
     * Add "Unreleased" section to CHANGELOG and commit
     * Update all the transitive dependencies: `cargo update` and commit
     * Push it: `git push`
