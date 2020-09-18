@@ -118,10 +118,11 @@ Support
 * Check out our
   [documentation](https://newsboat.org/releases/2.20.1/docs/newsboat.html) and
   [FAQ](https://newsboat.org/releases/2.20.1/docs/faq.html)
-* Bugs and whatnot should be reported to the
-  [issue tracker](https://github.com/newsboat/newsboat/issues)
-* Drop us a line at
-  [newsboat mailing list](https://groups.google.com/group/newsboat)
+* Report security vulnerabilities to security@newsboat.org. Please encrypt your emails to
+  [PGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp) if you can.
+* Report bugs and ask questions on
+  [the issue tracker](https://github.com/newsboat/newsboat/issues) and
+  [the mailing list](https://groups.google.com/group/newsboat)
   (newsboat@googlegroups.com)
 * Chat with developers and fellow users on #newsboat at
   [Freenode](https://freenode.net) ([webchat
