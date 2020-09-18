@@ -360,7 +360,7 @@ msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
-"HATA: Miniflux'u kullanmak için `miniflux-login` ve miniflux-password` veya "
+"HATA: Miniflux'u kullanmak için `miniflux-login` ve `miniflux-password` veya "
 "`miniflux-passwordfile` veya `miniflux-passwordeval` seçeneklerinden biri "
 "ayarlı olmalıdır\n"
 
