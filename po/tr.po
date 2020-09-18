@@ -155,13 +155,12 @@ msgstr ""
 "github.com/nlohmann/json"
 
 #: newsboat.cpp:167
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"- expected-lite kitaplığı, Boost Software License ile lisanslanmıştır: "
-"https://github.com/martinmoene/expected-lite"
+"- optional-lite kitaplığı, Boost Software License ile lisanslanmıştır: "
+"https://github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:170
 msgid ""
@@ -301,7 +300,7 @@ msgstr "bilinmeyen hata (bug)."
 #: src/configparser.cpp:98
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s satır %u"
 
 #: src/configparser.cpp:118
 #, c-format
@@ -309,9 +308,9 @@ msgid "unknown command `%s'"
 msgstr "bilinmeyen komut `%s'"
 
 #: src/configparser.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "`%s' komutu çalıştırılırken hata (%s %u. satır): %s"
+msgstr "`%s' (%s) komutu işlenirken hata: %s"
 
 #: src/controller.cpp:147 src/pbcontroller.cpp:246
 #, c-format
@@ -353,15 +352,17 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s erişilemiyor ve oluşturulamaz\n"
 
 #: src/controller.cpp:295
-#, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
-msgstr "HATA: NewsBlur kullanmak için `cookie-cache`i ayarlamalısınız.\n"
+msgstr "HATA: Miniflux kullanmak için `miniflux-url` ayarlı olmalıdır\n"
 
 #: src/controller.cpp:307
 msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
+"HATA: Miniflux'u kullanmak için `miniflux-login` ve miniflux-password` veya "
+"`miniflux-passwordfile` veya `miniflux-passwordeval` seçeneklerinden biri "
+"ayarlı olmalıdır\n"
 
 #: src/controller.cpp:320
 msgid ""
@@ -431,12 +432,11 @@ msgstr ""
 "Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Görünüşe göre NewsBlur hesabınızda herhangi bir besleme ayarlamamışsınız. "
+"Görünüşe göre Miniflux hesabınızda herhangi bir besleme ayarlamamışsınız. "
 "Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:395
@@ -484,7 +484,7 @@ msgstr "Hata: tüm beslemeler okundu olarak imlenemedi: %s"
 #: src/controller.cpp:652
 #, c-format
 msgid "An error occurred while parsing %s."
-msgstr ""
+msgstr "%s ayrıştırılırken bir hata oluştu."
 
 #: src/controller.cpp:657
 #, c-format
@@ -633,9 +633,8 @@ msgstr ""
 #: src/itemlistformaction.cpp:175 src/itemlistformaction.cpp:197
 #: src/itemlistformaction.cpp:214 src/itemviewformaction.cpp:251
 #: src/itemviewformaction.cpp:438
-#, fuzzy
 msgid "Failed to spawn browser"
-msgstr "Yazıyı tarayıcıda aç"
+msgstr "Tarayıcı başlatılamadı"
 
 #: src/feedlistformaction.cpp:251 src/feedlistformaction.cpp:279
 #: src/feedlistformaction.cpp:304 src/itemlistformaction.cpp:143
@@ -673,9 +672,9 @@ msgid "Already on first feed."
 msgstr "Halihazırda ilk besleme üzerinde"
 
 #: src/feedlistformaction.cpp:409
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "`%s' üzerine yazmak istediğinize emin misiniz (e:Evet h:Hayır)? "
+msgstr "Tüm beslemeleri okundu olarak imlemek istediğinize emin misiniz "
+"(e:Evet h:Hayır)? "
 
 #: src/feedlistformaction.cpp:410 src/feedlistformaction.cpp:523
 #: src/filebrowserformaction.cpp:126 src/itemlistformaction.cpp:1435
@@ -1212,14 +1211,12 @@ msgid "Save articles"
 msgstr "Yazıları kaydet"
 
 #: src/keymap.cpp:87
-#, fuzzy
 msgid "Go to next entry"
-msgstr "Sonraki girdiye taşı"
+msgstr "Sonraki girdiye git"
 
 #: src/keymap.cpp:94
-#, fuzzy
 msgid "Go to previous entry"
-msgstr "Önceki girdiye taşı"
+msgstr "Önceki girdiye git"
 
 #: src/keymap.cpp:101
 msgid "Go to next unread article"
@@ -1736,7 +1733,7 @@ msgstr "Adresler"
 
 #: src/view.cpp:156
 msgid "Error: Failed to execute startup commands"
-msgstr ""
+msgstr "Hata: Başlangıç komutları çalıştırılamadı"
 
 #: src/view.cpp:425 src/view.cpp:451
 msgid "Error: feed contains no items!"
@@ -1818,16 +1815,16 @@ msgstr "Göç iptal ediliyor çünkü `%s' üzerinde mkdir başarısız oldu: %s
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:263
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Ayrıştırma hatası: %{} konumundan sonra fazladan karakterler: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:270
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "%{} konumunda ayrıştırma hatası: %s bekleniyordu"
 
 #: rust/libnewsboat/src/filterparser.rs:275
 msgid "Internal parse error"
-msgstr ""
+msgstr "İç ayrıştırma hatası"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
@@ -1836,12 +1833,3 @@ msgstr "regcomp %i kodunu döndürdü"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec %i kodunu döndürdü"
-
-#~ msgid "invalid feed index (bug)"
-#~ msgstr "geçersiz besleme indeksi (bug)"
-
-#~ msgid "Go to next article"
-#~ msgstr "Sonraki yazıya git"
-
-#~ msgid "Go to previous article"
-#~ msgstr "Önceki yazıya git"
