@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-09-17 16:02+0300\n"
-"PO-Revision-Date: 2020-06-17 09:45+0200\n"
+"PO-Revision-Date: 2020-09-18 15:24+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -300,7 +300,7 @@ msgstr "onbekende fout (bug)."
 #: src/configparser.cpp:98
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s lijn %u"
 
 #: src/configparser.cpp:118
 #, c-format
@@ -308,9 +308,9 @@ msgid "unknown command `%s'"
 msgstr "onbekende opdracht ‘%s’"
 
 #: src/configparser.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "Fout bij het uitvoeren van opdrachtregel ‘%s’ (%s regel %u): %s"
+msgstr "Fout bij het uitvoeren van commando ‘%s’ (%s): %s"
 
 #: src/controller.cpp:147 src/pbcontroller.cpp:246
 #, c-format
@@ -354,10 +354,9 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s is niet toegangelijk en kan ook niet aangemaakt worden\n"
 
 #: src/controller.cpp:295
-#, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
 msgstr ""
-"Error: `cookie-cache` moet ingesteld worden om NewsBlur te kunnen "
+"Error: `miniflux-url` moet ingesteld worden om Miniflux te kunnen "
 "gebruiken.\n"
 
 #: src/controller.cpp:307
@@ -365,6 +364,9 @@ msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
+"FOUT: Configureer `miniflux-login` en één van de volgende opties (`miniflux-"
+"password`, `miniflux-passwordfile` or `miniflux-passwordeval`) om Miniflux "
+"te gebruiken\n"
 
 #: src/controller.cpp:320
 msgid ""
@@ -434,13 +436,12 @@ msgstr ""
 "Configureer enkele feeds en probeer dan opnieuw."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Blijkbaar hebt u nog geen feeds geconfigureerd in uw NewsBlur-account. "
-"Configureer enkele feeds en probeer dan opnieuw."
+"Het lijkt erop dat u nog geen feeds geconfigureerd hebt in uw Miniflux-"
+"account. Configureer enkele feeds en probeer dan opnieuw."
 
 #: src/controller.cpp:395
 msgid "Loading articles from cache..."
@@ -636,9 +637,8 @@ msgstr ""
 #: src/itemlistformaction.cpp:175 src/itemlistformaction.cpp:197
 #: src/itemlistformaction.cpp:214 src/itemviewformaction.cpp:251
 #: src/itemviewformaction.cpp:438
-#, fuzzy
 msgid "Failed to spawn browser"
-msgstr "Open artikel in browser"
+msgstr "Het starten van een browser is mislukt"
 
 #: src/feedlistformaction.cpp:251 src/feedlistformaction.cpp:279
 #: src/feedlistformaction.cpp:304 src/itemlistformaction.cpp:143
@@ -676,9 +676,8 @@ msgid "Already on first feed."
 msgstr "Dit is reeds de eerste feed."
 
 #: src/feedlistformaction.cpp:409
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "Bent u zeker dat u ‘%s’ wilt overschrijven (j:ja n:nee)? "
+msgstr "Weet u zeker dat u alle feeds als gelezen wilt markeren (j:ja n:nee)? "
 
 #: src/feedlistformaction.cpp:410 src/feedlistformaction.cpp:523
 #: src/filebrowserformaction.cpp:126 src/itemlistformaction.cpp:1435
@@ -1216,14 +1215,12 @@ msgid "Save articles"
 msgstr "Artikelen opslaan"
 
 #: src/keymap.cpp:87
-#, fuzzy
 msgid "Go to next entry"
-msgstr "Ga naar volgend ongelezen element"
+msgstr "Ga naar volgende item"
 
 #: src/keymap.cpp:94
-#, fuzzy
 msgid "Go to previous entry"
-msgstr "Ga naar vorig ongelezen element"
+msgstr "Ga naar vorige item"
 
 #: src/keymap.cpp:101
 msgid "Go to next unread article"
@@ -1741,7 +1738,7 @@ msgstr "URLs"
 
 #: src/view.cpp:156
 msgid "Error: Failed to execute startup commands"
-msgstr ""
+msgstr "Fout: Het uitvoeren van de opstart commando's is mislukt"
 
 #: src/view.cpp:425 src/view.cpp:451
 msgid "Error: feed contains no items!"
@@ -1827,16 +1824,16 @@ msgstr "Migratie is afgebroken omdat mkdir mislukte voor map `%s': %s"
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:263
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Fout tijdens ontleding: onverwachte tekens na positie %{}: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:270
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "Fout tijdens ontleding op positie %{}: verwachtte %s"
 
 #: rust/libnewsboat/src/filterparser.rs:275
 msgid "Internal parse error"
-msgstr ""
+msgstr "Interne fout tijdens ontleden"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
