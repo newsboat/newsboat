@@ -185,7 +185,7 @@ PbController::~PbController()
 	delete cfg;
 }
 
-int PbController::initialize(int argc, char* argv[])
+void PbController::initialize(int argc, char* argv[])
 {
 	int c;
 
@@ -209,7 +209,7 @@ int PbController::initialize(int argc, char* argv[])
 		case ':':
 		case '?':
 			print_usage(argv[0]);
-			return EXIT_FAILURE;
+			exit(EXIT_FAILURE);
 		case 'C':
 			config_file = optarg;
 			break;
@@ -232,13 +232,13 @@ int PbController::initialize(int argc, char* argv[])
 						argv[0],
 						static_cast<int>(l))
 					<< std::endl;
-				return EXIT_FAILURE;
+				exit(EXIT_FAILURE);
 			}
 		}
 		break;
 		case 'h':
 			print_usage(argv[0]);
-			return EXIT_SUCCESS;
+			exit(EXIT_SUCCESS);
 		}
 	};
 
@@ -255,7 +255,7 @@ int PbController::initialize(int argc, char* argv[])
 				"podboat",
 				pid)
 			<< std::endl;
-		return EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
 
 	std::cout << _("Loading configuration...");
@@ -283,10 +283,8 @@ int PbController::initialize(int argc, char* argv[])
 		cfgparser.parse_file(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
-		return EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
-
-	return EXIT_SUCCESS;
 }
 
 int PbController::run()

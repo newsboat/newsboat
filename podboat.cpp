@@ -28,10 +28,7 @@ int main(int argc, char* argv[])
 	PbController c;
 
 	try {
-		int ret = c.initialize(argc, argv);
-		if (ret != EXIT_SUCCESS) {
-			return ret;
-		}
+		c.initialize(argc, argv);
 
 		podboat::PbView v(&c);
 		c.set_view(&v);
