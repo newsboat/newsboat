@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-09-17 16:02+0300\n"
-"PO-Revision-Date: 2020-09-19 11:15+0200\n"
+"PO-Revision-Date: 2020-09-19 13:37+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -160,16 +160,16 @@ msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"- Zawiera bibliotekę  optional-lite, na licencji the Boost Software "
-"License: https://github.com/martinmoene/optional-lite"
+"- Zawiera bibliotekę  optional-lite, na licencji the Boost Software License: "
+"https://github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:170
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"- Zawiera bibliotekę  expected-lite, na licencji the Boost Software "
-"License: https://github.com/martinmoene/expected-lite"
+"- Zawiera bibliotekę  expected-lite, na licencji the Boost Software License: "
+"https://github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:243
 #, c-format
@@ -362,7 +362,7 @@ msgid ""
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
 "BŁĄD: Musisz ustawić `miniflux-login` oraz jeden z `miniflux-password`, "
-"`miniflux-passwordfile` olub`miniflux-passwordeval` aby korzystać z "
+"`miniflux-passwordfile` lub `miniflux-passwordeval` aby korzystać z "
 "Miniflux\n"
 
 #: src/controller.cpp:320
@@ -530,7 +530,7 @@ msgstr "Błędna pozycja!"
 
 #: src/dirbrowserformaction.cpp:293
 msgid "Directory: "
-msgstr "Folder:"
+msgstr "Folder: "
 
 #: src/dirbrowserformaction.cpp:321 src/filebrowserformaction.cpp:313
 #: src/pbview.cpp:370 src/selectformaction.cpp:246 src/selectformaction.cpp:250
@@ -1661,7 +1661,7 @@ msgid ""
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
-"OSTRZEŻENIE: Znaleziono kometarz w `%s'/ Plik kolejki jest nadpisywany kiedy "
+"OSTRZEŻENIE: Znaleziono komentarz w %s. Plik kolejki jest nadpisywany kiedy "
 "podboat kończy działanie, komentarze zostaną usunięte. Naciśnij Enter aby "
 "kontynuować lub Ctrl+c aby anulować"
 
@@ -1816,7 +1816,7 @@ msgstr "Przenoszenie konfiguracji i dancyh z ~/.newsbeuter/..."
 #: rust/libnewsboat/src/configpaths.rs:214
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr ""
-" Przerywanie migracji z powodu nieudanej operacji tworzenia folderu '%s' "
+"Przerywanie migracji z powodu nieudanej operacji tworzenia folderu '%s' "
 "nieudane: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
