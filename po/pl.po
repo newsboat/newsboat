@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-09-17 16:02+0300\n"
-"PO-Revision-Date: 2019-01-09 20:42+0100\n"
+"PO-Revision-Date: 2020-09-19 13:37+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -116,27 +116,23 @@ msgid "this help"
 msgstr "ta strona pomocy"
 
 #: newsboat.cpp:121
-#, fuzzy
 msgid "Files:"
-msgstr "Plik: "
+msgstr "Pliki:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:123
-#, fuzzy
 msgid "configuration"
-msgstr "Czytanie konfiguracji..."
+msgstr "konfiguracja"
 
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:125
-#, fuzzy
 msgid "feed URLs"
-msgstr "Adresy URL"
+msgstr "adresy URL"
 
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:127
-#, fuzzy
 msgid "cache"
-msgstr "<plik pamięci podręcznej>"
+msgstr "plik pamięci podręcznej"
 
 #: newsboat.cpp:158
 #, c-format
@@ -149,49 +145,46 @@ msgstr ""
 
 #: newsboat.cpp:163
 msgid "It bundles:"
-msgstr ""
+msgstr "Zawiera:"
 
 #: newsboat.cpp:164
-#, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"Zawiera bibliotekę JSON for Modern C++ na licencji MIT License: https://"
+"- Zawiera bibliotekę JSON for Modern C++ na licencji MIT License: https://"
 "github.com/nlohmann/json"
 
 #: newsboat.cpp:167
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Zawiera bibliotekę JSON for Modern C++ na licencji MIT License: https://"
-"github.com/nlohmann/json"
+"- Zawiera bibliotekę  optional-lite, na licencji the Boost Software License: "
+"https://github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:170
-#, fuzzy
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"Zawiera bibliotekę JSON for Modern C++ na licencji MIT License: https://"
-"github.com/nlohmann/json"
+"- Zawiera bibliotekę  expected-lite, na licencji the Boost Software License: "
+"https://github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr "Złapano wyjątek newsboat::dbexception o treści: %s"
+msgstr "Złapano wyjątek newsboat::DbException o treści: %s"
 
 #: newsboat.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr "Złapano wyjątek newsboat::matcherexception o treści: %s"
+msgstr "Złapano wyjątek newsboat::MatcherException o treści: %s"
 
 #: newsboat.cpp:256 podboat.cpp:41
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr "Złapano wyjątek newsboat::dbexception o treści: %s"
+msgstr "Złapano wyjątek newsboat::Exception o treści: %s"
 
 #: src/colormanager.cpp:55 src/colormanager.cpp:58 src/regexmanager.cpp:220
 #: src/regexmanager.cpp:234 src/regexmanager.cpp:305 src/regexmanager.cpp:317
@@ -217,33 +210,32 @@ msgstr ""
 "nieprzeczytanych artykułów)"
 
 #: src/configcontainer.cpp:271
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `"
 "%F'&? - %U"
 msgstr ""
-"%N %V - Artykuły w kanale '%T' (%u nieprzeczytanych, %t wszystkich) - %U"
+"%N %V - Artykuły w kanale '%T' (%u nieprzeczytanych, %t wszystkich)%F? "
+"pasujących do filtra `%F'&? - %U"
 
 #: src/configcontainer.cpp:277
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Okna dialogowe"
 
 #: src/configcontainer.cpp:280
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr ""
-"%N %V - Twoje kanały (%u nieprzeczytanych, %t wszystkich)%?T? - tag '%T'&?"
+"%N %V - Twoje kanały (%u nieprzeczytanych, %t wszystkich)%F? pasujących do "
+"filtra `%F'&?%?T? - tag '%T'&?"
 
 #: src/configcontainer.cpp:286
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Otwórz plik&Zapisz plik? - %f"
 
 #: src/configcontainer.cpp:290
-#, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
-msgstr "%N %V - %?O?Otwórz plik&Zapisz plik? - %f"
+msgstr "%N %V - %?O?Otwórz folder&Zapisz plik? - %f"
 
 #: src/configcontainer.cpp:294
 msgid "%N %V - Help"
@@ -254,9 +246,10 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artykuł '%T' (%u nieprzeczytanych, %t wszystkich)"
 
 #: src/configcontainer.cpp:302
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
-msgstr "%N %V - Wynik wyszukiwania (%u nieprzeczytanych, %t wszystkich)"
+msgstr ""
+"%N %V - Wynik wyszukiwania (%u nieprzeczytanych, %t wszystkich)%F? "
+"pasujących do filtra `%F'&?"
 
 #: src/configcontainer.cpp:307
 msgid "%N %V - Select Filter"
@@ -308,7 +301,7 @@ msgstr "nieznany błąd (bug)."
 #: src/configparser.cpp:98
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s linia %u"
 
 #: src/configparser.cpp:118
 #, c-format
@@ -316,9 +309,9 @@ msgid "unknown command `%s'"
 msgstr "nieznana komenda '%s'"
 
 #: src/configparser.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "Błąd podczas przetwarzania komendy '%s' (%s linia %u): %s"
+msgstr "Błąd podczas przetwarzania komendy `%s' (%s): %s"
 
 #: src/controller.cpp:147 src/pbcontroller.cpp:246
 #, c-format
@@ -360,26 +353,30 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s jest niedostępny i nie może zostać utworzony\n"
 
 #: src/controller.cpp:295
-#, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
-msgstr "BŁĄD: Musisz ustawić `cookie-cache` aby korzystać z NewsBlur.\n"
+msgstr "BŁĄD: Musisz ustawić `miniflux-url` aby korzystać z Miniflux.\n"
 
 #: src/controller.cpp:307
 msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
+"BŁĄD: Musisz ustawić `miniflux-login` oraz jeden z `miniflux-password`, "
+"`miniflux-passwordfile` lub `miniflux-passwordeval` aby korzystać z "
+"Miniflux\n"
 
 #: src/controller.cpp:320
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"BŁĄD: Musisz ustawić *zarówno* `inoreader-app-id` jak i `inoreader-app-key` "
+"aby korzystać z Inoreader.\n"
 
 #: src/controller.cpp:327
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "BŁĄD: Nieznana wartość urls-source `%s'"
 
 #: src/controller.cpp:334
 #, c-format
@@ -436,13 +433,12 @@ msgstr ""
 "Inoreader. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
 "Wygląda na to, że nie skonfigurowałeś żadnych kanałów na swoim koncie "
-"NewsBlur. Wykonaj to proszę i spróbuj ponownie."
+"Miniflux. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:395
 msgid "Loading articles from cache..."
@@ -534,7 +530,7 @@ msgstr "Błędna pozycja!"
 
 #: src/dirbrowserformaction.cpp:293
 msgid "Directory: "
-msgstr ""
+msgstr "Folder: "
 
 #: src/dirbrowserformaction.cpp:321 src/filebrowserformaction.cpp:313
 #: src/pbview.cpp:370 src/selectformaction.cpp:246 src/selectformaction.cpp:250
@@ -547,9 +543,9 @@ msgid "Save"
 msgstr "Zapisz"
 
 #: src/dirbrowserformaction.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Save Files - %s"
-msgstr "Zapisz plik - %s"
+msgstr "Zapisz pliki - %s"
 
 #: src/download.cpp:65
 msgid "queued"
@@ -638,9 +634,8 @@ msgstr ""
 #: src/itemlistformaction.cpp:175 src/itemlistformaction.cpp:197
 #: src/itemlistformaction.cpp:214 src/itemviewformaction.cpp:251
 #: src/itemviewformaction.cpp:438
-#, fuzzy
 msgid "Failed to spawn browser"
-msgstr "Otwórz artykuł w przeglądarce"
+msgstr "Nie udało się uruchomić przeglądarki internetowej"
 
 #: src/feedlistformaction.cpp:251 src/feedlistformaction.cpp:279
 #: src/feedlistformaction.cpp:304 src/itemlistformaction.cpp:143
@@ -649,7 +644,7 @@ msgstr "Otwórz artykuł w przeglądarce"
 #: src/itemviewformaction.cpp:441
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Przeglądarka internetowa zwróciła kod błędu %i"
 
 #: src/feedlistformaction.cpp:256
 msgid "Cannot open query feeds in the browser!"
@@ -678,9 +673,10 @@ msgid "Already on first feed."
 msgstr "To już pierwszy kanał."
 
 #: src/feedlistformaction.cpp:409
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "Czy na pewno chcesz nadpisać `%s' (t:Tak n:Nie)? "
+msgstr ""
+"Czy na pewno chcesz oznaczyć wszystkie kanały jako przeczytane (t:Tak n:"
+"Nie)? "
 
 #: src/feedlistformaction.cpp:410 src/feedlistformaction.cpp:523
 #: src/filebrowserformaction.cpp:126 src/itemlistformaction.cpp:1435
@@ -829,12 +825,11 @@ msgstr "Zapisano konfiguracje do %s"
 
 #: src/formaction.cpp:340
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "użycie: exec <polecenie>"
 
 #: src/formaction.cpp:346
-#, fuzzy
 msgid "Operation not found"
-msgstr "atrybut nie znaleziony"
+msgstr "Nie znaleziono polecenia"
 
 #: src/formaction.cpp:351
 #, c-format
@@ -915,11 +910,11 @@ msgstr "osadzony flash"
 
 #: src/htmlrenderer.cpp:1004
 msgid "video"
-msgstr ""
+msgstr "wideo"
 
 #: src/htmlrenderer.cpp:1006
 msgid "audio"
-msgstr ""
+msgstr "dzwięk"
 
 #: src/htmlrenderer.cpp:1008
 msgid "unknown (bug)"
@@ -1004,20 +999,18 @@ msgstr "Prześlij artykuł do polecenia: "
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
 #: src/itemlistformaction.cpp:676 src/itemlistformaction.cpp:714
-#, fuzzy
 msgid "dtfalgr"
-msgstr "dtfaog"
+msgstr "dtfaogl"
 
 #: src/itemlistformaction.cpp:678
-#, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
-msgstr "Sortuj wg (d)aty/(t)ytułu/(f)lag/(a)utora/(o)dnośnika/(g)uid?"
+msgstr "Sortuj wg (d)aty/(t)ytułu/(f)lag/(a)utora/(o)dnośnika/(g)uid/(l)osowo?"
 
 #: src/itemlistformaction.cpp:716
-#, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
-"Sortuj odwrotnie wg (d)aty/(t)ytułu/(f)lag/(a)utora/(o)dnośnika/(g)uid?"
+"Sortuj odwrotnie wg (d)aty/(t)ytułu/(f)lag/(a)utora/(o)dnośnika/(g)uid/"
+"(l)osowo?"
 
 #: src/itemlistformaction.cpp:841 src/itemviewformaction.cpp:558
 msgid "Flags updated."
@@ -1061,11 +1054,11 @@ msgstr "Lista artykułów - %s"
 #: src/itemlistformaction.cpp:1437
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr ""
+msgstr "Nadpisać `%s' w `%s' (t:Tak n:Nie)"
 
 #: src/itemlistformaction.cpp:1489
 msgid "yanq"
-msgstr ""
+msgstr "twnż"
 
 #: src/itemlistformaction.cpp:1511
 #, c-format
@@ -1073,6 +1066,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Nadpisac `%s' w `%s'? Jest jeszcze %d takich konfliktów (t:Tak, w:Tak, "
+"wszystkie, n:Nie, ż:Żaden)"
 
 #: src/itemlistformaction.cpp:1518
 #, c-format
@@ -1080,6 +1075,8 @@ msgid ""
 "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Nadpisac `%s' w `%s'? Nie ma już więcej takich konfliktów (t:Tak, w:Tak, "
+"wszystkie, n:Nie, ż:Żaden)"
 
 #: src/itemrenderer.cpp:60
 msgid "Feed: "
@@ -1176,7 +1173,7 @@ msgstr "Otwórz kanał/artykuł"
 
 #: src/keymap.cpp:41
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Przełącz między aktywnymi widżetami"
 
 #: src/keymap.cpp:44
 msgid "Return to previous dialog/Quit"
@@ -1211,19 +1208,16 @@ msgid "Save article"
 msgstr "Zapisz artykuł"
 
 #: src/keymap.cpp:82
-#, fuzzy
 msgid "Save articles"
-msgstr "Zapisz artykuł"
+msgstr "Zapisz artykuły"
 
 #: src/keymap.cpp:87
-#, fuzzy
 msgid "Go to next entry"
 msgstr "Przejdź do następnego wpisu"
 
 #: src/keymap.cpp:94
-#, fuzzy
 msgid "Go to previous entry"
-msgstr "Idź do poprzedniego wpisu"
+msgstr "Przejdź do poprzedniego wpisu"
 
 #: src/keymap.cpp:101
 msgid "Go to next unread article"
@@ -1465,39 +1459,39 @@ msgstr "Otwórz URL 9"
 
 #: src/keymap.cpp:401
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 1"
 
 #: src/keymap.cpp:402
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 2"
 
 #: src/keymap.cpp:403
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 3"
 
 #: src/keymap.cpp:404
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 4"
 
 #: src/keymap.cpp:405
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 5"
 
 #: src/keymap.cpp:406
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 6"
 
 #: src/keymap.cpp:407
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 7"
 
 #: src/keymap.cpp:408
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 8"
 
 #: src/keymap.cpp:409
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Uruchom wiersz poleceń z 9"
 
 #: src/keymap.cpp:411
 msgid "Move to the previous entry"
@@ -1534,9 +1528,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' nie jest dopuszczalnym poleceniem"
 
 #: src/keymap.cpp:755
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid operation"
-msgstr "`%s' nie jest dopuszczalnym kontekstem"
+msgstr "`%s' nie jest dopuszczalną operacją"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1607,9 +1601,9 @@ msgid " - %u parallel downloads"
 msgstr " - %u równoległych pobrań"
 
 #: src/pbview.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total%s"
-msgstr "Kolejka (%u pobieranych plików, %u wszystkich) - %.2f kb/s całość%s"
+msgstr "Kolejka (%u pobieranych plików, %u wszystkich) - %.2f %s całość%s"
 
 #: src/pbview.cpp:161
 msgid "Error: can't quit: download(s) in progress."
@@ -1626,15 +1620,15 @@ msgstr "Błąd: nie można wykonać operacji: pobieranie w toku."
 
 #: src/pbview.cpp:271
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: src/pbview.cpp:273
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: src/pbview.cpp:275
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: src/pbview.cpp:369
 msgid "Download"
@@ -1667,6 +1661,9 @@ msgid ""
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
+"OSTRZEŻENIE: Znaleziono komentarz w %s. Plik kolejki jest nadpisywany kiedy "
+"podboat kończy działanie, komentarze zostaną usunięte. Naciśnij Enter aby "
+"kontynuować lub Ctrl+c aby anulować"
 
 #: src/regexmanager.cpp:204
 #, c-format
@@ -1727,9 +1724,8 @@ msgid "EOF found while reading XML tag"
 msgstr "Trafiono na koniec pliku podczas odczytu tagu XML"
 
 #: src/urlviewformaction.cpp:70 src/urlviewformaction.cpp:79
-#, fuzzy
 msgid "No links available!"
-msgstr "Brak wybranego odnośnika!"
+msgstr "Brak odnośników!"
 
 #: src/urlviewformaction.cpp:159
 msgid "Save Bookmark"
@@ -1741,7 +1737,7 @@ msgstr "Adresy URL"
 
 #: src/view.cpp:156
 msgid "Error: Failed to execute startup commands"
-msgstr ""
+msgstr "Błąd: Nie udało się uruchomić polecen startowych"
 
 #: src/view.cpp:425 src/view.cpp:451
 msgid "Error: feed contains no items!"
@@ -1797,9 +1793,8 @@ msgid "unsupported feed format"
 msgstr "niewspierany format kanału"
 
 #: rust/libnewsboat/src/cliargsparser.rs:289
-#, fuzzy
 msgid "%s: %s: invalid loglevel value"
-msgstr "%s: %d: nieprawidłowy poziom logowania"
+msgstr "%s: %s: nieprawidłowy poziom logowania"
 
 #: rust/libnewsboat/src/configpaths.rs:85
 msgid ""
@@ -1812,38 +1807,39 @@ msgstr ""
 
 #: rust/libnewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr ""
+msgstr "Przenoszenie konfiguracji i danych z folderów XDG Newsbeutera..."
 
 #: rust/libnewsboat/src/configpaths.rs:202
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr ""
+msgstr "Przenoszenie konfiguracji i dancyh z ~/.newsbeuter/..."
 
 #: rust/libnewsboat/src/configpaths.rs:214
-#, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
-msgstr "Błąd: otwarcie pliku pamięci podręcznej '%s' nieudane: %s"
+msgstr ""
+"Przerywanie migracji z powodu nieudanej operacji tworzenia folderu '%s' "
+"nieudane: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:263
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Błąd przetwarzania: dodatkowe znaki po pozycji %{}: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:270
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "Błąd przetwarzania na pozycji %{}: oczekiwano %s"
 
 #: rust/libnewsboat/src/filterparser.rs:275
 msgid "Internal parse error"
-msgstr ""
+msgstr "Wewnetrzny błąd parsera"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
-msgstr ""
+msgstr "regcomp zwrócił kod błędu %i"
 
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
-msgstr ""
+msgstr "regexc zwrócił kod błędu %s"
 
 #~ msgid "invalid feed index (bug)"
 #~ msgstr "nieprawidłowy indeks kanału (bug)"
