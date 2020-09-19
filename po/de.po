@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-09-17 16:02+0300\n"
-"PO-Revision-Date: 2020-06-17 20:03+0200\n"
+"PO-Revision-Date: 2020-09-18 23:10+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -302,7 +302,7 @@ msgstr "Unbekannter Fehler (Bug)."
 #: src/configparser.cpp:98
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s Zeile %u"
 
 #: src/configparser.cpp:118
 #, c-format
@@ -310,9 +310,9 @@ msgid "unknown command `%s'"
 msgstr "unbekannter Befehl `%s'"
 
 #: src/configparser.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "Fehler beim Verarbeiten von Befehl `%s' (%s Zeile %u): %s"
+msgstr "Fehler beim Verarbeiten von Befehl „%s“ (%s): %s"
 
 #: src/controller.cpp:147 src/pbcontroller.cpp:246
 #, c-format
@@ -355,16 +355,18 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "Die Datei %s kann weder gelesen noch erstellt werden\n"
 
 #: src/controller.cpp:295
-#, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
 msgstr ""
-"Fehler: Sie müssen „cookie-cache“ setzen, um NewsBlur verwenden zu können.\n"
+"Fehler: Sie müssen „miniflux-url“ setzen, um Miniflux verwenden zu können\n"
 
 #: src/controller.cpp:307
 msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
+"Fehler: Sie müssen „miniflux-login“ und entweder „miniflux-password“, "
+"„miniflux-passwordfile“ oder „miniflux-passwordeval“ setzen, um Miniflux "
+"verwenden zu können\n"
 
 #: src/controller.cpp:320
 msgid ""
@@ -434,12 +436,11 @@ msgstr ""
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:384
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem NewsBlur-Account "
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Miniflux-Account "
 "konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
 
 #: src/controller.cpp:395
@@ -636,9 +637,8 @@ msgstr ""
 #: src/itemlistformaction.cpp:175 src/itemlistformaction.cpp:197
 #: src/itemlistformaction.cpp:214 src/itemviewformaction.cpp:251
 #: src/itemviewformaction.cpp:438
-#, fuzzy
 msgid "Failed to spawn browser"
-msgstr "Artikel im Browser öffnen"
+msgstr "Konnte den Browser nicht starten"
 
 #: src/feedlistformaction.cpp:251 src/feedlistformaction.cpp:279
 #: src/feedlistformaction.cpp:304 src/itemlistformaction.cpp:143
@@ -676,9 +676,8 @@ msgid "Already on first feed."
 msgstr "Bereits beim ersten Feed."
 
 #: src/feedlistformaction.cpp:409
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "Wollen Sie wirklich `%s' überschreiben (y:Ja n:Nein)? "
+msgstr "Möchten Sie wirklich alle Feeds als gelesen markieren (j:Ja n:Nein)? "
 
 #: src/feedlistformaction.cpp:410 src/feedlistformaction.cpp:523
 #: src/filebrowserformaction.cpp:126 src/itemlistformaction.cpp:1435
@@ -788,7 +787,7 @@ msgstr "Feedliste - %u ungelesen, %u gesamt"
 #: src/filebrowserformaction.cpp:123
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Wollen Sie wirklich `%s' überschreiben (y:Ja n:Nein)? "
+msgstr "Wollen Sie wirklich „%s“ überschreiben (j:Ja n:Nein)? "
 
 #: src/filebrowserformaction.cpp:126
 msgid "n"
@@ -1215,12 +1214,10 @@ msgid "Save articles"
 msgstr "Artikel speichern"
 
 #: src/keymap.cpp:87
-#, fuzzy
 msgid "Go to next entry"
 msgstr "zum nächsten Eintrag gehen"
 
 #: src/keymap.cpp:94
-#, fuzzy
 msgid "Go to previous entry"
 msgstr "zum vorhergehenden Eintrag gehen"
 
@@ -1746,7 +1743,7 @@ msgstr "URLs"
 
 #: src/view.cpp:156
 msgid "Error: Failed to execute startup commands"
-msgstr ""
+msgstr "Fehler: Konnte die Programmstartbefehle nicht ausführen"
 
 #: src/view.cpp:425 src/view.cpp:451
 msgid "Error: feed contains no items!"
@@ -1832,16 +1829,16 @@ msgstr ""
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:263
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Parsefehler: nachstehende Zeichen nach Position %{}: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:270
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "Parsefehler an Position %{}: %s erwartet"
 
 #: rust/libnewsboat/src/filterparser.rs:275
 msgid "Internal parse error"
-msgstr ""
+msgstr "Interner Parsefehler"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
