@@ -195,6 +195,7 @@ dependencies = [
  "curl-sys 0.4.36+curl-7.71.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "gettext-rs 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gettext-sys 0.19.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.77 (registry+https://github.com/rust-lang/crates.io-index)",
  "natord 1.0.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "nom 5.1.2 (registry+https://github.com/rust-lang/crates.io-index)",

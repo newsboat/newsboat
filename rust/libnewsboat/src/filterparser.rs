@@ -1,6 +1,7 @@
 //! Parses filter expressions.
 
 use gettextrs::gettext;
+use lazy_static::lazy_static;
 use nom::{
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
@@ -10,6 +11,7 @@ use nom::{
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset,
 };
+use std::collections::BTreeMap;
 use strprintf::fmt;
 
 /// Operators that can be used in comparisons.
@@ -61,9 +63,38 @@ enum Error<'a> {
     Internal,
 }
 
-static EXPECTED_ATTRIBUTE_NAME: &str = "attribute name";
-static EXPECTED_OPERATORS: &str = "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#";
-static EXPECTED_VALUE: &str = "one of: quoted string, range, number";
+// These strings are used as identifiers in nom::context macro, which unfortunately requires
+// &'static str. The identifiers are then turned into actual, internationalized messages by
+// expected_to_i18n_msg().
+static EXPECTED_ATTRIBUTE_NAME: &str = "EXPECTED_ATTRIBUTE_NAME";
+static EXPECTED_OPERATORS: &str = "EXPECTED_OPERATORS";
+static EXPECTED_VALUE: &str = "EXPECTED_VALUE";
+
+fn expected_to_i18n_msg(expected_id: &'static str) -> &'static str {
+    lazy_static! {
+        static ref ID_TO_I18N: BTreeMap<&'static str, String> = {
+            let mut result = BTreeMap::new();
+            result.insert(EXPECTED_ATTRIBUTE_NAME, gettext("attribute name"));
+            result.insert(
+                EXPECTED_OPERATORS,
+                gettext("one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"),
+            );
+            result.insert(
+                EXPECTED_VALUE,
+                gettext("one of: quoted string, range, number"),
+            );
+            result
+        };
+    }
+
+    ID_TO_I18N
+        .get(expected_id)
+        .map(|s| s.as_str())
+        // This message is intentionally left untranslated, to make it more eye-catching for
+        // non-English-speaking users. If this ever pops up, it's be nice to hear of it ASAP, so it
+        // pays to make it look unusual.
+        .unwrap_or("<internal error in filterparser::expected_to_i18n_msg>")
+}
 
 fn operators<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Operator, E> {
     context(
@@ -270,7 +301,7 @@ pub fn parse(expr: &str) -> Result<Expression, String> {
                     &gettext("Parse error at position %{}: expected %s"),
                     PRIu64,
                     pos as u64,
-                    expected
+                    expected_to_i18n_msg(expected)
                 ),
                 Error::Internal => fmt!(&gettext("Internal parse error")),
             };

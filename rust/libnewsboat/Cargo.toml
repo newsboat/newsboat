@@ -21,6 +21,7 @@ curl-sys = "0.4.5"
 libc = "0.2"
 gettext-rs = "0.5.0"
 natord = "1.0.9"
+lazy_static = "1.4.0"
 
 [dependencies.clap]
 version = "2.33"
