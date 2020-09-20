@@ -1,14 +1,76 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2020-09-20
-### Added
-### Changed
-- It is now an error if a macro is configured with 0 operations.
+## 2.21 - 2020-09-20
 
-### Deprecated
-### Removed
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes Ivan Tham.
+
+
+### Added
+
+- Build dependency on AWK
+- A note that security vulnerability should be reported to
+    security@newsboat.org, preferably encrypted to PGP key 4ED6CD61932B9EBE
+- Confirmation before marking all feeds as read (#1006) (Dennis van der Schagt)
+- `scrolloff` setting which keeps the specified number of lines above and below
+    the selected list item (#1103) (Dennis van der Schagt)
+- `%=[width][identifier]` formatting sequence for `*-format` settings. It
+    centers a given value inside a given width, padded with spaces and slanting
+    to the left if it can't be aligned evenly (Daniel Bauer)
+- Support for Miniflux (#448) (Galen Abell)
+- `run-on-startup` setting which executes a given list of operations when
+    Newsboat starts. This can be used to e.g. open tag dialog on startup, or go
+    to a certain feed (#888) (Dennis van der Schagt)
+- Documentation for `one`, `two`, ..., `nine`, `zero` operations that open
+    a corresponding URL in the browser (A1RO)
+
+### Changed
+
+- It is now a startup error for a macro to have no operations
+- Bumped minimum supported Rust version to 1.42.0
+- Updated vendored libraries: Catch2 to 2.13.1, json.hpp to 3.9.1
+- Empty strings in filter expressions are treated as zero when compared with
+    a numeric attribute like `age` (Alexander Batischev)
+- Converted various tables in docs to decorated lists, making them easier to
+    read (#441) (Spacewalker2)
+- In macros, no longer require a space between operation and the following
+    semicolon (#702) (Dennis van der Schagt)
+- Sorting by first tag now ignores "title tags", i.e. the ones that start with
+    a tilde (#1128) (José Rui Barros)
+- contrib/feedgrabber.rb updated to use Newsboat directories instead of
+    Newsbeuter's (Fabian Holler)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Polish (Carno), Russian (Alexander Batischev), Turkish (Emir
+    Sarı), Ukrainian (Alexander Batischev)
+
 ### Fixed
-### Security
+
+- TT-RSS not taking the MIME type into account when deciding what enclosure to
+    pick (#941) (chux0519)
+- Typos in documentation (Edgar Hipp)
+- History files storing the *oldest* entries instead of the most recent ones
+    (#1081) (Dennis van der Schagt)
+- Search dialogs all displaying results of the last search, not their individual
+    searches (#1087) (Dennis van der Schagt)
+- Feeds apparently not being sorted after a reload (#1089) (Alexander Batischev)
+- Search dialog displaying the new query even if the search failed (Dennis van
+    der Schagt)
+- `delete-all-articles` operation not working in the search dialog (Dennis van
+    der Schagt)
+- First feed marked as read when deleting all items in search dialog (Dennis van
+    der Schagt)
+- Arrow keys not working in the tag list (Dennis van der Schagt)
+- Inoreader not marking items unread (#1109) (José Rui Barros)
+- `content` attribute being unavailable to query feeds (#111) (Dennis van der
+    Schagt)
+- Newsboat sometimes opening wrong items (#72, #1126) (Dennis van der Schagt)
+- Unread items being double-counted by `-x print-unread` and notifications
+    (#444, #1120) (Alexander Batischev)
+- Nested lists being strung out into a single, non-nested list (#1158) (Dennis
+    van der Schagt)
+- Colons sometimes making filter expressions invalid (Alexander Batischev)
+- Child processes that display notifications not being waited on. We now
+    double-fork them (glacambre)
 
 
 
