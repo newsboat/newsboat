@@ -97,4 +97,8 @@ master repository and shell access to newsboat.org.
 13. Prepare the repo for the next release
     * Add "Unreleased" section to CHANGELOG and commit
     * Update all the transitive dependencies: `cargo update` and commit
+    * Set minimum supported Rust version (MSRV) to current_stable-2
+        * `git grep <previous version>`
+        * includes CI configs, README and doc/newsboat.asciidoc
+        * commit
     * Push it: `git push`
