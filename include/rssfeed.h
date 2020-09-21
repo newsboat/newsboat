@@ -110,7 +110,7 @@ public:
 	}
 	void set_rssurl(const std::string& u);
 
-	unsigned int unread_item_count();
+	unsigned int unread_item_count() const;
 	unsigned int total_item_count() const
 	{
 		return items_.size();
@@ -118,10 +118,11 @@ public:
 
 	void set_tags(const std::vector<std::string>& tags);
 	bool matches_tag(const std::string& tag);
-	std::string get_tags();
+	std::string get_tags() const;
 	std::string get_firsttag();
 
-	nonstd::optional<std::string> attribute_value(const std::string& attr) override;
+	nonstd::optional<std::string> attribute_value(const std::string& attr) const
+	override;
 
 	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
 
@@ -198,7 +199,7 @@ public:
 	void mark_all_items_read();
 
 	// this is ugly, but makes it possible to lock items use e.g. from the Cache class
-	std::mutex item_mutex;
+	mutable std::mutex item_mutex;
 
 private:
 	std::string title_;

@@ -137,7 +137,7 @@ void RssItem::set_enclosure_type(const std::string& type)
 }
 
 nonstd::optional<std::string> RssItem::attribute_value(const std::string&
-	attribname)
+	attribname) const
 {
 	if (attribname == "title") {
 		return utils::utf8_to_locale(title());

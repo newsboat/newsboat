@@ -125,7 +125,8 @@ public:
 	void update_flags();
 	void sort_flags();
 
-	nonstd::optional<std::string> attribute_value(const std::string& attr) override;
+	nonstd::optional<std::string> attribute_value(const std::string& attr) const
+	override;
 
 	void set_feedptr(std::shared_ptr<RssFeed> ptr);
 	void set_feedptr(const std::weak_ptr<RssFeed>& ptr);

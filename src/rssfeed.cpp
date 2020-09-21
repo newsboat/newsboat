@@ -42,7 +42,7 @@ RssFeed::~RssFeed()
 {
 }
 
-unsigned int RssFeed::unread_item_count()
+unsigned int RssFeed::unread_item_count() const
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
 	return std::count_if(items_.begin(),
@@ -70,7 +70,7 @@ std::string RssFeed::get_firsttag()
 	return "";
 }
 
-std::string RssFeed::get_tags()
+std::string RssFeed::get_tags() const
 {
 	std::string tags;
 	for (const auto& t : tags_) {
@@ -136,7 +136,7 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 }
 
 nonstd::optional<std::string> RssFeed::attribute_value(const std::string&
-	attribname)
+	attribname) const
 {
 	if (attribname == "feedtitle") {
 		return title();

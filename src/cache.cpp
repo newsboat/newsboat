@@ -1100,7 +1100,7 @@ void Cache::fetch_descriptions(RssFeed* feed)
 	run_sql(query, fill_content_callback, feed);
 }
 
-std::string Cache::fetch_description(RssItem* item)
+std::string Cache::fetch_description(const RssItem* item)
 {
 	const std::string in_clause = prepare_query("'%q'", item->guid());
 

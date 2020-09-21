@@ -21,7 +21,7 @@ public:
 	{}
 
 	nonstd::optional<std::string> attribute_value(const std::string& attribname)
-	override
+	const override
 	{
 		const auto it = m_data.find(attribname);
 		if (it != m_data.cend()) {
