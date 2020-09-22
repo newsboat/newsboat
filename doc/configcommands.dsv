@@ -30,7 +30,7 @@ feedhq-flag-share||<flag>||""||If set and FeedHQ support is used, then all artic
 feedhq-flag-star||<flag>||""||If set and FeedHQ support is used, then all articles that are flagged with the specified flag are being "starred" in FeedHQ and appear in the list of "Starred items".||feedhq-flag-star "b"
 feedhq-login||<login>||""||This variable sets your FeedHQ login for FeedHQ support.||feedhq-login "your-login"
 feedhq-min-items||<number>||20||This variable sets the number of articles that are loaded from FeedHQ per feed.||feedhq-min-items 100
-feedhq-password||<password>||""||This variable sets your FeedHQ password for FeedHQ support. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||feedhq-password "here_goesAquote:\""
+feedhq-password||<password>||""||This variable sets your FeedHQ password for FeedHQ support. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||feedhq-password "here_goesAquote:\""
 feedhq-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||feedhq-passwordfile "~/.newsboat/feedhq-pw.txt"
 feedhq-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||feedhq-passwordeval "gpg --decrypt ~/.newsboat/feedhq-password.gpg"
 feedhq-show-special-feeds||[yes/no]||yes||If set and FeedHQ support is used, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.||feedhq-show-special-feeds "no"
@@ -56,7 +56,7 @@ inoreader-flag-share||<flag>||""||If set and Inoreader support is used, then all
 inoreader-flag-star||<flag>||""||If set and Inoreader support is used, then all articles that are flagged with the specified flag are being "starred" in Inoreader and appear in the list of "Starred items".||inoreader-flag-star "b"
 inoreader-login||<login>||""||This variable sets your Inoreader login for Inoreader support.||inoreader-login "your-login"
 inoreader-min-items||<number>||20||This variable sets the number of articles that are loaded from Inoreader per feed.||inoreader-min-items 100
-inoreader-password||<password>||""||This variable sets your Inoreader password for Inoreader support. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||inoreader-password "here_goesAquote:\""
+inoreader-password||<password>||""||This variable sets your Inoreader password for Inoreader support. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||inoreader-password "here_goesAquote:\""
 inoreader-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||inoreader-passwordfile "~/.newsboat/inoreader-pw.txt"
 inoreader-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||inoreader-passwordeval "gpg --decrypt ~/.newsboat/inoreader-password.gpg"
 inoreader-show-special-feeds||[yes/no]||yes||If set and Inoreader support is used, then "special feeds" like "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.||inoreader-show-special-feeds "no"
@@ -67,13 +67,13 @@ max-download-speed||<number>||0||If set to a number greater than 0, the download
 max-browser-tabs||<number>||10||Set the maximum number of articles to open in a browser when using the `open-all-unread-in-browser` or `open-all-unread-in-browser-and-mark-read` commands.||max-browser-tabs 4
 max-items||<number>||0||Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.||max-items 100
 miniflux-login||<username>||""||Sets the username for use with Miniflux.||miniflux-login "admin"
-miniflux-password||<password>||""||Configures the password for use with Miniflux. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||miniflux-password "here_goesAquote:\""
+miniflux-password||<password>||""||Configures the password for use with Miniflux. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||miniflux-password "here_goesAquote:\""
 miniflux-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||miniflux-passwordfile "~/.newsboat/miniflux-pw.txt"
 miniflux-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||miniflux-passwordeval "gpg --decrypt ~/.newsboat/miniflux-password.gpg"
 miniflux-url||<url>||""||Configures the URL where the Miniflux installation you want to use resides.||miniflux-url "https://example.com/miniflux/"
 newsblur-login||<login>||""||This variable sets your NewsBlur login for NewsBlur support.||newsblur-login "your-login"
 newsblur-min-items||<number>||20||This variable sets the number of articles that are loaded from NewsBlur per feed.||newsblur-min-items 100
-newsblur-password||<password>||""||This variable sets your NewsBlur password for NewsBlur support. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||newsblur-password "here_goesAquote:\""
+newsblur-password||<password>||""||This variable sets your NewsBlur password for NewsBlur support. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||newsblur-password "here_goesAquote:\""
 newsblur-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||newsblur-passwordfile "~/.newsboat/newsblur-pw.txt"
 newsblur-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||newsblur-passwordeval "gpg --decrypt ~/.newsboat/newsblur-password.gpg"
 newsblur-url||<url>||"https://newsblur.com"||Configures the URL where the NewsBlur instance resides.||newsblur-url "https://localhost"
@@ -85,7 +85,7 @@ notify-screen||[yes/no]||no||If set to `yes`, then a "privacy message" will be s
 notify-xterm||[yes/no]||no||If set to `yes`, then the xterm window title will be set to a notification message about new articles.||notify-xterm yes
 ocnews-flag-star||<character>||""||If set and ownCloud News support is used, then all articles that are flagged with the specified flag are being "starred" in ownCloud News.||ocnews-flag-star "s"
 ocnews-login||<username>||""||Sets the username to use with the ownCloud instance.||ocnews-login "user"
-ocnews-password||<password>||""||Configures the password to use with the ownCloud instance. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||ocnews-password "here_goesAquote:\""
+ocnews-password||<password>||""||Configures the password to use with the ownCloud instance. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||ocnews-password "here_goesAquote:\""
 ocnews-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||ocnews-passwordfile "~/.newsboat/ocnews-pw.txt"
 ocnews-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||ocnews-passwordeval "gpg --decrypt ~/.newsboat/ocnews-password.gpg"
 ocnews-url||<url>||""||Configures the URL where the ownCloud instance resides.||ocnews-url "https://localhost/owncloud"
@@ -93,7 +93,7 @@ oldreader-flag-share||<flag>||""||If set and The Old Reader support is used, the
 oldreader-flag-star||<flag>||""||If set and The Old Reader support is used, then all articles that are flagged with the specified flag are being "starred" in The Old Reader and appear in the list of "Starred items".||oldreader-flag-star "b"
 oldreader-login||<login>||""||This variable sets your The Old Reader login for The Older Reader support.||oldreader-login "your-login"
 oldreader-min-items||<number>||20||This variable sets the number of articles that are loaded from The Old Reader per feed.||oldreader-min-items 100
-oldreader-password||<password>||""||This variable sets your The Old Reader password for The Old Reader support. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||oldreader-password "here_goesAquote:\""
+oldreader-password||<password>||""||This variable sets your The Old Reader password for The Old Reader support. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||oldreader-password "here_goesAquote:\""
 oldreader-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||oldreader-passwordfile "~/.newsboat/oldreader-pw.txt"
 oldreader-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||oldreader-passwordeval "gpg --decrypt ~/.newsboat/oldreader-password.gpg"
 oldreader-show-special-feeds||[yes/no]||yes||If set and The Old reader support is used, then "special feeds" like "People you follow" (articles shared by people you follow), "Starred items" (your starred articles) and "Shared items" (your shared articles) appear in your subscription list.||oldreader-show-special-feeds "no"
@@ -133,7 +133,7 @@ ttrss-flag-publish||<character>||""||If set and Tiny Tiny RSS support is used, t
 ttrss-flag-star||<character>||""||If set and Tiny Tiny RSS support is used, then all articles that are flagged with the specified flag are being "starred" in Tiny Tiny RSS.||ttrss-flag-star "a"
 ttrss-login||<username>||""||Sets the username for use with Tiny Tiny RSS.||ttrss-login "admin"
 ttrss-mode||[multi/single]||multi||Configures the mode in which Tiny Tiny RSS is used. In single-user mode, login and password are used for HTTP authentication, while in multi-user mode, they are used for authenticating with Tiny Tiny RSS.||ttrss-mode "single"
-ttrss-password||<password>||""||Configures the password for use with Tiny Tiny RSS. Double quotes should be escaped, i.e. you should write `{backslash}"` instead of `"`.||ttrss-password "here_goesAquote:\""
+ttrss-password||<password>||""||Configures the password for use with Tiny Tiny RSS. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||ttrss-password "here_goesAquote:\""
 ttrss-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||ttrss-passwordfile "~/.newsboat/ttrss-pw.txt"
 ttrss-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||ttrss-passwordeval "gpg --decrypt ~/.newsboat/ttrss-password.gpg"
 ttrss-url||<url>||""||Configures the URL where the Tiny Tiny RSS installation you want to use resides.||ttrss-url "https://example.com/ttrss/"
