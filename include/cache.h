@@ -74,7 +74,7 @@ public:
 	void mark_items_read_by_guid(const std::vector<std::string>& guids);
 	std::vector<std::string> get_read_item_guids();
 	void fetch_descriptions(RssFeed* feed);
-	std::string fetch_description(RssItem* item);
+	std::string fetch_description(const RssItem& item);
 
 private:
 	SchemaVersion get_schema_version();

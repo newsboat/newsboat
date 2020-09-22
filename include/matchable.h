@@ -11,7 +11,8 @@ class Matchable {
 public:
 	Matchable() = default;
 	virtual ~Matchable() = default;
-	virtual nonstd::optional<std::string> attribute_value(const std::string& attr) =
+	virtual nonstd::optional<std::string> attribute_value(const std::string& attr)
+	const =
 		0;
 };
 
