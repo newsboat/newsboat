@@ -403,8 +403,8 @@ that it can authenticate with the service:
 	oldreader-login "your-oldreader-account"
 	oldreader-password "your-password"
 
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
+Note that double quotes and backslashes in your password
+<<_using_double_quotes,should be escaped>>.
 
 See also <<oldreader-passwordfile,`oldreader-passwordfile`>>,
 <<oldreader-passwordeval,`oldreader-passwordeval`>>, and
@@ -458,8 +458,8 @@ Then, configure your NewsBlur credentials:
 	newsblur-login "your-newsblur-account"
 	newsblur-password "your-password"
 
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
+Note that double quotes and backslashes in your password
+<<_using_double_quotes,should be escaped>>.
 
 See also <<newsblur-passwordfile,`newsblur-passwordfile`>>,
 <<newsblur-passwordeval,`newsblur-passwordeval`>>, and
@@ -491,8 +491,8 @@ Then, configure your FeedHQ credentials:
 	feedhq-login "your-feedhq-account"
 	feedhq-password "your-password"
 
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
+Note that double quotes and backslashes in your password
+<<_using_double_quotes,should be escaped>>.
 
 See also <<feedhq-passwordfile,`feedhq-passwordfile`>>,
 <<feedhq-passwordeval,`feedhq-passwordeval`>>, and
@@ -545,8 +545,8 @@ In addition, it requires username and password for authentication:
 	ttrss-login "myusername"
 	ttrss-password "mypassword"
 
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
+Note that double quotes and backslashes in your password
+<<_using_double_quotes,should be escaped>>.
 
 See also <<ttrss-passwordfile,`ttrss-passwordfile`>>,
 <<ttrss-passwordeval,`ttrss-passwordeval`>>, and
@@ -656,8 +656,8 @@ have to create a username and password in Inoreader _Preferences > Profile_
 	inoreader-login "your-inoreader-account"
 	inoreader-password "your-password"
 
-(Note that double quotes should be escaped, i.e. you should write `{backslash}"`
-instead of `"`.)
+Note that double quotes and backslashes in your password
+<<_using_double_quotes,should be escaped>>.
 
 See also <<inoreader-passwordfile,`inoreader-passwordfile`>>,
 <<inoreader-passwordeval,`inoreader-passwordeval`>>, and <<_passwords_for_external_apis>>.
@@ -719,8 +719,8 @@ In addition, Miniflux requires username and password for authentication:
 	miniflux-login "myusername"
 	miniflux-password "mypassword"
 
-Note that double quotes should be escaped, i.e. you should write `\"`
-instead of `"`.
+Note that double quotes and backslashes in your password
+<<_using_double_quotes,should be escaped>>.
 
 See also <<miniflux-passwordfile,`miniflux-passwordfile`>>,
 <<miniflux-passwordeval,`miniflux-passwordeval`>>, and
