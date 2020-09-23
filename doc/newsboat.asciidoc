@@ -1279,7 +1279,7 @@ include::chapter-podcasts.asciidoc[]
 
 Since articles can link to various media content such as _audio_, _video_ and _images_, you may want to open those files with a dedicated application instead of a web browser.
 
-As an alternative to Podboat, media players such as `mpv` can stream content directly when given a URL as an argument. For podcasts, Newsboat always assign the main audio file to link [1]. Using the technique described in <<_macro_support,Macro Support>>, a specific link can be opened with the command of your choice, right from the article view (no need to reach for the URL view for this task). Instead of calling `open-in-browser`, the operations `one` to `ten` (numbers written textually) can be used to specify _which_ link to open.
+As an alternative to Podboat, media players such as `mpv` can stream content directly when given a URL as an argument. For podcasts, Newsboat always assign the main audio file to link [1]. Using the technique described in <<_macro_support,Macro Support>>, a specific link can be opened with the command of your choice, right from the article view (no need to reach for the URL view for this task). Instead of calling `open-in-browser`, the operations `one` to `zero` (numbers written textually) can be used to specify _which_ link to open.
 
 So, to stream a podcast from the article view, you can use a macro such as:
 
