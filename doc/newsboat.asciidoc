@@ -1275,6 +1275,32 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 include::chapter-podcasts.asciidoc[]
 
+=== Media Content
+
+Since articles can link to various media content such as _audio_, _video_ and _images_, you may want to open those files with a dedicated application instead of a web browser.
+
+As an alternative to Podboat, media players such as `mpv` can stream content directly when given a URL as an argument. For podcasts, Newsboat always assign the main audio file to link [1]. Using the technique described in <<_macro_support,Macro Support>>, a specific link can be opened with the command of your choice, right from the article view (no need to reach for the URL view for this task). Instead of calling `open-in-browser`, the operations `one` to `ten` (numbers written textually) can be used to specify _which_ link to open.
+
+So, to stream a podcast from the article view, you can use a macro such as:
+
+```
+macro 1 set browser mpv; one; set browser firefox
+```
+
+While listening, you might also want to keep using newsboat at the same time. There are many ways to achieve that. One of them is described in the link:faq.html#_after_i_open_a_link_in_the_browser_newsboat_stays_unresponsive_until_the_browser_is_closed[FAQ], another is to add `setsid -f` at the beginning of the command to fork the external application to a new process, independant of Newsboat. In addition to that, you probably want to open the media player in a dedicated terminal. The following macro does just that:
+
+```
+macro p set browser "setsid -f alacritty -e mpv"; one; set browser "firefox"
+```
+
+Of course, `setsid` and `alacritty` need to be installed on your machine. You can replace `alacritty` with your preferred terminal emulator, as long as the option to execute a command after launching the terminal (`-e` in this case) is set.
+
+Given the text-based user interface of Newsboat, one can even use it to stream audio content on a system without a graphical environment. Just make sure your audio player does not try to launch a GUI. For example:
+
+```
+macro c set browser "mpv --vid=no"; one; set browser "firefox"
+```
+
 === Running multiple copies of Newsboat simultaneously
 
 During development and testing, you might want to run a second copy of
