@@ -217,7 +217,6 @@ TEST_CASE("handle_action()", "[KeyMap]")
 	}
 
 	SECTION("macro without commands results in exception") {
-		REQUIRE_NOTHROW(k.handle_action("macro", "r ; ; ; ; open"));
 		REQUIRE_THROWS_AS(k.handle_action("macro", "r ; ; ; ;"),
 			ConfigHandlerException);
 	}
@@ -363,7 +362,8 @@ TEST_CASE("get_keymap_descriptions() does not return empty commands or descripti
 	}
 }
 
-TEST_CASE("get_keymap_descriptions() includes entries which include different keys bound to same operation",
+TEST_CASE("get_keymap_descriptions() includes entries which include different "
+	"keys bound to same operation",
 	"[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -467,22 +467,27 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 
 		k.handle_action("macro", "1 set \"arg 1\"");
 		k.handle_action("macro", "2 set \"arg 1\" ; set \"arg 2\" \"arg 3\"");
+		k.handle_action("macro", "x set a \"arg 1\"");
+		k.handle_action("macro", "y set m n");
+		k.handle_action("macro", "z set var I");
 
 		WHEN("calling dump_config()") {
 			k.dump_config(dumpOutput);
 
 			THEN("there is one line per configured macro ; all arguments are included") {
-				REQUIRE(dumpOutput.size() == 2);
+				REQUIRE(dumpOutput.size() == 5);
 
 				REQUIRE(dumpOutput[0] == R"(macro 1 set "arg 1")");
 				REQUIRE(dumpOutput[1] == R"(macro 2 set "arg 1" ; set "arg 2" "arg 3")");
+				REQUIRE(dumpOutput[2] == R"(macro x set "a" "arg 1")");
+				REQUIRE(dumpOutput[3] == R"(macro y set "m" "n")");
+				REQUIRE(dumpOutput[4] == R"(macro z set "var" "I")");
 			}
 		}
 	}
 }
 
-// Related to https://github.com/newsboat/newsboat/issues/702
-TEST_CASE("Regression test for macro configuration semicolon handling",
+TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 	"[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -518,5 +523,72 @@ TEST_CASE("Regression test for macro configuration semicolon handling",
 		REQUIRE(macros[0].args == std::vector<std::string>({}));
 		REQUIRE(macros[1].op == OP_QUIT);
 		REQUIRE(macros[1].args == std::vector<std::string>({}));
+	}
+}
+
+TEST_CASE("Whitespace around semicolons in macros is optional", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	const auto check = [&k]() {
+		const auto macro = k.get_macro("x");
+
+		REQUIRE(macro.size() == 3);
+
+		REQUIRE(macro[0].op == OP_OPEN);
+		REQUIRE(macro[0].args == std::vector<std::string>({}));
+
+		REQUIRE(macro[1].op == OP_INT_SET);
+		REQUIRE(macro[1].args == std::vector<std::string>({"browser", "firefox --private-window"}));
+
+		REQUIRE(macro[2].op == OP_QUIT);
+		REQUIRE(macro[2].args == std::vector<std::string>({}));
+	};
+
+	SECTION("Whitespace not required before the semicolon") {
+		k.handle_action("macro",
+			R"(x open; set browser "firefox --private-window"; quit)");
+		check();
+	}
+
+	SECTION("Whitespace not required after the semicolon") {
+		k.handle_action("macro",
+			R"(x open ;set browser "firefox --private-window" ;quit)");
+		check();
+	}
+
+	SECTION("Whitespace not required on either side of the semicolon") {
+		k.handle_action("macro",
+			R"(x open;set browser "firefox --private-window";quit)");
+		check();
+	}
+}
+
+TEST_CASE("It's not an error to have no operations before a semicolon in "
+	"a macro",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	const std::vector<std::string> op_lists = {
+		"; ;; ; open",
+		";;; ;; ; open",
+		";;; ;; ; open ;",
+		";;; ;; ; open ;; ;",
+		";;; ;; ; open ; ;;;;",
+		";;; open ; ;;;;",
+		"; open ;; ;; ;",
+		"open ; ;;; ;;",
+	};
+
+	for (const auto& op_list : op_lists) {
+		DYNAMIC_SECTION(op_list) {
+			k.handle_action("macro", "r " + op_list);
+
+			const auto macro = k.get_macro("r");
+			REQUIRE(macro.size() == 1);
+			REQUIRE(macro[0].op == OP_OPEN);
+			REQUIRE(macro[0].args == std::vector<std::string>({}));
+		}
 	}
 }
