@@ -592,3 +592,21 @@ TEST_CASE("It's not an error to have no operations before a semicolon in "
 		}
 	}
 }
+
+TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
+	"[KeyMap]")
+{
+	// This is a regression test for https://github.com/newsboat/newsboat/issues/1200
+
+	KeyMap k(KM_NEWSBOAT);
+
+	k.handle_action("macro",
+		R"(x set browser "sleep 3; do-something ; echo hi"; open-in-browser)");
+
+	const auto macro = k.get_macro("x");
+	REQUIRE(macro.size() == 2);
+	REQUIRE(macro[0].op == OP_INT_SET);
+	REQUIRE(macro[0].args == std::vector<std::string>({"browser", "sleep 3; do-something ; echo hi"}));
+	REQUIRE(macro[1].op == OP_OPENINBROWSER);
+	REQUIRE(macro[1].args == std::vector<std::string>({}));
+}
