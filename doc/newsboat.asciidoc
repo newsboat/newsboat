@@ -139,28 +139,6 @@ include::configcommands-linked.asciidoc[]
 
 include::availableoperations-linked.asciidoc[]
 
-Keys, as used in the bind-key configuration command, use a special syntax.
-Lowercase keys, uppercase keys and special characters are written literally.
-The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
-written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.
-The "Space" key is written as `SPACE`. Key combinations with the "Ctrl" key,
-such as "Ctrl-R", are written as `^R`. Please be aware that all Ctrl-related
-key combinations need to be written in uppercase. The following identifiers for
-keys are supported:
-
-- `ENTER` (Enter key)
-- `BACKSPACE` (backspace key)
-- `LEFT` (left cursor)
-- `RIGHT` (right cursor)
-- `UP` (up cursor)
-- `DOWN` (down cursor)
-- `PPAGE` (page up cursor)
-- `NPAGE` (page down cursor)
-- `HOME` (cursor to beginning of list/article)
-- `END` (cursor to end of list/article)
-- `ESC` (Esc key)
-- `TAB` (Tab key)
-
 === Example Configuration
 
 ----
@@ -1327,12 +1305,6 @@ Operation:Default key:Description
 [[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the "max-downloads" option by 1.
 [[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
 |=========================================================================
-
-A usual "use case" is to configure newsboat to automatically enqueue newly
-found podcast download URLs. Then, the user reloads the podcast RSS feeds in
-newsboat, and after that, uses podboat to view the current queue, and
-either selectively download certain files or automatically download them all
-together by pressing "a" within podboat.
 
 === Running multiple copies of Newsboat simultaneously
 
