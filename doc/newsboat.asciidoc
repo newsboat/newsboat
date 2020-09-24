@@ -130,15 +130,6 @@ documentation].
 include::chapter-firststeps.asciidoc[]
 
 
-=== Configuration Commands
-
-include::configcommands-linked.asciidoc[]
-
-
-=== Available Operations
-
-include::availableoperations-linked.asciidoc[]
-
 === Example Configuration
 
 ----
@@ -969,7 +960,7 @@ article list. In the article view, all flags (if available) are listed.
 In newsboat, it's possible to define macros to execute more than one command
 at once. A macro is configured using the <<macro,`macro`>> configuration command. The
 first parameter to `macro` is the key, all parameters afterwards are operations
-(as listed in the <<available-operations>> table above), optionally with
+(see <<_newsboat_operations>> and <<_podboat_operations>>), optionally with
 parameters on their own, separated by the `;` character. Here's a simple
 example:
 
@@ -1284,28 +1275,6 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 include::chapter-podcasts.asciidoc[]
 
-== Podboat Configuration Commands
-
-include::podboat-cmds-linked.asciidoc[]
-
-.Available Operations in Podboat
-[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
-|=========================================================================
-Operation:Default key:Description
-[[pb-quit]]<<pb-quit,+quit+>>:q:Quit the program.
-[[pb-hard-quit]]<<pb-hard-quit,+hard-quit+>>:Q:Quit the program without confirmation.
-[[pb-help]]<<pb-help,+help+>>:?:Show the help screen.
-[[pb-download]]<<pb-download,+pb-download+>>:d:Download the currently selected URL.
-[[pb-cancel]]<<pb-cancel,+pb-cancel+>>:c:Cancel the currently selected download.
-[[pb-play]]<<pb-play,+pb-play+>>:p:Start player with currently selected download.
-[[pb-mark-as-finished]]<<pb-mark-as-finished,+pb-mark-as-finished+>>:m:Mark currently selected entry as finished.
-[[pb-delete]]<<pb-delete,+pb-delete+>>:D:Delete the currently selected URL from the queue.
-[[pb-purge]]<<pb-purge,+pb-purge+>>:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
-[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
-[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the "max-downloads" option by 1.
-[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
-|=========================================================================
-
 === Running multiple copies of Newsboat simultaneously
 
 During development and testing, you might want to run a second copy of
@@ -1420,6 +1389,44 @@ You can also chat with developers and fellow users on #newsboat at Freenode
 (irc.freenode.net or https://webchat.freenode.net/?channels=newsboat[via
 webchat]).
 
+[appendix]
+== Newsboat Configuration Commands
+
+include::configcommands-linked.asciidoc[]
+
+[appendix]
+== Newsboat Operations
+
+include::availableoperations-linked.asciidoc[]
+
+[appendix]
+== Podboat Configuration Commands
+
+include::podboat-cmds-linked.asciidoc[]
+
+[appendix]
+== Podboat Operations
+
+.Available Operations in Podboat
+[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
+|=========================================================================
+Operation:Default key:Description
+[[pb-quit]]<<pb-quit,+quit+>>:q:Quit the program.
+[[pb-hard-quit]]<<pb-hard-quit,+hard-quit+>>:Q:Quit the program without confirmation.
+[[pb-help]]<<pb-help,+help+>>:?:Show the help screen.
+[[pb-download]]<<pb-download,+pb-download+>>:d:Download the currently selected URL.
+[[pb-cancel]]<<pb-cancel,+pb-cancel+>>:c:Cancel the currently selected download.
+[[pb-play]]<<pb-play,+pb-play+>>:p:Start player with currently selected download.
+[[pb-mark-as-finished]]<<pb-mark-as-finished,+pb-mark-as-finished+>>:m:Mark currently selected entry as finished.
+[[pb-delete]]<<pb-delete,+pb-delete+>>:D:Delete the currently selected URL from the queue.
+[[pb-purge]]<<pb-purge,+pb-purge+>>:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
+[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
+[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the "max-downloads" option by 1.
+[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
+|=========================================================================
+
+
+[appendix]
 == License
 
 MIT License
