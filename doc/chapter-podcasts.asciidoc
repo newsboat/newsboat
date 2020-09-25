@@ -21,3 +21,9 @@ queue but are marked as downloaded. You can remove them by purging them from
 the queue with the "P" key. After you've played a file and close podboat, it
 will be removed from the queue. The downloaded file remains on the
 filesystem unless "delete-played-files" is enabled.
+
+A usual "use case" is to configure newsboat to automatically enqueue newly
+found podcast download URLs. Then, the user reloads the podcast RSS feeds in
+newsboat, and after that, uses podboat to view the current queue, and
+either selectively download certain files or automatically download them all
+together by pressing "a" within podboat.

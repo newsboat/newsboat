@@ -114,3 +114,25 @@ _history.search_ file (stored next to the _cache.db_ file). By default, the
 last 100 search phrases are stored, but this limited can be influenced through
 the <<history-limit,`history-limit`>> configuration variable. To disable search
 history saving, simply set the `history-limit` to `0`.
+
+Keys, as used in the bind-key configuration command, use a special syntax.
+Lowercase keys, uppercase keys and special characters are written literally.
+The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
+written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.
+The "Space" key is written as `SPACE`. Key combinations with the "Ctrl" key,
+such as "Ctrl-R", are written as `^R`. Please be aware that all Ctrl-related
+key combinations need to be written in uppercase. The following identifiers for
+keys are supported:
+
+- `ENTER` (Enter key)
+- `BACKSPACE` (backspace key)
+- `LEFT` (left cursor)
+- `RIGHT` (right cursor)
+- `UP` (up cursor)
+- `DOWN` (down cursor)
+- `PPAGE` (page up cursor)
+- `NPAGE` (page down cursor)
+- `HOME` (cursor to beginning of list/article)
+- `END` (cursor to end of list/article)
+- `ESC` (Esc key)
+- `TAB` (Tab key)
