@@ -73,6 +73,18 @@ std::string get_prop(xmlNode* node, const std::string& prop,
 	return retval;
 }
 
+bool has_namespace(xmlNode* node, const char* ns_uri)
+{
+	if (!ns_uri && !node->ns) {
+		return true;
+	}
+	if (ns_uri && node->ns && node->ns->href &&
+		strcmp((const char*)node->ns->href, ns_uri) == 0) {
+		return true;
+	}
+	return false;
+}
+
 bool node_is(xmlNode* node, const char* name, const char* ns_uri)
 {
 	if (!node || !name || !node->name) {
@@ -80,13 +92,7 @@ bool node_is(xmlNode* node, const char* name, const char* ns_uri)
 	}
 
 	if (strcmp((const char*)node->name, name) == 0) {
-		if (!ns_uri && !node->ns) {
-			return true;
-		}
-		if (ns_uri && node->ns && node->ns->href &&
-			strcmp((const char*)node->ns->href, ns_uri) == 0) {
-			return true;
-		}
+		return has_namespace(node, ns_uri);
 	}
 	return false;
 }

@@ -6,6 +6,7 @@
 #include "exception.h"
 #include "feed.h"
 #include "item.h"
+#include "medianamespace.h"
 #include "rsspp_uris.h"
 #include "utils.h"
 #include "xmlutilities.h"
@@ -152,6 +153,8 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			get_prop(node, "scheme") ==
 			"http://www.google.com/reader/") {
 			it.labels.push_back(get_prop(node, "label"));
+		} else if (is_media_node(node)) {
+			parse_media_node(node, it);
 		}
 	} // for
 

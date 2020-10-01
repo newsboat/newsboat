@@ -6,11 +6,10 @@
 #include "exception.h"
 #include "feed.h"
 #include "item.h"
+#include "medianamespace.h"
 #include "rsspp_uris.h"
 #include "utils.h"
 #include "xmlutilities.h"
-
-#define MEDIA_RSS_URI "http://search.yahoo.com/mrss/"
 
 using namespace newsboat;
 
@@ -118,27 +117,8 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 				it.enclosure_url = get_prop(node, "url");
 				it.enclosure_type = std::move(type);
 			}
-		} else if (node_is(node, "content", MEDIA_RSS_URI)) {
-			const std::string type = get_prop(node, "type");
-			if (utils::is_valid_podcast_type(type)) {
-				it.enclosure_url = get_prop(node, "url");
-				it.enclosure_type = std::move(type);
-			}
-		} else if (node_is(node, "group", MEDIA_RSS_URI)) {
-			for (xmlNode* mnode = node->children; mnode != nullptr;
-				mnode = mnode->next) {
-				if (node_is(mnode, "content", MEDIA_RSS_URI)) {
-					const std::string type =
-						get_prop(mnode, "type");
-					if (utils::is_valid_podcast_type(
-							type)) {
-						it.enclosure_url =
-							get_prop(mnode, "url");
-						it.enclosure_type =
-							std::move(type);
-					}
-				}
-			}
+		} else if (is_media_node(node)) {
+			parse_media_node(node, it);
 		}
 	}
 
