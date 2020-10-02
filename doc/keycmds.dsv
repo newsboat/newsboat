@@ -7,7 +7,7 @@ mark-feed-read||A||Mark all articles in the currently selected feed read.
 mark-all-feeds-read||C||Mark articles in all feeds read.
 mark-all-above-as-read||n/a||Mark all above as read.
 save||s||Export the currently selected article to a plain text file.
-save-all||n/a||Export all articles from currently selected feed to plain text files.
+save-all||n/a||Export all articles from the currently selected feed to plain text files.
 next-unread||n||Jump to the next unread article.
 prev-unread||p||Jump to the previous unread article.
 next||J||Jump to next list entry.
