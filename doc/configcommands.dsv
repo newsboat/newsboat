@@ -12,7 +12,7 @@ browser||<command>||%BROWSER, otherwise lynx||Set the browser command to use whe
 cache-file||<path>||"~/.newsboat/cache.db" or "~/.local/share/cache.db" (see "Files" section)||This configuration option sets the cache file. This is especially useful if the filesystem of your home directory doesn't support proper locking (e.g. NFS).||cache-file "/tmp/testcache.db"
 cleanup-on-quit||[yes/no]||yes||If set to `yes`, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.||cleanup-on-quit no
 color||<element> <fgcolor> <bgcolor> [<attribute> ...]||n/a||Set the foreground color, background color and optional attributes for a certain element.||color background white black
-confirm-markAllFeedsRead||[yes/no]||yes||If set to `yes`, then newsboat will ask for confirmation whether the user wants to mark all feeds as read.||confirm-exit no
+confirm-markAllFeedsRead||[yes/no]||yes||If set to `yes`, then newsboat will ask for confirmation whether the user wants to mark all feeds as read.||confirm-markAllFeedsRead no
 confirm-exit||[yes/no]||no||If set to `yes`, then newsboat will ask for confirmation whether the user really wants to quit newsboat.||confirm-exit yes
 cookie-cache||<path>||""||Set a cookie cache. If set, cookies will be cached in (i.e. read from and written to) this file, using http://www.cookiecentral.com/faq/#3.5[Netscape format].||cookie-cache "~/.newsboat/cookies.txt"
 datetime-format||<date/time format>||%b %d||This format specifies the date/time format in the article list. For a detailed documentation on the allowed formats, consult the manpage of strftime(3).||datetime-format "%D, %R"
