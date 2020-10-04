@@ -955,38 +955,6 @@ articles via the filter language.
 If an article contains one or more flags, it is marked with an "!" in the
 article list. In the article view, all flags (if available) are listed.
 
-=== Macro Support
-
-In newsboat, it's possible to define macros to execute more than one command
-at once. A macro is configured using the <<macro,`macro`>> configuration command. The
-first parameter to `macro` is the key, all parameters afterwards are operations
-(see <<_newsboat_operations>> and <<_podboat_operations>>), optionally with
-parameters on their own, separated by the `;` character. Here's a simple
-example:
-
-	macro k open; reload; quit
-	macro o open-in-browser; toggle-article-read "read"
-
-When the user presses the macro prefix ("," by default) and then the "k" key,
-the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>> will be executed subsequently.
-The macro prefix can be changed from the default "," to another key, e.g. "+"
-(if you don't unbind the default "," you're left with two macro prefixes):
-
-	bind-key + macro-prefix
-	unbind-key ,
-
-It is also possible to modify configuration variables within macros, which can
-e.g. be used to temporarily modify the <<browser,`browser`>> configuration variable to do
-something else, such as running an image viewer from the URLs view:
-
-	macro i set browser "feh %u"; open-in-browser; set browser "elinks %u"
-
-You can even use this feature to enqueue any of the URLs from the URLs view to
-podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
-you're using XDG directories):
-
-	macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser "elinks %u"
-
 === Commandline Commands
 
 Newsboat comes with a `-x` option that indicates that commands added as arguments
@@ -1270,6 +1238,37 @@ opens the list of open dialogs. From there, the user can switch to another
 dialog by selecting the appropriate entry and pressing "Enter", or can close
 open dialogs by selecting them and pressing "Ctrl-X".
 
+=== Macro Support
+
+In newsboat, it's possible to define macros to execute more than one command
+at once. A macro is configured using the <<macro,`macro`>> configuration command. The
+first parameter to `macro` is the key, all parameters afterwards are operations
+(see <<_newsboat_operations>> and <<_podboat_operations>>), optionally with
+parameters on their own, separated by the `;` character. Here's a simple
+example:
+
+  macro k open; reload; quit
+  macro o open-in-browser; toggle-article-read "read"
+
+When the user presses the macro prefix ("," by default) and then the "k" key,
+the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>> will be executed subsequently.
+The macro prefix can be changed from the default "," to another key, e.g. "+"
+(if you don't unbind the default "," you're left with two macro prefixes):
+
+  bind-key + macro-prefix
+  unbind-key ,
+
+It is also possible to modify configuration variables within macros, which can
+e.g. be used to temporarily modify the <<browser,`browser`>> configuration variable to do
+something else, such as running an image viewer from the URLs view:
+
+  macro i set browser "feh %u"; open-in-browser; set browser "elinks %u"
+
+You can even use this feature to enqueue any of the URLs from the URLs view to
+podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
+you're using XDG directories):
+
+  macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser "elinks %u"
 
 === Podcast Support
 
