@@ -28,6 +28,12 @@ newsboat, and after that, uses podboat to view the current queue, and
 either selectively download certain files or automatically download them all
 together by pressing "a" within podboat.
 
+You can even use this feature to enqueue any of the URLs from the URLs view to
+podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
+you're using XDG directories):
+
+  macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser "elinks %u"
+
 === Media Content
 
 Since articles can link to various media content such as _audio_, _video_ and _images_, you may want to open those files with a dedicated application instead of a web browser.
