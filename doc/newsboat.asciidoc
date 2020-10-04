@@ -1252,14 +1252,19 @@ example:
 
 When the user presses the macro prefix ("," by default) and then the "k" key,
 the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>> will be executed subsequently.
+
 The macro prefix can be changed from the default "," to another key, e.g. "+"
 (if you don't unbind the default "," you're left with two macro prefixes):
 
   bind-key + macro-prefix
   unbind-key ,
 
-It is also possible to modify configuration variables within macros, which can
-e.g. be used to temporarily modify the <<browser,`browser`>> configuration variable to do
+=== Open Links with External Commands
+
+==== Switching Browser with Macros
+
+It is also possible to modify configuration variables within macros.
+For example, one can temporarily modify the <<browser,`browser`>> command to do
 something else, such as running an image viewer from the URLs view:
 
   macro i set browser "feh %u"; open-in-browser; set browser "elinks %u"
