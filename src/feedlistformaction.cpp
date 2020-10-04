@@ -406,7 +406,9 @@ REDO:
 	}
 	break;
 	case OP_MARKALLFEEDSREAD:
-		if (v->confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
+		if (!get_cfg()->get_configvalue_as_bool(
+					"confirm-markAllFeedsRead") ||
+			v->confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "FeedListFormAction: marking all feeds read");
 			v->set_status(_("Marking all feeds read..."));
