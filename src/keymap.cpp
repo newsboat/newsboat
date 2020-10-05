@@ -119,7 +119,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_OPENBROWSER_AND_MARK,
 		"open-in-browser-and-mark-read",
 		"O",
-		_("Open article in browser and mark read"),
+		_("Open URL of current article, or entry in URL view. Mark as read in article list"),
 		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
@@ -141,7 +141,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_OPENINBROWSER,
 		"open-in-browser",
 		"o",
-		_("Open URL of the feed, article or selection"),
+		_("Open URL of current article, feed or entry in URL view"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
