@@ -119,7 +119,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_OPENBROWSER_AND_MARK,
 		"open-in-browser-and-mark-read",
 		"O",
-		_("Open article in browser and mark read"),
+		_("Open URL of article, or entry in URL view. Mark read."),
 		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
@@ -141,7 +141,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_OPENINBROWSER,
 		"open-in-browser",
 		"o",
-		_("Open article in browser"),
+		_("Open URL of article, feed, or entry in URL view"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
@@ -387,7 +387,6 @@ static const std::vector<OpDesc> opdescs = {
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 
-	{OP_OPEN_URL_10, "zero", "0", _("Open URL 10"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_1, "one", "1", _("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_2, "two", "2", _("Open URL 2"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_3, "three", "3", _("Open URL 3"), KM_URLVIEW | KM_ARTICLE},
@@ -397,6 +396,7 @@ static const std::vector<OpDesc> opdescs = {
 	{OP_OPEN_URL_7, "seven", "7", _("Open URL 7"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_8, "eight", "8", _("Open URL 8"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_9, "nine", "9", _("Open URL 9"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_10, "zero", "0", _("Open URL 10"), KM_URLVIEW | KM_ARTICLE},
 
 	{OP_CMD_START_1, "cmd-one", "1", _("Start cmdline with 1"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
 	{OP_CMD_START_2, "cmd-two", "2", _("Start cmdline with 2"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
