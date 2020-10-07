@@ -41,28 +41,43 @@ you're using XDG directories):
 
   macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser "elinks %u"
 
-=== Media Content
+==== Streaming Audio Content with a Media Player
 
-Since articles can link to various media content such as _audio_, _video_ and _images_, you may want to open those files with a dedicated application instead of a web browser.
+As an alternative to `podboat` file management, media players such as `mpv` can
+stream content directly when given a URL. Since newsboat always assign the
+enclosure link to URL 1, the operation `one` can be used to open the audio file
+(beware that this operation will always open URL 1, even if no enclosure is
+found). To listen to your podcast from the article view, a basic macro would be:
 
-As an alternative to Podboat, media players such as `mpv` can stream content directly when given a URL as an argument. For podcasts, Newsboat always assign the main audio file to link [1]. Using the technique described in <<_macro_support,Macro Support>>, a specific link can be opened with the command of your choice, right from the article view (no need to reach for the URL view for this task). Instead of calling `open-in-browser`, the operations `one` to `zero` (numbers written textually) can be used to specify _which_ link to open.
+  macro 1 set browser mpv; one; set browser firefox
 
-So, to stream a podcast from the article view, you can use a macro such as:
+For media players with a graphical user interface like `vlc`, console output
+will typically need to be silenced with `>/dev/null 2>&1`. Also, the `&`
+character at the end of the browser command will detach the media player from
+newsboat. You can then read your articles while listening to podcasts:
 
-```
-macro 1 set browser mpv; one; set browser firefox
-```
+  macro v set browser "vlc %u >/dev/null 2>&1 &"; one; set browser firefox
 
-While listening, you might also want to keep using newsboat at the same time. There are many ways to achieve that. One of them is described in the link:faq.html#_after_i_open_a_link_in_the_browser_newsboat_stays_unresponsive_until_the_browser_is_closed[FAQ], another is to add `setsid -f` at the beginning of the command to fork the external application to a new process, independant of Newsboat. In addition to that, you probably want to open the media player in a dedicated terminal. The following macro does just that:
+With mpv, the podcast cover art is fetched automatically when using the
+pseudo-gui. The `--` at the end will prevent mpv from interpreting the following
+arguments as options:
 
-```
-macro p set browser "setsid -f alacritty -e mpv"; one; set browser "firefox"
-```
+  macro p set browser "mpv --player-operation-mode=pseudo-gui -- %u &"; one; set browser firefox
 
-Of course, `setsid` and `alacritty` need to be installed on your machine. You can replace `alacritty` with your preferred terminal emulator, as long as the option to execute a command after launching the terminal (`-e` in this case) is set.
+To use mpv's console interface instead, first launch a terminal emulator
+which will in turn execute mpv. This way, newsboat and the media player can both
+be controlled with text-based interfaces, side by side.
 
-Given the text-based user interface of Newsboat, one can even use it to stream audio content on a system without a graphical environment. Just make sure your audio player does not try to launch a GUI. For example:
+  macro c set browser "alacritty -e mpv --vid=no -- %u &"; one; set browser firefox
 
-```
-macro c set browser "mpv --vid=no"; one; set browser "firefox"
-```
+If you are working without a graphical environment (e.g. from a virtual
+console), you want to make sure the media player doesn't try to launch a
+graphical user interface. With mpv, the `--vid=no` option can be used for this
+purpose:
+
+  macro n set browser "mpv --vid=no --"; one; set browser lynx
+
+Another use case for this macro would be when running newsboat on a
+remote host, while logged in through a secure shell (e.g. OpenSSH).
+With this setup, newsboat will effectively be used as the controller to an ad hoc
+"remote media server". Audio will be playing on the remote host.
