@@ -1262,7 +1262,55 @@ The macro prefix can be changed from the default "," to another key, e.g. "+"
 
 === Open Links with External Commands
 
-==== Switching Browser with Macros
+==== Using Browser
+
+The first step to open links outside of newsboat is to set a default
+<<browser,`browser`>> in your config file. It can be any command that you would
+normally run, such as a web browser or an executable script. For example:
+
+  browser firefox
+
+The browser command also takes an optional `%u` to specify at which point the
+URL sould be expanded. If `%u` is not set, the URL will be appended at the end of
+the command. Therefore, the following example is equivalent to the last one:
+
+  browser "firefox %u"
+
+To open any link with your browser, the versatile
+<<open-in-browser,`open-in-browser`>> operation can be used. Its behavior is
+specific to each dialog. Here is an overview of the different kinds of links it
+can open:
+
+- From the article list or the article view, open the URL associated with the current article
+- From the feed list, open the URL associated with the current feed
+- From the URL view, open any URL present in the content of the article
+- From the URL view, open an RSS enclosure URL (e.g. the audio file of a podcast)
+
+The default keybinding for `open-in-browser` is "o". An alternative operation,
+<<open-in-browser-and-mark-read,`open-in-browser-and-mark-read`>> also marks the
+article as read when in the article list, but doesn't work in the feed list.
+The default keybinding is "O".
+
+Articles usually contain links which point to different resources and websites.
+Newsboat detects those links and creates a list which can be seen at the bottom
+of the article view. To easily scroll through the list and choose a link to
+open, one can go to the URL view with the "U" key.
+
+Those links can also be opened directly from the article view.
+Relevant operations are <<one,`one`>> to <<zero,`zero`>>
+(digits written as words) and <<goto-url,`goto-url`>>.
+Keys "1" to "0" can be used to open URL 1 to 10. To open URLs above 10,
+start with the "#" key, then type the URL number, and press "Enter"
+(note that because this operation is interactive, it cannot be used in macros).
+
+==== Switching Browser for Different Tasks
+
+To manually change the browser from newsboat internal command line, type
+`:set browser` followed by the command, and press "Enter".
+The variable is only set temporarily (useful for testing), so next
+time newsboat is launched, `browser` will be reset to its default value.
+
+  :set browser chromium
 
 It is also possible to modify configuration variables within macros.
 For example, one can temporarily modify the `browser` command to do
@@ -1270,6 +1318,54 @@ something else, such as running an image viewer from the URL view:
 
   macro i set browser feh; open-in-browser; set browser elinks
 
+==== Separating Browser from Newsboat
+
+The default behavior of newsboat when running external commands is to use the
+same terminal for the new application. It is great for a "classical" workflow
+i.e., when working from a virtual console without a graphical environment.
+On the other hand, it might seem like a limitation if you would like to keep
+using newsboat while the command is running. A few simple tricks can be used to
+work with both newsboat and an external application at the same time.
+Those are explained below.
+
+Applications like firefox, if already running, will simply open a new tab
+when receiving a link, then give control back to newsboat. Because of that,
+newsboat will be unavailable for a split second, then work can resume.
+
+Other applications without this kind of feature will usually do two things:
+print messages and warnings (or in the case of interactive console applications,
+overwrite newsboat interface with their own), while also blocking user input
+(which prevents controlling newsboat). To demonstrate this behavior,
+the single-tabbed `surf` browser is used:
+
+  :set browser surf
+
+To prevent applications from printing messages and warnings over newsboat
+interface (useful mostly for GUI apps), you may need to "redirect standard
+output and error" to the `null` device:
+
+  :set browser "surf %u >/dev/null 2>&1"
+
+At this point, if you try to open a link, you are back to the original terminal
+from which you initially launched newsboat, and input is still blocked.
+By adding the `&` character to the very end of the browser command, the
+application will run separately from newsboat, which can then be used
+(and even closed) independently of the app:
+
+  :set browser "surf %u >/dev/null 2>&1 &"
+
+For text-based console applications, it is best to first launch a terminal
+emulator, which will in turn execute the browser command.
+Standard output do not need to be silenced with this technique.
+Here, `alacritty` is used. Of course, you can replace it with your go-to
+terminal emulator, just remember to set the "command" or "execute" option
+(`-e` in this example). To open `lynx` in a dedicated terminal:
+
+  :set browser "alacritty -e lynx %u &"
+
+Once an application is properly detached, other apps can be launched from
+the same instance of newsboat. Each time, you can decide to keep the same
+browser or change it to serve a different purpose.
 
 === Podcast Support
 
