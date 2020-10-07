@@ -7,6 +7,7 @@ fn add_cxxbridge(module: &str) {
 
 fn main() {
     add_cxxbridge("fslock");
+    add_cxxbridge("keymap");
     add_cxxbridge("scopemeasure");
     add_cxxbridge("utils");
 }

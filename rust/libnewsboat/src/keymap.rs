@@ -1,16 +1,15 @@
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
-    character::complete::{none_of, space0, space1},
+    character::complete::{space0, space1},
     combinator::{complete, eof, map, recognize, value},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::{delimited, tuple},
+    sequence::delimited,
     IResult,
 };
 
 fn unquoted_token(input: &str) -> IResult<&str, String> {
-    let parser = tuple((none_of("\";"), is_not(" ;")));
-    let mut parser = map(recognize(parser), String::from);
+    let mut parser = map(recognize(is_not(" ;")), String::from);
 
     parser(input)
 }
@@ -283,6 +282,14 @@ mod tests {
         assert_eq!(
             tokenize_operation_sequence(r#"set "arg 1"#).unwrap(),
             vec![vec!["set", "arg 1"]]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_allows_single_character_unquoted() {
+        assert_eq!(
+            tokenize_operation_sequence(r#"set a b"#).unwrap(),
+            vec![vec!["set", "a", "b"]]
         );
     }
 }
