@@ -1294,8 +1294,8 @@ Those links can also be opened directly from the article view.
 Relevant operations are <<one,`one`>> to <<zero,`zero`>>
 (digits written as words) and <<goto-url,`goto-url`>>.
 Keys "1" to "0" can be used to open URL 1 to 10. To open URLs above 10,
-start with the "#" key, then type the URL number, and press "Enter". To use
-goto-url inside a macro, simply append the URL (e.g. `goto-url 11`).
+start with the "#" key, then type the URL's number, and press "Enter". To use
+goto-url inside a macro, simply append the URL's number (e.g. `goto-url 11`).
 
 ==== Switching Browser for Different Tasks
 
