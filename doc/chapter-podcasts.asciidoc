@@ -36,8 +36,7 @@ either selectively download certain files or automatically download them all
 together by pressing "a" within podboat.
 
 A macro can also be used to enqueue any of the URLs from the URLs view to
-podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
-you're using XDG directories):
+podboat's download queue:
 
   macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser elinks
 
@@ -66,7 +65,7 @@ arguments as options:
 
 To use mpv's console interface instead, first launch a terminal emulator
 which will in turn execute mpv. This way, newsboat and the media player can both
-be controlled with text-based interfaces, side by side.
+be controlled with text-based interfaces, side by side:
 
   macro c set browser "alacritty -e mpv --vid=no -- %u &"; one; set browser firefox
 

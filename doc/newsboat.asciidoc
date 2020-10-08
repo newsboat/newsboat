@@ -1278,13 +1278,7 @@ the command. Therefore, the following example is equivalent to the last one:
 
 To open any link with your browser, the versatile
 <<open-in-browser,`open-in-browser`>> operation can be used. Its behavior is
-specific to each dialog. Here is an overview of the different kinds of links it
-can open:
-
-- From the article list or the article view, open the URL associated with the current article
-- From the feed list, open the URL associated with the current feed
-- From the URL view, open any URL present in the content of the article
-- From the URL view, open an RSS enclosure URL (e.g. the audio file of a podcast)
+specific to each dialog.
 
 The default keybinding for `open-in-browser` is "o". An alternative operation,
 <<open-in-browser-and-mark-read,`open-in-browser-and-mark-read`>> also marks the
@@ -1294,26 +1288,27 @@ The default keybinding is "O".
 Articles usually contain links which point to different resources and websites.
 Newsboat detects those links and creates a list which can be seen at the bottom
 of the article view. To easily scroll through the list and choose a link to
-open, one can go to the URL view with the "U" key.
+open, one can go to the URL view with the "u" key.
 
 Those links can also be opened directly from the article view.
 Relevant operations are <<one,`one`>> to <<zero,`zero`>>
 (digits written as words) and <<goto-url,`goto-url`>>.
 Keys "1" to "0" can be used to open URL 1 to 10. To open URLs above 10,
-start with the "#" key, then type the URL number, and press "Enter"
-(note that because this operation is interactive, it cannot be used in macros).
+start with the "#" key, then type the URL number, and press "Enter". To use
+goto-url inside a macro, simply append the URL (e.g. `goto-url 11`).
 
 ==== Switching Browser for Different Tasks
 
 To manually change the browser from newsboat internal command line, type
 `:set browser` followed by the command, and press "Enter".
 The variable is only set temporarily (useful for testing), so next
-time newsboat is launched, `browser` will be reset to its default value.
+time newsboat is launched, `browser` will reset to the command specified in your
+config file:
 
   :set browser chromium
 
 It is also possible to modify configuration variables within macros.
-For example, one can temporarily modify the `browser` command to do
+For example, one can temporarily modify the browser command to do
 something else, such as running an image viewer from the URL view:
 
   macro i set browser feh; open-in-browser; set browser elinks
