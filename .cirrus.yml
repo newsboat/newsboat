@@ -383,3 +383,16 @@ undefined_behavior_sanitizer_task:
     build_script: make -j3 test/test
     test_script: cd test && ./test --order rand
     before_cache_script: *before_cache_script
+
+asciidoctor_warnings_task:
+    name: Asciidoctor with warnings-as-errors
+
+    container:
+      cpu: 1
+      memory: 512MB
+      dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
+
+    env:
+        ASCIIDOCTOR_OPTS: '--failure-level WARN'
+
+    script: make doc

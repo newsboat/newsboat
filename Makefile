@@ -200,7 +200,7 @@ doc/xhtml/newsboat.html: doc/podboat-cmds-linked.asciidoc
 doc/xhtml/newsboat.html: doc/cmdline-commands-linked.asciidoc
 
 doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
-	$(ASCIIDOCTOR) --backend=html5 -a webfonts! --destination-dir=doc/xhtml $<
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=html5 -a webfonts! --destination-dir=doc/xhtml $<
 
 doc/generate: doc/generate.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
@@ -220,7 +220,7 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-cmdline.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc
-	$(ASCIIDOCTOR) --backend=manpage doc/manpage-newsboat.asciidoc
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=manpage doc/manpage-newsboat.asciidoc
 
 doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
 	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
@@ -229,7 +229,7 @@ doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc doc/chapter-podcasts.asciidoc \
 		doc/podboat-cfgcmds.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc
-	$(ASCIIDOCTOR) --backend=manpage doc/manpage-podboat.asciidoc
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=manpage doc/manpage-podboat.asciidoc
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/gen-example-config doc/gen-example-config.cpp
