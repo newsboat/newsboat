@@ -183,7 +183,7 @@ impl<'a> Chmod<'a> {
 }
 
 impl<'a> Drop for Chmod<'a> {
-    fn drop(self: &mut Self) {
+    fn drop(&mut self) {
         fs::set_permissions(self.path, fs::Permissions::from_mode(self.original_mode))
             .unwrap_or_else(|_| {
                 panic!(
