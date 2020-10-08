@@ -1347,7 +1347,7 @@ output and error" to the `null` device:
   :set browser "surf %u >/dev/null 2>&1"
 
 At this point, if you try to open a link, you are back to the original terminal
-from which you initially launched newsboat, and input is still blocked.
+from which newsboat was initially launched, but input is still blocked.
 By adding the `&` character to the very end of the browser command, the
 application will run separately from newsboat, which can then be used
 (and even closed) independently of the app:
@@ -1355,7 +1355,7 @@ application will run separately from newsboat, which can then be used
   :set browser "surf %u >/dev/null 2>&1 &"
 
 For text-based console applications, it is best to first launch a terminal
-emulator, which will in turn execute the browser command.
+emulator, which will in turn execute the remainder of the browser command.
 Standard output do not need to be silenced with this technique.
 Here, `alacritty` is used. Of course, you can replace it with your go-to
 terminal emulator, just remember to set the "command" or "execute" option
@@ -1364,8 +1364,8 @@ terminal emulator, just remember to set the "command" or "execute" option
   :set browser "alacritty -e lynx %u &"
 
 Once an application is properly detached, other apps can be launched from
-the same instance of newsboat. Each time, you can decide to keep the same
-browser or change it to serve a different purpose.
+the same instance of newsboat. Each time, you can decide to either keep the same
+browser, or change it to serve a different purpose.
 
 === Podcast Support
 
