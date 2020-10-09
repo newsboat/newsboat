@@ -8,6 +8,7 @@
 #include "item.h"
 #include "rsspp_uris.h"
 #include "utils.h"
+#include "xmlutilities.h"
 
 #define MEDIA_RSS_URI "http://search.yahoo.com/mrss/"
 
