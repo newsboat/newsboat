@@ -259,3 +259,29 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 		REQUIRE(f.items[4].link == "http://example.com/regular-link");
 	}
 }
+
+TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
+	"[rsspp::Parser]")
+{
+	rsspp::Parser p;
+	rsspp::Feed f;
+
+	REQUIRE_NOTHROW(f = p.parse_file("data/rss20_2.xml"));
+
+	REQUIRE(f.title == "my weblog");
+	REQUIRE(f.link == "http://example.com/blog/");
+	REQUIRE(f.description == "my description");
+
+	REQUIRE(f.items.size() == 2u);
+
+	REQUIRE(f.items[0].title == "using multiple media tags");
+	REQUIRE(f.items[0].description == "media html content");
+	REQUIRE(f.items[0].description_type == "html");
+	REQUIRE(f.items[0].link == "http://example.com/player.html");
+
+	REQUIRE(f.items[1].title ==
+		"using multiple media tags nested in group/content");
+	REQUIRE(f.items[1].description == "nested media html content");
+	REQUIRE(f.items[1].description_type == "html");
+	REQUIRE(f.items[1].link == "http://example.com/player.html");
+}
