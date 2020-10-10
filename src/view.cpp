@@ -265,6 +265,29 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 			continue;
 		}
 
+		if (is_inside_qna) {
+			LOG(Level::DEBUG,
+				"View::run: we're inside QNA input");
+			if (is_inside_cmdline &&
+				strcmp(event, "TAB") == 0) {
+				handle_cmdline_completion(fa);
+				continue;
+			}
+			if (strcmp(event, "^U") == 0) {
+				clear_line(fa);
+				continue;
+			} else if (strcmp(event, "^K") == 0) {
+				clear_eol(fa);
+				continue;
+			} else if (strcmp(event, "^G") == 0) {
+				cancel_input(fa);
+				continue;
+			} else if (strcmp(event, "^W") == 0) {
+				delete_word(fa);
+				continue;
+			}
+		}
+
 		Operation op = keys->get_operation(event, fa->id());
 
 		if (OP_REDRAW == op) {
