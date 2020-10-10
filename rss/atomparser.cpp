@@ -6,8 +6,10 @@
 #include "exception.h"
 #include "feed.h"
 #include "item.h"
+#include "medianamespace.h"
 #include "rsspp_uris.h"
 #include "utils.h"
+#include "xmlutilities.h"
 
 namespace rsspp {
 
@@ -97,7 +99,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 				if (type == "html" || type == "text") {
 					it.description = get_content(node);
 				} else {
-					it.description = get_xml_content(node);
+					it.description = get_xml_content(node, doc);
 				}
 			} else if (mode == "escaped") {
 				it.description = get_content(node);
@@ -139,7 +141,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 					summary_type == "text") {
 					summary = get_content(node);
 				} else {
-					summary = get_xml_content(node);
+					summary = get_xml_content(node, doc);
 				}
 			} else if (mode == "escaped") {
 				summary = get_content(node);
@@ -151,6 +153,8 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			get_prop(node, "scheme") ==
 			"http://www.google.com/reader/") {
 			it.labels.push_back(get_prop(node, "label"));
+		} else if (is_media_node(node)) {
+			parse_media_node(node, it);
 		}
 	} // for
 

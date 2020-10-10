@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+    <title>my weblog</title>
+    <link>http://example.com/blog/</link>
+    <description>my description</description>
+
+<item>
+    <comments>http://example.com/blog/this_is_an_item.html#comments</comments>
+    <author>blog@synflood.at (Andreas Krennmair)</author>
+    <pubDate>Fri, 12 Dec 2008 02:36:10 +0100</pubDate>
+    <guid isPermaLink="false">http://example.com/blog/this_is_an_item.html</guid>
+
+    <media:description type="html">media html content</media:description>
+    <media:title>using multiple media tags</media:title>
+    <media:player url="http://example.com/player.html"/>
+</item>
+
+<item>
+    <comments>http://example.com/blog/this_is_an_item.html#comments</comments>
+    <author>blog@synflood.at (Andreas Krennmair)</author>
+    <pubDate>Fri, 12 Dec 2008 02:36:10 +0100</pubDate>
+    <guid isPermaLink="false">http://example.com/blog/this_is_an_item.html</guid>
+
+    <media:group>
+      <media:content>
+        <media:description type="html">nested media html content</media:description>
+        <media:title>using multiple media tags nested in group/content</media:title>
+        <media:player url="http://example.com/player.html"/>
+      </media:content>
+    </media:group>
+</item>
+</channel>
+</rss>

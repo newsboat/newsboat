@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+
+  <title>Media test feed</title>
+  <link rel="alternate" href="http://example.com/"/>
+  <updated>2008-12-30T18:26:15Z</updated>
+  <author>
+    <name>John Doe</name>
+  </author>
+  <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id>
+
+  <entry>
+    <title>using regular content</title>
+    <link href="http://example.com/1.html"/>
+    <id>tag:example.com,2008-12-30:/1</id>
+    <content type="html">regular html content</content>
+  </entry>
+
+  <entry>
+    <title>using media:description</title>
+    <link href="http://example.com/2.html"/>
+    <id>tag:example.com,2008-12-30:/2</id>
+    <media:description>media plaintext content</media:description>
+  </entry>
+
+  <entry>
+    <id>tag:example.com,2008-12-30:/3</id>
+    <media:description type="html">media html content</media:description>
+    <media:title>using multiple media tags</media:title>
+    <media:player url="http://example.com/player.html"/>
+  </entry>
+
+  <entry>
+    <id>tag:example.com,2008-12-30:/4</id>
+    <media:group>
+      <media:content>
+        <media:description type="html">nested media html content</media:description>
+        <media:title>using multiple media tags nested in group/content</media:title>
+        <media:player url="http://example.com/player.html"/>
+      </media:content>
+    </media:group>
+  </entry>
+
+  <entry>
+    <id>tag:example.com,2008-12-30:/5</id>
+    <title>regular title</title>
+    <content type="html">regular content</content>
+    <link rel="alternate" type="text/html" href="http://example.com/regular-link" />
+    <media:description type="plain">media:description content</media:description>
+    <media:title>using multiple media tags</media:title>
+    <media:player url="http://example.com/player.html"/>
+  </entry>
+
+</feed>
