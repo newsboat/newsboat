@@ -217,3 +217,38 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 		"http://example.com/content/atom_testing.html");
 	REQUIRE(f.items[2].author == "Person A, Person B");
 }
+
+TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
+{
+	rsspp::Parser p;
+	rsspp::Feed f;
+
+	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_2.xml"));
+
+	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
+
+	REQUIRE(f.title == "Media test feed");
+	REQUIRE(f.title_type == "text");
+	REQUIRE(f.pubDate == "Tue, 30 Dec 2008 18:26:15 +0000");
+	REQUIRE(f.link == "http://example.com/");
+
+	REQUIRE(f.items.size() == 4u);
+	REQUIRE(f.items[0].title == "using regular content");
+	REQUIRE(f.items[0].description == "regular html content");
+	REQUIRE(f.items[0].description_type == "html");
+
+	REQUIRE(f.items[1].title == "using media:description");
+	REQUIRE(f.items[1].description == "media plaintext content");
+	REQUIRE(f.items[1].description_type == "text");
+
+	REQUIRE(f.items[2].title == "using multiple media tags");
+	REQUIRE(f.items[2].description == "media html content");
+	REQUIRE(f.items[2].description_type == "html");
+	REQUIRE(f.items[2].link == "http://example.com/player.html");
+
+	REQUIRE(f.items[3].title ==
+		"using multiple media tags nested in group/content");
+	REQUIRE(f.items[3].description == "nested media html content");
+	REQUIRE(f.items[3].description_type == "html");
+	REQUIRE(f.items[3].link == "http://example.com/player.html");
+}
