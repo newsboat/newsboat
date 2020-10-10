@@ -188,27 +188,8 @@ int View::run()
 			continue;
 		}
 
-		if (is_inside_qna) {
-			LOG(Level::DEBUG,
-				"View::run: we're inside QNA input");
-			if (is_inside_cmdline &&
-				strcmp(event, "TAB") == 0) {
-				handle_cmdline_completion(fa);
-				continue;
-			}
-			if (strcmp(event, "^U") == 0) {
-				clear_line(fa);
-				continue;
-			} else if (strcmp(event, "^K") == 0) {
-				clear_eol(fa);
-				continue;
-			} else if (strcmp(event, "^G") == 0) {
-				cancel_input(fa);
-				continue;
-			} else if (strcmp(event, "^W") == 0) {
-				delete_word(fa);
-				continue;
-			}
+		if (handle_qna_event(event, fa)) {
+			continue;
 		}
 
 		LOG(Level::DEBUG, "View::run: event = %s", event);
@@ -265,27 +246,8 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 			continue;
 		}
 
-		if (is_inside_qna) {
-			LOG(Level::DEBUG,
-				"View::run: we're inside QNA input");
-			if (is_inside_cmdline &&
-				strcmp(event, "TAB") == 0) {
-				handle_cmdline_completion(fa);
-				continue;
-			}
-			if (strcmp(event, "^U") == 0) {
-				clear_line(fa);
-				continue;
-			} else if (strcmp(event, "^K") == 0) {
-				clear_eol(fa);
-				continue;
-			} else if (strcmp(event, "^G") == 0) {
-				cancel_input(fa);
-				continue;
-			} else if (strcmp(event, "^W") == 0) {
-				delete_word(fa);
-				continue;
-			}
+		if (handle_qna_event(event, fa)) {
+			continue;
 		}
 
 		Operation op = keys->get_operation(event, fa->id());
@@ -1120,6 +1082,33 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
 	fa->get_form().set("qna_value", val);
 	fa->get_form().set("qna_value_pos", std::to_string(firstpos));
+}
+
+bool View::handle_qna_event(const std::string& event,
+	std::shared_ptr<FormAction> fa)
+{
+	if (is_inside_qna) {
+		LOG(Level::DEBUG,
+			"View::handle_qna_event: we're inside QNA input");
+		if (is_inside_cmdline && event == "TAB") {
+			handle_cmdline_completion(fa);
+			return true;
+		}
+		if (event == "^U") {
+			clear_line(fa);
+			return true;
+		} else if (event == "^K") {
+			clear_eol(fa);
+			return true;
+		} else if (event == "^G") {
+			cancel_input(fa);
+			return true;
+		} else if (event == "^W") {
+			delete_word(fa);
+			return true;
+		}
+	}
+	return false;
 }
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
