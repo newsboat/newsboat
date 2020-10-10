@@ -27,7 +27,7 @@
     <id>tag:example.com,2008-12-30:/3</id>
     <media:description type="html">media html content</media:description>
     <media:title>using multiple media tags</media:title>
-    <media:player url="http://example.com/player.html">using multiple media tags</media:player>
+    <media:player url="http://example.com/player.html"/>
   </entry>
 
   <entry>
@@ -36,9 +36,19 @@
       <media:content>
         <media:description type="html">nested media html content</media:description>
         <media:title>using multiple media tags nested in group/content</media:title>
-        <media:player url="http://example.com/player.html"></media:player>
+        <media:player url="http://example.com/player.html"/>
       </media:content>
     </media:group>
+  </entry>
+
+  <entry>
+    <id>tag:example.com,2008-12-30:/5</id>
+    <title>regular title</title>
+    <content type="html">regular content</content>
+    <link rel="alternate" type="text/html" href="http://example.com/regular-link" />
+    <media:description type="plain">media:description content</media:description>
+    <media:title>using multiple media tags</media:title>
+    <media:player url="http://example.com/player.html"/>
   </entry>
 
 </feed>

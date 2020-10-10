@@ -232,7 +232,7 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.pubDate == "Tue, 30 Dec 2008 18:26:15 +0000");
 	REQUIRE(f.link == "http://example.com/");
 
-	REQUIRE(f.items.size() == 4u);
+	REQUIRE(f.items.size() == 5u);
 	REQUIRE(f.items[0].title == "using regular content");
 	REQUIRE(f.items[0].description == "regular html content");
 	REQUIRE(f.items[0].description_type == "html");
@@ -251,4 +251,11 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.items[3].description == "nested media html content");
 	REQUIRE(f.items[3].description_type == "html");
 	REQUIRE(f.items[3].link == "http://example.com/player.html");
+
+	SECTION("media:{title,description,player} does not overwrite regular title, description, and link if they exist") {
+		REQUIRE(f.items[4].title == "regular title");
+		REQUIRE(f.items[4].description == "regular content");
+		REQUIRE(f.items[4].description_type == "html");
+		REQUIRE(f.items[4].link == "http://example.com/regular-link");
+	}
 }
