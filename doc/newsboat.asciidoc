@@ -1382,7 +1382,7 @@ podboat's download queue:
 
 As an alternative to `podboat` file management, media players such as `mpv` can
 stream content directly when given a URL. Since newsboat always assign the
-enclosure link to URL 1, the operation `one` can be used to open the audio file
+enclosure link to URL 1, the operation <<one,`one`>> can be used to open the audio file
 (beware that this operation will always open URL 1, even if no enclosure is
 found). To listen to your podcast from the article view, a basic macro would be:
 
