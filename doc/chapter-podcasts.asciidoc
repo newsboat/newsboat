@@ -8,9 +8,5 @@ Podcast content is transported in RSS feeds via special tags called
 "enclosures". Newsboat recognizes these enclosures and stores the relevant
 information for every podcast item it finds in an RSS feed. Since version 2.0,
 it also recognizes and handles the Yahoo Media RSS extensions.
-
-The following sections present two different ways to handle podcasts with
-newsboat.
-
 ==== Managing Audio Files with Podboat
 

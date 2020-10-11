@@ -1366,6 +1366,9 @@ browser, or change it to serve a different purpose.
 
 include::chapter-podcasts.asciidoc[]
 
+The following sections present two different ways to handle podcasts with
+newsboat.
+
 A macro can also be used to enqueue any of the URLs from the URLs view to
 podboat's download queue:
 
