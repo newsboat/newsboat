@@ -191,6 +191,7 @@ doc/xhtml/newsboat.html: doc/chapter-tagging.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-snownews.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-cmdline.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-podcasts.asciidoc
+doc/xhtml/newsboat.html: doc/chapter-podboat.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-files.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-password.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-environment-variables.asciidoc
@@ -225,7 +226,8 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
 	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
 
-doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc doc/chapter-podcasts.asciidoc \
+doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
+		doc/chapter-podcasts.asciidoc doc/chapter-podboat.asciidoc \
 		doc/podboat-cfgcmds.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc

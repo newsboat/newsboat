@@ -41,9 +41,15 @@ can then be download with _podboat_.
        Use this logfile as output when logging debug messages. Please note that this
        only works when providing a loglevel.
 
+
 == PODCAST SUPPORT
 
 include::chapter-podcasts.asciidoc[]
+
+
+== MANAGING AUDIO FILES WITH PODBOAT
+
+include::chapter-podboat.asciidoc[]
 
 
 == CONFIGURATION COMMANDS

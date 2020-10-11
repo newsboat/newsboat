@@ -1369,6 +1369,10 @@ include::chapter-podcasts.asciidoc[]
 The following sections present two different ways to handle podcasts with
 newsboat.
 
+==== Managing Audio Files with Podboat
+
+include::chapter-podboat.asciidoc[]
+
 A macro can also be used to enqueue any of the URLs from the URLs view to
 podboat's download queue:
 
