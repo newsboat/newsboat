@@ -1366,6 +1366,52 @@ browser, or change it to serve a different purpose.
 
 include::chapter-podcasts.asciidoc[]
 
+A macro can also be used to enqueue any of the URLs from the URLs view to
+podboat's download queue:
+
+  macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser elinks
+
+==== Streaming Audio Content with a Media Player
+
+As an alternative to `podboat` file management, media players such as `mpv` can
+stream content directly when given a URL. Since newsboat always assign the
+enclosure link to URL 1, the operation `one` can be used to open the audio file
+(beware that this operation will always open URL 1, even if no enclosure is
+found). To listen to your podcast from the article view, a basic macro would be:
+
+  macro 1 set browser mpv; one; set browser firefox
+
+For media players with a graphical user interface like `vlc`, console output
+will typically need to be silenced with `>/dev/null 2>&1`. Also, the `&`
+character at the end of the browser command will detach the media player from
+newsboat. You can then read your articles while listening to podcasts:
+
+  macro v set browser "vlc %u >/dev/null 2>&1 &"; one; set browser firefox
+
+With mpv, the podcast cover art is fetched automatically when using the
+pseudo-gui. The `--` near the end will prevent mpv from interpreting the following
+arguments as options:
+
+  macro p set browser "mpv --player-operation-mode=pseudo-gui -- %u &"; one; set browser firefox
+
+To use mpv's console interface instead, first launch a terminal emulator
+which will in turn execute mpv. This way, newsboat and the media player can both
+be controlled with text-based interfaces, side by side:
+
+  macro c set browser "alacritty -e mpv --vid=no -- %u &"; one; set browser firefox
+
+If you are working without a graphical environment (e.g. from a virtual
+console), you want to make sure the media player doesn't try to launch a
+graphical user interface. With mpv, the `--vid=no` option can be used for this
+purpose:
+
+  macro n set browser "mpv --vid=no --"; one; set browser lynx
+
+Another use case for this macro would be when running newsboat on a
+remote host, while logged in through a secure shell (e.g. OpenSSH).
+With this setup, newsboat will effectively serve as the controller to an ad hoc
+"remote media server". Audio will be playing on the remote host.
+
 === Running multiple copies of Newsboat simultaneously
 
 During development and testing, you might want to run a second copy of
