@@ -955,38 +955,6 @@ articles via the filter language.
 If an article contains one or more flags, it is marked with an "!" in the
 article list. In the article view, all flags (if available) are listed.
 
-=== Macro Support
-
-In newsboat, it's possible to define macros to execute more than one command
-at once. A macro is configured using the <<macro,`macro`>> configuration command. The
-first parameter to `macro` is the key, all parameters afterwards are operations
-(see <<_newsboat_operations>> and <<_podboat_operations>>), optionally with
-parameters on their own, separated by the `;` character. Here's a simple
-example:
-
-	macro k open; reload; quit
-	macro o open-in-browser; toggle-article-read "read"
-
-When the user presses the macro prefix ("," by default) and then the "k" key,
-the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>> will be executed subsequently.
-The macro prefix can be changed from the default "," to another key, e.g. "+"
-(if you don't unbind the default "," you're left with two macro prefixes):
-
-	bind-key + macro-prefix
-	unbind-key ,
-
-It is also possible to modify configuration variables within macros, which can
-e.g. be used to temporarily modify the <<browser,`browser`>> configuration variable to do
-something else, such as running an image viewer from the URLs view:
-
-	macro i set browser "feh %u"; open-in-browser; set browser "elinks %u"
-
-You can even use this feature to enqueue any of the URLs from the URLs view to
-podboat's download queue (which might be in _~/.locale/share/newsboat/queue_ if
-you're using XDG directories):
-
-	macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser "elinks %u"
-
 === Commandline Commands
 
 Newsboat comes with a `-x` option that indicates that commands added as arguments
@@ -1270,10 +1238,186 @@ opens the list of open dialogs. From there, the user can switch to another
 dialog by selecting the appropriate entry and pressing "Enter", or can close
 open dialogs by selecting them and pressing "Ctrl-X".
 
+=== Macro Support
+
+In newsboat, it's possible to define macros to execute more than one command
+at once. A macro is configured using the <<macro,`macro`>> configuration
+command. The first parameter to `macro` is the key, all parameters afterwards
+are operations (see <<_newsboat_operations>> and <<_podboat_operations>>),
+optionally with parameters on their own, separated by the `;` character. Here's
+a simple example:
+
+  macro k open; reload; quit
+  macro o open-in-browser; toggle-article-read "read"
+
+When the user presses the macro prefix ("," by default) and then the "k" key,
+the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>>
+will be executed subsequently.
+
+The macro prefix can be changed from the default "," to another key, e.g. "+"
+(if you don't unbind the default "," you're left with two macro prefixes):
+
+  bind-key + macro-prefix
+  unbind-key ,
+
+=== Open Links with External Commands
+
+==== Using Browser
+
+The first step to open links outside of newsboat is to set a default
+<<browser,`browser`>> in your config file. It can be any command that you would
+normally run, such as a web browser or an executable script. For example:
+
+  browser firefox
+
+The browser command also takes an optional `%u` to specify at which point the
+URL sould be expanded. If `%u` is not set, the URL will be appended at the end of
+the command. Therefore, the following example is equivalent to the last one:
+
+  browser "firefox %u"
+
+To open any link with your browser, the versatile
+<<open-in-browser,`open-in-browser`>> operation can be used. Its behavior is
+specific to each dialog.
+
+The default keybinding for `open-in-browser` is "o". An alternative operation,
+<<open-in-browser-and-mark-read,`open-in-browser-and-mark-read`>> also marks the
+article as read when in the article list, but doesn't work in the feed list.
+The default keybinding is "O".
+
+Articles usually contain links which point to different resources and websites.
+Newsboat detects those links and creates a list which can be seen at the bottom
+of the article view. To easily scroll through the list and choose a link to
+open, one can go to the URL view with the "u" key.
+
+Those links can also be opened directly from the article view.
+Relevant operations are <<one,`one`>> to <<zero,`zero`>>
+(digits written as words) and <<goto-url,`goto-url`>>.
+Keys "1" to "0" can be used to open URL 1 to 10. To open URLs above 10,
+start with the "#" key, then type the URL's number, and press "Enter". To use
+goto-url inside a macro, simply append the URL's number (e.g. `goto-url 11`).
+
+==== Switching Browser for Different Tasks
+
+To manually change the browser from newsboat internal command line, type
+`:set browser` followed by the command, and press "Enter".
+The variable is only set temporarily (useful for testing), so next
+time newsboat is launched, `browser` will reset to the command specified in your
+config file:
+
+  :set browser chromium
+
+It is also possible to modify configuration variables within macros.
+For example, one can temporarily modify the browser command to do
+something else, such as running an image viewer from the URL view:
+
+  macro i set browser feh; open-in-browser; set browser elinks
+
+==== Separating Browser from Newsboat
+
+The default behavior of newsboat when running external commands is to use the
+same terminal for the new application. It is great for a "classical" workflow
+i.e., when working from a virtual console without a graphical environment.
+On the other hand, it might seem like a limitation if you would like to keep
+using newsboat while the command is running. A few simple tricks can be used to
+work with both newsboat and an external application at the same time.
+Those are explained below.
+
+Applications like `firefox`, if already running, will simply open a new tab
+when receiving a link, then give control back to newsboat. Because of that,
+newsboat will be unavailable for a split second, then work can resume.
+
+Other applications without this kind of feature will usually do two things:
+print messages and warnings (or in the case of interactive console applications,
+overwrite newsboat interface with their own), while also blocking user input
+(which prevents controlling newsboat). To demonstrate this behavior,
+the single-tabbed `surf` browser is used:
+
+  :set browser surf
+
+To prevent applications from printing messages and warnings over newsboat
+interface (useful mostly for GUI apps), you may need to "redirect standard
+output and error" to the `null` device:
+
+  :set browser "surf %u >/dev/null 2>&1"
+
+At this point, if you try to open a link, you are back to the original terminal
+from which newsboat was initially launched, but input is still blocked.
+By adding the `&` character to the very end of the browser command, the
+application will run separately from newsboat, which can then be used
+(and even closed) independently of the app:
+
+  :set browser "surf %u >/dev/null 2>&1 &"
+
+For text-based console applications, it is best to first launch a terminal
+emulator, which will in turn execute the remainder of the browser command.
+Standard output do not need to be silenced with this technique.
+Here, `alacritty` is used. Of course, you can replace it with your go-to
+terminal emulator, just remember to set the "command" or "execute" option
+(`-e` in this example). To open `lynx` in a dedicated terminal:
+
+  :set browser "alacritty -e lynx %u &"
+
+Once an application is properly detached, other apps can be launched from
+the same instance of newsboat. Each time, you can decide to either keep the same
+browser, or change it to serve a different purpose.
 
 === Podcast Support
 
 include::chapter-podcasts.asciidoc[]
+
+The following sections present two different ways to handle podcasts with
+newsboat.
+
+==== Managing Audio Files with Podboat
+
+include::chapter-podboat.asciidoc[]
+
+A macro can also be used to enqueue any of the URLs from the URLs view to
+podboat's download queue:
+
+  macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser elinks
+
+==== Streaming Audio Content with a Media Player
+
+As an alternative to podboat file management, media players such as `mpv` can
+stream content directly when given a URL. Since newsboat always assign the
+enclosure link to URL 1, the operation <<one,`one`>> can be used to open the audio file
+(beware that this operation will always open URL 1, even if no enclosure is
+found). To listen to your podcast from the article view, a basic macro would be:
+
+  macro 1 set browser mpv; one; set browser firefox
+
+For media players with a graphical user interface like `vlc`, console output
+will typically need to be silenced with `>/dev/null 2>&1`. Also, the `&`
+character at the end of the browser command will detach the media player from
+newsboat. You can then read your articles while listening to podcasts:
+
+  macro v set browser "vlc %u >/dev/null 2>&1 &"; one; set browser firefox
+
+With mpv, the podcast cover art is fetched automatically when using the
+pseudo-gui. The `--` near the end will prevent mpv from interpreting the following
+arguments as options:
+
+  macro p set browser "mpv --player-operation-mode=pseudo-gui -- %u &"; one; set browser firefox
+
+To use mpv's console interface instead, first launch a terminal emulator
+which will in turn execute mpv. This way, newsboat and the media player can both
+be controlled with text-based interfaces, side by side:
+
+  macro c set browser "alacritty -e mpv --vid=no -- %u &"; one; set browser firefox
+
+If you are working without a graphical environment (e.g. from a virtual
+console), you want to make sure the media player doesn't try to launch a
+graphical user interface. With mpv, the `--vid=no` option can be used for this
+purpose:
+
+  macro n set browser "mpv --vid=no --"; one; set browser lynx
+
+Another use case for this macro would be when running newsboat on a
+remote host, while logged in through a secure shell (e.g. OpenSSH).
+With this setup, newsboat will effectively serve as the controller to an ad hoc
+"remote media server". Audio will be playing on the remote host.
 
 === Running multiple copies of Newsboat simultaneously
 
