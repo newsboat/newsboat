@@ -1323,7 +1323,7 @@ using newsboat while the command is running. A few simple tricks can be used to
 work with both newsboat and an external application at the same time.
 Those are explained below.
 
-Applications like firefox, if already running, will simply open a new tab
+Applications like `firefox`, if already running, will simply open a new tab
 when receiving a link, then give control back to newsboat. Because of that,
 newsboat will be unavailable for a split second, then work can resume.
 
@@ -1380,7 +1380,7 @@ podboat's download queue:
 
 ==== Streaming Audio Content with a Media Player
 
-As an alternative to `podboat` file management, media players such as `mpv` can
+As an alternative to podboat file management, media players such as `mpv` can
 stream content directly when given a URL. Since newsboat always assign the
 enclosure link to URL 1, the operation <<one,`one`>> can be used to open the audio file
 (beware that this operation will always open URL 1, even if no enclosure is
