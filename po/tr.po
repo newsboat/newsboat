@@ -3,12 +3,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsboat 1.2\n"
+"Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-09-17 16:02+0300\n"
 "PO-Revision-Date: 2020-04-03 19:00+0300\n"
 "Last-Translator: Emir SARI <bitigchi@me.com>, 2020\n"
-"Language-Team: H. Gökhan SARI <hsa2@difuzyon.net>\n"
+"Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: newsboat.cpp:46
 msgid "export OPML feed to stdout"
-msgstr "beslemeleri OPML olarak çıktıla"
+msgstr "beslemeleri OPML olarak stdout'a dışa aktar"
 
 #: newsboat.cpp:47
 msgid "refresh feeds on start"
@@ -44,27 +44,27 @@ msgstr "OPML dosyasını içe aktar"
 
 #: newsboat.cpp:52
 msgid "<urlfile>"
-msgstr "<url_dosyası>"
+msgstr "<url-dosyası>"
 
 #: newsboat.cpp:53
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "RSS beslemeleri adreslerini <url_dosyası>ndan oku"
+msgstr "RSS beslemesi adreslerini <url-dosyası>'ndan oku"
 
 #: newsboat.cpp:58
 msgid "<cachefile>"
-msgstr "<önbellek_dosyası>"
+msgstr "<önbellek-dosyası>"
 
 #: newsboat.cpp:59
 msgid "use <cachefile> as cache file"
-msgstr "<önbellek_dosyası>nı önbellek dosyası olarak kullan"
+msgstr "<önbellek-dosyası>'nı önbellek dosyası olarak kullan"
 
 #: newsboat.cpp:64 src/pbcontroller.cpp:341
 msgid "<configfile>"
-msgstr "<ayar_dosyası>"
+msgstr "<yapılandırma-dosyası>"
 
 #: newsboat.cpp:65 src/pbcontroller.cpp:342
 msgid "read configuration from <configfile>"
-msgstr "ayarları <ayar_dosyası>ndan oku"
+msgstr "yapılandırmayı <yapılandırma-dosyası>'ndan oku"
 
 #: newsboat.cpp:67
 msgid "compact the cache"
@@ -88,27 +88,27 @@ msgstr "sürüm bilgisini al"
 
 #: newsboat.cpp:79 src/pbcontroller.cpp:354
 msgid "<loglevel>"
-msgstr "<kayıt_düzeyi>"
+msgstr "<kayıt-düzeyi>"
 
 #: newsboat.cpp:80 src/pbcontroller.cpp:355
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr "kayıt tutarken seviye belirle (geçerli seviyeler: 1 - 6)"
+msgstr "kayıt tutarken düzey belirle (geçerli seviyeler: 1 - 6)"
 
 #: newsboat.cpp:87 src/pbcontroller.cpp:362
 msgid "<logfile>"
-msgstr "<kayıt_dosyası>"
+msgstr "<kayıt-dosyası>"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:363
 msgid "use <logfile> as output log file"
-msgstr "<kayıt_dosyası>nı çıktı kaydı için kullan"
+msgstr "<kayıt-dosyası>'nı çıktı kaydı için kullan"
 
 #: newsboat.cpp:94
 msgid "export list of read articles to <file>"
-msgstr "okunmuş yazıların listesini <dosya>ya aktar"
+msgstr "okunmuş yazıların listesini <dosya>'ya aktar"
 
 #: newsboat.cpp:100
 msgid "import list of read articles from <file>"
-msgstr "okunmuş yazıları <dosya>dan aktar"
+msgstr "okunmuş yazıları <dosya>'dan aktar"
 
 #: newsboat.cpp:102 src/pbcontroller.cpp:365
 msgid "this help"
@@ -225,7 +225,7 @@ msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr ""
-"%N %V - %?F?Besleme&Sizin beslemeleriniz? (%u okunmamış, %t toplam)%?F? "
+"%N %V - %?F?Beslemeler&Beslemeleriniz? (%u okunmamış, %t toplam)%?F? "
 "süzgeçle eşleşen `%F'&?%?T? - etiket `%T'&?"
 
 #: src/configcontainer.cpp:286
@@ -260,7 +260,7 @@ msgstr "%N %V - Etiket Seç"
 
 #: src/configcontainer.cpp:315
 msgid "%N %V - URLs"
-msgstr "%N %V - Adres"
+msgstr "%N %V - URL'ler"
 
 #: src/configdata.cpp:54
 #, c-format
@@ -279,7 +279,7 @@ msgstr "geçersiz yapılandırma değeri `%s'"
 
 #: src/confighandlerexception.cpp:16
 msgid "invalid parameters."
-msgstr "Geçersiz parametre."
+msgstr "geçersiz parametre"
 
 #: src/confighandlerexception.cpp:18
 msgid "too few parameters."
@@ -287,15 +287,15 @@ msgstr "yetersiz parametre"
 
 #: src/confighandlerexception.cpp:20
 msgid "unknown command (bug)."
-msgstr "bilinmeyen komut (bug)."
+msgstr "bilinmeyen komut (bug)"
 
 #: src/confighandlerexception.cpp:22
 msgid "file couldn't be opened."
-msgstr "dosya açılamadı."
+msgstr "dosya açılamadı"
 
 #: src/confighandlerexception.cpp:24
 msgid "unknown error (bug)."
-msgstr "bilinmeyen hata (bug)."
+msgstr "bilinmeyen hata (bug)"
 
 #: src/configparser.cpp:98
 #, c-format
@@ -324,14 +324,14 @@ msgstr "Hata: %s zaten çalışıyor (PID: %u)"
 
 #: src/controller.cpp:167 src/pbcontroller.cpp:261
 msgid "Loading configuration..."
-msgstr "Ayarlar yükleniyor..."
+msgstr "Yapılandırma yükleniyor..."
 
 #: src/controller.cpp:203 src/controller.cpp:248 src/controller.cpp:345
 #: src/controller.cpp:403 src/controller.cpp:407 src/controller.cpp:443
 #: src/controller.cpp:457 src/controller.cpp:475 src/controller.cpp:486
 #: src/controller.cpp:528 src/pbcontroller.cpp:298 src/pbcontroller.cpp:316
 msgid "done."
-msgstr "tamamlandı."
+msgstr "bitti."
 
 #: src/controller.cpp:224 src/controller.cpp:398
 msgid "Opening cache..."
@@ -479,7 +479,7 @@ msgstr "başarız: "
 #: src/controller.cpp:557
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Hata: tüm beslemeler okundu olarak imlenemedi: %s"
+msgstr "Hata: Tüm beslemeler okundu olarak imlenemedi: %s"
 
 #: src/controller.cpp:652
 #, c-format
@@ -489,7 +489,7 @@ msgstr "%s ayrıştırılırken bir hata oluştu."
 #: src/controller.cpp:657
 #, c-format
 msgid "Import of %s finished."
-msgstr "%s'in içeri aktarımı tamamlandı."
+msgstr "%s içeri aktarımı tamamlandı."
 
 #: src/controller.cpp:787
 #, c-format
@@ -504,7 +504,7 @@ msgstr "%s: %s: Bilinmeyen komut"
 #: src/controller.cpp:897
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
-msgstr "Hata: ayar dosyası `%s' kaydedilemedi!"
+msgstr "Hata: Yapılandırma dosyası `%s' kaydedilemedi!"
 
 #: src/dialogsformaction.cpp:72
 msgid "Close"
@@ -1581,11 +1581,11 @@ msgstr ""
 
 #: src/pbcontroller.cpp:347
 msgid "<queuefile>"
-msgstr "<sıra_dosyası>"
+msgstr "<sıra-dosyası>"
 
 #: src/pbcontroller.cpp:348
 msgid "use <queuefile> as queue file"
-msgstr "<sıra_dosyası>'nı sıra dosyası olarak kullan"
+msgstr "<sıra-dosyası>'nı sıra dosyası olarak kullan"
 
 #: src/pbcontroller.cpp:350
 msgid "start download on startup"
@@ -1701,7 +1701,7 @@ msgstr "%a, %d %b %Y %T %z"
 #: src/rssparser.cpp:180
 #, c-format
 msgid "Error: unsupported URL: %s"
-msgstr "Hata: Desteklenmeyen adres: %s"
+msgstr "Hata: Desteklenmeyen URL: %s"
 
 #: src/selectformaction.cpp:247 src/selectformaction.cpp:267
 msgid "Select Tag"
@@ -1737,11 +1737,11 @@ msgstr "Hata: Başlangıç komutları çalıştırılamadı"
 
 #: src/view.cpp:425 src/view.cpp:451
 msgid "Error: feed contains no items!"
-msgstr "Hata: besleme boş!"
+msgstr "Hata: Beslemede bir şey yok!"
 
 #: src/view.cpp:579
 msgid "No tags defined."
-msgstr "Hiçbir etiket tanımlanmadı."
+msgstr "Hiçbir etiket tanımlanmamış."
 
 #: src/view.cpp:894
 msgid "Updating query feed..."
