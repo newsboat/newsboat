@@ -4,7 +4,7 @@ Alexander Batischev <eual.jp@gmail.com>
 
 == NAME
 
-podboat - a podcast download manager for text terminals
+Podboat - a podcast download manager for text terminals
 
 
 == SYNOPSIS
@@ -14,9 +14,9 @@ podboat - a podcast download manager for text terminals
 
 == DESCRIPTION
 
-_podboat_ is a podcast manager for text terminals. It is a helper program to
-_newsboat_ which queues podcast downloads into a file. These queued downloads
-can then be download with _podboat_.
+_Podboat_ is a podcast manager for text terminals. It is a helper program to
+_Newsboat_ which queues podcast downloads into a file. These queued downloads
+can then be download with _Podboat_.
 
 
 == OPTIONS
@@ -79,4 +79,4 @@ include::chapter-environment-variables.asciidoc[]
 
 == SEE ALSO
 
-newsboat(1)
+Newsboat(1)

@@ -1,7 +1,7 @@
 Newsboat contains support for Snownews extensions. The
 RSS feed readers Snownews and Liferea share a common way of extending the
 readers with custom scripts. Two mechanisms, namely "execurl" and "filter" type
-scripts, are available and supported by newsboat.
+scripts, are available and supported by Newsboat.
 
 An "execurl" script can be any program that gets executed and whose output is
 interpreted as RSS feed, while "filter" scripts are fed with the content of a

@@ -37,7 +37,7 @@ eight||8||Open URL 8 in the browser.
 nine||9||Open URL 9 in the browser.
 zero||0||Open URL 10 in the browser.
 enqueue||e||Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support).
-edit-urls||E||Edit the list of subscribed URLs. newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, newsboat will reload the URLs file.
+edit-urls||E||Edit the list of subscribed URLs. Newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, Newsboat will reload the URLs file.
 reload-urls||^R||Reload the URLs configuration file.
 redraw||^L||Redraw the screen.
 cmdline||:||Open the command line.

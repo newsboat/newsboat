@@ -1,20 +1,20 @@
 What the user can do is to add the podcast download URL to a download queue.
-Alternatively, newsboat can be configured to automatically do that. This
+Alternatively, Newsboat can be configured to automatically do that. This
 queue is stored in the _queue_ file next to the _cache.db_ file.
 
 The user can then use the download manager `podboat` to download these files
-to a directory on the local filesystem. Podboat comes with the newsboat
-package, and features a look and feel very close to the one of newsboat. It
+to a directory on the local filesystem. Podboat comes with the Newsboat
+package, and features a look and feel very close to the one of Newsboat. It
 also shares the same configuration file.
 
 Podcasts that have been downloaded but haven't been played yet remain in the
 queue but are marked as downloaded. You can remove them by purging them from
-the queue with the "P" key. After you've played a file and close podboat, it
+the queue with the "P" key. After you've played a file and close Podboat, it
 will be removed from the queue. The downloaded file remains on the
 filesystem unless "delete-played-files" is enabled.
 
-A common "use case" is to configure newsboat to automatically enqueue newly
+A common "use case" is to configure Newsboat to automatically enqueue newly
 found podcast download URLs. Then, the user reloads the podcast RSS feeds in
-newsboat, and after that, uses podboat to view the current queue, and
+Newsboat, and after that, uses Podboat to view the current queue, and
 either selectively download certain files or automatically download them all
-together by pressing "a" within podboat.
+together by pressing "a" within Podboat.

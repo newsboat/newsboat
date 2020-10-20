@@ -1,10 +1,10 @@
-After you've installed newsboat, you can run it for the first time by typing
+After you've installed Newsboat, you can run it for the first time by typing
 `newsboat` on your command prompt. This will bring you the following message:
 
 ----
 Error: no URLs configured. Please fill the file /home/ak/.newsboat/urls with RSS feed URLs or import an OPML file.
 
-newsboat 2.10
+Newsboat 2.10
 usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
     -e, --export-to-opml            export OPML feed to stdout
     -r, --refresh-on-start          refresh feeds on start
@@ -23,8 +23,8 @@ usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> .
     -h, --help                      this help
 ----
 
-This means that newsboat can't start without any configured feeds. To add
-feeds to newsboat, you can either add URLs to the configuration file
+This means that Newsboat can't start without any configured feeds. To add
+feeds to Newsboat, you can either add URLs to the configuration file
 _$HOME/.newsboat/urls_ or you can import an OPML file by running `newsboat -i
 blogroll.opml`. To manually add URLs, open the file with your favorite text
 editor and add the URLs, one per line:
@@ -52,7 +52,7 @@ You can also configure local files as feeds, by prefixing the local path with
 
 	file:///var/log/rss_eventlog.xml
 
-Now you can run newsboat again, and it will present you with a controllable
+Now you can run Newsboat again, and it will present you with a controllable
 list of the URLs that you configured previously. You can now start downloading
 the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
 download the currently selected feed. You can then select a feed you want to
@@ -69,10 +69,10 @@ a number next to it; to open it, type `#` and then the number, then press
 keyboard.
 
 Pressing "q" brings you back to the article list, and pressing "q" again brings
-you back to the feed list. Pressing "q" a third time then closes newsboat.
+you back to the feed list. Pressing "q" a third time then closes Newsboat.
 
 Newsboat caches the article that it downloads. This means that when you start
-newsboat again and reload a feed, the old articles can still be read even if
+Newsboat again and reload a feed, the old articles can still be read even if
 they aren't in the current RSS feeds anymore. Optionally you can configure how
 many articles shall be preserved by feed so that the article backlog doesn't
 grow endlessly (see <<max-items,`max-items`>> below).
@@ -87,7 +87,7 @@ updates faster, it also reduces the amount of transferred data per request.
 Conditional HTTP downloading can be optionally disabled per feed by using the
 <<always-download,`always-download`>> configuration command.
 
-Several aspects of newsboat's behaviour can be configured via a configuration
+Several aspects of Newsboat's behaviour can be configured via a configuration
 file _config_, which is stored next to the _urls_ file. This configuration file
 contains lines in the form `<config-command> <arg1> ...`.  The configuration
 file can also contain comments, which start with the `+#+` character and go as
@@ -102,7 +102,7 @@ with a backslash (e.g. `{backslash}{backtick}` and `{backslash}#`); in that
 case, they'll be replaced with literal `{backtick}` or `+#+` in the
 configuration.
 
-Searching for articles is possible in newsboat, too. Just press the "/" key,
+Searching for articles is possible in Newsboat, too. Just press the "/" key,
 enter your search phrase, and the title and content of all articles are
 searched for it. When you do a search from the list of feeds, all articles of
 all feeds will be searched. When you do a search from the article list of a

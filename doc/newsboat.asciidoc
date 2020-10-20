@@ -172,7 +172,7 @@ to add _another_ layer of escaping. Thus, you end up with a command like this:
 
 === Configuring Colors
 
-It is possible to configure custom color settings in newsboat. The basic configuration
+It is possible to configure custom color settings in Newsboat. The basic configuration
 syntax is:
 
 	color <element> <foreground color> <background color> [<attribute> ...]
@@ -223,7 +223,7 @@ Currently, the following elements are supported:
 - `article`: the article text
 - `end-of-text-marker`: filler lines (~) below blocks of text
 
-The default color configuration of newsboat looks like this:
+The default color configuration of Newsboat looks like this:
 
 	color background          white   black
 	color listnormal          white   black
@@ -242,7 +242,7 @@ include::chapter-files.asciidoc[]
 === Migrating from other RSS Feed Readers
 
 It is very likely that you have used other RSS feed readers before. In this
-case, it is practical to migrate the previous configuration to newsboat.
+case, it is practical to migrate the previous configuration to Newsboat.
 
 ==== Newsbeuter (automatic migration)
 
@@ -311,19 +311,19 @@ following command is necessary:
 	raggle --export-opml ~/blogroll.opml
 
 When you have exported the subscriptions from your old RSS feed reader, you can
-import them into newsboat:
+import them into Newsboat:
 
 	newsboat -i ~/blogroll.opml
 
-Don't worry, newsboat won't destroy your existing configuration, or add
+Don't worry, Newsboat won't destroy your existing configuration, or add
 subscriptions more than once: every URL that is added to the subscription list
 is checked before whether it is already in the list, and is only added if not.
 This makes it possible to merge several OPML files into your subscription list.
 
 If your old RSS feed reader was able to structure your subscriptions in
-hierarchies, and reflected this structure in the exported OPML file, newsboat
+hierarchies, and reflected this structure in the exported OPML file, Newsboat
 doesn't throw away this information (although it doesn't support hierarchies), but
-generates tags from it. Tags are newsboat's way of organizing subscriptions
+generates tags from it. Tags are Newsboat's way of organizing subscriptions
 in a non-hierarchical way. More information on the use of tags can be found below.
 
 Imagine the following folder hierarchy:
@@ -344,7 +344,7 @@ Subscriptions found in the folder "Private" will be tagged with "Private",
 subscriptions in the folder "International" will be tagged with "News" and
 "News/International", subscriptions in the folder "Erlang" will be tagged ith
 "IT", "IT/Programming" and "IT/Programming/Erlang", and so on. This means that
-when you select the tag "Programming" in newsboat, you will see all
+when you select the tag "Programming" in Newsboat, you will see all
 subscriptions that were in the "Programming" folder or one of its subfolders
 before. This means that you will lose virtually nothing of your previously
 configured structure.
@@ -750,7 +750,7 @@ an external program, configured via the configuration command <<bookmark-cmd,`bo
 parameters. The plugin itself implements the actual bookmark saving (e.g. writing the bookmark to an
 external file, or storing it to a del.icio.us account). If everything went OK, the plugin simply exits.
 In case something goes wrong while saving the bookmark, it writes out an error message as a single line.
-This error message is then presented to the user from within newsboat.
+This error message is then presented to the user from within Newsboat.
 
 Newsboat comes with an example plugin, which implements a simple tab-separated bookmark file. This
 example can be found in the _doc/examples_ subdirectory.
@@ -852,7 +852,7 @@ In Usenet, such functionality within software is traditionally called a "killfil
 i.e. based on the content of this "killfile", articles that match certain conditions
 do not get displayed and are not presented to the user at all.
 
-In newsboat, such a "killfile" can be implemented on a per-article basis via
+In Newsboat, such a "killfile" can be implemented on a per-article basis via
 the configuration file. The most important configuration command for this
 is <<ignore-article,`ignore-article`>>:
 
@@ -863,7 +863,7 @@ It takes two parameters. The first one is either a URL of a feed, or `"*"` to
 match any feed (asterisk is _not_ a pattern, glob or regex—we simply reserve it
 to mean "all feeds").  The second argument is <<_filter_language,a filter
 expression>> for an article, probably <<_using_double_quotes,in double quotes
-to preserve spaces inside>>. If newsboat hits an article in the specified RSS
+to preserve spaces inside>>. If Newsboat hits an article in the specified RSS
 feed that matches the specified filter expression, then this article is ignored
 and never presented to the user. The configuration itself can contain as many
 <<ignore-article,`ignore-article`>> commands as desired.
@@ -891,8 +891,8 @@ configuration file:
 
 === Query Feeds
 
-Query feeds are a mechanism of newsboat to define custom "meta feeds" by using
-newsboat's built-in filter language. A query feed is a feed that is aggregated
+Query feeds are a mechanism of Newsboat to define custom "meta feeds" by using
+Newsboat's built-in filter language. A query feed is a feed that is aggregated
 from all currently downloaded articles of all feeds. To narrow down the set of
 articles, the user has to specify a filter. Only articles that match this filter
 are added to the query feed.
@@ -907,7 +907,7 @@ following format:
 
 	query:<name of feed>:<filter expression> [<tag> ...]
 
-The `query:` in the beginning tells newsboat that it's a query feed, `<name of
+The `query:` in the beginning tells Newsboat that it's a query feed, `<name of
 feed>` specifies the name under which the query feed shall be displayed in the
 feed list, and `<filter expression>` is the filter expression that shall be
 used. Like every other feed, a query feed can be tagged to organize it like
@@ -961,10 +961,10 @@ Newsboat comes with a `-x` option that indicates that commands added as argument
 to the command line shall be executed. Currently, the following commands are
 available:
 
-- `reload`: this option reloads all feeds, and quits newsboat without printing any output.
+- `reload`: this option reloads all feeds, and quits Newsboat without printing any output.
   This is useful if a user wants to periodically reload all feeds without always having
-  a running newsboat instance, e.g. from cron.
-- `print-unread`: this option prints the number of unread articles and quits newsboat.
+  a running Newsboat instance, e.g. from cron.
+- `print-unread`: this option prints the number of unread articles and quits Newsboat.
   This is useful for users who want to integrate this number into some kind of monitoring
   system.
 
@@ -984,7 +984,7 @@ the right. Followed by the padding indication comes the actual sequence
 identifier, which is usually a single letter. `%=[width][identifier]` centers
 the sequence, where if w=0 the whole width of the window is used.
 
-In addition, newsboat provides other, more powerful sequences, such as
+In addition, Newsboat provides other, more powerful sequences, such as
 `%>[char]`, which indicates that the text right to the sequence will be aligned
 right on the screen, and characters between the text on the left and the text
 on the right will be filled by `[char]`. Another powerful format is the
@@ -1106,7 +1106,7 @@ You can customize
 the title format of all available dialogs. Here is a list of dialogs with their
 respective title format configuration variables, and a list of available formats
 and their meaning. Please note that the title formats are localized, so if you
-work on a different locale that is supported by newsboat, the actually displayed
+work on a different locale that is supported by Newsboat, the actually displayed
 title text may vary unless you customize it.
 
 .Dialog Title Formats
@@ -1130,7 +1130,7 @@ Dialog List:<<dialogs-title-format,+dialogs-title-format+>>:%N %V - Dialogs
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[common-title-format-N]]<<common-title-format-N,+N+>>:Name of the program, i.e. "newsboat"
+[[common-title-format-N]]<<common-title-format-N,+N+>>:Name of the program, i.e. "Newsboat"
 [[common-title-format-V]]<<common-title-format-V,+V+>>:Program version
 [[common-title-format-u]]<<common-title-format-u,+u+>>:Number of unread articles (if applicable)
 [[common-title-format-t]]<<common-title-format-t,+t+>>:Number of total articles (if applicable)
@@ -1240,7 +1240,7 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 === Macro Support
 
-In newsboat, it's possible to define macros to execute more than one command
+In Newsboat, it's possible to define macros to execute more than one command
 at once. A macro is configured using the <<macro,`macro`>> configuration
 command. The first parameter to `macro` is the key, all parameters afterwards
 are operations (see <<_newsboat_operations>> and <<_podboat_operations>>),
@@ -1264,7 +1264,7 @@ The macro prefix can be changed from the default "," to another key, e.g. "+"
 
 ==== Using Browser
 
-The first step to open links outside of newsboat is to set a default
+The first step to open links outside of Newsboat is to set a default
 <<browser,`browser`>> in your config file. It can be any command that you would
 normally run, such as a web browser or an executable script. For example:
 
@@ -1299,10 +1299,10 @@ goto-url inside a macro, simply append the URL's number (e.g. `goto-url 11`).
 
 ==== Switching Browser for Different Tasks
 
-To manually change the browser from newsboat internal command line, type
+To manually change the browser from Newsboat internal command line, type
 `:set browser` followed by the command, and press "Enter".
 The variable is only set temporarily (useful for testing), so next
-time newsboat is launched, `browser` will reset to the command specified in your
+time Newsboat is launched, `browser` will reset to the command specified in your
 config file:
 
   :set browser chromium
@@ -1315,36 +1315,36 @@ something else, such as running an image viewer from the URL view:
 
 ==== Separating Browser from Newsboat
 
-The default behavior of newsboat when running external commands is to use the
+The default behavior of Newsboat when running external commands is to use the
 same terminal for the new application. It is great for a "classical" workflow
 i.e., when working from a virtual console without a graphical environment.
 On the other hand, it might seem like a limitation if you would like to keep
-using newsboat while the command is running. A few simple tricks can be used to
-work with both newsboat and an external application at the same time.
+using Newsboat while the command is running. A few simple tricks can be used to
+work with both Newsboat and an external application at the same time.
 Those are explained below.
 
 Applications like `firefox`, if already running, will simply open a new tab
-when receiving a link, then give control back to newsboat. Because of that,
-newsboat will be unavailable for a split second, then work can resume.
+when receiving a link, then give control back to Newsboat. Because of that,
+Newsboat will be unavailable for a split second, then work can resume.
 
 Other applications without this kind of feature will usually do two things:
 print messages and warnings (or in the case of interactive console applications,
-overwrite newsboat interface with their own), while also blocking user input
-(which prevents controlling newsboat). To demonstrate this behavior,
+overwrite Newsboat interface with their own), while also blocking user input
+(which prevents controlling Newsboat). To demonstrate this behavior,
 the single-tabbed `surf` browser is used:
 
   :set browser surf
 
-To prevent applications from printing messages and warnings over newsboat
+To prevent applications from printing messages and warnings over Newsboat
 interface (useful mostly for GUI apps), you may need to "redirect standard
 output and error" to the `null` device:
 
   :set browser "surf %u >/dev/null 2>&1"
 
 At this point, if you try to open a link, you are back to the original terminal
-from which newsboat was initially launched, but input is still blocked.
+from which Newsboat was initially launched, but input is still blocked.
 By adding the `&` character to the very end of the browser command, the
-application will run separately from newsboat, which can then be used
+application will run separately from Newsboat, which can then be used
 (and even closed) independently of the app:
 
   :set browser "surf %u >/dev/null 2>&1 &"
@@ -1359,7 +1359,7 @@ terminal emulator, just remember to set the "command" or "execute" option
   :set browser "alacritty -e lynx %u &"
 
 Once an application is properly detached, other apps can be launched from
-the same instance of newsboat. Each time, you can decide to either keep the same
+the same instance of Newsboat. Each time, you can decide to either keep the same
 browser, or change it to serve a different purpose.
 
 === Podcast Support
@@ -1367,21 +1367,21 @@ browser, or change it to serve a different purpose.
 include::chapter-podcasts.asciidoc[]
 
 The following sections present two different ways to handle podcasts with
-newsboat.
+Newsboat.
 
 ==== Managing Audio Files with Podboat
 
 include::chapter-podboat.asciidoc[]
 
 A macro can also be used to enqueue any of the URLs from the URLs view to
-podboat's download queue:
+Podboat's download queue:
 
   macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser elinks
 
 ==== Streaming Audio Content with a Media Player
 
-As an alternative to podboat file management, media players such as `mpv` can
-stream content directly when given a URL. Since newsboat always assign the
+As an alternative to Podboat file management, media players such as `mpv` can
+stream content directly when given a URL. Since Newsboat always assign the
 enclosure link to URL 1, the operation <<one,`one`>> can be used to open the audio file
 (beware that this operation will always open URL 1, even if no enclosure is
 found). To listen to your podcast from the article view, a basic macro would be:
@@ -1391,7 +1391,7 @@ found). To listen to your podcast from the article view, a basic macro would be:
 For media players with a graphical user interface like `vlc`, console output
 will typically need to be silenced with `>/dev/null 2>&1`. Also, the `&`
 character at the end of the browser command will detach the media player from
-newsboat. You can then read your articles while listening to podcasts:
+Newsboat. You can then read your articles while listening to podcasts:
 
   macro v set browser "vlc %u >/dev/null 2>&1 &"; one; set browser firefox
 
@@ -1402,7 +1402,7 @@ arguments as options:
   macro p set browser "mpv --player-operation-mode=pseudo-gui -- %u &"; one; set browser firefox
 
 To use mpv's console interface instead, first launch a terminal emulator
-which will in turn execute mpv. This way, newsboat and the media player can both
+which will in turn execute mpv. This way, Newsboat and the media player can both
 be controlled with text-based interfaces, side by side:
 
   macro c set browser "alacritty -e mpv --vid=no -- %u &"; one; set browser firefox
@@ -1414,9 +1414,9 @@ purpose:
 
   macro n set browser "mpv --vid=no --"; one; set browser lynx
 
-Another use case for this macro would be when running newsboat on a
+Another use case for this macro would be when running Newsboat on a
 remote host, while logged in through a secure shell (e.g. OpenSSH).
-With this setup, newsboat will effectively serve as the controller to an ad hoc
+With this setup, Newsboat will effectively serve as the controller to an ad hoc
 "remote media server". Audio will be playing on the remote host.
 
 === Running multiple copies of Newsboat simultaneously
@@ -1460,20 +1460,20 @@ environment, e.g.:
 
 As already said: not beautiful, but gets the job done.
 
-=== Using SQLite Triggers with newsboat
+=== Using SQLite Triggers with Newsboat
 
 This section was written by mailto:elrond+newsbeuter(at)samba-tng.org[Elrond],
 originally for Newsbeuter.
 
-SQLite, the db used by newsboat, supports triggers. These are small
+SQLite, the db used by Newsboat, supports triggers. These are small
 snippets of SQL that get executed inside the database by the database
 engine. They're stored inside the db and the normal user (including
-newsboat itself) doesn't see them. Just the db seems to do some magic:
+Newsboat itself) doesn't see them. Just the db seems to do some magic:
 Like changing some values when you change another value.
 
-So what is this good for when looking at newsboat? Well, first off, it's a
+So what is this good for when looking at Newsboat? Well, first off, it's a
 hack. The real answer should be to use application logic (do it inside
-newsboat, not in the db). So: Don't use this, unless you know, what you're
+Newsboat, not in the db). So: Don't use this, unless you know, what you're
 doing, and unless you have some sort of backup.
 
 ==== Example
@@ -1484,16 +1484,16 @@ Suppose you have a strange feed where the articles become "new" by just
 changing their subject, and nothing else changes. The body is just empty, and
 the URL keeps the same. This feed really exists. It's the "updated software rss
 feed" of some major company and the title just contains the name of the driver
-and version number. And the URL points to the download page. newsboat
+and version number. And the URL points to the download page. Newsboat
 considers articles only as new, when they have a new UniqueID (this is good).
 So those articles are never marked as new (unread) ever again.
 
-So what can we do? We do some magic: We let the db test if newsboat
+So what can we do? We do some magic: We let the db test if Newsboat
 changes the subject and then let itself mark the article again as unread.
 
 1. You need the `sqlite3` command line tool (available via `apt-get install sqlite3` on Debian) or some other tool to do direct sql on the sqlite database.
 
-2. Start `sqlite3` with the newsboat db:
+2. Start `sqlite3` with the Newsboat db:
 
 	 Rivendell:~/.newsboat% sqlite3 cache.db
 	 SQLite version 3.4.2
@@ -1510,8 +1510,8 @@ changes the subject and then let itself mark the article again as unread.
 
 4. Leave `sqlite3` with "Ctrl-D" or `.quit`.
 
-That's it. newsboat (well, its db) now marks articles as unread when their
-title changes. And nicely enough this works all inside newsboat, no need to
+That's it. Newsboat (well, its db) now marks articles as unread when their
+title changes. And nicely enough this works all inside Newsboat, no need to
 restart it so that it rereads the cache, that magically modifies itself. It
 just works.
 
