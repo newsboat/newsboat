@@ -13,7 +13,7 @@ public:
 		const std::vector<std::string>&) override
 	{
 	}
-	void dump_config(std::vector<std::string>&) override {}
+	void dump_config(std::vector<std::string>&) const override {}
 };
 
 } // namespace newsboat

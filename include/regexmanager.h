@@ -20,7 +20,7 @@ public:
 	RegexManager();
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
-	void dump_config(std::vector<std::string>& config_output) override;
+	void dump_config(std::vector<std::string>& config_output) const override;
 	void quote_and_highlight(std::string& str, const std::string& location);
 	void remove_last_regex(const std::string& location);
 	int article_matches(Matchable* item);

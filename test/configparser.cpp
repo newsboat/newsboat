@@ -21,7 +21,7 @@ public:
 		history.emplace_back(action, params);
 	};
 
-	void dump_config(std::vector<std::string>&) override {};
+	void dump_config(std::vector<std::string>&) const override {};
 
 	std::vector<std::pair<std::string, std::vector<std::string>>> history;
 };

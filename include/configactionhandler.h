@@ -12,7 +12,7 @@ public:
 	virtual void handle_action(const std::string& action,
 		const std::string& params);
 
-	virtual void dump_config(std::vector<std::string>& config_output) = 0;
+	virtual void dump_config(std::vector<std::string>& config_output) const = 0;
 	ConfigActionHandler() {}
 	virtual ~ConfigActionHandler() {}
 

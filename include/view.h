@@ -52,6 +52,10 @@ public:
 	{
 		return keys;
 	}
+	const KeyMap* get_keymap() const
+	{
+		return keys;
+	}
 	void set_tags(const std::vector<std::string>& t);
 	void push_empty_formaction();
 	void pop_current_formaction();

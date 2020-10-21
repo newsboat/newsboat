@@ -62,7 +62,7 @@ public:
 	void register_commands(ConfigParser& cfgparser);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
-	void dump_config(std::vector<std::string>& config_output) override;
+	void dump_config(std::vector<std::string>& config_output) const override;
 
 	bool get_configvalue_as_bool(const std::string& key) const;
 	int get_configvalue_as_int(const std::string& key) const;

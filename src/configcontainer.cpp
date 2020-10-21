@@ -457,7 +457,7 @@ void ConfigContainer::toggle(const std::string& key)
 	}
 }
 
-void ConfigContainer::dump_config(std::vector<std::string>& config_output)
+void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
