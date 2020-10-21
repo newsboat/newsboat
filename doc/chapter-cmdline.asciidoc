@@ -14,7 +14,7 @@ limited to 100 entries by default, but can be influenced by setting the
 saving, set the `history-limit` to `0`.
 
 The commandline provides you with some help if you can't remember the full
-names of commandline commands. By pressing the "Tab" key, newsboat will try to
+names of commandline commands. By pressing the "Tab" key, Newsboat will try to
 automatically complete your command. If there is more than one possible
 completion, you can subsequently press the "Tab" key to cycle through all
 results. If no match is found, no suggestion will be inserted into the

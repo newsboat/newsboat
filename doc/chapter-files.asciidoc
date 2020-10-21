@@ -8,7 +8,7 @@ which splits the files between the following locations:
 - _~/.config/newsboat/_
 
 If these directories exist or the environment variables `$XDG_CONFIG_HOME` and
-`$XDG_DATA_HOME` are set, newsboat will use these directories, otherwise it
+`$XDG_DATA_HOME` are set, Newsboat will use these directories, otherwise it
 will default to _~/.newsboat_ as its configuration directory.
 
 If you're currently using _~/.newsboat/_ but wish to migrate to XDG

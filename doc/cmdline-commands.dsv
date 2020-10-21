@@ -1,4 +1,4 @@
-quit||||Quit newsboat.||quit
+quit||||Quit Newsboat.||quit
 q||||Alias for quit.||quit
 save||<filename>||Export the currently selected article to a plain text file. This works in the article list and in the article view.||save ~/important.txt
 set||<variable>[=<value>|&|!]||Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a _!_ after the name of boolean configuration variables toggles their values, a _&_ directly after the name of a configuration variable of any type resets its value to the documented default value.||set reload-time=15
