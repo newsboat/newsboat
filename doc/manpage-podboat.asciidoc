@@ -4,7 +4,7 @@ Alexander Batischev <eual.jp@gmail.com>
 
 == NAME
 
-Podboat - a podcast download manager for text terminals
+podboat - a podcast download manager for text terminals
 
 
 == SYNOPSIS
@@ -79,4 +79,4 @@ include::chapter-environment-variables.asciidoc[]
 
 == SEE ALSO
 
-Newsboat(1)
+newsboat(1)

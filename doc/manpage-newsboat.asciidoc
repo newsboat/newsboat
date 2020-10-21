@@ -4,7 +4,7 @@ Alexander Batischev <eual.jp@gmail.com>
 
 == NAME
 
-Newsboat - an RSS/Atom feed reader for text terminals
+newsboat - an RSS/Atom feed reader for text terminals
 
 
 == SYNOPSIS
@@ -150,4 +150,4 @@ include::chapter-environment-variables.asciidoc[]
 
 == SEE ALSO
 
-Podboat(1)
+podboat(1)

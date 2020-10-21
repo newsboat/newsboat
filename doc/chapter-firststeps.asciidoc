@@ -4,7 +4,7 @@ After you've installed Newsboat, you can run it for the first time by typing
 ----
 Error: no URLs configured. Please fill the file /home/ak/.newsboat/urls with RSS feed URLs or import an OPML file.
 
-Newsboat 2.10
+newsboat 2.10
 usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
     -e, --export-to-opml            export OPML feed to stdout
     -r, --refresh-on-start          refresh feeds on start
