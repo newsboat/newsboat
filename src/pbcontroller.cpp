@@ -374,6 +374,13 @@ void PbController::print_usage(const char* argv0)
 		}
 		std::cout << a.desc << std::endl;
 	}
+
+	std::cout << std::endl
+		<< _("Support at #newsboat at https://freenode.net or on our mailing "
+			"list https://groups.google.com/g/newsboat")
+		<< std::endl
+		<< _("For more information, check out https://newsboat.org/")
+		<< std::endl;
 }
 
 std::string PbController::get_formatstr()
