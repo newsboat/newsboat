@@ -84,7 +84,7 @@ void ColorManager::handle_action(const std::string& action,
 			ActionHandlerStatus::INVALID_COMMAND);
 }
 
-void ColorManager::dump_config(std::vector<std::string>& config_output)
+void ColorManager::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& element_style : element_styles) {
 		const std::string& element = element_style.first;

@@ -21,7 +21,7 @@ RegexManager::RegexManager()
 	locations["feedlist"];
 }
 
-void RegexManager::dump_config(std::vector<std::string>& config_output)
+void RegexManager::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& foo : cheat_store_for_dump_config) {
 		config_output.push_back(foo);

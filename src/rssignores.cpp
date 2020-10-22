@@ -65,7 +65,7 @@ void RssIgnores::handle_action(const std::string& action,
 	}
 }
 
-void RssIgnores::dump_config(std::vector<std::string>& config_output)
+void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& ign : ignores) {
 		std::string configline = "ignore-article ";

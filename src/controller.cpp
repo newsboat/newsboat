@@ -899,7 +899,7 @@ void Controller::load_configfile(const std::string& filename)
 	}
 }
 
-void Controller::dump_config(const std::string& filename)
+void Controller::dump_config(const std::string& filename) const
 {
 	std::vector<std::string> configlines;
 	cfg.dump_config(configlines);

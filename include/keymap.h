@@ -186,7 +186,7 @@ public:
 	std::vector<std::string> get_keys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
 		const std::string& params) override;
-	void dump_config(std::vector<std::string>& config_output) override;
+	void dump_config(std::vector<std::string>& config_output) const override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 
 	std::vector<MacroCmd> parse_operation_sequence(const std::string& line);
@@ -196,7 +196,7 @@ private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
 	std::map<std::string, Operation> get_internal_operations() const;
-	std::string getopname(Operation op);
+	std::string getopname(Operation op) const;
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, std::vector<MacroCmd>> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;

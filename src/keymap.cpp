@@ -632,11 +632,11 @@ Operation KeyMap::get_operation(const std::string& keycode,
 	return keymap_[context][key];
 }
 
-void KeyMap::dump_config(std::vector<std::string>& config_output)
+void KeyMap::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& ctx : contexts) {
 		const std::string& context = ctx.first;
-		std::map<std::string, Operation>& x = keymap_[context];
+		const auto& x = keymap_.at(context);
 		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
@@ -668,7 +668,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output)
 	}
 }
 
-std::string KeyMap::getopname(Operation op)
+std::string KeyMap::getopname(Operation op) const
 {
 	for (const auto& opdesc : opdescs) {
 		if (opdesc.op == op) {

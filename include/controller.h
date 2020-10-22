@@ -72,7 +72,7 @@ public:
 
 	void load_configfile(const std::string& filename);
 
-	void dump_config(const std::string& filename);
+	void dump_config(const std::string& filename) const;
 
 	void update_flags(std::shared_ptr<RssItem> item);
 
