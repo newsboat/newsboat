@@ -99,6 +99,9 @@ bool UrlViewFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_HELP:
+		v->push_help();
+		break;
 	case OP_QUIT:
 		quit = true;
 		break;
@@ -157,6 +160,7 @@ KeyMapHintEntry* UrlViewFormAction::get_keymap_hint()
 	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open in Browser")},
 		{OP_BOOKMARK, _("Save Bookmark")},
+		{OP_HELP, _("Help")},
 		{OP_NIL, nullptr}
 	};
 	return hints;

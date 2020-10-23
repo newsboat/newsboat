@@ -149,7 +149,7 @@ static const std::vector<OpDesc> opdescs = {
 		"help",
 		"?",
 		_("Open help dialog"),
-		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBOAT
+		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBOAT | KM_URLVIEW
 	},
 	{
 		OP_TOGGLESOURCEVIEW,
