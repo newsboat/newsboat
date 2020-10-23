@@ -4,8 +4,13 @@
 
 namespace newsboat {
 
-DownloadThread::DownloadThread(Reloader& r, const std::vector<int>& idxs)
-	: reloader(r), indexes(idxs) {}
+DownloadThread::DownloadThread(Reloader& r, const std::vector<int>& idxs,
+	bool notify_on_finish_)
+	: reloader(r)
+	, indexes(idxs)
+	, notify_on_finish(notify_on_finish_)
+{
+}
 
 DownloadThread::~DownloadThread() {}
 
@@ -23,7 +28,7 @@ void DownloadThread::operator()()
 		if (indexes.size() == 0) {
 			reloader.reload_all();
 		} else {
-			reloader.reload_indexes(indexes);
+			reloader.reload_indexes(indexes, notify_on_finish);
 		}
 		reloader.unlock_reload_mutex();
 	}

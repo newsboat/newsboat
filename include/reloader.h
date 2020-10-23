@@ -26,6 +26,9 @@ public:
 	/// If \a indexes is empty, all feeds will be reloaded.
 	void start_reload_all_thread(const std::vector<int>& indexes = {});
 
+	/// \brief Start a thread that will reload the specified feed
+	void start_reload_thread(int index);
+
 	void unlock_reload_mutex()
 	{
 		reload_mutex.unlock();
@@ -59,7 +62,7 @@ public:
 	/// \brief Reloads all feeds with given indexes in feedlist.
 	///
 	/// Only updates status bar if \a unattended is false.
-	void reload_indexes(const std::vector<int>& indexes,
+	void reload_indexes(const std::vector<int>& indexes, bool notify_on_finish,
 		bool unattended = false);
 
 	/// \brief Reloads feeds occupying positions from \a start to \a end in
