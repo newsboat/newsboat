@@ -31,7 +31,7 @@ RssItem::~RssItem() {}
 
 void RssItem::set_title(const std::string& t)
 {
-	title_ = t;
+	title_ = utils::consolidate_whitespace(t);
 	utils::trim(title_);
 }
 

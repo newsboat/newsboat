@@ -274,3 +274,28 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		}
 	}
 }
+
+TEST_CASE("set_title() removes superfluous whitespace", "[RssItem]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssItem item(&rsscache);
+
+	SECTION("duplicate whitespace") {
+		item.set_title("lorem        ipsum");
+		REQUIRE(item.title() == "lorem ipsum");
+
+		item.set_title("abc\n\r \tdef");
+		REQUIRE(item.title() == "abc def");
+	}
+
+	SECTION("leading whitespace") {
+		item.set_title("\n\r\t lorem ipsum");
+		REQUIRE(item.title() == "lorem ipsum");
+	}
+
+	SECTION("trailing whitespace") {
+		item.set_title("lorem ipsum\n\r\t ");
+		REQUIRE(item.title() == "lorem ipsum");
+	}
+}
