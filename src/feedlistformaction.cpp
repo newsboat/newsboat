@@ -125,9 +125,6 @@ REDO:
 		}
 	}
 	break;
-	case OP_INT_RESIZE:
-		do_redraw = true;
-		break;
 	case OP_RELOADURLS:
 		v->get_ctrl()->reload_urls_file();
 		break;
