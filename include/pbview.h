@@ -37,6 +37,7 @@ private:
 	void set_dllist_keymap_hint();
 	void set_help_keymap_hint();
 	std::pair<double, std::string> get_speed_human_readable(double kbps);
+	void handle_resize();
 
 	std::string prepare_keymaphint(KeyMapHintEntry* hints);
 	std::string format_line(const std::string& podlist_format,
