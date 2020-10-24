@@ -54,6 +54,7 @@ private:
 		const std::string& tag,
 		unsigned int pos,
 		unsigned int width);
+	void update_heading();
 
 	ListWidget tags_list;
 };
