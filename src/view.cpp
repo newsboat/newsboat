@@ -189,13 +189,7 @@ int View::run()
 		}
 
 		if (strcmp(event, "RESIZE") == 0) {
-			for (const auto& form : formaction_stack) {
-				if (form != nullptr) {
-					// Recalculate width and height of stfl widgets
-					form->get_form().run(-3);
-					form->set_redraw(true);
-				}
-			}
+			handle_resize();
 			continue;
 		}
 
@@ -254,6 +248,11 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 		const char* event = fa->get_form().run(1000);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 		if (!event || strcmp(event, "TIMEOUT") == 0) {
+			continue;
+		}
+
+		if (strcmp(event, "RESIZE") == 0) {
+			handle_resize();
 			continue;
 		}
 
@@ -1120,6 +1119,17 @@ bool View::handle_qna_event(const std::string& event,
 		}
 	}
 	return false;
+}
+
+void View::handle_resize()
+{
+	for (const auto& form : formaction_stack) {
+		if (form != nullptr) {
+			// Recalculate width and height of stfl widgets
+			form->get_form().run(-3);
+			form->set_redraw(true);
+		}
+	}
 }
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
