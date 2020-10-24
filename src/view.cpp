@@ -188,6 +188,17 @@ int View::run()
 			continue;
 		}
 
+		if (strcmp(event, "RESIZE") == 0) {
+			for (const auto& form : formaction_stack) {
+				if (form != nullptr) {
+					// Recalculate width and height of stfl widgets
+					form->get_form().run(-3);
+					form->set_redraw(true);
+				}
+			}
+			continue;
+		}
+
 		if (handle_qna_event(event, fa)) {
 			continue;
 		}
