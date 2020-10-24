@@ -28,18 +28,13 @@ void DialogsFormAction::init()
 	set_keymap_hints();
 
 	f.run(-3); // compute all widget dimensions
-
-	const unsigned int width = dialogs_list.get_width();
-	std::string title_format = cfg->get_configvalue("dialogs-title-format");
-	FmtStrFormatter fmt;
-	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', utils::program_version());
-	f.set("head", fmt.do_format(title_format, width));
 }
 
 void DialogsFormAction::prepare()
 {
 	if (do_redraw) {
+		update_heading();
+
 		ListFormatter listfmt;
 
 		unsigned int i = 1;
@@ -64,6 +59,17 @@ void DialogsFormAction::prepare()
 
 		do_redraw = false;
 	}
+}
+
+void DialogsFormAction::update_heading()
+{
+
+	const unsigned int width = dialogs_list.get_width();
+	const std::string title_format = cfg->get_configvalue("dialogs-title-format");
+	FmtStrFormatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+	f.set("head", fmt.do_format(title_format, width));
 }
 
 KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
