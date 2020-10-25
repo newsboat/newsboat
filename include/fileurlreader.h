@@ -17,7 +17,7 @@ public:
 	/// \brief Write URLs back to the input file.
 	///
 	/// This method is used after importing feeds from OPML.
-	void write_config();
+	nonstd::optional<std::string> write_config();
 
 private:
 	const std::string filename;
