@@ -715,8 +715,8 @@ test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  include/strprintf.h
 test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp 3rd-party/catch.hpp \
- test/test-helpers/misc.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h
+ test/test-helpers/chmod.h test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/filtercontainer.o: test/filtercontainer.cpp \
  include/filtercontainer.h include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \

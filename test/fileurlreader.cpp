@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
+#include "test-helpers/chmod.h"
 #include "test-helpers/misc.h"
 #include "test-helpers/tempfile.h"
 
@@ -94,4 +95,78 @@ TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 	REQUIRE(u.get_urls().size() == 1);
 	REQUIRE(u.get_urls()[0] ==
 		R"_(exec:curl --silent https://feeds.metaebene.me/raumzeit/m4a  | sed 's#\(</guid>\|</id>\)#-M4A&#')_");
+}
+
+TEST_CASE("URL reader returns error message if file cannot be opened",
+	"[FileUrlReader]")
+{
+	const std::string testDataPath("data/test-urls.txt");
+
+	TestHelpers::TempFile urlsFile;
+	FileUrlReader u(urlsFile.get_path());
+
+	SECTION("reload() returns error message if file does not exist") {
+		const auto error_message = u.reload();
+		REQUIRE(error_message.has_value());
+
+		SECTION("the error message contains the filename") {
+			INFO("error_message: " + error_message.value());
+			REQUIRE(error_message.value().find(urlsFile.get_path()) != std::string::npos);
+		}
+	}
+
+	SECTION("write_config() works fine if file does not exist") {
+		const auto error_message = u.write_config();
+		REQUIRE(error_message.has_value() == false);
+
+		SECTION("after writing file, reload() succeeds") {
+			const auto error_message = u.reload();
+			REQUIRE(error_message.has_value() == false);
+		}
+	}
+
+	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
+
+	SECTION("reload() succeeds if url file exists") {
+		const auto error_message = u.reload();
+		REQUIRE(error_message.has_value() == false);
+	}
+
+	GIVEN("that the urls file is not readable") {
+		TestHelpers::Chmod notReadable(urlsFile.get_path(), S_IWUSR);
+
+		THEN("reload() returns an error message") {
+			const auto error_message = u.reload();
+			REQUIRE(error_message.has_value());
+
+			SECTION("the error message contains the filename") {
+				INFO("error_message: " + error_message.value());
+				REQUIRE(error_message.value().find(urlsFile.get_path()) != std::string::npos);
+			}
+		}
+
+		THEN("write_config() still works fine") {
+			const auto error_message = u.write_config();
+			REQUIRE(error_message.has_value() == false);
+		}
+	}
+
+	GIVEN("that the urls file is not writable") {
+		TestHelpers::Chmod notWritable(urlsFile.get_path(), S_IRUSR);
+
+		THEN("write_config() returns an error message") {
+			const auto error_message = u.write_config();
+			REQUIRE(error_message.has_value());
+
+			SECTION("the error message contains the filename") {
+				INFO("error_message: " + error_message.value());
+				REQUIRE(error_message.value().find(urlsFile.get_path()) != std::string::npos);
+			}
+		}
+
+		THEN("reload() still work fine") {
+			const auto error_message = u.reload();
+			REQUIRE(error_message.has_value() == false);
+		}
+	}
 }
