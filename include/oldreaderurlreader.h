@@ -14,7 +14,7 @@ public:
 		const std::string& url_file,
 		RemoteApi* a);
 	~OldReaderUrlReader() override;
-	void reload() override;
+	nonstd::optional<std::string> reload() override;
 	std::string get_source() override;
 
 private:

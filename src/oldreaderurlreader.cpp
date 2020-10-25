@@ -36,7 +36,7 @@ OldReaderUrlReader::~OldReaderUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-void OldReaderUrlReader::reload()
+nonstd::optional<std::string> OldReaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -52,7 +52,10 @@ void OldReaderUrlReader::reload()
 	}
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
@@ -76,6 +79,8 @@ void OldReaderUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string OldReaderUrlReader::get_source()

@@ -52,11 +52,11 @@ src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  include/configcontainer.h include/controller.h include/cache.h \
  include/colormanager.h include/stflpp.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/opml.h \
- include/fileurlreader.h include/urlreader.h include/queuemanager.h \
- include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/reloader.h include/remoteapi.h \
- include/rssignores.h include/rssitem.h include/matchable.h \
- 3rd-party/optional.hpp include/dbexception.h include/logger.h \
+ include/fileurlreader.h include/urlreader.h 3rd-party/optional.hpp \
+ include/queuemanager.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/reloader.h \
+ include/remoteapi.h include/rssignores.h include/rssitem.h \
+ include/matchable.h include/dbexception.h include/logger.h \
  include/strprintf.h include/matcherexception.h include/rssfeed.h \
  include/utils.h include/logger.h include/scopemeasure.h \
  include/strprintf.h include/utils.h
@@ -115,10 +115,10 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configactionhandler.h include/colormanager.h include/stflpp.h \
  include/feedcontainer.h include/filtercontainer.h include/fslock.h \
  include/opml.h include/fileurlreader.h include/urlreader.h \
- include/queuemanager.h include/regexmanager.h include/matcher.h \
- filter/FilterParser.h include/regexowner.h include/reloader.h \
- include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h 3rd-party/optional.hpp include/cliargsparser.h \
+ 3rd-party/optional.hpp include/queuemanager.h include/regexmanager.h \
+ include/matcher.h filter/FilterParser.h include/regexowner.h \
+ include/reloader.h include/remoteapi.h include/rssignores.h \
+ include/rssitem.h include/matchable.h include/cliargsparser.h \
  include/logger.h config.h include/strprintf.h include/colormanager.h \
  include/configcontainer.h include/configexception.h \
  include/configparser.h include/configpaths.h include/cliargsparser.h \
@@ -195,10 +195,10 @@ src/feedhqapi.o: src/feedhqapi.cpp include/feedhqapi.h include/cache.h \
  include/strprintf.h include/utils.h 3rd-party/optional.hpp \
  include/logger.h include/strprintf.h
 src/feedhqurlreader.o: src/feedhqurlreader.cpp include/feedhqurlreader.h \
- include/urlreader.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/fileurlreader.h include/logger.h \
- config.h include/strprintf.h include/remoteapi.h \
- include/configcontainer.h include/utils.h 3rd-party/optional.hpp \
+ include/urlreader.h 3rd-party/optional.hpp include/configcontainer.h \
+ include/configparser.h include/configactionhandler.h \
+ include/fileurlreader.h include/logger.h config.h include/strprintf.h \
+ include/remoteapi.h include/configcontainer.h include/utils.h \
  include/logger.h
 src/feedlistformaction.o: src/feedlistformaction.cpp \
  include/feedlistformaction.h 3rd-party/optional.hpp \
@@ -238,7 +238,7 @@ src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h
 src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
- include/urlreader.h include/utils.h 3rd-party/optional.hpp \
+ include/urlreader.h 3rd-party/optional.hpp include/utils.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h
@@ -296,15 +296,14 @@ src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
 src/inoreaderapi.o: src/inoreaderapi.cpp include/inoreaderapi.h \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/remoteapi.h include/urlreader.h \
- config.h include/strprintf.h include/utils.h 3rd-party/optional.hpp \
+ 3rd-party/optional.hpp config.h include/strprintf.h include/utils.h \
  include/logger.h include/strprintf.h
 src/inoreaderurlreader.o: src/inoreaderurlreader.cpp \
- include/inoreaderurlreader.h include/urlreader.h \
+ include/inoreaderurlreader.h include/urlreader.h 3rd-party/optional.hpp \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/fileurlreader.h include/logger.h \
  config.h include/strprintf.h include/remoteapi.h \
- include/configcontainer.h include/utils.h 3rd-party/optional.hpp \
- include/logger.h
+ include/configcontainer.h include/utils.h include/logger.h
 src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/itemlistformaction.h 3rd-party/optional.hpp include/history.h \
  include/listformaction.h include/formaction.h include/keymap.h \
@@ -401,11 +400,10 @@ src/minifluxapi.o: src/minifluxapi.cpp include/minifluxapi.h \
  config.h include/strprintf.h include/logger.h include/remoteapi.h \
  include/strprintf.h include/utils.h
 src/minifluxurlreader.o: src/minifluxurlreader.cpp \
- include/minifluxurlreader.h include/urlreader.h include/fileurlreader.h \
- include/logger.h config.h include/strprintf.h include/remoteapi.h \
- include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/utils.h 3rd-party/optional.hpp \
- include/logger.h
+ include/minifluxurlreader.h include/urlreader.h 3rd-party/optional.hpp \
+ include/fileurlreader.h include/logger.h config.h include/strprintf.h \
+ include/remoteapi.h include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/utils.h include/logger.h
 src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/utils.h \
@@ -413,42 +411,41 @@ src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/remoteapi.h include/strprintf.h include/utils.h
 src/newsblururlreader.o: src/newsblururlreader.cpp \
  include/newsblururlreader.h rss/feed.h rss/item.h include/urlreader.h \
- include/fileurlreader.h include/logger.h config.h include/strprintf.h \
- include/remoteapi.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/utils.h 3rd-party/optional.hpp \
+ 3rd-party/optional.hpp include/fileurlreader.h include/logger.h config.h \
+ include/strprintf.h include/remoteapi.h include/configcontainer.h \
+ include/configparser.h include/configactionhandler.h include/utils.h \
  include/logger.h
 src/ocnewsapi.o: src/ocnewsapi.cpp include/ocnewsapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/utils.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h
 src/ocnewsurlreader.o: src/ocnewsurlreader.cpp include/ocnewsurlreader.h \
- include/urlreader.h include/fileurlreader.h include/logger.h config.h \
- include/strprintf.h include/remoteapi.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h include/utils.h \
- 3rd-party/optional.hpp include/logger.h
+ include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
+ include/logger.h config.h include/strprintf.h include/remoteapi.h \
+ include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/utils.h include/logger.h
 src/oldreaderapi.o: src/oldreaderapi.cpp include/oldreaderapi.h \
  include/cache.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/remoteapi.h config.h \
  include/strprintf.h include/utils.h 3rd-party/optional.hpp \
  include/logger.h include/strprintf.h
 src/oldreaderurlreader.o: src/oldreaderurlreader.cpp \
- include/oldreaderurlreader.h include/urlreader.h \
+ include/oldreaderurlreader.h include/urlreader.h 3rd-party/optional.hpp \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/fileurlreader.h include/logger.h \
  config.h include/strprintf.h include/remoteapi.h \
- include/configcontainer.h include/utils.h 3rd-party/optional.hpp \
- include/logger.h
+ include/configcontainer.h include/utils.h include/logger.h
 src/opml.o: src/opml.cpp include/opml.h include/feedcontainer.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/fileurlreader.h \
- include/urlreader.h include/rssfeed.h include/matchable.h \
- 3rd-party/optional.hpp include/rssitem.h include/matcher.h \
+ include/urlreader.h 3rd-party/optional.hpp include/rssfeed.h \
+ include/matchable.h include/rssitem.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h
 src/opmlurlreader.o: src/opmlurlreader.cpp include/opmlurlreader.h \
  include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/urlreader.h include/utils.h \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h
+ include/configactionhandler.h include/urlreader.h 3rd-party/optional.hpp \
+ include/utils.h include/logger.h config.h include/strprintf.h
 src/pbcontroller.o: src/pbcontroller.cpp include/pbcontroller.h \
  include/colormanager.h include/configparser.h \
  include/configactionhandler.h include/stflpp.h include/configcontainer.h \
@@ -502,11 +499,11 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/configactionhandler.h include/controller.h include/cache.h \
  include/colormanager.h include/stflpp.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/opml.h \
- include/fileurlreader.h include/urlreader.h include/queuemanager.h \
- include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/reloader.h include/remoteapi.h \
- include/rssignores.h include/rssitem.h include/matchable.h \
- 3rd-party/optional.hpp include/curlhandle.h include/dbexception.h \
+ include/fileurlreader.h include/urlreader.h 3rd-party/optional.hpp \
+ include/queuemanager.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/reloader.h \
+ include/remoteapi.h include/rssignores.h include/rssitem.h \
+ include/matchable.h include/curlhandle.h include/dbexception.h \
  include/downloadthread.h include/fmtstrformatter.h \
  include/reloadrangethread.h include/reloadthread.h include/controller.h \
  rss/exception.h include/rssfeed.h include/utils.h include/logger.h \
@@ -525,11 +522,11 @@ src/reloadthread.o: src/reloadthread.cpp include/reloadthread.h \
  include/configactionhandler.h include/controller.h include/cache.h \
  include/colormanager.h include/stflpp.h include/feedcontainer.h \
  include/filtercontainer.h include/fslock.h include/opml.h \
- include/fileurlreader.h include/urlreader.h include/queuemanager.h \
- include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/reloader.h include/remoteapi.h \
- include/rssignores.h include/rssitem.h include/matchable.h \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h
+ include/fileurlreader.h include/urlreader.h 3rd-party/optional.hpp \
+ include/queuemanager.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/reloader.h \
+ include/remoteapi.h include/rssignores.h include/rssitem.h \
+ include/matchable.h include/logger.h config.h include/strprintf.h
 src/remoteapi.o: src/remoteapi.cpp include/remoteapi.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/utils.h 3rd-party/optional.hpp \
@@ -620,11 +617,12 @@ src/ttrssapi.o: src/ttrssapi.cpp include/ttrssapi.h 3rd-party/json.hpp \
  include/strprintf.h include/utils.h 3rd-party/optional.hpp \
  include/logger.h
 src/ttrssurlreader.o: src/ttrssurlreader.cpp include/ttrssurlreader.h \
- include/urlreader.h include/fileurlreader.h include/logger.h config.h \
- include/strprintf.h include/remoteapi.h include/configcontainer.h \
- include/configparser.h include/configactionhandler.h include/utils.h \
- 3rd-party/optional.hpp include/logger.h
-src/urlreader.o: src/urlreader.cpp include/urlreader.h
+ include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
+ include/logger.h config.h include/strprintf.h include/remoteapi.h \
+ include/configcontainer.h include/configparser.h \
+ include/configactionhandler.h include/utils.h include/logger.h
+src/urlreader.o: src/urlreader.cpp include/urlreader.h \
+ 3rd-party/optional.hpp
 src/urlviewformaction.o: src/urlviewformaction.cpp \
  include/urlviewformaction.h include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/configactionhandler.h \
@@ -716,8 +714,9 @@ test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h
 test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
- include/urlreader.h 3rd-party/catch.hpp test/test-helpers/misc.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
+ include/urlreader.h 3rd-party/optional.hpp 3rd-party/catch.hpp \
+ test/test-helpers/misc.h test/test-helpers/tempfile.h \
+ test/test-helpers/maintempdir.h
 test/filtercontainer.o: test/filtercontainer.cpp \
  include/filtercontainer.h include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
@@ -780,18 +779,18 @@ test/matcherexception.o: test/matcherexception.cpp \
 test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/fileurlreader.h \
- include/urlreader.h 3rd-party/catch.hpp include/cache.h \
- include/fileurlreader.h include/rssfeed.h include/matchable.h \
- 3rd-party/optional.hpp include/rssitem.h include/matcher.h \
+ include/urlreader.h 3rd-party/optional.hpp 3rd-party/catch.hpp \
+ include/cache.h include/fileurlreader.h include/rssfeed.h \
+ include/matchable.h include/rssitem.h include/matcher.h \
  filter/FilterParser.h include/utils.h include/logger.h config.h \
  include/strprintf.h test/test-helpers/misc.h \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/opmlurlreader.o: test/opmlurlreader.cpp include/opmlurlreader.h \
  include/configcontainer.h include/configparser.h \
- include/configactionhandler.h include/urlreader.h 3rd-party/catch.hpp \
- test/test-helpers/misc.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h include/utils.h 3rd-party/optional.hpp \
- include/logger.h config.h include/strprintf.h
+ include/configactionhandler.h include/urlreader.h 3rd-party/optional.hpp \
+ 3rd-party/catch.hpp test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ include/utils.h include/logger.h config.h include/strprintf.h
 test/queueloader.o: test/queueloader.cpp include/queueloader.h \
  include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/download.h 3rd-party/catch.hpp \

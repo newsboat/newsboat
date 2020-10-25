@@ -15,14 +15,17 @@ TtRssUrlReader::TtRssUrlReader(const std::string& url_file, RemoteApi* a)
 
 TtRssUrlReader::~TtRssUrlReader() {}
 
-void TtRssUrlReader::reload()
+nonstd::optional<std::string> TtRssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	auto& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
@@ -47,6 +50,8 @@ void TtRssUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string TtRssUrlReader::get_source()

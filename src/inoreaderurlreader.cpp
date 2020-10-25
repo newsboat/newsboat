@@ -37,7 +37,7 @@ InoreaderUrlReader::~InoreaderUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-void InoreaderUrlReader::reload()
+nonstd::optional<std::string> InoreaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -55,7 +55,10 @@ void InoreaderUrlReader::reload()
 	}
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
@@ -79,6 +82,8 @@ void InoreaderUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string InoreaderUrlReader::get_source()

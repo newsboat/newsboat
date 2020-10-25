@@ -35,7 +35,7 @@ FeedHqUrlReader::~FeedHqUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-void FeedHqUrlReader::reload()
+nonstd::optional<std::string> FeedHqUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -51,7 +51,10 @@ void FeedHqUrlReader::reload()
 	}
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	for (const auto& url : ur.get_urls()) {
 		if (utils::is_query_url(url)) {
@@ -78,6 +81,8 @@ void FeedHqUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string FeedHqUrlReader::get_source()

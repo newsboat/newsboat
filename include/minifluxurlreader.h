@@ -11,7 +11,7 @@ class MinifluxUrlReader : public UrlReader {
 public:
 	MinifluxUrlReader(const std::string& url_file, RemoteApi* a);
 	~MinifluxUrlReader() override;
-	void reload() override;
+	nonstd::optional<std::string> reload() override;
 	std::string get_source() override;
 
 private:

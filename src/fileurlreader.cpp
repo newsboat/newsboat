@@ -1,5 +1,6 @@
 #include "fileurlreader.h"
 
+#include <cstring>
 #include <fstream>
 
 #include "utils.h"
@@ -16,7 +17,7 @@ std::string FileUrlReader::get_source()
 	return filename;
 }
 
-void FileUrlReader::reload()
+nonstd::optional<std::string> FileUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -25,7 +26,10 @@ void FileUrlReader::reload()
 	std::fstream f;
 	f.open(filename, std::fstream::in);
 	if (!f.is_open()) {
-		return;
+		const auto error_message = strerror(errno);
+		return strprintf::fmt(_("Error: Failed to open file \"%s\" (%s)"),
+				filename,
+				error_message);
 	}
 
 	for (std::string line; std::getline(f, line); /* nothing */) {
@@ -50,6 +54,8 @@ void FileUrlReader::reload()
 			}
 		}
 	};
+
+	return {};
 }
 
 void FileUrlReader::write_config()

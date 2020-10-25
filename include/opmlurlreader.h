@@ -12,7 +12,7 @@ namespace newsboat {
 class OpmlUrlReader : public UrlReader {
 public:
 	explicit OpmlUrlReader(ConfigContainer* c);
-	void reload() override;
+	nonstd::optional<std::string> reload() override;
 	std::string get_source() override;
 
 protected:

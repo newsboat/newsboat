@@ -15,14 +15,17 @@ MinifluxUrlReader::MinifluxUrlReader(const std::string& url_file, RemoteApi* a)
 
 MinifluxUrlReader::~MinifluxUrlReader() {}
 
-void MinifluxUrlReader::reload()
+nonstd::optional<std::string> MinifluxUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	const std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
@@ -42,6 +45,8 @@ void MinifluxUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string MinifluxUrlReader::get_source()
