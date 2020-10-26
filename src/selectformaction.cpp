@@ -148,6 +148,8 @@ bool SelectFormAction::process_operation(Operation op,
 void SelectFormAction::prepare()
 {
 	if (do_redraw) {
+		update_heading();
+
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
@@ -184,35 +186,13 @@ void SelectFormAction::prepare()
 
 void SelectFormAction::init()
 {
-	std::string title;
 	do_redraw = true;
 	quit = false;
 	value = "";
 
 	f.run(-3); // compute all widget dimensions
 
-	const unsigned int width = tags_list.get_width();
-
 	set_keymap_hints();
-
-	FmtStrFormatter fmt;
-	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', utils::program_version());
-
-	switch (type) {
-	case SelectionType::TAG:
-		title = fmt.do_format(
-				cfg->get_configvalue("selecttag-title-format"), width);
-		break;
-	case SelectionType::FILTER:
-		title = fmt.do_format(
-				cfg->get_configvalue("selectfilter-title-format"),
-				width);
-		break;
-	default:
-		assert(0); // should never happen
-	}
-	f.set("head", title);
 }
 
 std::string SelectFormAction::format_line(const std::string& selecttag_format,
@@ -239,6 +219,31 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 	auto formattedLine = fmt.do_format(selecttag_format, width);
 
 	return formattedLine;
+}
+
+void SelectFormAction::update_heading()
+{
+	std::string title;
+	const unsigned int width = tags_list.get_width();
+
+	FmtStrFormatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+
+	switch (type) {
+	case SelectionType::TAG:
+		title = fmt.do_format(
+				cfg->get_configvalue("selecttag-title-format"), width);
+		break;
+	case SelectionType::FILTER:
+		title = fmt.do_format(
+				cfg->get_configvalue("selectfilter-title-format"),
+				width);
+		break;
+	default:
+		assert(0); // should never happen
+	}
+	f.set("head", title);
 }
 
 KeyMapHintEntry* SelectFormAction::get_keymap_hint()

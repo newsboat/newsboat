@@ -120,6 +120,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			continue;
 		}
 
+		if (strcmp(event, "RESIZE") == 0) {
+			handle_resize();
+			continue;
+		}
+
 		Operation op = keys->get_operation(event, "podboat");
 
 		if (dllist_form.get("msg").length() > 0) {
@@ -259,6 +264,15 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 	} while (!quit);
 }
 
+void PbView::handle_resize()
+{
+	std::vector<std::reference_wrapper<newsboat::Stfl::Form>> forms = {dllist_form, help_form};
+	for (const auto form : forms) {
+		form.get().run(-3);
+	}
+	ctrl->set_view_update_necessary(true);
+}
+
 void PbView::apply_colors_to_all_forms()
 {
 	colorman.apply_colors(dllist_form);
@@ -305,6 +319,11 @@ void PbView::run_help()
 	do {
 		const char* event = help_form.run(0);
 		if (!event) {
+			continue;
+		}
+
+		if (strcmp(event, "RESIZE") == 0) {
+			handle_resize();
 			continue;
 		}
 

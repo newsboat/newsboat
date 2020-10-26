@@ -257,6 +257,9 @@ void FileBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
+		const std::string cwdtmp = utils::getcwd();
+		update_title(cwdtmp);
+
 		std::vector<std::string> files = get_sorted_filelist();
 
 		ListFormatter listfmt;
@@ -297,15 +300,11 @@ void FileBrowserFormAction::init()
 	int status = ::chdir(dir.c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
 
-	const std::string cwdtmp = utils::getcwd();
-
 	f.set("filenametext", default_filename);
 
 	// Set position to 0 and back to ensure that the text is visible
 	f.run(-1);
 	f.set("filenametext_pos", std::to_string(default_filename.length()));
-
-	update_title(cwdtmp);
 }
 
 KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()

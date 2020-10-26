@@ -24,7 +24,8 @@ private:
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	bool update_list;
+	void update_heading();
+
 	ListWidget dialogs_list;
 };
 

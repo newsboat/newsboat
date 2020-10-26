@@ -469,7 +469,6 @@ static const std::vector<OpDesc> opdescs = {
 		KM_INTERNAL
 	},
 
-	{OP_INT_RESIZE, "RESIZE", "internal-resize", "", KM_INTERNAL},
 	{OP_INT_SET, "set", "internal-set", "", KM_INTERNAL},
 
 	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},

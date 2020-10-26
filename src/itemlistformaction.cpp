@@ -750,9 +750,6 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	}
 	break;
-	case OP_INT_RESIZE:
-		invalidate_everything();
-		break;
 	default:
 		ListFormAction::process_operation(op, automatic, args);
 		break;

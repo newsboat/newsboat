@@ -32,6 +32,8 @@ private:
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
+	void update_heading();
+
 	std::vector<LinkPair> links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;

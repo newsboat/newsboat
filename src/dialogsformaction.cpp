@@ -16,7 +16,6 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, update_list(true)
 	, dialogs_list("dialogs", FormAction::f,
 		  cfg->get_configvalue_as_int("scrolloff"))
 {
@@ -29,18 +28,13 @@ void DialogsFormAction::init()
 	set_keymap_hints();
 
 	f.run(-3); // compute all widget dimensions
-
-	const unsigned int width = dialogs_list.get_width();
-	std::string title_format = cfg->get_configvalue("dialogs-title-format");
-	FmtStrFormatter fmt;
-	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', utils::program_version());
-	f.set("head", fmt.do_format(title_format, width));
 }
 
 void DialogsFormAction::prepare()
 {
-	if (update_list) {
+	if (do_redraw) {
+		update_heading();
+
 		ListFormatter listfmt;
 
 		unsigned int i = 1;
@@ -63,8 +57,19 @@ void DialogsFormAction::prepare()
 
 		dialogs_list.stfl_replace_lines(listfmt);
 
-		update_list = false;
+		do_redraw = false;
 	}
+}
+
+void DialogsFormAction::update_heading()
+{
+
+	const unsigned int width = dialogs_list.get_width();
+	const std::string title_format = cfg->get_configvalue("dialogs-title-format");
+	FmtStrFormatter fmt;
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+	f.set("head", fmt.do_format(title_format, width));
 }
 
 KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
@@ -91,7 +96,7 @@ bool DialogsFormAction::process_operation(Operation op,
 		const unsigned int pos = dialogs_list.get_position();
 		if (pos != 0) {
 			v->remove_formaction(pos);
-			update_list = true;
+			do_redraw = true;
 		} else {
 			v->show_error(
 				_("Error: you can't remove the feed list!"));

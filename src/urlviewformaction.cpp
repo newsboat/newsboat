@@ -124,6 +124,8 @@ bool UrlViewFormAction::process_operation(Operation op,
 void UrlViewFormAction::prepare()
 {
 	if (do_redraw) {
+		update_heading();
+
 		ListFormatter listfmt;
 		unsigned int i = 0;
 		for (const auto& link : links) {
@@ -141,6 +143,13 @@ void UrlViewFormAction::init()
 
 	f.run(-3); // compute all widget dimensions
 
+	do_redraw = true;
+	quit = false;
+	set_keymap_hints();
+}
+
+void UrlViewFormAction::update_heading()
+{
 	const unsigned int width = urls_list.get_width();
 
 	FmtStrFormatter fmt;
@@ -150,9 +159,6 @@ void UrlViewFormAction::init()
 	f.set("head",
 		fmt.do_format(
 			cfg->get_configvalue("urlview-title-format"), width));
-	do_redraw = true;
-	quit = false;
-	set_keymap_hints();
 }
 
 KeyMapHintEntry* UrlViewFormAction::get_keymap_hint()
