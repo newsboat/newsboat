@@ -117,11 +117,11 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 
 	SECTION("write_config() works fine if file does not exist") {
 		const auto error_message = u.write_config();
-		REQUIRE(error_message.has_value() == false);
+		REQUIRE_FALSE(error_message.has_value());
 
 		SECTION("after writing file, reload() succeeds") {
 			const auto error_message = u.reload();
-			REQUIRE(error_message.has_value() == false);
+			REQUIRE_FALSE(error_message.has_value());
 		}
 	}
 
@@ -129,7 +129,7 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 
 	SECTION("reload() succeeds if url file exists") {
 		const auto error_message = u.reload();
-		REQUIRE(error_message.has_value() == false);
+		REQUIRE_FALSE(error_message.has_value());
 	}
 
 	GIVEN("that the urls file is not readable") {
@@ -147,7 +147,7 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 
 		THEN("write_config() still works fine") {
 			const auto error_message = u.write_config();
-			REQUIRE(error_message.has_value() == false);
+			REQUIRE_FALSE(error_message.has_value());
 		}
 	}
 
@@ -166,7 +166,7 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 
 		THEN("reload() still work fine") {
 			const auto error_message = u.reload();
-			REQUIRE(error_message.has_value() == false);
+			REQUIRE_FALSE(error_message.has_value());
 		}
 	}
 }
