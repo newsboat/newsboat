@@ -195,8 +195,11 @@ nonstd::optional<std::string> opml::import(
 		if (strcmp((const char*)node->name, "body") == 0) {
 			LOG(Level::DEBUG, "opml::import: found body");
 			rec_find_rss_outlines(urlcfg, node->children, "");
-			error_message =
-				urlcfg.write_config(); // Only an error if optional string has a value
+
+			error_message = urlcfg.write_config();
+			if (error_message.has_value()) {
+				break;
+			}
 		}
 	}
 
