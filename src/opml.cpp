@@ -178,29 +178,34 @@ void rec_find_rss_outlines(
 	}
 }
 
-bool opml::import(
+nonstd::optional<std::string> opml::import(
 	const std::string& filename,
 	FileUrlReader& urlcfg)
 {
 	xmlDoc* doc = xmlReadFile(filename.c_str(), nullptr, 0);
 	if (doc == nullptr) {
-		return false;
+		return strprintf::fmt(_("Error: Failed to parse OPML file \"%s\""), filename);
 	}
 
-	xmlNode* root = xmlDocGetRootElement(doc);
+	nonstd::optional<std::string> error_message;
 
+	xmlNode* root = xmlDocGetRootElement(doc);
 	for (xmlNode* node = root->children; node != nullptr;
 		node = node->next) {
 		if (strcmp((const char*)node->name, "body") == 0) {
 			LOG(Level::DEBUG, "opml::import: found body");
 			rec_find_rss_outlines(urlcfg, node->children, "");
-			urlcfg.write_config();
+
+			error_message = urlcfg.write_config();
+			if (error_message.has_value()) {
+				break;
+			}
 		}
 	}
 
 	xmlFreeDoc(doc);
 
-	return true;
+	return error_message;
 }
 
 } // namespace newsboat

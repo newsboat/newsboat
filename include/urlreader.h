@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "3rd-party/optional.hpp"
+
 namespace newsboat {
 
 /// \brief Base class for classes that supply Newsboat with feed URLs.
@@ -18,7 +20,7 @@ public:
 	///
 	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`, so
 	/// make sure to save your modifications with `write_config()`.
-	virtual void reload() = 0;
+	virtual nonstd::optional<std::string> reload() = 0;
 
 	/// \brief User-visible description of where URLs come from.
 	///

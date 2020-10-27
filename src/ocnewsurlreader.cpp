@@ -15,14 +15,17 @@ OcNewsUrlReader::OcNewsUrlReader(const std::string& url_file, RemoteApi* a)
 
 OcNewsUrlReader::~OcNewsUrlReader() {}
 
-void OcNewsUrlReader::reload()
+nonstd::optional<std::string> OcNewsUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
@@ -42,6 +45,8 @@ void OcNewsUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string OcNewsUrlReader::get_source()

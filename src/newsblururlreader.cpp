@@ -16,14 +16,17 @@ NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file,
 
 NewsBlurUrlReader::~NewsBlurUrlReader() {}
 
-void NewsBlurUrlReader::reload()
+nonstd::optional<std::string> NewsBlurUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
 	alltags.clear();
 
 	FileUrlReader ur(file);
-	ur.reload();
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		return error_message;
+	}
 
 	std::vector<std::string>& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
@@ -43,6 +46,8 @@ void NewsBlurUrlReader::reload()
 			alltags.insert(tag);
 		}
 	}
+
+	return {};
 }
 
 std::string NewsBlurUrlReader::get_source()

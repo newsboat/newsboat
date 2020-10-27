@@ -11,7 +11,7 @@ OpmlUrlReader::OpmlUrlReader(ConfigContainer* c)
 {
 }
 
-void OpmlUrlReader::reload()
+nonstd::optional<std::string> OpmlUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -54,6 +54,8 @@ void OpmlUrlReader::reload()
 
 		xmlFreeDoc(doc);
 	}
+
+	return {};
 }
 
 void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)

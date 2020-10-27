@@ -340,7 +340,11 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 	}
-	urlcfg->reload();
+	const auto error_message = urlcfg->reload();
+	if (error_message.has_value()) {
+		std::cout << error_message.value() << std::endl;
+		return EXIT_FAILURE;
+	}
 	if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
@@ -641,21 +645,26 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	}
 }
 
-void Controller::import_opml(const std::string& opmlFile,
+int Controller::import_opml(const std::string& opmlFile,
 	const std::string& urlFile)
 {
 	auto urlReader = FileUrlReader(urlFile);
-	urlReader.reload(); // Load existing URLs
+	const auto error_message = urlReader.reload(); // Load existing URLs
+	if (error_message.has_value()) {
+		std::cout << error_message.value() << std::endl;
+		return EXIT_FAILURE;
+	}
 
 	if (!opml::import(opmlFile, urlReader)) {
 		std::cout << strprintf::fmt(
 				_("An error occurred while parsing %s."), opmlFile)
 			<< std::endl;
-		return;
+		return EXIT_FAILURE;
 	} else {
 		std::cout << strprintf::fmt(
 				_("Import of %s finished."), opmlFile)
 			<< std::endl;
+		return EXIT_SUCCESS;
 	}
 }
 
@@ -707,7 +716,12 @@ void Controller::enqueue_url(std::shared_ptr<RssItem> item,
 
 void Controller::reload_urls_file()
 {
-	urlcfg->reload();
+	const auto error_message = urlcfg->reload();
+	if (error_message.has_value()) {
+		v->set_status(error_message.value());
+		return;
+	}
+
 	std::vector<std::shared_ptr<RssFeed>> new_feeds;
 	unsigned int i = 0;
 
