@@ -3,9 +3,9 @@ freebsd_task:
         - name: FreeBSD 11.4
           freebsd_instance:
             image: freebsd-11-4-release-amd64
-        - name: FreeBSD 12.1
+        - name: FreeBSD 12.2
           freebsd_instance:
-            image: freebsd-12-1-release-amd64
+            image: freebsd-12-2-release-amd64
 
     cargo_cache: &cargo_cache
         # This works in conjunction with after_cache_script and
