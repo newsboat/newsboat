@@ -124,6 +124,8 @@ private:
 		const std::string& itemlist_format,
 		const std::string& datetime_format);
 
+	void goto_item(const std::string& title);
+
 	unsigned int pos;
 	std::shared_ptr<RssFeed> feed;
 	bool apply_filter;

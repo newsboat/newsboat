@@ -190,7 +190,7 @@ static const std::vector<OpDesc> opdescs = {
 		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST | KM_ARTICLE
 	},
 	{OP_GOTO_URL, "goto-url", "#", _("Goto URL #"), KM_ARTICLE},
-	{OP_GOTO_TITLE, "goto-title", "", _("Goto item with title"), KM_FEEDLIST},
+	{OP_GOTO_TITLE, "goto-title", "", _("Goto item with title"), KM_FEEDLIST | KM_ARTICLELIST},
 	{OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_ARTICLE},
 	{
 		OP_RELOADURLS,
