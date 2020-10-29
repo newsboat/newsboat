@@ -610,6 +610,18 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_GOTO_TITLE:
+		if (automatic) {
+			if (args->size() >= 1) {
+				qna_responses = {args[0]};
+				finished_qna(OP_INT_GOTO_TITLE);
+			}
+		} else {
+			std::vector<QnaPair> qna;
+			qna.push_back(QnaPair(_("Title: "), ""));
+			this->start_qna(qna, OP_INT_GOTO_TITLE);
+		}
+		break;
 	case OP_EDIT_URLS:
 		v->get_ctrl()->edit_urls_file();
 		break;
@@ -779,6 +791,10 @@ void ItemListFormAction::finished_qna(Operation op)
 
 	case OP_INT_START_SEARCH:
 		qna_start_search();
+		break;
+
+	case OP_INT_GOTO_TITLE:
+		goto_item(qna_responses[0]);
 		break;
 
 	case OP_PIPE_TO: {
@@ -1048,6 +1064,29 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	}
 
 	return formattedLine;
+}
+
+void ItemListFormAction::goto_item(const std::string& title)
+{
+	if (visible_items.empty()) {
+		return;
+	}
+
+	const unsigned int curpos = list.get_position();
+	for (unsigned int i = curpos + 1; i < visible_items.size(); ++i) {
+		if (strcasestr(visible_items[i].first->title().c_str(),
+				title.c_str()) != nullptr) {
+			list.set_position(i);
+			return;
+		}
+	}
+	for (unsigned int i = 0; i <= curpos; ++i) {
+		if (strcasestr(visible_items[i].first->title().c_str(),
+				title.c_str()) != nullptr) {
+			list.set_position(i);
+			return;
+		}
+	}
 }
 
 void ItemListFormAction::init()
