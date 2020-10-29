@@ -1068,6 +1068,10 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 
 void ItemListFormAction::goto_item(const std::string& title)
 {
+	if (visible_items.empty()) {
+		return;
+	}
+
 	const unsigned int curpos = list.get_position();
 	for (unsigned int i = curpos + 1; i < visible_items.size(); ++i) {
 		if (strcasestr(visible_items[i].first->title().c_str(),

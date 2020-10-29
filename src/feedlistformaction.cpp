@@ -663,6 +663,10 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 
 void FeedListFormAction::goto_feed(const std::string& str)
 {
+	if (visible_feeds.empty()) {
+		return;
+	}
+
 	const unsigned int curpos = list.get_position();
 	LOG(Level::DEBUG,
 		"FeedListFormAction::goto_feed: curpos = %u str = `%s'",
