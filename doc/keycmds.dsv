@@ -68,3 +68,4 @@ home||HOME||Go to the first item in the list.
 end||END||Go to the last item in the list.
 macro-prefix||,||Initiate macro execution. The next key press selects the actual macro and runs it.
 switch-focus||TAB||Switch focus between widgets. This is currently only applicable to the `filebrowser` and `dirbrowser` contexts.
+goto-title||||Go to item whose title contains the specified string.

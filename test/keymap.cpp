@@ -59,7 +59,8 @@ TEST_CASE(
 			if (i == OP_OPENALLUNREADINBROWSER ||
 				i == OP_MARKALLABOVEASREAD ||
 				i == OP_OPENALLUNREADINBROWSER_AND_MARK ||
-				i == OP_SAVEALL) {
+				i == OP_SAVEALL ||
+				i == OP_GOTO_TITLE) {
 				continue;
 			}
 			bool used_in_some_context = false;
