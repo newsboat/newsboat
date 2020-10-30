@@ -21,6 +21,7 @@ usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> .
     -E, --export-to-file=<file>     export list of read articles to <file>
     -I, --import-from-file=<file>   import list of read articles from <file>
     -h, --help                      this help
+        --cleanup                   remove unreferenced items from cache
 ----
 
 This means that Newsboat can't start without any configured feeds. To add

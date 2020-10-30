@@ -99,14 +99,21 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 			_s("<file>"),
 			_s("import list of read articles from <file>")
 		},
-		{'h', "help", "", _s("this help")}
+		{'h', "help", "", _s("this help")},
+		{'-', "cleanup", "", _s("remove unreferenced items from cache")}
 	};
 
 	std::stringstream ss;
 	for (const auto& a : args) {
-		std::string longcolumn("-");
-		longcolumn += a.name;
-		longcolumn += ", --" + a.longname;
+		std::string longcolumn;
+		if (a.name != '-') {
+			longcolumn += "-";
+			longcolumn += a.name;
+			longcolumn += ", ";
+		} else {
+			longcolumn += "    ";
+		}
+		longcolumn += "--" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
 		ss << "\t" << longcolumn;
 		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {

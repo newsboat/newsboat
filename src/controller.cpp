@@ -445,6 +445,15 @@ int Controller::run(const CliArgsParser& args)
 		std::cout << _("done.") << std::endl;
 	}
 
+	if (args.do_cleanup()) {
+		std::cout << _("Cleaning up cache...");
+		std::cout.flush();
+		rsscache->cleanup_cache(feedcontainer.get_all_feeds(), true);
+		std::cout << _("done.") << std::endl;
+		return EXIT_SUCCESS;
+	}
+
+
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
 	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {

@@ -38,6 +38,12 @@ terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
         _delete-read-articles-on-quit_, _keep-articles-days_, and _max-items_
         settings.
 
+--cleanup::
+        Remove unreferenced entries from the cache. Feeds and their articles
+        will be removed if the feedurl is no longer in the _urls_ file. If 
+        the _delete-read-articles-on-quit_ configuration is set, read articles
+        will also be deleted.
+
 -v, -V, --version::
         Get version information about Newsboat and the libraries it uses
 

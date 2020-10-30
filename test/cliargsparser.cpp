@@ -342,6 +342,19 @@ TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 	}
 }
 
+TEST_CASE("Sets `do_cleanup` if --cleanup is provided", "[CliArgsParser]")
+{
+	auto check = [](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.do_cleanup());
+	};
+
+	SECTION("--cleanup") {
+		check({"newsboat", "--cleanup"});
+	}
+}
+
 TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 	"[CliArgsParser]")
 {

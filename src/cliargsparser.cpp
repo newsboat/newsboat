@@ -18,6 +18,8 @@ extern "C" {
 
 	bool rs_cliargsparser_do_vacuum(void* rs_cliargsparser);
 
+	bool rs_cliargsparser_do_cleanup(void* rs_cliargsparser);
+
 	char* rs_cliargsparser_importfile(void* rs_cliargsparser);
 
 	char* rs_cliargsparser_program_name(void* rs_cliargsparser);
@@ -139,6 +141,11 @@ bool CliArgsParser::do_export() const
 bool CliArgsParser::do_vacuum() const
 {
 	GET_VALUE(do_vacuum, false);
+}
+
+bool CliArgsParser::do_cleanup() const
+{
+	GET_VALUE(do_cleanup, false);
 }
 
 std::string CliArgsParser::importfile() const

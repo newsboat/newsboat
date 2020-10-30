@@ -22,6 +22,8 @@ public:
 
 	bool do_vacuum() const;
 
+	bool do_cleanup() const;
+
 	std::string importfile() const;
 
 	/// If non-null, Newsboat should import read articles info from this
