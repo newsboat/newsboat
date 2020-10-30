@@ -737,7 +737,8 @@ void Cache::do_vacuum()
 	run_sql("VACUUM;");
 }
 
-void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds)
+void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
+	bool always_clean)
 {
 	// we don't use the std::lock_guard<> here... see comments below
 	mtx.lock();
@@ -754,7 +755,7 @@ void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds)
 	 * The behaviour whether the cleanup is done or not is configurable via
 	 * the configuration file.
 	 */
-	if (cfg->get_configvalue_as_bool("cleanup-on-quit")) {
+	if (always_clean || cfg->get_configvalue_as_bool("cleanup-on-quit")) {
 		LOG(Level::DEBUG, "Cache::cleanup_cache: cleaning up cache...");
 		std::string list = "(";
 

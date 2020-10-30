@@ -301,6 +301,47 @@ TEST_CASE(
 			REQUIRE(feed->total_item_count() == 6);
 		}
 	}
+
+	SECTION("cache will be cleaned up when `always_clean == true`, even if cleanup-on-quit is set to \"no\"") {
+		cfg->set_configvalue("cleanup-on-quit", "no");
+		const bool always_clean = true;
+
+		SECTION("delete-read-articles-on-quit set to \"no\"") {
+			/* Drop first feed; it should now be removed from the
+			 * Cache, too. */
+			feeds.erase(feeds.cbegin(), feeds.cbegin() + 1);
+			rsscache->cleanup_cache(feeds, always_clean);
+
+			cfg.reset(new ConfigContainer());
+			rsscache.reset(new Cache(dbfile.get_path(), cfg.get()));
+
+			std::shared_ptr<RssFeed> feed =
+				rsscache->internalize_rssfeed(
+					feedurls[0], nullptr);
+			REQUIRE(feed->total_item_count() == 0);
+			feed = rsscache->internalize_rssfeed(
+					feedurls[1], nullptr);
+			REQUIRE(feed->total_item_count() != 0);
+		}
+
+		SECTION("delete-read-articles-on-quit set to \"yes\"") {
+			cfg->set_configvalue(
+				"delete-read-articles-on-quit", "yes");
+			REQUIRE(feeds[0]->total_item_count() == 8);
+			feeds[0]->items()[0]->set_unread(false);
+			feeds[0]->items()[1]->set_unread(false);
+
+			rsscache->cleanup_cache(feeds, always_clean);
+
+			cfg.reset(new ConfigContainer());
+			rsscache.reset(new Cache(dbfile.get_path(), cfg.get()));
+
+			std::shared_ptr<RssFeed> feed =
+				rsscache->internalize_rssfeed(
+					feedurls[0], nullptr);
+			REQUIRE(feed->total_item_count() == 6);
+		}
+	}
 }
 
 TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
