@@ -395,15 +395,8 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.do_export() && !args.do_vacuum() && !args.silent()) {
-		std::cout << _("Loading articles from cache...");
-	}
 	if (args.do_vacuum()) {
 		std::cout << _("Opening cache...");
-	}
-	std::cout.flush();
-
-	if (args.do_vacuum()) {
 		std::cout << _("done.") << std::endl;
 		std::cout << _("Cleaning up cache thoroughly...");
 		std::cout.flush();
@@ -411,6 +404,11 @@ int Controller::run(const CliArgsParser& args)
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
+
+	if (!args.do_export() && !args.silent()) {
+		std::cout << _("Loading articles from cache...");
+	}
+	std::cout.flush();
 
 	unsigned int i = 0;
 	for (const auto& url : urlcfg->get_urls()) {
