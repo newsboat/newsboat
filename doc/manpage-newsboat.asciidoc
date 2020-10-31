@@ -39,10 +39,13 @@ terminals on Unix or Unix-like systems such as GNU/Linux, BSD or Mac OS X.
         settings.
 
 --cleanup::
-        Remove unreferenced entries from the cache. Feeds and their articles
-        will be removed if the feedurl is no longer in the _urls_ file. If 
-        the _delete-read-articles-on-quit_ configuration is set, read articles
-        will also be deleted.
+        Remove unreferenced entries from the cache and quit Newsboat. Feeds and
+        their articles will be removed if the feedurl is no longer in the
+        _urls_ file.
++
+Additionally, if the _delete-read-articles-on-quit_ configuration is set, all
+read articles will be deleted (including articles of feeds which are still in
+the _urls_ file).
 
 -v, -V, --version::
         Get version information about Newsboat and the libraries it uses
