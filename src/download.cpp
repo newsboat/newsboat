@@ -14,6 +14,7 @@ namespace podboat {
 
 Download::Download(std::function<void()> cb_require_view_update_)
 	: download_status(DlStatus::QUEUED)
+	, msg(nullptr)
 	, cursize(0.0)
 	, totalsize(0.0)
 	, curkbps(0.0)
@@ -98,10 +99,13 @@ void Download::set_progress(double downloaded, double total)
 	totalsize = total;
 }
 
-void Download::set_status(DlStatus dls)
+void Download::set_status(DlStatus dls, const char* msg_)
 {
 	if (download_status != dls) {
 		cb_require_view_update();
+	}
+	if (msg_ != nullptr) {
+		msg = msg_;
 	}
 	download_status = dls;
 }

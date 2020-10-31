@@ -261,6 +261,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			break;
 		}
 
+		if (dllist_form.get("msg").length() == 0) {
+			const auto idx = downloads_list.get_position();
+			dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
+		}
+
 	} while (!quit);
 }
 
