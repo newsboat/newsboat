@@ -11,6 +11,7 @@ use strprintf::fmt;
 pub struct CliArgsParser {
     pub do_export: bool,
     pub do_vacuum: bool,
+    pub do_cleanup: bool,
     pub program_name: String,
     pub show_version: usize,
     pub silent: bool,
@@ -88,6 +89,7 @@ impl CliArgsParser {
         const REFRESH_ON_START: &str = "refresh-on-start";
         const URL_FILE: &str = "url-file";
         const VACUUM: &str = "vacuum";
+        const CLEANUP: &str = "cleanup";
         const VERSION: &str = "version";
         const VERSION_V: &str = "-V";
 
@@ -128,6 +130,7 @@ impl CliArgsParser {
                     .takes_value(true),
             )
             .arg(Arg::with_name(VACUUM).short("X").long(VACUUM))
+            .arg(Arg::with_name(CLEANUP).long(CLEANUP))
             .arg(
                 Arg::with_name(VERSION)
                     .short("v")
@@ -201,6 +204,8 @@ impl CliArgsParser {
         }
 
         args.do_vacuum = matches.is_present(VACUUM);
+
+        args.do_cleanup = matches.is_present(CLEANUP);
 
         args.silent = args.silent || matches.is_present(QUIET);
 
@@ -507,6 +512,17 @@ mod tests {
 
         check(vec!["newsboat".to_string(), "-X".to_string()]);
         check(vec!["newsboat".to_string(), "--vacuum".to_string()]);
+    }
+
+    #[test]
+    fn t_sets_do_cleanup_if_dash_dash_cleanup_is_provided() {
+        let check = |opts| {
+            let args = CliArgsParser::new(opts);
+
+            assert!(args.do_cleanup);
+        };
+
+        check(vec!["newsboat".to_string(), "--cleanup".to_string()]);
     }
 
     #[test]

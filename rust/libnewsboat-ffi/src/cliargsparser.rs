@@ -99,6 +99,11 @@ pub unsafe extern "C" fn rs_cliargsparser_do_vacuum(object: *mut c_void) -> bool
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_cliargsparser_do_cleanup(object: *mut c_void) -> bool {
+    with_cliargsparser(object, |o| o.do_cleanup, false)
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_program_name(object: *mut c_void) -> *mut c_char {
     with_cliargsparser_str(object, |o| &o.program_name)
 }

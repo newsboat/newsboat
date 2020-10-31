@@ -51,7 +51,8 @@ public:
 		const std::string& feedurl);
 	void update_rssitem_unread_and_enqueued(RssItem* item,
 		const std::string& feedurl);
-	void cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds);
+	void cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
+		bool always_clean = false);
 	void do_vacuum();
 	std::vector<std::shared_ptr<RssItem>> search_for_items(
 			const std::string& querystr,
