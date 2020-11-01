@@ -104,9 +104,7 @@ void Download::set_status(DlStatus dls, const char* msg_)
 	if (download_status != dls) {
 		cb_require_view_update();
 	}
-	if (msg_ != nullptr) {
-		msg = msg_;
-	}
+	msg = msg_;
 	download_status = dls;
 }
 
