@@ -369,6 +369,8 @@ and seanBE.
     Tsipinakis) (#607, #227)
 - Numerous memory leaks detected by Clang's AddressSanitizer (Alexander
     Batischev) (#620, #621, #623, #624)
+- Segfauls when toggling article's "read" status after marking all articles read
+    (#473) (Nikos Tsipinakis)
 
 
 
