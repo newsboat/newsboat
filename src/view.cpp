@@ -354,6 +354,14 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 	Stfl::reset();
 	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
 	pop_current_formaction();
+	auto form = formaction_stack[current_formaction];
+	if (form != nullptr) {
+		// Ignore queued input
+		auto event = form->get_form().run(1); 
+		while (event != nullptr && strcmp(event, "TIMEOUT") != 0) {
+			event = form->get_form().run(1); 
+		}
+	}
 	return ret;
 }
 
