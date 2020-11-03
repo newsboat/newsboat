@@ -43,7 +43,7 @@ freebsd_task:
     #
     # Running three jobs because by default, VMs have 2 cores.
     build_script: su testuser -c 'cd ~ && gmake --jobs=3 --keep-going all test'
-    test_script: su testuser -c 'cd ~ && ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test --jobs=3) && sh -c "exit $ret"'
+    test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=3 RUST_BACKTRACE=1 gmake -j3 ci-check'
     clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings'
     # This installs everything into a "fake filesystem root", then uninstalls
     # everything and checks that there are no files left over. The purpose of
@@ -73,10 +73,7 @@ freebsd_task:
     build_script: &build_script
         - make -j3 --keep-going all test
     test_script: &test_script
-        # We want to run both C++ and Rust tests, but we also want this entire
-        # command to fail if one of the test suites fails. That's why we store
-        # the C++'s exit code and chain it to Rust's in the end.
-        - ( cd test && ./test --order rand ); ret=$?; (RUST_BACKTRACE=1 cargo test --jobs=3) && sh -c "exit $ret"
+        - RUST_TEST_THREADS=3 RUST_BACKTRACE=1 make -j3 ci-check
     clippy_script: &clippy_script
         - cargo clippy --all-targets --all-features -- -D warnings
     # For explanation of what this script does, please see the FreeBSD job

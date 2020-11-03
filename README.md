@@ -136,11 +136,14 @@ check out [our style guide](doc/internal/code-style.markdown).
 
 You'll probably want to run the tests; here's how:
 
-	$ make -j5 PROFILE=1 all test  # 5 is CPU cores + 1, to parallelize the build
-	$ (cd test && TMPDIR=/dev/shm ./test --order rand) && cargo test
+	$ TMPDIR=/dev/shm make -j5 PROFILE=1 check
 
-Note the use of ramdisk as `TMPDIR`: some tests create temporary files, which
-slows them down if `TMPDIR` is on HDD or even SSD.
+The "5" here is the number of CPU cores in your machine *plus one*. This
+parallelises the build. Rust tests already utilize as many cores as they can,
+but if you want to limit them, use the `RUST_TEST_THREADS` environment variable.
+`/dev/shm` is a "ramdisk", i.e. a virtual disk stored in the RAM. The tests
+create a lot of temporary files, and benefit from fast storage; a ramdisk is
+even better than an SSD.
 
 Newsboat can also be [built in Docker](doc/docker.md).
 
