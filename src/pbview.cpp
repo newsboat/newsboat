@@ -102,6 +102,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				i++;
 			}
 
+			if (i >= 1 && dllist_form.get("msg").length() == 0) {
+				const auto idx = downloads_list.get_position();
+				dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
+			}
+
 			downloads_list.stfl_replace_lines(listfmt);
 
 			ctrl->set_view_update_necessary(false);
@@ -139,22 +144,28 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PREV:
 		case OP_SK_UP:
 			downloads_list.move_up(wrap_scroll);
+			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_NEXT:
 		case OP_SK_DOWN:
 			downloads_list.move_down(wrap_scroll);
+			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_HOME:
 			downloads_list.move_to_first();
+			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_END:
 			downloads_list.move_to_last();
+			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_PGUP:
 			downloads_list.move_page_up(wrap_scroll);
+			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_PGDOWN:
 			downloads_list.move_page_down(wrap_scroll);
+			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;
@@ -259,11 +270,6 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			break;
 		default:
 			break;
-		}
-
-		if (ctrl->downloads().size() >= 1 && dllist_form.get("msg").length() == 0) {
-			const auto idx = downloads_list.get_position();
-			dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
 		}
 
 	} while (!quit);
