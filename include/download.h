@@ -30,13 +30,17 @@ public:
 	{
 		return download_status;
 	}
+	const std::string& status_msg() const
+	{
+		return msg;
+	}
 	const std::string filename() const;
 	const std::string basename() const;
 	const std::string url() const;
 	void set_filename(const std::string& str);
 	void set_url(const std::string& url);
 	void set_progress(double downloaded, double total);
-	void set_status(DlStatus dls);
+	void set_status(DlStatus dls, const std::string& msg_ = {});
 	void set_kbps(double kbps);
 	double kbps() const;
 	void set_offset(unsigned long offset);
@@ -54,6 +58,7 @@ private:
 	std::string fn;
 	std::string url_;
 	DlStatus download_status;
+	std::string msg;
 	double cursize;
 	double totalsize;
 	double curkbps;

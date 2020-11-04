@@ -1,5 +1,6 @@
 #include "poddlthread.h"
 
+#include <cstring>
 #include <cinttypes>
 #include <curl/curl.h>
 #include <iostream>
@@ -127,12 +128,12 @@ void PodDlThread::run()
 				::unlink(filename.c_str());
 				this->run();
 			} else {
-				dl->set_status(DlStatus::FAILED);
+				dl->set_status(DlStatus::FAILED, curl_easy_strerror(success));
 				::unlink(filename.c_str());
 			}
 		}
 	} else {
-		dl->set_status(DlStatus::FAILED);
+		dl->set_status(DlStatus::FAILED, strerror(errno));
 	}
 
 	curl_easy_cleanup(easyhandle);

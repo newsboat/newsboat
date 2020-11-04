@@ -98,11 +98,12 @@ void Download::set_progress(double downloaded, double total)
 	totalsize = total;
 }
 
-void Download::set_status(DlStatus dls)
+void Download::set_status(DlStatus dls, const std::string& msg_)
 {
 	if (download_status != dls) {
 		cb_require_view_update();
 	}
+	msg = msg_;
 	download_status = dls;
 }
 
