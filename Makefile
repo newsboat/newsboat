@@ -367,6 +367,16 @@ profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
 	$(RM) app*.info
 
+check: test
+	(cd test && ./test --order=rand)
+	+$(CARGO) test
+
+ci-check: test
+        # We want to run both C++ and Rust tests, but we also want this entire
+        # command to fail if one of the test suites fails. That's why we store
+        # the C++'s exit code and chain it to Rust's in the end.
+	$(CARGO) test --no-fail-fast ; ret=$$? ; cd test && ./test --order=rand && exit $$ret
+
 # miscellaneous stuff
 
 config: config.mk
