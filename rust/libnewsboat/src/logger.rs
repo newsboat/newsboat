@@ -19,7 +19,7 @@ pub enum Level {
     /// An error that can potentially be resolved by the user.
     ///
     /// This level should be used for configuration errors and the like.
-    UserError,
+    UserError = 1,
 
     /// An error that prevents program from working at all.
     ///
@@ -246,7 +246,7 @@ impl Logger {
     /// Error messages will be written.
     ///
     /// Regardless of the loglevel, at the minimum, error-logfile will be written
-    /// 
+    ///
     /// Calling this doesn't close already opened logs.
     pub fn set_loglevel(&self, level: Level) {
         self.loglevel.store(level as isize, Ordering::SeqCst);
@@ -668,12 +668,7 @@ mod tests {
     fn t_info_msgs_are_logged_at_curlevels_starting_with_info() {
         let message = (Level::Info, "hello".to_string());
 
-        let nolog_levels = vec![
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
-        ];
+        let nolog_levels = vec![Level::UserError, Level::Critical, Level::Error, Level::Warn];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)

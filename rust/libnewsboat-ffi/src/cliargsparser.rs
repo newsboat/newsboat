@@ -262,10 +262,12 @@ pub unsafe extern "C" fn rs_cliargsparser_set_log_level(object: *mut c_void) -> 
 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_log_level(object: *mut c_void) -> i8 {
-    with_cliargsparser(object, |o| {
-        match o.log_level {
+    with_cliargsparser(
+        object,
+        |o| match o.log_level {
             Some(l) => l as i8,
-            None => -1 as i8
-        }
-    }, -1)
+            None => -1 as i8,
+        },
+        -1,
+    )
 }
