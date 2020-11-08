@@ -110,7 +110,7 @@ fn conditional(input: &str) -> IResult<&str, Specifier> {
         let (input, _) = end_tag(input)?;
         Ok((input, None))
     };
-    let else_branch = alt((some_else_branch, none_else_branch));
+    let mut else_branch = alt((some_else_branch, none_else_branch));
 
     // Input parsing
     let (input, _) = start_tag(input)?;
