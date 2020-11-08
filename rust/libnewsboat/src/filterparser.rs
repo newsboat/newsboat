@@ -7,7 +7,7 @@ use nom::{
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
     character::{is_alphanumeric, is_digit},
     combinator::{complete, map, opt, peek, recognize, value},
-    error::{context, ParseError, VerboseError, VerboseErrorKind},
+    error::{context, ContextError, ParseError, VerboseError, VerboseErrorKind},
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset,
 };
@@ -96,7 +96,9 @@ fn expected_to_i18n_msg(expected_id: &'static str) -> &'static str {
         .unwrap_or("<internal error in filterparser::expected_to_i18n_msg>")
 }
 
-fn operators<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Operator, E> {
+fn operators<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    input: &'a str,
+) -> IResult<&'a str, Operator, E> {
     context(
         EXPECTED_OPERATORS,
         alt((
@@ -154,8 +156,10 @@ fn space1<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a st
     take_while1(|c| c == ' ')(input)
 }
 
-fn comparison<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Expression, E> {
-    let attribute_name = context(
+fn comparison<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    input: &'a str,
+) -> IResult<&'a str, Expression, E> {
+    let mut attribute_name = context(
         EXPECTED_ATTRIBUTE_NAME,
         take_while1(|c| is_alphanumeric(c as u8) || c == '_' || c == '-' || c == '.'),
     );
@@ -180,7 +184,9 @@ fn comparison<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Ex
     ))
 }
 
-fn parens<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Expression, E> {
+fn parens<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    input: &'a str,
+) -> IResult<&'a str, Expression, E> {
     let (input, _) = tag("(")(input)?;
     let (input, _) = space0(input)?;
     let (input, result) = alt((expression, parens, comparison))(input)?;
@@ -208,7 +214,9 @@ fn space_after_logop<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a 
     peek(parser)(input)
 }
 
-fn expression<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Expression, E> {
+fn expression<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    input: &'a str,
+) -> IResult<&'a str, Expression, E> {
     // `Expression`s enum variants can't be used as return values without filling in their
     // arguments, so we have to create another enum, which variants we can return and `match` on.
     // This is better than matching on bare strings returned by `tag`, as it enables us to write an
@@ -237,7 +245,9 @@ fn expression<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Ex
     Ok((leftovers, op))
 }
 
-fn parser<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Expression, E> {
+fn parser<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+    input: &'a str,
+) -> IResult<&'a str, Expression, E> {
     let parsers = alt((expression, parens, comparison));
     // Ignore leading and trailing whitespace
     let parsers = delimited(space0, parsers, space0);
