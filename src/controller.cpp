@@ -343,9 +343,7 @@ int Controller::run(const CliArgsParser& args)
 	const auto error_message = urlcfg->reload();
 	if (error_message.has_value()) {
 		std::cout << error_message.value() << std::endl;
-		return EXIT_FAILURE;
-	}
-	if (!args.do_export() && !args.silent()) {
+	} else if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
 
