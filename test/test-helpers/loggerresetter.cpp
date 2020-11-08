@@ -8,7 +8,7 @@ void reset_logger()
 {
 	::newsboat::Logger::set_logfile("/dev/null");
 	::newsboat::Logger::set_user_error_logfile("/dev/null");
-	::newsboat::Logger::set_loglevel(newsboat::Level::NONE);
+	::newsboat::Logger::unset_loglevel();
 }
 
 LoggerResetter::LoggerResetter()
