@@ -53,7 +53,8 @@ nonstd::optional<std::string> FeedHqUrlReader::reload()
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
-		return error_message;
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
+		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 
 	for (const auto& url : ur.get_urls()) {
