@@ -386,6 +386,11 @@ int Controller::run(const CliArgsParser& args)
 					_("It looks like you haven't configured any "
 						"feeds in your Miniflux account. Please do "
 						"so, and try again."));
+		} else if (type == "ocnews") {
+			msg = strprintf::fmt(
+					_("It looks like you haven't configured any feeds in your "
+						"Owncloud/Nextcloud account. Please do so, and try "
+						"again."));
 		} else {
 			assert(0); // shouldn't happen
 		}

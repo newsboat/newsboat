@@ -57,7 +57,8 @@ nonstd::optional<std::string> InoreaderUrlReader::reload()
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
-		return error_message;
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
+		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 
 	std::vector<std::string>& file_urls(ur.get_urls());
