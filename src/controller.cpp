@@ -611,6 +611,11 @@ void Controller::mark_all_read(unsigned int pos)
 
 	if (feed->is_query_feed()) {
 		rsscache->mark_all_read(feed);
+		if (api) {
+			for (const auto& item : feed->items()) {
+				api->mark_article_read(item->guid(), true);
+			}
+		}
 	} else {
 		rsscache->mark_all_read(feed->rssurl());
 		if (api) {
