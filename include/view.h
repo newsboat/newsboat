@@ -57,6 +57,7 @@ public:
 		return keys;
 	}
 	void set_tags(const std::vector<std::string>& t);
+	void drop_queued_input(Stfl::Form& form);
 	void push_empty_formaction();
 	void pop_current_formaction();
 	void remove_formaction(unsigned int pos);
@@ -73,6 +74,7 @@ public:
 	void push_itemview(std::shared_ptr<RssFeed> f,
 		const std::string& guid,
 		const std::string& searchphrase = "");
+	std::shared_ptr<FormAction> push_empty_form();
 	void push_help();
 	void push_urlview(const std::vector<LinkPair>& links,
 		std::shared_ptr<RssFeed>& feed);

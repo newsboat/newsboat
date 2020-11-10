@@ -27,6 +27,8 @@ extern "C" {
 #include "dbexception.h"
 #include "dialogs.h"
 #include "dialogsformaction.h"
+#include "emptyformaction.h"
+#include "empty.h"
 #include "exception.h"
 #include "feedlist.h"
 #include "filebrowser.h"
@@ -301,6 +303,15 @@ std::string View::get_filename_suggestion(const std::string& s)
 	return retval;
 }
 
+void View::drop_queued_input(Stfl::Form& form)
+{
+	// Ignore queued input
+	auto event = form.run(1);
+	while (event != nullptr && strcmp(event, "TIMEOUT") != 0) {
+		event = form.run(1);
+	}
+}
+
 void View::push_empty_formaction()
 {
 	formaction_stack.push_back(std::shared_ptr<FormAction>());
@@ -336,8 +347,8 @@ void View::open_in_pager(const std::string& filename)
 
 nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 {
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
+	auto form_action = push_empty_form();
+
 	std::string cmdline;
 	const std::string browser = cfg->get_configvalue("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
@@ -353,15 +364,10 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 	}
 	Stfl::reset();
 	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
+	drop_queued_input(form_action->get_form());
+
 	pop_current_formaction();
-	auto form = formaction_stack[current_formaction];
-	if (form != nullptr) {
-		// Ignore queued input
-		auto event = form->get_form().run(1); 
-		while (event != nullptr && strcmp(event, "TIMEOUT") != 0) {
-			event = form->get_form().run(1); 
-		}
-	}
+
 	return ret;
 }
 
@@ -525,6 +531,20 @@ void View::view_dialogs()
 		formaction_stack.push_back(dialogs);
 		current_formaction = formaction_stack_size() - 1;
 	}
+}
+
+std::shared_ptr<FormAction> View::push_empty_form()
+{
+	auto fa = get_current_formaction();
+
+	std::shared_ptr<EmptyFormAction> empty_view(
+		new EmptyFormAction(this, empty_str, cfg));
+	empty_view->set_parent_formaction(fa);
+	empty_view->init();
+	formaction_stack.push_back(empty_view);
+	current_formaction = formaction_stack_size() - 1;
+
+	return empty_view;
 }
 
 void View::push_help()
