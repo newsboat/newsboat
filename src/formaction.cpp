@@ -568,10 +568,10 @@ std::string FormAction::bookmark(const std::string& url,
 		LOG(Level::DEBUG, "FormAction::bookmark: cmd = %s", cmdline);
 
 		if (is_interactive) {
-			v->push_empty_formaction();
+			auto form_action = v->push_empty_form();
 			Stfl::reset();
-			utils::run_interactively(
-				cmdline, "FormAction::bookmark");
+			utils::run_interactively(cmdline, "FormAction::bookmark");
+			v->drop_queued_input(form_action->get_form());
 			v->pop_current_formaction();
 			return "";
 		} else {

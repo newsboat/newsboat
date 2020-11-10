@@ -58,7 +58,6 @@ public:
 	}
 	void set_tags(const std::vector<std::string>& t);
 	void drop_queued_input(Stfl::Form& form);
-	void push_empty_formaction();
 	void pop_current_formaction();
 	void remove_formaction(unsigned int pos);
 	void set_current_formaction(unsigned int pos);

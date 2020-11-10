@@ -312,16 +312,8 @@ void View::drop_queued_input(Stfl::Form& form)
 	}
 }
 
-void View::push_empty_formaction()
-{
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
-}
-
 void View::open_in_pager(const std::string& filename)
 {
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
 	std::string pager = cfg->get_configvalue("pager");
 	if (pager.find("%f") != std::string::npos) {
@@ -340,15 +332,15 @@ void View::open_in_pager(const std::string& filename)
 		cmdline.append(" ");
 		cmdline.append(filename);
 	}
+	auto form_action = push_empty_form();
 	Stfl::reset();
 	utils::run_interactively(cmdline, "View::open_in_pager");
+	drop_queued_input(form_action->get_form());
 	pop_current_formaction();
 }
 
 nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 {
-	auto form_action = push_empty_form();
-
 	std::string cmdline;
 	const std::string browser = cfg->get_configvalue("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
@@ -362,6 +354,8 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 		}
 		cmdline.append(" " + escaped_url);
 	}
+
+	auto form_action = push_empty_form();
 	Stfl::reset();
 	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
 	drop_queued_input(form_action->get_form());

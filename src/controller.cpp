@@ -786,10 +786,10 @@ void Controller::edit_urls_file()
 			editor,
 			utils::replace_all(configpaths.url_file(), "\"", "\\\""));
 
-	v->push_empty_formaction();
+	auto form_action = v->push_empty_form();
 	Stfl::reset();
-
 	utils::run_interactively(cmdline, "Controller::edit_urls_file");
+	v->drop_queued_input(form_action->get_form());
 
 	v->pop_current_formaction();
 
