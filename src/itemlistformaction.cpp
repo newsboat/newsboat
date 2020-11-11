@@ -408,7 +408,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!show_searchresult) {
 			LOG(Level::INFO,
 				"ItemListFormAction: reloading current feed");
-			v->get_ctrl()->get_reloader()->reload(pos);
+			v->get_ctrl()->get_reloader()->start_reload_thread(pos);
 			invalidate_everything();
 		} else {
 			v->show_error(
