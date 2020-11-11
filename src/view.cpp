@@ -27,6 +27,8 @@ extern "C" {
 #include "dbexception.h"
 #include "dialogs.h"
 #include "dialogsformaction.h"
+#include "emptyformaction.h"
+#include "empty.h"
 #include "exception.h"
 #include "feedlist.h"
 #include "filebrowser.h"
@@ -301,16 +303,17 @@ std::string View::get_filename_suggestion(const std::string& s)
 	return retval;
 }
 
-void View::push_empty_formaction()
+void View::drop_queued_input(Stfl::Form& form)
 {
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
+	// Ignore queued input
+	auto event = form.run(1);
+	while (event != nullptr && strcmp(event, "TIMEOUT") != 0) {
+		event = form.run(1);
+	}
 }
 
 void View::open_in_pager(const std::string& filename)
 {
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
 	std::string pager = cfg->get_configvalue("pager");
 	if (pager.find("%f") != std::string::npos) {
@@ -329,15 +332,15 @@ void View::open_in_pager(const std::string& filename)
 		cmdline.append(" ");
 		cmdline.append(filename);
 	}
+	auto form_action = push_empty_formaction();
 	Stfl::reset();
 	utils::run_interactively(cmdline, "View::open_in_pager");
+	drop_queued_input(form_action->get_form());
 	pop_current_formaction();
 }
 
 nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 {
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
 	std::string cmdline;
 	const std::string browser = cfg->get_configvalue("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
@@ -351,9 +354,14 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 		}
 		cmdline.append(" " + escaped_url);
 	}
+
+	auto form_action = push_empty_formaction();
 	Stfl::reset();
 	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
+	drop_queued_input(form_action->get_form());
+
 	pop_current_formaction();
+
 	return ret;
 }
 
@@ -405,9 +413,8 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 	LOG(Level::DEBUG, "View::push_searchresult: pushing search result");
 
 	if (feed->total_item_count() > 0) {
-		std::shared_ptr<ItemListFormAction> searchresult(
-			new ItemListFormAction(
-				this, itemlist_str, rsscache, filters, cfg, rxman));
+		auto searchresult = std::make_shared<ItemListFormAction>(
+				this, itemlist_str, rsscache, filters, cfg, rxman);
 		searchresult->set_feed(feed);
 		searchresult->set_show_searchresult(true);
 		searchresult->set_searchphrase(phrase);
@@ -431,9 +438,8 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 	prepare_query_feed(feed);
 
 	if (feed->total_item_count() > 0) {
-		std::shared_ptr<ItemListFormAction> itemlist(
-			new ItemListFormAction(
-				this, itemlist_str, rsscache, filters, cfg, rxman));
+		auto itemlist = std::make_shared<ItemListFormAction>(
+				this, itemlist_str, rsscache, filters, cfg, rxman);
 		itemlist->set_feed(feed);
 		itemlist->set_show_searchresult(false);
 		apply_colors(itemlist);
@@ -472,9 +478,8 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 			std::dynamic_pointer_cast<ItemListFormAction,
 			FormAction>(fa);
 		assert(itemlist != nullptr);
-		std::shared_ptr<ItemViewFormAction> itemview(
-			new ItemViewFormAction(
-				this, itemlist, itemview_str, rsscache, cfg, rxman));
+		auto itemview = std::make_shared<ItemViewFormAction>(
+				this, itemlist, itemview_str, rsscache, cfg, rxman);
 		itemview->set_feed(f);
 		itemview->set_guid(guid);
 		itemview->set_parent_formaction(fa);
@@ -509,8 +514,8 @@ void View::view_dialogs()
 {
 	auto fa = get_current_formaction();
 	if (fa != nullptr && fa->id() != "dialogs") {
-		std::shared_ptr<DialogsFormAction> dialogs(
-			new DialogsFormAction(this, dialogs_str, cfg));
+		auto dialogs = std::make_shared<DialogsFormAction>(
+				this, dialogs_str, cfg);
 		dialogs->set_parent_formaction(fa);
 		apply_colors(dialogs);
 		dialogs->init();
@@ -519,12 +524,26 @@ void View::view_dialogs()
 	}
 }
 
+std::shared_ptr<FormAction> View::push_empty_formaction()
+{
+	auto fa = get_current_formaction();
+
+	auto empty_view = std::make_shared<EmptyFormAction>(
+			this, empty_str, cfg);
+	empty_view->set_parent_formaction(fa);
+	empty_view->init();
+	formaction_stack.push_back(empty_view);
+	current_formaction = formaction_stack_size() - 1;
+
+	return empty_view;
+}
+
 void View::push_help()
 {
 	auto fa = get_current_formaction();
 
-	std::shared_ptr<HelpFormAction> helpview(
-		new HelpFormAction(this, help_str, cfg));
+	auto helpview = std::make_shared<HelpFormAction>(
+			this, help_str, cfg);
 	apply_colors(helpview);
 	helpview->set_context(fa->id());
 	helpview->set_parent_formaction(fa);
@@ -536,8 +555,8 @@ void View::push_help()
 void View::push_urlview(const std::vector<LinkPair>& links,
 	std::shared_ptr<RssFeed>& feed)
 {
-	std::shared_ptr<UrlViewFormAction> urlview(
-		new UrlViewFormAction(this, feed, urlview_str, cfg));
+	auto urlview = std::make_shared<UrlViewFormAction>(
+			this, feed, urlview_str, cfg);
 	apply_colors(urlview);
 	urlview->set_parent_formaction(get_current_formaction());
 	urlview->init();
@@ -549,8 +568,8 @@ void View::push_urlview(const std::vector<LinkPair>& links,
 std::string View::run_filebrowser(const std::string& default_filename,
 	const std::string& dir)
 {
-	std::shared_ptr<FileBrowserFormAction> filebrowser(
-		new FileBrowserFormAction(this, filebrowser_str, cfg));
+	auto filebrowser = std::make_shared<FileBrowserFormAction>(
+			this, filebrowser_str, cfg);
 	apply_colors(filebrowser);
 	filebrowser->set_dir(dir);
 	filebrowser->set_default_filename(default_filename);
@@ -560,8 +579,8 @@ std::string View::run_filebrowser(const std::string& default_filename,
 
 std::string View::run_dirbrowser(const std::string& dir)
 {
-	std::shared_ptr<DirBrowserFormAction> dirbrowser(
-		new DirBrowserFormAction(this, filebrowser_str, cfg));
+	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
+			this, filebrowser_str, cfg);
 	apply_colors(dirbrowser);
 	dirbrowser->set_dir(dir);
 	dirbrowser->set_parent_formaction(get_current_formaction());
@@ -574,8 +593,8 @@ std::string View::select_tag()
 		show_error(_("No tags defined."));
 		return "";
 	}
-	std::shared_ptr<SelectFormAction> selecttag(
-		new SelectFormAction(this, selecttag_str, cfg));
+	auto selecttag = std::make_shared<SelectFormAction>(
+			this, selecttag_str, cfg);
 	selecttag->set_type(SelectFormAction::SelectionType::TAG);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
@@ -586,8 +605,8 @@ std::string View::select_tag()
 
 std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 {
-	std::shared_ptr<SelectFormAction> selecttag(
-		new SelectFormAction(this, selecttag_str, cfg));
+	auto selecttag = std::make_shared<SelectFormAction>(
+			this, selecttag_str, cfg);
 	selecttag->set_type(SelectFormAction::SelectionType::FILTER);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
@@ -601,8 +620,8 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	LOG(Level::DEBUG, "View::confirm: charset = %s", charset);
 
 	std::shared_ptr<FormAction> f = get_current_formaction();
-	formaction_stack.push_back(std::shared_ptr<FormAction>());
-	current_formaction = formaction_stack_size() - 1;
+	// Push empty formaction so our "msg" is not overwritten
+	auto form_action = push_empty_formaction();
 	f->get_form().set("msg", prompt);
 
 	char result = 0;

@@ -182,6 +182,9 @@ src/downloadthread.o: src/downloadthread.cpp include/downloadthread.h \
  include/reloader.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h
+src/emptyformaction.o: src/emptyformaction.cpp include/emptyformaction.h \
+ include/formaction.h include/history.h include/keymap.h \
+ include/configparser.h include/configactionhandler.h include/stflpp.h
 src/exception.o: src/exception.cpp include/exception.h config.h
 src/feedcontainer.o: src/feedcontainer.cpp include/feedcontainer.h \
  include/configcontainer.h include/configparser.h \
@@ -661,16 +664,17 @@ src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/keymap.h include/feedlistformaction.h include/listformaction.h \
  include/view.h include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h config.h include/dbexception.h stfl/dialogs.h \
- include/dialogsformaction.h include/exception.h stfl/feedlist.h \
- stfl/filebrowser.h include/fmtstrformatter.h include/formaction.h \
- stfl/help.h include/helpformaction.h include/textviewwidget.h \
- include/htmlrenderer.h stfl/itemlist.h include/itemlistformaction.h \
- stfl/itemview.h include/itemviewformaction.h include/keymap.h \
- include/logger.h include/strprintf.h include/matcherexception.h \
- include/regexmanager.h include/reloadthread.h include/rssfeed.h \
- include/utils.h include/logger.h include/selectformaction.h \
- stfl/selecttag.h include/strprintf.h stfl/urlview.h \
- include/urlviewformaction.h include/utils.h
+ include/dialogsformaction.h include/emptyformaction.h stfl/empty.h \
+ include/exception.h stfl/feedlist.h stfl/filebrowser.h \
+ include/fmtstrformatter.h include/formaction.h stfl/help.h \
+ include/helpformaction.h include/textviewwidget.h include/htmlrenderer.h \
+ stfl/itemlist.h include/itemlistformaction.h stfl/itemview.h \
+ include/itemviewformaction.h include/keymap.h include/logger.h \
+ include/strprintf.h include/matcherexception.h include/regexmanager.h \
+ include/reloadthread.h include/rssfeed.h include/utils.h \
+ include/logger.h include/selectformaction.h stfl/selecttag.h \
+ include/strprintf.h stfl/urlview.h include/urlviewformaction.h \
+ include/utils.h
 test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/configparser.h include/configactionhandler.h 3rd-party/catch.hpp \
  include/configcontainer.h include/rssfeed.h include/matchable.h \
