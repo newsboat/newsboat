@@ -35,6 +35,6 @@ You'll need:
    directory.
 5. Upload built snaps to the Store, releasing them into all channels:
 
-    $ for i in *.snap; do snapcraft upload --release=edge,beta,candidate,stable $i ; done
+    $ for i in *.snap; do snapcraft upload --release=beta,candidate,stable $i ; done
 
 6. Remove built snaps: `rm -f *.snap newsboat*txt`.
