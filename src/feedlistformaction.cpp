@@ -273,7 +273,8 @@ REDO:
 					v->show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+					v->show_error(strprintf::fmt(_("Browser returned error code %i"),
+							exit_code.value()));
 					return false;
 				}
 			}
