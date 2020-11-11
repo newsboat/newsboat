@@ -73,7 +73,7 @@ public:
 	void push_itemview(std::shared_ptr<RssFeed> f,
 		const std::string& guid,
 		const std::string& searchphrase = "");
-	std::shared_ptr<FormAction> push_empty_form();
+	std::shared_ptr<FormAction> push_empty_formaction();
 	void push_help();
 	void push_urlview(const std::vector<LinkPair>& links,
 		std::shared_ptr<RssFeed>& feed);

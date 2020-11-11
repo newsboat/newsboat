@@ -804,7 +804,7 @@ void ItemListFormAction::finished_qna(Operation op)
 			std::ostringstream ostr;
 			v->get_ctrl()->write_item(
 				visible_items[itempos].first, ostr);
-			auto form_action = v->push_empty_form();
+			auto form_action = v->push_empty_formaction();
 			Stfl::reset();
 			FILE* f = popen(cmd.c_str(), "w");
 			if (f) {

@@ -565,7 +565,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		std::string cmd = qna_responses[0];
 		std::ostringstream ostr;
 		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
-		auto form_action = v->push_empty_form();
+		auto form_action = v->push_empty_formaction();
 		Stfl::reset();
 		FILE* f = popen(cmd.c_str(), "w");
 		if (f) {

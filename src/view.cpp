@@ -332,7 +332,7 @@ void View::open_in_pager(const std::string& filename)
 		cmdline.append(" ");
 		cmdline.append(filename);
 	}
-	auto form_action = push_empty_form();
+	auto form_action = push_empty_formaction();
 	Stfl::reset();
 	utils::run_interactively(cmdline, "View::open_in_pager");
 	drop_queued_input(form_action->get_form());
@@ -355,7 +355,7 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 		cmdline.append(" " + escaped_url);
 	}
 
-	auto form_action = push_empty_form();
+	auto form_action = push_empty_formaction();
 	Stfl::reset();
 	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
 	drop_queued_input(form_action->get_form());
@@ -527,7 +527,7 @@ void View::view_dialogs()
 	}
 }
 
-std::shared_ptr<FormAction> View::push_empty_form()
+std::shared_ptr<FormAction> View::push_empty_formaction()
 {
 	auto fa = get_current_formaction();
 
@@ -624,7 +624,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	// Push empty formaction so our "msg" is not overwritten
-	auto form_action = push_empty_form();
+	auto form_action = push_empty_formaction();
 	f->get_form().set("msg", prompt);
 
 	char result = 0;
