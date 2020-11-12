@@ -8,6 +8,7 @@
 #include <memory>
 #include <time.h>
 
+#include "strprintf.h"
 #include "utils.h"
 
 #define OCNEWS_API "/index.php/apps/news/api/v1-2/"
@@ -19,6 +20,7 @@ typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> CurlUptr;
 
 OcNewsApi::OcNewsApi(ConfigContainer* c)
 	: RemoteApi(c)
+	, batch_active(false)
 {
 	server = cfg->get_configvalue("ocnews-url");
 
@@ -156,8 +158,23 @@ bool OcNewsApi::mark_all_read(const std::string& feedurl)
 
 bool OcNewsApi::mark_article_read(const std::string& guid, bool read)
 {
+	const std::string id = guid.substr(0, guid.find_first_of(":"));
+
+	if (batch_active) {
+		if (read == true) {
+			mark_read_queue.push_back(id);
+			return true;
+		}
+		// Not handling "mark unread" requests in batch
+	}
+
+	return mark_article_read_single(id, read);
+}
+
+bool OcNewsApi::mark_article_read_single(const std::string& id, bool read)
+{
 	std::string query = "items/";
-	query += guid.substr(0, guid.find_first_of(":"));
+	query += id;
 
 	if (read) {
 		query += "/read";
@@ -166,6 +183,14 @@ bool OcNewsApi::mark_article_read(const std::string& guid, bool read)
 	}
 
 	return this->query(query, nullptr, "{}");
+}
+
+bool OcNewsApi::mark_article_read_multiple(const std::vector<std::string>& ids)
+{
+	const std::string query = "items/read/multiple";
+	const std::string id_array = strprintf::fmt("[%s]", utils::join(ids, ","));
+	const std::string parameters = strprintf::fmt(R"({"items": %s})", id_array);
+	return this->query(query, nullptr, parameters);
 }
 
 bool OcNewsApi::update_article_flags(const std::string& oldflags,
@@ -287,6 +312,18 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 	return feed;
 }
 
+void OcNewsApi::start_batch_operation()
+{
+	batch_active = true;
+}
+
+bool OcNewsApi::finish_batch_operation()
+{
+	batch_active = false;
+
+	return mark_article_read_multiple(mark_read_queue);
+}
+
 void OcNewsApi::add_custom_headers(curl_slist** /* custom_headers */)
 {
 	// nothing required
@@ -301,6 +338,7 @@ bool OcNewsApi::query(const std::string& query,
 
 	std::string url = server + OCNEWS_API + query;
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
+	curl_slist* headers = NULL;
 
 	utils::set_common_curl_options(handle, cfg);
 
@@ -319,12 +357,18 @@ bool OcNewsApi::query(const std::string& query,
 		curl_easy_setopt(handle, CURLOPT_POST, 1);
 		curl_easy_setopt(handle, CURLOPT_POSTFIELDS, post.c_str());
 		curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
+
+		headers = curl_slist_append(headers,
+				"Content-Type: application/json");
+		curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headers);
 	}
 
 	curl_easy_setopt(handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	curl_easy_setopt(handle, CURLOPT_USERPWD, auth.c_str());
 
 	CURLcode res = curl_easy_perform(handle);
+
+	curl_slist_free_all(headers);
 
 	if (res != CURLE_OK && res != CURLE_HTTP_RETURNED_ERROR) {
 		LOG(Level::CRITICAL,

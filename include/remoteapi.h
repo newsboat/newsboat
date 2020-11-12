@@ -32,6 +32,18 @@ public:
 	virtual bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) = 0;
+
+	// start_batch_operation() and finish_batch_operation() can be used to combine multiple mutation requests.
+	// For example, to mark multiple articles as read in a single HTTP request instead of sending separate requests for each item.
+	// Remote APIs are free to ignore the {start,finish}_batch_operation() calls and send requests immediately.
+	virtual void start_batch_operation()
+	{
+	};
+	virtual bool finish_batch_operation()
+	{
+		return true;
+	};
+
 	static const std::string read_password(const std::string& file);
 	static const std::string eval_password(const std::string& cmd);
 	// TODO

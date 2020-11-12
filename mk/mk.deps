@@ -420,8 +420,9 @@ src/newsblururlreader.o: src/newsblururlreader.cpp \
  include/logger.h
 src/ocnewsapi.o: src/ocnewsapi.cpp include/ocnewsapi.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
- include/configactionhandler.h rss/feed.h rss/item.h include/utils.h \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h
+ include/configactionhandler.h rss/feed.h rss/item.h include/strprintf.h \
+ include/utils.h 3rd-party/optional.hpp include/logger.h config.h \
+ include/strprintf.h
 src/ocnewsurlreader.o: src/ocnewsurlreader.cpp include/ocnewsurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
  include/logger.h config.h include/strprintf.h include/remoteapi.h \

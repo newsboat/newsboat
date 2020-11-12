@@ -23,7 +23,13 @@ public:
 	void add_custom_headers(curl_slist**) override;
 	rsspp::Feed fetch_feed(const std::string& feed_id);
 
+	void start_batch_operation() override;
+	bool finish_batch_operation() override;
+
 private:
+	bool mark_article_read_single(const std::string& id, bool read);
+	bool mark_article_read_multiple(const std::vector<std::string>& ids);
+
 	typedef std::map<std::string, std::pair<rsspp::Feed, long>> FeedMap;
 	std::string retrieve_auth();
 	bool query(const std::string& query,
@@ -33,6 +39,9 @@ private:
 	std::string auth;
 	std::string server;
 	FeedMap known_feeds;
+
+	bool batch_active;
+	std::vector<std::string> mark_read_queue; // IDs
 };
 
 } // namespace newsboat
