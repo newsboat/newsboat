@@ -196,11 +196,14 @@ bool OcNewsApi::update_article_flags(const std::string& oldflags,
 		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
 			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
 			query += "/unstar";
+		} else {
+			return true;
 		}
+	} else {
+		return true;
 	}
 
 	return this->query(query, nullptr, "{}");
-	;
 }
 
 rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
