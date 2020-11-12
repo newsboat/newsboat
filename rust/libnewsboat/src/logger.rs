@@ -66,6 +66,9 @@ impl fmt::Display for Level {
 ///
 /// This is part of `Logger` struct. This struct is not thread-safe, but in `Logger`, it will be
 /// behind a `Mutex`.
+///
+/// Log messages will only be written if the loglevel in the `Logger` struct is valid.
+/// That is, the loglevel must be equal to one of the enum variants specified above.
 struct LogFiles {
     /// The file to which all messages at and above `loglevel` will be written.
     logfile: Option<File>,
@@ -111,6 +114,7 @@ pub struct Logger {
     files: Mutex<LogFiles>,
 
     /// Maximum "importance level" of the messages that will be written to the log.
+    /// The value -1 is used to disable logging entirely.
     loglevel: AtomicIsize,
 }
 
@@ -152,6 +156,8 @@ impl Logger {
     }
 
     /// Specifies the file to which all Level::UserError messages will be written.
+    ///
+    /// Messages will only be written if the current loglevel is valid.
     ///
     /// The file will be created if it doesn't exist yet. It will be opened in the append mode, so
     /// its previous contents will stay unchanged.
@@ -245,14 +251,12 @@ impl Logger {
     /// For example, after the call to set_loglevel(Level::Error), only UserError, Critical, and
     /// Error messages will be written.
     ///
-    /// Regardless of the loglevel, at the minimum, error-logfile will be written
-    ///
     /// Calling this doesn't close already opened logs.
     pub fn set_loglevel(&self, level: Level) {
         self.loglevel.store(level as isize, Ordering::SeqCst);
     }
 
-    /// No logs will be written from now on.
+    /// Disables Logging entirely.
     pub fn unset_loglevel(&self) {
         self.loglevel.store(-1 as isize, Ordering::SeqCst);
     }
