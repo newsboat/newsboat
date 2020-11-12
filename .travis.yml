@@ -37,6 +37,7 @@ matrix:
             - asciidoctor
       env:
         - COMPILER=clang++-11
+        - PROFILE=1
         - REPORT_COVERAGE=yes
       before_install:
         - cargo install grcov
@@ -63,11 +64,8 @@ script:
   # stuff. To maximize the benefits, we ask Make to process as many rules as
   # possible before failing. This enables developers to fix more errors before
   # re-submitting the code to CI, which should increase throughput.
-  - if [ -z "$CHECKS" ]; then   make -j2 PROFILE=1 --keep-going all test   ; fi
-  # We want to run both C++ and Rust tests, but we also want this entire
-  # command to fail if some test suite fails. That's why we store the C++'s
-  # exit code and chain it to Rust's in the end.
-  - if [ -z "$CHECKS" ]; then   ( cd test && ./test --order rand ); ret=$?; (cargo test) && sh -c "exit $ret"   ; fi
+  - if [ -z "$CHECKS" ]; then   make -j2 --keep-going all test   ; fi
+  - if [ -z "$CHECKS" ]; then   make ci-check   ; fi
   - if [ "$CHECKS" = "i18nspector" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
 
 after_success:
