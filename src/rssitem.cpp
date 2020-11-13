@@ -46,10 +46,11 @@ void RssItem::set_author(const std::string& a)
 	author_ = a;
 }
 
-void RssItem::set_description(const std::string& d)
+void RssItem::set_description(const std::string& content,
+	const std::string& mime_type)
 {
 	std::lock_guard<std::mutex> guard(description_mutex);
-	description_ = d;
+	description_ = {content, mime_type};
 }
 
 void RssItem::set_size(unsigned int size)
@@ -149,7 +150,8 @@ nonstd::optional<std::string> RssItem::attribute_value(const std::string&
 		ScopeMeasure sm("RssItem::attribute_value(\"content\")");
 		std::lock_guard<std::mutex> guard(description_mutex);
 		if (description_.has_value()) {
-			return utils::utf8_to_locale(description_.value());
+			const std::string content = description_.value().text;
+			return utils::utf8_to_locale(content);
 		} else if (ch) {
 			std::string description = ch->fetch_description(*this);
 			return utils::utf8_to_locale(description);

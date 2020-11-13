@@ -115,7 +115,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto attr = "content";
 
 		const auto description = "First line.\nSecond one.\nAnd finally the third";
-		item.set_description(description);
+		item.set_description(description, "text/plain");
 
 		REQUIRE(item.attribute_value(attr) == description);
 
@@ -137,7 +137,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 
 			const auto description = "こんにちは"; // "good afternoon"
 
-			item.set_description(description);
+			item.set_description(description, "text/plain");
 
 			REQUIRE_FALSE(item.attribute_value(attr) == description);
 		}

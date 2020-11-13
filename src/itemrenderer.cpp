@@ -139,7 +139,8 @@ std::string item_renderer::to_plain_text(
 
 	prepare_header(item, lines, links, true);
 	const auto base = get_item_base_link(item);
-	render_html(cfg, utils::utf8_to_locale(item->description()), lines, links,
+	// TODO: Take mime-type into account
+	render_html(cfg, utils::utf8_to_locale(item->description().text), lines, links,
 		base, true);
 
 	TextFormatter txtfmt;
@@ -166,7 +167,8 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);
-	const auto body = utils::utf8_to_locale(item->description());
+	// TODO: Take mime-type into account
+	const auto body = utils::utf8_to_locale(item->description().text);
 	render_html(cfg, body, lines, links, baseurl, false);
 
 	TextFormatter txtfmt;
@@ -209,7 +211,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 
 	prepare_header(item, lines, links);
 	render_source(lines, utils::quote_for_stfl(utils::utf8_to_locale(
-				item->description())));
+				item->description().text)));
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

@@ -13,6 +13,11 @@ namespace newsboat {
 class Cache;
 class RssFeed;
 
+struct Description {
+	std::string text;
+	std::string mime;
+};
+
 class RssItem : public Matchable {
 public:
 	explicit RssItem(Cache* c);
@@ -37,12 +42,15 @@ public:
 	}
 	void set_author(const std::string& a);
 
-	std::string description() const
+	Description description() const
 	{
 		std::lock_guard<std::mutex> guard(description_mutex);
-		return description_.value_or("");
+		if (description_.has_value()) {
+			return description_.value();
+		}
+		return {"", ""};
 	}
-	void set_description(const std::string& d);
+	void set_description(const std::string& content, const std::string& mime_type);
 
 	unsigned int size() const
 	{
@@ -199,7 +207,7 @@ private:
 	bool override_unread_;
 
 	mutable std::mutex description_mutex;
-	nonstd::optional<std::string> description_;
+	nonstd::optional<Description> description_;
 };
 
 } // namespace newsboat
