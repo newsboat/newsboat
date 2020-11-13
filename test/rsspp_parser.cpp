@@ -235,27 +235,27 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.items.size() == 5u);
 	REQUIRE(f.items[0].title == "using regular content");
 	REQUIRE(f.items[0].description == "regular html content");
-	REQUIRE(f.items[0].description_type == "html");
+	REQUIRE(f.items[0].description_mime_type == "text/html");
 
 	REQUIRE(f.items[1].title == "using media:description");
 	REQUIRE(f.items[1].description == "media plaintext content");
-	REQUIRE(f.items[1].description_type == "text");
+	REQUIRE(f.items[1].description_mime_type == "text/plain");
 
 	REQUIRE(f.items[2].title == "using multiple media tags");
 	REQUIRE(f.items[2].description == "media html content");
-	REQUIRE(f.items[2].description_type == "html");
+	REQUIRE(f.items[2].description_mime_type == "text/html");
 	REQUIRE(f.items[2].link == "http://example.com/player.html");
 
 	REQUIRE(f.items[3].title ==
 		"using multiple media tags nested in group/content");
 	REQUIRE(f.items[3].description == "nested media html content");
-	REQUIRE(f.items[3].description_type == "html");
+	REQUIRE(f.items[3].description_mime_type == "text/html");
 	REQUIRE(f.items[3].link == "http://example.com/player.html");
 
 	SECTION("media:{title,description,player} does not overwrite regular title, description, and link if they exist") {
 		REQUIRE(f.items[4].title == "regular title");
 		REQUIRE(f.items[4].description == "regular content");
-		REQUIRE(f.items[4].description_type == "html");
+		REQUIRE(f.items[4].description_mime_type == "text/html");
 		REQUIRE(f.items[4].link == "http://example.com/regular-link");
 	}
 }
@@ -276,12 +276,12 @@ TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
 
 	REQUIRE(f.items[0].title == "using multiple media tags");
 	REQUIRE(f.items[0].description == "media html content");
-	REQUIRE(f.items[0].description_type == "html");
+	REQUIRE(f.items[0].description_mime_type == "text/html");
 	REQUIRE(f.items[0].link == "http://example.com/player.html");
 
 	REQUIRE(f.items[1].title ==
 		"using multiple media tags nested in group/content");
 	REQUIRE(f.items[1].description == "nested media html content");
-	REQUIRE(f.items[1].description_type == "html");
+	REQUIRE(f.items[1].description_mime_type == "text/html");
 	REQUIRE(f.items[1].link == "http://example.com/player.html");
 }

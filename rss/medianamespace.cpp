@@ -36,9 +36,9 @@ void parse_media_node(xmlNode* node, Item& it)
 		if (it.description.empty()) {
 			it.description = get_content(node);
 			if (type == "html") {
-				it.description_type = "html";
+				it.description_mime_type = "text/html";
 			} else {
-				it.description_type = "text";
+				it.description_mime_type = "text/plain";
 			}
 		}
 	} else if (node_is(node, "title", MEDIA_RSS_URI)) {

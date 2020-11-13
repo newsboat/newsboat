@@ -65,7 +65,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 {
 	Item it;
 	std::string summary;
-	std::string summary_type;
+	std::string summary_mime_type;
 	std::string updated;
 
 	std::string base = get_prop(entryNode, "base", XML_URI);
@@ -104,10 +104,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			} else if (mode == "escaped") {
 				it.description = get_content(node);
 			}
-			it.description_type = type;
-			if (it.description_type == "") {
-				it.description_type = "text";
-			}
+			it.description_mime_type = content_type_to_mime(type);
 			it.base = get_prop(node, "base", XML_URI);
 			if (it.base.empty()) {
 				it.base = base;
@@ -134,11 +131,11 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 				}
 			}
 		} else if (node_is(node, "summary", ns)) {
-			std::string mode = get_prop(node, "mode");
-			summary_type = get_prop(node, "type");
+			const std::string mode = get_prop(node, "mode");
+			const std::string type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
-				if (summary_type == "html" ||
-					summary_type == "text") {
+				if (type == "html" ||
+					type == "text") {
 					summary = get_content(node);
 				} else {
 					summary = get_xml_content(node, doc);
@@ -146,9 +143,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			} else if (mode == "escaped") {
 				summary = get_content(node);
 			}
-			if (summary_type == "") {
-				summary_type = "text";
-			}
+			summary_mime_type = content_type_to_mime(type);
 		} else if (node_is(node, "category", ns) &&
 			get_prop(node, "scheme") ==
 			"http://www.google.com/reader/") {
@@ -160,7 +155,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 
 	if (it.description == "") {
 		it.description = summary;
-		it.description_type = summary_type;
+		it.description_mime_type = summary_mime_type;
 	}
 
 	if (it.pubDate == "") {
@@ -168,6 +163,23 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 	}
 
 	return it;
+}
+
+std::string AtomParser::content_type_to_mime(const std::string& type)
+{
+	// Convert type to mime-type according to:
+	// https://tools.ietf.org/html/rfc4287#section-4.1.3.1
+	if (type == "html") {
+		return "text/html";
+	} else if (type == "xhtml") {
+		return "application/xhtml+xml";
+	} else if (type == "text") {
+		return "text/plain";
+	} else if (!type.empty()) {
+		return type;
+	} else {
+		return "text/plain";
+	}
 }
 
 } // namespace rsspp

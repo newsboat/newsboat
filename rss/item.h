@@ -19,7 +19,7 @@ public:
 	std::string title_type;
 	std::string link;
 	std::string description;
-	std::string description_type;
+	std::string description_mime_type;
 
 	std::string author;
 	std::string author_email;
