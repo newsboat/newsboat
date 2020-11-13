@@ -76,6 +76,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 				it.base = base;
 			}
 			it.description = get_content(node);
+			it.description_mime_type = "";
 		} else if (node_is(node, "encoded", CONTENT_URI)) {
 			it.content_encoded = get_content(node);
 		} else if (node_is(node, "summary", ITUNES_URI)) {

@@ -58,6 +58,7 @@ void Rss10Parser::parse_feed(Feed& f, xmlNode* rootNode)
 						"description",
 						RSS_1_0_NS)) {
 					it.description = get_content(itnode);
+					it.description_mime_type = "";
 				} else if (node_is(itnode, "date", DC_URI)) {
 					it.pubDate = w3cdtf_to_rfc822(
 							get_content(itnode));
