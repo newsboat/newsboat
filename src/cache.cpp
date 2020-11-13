@@ -380,6 +380,13 @@ static const schema_patches schemaPatches{
 
 			"INSERT INTO metadata VALUES ( 2, 11 );"
 		}
+	},
+	{	{2, 22},
+		{
+			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 22;",
+
+			"ALTER TABLE rss_item ADD COLUMN content_mime_type VARCHAR(255) NOT NULL DEFAULT \"\";"
+		}
 	}};
 
 void Cache::populate_tables()
