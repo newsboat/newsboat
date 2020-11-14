@@ -611,11 +611,13 @@ void Controller::mark_all_read(unsigned int pos)
 
 	if (feed->is_query_feed()) {
 		if (api) {
+			std::vector<std::string> item_guids;
 			for (const auto& item : feed->items()) {
 				if (item->unread()) {
-					api->mark_article_read(item->guid(), true);
+					item_guids.push_back(item->guid());
 				}
 			}
+			api->mark_articles_read(item_guids);
 		}
 		rsscache->mark_all_read(feed);
 	} else {
