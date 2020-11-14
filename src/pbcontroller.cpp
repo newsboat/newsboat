@@ -277,6 +277,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("highlight", null_cah);
 	cfgparser.register_handler("highlight-article", null_cah);
 	cfgparser.register_handler("reset-unread-on-update", null_cah);
+	cfgparser.register_handler("run-on-startup", null_cah);
 
 	try {
 		cfgparser.parse_file("/etc/newsboat/config");
