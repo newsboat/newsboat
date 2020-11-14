@@ -168,6 +168,19 @@ bool OcNewsApi::mark_article_read(const std::string& guid, bool read)
 	return this->query(query, nullptr, "{}");
 }
 
+bool OcNewsApi::mark_articles_read(const std::vector<std::string>& guids)
+{
+	std::vector<std::string> ids;
+	for (const auto& guid : guids) {
+		ids.push_back(guid.substr(0, guid.find_first_of(":")));
+	}
+
+	const std::string query = "items/read/multiple";
+	const std::string id_array = strprintf::fmt("[%s]", utils::join(ids, ","));
+	const std::string parameters = strprintf::fmt(R"({"items": %s})", id_array);
+	return this->query(query, nullptr, parameters);
+}
+
 bool OcNewsApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
@@ -301,6 +314,7 @@ bool OcNewsApi::query(const std::string& query,
 
 	std::string url = server + OCNEWS_API + query;
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
+	curl_slist* headers = NULL;
 
 	utils::set_common_curl_options(handle, cfg);
 
@@ -319,12 +333,17 @@ bool OcNewsApi::query(const std::string& query,
 		curl_easy_setopt(handle, CURLOPT_POST, 1);
 		curl_easy_setopt(handle, CURLOPT_POSTFIELDS, post.c_str());
 		curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
+
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+		curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headers);
 	}
 
 	curl_easy_setopt(handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	curl_easy_setopt(handle, CURLOPT_USERPWD, auth.c_str());
 
 	CURLcode res = curl_easy_perform(handle);
+
+	curl_slist_free_all(headers);
 
 	if (res != CURLE_OK && res != CURLE_HTTP_RETURNED_ERROR) {
 		LOG(Level::CRITICAL,
