@@ -1092,6 +1092,7 @@ void ItemListFormAction::goto_item(const std::string& title)
 
 void ItemListFormAction::init()
 {
+	f.run(-3); // FRUN - compute all widget dimensions
 	list.set_position(0);
 	f.set("msg", "");
 	set_keymap_hints();
@@ -1100,7 +1101,6 @@ void ItemListFormAction::init()
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
 	}
-	f.run(-3); // FRUN - compute all widget dimensions
 }
 
 void ItemListFormAction::set_head(const std::string& s,
