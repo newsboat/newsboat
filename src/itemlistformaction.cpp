@@ -1553,8 +1553,7 @@ void ItemListFormAction::handle_op_saveall()
 				} else {
 					c = v->confirm(strprintf::fmt(
 								_("Overwrite `%s' in `%s'? "
-									"There are no more conflicts like this "
-									"(y:Yes a:Yes to all n:No q:No to all)"),
+									"(y:Yes n:No)"),
 								filename, directory),
 							input_options);
 				}
