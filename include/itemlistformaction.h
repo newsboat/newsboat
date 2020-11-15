@@ -62,8 +62,6 @@ public:
 
 	void handle_cmdline(const std::string& cmd) override;
 
-	void do_update_visible_items();
-
 	void finished_qna(Operation op) override;
 
 	void set_show_searchresult(bool b)
@@ -79,6 +77,9 @@ public:
 
 private:
 	void register_format_styles();
+
+	void do_update_visible_items();
+	void draw_items();
 
 	bool process_operation(Operation op,
 		bool automatic = false,

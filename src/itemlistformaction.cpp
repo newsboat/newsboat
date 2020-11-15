@@ -933,6 +933,46 @@ void ItemListFormAction::do_update_visible_items()
 	visible_items = new_visible_items;
 }
 
+void ItemListFormAction::draw_items()
+{
+	const unsigned int width = list.get_width();
+	auto datetime_format = cfg->get_configvalue("datetime-format");
+	auto itemlist_format =
+		cfg->get_configvalue("articlelist-format");
+
+	switch (invalidation_mode) {
+	case InvalidationMode::COMPLETE:
+		listfmt.clear();
+
+		for (const auto& item : visible_items) {
+			auto line = item2formatted_line(item,
+					width,
+					itemlist_format,
+					datetime_format);
+			listfmt.add_line(line);
+		}
+		break;
+
+	case InvalidationMode::PARTIAL:
+		for (const auto& itempos : invalidated_itempos) {
+			auto item = visible_items[itempos];
+			auto line = item2formatted_line(item,
+					width,
+					itemlist_format,
+					datetime_format);
+			listfmt.set_line(itempos, line);
+		}
+		break;
+	case InvalidationMode::NONE:
+		break;
+	}
+
+	list.stfl_replace_lines(listfmt);
+
+	invalidated_itempos.clear();
+	invalidation_mode = InvalidationMode::NONE;
+}
+
 void ItemListFormAction::prepare()
 {
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
@@ -976,41 +1016,7 @@ void ItemListFormAction::prepare()
 		return;
 	}
 
-	auto datetime_format = cfg->get_configvalue("datetime-format");
-	auto itemlist_format =
-		cfg->get_configvalue("articlelist-format");
-
-	switch (invalidation_mode) {
-	case InvalidationMode::COMPLETE:
-		listfmt.clear();
-
-		for (const auto& item : visible_items) {
-			auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-			listfmt.add_line(line);
-		}
-		break;
-
-	case InvalidationMode::PARTIAL:
-		for (const auto& itempos : invalidated_itempos) {
-			auto item = visible_items[itempos];
-			auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-			listfmt.set_line(itempos, line);
-		}
-		break;
-	case InvalidationMode::NONE:
-		break;
-	}
-
-	list.stfl_replace_lines(listfmt);
-
-	invalidated_itempos.clear();
-	invalidation_mode = InvalidationMode::NONE;
+	draw_items();
 
 	set_head(feed->title(),
 		feed->unread_item_count(),
@@ -1098,6 +1104,7 @@ void ItemListFormAction::init()
 	set_keymap_hints();
 	invalidate_everything();
 	do_update_visible_items();
+	draw_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
 	}
