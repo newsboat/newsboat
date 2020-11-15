@@ -156,7 +156,7 @@ void RssParser::retrieve_uri(const std::string& uri)
 	if (is_ttrss) {
 		std::string::size_type pound = uri.find_first_of('#');
 		if (pound != std::string::npos) {
-			fetch_ttrss(my_uri.substr(pound + 1).c_str());
+			fetch_ttrss(my_uri.substr(pound + 1));
 		}
 	} else if (is_newsblur) {
 		fetch_newsblur(uri);
@@ -203,9 +203,9 @@ void RssParser::download_http(const std::string& uri)
 			useragent);
 		rsspp::Parser p(cfgcont->get_configvalue_as_int(
 				"download-timeout"),
-			useragent.c_str(),
-			proxy.c_str(),
-			proxy_auth.c_str(),
+			useragent,
+			proxy,
+			proxy_auth,
 			utils::get_proxy_type(proxy_type),
 			cfgcont->get_configvalue_as_bool(
 				"ssl-verifypeer"));
