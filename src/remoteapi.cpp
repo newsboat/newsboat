@@ -9,6 +9,17 @@
 
 namespace newsboat {
 
+bool RemoteApi::mark_articles_read(const std::vector<std::string>& guids)
+{
+	bool success = true;
+	for (const auto& guid : guids) {
+		if (!this->mark_article_read(guid, true)) {
+			success = false;
+		}
+	}
+	return success;
+}
+
 const std::string RemoteApi::read_password(const std::string& file)
 {
 	glob_t exp;
