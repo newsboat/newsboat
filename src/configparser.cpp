@@ -81,7 +81,7 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	included_files.push_back(filename);
 
 	unsigned int linecounter = 0;
-	std::ifstream f(filename.c_str());
+	std::ifstream f(filename);
 	std::string line;
 	if (!f.is_open()) {
 		LOG(Level::WARN,
