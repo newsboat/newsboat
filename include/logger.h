@@ -27,7 +27,8 @@ void unset_loglevel();
 template<typename... Args>
 void log(Level l, const std::string& format, Args... args)
 {
-	if (static_cast<int64_t>(l) <= rs_get_loglevel()) {
+	if (l == Level::USERERROR
+		|| static_cast<int64_t>(l) <= rs_get_loglevel()) {
 		rs_log(l, strprintf::fmt(format, args...).c_str());
 	}
 }

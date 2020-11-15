@@ -270,7 +270,7 @@ impl CliArgsParser {
         }
 
         if let Some(log_level_str) = matches.value_of(LOG_LEVEL) {
-            match log_level_str.parse::<i8>() {
+            match log_level_str.parse::<u8>() {
                 Ok(1) => {
                     args.log_level = Some(Level::UserError);
                 }
