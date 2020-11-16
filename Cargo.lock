@@ -250,7 +250,6 @@ dependencies = [
  "curl-sys",
  "gettext-rs",
  "gettext-sys",
- "lazy_static",
  "libc",
  "natord",
  "nom",

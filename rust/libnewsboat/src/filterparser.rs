@@ -1,17 +1,16 @@
 //! Parses filter expressions.
 
 use gettextrs::gettext;
-use lazy_static::lazy_static;
 use nom::{
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
     character::{is_alphanumeric, is_digit},
     combinator::{complete, map, opt, peek, recognize, value},
-    error::{context, ContextError, ParseError, VerboseError, VerboseErrorKind},
+    error::{ErrorKind, ParseError},
     sequence::{delimited, separated_pair, terminated, tuple},
-    IResult, Offset,
+    IResult, Offset, Parser,
 };
-use std::collections::BTreeMap;
+use std::vec::Vec;
 use strprintf::fmt;
 
 /// Operators that can be used in comparisons.
@@ -49,6 +48,24 @@ pub enum Expression {
     },
 }
 
+/// Used to state the type of thing that the parser expects to find.
+#[derive(PartialEq, Clone, Copy, Debug)]
+enum Expected {
+    AttributeName,
+    Operators,
+    Value,
+}
+
+/// Given a Expected enum value, returns a String with a translated error message
+/// indicating the thing thah was expected.
+fn translate_expected(expected: Expected) -> String {
+    match expected {
+        Expected::AttributeName => gettext("attribute name"),
+        Expected::Operators => gettext("one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"),
+        Expected::Value => gettext("one of: quoted string, range, number"),
+    }
+}
+
 /// Errors that may come up during parsing.
 #[derive(PartialEq, Debug)]
 enum Error<'a> {
@@ -56,51 +73,80 @@ enum Error<'a> {
     /// given position).
     TrailingCharacters(usize, &'a str),
 
-    /// Parsing error at given position. "Explanation string" is one of `EXPECTED_*` constants.
-    AtPos(usize, &'static str),
+    /// Parsing error at given position, where a value of given type was expected.
+    AtPos(usize, Expected),
 
     /// Parse error that has no explanations attached to it.
     Internal,
 }
 
-// These strings are used as identifiers in nom::context macro, which unfortunately requires
-// &'static str. The identifiers are then turned into actual, internationalized messages by
-// expected_to_i18n_msg().
-static EXPECTED_ATTRIBUTE_NAME: &str = "EXPECTED_ATTRIBUTE_NAME";
-static EXPECTED_OPERATORS: &str = "EXPECTED_OPERATORS";
-static EXPECTED_VALUE: &str = "EXPECTED_VALUE";
-
-fn expected_to_i18n_msg(expected_id: &'static str) -> &'static str {
-    lazy_static! {
-        static ref ID_TO_I18N: BTreeMap<&'static str, String> = {
-            let mut result = BTreeMap::new();
-            result.insert(EXPECTED_ATTRIBUTE_NAME, gettext("attribute name"));
-            result.insert(
-                EXPECTED_OPERATORS,
-                gettext("one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"),
-            );
-            result.insert(
-                EXPECTED_VALUE,
-                gettext("one of: quoted string, range, number"),
-            );
-            result
-        };
-    }
-
-    ID_TO_I18N
-        .get(expected_id)
-        .map(|s| s.as_str())
-        // This message is intentionally left untranslated, to make it more eye-catching for
-        // non-English-speaking users. If this ever pops up, it's be nice to hear of it ASAP, so it
-        // pays to make it look unusual.
-        .unwrap_or("<internal error in filterparser::expected_to_i18n_msg>")
+/// A custom error type for the parser.
+#[derive(PartialEq, Debug)]
+struct FilterParserError<'a> {
+    pub errors: Vec<(&'a str, FilterParserErrorKind)>,
 }
 
-fn operators<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+/// Kind of error
+#[derive(PartialEq, Debug)]
+enum FilterParserErrorKind {
+    Nom(ErrorKind),
+    Unexpected(Expected),
+}
+
+/// ParseError implementation for the custom error type.
+impl<'a> ParseError<&'a str> for FilterParserError<'a> {
+    fn from_error_kind(input: &'a str, kind: ErrorKind) -> Self {
+        FilterParserError {
+            errors: vec![(input, FilterParserErrorKind::Nom(kind))],
+        }
+    }
+
+    fn append(input: &'a str, kind: ErrorKind, mut other: Self) -> Self {
+        other.errors.push((input, FilterParserErrorKind::Nom(kind)));
+        other
+    }
+}
+
+/// Trait for adding a expected type context. Resembles the nom::error::ContextError trait.
+trait ExpectativeError<I>: Sized {
+    fn add_expectative(input: I, expected: Expected, other: Self) -> Self;
+}
+
+/// Implement ExpectativeError for FilterParserError.
+impl<'a> ExpectativeError<&'a str> for FilterParserError<'a> {
+    fn add_expectative(input: &'a str, expected: Expected, mut other: Self) -> Self {
+        other
+            .errors
+            .push((input, FilterParserErrorKind::Unexpected(expected)));
+        other
+    }
+}
+
+/// Create a new error from an input position, a expected kind of value and an existing error.
+/// This combinator is used to add the possibility of adding translated user friendly information
+/// to errors when backtracking through a parse tree.
+fn expect<I: Clone, E: ExpectativeError<I>, F, O>(
+    expected: Expected,
+    mut f: F,
+) -> impl FnMut(I) -> IResult<I, O, E>
+where
+    F: Parser<I, O, E>,
+{
+    move |i: I| match f.parse(i.clone()) {
+        Ok(o) => Ok(o),
+        Err(nom::Err::Incomplete(i)) => Err(nom::Err::Incomplete(i)),
+        Err(nom::Err::Error(e)) => Err(nom::Err::Error(E::add_expectative(i, expected, e))),
+        Err(nom::Err::Failure(e)) => Err(nom::Err::Failure(E::add_expectative(i, expected, e))),
+    }
+}
+
+fn operators<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     input: &'a str,
 ) -> IResult<&'a str, Operator, E> {
-    context(
-        EXPECTED_OPERATORS,
+    // State the expected kind of value (operator), so we can see an
+    // especific error message when this parser fails.
+    expect(
+        Expected::Operators,
         alt((
             value(Operator::RegexMatches, tag("=~")),
             value(Operator::Equals, alt((tag("=="), tag("=")))),
@@ -156,11 +202,13 @@ fn space1<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a st
     take_while1(|c| c == ' ')(input)
 }
 
-fn comparison<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+fn comparison<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     input: &'a str,
 ) -> IResult<&'a str, Expression, E> {
-    let mut attribute_name = context(
-        EXPECTED_ATTRIBUTE_NAME,
+    // State the expected kind of value (attribute name), so we can see an
+    // especific error message when this parser fails.
+    let mut attribute_name = expect(
+        Expected::AttributeName,
         take_while1(|c| is_alphanumeric(c as u8) || c == '_' || c == '-' || c == '.'),
     );
 
@@ -169,8 +217,10 @@ fn comparison<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     let (input, _) = space0(input)?;
     let (input, op) = operators(input)?;
     let (input, _) = space0(input)?;
-    let (leftovers, value) = context(
-        EXPECTED_VALUE,
+    // State the expected kind of value (value), so we can see an
+    // especific error message when this parser fails.
+    let (leftovers, value) = expect(
+        Expected::Value,
         alt((quoted_string, range, map(number, |n| Value(n.to_string())))),
     )(input)?;
 
@@ -184,7 +234,7 @@ fn comparison<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     ))
 }
 
-fn parens<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+fn parens<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     input: &'a str,
 ) -> IResult<&'a str, Expression, E> {
     let (input, _) = tag("(")(input)?;
@@ -214,7 +264,7 @@ fn space_after_logop<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a 
     peek(parser)(input)
 }
 
-fn expression<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+fn expression<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     input: &'a str,
 ) -> IResult<&'a str, Expression, E> {
     // `Expression`s enum variants can't be used as return values without filling in their
@@ -245,11 +295,11 @@ fn expression<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
     Ok((leftovers, op))
 }
 
-fn parser<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
+fn parser<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     input: &'a str,
 ) -> IResult<&'a str, Expression, E> {
     let parsers = alt((expression, parens, comparison));
-    // Ignore leading and trailing whitespace
+    // Ignore leading and trailing whitespace.
     let parsers = delimited(space0, parsers, space0);
     // Try to parse input. If parser says it needs more data, make that an error, since `input` is
     // all we got.
@@ -257,7 +307,7 @@ fn parser<'a, E: ParseError<&'a str> + ContextError<&'a str>>(
 }
 
 fn internal_parse(expr: &str) -> Result<Expression, Error> {
-    match parser::<VerboseError<&str>>(expr) {
+    match parser::<FilterParserError>(expr) {
         Ok((leftovers, expression)) => {
             if leftovers.is_empty() {
                 Ok(expression)
@@ -269,11 +319,13 @@ fn internal_parse(expr: &str) -> Result<Expression, Error> {
             }
         }
         Err(error) => {
-            let handler = |e: VerboseError<&str>| -> Error {
+            let handler = |e: FilterParserError| -> Error {
                 for (chunk, err) in e.errors {
                     let pos = expr.offset(chunk);
                     match err {
-                        VerboseErrorKind::Context(expected) => return Error::AtPos(pos, expected),
+                        FilterParserErrorKind::Unexpected(expected) => {
+                            return Error::AtPos(pos, expected)
+                        }
                         _ => continue,
                     }
                 }
@@ -311,7 +363,7 @@ pub fn parse(expr: &str) -> Result<Expression, String> {
                     &gettext("Parse error at position %{}: expected %s"),
                     PRIu64,
                     pos as u64,
-                    expected_to_i18n_msg(expected)
+                    &translate_expected(expected)
                 ),
                 Error::Internal => fmt!(&gettext("Internal parse error")),
             };
@@ -329,22 +381,22 @@ mod tests {
         // Invalid character in operator
         assert_eq!(
             internal_parse("title =¯ \"foo\""),
-            Err(Error::AtPos(7, EXPECTED_VALUE))
+            Err(Error::AtPos(7, Expected::Value))
         );
         // Incorrect string quoting
         assert_eq!(
             internal_parse("a = \"b"),
-            Err(Error::AtPos(4, EXPECTED_VALUE))
+            Err(Error::AtPos(4, Expected::Value))
         );
         // Non-value to the right of equality operator
         assert_eq!(
             internal_parse("a = b"),
-            Err(Error::AtPos(4, EXPECTED_VALUE))
+            Err(Error::AtPos(4, Expected::Value))
         );
         // Non-existent operator
         assert_eq!(
             internal_parse("a !! \"b\""),
-            Err(Error::AtPos(2, EXPECTED_OPERATORS))
+            Err(Error::AtPos(2, Expected::Operators))
         );
 
         // Unbalanced parentheses
@@ -370,7 +422,7 @@ mod tests {
         // Operator without arguments
         assert_eq!(
             internal_parse("=!"),
-            Err(Error::AtPos(0, EXPECTED_ATTRIBUTE_NAME))
+            Err(Error::AtPos(0, Expected::AttributeName))
         );
     }
 
@@ -502,19 +554,19 @@ mod tests {
     fn t_only_space_characters_are_considered_whitespace_by_filter_parser() {
         assert_eq!(
             internal_parse("attr\t= \"value\""),
-            Err(Error::AtPos(4, EXPECTED_OPERATORS))
+            Err(Error::AtPos(4, Expected::Operators))
         );
         assert_eq!(
             internal_parse("attr =\t\"value\""),
-            Err(Error::AtPos(6, EXPECTED_VALUE))
+            Err(Error::AtPos(6, Expected::Value))
         );
         assert_eq!(
             internal_parse("attr\n=\t\"value\""),
-            Err(Error::AtPos(4, EXPECTED_OPERATORS))
+            Err(Error::AtPos(4, Expected::Operators))
         );
         assert_eq!(
             internal_parse("attr\u{b}=\"value\""),
-            Err(Error::AtPos(4, EXPECTED_OPERATORS))
+            Err(Error::AtPos(4, Expected::Operators))
         );
         assert_eq!(
             internal_parse("attr=\"value\"\r\n"),
