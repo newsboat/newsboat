@@ -736,11 +736,6 @@ std::string utils::quote(const std::string& str)
 	return RustString(rs_quote(str.c_str()));
 }
 
-unsigned int utils::get_random_value(unsigned int max)
-{
-	return rs_get_random_value(max);
-}
-
 std::string utils::quote_if_necessary(const std::string& str)
 {
 	return RustString(rs_quote_if_necessary(str.c_str()));

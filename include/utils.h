@@ -15,6 +15,8 @@
 #include "configcontainer.h"
 #include "logger.h"
 
+#include "utils.rs.h"
+
 namespace newsboat {
 
 // Forward declaration for a type from htmlrenderer.h
@@ -118,8 +120,6 @@ void trim_end(std::string& str);
 void trim(std::string& str);
 
 std::string quote(const std::string& str);
-
-unsigned int get_random_value(unsigned int max);
 
 std::string quote_if_necessary(const std::string& str);
 
