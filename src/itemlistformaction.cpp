@@ -36,6 +36,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, filterpos(0)
 	, rxman(r)
 	, old_width(0)
+	, should_update_list(true)
 	, old_itempos(-1)
 	, invalidation_mode(InvalidationMode::NONE)
 	, listfmt(&rxman, "articlelist")
@@ -977,6 +978,11 @@ void ItemListFormAction::prepare()
 {
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
+	if (should_update_list) {
+		invalidate_everything();
+		should_update_list = false;
+	}
+
 	const auto sort_strategy = cfg->get_article_sort_strategy();
 	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
 		feed->sort(sort_strategy);
@@ -1007,7 +1013,7 @@ void ItemListFormAction::prepare()
 
 	const unsigned int width = list.get_width();
 
-	if (old_width != width) {
+	if (do_redraw || old_width != width) {
 		invalidate_everything();
 		old_width = width;
 	}

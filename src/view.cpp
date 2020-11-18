@@ -668,6 +668,7 @@ void View::notify_itemlist_change(std::shared_ptr<RssFeed> feed)
 					f->rssurl() == feed->rssurl()) {
 					itemlist->set_feed(feed);
 					itemlist->set_redraw(true);
+					itemlist->set_should_update_list();
 				}
 			}
 		}

@@ -29,12 +29,6 @@ public:
 	void prepare() override;
 	void init() override;
 
-	void set_redraw(bool b) override
-	{
-		FormAction::set_redraw(b);
-		invalidate_everything();
-	}
-
 	void set_feed(std::shared_ptr<RssFeed> fd);
 
 	std::string id() const override
@@ -74,6 +68,10 @@ public:
 	}
 
 	void recalculate_form() override;
+	void set_should_update_list()
+	{
+		should_update_list = true;
+	}
 
 private:
 	void register_format_styles();
@@ -145,6 +143,7 @@ private:
 	RegexManager& rxman;
 
 	unsigned int old_width;
+	bool should_update_list;
 	int old_itempos;
 	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
 
