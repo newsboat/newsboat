@@ -15,10 +15,12 @@ namespace newsboat {
 
 HelpFormAction::HelpFormAction(View* vv,
 	std::string formstr,
-	ConfigContainer* cfg)
+	ConfigContainer* cfg,
+	const std::string& ctx)
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
+	, context(ctx)
 	, textview("helptext", FormAction::f)
 {
 }
@@ -257,14 +259,6 @@ void HelpFormAction::finished_qna(Operation op)
 		break;
 	default:
 		break;
-	}
-}
-
-void HelpFormAction::set_context(const std::string& ctx)
-{
-	if (context != ctx) {
-		do_redraw = true;
-		context = ctx;
 	}
 }
 
