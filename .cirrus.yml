@@ -166,13 +166,13 @@ linux_task:
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: Rust 1.44.0, GCC 4.9 (Ubuntu 16.04)
+        - name: Rust 1.44.0, GCC 5 (Ubuntu 18.04)
           container:
-            dockerfile: docker/ubuntu_16.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-4.9
-                cc: gcc-4.9
-                cxx: g++-4.9
+                cxx_package: g++-5
+                cc: gcc-5
+                cxx: g++-5
                 rust_version: 1.44.0
         - name: Rust 1.44.0, GCC 10 (Ubuntu 20.04)
           container:
@@ -202,13 +202,6 @@ linux_task:
                 cxx: clang++-11
           env: *extra_warnings_and_checks_env
 
-        - name: Rust 1.48.0, GCC 4.9 (Ubuntu 16.04)
-          container:
-            dockerfile: docker/ubuntu_16.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-4.9
-                cc: gcc-4.9
-                cxx: g++-4.9
         - name: Rust 1.48.0, GCC 5 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile

@@ -66,7 +66,7 @@ Newsboat can be compiled. Make sure to install the header files as well (on
 Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 
 // UPDATE README.md IF YOU CHANGE THIS LIST
-- GCC 4.9 or newer, or Clang 3.6 or newer
+- GCC 5.0 or newer, or Clang 3.6 or newer
 - Stable https://www.rust-lang.org/en-US/[Rust] and Cargo (Rust's package
   manager) (1.44.0 or newer; might work with older versions, but we don't check
   that)
