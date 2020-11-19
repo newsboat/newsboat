@@ -1336,22 +1336,21 @@ int ItemListFormAction::get_pos(unsigned int realidx)
 	return -1;
 }
 
-void ItemListFormAction::recalculate_form()
+void ItemListFormAction::restore_selected_position()
 {
-	FormAction::recalculate_form();
-	invalidate_everything();
-
+	// If the old position was set and it is less than the current itempos, use
+	// it for the feed's itempos.
+	// This corrects a problem which occurs when you open an article, move to
+	// the next article (one or more times), and then exit to the itemlist. If
+	// `"show-read-articles" == false`, the itempos would be "wrong" without
+	// this fix.
 	const unsigned int itempos = list.get_position();
-
-	// If the old position was set and it is less than the itempos, use it
-	// for the feed's itempos Correct the problem when you open itemview and
-	// jump to next then exit to itemlist and the itempos is wrong This only
-	// applies when "show-read-articles" is set to false
 	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
 		!cfg->get_configvalue_as_bool("show-read-articles")) {
 		list.set_position(old_itempos);
 		old_itempos = -1; // Reset
 	}
+
 }
 
 void ItemListFormAction::save_article(const std::string& filename,

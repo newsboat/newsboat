@@ -476,6 +476,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			(get_parent_formaction());
 		if (parent_itemlist != nullptr) {
 			parent_itemlist->set_should_update_list();
+			parent_itemlist->restore_selected_position();
 		}
 	}
 

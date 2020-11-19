@@ -67,11 +67,11 @@ public:
 		search_phrase = s;
 	}
 
-	void recalculate_form() override;
 	void set_should_update_list()
 	{
 		should_update_list = true;
 	}
+	void restore_selected_position();
 
 private:
 	void register_format_styles();
