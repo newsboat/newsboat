@@ -1,6 +1,11 @@
-fn main() {
-    cxx_build::bridge("src/utils.rs")
+fn add_cxxbridge(module: &str) {
+    cxx_build::bridge(format!("src/{}.rs", module))
         .flag("-std=c++11")
-        .compile("libnewsboat-ffi-utils");
-    println!("cargo:rerun-if-changed=src/utils.rs");
+        .compile(&format!("libnewsboat-ffi-{}", module));
+    println!("cargo:rerun-if-changed=src/{}.rs", module);
+}
+
+fn main() {
+    add_cxxbridge("utils");
+    add_cxxbridge("scopemeasure");
 }

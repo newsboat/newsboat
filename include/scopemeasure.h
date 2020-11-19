@@ -3,16 +3,18 @@
 
 #include <string>
 
+#include "scopemeasure.rs.h"
+
 namespace newsboat {
 
 class ScopeMeasure {
 public:
 	ScopeMeasure(const std::string& func);
-	~ScopeMeasure();
+	~ScopeMeasure() = default;
 	void stopover(const std::string& son = "");
 
 private:
-	void* rs_object = nullptr;
+	rust::Box<scopemeasure::bridged::ScopeMeasure> rs_object;
 };
 
 } // namespace newsboat

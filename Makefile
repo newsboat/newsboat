@@ -162,7 +162,11 @@ regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 	cococpp -frames filter filter/filter.atg
 
-target/cxxbridge/libnewsboat-ffi/src/utils.rs.h: $(NEWSBOATLIB_OUTPUT)
+target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
+	@# This rule declares a dependency and doesn't need to run any
+	@# commands, but we can't leave the recipe empty because GNU Make
+	@# requires a recipe for pattern rules. So here you go, Make, have
+	@# a comment.
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<

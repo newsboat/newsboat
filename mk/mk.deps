@@ -92,6 +92,7 @@ src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  include/strprintf.h include/matcherexception.h include/rssfeed.h \
  include/utils.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h
 src/cliargsparser.o: src/cliargsparser.cpp include/cliargsparser.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
@@ -168,7 +169,8 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/ocnewsurlreader.h include/oldreaderapi.h \
  include/oldreaderurlreader.h include/opmlurlreader.h \
  include/regexmanager.h include/remoteapi.h include/rssfeed.h \
- include/rssparser.h include/scopemeasure.h include/stflpp.h \
+ include/rssparser.h include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h include/stflpp.h \
  include/strprintf.h include/ttrssapi.h include/ttrssurlreader.h \
  include/utils.h include/view.h include/controller.h \
  include/dirbrowserformaction.h include/listformatter.h \
@@ -262,6 +264,7 @@ src/feedlistformaction.o: src/feedlistformaction.cpp \
  include/listformatter.h include/logger.h include/strprintf.h \
  include/reloader.h include/rssfeed.h include/utils.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h include/view.h
 src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/filebrowserformaction.h include/configcontainer.h \
@@ -371,6 +374,7 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/logger.h include/strprintf.h include/matcherexception.h \
  include/rssfeed.h include/utils.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h include/view.h
 src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
@@ -400,6 +404,7 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/htmlrenderer.h include/logger.h include/strprintf.h \
  include/rssfeed.h include/utils.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/textformatter.h include/utils.h \
  include/view.h
 src/keymap.o: src/keymap.cpp include/keymap.h include/configparser.h \
@@ -443,7 +448,8 @@ src/logger.o: src/logger.cpp include/logger.h config.h \
 src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/logger.h config.h include/strprintf.h include/matchable.h \
  3rd-party/optional.hpp include/matcherexception.h include/scopemeasure.h \
- include/utils.h include/configcontainer.h include/configparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h include/utils.h \
+ include/configcontainer.h include/configparser.h \
  include/configactionhandler.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/matcherexception.o: src/matcherexception.cpp \
@@ -580,7 +586,8 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  rss/exception.h include/rssfeed.h include/utils.h include/logger.h \
  config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/rssparser.h \
- rss/feed.h rss/item.h include/scopemeasure.h include/utils.h \
+ rss/feed.h rss/item.h include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h include/utils.h \
  include/view.h include/dirbrowserformaction.h include/listformatter.h \
  include/listwidget.h include/formaction.h include/history.h \
  include/keymap.h include/feedlistformaction.h include/listformaction.h \
@@ -613,8 +620,9 @@ src/rssfeed.o: src/rssfeed.cpp include/rssfeed.h include/matchable.h \
  include/configcontainer.h include/confighandlerexception.h \
  include/dbexception.h include/htmlrenderer.h include/textformatter.h \
  include/regexmanager.h include/regexowner.h include/logger.h \
- include/scopemeasure.h include/strprintf.h include/tagsouppullparser.h \
- include/utils.h
+ include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
+ include/strprintf.h include/tagsouppullparser.h include/utils.h
 src/rssignores.o: src/rssignores.cpp include/rssignores.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  include/rssitem.h include/matchable.h 3rd-party/optional.hpp \
@@ -631,7 +639,9 @@ src/rssitem.o: src/rssitem.cpp include/rssitem.h include/matchable.h \
  include/configactionhandler.h include/dbexception.h include/rssfeed.h \
  include/rssitem.h include/utils.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- include/scopemeasure.h include/strprintf.h include/utils.h
+ include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
+ include/strprintf.h include/utils.h
 src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/remoteapi.h include/configcontainer.h include/configparser.h \
  include/configactionhandler.h rss/feed.h rss/item.h include/cache.h \
@@ -646,7 +656,8 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/matchable.h include/rssitem.h include/rssignores.h \
  include/strprintf.h include/ttrssapi.h include/cache.h include/utils.h
 src/ruststring.o: src/ruststring.cpp include/ruststring.h
-src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h
+src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
  include/configparser.h include/configactionhandler.h \
@@ -928,6 +939,7 @@ test/rsspp_rssparser.o: test/rsspp_rssparser.cpp rss/rssparser.h \
 test/ruststring.o: test/ruststring.cpp include/ruststring.h \
  3rd-party/catch.hpp
 test/scopemeasure.o: test/scopemeasure.cpp include/scopemeasure.h \
+ target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  3rd-party/catch.hpp include/logger.h config.h include/strprintf.h \
  test/test-helpers/loggerresetter.h test/test-helpers/tempfile.h \
  test/test-helpers/maintempdir.h
