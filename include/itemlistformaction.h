@@ -29,12 +29,6 @@ public:
 	void prepare() override;
 	void init() override;
 
-	void set_redraw(bool b) override
-	{
-		FormAction::set_redraw(b);
-		invalidate_everything();
-	}
-
 	void set_feed(std::shared_ptr<RssFeed> fd);
 
 	std::string id() const override
@@ -73,7 +67,12 @@ public:
 		search_phrase = s;
 	}
 
-	void recalculate_form() override;
+	void invalidate_list()
+	{
+		invalidation_mode = InvalidationMode::COMPLETE;
+	}
+
+	void restore_selected_position();
 
 private:
 	void register_format_styles();
@@ -104,11 +103,6 @@ private:
 	std::string gen_flags(std::shared_ptr<RssItem> item);
 
 	void prepare_set_filterpos();
-
-	void invalidate_everything()
-	{
-		invalidation_mode = InvalidationMode::COMPLETE;
-	}
 
 	void invalidate(const unsigned int invalidated_pos)
 	{

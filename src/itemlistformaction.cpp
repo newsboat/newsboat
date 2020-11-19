@@ -120,14 +120,14 @@ bool ItemListFormAction::process_operation(Operation op,
 			} else {
 				rsscache->mark_feed_items_deleted(feed->rssurl());
 			}
-			invalidate_everything();
+			invalidate_list();
 		}
 	}
 	break;
 	case OP_PURGE_DELETED: {
 		ScopeMeasure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
-		invalidate_everything();
+		invalidate_list();
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
@@ -217,7 +217,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 				return false;
 			}
-			invalidate_everything();
+			invalidate_list();
 		}
 	}
 	break;
@@ -409,7 +409,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			LOG(Level::INFO,
 				"ItemListFormAction: reloading current feed");
 			v->get_ctrl()->get_reloader()->reload(pos);
-			invalidate_everything();
+			invalidate_list();
 		} else {
 			v->show_error(
 				_("Error: you can't reload search results."));
@@ -535,7 +535,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					list.set_position(0);
 				}
 			}
-			invalidate_everything();
+			invalidate_list();
 			v->set_status("");
 		} catch (const DbException& e) {
 			v->show_error(strprintf::fmt(
@@ -561,7 +561,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					"show-read-articles")) {
 				list.set_position(0);
 			}
-			invalidate_everything();
+			invalidate_list();
 		}
 		v->set_status("");
 		break;
@@ -574,7 +574,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			cfg->set_configvalue("show-read-articles", "yes");
 		}
 		save_filterpos();
-		invalidate_everything();
+		invalidate_list();
 		break;
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
@@ -652,7 +652,7 @@ bool ItemListFormAction::process_operation(Operation op,
 								matcher.get_parse_error()));
 					} else {
 						apply_filter = true;
-						invalidate_everything();
+						invalidate_list();
 						save_filterpos();
 					}
 				}
@@ -678,7 +678,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_CLEARFILTER:
 		apply_filter = false;
-		invalidate_everything();
+		invalidate_list();
 		save_filterpos();
 		break;
 	case OP_SORT: {
@@ -836,7 +836,7 @@ void ItemListFormAction::qna_end_setfilter()
 		}
 
 		apply_filter = true;
-		invalidate_everything();
+		invalidate_list();
 		save_filterpos();
 	}
 }
@@ -981,7 +981,7 @@ void ItemListFormAction::prepare()
 	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
 		feed->sort(sort_strategy);
 		old_sort_strategy = sort_strategy;
-		invalidate_everything();
+		invalidate_list();
 	}
 
 	try {
@@ -1007,8 +1007,8 @@ void ItemListFormAction::prepare()
 
 	const unsigned int width = list.get_width();
 
-	if (old_width != width) {
-		invalidate_everything();
+	if (do_redraw || old_width != width) {
+		invalidate_list();
 		old_width = width;
 	}
 
@@ -1102,7 +1102,7 @@ void ItemListFormAction::init()
 	list.set_position(0);
 	f.set("msg", "");
 	set_keymap_hints();
-	invalidate_everything();
+	invalidate_list();
 	do_update_visible_items();
 	draw_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
@@ -1330,22 +1330,21 @@ int ItemListFormAction::get_pos(unsigned int realidx)
 	return -1;
 }
 
-void ItemListFormAction::recalculate_form()
+void ItemListFormAction::restore_selected_position()
 {
-	FormAction::recalculate_form();
-	invalidate_everything();
-
+	// If the old position was set and it is less than the current itempos, use
+	// it for the feed's itempos.
+	// This corrects a problem which occurs when you open an article, move to
+	// the next article (one or more times), and then exit to the itemlist. If
+	// `"show-read-articles" == false`, the itempos would be "wrong" without
+	// this fix.
 	const unsigned int itempos = list.get_position();
-
-	// If the old position was set and it is less than the itempos, use it
-	// for the feed's itempos Correct the problem when you open itemview and
-	// jump to next then exit to itemlist and the itempos is wrong This only
-	// applies when "show-read-articles" is set to false
 	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
 		!cfg->get_configvalue_as_bool("show-read-articles")) {
 		list.set_position(old_itempos);
 		old_itempos = -1; // Reset
 	}
+
 }
 
 void ItemListFormAction::save_article(const std::string& filename,
@@ -1428,7 +1427,7 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 		fd->title());
 	feed = fd;
 	feed->load();
-	invalidate_everything();
+	invalidate_list();
 	do_update_visible_items();
 }
 

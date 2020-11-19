@@ -341,19 +341,20 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/regexmanager.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h include/textviewwidget.h config.h \
  include/confighandlerexception.h include/dbexception.h \
- include/fmtstrformatter.h include/itemrenderer.h include/htmlrenderer.h \
- include/logger.h include/strprintf.h include/rssfeed.h \
- include/matchable.h 3rd-party/optional.hpp include/rssitem.h \
- include/utils.h include/configcontainer.h include/logger.h \
+ include/fmtstrformatter.h include/itemlistformaction.h \
+ 3rd-party/optional.hpp include/listformaction.h include/listwidget.h \
+ include/listformatter.h include/view.h include/colormanager.h \
+ include/configcontainer.h include/controller.h include/cache.h \
+ include/feedcontainer.h include/filtercontainer.h include/fslock.h \
+ include/opml.h include/fileurlreader.h include/urlreader.h \
+ include/queuemanager.h include/reloader.h include/remoteapi.h \
+ include/rssignores.h include/rssitem.h include/matchable.h \
+ include/dirbrowserformaction.h include/feedlistformaction.h \
+ include/filebrowserformaction.h include/itemrenderer.h \
+ include/htmlrenderer.h include/logger.h include/strprintf.h \
+ include/rssfeed.h include/utils.h include/logger.h \
  include/scopemeasure.h include/strprintf.h include/textformatter.h \
- include/utils.h include/view.h include/colormanager.h \
- include/controller.h include/cache.h include/feedcontainer.h \
- include/filtercontainer.h include/fslock.h include/opml.h \
- include/fileurlreader.h include/urlreader.h include/queuemanager.h \
- include/reloader.h include/remoteapi.h include/rssignores.h \
- include/dirbrowserformaction.h include/listformatter.h \
- include/listwidget.h include/feedlistformaction.h \
- include/listformaction.h include/view.h include/filebrowserformaction.h
+ include/utils.h include/view.h
 src/keymap.o: src/keymap.cpp include/keymap.h include/configparser.h \
  include/configactionhandler.h config.h include/confighandlerexception.h \
  include/logger.h include/strprintf.h include/strprintf.h include/utils.h \

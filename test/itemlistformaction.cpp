@@ -817,3 +817,77 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 		test_url,
 		test_description);
 }
+
+TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
+	"[ItemListFormAction]")
+{
+	ConfigPaths paths;
+	Controller c(paths);
+	ConfigContainer cfg;
+	KeyMap k(KM_NEWSBOAT);
+	newsboat::View v(&c);
+	v.set_config_container(&cfg);
+	v.set_keymap(&k);
+	Cache rsscache(":memory:", &cfg);
+	FilterContainer filters;
+	RegexManager rxman;
+
+	std::shared_ptr<RssItem> item1 = std::make_shared<RssItem>(&rsscache);
+	item1->set_link("https://example.com/1");
+	std::shared_ptr<RssItem> item2 = std::make_shared<RssItem>(&rsscache);
+	item2->set_link("https://example.com/2");
+	std::shared_ptr<RssItem> item3 = std::make_shared<RssItem>(&rsscache);
+	item3->set_link("https://example.com/3");
+
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	feed->add_item(item1);
+	feed->add_item(item2);
+	feed->add_item(item3);
+
+	cfg.set_configvalue("mark-as-read-on-hover", "yes");
+	cfg.set_configvalue("show-read-articles", "no");
+	cfg.set_configvalue("browser", "echo");
+
+	SECTION("by default, all items are marked as unread") {
+		REQUIRE(item1->unread());
+		REQUIRE(item2->unread());
+		REQUIRE(item3->unread());
+	}
+
+	// The following sections have some interactions with STFL.
+	// We call `Stfl::reset()` to make sure the terminal is in a regular mode
+	// before calling Catch2 functions. Without the reset, Catch2 might output
+	// text while the terminal is in application mode, which makes it invisble
+	// when back in regular mode.
+	// The `View` object calls `Stfl::reset()` in its destructor so we can be
+	// sure we always return to the regular terminal mode, even when an
+	// exception is thrown.
+
+	SECTION("when entering ItemList, the first item is marked as 'read' due to 'mark-as-read-on-hover'") {
+		auto itemlist = v.push_itemlist(feed);
+		itemlist->prepare();
+
+		Stfl::reset();
+		REQUIRE_FALSE(item1->unread());
+		REQUIRE(item2->unread());
+		REQUIRE(item3->unread());
+	}
+
+	SECTION("executing 'open-in-browser' operation does not cause the next item to be marked as read") {
+		auto itemlist = v.push_itemlist(feed);
+		itemlist->prepare();
+
+		bool success = itemlist->process_op(OP_OPENINBROWSER);
+		Stfl::reset();
+		REQUIRE(success);
+
+		itemlist->prepare();
+		Stfl::reset();
+
+		// Verify that following regression is fixed:
+		// https://github.com/newsboat/newsboat/issues/1292
+		REQUIRE_FALSE(item1->unread());
+		REQUIRE(item2->unread());
+		REQUIRE(item3->unread());
+	}
+}

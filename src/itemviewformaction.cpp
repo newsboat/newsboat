@@ -8,6 +8,7 @@
 #include "confighandlerexception.h"
 #include "dbexception.h"
 #include "fmtstrformatter.h"
+#include "itemlistformaction.h"
 #include "itemrenderer.h"
 #include "htmlrenderer.h"
 #include "logger.h"
@@ -470,6 +471,13 @@ bool ItemViewFormAction::process_operation(Operation op,
 		}
 	} else if (quit) {
 		v->pop_current_formaction();
+
+		auto parent_itemlist = std::dynamic_pointer_cast<ItemListFormAction>
+			(get_parent_formaction());
+		if (parent_itemlist != nullptr) {
+			parent_itemlist->invalidate_list();
+			parent_itemlist->restore_selected_position();
+		}
 	}
 
 	update_percent();
