@@ -36,7 +36,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, filterpos(0)
 	, rxman(r)
 	, old_width(0)
-	, should_update_list(true)
 	, old_itempos(-1)
 	, invalidation_mode(InvalidationMode::NONE)
 	, listfmt(&rxman, "articlelist")
@@ -121,14 +120,14 @@ bool ItemListFormAction::process_operation(Operation op,
 			} else {
 				rsscache->mark_feed_items_deleted(feed->rssurl());
 			}
-			invalidate_everything();
+			invalidate_list();
 		}
 	}
 	break;
 	case OP_PURGE_DELETED: {
 		ScopeMeasure m1("OP_PURGE_DELETED");
 		feed->purge_deleted_items();
-		invalidate_everything();
+		invalidate_list();
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
@@ -218,7 +217,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
 				return false;
 			}
-			invalidate_everything();
+			invalidate_list();
 		}
 	}
 	break;
@@ -410,7 +409,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			LOG(Level::INFO,
 				"ItemListFormAction: reloading current feed");
 			v->get_ctrl()->get_reloader()->reload(pos);
-			invalidate_everything();
+			invalidate_list();
 		} else {
 			v->show_error(
 				_("Error: you can't reload search results."));
@@ -536,7 +535,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					list.set_position(0);
 				}
 			}
-			invalidate_everything();
+			invalidate_list();
 			v->set_status("");
 		} catch (const DbException& e) {
 			v->show_error(strprintf::fmt(
@@ -562,7 +561,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					"show-read-articles")) {
 				list.set_position(0);
 			}
-			invalidate_everything();
+			invalidate_list();
 		}
 		v->set_status("");
 		break;
@@ -575,7 +574,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			cfg->set_configvalue("show-read-articles", "yes");
 		}
 		save_filterpos();
-		invalidate_everything();
+		invalidate_list();
 		break;
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
@@ -653,7 +652,7 @@ bool ItemListFormAction::process_operation(Operation op,
 								matcher.get_parse_error()));
 					} else {
 						apply_filter = true;
-						invalidate_everything();
+						invalidate_list();
 						save_filterpos();
 					}
 				}
@@ -679,7 +678,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_CLEARFILTER:
 		apply_filter = false;
-		invalidate_everything();
+		invalidate_list();
 		save_filterpos();
 		break;
 	case OP_SORT: {
@@ -837,7 +836,7 @@ void ItemListFormAction::qna_end_setfilter()
 		}
 
 		apply_filter = true;
-		invalidate_everything();
+		invalidate_list();
 		save_filterpos();
 	}
 }
@@ -978,16 +977,11 @@ void ItemListFormAction::prepare()
 {
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
-	if (should_update_list) {
-		invalidate_everything();
-		should_update_list = false;
-	}
-
 	const auto sort_strategy = cfg->get_article_sort_strategy();
 	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
 		feed->sort(sort_strategy);
 		old_sort_strategy = sort_strategy;
-		invalidate_everything();
+		invalidate_list();
 	}
 
 	try {
@@ -1014,7 +1008,7 @@ void ItemListFormAction::prepare()
 	const unsigned int width = list.get_width();
 
 	if (do_redraw || old_width != width) {
-		invalidate_everything();
+		invalidate_list();
 		old_width = width;
 	}
 
@@ -1108,7 +1102,7 @@ void ItemListFormAction::init()
 	list.set_position(0);
 	f.set("msg", "");
 	set_keymap_hints();
-	invalidate_everything();
+	invalidate_list();
 	do_update_visible_items();
 	draw_items();
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
@@ -1433,7 +1427,7 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 		fd->title());
 	feed = fd;
 	feed->load();
-	invalidate_everything();
+	invalidate_list();
 	do_update_visible_items();
 }
 

@@ -67,10 +67,11 @@ public:
 		search_phrase = s;
 	}
 
-	void set_should_update_list()
+	void invalidate_list()
 	{
-		should_update_list = true;
+		invalidation_mode = InvalidationMode::COMPLETE;
 	}
+
 	void restore_selected_position();
 
 private:
@@ -102,11 +103,6 @@ private:
 	std::string gen_flags(std::shared_ptr<RssItem> item);
 
 	void prepare_set_filterpos();
-
-	void invalidate_everything()
-	{
-		invalidation_mode = InvalidationMode::COMPLETE;
-	}
 
 	void invalidate(const unsigned int invalidated_pos)
 	{
@@ -143,7 +139,6 @@ private:
 	RegexManager& rxman;
 
 	unsigned int old_width;
-	bool should_update_list;
 	int old_itempos;
 	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
 
