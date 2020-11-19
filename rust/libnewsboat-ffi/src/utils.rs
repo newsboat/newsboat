@@ -16,6 +16,14 @@ mod ffi {
     }
 }
 
+// Functions that should be wrapped on the C++ side for ease of use.
+#[cxx::bridge(namespace = "newsboat::utils::bridged")]
+mod bridged {
+    extern "Rust" {
+        fn to_u(input: String, default_value: u32) -> u32;
+    }
+}
+
 #[repr(C)]
 pub struct FilterUrl {
     filter: *mut c_char,
@@ -116,16 +124,6 @@ pub unsafe extern "C" fn rs_resolve_relative(
         // it are valid strings
         let result = CString::new(result.to_str().unwrap()).unwrap();
         result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_to_u(in_str: *const c_char, default_value: u32) -> u32 {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(in_str);
-        let rs_str = rs_str.to_string_lossy().into_owned();
-
-        utils::to_u(rs_str, default_value)
     })
 }
 
