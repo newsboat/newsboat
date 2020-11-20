@@ -518,7 +518,9 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 				HTTPMethod::GET, easyhandle);
 		std::string content_mime_type;
 
-		// Determine mime-type
+		// Determine mime-type based on Content-type header:
+		// Content-type: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
+		// Format: https://tools.ietf.org/html/rfc7231#section-3.1.1.1
 		char* value = nullptr;
 		curl_easy_getinfo(easyhandle, CURLINFO_CONTENT_TYPE, &value);
 		if (value != nullptr) {
