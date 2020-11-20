@@ -75,7 +75,7 @@ extern "C" {
 
 	bool rs_cliargsparser_set_log_level(void* rs_cliargsparser);
 
-	unsigned char rs_cliargsparser_log_level(void* rs_cliargsparser);
+	char rs_cliargsparser_log_level(void* rs_cliargsparser);
 }
 
 #define GET_VALUE(NAME, DEFAULT) \
@@ -259,7 +259,7 @@ nonstd::optional<Level> CliArgsParser::log_level() const
 			return nonstd::nullopt;
 		}
 	} else {
-		return Level::NONE;
+		return nonstd::nullopt;
 	}
 }
 

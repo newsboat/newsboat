@@ -224,7 +224,7 @@ void PbController::initialize(int argc, char* argv[])
 			break;
 		case 'l': {
 			Level l = static_cast<Level>(atoi(optarg));
-			if (l > Level::NONE && l <= Level::DEBUG) {
+			if (l >= Level::USERERROR && l <= Level::DEBUG) {
 				Logger::set_loglevel(l);
 			} else {
 				std::cerr << strprintf::fmt(_("%s: %d: invalid "

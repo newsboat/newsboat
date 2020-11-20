@@ -5,7 +5,7 @@ use once_cell::sync::OnceCell;
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicIsize, Ordering};
 use std::sync::Mutex;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -16,16 +16,10 @@ use std::sync::Mutex;
 // TODO: remove repr(C) when we finished porting C++ code to Rust.
 #[repr(C)]
 pub enum Level {
-    /// Not important at all, don't log.
-    ///
-    /// This level is purely for Logger's internal use, and shouldn't be passed to log(). That
-    /// isn't enforced in any way, though.
-    None,
-
     /// An error that can potentially be resolved by the user.
     ///
     /// This level should be used for configuration errors and the like.
-    UserError,
+    UserError = 1,
 
     /// An error that prevents program from working at all.
     ///
@@ -58,7 +52,6 @@ pub enum Level {
 impl fmt::Display for Level {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Level::None => write!(f, "NONE"),
             Level::UserError => write!(f, "USERERROR"),
             Level::Critical => write!(f, "CRITICAL"),
             Level::Error => write!(f, "ERROR"),
@@ -66,12 +59,6 @@ impl fmt::Display for Level {
             Level::Info => write!(f, "INFO"),
             Level::Debug => write!(f, "DEBUG"),
         }
-    }
-}
-
-impl Default for Level {
-    fn default() -> Level {
-        Level::None
     }
 }
 
@@ -83,8 +70,7 @@ struct LogFiles {
     /// The file to which all messages at and above `loglevel` will be written.
     logfile: Option<File>,
 
-    /// The file to which all Level::UserError messages will be written if `loglevel` is not
-    /// Level::None.
+    /// The file to which all Level::UserError messages will be written.
     user_error_logfile: Option<File>,
 }
 
@@ -125,7 +111,7 @@ pub struct Logger {
     files: Mutex<LogFiles>,
 
     /// Maximum "importance level" of the messages that will be written to the log.
-    loglevel: AtomicUsize,
+    loglevel: AtomicIsize,
 }
 
 impl Logger {
@@ -138,7 +124,7 @@ impl Logger {
                 logfile: None,
                 user_error_logfile: None,
             }),
-            loglevel: AtomicUsize::new(Level::None as usize),
+            loglevel: AtomicIsize::new(-1 as isize),
         }
     }
 
@@ -166,8 +152,6 @@ impl Logger {
     }
 
     /// Specifies the file to which all Level::UserError messages will be written.
-    ///
-    /// The messages will only be written if Logger's loglevel is not Level::None.
     ///
     /// The file will be created if it doesn't exist yet. It will be opened in the append mode, so
     /// its previous contents will stay unchanged.
@@ -197,7 +181,7 @@ impl Logger {
     ///
     /// This method is a wrapper around `log_raw()`.
     pub fn log(&self, level: Level, message: &str) {
-        if level == Level::UserError || level as usize <= self.get_loglevel() {
+        if level == Level::UserError || level as isize <= self.get_loglevel() {
             self.log_raw(level, message.as_bytes())
         }
     }
@@ -234,7 +218,7 @@ impl Logger {
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
-        if level as usize <= self.get_loglevel() {
+        if level as isize <= self.get_loglevel() {
             if let Some(ref mut logfile) = files.logfile {
                 let level = format!("{}: ", level);
 
@@ -261,18 +245,20 @@ impl Logger {
     /// For example, after the call to set_loglevel(Level::Error), only UserError, Critical, and
     /// Error messages will be written.
     ///
-    /// If new level is Level::None, no logs will be written from now on. Otherwise, at least
-    /// error-logfile will be written.
-    ///
     /// Calling this doesn't close already opened logs.
     pub fn set_loglevel(&self, level: Level) {
-        self.loglevel.store(level as usize, Ordering::SeqCst);
+        self.loglevel.store(level as isize, Ordering::SeqCst);
+    }
+
+    /// Disables Logging (Except for UserError messages).
+    pub fn unset_loglevel(&self) {
+        self.loglevel.store(-1 as isize, Ordering::SeqCst);
     }
 
     /// Returns current maximum "importance level" of the messages that will be written to the log.
     ///
     /// For a more detailed explanation, see `set_loglevel()`.
-    pub fn get_loglevel(&self) -> usize {
+    pub fn get_loglevel(&self) -> isize {
         self.loglevel.load(Ordering::Relaxed)
     }
 }
@@ -401,7 +387,7 @@ mod tests {
 
     struct LogLinesCounter {
         messages: Vec<(Level, String)>,
-        levels: Vec<Level>,
+        levels: Vec<Option<Level>>,
         expected_log_lines: Option<usize>,
         expected_errorlog_lines: Option<usize>,
     }
@@ -421,7 +407,7 @@ mod tests {
             self
         }
 
-        pub fn at_levels(mut self, levels: Vec<Level>) -> Self {
+        pub fn at_levels(mut self, levels: Vec<Option<Level>>) -> Self {
             self.levels = levels;
             self
         }
@@ -443,7 +429,11 @@ mod tests {
 
             for level in &self.levels {
                 let (_tmp, logfile, error_logfile, logger) = setup_logger()?;
-                logger.set_loglevel(*level);
+
+                match *level {
+                    Some(l) => logger.set_loglevel(l),
+                    None => logger.unset_loglevel(),
+                };
 
                 for &(level, ref msg) in &self.messages {
                     logger.log(level, msg);
@@ -564,7 +554,7 @@ mod tests {
     fn t_if_curlevel_is_none_nothing_is_logged() {
         let (_tmp, logfile, _error_logfile, logger) = setup_logger().unwrap();
 
-        logger.set_loglevel(Level::None);
+        logger.unset_loglevel();
 
         let levels = vec![
             (Level::UserError, "USERERROR"),
@@ -593,18 +583,18 @@ mod tests {
 
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
-            .at_levels(vec![Level::None])
+            .at_levels(vec![None])
             .expected_log_lines_count(0)
             .test()
             .unwrap();
 
         let levels = vec![
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
-            Level::Info,
-            Level::Debug,
+            Some(Level::UserError),
+            Some(Level::Critical),
+            Some(Level::Error),
+            Some(Level::Warn),
+            Some(Level::Info),
+            Some(Level::Debug),
         ];
         LogLinesCounter::new()
             .with_messages(vec![message])
@@ -618,7 +608,7 @@ mod tests {
     fn t_critical_msgs_are_logged_at_curlevels_starting_with_critical() {
         let message = (Level::Critical, "hello".to_string());
 
-        let nolog_levels = vec![Level::None, Level::UserError];
+        let nolog_levels = vec![None, Some(Level::UserError)];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
@@ -627,11 +617,11 @@ mod tests {
             .unwrap();
 
         let log_levels = vec![
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
-            Level::Info,
-            Level::Debug,
+            Some(Level::Critical),
+            Some(Level::Error),
+            Some(Level::Warn),
+            Some(Level::Info),
+            Some(Level::Debug),
         ];
         LogLinesCounter::new()
             .with_messages(vec![message])
@@ -645,7 +635,7 @@ mod tests {
     fn t_error_msgs_are_logged_at_curlevels_starting_with_error() {
         let message = (Level::Error, "hello".to_string());
 
-        let nolog_levels = vec![Level::None, Level::UserError, Level::Critical];
+        let nolog_levels = vec![None, Some(Level::UserError), Some(Level::Critical)];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
@@ -653,7 +643,12 @@ mod tests {
             .test()
             .unwrap();
 
-        let log_levels = vec![Level::Error, Level::Warn, Level::Info, Level::Debug];
+        let log_levels = vec![
+            Some(Level::Error),
+            Some(Level::Warn),
+            Some(Level::Info),
+            Some(Level::Debug),
+        ];
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(log_levels)
@@ -666,7 +661,12 @@ mod tests {
     fn t_warning_msgs_are_logged_at_curlevels_starting_with_warning() {
         let message = (Level::Warn, "hello".to_string());
 
-        let nolog_levels = vec![Level::None, Level::UserError, Level::Critical, Level::Error];
+        let nolog_levels = vec![
+            None,
+            Some(Level::UserError),
+            Some(Level::Critical),
+            Some(Level::Error),
+        ];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
             .at_levels(nolog_levels)
@@ -674,7 +674,7 @@ mod tests {
             .test()
             .unwrap();
 
-        let log_levels = vec![Level::Warn, Level::Info, Level::Debug];
+        let log_levels = vec![Some(Level::Warn), Some(Level::Info), Some(Level::Debug)];
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(log_levels)
@@ -688,11 +688,11 @@ mod tests {
         let message = (Level::Info, "hello".to_string());
 
         let nolog_levels = vec![
-            Level::None,
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
+            None,
+            Some(Level::UserError),
+            Some(Level::Critical),
+            Some(Level::Error),
+            Some(Level::Warn),
         ];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
@@ -701,7 +701,7 @@ mod tests {
             .test()
             .unwrap();
 
-        let log_levels = vec![Level::Info, Level::Debug];
+        let log_levels = vec![Some(Level::Info), Some(Level::Debug)];
         LogLinesCounter::new()
             .with_messages(vec![message])
             .at_levels(log_levels)
@@ -715,12 +715,12 @@ mod tests {
         let message = (Level::Debug, "hello".to_string());
 
         let nolog_levels = vec![
-            Level::None,
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
-            Level::Info,
+            None,
+            Some(Level::UserError),
+            Some(Level::Critical),
+            Some(Level::Error),
+            Some(Level::Warn),
+            Some(Level::Info),
         ];
         LogLinesCounter::new()
             .with_messages(vec![message.clone()])
@@ -731,7 +731,7 @@ mod tests {
 
         LogLinesCounter::new()
             .with_messages(vec![message])
-            .at_levels(vec![Level::Debug])
+            .at_levels(vec![Some(Level::Debug)])
             .expected_log_lines_count(1)
             .test()
             .unwrap();
@@ -748,13 +748,13 @@ mod tests {
         let message = (Level::UserError, "hello".to_string());
 
         let log_levels = vec![
-            Level::None,
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
-            Level::Info,
-            Level::Debug,
+            None,
+            Some(Level::UserError),
+            Some(Level::Critical),
+            Some(Level::Error),
+            Some(Level::Warn),
+            Some(Level::Info),
+            Some(Level::Debug),
         ];
         LogLinesCounter::new()
             .with_messages(vec![message])
@@ -775,13 +775,13 @@ mod tests {
         ];
 
         let log_levels = vec![
-            Level::None,
-            Level::UserError,
-            Level::Critical,
-            Level::Error,
-            Level::Warn,
-            Level::Info,
-            Level::Debug,
+            None,
+            Some(Level::UserError),
+            Some(Level::Critical),
+            Some(Level::Error),
+            Some(Level::Warn),
+            Some(Level::Info),
+            Some(Level::Debug),
         ];
         LogLinesCounter::new()
             .with_messages(messages)

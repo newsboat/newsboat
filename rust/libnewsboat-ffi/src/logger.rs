@@ -19,6 +19,13 @@ pub unsafe extern "C" fn rs_set_loglevel(level: logger::Level) {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn rs_unset_loglevel() {
+    abort_on_panic(|| {
+        logger::get_instance().unset_loglevel();
+    })
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn rs_set_logfile(logfile: *const c_char) {
     abort_on_panic(|| {
         let logfile = CStr::from_ptr(logfile);
@@ -41,6 +48,6 @@ pub unsafe extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_
 }
 
 #[no_mangle]
-pub extern "C" fn rs_get_loglevel() -> u64 {
-    abort_on_panic(|| logger::get_instance().get_loglevel() as u64)
+pub extern "C" fn rs_get_loglevel() -> i64 {
+    abort_on_panic(|| logger::get_instance().get_loglevel() as i64)
 }
