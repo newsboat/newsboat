@@ -387,7 +387,10 @@ static const schema_patches schemaPatches{
 
 			"ALTER TABLE rss_item ADD COLUMN content_mime_type VARCHAR(255) NOT NULL DEFAULT \"\";"
 		}
-	}};
+	}
+
+	// Note: schema changes should use the version number of the release that introduced them.
+};
 
 void Cache::populate_tables()
 {
