@@ -33,8 +33,6 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 {
 	std::vector<Download> dltemp;
 	std::vector<Download> deletion_list;
-	std::fstream f;
-
 	for (const auto& dl : downloads) {
 		// we are not allowed to reload if a download is in progress!
 		if (dl.status() == DlStatus::DOWNLOADING) {
@@ -77,7 +75,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 		}
 	}
 
-	f.open(queuefile.c_str(), std::fstream::in);
+	std::fstream f(queuefile, std::fstream::in);
 	bool comments_ignored = false;
 	if (f.is_open()) {
 		std::string line;
@@ -201,7 +199,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 		f.close();
 	}
 
-	f.open(queuefile.c_str(), std::fstream::out);
+	f.open(queuefile, std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& dl : dltemp) {
 			f << dl.url() << " " << utils::quote(dl.filename());

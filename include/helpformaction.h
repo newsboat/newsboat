@@ -8,7 +8,8 @@ namespace newsboat {
 
 class HelpFormAction : public FormAction {
 public:
-	HelpFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	HelpFormAction(View*, std::string formstr, ConfigContainer* cfg,
+		const std::string& ctx);
 	~HelpFormAction() override;
 	void prepare() override;
 	void init() override;
@@ -20,7 +21,6 @@ public:
 	std::string title() override;
 
 	void finished_qna(Operation op) override;
-	void set_context(const std::string& ctx);
 
 private:
 	bool process_operation(Operation op,
@@ -30,7 +30,7 @@ private:
 	bool quit;
 	bool apply_search;
 	std::string searchphrase;
-	std::string context;
+	const std::string context;
 	TextviewWidget textview;
 };
 

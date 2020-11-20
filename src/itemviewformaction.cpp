@@ -29,7 +29,6 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 	RegexManager& r)
 	: FormAction(vv, formstr, cfg)
 	, show_source(false)
-	, quit(false)
 	, rxman(r)
 	, num_lines(0)
 	, itemlist(il)
@@ -48,7 +47,6 @@ void ItemViewFormAction::init()
 {
 	f.set("msg", "");
 	do_redraw = true;
-	quit = false;
 	links.clear();
 	num_lines = 0;
 	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
@@ -159,6 +157,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	std::vector<std::string>* args)
 {
 	bool hardquit = false;
+	bool quit = false;
 
 	/*
 	 * whenever we process an operation, we mark the item

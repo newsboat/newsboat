@@ -75,7 +75,6 @@ private:
 	std::shared_ptr<RssItem> item;
 	bool show_source;
 	std::vector<LinkPair> links;
-	bool quit;
 	RegexManager& rxman;
 	unsigned int num_lines;
 	std::shared_ptr<ItemListFormAction> itemlist;

@@ -146,8 +146,8 @@ void ColorManager::apply_colors(Stfl::Form& form) const
 			ul.append("attr=underline");
 			// STFL will just ignore those in forms which don't have the
 			// `color_bold` and `color_underline` variables.
-			form.set("color_bold", bold.c_str());
-			form.set("color_underline", ul.c_str());
+			form.set("color_bold", bold);
+			form.set("color_underline", ul);
 		}
 	}
 }

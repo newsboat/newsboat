@@ -859,8 +859,7 @@ std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
 void Controller::write_item(std::shared_ptr<RssItem> item,
 	const std::string& filename)
 {
-	std::fstream f;
-	f.open(filename.c_str(), std::fstream::out);
+	std::fstream f(filename, std::fstream::out);
 	if (!f.is_open()) {
 		throw Exception(errno);
 	}
@@ -877,7 +876,7 @@ void Controller::import_read_information(const std::string& readinfofile)
 {
 	std::vector<std::string> guids;
 
-	std::ifstream f(readinfofile.c_str());
+	std::ifstream f(readinfofile);
 	std::string line;
 	getline(f, line);
 	if (!f.is_open()) {
@@ -894,8 +893,7 @@ void Controller::export_read_information(const std::string& readinfofile)
 {
 	std::vector<std::string> guids = rsscache->get_read_item_guids();
 
-	std::fstream f;
-	f.open(readinfofile.c_str(), std::fstream::out);
+	std::fstream f(readinfofile, std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& guid : guids) {
 			f << guid << std::endl;
@@ -943,8 +941,7 @@ void Controller::dump_config(const std::string& filename) const
 	filters.dump_config(configlines);
 	colorman.dump_config(configlines);
 	rxman.dump_config(configlines);
-	std::fstream f;
-	f.open(filename.c_str(), std::fstream::out);
+	std::fstream f(filename, std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& line : configlines) {
 			f << line << std::endl;

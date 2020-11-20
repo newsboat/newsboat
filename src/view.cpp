@@ -543,9 +543,8 @@ void View::push_help()
 	auto fa = get_current_formaction();
 
 	auto helpview = std::make_shared<HelpFormAction>(
-			this, help_str, cfg);
+			this, help_str, cfg, fa->id());
 	apply_colors(helpview);
-	helpview->set_context(fa->id());
 	helpview->set_parent_formaction(fa);
 	helpview->init();
 	formaction_stack.push_back(helpview);
