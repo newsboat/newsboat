@@ -512,8 +512,24 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 	if (x->description().text.empty() &&
 		cfgcont->get_configvalue_as_bool("download-full-page") &&
 		!x->link().empty()) {
-		// TODO: Determine mime-type
-		x->set_description(utils::retrieve_url(x->link(), cfgcont), "");
+
+		CURL* easyhandle = curl_easy_init();
+		const std::string content = utils::retrieve_url(x->link(), cfgcont, "", nullptr,
+				HTTPMethod::GET, easyhandle);
+		std::string content_mime_type;
+
+		// Determine mime-type
+		char* value = nullptr;
+		curl_easy_getinfo(easyhandle, CURLINFO_CONTENT_TYPE, &value);
+		if (value != nullptr) {
+			std::string content_type(value);
+			content_mime_type = content_type.substr(0, content_type.find_first_of(";"));
+		} else {
+			content_mime_type = "application/octet-stream";
+		}
+
+		x->set_description(content, content_mime_type);
+		curl_easy_cleanup(easyhandle);
 	}
 
 	LOG(Level::DEBUG,
