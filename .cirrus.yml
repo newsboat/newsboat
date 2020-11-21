@@ -400,3 +400,18 @@ asciidoctor_warnings_task:
         ASCIIDOCTOR_OPTS: '--failure-level WARN'
 
     script: make doc
+
+i18nspector_task:
+    name: .po files
+
+    container:
+      cpu: 1
+      memory: 512MB
+      dockerfile: docker/i18nspector.dockerfile
+
+    # `tee` displays the output of `i18nspector`, but also store it in the file
+    # for later analysis. `egrep` returns exit code 0 if it finds something,
+    # and 1 otherwise. We need the opposite, so we negate the exit code using
+    # an exclamation mark. This fails the build if the log contains errors or
+    # warnings.
+    script: make run-i18nspector | tee i18nspector.log && ! egrep --silent "^(E|W):" i18nspector.log

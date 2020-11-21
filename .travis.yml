@@ -38,7 +38,6 @@ matrix:
       env:
         - COMPILER=clang++-11
         - PROFILE=1
-        - REPORT_COVERAGE=yes
       before_install:
         - cargo install grcov
 
@@ -46,13 +45,6 @@ matrix:
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort"
         - export RUSTDOCFLAGS="-Cpanic=abort"
-    - name: "i18nspector"
-      addons:
-        apt:
-          packages:
-            - i18nspector
-      env:
-        - CHECKS=i18nspector
 
 install:
   - export CXX=$COMPILER
@@ -64,10 +56,9 @@ script:
   # stuff. To maximize the benefits, we ask Make to process as many rules as
   # possible before failing. This enables developers to fix more errors before
   # re-submitting the code to CI, which should increase throughput.
-  - if [ -z "$CHECKS" ]; then   make -j2 --keep-going all test   ; fi
-  - if [ -z "$CHECKS" ]; then   make ci-check   ; fi
-  - if [ "$CHECKS" = "i18nspector" ]; then   make run-i18nspector | tee i18nspector.log && if `egrep '^(E|W):' i18nspector.log >/dev/null 2>&1` ; then false else true; fi   ; fi
+  - make -j2 --keep-going all test
+  - make ci-check
 
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
-  - if [ -n "${REPORT_COVERAGE}" ]; then   ./submit-to-coveralls.sh   ; fi
+  - ./submit-to-coveralls.sh
