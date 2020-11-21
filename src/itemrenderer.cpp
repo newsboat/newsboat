@@ -139,7 +139,6 @@ std::string item_renderer::to_plain_text(
 
 	prepare_header(item, lines, links, true);
 	const auto base = get_item_base_link(item);
-	// TODO: Take mime-type into account
 	render_html(cfg, utils::utf8_to_locale(item->description().text), lines, links,
 		base, true);
 
@@ -167,7 +166,6 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);
-	// TODO: Take mime-type into account
 	const auto body = utils::utf8_to_locale(item->description().text);
 	render_html(cfg, body, lines, links, baseurl, false);
 
