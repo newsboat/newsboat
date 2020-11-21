@@ -51,7 +51,7 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 	item->set_link("http://example.com/item");
 	item->set_guid("http://example.com/item");
 	item->set_author("Newsboat Testsuite");
-	item->set_description("");
+	item->set_description("", "");
 	item->set_pubDate(time(nullptr)); // current time
 	item->set_unread(true);
 	feed->add_item(item);
@@ -355,13 +355,13 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 	rsscache.externalize_rssfeed(feed, false);
 
 	for (auto& item : feed->items()) {
-		item->set_description("your test failed!");
+		item->set_description("your test failed!", "text/plain");
 	}
 
 	REQUIRE_NOTHROW(rsscache.fetch_descriptions(feed.get()));
 
 	for (auto& item : feed->items()) {
-		REQUIRE(item->description() != "your test failed!");
+		REQUIRE(item->description().text != "your test failed!");
 	}
 }
 
@@ -676,7 +676,8 @@ TEST_CASE(
 			REQUIRE((*fst_it)->title() == (*snd_it)->title());
 			REQUIRE((*fst_it)->link() == (*snd_it)->link());
 			REQUIRE((*fst_it)->author() == (*snd_it)->author());
-			REQUIRE((*fst_it)->description() == (*snd_it)->description());
+			REQUIRE((*fst_it)->description().text == (*snd_it)->description().text);
+			REQUIRE((*fst_it)->description().mime == (*snd_it)->description().mime);
 			REQUIRE((*fst_it)->size() == (*snd_it)->size());
 			REQUIRE((*fst_it)->length() == (*snd_it)->length());
 			REQUIRE((*fst_it)->pubDate() == (*snd_it)->pubDate());
@@ -851,7 +852,7 @@ TEST_CASE(
 	feed->load();
 	REQUIRE_FALSE(feed->items()[0]->unread());
 	feed->items()[0]->set_unread_nowrite(true);
-	feed->items()[0]->set_description("changed!");
+	feed->items()[0]->set_description("changed!", "text/plain");
 
 	SECTION("reset_unread = false; item remains read") {
 		rsscache->externalize_rssfeed(feed, false);

@@ -48,7 +48,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	item->set_link(test_url);
 	item->set_title(test_title);
 	item->set_author(test_author);
-	item->set_description(test_description);
+	item->set_description(test_description, "text/plain");
 	item->set_pubDate(test_pubDate);
 	item->set_unread(true);
 	feed->add_item(item);
@@ -406,7 +406,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	item->set_link(test_url);
 	item->set_title(test_title);
 	item->set_author(test_author);
-	item->set_description(test_description);
+	item->set_description(test_description, "text/plain");
 	item->set_pubDate(test_pubDate);
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
@@ -611,7 +611,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	item->set_title(test_title);
 	item->set_author(test_author);
 	item->set_pubDate(test_pubDate);
-	item->set_description(test_description);
+	item->set_description(test_description, "text/plain");
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 
@@ -801,7 +801,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	item->set_title(test_title);
 	item->set_author(test_author);
 	item->set_pubDate(test_pubDate);
-	item->set_description(test_description);
+	item->set_description(test_description, "text/plain");
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 

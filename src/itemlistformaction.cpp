@@ -302,7 +302,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						: visible_items[itempos]
 						.first->feedurl();
 					rnd.render(
-						utils::utf8_to_locale(visible_items[itempos].first->description()),
+						utils::utf8_to_locale(visible_items[itempos].first->description().text),
 						lines,
 						links,
 						baseurl);

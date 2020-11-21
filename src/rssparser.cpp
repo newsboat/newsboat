@@ -448,7 +448,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 			// casting to int64_t is either a no-op, or an up-cast which are
 			// always safe.
 			static_cast<int64_t>(x->pubDate_timestamp()),
-			x->description());
+			x->description().text);
 
 		add_item_to_feed(feed, x);
 	}
@@ -497,27 +497,46 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 
 	handle_itunes_summary(x, item);
 
-	if (x->description().empty()) {
-		x->set_description(item.description);
+	if (x->description().text.empty()) {
+		x->set_description(item.description, item.description_mime_type);
 	} else {
 		if (cfgcont->get_configvalue_as_bool(
 				"always-display-description") &&
 			!item.description.empty())
 			x->set_description(
-				x->description() + "<hr>" + item.description);
+				x->description().text + "<hr>" + item.description, "text/html");
 	}
 
 	/* if it's still empty and we shall download the full page, then we do
 	 * so. */
-	if (x->description().empty() &&
+	if (x->description().text.empty() &&
 		cfgcont->get_configvalue_as_bool("download-full-page") &&
 		!x->link().empty()) {
-		x->set_description(utils::retrieve_url(x->link(), cfgcont));
+
+		CURL* easyhandle = curl_easy_init();
+		const std::string content = utils::retrieve_url(x->link(), cfgcont, "", nullptr,
+				HTTPMethod::GET, easyhandle);
+		std::string content_mime_type;
+
+		// Determine mime-type based on Content-type header:
+		// Content-type: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
+		// Format: https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+		char* value = nullptr;
+		curl_easy_getinfo(easyhandle, CURLINFO_CONTENT_TYPE, &value);
+		if (value != nullptr) {
+			std::string content_type(value);
+			content_mime_type = content_type.substr(0, content_type.find_first_of(";"));
+		} else {
+			content_mime_type = "application/octet-stream";
+		}
+
+		x->set_description(content, content_mime_type);
+		curl_easy_cleanup(easyhandle);
 	}
 
 	LOG(Level::DEBUG,
 		"RssParser::set_item_content: content = %s",
-		x->description());
+		x->description().text);
 }
 
 std::string RssParser::get_guid(const rsspp::Item& item) const
@@ -582,14 +601,14 @@ void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,
 void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item) const
 {
-	if (!x->description().empty()) {
+	if (!x->description().text.empty()) {
 		return;
 	}
 
 	/* here we handle content:encoded tags that are an extension but very
 	 * widespread */
 	if (!item.content_encoded.empty()) {
-		x->set_description(item.content_encoded);
+		x->set_description(item.content_encoded, "text/html");
 	} else {
 		LOG(Level::DEBUG,
 			"RssParser::parse: found no content:encoded");
@@ -599,7 +618,7 @@ void RssParser::handle_content_encoded(std::shared_ptr<RssItem> x,
 void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item)
 {
-	if (!x->description().empty()) {
+	if (!x->description().text.empty()) {
 		return;
 	}
 
@@ -608,7 +627,7 @@ void RssParser::handle_itunes_summary(std::shared_ptr<RssItem> x,
 		std::string desc = "<ituneshack>";
 		desc.append(summary);
 		desc.append("</ituneshack>");
-		x->set_description(desc);
+		x->set_description(desc, "text/html");
 	}
 }
 

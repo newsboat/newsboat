@@ -72,7 +72,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	std::tie(item, feed) = create_test_item(&rsscache);
 
 	SECTION("Item without an enclosure") {
-		item->set_description(ITEM_DESCRIPTON);
+		item->set_description(ITEM_DESCRIPTON, "text/html");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -90,7 +90,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	}
 
 	SECTION("Item with an enclosure") {
-		item->set_description(ITEM_DESCRIPTON);
+		item->set_description(ITEM_DESCRIPTON, "text/html");
 		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
@@ -110,7 +110,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	}
 
 	SECTION("Item with an enclosure that has a MIME type") {
-		item->set_description(ITEM_DESCRIPTON);
+		item->set_description(ITEM_DESCRIPTON, "text/html");
 		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
 		item->set_enclosure_type(ITEM_ENCLOSURE_TYPE);
 
@@ -134,7 +134,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	SECTION("Item with some links in the description") {
 		item->set_description(
 			ITEM_DESCRIPTON +
-			"<p>See also <a href='https://example.com'>this site</a>.</p>");
+			"<p>See also <a href='https://example.com'>this site</a>.</p>", "text/html");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -176,7 +176,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
 		"Pellentesque nisl massa, luctus ut ligula vitae, suscipit tempus "
 		"velit. Vivamus sodales, quam in convallis posuere, libero nisi "
-		"ultricies orci, nec lobortis.");
+		"ultricies orci, nec lobortis.", "text/html");
 
 	const auto header = std::string() +
 		"Feed: " + FEED_TITLE + '\n' +
@@ -253,7 +253,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		item->set_description(
 			"&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;" // 10 characters
 			"&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" // 10 characters
-			"Lorem ipsum dolor sit amet");
+			"Lorem ipsum dolor sit amet", "text/html");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -282,7 +282,7 @@ TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
 	feed->set_title("<" + FEED_TITLE + ">");
 	item->set_title("<" + ITEM_TITLE + ">");
 	item->set_author("<" + ITEM_AUTHOR + ">");
-	item->set_description("&lt;test&gt;");
+	item->set_description("&lt;test&gt;", "text/html");
 
 	const auto expected = std::string() +
 		"Feed: <" + FEED_TITLE + ">\n" +
@@ -379,7 +379,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	}
 
 	SECTION("Item without an enclosure") {
-		item->set_description(ITEM_DESCRIPTON);
+		item->set_description(ITEM_DESCRIPTON, "text/html");
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -432,7 +432,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		const auto description = std::string() +
 			"<p>Hello, world! Check out "
 			"<a href='https://example.com'>our site</a>.</p>";
-		item->set_description(description);
+		item->set_description(description, "text/html");
 
 		SECTION("internal renderer") {
 			cfg.set_configvalue("html-renderer", "internal");
@@ -481,7 +481,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		const auto description = std::string() +
 			"<p>Hello, world!</p>\n\n"
 			"<p>Check out <a href='https://example.com'>our site</a>.</p>";
-		item->set_description(description);
+		item->set_description(description, "text/html");
 
 		SECTION("internal renderer") {
 			cfg.set_configvalue("html-renderer", "internal");
@@ -616,7 +616,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 	feed->set_title("<" + FEED_TITLE + ">");
 	item->set_title("<" + ITEM_TITLE + ">");
 	item->set_author("<" + ITEM_AUTHOR + ">");
-	item->set_description("<html>&lt;test&gt;</html>");
+	item->set_description("<html>&lt;test&gt;</html>", "text/html");
 
 	SECTION("to_stfl_list()") {
 		const auto expected = std::string() +

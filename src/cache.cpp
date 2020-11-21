@@ -207,11 +207,11 @@ static int fill_content_callback(void* myfeed,
 	char** /* azColName */)
 {
 	RssFeed* feed = static_cast<RssFeed*>(myfeed);
-	assert(argc == 2);
+	assert(argc == 3);
 	if (argv[0]) {
 		std::shared_ptr<RssItem> item =
 			feed->get_item_by_guid_unlocked(argv[0]);
-		item->set_description(argv[1] ? argv[1] : "");
+		item->set_description(argv[1] ? argv[1] : "", argv[2] ? argv[2] : "");
 	}
 	return 0;
 }
@@ -376,11 +376,21 @@ static const schema_patches schemaPatches{
 		{
 			"CREATE TABLE metadata ( "
 			" db_schema_version_major INTEGER NOT NULL, "
-			" db_schema_version_minor INTEGER NOT NULL );"
+			" db_schema_version_minor INTEGER NOT NULL );",
 
 			"INSERT INTO metadata VALUES ( 2, 11 );"
 		}
-	}};
+	},
+	{	{2, 22},
+		{
+			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 22;",
+
+			"ALTER TABLE rss_item ADD COLUMN content_mime_type VARCHAR(255) NOT NULL DEFAULT \"\";"
+		}
+	}
+
+	// Note: schema changes should use the version number of the release that introduced them.
+};
 
 void Cache::populate_tables()
 {
@@ -805,6 +815,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 			item->guid());
 	CbHandler count_cbh;
 	run_sql(query, count_callback, &count_cbh);
+	const auto description = item->description();
 	if (count_cbh.count() > 0) {
 		if (reset_unread) {
 			std::string content;
@@ -813,13 +824,13 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"'%q';",
 					item->guid());
 			run_sql(query, single_string_callback, &content);
-			if (content != item->description()) {
+			if (content != description.text) {
 				LOG(Level::DEBUG,
 					"Cache::update_rssitem_unlocked: '%s' "
 					"is "
 					"different from '%s'",
 					content,
-					item->description());
+					description.text);
 				query = prepare_query(
 						"UPDATE rss_item SET unread = 1 WHERE "
 						"guid = '%q';",
@@ -833,7 +844,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"UPDATE rss_item "
 					"SET title = '%q', author = '%q', url = '%q', "
 					"feedurl = '%q', "
-					"content = '%q', enclosure_url = '%q', "
+					"content = '%q', content_mime_type = '%q', enclosure_url = '%q', "
 					"enclosure_type = '%q', base = '%q', unread = "
 					"'%d' "
 					"WHERE guid = '%q'",
@@ -841,7 +852,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					item->author(),
 					item->link(),
 					feedurl,
-					item->description(),
+					description.text,
+					description.mime,
 					item->enclosure_url(),
 					item->enclosure_type(),
 					item->get_base(),
@@ -852,14 +864,15 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"UPDATE rss_item "
 					"SET title = '%q', author = '%q', url = '%q', "
 					"feedurl = '%q', "
-					"content = '%q', enclosure_url = '%q', "
+					"content = '%q', content_mime_type = '%q', enclosure_url = '%q', "
 					"enclosure_type = '%q', base = '%q' "
 					"WHERE guid = '%q'",
 					item->title(),
 					item->author(),
 					item->link(),
 					feedurl,
-					item->description(),
+					description.text,
+					description.mime,
 					item->enclosure_url(),
 					item->enclosure_type(),
 					item->get_base(),
@@ -870,10 +883,10 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 		std::string insert = prepare_query(
 				"INSERT INTO rss_item (guid, title, author, url, "
 				"feedurl, "
-				"pubDate, content, unread, enclosure_url, "
+				"pubDate, content, content_mime_type, unread, enclosure_url, "
 				"enclosure_type, enqueued, base) "
 				"VALUES "
-				"('%q','%q','%q','%q','%q','%u','%q','%d','%q','%q',%d,"
+				"('%q','%q','%q','%q','%q','%u','%q','%q','%d','%q','%q',%d,"
 				" "
 				"'%q')",
 				item->guid(),
@@ -882,7 +895,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 				item->link(),
 				feedurl,
 				item->pubDate_timestamp(),
-				item->description(),
+				description.text,
+				description.mime,
 				(item->unread() ? 1 : 0),
 				item->enclosure_url(),
 				item->enclosure_type(),
@@ -1095,7 +1109,7 @@ void Cache::fetch_descriptions(RssFeed* feed)
 	const std::string in_clause = utils::join(guids, ", ");
 
 	const std::string query = prepare_query(
-			"SELECT guid, content FROM rss_item WHERE guid IN (%s);",
+			"SELECT guid, content, content_mime_type FROM rss_item WHERE guid IN (%s);",
 			in_clause);
 
 	run_sql(query, fill_content_callback, feed);
