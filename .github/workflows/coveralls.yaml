@@ -1,0 +1,77 @@
+name: Coveralls
+
+on: [push, pull_request]
+
+jobs:
+  gen_coverage:
+    name: Calculate test coverage
+    runs-on: ubuntu-20.04
+
+    env:
+      # We use Rust Nightly, which builds upon LLVM 11. To ensure best
+      # compatibility, we use a matching C++ compiler.
+      CC: clang-11
+      CXX: clang++-11
+      # Enable test coverage.
+      PROFILE: 1
+      # These flags are necessary for grcov to correctly calculate coverage.
+      CARGO_INCREMENTAL: 0
+      RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
+      RUSTDOCFLAGS: '-Cpanic=abort'
+      # Some of our tests use ncurses, which require a terminal of some sort.
+      # We pretend ours is a simple one.
+      TERM: 'dumb'
+      # This prevents our tests from hogging too much of the CPU and failing
+      # due to races.
+      RUST_TEST_THREADS: 2
+
+    steps:
+      - name: Add Clang 11 repo
+        run: |
+          echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main" | sudo tee -a /etc/apt/sources.list.d/llvm-toolchain-focal-11.list
+          curl https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo apt-get update
+
+      - name: Install dependencies
+        run: sudo apt-get install --assume-yes --no-install-suggests clang-11 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
+
+      - name: Install Rust
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: nightly
+
+      - uses: actions/checkout@v2
+
+      - name: Cache ~/.cargo
+        uses: actions/cache@v2
+        id: cargo_cache
+        with:
+          key: cargo2-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/git
+            ~/.cargo/registry
+
+      - name: Install grcov
+        if: steps.cargo_cache.outputs.cache-hit != 'true'
+        run: cargo install grcov
+
+      - name: Run tests
+        run: make --jobs=3 ci-check
+
+        # gcov tool from gcc doesn't understand profiling info that LLVM
+        # produces, so we trick grcov into using llvm-cov instead. We can't
+        # simply point grcov at llvm-cov, because the latter only behaves like
+        # gcc's gcov when invoked by that name.
+      - name: Prepare to use llvm-cov-11 as gcov
+        run: ln -s $(which llvm-cov-11) gcov
+
+      - name: Calculate test coverage
+        # Note that we override the path to gcov tool.
+        run: GCOV=$(pwd)/gcov grcov . --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
+
+      - name: Submit coverage to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage.lcov
