@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_CONTROLLER_H_
 #define NEWSBOAT_CONTROLLER_H_
 
+#include <memory>
+
 #include <libxml/tree.h>
 
 #include "cache.h"
@@ -121,7 +123,7 @@ private:
 	void export_read_information(const std::string& readinfofile);
 
 	View* v;
-	UrlReader* urlcfg;
+	std::unique_ptr<UrlReader> urlcfg;
 	Cache* rsscache;
 	bool refresh_on_start;
 	ConfigContainer cfg;
