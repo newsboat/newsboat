@@ -44,7 +44,7 @@ freebsd_task:
     # Running three jobs because by default, VMs have 2 cores.
     build_script: su testuser -c 'cd ~ && gmake --jobs=3 --keep-going all test'
     test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=3 RUST_BACKTRACE=1 gmake -j3 ci-check'
-    clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings'
+    clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints'
     # This installs everything into a "fake filesystem root", then uninstalls
     # everything and checks that there are no files left over. The purpose of
     # this check is to ensure that: 1) `make install` doesn't fail; 2) `make
@@ -75,7 +75,7 @@ freebsd_task:
     test_script: &test_script
         - RUST_TEST_THREADS=3 RUST_BACKTRACE=1 make -j3 ci-check
     clippy_script: &clippy_script
-        - cargo clippy --all-targets --all-features -- -D warnings
+        - cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints
     # For explanation of what this script does, please see the FreeBSD job
     # above.
     fake_install_script: &fake_install_script
