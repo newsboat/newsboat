@@ -88,6 +88,16 @@ unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
 	return i;
 }
 
+HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
+{
+	std::string tagname = parser.get_text();
+	std::transform(tagname.begin(),
+		tagname.end(),
+		tagname.begin(),
+		::tolower);
+	return tags[tagname];
+}
+
 void HtmlRenderer::render(std::istream& input,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& links,
@@ -108,7 +118,6 @@ void HtmlRenderer::render(std::istream& input,
 	bool inside_audio = false;
 	std::vector<unsigned int> ol_counts;
 	std::vector<char> ol_types;
-	HtmlTag current_tag;
 	int link_num = -1;
 	std::vector<Table> tables;
 
@@ -127,17 +136,9 @@ void HtmlRenderer::render(std::istream& input,
 	for (TagSoupPullParser::Event e = xpp.next();
 		e != TagSoupPullParser::Event::END_DOCUMENT;
 		e = xpp.next()) {
-		std::string tagname;
 		switch (e) {
 		case TagSoupPullParser::Event::START_TAG:
-			tagname = xpp.get_text();
-			std::transform(tagname.begin(),
-				tagname.end(),
-				tagname.begin(),
-				::tolower);
-			current_tag = tags[tagname];
-
-			switch (current_tag) {
+			switch (extract_tag(xpp)) {
 			case HtmlTag::A: {
 				std::string link;
 				try {
@@ -598,14 +599,7 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 		case TagSoupPullParser::Event::END_TAG:
-			tagname = xpp.get_text();
-			std::transform(tagname.begin(),
-				tagname.end(),
-				tagname.begin(),
-				::tolower);
-			current_tag = tags[tagname];
-
-			switch (current_tag) {
+			switch (extract_tag(xpp)) {
 			case HtmlTag::BLOCKQUOTE:
 				--indent_level;
 				if (indent_level < 0) {
