@@ -100,7 +100,7 @@ impl FmtStrFormatter {
 
     fn format_format(&self, c: char, padding: &Padding, width: u32, result: &mut LimitedString) {
         let empty_string = String::new();
-        let value = self.fmts.get(&c).unwrap_or_else(|| &empty_string);
+        let value = self.fmts.get(&c).unwrap_or(&empty_string);
         match *padding {
             Padding::None => result.push_str(value),
 
