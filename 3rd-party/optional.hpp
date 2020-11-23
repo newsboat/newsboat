@@ -12,7 +12,7 @@
 #define NONSTD_OPTIONAL_LITE_HPP
 
 #define optional_lite_MAJOR  3
-#define optional_lite_MINOR  3
+#define optional_lite_MINOR  4
 #define optional_lite_PATCH  0
 
 #define optional_lite_VERSION  optional_STRINGIFY(optional_lite_MAJOR) "." optional_STRINGIFY(optional_lite_MINOR) "." optional_STRINGIFY(optional_lite_PATCH)
@@ -47,7 +47,10 @@
 // Control presence of exception handling (try and auto discover):
 
 #ifndef optional_CONFIG_NO_EXCEPTIONS
-# if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
+# if _MSC_VER
+# include <cstddef>     // for _HAS_EXCEPTIONS
+# endif
+# if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || (_HAS_EXCEPTIONS)
 #  define optional_CONFIG_NO_EXCEPTIONS  0
 # else
 #  define optional_CONFIG_NO_EXCEPTIONS  1
@@ -776,6 +779,12 @@ union storage_t
     }
 
     template< class... Args >
+    storage_t( nonstd_lite_in_place_t(T), Args&&... args )
+    {
+        emplace( std::forward<Args>(args)... );
+    }
+
+    template< class... Args >
     void emplace( Args&&... args )
     {
         ::new( value_ptr() ) value_type( std::forward<Args>(args)... );
@@ -1106,7 +1115,7 @@ public:
     >
     optional_constexpr explicit optional( U && value )
     : has_value_( true )
-    , contained( T{ std::forward<U>( value ) } )
+    , contained( nonstd_lite_in_place(T), std::forward<U>( value ) )
     {}
 
     // 8b (C++11) - non-explicit move construct from value
@@ -1121,7 +1130,7 @@ public:
     // NOLINTNEXTLINE( google-explicit-constructor, hicpp-explicit-conversions )
     optional_constexpr /*non-explicit*/ optional( U && value )
     : has_value_( true )
-    , contained( std::forward<U>( value ) )
+    , contained( nonstd_lite_in_place(T), std::forward<U>( value ) )
     {}
 
 #else // optional_CPP11_OR_GREATER
