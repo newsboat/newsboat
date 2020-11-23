@@ -804,7 +804,7 @@ void ItemListFormAction::finished_qna(Operation op)
 			std::ostringstream ostr;
 			v->get_ctrl()->write_item(
 				visible_items[itempos].first, ostr);
-			auto form_action = v->push_empty_formaction();
+			v->push_empty_formaction();
 			Stfl::reset();
 			FILE* f = popen(cmd.c_str(), "w");
 			if (f) {
@@ -812,7 +812,7 @@ void ItemListFormAction::finished_qna(Operation op)
 				fwrite(data.c_str(), data.length(), 1, f);
 				pclose(f);
 			}
-			v->drop_queued_input(form_action->get_form());
+			v->drop_queued_input();
 			v->pop_current_formaction();
 		}
 	}
