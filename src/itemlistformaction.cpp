@@ -382,17 +382,18 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
+			std::shared_ptr<RssItem> item = visible_items[itempos].first;
 			std::string filename;
 			if (automatic) {
 				if (args->size() > 0) {
 					filename = (*args)[0];
 				}
 			} else {
-				const auto title = utils::utf8_to_locale(visible_items[itempos].first->title());
+				const auto title = utils::utf8_to_locale(item->title());
 				const auto suggestion = v->get_filename_suggestion(title);
 				filename = v->run_filebrowser(suggestion);
 			}
-			save_article(filename, visible_items[itempos].first);
+			save_article(filename, item);
 		} else {
 			v->show_error(_("Error: no item selected!"));
 		}
