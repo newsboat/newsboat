@@ -258,6 +258,7 @@ void HelpFormAction::finished_qna(Operation op)
 		do_redraw = true;
 		break;
 	default:
+		FormAction::finished_qna(op);
 		break;
 	}
 }
