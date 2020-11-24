@@ -572,7 +572,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		std::string cmd = qna_responses[0];
 		std::ostringstream ostr;
 		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
-		auto form_action = v->push_empty_formaction();
+		v->push_empty_formaction();
 		Stfl::reset();
 		FILE* f = popen(cmd.c_str(), "w");
 		if (f) {
@@ -580,7 +580,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 			fwrite(data.c_str(), data.length(), 1, f);
 			pclose(f);
 		}
-		v->drop_queued_input(form_action->get_form());
+		v->drop_queued_input();
 		v->pop_current_formaction();
 	}
 	break;

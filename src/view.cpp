@@ -303,13 +303,9 @@ std::string View::get_filename_suggestion(const std::string& s)
 	return retval;
 }
 
-void View::drop_queued_input(Stfl::Form& form)
+void View::drop_queued_input()
 {
-	// Ignore queued input
-	auto event = form.run(1);
-	while (event != nullptr && strcmp(event, "TIMEOUT") != 0) {
-		event = form.run(1);
-	}
+	flushinp();
 }
 
 void View::open_in_pager(const std::string& filename)
@@ -332,10 +328,10 @@ void View::open_in_pager(const std::string& filename)
 		cmdline.append(" ");
 		cmdline.append(filename);
 	}
-	auto form_action = push_empty_formaction();
+	push_empty_formaction();
 	Stfl::reset();
 	utils::run_interactively(cmdline, "View::open_in_pager");
-	drop_queued_input(form_action->get_form());
+	drop_queued_input();
 	pop_current_formaction();
 }
 
@@ -355,10 +351,10 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
 		cmdline.append(" " + escaped_url);
 	}
 
-	auto form_action = push_empty_formaction();
+	push_empty_formaction();
 	Stfl::reset();
 	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
-	drop_queued_input(form_action->get_form());
+	drop_queued_input();
 
 	pop_current_formaction();
 
@@ -524,7 +520,7 @@ void View::view_dialogs()
 	}
 }
 
-std::shared_ptr<FormAction> View::push_empty_formaction()
+void View::push_empty_formaction()
 {
 	auto fa = get_current_formaction();
 
@@ -534,8 +530,6 @@ std::shared_ptr<FormAction> View::push_empty_formaction()
 	empty_view->init();
 	formaction_stack.push_back(empty_view);
 	current_formaction = formaction_stack_size() - 1;
-
-	return empty_view;
 }
 
 void View::push_help()
@@ -620,7 +614,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	// Push empty formaction so our "msg" is not overwritten
-	auto form_action = push_empty_formaction();
+	push_empty_formaction();
 	f->get_form().set("msg", prompt);
 
 	char result = 0;
