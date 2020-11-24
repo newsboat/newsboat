@@ -28,12 +28,6 @@ namespace newsboat {
 OldReaderApi::OldReaderApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	// TODO
-}
-
-OldReaderApi::~OldReaderApi()
-{
-	// TODO
 }
 
 bool OldReaderApi::authenticate()

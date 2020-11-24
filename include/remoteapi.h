@@ -35,7 +35,7 @@ public:
 		const std::string& guid) = 0;
 	static const std::string read_password(const std::string& file);
 	static const std::string eval_password(const std::string& cmd);
-	// TODO
+
 protected:
 	ConfigContainer* cfg;
 	Credentials get_credentials(const std::string& scope,

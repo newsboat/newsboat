@@ -28,7 +28,7 @@ public:
 		const std::string& newflags,
 		const std::string& guid) override;
 	rsspp::Feed fetch_feed(const std::string& id);
-	// TODO
+
 private:
 	std::string retrieve_auth();
 	json_object* query_api(const std::string& url,

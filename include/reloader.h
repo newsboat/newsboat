@@ -41,9 +41,6 @@ public:
 	/// made through \a easyhandle, unless it's nullptr, in which case
 	/// method creates a temporary handle that is destroyed when method
 	/// completes.
-	// TODO: check that the value passed via "max" is always obtained from
-	// feedcontainer, then move that request into the method and drop the
-	// parameter.
 	void reload(unsigned int pos,
 		unsigned int max = 0,
 		bool unattended = false,
