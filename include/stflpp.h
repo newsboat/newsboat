@@ -39,16 +39,11 @@ public:
 		void modify(const std::string& name,
 			const std::string& mode,
 			const std::string& text);
-		// std::string lookup(const std::string& path, const
-		// std::string& newname);
 
 	private:
 		stfl_form* f;
 		stfl_ipool* ipool;
 	};
-
-	// static std::string error();
-	// static void error_action(const std::string& mode);
 
 	static void reset();
 	static std::string quote(const std::string& text);
