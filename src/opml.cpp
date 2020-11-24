@@ -62,14 +62,17 @@ void rec_find_rss_outlines(
 		std::string newtag = tag;
 
 		if (strcmp((const char*)node->name, "outline") == 0) {
-			char* url = (char*)xmlGetProp(
+			char* url_p = (char*)xmlGetProp(
 					node, (const xmlChar*)"xmlUrl");
-			if (!url) {
-				url = (char*)xmlGetProp(
+			if (!url_p) {
+				url_p = (char*)xmlGetProp(
 						node, (const xmlChar*)"url");
 			}
 
-			if (url) {
+			if (url_p) {
+				const std::string url(url_p);
+				xmlFree(url_p);
+
 				LOG(Level::DEBUG,
 					"opml::import: found RSS outline with "
 					"url = "
@@ -81,13 +84,12 @@ void rec_find_rss_outlines(
 				// Liferea uses a pipe to signal feeds read from
 				// the output of a program in its OPMLs. Convert
 				// them to our syntax.
-				if (*url == '|') {
+				if (url.length() >= 1 && url[0] == '|') {
 					nurl = strprintf::fmt(
-							"exec:%s", url + 1);
+							"exec:%s", url.substr(1));
 					LOG(Level::DEBUG,
 						"opml::import: liferea-style "
-						"url %s "
-						"converted to %s",
+						"url %s converted to %s",
 						url,
 						nurl);
 				}
@@ -107,15 +109,9 @@ void rec_find_rss_outlines(
 					xmlFree(filtercmd);
 				}
 
-				xmlFree(url);
 				// Filters and scripts may have arguments, so,
 				// quote them when needed.
-				// TODO: get rid of xmlStrdup, it's useless
-				url = (char*)xmlStrdup(
-						(const xmlChar*)
-						utils::quote_if_necessary(nurl)
-						.c_str());
-				assert(url);
+				const std::string quoted_url = utils::quote_if_necessary(nurl);
 
 				bool found = false;
 
@@ -126,36 +122,28 @@ void rec_find_rss_outlines(
 				if (urlcfg.get_urls().size() > 0) {
 					for (const auto& u :
 						urlcfg.get_urls()) {
-						if (u == url) {
+						if (u == quoted_url) {
 							found = true;
 						}
 					}
 				}
 
 				if (!found) {
-					LOG(Level::DEBUG,
-						"opml::import: added url = %s",
-						url);
+					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
 					urlcfg.get_urls().push_back(
-						std::string(url));
+						std::string(quoted_url));
 					if (tag.length() > 0) {
 						LOG(Level::DEBUG,
-							"opml::import: "
-							"appending "
-							"tag %s to url %s",
+							"opml::import: appending tag %s to url %s",
 							tag,
-							url);
-						urlcfg.get_tags(url).push_back(
-							tag);
+							quoted_url);
+						urlcfg.get_tags(quoted_url).push_back(tag);
 					}
 				} else {
 					LOG(Level::DEBUG,
-						"opml::import: url = %s is "
-						"already "
-						"in list",
-						url);
+						"opml::import: url = %s is already in list",
+						quoted_url);
 				}
-				xmlFree(url);
 			} else {
 				char* text = (char*)xmlGetProp(
 						node, (const xmlChar*)"text");
