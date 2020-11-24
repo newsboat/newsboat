@@ -27,7 +27,6 @@ FilterParser& FilterParser::operator=(FilterParser& p) {
 }
 
 void FilterParser::add_logop(int op) {
-	//fprintf(stderr,"add_logop: op = %d\n", op);
 	expression * expr = new expression(op);
 	if (!root) {
 		printf("error: there can't be a logical expression w/o a prior expression!");
@@ -44,11 +43,9 @@ void FilterParser::add_logop(int op) {
 			curpos = root = expr;
 		}
 	}
-	// printf("logop: %d\n", op);
 }
 
 void FilterParser::add_matchexpr(char * name, int op, char * lit) {
-	//fprintf(stderr,"add_matchexpr: name = %s op = %d lit = %s\n", name, op, lit);
 	expression * expr = new expression(name, lit, op);
 	if (next_must_descend_right) {
 		next_must_descend_right = false;
@@ -69,16 +66,13 @@ void FilterParser::add_matchexpr(char * name, int op, char * lit) {
 	}
 	coco_string_delete(name);
 	coco_string_delete(lit);
-	// printf("matchexpr: %ls lit = %ls op = %d\n", name, lit, op);
 }
 
 void FilterParser::open_block() {
-	//fprintf(stderr,"open_block\n");
 	next_must_descend_right = true;
 }
 
 void FilterParser::close_block() {
-	//fprintf(stderr,"close_block\n");
 	if (curpos != root) {
 		curpos = curpos->parent;
 	}
