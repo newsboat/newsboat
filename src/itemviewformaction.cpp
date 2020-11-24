@@ -231,7 +231,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		} else {
 			try {
 				v->get_ctrl()->write_item(item, filename);
-				v->show_error(strprintf::fmt(
+				v->set_status(strprintf::fmt(
 						_("Saved article to %s."), filename));
 			} catch (...) {
 				v->show_error(strprintf::fmt(
@@ -537,7 +537,7 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 				try {
 					v->get_ctrl()->write_item(
 						item, filename);
-					v->show_error(strprintf::fmt(
+					v->set_status(strprintf::fmt(
 							_("Saved article to %s"),
 							filename));
 				} catch (...) {

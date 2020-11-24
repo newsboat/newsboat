@@ -1360,7 +1360,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 	} else {
 		try {
 			v->get_ctrl()->write_item(item, filename);
-			v->show_error(strprintf::fmt(
+			v->set_status(strprintf::fmt(
 					_("Saved article to %s"), filename));
 		} catch (...) {
 			v->show_error(strprintf::fmt(
