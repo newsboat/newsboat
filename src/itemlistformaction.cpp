@@ -1473,119 +1473,81 @@ void ItemListFormAction::handle_op_saveall()
 		directory.push_back(NEWSBEUTER_PATH_SEP);
 	}
 
-	if (visible_items.size() == 1) {
-		const std::string filename = v->get_filename_suggestion( utils::utf8_to_locale(
-					visible_items[0].first->title()));
-		const std::string fpath = directory + filename;
+	std::vector<std::string> filenames;
+	for (const auto& item : visible_items) {
+		filenames.emplace_back( utils::utf8_to_locale(v->get_filename_suggestion(
+					item.first->title())));
+	}
+
+	const auto unique_filenames = std::set<std::string>(
+			std::begin(filenames),
+			std::end(filenames));
+
+	int nfiles_exist = filenames.size() - unique_filenames.size();
+	for (const auto& filename : unique_filenames) {
+		const auto filepath = directory + filename;
+		struct stat sbuf;
+		if (::stat(filepath.c_str(), &sbuf) != -1) {
+			nfiles_exist++;
+		}
+	}
+
+	// Check that the number of translated answers is the same as the
+	// number of answers we expect to handle. If it doesn't, just give up.
+	// That'll prevent this function from saving anything, so users will
+	// complain, and we'll ask them to update the translation. A bit lame,
+	// but it's better than mishandling the answer.
+	const std::string input_options = _("yanq");
+	const auto n_options = ((std::string) "yanq").length();
+	if (input_options.length() < n_options) {
+		return;
+	}
+
+	bool overwrite_all = false;
+	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
+		const auto filename = filenames[item_idx];
+		const auto filepath = directory + filename;
+		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
-		if (::stat(fpath.c_str(), &sbuf) != -1) {
-			std::string input_options = _("yn");
-			char c = v->confirm(strprintf::fmt(
-						_("Overwrite `%s' in `%s'? "
-							"(y:Yes n:No)"),
-						filename, directory),
-					input_options);
-			if (!c) {
-				return;
+		if (::stat(filepath.c_str(), &sbuf) != -1) {
+			if (overwrite_all) {
+				save_article(filepath, item);
+				continue;
 			}
 
-			// Check that the number of translated answers is the same as the
-			// number of answers we expect to handle. If it doesn't, just give
-			// up. That'll prevent this function from saving anything, so users
-			// will complain, and we'll ask them to update the translation.
-			// A bit lame, but it's better than mishandling the answer.
-			const auto n_options = ((std::string) "yn").length();
-			if (input_options.length() < n_options) {
-				return;
+			char c;
+			if (nfiles_exist > 1) {
+				c = v->confirm(strprintf::fmt(
+							_("Overwrite `%s' in `%s'? "
+								"There are %d more conflicts like this "
+								"(y:Yes a:Yes to all n:No q:No to all)"),
+							filename, directory, --nfiles_exist),
+						input_options);
+			} else {
+				c = v->confirm(strprintf::fmt(
+							_("Overwrite `%s' in `%s'? "
+								"(y:Yes n:No)"),
+							filename, directory),
+						input_options);
+			}
+			if (!c) {
+				break;
 			}
 
 			if (c == input_options.at(0)) {
-				save_article(fpath, visible_items[0].first);
+				save_article(filepath, item);
 			} else if (c == input_options.at(1)) {
-				return;
+				overwrite_all = true;
+				save_article(filepath, item);
+			} else if (c == input_options.at(2)) {
+				continue;
+			} else if (c == input_options.at(3)) {
+				break;
 			}
 		} else {
 			// Create file since it does not exist
-			save_article(fpath, visible_items[0].first);
-		}
-	} else {
-		std::vector<std::string> filenames;
-		for (const auto& item : visible_items) {
-			filenames.emplace_back( utils::utf8_to_locale(v->get_filename_suggestion(
-						item.first->title())));
-		}
-
-		const auto unique_filenames = std::set<std::string>(
-				std::begin(filenames),
-				std::end(filenames));
-
-		int nfiles_exist = filenames.size() - unique_filenames.size();
-		for (const auto& filename : unique_filenames) {
-			const auto filepath = directory + filename;
-			struct stat sbuf;
-			if (::stat(filepath.c_str(), &sbuf) != -1) {
-				nfiles_exist++;
-			}
-		}
-
-		// Check that the number of translated answers is the same as the
-		// number of answers we expect to handle. If it doesn't, just give up.
-		// That'll prevent this function from saving anything, so users will
-		// complain, and we'll ask them to update the translation. A bit lame,
-		// but it's better than mishandling the answer.
-		const std::string input_options = _("yanq");
-		const auto n_options = ((std::string) "yanq").length();
-		if (input_options.length() < n_options) {
-			return;
-		}
-
-		bool overwrite_all = false;
-		for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
-			const auto filename = filenames[item_idx];
-			const auto filepath = directory + filename;
-			auto item = visible_items[item_idx].first;
-
-			struct stat sbuf;
-			if (::stat(filepath.c_str(), &sbuf) != -1) {
-				if (overwrite_all) {
-					save_article(filepath, item);
-					continue;
-				}
-
-				char c;
-				if (nfiles_exist > 1) {
-					c = v->confirm(strprintf::fmt(
-								_("Overwrite `%s' in `%s'? "
-									"There are %d more conflicts like this "
-									"(y:Yes a:Yes to all n:No q:No to all)"),
-								filename, directory, --nfiles_exist),
-							input_options);
-				} else {
-					c = v->confirm(strprintf::fmt(
-								_("Overwrite `%s' in `%s'? "
-									"(y:Yes n:No)"),
-								filename, directory),
-							input_options);
-				}
-				if (!c) {
-					break;
-				}
-
-				if (c == input_options.at(0)) {
-					save_article(filepath, item);
-				} else if (c == input_options.at(1)) {
-					overwrite_all = true;
-					save_article(filepath, item);
-				} else if (c == input_options.at(2)) {
-					continue;
-				} else if (c == input_options.at(3)) {
-					break;
-				}
-			} else {
-				// Create file since it does not exist
-				save_article(filepath, item);
-			}
+			save_article(filepath, item);
 		}
 	}
 }
