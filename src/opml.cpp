@@ -1,5 +1,6 @@
 #include "opml.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cinttypes>
 #include <cstring>
@@ -113,25 +114,14 @@ void rec_find_rss_outlines(
 				// quote them when needed.
 				const std::string quoted_url = utils::quote_if_necessary(nurl);
 
-				bool found = false;
-
 				LOG(Level::DEBUG,
 					"opml::import: size = %" PRIu64,
 					static_cast<uint64_t>(urlcfg.get_urls().size()));
-				// TODO: replace with algorithm::any or something
-				if (urlcfg.get_urls().size() > 0) {
-					for (const auto& u :
-						urlcfg.get_urls()) {
-						if (u == quoted_url) {
-							found = true;
-						}
-					}
-				}
 
-				if (!found) {
+				auto& urls = urlcfg.get_urls();
+				if (std::find(urls.begin(), urls.end(), quoted_url) == urls.end()) {
 					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
-					urlcfg.get_urls().push_back(
-						std::string(quoted_url));
+					urls.push_back(quoted_url);
 					if (tag.length() > 0) {
 						LOG(Level::DEBUG,
 							"opml::import: appending tag %s to url %s",
