@@ -1302,18 +1302,22 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		if (tokens.empty()) {
 			return;
 		}
-		if (tokens[0] == "save" && tokens.size() >= 2) {
-			std::string filename = utils::resolve_tilde(tokens[1]);
+		if (tokens[0] == "save") {
+			if (tokens.size() < 2) {
+				v->show_error(_("Error: no filename provided"));
+				return;
+			}
+			if (visible_items.empty()) {
+				v->show_error(_("Error: no item selected!"));
+				return;
+			}
+			const std::string filename = utils::resolve_tilde(tokens[1]);
 			const unsigned int itempos = list.get_position();
 			LOG(Level::INFO,
 				"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
 				itempos,
 				filename);
-			if (!visible_items.empty()) {
-				save_article(filename, visible_items[itempos].first);
-			} else {
-				v->show_error(_("Error: no item selected!"));
-			}
+			save_article(filename, visible_items[itempos].first);
 		} else {
 			FormAction::handle_cmdline(cmd);
 		}
