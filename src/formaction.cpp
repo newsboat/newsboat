@@ -329,7 +329,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			} else {
 				v->get_ctrl()->dump_config(
 					utils::resolve_tilde(tokens[0]));
-				v->show_error(strprintf::fmt(
+				v->set_status(strprintf::fmt(
 						_("Saved configuration to %s"),
 						tokens[0]));
 			}
