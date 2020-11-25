@@ -11,7 +11,7 @@ namespace newsboat {
 class FeedHqApi : public RemoteApi {
 public:
 	explicit FeedHqApi(ConfigContainer* c);
-	~FeedHqApi() override;
+	~FeedHqApi() override = default;
 	bool authenticate() override;
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;

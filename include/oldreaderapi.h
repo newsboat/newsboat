@@ -11,7 +11,7 @@ namespace newsboat {
 class OldReaderApi : public RemoteApi {
 public:
 	explicit OldReaderApi(ConfigContainer* c);
-	~OldReaderApi() override;
+	~OldReaderApi() override = default;
 	bool authenticate() override;
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;

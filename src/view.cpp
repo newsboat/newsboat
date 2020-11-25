@@ -926,7 +926,7 @@ void View::pop_current_formaction()
 	}
 	formaction_stack.erase(it);
 	if (f == nullptr) {
-		// XXX TODO this is not correct... we'd need to return to the previous one, but nullptr formactions have no parent
+		// TODO this is not correct... we'd need to return to the previous one, but nullptr formactions have no parent
 		current_formaction = formaction_stack_size() -
 			1;
 	} else if (formaction_stack.size() > 0) {

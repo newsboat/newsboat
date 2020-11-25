@@ -25,12 +25,6 @@ namespace newsboat {
 InoreaderApi::InoreaderApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	// TODO
-}
-
-InoreaderApi::~InoreaderApi()
-{
-	// TODO
 }
 
 bool InoreaderApi::authenticate()

@@ -26,12 +26,6 @@ namespace newsboat {
 FeedHqApi::FeedHqApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	// TODO
-}
-
-FeedHqApi::~FeedHqApi()
-{
-	// TODO
 }
 
 bool FeedHqApi::authenticate()
@@ -118,8 +112,6 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 	LOG(Level::DEBUG,
 		"FeedHqApi::get_subscribed_urls: document = %s",
 		result);
-
-	// TODO: parse result
 
 	json_object* reply = json_tokener_parse(result.c_str());
 	if (reply == nullptr) {

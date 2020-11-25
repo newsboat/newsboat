@@ -12,13 +12,13 @@ public:
 	ReloadRangeThread(Reloader& r,
 		unsigned int start,
 		unsigned int end,
-		unsigned int size,
 		bool unattended);
 	void operator()();
 
 private:
 	Reloader& reloader;
-	unsigned int start, end, size;
+	unsigned int start;
+	unsigned int end;
 	bool unattended;
 };
 
