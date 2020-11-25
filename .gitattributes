@@ -5,8 +5,6 @@
 /.editorconfig export-ignore
 /.gitignore export-ignore
 /.gitattributes export-ignore
-/.travis.yml export-ignore
 /.cirrus.yml export-ignore
-/submit-to-coveralls.sh export-ignore
 /.astylerc export-ignore
 /.rustfmt.toml export-ignore
