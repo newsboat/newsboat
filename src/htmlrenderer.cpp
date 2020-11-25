@@ -88,6 +88,16 @@ unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
 	return i;
 }
 
+HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
+{
+	std::string tagname = parser.get_text();
+	std::transform(tagname.begin(),
+		tagname.end(),
+		tagname.begin(),
+		::tolower);
+	return tags[tagname];
+}
+
 void HtmlRenderer::render(std::istream& input,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& links,
@@ -102,13 +112,12 @@ void HtmlRenderer::render(std::istream& input,
 	std::vector<HtmlTag> list_elements_stack;
 	bool inside_pre = false;
 	bool itunes_hack = false;
-	size_t inside_script = 0;
+	bool inside_script = false;
 	size_t inside_style = 0;
 	bool inside_video = false;
 	bool inside_audio = false;
 	std::vector<unsigned int> ol_counts;
 	std::vector<char> ol_types;
-	HtmlTag current_tag;
 	int link_num = -1;
 	std::vector<Table> tables;
 
@@ -127,17 +136,31 @@ void HtmlRenderer::render(std::istream& input,
 	for (TagSoupPullParser::Event e = xpp.next();
 		e != TagSoupPullParser::Event::END_DOCUMENT;
 		e = xpp.next()) {
-		std::string tagname;
+		if (inside_script) {
+			// <script> tags can't be nested[1], so we simply ignore all input
+			// while we're looking for the closing tag.
+			//
+			// 1. https://rules.sonarsource.com/html/RSPEC-4645
+
+			switch (e) {
+			case TagSoupPullParser::Event::END_TAG:
+				if (extract_tag(xpp) == HtmlTag::SCRIPT) {
+					inside_script = false;
+				}
+				break;
+
+			default:
+				// Skip everything else.
+				break;
+			}
+
+			// Go on to the next XML node
+			continue;
+		}
+
 		switch (e) {
 		case TagSoupPullParser::Event::START_TAG:
-			tagname = xpp.get_text();
-			std::transform(tagname.begin(),
-				tagname.end(),
-				tagname.begin(),
-				::tolower);
-			current_tag = tags[tagname];
-
-			switch (current_tag) {
+			switch (extract_tag(xpp)) {
 			case HtmlTag::A: {
 				std::string link;
 				try {
@@ -441,7 +464,7 @@ void HtmlRenderer::render(std::istream& input,
 					tables.size() ? 0 : indent_level);
 
 				// don't render scripts, ignore current line
-				inside_script++;
+				inside_script = true;
 				break;
 
 			case HtmlTag::STYLE:
@@ -598,14 +621,7 @@ void HtmlRenderer::render(std::istream& input,
 			break;
 
 		case TagSoupPullParser::Event::END_TAG:
-			tagname = xpp.get_text();
-			std::transform(tagname.begin(),
-				tagname.end(),
-				tagname.begin(),
-				::tolower);
-			current_tag = tags[tagname];
-
-			switch (current_tag) {
+			switch (extract_tag(xpp)) {
 			case HtmlTag::BLOCKQUOTE:
 				--indent_level;
 				if (indent_level < 0) {
@@ -761,12 +777,8 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::SCRIPT:
-				// don't render scripts, ignore current line
-				if (inside_script) {
-					inside_script--;
-				}
-				prepare_new_line(curline,
-					tables.size() ? 0 : indent_level);
+				// This line is unreachable, since we handle closing <script>
+				// tags way before this entire `switch`.
 				break;
 
 			case HtmlTag::STYLE:
@@ -908,7 +920,7 @@ void HtmlRenderer::render(std::istream& input,
 						curline.append(paragraph);
 					}
 				}
-			} else if (inside_script || inside_style || inside_video || inside_audio) {
+			} else if (inside_style || inside_video || inside_audio) {
 				// skip scripts, CSS styles and fallback text for media elements
 			} else {
 				// strip leading whitespace

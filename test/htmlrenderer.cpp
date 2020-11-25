@@ -1,5 +1,6 @@
 #include "htmlrenderer.h"
 
+#include <fstream>
 #include <sstream>
 
 #include "3rd-party/catch.hpp"
@@ -1463,5 +1464,22 @@ TEST_CASE("Ordered list can contain unordered list in its items",
 	REQUIRE(lines[11] == p(LineType::wrappable, ""));
 	REQUIRE(lines[12] == p(LineType::wrappable, ""));
 
+	REQUIRE(links.size() == 0);
+}
+
+TEST_CASE("Skips contents of <script> tags", "[HtmlRenderer]")
+{
+	// This is a regression test for https://github.com/newsboat/newsboat/issues/1300
+
+	HtmlRenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	std::ifstream input_file("data/1300-reproducer.html");
+	const auto input = std::string{std::istreambuf_iterator<char>(input_file), std::istreambuf_iterator<char>()};
+
+	rnd.render(input, lines, links, "");
+
+	REQUIRE(lines.size() == 0);
 	REQUIRE(links.size() == 0);
 }
