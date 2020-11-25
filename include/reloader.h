@@ -35,14 +35,14 @@ public:
 	/// \brief Reloads given feed.
 	///
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
-	/// feedscontainer). \a max is a total amount of feeds (used when
-	/// preparing messages to the user). Only updates status (at the bottom
-	/// of the screen) if \a unattended is false. All network requests are
-	/// made through \a easyhandle, unless it's nullptr, in which case
-	/// method creates a temporary handle that is destroyed when method
-	/// completes.
+	/// feedscontainer). \a show_progress specifies if a progress indicator
+	/// (`[<pos>/<total_feeds>]`) should be included when updating the status
+	/// message (at the bottom of the screen). Status messages are only shown
+	/// if \a unattended is false. All network requests are made through
+	/// \a easyhandle, unless it is a nullptr, in which case this method creates
+	/// a temporary handle which is destroyed before returning from it.
 	void reload(unsigned int pos,
-		unsigned int max = 0,
+		bool show_progress = false,
 		bool unattended = false,
 		CurlHandle* easyhandle = nullptr);
 
@@ -65,7 +65,6 @@ public:
 	/// Only updates status bar if \a unattended is false.
 	void reload_range(unsigned int start,
 		unsigned int end,
-		unsigned int size,
 		bool unattended = false);
 
 private:
@@ -87,10 +86,6 @@ private:
 	Cache* rsscache;
 	ConfigContainer* cfg;
 	std::mutex reload_mutex;
-
-	std::string prepare_message(unsigned int pos, unsigned int max);
-
-
 };
 
 } // namespace newsboat

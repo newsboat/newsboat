@@ -53,11 +53,11 @@ bool Reloader::trylock_reload_mutex()
 }
 
 void Reloader::reload(unsigned int pos,
-	unsigned int max,
+	bool show_progress,
 	bool unattended,
 	CurlHandle* easyhandle)
 {
-	LOG(Level::DEBUG, "Reloader::reload: pos = %u max = %u", pos, max);
+	LOG(Level::DEBUG, "Reloader::reload: pos = %u", pos);
 	std::shared_ptr<RssFeed> oldfeed = ctrl->get_feedcontainer()->get_feed(pos);
 	if (oldfeed) {
 		// Query feed reloading should be handled by the calling functions
@@ -69,9 +69,13 @@ void Reloader::reload(unsigned int pos,
 
 		std::string errmsg;
 		if (!unattended) {
+			const auto max = ctrl->get_feedcontainer()->feeds_size();
+			const std::string progress = show_progress ?
+				strprintf::fmt("(%u/%u) ", pos + 1, max) :
+				"";
 			ctrl->get_view()->set_status(
 				strprintf::fmt(_("%sLoading %s..."),
-					prepare_message(pos + 1, max),
+					progress,
 					utils::censor_url(oldfeed->rssurl())));
 		}
 
@@ -124,14 +128,6 @@ void Reloader::reload(unsigned int pos,
 	}
 }
 
-std::string Reloader::prepare_message(unsigned int pos, unsigned int max)
-{
-	if (max > 0) {
-		return strprintf::fmt("(%u/%u) ", pos, max);
-	}
-	return "";
-}
-
 void Reloader::reload_all(bool unattended)
 {
 	ScopeMeasure sm("Reloader::reload_all");
@@ -152,7 +148,7 @@ void Reloader::reload_all(bool unattended)
 
 	LOG(Level::DEBUG, "Reloader::reload_all: starting with reload all...");
 	if (num_threads == 1) {
-		reload_range(0, num_feeds - 1, num_feeds, unattended);
+		reload_range(0, num_feeds - 1, unattended);
 	} else {
 		std::vector<std::pair<unsigned int, unsigned int>> partitions =
 				utils::partition_indexes(0, num_feeds - 1, num_threads);
@@ -163,14 +159,12 @@ void Reloader::reload_all(bool unattended)
 			threads.push_back(std::thread(ReloadRangeThread(*this,
 						partitions[i].first,
 						partitions[i].second,
-						num_feeds,
 						unattended)));
 		}
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: starting my own reload...");
 		reload_range(partitions[num_threads - 1].first,
 			partitions[num_threads - 1].second,
-			num_feeds,
 			unattended);
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: joining other threads...");
@@ -202,10 +196,9 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
-	const auto size = ctrl->get_feedcontainer()->feeds_size();
 
 	for (const auto& idx : indexes) {
-		reload(idx, size, unattended);
+		reload(idx, true, unattended);
 	}
 
 	notify_reload_finished(unread_feeds, unread_articles);
@@ -217,7 +210,6 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 
 void Reloader::reload_range(unsigned int start,
 	unsigned int end,
-	unsigned int size,
 	bool unattended)
 {
 	std::vector<unsigned int> v;
@@ -250,7 +242,7 @@ void Reloader::reload_range(unsigned int start,
 		LOG(Level::DEBUG,
 			"Reloader::reload_range: reloading feed #%u",
 			i);
-		reload(i, size, unattended, &easyhandle);
+		reload(i, true, unattended, &easyhandle);
 	}
 }
 
