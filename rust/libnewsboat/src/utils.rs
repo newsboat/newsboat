@@ -254,6 +254,9 @@ pub fn get_random_value(max: u32) -> u32 {
 }
 
 pub fn is_valid_color(color: &str) -> bool {
+    // Can't fix this because Rust 1.44 doesn't have strip_prefix for &str.
+    #![allow(clippy::manual_strip)]
+
     const COLORS: [&str; 9] = [
         "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default",
     ];
