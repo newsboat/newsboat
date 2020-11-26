@@ -64,7 +64,10 @@ bool UrlViewFormAction::process_operation(Operation op,
 		if (!links.empty()) {
 			const unsigned int pos = urls_list.get_position();
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[pos].first);
+			const std::string feedurl = (feed != nullptr ?
+					feed->rssurl() :
+					"");
+			v->open_in_browser(links[pos].first, feedurl);
 			v->set_status("");
 		} else {
 			v->show_error(_("No links available!"));
@@ -94,7 +97,10 @@ bool UrlViewFormAction::process_operation(Operation op,
 
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx].first);
+			const std::string feedurl = (feed != nullptr ?
+					feed->rssurl() :
+					"");
+			v->open_in_browser(links[idx].first, feedurl);
 			v->set_status("");
 		}
 	}

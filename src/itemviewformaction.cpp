@@ -246,7 +246,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		v->set_status(_("Starting browser..."));
-		const auto exit_code = v->open_in_browser(item->link());
+		const auto exit_code = v->open_in_browser(item->link(), item->feedurl());
 		if (!exit_code.has_value()) {
 			v->show_error(_("Failed to spawn browser"));
 			return false;
@@ -433,7 +433,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		if (idx < links.size()) {
 			v->set_status(_("Starting browser..."));
 
-			const auto exit_code = v->open_in_browser(links[idx].first);
+			const auto exit_code = v->open_in_browser(links[idx].first, item->feedurl());
 			if (!exit_code.has_value()) {
 				v->show_error(_("Failed to spawn browser"));
 				return false;
@@ -589,7 +589,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		sscanf(qna_responses[0].c_str(), "%u", &idx);
 		if (idx && idx - 1 < links.size()) {
 			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx - 1].first);
+			v->open_in_browser(links[idx - 1].first, item->feedurl());
 			v->set_status("");
 		}
 	}

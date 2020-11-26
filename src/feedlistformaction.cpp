@@ -240,7 +240,8 @@ REDO:
 					}
 
 					if (!url.empty()) {
-						const auto exit_code = v->open_in_browser(url);
+						const std::string feedurl = feed->rssurl();
+						const auto exit_code = v->open_in_browser(url, feedurl);
 						if (!exit_code.has_value()) {
 							v->show_error(_("Failed to spawn browser"));
 							return false;

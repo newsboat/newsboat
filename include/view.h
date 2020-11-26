@@ -88,7 +88,8 @@ public:
 	std::string select_filter(
 		const std::vector<FilterNameExprPair>& filters);
 
-	nonstd::optional<std::uint8_t> open_in_browser(const std::string& url);
+	nonstd::optional<std::uint8_t> open_in_browser(const std::string& url,
+		const std::string& feedurl);
 	void open_in_pager(const std::string& filename);
 
 	std::string get_filename_suggestion(const std::string& s);
