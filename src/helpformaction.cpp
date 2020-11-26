@@ -145,39 +145,20 @@ void HelpFormAction::prepare()
 					strcasestr(desc.desc.c_str(),
 						searchphrase.c_str()) !=
 					nullptr) {
-					char tabs_1[] = "                ";
-					char tabs_2[] =
-						"                        ";
-					int how_often_1 = strlen(tabs_1) -
-						desc.key.length();
-					int how_often_2 = strlen(tabs_2) -
-						desc.cmd.length();
-					if (how_often_1 <= 0) {
-						how_often_1 = 1;
-					}
-					if (how_often_2 <= 0) {
-						how_often_2 = 1;
-					}
-					tabs_1[how_often_1] = '\0';
-					tabs_2[how_often_2] = '\0';
 					std::string line;
 					switch (i) {
 					case 0:
 					case 1:
 						line = strprintf::fmt(
-								"%s%s%s%s%s",
+								"%-15s %-23s %s",
 								desc.key,
-								tabs_1,
 								desc.cmd,
-								tabs_2,
 								desc.desc);
 						break;
 					case 2:
 						line = strprintf::fmt(
-								"%s%s%s%s",
+								"%-39s %s",
 								desc.cmd,
-								tabs_1,
-								tabs_2,
 								desc.desc);
 						break;
 					}
