@@ -73,6 +73,8 @@ std::string resolve_relative(const std::string&, const std::string&);
 std::string replace_all(std::string str,
 	const std::string& from,
 	const std::string& to);
+std::string replace_all(const std::string& str,
+	const std::vector<std::pair<std::string, std::string>> from_to_pairs);
 
 std::wstring str2wstr(const std::string& str);
 std::string wstr2str(const std::wstring& wstr);

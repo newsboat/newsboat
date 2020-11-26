@@ -533,6 +533,33 @@ std::string utils::replace_all(std::string str,
 	return RustString( rs_replace_all(str.c_str(), from.c_str(), to.c_str()) );
 }
 
+std::string utils::replace_all(const std::string& str,
+	const std::vector<std::pair<std::string, std::string>> from_to_pairs)
+{
+	std::size_t cur_index = 0;
+	std::string output;
+	while (cur_index != str.size()) {
+		std::size_t first_match = std::string::npos;
+		std::pair<std::string, std::string> first_match_pair;
+		for (const auto& p : from_to_pairs) {
+			auto match = str.find(p.first, cur_index);
+			if (match != std::string::npos && match < first_match) {
+				first_match = match;
+				first_match_pair = p;
+			}
+		}
+		if (first_match == std::string::npos) {
+			output += str.substr(cur_index);
+			break;
+		} else {
+			output += str.substr(cur_index, first_match - cur_index);
+			cur_index = first_match + first_match_pair.first.size();
+			output += first_match_pair.second;
+		}
+	}
+	return output;
+}
+
 std::wstring utils::str2wstr(const std::string& str)
 {
 	const char* codeset = nl_langinfo(CODESET);
