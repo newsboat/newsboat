@@ -314,12 +314,10 @@ void PbView::run_help()
 	ListFormatter listfmt;
 
 	for (const auto& desc : descs) {
-		std::string descline;
-		descline.append(desc.key);
-		descline.append(8 - desc.key.length(), ' ');
-		descline.append(desc.cmd);
-		descline.append(24 - desc.cmd.length(), ' ');
-		descline.append(desc.desc);
+		const std::string descline = strprintf::fmt("%-7s %-23s %s",
+				desc.key,
+				desc.cmd,
+				desc.desc);
 
 		listfmt.add_line(descline);
 	}
