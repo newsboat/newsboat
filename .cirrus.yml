@@ -159,6 +159,10 @@ formatting_task:
         - git diff --exit-code
 
 linux_task:
+    env:
+        RUSTFLAGS: '-D warnings'
+        PROFILE: 1
+
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
         # Newsboat release day
@@ -305,10 +309,6 @@ linux_task:
                 cxx: clang++-11
 
     cargo_cache: *cargo_cache
-
-    env:
-        RUSTFLAGS: '-D warnings'
-        PROFILE: 1
 
     after_cache_script: *after_cache_script
     build_script: *build_script
