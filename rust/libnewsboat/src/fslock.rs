@@ -97,11 +97,4 @@ impl FsLock {
             false
         }
     }
-
-    pub fn try_lock_ffi(&mut self, new_lock_path: &str, pid: &mut i64) -> bool {
-        let p: &mut libc::pid_t = &mut 0;
-        let result = self.try_lock(Path::new(new_lock_path), p);
-        *pid = i64::from(*p);
-        result
-    }
 }
