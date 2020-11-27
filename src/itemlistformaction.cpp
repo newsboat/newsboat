@@ -135,7 +135,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				const auto link = visible_items[itempos].first->link();
-				const auto exit_code = v->open_in_browser(link);
+				const auto feedurl = visible_items[itempos].first->feedurl();
+				const auto exit_code = v->open_in_browser(link, feedurl);
 				if (!exit_code.has_value()) {
 					v->show_error(_("Failed to spawn browser"));
 					break;
@@ -170,7 +171,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
 				const auto link = visible_items[itempos].first->link();
-				const auto exit_code = v->open_in_browser(link);
+				const auto feedurl = visible_items[itempos].first->feedurl();
+				const auto exit_code = v->open_in_browser(link, feedurl);
 				if (!exit_code.has_value()) {
 					v->show_error(_("Failed to spawn browser"));
 					return false;

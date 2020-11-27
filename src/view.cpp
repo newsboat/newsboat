@@ -335,18 +335,26 @@ void View::open_in_pager(const std::string& filename)
 	pop_current_formaction();
 }
 
-nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url)
+nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
+	const std::string& feedurl)
 {
 	std::string cmdline;
 	const std::string browser = cfg->get_configvalue("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
-	if (browser.find("%u") != std::string::npos) {
-		cmdline = utils::replace_all(browser, "%u", escaped_url);
+	const std::string escaped_feedurl = "'" + utils::replace_all(feedurl, "'",
+			"%27") + "'";
+
+	if (browser.find("%u") != std::string::npos
+		|| browser.find("%F") != std::string::npos) {
+		cmdline = utils::replace_all(browser, {
+			{"%u", escaped_url},
+			{"%F", escaped_feedurl}
+		});
 	} else {
 		if (browser != "") {
-			cmdline.append(browser);
+			cmdline = browser;
 		} else {
-			cmdline.append("lynx");
+			cmdline = "lynx";
 		}
 		cmdline.append(" " + escaped_url);
 	}

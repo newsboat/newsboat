@@ -675,6 +675,76 @@ TEST_CASE("replace_all()", "[utils]")
 	REQUIRE(utils::replace_all("o o o", "o", "<o>") == "<o> <o> <o>");
 }
 
+TEST_CASE("replace_all() with from/to pairs", "[utils]")
+{
+	SECTION("output == input if no from/to pairs are specified") {
+		const std::string input = "lorem ipsum";
+		REQUIRE(utils::replace_all("", {}) == "");
+		REQUIRE(utils::replace_all(input, {}) == input);
+	}
+
+	SECTION("supports multiple from/to pairs") {
+		const std::vector<std::pair<std::string, std::string>> rules = {
+			{"a", "x"},
+			{"bb", "y"},
+			{"c", "zz"}
+		};
+
+		SECTION("empty input results in empty output") {
+			REQUIRE(utils::replace_all("", rules) == "");
+		}
+
+		SECTION("a from/to pair can be matched multiple times") {
+			REQUIRE(utils::replace_all("aaa", rules) == "xxx");
+			REQUIRE(utils::replace_all("bbb", rules) == "yb");
+			REQUIRE(utils::replace_all("ccc", rules) == "zzzzzz");
+		}
+
+		SECTION("multiple from/to pairs can be matched in the same input") {
+			REQUIRE(utils::replace_all("abc cccbbbaaa", rules) == "xbzz zzzzzzybxxx");
+			REQUIRE(utils::replace_all("begin abc cccbbbaaa end",
+					rules) == "begin xbzz zzzzzzybxxx end");
+		}
+	}
+
+	SECTION("multiple from/to pairs do not create loop") {
+		const std::vector<std::pair<std::string, std::string>> rules = {
+			{"a", "b"},
+			{"b", "cc"},
+			{"cc", "z"}
+		};
+
+		REQUIRE(utils::replace_all("a", rules) == "b");
+		REQUIRE(utils::replace_all("aaa a", rules) == "bbb b");
+		REQUIRE(utils::replace_all("abc", rules) == "bccc");
+		REQUIRE(utils::replace_all("ccab", rules) == "zbcc");
+	}
+
+	SECTION("from/to pairs can start with common substring") {
+		const std::vector<std::pair<std::string, std::string>> rules = {
+			{"%u", "lorem"},
+			{"%F", "ipsum"},
+			{"%%", "%"}
+		};
+
+		REQUIRE(utils::replace_all("%u", rules) == "lorem");
+		REQUIRE(utils::replace_all("%F", rules) == "ipsum");
+		REQUIRE(utils::replace_all("%%", rules) == "%");
+		REQUIRE(utils::replace_all("%% %u %F", rules) == "% lorem ipsum");
+	}
+
+	SECTION("if multiple pairs match, first one is used") {
+		const std::vector<std::pair<std::string, std::string>> rules = {
+			{"test", "lorem"},
+			{"t", "ipsum"},
+			{"tester", "dolar"}
+		};
+
+		REQUIRE(utils::replace_all("tester", rules) == "loremer");
+		REQUIRE(utils::replace_all("ts", rules) == "ipsums");
+	}
+}
+
 TEST_CASE("to_string()", "[utils]")
 {
 	REQUIRE(std::to_string(0) == "0");

@@ -80,7 +80,7 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 		if (tabcount <
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
-				const auto exit_code = v->open_in_browser(item->link());
+				const auto exit_code = v->open_in_browser(item->link(), item->feedurl());
 				if (!exit_code.has_value() || *exit_code != 0) {
 					return exit_code;
 				}
