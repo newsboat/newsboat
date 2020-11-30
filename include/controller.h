@@ -134,7 +134,7 @@ private:
 	RegexManager rxman;
 	RemoteApi* api;
 
-	std::unique_ptr<FsLock> fslock;
+	FsLock fslock;
 
 	ConfigPaths& configpaths;
 
