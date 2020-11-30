@@ -13,7 +13,8 @@ public:
 	FsLock();
 	~FsLock() = default;
 
-	bool try_lock(const std::string& lock_file, pid_t& pid);
+	bool try_lock(const std::string& lock_file, pid_t& pid,
+		std::string& error_message);
 
 private:
 	rust::Box<fslock::bridged::FsLock> rs_object;

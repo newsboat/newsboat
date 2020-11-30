@@ -30,9 +30,9 @@ impl Drop for FsLock {
 }
 
 impl FsLock {
-    pub fn try_lock(&mut self, new_lock_path: &Path, pid: &mut libc::pid_t) -> bool {
+    pub fn try_lock(&mut self, new_lock_path: &Path, pid: &mut libc::pid_t) -> Result<(), String> {
         if self.lock_file.is_some() && self.lock_path == new_lock_path {
-            return true;
+            return Ok(());
         }
 
         // pid == 0 indicates that something went majorly wrong during locking
@@ -49,7 +49,13 @@ impl FsLock {
         options.create(true).read(true).write(true).mode(0o600);
         let mut file = match options.open(&new_lock_path) {
             Ok(file) => file,
-            Err(_) => return false,
+            Err(reason) => {
+                return Err(format!(
+                    "Failed to open lock file: '{}' ({})",
+                    new_lock_path.display(),
+                    reason
+                ))
+            }
         };
 
         // then we lock it (returns immediately if locking is not possible)
@@ -60,23 +66,24 @@ impl FsLock {
                 new_lock_path.display()
             );
             let pid = process::id().to_string();
-            let success = file
+            if let Err(reason) = file
                 .set_len(0)
                 .and_then(|_| file.write_all(&pid.as_bytes()))
-                .is_ok();
-            log!(
-                Level::Debug,
-                "FsLock: PID written successfully: {}",
-                success as usize
-            );
-            if success {
-                if self.lock_file.take().is_some() {
-                    remove_lock(&self.lock_path);
-                }
-                self.lock_file = Some(file);
-                self.lock_path = new_lock_path.to_owned();
+            {
+                log!(Level::Debug, "FsLock: Failed to write PID");
+                return Err(format!(
+                    "Failed to write PID to lock file: '{}' ({})",
+                    new_lock_path.display(),
+                    reason
+                ));
             }
-            success
+            log!(Level::Debug, "FsLock: PID written successfully");
+            if self.lock_file.take().is_some() {
+                remove_lock(&self.lock_path);
+            }
+            self.lock_file = Some(file);
+            self.lock_path = new_lock_path.to_owned();
+            Ok(())
         } else {
             log!(
                 Level::Error,
@@ -94,7 +101,11 @@ impl FsLock {
                 "FsLock: locking failed, already locked by {}",
                 pid
             );
-            false
+            Err(format!(
+                "Failed to lock '{}', already locked by process with PID {}",
+                new_lock_path.display(),
+                pid
+            ))
         }
     }
 }

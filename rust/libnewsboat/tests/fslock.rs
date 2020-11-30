@@ -25,7 +25,7 @@ fn t_returns_an_error_if_invalid_lock_location() {
     let mut lock = FsLock::default();
     let mut pid = -1;
 
-    assert!(!lock.try_lock(lock_location.as_ref(), &mut pid));
+    assert!(lock.try_lock(lock_location.as_ref(), &mut pid).is_err());
     assert_eq!(pid, 0);
 }
 
@@ -38,7 +38,7 @@ fn t_returns_an_error_lock_file_without_write_access() {
 
     let mut lock = FsLock::default();
     let mut pid = -1;
-    assert!(!lock.try_lock(lock_location.as_ref(), &mut pid));
+    assert!(lock.try_lock(lock_location.as_ref(), &mut pid).is_err());
     assert_eq!(pid, 0);
 }
 
@@ -70,7 +70,11 @@ fn t_fails_if_lock_was_already_created() {
     let stdout = child.stdout.as_mut().unwrap();
     stdout.read_exact(&mut [0]).unwrap();
 
-    assert!(!lock.try_lock(lock_location.as_ref(), &mut pid));
+    let result = lock.try_lock(lock_location.as_ref(), &mut pid);
+    assert!(result.is_err());
+    if let Err(e) = result {
+        assert!(!e.is_empty());
+    }
     assert_eq!(pid, cid, "pid should be process holding the lock");
 
     // notify child to exit and drop lock
@@ -84,17 +88,17 @@ fn t_succeeds_if_lock_file_location_is_valid_and_not_locked_by_different_process
     let mut lock = FsLock::default();
     let mut pid = 0;
 
-    assert!(lock.try_lock(lock_location.as_ref(), &mut pid));
+    assert!(lock.try_lock(lock_location.as_ref(), &mut pid).is_ok());
     assert!(lock_location.path().exists());
     assert!(
-        lock.try_lock(lock_location.as_ref(), &mut pid),
+        lock.try_lock(lock_location.as_ref(), &mut pid).is_ok(),
         "recall succeeds"
     );
 
     let new_lock_location = NamedTempFile::new().unwrap();
 
     assert!(lock_location.path().exists());
-    assert!(lock.try_lock(new_lock_location.as_ref(), &mut pid));
+    assert!(lock.try_lock(new_lock_location.as_ref(), &mut pid).is_ok());
     assert!(!lock_location.path().exists());
     assert!(new_lock_location.path().exists());
 }

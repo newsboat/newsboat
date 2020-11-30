@@ -31,7 +31,8 @@ public:
 			// Child process: Call try_lock, signal parent to continue, wait for parent process signal to stop
 			pid_t ignore_pid;
 			FsLock lock;
-			lock.try_lock(lock_location, ignore_pid);
+			std::string error_message;
+			lock.try_lock(lock_location, ignore_pid, error_message);
 			sem_post(sem_start);
 
 			sem_wait(sem_stop);
@@ -84,8 +85,10 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 			pid_t pid = -1;
 
 			// try_lock() is expected to fail as the relevant directory does not exist
-			REQUIRE_FALSE(lock.try_lock(lock_location, pid));
+			std::string error_message;
+			REQUIRE_FALSE(lock.try_lock(lock_location, pid, error_message));
 			REQUIRE(pid == 0);
+			REQUIRE(error_message.length() > 0);
 		}
 	}
 
@@ -97,8 +100,10 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 		THEN("try_lock() will fail and return pid == 0") {
 			FsLock lock;
 			pid_t pid = -1;
-			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid));
+			std::string error_message;
+			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid, error_message));
 			REQUIRE(pid == 0);
+			REQUIRE(error_message.length() > 0);
 		}
 	}
 }
@@ -114,11 +119,13 @@ TEST_CASE("try_lock() fails if lock was already created", "[FsLock]")
 		pid_t pid = 0;
 
 		THEN("Calling try_lock() for the same lock location will fail") {
-			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid));
+			std::string error_message;
+			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid, error_message));
 		}
 
 		THEN("try_lock() returns the pid of the process holding the lock") {
-			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid));
+			std::string error_message;
+			REQUIRE_FALSE(lock.try_lock(lock_location.get_path(), pid, error_message));
 
 			REQUIRE(pid == lock_process.get_child_pid());
 		}
@@ -132,21 +139,22 @@ TEST_CASE("try_lock() succeeds if lock file location is valid and not locked by 
 	FsLock lock;
 	pid_t pid = 0;
 
-	REQUIRE(lock.try_lock(lock_location.get_path(), pid));
+	std::string error_message;
+	REQUIRE(lock.try_lock(lock_location.get_path(), pid, error_message));
 
 	SECTION("The lock file exists after a call to try_lock()") {
 		REQUIRE(0 == ::access(lock_location.get_path().c_str(), F_OK));
 	}
 
 	SECTION("Calling try_lock() a second time for the same location succeeds") {
-		REQUIRE(lock.try_lock(lock_location.get_path(), pid));
+		REQUIRE(lock.try_lock(lock_location.get_path(), pid, error_message));
 	}
 
 	SECTION("Calling try_lock() a second time with a different location succeeds and cleans up old lock file") {
 		const TestHelpers::TempFile new_lock_location;
 
 		REQUIRE(0 == ::access(lock_location.get_path().c_str(), F_OK));
-		REQUIRE(lock.try_lock(new_lock_location.get_path(), pid));
+		REQUIRE(lock.try_lock(new_lock_location.get_path(), pid, error_message));
 		REQUIRE(0 != ::access(lock_location.get_path().c_str(), F_OK));
 		REQUIRE(0 == ::access(new_lock_location.get_path().c_str(), F_OK));
 	}
