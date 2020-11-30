@@ -349,6 +349,11 @@ subscriptions that were in the "Programming" folder or one of its subfolders
 before. This means that you will lose virtually nothing of your previously
 configured structure.
 
+=== User contributed content
+
+The `contrib/` directory contains user contributed content like scripts and
+color themes. End users are encouraged to take a look as they may find
+something useful.
 
 == Newsboat as a Client for Newsreading Services
 
