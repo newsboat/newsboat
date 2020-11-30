@@ -196,9 +196,8 @@ int Controller::run(const CliArgsParser& args)
 		configpaths.set_cache_file(cachefilepath);
 	}
 
-	fslock = std::unique_ptr<FsLock>(new FsLock());
 	pid_t pid;
-	if (!fslock->try_lock(configpaths.lock_file(), pid)) {
+	if (!fslock.try_lock(configpaths.lock_file(), pid)) {
 		std::cout << strprintf::fmt(
 				_("Error: an instance of %s is "
 					"already running (PID: %u)"),
