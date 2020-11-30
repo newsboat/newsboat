@@ -349,7 +349,6 @@ subscriptions that were in the "Programming" folder or one of its subfolders
 before. This means that you will lose virtually nothing of your previously
 configured structure.
 
-
 == Newsboat as a Client for Newsreading Services
 
 Newsboat is a perfectly capable feedreader in its own right, but it can’t cover

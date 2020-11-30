@@ -266,6 +266,7 @@ install-docs: doc
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
 	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir) || true
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib
+	$(INSTALL) -m 644 contrib/README.md $(DESTDIR)$(docdir)/contrib || true
 	$(INSTALL) -m 755 contrib/*.sh $(DESTDIR)$(docdir)/contrib || true
 	$(INSTALL) -m 755 contrib/*.rb $(DESTDIR)$(docdir)/contrib || true
 	$(INSTALL) -m 755 contrib/*.pl $(DESTDIR)$(docdir)/contrib || true
