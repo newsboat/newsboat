@@ -148,19 +148,6 @@ int Controller::run(const CliArgsParser& args)
 					PROGRAM_NAME,
 					utils::program_version())
 				<< std::endl;
-
-		fslock = std::unique_ptr<FsLock>(new FsLock());
-		pid_t pid;
-		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
-			if (!args.cmds_to_execute().has_value()) {
-				std::cout << strprintf::fmt(
-						_("Error: an instance of %s is already running (PID: %u)"),
-						PROGRAM_NAME,
-						pid)
-					<< std::endl;
-			}
-			return EXIT_FAILURE;
-		}
 	}
 
 	if (!args.silent()) {
@@ -207,17 +194,18 @@ int Controller::run(const CliArgsParser& args)
 	std::string cachefilepath = cfg.get_configvalue("cache-file");
 	if (cachefilepath.length() > 0 && !args.cache_file().has_value()) {
 		configpaths.set_cache_file(cachefilepath);
-		fslock = std::unique_ptr<FsLock>(new FsLock());
-		pid_t pid;
-		if (!fslock->try_lock(configpaths.lock_file(), pid)) {
-			std::cout << strprintf::fmt(
-					_("Error: an instance of %s is "
-						"already running (PID: %u)"),
-					PROGRAM_NAME,
-					pid)
-				<< std::endl;
-			return EXIT_FAILURE;
-		}
+	}
+
+	fslock = std::unique_ptr<FsLock>(new FsLock());
+	pid_t pid;
+	if (!fslock->try_lock(configpaths.lock_file(), pid)) {
+		std::cout << strprintf::fmt(
+				_("Error: an instance of %s is "
+					"already running (PID: %u)"),
+				PROGRAM_NAME,
+				pid)
+			<< std::endl;
+		return EXIT_FAILURE;
 	}
 
 	if (!args.silent()) {
