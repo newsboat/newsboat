@@ -137,3 +137,8 @@ keys are supported:
 - `END` (cursor to end of list/article)
 - `ESC` (Esc key)
 - `TAB` (Tab key)
+
+Newsboat also comes with user contributed content like scripts and color
+themes. The user contributed content can be found in
+`/usr/share/doc/newsboat/contrib/`. End users are encouraged to take a look as
+they may find something useful.
