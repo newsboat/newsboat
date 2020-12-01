@@ -39,6 +39,12 @@ void RegexManager::handle_action(const std::string& action,
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
 	}
+	std::string line = action;
+	for (const auto& param : params) {
+		line.append(" ");
+		line.append(utils::quote(param));
+	}
+	cheat_store_for_dump_config.push_back(line);
 }
 
 int RegexManager::article_matches(Matchable* item)
@@ -277,12 +283,6 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 			location.second.push_back({sharedRegex, colorstr});
 		}
 	}
-	std::string line = "highlight";
-	for (const auto& param : params) {
-		line.append(" ");
-		line.append(utils::quote(param));
-	}
-	cheat_store_for_dump_config.push_back(line);
 }
 
 void RegexManager::handle_highlight_article_action(const

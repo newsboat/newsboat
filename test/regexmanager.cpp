@@ -226,8 +226,8 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	}
 }
 
-TEST_CASE("RegexManager::dump_config turns each `highlight` rule into a string, "
-	"and appends them onto a vector",
+TEST_CASE("RegexManager::dump_config turns each `highlight` and "
+	"`highlight-article` rule into a string, and appends them onto a vector",
 	"[RegexManager]")
 {
 	RegexManager rxman;
@@ -251,8 +251,9 @@ TEST_CASE("RegexManager::dump_config turns each `highlight` rule into a string, 
 			"highlight-article",
 		{"title==\"\"", "green", "black"});
 		REQUIRE_NOTHROW(rxman.dump_config(result));
-		REQUIRE(result.size() == 1);
+		REQUIRE(result.size() == 2);
 		REQUIRE(result[0] == R"#(highlight "all" "keywords" "red" "blue")#");
+		REQUIRE(result[1] == R"#(highlight-article "title==\"\"" "green" "black")#");
 	}
 }
 
