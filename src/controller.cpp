@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cerrno>
+#include <cstdint>
 #include <cstdlib>
 #include <ctime>
 #include <curl/curl.h>
@@ -198,11 +199,13 @@ int Controller::run(const CliArgsParser& args)
 
 	pid_t pid;
 	if (!fslock.try_lock(configpaths.lock_file(), pid)) {
+		// pid_t size could vary so cast to known integer format to get correct print format
+		std::int64_t p = pid;
 		std::cout << strprintf::fmt(
 				_("Error: an instance of %s is "
-					"already running (PID: %u)"),
+					"already running (PID: %" PRId64 ")"),
 				PROGRAM_NAME,
-				pid)
+				p)
 			<< std::endl;
 		return EXIT_FAILURE;
 	}

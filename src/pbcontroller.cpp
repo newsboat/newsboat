@@ -1,5 +1,7 @@
 #include "pbcontroller.h"
 
+#include <cinttypes>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -249,11 +251,13 @@ void PbController::initialize(int argc, char* argv[])
 	fslock = std::unique_ptr<FsLock>(new FsLock());
 	pid_t pid;
 	if (!fslock->try_lock(lock_file, pid)) {
+		// pid_t size could vary so cast to known integer format to get correct print format
+		std::int64_t p = pid;
 		std::cout << strprintf::fmt(
 				_("Error: an instance of %s is already "
-					"running (PID: %u)"),
+					"running (PID: %" PRId64 ")"),
 				"podboat",
-				pid)
+				p)
 			<< std::endl;
 		exit(EXIT_FAILURE);
 	}

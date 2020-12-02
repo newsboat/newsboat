@@ -6,6 +6,7 @@ fn add_cxxbridge(module: &str) {
 }
 
 fn main() {
-    add_cxxbridge("utils");
+    add_cxxbridge("fslock");
     add_cxxbridge("scopemeasure");
+    add_cxxbridge("utils");
 }
