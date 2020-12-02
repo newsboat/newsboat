@@ -44,12 +44,16 @@ freebsd_task:
     # Running three jobs because by default, VMs have 2 cores.
     build_script: su testuser -c 'cd ~ && gmake --jobs=3 --keep-going all test'
     test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=3 RUST_BACKTRACE=1 gmake -j3 ci-check'
-    clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints'
     # This installs everything into a "fake filesystem root", then uninstalls
     # everything and checks that there are no files left over. The purpose of
     # this check is to ensure that: 1) `make install` doesn't fail; 2) `make
     # uninstall` cleans up everything that `make install` installed.
+    #
+    # We run this *before* Clippy because Clippy rebuilds crates in debug mode,
+    # which causes some C++ classes to be re-compiled as they depend on cxx
+    # bridges.
     fake_install_script: su testuser -c 'cd ~ && mkdir fakeroot && gmake DESTDIR=fakeroot install && gmake DESTDIR=fakeroot uninstall && [ $(find fakeroot -type f -print | wc -l) -eq 0 ]'
+    clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints'
     before_cache_script: &before_cache_script
         # Cirrus CI sometimes fails to unpack the cache. In that case, it
         # removes the "cache folder" and tries again.
@@ -74,8 +78,6 @@ freebsd_task:
         - make -j3 --keep-going all test
     test_script: &test_script
         - RUST_TEST_THREADS=3 RUST_BACKTRACE=1 make -j3 ci-check
-    clippy_script: &clippy_script
-        - cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints
     # For explanation of what this script does, please see the FreeBSD job
     # above.
     fake_install_script: &fake_install_script
@@ -83,6 +85,8 @@ freebsd_task:
         - make DESTDIR=fakeroot install
         - make DESTDIR=fakeroot uninstall
         - test $(find fakeroot -type f -print | wc -l) -eq 0
+    clippy_script: &clippy_script
+        - cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints
     before_cache_script: *before_cache_script
 
 macos_task:
@@ -123,8 +127,8 @@ macos_task:
 
     build_script: *build_script
     test_script: *test_script
-    clippy_script: *clippy_script
     fake_install_script: *fake_install_script
+    clippy_script: *clippy_script
     before_cache_script: *before_cache_script
 
     matrix:
@@ -166,13 +170,13 @@ linux_task:
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: Rust 1.44.0, GCC 4.9 (Ubuntu 16.04)
+        - name: Rust 1.44.0, GCC 5 (Ubuntu 18.04)
           container:
-            dockerfile: docker/ubuntu_16.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-4.9
-                cc: gcc-4.9
-                cxx: g++-4.9
+                cxx_package: g++-5
+                cc: gcc-5
+                cxx: g++-5
                 rust_version: 1.44.0
         - name: Rust 1.44.0, GCC 10 (Ubuntu 20.04)
           container:
@@ -202,13 +206,6 @@ linux_task:
                 cxx: clang++-11
           env: *extra_warnings_and_checks_env
 
-        - name: Rust 1.48.0, GCC 4.9 (Ubuntu 16.04)
-          container:
-            dockerfile: docker/ubuntu_16.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: g++-4.9
-                cc: gcc-4.9
-                cxx: g++-4.9
         - name: Rust 1.48.0, GCC 5 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
@@ -313,8 +310,8 @@ linux_task:
     after_cache_script: *after_cache_script
     build_script: *build_script
     test_script: *test_script
-    clippy_script: *clippy_script
     fake_install_script: *fake_install_script
+    clippy_script: *clippy_script
     before_cache_script: *before_cache_script
 
 address_sanitizer_task:
@@ -347,8 +344,6 @@ depslist_task:
     name: Dependencies list is up to date
 
     container:
-      cpu: 1
-      memory: 512MB
       dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
       docker_arguments:
           cxx_package: g++-9
@@ -356,7 +351,8 @@ depslist_task:
           cxx: g++-9
 
     script:
-        - make depslist
+          # Build in debug mode to speed things up
+        - make -j3 PROFILE=1 depslist
           # --exit-code forces git-diff to exit with code 1 if there were
           # changes. If it does, we print a warning, and propagate the error.
           # Otherwise this whole script exits with 0

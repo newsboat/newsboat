@@ -5,6 +5,35 @@ datadir?=$(prefix)/share
 localedir?=$(datadir)/locale
 docdir?=$(datadir)/doc/$(PACKAGE)
 
+# Here's a problem:
+# 1. our "Rust 1.44, GCC 10, Ubuntu 20.04" build fails: cxx-0.5 crate can't
+#    find the target directory, thus doesn't symlink cxxbridge headers into the
+#    expected location, thus C++ compilation fails.
+# 2. cxx-0.5 can take a hint from CARGO_TARGET_DIR, but it wants the path to be
+#    absolute.
+# 3. Cargo docs say that CARGO_TARGET_DIR is relative to current working
+#    directory, but in reality, Cargo works fine with an absolute path too.
+# 4. We actually need a relative path for a different purpose: to tell GCC
+#    where to find cxxbridge headers. Unfortunately, if we use an absolute path
+#    there, GCC will also print out absolute paths when printing out dependency
+#    info (see `depslist` target). So we have to supply GCC a relative path.
+#
+# So here's what we do:
+#
+# 1. if someone set CARGO_TARGET_DIR env var, we **hope** they followed Cargo
+#    docs' advice and used a relative path. If the var is not set, we use
+#    a default of "target" (which is Cargo's default, so nothing changes from
+#    the user's point of view).
+#
+#    We remember this path in a variable `relative_cargo_target_dir`, which we
+#    pass to GCC.
+# 2. we override CARGO_TARGET_DIR, turning it into an absolute path.
+#
+#    That fixes cxx-0.5.
+CARGO_TARGET_DIR?=target
+relative_cargo_target_dir:=$(CARGO_TARGET_DIR)
+export CARGO_TARGET_DIR:=$(abspath $(CARGO_TARGET_DIR))
+
 CPPCHECK_JOBS?=5
 
 # compiler
@@ -14,14 +43,18 @@ CXX?=c++
 CXX_FOR_BUILD?=$(CXX)
 
 # compiler and linker flags
-DEFINES=-DLOCALEDIR=\"$(localedir)\"
+DEFINES=-DLOCALEDIR='"$(localedir)"'
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
-INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss
+INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(relative_cargo_target_dir)/cxxbridge/libnewsboat-ffi/src/
 BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
+# Constants
 PACKAGE=newsboat
+## Do not include libnewsboat-ffi into the test executable, as it doesn't link
+## and can't contain any tests anyway.
+CARGO_TEST_FLAGS=--workspace --exclude libnewsboat-ffi
 
 ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector fmt))
 include config.mk
@@ -52,24 +85,21 @@ RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
 RSSPPLIB_OUTPUT=librsspp.a
 
-CARGO_FLAGS+=--verbose
+CARGO_BUILD_FLAGS+=--verbose
+
 ifeq ($(PROFILE),1)
-ifdef CARGO_BUILD_TARGET
-NEWSBOATLIB_OUTPUT=target/$(CARGO_BUILD_TARGET)/debug/libnewsboat.a
-LDFLAGS+=-L./target/$(CARGO_BUILD_TARGET)/debug
+BUILD_TYPE=debug
 else
-NEWSBOATLIB_OUTPUT=target/debug/libnewsboat.a
-LDFLAGS+=-L./target/debug
+BUILD_TYPE=release
+CARGO_BUILD_FLAGS+=--release
 endif
-else
+
 ifdef CARGO_BUILD_TARGET
-NEWSBOATLIB_OUTPUT=target/$(CARGO_BUILD_TARGET)/release/libnewsboat.a
-LDFLAGS+=-L./target/$(CARGO_BUILD_TARGET)/release
+NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)/libnewsboat.a
+LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)
 else
-NEWSBOATLIB_OUTPUT=target/release/libnewsboat.a
-LDFLAGS+=-L./target/release
-endif
-CARGO_FLAGS+=--release
+NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/libnewsboat.a
+LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
 endif
 
 PODBOAT=podboat
@@ -105,7 +135,7 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
 
 $(NEWSBOATLIB_OUTPUT): $(RUST_SRCS) Cargo.lock
-	+$(CARGO) build --package libnewsboat-ffi $(CARGO_FLAGS)
+	+$(CARGO) build --package libnewsboat-ffi $(CARGO_BUILD_FLAGS)
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -131,6 +161,12 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 	cococpp -frames filter filter/filter.atg
+
+target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
+	@# This rule declares a dependency and doesn't need to run any
+	@# commands, but we can't leave the recipe empty because GNU Make
+	@# requires a recipe for pattern rules. So here you go, Make, have
+	@# a comment.
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
@@ -354,7 +390,7 @@ uninstall-mo:
 test: test/test rust-test
 
 rust-test:
-	+$(CARGO) test --no-run
+	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
 
 TEST_SRCS:=$(wildcard test/*.cpp test/test-helpers/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
@@ -370,13 +406,13 @@ profclean:
 
 check: test
 	(cd test && ./test --order=rand)
-	+$(CARGO) test
+	+$(CARGO) test $(CARGO_TEST_FLAGS)
 
 ci-check: test
         # We want to run both C++ and Rust tests, but we also want this entire
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
-	$(CARGO) test --no-fail-fast ; ret=$$? ; cd test && ./test --order=rand && exit $$ret
+	$(CARGO) test $(CARGO_TEST_FLAGS) --no-fail-fast ; ret=$$? ; cd test && ./test --order=rand && exit $$ret
 
 # miscellaneous stuff
 
@@ -388,9 +424,11 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-ALL_SRCS:=$(shell ls -1 filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
+ALL_SRCS:=$(shell ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
 ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test-helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
-depslist: $(ALL_SRCS) $(ALL_HDRS)
+# This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
+# we need to record those headers in the deps file.
+depslist: $(NEWSBOATLIB_OUTPUT) $(ALL_SRCS) $(ALL_HDRS)
 	> mk/mk.deps
 	for file in $(ALL_SRCS) ; do \
 		target=`echo $$file | sed 's/cpp$$/o/'`; \

@@ -35,7 +35,7 @@ Newsboat can be compiled.
 <!--
     UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
 -->
-- GCC 4.9 or newer, or Clang 3.6 or newer
+- GCC 5.0 or newer, or Clang 3.6 or newer
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
     manager) (1.44.0 or newer; might work with older versions, but we don't
     check that)

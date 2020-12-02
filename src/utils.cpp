@@ -615,7 +615,7 @@ std::string utils::get_useragent(ConfigContainer* cfgcont)
 unsigned int utils::to_u(const std::string& str,
 	const unsigned int default_value)
 {
-	return rs_to_u(str.c_str(), default_value);
+	return bridged::to_u(str, default_value);
 }
 
 bool utils::is_valid_color(const std::string& color)
@@ -734,11 +734,6 @@ void utils::trim_end(std::string& str)
 std::string utils::quote(const std::string& str)
 {
 	return RustString(rs_quote(str.c_str()));
-}
-
-unsigned int utils::get_random_value(unsigned int max)
-{
-	return rs_get_random_value(max);
 }
 
 std::string utils::quote_if_necessary(const std::string& str)
