@@ -23,16 +23,15 @@ nonstd::optional<std::string> FileUrlReader::reload()
 	tags.clear();
 	alltags.clear();
 
-	std::fstream f;
-	f.open(filename, std::fstream::in);
-	if (!f.is_open()) {
-		const auto error_message = strerror(errno);
-		return strprintf::fmt(_("Error: Failed to open file \"%s\" (%s)"),
+	std::vector<std::string> lines;
+	std::string error_message;
+	if (!utils::read_text_file(filename, lines, error_message)) {
+		return strprintf::fmt(_("Error: Failed to read urls from file \"%s\" (%s)"),
 				filename,
 				error_message);
 	}
 
-	for (std::string line; std::getline(f, line); /* nothing */) {
+	for (const std::string& line : lines) {
 		// skip empty lines and comments
 		if (line.empty() || line[0] == '#') {
 			continue;

@@ -170,3 +170,20 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 		}
 	}
 }
+
+TEST_CASE("URL reader returns error message if file contains invalid unicode character",
+	"[FileUrlReader]")
+{
+	TestHelpers::TempFile urlsFile;
+
+	{
+		std::ofstream f(urlsFile.get_path());
+		f << "http://exmample.com/atom.xml" << std::endl;
+		f << "http://invalid.com/\xff.xml" << std::endl;
+	}
+
+	FileUrlReader u(urlsFile.get_path());
+	auto error_message = u.reload();
+	REQUIRE(error_message.has_value());
+	REQUIRE(error_message.value().size() > 0);
+}
