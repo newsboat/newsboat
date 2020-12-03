@@ -924,6 +924,20 @@ std::string utils::getcwd()
 	return RustString(rs_getcwd());
 }
 
+bool utils::read_text_file(const std::string& filename,
+	std::vector<std::string>& contents, std::string& error_message)
+{
+	rust::Vec<rust::String> c;
+	rust::String e;
+	bool result = bridged::read_text_file(filename, c, e);
+	contents.clear();
+	for (const auto& line : c) {
+		contents.push_back(std::string(line));
+	}
+	error_message = std::string(e);
+	return result;
+}
+
 int utils::strnaturalcmp(const std::string& a, const std::string& b)
 {
 	return rs_strnaturalcmp(a.c_str(), b.c_str());

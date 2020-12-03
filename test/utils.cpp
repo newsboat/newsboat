@@ -1,6 +1,7 @@
 #include "utils.h"
 
 #include <chrono>
+#include <fstream>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <tuple>
@@ -1265,6 +1266,40 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 		REQUIRE(0 == ::rmdir(tempdir_path.c_str()));
 
 		REQUIRE("" == utils::getcwd());
+	}
+}
+
+TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
+{
+	TestHelpers::TempFile tempfile;
+
+	SECTION("succesful if test file contains only valid unicode") {
+		{
+			std::ofstream f(tempfile.get_path());
+			f << "lorem ipsum\ntest1\ntest2";
+		}
+		std::vector<std::string> content;
+		std::string error_message;
+
+		REQUIRE(utils::read_text_file(tempfile.get_path(), content, error_message));
+		REQUIRE(content.size() == 3);
+		REQUIRE(content[0] == "lorem ipsum");
+		REQUIRE(content[1] == "test1");
+		REQUIRE(content[2] == "test2");
+	}
+
+	SECTION("fails with error message if file contains invalid unicode") {
+		{
+			std::ofstream f(tempfile.get_path());
+			f << "test1\nt\xffst2"; // \xff is an invalid unicode character
+		}
+		std::vector<std::string> content;
+		std::string error_message;
+
+		REQUIRE_FALSE(utils::read_text_file(tempfile.get_path(), content,
+				error_message));
+		REQUIRE(content.size() == 0);
+		REQUIRE(error_message.size() > 0);
 	}
 }
 

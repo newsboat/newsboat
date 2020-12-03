@@ -152,6 +152,9 @@ nonstd::optional<std::uint8_t> run_interactively(const std::string& command,
 
 std::string getcwd();
 
+bool read_text_file(const std::string& filename,
+	std::vector<std::string>& contents, std::string& error_message);
+
 int strnaturalcmp(const std::string& a, const std::string& b);
 
 void remove_soft_hyphens(std::string& text);
