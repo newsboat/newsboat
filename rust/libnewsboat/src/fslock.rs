@@ -1,10 +1,13 @@
 use crate::logger::{self, Level};
+use gettextrs::gettext;
 use std::fs::{self, File, OpenOptions};
 use std::io::{Error, Read, Write};
 use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
 use std::process;
+
+use strprintf::fmt;
 
 fn remove_lock(lock_path: &Path) {
     fs::remove_file(lock_path).ok();
@@ -50,10 +53,12 @@ impl FsLock {
         let mut file = match options.open(&new_lock_path) {
             Ok(file) => file,
             Err(reason) => {
-                return Err(format!(
-                    "Failed to open lock file: '{}' ({})",
-                    new_lock_path.display(),
-                    reason
+                return Err(fmt!(
+                    &gettext("Failed to open lock file: '%s' (%s)"),
+                    new_lock_path
+                        .to_str()
+                        .unwrap_or(&gettext("<filename containing invalid unicode character>")),
+                    reason.to_string()
                 ))
             }
         };
@@ -71,10 +76,12 @@ impl FsLock {
                 .and_then(|_| file.write_all(&pid.as_bytes()))
             {
                 log!(Level::Debug, "FsLock: Failed to write PID");
-                return Err(format!(
-                    "Failed to write PID to lock file: '{}' ({})",
-                    new_lock_path.display(),
-                    reason
+                return Err(fmt!(
+                    &gettext("Failed to write PID to lock file: '%s' (%s)"),
+                    new_lock_path
+                        .to_str()
+                        .unwrap_or(&gettext("<filename containing invalid unicode character>")),
+                    reason.to_string()
                 ));
             }
             log!(Level::Debug, "FsLock: PID written successfully");
@@ -101,10 +108,13 @@ impl FsLock {
                 "FsLock: locking failed, already locked by {}",
                 pid
             );
-            Err(format!(
-                "Failed to lock '{}', already locked by process with PID {}",
-                new_lock_path.display(),
-                pid
+            Err(fmt!(
+                &gettext("Failed to lock '%s', already locked by process with PID %{}"),
+                new_lock_path
+                    .to_str()
+                    .unwrap_or(&gettext("<filename containing invalid unicode character>")),
+                PRIi64,
+                *pid as i64
             ))
         }
     }
