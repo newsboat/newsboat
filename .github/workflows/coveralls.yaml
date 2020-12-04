@@ -16,7 +16,9 @@ jobs:
       PROFILE: 1
       # These flags are necessary for grcov to correctly calculate coverage.
       CARGO_INCREMENTAL: 0
-      RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
+      # We add `-A warnings` because we aren't interested in warnings from Rust
+      # Nightly -- GitHub turns them into annotations, which is annoying.
+      RUSTFLAGS: '-A warnings -Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
       RUSTDOCFLAGS: '-Cpanic=abort'
       # Some of our tests use ncurses, which require a terminal of some sort.
       # We pretend ours is a simple one.
