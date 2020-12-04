@@ -1040,10 +1040,19 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	fmt.register_fmt('n', item.first->unread() ? "N" : " ");
 	fmt.register_fmt('d', item.first->deleted() ? "D" : " ");
 	fmt.register_fmt('F', item.first->flags());
-	fmt.register_fmt('D',
-		utils::mt_strf_localtime(
-			datetime_format,
+
+	using namespace std::chrono;
+	const auto article_time_point = system_clock::from_time_t(
+			item.first->pubDate_timestamp());
+	using days = duration<int, std::ratio<86400>>;
+	const auto article_age = duration_cast<days>(
+			system_clock::now() - article_time_point).count();
+	const std::string new_datetime_format = utils::replace_all(
+			datetime_format, "%L", strprintf::fmt(
+				ngettext("1 day ago", "%u days ago", article_age), article_age));
+	fmt.register_fmt('D', utils::mt_strf_localtime(new_datetime_format,
 			item.first->pubDate_timestamp()));
+
 	if (feed->rssurl() != item.first->feedurl() &&
 		item.first->get_feedptr() != nullptr) {
 		auto feedtitle = item.first->get_feedptr()->title();
