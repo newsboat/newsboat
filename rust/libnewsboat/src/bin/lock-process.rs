@@ -5,7 +5,7 @@ fn main() {
     let lock_location = std::env::args().nth(1).unwrap();
 
     let mut lock = FsLock::default();
-    assert!(lock.try_lock(lock_location.as_ref(), &mut 0));
+    assert!(lock.try_lock(lock_location.as_ref(), &mut 0).is_ok());
 
     // signal that we already lock file
     println!();

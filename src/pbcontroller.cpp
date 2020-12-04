@@ -250,15 +250,20 @@ void PbController::initialize(int argc, char* argv[])
 
 	fslock = std::unique_ptr<FsLock>(new FsLock());
 	pid_t pid;
-	if (!fslock->try_lock(lock_file, pid)) {
-		// pid_t size could vary so cast to known integer format to get correct print format
-		std::int64_t p = pid;
-		std::cout << strprintf::fmt(
-				_("Error: an instance of %s is already "
-					"running (PID: %" PRId64 ")"),
-				"podboat",
-				p)
-			<< std::endl;
+	std::string error_message;
+	if (!fslock->try_lock(lock_file, pid, error_message)) {
+		if (pid != 0) {
+			// pid_t size could vary so cast to known integer format to get correct print format
+			std::int64_t p = pid;
+			std::cout << strprintf::fmt(
+					_("Error: an instance of %s is already "
+						"running (PID: %" PRId64 ")"),
+					"podboat",
+					p)
+				<< std::endl;
+		} else {
+			std::cout << _("Error: ") << error_message << std::endl;
+		}
 		exit(EXIT_FAILURE);
 	}
 
