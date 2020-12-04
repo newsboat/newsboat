@@ -1,5 +1,6 @@
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
+use gettextrs::gettext;
 use libc::{c_ulong, close, execvp, exit, fork, waitpid};
 use percent_encoding::*;
 use std::ffi::CString;
@@ -11,6 +12,8 @@ use std::process::{Command, Stdio};
 use std::ptr;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
+
+use strprintf::fmt;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -689,12 +692,24 @@ pub fn getcwd() -> Result<PathBuf, io::Error> {
 }
 
 /// Get the lines of text contained in a file.
-pub fn read_text_file(filename: &Path) -> Result<Vec<String>, std::io::Error> {
+pub fn read_text_file(filename: &Path) -> Result<Vec<String>, String> {
     use std::fs::File;
     use std::io::BufRead;
-    let file = File::open(filename)?;
+    let file = File::open(filename)
+        .map_err(|reason| fmt!(&gettext("Failed to open file (%s)"), reason.to_string()))?;
     let buffered = io::BufReader::new(file);
-    buffered.lines().collect::<Result<Vec<_>, _>>()
+    let mut lines = Vec::new();
+    for (line_number, line) in buffered.lines().enumerate() {
+        let line = line.map_err(|reason| {
+            fmt!(
+                &gettext("Failed to read line %u (%s)"),
+                (line_number + 1) as u32,
+                reason.to_string()
+            )
+        })?;
+        lines.push(line);
+    }
+    Ok(lines)
 }
 
 pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {

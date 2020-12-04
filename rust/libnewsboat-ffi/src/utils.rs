@@ -52,7 +52,7 @@ pub fn read_text_file(
             true
         }
         Err(e) => {
-            *error_message = e.to_string();
+            *error_message = e;
             false
         }
     }
