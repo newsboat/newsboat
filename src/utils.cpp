@@ -107,7 +107,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	 * 	[2]: x
 	 * 	y
 	 *
-	 * 	\", \r, \n, \t and \v are replaced with the literals that you
+	 * 	\", \r, \n, and \t are replaced with the literals that you
 	 * know from C/C++ strings.
 	 *
 	 */

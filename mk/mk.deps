@@ -421,7 +421,8 @@ src/keymap.o: src/keymap.cpp include/keymap.h include/configparser.h \
  include/configactionhandler.h config.h include/confighandlerexception.h \
  include/logger.h include/strprintf.h include/strprintf.h include/utils.h \
  3rd-party/optional.hpp include/configcontainer.h include/logger.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/keymap.rs.h
 src/listformaction.o: src/listformaction.cpp include/listformaction.h \
  3rd-party/optional.hpp include/formaction.h include/history.h \
  include/keymap.h include/configparser.h include/configactionhandler.h \

@@ -1,5 +1,6 @@
 #include "keymap.h"
 
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <string>
@@ -10,6 +11,8 @@
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
+
+#include "keymap.rs.h"
 
 namespace newsboat {
 
@@ -723,6 +726,10 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
+		// The token and operation sequence are delimited by one or more
+		// spaces. We have to strip them, or `parse_operation_sequence()` will
+		// include them into the first operation.
+		utils::trim(remaining_params);
 		const std::vector<MacroCmd> cmds = parse_operation_sequence(remaining_params);
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -740,20 +747,24 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 
 std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
 {
-	const auto operations = utils::tokenize_quoted(line, ";");
+	const auto operations = keymap::bridged::tokenize_operation_sequence(line);
 
 	std::vector<MacroCmd> cmds;
-	for (auto operation : operations) {
-		const auto command_name = utils::extract_token_quoted(operation);
-		if (!command_name.has_value()) {
+	for (const auto& operation : operations) {
+		const auto& tokens = keymap::bridged::operation_tokens(operation);
+		if (tokens.empty()) {
 			continue;
 		}
-		const auto arguments = utils::tokenize_quoted(operation);
+
+		const auto command_name = std::string(tokens[0]);
+		const auto arguments = std::vector<std::string>(std::next(std::begin(tokens)),
+				std::end(tokens));
+
 		MacroCmd cmd;
-		cmd.op = get_opcode(command_name.value());
+		cmd.op = get_opcode(command_name);
 		if (cmd.op == OP_NIL) {
 			throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
-					command_name.value()));
+					command_name));
 		}
 		cmd.args = arguments;
 
