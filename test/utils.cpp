@@ -1278,10 +1278,10 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 			std::ofstream f(tempfile.get_path());
 			f << "lorem ipsum\ntest1\ntest2";
 		}
-		std::vector<std::string> content;
-		std::string error_message;
 
-		REQUIRE(utils::read_text_file(tempfile.get_path(), content, error_message));
+		const auto result = utils::read_text_file(tempfile.get_path());
+		REQUIRE(result);
+		const auto content = result.value();
 		REQUIRE(content.size() == 3);
 		REQUIRE(content[0] == "lorem ipsum");
 		REQUIRE(content[1] == "test1");
@@ -1296,10 +1296,9 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 		std::vector<std::string> content;
 		std::string error_message;
 
-		REQUIRE_FALSE(utils::read_text_file(tempfile.get_path(), content,
-				error_message));
-		REQUIRE(content.size() == 0);
-		REQUIRE(error_message.size() > 0);
+		const auto result = utils::read_text_file(tempfile.get_path());
+		REQUIRE_FALSE(result);
+		REQUIRE(result.error().size() > 0);
 	}
 }
 

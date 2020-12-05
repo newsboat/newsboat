@@ -23,13 +23,13 @@ nonstd::optional<std::string> FileUrlReader::reload()
 	tags.clear();
 	alltags.clear();
 
-	std::vector<std::string> lines;
-	std::string error_message;
-	if (!utils::read_text_file(filename, lines, error_message)) {
+	auto result = utils::read_text_file(filename);
+	if (!result) {
 		return strprintf::fmt(_("Error: Failed to read URLs from file \"%s\" (%s)"),
 				filename,
-				error_message);
+				result.error());
 	}
+	std::vector<std::string> lines = result.value();
 
 	for (const std::string& line : lines) {
 		// skip empty lines and comments
