@@ -1,5 +1,6 @@
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
+use gettextrs::gettext;
 use libc::{c_ulong, close, execvp, exit, fork, waitpid};
 use percent_encoding::*;
 use std::ffi::CString;
@@ -11,6 +12,8 @@ use std::process::{Command, Stdio};
 use std::ptr;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
+
+use strprintf::fmt;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -686,6 +689,27 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
 pub fn getcwd() -> Result<PathBuf, io::Error> {
     use std::env;
     env::current_dir()
+}
+
+/// Get the lines of text contained in a file.
+pub fn read_text_file(filename: &Path) -> Result<Vec<String>, String> {
+    use std::fs::File;
+    use std::io::BufRead;
+    let file = File::open(filename)
+        .map_err(|reason| fmt!(&gettext("Failed to open file (%s)"), reason.to_string()))?;
+    let buffered = io::BufReader::new(file);
+    let mut lines = Vec::new();
+    for (line_number, line) in buffered.lines().enumerate() {
+        let line = line.map_err(|reason| {
+            fmt!(
+                &gettext("Failed to read line %u (%s)"),
+                (line_number + 1) as u32,
+                reason.to_string()
+            )
+        })?;
+        lines.push(line);
+    }
+    Ok(lines)
 }
 
 pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {
@@ -1400,6 +1424,36 @@ mod tests {
         // rerun on existing directories
         let result = mkdir_parents(&path, mode);
         assert!(result.is_ok());
+    }
+
+    #[test]
+    fn t_read_text_file_valid_unicode() {
+        use std::fs;
+        use tempfile::NamedTempFile;
+
+        let text_file_location = NamedTempFile::new().unwrap();
+        let data = "lorem ipsum\ntest1\ntest2";
+        fs::write(text_file_location.path(), data).expect("unable to write test data to file");
+
+        let lines = read_text_file(text_file_location.path()).unwrap();
+        assert_eq!(lines.len(), 3);
+        assert_eq!(lines[0], "lorem ipsum");
+        assert_eq!(lines[1], "test1");
+        assert_eq!(lines[2], "test2");
+    }
+
+    #[test]
+    fn t_read_text_file_invalid_unicode() {
+        use std::fs;
+        use tempfile::NamedTempFile;
+
+        let text_file_location = NamedTempFile::new().unwrap();
+        let data: Vec<u8> = vec![
+            0x74, 0x65, 0x73, 0x74, 0x31, 0x0a, 0x74, 0xff, 0x73, 0x74, 0x32, 0x0a,
+        ];
+        fs::write(text_file_location.path(), data).expect("unable to write test data to file");
+
+        assert!(read_text_file(text_file_location.path()).is_err());
     }
 
     #[test]

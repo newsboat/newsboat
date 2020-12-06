@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include "3rd-party/expected.hpp"
 #include "3rd-party/optional.hpp"
 
 #include "configcontainer.h"
@@ -151,6 +152,9 @@ nonstd::optional<std::uint8_t> run_interactively(const std::string& command,
 	const std::string& caller);
 
 std::string getcwd();
+
+nonstd::expected<std::vector<std::string>, std::string> read_text_file(
+	const std::string& filename);
 
 int strnaturalcmp(const std::string& a, const std::string& b);
 

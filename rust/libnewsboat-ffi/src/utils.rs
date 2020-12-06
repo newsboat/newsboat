@@ -21,6 +21,40 @@ mod ffi {
 mod bridged {
     extern "Rust" {
         fn to_u(input: String, default_value: u32) -> u32;
+
+        fn read_text_file(
+            filename: String,
+            contents: &mut Vec<String>,
+            error_message: &mut String,
+        ) -> bool;
+    }
+
+    extern "C++" {
+        // cxx uses `std::out_of_range`, but doesn't include the header that defines that
+        // exception. So we do it for them.
+        include!("stdexcept");
+        // Also inject a header that defines ptrdiff_t. Note this is *not* a C++ header, because
+        // cxx uses a non-C++ name of the type.
+        include!("stddef.h");
+    }
+}
+
+pub fn read_text_file(
+    filename: String,
+    contents: &mut Vec<String>,
+    error_message: &mut String,
+) -> bool {
+    use std::path::Path;
+
+    match utils::read_text_file(Path::new(&filename)) {
+        Ok(c) => {
+            *contents = c;
+            true
+        }
+        Err(e) => {
+            *error_message = e;
+            false
+        }
     }
 }
 
