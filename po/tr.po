@@ -1066,8 +1066,8 @@ msgstr "Hata: Süzgeç uygulanırken hata oluştu: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 gün önce"
+msgstr[1] "%u gün önce"
 
 #: src/itemlistformaction.cpp:1319
 msgid "Error: no filename provided"
