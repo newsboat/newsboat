@@ -33,18 +33,17 @@ void ConfigParser::handle_action(const std::string& action,
 	 */
 	if (action == "include") {
 		if (params.size() < 1) {
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		std::string tilde_expanded = utils::resolve_tilde(params[0]);
-		std::string current_fpath = included_files.back();
-		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded)))
-			throw ConfigHandlerException(
-				ActionHandlerStatus::FILENOTFOUND);
-	} else
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_COMMAND);
+		const std::string tilde_expanded = utils::resolve_tilde(params[0]);
+		const std::string current_fpath = included_files.back();
+		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
+			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
+		}
+	} else {
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 bool ConfigParser::parse_file(const std::string& tmp_filename)
@@ -111,7 +110,7 @@ void ConfigParser::parse_line(const std::string& line,
 	auto evaluated = evaluate_backticks(std::move(stripped));
 	const auto token = utils::extract_token_quoted(evaluated);
 	if (token.has_value()) {
-		std::string cmd = token.value();
+		const std::string cmd = token.value();
 		const std::string params = evaluated;
 
 		if (action_handlers.count(cmd) < 1) {
@@ -170,7 +169,7 @@ std::string ConfigParser::evaluate_backticks(std::string token)
 		find_non_escaped_backtick(token, pos1 + 1);
 
 	while (pos1 != std::string::npos && pos2 != std::string::npos) {
-		std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
+		const std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
 		token.erase(pos1, pos2 - pos1 + 1);
 		std::string result = utils::get_command_output(cmd);
 		utils::trim_end(result);
