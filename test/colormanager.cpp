@@ -5,7 +5,9 @@
 #include <vector>
 
 #include "3rd-party/catch.hpp"
+
 #include "confighandlerexception.h"
+#include "configparser.h"
 
 using namespace newsboat;
 

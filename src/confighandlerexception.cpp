@@ -1,6 +1,7 @@
 #include "confighandlerexception.h"
 
 #include "config.h"
+#include "configparser.h"
 
 namespace newsboat {
 

@@ -8,6 +8,7 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
+#include "configparser.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"

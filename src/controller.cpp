@@ -29,7 +29,6 @@
 #include "config.h"
 #include "configcontainer.h"
 #include "configexception.h"
-#include "configparser.h"
 #include "configpaths.h"
 #include "dbexception.h"
 #include "downloadthread.h"

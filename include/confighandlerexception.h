@@ -4,9 +4,9 @@
 #include <stdexcept>
 #include <string>
 
-#include "configparser.h"
-
 namespace newsboat {
+
+enum class ActionHandlerStatus;
 
 class ConfigHandlerException : public std::exception {
 public:

@@ -1,15 +1,16 @@
 #ifndef NEWSBOAT_REGEXMANAGER_H_
 #define NEWSBOAT_REGEXMANAGER_H_
 
+#include <map>
 #include <memory>
-#include <regex>
 #include <regex.h>
+#include <regex>
 #include <string>
 #include <sys/types.h>
 #include <utility>
 #include <vector>
 
-#include "configparser.h"
+#include "configactionhandler.h"
 #include "matcher.h"
 #include "regexowner.h"
 

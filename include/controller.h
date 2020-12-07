@@ -6,6 +6,7 @@
 #include "cache.h"
 #include "colormanager.h"
 #include "configcontainer.h"
+#include "configparser.h"
 #include "feedcontainer.h"
 #include "filtercontainer.h"
 #include "fslock.h"
