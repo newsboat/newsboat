@@ -1878,7 +1878,7 @@ msgstr "öznitelik adı bulunamadı"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr "şunlardan biri: =~, ==, =, !~, !=, <=, >=, <, >, arasında, #, !#"
+msgstr "şunlardan biri: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
