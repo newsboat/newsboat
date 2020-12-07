@@ -61,8 +61,7 @@ void RssIgnores::handle_action(const std::string& action,
 			resetflag.push_back(param);
 		}
 	} else {
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_COMMAND);
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
 	}
 }
 

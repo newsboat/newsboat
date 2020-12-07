@@ -691,16 +691,17 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	LOG(Level::DEBUG, "KeyMap::handle_action(%s, ...) called", action);
 	if (action == "bind-key") {
 		const auto tokens = utils::tokenize_quoted(params);
-		if (tokens.size() < 2)
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+		if (tokens.size() < 2) {
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
+		}
 		std::string context = "all";
 		if (tokens.size() >= 3) {
 			context = tokens[2];
 		}
-		if (!is_valid_context(context))
+		if (!is_valid_context(context)) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid context"), context));
+		}
 		const Operation op = get_opcode(tokens[1]);
 		if (op == OP_NIL) {
 			throw ConfigHandlerException(

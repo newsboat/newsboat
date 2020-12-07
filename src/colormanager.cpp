@@ -38,8 +38,7 @@ void ColorManager::handle_action(const std::string& action,
 		action);
 	if (action == "color") {
 		if (params.size() < 3) {
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
 		/*
@@ -50,19 +49,22 @@ void ColorManager::handle_action(const std::string& action,
 		std::string fgcolor = params[1];
 		std::string bgcolor = params[2];
 
-		if (!utils::is_valid_color(fgcolor))
+		if (!utils::is_valid_color(fgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"), fgcolor));
-		if (!utils::is_valid_color(bgcolor))
+		}
+		if (!utils::is_valid_color(bgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"), bgcolor));
+		}
 
 		std::vector<std::string> attribs;
 		for (unsigned int i = 3; i < params.size(); ++i) {
-			if (!utils::is_valid_attribute(params[i]))
+			if (!utils::is_valid_attribute(params[i])) {
 				throw ConfigHandlerException(strprintf::fmt(
 						_("`%s' is not a valid attribute"),
 						params[i]));
+			}
 			attribs.push_back(params[i]);
 		}
 
@@ -74,14 +76,15 @@ void ColorManager::handle_action(const std::string& action,
 			element == "background" || element == "article" ||
 			element == "end-of-text-marker") {
 			element_styles[element] = {fgcolor, bgcolor, attribs};
-		} else
+		} else {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid configuration element"),
 					element));
+		}
 
-	} else
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_COMMAND);
+	} else {
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 void ColorManager::dump_config(std::vector<std::string>& config_output) const
