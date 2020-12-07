@@ -809,9 +809,10 @@ test/configcontainer.o: test/configcontainer.cpp \
 test/configdata.o: test/configdata.cpp 3rd-party/catch.hpp \
  include/configdata.h 3rd-party/expected.hpp
 test/configparser.o: test/configparser.cpp include/configparser.h \
- include/configactionhandler.h 3rd-party/catch.hpp include/keymap.h \
- test/test-helpers/envvar.h 3rd-party/optional.hpp \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
+ include/configactionhandler.h 3rd-party/catch.hpp \
+ include/configexception.h include/keymap.h test/test-helpers/envvar.h \
+ 3rd-party/optional.hpp test/test-helpers/tempfile.h \
+ test/test-helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
  include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
  include/strprintf.h 3rd-party/catch.hpp test/test-helpers/chmod.h \
