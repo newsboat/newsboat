@@ -1874,7 +1874,7 @@ msgstr "Göç iptal ediliyor çünkü `%s' üzerinde mkdir başarısız oldu: %s
 
 #: rust/libnewsboat/src/filterparser.rs:63
 msgid "attribute name"
-msgstr "öznitelik adı bulunamadı"
+msgstr "öznitelik adı"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
