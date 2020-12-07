@@ -57,7 +57,7 @@ impl FsLock {
                     &gettext("Failed to open lock file: '%s' (%s)"),
                     new_lock_path
                         .to_str()
-                        .unwrap_or(&gettext("<filename containing invalid unicode character>")),
+                        .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
                     reason.to_string()
                 ))
             }
@@ -80,7 +80,7 @@ impl FsLock {
                     &gettext("Failed to write PID to lock file: '%s' (%s)"),
                     new_lock_path
                         .to_str()
-                        .unwrap_or(&gettext("<filename containing invalid unicode character>")),
+                        .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
                     reason.to_string()
                 ));
             }
@@ -112,7 +112,7 @@ impl FsLock {
                 &gettext("Failed to lock '%s', already locked by process with PID %{}"),
                 new_lock_path
                     .to_str()
-                    .unwrap_or(&gettext("<filename containing invalid unicode character>")),
+                    .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
                 PRIi64,
                 *pid as i64
             ))
