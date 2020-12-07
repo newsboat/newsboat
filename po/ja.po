@@ -10,6 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -1020,7 +1022,6 @@ msgstr ""
 msgid "1 day ago"
 msgid_plural "%u days ago"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/itemlistformaction.cpp:1319
 msgid "Error: no filename provided"
