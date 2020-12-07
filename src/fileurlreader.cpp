@@ -27,7 +27,7 @@ nonstd::optional<std::string> FileUrlReader::reload()
 	if (!result) {
 		return strprintf::fmt(_("Error: Failed to read URLs from file \"%s\" (%s)"),
 				filename,
-				result.error());
+				result.error().message);
 	}
 	std::vector<std::string> lines = result.value();
 

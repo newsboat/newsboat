@@ -1,6 +1,5 @@
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
-use gettextrs::gettext;
 use libc::{c_ulong, close, execvp, exit, fork, waitpid};
 use percent_encoding::*;
 use std::ffi::CString;
@@ -12,8 +11,6 @@ use std::process::{Command, Stdio};
 use std::ptr;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
-
-use strprintf::fmt;
 
 pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
@@ -691,21 +688,31 @@ pub fn getcwd() -> Result<PathBuf, io::Error> {
     env::current_dir()
 }
 
+/// Errors that `read_text_file()` can return.
+#[derive(Debug)]
+pub enum ReadTextFileError {
+    /// An error occurred while opening the file.
+    CantOpen { reason: io::Error },
+
+    /// One of the lines triggered an io::Error (most likely invalid UTF-8, but see `reason` for
+    /// details).
+    LineError {
+        line_number: usize,
+        reason: io::Error,
+    },
+}
+
 /// Get the lines of text contained in a file.
-pub fn read_text_file(filename: &Path) -> Result<Vec<String>, String> {
+pub fn read_text_file(filename: &Path) -> Result<Vec<String>, ReadTextFileError> {
     use std::fs::File;
     use std::io::BufRead;
-    let file = File::open(filename)
-        .map_err(|reason| fmt!(&gettext("Failed to open file (%s)"), reason.to_string()))?;
+    let file = File::open(filename).map_err(|reason| ReadTextFileError::CantOpen { reason })?;
     let buffered = io::BufReader::new(file);
     let mut lines = Vec::new();
     for (line_number, line) in buffered.lines().enumerate() {
-        let line = line.map_err(|reason| {
-            fmt!(
-                &gettext("Failed to read line %u (%s)"),
-                (line_number + 1) as u32,
-                reason.to_string()
-            )
+        let line = line.map_err(|reason| ReadTextFileError::LineError {
+            line_number: line_number + 1,
+            reason,
         })?;
         lines.push(line);
     }
@@ -1443,6 +1450,25 @@ mod tests {
     }
 
     #[test]
+    fn t_read_text_file_nonexistent_file() {
+        use tempfile::TempDir;
+
+        let tmp = TempDir::new().unwrap();
+        let filepath = {
+            let mut filepath = tmp.path().to_owned();
+            filepath.push("nonexistent");
+            filepath
+        };
+        assert!(!filepath.exists());
+        match read_text_file(&filepath) {
+            // Expected result.
+            Err(ReadTextFileError::CantOpen { .. }) => {}
+
+            other => panic!("Expected a result different from {:?}", other),
+        }
+    }
+
+    #[test]
     fn t_read_text_file_invalid_unicode() {
         use std::fs;
         use tempfile::NamedTempFile;
@@ -1453,7 +1479,12 @@ mod tests {
         ];
         fs::write(text_file_location.path(), data).expect("unable to write test data to file");
 
-        assert!(read_text_file(text_file_location.path()).is_err());
+        match read_text_file(text_file_location.path()) {
+            // Expected result.
+            Err(ReadTextFileError::LineError { .. }) => {}
+
+            other => panic!("Expected a result different from {:?}", other),
+        }
     }
 
     #[test]

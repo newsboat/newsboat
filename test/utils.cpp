@@ -1298,7 +1298,7 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 
 		const auto result = utils::read_text_file(tempfile.get_path());
 		REQUIRE_FALSE(result);
-		REQUIRE(result.error().size() > 0);
+		REQUIRE(result.error().message.size() > 0);
 	}
 }
 

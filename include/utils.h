@@ -153,7 +153,15 @@ nonstd::optional<std::uint8_t> run_interactively(const std::string& command,
 
 std::string getcwd();
 
-nonstd::expected<std::vector<std::string>, std::string> read_text_file(
+enum class ReadTextFileErrorKind {
+	CantOpen,
+	LineError
+};
+struct ReadTextFileError {
+	ReadTextFileErrorKind kind;
+	std::string message;
+};
+nonstd::expected<std::vector<std::string>, ReadTextFileError> read_text_file(
 	const std::string& filename);
 
 int strnaturalcmp(const std::string& a, const std::string& b);
