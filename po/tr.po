@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-04-03 19:00+0300\n"
+"PO-Revision-Date: 2020-12-07 19:00+0300\n"
 "Last-Translator: Emir SARI <bitigchi@me.com>, 2020\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -118,7 +118,7 @@ msgstr "bu yardım"
 
 #: newsboat.cpp:103
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "başvurulmamış ögeleri önbellekten kaldır"
 
 #: newsboat.cpp:128
 msgid "Files:"
@@ -144,10 +144,12 @@ msgid ""
 "Support at #newsboat at https://freenode.net or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Destek için https://freenode.net sunucusunda #newsboat kanalına veya e-posta "
+"listemize (https://groups.google.com/g/newsboat) başvurun"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:392
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "Daha fazla bilgi için https://newsboat.org adresine bakın"
 
 #: newsboat.cpp:172
 #, c-format
@@ -221,7 +223,7 @@ msgstr "`%s' geçerli bir yapılandırma ögesi değil"
 #, c-format
 msgid "newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: yeniden yükleme tamamlandı, %f okunmamış besleme (%n okunmamış "
+"newsboat: Yeniden yükleme tamamlandı, %f okunmamış besleme (%n okunmamış "
 "toplam yazı)"
 
 #: src/configcontainer.cpp:272
@@ -346,13 +348,13 @@ msgid "done."
 msgstr "bitti."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %<PRId64>)"
-msgstr "Hata: %s zaten çalışıyor (PID: %u)"
+msgstr "Hata: Bir %s oluşumu halihazırda çalışıyor (PID: %<PRId64>)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:265
 msgid "Error: "
-msgstr ""
+msgstr "Hata: "
 
 #: src/controller.cpp:219 src/controller.cpp:398
 msgid "Opening cache..."
@@ -409,7 +411,7 @@ msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
-"Hata: hiçbir adres ayarlanmamış. Lütfen %s içine RSS besleme kaynakları "
+"Hata: Hiçbir adres ayarlanmamış. Lütfen %s içine RSS besleme kaynakları "
 "ekleyin ya da bir OPML dosyasını içeri aktarın."
 
 #: src/controller.cpp:357
@@ -461,13 +463,12 @@ msgstr ""
 "Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:387
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Görünüşe göre NewsBlur hesabınızda herhangi bir besleme ayarlamamışsınız. "
-"Lütfen bir tane ayarlayıp yeniden deneyin."
+"Görünüşe göre Owncloud/Nextcloud hesabınızda herhangi bir besleme "
+"ayarlamamışsınız. Lütfen bir tane ayarlayıp yeniden deneyin."
 
 #: src/controller.cpp:400
 msgid "Cleaning up cache thoroughly..."
@@ -773,11 +774,11 @@ msgstr "Tümünü Yenile"
 
 #: src/feedlistformaction.cpp:613
 msgid "Mark Read"
-msgstr "Okundu İmle"
+msgstr "Okundu"
 
 #: src/feedlistformaction.cpp:614 src/itemlistformaction.cpp:1284
 msgid "Mark All Read"
-msgstr "Tümünü Okundu İmle"
+msgstr "Tümü Okundu"
 
 #: src/feedlistformaction.cpp:615 src/helpformaction.cpp:225
 #: src/itemlistformaction.cpp:1285
@@ -837,12 +838,12 @@ msgstr "Kaydet - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: Failed to read URLs from file \"%s\" (%s)"
-msgstr ""
+msgstr "Hata: URL'ler \"%s\" dosyasından okunamadı (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to open file \"%s\" (%s)"
-msgstr "`%s' beslemesi yüklenirken hata: %s"
+msgstr "Hata: \"%s\" dosyası açılamadı (%s)"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:343 src/rssignores.cpp:41
 #, c-format
@@ -1003,14 +1004,14 @@ msgstr "Hata: Hiçbiri seçilmedi!"
 
 #: src/itemlistformaction.cpp:418
 msgid "Error: you can't reload search results."
-msgstr "Hata: arama sonuçlarını yeniden yükleyemezsiniz."
+msgstr "Hata: Arama sonuçlarını yeniden yükleyemezsiniz."
 
 #: src/itemlistformaction.cpp:439 src/itemlistformaction.cpp:448
 #: src/itemlistformaction.cpp:472 src/itemviewformaction.cpp:347
 #: src/itemviewformaction.cpp:358 src/itemviewformaction.cpp:388
 #: src/view.cpp:726 src/view.cpp:791
 msgid "No unread items."
-msgstr "Okunmamış yok."
+msgstr "Okunmamış öge kalmadı."
 
 #: src/itemlistformaction.cpp:456 src/itemviewformaction.cpp:368
 #: src/view.cpp:858
@@ -1024,7 +1025,7 @@ msgstr "Halihazırda ilk öge üzerinde."
 
 #: src/itemlistformaction.cpp:478 src/itemlistformaction.cpp:483
 msgid "No unread feeds."
-msgstr "Okunmamış besleme yok."
+msgstr "Okunmamış besleme kalmadı."
 
 #: src/itemlistformaction.cpp:552
 msgid "Marking all above as read..."
@@ -1069,9 +1070,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/itemlistformaction.cpp:1319
-#, fuzzy
 msgid "Error: no filename provided"
-msgstr "Hata: Hiçbiri seçilmedi!"
+msgstr "Hata: Bir dosya adı sağlanmadı"
 
 #: src/itemlistformaction.cpp:1370 src/itemviewformaction.cpp:230
 #: src/itemviewformaction.cpp:535
@@ -1208,7 +1208,7 @@ msgstr "Yazı - %s"
 
 #: src/itemviewformaction.cpp:699
 msgid "Error: invalid regular expression!"
-msgstr "Hata: geçersiz düzenli ifade!"
+msgstr "Hata: Geçersiz düzenli ifade!"
 
 #: src/keymap.cpp:36
 msgid "Open feed/article"
@@ -1275,9 +1275,8 @@ msgid "Go to a random unread article"
 msgstr "Rastgele okunmamış bir yazıya git"
 
 #: src/keymap.cpp:125
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read."
-msgstr "Yazıyı tarayıcıda aç ve okundu olarak imle"
+msgstr "Yazının URL'sini veya URL görünümündeki girdiyi aç. Okundu imle."
 
 #: src/keymap.cpp:132
 msgid "Open all unread items of selected feed in browser"
@@ -1289,7 +1288,7 @@ msgstr "Seçili beslemenin tüm ögelerini tarayıcıda aç ve okundu olarak iml
 
 #: src/keymap.cpp:147
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr ""
+msgstr "Yazının, beslemenin veya girdinin URL'sini URL görünümünde aç"
 
 #: src/keymap.cpp:154
 msgid "Open help dialog"
@@ -1325,7 +1324,7 @@ msgstr "Arama diyaloğunu aç"
 
 #: src/keymap.cpp:196
 msgid "Goto item with title"
-msgstr ""
+msgstr "Başlıklı ögeye git"
 
 #: src/keymap.cpp:197
 msgid "Add download to queue"
@@ -1589,9 +1588,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "düzenli ifade '%s' geçersiz: %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to parse OPML file \"%s\""
-msgstr "Hata: Yazı %s' konumuna kaydedilemedi"
+msgstr "Hata: \"%s\" OPML dosyası ayrıştırılamadı"
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1657,16 +1656,15 @@ msgstr "Kuyruk (%u indirme sürüyor, %u toplam) - %.2f %s toplam%s"
 
 #: src/pbview.cpp:179
 msgid "Error: can't quit: download(s) in progress."
-msgstr "Hata: çıkılamadı: devam eden indirme(ler) var."
+msgstr "Hata: Çıkılamadı: Süren indirme(ler) var."
 
 #: src/pbview.cpp:219
 msgid "Error: download needs to be finished before the file can be played."
-msgstr ""
-"Hata: dosya oynatılmadan önce indirme işleminin tamamlanması gerekiyor."
+msgstr "Hata: Dosya oynatılmadan önce indirme işleminin bitmesi gerekiyor."
 
 #: src/pbview.cpp:263
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr "Hata: işlem gerçekleştirilemedi: devam eden indirme(ler) var."
+msgstr "Hata: İşlem gerçekleştirilemedi: Süren indirme(ler) var."
 
 #: src/pbview.cpp:298
 msgid "KB/s"
@@ -1844,11 +1842,11 @@ msgstr "desteklenmeyen besleme biçimi"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Dosya açılamadı (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "%u satırı okunamadı (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 msgid "%s: %s: invalid loglevel value"
@@ -1875,17 +1873,16 @@ msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Göç iptal ediliyor çünkü `%s' üzerinde mkdir başarısız oldu: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:63
-#, fuzzy
 msgid "attribute name"
-msgstr "özellik bulunamadı"
+msgstr "öznitelik adı bulunamadı"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "şunlardan biri: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "şunlardan biri: tırnak içinde dizi, erim, sayı"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
@@ -1903,20 +1900,21 @@ msgstr "İç ayrıştırma hatası"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Kilit dosyası açılamadı: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<dosya adı geçersiz UTF-8 karakterleri içeriyor>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
-msgstr ""
+msgstr "PID, kilit dosyasına yazılamadı: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
 msgstr ""
+"'%s' kilitlenemedi, halihazırda PID'si %{} olan işlem tarafından kiilitlenmiş"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
@@ -1925,13 +1923,3 @@ msgstr "regcomp %i kodunu döndürdü"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec %i kodunu döndürdü"
-
-#~ msgid ""
-#~ "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:"
-#~ "Yes to all n:No q:No to all)"
-#~ msgstr ""
-#~ "`%s' üzerine yaz (`%s' içinde)? Bunun gibi başka çakışmalar daha var (e:"
-#~ "Evet v:Tümüne evet h:Hayır a:Tümüne hayır)"
-
-#~ msgid "Open article in browser"
-#~ msgstr "Yazıyı tarayıcıda aç"
