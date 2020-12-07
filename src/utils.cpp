@@ -924,9 +924,7 @@ std::string utils::getcwd()
 	return RustString(rs_getcwd());
 }
 
-nonstd::expected<std::vector<std::string>, utils::ReadTextFileError>
-utils::read_text_file(
-	const std::string& filename)
+utils::ReadTextFileResult utils::read_text_file( const std::string& filename)
 {
 	rust::Vec<rust::String> c;
 	std::uint64_t error_line_number{};

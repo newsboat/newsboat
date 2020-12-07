@@ -79,19 +79,26 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	}
 	included_files.push_back(filename);
 
-	unsigned int linecounter = 0;
-	std::ifstream f(filename);
-	std::string line;
-	if (!f.is_open()) {
-		LOG(Level::WARN,
-			"ConfigParser::parse_file: file %s couldn't be opened",
-			filename);
-		return false;
+	const auto lines = utils::read_text_file(filename);
+	if (!lines) {
+		const auto error = lines.error();
+
+		switch (error.kind) {
+		case utils::ReadTextFileErrorKind::CantOpen:
+			LOG(Level::WARN,
+				"ConfigParser::parse_file: file %s couldn't be opened",
+				filename);
+			return false;
+
+		case utils::ReadTextFileErrorKind::LineError:
+			throw ConfigException(error.message);
+		}
 	}
 
-	while (f.is_open() && !f.eof()) {
-		getline(f, line);
+	unsigned int linecounter = 0;
+	for (const auto& line : lines.value()) {
 		++linecounter;
+
 		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
 
 		const std::string location = strprintf::fmt(_("%s line %u"), filename,

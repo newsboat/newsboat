@@ -256,6 +256,10 @@ TEST_CASE("`include` directive includes other config files", "[ConfigParser]")
 		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-missing-include"),
 			ConfigException);
 	}
+	SECTION("Errors on invalid UTF-8 in file") {
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-invalid-utf-8"),
+			ConfigException);
+	}
 	SECTION("Terminates on recursive include") {
 		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-recursive-include"),
 			ConfigException);

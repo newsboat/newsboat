@@ -161,8 +161,12 @@ struct ReadTextFileError {
 	ReadTextFileErrorKind kind;
 	std::string message;
 };
-nonstd::expected<std::vector<std::string>, ReadTextFileError> read_text_file(
-	const std::string& filename);
+// We define an alias for this to work around a bug in AStyle: the poor
+// formatter can't decide how to split the function declaration into multiple
+// lines, and re-formats it differently on each invocation.
+using ReadTextFileResult =
+	nonstd::expected<std::vector<std::string>, ReadTextFileError>;
+ReadTextFileResult read_text_file(const std::string& filename);
 
 int strnaturalcmp(const std::string& a, const std::string& b);
 
