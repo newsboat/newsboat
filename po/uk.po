@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-09-17 16:25+0300\n"
+"PO-Revision-Date: 2020-12-07 10:48+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,7 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -117,7 +119,7 @@ msgstr "ця довідка"
 
 #: newsboat.cpp:103
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "видалити з кешу статті, що більше не потрібні"
 
 #: newsboat.cpp:128
 msgid "Files:"
@@ -143,10 +145,12 @@ msgid ""
 "Support at #newsboat at https://freenode.net or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Підтримку шукайте на #newsboat у https://freenode.net чи у нашому списку "
+"розсилки https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:392
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "За додатковою інформацією див. https://newsboat.org/"
 
 #: newsboat.cpp:172
 #, c-format
@@ -345,13 +349,13 @@ msgid "done."
 msgstr "готово."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %<PRId64>)"
-msgstr "Помилка: вже працює копія %s (PID: %u)"
+msgstr "Помилка: вже працює копія %s (PID: %<PRId64>)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:265
 msgid "Error: "
-msgstr ""
+msgstr "Помилка: "
 
 #: src/controller.cpp:219 src/controller.cpp:398
 msgid "Opening cache..."
@@ -461,13 +465,12 @@ msgstr ""
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:387
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті NewsBlur.Будь "
-"ласка, зробіть це і спробуйте знову."
+"Схоже не те, що ви не налаштували ні одної теми у аккаунті Owncloud/"
+"Nextcloud. Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:400
 msgid "Cleaning up cache thoroughly..."
@@ -835,12 +838,12 @@ msgstr "Зберегти Файл - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: Failed to read URLs from file \"%s\" (%s)"
-msgstr ""
+msgstr "Помилка: не вдалося прочитати адреси тем з файлу \"%s\" (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to open file \"%s\" (%s)"
-msgstr "Помилка при завантаженні теми `%s': %s"
+msgstr "Помилка: не вдалося відкрити файл \"%s\" (%s)"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:343 src/rssignores.cpp:41
 #, c-format
@@ -1064,13 +1067,13 @@ msgstr "Помилка: примінення фільтру невдале: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u день тому"
+msgstr[1] "%u дні тому"
+msgstr[2] "%u днів тому"
 
 #: src/itemlistformaction.cpp:1319
-#, fuzzy
 msgid "Error: no filename provided"
-msgstr "Помилка: нічого не вибрано!"
+msgstr "Помилка: не вказано імені файлу"
 
 #: src/itemlistformaction.cpp:1370 src/itemviewformaction.cpp:230
 #: src/itemviewformaction.cpp:535
@@ -1274,9 +1277,9 @@ msgid "Go to a random unread article"
 msgstr "Перейти до будь-якої непрочитаної статті"
 
 #: src/keymap.cpp:125
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read."
-msgstr "Відкрити статтю у браузері і позначити прочитаною"
+msgstr ""
+"Відкрити URL статті, теми, чи рядка у діалозі URL. Позначити прочитаним."
 
 #: src/keymap.cpp:132
 msgid "Open all unread items of selected feed in browser"
@@ -1290,7 +1293,7 @@ msgstr ""
 
 #: src/keymap.cpp:147
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr ""
+msgstr "Відкрити URL статті, теми, чи рядка у діалозі URL"
 
 #: src/keymap.cpp:154
 msgid "Open help dialog"
@@ -1326,7 +1329,7 @@ msgstr "Відкрити діалог пошуку"
 
 #: src/keymap.cpp:196
 msgid "Goto item with title"
-msgstr ""
+msgstr "Перейти до статті із заголовком"
 
 #: src/keymap.cpp:197
 msgid "Add download to queue"
@@ -1590,9 +1593,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "вживаний вираз '%s' неправильний %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to parse OPML file \"%s\""
-msgstr "Помилка: не можу записати статтю у файл %s"
+msgstr "Помилка: не вдалося розібрати OPML-файл \"%s\""
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1845,11 +1848,11 @@ msgstr "формат теми не підтримується"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Не вдалося відкрити файл (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "Не вдалося прочитати рядок %u (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 msgid "%s: %s: invalid loglevel value"
@@ -1877,17 +1880,16 @@ msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Міграція відмінена: mkdir для `%s' повернув помилку: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:63
-#, fuzzy
 msgid "attribute name"
-msgstr "атрибут не знайдено"
+msgstr "ім'я атрибуту"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "одне із: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "одне із: рядок у лапках, інтервал, число"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
@@ -1905,20 +1907,21 @@ msgstr "Внутрішня помилка парсеру"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Не вдалося відкрити блокуючий файл: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<ім'я файлу з некоректним UTF-8>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
-msgstr ""
+msgstr "Не вдалося записати PID у блокуючий файл: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
 msgstr ""
+"Не вдалося заблокувати файл '%s', котрий вже заблокований процесом із PID %{}"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
@@ -1927,34 +1930,3 @@ msgstr "regcomp повернула код помилки %i"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec повернула код помилки %i"
-
-#~ msgid ""
-#~ "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:"
-#~ "Yes to all n:No q:No to all)"
-#~ msgstr ""
-#~ "Перезаписати `%s' в `%s'? Більше таких конфліктів немає (y:Так a:"
-#~ "Перезаписати усі n:Ні q:Не перезаписувати нічого)"
-
-#~ msgid "Open article in browser"
-#~ msgstr "Відкрити статтю у браузері"
-
-#~ msgid "invalid feed index (bug)"
-#~ msgstr "непрацездатний індекс теми (помилка)"
-
-#~ msgid "Go to next article"
-#~ msgstr "Перейти до наступної статті"
-
-#~ msgid "Go to previous article"
-#~ msgstr "Перейти до попередньої статті"
-
-#~ msgid "config"
-#~ msgstr "налаштування"
-
-#~ msgid "urls"
-#~ msgstr "посилання"
-
-#~ msgid "%s %s - Save Files - %s"
-#~ msgstr "%s %s - Зберегти файли - %s"
-
-#~ msgid "%s %s - Save File - %s"
-#~ msgstr "%s %s - Зберегти файл - %s"
