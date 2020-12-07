@@ -1066,8 +1066,8 @@ msgstr "Hata: Süzgeç uygulanırken hata oluştu: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 gün önce"
+msgstr[1] "%u gün önce"
 
 #: src/itemlistformaction.cpp:1319
 msgid "Error: no filename provided"
@@ -1874,7 +1874,7 @@ msgstr "Göç iptal ediliyor çünkü `%s' üzerinde mkdir başarısız oldu: %s
 
 #: rust/libnewsboat/src/filterparser.rs:63
 msgid "attribute name"
-msgstr "öznitelik adı bulunamadı"
+msgstr "öznitelik adı"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
