@@ -28,7 +28,17 @@ public:
 	{
 		/* nothing because ConfigParser itself only handles include */
 	}
+
+	/// Processes configuration commands from a file at \a filename.
+	///
+	/// Returns:
+	/// - `false` if the file couldn't be opened;
+	/// - `true` if the whole file was processed completely.
+	///
+	/// If the file contains any errors, throws `ConfigException` with
+	/// a message explaining the problem.
 	bool parse_file(const std::string& filename);
+
 	void parse_line(const std::string& line, const std::string& location);
 	static std::string evaluate_backticks(std::string token);
 

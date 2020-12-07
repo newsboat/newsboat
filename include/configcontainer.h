@@ -6,11 +6,12 @@
 #include <string>
 #include <vector>
 
-#include "configparser.h"
+#include "configactionhandler.h"
 
 namespace newsboat {
 
 class ConfigData;
+class ConfigParser;
 
 enum class FeedSortMethod {
 	NONE,

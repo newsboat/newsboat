@@ -6,6 +6,7 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
+#include "configparser.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -199,8 +200,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 	params)
 {
 	if (params.size() < 3) {
-		throw ConfigHandlerException(
-			ActionHandlerStatus::TOO_FEW_PARAMS);
+		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
 	std::string location = params[0];
@@ -289,8 +289,7 @@ void RegexManager::handle_highlight_article_action(const
 	std::vector<std::string>& params)
 {
 	if (params.size() < 3) {
-		throw ConfigHandlerException(
-			ActionHandlerStatus::TOO_FEW_PARAMS);
+		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
 	std::string expr = params[0];

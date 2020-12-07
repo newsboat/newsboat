@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "3rd-party/catch.hpp"
+
+#include "configexception.h"
 #include "keymap.h"
 #include "test-helpers/envvar.h"
 #include "test-helpers/tempfile.h"
@@ -28,7 +30,7 @@ public:
 
 } // Anonymous namespace
 
-TEST_CASE("parse_line() Handles both lines with and without quoting",
+TEST_CASE("parse_line() handles both lines with and without quoting",
 	"[ConfigParser]")
 {
 	ConfigParser cfgParser;
@@ -39,8 +41,9 @@ TEST_CASE("parse_line() Handles both lines with and without quoting",
 	const std::string location = "dummy-location";
 
 	SECTION("unknown command results in exception") {
-		REQUIRE_THROWS(cfgParser.parse_line("foo", location));
-		REQUIRE_THROWS(cfgParser.parse_line("foo arg1 arg2", location));
+		REQUIRE_THROWS_AS(cfgParser.parse_line("foo", location), ConfigException);
+		REQUIRE_THROWS_AS(cfgParser.parse_line("foo arg1 arg2", location),
+			ConfigException);
 	}
 
 	SECTION("different combinations of (un)quoted commands/arguments have the same result") {
@@ -245,15 +248,21 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 	}
 }
 
-TEST_CASE("include directive includes other config files", "[ConfigParser]")
+TEST_CASE("`include` directive includes other config files", "[ConfigParser]")
 {
 	// TODO: error messages should be more descriptive than "file couldn't be opened"
 	ConfigParser cfgparser;
-	SECTION("Errors on not found file") {
-		REQUIRE_THROWS(cfgparser.parse_file("data/config-missing-include"));
+	SECTION("Errors if file is not found") {
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-missing-include"),
+			ConfigException);
+	}
+	SECTION("Errors on invalid UTF-8 in file") {
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-invalid-utf-8"),
+			ConfigException);
 	}
 	SECTION("Terminates on recursive include") {
-		REQUIRE_THROWS(cfgparser.parse_file("data/config-recursive-include"));
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-recursive-include"),
+			ConfigException);
 	}
 	SECTION("Successfully includes existing file") {
 		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-absolute-include"));

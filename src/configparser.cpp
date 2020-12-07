@@ -33,18 +33,17 @@ void ConfigParser::handle_action(const std::string& action,
 	 */
 	if (action == "include") {
 		if (params.size() < 1) {
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		std::string tilde_expanded = utils::resolve_tilde(params[0]);
-		std::string current_fpath = included_files.back();
-		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded)))
-			throw ConfigHandlerException(
-				ActionHandlerStatus::FILENOTFOUND);
-	} else
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_COMMAND);
+		const std::string tilde_expanded = utils::resolve_tilde(params[0]);
+		const std::string current_fpath = included_files.back();
+		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
+			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
+		}
+	} else {
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 bool ConfigParser::parse_file(const std::string& tmp_filename)
@@ -80,19 +79,26 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	}
 	included_files.push_back(filename);
 
-	unsigned int linecounter = 0;
-	std::ifstream f(filename);
-	std::string line;
-	if (!f.is_open()) {
-		LOG(Level::WARN,
-			"ConfigParser::parse_file: file %s couldn't be opened",
-			filename);
-		return false;
+	const auto lines = utils::read_text_file(filename);
+	if (!lines) {
+		const auto error = lines.error();
+
+		switch (error.kind) {
+		case utils::ReadTextFileErrorKind::CantOpen:
+			LOG(Level::WARN,
+				"ConfigParser::parse_file: file %s couldn't be opened",
+				filename);
+			return false;
+
+		case utils::ReadTextFileErrorKind::LineError:
+			throw ConfigException(error.message);
+		}
 	}
 
-	while (f.is_open() && !f.eof()) {
-		getline(f, line);
+	unsigned int linecounter = 0;
+	for (const auto& line : lines.value()) {
 		++linecounter;
+
 		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
 
 		const std::string location = strprintf::fmt(_("%s line %u"), filename,
@@ -111,7 +117,7 @@ void ConfigParser::parse_line(const std::string& line,
 	auto evaluated = evaluate_backticks(std::move(stripped));
 	const auto token = utils::extract_token_quoted(evaluated);
 	if (token.has_value()) {
-		std::string cmd = token.value();
+		const std::string cmd = token.value();
 		const std::string params = evaluated;
 
 		if (action_handlers.count(cmd) < 1) {
@@ -170,7 +176,7 @@ std::string ConfigParser::evaluate_backticks(std::string token)
 		find_non_escaped_backtick(token, pos1 + 1);
 
 	while (pos1 != std::string::npos && pos2 != std::string::npos) {
-		std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
+		const std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
 		token.erase(pos1, pos2 - pos1 + 1);
 		std::string result = utils::get_command_output(cmd);
 		utils::trim_end(result);

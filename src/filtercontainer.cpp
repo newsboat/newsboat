@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
+#include "configparser.h"
 #include "matcher.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -21,8 +22,7 @@ void FilterContainer::handle_action(const std::string& action,
 	 */
 	if (action == "define-filter") {
 		if (params.size() < 2) {
-			throw ConfigHandlerException(
-				ActionHandlerStatus::TOO_FEW_PARAMS);
+			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
 		FilterNameExprPair filter;
@@ -39,8 +39,7 @@ void FilterContainer::handle_action(const std::string& action,
 
 		filters.emplace_back(std::move(filter));
 	} else {
-		throw ConfigHandlerException(
-			ActionHandlerStatus::INVALID_COMMAND);
+		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
 	}
 }
 

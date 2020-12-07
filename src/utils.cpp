@@ -924,12 +924,13 @@ std::string utils::getcwd()
 	return RustString(rs_getcwd());
 }
 
-nonstd::expected<std::vector<std::string>, std::string> utils::read_text_file(
-	const std::string& filename)
+utils::ReadTextFileResult utils::read_text_file( const std::string& filename)
 {
 	rust::Vec<rust::String> c;
-	rust::String e;
-	bool result = bridged::read_text_file(filename, c, e);
+	std::uint64_t error_line_number{};
+	rust::String error_reason;
+	const bool result = bridged::read_text_file(filename, c, error_line_number,
+			error_reason);
 
 	if (result) {
 		std::vector<std::string> contents;
@@ -938,7 +939,19 @@ nonstd::expected<std::vector<std::string>, std::string> utils::read_text_file(
 		}
 		return contents;
 	} else {
-		return nonstd::make_unexpected(std::string(e));
+		ReadTextFileError error;
+
+		if (error_line_number == 0) {
+			error.kind = ReadTextFileErrorKind::CantOpen;
+			error.message = strprintf::fmt(_("Failed to open file (%s)"),
+					std::string(error_reason));
+		} else {
+			error.kind = ReadTextFileErrorKind::LineError;
+			error.message = strprintf::fmt(_("Failed to read line %u (%s)"),
+					error_line_number, std::string(error_reason));
+		}
+
+		return nonstd::make_unexpected(error);
 	}
 }
 

@@ -25,7 +25,8 @@ mod bridged {
         fn read_text_file(
             filename: String,
             contents: &mut Vec<String>,
-            error_message: &mut String,
+            error_line_number: &mut u64,
+            error_reason: &mut String,
         ) -> bool;
     }
 
@@ -42,7 +43,8 @@ mod bridged {
 pub fn read_text_file(
     filename: String,
     contents: &mut Vec<String>,
-    error_message: &mut String,
+    error_line_number: &mut u64,
+    error_reason: &mut String,
 ) -> bool {
     use std::path::Path;
 
@@ -52,7 +54,21 @@ pub fn read_text_file(
             true
         }
         Err(e) => {
-            *error_message = e;
+            use utils::ReadTextFileError::*;
+            match e {
+                CantOpen { reason } => {
+                    *error_line_number = 0;
+                    *error_reason = reason.to_string();
+                }
+
+                LineError {
+                    line_number,
+                    reason,
+                } => {
+                    *error_line_number = line_number as u64;
+                    *error_reason = reason.to_string();
+                }
+            }
             false
         }
     }

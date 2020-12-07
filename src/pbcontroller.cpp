@@ -17,6 +17,7 @@
 #include "config.h"
 #include "configcontainer.h"
 #include "configexception.h"
+#include "configparser.h"
 #include "globals.h"
 #include "logger.h"
 #include "matcherexception.h"

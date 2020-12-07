@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-#include "configparser.h"
+#include "configactionhandler.h"
 #include "stflpp.h"
 
 namespace podboat {
@@ -14,6 +14,8 @@ class PbView;
 class View;
 
 namespace newsboat {
+
+class ConfigParser;
 
 struct TextStyle {
 	std::string fg_color;

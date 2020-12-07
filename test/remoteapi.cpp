@@ -4,6 +4,8 @@
 
 #include "3rd-party/catch.hpp"
 
+#include "configparser.h"
+
 using namespace newsboat;
 
 /*
