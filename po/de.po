@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-09-18 23:10+0200\n"
+"PO-Revision-Date: 2020-12-07 17:34+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -118,7 +118,7 @@ msgstr "diese Hilfe anzeigen"
 
 #: newsboat.cpp:103
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "nicht referenzierte Einträge aus Cache löschen"
 
 #: newsboat.cpp:128
 msgid "Files:"
@@ -144,10 +144,12 @@ msgid ""
 "Support at #newsboat at https://freenode.net or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Unterstützung im Kanal #newsboat auf https://freenode.net oder auf unserer "
+"Mailingliste unter https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:392
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "Weitere Informationen unter https://newsboat.org/"
 
 #: newsboat.cpp:172
 #, c-format
@@ -156,7 +158,7 @@ msgid ""
 "see the full text.)"
 msgstr ""
 "newsboat ist Freie Software und steht unter der MIT-Lizenz. („%s -vv“ zeigt "
-"den vollständigen Lizenztext an.) "
+"den vollständigen Lizenztext an.)"
 
 #: newsboat.cpp:177
 msgid "It bundles:"
@@ -346,13 +348,13 @@ msgid "done."
 msgstr "Fertig."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %<PRId64>)"
-msgstr "Fehler: Eine Instanz von %s läuft bereits (PID: %u)"
+msgstr "Fehler: Eine Instanz von %s läuft bereits (PID: %<PRId64>)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:265
 msgid "Error: "
-msgstr ""
+msgstr "Fehler: "
 
 #: src/controller.cpp:219 src/controller.cpp:398
 msgid "Opening cache..."
@@ -420,56 +422,55 @@ msgid ""
 "with feeds, and try again."
 msgstr ""
 "Es sieht so aus als würde die konfigurierte OPML-Datei keine Feeds "
-"enthalten. Bitte füllen Sie diese mit Feeds, und probieren Sie es erneut."
+"enthalten. Bitte füllen Sie diese mit Feeds und probieren Sie es erneut."
 
 #: src/controller.cpp:362
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem The-Old-Reader-Account "
-"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem The-Old-Reader-Konto "
+"konfiguriert. Bitte tun Sie das und probieren Sie es erneut."
 
 #: src/controller.cpp:367
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem Tiny-Tiny-RSS-Account "
-"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Tiny-Tiny-RSS-Konto "
+"konfiguriert. Bitte tun Sie das und probieren Sie es erneut."
 
 #: src/controller.cpp:372
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem NewsBlur-Account "
-"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem NewsBlur-Konto "
+"konfiguriert. Bitte tun Sie das und probieren Sie es erneut."
 
 #: src/controller.cpp:377
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem Inoreader-Account "
-"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Inoreader-Konto "
+"konfiguriert. Bitte tun Sie das und probieren Sie es erneut."
 
 #: src/controller.cpp:382
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem Miniflux-Account "
-"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Miniflux-Konto "
+"konfiguriert. Bitte tun Sie das und probieren Sie es erneut."
 
 #: src/controller.cpp:387
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Es sieht so aus als hätten Sie keine Feeds in Ihrem NewsBlur-Account "
-"konfiguriert. Bitte tun Sie das, und probieren Sie es erneut."
+"Es sieht so aus als hätten Sie keine Feeds in Ihrem Owncloud-/Nextcloud-"
+"Konto konfiguriert. Bitte tun Sie das und probieren Sie es erneut."
 
 #: src/controller.cpp:400
 msgid "Cleaning up cache thoroughly..."
@@ -837,12 +838,12 @@ msgstr "Datei speichern - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: Failed to read URLs from file \"%s\" (%s)"
-msgstr ""
+msgstr "Fehler: Lesen der URLs aus Datei „%s“ fehlgeschlagen (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to open file \"%s\" (%s)"
-msgstr "Fehler beim Laden von Feed `%s': %s"
+msgstr "Fehler: Öffnen der Datei „%s“ fehlgeschlagen (%s)"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:343 src/rssignores.cpp:41
 #, c-format
@@ -1065,13 +1066,12 @@ msgstr "Fehler: Anwenden des Filters fehlgeschlagen: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "gestern"
+msgstr[1] "vor %u Tagen"
 
 #: src/itemlistformaction.cpp:1319
-#, fuzzy
 msgid "Error: no filename provided"
-msgstr "Fehler: Keinen Artikel ausgewählt!"
+msgstr "Fehler: Keinen Dateinamen angegeben"
 
 #: src/itemlistformaction.cpp:1370 src/itemviewformaction.cpp:230
 #: src/itemviewformaction.cpp:535
@@ -1275,9 +1275,8 @@ msgid "Go to a random unread article"
 msgstr "zu einem zufälligen, ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:125
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read."
-msgstr "Artikel im Browser öffnen and als gelesen markieren"
+msgstr "URL des Artikels oder Eintrags in der URL-Ansicht öffnen and als gelesen markieren."
 
 #: src/keymap.cpp:132
 msgid "Open all unread items of selected feed in browser"
@@ -1291,7 +1290,7 @@ msgstr ""
 
 #: src/keymap.cpp:147
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr ""
+msgstr "URL des Artikels, Feeds oder Eintrags in der URL-Ansicht öffnen"
 
 #: src/keymap.cpp:154
 msgid "Open help dialog"
@@ -1327,7 +1326,7 @@ msgstr "Suchdialog öffnen"
 
 #: src/keymap.cpp:196
 msgid "Goto item with title"
-msgstr ""
+msgstr "Springe zu Eintrag mit Titel"
 
 #: src/keymap.cpp:197
 msgid "Add download to queue"
@@ -1591,9 +1590,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "Regulärer Ausdruck '%s' ist ungültig: %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to parse OPML file \"%s\""
-msgstr "Fehler: Konnte Artikel nicht nach %s speichern"
+msgstr "Fehler: Parsen der OPML-Datei „%s“ fehlgeschlagen"
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1851,11 +1850,11 @@ msgstr "nicht unterstütztes Feed-Format"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Öffnen der Datei fehlgeschlagen (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "Lesen der Zeile %u fehlgeschlagen (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 msgid "%s: %s: invalid loglevel value"
@@ -1886,17 +1885,16 @@ msgstr ""
 "„%s“: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:63
-#, fuzzy
 msgid "attribute name"
-msgstr "Attribut nicht gefunden"
+msgstr "Attributname"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "einer aus: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "einer aus: Text in Anführungszeichen, Bereich, Zahl"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
@@ -1914,20 +1912,20 @@ msgstr "Interner Parsefehler"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Öffnen der Sperrdatei fehlgeschlagen: „%s“ (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<Dateiname enthält ungültigen UTF-8-Codepunkt>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
-msgstr ""
+msgstr "Schreiben der PID in die Sperrdatei fehlgeschlagen: „%s“ (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
-msgstr ""
+msgstr "Sperren von „%s“ fehlgeschlagen, bereits von Prozess mit PID %{} gesperrt"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
@@ -1936,22 +1934,3 @@ msgstr "regcomp brach mit Rückgabestatus %i ab"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec brach mit Rückgabestatus %i ab"
-
-#~ msgid ""
-#~ "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:"
-#~ "Yes to all n:No q:No to all)"
-#~ msgstr ""
-#~ "„%s“ in „%s“ überschreiben? Es gibt keine weiteren Konflikte (j:Ja a:Alle "
-#~ "überschreiben n:Nein k:Keine überschreiben)"
-
-#~ msgid "Open article in browser"
-#~ msgstr "Artikel im Browser öffnen"
-
-#~ msgid "invalid feed index (bug)"
-#~ msgstr "ungültiger Feed-Index (Bug)"
-
-#~ msgid "Go to next article"
-#~ msgstr "zum nächsten Artikel gehen"
-
-#~ msgid "Go to previous article"
-#~ msgstr "zum vorhergehenden Artikel gehen"
