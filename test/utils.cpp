@@ -1273,7 +1273,7 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 {
 	TestHelpers::TempFile tempfile;
 
-	SECTION("succesful if test file contains only valid unicode") {
+	SECTION("succesful if test file contains only valid UTF-8") {
 		{
 			std::ofstream f(tempfile.get_path());
 			f << "lorem ipsum\ntest1\ntest2";
@@ -1288,10 +1288,10 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 		REQUIRE(content[2] == "test2");
 	}
 
-	SECTION("fails with error message if file contains invalid unicode") {
+	SECTION("fails with error message if file contains invalid UTF-8") {
 		{
 			std::ofstream f(tempfile.get_path());
-			f << "test1\nt\xffst2"; // \xff is an invalid unicode character
+			f << "test1\nt\xffst2"; // \xff is an invalid UTF-8 codepoint
 		}
 		std::vector<std::string> content;
 		std::string error_message;

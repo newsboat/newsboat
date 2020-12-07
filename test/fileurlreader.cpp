@@ -171,7 +171,7 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 	}
 }
 
-TEST_CASE("URL reader returns error message if file contains invalid unicode character",
+TEST_CASE("URL reader returns error message if file contains invalid UTF-8 codepoint",
 	"[FileUrlReader]")
 {
 	TestHelpers::TempFile urlsFile;
