@@ -117,23 +117,19 @@ bool FormAction::process_op(Operation op,
 		break;
 	case OP_INT_SET:
 		if (automatic) {
-			std::string cmdline = "set ";
-			if (args) {
-				for (const auto& arg : *args) {
-					cmdline.append(strprintf::fmt(
-							"%s ", Stfl::quote(arg)));
-				}
+			if (args && args->size() == 2) {
+				const std::string key = args->at(0);
+				const std::string value = args->at(1);
+				cfg->set_configvalue(key, value);
+				return true;
+			} else {
+				v->show_error(_("usage: set <config-option> <value>"));
+				return false;
 			}
-			LOG(Level::DEBUG,
-				"FormAction::process_op: running commandline "
-				"`%s'",
-				cmdline);
-			this->handle_cmdline(cmdline);
 		} else {
 			LOG(Level::WARN,
 				"FormAction::process_op: got OP_INT_SET, but "
-				"not "
-				"automatic");
+				"not automatic");
 		}
 		break;
 	case OP_INT_CANCEL_QNA:
