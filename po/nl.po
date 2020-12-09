@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-09-18 15:24+0200\n"
+"PO-Revision-Date: 2020-12-09 01:22+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: newsboat.cpp:31
@@ -118,7 +118,7 @@ msgstr "deze hulptekst"
 
 #: newsboat.cpp:103
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "verwijder ongebruikte data uit de cache"
 
 #: newsboat.cpp:128
 msgid "Files:"
@@ -144,10 +144,12 @@ msgid ""
 "Support at #newsboat at https://freenode.net or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Ondersteuning via het #newsboat kanaal op https://freenode.net of op de "
+"mailinglijst https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:392
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "Ga naar https://newsboat.org/ voor meer informatie"
 
 #: newsboat.cpp:172
 #, c-format
@@ -345,13 +347,13 @@ msgid "done."
 msgstr "klaar."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %<PRId64>)"
-msgstr "Fout: er draait al een instantie van %s (PID: %u)"
+msgstr "Fout: er draait al een %s process (PID: %<PRId64>)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:265
 msgid "Error: "
-msgstr ""
+msgstr "Fout: "
 
 #: src/controller.cpp:219 src/controller.cpp:398
 msgid "Opening cache..."
@@ -464,13 +466,12 @@ msgstr ""
 "account. Configureer enkele feeds en probeer dan opnieuw."
 
 #: src/controller.cpp:387
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Blijkbaar hebt u nog geen feeds geconfigureerd in uw NewsBlur-account. "
-"Configureer enkele feeds en probeer dan opnieuw."
+"Blijkbaar heeft u nog geen feeds geconfigureerd in uw Owncloud- of Nextcloud-"
+"account. Configureer enkele feeds en probeer dan opnieuw."
 
 #: src/controller.cpp:400
 msgid "Cleaning up cache thoroughly..."
@@ -838,12 +839,12 @@ msgstr "Bestand opslaan - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: Failed to read URLs from file \"%s\" (%s)"
-msgstr ""
+msgstr "Fout: Het lezen van URLs uit \"%s\" is mislukt (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to open file \"%s\" (%s)"
-msgstr "Fout tijdens het laden van ‘%s’: %s"
+msgstr "Fout: Openen van ‘%s’ is mislukt (%s)"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:343 src/rssignores.cpp:41
 #, c-format
@@ -1067,13 +1068,12 @@ msgstr "Fout: toepassen van filter is mislukt: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 dag geleden"
+msgstr[1] "%u dagen geleden"
 
 #: src/itemlistformaction.cpp:1319
-#, fuzzy
 msgid "Error: no filename provided"
-msgstr "Fout: geen item geselecteerd!"
+msgstr "Fout: geen bestandnaam opgegeven"
 
 #: src/itemlistformaction.cpp:1370 src/itemviewformaction.cpp:230
 #: src/itemviewformaction.cpp:535
@@ -1277,9 +1277,8 @@ msgid "Go to a random unread article"
 msgstr "Ga naar willekeurig ongelezen artikel"
 
 #: src/keymap.cpp:125
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read."
-msgstr "Open artikel in browser en markeer als gelezen"
+msgstr "Open URL van artikel in browser en markeer als gelezen."
 
 #: src/keymap.cpp:132
 msgid "Open all unread items of selected feed in browser"
@@ -1291,7 +1290,7 @@ msgstr "Open alle ongelezen artikelen in de browser en markeer als gelezen"
 
 #: src/keymap.cpp:147
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr ""
+msgstr "Open URL van artikel, feed, of item in het URL overzicht"
 
 #: src/keymap.cpp:154
 msgid "Open help dialog"
@@ -1327,7 +1326,7 @@ msgstr "Zoekvenster openen"
 
 #: src/keymap.cpp:196
 msgid "Goto item with title"
-msgstr ""
+msgstr "Ga naar item met titel"
 
 #: src/keymap.cpp:197
 msgid "Add download to queue"
@@ -1591,9 +1590,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "reguliere expressie ‘%s’ is ongeldig: %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to parse OPML file \"%s\""
-msgstr "Fout: artikel opslaan in bestand ‘%s’ is mislukt"
+msgstr "Fout: Het ontleden van OPML-bestand \"%s\" is mislukt"
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1847,11 +1846,11 @@ msgstr "feed-type wordt niet ondersteund"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Mislukt om bestand te openen (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "Mislukt om lijn %u te lezen (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 msgid "%s: %s: invalid loglevel value"
@@ -1882,17 +1881,16 @@ msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Migratie is afgebroken omdat mkdir mislukte voor map `%s': %s"
 
 #: rust/libnewsboat/src/filterparser.rs:63
-#, fuzzy
 msgid "attribute name"
-msgstr "attribuut niet gevonden"
+msgstr "naam van attribuut"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "een van: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "een van: tekst tussen aanhalingstekens, inverval, nummer"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
@@ -1910,20 +1908,22 @@ msgstr "Interne fout tijdens ontleden"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Openen van lock-bestand is mislukt: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<bestandsnaam met ongeldig UTF-8 codepoint>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
-msgstr ""
+msgstr "PID naar lock bestand schrijven is mislukt: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
 msgstr ""
+"Het is mislukt om '%s' te vergrendelen, het is al vergrendeld door een "
+"proces met PID %{}"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
