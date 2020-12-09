@@ -57,6 +57,17 @@ fn operation_sequence(input: &str) -> IResult<&str, Vec<Vec<String>>> {
     parser(input)
 }
 
+fn operation_description(input: &str) -> IResult<&str, &str> {
+    let start_token = delimited(many0(one_of(" \t")), tag("--"), many0(one_of(" \t")));
+
+    let double_quote = tag("\"");
+    let parser = delimited(&double_quote, recognize(is_not("\"")), &double_quote);
+
+    let mut parser = preceded(start_token, parser);
+
+    parser(input)
+}
+
 /// Split a semicolon-separated list of operations into a vector. Each operation is represented by
 /// a non-empty sub-vector, where the first element is the name of the operation, and the rest of
 /// the elements are operation's arguments.
@@ -77,8 +88,16 @@ pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, &st
     }
 }
 
+pub fn tokenize_operation_description(input: &str) -> Option<&str> {
+    match operation_description(input) {
+        Ok((_leftovers, description)) => Some(description),
+        Err(_error) => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use super::tokenize_operation_description;
     use super::tokenize_operation_sequence;
 
     #[test]
@@ -350,5 +369,54 @@ mod tests {
             vec![vec!["set", "a", "b", "--", "name of function"]]
         );
         assert_eq!(leftover, "");
+    }
+
+    #[test]
+    fn t_tokenize_operation_description_supports_empty_input() {
+        assert_eq!(tokenize_operation_description(""), None);
+    }
+
+    #[test]
+    fn t_tokenize_operation_description_ignores_preceding_spaces() {
+        assert_eq!(
+            tokenize_operation_description(r#"--"description""#).unwrap(),
+            "description"
+        );
+        assert_eq!(
+            tokenize_operation_description(r#"-- "description""#).unwrap(),
+            "description"
+        );
+        assert_eq!(
+            tokenize_operation_description(r#"     -- "description""#).unwrap(),
+            "description"
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_description_ignores_trailing_spaces() {
+        assert_eq!(
+            tokenize_operation_description(r#"-- "description"   "#).unwrap(),
+            "description"
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_description_includes_whitespace() {
+        assert_eq!(
+            tokenize_operation_description(r#"-- "multi-word description""#).unwrap(),
+            "multi-word description"
+        );
+        assert_eq!(
+            tokenize_operation_description(r#"-- "  leading and trailing  ""#).unwrap(),
+            "  leading and trailing  "
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_description_requires_closing_quote() {
+        assert_eq!(
+            tokenize_operation_description(r#"-- "description not closed "#),
+            None
+        );
     }
 }

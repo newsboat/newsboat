@@ -17,6 +17,8 @@ mod ffi {
         type Operation;
         fn tokenize_operation_sequence(input: &str, leftovers: &mut String) -> Vec<Operation>;
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
+
+        fn tokenize_operation_description(input: &str) -> String;
     }
 
     extern "C++" {
@@ -48,4 +50,11 @@ fn tokenize_operation_sequence(input: &str, leftovers: &mut String) -> Vec<Opera
 
 fn operation_tokens(input: &Operation) -> &Vec<String> {
     &input.tokens
+}
+
+fn tokenize_operation_description(input: &str) -> String {
+    match libnewsboat::keymap::tokenize_operation_description(input) {
+        Some(description) => String::from(description),
+        None => String::new(),
+    }
 }

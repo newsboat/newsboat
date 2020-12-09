@@ -790,6 +790,12 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line)
 	};
 }
 
+std::string KeyMap::parse_operation_description(const std::string& input)
+{
+	const auto description = keymap::bridged::tokenize_operation_description(input);
+	return std::string(description);
+}
+
 std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()
 {
 	return startup_operations_sequence;

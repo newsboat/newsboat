@@ -197,6 +197,7 @@ public:
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 
 	ParsedOperations parse_operation_sequence(const std::string& line);
+	std::string parse_operation_description(const std::string& input);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 private:
