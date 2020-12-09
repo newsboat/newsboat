@@ -728,10 +728,6 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
-		// The token and operation sequence are delimited by one or more
-		// spaces. We have to strip them, or `parse_operation_sequence()` will
-		// include them into the first operation.
-		utils::trim(remaining_params);
 		const std::vector<MacroCmd> cmds = parse_operation_sequence(remaining_params);
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);

@@ -4,7 +4,7 @@ use nom::{
     character::complete::{space0, space1},
     combinator::{complete, eof, map, recognize, value},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::delimited,
+    sequence::{delimited, preceded},
     IResult,
 };
 
@@ -49,6 +49,7 @@ fn semicolon(input: &str) -> IResult<&str, &str> {
 fn operation_sequence(input: &str) -> IResult<&str, Vec<Vec<String>>> {
     let parser = separated_list0(many1(semicolon), operation_with_args);
     let parser = delimited(many0(semicolon), parser, many0(semicolon));
+    let parser = preceded(space0, parser);
 
     let mut parser = complete(parser);
 
@@ -289,6 +290,14 @@ mod tests {
     fn t_tokenize_operation_sequence_allows_single_character_unquoted() {
         assert_eq!(
             tokenize_operation_sequence(r#"set a b"#).unwrap(),
+            vec![vec!["set", "a", "b"]]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_ignores_leading_and_trailing_spaces() {
+        assert_eq!(
+            tokenize_operation_sequence(r#"  set a b    "#).unwrap(),
             vec![vec!["set", "a", "b"]]
         );
     }
