@@ -735,7 +735,13 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
-		const std::vector<MacroCmd> cmds = parse_operation_sequence(remaining_params);
+		const auto parsed = parse_operation_sequence(remaining_params);
+		const std::vector<MacroCmd> cmds = parsed.operations;
+		remaining_params = parsed.leftovers;
+		if (!remaining_params.empty()) {
+			LOG(Level::DEBUG,
+				"KeyMap::handle_action(macro): ignored remainder:  \"%s\"", remaining_params);
+		}
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
@@ -743,16 +749,18 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 
 		macros_[macrokey] = cmds;
 	} else if (action == "run-on-startup") {
-		startup_operations_sequence = parse_operation_sequence(params);
+		startup_operations_sequence = parse_operation_sequence(params).operations;
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
 	}
 }
 
 
-std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
+ParsedOperations KeyMap::parse_operation_sequence(const std::string& line)
 {
-	const auto operations = keymap::bridged::tokenize_operation_sequence(line);
+	rust::String leftovers;
+	const auto operations = keymap::bridged::tokenize_operation_sequence(line,
+			leftovers);
 
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {
@@ -776,7 +784,10 @@ std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
 		cmds.push_back(cmd);
 	}
 
-	return cmds;
+	return ParsedOperations{
+		.operations = cmds,
+		.leftovers = std::string(leftovers)
+	};
 }
 
 std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()

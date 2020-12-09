@@ -15,7 +15,7 @@ mod ffi {
         // This is not very elegant, but doing the same by hand using `extern "C"` is prohibitively
         // complex.
         type Operation;
-        fn tokenize_operation_sequence(input: &str) -> Vec<Operation>;
+        fn tokenize_operation_sequence(input: &str, leftovers: &mut String) -> Vec<Operation>;
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
     }
 
@@ -33,12 +33,15 @@ struct Operation {
     tokens: Vec<String>,
 }
 
-fn tokenize_operation_sequence(input: &str) -> Vec<Operation> {
+fn tokenize_operation_sequence(input: &str, leftovers: &mut String) -> Vec<Operation> {
     match libnewsboat::keymap::tokenize_operation_sequence(input) {
-        Some(operations) => operations
-            .into_iter()
-            .map(|tokens| Operation { tokens })
-            .collect::<Vec<_>>(),
+        Some((operations, remainder)) => {
+            *leftovers = remainder.to_string();
+            operations
+                .into_iter()
+                .map(|tokens| Operation { tokens })
+                .collect::<Vec<_>>()
+        }
         None => vec![],
     }
 }
