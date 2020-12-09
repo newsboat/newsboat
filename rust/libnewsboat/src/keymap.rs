@@ -2,14 +2,15 @@ use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
     character::complete::one_of,
-    combinator::{complete, eof, map, recognize, value},
+    combinator::{complete, eof, map, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
     sequence::{delimited, preceded},
     IResult,
 };
 
 fn unquoted_token(input: &str) -> IResult<&str, String> {
-    let mut parser = map(recognize(is_not("\t ;")), String::from);
+    let parser = map(recognize(is_not("\t ;")), String::from);
+    let mut parser = verify(parser, |t: &str| t != "--");
 
     parser(input)
 }
@@ -307,6 +308,22 @@ mod tests {
         assert_eq!(
             tokenize_operation_sequence("\tset\ta\tb\t;\topen\t").unwrap(),
             vec![vec!["set", "a", "b"], vec!["open"]]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_does_not_consume_dashdash() {
+        assert_eq!(
+            tokenize_operation_sequence(r#"set a b -- "name of function""#).unwrap(),
+            vec![vec!["set", "a", "b"]]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_allows_dashdash_in_quoted() {
+        assert_eq!(
+            tokenize_operation_sequence(r#"set a b "--" "name of function""#).unwrap(),
+            vec![vec!["set", "a", "b", "--", "name of function"]]
         );
     }
 }
