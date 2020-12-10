@@ -84,7 +84,8 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 
-	bool open_item_in_browser(const std::shared_ptr<RssItem>& item) const;
+	bool open_item_in_browser(const std::shared_ptr<RssItem>& item,
+		bool interactive) const;
 
 	void set_head(const std::string& s,
 		unsigned int unread,

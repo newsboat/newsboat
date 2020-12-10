@@ -215,7 +215,20 @@ REDO:
 			std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
 					pos);
 			if (feed) {
-				return open_feed_in_browser(feed);
+				const bool interactive = true;
+				return open_feed_in_browser(feed, interactive);
+			}
+		} else {
+			v->show_error(_("No feed selected!"));
+		}
+		break;
+	case OP_OPENINBROWSER_NONINTERACTIVE:
+		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+			std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
+					pos);
+			if (feed) {
+				const bool interactive = false;
+				return open_feed_in_browser(feed, interactive);
 			}
 		} else {
 			v->show_error(_("No feed selected!"));
@@ -526,7 +539,7 @@ REDO:
 }
 
 bool FeedListFormAction::open_feed_in_browser(const std::shared_ptr<RssFeed>&
-	feed) const
+	feed, bool interactive) const
 {
 	if (!feed->is_query_feed()) {
 		LOG(Level::INFO,
@@ -551,7 +564,7 @@ bool FeedListFormAction::open_feed_in_browser(const std::shared_ptr<RssFeed>&
 
 		if (!url.empty()) {
 			const std::string feedurl = feed->rssurl();
-			const auto exit_code = v->open_in_browser(url, feedurl);
+			const auto exit_code = v->open_in_browser(url, feedurl, interactive);
 			if (!exit_code.has_value()) {
 				v->show_error(_("Failed to spawn browser"));
 				return false;

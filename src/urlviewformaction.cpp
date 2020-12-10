@@ -67,7 +67,23 @@ bool UrlViewFormAction::process_operation(Operation op,
 			const std::string feedurl = (feed != nullptr ?
 					feed->rssurl() :
 					"");
-			v->open_in_browser(links[pos].first, feedurl);
+			const bool interactive = true;
+			v->open_in_browser(links[pos].first, feedurl, interactive);
+			v->set_status("");
+		} else {
+			v->show_error(_("No links available!"));
+		}
+	}
+	break;
+	case OP_OPENINBROWSER_NONINTERACTIVE: {
+		if (!links.empty()) {
+			const unsigned int pos = urls_list.get_position();
+			v->set_status(_("Starting browser..."));
+			const std::string feedurl = (feed != nullptr ?
+					feed->rssurl() :
+					"");
+			const bool interactive = false;
+			v->open_in_browser(links[pos].first, feedurl, interactive);
 			v->set_status("");
 		} else {
 			v->show_error(_("No links available!"));
@@ -100,7 +116,8 @@ bool UrlViewFormAction::process_operation(Operation op,
 			const std::string feedurl = (feed != nullptr ?
 					feed->rssurl() :
 					"");
-			v->open_in_browser(links[idx].first, feedurl);
+			const bool interactive = true;
+			v->open_in_browser(links[idx].first, feedurl, interactive);
 			v->set_status("");
 		}
 	}

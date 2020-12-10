@@ -60,7 +60,8 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 
-	bool open_feed_in_browser(const std::shared_ptr<RssFeed>& feed) const;
+	bool open_feed_in_browser(const std::shared_ptr<RssFeed>& feed,
+		bool interactive) const;
 
 	void goto_feed(const std::string& str);
 

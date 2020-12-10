@@ -14,6 +14,7 @@ next||J||Jump to next list entry.
 prev||K||Jump to previous list entry.
 random-unread||^K||Jump to a random unread article.
 open-in-browser||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view.
+open-in-noninteractive-browser||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to `open-in-browser`, but the output of the browser (stdout and stderr) are not shown.
 open-in-browser-and-mark-read||O||Use browser to open the URL associated with the current article, or entry in the URL view. When used in the article list, it will also mark the article as read.
 open-all-unread-in-browser||n/a||Open all the unread URLs in the current feed.
 open-all-unread-in-browser-and-mark-read||n/a||Open all the unread URLs in the current feed and mark them as read.

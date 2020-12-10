@@ -134,7 +134,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
 		if (!visible_items.empty() && itempos < visible_items.size()) {
 			auto item = visible_items[itempos].first;
-			if (!open_item_in_browser(item)) {
+			const bool interactive = true;
+			if (!open_item_in_browser(item, interactive)) {
 				return false;
 			}
 			item->set_unread(false);
@@ -156,7 +157,22 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
 		if (!visible_items.empty() && itempos < visible_items.size()) {
 			auto item = visible_items[itempos].first;
-			if (!open_item_in_browser(item)) {
+			const bool interactive = true;
+			if (!open_item_in_browser(item, interactive)) {
+				return false;
+			}
+			invalidate(itempos);
+		} else {
+			v->show_error(_("No item selected!"));
+		}
+	}
+	break;
+	case OP_OPENINBROWSER_NONINTERACTIVE: {
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty() && itempos < visible_items.size()) {
+			auto item = visible_items[itempos].first;
+			const bool interactive = false;
+			if (!open_item_in_browser(item, interactive)) {
 				return false;
 			}
 			invalidate(itempos);
@@ -757,11 +773,11 @@ bool ItemListFormAction::process_operation(Operation op,
 }
 
 bool ItemListFormAction::open_item_in_browser(
-	const std::shared_ptr<RssItem>& item) const
+	const std::shared_ptr<RssItem>& item, bool interactive) const
 {
 	const auto link = item->link();
 	const auto feedurl = item->feedurl();
-	const auto exit_code = v->open_in_browser(link, feedurl);
+	const auto exit_code = v->open_in_browser(link, feedurl, interactive);
 	if (!exit_code.has_value()) {
 		v->show_error(_("Failed to spawn browser"));
 		return false;
