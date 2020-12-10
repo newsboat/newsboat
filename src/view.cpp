@@ -171,7 +171,7 @@ int View::run()
 		fa->prepare();
 
 		// we then receive the event and ignore timeouts.
-		const char* event = fa->get_form().run(60000);
+		const char* event_ptr = fa->get_form().run(60000);
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -186,11 +186,17 @@ int View::run()
 			}
 		}
 
-		if (!event || strcmp(event, "TIMEOUT") == 0) {
+		if (!event_ptr) {
 			continue;
 		}
 
-		if (strcmp(event, "RESIZE") == 0) {
+		std::string event = event_ptr;
+
+		if (event == "TIMEOUT") {
+			continue;
+		}
+
+		if (event == "RESIZE") {
 			handle_resize();
 			continue;
 		}
@@ -203,11 +209,11 @@ int View::run()
 
 		if (have_macroprefix) {
 			have_macroprefix = false;
+			set_status("");
 			LOG(Level::DEBUG,
 				"View::run: running macro `%s'",
 				event);
 			run_commands(keys->get_macro(event));
-			set_status("");
 		} else {
 			const Operation op = keys->get_operation(event, fa->id());
 
