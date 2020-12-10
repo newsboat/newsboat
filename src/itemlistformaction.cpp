@@ -159,6 +159,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (!open_item_in_browser(item)) {
 				break;
 			}
+			invalidate(itempos);
 		} else {
 			v->show_error(_("No item selected!"));
 		}
