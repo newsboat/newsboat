@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: newsboat 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-12-09 20:51+0100\n"
+"PO-Revision-Date: 2020-12-10 21:26+0100\n"
 "Last-Translator: Tanguy Kerdoncuff <t.kerdonc@gmail.com>\n"
-"Language-Team: Nicolas Martyanoff <khaelin@gmail.com, Tanguy Kerdoncuff"
-" <t.kerdonc@gmail.com>\n"
+"Language-Team: Nicolas Martyanoff <khaelin@gmail.com, Tanguy Kerdoncuff <t."
+"kerdonc@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -160,8 +160,8 @@ msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"newsboat est un logiciel libre, publié sous la licence MIT. "
-"(Tapez `%s -vv' pour voir le reste du texte.)"
+"newsboat est un logiciel libre, publié sous la licence MIT. (Tapez `%s -vv' "
+"pour voir le reste du texte.)"
 
 #: newsboat.cpp:177
 msgid "It bundles:"
@@ -172,8 +172,8 @@ msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"- la bibliothèque JSON for Modern C++, publiée sous la licence MIT : "
-"https://github.com/nlohmann/json"
+"- la bibliothèque JSON for Modern C++, publiée sous la licence MIT : https://"
+"github.com/nlohmann/json"
 
 #: newsboat.cpp:181
 msgid ""
@@ -874,7 +874,7 @@ msgstr "Configuration enregistrée dans %s"
 
 #: src/formaction.cpp:340
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "utilisation : exec <operation>"
 
 #: src/formaction.cpp:346
 msgid "Operation not found"
@@ -1110,7 +1110,7 @@ msgstr "Articles - %s"
 
 #: src/itemlistformaction.cpp:1511
 msgid "yanq"
-msgstr ""
+msgstr "yanq"
 
 #: src/itemlistformaction.cpp:1533
 #, c-format
@@ -1118,11 +1118,13 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Ecraser `%s' sur `%s'? Il y a %d autre conflits similaires (y : Oui a : Oui "
+"à tous n : Non q : Non à tous)"
 
 #: src/itemlistformaction.cpp:1540
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr ""
+msgstr "Ecrire `%s' sur `%s'? (y : Oui n : Non)"
 
 #: src/itemrenderer.cpp:60
 msgid "Feed: "
@@ -1682,15 +1684,15 @@ msgstr "Erreur : impossible d'effectuer l'opération : téléchargement en cours
 
 #: src/pbview.cpp:298
 msgid "KB/s"
-msgstr ""
+msgstr "KO/s"
 
 #: src/pbview.cpp:300
 msgid "MB/s"
-msgstr ""
+msgstr "MO/s"
 
 #: src/pbview.cpp:302
 msgid "GB/s"
-msgstr ""
+msgstr "GO/s"
 
 #: src/pbview.cpp:399
 msgid "Download"
@@ -1856,11 +1858,11 @@ msgstr "le format du fil n'est pas supporté"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Echec d'ouverture du fichier (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "Echec de lecture de ligne %u (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 msgid "%s: %s: invalid loglevel value"
@@ -1878,10 +1880,12 @@ msgstr ""
 #: rust/libnewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr ""
+"Migration de configuration et de données depuis le répertoire XDG de "
+"Newsbeuter..."
 
 #: rust/libnewsboat/src/configpaths.rs:202
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr ""
+msgstr "Migration de configuration et de données depuis ~/.newsbeuter/..."
 
 #: rust/libnewsboat/src/configpaths.rs:214
 msgid "Aborting migration because mkdir on `%s' failed: %s"
@@ -1893,21 +1897,21 @@ msgstr "nom de l'attribut"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "L'un de: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "L'un de: quoted string, range, number"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Erreur d'analyse : caractères surnuméraires après la position %{}: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:363
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "Erreur d'analyse à la position%{}: %s était attentu"
 
 #: rust/libnewsboat/src/filterparser.rs:368
 msgid "Internal parse error"
@@ -1915,28 +1919,29 @@ msgstr "Erreur d'analyse interne"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Echec d'ouverture du fichier de verrouillage : '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<fichier contenant un code UTF-8 invalide>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
-msgstr ""
+msgstr "Echec d'écriture du PID dans le fichier de verrouillage : '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
 msgstr ""
+"Echec de verrouillage de '%s', déjà verrouillé par le processus de PID %{}"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
-msgstr ""
+msgstr "regcomp a retourné le code %i"
 
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
-msgstr ""
+msgstr "regexec a retourné le code %i"
 
 #~ msgid "Open article in browser"
 #~ msgstr "Ouvrir l'article dans le navigateur"
