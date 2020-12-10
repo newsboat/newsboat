@@ -135,7 +135,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty() && itempos < visible_items.size()) {
 			auto item = visible_items[itempos].first;
 			if (!open_item_in_browser(item)) {
-				break;
+				return false;
 			}
 			item->set_unread(false);
 			v->get_ctrl()->mark_article_read(item->guid(), true);
@@ -157,7 +157,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty() && itempos < visible_items.size()) {
 			auto item = visible_items[itempos].first;
 			if (!open_item_in_browser(item)) {
-				break;
+				return false;
 			}
 			invalidate(itempos);
 		} else {
