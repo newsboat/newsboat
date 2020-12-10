@@ -151,6 +151,9 @@ std::string make_title(const std::string& url);
 nonstd::optional<std::uint8_t> run_interactively(const std::string& command,
 	const std::string& caller);
 
+nonstd::optional<std::uint8_t> run_non_interactively(const std::string& command,
+	const std::string& caller);
+
 std::string getcwd();
 
 enum class ReadTextFileErrorKind {

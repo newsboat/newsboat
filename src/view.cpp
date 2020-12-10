@@ -342,7 +342,7 @@ void View::open_in_pager(const std::string& filename)
 }
 
 nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
-	const std::string& feedurl)
+	const std::string& feedurl, bool interactive)
 {
 	std::string cmdline;
 	const std::string browser = cfg->get_configvalue("browser");
@@ -365,14 +365,19 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 		cmdline.append(" " + escaped_url);
 	}
 
-	push_empty_formaction();
-	Stfl::reset();
-	const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
-	drop_queued_input();
-
-	pop_current_formaction();
-
-	return ret;
+	if (interactive) {
+		push_empty_formaction();
+		Stfl::reset();
+		const auto ret = utils::run_interactively(cmdline, "View::open_in_browser");
+		drop_queued_input();
+		pop_current_formaction();
+		return ret;
+	} else {
+		set_status(strprintf::fmt(_("Running browser: %s"), cmdline));
+		const auto ret = utils::run_non_interactively(cmdline, "View::open_in_browser");
+		set_status("");
+		return ret;
+	}
 }
 
 void View::update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds)

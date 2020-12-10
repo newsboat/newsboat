@@ -682,6 +682,40 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
         .map(|exit_code| exit_code as u8)
 }
 
+/// Run the given command non-interactively with closed stdin and stdout/stderr. Return the lowest
+/// 8 bits of its exit code, or `None` if the command failed to start.
+/// ```
+/// use libnewsboat::utils::run_non_interactively;
+///
+/// let result = run_non_interactively("echo true", "test");
+/// assert_eq!(result, Some(0));
+///
+/// let result = run_non_interactively("exit 1", "test");
+/// assert_eq!(result, Some(1));
+///
+/// // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
+/// // that it returns just the lowest 8 bits.
+/// ```
+pub fn run_non_interactively(command: &str, caller: &str) -> Option<u8> {
+    log!(Level::Debug, &format!("{}: running `{}'", caller, command));
+    Command::new("sh")
+        .arg("-c")
+        .arg(command)
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .status()
+        .map_err(|err| {
+            log!(
+                Level::Warn,
+                &format!("{}: Couldn't create child process: {}", caller, err)
+            )
+        })
+        .ok()
+        .and_then(|exit_status| exit_status.code())
+        .map(|exit_code| exit_code as u8)
+}
+
 /// Get the current working directory.
 pub fn getcwd() -> Result<PathBuf, io::Error> {
     use std::env;

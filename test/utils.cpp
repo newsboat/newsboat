@@ -1079,6 +1079,48 @@ TEST_CASE("run_interactively runs a command with inherited I/O", "[utils]")
 	// `nonstd::nullopt`, nor to test that it returns just the lower 8 bits.
 }
 
+TEST_CASE("run_non_interactively runs a command without I/O", "[utils]")
+{
+	SECTION("echo hello should return 0") {
+		const auto result = utils::run_non_interactively("echo hello", "test");
+		REQUIRE(result == 0);
+	}
+	SECTION("exit 1 should return 1") {
+		const auto result = utils::run_non_interactively("exit 1", "test");
+		REQUIRE(result == 1);
+	}
+
+	// Unfortunately, there is no easy way to provoke this function to return
+	// `nonstd::nullopt`, nor to test that it returns just the lower 8 bits.
+}
+
+TEST_CASE("run_non_interactively waits for program to finish", "[utils]")
+{
+	using namespace std::chrono;
+
+	SECTION("when sleeping, we use at least as much time as specified") {
+		const auto start = steady_clock::now();
+
+		const auto result = utils::run_non_interactively("sleep 1", "test");
+		REQUIRE(result == 0);
+
+		const auto finish = steady_clock::now();
+		const auto runtime = duration_cast<milliseconds>(finish - start);
+		REQUIRE(runtime.count() >= 1000);
+	}
+
+	SECTION("if program is put in background, using &, we return immediately") {
+		const auto start = steady_clock::now();
+
+		const auto result = utils::run_non_interactively("sleep 5 &", "test");
+		REQUIRE(result == 0);
+
+		const auto finish = steady_clock::now();
+		const auto runtime = duration_cast<milliseconds>(finish - start);
+		REQUIRE(runtime.count() < 5000);
+	}
+}
+
 TEST_CASE("remove_soft_hyphens remove all U+00AD characters from a string",
 	"[utils]")
 {
