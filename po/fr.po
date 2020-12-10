@@ -140,7 +140,7 @@ msgstr "URLS de fils"
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:134
 msgid "cache"
-msgstr ""
+msgstr "cache"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:389
 msgid ""
@@ -172,8 +172,8 @@ msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"- la bibliothèque JSON for Modern C++, publiée sous la licence MIT https://"
-"github.com/nlohmann/json"
+"- la bibliothèque JSON for Modern C++, publiée sous la licence MIT : "
+"https://github.com/nlohmann/json"
 
 #: newsboat.cpp:181
 msgid ""
@@ -1280,7 +1280,7 @@ msgstr "Lire un article au hasard"
 #: src/keymap.cpp:125
 msgid "Open URL of article, or entry in URL view. Mark read."
 msgstr ""
-"Ouvrir l'article ou l'élément dans le navigateur et le marquer  comme lu"
+"Ouvrir l'article ou l'élément dans le navigateur et le marquer comme lu"
 
 #: src/keymap.cpp:132
 msgid "Open all unread items of selected feed in browser"
