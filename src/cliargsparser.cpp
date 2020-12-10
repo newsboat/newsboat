@@ -12,14 +12,6 @@ extern "C" {
 
 	void destroy_rs_cliargsparser(void*);
 
-	bool rs_cliargsparser_do_import(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_export(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_vacuum(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_cleanup(void* rs_cliargsparser);
-
 	char* rs_cliargsparser_importfile(void* rs_cliargsparser);
 
 	char* rs_cliargsparser_program_name(void* rs_cliargsparser);
@@ -32,21 +24,11 @@ extern "C" {
 
 	char* rs_cliargsparser_readinfo_export_file(void* rs_cliargsparser);
 
-	unsigned int rs_cliargsparser_show_version(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_silent(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_using_nonstandard_configs(void* rs_cliargsparser);
-
 	bool rs_cliargsparser_should_return(void* rs_cliargsparser);
 
 	int rs_cliargsparser_return_code(void* rs_cliargsparser);
 
 	char* rs_cliargsparser_display_msg(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_should_print_usage(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_refresh_on_start(void* rs_cliargsparser);
 
 	bool rs_cliargsparser_set_url_file(void* rs_cliargsparser);
 
@@ -77,13 +59,6 @@ extern "C" {
 
 	char rs_cliargsparser_log_level(void* rs_cliargsparser);
 }
-
-#define GET_VALUE(NAME, DEFAULT) \
-	if (rs_cliargsparser) { \
-		return rs_cliargsparser_ ## NAME (rs_cliargsparser); \
-	} else { \
-		return DEFAULT; \
-	}
 
 #define GET_STRING(NAME) \
 	if (rs_cliargsparser) { \
@@ -116,13 +91,26 @@ extern "C" {
 
 namespace newsboat {
 
-CliArgsParser::CliArgsParser(int argc, char* argv[])
+
+rust::Vec<rust::String> argv_to_rust_args(int argc, char* argv[])
 {
-	rs_cliargsparser = create_rs_cliargsparser(argc, argv);
+	rust::Vec<rust::String> args;
+	for (int i = 0; i < argc; ++i) {
+		// TODO: Handle invalid utf-8 codepoints gracefully?
+		args.push_back(argv[i]);
+	}
+	return args;
+}
+
+CliArgsParser::CliArgsParser(int argc, char* argv[])
+	: rs_object(cliargsparser::bridged::create(argv_to_rust_args(argc, argv)))
+{
+	rs_cliargsparser = create_rs_cliargsparser(argc, argv); // TODO: Remove
 }
 
 CliArgsParser::~CliArgsParser()
 {
+	// TODO: Remove, mark destructor with `= default`
 	if (rs_cliargsparser) {
 		destroy_rs_cliargsparser(rs_cliargsparser);
 	}
@@ -130,22 +118,22 @@ CliArgsParser::~CliArgsParser()
 
 bool CliArgsParser::do_import() const
 {
-	GET_VALUE(do_import, false);
+	return newsboat::cliargsparser::bridged::do_import(*rs_object);
 }
 
 bool CliArgsParser::do_export() const
 {
-	GET_VALUE(do_export, false);
+	return newsboat::cliargsparser::bridged::do_export(*rs_object);
 }
 
 bool CliArgsParser::do_vacuum() const
 {
-	GET_VALUE(do_vacuum, false);
+	return newsboat::cliargsparser::bridged::do_vacuum(*rs_object);
 }
 
 bool CliArgsParser::do_cleanup() const
 {
-	GET_VALUE(do_cleanup, false);
+	return newsboat::cliargsparser::bridged::do_cleanup(*rs_object);
 }
 
 std::string CliArgsParser::importfile() const
@@ -170,17 +158,17 @@ std::string CliArgsParser::program_name() const
 
 unsigned int CliArgsParser::show_version() const
 {
-	GET_VALUE(show_version, 0);
+	return newsboat::cliargsparser::bridged::do_show_version(*rs_object);
 }
 
 bool CliArgsParser::silent() const
 {
-	GET_VALUE(silent, false);
+	return newsboat::cliargsparser::bridged::silent(*rs_object);
 }
 
 bool CliArgsParser::using_nonstandard_configs() const
 {
-	GET_VALUE(using_nonstandard_configs, false);
+	return newsboat::cliargsparser::bridged::using_nonstandard_configs(*rs_object);
 }
 
 nonstd::optional<int> CliArgsParser::return_code() const
@@ -195,12 +183,12 @@ std::string CliArgsParser::display_msg() const
 
 bool CliArgsParser::should_print_usage() const
 {
-	GET_VALUE(should_print_usage, false);
+	return newsboat::cliargsparser::bridged::should_print_usage(*rs_object);
 }
 
 bool CliArgsParser::refresh_on_start() const
 {
-	GET_VALUE(refresh_on_start, false);
+	return newsboat::cliargsparser::bridged::refresh_on_start(*rs_object);
 }
 
 nonstd::optional<std::string> CliArgsParser::url_file() const

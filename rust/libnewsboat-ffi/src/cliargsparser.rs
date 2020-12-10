@@ -8,6 +8,74 @@ use std::path::PathBuf;
 use std::ptr;
 use std::slice;
 
+#[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
+mod bridged {
+    extern "Rust" {
+        type CliArgsParser;
+
+        fn create(argv: Vec<String>) -> Box<CliArgsParser>;
+
+        fn do_import(cliargsparser: &CliArgsParser) -> bool;
+        fn do_export(cliargsparser: &CliArgsParser) -> bool;
+        fn do_vacuum(cliargsparser: &CliArgsParser) -> bool;
+        fn do_cleanup(cliargsparser: &CliArgsParser) -> bool;
+        fn do_show_version(cliargsparser: &CliArgsParser) -> u64;
+        fn silent(cliargsparser: &CliArgsParser) -> bool;
+        fn using_nonstandard_configs(cliargsparser: &CliArgsParser) -> bool;
+        fn should_print_usage(cliargsparser: &CliArgsParser) -> bool;
+        fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool;
+    }
+
+    extern "C++" {
+        // cxx uses `std::out_of_range`, but doesn't include the header that defines that
+        // exception. So we do it for them.
+        include!("stdexcept");
+        // Also inject a header that defines ptrdiff_t. Note this is *not* a C++ header, because
+        // cxx uses a non-C++ name of the type.
+        include!("stddef.h");
+    }
+}
+
+fn create(argv: Vec<String>) -> Box<CliArgsParser> {
+    Box::new(CliArgsParser::new(argv))
+}
+
+fn do_import(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.importfile.is_some()
+}
+
+fn do_export(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.do_export
+}
+
+fn do_vacuum(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.do_vacuum
+}
+
+fn do_cleanup(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.do_cleanup
+}
+
+fn do_show_version(cliargsparser: &CliArgsParser) -> u64 {
+    cliargsparser.show_version as u64
+}
+
+fn silent(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.silent
+}
+
+fn using_nonstandard_configs(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.using_nonstandard_configs()
+}
+
+fn should_print_usage(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.should_print_usage
+}
+
+fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.refresh_on_start
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn create_rs_cliargsparser(
     argc: isize,
@@ -83,26 +151,6 @@ where
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_do_import(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.importfile.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_do_export(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.do_export, false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_do_vacuum(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.do_vacuum, false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_do_cleanup(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.do_cleanup, false)
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_program_name(object: *mut c_void) -> *mut c_char {
     with_cliargsparser_str(object, |o| &o.program_name)
 }
@@ -133,21 +181,6 @@ pub unsafe extern "C" fn rs_cliargsparser_readinfo_export_file(object: *mut c_vo
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_show_version(object: *mut c_void) -> usize {
-    with_cliargsparser(object, |o| o.show_version, 0)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_silent(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.silent, false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_using_nonstandard_configs(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.using_nonstandard_configs(), false)
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_should_return(object: *mut c_void) -> bool {
     with_cliargsparser(object, |o| o.return_code.is_some(), false)
 }
@@ -160,16 +193,6 @@ pub unsafe extern "C" fn rs_cliargsparser_return_code(object: *mut c_void) -> is
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_display_msg(object: *mut c_void) -> *mut c_char {
     with_cliargsparser_str(object, |o| &o.display_msg)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_should_print_usage(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.should_print_usage, false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_refresh_on_start(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.refresh_on_start, false)
 }
 
 #[no_mangle]

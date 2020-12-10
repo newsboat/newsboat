@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_CLIARGSPARSER_H_
 #define NEWSBOAT_CLIARGSPARSER_H_
 
+#include "cliargsparser.rs.h"
+
 #include <string>
 #include <vector>
 
@@ -84,6 +86,9 @@ public:
 	/// This is only meant to be used in situations when one wants to pass
 	/// a pointer to CliArgsParser back to Rust.
 	void* get_rust_pointer() const;
+
+private:
+	rust::Box<cliargsparser::bridged::CliArgsParser> rs_object;
 };
 } // namespace newsboat
 

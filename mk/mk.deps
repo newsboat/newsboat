@@ -9,6 +9,7 @@ filter/Parser.o: filter/Parser.cpp filter/Parser.h filter/FilterParser.h \
 filter/Scanner.o: filter/Scanner.cpp filter/Scanner.h
 newsboat.o: newsboat.cpp include/cache.h include/configcontainer.h \
  include/configactionhandler.h include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
  config.h include/configpaths.h include/cliargsparser.h \
  include/controller.h include/cache.h include/colormanager.h \
@@ -97,6 +98,7 @@ src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h
 src/cliargsparser.o: src/cliargsparser.cpp include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
  include/globals.h include/ruststring.h include/strprintf.h
 src/colormanager.o: src/colormanager.cpp include/colormanager.h \
@@ -146,9 +148,10 @@ src/configparser.o: src/configparser.cpp include/configparser.h \
  3rd-party/expected.hpp 3rd-party/optional.hpp include/configcontainer.h \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/configpaths.o: src/configpaths.cpp include/configpaths.h \
- include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
- include/strprintf.h include/globals.h include/ruststring.h \
- include/strprintf.h
+ include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
+ include/globals.h include/ruststring.h include/strprintf.h
 src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configcontainer.h include/configactionhandler.h \
  include/colormanager.h include/stflpp.h include/configparser.h \
@@ -158,12 +161,14 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/queuemanager.h include/regexmanager.h include/matcher.h \
  filter/FilterParser.h include/regexowner.h include/reloader.h \
  include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h include/cliargsparser.h include/logger.h config.h \
- include/strprintf.h include/colormanager.h include/configcontainer.h \
- include/configexception.h include/configpaths.h include/cliargsparser.h \
- include/dbexception.h include/downloadthread.h include/exception.h \
- include/feedhqapi.h include/feedhqurlreader.h include/fileurlreader.h \
- include/globals.h include/inoreaderapi.h include/inoreaderurlreader.h \
+ include/matchable.h include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
+ config.h include/strprintf.h include/colormanager.h \
+ include/configcontainer.h include/configexception.h \
+ include/configpaths.h include/cliargsparser.h include/dbexception.h \
+ include/downloadthread.h include/exception.h include/feedhqapi.h \
+ include/feedhqurlreader.h include/fileurlreader.h include/globals.h \
+ include/inoreaderapi.h include/inoreaderurlreader.h \
  include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
  include/logger.h include/minifluxapi.h 3rd-party/json.hpp rss/feed.h \
  rss/item.h include/utils.h 3rd-party/expected.hpp \
@@ -568,11 +573,12 @@ src/queueloader.o: src/queueloader.cpp include/queueloader.h \
  3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/queuemanager.o: src/queuemanager.cpp include/queuemanager.h \
- include/configpaths.h include/cliargsparser.h 3rd-party/optional.hpp \
- include/logger.h config.h include/strprintf.h include/fmtstrformatter.h \
- include/rssfeed.h include/matchable.h include/rssitem.h \
- include/matcher.h filter/FilterParser.h include/utils.h \
- 3rd-party/expected.hpp include/configcontainer.h \
+ include/configpaths.h include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
+ include/fmtstrformatter.h include/rssfeed.h include/matchable.h \
+ include/rssitem.h include/matcher.h filter/FilterParser.h \
+ include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
  include/configactionhandler.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/stflpp.h \
  include/utils.h
@@ -795,8 +801,10 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/rssparser.h include/remoteapi.h rss/feed.h rss/item.h \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
- include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
- include/strprintf.h test/test-helpers/envvar.h test/test-helpers/opts.h \
+ include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
+ test/test-helpers/envvar.h test/test-helpers/opts.h \
  test/test-helpers/stringmaker/optional.h test/test-helpers/tempdir.h \
  test/test-helpers/maintempdir.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
@@ -814,12 +822,13 @@ test/configparser.o: test/configparser.cpp include/configparser.h \
  3rd-party/optional.hpp test/test-helpers/tempfile.h \
  test/test-helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
- include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
- include/strprintf.h 3rd-party/catch.hpp test/test-helpers/chmod.h \
- test/test-helpers/envvar.h test/test-helpers/opts.h \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
- include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
- include/configactionhandler.h \
+ include/cliargsparser.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
+ 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
+ test/test-helpers/opts.h test/test-helpers/tempdir.h \
+ test/test-helpers/maintempdir.h include/utils.h 3rd-party/expected.hpp \
+ include/configcontainer.h include/configactionhandler.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 test/download.o: test/download.cpp include/download.h 3rd-party/catch.hpp
 test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
@@ -869,12 +878,12 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  include/feedlistformaction.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h 3rd-party/catch.hpp \
  include/cache.h include/configpaths.h include/cliargsparser.h \
- include/logger.h config.h include/strprintf.h \
- include/feedlistformaction.h stfl/itemlist.h include/keymap.h \
- include/regexmanager.h include/rssfeed.h include/utils.h \
- 3rd-party/expected.hpp target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- test/test-helpers/misc.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
+ config.h include/strprintf.h include/feedlistformaction.h \
+ stfl/itemlist.h include/keymap.h include/regexmanager.h \
+ include/rssfeed.h include/utils.h 3rd-party/expected.hpp \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
