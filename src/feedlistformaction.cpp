@@ -237,8 +237,11 @@ REDO:
 					v->show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"),
 							*exit_code));
+#pragma GCC diagnostic pop
 					return false;
 				}
 			}
@@ -263,7 +266,10 @@ REDO:
 					v->show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+#pragma GCC diagnostic pop
 					return false;
 				}
 
