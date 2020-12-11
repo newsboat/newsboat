@@ -2,8 +2,6 @@ use crate::abort_on_panic;
 use libc::{c_char, c_void};
 use libnewsboat::cliargsparser::CliArgsParser;
 use std::ffi::CStr;
-use std::mem;
-use std::panic::{RefUnwindSafe, UnwindSafe};
 use std::slice;
 
 #[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
@@ -38,6 +36,8 @@ mod bridged {
         fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
 
         fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String>;
+
+        fn log_level(cliargsparser: &CliArgsParser, level: &mut i8) -> bool;
     }
 
     extern "C++" {
@@ -189,6 +189,16 @@ fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String> {
     cliargsparser.cmds_to_execute.to_owned()
 }
 
+fn log_level(cliargsparser: &CliArgsParser, level: &mut i8) -> bool {
+    match cliargsparser.log_level {
+        Some(l) => {
+            *level = l as i8;
+            true
+        }
+        None => false,
+    }
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn create_rs_cliargsparser(
     argc: isize,
@@ -215,38 +225,4 @@ pub unsafe extern "C" fn destroy_rs_cliargsparser(object: *mut c_void) {
         }
         Box::from_raw(object as *mut CliArgsParser);
     })
-}
-
-unsafe fn with_cliargsparser<F, T>(object: *mut c_void, action: F, default: T) -> T
-where
-    F: RefUnwindSafe + Fn(&CliArgsParser) -> T,
-    T: UnwindSafe,
-{
-    abort_on_panic(|| {
-        if object.is_null() {
-            return default;
-        }
-        let object = Box::from_raw(object as *mut CliArgsParser);
-        let result = action(&object);
-        // Don't destroy the object when the function finishes
-        mem::forget(object);
-        result
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_set_log_level(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.log_level.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_log_level(object: *mut c_void) -> i8 {
-    with_cliargsparser(
-        object,
-        |o| match o.log_level {
-            Some(l) => l as i8,
-            None => -1 as i8,
-        },
-        -1,
-    )
 }

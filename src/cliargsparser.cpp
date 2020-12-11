@@ -11,10 +11,6 @@ extern "C" {
 	void* create_rs_cliargsparser(int argc, char* argv[]);
 
 	void destroy_rs_cliargsparser(void*);
-
-	bool rs_cliargsparser_set_log_level(void* rs_cliargsparser);
-
-	char rs_cliargsparser_log_level(void* rs_cliargsparser);
 }
 
 namespace newsboat {
@@ -195,15 +191,11 @@ nonstd::optional<std::string> CliArgsParser::log_file() const
 
 nonstd::optional<Level> CliArgsParser::log_level() const
 {
-	if (rs_cliargsparser) {
-		if (rs_cliargsparser_set_log_level(rs_cliargsparser)) {
-			return static_cast<Level>(rs_cliargsparser_log_level(rs_cliargsparser));
-		} else {
-			return nonstd::nullopt;
-		}
-	} else {
-		return nonstd::nullopt;
+	std::int8_t level;
+	if (newsboat::cliargsparser::bridged::log_level(*rs_object, level)) {
+		return static_cast<Level>(level);
 	}
+	return nonstd::nullopt;
 }
 
 void* CliArgsParser::get_rust_pointer() const
