@@ -67,8 +67,6 @@ std::string retrieve_url(const std::string& url,
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET,
 	CURL* easyhandle = nullptr);
-void run_command(const std::string& cmd,
-	const std::string& param); // used for notifications only
 std::string run_program(const char* argv[], const std::string& input);
 
 std::string resolve_tilde(const std::string&);
@@ -101,9 +99,6 @@ std::string substr_with_width_stfl(const std::string& str,
 unsigned int to_u(const std::string& str,
 	const unsigned int default_value = 0);
 
-bool is_valid_color(const std::string& color);
-bool is_valid_attribute(const std::string& attrib);
-
 std::vector<std::pair<unsigned int, unsigned int>> partition_indexes(
 		unsigned int start,
 		unsigned int end,
@@ -129,19 +124,11 @@ void set_common_curl_options(CURL* handle, ConfigContainer* cfg);
 curl_proxytype get_proxy_type(const std::string& type);
 unsigned long get_auth_method(const std::string& type);
 
-bool is_special_url(const std::string& url);
-bool is_http_url(const std::string& url);
-bool is_query_url(const std::string& url);
-bool is_filter_url(const std::string& url);
-bool is_exec_url(const std::string& url);
-
 std::string get_content(xmlNode* node);
 std::string get_basename(const std::string& url);
 
 std::string unescape_url(const std::string& url);
 void initialize_ssl_implementation(void);
-
-unsigned int gentabs(const std::string& str);
 
 int mkdir_parents(const std::string& pathname,
 	mode_t mode = 0755);

@@ -505,11 +505,6 @@ std::string utils::retrieve_url(const std::string& url,
 	return buf;
 }
 
-void utils::run_command(const std::string& cmd, const std::string& input)
-{
-	rs_run_command(cmd.c_str(), input.c_str());
-}
-
 std::string utils::run_program(const char* argv[], const std::string& input)
 {
 	return RustString(rs_run_program(argv, input.c_str()));
@@ -618,16 +613,6 @@ unsigned int utils::to_u(const std::string& str,
 	return bridged::to_u(str, default_value);
 }
 
-bool utils::is_valid_color(const std::string& color)
-{
-	return rs_is_valid_color(color.c_str());
-}
-
-bool utils::is_valid_attribute(const std::string& attrib)
-{
-	return rs_is_valid_attribute(attrib.c_str());
-}
-
 std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 		unsigned int start,
 		unsigned int end,
@@ -684,31 +669,6 @@ std::string utils::join(const std::vector<std::string>& strings,
 			result.length() - separator.length(), result.length());
 
 	return result;
-}
-
-bool utils::is_special_url(const std::string& url)
-{
-	return rs_is_special_url(url.c_str());
-}
-
-bool utils::is_http_url(const std::string& url)
-{
-	return rs_is_http_url(url.c_str());
-}
-
-bool utils::is_query_url(const std::string& url)
-{
-	return rs_is_query_url(url.c_str());
-}
-
-bool utils::is_filter_url(const std::string& url)
-{
-	return rs_is_filter_url(url.c_str());
-}
-
-bool utils::is_exec_url(const std::string& url)
-{
-	return rs_is_exec_url(url.c_str());
 }
 
 std::string utils::censor_url(const std::string& url)
@@ -886,11 +846,6 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
 		}
 	}
 	return text;
-}
-
-unsigned int utils::gentabs(const std::string& str)
-{
-	return rs_gentabs(str.c_str());
 }
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't

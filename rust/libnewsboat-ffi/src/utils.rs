@@ -13,6 +13,15 @@ use std::ptr;
 mod ffi {
     extern "Rust" {
         fn get_random_value(max: u32) -> u32;
+        fn is_special_url(url: &str) -> bool;
+        fn is_http_url(url: &str) -> bool;
+        fn is_query_url(url: &str) -> bool;
+        fn is_filter_url(url: &str) -> bool;
+        fn is_exec_url(url: &str) -> bool;
+        fn is_valid_color(color: &str) -> bool;
+        fn is_valid_attribute(attribute: &str) -> bool;
+        fn gentabs(string: &str) -> usize;
+        fn run_command(cmd: &str, param: &str);
     }
 }
 
@@ -205,51 +214,6 @@ pub unsafe extern "C" fn rs_absolute_url(
         // a slash. `rs_base_url` and `rs_link` came here as C strings, so they are guaranteed not
         // to contain NUL. The slash is obviously not a NUL. Thus, `unwrap` won't panic.
         CString::new(ret).unwrap().into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_special_url(in_str: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(in_str);
-        let rs_str = rs_str.to_string_lossy();
-        utils::is_special_url(&rs_str)
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_http_url(in_str: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(in_str);
-        let rs_str = rs_str.to_string_lossy();
-        utils::is_http_url(&rs_str)
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_query_url(in_str: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(in_str);
-        let rs_str = rs_str.to_string_lossy();
-        utils::is_query_url(&rs_str)
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_filter_url(in_str: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(in_str);
-        let rs_str = rs_str.to_string_lossy();
-        utils::is_filter_url(&rs_str)
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_exec_url(in_str: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(in_str);
-        let rs_str = rs_str.to_string_lossy();
-        utils::is_exec_url(&rs_str)
     })
 }
 
@@ -463,15 +427,6 @@ pub extern "C" fn rs_get_default_browser() -> *mut c_char {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_is_valid_color(input: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy();
-        utils::is_valid_color(&rs_input)
-    })
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(input);
@@ -485,15 +440,6 @@ pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_gentabs(input: *const c_char) -> usize {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(input);
-        let rs_str = rs_str.to_string_lossy().into_owned();
-        utils::gentabs(&rs_str)
-    })
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isize {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(path);
@@ -502,15 +448,6 @@ pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isi
             Ok(()) => 0,
             Err(_) => -1,
         }
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_valid_attribute(attribute: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_attribute = CStr::from_ptr(attribute);
-        let rs_attribute = rs_attribute.to_string_lossy();
-        utils::is_valid_attribute(&rs_attribute)
     })
 }
 
@@ -620,21 +557,6 @@ pub unsafe extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_c
         // so this shouldn't be able to panic
         let result = CString::new(output).unwrap();
         result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_run_command(command: *const c_char, param: *const c_char) {
-    abort_on_panic(|| {
-        let command = CStr::from_ptr(command);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let command = command.to_str().expect("command contained invalid UTF-8");
-
-        let param = CStr::from_ptr(param);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let param = param.to_str().expect("param contained invalid UTF-8");
-
-        utils::run_command(command, param);
     })
 }
 
