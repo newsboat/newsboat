@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-09-19 13:37+0200\n"
+"PO-Revision-Date: 2020-12-11 19:36+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -119,7 +119,7 @@ msgstr "ta strona pomocy"
 
 #: newsboat.cpp:103
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "usuń nieużywane elementy z pliku pamięci podręcznej"
 
 #: newsboat.cpp:128
 msgid "Files:"
@@ -145,10 +145,12 @@ msgid ""
 "Support at #newsboat at https://freenode.net or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Wsparcie #newsboat w sieci https://freenode.net lub nasza lista mailingowa "
+"https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:392
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "Więcej informacji, sprawdź https://newsboat.org/"
 
 #: newsboat.cpp:172
 #, c-format
@@ -347,13 +349,13 @@ msgid "done."
 msgstr "gotowe."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %<PRId64>)"
-msgstr "Błąd: inny proces %s jest już uruchomiony (PID: %u)"
+msgstr "Błąd: inny proces %s jest już uruchomiony (PID: %<PRId64>)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:265
 msgid "Error: "
-msgstr ""
+msgstr "Błąd: "
 
 #: src/controller.cpp:219 src/controller.cpp:398
 msgid "Opening cache..."
@@ -462,13 +464,12 @@ msgstr ""
 "Miniflux. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:387
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
 "Wygląda na to, że nie skonfigurowałeś żadnych kanałów na swoim koncie "
-"NewsBlur. Wykonaj to proszę i spróbuj ponownie."
+"Owncloud/Nextcloud. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:400
 msgid "Cleaning up cache thoroughly..."
@@ -838,12 +839,12 @@ msgstr "Zapisz plik - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: Failed to read URLs from file \"%s\" (%s)"
-msgstr ""
+msgstr "Błąd: Nie udało się wczytać odnośników z pliku \"%s\" (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to open file \"%s\" (%s)"
-msgstr "Błąd podczas ładowania kanału: '%s': %s"
+msgstr "Błąd: Nie udało się otworzyć pliku \"%s\" (%s)"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:343 src/rssignores.cpp:41
 #, c-format
@@ -1065,14 +1066,13 @@ msgstr "Błąd: użycie filtra nie powiodło się: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 dzień temu"
+msgstr[1] "%u dni temu"
+msgstr[2] "%u dni temu"
 
 #: src/itemlistformaction.cpp:1319
-#, fuzzy
 msgid "Error: no filename provided"
-msgstr "Błąd: nie wybrano żadnej pozycji!"
+msgstr "Błąd: nie podano żadnej nazwy pliku"
 
 #: src/itemlistformaction.cpp:1370 src/itemviewformaction.cpp:230
 #: src/itemviewformaction.cpp:535
@@ -1276,9 +1276,10 @@ msgid "Go to a random unread article"
 msgstr "Przejdź do losowo wybranego artykułu"
 
 #: src/keymap.cpp:125
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read."
-msgstr "Otwórz artykuł w przeglądarce i oznacz jako przeczytany"
+msgstr ""
+"Otwórz odnośnik artykułu, lub wpis w widoku odnośników. Oznacz jako "
+"przeczytany."
 
 #: src/keymap.cpp:132
 msgid "Open all unread items of selected feed in browser"
@@ -1292,7 +1293,7 @@ msgstr ""
 
 #: src/keymap.cpp:147
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr ""
+msgstr "Otwórz odnośnik artykułu, lub wpis w widoku odnośników"
 
 #: src/keymap.cpp:154
 msgid "Open help dialog"
@@ -1328,7 +1329,7 @@ msgstr "Otwórz dialog wyszukiwania"
 
 #: src/keymap.cpp:196
 msgid "Goto item with title"
-msgstr ""
+msgstr "Idź do elementu o tytule"
 
 #: src/keymap.cpp:197
 msgid "Add download to queue"
@@ -1592,9 +1593,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "wyrażenie regularne: '%s' jest nieprawidłowe: %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to parse OPML file \"%s\""
-msgstr "Błąd: nie można zapisać artykułu do pliku %s"
+msgstr "Błąd: nie odczytać pliku OPML \"%s\""
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1848,11 +1849,11 @@ msgstr "niewspierany format kanału"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Nie udało się otworzyć pliku (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "Nie udało się wczytać linii %u (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 msgid "%s: %s: invalid loglevel value"
@@ -1882,17 +1883,16 @@ msgstr ""
 "nieudane: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:63
-#, fuzzy
 msgid "attribute name"
-msgstr "atrybut nie znaleziony"
+msgstr "nazwa atrybutu"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "jeden z: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "jeden z: ciąg znaków ujęty w znaki cudzysłowu, zakres, liczba"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
@@ -1910,20 +1910,22 @@ msgstr "Wewnetrzny błąd parsera"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Nie udało się otworzyć pliku blokady: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<plik zawierający nieprawidłowy znacznik UTF-8>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
 msgstr ""
+"Nie udało się zapisać indetyfikatora procesu do pliku blokady: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
 msgstr ""
+"Nie udało się zablokować '%s', zablokowany przez proces o identyfikatorze %{}"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
