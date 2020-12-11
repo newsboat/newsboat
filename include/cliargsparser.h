@@ -12,11 +12,9 @@
 
 namespace newsboat {
 class CliArgsParser {
-	void* rs_cliargsparser = nullptr;
-
 public:
 	CliArgsParser(int argc, char* argv[]);
-	~CliArgsParser();
+	~CliArgsParser() = default;
 
 	bool do_import() const;
 

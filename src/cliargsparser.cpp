@@ -7,12 +7,6 @@
 #include "ruststring.h"
 #include "strprintf.h"
 
-extern "C" {
-	void* create_rs_cliargsparser(int argc, char* argv[]);
-
-	void destroy_rs_cliargsparser(void*);
-}
-
 namespace newsboat {
 
 
@@ -29,15 +23,6 @@ rust::Vec<rust::String> argv_to_rust_args(int argc, char* argv[])
 CliArgsParser::CliArgsParser(int argc, char* argv[])
 	: rs_object(cliargsparser::bridged::create(argv_to_rust_args(argc, argv)))
 {
-	rs_cliargsparser = create_rs_cliargsparser(argc, argv); // TODO: Remove
-}
-
-CliArgsParser::~CliArgsParser()
-{
-	// TODO: Remove, mark destructor with `= default`
-	if (rs_cliargsparser) {
-		destroy_rs_cliargsparser(rs_cliargsparser);
-	}
 }
 
 bool CliArgsParser::do_import() const

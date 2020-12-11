@@ -1,8 +1,4 @@
-use crate::abort_on_panic;
-use libc::{c_char, c_void};
 use libnewsboat::cliargsparser::CliArgsParser;
-use std::ffi::CStr;
-use std::slice;
 
 #[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
 mod bridged {
@@ -197,32 +193,4 @@ fn log_level(cliargsparser: &CliArgsParser, level: &mut i8) -> bool {
         }
         None => false,
     }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn create_rs_cliargsparser(
-    argc: isize,
-    argv: *mut *const c_char,
-) -> *mut c_void {
-    abort_on_panic(|| {
-        assert!(!argv.is_null());
-        assert!(argc >= 0);
-        let argv = slice::from_raw_parts(argv, argc as usize);
-
-        let args = argv
-            .iter()
-            .map(|s_ptr| CStr::from_ptr(*s_ptr).to_string_lossy().into_owned())
-            .collect::<Vec<String>>();
-        Box::into_raw(Box::new(CliArgsParser::new(args))) as *mut c_void
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn destroy_rs_cliargsparser(object: *mut c_void) {
-    abort_on_panic(|| {
-        if object.is_null() {
-            return;
-        }
-        Box::from_raw(object as *mut CliArgsParser);
-    })
 }
