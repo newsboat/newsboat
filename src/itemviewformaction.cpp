@@ -245,17 +245,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_OPENINBROWSER:
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
-		v->set_status(_("Starting browser..."));
-		const auto exit_code = v->open_in_browser(item->link(), item->feedurl());
-		if (!exit_code.has_value()) {
-			v->show_error(_("Failed to spawn browser"));
-			return false;
-		} else if (*exit_code != 0) {
-			v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-			return false;
-		}
-
-		v->set_status("");
+		return open_link_in_browser(item->link());
 	}
 	break;
 	case OP_BOOKMARK:
@@ -431,18 +421,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			op,
 			idx);
 		if (idx < links.size()) {
-			v->set_status(_("Starting browser..."));
-
-			const auto exit_code = v->open_in_browser(links[idx].first, item->feedurl());
-			if (!exit_code.has_value()) {
-				v->show_error(_("Failed to spawn browser"));
-				return false;
-			} else if (*exit_code != 0) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-				return false;
-			}
-
-			v->set_status("");
+			return open_link_in_browser(links[idx].first);
 		}
 	}
 	break;
@@ -481,6 +460,20 @@ bool ItemViewFormAction::process_operation(Operation op,
 
 	update_percent();
 
+	return true;
+}
+
+bool ItemViewFormAction::open_link_in_browser(const std::string& link) const
+{
+	const std::string feedurl = item->feedurl();
+	const auto exit_code = v->open_in_browser(link, feedurl);
+	if (!exit_code.has_value()) {
+		v->show_error(_("Failed to spawn browser"));
+		return false;
+	} else if (*exit_code != 0) {
+		v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+		return false;
+	}
 	return true;
 }
 
@@ -588,9 +581,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		unsigned int idx = 0;
 		sscanf(qna_responses[0].c_str(), "%u", &idx);
 		if (idx && idx - 1 < links.size()) {
-			v->set_status(_("Starting browser..."));
-			v->open_in_browser(links[idx - 1].first, item->feedurl());
-			v->set_status("");
+			open_link_in_browser(links[idx - 1].first);
 		}
 	}
 	break;

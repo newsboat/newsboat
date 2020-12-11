@@ -212,47 +212,10 @@ REDO:
 	break;
 	case OP_OPENINBROWSER:
 		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
-			std::shared_ptr<RssFeed> feed =
-				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
+			std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
+					pos);
 			if (feed) {
-				if (!feed->is_query_feed()) {
-					LOG(Level::INFO,
-						"FeedListFormAction: opening "
-						"feed "
-						"at position `%s': %s",
-						feedpos,
-						feed->link());
-
-					std::string url;
-					if (!feed->link().empty()) {
-						url = feed->link();
-					} else if (!feed->rssurl().empty()) {
-						url = feed->rssurl();
-					} else {
-						// rssurl can't be empty, so if we got to this branch,
-						// something is clearly wrong with Newsboat internals.
-						// That's why we write a message to the log, and not
-						// just display it to the user.
-						LOG(Level::INFO,
-							"FeedListFormAction: cannot open feed in browser "
-							"because both `link' and `rssurl' fields are "
-							"empty");
-					}
-
-					if (!url.empty()) {
-						const std::string feedurl = feed->rssurl();
-						const auto exit_code = v->open_in_browser(url, feedurl);
-						if (!exit_code.has_value()) {
-							v->show_error(_("Failed to spawn browser"));
-							return false;
-						} else if (*exit_code != 0) {
-							v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-							return false;
-						}
-					}
-				} else {
-					v->show_error(_("Cannot open query feeds in the browser!"));
-				}
+				return open_feed_in_browser(feed);
 			}
 		} else {
 			v->show_error(_("No feed selected!"));
@@ -273,9 +236,12 @@ REDO:
 				if (!exit_code.has_value()) {
 					v->show_error(_("Failed to spawn browser"));
 					return false;
-				} else if (exit_code.value() != 0) {
+				} else if (*exit_code != 0) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"),
-							exit_code.value()));
+							*exit_code));
+#pragma GCC diagnostic pop
 					return false;
 				}
 			}
@@ -300,7 +266,10 @@ REDO:
 					v->show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+#pragma GCC diagnostic pop
 					return false;
 				}
 
@@ -554,6 +523,48 @@ REDO:
 		}
 	}
 	return true;
+}
+
+bool FeedListFormAction::open_feed_in_browser(const std::shared_ptr<RssFeed>&
+	feed) const
+{
+	if (!feed->is_query_feed()) {
+		LOG(Level::INFO,
+			"FeedListFormAction: opening feed %s",
+			feed->link());
+
+		std::string url;
+		if (!feed->link().empty()) {
+			url = feed->link();
+		} else if (!feed->rssurl().empty()) {
+			url = feed->rssurl();
+		} else {
+			// rssurl can't be empty, so if we got to this branch,
+			// something is clearly wrong with Newsboat internals.
+			// That's why we write a message to the log, and not
+			// just display it to the user.
+			LOG(Level::INFO,
+				"FeedListFormAction: cannot open feed in browser "
+				"because both `link' and `rssurl' fields are "
+				"empty");
+		}
+
+		if (!url.empty()) {
+			const std::string feedurl = feed->rssurl();
+			const auto exit_code = v->open_in_browser(url, feedurl);
+			if (!exit_code.has_value()) {
+				v->show_error(_("Failed to spawn browser"));
+				return false;
+			} else if (*exit_code != 0) {
+				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+				return false;
+			}
+		}
+		return true;
+	} else {
+		v->show_error(_("Cannot open query feeds in the browser!"));
+		return false;
+	}
 }
 
 void FeedListFormAction::update_visible_feeds(

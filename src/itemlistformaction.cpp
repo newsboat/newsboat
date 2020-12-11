@@ -132,59 +132,36 @@ bool ItemListFormAction::process_operation(Operation op,
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
-		if (!visible_items.empty()) {
-			if (itempos < visible_items.size()) {
-				const auto link = visible_items[itempos].first->link();
-				const auto feedurl = visible_items[itempos].first->feedurl();
-				const auto exit_code = v->open_in_browser(link, feedurl);
-				if (!exit_code.has_value()) {
-					v->show_error(_("Failed to spawn browser"));
-					break;
-				} else if (*exit_code != 0) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-					break;
-				}
-				visible_items[itempos].first->set_unread(false);
-				v->get_ctrl()->mark_article_read(
-					visible_items[itempos].first->guid(),
-					true);
-				if (!cfg->get_configvalue_as_bool(
-						"openbrowser-and-mark-jumps-to-"
-						"next-unread")) {
-					if (itempos <
-						visible_items.size() - 1) {
-						list.set_position(itempos + 1);
-					}
-				} else {
-					process_operation(OP_NEXTUNREAD);
-				}
-				invalidate(itempos);
+		if (!visible_items.empty() && itempos < visible_items.size()) {
+			auto item = visible_items[itempos].first;
+			if (!open_item_in_browser(item)) {
+				return false;
 			}
+			item->set_unread(false);
+			v->get_ctrl()->mark_article_read(item->guid(), true);
+			if (cfg->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
+				process_operation(OP_NEXTUNREAD);
+			} else {
+				if (itempos < visible_items.size() - 1) {
+					list.set_position(itempos + 1);
+				}
+			}
+			invalidate(itempos);
 		} else {
-			v->show_error(
-				_("No item selected!")); // should not happen
+			v->show_error(_("No item selected!"));
 		}
 	}
 	break;
 	case OP_OPENINBROWSER: {
 		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
-		if (!visible_items.empty()) {
-			if (itempos < visible_items.size()) {
-				const auto link = visible_items[itempos].first->link();
-				const auto feedurl = visible_items[itempos].first->feedurl();
-				const auto exit_code = v->open_in_browser(link, feedurl);
-				if (!exit_code.has_value()) {
-					v->show_error(_("Failed to spawn browser"));
-					return false;
-				} else if (*exit_code != 0) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-					return false;
-				}
-				invalidate(itempos);
+		if (!visible_items.empty() && itempos < visible_items.size()) {
+			auto item = visible_items[itempos].first;
+			if (!open_item_in_browser(item)) {
+				return false;
 			}
+			invalidate(itempos);
 		} else {
-			v->show_error(
-				_("No item selected!")); // should not happen
+			v->show_error(_("No item selected!"));
 		}
 	}
 	break;
@@ -775,6 +752,22 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	} else if (quit) {
 		v->pop_current_formaction();
+	}
+	return true;
+}
+
+bool ItemListFormAction::open_item_in_browser(
+	const std::shared_ptr<RssItem>& item) const
+{
+	const auto link = item->link();
+	const auto feedurl = item->feedurl();
+	const auto exit_code = v->open_in_browser(link, feedurl);
+	if (!exit_code.has_value()) {
+		v->show_error(_("Failed to spawn browser"));
+		return false;
+	} else if (*exit_code != 0) {
+		v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+		return false;
 	}
 	return true;
 }
