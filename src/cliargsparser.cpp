@@ -12,10 +12,6 @@ extern "C" {
 
 	void destroy_rs_cliargsparser(void*);
 
-	char* rs_cliargsparser_importfile(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_program_name(void* rs_cliargsparser);
-
 	bool rs_cliargsparser_do_read_import(void* rs_cliargsparser);
 
 	char* rs_cliargsparser_readinfo_import_file(void* rs_cliargsparser);
@@ -27,8 +23,6 @@ extern "C" {
 	bool rs_cliargsparser_should_return(void* rs_cliargsparser);
 
 	int rs_cliargsparser_return_code(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_display_msg(void* rs_cliargsparser);
 
 	bool rs_cliargsparser_set_url_file(void* rs_cliargsparser);
 
@@ -59,13 +53,6 @@ extern "C" {
 
 	char rs_cliargsparser_log_level(void* rs_cliargsparser);
 }
-
-#define GET_STRING(NAME) \
-	if (rs_cliargsparser) { \
-		return RustString(rs_cliargsparser_ ## NAME (rs_cliargsparser)); \
-	} else { \
-		return {}; \
-	}
 
 #define GET_OPTIONAL_VALUE(CHECKER, GETTER, DEFAULT) \
 	if (rs_cliargsparser) { \
@@ -138,7 +125,7 @@ bool CliArgsParser::do_cleanup() const
 
 std::string CliArgsParser::importfile() const
 {
-	GET_STRING(importfile);
+	return std::string(newsboat::cliargsparser::bridged::importfile(*rs_object));
 }
 
 nonstd::optional<std::string> CliArgsParser::readinfo_import_file() const
@@ -153,7 +140,7 @@ nonstd::optional<std::string> CliArgsParser::readinfo_export_file() const
 
 std::string CliArgsParser::program_name() const
 {
-	GET_STRING(program_name);
+	return std::string(newsboat::cliargsparser::bridged::program_name(*rs_object));
 }
 
 unsigned int CliArgsParser::show_version() const
@@ -178,7 +165,7 @@ nonstd::optional<int> CliArgsParser::return_code() const
 
 std::string CliArgsParser::display_msg() const
 {
-	GET_STRING(display_msg);
+	return std::string(newsboat::cliargsparser::bridged::display_msg(*rs_object));
 }
 
 bool CliArgsParser::should_print_usage() const

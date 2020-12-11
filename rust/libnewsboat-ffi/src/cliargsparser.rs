@@ -24,6 +24,10 @@ mod bridged {
         fn using_nonstandard_configs(cliargsparser: &CliArgsParser) -> bool;
         fn should_print_usage(cliargsparser: &CliArgsParser) -> bool;
         fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool;
+
+        fn importfile(cliargsparser: &CliArgsParser) -> String;
+        fn program_name(cliargsparser: &CliArgsParser) -> String;
+        fn display_msg(cliargsparser: &CliArgsParser) -> String;
     }
 
     extern "C++" {
@@ -76,6 +80,21 @@ fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool {
     cliargsparser.refresh_on_start
 }
 
+fn importfile(cliargsparser: &CliArgsParser) -> String {
+    match cliargsparser.importfile.to_owned() {
+        Some(path) => path.to_string_lossy().to_string(),
+        None => String::new(),
+    }
+}
+
+fn program_name(cliargsparser: &CliArgsParser) -> String {
+    cliargsparser.program_name.to_string()
+}
+
+fn display_msg(cliargsparser: &CliArgsParser) -> String {
+    cliargsparser.display_msg.to_string()
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn create_rs_cliargsparser(
     argc: isize,
@@ -121,17 +140,6 @@ where
     })
 }
 
-unsafe fn with_cliargsparser_str<F>(object: *mut c_void, action: F) -> *mut c_char
-where
-    F: RefUnwindSafe + Fn(&CliArgsParser) -> &str,
-{
-    with_cliargsparser(
-        object,
-        |o| CString::new(action(o).to_string()).unwrap().into_raw(),
-        ptr::null_mut(),
-    )
-}
-
 unsafe fn with_cliargsparser_opt_pathbuf<F>(object: *mut c_void, action: F) -> *mut c_char
 where
     F: RefUnwindSafe + Fn(&CliArgsParser) -> &Option<PathBuf>,
@@ -148,16 +156,6 @@ where
         },
         ptr::null_mut(),
     )
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_program_name(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.program_name)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_importfile(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.importfile)
 }
 
 #[no_mangle]
@@ -188,11 +186,6 @@ pub unsafe extern "C" fn rs_cliargsparser_should_return(object: *mut c_void) -> 
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_return_code(object: *mut c_void) -> isize {
     with_cliargsparser(object, |o| o.return_code.unwrap_or(0) as isize, 0)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_display_msg(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_str(object, |o| &o.display_msg)
 }
 
 #[no_mangle]
