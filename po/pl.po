@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
-"PO-Revision-Date: 2020-12-10 00:23+0100\n"
+"PO-Revision-Date: 2020-12-11 19:36+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -1891,9 +1891,8 @@ msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 msgstr "jeden z: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
-#, fuzzy
 msgid "one of: quoted string, range, number"
-msgstr "jeden z: quoted string, range, number"
+msgstr "jeden z: ciąg znaków ujęty w znaki cudzysłowu, zakres, liczba"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
