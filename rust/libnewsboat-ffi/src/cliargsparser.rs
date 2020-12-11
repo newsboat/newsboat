@@ -4,7 +4,6 @@ use libnewsboat::cliargsparser::CliArgsParser;
 use std::ffi::{CStr, CString};
 use std::mem;
 use std::panic::{RefUnwindSafe, UnwindSafe};
-use std::path::PathBuf;
 use std::ptr;
 use std::slice;
 
@@ -30,6 +29,14 @@ mod bridged {
         fn display_msg(cliargsparser: &CliArgsParser) -> String;
 
         fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool;
+
+        fn readinfo_import_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn readinfo_export_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn url_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn lock_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
     }
 
     extern "C++" {
@@ -107,6 +114,76 @@ fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool {
     }
 }
 
+fn readinfo_import_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.readinfo_import_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
+fn readinfo_export_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.readinfo_export_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
+fn url_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.url_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
+fn lock_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.lock_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
+fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.cache_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
+fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.config_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
+fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match cliargsparser.log_file.to_owned() {
+        Some(p) => {
+            *path = p.to_string_lossy().to_string();
+            true
+        }
+        None => false,
+    }
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn create_rs_cliargsparser(
     argc: isize,
@@ -152,84 +229,6 @@ where
     })
 }
 
-unsafe fn with_cliargsparser_opt_pathbuf<F>(object: *mut c_void, action: F) -> *mut c_char
-where
-    F: RefUnwindSafe + Fn(&CliArgsParser) -> &Option<PathBuf>,
-{
-    with_cliargsparser(
-        object,
-        |o| {
-            let opt: &Option<PathBuf> = action(o);
-            let opt: String = match opt.to_owned() {
-                Some(path) => path.to_string_lossy().to_string(),
-                None => String::new(),
-            };
-            CString::new(opt).unwrap().into_raw()
-        },
-        ptr::null_mut(),
-    )
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_do_read_import(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.readinfo_import_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_readinfo_import_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.readinfo_import_file)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_do_read_export(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.readinfo_export_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_readinfo_export_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.readinfo_export_file)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_set_url_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.url_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_url_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.url_file)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_set_lock_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.lock_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_lock_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.lock_file)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_set_cache_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.cache_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_cache_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.cache_file)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_set_config_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.config_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_config_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.config_file)
-}
-
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_execute_cmds(object: *mut c_void) -> bool {
     with_cliargsparser(object, |o| !o.cmds_to_execute.is_empty(), false)
@@ -261,16 +260,6 @@ pub unsafe extern "C" fn rs_cliargsparser_cmd_to_execute_n(
         mem::forget(object);
         result
     })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_set_log_file(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.log_file.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_log_file(object: *mut c_void) -> *mut c_char {
-    with_cliargsparser_opt_pathbuf(object, |o| &o.log_file)
 }
 
 #[no_mangle]
