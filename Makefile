@@ -306,11 +306,17 @@ install-docs: doc
 	$(INSTALL) -m 755 contrib/*.sh $(DESTDIR)$(docdir)/contrib || true
 	$(INSTALL) -m 755 contrib/*.rb $(DESTDIR)$(docdir)/contrib || true
 	$(INSTALL) -m 755 contrib/*.pl $(DESTDIR)$(docdir)/contrib || true
+	$(INSTALL) -m 755 contrib/*.py $(DESTDIR)$(docdir)/contrib || true
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib/colorschemes
 	$(INSTALL) -m 644 contrib/colorschemes/* $(DESTDIR)$(docdir)/contrib/colorschemes || true
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib/getpocket.com
 	$(INSTALL) -m 755 contrib/getpocket.com/*.sh $(DESTDIR)$(docdir)/contrib/getpocket.com || true
 	$(INSTALL) -m 644 contrib/getpocket.com/*.md $(DESTDIR)$(docdir)/contrib/getpocket.com || true
+	$(MKDIR) $(DESTDIR)$(docdir)/contrib/image-preview
+	$(INSTALL) -m 755 contrib/image-preview/vifmimg $(DESTDIR)$(docdir)/contrib/image-preview || true
+	$(INSTALL) -m 755 contrib/image-preview/nbrun $(DESTDIR)$(docdir)/contrib/image-preview || true
+	$(INSTALL) -m 755 contrib/image-preview/nbparser $(DESTDIR)$(docdir)/contrib/image-preview || true
+	$(INSTALL) -m 644 contrib/image-preview/README.org $(DESTDIR)$(docdir)/contrib/image-preview || true
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
 	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
