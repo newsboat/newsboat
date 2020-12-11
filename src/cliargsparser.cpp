@@ -20,10 +20,6 @@ extern "C" {
 
 	char* rs_cliargsparser_readinfo_export_file(void* rs_cliargsparser);
 
-	bool rs_cliargsparser_should_return(void* rs_cliargsparser);
-
-	int rs_cliargsparser_return_code(void* rs_cliargsparser);
-
 	bool rs_cliargsparser_set_url_file(void* rs_cliargsparser);
 
 	char* rs_cliargsparser_url_file(void* rs_cliargsparser);
@@ -53,17 +49,6 @@ extern "C" {
 
 	char rs_cliargsparser_log_level(void* rs_cliargsparser);
 }
-
-#define GET_OPTIONAL_VALUE(CHECKER, GETTER, DEFAULT) \
-	if (rs_cliargsparser) { \
-		if (rs_cliargsparser_ ## CHECKER (rs_cliargsparser)) { \
-			return rs_cliargsparser_ ## GETTER (rs_cliargsparser); \
-		} else { \
-			return nonstd::nullopt; \
-		} \
-	} else { \
-		return DEFAULT; \
-	}
 
 #define GET_OPTIONAL_STRING(CHECKER, GETTER) \
 	if (rs_cliargsparser) { \
@@ -160,7 +145,11 @@ bool CliArgsParser::using_nonstandard_configs() const
 
 nonstd::optional<int> CliArgsParser::return_code() const
 {
-	GET_OPTIONAL_VALUE(should_return, return_code, 0);
+	rust::isize code = 0;
+	if (newsboat::cliargsparser::bridged::return_code(*rs_object, code)) {
+		return static_cast<int>(code);
+	}
+	return nonstd::nullopt;
 }
 
 std::string CliArgsParser::display_msg() const

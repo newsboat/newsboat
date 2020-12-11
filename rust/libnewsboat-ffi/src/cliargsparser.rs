@@ -28,6 +28,8 @@ mod bridged {
         fn importfile(cliargsparser: &CliArgsParser) -> String;
         fn program_name(cliargsparser: &CliArgsParser) -> String;
         fn display_msg(cliargsparser: &CliArgsParser) -> String;
+
+        fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool;
     }
 
     extern "C++" {
@@ -93,6 +95,16 @@ fn program_name(cliargsparser: &CliArgsParser) -> String {
 
 fn display_msg(cliargsparser: &CliArgsParser) -> String {
     cliargsparser.display_msg.to_string()
+}
+
+fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool {
+    match cliargsparser.return_code {
+        Some(code) => {
+            *value = code as isize;
+            true
+        }
+        None => false,
+    }
 }
 
 #[no_mangle]
@@ -176,16 +188,6 @@ pub unsafe extern "C" fn rs_cliargsparser_do_read_export(object: *mut c_void) ->
 #[no_mangle]
 pub unsafe extern "C" fn rs_cliargsparser_readinfo_export_file(object: *mut c_void) -> *mut c_char {
     with_cliargsparser_opt_pathbuf(object, |o| &o.readinfo_export_file)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_should_return(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| o.return_code.is_some(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_return_code(object: *mut c_void) -> isize {
-    with_cliargsparser(object, |o| o.return_code.unwrap_or(0) as isize, 0)
 }
 
 #[no_mangle]
