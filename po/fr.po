@@ -645,7 +645,7 @@ msgstr "Aucun fil sélectionné !"
 #. / (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:135 src/feedlistformaction.cpp:175
 msgid "ftauln"
-msgstr "ptnia"
+msgstr "ptnida"
 
 #: src/feedlistformaction.cpp:137
 msgid ""
@@ -653,7 +653,7 @@ msgid ""
 "(n)one?"
 msgstr ""
 "Trier par (p)remière étiquette/(t)itre/(n)ombre d'articles/nombre d'articles "
-"à l(i)re/(a)ucun ?"
+"à l(i)re/(d)ernière mise à jour/(a)ucun ?"
 
 #: src/feedlistformaction.cpp:177
 msgid ""
@@ -661,7 +661,7 @@ msgid ""
 "(l)astupdated/(n)one?"
 msgstr ""
 "Trier en sens inverse par (p)remier tag/(t)itre/(n)nombre d'articles/nombre "
-"d'articles à l(i)re/(a)ucun ?"
+"d'articles à l(i)re/(d)ernière mise à jour/(a)ucun ?"
 
 #: src/feedlistformaction.cpp:246 src/feedlistformaction.cpp:274
 #: src/feedlistformaction.cpp:300 src/itemlistformaction.cpp:141
@@ -1124,7 +1124,7 @@ msgstr ""
 #: src/itemlistformaction.cpp:1540
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr "Ecrire `%s' sur `%s'? (y : Oui n : Non)"
+msgstr "Ecrire `%s' sur `%s'? (o : Oui n : Non)"
 
 #: src/itemrenderer.cpp:60
 msgid "Feed: "
@@ -1897,21 +1897,22 @@ msgstr "nom de l'attribut"
 
 #: rust/libnewsboat/src/filterparser.rs:64
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr "L'un de: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
+msgstr "l'un de : =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
 msgid "one of: quoted string, range, number"
-msgstr "L'un de: quoted string, range, number"
+msgstr "l'un de : chaîne de caractères entre guillemets, plage de "
+"nombres, nombre"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr "Erreur d'analyse : caractères surnuméraires après la position %{}: %s"
+msgstr "Erreur d'analyse : caractères surnuméraires après la position %{} : %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:363
 msgid "Parse error at position %{}: expected %s"
-msgstr "Erreur d'analyse à la position%{}: %s était attentu"
+msgstr "Erreur d'analyse à la position %{} : %s était attentu"
 
 #: rust/libnewsboat/src/filterparser.rs:368
 msgid "Internal parse error"
