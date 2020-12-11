@@ -39,6 +39,24 @@ mod bridged {
             error_line_number: &mut u64,
             error_reason: &mut String,
         ) -> bool;
+
+        fn replace_all(input: String, from: &str, to: &str) -> String;
+        fn consolidate_whitespace(input: String) -> String;
+        fn absolute_url(base_url: &str, link: &str) -> String;
+        fn censor_url(url: &str) -> String;
+        fn quote_for_stfl(string: &str) -> String;
+        fn trim(rs_str: String) -> String;
+        fn trim_end(rs_str: String) -> String;
+        fn quote(input: String) -> String;
+        fn quote_if_necessary(input: String) -> String;
+        fn make_title(rs_str: String) -> String;
+        fn get_default_browser() -> String;
+        fn substr_with_width(string: &str, max_width: usize) -> String;
+        fn substr_with_width_stfl(string: &str, max_width: usize) -> String;
+        fn get_command_output(cmd: &str) -> String;
+        fn get_basename(input: &str) -> String;
+        fn program_version() -> String;
+        fn strip_comments(line: &str) -> &str;
     }
 
     extern "C++" {
@@ -102,52 +120,6 @@ pub struct FilterUrl {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_replace_all(
-    input: *const c_char,
-    from: *const c_char,
-    to: *const c_char,
-) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let rs_from = CStr::from_ptr(from);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let rs_from = rs_from.to_str().expect("rs_from contained invalid UTF-8");
-
-        let rs_to = CStr::from_ptr(to);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let rs_to = rs_to.to_str().expect("rs_to contained invalid UTF-8");
-
-        let result = utils::replace_all(rs_input, rs_from, rs_to);
-        // Panic here can't happen because:
-        // 1. panic can only happen if `result` contains null bytes;
-        // 2. `result` contains what `input` contained, plus maybe what `to` contains (if there were
-        //    replacements);
-        // 3. neither `input` nor `to` could contain null bytes because they're null-terminated
-        //    strings we got from C.
-        let result = CString::new(result).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_consolidate_whitespace(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let result = utils::consolidate_whitespace(rs_input);
-        // Panic here can't happen because:
-        // 1. panic can only happen if `result` contains null bytes;
-        // 2. `result` contains what `input` contained, and input is a
-        // null-terminated string from C.
-        let result = CString::new(result).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_resolve_tilde(path: *const c_char) -> *mut c_char {
     abort_on_panic(|| {
         let rs_path = CStr::from_ptr(path);
@@ -199,112 +171,6 @@ pub unsafe extern "C" fn rs_resolve_relative(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_absolute_url(
-    base_url: *const c_char,
-    link: *const c_char,
-) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_base_url = CStr::from_ptr(base_url);
-        let rs_base_url = rs_base_url.to_string_lossy();
-        let rs_link = CStr::from_ptr(link);
-        let rs_link = rs_link.to_string_lossy();
-
-        let ret = utils::absolute_url(&rs_base_url, &rs_link);
-        // `ret` is either the same as `rs_link`, or a combination of `rs_base_url`, `rs_link`, and
-        // a slash. `rs_base_url` and `rs_link` came here as C strings, so they are guaranteed not
-        // to contain NUL. The slash is obviously not a NUL. Thus, `unwrap` won't panic.
-        CString::new(ret).unwrap().into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_censor_url(url: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_url = CStr::from_ptr(url);
-        let rs_url = rs_url.to_string_lossy();
-        // `censor_url` replaces part of `rs_url` with `*`. Since `rs_url` came here as a C string,
-        // it doesn't contain NUL bytes. Thus, the result of `censor_url` won't contain NUL either,
-        // and `unwrap` won't panic.
-        CString::new(utils::censor_url(&rs_url)).unwrap().into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_quote_for_stfl(string: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_string = CStr::from_ptr(string);
-        let rs_string = rs_string.to_string_lossy();
-        CString::new(utils::quote_for_stfl(&rs_string))
-            // CString::new declares returning a NulError if the passed string contains \0-bytes.
-            // Unwrap is checked here, because quote_for_stfl receives a regular, c-style string,
-            // and only inserts additional, non-null bytes ('>'), so unwrapping it will always
-            // succeed.
-            .unwrap()
-            .into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_trim_end(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let result = utils::trim_end(rs_input);
-
-        // `result` is a subset of `rs_input`, which is a C string; thus, `unwrap` won't panic.
-        let result = CString::new(result).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_trim(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let result = utils::trim(rs_input);
-
-        // `result` is a subset of `rs_input`, which is a C string; thus, `unwrap` won't panic.
-        let result = CString::new(result).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_quote(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let output = utils::quote(rs_input);
-        // Panic here can't happen because:
-        // 1. panic can only happen if `output` contains null bytes;
-        // 2. `output` contains what `input` contained, plus quotes and backslases,
-        // and input is a null-terminated string from C.
-        let output = CString::new(output).unwrap();
-        output.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_quote_if_necessary(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let output = utils::quote_if_necessary(rs_input);
-        // Panic here can't happen because:
-        // 1. panic can only happen if `output` contains null bytes;
-        // 2. `output` contains what `input` contained, plus quotes and backslashes
-        // if necessary, and input is a null-terminated string from C.
-        let output = CString::new(output).unwrap();
-        output.into_raw()
-    })
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_get_auth_method(input: *const c_char) -> c_ulong {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(input);
@@ -331,24 +197,6 @@ pub unsafe extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
             return result.into_raw();
         }
         ptr::null_mut()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_make_title(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let result = utils::make_title(rs_input);
-        // Panic here can't happen because:
-        // 1. panic can only happen if `result` contains null bytes;
-        // 2. panic due to null bytes would be dealt with in unescape_url
-        // 3. `result` contains what `input` contained, and input is a
-        // null-terminated string from C.
-        let result = CString::new(result).unwrap();
-
-        result.into_raw()
     })
 }
 
@@ -414,32 +262,6 @@ pub unsafe extern "C" fn rs_strnaturalcmp(a: *const c_char, b: *const c_char) ->
 }
 
 #[no_mangle]
-pub extern "C" fn rs_get_default_browser() -> *mut c_char {
-    abort_on_panic(|| {
-        let browser = utils::get_default_browser();
-        // Panic here can't happen because:
-        //1. panic can only happen if `result` contains null bytes;
-        //2. std::env::var returns an error if the variable contains invalid Unicode,
-        // In that case get_default_browser will return "lynx", which obviously doesn't contain null bytes.
-        let result = CString::new(browser).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_get_basename(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy();
-        let output = utils::get_basename(&rs_input);
-        // `output` is a subset of `rs_input`, which is a C string. `output` can also be an empty
-        // string, which obviously doesn't contain NUL. Thus, `unwrap` here won't panic.
-        let result = CString::new(output).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isize {
     abort_on_panic(|| {
         let rs_input = CStr::from_ptr(path);
@@ -466,38 +288,6 @@ pub unsafe extern "C" fn rs_strwidth_stfl(input: *const c_char) -> usize {
         let rs_str = CStr::from_ptr(input);
         let rs_str = rs_str.to_string_lossy().into_owned();
         utils::strwidth_stfl(&rs_str)
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_substr_with_width(
-    string: *const c_char,
-    max_width: usize,
-) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(string);
-        let rs_str = rs_str.to_string_lossy().into_owned();
-        let output = utils::substr_with_width(&rs_str, max_width);
-        // `output` contains a subset of `string`, which is a C string. Thus, we conclude that
-        // `output` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
-        let result = CString::new(output).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_substr_with_width_stfl(
-    string: *const c_char,
-    max_width: usize,
-) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(string);
-        let rs_str = rs_str.to_string_lossy().into_owned();
-        let output = utils::substr_with_width_stfl(&rs_str, max_width);
-        // `output` contains a subset of `string`, which is a C string. Thus, we conclude that
-        // `output` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
-        let result = CString::new(output).unwrap();
-        result.into_raw()
     })
 }
 
@@ -547,20 +337,6 @@ pub unsafe extern "C" fn rs_podcast_mime_to_link_type(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn rs_get_command_output(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let rs_input = rs_input.to_str().expect("input contained invalid UTF-8");
-        let output = utils::get_command_output(&rs_input);
-        // String::from_utf8_lossy() will replace invalid unicode (including null bytes) with U+FFFD,
-        // so this shouldn't be able to panic
-        let result = CString::new(output).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
 pub unsafe extern "C" fn rs_run_program(
     argv: *const *mut c_char,
     input: *const c_char,
@@ -600,37 +376,8 @@ pub unsafe extern "C" fn rs_run_program(
 }
 
 #[no_mangle]
-pub extern "C" fn rs_program_version() -> *mut c_char {
-    abort_on_panic(|| {
-        let version = utils::program_version();
-        // `utils::program_version` generates the string either from a textual representation of
-        // current Git commit id (which has no internal nul bytes), or a combination of major,
-        // minor, and patch versions of `libnewsboat` crate (which, too, has no internal nul
-        // bytes). Therefore there is no reason from `new()` to return `None`.
-        let result = CString::new(version).unwrap();
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
 pub extern "C" fn rs_newsboat_version_major() -> u32 {
     abort_on_panic(utils::newsboat_major_version)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_strip_comments(line: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let line = CStr::from_ptr(line);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let line = line.to_str().expect("line contained invalid UTF-8");
-
-        let result = utils::strip_comments(line);
-
-        // `result` contains a subset of `line`, which is a C string. Thus, we conclude that
-        // `result` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
-        let result = CString::new(result).unwrap();
-        result.into_raw()
-    })
 }
 
 #[no_mangle]

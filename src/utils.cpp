@@ -83,7 +83,7 @@ void append_escapes(std::string& str, char c)
 
 std::string utils::strip_comments(const std::string& line)
 {
-	return RustString(rs_strip_comments(line.c_str()));
+	return std::string(utils::bridged::strip_comments(line));
 }
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str,
@@ -215,7 +215,7 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 std::string utils::consolidate_whitespace(const std::string& str)
 {
 
-	return RustString(rs_consolidate_whitespace(str.c_str()));
+	return std::string(utils::bridged::consolidate_whitespace(str));
 }
 
 std::vector<std::string> utils::tokenize_nl(const std::string& str,
@@ -397,7 +397,7 @@ std::string utils::utf8_to_locale(const std::string& text)
 
 std::string utils::get_command_output(const std::string& cmd)
 {
-	return RustString(rs_get_command_output(cmd.c_str()));
+	return std::string(utils::bridged::get_command_output(cmd));
 }
 
 void utils::extract_filter(const std::string& line,
@@ -525,7 +525,7 @@ std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
 {
-	return RustString( rs_replace_all(str.c_str(), from.c_str(), to.c_str()) );
+	return std::string(utils::bridged::replace_all(str, from, to));
 }
 
 std::string utils::replace_all(const std::string& str,
@@ -576,7 +576,7 @@ std::string utils::wstr2str(const std::wstring& wstr)
 
 std::string utils::absolute_url(const std::string& url, const std::string& link)
 {
-	return RustString(rs_absolute_url(url.c_str(), link.c_str()));
+	return std::string(utils::bridged::absolute_url(url, link));
 }
 
 std::string utils::get_useragent(ConfigContainer* cfgcont)
@@ -645,13 +645,13 @@ size_t utils::strwidth_stfl(const std::string& str)
 std::string utils::substr_with_width(const std::string& str,
 	const size_t max_width)
 {
-	return RustString(rs_substr_with_width(str.c_str(), max_width));
+	return std::string(utils::bridged::substr_with_width(str, max_width));
 }
 
 std::string utils::substr_with_width_stfl(const std::string& str,
 	const size_t max_width)
 {
-	return RustString(rs_substr_with_width_stfl(str.c_str(), max_width));
+	return std::string(utils::bridged::substr_with_width_stfl(str, max_width));
 }
 
 std::string utils::join(const std::vector<std::string>& strings,
@@ -673,32 +673,32 @@ std::string utils::join(const std::vector<std::string>& strings,
 
 std::string utils::censor_url(const std::string& url)
 {
-	return RustString(rs_censor_url(url.c_str()));
+	return std::string(utils::bridged::censor_url(url));
 }
 
 std::string utils::quote_for_stfl(std::string str)
 {
-	return RustString(rs_quote_for_stfl(str.c_str()));
+	return std::string(utils::bridged::quote_for_stfl(str));
 }
 
 void utils::trim(std::string& str)
 {
-	str = RustString(rs_trim(str.c_str()));
+	str = std::string(utils::bridged::trim(str));
 }
 
 void utils::trim_end(std::string& str)
 {
-	str = RustString(rs_trim_end(str.c_str()));
+	str = std::string(utils::bridged::trim_end(str));
 }
 
 std::string utils::quote(const std::string& str)
 {
-	return RustString(rs_quote(str.c_str()));
+	return std::string(utils::bridged::quote(str));
 }
 
 std::string utils::quote_if_necessary(const std::string& str)
 {
-	return RustString(rs_quote_if_necessary(str.c_str()));
+	return std::string(utils::bridged::quote_if_necessary(str));
 }
 
 void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
@@ -791,7 +791,7 @@ std::string utils::get_content(xmlNode* node)
 
 std::string utils::get_basename(const std::string& url)
 {
-	return RustString(rs_get_basename(url.c_str()));
+	return std::string(utils::bridged::get_basename(url));
 }
 
 unsigned long utils::get_auth_method(const std::string& type)
@@ -857,7 +857,7 @@ int utils::mkdir_parents(const std::string& p, mode_t mode)
 
 std::string utils::make_title(const std::string& const_url)
 {
-	return RustString(rs_make_title(const_url.c_str()));
+	return std::string(utils::bridged::make_title(const_url));
 }
 
 nonstd::optional<std::uint8_t> utils::run_interactively(
@@ -1008,12 +1008,12 @@ void utils::initialize_ssl_implementation(void)
 
 std::string utils::get_default_browser()
 {
-	return RustString(rs_get_default_browser());
+	return std::string(utils::bridged::get_default_browser());
 }
 
 std::string utils::program_version()
 {
-	return RustString(rs_program_version());
+	return std::string(utils::bridged::program_version());
 }
 
 unsigned int utils::newsboat_version_major()
