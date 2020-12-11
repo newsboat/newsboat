@@ -1,10 +1,9 @@
 use crate::abort_on_panic;
 use libc::{c_char, c_void};
 use libnewsboat::cliargsparser::CliArgsParser;
-use std::ffi::{CStr, CString};
+use std::ffi::CStr;
 use std::mem;
 use std::panic::{RefUnwindSafe, UnwindSafe};
-use std::ptr;
 use std::slice;
 
 #[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
@@ -37,6 +36,8 @@ mod bridged {
         fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
         fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
         fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+
+        fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String>;
     }
 
     extern "C++" {
@@ -184,6 +185,10 @@ fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
     }
 }
 
+fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String> {
+    cliargsparser.cmds_to_execute.to_owned()
+}
+
 #[no_mangle]
 pub unsafe extern "C" fn create_rs_cliargsparser(
     argc: isize,
@@ -223,39 +228,6 @@ where
         }
         let object = Box::from_raw(object as *mut CliArgsParser);
         let result = action(&object);
-        // Don't destroy the object when the function finishes
-        mem::forget(object);
-        result
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_execute_cmds(object: *mut c_void) -> bool {
-    with_cliargsparser(object, |o| !o.cmds_to_execute.is_empty(), false)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_cmds_to_execute_count(object: *mut c_void) -> usize {
-    with_cliargsparser(object, |o| o.cmds_to_execute.len(), 0)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_cliargsparser_cmd_to_execute_n(
-    object: *mut c_void,
-    n: usize,
-) -> *mut c_char {
-    if object.is_null() {
-        return ptr::null_mut();
-    }
-    abort_on_panic(|| {
-        let object = Box::from_raw(object as *mut CliArgsParser);
-        let result = if n < object.cmds_to_execute.len() {
-            CString::new(object.cmds_to_execute[n].clone())
-                .unwrap()
-                .into_raw()
-        } else {
-            ptr::null_mut()
-        };
         // Don't destroy the object when the function finishes
         mem::forget(object);
         result

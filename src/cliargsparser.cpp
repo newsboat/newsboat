@@ -12,11 +12,6 @@ extern "C" {
 
 	void destroy_rs_cliargsparser(void*);
 
-	bool rs_cliargsparser_execute_cmds(void* rs_cliargsparser);
-
-	unsigned int rs_cliargsparser_cmds_to_execute_count(void* rs_cliargsparser);
-	char* rs_cliargsparser_cmd_to_execute_n(void* rs_cliargsparser, unsigned int n);
-
 	bool rs_cliargsparser_set_log_level(void* rs_cliargsparser);
 
 	char rs_cliargsparser_log_level(void* rs_cliargsparser);
@@ -175,23 +170,18 @@ nonstd::optional<std::string> CliArgsParser::config_file() const
 nonstd::optional<std::vector<std::string>> CliArgsParser::cmds_to_execute()
 	const
 {
-	if (rs_cliargsparser) {
-		if (rs_cliargsparser_execute_cmds(rs_cliargsparser)) {
-			std::vector<std::string> result;
+	const auto rs_cmds = newsboat::cliargsparser::bridged::cmds_to_execute(
+			*rs_object);
 
-			const auto count = rs_cliargsparser_cmds_to_execute_count(rs_cliargsparser);
-			for (unsigned int i = 0; i < count; ++i) {
-				result.push_back(RustString(rs_cliargsparser_cmd_to_execute_n(rs_cliargsparser,
-							i)));
-			}
-
-			return result;
-		} else {
-			return nonstd::nullopt;
-		}
-	} else {
-		return {};
+	if (rs_cmds.empty()) {
+		return nonstd::nullopt;
 	}
+
+	std::vector<std::string> cmds;
+	for (const auto& cmd : rs_cmds) {
+		cmds.push_back(std::string(cmd));
+	}
+	return cmds;
 }
 
 nonstd::optional<std::string> CliArgsParser::log_file() const
