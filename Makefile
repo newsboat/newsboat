@@ -299,33 +299,33 @@ install-podboat: $(PODBOAT)
 
 install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
-	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir) || true
-	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir) || true
+	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir)
+	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir)
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib
-	$(INSTALL) -m 644 contrib/README.md $(DESTDIR)$(docdir)/contrib || true
-	$(INSTALL) -m 755 contrib/*.sh $(DESTDIR)$(docdir)/contrib || true
-	$(INSTALL) -m 755 contrib/*.rb $(DESTDIR)$(docdir)/contrib || true
-	$(INSTALL) -m 755 contrib/*.pl $(DESTDIR)$(docdir)/contrib || true
-	$(INSTALL) -m 755 contrib/*.py $(DESTDIR)$(docdir)/contrib || true
+	$(INSTALL) -m 644 contrib/README.md $(DESTDIR)$(docdir)/contrib
+	$(INSTALL) -m 755 contrib/*.sh $(DESTDIR)$(docdir)/contrib
+	$(INSTALL) -m 755 contrib/*.rb $(DESTDIR)$(docdir)/contrib
+	$(INSTALL) -m 755 contrib/*.pl $(DESTDIR)$(docdir)/contrib
+	$(INSTALL) -m 755 contrib/*.py $(DESTDIR)$(docdir)/contrib
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib/colorschemes
-	$(INSTALL) -m 644 contrib/colorschemes/* $(DESTDIR)$(docdir)/contrib/colorschemes || true
+	$(INSTALL) -m 644 contrib/colorschemes/* $(DESTDIR)$(docdir)/contrib/colorschemes
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib/getpocket.com
-	$(INSTALL) -m 755 contrib/getpocket.com/*.sh $(DESTDIR)$(docdir)/contrib/getpocket.com || true
-	$(INSTALL) -m 644 contrib/getpocket.com/*.md $(DESTDIR)$(docdir)/contrib/getpocket.com || true
+	$(INSTALL) -m 755 contrib/getpocket.com/*.sh $(DESTDIR)$(docdir)/contrib/getpocket.com
+	$(INSTALL) -m 644 contrib/getpocket.com/*.md $(DESTDIR)$(docdir)/contrib/getpocket.com
 	$(MKDIR) $(DESTDIR)$(docdir)/contrib/image-preview
-	$(INSTALL) -m 755 contrib/image-preview/vifmimg $(DESTDIR)$(docdir)/contrib/image-preview || true
-	$(INSTALL) -m 755 contrib/image-preview/nbrun $(DESTDIR)$(docdir)/contrib/image-preview || true
-	$(INSTALL) -m 755 contrib/image-preview/nbparser $(DESTDIR)$(docdir)/contrib/image-preview || true
-	$(INSTALL) -m 644 contrib/image-preview/README.org $(DESTDIR)$(docdir)/contrib/image-preview || true
+	$(INSTALL) -m 755 contrib/image-preview/vifmimg $(DESTDIR)$(docdir)/contrib/image-preview
+	$(INSTALL) -m 755 contrib/image-preview/nbrun $(DESTDIR)$(docdir)/contrib/image-preview
+	$(INSTALL) -m 755 contrib/image-preview/nbparser $(DESTDIR)$(docdir)/contrib/image-preview
+	$(INSTALL) -m 644 contrib/image-preview/README.org $(DESTDIR)$(docdir)/contrib/image-preview
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
-	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1 || true
-	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1 || true
+	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1
+	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1
 
 install-examples: doc/example-config
 	$(MKDIR) $(DESTDIR)$(docdir)/examples
-	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config || true
-	$(INSTALL) -m 755 doc/examples/example-bookmark-plugin.sh $(DESTDIR)$(docdir)/examples/example-bookmark-plugin.sh || true
-	$(INSTALL) -m 755 doc/examples/example-exec-script.py $(DESTDIR)$(docdir)/examples/example-exec-script.py || true
+	$(INSTALL) -m 644 doc/example-config $(DESTDIR)$(docdir)/examples/config
+	$(INSTALL) -m 755 doc/examples/example-bookmark-plugin.sh $(DESTDIR)$(docdir)/examples/example-bookmark-plugin.sh
+	$(INSTALL) -m 755 doc/examples/example-exec-script.py $(DESTDIR)$(docdir)/examples/example-exec-script.py
 
 install-icon:
 	$(MKDIR) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps
