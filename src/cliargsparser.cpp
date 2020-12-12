@@ -148,15 +148,11 @@ nonstd::optional<std::string> CliArgsParser::config_file() const
 	return nonstd::nullopt;
 }
 
-nonstd::optional<std::vector<std::string>> CliArgsParser::cmds_to_execute()
-	const
+std::vector<std::string> CliArgsParser::cmds_to_execute()
+const
 {
 	const auto rs_cmds = newsboat::cliargsparser::bridged::cmds_to_execute(
 			*rs_object);
-
-	if (rs_cmds.empty()) {
-		return nonstd::nullopt;
-	}
 
 	std::vector<std::string> cmds;
 	for (const auto& cmd : rs_cmds) {

@@ -415,8 +415,7 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 	auto check = [](TestHelpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE_FALSE(args.cmds_to_execute() == nonstd::nullopt);
-		REQUIRE_FALSE(args.cmds_to_execute().value().empty());
+		REQUIRE_FALSE(args.cmds_to_execute().empty());
 	};
 
 	SECTION("-x") {

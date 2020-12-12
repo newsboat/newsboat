@@ -73,7 +73,7 @@ public:
 	/// If non-null, Newsboat should execute these commands.
 	///
 	/// \note The parser does not check if the passed commands are valid.
-	nonstd::optional<std::vector<std::string>> cmds_to_execute() const;
+	std::vector<std::string> cmds_to_execute() const;
 
 	nonstd::optional<std::string> log_file() const;
 
