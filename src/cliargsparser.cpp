@@ -14,7 +14,6 @@ rust::Vec<rust::String> argv_to_rust_args(int argc, char* argv[])
 {
 	rust::Vec<rust::String> args;
 	for (int i = 0; i < argc; ++i) {
-		// TODO: Handle invalid utf-8 codepoints gracefully?
 		args.push_back(argv[i]);
 	}
 	return args;
