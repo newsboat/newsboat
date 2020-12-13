@@ -70,7 +70,7 @@ public:
 
 	nonstd::optional<std::string> config_file() const;
 
-	/// If non-null, Newsboat should execute these commands.
+	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
 	/// \note The parser does not check if the passed commands are valid.
 	std::vector<std::string> cmds_to_execute() const;
