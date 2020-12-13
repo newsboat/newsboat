@@ -1922,38 +1922,3 @@ msgstr "regcomp ha ritornato codice %i"
 msgid "regexec returned code %i"
 msgstr "regexec ha ritornato codice %i"
 
-#~ msgid ""
-#~ "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:"
-#~ "Yes to all n:No q:No to all)"
-#~ msgstr ""
-#~ "Sovrascrivere `%s` in `%s`? Non ci sono altri conflitti come il presente "
-#~ "(s:Sì a:Sì a tutti n:No q:No a tutti)"
-
-#~ msgid "Open article in browser"
-#~ msgstr "Apri l'articolo nel browser"
-
-#~ msgid "invalid feed index (bug)"
-#~ msgstr "indice del feed non valido (bug)"
-
-#~ msgid "Go to next article"
-#~ msgstr "Vai al prossimo articolo"
-
-#~ msgid "Go to previous article"
-#~ msgstr "Vai all'articolo non letto precedente"
-
-#, fuzzy
-#~ msgid "config"
-#~ msgstr "<configfile>"
-
-#~ msgid "%s %s - Save Files - %s"
-#~ msgstr "%s %s - Salva File - %s"
-
-#~ msgid "%s %s - Save File - %s"
-#~ msgstr "%s %s - Salva File - %s"
-
-#~ msgid ""
-#~ "It bundles an alphanum algorithm implementation licensed under the MIT "
-#~ "license: http://www.davekoelle.com/alphanum.html"
-#~ msgstr ""
-#~ "Include l'implementazione dell'algoritmo alphanum, sotto licenza MIT: "
-#~ "http://www.davekoelle.com/alphanum.html"
