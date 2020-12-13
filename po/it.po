@@ -238,7 +238,6 @@ msgid "%N %V - Dialogs"
 msgstr "%N %V - Schermate"
 
 #: src/configcontainer.cpp:281
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
@@ -700,9 +699,8 @@ msgid "Already on first feed."
 msgstr "Già al primo feed."
 
 #: src/feedlistformaction.cpp:410
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "Vuoi veramente sovrascrivere `%s' (s:Sì n:No)? "
+msgstr "Vuoi veramente segnare tutti i feeds come letti' (s:Sì n:No)? "
 
 #: src/feedlistformaction.cpp:411 src/feedlistformaction.cpp:536
 #: src/filebrowserformaction.cpp:126 src/view.cpp:183
@@ -837,9 +835,9 @@ msgid "Error: Failed to read URLs from file \"%s\" (%s)"
 msgstr "Errore: Impossibile leggere gli URL dal file \"%s\" (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: Failed to open file \"%s\" (%s)"
-msgstr "Errore durante il caricamento del feed `%s': %s"
+msgstr "Errore: Impossibile aprire il file \"%s\" (%s)"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:343 src/rssignores.cpp:41
 #, c-format
@@ -1284,7 +1282,7 @@ msgstr "Apri tutti gli articoli del feed nel browser e segnali come letti"
 
 #: src/keymap.cpp:147
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr ""
+msgstr "Apri URL articolo, feed, o elemento in visualizzatore URL"
 
 #: src/keymap.cpp:154
 msgid "Open help dialog"
