@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2020-12-07 10:26+0300\n"
 "PO-Revision-Date: 2019-08-26 23:02+0200\n"
-"Last-Translator: Leandro Noferini <leandro@noferini.org>\n"
+"Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr "questo aiuto"
 
 #: newsboat.cpp:103
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "rimuovi elementi non referenziati dalla cache"
 
 #: newsboat.cpp:128
 #, fuzzy
@@ -149,7 +149,7 @@ msgstr ""
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:392
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "Per ulteriori informazioni, visita https://newsboat.org/"
 
 #: newsboat.cpp:172
 #, c-format
@@ -162,7 +162,7 @@ msgstr ""
 
 #: newsboat.cpp:177
 msgid "It bundles:"
-msgstr ""
+msgstr "Include:"
 
 #: newsboat.cpp:178
 #, fuzzy
@@ -179,8 +179,8 @@ msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Include la libreria JSON for Modern C++, sotto licenza MIT: https://github."
-"com/nlohmann/json"
+"- Libreria optional-lite, sotto licenza Boost Software License:"
+"https://github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:184
 #, fuzzy
@@ -188,8 +188,8 @@ msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"Include la libreria JSON for Modern C++, sotto licenza MIT: https://github."
-"com/nlohmann/json"
+"- Libreria expected-lite, sotto licenza Boost Software License:"
+"https://github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:257
 #, c-format
@@ -318,7 +318,7 @@ msgstr "errore sconosciuto (bug)."
 #: src/configparser.cpp:98
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s linea %u"
 
 #: src/configparser.cpp:118
 #, c-format
@@ -354,7 +354,7 @@ msgstr "Errore: un'istanza di %s è già in esecuzione (PID: %u)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:265
 msgid "Error: "
-msgstr ""
+msgstr "Errore: "
 
 #: src/controller.cpp:219 src/controller.cpp:398
 msgid "Opening cache..."
@@ -384,17 +384,21 @@ msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
+"ERRORE: Devi impostare `miniflux-login` e una tra `miniflux-password`, "
+"`miniflux-passwordfile` o `miniflux-passwordeval` per usare Miniflux\n"
 
 #: src/controller.cpp:315
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"ERRORE: Devi impostare *entrambi* `inoreader-app-id` e `inoreader-app-key` per usare "
+"Inoreader.\n"
 
 #: src/controller.cpp:322
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "ERRORE: urls-source `%s` sconosciuto"
 
 #: src/controller.cpp:329
 #, c-format
@@ -673,7 +677,7 @@ msgstr "Apri l'articolo nel browser"
 #: src/itemviewformaction.cpp:441
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Il browser ha ritornato il codice errore %i"
 
 #: src/feedlistformaction.cpp:254
 msgid "Cannot open query feeds in the browser!"
@@ -836,7 +840,7 @@ msgstr "Salva File - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: Failed to read URLs from file \"%s\" (%s)"
-msgstr ""
+msgstr "Errore: Impossibile leggere gli URL dal file \"%s\" (%s)"
 
 #: src/fileurlreader.cpp:66
 #, fuzzy, c-format
@@ -1216,7 +1220,7 @@ msgstr "Apri feed/articolo"
 
 #: src/keymap.cpp:44
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Cambia fuoco tra widgets"
 
 #: src/keymap.cpp:47
 msgid "Return to previous dialog/Quit"
@@ -1793,7 +1797,7 @@ msgstr "URL"
 
 #: src/view.cpp:158
 msgid "Error: Failed to execute startup commands"
-msgstr ""
+msgstr "Errore: Impossibile eseguire comandi all'avvio"
 
 #: src/view.cpp:431 src/view.cpp:456
 msgid "Error: feed contains no items!"
@@ -1850,11 +1854,11 @@ msgstr "formato feed non supportato"
 
 #: rust/libnewsboat/src/utils.rs:699
 msgid "Failed to open file (%s)"
-msgstr ""
+msgstr "Fallita apertura del file (%s)"
 
 #: rust/libnewsboat/src/utils.rs:705
 msgid "Failed to read line %u (%s)"
-msgstr ""
+msgstr "Fallita lettura linea %u (%s)"
 
 #: rust/libnewsboat/src/cliargsparser.rs:294
 #, fuzzy
@@ -1899,41 +1903,41 @@ msgstr ""
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
 msgid "Parse error: trailing characters after position %{}: %s"
-msgstr ""
+msgstr "Errore parsing: caratteri in coda dopo la posizione %{}: %s"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:363
 msgid "Parse error at position %{}: expected %s"
-msgstr ""
+msgstr "Errore parsing alla posizione %{}: atteso %s"
 
 #: rust/libnewsboat/src/filterparser.rs:368
 msgid "Internal parse error"
-msgstr ""
+msgstr "Errore interno di parsing"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file: '%s' (%s)"
-msgstr ""
+msgstr "Fallita apertura file di blocco: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<nome file contenente carattere UTF-8 non valido>"
 
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file: '%s' (%s)"
-msgstr ""
+msgstr "Faillita scrittura PID in file di blocco: '%s' (%s)"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
-msgstr ""
+msgstr "Fallito blocco di '%s', gia' bloccato dal processo con PID %{}"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
-msgstr ""
+msgstr "regcomp ha ritornato codice %i"
 
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
-msgstr ""
+msgstr "regexec ha ritornato codice %i"
 
 #~ msgid ""
 #~ "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:"
