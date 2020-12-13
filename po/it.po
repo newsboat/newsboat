@@ -121,7 +121,7 @@ msgstr "rimuovi elementi non referenziati dalla cache"
 
 #: newsboat.cpp:128
 msgid "Files:"
-msgstr "Files: "
+msgstr "Files:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:130
@@ -243,7 +243,7 @@ msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr ""
-"%N %V - %?F?Feeds&YI tuoi feed (%u non letti, %t totali)%?F? corrispondenti al filtro `"
+"%N %V - %?F?Feeds&I tuoi feed (%u non letti, %t totali)%?F? corrispondenti al filtro `"
 "%F'&?%?T? - tag `%T'&?"
 
 #: src/configcontainer.cpp:287
@@ -1878,14 +1878,12 @@ msgid "attribute name"
 msgstr "nome attributo"
 
 #: rust/libnewsboat/src/filterparser.rs:64
-#, fuzzy
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 msgstr "uno tra: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #: rust/libnewsboat/src/filterparser.rs:65
-#, fuzzy
 msgid "one of: quoted string, range, number"
-msgstr "uno tra: quoted string, range, number"
+msgstr "uno tra: stringa tra virgolette, intervallo, numero"
 
 #. The "%{}" thing is a number, a zero-based offset into a string.
 #: rust/libnewsboat/src/filterparser.rs:356
