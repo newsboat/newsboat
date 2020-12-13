@@ -87,7 +87,7 @@ fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool {
 }
 
 fn importfile(cliargsparser: &CliArgsParser) -> String {
-    match cliargsparser.importfile.to_owned() {
+    match &cliargsparser.importfile {
         Some(path) => path.to_string_lossy().to_string(),
         None => String::new(),
     }
@@ -112,7 +112,7 @@ fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool {
 }
 
 fn readinfo_import_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.readinfo_import_file.to_owned() {
+    match &cliargsparser.readinfo_import_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -122,7 +122,7 @@ fn readinfo_import_file(cliargsparser: &CliArgsParser, path: &mut String) -> boo
 }
 
 fn readinfo_export_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.readinfo_export_file.to_owned() {
+    match &cliargsparser.readinfo_export_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -132,7 +132,7 @@ fn readinfo_export_file(cliargsparser: &CliArgsParser, path: &mut String) -> boo
 }
 
 fn url_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.url_file.to_owned() {
+    match &cliargsparser.url_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -142,7 +142,7 @@ fn url_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
 }
 
 fn lock_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.lock_file.to_owned() {
+    match &cliargsparser.lock_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -152,7 +152,7 @@ fn lock_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
 }
 
 fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.cache_file.to_owned() {
+    match &cliargsparser.cache_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -162,7 +162,7 @@ fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
 }
 
 fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.config_file.to_owned() {
+    match &cliargsparser.config_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -172,7 +172,7 @@ fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
 }
 
 fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match cliargsparser.log_file.to_owned() {
+    match &cliargsparser.log_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
