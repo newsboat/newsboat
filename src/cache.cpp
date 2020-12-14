@@ -747,15 +747,16 @@ void Cache::do_vacuum()
 	run_sql("VACUUM;");
 }
 
-int Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
+/// if requested, removes unreachable data stored in cache.
+/// returns a count of unreachable feeds and items.
+std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {
-	int unreachable = 0;
+	std::uint64_t unreachable = 0u;
 	std::string list = "(";
 
 	for (const auto& feed : feeds) {
-		std::string name =
-			prepare_query("'%q'", feed->rssurl());
+		const auto name = prepare_query("'%q'", feed->rssurl());
 		list.append(name);
 		list.append(", ");
 	}
@@ -798,10 +799,6 @@ int Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 				"delete-read-articles-on-quit")) {
 			run_sql(cleanup_read_items_statement);
 		}
-
-		// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
-		// PURPOSE! It's missing so that no database operation can occur
-		// after the cache cleanup! mtx->unlock();
 	} else {
 		LOG(Level::DEBUG,
 			"Cache::cleanup_cache: NOT cleaning up cache...");
@@ -822,6 +819,10 @@ int Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 		run_sql(query, count_callback, &count_cbh);
 		unreachable = count_cbh.count();
 	}
+
+	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
+	// PURPOSE! It's missing so that no database operation can occur
+	// after the cache cleanup! mtx->unlock();
 	return unreachable;
 }
 
