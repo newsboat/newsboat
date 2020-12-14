@@ -747,8 +747,6 @@ void Cache::do_vacuum()
 	run_sql("VACUUM;");
 }
 
-/// if requested, removes unreachable data stored in cache.
-/// returns a count of unreachable feeds and items.
 std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {

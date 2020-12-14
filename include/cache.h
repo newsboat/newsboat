@@ -51,6 +51,8 @@ public:
 		const std::string& feedurl);
 	void update_rssitem_unread_and_enqueued(RssItem* item,
 		const std::string& feedurl);
+	/// if requested, removes unreachable data stored in cache.
+	/// returns a count of unreachable feeds and items.
 	std::uint64_t cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 		bool always_clean = false);
 	void do_vacuum();
