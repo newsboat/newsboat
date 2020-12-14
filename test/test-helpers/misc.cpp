@@ -51,3 +51,17 @@ void TestHelpers::copy_file(const std::string& source,
 
 	dst << src.rdbuf();
 }
+
+std::vector<std::string> TestHelpers::file_contents(const std::string& filepath)
+{
+	std::vector<std::string> lines;
+
+	std::ifstream in(filepath);
+	while (in.is_open() && !in.eof()) {
+		std::string line;
+		std::getline(in, line);
+		lines.emplace_back(std::move(line));
+	}
+
+	return lines;
+}
