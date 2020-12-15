@@ -13,7 +13,7 @@ namespace podboat {
 
 class QueueLoader {
 public:
-	QueueLoader(const std::string& file, newsboat::ConfigContainer& cfg,
+	QueueLoader(const std::string& file, const newsboat::ConfigContainer& cfg,
 		std::function<void()> cb_require_view_update);
 	void reload(std::vector<Download>& downloads,
 		bool also_remove_finished = false) const;
@@ -21,8 +21,8 @@ public:
 private:
 	std::string get_filename(const std::string& str) const;
 
-	std::string queuefile;
-	newsboat::ConfigContainer& cfg;
+	const std::string queuefile;
+	const newsboat::ConfigContainer& cfg;
 	std::function<void()> cb_require_view_update;
 
 	/// A helper type for methods that process the queue file.

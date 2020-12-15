@@ -20,7 +20,7 @@ using namespace newsboat;
 
 namespace podboat {
 
-QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
+QueueLoader::QueueLoader(const std::string& file, const ConfigContainer& cfg_,
 	std::function<void()> cb_require_view_update_)
 	: queuefile(file)
 	, cfg(cfg_)
@@ -32,7 +32,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 	bool also_remove_finished) const
 {
 	CategorizedDownloads categorized_downloads;
-	auto res = categorize_downloads(downloads, also_remove_finished);
+	const auto res = categorize_downloads(downloads, also_remove_finished);
 	if (!res.has_value()) {
 		return;
 	}
@@ -74,14 +74,17 @@ nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_down
 		case DlStatus::FINISHED:
 			if (!also_remove_finished) {
 				LOG(Level::DEBUG,
-					"QueueLoader::reload: storing %s to "
-					"new "
-					"vector",
+					"QueueLoader::reload: storing %s to new vector",
 					dl.url());
 				keep_entry = true;
 			}
 			break;
-		default:
+		case DlStatus::DELETED:
+			keep_entry = false;
+			break;
+
+		case DlStatus::DOWNLOADING:
+			assert(!"Can't be reached because of the `if` above");
 			break;
 		}
 
@@ -109,11 +112,9 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 		}
 
 		LOG(Level::DEBUG,
-			"QueueLoader::reload: loaded `%s' from "
-			"queue file",
+			"QueueLoader::reload: loaded `%s' from queue file",
 			line);
-		std::vector<std::string> fields =
-			utils::tokenize_quoted(line);
+		const std::vector<std::string> fields = utils::tokenize_quoted(line);
 		bool url_found = false;
 
 		if (fields.empty()) {
@@ -135,9 +136,7 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 		for (const auto& dl : downloads.to_keep) {
 			if (fields[0] == dl.url()) {
 				LOG(Level::INFO,
-					"QueueLoader::reload: "
-					"found `%s' in old "
-					"vector",
+					"QueueLoader::reload: found `%s' in old vector",
 					fields[0]);
 				url_found = true;
 				break;
@@ -147,9 +146,7 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 		for (const auto& dl : downloads.to_delete) {
 			if (fields[0] == dl.url()) {
 				LOG(Level::INFO,
-					"QueueLoader::reload: "
-					"found `%s' in scheduled for deletion "
-					"vector",
+					"QueueLoader::reload: found `%s' in scheduled for deletion vector",
 					fields[0]);
 				url_found = true;
 				break;
@@ -158,10 +155,7 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 
 		if (!url_found) {
 			LOG(Level::INFO,
-				"QueueLoader::reload: found "
-				"`%s' "
-				"nowhere -> storing to new "
-				"vector",
+				"QueueLoader::reload: found `%s' nowhere -> storing to new vector",
 				line);
 			Download d(cb_require_view_update);
 			std::string fn;
@@ -173,48 +167,28 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			d.set_filename(fn);
 			if (access(fn.c_str(), F_OK) == 0) {
 				LOG(Level::INFO,
-					"QueueLoader::reload: "
-					"found `%s' on file "
-					"system "
-					"-> mark as already "
-					"downloaded",
+					"QueueLoader::reload: found `%s' on file system -> mark as already downloaded",
 					fn);
 				if (fields.size() >= 3) {
-					if (fields[2] ==
-						"downloaded")
-						d.set_status(
-							DlStatus::
-							READY);
-					if (fields[2] ==
-						"played")
-						d.set_status(
-							DlStatus::
-							PLAYED);
-					if (fields[2] ==
-						"finished")
-						d.set_status(
-							DlStatus::
-							FINISHED);
-				} else
-					d.set_status(DlStatus::
-						ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
-			} else if (
-				access((fn +
-						ConfigContainer::
-						PARTIAL_FILE_SUFFIX)
-					.c_str(),
+					if (fields[2] == "downloaded") {
+						d.set_status(DlStatus::READY);
+					}
+					if (fields[2] == "played") {
+						d.set_status(DlStatus::PLAYED);
+					}
+					if (fields[2] == "finished") {
+						d.set_status(DlStatus::FINISHED);
+					}
+				} else {
+					// TODO: scrap DlStatus::ALREADY_DOWNLOADED state
+					d.set_status(DlStatus::ALREADY_DOWNLOADED);
+				}
+			} else if (access((fn + ConfigContainer::PARTIAL_FILE_SUFFIX).c_str(),
 					F_OK) == 0) {
 				LOG(Level::INFO,
-					"QueueLoader::reload: "
-					"found `%s' on file "
-					"system "
-					"-> mark as partially "
-					"downloaded",
-					fn +
-					ConfigContainer::
-					PARTIAL_FILE_SUFFIX);
-				d.set_status(DlStatus::
-					ALREADY_DOWNLOADED);
+					"QueueLoader::reload: found `%s' on file system -> mark as partially downloaded",
+					fn + ConfigContainer::PARTIAL_FILE_SUFFIX);
+				d.set_status(DlStatus::ALREADY_DOWNLOADED);
 			}
 
 			d.set_url(fields[0]);
@@ -232,14 +206,27 @@ void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 
 	for (const auto& dl : downloads.to_keep) {
 		f << dl.url() << " " << utils::quote(dl.filename());
-		if (dl.status() == DlStatus::READY) {
+		switch (dl.status()) {
+		case DlStatus::READY:
 			f << " downloaded";
-		}
-		if (dl.status() == DlStatus::PLAYED) {
+			break;
+
+		case DlStatus::PLAYED:
 			f << " played";
-		}
-		if (dl.status() == DlStatus::FINISHED) {
+			break;
+
+		case DlStatus::FINISHED:
 			f << " finished";
+			break;
+
+		// The following statuses have no marks in the queue file.
+		case DlStatus::QUEUED:
+		case DlStatus::DOWNLOADING:
+		case DlStatus::CANCELLED:
+		case DlStatus::DELETED:
+		case DlStatus::FAILED:
+		case DlStatus::ALREADY_DOWNLOADED:
+			break;
 		}
 		f << std::endl;
 	}
@@ -254,9 +241,7 @@ const
 
 	for (const auto& dl : downloads.to_delete) {
 		const std::string filename = dl.filename();
-		LOG(Level::INFO,
-			"Deleting file %s",
-			filename);
+		LOG(Level::INFO, "Deleting file %s", filename);
 		if (std::remove(filename.c_str()) != 0) {
 			if (errno != ENOENT) {
 				LOG(Level::ERROR,
