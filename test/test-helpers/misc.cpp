@@ -1,6 +1,7 @@
 #include "misc.h"
 
 #include <fstream>
+#include <unistd.h>
 
 #include "3rd-party/catch.hpp"
 
@@ -70,4 +71,9 @@ bool TestHelpers::starts_with(const std::string& input,
 	const std::string& prefix)
 {
 	return input.substr(0, prefix.size()) == prefix;
+}
+
+bool TestHelpers::file_exists(const std::string& filepath)
+{
+	return access(filepath.c_str(), F_OK) == 0;
 }

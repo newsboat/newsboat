@@ -33,6 +33,10 @@ std::vector<std::string> file_contents(const std::string& filepath);
  */
 bool starts_with(const std::string& input, const std::string& prefix);
 
+/* \brief Returns `true` if the file at `filepath` exists.
+ */
+bool file_exists(const std::string& filepath);
+
 } // namespace TestHelpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_MISC_H_ */
