@@ -29,6 +29,10 @@ void copy_file(const std::string& source, const std::string& destination);
  */
 std::vector<std::string> file_contents(const std::string& filepath);
 
+/* \brief Returns `true` if `input` starts with `prefix`.
+ */
+bool starts_with(const std::string& input, const std::string& prefix);
+
 } // namespace TestHelpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_MISC_H_ */

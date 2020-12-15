@@ -190,18 +190,13 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		ConfigPaths paths;
 		REQUIRE(paths.initialized());
 
-		const auto starts_with =
-			[]
-		(const std::string& input, const std::string& prefix) -> bool {
-			return input.substr(0, prefix.size()) == prefix;
-		};
-		REQUIRE(starts_with(paths.url_file(), tmp.get_path()));
-		REQUIRE(starts_with(paths.config_file(), tmp.get_path()));
-		REQUIRE(starts_with(paths.cache_file(), tmp.get_path()));
-		REQUIRE(starts_with(paths.lock_file(), tmp.get_path()));
-		REQUIRE(starts_with(paths.queue_file(), tmp.get_path()));
-		REQUIRE(starts_with(paths.search_file(), tmp.get_path()));
-		REQUIRE(starts_with(paths.cmdline_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.url_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.config_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.cache_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.lock_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.queue_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.search_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(paths.cmdline_file(), tmp.get_path()));
 
 		REQUIRE(paths.create_dirs());
 
