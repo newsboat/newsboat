@@ -131,54 +131,34 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_OPENBROWSER_AND_MARK: {
-		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
-		if (!visible_items.empty() && itempos < visible_items.size()) {
-			auto item = visible_items[itempos].first;
-			const bool interactive = true;
-			if (!open_item_in_browser(item, interactive)) {
-				return false;
-			}
-			item->set_unread(false);
-			v->get_ctrl()->mark_article_read(item->guid(), true);
-			if (cfg->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
-				process_operation(OP_NEXTUNREAD);
-			} else {
-				if (itempos < visible_items.size() - 1) {
-					list.set_position(itempos + 1);
-				}
-			}
-			invalidate(itempos);
+		const bool interactive = true;
+		invalidate(itempos);
+		if (!open_position_in_browser(itempos, interactive)) {
+			return false;
+		}
+
+		auto item = visible_items[itempos].first;
+		item->set_unread(false);
+		v->get_ctrl()->mark_article_read(item->guid(), true);
+		if (cfg->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
+			process_operation(OP_NEXTUNREAD);
 		} else {
-			v->show_error(_("No item selected!"));
+			if (itempos < visible_items.size() - 1) {
+				list.set_position(itempos + 1);
+			}
 		}
 	}
 	break;
 	case OP_OPENINBROWSER: {
-		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
-		if (!visible_items.empty() && itempos < visible_items.size()) {
-			auto item = visible_items[itempos].first;
-			const bool interactive = true;
-			if (!open_item_in_browser(item, interactive)) {
-				return false;
-			}
-			invalidate(itempos);
-		} else {
-			v->show_error(_("No item selected!"));
-		}
+		const bool interactive = true;
+		invalidate(itempos);
+		return open_position_in_browser(itempos, interactive);
 	}
 	break;
 	case OP_OPENINBROWSER_NONINTERACTIVE: {
-		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
-		if (!visible_items.empty() && itempos < visible_items.size()) {
-			auto item = visible_items[itempos].first;
-			const bool interactive = false;
-			if (!open_item_in_browser(item, interactive)) {
-				return false;
-			}
-			invalidate(itempos);
-		} else {
-			v->show_error(_("No item selected!"));
-		}
+		const bool interactive = false;
+		invalidate(itempos);
+		return open_position_in_browser(itempos, interactive);
 	}
 	break;
 	case OP_OPENALLUNREADINBROWSER: {
@@ -772,20 +752,30 @@ bool ItemListFormAction::process_operation(Operation op,
 	return true;
 }
 
-bool ItemListFormAction::open_item_in_browser(
-	const std::shared_ptr<RssItem>& item, bool interactive) const
+bool ItemListFormAction::open_position_in_browser(
+	unsigned int pos, bool interactive) const
 {
-	const auto link = item->link();
-	const auto feedurl = item->feedurl();
-	const auto exit_code = v->open_in_browser(link, feedurl, interactive);
-	if (!exit_code.has_value()) {
-		v->show_error(_("Failed to spawn browser"));
-		return false;
-	} else if (*exit_code != 0) {
-		v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+	LOG(Level::INFO,
+		"ItemListFormAction: opening item at pos `%u', interactive: %s",
+		pos,
+		interactive ? "true" : "false");
+	if (!visible_items.empty() && pos < visible_items.size()) {
+		const auto item = visible_items[pos].first;
+		const auto link = item->link();
+		const auto feedurl = item->feedurl();
+		const auto exit_code = v->open_in_browser(link, feedurl, interactive);
+		if (!exit_code.has_value()) {
+			v->show_error(_("Failed to spawn browser"));
+			return false;
+		} else if (*exit_code != 0) {
+			v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+			return false;
+		}
+		return true;
+	} else {
+		v->show_error(_("No item selected!"));
 		return false;
 	}
-	return true;
 }
 
 void ItemListFormAction::finished_qna(Operation op)
