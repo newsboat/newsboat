@@ -103,124 +103,124 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 	}
 
 	bool comments_ignored = false;
-	std::string line;
-	do {
-		std::getline(f, line);
-		if (!f.eof() && line.length() > 0) {
-			LOG(Level::DEBUG,
-				"QueueLoader::reload: loaded `%s' from "
-				"queue file",
-				line);
-			std::vector<std::string> fields =
-				utils::tokenize_quoted(line);
-			bool url_found = false;
+	for (std::string line; std::getline(f, line); ) {
+		if (line.empty()) {
+			continue;
+		}
 
-			if (fields.empty()) {
-				if (!comments_ignored) {
-					std::cout << strprintf::fmt(
-							_("WARNING: Comment found "
-								"in %s. The queue file is regenerated "
-								"when podboat exits and comments will "
-								"be deleted. Press Enter to continue or "
-								"Ctrl+C to abort"),
-							queuefile)
-						<< std::endl;
-					std::cin.ignore();
-					comments_ignored = true;
-				}
-				continue;
+		LOG(Level::DEBUG,
+			"QueueLoader::reload: loaded `%s' from "
+			"queue file",
+			line);
+		std::vector<std::string> fields =
+			utils::tokenize_quoted(line);
+		bool url_found = false;
+
+		if (fields.empty()) {
+			if (!comments_ignored) {
+				std::cout << strprintf::fmt(
+						_("WARNING: Comment found "
+							"in %s. The queue file is regenerated "
+							"when podboat exits and comments will "
+							"be deleted. Press Enter to continue or "
+							"Ctrl+C to abort"),
+						queuefile)
+					<< std::endl;
+				std::cin.ignore();
+				comments_ignored = true;
 			}
+			continue;
+		}
 
-			for (const auto& dl : downloads.to_keep) {
-				if (fields[0] == dl.url()) {
-					LOG(Level::INFO,
-						"QueueLoader::reload: "
-						"found `%s' in old "
-						"vector",
-						fields[0]);
-					url_found = true;
-					break;
-				}
-			}
-
-			for (const auto& dl : downloads.to_delete) {
-				if (fields[0] == dl.url()) {
-					LOG(Level::INFO,
-						"QueueLoader::reload: "
-						"found `%s' in scheduled for deletion "
-						"vector",
-						fields[0]);
-					url_found = true;
-					break;
-				}
-			}
-
-			if (!url_found) {
+		for (const auto& dl : downloads.to_keep) {
+			if (fields[0] == dl.url()) {
 				LOG(Level::INFO,
-					"QueueLoader::reload: found "
-					"`%s' "
-					"nowhere -> storing to new "
+					"QueueLoader::reload: "
+					"found `%s' in old "
 					"vector",
-					line);
-				Download d(cb_require_view_update);
-				std::string fn;
-				if (fields.size() == 1) {
-					fn = get_filename(fields[0]);
-				} else {
-					fn = fields[1];
-				}
-				d.set_filename(fn);
-				if (access(fn.c_str(), F_OK) == 0) {
-					LOG(Level::INFO,
-						"QueueLoader::reload: "
-						"found `%s' on file "
-						"system "
-						"-> mark as already "
-						"downloaded",
-						fn);
-					if (fields.size() >= 3) {
-						if (fields[2] ==
-							"downloaded")
-							d.set_status(
-								DlStatus::
-								READY);
-						if (fields[2] ==
-							"played")
-							d.set_status(
-								DlStatus::
-								PLAYED);
-						if (fields[2] ==
-							"finished")
-							d.set_status(
-								DlStatus::
-								FINISHED);
-					} else
-						d.set_status(DlStatus::
-							ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
-				} else if (
-					access((fn +
-							ConfigContainer::
-							PARTIAL_FILE_SUFFIX)
-						.c_str(),
-						F_OK) == 0) {
-					LOG(Level::INFO,
-						"QueueLoader::reload: "
-						"found `%s' on file "
-						"system "
-						"-> mark as partially "
-						"downloaded",
-						fn +
-						ConfigContainer::
-						PARTIAL_FILE_SUFFIX);
-					d.set_status(DlStatus::
-						ALREADY_DOWNLOADED);
-				}
-
-				d.set_url(fields[0]);
-				downloads.to_keep.push_back(d);
+					fields[0]);
+				url_found = true;
+				break;
 			}
 		}
-	} while (!f.eof());
+
+		for (const auto& dl : downloads.to_delete) {
+			if (fields[0] == dl.url()) {
+				LOG(Level::INFO,
+					"QueueLoader::reload: "
+					"found `%s' in scheduled for deletion "
+					"vector",
+					fields[0]);
+				url_found = true;
+				break;
+			}
+		}
+
+		if (!url_found) {
+			LOG(Level::INFO,
+				"QueueLoader::reload: found "
+				"`%s' "
+				"nowhere -> storing to new "
+				"vector",
+				line);
+			Download d(cb_require_view_update);
+			std::string fn;
+			if (fields.size() == 1) {
+				fn = get_filename(fields[0]);
+			} else {
+				fn = fields[1];
+			}
+			d.set_filename(fn);
+			if (access(fn.c_str(), F_OK) == 0) {
+				LOG(Level::INFO,
+					"QueueLoader::reload: "
+					"found `%s' on file "
+					"system "
+					"-> mark as already "
+					"downloaded",
+					fn);
+				if (fields.size() >= 3) {
+					if (fields[2] ==
+						"downloaded")
+						d.set_status(
+							DlStatus::
+							READY);
+					if (fields[2] ==
+						"played")
+						d.set_status(
+							DlStatus::
+							PLAYED);
+					if (fields[2] ==
+						"finished")
+						d.set_status(
+							DlStatus::
+							FINISHED);
+				} else
+					d.set_status(DlStatus::
+						ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
+			} else if (
+				access((fn +
+						ConfigContainer::
+						PARTIAL_FILE_SUFFIX)
+					.c_str(),
+					F_OK) == 0) {
+				LOG(Level::INFO,
+					"QueueLoader::reload: "
+					"found `%s' on file "
+					"system "
+					"-> mark as partially "
+					"downloaded",
+					fn +
+					ConfigContainer::
+					PARTIAL_FILE_SUFFIX);
+				d.set_status(DlStatus::
+					ALREADY_DOWNLOADED);
+			}
+
+			d.set_url(fields[0]);
+			downloads.to_keep.push_back(d);
+		}
+	}
 }
 
 void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
