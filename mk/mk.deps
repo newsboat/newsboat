@@ -34,11 +34,11 @@ podboat.o: podboat.cpp config.h include/exception.h \
  include/configactionhandler.h include/configcontainer.h \
  include/download.h include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/keymap.h \
- include/queueloader.h include/pbview.h include/listwidget.h \
- include/listformatter.h include/regexmanager.h include/matcher.h \
- filter/FilterParser.h include/regexowner.h include/stflpp.h \
- include/textviewwidget.h include/utils.h 3rd-party/expected.hpp \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
+ include/queueloader.h 3rd-party/optional.hpp include/pbview.h \
+ include/listwidget.h include/listformatter.h include/regexmanager.h \
+ include/matcher.h filter/FilterParser.h include/regexowner.h \
+ include/stflpp.h include/textviewwidget.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 rss/atomparser.o: rss/atomparser.cpp rss/atomparser.h rss/rssparser.h \
  config.h rss/exception.h rss/feed.h rss/item.h rss/medianamespace.h \
@@ -229,7 +229,7 @@ src/download.o: src/download.cpp include/download.h config.h \
  include/configactionhandler.h include/configcontainer.h \
  include/download.h include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/keymap.h \
- include/queueloader.h
+ include/queueloader.h 3rd-party/optional.hpp
 src/downloadthread.o: src/downloadthread.cpp include/downloadthread.h \
  include/reloader.h include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
@@ -540,16 +540,16 @@ src/pbcontroller.o: src/pbcontroller.cpp include/pbcontroller.h \
  include/colormanager.h include/configactionhandler.h \
  include/configcontainer.h include/download.h include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/keymap.h \
- include/queueloader.h config.h include/configcontainer.h \
- include/configexception.h include/configparser.h include/globals.h \
- include/logger.h include/strprintf.h include/matcherexception.h \
+ include/queueloader.h 3rd-party/optional.hpp config.h \
+ include/configcontainer.h include/configexception.h \
+ include/configparser.h include/globals.h include/logger.h \
+ include/strprintf.h include/matcherexception.h \
  include/nullconfigactionhandler.h include/pbview.h include/listwidget.h \
  include/listformatter.h include/regexmanager.h include/matcher.h \
  filter/FilterParser.h include/regexowner.h include/stflpp.h \
  include/textviewwidget.h include/poddlthread.h include/queueloader.h \
  include/strprintf.h include/utils.h 3rd-party/expected.hpp \
- 3rd-party/optional.hpp include/logger.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
+ include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/configactionhandler.h include/keymap.h include/listwidget.h \
  include/listformatter.h include/regexmanager.h include/matcher.h \
@@ -559,8 +559,8 @@ src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/listformatter.h include/logger.h include/strprintf.h \
  include/pbcontroller.h include/configcontainer.h include/download.h \
  include/fslock.h target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h \
- include/queueloader.h include/strprintf.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
+ include/queueloader.h 3rd-party/optional.hpp include/strprintf.h \
+ include/utils.h 3rd-party/expected.hpp include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/poddlthread.o: src/poddlthread.cpp include/poddlthread.h \
  include/configcontainer.h include/configactionhandler.h \
@@ -568,10 +568,11 @@ src/poddlthread.o: src/poddlthread.cpp include/poddlthread.h \
  include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/queueloader.o: src/queueloader.cpp include/queueloader.h \
- include/configcontainer.h include/configactionhandler.h \
- include/download.h config.h include/configcontainer.h include/logger.h \
- include/strprintf.h include/stflpp.h include/strprintf.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
+ 3rd-party/optional.hpp include/configcontainer.h \
+ include/configactionhandler.h include/download.h config.h \
+ include/configcontainer.h include/logger.h include/strprintf.h \
+ include/stflpp.h include/strprintf.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/queuemanager.o: src/queuemanager.cpp include/queuemanager.h \
  include/configpaths.h include/cliargsparser.h \
@@ -916,11 +917,11 @@ test/opmlurlreader.o: test/opmlurlreader.cpp include/opmlurlreader.h \
  include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 test/queueloader.o: test/queueloader.cpp include/queueloader.h \
- include/configcontainer.h include/configactionhandler.h \
- include/download.h 3rd-party/catch.hpp test/test-helpers/chmod.h \
- test/test-helpers/misc.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h include/configcontainer.h \
- include/download.h
+ 3rd-party/optional.hpp include/configcontainer.h \
+ include/configactionhandler.h include/download.h 3rd-party/catch.hpp \
+ test/test-helpers/chmod.h test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ include/configcontainer.h include/download.h
 test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h 3rd-party/catch.hpp \

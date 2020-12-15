@@ -144,12 +144,8 @@ struct ReadTextFileError {
 	ReadTextFileErrorKind kind;
 	std::string message;
 };
-// We define an alias for this to work around a bug in AStyle: the poor
-// formatter can't decide how to split the function declaration into multiple
-// lines, and re-formats it differently on each invocation.
-using ReadTextFileResult =
-	nonstd::expected<std::vector<std::string>, ReadTextFileError>;
-ReadTextFileResult read_text_file(const std::string& filename);
+nonstd::expected<std::vector<std::string>, ReadTextFileError> read_text_file(
+	const std::string& filename);
 
 void remove_soft_hyphens(std::string& text);
 

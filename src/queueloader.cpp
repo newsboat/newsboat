@@ -31,15 +31,32 @@ QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
 void QueueLoader::reload(std::vector<Download>& downloads,
 	bool also_remove_finished) const
 {
-	std::vector<Download> dltemp;
-	std::vector<Download> deletion_list;
+	CategorizedDownloads categorized_downloads;
+	auto res = categorize_downloads(downloads, also_remove_finished);
+	if (!res.has_value()) {
+		return;
+	}
+	categorized_downloads = res.value();
+
+	update_from_queue_file(categorized_downloads);
+	write_queue_file(categorized_downloads);
+	delete_played_files(categorized_downloads);
+	downloads = std::move(categorized_downloads.to_keep);
+}
+
+nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloads(
+	const std::vector<Download>& downloads,
+	bool also_remove_finished)
+{
+	CategorizedDownloads result;
+
 	for (const auto& dl : downloads) {
 		// we are not allowed to reload if a download is in progress!
 		if (dl.status() == DlStatus::DOWNLOADING) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: aborting reload due to "
 				"DlStatus::DOWNLOADING status");
-			return;
+			return nonstd::nullopt;
 		}
 		bool keep_entry = false;
 		switch (dl.status()) {
@@ -69,12 +86,17 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 		}
 
 		if (keep_entry) {
-			dltemp.push_back(dl);
+			result.to_keep.push_back(dl);
 		} else {
-			deletion_list.push_back(dl);
+			result.to_delete.push_back(dl);
 		}
 	}
 
+	return result;
+}
+
+void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
+{
 	std::fstream f(queuefile, std::fstream::in);
 	bool comments_ignored = false;
 	if (f.is_open()) {
@@ -106,7 +128,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 					continue;
 				}
 
-				for (const auto& dl : dltemp) {
+				for (const auto& dl : downloads.to_keep) {
 					if (fields[0] == dl.url()) {
 						LOG(Level::INFO,
 							"QueueLoader::reload: "
@@ -118,7 +140,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 					}
 				}
 
-				for (const auto& dl : deletion_list) {
+				for (const auto& dl : downloads.to_delete) {
 					if (fields[0] == dl.url()) {
 						LOG(Level::INFO,
 							"QueueLoader::reload: "
@@ -192,16 +214,19 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 					}
 
 					d.set_url(fields[0]);
-					dltemp.push_back(d);
+					downloads.to_keep.push_back(d);
 				}
 			}
 		} while (!f.eof());
 		f.close();
 	}
+}
 
-	f.open(queuefile, std::fstream::out);
+void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
+{
+	std::fstream f(queuefile, std::fstream::out);
 	if (f.is_open()) {
-		for (const auto& dl : dltemp) {
+		for (const auto& dl : downloads.to_keep) {
 			f << dl.url() << " " << utils::quote(dl.filename());
 			if (dl.status() == DlStatus::READY) {
 				f << " downloaded";
@@ -216,9 +241,13 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 		}
 		f.close();
 	}
+}
 
+void QueueLoader::delete_played_files(const CategorizedDownloads& downloads)
+const
+{
 	if (cfg.get_configvalue_as_bool("delete-played-files")) {
-		for (const auto& dl : deletion_list) {
+		for (const auto& dl : downloads.to_delete) {
 			const std::string filename = dl.filename();
 			LOG(Level::INFO,
 				"Deleting file %s",
@@ -232,8 +261,6 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 			}
 		}
 	}
-
-	downloads = dltemp;
 }
 
 std::string QueueLoader::get_filename(const std::string& str) const
