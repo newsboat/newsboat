@@ -150,9 +150,9 @@ static const std::vector<OpDesc> opdescs = {
 	},
 	{
 		OP_OPENINBROWSER_NONINTERACTIVE,
-		"open-in-noninteractive-browser",
+		"open-in-browser-noninteractively",
 		"",
-		_("Open URL of article, feed, or entry in non-interactive browser"),
+		_("Open URL of article, feed, or entry in a browser, non-interactively"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
