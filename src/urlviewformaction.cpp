@@ -61,33 +61,13 @@ bool UrlViewFormAction::process_operation(Operation op,
 	case OP_OPENINBROWSER:
 	case OP_OPENBROWSER_AND_MARK:
 	case OP_OPEN: {
-		if (!links.empty()) {
-			const unsigned int pos = urls_list.get_position();
-			v->set_status(_("Starting browser..."));
-			const std::string feedurl = (feed != nullptr ?
-					feed->rssurl() :
-					"");
-			const bool interactive = true;
-			v->open_in_browser(links[pos].first, feedurl, interactive);
-			v->set_status("");
-		} else {
-			v->show_error(_("No links available!"));
-		}
+		const bool interactive = true;
+		open_current_position_in_browser(interactive);
 	}
 	break;
 	case OP_OPENINBROWSER_NONINTERACTIVE: {
-		if (!links.empty()) {
-			const unsigned int pos = urls_list.get_position();
-			v->set_status(_("Starting browser..."));
-			const std::string feedurl = (feed != nullptr ?
-					feed->rssurl() :
-					"");
-			const bool interactive = false;
-			v->open_in_browser(links[pos].first, feedurl, interactive);
-			v->set_status("");
-		} else {
-			v->show_error(_("No links available!"));
-		}
+		const bool interactive = false;
+		open_current_position_in_browser(interactive);
 	}
 	break;
 	case OP_BOOKMARK: {
@@ -112,13 +92,9 @@ bool UrlViewFormAction::process_operation(Operation op,
 		unsigned int idx = op - OP_OPEN_URL_1;
 
 		if (idx < links.size()) {
-			v->set_status(_("Starting browser..."));
-			const std::string feedurl = (feed != nullptr ?
-					feed->rssurl() :
-					"");
+			const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
 			const bool interactive = true;
 			v->open_in_browser(links[idx].first, feedurl, interactive);
-			v->set_status("");
 		}
 	}
 	break;
@@ -142,6 +118,17 @@ bool UrlViewFormAction::process_operation(Operation op,
 		v->pop_current_formaction();
 	}
 	return true;
+}
+
+void UrlViewFormAction::open_current_position_in_browser(bool interactive)
+{
+	if (!links.empty()) {
+		const unsigned int pos = urls_list.get_position();
+		const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
+		v->open_in_browser(links[pos].first, feedurl, interactive);
+	} else {
+		v->show_error(_("No links available!"));
+	}
 }
 
 void UrlViewFormAction::prepare()
