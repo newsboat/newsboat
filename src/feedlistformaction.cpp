@@ -210,30 +210,14 @@ REDO:
 		}
 	}
 	break;
-	case OP_OPENINBROWSER:
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
-			std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
-					pos);
-			if (feed) {
-				const bool interactive = true;
-				return open_feed_in_browser(feed, interactive);
-			}
-		} else {
-			v->show_error(_("No feed selected!"));
-		}
-		break;
-	case OP_OPENINBROWSER_NONINTERACTIVE:
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
-			std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
-					pos);
-			if (feed) {
-				const bool interactive = false;
-				return open_feed_in_browser(feed, interactive);
-			}
-		} else {
-			v->show_error(_("No feed selected!"));
-		}
-		break;
+	case OP_OPENINBROWSER: {
+		const bool interactive = true;
+		return open_position_in_browser(pos, interactive);
+	}
+	case OP_OPENINBROWSER_NONINTERACTIVE: {
+		const bool interactive = false;
+		return open_position_in_browser(pos, interactive);
+	}
 	case OP_OPENALLUNREADINBROWSER:
 		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			std::shared_ptr<RssFeed> feed =
@@ -538,46 +522,58 @@ REDO:
 	return true;
 }
 
-bool FeedListFormAction::open_feed_in_browser(const std::shared_ptr<RssFeed>&
-	feed, bool interactive) const
+bool FeedListFormAction::open_position_in_browser(unsigned int pos,
+	bool interactive) const
 {
-	if (!feed->is_query_feed()) {
-		LOG(Level::INFO,
-			"FeedListFormAction: opening feed %s",
-			feed->link());
+	if (visible_feeds.empty() || pos >= visible_feeds.size()) {
+		v->show_error(_("No feed selected!"));
+		return false;
+	}
 
-		std::string url;
-		if (!feed->link().empty()) {
-			url = feed->link();
-		} else if (!feed->rssurl().empty()) {
-			url = feed->rssurl();
-		} else {
-			// rssurl can't be empty, so if we got to this branch,
-			// something is clearly wrong with Newsboat internals.
-			// That's why we write a message to the log, and not
-			// just display it to the user.
-			LOG(Level::INFO,
-				"FeedListFormAction: cannot open feed in browser "
-				"because both `link' and `rssurl' fields are "
-				"empty");
-		}
+	std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
+			pos);
+	if (feed == nullptr) {
+		v->show_error(_("No feed selected!"));
+		return false;
+	}
 
-		if (!url.empty()) {
-			const std::string feedurl = feed->rssurl();
-			const auto exit_code = v->open_in_browser(url, feedurl, interactive);
-			if (!exit_code.has_value()) {
-				v->show_error(_("Failed to spawn browser"));
-				return false;
-			} else if (*exit_code != 0) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-				return false;
-			}
-		}
-		return true;
-	} else {
+	if (feed->is_query_feed()) {
 		v->show_error(_("Cannot open query feeds in the browser!"));
 		return false;
 	}
+
+	LOG(Level::INFO, "FeedListFormAction: opening feed %s, interactive: %s",
+		feed->link(),
+		interactive ? "true" : "false");
+
+	std::string url;
+	if (!feed->link().empty()) {
+		url = feed->link();
+	} else if (!feed->rssurl().empty()) {
+		url = feed->rssurl();
+	} else {
+		// rssurl can't be empty, so if we got to this branch,
+		// something is clearly wrong with Newsboat internals.
+		// That's why we write a message to the log, and not
+		// just display it to the user.
+		LOG(Level::INFO,
+			"FeedListFormAction: cannot open feed in browser "
+			"because both `link' and `rssurl' fields are "
+			"empty");
+	}
+
+	if (!url.empty()) {
+		const std::string feedurl = feed->rssurl();
+		const auto exit_code = v->open_in_browser(url, feedurl, interactive);
+		if (!exit_code.has_value()) {
+			v->show_error(_("Failed to spawn browser"));
+			return false;
+		} else if (*exit_code != 0) {
+			v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+			return false;
+		}
+	}
+	return true;
 }
 
 void FeedListFormAction::update_visible_feeds(
