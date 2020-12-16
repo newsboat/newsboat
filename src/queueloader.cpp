@@ -153,47 +153,49 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			}
 		}
 
-		if (!url_found) {
+		if (url_found) {
+			continue;
+		}
+
+		LOG(Level::INFO,
+			"QueueLoader::reload: found `%s' nowhere -> storing to new vector",
+			line);
+		Download d(cb_require_view_update);
+		std::string fn;
+		if (fields.size() == 1) {
+			fn = get_filename(fields[0]);
+		} else {
+			fn = fields[1];
+		}
+		d.set_filename(fn);
+		if (access(fn.c_str(), F_OK) == 0) {
 			LOG(Level::INFO,
-				"QueueLoader::reload: found `%s' nowhere -> storing to new vector",
-				line);
-			Download d(cb_require_view_update);
-			std::string fn;
-			if (fields.size() == 1) {
-				fn = get_filename(fields[0]);
-			} else {
-				fn = fields[1];
-			}
-			d.set_filename(fn);
-			if (access(fn.c_str(), F_OK) == 0) {
-				LOG(Level::INFO,
-					"QueueLoader::reload: found `%s' on file system -> mark as already downloaded",
-					fn);
-				if (fields.size() >= 3) {
-					if (fields[2] == "downloaded") {
-						d.set_status(DlStatus::READY);
-					}
-					if (fields[2] == "played") {
-						d.set_status(DlStatus::PLAYED);
-					}
-					if (fields[2] == "finished") {
-						d.set_status(DlStatus::FINISHED);
-					}
-				} else {
-					// TODO: scrap DlStatus::ALREADY_DOWNLOADED state
-					d.set_status(DlStatus::ALREADY_DOWNLOADED);
+				"QueueLoader::reload: found `%s' on file system -> mark as already downloaded",
+				fn);
+			if (fields.size() >= 3) {
+				if (fields[2] == "downloaded") {
+					d.set_status(DlStatus::READY);
 				}
-			} else if (access((fn + ConfigContainer::PARTIAL_FILE_SUFFIX).c_str(),
-					F_OK) == 0) {
-				LOG(Level::INFO,
-					"QueueLoader::reload: found `%s' on file system -> mark as partially downloaded",
-					fn + ConfigContainer::PARTIAL_FILE_SUFFIX);
+				if (fields[2] == "played") {
+					d.set_status(DlStatus::PLAYED);
+				}
+				if (fields[2] == "finished") {
+					d.set_status(DlStatus::FINISHED);
+				}
+			} else {
+				// TODO: scrap DlStatus::ALREADY_DOWNLOADED state
 				d.set_status(DlStatus::ALREADY_DOWNLOADED);
 			}
-
-			d.set_url(fields[0]);
-			downloads.to_keep.push_back(d);
+		} else if (access((fn + ConfigContainer::PARTIAL_FILE_SUFFIX).c_str(),
+				F_OK) == 0) {
+			LOG(Level::INFO,
+				"QueueLoader::reload: found `%s' on file system -> mark as partially downloaded",
+				fn + ConfigContainer::PARTIAL_FILE_SUFFIX);
+			d.set_status(DlStatus::ALREADY_DOWNLOADED);
 		}
+
+		d.set_url(fields[0]);
+		downloads.to_keep.push_back(d);
 	}
 }
 
