@@ -11,10 +11,19 @@
 
 namespace podboat {
 
+/// Synchronizes Podboat's array of downloads with the queue file on the
+/// filesystem.
 class QueueLoader {
 public:
-	QueueLoader(const std::string& file, const newsboat::ConfigContainer& cfg,
+	/// Create a loader that will work with the queue file at \a filepath.
+	/// `Download` objects will be given \a cb_require_view_update as an
+	/// argument.
+	QueueLoader(const std::string& filepath, const newsboat::ConfigContainer& cfg,
 		std::function<void()> cb_require_view_update);
+
+	/// Synchronize the queue file with \a downloads. Downloads with `DELETED`
+	/// status are removed. If \a also_remove_finished is `true`, `FINISHED`
+	/// downloads are removed too.
 	void reload(std::vector<Download>& downloads,
 		bool also_remove_finished = false) const;
 

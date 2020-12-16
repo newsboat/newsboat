@@ -20,9 +20,10 @@ using namespace newsboat;
 
 namespace podboat {
 
-QueueLoader::QueueLoader(const std::string& file, const ConfigContainer& cfg_,
+QueueLoader::QueueLoader(const std::string& filepath,
+	const ConfigContainer& cfg_,
 	std::function<void()> cb_require_view_update_)
-	: queuefile(file)
+	: queuefile(filepath)
 	, cfg(cfg_)
 	, cb_require_view_update(cb_require_view_update_)
 {
