@@ -280,7 +280,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 void PbView::handle_resize()
 {
 	std::vector<std::reference_wrapper<newsboat::Stfl::Form>> forms = {dllist_form, help_form};
-	for (const auto form : forms) {
+	for (const auto& form : forms) {
 		form.get().run(-3);
 	}
 	ctrl->set_view_update_necessary(true);

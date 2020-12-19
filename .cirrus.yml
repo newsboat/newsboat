@@ -91,7 +91,7 @@ freebsd_task:
 
 macos_task:
     osx_instance:
-        image: catalina-base
+        image: big-sur-base
 
     cargo_cache: *cargo_cache
 
@@ -132,19 +132,26 @@ macos_task:
     before_cache_script: *before_cache_script
 
     matrix:
-        - name: macOS Clang Rust stable
+        - name: macOS Catalina, Clang, Rust 1.48.0
           env:
               CC: clang
               CXX: clang++
               RUST: 1.48.0
-        - name: macOS GCC Rust stable
+          osx_instance:
+              image: catalina-base
+        - name: macOS Big Sur, Clang, Rust 1.48.0
+          env:
+              CC: clang
+              CXX: clang++
+              RUST: 1.48.0
+        - name: macOS Big Sur, GCC, Rust 1.48.0
           env:
               CC: gcc
               CXX: g++
               RUST: 1.48.0
         # This job tests our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: macOS GCC Rust 1.44.0
+        - name: macOS Big Sur, GCC, Rust 1.44.0
           env:
               CC: gcc
               CXX: g++
