@@ -1,15 +1,15 @@
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
-    character::complete::{space0, space1},
+    character::complete::one_of,
     combinator::{complete, eof, map, recognize, value},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::delimited,
+    sequence::{delimited, preceded},
     IResult,
 };
 
 fn unquoted_token(input: &str) -> IResult<&str, String> {
-    let mut parser = map(recognize(is_not(" ;")), String::from);
+    let mut parser = map(recognize(is_not("\t ;")), String::from);
 
     parser(input)
 }
@@ -38,17 +38,18 @@ fn token(input: &str) -> IResult<&str, String> {
 }
 
 fn operation_with_args(input: &str) -> IResult<&str, Vec<String>> {
-    let mut parser = separated_list1(space1, token);
+    let mut parser = separated_list1(many1(one_of(" \t")), token);
     parser(input)
 }
 
 fn semicolon(input: &str) -> IResult<&str, &str> {
-    delimited(space0, tag(";"), space0)(input)
+    delimited(many0(one_of(" \t")), tag(";"), many0(one_of(" \t")))(input)
 }
 
 fn operation_sequence(input: &str) -> IResult<&str, Vec<Vec<String>>> {
     let parser = separated_list0(many1(semicolon), operation_with_args);
     let parser = delimited(many0(semicolon), parser, many0(semicolon));
+    let parser = preceded(many0(one_of(" \t")), parser);
 
     let mut parser = complete(parser);
 
@@ -290,6 +291,22 @@ mod tests {
         assert_eq!(
             tokenize_operation_sequence(r#"set a b"#).unwrap(),
             vec![vec!["set", "a", "b"]]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_ignores_leading_and_trailing_whitespace() {
+        assert_eq!(
+            tokenize_operation_sequence(" \t set a b \t   ").unwrap(),
+            vec![vec!["set", "a", "b"]]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_allows_tabs_between_arguments() {
+        assert_eq!(
+            tokenize_operation_sequence("\tset\ta\tb\t;\topen\t").unwrap(),
+            vec![vec!["set", "a", "b"], vec!["open"]]
         );
     }
 }
