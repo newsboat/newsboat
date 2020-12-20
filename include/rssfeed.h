@@ -157,10 +157,6 @@ public:
 	{
 		idx = i;
 	}
-	unsigned int get_index()
-	{
-		return idx;
-	}
 
 	void set_order(unsigned int x)
 	{
