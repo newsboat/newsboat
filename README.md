@@ -116,8 +116,8 @@ Support
 -------
 
 * Check out our
-  [documentation](https://newsboat.org/releases/2.21/docs/newsboat.html) and
-  [FAQ](https://newsboat.org/releases/2.21/docs/faq.html)
+  [documentation](https://newsboat.org/releases/2.22/docs/newsboat.html) and
+  [FAQ](https://newsboat.org/releases/2.22/docs/faq.html)
 * Report security vulnerabilities to security@newsboat.org. Please encrypt your emails to
   [PGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp) if you can.
 * Report bugs and ask questions on

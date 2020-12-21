@@ -7,14 +7,14 @@ master repository and shell access to newsboat.org.
 
 0. Pull all the latest changes from the main repo.
 1. Update CHANGELOG
-    * Consult `git log --reverse PREVIOUS_VERISION..`
+    * Consult `git log --reverse PREVIOUS_VERISION..`, search for " Merge "
     * Mention issue number ("#X" for Newsboat issues, full link to issue tracker
         for Newsbeuter issues)
     * Mention the name of contributor
     * Acknowledge contributions from people whose changes didn't make it into
         the lists. The full list of contributors can be got with:
         ```
-        $ git shortlog PREVIOUS_VERSION.. | egrep -v '^(\s|$)'
+        $ git shortlog PREVIOUS_VERSION.. | egrep -v '^(\s|$) | sed -r 's# \([[:digit:]]+\):$##''
         ```
 2. Update version:
     * rust/libnewsboat/Cargo.toml

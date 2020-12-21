@@ -1,13 +1,91 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2020-12-20
+## 2.22 - 2020-12-21
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes David Brito and panvicka.
 
 ### Added
+
+- `confirm-mark-all-feeds-read` setting, which makes Newsboat ask for
+    confirmation before marking all the feeds as read (#1215) (Tarishi Jain)
+- Command line autocompletion in the save dialog (#893) (Dennis van der Schagt)
+- Support for ^U, ^K, ^G, and ^W editing keys (as in readline and Emacs) in
+    command line in the save dialog (Dennis van der Schagt)
+- Support for RSS Media extension in Atom feeds (#595) (Dennis van der Schagt)
+- New, more detailed, documentation chapters on macros and running external
+    commands (A1RO)
+- User-contributed script that exports feeds with their tags in the OPML format:
+    contrib/exportOPMLWithTags.py (jartigag)
+- Help dialog in the URLs view (#1218) (Dennis van der Schagt)
+- Handling of terminal resizes for all dialogs (#389, #390) (Dennis van der
+    Schagt)
+- `goto-title` operation, which selects a feed with a given title (#888, #1135)
+    (Dennis van der Schagt)
+- `--cleanup` command-line flag, which does the same as `cleanup-on-quit`
+    option (#1182) (Dennis van der Schagt)
+- `check` and `ci-check` Makefile targets. Both run C++ and Rust test suites
+    consecutively, but the former fails early. Use `check` locally where
+    re-running tests is quick, and use `ci-check` in CI where re-running tests
+    usually means re-building everything first (#896) (Alexander Batischev)
+- Command line support in the help dialog (Dennis van der Schagt)
+- "(localized)" marks in documentation for all settings with internationalized
+    default values (#1270) (Amrit Brar)
+- `%F` placeholder in `browser` setting, which is *always* replaced by the
+    feed's URL (unlike `%u`, which depends on the context in which the browser
+    is invoked) (#423) (Dennis van der Schagt)
+- Dumping of `ignore-article` rules with `dumpconfig` command (in Newsboat's
+    internal command line) (#635) (Dennis van der Schagt)
+- `%L` placeholder in `datetime-format` setting, which turns into "X days ago"
+    string explaining when the article was published (#1323) (Amrit Brar)
+- Support for escaped double quotes in arguments to `set` operation when used in
+    macros (#1345) (Dennis van der Schagt)
+- Podboat: error message if the podcast file can't be written onto disk (#1209)
+    (Nicholas Defranco)
+
 ### Changed
-### Deprecated
-### Removed
+
+- Abort startup if the urls file or config file is not in UTF-8 encoding. This
+    limitation was effectively in place for a couple releases already, but
+    Newsboat crashed instead of displaying an error message. We intend to relax
+    the requirement again, but for now, we choose to be upfront about it rather
+    than crashing (#723, #844) (Dennis van der Schagt, Alexander Batischev)
+- `save-all` operation no longer provides "yes for all" and "no for all" options
+    when there is only one conflict to resolve (#657) (saleh)
+- Config parser now allows to have tab characters between `macro` arguments;
+    they will be treated as space (Dennis van der Schagt)
+- Updated vendored libraries: Catch2 to 2.13.3, martinmoene/optional-lite
+    to 3.4.0, martinmoene/expected-lite to 0.5.0
+- Updated translations: Dutch (Dennis van der Schagt), French (tkerdonc), German
+    (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian
+    (Alexander Batischev), Turkish (Emir Sarı), Ukrainian (Alexander Batischev)
+
 ### Fixed
-### Security
+
+- Whitespace not being consolidated in item titles (#1227) (Dennis van der
+    Schagt)
+- Misleading error message when the urls file exists, but can't be opened (#439)
+    (Dennis van der Schagt)
+- Newsboat processing the leftovers of `stdin` after running `open-in-browser`
+    operation (#26, #63, #1094) (Dennis van der Schagt)
+- `mark-feed-read` operation not marking articles as read on a remote service
+    when the operation is invoked in the query feed (#220) (Dennis van der
+    Schagt)
+- `run-on-startup` setting preventing Podboat from starting (#1288) (Dennis van
+    der Schagt)
+- `scrolloff` setting being ignored when opening a feed with lots of read
+    articles before the unread one (#1293) (Dennis van der Schagt)
+- Memory corruption while rendering an article with JavaScript that contains
+    HTML (#1300) (Alexander Batischev)
+- Podboat help dialog crashing if `BACKSPACE` is bound (#1139) (Dennis van der
+    Schagt)
+- Being unable to run a second Newsboat instance with `--cache-file` switch if
+    `cache-file` setting is used (#1318) (Dennis van der Schagt)
+- Misleading "an instance is already running" message when a lock file can't be
+    created or written to (#314) (Dennis van der Schagt)
+- Failing to parse macros which contain semicolons in operations' arguments
+    (#1200) (Alexander Batischev)
+- Not installing some of the contrib scripts (Alexander Batischev)
 
 
 
@@ -15,7 +93,6 @@
 
 Lists below only mention user-visible changes, but the full list of contributors
 for this release also includes Ivan Tham.
-
 
 ### Added
 
