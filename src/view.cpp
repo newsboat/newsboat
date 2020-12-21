@@ -108,7 +108,8 @@ void View::set_status(const std::string& msg)
 	std::lock_guard<std::mutex> lock(mtx);
 
 	auto fa = get_current_formaction();
-	if (fa) {
+	if (fa != nullptr
+		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
 		Stfl::Form& form = fa->get_form();
 		form.set("msg", msg);
 		form.run(-1);
@@ -924,7 +925,8 @@ void View::prepare_query_feed(std::shared_ptr<RssFeed> feed)
 void View::force_redraw()
 {
 	std::shared_ptr<FormAction> fa = get_current_formaction();
-	if (fa != nullptr) {
+	if (fa != nullptr
+		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
 		fa->set_redraw(true);
 		fa->prepare();
 		fa->get_form().run(-1);
