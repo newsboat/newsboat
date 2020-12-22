@@ -20,7 +20,6 @@ class Cache;
 class RssFeed : public Matchable {
 public:
 	explicit RssFeed(Cache* c, const std::string& rssurl);
-	RssFeed();
 	~RssFeed() override;
 	std::string title_raw() const
 	{
