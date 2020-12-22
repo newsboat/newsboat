@@ -42,7 +42,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	Cache rsscache(":memory:", &cfg);
 	cfg.set_configvalue("pager", "cat %f > " + pagerfile.get_path());
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
@@ -79,7 +79,7 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 	RegexManager rxman;
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	feed->add_item(item);
 
@@ -120,7 +120,7 @@ TEST_CASE(
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
 	item->set_unread(true);
@@ -157,7 +157,7 @@ TEST_CASE(
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
 	item->set_unread(true);
@@ -190,7 +190,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
 	feed->add_item(item);
@@ -224,7 +224,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
 	feed->add_item(item);
@@ -260,7 +260,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	for (int i = 0; i < itemCount; i++) {
 		std::shared_ptr<RssItem> item =
@@ -344,7 +344,7 @@ TEST_CASE(
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	for (unsigned int i = 0; i < itemCount; i++) {
 		std::shared_ptr<RssItem> item =
@@ -434,7 +434,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
 	item->set_link(test_url);
@@ -494,7 +494,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_title(feed_title);
 
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
@@ -536,7 +536,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
@@ -638,7 +638,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
@@ -676,7 +676,7 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 
 	feed->add_item(item);
@@ -702,7 +702,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
@@ -736,7 +736,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_title(first_article_title);
@@ -778,7 +778,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	feed->add_item(item);
@@ -828,7 +828,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	v.set_config_container(&cfg);
 	c.set_view(&v);
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 
 	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
 	item->set_link(test_url);
@@ -873,7 +873,7 @@ TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
 	std::shared_ptr<RssItem> item3 = std::make_shared<RssItem>(&rsscache);
 	item3->set_link("https://example.com/3");
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->add_item(item1);
 	feed->add_item(item2);
 	feed->add_item(item3);

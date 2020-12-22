@@ -130,7 +130,7 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[Cache]")
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 
-	test_feed = std::make_shared<RssFeed>(&rsscache);
+	test_feed = std::make_shared<RssFeed>(&rsscache, "");
 	test_feed->set_title("Test feed");
 	auto test_feed_url = "http://example.com/atom.xml";
 	test_feed->set_link(test_feed_url);
@@ -913,8 +913,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 
-	auto feed = std::make_shared<RssFeed>(rsscache.get());
-	feed->set_rssurl("query:All unread:unread = \"yes\"");
+	auto feed = std::make_shared<RssFeed>(rsscache.get(),
+			"query:All unread:unread = \"yes\"");
 
 	REQUIRE_NOTHROW(rsscache->externalize_rssfeed(feed, false));
 

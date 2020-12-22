@@ -56,16 +56,14 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 		FeedContainer feeds;
 
 		std::shared_ptr<RssFeed> feed =
-			std::make_shared<RssFeed>(&rsscache);
+			std::make_shared<RssFeed>(&rsscache, "https://example.com/feed1.xml");
 		feed->set_title("Feed 1");
 		feed->set_link("https://example.com/feed1/");
-		feed->set_rssurl("https://example.com/feed1.xml");
 		feeds.add_feed(std::move(feed));
 
-		feed = std::make_shared<RssFeed>(&rsscache);
+		feed = std::make_shared<RssFeed>(&rsscache, "https://example.com/feed2.xml");
 		feed->set_title("Feed 2");
 		feed->set_link("https://example.com/feed2/");
-		feed->set_rssurl("https://example.com/feed2.xml");
 		feeds.add_feed(std::move(feed));
 
 		const std::string expectedOpmlText(

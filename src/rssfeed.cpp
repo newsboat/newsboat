@@ -27,8 +27,9 @@
 
 namespace newsboat {
 
-RssFeed::RssFeed(Cache* c)
+RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 	: pubDate_(0)
+	, rssurl_(rssurl)
 	, ch(c)
 	, search_feed(false)
 	, is_rtl_(false)
@@ -36,6 +37,42 @@ RssFeed::RssFeed(Cache* c)
 	, order(0)
 	, status_(DlStatus::SUCCESS)
 {
+	if (utils::is_query_url(rssurl_)) {
+		/* Query string looks like this:
+		 *
+		 * query:Title:unread = "yes" and age between 0:7
+		 *
+		 * So we split by colons to get title and the query itself. */
+		const auto tokens = utils::tokenize(rssurl_, ":");
+
+		if (tokens.size() < 3) {
+			throw _s("too few arguments");
+		}
+
+		/* "Between" operator requires a range, which contains a colon.
+		 * Since we've been tokenizing by colon, we might've
+		 * inadertently split the query itself. Let's reconstruct it! */
+		auto query = tokens[2];
+		for (auto it = tokens.begin() + 3; it != tokens.end(); ++it) {
+			query += ":";
+			query += *it;
+		}
+		// Have to check if the result is a valid query, just in case
+		Matcher m;
+		if (!m.parse(query)) {
+			throw strprintf::fmt(
+				_("`%s' is not a valid filter expression"),
+				query);
+		}
+
+		LOG(Level::DEBUG,
+			"RssFeed constructor: query name = `%s' expr = `%s'",
+			tokens[1],
+			query);
+
+		set_title(tokens[1]);
+		this->query = query;
+	}
 }
 
 RssFeed::~RssFeed()
@@ -196,47 +233,6 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 	std::sort(items_.begin(), items_.end());
 
 	sm.stopover("sorting");
-}
-
-void RssFeed::set_rssurl(const std::string& u)
-{
-	rssurl_ = u;
-	if (utils::is_query_url(u)) {
-		/* Query string looks like this:
-		 *
-		 * query:Title:unread = "yes" and age between 0:7
-		 *
-		 * So we split by colons to get title and the query itself. */
-		const auto tokens = utils::tokenize(u, ":");
-
-		if (tokens.size() < 3) {
-			throw _s("too few arguments");
-		}
-
-		/* "Between" operator requires a range, which contains a colon.
-		 * Since we've been tokenizing by colon, we might've
-		 * inadertently split the query itself. Let's reconstruct it! */
-		auto query = tokens[2];
-		for (auto it = tokens.begin() + 3; it != tokens.end(); ++it) {
-			query += ":";
-			query += *it;
-		}
-		// Have to check if the result is a valid query, just in case
-		Matcher m;
-		if (!m.parse(query)) {
-			throw strprintf::fmt(
-				_("`%s' is not a valid filter expression"),
-				query);
-		}
-
-		LOG(Level::DEBUG,
-			"RssFeed::set_rssurl: query name = `%s' expr = `%s'",
-			tokens[1],
-			query);
-
-		set_title(tokens[1]);
-		this->query = query;
-	}
 }
 
 void RssFeed::sort(const ArticleSortStrategy& sort_strategy)
