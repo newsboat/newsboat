@@ -22,6 +22,7 @@ mod ffi {
         fn is_valid_attribute(attribute: &str) -> bool;
         fn gentabs(string: &str) -> usize;
         fn run_command(cmd: &str, param: &str);
+        fn strnaturalcmp(a: &str, b: &str) -> isize;
     }
 }
 
@@ -79,7 +80,7 @@ fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> boo
     }
 }
 
-pub fn read_text_file(
+fn read_text_file(
     filename: String,
     contents: &mut Vec<String>,
     error_line_number: &mut u64,
@@ -110,6 +111,15 @@ pub fn read_text_file(
             }
             false
         }
+    }
+}
+
+fn strnaturalcmp(a: &str, b: &str) -> isize {
+    use std::cmp::Ordering;
+    match utils::strnaturalcmp(a, b) {
+        Ordering::Less => -1,
+        Ordering::Equal => 0,
+        Ordering::Greater => 1,
     }
 }
 
@@ -244,20 +254,6 @@ pub extern "C" fn rs_getcwd() -> *mut c_char {
         let result = CString::new(result.into_os_string().into_vec()).unwrap();
 
         result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_strnaturalcmp(a: *const c_char, b: *const c_char) -> isize {
-    use std::cmp::Ordering;
-    abort_on_panic(|| {
-        let a = CStr::from_ptr(a).to_string_lossy();
-        let b = CStr::from_ptr(b).to_string_lossy();
-        match utils::strnaturalcmp(&a, &b) {
-            Ordering::Less => -1,
-            Ordering::Equal => 0,
-            Ordering::Greater => 1,
-        }
     })
 }
 

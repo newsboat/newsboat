@@ -158,8 +158,6 @@ using ReadTextFileResult =
 	nonstd::expected<std::vector<std::string>, ReadTextFileError>;
 ReadTextFileResult read_text_file(const std::string& filename);
 
-int strnaturalcmp(const std::string& a, const std::string& b);
-
 void remove_soft_hyphens(std::string& text);
 
 bool is_valid_podcast_type(const std::string& mimetype);

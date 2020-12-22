@@ -32,7 +32,9 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 				return a->get_firsttag().length() >
 					b->get_firsttag().length();
 			}
-			return utils::strnaturalcmp(a->get_firsttag(), b->get_firsttag()) < 0;
+			const auto left = a->get_firsttag();
+			const auto right = b->get_firsttag();
+			return utils::strnaturalcmp(left, right) < 0;
 		});
 		break;
 	case FeedSortMethod::TITLE:
@@ -40,7 +42,9 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			feeds.end(),
 			[](std::shared_ptr<RssFeed> a,
 		std::shared_ptr<RssFeed> b) {
-			return utils::strnaturalcmp(a->title(), b->title()) < 0;
+			const auto left = a->title();
+			const auto right = b->title();
+			return utils::strnaturalcmp(left, right) < 0;
 		});
 		break;
 	case FeedSortMethod::ARTICLE_COUNT:

@@ -27,8 +27,6 @@ std::uint8_t rs_run_interactively(const char* command, const char* caller,
 
 char* rs_getcwd();
 
-int rs_strnaturalcmp(const char* a, const char* b);
-
 size_t rs_strwidth(const char* str);
 
 size_t rs_strwidth_stfl(const char* str);

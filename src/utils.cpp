@@ -922,11 +922,6 @@ utils::ReadTextFileResult utils::read_text_file( const std::string& filename)
 	}
 }
 
-int utils::strnaturalcmp(const std::string& a, const std::string& b)
-{
-	return rs_strnaturalcmp(a.c_str(), b.c_str());
-}
-
 void utils::remove_soft_hyphens(std::string& text)
 {
 	/* Remove all soft-hyphens as they can behave unpredictably (see
