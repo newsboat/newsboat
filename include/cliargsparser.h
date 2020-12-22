@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_CLIARGSPARSER_H_
 #define NEWSBOAT_CLIARGSPARSER_H_
 
+#include "cliargsparser.rs.h"
+
 #include <string>
 #include <vector>
 
@@ -10,11 +12,9 @@
 
 namespace newsboat {
 class CliArgsParser {
-	void* rs_cliargsparser = nullptr;
-
 public:
 	CliArgsParser(int argc, char* argv[]);
-	~CliArgsParser();
+	~CliArgsParser() = default;
 
 	bool do_import() const;
 
@@ -70,10 +70,10 @@ public:
 
 	nonstd::optional<std::string> config_file() const;
 
-	/// If non-null, Newsboat should execute these commands.
+	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
 	/// \note The parser does not check if the passed commands are valid.
-	nonstd::optional<std::vector<std::string>> cmds_to_execute() const;
+	std::vector<std::string> cmds_to_execute() const;
 
 	nonstd::optional<std::string> log_file() const;
 
@@ -84,6 +84,9 @@ public:
 	/// This is only meant to be used in situations when one wants to pass
 	/// a pointer to CliArgsParser back to Rust.
 	void* get_rust_pointer() const;
+
+private:
+	rust::Box<cliargsparser::bridged::CliArgsParser> rs_object;
 };
 } // namespace newsboat
 

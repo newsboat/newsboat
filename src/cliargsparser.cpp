@@ -7,265 +7,180 @@
 #include "ruststring.h"
 #include "strprintf.h"
 
-extern "C" {
-	void* create_rs_cliargsparser(int argc, char* argv[]);
-
-	void destroy_rs_cliargsparser(void*);
-
-	bool rs_cliargsparser_do_import(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_export(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_vacuum(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_cleanup(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_importfile(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_program_name(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_read_import(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_readinfo_import_file(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_do_read_export(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_readinfo_export_file(void* rs_cliargsparser);
-
-	unsigned int rs_cliargsparser_show_version(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_silent(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_using_nonstandard_configs(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_should_return(void* rs_cliargsparser);
-
-	int rs_cliargsparser_return_code(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_display_msg(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_should_print_usage(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_refresh_on_start(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_set_url_file(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_url_file(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_set_lock_file(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_lock_file(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_set_cache_file(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_cache_file(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_set_config_file(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_config_file(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_execute_cmds(void* rs_cliargsparser);
-
-	unsigned int rs_cliargsparser_cmds_to_execute_count(void* rs_cliargsparser);
-	char* rs_cliargsparser_cmd_to_execute_n(void* rs_cliargsparser, unsigned int n);
-
-	bool rs_cliargsparser_set_log_file(void* rs_cliargsparser);
-
-	char* rs_cliargsparser_log_file(void* rs_cliargsparser);
-
-	bool rs_cliargsparser_set_log_level(void* rs_cliargsparser);
-
-	char rs_cliargsparser_log_level(void* rs_cliargsparser);
-}
-
-#define GET_VALUE(NAME, DEFAULT) \
-	if (rs_cliargsparser) { \
-		return rs_cliargsparser_ ## NAME (rs_cliargsparser); \
-	} else { \
-		return DEFAULT; \
-	}
-
-#define GET_STRING(NAME) \
-	if (rs_cliargsparser) { \
-		return RustString(rs_cliargsparser_ ## NAME (rs_cliargsparser)); \
-	} else { \
-		return {}; \
-	}
-
-#define GET_OPTIONAL_VALUE(CHECKER, GETTER, DEFAULT) \
-	if (rs_cliargsparser) { \
-		if (rs_cliargsparser_ ## CHECKER (rs_cliargsparser)) { \
-			return rs_cliargsparser_ ## GETTER (rs_cliargsparser); \
-		} else { \
-			return nonstd::nullopt; \
-		} \
-	} else { \
-		return DEFAULT; \
-	}
-
-#define GET_OPTIONAL_STRING(CHECKER, GETTER) \
-	if (rs_cliargsparser) { \
-		if (rs_cliargsparser_ ## CHECKER (rs_cliargsparser)) { \
-			return RustString(rs_cliargsparser_ ## GETTER (rs_cliargsparser)); \
-		} else { \
-			return nonstd::nullopt; \
-		} \
-	} else { \
-		return {}; \
-	}
-
 namespace newsboat {
 
-CliArgsParser::CliArgsParser(int argc, char* argv[])
+
+rust::Vec<rust::String> argv_to_rust_args(int argc, char* argv[])
 {
-	rs_cliargsparser = create_rs_cliargsparser(argc, argv);
+	rust::Vec<rust::String> args;
+	for (int i = 0; i < argc; ++i) {
+		args.push_back(argv[i]);
+	}
+	return args;
 }
 
-CliArgsParser::~CliArgsParser()
+CliArgsParser::CliArgsParser(int argc, char* argv[])
+	: rs_object(cliargsparser::bridged::create(argv_to_rust_args(argc, argv)))
 {
-	if (rs_cliargsparser) {
-		destroy_rs_cliargsparser(rs_cliargsparser);
-	}
 }
 
 bool CliArgsParser::do_import() const
 {
-	GET_VALUE(do_import, false);
+	return newsboat::cliargsparser::bridged::do_import(*rs_object);
 }
 
 bool CliArgsParser::do_export() const
 {
-	GET_VALUE(do_export, false);
+	return newsboat::cliargsparser::bridged::do_export(*rs_object);
 }
 
 bool CliArgsParser::do_vacuum() const
 {
-	GET_VALUE(do_vacuum, false);
+	return newsboat::cliargsparser::bridged::do_vacuum(*rs_object);
 }
 
 bool CliArgsParser::do_cleanup() const
 {
-	GET_VALUE(do_cleanup, false);
+	return newsboat::cliargsparser::bridged::do_cleanup(*rs_object);
 }
 
 std::string CliArgsParser::importfile() const
 {
-	GET_STRING(importfile);
+	return std::string(newsboat::cliargsparser::bridged::importfile(*rs_object));
 }
 
 nonstd::optional<std::string> CliArgsParser::readinfo_import_file() const
 {
-	GET_OPTIONAL_STRING(do_read_import, readinfo_import_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::readinfo_import_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
 nonstd::optional<std::string> CliArgsParser::readinfo_export_file() const
 {
-	GET_OPTIONAL_STRING(do_read_export, readinfo_export_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::readinfo_export_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
 std::string CliArgsParser::program_name() const
 {
-	GET_STRING(program_name);
+	return std::string(newsboat::cliargsparser::bridged::program_name(*rs_object));
 }
 
 unsigned int CliArgsParser::show_version() const
 {
-	GET_VALUE(show_version, 0);
+	return newsboat::cliargsparser::bridged::do_show_version(*rs_object);
 }
 
 bool CliArgsParser::silent() const
 {
-	GET_VALUE(silent, false);
+	return newsboat::cliargsparser::bridged::silent(*rs_object);
 }
 
 bool CliArgsParser::using_nonstandard_configs() const
 {
-	GET_VALUE(using_nonstandard_configs, false);
+	return newsboat::cliargsparser::bridged::using_nonstandard_configs(*rs_object);
 }
 
 nonstd::optional<int> CliArgsParser::return_code() const
 {
-	GET_OPTIONAL_VALUE(should_return, return_code, 0);
+	rust::isize code = 0;
+	if (newsboat::cliargsparser::bridged::return_code(*rs_object, code)) {
+		return static_cast<int>(code);
+	}
+	return nonstd::nullopt;
 }
 
 std::string CliArgsParser::display_msg() const
 {
-	GET_STRING(display_msg);
+	return std::string(newsboat::cliargsparser::bridged::display_msg(*rs_object));
 }
 
 bool CliArgsParser::should_print_usage() const
 {
-	GET_VALUE(should_print_usage, false);
+	return newsboat::cliargsparser::bridged::should_print_usage(*rs_object);
 }
 
 bool CliArgsParser::refresh_on_start() const
 {
-	GET_VALUE(refresh_on_start, false);
+	return newsboat::cliargsparser::bridged::refresh_on_start(*rs_object);
 }
 
 nonstd::optional<std::string> CliArgsParser::url_file() const
 {
-	GET_OPTIONAL_STRING(set_url_file, url_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::url_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
 nonstd::optional<std::string> CliArgsParser::lock_file() const
 {
-	GET_OPTIONAL_STRING(set_lock_file, lock_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::lock_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
 nonstd::optional<std::string> CliArgsParser::cache_file() const
 {
-	GET_OPTIONAL_STRING(set_cache_file, cache_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::cache_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
 nonstd::optional<std::string> CliArgsParser::config_file() const
 {
-	GET_OPTIONAL_STRING(set_config_file, config_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::config_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
-nonstd::optional<std::vector<std::string>> CliArgsParser::cmds_to_execute()
-	const
+std::vector<std::string> CliArgsParser::cmds_to_execute()
+const
 {
-	if (rs_cliargsparser) {
-		if (rs_cliargsparser_execute_cmds(rs_cliargsparser)) {
-			std::vector<std::string> result;
+	const auto rs_cmds = newsboat::cliargsparser::bridged::cmds_to_execute(
+			*rs_object);
 
-			const auto count = rs_cliargsparser_cmds_to_execute_count(rs_cliargsparser);
-			for (unsigned int i = 0; i < count; ++i) {
-				result.push_back(RustString(rs_cliargsparser_cmd_to_execute_n(rs_cliargsparser,
-							i)));
-			}
-
-			return result;
-		} else {
-			return nonstd::nullopt;
-		}
-	} else {
-		return {};
+	std::vector<std::string> cmds;
+	for (const auto& cmd : rs_cmds) {
+		cmds.push_back(std::string(cmd));
 	}
+	return cmds;
 }
 
 nonstd::optional<std::string> CliArgsParser::log_file() const
 {
-	GET_OPTIONAL_STRING(set_log_file, log_file);
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::log_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
 }
 
 nonstd::optional<Level> CliArgsParser::log_level() const
 {
-	if (rs_cliargsparser) {
-		if (rs_cliargsparser_set_log_level(rs_cliargsparser)) {
-			return static_cast<Level>(rs_cliargsparser_log_level(rs_cliargsparser));
-		} else {
-			return nonstd::nullopt;
-		}
-	} else {
-		return nonstd::nullopt;
+	std::int8_t level;
+	if (newsboat::cliargsparser::bridged::log_level(*rs_object, level)) {
+		return static_cast<Level>(level);
 	}
+	return nonstd::nullopt;
 }
 
 void* CliArgsParser::get_rust_pointer() const
 {
-	return rs_cliargsparser;
+	return (void*)&*rs_object;
 }
 
 } // namespace newsboat

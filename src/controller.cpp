@@ -502,8 +502,9 @@ int Controller::run(const CliArgsParser& args)
 	v->set_tags(tags);
 	v->set_cache(rsscache);
 
-	if (args.cmds_to_execute().has_value()) {
-		execute_commands(args.cmds_to_execute().value());
+	const auto cmds_to_execute = args.cmds_to_execute();
+	if (cmds_to_execute.size() >= 1) {
+		execute_commands(cmds_to_execute);
 		return EXIT_SUCCESS;
 	}
 
