@@ -1006,6 +1006,7 @@ void ItemListFormAction::prepare()
 	if (do_redraw || old_width != width) {
 		invalidate_list();
 		old_width = width;
+		do_redraw = false;
 	}
 
 	if (invalidation_mode == InvalidationMode::NONE) {
