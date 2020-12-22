@@ -1,5 +1,22 @@
 # Changes for Newsboat
 
+## Unreleased (2.23 - expected 2021-03-21)
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes:
+
+### Added
+### Changed
+
+- Bumped minimum supported Rust version to 1.46.0
+
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.22 - 2020-12-21
 
 Lists below only mention user-visible changes, but the full list of contributors
@@ -54,6 +71,7 @@ for this release also includes David Brito and panvicka.
     when there is only one conflict to resolve (#657) (saleh)
 - Config parser now allows to have tab characters between `macro` arguments;
     they will be treated as space (Dennis van der Schagt)
+- Bumped minimum supported Rust version to 1.44.0
 - Updated vendored libraries: Catch2 to 2.13.3, martinmoene/optional-lite
     to 3.4.0, martinmoene/expected-lite to 0.5.0
 - Updated translations: Dutch (Dennis van der Schagt), French (tkerdonc), German

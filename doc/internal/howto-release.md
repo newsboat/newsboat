@@ -95,10 +95,14 @@ master repository and shell access to newsboat.org.
 12. Add a TaskWarrior reminder to myself to update POT file and ask for updated
     translations two weeks before the next release
 13. Prepare the repo for the next release
-    * Add "Unreleased" section to CHANGELOG and commit
-    * Update all the transitive dependencies: `cargo update` and commit
+    * Add "Unreleased" section to CHANGELOG
+    * Update all the transitive dependencies: `cargo update`
     * Set minimum supported Rust version (MSRV) to current_stable-2
         * `git grep <previous version>`
         * includes CI configs, README and doc/newsboat.asciidoc
-        * commit
-    * Push it: `git push`
+        * mention this in "Changed" section of the changelog
+    * Commit and submit a PR:
+
+        git checkout -b feature/prepare-next-release
+        git commit -am'Prepare for next release'
+        git push origin -u feature/prepare-next-release
