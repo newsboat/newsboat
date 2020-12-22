@@ -169,9 +169,8 @@ void RssParser::retrieve_uri(const std::string& uri)
 	} else if (utils::is_exec_url(uri)) {
 		get_execplugin(uri.substr(5, uri.length() - 5));
 	} else if (utils::is_filter_url(uri)) {
-		std::string filter, url;
-		utils::extract_filter(uri, filter, url);
-		download_filterplugin(filter, url);
+		const auto parts = utils::extract_filter(uri);
+		download_filterplugin(std::string(parts.script_name), std::string(parts.url));
 	} else if (utils::is_query_url(my_uri)) {
 		f.rss_version = rsspp::Feed::Version::UNKNOWN;
 	} else if (my_uri.substr(0, 7) == "file://") {

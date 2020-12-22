@@ -531,34 +531,36 @@ TEST_CASE("get_command_output()", "[utils]")
 
 TEST_CASE("extract_filter()", "[utils]")
 {
-	std::string filter;
-	std::string url;
+	{
+		const auto parts =
+			utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org");
+		REQUIRE(std::string(parts.script_name) == "~/bin/script.sh");
+		REQUIRE(std::string(parts.url) == "https://newsboat.org");
+	}
 
-	utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org", filter,
-		url);
+	{
+		const auto parts = utils::extract_filter("filter::https://newsboat.org");
+		REQUIRE(std::string(parts.script_name) == "");
+		REQUIRE(std::string(parts.url) == "https://newsboat.org");
+	}
 
-	REQUIRE(filter == "~/bin/script.sh");
-	REQUIRE(url == "https://newsboat.org");
+	{
+		const auto parts = utils::extract_filter("filter:https://newsboat.org");
+		REQUIRE(std::string(parts.script_name) == "https");
+		REQUIRE(std::string(parts.url) == "//newsboat.org");
+	}
 
-	utils::extract_filter("filter::https://newsboat.org", filter, url);
+	{
+		const auto parts = utils::extract_filter("filter:foo:");
+		REQUIRE(std::string(parts.script_name) == "foo");
+		REQUIRE(std::string(parts.url) == "");
+	}
 
-	REQUIRE(filter == "");
-	REQUIRE(url == "https://newsboat.org");
-
-	utils::extract_filter("filter:https://newsboat.org", filter, url);
-
-	REQUIRE(filter == "https");
-	REQUIRE(url == "//newsboat.org");
-
-	utils::extract_filter("filter:foo:", filter, url);
-
-	REQUIRE(filter == "foo");
-	REQUIRE(url == "");
-
-	utils::extract_filter("filter:", filter, url);
-
-	REQUIRE(filter == "");
-	REQUIRE(url == "");
+	{
+		const auto parts = utils::extract_filter("filter:");
+		REQUIRE(std::string(parts.script_name) == "");
+		REQUIRE(std::string(parts.url) == "");
+	}
 }
 
 TEST_CASE("run_program()", "[utils]")

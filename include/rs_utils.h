@@ -9,11 +9,6 @@
 extern "C" {
 #endif
 
-struct FilterUrl {
-	char* filter;
-	char* url;
-};
-
 char* rs_resolve_tilde(const char* str);
 
 char* rs_resolve_relative(const char* reference, const char* fname);
@@ -38,8 +33,6 @@ char* rs_run_program(const char* argv[], const char* input);
 unsigned int rs_newsboat_version_major();
 
 int rs_mkdir_parents(const char* path, const std::uint32_t mode);
-
-FilterUrl rs_extract_filter(const char* line);
 
 #ifdef __cplusplus
 }

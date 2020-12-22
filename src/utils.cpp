@@ -400,16 +400,6 @@ std::string utils::get_command_output(const std::string& cmd)
 	return std::string(utils::bridged::get_command_output(cmd));
 }
 
-void utils::extract_filter(const std::string& line,
-	std::string& filter,
-	std::string& url)
-{
-	FilterUrl filterUrl = rs_extract_filter(line.c_str());
-
-	filter = RustString(filterUrl.filter);
-	url = RustString(filterUrl.url);
-}
-
 static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 	void* userp)
 {

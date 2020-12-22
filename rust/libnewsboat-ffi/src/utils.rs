@@ -11,6 +11,11 @@ use std::ptr;
 
 #[cxx::bridge(namespace = "newsboat::utils")]
 mod ffi {
+    struct FilterUrlParts {
+        script_name: String,
+        url: String,
+    }
+
     extern "Rust" {
         fn get_random_value(max: u32) -> u32;
         fn is_special_url(url: &str) -> bool;
@@ -25,6 +30,7 @@ mod ffi {
         fn strnaturalcmp(a: &str, b: &str) -> isize;
         fn strwidth(rs_str: &str) -> usize;
         fn strwidth_stfl(rs_str: &str) -> usize;
+        fn extract_filter(line: &str) -> FilterUrlParts;
     }
 }
 
@@ -125,10 +131,12 @@ fn strnaturalcmp(a: &str, b: &str) -> isize {
     }
 }
 
-#[repr(C)]
-pub struct FilterUrl {
-    filter: *mut c_char,
-    url: *mut c_char,
+fn extract_filter(line: &str) -> ffi::FilterUrlParts {
+    let result = utils::extract_filter(line);
+    ffi::FilterUrlParts {
+        script_name: result.script_name,
+        url: result.url,
+    }
 }
 
 #[no_mangle]
@@ -358,28 +366,6 @@ pub unsafe extern "C" fn rs_run_program(
 #[no_mangle]
 pub extern "C" fn rs_newsboat_version_major() -> u32 {
     abort_on_panic(utils::newsboat_major_version)
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_extract_filter(line: *const c_char) -> FilterUrl {
-    abort_on_panic(|| {
-        let line = CStr::from_ptr(line);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let line = line.to_str().expect("line contained invalid UTF-8");
-
-        let (filter, url) = utils::extract_filter(line);
-        // `rfilter` contains a subset of `line`, which is a C string. Thus, we conclude that
-        // `rfilter` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
-        let filter = CString::new(filter).unwrap();
-        // `rurl` contains a subset of `line`, which is a C string. Thus, we conclude that
-        // `rurl` doesn't contain null bytes. Therefore, `CString::new` always returns `Some`.
-        let url = CString::new(url).unwrap();
-
-        FilterUrl {
-            filter: filter.into_raw() as *mut c_char,
-            url: url.into_raw() as *mut c_char,
-        }
-    })
 }
 
 #[no_mangle]

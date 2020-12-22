@@ -858,21 +858,33 @@ pub fn strip_comments(line: &str) -> &str {
     &line[0..first_pound_chr_idx]
 }
 
+/// The result of executing `extract_filter()`.
+pub struct FilterUrlParts {
+    /// "~/bin/foo.sh" in "filter:~/bin/foo.sh:https://example.com/news.atom"
+    pub script_name: String,
+
+    /// "https://example.com/news.atom" in "filter:~/bin/foo.sh:https://example.com/news.atom"
+    pub url: String,
+}
+
 /// Extract filter and url from line separated by ':'.
-pub fn extract_filter(line: &str) -> (&str, &str) {
+pub fn extract_filter(line: &str) -> FilterUrlParts {
     debug_assert!(line.starts_with("filter:"));
     // line must start with "filter:"
     let line = line.get("filter:".len()..).unwrap();
-    let (filter, url) = line.split_at(line.find(':').unwrap_or(0));
+    let (script_name, url) = line.split_at(line.find(':').unwrap_or(0));
     let url = url.get(1..).unwrap_or("");
     log!(
         Level::Debug,
-        "utils::extract_filter: {} -> filter: {} url: {}",
+        "utils::extract_filter: {} -> script_name: {} url: {}",
         line,
-        filter,
+        script_name,
         url
     );
-    (filter, url)
+    FilterUrlParts {
+        script_name: script_name.to_string(),
+        url: url.to_string(),
+    }
 }
 
 #[cfg(test)]
@@ -1600,24 +1612,39 @@ mod tests {
 
     #[test]
     fn t_extract_filter() {
-        let expected = ("~/bin/script.sh", "https://newsboat.org");
         let input = "filter:~/bin/script.sh:https://newsboat.org";
-        assert_eq!(extract_filter(input), expected);
+        let expected_script_name = "~/bin/script.sh";
+        let expected_url = "https://newsboat.org";
+        let actual = extract_filter(input);
+        assert_eq!(actual.script_name, expected_script_name);
+        assert_eq!(actual.url, expected_url);
 
-        let expected = ("", "https://newsboat.org");
         let input = "filter::https://newsboat.org";
-        assert_eq!(extract_filter(input), expected);
+        let expected_script_name = "";
+        let expected_url = "https://newsboat.org";
+        let actual = extract_filter(input);
+        assert_eq!(actual.script_name, expected_script_name);
+        assert_eq!(actual.url, expected_url);
 
-        let expected = ("https", "//newsboat.org");
         let input = "filter:https://newsboat.org";
-        assert_eq!(extract_filter(input), expected);
+        let expected_script_name = "https";
+        let expected_url = "//newsboat.org";
+        let actual = extract_filter(input);
+        assert_eq!(actual.script_name, expected_script_name);
+        assert_eq!(actual.url, expected_url);
 
-        let expected = ("foo", "");
         let input = "filter:foo:";
-        assert_eq!(extract_filter(input), expected);
+        let expected_script_name = "foo";
+        let expected_url = "";
+        let actual = extract_filter(input);
+        assert_eq!(actual.script_name, expected_script_name);
+        assert_eq!(actual.url, expected_url);
 
-        let expected = ("", "");
         let input = "filter:";
-        assert_eq!(extract_filter(input), expected);
+        let expected_script_name = "";
+        let expected_url = "";
+        let actual = extract_filter(input);
+        assert_eq!(actual.script_name, expected_script_name);
+        assert_eq!(actual.url, expected_url);
     }
 }
