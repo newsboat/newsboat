@@ -23,6 +23,8 @@ mod ffi {
         fn gentabs(string: &str) -> usize;
         fn run_command(cmd: &str, param: &str);
         fn strnaturalcmp(a: &str, b: &str) -> isize;
+        fn strwidth(rs_str: &str) -> usize;
+        fn strwidth_stfl(rs_str: &str) -> usize;
     }
 }
 
@@ -266,24 +268,6 @@ pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isi
             Ok(()) => 0,
             Err(_) => -1,
         }
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_strwidth(input: *const c_char) -> usize {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(input);
-        let rs_str = rs_str.to_string_lossy().into_owned();
-        utils::strwidth(&rs_str)
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_strwidth_stfl(input: *const c_char) -> usize {
-    abort_on_panic(|| {
-        let rs_str = CStr::from_ptr(input);
-        let rs_str = rs_str.to_string_lossy().into_owned();
-        utils::strwidth_stfl(&rs_str)
     })
 }
 

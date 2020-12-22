@@ -881,7 +881,8 @@ TEST_CASE("strwidth()", "[utils]")
 
 	REQUIRE(utils::strwidth("xx") == 2);
 
-	REQUIRE(utils::strwidth(utils::wstr2str(L"\uF91F")) == 2);
+	const auto input1 = utils::wstr2str(L"\uF91F");
+	REQUIRE(utils::strwidth(input1) == 2);
 	REQUIRE(utils::strwidth("\07") == 0);
 }
 
@@ -899,7 +900,8 @@ TEST_CASE("strwidth_stfl()", "[utils]")
 
 	REQUIRE(utils::strwidth_stfl("x<>y<>z") == 5);
 
-	REQUIRE(utils::strwidth_stfl(utils::wstr2str(L"\uF91F")) == 2);
+	const auto input1 = utils::wstr2str(L"\uF91F");
+	REQUIRE(utils::strwidth_stfl(input1) == 2);
 	REQUIRE(utils::strwidth_stfl("\07") == 0);
 }
 

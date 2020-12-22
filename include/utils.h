@@ -87,9 +87,6 @@ std::string absolute_url(const std::string& url,
 
 std::string get_useragent(ConfigContainer* cfgcont);
 
-size_t strwidth(const std::string& s);
-size_t strwidth_stfl(const std::string& str);
-
 std::string substr_with_width(const std::string& str,
 	const size_t max_width);
 

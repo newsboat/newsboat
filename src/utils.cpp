@@ -632,16 +632,6 @@ std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 	return partitions;
 }
 
-size_t utils::strwidth(const std::string& str)
-{
-	return rs_strwidth(str.c_str());
-}
-
-size_t utils::strwidth_stfl(const std::string& str)
-{
-	return rs_strwidth_stfl(str.c_str());
-}
-
 std::string utils::substr_with_width(const std::string& str,
 	const size_t max_width)
 {
