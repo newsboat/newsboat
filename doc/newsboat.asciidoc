@@ -1348,6 +1348,18 @@ application will run separately from Newsboat, which can then be used
 
   :set browser "surf %u >/dev/null 2>&1 &"
 
+This can be simplified by using Newsboat's `open-in-browser-noninteractively`
+operation. The operation runs the browser while keeping Newsboat's view on the
+foreground. It does not show any of the browser's `stdout` and `stderr` output.
+
+  :set browser "surf %u &"
+  :exec open-in-browser-noninteractively
+
+This can also be useful if you want to run a download script in the background.
+For example:
+
+  macro d set browser "youtube-dl %u &"; open-in-browser-noninteractively; set browser elinks
+
 For text-based console applications, it is best to first launch a terminal
 emulator, which will in turn execute the remainder of the browser command.
 Standard output do not need to be silenced with this technique.

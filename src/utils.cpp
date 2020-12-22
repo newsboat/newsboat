@@ -919,6 +919,18 @@ nonstd::optional<std::uint8_t> utils::run_interactively(
 	return nonstd::nullopt;
 }
 
+nonstd::optional<std::uint8_t> utils::run_non_interactively(
+	const std::string& command,
+	const std::string& caller)
+{
+	std::uint8_t exit_code = 0;
+	if (bridged::run_non_interactively(command, caller, exit_code)) {
+		return exit_code;
+	}
+
+	return nonstd::nullopt;
+}
+
 std::string utils::getcwd()
 {
 	return RustString(rs_getcwd());

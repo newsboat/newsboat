@@ -22,6 +22,8 @@ mod bridged {
     extern "Rust" {
         fn to_u(input: String, default_value: u32) -> u32;
 
+        fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool;
+
         fn read_text_file(
             filename: String,
             contents: &mut Vec<String>,
@@ -37,6 +39,16 @@ mod bridged {
         // Also inject a header that defines ptrdiff_t. Note this is *not* a C++ header, because
         // cxx uses a non-C++ name of the type.
         include!("stddef.h");
+    }
+}
+
+fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool {
+    match utils::run_non_interactively(command, caller) {
+        Some(e) => {
+            *exit_code = e;
+            true
+        }
+        None => false,
     }
 }
 

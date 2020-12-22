@@ -207,6 +207,40 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	REQUIRE(line == test_url);
 }
 
+TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
+	"[ItemListFormAction]")
+{
+	ConfigPaths paths;
+	Controller c(paths);
+	newsboat::View v(&c);
+	TestHelpers::TempFile browserfile;
+	const std::string test_url = "http://test_url";
+	std::string line;
+
+	ConfigContainer cfg;
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
+
+	Cache rsscache(":memory:", &cfg);
+	FilterContainer filters;
+	RegexManager rxman;
+
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache);
+	std::shared_ptr<RssItem> item = std::make_shared<RssItem>(&rsscache);
+	item->set_link(test_url);
+	feed->add_item(item);
+
+	v.set_config_container(&cfg);
+	c.set_view(&v);
+
+	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
+	itemlist.set_feed(feed);
+	itemlist.process_op(newsboat::OP_OPENINBROWSER_NONINTERACTIVE);
+	std::ifstream browserFileStream(browserfile.get_path());
+
+	REQUIRE(std::getline(browserFileStream, line));
+	REQUIRE(line == test_url);
+}
+
 TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	"[ItemListFormAction]")
 {
