@@ -914,7 +914,6 @@ TEST_CASE(
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 
 	auto feed = std::make_shared<RssFeed>(rsscache.get());
-	feed->set_query("unread = \"yes\"");
 	feed->set_rssurl("query:All unread:unread = \"yes\"");
 
 	REQUIRE_NOTHROW(rsscache->externalize_rssfeed(feed, false));

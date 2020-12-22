@@ -235,7 +235,7 @@ void RssFeed::set_rssurl(const std::string& u)
 			query);
 
 		set_title(tokens[1]);
-		set_query(query);
+		this->query = query;
 	}
 }
 

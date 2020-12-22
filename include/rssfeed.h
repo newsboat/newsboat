@@ -126,11 +126,6 @@ public:
 
 	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
 
-	void set_query(const std::string& s)
-	{
-		query = s;
-	}
-
 	bool is_query_feed() const
 	{
 		return rssurl_.substr(0, 6) == "query:";
