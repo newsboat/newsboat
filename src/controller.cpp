@@ -533,9 +533,15 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		rsscache->cleanup_cache(feedcontainer.get_all_feeds());
+		const std::uint64_t amt = rsscache->cleanup_cache(
+				feedcontainer.get_all_feeds());
 		if (!args.silent()) {
 			std::cout << _("done.") << std::endl;
+			if (amt > 0u) {
+				std::cout << _("Unreachable feeds found, consider setting "
+						"`cleanup-on-quit yes` or run `newsboat --cleanup`")
+					<< std::endl;
+			}
 		}
 	} catch (const DbException& e) {
 		LOG(Level::USERERROR, "Cleaning up cache failed: %s", e.what());

@@ -747,9 +747,19 @@ void Cache::do_vacuum()
 	run_sql("VACUUM;");
 }
 
-void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
+std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {
+	std::uint64_t unreachable = 0u;
+	std::string list = "(";
+
+	for (const auto& feed : feeds) {
+		const auto name = prepare_query("'%q'", feed->rssurl());
+		list.append(name);
+		list.append(", ");
+	}
+	list.append("'')");
+
 	// we don't use the std::lock_guard<> here... see comments below
 	mtx.lock();
 
@@ -767,15 +777,6 @@ void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	 */
 	if (always_clean || cfg->get_configvalue_as_bool("cleanup-on-quit")) {
 		LOG(Level::DEBUG, "Cache::cleanup_cache: cleaning up cache...");
-		std::string list = "(";
-
-		for (const auto& feed : feeds) {
-			std::string name =
-				prepare_query("'%q'", feed->rssurl());
-			list.append(name);
-			list.append(", ");
-		}
-		list.append("'')");
 
 		std::string cleanup_rss_feeds_statement(
 			"DELETE FROM rss_feed WHERE rssurl NOT IN ");
@@ -796,14 +797,31 @@ void Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 				"delete-read-articles-on-quit")) {
 			run_sql(cleanup_read_items_statement);
 		}
-
-		// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
-		// PURPOSE! It's missing so that no database operation can occur
-		// after the cache cleanup! mtx->unlock();
 	} else {
 		LOG(Level::DEBUG,
 			"Cache::cleanup_cache: NOT cleaning up cache...");
+
+		std::string query = (
+				"SELECT count(rss) "
+				"FROM ("
+				"SELECT feedurl AS rss FROM rss_item "
+				"UNION ALL "
+				"SELECT rssurl FROM rss_feed"
+				") "
+				"WHERE rss NOT IN "
+			);
+		query.append(list);
+		query.push_back(';');
+
+		CbHandler count_cbh;
+		run_sql(query, count_callback, &count_cbh);
+		unreachable = count_cbh.count();
 	}
+
+	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
+	// PURPOSE! It's missing so that no database operation can occur
+	// after the cache cleanup! mtx->unlock();
+	return unreachable;
 }
 
 void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
