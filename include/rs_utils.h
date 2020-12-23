@@ -9,8 +9,6 @@
 extern "C" {
 #endif
 
-bool rs_is_valid_podcast_type(const char* mimetype);
-
 std::int64_t rs_podcast_mime_to_link_type(const char* mimetype, bool* success);
 
 char* rs_run_program(const char* argv[], const char* input);

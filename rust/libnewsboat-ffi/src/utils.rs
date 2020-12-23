@@ -69,6 +69,7 @@ mod bridged {
         fn get_basename(input: &str) -> String;
         fn program_version() -> String;
         fn strip_comments(line: &str) -> &str;
+        fn is_valid_podcast_type(mimetype: &str) -> bool;
 
         fn resolve_tilde(path: &str) -> String;
         fn resolve_relative(reference: &str, path: &str) -> String;
@@ -201,15 +202,6 @@ fn unescape_url(url: String, success: &mut bool) -> String {
             String::new()
         }
     }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_is_valid_podcast_type(mimetype: *const c_char) -> bool {
-    abort_on_panic(|| {
-        let rs_mimetype = CStr::from_ptr(mimetype);
-        let rs_mimetype = rs_mimetype.to_string_lossy();
-        utils::is_valid_podcast_type(&rs_mimetype)
-    })
 }
 
 #[no_mangle]

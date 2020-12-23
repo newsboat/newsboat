@@ -903,7 +903,7 @@ void utils::remove_soft_hyphens(std::string& text)
 
 bool utils::is_valid_podcast_type(const std::string& mimetype)
 {
-	return rs_is_valid_podcast_type(mimetype.c_str());
+	return utils::bridged::is_valid_podcast_type(mimetype);
 }
 
 nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
