@@ -21,7 +21,7 @@ class QueueLoader;
 class PbController {
 public:
 	PbController();
-	~PbController();
+	~PbController() = default;
 	void set_view(PbView* vv)
 	{
 		v = vv;
@@ -59,7 +59,7 @@ public:
 
 	newsboat::ConfigContainer* get_cfgcont()
 	{
-		return cfg;
+		return &cfg;
 	}
 
 	const newsboat::ColorManager& get_colormanager()
@@ -74,7 +74,7 @@ private:
 	PbView* v;
 	std::string config_file;
 	std::string queue_file;
-	newsboat::ConfigContainer* cfg;
+	newsboat::ConfigContainer cfg;
 	bool view_update_;
 	std::vector<Download> downloads_;
 

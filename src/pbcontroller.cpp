@@ -131,7 +131,6 @@ PbController::PbController()
 	: v(0)
 	, config_file("config")
 	, queue_file("queue")
-	, cfg(0)
 	, view_update_(true)
 	, max_dls(1)
 	, ql(0)
@@ -181,11 +180,6 @@ PbController::PbController()
 	config_file = config_dir + NEWSBEUTER_PATH_SEP + config_file;
 	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
 	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
-}
-
-PbController::~PbController()
-{
-	delete cfg;
 }
 
 void PbController::initialize(int argc, char* argv[])
@@ -272,8 +266,7 @@ void PbController::initialize(int argc, char* argv[])
 	std::cout.flush();
 
 	ConfigParser cfgparser;
-	cfg = new ConfigContainer();
-	cfg->register_commands(cfgparser);
+	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
 	cfgparser.register_handler("bind-key", keys);
@@ -302,17 +295,17 @@ int PbController::run()
 {
 	v->apply_colors_to_all_forms();
 
-	max_dls = cfg->get_configvalue_as_int("max-downloads");
+	max_dls = cfg.get_configvalue_as_int("max-downloads");
 
 	std::cout << _("done.") << std::endl;
 
-	ql = new QueueLoader(queue_file, *cfg,
+	ql = new QueueLoader(queue_file, cfg,
 		std::bind(&PbController::set_view_update_necessary, this, true));
 	ql->reload(downloads_);
 
 	v->set_keymap(&keys);
 
-	v->run(automatic_dl, cfg->get_configvalue_as_bool("wrap-scroll"));
+	v->run(automatic_dl, cfg.get_configvalue_as_bool("wrap-scroll"));
 
 	Stfl::reset();
 
@@ -396,7 +389,7 @@ void PbController::print_usage(const char* argv0)
 
 std::string PbController::get_formatstr()
 {
-	return cfg->get_configvalue("podlist-format");
+	return cfg.get_configvalue("podlist-format");
 }
 
 unsigned int PbController::downloads_in_progress()
@@ -442,7 +435,7 @@ void PbController::start_downloads()
 		}
 
 		if (download.status() == DlStatus::QUEUED) {
-			std::thread t{PodDlThread(&download, cfg)};
+			std::thread t{PodDlThread(&download, &cfg)};
 			--dl2start;
 			t.detach();
 		}
@@ -464,7 +457,7 @@ void PbController::decrease_parallel_downloads()
 void PbController::play_file(const std::string& file)
 {
 	std::string cmdline;
-	std::string player = cfg->get_configvalue("player");
+	std::string player = cfg.get_configvalue("player");
 	if (player == "") {
 		return;
 	}
