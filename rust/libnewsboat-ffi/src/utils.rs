@@ -76,6 +76,8 @@ mod bridged {
         fn mkdir_parents(path: &str, mode: u32) -> isize;
 
         fn unescape_url(url: String, success: &mut bool) -> String;
+
+        fn remove_soft_hyphens(text: &mut String);
     }
 
     extern "C++" {
@@ -199,20 +201,6 @@ fn unescape_url(url: String, success: &mut bool) -> String {
             String::new()
         }
     }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_remove_soft_hyphens(text: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_text = CStr::from_ptr(text);
-        let mut rs_text = rs_text.to_string_lossy().into_owned();
-        utils::remove_soft_hyphens(&mut rs_text);
-        // Panic can't happen here because:
-        // It could only happen if `rs_text` contains null bytes.
-        // But since it is based on a C string it can't contain null bytes
-        let result = CString::new(rs_text).unwrap();
-        result.into_raw()
-    })
 }
 
 #[no_mangle]

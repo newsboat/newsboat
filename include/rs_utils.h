@@ -9,8 +9,6 @@
 extern "C" {
 #endif
 
-char* rs_remove_soft_hyphens(const char* str);
-
 bool rs_is_valid_podcast_type(const char* mimetype);
 
 std::int64_t rs_podcast_mime_to_link_type(const char* mimetype, bool* success);

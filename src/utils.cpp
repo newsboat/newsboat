@@ -896,10 +896,9 @@ utils::ReadTextFileResult utils::read_text_file( const std::string& filename)
 
 void utils::remove_soft_hyphens(std::string& text)
 {
-	/* Remove all soft-hyphens as they can behave unpredictably (see
-	 * https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490)
-	 * and inadvertently render as hyphens */
-	text = RustString(rs_remove_soft_hyphens(text.c_str()));
+	rust::String tmp(text);
+	utils::bridged::remove_soft_hyphens(tmp);
+	text = std::string(tmp);
 }
 
 bool utils::is_valid_podcast_type(const std::string& mimetype)
