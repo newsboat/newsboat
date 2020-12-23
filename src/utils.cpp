@@ -44,8 +44,6 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include <openssl/crypto.h>
 #endif
 
-#include "rs_utils.h"
-
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
@@ -495,7 +493,11 @@ std::string utils::retrieve_url(const std::string& url,
 
 std::string utils::run_program(const char* argv[], const std::string& input)
 {
-	return RustString(rs_run_program(argv, input.c_str()));
+	rust::Vec<rust::String> rs_argv;
+	for (; *argv; ++argv) {
+		rs_argv.emplace_back(*argv);
+	}
+	return std::string(utils::bridged::run_program(rs_argv, input));
 }
 
 std::string utils::resolve_tilde(const std::string& str)

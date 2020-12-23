@@ -762,8 +762,7 @@ src/utils.o: src/utils.cpp include/utils.h 3rd-party/expected.hpp \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  include/matcher.h filter/FilterParser.h include/regexowner.h \
- include/logger.h include/ruststring.h include/strprintf.h \
- include/rs_utils.h
+ include/logger.h include/ruststring.h include/strprintf.h
 src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/colormanager.h include/configactionhandler.h include/stflpp.h \
  include/configcontainer.h include/controller.h include/cache.h \
@@ -1008,7 +1007,7 @@ test/utils.o: test/utils.cpp include/utils.h 3rd-party/expected.hpp \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
  3rd-party/catch.hpp include/htmlrenderer.h include/textformatter.h \
  include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/rs_utils.h test/test-helpers/chdir.h \
+ include/regexowner.h test/test-helpers/chdir.h \
  test/test-helpers/envvar.h test/test-helpers/stringmaker/optional.h \
  test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
  test/test-helpers/tempfile.h

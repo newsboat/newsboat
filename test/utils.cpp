@@ -9,7 +9,6 @@
 
 #include "3rd-party/catch.hpp"
 #include "htmlrenderer.h"
-#include "rs_utils.h"
 #include "test-helpers/chdir.h"
 #include "test-helpers/envvar.h"
 #include "test-helpers/stringmaker/optional.h"

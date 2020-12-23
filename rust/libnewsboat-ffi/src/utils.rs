@@ -1,4 +1,3 @@
-use crate::abort_on_panic;
 use libc::c_char;
 use libnewsboat::utils::{self, *};
 use std::ffi::{CStr, CString};
@@ -81,6 +80,8 @@ mod bridged {
         fn remove_soft_hyphens(text: &mut String);
 
         fn podcast_mime_to_link_type(mime_type: &str, success: &mut bool) -> i64;
+
+        fn run_program(argv: &Vec<String>, input: &str) -> String;
     }
 
     extern "C++" {
@@ -220,43 +221,18 @@ fn podcast_mime_to_link_type(mime_type: &str, success: &mut bool) -> i64 {
     }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_run_program(
-    argv: *const *mut c_char,
-    input: *const c_char,
-) -> *mut c_char {
-    abort_on_panic(|| {
-        let argv = {
-            let mut result: Vec<&str> = Vec::new();
-            let mut cur_ptr = argv;
-
-            let mut offset: usize = 0;
-            while !(*cur_ptr).is_null() {
-                let arg = CStr::from_ptr(*cur_ptr);
-                let arg = arg.to_str().unwrap_or_else(|_| {
-                    panic!("argument at offset {} contained invalid UTF-8", offset)
-                });
-
-                result.push(arg);
-
-                offset += 1;
-                cur_ptr = cur_ptr.offset(1isize);
-            }
-
-            result
-        };
-
-        let input = CStr::from_ptr(input);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let input = input.to_str().expect("input contained invalid UTF-8");
-
-        let output = utils::run_program(&argv, input);
-
-        // String::from_utf8_lossy() will replace invalid unicode (including null bytes) with U+FFFD,
-        // so this shouldn't be able to panic
-        let result = CString::new(output).unwrap();
-        result.into_raw()
-    })
+// Ignore Clippy's suggestion to replace &Vec<_> with &[_], because cxx crate doesn't allow us to
+// pass &[String] over FFI — only &[u8] is supported.
+#[allow(clippy::ptr_arg)]
+fn run_program(argv: &Vec<String>, input: &str) -> String {
+    let argv_of_str = {
+        let mut result = Vec::<&str>::new();
+        for s in argv {
+            result.push(s);
+        }
+        result
+    };
+    utils::run_program(&argv_of_str, input)
 }
 
 #[no_mangle]
