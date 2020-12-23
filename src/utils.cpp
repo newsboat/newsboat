@@ -502,13 +502,13 @@ std::string utils::run_program(const char* argv[], const std::string& input)
 
 std::string utils::resolve_tilde(const std::string& str)
 {
-	return RustString(rs_resolve_tilde(str.c_str()));
+	return std::string(utils::bridged::resolve_tilde(str));
 }
 
 std::string utils::resolve_relative(const std::string& reference,
 	const std::string& fname)
 {
-	return RustString(rs_resolve_relative(reference.c_str(), fname.c_str()));
+	return std::string(utils::bridged::resolve_relative(reference, fname));
 }
 
 std::string utils::replace_all(std::string str,
@@ -832,7 +832,7 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
  * exist. */
 int utils::mkdir_parents(const std::string& p, mode_t mode)
 {
-	return rs_mkdir_parents(p.c_str(), static_cast<std::uint32_t>(mode));
+	return utils::bridged::mkdir_parents(p, static_cast<std::uint32_t>(mode));
 }
 
 std::string utils::make_title(const std::string& const_url)
@@ -868,7 +868,7 @@ nonstd::optional<std::uint8_t> utils::run_non_interactively(
 
 std::string utils::getcwd()
 {
-	return RustString(rs_getcwd());
+	return std::string(utils::bridged::getcwd());
 }
 
 utils::ReadTextFileResult utils::read_text_file( const std::string& filename)

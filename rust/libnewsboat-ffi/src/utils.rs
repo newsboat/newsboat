@@ -1,12 +1,8 @@
 use crate::abort_on_panic;
 use libc::{c_char, c_ulong};
 use libnewsboat::utils::{self, *};
-use libnewsboat::{
-    log,
-    logger::{self, Level},
-};
 use std::ffi::{CStr, CString};
-use std::path;
+use std::path::{Path, PathBuf};
 use std::ptr;
 
 #[cxx::bridge(namespace = "newsboat::utils")]
@@ -66,6 +62,11 @@ mod bridged {
         fn get_basename(input: &str) -> String;
         fn program_version() -> String;
         fn strip_comments(line: &str) -> &str;
+
+        fn resolve_tilde(path: &str) -> String;
+        fn resolve_relative(reference: &str, path: &str) -> String;
+        fn getcwd() -> String;
+        fn mkdir_parents(path: &str, mode: u32) -> isize;
     }
 
     extern "C++" {
@@ -94,8 +95,6 @@ fn read_text_file(
     error_line_number: &mut u64,
     error_reason: &mut String,
 ) -> bool {
-    use std::path::Path;
-
     match utils::read_text_file(Path::new(&filename)) {
         Ok(c) => {
             *contents = c;
@@ -139,55 +138,31 @@ fn extract_filter(line: &str) -> ffi::FilterUrlParts {
     }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_resolve_tilde(path: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_path = CStr::from_ptr(path);
-        // We simply assume that all the paths are in UTF-8 -- hence to_string_lossy().
-        let rs_path = rs_path.to_string_lossy().into_owned();
-
-        let result = utils::resolve_tilde(path::PathBuf::from(rs_path));
-        // We simply assume that all the paths are in UTF-8 -- hence to_string_lossy().
-        let result = result.to_string_lossy().into_owned();
-
-        // `result` consists of:
-        // 1. a path to the home dir, which can't contain NUL bytes, since it has to be handled by
-        //    C APIs;
-        // 2. a path delimiter, which is a slash and not a NUL byte;
-        // 3. the original input, `path`, which came here as a C string, so doesn't contain NUL
-        //    bytes.
-        //
-        // Thus, `unwrap` won't panic.
-        let result = CString::new(result).unwrap();
-        result.into_raw()
-    })
+fn resolve_tilde(path: &str) -> String {
+    let path = PathBuf::from(path);
+    let result = utils::resolve_tilde(path);
+    result.to_string_lossy().to_string()
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_resolve_relative(
-    reference: *const c_char,
-    path: *const c_char,
-) -> *mut c_char {
-    use std::path::Path;
-    abort_on_panic(|| {
-        let rs_reference = CStr::from_ptr(reference);
-        let rs_reference = rs_reference.to_string_lossy().into_owned();
+fn resolve_relative(reference: &str, path: &str) -> String {
+    let reference = Path::new(reference);
+    let path = Path::new(path);
+    let result = utils::resolve_relative(&reference, &path);
+    result.to_string_lossy().to_string()
+}
 
-        let rs_path = CStr::from_ptr(path);
-        let rs_path = rs_path.to_string_lossy().into_owned();
+fn getcwd() -> String {
+    utils::getcwd()
+        .map(|path| path.to_string_lossy().to_string())
+        .unwrap_or_else(|_| String::new())
+}
 
-        let result = utils::resolve_relative(Path::new(&rs_reference), Path::new(&rs_path));
-
-        // result.to_str().unwrap()' won't panic because it is either
-        // - rs_path
-        // - combination of reference and rs_path
-        //   which are both valid strings
-        //
-        // CString::new(...).unwrap() won't panic for the above reasons, the strings that went into
-        // it are valid strings
-        let result = CString::new(result.to_str().unwrap()).unwrap();
-        result.into_raw()
-    })
+fn mkdir_parents(path: &str, mode: u32) -> isize {
+    let path = Path::new(path);
+    match utils::mkdir_parents(&path, mode) {
+        Ok(_) => 0,
+        Err(_) => -1,
+    }
 }
 
 #[no_mangle]
@@ -245,36 +220,6 @@ pub unsafe extern "C" fn rs_run_interactively(
                 *success = false;
                 0
             }
-        }
-    })
-}
-
-#[no_mangle]
-/// Gets the current working directory or an empty string on error.
-pub extern "C" fn rs_getcwd() -> *mut c_char {
-    use std::os::unix::ffi::OsStringExt;
-    abort_on_panic(|| {
-        let result = utils::getcwd().unwrap_or_else(|err| {
-            log!(Level::Warn, "Error getting current directory: {}", err);
-            path::PathBuf::new()
-        });
-        // Panic here can't happen because:
-        // 1. panic can only happen if `result` contains null bytes;
-        // 2. `result` contains the current working directory which can't contain null.
-        let result = CString::new(result.into_os_string().into_vec()).unwrap();
-
-        result.into_raw()
-    })
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_mkdir_parents(path: *const c_char, mode: u32) -> isize {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(path);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-        match utils::mkdir_parents(&rs_input, mode) {
-            Ok(()) => 0,
-            Err(_) => -1,
         }
     })
 }
