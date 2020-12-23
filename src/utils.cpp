@@ -838,10 +838,8 @@ nonstd::optional<std::uint8_t> utils::run_interactively(
 	const std::string& command,
 	const std::string& caller)
 {
-	bool success = false;
-	const auto exit_code = rs_run_interactively(command.c_str(), caller.c_str(),
-			&success);
-	if (success) {
+	std::uint8_t exit_code = 0;
+	if (bridged::run_interactively(command, caller, exit_code)) {
 		return exit_code;
 	}
 

@@ -42,6 +42,7 @@ mod bridged {
     extern "Rust" {
         fn to_u(input: String, default_value: u32) -> u32;
 
+        fn run_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool;
         fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool;
 
         fn read_text_file(
@@ -89,6 +90,16 @@ mod bridged {
 
 fn get_auth_method(method: &str) -> u64 {
     utils::get_auth_method(method) as u64
+}
+
+fn run_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool {
+    match utils::run_interactively(command, caller) {
+        Some(e) => {
+            *exit_code = e;
+            true
+        }
+        None => false,
+    }
 }
 
 fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool {
@@ -188,35 +199,6 @@ fn unescape_url(url: String, success: &mut bool) -> String {
             String::new()
         }
     }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_run_interactively(
-    command: *const c_char,
-    caller: *const c_char,
-    success: *mut bool,
-) -> u8 {
-    abort_on_panic(|| {
-        let command = CStr::from_ptr(command);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let command = command.to_str().expect("command contained invalid UTF-8");
-
-        let caller = CStr::from_ptr(caller);
-        // This won't panic because all strings in Newsboat are in UTF-8
-        let caller = caller.to_str().expect("caller contained invalid UTF-8");
-
-        match utils::run_interactively(&command, &caller) {
-            Some(exit_code) => {
-                *success = true;
-                exit_code
-            }
-
-            None => {
-                *success = false;
-                0
-            }
-        }
-    })
 }
 
 #[no_mangle]

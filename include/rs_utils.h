@@ -9,9 +9,6 @@
 extern "C" {
 #endif
 
-std::uint8_t rs_run_interactively(const char* command, const char* caller,
-	bool* success);
-
 char* rs_remove_soft_hyphens(const char* str);
 
 bool rs_is_valid_podcast_type(const char* mimetype);
