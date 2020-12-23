@@ -991,11 +991,6 @@ std::string utils::program_version()
 	return std::string(utils::bridged::program_version());
 }
 
-unsigned int utils::newsboat_version_major()
-{
-	return rs_newsboat_version_major();
-}
-
 std::string utils::mt_strf_localtime(const std::string& format, time_t t)
 {
 	// localtime() returns a pointer to static memory, so we need to protect

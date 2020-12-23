@@ -27,6 +27,7 @@ mod ffi {
         fn strwidth(rs_str: &str) -> usize;
         fn strwidth_stfl(rs_str: &str) -> usize;
         fn extract_filter(line: &str) -> FilterUrlParts;
+        fn newsboat_major_version() -> u32;
     }
 }
 
@@ -306,11 +307,6 @@ pub unsafe extern "C" fn rs_run_program(
         let result = CString::new(output).unwrap();
         result.into_raw()
     })
-}
-
-#[no_mangle]
-pub extern "C" fn rs_newsboat_version_major() -> u32 {
-    abort_on_panic(utils::newsboat_major_version)
 }
 
 #[no_mangle]

@@ -400,7 +400,7 @@ void Cache::populate_tables()
 		version.major,
 		version.minor);
 
-	if (version.major > utils::newsboat_version_major()) {
+	if (version.major > utils::newsboat_major_version()) {
 		const std::string msg =
 			"Database schema isn't supported because it's too new";
 		LOG(Level::ERROR, msg);

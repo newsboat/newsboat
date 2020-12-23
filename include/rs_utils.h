@@ -24,8 +24,6 @@ std::int64_t rs_podcast_mime_to_link_type(const char* mimetype, bool* success);
 
 char* rs_run_program(const char* argv[], const char* input);
 
-unsigned int rs_newsboat_version_major();
-
 #ifdef __cplusplus
 }
 #endif
