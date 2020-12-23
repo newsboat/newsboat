@@ -18,8 +18,6 @@ enum class DlStatus {
 	PLAYED
 };
 
-class PbController;
-
 class Download {
 public:
 	explicit Download(std::function<void()> cb_require_view_update);

@@ -16,8 +16,6 @@ namespace podboat {
 
 class PbView;
 
-class QueueLoader;
-
 class PbController {
 public:
 	PbController();
