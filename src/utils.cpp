@@ -469,10 +469,8 @@ std::string utils::retrieve_url(const std::string& url,
 	}
 
 	if (!authinfo.empty()) {
-		curl_easy_setopt(easyhandle,
-			CURLOPT_HTTPAUTH,
-			get_auth_method(
-				cfgcont->get_configvalue("http-auth-method")));
+		const auto auth_method = cfgcont->get_configvalue("http-auth-method");
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, get_auth_method(auth_method));
 		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo.c_str());
 	}
 
@@ -772,11 +770,6 @@ std::string utils::get_content(xmlNode* node)
 std::string utils::get_basename(const std::string& url)
 {
 	return std::string(utils::bridged::get_basename(url));
-}
-
-unsigned long utils::get_auth_method(const std::string& type)
-{
-	return rs_get_auth_method(type.c_str());
 }
 
 curl_proxytype utils::get_proxy_type(const std::string& type)

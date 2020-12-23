@@ -9,8 +9,6 @@
 extern "C" {
 #endif
 
-unsigned long rs_get_auth_method(const char* str);
-
 char* rs_unescape_url(const char* str);
 
 std::uint8_t rs_run_interactively(const char* command, const char* caller,

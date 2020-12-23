@@ -116,7 +116,6 @@ std::string quote_if_necessary(const std::string& str);
 void set_common_curl_options(CURL* handle, ConfigContainer* cfg);
 
 curl_proxytype get_proxy_type(const std::string& type);
-unsigned long get_auth_method(const std::string& type);
 
 std::string get_content(xmlNode* node);
 std::string get_basename(const std::string& url);

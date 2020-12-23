@@ -1,5 +1,5 @@
 use crate::abort_on_panic;
-use libc::{c_char, c_ulong};
+use libc::c_char;
 use libnewsboat::utils::{self, *};
 use std::ffi::{CStr, CString};
 use std::path::{Path, PathBuf};
@@ -28,6 +28,12 @@ mod ffi {
         fn strwidth_stfl(rs_str: &str) -> usize;
         fn extract_filter(line: &str) -> FilterUrlParts;
         fn newsboat_major_version() -> u32;
+
+        // This function is wrapped on the Rust side to convert its output type from
+        // a platform-specific `c_ulong`/`unsigned long` to platform-agnostic `u64`. Since we don't
+        // need a wrapped on the C++ side, we chose to put this function in this module rather than
+        // the "bridged" one.
+        fn get_auth_method(method: &str) -> u64;
     }
 }
 
@@ -78,6 +84,10 @@ mod bridged {
         // cxx uses a non-C++ name of the type.
         include!("stddef.h");
     }
+}
+
+fn get_auth_method(method: &str) -> u64 {
+    utils::get_auth_method(method) as u64
 }
 
 fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool {
@@ -164,16 +174,6 @@ fn mkdir_parents(path: &str, mode: u32) -> isize {
         Ok(_) => 0,
         Err(_) => -1,
     }
-}
-
-#[no_mangle]
-pub unsafe extern "C" fn rs_get_auth_method(input: *const c_char) -> c_ulong {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        utils::get_auth_method(&rs_input)
-    })
 }
 
 #[no_mangle]
