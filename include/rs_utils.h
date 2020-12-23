@@ -9,8 +9,6 @@
 extern "C" {
 #endif
 
-char* rs_unescape_url(const char* str);
-
 std::uint8_t rs_run_interactively(const char* command, const char* caller,
 	bool* success);
 

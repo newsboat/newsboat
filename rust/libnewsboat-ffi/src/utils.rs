@@ -3,7 +3,6 @@ use libc::c_char;
 use libnewsboat::utils::{self, *};
 use std::ffi::{CStr, CString};
 use std::path::{Path, PathBuf};
-use std::ptr;
 
 #[cxx::bridge(namespace = "newsboat::utils")]
 mod ffi {
@@ -74,6 +73,8 @@ mod bridged {
         fn resolve_relative(reference: &str, path: &str) -> String;
         fn getcwd() -> String;
         fn mkdir_parents(path: &str, mode: u32) -> isize;
+
+        fn unescape_url(url: String, success: &mut bool) -> String;
     }
 
     extern "C++" {
@@ -176,24 +177,17 @@ fn mkdir_parents(path: &str, mode: u32) -> isize {
     }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_unescape_url(input: *const c_char) -> *mut c_char {
-    abort_on_panic(|| {
-        let rs_input = CStr::from_ptr(input);
-        let rs_input = rs_input.to_string_lossy().into_owned();
-
-        let result = utils::unescape_url(rs_input);
-        if let Some(result) = result {
-            // Panic here can't happen because:
-            // 1. It would have already occured within unescape_url
-            // 2. panic can only happen if `result` contains null bytes;
-            // 3. `result` contains what `input` contained, and input is a
-            // null-terminated string from C.
-            let result = CString::new(result).unwrap();
-            return result.into_raw();
+fn unescape_url(url: String, success: &mut bool) -> String {
+    match utils::unescape_url(url) {
+        Some(result) => {
+            *success = true;
+            result
         }
-        ptr::null_mut()
-    })
+        None => {
+            *success = false;
+            String::new()
+        }
+    }
 }
 
 #[no_mangle]
