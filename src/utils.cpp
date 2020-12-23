@@ -910,7 +910,7 @@ nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
 	const std::string& mimetype)
 {
 	bool ok = false;
-	const auto result = rs_podcast_mime_to_link_type(mimetype.c_str(), &ok);
+	const auto result = utils::bridged::podcast_mime_to_link_type(mimetype, ok);
 	if (ok) {
 		return static_cast<LinkType>(result);
 	}

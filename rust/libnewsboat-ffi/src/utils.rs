@@ -79,6 +79,8 @@ mod bridged {
         fn unescape_url(url: String, success: &mut bool) -> String;
 
         fn remove_soft_hyphens(text: &mut String);
+
+        fn podcast_mime_to_link_type(mime_type: &str, success: &mut bool) -> i64;
     }
 
     extern "C++" {
@@ -204,26 +206,18 @@ fn unescape_url(url: String, success: &mut bool) -> String {
     }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_podcast_mime_to_link_type(
-    mimetype: *const c_char,
-    success: *mut bool,
-) -> i64 {
-    abort_on_panic(|| {
-        let rs_mimetype = CStr::from_ptr(mimetype);
-        let rs_mimetype = rs_mimetype.to_string_lossy();
-        match utils::podcast_mime_to_link_type(&rs_mimetype) {
-            Some(link_type) => {
-                *success = true;
-                link_type as i64
-            }
-
-            None => {
-                *success = false;
-                0 // arbitrary value -- it won't be used on the other side
-            }
+fn podcast_mime_to_link_type(mime_type: &str, success: &mut bool) -> i64 {
+    match utils::podcast_mime_to_link_type(&mime_type) {
+        Some(link_type) => {
+            *success = true;
+            link_type as i64
         }
-    })
+
+        None => {
+            *success = false;
+            0 // arbitrary value -- it won't be used on the other side
+        }
+    }
 }
 
 #[no_mangle]
