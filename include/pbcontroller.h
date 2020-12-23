@@ -84,7 +84,7 @@ private:
 
 	unsigned int max_dls;
 
-	QueueLoader* ql;
+	std::unique_ptr<QueueLoader> ql;
 
 	std::string lock_file;
 	std::unique_ptr<newsboat::FsLock> fslock;

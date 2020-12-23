@@ -133,7 +133,6 @@ PbController::PbController()
 	, queue_file("queue")
 	, view_update_(true)
 	, max_dls(1)
-	, ql(0)
 	, lock_file("pb-lock.pid")
 	, keys(KM_PODBOAT)
 {
@@ -299,8 +298,8 @@ int PbController::run()
 
 	std::cout << _("done.") << std::endl;
 
-	ql = new QueueLoader(queue_file, cfg,
-		std::bind(&PbController::set_view_update_necessary, this, true));
+	ql.reset(new QueueLoader(queue_file, cfg,
+			std::bind(&PbController::set_view_update_necessary, this, true)));
 	ql->reload(downloads_);
 
 	v->set_keymap(&keys);
@@ -313,7 +312,6 @@ int PbController::run()
 	std::cout.flush();
 
 	ql->reload(downloads_);
-	delete ql;
 
 	std::cout << _("done.") << std::endl;
 
@@ -410,7 +408,7 @@ unsigned int PbController::get_maxdownloads()
 
 void PbController::purge_queue()
 {
-	if (ql) {
+	if (ql != nullptr) {
 		ql->reload(downloads_, true);
 	}
 }
