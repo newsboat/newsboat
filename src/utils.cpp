@@ -911,9 +911,8 @@ bool utils::is_valid_podcast_type(const std::string& mimetype)
 nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
 	const std::string& mimetype)
 {
-	bool ok = false;
-	const auto result = utils::bridged::podcast_mime_to_link_type(mimetype, ok);
-	if (ok) {
+	std::int64_t result = 0;
+	if (utils::bridged::podcast_mime_to_link_type(mimetype, result)) {
 		return static_cast<LinkType>(result);
 	}
 

@@ -79,7 +79,7 @@ mod bridged {
 
         fn remove_soft_hyphens(text: &mut String);
 
-        fn podcast_mime_to_link_type(mime_type: &str, success: &mut bool) -> i64;
+        fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool;
 
         fn run_program(argv: &Vec<String>, input: &str) -> String;
     }
@@ -207,16 +207,16 @@ fn unescape_url(url: String, success: &mut bool) -> String {
     }
 }
 
-fn podcast_mime_to_link_type(mime_type: &str, success: &mut bool) -> i64 {
+fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool {
     match utils::podcast_mime_to_link_type(&mime_type) {
         Some(link_type) => {
-            *success = true;
-            link_type as i64
+            *result = link_type as i64;
+            true
         }
 
         None => {
-            *success = false;
-            0 // arbitrary value -- it won't be used on the other side
+            // We don't assign anything to `result` because it won't be used on the other side.
+            false
         }
     }
 }
