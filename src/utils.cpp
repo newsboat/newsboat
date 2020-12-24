@@ -44,8 +44,6 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include <openssl/crypto.h>
 #endif
 
-#include "rs_utils.h"
-
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
@@ -83,7 +81,7 @@ void append_escapes(std::string& str, char c)
 
 std::string utils::strip_comments(const std::string& line)
 {
-	return RustString(rs_strip_comments(line.c_str()));
+	return std::string(utils::bridged::strip_comments(line));
 }
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str,
@@ -215,7 +213,7 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 std::string utils::consolidate_whitespace(const std::string& str)
 {
 
-	return RustString(rs_consolidate_whitespace(str.c_str()));
+	return std::string(utils::bridged::consolidate_whitespace(str));
 }
 
 std::vector<std::string> utils::tokenize_nl(const std::string& str,
@@ -397,17 +395,7 @@ std::string utils::utf8_to_locale(const std::string& text)
 
 std::string utils::get_command_output(const std::string& cmd)
 {
-	return RustString(rs_get_command_output(cmd.c_str()));
-}
-
-void utils::extract_filter(const std::string& line,
-	std::string& filter,
-	std::string& url)
-{
-	FilterUrl filterUrl = rs_extract_filter(line.c_str());
-
-	filter = RustString(filterUrl.filter);
-	url = RustString(filterUrl.url);
+	return std::string(utils::bridged::get_command_output(cmd));
 }
 
 static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
@@ -479,10 +467,8 @@ std::string utils::retrieve_url(const std::string& url,
 	}
 
 	if (!authinfo.empty()) {
-		curl_easy_setopt(easyhandle,
-			CURLOPT_HTTPAUTH,
-			get_auth_method(
-				cfgcont->get_configvalue("http-auth-method")));
+		const auto auth_method = cfgcont->get_configvalue("http-auth-method");
+		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, get_auth_method(auth_method));
 		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo.c_str());
 	}
 
@@ -505,32 +491,31 @@ std::string utils::retrieve_url(const std::string& url,
 	return buf;
 }
 
-void utils::run_command(const std::string& cmd, const std::string& input)
-{
-	rs_run_command(cmd.c_str(), input.c_str());
-}
-
 std::string utils::run_program(const char* argv[], const std::string& input)
 {
-	return RustString(rs_run_program(argv, input.c_str()));
+	rust::Vec<rust::String> rs_argv;
+	for (; *argv; ++argv) {
+		rs_argv.emplace_back(*argv);
+	}
+	return std::string(utils::bridged::run_program(rs_argv, input));
 }
 
 std::string utils::resolve_tilde(const std::string& str)
 {
-	return RustString(rs_resolve_tilde(str.c_str()));
+	return std::string(utils::bridged::resolve_tilde(str));
 }
 
 std::string utils::resolve_relative(const std::string& reference,
 	const std::string& fname)
 {
-	return RustString(rs_resolve_relative(reference.c_str(), fname.c_str()));
+	return std::string(utils::bridged::resolve_relative(reference, fname));
 }
 
 std::string utils::replace_all(std::string str,
 	const std::string& from,
 	const std::string& to)
 {
-	return RustString( rs_replace_all(str.c_str(), from.c_str(), to.c_str()) );
+	return std::string(utils::bridged::replace_all(str, from, to));
 }
 
 std::string utils::replace_all(const std::string& str,
@@ -581,7 +566,7 @@ std::string utils::wstr2str(const std::wstring& wstr)
 
 std::string utils::absolute_url(const std::string& url, const std::string& link)
 {
-	return RustString(rs_absolute_url(url.c_str(), link.c_str()));
+	return std::string(utils::bridged::absolute_url(url, link));
 }
 
 std::string utils::get_useragent(ConfigContainer* cfgcont)
@@ -618,16 +603,6 @@ unsigned int utils::to_u(const std::string& str,
 	return bridged::to_u(str, default_value);
 }
 
-bool utils::is_valid_color(const std::string& color)
-{
-	return rs_is_valid_color(color.c_str());
-}
-
-bool utils::is_valid_attribute(const std::string& attrib)
-{
-	return rs_is_valid_attribute(attrib.c_str());
-}
-
 std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 		unsigned int start,
 		unsigned int end,
@@ -647,26 +622,16 @@ std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 	return partitions;
 }
 
-size_t utils::strwidth(const std::string& str)
-{
-	return rs_strwidth(str.c_str());
-}
-
-size_t utils::strwidth_stfl(const std::string& str)
-{
-	return rs_strwidth_stfl(str.c_str());
-}
-
 std::string utils::substr_with_width(const std::string& str,
 	const size_t max_width)
 {
-	return RustString(rs_substr_with_width(str.c_str(), max_width));
+	return std::string(utils::bridged::substr_with_width(str, max_width));
 }
 
 std::string utils::substr_with_width_stfl(const std::string& str,
 	const size_t max_width)
 {
-	return RustString(rs_substr_with_width_stfl(str.c_str(), max_width));
+	return std::string(utils::bridged::substr_with_width_stfl(str, max_width));
 }
 
 std::string utils::join(const std::vector<std::string>& strings,
@@ -686,59 +651,34 @@ std::string utils::join(const std::vector<std::string>& strings,
 	return result;
 }
 
-bool utils::is_special_url(const std::string& url)
-{
-	return rs_is_special_url(url.c_str());
-}
-
-bool utils::is_http_url(const std::string& url)
-{
-	return rs_is_http_url(url.c_str());
-}
-
-bool utils::is_query_url(const std::string& url)
-{
-	return rs_is_query_url(url.c_str());
-}
-
-bool utils::is_filter_url(const std::string& url)
-{
-	return rs_is_filter_url(url.c_str());
-}
-
-bool utils::is_exec_url(const std::string& url)
-{
-	return rs_is_exec_url(url.c_str());
-}
-
 std::string utils::censor_url(const std::string& url)
 {
-	return RustString(rs_censor_url(url.c_str()));
+	return std::string(utils::bridged::censor_url(url));
 }
 
 std::string utils::quote_for_stfl(std::string str)
 {
-	return RustString(rs_quote_for_stfl(str.c_str()));
+	return std::string(utils::bridged::quote_for_stfl(str));
 }
 
 void utils::trim(std::string& str)
 {
-	str = RustString(rs_trim(str.c_str()));
+	str = std::string(utils::bridged::trim(str));
 }
 
 void utils::trim_end(std::string& str)
 {
-	str = RustString(rs_trim_end(str.c_str()));
+	str = std::string(utils::bridged::trim_end(str));
 }
 
 std::string utils::quote(const std::string& str)
 {
-	return RustString(rs_quote(str.c_str()));
+	return std::string(utils::bridged::quote(str));
 }
 
 std::string utils::quote_if_necessary(const std::string& str)
 {
-	return RustString(rs_quote_if_necessary(str.c_str()));
+	return std::string(utils::bridged::quote_if_necessary(str));
 }
 
 void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
@@ -831,12 +771,7 @@ std::string utils::get_content(xmlNode* node)
 
 std::string utils::get_basename(const std::string& url)
 {
-	return RustString(rs_get_basename(url.c_str()));
-}
-
-unsigned long utils::get_auth_method(const std::string& type)
-{
-	return rs_get_auth_method(type.c_str());
+	return std::string(utils::bridged::get_basename(url));
 }
 
 curl_proxytype utils::get_proxy_type(const std::string& type)
@@ -869,12 +804,13 @@ curl_proxytype utils::get_proxy_type(const std::string& type)
 
 std::string utils::unescape_url(const std::string& url)
 {
-	char* ptr = rs_unescape_url(url.c_str());
-	if (ptr == nullptr) {
+	bool success = false;
+	const auto result = utils::bridged::unescape_url(url, success);
+	if (!success) {
 		LOG(Level::DEBUG, "Rust failed to unescape url: %s", url );
 		throw std::runtime_error("unescaping url failed");
 	} else {
-		return RustString(ptr);
+		return std::string(result);
 	}
 }
 
@@ -888,31 +824,24 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
 	return text;
 }
 
-unsigned int utils::gentabs(const std::string& str)
-{
-	return rs_gentabs(str.c_str());
-}
-
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
 int utils::mkdir_parents(const std::string& p, mode_t mode)
 {
-	return rs_mkdir_parents(p.c_str(), static_cast<std::uint32_t>(mode));
+	return utils::bridged::mkdir_parents(p, static_cast<std::uint32_t>(mode));
 }
 
 std::string utils::make_title(const std::string& const_url)
 {
-	return RustString(rs_make_title(const_url.c_str()));
+	return std::string(utils::bridged::make_title(const_url));
 }
 
 nonstd::optional<std::uint8_t> utils::run_interactively(
 	const std::string& command,
 	const std::string& caller)
 {
-	bool success = false;
-	const auto exit_code = rs_run_interactively(command.c_str(), caller.c_str(),
-			&success);
-	if (success) {
+	std::uint8_t exit_code = 0;
+	if (bridged::run_interactively(command, caller, exit_code)) {
 		return exit_code;
 	}
 
@@ -933,7 +862,7 @@ nonstd::optional<std::uint8_t> utils::run_non_interactively(
 
 std::string utils::getcwd()
 {
-	return RustString(rs_getcwd());
+	return std::string(utils::bridged::getcwd());
 }
 
 utils::ReadTextFileResult utils::read_text_file( const std::string& filename)
@@ -967,30 +896,23 @@ utils::ReadTextFileResult utils::read_text_file( const std::string& filename)
 	}
 }
 
-int utils::strnaturalcmp(const std::string& a, const std::string& b)
-{
-	return rs_strnaturalcmp(a.c_str(), b.c_str());
-}
-
 void utils::remove_soft_hyphens(std::string& text)
 {
-	/* Remove all soft-hyphens as they can behave unpredictably (see
-	 * https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490)
-	 * and inadvertently render as hyphens */
-	text = RustString(rs_remove_soft_hyphens(text.c_str()));
+	rust::String tmp(text);
+	utils::bridged::remove_soft_hyphens(tmp);
+	text = std::string(tmp);
 }
 
 bool utils::is_valid_podcast_type(const std::string& mimetype)
 {
-	return rs_is_valid_podcast_type(mimetype.c_str());
+	return utils::bridged::is_valid_podcast_type(mimetype);
 }
 
 nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
 	const std::string& mimetype)
 {
-	bool ok = false;
-	const auto result = rs_podcast_mime_to_link_type(mimetype.c_str(), &ok);
-	if (ok) {
+	std::int64_t result = 0;
+	if (utils::bridged::podcast_mime_to_link_type(mimetype, result)) {
 		return static_cast<LinkType>(result);
 	}
 
@@ -1053,17 +975,12 @@ void utils::initialize_ssl_implementation(void)
 
 std::string utils::get_default_browser()
 {
-	return RustString(rs_get_default_browser());
+	return std::string(utils::bridged::get_default_browser());
 }
 
 std::string utils::program_version()
 {
-	return RustString(rs_program_version());
-}
-
-unsigned int utils::newsboat_version_major()
-{
-	return rs_newsboat_version_major();
+	return std::string(utils::bridged::program_version());
 }
 
 std::string utils::mt_strf_localtime(const std::string& format, time_t t)

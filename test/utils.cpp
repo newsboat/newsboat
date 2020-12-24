@@ -9,7 +9,6 @@
 
 #include "3rd-party/catch.hpp"
 #include "htmlrenderer.h"
-#include "rs_utils.h"
 #include "test-helpers/chdir.h"
 #include "test-helpers/envvar.h"
 #include "test-helpers/stringmaker/optional.h"
@@ -531,34 +530,36 @@ TEST_CASE("get_command_output()", "[utils]")
 
 TEST_CASE("extract_filter()", "[utils]")
 {
-	std::string filter;
-	std::string url;
+	{
+		const auto parts =
+			utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org");
+		REQUIRE(std::string(parts.script_name) == "~/bin/script.sh");
+		REQUIRE(std::string(parts.url) == "https://newsboat.org");
+	}
 
-	utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org", filter,
-		url);
+	{
+		const auto parts = utils::extract_filter("filter::https://newsboat.org");
+		REQUIRE(std::string(parts.script_name) == "");
+		REQUIRE(std::string(parts.url) == "https://newsboat.org");
+	}
 
-	REQUIRE(filter == "~/bin/script.sh");
-	REQUIRE(url == "https://newsboat.org");
+	{
+		const auto parts = utils::extract_filter("filter:https://newsboat.org");
+		REQUIRE(std::string(parts.script_name) == "https");
+		REQUIRE(std::string(parts.url) == "//newsboat.org");
+	}
 
-	utils::extract_filter("filter::https://newsboat.org", filter, url);
+	{
+		const auto parts = utils::extract_filter("filter:foo:");
+		REQUIRE(std::string(parts.script_name) == "foo");
+		REQUIRE(std::string(parts.url) == "");
+	}
 
-	REQUIRE(filter == "");
-	REQUIRE(url == "https://newsboat.org");
-
-	utils::extract_filter("filter:https://newsboat.org", filter, url);
-
-	REQUIRE(filter == "https");
-	REQUIRE(url == "//newsboat.org");
-
-	utils::extract_filter("filter:foo:", filter, url);
-
-	REQUIRE(filter == "foo");
-	REQUIRE(url == "");
-
-	utils::extract_filter("filter:", filter, url);
-
-	REQUIRE(filter == "");
-	REQUIRE(url == "");
+	{
+		const auto parts = utils::extract_filter("filter:");
+		REQUIRE(std::string(parts.script_name) == "");
+		REQUIRE(std::string(parts.url) == "");
+	}
 }
 
 TEST_CASE("run_program()", "[utils]")
@@ -881,7 +882,8 @@ TEST_CASE("strwidth()", "[utils]")
 
 	REQUIRE(utils::strwidth("xx") == 2);
 
-	REQUIRE(utils::strwidth(utils::wstr2str(L"\uF91F")) == 2);
+	const auto input1 = utils::wstr2str(L"\uF91F");
+	REQUIRE(utils::strwidth(input1) == 2);
 	REQUIRE(utils::strwidth("\07") == 0);
 }
 
@@ -899,7 +901,8 @@ TEST_CASE("strwidth_stfl()", "[utils]")
 
 	REQUIRE(utils::strwidth_stfl("x<>y<>z") == 5);
 
-	REQUIRE(utils::strwidth_stfl(utils::wstr2str(L"\uF91F")) == 2);
+	const auto input1 = utils::wstr2str(L"\uF91F");
+	REQUIRE(utils::strwidth_stfl(input1) == 2);
 	REQUIRE(utils::strwidth_stfl("\07") == 0);
 }
 
