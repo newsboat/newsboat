@@ -1,5 +1,5 @@
 By default, Newsboat stores all the files in a traditional Unix fashion, i.e.
-in the "dotdir" located at _~/.newsboat_. However, it also supports a modern
+in a "dotdir" located at _~/.newsboat_. However, it also supports a modern
 way,
 https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base Directory Specification],
 which splits the files between the following locations:
@@ -9,7 +9,7 @@ which splits the files between the following locations:
 
 If these directories exist or the environment variables `$XDG_CONFIG_HOME` and
 `$XDG_DATA_HOME` are set, Newsboat will use these directories, otherwise it
-will default to _~/.newsboat_ as its configuration directory.
+will default to _~/.newsboat_.
 
 If you're currently using _~/.newsboat/_ but wish to migrate to XDG
 directories, you should move the files as follows:
