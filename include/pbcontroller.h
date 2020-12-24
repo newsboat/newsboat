@@ -72,7 +72,6 @@ private:
 	std::vector<Download> downloads_;
 
 	std::string config_dir;
-	std::string cache_file;
 
 	unsigned int max_dls;
 

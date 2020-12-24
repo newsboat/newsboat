@@ -113,9 +113,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		config_dir + NEWSBEUTER_PATH_SEP + config_file;
 
 	/* in data */
-	cache_file =
-		xdg_data_dir + NEWSBEUTER_PATH_SEP + cache_file;
-	lock_file = cache_file + LOCK_SUFFIX;
+	lock_file = xdg_data_dir + NEWSBEUTER_PATH_SEP + LOCK_SUFFIX;
 	queue_file =
 		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
 
