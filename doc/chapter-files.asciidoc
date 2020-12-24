@@ -7,8 +7,8 @@ which splits the files between the following locations:
 - _~/.local/share/newsboat/_
 - _~/.config/newsboat/_
 
-If these directories exist, Newsboat will use them, otherwise it will default
-to _~/.newsboat_.
+If the config directory exists, Newsboat will use XDG directories, otherwise it
+will default to _~/.newsboat_.
 
 If you're currently using _~/.newsboat/_ but wish to migrate to XDG
 directories, you should move the files as follows:
