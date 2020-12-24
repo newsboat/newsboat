@@ -104,24 +104,24 @@ bool ItemListFormAction::process_operation(Operation op,
 	break;
 	case OP_DELETE_ALL: {
 		ScopeMeasure m1("OP_DELETE_ALL");
-		if (visible_items.size() > 0) {
-			if (!feed->is_search_feed()) {
-				v->get_ctrl()->mark_all_read(pos);
-			} else {
-				v->get_ctrl()->mark_all_read(feed);
-			}
-			for (const auto& pair : visible_items) {
-				pair.first->set_deleted(true);
-			}
-			if (feed->is_query_feed() || feed->is_search_feed()) {
-				for (const auto& pair : visible_items) {
-					rsscache->mark_item_deleted(pair.first->guid(), true);
-				}
-			} else {
-				rsscache->mark_feed_items_deleted(feed->rssurl());
-			}
-			invalidate_list();
+
+		std::vector<std::string> item_guids;
+		for (const auto& pair : visible_items) {
+			const auto item = pair.first;
+			item_guids.push_back(item->guid());
 		}
+		v->get_ctrl()->mark_all_read(item_guids);
+
+		for (const auto& pair : visible_items) {
+			const auto item = pair.first;
+
+			// mark as read
+			item->set_unread(false);
+			// mark as deleted
+			item->set_deleted(true);
+			rsscache->mark_item_deleted(item->guid(), true);
+		}
+		invalidate_list();
 	}
 	break;
 	case OP_PURGE_DELETED: {
