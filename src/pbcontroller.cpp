@@ -109,7 +109,6 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	}
 
 	/* in config */
-	url_file = config_dir + NEWSBEUTER_PATH_SEP + url_file;
 	config_file =
 		config_dir + NEWSBEUTER_PATH_SEP + config_file;
 
@@ -119,10 +118,6 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	lock_file = cache_file + LOCK_SUFFIX;
 	queue_file =
 		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
-	searchfile = strprintf::fmt(
-			"%s%chistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
-	cmdlinefile = strprintf::fmt(
-			"%s%chistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }
