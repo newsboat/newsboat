@@ -37,8 +37,6 @@ public:
 		return downloads_;
 	}
 
-	std::string get_formatstr();
-
 	unsigned int downloads_in_progress();
 	void purge_queue();
 

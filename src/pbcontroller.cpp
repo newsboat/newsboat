@@ -384,11 +384,6 @@ void PbController::print_usage(const char* argv0)
 		<< std::endl;
 }
 
-std::string PbController::get_formatstr()
-{
-	return cfg.get_configvalue("podlist-format");
-}
-
 unsigned int PbController::downloads_in_progress()
 {
 	unsigned int count = 0;

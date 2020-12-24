@@ -90,14 +90,15 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				static_cast<uint64_t>(ctrl->downloads().size()));
 
 			ListFormatter listfmt;
-			std::string formatstring = ctrl->get_formatstr();
+			const std::string line_format =
+				ctrl->get_cfgcont()->get_configvalue("podlist-format");
 
 			dllist_form.run(-3); // compute all widget dimensions
 			const unsigned int width = downloads_list.get_width();
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
-				auto lbuf = format_line(formatstring, dl, i, width);
+				auto lbuf = format_line(line_format, dl, i, width);
 				listfmt.add_line(lbuf);
 				i++;
 			}
