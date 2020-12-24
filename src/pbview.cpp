@@ -16,7 +16,6 @@
 #include "listformatter.h"
 #include "logger.h"
 #include "pbcontroller.h"
-#include "poddlthread.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -90,14 +89,15 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				static_cast<uint64_t>(ctrl->downloads().size()));
 
 			ListFormatter listfmt;
-			std::string formatstring = ctrl->get_formatstr();
+			const std::string line_format =
+				ctrl->get_cfgcont()->get_configvalue("podlist-format");
 
 			dllist_form.run(-3); // compute all widget dimensions
 			const unsigned int width = downloads_list.get_width();
 
 			unsigned int i = 0;
 			for (const auto& dl : ctrl->downloads()) {
-				auto lbuf = format_line(formatstring, dl, i, width);
+				auto lbuf = format_line(line_format, dl, i, width);
 				listfmt.add_line(lbuf);
 				i++;
 			}
@@ -192,12 +192,9 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PB_DOWNLOAD: {
 			if (ctrl->downloads().size() >= 1) {
 				const auto idx = downloads_list.get_position();
-				if (ctrl->downloads()[idx].status() !=
-					DlStatus::DOWNLOADING) {
-					std::thread t{PodDlThread(
-							&ctrl->downloads()[idx],
-							ctrl->get_cfgcont())};
-					t.detach();
+				auto& item = ctrl->downloads()[idx];
+				if (item.status() != DlStatus::DOWNLOADING) {
+					ctrl->start_download(item);
 				}
 			}
 		}

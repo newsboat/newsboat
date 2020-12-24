@@ -29,7 +29,7 @@ QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
 }
 
 void QueueLoader::reload(std::vector<Download>& downloads,
-	bool also_remove_finished)
+	bool also_remove_finished) const
 {
 	std::vector<Download> dltemp;
 	std::vector<Download> deletion_list;
@@ -236,7 +236,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 	downloads = dltemp;
 }
 
-std::string QueueLoader::get_filename(const std::string& str)
+std::string QueueLoader::get_filename(const std::string& str) const
 {
 	std::string fn = cfg.get_configvalue("download-path");
 

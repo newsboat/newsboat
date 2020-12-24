@@ -31,9 +31,8 @@ int main(int argc, char* argv[])
 		c.initialize(argc, argv);
 
 		podboat::PbView v(&c);
-		c.set_view(&v);
 
-		return c.run();
+		return c.run(v);
 	} catch (const newsboat::Exception& e) {
 		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
 					"message: %s"),

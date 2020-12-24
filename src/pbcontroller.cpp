@@ -109,32 +109,22 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	}
 
 	/* in config */
-	url_file = config_dir + NEWSBEUTER_PATH_SEP + url_file;
 	config_file =
 		config_dir + NEWSBEUTER_PATH_SEP + config_file;
 
 	/* in data */
-	cache_file =
-		xdg_data_dir + NEWSBEUTER_PATH_SEP + cache_file;
-	lock_file = cache_file + LOCK_SUFFIX;
+	lock_file = xdg_data_dir + NEWSBEUTER_PATH_SEP + LOCK_SUFFIX;
 	queue_file =
 		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
-	searchfile = strprintf::fmt(
-			"%s%chistory.search", xdg_data_dir, NEWSBEUTER_PATH_SEP);
-	cmdlinefile = strprintf::fmt(
-			"%s%chistory.cmdline", xdg_data_dir, NEWSBEUTER_PATH_SEP);
 
 	return true;
 }
 
 PbController::PbController()
-	: v(0)
-	, config_file("config")
+	: config_file("config")
 	, queue_file("queue")
-	, cfg(0)
 	, view_update_(true)
 	, max_dls(1)
-	, ql(0)
 	, lock_file("pb-lock.pid")
 	, keys(KM_PODBOAT)
 {
@@ -181,11 +171,6 @@ PbController::PbController()
 	config_file = config_dir + NEWSBEUTER_PATH_SEP + config_file;
 	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
 	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
-}
-
-PbController::~PbController()
-{
-	delete cfg;
 }
 
 void PbController::initialize(int argc, char* argv[])
@@ -272,8 +257,7 @@ void PbController::initialize(int argc, char* argv[])
 	std::cout.flush();
 
 	ConfigParser cfgparser;
-	cfg = new ConfigContainer();
-	cfg->register_commands(cfgparser);
+	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
 	cfgparser.register_handler("bind-key", keys);
@@ -298,21 +282,21 @@ void PbController::initialize(int argc, char* argv[])
 	}
 }
 
-int PbController::run()
+int PbController::run(PbView& v)
 {
-	v->apply_colors_to_all_forms();
+	v.apply_colors_to_all_forms();
 
-	max_dls = cfg->get_configvalue_as_int("max-downloads");
+	max_dls = cfg.get_configvalue_as_int("max-downloads");
 
 	std::cout << _("done.") << std::endl;
 
-	ql = new QueueLoader(queue_file, *cfg,
-		std::bind(&PbController::set_view_update_necessary, this, true));
+	ql.reset(new QueueLoader(queue_file, cfg,
+			std::bind(&PbController::set_view_update_necessary, this, true)));
 	ql->reload(downloads_);
 
-	v->set_keymap(&keys);
+	v.set_keymap(&keys);
 
-	v->run(automatic_dl, cfg->get_configvalue_as_bool("wrap-scroll"));
+	v.run(automatic_dl, cfg.get_configvalue_as_bool("wrap-scroll"));
 
 	Stfl::reset();
 
@@ -320,7 +304,6 @@ int PbController::run()
 	std::cout.flush();
 
 	ql->reload(downloads_);
-	delete ql;
 
 	std::cout << _("done.") << std::endl;
 
@@ -394,11 +377,6 @@ void PbController::print_usage(const char* argv0)
 		<< std::endl;
 }
 
-std::string PbController::get_formatstr()
-{
-	return cfg->get_configvalue("podlist-format");
-}
-
 unsigned int PbController::downloads_in_progress()
 {
 	unsigned int count = 0;
@@ -417,7 +395,7 @@ unsigned int PbController::get_maxdownloads()
 
 void PbController::purge_queue()
 {
-	if (ql) {
+	if (ql != nullptr) {
 		ql->reload(downloads_, true);
 	}
 }
@@ -442,11 +420,16 @@ void PbController::start_downloads()
 		}
 
 		if (download.status() == DlStatus::QUEUED) {
-			std::thread t{PodDlThread(&download, cfg)};
+			start_download(download);
 			--dl2start;
-			t.detach();
 		}
 	}
+}
+
+void PbController::start_download(Download& item)
+{
+	std::thread t{PodDlThread(&item, &cfg)};
+	t.detach();
 }
 
 void PbController::increase_parallel_downloads()
@@ -464,7 +447,7 @@ void PbController::decrease_parallel_downloads()
 void PbController::play_file(const std::string& file)
 {
 	std::string cmdline;
-	std::string player = cfg->get_configvalue("player");
+	std::string player = cfg.get_configvalue("player");
 	if (player == "") {
 		return;
 	}

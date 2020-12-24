@@ -558,9 +558,9 @@ src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  include/listformatter.h include/logger.h include/strprintf.h \
  include/pbcontroller.h include/configcontainer.h include/download.h \
  include/fslock.h target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h \
- include/queueloader.h include/poddlthread.h include/strprintf.h \
- include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
- include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
+ include/queueloader.h include/strprintf.h include/utils.h \
+ 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/poddlthread.o: src/poddlthread.cpp include/poddlthread.h \
  include/configcontainer.h include/configactionhandler.h \
  include/download.h config.h include/logger.h include/strprintf.h \
