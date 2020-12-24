@@ -16,7 +16,6 @@
 #include "listformatter.h"
 #include "logger.h"
 #include "pbcontroller.h"
-#include "poddlthread.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -193,12 +192,9 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PB_DOWNLOAD: {
 			if (ctrl->downloads().size() >= 1) {
 				const auto idx = downloads_list.get_position();
-				if (ctrl->downloads()[idx].status() !=
-					DlStatus::DOWNLOADING) {
-					std::thread t{PodDlThread(
-							&ctrl->downloads()[idx],
-							ctrl->get_cfgcont())};
-					t.detach();
+				auto& item = ctrl->downloads()[idx];
+				if (item.status() != DlStatus::DOWNLOADING) {
+					ctrl->start_download(item);
 				}
 			}
 		}

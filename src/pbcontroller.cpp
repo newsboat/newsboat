@@ -427,11 +427,16 @@ void PbController::start_downloads()
 		}
 
 		if (download.status() == DlStatus::QUEUED) {
-			std::thread t{PodDlThread(&download, &cfg)};
+			start_download(download);
 			--dl2start;
-			t.detach();
 		}
 	}
+}
+
+void PbController::start_download(Download& item)
+{
+	std::thread t{PodDlThread(&item, &cfg)};
+	t.detach();
 }
 
 void PbController::increase_parallel_downloads()

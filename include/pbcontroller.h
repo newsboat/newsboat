@@ -42,6 +42,7 @@ public:
 
 	unsigned int get_maxdownloads();
 	void start_downloads();
+	void start_download(Download& item);
 
 	void increase_parallel_downloads();
 	void decrease_parallel_downloads();
