@@ -177,6 +177,9 @@ for this release also includes Ivan Tham.
 - Colons sometimes making filter expressions invalid (Alexander Batischev)
 - Child processes that display notifications not being waited on. We now
     double-fork them (glacambre)
+- Newsboat deleting all items of a feed when `cleanup-on-quit` is enabled (the
+    default) and user moves from a search feed to a different feed with
+    `next-unread` or `prev-unread` operations (#685) (Dennis van der Schagt)
 
 
 
