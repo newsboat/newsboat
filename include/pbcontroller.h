@@ -20,12 +20,9 @@ class PbController {
 public:
 	PbController();
 	~PbController() = default;
-	void set_view(PbView* vv)
-	{
-		v = vv;
-	}
+
 	void initialize(int argc, char* argv[]);
-	int run();
+	int run(PbView& v);
 
 	bool view_update_necessary() const
 	{
@@ -69,7 +66,6 @@ private:
 	void print_usage(const char* argv0);
 	bool setup_dirs_xdg(const char* env_home);
 
-	PbView* v;
 	std::string config_file;
 	std::string queue_file;
 	newsboat::ConfigContainer cfg;

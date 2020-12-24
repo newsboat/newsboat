@@ -128,8 +128,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 }
 
 PbController::PbController()
-	: v(0)
-	, config_file("config")
+	: config_file("config")
 	, queue_file("queue")
 	, view_update_(true)
 	, max_dls(1)
@@ -290,9 +289,9 @@ void PbController::initialize(int argc, char* argv[])
 	}
 }
 
-int PbController::run()
+int PbController::run(PbView& v)
 {
-	v->apply_colors_to_all_forms();
+	v.apply_colors_to_all_forms();
 
 	max_dls = cfg.get_configvalue_as_int("max-downloads");
 
@@ -302,9 +301,9 @@ int PbController::run()
 			std::bind(&PbController::set_view_update_necessary, this, true)));
 	ql->reload(downloads_);
 
-	v->set_keymap(&keys);
+	v.set_keymap(&keys);
 
-	v->run(automatic_dl, cfg.get_configvalue_as_bool("wrap-scroll"));
+	v.run(automatic_dl, cfg.get_configvalue_as_bool("wrap-scroll"));
 
 	Stfl::reset();
 
