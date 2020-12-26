@@ -23,3 +23,25 @@ _config_, _urls_::
 _cache.db_, _history.search_, _history.cmdline_, _queue_::
         to _$XDG_DATA_HOME/newsboat/_
 
+Newsboat and Podboat also create "lock files". These prevent you from starting
+two instances of the same program, and thus from corrupting your data. Newsboat
+and Podboat remove these files when you quit the program, so there is no need
+to copy them anywhere — just be aware of them in case you write scripts that
+work with _cache.db_ or _queue_. By default, lock files are located as follows:
+
+|===
+||dotdir|XDG
+
+|Newsboat
+|_~/.newsboat/cache.db.lock_
+|_$XDG_DATA_HOME/newsboat/cache.db.lock_
+
+|Podboat
+|_~/.newsboat/pb-lock.pid_
+|_$XDG_DATA_HOME/newsboat/.lock_
+|===
+
+Newsboat places the lock file next to the cache file, so if you specify
+<<cache-file,cache-file>> setting or pass `--cache-file` command-line argument,
+the path to the lock file will change too. Podboat, on the other hand, always
+places its lock file as shown above.
