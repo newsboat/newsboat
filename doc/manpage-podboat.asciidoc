@@ -67,9 +67,13 @@ dotfiles::
 _$HOME/.newsboat/queue_
 
 XDG::
-        _$HOME/.config/newsboat/config_
+        _$XDG_CONFIG_HOME/newsboat/config_
 +
-_$HOME/.local/share/newsboat/queue_
+_$XDG_DATA_HOME/newsboat/queue_
++
+Note: if `XDG_CONFIG_HOME` environment variable is not set, Newsboat behaves as
+if it was set to _~/.config_. Similarly, `XDG_DATA_HOME` defaults to
+    _~/.local/share_.
 
 
 == ENVIRONMENT

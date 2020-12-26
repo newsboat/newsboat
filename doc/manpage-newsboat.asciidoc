@@ -147,9 +147,11 @@ dotfiles::
 _$HOME/.newsboat/urls_
 
 XDG::
-        _$HOME/.config/newsboat/config_
+        _$XDG_CONFIG_HOME/newsboat/config_
 +
-_$HOME/.config/newsboat/urls_
+_$XDG_CONFIG_HOME/newsboat/urls_
++
+Note: if `XDG_CONFIG_HOME` environment variable is not set, Newsboat behaves as if it was set to _~/.config_.
 
 
 == ENVIRONMENT
