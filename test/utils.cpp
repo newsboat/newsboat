@@ -636,7 +636,7 @@ TEST_CASE("run_command() doesn't wait for the command to finish",
 	REQUIRE(runtime.count() < 60000);
 }
 
-TEST_CASE("resolve_tilde() replaces ~ with the path to the $HOME directory",
+TEST_CASE("resolve_tilde() replaces ~ with the path to the home directory",
 	"[utils]")
 {
 	TestHelpers::EnvVar envVar("HOME");

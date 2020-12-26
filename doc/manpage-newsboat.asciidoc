@@ -142,9 +142,9 @@ _<number>_::
 include::chapter-files.asciidoc[]
 
 dotfiles::
-        _$HOME/.newsboat/config_
+        _~/.newsboat/config_
 +
-_$HOME/.newsboat/urls_
+_~/.newsboat/urls_
 
 XDG::
         _$XDG_CONFIG_HOME/newsboat/config_
