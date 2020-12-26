@@ -71,9 +71,9 @@ XDG::
 +
 _$XDG_DATA_HOME/newsboat/queue_
 +
-Note: if `XDG_CONFIG_HOME` environment variable is not set, Newsboat behaves as
+Note: if the `XDG_CONFIG_HOME` environment variable is not set, Podboat behaves as
 if it was set to _~/.config_. Similarly, `XDG_DATA_HOME` defaults to
-    _~/.local/share_.
+_~/.local/share_.
 
 
 == ENVIRONMENT

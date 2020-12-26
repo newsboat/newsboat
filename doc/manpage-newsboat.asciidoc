@@ -151,7 +151,7 @@ XDG::
 +
 _$XDG_CONFIG_HOME/newsboat/urls_
 +
-Note: if `XDG_CONFIG_HOME` environment variable is not set, Newsboat behaves as if it was set to _~/.config_.
+Note: if the `XDG_CONFIG_HOME` environment variable is not set, Newsboat behaves as if it was set to _~/.config_.
 
 
 == ENVIRONMENT
