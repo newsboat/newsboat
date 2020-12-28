@@ -52,7 +52,7 @@ prev-unread-feed||^P||Go to the previous feed with unread articles. This only wo
 next-feed||j||Go to the next feed. This only works from the article list.
 prev-feed||k||Go to the previous feed. This only works from the article list.
 delete-article||D||Delete the currently selected article.
-delete-all-articles||^D||Delete all articles in the current feed.
+delete-all-articles||^D||Delete all articles in the articlelist. Note that the articlelist might contain a subset of feed's articles (because of filters or `show-read-articles no`), or it might contain a mix of articles from different feeds (if you're viewing a query feed) — in either case, `delete-all-articles` affects just those articles, not all articles of the respective feed(s).
 purge-deleted||$||Purge all articles that are marked as deleted from the article list.
 view-dialogs||v||View list of open dialogs.
 close-dialog||^X||Close currently selected dialog.
