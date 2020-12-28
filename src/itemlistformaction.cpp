@@ -1114,6 +1114,12 @@ void ItemListFormAction::init()
 	if (cfg->get_configvalue_as_bool("goto-first-unread")) {
 		jump_to_next_unread_item(true);
 	}
+
+	// This is a hack to make `prepare()` do all the work it's required to do
+	// on the first run. Yes, we have a call to `invalidate_list() ` just a few
+	// lines prior, but `draw_items()` above resets the mode back to `NONE`,
+	// leading to https://github.com/newsboat/newsboat/issues/1385
+	invalidate_list();
 }
 
 void ItemListFormAction::set_head(const std::string& s,
