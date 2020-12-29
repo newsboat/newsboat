@@ -50,6 +50,7 @@ public:
 	{
 		rsscache->mark_all_read(feed);
 	}
+	void mark_all_read(const std::vector<std::string>& item_guids);
 	bool get_refresh_on_start() const
 	{
 		return refresh_on_start;

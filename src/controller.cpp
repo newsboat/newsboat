@@ -635,6 +635,14 @@ void Controller::mark_all_read(unsigned int pos)
 	feedcontainer.mark_all_feed_items_read(feed);
 }
 
+void Controller::mark_all_read(const std::vector<std::string>& item_guids)
+{
+	ScopeMeasure m("Controller::mark_all_read");
+	if (api) {
+		api->mark_articles_read(item_guids);
+	}
+}
+
 void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	std::shared_ptr<RssFeed> newfeed,
 	unsigned int pos,
