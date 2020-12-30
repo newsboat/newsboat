@@ -889,7 +889,7 @@ void ItemListFormAction::qna_start_search()
 		return;
 	}
 
-	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(rsscache));
+	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(rsscache, ""));
 	search_dummy_feed->set_search_feed(true);
 	search_dummy_feed->add_items(items);
 

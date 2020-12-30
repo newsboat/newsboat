@@ -17,7 +17,7 @@ std::vector<std::shared_ptr<RssFeed>> get_five_empty_feeds(Cache* rsscache)
 {
 	std::vector<std::shared_ptr<RssFeed>> feeds;
 	for (int i = 0; i < 5; ++i) {
-		const auto feed = std::make_shared<RssFeed>(rsscache);
+		const auto feed = std::make_shared<RssFeed>(rsscache, "");
 		feeds.push_back(feed);
 	}
 	return feeds;
@@ -30,11 +30,16 @@ TEST_CASE("get_feed() returns feed by its position number", "[FeedContainer]")
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	const auto feeds = get_five_empty_feeds(&rsscache);
+	const std::vector<std::shared_ptr<RssFeed>> feeds = {
+		std::make_shared<RssFeed>(&rsscache, "url/0"),
+		std::make_shared<RssFeed>(&rsscache, "url/1"),
+		std::make_shared<RssFeed>(&rsscache, "url/2"),
+		std::make_shared<RssFeed>(&rsscache, "url/3"),
+		std::make_shared<RssFeed>(&rsscache, "url/4")
+	};
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_title(std::to_string(i));
-		feed->set_rssurl("url/" + std::to_string(i));
 		i++;
 	}
 	feedcontainer.set_feeds(feeds);
@@ -65,7 +70,7 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	feedcontainer.set_feeds({});
-	const auto feed = std::make_shared<RssFeed>(&rsscache);
+	const auto feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_title("Example feed");
 
 	feedcontainer.add_feed(feed);
@@ -85,8 +90,8 @@ TEST_CASE("populate_query_feeds() populates query feeds", "[FeedContainer]")
 		feeds[j]->add_item(item);
 	}
 
-	const auto feed = std::make_shared<RssFeed>(&rsscache);
-	feed->set_rssurl("query:a title:unread = \"yes\"");
+	const auto feed = std::make_shared<RssFeed>(&rsscache,
+			"query:a title:unread = \"yes\"");
 	feeds.push_back(feed);
 
 	feedcontainer.set_feeds(feeds);
@@ -113,11 +118,16 @@ TEST_CASE("get_feed_by_url() returns feed by its URL", "[FeedContainer]")
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	const auto feeds = get_five_empty_feeds(&rsscache);
+	const std::vector<std::shared_ptr<RssFeed>> feeds = {
+		std::make_shared<RssFeed>(&rsscache, "url/0"),
+		std::make_shared<RssFeed>(&rsscache, "url/1"),
+		std::make_shared<RssFeed>(&rsscache, "url/2"),
+		std::make_shared<RssFeed>(&rsscache, "url/3"),
+		std::make_shared<RssFeed>(&rsscache, "url/4")
+	};
 	int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_title(std::to_string(i));
-		feed->set_rssurl("url/" + std::to_string(i));
 		i++;
 	}
 	feedcontainer.set_feeds(feeds);
@@ -137,12 +147,11 @@ TEST_CASE(
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	const auto feeds = get_five_empty_feeds(&rsscache);
-	int i = 0;
-	for (const auto& feed : feeds) {
-		feed->set_rssurl("url/" + std::to_string(i));
-		i++;
-	}
+	const std::vector<std::shared_ptr<RssFeed>> feeds = {
+		std::make_shared<RssFeed>(&rsscache, "url/0"),
+		std::make_shared<RssFeed>(&rsscache, "url/1"),
+		std::make_shared<RssFeed>(&rsscache, "url/2"),
+	};
 	feedcontainer.set_feeds(feeds);
 
 	auto feed = feedcontainer.get_feed_by_url("Wrong URL");
@@ -732,10 +741,10 @@ TEST_CASE("unread_item_count() returns number of distinct unread items "
 
 		auto feeds = get_five_empty_feeds(&rsscache);
 
-		auto query1 = std::make_shared<RssFeed>(&rsscache);
-		query1->set_rssurl("query:Title contains word:title # \"word\"");
-		auto query2 = std::make_shared<RssFeed>(&rsscache);
-		query2->set_rssurl("query:Posts by John Doe:author = \"John Doe\"");
+		auto query1 = std::make_shared<RssFeed>(&rsscache,
+				"query:Title contains word:title # \"word\"");
+		auto query2 = std::make_shared<RssFeed>(&rsscache,
+				"query:Posts by John Doe:author = \"John Doe\"");
 
 		feeds.push_back(query1);
 		feeds.push_back(query2);
@@ -799,7 +808,9 @@ TEST_CASE("unread_item_count() returns number of distinct unread items "
 		REQUIRE(feedcontainer.unread_item_count() == 2);
 
 		SECTION("...unless they are also in some query feed(s)") {
-			feeds[3]->set_rssurl("query:Posts from the hidden feed:guid =~ \".*feed1\"");
+			const auto query_feed = std::make_shared<RssFeed>(&rsscache,
+					"query:Posts from the hidden feed:guid =~ \".*feed1\"");
+			feeds.push_back(query_feed);
 			feedcontainer.set_feeds(feeds);
 			feedcontainer.populate_query_feeds();
 
@@ -825,9 +836,9 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
-		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
-		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
-		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
+		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
+		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
+		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
 
 		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("unknown") == 0);
 		REQUIRE(feedcontainer.get_unread_feed_count_per_tag("test") == 0);
@@ -838,15 +849,15 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"one", "two", "three"});
 		feedcontainer.add_feed(feed);
 
-		feed = std::make_shared<RssFeed>(&rsscache);
+		feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"some", "different", "tags"});
 		feedcontainer.add_feed(feed);
 
-		feed = std::make_shared<RssFeed>(&rsscache);
+		feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"here's one with spaces"});
 		feedcontainer.add_feed(feed);
 
@@ -868,7 +879,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
 	const auto desired_tag = std::string("target");
 	const auto different_tag = std::string("something else entirely");
 
-	auto feed = std::make_shared<RssFeed>(&rsscache);
+	auto feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_tags({desired_tag});
 	for (int i = 0; i < 10; ++i) {
 		auto item = std::make_shared<RssItem>(&rsscache);
@@ -877,7 +888,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
 	}
 	feedcontainer.add_feed(feed);
 
-	feed = std::make_shared<RssFeed>(&rsscache);
+	feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_tags({different_tag});
 	for (int i = 0; i < 5; ++i) {
 		auto item = std::make_shared<RssItem>(&rsscache);
@@ -909,7 +920,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 	const auto add_feed_with_tag_and_unreads =
 		[&feedcontainer, &rsscache]
 	(std::string tag, unsigned int unreads) {
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 
 		feed->set_tags({tag});
 
@@ -972,9 +983,9 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
-		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
-		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
-		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache));
+		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
+		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
+		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
 
 		REQUIRE(feedcontainer.get_unread_item_count_per_tag("unknown") == 0);
 		REQUIRE(feedcontainer.get_unread_item_count_per_tag("test") == 0);
@@ -985,15 +996,15 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 		ConfigContainer cfg;
 		Cache rsscache(":memory:", &cfg);
 
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"one", "two", "three"});
 		feedcontainer.add_feed(feed);
 
-		feed = std::make_shared<RssFeed>(&rsscache);
+		feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"some", "different", "tags"});
 		feedcontainer.add_feed(feed);
 
-		feed = std::make_shared<RssFeed>(&rsscache);
+		feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"here's one with spaces"});
 		feedcontainer.add_feed(feed);
 
@@ -1015,7 +1026,7 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
 	const auto desired_tag = std::string("target");
 	const auto different_tag = std::string("something else entirely");
 
-	auto feed = std::make_shared<RssFeed>(&rsscache);
+	auto feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_tags({desired_tag});
 	for (int i = 0; i < 10; ++i) {
 		auto item = std::make_shared<RssItem>(&rsscache);
@@ -1024,7 +1035,7 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
 	}
 	feedcontainer.add_feed(feed);
 
-	feed = std::make_shared<RssFeed>(&rsscache);
+	feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_tags({different_tag});
 	for (int i = 0; i < 5; ++i) {
 		auto item = std::make_shared<RssItem>(&rsscache);
@@ -1056,7 +1067,7 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 	const auto add_feed_with_tag_and_unreads =
 		[&feedcontainer, &rsscache]
 	(std::string tag, unsigned int unreads) {
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 
 		feed->set_tags({tag});
 

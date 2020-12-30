@@ -10,24 +10,23 @@
 
 using namespace newsboat;
 
-TEST_CASE("RssFeed::set_rssurl() checks if query feed has a valid query",
+TEST_CASE("RssFeed constructor checks if query feed has a valid query",
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
 
 	SECTION("invalid query results in exception") {
-		REQUIRE_THROWS(f.set_rssurl("query:a title:unread ="));
-		REQUIRE_THROWS(f.set_rssurl("query:a title:between 1:3"));
+		REQUIRE_THROWS(RssFeed(&rsscache, "query:a title:unread ="));
+		REQUIRE_THROWS(RssFeed(&rsscache, "query:a title:between 1:3"));
 	}
 
 	SECTION("valid query doesn't throw an exception") {
-		REQUIRE_NOTHROW(f.set_rssurl("query:a title:unread = \"yes\""));
-		REQUIRE_NOTHROW(f.set_rssurl(
+		REQUIRE_NOTHROW(RssFeed(&rsscache, "query:a title:unread = \"yes\""));
+		REQUIRE_NOTHROW(RssFeed(&rsscache,
 				"query:Title:unread = \"yes\" and age between 0:7"));
 
-		REQUIRE_NOTHROW(f.set_rssurl(R"_(query:a title:title =~ "media:")_"));
+		REQUIRE_NOTHROW(RssFeed(&rsscache, R"_(query:a title:title =~ "media:")_"));
 	}
 }
 
@@ -35,7 +34,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
 		item->set_guid(std::to_string(i));
@@ -215,7 +214,7 @@ TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
 		item->set_guid(std::to_string(i));
@@ -245,7 +244,7 @@ TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 	const std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
 	f.set_tags(tags);
 
@@ -261,7 +260,7 @@ TEST_CASE("RssFeed::get_firsttag() returns first tag", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 
 	SECTION("Empty tag array") {
 		REQUIRE(f.get_firsttag() == "");
@@ -294,7 +293,7 @@ TEST_CASE(
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 
 	REQUIRE_FALSE(f.hidden());
 
@@ -317,7 +316,7 @@ TEST_CASE(
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
 		REQUIRE(item->unread());
@@ -335,7 +334,7 @@ TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 
 	std::vector<std::string> tags = {"One", "Two"};
 	f.set_tags(tags);
@@ -352,7 +351,7 @@ TEST_CASE(
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
 		if (i % 2) {
@@ -392,24 +391,24 @@ TEST_CASE(
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
 
-	f.set_rssurl("query... no wait");
-	REQUIRE_FALSE(f.is_query_feed());
-	f.set_rssurl("  query:");
-	REQUIRE_FALSE(f.is_query_feed());
+	const auto check_if_query_feed = [&](const std::string& rssurl) {
+		RssFeed f(&rsscache, rssurl);
+		return f.is_query_feed();
+	};
 
-	f.set_rssurl("query:a title:unread = \"yes\"");
-	REQUIRE(f.is_query_feed());
-	f.set_rssurl("query:Title:unread = \"yes\" and age between 0:7");
-	REQUIRE(f.is_query_feed());
+	REQUIRE_FALSE(check_if_query_feed("query... no wait"));
+	REQUIRE_FALSE(check_if_query_feed("  query:"));
+
+	REQUIRE(check_if_query_feed("query:a title:unread = \"yes\""));
+	REQUIRE(check_if_query_feed("query:Title:unread = \"yes\" and age between 0:7"));
 }
 
 TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	RssFeed f(&rsscache);
+	RssFeed f(&rsscache, "");
 
 	SECTION("`feedtitle`, containing feed's title") {
 		const auto title = std::string("Example feed");
@@ -491,10 +490,10 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 
 	SECTION("rssurl, the URL by which this feed is fetched (specified in the urls file)") {
 		const auto url = std::string("https://example.com/news.atom");
-		f.set_rssurl(url);
+		RssFeed f2(&rsscache, url);
 
 		const auto attr = "rssurl";
-		REQUIRE(f.attribute_value(attr) == url);
+		REQUIRE(f2.attribute_value(attr) == url);
 	}
 
 	SECTION("unread_count, the number of items in the feed that aren't read yet") {

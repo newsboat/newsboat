@@ -55,8 +55,7 @@ std::shared_ptr<RssFeed> RssParser::parse()
 		return nullptr;
 	}
 
-	std::shared_ptr<RssFeed> feed(new RssFeed(ch));
-	feed->set_rssurl(my_uri);
+	std::shared_ptr<RssFeed> feed(new RssFeed(ch, my_uri));
 
 	/*
 	 * After parsing is done, we fill our feed object with title,

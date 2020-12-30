@@ -19,8 +19,7 @@ class Cache;
 
 class RssFeed : public Matchable {
 public:
-	explicit RssFeed(Cache* c);
-	RssFeed();
+	explicit RssFeed(Cache* c, const std::string& rssurl);
 	~RssFeed() override;
 	std::string title_raw() const
 	{
@@ -102,13 +101,11 @@ public:
 	std::shared_ptr<RssItem> get_item_by_guid_unlocked(
 		const std::string& guid);
 
-	/// \brief User-specified feed URL. Can't be empty, otherwise we wouldn't
-	/// be able to fetch the feed.
+	/// \brief User-specified feed URL.
 	const std::string& rssurl() const
 	{
 		return rssurl_;
 	}
-	void set_rssurl(const std::string& u);
 
 	unsigned int unread_item_count() const;
 	unsigned int total_item_count() const
@@ -125,11 +122,6 @@ public:
 	override;
 
 	void update_items(std::vector<std::shared_ptr<RssFeed>> feeds);
-
-	void set_query(const std::string& s)
-	{
-		query = s;
-	}
 
 	bool is_query_feed() const
 	{
@@ -206,7 +198,7 @@ private:
 	std::string description_;
 	std::string link_;
 	time_t pubDate_;
-	std::string rssurl_;
+	const std::string rssurl_;
 	std::vector<std::shared_ptr<RssItem>> items_;
 	std::unordered_map<std::string, std::shared_ptr<RssItem>>
 		items_guid_map;

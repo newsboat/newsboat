@@ -13,7 +13,7 @@ using namespace newsboat;
 static const auto FEED_TITLE = std::string("Funniest jokes ever");
 std::shared_ptr<RssFeed> create_test_feed(Cache* c)
 {
-	auto feed = std::make_shared<RssFeed>(c);
+	auto feed = std::make_shared<RssFeed>(c, "");
 
 	feed->set_title(FEED_TITLE);
 
@@ -584,15 +584,15 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 
-	std::shared_ptr<RssItem> item;
-	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
-
 	const auto feedurl = std::string("https://example.com/~joe/entries.rss");
+
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, feedurl);
+	auto item = std::make_shared<RssItem>(&rsscache);
+	item->set_feedptr(feed);
+
 
 	feed->set_title("");
 	feed->set_link("");
-	feed->set_rssurl(feedurl);
 
 	const auto result = item_renderer::get_feedtitle(item);
 	REQUIRE(result == feedurl);

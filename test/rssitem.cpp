@@ -254,7 +254,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 	}
 
 	SECTION("unknown attributes are forwarded to parent feed") {
-		auto feed = std::make_shared<RssFeed>(&rsscache);
+		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 		auto item = std::make_shared<RssItem>(&rsscache);
 		feed->add_item(item);
 

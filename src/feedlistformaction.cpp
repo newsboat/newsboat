@@ -992,7 +992,7 @@ void FeedListFormAction::op_start_search()
 			return;
 		}
 		if (!items.empty()) {
-			std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache));
+			std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache, ""));
 			search_dummy_feed->set_search_feed(true);
 			search_dummy_feed->add_items(items);
 			v->push_searchresult(search_dummy_feed, searchphrase);
