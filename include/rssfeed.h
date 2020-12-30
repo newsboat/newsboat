@@ -101,8 +101,7 @@ public:
 	std::shared_ptr<RssItem> get_item_by_guid_unlocked(
 		const std::string& guid);
 
-	/// \brief User-specified feed URL. Can't be empty, otherwise we wouldn't
-	/// be able to fetch the feed.
+	/// \brief User-specified feed URL.
 	const std::string& rssurl() const
 	{
 		return rssurl_;
