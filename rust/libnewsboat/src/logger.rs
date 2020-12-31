@@ -124,7 +124,7 @@ impl Logger {
                 logfile: None,
                 user_error_logfile: None,
             }),
-            loglevel: AtomicIsize::new(-1 as isize),
+            loglevel: AtomicIsize::new(-1_isize),
         }
     }
 
@@ -252,7 +252,7 @@ impl Logger {
 
     /// Disables Logging (Except for UserError messages).
     pub fn unset_loglevel(&self) {
-        self.loglevel.store(-1 as isize, Ordering::SeqCst);
+        self.loglevel.store(-1_isize, Ordering::SeqCst);
     }
 
     /// Returns current maximum "importance level" of the messages that will be written to the log.
