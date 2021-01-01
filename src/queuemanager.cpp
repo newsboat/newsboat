@@ -83,7 +83,7 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
 	}
 
 	FmtStrFormatter fmt;
-	fmt.register_fmt('n', feed->title());
+	fmt.register_fmt('n', utils::replace_all(feed->title(), "/", "_"));
 	fmt.register_fmt('h', get_hostname_from_url(url));
 	fmt.register_fmt('u', base);
 	fmt.register_fmt('F', utils::mt_strf_localtime("%F", pubDate));
@@ -95,16 +95,16 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
 	fmt.register_fmt('S', utils::mt_strf_localtime("%S", pubDate));
 	fmt.register_fmt('y', utils::mt_strf_localtime("%y", pubDate));
 	fmt.register_fmt('Y', utils::mt_strf_localtime("%Y", pubDate));
-	fmt.register_fmt('t', title);
-	fmt.register_fmt('e', extension);
+	fmt.register_fmt('t', utils::replace_all(title, "/", "_"));
+	fmt.register_fmt('e', utils::replace_all(extension, "/", "_"));
 
 	if (feed->rssurl() != item->feedurl() &&
 		item->get_feedptr() != nullptr) {
 		std::string feedtitle = item->get_feedptr()->title();
 		utils::remove_soft_hyphens(feedtitle);
-		fmt.register_fmt('N', feedtitle);
+		fmt.register_fmt('N', utils::replace_all(feedtitle, "/", "_"));
 	} else {
-		fmt.register_fmt('N', feed->title());
+		fmt.register_fmt('N', utils::replace_all(feed->title(), "/", "_"));
 	}
 
 	const std::string dlpath = fmt.do_format(dlformat);
