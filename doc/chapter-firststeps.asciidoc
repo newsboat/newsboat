@@ -26,7 +26,7 @@ usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> .
 
 This means that Newsboat can't start without any configured feeds. To add
 feeds to Newsboat, you can either add URLs to the configuration file
-_$HOME/.newsboat/urls_ or you can import an OPML file by running `newsboat -i
+_~/.newsboat/urls_ or you can import an OPML file by running `newsboat -i
 blogroll.opml`. To manually add URLs, open the file with your favorite text
 editor and add the URLs, one per line:
 
@@ -39,7 +39,7 @@ provide the username/password in the following way:
 	https://username:password@hostname.domain.tld/feed.rss
 
 In order to protect username and password, make sure that
-_$HOME/.newsboat/urls_ is only readable by you and, optionally, your group:
+_~/.newsboat/urls_ is only readable by you and, optionally, your group:
 
     $ chmod u=rw,g=r,o= ~/.newsboat/urls
 
