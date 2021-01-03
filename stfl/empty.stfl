@@ -3,6 +3,9 @@ vbox
     text[head]:"empty formaction"
     .expand:h
     .display[showtitle]:1
+  vbox[hints]
+    .expand:0
+    .display[showhint]:1
   hbox[lastline]
     .expand:0
     label[msglabel]
