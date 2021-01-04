@@ -110,7 +110,7 @@ void View::set_status(const std::string& msg)
 	auto fa = get_current_formaction();
 	if (fa != nullptr
 		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
-		fa->get_form().set("msg", msg);
+		fa->set_value("msg", msg);
 		fa->draw_form();
 	}
 }
@@ -628,7 +628,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	// Push empty formaction so our "msg" is not overwritten
 	push_empty_formaction();
-	f->get_form().set("msg", prompt);
+	f->set_value("msg", prompt);
 
 	char result = 0;
 
@@ -652,7 +652,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 			result);
 	} while (!result || strchr(charset.c_str(), result) == nullptr);
 
-	f->get_form().set("msg", "");
+	f->set_value("msg", "");
 	f->draw_form();
 
 	pop_current_formaction();
@@ -965,7 +965,7 @@ void View::pop_current_formaction()
 		std::shared_ptr<FormAction> f = get_current_formaction();
 		if (f) {
 			f->set_redraw(true);
-			f->get_form().set("msg", "");
+			f->set_value("msg", "");
 			f->recalculate_widget_dimensions();
 		}
 	}
@@ -1073,8 +1073,8 @@ void View::inside_cmdline(bool f)
 
 void View::clear_line(std::shared_ptr<FormAction> fa)
 {
-	fa->get_form().set("qna_value", "");
-	fa->get_form().set("qna_value_pos", "0");
+	fa->set_value("qna_value", "");
+	fa->set_value("qna_value_pos", "0");
 	LOG(Level::DEBUG, "View::clear_line: cleared line");
 }
 
@@ -1083,8 +1083,8 @@ void View::clear_eol(std::shared_ptr<FormAction> fa)
 	unsigned int pos = utils::to_u(fa->get_value("qna_value_pos"), 0);
 	std::string val = fa->get_value("qna_value");
 	val.erase(pos, val.length());
-	fa->get_form().set("qna_value", val);
-	fa->get_form().set("qna_value_pos", std::to_string(val.length()));
+	fa->set_value("qna_value", val);
+	fa->set_value("qna_value_pos", std::to_string(val.length()));
 	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
 }
 
@@ -1117,8 +1117,8 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	}
 	val.erase(firstpos, curpos - firstpos);
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
-	fa->get_form().set("qna_value", val);
-	fa->get_form().set("qna_value_pos", std::to_string(firstpos));
+	fa->set_value("qna_value", val);
+	fa->set_value("qna_value_pos", std::to_string(firstpos));
 }
 
 bool View::handle_qna_event(const std::string& event,
@@ -1186,9 +1186,8 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
 		break;
 	}
-	fa->get_form().set("qna_value", suggestion);
-	fa->get_form().set(
-		"qna_value_pos", std::to_string(suggestion.length()));
+	fa->set_value("qna_value", suggestion);
+	fa->set_value("qna_value_pos", std::to_string(suggestion.length()));
 	last_fragment = suggestion;
 }
 

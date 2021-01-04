@@ -27,10 +27,10 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 {
 	if (v) {
 		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
-			f.set("showhint", "0");
+			set_value("showhint", "0");
 		}
 		if (cfg->get_configvalue_as_bool("show-title-bar") == false) {
-			f.set("showtitle", "0");
+			set_value("showtitle", "0");
 		}
 		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
 			true) {
@@ -52,7 +52,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 
 void FormAction::set_keymap_hints()
 {
-	f.set("help", prepare_keymap_hint(this->get_keymap_hint()));
+	set_value("help", prepare_keymap_hint(this->get_keymap_hint()));
 }
 
 FormAction::~FormAction() {}
@@ -90,6 +90,11 @@ std::string FormAction::get_value(const std::string& name)
 	return f.get(name);
 }
 
+void FormAction::set_value(const std::string& name, const std::string& value)
+{
+	f.set(name, value);
+}
+
 void FormAction::draw_form()
 {
 	f.run(-1);
@@ -108,7 +113,6 @@ void FormAction::recalculate_widget_dimensions()
 {
 	f.run(-3);
 }
-
 
 void FormAction::start_cmdline(std::string default_value)
 {
@@ -158,15 +162,15 @@ bool FormAction::process_op(Operation op,
 	case OP_INT_QNA_NEXTHIST:
 		if (qna_history) {
 			std::string entry = qna_history->next_line();
-			f.set("qna_value", entry);
-			f.set("qna_value_pos", std::to_string(entry.length()));
+			set_value("qna_value", entry);
+			set_value("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_QNA_PREVHIST:
 		if (qna_history) {
 			std::string entry = qna_history->previous_line();
-			f.set("qna_value", entry);
-			f.set("qna_value_pos", std::to_string(entry.length()));
+			set_value("qna_value", entry);
+			set_value("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_END_QUESTION:
@@ -527,7 +531,7 @@ void FormAction::start_next_question()
 
 		// Set position to 0 and back to ensure that the text is visible
 		draw_form();
-		f.set("qna_value_pos",
+		set_value("qna_value_pos",
 			std::to_string(qna_prompts[0].second.length()));
 
 		qna_prompts.erase(qna_prompts.begin());

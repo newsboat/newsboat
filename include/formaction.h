@@ -39,6 +39,7 @@ public:
 	virtual std::string id() const = 0;
 
 	std::string get_value(const std::string& name);
+	void set_value(const std::string& name, const std::string& value);
 
 	void draw_form();
 	std::string draw_form_wait_for_event(unsigned int timeout);
