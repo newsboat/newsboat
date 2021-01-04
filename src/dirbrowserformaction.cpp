@@ -311,7 +311,7 @@ void DirBrowserFormAction::init()
 	f.set("filenametext", dir);
 
 	// Set position to 0 and back to ensure that the text is visible
-	f.run(-1);
+	draw_form();
 	f.set("filenametext_pos", std::to_string(dir.length()));
 }
 

@@ -95,6 +95,11 @@ std::string FormAction::get_value(const std::string& value)
 	return f.get(value);
 }
 
+void FormAction::draw_form()
+{
+	f.run(-1);
+}
+
 void FormAction::start_cmdline(std::string default_value)
 {
 	std::vector<QnaPair> qna;
@@ -511,7 +516,7 @@ void FormAction::start_next_question()
 		f.set_focus("qnainput");
 
 		// Set position to 0 and back to ensure that the text is visible
-		f.run(-1);
+		draw_form();
 		f.set("qna_value_pos",
 			std::to_string(qna_prompts[0].second.length()));
 

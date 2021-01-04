@@ -303,7 +303,7 @@ void FileBrowserFormAction::init()
 	f.set("filenametext", default_filename);
 
 	// Set position to 0 and back to ensure that the text is visible
-	f.run(-1);
+	draw_form();
 	f.set("filenametext_pos", std::to_string(default_filename.length()));
 }
 

@@ -110,9 +110,8 @@ void View::set_status(const std::string& msg)
 	auto fa = get_current_formaction();
 	if (fa != nullptr
 		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
-		Stfl::Form& form = fa->get_form();
-		form.set("msg", msg);
-		form.run(-1);
+		fa->get_form().set("msg", msg);
+		fa->draw_form();
 	}
 }
 
@@ -129,7 +128,7 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 		}
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
-		fa->get_form().run(-1);
+		fa->draw_form();
 		if (!fa->process_op(command.op, true, &command.args)) {
 			// Operation failed, abort
 			return false;
@@ -660,7 +659,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	} while (!result || strchr(charset.c_str(), result) == nullptr);
 
 	f->get_form().set("msg", "");
-	f->get_form().run(-1);
+	f->draw_form();
 
 	pop_current_formaction();
 
@@ -934,7 +933,7 @@ void View::force_redraw()
 		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
 		fa->set_redraw(true);
 		fa->prepare();
-		fa->get_form().run(-1);
+		fa->draw_form();
 	}
 }
 

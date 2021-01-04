@@ -40,6 +40,8 @@ public:
 
 	virtual std::string get_value(const std::string& value);
 
+	void draw_form();
+
 	virtual void handle_cmdline(const std::string& cmd);
 
 	bool process_op(Operation op,
