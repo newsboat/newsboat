@@ -972,7 +972,7 @@ void View::pop_current_formaction()
 		if (f) {
 			f->set_redraw(true);
 			f->get_form().set("msg", "");
-			f->recalculate_form();
+			f->recalculate_widget_dimensions();
 		}
 	}
 }
@@ -1159,7 +1159,7 @@ void View::handle_resize()
 	for (const auto& form : formaction_stack) {
 		if (form != nullptr) {
 			// Recalculate width and height of stfl widgets
-			form->get_form().run(-3);
+			form->recalculate_widget_dimensions();
 			form->set_redraw(true);
 		}
 	}

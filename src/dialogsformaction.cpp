@@ -27,7 +27,7 @@ void DialogsFormAction::init()
 {
 	set_keymap_hints();
 
-	f.run(-3); // compute all widget dimensions
+	recalculate_widget_dimensions();
 }
 
 void DialogsFormAction::prepare()

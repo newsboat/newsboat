@@ -190,7 +190,7 @@ void SelectFormAction::init()
 	quit = false;
 	value = "";
 
-	f.run(-3); // compute all widget dimensions
+	recalculate_widget_dimensions();
 
 	set_keymap_hints();
 }

@@ -83,7 +83,7 @@ bool HelpFormAction::process_operation(Operation op,
 void HelpFormAction::prepare()
 {
 	if (do_redraw) {
-		f.run(-3); // compute all widget dimensions
+		recalculate_widget_dimensions();
 
 		const unsigned int width = textview.get_width();
 

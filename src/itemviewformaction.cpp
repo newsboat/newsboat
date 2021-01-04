@@ -93,7 +93,7 @@ void ItemViewFormAction::prepare()
 		{
 			ScopeMeasure("itemview::prepare: rendering");
 			// XXX HACK: render once so that we get a proper widget width
-			f.run(-3);
+			recalculate_widget_dimensions();
 		}
 
 		update_head(item);

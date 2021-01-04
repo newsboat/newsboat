@@ -47,7 +47,7 @@ void FeedListFormAction::init()
 {
 	set_keymap_hints();
 
-	f.run(-3); // compute all widget dimensions
+	recalculate_widget_dimensions();
 
 	if (v->get_ctrl()->get_refresh_on_start()) {
 		v->get_ctrl()->get_reloader()->start_reload_all_thread();

@@ -41,6 +41,7 @@ public:
 	virtual std::string get_value(const std::string& value);
 
 	void draw_form();
+	void recalculate_widget_dimensions();
 
 	virtual void handle_cmdline(const std::string& cmd);
 
@@ -51,8 +52,6 @@ public:
 	virtual void finished_qna(Operation op);
 
 	void start_cmdline(std::string default_value = "");
-
-	virtual void recalculate_form();
 
 	std::string get_qna_response(unsigned int i)
 	{

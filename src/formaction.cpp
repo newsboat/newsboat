@@ -55,11 +55,6 @@ void FormAction::set_keymap_hints()
 	f.set("help", prepare_keymap_hint(this->get_keymap_hint()));
 }
 
-void FormAction::recalculate_form()
-{
-	f.run(-3);
-}
-
 FormAction::~FormAction() {}
 
 Stfl::Form& FormAction::get_form()
@@ -99,6 +94,12 @@ void FormAction::draw_form()
 {
 	f.run(-1);
 }
+
+void FormAction::recalculate_widget_dimensions()
+{
+	f.run(-3);
+}
+
 
 void FormAction::start_cmdline(std::string default_value)
 {

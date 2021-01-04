@@ -151,7 +151,7 @@ void UrlViewFormAction::init()
 {
 	v->set_status("");
 
-	f.run(-3); // compute all widget dimensions
+	recalculate_widget_dimensions();
 
 	do_redraw = true;
 	quit = false;
