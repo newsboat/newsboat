@@ -85,9 +85,9 @@ std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 	return keymap_hint;
 }
 
-std::string FormAction::get_value(const std::string& value)
+std::string FormAction::get_value(const std::string& name)
 {
-	return f.get(value);
+	return f.get(name);
 }
 
 void FormAction::draw_form()
@@ -174,7 +174,7 @@ bool FormAction::process_op(Operation op,
 		 * An answer has been entered, we save the value, and ask the
 		 * next question.
 		 */
-		qna_responses.push_back(f.get("qna_value"));
+		qna_responses.push_back(get_value("qna_value"));
 		start_next_question();
 		break;
 	case OP_VIEWDIALOGS:

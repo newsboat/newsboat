@@ -1080,8 +1080,8 @@ void View::clear_line(std::shared_ptr<FormAction> fa)
 
 void View::clear_eol(std::shared_ptr<FormAction> fa)
 {
-	unsigned int pos = utils::to_u(fa->get_form().get("qna_value_pos"), 0);
-	std::string val = fa->get_form().get("qna_value");
+	unsigned int pos = utils::to_u(fa->get_value("qna_value_pos"), 0);
+	std::string val = fa->get_value("qna_value");
 	val.erase(pos, val.length());
 	fa->get_form().set("qna_value", val);
 	fa->get_form().set("qna_value_pos", std::to_string(val.length()));
@@ -1097,8 +1097,8 @@ void View::cancel_input(std::shared_ptr<FormAction> fa)
 void View::delete_word(std::shared_ptr<FormAction> fa)
 {
 	std::string::size_type curpos =
-		utils::to_u(fa->get_form().get("qna_value_pos"), 0);
-	std::string val = fa->get_form().get("qna_value");
+		utils::to_u(fa->get_value("qna_value_pos"), 0);
+	std::string val = fa->get_value("qna_value");
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
@@ -1161,7 +1161,7 @@ void View::handle_resize()
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 {
-	std::string fragment = fa->get_form().get("qna_value");
+	std::string fragment = fa->get_value("qna_value");
 	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = fa->get_suggestions(fragment);
