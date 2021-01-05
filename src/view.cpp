@@ -171,7 +171,7 @@ int View::run()
 		fa->prepare();
 
 		// we then receive the event and ignore timeouts.
-		const char* event_ptr = fa->get_form().run(60000);
+		const std::string event = fa->draw_form_wait_for_event(60000);
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -186,13 +186,7 @@ int View::run()
 			}
 		}
 
-		if (!event_ptr) {
-			continue;
-		}
-
-		std::string event = event_ptr;
-
-		if (event == "TIMEOUT") {
+		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
 
@@ -253,13 +247,13 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const char* event = fa->get_form().run(1000);
+		const std::string event = fa->draw_form_wait_for_event(1000);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
-		if (!event || strcmp(event, "TIMEOUT") == 0) {
+		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
 
-		if (strcmp(event, "RESIZE") == 0) {
+		if (event == "RESIZE") {
 			handle_resize();
 			continue;
 		}
@@ -639,12 +633,12 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	char result = 0;
 
 	do {
-		const char* event = f->get_form().run(0);
+		const std::string event = f->draw_form_wait_for_event(0);
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
-		if (!event) {
+		if (event.empty()) {
 			continue;
 		}
-		if (strcmp(event, "ESC") == 0 || strcmp(event, "ENTER") == 0) {
+		if (event == "ESC" || event == "ENTER") {
 			result = 0;
 			LOG(Level::DEBUG,
 				"View::confirm: user pressed ESC or ENTER, we "

@@ -41,6 +41,7 @@ public:
 	virtual std::string get_value(const std::string& value);
 
 	void draw_form();
+	std::string draw_form_wait_for_event(unsigned int timeout);
 	void recalculate_widget_dimensions();
 
 	virtual void handle_cmdline(const std::string& cmd);

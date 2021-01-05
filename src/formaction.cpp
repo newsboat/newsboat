@@ -95,6 +95,15 @@ void FormAction::draw_form()
 	f.run(-1);
 }
 
+std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+{
+	const char* event = f.run(timeout);
+	if (event == nullptr) {
+		return "";
+	}
+	return std::string(event);
+}
+
 void FormAction::recalculate_widget_dimensions()
 {
 	f.run(-3);
