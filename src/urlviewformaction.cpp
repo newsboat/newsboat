@@ -166,7 +166,7 @@ void UrlViewFormAction::update_heading()
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 
-	f.set("head",
+	set_value("head",
 		fmt.do_format(
 			cfg->get_configvalue("urlview-title-format"), width));
 }

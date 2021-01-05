@@ -243,7 +243,7 @@ void SelectFormAction::update_heading()
 	default:
 		assert(0); // should never happen
 	}
-	f.set("head", title);
+	set_value("head", title);
 }
 
 KeyMapHintEntry* SelectFormAction::get_keymap_hint()

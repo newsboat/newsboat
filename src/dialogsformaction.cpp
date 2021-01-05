@@ -69,7 +69,7 @@ void DialogsFormAction::update_heading()
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	f.set("head", fmt.do_format(title_format, width));
+	set_value("head", fmt.do_format(title_format, width));
 }
 
 KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
