@@ -172,7 +172,6 @@ formatting_task:
 linux_task:
     env:
         RUSTFLAGS: '-D warnings'
-        PROFILE: 1
 
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
@@ -203,7 +202,6 @@ linux_task:
                 cxx: g++-10
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-            PROFILE: 0
         - name: Clang 11, more warnings and checks (Ubuntu 20.10)
           container:
             dockerfile: docker/ubuntu_20.10-build-tools.dockerfile
