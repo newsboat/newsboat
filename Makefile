@@ -45,7 +45,7 @@ CXX_FOR_BUILD?=$(CXX)
 # compiler and linker flags
 DEFINES=-DLOCALEDIR='"$(localedir)"'
 
-WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code -Wno-unknown-warning-option -Wno-unknown-pragmas
+WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(relative_cargo_target_dir)/cxxbridge/libnewsboat-ffi/src/
 BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.

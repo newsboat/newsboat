@@ -229,16 +229,17 @@ REDO:
 					"items in feed at position `%s'",
 					feedpos.c_str());
 
-				const auto exit_code = open_unread_items_in_browser(feed, false);
+				// We can't just `const auto exit_code = ...` here because this
+				// triggers -Wmaybe-initialized in GCC 9 with -O2.
+				nonstd::optional<std::uint8_t> exit_code;
+				exit_code = open_unread_items_in_browser(feed, false);
+
 				if (!exit_code.has_value()) {
 					v->show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"),
 							*exit_code));
-#pragma GCC diagnostic pop
 					return false;
 				}
 			}
@@ -258,15 +259,16 @@ REDO:
 					"marking read",
 					feedpos.c_str());
 
-				const auto exit_code = open_unread_items_in_browser(feed, true);
+				// We can't just `const auto exit_code = ...` here because this
+				// triggers -Wmaybe-initialized in GCC 9 with -O2.
+				nonstd::optional<std::uint8_t> exit_code;
+				exit_code = open_unread_items_in_browser(feed, true);
+
 				if (!exit_code.has_value()) {
 					v->show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
-#pragma GCC diagnostic pop
 					return false;
 				}
 
