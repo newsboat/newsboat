@@ -3,17 +3,17 @@
 #include "atomparser.h"
 #include "config.h"
 #include "exception.h"
-#include "feed.h"
 #include "rss09xparser.h"
 #include "rss10parser.h"
 #include "rss20parser.h"
 
 namespace rsspp {
 
-std::shared_ptr<RssParser> RssParserFactory::get_object(Feed& f,
+std::shared_ptr<RssParser> RssParserFactory::get_object(
+	Feed::Version rss_version,
 	xmlDocPtr doc)
 {
-	switch (f.rss_version) {
+	switch (rss_version) {
 	case Feed::RSS_0_91:
 	case Feed::RSS_0_92:
 	case Feed::RSS_0_94:
