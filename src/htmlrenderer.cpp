@@ -29,6 +29,7 @@ HtmlRenderer::HtmlRenderer(bool raw)
 	tags["blockquote"] = HtmlTag::BLOCKQUOTE;
 	tags["aside"] = HtmlTag::BLOCKQUOTE;
 	tags["p"] = HtmlTag::P;
+	tags["div"] = HtmlTag::DIV;
 	tags["h1"] = HtmlTag::H1;
 	tags["h2"] = HtmlTag::H2;
 	tags["h3"] = HtmlTag::H3;
@@ -320,7 +321,8 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::H4:
 			case HtmlTag::H5:
 			case HtmlTag::H6:
-			case HtmlTag::P: {
+			case HtmlTag::P:
+			case HtmlTag::DIV: {
 				add_nonempty_line(curline, tables, lines);
 				if (lines.size() > 0) {
 					std::string::size_type last_line_len =
@@ -718,6 +720,7 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::H5:
 			case HtmlTag::H6:
 			case HtmlTag::P:
+			case HtmlTag::DIV:
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);
