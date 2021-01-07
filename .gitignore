@@ -30,3 +30,4 @@ doc/podboat-cmds-linked.asciidoc
 /target/
 **/*.rs.bk
 .vscode
+/cppcheck.log
