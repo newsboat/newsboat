@@ -12,7 +12,7 @@ namespace newsboat {
 
 class Regex {
 private:
-	Regex(const regex_t& r);
+	explicit Regex(const regex_t& r);
 
 public:
 	~Regex();
