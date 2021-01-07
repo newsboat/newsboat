@@ -96,9 +96,9 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> testUrls {
-		{"http://test1.url.cc/feed.xml", {"tag1", "tag2"}},
+		{"http://test1.url.cc/feed.xml", {"~title", "tag1", "tag2"}},
 		{"http://anotherfeed.com/", {}},
-		{"http://onemorefeed.at/feed/", {"tag1", "tag3"}}
+		{"http://onemorefeed.at/feed/", {"tag1", "~another title", "tag3"}}
 	};
 
 	FileUrlReader urlcfg(urlsFile.get_path());
@@ -228,9 +228,9 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> testUrls {
-		{"http://test1.url.cc/feed.xml", {"tag1", "tag2"}},
+		{"http://test1.url.cc/feed.xml", {"~title", "tag1", "tag2"}},
 		{"http://anotherfeed.com/", {}},
-		{"http://onemorefeed.at/feed/", {"tag1", "tag3"}}
+		{"http://onemorefeed.at/feed/", {"tag1", "~another title", "tag3"}}
 	};
 
 	FileUrlReader urlcfg(urlsFile.get_path());
