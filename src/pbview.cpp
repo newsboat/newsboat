@@ -285,8 +285,11 @@ void PbView::handle_resize()
 
 void PbView::apply_colors_to_all_forms()
 {
-	colorman.apply_colors(dllist_form);
-	colorman.apply_colors(help_form);
+	using namespace std::placeholders;
+	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &dllist_form, _1,
+			_2));
+	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &help_form, _1,
+			_2));
 }
 
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)

@@ -56,11 +56,6 @@ void FormAction::set_keymap_hints()
 
 FormAction::~FormAction() {}
 
-Stfl::Form& FormAction::get_form()
-{
-	return f;
-}
-
 std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 {
 	/*

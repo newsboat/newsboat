@@ -1013,7 +1013,11 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 {
 	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
 
-	colorman.apply_colors(fa->get_form());
+	const auto stfl_value_setter = [&](const std::string& name,
+	const std::string& value) {
+		fa->set_value(name, value);
+	};
+	colorman.apply_colors(stfl_value_setter);
 }
 
 void View::feedlist_mark_pos_if_visible(unsigned int pos)

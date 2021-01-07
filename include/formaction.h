@@ -28,7 +28,6 @@ public:
 	virtual ~FormAction();
 	virtual void prepare() = 0;
 	virtual void init() = 0;
-	Stfl::Form& get_form();
 	virtual void set_redraw(bool b)
 	{
 		do_redraw = b;
