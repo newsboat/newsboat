@@ -137,8 +137,6 @@ public:
 	void inside_qna(bool f);
 	void inside_cmdline(bool f);
 
-	void dump_current_form();
-
 	static void ctrl_c_action(int sig);
 
 protected:

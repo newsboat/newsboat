@@ -1191,27 +1191,6 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 	last_fragment = suggestion;
 }
 
-void View::dump_current_form()
-{
-	std::string formtext =
-		formaction_stack[current_formaction]->get_form().dump(
-			"", "", 0);
-	time_t t = time(nullptr);
-	const auto fnbuf = utils::mt_strf_localtime(
-			"dumpform-%Y%m%d-%H%M%S.stfl",
-			t);
-	std::fstream f(fnbuf, std::ios_base::out);
-	if (!f.is_open()) {
-		show_error(strprintf::fmt("Error: couldn't open file %s: %s",
-				fnbuf,
-				strerror(errno)));
-		return;
-	}
-	f << formtext;
-	f.close();
-	set_status(strprintf::fmt("Dumped current form to file %s", fnbuf));
-}
-
 void View::ctrl_c_action(int /* sig */)
 {
 	LOG(Level::DEBUG, "caught SIGINT");

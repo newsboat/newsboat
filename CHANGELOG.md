@@ -12,6 +12,10 @@ for this release also includes:
 
 ### Deprecated
 ### Removed
+
+- `dumpform` command-line command which was only intended for debugging
+    Newsboat's UI code
+
 ### Fixed
 ### Security
 
