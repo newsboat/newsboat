@@ -110,9 +110,8 @@ void View::set_status(const std::string& msg)
 	auto fa = get_current_formaction();
 	if (fa != nullptr
 		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
-		Stfl::Form& form = fa->get_form();
-		form.set("msg", msg);
-		form.run(-1);
+		fa->set_value("msg", msg);
+		fa->draw_form();
 	}
 }
 
@@ -129,7 +128,7 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 		}
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
-		fa->get_form().run(-1);
+		fa->draw_form();
 		if (!fa->process_op(command.op, true, &command.args)) {
 			// Operation failed, abort
 			return false;
@@ -172,7 +171,7 @@ int View::run()
 		fa->prepare();
 
 		// we then receive the event and ignore timeouts.
-		const char* event_ptr = fa->get_form().run(60000);
+		const std::string event = fa->draw_form_wait_for_event(60000);
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -187,13 +186,7 @@ int View::run()
 			}
 		}
 
-		if (!event_ptr) {
-			continue;
-		}
-
-		std::string event = event_ptr;
-
-		if (event == "TIMEOUT") {
+		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
 
@@ -254,13 +247,13 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const char* event = fa->get_form().run(1000);
+		const std::string event = fa->draw_form_wait_for_event(1000);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
-		if (!event || strcmp(event, "TIMEOUT") == 0) {
+		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
 
-		if (strcmp(event, "RESIZE") == 0) {
+		if (event == "RESIZE") {
 			handle_resize();
 			continue;
 		}
@@ -635,17 +628,17 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	std::shared_ptr<FormAction> f = get_current_formaction();
 	// Push empty formaction so our "msg" is not overwritten
 	push_empty_formaction();
-	f->get_form().set("msg", prompt);
+	f->set_value("msg", prompt);
 
 	char result = 0;
 
 	do {
-		const char* event = f->get_form().run(0);
+		const std::string event = f->draw_form_wait_for_event(0);
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
-		if (!event) {
+		if (event.empty()) {
 			continue;
 		}
-		if (strcmp(event, "ESC") == 0 || strcmp(event, "ENTER") == 0) {
+		if (event == "ESC" || event == "ENTER") {
 			result = 0;
 			LOG(Level::DEBUG,
 				"View::confirm: user pressed ESC or ENTER, we "
@@ -659,8 +652,8 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 			result);
 	} while (!result || strchr(charset.c_str(), result) == nullptr);
 
-	f->get_form().set("msg", "");
-	f->get_form().run(-1);
+	f->set_value("msg", "");
+	f->draw_form();
 
 	pop_current_formaction();
 
@@ -934,7 +927,7 @@ void View::force_redraw()
 		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
 		fa->set_redraw(true);
 		fa->prepare();
-		fa->get_form().run(-1);
+		fa->draw_form();
 	}
 }
 
@@ -972,8 +965,8 @@ void View::pop_current_formaction()
 		std::shared_ptr<FormAction> f = get_current_formaction();
 		if (f) {
 			f->set_redraw(true);
-			f->get_form().set("msg", "");
-			f->recalculate_form();
+			f->set_value("msg", "");
+			f->recalculate_widget_dimensions();
 		}
 	}
 }
@@ -1020,7 +1013,11 @@ void View::apply_colors(std::shared_ptr<FormAction> fa)
 {
 	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
 
-	colorman.apply_colors(fa->get_form());
+	const auto stfl_value_setter = [&](const std::string& name,
+	const std::string& value) {
+		fa->set_value(name, value);
+	};
+	colorman.apply_colors(stfl_value_setter);
 }
 
 void View::feedlist_mark_pos_if_visible(unsigned int pos)
@@ -1080,18 +1077,18 @@ void View::inside_cmdline(bool f)
 
 void View::clear_line(std::shared_ptr<FormAction> fa)
 {
-	fa->get_form().set("qna_value", "");
-	fa->get_form().set("qna_value_pos", "0");
+	fa->set_value("qna_value", "");
+	fa->set_value("qna_value_pos", "0");
 	LOG(Level::DEBUG, "View::clear_line: cleared line");
 }
 
 void View::clear_eol(std::shared_ptr<FormAction> fa)
 {
-	unsigned int pos = utils::to_u(fa->get_form().get("qna_value_pos"), 0);
-	std::string val = fa->get_form().get("qna_value");
+	unsigned int pos = utils::to_u(fa->get_value("qna_value_pos"), 0);
+	std::string val = fa->get_value("qna_value");
 	val.erase(pos, val.length());
-	fa->get_form().set("qna_value", val);
-	fa->get_form().set("qna_value_pos", std::to_string(val.length()));
+	fa->set_value("qna_value", val);
+	fa->set_value("qna_value_pos", std::to_string(val.length()));
 	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
 }
 
@@ -1104,8 +1101,8 @@ void View::cancel_input(std::shared_ptr<FormAction> fa)
 void View::delete_word(std::shared_ptr<FormAction> fa)
 {
 	std::string::size_type curpos =
-		utils::to_u(fa->get_form().get("qna_value_pos"), 0);
-	std::string val = fa->get_form().get("qna_value");
+		utils::to_u(fa->get_value("qna_value_pos"), 0);
+	std::string val = fa->get_value("qna_value");
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
@@ -1124,8 +1121,8 @@ void View::delete_word(std::shared_ptr<FormAction> fa)
 	}
 	val.erase(firstpos, curpos - firstpos);
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
-	fa->get_form().set("qna_value", val);
-	fa->get_form().set("qna_value_pos", std::to_string(firstpos));
+	fa->set_value("qna_value", val);
+	fa->set_value("qna_value_pos", std::to_string(firstpos));
 }
 
 bool View::handle_qna_event(const std::string& event,
@@ -1160,7 +1157,7 @@ void View::handle_resize()
 	for (const auto& form : formaction_stack) {
 		if (form != nullptr) {
 			// Recalculate width and height of stfl widgets
-			form->get_form().run(-3);
+			form->recalculate_widget_dimensions();
 			form->set_redraw(true);
 		}
 	}
@@ -1168,7 +1165,7 @@ void View::handle_resize()
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 {
-	std::string fragment = fa->get_form().get("qna_value");
+	std::string fragment = fa->get_value("qna_value");
 	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = fa->get_suggestions(fragment);
@@ -1193,31 +1190,9 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
 		break;
 	}
-	fa->get_form().set("qna_value", suggestion);
-	fa->get_form().set(
-		"qna_value_pos", std::to_string(suggestion.length()));
+	fa->set_value("qna_value", suggestion);
+	fa->set_value("qna_value_pos", std::to_string(suggestion.length()));
 	last_fragment = suggestion;
-}
-
-void View::dump_current_form()
-{
-	std::string formtext =
-		formaction_stack[current_formaction]->get_form().dump(
-			"", "", 0);
-	time_t t = time(nullptr);
-	const auto fnbuf = utils::mt_strf_localtime(
-			"dumpform-%Y%m%d-%H%M%S.stfl",
-			t);
-	std::fstream f(fnbuf, std::ios_base::out);
-	if (!f.is_open()) {
-		show_error(strprintf::fmt("Error: couldn't open file %s: %s",
-				fnbuf,
-				strerror(errno)));
-		return;
-	}
-	f << formtext;
-	f.close();
-	set_status(strprintf::fmt("Dumped current form to file %s", fnbuf));
 }
 
 void View::ctrl_c_action(int /* sig */)

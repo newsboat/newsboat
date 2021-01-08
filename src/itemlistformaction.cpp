@@ -1120,9 +1120,9 @@ void ItemListFormAction::goto_item(const std::string& title)
 
 void ItemListFormAction::init()
 {
-	f.run(-3); // FRUN - compute all widget dimensions
+	recalculate_widget_dimensions();
 	list.set_position(0);
-	f.set("msg", "");
+	set_value("msg", "");
 	set_keymap_hints();
 	invalidate_list();
 	do_update_visible_items();
@@ -1174,7 +1174,7 @@ void ItemListFormAction::set_head(const std::string& s,
 				cfg->get_configvalue("searchresult-title-format"),
 				width);
 	}
-	f.set("head", title);
+	set_value("head", title);
 }
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)

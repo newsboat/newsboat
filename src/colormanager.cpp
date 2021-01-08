@@ -104,7 +104,9 @@ void ColorManager::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-void ColorManager::apply_colors(Stfl::Form& form) const
+void ColorManager::apply_colors(
+	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
+const
 {
 	for (const auto& element_style : element_styles) {
 		const std::string& element = element_style.first;
@@ -134,7 +136,7 @@ void ColorManager::apply_colors(Stfl::Form& form) const
 			element,
 			colorattr);
 
-		form.set(element, colorattr);
+		stfl_value_setter(element, colorattr);
 
 		if (element == "article") {
 			std::string bold = colorattr;
@@ -149,8 +151,8 @@ void ColorManager::apply_colors(Stfl::Form& form) const
 			ul.append("attr=underline");
 			// STFL will just ignore those in forms which don't have the
 			// `color_bold` and `color_underline` variables.
-			form.set("color_bold", bold);
-			form.set("color_underline", ul);
+			stfl_value_setter("color_bold", bold);
+			stfl_value_setter("color_underline", ul);
 		}
 	}
 }

@@ -89,7 +89,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 							base + 1,
 							std::string::npos);
 					}
-					f.set("filenametext", fn);
+					set_value("filenametext", fn);
 					do_redraw = true;
 				}
 				break;
@@ -99,7 +99,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
 					fn.append(filename);
-					f.set("filenametext", fn);
+					set_value("filenametext", fn);
 					f.set_focus("filename");
 				}
 				break;
@@ -166,7 +166,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		if (f.get_focus() == "files") {
 			files_list.move_to_first();
 		} else {
-			f.set("filenametext_pos", "0");
+			set_value("filenametext_pos", "0");
 		}
 		break;
 	case OP_SK_END:
@@ -174,7 +174,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 			files_list.move_to_last();
 		} else {
 			const std::size_t text_length = f.get("filenametext").length();
-			f.set("filenametext_pos", std::to_string(text_length));
+			set_value("filenametext_pos", std::to_string(text_length));
 		}
 		break;
 	case OP_SK_PGUP:
@@ -191,14 +191,14 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		LOG(Level::DEBUG, "view::filebrowser: quitting");
 		curs_set(0);
 		v->pop_current_formaction();
-		f.set("filenametext", "");
+		set_value("filenametext", "");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::filebrowser: hard quitting");
 		while (v->formaction_stack_size() > 0) {
 			v->pop_current_formaction();
 		}
-		f.set("filenametext", "");
+		set_value("filenametext", "");
 		break;
 	default:
 		break;
@@ -218,7 +218,7 @@ void FileBrowserFormAction::update_title(const std::string& working_directory)
 	const std::string title = fmt.do_format(
 			cfg->get_configvalue("filebrowser-title-format"), width);
 
-	f.set("head", title);
+	set_value("head", title);
 }
 
 std::vector<std::string> get_sorted_filelist()
@@ -285,7 +285,7 @@ void FileBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	f.set("fileprompt", _("File: "));
+	set_value("fileprompt", _("File: "));
 
 	if (dir == "") {
 		std::string save_path = cfg->get_configvalue("save-path");
@@ -300,11 +300,11 @@ void FileBrowserFormAction::init()
 	int status = ::chdir(dir.c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
 
-	f.set("filenametext", default_filename);
+	set_value("filenametext", default_filename);
 
 	// Set position to 0 and back to ensure that the text is visible
-	f.run(-1);
-	f.set("filenametext_pos", std::to_string(default_filename.length()));
+	draw_form();
+	set_value("filenametext_pos", std::to_string(default_filename.length()));
 }
 
 KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()

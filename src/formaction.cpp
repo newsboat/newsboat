@@ -27,10 +27,10 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 {
 	if (v) {
 		if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
-			f.set("showhint", "0");
+			set_value("showhint", "0");
 		}
 		if (cfg->get_configvalue_as_bool("show-title-bar") == false) {
-			f.set("showtitle", "0");
+			set_value("showtitle", "0");
 		}
 		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
 			true) {
@@ -46,26 +46,15 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	valid_cmds.push_back("quit");
 	valid_cmds.push_back("source");
 	valid_cmds.push_back("dumpconfig");
-	valid_cmds.push_back("dumpform");
 	valid_cmds.push_back("exec");
 }
 
 void FormAction::set_keymap_hints()
 {
-	f.set("help", prepare_keymap_hint(this->get_keymap_hint()));
-}
-
-void FormAction::recalculate_form()
-{
-	f.run(-3);
+	set_value("help", prepare_keymap_hint(this->get_keymap_hint()));
 }
 
 FormAction::~FormAction() {}
-
-Stfl::Form& FormAction::get_form()
-{
-	return f;
-}
 
 std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 {
@@ -90,9 +79,33 @@ std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
 	return keymap_hint;
 }
 
-std::string FormAction::get_value(const std::string& value)
+std::string FormAction::get_value(const std::string& name)
 {
-	return f.get(value);
+	return f.get(name);
+}
+
+void FormAction::set_value(const std::string& name, const std::string& value)
+{
+	f.set(name, value);
+}
+
+void FormAction::draw_form()
+{
+	f.run(-1);
+}
+
+std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+{
+	const char* event = f.run(timeout);
+	if (event == nullptr) {
+		return "";
+	}
+	return std::string(event);
+}
+
+void FormAction::recalculate_widget_dimensions()
+{
+	f.run(-3);
 }
 
 void FormAction::start_cmdline(std::string default_value)
@@ -143,15 +156,15 @@ bool FormAction::process_op(Operation op,
 	case OP_INT_QNA_NEXTHIST:
 		if (qna_history) {
 			std::string entry = qna_history->next_line();
-			f.set("qna_value", entry);
-			f.set("qna_value_pos", std::to_string(entry.length()));
+			set_value("qna_value", entry);
+			set_value("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_QNA_PREVHIST:
 		if (qna_history) {
 			std::string entry = qna_history->previous_line();
-			f.set("qna_value", entry);
-			f.set("qna_value_pos", std::to_string(entry.length()));
+			set_value("qna_value", entry);
+			set_value("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_END_QUESTION:
@@ -159,7 +172,7 @@ bool FormAction::process_op(Operation op,
 		 * An answer has been entered, we save the value, and ask the
 		 * next question.
 		 */
-		qna_responses.push_back(f.get("qna_value"));
+		qna_responses.push_back(get_value("qna_value"));
 		start_next_question();
 		break;
 	case OP_VIEWDIALOGS:
@@ -329,8 +342,6 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 						_("Saved configuration to %s"),
 						tokens[0]));
 			}
-		} else if (cmd == "dumpform") {
-			v->dump_current_form();
 		} else if (cmd == "exec") {
 			if (tokens.size() != 1) {
 				v->show_error(_("usage: exec <operation>"));
@@ -511,8 +522,8 @@ void FormAction::start_next_question()
 		f.set_focus("qnainput");
 
 		// Set position to 0 and back to ensure that the text is visible
-		f.run(-1);
-		f.set("qna_value_pos",
+		draw_form();
+		set_value("qna_value_pos",
 			std::to_string(qna_prompts[0].second.length()));
 
 		qna_prompts.erase(qna_prompts.begin());

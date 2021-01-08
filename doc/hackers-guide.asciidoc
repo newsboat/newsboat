@@ -182,11 +182,6 @@ test" to build the tests, the result is a binary called "test" within the test
 subdirectory. Run it and see whether everything still works as expected. Run
 "make clean-test" to clean up after the tests.
 
-=== Dump an STFL form
-
-You can dump the currently shown STFL form with the "dumpform" command on the
-internal commandline. This can help debugging of rendering issues.
-
 == Keys
 
 === Unused keys

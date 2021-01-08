@@ -190,7 +190,7 @@ void SelectFormAction::init()
 	quit = false;
 	value = "";
 
-	f.run(-3); // compute all widget dimensions
+	recalculate_widget_dimensions();
 
 	set_keymap_hints();
 }
@@ -243,7 +243,7 @@ void SelectFormAction::update_heading()
 	default:
 		assert(0); // should never happen
 	}
-	f.set("head", title);
+	set_value("head", title);
 }
 
 KeyMapHintEntry* SelectFormAction::get_keymap_hint()

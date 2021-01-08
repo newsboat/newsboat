@@ -45,15 +45,15 @@ ItemViewFormAction::~ItemViewFormAction() {}
 
 void ItemViewFormAction::init()
 {
-	f.set("msg", "");
+	set_value("msg", "");
 	do_redraw = true;
 	links.clear();
 	num_lines = 0;
 	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
-		f.set("percentwidth", "0");
+		set_value("percentwidth", "0");
 	} else {
 		const size_t min_field_width = 6;
-		f.set("percentwidth",
+		set_value("percentwidth",
 			std::to_string(
 		std::max({
 			min_field_width,
@@ -93,7 +93,7 @@ void ItemViewFormAction::prepare()
 		{
 			ScopeMeasure("itemview::prepare: rendering");
 			// XXX HACK: render once so that we get a proper widget width
-			f.run(-3);
+			recalculate_widget_dimensions();
 		}
 
 		update_head(item);
@@ -141,7 +141,7 @@ void ItemViewFormAction::prepare()
 		}
 
 		textview.stfl_replace_lines(num_lines, formatted_text);
-		f.set("article_offset", "0");
+		set_value("article_offset", "0");
 
 		if (in_search) {
 			rxman.remove_last_regex("article");
@@ -521,7 +521,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 
 	const unsigned int width = textview.get_width();
 
-	f.set("head",
+	set_value("head",
 		fmt.do_format(
 			cfg->get_configvalue("itemview-title-format"), width));
 }
@@ -634,11 +634,11 @@ void ItemViewFormAction::update_percent()
 			percent);
 
 		if (offset == 0 || percent == 0) {
-			f.set("percent", _("Top"));
+			set_value("percent", _("Top"));
 		} else if (offset == (num_lines - 1)) {
-			f.set("percent", _("Bottom"));
+			set_value("percent", _("Bottom"));
 		} else {
-			f.set("percent", strprintf::fmt("%3u %% ", percent));
+			set_value("percent", strprintf::fmt("%3u %% ", percent));
 		}
 	}
 }
