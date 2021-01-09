@@ -284,24 +284,20 @@ void DirBrowserFormAction::init()
 
 	set_value("fileprompt", _("Directory: "));
 
-	if (dir == "") {
-		const std::string save_path = cfg->get_configvalue("save-path");
+	const std::string save_path = cfg->get_configvalue("save-path");
 
-		LOG(Level::DEBUG,
-			"view::dirbrowser: save-path is '%s'",
-			save_path);
+	LOG(Level::DEBUG,
+		"view::dirbrowser: save-path is '%s'",
+		save_path);
 
-		dir = save_path;
-	}
+	const int status = ::chdir(save_path.c_str());
+	LOG(Level::DEBUG, "view::dirbrowser: chdir(%s) = %i", save_path, status);
 
-	const int status = ::chdir(dir.c_str());
-	LOG(Level::DEBUG, "view::dirbrowser: chdir(%s) = %i", dir, status);
-
-	set_value("filenametext", dir);
+	set_value("filenametext", save_path);
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
-	set_value("filenametext_pos", std::to_string(dir.length()));
+	set_value("filenametext_pos", std::to_string(save_path.length()));
 }
 
 KeyMapHintEntry* DirBrowserFormAction::get_keymap_hint()

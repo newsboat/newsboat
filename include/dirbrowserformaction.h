@@ -42,7 +42,6 @@ private:
 	std::string get_formatted_dirname(std::string dirname, char ftype, mode_t mode);
 
 	std::string cwd;
-	std::string dir;
 
 	ListWidget files_list;
 };
