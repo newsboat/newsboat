@@ -19,11 +19,6 @@ public:
 	void init() override;
 	KeyMapHintEntry* get_keymap_hint() override;
 
-	void set_dir(const std::string& d)
-	{
-		dir = d;
-	}
-
 	std::string id() const override
 	{
 		return "dirbrowser";
