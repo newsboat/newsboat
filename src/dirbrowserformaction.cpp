@@ -76,7 +76,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		 * needs to be returned.
 		 */
 		LOG(Level::DEBUG, "DirBrowserFormAction: 'opening' item");
-		std::string focus = f.get_focus();
+		const std::string focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
 				const auto selected_position = files_list.get_position();
@@ -86,7 +86,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				const std::string filename(selection);
 				switch (filetype) {
 				case 'd': {
-					int status = ::chdir(filename.c_str());
+					const int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
 						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
@@ -285,7 +285,7 @@ void DirBrowserFormAction::init()
 	set_value("fileprompt", _("Directory: "));
 
 	if (dir == "") {
-		std::string save_path = cfg->get_configvalue("save-path");
+		const std::string save_path = cfg->get_configvalue("save-path");
 
 		LOG(Level::DEBUG,
 			"view::dirbrowser: save-path is '%s'",
@@ -294,7 +294,7 @@ void DirBrowserFormAction::init()
 		dir = save_path;
 	}
 
-	int status = ::chdir(dir.c_str());
+	const int status = ::chdir(dir.c_str());
 	LOG(Level::DEBUG, "view::dirbrowser: chdir(%s) = %i", dir, status);
 
 	set_value("filenametext", dir);
