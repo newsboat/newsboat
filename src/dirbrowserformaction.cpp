@@ -99,17 +99,6 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
 
-					std::string fnstr =
-						f.get("filenametext");
-					std::string::size_type base =
-						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
-					if (base == std::string::npos) {
-						fn.append(fnstr);
-					} else {
-						fn.append(fnstr,
-							base + 1,
-							std::string::npos);
-					}
 					set_value("filenametext", fn);
 					do_redraw = true;
 				}
