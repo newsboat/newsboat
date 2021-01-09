@@ -1483,3 +1483,35 @@ TEST_CASE("Skips contents of <script> tags", "[HtmlRenderer]")
 	REQUIRE(lines.size() == 0);
 	REQUIRE(links.size() == 0);
 }
+
+TEST_CASE("<div> is always rendered on a new line", "[HtmlRenderer]")
+{
+	HtmlRenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	const std::string
+	input("<div>oh</div>"
+		"<div>hello there,</div>"
+		"<p>world</p>"
+		"<div>!</div>"
+		"<div>"
+		"    <div>"
+		"        <p>hehe</p>"
+		"    </div>"
+		"</div>");
+
+	rnd.render(input, lines, links, "");
+
+	REQUIRE(lines.size() == 9);
+	REQUIRE(lines[0] == p(LineType::wrappable, "oh"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "hello there,"));
+	REQUIRE(lines[3] == p(LineType::wrappable, ""));
+	REQUIRE(lines[4] == p(LineType::wrappable, "world"));
+	REQUIRE(lines[5] == p(LineType::wrappable, ""));
+	REQUIRE(lines[6] == p(LineType::wrappable, "!"));
+	REQUIRE(lines[7] == p(LineType::wrappable, ""));
+	REQUIRE(lines[8] == p(LineType::wrappable, "hehe"));
+	REQUIRE(links.size() == 0);
+}

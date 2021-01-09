@@ -30,6 +30,7 @@ enum class HtmlTag {
 	H5,
 	H6,
 	P,
+	DIV,
 	OL,
 	UL,
 	LI,
