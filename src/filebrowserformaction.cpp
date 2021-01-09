@@ -287,18 +287,14 @@ void FileBrowserFormAction::init()
 
 	set_value("fileprompt", _("File: "));
 
-	if (dir == "") {
-		const std::string save_path = cfg->get_configvalue("save-path");
+	const std::string save_path = cfg->get_configvalue("save-path");
 
-		LOG(Level::DEBUG,
-			"view::filebrowser: save-path is '%s'",
-			save_path);
+	LOG(Level::DEBUG,
+		"view::filebrowser: save-path is '%s'",
+		save_path);
 
-		dir = save_path;
-	}
-
-	const int status = ::chdir(dir.c_str());
-	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
+	const int status = ::chdir(save_path.c_str());
+	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
 	set_value("filenametext", default_filename);
 

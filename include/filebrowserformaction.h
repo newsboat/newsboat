@@ -51,7 +51,6 @@ private:
 
 	bool quit;
 	std::string cwd;
-	std::string dir;
 	std::string default_filename;
 
 	ListWidget files_list;
