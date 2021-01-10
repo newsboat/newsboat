@@ -19,11 +19,6 @@ public:
 	void init() override;
 	KeyMapHintEntry* get_keymap_hint() override;
 
-	void set_dir(const std::string& d)
-	{
-		dir = d;
-	}
-
 	std::string id() const override
 	{
 		return "dirbrowser";
@@ -47,7 +42,6 @@ private:
 	std::string get_formatted_dirname(std::string dirname, char ftype, mode_t mode);
 
 	std::string cwd;
-	std::string dir;
 
 	ListWidget files_list;
 };

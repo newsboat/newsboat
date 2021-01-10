@@ -55,7 +55,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		 * needs to be returned.
 		 */
 		LOG(Level::DEBUG, "FileBrowserFormAction: 'opening' item");
-		std::string focus = f.get_focus();
+		const std::string focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
 				const auto selected_position = files_list.get_position();
@@ -65,7 +65,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				const std::string filename(selection);
 				switch (filetype) {
 				case 'd': {
-					int status = ::chdir(filename.c_str());
+					const int status = ::chdir(filename.c_str());
 					LOG(Level::DEBUG,
 						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						filename,
@@ -78,9 +78,9 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
 
-					std::string fnstr =
+					const std::string fnstr =
 						f.get("filenametext");
-					std::string::size_type base =
+					const std::string::size_type base =
 						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
 					if (base == std::string::npos) {
 						fn.append(fnstr);
@@ -287,18 +287,14 @@ void FileBrowserFormAction::init()
 
 	set_value("fileprompt", _("File: "));
 
-	if (dir == "") {
-		std::string save_path = cfg->get_configvalue("save-path");
+	const std::string save_path = cfg->get_configvalue("save-path");
 
-		LOG(Level::DEBUG,
-			"view::filebrowser: save-path is '%s'",
-			save_path);
+	LOG(Level::DEBUG,
+		"view::filebrowser: save-path is '%s'",
+		save_path);
 
-		dir = save_path;
-	}
-
-	int status = ::chdir(dir.c_str());
-	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", dir, status);
+	const int status = ::chdir(save_path.c_str());
+	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
 	set_value("filenametext", default_filename);
 

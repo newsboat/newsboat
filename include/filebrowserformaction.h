@@ -19,10 +19,6 @@ public:
 	void init() override;
 	KeyMapHintEntry* get_keymap_hint() override;
 
-	void set_dir(const std::string& d)
-	{
-		dir = d;
-	}
 	void set_default_filename(const std::string& fn)
 	{
 		default_filename = fn;
@@ -55,7 +51,6 @@ private:
 
 	bool quit;
 	std::string cwd;
-	std::string dir;
 	std::string default_filename;
 
 	ListWidget files_list;
