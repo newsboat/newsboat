@@ -276,7 +276,7 @@ fn expression<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     enum Op {
         And,
         Or,
-    };
+    }
 
     let (input, left) = alt((parens, comparison))(input)?;
     let (input, _) = space0(input)?;
