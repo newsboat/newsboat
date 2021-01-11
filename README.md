@@ -128,24 +128,10 @@ Support
   [Freenode](https://freenode.net) ([webchat
   available!](https://webchat.freenode.net/?channels=newsboat))
 
-Development
------------
+Contributing
+------------
 
-Decided to work on an issue, fix a bug or add a feature? Great! Be sure to
-check out [our style guide](doc/internal/code-style.markdown).
-
-You'll probably want to run the tests; here's how:
-
-	$ TMPDIR=/dev/shm make -j5 PROFILE=1 check
-
-The "5" here is the number of CPU cores in your machine *plus one*. This
-parallelises the build. Rust tests already utilize as many cores as they can,
-but if you want to limit them, use the `RUST_TEST_THREADS` environment variable.
-`/dev/shm` is a "ramdisk", i.e. a virtual disk stored in the RAM. The tests
-create a lot of temporary files, and benefit from fast storage; a ramdisk is
-even better than an SSD.
-
-Newsboat can also be [built in Docker](doc/docker.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 License
 -------
