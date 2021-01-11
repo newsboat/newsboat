@@ -527,7 +527,7 @@ REDO:
 bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 	bool interactive) const
 {
-	if (visible_feeds.empty() || pos >= visible_feeds.size()) {
+	if (visible_feeds.empty()) {
 		v->show_error(_("No feed selected!"));
 		return false;
 	}
