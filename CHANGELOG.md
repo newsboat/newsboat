@@ -21,6 +21,18 @@ for this release also includes:
 
 
 
+## 2.22.1 - 2021-01-10
+
+### Fixed
+
+- Slow scrolling in the article list (regression) (#1372) (Alexander Batischev)
+- Segfaults if `swap-title-and-hints` is enabled (regression) (#1399) (Dennis
+    van der Schagt)
+- Build failure on GCC 9 due to `maybe-uninitialized` warning which `-Werror`
+    turns into an error (Alexander Batischev)
+
+
+
 ## 2.22 - 2020-12-21
 
 Lists below only mention user-visible changes, but the full list of contributors
