@@ -27,7 +27,15 @@ apps:
       - desktop
 
 parts:
+  rust:
+    plugin: nil
+    build-snaps:
+      - rustup
+    override-build: |
+      rustup install stable
   newsboat:
+    after:
+      - rust
     plugin: make
     source: .
     build-packages: 
@@ -41,7 +49,6 @@ parts:
       - asciidoctor
       - libssl-dev
       - gettext
-      - cargo
       - g++
     stage-packages:
       - libxml2
