@@ -12,6 +12,11 @@ class ConfigPaths;
 class RssFeed;
 class RssItem;
 
+enum class EnqueueResult {
+	QUEUED_SUCCESSFULLY,
+	URL_QUEUED_ALREADY,
+};
+
 class QueueManager {
 	ConfigContainer* cfg = nullptr;
 	ConfigPaths* paths = nullptr;
@@ -19,7 +24,8 @@ class QueueManager {
 public:
 	QueueManager(ConfigContainer* cfg, ConfigPaths* paths);
 
-	void enqueue_url(std::shared_ptr<RssItem> item,
+	/// Adds the podcast URL to Podboat's queue file
+	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
 		std::shared_ptr<RssFeed> feed);
 
 	void autoenqueue(std::shared_ptr<RssFeed> feed);

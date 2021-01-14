@@ -205,13 +205,23 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_ENQUEUE: {
 		if (item->enclosure_url().length() > 0 &&
 			utils::is_http_url(item->enclosure_url())) {
-			v->get_ctrl()->enqueue_url(item, feed);
-			v->set_status(
-				strprintf::fmt(_("Added %s to download queue."),
-					item->enclosure_url()));
+			const EnqueueResult status = v->get_ctrl()->enqueue_url(item, feed);
+			switch (status) {
+			case EnqueueResult::QUEUED_SUCCESSFULLY:
+				v->set_status(
+					strprintf::fmt(_("Added %s to download queue."),
+						item->enclosure_url()));
+				return true;
+			case EnqueueResult::URL_QUEUED_ALREADY:
+				v->set_status(
+					strprintf::fmt(_("%s is already queued."),
+						item->enclosure_url()));
+				return true; // Not a failure, just an idempotent action
+			}
 		} else {
-			v->set_status(strprintf::fmt(
+			v->show_error(strprintf::fmt(
 					_("Invalid URL: '%s'"), item->enclosure_url()));
+			return false;
 		}
 	}
 	break;

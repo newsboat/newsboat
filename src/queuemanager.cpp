@@ -16,11 +16,10 @@ QueueManager::QueueManager(ConfigContainer* cfg_, ConfigPaths* paths_)
 	, paths(paths_)
 {}
 
-void QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
+EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
 	const std::string& url = item->enclosure_url();
-	bool url_found = false;
 	std::fstream f;
 	f.open(paths->queue_file(), std::fstream::in);
 	if (f.is_open()) {
@@ -31,21 +30,21 @@ void QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 				std::vector<std::string> fields =
 					utils::tokenize_quoted(line);
 				if (!fields.empty() && fields[0] == url) {
-					url_found = true;
-					break;
+					return EnqueueResult::URL_QUEUED_ALREADY;
 				}
 			}
 		} while (!f.eof());
 		f.close();
 	}
-	if (!url_found) {
-		f.open(paths->queue_file(),
-			std::fstream::app | std::fstream::out);
-		const std::string filename =
-			generate_enqueue_filename(item, feed);
-		f << url << " " << utils::quote(filename) << std::endl;
-		f.close();
-	}
+
+	f.open(paths->queue_file(),
+		std::fstream::app | std::fstream::out);
+	const std::string filename =
+		generate_enqueue_filename(item, feed);
+	f << url << " " << utils::quote(filename) << std::endl;
+	f.close();
+
+	return EnqueueResult::QUEUED_SUCCESSFULLY;
 }
 
 std::string get_hostname_from_url(const std::string& url)
