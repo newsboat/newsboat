@@ -10,19 +10,23 @@
 
 namespace newsboat {
 
-/*
- * LineType specifies the way wrapping should be handled.
- *
- * wrappable: Wrap lines at the user-specified text-width setting, if not set
- * wrap at the window border.
- *
- * softwrappable: Wrap at the window border
- *
- * nonwrappable: Don't wrap lines, characters that cannot be drawn due to
- *               insufficient window width will be ignored.
- */
+/// This type dictates how the line should be wrapped and/or rendered.
+enum class LineType {
+	/// Wrap the line at the user-specified text-width setting. If the setting
+	/// is not set, wrap at the window border.
+	wrappable = 1,
 
-enum class LineType { wrappable = 1, softwrappable, nonwrappable, hr };
+	/// Wrap the line at the window border.
+	softwrappable,
+
+	/// Do not wrap. The part of the line that doesn't fit into the window will
+	/// be ignored.
+	nonwrappable,
+
+	/// Render as a horizontal line `text-width` characters long. If the
+	/// setting is not set, the line will span the entire width of the window.
+	hr
+};
 
 class TextFormatter {
 public:
