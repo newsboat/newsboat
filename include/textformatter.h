@@ -1,14 +1,13 @@
 #ifndef NEWSBOAT_TEXTFORMATTER_H_
 #define NEWSBOAT_TEXTFORMATTER_H_
 
-#include <climits>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "regexmanager.h"
-
 namespace newsboat {
+
+class RegexManager;
 
 /// This type dictates how the line should be wrapped and/or rendered.
 enum class LineType {
@@ -30,8 +29,8 @@ enum class LineType {
 
 class TextFormatter {
 public:
-	TextFormatter();
-	~TextFormatter();
+	TextFormatter() = default;
+	~TextFormatter() = default;
 	void add_line(LineType type, std::string line);
 	void add_lines(
 		const std::vector<std::pair<LineType, std::string>>& lines);

@@ -2,6 +2,8 @@
 
 #include "3rd-party/catch.hpp"
 
+#include "regexmanager.h"
+
 using namespace newsboat;
 
 TEST_CASE("lines marked as `wrappable` are wrapped to fit width",

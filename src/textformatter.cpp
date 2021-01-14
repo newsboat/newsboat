@@ -6,15 +6,12 @@
 #include <limits.h>
 
 #include "htmlrenderer.h"
+#include "regexmanager.h"
 #include "stflpp.h"
 #include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {
-
-TextFormatter::TextFormatter() {}
-
-TextFormatter::~TextFormatter() {}
 
 void TextFormatter::add_line(LineType type, std::string line)
 {
