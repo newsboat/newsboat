@@ -79,8 +79,8 @@ rss/rssparser.o: rss/rssparser.cpp rss/rssparser.h rss/exception.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 rss/rssparserfactory.o: rss/rssparserfactory.cpp rss/rssparserfactory.h \
- rss/rssparser.h rss/atomparser.h config.h rss/exception.h rss/feed.h \
- rss/item.h rss/rss09xparser.h rss/rss10parser.h rss/rss20parser.h
+ rss/feed.h rss/item.h rss/rssparser.h rss/atomparser.h config.h \
+ rss/exception.h rss/rss09xparser.h rss/rss10parser.h rss/rss20parser.h
 rss/xmlutilities.o: rss/xmlutilities.cpp rss/xmlutilities.h
 src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
  include/configactionhandler.h config.h include/configcontainer.h \

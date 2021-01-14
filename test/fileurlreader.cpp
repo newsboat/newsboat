@@ -38,12 +38,17 @@ TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 	FileUrlReader u("data/test-urls.txt");
 	u.reload();
 
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml").size() == 2);
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[0] == "tag1");
-	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[1] == "tag2");
+	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml").size() == 3);
+	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[0] == "~title");
+	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[1] == "tag1");
+	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml")[2] == "tag2");
 
 	REQUIRE(u.get_tags("http://anotherfeed.com/").size() == 0);
-	REQUIRE(u.get_tags("http://onemorefeed.at/feed/").size() == 2);
+
+	REQUIRE(u.get_tags("http://onemorefeed.at/feed/").size() == 3);
+	REQUIRE(u.get_tags("http://onemorefeed.at/feed/")[0] == "tag1");
+	REQUIRE(u.get_tags("http://onemorefeed.at/feed/")[1] == "~another title");
+	REQUIRE(u.get_tags("http://onemorefeed.at/feed/")[2] == "tag3");
 }
 
 TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
@@ -186,4 +191,18 @@ TEST_CASE("URL reader returns error message if file contains invalid UTF-8 codep
 	auto error_message = u.reload();
 	REQUIRE(error_message.has_value());
 	REQUIRE(error_message.value().size() > 0);
+}
+
+TEST_CASE("FileUrlReader::get_alltags() returns all unique tags across all feeds, "
+	"excluding the title tags",
+	"[FileUrlReader]")
+{
+	FileUrlReader u("data/test-urls.txt");
+	u.reload();
+
+	const auto tags = u.get_alltags();
+	REQUIRE(tags.size() == 3);
+	REQUIRE(tags[0] == "tag1");
+	REQUIRE(tags[1] == "tag2");
+	REQUIRE(tags[2] == "tag3");
 }

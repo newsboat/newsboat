@@ -370,7 +370,7 @@ Feed Parser::parse_xmlnode(xmlNode* node)
 			}
 
 			std::shared_ptr<RssParser> parser =
-				RssParserFactory::get_object(f, doc);
+				RssParserFactory::get_object(f.rss_version, doc);
 
 			try {
 				parser->parse_feed(f, node);

@@ -8,9 +8,8 @@
 
 TestHelpers::MainTempDir::tempfileexception::tempfileexception(
 	const std::string& error)
+	: msg("tempfileexception: " + error)
 {
-	msg = "tempfileexception: ";
-	msg += error;
 };
 
 const char* TestHelpers::MainTempDir::tempfileexception::what() const throw()

@@ -283,9 +283,11 @@ fmt:
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
+		--config-exclude=3rd-party --config-exclude=$(relative_cargo_target_dir) --config-exclude=/usr/include \
+		--suppress=*:3rd-party/* --suppress=*:$(relative_cargo_target_dir)/* --suppress=*:/usr/include/* \
 		-DDEBUG=1 \
 		$(INCLUDES) $(DEFINES) \
-		include filter newsboat.cpp podboat.cpp rss src stfl test \
+		include newsboat.cpp podboat.cpp rss src stfl test \
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 

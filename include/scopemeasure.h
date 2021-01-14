@@ -9,7 +9,7 @@ namespace newsboat {
 
 class ScopeMeasure {
 public:
-	ScopeMeasure(const std::string& func);
+	explicit ScopeMeasure(const std::string& func);
 	~ScopeMeasure() = default;
 	void stopover(const std::string& son = "");
 

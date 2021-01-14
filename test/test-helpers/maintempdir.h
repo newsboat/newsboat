@@ -17,7 +17,7 @@ public:
 		virtual const char* what() const throw();
 
 	private:
-		std::string msg;
+		const std::string msg;
 	};
 
 	MainTempDir();
