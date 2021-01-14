@@ -761,7 +761,7 @@ To bookmark the currently selected item, press `^B` (invoking the
 After that, the program configured via `bookmark-cmd` is executed. It is given
 four arguments, the same ones and in the same order as described above. The
 program then does the actual bookmark saving, e.g. writing the bookmark into an
-external file, or storing it to the del.icio.us account.
+external file, or storing it to a del.icio.us account.
 
 If everything goes OK, the program simply exits. In case something goes wrong,
 the program writes out an error message to stdout as a single line. This error
