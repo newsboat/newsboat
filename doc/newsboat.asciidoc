@@ -740,19 +740,47 @@ include::chapter-snownews.asciidoc[]
 
 === Bookmarking
 
-Newsboat contains a plugin-based bookmarking system. When a user bookmarks a link (possible
-in the article list, in the article view, and in the URL view), they are asked for the URL to bookmark (already
-preset with the URL of the current selection), the bookmark title (in most cases preset with the
-title of the current selection), the bookmark description and (since 2.10) the
-title of the feed the user is currently in. After the question for the description,
-an external program, configured via the configuration command <<bookmark-cmd,`bookmark-cmd`>>, is executed with 4 (since 2.10) commandline
-parameters. The plugin itself implements the actual bookmark saving (e.g. writing the bookmark to an
-external file, or storing it to a del.icio.us account). If everything went OK, the plugin simply exits.
-In case something goes wrong while saving the bookmark, it writes out an error message as a single line.
-This error message is then presented to the user from within Newsboat.
+This feature lets you save links from the article list, the article view, and
+the URL view. The actual bookmarking is performed by a program that you specify
+via the <<bookmark-cmd,`bookmark-cmd`>> setting; Newsboat merely supplies the
+data.
 
-Newsboat comes with an example plugin, which implements a simple tab-separated bookmark file. This
-example can be found in the _doc/examples_ subdirectory.
+To bookmark the currently selected item, press `^B` (invoking
+<<bookmark,`bookmark`>> operation), and Newsboat will ask you for:
+
+1. the URL to bookmark (already preset with the URL of the current selection);
+2. the bookmark title (in most cases preset with the title of the current
+   selection);
+3. the bookmark description (default empty); and
+4. (since Newsboat 2.10) the title of the feed you're currently in (preset as
+   you'd expect).
+
+(If you find that the above preset values always work for you, enable
+<<bookmark-autopilot,`bookmark-autopilot`>> to avoid being asked anything.)
+
+After that, the program configured via `bookmark-cmd` is executed. It is given
+four arguments, the same ones and in the same order as described above. The
+program then does the actual bookmark saving, e.g. writing the bookmark into an
+external file, or storing it to the del.icio.us account.
+
+If everything goes OK, the program simply exits. In case something goes wrong,
+the program writes out an error message to stdout as a single line. This error
+message is then presented to the user from within Newsboat. At the moment,
+Newsboat doesn't care about the exit code of the program; only its output is
+used to determine success.
+
+Some bookmarking commands are interactive, e.g. they might want you to select
+a category for your bookmark, or a Mastodon account from which to share the
+bookmark. Oftentimes you can specify defaults for these, but if you can't,
+enable <<bookmark-interactive,`bookmark-interactive`>>: it will make Newsboat
+relinquish the terminal to the bookmarking program. You'll be able to make all
+the changes there, and will return to Newsboat once the bookmarking program
+exits.
+
+Newsboat comes with an example plugin,
+_doc/examples/example-bookmark-plugin.sh_, which implements a simple
+tab-separated bookmark file. You can use that as a starting point to write your
+own bookmarking program.
 
 
 === Command Line
