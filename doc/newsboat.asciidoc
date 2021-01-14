@@ -745,7 +745,7 @@ the URL view. The actual bookmarking is performed by a program that you specify
 via the <<bookmark-cmd,`bookmark-cmd`>> setting; Newsboat merely supplies the
 data.
 
-To bookmark the currently selected item, press `^B` (invoking
+To bookmark the currently selected item, press `^B` (invoking the
 <<bookmark,`bookmark`>> operation), and Newsboat will ask you for:
 
 1. the URL to bookmark (already preset with the URL of the current selection);
