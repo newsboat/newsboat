@@ -22,7 +22,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	const std::string& url = item->enclosure_url();
 	std::fstream f;
 	f.open(paths->queue_file(), std::fstream::in);
-	if (f.is_open()) {
+	if (!f.is_open()) {
 		do {
 			std::string line;
 			getline(f, line);
@@ -39,6 +39,9 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 
 	f.open(paths->queue_file(),
 		std::fstream::app | std::fstream::out);
+	if (!f.is_open()) {
+		return EnqueueResult::QUEUE_FILE_OPEN_ERROR;
+	}
 	const std::string filename =
 		generate_enqueue_filename(item, feed);
 	f << url << " " << utils::quote(filename) << std::endl;

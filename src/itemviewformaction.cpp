@@ -217,6 +217,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 					strprintf::fmt(_("%s is already queued."),
 						item->enclosure_url()));
 				return true; // Not a failure, just an idempotent action
+			case EnqueueResult::QUEUE_FILE_OPEN_ERROR:
+				v->show_error(
+					strprintf::fmt(_("Failed to open queue file.")));
+				return false;
 			}
 		} else {
 			v->show_error(strprintf::fmt(

@@ -15,6 +15,7 @@ class RssItem;
 enum class EnqueueResult {
 	QUEUED_SUCCESSFULLY,
 	URL_QUEUED_ALREADY,
+	QUEUE_FILE_OPEN_ERROR,
 };
 
 class QueueManager {
