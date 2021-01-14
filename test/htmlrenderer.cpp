@@ -375,16 +375,22 @@ TEST_CASE("spaces and line breaks are preserved inside <pre>", "[HtmlRenderer]")
 
 	const std::string input =
 		"<pre>oh cool\n"
+		"\n"
 		"  check this\tstuff  out!\n"
+		"     \n"
+		"neat huh?\n"
 		"</pre>";
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 2);
+	REQUIRE(lines.size() == 5);
 	REQUIRE(lines[0] == p(LineType::softwrappable, "oh cool"));
-	REQUIRE(lines[1] ==
+	REQUIRE(lines[1] == p(LineType::softwrappable, ""));
+	REQUIRE(lines[2] ==
 		p(LineType::softwrappable, "  check this\tstuff  out!"));
+	REQUIRE(lines[3] == p(LineType::softwrappable, "     "));
+	REQUIRE(lines[4] == p(LineType::softwrappable, "neat huh?"));
 	REQUIRE(links.size() == 0);
 }
 
