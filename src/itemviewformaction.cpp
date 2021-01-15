@@ -217,6 +217,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 					strprintf::fmt(_("%s is already queued."),
 						item->enclosure_url()));
 				return true; // Not a failure, just an idempotent action
+			case EnqueueResult::OUTPUT_FILENAME_USED_ALREADY:
+				v->show_error(
+					strprintf::fmt(_("Generated filename is used already.")));
+				return false;
 			case EnqueueResult::QUEUE_FILE_OPEN_ERROR:
 				v->show_error(
 					strprintf::fmt(_("Failed to open queue file.")));

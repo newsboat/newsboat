@@ -20,17 +20,22 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
 	const std::string& url = item->enclosure_url();
+	const std::string filename = generate_enqueue_filename(item, feed);
+
 	std::fstream f;
 	f.open(paths->queue_file(), std::fstream::in);
-	if (!f.is_open()) {
+	if (f.is_open()) {
 		do {
 			std::string line;
 			getline(f, line);
 			if (!f.eof() && !line.empty()) {
 				std::vector<std::string> fields =
 					utils::tokenize_quoted(line);
-				if (!fields.empty() && fields[0] == url) {
+				if (fields.size() >= 1 && fields[0] == url) {
 					return EnqueueResult::URL_QUEUED_ALREADY;
+				}
+				if (fields.size() >= 2 && fields[1] == filename) {
+					return EnqueueResult::OUTPUT_FILENAME_USED_ALREADY;
 				}
 			}
 		} while (!f.eof());
@@ -42,8 +47,6 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	if (!f.is_open()) {
 		return EnqueueResult::QUEUE_FILE_OPEN_ERROR;
 	}
-	const std::string filename =
-		generate_enqueue_filename(item, feed);
 	f << url << " " << utils::quote(filename) << std::endl;
 	f.close();
 
