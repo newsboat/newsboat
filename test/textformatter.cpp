@@ -2,6 +2,8 @@
 
 #include "3rd-party/catch.hpp"
 
+#include "regexmanager.h"
+
 using namespace newsboat;
 
 TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
@@ -54,7 +56,7 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	}
 }
 
-TEST_CASE("line wrapping works for non-space-separeted text", "[TextFormatter]")
+TEST_CASE("line wrapping works for non-space-separated text", "[TextFormatter]")
 {
 	TextFormatter fmt;
 
@@ -246,4 +248,39 @@ TEST_CASE(
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);
 	}
+}
+
+TEST_CASE("Lines consisting entirely of spaces are replaced "
+	"by a single space",
+	"[TextFormatter]")
+{
+	// Limit for wrappable lines
+	const size_t wrap_width = 3;
+	// Limit for softwrapable lines
+	const size_t total_width = 4;
+
+	TextFormatter fmt;
+	// All of these lines are longer than the wrap limits. If these lines were
+	// wrapped, the result would have more than 4 lines.
+	fmt.add_line(LineType::wrappable, "    ");
+	fmt.add_line(LineType::wrappable, "          ");
+	fmt.add_line(LineType::softwrappable, "      ");
+	fmt.add_line(LineType::softwrappable, "  ");
+
+	const std::string expected_text =
+		"{list"
+		"{listitem text:\" \"}"
+		"{listitem text:\" \"}"
+		"{listitem text:\" \"}"
+		"{listitem text:\" \"}"
+		"}";
+	const std::size_t expected_count = 4;
+
+	RegexManager* rxman = nullptr;
+	const std::string location = "";
+	const auto result = fmt.format_text_to_list(rxman, location, wrap_width,
+			total_width);
+
+	REQUIRE(result.first == expected_text);
+	REQUIRE(result.second == expected_count);
 }

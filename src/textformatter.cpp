@@ -6,15 +6,12 @@
 #include <limits.h>
 
 #include "htmlrenderer.h"
+#include "regexmanager.h"
 #include "stflpp.h"
 #include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {
-
-TextFormatter::TextFormatter() {}
-
-TextFormatter::~TextFormatter() {}
 
 void TextFormatter::add_line(LineType type, std::string line)
 {
@@ -37,6 +34,13 @@ void TextFormatter::add_lines(
 	}
 }
 
+bool iswhitespace(const std::string& input)
+{
+	return std::all_of(input.cbegin(), input.cend(), [](std::string::value_type c) {
+		return std::isspace(c);
+	});
+};
+
 std::vector<std::string> wrap_line(const std::string& line, const size_t width,
 	bool raw)
 {
@@ -49,13 +53,6 @@ std::vector<std::string> wrap_line(const std::string& line, const size_t width,
 
 	std::string prefix;
 	size_t prefix_width = 0;
-	auto iswhitespace = [](const std::string& input) {
-		return std::all_of(input.cbegin(),
-				input.cend(),
-		[](std::string::value_type c) {
-			return std::isspace(c);
-		});
-	};
 	auto strwidth = [raw](const std::string& str) {
 		if (raw) {
 			return utils::strwidth(str);
@@ -153,7 +150,7 @@ std::vector<std::string> format_text_plain_helper(
 	};
 
 	for (const auto& line : lines) {
-		auto type = line.first;
+		const auto type = line.first;
 		auto text = line.second;
 
 		LOG(Level::DEBUG,
@@ -168,7 +165,7 @@ std::vector<std::string> format_text_plain_helper(
 
 		switch (type) {
 		case LineType::wrappable:
-			if (text == "") {
+			if (text.empty() || iswhitespace(text)) {
 				store_line(" ");
 				continue;
 			}
@@ -179,7 +176,7 @@ std::vector<std::string> format_text_plain_helper(
 			break;
 
 		case LineType::softwrappable:
-			if (text == "") {
+			if (text.empty() || iswhitespace(text)) {
 				store_line(" ");
 				continue;
 			}
