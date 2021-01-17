@@ -1,6 +1,8 @@
 #include "utils.h"
 
+#include <algorithm>
 #include <chrono>
+#include <ctype.h>
 #include <fstream>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -1717,5 +1719,187 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 
 	SECTION("Path ends in slash => directory created") {
 		check(path + "/");
+	}
+}
+
+TEST_CASE("convert_text() returns input string if `fromcode` and `tocode` are the same",
+	"[utils]")
+{
+	const std::vector<std::string> inputs {
+		"\x81\x13\xa0", // \x81 is not valid UTF-8
+		"\x01", // incomplete UTF-16
+		"\x01\x1f\x80\x9b", // those bytes are not defined in ISO-8859-1
+		"\x7f\x1e\x03", // these bytes are not defined in KOI8-R
+	};
+
+	const std::vector<std::string> codes {
+		"utf-8",
+		"utf-16",
+		"iso-8859-1",
+		"koi8-r",
+	};
+
+	SECTION("Codes are literally the same") {
+		for (const auto& code : codes) {
+			for (const auto& input : inputs) {
+				INFO("code:  " << code);
+				INFO("input: " << input);
+				REQUIRE(utils::convert_text(input, code, code) == input);
+			}
+		}
+	}
+
+	const auto to_uppercase = [](std::string input) -> std::string {
+		std::transform(input.begin(), input.end(), input.begin(), ::toupper);
+		return input;
+	};
+
+	SECTION("From-code is an uppercase version of to-code") {
+		for (const auto& code : codes) {
+			for (const auto& input : inputs) {
+				const auto fromcode = to_uppercase(code);
+				const auto& tocode = code;
+				INFO("from-code: " << fromcode);
+				INFO("to-code:   " << tocode);
+				INFO("input:     " << input);
+				REQUIRE(utils::convert_text(input, tocode, fromcode) == input);
+			}
+		}
+	}
+
+	SECTION("To-code is an uppercase version of from-code") {
+		for (const auto& code : codes) {
+			for (const auto& input : inputs) {
+				const auto& fromcode = code;
+				const auto tocode = to_uppercase(code);
+				INFO("from-code: " << fromcode);
+				INFO("to-code:   " << tocode);
+				INFO("input:     " << input);
+				REQUIRE(utils::convert_text(input, tocode, fromcode) == input);
+			}
+		}
+	}
+}
+
+TEST_CASE("convert_text() returns empty string if conversion is impossible",
+	"[utils]")
+{
+	// "Hello", in Russian, encoded in UTF-8.
+	const std::string input("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
+
+	SECTION("Can't convert from non-existent encoding") {
+		REQUIRE(utils::convert_text(input, "UTF-8", "UTF-three-and-a-half") == "");
+	}
+
+	SECTION("Can't convert to non-existent encoding") {
+		REQUIRE(utils::convert_text(input, "That one with squiggles", "UTF-8") == "");
+	}
+}
+
+TEST_CASE("convert_text() replaces incomplete multi-byte sequences with a question mark",
+	"[utils]")
+{
+	SECTION("From UTF-8 to UTF-16LE") {
+		// "oops" in Russian, but the last byte is missing
+		const std::string input("\xd0\xbe\xd0");
+		// FIXME: the question mark is encoded by a single byte here, which is
+		// wrong; it should be \x3f\x00 instead.
+		const std::string expected("\x3e\x04\x3f");
+		REQUIRE(utils::convert_text(input, "UTF-16LE", "UTF-8") == expected);
+	}
+
+	SECTION("From UTF-16LE to UTF-8") {
+		// FIXME: when I tried to use ASCII for input, I got the wrong result
+		// because in UTF-16, ASCII characters are represented by adding a zero
+		// byte at the end. This throws off `strlen()` calls inside
+		// `convert_text()`. I should replace those calls with
+		// `std::string::length()` or something.
+
+		// "hey" in Russian, but the last byte is missing
+		const std::string input("\x4d\x04\x39", 3);
+		const std::string expected("\xd1\x8d?");
+		REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
+	}
+}
+
+TEST_CASE("convert_text() replaces invalid multi-byte sequences with "
+	"a question mark (as best as it can)",
+	"[utils]")
+{
+	SECTION("From UTF-8 to UTF-16LE") {
+		// "日本", "Japan", but the third byte of the first character (0xa5) is
+		// missing, making the whole first character an illegal sequence.
+		const std::string input("\xe6\x97\xe6\x9c\xac");
+		const std::string expected("??\x2c\x67");
+		REQUIRE(utils::convert_text(input, "UTF-16LE", "UTF-8") == expected);
+	}
+
+	SECTION("From UTF-16LE to UTF-8") {
+		// The first two bytes here are part of a surrogate pair, i.e. they
+		// imply that the next two bytes encode additional info. However, the
+		// next two bytes are an ordinary character. This breaks the decoding
+		// process, so some things get turned into a question mark while others
+		// are decoded incorrectly.
+		const std::string input("\x01\xd8\xd7\x03");
+		const std::string expected("?\xed\x9f\x98?");
+		REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
+	}
+}
+
+TEST_CASE("convert_text() converts text between encodings", "[utils]")
+{
+	SECTION("From UTF-8 to UTF-16LE") {
+		// "Testing" in Russian.
+		const std::string input("\xd0\xa2\xd0\xb5\xd1\x81\xd1\x82\xd0\xb8\xd1"
+			"\x80\xd1\x83\xd1\x8e");
+		const std::string expected("\x22\x04\x35\x04\x41\x04\x42\x04"
+			"\x38\x04\x40\x04\x43\x04\x4e\x04");
+		REQUIRE(utils::convert_text(input, "UTF-16LE", "UTF-8") == expected);
+	}
+
+	SECTION("From UTF-8 to KOI8-R") {
+		// "Check" in Russian.
+		const std::string input("\xd0\x9f\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd1"
+			"\x80\xd0\xba\xd0\xb0");
+		const std::string expected("\xf0\xd2\xcf\xd7\xc5\xd2\xcb\xc1");
+		REQUIRE(utils::convert_text(input, "KOI8-R", "UTF-8") == expected);
+	}
+
+	SECTION("From UTF-8 to ISO-8859-1 (transliterating if need be)") {
+		// Mix of Cyrillic (unsupported by ISO-8859-1) and ISO-8859-1 characters.
+		const std::string input("\xd0\xb2\xd0\xb0\xd1\x83\x20\xc2\xb0\xc2\xb1"
+			"\xc2\xb2\xc2\xb3\xc2\xb4\xc2\xb5\xc2\xb6\xc2\xb7\xc2\xb8\xc2\xb9"
+			"\xc2\xba\xc2\xbb\xc2\xbc\xc2\xbd\xc2\xbe\xc2\xbf\xc3\x80\xc3\x81"
+			"\xc3\x82\xc3\x83");
+
+		const auto result = utils::convert_text(input, "ISO-8859-1", "UTF-8");
+		// We can't spell out an expected result because different platforms
+		// might follow different transliteration rules.
+		REQUIRE(result != "");
+		REQUIRE(result != input);
+	}
+
+	SECTION("From UTF-16LE to UTF-8") {
+		// "Success" in Russian.
+		const std::string input("\xff\xfe\x23\x04\x41\x04\x3f\x04\x35\x04\x45\x04");
+		const std::string expected("\xef\xbb\xbf\xd0\xa3\xd1\x81\xd0\xbf\xd0\xb5"
+			"\xd1\x85");
+		REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
+	}
+
+	SECTION("From KOI8-R to UTF-8") {
+		// "History" in Russian.
+		const std::string input("\xe9\xd3\xd4\xcf\xd2\xc9\xd1");
+		const std::string expected("\xd0\x98\xd1\x81\xd1\x82\xd0\xbe\xd1\x80"
+			"\xd0\xb8\xd1\x8f");
+		REQUIRE(utils::convert_text(input, "UTF-8", "KOI8-R") == expected);
+	}
+
+	SECTION("From ISO-8859-1 to UTF-8") {
+		// Some umlauts and Latin letters.
+		const std::string input("\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf");
+		const std::string expected("\xc3\x84\xc3\x85\xc3\x86\xc3\x87\xc3\x88\xc3"
+			"\x89\xc3\x8a\xc3\x8b\xc3\x8c\xc3\x8d\xc3\x8e\xc3\x8f");
+		REQUIRE(utils::convert_text(input, "UTF-8", "ISO-8859-1") == expected);
 	}
 }
