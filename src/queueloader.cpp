@@ -41,7 +41,9 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 
 	update_from_queue_file(categorized_downloads);
 	write_queue_file(categorized_downloads);
-	delete_played_files(categorized_downloads);
+	if (cfg.get_configvalue_as_bool("delete-played-files")) {
+		delete_played_files(categorized_downloads);
+	}
 	downloads = std::move(categorized_downloads.to_keep);
 }
 
@@ -238,10 +240,6 @@ void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 void QueueLoader::delete_played_files(const CategorizedDownloads& downloads)
 const
 {
-	if (!cfg.get_configvalue_as_bool("delete-played-files")) {
-		return;
-	}
-
 	for (const auto& dl : downloads.to_delete) {
 		const std::string filename = dl.filename();
 		LOG(Level::INFO, "Deleting file %s", filename);
