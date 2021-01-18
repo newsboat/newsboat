@@ -1,6 +1,7 @@
 #include "misc.h"
 
 #include <fstream>
+#include <unistd.h>
 
 #include "3rd-party/catch.hpp"
 
@@ -50,4 +51,29 @@ void TestHelpers::copy_file(const std::string& source,
 	REQUIRE(dst.is_open());
 
 	dst << src.rdbuf();
+}
+
+std::vector<std::string> TestHelpers::file_contents(const std::string& filepath)
+{
+	std::vector<std::string> lines;
+
+	std::ifstream in(filepath);
+	while (in.is_open() && !in.eof()) {
+		std::string line;
+		std::getline(in, line);
+		lines.emplace_back(std::move(line));
+	}
+
+	return lines;
+}
+
+bool TestHelpers::starts_with(const std::string& input,
+	const std::string& prefix)
+{
+	return input.substr(0, prefix.size()) == prefix;
+}
+
+bool TestHelpers::file_exists(const std::string& filepath)
+{
+	return access(filepath.c_str(), F_OK) == 0;
 }

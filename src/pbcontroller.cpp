@@ -290,8 +290,9 @@ int PbController::run(PbView& v)
 
 	std::cout << _("done.") << std::endl;
 
-	ql.reset(new QueueLoader(queue_file, cfg,
-			std::bind(&PbController::set_view_update_necessary, this, true)));
+	ql.reset(new QueueLoader(queue_file, cfg, [this]() {
+		this->set_view_update_necessary(true);
+	}));
 	ql->reload(downloads_);
 
 	v.set_keymap(&keys);

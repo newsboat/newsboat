@@ -2,6 +2,7 @@
 #define NEWSBOAT_TEST_HELPERS_MISC_H_
 
 #include <string>
+#include <vector>
 
 namespace TestHelpers {
 
@@ -21,6 +22,20 @@ void assert_article_file_content(const std::string& path,
 /* \brief Copy a file
  */
 void copy_file(const std::string& source, const std::string& destination);
+
+/* \brief Returns the contents of the file at `filepath` (each line represented
+ * by a separate string, without the newline character), or an empty vector if
+ * the file couldn't be opened.
+ */
+std::vector<std::string> file_contents(const std::string& filepath);
+
+/* \brief Returns `true` if `input` starts with `prefix`.
+ */
+bool starts_with(const std::string& input, const std::string& prefix);
+
+/* \brief Returns `true` if the file at `filepath` exists.
+ */
+bool file_exists(const std::string& filepath);
 
 } // namespace TestHelpers
 

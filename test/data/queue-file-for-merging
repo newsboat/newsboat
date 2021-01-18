@@ -1,0 +1,3 @@
+https://example.com/podcast/episode-001.ogg nonexistent-file.ogg
+https://example.com/this_doesnt_exist_in_code.mp3 "data/podcast-standin.mp3" downloaded
+https://example.com/podcast/episode-002.ogg "a different episode.ogg"

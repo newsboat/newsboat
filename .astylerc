@@ -10,5 +10,5 @@
 --add-braces
 --attach-return-type
 --attach-return-type-decl
---max-code-length=80
+--max-code-length=91
 --indent-after-parens

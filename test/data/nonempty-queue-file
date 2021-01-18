@@ -1,0 +1,5 @@
+https://example.com/podcast/episode-001.ogg nonexistent-file.ogg
+https://wwww.example.com/another-podcast/episode-421.mp3 data/podcast-standin.mp3 downloaded
+https://pods.example.com/that_one/ "data/podcast-standin.mp4" played
+https://pods.example.com/this%20one/audio.ogg "data/podcast-standin.ogg" finished
+https://pods.example.com/partial.ogg "data/partial.ogg"

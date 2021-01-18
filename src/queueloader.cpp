@@ -20,9 +20,10 @@ using namespace newsboat;
 
 namespace podboat {
 
-QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
+QueueLoader::QueueLoader(const std::string& filepath,
+	const ConfigContainer& cfg_,
 	std::function<void()> cb_require_view_update_)
-	: queuefile(file)
+	: queuefile(filepath)
 	, cfg(cfg_)
 	, cb_require_view_update(cb_require_view_update_)
 {
@@ -31,15 +32,34 @@ QueueLoader::QueueLoader(const std::string& file, ConfigContainer& cfg_,
 void QueueLoader::reload(std::vector<Download>& downloads,
 	bool also_remove_finished) const
 {
-	std::vector<Download> dltemp;
-	std::vector<Download> deletion_list;
+	CategorizedDownloads categorized_downloads;
+	const auto res = categorize_downloads(downloads, also_remove_finished);
+	if (!res.has_value()) {
+		return;
+	}
+	categorized_downloads = res.value();
+
+	update_from_queue_file(categorized_downloads);
+	write_queue_file(categorized_downloads);
+	if (cfg.get_configvalue_as_bool("delete-played-files")) {
+		delete_played_files(categorized_downloads);
+	}
+	downloads = std::move(categorized_downloads.to_keep);
+}
+
+nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloads(
+	const std::vector<Download>& downloads,
+	bool also_remove_finished)
+{
+	CategorizedDownloads result;
+
 	for (const auto& dl : downloads) {
 		// we are not allowed to reload if a download is in progress!
 		if (dl.status() == DlStatus::DOWNLOADING) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: aborting reload due to "
 				"DlStatus::DOWNLOADING status");
-			return;
+			return nonstd::nullopt;
 		}
 		bool keep_entry = false;
 		switch (dl.status()) {
@@ -57,183 +77,180 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 		case DlStatus::FINISHED:
 			if (!also_remove_finished) {
 				LOG(Level::DEBUG,
-					"QueueLoader::reload: storing %s to "
-					"new "
-					"vector",
+					"QueueLoader::reload: storing %s to new vector",
 					dl.url());
 				keep_entry = true;
 			}
 			break;
-		default:
+		case DlStatus::DELETED:
+			keep_entry = false;
+			break;
+
+		case DlStatus::DOWNLOADING:
+			assert(!"Can't be reached because of the `if` above");
 			break;
 		}
 
 		if (keep_entry) {
-			dltemp.push_back(dl);
+			result.to_keep.push_back(dl);
 		} else {
-			deletion_list.push_back(dl);
+			result.to_delete.push_back(dl);
 		}
 	}
 
+	return result;
+}
+
+void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
+{
 	std::fstream f(queuefile, std::fstream::in);
+	if (!f.is_open()) {
+		return;
+	}
+
 	bool comments_ignored = false;
-	if (f.is_open()) {
-		std::string line;
-		do {
-			std::getline(f, line);
-			if (!f.eof() && line.length() > 0) {
-				LOG(Level::DEBUG,
-					"QueueLoader::reload: loaded `%s' from "
-					"queue file",
-					line);
-				std::vector<std::string> fields =
-					utils::tokenize_quoted(line);
-				bool url_found = false;
-
-				if (fields.empty()) {
-					if (!comments_ignored) {
-						std::cout << strprintf::fmt(
-								_("WARNING: Comment found "
-									"in %s. The queue file is regenerated "
-									"when podboat exits and comments will "
-									"be deleted. Press Enter to continue or "
-									"Ctrl+C to abort"),
-								queuefile)
-							<< std::endl;
-						std::cin.ignore();
-						comments_ignored = true;
-					}
-					continue;
-				}
-
-				for (const auto& dl : dltemp) {
-					if (fields[0] == dl.url()) {
-						LOG(Level::INFO,
-							"QueueLoader::reload: "
-							"found `%s' in old "
-							"vector",
-							fields[0]);
-						url_found = true;
-						break;
-					}
-				}
-
-				for (const auto& dl : deletion_list) {
-					if (fields[0] == dl.url()) {
-						LOG(Level::INFO,
-							"QueueLoader::reload: "
-							"found `%s' in scheduled for deletion "
-							"vector",
-							fields[0]);
-						url_found = true;
-						break;
-					}
-				}
-
-				if (!url_found) {
-					LOG(Level::INFO,
-						"QueueLoader::reload: found "
-						"`%s' "
-						"nowhere -> storing to new "
-						"vector",
-						line);
-					Download d(cb_require_view_update);
-					std::string fn;
-					if (fields.size() == 1) {
-						fn = get_filename(fields[0]);
-					} else {
-						fn = fields[1];
-					}
-					d.set_filename(fn);
-					if (access(fn.c_str(), F_OK) == 0) {
-						LOG(Level::INFO,
-							"QueueLoader::reload: "
-							"found `%s' on file "
-							"system "
-							"-> mark as already "
-							"downloaded",
-							fn);
-						if (fields.size() >= 3) {
-							if (fields[2] ==
-								"downloaded")
-								d.set_status(
-									DlStatus::
-									READY);
-							if (fields[2] ==
-								"played")
-								d.set_status(
-									DlStatus::
-									PLAYED);
-							if (fields[2] ==
-								"finished")
-								d.set_status(
-									DlStatus::
-									FINISHED);
-						} else
-							d.set_status(DlStatus::
-								ALREADY_DOWNLOADED); // TODO: scrap DlStatus::ALREADY_DOWNLOADED state
-					} else if (
-						access((fn +
-								ConfigContainer::
-								PARTIAL_FILE_SUFFIX)
-							.c_str(),
-							F_OK) == 0) {
-						LOG(Level::INFO,
-							"QueueLoader::reload: "
-							"found `%s' on file "
-							"system "
-							"-> mark as partially "
-							"downloaded",
-							fn +
-							ConfigContainer::
-							PARTIAL_FILE_SUFFIX);
-						d.set_status(DlStatus::
-							ALREADY_DOWNLOADED);
-					}
-
-					d.set_url(fields[0]);
-					dltemp.push_back(d);
-				}
-			}
-		} while (!f.eof());
-		f.close();
-	}
-
-	f.open(queuefile, std::fstream::out);
-	if (f.is_open()) {
-		for (const auto& dl : dltemp) {
-			f << dl.url() << " " << utils::quote(dl.filename());
-			if (dl.status() == DlStatus::READY) {
-				f << " downloaded";
-			}
-			if (dl.status() == DlStatus::PLAYED) {
-				f << " played";
-			}
-			if (dl.status() == DlStatus::FINISHED) {
-				f << " finished";
-			}
-			f << std::endl;
+	for (std::string line; std::getline(f, line); ) {
+		if (line.empty()) {
+			continue;
 		}
-		f.close();
-	}
 
-	if (cfg.get_configvalue_as_bool("delete-played-files")) {
-		for (const auto& dl : deletion_list) {
-			const std::string filename = dl.filename();
+		LOG(Level::DEBUG,
+			"QueueLoader::reload: loaded `%s' from queue file",
+			line);
+		const std::vector<std::string> fields = utils::tokenize_quoted(line);
+		bool url_found = false;
+
+		if (fields.empty()) {
+			if (!comments_ignored) {
+				std::cout << strprintf::fmt(
+						_("WARNING: Comment found "
+							"in %s. The queue file is regenerated "
+							"when podboat exits and comments will "
+							"be deleted. Press Enter to continue or "
+							"Ctrl+C to abort"),
+						queuefile)
+					<< std::endl;
+				std::cin.ignore();
+				comments_ignored = true;
+			}
+			continue;
+		}
+
+		for (const auto& dl : downloads.to_keep) {
+			if (fields[0] == dl.url()) {
+				LOG(Level::INFO,
+					"QueueLoader::reload: found `%s' in old vector",
+					fields[0]);
+				url_found = true;
+				break;
+			}
+		}
+
+		for (const auto& dl : downloads.to_delete) {
+			if (fields[0] == dl.url()) {
+				LOG(Level::INFO,
+					"QueueLoader::reload: found `%s' in scheduled for deletion vector",
+					fields[0]);
+				url_found = true;
+				break;
+			}
+		}
+
+		if (url_found) {
+			continue;
+		}
+
+		LOG(Level::INFO,
+			"QueueLoader::reload: found `%s' nowhere -> storing to new vector",
+			line);
+		Download d(cb_require_view_update);
+		std::string fn;
+		if (fields.size() == 1) {
+			fn = get_filename(fields[0]);
+		} else {
+			fn = fields[1];
+		}
+		d.set_filename(fn);
+		if (access(fn.c_str(), F_OK) == 0) {
 			LOG(Level::INFO,
-				"Deleting file %s",
-				filename);
-			if (std::remove(filename.c_str()) != 0) {
-				if (errno != ENOENT) {
-					LOG(Level::ERROR,
-						"Failed to delete file %s, error code: %d (%s)",
-						filename, errno, strerror(errno));
+				"QueueLoader::reload: found `%s' on file system -> mark as already downloaded",
+				fn);
+			if (fields.size() >= 3) {
+				if (fields[2] == "downloaded") {
+					d.set_status(DlStatus::READY);
 				}
+				if (fields[2] == "played") {
+					d.set_status(DlStatus::PLAYED);
+				}
+				if (fields[2] == "finished") {
+					d.set_status(DlStatus::FINISHED);
+				}
+			} else {
+				// TODO: scrap DlStatus::ALREADY_DOWNLOADED state
+				d.set_status(DlStatus::ALREADY_DOWNLOADED);
+			}
+		} else if (access((fn + ConfigContainer::PARTIAL_FILE_SUFFIX).c_str(),
+				F_OK) == 0) {
+			LOG(Level::INFO,
+				"QueueLoader::reload: found `%s' on file system -> mark as partially downloaded",
+				fn + ConfigContainer::PARTIAL_FILE_SUFFIX);
+			d.set_status(DlStatus::ALREADY_DOWNLOADED);
+		}
+
+		d.set_url(fields[0]);
+		downloads.to_keep.push_back(d);
+	}
+}
+
+void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
+{
+	std::fstream f(queuefile, std::fstream::out);
+	if (!f.is_open()) {
+		return;
+	}
+
+	for (const auto& dl : downloads.to_keep) {
+		f << dl.url() << " " << utils::quote(dl.filename());
+		switch (dl.status()) {
+		case DlStatus::READY:
+			f << " downloaded";
+			break;
+
+		case DlStatus::PLAYED:
+			f << " played";
+			break;
+
+		case DlStatus::FINISHED:
+			f << " finished";
+			break;
+
+		// The following statuses have no marks in the queue file.
+		case DlStatus::QUEUED:
+		case DlStatus::DOWNLOADING:
+		case DlStatus::CANCELLED:
+		case DlStatus::DELETED:
+		case DlStatus::FAILED:
+		case DlStatus::ALREADY_DOWNLOADED:
+			break;
+		}
+		f << std::endl;
+	}
+}
+
+void QueueLoader::delete_played_files(const CategorizedDownloads& downloads)
+const
+{
+	for (const auto& dl : downloads.to_delete) {
+		const std::string filename = dl.filename();
+		LOG(Level::INFO, "Deleting file %s", filename);
+		if (std::remove(filename.c_str()) != 0) {
+			if (errno != ENOENT) {
+				LOG(Level::ERROR,
+					"Failed to delete file %s, error code: %d (%s)",
+					filename, errno, strerror(errno));
 			}
 		}
 	}
-
-	downloads = dltemp;
 }
 
 std::string QueueLoader::get_filename(const std::string& str) const
