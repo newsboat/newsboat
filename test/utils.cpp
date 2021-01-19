@@ -1903,3 +1903,123 @@ TEST_CASE("convert_text() converts text between encodings", "[utils]")
 		REQUIRE(utils::convert_text(input, "UTF-8", "ISO-8859-1") == expected);
 	}
 }
+
+TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
+	"by locale in LC_CTYPE class",
+	"[utils]")
+{
+	TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+	lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+		if (new_charset.has_value()) {
+			::setlocale(LC_CTYPE, new_charset.value().c_str());
+		} else {
+			::setlocale(LC_CTYPE, "");
+		}
+	});
+	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
+		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
+		{
+			WARN("Couldn't set locale " + new_locale + "; test skipped.");
+			return false;
+		}
+		lc_ctype.set(new_locale);
+		return true;
+	};
+
+	SECTION("UTF-8") {
+		if (!set_locale("en_US.UTF-8")) {
+			return;
+		}
+
+		REQUIRE(utils::utf8_to_locale("") == "");
+
+		// "Just testing this" in Russian.
+		const std::string text("\xd0\x9f\xd1\x80\xd0\xbe\xd1\x81\xd1\x82\xd0"
+			"\xbe\x20\xd0\xbf\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd1\x80\xd1\x8f\xd1\x8e");
+		REQUIRE(utils::utf8_to_locale(text) == text);
+	}
+
+	SECTION("KOI8-R") {
+		if (!set_locale("ru_RU.KOI8-R")) {
+			return;
+		}
+
+		REQUIRE(utils::utf8_to_locale("") == "");
+
+		// "another test" in Russian.
+		const std::string input("\xd0\xb5\xd1\x89\xd1\x91\x20\xd0\xbe\xd0\xb4"
+			"\xd0\xb8\xd0\xbd\x20\xd1\x82\xd0\xb5\xd1\x81\xd1\x82");
+		const std::string expected("\xc5\xdd\xa3\x20\xcf\xc4\xc9\xce\x20\xd4"
+			"\xc5\xd3\xd4");
+		REQUIRE(utils::utf8_to_locale(input) == expected);
+	}
+
+	SECTION("CP1251") {
+		if (!set_locale("ru_RU.CP1251")) {
+			return;
+		}
+
+		REQUIRE(utils::utf8_to_locale("") == "");
+
+		// "Greetings!" in Russian.
+		const std::string input("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1"
+			"\x82\xd1\x81\xd1\x82\xd0\xb2\xd1\x83\xd1\x8e\x21");
+		const std::string expected("\xcf\xf0\xe8\xe2\xe5\xf2\xf1\xf2\xe2\xf3"
+			"\xfe\x21");
+		REQUIRE(utils::utf8_to_locale(input) == expected);
+	}
+}
+
+TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale's encoding",
+	"[utils]")
+{
+	TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+	lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+		if (new_charset.has_value()) {
+			::setlocale(LC_CTYPE, new_charset.value().c_str());
+		} else {
+			::setlocale(LC_CTYPE, "");
+		}
+	});
+	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
+		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
+		{
+			WARN("Couldn't set locale " + new_locale + "; test skipped.");
+			return false;
+		}
+		lc_ctype.set(new_locale);
+		return true;
+	};
+
+	// Tests below don't spell out the expected result because different
+	// platforms might follow different transliteration rules. The best we can
+	// do is check that 1) the output is non-empty, i.e. there was no error in
+	// conversion; 2) the output is not the same as the input, i.e. the
+	// conversion did something.
+
+	SECTION("KOI8-R doesn't support Ukrainian characters") {
+		if (!set_locale("ru_RU.KOI8-R")) {
+			return;
+		}
+
+		// "Song" in Ukrainian.
+		const std::string input("\xd0\x9f\xd1\x96\xd1\x81\xd0\xbd\xd1\x8f");
+
+		const auto result = utils::utf8_to_locale(input);
+		REQUIRE(result != "");
+		REQUIRE(result != input);
+	}
+
+	SECTION("CP1251") {
+		if (!set_locale("ru_RU.CP1251")) {
+			return;
+		}
+
+		// "Japan" in Japanese
+		const std::string input("\xe6\x97\xa5\xe6\x9c\xac");
+
+		const auto result = utils::utf8_to_locale(input);
+		REQUIRE(result != "");
+		REQUIRE(result != input);
+	}
+}

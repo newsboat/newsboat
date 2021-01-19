@@ -81,6 +81,9 @@ RUN addgroup --gid 1000 builder \
 
 RUN apt-get install locales \
     && echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen \
+    && echo 'ru_RU.KOI8-R KOI8-R' >> /etc/locale.gen \
+    && echo 'nl_NL.ISO-8859-1 ISO-8859-1' >> /etc/locale.gen \
+    && echo 'ru_RU.CP1251 CP1251' >> /etc/locale.gen \
     && locale-gen
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
