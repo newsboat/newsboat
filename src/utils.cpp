@@ -345,26 +345,27 @@ std::string utils::convert_text(const std::string& text,
 	char* outbufp = outbuf;
 
 	outbytesleft = sizeof(outbuf);
-	inbufp = const_cast<char*>(
-			text.c_str()); // evil, but spares us some trouble
-	inbytesleft = strlen(inbufp);
+
+	// iconv() wants a non-const pointer to data, but std::string::c_str()
+	// returns a const one. So we copy the data to a vector, which *does* give
+	// us a non-const pointer.
+	std::vector<char> input(text.cbegin(), text.cend());
+	inbufp = input.data();
+	inbytesleft = input.size();
 
 	do {
 		char* old_outbufp = outbufp;
-		int rc = ::iconv(
-				cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
+		const int rc = ::iconv(cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
 		if (-1 == rc) {
 			switch (errno) {
 			case E2BIG:
-				result.append(
-					old_outbufp, outbufp - old_outbufp);
+				result.append(old_outbufp, outbufp - old_outbufp);
 				outbufp = outbuf;
 				outbytesleft = sizeof(outbuf);
 				break;
 			case EILSEQ:
 			case EINVAL:
-				result.append(
-					old_outbufp, outbufp - old_outbufp);
+				result.append(old_outbufp, outbufp - old_outbufp);
 				result.append("?");
 				inbufp += 1;
 				inbytesleft -= 1;

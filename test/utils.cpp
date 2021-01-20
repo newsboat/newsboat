@@ -1809,16 +1809,19 @@ TEST_CASE("convert_text() replaces incomplete multi-byte sequences with a questi
 	}
 
 	SECTION("From UTF-16LE to UTF-8") {
-		// FIXME: when I tried to use ASCII for input, I got the wrong result
-		// because in UTF-16, ASCII characters are represented by adding a zero
-		// byte at the end. This throws off `strlen()` calls inside
-		// `convert_text()`. I should replace those calls with
-		// `std::string::length()` or something.
+		SECTION("Input contains zero bytes") {
+			// "hi", but the last byte is missing
+			const std::string input("\x68\x00\x69", 3);
+			const std::string expected("h?");
+			REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
+		}
 
-		// "hey" in Russian, but the last byte is missing
-		const std::string input("\x4d\x04\x39", 3);
-		const std::string expected("\xd1\x8d?");
-		REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
+		SECTION("Input doesn't contain zero bytes") {
+			// "hey" in Russian, but the last byte is missing
+			const std::string input("\x4d\x04\x39", 3);
+			const std::string expected("\xd1\x8d?");
+			REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
+		}
 	}
 }
 
