@@ -55,6 +55,9 @@ std::string convert_text(const std::string& text,
 /// Converts input string from UTF-8 to the locale's encoding (as detected by
 /// nl_langinfo(CODESET)).
 std::string utf8_to_locale(const std::string& text);
+/// Converts input string from the locale's encoding (as detected by
+/// nl_langinfo(CODESET)) to UTF-8.
+std::string locale_to_utf8(const std::string& text);
 
 std::string get_command_output(const std::string& cmd);
 std::string http_method_str(const HTTPMethod method);

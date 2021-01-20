@@ -405,6 +405,15 @@ std::string utils::utf8_to_locale(const std::string& text)
 	return utils::convert_text(text, nl_langinfo(CODESET), "utf-8");
 }
 
+std::string utils::locale_to_utf8(const std::string& text)
+{
+	if (text.empty()) {
+		return {};
+	}
+
+	return utils::convert_text(text, "utf-8", nl_langinfo(CODESET));
+}
+
 std::string utils::get_command_output(const std::string& cmd)
 {
 	return std::string(utils::bridged::get_command_output(cmd));

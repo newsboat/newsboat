@@ -2024,3 +2024,72 @@ TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale'
 		REQUIRE(result != input);
 	}
 }
+
+TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale "
+	"in LC_CTYPE class to UTF-8",
+	"[utils]")
+{
+	TestHelpers::EnvVar lc_ctype("LC_CTYPE");
+	lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
+		if (new_charset.has_value()) {
+			::setlocale(LC_CTYPE, new_charset.value().c_str());
+		} else {
+			::setlocale(LC_CTYPE, "");
+		}
+	});
+	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
+		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
+		{
+			WARN("Couldn't set locale " + new_locale + "; test skipped.");
+			return false;
+		}
+		lc_ctype.set(new_locale);
+		return true;
+	};
+
+	SECTION("UTF-8") {
+		if (!set_locale("en_US.UTF-8")) {
+			return;
+		}
+
+		REQUIRE(utils::locale_to_utf8("") == "");
+
+		// "I like Newsboat" in Russian.
+		const std::string text("\x4e\x65\x77\x73\x62\x6f\x61\x74\x20\xd0\xbc"
+			"\xd0\xbd\xd0\xb5\x20\xd0\xbd\xd1\x80\xd0\xb0\xd0\xb2\xd0\xb8"
+			"\xd1\x82\xd1\x81\xd1\x8f");
+		REQUIRE(utils::locale_to_utf8(text) == text);
+	}
+
+	SECTION("KOI8-R") {
+		if (!set_locale("ru_RU.KOI8-R")) {
+			return;
+		}
+
+		REQUIRE(utils::locale_to_utf8("") == "");
+
+		// "excellent check" in Russian.
+		const std::string input("\xd7\xc5\xcc\xc9\xcb\xcf\xcc\xc5\xd0\xce\xc1"
+			"\xd1\x20\xd0\xd2\xcf\xd7\xc5\xd2\xcb\xc1");
+		const std::string expected("\xd0\xb2\xd0\xb5\xd0\xbb\xd0\xb8\xd0\xba\xd0"
+			"\xbe\xd0\xbb\xd0\xb5\xd0\xbf\xd0\xbd\xd0\xb0\xd1\x8f\x20\xd0"
+			"\xbf\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd1\x80\xd0\xba\xd0\xb0");
+		REQUIRE(utils::locale_to_utf8(input) == expected);
+	}
+
+	SECTION("CP1251") {
+		if (!set_locale("ru_RU.CP1251")) {
+			return;
+		}
+
+		REQUIRE(utils::locale_to_utf8("") == "");
+
+		// "All tests green!" in Russian.
+		const std::string input("\xc2\xf1\xe5\x20\xf2\xe5\xf1\xf2\xfb\x20\xe7"
+			"\xe5\xeb\xb8\xed\xfb\xe5\x21");
+		const std::string expected("\xd0\x92\xd1\x81\xd0\xb5\x20\xd1\x82\xd0\xb5"
+			"\xd1\x81\xd1\x82\xd1\x8b\x20\xd0\xb7\xd0\xb5\xd0\xbb\xd1\x91\xd0"
+			"\xbd\xd1\x8b\xd0\xb5\x21");
+		REQUIRE(utils::locale_to_utf8(input) == expected);
+	}
+}
