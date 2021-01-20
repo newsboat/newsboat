@@ -360,16 +360,14 @@ std::string utils::convert_text(const std::string& text,
 					old_outbufp, outbufp - old_outbufp);
 				outbufp = outbuf;
 				outbytesleft = sizeof(outbuf);
-				inbufp += strlen(inbufp) - inbytesleft;
-				inbytesleft = strlen(inbufp);
 				break;
 			case EILSEQ:
 			case EINVAL:
 				result.append(
 					old_outbufp, outbufp - old_outbufp);
 				result.append("?");
-				inbufp += strlen(inbufp) - inbytesleft + 1;
-				inbytesleft = strlen(inbufp);
+				inbufp += 1;
+				inbytesleft -= 1;
 				break;
 			default:
 				break;
