@@ -1802,9 +1802,7 @@ TEST_CASE("convert_text() replaces incomplete multi-byte sequences with a questi
 	SECTION("From UTF-8 to UTF-16LE") {
 		// "oops" in Russian, but the last byte is missing
 		const std::string input("\xd0\xbe\xd0");
-		// FIXME: the question mark is encoded by a single byte here, which is
-		// wrong; it should be \x3f\x00 instead.
-		const std::string expected("\x3e\x04\x3f");
+		const std::string expected("\x3e\x04\x3f\x00", 4);
 		REQUIRE(utils::convert_text(input, "UTF-16LE", "UTF-8") == expected);
 	}
 
@@ -1833,7 +1831,7 @@ TEST_CASE("convert_text() replaces invalid multi-byte sequences with "
 		// "日本", "Japan", but the third byte of the first character (0xa5) is
 		// missing, making the whole first character an illegal sequence.
 		const std::string input("\xe6\x97\xe6\x9c\xac");
-		const std::string expected("??\x2c\x67");
+		const std::string expected("\x3f\x00\x3f\x00\x2c\x67", 6);
 		REQUIRE(utils::convert_text(input, "UTF-16LE", "UTF-8") == expected);
 	}
 
