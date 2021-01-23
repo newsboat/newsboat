@@ -37,7 +37,7 @@ public:
 	/// a temporary or a string literal anyway. Just do it, and use set() and
 	/// unset() methods, instead of keeping a local variable with a name in it
 	/// and calling setenv(3) and unsetenv(3).
-	EnvVar(std::string name_);
+	explicit EnvVar(std::string name_);
 
 	~EnvVar();
 

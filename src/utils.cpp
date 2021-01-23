@@ -320,8 +320,21 @@ std::string utils::convert_text(const std::string& text,
 		return text;
 	}
 
-	iconv_t cd = ::iconv_open(
-			translit(tocode, fromcode).c_str(), fromcode.c_str());
+	const auto tocode_translit = translit(tocode, fromcode);
+
+	// Illegal and incomplete multi-byte sequences will be replaced by this
+	// placeholder. By default, we use an ASCII value for "question mark".
+	std::string question_mark("\x3f");
+	// This `if` prevens the function to recurse indefinitely.
+	if (text != question_mark && fromcode != "ASCII") {
+		question_mark = utils::convert_text("\x3f", tocode_translit, "ASCII");
+	}
+	// If we can't even convert a question mark, let's just give up.
+	if (question_mark.empty()) {
+		return result;
+	}
+
+	iconv_t cd = ::iconv_open(tocode_translit.c_str(), fromcode.c_str());
 
 	if (cd == reinterpret_cast<iconv_t>(-1)) {
 		return result;
@@ -345,31 +358,30 @@ std::string utils::convert_text(const std::string& text,
 	char* outbufp = outbuf;
 
 	outbytesleft = sizeof(outbuf);
-	inbufp = const_cast<char*>(
-			text.c_str()); // evil, but spares us some trouble
-	inbytesleft = strlen(inbufp);
+
+	// iconv() wants a non-const pointer to data, but std::string::c_str()
+	// returns a const one. So we copy the data to a vector, which *does* give
+	// us a non-const pointer.
+	std::vector<char> input(text.cbegin(), text.cend());
+	inbufp = input.data();
+	inbytesleft = input.size();
 
 	do {
 		char* old_outbufp = outbufp;
-		int rc = ::iconv(
-				cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
+		const int rc = ::iconv(cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
 		if (-1 == rc) {
 			switch (errno) {
 			case E2BIG:
-				result.append(
-					old_outbufp, outbufp - old_outbufp);
+				result.append(old_outbufp, outbufp - old_outbufp);
 				outbufp = outbuf;
 				outbytesleft = sizeof(outbuf);
-				inbufp += strlen(inbufp) - inbytesleft;
-				inbytesleft = strlen(inbufp);
 				break;
 			case EILSEQ:
 			case EINVAL:
-				result.append(
-					old_outbufp, outbufp - old_outbufp);
-				result.append("?");
-				inbufp += strlen(inbufp) - inbytesleft + 1;
-				inbytesleft = strlen(inbufp);
+				result.append(old_outbufp, outbufp - old_outbufp);
+				result.append(question_mark);
+				inbufp += 1;
+				inbytesleft -= 1;
 				break;
 			default:
 				break;
@@ -391,6 +403,15 @@ std::string utils::utf8_to_locale(const std::string& text)
 	}
 
 	return utils::convert_text(text, nl_langinfo(CODESET), "utf-8");
+}
+
+std::string utils::locale_to_utf8(const std::string& text)
+{
+	if (text.empty()) {
+		return {};
+	}
+
+	return utils::convert_text(text, "utf-8", nl_langinfo(CODESET));
 }
 
 std::string utils::get_command_output(const std::string& cmd)

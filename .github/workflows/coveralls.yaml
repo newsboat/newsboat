@@ -37,6 +37,15 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get install --assume-yes --no-install-suggests clang-11 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
 
+      - name: Generate locales
+        run: |
+          sudo apt-get install --assume-yes locales
+          echo 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
+          echo 'ru_RU.KOI8-R KOI8-R' | sudo tee --append /etc/locale.gen
+          echo 'nl_NL.ISO-8859-1 ISO-8859-1' | sudo tee --append /etc/locale.gen
+          echo 'ru_RU.CP1251 CP1251' | sudo tee --append /etc/locale.gen
+          sudo locale-gen
+
       - name: Install Rust
         uses: ATiltedTree/setup-rust@v1
         with:

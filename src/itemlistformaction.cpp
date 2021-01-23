@@ -882,8 +882,7 @@ void ItemListFormAction::qna_start_search()
 	searchhistory.add_line(searchphrase);
 	std::vector<std::shared_ptr<RssItem>> items;
 	try {
-		std::string utf8searchphrase = utils::convert_text(
-				searchphrase, "utf-8", nl_langinfo(CODESET));
+		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
 		items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, feed);
 	} catch (const DbException& e) {
