@@ -1784,7 +1784,7 @@ TEST_CASE("convert_text() returns input string if `fromcode` and `tocode` are th
 TEST_CASE("convert_text() returns empty string if conversion is impossible",
 	"[utils]")
 {
-	// "Hello", in Russian, encoded in UTF-8.
+	// "Привет", "Hello", in Russian, encoded in UTF-8.
 	const std::string input("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
 
 	SECTION("Can't convert from non-existent encoding") {
@@ -1800,7 +1800,7 @@ TEST_CASE("convert_text() replaces incomplete multi-byte sequences with a questi
 	"[utils]")
 {
 	SECTION("From UTF-8 to UTF-16LE") {
-		// "oops" in Russian, but the last byte is missing
+		// "ой", "oops" in Russian, but the last byte is missing
 		const std::string input("\xd0\xbe\xd0");
 		const std::string expected("\x3e\x04\x3f\x00", 4);
 		REQUIRE(utils::convert_text(input, "UTF-16LE", "UTF-8") == expected);
@@ -1815,7 +1815,7 @@ TEST_CASE("convert_text() replaces incomplete multi-byte sequences with a questi
 		}
 
 		SECTION("Input doesn't contain zero bytes") {
-			// "hey" in Russian, but the last byte is missing
+			// "эй", "hey" in Russian, but the last byte is missing
 			const std::string input("\x4d\x04\x39", 3);
 			const std::string expected("\xd1\x8d?");
 			REQUIRE(utils::convert_text(input, "UTF-8", "UTF-16LE") == expected);
@@ -1850,7 +1850,7 @@ TEST_CASE("convert_text() replaces invalid multi-byte sequences with "
 TEST_CASE("convert_text() converts text between encodings", "[utils]")
 {
 	SECTION("From UTF-8 to UTF-16LE") {
-		// "Testing" in Russian.
+		// "Тестирую", "Testing" in Russian.
 		const std::string input("\xd0\xa2\xd0\xb5\xd1\x81\xd1\x82\xd0\xb8\xd1"
 			"\x80\xd1\x83\xd1\x8e");
 		const std::string expected("\x22\x04\x35\x04\x41\x04\x42\x04"
@@ -1859,7 +1859,7 @@ TEST_CASE("convert_text() converts text between encodings", "[utils]")
 	}
 
 	SECTION("From UTF-8 to KOI8-R") {
-		// "Check" in Russian.
+		// "Проверка", "Check" in Russian.
 		const std::string input("\xd0\x9f\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd1"
 			"\x80\xd0\xba\xd0\xb0");
 		const std::string expected("\xf0\xd2\xcf\xd7\xc5\xd2\xcb\xc1");
@@ -1867,7 +1867,8 @@ TEST_CASE("convert_text() converts text between encodings", "[utils]")
 	}
 
 	SECTION("From UTF-8 to ISO-8859-1 (transliterating if need be)") {
-		// Mix of Cyrillic (unsupported by ISO-8859-1) and ISO-8859-1 characters.
+		// "вау °±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃ": a mix of Cyrillic (unsupported by
+		// ISO-8859-1) and ISO-8859-1 characters.
 		const std::string input("\xd0\xb2\xd0\xb0\xd1\x83\x20\xc2\xb0\xc2\xb1"
 			"\xc2\xb2\xc2\xb3\xc2\xb4\xc2\xb5\xc2\xb6\xc2\xb7\xc2\xb8\xc2\xb9"
 			"\xc2\xba\xc2\xbb\xc2\xbc\xc2\xbd\xc2\xbe\xc2\xbf\xc3\x80\xc3\x81"
@@ -1881,7 +1882,7 @@ TEST_CASE("convert_text() converts text between encodings", "[utils]")
 	}
 
 	SECTION("From UTF-16LE to UTF-8") {
-		// "Success" in Russian.
+		// "Успех", "Success" in Russian.
 		const std::string input("\xff\xfe\x23\x04\x41\x04\x3f\x04\x35\x04\x45\x04");
 		const std::string expected("\xef\xbb\xbf\xd0\xa3\xd1\x81\xd0\xbf\xd0\xb5"
 			"\xd1\x85");
@@ -1889,7 +1890,7 @@ TEST_CASE("convert_text() converts text between encodings", "[utils]")
 	}
 
 	SECTION("From KOI8-R to UTF-8") {
-		// "History" in Russian.
+		// "История", "History" in Russian.
 		const std::string input("\xe9\xd3\xd4\xcf\xd2\xc9\xd1");
 		const std::string expected("\xd0\x98\xd1\x81\xd1\x82\xd0\xbe\xd1\x80"
 			"\xd0\xb8\xd1\x8f");
@@ -1897,7 +1898,7 @@ TEST_CASE("convert_text() converts text between encodings", "[utils]")
 	}
 
 	SECTION("From ISO-8859-1 to UTF-8") {
-		// Some umlauts and Latin letters.
+		// "ÄÅÆÇÈÉÊËÌÍÎÏ": some umlauts and Latin letters.
 		const std::string input("\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf");
 		const std::string expected("\xc3\x84\xc3\x85\xc3\x86\xc3\x87\xc3\x88\xc3"
 			"\x89\xc3\x8a\xc3\x8b\xc3\x8c\xc3\x8d\xc3\x8e\xc3\x8f");
@@ -1934,7 +1935,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 
 		REQUIRE(utils::utf8_to_locale("") == "");
 
-		// "Just testing this" in Russian.
+		// "Просто проверяю", "Just testing" in Russian.
 		const std::string text("\xd0\x9f\xd1\x80\xd0\xbe\xd1\x81\xd1\x82\xd0"
 			"\xbe\x20\xd0\xbf\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd1\x80\xd1\x8f\xd1\x8e");
 		REQUIRE(utils::utf8_to_locale(text) == text);
@@ -1947,7 +1948,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 
 		REQUIRE(utils::utf8_to_locale("") == "");
 
-		// "another test" in Russian.
+		// "ещё один тест", "another test" in Russian.
 		const std::string input("\xd0\xb5\xd1\x89\xd1\x91\x20\xd0\xbe\xd0\xb4"
 			"\xd0\xb8\xd0\xbd\x20\xd1\x82\xd0\xb5\xd1\x81\xd1\x82");
 		const std::string expected("\xc5\xdd\xa3\x20\xcf\xc4\xc9\xce\x20\xd4"
@@ -1962,7 +1963,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 
 		REQUIRE(utils::utf8_to_locale("") == "");
 
-		// "Greetings!" in Russian.
+		// "Приветствую!", "Greetings!" in Russian.
 		const std::string input("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1"
 			"\x82\xd1\x81\xd1\x82\xd0\xb2\xd1\x83\xd1\x8e\x21");
 		const std::string expected("\xcf\xf0\xe8\xe2\xe5\xf2\xf1\xf2\xe2\xf3"
@@ -2003,7 +2004,7 @@ TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale'
 			return;
 		}
 
-		// "Song" in Ukrainian.
+		// "Пісня", "Song" in Ukrainian.
 		const std::string input("\xd0\x9f\xd1\x96\xd1\x81\xd0\xbd\xd1\x8f");
 
 		const auto result = utils::utf8_to_locale(input);
@@ -2016,7 +2017,7 @@ TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale'
 			return;
 		}
 
-		// "Japan" in Japanese
+		// "日本", "Japan" in Japanese
 		const std::string input("\xe6\x97\xa5\xe6\x9c\xac");
 
 		const auto result = utils::utf8_to_locale(input);
@@ -2054,7 +2055,7 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 
 		REQUIRE(utils::locale_to_utf8("") == "");
 
-		// "I like Newsboat" in Russian.
+		// "Newsboat мне нравится", "I like Newsboat" in Russian.
 		const std::string text("\x4e\x65\x77\x73\x62\x6f\x61\x74\x20\xd0\xbc"
 			"\xd0\xbd\xd0\xb5\x20\xd0\xbd\xd1\x80\xd0\xb0\xd0\xb2\xd0\xb8"
 			"\xd1\x82\xd1\x81\xd1\x8f");
@@ -2068,7 +2069,7 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 
 		REQUIRE(utils::locale_to_utf8("") == "");
 
-		// "excellent check" in Russian.
+		// "великолепная проверка", "excellent check" in Russian.
 		const std::string input("\xd7\xc5\xcc\xc9\xcb\xcf\xcc\xc5\xd0\xce\xc1"
 			"\xd1\x20\xd0\xd2\xcf\xd7\xc5\xd2\xcb\xc1");
 		const std::string expected("\xd0\xb2\xd0\xb5\xd0\xbb\xd0\xb8\xd0\xba\xd0"
@@ -2084,7 +2085,7 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 
 		REQUIRE(utils::locale_to_utf8("") == "");
 
-		// "All tests green!" in Russian.
+		// "Все тесты зелёные!", "All tests green!" in Russian.
 		const std::string input("\xc2\xf1\xe5\x20\xf2\xe5\xf1\xf2\xfb\x20\xe7"
 			"\xe5\xeb\xb8\xed\xfb\xe5\x21");
 		const std::string expected("\xd0\x92\xd1\x81\xd0\xb5\x20\xd1\x82\xd0\xb5"
