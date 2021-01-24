@@ -2079,3 +2079,58 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 		REQUIRE(utils::locale_to_utf8(input) == expected);
 	}
 }
+
+TEST_CASE("translit() returns the value of `tocode`, maybe with \"//TRANSLIT\" appended",
+	"[utils]")
+{
+	// The behaviour of translit() is inherently platform-dependent: some
+	// platforms support transliteration for some encodings, while others
+	// support it for different encodings, or don't support it at all. This
+	// tests checks just the bare minimum: the function doesn't crash, doesn't
+	// throw exceptions, and returns something resembling a correct value.
+
+	const auto check = [](std::string fromcode, std::string tocode) {
+		DYNAMIC_SECTION(fromcode << " → " << tocode) {
+			const auto expected1(tocode);
+			const auto expected2(tocode + "//TRANSLIT");
+
+			const auto actual = utils::translit(tocode, fromcode);
+
+			INFO("Expected " << expected1);
+			INFO("      or " << expected2);
+			INFO("But got: " << actual);
+
+			// Extra parentheses required by Catch2 -- otherwise it doesn't let us use operator||.
+			REQUIRE((actual == expected1 || actual == expected2));
+		}
+	};
+
+	check("ISO-8859-1", "UTF-8");
+	check("KOI8-R", "UTF-8");
+	check("UTF-16", "UTF-8");
+	check("UTF-8", "UTF-8");
+	check("UTF-8", "UTF-16");
+	check("UTF-8", "KOI8-R");
+	check("UTF-8", "ISO-8859-1");
+}
+
+TEST_CASE("translit() always returns the same value for the same inputs",
+	"[utils]")
+{
+	const std::vector<std::string> encodings {"UTF-8", "UTF-16", "KOI8-R", "ISO-8859-1"};
+	// (fromcode, tocode) -> result
+	std::map<std::pair<std::string, std::string>, std::string> results;
+
+	for (const auto& fromcode : encodings) {
+		for (const auto& tocode : encodings) {
+			results[std::make_pair(fromcode, tocode)] = utils::translit(tocode, fromcode);
+		}
+	}
+
+	for (const auto& fromcode : encodings) {
+		for (const auto& tocode : encodings) {
+			INFO(fromcode << " → " << tocode);
+			REQUIRE(utils::translit(tocode, fromcode) == results.at(std::make_pair(fromcode, tocode)));
+		}
+	}
+}
