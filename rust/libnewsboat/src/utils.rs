@@ -887,6 +887,12 @@ pub fn extract_filter(line: &str) -> FilterUrlParts {
     }
 }
 
+/// Annotates the target encoding (`tocode`) with `//TRANSLIT` if conversion between `fromcode` and
+/// `tocode` might require transliterating some characters.
+pub fn translit(tocode: &str, _fromcode: &str) -> String {
+    tocode.to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1646,5 +1652,58 @@ mod tests {
         let actual = extract_filter(input);
         assert_eq!(actual.script_name, expected_script_name);
         assert_eq!(actual.url, expected_url);
+    }
+
+    #[test]
+    fn t_translit_returns_tocode_maybe_with_translit_appended() {
+        // The behaviour of translit() is inherently platform-dependent: some
+        // platforms support transliteration for some encodings, while others
+        // support it for different encodings, or don't support it at all. This
+        // tests checks just the bare minimum: the function doesn't crash, doesn't
+        // throw exceptions, and returns something resembling a correct value.
+
+        let check = |fromcode, tocode| {
+            let expected1 = tocode;
+            let expected2 = format!("{}//TRANSLIT", tocode);
+
+            let actual = translit(tocode, fromcode);
+
+            assert!(actual == expected1 || actual == expected2);
+        };
+
+        check("ISO-8859-1", "UTF-8");
+        check("KOI8-R", "UTF-8");
+        check("UTF-16", "UTF-8");
+        check("UTF-8", "UTF-8");
+        check("UTF-8", "UTF-16");
+        check("UTF-8", "KOI8-R");
+        check("UTF-8", "ISO-8859-1");
+    }
+
+    #[test]
+    fn t_translit_always_returns_the_same_value_for_the_same_inputs() {
+        use std::collections::BTreeMap;
+
+        let encodings = vec!["UTF-8", "UTF-16", "KOI8-R", "ISO-8859-1"];
+
+        // (fromcode, tocode) -> result
+        let mut results = BTreeMap::<(String, String), String>::new();
+
+        for fromcode in &encodings {
+            for tocode in &encodings {
+                let key = (fromcode.to_string(), tocode.to_string());
+                let result = translit(tocode, fromcode);
+                results.insert(key, result);
+            }
+        }
+
+        for fromcode in &encodings {
+            for tocode in &encodings {
+                let key = (fromcode.to_string(), tocode.to_string());
+                let expected = results.get(&key).unwrap();
+                let actual = translit(tocode, fromcode);
+                assert_eq!(actual, *expected);
+            }
+        }
     }
 }
