@@ -82,6 +82,8 @@ mod bridged {
         fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool;
 
         fn run_program(argv: &Vec<String>, input: &str) -> String;
+
+        fn translit(tocode: &str, fromcode: &str) -> String;
     }
 
     extern "C++" {

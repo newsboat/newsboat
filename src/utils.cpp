@@ -212,7 +212,6 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 
 std::string utils::consolidate_whitespace(const std::string& str)
 {
-
 	return std::string(utils::bridged::consolidate_whitespace(str));
 }
 
@@ -257,7 +256,12 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	return tokens;
 }
 
-std::string utils::translit(const std::string& tocode,
+std::string utils::translit(const std::string& tocode, const std::string& fromcode)
+{
+	return std::string(utils::bridged::translit(tocode, fromcode));
+}
+
+std::string utils::cpp_translit(const std::string& tocode,
 	const std::string& fromcode)
 {
 	std::string tlit = "//TRANSLIT";
