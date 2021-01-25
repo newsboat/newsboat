@@ -30,7 +30,7 @@ public:
 	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
 		std::shared_ptr<RssFeed> feed);
 
-	void autoenqueue(std::shared_ptr<RssFeed> feed);
+	EnqueueResult autoenqueue(std::shared_ptr<RssFeed> feed);
 
 private:
 	std::string generate_enqueue_filename(std::shared_ptr<RssItem> item,

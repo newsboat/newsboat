@@ -663,7 +663,25 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
 	feed->set_order(oldfeed->get_order());
 	feedcontainer.replace_feed(pos, feed);
-	queueManager.autoenqueue(feed);
+
+	if (cfg.get_configvalue_as_bool("podcast-auto-enqueue")) {
+		const auto status = queueManager.autoenqueue(feed);
+		switch (status) {
+		case EnqueueResult::QUEUED_SUCCESSFULLY:
+		case EnqueueResult::URL_QUEUED_ALREADY:
+			// All is well, nothing to be done
+			break;
+		case EnqueueResult::OUTPUT_FILENAME_USED_ALREADY:
+			v->show_error(
+				strprintf::fmt(_("Generated filename is used already.")));
+			break;
+		case EnqueueResult::QUEUE_FILE_OPEN_ERROR:
+			v->show_error(
+				strprintf::fmt(_("Failed to open queue file.")));
+			break;
+		}
+	}
+
 	for (const auto& item : feed->items()) {
 		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 	}

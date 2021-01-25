@@ -118,12 +118,8 @@ std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
 	return dlpath;
 }
 
-void QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
+EnqueueResult QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 {
-	if (!cfg->get_configvalue_as_bool("podcast-auto-enqueue")) {
-		return;
-	}
-
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	for (const auto& item : feed->items()) {
 		if (!item->enqueued() && item->enclosure_url().length() > 0) {
@@ -138,10 +134,22 @@ void QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 					"QueueManager::autoenqueue: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				enqueue_url(item, feed);
+				const auto status = enqueue_url(item, feed);
+				switch (status) {
+				case EnqueueResult::QUEUED_SUCCESSFULLY:
+				case EnqueueResult::URL_QUEUED_ALREADY:
+					// Not an issue, continue processing rest of items
+					break;
+				case EnqueueResult::QUEUE_FILE_OPEN_ERROR:
+				case EnqueueResult::OUTPUT_FILENAME_USED_ALREADY:
+					// Let caller of `autoenqueue` handle the issue
+					return status;
+				}
 			}
 		}
 	}
+
+	return EnqueueResult::QUEUED_SUCCESSFULLY;
 }
 
 } // namespace newsboat
