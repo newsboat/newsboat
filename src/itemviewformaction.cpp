@@ -206,6 +206,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		if (item->enclosure_url().length() > 0 &&
 			utils::is_http_url(item->enclosure_url())) {
 			const EnqueueResult status = v->get_ctrl()->enqueue_url(item, feed);
+			rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 			switch (status) {
 			case EnqueueResult::QUEUED_SUCCESSFULLY:
 				v->set_status(

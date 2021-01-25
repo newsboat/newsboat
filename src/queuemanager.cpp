@@ -50,6 +50,8 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	f << url << " " << utils::quote(filename) << std::endl;
 	f.close();
 
+	item->set_enqueued(true);
+
 	return EnqueueResult::QUEUED_SUCCESSFULLY;
 }
 
@@ -137,7 +139,6 @@ void QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 					"`%s'",
 					item->enclosure_url());
 				enqueue_url(item, feed);
-				item->set_enqueued(true);
 			}
 		}
 	}
