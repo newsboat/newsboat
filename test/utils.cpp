@@ -1781,21 +1781,6 @@ TEST_CASE("convert_text() returns input string if `fromcode` and `tocode` are th
 	}
 }
 
-TEST_CASE("convert_text() returns empty string if conversion is impossible",
-	"[utils]")
-{
-	// "Привет", "Hello", in Russian, encoded in UTF-8.
-	const std::string input("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
-
-	SECTION("Can't convert from non-existent encoding") {
-		REQUIRE(utils::convert_text(input, "UTF-8", "UTF-three-and-a-half") == "");
-	}
-
-	SECTION("Can't convert to non-existent encoding") {
-		REQUIRE(utils::convert_text(input, "That one with squiggles", "UTF-8") == "");
-	}
-}
-
 TEST_CASE("convert_text() replaces incomplete multi-byte sequences with a question mark",
 	"[utils]")
 {

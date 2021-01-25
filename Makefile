@@ -413,14 +413,14 @@ profclean:
 	$(RM) app*.info
 
 check: test
-	(cd test && ./test --order=rand)
+	(cd test && ./test --order=rand --rng-seed=time)
 	+$(CARGO) test $(CARGO_TEST_FLAGS)
 
 ci-check: test
         # We want to run both C++ and Rust tests, but we also want this entire
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
-	$(CARGO) test $(CARGO_TEST_FLAGS) --no-fail-fast ; ret=$$? ; cd test && ./test --order=rand && exit $$ret
+	$(CARGO) test $(CARGO_TEST_FLAGS) --no-fail-fast ; ret=$$? ; cd test && ./test --order=rand --rng-seed=time && exit $$ret
 
 # miscellaneous stuff
 
