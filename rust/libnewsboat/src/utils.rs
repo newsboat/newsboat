@@ -1,6 +1,6 @@
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
-use libc::{c_ulong, close, execvp, exit, fork, waitpid};
+use libc::{c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t, waitpid, EINVAL};
 use percent_encoding::*;
 use std::ffi::CString;
 use std::fs::DirBuilder;
@@ -887,10 +887,98 @@ pub fn extract_filter(line: &str) -> FilterUrlParts {
     }
 }
 
+// This type name comes from C, and we'd like to keep its original spelling to make the code easier
+// to compare to other C code.
+#[allow(non_camel_case_types)]
+type iconv_t = *mut c_void;
+
+// On FreeBSD, link with GNU libiconv; the iconv implementation in libc doesn't support //TRANSLIT
+// and WCHAR_T. This is also why we change the symbol names from "iconv" to "libiconv" below.
+#[cfg_attr(target_os = "freebsd", link(name = "iconv"))]
+extern "C" {
+    #[cfg_attr(target_os = "freebsd", link_name = "libiconv_open")]
+    pub fn iconv_open(tocode: *const c_char, fromcode: *const c_char) -> iconv_t;
+    #[cfg_attr(target_os = "freebsd", link_name = "libiconv")]
+    pub fn iconv(
+        cd: iconv_t,
+        inbuf: *mut *mut c_char,
+        inbytesleft: *mut size_t,
+        outbuf: *mut *mut c_char,
+        outbytesleft: *mut size_t,
+    ) -> size_t;
+    #[cfg_attr(target_os = "freebsd", link_name = "libiconv_close")]
+    pub fn iconv_close(cd: iconv_t) -> c_int;
+}
+
 /// Annotates the target encoding (`tocode`) with `//TRANSLIT` if conversion between `fromcode` and
 /// `tocode` might require transliterating some characters.
-pub fn translit(tocode: &str, _fromcode: &str) -> String {
-    tocode.to_string()
+pub fn translit(tocode: &str, fromcode: &str) -> String {
+    #[derive(PartialEq)]
+    enum TranslitState {
+        Unknown,
+        Supported,
+        Unsupported,
+    }
+    // Mutable `static`s are unsafe because they're a global state which might suffer from races.
+    // However, in our case it's okay: even if multiple threads run this function, they will all
+    // arrive at the same result, so we don't care if those threads race to write that result into
+    // the variable.
+    static mut STATE: TranslitState = TranslitState::Unknown;
+
+    // TRANSLIT is not needed when converting to unicode encodings
+    if tocode == "utf-8" || tocode == "WCHAR_T" {
+        return tocode.to_string();
+    }
+
+    let tocode_translit = format!("{}//TRANSLIT", tocode);
+
+    unsafe {
+        if STATE == TranslitState::Unknown {
+            // The three calls to expect() can't panic because the input strings come from either:
+            //
+            // - our code, and we won't deliberately put a NUL byte inside an encoding name; or
+            // - the user's locale, which we obtain via C interfaces that would've stripped a NUL byte.
+            let c_tocode = CString::new(tocode.to_string()).expect("tocode String contains NUL");
+            let c_tocode_translit = CString::new(tocode_translit.to_string())
+                .expect("tocode_translit String contains NUL");
+            let c_fromcode = CString::new(fromcode).expect("fromcode String contains NUL");
+
+            let cd = iconv_open(c_tocode_translit.as_ptr(), c_fromcode.as_ptr());
+
+            if cd == -1_isize as iconv_t {
+                let errno = std::io::Error::last_os_error()
+                    .raw_os_error()
+                    .expect("Error constructed with last_os_error didn't contain errno code");
+                if errno == EINVAL {
+                    let cd = iconv_open(c_tocode.as_ptr(), c_fromcode.as_ptr());
+                    if cd != -1_isize as iconv_t {
+                        STATE = TranslitState::Unsupported;
+                    } else {
+                        let errno = std::io::Error::last_os_error();
+                        eprintln!("iconv_open('{}', '{}') failed: {}", tocode, fromcode, errno);
+                        std::process::abort();
+                    }
+                } else {
+                    let errno = std::io::Error::last_os_error();
+                    eprintln!(
+                        "iconv_open('{}', '{}') failed: {}",
+                        tocode_translit, fromcode, errno
+                    );
+                    std::process::abort();
+                }
+            } else {
+                STATE = TranslitState::Supported;
+            }
+
+            iconv_close(cd);
+        }
+    }
+
+    if unsafe { STATE == TranslitState::Supported } {
+        tocode_translit
+    } else {
+        tocode.to_string()
+    }
 }
 
 #[cfg(test)]
