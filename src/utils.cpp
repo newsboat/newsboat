@@ -265,86 +265,12 @@ std::string utils::convert_text(const std::string& text,
 	const std::string& tocode,
 	const std::string& fromcode)
 {
-	std::string result;
-
-	if (strcasecmp(tocode.c_str(), fromcode.c_str()) == 0) {
-		return text;
-	}
-
-	const auto tocode_translit = translit(tocode, fromcode);
-
-	// Illegal and incomplete multi-byte sequences will be replaced by this
-	// placeholder. By default, we use an ASCII value for "question mark".
-	std::string question_mark("\x3f");
-	// This `if` prevens the function to recurse indefinitely.
-	if (text != question_mark && fromcode != "ASCII") {
-		question_mark = utils::convert_text("\x3f", tocode_translit, "ASCII");
-	}
-	// If we can't even convert a question mark, let's just give up.
-	if (question_mark.empty()) {
-		return result;
-	}
-
-	iconv_t cd = ::iconv_open(tocode_translit.c_str(), fromcode.c_str());
-
-	if (cd == reinterpret_cast<iconv_t>(-1)) {
-		return result;
-	}
-
-	size_t inbytesleft;
-	size_t outbytesleft;
-
-	/*
-	 * of all the Unix-like systems around there, only Linux/glibc seems to
-	 * come with a SuSv3-conforming iconv implementation.
-	 */
-#if !defined(__linux__) && !defined(__GLIBC__) && !defined(__APPLE__) && \
-	!defined(__OpenBSD__) && !defined(__FreeBSD__) &&                \
-	!defined(__DragonFly__)
-	const char* inbufp;
-#else
-	char* inbufp;
-#endif
-	char outbuf[16];
-	char* outbufp = outbuf;
-
-	outbytesleft = sizeof(outbuf);
-
-	// iconv() wants a non-const pointer to data, but std::string::c_str()
-	// returns a const one. So we copy the data to a vector, which *does* give
-	// us a non-const pointer.
-	std::vector<char> input(text.cbegin(), text.cend());
-	inbufp = input.data();
-	inbytesleft = input.size();
-
-	do {
-		char* old_outbufp = outbufp;
-		const int rc = ::iconv(cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
-		if (-1 == rc) {
-			switch (errno) {
-			case E2BIG:
-				result.append(old_outbufp, outbufp - old_outbufp);
-				outbufp = outbuf;
-				outbytesleft = sizeof(outbuf);
-				break;
-			case EILSEQ:
-			case EINVAL:
-				result.append(old_outbufp, outbufp - old_outbufp);
-				result.append(question_mark);
-				inbufp += 1;
-				inbytesleft -= 1;
-				break;
-			default:
-				break;
-			}
-		} else {
-			result.append(old_outbufp, outbufp - old_outbufp);
-		}
-	} while (inbytesleft > 0);
-
-	iconv_close(cd);
-
-	return result;
+	const auto text_slice =
+		rust::Slice<unsigned char>(
+			reinterpret_cast<const unsigned char*>(text.c_str()),
+			text.length());
+	const auto result = utils::bridged::convert_text(text_slice, tocode, fromcode);
+	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
 std::string utils::utf8_to_locale(const std::string& text)

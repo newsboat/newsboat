@@ -84,6 +84,7 @@ mod bridged {
         fn run_program(argv: &Vec<String>, input: &str) -> String;
 
         fn translit(tocode: &str, fromcode: &str) -> String;
+        fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8>;
     }
 
     extern "C++" {
