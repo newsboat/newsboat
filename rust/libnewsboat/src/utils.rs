@@ -953,6 +953,7 @@ pub fn translit(tocode: &str, fromcode: &str) -> String {
                     let cd = iconv_open(c_tocode.as_ptr(), c_fromcode.as_ptr());
                     if cd != -1_isize as iconv_t {
                         STATE = TranslitState::Unsupported;
+                        iconv_close(cd);
                     } else {
                         let errno = std::io::Error::last_os_error();
                         eprintln!("iconv_open('{}', '{}') failed: {}", tocode, fromcode, errno);
@@ -968,9 +969,8 @@ pub fn translit(tocode: &str, fromcode: &str) -> String {
                 }
             } else {
                 STATE = TranslitState::Supported;
+                iconv_close(cd);
             }
-
-            iconv_close(cd);
         }
     }
 
