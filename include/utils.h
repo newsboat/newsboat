@@ -48,8 +48,6 @@ std::string consolidate_whitespace(const std::string& str);
 
 std::string translit(const std::string& tocode,
 	const std::string& fromcode);
-std::string cpp_translit(const std::string& tocode,
-	const std::string& fromcode);
 std::string convert_text(const std::string& text,
 	const std::string& tocode,
 	const std::string& fromcode);

@@ -2134,23 +2134,3 @@ TEST_CASE("translit() always returns the same value for the same inputs",
 		}
 	}
 }
-
-TEST_CASE("Rust and C++ implementations of translit() behave identically", "[utils]")
-{
-	const auto check = [](std::string fromcode, std::string tocode) {
-		DYNAMIC_SECTION(fromcode << " → " << tocode) {
-			const auto rust = utils::translit(tocode, fromcode);
-			const auto cpp = utils::cpp_translit(tocode, fromcode);
-
-			REQUIRE(rust == cpp);
-		}
-	};
-
-	check("ISO-8859-1", "UTF-8");
-	check("KOI8-R", "UTF-8");
-	check("UTF-16", "UTF-8");
-	check("UTF-8", "UTF-8");
-	check("UTF-8", "UTF-16");
-	check("UTF-8", "KOI8-R");
-	check("UTF-8", "ISO-8859-1");
-}

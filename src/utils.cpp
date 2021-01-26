@@ -261,59 +261,6 @@ std::string utils::translit(const std::string& tocode, const std::string& fromco
 	return std::string(utils::bridged::translit(tocode, fromcode));
 }
 
-std::string utils::cpp_translit(const std::string& tocode,
-	const std::string& fromcode)
-{
-	std::string tlit = "//TRANSLIT";
-
-	enum class TranslitState { UNKNOWN, SUPPORTED, UNSUPPORTED };
-
-	static TranslitState state = TranslitState::UNKNOWN;
-
-	// TRANSLIT is not needed when converting to unicode encodings
-	if (tocode == "utf-8" || tocode == "WCHAR_T") {
-		return tocode;
-	}
-
-	if (state == TranslitState::UNKNOWN) {
-		iconv_t cd = ::iconv_open(
-				(tocode + "//TRANSLIT").c_str(), fromcode.c_str());
-
-		if (cd == reinterpret_cast<iconv_t>(-1)) {
-			if (errno == EINVAL) {
-				iconv_t cd = ::iconv_open(
-						tocode.c_str(), fromcode.c_str());
-				if (cd != reinterpret_cast<iconv_t>(-1)) {
-					state = TranslitState::UNSUPPORTED;
-				} else {
-					fprintf(stderr,
-						"iconv_open('%s', '%s') "
-						"failed: %s",
-						tocode.c_str(),
-						fromcode.c_str(),
-						strerror(errno));
-					abort();
-				}
-			} else {
-				fprintf(stderr,
-					"iconv_open('%s//TRANSLIT', '%s') "
-					"failed: %s",
-					tocode.c_str(),
-					fromcode.c_str(),
-					strerror(errno));
-				abort();
-			}
-		} else {
-			state = TranslitState::SUPPORTED;
-		}
-
-		iconv_close(cd);
-	}
-
-	return ((state == TranslitState::SUPPORTED) ? (tocode + tlit)
-			: (tocode));
-}
-
 std::string utils::convert_text(const std::string& text,
 	const std::string& tocode,
 	const std::string& fromcode)
