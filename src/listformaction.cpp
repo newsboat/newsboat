@@ -88,7 +88,10 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 				}
 
 				tabcount += 1;
-				item->set_unread(!markread);
+				if (markread) {
+					item->set_unread(false);
+					v->get_ctrl()->mark_article_read(item->guid(), true);
+				}
 			}
 		} else {
 			break;
