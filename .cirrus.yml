@@ -1,11 +1,17 @@
+freebsd_resource_settings: &freebsd_resource_settings
+  cpu: 4
+  memory: 8GB
+
 freebsd_task:
     matrix:
         - name: FreeBSD 11.4
           freebsd_instance:
             image: freebsd-11-4-release-amd64
+            << : *freebsd_resource_settings
         - name: FreeBSD 12.2
           freebsd_instance:
             image: freebsd-12-2-release-amd64
+            << : *freebsd_resource_settings
 
     cargo_cache: &cargo_cache
         # This works in conjunction with after_cache_script and
@@ -40,10 +46,8 @@ freebsd_task:
     # stuff. To maximize the benefits, we ask Make to process as many rules as
     # possible before failing. This enables developers to fix more errors before
     # re-submitting the code to CI, which should increase throughput.
-    #
-    # Running three jobs because by default, VMs have 2 cores.
-    build_script: su testuser -c 'cd ~ && gmake --jobs=3 --keep-going all test'
-    test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=3 RUST_BACKTRACE=1 gmake -j3 ci-check'
+    build_script: su testuser -c 'cd ~ && gmake --jobs=5 --keep-going all test'
+    test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=5 RUST_BACKTRACE=1 gmake -j5 ci-check'
     # This installs everything into a "fake filesystem root", then uninstalls
     # everything and checks that there are no files left over. The purpose of
     # this check is to ensure that: 1) `make install` doesn't fail; 2) `make
