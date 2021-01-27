@@ -77,11 +77,12 @@ freebsd_task:
     cargo_cache: *cargo_cache
     env:
         RUSTFLAGS: '-D warnings'
+        JOBS: 3
     after_cache_script: *after_cache_script
     build_script: &build_script
-        - make -j3 --keep-going all test
+        - make -j${JOBS} --keep-going all test
     test_script: &test_script
-        - RUST_TEST_THREADS=3 RUST_BACKTRACE=1 make -j3 ci-check
+        - RUST_TEST_THREADS=${JOBS} RUST_BACKTRACE=1 make -j${JOBS} ci-check
     # For explanation of what this script does, please see the FreeBSD job
     # above.
     fake_install_script: &fake_install_script
@@ -130,6 +131,7 @@ macos_task:
         CXXFLAGS: -I/usr/local/opt/gettext/include
         GETTEXT_DIR: /usr/local/opt/gettext
         RUSTFLAGS: '-D warnings'
+        JOBS: 13
 
     build_script: *build_script
     test_script: *test_script
@@ -170,6 +172,7 @@ formatting_task:
 linux_task:
     env:
         RUSTFLAGS: '-D warnings'
+        JOBS: 3
 
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
@@ -332,6 +335,7 @@ address_sanitizer_task:
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
       ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
+      JOBS: 3
 
     cargo_cache: *cargo_cache
 
@@ -339,7 +343,7 @@ address_sanitizer_task:
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
     after_cache_script: *after_cache_script
-    build_script: make -j3 test/test
+    build_script: make -j${JOBS} test/test
     test_script: cd test && ./test --order rand
     before_cache_script: *before_cache_script
 
@@ -353,9 +357,12 @@ depslist_task:
           cc: gcc-9
           cxx: g++-9
 
+    env:
+      JOBS: 3
+
     script:
           # Build in debug mode to speed things up
-        - make -j3 PROFILE=1 depslist
+        - make -j${JOBS} PROFILE=1 depslist
           # --exit-code forces git-diff to exit with code 1 if there were
           # changes. If it does, we print a warning, and propagate the error.
           # Otherwise this whole script exits with 0
@@ -376,6 +383,7 @@ undefined_behavior_sanitizer_task:
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
       UBSAN_OPTIONS: "suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1"
+      JOBS: 3
 
     cargo_cache: *cargo_cache
 
@@ -383,7 +391,7 @@ undefined_behavior_sanitizer_task:
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
     after_cache_script: *after_cache_script
-    build_script: make -j3 test/test
+    build_script: make -j${JOBS} test/test
     test_script: cd test && ./test --order rand
     before_cache_script: *before_cache_script
 
