@@ -76,6 +76,8 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 	bool markread)
 {
 	int tabcount = 0;
+	nonstd::optional<std::uint8_t> return_value = 0;
+	std::vector<std::string> guids_of_read_articles;
 	for (const auto& item : feed->items()) {
 		if (tabcount <
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
@@ -84,17 +86,26 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 				const auto exit_code = v->open_in_browser(item->link(), item->feedurl(),
 						interactive);
 				if (!exit_code.has_value() || *exit_code != 0) {
-					return exit_code;
+					return_value = exit_code;
+					break;
 				}
 
 				tabcount += 1;
-				item->set_unread(!markread);
+				if (markread) {
+					item->set_unread(false);
+					guids_of_read_articles.push_back(item->guid());
+				}
 			}
 		} else {
 			break;
 		}
 	}
-	return 0;
+
+	if (guids_of_read_articles.size() > 0) {
+		v->get_ctrl()->mark_all_read(guids_of_read_articles);
+	}
+
+	return return_value;
 }
 
 } // namespace newsboat
