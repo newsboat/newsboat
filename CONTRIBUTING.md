@@ -53,7 +53,8 @@ even better than an SSD.
 Newsboat can also be [built in Docker](doc/docker.md).
 
 Please follow our [style guide](doc/internal/code-style.markdown) when
-contributing code.
+contributing code. See also [the Newsboat hacker's
+guide](doc/internal/hackers-guide.asciidoc).
 
 Patches can be submitted by sending a 
 [GitHub Pull Request](https://github.com/newsboat/newsboat/pull/new/master) or 

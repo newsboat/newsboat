@@ -1,19 +1,24 @@
-= The Newsbeuter Hacker's Guide
+= The Newsboat Hacker's Guide
 Andreas Krennmair <ak@newsbeuter.org>
+Alexander Batishev <eual.jp@gmail.com>
+
+**WARNING**: this document is being slowly updated. See the date of each
+section to get a feel of how up-to-date and reliable is the information in it.
 
 == Introduction
 
-This is the "hacker's guide" to newsbeuter. It describes the overall architecture
-of newsbeuter, the most important design decisions and some other noteworthy things
-that don't belong anywhere else.
+This is the "hacker's guide" to Newsboat. It describes the overall architecture
+of the program, the most important design decisions, and some other noteworthy
+things that don't belong anywhere else.
 
-This guide assumes that you know about Unix programming with C++,
-multithreading, and some more stuff. This is not for end users, so if you don't
-have C++ programming experience, then this is not for you.
+This guide assumes that you know about Unix programming, C++, Rust,
+multithreading, and some more stuff. This is not for end users.
 
 == Architecture
 
 === Classes
+
+**Status of this section:** incomplete (January 2021).
 
 This section describes the different classes and their purpose.
 
@@ -105,12 +110,16 @@ htmlrenderer class.
 
 === Interaction
 
+**Status of this section:** yet unwritten :)
+
 TODO: describe interaction between classes.
 
 
 == Design Decisions
 
 === Use text file as configuration
+
+**Status of this section:** the idea holds (January 2021).
 
 The "classical" text tools, like vim, slrn and mutt, are all configurable
 solely via text files. Newsbeuter follows the same spirit, especially since the
@@ -122,6 +131,9 @@ crude menus that are somehow hard to use.
 
 === Keep a good balance of customizability
 
+**Status of this section:** the idea holds, but Newsboat arguably failed this
+goal (January 2021).
+
 The problem with user wishes is that too many people demand a possibility to
 customize this bell or that whistle within newsbeuter. Often, these
 possibilities only have a very limited purpose, and their value is in no
@@ -132,6 +144,9 @@ The code shouldn't get too bloated, it should be kept straight-forward and easy
 to read. With too much customizability, this goal would be in danger.
 
 === Why C++ and not C, [insert your favorite language], ...?
+
+**Status of this section:** partially holds, but we're moving to Rust (January
+2021).
 
 C++ has many advantages compared to other programming languages.
 
@@ -151,6 +166,9 @@ useable language during the development process.
 
 === Use the full potential of modern C++
 
+**Status of this section:** mostly holds, but new stuff should be written in
+Rust if possible (January 2021).
+
 The C++ standard library comes with an extensive set of algorithms and data
 structures. Developers are encouraged to use especially the data structures,
 because the available container classes are standardized, their behaviour and
@@ -165,6 +183,8 @@ and *class stflpp*.
 
 === Getting a detailed debug log
 
+**Status of this section:** up-to-date (January 2021).
+
 If you want to get a detailed debug log from newsbeuter, you only need to run
 newsbeuter with special parameters:
 
@@ -175,16 +195,30 @@ code, so it's only helpful for developers.
 
 === Use (and extend) the unit tests
 
-In the test subdirectory resides a simple unit test to check the most important
-functionality of the newsbeuter internals. These tests build upon the lemon
-test framework which comes bundled as test/lemon.h with newsbeuter. Run "make
-test" to build the tests, the result is a binary called "test" within the test
-subdirectory. Run it and see whether everything still works as expected. Run
-"make clean-test" to clean up after the tests.
+**Status of this section:** up-to-date (January 2021).
+
+C++ tests are in the _test_ subdirectory. They're using
+https://github.com/catchorg/Catch2/tree/devel/docs[the Catch2 framework]. Rust
+tests are split: unit tests are in `mod tests` sub-modules under
+_rust/libnewsboat/src_, while integration tests are under
+_rust/libnewsboat/tests_. Rust's test runner is multi-threaded, so we use
+integration testing when we want to do the checks in a separate process.
+
+In addition to `TMPDIR=/dev/shm make -j5 PROFILE=1 check` incantation that's
+already explained in the contributing guidelines, you should know about the
+`NEWSBOAT_RUN_IGNORED_TESTS` variable. Like `PROFILE`, it can be set to `1`.
+When set, it enables tests that require some additional prerequisites:
+
+- locales:
+    - `en_US.UTF-8`
+    - `ru_RU.CP1251`
+    - `ru_RU.KOI8-R`
 
 == Keys
 
 === Unused keys
+
+**Status of this section:** probably outdated (January 2021).
 
 	      _b_____hi_____________wxyz
 	      _B_____HI__LM_____STUVWXYZ
