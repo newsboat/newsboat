@@ -47,7 +47,7 @@ freebsd_task:
     # possible before failing. This enables developers to fix more errors before
     # re-submitting the code to CI, which should increase throughput.
     build_script: su testuser -c 'cd ~ && gmake --jobs=5 --keep-going all test'
-    test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=5 RUST_BACKTRACE=1 gmake -j5 ci-check'
+    test_script: su testuser -c 'cd ~ && RUST_TEST_THREADS=5 RUST_BACKTRACE=1 gmake -j5 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check'
     # This installs everything into a "fake filesystem root", then uninstalls
     # everything and checks that there are no files left over. The purpose of
     # this check is to ensure that: 1) `make install` doesn't fail; 2) `make
@@ -82,7 +82,7 @@ freebsd_task:
     build_script: &build_script
         - make -j${JOBS} --keep-going all test
     test_script: &test_script
-        - RUST_TEST_THREADS=${JOBS} RUST_BACKTRACE=1 make -j${JOBS} ci-check
+        - RUST_TEST_THREADS=${JOBS} RUST_BACKTRACE=1 make -j${JOBS} NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
     # For explanation of what this script does, please see the FreeBSD job
     # above.
     fake_install_script: &fake_install_script

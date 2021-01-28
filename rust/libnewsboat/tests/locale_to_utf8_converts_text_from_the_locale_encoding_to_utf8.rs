@@ -6,11 +6,10 @@ mod locale_helpers;
 
 enable_sections! {
     #[test]
+    #[ignore]
     fn t_locale_to_utf8_converts_text_from_the_locale_encoding_to_utf8() {
     if section!("UTF-8") {
-        if !locale_helpers::set_locale("en_US.UTF-8") {
-            continue;
-        }
+        locale_helpers::set_locale("en_US.UTF-8");
 
         assert_eq!(locale_to_utf8(&[]), "");
 
@@ -23,9 +22,7 @@ enable_sections! {
     }
 
     if section!("KOI8-R") {
-        if !locale_helpers::set_locale("ru_RU.KOI8-R") {
-            continue;
-        }
+        locale_helpers::set_locale("ru_RU.KOI8-R");
 
         assert_eq!(locale_to_utf8(&[]), "");
 
@@ -37,9 +34,7 @@ enable_sections! {
     }
 
     if section!("CP1251") {
-        if !locale_helpers::set_locale("ru_RU.CP1251") {
-            continue;
-        }
+        locale_helpers::set_locale("ru_RU.CP1251");
 
         assert_eq!(locale_to_utf8(&[]), "");
 
