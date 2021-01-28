@@ -1088,6 +1088,41 @@ pub fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8> {
     result
 }
 
+fn get_locale_encoding() -> String {
+    unsafe {
+        use libc::{nl_langinfo, CODESET};
+        use std::ffi::CStr;
+
+        let codeset = CStr::from_ptr(nl_langinfo(CODESET));
+        // Codeset names are ASCII, so the below expect() should never panic.
+        codeset
+            .to_str()
+            .expect("Locale codeset name is not a valid UTF-8 string")
+            .to_owned()
+    }
+}
+
+/// Converts input string from UTF-8 to the locale's encoding (as detected by
+/// nl_langinfo(CODESET)).
+pub fn utf8_to_locale(text: &str) -> Vec<u8> {
+    if text.is_empty() {
+        return vec![];
+    }
+
+    convert_text(text.as_bytes(), &get_locale_encoding(), "utf-8")
+}
+
+/// Converts input string from the locale's encoding (as detected by
+/// nl_langinfo(CODESET)) to UTF-8.
+pub fn locale_to_utf8(text: &[u8]) -> String {
+    if text.is_empty() {
+        return String::new();
+    }
+
+    let converted = convert_text(text, "utf-8", &get_locale_encoding());
+    String::from_utf8(converted).expect("convert_text() returned a non-UTF-8 string")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

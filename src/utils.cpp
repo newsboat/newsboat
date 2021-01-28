@@ -275,20 +275,17 @@ std::string utils::convert_text(const std::string& text,
 
 std::string utils::utf8_to_locale(const std::string& text)
 {
-	if (text.empty()) {
-		return {};
-	}
-
-	return utils::convert_text(text, nl_langinfo(CODESET), "utf-8");
+	const auto result = utils::bridged::utf8_to_locale(text);
+	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
 std::string utils::locale_to_utf8(const std::string& text)
 {
-	if (text.empty()) {
-		return {};
-	}
-
-	return utils::convert_text(text, "utf-8", nl_langinfo(CODESET));
+	const auto text_slice =
+		rust::Slice<unsigned char>(
+			reinterpret_cast<const unsigned char*>(text.c_str()),
+			text.length());
+	return std::string(utils::bridged::locale_to_utf8(text_slice));
 }
 
 std::string utils::get_command_output(const std::string& cmd)
