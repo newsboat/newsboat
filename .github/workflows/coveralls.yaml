@@ -42,7 +42,6 @@ jobs:
           sudo apt-get install --assume-yes locales
           echo 'en_US.UTF-8 UTF-8' | sudo tee --append /etc/locale.gen
           echo 'ru_RU.KOI8-R KOI8-R' | sudo tee --append /etc/locale.gen
-          echo 'nl_NL.ISO-8859-1 ISO-8859-1' | sudo tee --append /etc/locale.gen
           echo 'ru_RU.CP1251 CP1251' | sudo tee --append /etc/locale.gen
           sudo locale-gen
 
@@ -68,7 +67,7 @@ jobs:
         run: cargo install grcov
 
       - name: Run tests
-        run: make --jobs=3 ci-check
+        run: make --jobs=3 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
 
         # gcov tool from gcc doesn't understand profiling info that LLVM
         # produces, so we trick grcov into using llvm-cov instead. We can't

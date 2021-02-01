@@ -36,6 +36,10 @@ export CARGO_TARGET_DIR:=$(abspath $(CARGO_TARGET_DIR))
 
 CPPCHECK_JOBS?=5
 
+# By default, do not run "ignored" Rust tests -- they require some additional
+# setup on the test machine.
+NEWSBOAT_RUN_IGNORED_TESTS?=0
+
 # compiler
 CXX?=c++
 # Compiler for building executables meant to be run on the
@@ -414,13 +418,25 @@ profclean:
 
 check: test
 	(cd test && ./test --order=rand --rng-seed=time)
-	+$(CARGO) test $(CARGO_TEST_FLAGS)
+	$(CARGO) test $(CARGO_TEST_FLAGS)
+	if [ $(NEWSBOAT_RUN_IGNORED_TESTS) -eq 1 ] ; then $(CARGO) test $(CARGO_TEST_FLAGS) -- --ignored ; fi
 
 ci-check: test
         # We want to run both C++ and Rust tests, but we also want this entire
         # command to fail if one of the test suites fails. That's why we store
         # the C++'s exit code and chain it to Rust's in the end.
-	$(CARGO) test $(CARGO_TEST_FLAGS) --no-fail-fast ; ret=$$? ; cd test && ./test --order=rand --rng-seed=time && exit $$ret
+	$(CARGO) test $(CARGO_TEST_FLAGS) --no-fail-fast ; \
+	ret1=$$? ; \
+	\
+	ret2=0 ; \
+	if [ $(NEWSBOAT_RUN_IGNORED_TESTS) -eq 1 ] ; \
+		then $(CARGO) test $(CARGO_TEST_FLAGS) --no-fail-fast -- --ignored ; ret2=$$? ; \
+		fi ; \
+	\
+	cd test && \
+	./test --order=rand --rng-seed=time && \
+	\
+	[ \( $$ret1 -eq 0 \) -a \( $$ret2 -eq 0 \) ]
 
 # miscellaneous stuff
 

@@ -1,6 +1,9 @@
 use crate::htmlrenderer;
 use crate::logger::{self, Level};
-use libc::{c_ulong, close, execvp, exit, fork, waitpid};
+use libc::{
+    c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t, waitpid, E2BIG, EILSEQ,
+    EINVAL,
+};
 use percent_encoding::*;
 use std::ffi::CString;
 use std::fs::DirBuilder;
@@ -887,6 +890,239 @@ pub fn extract_filter(line: &str) -> FilterUrlParts {
     }
 }
 
+// This type name comes from C, and we'd like to keep its original spelling to make the code easier
+// to compare to other C code.
+#[allow(non_camel_case_types)]
+type iconv_t = *mut c_void;
+
+// On FreeBSD, link with GNU libiconv; the iconv implementation in libc doesn't support //TRANSLIT
+// and WCHAR_T. This is also why we change the symbol names from "iconv" to "libiconv" below.
+#[cfg_attr(target_os = "freebsd", link(name = "iconv"))]
+extern "C" {
+    #[cfg_attr(target_os = "freebsd", link_name = "libiconv_open")]
+    pub fn iconv_open(tocode: *const c_char, fromcode: *const c_char) -> iconv_t;
+    #[cfg_attr(target_os = "freebsd", link_name = "libiconv")]
+    pub fn iconv(
+        cd: iconv_t,
+        inbuf: *mut *mut c_char,
+        inbytesleft: *mut size_t,
+        outbuf: *mut *mut c_char,
+        outbytesleft: *mut size_t,
+    ) -> size_t;
+    #[cfg_attr(target_os = "freebsd", link_name = "libiconv_close")]
+    pub fn iconv_close(cd: iconv_t) -> c_int;
+}
+
+/// Annotates the target encoding (`tocode`) with `//TRANSLIT` if conversion between `fromcode` and
+/// `tocode` might require transliterating some characters.
+pub fn translit(tocode: &str, fromcode: &str) -> String {
+    #[derive(PartialEq)]
+    enum TranslitState {
+        Unknown,
+        Supported,
+        Unsupported,
+    }
+    // Mutable `static`s are unsafe because they're a global state which might suffer from races.
+    // However, in our case it's okay: even if multiple threads run this function, they will all
+    // arrive at the same result, so we don't care if those threads race to write that result into
+    // the variable.
+    static mut STATE: TranslitState = TranslitState::Unknown;
+
+    // TRANSLIT is not needed when converting to unicode encodings
+    if tocode == "utf-8" || tocode == "WCHAR_T" {
+        return tocode.to_string();
+    }
+
+    let tocode_translit = format!("{}//TRANSLIT", tocode);
+
+    unsafe {
+        if STATE == TranslitState::Unknown {
+            // The three calls to expect() can't panic because the input strings come from either:
+            //
+            // - our code, and we won't deliberately put a NUL byte inside an encoding name; or
+            // - the user's locale, which we obtain via C interfaces that would've stripped a NUL byte.
+            let c_tocode = CString::new(tocode.to_string()).expect("tocode String contains NUL");
+            let c_tocode_translit = CString::new(tocode_translit.to_string())
+                .expect("tocode_translit String contains NUL");
+            let c_fromcode = CString::new(fromcode).expect("fromcode String contains NUL");
+
+            let cd = iconv_open(c_tocode_translit.as_ptr(), c_fromcode.as_ptr());
+
+            if cd == -1_isize as iconv_t {
+                let errno = std::io::Error::last_os_error()
+                    .raw_os_error()
+                    .expect("Error constructed with last_os_error didn't contain errno code");
+                if errno == EINVAL {
+                    let cd = iconv_open(c_tocode.as_ptr(), c_fromcode.as_ptr());
+                    if cd != -1_isize as iconv_t {
+                        STATE = TranslitState::Unsupported;
+                        iconv_close(cd);
+                    } else {
+                        let errno = std::io::Error::last_os_error();
+                        eprintln!("iconv_open('{}', '{}') failed: {}", tocode, fromcode, errno);
+                        std::process::abort();
+                    }
+                } else {
+                    let errno = std::io::Error::last_os_error();
+                    eprintln!(
+                        "iconv_open('{}', '{}') failed: {}",
+                        tocode_translit, fromcode, errno
+                    );
+                    std::process::abort();
+                }
+            } else {
+                STATE = TranslitState::Supported;
+                iconv_close(cd);
+            }
+        }
+    }
+
+    if unsafe { STATE == TranslitState::Supported } {
+        tocode_translit
+    } else {
+        tocode.to_string()
+    }
+}
+
+/// Converts `text` from encoding `fromcode` to encoding `tocode`.
+pub fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8> {
+    if tocode.to_lowercase() == fromcode.to_lowercase() {
+        return text.to_owned();
+    }
+
+    let mut result = vec![];
+
+    let tocode_translit = translit(tocode, fromcode);
+
+    // Illegal and incomplete multi-byte sequences will be replaced by this
+    // placeholder. By default, we use an ASCII value for "question mark".
+    let question_mark = {
+        let mut question_mark = vec![0x3f];
+
+        // This `if` prevents the function from recursing indefinitely.
+        if text != question_mark && fromcode != "ASCII" {
+            question_mark = convert_text(&question_mark, &tocode_translit, "ASCII");
+        }
+        // If we can't even convert a question mark, let's just give up.
+        if question_mark.is_empty() {
+            return result;
+        }
+
+        question_mark
+    };
+
+    let cd = unsafe {
+        // The following two `expect()`s can't panic because their input string come from trusted
+        // sources:
+        // - from our code, and we obviously won't put NUL inside one of those strings;
+        // - from the locale, which we interrogate via a C API which "filters out" any NULs.
+        let c_tocode_translit =
+            CString::new(tocode_translit).expect("tocode_translit String contained NUL");
+        let c_fromcode = CString::new(fromcode).expect("fromcode str contained NUL");
+
+        iconv_open(c_tocode_translit.as_ptr(), c_fromcode.as_ptr())
+    };
+
+    if cd == -1isize as iconv_t {
+        return result;
+    }
+
+    unsafe {
+        let mut outbuf: [u8; 16] = [0; 16];
+        let mut outbufp = outbuf.as_mut_ptr() as *mut c_char;
+        let mut outbytesleft = outbuf.len();
+
+        // iconv() wants a non-const pointer to data, but we only have an immutable &[u8] for
+        // input. So we copy the data to a Vec.
+        let mut input = text.to_owned();
+        let mut inbufp = input.as_mut_ptr() as *mut c_char;
+        let mut inbytesleft = input.len();
+
+        let copy_converted_chunk = |outbuf: &[u8],
+                                    old_outbufp: *const c_char,
+                                    outbufp: *const c_char,
+                                    result: &mut Vec<u8>| {
+            let zero = outbuf.as_ptr() as *const c_char;
+            // Casts from isize to usize are okay because `zero` points to the first element of
+            // `outbuf` while `old_outbufp` and `outbufp` point to the first or later element.
+            let start = old_outbufp as usize - zero as usize;
+            let end = outbufp as usize - zero as usize;
+            result.extend_from_slice(&outbuf[start..end]);
+        };
+
+        while inbytesleft > 0 {
+            let old_outbufp = outbufp;
+            let rc = iconv(
+                cd,
+                &mut inbufp,
+                &mut inbytesleft,
+                &mut outbufp,
+                &mut outbytesleft,
+            );
+            if rc == -1isize as size_t {
+                let errno = std::io::Error::last_os_error()
+                    .raw_os_error()
+                    .expect("Error constructed with last_os_error didn't contain errno code");
+                match errno {
+                    E2BIG => {
+                        copy_converted_chunk(&outbuf, old_outbufp, outbufp, &mut result);
+                        outbufp = outbuf.as_mut_ptr() as *mut c_char;
+                        outbytesleft = outbuf.len();
+                    }
+                    EILSEQ | EINVAL => {
+                        copy_converted_chunk(&outbuf, old_outbufp, outbufp, &mut result);
+                        result.extend_from_slice(&question_mark);
+                        inbufp = inbufp.add(1);
+                        inbytesleft -= 1;
+                    }
+                    _ => {}
+                }
+            } else {
+                copy_converted_chunk(&outbuf, old_outbufp, outbufp, &mut result);
+            }
+        }
+
+        iconv_close(cd);
+    }
+
+    result
+}
+
+fn get_locale_encoding() -> String {
+    unsafe {
+        use libc::{nl_langinfo, CODESET};
+        use std::ffi::CStr;
+
+        let codeset = CStr::from_ptr(nl_langinfo(CODESET));
+        // Codeset names are ASCII, so the below expect() should never panic.
+        codeset
+            .to_str()
+            .expect("Locale codeset name is not a valid UTF-8 string")
+            .to_owned()
+    }
+}
+
+/// Converts input string from UTF-8 to the locale's encoding (as detected by
+/// nl_langinfo(CODESET)).
+pub fn utf8_to_locale(text: &str) -> Vec<u8> {
+    if text.is_empty() {
+        return vec![];
+    }
+
+    convert_text(text.as_bytes(), &get_locale_encoding(), "utf-8")
+}
+
+/// Converts input string from the locale's encoding (as detected by
+/// nl_langinfo(CODESET)) to UTF-8.
+pub fn locale_to_utf8(text: &[u8]) -> String {
+    if text.is_empty() {
+        return String::new();
+    }
+
+    let converted = convert_text(text, "utf-8", &get_locale_encoding());
+    String::from_utf8(converted).expect("convert_text() returned a non-UTF-8 string")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1646,5 +1882,246 @@ mod tests {
         let actual = extract_filter(input);
         assert_eq!(actual.script_name, expected_script_name);
         assert_eq!(actual.url, expected_url);
+    }
+
+    #[test]
+    fn t_translit_returns_tocode_maybe_with_translit_appended() {
+        // The behaviour of translit() is inherently platform-dependent: some
+        // platforms support transliteration for some encodings, while others
+        // support it for different encodings, or don't support it at all. This
+        // tests checks just the bare minimum: the function doesn't crash, doesn't
+        // throw exceptions, and returns something resembling a correct value.
+
+        let check = |fromcode, tocode| {
+            let expected1 = tocode;
+            let expected2 = format!("{}//TRANSLIT", tocode);
+
+            let actual = translit(tocode, fromcode);
+
+            assert!(actual == expected1 || actual == expected2);
+        };
+
+        check("ISO-8859-1", "UTF-8");
+        check("KOI8-R", "UTF-8");
+        check("UTF-16", "UTF-8");
+        check("UTF-8", "UTF-8");
+        check("UTF-8", "UTF-16");
+        check("UTF-8", "KOI8-R");
+        check("UTF-8", "ISO-8859-1");
+    }
+
+    #[test]
+    fn t_translit_always_returns_the_same_value_for_the_same_inputs() {
+        use std::collections::BTreeMap;
+
+        let encodings = vec!["UTF-8", "UTF-16", "KOI8-R", "ISO-8859-1"];
+
+        // (fromcode, tocode) -> result
+        let mut results = BTreeMap::<(String, String), String>::new();
+
+        for fromcode in &encodings {
+            for tocode in &encodings {
+                let key = (fromcode.to_string(), tocode.to_string());
+                let result = translit(tocode, fromcode);
+                results.insert(key, result);
+            }
+        }
+
+        for fromcode in &encodings {
+            for tocode in &encodings {
+                let key = (fromcode.to_string(), tocode.to_string());
+                let expected = results.get(&key).unwrap();
+                let actual = translit(tocode, fromcode);
+                assert_eq!(actual, *expected);
+            }
+        }
+    }
+
+    #[test]
+    fn t_convert_text_returns_input_string_if_fromcode_and_tocode_are_literally_the_same() {
+        let inputs: &[&[u8]] = &[
+            &[0x81, 0x13, 0xa0],       // \x81 is not valid UTF-8
+            &[0x01],                   // incomplete UTF-16
+            &[0x01, 0x1f, 0x80, 0x9b], // those bytes are not defined in ISO-8859-1
+            &[0x7f, 0x1e, 0x03],       // these bytes are not defined in KOI8-R
+        ];
+
+        let codes = &["utf-8", "utf-16", "iso-8859-1", "koi8-r"];
+
+        for code in codes {
+            for input in inputs {
+                assert_eq!(convert_text(input, code, code), *input);
+            }
+        }
+    }
+
+    #[test]
+    fn t_convert_text_returns_input_string_if_fromcode_is_an_uppercase_of_tocode() {
+        let inputs: &[&[u8]] = &[
+            &[0x81, 0x13, 0xa0],       // \x81 is not valid UTF-8
+            &[0x01],                   // incomplete UTF-16
+            &[0x01, 0x1f, 0x80, 0x9b], // those bytes are not defined in ISO-8859-1
+            &[0x7f, 0x1e, 0x03],       // these bytes are not defined in KOI8-R
+        ];
+
+        let codes = &["utf-8", "utf-16", "iso-8859-1", "koi8-r"];
+
+        for code in codes {
+            for input in inputs {
+                let fromcode = code.to_uppercase();
+                let tocode = code;
+                assert_eq!(convert_text(input, tocode, &fromcode), *input);
+            }
+        }
+    }
+
+    #[test]
+    fn t_convert_text_returns_input_string_if_tocode_is_an_uppercase_of_fromcode() {
+        let inputs: &[&[u8]] = &[
+            &[0x81, 0x13, 0xa0],       // \x81 is not valid UTF-8
+            &[0x01],                   // incomplete UTF-16
+            &[0x01, 0x1f, 0x80, 0x9b], // those bytes are not defined in ISO-8859-1
+            &[0x7f, 0x1e, 0x03],       // these bytes are not defined in KOI8-R
+        ];
+
+        let codes = &["utf-8", "utf-16", "iso-8859-1", "koi8-r"];
+
+        for code in codes {
+            for input in inputs {
+                let fromcode = code;
+                let tocode = code.to_uppercase();
+                assert_eq!(convert_text(input, &tocode, fromcode), *input);
+            }
+        }
+    }
+
+    #[test]
+    fn t_convert_text_replaces_incomplete_multibyte_sequences_with_a_question_mark_utf8_to_utf16le()
+    {
+        // "ой", "oops" in Russian, but the last byte is missing
+        let input = &[0xd0, 0xbe, 0xd0];
+        let expected = &[0x3e, 0x04, 0x3f, 0x00];
+        assert_eq!(convert_text(input, "UTF-16LE", "UTF-8"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_replaces_incomplete_multibyte_sequences_with_a_question_mark_utf16le_to_utf8()
+    {
+        // Input contains zero bytes
+        // "hi", but the last byte is missing
+        let input = &[0x68, 0x00, 0x69];
+        let expected = &[0x68, 0x3f];
+        assert_eq!(convert_text(input, "UTF-8", "UTF-16LE"), expected);
+
+        // Input doesn't contain zero bytes
+        // "эй", "hey" in Russian, but the last byte is missing
+        let input = &[0x4d, 0x04, 0x39];
+        let expected = &[0xd1, 0x8d, 0x3f];
+        assert_eq!(convert_text(input, "UTF-8", "UTF-16LE"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_replaces_invalid_multibyte_sequences_with_a_question_mark_utf8_to_utf16le() {
+        // "日本", "Japan", but the third byte of the first character (0xa5) is
+        // missing, making the whole first character an illegal sequence.
+        let input = [0xe6, 0x97, 0xe6, 0x9c, 0xac];
+        let expected = [0x3f, 0x00, 0x3f, 0x00, 0x2c, 0x67];
+        assert_eq!(convert_text(&input, "UTF-16LE", "UTF-8"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_replaces_invalid_multibyte_sequences_with_a_question_mark_utf16le_to_utf8() {
+        // The first two bytes here are part of a surrogate pair, i.e. they
+        // imply that the next two bytes encode additional info. However, the
+        // next two bytes are an ordinary character. This breaks the decoding
+        // process, so some things get turned into a question mark while others
+        // are decoded incorrectly.
+        let input = [0x01, 0xd8, 0xd7, 0x03];
+        let expected = [0x3f, 0xed, 0x9f, 0x98, 0x3f];
+        assert_eq!(convert_text(&input, "UTF-8", "UTF-16LE"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_converts_text_between_encodings_utf8_to_utf16le() {
+        // "Тестирую", "Testing" in Russian.
+        let input = [
+            0xd0, 0xa2, 0xd0, 0xb5, 0xd1, 0x81, 0xd1, 0x82, 0xd0, 0xb8, 0xd1, 0x80, 0xd1, 0x83,
+            0xd1, 0x8e,
+        ];
+        let expected = [
+            0x22, 0x04, 0x35, 0x04, 0x41, 0x04, 0x42, 0x04, 0x38, 0x04, 0x40, 0x04, 0x43, 0x04,
+            0x4e, 0x04,
+        ];
+        assert_eq!(convert_text(&input, "UTF-16LE", "UTF-8"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_converts_text_between_encodings_utf8_to_koi8r() {
+        // "Проверка", "Check" in Russian.
+        let input = [
+            0xd0, 0x9f, 0xd1, 0x80, 0xd0, 0xbe, 0xd0, 0xb2, 0xd0, 0xb5, 0xd1, 0x80, 0xd0, 0xba,
+            0xd0, 0xb0,
+        ];
+        let expected = [0xf0, 0xd2, 0xcf, 0xd7, 0xc5, 0xd2, 0xcb, 0xc1];
+        assert_eq!(convert_text(&input, "KOI8-R", "UTF-8"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_converts_text_between_encodings_utf8_to_iso8859_1() {
+        // Some symbols in the result will be transliterated.
+
+        // "вау °±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃ": a mix of Cyrillic (unsupported by
+        // ISO-8859-1) and ISO-8859-1 characters.
+        //
+        // Have to specify the type explicitly, otherwise Rust 1.46.0 remembers the size of the
+        // array and fails to compile `assert_ne!` below, as it can't compare arrays longer than 32
+        // elements.
+        let input: &[u8] = &[
+            0xd0, 0xb2, 0xd0, 0xb0, 0xd1, 0x83, 0x20, 0xc2, 0xb0, 0xc2, 0xb1, 0xc2, 0xb2, 0xc2,
+            0xb3, 0xc2, 0xb4, 0xc2, 0xb5, 0xc2, 0xb6, 0xc2, 0xb7, 0xc2, 0xb8, 0xc2, 0xb9, 0xc2,
+            0xba, 0xc2, 0xbb, 0xc2, 0xbc, 0xc2, 0xbd, 0xc2, 0xbe, 0xc2, 0xbf, 0xc3, 0x80, 0xc3,
+            0x81, 0xc3, 0x82, 0xc3, 0x83,
+        ];
+
+        let result = convert_text(&input, "ISO-8859-1", "UTF-8");
+        // We can't spell out an expected result because different platforms
+        // might follow different transliteration rules.
+        assert_ne!(result, &[]);
+        assert_ne!(result, input);
+    }
+
+    #[test]
+    fn t_convert_text_converts_text_between_encodings_utf16le_to_utf8() {
+        // "Успех", "Success" in Russian.
+        let input = [
+            0xff, 0xfe, 0x23, 0x04, 0x41, 0x04, 0x3f, 0x04, 0x35, 0x04, 0x45, 0x04,
+        ];
+        let expected = [
+            0xef, 0xbb, 0xbf, 0xd0, 0xa3, 0xd1, 0x81, 0xd0, 0xbf, 0xd0, 0xb5, 0xd1, 0x85,
+        ];
+        assert_eq!(convert_text(&input, "UTF-8", "UTF-16LE"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_converts_text_between_encodings_koi8r_to_utf8() {
+        // "История", "History" in Russian.
+        let input = [0xe9, 0xd3, 0xd4, 0xcf, 0xd2, 0xc9, 0xd1];
+        let expected = [
+            0xd0, 0x98, 0xd1, 0x81, 0xd1, 0x82, 0xd0, 0xbe, 0xd1, 0x80, 0xd0, 0xb8, 0xd1, 0x8f,
+        ];
+        assert_eq!(convert_text(&input, "UTF-8", "KOI8-R"), expected);
+    }
+
+    #[test]
+    fn t_convert_text_converts_text_between_encodings_iso8859_1_to_utf8() {
+        // "ÄÅÆÇÈÉÊËÌÍÎÏ": some umlauts and Latin letters.
+        let input = [
+            0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf,
+        ];
+        let expected = [
+            0xc3, 0x84, 0xc3, 0x85, 0xc3, 0x86, 0xc3, 0x87, 0xc3, 0x88, 0xc3, 0x89, 0xc3, 0x8a,
+            0xc3, 0x8b, 0xc3, 0x8c, 0xc3, 0x8d, 0xc3, 0x8e, 0xc3, 0x8f,
+        ];
+        assert_eq!(convert_text(&input, "UTF-8", "ISO-8859-1"), expected);
     }
 }

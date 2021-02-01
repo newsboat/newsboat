@@ -212,7 +212,6 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 
 std::string utils::consolidate_whitespace(const std::string& str)
 {
-
 	return std::string(utils::bridged::consolidate_whitespace(str));
 }
 
@@ -257,161 +256,36 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	return tokens;
 }
 
-std::string utils::translit(const std::string& tocode,
-	const std::string& fromcode)
+std::string utils::translit(const std::string& tocode, const std::string& fromcode)
 {
-	std::string tlit = "//TRANSLIT";
-
-	enum class TranslitState { UNKNOWN, SUPPORTED, UNSUPPORTED };
-
-	static TranslitState state = TranslitState::UNKNOWN;
-
-	// TRANSLIT is not needed when converting to unicode encodings
-	if (tocode == "utf-8" || tocode == "WCHAR_T") {
-		return tocode;
-	}
-
-	if (state == TranslitState::UNKNOWN) {
-		iconv_t cd = ::iconv_open(
-				(tocode + "//TRANSLIT").c_str(), fromcode.c_str());
-
-		if (cd == reinterpret_cast<iconv_t>(-1)) {
-			if (errno == EINVAL) {
-				iconv_t cd = ::iconv_open(
-						tocode.c_str(), fromcode.c_str());
-				if (cd != reinterpret_cast<iconv_t>(-1)) {
-					state = TranslitState::UNSUPPORTED;
-				} else {
-					fprintf(stderr,
-						"iconv_open('%s', '%s') "
-						"failed: %s",
-						tocode.c_str(),
-						fromcode.c_str(),
-						strerror(errno));
-					abort();
-				}
-			} else {
-				fprintf(stderr,
-					"iconv_open('%s//TRANSLIT', '%s') "
-					"failed: %s",
-					tocode.c_str(),
-					fromcode.c_str(),
-					strerror(errno));
-				abort();
-			}
-		} else {
-			state = TranslitState::SUPPORTED;
-		}
-
-		iconv_close(cd);
-	}
-
-	return ((state == TranslitState::SUPPORTED) ? (tocode + tlit)
-			: (tocode));
+	return std::string(utils::bridged::translit(tocode, fromcode));
 }
 
 std::string utils::convert_text(const std::string& text,
 	const std::string& tocode,
 	const std::string& fromcode)
 {
-	std::string result;
-
-	if (strcasecmp(tocode.c_str(), fromcode.c_str()) == 0) {
-		return text;
-	}
-
-	const auto tocode_translit = translit(tocode, fromcode);
-
-	// Illegal and incomplete multi-byte sequences will be replaced by this
-	// placeholder. By default, we use an ASCII value for "question mark".
-	std::string question_mark("\x3f");
-	// This `if` prevens the function to recurse indefinitely.
-	if (text != question_mark && fromcode != "ASCII") {
-		question_mark = utils::convert_text("\x3f", tocode_translit, "ASCII");
-	}
-	// If we can't even convert a question mark, let's just give up.
-	if (question_mark.empty()) {
-		return result;
-	}
-
-	iconv_t cd = ::iconv_open(tocode_translit.c_str(), fromcode.c_str());
-
-	if (cd == reinterpret_cast<iconv_t>(-1)) {
-		return result;
-	}
-
-	size_t inbytesleft;
-	size_t outbytesleft;
-
-	/*
-	 * of all the Unix-like systems around there, only Linux/glibc seems to
-	 * come with a SuSv3-conforming iconv implementation.
-	 */
-#if !defined(__linux__) && !defined(__GLIBC__) && !defined(__APPLE__) && \
-	!defined(__OpenBSD__) && !defined(__FreeBSD__) &&                \
-	!defined(__DragonFly__)
-	const char* inbufp;
-#else
-	char* inbufp;
-#endif
-	char outbuf[16];
-	char* outbufp = outbuf;
-
-	outbytesleft = sizeof(outbuf);
-
-	// iconv() wants a non-const pointer to data, but std::string::c_str()
-	// returns a const one. So we copy the data to a vector, which *does* give
-	// us a non-const pointer.
-	std::vector<char> input(text.cbegin(), text.cend());
-	inbufp = input.data();
-	inbytesleft = input.size();
-
-	do {
-		char* old_outbufp = outbufp;
-		const int rc = ::iconv(cd, &inbufp, &inbytesleft, &outbufp, &outbytesleft);
-		if (-1 == rc) {
-			switch (errno) {
-			case E2BIG:
-				result.append(old_outbufp, outbufp - old_outbufp);
-				outbufp = outbuf;
-				outbytesleft = sizeof(outbuf);
-				break;
-			case EILSEQ:
-			case EINVAL:
-				result.append(old_outbufp, outbufp - old_outbufp);
-				result.append(question_mark);
-				inbufp += 1;
-				inbytesleft -= 1;
-				break;
-			default:
-				break;
-			}
-		} else {
-			result.append(old_outbufp, outbufp - old_outbufp);
-		}
-	} while (inbytesleft > 0);
-
-	iconv_close(cd);
-
-	return result;
+	const auto text_slice =
+		rust::Slice<unsigned char>(
+			reinterpret_cast<const unsigned char*>(text.c_str()),
+			text.length());
+	const auto result = utils::bridged::convert_text(text_slice, tocode, fromcode);
+	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
 std::string utils::utf8_to_locale(const std::string& text)
 {
-	if (text.empty()) {
-		return {};
-	}
-
-	return utils::convert_text(text, nl_langinfo(CODESET), "utf-8");
+	const auto result = utils::bridged::utf8_to_locale(text);
+	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
 std::string utils::locale_to_utf8(const std::string& text)
 {
-	if (text.empty()) {
-		return {};
-	}
-
-	return utils::convert_text(text, "utf-8", nl_langinfo(CODESET));
+	const auto text_slice =
+		rust::Slice<unsigned char>(
+			reinterpret_cast<const unsigned char*>(text.c_str()),
+			text.length());
+	return std::string(utils::bridged::locale_to_utf8(text_slice));
 }
 
 std::string utils::get_command_output(const std::string& cmd)
