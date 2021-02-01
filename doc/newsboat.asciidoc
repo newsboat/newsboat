@@ -115,13 +115,12 @@ There are a few different ways:
   $ sudo make install      #  install everything under /usr/local
 +
 To install to a different directory, pass `prefix` like so: `sudo make
-prefix=/opt/newsboat install`.
+prefix=/opt/newsboat install`. If you're cross-compiling, set
+`CARGO_BUILD_TARGET`; see
+https://doc.rust-lang.org/cargo/reference/config.html#environment-variables[cargo
+documentation] for details.
 +
 To uninstall, run `sudo make uninstall`.
-
-Cross-compilers need to set `CARGO_BUILD_TARGET`; see
-https://doc.rust-lang.org/cargo/reference/config.html#environment-variables[cargo
-documentation].
 
 // UPDATE README.md IF YOU CHANGE THIS LIST
 

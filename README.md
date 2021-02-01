@@ -95,6 +95,9 @@ There are numerous ways:
     sure to install the header files as well (on Debian and derivatives, headers
     are in `-dev` packages, e.g. `libsqlite3-dev`.)
 
+    Cross-compilers need to set `CARGO_BUILD_TARGET`; see [cargo
+    documentation](https://doc.rust-lang.org/cargo/reference/config.html#environment-variables).
+
     Then compile and install with:
 
       $ make                   #  pass -jN to use N CPU cores, e.g. -j8
@@ -104,9 +107,6 @@ There are numerous ways:
     prefix=/opt/newsboat install`.
 
     To uninstall, run `sudo make uninstall`.
-
-Cross-compilers need to set `CARGO_BUILD_TARGET`; see [cargo
-documentation](https://doc.rust-lang.org/cargo/reference/config.html#environment-variables).
 
 <!--
     UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
