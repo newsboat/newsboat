@@ -684,9 +684,12 @@ int Controller::import_opml(const std::string& opmlFile,
 		return EXIT_FAILURE;
 	}
 
-	if (!opml::import(opmlFile, urlReader)) {
+	const auto import_error = opml::import(opmlFile, urlReader);
+	if (import_error.has_value()) {
 		std::cout << strprintf::fmt(
-				_("An error occurred while parsing %s."), opmlFile)
+				_("An error occurred while parsing %s: %s"),
+				opmlFile,
+				import_error.value())
 			<< std::endl;
 		return EXIT_FAILURE;
 	} else {
