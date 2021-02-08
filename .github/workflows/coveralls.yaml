@@ -53,7 +53,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Cache ~/.cargo
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         id: cargo_cache
         with:
           key: cargo2-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}
