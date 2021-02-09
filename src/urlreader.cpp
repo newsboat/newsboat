@@ -17,6 +17,8 @@ std::vector<std::string> UrlReader::get_alltags()
 	std::vector<std::string> tmptags;
 	for (const auto& t : alltags) {
 		if (t.substr(0, 1) != "~") {
+			// std::copy_if would make this code less readable IMHO
+			// cppcheck-suppress useStlAlgorithm
 			tmptags.push_back(t);
 		}
 	}
