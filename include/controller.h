@@ -55,7 +55,8 @@ public:
 	{
 		return refresh_on_start;
 	}
-	void enqueue_url(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed);
+	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
+		std::shared_ptr<RssFeed> feed);
 
 	void reload_urls_file();
 	void edit_urls_file();

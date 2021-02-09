@@ -12,6 +12,18 @@ class ConfigPaths;
 class RssFeed;
 class RssItem;
 
+enum class EnqueueStatus {
+	QUEUED_SUCCESSFULLY,
+	URL_QUEUED_ALREADY, // `extra_info` should specify the concerning URL
+	OUTPUT_FILENAME_USED_ALREADY, // `extra_info` should specify the generated filename
+	QUEUE_FILE_OPEN_ERROR, // `extra_info` should specify the location of the queue file
+};
+
+struct EnqueueResult {
+	EnqueueStatus status;
+	std::string extra_info;
+};
+
 class QueueManager {
 	ConfigContainer* cfg = nullptr;
 	ConfigPaths* paths = nullptr;
@@ -19,10 +31,11 @@ class QueueManager {
 public:
 	QueueManager(ConfigContainer* cfg, ConfigPaths* paths);
 
-	void enqueue_url(std::shared_ptr<RssItem> item,
+	/// Adds the podcast URL to Podboat's queue file
+	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
 		std::shared_ptr<RssFeed> feed);
 
-	void autoenqueue(std::shared_ptr<RssFeed> feed);
+	EnqueueResult autoenqueue(std::shared_ptr<RssFeed> feed);
 
 private:
 	std::string generate_enqueue_filename(std::shared_ptr<RssItem> item,
