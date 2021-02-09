@@ -1,5 +1,5 @@
-How to re-build snap against and up-to-date packages
-----------------------------------------------------
+How to re-build snap against up-to-date packages
+------------------------------------------------
 
 The snap's owner (currently Alexander Batischev) might receive an email from
 the Snap Store saying:
