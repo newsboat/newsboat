@@ -22,8 +22,9 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	const std::string& url = item->enclosure_url();
 	const std::string filename = generate_enqueue_filename(item, feed);
 
+	const std::string queue_file = paths->queue_file();
 	std::fstream f;
-	f.open(paths->queue_file(), std::fstream::in);
+	f.open(queue_file, std::fstream::in);
 	if (f.is_open()) {
 		do {
 			std::string line;
@@ -32,27 +33,27 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 				std::vector<std::string> fields =
 					utils::tokenize_quoted(line);
 				if (fields.size() >= 1 && fields[0] == url) {
-					return EnqueueResult::URL_QUEUED_ALREADY;
+					return {EnqueueStatus::URL_QUEUED_ALREADY, url};
 				}
 				if (fields.size() >= 2 && fields[1] == filename) {
-					return EnqueueResult::OUTPUT_FILENAME_USED_ALREADY;
+					return {EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY, filename};
 				}
 			}
 		} while (!f.eof());
 		f.close();
 	}
 
-	f.open(paths->queue_file(),
+	f.open(queue_file,
 		std::fstream::app | std::fstream::out);
 	if (!f.is_open()) {
-		return EnqueueResult::QUEUE_FILE_OPEN_ERROR;
+		return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, queue_file};
 	}
 	f << url << " " << utils::quote(filename) << std::endl;
 	f.close();
 
 	item->set_enqueued(true);
 
-	return EnqueueResult::QUEUED_SUCCESSFULLY;
+	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
 }
 
 std::string get_hostname_from_url(const std::string& url)
@@ -134,22 +135,22 @@ EnqueueResult QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 					"QueueManager::autoenqueue: enqueuing "
 					"`%s'",
 					item->enclosure_url());
-				const auto status = enqueue_url(item, feed);
-				switch (status) {
-				case EnqueueResult::QUEUED_SUCCESSFULLY:
-				case EnqueueResult::URL_QUEUED_ALREADY:
+				const auto result = enqueue_url(item, feed);
+				switch (result.status) {
+				case EnqueueStatus::QUEUED_SUCCESSFULLY:
+				case EnqueueStatus::URL_QUEUED_ALREADY:
 					// Not an issue, continue processing rest of items
 					break;
-				case EnqueueResult::QUEUE_FILE_OPEN_ERROR:
-				case EnqueueResult::OUTPUT_FILENAME_USED_ALREADY:
+				case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
+				case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
 					// Let caller of `autoenqueue` handle the issue
-					return status;
+					return result;
 				}
 			}
 		}
 	}
 
-	return EnqueueResult::QUEUED_SUCCESSFULLY;
+	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
 }
 
 } // namespace newsboat

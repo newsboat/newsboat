@@ -12,11 +12,16 @@ class ConfigPaths;
 class RssFeed;
 class RssItem;
 
-enum class EnqueueResult {
+enum class EnqueueStatus {
 	QUEUED_SUCCESSFULLY,
-	URL_QUEUED_ALREADY,
-	OUTPUT_FILENAME_USED_ALREADY,
-	QUEUE_FILE_OPEN_ERROR,
+	URL_QUEUED_ALREADY, // `extra_info` should specify the concerning URL
+	OUTPUT_FILENAME_USED_ALREADY, // `extra_info` should specify the generated filename
+	QUEUE_FILE_OPEN_ERROR, // `extra_info` should specify the location of the queue file
+};
+
+struct EnqueueResult {
+	EnqueueStatus status;
+	std::string extra_info;
 };
 
 class QueueManager {
