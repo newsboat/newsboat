@@ -25,6 +25,11 @@ class Opts {
 
 public:
 	/// Turns \a opts into argc and argv.
+	// This constructor is not marked as explicit because it's used in tests
+	// that are small and don't care which exact type is being constructed.
+	// Making the constructor explicit will only add unnecessary mention of the
+	// type name.
+	// cppcheck-suppress noExplicitConstructor
 	Opts(std::initializer_list<std::string> opts);
 
 	std::size_t argc() const;

@@ -289,7 +289,7 @@ cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
 		--config-exclude=3rd-party --config-exclude=$(relative_cargo_target_dir) --config-exclude=/usr/include \
 		--suppress=*:3rd-party/* --suppress=*:$(relative_cargo_target_dir)/* --suppress=*:/usr/include/* \
-		-DDEBUG=1 \
+		--inline-suppr -DDEBUG=1 -U__VERSION__ \
 		$(INCLUDES) $(DEFINES) \
 		include newsboat.cpp podboat.cpp rss src stfl test \
 		2>cppcheck.log
