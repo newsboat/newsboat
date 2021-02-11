@@ -84,7 +84,7 @@ where
     CString::new(format).ok().and_then(|local_format_cstring| {
         // Returns None if a holder couldn't be obtained - e.g. the value is a String that
         // contains a null byte
-        arg.to_c_repr_holder().and_then(|arg_c_repr_holder| {
+        arg.into_c_repr_holder().and_then(|arg_c_repr_holder| {
             match fmt_arg_with_buffer_size(&local_format_cstring, &arg_c_repr_holder, 1024) {
                 Ok(formatted) => Some(formatted),
                 Err(buf_size) => {
