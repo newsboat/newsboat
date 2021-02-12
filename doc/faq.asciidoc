@@ -106,6 +106,9 @@ important bit.
 
 == Regarding Newsboat snap installations
 
-The Newsboat snap will also issue error messages related to browser error codes, because it is being prevented from accessing resources outside its strict confinement. Add the following to your Newsboat's config so that it can open your default browser:
+The Newsboat snap will also issue error messages related to browser error codes,
+because it is being prevented from accessing resources outside its strict
+confinement. Add the following to your Newsboat's config so that it can open
+your default browser:
 
     browser "xdg-open %u"
