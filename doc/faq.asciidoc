@@ -26,7 +26,7 @@ query feeds].
 
 == After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
 
-Newsboat has to behave like that in order to accomodate users of text-based
+Newsboat has to behave like that in order to accommodate users of text-based
 browsers like lynx and w3m. It has to relinquish the terminal and stay out of
 the way, otherwise people won't be able to see their browsers.
 
@@ -103,3 +103,12 @@ important bit.
 3. Add the following to your Newsboat's config:
 +
     browser "~/bin/newsboat-browser.sh"
+
+== Regarding Newsboat snap installations
+
+The Newsboat snap will also issue error messages related to browser error codes,
+because it is being prevented from accessing resources outside its strict
+confinement. Add the following to your Newsboat's config so that it can open
+your default browser:
+
+    browser "xdg-open %u"
