@@ -13,13 +13,10 @@ jobs:
       CC: clang-12
       CXX: clang++-12
       # Enable test coverage.
-      PROFILE: 1
-      # These flags are necessary for grcov to correctly calculate coverage.
-      CARGO_INCREMENTAL: 0
+      CXXFLAGS: '-fprofile-instr-generate -fcoverage-mapping'
       # We add `-A warnings` because we aren't interested in warnings from Rust
       # Nightly -- GitHub turns them into annotations, which is annoying.
-      RUSTFLAGS: '-A warnings -Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
-      RUSTDOCFLAGS: '-Cpanic=abort'
+      RUSTFLAGS: '-A warnings -Zinstrument-coverage'
       # Some of our tests use ncurses, which require a terminal of some sort.
       # We pretend ours is a simple one.
       TERM: 'dumb'
@@ -45,10 +42,12 @@ jobs:
           echo 'ru_RU.CP1251 CP1251' | sudo tee --append /etc/locale.gen
           sudo locale-gen
 
-      - name: Install Rust
-        uses: ATiltedTree/setup-rust@v1
+      - name: Toolchain setup
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: nightly
+          toolchain: nightly
+          override: true
+          components: llvm-tools-preview
 
       - uses: actions/checkout@v2
 
@@ -78,7 +77,7 @@ jobs:
 
       - name: Calculate test coverage
         # Note that we override the path to gcov tool.
-        run: GCOV=$(pwd)/gcov grcov . --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
+        run: GCOV=$(pwd)/gcov grcov . --binary-path ./target/debug/deps/ --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
 
       - name: Submit coverage to Coveralls
         uses: coverallsapp/github-action@master
