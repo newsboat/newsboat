@@ -162,7 +162,7 @@ nonstd::optional<std::string> opml::import(
 {
 	xmlDoc* doc = xmlReadFile(filename.c_str(), nullptr, 0);
 	if (doc == nullptr) {
-		return strprintf::fmt(_("Error: Failed to parse OPML file \"%s\""), filename);
+		return strprintf::fmt(_("Error: failed to parse OPML file \"%s\""), filename);
 	}
 
 	nonstd::optional<std::string> error_message;

@@ -25,7 +25,7 @@ nonstd::optional<std::string> FileUrlReader::reload()
 
 	auto result = utils::read_text_file(filename);
 	if (!result) {
-		return strprintf::fmt(_("Error: Failed to read URLs from file \"%s\" (%s)"),
+		return strprintf::fmt(_("Error: failed to read URLs from file \"%s\" (%s)"),
 				filename,
 				result.error().message);
 	}
@@ -63,7 +63,7 @@ nonstd::optional<std::string> FileUrlReader::write_config()
 	f.open(filename, std::fstream::out);
 	if (!f.is_open()) {
 		const auto error_message = strerror(errno);
-		return strprintf::fmt(_("Error: Failed to open file \"%s\" (%s)"),
+		return strprintf::fmt(_("Error: failed to open file \"%s\" (%s)"),
 				filename,
 				error_message);
 	}

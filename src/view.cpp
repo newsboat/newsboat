@@ -155,7 +155,7 @@ int View::run()
 
 	if (!run_commands(keys->get_startup_operation_sequence())) {
 		Stfl::reset();
-		std::cerr << _("Error: Failed to execute startup commands") << std::endl;
+		std::cerr << _("Error: failed to execute startup commands") << std::endl;
 		return EXIT_FAILURE;
 	}
 
