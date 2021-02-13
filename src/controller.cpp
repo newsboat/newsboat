@@ -678,7 +678,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 			break;
 		case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
 			v->show_error(
-				strprintf::fmt(_("Failed to open queue file (%s)."), result.extra_info));
+				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
 			break;
 		}
 	}

@@ -54,7 +54,7 @@ impl FsLock {
             Ok(file) => file,
             Err(reason) => {
                 return Err(fmt!(
-                    &gettext("Failed to open lock file: '%s' (%s)"),
+                    &gettext("Failed to open lock file '%s': %s"),
                     new_lock_path
                         .to_str()
                         .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
@@ -77,7 +77,7 @@ impl FsLock {
             {
                 log!(Level::Debug, "FsLock: Failed to write PID");
                 return Err(fmt!(
-                    &gettext("Failed to write PID to lock file: '%s' (%s)"),
+                    &gettext("Failed to write PID to lock file '%s': %s"),
                     new_lock_path
                         .to_str()
                         .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
