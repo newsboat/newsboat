@@ -1532,10 +1532,10 @@ mod tests {
 
         run_command("touch", filepath.to_str().unwrap());
 
-        // Busy-wait for 100 tries of 10 milliseconds each, waiting for `touch` to
-        // create the file. Usually it happens quickly, and the loop exists on the
-        // first try; but sometimes on CI it takes longer for `touch` to finish, so
-        // we need a slightly longer wait.
+        // Busy-wait for 1000 tries of 10 milliseconds each, i.e. 10 seconds, waiting for `touch`
+        // to create the file. Usually it happens quickly, and the loop exists on the first try;
+        // but sometimes on CI it takes longer for `touch` to finish, so we need a slightly longer
+        // wait.
         for _ in 0..100 {
             thread::sleep(time::Duration::from_millis(10));
 
