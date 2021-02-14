@@ -61,7 +61,9 @@ enum Expected {
 fn translate_expected(expected: Expected) -> String {
     match expected {
         Expected::AttributeName => gettext("attribute name"),
+        // Don't translate "between" -- it's a keyword, not an English word.
         Expected::Operators => gettext("one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"),
+        // The options ("quoted string" etc.) are not keywords, so please translate them.
         Expected::Value => gettext("one of: quoted string, range, number"),
     }
 }

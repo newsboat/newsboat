@@ -780,11 +780,11 @@ nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read
 
 		if (error_line_number == 0) {
 			error.kind = ReadTextFileErrorKind::CantOpen;
-			error.message = strprintf::fmt(_("Failed to open file (%s)"),
+			error.message = strprintf::fmt(_("Failed to open file: %s"),
 					std::string(error_reason));
 		} else {
 			error.kind = ReadTextFileErrorKind::LineError;
-			error.message = strprintf::fmt(_("Failed to read line %u (%s)"),
+			error.message = strprintf::fmt(_("Failed to read line %u: %s"),
 					error_line_number, std::string(error_reason));
 		}
 

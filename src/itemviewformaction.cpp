@@ -225,7 +225,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 				return false;
 			case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
 				v->show_error(
-					strprintf::fmt(_("Failed to open queue file (%s)."), result.extra_info));
+					strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
 				return false;
 			}
 		} else {
