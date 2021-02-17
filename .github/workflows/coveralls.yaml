@@ -17,6 +17,7 @@ jobs:
       # We add `-A warnings` because we aren't interested in warnings from Rust
       # Nightly -- GitHub turns them into annotations, which is annoying.
       RUSTFLAGS: '-A warnings -Zinstrument-coverage'
+      LLVM_PROFILE_FILE: '%p-%m.profraw'
       # Some of our tests use ncurses, which require a terminal of some sort.
       # We pretend ours is a simple one.
       TERM: 'dumb'

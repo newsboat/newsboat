@@ -2,14 +2,16 @@ use libnewsboat::utils;
 use std::env;
 use tempfile::TempDir;
 
+mod chdir_helpers;
+
 #[test]
 fn t_getcwd_value_depends_on_current_directory() {
     let initial_dir = utils::getcwd().unwrap();
 
     let tmp = TempDir::new().unwrap();
     assert_ne!(&initial_dir, tmp.path());
-    let chdir_result = env::set_current_dir(&tmp.path());
-    assert!(chdir_result.is_ok());
+
+    let _chdir = chdir_helpers::Chdir::new(&tmp.path());
 
     let new_dir = utils::getcwd().unwrap();
 
