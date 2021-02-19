@@ -1,3 +1,5 @@
+#![allow(unknown_lints, non_fmt_panic)] // See https://github.com/newsboat/newsboat/issues/1480.
+
 use section_testing::{enable_sections, section};
 
 use libnewsboat::utils::utf8_to_locale;
