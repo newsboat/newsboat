@@ -242,7 +242,7 @@ msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `"
 "%F'&?%?T? - tag `%T'&?"
 msgstr ""
-"%N %V - %?F?Feeds&I tuoi feed (%u non letti, %t totali)%?F? corrispondenti al filtro `"
+"%N %V - %?F?Feed&I tuoi feed? (%u non letti, %t totali)%?F? corrispondenti al filtro `"
 "%F'&?%?T? - tag `%T'&?"
 
 #: src/configcontainer.cpp:287
