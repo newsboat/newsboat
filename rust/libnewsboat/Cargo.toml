@@ -61,4 +61,4 @@ default-features = false
 tempfile = "3"
 # 0.9.6 fixes build failures on Nightly >=2020-04-08: https://github.com/newsboat/newsboat/issues/870
 proptest = ">=0.9.6"
-section_testing = "0.0.4"
+section_testing = "0.0.5"
