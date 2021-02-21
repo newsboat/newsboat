@@ -1,5 +1,3 @@
-#![allow(unknown_lints, non_fmt_panic)] // See https://github.com/newsboat/newsboat/issues/1480.
-
 use libnewsboat::configpaths::ConfigPaths;
 use rand::random;
 use section_testing::{enable_sections, section};

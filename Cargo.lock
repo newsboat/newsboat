@@ -726,9 +726,9 @@ checksum = "7e114536316b51a5aa7a0e59fc49661fd263c5507dd08bd28de052e57626ce69"
 
 [[package]]
 name = "section_testing"
-version = "0.0.4"
+version = "0.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ece4d7d98fdab75ddff5c4fad54a4c7ad0222a13c8a3c6859f1037a1d9e53f28"
+checksum = "5fd2493b68af689f4863060b240cbdffb350cee9ed69e2c50f8d71a62ca2aea1"
 
 [[package]]
 name = "static_assertions"
