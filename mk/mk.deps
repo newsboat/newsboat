@@ -968,6 +968,8 @@ test/scopemeasure.o: test/scopemeasure.cpp include/scopemeasure.h \
  3rd-party/catch.hpp include/logger.h config.h include/strprintf.h \
  test/test-helpers/loggerresetter.h test/test-helpers/tempfile.h \
  test/test-helpers/maintempdir.h
+test/statusline.o: test/statusline.cpp include/statusline.h \
+ 3rd-party/catch.hpp
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
