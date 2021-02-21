@@ -39,7 +39,6 @@ public:
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds);
 	void set_keymap(KeyMap* k);
 	void set_config_container(ConfigContainer* cfgcontainer);
-	void show_error(const std::string& msg) override;
 	void set_status(const std::string& msg) override;
 	StatusLine& get_statusline();
 	Controller* get_ctrl()
@@ -163,6 +162,7 @@ protected:
 	unsigned int current_formaction;
 	std::shared_ptr<FeedListFormAction> feedlist_form;
 
+	void show_error(const std::string& msg) override;
 	StatusLine status_line;
 
 	std::vector<std::string> tags;

@@ -74,7 +74,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				show_searchresult ? search_phrase : "");
 			invalidate(itempos);
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No item selected!")); // should not happen
 		}
 	}
@@ -97,7 +97,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			invalidate(itempos);
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No item selected!")); // should not happen
 		}
 	}
@@ -174,10 +174,11 @@ bool ItemListFormAction::process_operation(Operation op,
 			exit_code = open_unread_items_in_browser(feed, false);
 
 			if (!exit_code.has_value()) {
-				v->show_error(_("Failed to spawn browser"));
+				v->get_statusline().show_error(_("Failed to spawn browser"));
 				return false;
 			} else if (*exit_code != 0) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+				v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+						*exit_code));
 				return false;
 			}
 		}
@@ -196,10 +197,11 @@ bool ItemListFormAction::process_operation(Operation op,
 			exit_code = open_unread_items_in_browser(feed, true);
 
 			if (!exit_code.has_value()) {
-				v->show_error(_("Failed to spawn browser"));
+				v->get_statusline().show_error(_("Failed to spawn browser"));
 				return false;
 			} else if (*exit_code != 0) {
-				v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+				v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+						*exit_code));
 				return false;
 			}
 			invalidate_list();
@@ -294,7 +296,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					if (!links.empty()) {
 						v->push_urlview(links, feed);
 					} else {
-						v->show_error(
+						v->get_statusline().show_error(
 							_("URL list empty."));
 					}
 				} else {
@@ -304,7 +306,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			}
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No item selected!")); // should not happen
 		}
 		break;
@@ -333,7 +335,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			}
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No item selected!")); // should not happen
 		}
 	}
@@ -359,7 +361,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			}
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No item selected!")); // should not happen
 		}
 	}
@@ -380,7 +382,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			save_article(filename, item);
 		} else {
-			v->show_error(_("Error: no item selected!"));
+			v->get_statusline().show_error(_("Error: no item selected!"));
 		}
 	}
 	break;
@@ -397,7 +399,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			v->get_ctrl()->get_reloader()->reload(pos);
 			invalidate_list();
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("Error: you can't reload search results."));
 		}
 		break;
@@ -419,7 +421,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			"ItemListFormAction: jumping to next unread item");
 		if (!jump_to_next_unread_item(false)) {
 			if (!v->get_next_unread(*this)) {
-				v->show_error(_("No unread items."));
+				v->get_statusline().show_error(_("No unread items."));
 			}
 		}
 		break;
@@ -428,7 +430,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			"ItemListFormAction: jumping to previous unread item");
 		if (!jump_to_previous_unread_item(false)) {
 			if (!v->get_previous_unread(*this)) {
-				v->show_error(_("No unread items."));
+				v->get_statusline().show_error(_("No unread items."));
 			}
 		}
 		break;
@@ -436,7 +438,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: jumping to next item");
 		if (!jump_to_next_item(false)) {
 			if (!v->get_next(*this)) {
-				v->show_error(_("Already on last item."));
+				v->get_statusline().show_error(_("Already on last item."));
 			}
 		}
 		break;
@@ -445,35 +447,35 @@ bool ItemListFormAction::process_operation(Operation op,
 			"ItemListFormAction: jumping to previous item");
 		if (!jump_to_previous_item(false)) {
 			if (!v->get_previous(*this)) {
-				v->show_error(_("Already on first item."));
+				v->get_statusline().show_error(_("Already on first item."));
 			}
 		}
 		break;
 	case OP_RANDOMUNREAD:
 		if (!jump_to_random_unread_item()) {
 			if (!v->get_random_unread(*this)) {
-				v->show_error(_("No unread items."));
+				v->get_statusline().show_error(_("No unread items."));
 			}
 		}
 		break;
 	case OP_NEXTUNREADFEED:
 		if (!v->get_next_unread_feed(*this)) {
-			v->show_error(_("No unread feeds."));
+			v->get_statusline().show_error(_("No unread feeds."));
 		}
 		break;
 	case OP_PREVUNREADFEED:
 		if (!v->get_prev_unread_feed(*this)) {
-			v->show_error(_("No unread feeds."));
+			v->get_statusline().show_error(_("No unread feeds."));
 		}
 		break;
 	case OP_NEXTFEED:
 		if (!v->get_next_feed(*this)) {
-			v->show_error(_("Already on last feed."));
+			v->get_statusline().show_error(_("Already on last feed."));
 		}
 		break;
 	case OP_PREVFEED:
 		if (!v->get_prev_feed(*this)) {
-			v->show_error(_("Already on first feed."));
+			v->get_statusline().show_error(_("Already on first feed."));
 		}
 		break;
 	case OP_MARKFEEDREAD:
@@ -524,7 +526,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			invalidate_list();
 			v->set_status("");
 		} catch (const DbException& e) {
-			v->show_error(strprintf::fmt(
+			v->get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't mark feed read: %s"),
 					e.what()));
 		}
@@ -578,7 +580,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					qna, OP_PIPE_TO, &cmdlinehistory);
 			}
 		} else {
-			v->show_error(_("No item selected!"));
+			v->get_statusline().show_error(_("No item selected!"));
 		}
 		break;
 	case OP_SEARCH: {
@@ -630,7 +632,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!matcher.parse(newfilter)) {
-						v->show_error(strprintf::fmt(
+						v->get_statusline().show_error(strprintf::fmt(
 								_("Error: couldn't "
 									"parse filter "
 									"command `%s': %s"),
@@ -644,7 +646,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			}
 		} else {
-			v->show_error(_("No filters defined."));
+			v->get_statusline().show_error(_("No filters defined."));
 		}
 
 		break;
@@ -775,15 +777,16 @@ bool ItemListFormAction::open_position_in_browser(
 		const auto feedurl = item->feedurl();
 		const auto exit_code = v->open_in_browser(link, feedurl, interactive);
 		if (!exit_code.has_value()) {
-			v->show_error(_("Failed to spawn browser"));
+			v->get_statusline().show_error(_("Failed to spawn browser"));
 			return false;
 		} else if (*exit_code != 0) {
-			v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+			v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+					*exit_code));
 			return false;
 		}
 		return true;
 	} else {
-		v->show_error(_("No item selected!"));
+		v->get_statusline().show_error(_("No item selected!"));
 		return false;
 	}
 }
@@ -842,7 +845,7 @@ void ItemListFormAction::qna_end_setfilter()
 
 	if (filtertext.length() > 0) {
 		if (!matcher.parse(filtertext)) {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("Error: couldn't parse filter command!"));
 			return;
 		}
@@ -856,7 +859,7 @@ void ItemListFormAction::qna_end_setfilter()
 void ItemListFormAction::qna_end_editflags()
 {
 	if (visible_items.empty()) {
-		v->show_error(_("No item selected!")); // should not happen
+		v->get_statusline().show_error(_("No item selected!")); // should not happen
 		return;
 	}
 
@@ -886,7 +889,7 @@ void ItemListFormAction::qna_start_search()
 		items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, feed);
 	} catch (const DbException& e) {
-		v->show_error(
+		v->get_statusline().show_error(
 			strprintf::fmt(_("Error while searching for `%s': %s"),
 				searchphrase,
 				e.what()));
@@ -894,7 +897,7 @@ void ItemListFormAction::qna_start_search()
 	}
 
 	if (items.empty()) {
-		v->show_error(_("No results."));
+		v->get_statusline().show_error(_("No results."));
 		return;
 	}
 
@@ -998,7 +1001,7 @@ void ItemListFormAction::prepare()
 	try {
 		do_update_visible_items();
 	} catch (MatcherException& e) {
-		v->show_error(strprintf::fmt(
+		v->get_statusline().show_error(strprintf::fmt(
 				_("Error: applying the filter failed: %s"), e.what()));
 		return;
 	}
@@ -1310,12 +1313,12 @@ void ItemListFormAction::handle_cmdline_num(unsigned int idx)
 		idx <= visible_items[visible_items.size() - 1].second + 1) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
-			v->show_error(_("Position not visible!"));
+			v->get_statusline().show_error(_("Position not visible!"));
 		} else {
 			list.set_position(i);
 		}
 	} else {
-		v->show_error(_("Invalid position!"));
+		v->get_statusline().show_error(_("Invalid position!"));
 	}
 }
 
@@ -1331,11 +1334,11 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		}
 		if (tokens[0] == "save") {
 			if (tokens.size() < 2) {
-				v->show_error(_("Error: no filename provided"));
+				v->get_statusline().show_error(_("Error: no filename provided"));
 				return;
 			}
 			if (visible_items.empty()) {
-				v->show_error(_("Error: no item selected!"));
+				v->get_statusline().show_error(_("Error: no item selected!"));
 				return;
 			}
 			const std::string filename = utils::resolve_tilde(tokens[1]);
@@ -1382,14 +1385,14 @@ void ItemListFormAction::save_article(const std::string& filename,
 	std::shared_ptr<RssItem> item)
 {
 	if (filename == "") {
-		v->show_error(_("Aborted saving."));
+		v->get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
 			v->get_ctrl()->write_item(item, filename);
 			v->set_status(strprintf::fmt(
 					_("Saved article to %s"), filename));
 		} catch (...) {
-			v->show_error(strprintf::fmt(
+			v->get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't save article to %s"),
 					filename));
 		}

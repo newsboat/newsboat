@@ -98,7 +98,7 @@ bool DialogsFormAction::process_operation(Operation op,
 			v->remove_formaction(pos);
 			do_redraw = true;
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("Error: you can't remove the feed list!"));
 		}
 	}
@@ -144,7 +144,7 @@ void DialogsFormAction::handle_cmdline(const std::string& cmd)
 		if (idx >= 1 && idx <= v->formaction_stack_size()) {
 			dialogs_list.set_position(idx - 1);
 		} else {
-			v->show_error(_("Invalid position!"));
+			v->get_statusline().show_error(_("Invalid position!"));
 		}
 	} else {
 		FormAction::handle_cmdline(cmd);

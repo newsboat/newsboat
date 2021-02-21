@@ -439,7 +439,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 		formaction_stack.push_back(searchresult);
 		current_formaction = formaction_stack_size() - 1;
 	} else {
-		show_error(_("Error: feed contains no items!"));
+		status_line.show_error(_("Error: feed contains no items!"));
 	}
 }
 
@@ -464,7 +464,7 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 		current_formaction = formaction_stack_size() - 1;
 		return itemlist;
 	} else {
-		show_error(_("Error: feed contains no items!"));
+		status_line.show_error(_("Error: feed contains no items!"));
 		return nullptr;
 	}
 }
@@ -517,7 +517,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 					item->guid(), true);
 			}
 		} catch (const DbException& e) {
-			show_error(strprintf::fmt(
+			status_line.show_error(strprintf::fmt(
 					_("Error while marking article as read: %s"),
 					e.what()));
 		}
@@ -599,7 +599,7 @@ std::string View::run_dirbrowser()
 std::string View::select_tag()
 {
 	if (tags.size() == 0) {
-		show_error(_("No tags defined."));
+		status_line.show_error(_("No tags defined."));
 		return "";
 	}
 	auto selecttag = std::make_shared<SelectFormAction>(
@@ -731,7 +731,7 @@ bool View::get_previous_unread(ItemListFormAction& itemlist,
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed") == false) {
 		LOG(Level::DEBUG,
 			"View::get_previous_unread: goto-next-feed = false");
-		show_error(_("No unread items."));
+		status_line.show_error(_("No unread items."));
 	} else if (feedlist_form->jump_to_previous_unread_feed(feedpos)) {
 		LOG(Level::DEBUG,
 			"View::get_previous_unread: found feed with unread "
@@ -796,7 +796,7 @@ bool View::get_next_unread(ItemListFormAction& itemlist,
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed") == false) {
 		LOG(Level::DEBUG,
 			"View::get_next_unread: goto-next-feed = false");
-		show_error(_("No unread items."));
+		status_line.show_error(_("No unread items."));
 	} else if (feedlist_form->jump_to_next_unread_feed(feedpos)) {
 		LOG(Level::DEBUG,
 			"View::get_next_unread: found feed with unread "
@@ -831,7 +831,7 @@ bool View::get_previous(ItemListFormAction& itemlist,
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed") == false) {
 		LOG(Level::DEBUG, "View::get_previous: goto-next-feed = false");
-		show_error(_("Already on first item."));
+		status_line.show_error(_("Already on first item."));
 	} else if (feedlist_form->jump_to_previous_feed(feedpos)) {
 		LOG(Level::DEBUG, "View::get_previous: previous feed");
 		prepare_query_feed(feedlist_form->get_feed());
@@ -863,7 +863,7 @@ bool View::get_next(ItemListFormAction& itemlist, ItemViewFormAction* itemview)
 		return true;
 	} else if (cfg->get_configvalue_as_bool("goto-next-feed") == false) {
 		LOG(Level::DEBUG, "View::get_next: goto-next-feed = false");
-		show_error(_("Already on last item."));
+		status_line.show_error(_("Already on last item."));
 	} else if (feedlist_form->jump_to_next_feed(feedpos)) {
 		LOG(Level::DEBUG, "View::get_next: next feed");
 		prepare_query_feed(feedlist_form->get_feed());

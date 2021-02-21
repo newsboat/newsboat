@@ -108,7 +108,7 @@ REDO:
 				v->push_itemlist(pos);
 			} else {
 				// should not happen
-				v->show_error(_("No feed selected!"));
+				v->get_statusline().show_error(_("No feed selected!"));
 			}
 		}
 	}
@@ -120,7 +120,7 @@ REDO:
 		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
 			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No feed selected!")); // should not happen
 		}
 	}
@@ -235,16 +235,16 @@ REDO:
 				exit_code = open_unread_items_in_browser(feed, false);
 
 				if (!exit_code.has_value()) {
-					v->show_error(_("Failed to spawn browser"));
+					v->get_statusline().show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"),
+					v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
 							*exit_code));
 					return false;
 				}
 			}
 		} else {
-			v->show_error(_("No feed selected!"));
+			v->get_statusline().show_error(_("No feed selected!"));
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
@@ -265,10 +265,11 @@ REDO:
 				exit_code = open_unread_items_in_browser(feed, true);
 
 				if (!exit_code.has_value()) {
-					v->show_error(_("Failed to spawn browser"));
+					v->get_statusline().show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-					v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+					v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+							*exit_code));
 					return false;
 				}
 
@@ -307,12 +308,12 @@ REDO:
 					list.set_position(pos + 1);
 				}
 			} catch (const DbException& e) {
-				v->show_error(strprintf::fmt(
+				v->get_statusline().show_error(strprintf::fmt(
 						_("Error: couldn't mark feed read: %s"),
 						e.what()));
 			}
 		} else {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("No feed selected!")); // should not happen
 		}
 	}
@@ -333,7 +334,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to next unread feed");
 		if (!jump_to_next_unread_feed(local_tmp)) {
-			v->show_error(_("No feeds with unread items."));
+			v->get_statusline().show_error(_("No feeds with unread items."));
 		}
 	}
 	break;
@@ -342,7 +343,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to previous unread feed");
 		if (!jump_to_previous_unread_feed(local_tmp)) {
-			v->show_error(_("No feeds with unread items."));
+			v->get_statusline().show_error(_("No feeds with unread items."));
 		}
 	}
 	break;
@@ -350,7 +351,7 @@ REDO:
 		unsigned int local_tmp;
 		LOG(Level::INFO, "FeedListFormAction: jumping to next feed");
 		if (!jump_to_next_feed(local_tmp)) {
-			v->show_error(_("Already on last feed."));
+			v->get_statusline().show_error(_("Already on last feed."));
 		}
 	}
 	break;
@@ -359,7 +360,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to previous feed");
 		if (!jump_to_previous_feed(local_tmp)) {
-			v->show_error(_("Already on first feed."));
+			v->get_statusline().show_error(_("Already on first feed."));
 		}
 	}
 	break;
@@ -368,7 +369,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to random unread feed");
 		if (!jump_to_random_unread_feed(local_tmp)) {
-			v->show_error(_("No feeds with unread items."));
+			v->get_statusline().show_error(_("No feeds with unread items."));
 		}
 	}
 	break;
@@ -426,7 +427,7 @@ REDO:
 				filterhistory.add_line(newfilter);
 				if (newfilter.length() > 0) {
 					if (!matcher.parse(newfilter)) {
-						v->show_error(strprintf::fmt(
+						v->get_statusline().show_error(strprintf::fmt(
 								_("Error: couldn't "
 									"parse filter "
 									"command `%s': %s"),
@@ -440,7 +441,7 @@ REDO:
 				}
 			}
 		} else {
-			v->show_error(_("No filters defined."));
+			v->get_statusline().show_error(_("No filters defined."));
 		}
 		break;
 	case OP_SEARCH:
@@ -528,19 +529,19 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 	bool interactive) const
 {
 	if (visible_feeds.empty()) {
-		v->show_error(_("No feed selected!"));
+		v->get_statusline().show_error(_("No feed selected!"));
 		return false;
 	}
 
 	std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
 			pos);
 	if (feed == nullptr) {
-		v->show_error(_("No feed selected!"));
+		v->get_statusline().show_error(_("No feed selected!"));
 		return false;
 	}
 
 	if (feed->is_query_feed()) {
-		v->show_error(_("Cannot open query feeds in the browser!"));
+		v->get_statusline().show_error(_("Cannot open query feeds in the browser!"));
 		return false;
 	}
 
@@ -568,10 +569,11 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 		const std::string feedurl = feed->rssurl();
 		const auto exit_code = v->open_in_browser(url, feedurl, interactive);
 		if (!exit_code.has_value()) {
-			v->show_error(_("Failed to spawn browser"));
+			v->get_statusline().show_error(_("Failed to spawn browser"));
 			return false;
 		} else if (*exit_code != 0) {
-			v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+			v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+					*exit_code));
 			return false;
 		}
 	}
@@ -960,7 +962,7 @@ void FeedListFormAction::op_end_setfilter()
 	filterhistory.add_line(filtertext);
 	if (filtertext.length() > 0) {
 		if (!matcher.parse(filtertext)) {
-			v->show_error(
+			v->get_statusline().show_error(
 				_("Error: couldn't parse filter command!"));
 		} else {
 			save_filterpos();
@@ -986,7 +988,7 @@ void FeedListFormAction::op_start_search()
 			items = v->get_ctrl()->search_for_items(
 					utf8searchphrase, nullptr);
 		} catch (const DbException& e) {
-			v->show_error(strprintf::fmt(
+			v->get_statusline().show_error(strprintf::fmt(
 					_("Error while searching for `%s': %s"),
 					searchphrase,
 					e.what()));
@@ -998,7 +1000,7 @@ void FeedListFormAction::op_start_search()
 			search_dummy_feed->add_items(items);
 			v->push_searchresult(search_dummy_feed, searchphrase);
 		} else {
-			v->show_error(_("No results."));
+			v->get_statusline().show_error(_("No results."));
 		}
 	}
 }
@@ -1009,12 +1011,12 @@ void FeedListFormAction::handle_cmdline_num(unsigned int idx)
 		idx <= (visible_feeds[visible_feeds.size() - 1].second + 1)) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
-			v->show_error(_("Position not visible!"));
+			v->get_statusline().show_error(_("Position not visible!"));
 		} else {
 			list.set_position(i);
 		}
 	} else {
-		v->show_error(_("Invalid position!"));
+		v->get_statusline().show_error(_("Invalid position!"));
 	}
 }
 

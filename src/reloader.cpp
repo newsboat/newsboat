@@ -124,7 +124,7 @@ void Reloader::reload(unsigned int pos,
 			LOG(Level::USERERROR, "%s", errmsg);
 		}
 	} else {
-		ctrl->get_view()->show_error(_("Error: invalid feed!"));
+		ctrl->get_view()->get_statusline().show_error(_("Error: invalid feed!"));
 	}
 }
 

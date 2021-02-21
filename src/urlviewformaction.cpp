@@ -75,7 +75,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 			const unsigned int pos = urls_list.get_position();
 			this->start_bookmark_qna("", links[pos].first, "", feed->title());
 		} else {
-			v->show_error(_("No links available!"));
+			v->get_statusline().show_error(_("No links available!"));
 		}
 	}
 	break;
@@ -127,7 +127,7 @@ void UrlViewFormAction::open_current_position_in_browser(bool interactive)
 		const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
 		v->open_in_browser(links[pos].first, feedurl, interactive);
 	} else {
-		v->show_error(_("No links available!"));
+		v->get_statusline().show_error(_("No links available!"));
 	}
 }
 
@@ -187,7 +187,7 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		if (idx < 1 || idx > links.size()) {
-			v->show_error(_("Invalid position!"));
+			v->get_statusline().show_error(_("Invalid position!"));
 		} else {
 			urls_list.set_position(idx - 1);
 		}
