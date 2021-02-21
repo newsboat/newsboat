@@ -28,7 +28,7 @@ newsboat.o: newsboat.cpp include/cache.h include/configcontainer.h \
  include/formaction.h include/history.h include/keymap.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h xlicense.h
+ include/textformatter.h include/statusline.h xlicense.h
 podboat.o: podboat.cpp config.h include/exception.h \
  include/pbcontroller.h include/colormanager.h \
  include/configactionhandler.h include/configcontainer.h \
@@ -117,7 +117,7 @@ src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
  include/feedlistformaction.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h \
+ include/htmlrenderer.h include/textformatter.h include/statusline.h \
  include/filebrowserformaction.h include/helpformaction.h \
  include/textviewwidget.h include/itemlistformaction.h \
  include/itemviewformaction.h include/logger.h include/strprintf.h \
@@ -186,7 +186,8 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/dirbrowserformaction.h include/listformatter.h \
  include/listwidget.h include/stflpp.h include/formaction.h \
  include/history.h include/keymap.h include/feedlistformaction.h \
- include/listformaction.h include/view.h include/filebrowserformaction.h
+ include/listformaction.h include/view.h include/filebrowserformaction.h \
+ include/statusline.h
 src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/dialogsformaction.h include/formaction.h include/history.h \
  include/keymap.h include/configactionhandler.h include/stflpp.h \
@@ -204,7 +205,7 @@ src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/rssignores.h include/rssitem.h include/matchable.h \
  include/dirbrowserformaction.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h
+ include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/dirbrowserformaction.o: src/dirbrowserformaction.cpp \
  include/dirbrowserformaction.h include/configcontainer.h \
  include/configactionhandler.h include/listformatter.h \
@@ -223,7 +224,7 @@ src/dirbrowserformaction.o: src/dirbrowserformaction.cpp \
  include/rssignores.h include/rssitem.h include/matchable.h \
  include/dirbrowserformaction.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h
+ include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/download.o: src/download.cpp include/download.h config.h \
  include/pbcontroller.h include/colormanager.h \
  include/configactionhandler.h include/configcontainer.h \
@@ -271,8 +272,8 @@ src/feedlistformaction.o: src/feedlistformaction.cpp \
  include/rssignores.h include/rssitem.h include/matchable.h \
  include/dirbrowserformaction.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h config.h include/dbexception.h \
- include/feedcontainer.h include/fmtstrformatter.h \
+ include/textformatter.h include/statusline.h config.h \
+ include/dbexception.h include/feedcontainer.h include/fmtstrformatter.h \
  include/listformatter.h include/logger.h include/strprintf.h \
  include/reloader.h include/rssfeed.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \
@@ -297,7 +298,7 @@ src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/rssignores.h include/rssitem.h include/matchable.h \
  include/dirbrowserformaction.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h
+ include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/utils.h \
  3rd-party/expected.hpp include/configcontainer.h \
@@ -329,7 +330,7 @@ src/formaction.o: src/formaction.cpp include/formaction.h \
  include/listformatter.h include/listwidget.h include/formaction.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h
+ include/textformatter.h include/statusline.h
 src/fslock.o: src/fslock.cpp include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/logger.h \
  config.h include/strprintf.h
@@ -351,7 +352,7 @@ src/helpformaction.o: src/helpformaction.cpp include/helpformaction.h \
  include/dirbrowserformaction.h include/listformatter.h \
  include/listwidget.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h
+ include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/history.o: src/history.cpp include/history.h include/ruststring.h
 src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h config.h include/logger.h include/strprintf.h \
@@ -386,12 +387,12 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
  include/feedlistformaction.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h config.h \
- include/controller.h include/dbexception.h include/fmtstrformatter.h \
- include/logger.h include/strprintf.h include/matcherexception.h \
- include/rssfeed.h include/utils.h 3rd-party/expected.hpp \
- include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- include/scopemeasure.h \
+ include/htmlrenderer.h include/textformatter.h include/statusline.h \
+ config.h include/controller.h include/dbexception.h \
+ include/fmtstrformatter.h include/logger.h include/strprintf.h \
+ include/matcherexception.h include/rssfeed.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h include/view.h
 src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
@@ -419,8 +420,8 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
  include/feedlistformaction.h include/filebrowserformaction.h \
- include/itemrenderer.h include/htmlrenderer.h include/logger.h \
- include/strprintf.h include/rssfeed.h include/utils.h \
+ include/statusline.h include/itemrenderer.h include/htmlrenderer.h \
+ include/logger.h include/strprintf.h include/rssfeed.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
@@ -450,7 +451,7 @@ src/listformaction.o: src/listformaction.cpp include/listformaction.h \
  include/rssignores.h include/dirbrowserformaction.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h
+ include/textformatter.h include/statusline.h
 src/listformatter.o: src/listformatter.cpp include/listformatter.h \
  include/regexmanager.h include/configactionhandler.h include/matcher.h \
  filter/FilterParser.h include/regexowner.h include/stflpp.h \
@@ -613,7 +614,7 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/listwidget.h include/stflpp.h include/formaction.h \
  include/history.h include/keymap.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h
+ include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/reloadrangethread.o: src/reloadrangethread.cpp \
  include/reloadrangethread.h include/reloader.h include/configcontainer.h \
  include/configactionhandler.h
@@ -696,7 +697,7 @@ src/selectformaction.o: src/selectformaction.cpp \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h
+ include/textformatter.h include/statusline.h
 src/statusline.o: src/statusline.cpp include/statusline.h
 src/stflpp.o: src/stflpp.cpp include/stflpp.h include/exception.h \
  include/logger.h config.h include/strprintf.h include/utils.h \
@@ -754,7 +755,8 @@ src/urlviewformaction.o: src/urlviewformaction.cpp \
  include/fileurlreader.h include/urlreader.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/dirbrowserformaction.h include/feedlistformaction.h \
- include/listformaction.h include/view.h include/filebrowserformaction.h
+ include/listformaction.h include/view.h include/filebrowserformaction.h \
+ include/statusline.h
 src/utils.o: src/utils.cpp include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
@@ -775,12 +777,13 @@ src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/formaction.h include/history.h include/keymap.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
- include/textformatter.h config.h include/dbexception.h stfl/dialogs.h \
- include/dialogsformaction.h include/emptyformaction.h stfl/empty.h \
- include/exception.h stfl/feedlist.h stfl/filebrowser.h \
- include/fmtstrformatter.h include/formaction.h stfl/help.h \
- include/helpformaction.h include/textviewwidget.h include/htmlrenderer.h \
- stfl/itemlist.h include/itemlistformaction.h stfl/itemview.h \
+ include/textformatter.h include/statusline.h config.h \
+ include/dbexception.h stfl/dialogs.h include/dialogsformaction.h \
+ include/emptyformaction.h stfl/empty.h include/exception.h \
+ stfl/feedlist.h stfl/filebrowser.h include/fmtstrformatter.h \
+ include/formaction.h stfl/help.h include/helpformaction.h \
+ include/textviewwidget.h include/htmlrenderer.h stfl/itemlist.h \
+ include/itemlistformaction.h stfl/itemview.h \
  include/itemviewformaction.h include/keymap.h include/logger.h \
  include/strprintf.h include/matcherexception.h include/regexmanager.h \
  include/reloadthread.h include/rssfeed.h include/utils.h \
@@ -873,8 +876,9 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
  include/feedlistformaction.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h 3rd-party/catch.hpp \
- include/cache.h include/configpaths.h include/cliargsparser.h \
+ include/htmlrenderer.h include/textformatter.h include/statusline.h \
+ 3rd-party/catch.hpp include/cache.h include/configpaths.h \
+ include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
  config.h include/strprintf.h include/feedlistformaction.h \
  stfl/itemlist.h include/keymap.h include/regexmanager.h \

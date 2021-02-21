@@ -65,6 +65,7 @@ View::View(Controller* c)
 	, cfg(0)
 	, keys(0)
 	, current_formaction(0)
+	, status_line(*this)
 	, rxman(c->get_regexmanager())
 	, is_inside_qna(false)
 	, is_inside_cmdline(false)
@@ -118,6 +119,11 @@ void View::set_status(const std::string& msg)
 void View::show_error(const std::string& msg)
 {
 	set_status(msg);
+}
+
+StatusLine& View::get_statusline()
+{
+	return status_line;
 }
 
 bool View::run_commands(const std::vector<MacroCmd>& commands)
