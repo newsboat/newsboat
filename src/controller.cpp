@@ -769,7 +769,7 @@ void Controller::reload_urls_file()
 {
 	const auto error_message = urlcfg->reload();
 	if (error_message.has_value()) {
-		v->set_status(error_message.value());
+		v->get_statusline().show_message(error_message.value());
 		return;
 	}
 

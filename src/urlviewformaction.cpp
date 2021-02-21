@@ -149,8 +149,6 @@ void UrlViewFormAction::prepare()
 
 void UrlViewFormAction::init()
 {
-	v->set_status("");
-
 	recalculate_widget_dimensions();
 
 	do_redraw = true;

@@ -295,7 +295,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(strprintf::fmt("  %s=%s",
+					v->get_statusline().show_message(strprintf::fmt("  %s=%s",
 							var,
 							utils::quote_if_necessary(
 								cfg->get_configvalue(
@@ -338,7 +338,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			} else {
 				v->get_ctrl()->dump_config(
 					utils::resolve_tilde(tokens[0]));
-				v->set_status(strprintf::fmt(
+				v->get_statusline().show_message(strprintf::fmt(
 						_("Saved configuration to %s"),
 						tokens[0]));
 			}
@@ -405,15 +405,15 @@ void FormAction::finished_qna(Operation op)
 	case OP_INT_BM_END: {
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
-		v->set_status(_("Saving bookmark..."));
+		v->get_statusline().show_message(_("Saving bookmark..."));
 		std::string retval = bookmark(qna_responses[0],
 				qna_responses[1],
 				qna_responses[2],
 				qna_responses[3]);
 		if (retval.length() == 0) {
-			v->set_status(_("Saved bookmark."));
+			v->get_statusline().show_message(_("Saved bookmark."));
 		} else {
-			v->set_status(
+			v->get_statusline().show_message(
 				_s("Error while saving bookmark: ") + retval);
 			LOG(Level::DEBUG,
 				"FormAction::finished_qna: error while saving "
@@ -479,15 +479,15 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			default_feed_title.empty()) {
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
-			v->set_status(_("Saving bookmark on autopilot..."));
+			v->get_statusline().show_message(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
 					new_title,
 					default_desc,
 					default_feed_title);
 			if (retval.length() == 0) {
-				v->set_status(_("Saved bookmark."));
+				v->get_statusline().show_message(_("Saved bookmark."));
 			} else {
-				v->set_status(
+				v->get_statusline().show_message(
 					_s("Error while saving bookmark: ") +
 					retval);
 				LOG(Level::DEBUG,

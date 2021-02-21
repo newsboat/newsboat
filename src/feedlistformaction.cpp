@@ -298,11 +298,13 @@ REDO:
 			"`%s'",
 			feedpos);
 		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
-			v->set_status(_("Marking feed read..."));
 			try {
-				v->get_ctrl()->mark_all_read(pos);
-				do_redraw = true;
-				v->set_status("");
+				{
+					const auto message_lifetime = v->get_statusline().show_message_until_finished(
+							_("Marking feed read..."));
+					v->get_ctrl()->mark_all_read(pos);
+					do_redraw = true;
+				}
 				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
 				if (visible_feeds.size() > (pos + 1) && show_read) {
 					list.set_position(pos + 1);
@@ -379,7 +381,8 @@ REDO:
 			v->confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "FeedListFormAction: marking all feeds read");
-			v->set_status(_("Marking all feeds read..."));
+			const auto message_lifetime = v->get_statusline().show_message_until_finished(
+					_("Marking all feeds read..."));
 			if (tag == "") {
 				v->get_ctrl()->mark_all_read("");
 			} else {
@@ -391,7 +394,6 @@ REDO:
 					v->get_ctrl()->mark_all_read(feedurl);
 				}
 			}
-			v->set_status("");
 			do_redraw = true;
 		}
 		break;
@@ -980,7 +982,8 @@ void FeedListFormAction::op_start_search()
 		"`%s'",
 		searchphrase);
 	if (searchphrase.length() > 0) {
-		v->set_status(_("Searching..."));
+		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+				_("Searching..."));
 		searchhistory.add_line(searchphrase);
 		std::vector<std::shared_ptr<RssItem>> items;
 		try {

@@ -209,12 +209,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 			rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 			switch (result.status) {
 			case EnqueueStatus::QUEUED_SUCCESSFULLY:
-				v->set_status(
+				v->get_statusline().show_message(
 					strprintf::fmt(_("Added %s to download queue."),
 						item->enclosure_url()));
 				return true;
 			case EnqueueStatus::URL_QUEUED_ALREADY:
-				v->set_status(
+				v->get_statusline().show_message(
 					strprintf::fmt(_("%s is already queued."),
 						item->enclosure_url()));
 				return true; // Not a failure, just an idempotent action
@@ -251,7 +251,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		} else {
 			try {
 				v->get_ctrl()->write_item(item, filename);
-				v->set_status(strprintf::fmt(
+				v->get_statusline().show_message(strprintf::fmt(
 						_("Saved article to %s."), filename));
 			} catch (...) {
 				v->get_statusline().show_error(strprintf::fmt(
@@ -405,10 +405,11 @@ bool ItemViewFormAction::process_operation(Operation op,
 			v->get_statusline().show_error(_("No unread items."));
 		}
 		break;
-	case OP_TOGGLEITEMREAD:
+	case OP_TOGGLEITEMREAD: {
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: setting unread and quitting");
-		v->set_status(_("Toggling read flag for article..."));
+		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+				_("Toggling read flag for article..."));
 		try {
 			item->set_unread(true);
 			v->get_ctrl()->mark_article_read(item->guid(), false);
@@ -417,9 +418,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 					_("Error while marking article as unread: %s"),
 					e.what()));
 		}
-		v->set_status("");
 		quit = true;
 		break;
+	}
 	case OP_QUIT:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: quitting");
 		quit = true;
@@ -560,7 +561,7 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 				try {
 					v->get_ctrl()->write_item(
 						item, filename);
-					v->set_status(strprintf::fmt(
+					v->get_statusline().show_message(strprintf::fmt(
 							_("Saved article to %s"),
 							filename));
 				} catch (...) {
@@ -585,7 +586,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 	case OP_INT_EDITFLAGS_END:
 		item->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(item);
-		v->set_status(_("Flags updated."));
+		v->get_statusline().show_message(_("Flags updated."));
 		do_redraw = true;
 		break;
 	case OP_INT_START_SEARCH:

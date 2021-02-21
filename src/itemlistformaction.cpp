@@ -211,8 +211,9 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_TOGGLEITEMREAD: {
 		LOG(Level::INFO, "ItemListFormAction: toggling item read at pos `%u'", itempos);
 		if (!visible_items.empty()) {
-			v->set_status(_("Toggling read flag for article..."));
 			try {
+				const auto message_lifetime = v->get_statusline().show_message_until_finished(
+						_("Toggling read flag for article..."));
 				if (automatic && args->size() > 0) {
 					if ((*args)[0] == "read") {
 						visible_items[itempos]
@@ -231,7 +232,6 @@ bool ItemListFormAction::process_operation(Operation op,
 							.first->guid(),
 							false);
 					}
-					v->set_status("");
 				} else {
 					// mark as undeleted
 					visible_items[itempos]
@@ -249,10 +249,9 @@ bool ItemListFormAction::process_operation(Operation op,
 						visible_items[itempos]
 						.first->guid(),
 						unread);
-					v->set_status("");
 				}
 			} catch (const DbException& e) {
-				v->set_status(strprintf::fmt(
+				v->get_statusline().show_error(strprintf::fmt(
 						_("Error while toggling read flag: %s"),
 						e.what()));
 			}
@@ -480,8 +479,9 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_MARKFEEDREAD:
 		LOG(Level::INFO, "ItemListFormAction: marking feed read");
-		v->set_status(_("Marking feed read..."));
 		try {
+			const auto message_lifetime = v->get_statusline().show_message_until_finished(
+					_("Marking feed read..."));
 			if (feed->rssurl() != "") {
 				v->get_ctrl()->mark_all_read(pos);
 			} else {
@@ -524,17 +524,17 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			}
 			invalidate_list();
-			v->set_status("");
 		} catch (const DbException& e) {
 			v->get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't mark feed read: %s"),
 					e.what()));
 		}
 		break;
-	case OP_MARKALLABOVEASREAD:
+	case OP_MARKALLABOVEASREAD: {
 		LOG(Level::INFO,
 			"ItemListFormAction: marking all above as read");
-		v->set_status(_("Marking all above as read..."));
+		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+				_("Marking all above as read..."));
 		if (itempos < visible_items.size()) {
 			for (unsigned int i = 0; i < itempos; ++i) {
 				if (visible_items[i].first->unread()) {
@@ -551,8 +551,8 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 			invalidate_list();
 		}
-		v->set_status("");
 		break;
+	}
 	case OP_TOGGLESHOWREAD:
 		LOG(Level::DEBUG,
 			"ItemListFormAction: toggling show-read-articles");
@@ -867,7 +867,7 @@ void ItemListFormAction::qna_end_editflags()
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
-		v->set_status(_("Flags updated."));
+		v->get_statusline().show_message(_("Flags updated."));
 		LOG(Level::DEBUG,
 			"ItemListFormAction::finished_qna: updated flags");
 		invalidate(itempos);
@@ -881,10 +881,11 @@ void ItemListFormAction::qna_start_search()
 		return;
 	}
 
-	v->set_status(_("Searching..."));
 	searchhistory.add_line(searchphrase);
 	std::vector<std::shared_ptr<RssItem>> items;
 	try {
+		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+				_("Searching..."));
 		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
 		items = v->get_ctrl()->search_for_items(
 				utf8searchphrase, feed);
@@ -1389,7 +1390,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 	} else {
 		try {
 			v->get_ctrl()->write_item(item, filename);
-			v->set_status(strprintf::fmt(
+			v->get_statusline().show_message(strprintf::fmt(
 					_("Saved article to %s"), filename));
 		} catch (...) {
 			v->get_statusline().show_error(strprintf::fmt(
