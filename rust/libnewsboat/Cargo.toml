@@ -59,6 +59,7 @@ default-features = false
 
 [dev-dependencies]
 tempfile = "3"
-# 0.9.6 fixes build failures on Nightly >=2020-04-08: https://github.com/newsboat/newsboat/issues/870
-proptest = ">=0.9.6"
+# 1.0.0 declares MSRV of 1.50.0, but it still builds with our MSRV of 1.46.0.
+# See https://github.com/newsboat/newsboat/pull/1484#issuecomment-783339867
+proptest = "=1.0.0"
 section_testing = "0.0.5"
