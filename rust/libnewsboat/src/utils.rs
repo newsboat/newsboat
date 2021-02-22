@@ -1558,7 +1558,7 @@ mod tests {
 
         let runtime = start.elapsed();
 
-        assert!(runtime < Duration::from_secs(1));
+        assert!(runtime < Duration::from_secs(10));
     }
 
     #[test]
