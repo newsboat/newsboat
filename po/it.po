@@ -259,7 +259,7 @@ msgstr "%N %V - Aiuto"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - Article '%T' (%u unread, %t total)"
-msgstr "%N %V - Articolo '%T' (%u non letti, %t in totale) - %U"
+msgstr "%N %V - Articolo '%T' (%u non letti, %t in totale)"
 
 #: src/configcontainer.cpp:303
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?"
