@@ -18,11 +18,8 @@ the Snap Store saying:
 
 This document outlines how to rebuild the snap and push it out.
 
-NOTE: these instructions are rather rough at the moment. Please polish as you
-encounter problems.
-
 You'll need:
-- a machine with Snap installed (I'm using a virtual machine running Ubuntu 18.04);
+- a machine with Snap installed (I'm using a virtual machine running Ubuntu 20.04);
 - login and password for the snap's owner account.
 
 1. Navigate to your local clone of Newsboat.
