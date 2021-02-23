@@ -546,7 +546,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 			const std::string& key = keymap.first;
 			const Operation op = keymap.second;
 			if (opdesc.op == op) {
-				descs.push_back({key, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+				descs.push_back({key, opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
 				bound_to_key = true;
 			}
 		}
