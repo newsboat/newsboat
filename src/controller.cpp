@@ -569,7 +569,7 @@ void Controller::mark_all_read(const std::string& feedurl)
 	try {
 		rsscache->mark_all_read(feedurl);
 	} catch (const DbException& e) {
-		v->show_error(strprintf::fmt(
+		v->get_statusline().show_error(strprintf::fmt(
 				_("Error: couldn't mark all feeds read: %s"),
 				e.what()));
 		return;
@@ -672,12 +672,12 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 			// All is well, nothing to be done
 			break;
 		case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
-			v->show_error(
+			v->get_statusline().show_error(
 				strprintf::fmt(_("Generated filename (%s) is used already."),
 					result.extra_info));
 			break;
 		case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
-			v->show_error(
+			v->get_statusline().show_error(
 				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
 			break;
 		}
@@ -769,7 +769,7 @@ void Controller::reload_urls_file()
 {
 	const auto error_message = urlcfg->reload();
 	if (error_message.has_value()) {
-		v->set_status(error_message.value());
+		v->get_statusline().show_message(error_message.value());
 		return;
 	}
 
@@ -945,7 +945,7 @@ void Controller::update_config()
 				strprintf::fmt("Couldn't open %s: %s",
 					cfg.get_configvalue("error-log"),
 					e.what());
-			v->show_error(msg);
+			v->get_statusline().show_error(msg);
 			std::cerr << msg << std::endl;
 		}
 	}
@@ -956,7 +956,7 @@ void Controller::load_configfile(const std::string& filename)
 	if (cfgparser.parse_file(filename)) {
 		update_config();
 	} else {
-		v->show_error(strprintf::fmt(
+		v->get_statusline().show_error(strprintf::fmt(
 				_("Error: couldn't open configuration file `%s'!"),
 				filename));
 	}

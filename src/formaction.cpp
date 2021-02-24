@@ -136,7 +136,7 @@ bool FormAction::process_op(Operation op,
 				cfg->set_configvalue(key, value);
 				return true;
 			} else {
-				v->show_error(_("usage: set <config-option> <value>"));
+				v->get_statusline().show_error(_("usage: set <config-option> <value>"));
 				return false;
 			}
 		} else {
@@ -280,7 +280,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 		tokens.erase(tokens.begin());
 		if (cmd == "set") {
 			if (tokens.empty()) {
-				v->show_error(
+				v->get_statusline().show_error(
 					_("usage: set <variable>[=<value>]"));
 			} else if (tokens.size() == 1) {
 				std::string var = tokens[0];
@@ -295,7 +295,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 						cfg->reset_to_default(var);
 						set_redraw(true);
 					}
-					v->set_status(strprintf::fmt("  %s=%s",
+					v->get_statusline().show_message(strprintf::fmt("  %s=%s",
 							var,
 							utils::quote_if_necessary(
 								cfg->get_configvalue(
@@ -310,7 +310,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 				// because some configuration value might have changed something UI-related
 				set_redraw(true);
 			} else {
-				v->show_error(
+				v->get_statusline().show_error(
 					_("usage: set <variable>[=<value>]"));
 			}
 		} else if (cmd == "q" || cmd == "quit") {
@@ -319,7 +319,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 			}
 		} else if (cmd == "source") {
 			if (tokens.empty()) {
-				v->show_error(_("usage: source <file> [...]"));
+				v->get_statusline().show_error(_("usage: source <file> [...]"));
 			} else {
 				for (const auto& token : tokens) {
 					try {
@@ -327,34 +327,34 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 							utils::resolve_tilde(
 								token));
 					} catch (const ConfigException& ex) {
-						v->show_error(ex.what());
+						v->get_statusline().show_error(ex.what());
 						break;
 					}
 				}
 			}
 		} else if (cmd == "dumpconfig") {
 			if (tokens.size() != 1) {
-				v->show_error(_("usage: dumpconfig <file>"));
+				v->get_statusline().show_error(_("usage: dumpconfig <file>"));
 			} else {
 				v->get_ctrl()->dump_config(
 					utils::resolve_tilde(tokens[0]));
-				v->set_status(strprintf::fmt(
+				v->get_statusline().show_message(strprintf::fmt(
 						_("Saved configuration to %s"),
 						tokens[0]));
 			}
 		} else if (cmd == "exec") {
 			if (tokens.size() != 1) {
-				v->show_error(_("usage: exec <operation>"));
+				v->get_statusline().show_error(_("usage: exec <operation>"));
 			} else {
 				const auto op = v->get_keymap()->get_opcode(tokens[0]);
 				if (op != OP_NIL) {
 					process_op(op);
 				} else {
-					v->show_error(_("Operation not found"));
+					v->get_statusline().show_error(_("Operation not found"));
 				}
 			}
 		} else {
-			v->show_error(strprintf::fmt(
+			v->get_statusline().show_error(strprintf::fmt(
 					_("Not a command: %s"), cmdline));
 		}
 	}
@@ -405,15 +405,15 @@ void FormAction::finished_qna(Operation op)
 	case OP_INT_BM_END: {
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
-		v->set_status(_("Saving bookmark..."));
+		v->get_statusline().show_message(_("Saving bookmark..."));
 		std::string retval = bookmark(qna_responses[0],
 				qna_responses[1],
 				qna_responses[2],
 				qna_responses[3]);
 		if (retval.length() == 0) {
-			v->set_status(_("Saved bookmark."));
+			v->get_statusline().show_message(_("Saved bookmark."));
 		} else {
-			v->set_status(
+			v->get_statusline().show_message(
 				_s("Error while saving bookmark: ") + retval);
 			LOG(Level::DEBUG,
 				"FormAction::finished_qna: error while saving "
@@ -479,15 +479,15 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			default_feed_title.empty()) {
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
-			v->set_status(_("Saving bookmark on autopilot..."));
+			v->get_statusline().show_message(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
 					new_title,
 					default_desc,
 					default_feed_title);
 			if (retval.length() == 0) {
-				v->set_status(_("Saved bookmark."));
+				v->get_statusline().show_message(_("Saved bookmark."));
 			} else {
-				v->set_status(
+				v->get_statusline().show_message(
 					_s("Error while saving bookmark: ") +
 					retval);
 				LOG(Level::DEBUG,

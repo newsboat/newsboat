@@ -173,7 +173,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			v->get_ctrl()->mark_article_read(item->guid(), true);
 		}
 	} catch (const DbException& e) {
-		v->show_error(strprintf::fmt(
+		v->get_statusline().show_error(strprintf::fmt(
 				_("Error while marking article as read: %s"),
 				e.what()));
 	}
@@ -209,27 +209,27 @@ bool ItemViewFormAction::process_operation(Operation op,
 			rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 			switch (result.status) {
 			case EnqueueStatus::QUEUED_SUCCESSFULLY:
-				v->set_status(
+				v->get_statusline().show_message(
 					strprintf::fmt(_("Added %s to download queue."),
 						item->enclosure_url()));
 				return true;
 			case EnqueueStatus::URL_QUEUED_ALREADY:
-				v->set_status(
+				v->get_statusline().show_message(
 					strprintf::fmt(_("%s is already queued."),
 						item->enclosure_url()));
 				return true; // Not a failure, just an idempotent action
 			case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
-				v->show_error(
+				v->get_statusline().show_error(
 					strprintf::fmt(_("Generated filename (%s) is used already."),
 						result.extra_info));
 				return false;
 			case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
-				v->show_error(
+				v->get_statusline().show_error(
 					strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
 				return false;
 			}
 		} else {
-			v->show_error(strprintf::fmt(
+			v->get_statusline().show_error(strprintf::fmt(
 					_("Invalid URL: '%s'"), item->enclosure_url()));
 			return false;
 		}
@@ -247,14 +247,14 @@ bool ItemViewFormAction::process_operation(Operation op,
 							item->title())));
 		}
 		if (filename == "") {
-			v->show_error(_("Aborted saving."));
+			v->get_statusline().show_error(_("Aborted saving."));
 		} else {
 			try {
 				v->get_ctrl()->write_item(item, filename);
-				v->set_status(strprintf::fmt(
+				v->get_statusline().show_message(strprintf::fmt(
 						_("Saved article to %s."), filename));
 			} catch (...) {
-				v->show_error(strprintf::fmt(
+				v->get_statusline().show_error(strprintf::fmt(
 						_("Error: couldn't write article to "
 							"file %s"),
 						filename));
@@ -339,7 +339,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			if (links.size() > 0) {
 				v->push_urlview(links, feed);
 			} else {
-				v->show_error(_("URL list empty."));
+				v->get_statusline().show_error(_("URL list empty."));
 			}
 		} else {
 			qna_responses.clear();
@@ -361,7 +361,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
-			v->show_error(_("No unread items."));
+			v->get_statusline().show_error(_("No unread items."));
 		}
 		break;
 	case OP_PREVUNREAD:
@@ -372,7 +372,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
-			v->show_error(_("No unread items."));
+			v->get_statusline().show_error(_("No unread items."));
 		}
 		break;
 	case OP_NEXT:
@@ -382,7 +382,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
-			v->show_error(_("Already on last item."));
+			v->get_statusline().show_error(_("Already on last item."));
 		}
 		break;
 	case OP_PREV:
@@ -392,7 +392,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
-			v->show_error(_("Already on first item."));
+			v->get_statusline().show_error(_("Already on first item."));
 		}
 		break;
 	case OP_RANDOMUNREAD:
@@ -402,24 +402,25 @@ bool ItemViewFormAction::process_operation(Operation op,
 			do_redraw = true;
 		} else {
 			v->pop_current_formaction();
-			v->show_error(_("No unread items."));
+			v->get_statusline().show_error(_("No unread items."));
 		}
 		break;
-	case OP_TOGGLEITEMREAD:
+	case OP_TOGGLEITEMREAD: {
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: setting unread and quitting");
-		v->set_status(_("Toggling read flag for article..."));
+		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+				_("Toggling read flag for article..."));
 		try {
 			item->set_unread(true);
 			v->get_ctrl()->mark_article_read(item->guid(), false);
 		} catch (const DbException& e) {
-			v->show_error(strprintf::fmt(
+			v->get_statusline().show_error(strprintf::fmt(
 					_("Error while marking article as unread: %s"),
 					e.what()));
 		}
-		v->set_status("");
 		quit = true;
 		break;
+	}
 	case OP_QUIT:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: quitting");
 		quit = true;
@@ -497,10 +498,11 @@ bool ItemViewFormAction::open_link_in_browser(const std::string& link,
 	const std::string feedurl = item->feedurl();
 	const auto exit_code = v->open_in_browser(link, feedurl, interactive);
 	if (!exit_code.has_value()) {
-		v->show_error(_("Failed to spawn browser"));
+		v->get_statusline().show_error(_("Failed to spawn browser"));
 		return false;
 	} else if (*exit_code != 0) {
-		v->show_error(strprintf::fmt(_("Browser returned error code %i"), *exit_code));
+		v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+				*exit_code));
 		return false;
 	}
 	return true;
@@ -554,16 +556,16 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 			std::string filename = utils::resolve_tilde(tokens[1]);
 
 			if (filename == "") {
-				v->show_error(_("Aborted saving."));
+				v->get_statusline().show_error(_("Aborted saving."));
 			} else {
 				try {
 					v->get_ctrl()->write_item(
 						item, filename);
-					v->set_status(strprintf::fmt(
+					v->get_statusline().show_message(strprintf::fmt(
 							_("Saved article to %s"),
 							filename));
 				} catch (...) {
-					v->show_error(strprintf::fmt(
+					v->get_statusline().show_error(strprintf::fmt(
 							_("Error: couldn't save "
 								"article to %s"),
 							filename));
@@ -584,7 +586,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 	case OP_INT_EDITFLAGS_END:
 		item->set_flags(qna_responses[0]);
 		v->get_ctrl()->update_flags(item);
-		v->set_status(_("Flags updated."));
+		v->get_statusline().show_message(_("Flags updated."));
 		do_redraw = true;
 		break;
 	case OP_INT_START_SEARCH:
@@ -717,7 +719,7 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 			"ItemViewFormAction::highlight_text: handle_action "
 			"failed, error = %s",
 			e.what());
-		v->show_error(_("Error: invalid regular expression!"));
+		v->get_statusline().show_error(_("Error: invalid regular expression!"));
 	}
 }
 

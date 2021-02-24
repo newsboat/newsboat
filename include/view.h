@@ -18,6 +18,7 @@
 #include "htmlrenderer.h"
 #include "keymap.h"
 #include "regexmanager.h"
+#include "statusline.h"
 #include "stflpp.h"
 
 namespace newsboat {
@@ -26,7 +27,7 @@ class ItemListFormAction;
 class ItemViewFormAction;
 class FeedListFormAction;
 
-class View {
+class View : public IStatus {
 public:
 	explicit View(Controller*);
 	~View();
@@ -38,8 +39,7 @@ public:
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds);
 	void set_keymap(KeyMap* k);
 	void set_config_container(ConfigContainer* cfgcontainer);
-	void show_error(const std::string& msg);
-	void set_status(const std::string& msg);
+	StatusLine& get_statusline();
 	Controller* get_ctrl()
 	{
 		return ctrl;
@@ -160,6 +160,10 @@ protected:
 	std::vector<std::shared_ptr<FormAction>> formaction_stack;
 	unsigned int current_formaction;
 	std::shared_ptr<FeedListFormAction> feedlist_form;
+
+	void set_status(const std::string& msg) override;
+	void show_error(const std::string& msg) override;
+	StatusLine status_line;
 
 	std::vector<std::string> tags;
 

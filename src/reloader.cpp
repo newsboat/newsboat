@@ -68,15 +68,16 @@ void Reloader::reload(unsigned int pos,
 		}
 
 		std::string errmsg;
+		std::shared_ptr<AutoDiscardMessage> message_lifetime;
 		if (!unattended) {
 			const auto max = ctrl->get_feedcontainer()->feeds_size();
 			const std::string progress = show_progress ?
 				strprintf::fmt("(%u/%u) ", pos + 1, max) :
 				"";
-			ctrl->get_view()->set_status(
-				strprintf::fmt(_("%sLoading %s..."),
-					progress,
-					utils::censor_url(oldfeed->rssurl())));
+			message_lifetime = ctrl->get_view()->get_statusline().show_message_until_finished(
+					strprintf::fmt(_("%sLoading %s..."),
+						progress,
+						utils::censor_url(oldfeed->rssurl())));
 		}
 
 		const bool ignore_dl =
@@ -90,6 +91,8 @@ void Reloader::reload(unsigned int pos,
 		parser.set_easyhandle(easyhandle);
 		LOG(Level::DEBUG, "Reloader::reload: created parser");
 		try {
+			const auto inner_message_lifetime = message_lifetime;
+			message_lifetime.reset();
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
 			std::shared_ptr<RssFeed> newfeed = parser.parse();
 			if (newfeed != nullptr) {
@@ -101,7 +104,6 @@ void Reloader::reload(unsigned int pos,
 				}
 			}
 			oldfeed->set_status(DlStatus::SUCCESS);
-			ctrl->get_view()->set_status("");
 		} catch (const DbException& e) {
 			errmsg = strprintf::fmt(
 					_("Error while retrieving %s: %s"),
@@ -120,11 +122,11 @@ void Reloader::reload(unsigned int pos,
 		}
 		if (!errmsg.empty()) {
 			oldfeed->set_status(DlStatus::DL_ERROR);
-			ctrl->get_view()->set_status(errmsg);
+			ctrl->get_view()->get_statusline().show_error(errmsg);
 			LOG(Level::USERERROR, "%s", errmsg);
 		}
 	} else {
-		ctrl->get_view()->show_error(_("Error: invalid feed!"));
+		ctrl->get_view()->get_statusline().show_error(_("Error: invalid feed!"));
 	}
 }
 
@@ -202,10 +204,6 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 	}
 
 	notify_reload_finished(unread_feeds, unread_articles);
-
-	if (!unattended) {
-		ctrl->get_view()->set_status("");
-	}
 }
 
 void Reloader::reload_range(unsigned int start,
