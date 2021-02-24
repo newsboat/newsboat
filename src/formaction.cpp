@@ -134,11 +134,26 @@ bool FormAction::process_op(Operation op,
 				const std::string key = args->at(0);
 				const std::string value = args->at(1);
 				cfg->set_configvalue(key, value);
+				set_redraw(true);
 				return true;
-			} else {
-				v->get_statusline().show_error(_("usage: set <config-option> <value>"));
-				return false;
 			}
+			if (args && args->size() == 1) {
+				std::string key = args->at(0);
+				if (key.size() >= 1 && key.back() == '!') {
+					key.pop_back();
+					cfg->toggle(key);
+					set_redraw(true);
+					return true;
+				}
+				if (key.size() >= 1 && key.back() == '&') {
+					key.pop_back();
+					cfg->reset_to_default(key);
+					set_redraw(true);
+					return true;
+				}
+			}
+			v->get_statusline().show_error(_("usage: set <config-option> <value>"));
+			return false;
 		} else {
 			LOG(Level::WARN,
 				"FormAction::process_op: got OP_INT_SET, but "
