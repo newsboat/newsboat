@@ -34,7 +34,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_OPEN,
 		"open",
 		"ENTER",
-		_("Open feed/article"),
+		translatable("Open feed/article"),
 		KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_TAGSELECT |
 		KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS | KM_DIRBROWSER
 	},
@@ -42,102 +42,102 @@ static const std::vector<OpDesc> opdescs = {
 		OP_SWITCH_FOCUS,
 		"switch-focus",
 		"TAB",
-		_("Switch focus between widgets"),
+		translatable("Switch focus between widgets"),
 		KM_FILEBROWSER | KM_DIRBROWSER
 	},
-	{OP_QUIT, "quit", "q", _("Return to previous dialog/Quit"), KM_BOTH},
+	{OP_QUIT, "quit", "q", translatable("Return to previous dialog/Quit"), KM_BOTH},
 	{
 		OP_HARDQUIT,
 		"hard-quit",
 		"Q",
-		_("Quit program, no confirmation"),
+		translatable("Quit program, no confirmation"),
 		KM_BOTH
 	},
 	{
 		OP_RELOAD,
 		"reload",
 		"r",
-		_("Reload currently selected feed"),
+		translatable("Reload currently selected feed"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
-	{OP_RELOADALL, "reload-all", "R", _("Reload all feeds"), KM_FEEDLIST},
+	{OP_RELOADALL, "reload-all", "R", translatable("Reload all feeds"), KM_FEEDLIST},
 	{
 		OP_MARKFEEDREAD,
 		"mark-feed-read",
 		"A",
-		_("Mark feed read"),
+		translatable("Mark feed read"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_MARKALLFEEDSREAD,
 		"mark-all-feeds-read",
 		"C",
-		_("Mark all feeds read"),
+		translatable("Mark all feeds read"),
 		KM_FEEDLIST
 	},
 	{
 		OP_MARKALLABOVEASREAD,
 		"mark-all-above-as-read",
 		"",
-		_("Mark all above as read"),
+		translatable("Mark all above as read"),
 		KM_ARTICLELIST
 	},
-	{OP_SAVE, "save", "s", _("Save article"), KM_ARTICLELIST | KM_ARTICLE},
-	{OP_SAVEALL, "save-all", "", _("Save articles"), KM_ARTICLELIST},
+	{OP_SAVE, "save", "s", translatable("Save article"), KM_ARTICLELIST | KM_ARTICLE},
+	{OP_SAVEALL, "save-all", "", translatable("Save articles"), KM_ARTICLELIST},
 	{
 		OP_NEXT,
 		"next",
 		"J",
-		_("Go to next entry"),
+		translatable("Go to next entry"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_DIALOGS | KM_DIRBROWSER | KM_FILEBROWSER | KM_FILTERSELECT | KM_TAGSELECT | KM_URLVIEW | KM_PODBOAT
 	},
 	{
 		OP_PREV,
 		"prev",
 		"K",
-		_("Go to previous entry"),
+		translatable("Go to previous entry"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_DIALOGS | KM_DIRBROWSER | KM_FILEBROWSER | KM_FILTERSELECT | KM_TAGSELECT | KM_URLVIEW | KM_PODBOAT
 	},
 	{
 		OP_NEXTUNREAD,
 		"next-unread",
 		"n",
-		_("Go to next unread article"),
+		translatable("Go to next unread article"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
 	},
 	{
 		OP_PREVUNREAD,
 		"prev-unread",
 		"p",
-		_("Go to previous unread article"),
+		translatable("Go to previous unread article"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
 	},
 	{
 		OP_RANDOMUNREAD,
 		"random-unread",
 		"^K",
-		_("Go to a random unread article"),
+		translatable("Go to a random unread article"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE
 	},
 	{
 		OP_OPENBROWSER_AND_MARK,
 		"open-in-browser-and-mark-read",
 		"O",
-		_("Open URL of article, or entry in URL view. Mark read"),
+		translatable("Open URL of article, or entry in URL view. Mark read"),
 		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
 		OP_OPENALLUNREADINBROWSER,
 		"open-all-unread-in-browser",
 		"",
-		_("Open all unread items of selected feed in browser"),
+		translatable("Open all unread items of selected feed in browser"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_OPENALLUNREADINBROWSER_AND_MARK,
 		"open-all-unread-in-browser-and-mark-read",
 		"",
-		_("Open all unread items of selected feed in browser and mark "
+		translatable("Open all unread items of selected feed in browser and mark "
 			"read"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
@@ -145,295 +145,295 @@ static const std::vector<OpDesc> opdescs = {
 		OP_OPENINBROWSER,
 		"open-in-browser",
 		"o",
-		_("Open URL of article, feed, or entry in URL view"),
+		translatable("Open URL of article, feed, or entry in URL view"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
 		OP_OPENINBROWSER_NONINTERACTIVE,
 		"open-in-browser-noninteractively",
 		"",
-		_("Open URL of article, feed, or entry in a browser, non-interactively"),
+		translatable("Open URL of article, feed, or entry in a browser, non-interactively"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
 		OP_HELP,
 		"help",
 		"?",
-		_("Open help dialog"),
+		translatable("Open help dialog"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_ARTICLE | KM_PODBOAT | KM_URLVIEW
 	},
 	{
 		OP_TOGGLESOURCEVIEW,
 		"toggle-source-view",
 		"^U",
-		_("Toggle source view"),
+		translatable("Toggle source view"),
 		KM_ARTICLE
 	},
 	{
 		OP_TOGGLEITEMREAD,
 		"toggle-article-read",
 		"N",
-		_("Toggle read status for article"),
+		translatable("Toggle read status for article"),
 		KM_ARTICLELIST | KM_ARTICLE
 	},
 	{
 		OP_TOGGLESHOWREAD,
 		"toggle-show-read-feeds",
 		"l",
-		_("Toggle show read feeds/articles"),
+		translatable("Toggle show read feeds/articles"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_SHOWURLS,
 		"show-urls",
 		"u",
-		_("Show URLs in current article"),
+		translatable("Show URLs in current article"),
 		KM_ARTICLE | KM_ARTICLELIST
 	},
-	{OP_CLEARTAG, "clear-tag", "^T", _("Clear current tag"), KM_FEEDLIST},
-	{OP_SETTAG, "set-tag", "t", _("Select tag"), KM_FEEDLIST},
-	{OP_SETTAG, "select-tag", "t", _("Select tag"), KM_FEEDLIST},
+	{OP_CLEARTAG, "clear-tag", "^T", translatable("Clear current tag"), KM_FEEDLIST},
+	{OP_SETTAG, "set-tag", "t", translatable("Select tag"), KM_FEEDLIST},
+	{OP_SETTAG, "select-tag", "t", translatable("Select tag"), KM_FEEDLIST},
 	{
 		OP_SEARCH,
 		"open-search",
 		"/",
-		_("Open search dialog"),
+		translatable("Open search dialog"),
 		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST | KM_ARTICLE
 	},
-	{OP_GOTO_URL, "goto-url", "#", _("Goto URL #"), KM_ARTICLE},
-	{OP_GOTO_TITLE, "goto-title", "", _("Goto item with title"), KM_FEEDLIST | KM_ARTICLELIST},
-	{OP_ENQUEUE, "enqueue", "e", _("Add download to queue"), KM_ARTICLE},
+	{OP_GOTO_URL, "goto-url", "#", translatable("Goto URL #"), KM_ARTICLE},
+	{OP_GOTO_TITLE, "goto-title", "", translatable("Goto item with title"), KM_FEEDLIST | KM_ARTICLELIST},
+	{OP_ENQUEUE, "enqueue", "e", translatable("Add download to queue"), KM_ARTICLE},
 	{
 		OP_RELOADURLS,
 		"reload-urls",
 		"^R",
-		_("Reload the list of URLs from the configuration"),
+		translatable("Reload the list of URLs from the configuration"),
 		KM_FEEDLIST
 	},
-	{OP_PB_DOWNLOAD, "pb-download", "d", _("Download file"), KM_PODBOAT},
-	{OP_PB_CANCEL, "pb-cancel", "c", _("Cancel download"), KM_PODBOAT},
+	{OP_PB_DOWNLOAD, "pb-download", "d", translatable("Download file"), KM_PODBOAT},
+	{OP_PB_CANCEL, "pb-cancel", "c", translatable("Cancel download"), KM_PODBOAT},
 	{
 		OP_PB_DELETE,
 		"pb-delete",
 		"D",
-		_("Mark download as deleted"),
+		translatable("Mark download as deleted"),
 		KM_PODBOAT
 	},
 	{
 		OP_PB_PURGE,
 		"pb-purge",
 		"P",
-		_("Purge finished and deleted downloads from queue"),
+		translatable("Purge finished and deleted downloads from queue"),
 		KM_PODBOAT
 	},
 	{
 		OP_PB_TOGGLE_DLALL,
 		"pb-toggle-download-all",
 		"a",
-		_("Toggle automatic download on/off"),
+		translatable("Toggle automatic download on/off"),
 		KM_PODBOAT
 	},
 	{
 		OP_PB_PLAY,
 		"pb-play",
 		"p",
-		_("Start player with currently selected download"),
+		translatable("Start player with currently selected download"),
 		KM_PODBOAT
 	},
 	{
 		OP_PB_MARK_FINISHED,
 		"pb-mark-as-finished",
 		"m",
-		_("Mark file as finished (not played)"),
+		translatable("Mark file as finished (not played)"),
 		KM_PODBOAT
 	},
 	{
 		OP_PB_MOREDL,
 		"pb-increase-max-dls",
 		"+",
-		_("Increase the number of concurrent downloads"),
+		translatable("Increase the number of concurrent downloads"),
 		KM_PODBOAT
 	},
 	{
 		OP_PB_LESSDL,
 		"pb-decreate-max-dls",
 		"-",
-		_("Decrease the number of concurrent downloads"),
+		translatable("Decrease the number of concurrent downloads"),
 		KM_PODBOAT
 	},
-	{OP_REDRAW, "redraw", "^L", _("Redraw screen"), KM_SYSKEYS},
-	{OP_CMDLINE, "cmdline", ":", _("Open the commandline"), KM_NEWSBOAT},
+	{OP_REDRAW, "redraw", "^L", translatable("Redraw screen"), KM_SYSKEYS},
+	{OP_CMDLINE, "cmdline", ":", translatable("Open the commandline"), KM_NEWSBOAT},
 	{
 		OP_SETFILTER,
 		"set-filter",
 		"F",
-		_("Set a filter"),
+		translatable("Set a filter"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_SELECTFILTER,
 		"select-filter",
 		"f",
-		_("Select a predefined filter"),
+		translatable("Select a predefined filter"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_CLEARFILTER,
 		"clear-filter",
 		"^F",
-		_("Clear currently set filter"),
+		translatable("Clear currently set filter"),
 		KM_FEEDLIST | KM_HELP | KM_ARTICLELIST
 	},
 	{
 		OP_BOOKMARK,
 		"bookmark",
 		"^B",
-		_("Bookmark current link/article"),
+		translatable("Bookmark current link/article"),
 		KM_ARTICLELIST | KM_ARTICLE | KM_URLVIEW
 	},
 	{
 		OP_EDITFLAGS,
 		"edit-flags",
 		"^E",
-		_("Edit flags"),
+		translatable("Edit flags"),
 		KM_ARTICLELIST | KM_ARTICLE
 	},
-	{OP_NEXTFEED, "next-feed", "j", _("Go to next feed"), KM_ARTICLELIST},
+	{OP_NEXTFEED, "next-feed", "j", translatable("Go to next feed"), KM_ARTICLELIST},
 	{
 		OP_PREVFEED,
 		"prev-feed",
 		"k",
-		_("Go to previous feed"),
+		translatable("Go to previous feed"),
 		KM_ARTICLELIST
 	},
 	{
 		OP_NEXTUNREADFEED,
 		"next-unread-feed",
 		"^N",
-		_("Go to next unread feed"),
+		translatable("Go to next unread feed"),
 		KM_ARTICLELIST
 	},
 	{
 		OP_PREVUNREADFEED,
 		"prev-unread-feed",
 		"^P",
-		_("Go to previous unread feed"),
+		translatable("Go to previous unread feed"),
 		KM_ARTICLELIST
 	},
-	{OP_MACROPREFIX, "macro-prefix", ",", _("Call a macro"), KM_NEWSBOAT},
+	{OP_MACROPREFIX, "macro-prefix", ",", translatable("Call a macro"), KM_NEWSBOAT},
 	{
 		OP_DELETE,
 		"delete-article",
 		"D",
-		_("Delete article"),
+		translatable("Delete article"),
 		KM_ARTICLELIST | KM_ARTICLE
 	},
 	{
 		OP_DELETE_ALL,
 		"delete-all-articles",
 		"^D",
-		_("Delete all articles"),
+		translatable("Delete all articles"),
 		KM_ARTICLELIST
 	},
 	{
 		OP_PURGE_DELETED,
 		"purge-deleted",
 		"$",
-		_("Purge deleted articles"),
+		translatable("Purge deleted articles"),
 		KM_ARTICLELIST
 	},
 	{
 		OP_EDIT_URLS,
 		"edit-urls",
 		"E",
-		_("Edit subscribed URLs"),
+		translatable("Edit subscribed URLs"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_CLOSEDIALOG,
 		"close-dialog",
 		"^X",
-		_("Close currently selected dialog"),
+		translatable("Close currently selected dialog"),
 		KM_DIALOGS
 	},
 	{
 		OP_VIEWDIALOGS,
 		"view-dialogs",
 		"v",
-		_("View list of open dialogs"),
+		translatable("View list of open dialogs"),
 		KM_NEWSBOAT
 	},
 	{
 		OP_NEXTDIALOG,
 		"next-dialog",
 		"^V",
-		_("Go to next dialog"),
+		translatable("Go to next dialog"),
 		KM_NEWSBOAT
 	},
 	{
 		OP_PREVDIALOG,
 		"prev-dialog",
 		"^G",
-		_("Go to previous dialog"),
+		translatable("Go to previous dialog"),
 		KM_NEWSBOAT
 	},
 	{
 		OP_PIPE_TO,
 		"pipe-to",
 		"|",
-		_("Pipe article to command"),
+		translatable("Pipe article to command"),
 		KM_ARTICLE | KM_ARTICLELIST
 	},
 	{
 		OP_SORT,
 		"sort",
 		"g",
-		_("Sort current list"),
+		translatable("Sort current list"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 	{
 		OP_REVSORT,
 		"rev-sort",
 		"G",
-		_("Sort current list (reverse)"),
+		translatable("Sort current list (reverse)"),
 		KM_FEEDLIST | KM_ARTICLELIST
 	},
 
-	{OP_OPEN_URL_1, "one", "1", _("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_2, "two", "2", _("Open URL 2"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_3, "three", "3", _("Open URL 3"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_4, "four", "4", _("Open URL 4"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_5, "five", "5", _("Open URL 5"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_6, "six", "6", _("Open URL 6"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_7, "seven", "7", _("Open URL 7"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_8, "eight", "8", _("Open URL 8"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_9, "nine", "9", _("Open URL 9"), KM_URLVIEW | KM_ARTICLE},
-	{OP_OPEN_URL_10, "zero", "0", _("Open URL 10"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_1, "one", "1", translatable("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_2, "two", "2", translatable("Open URL 2"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_3, "three", "3", translatable("Open URL 3"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_4, "four", "4", translatable("Open URL 4"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_5, "five", "5", translatable("Open URL 5"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_6, "six", "6", translatable("Open URL 6"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_7, "seven", "7", translatable("Open URL 7"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_8, "eight", "8", translatable("Open URL 8"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_9, "nine", "9", translatable("Open URL 9"), KM_URLVIEW | KM_ARTICLE},
+	{OP_OPEN_URL_10, "zero", "0", translatable("Open URL 10"), KM_URLVIEW | KM_ARTICLE},
 
-	{OP_CMD_START_1, "cmd-one", "1", _("Start cmdline with 1"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_2, "cmd-two", "2", _("Start cmdline with 2"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_3, "cmd-three", "3", _("Start cmdline with 3"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_4, "cmd-four", "4", _("Start cmdline with 4"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_5, "cmd-five", "5", _("Start cmdline with 5"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_6, "cmd-six", "6", _("Start cmdline with 6"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_7, "cmd-seven", "7", _("Start cmdline with 7"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_8, "cmd-eight", "8", _("Start cmdline with 8"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
-	{OP_CMD_START_9, "cmd-nine", "9", _("Start cmdline with 9"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_1, "cmd-one", "1", translatable("Start cmdline with 1"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_2, "cmd-two", "2", translatable("Start cmdline with 2"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_3, "cmd-three", "3", translatable("Start cmdline with 3"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_4, "cmd-four", "4", translatable("Start cmdline with 4"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_5, "cmd-five", "5", translatable("Start cmdline with 5"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_6, "cmd-six", "6", translatable("Start cmdline with 6"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_7, "cmd-seven", "7", translatable("Start cmdline with 7"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_8, "cmd-eight", "8", translatable("Start cmdline with 8"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
+	{OP_CMD_START_9, "cmd-nine", "9", translatable("Start cmdline with 9"), KM_FEEDLIST | KM_ARTICLELIST | KM_TAGSELECT | KM_FILTERSELECT},
 
-	{OP_SK_UP, "up", "UP", _("Move to the previous entry"), KM_SYSKEYS},
-	{OP_SK_DOWN, "down", "DOWN", _("Move to the next entry"), KM_SYSKEYS},
+	{OP_SK_UP, "up", "UP", translatable("Move to the previous entry"), KM_SYSKEYS},
+	{OP_SK_DOWN, "down", "DOWN", translatable("Move to the next entry"), KM_SYSKEYS},
 	{
 		OP_SK_PGUP,
 		"pageup",
 		"PPAGE",
-		_("Move to the previous page"),
+		translatable("Move to the previous page"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_PGDOWN,
 		"pagedown",
 		"NPAGE",
-		_("Move to the next page"),
+		translatable("Move to the next page"),
 		KM_SYSKEYS
 	},
 
@@ -441,14 +441,14 @@ static const std::vector<OpDesc> opdescs = {
 		OP_SK_HOME,
 		"home",
 		"HOME",
-		_("Move to the start of page/list"),
+		translatable("Move to the start of page/list"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_END,
 		"end",
 		"END",
-		_("Move to the end of page/list"),
+		translatable("Move to the end of page/list"),
 		KM_SYSKEYS
 	},
 
@@ -546,7 +546,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 			const std::string& key = keymap.first;
 			const Operation op = keymap.second;
 			if (opdesc.op == op) {
-				descs.push_back({key, opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+				descs.push_back({key, opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
 				bound_to_key = true;
 			}
 		}
@@ -555,7 +555,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 				"KeyMap::get_keymap_descriptions: found unbound function: %s context = %s",
 				opdesc.opstr,
 				context);
-			descs.push_back({"", opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+			descs.push_back({"", opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
 		}
 	}
 	return descs;
