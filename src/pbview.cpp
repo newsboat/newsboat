@@ -388,14 +388,14 @@ std::string PbView::prepare_keymaphint(KeyMapHintEntry* hints)
 
 void PbView::set_help_keymap_hint()
 {
-	KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")}, {OP_NIL, nullptr}};
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")}, {OP_NIL, nullptr}};
 	std::string keymap_hint = prepare_keymaphint(hints);
 	help_form.set("help", keymap_hint);
 }
 
 void PbView::set_dllist_keymap_hint()
 {
-	KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
 		{OP_PB_DOWNLOAD, _("Download")},
 		{OP_PB_CANCEL, _("Cancel")},
 		{OP_PB_DELETE, _("Delete")},
