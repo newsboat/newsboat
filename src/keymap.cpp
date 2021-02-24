@@ -555,7 +555,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 				"KeyMap::get_keymap_descriptions: found unbound function: %s context = %s",
 				opdesc.opstr,
 				context);
-			descs.push_back({"", opdesc.opstr, opdesc.help_text, context, opdesc.flags});
+			descs.push_back({"", opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
 		}
 	}
 	return descs;
