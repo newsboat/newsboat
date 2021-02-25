@@ -10,7 +10,7 @@ regex-rs = { path="../regex-rs" }
 
 chrono = "0.4"
 rand = "0.8"
-once_cell = "1.6.0"
+once_cell = "1.7.0"
 url = "2.2.1"
 percent-encoding = "2.0.0"
 xdg = "2.2.0"
