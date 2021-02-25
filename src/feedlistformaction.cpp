@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstring>
 #include <langinfo.h>
+#include <numeric>
 #include <sstream>
 #include <string>
 
@@ -942,6 +943,7 @@ void FeedListFormAction::update_form_title(unsigned int width)
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('u', std::to_string(count_unread_feeds()));
+	fmt.register_fmt('U', std::to_string(count_unread_articles()));
 	fmt.register_fmt('t', std::to_string(visible_feeds.size()));
 	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
 
@@ -956,6 +958,15 @@ unsigned int FeedListFormAction::count_unread_feeds()
 	[](const FeedPtrPosPair& feed) {
 		return feed.first->unread_item_count() > 0;
 	});
+}
+
+unsigned int FeedListFormAction::count_unread_articles()
+{
+	unsigned int total = 0;
+	for (const auto& feed : visible_feeds) {
+		total += feed.first->unread_item_count();
+	}
+	return total;
 }
 
 void FeedListFormAction::op_end_setfilter()
