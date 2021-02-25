@@ -284,10 +284,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 		std::string cmd = tokens[0];
 		tokens.erase(tokens.begin());
 		if (cmd == "set") {
-			if (tokens.empty()) {
-				v->get_statusline().show_error(
-					_("usage: set <variable>[=<value>]"));
-			} else if (tokens.size() == 1) {
+			if (tokens.size() == 1) {
 				const std::string var = tokens[0];
 				if (handle_single_argument_set(var)) {
 					return;
