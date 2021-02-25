@@ -103,25 +103,29 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_DELETE_ALL: {
-		ScopeMeasure m1("OP_DELETE_ALL");
+		if (!cfg->get_configvalue_as_bool("confirm-delete-all-articles") ||
+			v->confirm(_("Do you really want to delete all articles (y:Yes n:No)? "),
+				_("yn")) == *_("y")) {
+			ScopeMeasure m1("OP_DELETE_ALL");
 
-		std::vector<std::string> item_guids;
-		for (const auto& pair : visible_items) {
-			const auto item = pair.first;
-			item_guids.push_back(item->guid());
+			std::vector<std::string> item_guids;
+			for (const auto& pair : visible_items) {
+				const auto item = pair.first;
+				item_guids.push_back(item->guid());
+			}
+			v->get_ctrl()->mark_all_read(item_guids);
+
+			for (const auto& pair : visible_items) {
+				const auto item = pair.first;
+
+				// mark as read
+				item->set_unread(false);
+				// mark as deleted
+				item->set_deleted(true);
+				rsscache->mark_item_deleted(item->guid(), true);
+			}
+			invalidate_list();
 		}
-		v->get_ctrl()->mark_all_read(item_guids);
-
-		for (const auto& pair : visible_items) {
-			const auto item = pair.first;
-
-			// mark as read
-			item->set_unread(false);
-			// mark as deleted
-			item->set_deleted(true);
-			rsscache->mark_item_deleted(item->guid(), true);
-		}
-		invalidate_list();
 	}
 	break;
 	case OP_PURGE_DELETED: {

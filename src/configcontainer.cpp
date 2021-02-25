@@ -44,6 +44,7 @@ ConfigContainer::ConfigContainer()
 			ConfigDataType::PATH)},
 	{"cache-file", ConfigData("", ConfigDataType::PATH)},
 	{"cleanup-on-quit", ConfigData("yes", ConfigDataType::BOOL)},
+	{"confirm-delete-all-articles", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-mark-all-feeds-read", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-exit", ConfigData("no", ConfigDataType::BOOL)},
 	{"cookie-cache", ConfigData("", ConfigDataType::PATH)},
