@@ -664,16 +664,19 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 		std::string configline = "macro ";
 		configline.append(macro.first);
 		configline.append(" ");
-		for (unsigned int i = 0; i < macro.second.size(); ++i) {
-			const auto& cmd = macro.second[i];
+		for (unsigned int i = 0; i < macro.second.cmds.size(); ++i) {
+			const auto& cmd = macro.second.cmds[i];
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
 				configline.append(utils::quote(arg));
 			}
-			if (i < (macro.second.size() - 1)) {
+			if (i < (macro.second.cmds.size() - 1)) {
 				configline.append(" ; ");
 			}
+		}
+		if (macro.second.description.size() >= 1) {
+			configline.append(strprintf::fmt(R"( -- "%s")", macro.second.description));
 		}
 		config_output.push_back(configline);
 	}
@@ -736,18 +739,14 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
 		const auto parsed = parse_operation_sequence(remaining_params);
+		const auto description = parse_operation_description(parsed.leftovers);
 		const std::vector<MacroCmd> cmds = parsed.operations;
-		remaining_params = parsed.leftovers;
-		if (!remaining_params.empty()) {
-			LOG(Level::DEBUG,
-				"KeyMap::handle_action(macro): ignored remainder:  \"%s\"", remaining_params);
-		}
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 		const std::string macrokey = token.value();
 
-		macros_[macrokey] = cmds;
+		macros_[macrokey] = {cmds, description};
 	} else if (action == "run-on-startup") {
 		startup_operations_sequence = parse_operation_sequence(params).operations;
 	} else {
@@ -816,7 +815,7 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
 	if (macros_.count(key) >= 1) {
-		return macros_.at(key);
+		return macros_.at(key).cmds;
 	}
 	return {};
 }

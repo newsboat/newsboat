@@ -171,6 +171,11 @@ struct MacroCmd {
 	std::vector<std::string> args;
 };
 
+struct MacroBinding {
+	std::vector<MacroCmd> cmds;
+	std::string description;
+};
+
 struct ParsedOperations {
 	std::vector<MacroCmd> operations;
 	std::string leftovers;
@@ -206,7 +211,7 @@ private:
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
-	std::map<std::string, std::vector<MacroCmd>> macros_;
+	std::map<std::string, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };
 
