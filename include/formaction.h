@@ -45,6 +45,7 @@ public:
 	void recalculate_widget_dimensions();
 
 	virtual void handle_cmdline(const std::string& cmd);
+	bool handle_single_argument_set(std::string argument);
 
 	bool process_op(Operation op,
 		bool automatic = false,
