@@ -134,11 +134,16 @@ bool FormAction::process_op(Operation op,
 				const std::string key = args->at(0);
 				const std::string value = args->at(1);
 				cfg->set_configvalue(key, value);
+				set_redraw(true);
 				return true;
-			} else {
-				v->get_statusline().show_error(_("usage: set <config-option> <value>"));
-				return false;
 			}
+			if (args && args->size() == 1) {
+				if (handle_single_argument_set(args->at(0))) {
+					return true;
+				}
+			}
+			v->get_statusline().show_error(_("usage: set <config-option> <value>"));
+			return false;
 		} else {
 			LOG(Level::WARN,
 				"FormAction::process_op: got OP_INT_SET, but "
@@ -279,32 +284,16 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 		std::string cmd = tokens[0];
 		tokens.erase(tokens.begin());
 		if (cmd == "set") {
-			if (tokens.empty()) {
-				v->get_statusline().show_error(
-					_("usage: set <variable>[=<value>]"));
-			} else if (tokens.size() == 1) {
-				std::string var = tokens[0];
-				if (var.length() > 0) {
-					if (var[var.length() - 1] == '!') {
-						var.erase(var.length() - 1);
-						cfg->toggle(var);
-						set_redraw(true);
-					} else if (var[var.length() - 1] ==
-						'&') {
-						var.erase(var.length() - 1);
-						cfg->reset_to_default(var);
-						set_redraw(true);
-					}
-					v->get_statusline().show_message(strprintf::fmt("  %s=%s",
-							var,
-							utils::quote_if_necessary(
-								cfg->get_configvalue(
-									var))));
+			if (tokens.size() == 1) {
+				const std::string var = tokens[0];
+				if (handle_single_argument_set(var)) {
+					return;
 				}
+				v->get_statusline().show_message(strprintf::fmt("  %s=%s",
+						var,
+						utils::quote_if_necessary(cfg->get_configvalue(var))));
 			} else if (tokens.size() == 2) {
-				std::string result =
-					ConfigParser::evaluate_backticks(
-						tokens[1]);
+				std::string result = ConfigParser::evaluate_backticks(tokens[1]);
 				utils::trim_end(result);
 				cfg->set_configvalue(tokens[0], result);
 				// because some configuration value might have changed something UI-related
@@ -358,6 +347,23 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 					_("Not a command: %s"), cmdline));
 		}
 	}
+}
+
+bool FormAction::handle_single_argument_set(std::string argument)
+{
+	if (argument.size() >= 1 && argument.back() == '!') {
+		argument.pop_back();
+		cfg->toggle(argument);
+		set_redraw(true);
+		return true;
+	}
+	if (argument.size() >= 1 && argument.back() == '&') {
+		argument.pop_back();
+		cfg->reset_to_default(argument);
+		set_redraw(true);
+		return true;
+	}
+	return false;
 }
 
 void FormAction::start_qna(const std::vector<QnaPair>& prompts,
