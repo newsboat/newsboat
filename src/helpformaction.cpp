@@ -126,14 +126,28 @@ void HelpFormAction::prepare()
 			return line;
 		};
 
-		for (unsigned int i = 0; i < 3; i++) {
+		for (const auto& desc : descs) {
+			if (desc.key.length() == 0 || desc.flags & KM_SYSKEYS) {
+				continue;
+			}
+			if (should_be_visible(desc)) {
+				auto line = strprintf::fmt("%-15s %-23s %s", desc.key, desc.cmd, desc.desc);
+				line = utils::quote_for_stfl(line);
+				line = apply_highlights(line);
+				listfmt.add_line(line);
+			}
+		}
+
+		if (syskey_count > 0) {
+			listfmt.add_line("");
+			listfmt.add_line(_("Generic bindings:"));
+			listfmt.add_line("");
+		}
+
+		for (unsigned int i = 1; i < 3; i++) {
 			for (const auto& desc : descs) {
 				bool hide_description = false;
 				switch (i) {
-				case 0:
-					hide_description = (desc.key.length() == 0 ||
-							desc.flags & KM_SYSKEYS);
-					break;
 				case 1:
 					hide_description = !(desc.flags & KM_SYSKEYS);
 					break;
@@ -151,7 +165,6 @@ void HelpFormAction::prepare()
 				if (should_be_visible(desc)) {
 					std::string line;
 					switch (i) {
-					case 0:
 					case 1:
 						line = strprintf::fmt(
 								"%-15s %-23s %s",
@@ -182,14 +195,6 @@ void HelpFormAction::prepare()
 				}
 			}
 			switch (i) {
-			case 0:
-				if (syskey_count > 0) {
-					listfmt.add_line("");
-					listfmt.add_line(
-						_("Generic bindings:"));
-					listfmt.add_line("");
-				}
-				break;
 			case 1:
 				if (unbound_count > 0) {
 					listfmt.add_line("");
