@@ -130,8 +130,7 @@ void HelpFormAction::prepare()
 					condition = true;
 					break;
 				}
-				if (context.length() > 0 &&
-					(desc.ctx != context || condition)) {
+				if (condition) {
 					continue;
 				}
 				if (!apply_search ||
