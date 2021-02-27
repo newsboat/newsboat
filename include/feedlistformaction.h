@@ -54,6 +54,7 @@ private:
 	void update_form_title(unsigned int width);
 
 	unsigned int count_unread_feeds();
+	unsigned int count_unread_articles();
 
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
