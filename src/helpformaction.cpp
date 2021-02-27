@@ -112,6 +112,20 @@ void HelpFormAction::prepare()
 			return desc.flags & KM_SYSKEYS;
 		});
 
+		const auto should_be_visible = [&](const KeyMapDesc& desc) {
+			return !apply_search
+				|| strcasestr(desc.key.c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(desc.cmd.c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
+		};
+
+		const auto apply_highlights = [&](const std::string& line) {
+			if (apply_search && searchphrase.length() > 0) {
+				return utils::replace_all(line, searchphrase, highlighted_searchphrase);
+			}
+			return line;
+		};
+
 		for (unsigned int i = 0; i < 3; i++) {
 			for (const auto& desc : descs) {
 				bool hide_description = false;
@@ -134,16 +148,7 @@ void HelpFormAction::prepare()
 				if (hide_description) {
 					continue;
 				}
-				if (!apply_search ||
-					strcasestr(desc.key.c_str(),
-						searchphrase.c_str()) !=
-					nullptr ||
-					strcasestr(desc.cmd.c_str(),
-						searchphrase.c_str()) !=
-					nullptr ||
-					strcasestr(desc.desc.c_str(),
-						searchphrase.c_str()) !=
-					nullptr) {
+				if (should_be_visible(desc)) {
 					std::string line;
 					switch (i) {
 					case 0:
@@ -172,17 +177,7 @@ void HelpFormAction::prepare()
 						"step 2 "
 						"- line = %s",
 						line);
-					if (apply_search &&
-						searchphrase.length() > 0) {
-						line = utils::replace_all(line,
-								searchphrase,
-								highlighted_searchphrase);
-						LOG(Level::DEBUG,
-							"HelpFormAction::"
-							"prepare: "
-							"step 3 - line = %s",
-							line);
-					}
+					line = apply_highlights(line);
 					listfmt.add_line(line);
 				}
 			}
