@@ -142,67 +142,36 @@ void HelpFormAction::prepare()
 			listfmt.add_line("");
 			listfmt.add_line(_("Generic bindings:"));
 			listfmt.add_line("");
-		}
 
-		for (unsigned int i = 1; i < 3; i++) {
 			for (const auto& desc : descs) {
-				bool hide_description = false;
-				switch (i) {
-				case 1:
-					hide_description = !(desc.flags & KM_SYSKEYS);
-					break;
-				case 2:
-					hide_description = (desc.key.length() > 0 ||
-							desc.flags & KM_SYSKEYS);
-					break;
-				default:
-					hide_description = true;
-					break;
-				}
-				if (hide_description) {
+				if (!(desc.flags & KM_SYSKEYS)) {
 					continue;
 				}
 				if (should_be_visible(desc)) {
-					std::string line;
-					switch (i) {
-					case 1:
-						line = strprintf::fmt(
-								"%-15s %-23s %s",
-								desc.key,
-								desc.cmd,
-								desc.desc);
-						break;
-					case 2:
-						line = strprintf::fmt(
-								"%-39s %s",
-								desc.cmd,
-								desc.desc);
-						break;
-					}
-					LOG(Level::DEBUG,
-						"HelpFormAction::prepare: "
-						"step 1 "
-						"- line = %s",
-						line);
+					auto line = strprintf::fmt("%-15s %-23s %s", desc.key, desc.cmd, desc.desc);
 					line = utils::quote_for_stfl(line);
-					LOG(Level::DEBUG,
-						"HelpFormAction::prepare: "
-						"step 2 "
-						"- line = %s",
-						line);
 					line = apply_highlights(line);
 					listfmt.add_line(line);
 				}
 			}
-			switch (i) {
-			case 1:
-				if (unbound_count > 0) {
-					listfmt.add_line("");
-					listfmt.add_line(
-						_("Unbound functions:"));
-					listfmt.add_line("");
+		}
+
+		if (unbound_count > 0) {
+			listfmt.add_line("");
+			listfmt.add_line(
+				_("Unbound functions:"));
+			listfmt.add_line("");
+
+			for (const auto& desc : descs) {
+				if (desc.key.length() > 0 || desc.flags & KM_SYSKEYS) {
+					continue;
 				}
-				break;
+				if (should_be_visible(desc)) {
+					std::string line = strprintf::fmt("%-39s %s", desc.cmd, desc.desc);
+					line = utils::quote_for_stfl(line);
+					line = apply_highlights(line);
+					listfmt.add_line(line);
+				}
 			}
 		}
 
