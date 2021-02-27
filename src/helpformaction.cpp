@@ -107,10 +107,10 @@ void HelpFormAction::prepare()
 
 		for (unsigned int i = 0; i < 3; i++) {
 			for (const auto& desc : descs) {
-				bool condition;
+				bool hide_description = false;
 				switch (i) {
 				case 0:
-					condition = (desc.key.length() == 0 ||
+					hide_description = (desc.key.length() == 0 ||
 							desc.flags & KM_SYSKEYS);
 					if (desc.key.length() == 0) {
 						unbound_count++;
@@ -120,17 +120,17 @@ void HelpFormAction::prepare()
 					}
 					break;
 				case 1:
-					condition = !(desc.flags & KM_SYSKEYS);
+					hide_description = !(desc.flags & KM_SYSKEYS);
 					break;
 				case 2:
-					condition = (desc.key.length() > 0 ||
+					hide_description = (desc.key.length() > 0 ||
 							desc.flags & KM_SYSKEYS);
 					break;
 				default:
-					condition = true;
+					hide_description = true;
 					break;
 				}
-				if (condition) {
+				if (hide_description) {
 					continue;
 				}
 				if (!apply_search ||
