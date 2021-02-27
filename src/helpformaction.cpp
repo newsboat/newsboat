@@ -1,5 +1,6 @@
 #include "helpformaction.h"
 
+#include <algorithm>
 #include <cstring>
 #include <sstream>
 
@@ -102,8 +103,14 @@ void HelpFormAction::prepare()
 		set_value("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
 
-		unsigned int unbound_count = 0;
-		unsigned int syskey_count = 0;
+		const unsigned int unbound_count = std::count_if(descs.begin(),
+		descs.end(), [](const KeyMapDesc& desc) {
+			return desc.key.length() == 0;
+		});
+		const unsigned int syskey_count = std::count_if(descs.begin(),
+		descs.end(), [](const KeyMapDesc& desc) {
+			return desc.flags & KM_SYSKEYS;
+		});
 
 		for (unsigned int i = 0; i < 3; i++) {
 			for (const auto& desc : descs) {
@@ -112,12 +119,6 @@ void HelpFormAction::prepare()
 				case 0:
 					hide_description = (desc.key.length() == 0 ||
 							desc.flags & KM_SYSKEYS);
-					if (desc.key.length() == 0) {
-						unbound_count++;
-					}
-					if (desc.flags & KM_SYSKEYS) {
-						syskey_count++;
-					}
 					break;
 				case 1:
 					hide_description = !(desc.flags & KM_SYSKEYS);
