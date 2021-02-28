@@ -130,17 +130,39 @@ void render_html(
 	}
 }
 
+void render_plaintext(
+	const std::string& source,
+	std::vector<std::pair<LineType, std::string>>& lines)
+{
+	std::string::size_type pos = 0;
+	while (pos < source.size()) {
+		const auto end_of_line = source.find_first_of("\r\n", pos);
+		const std::string line = source.substr(pos, end_of_line - pos);
+		lines.push_back(std::make_pair(LineType::wrappable, line));
+		if (end_of_line == std::string::npos) {
+			break;
+		}
+		pos = end_of_line + 1;
+	}
+}
+
 std::string item_renderer::to_plain_text(
 	ConfigContainer& cfg,
 	std::shared_ptr<RssItem> item)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
+	const auto item_description = item->description();
 
 	prepare_header(item, lines, links, true);
 	const auto base = get_item_base_link(item);
-	render_html(cfg, utils::utf8_to_locale(item->description().text), lines, links,
-		base, true);
+	const auto body = utils::utf8_to_locale(item_description.text);
+
+	if (item_description.mime == "text/plain") {
+		render_plaintext(body, lines);
+	} else {
+		render_html(cfg, body, lines, links, base, true);
+	}
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -163,11 +185,17 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	std::vector<LinkPair>& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
+	const auto item_description = item->description();
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);
-	const auto body = utils::utf8_to_locale(item->description().text);
-	render_html(cfg, body, lines, links, baseurl, false);
+	const auto body = utils::utf8_to_locale(item_description.text);
+
+	if (item_description.mime == "text/plain") {
+		render_plaintext(body, lines);
+	} else {
+		render_html(cfg, body, lines, links, baseurl, false);
+	}
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
