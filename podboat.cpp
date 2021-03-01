@@ -22,8 +22,11 @@ int main(int argc, char* argv[])
 	setlocale(LC_CTYPE, "");
 	setlocale(LC_MESSAGES, "");
 
-	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	// Internally, Newsboat stores all strings in UTF-8, so we require gettext
+	// to return messages in that encoding.
+	bind_textdomain_codeset(PACKAGE, "UTF-8");
 
 	PbController c;
 
