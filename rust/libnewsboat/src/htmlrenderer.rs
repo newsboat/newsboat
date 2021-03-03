@@ -10,6 +10,9 @@ pub enum LinkType {
     /// HTML `<embed>`
     Embed,
 
+    /// HTML `<iframe>`
+    Iframe,
+
     /// HTML `<video>`
     Video,
 

@@ -13,11 +13,12 @@ namespace newsboat {
 class TagSoupPullParser;
 
 // This enum has to be kept in sync with enum LinkType in rust/libnewsboat/src/htmlrenderer.rs
-enum class LinkType { HREF, IMG, EMBED, VIDEO, AUDIO };
+enum class LinkType { HREF, IMG, EMBED, IFRAME, VIDEO, AUDIO };
 
 enum class HtmlTag {
 	A = 1,
 	EMBED,
+	IFRAME,
 	BR,
 	PRE,
 	ITUNESHACK,
@@ -139,7 +140,8 @@ private:
 	std::string get_roman_numbering(unsigned int count);
 	void add_media_link(std::string& line, std::vector<LinkPair>& links,
 		const std::string& url, const std::string& media_url,
-		unsigned int media_count, LinkType type);
+		const std::string& media_title, unsigned int media_count,
+		LinkType type);
 	HtmlTag extract_tag(TagSoupPullParser& parser);
 	bool raw_;
 };
