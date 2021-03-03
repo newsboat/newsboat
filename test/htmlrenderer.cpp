@@ -369,6 +369,66 @@ TEST_CASE("<embed>s are ignored if `type' is not set", "[HtmlRenderer]")
 	REQUIRE(links.size() == 0);
 }
 
+TEST_CASE("<iframe>s are added to links if `src' is set", "[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input(
+		"<iframe src=\"https://www.youtube.com/embed/0123456789A\""
+		"        width=\"640\" height=\"360\"></iframe>");
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[iframe 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: https://www.youtube.com/embed/0123456789A (iframe)"));
+	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].first == "https://www.youtube.com/embed/0123456789A");
+	REQUIRE(links[0].second == LinkType::IFRAME);
+}
+
+TEST_CASE("<iframe>s are rendered with a title if `title' is set",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input(
+		"<iframe src=\"https://www.youtube.com/embed/0123456789A\""
+		"        title=\"My Video\" width=\"640\" height=\"360\"></iframe>");
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable,
+			"[iframe 1: My Video (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: https://www.youtube.com/embed/0123456789A (iframe)"));
+	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].first == "https://www.youtube.com/embed/0123456789A");
+	REQUIRE(links[0].second == LinkType::IFRAME);
+}
+
+TEST_CASE("<iframe>s are ignored if `src' is not set", "[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input(
+		"<iframe width=\"640\" height=\"360\"></iframe>");
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
+	REQUIRE(lines.size() == 0);
+	REQUIRE(links.size() == 0);
+}
+
 TEST_CASE("spaces and line breaks are preserved inside <pre>", "[HtmlRenderer]")
 {
 	HtmlRenderer r;

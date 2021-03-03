@@ -22,6 +22,7 @@ HtmlRenderer::HtmlRenderer(bool raw)
 {
 	tags["a"] = HtmlTag::A;
 	tags["embed"] = HtmlTag::EMBED;
+	tags["iframe"] = HtmlTag::IFRAME;
 	tags["br"] = HtmlTag::BR;
 	tags["pre"] = HtmlTag::PRE;
 	tags["ituneshack"] = HtmlTag::ITUNESHACK;
@@ -108,6 +109,7 @@ void HtmlRenderer::render(std::istream& input,
 	unsigned int video_count = 0;
 	unsigned int audio_count = 0;
 	unsigned int source_count = 0;
+	unsigned int iframe_count = 0;
 	std::string curline;
 	int indent_level = 0;
 	std::vector<HtmlTag> list_elements_stack;
@@ -238,6 +240,48 @@ void HtmlRenderer::render(std::istream& input,
 								_("embedded flash:"),
 								link_num));
 					}
+				}
+			}
+			break;
+
+			case HtmlTag::IFRAME: {
+				std::string iframe_url;
+				std::string iframe_title;
+				try {
+					iframe_url = xpp.get_attribute_value("src");
+				} catch (const std::invalid_argument&) {
+					LOG(Level::WARN,
+						"HtmlRenderer::render: "
+						"found iframe tag without src attribute");
+					iframe_url = "";
+				}
+				try {
+					iframe_title = xpp.get_attribute_value("title");
+				} catch (const std::invalid_argument&) {
+					iframe_title = "";
+				}
+				if (iframe_url.length() > 0) {
+					add_nonempty_line(curline, tables, lines);
+					if (lines.size() > 0) {
+						std::string::size_type last_line_len =
+							lines[lines.size() - 1]
+							.second.length();
+						if (last_line_len >
+							static_cast<unsigned int>(
+								indent_level * 2)) {
+							add_line("", tables, lines);
+						}
+					}
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
+
+					iframe_count++;
+
+					add_media_link(curline, links, url, iframe_url,
+						iframe_title, iframe_count, LinkType::IFRAME);
+					add_line(curline, tables, lines);
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
 				}
 			}
 			break;
@@ -557,7 +601,7 @@ void HtmlRenderer::render(std::istream& input,
 
 				video_count++;
 				inside_video = true;
-				add_media_link(curline, links, url, videourl,
+				add_media_link(curline, links, url, videourl, "",
 					video_count, LinkType::VIDEO);
 			}
 			break;
@@ -590,7 +634,7 @@ void HtmlRenderer::render(std::istream& input,
 
 				audio_count++;
 				inside_audio = true;
-				add_media_link(curline, links, url, audiourl,
+				add_media_link(curline, links, url, audiourl, "",
 					audio_count, LinkType::AUDIO);
 			}
 			break;
@@ -609,13 +653,13 @@ void HtmlRenderer::render(std::istream& input,
 
 				if (inside_video) {
 					add_media_link(curline, links, url,
-						sourceurl, video_count,
+						sourceurl, "", video_count,
 						LinkType::VIDEO);
 				}
 
 				if (inside_audio) {
 					add_media_link(curline, links, url,
-						sourceurl, audio_count,
+						sourceurl, "", audio_count,
 						LinkType::AUDIO);
 				}
 			}
@@ -771,6 +815,7 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::EMBED:
+			case HtmlTag::IFRAME:
 			case HtmlTag::BR:
 			case HtmlTag::ITUNESHACK:
 			case HtmlTag::IMG:
@@ -982,7 +1027,8 @@ void HtmlRenderer::render(std::istream& input,
 
 void HtmlRenderer::add_media_link(std::string& curline,
 	std::vector<LinkPair>& links, const std::string& url,
-	const std::string& media_url, unsigned int media_count, LinkType type)
+	const std::string& media_url, const std::string& media_title,
+	unsigned int media_count, LinkType type)
 {
 	if (media_url.empty()) {
 		return;
@@ -992,9 +1038,16 @@ void HtmlRenderer::add_media_link(std::string& curline,
 	unsigned int link_num = add_link(links,
 			utils::censor_url(utils::absolute_url(url, media_url)),
 			type);
+	std::string output;
 
-	curline.append(strprintf::fmt("[%s %u (%s #%u)]", _(type_str.c_str()),
-			media_count, _("link"), link_num));
+	if (!media_title.empty()) {
+		output = strprintf::fmt("[%s %u: %s (%s #%u)]", _(type_str.c_str()),
+				media_count, media_title, _("link"), link_num);
+	} else {
+		output = strprintf::fmt("[%s %u (%s #%u)]", _(type_str.c_str()),
+				media_count, _("link"), link_num);
+	}
+	curline.append(output);
 }
 
 std::string HtmlRenderer::render_hr(const unsigned int width)
@@ -1015,6 +1068,8 @@ std::string HtmlRenderer::type2str(LinkType type)
 		return _("image");
 	case LinkType::EMBED:
 		return _("embedded flash");
+	case LinkType::IFRAME:
+		return _("iframe");
 	case LinkType::VIDEO:
 		return _("video");
 	case LinkType::AUDIO:
