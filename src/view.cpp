@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <libgen.h>
+#include <limits.h>
 #include <ncurses.h>
 #include <pwd.h>
 #include <string.h>
@@ -177,7 +178,7 @@ int View::run()
 		fa->prepare();
 
 		// we then receive the event and ignore timeouts.
-		const std::string event = fa->draw_form_wait_for_event(60000);
+		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -253,7 +254,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
-		const std::string event = fa->draw_form_wait_for_event(1000);
+		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 		if (event.empty() || event == "TIMEOUT") {
 			continue;
