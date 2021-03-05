@@ -304,50 +304,26 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::IMG: {
-				std::string imgurl;
-				std::string imgtitle;
+				std::string img_url;
+				std::string img_title;
 				try {
-					imgurl = xpp.get_attribute_value("src");
+					img_url = xpp.get_attribute_value("src");
+					image_count++;
 				} catch (const std::invalid_argument&) {
 					LOG(Level::WARN,
 						"HtmlRenderer::render: found "
 						"img "
 						"tag with no src attribute");
-					imgurl = "";
+					img_url = "";
 				}
 				try {
-					imgtitle = xpp.get_attribute_value(
+					img_title = xpp.get_attribute_value(
 							"title");
 				} catch (const std::invalid_argument&) {
-					imgtitle = "";
+					img_title = "";
 				}
-				if (imgurl.length() > 0) {
-					if (imgurl.substr(0, 5) == "data:") {
-						link_num = add_link(links,
-								"inline image",
-								LinkType::IMG);
-					} else {
-						link_num = add_link(links,
-								utils::censor_url(
-									utils::absolute_url(
-										url,
-										imgurl)),
-								LinkType::IMG);
-					}
-					if (imgtitle != "") {
-						curline.append(strprintf::fmt(
-								"[%s %u: %s]",
-								_("image"),
-								link_num,
-								imgtitle));
-					} else {
-						curline.append(strprintf::fmt(
-								"[%s %u]",
-								_("image"),
-								link_num));
-					}
-					image_count++;
-				}
+				add_media_link(curline, links, url, img_url,
+					img_title, image_count, LinkType::IMG);
 			}
 			break;
 
@@ -1034,10 +1010,17 @@ void HtmlRenderer::add_media_link(std::string& curline,
 		return;
 	}
 
-	std::string type_str = type2str(type);
-	unsigned int link_num = add_link(links,
-			utils::censor_url(utils::absolute_url(url, media_url)),
-			type);
+	std::string link_url;
+
+	// Display media_url except if it's an inline image
+	if (type == LinkType::IMG && media_url.substr(0, 5) == "data:") {
+		link_url = "inline image";
+	} else {
+		link_url = utils::censor_url(utils::absolute_url(url, media_url));
+	}
+
+	const std::string type_str = type2str(type);
+	const unsigned int link_num = add_link(links, link_url, type);
 	std::string output;
 
 	if (!media_title.empty()) {
