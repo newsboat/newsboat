@@ -48,7 +48,7 @@ jobs:
       - name: Install Rust
         uses: ATiltedTree/setup-rust@v1
         with:
-          rust-version: nightly
+          rust-version: nightly-2021-03-04
 
       - uses: actions/checkout@v2
 
