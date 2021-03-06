@@ -550,7 +550,56 @@ TEST_CASE(
 	REQUIRE(links.size() == 1);
 }
 
-TEST_CASE("title is mentioned in placeholder if <img> has `title'",
+TEST_CASE("alt is mentioned in placeholder if <img> has `alt'",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<img src='http://example.com/image.png'"
+		"alt='Just a test image'></img>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable,
+			"[image 1: Just a test image (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: http://example.com/image.png (image)"));
+	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].first == "http://example.com/image.png");
+	REQUIRE(links[0].second == LinkType::IMG);
+}
+
+TEST_CASE("alt is mentioned in placeholder if <img> has `alt' and `title",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<img src='http://example.com/image.png'"
+		"alt='Just a test image' title='Image title'></img>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable,
+			"[image 1: Just a test image (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: http://example.com/image.png (image)"));
+	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].first == "http://example.com/image.png");
+	REQUIRE(links[0].second == LinkType::IMG);
+}
+
+TEST_CASE(
+	"title is mentioned in placeholder if <img> has `title' but not `alt'",
 	"[HtmlRenderer]")
 {
 	HtmlRenderer r;
@@ -591,7 +640,7 @@ TEST_CASE(
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1 (link #1)]"));
+	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1: Red dot (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
 	REQUIRE(lines[3] ==
