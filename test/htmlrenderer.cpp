@@ -485,7 +485,7 @@ TEST_CASE("<img> results in a placeholder and a link", "[HtmlRenderer]")
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1]"));
+	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
 	REQUIRE(lines[3] ==
@@ -494,6 +494,37 @@ TEST_CASE("<img> results in a placeholder and a link", "[HtmlRenderer]")
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].first == "http://example.com/image.png");
 	REQUIRE(links[0].second == LinkType::IMG);
+}
+
+TEST_CASE(
+	"<img> results in a placeholder with the correct index, "
+	"and a link",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<a href='http://example.com/index.html'>My Page</a>"
+		" and an image: "
+		"<img src='http://example.com/image.png'></img>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 5);
+	REQUIRE(lines[0] == p(LineType::wrappable,
+			"<u>My Page</>[1] and an image: [image 1 (link #2)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: http://example.com/index.html (link)"));
+	REQUIRE(lines[4] == p(LineType::softwrappable,
+			"[2]: http://example.com/image.png (image)"));
+	REQUIRE(links.size() == 2);
+	REQUIRE(links[0].first == "http://example.com/index.html");
+	REQUIRE(links[0].second == LinkType::HREF);
+	REQUIRE(links[1].first == "http://example.com/image.png");
+	REQUIRE(links[1].second == LinkType::IMG);
 }
 
 TEST_CASE("<img>s without `src' are ignored", "[HtmlRenderer]")
@@ -523,7 +554,7 @@ TEST_CASE("title is mentioned in placeholder if <img> has `title'",
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
 	REQUIRE(lines[0] ==
-		p(LineType::wrappable, "[image 1: Just a test image]"));
+		p(LineType::wrappable, "[image 1: Just a test image (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
 	REQUIRE(lines[3] ==
@@ -550,7 +581,7 @@ TEST_CASE(
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1]"));
+	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
 	REQUIRE(lines[3] ==
