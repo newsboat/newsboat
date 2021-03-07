@@ -527,17 +527,27 @@ TEST_CASE(
 	REQUIRE(links[1].second == LinkType::IMG);
 }
 
-TEST_CASE("<img>s without `src' are ignored", "[HtmlRenderer]")
+TEST_CASE(
+	"<img>s without `src', or with empty `src', are ignored",
+	"[HtmlRenderer]")
 {
 	HtmlRenderer r;
 
-	const std::string input = "<img></img>";
+	const std::string input =
+		"<img></img>"
+		"<img src=''></img>"
+		"<img src='http://example.com/image.png'>";
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 0);
-	REQUIRE(links.size() == 0);
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: http://example.com/image.png (image)"));
+	REQUIRE(links.size() == 1);
 }
 
 TEST_CASE("title is mentioned in placeholder if <img> has `title'",
@@ -1346,13 +1356,20 @@ TEST_CASE("<video>s without valid sources are ignored", "[HtmlRenderer]")
 	HtmlRenderer r;
 
 	const std::string input = "<video></video>"
-		"<video><source><source></video>";
+		"<video><source><source></video>"
+		"<video src=''></video>"
+		"<video src='http://example.com/video.avi'></video>";
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 0);
-	REQUIRE(links.size() == 0);
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: http://example.com/video.avi (video)"));
+	REQUIRE(links.size() == 1);
 }
 
 TEST_CASE("<audio> results in a placeholder and a link for each valid source",
@@ -1399,13 +1416,20 @@ TEST_CASE("<audio>s without valid sources are ignored", "[HtmlRenderer]")
 	HtmlRenderer r;
 
 	const std::string input = "<audio></audio>"
-		"<audio><source><source></audio>";
+		"<audio><source><source></audio>"
+		"<audio src=''></audio>"
+		"<audio src='http://example.com/audio.oga'></audio>";
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 0);
-	REQUIRE(links.size() == 0);
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[audio 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[3] == p(LineType::softwrappable,
+			"[1]: http://example.com/audio.oga (audio)"));
+	REQUIRE(links.size() == 1);
 }
 
 TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
