@@ -158,8 +158,7 @@ void HelpFormAction::prepare()
 
 		if (unbound_count > 0) {
 			listfmt.add_line("");
-			listfmt.add_line(
-				_("Unbound functions:"));
+			listfmt.add_line(_("Unbound functions:"));
 			listfmt.add_line("");
 
 			for (const auto& desc : descs) {
@@ -172,6 +171,25 @@ void HelpFormAction::prepare()
 					line = apply_highlights(line);
 					listfmt.add_line(line);
 				}
+			}
+		}
+
+		const auto macros = v->get_keymap()->get_macro_descriptions();
+		if (!macros.empty()) {
+			listfmt.add_line("");
+			listfmt.add_line(_("Macros:"));
+			listfmt.add_line("");
+
+			for (const auto& macro : macros) {
+				const std::string key = macro.first;
+				const std::string description = macro.second.description;
+				const std::string prefix = _("prefix-key");
+				const std::string filler = std::string(std::max(0, 36 - (int)prefix.length()), ' ');
+
+				std::string line = strprintf::fmt("<%s>%s%s %s", prefix, key, filler, description);
+				line = utils::quote_for_stfl(line);
+				line = apply_highlights(line);
+				listfmt.add_line(line);
 			}
 		}
 
