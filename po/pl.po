@@ -856,7 +856,7 @@ msgstr "Zapisz plik - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Błąd: Nie udało się wczytać odnośników z pliku \"%s\" : %s"
+msgstr "Błąd: Nie udało się wczytać odnośników z pliku \"%s\": %s"
 
 #: src/fileurlreader.cpp:66
 #, c-format
@@ -870,7 +870,7 @@ msgstr "błąd składniowy komendy filtra `%s': %s"
 
 #: src/formaction.cpp:145
 msgid "usage: set <config-option> <value>"
-msgstr "użycie: set <zmienna> <wartość>"
+msgstr "użycie: set <opcja> <wartość>"
 
 #: src/formaction.cpp:303
 msgid "usage: set <variable>[=<value>]"
@@ -1952,7 +1952,7 @@ msgstr "Wewnetrzny błąd parsera"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file '%s': %s"
-msgstr "Nie udało się otworzyć pliku blokady: '%s': %s"
+msgstr "Nie udało się otworzyć pliku blokady '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
@@ -1962,7 +1962,7 @@ msgstr "<plik zawierający nieprawidłowy znacznik UTF-8>"
 #: rust/libnewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file '%s': %s"
 msgstr ""
-"Nie udało się zapisać identyfikatora procesu do pliku blokady: '%s': %s"
+"Nie udało się zapisać identyfikatora procesu do pliku blokady '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
