@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2012-08-08 20:07+0100\n"
 "Last-Translator: Daniel Aleksandersen <code@daniel.priv.no>\n"
 "Language-Team: \n"
@@ -1222,7 +1222,7 @@ msgstr "Feil: kunne ikke skrive artikkelen til filen %s"
 msgid "Error while marking article as unread: %s"
 msgstr "Feil mens artikkelen ble markert som lest: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Gå til URL #"
 
@@ -1242,6 +1242,373 @@ msgstr "Artikkel - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Feil: ugyldig regulært uttrykk!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Åpne nyhetsstrøm/artikkel"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Vend tilbake til forrige dialog/avslutt"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Avslutt programmet uten bekreftelse"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Oppdater den markerte nyhetsstrømmen"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Oppdater alle nyhetsstrømmer"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Marker nyhetsstrømmen som lest"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Marker alle nyhetsstrømmer som lest"
+
+#: src/keymap.cpp:82
+#, fuzzy
+msgid "Mark all above as read"
+msgstr "Marker alle nyhetsstrømmer som lest"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Lagre artikkel"
+
+#: src/keymap.cpp:86
+#, fuzzy
+msgid "Save articles"
+msgstr "Lagre artikkel"
+
+#: src/keymap.cpp:91
+#, fuzzy
+msgid "Go to next entry"
+msgstr "Gå til neste innlegg"
+
+#: src/keymap.cpp:98
+#, fuzzy
+msgid "Go to previous entry"
+msgstr "Gå til forrige innlegg"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Gå til neste uleste artikkel"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Gå til forrige uleste artikkel"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Gå til en tilfeldig ulest artikkel"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Åpne artikkel i en nettleser og marker som lest"
+
+#: src/keymap.cpp:133
+#, fuzzy
+msgid "Open all unread items of selected feed in browser"
+msgstr "Åpne artikkel i en nettleser og marker som lest"
+
+#: src/keymap.cpp:140
+#, fuzzy
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr "Åpne artikkel i en nettleser og marker som lest"
+
+#: src/keymap.cpp:148
+#, fuzzy
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Åpne artikkel i en nettleser og marker som lest"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Åpne artikkel i en nettleser og marker som lest"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Åpne hjelpedialog"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Kildevisning [av/på]"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Leststatus for artikkel [av/på]"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Vis leste nyhetsstrømmer/artikler [av/på]"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "Vis artikkelens URLer"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Tøm valgte etikett"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Velg etikett"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Åpne søkedialog"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Legg til i nedlastingskøen"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Oppdater listen over URLer fra oppsettet"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Last ned filen"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Avbryt nedlastingen"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Merk nedlastingen som slettet"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Fjern ferdige og slettede nedlastinger fra køen"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Automatisk nedlasting [av/på]"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Start markerte nedlasting i avspilleren"
+
+#: src/keymap.cpp:247
+#, fuzzy
+msgid "Mark file as finished (not played)"
+msgstr "Fjern fullførte"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Øk antallet samtidige nedlastinger"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Reduser antallet samtidige nedlastinger"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Tegn skjermen på nytt"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Åpne kommandolinjen"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Velg et filter"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Velg et eksisterende filter"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Tøm gjeldende filtrering"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Sett bokmerke på denne lenken/artikkelen"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Endre flagg"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Gå til neste nyhetsstrøm"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Gå til forrige nyhetsstrøm"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Gå til neste uleste nyhetsstrøm"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Gå til forrige uleste nyhetsstrøm"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Bruk en makro"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Slett artikkel"
+
+#: src/keymap.cpp:335
+#, fuzzy
+msgid "Delete all articles"
+msgstr "Slett artikkel"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Fjern slettede artikkler"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Endre abonnements-URLene"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Lukk den markerte dialogen"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Vis listen over åpne dialoger"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Gå til neste dialog"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Vend tilbake til forrige dialog"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Send artikkel til kommando"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Sorter denne listen stigende"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Sorter denne listen synkende"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "Åpne URL 1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "Åpne URL 2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "Åpne URL 3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "Åpne URL 4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "Åpne URL 5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "Åpne URL 6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "Åpne URL 7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "Åpne URL 8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "Åpne URL 9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "Åpne URL 10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Gå til forrige innlegg"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Gå til neste innlegg"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Gå til forrige side"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Gå til neste side"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Gå til starten av siden/listen"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Gå til slutten av siden/listen"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1622,235 +1989,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "Åpner nettleseren..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Åpne nyhetsstrøm/artikkel"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Vend tilbake til forrige dialog/avslutt"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Avslutt programmet uten bekreftelse"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Oppdater den markerte nyhetsstrømmen"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Oppdater alle nyhetsstrømmer"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Marker nyhetsstrømmen som lest"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Marker alle nyhetsstrømmer som lest"
-
-#, fuzzy
-#~ msgid "Mark all above as read"
-#~ msgstr "Marker alle nyhetsstrømmer som lest"
-
-#~ msgid "Save article"
-#~ msgstr "Lagre artikkel"
-
-#, fuzzy
-#~ msgid "Save articles"
-#~ msgstr "Lagre artikkel"
-
-#, fuzzy
-#~ msgid "Go to next entry"
-#~ msgstr "Gå til neste innlegg"
-
-#, fuzzy
-#~ msgid "Go to previous entry"
-#~ msgstr "Gå til forrige innlegg"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Gå til neste uleste artikkel"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Gå til forrige uleste artikkel"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Gå til en tilfeldig ulest artikkel"
-
-#, fuzzy
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Åpne artikkel i en nettleser og marker som lest"
-
-#, fuzzy
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr "Åpne artikkel i en nettleser og marker som lest"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Åpne hjelpedialog"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Kildevisning [av/på]"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Leststatus for artikkel [av/på]"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Vis leste nyhetsstrømmer/artikler [av/på]"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "Vis artikkelens URLer"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Tøm valgte etikett"
-
-#~ msgid "Select tag"
-#~ msgstr "Velg etikett"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Åpne søkedialog"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Legg til i nedlastingskøen"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Oppdater listen over URLer fra oppsettet"
-
-#~ msgid "Download file"
-#~ msgstr "Last ned filen"
-
-#~ msgid "Cancel download"
-#~ msgstr "Avbryt nedlastingen"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Merk nedlastingen som slettet"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Fjern ferdige og slettede nedlastinger fra køen"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Automatisk nedlasting [av/på]"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Start markerte nedlasting i avspilleren"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Øk antallet samtidige nedlastinger"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Reduser antallet samtidige nedlastinger"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Tegn skjermen på nytt"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Åpne kommandolinjen"
-
-#~ msgid "Set a filter"
-#~ msgstr "Velg et filter"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Velg et eksisterende filter"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Tøm gjeldende filtrering"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Sett bokmerke på denne lenken/artikkelen"
-
-#~ msgid "Edit flags"
-#~ msgstr "Endre flagg"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Gå til neste nyhetsstrøm"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Gå til forrige nyhetsstrøm"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Gå til neste uleste nyhetsstrøm"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Gå til forrige uleste nyhetsstrøm"
-
-#~ msgid "Call a macro"
-#~ msgstr "Bruk en makro"
-
-#~ msgid "Delete article"
-#~ msgstr "Slett artikkel"
-
-#, fuzzy
-#~ msgid "Delete all articles"
-#~ msgstr "Slett artikkel"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Fjern slettede artikkler"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Endre abonnements-URLene"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Lukk den markerte dialogen"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Vis listen over åpne dialoger"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Gå til neste dialog"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Vend tilbake til forrige dialog"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Send artikkel til kommando"
-
-#~ msgid "Sort current list"
-#~ msgstr "Sorter denne listen stigende"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Sorter denne listen synkende"
-
-#~ msgid "Open URL 1"
-#~ msgstr "Åpne URL 1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "Åpne URL 2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "Åpne URL 3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "Åpne URL 4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "Åpne URL 5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "Åpne URL 6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "Åpne URL 7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "Åpne URL 8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "Åpne URL 9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "Åpne URL 10"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Gå til forrige innlegg"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Gå til neste innlegg"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Gå til forrige side"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Gå til neste side"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Gå til starten av siden/listen"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Gå til slutten av siden/listen"
 
 #~ msgid "Open article in browser"
 #~ msgstr "Åpne artikkel i en nettleser"

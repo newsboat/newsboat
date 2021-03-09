@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2020-12-07 19:00+0300\n"
 "Last-Translator: Emir SARI <bitigchi@me.com>, 2020\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
@@ -1217,7 +1217,7 @@ msgstr "Hata: Yazı %s' konumuna kaydedilemedi"
 msgid "Error while marking article as unread: %s"
 msgstr "Yazı yeni olarak imlenirken hata oluştu: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "URL'ye git: #"
 
@@ -1237,6 +1237,364 @@ msgstr "Yazı - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Hata: Geçersiz düzenli ifade!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Beslemeyi/Yazıyı aç"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr "Araç takımları arasındaki odağı değiştir"
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Önceki diyaloğa dön/Çık"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Programdan onay olmadan çık"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Seçilen beslemeyi yeniden yükle"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Tüm beslemeleri yeniden yükle"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Beslemeyi okundu olarak işaretle"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Tüm beslemeleri okundu olarak imle"
+
+#: src/keymap.cpp:82
+msgid "Mark all above as read"
+msgstr "Yukarıdakilerin tümünü okundu olarak imle"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Yazıyı kaydet"
+
+#: src/keymap.cpp:86
+msgid "Save articles"
+msgstr "Yazıları kaydet"
+
+#: src/keymap.cpp:91
+msgid "Go to next entry"
+msgstr "Sonraki girdiye git"
+
+#: src/keymap.cpp:98
+msgid "Go to previous entry"
+msgstr "Önceki girdiye git"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Sonraki okunmamış yazıya git"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Önceki okunmamış yazıya git"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Rastgele okunmamış bir yazıya git"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Yazının URL'sini veya URL görünümündeki girdiyi aç. Okundu imle."
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr "Seçili beslemenin tüm okunmamış ögelerini tarayıcıda aç"
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr "Seçili beslemenin tüm ögelerini tarayıcıda aç ve okundu olarak imle"
+
+#: src/keymap.cpp:148
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Yazının, beslemenin veya girdinin URL'sini URL görünümünde aç"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Yazının, beslemenin veya girdinin URL'sini URL görünümünde aç"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Yardım diyaloğunu aç"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Kaynak gösterimini aç/kapat"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Durum okuma özelliğini aç/kapat"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Yazı okumayı aç/kapat"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "Adresleri mevcut yazı içinde göster"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Mevcut etiketi temizle"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Etiket seç"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Arama diyaloğunu aç"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr "Başlıklı ögeye git"
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "İndirmeyi kuyruğa ekle"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Ayar dosyasında adreslerin listesini yeniden yükle"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Dosyayı indir"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "İndirmeyi iptal et"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "İndirmeyi silindi olarak imle"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Tamamlanan ve silinen indirmeleri kuyruktan temizle"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Otomatik indirmeyi aç/kapat"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Oynatıcı seçilen indirme ile başlat"
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr "Dosyayı bitmiş olarak imle (oynatılmadı)"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Eşzamanlı indirmelerin sayısını artır"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Eşzamanlı indirmelerin sayısını azalt"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Ekranı yeniden çiz"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Komut satırını aç"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Süzgeç ayarla"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Önceden tanımlanmış bir süzgeç seç"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Mevcut süzgeci temizle"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Mevcut yazıyı yerimlerine ekle"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Bayrakları düzenle"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Sonraki beslemeye git"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Önceki beslemeye git"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Sonraki okunmamış beslemeye git"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Önceki okunmamış beslemeye git"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Makro çağır"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Yazıyı sil"
+
+#: src/keymap.cpp:335
+msgid "Delete all articles"
+msgstr "Tüm yazıları sil"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Silinen yazıları temizle"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Abone olunan adresleri düzenle"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Seçilen diyalogu kapat"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Açık diyalogların listesini görüntüle"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Sonraki diyaloga git"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Önceki diyaloğa dön/Çık"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Yazıyı komuta kanalla"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Mevcut listeyi sırala"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Mevcut listeyi sırala (tersten)"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "URL 1'i aç"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "URL 2'yi aç"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "URL 3'ü aç"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "URL 4'ü aç"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "URL 5'i aç"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "URL 6'yı aç"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "URL 7'yi aç"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "URL 8'i aç"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "URL 9'u aç"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "URL 10'u aç"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr "Komut satırını 1 ile başlat"
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr "Komut satırını 2 ile başlat"
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr "Komut satırını 3 ile başlat"
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr "Komut satırını 4 ile başlat"
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr "Komut satırını 5 ile başlat"
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr "Komut satırını 6 ile başlat"
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr "Komut satırını 7 ile başlat"
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr "Komut satırını 8 ile başlat"
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr "Komut satırını 9 ile başlat"
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Önceki girdiye taşı"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Sonraki girdiye taşı"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Önceki sayfaya taşı"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Sonraki sayfaya taşı"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Sayfanın/listenin başına taşı"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Sayfanın/listenin sonuna taşı"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1614,267 +1972,3 @@ msgstr "regexec %i kodunu döndürdü"
 
 #~ msgid "Starting browser..."
 #~ msgstr "Tarayıcı başlatılıyor..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Beslemeyi/Yazıyı aç"
-
-#~ msgid "Switch focus between widgets"
-#~ msgstr "Araç takımları arasındaki odağı değiştir"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Önceki diyaloğa dön/Çık"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Programdan onay olmadan çık"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Seçilen beslemeyi yeniden yükle"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Tüm beslemeleri yeniden yükle"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Beslemeyi okundu olarak işaretle"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Tüm beslemeleri okundu olarak imle"
-
-#~ msgid "Mark all above as read"
-#~ msgstr "Yukarıdakilerin tümünü okundu olarak imle"
-
-#~ msgid "Save article"
-#~ msgstr "Yazıyı kaydet"
-
-#~ msgid "Save articles"
-#~ msgstr "Yazıları kaydet"
-
-#~ msgid "Go to next entry"
-#~ msgstr "Sonraki girdiye git"
-
-#~ msgid "Go to previous entry"
-#~ msgstr "Önceki girdiye git"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Sonraki okunmamış yazıya git"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Önceki okunmamış yazıya git"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Rastgele okunmamış bir yazıya git"
-
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Yazının URL'sini veya URL görünümündeki girdiyi aç. Okundu imle."
-
-#~ msgid "Open all unread items of selected feed in browser"
-#~ msgstr "Seçili beslemenin tüm okunmamış ögelerini tarayıcıda aç"
-
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr "Seçili beslemenin tüm ögelerini tarayıcıda aç ve okundu olarak imle"
-
-#~ msgid "Open URL of article, feed, or entry in URL view"
-#~ msgstr "Yazının, beslemenin veya girdinin URL'sini URL görünümünde aç"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Yardım diyaloğunu aç"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Kaynak gösterimini aç/kapat"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Durum okuma özelliğini aç/kapat"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Yazı okumayı aç/kapat"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "Adresleri mevcut yazı içinde göster"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Mevcut etiketi temizle"
-
-#~ msgid "Select tag"
-#~ msgstr "Etiket seç"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Arama diyaloğunu aç"
-
-#~ msgid "Goto item with title"
-#~ msgstr "Başlıklı ögeye git"
-
-#~ msgid "Add download to queue"
-#~ msgstr "İndirmeyi kuyruğa ekle"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Ayar dosyasında adreslerin listesini yeniden yükle"
-
-#~ msgid "Download file"
-#~ msgstr "Dosyayı indir"
-
-#~ msgid "Cancel download"
-#~ msgstr "İndirmeyi iptal et"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "İndirmeyi silindi olarak imle"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Tamamlanan ve silinen indirmeleri kuyruktan temizle"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Otomatik indirmeyi aç/kapat"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Oynatıcı seçilen indirme ile başlat"
-
-#~ msgid "Mark file as finished (not played)"
-#~ msgstr "Dosyayı bitmiş olarak imle (oynatılmadı)"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Eşzamanlı indirmelerin sayısını artır"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Eşzamanlı indirmelerin sayısını azalt"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Ekranı yeniden çiz"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Komut satırını aç"
-
-#~ msgid "Set a filter"
-#~ msgstr "Süzgeç ayarla"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Önceden tanımlanmış bir süzgeç seç"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Mevcut süzgeci temizle"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Mevcut yazıyı yerimlerine ekle"
-
-#~ msgid "Edit flags"
-#~ msgstr "Bayrakları düzenle"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Sonraki beslemeye git"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Önceki beslemeye git"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Sonraki okunmamış beslemeye git"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Önceki okunmamış beslemeye git"
-
-#~ msgid "Call a macro"
-#~ msgstr "Makro çağır"
-
-#~ msgid "Delete article"
-#~ msgstr "Yazıyı sil"
-
-#~ msgid "Delete all articles"
-#~ msgstr "Tüm yazıları sil"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Silinen yazıları temizle"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Abone olunan adresleri düzenle"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Seçilen diyalogu kapat"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Açık diyalogların listesini görüntüle"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Sonraki diyaloga git"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Önceki diyaloğa dön/Çık"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Yazıyı komuta kanalla"
-
-#~ msgid "Sort current list"
-#~ msgstr "Mevcut listeyi sırala"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Mevcut listeyi sırala (tersten)"
-
-#~ msgid "Open URL 1"
-#~ msgstr "URL 1'i aç"
-
-#~ msgid "Open URL 2"
-#~ msgstr "URL 2'yi aç"
-
-#~ msgid "Open URL 3"
-#~ msgstr "URL 3'ü aç"
-
-#~ msgid "Open URL 4"
-#~ msgstr "URL 4'ü aç"
-
-#~ msgid "Open URL 5"
-#~ msgstr "URL 5'i aç"
-
-#~ msgid "Open URL 6"
-#~ msgstr "URL 6'yı aç"
-
-#~ msgid "Open URL 7"
-#~ msgstr "URL 7'yi aç"
-
-#~ msgid "Open URL 8"
-#~ msgstr "URL 8'i aç"
-
-#~ msgid "Open URL 9"
-#~ msgstr "URL 9'u aç"
-
-#~ msgid "Open URL 10"
-#~ msgstr "URL 10'u aç"
-
-#~ msgid "Start cmdline with 1"
-#~ msgstr "Komut satırını 1 ile başlat"
-
-#~ msgid "Start cmdline with 2"
-#~ msgstr "Komut satırını 2 ile başlat"
-
-#~ msgid "Start cmdline with 3"
-#~ msgstr "Komut satırını 3 ile başlat"
-
-#~ msgid "Start cmdline with 4"
-#~ msgstr "Komut satırını 4 ile başlat"
-
-#~ msgid "Start cmdline with 5"
-#~ msgstr "Komut satırını 5 ile başlat"
-
-#~ msgid "Start cmdline with 6"
-#~ msgstr "Komut satırını 6 ile başlat"
-
-#~ msgid "Start cmdline with 7"
-#~ msgstr "Komut satırını 7 ile başlat"
-
-#~ msgid "Start cmdline with 8"
-#~ msgstr "Komut satırını 8 ile başlat"
-
-#~ msgid "Start cmdline with 9"
-#~ msgstr "Komut satırını 9 ile başlat"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Önceki girdiye taşı"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Sonraki girdiye taşı"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Önceki sayfaya taşı"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Sonraki sayfaya taşı"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Sayfanın/listenin başına taşı"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Sayfanın/listenin sonuna taşı"

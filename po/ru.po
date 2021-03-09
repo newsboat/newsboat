@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2020-12-07 10:35+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
@@ -1218,7 +1218,7 @@ msgstr "Ошибка: невозможно записать заметку в ф
 msgid "Error while marking article as unread: %s"
 msgstr "Ошибка во время пометки заметки как непрочитанной: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Открыть ссылку №"
 
@@ -1238,6 +1238,367 @@ msgstr "Заметка - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Ошибка: неправильное регулярное выражение!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Открыть ленту/заметку"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr "Переключить фокус между виджетами"
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Вернуться в предыдущий диалог/Выйти"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Закрыть программу без подтверждения"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Обновить выбранную ленту"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Обновить все ленты"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Отметить ленту как прочитанную"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Отметить все ленты как прочитанные"
+
+#: src/keymap.cpp:82
+msgid "Mark all above as read"
+msgstr "Отметить все, что выше, как прочитанные"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Сохранить заметку"
+
+#: src/keymap.cpp:86
+msgid "Save articles"
+msgstr "Сохранить заметки"
+
+#: src/keymap.cpp:91
+msgid "Go to next entry"
+msgstr "Перейти к следующей заметке"
+
+#: src/keymap.cpp:98
+msgid "Go to previous entry"
+msgstr "Перейти к предыдущей заметке"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Перейти к следующей непрочитанной заметке"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Перейти к предыдущей непрочитанной заметке"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Перейти к случайной непрочитанной заметке"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr ""
+"Открыть URL статьи, ленты, или записи в диалоге URL. Отметить прочтённым."
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr "Открыть все непрочитанные статьи из выбранной ленты в браузере"
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr ""
+"Открыть все непрочитанные статьи из выбранной ленты в браузере и пометить "
+"прочитанными"
+
+#: src/keymap.cpp:148
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Открыть URL статьи, ленты, или записи в диалоге URL"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Открыть URL статьи, ленты, или записи в диалоге URL"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Открыть диалог помощи"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Переключиться на просмотр исходных данных"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Переключить статус прочтения заметки"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Включить показ прочитанных лент"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "Показывать ссылки в текущей заметке"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Очистить текущую метку"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Выбрать метку"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Открыть диалог поиска"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr "Открыть запись с названием"
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Добавить загрузку в очередь"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Обновить список ссылок из файла настроек"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Загрузить файл"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Отменить загрузку"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Отметить загрузку как удаленную"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Очистить очередь от законченных и удалённых загрузок"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Переключить автоматическую загрузку вкл/выкл"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Запустить проигрыватель с текущей выбранной закачкой"
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr "Отметить файл как завершённый (не проигрывался)"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Увеличить количество одновременных загрузок"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Уменьшить количество одновременных загрузок"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Обновить экран"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Открыть командную строку"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Установить фильтр"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Выбрать предопределённый фильтр"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Очистить текущий фильтр"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Занести в закладки текущую ссылку/заметку"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Редактировать флаги"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Перейти к следующей ленте"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Перейти к предыдущей ленте"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Перейти к следующей непрочитанной ленте"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Перейти к предыдущей непрочитанной ленте"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Вызвать макрос"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Удалить заметку"
+
+#: src/keymap.cpp:335
+msgid "Delete all articles"
+msgstr "Удалить все заметки"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Очистить от удаленных заметок"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Изменить подписанные ссылки"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Закрыть текущий диалог"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Просмотреть список открытых окон"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Перейти к следующему диалогу"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Вернуться в предыдущий диалог"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Обработать заметку командой"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Отсортировать текущий список"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Отсортировать список в обратном порядке"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "Открыть ссылку 1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "Открыть ссылку 2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "Открыть ссылку 3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "Открыть ссылку 4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "Открыть ссылку 5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "Открыть ссылку 6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "Открыть ссылку 7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "Открыть ссылку 8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "Открыть ссылку 9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "Открыть ссылку 10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr "Начать командную строку с единицы"
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr "Начать командную строку с двойки"
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr "Начать командную строку с тройки"
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr "Начать командную строку с четвёрки"
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr "Начать командную строку с пятёрки"
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr "Начать командную строку с шестёрки"
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr "Начать командную строку с семёрки"
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr "Начать командную строку с восьмёрки"
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr "Начать командную строку с девятки"
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Перейти к предыдущей заметке"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Перейти к следующей заметке"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Вернуться на предыдущую страницу"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Перейти к следующей странице"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Перейти к началу страницы/списка"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Перейти к концу страницы/списка"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1617,270 +1978,3 @@ msgstr "regexec вернула код %i"
 
 #~ msgid "Starting browser..."
 #~ msgstr "Запускаю браузер..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Открыть ленту/заметку"
-
-#~ msgid "Switch focus between widgets"
-#~ msgstr "Переключить фокус между виджетами"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Вернуться в предыдущий диалог/Выйти"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Закрыть программу без подтверждения"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Обновить выбранную ленту"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Обновить все ленты"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Отметить ленту как прочитанную"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Отметить все ленты как прочитанные"
-
-#~ msgid "Mark all above as read"
-#~ msgstr "Отметить все, что выше, как прочитанные"
-
-#~ msgid "Save article"
-#~ msgstr "Сохранить заметку"
-
-#~ msgid "Save articles"
-#~ msgstr "Сохранить заметки"
-
-#~ msgid "Go to next entry"
-#~ msgstr "Перейти к следующей заметке"
-
-#~ msgid "Go to previous entry"
-#~ msgstr "Перейти к предыдущей заметке"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Перейти к следующей непрочитанной заметке"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Перейти к предыдущей непрочитанной заметке"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Перейти к случайной непрочитанной заметке"
-
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr ""
-#~ "Открыть URL статьи, ленты, или записи в диалоге URL. Отметить прочтённым."
-
-#~ msgid "Open all unread items of selected feed in browser"
-#~ msgstr "Открыть все непрочитанные статьи из выбранной ленты в браузере"
-
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr ""
-#~ "Открыть все непрочитанные статьи из выбранной ленты в браузере и пометить "
-#~ "прочитанными"
-
-#~ msgid "Open URL of article, feed, or entry in URL view"
-#~ msgstr "Открыть URL статьи, ленты, или записи в диалоге URL"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Открыть диалог помощи"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Переключиться на просмотр исходных данных"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Переключить статус прочтения заметки"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Включить показ прочитанных лент"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "Показывать ссылки в текущей заметке"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Очистить текущую метку"
-
-#~ msgid "Select tag"
-#~ msgstr "Выбрать метку"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Открыть диалог поиска"
-
-#~ msgid "Goto item with title"
-#~ msgstr "Открыть запись с названием"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Добавить загрузку в очередь"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Обновить список ссылок из файла настроек"
-
-#~ msgid "Download file"
-#~ msgstr "Загрузить файл"
-
-#~ msgid "Cancel download"
-#~ msgstr "Отменить загрузку"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Отметить загрузку как удаленную"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Очистить очередь от законченных и удалённых загрузок"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Переключить автоматическую загрузку вкл/выкл"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Запустить проигрыватель с текущей выбранной закачкой"
-
-#~ msgid "Mark file as finished (not played)"
-#~ msgstr "Отметить файл как завершённый (не проигрывался)"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Увеличить количество одновременных загрузок"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Уменьшить количество одновременных загрузок"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Обновить экран"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Открыть командную строку"
-
-#~ msgid "Set a filter"
-#~ msgstr "Установить фильтр"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Выбрать предопределённый фильтр"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Очистить текущий фильтр"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Занести в закладки текущую ссылку/заметку"
-
-#~ msgid "Edit flags"
-#~ msgstr "Редактировать флаги"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Перейти к следующей ленте"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Перейти к предыдущей ленте"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Перейти к следующей непрочитанной ленте"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Перейти к предыдущей непрочитанной ленте"
-
-#~ msgid "Call a macro"
-#~ msgstr "Вызвать макрос"
-
-#~ msgid "Delete article"
-#~ msgstr "Удалить заметку"
-
-#~ msgid "Delete all articles"
-#~ msgstr "Удалить все заметки"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Очистить от удаленных заметок"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Изменить подписанные ссылки"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Закрыть текущий диалог"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Просмотреть список открытых окон"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Перейти к следующему диалогу"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Вернуться в предыдущий диалог"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Обработать заметку командой"
-
-#~ msgid "Sort current list"
-#~ msgstr "Отсортировать текущий список"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Отсортировать список в обратном порядке"
-
-#~ msgid "Open URL 1"
-#~ msgstr "Открыть ссылку 1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "Открыть ссылку 2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "Открыть ссылку 3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "Открыть ссылку 4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "Открыть ссылку 5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "Открыть ссылку 6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "Открыть ссылку 7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "Открыть ссылку 8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "Открыть ссылку 9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "Открыть ссылку 10"
-
-#~ msgid "Start cmdline with 1"
-#~ msgstr "Начать командную строку с единицы"
-
-#~ msgid "Start cmdline with 2"
-#~ msgstr "Начать командную строку с двойки"
-
-#~ msgid "Start cmdline with 3"
-#~ msgstr "Начать командную строку с тройки"
-
-#~ msgid "Start cmdline with 4"
-#~ msgstr "Начать командную строку с четвёрки"
-
-#~ msgid "Start cmdline with 5"
-#~ msgstr "Начать командную строку с пятёрки"
-
-#~ msgid "Start cmdline with 6"
-#~ msgstr "Начать командную строку с шестёрки"
-
-#~ msgid "Start cmdline with 7"
-#~ msgstr "Начать командную строку с семёрки"
-
-#~ msgid "Start cmdline with 8"
-#~ msgstr "Начать командную строку с восьмёрки"
-
-#~ msgid "Start cmdline with 9"
-#~ msgstr "Начать командную строку с девятки"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Перейти к предыдущей заметке"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Перейти к следующей заметке"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Вернуться на предыдущую страницу"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Перейти к следующей странице"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Перейти к началу страницы/списка"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Перейти к концу страницы/списка"

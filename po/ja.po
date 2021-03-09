@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.9\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2015-04-26 05:55+0900\n"
 "Last-Translator: Grady Martin <GradyMartin@gmail.com>\n"
 "Language-Team: \n"
@@ -1168,7 +1168,7 @@ msgstr ""
 msgid "Error while marking article as unread: %s"
 msgstr ""
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr ""
 
@@ -1187,6 +1187,367 @@ msgstr ""
 
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
+msgstr ""
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr ""
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr ""
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr ""
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr ""
+
+#: src/keymap.cpp:63
+#, fuzzy
+msgid "Reload all feeds"
+msgstr "全フィードを同期"
+
+#: src/keymap.cpp:68
+#, fuzzy
+msgid "Mark feed read"
+msgstr "既読にする"
+
+#: src/keymap.cpp:75
+#, fuzzy
+msgid "Mark all feeds read"
+msgstr "全件を既読にする"
+
+#: src/keymap.cpp:82
+#, fuzzy
+msgid "Mark all above as read"
+msgstr "全件を既読にする"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr ""
+
+#: src/keymap.cpp:86
+msgid "Save articles"
+msgstr ""
+
+#: src/keymap.cpp:91
+msgid "Go to next entry"
+msgstr ""
+
+#: src/keymap.cpp:98
+msgid "Go to previous entry"
+msgstr ""
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr ""
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr ""
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr ""
+
+#: src/keymap.cpp:126
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr ""
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr ""
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr ""
+
+#: src/keymap.cpp:148
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr ""
+
+#: src/keymap.cpp:155
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr ""
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr ""
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr ""
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr ""
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr ""
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr ""
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr ""
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr ""
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr ""
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+#, fuzzy
+msgid "Add download to queue"
+msgstr "%sのダウンロードを予約しました。"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr ""
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr ""
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr ""
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr ""
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr ""
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr ""
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr ""
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr ""
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr ""
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr ""
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr ""
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr ""
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr ""
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr ""
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr ""
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr ""
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr ""
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr ""
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr ""
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr ""
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr ""
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr ""
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr ""
+
+#: src/keymap.cpp:335
+msgid "Delete all articles"
+msgstr ""
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr ""
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr ""
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr ""
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr ""
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr ""
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr ""
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr ""
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr ""
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr ""
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr ""
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr ""
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr ""
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr ""
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr ""
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr ""
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr ""
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr ""
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr ""
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr ""
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr ""
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr ""
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr ""
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr ""
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr ""
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
 msgstr ""
 
 #: src/keymap.cpp:710
@@ -1557,10 +1918,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "ブラウザーを起動中…"
-
-#, fuzzy
-#~ msgid "Mark all above as read"
-#~ msgstr "全件を既読にする"
 
 #, fuzzy
 #~ msgid "config"

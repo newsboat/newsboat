@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2008-01-28 10:00+0100\n"
 "Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
 "Language-Team: \n"
@@ -1217,7 +1217,7 @@ msgstr "Hiba: nem tudtam a cikket a(z) %s file-ba menteni"
 msgid "Error while marking article as unread: %s"
 msgstr "Hiba a cikk olvasatlanná tétele közben: %s "
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Ugrás: URL #"
 
@@ -1237,6 +1237,375 @@ msgstr "Cikk %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Hiba: érvénytelen reguláris kifejezés!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Forrás/cikk megnyitása"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Vissza az előzőhöz/Kilépés"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Kilépés a programból, megerősítés nélkül"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Az aktuális forrás újratöltése"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Összes forrás újratöltése"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Forrás olvasottá"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Összes forrás olvasottá"
+
+#: src/keymap.cpp:82
+#, fuzzy
+msgid "Mark all above as read"
+msgstr "Összes forrás olvasottá"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Cikk mentése"
+
+#: src/keymap.cpp:86
+#, fuzzy
+msgid "Save articles"
+msgstr "Cikk mentése"
+
+#: src/keymap.cpp:91
+#, fuzzy
+msgid "Go to next entry"
+msgstr "Következő bejegyzés"
+
+#: src/keymap.cpp:98
+#, fuzzy
+msgid "Go to previous entry"
+msgstr "Előző bejegyzés"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Következő olvasatlan cikk"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Elõző olvasatlan cikk"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Véletlenszerű olvasatlan cikk"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Cikk megnyitása böngészőben"
+
+#: src/keymap.cpp:133
+#, fuzzy
+msgid "Open all unread items of selected feed in browser"
+msgstr "Cikk megnyitása böngészőben"
+
+#: src/keymap.cpp:140
+#, fuzzy
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr "Cikk megnyitása böngészőben"
+
+#: src/keymap.cpp:148
+#, fuzzy
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Cikk megnyitása böngészőben"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Cikk megnyitása böngészőben"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Súgó megnyitása"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Forrás nézet"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Olvasott státusz ki/beállítása a cikkre"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Olvasott források mutatása"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "URL-ek az aktuális cikkben"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Aktuális cimke törlése"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Cimke kijelölése"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Keresés megnyitása"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Letöltési listához hozzáad"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Az URL-ek listájának újratöltése"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Fájl letöltése"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Letöltés megszakítása"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Letöltés töröltnek nyilvánítása"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Befejezett és törölt letöltések ürítése a listából"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Automatikus letöltés be/ki"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Lejátszó indítása a kijelölt letöltéssel"
+
+#: src/keymap.cpp:247
+#, fuzzy
+msgid "Mark file as finished (not played)"
+msgstr "Takarítás befejezve"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Párhuzamos letöltések számának növelése"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Párhuzamos letöltések számának csökkentése"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Képernyő újrarajzolása"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Parancssor nyitása"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Szűrő állítása"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Előredefiniált szűrő kiválasztása"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Aktuális szűrő törlése"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Aktuális link/cikk könyvjelzőbe"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Jelzők szerkesztése"
+
+#: src/keymap.cpp:301
+#, fuzzy
+msgid "Go to next feed"
+msgstr "Következő olvasatlan forrás"
+
+#: src/keymap.cpp:306
+#, fuzzy
+msgid "Go to previous feed"
+msgstr "Előző olvasatlan forrás"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Következő olvasatlan forrás"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Előző olvasatlan forrás"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Makró hívása"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Cikk törlése"
+
+#: src/keymap.cpp:335
+#, fuzzy
+msgid "Delete all articles"
+msgstr "Cikk törlése"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Végleges törlés"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Feliratkozott URL-ek szerkesztése"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Az aktuálisan kijelölt dialógus bezárása"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Megnyitott dialógusok listája"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Következő dialógus"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Előző dialógus"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Cikk pipe-olása parancsnak"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Aktuális lista rendezése"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Aktuális lista rendezése (fordított)"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "1. URL megnyitása"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "2. URL megnyitása"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "3. URL megnyitása"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "4. URL megnyitása"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "5. URL megnyitása"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "6. URL megnyitása"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "7. URL megnyitása"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "8. URL megnyitása"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "9. URL megnyitása"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "10. URL megnyitása"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Előző bejegyzés"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Következő bejegyzés"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Az előző oldalra"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "A következő oldalra"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Mozgatás az oldal/lista elejére"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Mozgatás az oldal/lista végére"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1617,237 +1986,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "Böngésző indítása..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Forrás/cikk megnyitása"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Vissza az előzőhöz/Kilépés"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Kilépés a programból, megerősítés nélkül"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Az aktuális forrás újratöltése"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Összes forrás újratöltése"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Forrás olvasottá"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Összes forrás olvasottá"
-
-#, fuzzy
-#~ msgid "Mark all above as read"
-#~ msgstr "Összes forrás olvasottá"
-
-#~ msgid "Save article"
-#~ msgstr "Cikk mentése"
-
-#, fuzzy
-#~ msgid "Save articles"
-#~ msgstr "Cikk mentése"
-
-#, fuzzy
-#~ msgid "Go to next entry"
-#~ msgstr "Következő bejegyzés"
-
-#, fuzzy
-#~ msgid "Go to previous entry"
-#~ msgstr "Előző bejegyzés"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Következő olvasatlan cikk"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Elõző olvasatlan cikk"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Véletlenszerű olvasatlan cikk"
-
-#, fuzzy
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Cikk megnyitása böngészőben"
-
-#, fuzzy
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr "Cikk megnyitása böngészőben"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Súgó megnyitása"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Forrás nézet"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Olvasott státusz ki/beállítása a cikkre"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Olvasott források mutatása"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "URL-ek az aktuális cikkben"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Aktuális cimke törlése"
-
-#~ msgid "Select tag"
-#~ msgstr "Cimke kijelölése"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Keresés megnyitása"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Letöltési listához hozzáad"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Az URL-ek listájának újratöltése"
-
-#~ msgid "Download file"
-#~ msgstr "Fájl letöltése"
-
-#~ msgid "Cancel download"
-#~ msgstr "Letöltés megszakítása"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Letöltés töröltnek nyilvánítása"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Befejezett és törölt letöltések ürítése a listából"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Automatikus letöltés be/ki"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Lejátszó indítása a kijelölt letöltéssel"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Párhuzamos letöltések számának növelése"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Párhuzamos letöltések számának csökkentése"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Képernyő újrarajzolása"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Parancssor nyitása"
-
-#~ msgid "Set a filter"
-#~ msgstr "Szűrő állítása"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Előredefiniált szűrő kiválasztása"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Aktuális szűrő törlése"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Aktuális link/cikk könyvjelzőbe"
-
-#~ msgid "Edit flags"
-#~ msgstr "Jelzők szerkesztése"
-
-#, fuzzy
-#~ msgid "Go to next feed"
-#~ msgstr "Következő olvasatlan forrás"
-
-#, fuzzy
-#~ msgid "Go to previous feed"
-#~ msgstr "Előző olvasatlan forrás"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Következő olvasatlan forrás"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Előző olvasatlan forrás"
-
-#~ msgid "Call a macro"
-#~ msgstr "Makró hívása"
-
-#~ msgid "Delete article"
-#~ msgstr "Cikk törlése"
-
-#, fuzzy
-#~ msgid "Delete all articles"
-#~ msgstr "Cikk törlése"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Végleges törlés"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Feliratkozott URL-ek szerkesztése"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Az aktuálisan kijelölt dialógus bezárása"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Megnyitott dialógusok listája"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Következő dialógus"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Előző dialógus"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Cikk pipe-olása parancsnak"
-
-#~ msgid "Sort current list"
-#~ msgstr "Aktuális lista rendezése"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Aktuális lista rendezése (fordított)"
-
-#~ msgid "Open URL 1"
-#~ msgstr "1. URL megnyitása"
-
-#~ msgid "Open URL 2"
-#~ msgstr "2. URL megnyitása"
-
-#~ msgid "Open URL 3"
-#~ msgstr "3. URL megnyitása"
-
-#~ msgid "Open URL 4"
-#~ msgstr "4. URL megnyitása"
-
-#~ msgid "Open URL 5"
-#~ msgstr "5. URL megnyitása"
-
-#~ msgid "Open URL 6"
-#~ msgstr "6. URL megnyitása"
-
-#~ msgid "Open URL 7"
-#~ msgstr "7. URL megnyitása"
-
-#~ msgid "Open URL 8"
-#~ msgstr "8. URL megnyitása"
-
-#~ msgid "Open URL 9"
-#~ msgstr "9. URL megnyitása"
-
-#~ msgid "Open URL 10"
-#~ msgstr "10. URL megnyitása"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Előző bejegyzés"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Következő bejegyzés"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Az előző oldalra"
-
-#~ msgid "Move to the next page"
-#~ msgstr "A következő oldalra"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Mozgatás az oldal/lista elejére"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Mozgatás az oldal/lista végére"
 
 #~ msgid "Open article in browser"
 #~ msgstr "Cikk megnyitása böngészőben"

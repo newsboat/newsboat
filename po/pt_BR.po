@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2018-03-06 20:35-0300\n"
 "Last-Translator: Alexandre Erwin Ittner <alexandre@ittner.com.br>\n"
 "Language-Team: \n"
@@ -1224,7 +1224,7 @@ msgstr "Erro: não foi possível gravar o artigo no arquivo %s"
 msgid "Error while marking article as unread: %s"
 msgstr "Erro marcando artigo como não lido: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Ir para a URL #"
 
@@ -1244,6 +1244,372 @@ msgstr "Artigo - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Erro: expressão regular inválida!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Abrir fonte/artigo"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Retornar à tela anterior/Sair"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Fechar o programa, sem confirmação"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Atualizar a fonte selecionada"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Atualizar todas fontes"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Marcar fonte como lida"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Marcar todas fontes como lidas"
+
+#: src/keymap.cpp:82
+#, fuzzy
+msgid "Mark all above as read"
+msgstr "Marcar todas fontes como lidas"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Salvar artigo"
+
+#: src/keymap.cpp:86
+#, fuzzy
+msgid "Save articles"
+msgstr "Salvar artigo"
+
+#: src/keymap.cpp:91
+#, fuzzy
+msgid "Go to next entry"
+msgstr "Ir para o próximo item"
+
+#: src/keymap.cpp:98
+#, fuzzy
+msgid "Go to previous entry"
+msgstr "Ir para o item anterior "
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Ir para o próximo artigo não lido"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Ir para o artigo não lido anterior"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Pular para um artigo não lido aleatório"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Abrir artigo no navegador e marca-o como lido"
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr "Abrir todos os itens não lidos da fonte selecionada no navegador"
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr ""
+"Abrir todos os itens não lidos da fonte selecionada no navegador e marcar "
+"como lidos"
+
+#: src/keymap.cpp:148
+#, fuzzy
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Abrir artigo no navegador e marca-o como lido"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Abrir artigo no navegador e marca-o como lido"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Abrir a tela de ajuda"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Alternar a visualização do código-fonte"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Alternar o estado lido/não lido do artigo"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Alternar a visualização de fontes RSS/artigos não lidos"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "Mostrar URLs no artigo atual"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Limpar etiqueta atual"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Selecionar etiqueta"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Abrir tela de procura"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Adicionar à fila para ser baixado"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Atualizar a lista de URLs a partir da configuração"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Baixar arquivo"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Cancelar a transferência"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Marcar transferência como excluída"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Eliminar transferências concluídas ou excluídas da fila"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Ativar/desativar transferência automática"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Iniciar tocador com a transferência selecionada"
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr "Marcar o arquivo como concluído (não tocado)"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Aumentar número de transferências simultâneas"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Diminuir o número de transferências simultâneas"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Redesenhar tela"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Abrir a linha de comando"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Definir um filtro"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Selecionar um filtro pré-definido"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Limpar o filtro atual"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Adicionar marcador ao link ou artigo atual"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Editar sinalizações"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Ir para a próxima fonte"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Ir para a fonte anterior"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Ir para a próxima fonte não lida"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Ir para a fonte não lida anterior"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Chamar uma macro"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Excluir artigo"
+
+#: src/keymap.cpp:335
+#, fuzzy
+msgid "Delete all articles"
+msgstr "Excluir artigo"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Eliminar artigos excluídos"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Editar lista de URLs assinadas"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Fechar a tela atualmente selecionada"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Ver lista de telas abertos"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Ir para a próxima tela"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Retornar à tela anterior"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Passar artigo por pipe a um comando"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Ordenar a lista atual"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Ordenar a lista atual (inversamente)"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "Abrir URL 1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "Abrir URL 2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "Abrir URL 3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "Abrir URL 4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "Abrir URL 5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "Abrir URL 6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "Abrir URL 7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "Abrir URL 8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "Abrir URL 9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "Abrir URL 10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Ir para o item anterior "
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Ir para o próximo item"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Ir para a página anterior"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Ir para a próxima página"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Ir para o início da página/lista"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Ir para o fim da página/lista"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1622,242 +1988,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "Iniciando navegador..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Abrir fonte/artigo"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Retornar à tela anterior/Sair"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Fechar o programa, sem confirmação"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Atualizar a fonte selecionada"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Atualizar todas fontes"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Marcar fonte como lida"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Marcar todas fontes como lidas"
-
-#, fuzzy
-#~ msgid "Mark all above as read"
-#~ msgstr "Marcar todas fontes como lidas"
-
-#~ msgid "Save article"
-#~ msgstr "Salvar artigo"
-
-#, fuzzy
-#~ msgid "Save articles"
-#~ msgstr "Salvar artigo"
-
-#, fuzzy
-#~ msgid "Go to next entry"
-#~ msgstr "Ir para o próximo item"
-
-#, fuzzy
-#~ msgid "Go to previous entry"
-#~ msgstr "Ir para o item anterior "
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Ir para o próximo artigo não lido"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Ir para o artigo não lido anterior"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Pular para um artigo não lido aleatório"
-
-#, fuzzy
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Abrir artigo no navegador e marca-o como lido"
-
-#~ msgid "Open all unread items of selected feed in browser"
-#~ msgstr "Abrir todos os itens não lidos da fonte selecionada no navegador"
-
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr ""
-#~ "Abrir todos os itens não lidos da fonte selecionada no navegador e marcar "
-#~ "como lidos"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Abrir a tela de ajuda"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Alternar a visualização do código-fonte"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Alternar o estado lido/não lido do artigo"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Alternar a visualização de fontes RSS/artigos não lidos"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "Mostrar URLs no artigo atual"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Limpar etiqueta atual"
-
-#~ msgid "Select tag"
-#~ msgstr "Selecionar etiqueta"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Abrir tela de procura"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Adicionar à fila para ser baixado"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Atualizar a lista de URLs a partir da configuração"
-
-#~ msgid "Download file"
-#~ msgstr "Baixar arquivo"
-
-#~ msgid "Cancel download"
-#~ msgstr "Cancelar a transferência"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Marcar transferência como excluída"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Eliminar transferências concluídas ou excluídas da fila"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Ativar/desativar transferência automática"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Iniciar tocador com a transferência selecionada"
-
-#~ msgid "Mark file as finished (not played)"
-#~ msgstr "Marcar o arquivo como concluído (não tocado)"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Aumentar número de transferências simultâneas"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Diminuir o número de transferências simultâneas"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Redesenhar tela"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Abrir a linha de comando"
-
-#~ msgid "Set a filter"
-#~ msgstr "Definir um filtro"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Selecionar um filtro pré-definido"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Limpar o filtro atual"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Adicionar marcador ao link ou artigo atual"
-
-#~ msgid "Edit flags"
-#~ msgstr "Editar sinalizações"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Ir para a próxima fonte"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Ir para a fonte anterior"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Ir para a próxima fonte não lida"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Ir para a fonte não lida anterior"
-
-#~ msgid "Call a macro"
-#~ msgstr "Chamar uma macro"
-
-#~ msgid "Delete article"
-#~ msgstr "Excluir artigo"
-
-#, fuzzy
-#~ msgid "Delete all articles"
-#~ msgstr "Excluir artigo"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Eliminar artigos excluídos"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Editar lista de URLs assinadas"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Fechar a tela atualmente selecionada"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Ver lista de telas abertos"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Ir para a próxima tela"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Retornar à tela anterior"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Passar artigo por pipe a um comando"
-
-#~ msgid "Sort current list"
-#~ msgstr "Ordenar a lista atual"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Ordenar a lista atual (inversamente)"
-
-#~ msgid "Open URL 1"
-#~ msgstr "Abrir URL 1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "Abrir URL 2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "Abrir URL 3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "Abrir URL 4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "Abrir URL 5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "Abrir URL 6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "Abrir URL 7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "Abrir URL 8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "Abrir URL 9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "Abrir URL 10"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Ir para o item anterior "
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Ir para o próximo item"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Ir para a página anterior"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Ir para a próxima página"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Ir para o início da página/lista"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Ir para o fim da página/lista"
 
 #~ msgid "Open article in browser"
 #~ msgstr "Abrir artigo no navegador"
