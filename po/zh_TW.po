@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2010-03-03 16:55+0800\n"
 "Last-Translator: Aeglos <aeglos.lin@gmail.com>\n"
 "Language-Team: \n"
@@ -1196,7 +1196,7 @@ msgstr "錯誤：無法將文章寫至 %s"
 msgid "Error while marking article as unread: %s"
 msgstr "將文章標為未讀時發生錯誤: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "前往網址 #"
 
@@ -1216,6 +1216,375 @@ msgstr "文章 - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "錯誤:無效的正規表示式！"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "打開來源/文章"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "返回到前一個對話框/退出"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "不經確認，直接離開程式"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "重新載入選擇的來源"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "重新載入所有來源"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "將來源標為已讀"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "將所有來源標為已讀"
+
+#: src/keymap.cpp:82
+#, fuzzy
+msgid "Mark all above as read"
+msgstr "將所有來源標為已讀"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "保存文章"
+
+#: src/keymap.cpp:86
+#, fuzzy
+msgid "Save articles"
+msgstr "保存文章"
+
+#: src/keymap.cpp:91
+#, fuzzy
+msgid "Go to next entry"
+msgstr "跳到下一項"
+
+#: src/keymap.cpp:98
+#, fuzzy
+msgid "Go to previous entry"
+msgstr "跳到前一項"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "轉到下一篇未讀文章"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "轉到前一篇未讀文章"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "隨機跳到未讀的文章"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "在瀏覽器裡打開文章"
+
+#: src/keymap.cpp:133
+#, fuzzy
+msgid "Open all unread items of selected feed in browser"
+msgstr "在瀏覽器裡打開文章"
+
+#: src/keymap.cpp:140
+#, fuzzy
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr "在瀏覽器裡打開文章"
+
+#: src/keymap.cpp:148
+#, fuzzy
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "在瀏覽器裡打開文章"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "在瀏覽器裡打開文章"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "打開說明對話框"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "切換原始碼顯示"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "切換文章的閱讀狀態（已讀/未讀）"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "切換顯示已讀來源/文章"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "列出當前文章裡的所有鏈結"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "清除當前標籤"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "選擇標籤"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "打開搜尋對話框"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "將該下載項目加入隊列"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "重新載入配置文件裡的鏈結列表"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "下載檔案"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "取消下載"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "將下載的項目標記為已刪除"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "清除隊列中已完成的和已刪除的下載項目"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "切換是否自動下載"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "播放當前所選的下載項目"
+
+#: src/keymap.cpp:247
+#, fuzzy
+msgid "Mark file as finished (not played)"
+msgstr "清除完畢的項目"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "增加同時下載的數目"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "減少同時下載的數目"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "更新畫面"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "打開命令列"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "設置一個過濾器"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "選擇一個預先設定的過濾器"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "清除目前的過濾器"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "將目前的文章/鏈結加入書籤"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "編輯標記"
+
+#: src/keymap.cpp:301
+#, fuzzy
+msgid "Go to next feed"
+msgstr "跳到下一篇未讀文章"
+
+#: src/keymap.cpp:306
+#, fuzzy
+msgid "Go to previous feed"
+msgstr "跳到前一篇未讀文章"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "跳到下一篇未讀文章"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "跳到前一篇未讀文章"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "呼叫巨集"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "刪除文章"
+
+#: src/keymap.cpp:335
+#, fuzzy
+msgid "Delete all articles"
+msgstr "刪除文章"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "清空被刪除的文章"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "編緝已訂閱的鏈結"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "關閉目前選擇的對話窗"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "檢視已開啟對話窗列表"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "跳到下一個對話窗"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "跳到前一個對話窗"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Pipe article to command"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "排序列表"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "排序列表(反向)"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "打開網址1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "打開網址2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "打開網址3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "打開網址4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "打開網址5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "打開網址6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "打開網址7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "打開網址8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "打開網址9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "打開網址10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "跳到前一項"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "跳到下一項"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "回到前一頁"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "跳到下一頁"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "跳到頁面/列表的開始"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "跳到頁面/列表的最後"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1592,237 +1961,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "啟動瀏覽器..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "打開來源/文章"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "返回到前一個對話框/退出"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "不經確認，直接離開程式"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "重新載入選擇的來源"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "重新載入所有來源"
-
-#~ msgid "Mark feed read"
-#~ msgstr "將來源標為已讀"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "將所有來源標為已讀"
-
-#, fuzzy
-#~ msgid "Mark all above as read"
-#~ msgstr "將所有來源標為已讀"
-
-#~ msgid "Save article"
-#~ msgstr "保存文章"
-
-#, fuzzy
-#~ msgid "Save articles"
-#~ msgstr "保存文章"
-
-#, fuzzy
-#~ msgid "Go to next entry"
-#~ msgstr "跳到下一項"
-
-#, fuzzy
-#~ msgid "Go to previous entry"
-#~ msgstr "跳到前一項"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "轉到下一篇未讀文章"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "轉到前一篇未讀文章"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "隨機跳到未讀的文章"
-
-#, fuzzy
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "在瀏覽器裡打開文章"
-
-#, fuzzy
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr "在瀏覽器裡打開文章"
-
-#~ msgid "Open help dialog"
-#~ msgstr "打開說明對話框"
-
-#~ msgid "Toggle source view"
-#~ msgstr "切換原始碼顯示"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "切換文章的閱讀狀態（已讀/未讀）"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "切換顯示已讀來源/文章"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "列出當前文章裡的所有鏈結"
-
-#~ msgid "Clear current tag"
-#~ msgstr "清除當前標籤"
-
-#~ msgid "Select tag"
-#~ msgstr "選擇標籤"
-
-#~ msgid "Open search dialog"
-#~ msgstr "打開搜尋對話框"
-
-#~ msgid "Add download to queue"
-#~ msgstr "將該下載項目加入隊列"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "重新載入配置文件裡的鏈結列表"
-
-#~ msgid "Download file"
-#~ msgstr "下載檔案"
-
-#~ msgid "Cancel download"
-#~ msgstr "取消下載"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "將下載的項目標記為已刪除"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "清除隊列中已完成的和已刪除的下載項目"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "切換是否自動下載"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "播放當前所選的下載項目"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "增加同時下載的數目"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "減少同時下載的數目"
-
-#~ msgid "Redraw screen"
-#~ msgstr "更新畫面"
-
-#~ msgid "Open the commandline"
-#~ msgstr "打開命令列"
-
-#~ msgid "Set a filter"
-#~ msgstr "設置一個過濾器"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "選擇一個預先設定的過濾器"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "清除目前的過濾器"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "將目前的文章/鏈結加入書籤"
-
-#~ msgid "Edit flags"
-#~ msgstr "編輯標記"
-
-#, fuzzy
-#~ msgid "Go to next feed"
-#~ msgstr "跳到下一篇未讀文章"
-
-#, fuzzy
-#~ msgid "Go to previous feed"
-#~ msgstr "跳到前一篇未讀文章"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "跳到下一篇未讀文章"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "跳到前一篇未讀文章"
-
-#~ msgid "Call a macro"
-#~ msgstr "呼叫巨集"
-
-#~ msgid "Delete article"
-#~ msgstr "刪除文章"
-
-#, fuzzy
-#~ msgid "Delete all articles"
-#~ msgstr "刪除文章"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "清空被刪除的文章"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "編緝已訂閱的鏈結"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "關閉目前選擇的對話窗"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "檢視已開啟對話窗列表"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "跳到下一個對話窗"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "跳到前一個對話窗"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Pipe article to command"
-
-#~ msgid "Sort current list"
-#~ msgstr "排序列表"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "排序列表(反向)"
-
-#~ msgid "Open URL 1"
-#~ msgstr "打開網址1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "打開網址2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "打開網址3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "打開網址4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "打開網址5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "打開網址6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "打開網址7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "打開網址8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "打開網址9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "打開網址10"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "跳到前一項"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "跳到下一項"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "回到前一頁"
-
-#~ msgid "Move to the next page"
-#~ msgstr "跳到下一頁"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "跳到頁面/列表的開始"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "跳到頁面/列表的最後"
 
 #~ msgid "Open article in browser"
 #~ msgstr "在瀏覽器裡打開文章"

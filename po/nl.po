@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2020-12-09 01:22+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
@@ -1219,7 +1219,7 @@ msgstr "Fout: artikel opslaan in bestand ‘%s’ is mislukt"
 msgid "Error while marking article as unread: %s"
 msgstr "Het als ongelezen markeren van het artikel ‘%s’ is mislukt"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Ga naar URL #"
 
@@ -1239,6 +1239,364 @@ msgstr "Artikel - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Fout: ongeldige reguliere expressie!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Open feed/artikel"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr "Wissel tussen widgets"
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Naar vorige dialoogvenster terugkeren/afsluiten"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Programma afsluiten zonder bevestiging"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Geselecteerde feed vernieuwen"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Alle feeds vernieuwen"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Feed als gelezen markeren"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Alle feeds als gelezen markeren"
+
+#: src/keymap.cpp:82
+msgid "Mark all above as read"
+msgstr "Markeer alle voorgaande feeds als gelezen"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Artikel opslaan"
+
+#: src/keymap.cpp:86
+msgid "Save articles"
+msgstr "Artikelen opslaan"
+
+#: src/keymap.cpp:91
+msgid "Go to next entry"
+msgstr "Ga naar volgende item"
+
+#: src/keymap.cpp:98
+msgid "Go to previous entry"
+msgstr "Ga naar vorige item"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Ga naar volgend ongelezen artikel"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Ga naar vorig ongelezen artikel"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Ga naar willekeurig ongelezen artikel"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Open URL van artikel in browser en markeer als gelezen."
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr "Open alle ongelezen artikelen van de huidige feed in de browser"
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr "Open alle ongelezen artikelen in de browser en markeer als gelezen"
+
+#: src/keymap.cpp:148
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Open URL van artikel, feed, of item in het URL overzicht"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Open URL van artikel, feed, of item in het URL overzicht"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Open het hulpvenster"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Broncodeweergave omschakelen"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Gelezen status voor artikel omschakelen"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Wissel tussen tonen/niet tonen van gelezen feeds/artikelen"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "URLs in huidige artikelen tonen"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Huidige tag wissen"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Tag selecteren"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Zoekvenster openen"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr "Ga naar item met titel"
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Download toevoegen aan wachtrij"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Lijst van URLs opnieuw uit de configuratie lezen"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Bestand downloaden"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Download annuleren"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Download als verwijderd markeren"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Afgeronde en verwijderde downloads uit de wachtrij verwijderen"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Automatisch downloaden omschakelen"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Speler starten met huidig geselecteerde download"
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr "Bestand als afgerond markeren (niet afgespeeld)"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Aantal gelijktijdige downloads verhogen"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Aantal gelijktijdige downloads verminderen"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Scherm verversen"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Opdrachtregel openen"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Filter instellen"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Voorgedefinieerde filter selecteren"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Huidig geselecteerde filter wissen"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Bladwijzer op huidig(e) koppeling/artikel zetten"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Wijzig vlaggen"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Ga naar volgende feed"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Ga naar vorige feed"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Ga naar volgende ongelezen feed"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Ga naar vorige ongelezen feed"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Macro uitvoeren"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Artikel verwijderen"
+
+#: src/keymap.cpp:335
+msgid "Delete all articles"
+msgstr "Alle artikelen verwijderen"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Verwijderde artikelen definitief opruimen"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Geabonneerde URLs wijzigen"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Huidig geselecteerd dialoogvenster sluiten"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Toon lijst van open dialoogvensters"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Ga naar volgend dialoogvenster"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Ga naar vorig dialoogvenster"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Artikel naar commando doorsturen"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Huidige lijst sorteren"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Huidige lijst omgekeerd sorteren"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "Open URL 1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "Open URL 2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "Open URL 3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "Open URL 4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "Open URL 5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "Open URL 6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "Open URL 7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "Open URL 8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "Open URL 9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "Open URL 10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr "Open opdrachtregel met 1"
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr "Open opdrachtregel met 2"
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr "Open opdrachtregel met 3"
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr "Open opdrachtregel met 4"
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr "Open opdrachtregel met 5"
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr "Open opdrachtregel met 6"
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr "Open opdrachtregel met 7"
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr "Open opdrachtregel met 8"
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr "Open opdrachtregel met 9"
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Ga naar vorig ongelezen element"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Ga naar volgend ongelezen element"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Ga naar vorige pagina"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Ga naar volgende pagina"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Ga naar begin van pagina/lijst"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Ga naar einde van pagina/lijst"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1623,270 +1981,6 @@ msgstr "regexec gaf error code %i terug"
 
 #~ msgid "Starting browser..."
 #~ msgstr "Bezig met starten van browser..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Open feed/artikel"
-
-#~ msgid "Switch focus between widgets"
-#~ msgstr "Wissel tussen widgets"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Naar vorige dialoogvenster terugkeren/afsluiten"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Programma afsluiten zonder bevestiging"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Geselecteerde feed vernieuwen"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Alle feeds vernieuwen"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Feed als gelezen markeren"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Alle feeds als gelezen markeren"
-
-#~ msgid "Mark all above as read"
-#~ msgstr "Markeer alle voorgaande feeds als gelezen"
-
-#~ msgid "Save article"
-#~ msgstr "Artikel opslaan"
-
-#~ msgid "Save articles"
-#~ msgstr "Artikelen opslaan"
-
-#~ msgid "Go to next entry"
-#~ msgstr "Ga naar volgende item"
-
-#~ msgid "Go to previous entry"
-#~ msgstr "Ga naar vorige item"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Ga naar volgend ongelezen artikel"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Ga naar vorig ongelezen artikel"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Ga naar willekeurig ongelezen artikel"
-
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Open URL van artikel in browser en markeer als gelezen."
-
-#~ msgid "Open all unread items of selected feed in browser"
-#~ msgstr "Open alle ongelezen artikelen van de huidige feed in de browser"
-
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr "Open alle ongelezen artikelen in de browser en markeer als gelezen"
-
-#~ msgid "Open URL of article, feed, or entry in URL view"
-#~ msgstr "Open URL van artikel, feed, of item in het URL overzicht"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Open het hulpvenster"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Broncodeweergave omschakelen"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Gelezen status voor artikel omschakelen"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Wissel tussen tonen/niet tonen van gelezen feeds/artikelen"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "URLs in huidige artikelen tonen"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Huidige tag wissen"
-
-#~ msgid "Select tag"
-#~ msgstr "Tag selecteren"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Zoekvenster openen"
-
-#~ msgid "Goto item with title"
-#~ msgstr "Ga naar item met titel"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Download toevoegen aan wachtrij"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Lijst van URLs opnieuw uit de configuratie lezen"
-
-#~ msgid "Download file"
-#~ msgstr "Bestand downloaden"
-
-#~ msgid "Cancel download"
-#~ msgstr "Download annuleren"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Download als verwijderd markeren"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Afgeronde en verwijderde downloads uit de wachtrij verwijderen"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Automatisch downloaden omschakelen"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Speler starten met huidig geselecteerde download"
-
-#~ msgid "Mark file as finished (not played)"
-#~ msgstr "Bestand als afgerond markeren (niet afgespeeld)"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Aantal gelijktijdige downloads verhogen"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Aantal gelijktijdige downloads verminderen"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Scherm verversen"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Opdrachtregel openen"
-
-#~ msgid "Set a filter"
-#~ msgstr "Filter instellen"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Voorgedefinieerde filter selecteren"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Huidig geselecteerde filter wissen"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Bladwijzer op huidig(e) koppeling/artikel zetten"
-
-#~ msgid "Edit flags"
-#~ msgstr "Wijzig vlaggen"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Ga naar volgende feed"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Ga naar vorige feed"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Ga naar volgende ongelezen feed"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Ga naar vorige ongelezen feed"
-
-#~ msgid "Call a macro"
-#~ msgstr "Macro uitvoeren"
-
-#~ msgid "Delete article"
-#~ msgstr "Artikel verwijderen"
-
-#~ msgid "Delete all articles"
-#~ msgstr "Alle artikelen verwijderen"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Verwijderde artikelen definitief opruimen"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Geabonneerde URLs wijzigen"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Huidig geselecteerd dialoogvenster sluiten"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Toon lijst van open dialoogvensters"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Ga naar volgend dialoogvenster"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Ga naar vorig dialoogvenster"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Artikel naar commando doorsturen"
-
-#~ msgid "Sort current list"
-#~ msgstr "Huidige lijst sorteren"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Huidige lijst omgekeerd sorteren"
-
-#~ msgid "Open URL 1"
-#~ msgstr "Open URL 1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "Open URL 2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "Open URL 3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "Open URL 4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "Open URL 5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "Open URL 6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "Open URL 7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "Open URL 8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "Open URL 9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "Open URL 10"
-
-#~ msgid "Start cmdline with 1"
-#~ msgstr "Open opdrachtregel met 1"
-
-#~ msgid "Start cmdline with 2"
-#~ msgstr "Open opdrachtregel met 2"
-
-#~ msgid "Start cmdline with 3"
-#~ msgstr "Open opdrachtregel met 3"
-
-#~ msgid "Start cmdline with 4"
-#~ msgstr "Open opdrachtregel met 4"
-
-#~ msgid "Start cmdline with 5"
-#~ msgstr "Open opdrachtregel met 5"
-
-#~ msgid "Start cmdline with 6"
-#~ msgstr "Open opdrachtregel met 6"
-
-#~ msgid "Start cmdline with 7"
-#~ msgstr "Open opdrachtregel met 7"
-
-#~ msgid "Start cmdline with 8"
-#~ msgstr "Open opdrachtregel met 8"
-
-#~ msgid "Start cmdline with 9"
-#~ msgstr "Open opdrachtregel met 9"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Ga naar vorig ongelezen element"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Ga naar volgend ongelezen element"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Ga naar vorige pagina"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Ga naar volgende pagina"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Ga naar begin van pagina/lijst"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Ga naar einde van pagina/lijst"
 
 #~ msgid ""
 #~ "Overwrite `%s' in `%s'? There are no more conflicts like this (y:Yes a:"

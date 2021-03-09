@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: \n"
@@ -1212,7 +1212,7 @@ msgstr "Chyba: nemožno zapísať článok do súboru %s"
 msgid "Error while marking article as unread: %s"
 msgstr "Chyba pri označovaní článku ako neprečítaného: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Choď na URL #"
 
@@ -1232,6 +1232,374 @@ msgstr "Článok - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Chyba: neplatný regulárny výraz!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Otvoriť informačný kanál/článok"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Návrat do predchádzajúceho dialógového okna/Ukončiť"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Ukončiť program, bez potvrdenia"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Aktualizovať aktuálne vybraný informačný kanál (zdroj)"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Znovu načítať všetky informačné kanály"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Označ informačný kanál ako prečítaný"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Označ všetky informačné kanály ako prečítané"
+
+#: src/keymap.cpp:82
+#, fuzzy
+msgid "Mark all above as read"
+msgstr "Označ všetky informačné kanály ako prečítané"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Uložiť článok"
+
+#: src/keymap.cpp:86
+#, fuzzy
+msgid "Save articles"
+msgstr "Uložiť článok"
+
+#: src/keymap.cpp:91
+#, fuzzy
+msgid "Go to next entry"
+msgstr "Prejsť na ďalšiu položku"
+
+#: src/keymap.cpp:98
+#, fuzzy
+msgid "Go to previous entry"
+msgstr "Prejsť na predchádzajúcu položku"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Choď na nasledujúci neprečítaný článok"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Choď na predchádzajúci neprečítaný článok"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Choď na náhodný neprečítaný článok"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr ""
+"Otvoriť všetky neprečítané položky vybratého informačného kanála v "
+"prehliadači"
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr ""
+"Otvoriť všetky neprečítané položky vybratého informačného kanála v "
+"prehliadači a označ ako prečítané"
+
+#: src/keymap.cpp:148
+#, fuzzy
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Otvor dialóg pomocníka"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Prepnúť zobrazenie zdroja"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Prepnúť status čítania článku"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Prepnúť zobrazenie informačných kanálov/článkov"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "Zobraziť adresy URL v aktuálnom článku"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Vymazať aktuálnu značku (tag)"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Vybrať značku (tag)"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Otvoriť dialógové okno vyhľadávania"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Pridať sťahovanie do fronty"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Znova načítať zoznam adries URL z konfigurácie"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Stiahnuť súbor"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Zrušiť sťahovanie"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Označiť stiahnuté ako odstránené"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Vyčistiť dokončené a odstrániť stiahnuté z fronty"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Prepnúť automatické preberanie zapnuté/vypnuté"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Spustiť prehrávač s aktuálne vybratým sťahovaním"
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr "Označiť súbor ako dokončený (neprehraný)"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Zvýšenie počtu paralelných sťahovaní"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Znížiť počet paralelných sťahovaní"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Prepísať obrazovku"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Otvoriť príkazový riadok (cli)"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Nastav fitler"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Vybrať preddefinovaný filter"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Vymazať aktuálne nastavený filter"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Záložka aktuálneho odkazu/článku"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Upraviť príznaky"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Prejsť na ďalší informačný kanál"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Prejsť na predchádzajúci informačný kanál"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Prejsť na ďalší neprečítaný informačný kanál"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Prejsť na predchádzajúci neprečítaný informačný kanál"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Vyvolať makro"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Zmazať článok"
+
+#: src/keymap.cpp:335
+#, fuzzy
+msgid "Delete all articles"
+msgstr "Zmazať článok"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Vyčistiť odstránené články"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Upraviť vybrané URL adresy"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Zatvoriť aktuálne vybratý dialóg"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Zobraziť zoznam otvorených dialógov"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Prejsť na ďalší dialóg"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Prejsť na predchádzajúci dialóg"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "\"Pipe\" článok do príkazu"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Zoradiť aktuálny zoznam"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Zoradiť aktuálny zoznam (spätne)"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "Otvor URL 1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "Otvor URL 2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "Otvor URL 3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "Otvor URL 4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "Otvor URL 5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "Otvor URL 6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "Otvor URL 7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "Otvor URL 8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "Otvor URL 9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "Otvor URL 10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Prejsť na predchádzajúcu položku"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Prejsť na ďalšiu položku"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Prejsť na predchádzajúcu stránku"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Prejsť na ďalšiu stránku"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Prejsť na začiatok stránky / zoznamu"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Prejsť na koniec stránky/zoznamu"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1610,244 +1978,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "Spustenie prehliadača..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Otvoriť informačný kanál/článok"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Návrat do predchádzajúceho dialógového okna/Ukončiť"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Ukončiť program, bez potvrdenia"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Aktualizovať aktuálne vybraný informačný kanál (zdroj)"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Znovu načítať všetky informačné kanály"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Označ informačný kanál ako prečítaný"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Označ všetky informačné kanály ako prečítané"
-
-#, fuzzy
-#~ msgid "Mark all above as read"
-#~ msgstr "Označ všetky informačné kanály ako prečítané"
-
-#~ msgid "Save article"
-#~ msgstr "Uložiť článok"
-
-#, fuzzy
-#~ msgid "Save articles"
-#~ msgstr "Uložiť článok"
-
-#, fuzzy
-#~ msgid "Go to next entry"
-#~ msgstr "Prejsť na ďalšiu položku"
-
-#, fuzzy
-#~ msgid "Go to previous entry"
-#~ msgstr "Prejsť na predchádzajúcu položku"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Choď na nasledujúci neprečítaný článok"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Choď na predchádzajúci neprečítaný článok"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Choď na náhodný neprečítaný článok"
-
-#, fuzzy
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
-
-#~ msgid "Open all unread items of selected feed in browser"
-#~ msgstr ""
-#~ "Otvoriť všetky neprečítané položky vybratého informačného kanála v "
-#~ "prehliadači"
-
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr ""
-#~ "Otvoriť všetky neprečítané položky vybratého informačného kanála v "
-#~ "prehliadači a označ ako prečítané"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Otvor dialóg pomocníka"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Prepnúť zobrazenie zdroja"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Prepnúť status čítania článku"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Prepnúť zobrazenie informačných kanálov/článkov"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "Zobraziť adresy URL v aktuálnom článku"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Vymazať aktuálnu značku (tag)"
-
-#~ msgid "Select tag"
-#~ msgstr "Vybrať značku (tag)"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Otvoriť dialógové okno vyhľadávania"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Pridať sťahovanie do fronty"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Znova načítať zoznam adries URL z konfigurácie"
-
-#~ msgid "Download file"
-#~ msgstr "Stiahnuť súbor"
-
-#~ msgid "Cancel download"
-#~ msgstr "Zrušiť sťahovanie"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Označiť stiahnuté ako odstránené"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Vyčistiť dokončené a odstrániť stiahnuté z fronty"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Prepnúť automatické preberanie zapnuté/vypnuté"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Spustiť prehrávač s aktuálne vybratým sťahovaním"
-
-#~ msgid "Mark file as finished (not played)"
-#~ msgstr "Označiť súbor ako dokončený (neprehraný)"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Zvýšenie počtu paralelných sťahovaní"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Znížiť počet paralelných sťahovaní"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Prepísať obrazovku"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Otvoriť príkazový riadok (cli)"
-
-#~ msgid "Set a filter"
-#~ msgstr "Nastav fitler"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Vybrať preddefinovaný filter"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Vymazať aktuálne nastavený filter"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Záložka aktuálneho odkazu/článku"
-
-#~ msgid "Edit flags"
-#~ msgstr "Upraviť príznaky"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Prejsť na ďalší informačný kanál"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Prejsť na predchádzajúci informačný kanál"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Prejsť na ďalší neprečítaný informačný kanál"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Prejsť na predchádzajúci neprečítaný informačný kanál"
-
-#~ msgid "Call a macro"
-#~ msgstr "Vyvolať makro"
-
-#~ msgid "Delete article"
-#~ msgstr "Zmazať článok"
-
-#, fuzzy
-#~ msgid "Delete all articles"
-#~ msgstr "Zmazať článok"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Vyčistiť odstránené články"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Upraviť vybrané URL adresy"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Zatvoriť aktuálne vybratý dialóg"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Zobraziť zoznam otvorených dialógov"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Prejsť na ďalší dialóg"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Prejsť na predchádzajúci dialóg"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "\"Pipe\" článok do príkazu"
-
-#~ msgid "Sort current list"
-#~ msgstr "Zoradiť aktuálny zoznam"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Zoradiť aktuálny zoznam (spätne)"
-
-#~ msgid "Open URL 1"
-#~ msgstr "Otvor URL 1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "Otvor URL 2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "Otvor URL 3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "Otvor URL 4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "Otvor URL 5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "Otvor URL 6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "Otvor URL 7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "Otvor URL 8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "Otvor URL 9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "Otvor URL 10"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Prejsť na predchádzajúcu položku"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Prejsť na ďalšiu položku"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Prejsť na predchádzajúcu stránku"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Prejsť na ďalšiu stránku"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Prejsť na začiatok stránky / zoznamu"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Prejsť na koniec stránky/zoznamu"
 
 #~ msgid "Open article in browser"
 #~ msgstr "Otvoriť článok v prehliadači"

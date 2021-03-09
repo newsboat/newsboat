@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-03-09 19:02+0300\n"
+"POT-Creation-Date: 2021-03-09 22:46+0300\n"
 "PO-Revision-Date: 2018-08-08 10:17+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
@@ -1217,7 +1217,7 @@ msgstr "Fel: kunde inte skriva artikel till fil %s"
 msgid "Error while marking article as unread: %s"
 msgstr "Fel vid markering av artikel som oläst: %s"
 
-#: src/itemviewformaction.cpp:466
+#: src/itemviewformaction.cpp:466 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Gå till URL #"
 
@@ -1237,6 +1237,371 @@ msgstr "Artikel - %s"
 #: src/itemviewformaction.cpp:722
 msgid "Error: invalid regular expression!"
 msgstr "Fel: ogiltigt reguljärt uttryck!"
+
+#: src/keymap.cpp:37
+msgid "Open feed/article"
+msgstr "Öppna webbflöde/artikel"
+
+#: src/keymap.cpp:45
+msgid "Switch focus between widgets"
+msgstr ""
+
+#: src/keymap.cpp:48
+msgid "Return to previous dialog/Quit"
+msgstr "Återvänd till föregående dialogruta/Avsluta"
+
+#: src/keymap.cpp:53
+msgid "Quit program, no confirmation"
+msgstr "Avsluta program utan att begära bekräftelse"
+
+#: src/keymap.cpp:60
+msgid "Reload currently selected feed"
+msgstr "Läs om markerat webbflöde"
+
+#: src/keymap.cpp:63
+msgid "Reload all feeds"
+msgstr "Läs om alla webbflöden"
+
+#: src/keymap.cpp:68
+msgid "Mark feed read"
+msgstr "Markera webbflöde som läst"
+
+#: src/keymap.cpp:75
+msgid "Mark all feeds read"
+msgstr "Markera alla webbflöden som lästa"
+
+#: src/keymap.cpp:82
+msgid "Mark all above as read"
+msgstr "Markera allt ovanför som läst"
+
+#: src/keymap.cpp:85
+msgid "Save article"
+msgstr "Spara artikel"
+
+#: src/keymap.cpp:86
+#, fuzzy
+msgid "Save articles"
+msgstr "Spara artikel"
+
+#: src/keymap.cpp:91
+#, fuzzy
+msgid "Go to next entry"
+msgstr "Flytta till nästa post"
+
+#: src/keymap.cpp:98
+#, fuzzy
+msgid "Go to previous entry"
+msgstr "Flytta till föregående post"
+
+#: src/keymap.cpp:105
+msgid "Go to next unread article"
+msgstr "Gå till nästa olästa artikel"
+
+#: src/keymap.cpp:112
+msgid "Go to previous unread article"
+msgstr "Gå till föregående olästa artikel"
+
+#: src/keymap.cpp:119
+msgid "Go to a random unread article"
+msgstr "Gå till en slumpmässigt vald oläst artikel"
+
+#: src/keymap.cpp:126
+#, fuzzy
+msgid "Open URL of article, or entry in URL view. Mark read"
+msgstr "Öppna artikel i webbläsare och markera som läst"
+
+#: src/keymap.cpp:133
+msgid "Open all unread items of selected feed in browser"
+msgstr "Öppna alla olästa artiklar i markerat webbflöde i webbläsare"
+
+#: src/keymap.cpp:140
+msgid "Open all unread items of selected feed in browser and mark read"
+msgstr ""
+"Öppna alla olästa artiklar i markerat webbflöde i webbläsare och markera som "
+"lästa"
+
+#: src/keymap.cpp:148
+#, fuzzy
+msgid "Open URL of article, feed, or entry in URL view"
+msgstr "Öppna artikel i webbläsare och markera som läst"
+
+#: src/keymap.cpp:155
+#, fuzzy
+msgid "Open URL of article, feed, or entry in a browser, non-interactively"
+msgstr "Öppna artikel i webbläsare och markera som läst"
+
+#: src/keymap.cpp:162
+msgid "Open help dialog"
+msgstr "Öppna hjälpdialogruta"
+
+#: src/keymap.cpp:169
+msgid "Toggle source view"
+msgstr "Växla källvy"
+
+#: src/keymap.cpp:176
+msgid "Toggle read status for article"
+msgstr "Växla lässtatus för artikel"
+
+#: src/keymap.cpp:183
+msgid "Toggle show read feeds/articles"
+msgstr "Växla visa lästa webbflöden/artiklar"
+
+#: src/keymap.cpp:190
+msgid "Show URLs in current article"
+msgstr "Visa URL:er i nuvarande artikel"
+
+#: src/keymap.cpp:193
+msgid "Clear current tag"
+msgstr "Töm nuvarande tagg"
+
+#: src/keymap.cpp:194 src/keymap.cpp:195
+msgid "Select tag"
+msgstr "Välj tagg"
+
+#: src/keymap.cpp:200
+msgid "Open search dialog"
+msgstr "Öppna sökdialogrutan"
+
+#: src/keymap.cpp:204
+msgid "Goto item with title"
+msgstr ""
+
+#: src/keymap.cpp:205
+msgid "Add download to queue"
+msgstr "Lägg till hämtning i kö"
+
+#: src/keymap.cpp:210
+msgid "Reload the list of URLs from the configuration"
+msgstr "Läs om listan över URL:er från konfigurationen"
+
+#: src/keymap.cpp:213
+msgid "Download file"
+msgstr "Hämta fil"
+
+#: src/keymap.cpp:214
+msgid "Cancel download"
+msgstr "Avbryt hämtning"
+
+#: src/keymap.cpp:219
+msgid "Mark download as deleted"
+msgstr "Markera hämtning som borttagen"
+
+#: src/keymap.cpp:226
+msgid "Purge finished and deleted downloads from queue"
+msgstr "Rensa färdiga och borttagna hämtningar från kö"
+
+#: src/keymap.cpp:233
+msgid "Toggle automatic download on/off"
+msgstr "Växla automatisk hämtning på/av"
+
+#: src/keymap.cpp:240
+msgid "Start player with currently selected download"
+msgstr "Starta spelaren med den markerade hämtningen"
+
+#: src/keymap.cpp:247
+msgid "Mark file as finished (not played)"
+msgstr "Markera fil som klar (inte spelad)"
+
+#: src/keymap.cpp:254
+msgid "Increase the number of concurrent downloads"
+msgstr "Öka antalet samtidiga hämtningar"
+
+#: src/keymap.cpp:261
+msgid "Decrease the number of concurrent downloads"
+msgstr "Minska antalet samtidiga hämtningar"
+
+#: src/keymap.cpp:264
+msgid "Redraw screen"
+msgstr "Rita om skärm"
+
+#: src/keymap.cpp:265
+msgid "Open the commandline"
+msgstr "Öppna kommandoraden"
+
+#: src/keymap.cpp:270
+msgid "Set a filter"
+msgstr "Ställ in ett filter"
+
+#: src/keymap.cpp:277
+msgid "Select a predefined filter"
+msgstr "Välj ett förinställt filter"
+
+#: src/keymap.cpp:284
+msgid "Clear currently set filter"
+msgstr "Töm aktuellt inställt filter"
+
+#: src/keymap.cpp:291
+msgid "Bookmark current link/article"
+msgstr "Bokmarkera aktuell länk/artikel"
+
+#: src/keymap.cpp:298
+msgid "Edit flags"
+msgstr "Redigera flaggor"
+
+#: src/keymap.cpp:301
+msgid "Go to next feed"
+msgstr "Gå till nästa webbflöde"
+
+#: src/keymap.cpp:306
+msgid "Go to previous feed"
+msgstr "Gå till föregående webbflöde"
+
+#: src/keymap.cpp:313
+msgid "Go to next unread feed"
+msgstr "Gå till nästa olästa webbflöde"
+
+#: src/keymap.cpp:320
+msgid "Go to previous unread feed"
+msgstr "Gå till föregående olästa webbflöde"
+
+#: src/keymap.cpp:323
+msgid "Call a macro"
+msgstr "Anropa ett makro"
+
+#: src/keymap.cpp:328
+msgid "Delete article"
+msgstr "Ta bort artikel"
+
+#: src/keymap.cpp:335
+#, fuzzy
+msgid "Delete all articles"
+msgstr "Ta bort artikel"
+
+#: src/keymap.cpp:342
+msgid "Purge deleted articles"
+msgstr "Rensa borttagna artiklar"
+
+#: src/keymap.cpp:349
+msgid "Edit subscribed URLs"
+msgstr "Redigera prenumererade URL:er"
+
+#: src/keymap.cpp:356
+msgid "Close currently selected dialog"
+msgstr "Stäng markerad dialogruta"
+
+#: src/keymap.cpp:363
+msgid "View list of open dialogs"
+msgstr "Se lista över öppna dialogrutor"
+
+#: src/keymap.cpp:370
+msgid "Go to next dialog"
+msgstr "Gå till nästa dialogruta"
+
+#: src/keymap.cpp:377
+msgid "Go to previous dialog"
+msgstr "Gå till föregående dialogruta"
+
+#: src/keymap.cpp:384
+msgid "Pipe article to command"
+msgstr "Skicka artikel genom pipe till kommando"
+
+#: src/keymap.cpp:391
+msgid "Sort current list"
+msgstr "Sortera aktuell lista"
+
+#: src/keymap.cpp:398
+msgid "Sort current list (reverse)"
+msgstr "Sortera aktuell lista (omvänt)"
+
+#: src/keymap.cpp:402
+msgid "Open URL 1"
+msgstr "Öppna url 1"
+
+#: src/keymap.cpp:403
+msgid "Open URL 2"
+msgstr "Öppna url 2"
+
+#: src/keymap.cpp:404
+msgid "Open URL 3"
+msgstr "Öppna url 3"
+
+#: src/keymap.cpp:405
+msgid "Open URL 4"
+msgstr "Öppna url 4"
+
+#: src/keymap.cpp:406
+msgid "Open URL 5"
+msgstr "Öppna url 5"
+
+#: src/keymap.cpp:407
+msgid "Open URL 6"
+msgstr "Öppna url 6"
+
+#: src/keymap.cpp:408
+msgid "Open URL 7"
+msgstr "Öppna url 7"
+
+#: src/keymap.cpp:409
+msgid "Open URL 8"
+msgstr "Öppna url 8"
+
+#: src/keymap.cpp:410
+msgid "Open URL 9"
+msgstr "Öppna url 9"
+
+#: src/keymap.cpp:411
+msgid "Open URL 10"
+msgstr "Öppna url 10"
+
+#: src/keymap.cpp:413
+msgid "Start cmdline with 1"
+msgstr ""
+
+#: src/keymap.cpp:414
+msgid "Start cmdline with 2"
+msgstr ""
+
+#: src/keymap.cpp:415
+msgid "Start cmdline with 3"
+msgstr ""
+
+#: src/keymap.cpp:416
+msgid "Start cmdline with 4"
+msgstr ""
+
+#: src/keymap.cpp:417
+msgid "Start cmdline with 5"
+msgstr ""
+
+#: src/keymap.cpp:418
+msgid "Start cmdline with 6"
+msgstr ""
+
+#: src/keymap.cpp:419
+msgid "Start cmdline with 7"
+msgstr ""
+
+#: src/keymap.cpp:420
+msgid "Start cmdline with 8"
+msgstr ""
+
+#: src/keymap.cpp:421
+msgid "Start cmdline with 9"
+msgstr ""
+
+#: src/keymap.cpp:423
+msgid "Move to the previous entry"
+msgstr "Flytta till föregående post"
+
+#: src/keymap.cpp:424
+msgid "Move to the next entry"
+msgstr "Flytta till nästa post"
+
+#: src/keymap.cpp:429
+msgid "Move to the previous page"
+msgstr "Flytta till föregående sida"
+
+#: src/keymap.cpp:436
+msgid "Move to the next page"
+msgstr "Flytta till nästa sida"
+
+#: src/keymap.cpp:444
+msgid "Move to the start of page/list"
+msgstr "Flytta till början av sida/lista"
+
+#: src/keymap.cpp:451
+msgid "Move to the end of page/list"
+msgstr "Flytta till slutet av sida/lista"
 
 #: src/keymap.cpp:710
 #, c-format
@@ -1613,241 +1978,6 @@ msgstr ""
 
 #~ msgid "Starting browser..."
 #~ msgstr "Startar webbläsare..."
-
-#~ msgid "Open feed/article"
-#~ msgstr "Öppna webbflöde/artikel"
-
-#~ msgid "Return to previous dialog/Quit"
-#~ msgstr "Återvänd till föregående dialogruta/Avsluta"
-
-#~ msgid "Quit program, no confirmation"
-#~ msgstr "Avsluta program utan att begära bekräftelse"
-
-#~ msgid "Reload currently selected feed"
-#~ msgstr "Läs om markerat webbflöde"
-
-#~ msgid "Reload all feeds"
-#~ msgstr "Läs om alla webbflöden"
-
-#~ msgid "Mark feed read"
-#~ msgstr "Markera webbflöde som läst"
-
-#~ msgid "Mark all feeds read"
-#~ msgstr "Markera alla webbflöden som lästa"
-
-#~ msgid "Mark all above as read"
-#~ msgstr "Markera allt ovanför som läst"
-
-#~ msgid "Save article"
-#~ msgstr "Spara artikel"
-
-#, fuzzy
-#~ msgid "Save articles"
-#~ msgstr "Spara artikel"
-
-#, fuzzy
-#~ msgid "Go to next entry"
-#~ msgstr "Flytta till nästa post"
-
-#, fuzzy
-#~ msgid "Go to previous entry"
-#~ msgstr "Flytta till föregående post"
-
-#~ msgid "Go to next unread article"
-#~ msgstr "Gå till nästa olästa artikel"
-
-#~ msgid "Go to previous unread article"
-#~ msgstr "Gå till föregående olästa artikel"
-
-#~ msgid "Go to a random unread article"
-#~ msgstr "Gå till en slumpmässigt vald oläst artikel"
-
-#, fuzzy
-#~ msgid "Open URL of article, or entry in URL view. Mark read."
-#~ msgstr "Öppna artikel i webbläsare och markera som läst"
-
-#~ msgid "Open all unread items of selected feed in browser"
-#~ msgstr "Öppna alla olästa artiklar i markerat webbflöde i webbläsare"
-
-#~ msgid "Open all unread items of selected feed in browser and mark read"
-#~ msgstr ""
-#~ "Öppna alla olästa artiklar i markerat webbflöde i webbläsare och markera "
-#~ "som lästa"
-
-#~ msgid "Open help dialog"
-#~ msgstr "Öppna hjälpdialogruta"
-
-#~ msgid "Toggle source view"
-#~ msgstr "Växla källvy"
-
-#~ msgid "Toggle read status for article"
-#~ msgstr "Växla lässtatus för artikel"
-
-#~ msgid "Toggle show read feeds/articles"
-#~ msgstr "Växla visa lästa webbflöden/artiklar"
-
-#~ msgid "Show URLs in current article"
-#~ msgstr "Visa URL:er i nuvarande artikel"
-
-#~ msgid "Clear current tag"
-#~ msgstr "Töm nuvarande tagg"
-
-#~ msgid "Select tag"
-#~ msgstr "Välj tagg"
-
-#~ msgid "Open search dialog"
-#~ msgstr "Öppna sökdialogrutan"
-
-#~ msgid "Add download to queue"
-#~ msgstr "Lägg till hämtning i kö"
-
-#~ msgid "Reload the list of URLs from the configuration"
-#~ msgstr "Läs om listan över URL:er från konfigurationen"
-
-#~ msgid "Download file"
-#~ msgstr "Hämta fil"
-
-#~ msgid "Cancel download"
-#~ msgstr "Avbryt hämtning"
-
-#~ msgid "Mark download as deleted"
-#~ msgstr "Markera hämtning som borttagen"
-
-#~ msgid "Purge finished and deleted downloads from queue"
-#~ msgstr "Rensa färdiga och borttagna hämtningar från kö"
-
-#~ msgid "Toggle automatic download on/off"
-#~ msgstr "Växla automatisk hämtning på/av"
-
-#~ msgid "Start player with currently selected download"
-#~ msgstr "Starta spelaren med den markerade hämtningen"
-
-#~ msgid "Mark file as finished (not played)"
-#~ msgstr "Markera fil som klar (inte spelad)"
-
-#~ msgid "Increase the number of concurrent downloads"
-#~ msgstr "Öka antalet samtidiga hämtningar"
-
-#~ msgid "Decrease the number of concurrent downloads"
-#~ msgstr "Minska antalet samtidiga hämtningar"
-
-#~ msgid "Redraw screen"
-#~ msgstr "Rita om skärm"
-
-#~ msgid "Open the commandline"
-#~ msgstr "Öppna kommandoraden"
-
-#~ msgid "Set a filter"
-#~ msgstr "Ställ in ett filter"
-
-#~ msgid "Select a predefined filter"
-#~ msgstr "Välj ett förinställt filter"
-
-#~ msgid "Clear currently set filter"
-#~ msgstr "Töm aktuellt inställt filter"
-
-#~ msgid "Bookmark current link/article"
-#~ msgstr "Bokmarkera aktuell länk/artikel"
-
-#~ msgid "Edit flags"
-#~ msgstr "Redigera flaggor"
-
-#~ msgid "Go to next feed"
-#~ msgstr "Gå till nästa webbflöde"
-
-#~ msgid "Go to previous feed"
-#~ msgstr "Gå till föregående webbflöde"
-
-#~ msgid "Go to next unread feed"
-#~ msgstr "Gå till nästa olästa webbflöde"
-
-#~ msgid "Go to previous unread feed"
-#~ msgstr "Gå till föregående olästa webbflöde"
-
-#~ msgid "Call a macro"
-#~ msgstr "Anropa ett makro"
-
-#~ msgid "Delete article"
-#~ msgstr "Ta bort artikel"
-
-#, fuzzy
-#~ msgid "Delete all articles"
-#~ msgstr "Ta bort artikel"
-
-#~ msgid "Purge deleted articles"
-#~ msgstr "Rensa borttagna artiklar"
-
-#~ msgid "Edit subscribed URLs"
-#~ msgstr "Redigera prenumererade URL:er"
-
-#~ msgid "Close currently selected dialog"
-#~ msgstr "Stäng markerad dialogruta"
-
-#~ msgid "View list of open dialogs"
-#~ msgstr "Se lista över öppna dialogrutor"
-
-#~ msgid "Go to next dialog"
-#~ msgstr "Gå till nästa dialogruta"
-
-#~ msgid "Go to previous dialog"
-#~ msgstr "Gå till föregående dialogruta"
-
-#~ msgid "Pipe article to command"
-#~ msgstr "Skicka artikel genom pipe till kommando"
-
-#~ msgid "Sort current list"
-#~ msgstr "Sortera aktuell lista"
-
-#~ msgid "Sort current list (reverse)"
-#~ msgstr "Sortera aktuell lista (omvänt)"
-
-#~ msgid "Open URL 1"
-#~ msgstr "Öppna url 1"
-
-#~ msgid "Open URL 2"
-#~ msgstr "Öppna url 2"
-
-#~ msgid "Open URL 3"
-#~ msgstr "Öppna url 3"
-
-#~ msgid "Open URL 4"
-#~ msgstr "Öppna url 4"
-
-#~ msgid "Open URL 5"
-#~ msgstr "Öppna url 5"
-
-#~ msgid "Open URL 6"
-#~ msgstr "Öppna url 6"
-
-#~ msgid "Open URL 7"
-#~ msgstr "Öppna url 7"
-
-#~ msgid "Open URL 8"
-#~ msgstr "Öppna url 8"
-
-#~ msgid "Open URL 9"
-#~ msgstr "Öppna url 9"
-
-#~ msgid "Open URL 10"
-#~ msgstr "Öppna url 10"
-
-#~ msgid "Move to the previous entry"
-#~ msgstr "Flytta till föregående post"
-
-#~ msgid "Move to the next entry"
-#~ msgstr "Flytta till nästa post"
-
-#~ msgid "Move to the previous page"
-#~ msgstr "Flytta till föregående sida"
-
-#~ msgid "Move to the next page"
-#~ msgstr "Flytta till nästa sida"
-
-#~ msgid "Move to the start of page/list"
-#~ msgstr "Flytta till början av sida/lista"
-
-#~ msgid "Move to the end of page/list"
-#~ msgstr "Flytta till slutet av sida/lista"
 
 #~ msgid "Open article in browser"
 #~ msgstr "Öppna artikel i webbläsare"
