@@ -24,7 +24,7 @@ class AutoDiscardMessage;
 
 class StatusLine {
 public:
-	StatusLine(IStatus& s);
+	explicit StatusLine(IStatus& s);
 
 	void show_message(const std::string& message);
 	void show_error(const std::string& message);
