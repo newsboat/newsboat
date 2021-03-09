@@ -251,9 +251,9 @@ dependencies = [
 
 [[package]]
 name = "gettext-rs"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b95fa19cca70adf9888150e979839ae9bd58f85a1a42e4753699112875189e1"
+checksum = "3df4e7a9dc238dddd30f183d43e4f497990885daa211fcf01657159ade8f1610"
 dependencies = [
  "gettext-sys",
  "locale_config",
@@ -261,11 +261,12 @@ dependencies = [
 
 [[package]]
 name = "gettext-sys"
-version = "0.19.9"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e034c4ba5bb796730a6cc5eb0d654c16885006a7c3d6c6603581ed809434f153"
+checksum = "885d118016f633f99f741afe6c1433c040813a3cbc755cbfdf85f963e02fad80"
 dependencies = [
  "cc",
+ "tempfile",
 ]
 
 [[package]]
@@ -319,7 +320,6 @@ dependencies = [
  "clap",
  "curl-sys",
  "gettext-rs",
- "gettext-sys",
  "libc",
  "natord",
  "nom",
