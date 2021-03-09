@@ -305,7 +305,7 @@ void HtmlRenderer::render(std::istream& input,
 
 			case HtmlTag::IMG: {
 				std::string img_url;
-				std::string img_title;
+				std::string img_label;
 				try {
 					img_url = xpp.get_attribute_value("src");
 				} catch (const std::invalid_argument&) {
@@ -315,16 +315,23 @@ void HtmlRenderer::render(std::istream& input,
 						"attribute");
 					img_url = "";
 				}
+				// Prefer `alt' over `title'
 				try {
-					img_title = xpp.get_attribute_value(
-							"title");
+					img_label = xpp.get_attribute_value("alt");
 				} catch (const std::invalid_argument&) {
-					img_title = "";
+					img_label = "";
+				}
+				if (img_label.empty()) {
+					try {
+						img_label = xpp.get_attribute_value("title");
+					} catch (const std::invalid_argument&) {
+						img_label = "";
+					}
 				}
 				if (!img_url.empty()) {
 					image_count++;
 					add_media_link(curline, links, url,
-						img_url, img_title, image_count,
+						img_url, img_label, image_count,
 						LinkType::IMG);
 				}
 			}
