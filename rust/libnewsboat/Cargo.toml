@@ -18,7 +18,6 @@ backtrace = "= 0.3"
 unicode-width = "0.1.8"
 nom = "6"
 libc = "0.2"
-gettext-rs = "0.5.0"
 natord = "1.0.9"
 
 [dependencies.clap]
@@ -32,8 +31,8 @@ version = "2.33"
 #   I want as little dependencies as practically possible.
 default-features = false
 
-[dependencies.gettext-sys]
-version = "0.19.9"
+[dependencies.gettext-rs]
+version = "0.6.0"
 # Don't let the crate build its own copy of gettext; force it to use the one
 # built into glibc.
 features = [ "gettext-system" ]
