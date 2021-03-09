@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-03-09 22:46+0300\n"
-"PO-Revision-Date: 2020-12-13 21:15+0100\n"
+"PO-Revision-Date: 2021-03-09 21:32+0100\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -506,6 +506,8 @@ msgid ""
 "Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
+"Trovati feed non raggiungibili, considera impostare `cleanup-on-quit yes` o esegui "
+"`newsboat --cleanup`"
 
 #: src/controller.cpp:549
 msgid "failed: "
@@ -519,17 +521,17 @@ msgstr "Errore: impossibile contrassegnare tutti i feed letti: %s"
 #: src/controller.cpp:676 src/itemviewformaction.cpp:223
 #, c-format
 msgid "Generated filename (%s) is used already."
-msgstr ""
+msgstr "Il nome di file generato (%s) è già in uso."
 
 #: src/controller.cpp:681 src/itemviewformaction.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open queue file: %s."
-msgstr "Fallita apertura del file (%s)"
+msgstr "Fallita apertura del file di coda: %s."
 
 #: src/controller.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while parsing %s: %s"
-msgstr "Si è verificato un errore analizzando %s."
+msgstr "Si è verificato un errore analizzando %s: %s"
 
 #: src/controller.cpp:716
 #, c-format
@@ -847,14 +849,14 @@ msgid "Save File - %s"
 msgstr "Salva File - %s"
 
 #: src/fileurlreader.cpp:28
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Errore: Impossibile leggere gli URL dal file \"%s\" (%s)"
+msgstr "Errore: impossibile leggere gli URL dal file \"%s\": %s"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "Errore: Impossibile aprire il file \"%s\" (%s)"
+msgstr "Errore: impossibile aprire il file \"%s\": %s"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:342 src/rssignores.cpp:42
 #, c-format
@@ -862,9 +864,8 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "impossibile analizzare l'espressione di filtro `%s': %s"
 
 #: src/formaction.cpp:145
-#, fuzzy
 msgid "usage: set <config-option> <value>"
-msgstr "uso: set <variabile>[=<valore>]"
+msgstr "uso: set <opzione-configurazione> <valore>"
 
 #: src/formaction.cpp:303
 msgid "usage: set <variable>[=<value>]"
@@ -967,7 +968,7 @@ msgstr "flash integrato"
 
 #: src/htmlrenderer.cpp:1091
 msgid "iframe"
-msgstr ""
+msgstr "iframe"
 
 #: src/htmlrenderer.cpp:1093
 msgid "video"
@@ -1001,9 +1002,8 @@ msgid "No item selected!"
 msgstr "Nessuna voce selezionata!"
 
 #: src/itemlistformaction.cpp:107
-#, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "Vuoi veramente sovrascrivere `%s' (s:Sì n:No)? "
+msgstr "Vuoi davvero cancellare tutti gli articoli (s:Sì n:No)? "
 
 #: src/itemlistformaction.cpp:220 src/itemviewformaction.cpp:412
 msgid "Toggling read flag for article..."
@@ -1191,7 +1191,7 @@ msgstr "Aggiunto %s alla coda dei download."
 #: src/itemviewformaction.cpp:218
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s è già in coda."
 
 #: src/itemviewformaction.cpp:233
 #, c-format
@@ -1299,9 +1299,8 @@ msgid "Go to a random unread article"
 msgstr "Vai su un articolo non letto a caso"
 
 #: src/keymap.cpp:126
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read"
-msgstr "Apri l'URL dell'articolo nel browser e segnalo come letto"
+msgstr "Apri l'URL dell'articolo, o elemento nel browser. Segnalo come letto"
 
 #: src/keymap.cpp:133
 msgid "Open all unread items of selected feed in browser"
@@ -1316,9 +1315,8 @@ msgid "Open URL of article, feed, or entry in URL view"
 msgstr "Apri URL articolo, feed, o elemento in visualizzatore URL"
 
 #: src/keymap.cpp:155
-#, fuzzy
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "Apri URL articolo, feed, o elemento in visualizzatore URL"
+msgstr "Apri URL dell'articolo, feed, o elemento in un browser, non-interattivamente"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
@@ -1618,7 +1616,7 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "l'espressione regolare `%s' non è valida: %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Errore: impossibile analizzare il file OPML \"%s\""
 
@@ -1644,8 +1642,7 @@ msgstr ""
 #, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
 msgstr ""
-"Errore fatale: impossibile creare la directory di configurazione `%s': (%i) "
-"%s"
+"Errore fatale: impossibile creare la directory di configurazione `%s': (%i) %s"
 
 #: src/pbcontroller.cpp:218
 #, c-format
@@ -1818,24 +1815,23 @@ msgid "URLs"
 msgstr "URL"
 
 #: src/utils.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file: %s"
-msgstr "Fallita apertura del file (%s)"
+msgstr "Fallita apertura del file: %s"
 
 #: src/utils.cpp:787
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read line %u: %s"
-msgstr "Fallita lettura linea %u (%s)"
+msgstr "Fallita lettura linea %u: %s"
 
 #: src/view.cpp:165
-#, fuzzy
 msgid "Error: failed to execute startup commands"
-msgstr "Errore: Impossibile eseguire comandi all'avvio"
+msgstr "Errore: fallita esecuzione comandi d'avvio"
 
 #: src/view.cpp:377
 #, c-format
 msgid "Running browser: %s"
-msgstr ""
+msgstr "Avviando browser: %s"
 
 #: src/view.cpp:443 src/view.cpp:468
 msgid "Error: feed contains no items!"
@@ -1944,9 +1940,8 @@ msgid "Internal parse error"
 msgstr "Errore interno di parsing"
 
 #: rust/libnewsboat/src/fslock.rs:57
-#, fuzzy
 msgid "Failed to open lock file '%s': %s"
-msgstr "Fallita apertura file di blocco: '%s' (%s)"
+msgstr "Fallita apertura file di blocco: '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
@@ -1954,9 +1949,8 @@ msgid "<filename containing invalid UTF-8 codepoint>"
 msgstr "<nome file contenente carattere UTF-8 non valido>"
 
 #: rust/libnewsboat/src/fslock.rs:80
-#, fuzzy
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr "Faillita scrittura PID in file di blocco: '%s' (%s)"
+msgstr "Faillita scrittura PID in file di blocco '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
