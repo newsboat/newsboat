@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      # We use Rust Nightly, which builds upon LLVM 11. To ensure best
+      # We use Rust Nightly, which builds upon LLVM 12. To ensure best
       # compatibility, we use a matching C++ compiler.
-      CC: clang-11
-      CXX: clang++-11
+      CC: clang-12
+      CXX: clang++-12
       # Enable test coverage.
       PROFILE: 1
       # These flags are necessary for grcov to correctly calculate coverage.
@@ -28,14 +28,14 @@ jobs:
       RUST_TEST_THREADS: 2
 
     steps:
-      - name: Add Clang 11 repo
+      - name: Add Clang 12 repo
         run: |
-          echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main" | sudo tee -a /etc/apt/sources.list.d/llvm-toolchain-focal-11.list
+          echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main" | sudo tee -a /etc/apt/sources.list.d/llvm-toolchain-focal-12.list
           curl https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
           sudo apt-get update
 
       - name: Install dependencies
-        run: sudo apt-get install --assume-yes --no-install-suggests clang-11 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
+        run: sudo apt-get install --assume-yes --no-install-suggests clang-12 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
 
       - name: Generate locales
         run: |
@@ -48,7 +48,7 @@ jobs:
       - name: Install Rust
         uses: ATiltedTree/setup-rust@v1
         with:
-          rust-version: nightly-2021-03-04
+          rust-version: nightly
 
       - uses: actions/checkout@v2
 
@@ -73,8 +73,8 @@ jobs:
         # produces, so we trick grcov into using llvm-cov instead. We can't
         # simply point grcov at llvm-cov, because the latter only behaves like
         # gcc's gcov when invoked by that name.
-      - name: Prepare to use llvm-cov-11 as gcov
-        run: ln -s $(which llvm-cov-11) gcov
+      - name: Prepare to use llvm-cov-12 as gcov
+        run: ln -s $(which llvm-cov-12) gcov
 
       - name: Calculate test coverage
         # Note that we override the path to gcov tool.
