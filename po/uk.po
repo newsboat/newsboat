@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-03-09 22:46+0300\n"
-"PO-Revision-Date: 2020-12-07 10:48+0300\n"
+"PO-Revision-Date: 2021-03-14 20:47+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -510,6 +510,8 @@ msgid ""
 "Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
+"Знайдено недосяжні теми; скористайтесь налаштуванням `cleanup-on-quit yes` "
+"або запустіть `newsboat --cleanup`"
 
 #: src/controller.cpp:549
 msgid "failed: "
@@ -523,17 +525,17 @@ msgstr "Помилка: не вдалось позначити всі теми �
 #: src/controller.cpp:676 src/itemviewformaction.cpp:223
 #, c-format
 msgid "Generated filename (%s) is used already."
-msgstr ""
+msgstr "Сгенероване і'мя (%s) вже використовується."
 
 #: src/controller.cpp:681 src/itemviewformaction.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open queue file: %s."
-msgstr "Не вдалося відкрити файл (%s)"
+msgstr "Не вдалося відкрити файл черги: %s."
 
 #: src/controller.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while parsing %s: %s"
-msgstr "Виникла помилка при розборі %s."
+msgstr "При розборі %s виникла помилка: %s"
 
 #: src/controller.cpp:716
 #, c-format
@@ -851,14 +853,14 @@ msgid "Save File - %s"
 msgstr "Зберегти Файл - %s"
 
 #: src/fileurlreader.cpp:28
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Помилка: не вдалося прочитати адреси тем з файлу \"%s\" (%s)"
+msgstr "Помилка: не вдалося прочитати адреси тем з файлу \"%s\": %s"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "Помилка: не вдалося відкрити файл \"%s\" (%s)"
+msgstr "Помилка: не вдалося відкрити файл \"%s\": %s"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:342 src/rssignores.cpp:42
 #, c-format
@@ -866,9 +868,8 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "неможливо парсувати вираз фільра `%s': %s"
 
 #: src/formaction.cpp:145
-#, fuzzy
 msgid "usage: set <config-option> <value>"
-msgstr "використання: set <змінна>[=<значення>]"
+msgstr "використання: set <налаштування> <значення>"
 
 #: src/formaction.cpp:303
 msgid "usage: set <variable>[=<value>]"
@@ -971,7 +972,7 @@ msgstr "вбудований флеш"
 
 #: src/htmlrenderer.cpp:1091
 msgid "iframe"
-msgstr ""
+msgstr "iframe"
 
 #: src/htmlrenderer.cpp:1093
 msgid "video"
@@ -1005,9 +1006,8 @@ msgid "No item selected!"
 msgstr "Не вибрано нічого!"
 
 #: src/itemlistformaction.cpp:107
-#, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "Ви впевнені, що хочете перезаписати `%s' (y:Так n:Ні)? "
+msgstr "Ви впевнені, що хочете видалити всі статті (y:Так n:Ні)? "
 
 #: src/itemlistformaction.cpp:220 src/itemviewformaction.cpp:412
 msgid "Toggling read flag for article..."
@@ -1197,7 +1197,7 @@ msgstr "Додано %s до черги завантаження."
 #: src/itemviewformaction.cpp:218
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s вже у черзі."
 
 #: src/itemviewformaction.cpp:233
 #, c-format
@@ -1305,10 +1305,8 @@ msgid "Go to a random unread article"
 msgstr "Перейти до будь-якої непрочитаної статті"
 
 #: src/keymap.cpp:126
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read"
-msgstr ""
-"Відкрити URL статті, теми, чи рядка у діалозі URL. Позначити прочитаним."
+msgstr "Відкрити URL статті чи рядка у діалозі URL. Позначити прочитаним"
 
 #: src/keymap.cpp:133
 msgid "Open all unread items of selected feed in browser"
@@ -1325,9 +1323,8 @@ msgid "Open URL of article, feed, or entry in URL view"
 msgstr "Відкрити URL статті, теми, чи рядка у діалозі URL"
 
 #: src/keymap.cpp:155
-#, fuzzy
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "Відкрити URL статті, теми, чи рядка у діалозі URL"
+msgstr "Відкрити URL статті, теми, чи рядка у неінтерактивному браузері"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
@@ -1627,7 +1624,7 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "вживаний вираз '%s' неправильний %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Помилка: не вдалося розібрати OPML-файл \"%s\""
 
@@ -1824,24 +1821,23 @@ msgid "URLs"
 msgstr "URLs"
 
 #: src/utils.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file: %s"
-msgstr "Не вдалося відкрити файл (%s)"
+msgstr "Не вдалося відкрити файл: %s"
 
 #: src/utils.cpp:787
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read line %u: %s"
-msgstr "Не вдалося прочитати рядок %u (%s)"
+msgstr "Не вдалося прочитати рядок %u: %s"
 
 #: src/view.cpp:165
-#, fuzzy
 msgid "Error: failed to execute startup commands"
-msgstr "Помилка: Не вдалося виконати стартові команди"
+msgstr "Помилка: не вдалося виконати стартові команди"
 
 #: src/view.cpp:377
 #, c-format
 msgid "Running browser: %s"
-msgstr ""
+msgstr "Запускаю браузер: %s"
 
 #: src/view.cpp:443 src/view.cpp:468
 msgid "Error: feed contains no items!"
@@ -1950,9 +1946,8 @@ msgid "Internal parse error"
 msgstr "Внутрішня помилка парсеру"
 
 #: rust/libnewsboat/src/fslock.rs:57
-#, fuzzy
 msgid "Failed to open lock file '%s': %s"
-msgstr "Не вдалося відкрити блокуючий файл: '%s' (%s)"
+msgstr "Не вдалося відкрити блокуючий файл '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
@@ -1960,9 +1955,8 @@ msgid "<filename containing invalid UTF-8 codepoint>"
 msgstr "<ім'я файлу з некоректним UTF-8>"
 
 #: rust/libnewsboat/src/fslock.rs:80
-#, fuzzy
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr "Не вдалося записати PID у блокуючий файл: '%s' (%s)"
+msgstr "Не вдалося записати PID у блокуючий файл '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
