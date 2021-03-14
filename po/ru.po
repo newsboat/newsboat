@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-03-09 22:46+0300\n"
-"PO-Revision-Date: 2020-12-07 10:35+0300\n"
+"PO-Revision-Date: 2021-03-14 20:37+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -509,6 +509,8 @@ msgid ""
 "Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
+"Найдены недостижимые ленты; используйте `cleanup-on-quit yes` или запустите "
+"`newsboat --cleanup`"
 
 #: src/controller.cpp:549
 msgid "failed: "
@@ -522,17 +524,17 @@ msgstr "Ошибка: невозможно отметить все ленты к
 #: src/controller.cpp:676 src/itemviewformaction.cpp:223
 #, c-format
 msgid "Generated filename (%s) is used already."
-msgstr ""
+msgstr "Сгенерированное имя (%s) уже используется."
 
 #: src/controller.cpp:681 src/itemviewformaction.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open queue file: %s."
-msgstr "Не удалось открыть файл (%s)"
+msgstr "Не удалось открыть файл очереди: %s."
 
 #: src/controller.cpp:709
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while parsing %s: %s"
-msgstr "При обработке %s возникла ошибка."
+msgstr "При разборе %s возникла ошибка: %s"
 
 #: src/controller.cpp:716
 #, c-format
@@ -850,14 +852,14 @@ msgid "Save File - %s"
 msgstr "Сохранить файл - %s"
 
 #: src/fileurlreader.cpp:28
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Ошибка: не удалось прочесть адреса лент из файла \"%s\" (%s)"
+msgstr "Ошибка: не удалось прочесть адреса лент из файла \"%s\": %s"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "Ошибка: не удалось открыть файл \"%s\" (%s)"
+msgstr "Ошибка: не удалось открыть файл \"%s\": %s"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:342 src/rssignores.cpp:42
 #, c-format
@@ -865,9 +867,8 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "не удалось разобрать команду фильтрации `%s': %s"
 
 #: src/formaction.cpp:145
-#, fuzzy
 msgid "usage: set <config-option> <value>"
-msgstr "использование: set <переменная>[=<значение>]"
+msgstr "использование: set <настройка> <значение>"
 
 #: src/formaction.cpp:303
 msgid "usage: set <variable>[=<value>]"
@@ -970,7 +971,7 @@ msgstr "встроенный flash"
 
 #: src/htmlrenderer.cpp:1091
 msgid "iframe"
-msgstr ""
+msgstr "iframe"
 
 #: src/htmlrenderer.cpp:1093
 msgid "video"
@@ -1004,9 +1005,8 @@ msgid "No item selected!"
 msgstr "Не выбранно ни одного элемента!"
 
 #: src/itemlistformaction.cpp:107
-#, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "Вы правда хотите перезаписать `%s' (y:Да n:Нет)? "
+msgstr "Вы правда хотите удалить все заметки (y:Да n:Нет)? "
 
 #: src/itemlistformaction.cpp:220 src/itemviewformaction.cpp:412
 msgid "Toggling read flag for article..."
@@ -1196,7 +1196,7 @@ msgstr "Добавили %s в очередь загрузки."
 #: src/itemviewformaction.cpp:218
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s уже в очереди."
 
 #: src/itemviewformaction.cpp:233
 #, c-format
@@ -1304,10 +1304,8 @@ msgid "Go to a random unread article"
 msgstr "Перейти к случайной непрочитанной заметке"
 
 #: src/keymap.cpp:126
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read"
-msgstr ""
-"Открыть URL статьи, ленты, или записи в диалоге URL. Отметить прочтённым."
+msgstr "Открыть URL статьи или записи в диалоге URL. Отметить прочтённым"
 
 #: src/keymap.cpp:133
 msgid "Open all unread items of selected feed in browser"
@@ -1324,9 +1322,8 @@ msgid "Open URL of article, feed, or entry in URL view"
 msgstr "Открыть URL статьи, ленты, или записи в диалоге URL"
 
 #: src/keymap.cpp:155
-#, fuzzy
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "Открыть URL статьи, ленты, или записи в диалоге URL"
+msgstr "Открыть URL статьи, ленты, или записи в неинтерактивном браузере"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
@@ -1626,7 +1623,7 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "регулярное выражение '%s' неверно: %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Ошибка: не удалось разобрать OPML-файл \"%s\""
 
@@ -1823,24 +1820,23 @@ msgid "URLs"
 msgstr "Источники"
 
 #: src/utils.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file: %s"
-msgstr "Не удалось открыть файл (%s)"
+msgstr "Не удалось открыть файл: %s"
 
 #: src/utils.cpp:787
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read line %u: %s"
-msgstr "Не удалось прочесть строку %u (%s)"
+msgstr "Не удалось прочесть строку %u: %s"
 
 #: src/view.cpp:165
-#, fuzzy
 msgid "Error: failed to execute startup commands"
-msgstr "Ошибка: Не удалось выполнить стартовые команды"
+msgstr "Ошибка: не удалось выполнить стартовые команды"
 
 #: src/view.cpp:377
 #, c-format
 msgid "Running browser: %s"
-msgstr ""
+msgstr "Запускаю браузер: %s"
 
 #: src/view.cpp:443 src/view.cpp:468
 msgid "Error: feed contains no items!"
@@ -1949,9 +1945,8 @@ msgid "Internal parse error"
 msgstr "Внутренняя ошибка парсера"
 
 #: rust/libnewsboat/src/fslock.rs:57
-#, fuzzy
 msgid "Failed to open lock file '%s': %s"
-msgstr "Не удалось открыть файл блокировки: %s (%s)"
+msgstr "Не удалось открыть файл блокировки '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:83
 #: rust/libnewsboat/src/fslock.rs:115
@@ -1959,9 +1954,8 @@ msgid "<filename containing invalid UTF-8 codepoint>"
 msgstr "<имя файла, содержащее некорректный UTF-8>"
 
 #: rust/libnewsboat/src/fslock.rs:80
-#, fuzzy
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr "Не удалось записать PID в файл блокировки: '%s' (%s)"
+msgstr "Не удалось записать PID в файл блокировки '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %{}"
