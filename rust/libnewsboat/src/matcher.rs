@@ -43,10 +43,10 @@ impl Matcher {
 impl Operator {
     fn apply(&self, attr: &str, value: &Value) -> Result<bool, MatcherError> {
         match self {
-            Operator::Equals => Ok(attr == value.0),
+            Operator::Equals => Ok(attr == value.literal()),
             Operator::NotEquals => Operator::Equals.apply(attr, value).map(|result| !result),
             Operator::RegexMatches => match Regex::new(
-                &value.0,
+                &value.literal(),
                 CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
             ) {
                 Ok(regex) => {
@@ -60,19 +60,25 @@ impl Operator {
                 }
 
                 Err(errmsg) => Err(MatcherError::InvalidRegex {
-                    regex: value.0.clone(),
+                    regex: value.literal().to_string(),
                     errmsg,
                 }),
             },
             Operator::NotRegexMatches => Operator::RegexMatches
                 .apply(attr, value)
                 .map(|result| !result),
-            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.0)),
-            Operator::GreaterThan => Ok(dbg!(string_to_num(attr)) > dbg!(string_to_num(&value.0))),
-            Operator::LessThanOrEquals => Ok(string_to_num(attr) <= string_to_num(&value.0)),
-            Operator::GreaterThanOrEquals => Ok(string_to_num(attr) >= string_to_num(&value.0)),
+            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.literal())),
+            Operator::GreaterThan => {
+                Ok(dbg!(string_to_num(attr)) > dbg!(string_to_num(&value.literal())))
+            }
+            Operator::LessThanOrEquals => {
+                Ok(string_to_num(attr) <= string_to_num(&value.literal()))
+            }
+            Operator::GreaterThanOrEquals => {
+                Ok(string_to_num(attr) >= string_to_num(&value.literal()))
+            }
             Operator::Between => {
-                let fields = value.0.split(':').collect::<Vec<_>>();
+                let fields = value.literal().split(':').collect::<Vec<_>>();
                 if fields.len() != 2 {
                     return Ok(false);
                 }
@@ -87,7 +93,7 @@ impl Operator {
             }
             Operator::Contains => {
                 for token in attr.split(' ') {
-                    if token == value.0 {
+                    if token == value.literal() {
                         return Ok(true);
                     }
                 }
