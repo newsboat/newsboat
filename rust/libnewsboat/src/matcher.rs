@@ -3,7 +3,6 @@
 use crate::filterparser::{self, Expression, Expression::*, Operator, Value};
 use crate::matchable::Matchable;
 use crate::matchererror::MatcherError;
-use regex_rs::{CompFlags, MatchFlags, Regex};
 
 /// Checks if given filter expression is true for a given feed or article.
 ///
@@ -45,14 +44,13 @@ impl Operator {
         match self {
             Operator::Equals => Ok(attr == value.literal()),
             Operator::NotEquals => Operator::Equals.apply(attr, value).map(|result| !result),
-            Operator::RegexMatches => match Regex::new(
-                &value.literal(),
-                CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
-            ) {
+            Operator::RegexMatches => match value.as_regex() {
                 Ok(regex) => {
                     let mut result = false;
                     let max_matches = 1;
-                    if let Ok(matches) = regex.matches(attr, max_matches, MatchFlags::empty()) {
+                    if let Ok(matches) =
+                        regex.matches(attr, max_matches, regex_rs::MatchFlags::empty())
+                    {
                         // Ok with non-empty Vec inside means a match was found
                         result = !matches.is_empty();
                     }
@@ -61,7 +59,7 @@ impl Operator {
 
                 Err(errmsg) => Err(MatcherError::InvalidRegex {
                     regex: value.literal().to_string(),
-                    errmsg,
+                    errmsg: errmsg.to_string(),
                 }),
             },
             Operator::NotRegexMatches => Operator::RegexMatches

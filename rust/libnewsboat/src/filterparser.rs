@@ -10,6 +10,8 @@ use nom::{
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset, Parser,
 };
+use once_cell::unsync::OnceCell;
+use regex_rs::Regex;
 use std::vec::Vec;
 use strprintf::fmt;
 
@@ -30,22 +32,72 @@ pub enum Operator {
 }
 
 /// Values that can be used on the right-hand side of comparisons.
-#[derive(Debug, Clone, PartialEq)]
 pub struct Value {
     literal: String,
+    regex: OnceCell<Result<Regex, String>>,
 }
 
 impl Value {
     /// Construct a value from the parsed token.
     fn new(literal: String) -> Self {
-        Self { literal }
+        Self {
+            literal,
+            regex: OnceCell::new(),
+        }
     }
 
     /// Access the stored literal as a string.
     pub fn literal(&self) -> &str {
         &self.literal
     }
+
+    /// The literal interpreted as a POSIX extended regular expression.
+    ///
+    /// When matching, case will be ignored, and no parenthesised sub-expressions will be
+    /// extracted.
+    ///
+    /// Returns `Ok` with a regex or an `Err` with an error message.
+    pub fn as_regex(&self) -> Result<&Regex, &str> {
+        let regex = self.regex.get_or_init(|| {
+            use regex_rs::CompFlags;
+
+            Regex::new(
+                &self.literal,
+                CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
+            )
+        });
+
+        match regex {
+            Ok(regex) => Ok(&regex),
+            Err(message) => Err(&message),
+        }
+    }
 }
+
+impl core::fmt::Debug for Value {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+        f.debug_struct("Value")
+            .field("literal", &self.literal)
+            .finish()
+    }
+}
+
+impl Clone for Value {
+    fn clone(&self) -> Self {
+        Self {
+            literal: self.literal.clone(),
+            regex: OnceCell::new(),
+        }
+    }
+}
+
+impl PartialEq for Value {
+    fn eq(&self, other: &Value) -> bool {
+        self.literal == other.literal
+    }
+}
+
+impl Eq for Value {}
 
 /// Parsed filter expression.
 ///
