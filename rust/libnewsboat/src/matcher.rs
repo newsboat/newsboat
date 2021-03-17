@@ -66,9 +66,7 @@ impl Operator {
                 .apply(attr, value)
                 .map(|result| !result),
             Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.literal())),
-            Operator::GreaterThan => {
-                Ok(dbg!(string_to_num(attr)) > dbg!(string_to_num(&value.literal())))
-            }
+            Operator::GreaterThan => Ok(string_to_num(attr) > string_to_num(&value.literal())),
             Operator::LessThanOrEquals => {
                 Ok(string_to_num(attr) <= string_to_num(&value.literal()))
             }
