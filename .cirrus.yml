@@ -422,3 +422,24 @@ i18nspector_task:
     # an exclamation mark. This fails the build if the log contains errors or
     # warnings.
     script: make run-i18nspector | tee i18nspector.log && ! egrep --silent "^(E|W):" i18nspector.log
+
+no_dbg_macros_task:
+    name: "No dbg! macros in Rust code"
+
+    container:
+      cpu: 1
+      memory: 512MB
+      image: alpine:3.10.2
+
+    script:
+      # Alpine uses BusyBox, so grep there doesn't support long options.
+      #
+      # -E -- extended regex, which supports beginning-of-word marker
+      # -r -- recursive
+      # -n -- show line numbers
+      #
+      # `!` in front of the command negates its exit code: this script will now
+      # exit with 0 if no matches were found, and with 1 if there are matches.
+      # We need parentheses to prevent YAML parser from eating up the
+      # exclamation mark.
+      - ( ! grep -Ern '\<dbg!' * )
