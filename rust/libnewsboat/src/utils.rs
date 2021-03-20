@@ -44,13 +44,7 @@ pub fn consolidate_whitespace(input: String) -> String {
 }
 
 pub fn to_u(rs_str: String, default_value: u32) -> u32 {
-    let mut result = rs_str.parse::<u32>();
-
-    if result.is_err() {
-        result = Ok(default_value);
-    }
-
-    result.unwrap()
+    rs_str.parse::<u32>().unwrap_or(default_value)
 }
 
 /// Combine a base URL and a link to a new absolute URL.
