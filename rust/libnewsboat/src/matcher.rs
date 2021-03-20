@@ -3,7 +3,6 @@
 use crate::filterparser::{self, Expression, Expression::*, Operator, Value};
 use crate::matchable::Matchable;
 use crate::matchererror::MatcherError;
-use regex_rs::{CompFlags, MatchFlags, Regex};
 
 /// Checks if given filter expression is true for a given feed or article.
 ///
@@ -43,16 +42,15 @@ impl Matcher {
 impl Operator {
     fn apply(&self, attr: &str, value: &Value) -> Result<bool, MatcherError> {
         match self {
-            Operator::Equals => Ok(attr == value.0),
+            Operator::Equals => Ok(attr == value.literal()),
             Operator::NotEquals => Operator::Equals.apply(attr, value).map(|result| !result),
-            Operator::RegexMatches => match Regex::new(
-                &value.0,
-                CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
-            ) {
+            Operator::RegexMatches => match value.as_regex() {
                 Ok(regex) => {
                     let mut result = false;
                     let max_matches = 1;
-                    if let Ok(matches) = regex.matches(attr, max_matches, MatchFlags::empty()) {
+                    if let Ok(matches) =
+                        regex.matches(attr, max_matches, regex_rs::MatchFlags::empty())
+                    {
                         // Ok with non-empty Vec inside means a match was found
                         result = !matches.is_empty();
                     }
@@ -60,19 +58,23 @@ impl Operator {
                 }
 
                 Err(errmsg) => Err(MatcherError::InvalidRegex {
-                    regex: value.0.clone(),
-                    errmsg,
+                    regex: value.literal().to_string(),
+                    errmsg: errmsg.to_string(),
                 }),
             },
             Operator::NotRegexMatches => Operator::RegexMatches
                 .apply(attr, value)
                 .map(|result| !result),
-            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.0)),
-            Operator::GreaterThan => Ok(dbg!(string_to_num(attr)) > dbg!(string_to_num(&value.0))),
-            Operator::LessThanOrEquals => Ok(string_to_num(attr) <= string_to_num(&value.0)),
-            Operator::GreaterThanOrEquals => Ok(string_to_num(attr) >= string_to_num(&value.0)),
+            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.literal())),
+            Operator::GreaterThan => Ok(string_to_num(attr) > string_to_num(&value.literal())),
+            Operator::LessThanOrEquals => {
+                Ok(string_to_num(attr) <= string_to_num(&value.literal()))
+            }
+            Operator::GreaterThanOrEquals => {
+                Ok(string_to_num(attr) >= string_to_num(&value.literal()))
+            }
             Operator::Between => {
-                let fields = value.0.split(':').collect::<Vec<_>>();
+                let fields = value.literal().split(':').collect::<Vec<_>>();
                 if fields.len() != 2 {
                     return Ok(false);
                 }
@@ -87,7 +89,7 @@ impl Operator {
             }
             Operator::Contains => {
                 for token in attr.split(' ') {
-                    if token == value.0 {
+                    if token == value.literal() {
                         return Ok(true);
                     }
                 }

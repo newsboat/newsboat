@@ -10,6 +10,8 @@ use nom::{
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset, Parser,
 };
+use once_cell::unsync::OnceCell;
+use regex_rs::Regex;
 use std::vec::Vec;
 use strprintf::fmt;
 
@@ -30,8 +32,72 @@ pub enum Operator {
 }
 
 /// Values that can be used on the right-hand side of comparisons.
-#[derive(Debug, Clone, PartialEq)]
-pub struct Value(pub String);
+pub struct Value {
+    literal: String,
+    regex: OnceCell<Result<Regex, String>>,
+}
+
+impl Value {
+    /// Construct a value from the parsed token.
+    fn new(literal: String) -> Self {
+        Self {
+            literal,
+            regex: OnceCell::new(),
+        }
+    }
+
+    /// Access the stored literal as a string.
+    pub fn literal(&self) -> &str {
+        &self.literal
+    }
+
+    /// The literal interpreted as a POSIX extended regular expression.
+    ///
+    /// When matching, case will be ignored, and no parenthesised sub-expressions will be
+    /// extracted.
+    ///
+    /// Returns `Ok` with a regex or an `Err` with an error message.
+    pub fn as_regex(&self) -> Result<&Regex, &str> {
+        let regex = self.regex.get_or_init(|| {
+            use regex_rs::CompFlags;
+
+            Regex::new(
+                &self.literal,
+                CompFlags::EXTENDED | CompFlags::IGNORE_CASE | CompFlags::NO_SUB,
+            )
+        });
+
+        match regex {
+            Ok(regex) => Ok(&regex),
+            Err(message) => Err(&message),
+        }
+    }
+}
+
+impl core::fmt::Debug for Value {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
+        f.debug_struct("Value")
+            .field("literal", &self.literal)
+            .finish()
+    }
+}
+
+impl Clone for Value {
+    fn clone(&self) -> Self {
+        Self {
+            literal: self.literal.clone(),
+            regex: OnceCell::new(),
+        }
+    }
+}
+
+impl PartialEq for Value {
+    fn eq(&self, other: &Value) -> bool {
+        self.literal == other.literal
+    }
+}
+
+impl Eq for Value {}
 
 /// Parsed filter expression.
 ///
@@ -176,7 +242,7 @@ fn quoted_string<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str,
         Ok((leftovers, String::from(chr)))
     };
 
-    map(alt((nonempty_string, empty_string)), Value)(input)
+    map(alt((nonempty_string, empty_string)), Value::new)(input)
 }
 
 fn number<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a str, E> {
@@ -185,7 +251,7 @@ fn number<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a st
 
 fn range<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Value, E> {
     separated_pair(number, tag(":"), number)(input)
-        .map(|(leftovers, (a, b))| (leftovers, Value(format!("{}:{}", a, b))))
+        .map(|(leftovers, (a, b))| (leftovers, Value::new(format!("{}:{}", a, b))))
 }
 
 /// Skips zero or more space characters.
@@ -223,7 +289,11 @@ fn comparison<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     // especific error message when this parser fails.
     let (leftovers, value) = expect(
         Expected::Value,
-        alt((quoted_string, range, map(number, |n| Value(n.to_string())))),
+        alt((
+            quoted_string,
+            range,
+            map(number, |n| Value::new(n.to_string())),
+        )),
     )(input)?;
 
     Ok((
@@ -445,7 +515,7 @@ mod tests {
         let expected = Ok(Expression::Comparison {
             attribute: "a".to_string(),
             op: Operator::Equals,
-            value: Value("abc".to_string()),
+            value: Value::new("abc".to_string()),
         });
 
         assert_eq!(internal_parse("a = \"abc\""), expected);
@@ -468,7 +538,7 @@ mod tests {
             Ok(Expression::Comparison {
                 attribute: "attribute".to_string(),
                 op: Operator::Equals,
-                value: Value("hello\0world".to_string()),
+                value: Value::new("hello\0world".to_string()),
             })
         );
     }
@@ -478,7 +548,7 @@ mod tests {
         let expected = Ok(Expression::Comparison {
             attribute: "title".to_string(),
             op: Operator::Equals,
-            value: Value(String::new()),
+            value: Value::new(String::new()),
         });
 
         assert_eq!(internal_parse("title==\"\""), expected);
@@ -494,12 +564,12 @@ mod tests {
             Box::new(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::Equals,
-                value: Value("42".to_string()),
+                value: Value::new("42".to_string()),
             }),
             Box::new(Comparison {
                 attribute: "y".to_string(),
                 op: Operator::Equals,
-                value: Value("0".to_string()),
+                value: Value::new("0".to_string()),
             }),
         );
 
@@ -518,12 +588,12 @@ mod tests {
             Box::new(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::Equals,
-                value: Value("42".to_string()),
+                value: Value::new("42".to_string()),
             }),
             Box::new(Comparison {
                 attribute: "y".to_string(),
                 op: Operator::Equals,
-                value: Value("0".to_string()),
+                value: Value::new("0".to_string()),
             }),
         );
 
@@ -537,7 +607,7 @@ mod tests {
         let expected = Comparison {
             attribute: "array".to_string(),
             op: Operator::Contains,
-            value: Value("bar".to_string()),
+            value: Value::new("bar".to_string()),
         };
 
         assert_eq!(internal_parse("array # \"bar\""), Ok(expected.clone()));
@@ -584,12 +654,12 @@ mod tests {
                 Box::new(Comparison {
                     attribute: "x".to_string(),
                     op: Operator::Equals,
-                    value: Value("42".to_string())
+                    value: Value::new("42".to_string())
                 }),
                 Box::new(Comparison {
                     attribute: "y".to_string(),
                     op: Operator::Equals,
-                    value: Value("0".to_string())
+                    value: Value::new("0".to_string())
                 })
             ))
         );
@@ -600,12 +670,12 @@ mod tests {
                 Box::new(Comparison {
                     attribute: "x".to_string(),
                     op: Operator::Equals,
-                    value: Value("42".to_string())
+                    value: Value::new("42".to_string())
                 }),
                 Box::new(Comparison {
                     attribute: "y".to_string(),
                     op: Operator::Equals,
-                    value: Value("0".to_string())
+                    value: Value::new("0".to_string())
                 })
             ))
         );
@@ -616,12 +686,12 @@ mod tests {
                 Box::new(Comparison {
                     attribute: "x".to_string(),
                     op: Operator::Equals,
-                    value: Value("42".to_string())
+                    value: Value::new("42".to_string())
                 }),
                 Box::new(Comparison {
                     attribute: "y".to_string(),
                     op: Operator::Equals,
-                    value: Value("42".to_string())
+                    value: Value::new("42".to_string())
                 })
             ))
         );
@@ -636,7 +706,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::Equals,
-                value: Value("b".to_string())
+                value: Value::new("b".to_string())
             })
         );
 
@@ -645,7 +715,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::NotEquals,
-                value: Value("b".to_string())
+                value: Value::new("b".to_string())
             })
         );
 
@@ -654,7 +724,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::RegexMatches,
-                value: Value("b".to_string())
+                value: Value::new("b".to_string())
             })
         );
 
@@ -663,7 +733,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::NotRegexMatches,
-                value: Value("b".to_string())
+                value: Value::new("b".to_string())
             })
         );
 
@@ -674,7 +744,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::LessThan,
-                value: Value("b".to_string())
+                value: Value::new("b".to_string())
             })
         );
 
@@ -683,7 +753,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::LessThanOrEquals,
-                value: Value("b".to_string())
+                value: Value::new("b".to_string())
             })
         );
 
@@ -692,7 +762,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::GreaterThan,
-                value: Value("abc".to_string())
+                value: Value::new("abc".to_string())
             })
         );
 
@@ -701,7 +771,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::Equals,
-                value: Value("abc".to_string())
+                value: Value::new("abc".to_string())
             })
         );
 
@@ -710,7 +780,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "a".to_string(),
                 op: Operator::GreaterThanOrEquals,
-                value: Value("3".to_string())
+                value: Value::new("3".to_string())
             })
         );
 
@@ -719,7 +789,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "some_value".to_string(),
                 op: Operator::Between,
-                value: Value("0:-1".to_string())
+                value: Value::new("0:-1".to_string())
             })
         );
 
@@ -728,7 +798,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "other_string".to_string(),
                 op: Operator::Between,
-                value: Value("impossible".to_string())
+                value: Value::new("impossible".to_string())
             })
         );
 
@@ -737,7 +807,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "array".to_string(),
                 op: Operator::Contains,
-                value: Value("name".to_string())
+                value: Value::new("name".to_string())
             })
         );
 
@@ -746,7 +816,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "answers".to_string(),
                 op: Operator::NotContains,
-                value: Value("42".to_string())
+                value: Value::new("42".to_string())
             })
         );
 
@@ -755,7 +825,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "author".to_string(),
                 op: Operator::RegexMatches,
-                value: Value("\\s*Doe$".to_string())
+                value: Value::new("\\s*Doe$".to_string())
             })
         );
     }
@@ -768,18 +838,18 @@ mod tests {
                 Box::new(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::Equals,
-                    value: Value("b".to_string())
+                    value: Value::new("b".to_string())
                 }),
                 Box::new(Or(
                     Box::new(Comparison {
                         attribute: "b".to_string(),
                         op: Operator::Equals,
-                        value: Value("c".to_string())
+                        value: Value::new("c".to_string())
                     }),
                     Box::new(Comparison {
                         attribute: "c".to_string(),
                         op: Operator::Equals,
-                        value: Value("d".to_string())
+                        value: Value::new("d".to_string())
                     }),
                 ))
             )
@@ -791,18 +861,18 @@ mod tests {
                 Box::new(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::Equals,
-                    value: Value("b".to_string())
+                    value: Value::new("b".to_string())
                 }),
                 Box::new(And(
                     Box::new(Comparison {
                         attribute: "b".to_string(),
                         op: Operator::Equals,
-                        value: Value("c".to_string())
+                        value: Value::new("c".to_string())
                     }),
                     Box::new(Comparison {
                         attribute: "c".to_string(),
                         op: Operator::Equals,
-                        value: Value("d".to_string())
+                        value: Value::new("d".to_string())
                     }),
                 ))
             )
@@ -815,18 +885,18 @@ mod tests {
                     Box::new(Comparison {
                         attribute: "a".to_string(),
                         op: Operator::Equals,
-                        value: Value("b".to_string())
+                        value: Value::new("b".to_string())
                     }),
                     Box::new(Comparison {
                         attribute: "b".to_string(),
                         op: Operator::Equals,
-                        value: Value("c".to_string())
+                        value: Value::new("c".to_string())
                     }),
                 )),
                 Box::new(Comparison {
                     attribute: "c".to_string(),
                     op: Operator::Equals,
-                    value: Value("d".to_string())
+                    value: Value::new("d".to_string())
                 })
             )
         );
@@ -843,7 +913,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "value".to_string(),
                 op: Operator::Between,
-                value: Value("-100:-1".to_string())
+                value: Value::new("-100:-1".to_string())
             })
         );
 
@@ -852,7 +922,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "value".to_string(),
                 op: Operator::Between,
-                value: Value("-100:100500".to_string())
+                value: Value::new("-100:100500".to_string())
             })
         );
 
@@ -861,7 +931,7 @@ mod tests {
             Ok(Comparison {
                 attribute: "value".to_string(),
                 op: Operator::Between,
-                value: Value("123:-10".to_string())
+                value: Value::new("123:-10".to_string())
             })
         );
     }
@@ -880,7 +950,7 @@ mod tests {
                 Ok(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::NotEquals,
-                    value: Value("b".to_string())
+                    value: Value::new("b".to_string())
                 })
             );
         }
@@ -892,7 +962,7 @@ mod tests {
                 Ok(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::NotEquals,
-                    value: Value("b".to_string())
+                    value: Value::new("b".to_string())
                 })
             );
         }
