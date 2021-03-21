@@ -1,23 +1,62 @@
 # Changes for Newsboat
 
-## Unreleased (2.23 - expected 2021-03-21)
+## 2.23 - 2021-03-21
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes:
+for this release also includes: John Jarvis, Nicholas Defranco, and Raphael
+Nestler.
 
 ### Added
+
+- `open-in-browser-noninteractively` operation which is similar to
+    `open-in-browser`, but doesn't relinquish the terminal to the browser. It
+    still waits for the browser to finish executing, though (Dennis van der
+    Schagt)
+- Confirmation for `delete-all-articles` (#1490) (Amrit Brar)
+- `%U` specifier for `feedlist-title-format` which shows the total number of
+    unread articles in all feeds (#1495) (Dennis van der Schagt)
+- Display images' alternate text in the article view (#1512)
+    (Mark A. Matney, Jr)
+- List `iframe` URLs in the article view (#1153) (Mark A. Matney, Jr)
+
 ### Changed
 
+- Newsboat now refuses to enqueue a podcast if its filename is already present
+    in the queue. If that happens, you'll have to adjust
+    `download-filename-format` to make the filenames more distinguishable
+    (#1411) (Dennis van der Schagt)
+- Reduced message flickering when reloading feeds (Dennis van der Schagt)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian (Alexander
+    Batischev), Turkish (Emir Sari), and Ukrainian (Alexander Batischev)
 - Bumped minimum supported Rust version to 1.46.0
+- Updated vendored library Catch2 to 2.13.4
 
-### Deprecated
 ### Removed
 
 - `dumpform` command-line command which was only intended for debugging
-    Newsboat's UI code
+    (Dennis van der Schagt)
 
 ### Fixed
-### Security
+
+- Missing empty lines inside `pre` tags (#1429) (Alexander Batischev)
+- `open-all-unread-in-browser-and-mark-read` not synchronizing the "read" status
+    to the remote API (#1449) (Dennis van der Schagt)
+- Newsboat redrawing the screen once a minute even if idle (#563) (Dennis van
+    der Schagt)
+- `delete-all-articles` no longer deletes items that aren't visible (e.g.
+    because of `ignore-mode display`) (#1360) (Alexander Batischev)
+- Slashes are now replaced by underscores when generating a podcast filename
+    (#836) (Dennis van der Schagt)
+- File- and dirbrowsers no longer produce invalid paths when user navigates with
+    arrow keys (#1418) (Dennis van der Schagt)
+- Successful OPML import is no longer misreported as an error (Alexander
+    Batischev)
+- Descriptions in the help dialog are localized again (#1471) (Emir Sari)
+- Added a newline after each `div`, since it's a block element (#1405)
+    (Alexander Batischev)
+- Re-introduce `set x!` (toggle) and `set x&` (reset) (#1491) (Dennis van der
+    Schagt)
 
 
 
@@ -30,6 +69,8 @@ for this release also includes:
     van der Schagt)
 - Build failure on GCC 9 due to `maybe-uninitialized` warning which `-Werror`
     turns into an error (Alexander Batischev)
+- Articlelist's title not being updated when moving to the next unread feed
+    (#1385) (Alexander Batischev)
 
 
 
