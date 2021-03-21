@@ -48,9 +48,6 @@ std::string consolidate_whitespace(const std::string& str);
 
 std::string translit(const std::string& tocode,
 	const std::string& fromcode);
-std::string convert_text(const std::string& text,
-	const std::string& tocode,
-	const std::string& fromcode);
 
 /// Converts input string from UTF-8 to the locale's encoding (as detected by
 /// nl_langinfo(CODESET)).

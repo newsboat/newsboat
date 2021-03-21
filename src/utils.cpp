@@ -261,18 +261,6 @@ std::string utils::translit(const std::string& tocode, const std::string& fromco
 	return std::string(utils::bridged::translit(tocode, fromcode));
 }
 
-std::string utils::convert_text(const std::string& text,
-	const std::string& tocode,
-	const std::string& fromcode)
-{
-	const auto text_slice =
-		rust::Slice<unsigned char>(
-			reinterpret_cast<const unsigned char*>(text.c_str()),
-			text.length());
-	const auto result = utils::bridged::convert_text(text_slice, tocode, fromcode);
-	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
-}
-
 std::string utils::utf8_to_locale(const std::string& text)
 {
 	const auto result = utils::bridged::utf8_to_locale(text);
