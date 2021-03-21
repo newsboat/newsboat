@@ -149,13 +149,13 @@ macos_task:
               RUST: 1.50.0
         # This job tests our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: macOS Catalina, GCC, Rust 1.46.0
+        - name: macOS Catalina, GCC, Rust 1.48.0
           osx_instance:
               image: catalina-base
           env:
               CC: gcc
               CXX: g++
-              RUST: 1.46.0
+              RUST: 1.48.0
 
 formatting_task:
     name: Code formatting
@@ -177,22 +177,22 @@ linux_task:
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: Rust 1.46.0, GCC 5 (Ubuntu 18.04)
+        - name: Rust 1.48.0, GCC 5 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-5
                 cc: gcc-5
                 cxx: g++-5
-                rust_version: 1.46.0
-        - name: Rust 1.46.0, GCC 10 (Ubuntu 20.04)
+                rust_version: 1.48.0
+        - name: Rust 1.48.0, GCC 10 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-10
                 cc: gcc-10
                 cxx: g++-10
-                rust_version: 1.46.0
+                rust_version: 1.48.0
 
         - name: GCC 10, more warnings and checks (Ubuntu 20.04)
           container:

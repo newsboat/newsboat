@@ -2067,7 +2067,7 @@ mod tests {
         // "вау °±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃ": a mix of Cyrillic (unsupported by
         // ISO-8859-1) and ISO-8859-1 characters.
         //
-        // Have to specify the type explicitly, otherwise Rust 1.46.0 remembers the size of the
+        // Have to specify the type explicitly, otherwise Rust remembers the size of the
         // array and fails to compile `assert_ne!` below, as it can't compare arrays longer than 32
         // elements.
         let input: &[u8] = &[
