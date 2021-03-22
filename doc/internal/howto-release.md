@@ -71,7 +71,7 @@ branch off the latest release and backport the bugfixes onto it.
         * Don't use "###" style for headers because they'll be stripped ("#" is
             a shell comment). Use "===" style instead.
 5. Prepare the tarball:
-    * `git archive --format=tar --prefix="newsboat-VERSION/" rVERSION | pixz newsboat-VERSION.tar.xz`.
+    * `git archive --format=tar --prefix="newsboat-VERSION/" rVERSION | pixz > newsboat-VERSION.tar.xz`.
     * Sign the tarball:
         `gpg2 --sign-with 'newsboat@googlegroups.com' --detach-sign --armour newsboat-VERSION.tar.xz`.
     * Upload both files to newsboat.org staging area.
@@ -120,9 +120,6 @@ branch off the latest release and backport the bugfixes onto it.
     * Send an email to the mailing list
     * Change the topic on #newsboat at Freenode
 9. Release the snap:
-    * For patch releases:
-        * Follow _howto-update-snap.markdown_ to build and release a new version.
-        * Run `git fetch origin --tags` to fetch the tag you just pushed.
     * For minor releases:
         * Go to https://dashboard.snapcraft.io/ and log in.
         * Go to https://dashboard.snapcraft.io/snaps/newsboat/revisions/ and for
@@ -131,6 +128,9 @@ branch off the latest release and backport the bugfixes onto it.
             * In "Channels" row, click "Release".
             * Tick all checkboxes ("stable", "candidate", "beta", and "edge").
             * Click "Release".
+    * For patch releases:
+        * Follow _howto-update-snap.markdown_ to build and release a new version.
+        * Run `git fetch origin --tags` to fetch the tag you just pushed.
 10. Manage milestones https://github.com/newsboat/newsboat/milestones?with_issues=no :
     * Add all unassigned issues and pull requests to the current one:
         * Search for "no:milestone closed:>=2020-03-20 is:pr state:merged", set
@@ -160,6 +160,10 @@ branch off the latest release and backport the bugfixes onto it.
         git checkout -b feature/prepare-next-release
         git commit -am'Prepare for next release'
         git push origin -u feature/prepare-next-release
+    * Once the new MSRV checks passed, go to Settings → Branches → Branch
+        protection rules, "Edit" the rules for "master" and:
+        - make the old MSRV checks *not* required
+        - make the new MSRV checks *required*
 
 
 ## If you're making a patch release (x.y.Z)
