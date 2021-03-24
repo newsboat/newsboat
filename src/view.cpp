@@ -373,7 +373,7 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 		drop_queued_input();
 		pop_current_formaction();
 		return ret;
-	} else {	
+	} else {
 		status_line.show_message(strprintf::fmt(_("Running browser: %s"), cmdline));
 		const auto ret = utils::run_non_interactively(cmdline, "View::open_in_browser");
 		status_line.show_message("");
