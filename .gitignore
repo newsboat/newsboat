@@ -31,3 +31,4 @@ doc/podboat-cmds-linked.asciidoc
 **/*.rs.bk
 .vscode
 /cppcheck.log
+*.dSYM

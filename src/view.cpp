@@ -210,7 +210,7 @@ int View::run()
 
 		if (have_macroprefix) {
 			have_macroprefix = false;
-			set_status("");
+			status_line.show_message("");
 			LOG(Level::DEBUG,
 				"View::run: running macro `%s'",
 				event);
@@ -225,7 +225,7 @@ int View::run()
 
 			if (OP_MACROPREFIX == op) {
 				have_macroprefix = true;
-				set_status("macro-");
+				status_line.show_message("macro-");
 			}
 
 			// now we handle the operation to the
@@ -373,10 +373,10 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 		drop_queued_input();
 		pop_current_formaction();
 		return ret;
-	} else {
-		set_status(strprintf::fmt(_("Running browser: %s"), cmdline));
+	} else {	
+		status_line.show_message(strprintf::fmt(_("Running browser: %s"), cmdline));
 		const auto ret = utils::run_non_interactively(cmdline, "View::open_in_browser");
-		set_status("");
+		status_line.show_message("");
 		return ret;
 	}
 }
@@ -389,7 +389,7 @@ void View::update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds)
 			feedlist_form->update_visible_feeds(feeds);
 		}
 	} catch (const MatcherException& e) {
-		set_status(strprintf::fmt(
+		status_line.show_message(strprintf::fmt(
 				_("Error: applying the filter failed: %s"), e.what()));
 		LOG(Level::DEBUG,
 			"View::update_visible_feeds: inside catch: %s",
@@ -412,7 +412,7 @@ void View::set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds)
 			feedlist_form->set_feedlist(feeds);
 		}
 	} catch (const MatcherException& e) {
-		set_status(strprintf::fmt(
+		status_line.show_message(strprintf::fmt(
 				_("Error: applying the filter failed: %s"), e.what()));
 	}
 }
@@ -916,11 +916,11 @@ void View::prepare_query_feed(std::shared_ptr<RssFeed> feed)
 			"View::prepare_query_feed: %s",
 			feed->rssurl());
 
-		set_status(_("Updating query feed..."));
+		status_line.show_message(_("Updating query feed..."));
 		feed->update_items(ctrl->get_feedcontainer()->get_all_feeds());
 		feed->sort(cfg->get_article_sort_strategy());
 		notify_itemlist_change(feed);
-		set_status("");
+		status_line.show_message("");
 	}
 }
 
