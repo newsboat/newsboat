@@ -296,8 +296,7 @@ pub fn strwidth(rs_str: &str) -> usize {
 /// assert_eq!(strwidth_stfl("less-than: <>"), 12);
 /// assert_eq!(strwidth_stfl("ＡＢＣＤＥＦ"), 12);
 ///```
-pub fn strwidth_stfl(rs_str: &str) -> usize {
-    let mut s = &rs_str[..];
+pub fn strwidth_stfl(mut s: &str) -> usize {
     let mut width = 0;
     loop {
         if let Some(pos) = s.find('<') {
