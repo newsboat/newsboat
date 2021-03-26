@@ -270,7 +270,7 @@ std::string utils::utf8_to_locale(const std::string& text)
 std::string utils::locale_to_utf8(const std::string& text)
 {
 	const auto text_slice =
-		rust::Slice<unsigned char>(
+		rust::Slice<const unsigned char>(
 			reinterpret_cast<const unsigned char*>(text.c_str()),
 			text.length());
 	return std::string(utils::bridged::locale_to_utf8(text_slice));

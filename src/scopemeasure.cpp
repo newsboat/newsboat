@@ -9,7 +9,7 @@ ScopeMeasure::ScopeMeasure(const std::string& func)
 
 void ScopeMeasure::stopover(const std::string& son)
 {
-	rs_object->stopover(son);
+	scopemeasure::bridged::stopover(*rs_object, son);
 }
 
 } // namespace newsboat
