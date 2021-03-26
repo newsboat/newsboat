@@ -383,7 +383,7 @@ mod tests {
             match Matcher::parse(expression).unwrap().matches(&mock) {
                 Err(MatcherError::AttributeUnavailable { .. }) => { /* that's the expected result */
                 }
-                result => panic!(format!("unexpected result: {:?}", result)),
+                result => panic!("unexpected result: {:?}", result),
             }
         };
 
@@ -401,12 +401,12 @@ mod tests {
 
         match Matcher::parse("AAAA =~ \"[[\"").unwrap().matches(&mock) {
             Err(MatcherError::InvalidRegex { .. }) => { /* that's the expected result */ }
-            result => panic!(format!("unexpected result: {:?}", result)),
+            result => panic!("unexpected result: {:?}", result),
         }
 
         match Matcher::parse("AAAA !~ \"[[\"").unwrap().matches(&mock) {
             Err(MatcherError::InvalidRegex { .. }) => { /* that's the expected result */ }
-            result => panic!(format!("unexpected result: {:?}", result)),
+            result => panic!("unexpected result: {:?}", result),
         }
     }
 
