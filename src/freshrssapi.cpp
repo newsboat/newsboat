@@ -147,6 +147,19 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 
 		tags.push_back(std::string("~") + title);
 
+        json_object* cats_obj{};
+        json_object_object_get_ex(sub, "categories", &cats_obj);
+        array_list* cats = json_object_get_array(cats_obj);
+
+        int ncats = array_list_length(cats);
+        for (int x = 0; x < ncats; x++) {
+            json_object* cat = json_object_array_get_idx(cats_obj, x);
+            json_object* cat_name{};
+            json_object_object_get_ex(cat, "label", &cat_name);
+            const char* category = json_object_get_string(cat_name);
+            tags.push_back(category);
+        }
+
 		char* escaped_id = curl_easy_escape(handle, id, 0);
 
 		auto url = strprintf::fmt("%s%s%s?n=%u",
