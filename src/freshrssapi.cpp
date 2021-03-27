@@ -398,8 +398,6 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
             id,
             cfg->get_configvalue_as_int("freshrss-min-items"));
 
-    LOG(Level::INFO, "urls: %s, %s", id, query);
-
     CURL* handle;
     if (cached_handle) {
         // Never seems to be a cached handle
