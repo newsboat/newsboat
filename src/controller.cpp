@@ -35,6 +35,8 @@
 #include "exception.h"
 #include "feedhqapi.h"
 #include "feedhqurlreader.h"
+#include "freshrssapi.h"
+#include "freshrssurlreader.h"
 #include "fileurlreader.h"
 #include "globals.h"
 #include "inoreaderapi.h"
@@ -279,6 +281,9 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "feedhq") {
 		api = new FeedHqApi(&cfg);
 		urlcfg = new FeedHqUrlReader(&cfg, configpaths.url_file(), api);
+    } else if (type == "freshrss") {
+        api = new FreshRssApi(&cfg);
+        urlcfg = new FreshRssUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "ocnews") {
 		api = new OcNewsApi(&cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
