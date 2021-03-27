@@ -505,6 +505,23 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
                 item.pubDate_ts = pub_time;
             }
 
+            bool unread = true;
+
+            if (!entry["categories"].is_null()) {
+                for (const auto& a: entry["categories"]) {
+                    /* LOG(Level::INFO, "category %s", a); */
+                    if (a == "user/-/state/com.google/read") {
+                        unread = false;
+                    }
+                }
+            }
+
+            if (unread) {
+                item.labels.push_back("unread");
+            } else {
+                item.labels.push_back("read");
+            }
+
             /* const std::string status = entry["status"]; */
             /* if (status == "unread") { */
             /*     item.labels.push_back("miniflux:unread"); */
