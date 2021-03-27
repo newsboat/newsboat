@@ -445,7 +445,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
         for (const auto& entry : entries) {
             rsspp::Item item;
 
-            if (!entry["title"].is_null()) {
+            if (entry.contains("title") && !entry["title"].is_null()) {
                 item.title = entry["title"];
                 LOG(Level::INFO, "Feed title: %s", item.title);
             }
@@ -460,9 +460,9 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
             //        }
             //    }
             //}
-            if (!entry["canonical"].is_null()) {
+            if (entry.contains("canonical") && !entry["canonical"].is_null()) {
                 for (const auto& a : entry["canonical"]) {
-                    if (!a["href"].is_null()) {
+                    if (a.contains("href") && !a["href"].is_null()) {
                         item.link = a["href"];
                         LOG(Level::INFO, "Feed link: %s", item.link);
                         break;
@@ -470,15 +470,18 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
                 }
             }
 
-            if (!entry["author"].is_null()) {
+            if (entry.contains("author") && !entry["author"].is_null()) {
                 item.author = entry["author"];
                 LOG(Level::INFO, "Feed author: %s", item.author);
             }
 
-            if (!entry["summary"].is_null()) {
+            if (entry.contains("summary") && !entry["summary"].is_null()) {
                 LOG(Level::INFO, "Feed summary");
-                for (const auto& a : entry["summary"]) {
-                    item.content_encoded = std::string(a);
+                for (const auto& a : entry["summary"].items()) {
+                    if (!a.value().is_null()) {
+                        item.content_encoded = a.value();
+                    break;
+                    }
                 }
             }
 
@@ -489,13 +492,13 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
             /* const int entry_id = entry["id"]; */
             /* item.guid = std::to_string(entry_id); */
-            if (!entry["id"].is_null()) {
+            if (entry.contains("id") && !entry["id"].is_null()) {
                 item.guid = entry["id"];
                 LOG(Level::INFO, "Feed id: %s", item.guid);
             }
 
             // /* item.pubDate = entry["published"]; */
-            if (!entry["published"].is_null()) {
+            if (entry.contains("published") && !entry["published"].is_null()) {
                 int pub_time = entry["published"];
                 time_t updated = static_cast<time_t>(pub_time);
 
@@ -507,7 +510,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
             bool unread = true;
 
-            if (!entry["categories"].is_null()) {
+            if (entry.contains("categories") && !entry["categories"].is_null()) {
                 for (const auto& a: entry["categories"]) {
                     /* LOG(Level::INFO, "category %s", a); */
                     if (a == "user/-/state/com.google/read") {
