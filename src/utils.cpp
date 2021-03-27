@@ -376,10 +376,13 @@ std::string utils::retrieve_url(const std::string& url,
 
 std::string utils::run_program(const char* argv[], const std::string& input)
 {
-	rust::Vec<rust::String> rs_argv;
+	std::vector<rust::Str> slices;
 	for (; *argv; ++argv) {
-		rs_argv.emplace_back(*argv);
+		slices.emplace_back(*argv);
 	}
+
+	const auto rs_argv = rust::Slice<const rust::Str>(slices.data(), slices.size());
+
 	return std::string(utils::bridged::run_program(rs_argv, input));
 }
 
