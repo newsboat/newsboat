@@ -15,6 +15,7 @@
 #include "logger.h"
 #include "minifluxapi.h"
 #include "newsblurapi.h"
+#include "freshrssapi.h"
 #include "ocnewsapi.h"
 #include "rss/exception.h"
 #include "rss/parser.h"
@@ -43,6 +44,7 @@ RssParser::RssParser(const std::string& uri,
 	is_newsblur = cfgcont->get_configvalue("urls-source") == "newsblur";
 	is_ocnews = cfgcont->get_configvalue("urls-source") == "ocnews";
 	is_miniflux = cfgcont->get_configvalue("urls-source") == "miniflux";
+    is_freshrss = cfgcont->get_configvalue("urls-source") == "freshrss";
 }
 
 RssParser::~RssParser() {}
@@ -163,6 +165,8 @@ void RssParser::retrieve_uri(const std::string& uri)
 		fetch_ocnews(uri);
 	} else if (is_miniflux) {
 		fetch_miniflux(uri);
+    } else if (is_freshrss) {
+        fetch_freshrss(uri);
 	} else if (utils::is_http_url(uri)) {
 		download_http(uri);
 	} else if (utils::is_exec_url(uri)) {
@@ -364,7 +368,8 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 				f.rss_version == rsspp::Feed::TTRSS_JSON ||
 				f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
 				f.rss_version == rsspp::Feed::OCNEWS_JSON ||
-				f.rss_version == rsspp::Feed::MINIFLUX_JSON) &&
+                f.rss_version == rsspp::Feed::MINIFLUX_JSON ||
+				f.rss_version == rsspp::Feed::FRESHRSS_JSON) &&
 			item.labels.size() > 0) {
 			auto start = item.labels.begin();
 			auto finish = item.labels.end();
@@ -678,6 +683,17 @@ void RssParser::fetch_miniflux(const std::string& feed_id)
 	LOG(Level::INFO,
 		"RssParser::fetch_miniflux: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
+}
+
+void RssParser::fetch_freshrss(const std::string& feed_id)
+{
+    FreshRssApi* fapi = dynamic_cast<FreshRssApi*>(api);
+    if (fapi) {
+        f = fapi->fetch_feed(feed_id, easyhandle ? easyhandle->ptr() : nullptr);
+    }
+    LOG(Level::INFO,
+        "RssParser::fetch_freshrss: f.items.size = %" PRIu64,
+        static_cast<uint64_t>(f.items.size()));
 }
 
 } // namespace newsboat

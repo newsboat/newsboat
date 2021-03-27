@@ -5,6 +5,11 @@
 
 #include "cache.h"
 #include "remoteapi.h"
+#include "rss/feed.h"
+#include "3rd-party/json.hpp"
+#include "utils.h"
+
+using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
 
@@ -20,6 +25,7 @@ public:
 	bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) override;
+    rsspp::Feed fetch_feed(const std::string& id, CURL* cached_handle);
 
 private:
 	std::vector<std::string> get_tags(xmlNode* node);
@@ -34,6 +40,7 @@ private:
 		const std::string& token);
 	std::string auth;
 	std::string auth_header;
+    /* std::string server; */
 };
 
 } // namespace newsboat

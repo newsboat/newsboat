@@ -76,6 +76,7 @@ private:
 	void fetch_newsblur(const std::string& feed_id);
 	void fetch_ocnews(const std::string& feed_id);
 	void fetch_miniflux(const std::string& feed_id);
+    void fetch_freshrss(const std::string& feed_id);
 
 	std::string my_uri;
 	Cache* ch;
@@ -87,6 +88,7 @@ private:
 	bool is_newsblur;
 	bool is_ocnews;
 	bool is_miniflux;
+    bool is_freshrss;
 
 	CurlHandle* easyhandle;
 };
