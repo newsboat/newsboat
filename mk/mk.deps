@@ -900,6 +900,13 @@ test/keymap.o: test/keymap.cpp include/keymap.h \
 test/listformatter.o: test/listformatter.cpp include/listformatter.h \
  include/regexmanager.h include/configactionhandler.h include/matcher.h \
  filter/FilterParser.h include/regexowner.h 3rd-party/catch.hpp
+test/listwidget.o: test/listwidget.cpp include/listwidget.h \
+ include/listformatter.h include/regexmanager.h \
+ include/configactionhandler.h include/matcher.h filter/FilterParser.h \
+ include/regexowner.h include/stflpp.h include/stflpp.h include/utils.h \
+ 3rd-party/expected.hpp 3rd-party/optional.hpp include/configcontainer.h \
+ include/logger.h config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp
 test/matcher.o: test/matcher.cpp include/matcher.h filter/FilterParser.h \
  3rd-party/catch.hpp include/matchable.h 3rd-party/optional.hpp \
  include/matcherexception.h test/test-helpers/stringmaker/optional.h
