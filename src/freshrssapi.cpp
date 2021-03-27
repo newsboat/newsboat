@@ -11,7 +11,7 @@
 
 #define FRESHRSS_LOGIN "/accounts/ClientLogin"
 #define FRESHRSS_API_PREFIX "/reader/api/0/"
-#define FRESHRSS_FEED_PREFIX "/reader/atom/"
+#define FRESHRSS_FEED_PREFIX "/reader/api/0/stream/contents/"
 
 #define FRESHRSS_OUTPUT_SUFFIX "?output=json"
 
