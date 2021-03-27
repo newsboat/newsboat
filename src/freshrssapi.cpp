@@ -162,11 +162,10 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 
 		char* escaped_id = curl_easy_escape(handle, id, 0);
 
-		auto url = strprintf::fmt("%s%s%s?n=%u",
+		auto url = strprintf::fmt("%s%s%s",
 				cfg->get_configvalue("freshrss-url"),
 				FRESHRSS_FEED_PREFIX,
-				escaped_id,
-				cfg->get_configvalue_as_int("freshrss-min-items"));
+				escaped_id);
 		urls.push_back(TaggedFeedUrl(url, tags));
 
 		curl_free(escaped_id);
@@ -395,8 +394,11 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
     rsspp::Feed feed;
     feed.rss_version = rsspp::Feed::FRESHRSS_JSON;
 
-    const std::string query =
-        strprintf::fmt(FRESHRSS_FEED_PREFIX, "feed/", id);
+    const std::string query = strprintf::fmt("%s?n=%u",
+            id,
+            cfg->get_configvalue_as_int("freshrss-min-items"));
+
+    LOG(Level::INFO, "urls: %s, %s", id, query);
 
     CURL* handle;
     if (cached_handle) {
@@ -415,7 +417,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
     curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
     curl_easy_setopt(handle,
         CURLOPT_URL,
-        id.c_str());
+        query.c_str());
     curl_easy_perform(handle);
     if (!cached_handle) {
         curl_easy_cleanup(handle);
