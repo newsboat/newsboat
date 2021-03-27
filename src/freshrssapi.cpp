@@ -398,18 +398,13 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
     const std::string query =
         strprintf::fmt(FRESHRSS_FEED_PREFIX, "feed/", id);
 
-    //const nlohmann::json content = run_op(query, nlohmann::json(), HTTPMethod::GET, cached_handle);
-
-    // From
     CURL* handle;
     if (cached_handle) {
+        // Never seems to be a cached handle
         handle = cached_handle;
-        LOG(Level::INFO, "Cached handle");
     } else {
         handle = curl_easy_init();
-        LOG(Level::INFO, "No cached handle");
     }
-    LOG(Level::INFO, "Feed id: %s", id);
     std::string result;
     curl_slist* custom_headers{};
     add_custom_headers(&custom_headers);
@@ -458,38 +453,28 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
         for (const auto& entry : entries) {
             rsspp::Item item;
 
+            // Title
             if (entry.contains("title") && !entry["title"].is_null()) {
                 item.title = entry["title"];
-                LOG(Level::INFO, "Feed title: %s", item.title);
             }
 
-            // No such entry?
-            //if (!entry["canonical"].is_null()) {
-            //    const auto& canon = entry["canonical"];
-            //    if (canon.is_array()) {
-            //        if (!canon["href"].is_null()) {
-            //            item.link = canon["href"];
-            //            LOG(Level::INFO, "Feed link: %s", item.link);
-            //        }
-            //    }
-            //}
+            // Link
             if (entry.contains("canonical") && !entry["canonical"].is_null()) {
                 for (const auto& a : entry["canonical"]) {
                     if (a.contains("href") && !a["href"].is_null()) {
                         item.link = a["href"];
-                        LOG(Level::INFO, "Feed link: %s", item.link);
                         break;
                     }
                 }
             }
 
+            // Author
             if (entry.contains("author") && !entry["author"].is_null()) {
                 item.author = entry["author"];
-                LOG(Level::INFO, "Feed author: %s", item.author);
             }
 
+            // Content
             if (entry.contains("summary") && !entry["summary"].is_null()) {
-                LOG(Level::INFO, "Feed summary");
                 for (const auto& a : entry["summary"].items()) {
                     if (!a.value().is_null()) {
                         item.content_encoded = a.value();
@@ -498,19 +483,12 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
                 }
             }
 
-            // if (!entry["content"].is_null()) {
-            //     item.content_encoded = entry["content"];
-            //     LOG(Level::INFO, "Feed content: %s", item.content_encoded);
-            // }
-
-            /* const int entry_id = entry["id"]; */
-            /* item.guid = std::to_string(entry_id); */
+            // Guid
             if (entry.contains("id") && !entry["id"].is_null()) {
                 item.guid = entry["id"];
-                LOG(Level::INFO, "Feed id: %s", item.guid);
             }
 
-            // /* item.pubDate = entry["published"]; */
+            // Publish date
             if (entry.contains("published") && !entry["published"].is_null()) {
                 int pub_time = entry["published"];
                 time_t updated = static_cast<time_t>(pub_time);
@@ -521,20 +499,9 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
                 item.pubDate_ts = pub_time;
             }
 
-            bool unread = true;
-
-            if (entry.contains("categories") && !entry["categories"].is_null()) {
-                for (const auto& a: entry["categories"]) {
-                    /* LOG(Level::INFO, "category %s", a); */
-                    if (a == "user/-/state/com.google/read") {
-                        unread = false;
-                    }
-                }
-            }
-
+            // Podcast enclosure
             if (entry.contains("enclosure") && !entry["enclosure"].is_null()) {
                 for (const auto& a : entry["enclosure"]) {
-                    LOG(Level::INFO, "attach %s", a.dump());
                     if (a.contains("href") && a.contains("type")
                         && !a["href"].is_null() && !a["type"].is_null()
                         && newsboat::utils::is_valid_podcast_type(a["type"])) {
@@ -546,18 +513,20 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
                 }
             }
 
+            // Read/unread status
+            bool unread = true;
+            if (entry.contains("categories") && !entry["categories"].is_null()) {
+                for (const auto& a: entry["categories"]) {
+                    if (a == "user/-/state/com.google/read") {
+                        unread = false;
+                    }
+                }
+            }
             if (unread) {
                 item.labels.push_back("unread");
             } else {
                 item.labels.push_back("read");
             }
-
-            /* const std::string status = entry["status"]; */
-            /* if (status == "unread") { */
-            /*     item.labels.push_back("miniflux:unread"); */
-            /* } else { */
-            /*     item.labels.push_back("miniflux:read"); */
-            /* } */
 
             feed.items.push_back(item);
         }

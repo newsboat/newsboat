@@ -19,13 +19,8 @@ FreshRssUrlReader::FreshRssUrlReader(ConfigContainer* c,
 
 FreshRssUrlReader::~FreshRssUrlReader() {}
 
-#define BROADCAST_FRIENDS_URL                                    \
-	"http://freshrss.org/reader/atom/user/-/state/com.google/" \
-	"broadcast-friends"
 #define STARRED_ITEMS_URL \
-	"http://freshrss.org/reader/atom/user/-/state/com.google/starred"
-#define SHARED_ITEMS_URL \
-	"http://freshrss.org/reader/atom/user/-/state/com.google/broadcast"
+	"/reader/api/0/stream/contents/user/-/state/com.google/starred"
 
 #define ADD_URL(url, caption)                 \
 	do {                                  \
@@ -43,11 +38,8 @@ nonstd::optional<std::string> FreshRssUrlReader::reload()
 
 	if (cfg->get_configvalue_as_bool("freshrss-show-special-feeds")) {
 		std::vector<std::string> tmptags;
-		ADD_URL(BROADCAST_FRIENDS_URL,
-			std::string("~") + _("People you follow"));
-		ADD_URL(STARRED_ITEMS_URL,
+		ADD_URL(cfg->get_configvalue("freshrss-url") + STARRED_ITEMS_URL,
 			std::string("~") + _("Starred items"));
-		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
 	}
 
 	FileUrlReader ur(file);
