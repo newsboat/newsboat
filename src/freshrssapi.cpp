@@ -532,6 +532,20 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
                 }
             }
 
+            if (entry.contains("enclosure") && !entry["enclosure"].is_null()) {
+                for (const auto& a : entry["enclosure"]) {
+                    LOG(Level::INFO, "attach %s", a.dump());
+                    if (a.contains("href") && a.contains("type")
+                        && !a["href"].is_null() && !a["type"].is_null()
+                        && newsboat::utils::is_valid_podcast_type(a["type"])) {
+                        item.enclosure_type =
+                            a["type"];
+                        item.enclosure_url = a["href"];
+                        break;
+                    }
+                }
+            }
+
             if (unread) {
                 item.labels.push_back("unread");
             } else {
