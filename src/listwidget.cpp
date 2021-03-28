@@ -20,12 +20,28 @@ void ListWidget::stfl_replace_list(std::uint32_t number_of_lines,
 {
 	num_lines = number_of_lines;
 	form.modify(list_name, "replace", stfl);
+
+	if (get_position() >= num_lines) {
+		if (num_lines > 0) {
+			set_position(num_lines - 1);
+		} else {
+			set_position(0);
+		}
+	}
 }
 
 void ListWidget::stfl_replace_lines(const ListFormatter& listfmt)
 {
 	num_lines = listfmt.get_lines_count();
 	form.modify(list_name, "replace_inner", listfmt.format_list());
+
+	if (get_position() >= num_lines) {
+		if (num_lines > 0) {
+			set_position(num_lines - 1);
+		} else {
+			set_position(0);
+		}
+	}
 }
 
 bool ListWidget::move_up(bool wrap_scroll)

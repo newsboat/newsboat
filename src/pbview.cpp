@@ -102,14 +102,14 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				i++;
 			}
 
+			downloads_list.stfl_replace_lines(listfmt);
+
 			// If there's no status message, we know there's no error to show
 			// Thus, it's safe to replace with the download's status
 			if (i >= 1 && dllist_form.get("msg").empty()) {
 				const auto idx = downloads_list.get_position();
 				dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
 			}
-
-			downloads_list.stfl_replace_lines(listfmt);
 
 			ctrl->set_view_update_necessary(false);
 		}
