@@ -4,7 +4,7 @@ use nom::{
     character::complete::one_of,
     combinator::{complete, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::{delimited, preceded, tuple},
+    sequence::{delimited, preceded, terminated, tuple},
     IResult,
 };
 
@@ -71,8 +71,9 @@ fn operation_description(input: &str) -> IResult<&str, String> {
 fn operation_sequence(input: &str) -> IResult<&str, (Vec<Vec<String>>, Option<String>)> {
     let parser = separated_list0(many1(semicolon), operation_with_args);
     let parser = delimited(many0(semicolon), parser, many0(semicolon));
-    let parser = preceded(many0(one_of(" \t")), parser);
     let parser = tuple((parser, opt(operation_description)));
+    let parser = delimited(many0(one_of(" \t")), parser, many0(one_of(" \t")));
+    let parser = terminated(parser, eof);
 
     let mut parser = complete(parser);
 
@@ -416,9 +417,16 @@ mod tests {
     #[test]
     fn t_tokenize_operation_sequence_requires_closing_quote_in_description() {
         assert_eq!(
-            tokenize_operation_sequence(r#"-- "description not closed "#)
-                .unwrap()
-                .1,
+            tokenize_operation_sequence(r#"open -- "description not closed "#),
+            None
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_sequence_requires_quoted_string_after_delimiter() {
+        assert_eq!(tokenize_operation_sequence(r#"open --"#), None);
+        assert_eq!(
+            tokenize_operation_sequence(r#"open -- invalid description"#),
             None
         );
     }
