@@ -486,29 +486,22 @@ bool ItemListFormAction::process_operation(Operation op,
 		try {
 			const auto message_lifetime = v->get_statusline().show_message_until_finished(
 					_("Marking feed read..."));
-			if (feed->rssurl() != "") {
-				v->get_ctrl()->mark_all_read(pos);
-			} else {
-				{
-					std::lock_guard<std::mutex> lock(
-						feed->item_mutex);
-					LOG(Level::DEBUG,
-						"ItemListFormAction: oh, it "
-						"looks "
-						"like I'm in a pseudo-feed "
-						"(search "
-						"result, query feed)");
-					for (const auto& item : feed->items()) {
-						item->set_unread_nowrite_notify(
-							false,
-							true);
-						// TODO: do we need to call mark_article_read here, too?
-					}
-				}
-				v->get_ctrl()->mark_all_read(feed);
+			std::vector<std::string> guids;
+			for (const auto& item : visible_items) {
+				const std::string guid = item.first->guid();
+				guids.push_back(guid);
 			}
-			if (cfg->get_configvalue_as_bool(
-					"markfeedread-jumps-to-next-unread")) {
+			rsscache->mark_items_read_by_guid(guids);
+			v->get_ctrl()->mark_all_read(guids);
+
+			if (visible_items.size() > 0) {
+				std::lock_guard<std::mutex> lock(feed->item_mutex);
+				bool notify = visible_items[0].first->feedurl() != feed->rssurl();
+				for (const auto& item : visible_items) {
+					item.first->set_unread_nowrite_notify(false, notify);
+				}
+			}
+			if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
 			} else { // reposition to first/last item
 				std::string sortorder =
