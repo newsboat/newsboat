@@ -104,7 +104,7 @@ check_pkg "stfl" || fail "stfl"
 ( check_pkg "json" "" 0.11 || check_pkg "json-c" "" 0.11 ) || fail "json-c"
 
 if [ `uname -s` = "Darwin" ]; then
-	check_custom "ncurses5.4" "ncurses5.4-config" || fail "ncurses5.4"
+	check_pkg "ncurses" || fail "ncurses"
     # rand crate needs Security framework, and rustc doesn't (can't) link it
     # into libnewsboat.a
     echo 'LDFLAGS+=-framework Security' >> config.mk
