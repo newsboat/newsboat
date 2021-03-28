@@ -99,16 +99,8 @@ pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, Opt
     }
 }
 
-pub fn tokenize_operation_description(input: &str) -> Option<String> {
-    match operation_description(input) {
-        Ok((_leftovers, description)) => Some(description),
-        Err(_error) => None,
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use super::tokenize_operation_description;
     use super::tokenize_operation_sequence;
 
     #[test]
@@ -351,6 +343,12 @@ mod tests {
             tokenize_operation_sequence(" \t set a b \t   ").unwrap().0,
             vec![vec!["set", "a", "b"]]
         );
+
+        let (operations, description) =
+            tokenize_operation_sequence(" \t set a b -- \"description\" \t   ").unwrap();
+        assert_eq!(operations, vec![vec!["set", "a", "b"]]);
+        assert!(description.is_some());
+        assert_eq!(description.unwrap(), "description");
     }
 
     #[test]
@@ -384,83 +382,70 @@ mod tests {
     }
 
     #[test]
-    fn t_tokenize_operation_description_supports_empty_input() {
-        assert_eq!(tokenize_operation_description(""), None);
+    fn t_tokenize_operation_sequence_allows_missing_description() {
+        let (operations, description) = tokenize_operation_sequence(r#"set a b"#).unwrap();
+        assert_eq!(operations, vec![vec!["set", "a", "b"]]);
+        assert!(description.is_none());
+    }
+
+    fn verify_parsed_description(input: &str, expected_output: &str) {
+        let (_operations, description) = tokenize_operation_sequence(input).unwrap();
+        assert!(description.is_some());
+        assert_eq!(description.unwrap(), expected_output);
     }
 
     #[test]
-    fn t_tokenize_operation_description_ignores_preceding_spaces() {
-        assert_eq!(
-            tokenize_operation_description(r#"--"description""#).unwrap(),
-            "description"
-        );
-        assert_eq!(
-            tokenize_operation_description(r#"-- "description""#).unwrap(),
-            "description"
-        );
-        assert_eq!(
-            tokenize_operation_description(r#"     -- "description""#).unwrap(),
-            "description"
-        );
+    fn t_tokenize_operation_sequence_ignores_spaces_preceding_description() {
+        verify_parsed_description(r#"set "a" "b"--"description""#, "description");
+        verify_parsed_description(r#"set "a" "b"-- "description""#, "description");
+        verify_parsed_description(r#"set "a" "b"     -- "description""#, "description");
     }
 
     #[test]
-    fn t_tokenize_operation_description_ignores_trailing_spaces() {
-        assert_eq!(
-            tokenize_operation_description(r#"-- "description"   "#).unwrap(),
-            "description"
+    fn t_tokenize_operation_sequence_includes_whitespace_in_description() {
+        verify_parsed_description(
+            r#"open -- "multi-word description""#,
+            "multi-word description",
         );
-    }
-
-    #[test]
-    fn t_tokenize_operation_description_includes_whitespace() {
-        assert_eq!(
-            tokenize_operation_description(r#"-- "multi-word description""#).unwrap(),
-            "multi-word description"
-        );
-        assert_eq!(
-            tokenize_operation_description(r#"-- "  leading and trailing  ""#).unwrap(),
-            "  leading and trailing  "
+        verify_parsed_description(
+            r#"open -- "  leading and trailing  ""#,
+            "  leading and trailing  ",
         );
     }
 
     #[test]
-    fn t_tokenize_operation_description_requires_closing_quote() {
+    fn t_tokenize_operation_sequence_requires_closing_quote_in_description() {
         assert_eq!(
-            tokenize_operation_description(r#"-- "description not closed "#),
+            tokenize_operation_sequence(r#"-- "description not closed "#)
+                .unwrap()
+                .1,
             None
         );
     }
 
     #[test]
-    fn t_tokenize_operation_handles_escaped_quotes() {
-        assert_eq!(
-            tokenize_operation_description(r#"-- "internal \" quote""#).unwrap(),
-            r#"internal " quote"#
-        );
-        assert_eq!(
-            tokenize_operation_description(r#"-- "\"internal \"\"\" quotes\"""#).unwrap(),
-            r#""internal """ quotes""#
+    fn t_tokenize_operation_sequence_handles_escaped_quotes_in_description() {
+        verify_parsed_description(r#"open -- "internal \" quote""#, r#"internal " quote"#);
+        verify_parsed_description(
+            r#"open -- "\"internal \"\"\" quotes\"""#,
+            r#""internal """ quotes""#,
         );
     }
 
     #[test]
-    fn t_tokenize_operation_handles_escaped_backslashes() {
-        assert_eq!(
-            tokenize_operation_description(r#"-- "internal \\ backslash""#).unwrap(),
-            r#"internal \ backslash"#
+    fn t_tokenize_operation_sequence_handles_escaped_backslashes_in_description() {
+        verify_parsed_description(
+            r#"open -- "internal \\ backslash""#,
+            r#"internal \ backslash"#,
         );
-        assert_eq!(
-            tokenize_operation_description(r#"-- "\"internal \\\\\\ backslashes\"""#).unwrap(),
-            r#""internal \\\ backslashes""#
+        verify_parsed_description(
+            r#"open -- "\"internal \\\\\\ backslashes\"""#,
+            r#""internal \\\ backslashes""#,
         );
     }
 
     #[test]
-    fn t_tokenize_operation_passes_through_unknown_escaped_characters() {
-        assert_eq!(
-            tokenize_operation_description(r#"-- "\f\o\o\"\\\b\a\r""#).unwrap(),
-            r#"foo"\bar"#
-        );
+    fn t_tokenize_operation_sequence_passes_through_unknown_escaped_characters_in_description() {
+        verify_parsed_description(r#"open -- "\f\o\o\"\\\b\a\r""#, r#"foo"\bar"#);
     }
 }
