@@ -57,11 +57,21 @@ fn operation_sequence(input: &str) -> IResult<&str, Vec<Vec<String>>> {
     parser(input)
 }
 
-fn operation_description(input: &str) -> IResult<&str, &str> {
+fn operation_description(input: &str) -> IResult<&str, String> {
     let start_token = delimited(many0(one_of(" \t")), tag("--"), many0(one_of(" \t")));
 
+    let string_content = escaped_transform(
+        is_not(r#""\"#),
+        '\\',
+        alt((
+          value("\\", tag("\\")), // `\\` -> `\`
+          value("\"", tag("\"")), // `\"` -> `"`
+          take(1usize), // all other escaped characters are passed through, unmodified
+        ))
+    );
+
     let double_quote = tag("\"");
-    let parser = delimited(&double_quote, recognize(is_not("\"")), &double_quote);
+    let parser = delimited(&double_quote, string_content, &double_quote);
 
     let mut parser = preceded(start_token, parser);
 
@@ -88,7 +98,7 @@ pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, &st
     }
 }
 
-pub fn tokenize_operation_description(input: &str) -> Option<&str> {
+pub fn tokenize_operation_description(input: &str) -> Option<String> {
     match operation_description(input) {
         Ok((_leftovers, description)) => Some(description),
         Err(_error) => None,
@@ -417,6 +427,38 @@ mod tests {
         assert_eq!(
             tokenize_operation_description(r#"-- "description not closed "#),
             None
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_handles_escaped_quotes() {
+        assert_eq!(
+            tokenize_operation_description(r#"-- "internal \" quote""#).unwrap(),
+            r#"internal " quote"#
+        );
+        assert_eq!(
+            tokenize_operation_description(r#"-- "\"internal \"\"\" quotes\"""#).unwrap(),
+            r#""internal """ quotes""#
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_handles_escaped_backslashes() {
+        assert_eq!(
+            tokenize_operation_description(r#"-- "internal \\ backslash""#).unwrap(),
+            r#"internal \ backslash"#
+        );
+        assert_eq!(
+            tokenize_operation_description(r#"-- "\"internal \\\\\\ backslashes\"""#).unwrap(),
+            r#""internal \\\ backslashes""#
+        );
+    }
+
+    #[test]
+    fn t_tokenize_operation_passes_through_unknown_escaped_characters() {
+        assert_eq!(
+            tokenize_operation_description(r#"-- "\f\o\o\"\\\b\a\r""#).unwrap(),
+            r#"foo"\bar"#
         );
     }
 }

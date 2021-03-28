@@ -54,7 +54,7 @@ fn operation_tokens(input: &Operation) -> &Vec<String> {
 
 fn tokenize_operation_description(input: &str) -> String {
     match libnewsboat::keymap::tokenize_operation_description(input) {
-        Some(description) => String::from(description),
+        Some(description) => description,
         None => String::new(),
     }
 }
