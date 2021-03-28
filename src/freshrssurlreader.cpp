@@ -22,12 +22,12 @@ FreshRssUrlReader::~FreshRssUrlReader() {}
 #define STARRED_ITEMS_URL \
 	"/reader/api/0/stream/contents/user/-/state/com.google/starred"
 
-#define ADD_URL(url, caption)                 \
-	do {                                  \
-		tmptags.clear();              \
-		urls.push_back((url));        \
+#define ADD_URL(url, caption)				  \
+	do {								  \
+		tmptags.clear();			  \
+		urls.push_back((url));		  \
 		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags;        \
+		tags[(url)] = tmptags;		  \
 	} while (0)
 
 nonstd::optional<std::string> FreshRssUrlReader::reload()

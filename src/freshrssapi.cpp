@@ -29,7 +29,7 @@ namespace newsboat {
 FreshRssApi::FreshRssApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-    /* server = cfg->get_configvalue("freshrss-url"); */
+	/* server = cfg->get_configvalue("freshrss-url"); */
 }
 
 bool FreshRssApi::authenticate()
@@ -147,18 +147,18 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 
 		tags.push_back(std::string("~") + title);
 
-        json_object* cats_obj{};
-        json_object_object_get_ex(sub, "categories", &cats_obj);
-        array_list* cats = json_object_get_array(cats_obj);
+		json_object* cats_obj{};
+		json_object_object_get_ex(sub, "categories", &cats_obj);
+		array_list* cats = json_object_get_array(cats_obj);
 
-        int ncats = array_list_length(cats);
-        for (int x = 0; x < ncats; x++) {
-            json_object* cat = json_object_array_get_idx(cats_obj, x);
-            json_object* cat_name{};
-            json_object_object_get_ex(cat, "label", &cat_name);
-            const char* category = json_object_get_string(cat_name);
-            tags.push_back(category);
-        }
+		int ncats = array_list_length(cats);
+		for (int x = 0; x < ncats; x++) {
+			json_object* cat = json_object_array_get_idx(cats_obj, x);
+			json_object* cat_name{};
+			json_object_object_get_ex(cat, "label", &cat_name);
+			const char* category = json_object_get_string(cat_name);
+			tags.push_back(category);
+		}
 
 		char* escaped_id = curl_easy_escape(handle, id, 0);
 
@@ -391,158 +391,158 @@ std::string FreshRssApi::post_content(const std::string& url,
 
 rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 {
-    rsspp::Feed feed;
-    feed.rss_version = rsspp::Feed::FRESHRSS_JSON;
+	rsspp::Feed feed;
+	feed.rss_version = rsspp::Feed::FRESHRSS_JSON;
 
-    const std::string query = strprintf::fmt("%s?n=%u",
-            id,
-            cfg->get_configvalue_as_int("freshrss-min-items"));
+	const std::string query = strprintf::fmt("%s?n=%u",
+			id,
+			cfg->get_configvalue_as_int("freshrss-min-items"));
 
-    CURL* handle;
-    if (cached_handle) {
-        // Never seems to be a cached handle
-        handle = cached_handle;
-    } else {
-        handle = curl_easy_init();
-    }
-    std::string result;
-    curl_slist* custom_headers{};
-    add_custom_headers(&custom_headers);
-    curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
+	CURL* handle;
+	if (cached_handle) {
+		// Never seems to be a cached handle
+		handle = cached_handle;
+	} else {
+		handle = curl_easy_init();
+	}
+	std::string result;
+	curl_slist* custom_headers{};
+	add_custom_headers(&custom_headers);
+	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
 
-    utils::set_common_curl_options(handle, cfg);
-    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-    curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-    curl_easy_setopt(handle,
-        CURLOPT_URL,
-        query.c_str());
-    curl_easy_perform(handle);
-    if (!cached_handle) {
-        curl_easy_cleanup(handle);
-    }
-    curl_slist_free_all(custom_headers);
+	utils::set_common_curl_options(handle, cfg);
+	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle,
+		CURLOPT_URL,
+		query.c_str());
+	curl_easy_perform(handle);
+	if (!cached_handle) {
+		curl_easy_cleanup(handle);
+	}
+	curl_slist_free_all(custom_headers);
 
-    if (result.empty()) {
-        LOG(Level::ERROR,
-            "FreshRssApi::fetch_feed: Empty response: %s",
-            result);
-        return feed;
-    }
-    nlohmann::json content;
-    try {
-        content = nlohmann::json::parse(result);
-    } catch (nlohmann::json::parse_error& e) {
-        LOG(Level::ERROR,
-            "FreshRssApi::fetch_feed: reply failed to parse: %s",
-            result);
-        return feed;
-    }
+	if (result.empty()) {
+		LOG(Level::ERROR,
+			"FreshRssApi::fetch_feed: Empty response: %s",
+			result);
+		return feed;
+	}
+	nlohmann::json content;
+	try {
+		content = nlohmann::json::parse(result);
+	} catch (nlohmann::json::parse_error& e) {
+		LOG(Level::ERROR,
+			"FreshRssApi::fetch_feed: reply failed to parse: %s",
+			result);
+		return feed;
+	}
 
 
-    const nlohmann::json entries = content["items"];
-    if (!entries.is_array()) {
-        LOG(Level::ERROR,
-            "FreshRssApi::fetch_feed: items is not an array");
-        return feed;
-    }
+	const nlohmann::json entries = content["items"];
+	if (!entries.is_array()) {
+		LOG(Level::ERROR,
+			"FreshRssApi::fetch_feed: items is not an array");
+		return feed;
+	}
 
-    LOG(Level::DEBUG,
-        "FreshRssApi::fetch_feed: %" PRIu64 " items",
-        static_cast<uint64_t>(entries.size()));
-    try {
-        for (const auto& entry : entries) {
-            rsspp::Item item;
+	LOG(Level::DEBUG,
+		"FreshRssApi::fetch_feed: %" PRIu64 " items",
+		static_cast<uint64_t>(entries.size()));
+	try {
+		for (const auto& entry : entries) {
+			rsspp::Item item;
 
-            // Title
-            if (entry.contains("title") && !entry["title"].is_null()) {
-                item.title = entry["title"];
-            }
+			// Title
+			if (entry.contains("title") && !entry["title"].is_null()) {
+				item.title = entry["title"];
+			}
 
-            // Link
-            if (entry.contains("canonical") && !entry["canonical"].is_null()) {
-                for (const auto& a : entry["canonical"]) {
-                    if (a.contains("href") && !a["href"].is_null()) {
-                        item.link = a["href"];
-                        break;
-                    }
-                }
-            }
+			// Link
+			if (entry.contains("canonical") && !entry["canonical"].is_null()) {
+				for (const auto& a : entry["canonical"]) {
+					if (a.contains("href") && !a["href"].is_null()) {
+						item.link = a["href"];
+						break;
+					}
+				}
+			}
 
-            // Author
-            if (entry.contains("author") && !entry["author"].is_null()) {
-                item.author = entry["author"];
-            }
+			// Author
+			if (entry.contains("author") && !entry["author"].is_null()) {
+				item.author = entry["author"];
+			}
 
-            // Content
-            if (entry.contains("summary") && !entry["summary"].is_null()) {
-                for (const auto& a : entry["summary"].items()) {
-                    if (!a.value().is_null()) {
-                        item.content_encoded = a.value();
-                    break;
-                    }
-                }
-            }
+			// Content
+			if (entry.contains("summary") && !entry["summary"].is_null()) {
+				for (const auto& a : entry["summary"].items()) {
+					if (!a.value().is_null()) {
+						item.content_encoded = a.value();
+					break;
+					}
+				}
+			}
 
-            // Guid
-            if (entry.contains("id") && !entry["id"].is_null()) {
-                item.guid = entry["id"];
-            }
+			// Guid
+			if (entry.contains("id") && !entry["id"].is_null()) {
+				item.guid = entry["id"];
+			}
 
-            // Publish date
-            if (entry.contains("published") && !entry["published"].is_null()) {
-                int pub_time = entry["published"];
-                time_t updated = static_cast<time_t>(pub_time);
+			// Publish date
+			if (entry.contains("published") && !entry["published"].is_null()) {
+				int pub_time = entry["published"];
+				time_t updated = static_cast<time_t>(pub_time);
 
-                item.pubDate = utils::mt_strf_localtime(
-                        "%a, %d %b %Y %H:%M:%S %z",
-                        updated);
-                item.pubDate_ts = pub_time;
-            }
+				item.pubDate = utils::mt_strf_localtime(
+						"%a, %d %b %Y %H:%M:%S %z",
+						updated);
+				item.pubDate_ts = pub_time;
+			}
 
-            // Podcast enclosure
-            if (entry.contains("enclosure") && !entry["enclosure"].is_null()) {
-                for (const auto& a : entry["enclosure"]) {
-                    if (a.contains("href") && a.contains("type")
-                        && !a["href"].is_null() && !a["type"].is_null()
-                        && newsboat::utils::is_valid_podcast_type(a["type"])) {
-                        item.enclosure_type =
-                            a["type"];
-                        item.enclosure_url = a["href"];
-                        break;
-                    }
-                }
-            }
+			// Podcast enclosure
+			if (entry.contains("enclosure") && !entry["enclosure"].is_null()) {
+				for (const auto& a : entry["enclosure"]) {
+					if (a.contains("href") && a.contains("type")
+						&& !a["href"].is_null() && !a["type"].is_null()
+						&& newsboat::utils::is_valid_podcast_type(a["type"])) {
+						item.enclosure_type =
+							a["type"];
+						item.enclosure_url = a["href"];
+						break;
+					}
+				}
+			}
 
-            // Read/unread status
-            bool unread = true;
-            if (entry.contains("categories") && !entry["categories"].is_null()) {
-                for (const auto& a: entry["categories"]) {
-                    if (a == "user/-/state/com.google/read") {
-                        unread = false;
-                    }
-                }
-            }
-            if (unread) {
-                item.labels.push_back("unread");
-            } else {
-                item.labels.push_back("read");
-            }
+			// Read/unread status
+			bool unread = true;
+			if (entry.contains("categories") && !entry["categories"].is_null()) {
+				for (const auto& a: entry["categories"]) {
+					if (a == "user/-/state/com.google/read") {
+						unread = false;
+					}
+				}
+			}
+			if (unread) {
+				item.labels.push_back("unread");
+			} else {
+				item.labels.push_back("read");
+			}
 
-            feed.items.push_back(item);
-        }
-    } catch (nlohmann::json::exception& e) {
-        LOG(Level::ERROR,
-            "Exception occurred while parsing feed: ",
-            e.what());
-    }
+			feed.items.push_back(item);
+		}
+	} catch (nlohmann::json::exception& e) {
+		LOG(Level::ERROR,
+			"Exception occurred while parsing feed: ",
+			e.what());
+	}
 
-    std::sort(feed.items.begin(),
-        feed.items.end(),
-    [](const rsspp::Item& a, const rsspp::Item& b) {
-        return a.pubDate_ts > b.pubDate_ts;
-    });
+	std::sort(feed.items.begin(),
+		feed.items.end(),
+	[](const rsspp::Item& a, const rsspp::Item& b) {
+		return a.pubDate_ts > b.pubDate_ts;
+	});
 
-    return feed;
+	return feed;
 }
 
 } // namespace newsboat
