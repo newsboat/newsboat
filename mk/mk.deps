@@ -687,7 +687,7 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/remoteapi.h rss/feed.h rss/rssparser.h include/rssfeed.h \
  include/matchable.h include/rssitem.h include/matcher.h \
  filter/FilterParser.h include/rssignores.h include/strprintf.h \
- include/ttrssapi.h include/cache.h include/utils.h
+ include/ttrssapi.h include/cache.h include/utils.h include/freshrssapi.h
 src/ruststring.o: src/ruststring.cpp include/ruststring.h
 src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h
