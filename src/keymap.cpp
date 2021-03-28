@@ -750,8 +750,8 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
 		const auto parsed = parse_operation_sequence(remaining_params);
-		const auto description = parse_operation_description(parsed.leftovers);
 		const std::vector<MacroCmd> cmds = parsed.operations;
+		const std::string description = parsed.description;
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
@@ -768,9 +768,8 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 
 ParsedOperations KeyMap::parse_operation_sequence(const std::string& line)
 {
-	rust::String leftovers;
-	const auto operations = keymap::bridged::tokenize_operation_sequence(line,
-			leftovers);
+	rust::String description;
+	const auto operations = keymap::bridged::tokenize_operation_sequence(line, description);
 
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {
@@ -796,14 +795,8 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line)
 
 	return ParsedOperations{
 		.operations = cmds,
-		.leftovers = std::string(leftovers)
+		.description = std::string(description)
 	};
-}
-
-std::string KeyMap::parse_operation_description(const std::string& input)
-{
-	const auto description = keymap::bridged::tokenize_operation_description(input);
-	return std::string(description);
 }
 
 std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()

@@ -178,7 +178,7 @@ struct MacroBinding {
 
 struct ParsedOperations {
 	std::vector<MacroCmd> operations;
-	std::string leftovers;
+	std::string description;
 };
 
 class KeyMap : public ConfigActionHandler {
@@ -203,7 +203,6 @@ public:
 	std::vector<std::pair<std::string, MacroBinding>> get_macro_descriptions();
 
 	ParsedOperations parse_operation_sequence(const std::string& line);
-	std::string parse_operation_description(const std::string& input);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 private:

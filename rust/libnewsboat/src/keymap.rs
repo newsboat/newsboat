@@ -2,9 +2,9 @@ use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
     character::complete::one_of,
-    combinator::{complete, eof, map, recognize, value, verify},
+    combinator::{complete, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::{delimited, preceded},
+    sequence::{delimited, preceded, tuple},
     IResult,
 };
 
@@ -47,16 +47,6 @@ fn semicolon(input: &str) -> IResult<&str, &str> {
     delimited(many0(one_of(" \t")), tag(";"), many0(one_of(" \t")))(input)
 }
 
-fn operation_sequence(input: &str) -> IResult<&str, Vec<Vec<String>>> {
-    let parser = separated_list0(many1(semicolon), operation_with_args);
-    let parser = delimited(many0(semicolon), parser, many0(semicolon));
-    let parser = preceded(many0(one_of(" \t")), parser);
-
-    let mut parser = complete(parser);
-
-    parser(input)
-}
-
 fn operation_description(input: &str) -> IResult<&str, String> {
     let start_token = delimited(many0(one_of(" \t")), tag("--"), many0(one_of(" \t")));
 
@@ -64,16 +54,27 @@ fn operation_description(input: &str) -> IResult<&str, String> {
         is_not(r#""\"#),
         '\\',
         alt((
-          value("\\", tag("\\")), // `\\` -> `\`
-          value("\"", tag("\"")), // `\"` -> `"`
-          take(1usize), // all other escaped characters are passed through, unmodified
-        ))
+            value("\\", tag("\\")), // `\\` -> `\`
+            value("\"", tag("\"")), // `\"` -> `"`
+            take(1usize),           // all other escaped characters are passed through, unmodified
+        )),
     );
 
     let double_quote = tag("\"");
     let parser = delimited(&double_quote, string_content, &double_quote);
 
     let mut parser = preceded(start_token, parser);
+
+    parser(input)
+}
+
+fn operation_sequence(input: &str) -> IResult<&str, (Vec<Vec<String>>, Option<String>)> {
+    let parser = separated_list0(many1(semicolon), operation_with_args);
+    let parser = delimited(many0(semicolon), parser, many0(semicolon));
+    let parser = preceded(many0(one_of(" \t")), parser);
+    let parser = tuple((parser, opt(operation_description)));
+
+    let mut parser = complete(parser);
 
     parser(input)
 }
@@ -91,9 +92,9 @@ fn operation_description(input: &str) -> IResult<&str, String> {
 /// 2. doesn't contain backticks that need to be processed.
 ///
 /// Returns `None` if the input could not be parsed.
-pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, &str)> {
+pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, Option<String>)> {
     match operation_sequence(input) {
-        Ok((leftovers, tokens)) => Some((tokens, leftovers)),
+        Ok((_leftovers, tokens)) => Some((tokens.0, tokens.1)),
         Err(_error) => None,
     }
 }
@@ -363,22 +364,23 @@ mod tests {
     }
 
     #[test]
-    fn t_tokenize_operation_sequence_does_not_consume_dashdash() {
-        let (operations, leftover) =
+    fn t_tokenize_operation_sequence_supports_optional_description() {
+        let (operations, description) =
             tokenize_operation_sequence(r#"set a b -- "name of function""#).unwrap();
         assert_eq!(operations, vec![vec!["set", "a", "b"]]);
-        assert_eq!(leftover, r#" -- "name of function""#);
+        assert!(description.is_some());
+        assert_eq!(description.unwrap(), "name of function");
     }
 
     #[test]
-    fn t_tokenize_operation_sequence_allows_dashdash_in_quoted() {
-        let (operations, leftover) =
+    fn t_tokenize_operation_sequence_allows_dashdash_in_quoted_string() {
+        let (operations, description) =
             tokenize_operation_sequence(r#"set a b "--" "name of function""#).unwrap();
         assert_eq!(
             operations,
             vec![vec!["set", "a", "b", "--", "name of function"]]
         );
-        assert_eq!(leftover, "");
+        assert!(description.is_none());
     }
 
     #[test]
