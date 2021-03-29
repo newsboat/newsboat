@@ -24,7 +24,7 @@ public:
 		NEWSBLUR_JSON,
 		OCNEWS_JSON,
 		MINIFLUX_JSON,
-        FRESHRSS_JSON
+		FRESHRSS_JSON
 	};
 
 	Feed()

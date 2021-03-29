@@ -560,7 +560,7 @@ std::string RssParser::get_guid(const rsspp::Item& item) const
 	} else if (!item.title.empty()) {
 		return item.title;
 	} else {
-		return "";        // too bad.
+		return "";		  // too bad.
 	}
 }
 

@@ -493,31 +493,40 @@ password.
 
 === FreshRSS
 
-https://freshrss.org[FreshRSS] is a self-hosted feed reader that also uses a "Google Reader API," but is incompatable with the <<_feedhq,FeedHQ>> API. To use FreshRSS support, ensure that API access is enabled in the Authentication settings for your server, and that you have set an API password for your user Profile. Then point NewsBoat to your server:
+https://freshrss.org[FreshRSS] is a self-hosted feed reader that also uses a
+"Google Reader API," but is incompatable with the <<_feedhq,FeedHQ>> API. To
+use FreshRSS support, ensure that API access is enabled in the Authentication
+settings for your server, and that you have set an API password for your user
+Profile. Then point NewsBoat to your server:
 
-    urls-source "freshrss"
-    freshrss-url "https://freshrss.example.com/api/greader.php"
-    freshrss-login "myusername"
-    freshrss-password "mypassword"
+	urls-source "freshrss"
+	freshrss-url "https://freshrss.example.com/api/greader.php"
+	freshrss-login "myusername"
+	freshrss-password "mypassword"
 
-See <<_passwords_for_external_apis>> for other, more secure ways to store your password.
+See <<_passwords_for_external_apis>> for other, more secure ways to store your
+password.
 
 NewsBoat will request 20 articles by default. Change this with e.g.
 
-    freshrss-min-items 100
+	freshrss-min-items 100
 
-FreshRSS provides the ability to "favourite"/"star" articles. Starred articles are basically bookmarks. Newsboat allows the use of these features by mapping its flags to the "star" operation.
+FreshRSS provides the ability to "favourite"/"star" articles. Starred articles
+are basically bookmarks. Newsboat allows the use of these features by mapping
+its flags to the "star" operation.
 
-In order to use this mapping, you need to configure the flag that should be used:
+In order to use this mapping, you need to configure the flag that should be
+used:
 
-    freshrss-flag-star "s"
+	freshrss-flag-star "s"
 
-After that, use this flag when you edit flags for an article, and these articles
-will be starred.
+After that, use this flag when you edit flags for an article, and these
+articles will be starred.
 
-By default a "Starred Items" feed is included in the feed list. This can be removed with:
+By default a "Starred Items" feed is included in the feed list. This can be
+removed with:
 
-    freshrss-show-special-feeds "false"
+	freshrss-show-special-feeds "false"
 
 FreshRSS categories are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
