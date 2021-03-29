@@ -478,7 +478,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 				for (const auto& a : entry["summary"].items()) {
 					if (!a.value().is_null()) {
 						item.content_encoded = a.value();
-					break;
+						break;
 					}
 				}
 			}
@@ -503,10 +503,9 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 			if (entry.contains("enclosure") && !entry["enclosure"].is_null()) {
 				for (const auto& a : entry["enclosure"]) {
 					if (a.contains("href") && a.contains("type")
-						&& !a["href"].is_null() && !a["type"].is_null()
-						&& newsboat::utils::is_valid_podcast_type(a["type"])) {
-						item.enclosure_type =
-							a["type"];
+							&& !a["href"].is_null() && !a["type"].is_null()
+							&& newsboat::utils::is_valid_podcast_type(a["type"])) {
+						item.enclosure_type = a["type"];
 						item.enclosure_url = a["href"];
 						break;
 					}
@@ -515,7 +514,8 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
 			// Read/unread status
 			bool unread = true;
-			if (entry.contains("categories") && !entry["categories"].is_null()) {
+			if (entry.contains("categories")
+					&& !entry["categories"].is_null()) {
 				for (const auto& a: entry["categories"]) {
 					if (a == "user/-/state/com.google/read") {
 						unread = false;
@@ -531,9 +531,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 			feed.items.push_back(item);
 		}
 	} catch (nlohmann::json::exception& e) {
-		LOG(Level::ERROR,
-			"Exception occurred while parsing feed: ",
-			e.what());
+		LOG(Level::ERROR, "Exception occurred while parsing feed: ", e.what());
 	}
 
 	std::sort(feed.items.begin(),
