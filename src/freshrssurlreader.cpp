@@ -19,17 +19,6 @@ FreshRssUrlReader::FreshRssUrlReader(ConfigContainer* c,
 
 FreshRssUrlReader::~FreshRssUrlReader() {}
 
-#define STARRED_ITEMS_URL \
-	"/reader/api/0/stream/contents/user/-/state/com.google/starred"
-
-#define ADD_URL(url, caption)				  \
-	do {								  \
-		tmptags.clear();			  \
-		urls.push_back((url));		  \
-		tmptags.push_back((caption)); \
-		tags[(url)] = tmptags;		  \
-	} while (0)
-
 nonstd::optional<std::string> FreshRssUrlReader::reload()
 {
 	urls.clear();
@@ -38,8 +27,12 @@ nonstd::optional<std::string> FreshRssUrlReader::reload()
 
 	if (cfg->get_configvalue_as_bool("freshrss-show-special-feeds")) {
 		std::vector<std::string> tmptags;
-		ADD_URL(cfg->get_configvalue("freshrss-url") + STARRED_ITEMS_URL,
-			std::string("~") + _("Starred items"));
+		tmptags.clear();
+		urls.push_back((cfg->get_configvalue("freshrss-url") +
+				"/reader/api/0/stream/contents/user/-/state/com.google/starred"));
+		tmptags.push_back(std::string("~") + _("Starred items"));
+		tags[(cfg->get_configvalue("freshrss-url") +
+								      "/reader/api/0/stream/contents/user/-/state/com.google/starred")] = tmptags;
 	}
 
 	FileUrlReader ur(file);
