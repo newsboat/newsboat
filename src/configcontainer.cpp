@@ -28,7 +28,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("date-asc", ConfigDataType::STR)},
 	{
 		"articlelist-format",
-		ConfigData("%4i %f %D %6L  %?T?|%-17T|	&?%t",
+		ConfigData("%4i %f %D %6L  %?T?|%-17T|  &?%t",
 			ConfigDataType::STR)},
 	{"auto-reload", ConfigData("no", ConfigDataType::BOOL)},
 	{

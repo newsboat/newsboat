@@ -40,7 +40,6 @@ private:
 		const std::string& token);
 	std::string auth;
 	std::string auth_header;
-	/* std::string server; */
 };
 
 } // namespace newsboat

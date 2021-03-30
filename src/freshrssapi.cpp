@@ -29,7 +29,6 @@ namespace newsboat {
 FreshRssApi::FreshRssApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	/* server = cfg->get_configvalue("freshrss-url"); */
 }
 
 bool FreshRssApi::authenticate()
@@ -137,10 +136,6 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 		json_object* sub =
 			json_object_array_get_idx(subscription_obj, i);
 
-		json_object* id_str{};
-		json_object_object_get_ex(sub, "id", &id_str);
-		const char* id = json_object_get_string(id_str);
-
 		json_object* title_str{};
 		json_object_object_get_ex(sub, "title", &title_str);
 		const char* title = json_object_get_string(title_str);
@@ -160,8 +155,10 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 			tags.push_back(category);
 		}
 
+        json_object* id_str{};
+        json_object_object_get_ex(sub, "id", &id_str);
+        const char* id = json_object_get_string(id_str);
 		char* escaped_id = curl_easy_escape(handle, id, 0);
-
 		auto url = strprintf::fmt("%s%s%s",
 				cfg->get_configvalue("freshrss-url"),
 				FRESHRSS_FEED_PREFIX,
@@ -400,7 +397,6 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 
 	CURL* handle;
 	if (cached_handle) {
-		// Never seems to be a cached handle
 		handle = cached_handle;
 	} else {
 		handle = curl_easy_init();
