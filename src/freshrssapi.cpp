@@ -155,9 +155,9 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 			tags.push_back(category);
 		}
 
-        json_object* id_str{};
-        json_object_object_get_ex(sub, "id", &id_str);
-        const char* id = json_object_get_string(id_str);
+		json_object* id_str{};
+		json_object_object_get_ex(sub, "id", &id_str);
+		const char* id = json_object_get_string(id_str);
 		char* escaped_id = curl_easy_escape(handle, id, 0);
 		auto url = strprintf::fmt("%s%s%s",
 				cfg->get_configvalue("freshrss-url"),
@@ -529,12 +529,6 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	} catch (nlohmann::json::exception& e) {
 		LOG(Level::ERROR, "Exception occurred while parsing feed: ", e.what());
 	}
-
-	std::sort(feed.items.begin(),
-		feed.items.end(),
-	[](const rsspp::Item& a, const rsspp::Item& b) {
-		return a.pubDate_ts > b.pubDate_ts;
-	});
 
 	return feed;
 }
