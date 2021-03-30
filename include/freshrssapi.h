@@ -30,6 +30,7 @@ public:
 private:
 	std::vector<std::string> get_tags(xmlNode* node);
 	std::string get_new_token();
+	bool refresh_token();
 	std::string retrieve_auth();
 	std::string post_content(const std::string& url,
 		const std::string& postdata);
@@ -40,6 +41,8 @@ private:
 		const std::string& token);
 	std::string auth;
 	std::string auth_header;
+	bool token_expired;
+	std::string token;
 };
 
 } // namespace newsboat

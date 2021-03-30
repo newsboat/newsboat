@@ -29,6 +29,7 @@ namespace newsboat {
 FreshRssApi::FreshRssApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
+	token_expired = true;
 }
 
 bool FreshRssApi::authenticate()
@@ -202,7 +203,8 @@ bool FreshRssApi::mark_all_read(const std::string& feedurl)
 			e.what());
 		return false;
 	}
-	std::string token = get_new_token();
+
+	refresh_token();
 
 	std::string postcontent =
 		strprintf::fmt("s=%s&T=%s", real_feedurl, token);
@@ -216,7 +218,7 @@ bool FreshRssApi::mark_all_read(const std::string& feedurl)
 
 bool FreshRssApi::mark_article_read(const std::string& guid, bool read)
 {
-	std::string token = get_new_token();
+	refresh_token();
 	return mark_article_read_with_token(guid, read, token);
 }
 
@@ -277,6 +279,19 @@ std::string FreshRssApi::get_new_token()
 	LOG(Level::DEBUG, "FreshRssApi::get_new_token: token = %s", result);
 
 	return result;
+}
+
+bool FreshRssApi::refresh_token()
+{
+	// Check and, if needed, refresh token
+	// Note that at present token never expires
+	// https://github.com/FreshRSS/FreshRSS/blob/master/p/api/greader.php#L206
+	if (token_expired) {
+		token = get_new_token();
+		token_expired = false;
+		return true;
+	}
+	return false;
 }
 
 bool FreshRssApi::update_article_flags(const std::string& oldflags,
