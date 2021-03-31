@@ -374,10 +374,9 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 		pop_current_formaction();
 		return ret;
 	} else {
-		status_line.show_message(strprintf::fmt(_("Running browser: %s"), cmdline));
-		const auto ret = utils::run_non_interactively(cmdline, "View::open_in_browser");
-		status_line.show_message("");
-		return ret;
+		const std::shared_ptr<AutoDiscardMessage> message =
+			status_line.show_message_until_finished(strprintf::fmt(_("Running browser: %s"), cmdline));
+		return utils::run_non_interactively(cmdline, "View::open_in_browser");
 	}
 }
 
@@ -916,11 +915,11 @@ void View::prepare_query_feed(std::shared_ptr<RssFeed> feed)
 			"View::prepare_query_feed: %s",
 			feed->rssurl());
 
-		status_line.show_message(_("Updating query feed..."));
+		const std::shared_ptr<AutoDiscardMessage> message = status_line.show_message_until_finished(
+				_("Updating query feed..."));
 		feed->update_items(ctrl->get_feedcontainer()->get_all_feeds());
 		feed->sort(cfg->get_article_sort_strategy());
 		notify_itemlist_change(feed);
-		status_line.show_message("");
 	}
 }
 
