@@ -114,6 +114,7 @@ macos_task:
         - brew install "gettext" && brew link --force "gettext"
         - brew outdated "sqlite" || brew upgrade "sqlite"
         - brew outdated "curl" || brew upgrade "curl"
+        - brew install "libiconv"
         - brew install "libstfl"
         - brew install "json-c"
         - brew install "asciidoctor"
