@@ -1,6 +1,10 @@
-use libnewsboat::fslock::FsLock;
+use libnewsboat::fslock;
 
 use std::path::Path;
+
+// cxx doesn't allow to share types from other crates, so we have to wrap it
+// cf. https://github.com/dtolnay/cxx/issues/496
+struct FsLock(fslock::FsLock);
 
 #[cxx::bridge(namespace = "newsboat::fslock::bridged")]
 mod bridged {
@@ -18,7 +22,7 @@ mod bridged {
 }
 
 fn create() -> Box<FsLock> {
-    Box::new(FsLock::default())
+    Box::new(FsLock(fslock::FsLock::default()))
 }
 
 fn try_lock(
@@ -28,7 +32,7 @@ fn try_lock(
     error_message: &mut String,
 ) -> bool {
     let p: &mut libc::pid_t = &mut 0;
-    let result = fslock.try_lock(Path::new(new_lock_path), p);
+    let result = fslock.0.try_lock(Path::new(new_lock_path), p);
     *pid = i64::from(*p);
     match result {
         Ok(_) => return true,

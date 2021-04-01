@@ -81,7 +81,7 @@ mod bridged {
 
         fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool;
 
-        fn run_program(argv: &Vec<String>, input: &str) -> String;
+        fn run_program(argv: &[&str], input: &str) -> String;
 
         fn translit(tocode: &str, fromcode: &str) -> String;
         fn utf8_to_locale(text: &str) -> Vec<u8>;
@@ -223,20 +223,6 @@ fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool {
             false
         }
     }
-}
-
-// Ignore Clippy's suggestion to replace &Vec<_> with &[_], because cxx crate doesn't allow us to
-// pass &[String] over FFI — only &[u8] is supported.
-#[allow(clippy::ptr_arg)]
-fn run_program(argv: &Vec<String>, input: &str) -> String {
-    let argv_of_str = {
-        let mut result = Vec::<&str>::new();
-        for s in argv {
-            result.push(s);
-        }
-        result
-    };
-    utils::run_program(&argv_of_str, input)
 }
 
 #[no_mangle]
