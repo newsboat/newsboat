@@ -915,8 +915,8 @@ void View::prepare_query_feed(std::shared_ptr<RssFeed> feed)
 			"View::prepare_query_feed: %s",
 			feed->rssurl());
 
-		const std::shared_ptr<AutoDiscardMessage> message = status_line.show_message_until_finished(
-				_("Updating query feed..."));
+		const std::shared_ptr<AutoDiscardMessage> message =
+			status_line.show_message_until_finished(_("Updating query feed..."));
 		feed->update_items(ctrl->get_feedcontainer()->get_all_feeds());
 		feed->sort(cfg->get_article_sort_strategy());
 		notify_itemlist_change(feed);
