@@ -27,12 +27,11 @@ nonstd::optional<std::string> FreshRssUrlReader::reload()
 
 	if (cfg->get_configvalue_as_bool("freshrss-show-special-feeds")) {
 		std::vector<std::string> tmptags;
-		tmptags.clear();
-		urls.push_back((cfg->get_configvalue("freshrss-url") +
-				"/reader/api/0/stream/contents/user/-/state/com.google/starred"));
+		const std::string star_url = cfg->get_configvalue("freshrss-url") +
+			"/reader/api/0/stream/contents/user/-/state/com.google/starred";
+		urls.push_back(star_url);
 		tmptags.push_back(std::string("~") + _("Starred items"));
-		tags[(cfg->get_configvalue("freshrss-url") +
-								      "/reader/api/0/stream/contents/user/-/state/com.google/starred")] = tmptags;
+		tags[star_url] = tmptags;
 	}
 
 	FileUrlReader ur(file);
