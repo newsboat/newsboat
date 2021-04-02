@@ -47,7 +47,7 @@ freshrss-password||<password>||""||This variable sets your FreshRSS password for
 freshrss-passwordfile||<path>||""||A more secure alternative to the above, by storing your password elsewhere in your system.||freshrss-passwordfile "~/.newsboat/freshrss-pw.txt"
 freshrss-passwordeval||<command>||""||Another secure alternative, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||freshrss-passwordeval "gpg --decrypt ~/.newsboat/freshrss-password.gpg"
 freshrss-show-special-feeds||[yes/no]||yes||If set and FreshRSS support is used, then a "Starred items" feed (containing your starred/favourited articles) appears in your subscription list.||freshrss-show-special-feeds "no"
-freshrss-url||<url>||"https://freshrss.org/"||Configures the URL where your FreshRSS instance resides.||freshrss-url "https://freshrss.example.com/"
+freshrss-url||<url>||""||Configures the URL where your FreshRSS instance resides.||freshrss-url "https://freshrss.example.com/"
 goto-first-unread||[yes/no]||yes||If set to `yes`, then the first unread article will be selected whenever a feed is entered.||goto-first-unread no
 goto-next-feed||[yes/no]||yes||If set to `yes`, then the next-unread, prev-unread and random-unread keys will search in other feeds for unread articles if all articles in the current feed are read. If set to `no`, then these keys will stop in the current feed.||goto-next-feed no
 help-title-format||<format>||"%N %V - Help" (localized)||Format of the title in help window. See "Format Strings" section of Newsboat manual for details on available formats.||help-title-format "%N %V - Help"

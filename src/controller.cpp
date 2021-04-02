@@ -282,6 +282,27 @@ int Controller::run(const CliArgsParser& args)
 		api = new FeedHqApi(&cfg);
 		urlcfg = new FeedHqUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "freshrss") {
+        const auto freshrss_url = cfg.get_configvalue("freshrss-url");
+        if (freshrss_url.empty()) {
+            std::cerr <<
+                _("ERROR: You must set `freshrss-url` to use FreshRSS\n");
+            return EXIT_FAILURE;
+        }
+
+        const std::string user = cfg.get_configvalue("freshrss-login");
+        const std::string pass = cfg.get_configvalue("freshrss-password");
+        const std::string pass_file = cfg.get_configvalue("freshrss-passwordfile");
+        const std::string pass_eval = cfg.get_configvalue("freshrss-passwordeval");
+        const bool creds_set = !user.empty() &&
+            (!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+        if (!creds_set) {
+            std::cerr <<
+                _("ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
+                    "`freshrss-passwordfile` or `freshrss-passwordeval` to use "
+                    "FreshRSS\n");
+            return EXIT_FAILURE;
+        }
+
 		api = new FreshRssApi(&cfg);
 		urlcfg = new FreshRssUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "ocnews") {
