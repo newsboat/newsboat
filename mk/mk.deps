@@ -168,14 +168,14 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configcontainer.h include/configexception.h \
  include/configpaths.h include/cliargsparser.h include/dbexception.h \
  include/downloadthread.h include/exception.h include/feedhqapi.h \
- include/feedhqurlreader.h include/fileurlreader.h include/globals.h \
+ include/feedhqurlreader.h include/freshrssapi.h rss/feed.h rss/item.h \
+ 3rd-party/json.hpp include/utils.h 3rd-party/expected.hpp \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
+ include/freshrssurlreader.h include/fileurlreader.h include/globals.h \
  include/inoreaderapi.h include/inoreaderurlreader.h \
  include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
- include/logger.h include/minifluxapi.h 3rd-party/json.hpp rss/feed.h \
- rss/item.h include/utils.h 3rd-party/expected.hpp \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- include/minifluxurlreader.h include/newsblurapi.h \
- include/newsblururlreader.h include/ocnewsapi.h \
+ include/logger.h include/minifluxapi.h include/minifluxurlreader.h \
+ include/newsblurapi.h include/newsblururlreader.h include/ocnewsapi.h \
  include/ocnewsurlreader.h include/oldreaderapi.h \
  include/oldreaderurlreader.h include/opmlurlreader.h \
  include/regexmanager.h include/remoteapi.h include/rssfeed.h \
@@ -331,6 +331,20 @@ src/formaction.o: src/formaction.cpp include/formaction.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h
+src/freshrssapi.o: src/freshrssapi.cpp include/freshrssapi.h \
+ include/cache.h include/configcontainer.h include/configactionhandler.h \
+ include/remoteapi.h rss/feed.h rss/item.h 3rd-party/json.hpp \
+ include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
+ include/logger.h config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/strprintf.h \
+ include/utils.h
+src/freshrssurlreader.o: src/freshrssurlreader.cpp \
+ include/freshrssurlreader.h include/urlreader.h 3rd-party/optional.hpp \
+ include/configcontainer.h include/configactionhandler.h \
+ include/fileurlreader.h include/logger.h config.h include/strprintf.h \
+ include/remoteapi.h include/configcontainer.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/fslock.o: src/fslock.cpp include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/logger.h \
  config.h include/strprintf.h
@@ -671,11 +685,12 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
  include/strprintf.h include/minifluxapi.h 3rd-party/json.hpp \
  include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- include/newsblurapi.h include/ocnewsapi.h rss/exception.h rss/parser.h \
- include/remoteapi.h rss/feed.h rss/rssparser.h include/rssfeed.h \
- include/matchable.h include/rssitem.h include/matcher.h \
- filter/FilterParser.h include/rssignores.h include/strprintf.h \
- include/ttrssapi.h include/cache.h include/utils.h
+ include/newsblurapi.h include/freshrssapi.h include/cache.h \
+ include/ocnewsapi.h rss/exception.h rss/parser.h include/remoteapi.h \
+ rss/feed.h rss/rssparser.h include/rssfeed.h include/matchable.h \
+ include/rssitem.h include/matcher.h filter/FilterParser.h \
+ include/rssignores.h include/strprintf.h include/ttrssapi.h \
+ include/utils.h
 src/ruststring.o: src/ruststring.cpp include/ruststring.h
 src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h

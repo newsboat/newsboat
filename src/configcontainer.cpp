@@ -84,6 +84,18 @@ ConfigContainer::ConfigContainer()
 	{
 		"feedhq-url",
 		ConfigData("https://feedhq.org/", ConfigDataType::STR)},
+	{"freshrss-flag-star", ConfigData("", ConfigDataType::STR)},
+	{"freshrss-login", ConfigData("", ConfigDataType::STR)},
+	{"freshrss-min-items", ConfigData("20", ConfigDataType::INT)},
+	{"freshrss-password", ConfigData("", ConfigDataType::STR)},
+	{"freshrss-passwordfile", ConfigData("", ConfigDataType::PATH)},
+	{"freshrss-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{
+		"freshrss-show-special-feeds",
+		ConfigData("true", ConfigDataType::BOOL)},
+	{
+		"freshrss-url",
+		ConfigData("", ConfigDataType::STR)},
 	{
 		"feedlist-format",
 		ConfigData("%4i %n %11u %t", ConfigDataType::STR)},
@@ -261,6 +273,7 @@ ConfigContainer::ConfigContainer()
 			"ttrss",
 			"newsblur",
 			"feedhq",
+			"freshrss",
 			"ocnews",
 			"miniflux",
 			"inoreader"}))},
