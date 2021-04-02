@@ -285,7 +285,7 @@ bool FreshRssApi::refresh_token()
 {
 	// Check and, if needed, refresh token
 	// Note that at present token never expires
-	// https://github.com/FreshRSS/FreshRSS/blob/master/p/api/greader.php#L206
+	// https://github.com/FreshRSS/FreshRSS/blob/634005de9a4b5e415ebf7c1106c769a0fbed5cfd/p/api/greader.php#L206
 	if (token_expired) {
 		token = get_new_token();
 		token_expired = false;
