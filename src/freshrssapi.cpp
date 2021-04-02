@@ -59,7 +59,7 @@ std::string FreshRssApi::retrieve_auth()
 	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
 	std::string postcontent = strprintf::fmt(
-			"Email=%s&Passwd=%s&source=%s%2F%s",
+			"Email=%s&Passwd=%s&source=%s%%2F%s",
 			username,
 			password,
 			PROGRAM_NAME,
