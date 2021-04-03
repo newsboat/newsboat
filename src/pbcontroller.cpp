@@ -231,7 +231,7 @@ void PbController::initialize(int argc, char* argv[])
 	};
 
 	std::cout << strprintf::fmt(
-			_("Starting %s %s..."), "podboat", utils::program_version())
+			_("Starting %s %s..."), "Podboat", utils::program_version())
 		<< std::endl;
 
 	fslock = std::unique_ptr<FsLock>(new FsLock());
@@ -244,7 +244,7 @@ void PbController::initialize(int argc, char* argv[])
 			std::cout << strprintf::fmt(
 					_("Error: an instance of %s is already "
 						"running (PID: %" PRId64 ")"),
-					"podboat",
+					"Podboat",
 					p)
 				<< std::endl;
 		} else {
@@ -315,7 +315,7 @@ void PbController::print_usage(const char* argv0)
 {
 	auto msg = strprintf::fmt(
 			_("%s %s\nusage %s [-C <file>] [-q <file>] [-h]\n"),
-			"podboat",
+			"Podboat",
 			utils::program_version(),
 			argv0);
 	std::cout << msg;
