@@ -92,10 +92,11 @@ fn operation_sequence(input: &str) -> IResult<&str, (Vec<Vec<String>>, Option<St
 /// 1. doesn't contain a comment;
 /// 2. doesn't contain backticks that need to be processed.
 ///
-/// Returns `None` if the input could not be parsed.
+/// Returns a vector of operations togeter with an optional description, as a tuple, or `None` if
+/// the input could not be parsed.
 pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, Option<String>)> {
     match operation_sequence(input) {
-        Ok((_leftovers, tokens)) => Some((tokens.0, tokens.1)),
+        Ok((_leftovers, tokens)) => Some(tokens),
         Err(_error) => None,
     }
 }

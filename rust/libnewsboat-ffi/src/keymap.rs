@@ -15,7 +15,7 @@ mod ffi {
         // This is not very elegant, but doing the same by hand using `extern "C"` is prohibitively
         // complex.
         type Operation;
-        fn tokenize_operation_sequence(input: &str, leftovers: &mut String) -> Vec<Operation>;
+        fn tokenize_operation_sequence(input: &str, description: &mut String) -> Vec<Operation>;
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
     }
 
