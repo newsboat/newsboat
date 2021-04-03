@@ -681,7 +681,11 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 			}
 		}
 		if (macro.second.description.size() >= 1) {
-			configline.append(strprintf::fmt(R"( -- "%s")", macro.second.description));
+			const auto escaped_string = utils::replace_all(macro.second.description, {
+				{R"(\)", R"(\\)"},
+				{R"(")", R"(\")"},
+			});
+			configline.append(strprintf::fmt(R"( -- "%s")", escaped_string));
 		}
 		config_output.push_back(configline);
 	}

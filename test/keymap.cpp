@@ -488,6 +488,33 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	}
 }
 
+TEST_CASE("dump_config() stores a description if it is present", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	std::vector<std::string> dumpOutput;
+
+	GIVEN("a few macros, some with a description") {
+		k.unset_all_keys("all");
+
+		k.handle_action("macro", R"(x open -- "first description")");
+		k.handle_action("macro", R"(y set m n -- "configure \"m\" \\ ")");
+		k.handle_action("macro", R"(z set var I)");
+
+		WHEN("calling dump_config()") {
+			k.dump_config(dumpOutput);
+
+			THEN("there is one line per configured macro ; all given descriptions are included") {
+				REQUIRE(dumpOutput.size() == 3);
+
+				REQUIRE(dumpOutput[0] == R"(macro x open -- "first description")");
+				REQUIRE(dumpOutput[1] == R"(macro y set "m" "n" -- "configure \"m\" \\ ")");
+				REQUIRE(dumpOutput[2] == R"(macro z set "var" "I")");
+			}
+		}
+	}
+}
+
 TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 	"[KeyMap]")
 {
