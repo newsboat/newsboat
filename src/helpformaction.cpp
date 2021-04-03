@@ -183,10 +183,9 @@ void HelpFormAction::prepare()
 			for (const auto& macro : macros) {
 				const std::string key = macro.first;
 				const std::string description = macro.second.description;
-				const std::string prefix = _("prefix-key");
-				const std::string filler = std::string(std::max(0, 36 - (int)prefix.length()), ' ');
 
-				std::string line = strprintf::fmt("<%s>%s%s %s", prefix, key, filler, description);
+				// "macro-prefix" is not translated because it refers to an operation name
+				std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
 				line = utils::quote_for_stfl(line);
 				line = apply_highlights(line);
 				listfmt.add_line(line);
