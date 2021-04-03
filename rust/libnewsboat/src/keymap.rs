@@ -393,10 +393,23 @@ mod tests {
     }
 
     #[test]
-    fn t_tokenize_operation_sequence_ignores_spaces_preceding_description() {
-        verify_parsed_description(r#"set "a" "b"--"description""#, "description");
-        verify_parsed_description(r#"set "a" "b"-- "description""#, "description");
-        verify_parsed_description(r#"set "a" "b"     -- "description""#, "description");
+    fn t_tokenize_operation_sequence_ignores_whitespace_preceding_description() {
+        verify_parsed_description(
+            &format!(r#"set "a" "b"{}--{}"description""#, "", ""),
+            "description",
+        );
+        verify_parsed_description(
+            &format!(r#"set "a" "b"{}--{}"description""#, " \t", ""),
+            "description",
+        );
+        verify_parsed_description(
+            &format!(r#"set "a" "b"{}--{}"description""#, "", " \t"),
+            "description",
+        );
+        verify_parsed_description(
+            &format!(r#"set "a" "b"{}--{}"description""#, " \t", " \t"),
+            "description",
+        );
     }
 
     #[test]
