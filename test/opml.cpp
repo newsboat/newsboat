@@ -44,7 +44,7 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 		const std::string expectedOpmlText(
 			"<?xml version=\"1.0\"?>\n"
 			"<opml version=\"1.0\">"
-			"<head><title>newsboat - Exported Feeds</title></head>"
+			"<head><title>Newsboat - Exported Feeds</title></head>"
 			"<body/></opml>\n");
 
 		REQUIRE(check(feeds) == expectedOpmlText);
@@ -69,7 +69,7 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 		const std::string expectedOpmlText(
 			"<?xml version=\"1.0\"?>\n"
 			"<opml version=\"1.0\">"
-			"<head><title>newsboat - Exported Feeds</title></head>"
+			"<head><title>Newsboat - Exported Feeds</title></head>"
 			"<body>"
 			"<outline type=\"rss\" "
 			"xmlUrl=\"https://example.com/feed1.xml\" "
