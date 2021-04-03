@@ -380,8 +380,7 @@ mod tests {
         let (operations, description) =
             tokenize_operation_sequence(" \t set a b -- \"description\" \t   ").unwrap();
         assert_eq!(operations, vec![vec_of_strings!["set", "a", "b"]]);
-        assert!(description.is_some());
-        assert_eq!(description.unwrap(), "description");
+        assert_eq!(description, Some("description".to_string()));
     }
 
     #[test]
@@ -400,8 +399,7 @@ mod tests {
         let (operations, description) =
             tokenize_operation_sequence(r#"set a b -- "name of function""#).unwrap();
         assert_eq!(operations, vec![vec_of_strings!["set", "a", "b"]]);
-        assert!(description.is_some());
-        assert_eq!(description.unwrap(), "name of function");
+        assert_eq!(description, Some("name of function".to_string()));
     }
 
     #[test]
@@ -424,8 +422,7 @@ mod tests {
 
     fn verify_parsed_description(input: &str, expected_output: &str) {
         let (_operations, description) = tokenize_operation_sequence(input).unwrap();
-        assert!(description.is_some());
-        assert_eq!(description.unwrap(), expected_output);
+        assert_eq!(description, Some(expected_output.to_string()));
     }
 
     #[test]
