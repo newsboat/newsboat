@@ -371,8 +371,10 @@ void ConfigContainer::handle_action(const std::string& action,
 		action,
 		static_cast<unsigned int>(cfgdata.type()));
 
-	if (params.size() < 1) {
+	if (params.size() == 0) {
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
+	} else if (params.size() > 1 && !cfgdata.multi_option()) {
+		throw ConfigHandlerException(ActionHandlerStatus::TOO_MANY_PARAMS);
 	}
 
 	switch (cfgdata.type()) {
