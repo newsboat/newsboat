@@ -9,7 +9,7 @@ use nom::{
 };
 
 fn unquoted_token(input: &str) -> IResult<&str, String> {
-    let parser = map(recognize(is_not("\t ;")), String::from);
+    let parser = map(recognize(is_not("\t\" ;")), String::from);
     let mut parser = verify(parser, |t: &str| t != "--");
 
     parser(input)
@@ -263,10 +263,6 @@ mod tests {
         assert_eq!(
             tokenize_operation_sequence(r#"\v"#).unwrap().0,
             vec![vec![r#"\v"#]]
-        );
-        assert_eq!(
-            tokenize_operation_sequence(r#"\""#).unwrap().0,
-            vec![vec![r#"\""#]]
         );
         assert_eq!(
             tokenize_operation_sequence(r#"\\"#).unwrap().0,
