@@ -757,17 +757,19 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 
 		macros_[macrokey] = {cmds, description};
 	} else if (action == "run-on-startup") {
-		startup_operations_sequence = parse_operation_sequence(params).operations;
+		startup_operations_sequence = parse_operation_sequence(params, false).operations;
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
 	}
 }
 
 
-ParsedOperations KeyMap::parse_operation_sequence(const std::string& line)
+ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
+	bool allow_description)
 {
 	rust::String description;
-	const auto operations = keymap::bridged::tokenize_operation_sequence(line, description);
+	const auto operations = keymap::bridged::tokenize_operation_sequence(line, description,
+			allow_description);
 
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {

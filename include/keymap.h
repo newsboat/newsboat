@@ -202,7 +202,8 @@ public:
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 	const std::map<std::string, MacroBinding>& get_macro_descriptions();
 
-	ParsedOperations parse_operation_sequence(const std::string& line);
+	ParsedOperations parse_operation_sequence(const std::string& line,
+		bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 private:
