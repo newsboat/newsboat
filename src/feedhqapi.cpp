@@ -55,7 +55,7 @@ std::string FeedHqApi::retrieve_auth()
 	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
 
 	std::string postcontent = strprintf::fmt(
-			"service=reader&Email=%s&Passwd=%s&source=%s%2F%s&accountType="
+			"service=reader&Email=%s&Passwd=%s&source=%s%%2F%s&accountType="
 			"HOSTED_OR_GOOGLE&continue=http://www.google.com/",
 			username,
 			password,
