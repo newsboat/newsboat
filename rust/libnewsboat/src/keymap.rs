@@ -105,192 +105,227 @@ pub fn tokenize_operation_sequence(input: &str) -> Option<(Vec<Vec<String>>, Opt
 mod tests {
     use super::tokenize_operation_sequence;
 
+    macro_rules! vec_of_strings {
+        ($($x:expr),*) => (vec![$($x.to_string()),*]);
+    }
+
     #[test]
     fn t_tokenize_operation_sequence_works_for_all_cpp_inputs() {
         assert_eq!(
-            tokenize_operation_sequence("").unwrap().0,
-            Vec::<Vec<String>>::new()
+            tokenize_operation_sequence("").unwrap(),
+            (Vec::<Vec<String>>::new(), None)
         );
         assert_eq!(
-            tokenize_operation_sequence("open").unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence("open").unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence("open-all-unread-in-browser-and-mark-read")
-                .unwrap()
-                .0,
-            vec![vec!["open-all-unread-in-browser-and-mark-read"]]
+            tokenize_operation_sequence("open-all-unread-in-browser-and-mark-read").unwrap(),
+            (
+                vec![vec_of_strings!["open-all-unread-in-browser-and-mark-read"]],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence("; ; ; ;").unwrap().0,
-            Vec::<Vec<String>>::new()
+            tokenize_operation_sequence("; ; ; ;").unwrap(),
+            (Vec::<Vec<String>>::new(), None)
         );
         assert_eq!(
-            tokenize_operation_sequence("open ; next").unwrap().0,
-            vec![vec!["open"], vec!["next"]]
+            tokenize_operation_sequence("open ; next").unwrap(),
+            (vec![vec_of_strings!["open"], vec_of_strings!["next"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence("open ; next ; prev").unwrap().0,
-            vec![vec!["open"], vec!["next"], vec!["prev"]]
+            tokenize_operation_sequence("open ; next ; prev").unwrap(),
+            (
+                vec![
+                    vec_of_strings!["open"],
+                    vec_of_strings!["next"],
+                    vec_of_strings!["prev"]
+                ],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence("open ; next ; prev ; quit")
-                .unwrap()
-                .0,
-            vec![vec!["open"], vec!["next"], vec!["prev"], vec!["quit"]]
+            tokenize_operation_sequence("open ; next ; prev ; quit").unwrap(),
+            (
+                vec![
+                    vec_of_strings!["open"],
+                    vec_of_strings!["next"],
+                    vec_of_strings!["prev"],
+                    vec_of_strings!["quit"]
+                ],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"set "arg 1""#).unwrap().0,
-            vec![vec!["set", "arg 1"]]
+            tokenize_operation_sequence(r#"set "arg 1""#).unwrap(),
+            (vec![vec_of_strings!["set", "arg 1"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"set "arg 1" ; set "arg 2" "arg 3""#)
-                .unwrap()
-                .0,
-            vec![vec!["set", "arg 1"], vec!["set", "arg 2", "arg 3"]]
+            tokenize_operation_sequence(r#"set "arg 1" ; set "arg 2" "arg 3""#).unwrap(),
+            (
+                vec![
+                    vec_of_strings!["set", "arg 1"],
+                    vec_of_strings!["set", "arg 2", "arg 3"]
+                ],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"set browser "firefox"; open-in-browser"#)
-                .unwrap()
-                .0,
-            vec![vec!["set", "browser", "firefox"], vec!["open-in-browser"]]
+            tokenize_operation_sequence(r#"set browser "firefox"; open-in-browser"#).unwrap(),
+            (
+                vec![
+                    vec_of_strings!["set", "browser", "firefox"],
+                    vec_of_strings!["open-in-browser"]
+                ],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence("set browser firefox; open-in-browser")
-                .unwrap()
-                .0,
-            vec![vec!["set", "browser", "firefox"], vec!["open-in-browser"]]
+            tokenize_operation_sequence("set browser firefox; open-in-browser").unwrap(),
+            (
+                vec![
+                    vec_of_strings!["set", "browser", "firefox"],
+                    vec_of_strings!["open-in-browser"]
+                ],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence("open-in-browser; quit")
-                .unwrap()
-                .0,
-            vec![vec!["open-in-browser"], vec!["quit"]]
+            tokenize_operation_sequence("open-in-browser; quit").unwrap(),
+            (
+                vec![vec_of_strings!["open-in-browser"], vec_of_strings!["quit"]],
+                None
+            )
         );
         assert_eq!(
             tokenize_operation_sequence(r#"open; set browser "firefox --private-window"; quit"#)
-                .unwrap()
-                .0,
-            vec![
-                vec!["open"],
-                vec!["set", "browser", "firefox --private-window"],
-                vec!["quit"]
-            ]
+                .unwrap(),
+            (
+                vec![
+                    vec_of_strings!["open"],
+                    vec_of_strings!["set", "browser", "firefox --private-window"],
+                    vec_of_strings!["quit"]
+                ],
+                None
+            )
         );
         assert_eq!(
             tokenize_operation_sequence(r#"open ;set browser "firefox --private-window" ;quit"#)
-                .unwrap()
-                .0,
-            vec![
-                vec!["open"],
-                vec!["set", "browser", "firefox --private-window"],
-                vec!["quit"]
-            ]
+                .unwrap(),
+            (
+                vec![
+                    vec_of_strings!["open"],
+                    vec_of_strings!["set", "browser", "firefox --private-window"],
+                    vec_of_strings!["quit"]
+                ],
+                None
+            )
         );
         assert_eq!(
             tokenize_operation_sequence(r#"open;set browser "firefox --private-window";quit"#)
-                .unwrap()
-                .0,
-            vec![
-                vec!["open"],
-                vec!["set", "browser", "firefox --private-window"],
-                vec!["quit"]
-            ]
+                .unwrap(),
+            (
+                vec![
+                    vec_of_strings!["open"],
+                    vec_of_strings!["set", "browser", "firefox --private-window"],
+                    vec_of_strings!["quit"]
+                ],
+                None
+            )
         );
         assert_eq!(
-            tokenize_operation_sequence("; ;; ; open",).unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence("; ;; ; open",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(";;; ;; ; open",).unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence(";;; ;; ; open",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(";;; ;; ; open ;",).unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence(";;; ;; ; open ;",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(";;; ;; ; open ;; ;",)
-                .unwrap()
-                .0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence(";;; ;; ; open ;; ;",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(";;; ;; ; open ; ;;;;",)
-                .unwrap()
-                .0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence(";;; ;; ; open ; ;;;;",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(";;; open ; ;;;;",).unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence(";;; open ; ;;;;",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence("; open ;; ;; ;",).unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence("; open ;; ;; ;",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence("open ; ;;; ;;",).unwrap().0,
-            vec![vec!["open"]]
+            tokenize_operation_sequence("open ; ;;; ;;",).unwrap(),
+            (vec![vec_of_strings!["open"]], None)
         );
         assert_eq!(
             tokenize_operation_sequence(
                 r#"set browser "sleep 3; do-something ; echo hi"; open-in-browser"#
             )
-            .unwrap()
-            .0,
-            vec![
-                vec!["set", "browser", "sleep 3; do-something ; echo hi"],
-                vec!["open-in-browser"]
-            ]
+            .unwrap(),
+            (
+                vec![
+                    vec_of_strings!["set", "browser", "sleep 3; do-something ; echo hi"],
+                    vec_of_strings!["open-in-browser"]
+                ],
+                None
+            )
         );
     }
 
     #[test]
     fn t_tokenize_operation_sequence_ignores_escaped_sequences_outside_double_quotes() {
         assert_eq!(
-            tokenize_operation_sequence(r#"\t"#).unwrap().0,
-            vec![vec![r#"\t"#]]
+            tokenize_operation_sequence(r#"\t"#).unwrap(),
+            (vec![vec_of_strings![r#"\t"#]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\r"#).unwrap().0,
-            vec![vec![r#"\r"#]]
+            tokenize_operation_sequence(r#"\r"#).unwrap(),
+            (vec![vec_of_strings![r#"\r"#]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\n"#).unwrap().0,
-            vec![vec![r#"\n"#]]
+            tokenize_operation_sequence(r#"\n"#).unwrap(),
+            (vec![vec_of_strings![r#"\n"#]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\v"#).unwrap().0,
-            vec![vec![r#"\v"#]]
+            tokenize_operation_sequence(r#"\v"#).unwrap(),
+            (vec![vec_of_strings![r#"\v"#]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\\"#).unwrap().0,
-            vec![vec![r#"\\"#]]
+            tokenize_operation_sequence(r#"\\"#).unwrap(),
+            (vec![vec_of_strings![r#"\\"#]], None)
         );
     }
 
     #[test]
     fn t_tokenize_operation_sequence_expands_escaped_sequences_inside_double_quotes() {
         assert_eq!(
-            tokenize_operation_sequence(r#""\t""#).unwrap().0,
-            vec![vec!["\t"]]
+            tokenize_operation_sequence(r#""\t""#).unwrap(),
+            (vec![vec_of_strings!["\t"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\r""#).unwrap().0,
-            vec![vec!["\r"]]
+            tokenize_operation_sequence(r#""\r""#).unwrap(),
+            (vec![vec_of_strings!["\r"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\n""#).unwrap().0,
-            vec![vec!["\n"]]
+            tokenize_operation_sequence(r#""\n""#).unwrap(),
+            (vec![vec_of_strings!["\n"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\"""#).unwrap().0,
-            vec![vec!["\""]]
+            tokenize_operation_sequence(r#""\"""#).unwrap(),
+            (vec![vec_of_strings!["\""]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\\""#).unwrap().0,
-            vec![vec!["\\"]]
+            tokenize_operation_sequence(r#""\\""#).unwrap(),
+            (vec![vec_of_strings!["\\"]], None)
         );
     }
 
@@ -298,53 +333,53 @@ mod tests {
     fn t_tokenize_operation_sequence_passes_through_unsupported_escaped_chars_inside_double_quotes()
     {
         assert_eq!(
-            tokenize_operation_sequence(r#""\1""#).unwrap().0,
-            vec![vec!["1"]]
+            tokenize_operation_sequence(r#""\1""#).unwrap(),
+            (vec![vec_of_strings!["1"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\W""#).unwrap().0,
-            vec![vec!["W"]]
+            tokenize_operation_sequence(r#""\W""#).unwrap(),
+            (vec![vec_of_strings!["W"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\b""#).unwrap().0,
-            vec![vec!["b"]]
+            tokenize_operation_sequence(r#""\b""#).unwrap(),
+            (vec![vec_of_strings!["b"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\d""#).unwrap().0,
-            vec![vec!["d"]]
+            tokenize_operation_sequence(r#""\d""#).unwrap(),
+            (vec![vec_of_strings!["d"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#""\x""#).unwrap().0,
-            vec![vec!["x"]]
+            tokenize_operation_sequence(r#""\x""#).unwrap(),
+            (vec![vec_of_strings!["x"]], None)
         );
     }
 
     #[test]
     fn t_tokenize_operation_sequence_implicitly_closes_double_quotes_at_end_of_input() {
         assert_eq!(
-            tokenize_operation_sequence(r#"set "arg 1"#).unwrap().0,
-            vec![vec!["set", "arg 1"]]
+            tokenize_operation_sequence(r#"set "arg 1"#).unwrap(),
+            (vec![vec_of_strings!["set", "arg 1"]], None)
         );
     }
 
     #[test]
     fn t_tokenize_operation_sequence_allows_single_character_unquoted() {
         assert_eq!(
-            tokenize_operation_sequence(r#"set a b"#).unwrap().0,
-            vec![vec!["set", "a", "b"]]
+            tokenize_operation_sequence(r#"set a b"#).unwrap(),
+            (vec![vec_of_strings!["set", "a", "b"]], None)
         );
     }
 
     #[test]
     fn t_tokenize_operation_sequence_ignores_leading_and_trailing_whitespace() {
         assert_eq!(
-            tokenize_operation_sequence(" \t set a b \t   ").unwrap().0,
-            vec![vec!["set", "a", "b"]]
+            tokenize_operation_sequence(" \t set a b \t   ").unwrap(),
+            (vec![vec_of_strings!["set", "a", "b"]], None)
         );
 
         let (operations, description) =
             tokenize_operation_sequence(" \t set a b -- \"description\" \t   ").unwrap();
-        assert_eq!(operations, vec![vec!["set", "a", "b"]]);
+        assert_eq!(operations, vec![vec_of_strings!["set", "a", "b"]]);
         assert!(description.is_some());
         assert_eq!(description.unwrap(), "description");
     }
@@ -352,10 +387,11 @@ mod tests {
     #[test]
     fn t_tokenize_operation_sequence_allows_tabs_between_arguments() {
         assert_eq!(
-            tokenize_operation_sequence("\tset\ta\tb\t;\topen\t")
-                .unwrap()
-                .0,
-            vec![vec!["set", "a", "b"], vec!["open"]]
+            tokenize_operation_sequence("\tset\ta\tb\t;\topen\t").unwrap(),
+            (
+                vec![vec_of_strings!["set", "a", "b"], vec_of_strings!["open"]],
+                None
+            )
         );
     }
 
@@ -363,7 +399,7 @@ mod tests {
     fn t_tokenize_operation_sequence_supports_optional_description() {
         let (operations, description) =
             tokenize_operation_sequence(r#"set a b -- "name of function""#).unwrap();
-        assert_eq!(operations, vec![vec!["set", "a", "b"]]);
+        assert_eq!(operations, vec![vec_of_strings!["set", "a", "b"]]);
         assert!(description.is_some());
         assert_eq!(description.unwrap(), "name of function");
     }
@@ -374,7 +410,7 @@ mod tests {
             tokenize_operation_sequence(r#"set a b "--" "name of function""#).unwrap();
         assert_eq!(
             operations,
-            vec![vec!["set", "a", "b", "--", "name of function"]]
+            vec![vec_of_strings!["set", "a", "b", "--", "name of function"]]
         );
         assert!(description.is_none());
     }
@@ -382,7 +418,7 @@ mod tests {
     #[test]
     fn t_tokenize_operation_sequence_allows_missing_description() {
         let (operations, description) = tokenize_operation_sequence(r#"set a b"#).unwrap();
-        assert_eq!(operations, vec![vec!["set", "a", "b"]]);
+        assert_eq!(operations, vec![vec_of_strings!["set", "a", "b"]]);
         assert!(description.is_none());
     }
 
