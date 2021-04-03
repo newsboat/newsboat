@@ -200,7 +200,7 @@ public:
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
-	std::vector<std::pair<std::string, MacroBinding>> get_macro_descriptions();
+	const std::map<std::string, MacroBinding>& get_macro_descriptions();
 
 	ParsedOperations parse_operation_sequence(const std::string& line);
 	std::vector<MacroCmd> get_startup_operation_sequence();

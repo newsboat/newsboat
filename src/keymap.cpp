@@ -561,15 +561,9 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 	return descs;
 }
 
-std::vector<std::pair<std::string, MacroBinding>> KeyMap::get_macro_descriptions()
+const std::map<std::string, MacroBinding>& KeyMap::get_macro_descriptions()
 {
-	std::vector<std::pair<std::string, MacroBinding>> bindings;
-	for (const auto& binding : macros_) {
-		const std::string key = binding.first;
-		const auto description = binding.second;
-		bindings.push_back(std::make_pair(key, description));
-	}
-	return bindings;
+	return macros_;
 }
 
 KeyMap::~KeyMap() {}
