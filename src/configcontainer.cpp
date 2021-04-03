@@ -283,18 +283,14 @@ ConfigContainer::ConfigContainer()
 	/* title formats: */
 	{
 		"articlelist-title-format",
-		ConfigData(_("%N %V - Articles in feed '%T' (%u unread, %t total)"
-				"%?F? matching filter `%F'&?"
-				" - %U"),
+		ConfigData(_("%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter '%F'&? - %U"),
 			ConfigDataType::STR)},
 	{
 		"dialogs-title-format",
 		ConfigData(_("%N %V - Dialogs"), ConfigDataType::STR)},
 	{
 		"feedlist-title-format",
-		ConfigData(_("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)"
-				"%?F? matching filter `%F'&?"
-				"%?T? - tag `%T'&?"),
+		ConfigData(_("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?%?T? - tag '%T'&?"),
 			ConfigDataType::STR)},
 	{
 		"filebrowser-title-format",
@@ -309,13 +305,11 @@ ConfigContainer::ConfigContainer()
 		ConfigData(_("%N %V - Help"), ConfigDataType::STR)},
 	{
 		"itemview-title-format",
-		ConfigData(_("%N %V - Article '%T' (%u unread, %t "
-				"total)"),
+		ConfigData(_("%N %V - Article '%T' (%u unread, %t total)"),
 			ConfigDataType::STR)},
 	{
 		"searchresult-title-format",
-		ConfigData(_("%N %V - Search results (%u unread, %t total)"
-				"%?F? matching filter `%F'&?"),
+		ConfigData(_("%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"),
 			ConfigDataType::STR)},
 	{
 		"selectfilter-title-format",
