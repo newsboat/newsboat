@@ -1314,15 +1314,15 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 === Macro Support
 
-In Newsboat, it's possible to define macros to execute more than one command
-at once. A macro is configured using the <<macro,`macro`>> configuration
-command. The first parameter to `macro` is the key, all parameters afterwards
-are operations (see <<_newsboat_operations>> and <<_podboat_operations>>),
-optionally with parameters on their own, separated by the `;` character. Here's
-a simple example:
+In Newsboat, it's possible to define macros to execute more than one command at
+once. A macro is configured using the <<macro,`macro`>> configuration command.
+The first parameter to `macro` is the key, the parameters following it are
+operations (see <<_newsboat_operations>> and <<_podboat_operations>>),
+optionally with parameters on their own, separated by the `;` character.
+A description can be specified at the end (optional). Here's a simple example:
 
-  macro k open; reload; quit
-  macro o open-in-browser; toggle-article-read "read"
+  macro k open; reload; quit                            -- "enter feed to reload it"
+  macro o open-in-browser; toggle-article-read "read"   -- "open in browser and mark read"
 
 When the user presses the macro prefix ("," by default) and then the "k" key,
 the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>>
