@@ -269,14 +269,6 @@ pub fn substr_with_width(string: &str, max_width: usize) -> String {
 /// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
 /// returns None, the character width is treated as 0. A STFL tag (e.g. `<b>`, `<foobar>`, `</>`)
 /// width is treated as 0, but escaped less-than (`<>`) width is treated as 1.
-/// ```
-/// use libnewsboat::utils::substr_with_width_stfl;
-/// assert_eq!(substr_with_width_stfl("a", 1), "a");
-/// assert_eq!(substr_with_width_stfl("a", 2), "a");
-/// assert_eq!(substr_with_width_stfl("ab", 1), "a");
-/// assert_eq!(substr_with_width_stfl("abc", 1), "a");
-/// assert_eq!(substr_with_width_stfl("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
-///```
 pub fn substr_with_width_stfl(string: &str, max_width: usize) -> String {
     let mut result = String::new();
     let mut in_bracket = false;
@@ -1293,6 +1285,18 @@ mod tests {
     #[test]
     fn t_substr_with_width_max_width_non_printable() {
         assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01\x02a");
+    }
+
+    #[test]
+    fn t_substr_with_width_stfl() {
+        assert_eq!(substr_with_width_stfl("a", 1), "a");
+        assert_eq!(substr_with_width_stfl("a", 2), "a");
+        assert_eq!(substr_with_width_stfl("ab", 1), "a");
+        assert_eq!(substr_with_width_stfl("abc", 1), "a");
+        assert_eq!(
+            substr_with_width_stfl("A\u{3042}B\u{3044}C\u{3046}", 5),
+            "A\u{3042}B"
+        )
     }
 
     #[test]
