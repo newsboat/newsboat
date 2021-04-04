@@ -916,6 +916,7 @@ TEST_CASE("strwidth_stfl()", "[utils]")
 
 TEST_CASE("is_http_url()", "[utils]")
 {
+	REQUIRE(utils::is_http_url("http://example.com"));
 	REQUIRE(utils::is_http_url("http://foo.bar"));
 	REQUIRE(utils::is_http_url("https://foo.bar"));
 	REQUIRE(utils::is_http_url("http://"));
