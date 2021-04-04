@@ -1198,7 +1198,7 @@ Dialog List:<<dialogs-title-format,+dialogs-title-format+>>:%N %V - Dialogs
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
 Identifier:Meaning
-[[common-title-format-N]]<<common-title-format-N,+N+>>:Name of the program, i.e. "newsboat"
+[[common-title-format-N]]<<common-title-format-N,+N+>>:Name of the program, i.e. "Newsboat"
 [[common-title-format-V]]<<common-title-format-V,+V+>>:Program version
 |======================================================================
 

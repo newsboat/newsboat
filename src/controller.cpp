@@ -175,7 +175,7 @@ int Controller::run(const CliArgsParser& args)
 	cfgparser.register_handler("highlight-article", rxman);
 
 	try {
-		cfgparser.parse_file("/etc/" PROGRAM_NAME "/config");
+		cfgparser.parse_file("/etc/" PACKAGE "/config");
 		cfgparser.parse_file(configpaths.config_file());
 	} catch (const ConfigException& ex) {
 		LOG(Level::ERROR,

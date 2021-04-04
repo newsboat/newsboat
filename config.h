@@ -2,7 +2,7 @@
 #define NEWSBOAT_CONFIG_H_
 
 #define PACKAGE				"newsboat"
-#define PROGRAM_NAME			PACKAGE
+#define PROGRAM_NAME			"Newsboat"
 
 #define PROGRAM_URL			"https://newsboat.org/"
 

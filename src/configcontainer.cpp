@@ -156,7 +156,7 @@ ConfigContainer::ConfigContainer()
 	{"notify-beep", ConfigData("no", ConfigDataType::BOOL)},
 	{
 		"notify-format",
-		ConfigData(_("newsboat: finished reload, %f unread "
+		ConfigData(_("Newsboat: finished reload, %f unread "
 				"feeds (%n unread articles total)"),
 			ConfigDataType::STR)},
 	{"notify-program", ConfigData("", ConfigDataType::PATH)},

@@ -125,7 +125,7 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 				std::cout << strprintf::fmt(
 						_("WARNING: Comment found "
 							"in %s. The queue file is regenerated "
-							"when podboat exits and comments will "
+							"when Podboat exits and comments will "
 							"be deleted. Press Enter to continue or "
 							"Ctrl+C to abort"),
 						queuefile)
