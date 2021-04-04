@@ -97,3 +97,14 @@ the same header as the class they're helping.
 If a big group of classes are sufficiently isolated from the rest, they can be
 stored in a separate directory and compiled into a static library. Examples:
 "filter" and "rss" directories.
+
+
+
+## Rust
+
+
+### Documentation tests (doctests)
+
+Each doctest is linked as a separate binary, which is slow. Use them to
+document the general API of the module, and mark them `no_run`. Do actual
+testing with unit tests inside the `tests` sub-module.
