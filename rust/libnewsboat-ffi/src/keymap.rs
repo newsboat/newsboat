@@ -15,7 +15,12 @@ mod ffi {
         // This is not very elegant, but doing the same by hand using `extern "C"` is prohibitively
         // complex.
         type Operation;
-        fn tokenize_operation_sequence(input: &str) -> Vec<Operation>;
+        fn tokenize_operation_sequence(
+            input: &str,
+            description: &mut String,
+            allow_description: bool,
+            parsing_failed: &mut bool,
+        ) -> Vec<Operation>;
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
     }
 
@@ -33,13 +38,25 @@ struct Operation {
     tokens: Vec<String>,
 }
 
-fn tokenize_operation_sequence(input: &str) -> Vec<Operation> {
-    match libnewsboat::keymap::tokenize_operation_sequence(input) {
-        Some(operations) => operations
-            .into_iter()
-            .map(|tokens| Operation { tokens })
-            .collect::<Vec<_>>(),
-        None => vec![],
+fn tokenize_operation_sequence(
+    input: &str,
+    description: &mut String,
+    allow_description: bool,
+    parsing_failed: &mut bool,
+) -> Vec<Operation> {
+    match libnewsboat::keymap::tokenize_operation_sequence(input, allow_description) {
+        Some((operations, opt_description)) => {
+            *parsing_failed = false;
+            *description = opt_description.unwrap_or_default();
+            operations
+                .into_iter()
+                .map(|tokens| Operation { tokens })
+                .collect::<Vec<_>>()
+        }
+        None => {
+            *parsing_failed = true;
+            vec![]
+        }
     }
 }
 

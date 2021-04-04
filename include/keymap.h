@@ -171,6 +171,16 @@ struct MacroCmd {
 	std::vector<std::string> args;
 };
 
+struct MacroBinding {
+	std::vector<MacroCmd> cmds;
+	std::string description;
+};
+
+struct ParsedOperations {
+	std::vector<MacroCmd> operations;
+	std::string description;
+};
+
 class KeyMap : public ConfigActionHandler {
 public:
 	explicit KeyMap(unsigned int flags);
@@ -190,8 +200,10 @@ public:
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
+	const std::map<std::string, MacroBinding>& get_macro_descriptions();
 
-	std::vector<MacroCmd> parse_operation_sequence(const std::string& line);
+	ParsedOperations parse_operation_sequence(const std::string& line,
+		const std::string& command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 private:
@@ -200,7 +212,7 @@ private:
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
-	std::map<std::string, std::vector<MacroCmd>> macros_;
+	std::map<std::string, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };
 

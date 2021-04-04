@@ -561,6 +561,11 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 	return descs;
 }
 
+const std::map<std::string, MacroBinding>& KeyMap::get_macro_descriptions()
+{
+	return macros_;
+}
+
 KeyMap::~KeyMap() {}
 
 void KeyMap::set_key(Operation op,
@@ -664,16 +669,23 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 		std::string configline = "macro ";
 		configline.append(macro.first);
 		configline.append(" ");
-		for (unsigned int i = 0; i < macro.second.size(); ++i) {
-			const auto& cmd = macro.second[i];
+		for (unsigned int i = 0; i < macro.second.cmds.size(); ++i) {
+			const auto& cmd = macro.second.cmds[i];
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
 				configline.append(utils::quote(arg));
 			}
-			if (i < (macro.second.size() - 1)) {
+			if (i < (macro.second.cmds.size() - 1)) {
 				configline.append(" ; ");
 			}
+		}
+		if (macro.second.description.size() >= 1) {
+			const auto escaped_string = utils::replace_all(macro.second.description, {
+				{R"(\)", R"(\\)"},
+				{R"(")", R"(\")"},
+			});
+			configline.append(strprintf::fmt(R"( -- "%s")", escaped_string));
 		}
 		config_output.push_back(configline);
 	}
@@ -735,24 +747,34 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
-		const std::vector<MacroCmd> cmds = parse_operation_sequence(remaining_params);
+		const auto parsed = parse_operation_sequence(remaining_params, action);
+		const std::vector<MacroCmd> cmds = parsed.operations;
+		const std::string description = parsed.description;
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 		const std::string macrokey = token.value();
 
-		macros_[macrokey] = cmds;
+		macros_[macrokey] = {cmds, description};
 	} else if (action == "run-on-startup") {
-		startup_operations_sequence = parse_operation_sequence(params);
+		startup_operations_sequence = parse_operation_sequence(params, action, false).operations;
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
 	}
 }
 
 
-std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
+ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
+	const std::string& command_name, bool allow_description)
 {
-	const auto operations = keymap::bridged::tokenize_operation_sequence(line);
+	rust::String description;
+	bool parsing_failed = false;
+	const auto operations = keymap::bridged::tokenize_operation_sequence(line, description,
+			allow_description, parsing_failed);
+	if (parsing_failed) {
+		throw ConfigHandlerException(strprintf::fmt(_("failed to parse operation sequence for %s"),
+				command_name));
+	}
 
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {
@@ -776,7 +798,10 @@ std::vector<MacroCmd> KeyMap::parse_operation_sequence(const std::string& line)
 		cmds.push_back(cmd);
 	}
 
-	return cmds;
+	return ParsedOperations{
+		.operations = cmds,
+		.description = std::string(description)
+	};
 }
 
 std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()
@@ -799,7 +824,7 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
 	if (macros_.count(key) >= 1) {
-		return macros_.at(key);
+		return macros_.at(key).cmds;
 	}
 	return {};
 }
