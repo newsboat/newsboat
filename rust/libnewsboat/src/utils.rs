@@ -111,43 +111,6 @@ pub fn is_exec_url(url: &str) -> bool {
 }
 
 /// Censor URLs by replacing username and password with '*'
-/// ```
-/// use libnewsboat::utils::censor_url;
-/// assert_eq!(&censor_url(""), "");
-/// assert_eq!(&censor_url("foobar"), "foobar");
-/// assert_eq!(&censor_url("foobar://xyz/"), "foobar://xyz/");
-/// assert_eq!(&censor_url("http://newsbeuter.org/"),
-///     "http://newsbeuter.org/");
-/// assert_eq!(&censor_url("https://newsbeuter.org/"),
-///     "https://newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://@newsbeuter.org/"),
-///         "http://newsbeuter.org/");
-/// assert_eq!(&censor_url("https://@newsbeuter.org/"),
-///         "https://newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://foo:bar@newsbeuter.org/"),
-///     "http://*:*@newsbeuter.org/");
-/// assert_eq!(&censor_url("https://foo:bar@newsbeuter.org/"),
-///     "https://*:*@newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://aschas@newsbeuter.org/"),
-///     "http://*:*@newsbeuter.org/");
-/// assert_eq!(&censor_url("https://aschas@newsbeuter.org/"),
-///     "https://*:*@newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("xxx://aschas@newsbeuter.org/"),
-///     "xxx://*:*@newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://foobar"), "http://foobar/");
-/// assert_eq!(&censor_url("https://foobar"), "https://foobar/");
-///
-/// assert_eq!(&censor_url("http://aschas@host"), "http://*:*@host/");
-/// assert_eq!(&censor_url("https://aschas@host"), "https://*:*@host/");
-///
-/// assert_eq!(&censor_url("query:name:age between 1:10"),
-///     "query:name:age between 1:10");
-/// ```
 pub fn censor_url(url: &str) -> String {
     if !url.is_empty() && !is_special_url(url) {
         Url::parse(url)
@@ -2119,5 +2082,63 @@ mod tests {
             "http://test:test@foobar:33/bla2.html".to_owned()
         );
         assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+    }
+
+    #[test]
+    fn t_censor_url() {
+        assert_eq!(&censor_url(""), "");
+        assert_eq!(&censor_url("foobar"), "foobar");
+        assert_eq!(&censor_url("foobar://xyz/"), "foobar://xyz/");
+        assert_eq!(
+            &censor_url("http://newsbeuter.org/"),
+            "http://newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://newsbeuter.org/"),
+            "https://newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("http://@newsbeuter.org/"),
+            "http://newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://@newsbeuter.org/"),
+            "https://newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("http://foo:bar@newsbeuter.org/"),
+            "http://*:*@newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://foo:bar@newsbeuter.org/"),
+            "https://*:*@newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("http://aschas@newsbeuter.org/"),
+            "http://*:*@newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://aschas@newsbeuter.org/"),
+            "https://*:*@newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("xxx://aschas@newsbeuter.org/"),
+            "xxx://*:*@newsbeuter.org/"
+        );
+
+        assert_eq!(&censor_url("http://foobar"), "http://foobar/");
+        assert_eq!(&censor_url("https://foobar"), "https://foobar/");
+
+        assert_eq!(&censor_url("http://aschas@host"), "http://*:*@host/");
+        assert_eq!(&censor_url("https://aschas@host"), "https://*:*@host/");
+
+        assert_eq!(
+            &censor_url("query:name:age between 1:10"),
+            "query:name:age between 1:10"
+        );
     }
 }
