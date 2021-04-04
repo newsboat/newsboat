@@ -2031,7 +2031,7 @@ mod tests {
     #[test]
     fn t_gentabs() {
         fn genstring(len: usize) -> String {
-            return std::iter::repeat("a").take(len).collect::<String>();
+            std::iter::repeat("a").take(len).collect::<String>()
         }
 
         assert_eq!(gentabs(""), 4);
