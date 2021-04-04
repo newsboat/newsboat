@@ -89,7 +89,7 @@ struct LogFiles {
 /// This is meant to be a long-lived, shared object that exists for the duration of the program.
 /// Users would call its `log` method to add messages to the log file, like this:
 ///
-/// ```
+/// ```no_run
 /// use libnewsboat::logger::{Logger, Level};
 ///
 /// // Create and configure the logger

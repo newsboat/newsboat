@@ -49,21 +49,6 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
 
 /// Combine a base URL and a link to a new absolute URL.
 /// If the base URL is malformed or joining with the link fails, link will be returned.
-/// # Examples
-/// ```
-/// use libnewsboat::utils::absolute_url;
-/// assert_eq!(absolute_url("http://foobar/hello/crook/", "bar.html"),
-///     "http://foobar/hello/crook/bar.html".to_owned());
-/// assert_eq!(absolute_url("https://foobar/foo/", "/bar.html"),
-///     "https://foobar/bar.html".to_owned());
-/// assert_eq!(absolute_url("https://foobar/foo/", "http://quux/bar.html"),
-///     "http://quux/bar.html".to_owned());
-/// assert_eq!(absolute_url("http://foobar", "bla.html"),
-///     "http://foobar/bla.html".to_owned());
-/// assert_eq!(absolute_url("http://test:test@foobar:33", "bla2.html"),
-///     "http://test:test@foobar:33/bla2.html".to_owned());
-/// assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
-/// ```
 pub fn absolute_url(base_url: &str, link: &str) -> String {
     Url::parse(base_url)
         .and_then(|url| url.join(link))
@@ -109,11 +94,6 @@ pub fn is_special_url(url: &str) -> bool {
 }
 
 /// Check if the given URL is a http(s) URL
-/// # Example
-/// ```
-/// use libnewsboat::utils::is_http_url;
-/// assert!(is_http_url("http://example.com"));
-/// ```
 pub fn is_http_url(url: &str) -> bool {
     url.starts_with("https://") || url.starts_with("http://")
 }
@@ -131,43 +111,6 @@ pub fn is_exec_url(url: &str) -> bool {
 }
 
 /// Censor URLs by replacing username and password with '*'
-/// ```
-/// use libnewsboat::utils::censor_url;
-/// assert_eq!(&censor_url(""), "");
-/// assert_eq!(&censor_url("foobar"), "foobar");
-/// assert_eq!(&censor_url("foobar://xyz/"), "foobar://xyz/");
-/// assert_eq!(&censor_url("http://newsbeuter.org/"),
-///     "http://newsbeuter.org/");
-/// assert_eq!(&censor_url("https://newsbeuter.org/"),
-///     "https://newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://@newsbeuter.org/"),
-///         "http://newsbeuter.org/");
-/// assert_eq!(&censor_url("https://@newsbeuter.org/"),
-///         "https://newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://foo:bar@newsbeuter.org/"),
-///     "http://*:*@newsbeuter.org/");
-/// assert_eq!(&censor_url("https://foo:bar@newsbeuter.org/"),
-///     "https://*:*@newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://aschas@newsbeuter.org/"),
-///     "http://*:*@newsbeuter.org/");
-/// assert_eq!(&censor_url("https://aschas@newsbeuter.org/"),
-///     "https://*:*@newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("xxx://aschas@newsbeuter.org/"),
-///     "xxx://*:*@newsbeuter.org/");
-///
-/// assert_eq!(&censor_url("http://foobar"), "http://foobar/");
-/// assert_eq!(&censor_url("https://foobar"), "https://foobar/");
-///
-/// assert_eq!(&censor_url("http://aschas@host"), "http://*:*@host/");
-/// assert_eq!(&censor_url("https://aschas@host"), "https://*:*@host/");
-///
-/// assert_eq!(&censor_url("query:name:age between 1:10"),
-///     "query:name:age between 1:10");
-/// ```
 pub fn censor_url(url: &str) -> String {
     if !url.is_empty() && !is_special_url(url) {
         Url::parse(url)
@@ -189,25 +132,11 @@ pub fn censor_url(url: &str) -> String {
 }
 
 /// Quote a string for use with stfl by replacing all occurences of "<" with "<>"
-/// ```
-/// use libnewsboat::utils::quote_for_stfl;
-/// assert_eq!(&quote_for_stfl("<"), "<>");
-/// assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
-/// assert_eq!(&quote_for_stfl("test"), "test");
-/// ```
 pub fn quote_for_stfl(string: &str) -> String {
     string.replace("<", "<>")
 }
 
 /// Get basename from a URL if available else return an empty string
-/// ```
-/// use libnewsboat::utils::get_basename;
-/// assert_eq!(get_basename("https://example.com/"), "");
-/// assert_eq!(get_basename("https://example.org/?param=value#fragment"), "");
-/// assert_eq!(get_basename("https://example.org/path/to/?param=value#fragment"), "");
-/// assert_eq!(get_basename("https://example.org/file.mp3"), "file.mp3");
-/// assert_eq!(get_basename("https://example.org/path/to/file.mp3?param=value#fragment"), "file.mp3");
-/// ```
 pub fn get_basename(input: &str) -> String {
     match Url::parse(input) {
         Ok(url) => match url.path_segments() {
@@ -289,13 +218,6 @@ pub fn strwidth(rs_str: &str) -> usize {
 ///
 /// STFL tags (e.g. `<b>`, `<foobar>`, `</>`) are counted as having 0 width.
 /// Escaped less-than sign (`<` escaped as `<>`) is counted as having a width of 1 character.
-/// ```
-/// use libnewsboat::utils::strwidth_stfl;
-/// assert_eq!(strwidth_stfl("a"), 1);
-/// assert_eq!(strwidth_stfl("abc<tag>def"), 6);
-/// assert_eq!(strwidth_stfl("less-than: <>"), 12);
-/// assert_eq!(strwidth_stfl("ＡＢＣＤＥＦ"), 12);
-///```
 pub fn strwidth_stfl(mut s: &str) -> usize {
     let mut width = 0;
     loop {
@@ -326,14 +248,6 @@ pub fn strwidth_stfl(mut s: &str) -> usize {
 ///
 /// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
 /// returns None, the character width is treated as 0.
-/// ```
-/// use libnewsboat::utils::substr_with_width;
-/// assert_eq!(substr_with_width("a", 1), "a");
-/// assert_eq!(substr_with_width("a", 2), "a");
-/// assert_eq!(substr_with_width("ab", 1), "a");
-/// assert_eq!(substr_with_width("abc", 1), "a");
-/// assert_eq!(substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
-///```
 pub fn substr_with_width(string: &str, max_width: usize) -> String {
     let mut result = String::new();
     let mut width = 0;
@@ -355,14 +269,6 @@ pub fn substr_with_width(string: &str, max_width: usize) -> String {
 /// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
 /// returns None, the character width is treated as 0. A STFL tag (e.g. `<b>`, `<foobar>`, `</>`)
 /// width is treated as 0, but escaped less-than (`<>`) width is treated as 1.
-/// ```
-/// use libnewsboat::utils::substr_with_width_stfl;
-/// assert_eq!(substr_with_width_stfl("a", 1), "a");
-/// assert_eq!(substr_with_width_stfl("a", 2), "a");
-/// assert_eq!(substr_with_width_stfl("ab", 1), "a");
-/// assert_eq!(substr_with_width_stfl("abc", 1), "a");
-/// assert_eq!(substr_with_width_stfl("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
-///```
 pub fn substr_with_width_stfl(string: &str, max_width: usize) -> String {
     let mut result = String::new();
     let mut in_bracket = false;
@@ -645,18 +551,6 @@ pub fn make_title(rs_str: String) -> String {
 
 /// Run the given command interactively with inherited stdin and stdout/stderr. Return the lowest
 /// 8 bits of its exit code, or `None` if the command failed to start.
-/// ```
-/// use libnewsboat::utils::run_interactively;
-///
-/// let result = run_interactively("echo true", "test");
-/// assert_eq!(result, Some(0));
-///
-/// let result = run_interactively("exit 1", "test");
-/// assert_eq!(result, Some(1));
-///
-/// // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
-/// // that it returns just the lowest 8 bits.
-/// ```
 pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
     log!(Level::Debug, &format!("{}: running `{}'", caller, command));
     Command::new("sh")
@@ -676,18 +570,6 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
 
 /// Run the given command non-interactively with closed stdin and stdout/stderr. Return the lowest
 /// 8 bits of its exit code, or `None` if the command failed to start.
-/// ```
-/// use libnewsboat::utils::run_non_interactively;
-///
-/// let result = run_non_interactively("echo true", "test");
-/// assert_eq!(result, Some(0));
-///
-/// let result = run_non_interactively("exit 1", "test");
-/// assert_eq!(result, Some(1));
-///
-/// // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
-/// // that it returns just the lowest 8 bits.
-/// ```
 pub fn run_non_interactively(command: &str, caller: &str) -> Option<u8> {
     log!(Level::Debug, &format!("{}: running `{}'", caller, command));
     Command::new("sh")
@@ -753,32 +635,6 @@ pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {
 ///
 /// The number of tabs will be adjusted by the width of the given string.  Usually, a column will
 /// consist of 4 tabs, 8 characters each.  Each column will consist of at least one tab.
-///
-/// ```
-/// use libnewsboat::utils::gentabs;
-///
-/// fn genstring(len: usize) -> String {
-///     return std::iter::repeat("a").take(len).collect::<String>();
-/// }
-///
-/// assert_eq!(gentabs(""), 4);
-/// assert_eq!(gentabs("a"), 4);
-/// assert_eq!(gentabs("aa"), 4);
-/// assert_eq!(gentabs("aaa"), 4);
-/// assert_eq!(gentabs("aaaa"), 4);
-/// assert_eq!(gentabs("aaaaa"), 4);
-/// assert_eq!(gentabs("aaaaaa"), 4);
-/// assert_eq!(gentabs("aaaaaaa"), 4);
-/// assert_eq!(gentabs("aaaaaaaa"), 3);
-/// assert_eq!(gentabs(&genstring(8)), 3);
-/// assert_eq!(gentabs(&genstring(9)), 3);
-/// assert_eq!(gentabs(&genstring(15)), 3);
-/// assert_eq!(gentabs(&genstring(16)), 2);
-/// assert_eq!(gentabs(&genstring(20)), 2);
-/// assert_eq!(gentabs(&genstring(24)), 1);
-/// assert_eq!(gentabs(&genstring(32)), 1);
-/// assert_eq!(gentabs(&genstring(100)), 1);
-/// ```
 pub fn gentabs(string: &str) -> usize {
     let tabcount = strwidth(string) / 8;
     if tabcount >= 4 {
@@ -1207,6 +1063,7 @@ mod tests {
 
     #[test]
     fn t_is_http_url() {
+        assert!(is_http_url("http://example.com"));
         assert!(is_http_url("https://foo.bar"));
         assert!(is_http_url("http://"));
         assert!(is_http_url("https://"));
@@ -1321,6 +1178,22 @@ mod tests {
         assert_eq!(strwidth_stfl("\u{F91F}"), 2);
         assert_eq!(strwidth_stfl("\u{0007}"), 0);
         assert_eq!(strwidth_stfl("<a"), 0); // #415
+        assert_eq!(strwidth_stfl("a"), 1);
+        assert_eq!(strwidth_stfl("abc<tag>def"), 6);
+        assert_eq!(strwidth_stfl("less-than: <>"), 12);
+        assert_eq!(strwidth_stfl("ＡＢＣＤＥＦ"), 12);
+    }
+
+    #[test]
+    fn t_substr_with_width() {
+        assert_eq!(substr_with_width("a", 1), "a");
+        assert_eq!(substr_with_width("a", 2), "a");
+        assert_eq!(substr_with_width("ab", 1), "a");
+        assert_eq!(substr_with_width("abc", 1), "a");
+        assert_eq!(
+            substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5),
+            "A\u{3042}B"
+        )
     }
 
     #[test]
@@ -1362,6 +1235,18 @@ mod tests {
     #[test]
     fn t_substr_with_width_max_width_non_printable() {
         assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01\x02a");
+    }
+
+    #[test]
+    fn t_substr_with_width_stfl() {
+        assert_eq!(substr_with_width_stfl("a", 1), "a");
+        assert_eq!(substr_with_width_stfl("a", 2), "a");
+        assert_eq!(substr_with_width_stfl("ab", 1), "a");
+        assert_eq!(substr_with_width_stfl("abc", 1), "a");
+        assert_eq!(
+            substr_with_width_stfl("A\u{3042}B\u{3044}C\u{3046}", 5),
+            "A\u{3042}B"
+        )
     }
 
     #[test]
@@ -2116,5 +2001,162 @@ mod tests {
             0xc3, 0x8b, 0xc3, 0x8c, 0xc3, 0x8d, 0xc3, 0x8e, 0xc3, 0x8f,
         ];
         assert_eq!(convert_text(&input, "UTF-8", "ISO-8859-1"), expected);
+    }
+
+    #[test]
+    fn t_absolute_url() {
+        assert_eq!(
+            absolute_url("http://foobar/hello/crook/", "bar.html"),
+            "http://foobar/hello/crook/bar.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://foobar/foo/", "/bar.html"),
+            "https://foobar/bar.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://foobar/foo/", "http://quux/bar.html"),
+            "http://quux/bar.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("http://foobar", "bla.html"),
+            "http://foobar/bla.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("http://test:test@foobar:33", "bla2.html"),
+            "http://test:test@foobar:33/bla2.html".to_owned()
+        );
+        assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+    }
+
+    #[test]
+    fn t_gentabs() {
+        fn genstring(len: usize) -> String {
+            std::iter::repeat("a").take(len).collect::<String>()
+        }
+
+        assert_eq!(gentabs(""), 4);
+        assert_eq!(gentabs("a"), 4);
+        assert_eq!(gentabs("aa"), 4);
+        assert_eq!(gentabs("aaa"), 4);
+        assert_eq!(gentabs("aaaa"), 4);
+        assert_eq!(gentabs("aaaaa"), 4);
+        assert_eq!(gentabs("aaaaaa"), 4);
+        assert_eq!(gentabs("aaaaaaa"), 4);
+        assert_eq!(gentabs("aaaaaaaa"), 3);
+        assert_eq!(gentabs(&genstring(8)), 3);
+        assert_eq!(gentabs(&genstring(9)), 3);
+        assert_eq!(gentabs(&genstring(15)), 3);
+        assert_eq!(gentabs(&genstring(16)), 2);
+        assert_eq!(gentabs(&genstring(20)), 2);
+        assert_eq!(gentabs(&genstring(24)), 1);
+        assert_eq!(gentabs(&genstring(32)), 1);
+        assert_eq!(gentabs(&genstring(100)), 1);
+    }
+
+    #[test]
+    fn t_run_non_interactively() {
+        let result = run_non_interactively("echo true", "test");
+        assert_eq!(result, Some(0));
+
+        let result = run_non_interactively("exit 1", "test");
+        assert_eq!(result, Some(1));
+
+        // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
+        // that it returns just the lowest 8 bits.
+    }
+
+    #[test]
+    fn t_run_interactively() {
+        let result = run_interactively("echo true", "test");
+        assert_eq!(result, Some(0));
+
+        let result = run_interactively("exit 1", "test");
+        assert_eq!(result, Some(1));
+
+        // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
+        // that it returns just the lowest 8 bits.
+    }
+
+    #[test]
+    fn t_get_basename() {
+        assert_eq!(get_basename("https://example.com/"), "");
+        assert_eq!(
+            get_basename("https://example.org/?param=value#fragment"),
+            ""
+        );
+        assert_eq!(
+            get_basename("https://example.org/path/to/?param=value#fragment"),
+            ""
+        );
+        assert_eq!(get_basename("https://example.org/file.mp3"), "file.mp3");
+        assert_eq!(
+            get_basename("https://example.org/path/to/file.mp3?param=value#fragment"),
+            "file.mp3"
+        );
+    }
+
+    #[test]
+    fn t_quote_for_stfl() {
+        assert_eq!(&quote_for_stfl("<"), "<>");
+        assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
+        assert_eq!(&quote_for_stfl("test"), "test");
+    }
+
+    #[test]
+    fn t_censor_url() {
+        assert_eq!(&censor_url(""), "");
+        assert_eq!(&censor_url("foobar"), "foobar");
+        assert_eq!(&censor_url("foobar://xyz/"), "foobar://xyz/");
+        assert_eq!(
+            &censor_url("http://newsbeuter.org/"),
+            "http://newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://newsbeuter.org/"),
+            "https://newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("http://@newsbeuter.org/"),
+            "http://newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://@newsbeuter.org/"),
+            "https://newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("http://foo:bar@newsbeuter.org/"),
+            "http://*:*@newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://foo:bar@newsbeuter.org/"),
+            "https://*:*@newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("http://aschas@newsbeuter.org/"),
+            "http://*:*@newsbeuter.org/"
+        );
+        assert_eq!(
+            &censor_url("https://aschas@newsbeuter.org/"),
+            "https://*:*@newsbeuter.org/"
+        );
+
+        assert_eq!(
+            &censor_url("xxx://aschas@newsbeuter.org/"),
+            "xxx://*:*@newsbeuter.org/"
+        );
+
+        assert_eq!(&censor_url("http://foobar"), "http://foobar/");
+        assert_eq!(&censor_url("https://foobar"), "https://foobar/");
+
+        assert_eq!(&censor_url("http://aschas@host"), "http://*:*@host/");
+        assert_eq!(&censor_url("https://aschas@host"), "https://*:*@host/");
+
+        assert_eq!(
+            &censor_url("query:name:age between 1:10"),
+            "query:name:age between 1:10"
+        );
     }
 }

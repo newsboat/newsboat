@@ -906,10 +906,17 @@ TEST_CASE("strwidth_stfl()", "[utils]")
 	const auto input1 = utils::wstr2str(L"\uF91F");
 	REQUIRE(utils::strwidth_stfl(input1) == 2);
 	REQUIRE(utils::strwidth_stfl("\07") == 0);
+
+	REQUIRE(utils::strwidth_stfl("<a") == 0); // #415
+	REQUIRE(utils::strwidth_stfl("a") == 1);
+	REQUIRE(utils::strwidth_stfl("abc<tag>def") == 6);
+	REQUIRE(utils::strwidth_stfl("less-than: <>") ==  12);
+	REQUIRE(utils::strwidth_stfl("ＡＢＣＤＥＦ") == 12);
 }
 
 TEST_CASE("is_http_url()", "[utils]")
 {
+	REQUIRE(utils::is_http_url("http://example.com"));
 	REQUIRE(utils::is_http_url("http://foo.bar"));
 	REQUIRE(utils::is_http_url("https://foo.bar"));
 	REQUIRE(utils::is_http_url("http://"));
