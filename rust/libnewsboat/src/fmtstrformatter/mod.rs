@@ -21,7 +21,7 @@ use std::collections::BTreeMap;
 /// Since Newsboat contains a number of different format strings with different specifiers, we need
 /// an object to encapsulate the common part: the act of formatting. That way, the above example
 /// with titles and authors can be implemented very easily:
-/// ```
+/// ```no_run
 /// use libnewsboat::fmtstrformatter::*;
 ///
 /// let format = "%t (%a)";
