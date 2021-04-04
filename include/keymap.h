@@ -203,7 +203,7 @@ public:
 	const std::map<std::string, MacroBinding>& get_macro_descriptions();
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
-		bool allow_description = true);
+		const std::string& command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 private:

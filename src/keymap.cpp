@@ -747,7 +747,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
-		const auto parsed = parse_operation_sequence(remaining_params);
+		const auto parsed = parse_operation_sequence(remaining_params, action);
 		const std::vector<MacroCmd> cmds = parsed.operations;
 		const std::string description = parsed.description;
 		if (!token.has_value() || cmds.empty()) {
@@ -757,7 +757,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 
 		macros_[macrokey] = {cmds, description};
 	} else if (action == "run-on-startup") {
-		startup_operations_sequence = parse_operation_sequence(params, false).operations;
+		startup_operations_sequence = parse_operation_sequence(params, action, false).operations;
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_PARAMS);
 	}
@@ -765,11 +765,16 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 
 
 ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
-	bool allow_description)
+	const std::string& command_name, bool allow_description)
 {
 	rust::String description;
+	bool parsing_failed = false;
 	const auto operations = keymap::bridged::tokenize_operation_sequence(line, description,
-			allow_description);
+			allow_description, parsing_failed);
+	if (parsing_failed) {
+		throw ConfigHandlerException(strprintf::fmt(_("failed to parse operation sequence for %s"),
+				command_name));
+	}
 
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {

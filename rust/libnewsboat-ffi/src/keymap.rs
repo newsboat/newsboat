@@ -19,6 +19,7 @@ mod ffi {
             input: &str,
             description: &mut String,
             allow_description: bool,
+            parsing_failed: &mut bool,
         ) -> Vec<Operation>;
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
     }
@@ -41,16 +42,21 @@ fn tokenize_operation_sequence(
     input: &str,
     description: &mut String,
     allow_description: bool,
+    parsing_failed: &mut bool,
 ) -> Vec<Operation> {
     match libnewsboat::keymap::tokenize_operation_sequence(input, allow_description) {
         Some((operations, opt_description)) => {
+            *parsing_failed = false;
             *description = opt_description.unwrap_or_default();
             operations
                 .into_iter()
                 .map(|tokens| Operation { tokens })
                 .collect::<Vec<_>>()
         }
-        None => vec![],
+        None => {
+            *parsing_failed = true;
+            vec![]
+        }
     }
 }
 
