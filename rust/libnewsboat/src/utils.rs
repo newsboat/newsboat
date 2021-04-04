@@ -570,18 +570,6 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
 
 /// Run the given command non-interactively with closed stdin and stdout/stderr. Return the lowest
 /// 8 bits of its exit code, or `None` if the command failed to start.
-/// ```
-/// use libnewsboat::utils::run_non_interactively;
-///
-/// let result = run_non_interactively("echo true", "test");
-/// assert_eq!(result, Some(0));
-///
-/// let result = run_non_interactively("exit 1", "test");
-/// assert_eq!(result, Some(1));
-///
-/// // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
-/// // that it returns just the lowest 8 bits.
-/// ```
 pub fn run_non_interactively(command: &str, caller: &str) -> Option<u8> {
     log!(Level::Debug, &format!("{}: running `{}'", caller, command));
     Command::new("sh")
@@ -2064,6 +2052,18 @@ mod tests {
             "http://test:test@foobar:33/bla2.html".to_owned()
         );
         assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+    }
+
+    #[test]
+    fn t_run_non_interactively() {
+        let result = run_non_interactively("echo true", "test");
+        assert_eq!(result, Some(0));
+
+        let result = run_non_interactively("exit 1", "test");
+        assert_eq!(result, Some(1));
+
+        // Unfortunately, there is no easy way to provoke this function to return `None`, nor to test
+        // that it returns just the lowest 8 bits.
     }
 
     #[test]
