@@ -49,21 +49,6 @@ pub fn to_u(rs_str: String, default_value: u32) -> u32 {
 
 /// Combine a base URL and a link to a new absolute URL.
 /// If the base URL is malformed or joining with the link fails, link will be returned.
-/// # Examples
-/// ```
-/// use libnewsboat::utils::absolute_url;
-/// assert_eq!(absolute_url("http://foobar/hello/crook/", "bar.html"),
-///     "http://foobar/hello/crook/bar.html".to_owned());
-/// assert_eq!(absolute_url("https://foobar/foo/", "/bar.html"),
-///     "https://foobar/bar.html".to_owned());
-/// assert_eq!(absolute_url("https://foobar/foo/", "http://quux/bar.html"),
-///     "http://quux/bar.html".to_owned());
-/// assert_eq!(absolute_url("http://foobar", "bla.html"),
-///     "http://foobar/bla.html".to_owned());
-/// assert_eq!(absolute_url("http://test:test@foobar:33", "bla2.html"),
-///     "http://test:test@foobar:33/bla2.html".to_owned());
-/// assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
-/// ```
 pub fn absolute_url(base_url: &str, link: &str) -> String {
     Url::parse(base_url)
         .and_then(|url| url.join(link))
@@ -2109,5 +2094,30 @@ mod tests {
             0xc3, 0x8b, 0xc3, 0x8c, 0xc3, 0x8d, 0xc3, 0x8e, 0xc3, 0x8f,
         ];
         assert_eq!(convert_text(&input, "UTF-8", "ISO-8859-1"), expected);
+    }
+
+    #[test]
+    fn t_absolute_url() {
+        assert_eq!(
+            absolute_url("http://foobar/hello/crook/", "bar.html"),
+            "http://foobar/hello/crook/bar.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://foobar/foo/", "/bar.html"),
+            "https://foobar/bar.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://foobar/foo/", "http://quux/bar.html"),
+            "http://quux/bar.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("http://foobar", "bla.html"),
+            "http://foobar/bla.html".to_owned()
+        );
+        assert_eq!(
+            absolute_url("http://test:test@foobar:33", "bla2.html"),
+            "http://test:test@foobar:33/bla2.html".to_owned()
+        );
+        assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
     }
 }
