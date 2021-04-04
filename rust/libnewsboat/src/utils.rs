@@ -635,32 +635,6 @@ pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {
 ///
 /// The number of tabs will be adjusted by the width of the given string.  Usually, a column will
 /// consist of 4 tabs, 8 characters each.  Each column will consist of at least one tab.
-///
-/// ```
-/// use libnewsboat::utils::gentabs;
-///
-/// fn genstring(len: usize) -> String {
-///     return std::iter::repeat("a").take(len).collect::<String>();
-/// }
-///
-/// assert_eq!(gentabs(""), 4);
-/// assert_eq!(gentabs("a"), 4);
-/// assert_eq!(gentabs("aa"), 4);
-/// assert_eq!(gentabs("aaa"), 4);
-/// assert_eq!(gentabs("aaaa"), 4);
-/// assert_eq!(gentabs("aaaaa"), 4);
-/// assert_eq!(gentabs("aaaaaa"), 4);
-/// assert_eq!(gentabs("aaaaaaa"), 4);
-/// assert_eq!(gentabs("aaaaaaaa"), 3);
-/// assert_eq!(gentabs(&genstring(8)), 3);
-/// assert_eq!(gentabs(&genstring(9)), 3);
-/// assert_eq!(gentabs(&genstring(15)), 3);
-/// assert_eq!(gentabs(&genstring(16)), 2);
-/// assert_eq!(gentabs(&genstring(20)), 2);
-/// assert_eq!(gentabs(&genstring(24)), 1);
-/// assert_eq!(gentabs(&genstring(32)), 1);
-/// assert_eq!(gentabs(&genstring(100)), 1);
-/// ```
 pub fn gentabs(string: &str) -> usize {
     let tabcount = strwidth(string) / 8;
     if tabcount >= 4 {
@@ -2052,6 +2026,31 @@ mod tests {
             "http://test:test@foobar:33/bla2.html".to_owned()
         );
         assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+    }
+
+    #[test]
+    fn t_gentabs() {
+        fn genstring(len: usize) -> String {
+            return std::iter::repeat("a").take(len).collect::<String>();
+        }
+
+        assert_eq!(gentabs(""), 4);
+        assert_eq!(gentabs("a"), 4);
+        assert_eq!(gentabs("aa"), 4);
+        assert_eq!(gentabs("aaa"), 4);
+        assert_eq!(gentabs("aaaa"), 4);
+        assert_eq!(gentabs("aaaaa"), 4);
+        assert_eq!(gentabs("aaaaaa"), 4);
+        assert_eq!(gentabs("aaaaaaa"), 4);
+        assert_eq!(gentabs("aaaaaaaa"), 3);
+        assert_eq!(gentabs(&genstring(8)), 3);
+        assert_eq!(gentabs(&genstring(9)), 3);
+        assert_eq!(gentabs(&genstring(15)), 3);
+        assert_eq!(gentabs(&genstring(16)), 2);
+        assert_eq!(gentabs(&genstring(20)), 2);
+        assert_eq!(gentabs(&genstring(24)), 1);
+        assert_eq!(gentabs(&genstring(32)), 1);
+        assert_eq!(gentabs(&genstring(100)), 1);
     }
 
     #[test]
