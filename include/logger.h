@@ -4,14 +4,7 @@
 #include "config.h"
 #include "strprintf.h"
 
-namespace newsboat {
-enum class Level;
-}
-
-extern "C" {
-	int64_t rs_get_loglevel();
-	void rs_log(newsboat::Level level, const char* message);
-}
+#include "logger.rs.h"
 
 namespace newsboat {
 
@@ -27,9 +20,8 @@ void unset_loglevel();
 template<typename... Args>
 void log(Level l, const std::string& format, Args... args)
 {
-	if (l == Level::USERERROR
-		|| static_cast<int64_t>(l) <= rs_get_loglevel()) {
-		rs_log(l, strprintf::fmt(format, args...).c_str());
+	if (l == Level::USERERROR || static_cast<int64_t>(l) <= logger::bridged::get_loglevel()) {
+		logger::bridged::log(int16_t(l), strprintf::fmt(format, args...));
 	}
 }
 };

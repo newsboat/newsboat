@@ -13,6 +13,7 @@ fn main() {
     add_cxxbridge("cliargsparser");
     add_cxxbridge("fslock");
     add_cxxbridge("keymap");
+    add_cxxbridge("logger");
     add_cxxbridge("scopemeasure");
     add_cxxbridge("utils");
 }
