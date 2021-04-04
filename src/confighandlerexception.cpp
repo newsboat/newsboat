@@ -25,8 +25,6 @@ const char* ConfigHandlerException::get_errmsg(ActionHandlerStatus status)
 		return _("unknown command (bug).");
 	case ActionHandlerStatus::FILENOTFOUND:
 		return _("file couldn't be opened.");
-	case ActionHandlerStatus::VALID:
-		assert(0 && "unreachable, because this function is only called on errors");
 	}
 
 	assert(0 && "unreachable, because the switch() above handles everything");
