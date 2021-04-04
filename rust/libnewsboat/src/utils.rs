@@ -132,12 +132,6 @@ pub fn censor_url(url: &str) -> String {
 }
 
 /// Quote a string for use with stfl by replacing all occurences of "<" with "<>"
-/// ```
-/// use libnewsboat::utils::quote_for_stfl;
-/// assert_eq!(&quote_for_stfl("<"), "<>");
-/// assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
-/// assert_eq!(&quote_for_stfl("test"), "test");
-/// ```
 pub fn quote_for_stfl(string: &str) -> String {
     string.replace("<", "<>")
 }
@@ -2082,6 +2076,13 @@ mod tests {
             "http://test:test@foobar:33/bla2.html".to_owned()
         );
         assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+    }
+
+    #[test]
+    fn t_quote_for_stfl() {
+        assert_eq!(&quote_for_stfl("<"), "<>");
+        assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
+        assert_eq!(&quote_for_stfl("test"), "test");
     }
 
     #[test]
