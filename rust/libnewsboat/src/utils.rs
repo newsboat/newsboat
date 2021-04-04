@@ -248,14 +248,6 @@ pub fn strwidth_stfl(mut s: &str) -> usize {
 ///
 /// Each chararacter width is calculated with UnicodeWidthChar::width. If UnicodeWidthChar::width()
 /// returns None, the character width is treated as 0.
-/// ```
-/// use libnewsboat::utils::substr_with_width;
-/// assert_eq!(substr_with_width("a", 1), "a");
-/// assert_eq!(substr_with_width("a", 2), "a");
-/// assert_eq!(substr_with_width("ab", 1), "a");
-/// assert_eq!(substr_with_width("abc", 1), "a");
-/// assert_eq!(substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5), "A\u{3042}B")
-///```
 pub fn substr_with_width(string: &str, max_width: usize) -> String {
     let mut result = String::new();
     let mut width = 0;
@@ -1248,6 +1240,18 @@ mod tests {
         assert_eq!(strwidth_stfl("abc<tag>def"), 6);
         assert_eq!(strwidth_stfl("less-than: <>"), 12);
         assert_eq!(strwidth_stfl("ＡＢＣＤＥＦ"), 12);
+    }
+
+    #[test]
+    fn t_substr_with_width() {
+        assert_eq!(substr_with_width("a", 1), "a");
+        assert_eq!(substr_with_width("a", 2), "a");
+        assert_eq!(substr_with_width("ab", 1), "a");
+        assert_eq!(substr_with_width("abc", 1), "a");
+        assert_eq!(
+            substr_with_width("A\u{3042}B\u{3044}C\u{3046}", 5),
+            "A\u{3042}B"
+        )
     }
 
     #[test]
