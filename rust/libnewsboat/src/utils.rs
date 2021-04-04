@@ -137,14 +137,6 @@ pub fn quote_for_stfl(string: &str) -> String {
 }
 
 /// Get basename from a URL if available else return an empty string
-/// ```
-/// use libnewsboat::utils::get_basename;
-/// assert_eq!(get_basename("https://example.com/"), "");
-/// assert_eq!(get_basename("https://example.org/?param=value#fragment"), "");
-/// assert_eq!(get_basename("https://example.org/path/to/?param=value#fragment"), "");
-/// assert_eq!(get_basename("https://example.org/file.mp3"), "file.mp3");
-/// assert_eq!(get_basename("https://example.org/path/to/file.mp3?param=value#fragment"), "file.mp3");
-/// ```
 pub fn get_basename(input: &str) -> String {
     match Url::parse(input) {
         Ok(url) => match url.path_segments() {
@@ -2076,6 +2068,24 @@ mod tests {
             "http://test:test@foobar:33/bla2.html".to_owned()
         );
         assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+    }
+
+    #[test]
+    fn t_get_basename() {
+        assert_eq!(get_basename("https://example.com/"), "");
+        assert_eq!(
+            get_basename("https://example.org/?param=value#fragment"),
+            ""
+        );
+        assert_eq!(
+            get_basename("https://example.org/path/to/?param=value#fragment"),
+            ""
+        );
+        assert_eq!(get_basename("https://example.org/file.mp3"), "file.mp3");
+        assert_eq!(
+            get_basename("https://example.org/path/to/file.mp3?param=value#fragment"),
+            "file.mp3"
+        );
     }
 
     #[test]
