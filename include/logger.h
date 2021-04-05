@@ -8,8 +8,7 @@
 
 namespace newsboat {
 
-// This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
-enum class Level { USERERROR = 1, CRITICAL, ERROR, WARN, INFO, DEBUG };
+using Level = logger::bridged::Level;
 
 namespace Logger {
 void set_logfile(const std::string& logfile);
@@ -21,7 +20,7 @@ template<typename... Args>
 void log(Level l, const std::string& format, Args... args)
 {
 	if (l == Level::USERERROR || static_cast<int64_t>(l) <= logger::bridged::get_loglevel()) {
-		logger::bridged::log(int16_t(l), strprintf::fmt(format, args...));
+		logger::bridged::log(l, strprintf::fmt(format, args...));
 	}
 }
 };

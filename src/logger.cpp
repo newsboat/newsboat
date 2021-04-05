@@ -13,7 +13,7 @@ void Logger::set_user_error_logfile(const std::string& logfile)
 
 void Logger::set_loglevel(Level l)
 {
-	logger::bridged::set_loglevel(int16_t(l));
+	logger::bridged::set_loglevel(l);
 }
 
 void Logger::unset_loglevel()
