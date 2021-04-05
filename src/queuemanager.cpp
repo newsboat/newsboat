@@ -6,7 +6,6 @@
 #include "configpaths.h"
 #include "fmtstrformatter.h"
 #include "rssfeed.h"
-#include "stflpp.h"
 #include "utils.h"
 
 namespace newsboat {
