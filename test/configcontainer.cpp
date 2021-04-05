@@ -99,6 +99,20 @@ TEST_CASE("Throws if command argument has invalid type", "[ConfigContainer]")
 	}
 }
 
+TEST_CASE("Throws if there are too few arguments", "[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	CHECK_THROWS_AS(cfg.handle_action("browser", {}), ConfigHandlerException);
+}
+
+TEST_CASE("Throws if there are too many arguments", "[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	CHECK_THROWS_AS(cfg.handle_action("browser", {"xdg-open", "%u"}), ConfigHandlerException);
+}
+
 TEST_CASE("reset_to_default changes setting to its default value",
 	"[ConfigContainer]")
 {
