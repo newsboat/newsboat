@@ -138,9 +138,25 @@ std::string item_renderer::to_plain_text(
 	std::vector<LinkPair> links;
 
 	prepare_header(item, lines, links, true);
+	const auto description = item->description();
+	const auto text = utils::utf8_to_locale(description.text);
+	const auto mime = description.mime;
 	const auto base = get_item_base_link(item);
-	render_html(cfg, utils::utf8_to_locale(item->description().text), lines, links,
-		base, true);
+	if (
+		mime == "html" ||
+		mime == "xhtml" ||
+		mime == "text/html" ||
+		mime == "application/xhtml+xml"
+	) {
+		render_html(cfg, text, lines, links, base, true);
+	} else {
+		// Unrecognised mime type
+		std::istringstream stream(text);
+		std::string line;
+		while (getline(stream, line, '\n')) {
+			lines.push_back(std::make_pair(LineType::wrappable, line));
+		}
+	}
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -165,9 +181,25 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	std::vector<std::pair<LineType, std::string>> lines;
 
 	prepare_header(item, lines, links);
-	const std::string baseurl = get_item_base_link(item);
-	const auto body = utils::utf8_to_locale(item->description().text);
-	render_html(cfg, body, lines, links, baseurl, false);
+	const auto description = item->description();
+	const auto text = utils::utf8_to_locale(description.text);
+	const auto mime = description.mime;
+	const auto base = get_item_base_link(item);
+	if (
+		mime == "html" ||
+		mime == "xhtml" ||
+		mime == "text/html" ||
+		mime == "application/xhtml+xml"
+	) {
+		render_html(cfg, text, lines, links, base, false);
+	} else {
+		// Unrecognised mime type
+		std::istringstream stream(text);
+		std::string line;
+		while (getline(stream, line, '\n')) {
+			lines.push_back(std::make_pair(LineType::wrappable, line));
+		}
+	}
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
