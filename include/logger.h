@@ -8,19 +8,15 @@
 
 namespace newsboat {
 
-using Level = logger::bridged::Level;
+using Level = Logger::Level;
 
 namespace Logger {
-void set_logfile(const std::string& logfile);
-void set_user_error_logfile(const std::string& logfile);
-void set_loglevel(Level l);
-void unset_loglevel();
 
 template<typename... Args>
 void log(Level l, const std::string& format, Args... args)
 {
-	if (l == Level::USERERROR || static_cast<int64_t>(l) <= logger::bridged::get_loglevel()) {
-		logger::bridged::log(l, strprintf::fmt(format, args...));
+	if (l == Level::USERERROR || static_cast<int64_t>(l) <= get_loglevel()) {
+		log_internal(l, strprintf::fmt(format, args...));
 	}
 }
 };

@@ -515,8 +515,6 @@ src/listwidget.o: src/listwidget.cpp include/listwidget.h \
  include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
-src/logger.o: src/logger.cpp include/logger.h config.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
 src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/matchable.h \
