@@ -1,53 +1,61 @@
-use crate::abort_on_panic;
-use libc::c_char;
 use libnewsboat::logger;
-use std::ffi::CStr;
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_log(level: logger::Level, message: *const c_char) {
-    abort_on_panic(|| {
-        let message = CStr::from_ptr(message);
-        logger::get_instance().log_raw(level, message.to_bytes());
-    })
+#[cxx::bridge(namespace = "newsboat::Logger")]
+mod ffi {
+    // This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
+    enum Level {
+        USERERROR = 1,
+        CRITICAL,
+        ERROR,
+        WARN,
+        INFO,
+        DEBUG,
+    }
+
+    extern "Rust" {
+        fn unset_loglevel();
+        fn set_logfile(logfile: &str);
+        fn get_loglevel() -> i64;
+        fn set_loglevel(level: Level);
+        fn log_internal(level: Level, message: &str);
+        fn set_user_error_logfile(user_error_logfile: &str);
+    }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_set_loglevel(level: logger::Level) {
-    abort_on_panic(|| {
-        logger::get_instance().set_loglevel(level);
-    })
+fn ffi_level_to_log_level(level: ffi::Level) -> logger::Level {
+    match level {
+        ffi::Level::USERERROR => logger::Level::UserError,
+        ffi::Level::CRITICAL => logger::Level::Critical,
+        ffi::Level::ERROR => logger::Level::Error,
+        ffi::Level::WARN => logger::Level::Warn,
+        ffi::Level::INFO => logger::Level::Info,
+        ffi::Level::DEBUG => logger::Level::Debug,
+        _ => panic!("Unknown log level"),
+    }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_unset_loglevel() {
-    abort_on_panic(|| {
-        logger::get_instance().unset_loglevel();
-    })
+fn unset_loglevel() {
+    logger::get_instance().unset_loglevel();
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_set_logfile(logfile: *const c_char) {
-    abort_on_panic(|| {
-        let logfile = CStr::from_ptr(logfile);
-        let logfile = logfile
-            .to_str()
-            .expect("logfile path contained invalid UTF-8");
-        logger::get_instance().set_logfile(logfile);
-    })
+fn set_logfile(logfile: &str) {
+    logger::get_instance().set_logfile(logfile);
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_set_user_error_logfile(user_error_logfile: *const c_char) {
-    abort_on_panic(|| {
-        let user_error_logfile = CStr::from_ptr(user_error_logfile);
-        let user_error_logfile = user_error_logfile
-            .to_str()
-            .expect("user_error_logfile path contained invalid UTF-8");
-        logger::get_instance().set_user_error_logfile(user_error_logfile);
-    })
+fn get_loglevel() -> i64 {
+    logger::get_instance().get_loglevel() as i64
 }
 
-#[no_mangle]
-pub extern "C" fn rs_get_loglevel() -> i64 {
-    abort_on_panic(|| logger::get_instance().get_loglevel() as i64)
+fn set_loglevel(level: ffi::Level) {
+    let level = ffi_level_to_log_level(level);
+    logger::get_instance().set_loglevel(level);
+}
+
+fn log_internal(level: ffi::Level, message: &str) {
+    let level = ffi_level_to_log_level(level);
+    logger::get_instance().log(level, message);
+}
+
+fn set_user_error_logfile(user_error_logfile: &str) {
+    logger::get_instance().set_user_error_logfile(user_error_logfile);
 }

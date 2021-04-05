@@ -4,32 +4,19 @@
 #include "config.h"
 #include "strprintf.h"
 
-namespace newsboat {
-enum class Level;
-}
-
-extern "C" {
-	int64_t rs_get_loglevel();
-	void rs_log(newsboat::Level level, const char* message);
-}
+#include "logger.rs.h"
 
 namespace newsboat {
 
-// This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
-enum class Level { USERERROR = 1, CRITICAL, ERROR, WARN, INFO, DEBUG };
+using Level = Logger::Level;
 
 namespace Logger {
-void set_logfile(const std::string& logfile);
-void set_user_error_logfile(const std::string& logfile);
-void set_loglevel(Level l);
-void unset_loglevel();
 
 template<typename... Args>
 void log(Level l, const std::string& format, Args... args)
 {
-	if (l == Level::USERERROR
-		|| static_cast<int64_t>(l) <= rs_get_loglevel()) {
-		rs_log(l, strprintf::fmt(format, args...).c_str());
+	if (l == Level::USERERROR || static_cast<int64_t>(l) <= get_loglevel()) {
+		log_internal(l, strprintf::fmt(format, args...));
 	}
 }
 };
