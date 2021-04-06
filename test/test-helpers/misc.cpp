@@ -67,8 +67,8 @@ std::vector<std::string> TestHelpers::file_contents(const std::string& filepath)
 	return lines;
 }
 
-bool TestHelpers::starts_with(const std::string& input,
-	const std::string& prefix)
+bool TestHelpers::starts_with(const std::string& prefix,
+	const std::string& input)
 {
 	return input.substr(0, prefix.size()) == prefix;
 }
