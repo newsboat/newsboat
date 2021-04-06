@@ -7,7 +7,6 @@
 namespace newsboat {
 
 class ConfigContainer;
-class ConfigPaths;
 class RssFeed;
 class RssItem;
 
@@ -25,10 +24,12 @@ struct EnqueueResult {
 
 class QueueManager {
 	ConfigContainer* cfg = nullptr;
-	ConfigPaths* paths = nullptr;
+	std::string queue_file;
 
 public:
-	QueueManager(ConfigContainer* cfg, ConfigPaths* paths);
+	/// Construct `QueueManager` instance out of a config container and a path
+	/// to the queue file.
+	QueueManager(ConfigContainer* cfg, std::string queue_file);
 
 	/// Adds the podcast URL to Podboat's queue file
 	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,

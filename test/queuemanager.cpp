@@ -4,11 +4,10 @@
 #include "test-helpers/chmod.h"
 #include "test-helpers/envvar.h"
 #include "test-helpers/misc.h"
-#include "test-helpers/tempdir.h"
+#include "test-helpers/tempfile.h"
 
 #include "cache.h"
 #include "configcontainer.h"
-#include "configpaths.h"
 #include "rssfeed.h"
 #include "rssitem.h"
 #include "utils.h"
@@ -18,23 +17,6 @@ using namespace newsboat;
 SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 {
 	GIVEN("A fresh instance of QueueManager") {
-		TestHelpers::TempDir home_dir;
-		const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-		REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-		TestHelpers::EnvVar home_env("HOME");
-		home_env.set(home_dir.get_path());
-
-		// ConfigPaths rely on these variables, so let's sanitize them to ensure
-		// that the tests aren't affected
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.unset();
-		TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-		xdg_data.unset();
-
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
 		ConfigContainer cfg;
 
 		Cache cache(":memory:", &cfg);
@@ -46,10 +28,11 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
-		QueueManager manager(&cfg, &paths);
+		TestHelpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
 
 		THEN("the queue file is not automatically created") {
-			REQUIRE_FALSE(TestHelpers::file_exists(paths.queue_file()));
+			REQUIRE_FALSE(TestHelpers::file_exists(queue_file.get_path()));
 		}
 
 		WHEN("enqueue_url() is called") {
@@ -61,9 +44,9 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 			}
 
 			THEN("the queue file contains an entry") {
-				REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(paths.queue_file());
+				const auto lines = TestHelpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
 				REQUIRE(TestHelpers::starts_with(enclosure_url, lines[0]));
 				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
@@ -86,9 +69,9 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 			}
 
 			THEN("the queue file contains a single entry") {
-				REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(paths.queue_file());
+				const auto lines = TestHelpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
 				REQUIRE(TestHelpers::starts_with(enclosure_url, lines[0]));
 				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
@@ -126,9 +109,9 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 			}
 
 			THEN("the queue file contains three entries") {
-				REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(paths.queue_file());
+				const auto lines = TestHelpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 4);
 				REQUIRE(lines[0] != "");
 				REQUIRE(lines[1] != "");
@@ -148,23 +131,6 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]")
 {
 	GIVEN("Pristine QueueManager and two RssItems") {
-		TestHelpers::TempDir home_dir;
-		const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-		REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-		TestHelpers::EnvVar home_env("HOME");
-		home_env.set(home_dir.get_path());
-
-		// ConfigPaths rely on these variables, so let's sanitize them to ensure
-		// that the tests aren't affected
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.unset();
-		TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-		xdg_data.unset();
-
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
 		ConfigContainer cfg;
 
 		Cache cache(":memory:", &cfg);
@@ -181,7 +147,8 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
-		QueueManager manager(&cfg, &paths);
+		TestHelpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
 
 		WHEN("first item is enqueued") {
 			const auto result = manager.enqueue_url(item1, feed);
@@ -192,9 +159,9 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 			}
 
 			THEN("the queue file contains a corresponding entry") {
-				REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(paths.queue_file());
+				const auto lines = TestHelpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
 				REQUIRE(TestHelpers::starts_with(enclosure_url1, lines[0]));
 				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
@@ -217,9 +184,9 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 				}
 
 				THEN("the queue file still contains a single entry") {
-					REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+					REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-					const auto lines = TestHelpers::file_contents(paths.queue_file());
+					const auto lines = TestHelpers::file_contents(queue_file.get_path());
 					REQUIRE(lines.size() == 2);
 					REQUIRE(TestHelpers::starts_with(enclosure_url1, lines[0]));
 					REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
@@ -240,23 +207,6 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 	"[QueueManager]")
 {
 	GIVEN("Pristine QueueManager, an RssItem, and an uneditable queue file") {
-		TestHelpers::TempDir home_dir;
-		const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-		REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-		TestHelpers::EnvVar home_env("HOME");
-		home_env.set(home_dir.get_path());
-
-		// ConfigPaths rely on these variables, so let's sanitize them to ensure
-		// that the tests aren't affected
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.unset();
-		TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-		xdg_data.unset();
-
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
 		ConfigContainer cfg;
 
 		Cache cache(":memory:", &cfg);
@@ -267,18 +217,19 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
-		QueueManager manager(&cfg, &paths);
+		TestHelpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
 
-		TestHelpers::copy_file("data/empty-file", paths.queue_file());
+		TestHelpers::copy_file("data/empty-file", queue_file.get_path());
 		// The file is read-only
-		TestHelpers::Chmod uneditable_queue_file(paths.queue_file(), 0444);
+		TestHelpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
 		WHEN("enqueue_url() is called") {
 			const auto result = manager.enqueue_url(item, feed);
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == paths.queue_file());
+				REQUIRE(result.extra_info == queue_file.get_path());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -291,23 +242,6 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 TEST_CASE("QueueManager puts files into a location configured by `download-path`",
 	"[QueueManager]")
 {
-	TestHelpers::TempDir home_dir;
-	const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-	TestHelpers::EnvVar home_env("HOME");
-	home_env.set(home_dir.get_path());
-
-	// ConfigPaths rely on these variables, so let's sanitize them to ensure
-	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-	xdg_data.unset();
-
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-
 	ConfigContainer cfg;
 	SECTION("path with a slash at the end") {
 		cfg.set_configvalue("download-path", "/tmp/nonexistent-newsboat/");
@@ -330,7 +264,8 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 
 	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/podcasts.atom");
 
-	QueueManager manager(&cfg, &paths);
+	TestHelpers::TempFile queue_file;
+	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result1 = manager.enqueue_url(item1, feed);
 	REQUIRE(result1.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
@@ -344,9 +279,9 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 
 	REQUIRE(item2->enqueued());
 
-	REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+	REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-	const auto lines = TestHelpers::file_contents(paths.queue_file());
+	const auto lines = TestHelpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] ==
 		R"(https://example.com/podcast.mp3 "/tmp/nonexistent-newsboat/podcast.mp3")");
@@ -358,23 +293,6 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 TEST_CASE("QueueManager names files according to the `download-filename-format` setting",
 	"[QueueManager]")
 {
-	TestHelpers::TempDir home_dir;
-	const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-	TestHelpers::EnvVar home_env("HOME");
-	home_env.set(home_dir.get_path());
-
-	// ConfigPaths rely on these variables, so let's sanitize them to ensure
-	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-	xdg_data.unset();
-
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-
 	ConfigContainer cfg;
 	// We set the download-path to a fixed value to ensure that we know
 	// *exactly* how the result should look.
@@ -388,7 +306,8 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/podcasts.atom");
 
-	QueueManager manager(&cfg, &paths);
+	TestHelpers::TempFile queue_file;
+	QueueManager manager(&cfg, queue_file.get_path());
 
 	SECTION("%n for current feed title, with slashes replaced by underscores") {
 		cfg.set_configvalue("download-filename-format", "%n");
@@ -396,7 +315,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(paths.queue_file());
+		const auto lines = TestHelpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/Feed title_theme")");
@@ -408,7 +327,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(paths.queue_file());
+		const auto lines = TestHelpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] == R"(https://example.com/~adam/podcast.mp3 "/example/example.com")");
 		REQUIRE(lines[1] == "");
@@ -419,7 +338,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(paths.queue_file());
+		const auto lines = TestHelpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] == R"(https://example.com/~adam/podcast.mp3 "/example/podcast.mp3")");
 		REQUIRE(lines[1] == "");
@@ -439,7 +358,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(paths.queue_file());
+		const auto lines = TestHelpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/2021-04-06, 04, Apr, 06, 15, 38, 19, 21, and 2021")");
@@ -452,7 +371,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(paths.queue_file());
+		const auto lines = TestHelpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/Rain_snow_sun in a single day")");
@@ -464,7 +383,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(paths.queue_file());
+		const auto lines = TestHelpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/mp3")");
@@ -485,7 +404,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 			manager.enqueue_url(item, irrelevant_feed);
 
-			const auto lines = TestHelpers::file_contents(paths.queue_file());
+			const auto lines = TestHelpers::file_contents(queue_file.get_path());
 			REQUIRE(lines.size() == 2);
 			REQUIRE(lines[0] ==
 				R"(https://example.com/~adam/podcast.mp3 "/example/Relevant feed")");
@@ -498,7 +417,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 			manager.enqueue_url(item, feed);
 
-			const auto lines = TestHelpers::file_contents(paths.queue_file());
+			const auto lines = TestHelpers::file_contents(queue_file.get_path());
 			REQUIRE(lines.size() == 2);
 			REQUIRE(lines[0] ==
 				R"(https://example.com/~adam/podcast.mp3 "/example/Relevant feed")");
@@ -510,23 +429,6 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[QueueManager]")
 {
 	GIVEN("Pristine QueueManager and a feed of three items") {
-		TestHelpers::TempDir home_dir;
-		const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-		REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-		TestHelpers::EnvVar home_env("HOME");
-		home_env.set(home_dir.get_path());
-
-		// ConfigPaths rely on these variables, so let's sanitize them to ensure
-		// that the tests aren't affected
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.unset();
-		TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-		xdg_data.unset();
-
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
 		ConfigContainer cfg;
 
 		Cache cache(":memory:", &cfg);
@@ -548,7 +450,8 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 		item3->set_enclosure_type("image/jpeg");
 		feed->add_item(item3);
 
-		QueueManager manager(&cfg, &paths);
+		TestHelpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);
@@ -559,9 +462,9 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 			}
 
 			THEN("the queue file contains three entries") {
-				REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(paths.queue_file());
+				const auto lines = TestHelpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 4);
 				REQUIRE(lines[0] != "");
 				REQUIRE(lines[1] != "");
@@ -581,23 +484,6 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]")
 {
 	GIVEN("Pristine QueueManager and a feed of two items") {
-		TestHelpers::TempDir home_dir;
-		const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-		REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-		TestHelpers::EnvVar home_env("HOME");
-		home_env.set(home_dir.get_path());
-
-		// ConfigPaths rely on these variables, so let's sanitize them to ensure
-		// that the tests aren't affected
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.unset();
-		TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-		xdg_data.unset();
-
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
 		ConfigContainer cfg;
 
 		Cache cache(":memory:", &cfg);
@@ -616,7 +502,8 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 		item2->set_enclosure_type("audio/mpeg");
 		feed->add_item(item2);
 
-		QueueManager manager(&cfg, &paths);
+		TestHelpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);
@@ -629,9 +516,9 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 			}
 
 			THEN("the queue file still contains a single entry") {
-				REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(paths.queue_file());
+				const auto lines = TestHelpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
 				REQUIRE(TestHelpers::starts_with(enclosure_url1, lines[0]));
 				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
@@ -651,23 +538,6 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 	"[QueueManager]")
 {
 	GIVEN("Pristine QueueManager, a single-item feed, and an uneditable queue file") {
-		TestHelpers::TempDir home_dir;
-		const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-		REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-		TestHelpers::EnvVar home_env("HOME");
-		home_env.set(home_dir.get_path());
-
-		// ConfigPaths rely on these variables, so let's sanitize them to ensure
-		// that the tests aren't affected
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-		xdg_config.unset();
-		TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-		xdg_data.unset();
-
-		ConfigPaths paths;
-		REQUIRE(paths.initialized());
-
 		ConfigContainer cfg;
 
 		Cache cache(":memory:", &cfg);
@@ -679,18 +549,19 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 		item->set_enclosure_type("audio/mpeg");
 		feed->add_item(item);
 
-		QueueManager manager(&cfg, &paths);
+		TestHelpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
 
-		TestHelpers::copy_file("data/empty-file", paths.queue_file());
+		TestHelpers::copy_file("data/empty-file", queue_file.get_path());
 		// The file is read-only
-		TestHelpers::Chmod uneditable_queue_file(paths.queue_file(), 0444);
+		TestHelpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == paths.queue_file());
+				REQUIRE(result.extra_info == queue_file.get_path());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -702,23 +573,6 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 
 TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 {
-	TestHelpers::TempDir home_dir;
-	const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-	TestHelpers::EnvVar home_env("HOME");
-	home_env.set(home_dir.get_path());
-
-	// ConfigPaths rely on these variables, so let's sanitize them to ensure
-	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-	xdg_data.unset();
-
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-
 	ConfigContainer cfg;
 	// We set the download-path to a fixed value to ensure that we know
 	// *exactly* how the result should look.
@@ -744,15 +598,16 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 	item3->set_enclosure_type("audio/mpeg");
 	feed->add_item(item3);
 
-	QueueManager manager(&cfg, &paths);
+	TestHelpers::TempFile queue_file;
+	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(result.extra_info == "");
 
-	REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+	REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-	const auto lines = TestHelpers::file_contents(paths.queue_file());
+	const auto lines = TestHelpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == R"(https://example.com/podcast.mp3 "/example/podcast.mp3")");
 	REQUIRE(lines[1] == R"(https://example.com/podcast3.mp3 "/example/podcast3.mp3")");
@@ -761,23 +616,6 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 
 TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 {
-	TestHelpers::TempDir home_dir;
-	const auto newsboat_dir = home_dir.get_path() + ".newsboat";
-	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
-
-	TestHelpers::EnvVar home_env("HOME");
-	home_env.set(home_dir.get_path());
-
-	// ConfigPaths rely on these variables, so let's sanitize them to ensure
-	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
-	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
-	xdg_data.unset();
-
-	ConfigPaths paths;
-	REQUIRE(paths.initialized());
-
 	ConfigContainer cfg;
 	// We set the download-path to a fixed value to ensure that we know
 	// *exactly* how the result should look.
@@ -802,15 +640,16 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 	item3->set_enclosure_type("audio/mpeg");
 	feed->add_item(item3);
 
-	QueueManager manager(&cfg, &paths);
+	TestHelpers::TempFile queue_file;
+	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(result.extra_info == "");
 
-	REQUIRE(TestHelpers::file_exists(paths.queue_file()));
+	REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
 
-	const auto lines = TestHelpers::file_contents(paths.queue_file());
+	const auto lines = TestHelpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == R"(https://example.com/podcast.mp3 "/example/podcast.mp3")");
 	REQUIRE(lines[1] == R"(http://example.com/podcast2.mp3 "/example/podcast2.mp3")");
