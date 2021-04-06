@@ -3,16 +3,15 @@
 #include <fstream>
 #include <libxml/uri.h>
 
-#include "configpaths.h"
 #include "fmtstrformatter.h"
 #include "rssfeed.h"
 #include "utils.h"
 
 namespace newsboat {
 
-QueueManager::QueueManager(ConfigContainer* cfg_, ConfigPaths* paths_)
+QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 	: cfg(cfg_)
-	, paths(paths_)
+	, queue_file(std::move(queue_file))
 {}
 
 EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
@@ -21,7 +20,6 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	const std::string& url = item->enclosure_url();
 	const std::string filename = generate_enqueue_filename(item, feed);
 
-	const std::string queue_file = paths->queue_file();
 	std::fstream f;
 	f.open(queue_file, std::fstream::in);
 	if (f.is_open()) {
