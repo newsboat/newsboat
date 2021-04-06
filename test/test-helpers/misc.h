@@ -31,7 +31,7 @@ std::vector<std::string> file_contents(const std::string& filepath);
 
 /* \brief Returns `true` if `input` starts with `prefix`.
  */
-bool starts_with(const std::string& input, const std::string& prefix);
+bool starts_with(const std::string& prefix, const std::string& input);
 
 /* \brief Returns `true` if the file at `filepath` exists.
  */
