@@ -34,6 +34,7 @@ public:
 	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
 		std::shared_ptr<RssFeed> feed);
 
+	/// Add all HTTP and HTTPS enclosures to the queue file
 	EnqueueResult autoenqueue(std::shared_ptr<RssFeed> feed);
 
 private:
