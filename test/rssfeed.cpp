@@ -479,7 +479,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 	}
 
 	SECTION("feeddate, feed's publication date") {
-		TestHelpers::EnvVar tzEnv("TZ");
+		TestHelpers::TzEnvVar tzEnv;
 		tzEnv.set("UTC");
 
 		f.set_pubDate(1); // one second into the Unix epoch

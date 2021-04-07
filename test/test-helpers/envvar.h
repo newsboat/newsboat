@@ -37,9 +37,11 @@ public:
 	/// a temporary or a string literal anyway. Just do it, and use set() and
 	/// unset() methods, instead of keeping a local variable with a name in it
 	/// and calling setenv(3) and unsetenv(3).
+	///
+	/// \note For TZ env var, use `TzEnvVar` instead.
 	explicit EnvVar(std::string name_);
 
-	~EnvVar();
+	virtual ~EnvVar();
 
 	/// \brief Changes the value of the environment variable.
 	///
@@ -49,14 +51,14 @@ public:
 	/// restore the variable when the test finished running. The variable is
 	/// always restored to the state it was in when EnvVar object was
 	/// constructed.
-	void set(const std::string& new_value) const;
+	virtual void set(const std::string& new_value) const;
 
 	/// \brief Unsets the environment variable.
 	///
 	/// \note This does \emph{not} change the value to which EnvVar will
 	/// restore the variable when the test finished running. The variable is
 	/// always restored to the state it was in when EnvVar object was
-	void unset() const;
+	virtual void unset() const;
 
 	/// \brief Specifies a function that should be ran after each call to set()
 	/// or unset() methods, and also during object destruction.
@@ -68,7 +70,30 @@ public:
 	/// - nonstd::nullopt  --  meaning the environment variable is now unset
 	/// - std::string      --  meaning the environment variable is now set to
 	///                        this value
-	void on_change(std::function<void(nonstd::optional<std::string> new_value)> fn);
+	virtual void on_change(std::function<void(nonstd::optional<std::string> new_value)> fn);
+
+protected:
+	// The main constructor throws for some values of `name`; this one doesn't.
+	//
+	// This is meant to be used in subclasses that implement behaviors for
+	// `name`s that throw. The second parameter is meant to disambiguate the
+	// call, and is not used for anything.
+	explicit EnvVar(std::string name_, bool /* unused */);
+};
+
+/* \brief Save and restore timezone environment variable, calling tzset as
+ * appropriate.
+ *
+ * For details, see the docs for `EnvVar`.
+ */
+class TzEnvVar final : public EnvVar {
+public:
+	TzEnvVar();
+	virtual ~TzEnvVar() = default;
+
+private:
+	// We hide this method because we don't want users to override our handler.
+	using EnvVar::on_change;
 };
 
 } // namespace TestHelpers

@@ -144,7 +144,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 	}
 
 	SECTION("date") {
-		TestHelpers::EnvVar tzEnv("TZ");
+		TestHelpers::TzEnvVar tzEnv;
 		tzEnv.set("UTC");
 
 		const auto attr = "date";
