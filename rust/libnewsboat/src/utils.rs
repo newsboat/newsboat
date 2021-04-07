@@ -835,10 +835,6 @@ pub fn translit(tocode: &str, fromcode: &str) -> String {
 
 /// Converts `text` from encoding `fromcode` to encoding `tocode`.
 pub fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8> {
-    if tocode.to_lowercase() == fromcode.to_lowercase() {
-        return text.to_owned();
-    }
-
     let mut result = vec![];
 
     let tocode_translit = translit(tocode, fromcode);
@@ -1811,64 +1807,6 @@ mod tests {
                 let expected = results.get(&key).unwrap();
                 let actual = translit(tocode, fromcode);
                 assert_eq!(actual, *expected);
-            }
-        }
-    }
-
-    #[test]
-    fn t_convert_text_returns_input_string_if_fromcode_and_tocode_are_literally_the_same() {
-        let inputs: &[&[u8]] = &[
-            &[0x81, 0x13, 0xa0],       // \x81 is not valid UTF-8
-            &[0x01],                   // incomplete UTF-16
-            &[0x01, 0x1f, 0x80, 0x9b], // those bytes are not defined in ISO-8859-1
-            &[0x7f, 0x1e, 0x03],       // these bytes are not defined in KOI8-R
-        ];
-
-        let codes = &["utf-8", "utf-16", "iso-8859-1", "koi8-r"];
-
-        for code in codes {
-            for input in inputs {
-                assert_eq!(convert_text(input, code, code), *input);
-            }
-        }
-    }
-
-    #[test]
-    fn t_convert_text_returns_input_string_if_fromcode_is_an_uppercase_of_tocode() {
-        let inputs: &[&[u8]] = &[
-            &[0x81, 0x13, 0xa0],       // \x81 is not valid UTF-8
-            &[0x01],                   // incomplete UTF-16
-            &[0x01, 0x1f, 0x80, 0x9b], // those bytes are not defined in ISO-8859-1
-            &[0x7f, 0x1e, 0x03],       // these bytes are not defined in KOI8-R
-        ];
-
-        let codes = &["utf-8", "utf-16", "iso-8859-1", "koi8-r"];
-
-        for code in codes {
-            for input in inputs {
-                let fromcode = code.to_uppercase();
-                let tocode = code;
-                assert_eq!(convert_text(input, tocode, &fromcode), *input);
-            }
-        }
-    }
-
-    #[test]
-    fn t_convert_text_returns_input_string_if_tocode_is_an_uppercase_of_fromcode() {
-        let inputs: &[&[u8]] = &[
-            &[0x81, 0x13, 0xa0],       // \x81 is not valid UTF-8
-            &[0x01],                   // incomplete UTF-16
-            &[0x01, 0x1f, 0x80, 0x9b], // those bytes are not defined in ISO-8859-1
-            &[0x7f, 0x1e, 0x03],       // these bytes are not defined in KOI8-R
-        ];
-
-        let codes = &["utf-8", "utf-16", "iso-8859-1", "koi8-r"];
-
-        for code in codes {
-            for input in inputs {
-                let fromcode = code;
-                let tocode = code.to_uppercase();
-                assert_eq!(convert_text(input, &tocode, fromcode), *input);
             }
         }
     }
