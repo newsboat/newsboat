@@ -1,5 +1,6 @@
 #include "itemrenderer.h"
 
+#include <set>
 #include <sstream>
 
 #include "configcontainer.h"
@@ -8,6 +9,17 @@
 #include "textformatter.h"
 
 namespace newsboat {
+
+bool should_render_as_html(const std::string mime_type)
+{
+	static const std::set<std::string> html_mime_types = {
+		"html",
+		"xhtml",
+		"text/html",
+		"application/xhtml+xml"
+	};
+	return (html_mime_types.count(mime_type) >= 1);
+}
 
 std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
 {
@@ -158,10 +170,10 @@ std::string item_renderer::to_plain_text(
 	const auto base = get_item_base_link(item);
 	const auto body = utils::utf8_to_locale(item_description.text);
 
-	if (item_description.mime == "text/plain") {
-		render_plaintext(body, lines);
-	} else {
+	if (should_render_as_html(item_description.mime)) {
 		render_html(cfg, body, lines, links, base, true);
+	} else {
+		render_plaintext(body, lines);
 	}
 
 	TextFormatter txtfmt;
@@ -191,10 +203,10 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	const std::string baseurl = get_item_base_link(item);
 	const auto body = utils::utf8_to_locale(item_description.text);
 
-	if (item_description.mime == "text/plain") {
-		render_plaintext(body, lines);
-	} else {
+	if (should_render_as_html(item_description.mime)) {
 		render_html(cfg, body, lines, links, baseurl, false);
+	} else {
+		render_plaintext(body, lines);
 	}
 
 	TextFormatter txtfmt;
