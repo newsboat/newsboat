@@ -16,7 +16,7 @@ one that we use for Continuous Integration:
     # In the root of Newsboat's repository
     $ docker build \
         --tag=newsboat-build-tools \
-        --file=docker/ubuntu_18.04-build-tools.dockerfile \
+        --file=docker/ubuntu_20.10-build-tools.dockerfile \
         docker
 
 This will use the description from "docker/ubuntu_18.04-build-tools.dockerfile"
