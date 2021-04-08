@@ -19,7 +19,7 @@ one that we use for Continuous Integration:
         --file=docker/ubuntu_20.10-build-tools.dockerfile \
         docker
 
-This will use the description from "docker/ubuntu_18.04-build-tools.dockerfile"
+This will use the description from "docker/ubuntu_20.10-build-tools.dockerfile"
 to build an image named "newsboat-build-tools". That image contains all the
 compilers and libraries that one needs to build Newsboat from source.
 
