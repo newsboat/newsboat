@@ -3,7 +3,7 @@
 #include <cinttypes>
 #include <cstdio>
 #include <cstring>
-#include <curses.h>
+#include <ncurses.h>
 #include <iostream>
 #include <sstream>
 
