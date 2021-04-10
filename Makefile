@@ -406,8 +406,10 @@ rust-test:
 
 TEST_SRCS:=$(wildcard test/*.cpp test/test-helpers/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
+SRC_SRCS:=$(wildcard src/*.cpp)
+SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
 test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) src/*.o $(NEWSBOAT_LIBS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 clean-test:
 	$(RM) test/test test/*.o test/test-helpers/*.o
