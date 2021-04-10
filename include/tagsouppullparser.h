@@ -35,7 +35,7 @@ private:
 	Event current_event;
 
 	void add_attribute(std::string s);
-	std::string read_tag();
+	nonstd::optional<std::string> read_tag();
 	Event determine_tag_type();
 	std::string decode_attribute(const std::string& s);
 	std::string decode_entities(const std::string& s);

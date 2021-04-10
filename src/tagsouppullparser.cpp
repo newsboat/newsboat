@@ -11,7 +11,6 @@
 #include "config.h"
 #include "logger.h"
 #include "utils.h"
-#include "xmlexception.h"
 
 namespace newsboat {
 
@@ -114,14 +113,12 @@ void TagSoupPullParser::add_attribute(std::string s)
 	attributes.push_back(Attribute(attribname, attribvalue));
 }
 
-std::string TagSoupPullParser::read_tag()
+nonstd::optional<std::string> TagSoupPullParser::read_tag()
 {
 	std::string s;
 	getline(inputstream, s, '>');
 	if (inputstream.eof()) {
-		// TODO: test whether this works reliably
-		throw XmlException(
-			_("EOF found while reading XML tag"));
+		return nonstd::nullopt;
 	}
 	return s;
 }
@@ -588,15 +585,13 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 
 void TagSoupPullParser::handle_tag()
 {
-	std::string s;
-	try {
-		s = read_tag();
-	} catch (const XmlException&) {
+	auto s = read_tag();
+	if (s.has_value()) {
+		parse_tag(s.value());
+		current_event = determine_tag_type();
+	} else {
 		current_event = Event::END_DOCUMENT;
-		return;
 	}
-	parse_tag(s);
-	current_event = determine_tag_type();
 }
 
 void TagSoupPullParser::handle_text(char c)
