@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_HISTORY_H_
 #define NEWSBOAT_HISTORY_H_
 
+#include "history.rs.h"
+
 #include <string>
 
 namespace newsboat {
@@ -8,7 +10,7 @@ namespace newsboat {
 class History {
 public:
 	History();
-	~History();
+	~History() = default;
 	void add_line(const std::string& line);
 	std::string previous_line();
 	std::string next_line();
@@ -16,7 +18,7 @@ public:
 	void save_to_file(const std::string& file, unsigned int limit);
 
 private:
-	void* rs_hst = nullptr;
+	rust::Box<history::bridged::History> rs_object;
 };
 
 } // namespace newsboat
