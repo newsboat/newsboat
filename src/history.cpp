@@ -30,38 +30,33 @@ extern "C" {
 namespace newsboat {
 
 History::History()
+	: rs_object(history::bridged::create())
 {
-	rs_hst = rs_history_new();
-}
-
-History::~History()
-{
-	rs_history_free(rs_hst);
 }
 
 void History::add_line(const std::string& line)
 {
-	rs_history_add_line(rs_hst, line.c_str());
+	history::bridged::add_line(*rs_object, line);
 }
 
 std::string History::previous_line()
 {
-	return RustString(rs_history_previous_line(rs_hst));
+	return std::string(history::bridged::previous_line(*rs_object));
 }
 
 std::string History::next_line()
 {
-	return RustString(rs_history_next_line(rs_hst));
+	return std::string(history::bridged::next_line(*rs_object));
 }
 
 void History::load_from_file(const std::string& file)
 {
-	rs_history_load_from_file(rs_hst, file.c_str());
+	history::bridged::load_from_file(*rs_object, file);
 }
 
 void History::save_to_file(const std::string& file, unsigned int limit)
 {
-	rs_history_save_to_file(rs_hst, file.c_str(), limit);
+	history::bridged::save_to_file(*rs_object, file, limit);
 }
 
 } // namespace newsboat
