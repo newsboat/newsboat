@@ -17,9 +17,8 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 		"<xxx foo=bar baz=\"qu ux\" hi='ho ho ho'></xxx>"
 		"</test>");
 
-	TagSoupPullParser xpp;
+	TagSoupPullParser xpp(input_stream);
 	TagSoupPullParser::Event e;
-	xpp.set_input(input_stream);
 
 	e = xpp.get_event_type();
 	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
@@ -83,7 +82,6 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 {
 	std::istringstream input_stream;
-	TagSoupPullParser Parser;
 	TagSoupPullParser::Event event;
 
 	for (auto input : {
@@ -91,7 +89,7 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 		}) {
 		SECTION(input) {
 			input_stream.str(input);
-			Parser.set_input(input_stream);
+			TagSoupPullParser Parser(input_stream);
 
 			event = Parser.get_event_type();
 			REQUIRE(event ==
@@ -118,9 +116,8 @@ TEST_CASE("Tagsoup pull parser emits whitespace as is",
 		"</pre>"
 		"</test>");
 
-	TagSoupPullParser xpp;
+	TagSoupPullParser xpp(input_stream);
 	TagSoupPullParser::Event e;
-	xpp.set_input(input_stream);
 
 	e = xpp.get_event_type();
 	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);

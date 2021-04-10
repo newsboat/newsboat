@@ -133,8 +133,7 @@ void HtmlRenderer::render(std::istream& input,
 	 *   - we then can iterate over all continuous elements, such as start
 	 * tag, close tag, text element, ...
 	 */
-	TagSoupPullParser xpp;
-	xpp.set_input(input);
+	TagSoupPullParser xpp(input);
 
 	for (TagSoupPullParser::Event e = xpp.next();
 		e != TagSoupPullParser::Event::END_DOCUMENT;
