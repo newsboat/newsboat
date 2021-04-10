@@ -142,7 +142,7 @@ void render_html(
 	}
 }
 
-void render_plaintext(
+void item_renderer::render_plaintext(
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines)
 {

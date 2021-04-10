@@ -656,3 +656,45 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 		REQUIRE(result.first == expected);
 	}
 }
+
+TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_renderer]")
+{
+	// Verifies that render_plaintext creates the expected lines, all marked as wrappable
+	const auto check = [](const std::string input,
+	const std::vector<std::string>& expected_lines) {
+		std::vector<std::pair<LineType, std::string>> output;
+		item_renderer::render_plaintext(input, output);
+
+		REQUIRE(output.size() == expected_lines.size());
+		for (std::size_t i = 0; i < output.size(); ++i) {
+			INFO("i: " + std::to_string(i));
+			REQUIRE(output[i].first == LineType::wrappable);
+			REQUIRE(output[i].second == expected_lines[i]);
+		}
+	};
+
+	SECTION(R"(regular text is split on \r and \n)") {
+		const std::string text =
+			"Lorem ipsum dolor sit amet\nconsectetur adipiscing elit\rsed do eiusmod tempor incididunt ut labore\net dolore magna aliqua.";
+
+		check(text, {
+			"Lorem ipsum dolor sit amet",
+			"consectetur adipiscing elit",
+			"sed do eiusmod tempor incididunt ut labore",
+			"et dolore magna aliqua."
+		});
+	}
+
+	SECTION("render_plaintext keeps indentation") {
+		const std::string text =
+			"The following lines are indented:\n    hello\n    this is a test\n\nback to no indentation";
+
+		check(text, {
+			"The following lines are indented:",
+			"    hello",
+			"    this is a test",
+			"",
+			"back to no indentation"
+		});
+	}
+}

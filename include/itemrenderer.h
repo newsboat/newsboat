@@ -19,6 +19,10 @@ namespace item_renderer {
 /// the title isn't available.
 std::string get_feedtitle(std::shared_ptr<RssItem> item);
 
+/// \brief Splits text into lines marked as wrappable
+void render_plaintext(const std::string& source,
+	std::vector<std::pair<LineType, std::string>>& lines);
+
 /// \brief Returns plain-text representation of the RssItem.
 ///
 /// Markup is mostly stripped. Links are numbered and tagged. The text is
