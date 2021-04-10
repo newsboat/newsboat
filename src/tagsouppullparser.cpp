@@ -29,7 +29,7 @@ TagSoupPullParser::TagSoupPullParser(std::istream& is)
 
 TagSoupPullParser::~TagSoupPullParser() {}
 
-std::string TagSoupPullParser::get_attribute_value(
+nonstd::optional<std::string> TagSoupPullParser::get_attribute_value(
 	const std::string& name) const
 {
 	for (const auto& attr : attributes) {
@@ -37,7 +37,7 @@ std::string TagSoupPullParser::get_attribute_value(
 			return attr.second;
 		}
 	}
-	throw std::invalid_argument(_("attribute not found"));
+	return nonstd::nullopt;
 }
 
 TagSoupPullParser::Event TagSoupPullParser::get_event_type() const

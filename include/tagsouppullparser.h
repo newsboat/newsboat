@@ -5,6 +5,8 @@
 #include <utility>
 #include <vector>
 
+#include "3rd-party/optional.hpp"
+
 namespace newsboat {
 
 class TagSoupPullParser {
@@ -19,8 +21,7 @@ public:
 
 	TagSoupPullParser(std::istream& is);
 	virtual ~TagSoupPullParser();
-	void set_input(std::istream& is);
-	std::string get_attribute_value(const std::string& name) const;
+	nonstd::optional<std::string> get_attribute_value(const std::string& name) const;
 	Event get_event_type() const;
 	std::string get_text() const;
 	Event next();

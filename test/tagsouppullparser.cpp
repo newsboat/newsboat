@@ -30,8 +30,8 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "foo");
-	REQUIRE(xpp.get_attribute_value("quux") == "asdf");
-	REQUIRE(xpp.get_attribute_value("bar") == "qqq");
+	REQUIRE(xpp.get_attribute_value("quux").value() == "asdf");
+	REQUIRE(xpp.get_attribute_value("bar").value() == "qqq");
 
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
@@ -60,9 +60,9 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "xxx");
-	REQUIRE(xpp.get_attribute_value("foo") == "bar");
-	REQUIRE(xpp.get_attribute_value("baz") == "qu ux");
-	REQUIRE(xpp.get_attribute_value("hi") == "ho ho ho");
+	REQUIRE(xpp.get_attribute_value("foo").value() == "bar");
+	REQUIRE(xpp.get_attribute_value("baz").value() == "qu ux");
+	REQUIRE(xpp.get_attribute_value("hi").value() == "ho ho ho");
 
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
