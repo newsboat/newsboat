@@ -85,7 +85,7 @@ Controller::Controller(ConfigPaths& configpaths)
 	, refresh_on_start(false)
 	, api(0)
 	, configpaths(configpaths)
-	, queueManager(&cfg, &configpaths)
+	, queueManager(&cfg, configpaths.queue_file())
 {
 }
 

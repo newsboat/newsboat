@@ -3,17 +3,15 @@
 #include <fstream>
 #include <libxml/uri.h>
 
-#include "configpaths.h"
 #include "fmtstrformatter.h"
 #include "rssfeed.h"
-#include "stflpp.h"
 #include "utils.h"
 
 namespace newsboat {
 
-QueueManager::QueueManager(ConfigContainer* cfg_, ConfigPaths* paths_)
+QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 	: cfg(cfg_)
-	, paths(paths_)
+	, queue_file(std::move(queue_file))
 {}
 
 EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
@@ -22,7 +20,6 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	const std::string& url = item->enclosure_url();
 	const std::string filename = generate_enqueue_filename(item, feed);
 
-	const std::string queue_file = paths->queue_file();
 	std::fstream f;
 	f.open(queue_file, std::fstream::in);
 	if (f.is_open()) {
@@ -30,8 +27,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 			std::string line;
 			getline(f, line);
 			if (!f.eof() && !line.empty()) {
-				std::vector<std::string> fields =
-					utils::tokenize_quoted(line);
+				const auto fields = utils::tokenize_quoted(line);
 				if (fields.size() >= 1 && fields[0] == url) {
 					return {EnqueueStatus::URL_QUEUED_ALREADY, url};
 				}
@@ -43,8 +39,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 		f.close();
 	}
 
-	f.open(queue_file,
-		std::fstream::app | std::fstream::out);
+	f.open(queue_file, std::fstream::app | std::fstream::out);
 	if (!f.is_open()) {
 		return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, queue_file};
 	}
@@ -67,8 +62,8 @@ std::string get_hostname_from_url(const std::string& url)
 	return hostname;
 }
 
-std::string QueueManager::generate_enqueue_filename(std::shared_ptr<RssItem>
-	item,
+std::string QueueManager::generate_enqueue_filename(
+	std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
 	const std::string& url = item->enclosure_url();
@@ -123,29 +118,28 @@ EnqueueResult QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 {
 	std::lock_guard<std::mutex> lock(feed->item_mutex);
 	for (const auto& item : feed->items()) {
-		if (!item->enqueued() && item->enclosure_url().length() > 0) {
-			LOG(Level::DEBUG,
-				"QueueManager::autoenqueue: enclosure_url = "
-				"`%s' "
-				"enclosure_type = `%s'",
-				item->enclosure_url(),
-				item->enclosure_type());
-			if (utils::is_http_url(item->enclosure_url())) {
-				LOG(Level::INFO,
-					"QueueManager::autoenqueue: enqueuing "
-					"`%s'",
-					item->enclosure_url());
-				const auto result = enqueue_url(item, feed);
-				switch (result.status) {
-				case EnqueueStatus::QUEUED_SUCCESSFULLY:
-				case EnqueueStatus::URL_QUEUED_ALREADY:
-					// Not an issue, continue processing rest of items
-					break;
-				case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
-				case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
-					// Let caller of `autoenqueue` handle the issue
-					return result;
-				}
+		if (item->enqueued() || item->enclosure_url().empty()) {
+			continue;
+		}
+
+		LOG(Level::DEBUG,
+			"QueueManager::autoenqueue: enclosure_url = `%s' enclosure_type = `%s'",
+			item->enclosure_url(),
+			item->enclosure_type());
+		if (utils::is_http_url(item->enclosure_url())) {
+			LOG(Level::INFO,
+				"QueueManager::autoenqueue: enqueuing `%s'",
+				item->enclosure_url());
+			const auto result = enqueue_url(item, feed);
+			switch (result.status) {
+			case EnqueueStatus::QUEUED_SUCCESSFULLY:
+			case EnqueueStatus::URL_QUEUED_ALREADY:
+				// Not an issue, continue processing rest of items
+				break;
+			case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
+			case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
+				// Let caller of `autoenqueue` handle the issue
+				return result;
 			}
 		}
 	}

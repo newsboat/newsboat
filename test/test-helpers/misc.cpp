@@ -67,13 +67,34 @@ std::vector<std::string> TestHelpers::file_contents(const std::string& filepath)
 	return lines;
 }
 
-bool TestHelpers::starts_with(const std::string& input,
-	const std::string& prefix)
+bool TestHelpers::starts_with(const std::string& prefix,
+	const std::string& input)
 {
 	return input.substr(0, prefix.size()) == prefix;
+}
+
+bool TestHelpers::ends_with(const std::string& suffix,
+	const std::string& input)
+{
+	if (input.size() < suffix.size()) {
+		return false;
+	} else {
+		return input.substr(input.size() - suffix.size(), suffix.size()) == suffix;
+	}
 }
 
 bool TestHelpers::file_exists(const std::string& filepath)
 {
 	return access(filepath.c_str(), F_OK) == 0;
+}
+
+TEST_CASE("ends_with", "[TestHelpers]")
+{
+	REQUIRE_FALSE(TestHelpers::ends_with("bye", "hello"));
+	REQUIRE_FALSE(TestHelpers::ends_with("bye", "hi"));
+
+	REQUIRE(TestHelpers::ends_with("ype", "type"));
+	REQUIRE(TestHelpers::ends_with("pe", "type"));
+	REQUIRE(TestHelpers::ends_with("e", "type"));
+	REQUIRE(TestHelpers::ends_with("", "type"));
 }

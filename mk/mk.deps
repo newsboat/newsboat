@@ -649,16 +649,13 @@ src/queueloader.o: src/queueloader.cpp include/queueloader.h \
  include/strprintf.h include/utils.h 3rd-party/expected.hpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/queuemanager.o: src/queuemanager.cpp include/queuemanager.h \
- include/configpaths.h include/cliargsparser.h \
- target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/fmtstrformatter.h include/rssfeed.h include/matchable.h \
- include/rssitem.h include/matcher.h filter/FilterParser.h \
- include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
- include/configactionhandler.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/stflpp.h \
- include/utils.h
+ 3rd-party/optional.hpp include/rssitem.h include/matcher.h \
+ filter/FilterParser.h include/utils.h 3rd-party/expected.hpp \
+ include/configcontainer.h include/configactionhandler.h include/logger.h \
+ config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/utils.h
 src/regexmanager.o: src/regexmanager.cpp include/regexmanager.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h config.h include/confighandlerexception.h \
@@ -1038,6 +1035,17 @@ test/queueloader.o: test/queueloader.cpp include/queueloader.h \
  test/test-helpers/chmod.h test/test-helpers/misc.h \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
  include/configcontainer.h include/download.h
+test/queuemanager.o: test/queuemanager.cpp include/queuemanager.h \
+ 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
+ 3rd-party/optional.hpp test/test-helpers/misc.h \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ include/cache.h include/configcontainer.h include/configactionhandler.h \
+ include/configcontainer.h include/rssfeed.h include/matchable.h \
+ include/rssitem.h include/matcher.h filter/FilterParser.h \
+ include/utils.h 3rd-party/expected.hpp include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/rssitem.h \
+ include/utils.h
 test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h 3rd-party/catch.hpp \
