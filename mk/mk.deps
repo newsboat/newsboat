@@ -159,8 +159,8 @@ src/configparser.o: src/configparser.cpp include/configparser.h \
  include/configactionhandler.h config.h include/configexception.h \
  include/confighandlerexception.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/strprintf.h \
- include/tagsouppullparser.h include/utils.h 3rd-party/expected.hpp \
- 3rd-party/optional.hpp include/configcontainer.h include/logger.h \
+ include/tagsouppullparser.h 3rd-party/optional.hpp include/utils.h \
+ 3rd-party/expected.hpp include/configcontainer.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/configpaths.o: src/configpaths.cpp include/configpaths.h \
  include/cliargsparser.h \
@@ -407,8 +407,8 @@ src/history.o: src/history.cpp include/history.h \
 src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h config.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/strprintf.h \
- include/tagsouppullparser.h include/utils.h 3rd-party/expected.hpp \
- 3rd-party/optional.hpp include/configcontainer.h \
+ include/tagsouppullparser.h 3rd-party/optional.hpp include/utils.h \
+ 3rd-party/expected.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/inoreaderapi.o: src/inoreaderapi.cpp include/inoreaderapi.h \
@@ -787,11 +787,12 @@ src/stflpp.o: src/stflpp.cpp include/stflpp.h include/exception.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/strprintf.o: src/strprintf.cpp include/strprintf.h
 src/tagsouppullparser.o: src/tagsouppullparser.cpp \
- include/tagsouppullparser.h config.h include/logger.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
- include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
- include/configcontainer.h include/configactionhandler.h include/logger.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/xmlexception.h
+ include/tagsouppullparser.h 3rd-party/optional.hpp config.h \
+ include/logger.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/utils.h \
+ 3rd-party/expected.hpp include/configcontainer.h \
+ include/configactionhandler.h include/logger.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/textformatter.o: src/textformatter.cpp include/textformatter.h \
  include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
@@ -1099,7 +1100,7 @@ test/statusline.o: test/statusline.cpp include/statusline.h \
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
- include/tagsouppullparser.h 3rd-party/catch.hpp
+ include/tagsouppullparser.h 3rd-party/optional.hpp 3rd-party/catch.hpp
 test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
 test/test-helpers/chdir.o: test/test-helpers/chdir.cpp \

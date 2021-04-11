@@ -133,8 +133,7 @@ void HtmlRenderer::render(std::istream& input,
 	 *   - we then can iterate over all continuous elements, such as start
 	 * tag, close tag, text element, ...
 	 */
-	TagSoupPullParser xpp;
-	xpp.set_input(input);
+	TagSoupPullParser xpp(input);
 
 	for (TagSoupPullParser::Event e = xpp.next();
 		e != TagSoupPullParser::Event::END_DOCUMENT;
@@ -166,14 +165,11 @@ void HtmlRenderer::render(std::istream& input,
 			switch (extract_tag(xpp)) {
 			case HtmlTag::A: {
 				std::string link;
-				try {
-					link = xpp.get_attribute_value("href");
-				} catch (const std::invalid_argument&) {
-					LOG(Level::WARN,
-						"HtmlRenderer::render: found a "
-						"tag "
-						"with no href attribute");
-					link = "";
+				auto href_option = xpp.get_attribute_value("href");
+				if (href_option.has_value()) {
+					link = href_option.value();
+				} else {
+					LOG(Level::WARN, "HtmlRenderer::render: found a tag with no href attribute");
 				}
 				if (link.length() > 0) {
 					link_num = add_link(links,
@@ -205,28 +201,19 @@ void HtmlRenderer::render(std::istream& input,
 
 			case HtmlTag::EMBED: {
 				std::string type;
-				try {
-					type = xpp.get_attribute_value("type");
-				} catch (const std::invalid_argument&) {
-					LOG(Level::WARN,
-						"HtmlRenderer::render: found "
-						"embed "
-						"object without type "
-						"attribute");
-					type = "";
+				auto type_option = xpp.get_attribute_value("type");
+				if (type_option.has_value()) {
+					type = type_option.value();
+				} else {
+					LOG(Level::WARN, "HtmlRenderer::render: found embed object without type attribute");
 				}
 				if (type == "application/x-shockwave-flash") {
 					std::string link;
-					try {
-						link = xpp.get_attribute_value(
-								"src");
-					} catch (const std::invalid_argument&) {
-						LOG(Level::WARN,
-							"HtmlRenderer::render: "
-							"found embed object "
-							"without src "
-							"attribute");
-						link = "";
+					auto link_option = xpp.get_attribute_value("src");
+					if (link_option.has_value()) {
+						link = link_option.value();
+					} else {
+						LOG(Level::WARN, "HtmlRenderer::render: found embed object without src attribute");
 					}
 					if (link.length() > 0) {
 						link_num = add_link(links,
@@ -247,18 +234,16 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::IFRAME: {
 				std::string iframe_url;
 				std::string iframe_title;
-				try {
-					iframe_url = xpp.get_attribute_value("src");
-				} catch (const std::invalid_argument&) {
-					LOG(Level::WARN,
-						"HtmlRenderer::render: "
-						"found iframe tag without src attribute");
+				auto src_option = xpp.get_attribute_value("src");
+				if (src_option.has_value()) {
+					iframe_url = src_option.value();
+				} else {
+					LOG(Level::WARN, "HtmlRenderer::render: found iframe tag without src attribute");
 					iframe_url = "";
 				}
-				try {
-					iframe_title = xpp.get_attribute_value("title");
-				} catch (const std::invalid_argument&) {
-					iframe_title = "";
+				auto title_option = xpp.get_attribute_value("title");
+				if (title_option.has_value()) {
+					iframe_title = title_option.value();
 				}
 				if (iframe_url.length() > 0) {
 					add_nonempty_line(curline, tables, lines);
@@ -306,26 +291,21 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::IMG: {
 				std::string img_url;
 				std::string img_label;
-				try {
-					img_url = xpp.get_attribute_value("src");
-				} catch (const std::invalid_argument&) {
-					LOG(Level::WARN,
-						"HtmlRenderer::render: "
-						"found img tag with no src "
-						"attribute");
-					img_url = "";
+				auto src_option = xpp.get_attribute_value("src");
+				if (src_option.has_value()) {
+					img_url = src_option.value();
+				} else {
+					LOG(Level::WARN, "HtmlRenderer::render: found img tag with no src attribute");
 				}
 				// Prefer `alt' over `title'
-				try {
-					img_label = xpp.get_attribute_value("alt");
-				} catch (const std::invalid_argument&) {
-					img_label = "";
+				auto alt_option = xpp.get_attribute_value("alt");
+				if (alt_option.has_value()) {
+					img_label = alt_option.value();
 				}
 				if (img_label.empty()) {
-					try {
-						img_label = xpp.get_attribute_value("title");
-					} catch (const std::invalid_argument&) {
-						img_label = "";
+					auto title_option = xpp.get_attribute_value("title");
+					if (title_option.has_value()) {
+						img_label = title_option.value();
 					}
 				}
 				if (!img_url.empty()) {
@@ -374,21 +354,19 @@ void HtmlRenderer::render(std::istream& input,
 				{
 					unsigned int ol_count = 1;
 					std::string ol_count_str;
-					try {
-						ol_count_str =
-							xpp.get_attribute_value(
-								"start");
-					} catch (const std::invalid_argument&) {
+					auto start_option = xpp.get_attribute_value("start");
+					if (start_option.has_value()) {
+						ol_count_str = start_option.value();
+					} else {
 						ol_count_str = "1";
 					}
 					ol_count = utils::to_u(ol_count_str, 1);
 					ol_counts.push_back(ol_count);
 
 					std::string ol_type;
-					try {
-						ol_type =
-							xpp.get_attribute_value(
-								"type");
+					auto type_option = xpp.get_attribute_value("type");
+					if (type_option.has_value()) {
+						ol_type = type_option.value();
 						if (ol_type != "1" &&
 							ol_type != "a" &&
 							ol_type != "A" &&
@@ -396,7 +374,7 @@ void HtmlRenderer::render(std::istream& input,
 							ol_type != "I") {
 							ol_type = "1";
 						}
-					} catch (const std::invalid_argument&) {
+					} else {
 						ol_type = "1";
 					}
 					ol_types.push_back(ol_type[0]);
@@ -509,11 +487,10 @@ void HtmlRenderer::render(std::istream& input,
 					curline, 0); // no indent in tables
 
 				bool has_border = false;
-				try {
-					std::string b = xpp.get_attribute_value(
-							"border");
-					has_border = (utils::to_u(b, 0) > 0);
-				} catch (const std::invalid_argument&) {
+				auto b = xpp.get_attribute_value("border");
+				if (b.has_value()) {
+					has_border = (utils::to_u(b.value(), 0) > 0);
+				} else {
 					// is ok, no border then
 				}
 				tables.push_back(Table(has_border));
@@ -528,12 +505,10 @@ void HtmlRenderer::render(std::istream& input,
 
 			case HtmlTag::TH: {
 				size_t span = 1;
-				try {
-					span = utils::to_u(
-							xpp.get_attribute_value(
-								"colspan"),
-							1);
-				} catch (const std::invalid_argument&) {
+				auto colspan_option = xpp.get_attribute_value("colspan");
+				if (colspan_option.has_value()) {
+					span = utils::to_u(colspan_option.value(), 1);
+				} else {
 					// is ok, span 1 then
 				}
 				if (!tables.empty()) {
@@ -545,12 +520,10 @@ void HtmlRenderer::render(std::istream& input,
 
 			case HtmlTag::TD: {
 				size_t span = 1;
-				try {
-					span = utils::to_u(
-							xpp.get_attribute_value(
-								"colspan"),
-							1);
-				} catch (const std::invalid_argument&) {
+				auto colspan_option = xpp.get_attribute_value("colspan");
+				if (colspan_option.has_value()) {
+					span = utils::to_u(colspan_option.value(), 1);
+				} else {
 					// is ok, span 1 then
 				}
 				if (!tables.empty()) {
@@ -589,10 +562,9 @@ void HtmlRenderer::render(std::istream& input,
 				// <source> elements
 				video_count++;
 
-				try {
-					video_url = xpp.get_attribute_value("src");
-				} catch (const std::invalid_argument&) {
-					video_url = "";
+				auto src_option = xpp.get_attribute_value("src");
+				if (src_option.has_value()) {
+					video_url = src_option.value();
 				}
 
 				if (!video_url.empty()) {
@@ -636,10 +608,9 @@ void HtmlRenderer::render(std::istream& input,
 				// <source> elements
 				audio_count++;
 
-				try {
-					audio_url = xpp.get_attribute_value("src");
-				} catch (const std::invalid_argument&) {
-					audio_url = "";
+				auto src_option = xpp.get_attribute_value("src");
+				if (src_option.has_value()) {
+					audio_url = src_option.value();
 				}
 
 				if (!audio_url.empty()) {
@@ -656,14 +627,11 @@ void HtmlRenderer::render(std::istream& input,
 			case HtmlTag::SOURCE: {
 				std::string source_url;
 
-				try {
-					source_url = xpp.get_attribute_value("src");
-				} catch (const std::invalid_argument&) {
-					LOG(Level::WARN,
-						"HtmlRenderer::render: "
-						"found source tag with no src "
-						"attribute");
-					source_url = "";
+				auto src_option = xpp.get_attribute_value("src");
+				if (src_option.has_value()) {
+					source_url = src_option.value();
+				} else {
+					LOG(Level::WARN, "HtmlRenderer::render: found source tag with no src attribute");
 				}
 
 				if (inside_video && !source_url.empty()) {
