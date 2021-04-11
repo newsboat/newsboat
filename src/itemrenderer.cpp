@@ -146,10 +146,13 @@ void item_renderer::render_plaintext(
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines)
 {
+	std::string normalized = utils::replace_all(source, "\r\n", "\n");
+	normalized = utils::replace_all(normalized, "\r", "\n");
+
 	std::string::size_type pos = 0;
-	while (pos < source.size()) {
-		const auto end_of_line = source.find_first_of("\r\n", pos);
-		const std::string line = source.substr(pos, end_of_line - pos);
+	while (pos < normalized.size()) {
+		const auto end_of_line = normalized.find_first_of("\n", pos);
+		const std::string line = normalized.substr(pos, end_of_line - pos);
 		lines.push_back(std::make_pair(LineType::wrappable, line));
 		if (end_of_line == std::string::npos) {
 			break;

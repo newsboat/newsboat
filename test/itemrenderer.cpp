@@ -697,4 +697,20 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 			"back to no indentation"
 		});
 	}
+
+	SECTION(R"(text is split on sequences of \r\n, and on separate \r and \n characters)") {
+		const std::string text =
+			"Lorem ipsum\r\ndolor sit amet\n\rconsectetur adipiscing elit\rsed do eiusmod tempor incididunt ut labore\net dolore magna\r\n\r\naliqua.";
+
+		check(text, {
+			"Lorem ipsum",
+			"dolor sit amet",
+			"",
+			"consectetur adipiscing elit",
+			"sed do eiusmod tempor incididunt ut labore",
+			"et dolore magna",
+			"",
+			"aliqua."
+		});
+	}
 }
