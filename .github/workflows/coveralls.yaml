@@ -78,7 +78,7 @@ jobs:
 
       - name: Calculate test coverage
         # Note that we override the path to gcov tool.
-        run: GCOV=$(pwd)/gcov grcov . --binary-path ./target/debug/deps/ --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
+        run: GCOV=$(pwd)/gcov grcov . --binary-path ./test/test --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
 
       - name: Submit coverage to Coveralls
         uses: coverallsapp/github-action@master
