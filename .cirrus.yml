@@ -12,6 +12,10 @@ freebsd_task:
           freebsd_instance:
             image: freebsd-12-2-release-amd64
             << : *freebsd_resource_settings
+        - name: FreeBSD 13.0
+          freebsd_instance:
+            image: freebsd-13-0-release-amd64
+            << : *freebsd_resource_settings
 
     cargo_cache: &cargo_cache
         # This works in conjunction with after_cache_script and
