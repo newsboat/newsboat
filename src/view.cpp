@@ -4,7 +4,6 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
-#include <curses.h>
 #include <dirent.h>
 #include <fstream>
 #include <grp.h>

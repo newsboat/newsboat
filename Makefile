@@ -203,10 +203,10 @@ clean-doc:
 		doc/example-config doc/generate doc/generate2 \
 		doc/gen-example-config
 
-clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-librsspp clean-libnewsboat
+clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
 	$(RM) $(STFLHDRS) xlicense.h
 
-distclean: clean clean-mo clean-test profclean
+distclean: clean profclean
 	$(RM) core *.core core.* config.mk
 
 doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html doc/example-config

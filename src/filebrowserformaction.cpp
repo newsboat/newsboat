@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cinttypes>
 #include <cstring>
-#include <curses.h>
+#include <ncurses.h>
 #include <dirent.h>
 #include <grp.h>
 #include <iomanip>
