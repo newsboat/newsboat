@@ -12,6 +12,7 @@ fn add_cxxbridge(module: &str) {
 fn main() {
     add_cxxbridge("cliargsparser");
     add_cxxbridge("fslock");
+    add_cxxbridge("history");
     add_cxxbridge("keymap");
     add_cxxbridge("logger");
     add_cxxbridge("scopemeasure");

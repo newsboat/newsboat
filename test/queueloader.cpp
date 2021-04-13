@@ -334,8 +334,8 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 		"here%27s_one_with_a_quote.mp4");
 	// These two downloads should have filenames based on current time, so we
 	// only check their prefixes.
-	REQUIRE(TestHelpers::starts_with(downloads[3].filename(), download_path));
-	REQUIRE(TestHelpers::starts_with(downloads[4].filename(), download_path));
+	REQUIRE(TestHelpers::starts_with(download_path, downloads[3].filename()));
+	REQUIRE(TestHelpers::starts_with(download_path, downloads[4].filename()));
 }
 
 TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "

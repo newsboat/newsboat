@@ -1,5 +1,6 @@
 #include "itemrenderer.h"
 
+#include <set>
 #include <sstream>
 
 #include "configcontainer.h"
@@ -8,6 +9,17 @@
 #include "textformatter.h"
 
 namespace newsboat {
+
+bool should_render_as_html(const std::string mime_type)
+{
+	static const std::set<std::string> html_mime_types = {
+		"html",
+		"xhtml",
+		"text/html",
+		"application/xhtml+xml"
+	};
+	return (html_mime_types.count(mime_type) >= 1);
+}
 
 std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
 {
@@ -130,17 +142,42 @@ void render_html(
 	}
 }
 
+void item_renderer::render_plaintext(
+	const std::string& source,
+	std::vector<std::pair<LineType, std::string>>& lines)
+{
+	std::string normalized = utils::replace_all(source, "\r\n", "\n");
+	normalized = utils::replace_all(normalized, "\r", "\n");
+
+	std::string::size_type pos = 0;
+	while (pos < normalized.size()) {
+		const auto end_of_line = normalized.find_first_of("\n", pos);
+		const std::string line = normalized.substr(pos, end_of_line - pos);
+		lines.push_back(std::make_pair(LineType::wrappable, line));
+		if (end_of_line == std::string::npos) {
+			break;
+		}
+		pos = end_of_line + 1;
+	}
+}
+
 std::string item_renderer::to_plain_text(
 	ConfigContainer& cfg,
 	std::shared_ptr<RssItem> item)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	std::vector<LinkPair> links;
+	const auto item_description = item->description();
 
 	prepare_header(item, lines, links, true);
 	const auto base = get_item_base_link(item);
-	render_html(cfg, utils::utf8_to_locale(item->description().text), lines, links,
-		base, true);
+	const auto body = utils::utf8_to_locale(item_description.text);
+
+	if (should_render_as_html(item_description.mime)) {
+		render_html(cfg, body, lines, links, base, true);
+	} else {
+		render_plaintext(body, lines);
+	}
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -163,11 +200,17 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	std::vector<LinkPair>& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
+	const auto item_description = item->description();
 
 	prepare_header(item, lines, links);
 	const std::string baseurl = get_item_base_link(item);
-	const auto body = utils::utf8_to_locale(item->description().text);
-	render_html(cfg, body, lines, links, baseurl, false);
+	const auto body = utils::utf8_to_locale(item_description.text);
+
+	if (should_render_as_html(item_description.mime)) {
+		render_html(cfg, body, lines, links, baseurl, false);
+	} else {
+		render_plaintext(body, lines);
+	}
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

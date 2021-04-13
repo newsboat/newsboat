@@ -190,13 +190,13 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		ConfigPaths paths;
 		REQUIRE(paths.initialized());
 
-		REQUIRE(TestHelpers::starts_with(paths.url_file(), tmp.get_path()));
-		REQUIRE(TestHelpers::starts_with(paths.config_file(), tmp.get_path()));
-		REQUIRE(TestHelpers::starts_with(paths.cache_file(), tmp.get_path()));
-		REQUIRE(TestHelpers::starts_with(paths.lock_file(), tmp.get_path()));
-		REQUIRE(TestHelpers::starts_with(paths.queue_file(), tmp.get_path()));
-		REQUIRE(TestHelpers::starts_with(paths.search_file(), tmp.get_path()));
-		REQUIRE(TestHelpers::starts_with(paths.cmdline_file(), tmp.get_path()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.url_file()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.config_file()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.cache_file()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.lock_file()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.queue_file()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.search_file()));
+		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.cmdline_file()));
 
 		REQUIRE(paths.create_dirs());
 

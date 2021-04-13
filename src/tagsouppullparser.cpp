@@ -11,7 +11,6 @@
 #include "config.h"
 #include "logger.h"
 #include "utils.h"
-#include "xmlexception.h"
 
 namespace newsboat {
 
@@ -21,21 +20,15 @@ namespace newsboat {
  * remotely looks like XML. We use this parser for the HTML renderer.
  */
 
-TagSoupPullParser::TagSoupPullParser()
-	: inputstream(0)
+TagSoupPullParser::TagSoupPullParser(std::istream& is)
+	: inputstream(is)
 	, current_event(Event::START_DOCUMENT)
 {
 }
 
 TagSoupPullParser::~TagSoupPullParser() {}
 
-void TagSoupPullParser::set_input(std::istream& is)
-{
-	inputstream = &is;
-	current_event = Event::START_DOCUMENT;
-}
-
-std::string TagSoupPullParser::get_attribute_value(
+nonstd::optional<std::string> TagSoupPullParser::get_attribute_value(
 	const std::string& name) const
 {
 	for (const auto& attr : attributes) {
@@ -43,7 +36,7 @@ std::string TagSoupPullParser::get_attribute_value(
 			return attr.second;
 		}
 	}
-	throw std::invalid_argument(_("attribute not found"));
+	return nonstd::nullopt;
 }
 
 TagSoupPullParser::Event TagSoupPullParser::get_event_type() const
@@ -66,7 +59,7 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	attributes.clear();
 	text = "";
 
-	if (inputstream->eof()) {
+	if (inputstream.eof()) {
 		current_event = Event::END_DOCUMENT;
 	}
 
@@ -75,8 +68,8 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	case Event::START_TAG:
 	case Event::END_TAG: {
 		char c = 0;
-		inputstream->read(&c, 1);
-		if (inputstream->eof()) {
+		inputstream.read(&c, 1);
+		if (inputstream.eof()) {
 			current_event = Event::END_DOCUMENT;
 		} else if (c == '<') {
 			handle_tag();
@@ -120,14 +113,12 @@ void TagSoupPullParser::add_attribute(std::string s)
 	attributes.push_back(Attribute(attribname, attribvalue));
 }
 
-std::string TagSoupPullParser::read_tag()
+nonstd::optional<std::string> TagSoupPullParser::read_tag()
 {
 	std::string s;
-	getline(*inputstream, s, '>');
-	if (inputstream->eof()) {
-		// TODO: test whether this works reliably
-		throw XmlException(
-			_("EOF found while reading XML tag"));
+	getline(inputstream, s, '>');
+	if (inputstream.eof()) {
+		return nonstd::nullopt;
 	}
 	return s;
 }
@@ -594,22 +585,20 @@ void TagSoupPullParser::parse_tag(const std::string& tagstr)
 
 void TagSoupPullParser::handle_tag()
 {
-	std::string s;
-	try {
-		s = read_tag();
-	} catch (const XmlException&) {
+	auto s = read_tag();
+	if (s.has_value()) {
+		parse_tag(s.value());
+		current_event = determine_tag_type();
+	} else {
 		current_event = Event::END_DOCUMENT;
-		return;
 	}
-	parse_tag(s);
-	current_event = determine_tag_type();
 }
 
 void TagSoupPullParser::handle_text(char c)
 {
 	text.push_back(c);
 	std::string tmp;
-	getline(*inputstream, tmp, '<');
+	getline(inputstream, tmp, '<');
 	text.append(tmp);
 	text = decode_entities(text);
 	utils::remove_soft_hyphens(text);
