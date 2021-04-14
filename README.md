@@ -88,6 +88,13 @@ There are numerous ways:
 
       $ sudo snap install newsboat
 
+  Our snap [only supports `xdg-open` as the browser][snap-browser], and you
+  can't run arbitrary scripts for rendering and bookmarking. The reason is
+  strict confinement; if we disabled it, the snap would be no better than
+  a distribution's package;
+
+  [snap-browser]: https://newsboat.org/releases/2.23/docs/faq.html#_regarding_newsboat_snap_installations
+
 - [build from source with Docker](doc/docker.md). Note that the resulting binary
     might not run outside of that same Docker container if your system doesn't
     have all the necessary libraries, or if their versions are too old;
