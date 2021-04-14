@@ -13,8 +13,17 @@ Newsboat [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/newsboat/ne
 Newsboat is an RSS/Atom feed reader for the text console. It's an actively
 maintained fork of Newsbeuter.
 
-Logo [by noobilanderi](https://groups.google.com/forum/#!topic/newsboat/Xm5pTsbeMEk),
-licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+A feed reader pulls updates directly from sites like blogs and news agencies,
+and lets you review them in a single interface. Many times, the feed includes
+the full text of the update, so you don't even need to start a web browser! You
+can learn more about feed readers [on
+Wikipedia](https://en.wikipedia.org/wiki/News_aggregator).
+
+<img
+    style="display: block; margin-left: auto; margin-right: auto;"
+    src="https://newsboat.org/images/2.23-screenshot_2x-ec3449d9.png"
+    alt="Viewing an article in Newsboat"
+    />
 
 Downloading
 -----------
@@ -137,4 +146,6 @@ License
 -------
 
 Newsboat is licensed under [the MIT
-license](https://opensource.org/licenses/MIT); see the LICENSE file.
+license](https://opensource.org/licenses/MIT); see the LICENSE file. Logo [by
+noobilanderi](https://groups.google.com/forum/#!topic/newsboat/Xm5pTsbeMEk),
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
