@@ -25,6 +25,25 @@ Wikipedia](https://en.wikipedia.org/wiki/News_aggregator).
     alt="Viewing an article in Newsboat"
     />
 
+Notable features
+----------------
+
+* Powerful built-in HTML renderer — no need to start the web browser to view
+    text-only entries
+* Send links and whole articles to third-party services using [bookmarking
+    scripts](https://newsboat.org/releases/2.23/docs/newsboat.html#_bookmarking)
+* [Filter articles out](https://newsboat.org/releases/2.23/docs/newsboat.html#_killfiles)
+    based on title, author, contents etc.
+* [Aggregate articles](https://newsboat.org/releases/2.23/docs/newsboat.html#_query_feeds)
+    into meta-feeds by arbitrary criteria
+* [Apply transformations](https://newsboat.org/releases/2.23/docs/newsboat.html#_scripts_and_filters_snownews_extensions)
+    to feeds before passing them into Newsboat
+* Integrates with services like The Old Reader, NewsBlur, FeedHQ
+    and [many more](https://newsboat.org/releases/2.23/docs/newsboat.html#_newsboat_as_a_client_for_newsreading_services)
+* [Macros](https://newsboat.org/releases/2.23/docs/newsboat.html#_macro_support)
+    to execute sequences of actions with just two keystrokes
+* Rudimentary [podcast support](https://newsboat.org/releases/2.23/docs/newsboat.html#_podcast_support)
+
 Downloading
 -----------
 
