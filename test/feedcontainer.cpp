@@ -382,7 +382,8 @@ TEST_CASE("sort_feeds() sorts by number of articles in a feed "
 	}
 }
 
-TEST_CASE("sort_feeds() and keep in-group order", "[FeedContainer]")
+TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles",
+	"[FeedContainer]")
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -432,6 +433,58 @@ TEST_CASE("sort_feeds() and keep in-group order", "[FeedContainer]")
 		}
 
 		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"};
+		REQUIRE(expected == actual);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by order", "[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, int> name_to_unreads = {
+		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : name_to_unreads) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, "");
+		feed->set_title(entry.first);
+		feed->set_order(entry.second);
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::NONE;
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("descending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"a", "b", "c", "d", "e"};
 		REQUIRE(expected == actual);
 	}
 }

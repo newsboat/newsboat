@@ -18,11 +18,11 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 		std::stable_sort(
 			feeds.begin(), feeds.end(),
 		[&](std::shared_ptr<RssFeed> a, std::shared_ptr<RssFeed> b) {
-			bool result = a->get_order() < b->get_order();
 			if (sort_strategy.sd == SortDirection::ASC) {
-				result = !result;
+				return a->get_order() > b->get_order();
+			} else {
+				return a->get_order() < b->get_order();
 			}
-			return result;
 		});
 		break;
 	case FeedSortMethod::FIRST_TAG:
