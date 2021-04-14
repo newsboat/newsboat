@@ -75,15 +75,11 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 		std::stable_sort(
 			feeds.begin(), feeds.end(),
 		[&](std::shared_ptr<RssFeed> a, std::shared_ptr<RssFeed> b) {
-			int diff = a->unread_item_count() - b->unread_item_count();
-			bool result = false;
-			if (diff != 0) {
-				if (sort_strategy.sd == SortDirection::DESC) {
-					diff *= -1;
-				}
-				result = diff > 0;
+			if (sort_strategy.sd == SortDirection::DESC) {
+				return a->unread_item_count() < b->unread_item_count();
+			} else {
+				return a->unread_item_count() > b->unread_item_count();
 			}
-			return result;
 		});
 		break;
 	case FeedSortMethod::LAST_UPDATED:
