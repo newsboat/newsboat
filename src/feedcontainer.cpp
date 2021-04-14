@@ -9,28 +9,6 @@
 
 namespace newsboat {
 
-class UnreadArticeCountComparator {
-	FeedSortStrategy sort_strategy;
-
-public:
-	UnreadArticeCountComparator(const FeedSortStrategy& sort_strategy)
-		: sort_strategy(sort_strategy) {}
-
-	bool operator()(const std::shared_ptr<RssFeed>& a,
-		const std::shared_ptr<RssFeed>& b)
-	{
-		int diff = a->unread_item_count() - b->unread_item_count();
-		bool result = false;
-		if (diff != 0) {
-			if (sort_strategy.sd == SortDirection::DESC) {
-				diff *= -1;
-			}
-			result = diff > 0;
-		}
-		return result;
-	}
-};
-
 void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
@@ -95,7 +73,18 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 		break;
 	case FeedSortMethod::UNREAD_ARTICLE_COUNT:
 		std::stable_sort(
-			feeds.begin(), feeds.end(),UnreadArticeCountComparator(sort_strategy));
+			feeds.begin(), feeds.end(),
+		[&](std::shared_ptr<RssFeed> a, std::shared_ptr<RssFeed> b) {
+			int diff = a->unread_item_count() - b->unread_item_count();
+			bool result = false;
+			if (diff != 0) {
+				if (sort_strategy.sd == SortDirection::DESC) {
+					diff *= -1;
+				}
+				result = diff > 0;
+			}
+			return result;
+		});
 		break;
 	case FeedSortMethod::LAST_UPDATED:
 		std::stable_sort(
