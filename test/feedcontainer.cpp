@@ -545,7 +545,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by articles",
 	}
 }
 
-TEST_CASE("sort_feeds() and keep in-group order when sorting by lsat updated item",
+TEST_CASE("sort_feeds() and keep in-group order when sorting by last updated item",
 	"[FeedContainer]")
 {
 	ConfigContainer cfg;
@@ -596,6 +596,58 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by lsat updated ite
 		}
 
 		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"} ;
+		REQUIRE(expected == actual);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by title",
+	"[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, std::string> url_to_title = {
+		{"1", "c"}, {"2", "b"}, {"3", "a"}, {"4", "a"}, {"5", "a"}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : url_to_title) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, entry.first);
+		feed->set_title(entry.second);
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::TITLE;
+	SECTION("descending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto url = feed->rssurl();
+			actual.push_back(url);
+		}
+
+		const std::vector<std::string> expected = {"3", "4", "5", "2", "1"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto url = feed->rssurl();
+			actual.push_back(url);
+		}
+
+		const std::vector<std::string> expected = {"1", "2", "3", "4", "5"} ;
 		REQUIRE(expected == actual);
 	}
 }

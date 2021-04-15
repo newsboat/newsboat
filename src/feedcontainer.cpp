@@ -3,7 +3,6 @@
 #include <algorithm> // stable_sort
 #include <numeric>   // accumulate
 #include <unordered_set>
-#include <iostream>
 
 #include "rssfeed.h"
 #include "utils.h"
@@ -48,20 +47,17 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			return result;
 		});
 		break;
-
-
-	// TODO
 	case FeedSortMethod::TITLE:
 		std::stable_sort(
 			feeds.begin(), feeds.end(),
 		[&](std::shared_ptr<RssFeed> a, std::shared_ptr<RssFeed> b) {
 			const auto left = a->title();
 			const auto right = b->title();
-			bool result = utils::strnaturalcmp(left, right) < 0;
 			if (sort_strategy.sd == SortDirection::ASC) {
-				result = !result;
+				return utils::strnaturalcmp(left, right) > 0;
+			} else {
+				return utils::strnaturalcmp(left, right) < 0;
 			}
-			return result;
 		});
 		break;
 	case FeedSortMethod::ARTICLE_COUNT:
