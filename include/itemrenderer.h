@@ -21,7 +21,7 @@ std::string get_feedtitle(std::shared_ptr<RssItem> item);
 
 /// \brief Splits text into lines marked as wrappable
 void render_plaintext(const std::string& source,
-	std::vector<std::pair<LineType, std::string>>& lines);
+	std::vector<std::pair<LineType, std::string>>& lines, bool raw = false);
 
 /// \brief Returns plain-text representation of the RssItem.
 ///

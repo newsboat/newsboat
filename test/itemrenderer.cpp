@@ -661,9 +661,9 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 {
 	// Verifies that render_plaintext creates the expected lines, all marked as wrappable
 	const auto check = [](const std::string input,
-	const std::vector<std::string>& expected_lines) {
+	const std::vector<std::string>& expected_lines, bool for_stfl = true) {
 		std::vector<std::pair<LineType, std::string>> output;
-		item_renderer::render_plaintext(input, output);
+		item_renderer::render_plaintext(input, output, !for_stfl);
 
 		REQUIRE(output.size() == expected_lines.size());
 		for (std::size_t i = 0; i < output.size(); ++i) {
@@ -712,5 +712,25 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 			"",
 			"aliqua."
 		});
+	}
+
+	SECTION("render_plaintext escapes angle brackets for STFL") {
+		const std::string text = "this < should be escaped >\n<p>test text</p>";
+
+		check(text, {
+			"this <> should be escaped >",
+			"<>p>test text<>/p>"
+		});
+	}
+
+	SECTION("render_plaintext does not escape when rendering towards some plaintext output") {
+		const std::string text = "this < should *not* be escaped >\n<p>test text</p>";
+
+		const bool render_for_stfl = false;
+
+		check(text, {
+			"this < should *not* be escaped >",
+			"<p>test text</p>"
+		}, render_for_stfl);
 	}
 }

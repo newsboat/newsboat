@@ -144,7 +144,7 @@ void render_html(
 
 void item_renderer::render_plaintext(
 	const std::string& source,
-	std::vector<std::pair<LineType, std::string>>& lines)
+	std::vector<std::pair<LineType, std::string>>& lines, bool raw)
 {
 	std::string normalized = utils::replace_all(source, "\r\n", "\n");
 	normalized = utils::replace_all(normalized, "\r", "\n");
@@ -153,7 +153,14 @@ void item_renderer::render_plaintext(
 	while (pos < normalized.size()) {
 		const auto end_of_line = normalized.find_first_of("\n", pos);
 		const std::string line = normalized.substr(pos, end_of_line - pos);
-		lines.push_back(std::make_pair(LineType::wrappable, line));
+
+		if (raw) {
+			lines.push_back(std::make_pair(LineType::wrappable, line));
+		} else {
+			const std::string stfl_quoted_line = utils::quote_for_stfl(line);
+			lines.push_back(std::make_pair(LineType::wrappable, stfl_quoted_line));
+		}
+
 		if (end_of_line == std::string::npos) {
 			break;
 		}
