@@ -237,8 +237,8 @@ for this release also includes Ivan Tham.
     der Schagt)
 - Arrow keys not working in the tag list (Dennis van der Schagt)
 - Inoreader not marking items unread (#1109) (José Rui Barros)
-- `content` attribute being unavailable to query feeds (#111) (Dennis van der
-    Schagt)
+- `content` attribute being unavailable to query feeds (#111, #218)
+    (Dennis van der Schagt)
 - Newsboat sometimes opening wrong items (#72, #1126) (Dennis van der Schagt)
 - Unread items being double-counted by `-x print-unread` and notifications
     (#444, #1120) (Alexander Batischev)
