@@ -571,18 +571,8 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 	const auto methods =
 		utils::tokenize(get_configvalue("article-sort-order"), "-");
 
-	if (!methods.empty() &&
-		methods[0] == "date") { // date is ascending by default
-		ss.sm = ArtSortMethod::DATE;
-		ss.sd = SortDirection::ASC;
-		if (methods.size() > 1 && methods[1] == "desc") {
-			ss.sd = SortDirection::DESC;
-		}
-	} else { // all other sort methods are ascending by default
-		ss.sd = SortDirection::ASC;
-		if (methods.size() > 1 && methods[1] == "desc") {
-			ss.sd = SortDirection::DESC;
-		}
+	if (methods.size() > 1 && methods[1] == "desc") {
+		ss.sd = SortDirection::DESC;
 	}
 
 	if (!methods.empty()) {
