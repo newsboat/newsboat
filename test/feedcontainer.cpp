@@ -1,6 +1,7 @@
 #include "3rd-party/catch.hpp"
 
 #include <memory>
+#include <string>
 
 #include "cache.h"
 #include "configcontainer.h"
@@ -379,6 +380,275 @@ TEST_CASE("sort_feeds() sorts by number of articles in a feed "
 		REQUIRE(sorted_feeds[2]->total_item_count() == 1);
 		REQUIRE(sorted_feeds[3]->total_item_count() == 2);
 		REQUIRE(sorted_feeds[4]->total_item_count() == 3);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles",
+	"[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, int> name_to_unreads = {
+		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : name_to_unreads) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, "");
+		feed->set_title(entry.first);
+		for (int i = 0; i < entry.second; ++i) {
+			feed->add_item(std::make_shared<RssItem>(&rsscache));
+		}
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::UNREAD_ARTICLE_COUNT;
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"a", "b", "c", "d", "e"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("descending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"};
+		REQUIRE(expected == actual);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by order", "[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, int> name_to_order = {
+		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : name_to_order) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, "");
+		feed->set_title(entry.first);
+		feed->set_order(entry.second);
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::NONE;
+	SECTION("descending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"a", "b", "c", "d", "e"};
+		REQUIRE(expected == actual);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by articles",
+	"[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, int> name_to_articles = {
+		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : name_to_articles) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, "");
+		feed->set_title(entry.first);
+		for (int i=0; i<entry.second; ++i) {
+			feed->add_item(std::make_shared<RssItem>(&rsscache));
+		}
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::ARTICLE_COUNT;
+	SECTION("descending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"a", "b", "c", "d", "e"};
+		REQUIRE(expected == actual);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by last updated item",
+	"[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, int> name_to_date = {
+		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : name_to_date) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, "");
+		feed->set_title(entry.first);
+		auto item = std::make_shared<RssItem>(&rsscache);
+		item->set_pubDate(entry.second);
+		feed->add_item(item);
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::LAST_UPDATED;
+	SECTION("descending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"a", "b", "c", "d", "e"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto title = feed->title();
+			actual.push_back(title);
+		}
+
+		const std::vector<std::string> expected = {"c", "d", "e", "b", "a"} ;
+		REQUIRE(expected == actual);
+	}
+}
+
+TEST_CASE("sort_feeds() and keep in-group order when sorting by title",
+	"[FeedContainer]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::map<std::string, std::string> url_to_title = {
+		{"1", "c"}, {"2", "b"}, {"3", "a"}, {"4", "a"}, {"5", "a"}
+	};
+
+	std::vector<std::shared_ptr<RssFeed>> feeds;
+	for (const auto& entry : url_to_title) {
+		const auto feed = std::make_shared<RssFeed>(&rsscache, entry.first);
+		feed->set_title(entry.second);
+		feeds.push_back(feed);
+	}
+	FeedContainer feedcontainer;
+	feedcontainer.set_feeds(feeds);
+
+	FeedSortStrategy strategy;
+	strategy.sm = FeedSortMethod::TITLE;
+	SECTION("descending order") {
+		strategy.sd = SortDirection::DESC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto url = feed->rssurl();
+			actual.push_back(url);
+		}
+
+		const std::vector<std::string> expected = {"3", "4", "5", "2", "1"};
+		REQUIRE(expected == actual);
+	}
+
+	SECTION("acsending order") {
+		strategy.sd = SortDirection::ASC;
+		feedcontainer.sort_feeds(strategy);
+		const auto sorted_feeds = feedcontainer.get_all_feeds();
+
+		std::vector<std::string> actual;
+		for (const auto& feed : sorted_feeds) {
+			auto url = feed->rssurl();
+			actual.push_back(url);
+		}
+
+		const std::vector<std::string> expected = {"1", "2", "3", "4", "5"} ;
+		REQUIRE(expected == actual);
 	}
 }
 
