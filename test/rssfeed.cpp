@@ -189,7 +189,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::DATE;
-		ss.sd = SortDirection::DESC;
+		ss.sd = SortDirection::ASC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 7);
@@ -198,7 +198,7 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->pubDate_timestamp() == 69);
 		REQUIRE(articles[4]->pubDate_timestamp() == 93);
 
-		ss.sd = SortDirection::ASC;
+		ss.sd = SortDirection::DESC;
 		f.sort(ss);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 93);

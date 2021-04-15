@@ -624,7 +624,7 @@ TEST_CASE(
 		cfg.set_configvalue("article-sort-order", "date");
 		sort_strategy = cfg.get_article_sort_strategy();
 		REQUIRE(sort_strategy.sm == ArtSortMethod::DATE);
-		REQUIRE(sort_strategy.sd == SortDirection::DESC);
+		REQUIRE(sort_strategy.sd == SortDirection::ASC);
 
 		cfg.set_configvalue("article-sort-order", "date-asc");
 		sort_strategy = cfg.get_article_sort_strategy();

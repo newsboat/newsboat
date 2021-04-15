@@ -25,7 +25,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("false", ConfigDataType::BOOL)},
 	{
 		"article-sort-order",
-		ConfigData("date-asc", ConfigDataType::STR)},
+		ConfigData("date-desc", ConfigDataType::STR)},
 	{
 		"articlelist-format",
 		ConfigData("%4i %f %D %6L  %?T?|%-17T|  &?%t",
@@ -572,11 +572,11 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 		utils::tokenize(get_configvalue("article-sort-order"), "-");
 
 	if (!methods.empty() &&
-		methods[0] == "date") { // date is descending by default
+		methods[0] == "date") { // date is ascending by default
 		ss.sm = ArtSortMethod::DATE;
-		ss.sd = SortDirection::DESC;
-		if (methods.size() > 1 && methods[1] == "asc") {
-			ss.sd = SortDirection::ASC;
+		ss.sd = SortDirection::ASC;
+		if (methods.size() > 1 && methods[1] == "desc") {
+			ss.sd = SortDirection::DESC;
 		}
 	} else { // all other sort methods are ascending by default
 		ss.sd = SortDirection::ASC;

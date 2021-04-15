@@ -312,9 +312,9 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 		const std::shared_ptr<RssItem>& b) {
 			// date is descending by default
 			return sort_strategy.sd == SortDirection::ASC
-				? (a->pubDate_timestamp() >
+				? (a->pubDate_timestamp() <
 					b->pubDate_timestamp())
-				: (a->pubDate_timestamp() <
+				: (a->pubDate_timestamp() >
 					b->pubDate_timestamp());
 		});
 		break;
