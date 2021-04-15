@@ -75,8 +75,6 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			}
 		});
 		break;
-
-	// TODO
 	case FeedSortMethod::UNREAD_ARTICLE_COUNT:
 		std::stable_sort(
 			feeds.begin(), feeds.end(),
@@ -88,8 +86,6 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			}
 		});
 		break;
-
-	// TODO
 	case FeedSortMethod::LAST_UPDATED:
 		std::stable_sort(
 			feeds.begin(), feeds.end(),
@@ -110,11 +106,11 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			auto& b_item = *std::min_element(b->items().begin(),
 					b->items().end(), cmp);
 
-			bool result = cmp(a_item, b_item);
-			if (sort_strategy.sd == SortDirection::ASC) {
-				result = !result;
+			if (sort_strategy.sd == SortDirection::DESC) {
+				return *a_item < *b_item;
+			} else {
+				return *b_item < *a_item;
 			}
-			return result;
 		});
 		break;
 	}
