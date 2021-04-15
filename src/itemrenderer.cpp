@@ -13,6 +13,7 @@ namespace newsboat {
 bool should_render_as_html(const std::string mime_type)
 {
 	static const std::set<std::string> html_mime_types = {
+		"", // Render as HTML when no mime-type is provided
 		"html",
 		"xhtml",
 		"text/html",
