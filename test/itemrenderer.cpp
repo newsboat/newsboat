@@ -659,11 +659,12 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 
 TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_renderer]")
 {
+	using newsboat::item_renderer::OutputFormat;
 	// Verifies that render_plaintext creates the expected lines, all marked as wrappable
 	const auto check = [](const std::string input,
-	const std::vector<std::string>& expected_lines) {
+	const std::vector<std::string>& expected_lines, OutputFormat format) {
 		std::vector<std::pair<LineType, std::string>> output;
-		item_renderer::render_plaintext(input, output);
+		item_renderer::render_plaintext(input, output, format);
 
 		REQUIRE(output.size() == expected_lines.size());
 		for (std::size_t i = 0; i < output.size(); ++i) {
@@ -682,7 +683,7 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 			"consectetur adipiscing elit",
 			"sed do eiusmod tempor incididunt ut labore",
 			"et dolore magna aliqua."
-		});
+		}, OutputFormat::StflRichText);
 	}
 
 	SECTION("render_plaintext keeps indentation") {
@@ -695,7 +696,7 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 			"    this is a test",
 			"",
 			"back to no indentation"
-		});
+		}, OutputFormat::StflRichText);
 	}
 
 	SECTION(R"(text is split on sequences of \r\n, and on separate \r and \n characters)") {
@@ -711,6 +712,24 @@ TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_re
 			"et dolore magna",
 			"",
 			"aliqua."
-		});
+		}, OutputFormat::StflRichText);
+	}
+
+	SECTION("render_plaintext escapes angle brackets for STFL") {
+		const std::string text = "this < should be escaped >\n<p>test text</p>";
+
+		check(text, {
+			"this <> should be escaped >",
+			"<>p>test text<>/p>"
+		}, OutputFormat::StflRichText);
+	}
+
+	SECTION("render_plaintext does not escape when rendering towards some plaintext output") {
+		const std::string text = "this < should *not* be escaped >\n<p>test text</p>";
+
+		check(text, {
+			"this < should *not* be escaped >",
+			"<p>test text</p>"
+		}, OutputFormat::PlainText);
 	}
 }
