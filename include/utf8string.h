@@ -8,6 +8,8 @@ namespace newsboat {
 /// A string that's guaranteed to contain valid UTF-8.
 class Utf8String {
 public:
+	Utf8String() = default;
+
 	/// Construct an object from a string literal, which is assumed to be in
 	/// UTF-8 since Newsboat's source code is in UTF-8.
 	///
@@ -47,8 +49,29 @@ public:
 	Utf8String& operator=(const Utf8String&) = default;
 	Utf8String& operator=(Utf8String&&) = default;
 
+	using size_type = std::string::size_type;
+
+	// We do not provide an overload that takes char* because we don't want to
+	// introduce a channel by which non-UTF-8 data can slip through. Any other
+	// string type will have to be converter into Utf8String in order to be
+	// mixed with Utf8String.
+	Utf8String& append(const Utf8String& other)
+	{
+		inner.append(other.inner);
+		return *this;
+	}
+
+	size_type length() const noexcept
+	{
+		return inner.length();
+	}
+
 	friend bool operator==(const Utf8String& lhs, const Utf8String& rhs);
 	friend bool operator!=(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator<(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator<=(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator>(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator>=(const Utf8String& lhs, const Utf8String& rhs);
 
 private:
 	explicit Utf8String(std::string input);
@@ -65,6 +88,26 @@ inline bool operator==(const Utf8String& lhs, const Utf8String& rhs)
 inline bool operator!=(const Utf8String& lhs, const Utf8String& rhs)
 {
 	return lhs.inner != rhs.inner;
+}
+
+inline bool operator<(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner < rhs.inner;
+}
+
+inline bool operator<=(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner <= rhs.inner;
+}
+
+inline bool operator>(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner > rhs.inner;
+}
+
+inline bool operator>=(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner >= rhs.inner;
 }
 
 } // namespace newsboat

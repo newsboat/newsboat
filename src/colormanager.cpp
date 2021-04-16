@@ -45,27 +45,27 @@ void ColorManager::handle_action(const std::string& action,
 		 * the command syntax is:
 		 * color <element> <fgcolor> <bgcolor> [<attribute> ...]
 		 */
-		std::string element = params[0];
-		std::string fgcolor = params[1];
-		std::string bgcolor = params[2];
+		const auto element = Utf8String::from_utf8(params[0]);
+		const auto fgcolor = Utf8String::from_utf8(params[1]);
+		const auto bgcolor = Utf8String::from_utf8(params[2]);
 
-		if (!utils::is_valid_color(fgcolor)) {
+		if (!utils::is_valid_color(fgcolor.to_utf8())) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"), fgcolor));
 		}
-		if (!utils::is_valid_color(bgcolor)) {
+		if (!utils::is_valid_color(bgcolor.to_utf8())) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid color"), bgcolor));
 		}
 
-		std::vector<std::string> attribs;
+		std::vector<Utf8String> attribs;
 		for (unsigned int i = 3; i < params.size(); ++i) {
 			if (!utils::is_valid_attribute(params[i])) {
 				throw ConfigHandlerException(strprintf::fmt(
 						_("`%s' is not a valid attribute"),
 						params[i]));
 			}
-			attribs.push_back(params[i]);
+			attribs.push_back(Utf8String::from_utf8(params[i]));
 		}
 
 		/* we only allow certain elements to be configured, also to
@@ -90,17 +90,17 @@ void ColorManager::handle_action(const std::string& action,
 void ColorManager::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& element_style : element_styles) {
-		const std::string& element = element_style.first;
-		const TextStyle& style = element_style.second;
-		std::string configline = strprintf::fmt("color %s %s %s",
-				element,
-				style.fg_color,
-				style.bg_color);
+		const auto& element = element_style.first;
+		const auto& style = element_style.second;
+		auto configline = Utf8String::from_utf8(strprintf::fmt("color %s %s %s",
+					element,
+					style.fg_color,
+					style.bg_color));
 		for (const auto& attrib : style.attributes) {
 			configline.append(" ");
 			configline.append(attrib);
 		}
-		config_output.push_back(configline);
+		config_output.push_back(configline.to_utf8());
 	}
 }
 
@@ -109,9 +109,9 @@ void ColorManager::apply_colors(
 const
 {
 	for (const auto& element_style : element_styles) {
-		const std::string& element = element_style.first;
-		const TextStyle& style = element_style.second;
-		std::string colorattr;
+		const auto& element = element_style.first;
+		const auto& style = element_style.second;
+		Utf8String colorattr;
 		if (style.fg_color != "default") {
 			colorattr.append("fg=");
 			colorattr.append(style.fg_color);
@@ -136,11 +136,11 @@ const
 			element,
 			colorattr);
 
-		stfl_value_setter(element, colorattr);
+		stfl_value_setter(element.to_utf8(), colorattr.to_utf8());
 
 		if (element == "article") {
-			std::string bold = colorattr;
-			std::string ul = colorattr;
+			Utf8String bold = colorattr;
+			Utf8String ul = colorattr;
 			if (bold.length() > 0) {
 				bold.append(",");
 			}
@@ -151,8 +151,8 @@ const
 			ul.append("attr=underline");
 			// STFL will just ignore those in forms which don't have the
 			// `color_bold` and `color_underline` variables.
-			stfl_value_setter("color_bold", bold);
-			stfl_value_setter("color_underline", ul);
+			stfl_value_setter("color_bold", bold.to_utf8());
+			stfl_value_setter("color_underline", ul.to_utf8());
 		}
 	}
 }

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace podboat {
 class PbView;
@@ -23,6 +24,12 @@ struct TextStyle {
 	std::vector<std::string> attributes;
 };
 
+struct InternalTextStyle {
+	Utf8String fg_color;
+	Utf8String bg_color;
+	std::vector<Utf8String> attributes;
+};
+
 class ColorManager : public ConfigActionHandler {
 public:
 	ColorManager();
@@ -35,11 +42,27 @@ public:
 		stfl_value_setter) const;
 	std::map<std::string, TextStyle> get_styles() const
 	{
-		return element_styles;
+		std::map<std::string, TextStyle> result;
+
+		for (const auto& entry : element_styles) {
+			const auto key = entry.first;
+			const auto value = entry.second;
+
+			TextStyle new_value;
+			new_value.fg_color = value.fg_color.to_utf8();
+			new_value.bg_color = value.bg_color.to_utf8();
+			for (const auto& attr : value.attributes) {
+				new_value.attributes.push_back(attr.to_utf8());
+			}
+
+			result[key.to_utf8()] = new_value;
+		}
+
+		return result;
 	}
 
 private:
-	std::map<std::string, TextStyle> element_styles;
+	std::map<Utf8String, InternalTextStyle> element_styles;
 };
 
 } // namespace newsboat
