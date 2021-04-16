@@ -226,6 +226,12 @@ TEST_CASE("strprintf::fmt() formats std::string*", "[strprintf]")
 	REQUIRE(strprintf::fmt("%-15s", input) == "Hello, world!  ");
 }
 
+TEST_CASE("strprintf::fmt() formats Utf8String", "[strprintf]")
+{
+	const auto input = Utf8String::from_utf8("Здравствуй, мир!");
+	REQUIRE(strprintf::fmt("%s", input) == "Здравствуй, мир!");
+}
+
 TEST_CASE("strprintf::fmt() works fine with 2MB format string", "[strprintf]")
 {
 	const auto spacer = std::string(1024 * 1024, ' ');

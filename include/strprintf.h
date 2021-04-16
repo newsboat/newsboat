@@ -6,6 +6,8 @@
 #include <tuple>
 #include <vector>
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 namespace strprintf {
@@ -93,6 +95,14 @@ std::string fmt(const std::string& format,
 	Args... args)
 {
 	return fmt(format, argument->c_str(), args...);
+}
+
+template<typename... Args>
+std::string fmt(const std::string& format,
+	const Utf8String& argument,
+	Args... args)
+{
+	return fmt(format, argument.to_utf8(), args...);
 }
 
 namespace detail {

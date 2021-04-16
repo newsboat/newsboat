@@ -14,4 +14,5 @@ src/ruststring.cpp
 src/scopemeasure.cpp
 src/stflpp.cpp
 src/strprintf.cpp
+src/utf8string.cpp
 src/utils.cpp
