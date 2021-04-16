@@ -7,6 +7,8 @@ TestHelpers::EnvVar::EnvVar(std::string name_)
 {
 	if (name_ == "TZ") {
 		throw std::invalid_argument("Using EnvVar(\"TZ\") is discouraged. Try TestHelpers::TzEnvVar instead.");
+	} else if (name_ == "LC_CTYPE") {
+		throw std::invalid_argument("Using EnvVar(\"LC_CTYPE\") is discouraged. Try TestHelpers::LcCtypeEnvVar instead.");
 	}
 }
 
@@ -57,6 +59,18 @@ TestHelpers::TzEnvVar::TzEnvVar()
 {
 	on_change([](nonstd::optional<std::string>) {
 		::tzset();
+	});
+}
+
+TestHelpers::LcCtypeEnvVar::LcCtypeEnvVar()
+	: EnvVar("LC_CTYPE", true)
+{
+	on_change([](nonstd::optional<std::string> new_charset) {
+		if (new_charset.has_value()) {
+			::setlocale(LC_CTYPE, new_charset.value().c_str());
+		} else {
+			::setlocale(LC_CTYPE, "");
+		}
 	});
 }
 
@@ -407,4 +421,9 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 TEST_CASE("EnvVar can't be constructed for TZ variable", "[test-helpers]")
 {
 	REQUIRE_THROWS_AS(TestHelpers::EnvVar("TZ"), std::invalid_argument);
+}
+
+TEST_CASE("EnvVar can't be constructed for LC_CTYPE variable", "[test-helpers]")
+{
+	REQUIRE_THROWS_AS(TestHelpers::EnvVar("LC_CTYPE"), std::invalid_argument);
 }

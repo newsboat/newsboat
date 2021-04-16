@@ -96,6 +96,21 @@ private:
 	using EnvVar::on_change;
 };
 
+/* \brief Save and restore locale charset environment variable, calling
+ * setlocale as appropriate.
+ *
+ * For details, see the docs for `EnvVar`.
+ */
+class LcCtypeEnvVar final : public EnvVar {
+public:
+	LcCtypeEnvVar();
+	virtual ~LcCtypeEnvVar() = default;
+
+private:
+	// We hide this method because we don't want users to override our handler.
+	using EnvVar::on_change;
+};
+
 } // namespace TestHelpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_ENVVAR_H_ */

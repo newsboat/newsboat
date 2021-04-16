@@ -1733,14 +1733,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 	"by locale in LC_CTYPE class",
 	"[utils]")
 {
-	TestHelpers::EnvVar lc_ctype("LC_CTYPE");
-	lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
-		if (new_charset.has_value()) {
-			::setlocale(LC_CTYPE, new_charset.value().c_str());
-		} else {
-			::setlocale(LC_CTYPE, "");
-		}
-	});
+	TestHelpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
 		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
 		{
@@ -1798,14 +1791,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale's encoding",
 	"[utils]")
 {
-	TestHelpers::EnvVar lc_ctype("LC_CTYPE");
-	lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
-		if (new_charset.has_value()) {
-			::setlocale(LC_CTYPE, new_charset.value().c_str());
-		} else {
-			::setlocale(LC_CTYPE, "");
-		}
-	});
+	TestHelpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
 		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
 		{
@@ -1853,14 +1839,7 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 	"in LC_CTYPE class to UTF-8",
 	"[utils]")
 {
-	TestHelpers::EnvVar lc_ctype("LC_CTYPE");
-	lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
-		if (new_charset.has_value()) {
-			::setlocale(LC_CTYPE, new_charset.value().c_str());
-		} else {
-			::setlocale(LC_CTYPE, "");
-		}
-	});
+	TestHelpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
 		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
 		{
