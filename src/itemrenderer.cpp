@@ -13,6 +13,7 @@ namespace newsboat {
 bool should_render_as_html(const std::string mime_type)
 {
 	static const std::set<std::string> html_mime_types = {
+		"", // Render as HTML when no mime-type is provided
 		"html",
 		"xhtml",
 		"text/html",
@@ -144,7 +145,7 @@ void render_html(
 
 void item_renderer::render_plaintext(
 	const std::string& source,
-	std::vector<std::pair<LineType, std::string>>& lines)
+	std::vector<std::pair<LineType, std::string>>& lines, OutputFormat format)
 {
 	std::string normalized = utils::replace_all(source, "\r\n", "\n");
 	normalized = utils::replace_all(normalized, "\r", "\n");
@@ -153,7 +154,17 @@ void item_renderer::render_plaintext(
 	while (pos < normalized.size()) {
 		const auto end_of_line = normalized.find_first_of("\n", pos);
 		const std::string line = normalized.substr(pos, end_of_line - pos);
-		lines.push_back(std::make_pair(LineType::wrappable, line));
+
+		switch (format) {
+		case OutputFormat::PlainText:
+			lines.push_back(std::make_pair(LineType::wrappable, line));
+			break;
+		case OutputFormat::StflRichText:
+			const std::string stfl_quoted_line = utils::quote_for_stfl(line);
+			lines.push_back(std::make_pair(LineType::wrappable, stfl_quoted_line));
+			break;
+		}
+
 		if (end_of_line == std::string::npos) {
 			break;
 		}
@@ -176,7 +187,7 @@ std::string item_renderer::to_plain_text(
 	if (should_render_as_html(item_description.mime)) {
 		render_html(cfg, body, lines, links, base, true);
 	} else {
-		render_plaintext(body, lines);
+		render_plaintext(body, lines, OutputFormat::PlainText);
 	}
 
 	TextFormatter txtfmt;
@@ -209,7 +220,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	if (should_render_as_html(item_description.mime)) {
 		render_html(cfg, body, lines, links, baseurl, false);
 	} else {
-		render_plaintext(body, lines);
+		render_plaintext(body, lines, OutputFormat::StflRichText);
 	}
 
 	TextFormatter txtfmt;

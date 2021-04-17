@@ -15,13 +15,19 @@ class RssItem;
 
 /// \brief Creates different textual representations of an RssItem.
 namespace item_renderer {
+
+enum class OutputFormat {
+	PlainText,
+	StflRichText,
+};
+
 /// \brief Returns feed's title of the item, or some replacement value if
 /// the title isn't available.
 std::string get_feedtitle(std::shared_ptr<RssItem> item);
 
 /// \brief Splits text into lines marked as wrappable
 void render_plaintext(const std::string& source,
-	std::vector<std::pair<LineType, std::string>>& lines);
+	std::vector<std::pair<LineType, std::string>>& lines, OutputFormat format);
 
 /// \brief Returns plain-text representation of the RssItem.
 ///
