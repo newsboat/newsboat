@@ -13,8 +13,36 @@ Newsboat [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/newsboat/ne
 Newsboat is an RSS/Atom feed reader for the text console. It's an actively
 maintained fork of Newsbeuter.
 
-Logo [by noobilanderi](https://groups.google.com/forum/#!topic/newsboat/Xm5pTsbeMEk),
-licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+A feed reader pulls updates directly from sites like blogs and news agencies,
+and lets you review them in a single interface. Many times, the feed includes
+the full text of the update, so you don't even need to start a web browser! You
+can learn more about feed readers [on
+Wikipedia](https://en.wikipedia.org/wiki/News_aggregator).
+
+<img
+    style="display: block; margin-left: auto; margin-right: auto;"
+    src="https://newsboat.org/images/2.23-screenshot_2x-ec3449d9.png"
+    alt="Viewing an article in Newsboat"
+    />
+
+Notable features
+----------------
+
+* Powerful built-in HTML renderer — no need to start the web browser to view
+    text-only entries
+* Send links and whole articles to third-party services using [bookmarking
+    scripts](https://newsboat.org/releases/2.23/docs/newsboat.html#_bookmarking)
+* [Filter articles out](https://newsboat.org/releases/2.23/docs/newsboat.html#_killfiles)
+    based on title, author, contents etc.
+* [Aggregate articles](https://newsboat.org/releases/2.23/docs/newsboat.html#_query_feeds)
+    into meta-feeds by arbitrary criteria
+* [Apply transformations](https://newsboat.org/releases/2.23/docs/newsboat.html#_scripts_and_filters_snownews_extensions)
+    to feeds before passing them into Newsboat
+* Integrates with services like The Old Reader, NewsBlur, FeedHQ
+    and [many more](https://newsboat.org/releases/2.23/docs/newsboat.html#_newsboat_as_a_client_for_newsreading_services)
+* [Macros](https://newsboat.org/releases/2.23/docs/newsboat.html#_macro_support)
+    to execute sequences of actions with just two keystrokes
+* Rudimentary [podcast support](https://newsboat.org/releases/2.23/docs/newsboat.html#_podcast_support)
 
 Downloading
 -----------
@@ -79,6 +107,13 @@ There are numerous ways:
 
       $ sudo snap install newsboat
 
+  Our snap [only supports `xdg-open` as the browser][snap-browser], and you
+  can't run arbitrary scripts for rendering and bookmarking. The reason is
+  strict confinement; if we disabled it, the snap would be no better than
+  a distribution's package;
+
+  [snap-browser]: https://newsboat.org/releases/2.23/docs/faq.html#_regarding_newsboat_snap_installations
+
 - [build from source with Docker](doc/docker.md). Note that the resulting binary
     might not run outside of that same Docker container if your system doesn't
     have all the necessary libraries, or if their versions are too old;
@@ -137,4 +172,6 @@ License
 -------
 
 Newsboat is licensed under [the MIT
-license](https://opensource.org/licenses/MIT); see the LICENSE file.
+license](https://opensource.org/licenses/MIT); see the LICENSE file. Logo [by
+noobilanderi](https://groups.google.com/forum/#!topic/newsboat/Xm5pTsbeMEk),
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
