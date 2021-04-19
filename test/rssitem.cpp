@@ -51,15 +51,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 			// we can't compare results to a known-good value. Instead, we
 			// merely check that the result is *not* UTF-8.
 
-			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
-			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
-				if (new_charset.has_value()) {
-					::setlocale(LC_CTYPE, new_charset.value().c_str());
-				} else {
-					::setlocale(LC_CTYPE, "");
-				}
-			});
-
+			TestHelpers::LcCtypeEnvVar lc_ctype;
 			lc_ctype.set("C"); // This means ASCII
 
 			const auto title = "こんにちは"; // "good afternoon"
@@ -92,15 +84,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 			// we can't compare results to a known-good value. Instead, we
 			// merely check that the result is *not* UTF-8.
 
-			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
-			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
-				if (new_charset.has_value()) {
-					::setlocale(LC_CTYPE, new_charset.value().c_str());
-				} else {
-					::setlocale(LC_CTYPE, "");
-				}
-			});
-
+			TestHelpers::LcCtypeEnvVar lc_ctype;
 			lc_ctype.set("C"); // This means ASCII
 
 			const auto author = "李白"; // "Li Bai"
@@ -124,15 +108,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 			// we can't compare results to a known-good value. Instead, we
 			// merely check that the result is *not* UTF-8.
 
-			TestHelpers::EnvVar lc_ctype("LC_CTYPE");
-			lc_ctype.on_change([](nonstd::optional<std::string> new_charset) {
-				if (new_charset.has_value()) {
-					::setlocale(LC_CTYPE, new_charset.value().c_str());
-				} else {
-					::setlocale(LC_CTYPE, "");
-				}
-			});
-
+			TestHelpers::LcCtypeEnvVar lc_ctype;
 			lc_ctype.set("C"); // This means ASCII
 
 			const auto description = "こんにちは"; // "good afternoon"
@@ -144,7 +120,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 	}
 
 	SECTION("date") {
-		TestHelpers::EnvVar tzEnv("TZ");
+		TestHelpers::TzEnvVar tzEnv;
 		tzEnv.set("UTC");
 
 		const auto attr = "date";
