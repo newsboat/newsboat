@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cinttypes>
 #include <cstdlib>
+#include <cstring>
+#include <cwchar>
 #include <iostream>
 #include <istream>
 #include <sstream>
@@ -436,6 +438,10 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 	LOG(Level::DEBUG,
 		"TagSoupPullParser::decode_entity: decoding '%s'...",
 		s);
+
+	mbstate_t mb_state;
+	::memset(&mb_state, 0, sizeof(mb_state));
+
 	if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
@@ -477,7 +483,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			break; // &oelig;
 		}
 
-		const int pos = wctomb(mbc, static_cast<wchar_t>(wc));
+		const int pos = wcrtomb(mbc, static_cast<wchar_t>(wc), &mb_state);
 		if (pos > 0) {
 			mbc[pos] = '\0';
 			result.append(mbc);
@@ -494,7 +500,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 		for (unsigned int i = 0; entity_table[i].entity; ++i) {
 			if (s == entity_table[i].entity) {
 				char mbc[MB_LEN_MAX];
-				const int pos = wctomb(mbc, entity_table[i].value);
+				const int pos = wcrtomb(mbc, entity_table[i].value, &mb_state);
 				if (pos == -1) {
 					return std::string();
 				} else {
