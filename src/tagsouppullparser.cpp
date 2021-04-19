@@ -449,7 +449,6 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			s.erase(0, 1);
 			wc = utils::to_u(s);
 		}
-		int pos;
 		// convert some common but unknown numeric entities
 		switch (wc) {
 		case 133:
@@ -478,9 +477,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			break; // &oelig;
 		}
 
-		// std::cerr << "value: " << wc << " " <<
-		// static_cast<wchar_t>(wc) << " pos: " << pos << std::endl;
-		pos = wctomb(mbc, static_cast<wchar_t>(wc));
+		const int pos = wctomb(mbc, static_cast<wchar_t>(wc));
 		if (pos > 0) {
 			mbc[pos] = '\0';
 			result.append(mbc);
@@ -497,7 +494,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 		for (unsigned int i = 0; entity_table[i].entity; ++i) {
 			if (s == entity_table[i].entity) {
 				char mbc[MB_CUR_MAX];
-				int pos = wctomb(mbc, entity_table[i].value);
+				const int pos = wctomb(mbc, entity_table[i].value);
 				if (pos == -1) {
 					return std::string();
 				} else {
