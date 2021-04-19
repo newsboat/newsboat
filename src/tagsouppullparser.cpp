@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cinttypes>
 #include <cstdlib>
+#include <cstring>
+#include <cwchar>
 #include <iostream>
 #include <istream>
 #include <sstream>
@@ -436,10 +438,14 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 	LOG(Level::DEBUG,
 		"TagSoupPullParser::decode_entity: decoding '%s'...",
 		s);
+
+	mbstate_t mb_state;
+	::memset(&mb_state, 0, sizeof(mb_state));
+
 	if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
-		char mbc[MB_CUR_MAX];
+		char mbc[MB_LEN_MAX];
 		mbc[0] = '\0';
 		if (s[1] == 'x') {
 			s.erase(0, 2);
@@ -449,7 +455,6 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			s.erase(0, 1);
 			wc = utils::to_u(s);
 		}
-		int pos;
 		// convert some common but unknown numeric entities
 		switch (wc) {
 		case 133:
@@ -478,9 +483,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			break; // &oelig;
 		}
 
-		// std::cerr << "value: " << wc << " " <<
-		// static_cast<wchar_t>(wc) << " pos: " << pos << std::endl;
-		pos = wctomb(mbc, static_cast<wchar_t>(wc));
+		const int pos = wcrtomb(mbc, static_cast<wchar_t>(wc), &mb_state);
 		if (pos > 0) {
 			mbc[pos] = '\0';
 			result.append(mbc);
@@ -496,8 +499,8 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 	} else {
 		for (unsigned int i = 0; entity_table[i].entity; ++i) {
 			if (s == entity_table[i].entity) {
-				char mbc[MB_CUR_MAX];
-				int pos = wctomb(mbc, entity_table[i].value);
+				char mbc[MB_LEN_MAX];
+				const int pos = wcrtomb(mbc, entity_table[i].value, &mb_state);
 				if (pos == -1) {
 					return std::string();
 				} else {
