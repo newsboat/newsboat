@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_UTF8STRING_H_
 #define NEWSBOAT_UTF8STRING_H_
 
+#include <functional>
 #include <string>
 
 namespace newsboat {
@@ -125,6 +126,15 @@ inline Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs)
 }
 
 } // namespace newsboat
+
+namespace std {
+template<> struct hash<::newsboat::Utf8String> {
+	std::size_t operator()(const ::newsboat::Utf8String& s) const noexcept
+	{
+		return std::hash<std::string> {}(s.to_utf8());
+	}
+};
+} // namespace std
 
 #endif /* NEWSBOAT_UTF8STRING_H_ */
 

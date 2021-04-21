@@ -6,6 +6,8 @@
 
 #include "3rd-party/expected.hpp"
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 enum class ConfigDataType { INVALID, BOOL, INT, STR, PATH, ENUM };
@@ -27,7 +29,7 @@ public:
 	/// Current value of the setting.
 	std::string value() const
 	{
-		return value_;
+		return value_.to_utf8();
 	}
 
 	/// Change the setting's value to `new_value`.
@@ -38,7 +40,7 @@ public:
 	/// Default value of the setting.
 	std::string default_value() const
 	{
-		return default_value_;
+		return default_value_.to_utf8();
 	}
 
 	/// Change the setting's value to the default one.
@@ -54,9 +56,14 @@ public:
 	}
 
 	/// Possible values of this setting if `type` is `ENUM`.
-	const std::unordered_set<std::string>& enum_values() const
+	// FIXME(utf8): change this back to const std::unordered_set<...>&
+	std::unordered_set<std::string> enum_values() const
 	{
-		return enum_values_;
+		std::unordered_set<std::string> result;
+		for (const auto& value : enum_values_) {
+			result.insert(value.to_utf8());
+		}
+		return result;
 	}
 
 	/// If `true`, multiple values of this setting should be combined instead
@@ -67,10 +74,10 @@ public:
 	}
 
 private:
-	std::string value_;
-	std::string default_value_;
+	Utf8String value_;
+	Utf8String default_value_;
 	ConfigDataType type_;
-	std::unordered_set<std::string> enum_values_;
+	std::unordered_set<Utf8String> enum_values_;
 	bool multi_option_;
 };
 

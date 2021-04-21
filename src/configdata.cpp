@@ -24,8 +24,8 @@ namespace newsboat {
 
 ConfigData::ConfigData(const std::string& v, ConfigDataType t,
 	bool multi_option)
-	: value_(v)
-	, default_value_(v)
+	: value_(Utf8String::from_utf8(v))
+	, default_value_(Utf8String::from_utf8(v))
 	, type_(t)
 	, multi_option_(multi_option)
 {
@@ -33,12 +33,14 @@ ConfigData::ConfigData(const std::string& v, ConfigDataType t,
 
 ConfigData::ConfigData(const std::string& v,
 	const std::unordered_set<std::string>& values)
-	: value_(v)
-	, default_value_(v)
+	: value_(Utf8String::from_utf8(v))
+	, default_value_(Utf8String::from_utf8(v))
 	, type_(ConfigDataType::ENUM)
-	, enum_values_(values)
 	, multi_option_(false)
 {
+	for (const auto& value : values) {
+		enum_values_.insert(Utf8String::from_utf8(value));
+	}
 }
 
 nonstd::expected<void, std::string> ConfigData::set_value(
@@ -47,7 +49,7 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 	switch (type_) {
 	case ConfigDataType::BOOL:
 		if (is_bool(new_value)) {
-			value_ = std::move(new_value);
+			value_ = Utf8String::from_utf8(std::move(new_value));
 		} else {
 			return nonstd::make_unexpected(
 					strprintf::fmt(
@@ -58,7 +60,7 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 
 	case ConfigDataType::INT:
 		if (is_int(new_value)) {
-			value_ = std::move(new_value);
+			value_ = Utf8String::from_utf8(std::move(new_value));
 		} else {
 			return nonstd::make_unexpected(strprintf::fmt(
 						_("expected integer value, found `%s' instead"),
@@ -67,8 +69,8 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 		break;
 
 	case ConfigDataType::ENUM:
-		if (enum_values_.find(new_value) != enum_values_.end()) {
-			value_ = std::move(new_value);
+		if (enum_values_.find(Utf8String::from_utf8(new_value)) != enum_values_.end()) {
+			value_ = Utf8String::from_utf8(std::move(new_value));
 		} else {
 			return nonstd::make_unexpected(strprintf::fmt(
 						_("invalid configuration value `%s'"),
@@ -78,7 +80,7 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 
 	case ConfigDataType::STR:
 	case ConfigDataType::PATH:
-		value_ = std::move(new_value);
+		value_ = Utf8String::from_utf8(std::move(new_value));
 		break;
 
 	case ConfigDataType::INVALID:

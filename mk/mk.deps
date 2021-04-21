@@ -157,7 +157,7 @@ src/configcontainer.o: src/configcontainer.cpp include/configcontainer.h \
  include/utils.h 3rd-party/optional.hpp include/configcontainer.h \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/configdata.o: src/configdata.cpp include/configdata.h \
- 3rd-party/expected.hpp config.h include/strprintf.h include/utf8string.h
+ 3rd-party/expected.hpp include/utf8string.h config.h include/strprintf.h
 src/confighandlerexception.o: src/confighandlerexception.cpp \
  include/confighandlerexception.h config.h include/configparser.h \
  include/configactionhandler.h
@@ -955,7 +955,7 @@ test/configcontainer.o: test/configcontainer.cpp \
  3rd-party/expected.hpp include/confighandlerexception.h \
  include/configparser.h include/keymap.h
 test/configdata.o: test/configdata.cpp 3rd-party/catch.hpp \
- include/configdata.h 3rd-party/expected.hpp
+ include/configdata.h 3rd-party/expected.hpp include/utf8string.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/configexception.h include/keymap.h test/test-helpers/envvar.h \
