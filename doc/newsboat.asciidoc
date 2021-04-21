@@ -298,19 +298,17 @@ The best thing to start with is to export your subscriptions from the old
 reader.  Usually, RSS feed readers have appropriate menu items available to do
 so.
 
-Snownews provides a script to convert your current subscription file into an
-OPML file:
+Snownews 1.7+ stores its subscriptions natively in OPML, in
+_~/.config/snownews/urls.opml_. Earlier versions provide an export script:
 
 	snow2opml > ~/blogroll.opml
 
-This command creates from your Snownews configuration a file _blogroll.opml_ in
-your home directory. To export the subscription list from raggle, the
-following command is necessary:
+To export the subscription list from raggle, the following command is
+necessary:
 
 	raggle --export-opml ~/blogroll.opml
 
-When you have exported the subscriptions from your old RSS feed reader, you can
-import them into Newsboat:
+You can then import subscriptions into Newsboat:
 
 	newsboat -i ~/blogroll.opml
 
