@@ -35,9 +35,11 @@ In both cases, the tagging feature as described above is still available:
 
 If you need to write your own extension, see
 https://web.archive.org/web/20090724045314/http://kiza.kcore.de/software/snownews/snowscripts/writing[this
-short guide] for an introduction.
-https://github.com/kouya/snownews/tree/master/contrib[A collection
-of existing scripts] might also help.
+short guide] for an introduction. A collection of existing
+https://github.com/msharov/snownews/tree/de3bd8b28191c4d4bc1be18275786613bcbc0c94/docs/untested[scripts]
+and
+https://github.com/msharov/snownews/tree/9fb45e4cdf1cf9dea55b9af66c13a4c238809851/docs/filters[filters]
+might help, too.
 
 Newsboat comes with an example exec script which shows one way to generate an
 RSS channel. It also includes a way to see which exact arguments are passed to
