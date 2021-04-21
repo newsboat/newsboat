@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -78,7 +79,7 @@ public:
 	static const std::string PARTIAL_FILE_SUFFIX;
 
 private:
-	std::map<std::string, ConfigData> config_data;
+	std::map<Utf8String, ConfigData> config_data;
 	mutable std::recursive_mutex config_data_mtx;
 };
 

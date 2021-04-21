@@ -343,7 +343,7 @@ void ConfigContainer::register_commands(ConfigParser& cfgparser)
 	// ConfigContainer
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		cfgparser.register_handler(cfg.first, *this);
+		cfgparser.register_handler(cfg.first.to_utf8(), *this);
 	}
 }
 
@@ -351,7 +351,7 @@ void ConfigContainer::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	ConfigData& cfgdata = config_data[action];
+	ConfigData& cfgdata = config_data[Utf8String::from_utf8(action)];
 
 	// ConfigDataType::INVALID indicates that the action didn't exist, and
 	// that the returned object was created ad-hoc.
@@ -402,7 +402,7 @@ void ConfigContainer::handle_action(const std::string& action,
 std::string ConfigContainer::get_configvalue(const std::string& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	auto it = config_data.find(key);
+	auto it = config_data.find(Utf8String::from_utf8(key));
 	if (it != config_data.cend()) {
 		const auto& entry = it->second;
 		std::string value = entry.value();
@@ -418,7 +418,7 @@ std::string ConfigContainer::get_configvalue(const std::string& key) const
 int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	auto it = config_data.find(key);
+	auto it = config_data.find(Utf8String::from_utf8(key));
 	if (it != config_data.cend()) {
 		const auto& value = it->second.value();
 		std::istringstream is(value);
@@ -433,7 +433,7 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	auto it = config_data.find(key);
+	auto it = config_data.find(Utf8String::from_utf8(key));
 	if (it != config_data.cend()) {
 		const auto& value = it->second.value();
 		return (value == "true" || value == "yes");
@@ -450,19 +450,19 @@ void ConfigContainer::set_configvalue(const std::string& key,
 		key,
 		value);
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].set_value(value);
+	config_data[Utf8String::from_utf8(key)].set_value(value);
 }
 
 void ConfigContainer::reset_to_default(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].reset_to_default();
+	config_data[Utf8String::from_utf8(key)].reset_to_default();
 }
 
 void ConfigContainer::toggle(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	if (config_data[key].type() == ConfigDataType::BOOL) {
+	if (config_data[Utf8String::from_utf8(key)].type() == ConfigDataType::BOOL) {
 		set_configvalue(key,
 			std::string(get_configvalue_as_bool(key) ? "false"
 				: "true"));
@@ -473,17 +473,17 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		std::string configline = cfg.first + " ";
+		Utf8String configline = cfg.first + " ";
 		assert(cfg.second.type() != ConfigDataType::INVALID);
 		switch (cfg.second.type()) {
 		case ConfigDataType::BOOL:
 		case ConfigDataType::INT:
-			configline.append(cfg.second.value());
+			configline.append(Utf8String::from_utf8(cfg.second.value()));
 			if (cfg.second.value() != cfg.second.default_value()) {
 				configline.append(
-					strprintf::fmt(
-						" # default: %s",
-						cfg.second.default_value()));
+					Utf8String::from_utf8(strprintf::fmt(
+							" # default: %s",
+							cfg.second.default_value())));
 			}
 			break;
 		case ConfigDataType::ENUM:
@@ -493,14 +493,14 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 				const std::vector<std::string> tokens = utils::tokenize(cfg.second.value(),
 						" ");
 				for (const auto& token : tokens) {
-					configline.append(utils::quote(token) + " ");
+					configline.append(Utf8String::from_utf8(utils::quote(token)) + " ");
 				}
 			} else {
-				configline.append(utils::quote(cfg.second.value()));
+				configline.append(Utf8String::from_utf8(utils::quote(cfg.second.value())));
 				if (cfg.second.value() != cfg.second.default_value()) {
-					configline.append(strprintf::fmt(
-							" # default: %s",
-							cfg.second.default_value()));
+					configline.append(Utf8String::from_utf8(strprintf::fmt(
+								" # default: %s",
+								cfg.second.default_value())));
 				}
 			}
 			break;
@@ -509,7 +509,7 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 			// before the `switch`
 			break;
 		}
-		config_output.push_back(configline);
+		config_output.push_back(configline.to_utf8());
 	}
 }
 
@@ -519,8 +519,8 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 	std::vector<std::string> result;
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		if (cfg.first.substr(0, fragment.length()) == fragment) {
-			result.push_back(cfg.first);
+		if (cfg.first.substr(0, fragment.length()) == Utf8String::from_utf8(fragment)) {
+			result.push_back(cfg.first.to_utf8());
 		}
 	}
 	std::sort(result.begin(), result.end());

@@ -51,6 +51,8 @@ public:
 
 	using size_type = std::string::size_type;
 
+	static const size_type npos = -1;
+
 	// We do not provide an overload that takes char* because we don't want to
 	// introduce a channel by which non-UTF-8 data can slip through. Any other
 	// string type will have to be converter into Utf8String in order to be
@@ -59,6 +61,11 @@ public:
 	{
 		inner.append(other.inner);
 		return *this;
+	}
+
+	Utf8String substr(size_type pos = 0, size_type count = npos) const
+	{
+		return Utf8String(inner.substr(pos, count));
 	}
 
 	size_type length() const noexcept
@@ -72,6 +79,8 @@ public:
 	friend bool operator<=(const Utf8String& lhs, const Utf8String& rhs);
 	friend bool operator>(const Utf8String& lhs, const Utf8String& rhs);
 	friend bool operator>=(const Utf8String& lhs, const Utf8String& rhs);
+
+	friend Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs);
 
 private:
 	explicit Utf8String(std::string input);
@@ -108,6 +117,11 @@ inline bool operator>(const Utf8String& lhs, const Utf8String& rhs)
 inline bool operator>=(const Utf8String& lhs, const Utf8String& rhs)
 {
 	return lhs.inner >= rhs.inner;
+}
+
+inline Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return Utf8String(lhs.inner + rhs.inner);
 }
 
 } // namespace newsboat
