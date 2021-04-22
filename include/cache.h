@@ -7,6 +7,7 @@
 #include <unordered_set>
 
 #include "configcontainer.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -37,7 +38,7 @@ struct SchemaVersion {
 
 const SchemaVersion unknown_version = {0, 0};
 
-using schema_patches = std::map<SchemaVersion, std::vector<std::string>>;
+using schema_patches = std::map<SchemaVersion, std::vector<Utf8String>>;
 
 class Cache {
 public:

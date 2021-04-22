@@ -423,7 +423,7 @@ void Cache::populate_tables()
 			patch_version.major,
 			patch_version.minor);
 		for (const auto& query : patches_it->second) {
-			run_sql_nothrow(query);
+			run_sql_nothrow(query.to_utf8());
 		}
 	}
 }
