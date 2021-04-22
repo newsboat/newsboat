@@ -971,18 +971,21 @@ unsigned int FeedListFormAction::count_unread_articles()
 
 void FeedListFormAction::op_end_setfilter()
 {
-	std::string filtertext = qna_responses[0];
-	filterhistory.add_line(filtertext);
-	if (filtertext.length() > 0) {
-		if (!matcher.parse(filtertext)) {
-			v->get_statusline().show_error(
-				_("Error: couldn't parse filter command!"));
-		} else {
-			save_filterpos();
-			apply_filter = true;
-			do_redraw = true;
-		}
+	const auto filtertext = qna_responses[0];
+	if (filtertext.empty()) {
+		return;
 	}
+
+	filterhistory.add_line(filtertext);
+
+	if (!matcher.parse(filtertext)) {
+		v->get_statusline().show_error(_("Error: couldn't parse filter command!"));
+		return;
+	}
+
+	save_filterpos();
+	apply_filter = true;
+	do_redraw = true;
 }
 
 void FeedListFormAction::op_start_search()

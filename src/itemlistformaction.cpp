@@ -837,20 +837,22 @@ void ItemListFormAction::finished_qna(Operation op)
 
 void ItemListFormAction::qna_end_setfilter()
 {
-	std::string filtertext = qna_responses[0];
+	const auto filtertext = qna_responses[0];
+
+	if (filtertext.empty()) {
+		return;
+	}
+
 	filterhistory.add_line(filtertext);
 
-	if (filtertext.length() > 0) {
-		if (!matcher.parse(filtertext)) {
-			v->get_statusline().show_error(
-				_("Error: couldn't parse filter command!"));
-			return;
-		}
-
-		apply_filter = true;
-		invalidate_list();
-		save_filterpos();
+	if (!matcher.parse(filtertext)) {
+		v->get_statusline().show_error(_("Error: couldn't parse filter command!"));
+		return;
 	}
+
+	apply_filter = true;
+	invalidate_list();
+	save_filterpos();
 }
 
 void ItemListFormAction::qna_end_editflags()
