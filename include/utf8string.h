@@ -45,6 +45,9 @@ public:
 	/// Invalid characters will be replaces by a question mark.
 	std::string to_locale_charset() const;
 
+	/// Returns the same string, but in lower case.
+	Utf8String to_lowercase() const;
+
 	Utf8String(const Utf8String&) = default;
 	Utf8String(Utf8String&&) = default;
 	Utf8String& operator=(const Utf8String&) = default;

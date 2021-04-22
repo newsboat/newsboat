@@ -9,6 +9,19 @@
 
 using namespace newsboat;
 
+namespace Catch {
+template<>
+struct StringMaker<Utf8String> {
+	static std::string convert(const Utf8String& value)
+	{
+		std::string result("Utf8String( \"");
+		result.append(value.to_utf8());
+		result.append("\" )");
+		return result;
+	}
+};
+}
+
 TEST_CASE("Utf8String can be constructed from valid UTF-8", "[Utf8String]")
 {
 	const auto str1 = Utf8String::from_utf8("");
@@ -249,4 +262,13 @@ TEST_CASE("Utf8String::to_locale_charset() replaces invalid characters with ques
 			}
 		}
 	}
+}
+
+TEST_CASE("to_lowercase() returns lowercased string", "[Utf8String]")
+{
+	REQUIRE(Utf8String("").to_lowercase() == "");
+	REQUIRE(Utf8String("HellO!").to_lowercase() == "hello!");
+	// "Hello" in Russian
+	REQUIRE(Utf8String("ЗдравСтвуйТе!").to_lowercase() ==
+		"здравствуйте!");
 }

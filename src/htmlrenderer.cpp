@@ -92,12 +92,8 @@ unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
 
 HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
 {
-	std::string tagname = parser.get_text();
-	std::transform(tagname.begin(),
-		tagname.end(),
-		tagname.begin(),
-		::tolower);
-	return tags[tagname];
+	const auto tagname = Utf8String::from_utf8(parser.get_text());
+	return tags[tagname.to_lowercase()];
 }
 
 void HtmlRenderer::render(std::istream& input,

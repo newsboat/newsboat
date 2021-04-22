@@ -426,8 +426,8 @@ src/helpformaction.o: src/helpformaction.cpp include/helpformaction.h \
 src/history.o: src/history.cpp include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/ruststring.h
 src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
- include/textformatter.h config.h include/logger.h include/strprintf.h \
- include/utf8string.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/textformatter.h include/utf8string.h config.h include/logger.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/strprintf.h include/tagsouppullparser.h 3rd-party/optional.hpp \
  include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h \
@@ -473,8 +473,8 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h include/view.h
 src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
- include/htmlrenderer.h include/textformatter.h include/configcontainer.h \
- include/configactionhandler.h include/utf8string.h \
+ include/htmlrenderer.h include/textformatter.h include/utf8string.h \
+ include/configcontainer.h include/configactionhandler.h \
  include/htmlrenderer.h include/rssfeed.h include/matchable.h \
  3rd-party/optional.hpp include/rssitem.h include/matcher.h \
  filter/FilterParser.h include/utils.h 3rd-party/expected.hpp \
@@ -831,10 +831,10 @@ src/tagsouppullparser.o: src/tagsouppullparser.cpp \
  include/configactionhandler.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/textformatter.o: src/textformatter.cpp include/textformatter.h \
- include/htmlrenderer.h include/textformatter.h include/regexmanager.h \
- include/configactionhandler.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h include/stflpp.h include/strprintf.h \
- include/utf8string.h include/utils.h 3rd-party/expected.hpp \
+ include/htmlrenderer.h include/textformatter.h include/utf8string.h \
+ include/regexmanager.h include/configactionhandler.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/stflpp.h \
+ include/strprintf.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h include/logger.h \
  config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
@@ -1004,8 +1004,8 @@ test/history.o: test/history.cpp include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h 3rd-party/catch.hpp \
  test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
 test/htmlrenderer.o: test/htmlrenderer.cpp include/htmlrenderer.h \
- include/textformatter.h 3rd-party/catch.hpp include/strprintf.h \
- include/utf8string.h include/utils.h 3rd-party/expected.hpp \
+ include/textformatter.h include/utf8string.h 3rd-party/catch.hpp \
+ include/strprintf.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
@@ -1037,13 +1037,13 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  test/test-helpers/misc.h test/test-helpers/tempfile.h \
  test/test-helpers/maintempdir.h
 test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
- include/htmlrenderer.h include/textformatter.h 3rd-party/catch.hpp \
- include/cache.h include/configcontainer.h include/configactionhandler.h \
- include/utf8string.h include/configcontainer.h include/regexmanager.h \
- include/matcher.h filter/FilterParser.h include/regexowner.h \
- include/rssfeed.h include/matchable.h 3rd-party/optional.hpp \
- include/rssitem.h include/utils.h 3rd-party/expected.hpp \
- include/logger.h config.h include/strprintf.h \
+ include/htmlrenderer.h include/textformatter.h include/utf8string.h \
+ 3rd-party/catch.hpp include/cache.h include/configcontainer.h \
+ include/configactionhandler.h include/configcontainer.h \
+ include/regexmanager.h include/matcher.h filter/FilterParser.h \
+ include/regexowner.h include/rssfeed.h include/matchable.h \
+ 3rd-party/optional.hpp include/rssitem.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
  test/test-helpers/envvar.h

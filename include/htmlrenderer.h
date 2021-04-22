@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "textformatter.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -122,7 +123,6 @@ private:
 	std::string absolute_url(const std::string& url,
 		const std::string& link);
 	std::string type2str(LinkType type);
-	std::map<std::string, HtmlTag> tags;
 	void render_table(const Table& table,
 		std::vector<std::pair<LineType, std::string>>& lines);
 	void add_nonempty_line(const std::string& curline,
@@ -143,6 +143,8 @@ private:
 		const std::string& media_title, unsigned int media_count,
 		LinkType type);
 	HtmlTag extract_tag(TagSoupPullParser& parser);
+
+	std::map<Utf8String, HtmlTag> tags;
 	bool raw_;
 };
 
