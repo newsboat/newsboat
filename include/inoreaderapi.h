@@ -6,6 +6,7 @@
 #include "cache.h"
 #include "remoteapi.h"
 #include "urlreader.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -31,8 +32,8 @@ private:
 	bool share_article(const std::string& guid, bool share);
 	curl_slist* add_app_headers(curl_slist* headers);
 
-	std::string auth;
-	std::string auth_header;
+	Utf8String auth;
+	Utf8String auth_header;
 };
 
 } // namespace newsboat
