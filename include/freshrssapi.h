@@ -3,10 +3,12 @@
 
 #include <libxml/tree.h>
 
+#include "3rd-party/json.hpp"
+
 #include "cache.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
-#include "3rd-party/json.hpp"
+#include "utf8string.h"
 #include "utils.h"
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
@@ -39,10 +41,10 @@ private:
 	bool mark_article_read_with_token(const std::string& guid,
 		bool read,
 		const std::string& token);
-	std::string auth;
-	std::string auth_header;
+	Utf8String auth;
+	Utf8String auth_header;
 	bool token_expired;
-	std::string token;
+	Utf8String token;
 };
 
 } // namespace newsboat

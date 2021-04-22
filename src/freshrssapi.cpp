@@ -34,7 +34,7 @@ FreshRssApi::FreshRssApi(ConfigContainer* c)
 
 bool FreshRssApi::authenticate()
 {
-	auth = retrieve_auth();
+	auth = Utf8String::from_utf8(retrieve_auth());
 	LOG(Level::DEBUG, "FreshRssApi::authenticate: Auth = %s", auth);
 	return auth != "";
 }
@@ -176,14 +176,13 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 void FreshRssApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
-		auth_header = strprintf::fmt(
-				"Authorization: GoogleLogin auth=%s", auth);
+		auth_header = Utf8String::from_utf8(strprintf::fmt("Authorization: GoogleLogin auth=%s",
+					auth.to_utf8()));
 	}
 	LOG(Level::DEBUG,
 		"FreshRssApi::add_custom_headers header = %s",
 		auth_header);
-	*custom_headers =
-		curl_slist_append(*custom_headers, auth_header.c_str());
+	*custom_headers = curl_slist_append(*custom_headers, auth_header.to_utf8().c_str());
 }
 
 bool FreshRssApi::mark_all_read(const std::string& feedurl)
@@ -219,7 +218,7 @@ bool FreshRssApi::mark_all_read(const std::string& feedurl)
 bool FreshRssApi::mark_article_read(const std::string& guid, bool read)
 {
 	refresh_token();
-	return mark_article_read_with_token(guid, read, token);
+	return mark_article_read_with_token(guid, read, token.to_utf8() );
 }
 
 bool FreshRssApi::mark_article_read_with_token(const std::string& guid,
@@ -287,7 +286,7 @@ bool FreshRssApi::refresh_token()
 	// Note that at present token never expires
 	// https://github.com/FreshRSS/FreshRSS/blob/634005de9a4b5e415ebf7c1106c769a0fbed5cfd/p/api/greader.php#L206
 	if (token_expired) {
-		token = get_new_token();
+		token = Utf8String::from_utf8(get_new_token());
 		token_expired = false;
 		return true;
 	}

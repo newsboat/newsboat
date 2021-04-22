@@ -191,8 +191,8 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configcontainer.h include/configexception.h \
  include/configpaths.h include/cliargsparser.h include/dbexception.h \
  include/downloadthread.h include/exception.h include/feedhqapi.h \
- include/feedhqurlreader.h include/freshrssapi.h rss/feed.h rss/item.h \
- 3rd-party/json.hpp include/utils.h 3rd-party/expected.hpp \
+ include/feedhqurlreader.h include/freshrssapi.h 3rd-party/json.hpp \
+ rss/feed.h rss/item.h include/utils.h 3rd-party/expected.hpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
  include/freshrssurlreader.h include/fileurlreader.h include/globals.h \
  include/inoreaderapi.h include/inoreaderurlreader.h \
@@ -382,9 +382,9 @@ src/formaction.o: src/formaction.cpp include/formaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h
 src/freshrssapi.o: src/freshrssapi.cpp include/freshrssapi.h \
- include/cache.h include/configcontainer.h include/configactionhandler.h \
- include/utf8string.h include/remoteapi.h rss/feed.h rss/item.h \
- 3rd-party/json.hpp include/utils.h 3rd-party/expected.hpp \
+ 3rd-party/json.hpp include/cache.h include/configcontainer.h \
+ include/configactionhandler.h include/utf8string.h include/remoteapi.h \
+ rss/feed.h rss/item.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/strprintf.h \
