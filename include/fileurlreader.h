@@ -4,6 +4,7 @@
 #include <string>
 
 #include "urlreader.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -24,7 +25,7 @@ public:
 	nonstd::optional<std::string> write_config();
 
 private:
-	const std::string filename;
+	const Utf8String filename;
 };
 
 }

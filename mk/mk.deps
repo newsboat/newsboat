@@ -344,11 +344,10 @@ src/filesystembrowser.o: src/filesystembrowser.cpp \
  include/filesystembrowser.h 3rd-party/optional.hpp include/strprintf.h \
  include/utf8string.h
 src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
- include/urlreader.h 3rd-party/optional.hpp include/utils.h \
- 3rd-party/expected.hpp include/configcontainer.h \
- include/configactionhandler.h include/utf8string.h include/logger.h \
- config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/urlreader.h 3rd-party/optional.hpp include/utf8string.h \
+ include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
+ include/configactionhandler.h include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
  include/configactionhandler.h config.h include/confighandlerexception.h \
@@ -574,8 +573,8 @@ src/minifluxapi.o: src/minifluxapi.cpp include/minifluxapi.h \
  include/remoteapi.h include/strprintf.h include/utils.h
 src/minifluxurlreader.o: src/minifluxurlreader.cpp \
  include/minifluxurlreader.h include/urlreader.h 3rd-party/optional.hpp \
- include/fileurlreader.h include/logger.h config.h include/strprintf.h \
- include/utf8string.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/fileurlreader.h include/utf8string.h include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/remoteapi.h include/configcontainer.h \
  include/configactionhandler.h include/utils.h 3rd-party/expected.hpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
@@ -589,8 +588,8 @@ src/newsblurapi.o: src/newsblurapi.cpp include/newsblurapi.h \
  include/strprintf.h include/utils.h
 src/newsblururlreader.o: src/newsblururlreader.cpp \
  include/newsblururlreader.h rss/feed.h rss/item.h include/urlreader.h \
- 3rd-party/optional.hpp include/fileurlreader.h include/logger.h config.h \
- include/strprintf.h include/utf8string.h \
+ 3rd-party/optional.hpp include/fileurlreader.h include/utf8string.h \
+ include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/remoteapi.h \
  include/configcontainer.h include/configactionhandler.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \
@@ -604,7 +603,7 @@ src/ocnewsapi.o: src/ocnewsapi.cpp include/ocnewsapi.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/ocnewsurlreader.o: src/ocnewsurlreader.cpp include/ocnewsurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
- include/logger.h config.h include/strprintf.h include/utf8string.h \
+ include/utf8string.h include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/remoteapi.h \
  include/configcontainer.h include/configactionhandler.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \
@@ -856,7 +855,7 @@ src/ttrssapi.o: src/ttrssapi.cpp include/ttrssapi.h 3rd-party/json.hpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/ttrssurlreader.o: src/ttrssurlreader.cpp include/ttrssurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
- include/logger.h config.h include/strprintf.h include/utf8string.h \
+ include/utf8string.h include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/remoteapi.h \
  include/configcontainer.h include/configactionhandler.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \
@@ -986,8 +985,8 @@ test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
 test/filesystembrowser.o: test/filesystembrowser.cpp 3rd-party/catch.hpp \
  include/filesystembrowser.h 3rd-party/optional.hpp
 test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
- include/urlreader.h 3rd-party/optional.hpp 3rd-party/catch.hpp \
- test/test-helpers/chmod.h test/test-helpers/misc.h \
+ include/urlreader.h 3rd-party/optional.hpp include/utf8string.h \
+ 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/misc.h \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/filtercontainer.o: test/filtercontainer.cpp \
  include/filtercontainer.h include/configactionhandler.h \

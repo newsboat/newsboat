@@ -8,13 +8,13 @@
 namespace newsboat {
 
 FileUrlReader::FileUrlReader(const std::string& file)
-	: filename(file)
+	: filename(Utf8String::from_utf8(file))
 {
 }
 
 std::string FileUrlReader::get_source()
 {
-	return filename;
+	return filename.to_utf8();
 }
 
 nonstd::optional<std::string> FileUrlReader::reload()
@@ -23,7 +23,7 @@ nonstd::optional<std::string> FileUrlReader::reload()
 	tags.clear();
 	alltags.clear();
 
-	auto result = utils::read_text_file(filename);
+	auto result = utils::read_text_file(filename.to_utf8());
 	if (!result) {
 		return strprintf::fmt(_("Error: failed to read URLs from file \"%s\": %s"),
 				filename,
@@ -60,7 +60,7 @@ nonstd::optional<std::string> FileUrlReader::reload()
 nonstd::optional<std::string> FileUrlReader::write_config()
 {
 	std::fstream f;
-	f.open(filename, std::fstream::out);
+	f.open(filename.to_utf8(), std::fstream::out);
 	if (!f.is_open()) {
 		const auto error_message = strerror(errno);
 		return strprintf::fmt(_("Error: failed to open file \"%s\": %s"),
