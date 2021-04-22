@@ -210,8 +210,6 @@ public:
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
 	const std::map<std::string, MacroBinding>& get_macro_descriptions();
 
-	ParsedOperations parse_operation_sequence(const std::string& line,
-		const std::string& command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
@@ -222,6 +220,9 @@ private:
 	unsigned short get_flag_from_context(const std::string& context);
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
+	ParsedOperations parse_operation_sequence(const std::string& line,
+		const std::string& command_name, bool allow_description = true);
+
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
