@@ -3,6 +3,7 @@
 
 #include "formaction.h"
 #include "textviewwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -29,8 +30,8 @@ private:
 	std::string make_colorstring(const std::vector<std::string>& colors);
 	bool quit;
 	bool apply_search;
-	std::string searchphrase;
-	const std::string context;
+	Utf8String searchphrase;
+	const Utf8String context;
 	TextviewWidget textview;
 };
 

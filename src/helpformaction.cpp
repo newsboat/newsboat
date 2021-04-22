@@ -21,7 +21,7 @@ HelpFormAction::HelpFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
-	, context(ctx)
+	, context(Utf8String::from_utf8(ctx))
 	, textview("helptext", FormAction::f)
 {
 }
@@ -94,7 +94,7 @@ void HelpFormAction::prepare()
 		set_value("head",
 			fmt.do_format(cfg->get_configvalue("help-title-format"), width));
 
-		const auto descs = v->get_keymap()->get_keymap_descriptions(context);
+		const auto descs = v->get_keymap()->get_keymap_descriptions(context.to_utf8());
 
 		std::string highlighted_searchphrase =
 			strprintf::fmt("<hl>%s</>", searchphrase);
@@ -114,14 +114,14 @@ void HelpFormAction::prepare()
 
 		const auto should_be_visible = [&](const KeyMapDesc& desc) {
 			return !apply_search
-				|| strcasestr(desc.key.c_str(), searchphrase.c_str()) != nullptr
-				|| strcasestr(desc.cmd.c_str(), searchphrase.c_str()) != nullptr
-				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
+				|| strcasestr(desc.key.c_str(), searchphrase.to_utf8().c_str()) != nullptr
+				|| strcasestr(desc.cmd.c_str(), searchphrase.to_utf8().c_str()) != nullptr
+				|| strcasestr(desc.desc.c_str(), searchphrase.to_utf8().c_str()) != nullptr;
 		};
 
 		const auto apply_highlights = [&](const std::string& line) {
-			if (apply_search && searchphrase.length() > 0) {
-				return utils::replace_all(line, searchphrase, highlighted_searchphrase);
+			if (apply_search && !searchphrase.empty()) {
+				return utils::replace_all(line, searchphrase.to_utf8(), highlighted_searchphrase);
 			}
 			return line;
 		};
@@ -219,7 +219,7 @@ void HelpFormAction::finished_qna(Operation op)
 	v->inside_qna(false);
 	switch (op) {
 	case OP_INT_START_SEARCH:
-		searchphrase = qna_responses[0].to_utf8();
+		searchphrase = qna_responses[0];
 		apply_search = true;
 		do_redraw = true;
 		break;
