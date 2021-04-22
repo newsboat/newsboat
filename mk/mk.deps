@@ -350,11 +350,11 @@ src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
- include/configactionhandler.h config.h include/confighandlerexception.h \
- include/utf8string.h include/configparser.h include/matcher.h \
- filter/FilterParser.h include/strprintf.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/configcontainer.h \
- include/logger.h include/strprintf.h \
+ include/configactionhandler.h include/utf8string.h config.h \
+ include/confighandlerexception.h include/configparser.h \
+ include/matcher.h filter/FilterParser.h include/strprintf.h \
+ include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
+ include/configcontainer.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
@@ -795,12 +795,12 @@ src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
- include/configactionhandler.h include/formaction.h include/history.h \
- target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
- include/stflpp.h include/listwidget.h include/listformatter.h \
- include/regexmanager.h include/matcher.h filter/FilterParser.h \
- include/regexowner.h config.h include/fmtstrformatter.h \
- include/listformatter.h include/strprintf.h include/utf8string.h \
+ include/configactionhandler.h include/utf8string.h include/formaction.h \
+ include/history.h target/cxxbridge/libnewsboat-ffi/src/history.rs.h \
+ include/keymap.h include/stflpp.h include/listwidget.h \
+ include/listformatter.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h config.h \
+ include/fmtstrformatter.h include/listformatter.h include/strprintf.h \
  include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
  include/configcontainer.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
@@ -990,8 +990,8 @@ test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/filtercontainer.o: test/filtercontainer.cpp \
  include/filtercontainer.h include/configactionhandler.h \
- 3rd-party/catch.hpp include/confighandlerexception.h \
- include/utf8string.h
+ include/utf8string.h 3rd-party/catch.hpp \
+ include/confighandlerexception.h
 test/filterparser.o: test/filterparser.cpp filter/FilterParser.h \
  3rd-party/catch.hpp
 test/fmtstrformatter.o: test/fmtstrformatter.cpp \

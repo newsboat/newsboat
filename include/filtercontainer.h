@@ -2,6 +2,7 @@
 #define NEWSBOAT_FILTERCONTAINER_H_
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -15,6 +16,16 @@ struct FilterNameExprPair {
 	std::string expr;
 };
 
+/// Stores the name of the filter and the filter expression that user added via
+/// `define-filter` configuration option
+struct InternalFilterNameExprPair {
+	/// Name of the filter
+	Utf8String name;
+
+	/// Filter expression for this named filter
+	Utf8String expr;
+};
+
 class FilterContainer : public ConfigActionHandler {
 public:
 	FilterContainer() = default;
@@ -22,9 +33,17 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
-	const std::vector<FilterNameExprPair>& get_filters() const
+	// FIXME(utf8): change this back to const std::vector<>&
+	std::vector<FilterNameExprPair> get_filters() const
 	{
-		return filters;
+		std::vector<FilterNameExprPair> result;
+		for (const auto& filter : filters) {
+			FilterNameExprPair entry;
+			entry.name = filter.name.to_utf8();
+			entry.expr = filter.expr.to_utf8();
+			result.push_back(std::move(entry));
+		}
+		return result;
 	}
 	unsigned int size()
 	{
@@ -32,7 +51,7 @@ public:
 	}
 
 private:
-	std::vector<FilterNameExprPair> filters;
+	std::vector<InternalFilterNameExprPair> filters;
 };
 
 } // namespace newsboat

@@ -25,12 +25,12 @@ void FilterContainer::handle_action(const std::string& action,
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		FilterNameExprPair filter;
-		filter.name = params[0];
-		filter.expr = params[1];
+		InternalFilterNameExprPair filter;
+		filter.name = Utf8String::from_utf8(params[0]);
+		filter.expr = Utf8String::from_utf8(params[1]);
 
 		Matcher m;
-		if (!m.parse(filter.expr)) {
+		if (!m.parse(filter.expr.to_utf8())) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("couldn't parse filter expression `%s': %s"),
 					filter.expr,
@@ -47,8 +47,8 @@ void FilterContainer::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& filter : filters) {
 		config_output.push_back(strprintf::fmt("define-filter %s %s",
-				utils::quote(filter.name),
-				utils::quote(filter.expr)));
+				utils::quote(filter.name.to_utf8()),
+				utils::quote(filter.expr.to_utf8())));
 	}
 }
 
