@@ -561,9 +561,24 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 	return descs;
 }
 
-const std::map<std::string, MacroBinding>& KeyMap::get_macro_descriptions()
+std::map<std::string, MacroBinding> KeyMap::get_macro_descriptions()
 {
-	return macros_;
+	std::map<std::string, MacroBinding> result;
+	for (const auto& macro : macros_) {
+		const auto key = macro.first.to_utf8();
+
+		MacroBinding value;
+		value.description = macro.second.description.to_utf8();
+		for (const auto& internal_cmd : macro.second.cmds) {
+			MacroCmd cmd;
+			cmd.op = internal_cmd.op;
+			for (const auto& arg : internal_cmd.args) {
+				cmd.args.push_back(arg.to_utf8());
+			}
+			value.cmds.push_back(cmd);
+		}
+	}
+	return result;
 }
 
 KeyMap::~KeyMap() {}
@@ -667,21 +682,21 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 	}
 	for (const auto& macro : macros_) {
 		std::string configline = "macro ";
-		configline.append(macro.first);
+		configline.append(macro.first.to_utf8());
 		configline.append(" ");
 		for (unsigned int i = 0; i < macro.second.cmds.size(); ++i) {
 			const auto& cmd = macro.second.cmds[i];
 			configline.append(getopname(cmd.op));
 			for (const auto& arg : cmd.args) {
 				configline.append(" ");
-				configline.append(utils::quote(arg));
+				configline.append(utils::quote(arg.to_utf8()));
 			}
 			if (i < (macro.second.cmds.size() - 1)) {
 				configline.append(" ; ");
 			}
 		}
-		if (macro.second.description.size() >= 1) {
-			const auto escaped_string = utils::replace_all(macro.second.description, {
+		if (!macro.second.description.empty()) {
+			const auto escaped_string = utils::replace_all(macro.second.description.to_utf8(), {
 				{R"(\)", R"(\\)"},
 				{R"(")", R"(\")"},
 			});
@@ -748,14 +763,14 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
 		const auto parsed = parse_operation_sequence(remaining_params, action);
-		const std::vector<MacroCmd> cmds = parsed.operations;
-		const std::string description = parsed.description;
+		const std::vector<InternalMacroCmd> cmds = parsed.operations;
+		const Utf8String description = parsed.description;
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 		const std::string macrokey = token.value();
 
-		macros_[macrokey] = {cmds, description};
+		macros_[Utf8String::from_utf8(macrokey)] = {cmds, description};
 	} else if (action == "run-on-startup") {
 		startup_operations_sequence = parse_operation_sequence(params, action, false).operations;
 	} else {
@@ -776,7 +791,7 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 				command_name));
 	}
 
-	std::vector<MacroCmd> cmds;
+	std::vector<InternalMacroCmd> cmds;
 	for (const auto& operation : operations) {
 		const auto& tokens = keymap::bridged::operation_tokens(operation);
 		if (tokens.empty()) {
@@ -784,10 +799,12 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 		}
 
 		const auto command_name = std::string(tokens[0]);
-		const auto arguments = std::vector<std::string>(std::next(std::begin(tokens)),
-				std::end(tokens));
+		std::vector<Utf8String> arguments;
+		for (auto it = std::next(std::begin(tokens)); it != std::end(tokens); ++it) {
+			arguments.push_back(*it);
+		}
 
-		MacroCmd cmd;
+		InternalMacroCmd cmd;
 		cmd.op = get_opcode(command_name);
 		if (cmd.op == OP_NIL) {
 			throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
@@ -800,13 +817,22 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 
 	return ParsedOperations{
 		.operations = cmds,
-		.description = std::string(description)
+		.description = Utf8String(description)
 	};
 }
 
 std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()
 {
-	return startup_operations_sequence;
+	std::vector<MacroCmd> result;
+	for (const auto& from : startup_operations_sequence) {
+		MacroCmd to;
+		to.op = from.op;
+		for (const auto& from : from.args) {
+			to.args.push_back(from.to_utf8());
+		}
+		result.push_back(to);
+	}
+	return result;
 }
 
 std::vector<std::string> KeyMap::get_keys(Operation op,
@@ -823,8 +849,17 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
-	if (macros_.count(key) >= 1) {
-		return macros_.at(key).cmds;
+	if (macros_.count(Utf8String::from_utf8(key)) >= 1) {
+		std::vector<MacroCmd> result;
+		for (const auto& from : macros_.at(Utf8String::from_utf8(key)).cmds) {
+			MacroCmd to;
+			to.op = from.op;
+			for (const auto& from : from.args) {
+				to.args.push_back(from.to_utf8());
+			}
+			result.push_back(to);
+		}
+		return result;
 	}
 	return {};
 }

@@ -50,7 +50,7 @@ CXX_FOR_BUILD?=$(CXX)
 DEFINES=-DLOCALEDIR='"$(localedir)"'
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
-INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(relative_cargo_target_dir)/cxxbridge/libnewsboat-ffi/src/
+INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(relative_cargo_target_dir)/cxxbridge/libnewsboat-ffi/src/ -I$(relative_cargo_target_dir)/cxxbridge/rust/
 BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 

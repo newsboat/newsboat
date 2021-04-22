@@ -4,12 +4,24 @@
 #include <functional>
 #include <string>
 
+namespace rust {
+inline namespace cxxbridge1 {
+class String;
+}
+}
+
 namespace newsboat {
 
 /// A string that's guaranteed to contain valid UTF-8.
 class Utf8String {
 public:
 	Utf8String() = default;
+
+	/// Construct an object from a String received from Rust.
+	///
+	/// This performs no validations because Rust strings are known to be
+	/// represented in UTF-8.
+	Utf8String(const rust::String&);
 
 	/// Construct an object from a string literal, which is assumed to be in
 	/// UTF-8 since Newsboat's source code is in UTF-8.

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 // in configuration: bind-key <key> <operation>
 
@@ -171,14 +172,24 @@ struct MacroCmd {
 	std::vector<std::string> args;
 };
 
+struct InternalMacroCmd {
+	Operation op;
+	std::vector<Utf8String> args;
+};
+
 struct MacroBinding {
 	std::vector<MacroCmd> cmds;
 	std::string description;
 };
 
+struct InternalMacroBinding {
+	std::vector<InternalMacroCmd> cmds;
+	Utf8String description;
+};
+
 struct ParsedOperations {
-	std::vector<MacroCmd> operations;
-	std::string description;
+	std::vector<InternalMacroCmd> operations;
+	Utf8String description;
 };
 
 class KeyMap : public ConfigActionHandler {
@@ -200,8 +211,8 @@ public:
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
-	const std::map<std::string, MacroBinding>& get_macro_descriptions();
-
+	// FIXME(utf8): change this back to const std::map<std::string, MacroBinding>&
+	std::map<std::string, MacroBinding> get_macro_descriptions();
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 private:
@@ -213,8 +224,8 @@ private:
 		const std::string& command_name, bool allow_description = true);
 
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
-	std::map<std::string, MacroBinding> macros_;
-	std::vector<MacroCmd> startup_operations_sequence;
+	std::map<Utf8String, InternalMacroBinding> macros_;
+	std::vector<InternalMacroCmd> startup_operations_sequence;
 };
 
 } // namespace newsboat

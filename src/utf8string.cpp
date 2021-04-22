@@ -3,9 +3,16 @@
 #include <stfl.h>
 #include <wctype.h>
 
+#include "cxx.h"
+
 #include "utils.h"
 
 namespace newsboat {
+
+Utf8String::Utf8String(const rust::String& input)
+{
+	inner = std::string(input);
+}
 
 Utf8String::Utf8String(std::string input)
 {
