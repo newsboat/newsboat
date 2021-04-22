@@ -112,7 +112,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	config_file = config_dir + NEWSBOAT_PATH_SEP + config_file;
 
 	/* in data */
-	lock_file = xdg_data_dir + NEWSBOAT_PATH_SEP + LOCK_SUFFIX;
+	lock_file = xdg_data_dir + NEWSBOAT_PATH_SEP + LOCK_SUFFIX.to_utf8();
 	queue_file = xdg_data_dir + NEWSBOAT_PATH_SEP + queue_file;
 
 	return true;

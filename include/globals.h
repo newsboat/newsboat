@@ -1,10 +1,10 @@
 #ifndef NEWSBOAT_GLOBALS_H_
 #define NEWSBOAT_GLOBALS_H_
 
-#include <string>
+#include "utf8string.h"
 
 namespace newsboat {
-const std::string LOCK_SUFFIX(".lock");
+const Utf8String LOCK_SUFFIX(".lock");
 }
 
 #endif /* NEWSBOAT_GLOBALS_H_ */
