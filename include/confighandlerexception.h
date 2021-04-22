@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 enum class ActionHandlerStatus;
@@ -11,14 +13,14 @@ enum class ActionHandlerStatus;
 class ConfigHandlerException : public std::exception {
 public:
 	explicit ConfigHandlerException(const std::string& emsg)
-		: msg(emsg)
+		: msg(Utf8String::from_utf8(emsg))
 	{
 	}
 	explicit ConfigHandlerException(ActionHandlerStatus e);
 	~ConfigHandlerException() throw() override {}
 	const char* what() const throw() override
 	{
-		return msg.c_str();
+		return msg.to_utf8().c_str();
 	}
 	int status()
 	{
@@ -27,7 +29,7 @@ public:
 
 private:
 	const char* get_errmsg(ActionHandlerStatus e);
-	std::string msg;
+	Utf8String msg;
 };
 
 } // namespace newsboat

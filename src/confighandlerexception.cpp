@@ -9,7 +9,7 @@ namespace newsboat {
 
 ConfigHandlerException::ConfigHandlerException(ActionHandlerStatus e)
 {
-	msg = get_errmsg(e);
+	msg = Utf8String::from_utf8(get_errmsg(e));
 }
 
 const char* ConfigHandlerException::get_errmsg(ActionHandlerStatus status)
