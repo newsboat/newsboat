@@ -31,7 +31,7 @@ const std::string Download::filename() const
 
 const std::string Download::basename() const
 {
-	std::string::size_type start = fn.rfind(NEWSBEUTER_PATH_SEP);
+	std::string::size_type start = fn.rfind(NEWSBOAT_PATH_SEP);
 
 	if (start != std::string::npos) {
 		return fn.substr(start+1);

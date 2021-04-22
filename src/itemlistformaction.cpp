@@ -1520,8 +1520,8 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	if (directory.back() != NEWSBEUTER_PATH_SEP) {
-		directory.push_back(NEWSBEUTER_PATH_SEP);
+	if (utils::ends_with(NEWSBOAT_PATH_SEP, directory)) {
+		directory.append(NEWSBOAT_PATH_SEP);
 	}
 
 	std::vector<std::string> filenames;

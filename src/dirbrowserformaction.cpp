@@ -71,8 +71,8 @@ bool DirBrowserFormAction::process_operation(Operation op,
 					std::string fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
+						fn.append(NEWSBOAT_PATH_SEP);
 					}
 
 					set_value("filenametext", fn);
@@ -81,8 +81,8 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				break;
 				case file_system::FileType::RegularFile: {
 					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
+						fn.append(NEWSBOAT_PATH_SEP);
 					}
 					fn.append(selection.name);
 					set_value("filenametext", fn);
