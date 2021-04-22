@@ -163,8 +163,8 @@ src/confighandlerexception.o: src/confighandlerexception.cpp \
  include/configactionhandler.h
 src/configparser.o: src/configparser.cpp include/configparser.h \
  include/configactionhandler.h config.h include/configexception.h \
- include/confighandlerexception.h include/logger.h include/strprintf.h \
- include/utf8string.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/utf8string.h include/confighandlerexception.h include/logger.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/strprintf.h include/tagsouppullparser.h 3rd-party/optional.hpp \
  include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
@@ -363,8 +363,8 @@ src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
 src/formaction.o: src/formaction.cpp include/formaction.h \
  include/history.h target/cxxbridge/libnewsboat-ffi/src/history.rs.h \
  include/keymap.h include/configactionhandler.h include/stflpp.h config.h \
- include/configexception.h include/logger.h include/strprintf.h \
- include/utf8string.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/configexception.h include/utf8string.h include/logger.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/matcherexception.h include/strprintf.h include/utils.h \
  3rd-party/expected.hpp 3rd-party/optional.hpp include/configcontainer.h \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
@@ -958,9 +958,9 @@ test/configdata.o: test/configdata.cpp 3rd-party/catch.hpp \
  include/configdata.h 3rd-party/expected.hpp include/utf8string.h
 test/configparser.o: test/configparser.cpp include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
- include/configexception.h include/keymap.h test/test-helpers/envvar.h \
- 3rd-party/optional.hpp test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h
+ include/configexception.h include/utf8string.h include/keymap.h \
+ test/test-helpers/envvar.h 3rd-party/optional.hpp \
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
  include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \

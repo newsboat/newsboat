@@ -4,22 +4,24 @@
 #include <stdexcept>
 #include <string>
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 class ConfigException : public std::exception {
 public:
 	explicit ConfigException(const std::string& errmsg)
-		: msg(errmsg)
+		: msg(Utf8String::from_utf8(errmsg))
 	{
 	}
 	~ConfigException() throw() override {}
 	const char* what() const throw() override
 	{
-		return msg.c_str();
+		return msg.to_utf8().c_str();
 	}
 
 private:
-	std::string msg;
+	Utf8String msg;
 };
 
 } // namespace newsboat
