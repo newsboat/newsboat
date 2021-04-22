@@ -71,7 +71,7 @@ TEST_CASE("FilterContainer::handle_action throws ConfigHandlerException on unkno
 		ConfigHandlerException);
 }
 
-TEST_CASE("FilterContainer::get_filters() gives direct access to stored filters",
+TEST_CASE("FilterContainer::get_filters() gives access to stored filters",
 	"[FilterContainer]")
 {
 	FilterContainer filters;
@@ -90,9 +90,6 @@ TEST_CASE("FilterContainer::get_filters() gives direct access to stored filters"
 	REQUIRE(filters.get_filters()[0].expr == filter1);
 	REQUIRE(filters.get_filters()[1].name == name2);
 	REQUIRE(filters.get_filters()[1].expr == filter2);
-
-	filters.get_filters().clear();
-	REQUIRE(filters.size() == 0);
 }
 
 TEST_CASE("FilterContainer::dump_config() writes out all configured settings to the provided vector",
