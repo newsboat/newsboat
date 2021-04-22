@@ -62,7 +62,7 @@ void ItemViewFormAction::init()
 		update_percent();
 	}
 	set_keymap_hints();
-	item = feed->get_item_by_guid(guid);
+	item = feed->get_item_by_guid(guid.to_utf8());
 }
 
 void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
@@ -119,13 +119,18 @@ void ItemViewFormAction::prepare()
 					&rxman,
 					"article");
 		} else {
+			std::vector<LinkPair> raw_links;
+
 			links.clear();
 			if (!item->enclosure_url().empty()) {
 				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type());
 				if (link_type.has_value()) {
-					links.push_back(LinkPair(item->enclosure_url(), link_type.value()));
+					raw_links.push_back(LinkPair(item->enclosure_url(), link_type.value()));
+					links.push_back(InternalLinkPair(Utf8String::from_utf8(item->enclosure_url()),
+							link_type.value()));
 				}
 			}
+
 
 			std::tie(formatted_text, num_lines) =
 				item_renderer::to_stfl_list(
@@ -137,7 +142,7 @@ void ItemViewFormAction::prepare()
 					window_width,
 					&rxman,
 					"article",
-					links);
+					raw_links);
 		}
 
 		textview.stfl_replace_lines(num_lines, formatted_text);
@@ -335,7 +340,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
-				v->push_urlview(links, feed);
+				std::vector<LinkPair> raw_links;
+				for (const auto& link : links) {
+					raw_links.push_back(LinkPair(link.first.to_utf8(), link.second));
+				}
+
+				v->push_urlview(raw_links, feed);
 			} else {
 				v->get_statusline().show_error(_("URL list empty."));
 			}
@@ -350,7 +360,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: deleting current article");
 		item->set_deleted(true);
-		rsscache->mark_item_deleted(guid, true);
+		rsscache->mark_item_deleted(guid.to_utf8(), true);
 	/* fall-through! */
 	case OP_NEXTUNREAD:
 		LOG(Level::INFO,
@@ -458,7 +468,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			idx);
 		if (idx < links.size()) {
 			const bool interactive = true;
-			return open_link_in_browser(links[idx].first, interactive);
+			return open_link_in_browser(links[idx].first.to_utf8(), interactive);
 		}
 	}
 	break;
@@ -602,7 +612,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		break;
 	case OP_PIPE_TO: {
 		std::ostringstream ostr;
-		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
+		v->get_ctrl()->write_item(feed->get_item_by_guid(guid.to_utf8()), ostr);
 		v->push_empty_formaction();
 		Stfl::reset();
 
@@ -621,7 +631,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		const auto idx = utils::to_u(qna_responses[0].to_utf8(), 0);
 		if (idx != 0 && idx - 1 < links.size()) {
 			const bool interactive = true;
-			open_link_in_browser(links[idx - 1].first, interactive);
+			open_link_in_browser(links[idx - 1].first.to_utf8(), interactive);
 		}
 	}
 	break;

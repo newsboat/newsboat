@@ -6,12 +6,15 @@
 #include "regexmanager.h"
 #include "textformatter.h"
 #include "textviewwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
 class Cache;
 class ItemListFormAction;
 class RssItem;
+
+using InternalLinkPair = std::pair<Utf8String, LinkType>;
 
 class ItemViewFormAction : public FormAction {
 public:
@@ -26,7 +29,7 @@ public:
 	void init() override;
 	void set_guid(const std::string& guid_)
 	{
-		guid = guid_;
+		guid = Utf8String::from_utf8(guid_);
 	}
 	void set_feed(std::shared_ptr<RssFeed> fd)
 	{
@@ -73,11 +76,11 @@ private:
 
 	void do_search();
 
-	std::string guid;
+	Utf8String guid;
 	std::shared_ptr<RssFeed> feed;
 	std::shared_ptr<RssItem> item;
 	bool show_source;
-	std::vector<LinkPair> links;
+	std::vector<InternalLinkPair> links;
 	RegexManager& rxman;
 	unsigned int num_lines;
 	std::shared_ptr<ItemListFormAction> itemlist;
