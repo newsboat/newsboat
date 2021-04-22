@@ -24,7 +24,7 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
-	std::vector<FilterNameExprPair>& get_filters()
+	const std::vector<FilterNameExprPair>& get_filters() const
 	{
 		return filters;
 	}
