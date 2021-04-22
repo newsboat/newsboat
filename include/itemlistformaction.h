@@ -9,6 +9,7 @@
 #include "listformaction.h"
 #include "listformatter.h"
 #include "regexmanager.h"
+#include "utf8string.h"
 #include "view.h"
 
 namespace newsboat {
@@ -64,7 +65,7 @@ public:
 	}
 	void set_searchphrase(const std::string& s)
 	{
-		search_phrase = s;
+		search_phrase = Utf8String::from_utf8(s);
 	}
 
 	void invalidate_list()
@@ -131,7 +132,7 @@ private:
 	Matcher matcher;
 	std::vector<ItemPtrPosPair> visible_items;
 	bool show_searchresult;
-	std::string search_phrase;
+	Utf8String search_phrase;
 
 	History filterhistory;
 

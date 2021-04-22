@@ -71,7 +71,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			old_itempos = itempos;
 			v->push_itemview(feed,
 				visible_items[itempos].first->guid(),
-				show_searchresult ? search_phrase : "");
+				show_searchresult ? search_phrase.to_utf8() : "");
 			invalidate(itempos);
 		} else {
 			v->get_statusline().show_error(
