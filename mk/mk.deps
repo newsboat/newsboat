@@ -441,12 +441,12 @@ src/inoreaderapi.o: src/inoreaderapi.cpp include/inoreaderapi.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/inoreaderurlreader.o: src/inoreaderurlreader.cpp \
  include/inoreaderurlreader.h include/urlreader.h 3rd-party/optional.hpp \
- include/configcontainer.h include/configactionhandler.h \
- include/utf8string.h include/fileurlreader.h include/logger.h config.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
- include/remoteapi.h include/configcontainer.h include/utils.h \
- 3rd-party/expected.hpp include/logger.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
+ include/utf8string.h include/configcontainer.h \
+ include/configactionhandler.h include/fileurlreader.h include/logger.h \
+ config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/remoteapi.h \
+ include/configcontainer.h include/utils.h 3rd-party/expected.hpp \
+ include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/itemlistformaction.h 3rd-party/optional.hpp include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h \

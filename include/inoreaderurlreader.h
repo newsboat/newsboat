@@ -2,6 +2,7 @@
 #define NEWSBOAT_INOREADERURLREADER_H_
 
 #include "urlreader.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -19,7 +20,7 @@ public:
 
 private:
 	ConfigContainer* cfg;
-	std::string file;
+	Utf8String file;
 	RemoteApi* api;
 };
 
