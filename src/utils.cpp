@@ -915,4 +915,18 @@ std::string utils::mt_strf_localtime(const std::string& format, time_t t)
 	return std::string(buffer, written);
 }
 
+bool utils::starts_with(const std::string& prefix, const std::string& input)
+{
+	return input.substr(0, prefix.size()) == prefix;
+}
+
+bool utils::ends_with(const std::string& suffix, const std::string& input)
+{
+	if (input.size() < suffix.size()) {
+		return false;
+	} else {
+		return input.substr(input.size() - suffix.size(), suffix.size()) == suffix;
+	}
+}
+
 } // namespace newsboat

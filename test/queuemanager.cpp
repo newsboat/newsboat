@@ -48,8 +48,8 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(test_helpers::starts_with(enclosure_url, lines[0]));
-				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(utils::starts_with(enclosure_url, lines[0]));
+				REQUIRE(utils::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -73,8 +73,8 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(test_helpers::starts_with(enclosure_url, lines[0]));
-				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(utils::starts_with(enclosure_url, lines[0]));
+				REQUIRE(utils::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -163,8 +163,8 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
-				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(utils::starts_with(enclosure_url1, lines[0]));
+				REQUIRE(utils::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -188,8 +188,8 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 					const auto lines = test_helpers::file_contents(queue_file.get_path());
 					REQUIRE(lines.size() == 2);
-					REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
-					REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
+					REQUIRE(utils::starts_with(enclosure_url1, lines[0]));
+					REQUIRE(utils::ends_with(R"(/podcast.mp3")", lines[0]));
 
 					REQUIRE(lines[1] == "");
 				}
@@ -517,8 +517,8 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 
 				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
-				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(utils::starts_with(enclosure_url1, lines[0]));
+				REQUIRE(utils::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}

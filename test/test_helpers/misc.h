@@ -29,14 +29,6 @@ void copy_file(const std::string& source, const std::string& destination);
  */
 std::vector<std::string> file_contents(const std::string& filepath);
 
-/* \brief Returns `true` if `input` starts with `prefix`.
- */
-bool starts_with(const std::string& prefix, const std::string& input);
-
-/* \brief Returns `true` if `input` ends with `suffix`.
- */
-bool ends_with(const std::string& suffix, const std::string& input);
-
 /* \brief Returns `true` if the file at `filepath` exists.
  */
 bool file_exists(const std::string& filepath);

@@ -176,6 +176,13 @@ std::string program_version();
 
 /// Threadsafe combination of strftime() and localtime()
 std::string mt_strf_localtime(const std::string& format, time_t t);
+
+// Returns `true` if `input` starts with `prefix`.
+bool starts_with(const std::string& prefix, const std::string& input);
+
+// Returns `true` if `input` ends with `suffix`.
+bool ends_with(const std::string& suffix, const std::string& input);
+
 }
 
 } // namespace newsboat

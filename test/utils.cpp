@@ -2187,3 +2187,25 @@ TEST_CASE("convert_text() converts text between encodings: ISO-8859-1 to utf8", 
 
 	verify_convert_text(input, "UTF-8", "ISO-8859-1", expected);
 }
+
+TEST_CASE("starts_with() checks if an input string starts with a given suffix", "[utils]")
+{
+	REQUIRE_FALSE(utils::starts_with("bye", "hello"));
+	REQUIRE_FALSE(utils::starts_with("bye", "hi"));
+
+	REQUIRE(utils::starts_with("", "type"));
+	REQUIRE(utils::starts_with("t", "type"));
+	REQUIRE(utils::starts_with("ty", "type"));
+	REQUIRE(utils::starts_with("typ", "type"));
+}
+
+TEST_CASE("ends_with() checks if an input string ends with a given suffix", "[utils]")
+{
+	REQUIRE_FALSE(utils::ends_with("bye", "hello"));
+	REQUIRE_FALSE(utils::ends_with("bye", "hi"));
+
+	REQUIRE(utils::ends_with("ype", "type"));
+	REQUIRE(utils::ends_with("pe", "type"));
+	REQUIRE(utils::ends_with("e", "type"));
+	REQUIRE(utils::ends_with("", "type"));
+}
