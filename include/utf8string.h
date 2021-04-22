@@ -74,6 +74,11 @@ public:
 		return inner.length();
 	}
 
+	bool empty() const noexcept
+	{
+		return inner.empty();
+	}
+
 	size_type rfind(const Utf8String& str, size_type pos = npos ) const noexcept
 	{
 		return inner.rfind(str.inner, pos);

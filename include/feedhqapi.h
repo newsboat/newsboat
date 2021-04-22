@@ -5,6 +5,7 @@
 
 #include "cache.h"
 #include "remoteapi.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -32,8 +33,8 @@ private:
 	bool mark_article_read_with_token(const std::string& guid,
 		bool read,
 		const std::string& token);
-	std::string auth;
-	std::string auth_header;
+	Utf8String auth;
+	Utf8String auth_header;
 };
 
 } // namespace newsboat
