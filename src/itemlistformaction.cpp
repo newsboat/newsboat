@@ -875,8 +875,8 @@ void ItemListFormAction::qna_end_editflags()
 
 void ItemListFormAction::qna_start_search()
 {
-	const std::string searchphrase = qna_responses[0];
-	if (searchphrase.length() == 0) {
+	const auto searchphrase = qna_responses[0];
+	if (searchphrase.empty()) {
 		return;
 	}
 
@@ -886,8 +886,7 @@ void ItemListFormAction::qna_start_search()
 		const auto message_lifetime = v->get_statusline().show_message_until_finished(
 				_("Searching..."));
 		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
-		items = v->get_ctrl()->search_for_items(
-				utf8searchphrase, feed);
+		items = v->get_ctrl()->search_for_items(utf8searchphrase, feed);
 	} catch (const DbException& e) {
 		v->get_statusline().show_error(
 			strprintf::fmt(_("Error while searching for `%s': %s"),
