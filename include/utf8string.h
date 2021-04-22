@@ -74,6 +74,11 @@ public:
 		return inner.length();
 	}
 
+	size_type rfind(const Utf8String& str, size_type pos = npos ) const noexcept
+	{
+		return inner.rfind(str.inner, pos);
+	}
+
 	friend bool operator==(const Utf8String& lhs, const Utf8String& rhs);
 	friend bool operator!=(const Utf8String& lhs, const Utf8String& rhs);
 	friend bool operator<(const Utf8String& lhs, const Utf8String& rhs);

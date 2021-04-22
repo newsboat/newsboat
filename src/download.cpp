@@ -26,7 +26,7 @@ Download::~Download() {}
 
 const std::string Download::filename() const
 {
-	return fn;
+	return fn.to_utf8();
 }
 
 const std::string Download::basename() const
@@ -34,19 +34,19 @@ const std::string Download::basename() const
 	std::string::size_type start = fn.rfind(NEWSBOAT_PATH_SEP);
 
 	if (start != std::string::npos) {
-		return fn.substr(start+1);
+		return fn.substr(start+1).to_utf8();
 	}
-	return fn;
+	return fn.to_utf8();
 }
 
 const std::string Download::url() const
 {
-	return url_;
+	return url_.to_utf8();
 }
 
 void Download::set_filename(const std::string& str)
 {
-	fn = str;
+	fn = newsboat::Utf8String::from_utf8(str);
 }
 
 double Download::percents_finished() const
@@ -86,7 +86,7 @@ const std::string Download::status_text() const
 
 void Download::set_url(const std::string& u)
 {
-	url_ = u;
+	url_ = newsboat::Utf8String::from_utf8(u);
 }
 
 void Download::set_progress(double downloaded, double total)
@@ -103,7 +103,7 @@ void Download::set_status(DlStatus dls, const std::string& msg_)
 	if (download_status != dls) {
 		cb_require_view_update();
 	}
-	msg = msg_;
+	msg = newsboat::Utf8String::from_utf8(msg_);
 	download_status = dls;
 }
 

@@ -4,6 +4,8 @@
 #include <functional>
 #include <string>
 
+#include "utf8string.h"
+
 namespace podboat {
 
 enum class DlStatus {
@@ -30,7 +32,7 @@ public:
 	}
 	const std::string& status_msg() const
 	{
-		return msg;
+		return msg.to_utf8();
 	}
 	const std::string filename() const;
 	const std::string basename() const;
@@ -53,10 +55,10 @@ public:
 	}
 
 private:
-	std::string fn;
-	std::string url_;
+	newsboat::Utf8String fn;
+	newsboat::Utf8String url_;
 	DlStatus download_status;
-	std::string msg;
+	newsboat::Utf8String msg;
 	double cursize;
 	double totalsize;
 	double curkbps;
