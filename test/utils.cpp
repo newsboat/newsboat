@@ -1951,3 +1951,25 @@ TEST_CASE("translit() always returns the same value for the same inputs",
 		}
 	}
 }
+
+TEST_CASE("starts_with() checks if an input string starts with a given suffix", "[utils]")
+{
+	REQUIRE_FALSE(utils::starts_with("bye", "hello"));
+	REQUIRE_FALSE(utils::starts_with("bye", "hi"));
+
+	REQUIRE(utils::starts_with("", "type"));
+	REQUIRE(utils::starts_with("t", "type"));
+	REQUIRE(utils::starts_with("ty", "type"));
+	REQUIRE(utils::starts_with("typ", "type"));
+}
+
+TEST_CASE("ends_with() checks if an input string ends with a given suffix", "[utils]")
+{
+	REQUIRE_FALSE(utils::ends_with("bye", "hello"));
+	REQUIRE_FALSE(utils::ends_with("bye", "hi"));
+
+	REQUIRE(utils::ends_with("ype", "type"));
+	REQUIRE(utils::ends_with("pe", "type"));
+	REQUIRE(utils::ends_with("e", "type"));
+	REQUIRE(utils::ends_with("", "type"));
+}

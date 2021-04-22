@@ -1046,7 +1046,10 @@ test/queueloader.o: test/queueloader.cpp include/queueloader.h \
  include/configactionhandler.h include/download.h 3rd-party/catch.hpp \
  test/test-helpers/chmod.h test/test-helpers/misc.h \
  test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
- include/configcontainer.h include/download.h
+ include/configcontainer.h include/download.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 test/queuemanager.o: test/queuemanager.cpp include/queuemanager.h \
  3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
  3rd-party/optional.hpp test/test-helpers/misc.h \
