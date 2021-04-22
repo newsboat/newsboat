@@ -6,7 +6,7 @@
 
 #define PROGRAM_URL			"https://newsboat.org/"
 
-#define NEWSBEUTER_PATH_SEP			'/'
+#define NEWSBOAT_PATH_SEP			"/"
 #define NEWSBEUTER_CONFIG_SUBDIR	".newsbeuter"
 #define NEWSBEUTER_SUBDIR_XDG		"newsbeuter"
 #define NEWSBOAT_CONFIG_SUBDIR	".newsboat"

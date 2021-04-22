@@ -65,9 +65,9 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
-	const std::string filename = (tmp_filename.front() == NEWSBEUTER_PATH_SEP) ?
+	const std::string filename = utils::starts_with(NEWSBOAT_PATH_SEP, tmp_filename) ?
 		tmp_filename :
-		utils::getcwd() + NEWSBEUTER_PATH_SEP + tmp_filename;
+		utils::getcwd() + NEWSBOAT_PATH_SEP + tmp_filename;
 
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {

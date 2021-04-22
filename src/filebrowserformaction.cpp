@@ -71,14 +71,14 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					std::string fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
+						fn.append(NEWSBOAT_PATH_SEP);
 					}
 
 					const std::string fnstr =
 						f.get("filenametext");
 					const std::string::size_type base =
-						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
+						fnstr.find_last_of(NEWSBOAT_PATH_SEP);
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
@@ -92,8 +92,8 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				break;
 				case FileSystemBrowser::FileType::RegularFile: {
 					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
+						fn.append(NEWSBOAT_PATH_SEP);
 					}
 					fn.append(selection.name);
 					set_value("filenametext", fn);

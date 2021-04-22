@@ -56,7 +56,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_config_dir = env_xdg_config;
 	} else {
 		xdg_config_dir = env_home;
-		xdg_config_dir.push_back(NEWSBEUTER_PATH_SEP);
+		xdg_config_dir.append(NEWSBOAT_PATH_SEP);
 		xdg_config_dir.append(".config");
 	}
 
@@ -65,16 +65,16 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_data_dir = env_xdg_data;
 	} else {
 		xdg_data_dir = env_home;
-		xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
+		xdg_data_dir.append(NEWSBOAT_PATH_SEP);
 		xdg_data_dir.append(".local");
-		xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
+		xdg_data_dir.append(NEWSBOAT_PATH_SEP);
 		xdg_data_dir.append("share");
 	}
 
-	xdg_config_dir.push_back(NEWSBEUTER_PATH_SEP);
+	xdg_config_dir.append(NEWSBOAT_PATH_SEP);
 	xdg_config_dir.append(NEWSBOAT_SUBDIR_XDG);
 
-	xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
+	xdg_data_dir.append(NEWSBOAT_PATH_SEP);
 	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists =
@@ -109,13 +109,11 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	}
 
 	/* in config */
-	config_file =
-		config_dir + NEWSBEUTER_PATH_SEP + config_file;
+	config_file = config_dir + NEWSBOAT_PATH_SEP + config_file;
 
 	/* in data */
-	lock_file = xdg_data_dir + NEWSBEUTER_PATH_SEP + LOCK_SUFFIX;
-	queue_file =
-		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
+	lock_file = xdg_data_dir + NEWSBOAT_PATH_SEP + LOCK_SUFFIX;
+	queue_file = xdg_data_dir + NEWSBOAT_PATH_SEP + queue_file;
 
 	return true;
 }
@@ -152,7 +150,7 @@ PbController::PbController()
 		return;
 	}
 
-	config_dir.push_back(NEWSBEUTER_PATH_SEP);
+	config_dir.append(NEWSBOAT_PATH_SEP);
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
 	// create configuration directory if it doesn't exist
@@ -168,9 +166,9 @@ PbController::PbController()
 		::exit(EXIT_FAILURE);
 	}
 
-	config_file = config_dir + NEWSBEUTER_PATH_SEP + config_file;
-	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
-	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
+	config_file = config_dir + NEWSBOAT_PATH_SEP + config_file;
+	queue_file = config_dir + NEWSBOAT_PATH_SEP + queue_file;
+	lock_file = config_dir + NEWSBOAT_PATH_SEP + lock_file;
 }
 
 void PbController::initialize(int argc, char* argv[])
