@@ -12,7 +12,7 @@ FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
 	const std::string& url_file,
 	RemoteApi* a)
 	: cfg(c)
-	, file(url_file)
+	, file(Utf8String::from_utf8(url_file))
 	, api(a)
 {
 }
@@ -50,7 +50,7 @@ nonstd::optional<std::string> FeedHqUrlReader::reload()
 		ADD_URL(SHARED_ITEMS_URL, std::string("~") + _("Shared items"));
 	}
 
-	FileUrlReader ur(file);
+	FileUrlReader ur(file.to_utf8());
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
 		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());

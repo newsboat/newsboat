@@ -286,8 +286,8 @@ src/feedhqapi.o: src/feedhqapi.cpp include/feedhqapi.h include/cache.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/feedhqurlreader.o: src/feedhqurlreader.cpp include/feedhqurlreader.h \
- include/urlreader.h 3rd-party/optional.hpp include/configcontainer.h \
- include/configactionhandler.h include/utf8string.h \
+ include/urlreader.h 3rd-party/optional.hpp include/utf8string.h \
+ include/configcontainer.h include/configactionhandler.h \
  include/fileurlreader.h include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/remoteapi.h \
  include/configcontainer.h include/utils.h 3rd-party/expected.hpp \
