@@ -8,6 +8,7 @@
 #include "listformaction.h"
 #include "matcher.h"
 #include "regexmanager.h"
+#include "utf8string.h"
 #include "view.h"
 
 namespace newsboat {
@@ -83,7 +84,7 @@ private:
 
 	bool zero_feedpos;
 	std::vector<FeedPtrPosPair> visible_feeds;
-	std::string tag;
+	Utf8String tag;
 
 	Matcher matcher;
 	bool apply_filter;

@@ -384,7 +384,7 @@ REDO:
 			LOG(Level::INFO, "FeedListFormAction: marking all feeds read");
 			const auto message_lifetime = v->get_statusline().show_message_until_finished(
 					_("Marking all feeds read..."));
-			if (tag == "") {
+			if (tag.empty()) {
 				v->get_ctrl()->mark_all_read("");
 			} else {
 				// we're in tag view, so let's only touch feeds that are
@@ -399,7 +399,7 @@ REDO:
 		}
 		break;
 	case OP_CLEARTAG:
-		tag = "";
+		tag.clear();
 		do_redraw = true;
 		zero_feedpos = true;
 		break;
@@ -410,8 +410,8 @@ REDO:
 		} else {
 			newtag = v->select_tag();
 		}
-		if (newtag != "") {
-			tag = newtag;
+		if (!newtag.empty()) {
+			tag = Utf8String::from_utf8(newtag);
 			do_redraw = true;
 			zero_feedpos = true;
 		}
@@ -496,7 +496,7 @@ REDO:
 		v->get_ctrl()->edit_urls_file();
 		break;
 	case OP_QUIT:
-		if (tag != "") {
+		if (!tag.empty()) {
 			op = OP_CLEARTAG;
 			goto REDO;
 		}
@@ -595,7 +595,7 @@ void FeedListFormAction::update_visible_feeds(
 	unsigned int i = 0;
 	for (const auto& feed : feeds) {
 		feed->set_index(i + 1);
-		if ((tag == "" || feed->matches_tag(tag)) &&
+		if ((tag.empty() || feed->matches_tag(tag.to_utf8())) &&
 			(show_read || feed->unread_item_count() > 0) &&
 			(!apply_filter || matcher.matches(feed.get())) &&
 			!feed->hidden()) {
@@ -846,7 +846,7 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 		if (!tokens.empty()) {
 			if (tokens[0] == "tag") {
 				if (tokens.size() >= 2 && tokens[1] != "") {
-					tag = tokens[1];
+					tag = Utf8String::from_utf8(tokens[1]);
 					do_redraw = true;
 					zero_feedpos = true;
 				}
@@ -939,7 +939,7 @@ void FeedListFormAction::update_form_title(unsigned int width)
 		cfg->get_configvalue("feedlist-title-format");
 
 	FmtStrFormatter fmt;
-	fmt.register_fmt('T', tag);
+	fmt.register_fmt('T', tag.to_utf8());
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('u', std::to_string(count_unread_feeds()));
