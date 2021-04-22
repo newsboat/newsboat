@@ -454,7 +454,7 @@ REDO:
 			// qna_responses vector from the arguments and then run
 			// the finished_qna() by ourselves to simulate a "Q&A"
 			// session that is in fact macro-driven.
-			qna_responses.push_back((*args)[0]);
+			qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 			finished_qna(OP_INT_START_SEARCH);
 		} else {
 			std::vector<QnaPair> qna;
@@ -465,8 +465,11 @@ REDO:
 		break;
 	case OP_GOTO_TITLE:
 		if (automatic) {
-			if (args->size() >= 1) {
-				qna_responses = {args[0]};
+			if (!args->empty()) {
+				qna_responses.clear();
+				for (const auto& arg : *args) {
+					qna_responses.push_back(Utf8String::from_utf8(arg));
+				}
 				finished_qna(OP_INT_GOTO_TITLE);
 			}
 		} else {
@@ -483,7 +486,7 @@ REDO:
 	case OP_SETFILTER:
 		if (automatic && args->size() > 0) {
 			qna_responses.clear();
-			qna_responses.push_back((*args)[0]);
+			qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 			finished_qna(OP_INT_END_SETFILTER);
 		} else {
 			std::vector<QnaPair> qna;
@@ -873,7 +876,7 @@ void FeedListFormAction::finished_qna(Operation op)
 		op_start_search();
 		break;
 	case OP_INT_GOTO_TITLE:
-		goto_feed(qna_responses[0]);
+		goto_feed(qna_responses[0].to_utf8());
 		break;
 	default:
 		break;
@@ -976,9 +979,9 @@ void FeedListFormAction::op_end_setfilter()
 		return;
 	}
 
-	filterhistory.add_line(filtertext);
+	filterhistory.add_line(filtertext.to_utf8());
 
-	if (!matcher.parse(filtertext)) {
+	if (!matcher.parse(filtertext.to_utf8())) {
 		v->get_statusline().show_error(_("Error: couldn't parse filter command!"));
 		return;
 	}
@@ -1001,12 +1004,10 @@ void FeedListFormAction::op_start_search()
 
 	const auto message_lifetime = v->get_statusline().show_message_until_finished(
 			_("Searching..."));
-	searchhistory.add_line(searchphrase);
+	searchhistory.add_line(searchphrase.to_utf8());
 	std::vector<std::shared_ptr<RssItem>> items;
 	try {
-		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
-		items = v->get_ctrl()->search_for_items(
-				utf8searchphrase, nullptr);
+		items = v->get_ctrl()->search_for_items(searchphrase.to_utf8(), nullptr);
 	} catch (const DbException& e) {
 		v->get_statusline().show_error(strprintf::fmt(
 				_("Error while searching for `%s': %s"),
@@ -1022,7 +1023,7 @@ void FeedListFormAction::op_start_search()
 	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache, ""));
 	search_dummy_feed->set_search_feed(true);
 	search_dummy_feed->add_items(items);
-	v->push_searchresult(search_dummy_feed, searchphrase);
+	v->push_searchresult(search_dummy_feed, searchphrase.to_utf8());
 }
 
 void FeedListFormAction::handle_cmdline_num(unsigned int idx)

@@ -219,7 +219,7 @@ void HelpFormAction::finished_qna(Operation op)
 	v->inside_qna(false);
 	switch (op) {
 	case OP_INT_START_SEARCH:
-		searchphrase = qna_responses[0];
+		searchphrase = qna_responses[0].to_utf8();
 		apply_search = true;
 		do_redraw = true;
 		break;

@@ -304,7 +304,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					}
 				} else {
 					qna_responses.clear();
-					qna_responses.push_back(urlviewer);
+					qna_responses.push_back(Utf8String::from_utf8(urlviewer));
 					this->finished_qna(OP_PIPE_TO);
 				}
 			}
@@ -319,15 +319,10 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (itempos < visible_items.size()) {
 				if (automatic) {
 					qna_responses.clear();
-					qna_responses.push_back(
-						visible_items[itempos]
-						.first->link());
-					qna_responses.push_back(utils::utf8_to_locale(
-							visible_items[itempos].first->title()));
-					qna_responses.push_back(args->size() > 0
-						? (*args)[0]
-						: "");
-					qna_responses.push_back(feed->title());
+					qna_responses.push_back(Utf8String::from_utf8(visible_items[itempos].first->link()));
+					qna_responses.push_back(Utf8String::from_utf8(visible_items[itempos].first->title()));
+					qna_responses.push_back(args->size() > 0 ? Utf8String::from_utf8((*args)[0]) : "");
+					qna_responses.push_back(Utf8String::from_utf8(feed->title()));
 					this->finished_qna(OP_INT_BM_END);
 				} else {
 					this->start_bookmark_qna(
@@ -349,10 +344,8 @@ bool ItemListFormAction::process_operation(Operation op,
 				if (automatic) {
 					if (args->size() > 0) {
 						qna_responses.clear();
-						qna_responses.push_back(
-							(*args)[0]);
-						finished_qna(
-							OP_INT_EDITFLAGS_END);
+						qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
+						finished_qna(OP_INT_EDITFLAGS_END);
 					}
 				} else {
 					std::vector<QnaPair> qna;
@@ -567,14 +560,12 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (automatic) {
 				if (args->size() > 0) {
 					qna_responses.clear();
-					qna_responses.push_back((*args)[0]);
+					qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 					finished_qna(OP_PIPE_TO);
 				}
 			} else {
-				qna.push_back(QnaPair(
-						_("Pipe article to command: "), ""));
-				this->start_qna(
-					qna, OP_PIPE_TO, &cmdlinehistory);
+				qna.push_back(QnaPair(_("Pipe article to command: "), ""));
+				this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 			}
 		} else {
 			v->get_statusline().show_error(_("No item selected!"));
@@ -585,20 +576,22 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 				finished_qna(OP_INT_START_SEARCH);
 			}
 		} else {
 			qna.push_back(QnaPair(_("Search for: "), ""));
-			this->start_qna(
-				qna, OP_INT_START_SEARCH, &searchhistory);
+			this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 		}
 	}
 	break;
 	case OP_GOTO_TITLE:
 		if (automatic) {
-			if (args->size() >= 1) {
-				qna_responses = {args[0]};
+			if (!args->empty()) {
+				qna_responses.clear();
+				for (const auto& arg : *args) {
+					qna_responses.push_back(Utf8String::from_utf8(arg));
+				}
 				finished_qna(OP_INT_GOTO_TITLE);
 			}
 		} else {
@@ -651,14 +644,13 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 				this->finished_qna(OP_INT_END_SETFILTER);
 			}
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Filter: "), ""));
-			this->start_qna(
-				qna, OP_INT_END_SETFILTER, &filterhistory);
+			this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 		}
 		break;
 	case OP_CLEARFILTER:
@@ -806,19 +798,19 @@ void ItemListFormAction::finished_qna(Operation op)
 		break;
 
 	case OP_INT_GOTO_TITLE:
-		goto_item(qna_responses[0]);
+		goto_item(qna_responses[0].to_utf8());
 		break;
 
 	case OP_PIPE_TO: {
 		if (!visible_items.empty()) {
 			unsigned int itempos = list.get_position();
-			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
-			v->get_ctrl()->write_item(
-				visible_items[itempos].first, ostr);
+			v->get_ctrl()->write_item(visible_items[itempos].first, ostr);
 			v->push_empty_formaction();
 			Stfl::reset();
-			FILE* f = popen(cmd.c_str(), "w");
+
+			const auto cmd = qna_responses[0];
+			FILE* f = popen(cmd.to_utf8().c_str(), "w");
 			if (f) {
 				std::string data = ostr.str();
 				fwrite(data.c_str(), data.length(), 1, f);
@@ -843,9 +835,9 @@ void ItemListFormAction::qna_end_setfilter()
 		return;
 	}
 
-	filterhistory.add_line(filtertext);
+	filterhistory.add_line(filtertext.to_utf8());
 
-	if (!matcher.parse(filtertext)) {
+	if (!matcher.parse(filtertext.to_utf8())) {
 		v->get_statusline().show_error(_("Error: couldn't parse filter command!"));
 		return;
 	}
@@ -864,7 +856,7 @@ void ItemListFormAction::qna_end_editflags()
 
 	const unsigned int itempos = list.get_position();
 	if (itempos < visible_items.size()) {
-		visible_items[itempos].first->set_flags(qna_responses[0]);
+		visible_items[itempos].first->set_flags(qna_responses[0].to_utf8());
 		v->get_ctrl()->update_flags(visible_items[itempos].first);
 		v->get_statusline().show_message(_("Flags updated."));
 		LOG(Level::DEBUG,
@@ -880,13 +872,12 @@ void ItemListFormAction::qna_start_search()
 		return;
 	}
 
-	searchhistory.add_line(searchphrase);
+	searchhistory.add_line(searchphrase.to_utf8());
 	std::vector<std::shared_ptr<RssItem>> items;
 	try {
 		const auto message_lifetime = v->get_statusline().show_message_until_finished(
 				_("Searching..."));
-		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
-		items = v->get_ctrl()->search_for_items(utf8searchphrase, feed);
+		items = v->get_ctrl()->search_for_items(searchphrase.to_utf8(), feed);
 	} catch (const DbException& e) {
 		v->get_statusline().show_error(
 			strprintf::fmt(_("Error while searching for `%s': %s"),
@@ -907,7 +898,7 @@ void ItemListFormAction::qna_start_search()
 	if (show_searchresult) {
 		v->pop_current_formaction();
 	}
-	v->push_searchresult(search_dummy_feed, searchphrase);
+	v->push_searchresult(search_dummy_feed, searchphrase.to_utf8());
 }
 
 void ItemListFormAction::do_update_visible_items()

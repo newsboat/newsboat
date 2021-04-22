@@ -278,11 +278,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_BOOKMARK:
 		if (automatic) {
 			qna_responses.clear();
-			qna_responses.push_back(item->link());
-			qna_responses.push_back(utils::utf8_to_locale(item->title()));
-			qna_responses.push_back(
-				args->size() > 0 ? (*args)[0] : "");
-			qna_responses.push_back(feed->title());
+			qna_responses.push_back(Utf8String::from_utf8(item->link()));
+			qna_responses.push_back(Utf8String::from_utf8(item->title()));
+			qna_responses.push_back(args->size() > 0 ? Utf8String::from_utf8((*args)[0]) : "");
+			qna_responses.push_back(Utf8String::from_utf8(feed->title()));
 		} else {
 			this->start_bookmark_qna(utils::utf8_to_locale(item->title()), item->link(), "",
 				feed->title());
@@ -293,7 +292,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 				finished_qna(OP_INT_START_SEARCH);
 			}
 		} else {
@@ -308,7 +307,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 				finished_qna(OP_PIPE_TO);
 			}
 		} else {
@@ -321,8 +320,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_EDITFLAGS:
 		if (automatic) {
 			qna_responses.clear();
-			if (args->size() > 0) {
-				qna_responses.push_back((*args)[0]);
+			if (!args->empty()) {
+				qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 				this->finished_qna(OP_INT_EDITFLAGS_END);
 			}
 		} else {
@@ -332,8 +331,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_SHOWURLS: {
-		std::string urlviewer =
-			cfg->get_configvalue("external-url-viewer");
+		const auto urlviewer = Utf8String::from_utf8(cfg->get_configvalue("external-url-viewer"));
 		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
@@ -469,7 +467,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		if (automatic) {
 			if (args->size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(Utf8String::from_utf8((*args)[0]));
 				finished_qna(OP_INT_GOTO_URL);
 			}
 		} else {
@@ -594,7 +592,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 
 	switch (op) {
 	case OP_INT_EDITFLAGS_END:
-		item->set_flags(qna_responses[0]);
+		item->set_flags(qna_responses[0].to_utf8());
 		v->get_ctrl()->update_flags(item);
 		v->get_statusline().show_message(_("Flags updated."));
 		do_redraw = true;
@@ -603,12 +601,13 @@ void ItemViewFormAction::finished_qna(Operation op)
 		do_search();
 		break;
 	case OP_PIPE_TO: {
-		std::string cmd = qna_responses[0];
 		std::ostringstream ostr;
 		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
 		v->push_empty_formaction();
 		Stfl::reset();
-		FILE* f = popen(cmd.c_str(), "w");
+
+		const auto cmd = qna_responses[0];
+		FILE* f = popen(cmd.to_utf8().c_str(), "w");
 		if (f) {
 			std::string data = ostr.str();
 			fwrite(data.c_str(), data.length(), 1, f);
@@ -619,9 +618,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 	}
 	break;
 	case OP_INT_GOTO_URL: {
-		unsigned int idx = 0;
-		sscanf(qna_responses[0].c_str(), "%u", &idx);
-		if (idx && idx - 1 < links.size()) {
+		const auto idx = utils::to_u(qna_responses[0].to_utf8(), 0);
+		if (idx != 0 && idx - 1 < links.size()) {
 			const bool interactive = true;
 			open_link_in_browser(links[idx - 1].first, interactive);
 		}
@@ -694,13 +692,13 @@ void ItemViewFormAction::do_search()
 		return;
 	}
 
-	searchhistory.add_line(searchphrase);
+	searchhistory.add_line(searchphrase.to_utf8());
 
 	LOG(Level::DEBUG,
 		"ItemViewFormAction::do_search: searchphrase = %s",
 		searchphrase);
 
-	highlight_text(searchphrase);
+	highlight_text(searchphrase.to_utf8());
 }
 
 void ItemViewFormAction::highlight_text(const std::string& searchphrase)

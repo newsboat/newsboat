@@ -8,6 +8,7 @@
 #include "history.h"
 #include "keymap.h"
 #include "stflpp.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -21,6 +22,7 @@ struct KeyMapHintEntry {
 };
 
 typedef std::pair<std::string, std::string> QnaPair;
+typedef std::pair<Utf8String, Utf8String> InternalQnaPair;
 
 class FormAction {
 public:
@@ -57,8 +59,11 @@ public:
 
 	std::string get_qna_response(unsigned int i)
 	{
-		return (qna_responses.size() >= (i + 1)) ? qna_responses[i]
-			: "";
+		if (qna_responses.size() > i) {
+			return qna_responses[i].to_utf8();
+		} else {
+			return "";
+		}
 	}
 	void start_qna(const std::vector<QnaPair>& prompts,
 		Operation finish_op,
@@ -105,18 +110,18 @@ protected:
 	Stfl::Form f;
 	bool do_redraw;
 
-	std::vector<std::string> qna_responses;
+	std::vector<Utf8String> qna_responses;
 
 	static History searchhistory;
 	static History cmdlinehistory;
 
-	std::vector<std::string> valid_cmds;
+	std::vector<Utf8String> valid_cmds;
 
 private:
 	std::string prepare_keymap_hint(KeyMapHintEntry* hints);
 	void start_next_question();
 
-	std::vector<QnaPair> qna_prompts;
+	std::vector<InternalQnaPair> qna_prompts;
 	Operation finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;

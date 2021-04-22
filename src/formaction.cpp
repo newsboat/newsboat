@@ -177,7 +177,7 @@ bool FormAction::process_op(Operation op,
 		 * An answer has been entered, we save the value, and ask the
 		 * next question.
 		 */
-		qna_responses.push_back(get_value("qna_value"));
+		qna_responses.push_back(Utf8String::from_utf8(get_value("qna_value")));
 		start_next_question();
 		break;
 	case OP_VIEWDIALOGS:
@@ -204,12 +204,11 @@ std::vector<std::string> FormAction::get_suggestions(
 	std::vector<std::string> result;
 	// first check all formaction command suggestions
 	for (const auto& cmd : valid_cmds) {
-		LOG(Level::DEBUG,
-			"FormAction::get_suggestions: extracted part: %s",
-			cmd.substr(0, fragment.length()));
-		if (cmd.substr(0, fragment.length()) == fragment) {
-			LOG(Level::DEBUG, "...and it matches.");
-			result.push_back(cmd);
+		if (utils::starts_with(fragment, cmd.to_utf8())) {
+			LOG(Level::DEBUG,
+				"FormAction::get_suggestions: cmd %s matches the fragment",
+				cmd);
+			result.push_back(cmd.to_utf8());
 		}
 	}
 	if (result.empty()) {
@@ -385,7 +384,13 @@ void FormAction::start_qna(const std::vector<QnaPair>& prompts,
 	 * fields corresponds with the first prompt, the second field with the
 	 * second prompt, etc.
 	 */
-	qna_prompts = prompts;
+	qna_prompts.clear();
+	for (const auto& prompt : prompts) {
+		InternalQnaPair entry = std::make_pair(Utf8String::from_utf8(prompt.first),
+				Utf8String::from_utf8(prompt.second));
+		qna_prompts.push_back(entry);
+	}
+
 	qna_responses.clear();
 	finish_operation = finish_op;
 	qna_history = h;
@@ -412,11 +417,11 @@ void FormAction::finished_qna(Operation op)
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
 		v->get_statusline().show_message(_("Saving bookmark..."));
-		std::string retval = bookmark(qna_responses[0],
-				qna_responses[1],
-				qna_responses[2],
-				qna_responses[3]);
-		if (retval.length() == 0) {
+		auto retval = bookmark(qna_responses[0].to_utf8(),
+				qna_responses[1].to_utf8(),
+				qna_responses[2].to_utf8(),
+				qna_responses[3].to_utf8());
+		if (retval.empty()) {
 			v->get_statusline().show_message(_("Saved bookmark."));
 		} else {
 			v->get_statusline().show_message(
@@ -430,10 +435,10 @@ void FormAction::finished_qna(Operation op)
 	break;
 	case OP_INT_END_CMDLINE: {
 		f.set_focus("feeds");
-		std::string cmdline = qna_responses[0];
-		FormAction::cmdlinehistory.add_line(cmdline);
+		const auto cmdline = qna_responses[0];
+		FormAction::cmdlinehistory.add_line(cmdline.to_utf8());
 		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);
-		this->handle_cmdline(cmdline);
+		this->handle_cmdline(cmdline.to_utf8());
 	}
 	break;
 	default:
@@ -515,13 +520,13 @@ void FormAction::start_next_question()
 	if (qna_prompts.size() > 0) {
 		std::string replacestr(
 			"{hbox[lastline] .expand:0 {label .expand:0 text:");
-		replacestr.append(Stfl::quote(qna_prompts[0].first));
+		replacestr.append(Stfl::quote(qna_prompts[0].first.to_utf8()));
 		replacestr.append(
 			"}{input[qnainput] on_ESC:cancel-qna "
 			"on_UP:qna-prev-history on_DOWN:qna-next-history "
 			"on_ENTER:end-question modal:1 .expand:h @bind_home:** "
 			"@bind_end:** text[qna_value]:");
-		replacestr.append(Stfl::quote(qna_prompts[0].second));
+		replacestr.append(Stfl::quote(qna_prompts[0].second.to_utf8()));
 		replacestr.append(" pos[qna_value_pos]:0");
 		replacestr.append("}}");
 		f.modify("lastline", "replace", replacestr);
