@@ -979,36 +979,39 @@ void FeedListFormAction::op_end_setfilter()
 
 void FeedListFormAction::op_start_search()
 {
-	std::string searchphrase = qna_responses[0];
+	const auto searchphrase = qna_responses[0];
 	LOG(Level::DEBUG,
-		"FeedListFormAction::op_start_search: starting search for "
-		"`%s'",
+		"FeedListFormAction::op_start_search: starting search for `%s'",
 		searchphrase);
-	if (searchphrase.length() > 0) {
-		const auto message_lifetime = v->get_statusline().show_message_until_finished(
-				_("Searching..."));
-		searchhistory.add_line(searchphrase);
-		std::vector<std::shared_ptr<RssItem>> items;
-		try {
-			const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
-			items = v->get_ctrl()->search_for_items(
-					utf8searchphrase, nullptr);
-		} catch (const DbException& e) {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Error while searching for `%s': %s"),
-					searchphrase,
-					e.what()));
-			return;
-		}
-		if (!items.empty()) {
-			std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache, ""));
-			search_dummy_feed->set_search_feed(true);
-			search_dummy_feed->add_items(items);
-			v->push_searchresult(search_dummy_feed, searchphrase);
-		} else {
-			v->get_statusline().show_error(_("No results."));
-		}
+
+	if (searchphrase.empty()) {
+		return;
 	}
+
+	const auto message_lifetime = v->get_statusline().show_message_until_finished(
+			_("Searching..."));
+	searchhistory.add_line(searchphrase);
+	std::vector<std::shared_ptr<RssItem>> items;
+	try {
+		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
+		items = v->get_ctrl()->search_for_items(
+				utf8searchphrase, nullptr);
+	} catch (const DbException& e) {
+		v->get_statusline().show_error(strprintf::fmt(
+				_("Error while searching for `%s': %s"),
+				searchphrase,
+				e.what()));
+		return;
+	}
+	if (items.empty()) {
+		v->get_statusline().show_error(_("No results."));
+		return;
+	}
+
+	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache, ""));
+	search_dummy_feed->set_search_feed(true);
+	search_dummy_feed->add_items(items);
+	v->push_searchresult(search_dummy_feed, searchphrase);
 }
 
 void FeedListFormAction::handle_cmdline_num(unsigned int idx)

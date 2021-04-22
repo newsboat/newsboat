@@ -689,8 +689,8 @@ void ItemViewFormAction::set_highlightphrase(const std::string& text)
 
 void ItemViewFormAction::do_search()
 {
-	std::string searchphrase = qna_responses[0];
-	if (searchphrase.length() == 0) {
+	const auto searchphrase = qna_responses[0];
+	if (searchphrase.empty()) {
 		return;
 	}
 
