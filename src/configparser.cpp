@@ -36,9 +36,10 @@ void ConfigParser::handle_action(const std::string& action,
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		const std::string tilde_expanded = utils::resolve_tilde(params[0]);
-		const std::string current_fpath = included_files.back();
-		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
+		const auto tilde_expanded = Utf8String::from_utf8(utils::resolve_tilde(params[0]));
+		const auto current_fpath = included_files.back();
+		if (!this->parse_file(utils::resolve_relative(current_fpath.to_utf8(),
+					tilde_expanded.to_utf8()))) {
 			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
 		}
 	} else {
@@ -65,9 +66,10 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
-	const std::string filename = utils::starts_with(NEWSBOAT_PATH_SEP, tmp_filename) ?
-		tmp_filename :
-		utils::getcwd() + NEWSBOAT_PATH_SEP + tmp_filename;
+	const auto filename = utils::starts_with(NEWSBOAT_PATH_SEP, tmp_filename) ?
+		Utf8String::from_utf8(tmp_filename) :
+		Utf8String::from_utf8(utils::getcwd()) + NEWSBOAT_PATH_SEP + Utf8String::from_utf8(
+			tmp_filename);
 
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {
@@ -79,7 +81,7 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	}
 	included_files.push_back(filename);
 
-	const auto lines = utils::read_text_file(filename);
+	const auto lines = utils::read_text_file(filename.to_utf8());
 	if (!lines) {
 		const auto error = lines.error();
 
@@ -117,15 +119,15 @@ void ConfigParser::parse_line(const std::string& line,
 	auto evaluated = evaluate_backticks(std::move(stripped));
 	const auto token = utils::extract_token_quoted(evaluated);
 	if (token.has_value()) {
-		const std::string cmd = token.value();
-		const std::string params = evaluated;
+		const auto cmd = Utf8String::from_utf8(token.value());
+		const auto params = evaluated;
 
 		if (action_handlers.count(cmd) < 1) {
 			throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
 		}
 		ConfigActionHandler& handler = action_handlers.at(cmd);
 		try {
-			handler.handle_action(cmd, params);
+			handler.handle_action(cmd.to_utf8(), params);
 		} catch (const ConfigHandlerException& e) {
 			throw ConfigException(strprintf::fmt(
 					_("Error while processing command `%s' (%s): %s"),
@@ -139,8 +141,8 @@ void ConfigParser::parse_line(const std::string& line,
 void ConfigParser::register_handler(const std::string& cmd,
 	ConfigActionHandler& handler)
 {
-	action_handlers.erase(cmd);
-	action_handlers.insert({cmd, handler});
+	action_handlers.erase(Utf8String::from_utf8(cmd));
+	action_handlers.insert({Utf8String::from_utf8(cmd), handler});
 }
 
 /* Note that this function not only finds next backtick that isn't prefixed

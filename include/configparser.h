@@ -5,6 +5,7 @@
 #include <map>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -44,10 +45,11 @@ public:
 
 private:
 	static std::string evaluate_cmd(const std::string& cmd);
-	std::vector<std::vector<std::string>> parsed_content;
-	std::map<std::string, std::reference_wrapper<ConfigActionHandler>>
+
+	std::vector<std::vector<Utf8String>> parsed_content;
+	std::map<Utf8String, std::reference_wrapper<ConfigActionHandler>>
 		action_handlers;
-	std::vector<std::string> included_files;
+	std::vector<Utf8String> included_files;
 };
 
 } // namespace newsboat
