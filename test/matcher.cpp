@@ -691,6 +691,12 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 	// ensure that we're using EREs, these tests try stuff that's *not*
 	// supported by EREs.
 	//
+	// FreeBSD 13 returns an error from regexec() instead of failing the match
+	// like other OSes do. Furthermore, REQUIRE() and REQUIRE_FALSE() will
+	// handle any exceptions that are thrown, so we have to save the result
+	// into an intermediate variable to get a chance to handle the exception
+	// ourselves.
+	//
 	// Ideas gleaned from https://www.regular-expressions.info/refcharacters.html
 
 	Matcher m;
@@ -700,40 +706,80 @@ TEST_CASE("=~ and !~ use POSIX extended regex syntax", "[Matcher]")
 		MatcherMockMatchable mock({{"attr", "*]+"}});
 
 		REQUIRE(m.parse(R"#(attr =~ "\Q*]+\E")#"));
-		REQUIRE_FALSE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE_FALSE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 
 		REQUIRE(m.parse(R"#(attr !~ "\Q*]+\E")#"));
-		REQUIRE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 	}
 
 	SECTION("No support for hexadecimal escape") {
 		MatcherMockMatchable mock({{"attr", "value"}});
 
 		REQUIRE(m.parse(R"#(attr =~ "^va\x6Cue")#"));
-		REQUIRE_FALSE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE_FALSE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 
 		REQUIRE(m.parse(R"#(attr !~ "^va\x6Cue")#"));
-		REQUIRE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 	}
 
 	SECTION("No support for \\a as alert/bell control character") {
 		MatcherMockMatchable mock({{"attr", "\x07"}});
 
 		REQUIRE(m.parse(R"#(attr =~ "\a")#"));
-		REQUIRE_FALSE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE_FALSE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 
 		REQUIRE(m.parse(R"#(attr !~ "\a")#"));
-		REQUIRE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 	}
 
 	SECTION("No support for \\b as backspace control character") {
 		MatcherMockMatchable mock({{"attr", "\x08"}});
 
 		REQUIRE(m.parse(R"#(attr =~ "\b")#"));
-		REQUIRE_FALSE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE_FALSE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 
 		REQUIRE(m.parse(R"#(attr !~ "\b")#"));
-		REQUIRE(m.matches(&mock));
+		try {
+			const auto result = m.matches(&mock);
+			REQUIRE(result);
+		} catch (const MatcherException& e) {
+			REQUIRE(e.type() == MatcherException::Type::INVALID_REGEX);
+		}
 	}
 
 	// If you add more checks to this test, consider adding the same to RegexManager tests
