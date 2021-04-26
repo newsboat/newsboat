@@ -32,7 +32,7 @@ version = "2.33"
 default-features = false
 
 [dependencies.gettext-rs]
-version = "0.6.0"
+version = "0.7.0"
 # Don't let the crate build its own copy of gettext; force it to use the one
 # built into glibc.
 features = [ "gettext-system" ]
