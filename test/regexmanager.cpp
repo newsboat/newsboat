@@ -4,6 +4,7 @@
 
 #include "confighandlerexception.h"
 #include "matchable.h"
+#include "matcherexception.h"
 
 using namespace newsboat;
 
@@ -555,13 +556,22 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 	// ensure that we're using EREs, these tests try stuff that's *not*
 	// supported by EREs.
 	//
+	// FreeBSD 13 returns an error from regexec() instead of failing the match
+	// like other OSes do. That's why we wrap our tests in a try-catch.
+	//
 	// Ideas gleaned from https://www.regular-expressions.info/refcharacters.html
 
 	RegexManager rxman;
 
 	// Supported by Perl, PCRE, PHP and others
 	SECTION("No support for escape sequence") {
-		rxman.handle_action("highlight", {"articlelist", R"#(\Q*]+\E)#", "red"});
+		try {
+			rxman.handle_action("highlight", {"articlelist", R"#(\Q*]+\E)#", "red"});
+		} catch (const ConfigHandlerException& e) {
+			const std::string expected(
+				R"#(`\Q*]+\E' is not a valid regular expression: trailing backslash (\))#");
+			REQUIRE(e.what() == expected);
+		}
 
 		std::string input = "*]+";
 		rxman.quote_and_highlight(input, "articlelist");
@@ -569,7 +579,13 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 	}
 
 	SECTION("No support for hexadecimal escape") {
-		rxman.handle_action("highlight", {"articlelist", R"#(^va\x6Cue)#", "red"});
+		try {
+			rxman.handle_action("highlight", {"articlelist", R"#(^va\x6Cue)#", "red"});
+		} catch (const ConfigHandlerException& e) {
+			const std::string expected(
+				R"#(`^va\x6Cue' is not a valid regular expression: trailing backslash (\))#");
+			REQUIRE(e.what() == expected);
+		}
 
 		std::string input = "value";
 		rxman.quote_and_highlight(input, "articlelist");
@@ -577,7 +593,13 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 	}
 
 	SECTION("No support for \\a as alert/bell control character") {
-		rxman.handle_action("highlight", {"articlelist", R"#(\a)#", "red"});
+		try {
+			rxman.handle_action("highlight", {"articlelist", R"#(\a)#", "red"});
+		} catch (const ConfigHandlerException& e) {
+			const std::string expected(
+				R"#(`\a' is not a valid regular expression: trailing backslash (\))#");
+			REQUIRE(e.what() == expected);
+		}
 
 		std::string input = "\x07";
 		rxman.quote_and_highlight(input, "articlelist");
@@ -585,7 +607,13 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 	}
 
 	SECTION("No support for \\b as backspace control character") {
-		rxman.handle_action("highlight", {"articlelist", R"#(\b)#", "red"});
+		try {
+			rxman.handle_action("highlight", {"articlelist", R"#(\b)#", "red"});
+		} catch (const ConfigHandlerException& e) {
+			const std::string expected(
+				R"#(`\b' is not a valid regular expression: trailing backslash (\))#");
+			REQUIRE(e.what() == expected);
+		}
 
 		std::string input = "\x08";
 		rxman.quote_and_highlight(input, "articlelist");

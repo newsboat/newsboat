@@ -1051,7 +1051,7 @@ test/regexmanager.o: test/regexmanager.cpp include/regexmanager.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h 3rd-party/catch.hpp \
  include/confighandlerexception.h include/matchable.h \
- 3rd-party/optional.hpp
+ 3rd-party/optional.hpp include/matcherexception.h
 test/regexowner.o: test/regexowner.cpp include/regexowner.h \
  3rd-party/catch.hpp
 test/remoteapi.o: test/remoteapi.cpp include/remoteapi.h \

@@ -989,6 +989,9 @@ mod tests {
     // ensure that we're using EREs, these tests try stuff that's *not*
     // supported by EREs.
     //
+    // FreeBSD 13 returns an error from regexec() instead of failing the match like other OSes do.
+    // That's why we do the `match` instead of simply chaining the results with `unwrap()`.
+    //
     // Ideas gleaned from https://www.regular-expressions.info/refcharacters.html
 
     #[test]
@@ -997,56 +1000,72 @@ mod tests {
 
         let mock = MockMatchable::new(&[("attr", "*]+")]);
 
-        assert!(!Matcher::parse(r#"(attr =~ "\Q*]+\E")"#)
+        match Matcher::parse(r#"(attr =~ "\Q*]+\E")"#)
             .unwrap()
             .matches(&mock)
-            .unwrap());
-        assert!(Matcher::parse(r#"(attr !~ "\Q*]+\E")"#)
+        {
+            Ok(result) => assert!(!result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
+
+        match Matcher::parse(r#"(attr !~ "\Q*]+\E")"#)
             .unwrap()
             .matches(&mock)
-            .unwrap());
+        {
+            Ok(result) => assert!(result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
     }
 
     #[test]
     fn t_regex_matching_doesnt_support_hexadecimal_escape() {
         let mock = MockMatchable::new(&[("attr", "value")]);
 
-        assert!(!Matcher::parse(r#"(attr =~ "^va\x6Cue")"#)
+        match Matcher::parse(r#"(attr =~ "^va\x6Cue")"#)
             .unwrap()
             .matches(&mock)
-            .unwrap());
-        assert!(Matcher::parse(r#"attr !~ "^va\x6Cue""#)
+        {
+            Ok(result) => assert!(!result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
+
+        match Matcher::parse(r#"attr !~ "^va\x6Cue""#)
             .unwrap()
             .matches(&mock)
-            .unwrap());
+        {
+            Ok(result) => assert!(result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
     }
 
     #[test]
     fn t_regex_matching_doesnt_support_backslash_a_as_alert_control_character() {
         let mock = MockMatchable::new(&[("attr", "\x07")]);
 
-        assert!(!Matcher::parse(r#"(attr =~ "\a")"#)
-            .unwrap()
-            .matches(&mock)
-            .unwrap());
-        assert!(Matcher::parse(r#"(attr !~ "\a")"#)
-            .unwrap()
-            .matches(&mock)
-            .unwrap());
+        match Matcher::parse(r#"(attr =~ "\a")"#).unwrap().matches(&mock) {
+            Ok(result) => assert!(!result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
+
+        match Matcher::parse(r#"(attr !~ "\a")"#).unwrap().matches(&mock) {
+            Ok(result) => assert!(result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
     }
 
     #[test]
     fn t_regex_matching_doesnt_support_backslash_b_as_backspace_control_character() {
         let mock = MockMatchable::new(&[("attr", "\x08")]);
 
-        assert!(!Matcher::parse(r#"(attr =~ "\b")"#)
-            .unwrap()
-            .matches(&mock)
-            .unwrap());
-        assert!(Matcher::parse(r#"(attr !~ "\b")"#)
-            .unwrap()
-            .matches(&mock)
-            .unwrap());
+        match Matcher::parse(r#"(attr =~ "\b")"#).unwrap().matches(&mock) {
+            Ok(result) => assert!(!result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
+
+        match Matcher::parse(r#"(attr !~ "\b")"#).unwrap().matches(&mock) {
+            Ok(result) => assert!(result),
+            Err(e) => assert!(matches!(e, MatcherError::InvalidRegex { .. })),
+        }
     }
 
     #[test]

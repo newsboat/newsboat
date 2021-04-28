@@ -164,3 +164,61 @@ TEST_CASE("Tagsoup pull parser emits whitespace as is",
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 }
+
+TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
+{
+	SECTION("Numbered entites") {
+		SECTION("Decimal") {
+			// 133 is used in its non-standard meaning here, designating a horizontal ellipsis
+			std::istringstream input_stream("&#020;&#42;&#189;&#133;&#963;");
+
+			TagSoupPullParser xpp(input_stream);
+			TagSoupPullParser::Event e;
+
+			e = xpp.get_event_type();
+			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+			e = xpp.next();
+			REQUIRE(e == TagSoupPullParser::Event::TEXT);
+			REQUIRE(xpp.get_text() == "\x14*½…σ");
+
+			e = xpp.next();
+			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+		}
+
+		SECTION("Hexadecimal") {
+			// x97 is used in its non-standard meaning here, designating an mdash
+			std::istringstream input_stream("&#x97;&#x20;&#x048;&#x0069;");
+
+			TagSoupPullParser xpp(input_stream);
+			TagSoupPullParser::Event e;
+
+			e = xpp.get_event_type();
+			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+			e = xpp.next();
+			REQUIRE(e == TagSoupPullParser::Event::TEXT);
+			REQUIRE(xpp.get_text() == "— Hi");
+
+			e = xpp.next();
+			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+		}
+	}
+
+	SECTION("Named entities") {
+		std::istringstream input_stream("&sigma;&trade;");
+
+		TagSoupPullParser xpp(input_stream);
+		TagSoupPullParser::Event e;
+
+		e = xpp.get_event_type();
+		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::TEXT);
+		REQUIRE(xpp.get_text() == "σ™");
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+	}
+}

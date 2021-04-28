@@ -346,10 +346,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 	SECTION("%F, %m, %b, %d, %H, %M, %S, %y, and %Y to render items's publication date with strftime") {
 		// %H is sensitive to the timezone, so reset it to UTC for a time being
-		TestHelpers::EnvVar tzEnv("TZ");
-		tzEnv.on_change([](nonstd::optional<std::string>) {
-			::tzset();
-		});
+		TestHelpers::TzEnvVar tzEnv;
 		tzEnv.set("UTC");
 
 		cfg.set_configvalue("download-filename-format", "%F, %m, %b, %d, %H, %M, %S, %y, and %Y");
