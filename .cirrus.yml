@@ -189,22 +189,22 @@ linux_task:
                 cc: gcc-5
                 cxx: g++-5
                 rust_version: 1.48.0
-        - name: Rust 1.48.0, GCC 10 (Ubuntu 20.04)
+        - name: Rust 1.48.0, GCC 11 (Ubuntu 21.04)
           container:
-            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-10
-                cc: gcc-10
-                cxx: g++-10
+                cxx_package: g++-11
+                cc: gcc-11
+                cxx: g++-11
                 rust_version: 1.48.0
 
-        - name: GCC 10, more warnings and checks (Ubuntu 20.04)
+        - name: GCC 11, more warnings and checks (Ubuntu 21.04)
           container:
-            dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-10
-                cc: gcc-10
-                cxx: g++-10
+                cxx_package: g++-11
+                cc: gcc-11
+                cxx: g++-11
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong -Wstack-protector --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 12, more warnings and checks (Ubuntu 21.04)
@@ -258,6 +258,13 @@ linux_task:
                 cxx_package: g++-10
                 cc: gcc-10
                 cxx: g++-10
+        - name: Rust 1.51.0, GCC 11 (Ubuntu 21.04)
+          container:
+            dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: g++-11
+                cc: gcc-11
+                cxx: g++-11
         - name: Rust 1.51.0, Clang 4.0 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
