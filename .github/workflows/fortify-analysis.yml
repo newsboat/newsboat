@@ -37,7 +37,7 @@ jobs:
 
       # Java 8 required by ScanCentral Client and FoD Uploader(Univeral CI Tool)
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           java-version: 1.8
 
