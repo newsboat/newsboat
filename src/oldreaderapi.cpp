@@ -32,7 +32,7 @@ OldReaderApi::OldReaderApi(ConfigContainer* c)
 
 bool OldReaderApi::authenticate()
 {
-	auth = retrieve_auth();
+	auth = Utf8String::from_utf8(retrieve_auth());
 	LOG(Level::DEBUG, "OldReaderApi::authenticate: Auth = %s", auth);
 	return auth != "";
 }
@@ -184,14 +184,13 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 void OldReaderApi::add_custom_headers(curl_slist** custom_headers)
 {
 	if (auth_header.empty()) {
-		auth_header = strprintf::fmt(
-				"Authorization: GoogleLogin auth=%s", auth);
+		auth_header = Utf8String::from_utf8(strprintf::fmt("Authorization: GoogleLogin auth=%s",
+					auth));
 	}
 	LOG(Level::DEBUG,
 		"OldReaderApi::add_custom_headers header = %s",
 		auth_header);
-	*custom_headers =
-		curl_slist_append(*custom_headers, auth_header.c_str());
+	*custom_headers = curl_slist_append(*custom_headers, auth_header.to_utf8().c_str());
 }
 
 bool OldReaderApi::mark_all_read(const std::string& feedurl)
