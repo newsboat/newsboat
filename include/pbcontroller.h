@@ -11,6 +11,7 @@
 #include "fslock.h"
 #include "keymap.h"
 #include "queueloader.h"
+#include "utf8string.h"
 
 namespace podboat {
 
@@ -65,19 +66,19 @@ private:
 	void print_usage(const char* argv0);
 	bool setup_dirs_xdg(const char* env_home);
 
-	std::string config_file;
-	std::string queue_file;
+	newsboat::Utf8String config_file;
+	newsboat::Utf8String queue_file;
 	newsboat::ConfigContainer cfg;
 	bool view_update_;
 	std::vector<Download> downloads_;
 
-	std::string config_dir;
+	newsboat::Utf8String config_dir;
 
 	unsigned int max_dls;
 
 	std::unique_ptr<QueueLoader> ql;
 
-	std::string lock_file;
+	newsboat::Utf8String lock_file;
 	std::unique_ptr<newsboat::FsLock> fslock;
 
 	bool automatic_dl = false;

@@ -48,23 +48,23 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 {
 	const char* env_xdg_config;
 	const char* env_xdg_data;
-	std::string xdg_config_dir;
-	std::string xdg_data_dir;
+	Utf8String xdg_config_dir;
+	Utf8String xdg_data_dir;
 
 	env_xdg_config = ::getenv("XDG_CONFIG_HOME");
 	if (env_xdg_config) {
-		xdg_config_dir = env_xdg_config;
+		xdg_config_dir = Utf8String::from_locale_charset(env_xdg_config);
 	} else {
-		xdg_config_dir = env_home;
+		xdg_config_dir = Utf8String::from_locale_charset(env_home);
 		xdg_config_dir.append(NEWSBOAT_PATH_SEP);
 		xdg_config_dir.append(".config");
 	}
 
 	env_xdg_data = ::getenv("XDG_DATA_HOME");
 	if (env_xdg_data) {
-		xdg_data_dir = env_xdg_data;
+		xdg_data_dir = Utf8String::from_locale_charset(env_xdg_data);
 	} else {
-		xdg_data_dir = env_home;
+		xdg_data_dir = Utf8String::from_locale_charset(env_home);
 		xdg_data_dir.append(NEWSBOAT_PATH_SEP);
 		xdg_data_dir.append(".local");
 		xdg_data_dir.append(NEWSBOAT_PATH_SEP);
@@ -77,8 +77,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	xdg_data_dir.append(NEWSBOAT_PATH_SEP);
 	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
 
-	bool config_dir_exists =
-		0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
+	bool config_dir_exists = 0 == access(xdg_config_dir.to_utf8().c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
 		std::cerr << strprintf::fmt(
@@ -100,7 +99,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	config_dir = xdg_config_dir;
 
 	// create data directory if it doesn't exist
-	int ret = utils::mkdir_parents(xdg_data_dir, 0700);
+	int ret = utils::mkdir_parents(xdg_data_dir.to_utf8(), 0700);
 	if (ret == -1) {
 		LOG(Level::CRITICAL,
 			"Couldn't create `%s'",
@@ -112,7 +111,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	config_file = config_dir + NEWSBOAT_PATH_SEP + config_file;
 
 	/* in data */
-	lock_file = xdg_data_dir + NEWSBOAT_PATH_SEP + LOCK_SUFFIX.to_utf8();
+	lock_file = xdg_data_dir + NEWSBOAT_PATH_SEP + LOCK_SUFFIX;
 	queue_file = xdg_data_dir + NEWSBOAT_PATH_SEP + queue_file;
 
 	return true;
@@ -144,7 +143,7 @@ PbController::PbController()
 			::exit(EXIT_FAILURE);
 		}
 	}
-	config_dir = cfgdir;
+	config_dir = Utf8String::from_locale_charset(std::string(cfgdir));
 
 	if (setup_dirs_xdg(cfgdir)) {
 		return;
@@ -154,7 +153,7 @@ PbController::PbController()
 	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
 
 	// create configuration directory if it doesn't exist
-	int ret = ::mkdir(config_dir.c_str(), 0700);
+	int ret = ::mkdir(config_dir.to_utf8().c_str(), 0700);
 	if (ret && errno != EEXIST) {
 		std::cerr << strprintf::fmt(
 				_("Fatal error: couldn't create "
@@ -197,10 +196,10 @@ void PbController::initialize(int argc, char* argv[])
 			print_usage(argv[0]);
 			exit(EXIT_FAILURE);
 		case 'C':
-			config_file = optarg;
+			config_file = Utf8String::from_locale_charset(std::string(optarg));
 			break;
 		case 'q':
-			queue_file = optarg;
+			queue_file = Utf8String::from_locale_charset(std::string(optarg));
 			break;
 		case 'a':
 			automatic_dl = true;
@@ -235,7 +234,7 @@ void PbController::initialize(int argc, char* argv[])
 	fslock = std::unique_ptr<FsLock>(new FsLock());
 	pid_t pid;
 	std::string error_message;
-	if (!fslock->try_lock(lock_file, pid, error_message)) {
+	if (!fslock->try_lock(lock_file.to_utf8(), pid, error_message)) {
 		if (pid != 0) {
 			// pid_t size could vary so cast to known integer format to get correct print format
 			std::int64_t p = pid;
@@ -273,7 +272,7 @@ void PbController::initialize(int argc, char* argv[])
 
 	try {
 		cfgparser.parse_file("/etc/newsboat/config");
-		cfgparser.parse_file(config_file);
+		cfgparser.parse_file(config_file.to_utf8());
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
 		exit(EXIT_FAILURE);
@@ -288,7 +287,7 @@ int PbController::run(PbView& v)
 
 	std::cout << _("done.") << std::endl;
 
-	ql.reset(new QueueLoader(queue_file, cfg, [this]() {
+	ql.reset(new QueueLoader(queue_file.to_utf8(), cfg, [this]() {
 		this->set_view_update_necessary(true);
 	}));
 	ql->reload(downloads_);
