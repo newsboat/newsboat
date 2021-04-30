@@ -11,7 +11,7 @@ namespace newsboat {
 
 QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 	: cfg(cfg_)
-	, queue_file(std::move(queue_file))
+	, queue_file(Utf8String::from_utf8(std::move(queue_file)))
 {}
 
 EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
@@ -21,7 +21,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	const std::string filename = generate_enqueue_filename(item, feed);
 
 	std::fstream f;
-	f.open(queue_file, std::fstream::in);
+	f.open(queue_file.to_locale_charset(), std::fstream::in);
 	if (f.is_open()) {
 		do {
 			std::string line;
@@ -39,9 +39,9 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 		f.close();
 	}
 
-	f.open(queue_file, std::fstream::app | std::fstream::out);
+	f.open(queue_file.to_locale_charset(), std::fstream::app | std::fstream::out);
 	if (!f.is_open()) {
-		return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, queue_file};
+		return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, queue_file.to_utf8()};
 	}
 	f << url << " " << utils::quote(filename) << std::endl;
 	f.close();

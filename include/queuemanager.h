@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 class ConfigContainer;
@@ -24,7 +26,7 @@ struct EnqueueResult {
 
 class QueueManager {
 	ConfigContainer* cfg = nullptr;
-	std::string queue_file;
+	Utf8String queue_file;
 
 public:
 	/// Construct `QueueManager` instance out of a config container and a path
