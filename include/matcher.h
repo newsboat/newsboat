@@ -2,6 +2,7 @@
 #define NEWSBOAT_MATCHER_H_
 
 #include "FilterParser.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -34,8 +35,8 @@ private:
 	bool matchop_between(expression* e, Matchable* item);
 
 	FilterParser p;
-	std::string errmsg;
-	std::string exp;
+	Utf8String errmsg;
+	Utf8String exp;
 };
 
 } // namespace newsboat

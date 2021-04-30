@@ -18,14 +18,14 @@ namespace newsboat {
 Matcher::Matcher() {}
 
 Matcher::Matcher(const std::string& expr)
-	: exp(expr)
+	: exp(Utf8String::from_utf8(expr))
 {
 	parse(expr);
 }
 
 std::string Matcher::get_expression()
 {
-	return exp;
+	return exp.to_utf8();
 }
 
 bool Matcher::parse(const std::string& expr)
@@ -37,9 +37,9 @@ bool Matcher::parse(const std::string& expr)
 	bool b = p.parse_string(expr);
 
 	if (b) {
-		exp = expr;
+		exp = Utf8String::from_utf8(expr);
 	} else {
-		errmsg = utils::wstr2str(p.get_error());
+		errmsg = Utf8String::from_utf8(utils::wstr2str(p.get_error()));
 	}
 
 	LOG(Level::DEBUG,
@@ -236,7 +236,7 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 
 std::string Matcher::get_parse_error()
 {
-	return errmsg;
+	return errmsg.to_utf8();
 }
 
 int Matcher::string_to_num(const std::string& number)
