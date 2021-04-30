@@ -5,13 +5,14 @@
 
 #include "remoteapi.h"
 #include "rss/feed.h"
+#include "utf8string.h"
 #include "utils.h"
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
 
-typedef std::map<std::string, rsspp::Feed> FeedMap;
+typedef std::map<Utf8String, rsspp::Feed> FeedMap;
 
 class NewsBlurApi : public RemoteApi {
 public:
@@ -34,7 +35,7 @@ private:
 		const HTTPMethod method = HTTPMethod::GET);
 	std::map<std::string, std::vector<std::string>> mk_feeds_to_tags(
 			json_object*);
-	std::string api_location;
+	Utf8String api_location;
 	FeedMap known_feeds;
 	unsigned int min_pages;
 };

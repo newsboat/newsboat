@@ -33,7 +33,7 @@ namespace newsboat {
 NewsBlurApi::NewsBlurApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	api_location = cfg->get_configvalue("newsblur-url");
+	api_location = Utf8String::from_utf8(cfg->get_configvalue("newsblur-url"));
 	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") +
 			(NEWSBLUR_ITEMS_PER_PAGE + 1)) /
 		NEWSBLUR_ITEMS_PER_PAGE;
@@ -116,7 +116,7 @@ std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
 		if (node) {
 			current_feed.link = json_object_get_string(node);
 
-			known_feeds[feed_id] = current_feed;
+			known_feeds[Utf8String::from_utf8(feed_id)] = current_feed;
 			std::string std_feed_id(feed_id);
 			std::vector<std::string> tags =
 				feeds_to_tags[std_feed_id];
@@ -239,7 +239,7 @@ time_t parse_date(const char* raw)
 
 rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 {
-	rsspp::Feed f = known_feeds[id];
+	rsspp::Feed f = known_feeds[Utf8String::from_utf8(id)];
 
 	LOG(Level::INFO,
 		"NewsBlurApi::fetch_feed: about to fetch %u pages of feed %s",
@@ -355,7 +355,7 @@ json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	const std::string* body,
 	const HTTPMethod method /* = GET */)
 {
-	std::string url = api_location + endpoint;
+	std::string url = api_location.to_utf8() + endpoint;
 	std::string data = utils::retrieve_url(url, cfg, "", body, method);
 
 	json_object* result = json_tokener_parse(data.c_str());
