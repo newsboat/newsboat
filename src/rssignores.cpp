@@ -34,7 +34,7 @@ void RssIgnores::handle_action(const std::string& action,
 		if (params.size() < 2) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		std::string ignore_rssurl = params[0];
+		const auto ignore_rssurl = Utf8String::from_utf8(params[0]);
 		std::string ignore_expr = params[1];
 		Matcher m;
 		if (!m.parse(ignore_expr)) {
@@ -50,7 +50,7 @@ void RssIgnores::handle_action(const std::string& action,
 		}
 
 		for (const auto& param : params) {
-			ignores_lastmodified.push_back(param);
+			ignores_lastmodified.push_back(Utf8String::from_utf8(param));
 		}
 	} else if (action == "reset-unread-on-update") {
 		if (params.empty()) {
@@ -58,7 +58,7 @@ void RssIgnores::handle_action(const std::string& action,
 		}
 
 		for (const auto& param : params) {
-			resetflag.push_back(param);
+			resetflag.push_back(Utf8String::from_utf8(param));
 		}
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
@@ -72,7 +72,7 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 		if (ign.first == "*") {
 			configline.append("*");
 		} else {
-			configline.append(utils::quote(ign.first));
+			configline.append(utils::quote(ign.first.to_utf8()));
 		}
 		configline.append(" ");
 		configline.append(utils::quote(ign.second->get_expression()));
@@ -80,11 +80,11 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 	}
 	for (const auto& ign_lm : ignores_lastmodified) {
 		config_output.push_back(strprintf::fmt(
-				"always-download %s", utils::quote(ign_lm)));
+				"always-download %s", utils::quote(ign_lm.to_utf8())));
 	}
 	for (const auto& rf : resetflag) {
 		config_output.push_back(strprintf::fmt(
-				"reset-unread-on-update %s", utils::quote(rf)));
+				"reset-unread-on-update %s", utils::quote(rf.to_utf8())));
 	}
 }
 
@@ -102,7 +102,7 @@ bool RssIgnores::matches(RssItem* item)
 			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
 			ign.first,
 			item->feedurl());
-		if (ign.first == "*" || item->feedurl() == ign.first) {
+		if (ign.first == "*" || item->feedurl() == ign.first.to_utf8()) {
 			if (ign.second->matches(item)) {
 				LOG(Level::DEBUG,
 					"RssIgnores::matches: found match");
@@ -117,8 +117,8 @@ bool RssIgnores::matches_lastmodified(const std::string& url)
 {
 	return std::find_if(ignores_lastmodified.begin(),
 			ignores_lastmodified.end(),
-	[&](const std::string& u) {
-		return u == url;
+	[&](const Utf8String& u) {
+		return u.to_utf8() == url;
 	}) !=
 	ignores_lastmodified.end();
 }
@@ -127,8 +127,8 @@ bool RssIgnores::matches_resetunread(const std::string& url)
 {
 	return std::find_if(resetflag.begin(),
 			resetflag.end(),
-	[&](const std::string& u) {
-		return u == url;
+	[&](const Utf8String& u) {
+		return u.to_utf8() == url;
 	}) !=
 	resetflag.end();
 }

@@ -7,10 +7,11 @@
 #include "configactionhandler.h"
 #include "matcher.h"
 #include "rssitem.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
-typedef std::pair<std::string, Matcher*> FeedUrlExprPair;
+typedef std::pair<Utf8String, Matcher*> FeedUrlExprPair;
 
 class RssIgnores : public ConfigActionHandler {
 public:
@@ -25,8 +26,8 @@ public:
 
 private:
 	std::vector<FeedUrlExprPair> ignores;
-	std::vector<std::string> ignores_lastmodified;
-	std::vector<std::string> resetflag;
+	std::vector<Utf8String> ignores_lastmodified;
+	std::vector<Utf8String> resetflag;
 };
 
 } // namespace newsboat
