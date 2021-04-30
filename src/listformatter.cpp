@@ -11,7 +11,7 @@ namespace newsboat {
 
 ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
 	: rxman(r)
-	, location(loc)
+	, location(Utf8String::from_utf8(loc))
 {}
 
 ListFormatter::~ListFormatter() {}
@@ -25,10 +25,10 @@ void ListFormatter::add_line(const std::string& text)
 void ListFormatter::set_line(const unsigned int itempos,
 	const std::string& text)
 {
-	std::vector<std::string> formatted_text;
+	std::vector<Utf8String> formatted_text;
 
-	formatted_text.push_back(utils::wstr2str(utils::clean_nonprintable_characters(
-				utils::str2wstr(text))));
+	formatted_text.push_back(Utf8String::from_utf8(utils::wstr2str(
+				utils::clean_nonprintable_characters(utils::str2wstr(text)))));
 
 	if (itempos == UINT_MAX) {
 		lines.insert(lines.cend(),
@@ -43,11 +43,11 @@ std::string ListFormatter::format_list() const
 {
 	std::string format_cache = "{list";
 	for (auto str : lines) {
+		std::string utf8_str = str.to_utf8();
 		if (rxman) {
-			rxman->quote_and_highlight(str, location);
+			rxman->quote_and_highlight(utf8_str, location.to_utf8());
 		}
-		format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", Stfl::quote(str)));
+		format_cache.append(strprintf::fmt("{listitem text:%s}", Stfl::quote(utf8_str)));
 	}
 	format_cache.push_back('}');
 	return format_cache;
