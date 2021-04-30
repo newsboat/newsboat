@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 struct MatcherErrorFfi;
@@ -17,8 +19,8 @@ public:
 		const std::string& info,
 		const std::string& info2 = "")
 		: type_(et)
-		, addinfo(info)
-		, addinfo2(info2)
+		, addinfo(Utf8String::from_utf8(info))
+		, addinfo2(Utf8String::from_utf8(info2))
 	{
 	}
 
@@ -35,18 +37,18 @@ public:
 
 	std::string info() const
 	{
-		return addinfo;
+		return addinfo.to_utf8();
 	}
 
 	std::string info2() const
 	{
-		return addinfo2;
+		return addinfo2.to_utf8();
 	}
 
 private:
 	Type type_;
-	std::string addinfo;
-	std::string addinfo2;
+	Utf8String addinfo;
+	Utf8String addinfo2;
 };
 
 /// A description of an error returned by Rust. This can be converted into

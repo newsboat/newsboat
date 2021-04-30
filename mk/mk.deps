@@ -561,8 +561,8 @@ src/matcher.o: src/matcher.cpp include/matcher.h filter/FilterParser.h \
  include/configactionhandler.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/matcherexception.o: src/matcherexception.cpp \
- include/matcherexception.h config.h include/ruststring.h \
- include/strprintf.h include/utf8string.h
+ include/matcherexception.h include/utf8string.h config.h \
+ include/ruststring.h include/strprintf.h
 src/minifluxapi.o: src/minifluxapi.cpp include/minifluxapi.h \
  3rd-party/json.hpp include/remoteapi.h include/configcontainer.h \
  include/configactionhandler.h include/utf8string.h rss/feed.h rss/item.h \
@@ -1069,7 +1069,7 @@ test/matcher.o: test/matcher.cpp include/matcher.h filter/FilterParser.h \
  3rd-party/optional.hpp include/matcherexception.h \
  test/test-helpers/stringmaker/optional.h
 test/matcherexception.o: test/matcherexception.cpp \
- include/matcherexception.h 3rd-party/catch.hpp
+ include/matcherexception.h include/utf8string.h 3rd-party/catch.hpp
 test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  include/configcontainer.h include/configactionhandler.h \
  include/utf8string.h include/fileurlreader.h include/urlreader.h \
