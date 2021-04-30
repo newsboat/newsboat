@@ -8,6 +8,7 @@
 
 #include "configcontainer.h"
 #include "download.h"
+#include "utf8string.h"
 
 namespace podboat {
 
@@ -30,7 +31,7 @@ public:
 private:
 	std::string get_filename(const std::string& str) const;
 
-	const std::string queuefile;
+	const newsboat::Utf8String queuefile;
 	const newsboat::ConfigContainer& cfg;
 	std::function<void()> cb_require_view_update;
 

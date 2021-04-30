@@ -23,7 +23,7 @@ namespace podboat {
 QueueLoader::QueueLoader(const std::string& filepath,
 	const ConfigContainer& cfg_,
 	std::function<void()> cb_require_view_update_)
-	: queuefile(filepath)
+	: queuefile(Utf8String::from_utf8(filepath))
 	, cfg(cfg_)
 	, cb_require_view_update(cb_require_view_update_)
 {
@@ -103,7 +103,7 @@ nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_down
 
 void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 {
-	std::fstream f(queuefile, std::fstream::in);
+	std::fstream f(queuefile.to_utf8(), std::fstream::in);
 	if (!f.is_open()) {
 		return;
 	}
@@ -204,7 +204,7 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 
 void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 {
-	std::fstream f(queuefile, std::fstream::out);
+	std::fstream f(queuefile.to_utf8(), std::fstream::out);
 	if (!f.is_open()) {
 		return;
 	}
