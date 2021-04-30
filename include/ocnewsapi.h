@@ -30,7 +30,6 @@ private:
 	bool query(const std::string& query,
 		json_object** result = nullptr,
 		const std::string& post = "");
-	std::string md5(const std::string& str);
 	std::string auth;
 	std::string server;
 	FeedMap known_feeds;

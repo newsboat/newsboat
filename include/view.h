@@ -169,8 +169,6 @@ protected:
 
 	RegexManager& rxman;
 
-	std::map<std::string, TextStyle> text_styles;
-
 	bool is_inside_qna;
 	bool is_inside_cmdline;
 

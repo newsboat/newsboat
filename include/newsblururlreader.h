@@ -10,8 +10,6 @@ namespace newsboat {
 
 class RemoteApi;
 
-typedef std::map<std::string, rsspp::Feed> FeedMap;
-
 class NewsBlurUrlReader : public UrlReader {
 public:
 	NewsBlurUrlReader(const std::string& url_file, RemoteApi* a);
