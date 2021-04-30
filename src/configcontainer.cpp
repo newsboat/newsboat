@@ -326,7 +326,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"wrap-scroll",
 		ConfigData("no", ConfigDataType::BOOL)},
-	}
+}
 {
 }
 
