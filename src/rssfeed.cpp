@@ -29,7 +29,7 @@ namespace newsboat {
 
 RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 	: pubDate_(0)
-	, rssurl_(rssurl)
+	, rssurl_(Utf8String::from_utf8(rssurl))
 	, ch(c)
 	, search_feed(false)
 	, is_rtl_(false)
@@ -37,13 +37,13 @@ RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 	, order(0)
 	, status_(DlStatus::SUCCESS)
 {
-	if (utils::is_query_url(rssurl_)) {
+	if (utils::is_query_url(rssurl_.to_utf8())) {
 		/* Query string looks like this:
 		 *
 		 * query:Title:unread = "yes" and age between 0:7
 		 *
 		 * So we split by colons to get title and the query itself. */
-		const auto tokens = utils::tokenize(rssurl_, ":");
+		const auto tokens = utils::tokenize(rssurl_.to_utf8(), ":");
 
 		if (tokens.size() < 3) {
 			throw _s("too few arguments");
@@ -71,7 +71,7 @@ RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 			query);
 
 		set_title(tokens[1]);
-		this->query = query;
+		this->query = Utf8String::from_utf8(query);
 	}
 }
 
@@ -92,8 +92,8 @@ unsigned int RssFeed::unread_item_count() const
 bool RssFeed::matches_tag(const std::string& tag)
 {
 	return std::find_if(
-	tags_.begin(), tags_.end(), [&](const std::string& t) {
-		return tag == t;
+	tags_.begin(), tags_.end(), [&](const Utf8String& t) {
+		return tag == t.to_utf8();
 	}) != tags_.end();
 }
 
@@ -101,7 +101,7 @@ std::string RssFeed::get_firsttag()
 {
 	for (const auto& t : tags_) {
 		if (t.substr(0, 1) != "~") {
-			return t;
+			return t.to_utf8();
 		}
 	}
 	return "";
@@ -112,7 +112,7 @@ std::string RssFeed::get_tags() const
 	std::string tags;
 	for (const auto& t : tags_) {
 		if (t.substr(0, 1) != "~" && t.substr(0, 1) != "!") {
-			tags.append(t);
+			tags.append(t.to_utf8());
 			tags.append(" ");
 		}
 	}
@@ -121,7 +121,10 @@ std::string RssFeed::get_tags() const
 
 void RssFeed::set_tags(const std::vector<std::string>& tags)
 {
-	tags_ = tags;
+	tags_.clear();
+	for (const auto& tag : tags) {
+		tags_.push_back(Utf8String::from_utf8(tag));
+	}
 }
 
 std::string RssFeed::title() const
@@ -131,20 +134,18 @@ std::string RssFeed::title() const
 	for (const auto& tag : tags_) {
 		if (tag.substr(0, 1) == "~") {
 			found_title = true;
-			alt_title = tag.substr(1, tag.length() - 1);
+			alt_title = tag.substr(1, tag.length() - 1).to_utf8();
 			break;
 		}
 	}
-	return found_title
-		? alt_title
-		: utils::utf8_to_locale(title_);
+	return found_title ? alt_title : title_.to_utf8();
 }
 
 bool RssFeed::hidden() const
 {
 	return std::any_of(tags_.begin(),
 			tags_.end(),
-	[](const std::string& tag) {
+	[](const Utf8String& tag) {
 		return tag.substr(0, 1) == "!";
 	});
 }
@@ -158,7 +159,7 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid(const std::string& guid)
 std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	const std::string& guid)
 {
-	auto it = items_guid_map.find(guid);
+	auto it = items_guid_map.find(Utf8String::from_utf8(guid));
 	if (it != items_guid_map.end()) {
 		return it->second;
 	}
@@ -208,7 +209,7 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 
 	ScopeMeasure sm("RssFeed::update_items");
 
-	Matcher m(query);
+	Matcher m(query.to_utf8());
 
 	items_.clear();
 	items_guid_map.clear();
@@ -223,7 +224,7 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 				LOG(Level::DEBUG, "RssFeed::update_items: Matcher matches!");
 				item->set_feedptr(feed);
 				items_.push_back(item);
-				items_guid_map[item->guid()] = item;
+				items_guid_map[Utf8String::from_utf8(item->guid())] = item;
 			}
 		}
 	}
@@ -334,7 +335,7 @@ void RssFeed::purge_deleted_items()
 		std::lock_guard<std::mutex> lock2(items_guid_map_mutex);
 		for (const auto& item : items_) {
 			if (item->deleted()) {
-				items_guid_map.erase(item->guid());
+				items_guid_map.erase(Utf8String::from_utf8(item->guid()));
 			}
 		}
 	}

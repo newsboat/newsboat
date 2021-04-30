@@ -9,6 +9,7 @@
 
 #include "matchable.h"
 #include "rssitem.h"
+#include "utf8string.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -23,31 +24,32 @@ public:
 	~RssFeed() override;
 	std::string title_raw() const
 	{
-		return title_;
+		return title_.to_utf8();
 	}
 	std::string title() const;
 	void set_title(const std::string& t)
 	{
-		title_ = t;
-		utils::trim(title_);
+		std::string tmp(t);
+		utils::trim(tmp);
+		title_ = Utf8String::from_utf8(tmp);
 	}
 
 	std::string description() const
 	{
-		return description_;
+		return description_.to_utf8();
 	}
 	void set_description(const std::string& d)
 	{
-		description_ = d;
+		description_ = Utf8String::from_utf8(d);
 	}
 
 	const std::string& link() const
 	{
-		return link_;
+		return link_.to_utf8();
 	}
 	void set_link(const std::string& l)
 	{
-		link_ = l;
+		link_ = Utf8String::from_utf8(l);
 	}
 
 	std::string pubDate() const
@@ -68,13 +70,13 @@ public:
 	void add_item(std::shared_ptr<RssItem> item)
 	{
 		items_.push_back(item);
-		items_guid_map[item->guid()] = item;
+		items_guid_map[Utf8String::from_utf8(item->guid())] = item;
 	}
 	void add_items(const std::vector<std::shared_ptr<RssItem>>& items)
 	{
 		for (const auto& item : items) {
 			items_.push_back(item);
-			items_guid_map[item->guid()] = item;
+			items_guid_map[Utf8String::from_utf8(item->guid())] = item;
 		}
 	}
 	void set_items(std::vector<std::shared_ptr<RssItem>>& items)
@@ -87,13 +89,13 @@ public:
 		std::vector<std::shared_ptr<RssItem>>::iterator end)
 	{
 		for (auto it = begin; it != end; ++it) {
-			items_guid_map.erase((*it)->guid());
+			items_guid_map.erase(Utf8String::from_utf8((*it)->guid()));
 		}
 		items_.erase(begin, end);
 	}
 	void erase_item(std::vector<std::shared_ptr<RssItem>>::iterator pos)
 	{
-		items_guid_map.erase((*pos)->guid());
+		items_guid_map.erase(Utf8String::from_utf8((*pos)->guid()));
 		items_.erase(pos);
 	}
 
@@ -104,7 +106,7 @@ public:
 	/// \brief User-specified feed URL.
 	const std::string& rssurl() const
 	{
-		return rssurl_;
+		return rssurl_.to_utf8();
 	}
 
 	unsigned int unread_item_count() const;
@@ -194,16 +196,15 @@ public:
 	mutable std::mutex item_mutex;
 
 private:
-	std::string title_;
-	std::string description_;
-	std::string link_;
+	Utf8String title_;
+	Utf8String description_;
+	Utf8String link_;
 	time_t pubDate_;
-	const std::string rssurl_;
+	const Utf8String rssurl_;
 	std::vector<std::shared_ptr<RssItem>> items_;
-	std::unordered_map<std::string, std::shared_ptr<RssItem>>
-		items_guid_map;
-	std::vector<std::string> tags_;
-	std::string query;
+	std::unordered_map<Utf8String, std::shared_ptr<RssItem>> items_guid_map;
+	std::vector<Utf8String> tags_;
+	Utf8String query;
 
 	Cache* ch;
 

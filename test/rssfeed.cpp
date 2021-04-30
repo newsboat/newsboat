@@ -416,20 +416,6 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 
 		const auto attr = "feedtitle";
 		REQUIRE(f.attribute_value(attr) == title);
-
-		SECTION("it is encoded to the locale's charset") {
-			// Due to differences in how platforms handle //TRANSLIT in iconv,
-			// we can't compare results to a known-good value. Instead, we
-			// merely check that the result is *not* UTF-8.
-
-			TestHelpers::LcCtypeEnvVar lc_ctype;
-			lc_ctype.set("C"); // This means ASCII
-
-			const auto title = "こんにちは";// "good afternoon" in Japanese
-			f.set_title(title);
-
-			REQUIRE_FALSE(f.attribute_value(attr) == title);
-		}
 	}
 
 	SECTION("description") {
