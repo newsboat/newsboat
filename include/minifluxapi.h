@@ -4,6 +4,7 @@
 #include "3rd-party/json.hpp"
 #include "remoteapi.h"
 #include "rss/feed.h"
+#include "utf8string.h"
 #include "utils.h"
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
@@ -37,8 +38,8 @@ private:
 	bool update_articles(const std::vector<std::string> guids,
 		nlohmann::json& args);
 	bool update_article(const std::string& guid, nlohmann::json& args);
-	std::string auth_info;
-	std::string server;
+	Utf8String auth_info;
+	Utf8String server;
 };
 
 } // namespace newsboat

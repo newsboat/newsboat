@@ -18,7 +18,7 @@ namespace newsboat {
 MinifluxApi::MinifluxApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	server = cfg->get_configvalue("miniflux-url");
+	server = Utf8String::from_utf8(cfg->get_configvalue("miniflux-url"));
 	const std::string http_auth_method = cfg->get_configvalue("http-auth-method");
 	if (http_auth_method == "any") {
 		// default to basic HTTP auth to prevent Newsboat from doubling up on HTTP
@@ -34,7 +34,7 @@ bool MinifluxApi::authenticate()
 {
 	// error check handled in Controller
 	const Credentials creds = get_credentials("miniflux", "");
-	auth_info = strprintf::fmt("%s:%s", creds.user, creds.pass);
+	auth_info = Utf8String::from_utf8(strprintf::fmt("%s:%s", creds.user, creds.pass));
 	return true;
 }
 
@@ -223,7 +223,7 @@ json MinifluxApi::run_op(const std::string& path,
 	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
-	const std::string url = server + path;
+	const std::string url = server.to_utf8() + path;
 
 	std::string* body = nullptr;
 	std::string arg_dump;
@@ -233,7 +233,7 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	const std::string result = utils::retrieve_url(
-			url, cfg, auth_info, body, method, easyhandle);
+			url, cfg, auth_info.to_utf8(), body, method, easyhandle);
 
 	if (!cached_handle) {
 		curl_easy_cleanup(easyhandle);
