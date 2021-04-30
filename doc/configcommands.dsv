@@ -153,3 +153,4 @@ urlview-title-format||<format>||"%N %V - URLs" (localized)||Format of the title 
 use-proxy||[yes/no]||no||If set to `yes`, then the configured proxy will be used for downloading the RSS feeds.||use-proxy yes
 user-agent||<string>||""||If set to a non-zero-length string, this value will be used as HTTP User-Agent header for all HTTP requests.||user-agent "Lynx/2.8.5rel.1 libwww-FM/2.14"
 wrap-scroll||[yes/no]||no||If set to `yes`, moving down while on the last item in a list will wrap around to the top and vice versa.||wrap-scroll yes
+ascii-only-filename||[yes/no]||yes||If set to `no`, Newsboat will not limit saved article filenames to ASCII characters.||ascii-only-filename yes

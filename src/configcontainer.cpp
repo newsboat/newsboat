@@ -324,7 +324,11 @@ ConfigContainer::ConfigContainer()
 		ConfigData(_("%N %V - URLs"), ConfigDataType::STR)},
 	{
 		"wrap-scroll",
-		ConfigData("no", ConfigDataType::BOOL)}}
+		ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"ascii-only-filename",
+		ConfigData("yes", ConfigDataType::BOOL)},
+	}
 {
 }
 

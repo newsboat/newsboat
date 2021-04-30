@@ -289,17 +289,23 @@ std::string View::get_filename_suggestion(const std::string& s)
 {
 	/*
 	 * With this function, we generate normalized filenames for saving
-	 * articles to files.
+	 * articles to files if the setting `ascii-only-filename` is enabled.
 	 */
 	std::string retval;
-	for (unsigned int i = 0; i < s.length(); ++i) {
-		if (isalnum(s[i])) {
-			retval.push_back(s[i]);
-		} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
-			s[i] == '\n') {
-			retval.push_back('_');
+
+	if (cfg->get_configvalue_as_bool("ascii-only-filename")) {
+		for (unsigned int i = 0; i < s.length(); ++i) {
+			if (isalnum(s[i])) {
+				retval.push_back(s[i]);
+			} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
+				s[i] == '\n') {
+				retval.push_back('_');
+			}
 		}
+	} else {
+		retval = s;
 	}
+
 	if (retval.length() == 0) {
 		retval = "article.txt";
 	} else {
