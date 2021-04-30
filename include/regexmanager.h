@@ -13,6 +13,7 @@
 #include "configactionhandler.h"
 #include "matcher.h"
 #include "regexowner.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -33,10 +34,10 @@ public:
 	std::string get_attrs_stfl_string(const std::string& location, bool hasFocus);
 
 private:
-	typedef std::vector<std::pair<std::shared_ptr<Regex>, std::string>>
+	typedef std::vector<std::pair<std::shared_ptr<Regex>, Utf8String>>
 		RegexStyleVector;
-	std::map<std::string, RegexStyleVector> locations;
-	std::vector<std::string> cheat_store_for_dump_config;
+	std::map<Utf8String, RegexStyleVector> locations;
+	std::vector<Utf8String> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;
 
 	void handle_highlight_action(const std::vector<std::string>& params);

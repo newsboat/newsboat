@@ -25,7 +25,7 @@ RegexManager::RegexManager()
 void RegexManager::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& foo : cheat_store_for_dump_config) {
-		config_output.push_back(foo);
+		config_output.push_back(foo.to_utf8());
 	}
 }
 
@@ -40,10 +40,10 @@ void RegexManager::handle_action(const std::string& action,
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
 	}
-	std::string line = action;
+	Utf8String line = Utf8String::from_utf8(action);
 	for (const auto& param : params) {
 		line.append(" ");
-		line.append(utils::quote(param));
+		line.append(Utf8String::from_utf8(utils::quote(param)));
 	}
 	cheat_store_for_dump_config.push_back(line);
 }
@@ -60,7 +60,7 @@ int RegexManager::article_matches(Matchable* item)
 
 void RegexManager::remove_last_regex(const std::string& location)
 {
-	auto& regexes = locations[location];
+	auto& regexes = locations[Utf8String::from_utf8(location)];
 	if (regexes.empty()) {
 		return;
 	}
@@ -163,7 +163,7 @@ void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
 void RegexManager::quote_and_highlight(std::string& str,
 	const std::string& location)
 {
-	auto& regexes = locations[location];
+	auto& regexes = locations[Utf8String::from_utf8(location)];
 
 	auto tag_locations = extract_style_tags(str);
 
@@ -269,7 +269,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 			params[1],
 			colorstr,
 			location);
-		locations[location].push_back({std::move(regex), colorstr});
+		locations[Utf8String::from_utf8(location)].push_back({std::move(regex), Utf8String::from_utf8(colorstr)});
 	} else {
 		std::shared_ptr<Regex> sharedRegex(std::move(regex));
 		for (auto& location : locations) {
@@ -280,7 +280,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 				params[1],
 				colorstr,
 				location.first);
-			location.second.push_back({sharedRegex, colorstr});
+			location.second.push_back({sharedRegex, Utf8String::from_utf8(colorstr)});
 		}
 	}
 }
@@ -346,7 +346,7 @@ void RegexManager::handle_highlight_article_action(const
 
 	int pos = locations["articlelist"].size();
 
-	locations["articlelist"].push_back({nullptr, colorstr});
+	locations["articlelist"].push_back({nullptr, Utf8String::from_utf8(colorstr)});
 
 	matchers.push_back(
 		std::pair<std::shared_ptr<Matcher>, int>(m, pos));
@@ -355,10 +355,10 @@ void RegexManager::handle_highlight_article_action(const
 std::string RegexManager::get_attrs_stfl_string(const std::string& location,
 	bool hasFocus)
 {
-	const auto& attributes = locations[location];
+	const auto& attributes = locations[Utf8String::from_utf8(location)];
 	std::string attrstr;
 	for (unsigned int i = 0; i < attributes.size(); ++i) {
-		const std::string& attribute = attributes[i].second;
+		const auto& attribute = attributes[i].second;
 		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		if (hasFocus) {
 			attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, attribute));
