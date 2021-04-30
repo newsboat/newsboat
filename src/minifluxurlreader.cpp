@@ -8,7 +8,7 @@
 namespace newsboat {
 
 MinifluxUrlReader::MinifluxUrlReader(const std::string& url_file, RemoteApi* a)
-	: file(url_file)
+	: file(Utf8String::from_utf8(url_file))
 	, api(a)
 {
 }
@@ -21,7 +21,7 @@ nonstd::optional<std::string> MinifluxUrlReader::reload()
 	tags.clear();
 	alltags.clear();
 
-	FileUrlReader ur(file);
+	FileUrlReader ur(file.to_utf8());
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
 		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
