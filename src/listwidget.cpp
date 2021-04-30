@@ -8,7 +8,7 @@ namespace newsboat {
 
 ListWidget::ListWidget(const std::string& list_name, Stfl::Form& form,
 	std::uint32_t scrolloff)
-	: list_name(list_name)
+	: list_name(Utf8String::from_utf8(list_name))
 	, form(form)
 	, num_lines(0)
 	, num_context_lines(scrolloff)
@@ -19,7 +19,7 @@ void ListWidget::stfl_replace_list(std::uint32_t number_of_lines,
 	std::string stfl)
 {
 	num_lines = number_of_lines;
-	form.modify(list_name, "replace", stfl);
+	form.modify(list_name.to_utf8(), "replace", stfl);
 
 	if (get_position() >= num_lines) {
 		if (num_lines > 0) {
@@ -33,7 +33,7 @@ void ListWidget::stfl_replace_list(std::uint32_t number_of_lines,
 void ListWidget::stfl_replace_lines(const ListFormatter& listfmt)
 {
 	num_lines = listfmt.get_lines_count();
-	form.modify(list_name, "replace_inner", listfmt.format_list());
+	form.modify(list_name.to_utf8(), "replace_inner", listfmt.format_list());
 
 	if (get_position() >= num_lines) {
 		if (num_lines > 0) {
@@ -123,7 +123,7 @@ void ListWidget::move_page_down(bool wrap_scroll)
 
 std::uint32_t ListWidget::get_position()
 {
-	const std::string pos = form.get(list_name + "_pos");
+	const std::string pos = form.get(list_name.to_utf8() + "_pos");
 	if (!pos.empty()) {
 		return std::max(0, std::stoi(pos));
 	}
@@ -132,23 +132,23 @@ std::uint32_t ListWidget::get_position()
 
 void ListWidget::set_position(std::uint32_t pos)
 {
-	form.set(list_name + "_pos", std::to_string(pos));
+	form.set(list_name.to_utf8() + "_pos", std::to_string(pos));
 	update_scroll_offset(pos);
 }
 
 std::uint32_t ListWidget::get_width()
 {
-	return utils::to_u(form.get(list_name + ":w"));
+	return utils::to_u(form.get(list_name.to_utf8() + ":w"));
 }
 
 std::uint32_t ListWidget::get_height()
 {
-	return utils::to_u(form.get(list_name + ":h"));
+	return utils::to_u(form.get(list_name.to_utf8() + ":h"));
 }
 
 std::uint32_t ListWidget::get_scroll_offset()
 {
-	const std::string offset = form.get(list_name + "_offset");
+	const std::string offset = form.get(list_name.to_utf8() + "_offset");
 	if (!offset.empty()) {
 		return std::max(0, std::stoi(offset));
 	}
@@ -157,7 +157,7 @@ std::uint32_t ListWidget::get_scroll_offset()
 
 void ListWidget::set_scroll_offset(std::uint32_t offset)
 {
-	form.set(list_name + "_offset", std::to_string(offset));
+	form.set(list_name.to_utf8() + "_offset", std::to_string(offset));
 }
 
 void ListWidget::update_scroll_offset(std::uint32_t pos)

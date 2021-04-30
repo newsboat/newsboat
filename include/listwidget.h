@@ -7,6 +7,7 @@
 
 #include "listformatter.h"
 #include "stflpp.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -35,7 +36,7 @@ private:
 
 	void update_scroll_offset(std::uint32_t pos);
 
-	const std::string list_name;
+	const Utf8String list_name;
 	Stfl::Form& form;
 	std::uint32_t num_lines;
 	std::uint32_t num_context_lines;
