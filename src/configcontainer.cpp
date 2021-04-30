@@ -217,6 +217,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("false", ConfigDataType::BOOL)},
 	{"reload-threads", ConfigData("1", ConfigDataType::INT)},
 	{"reload-time", ConfigData("60", ConfigDataType::INT)},
+	{"restrict-filename", ConfigData("yes", ConfigDataType::BOOL)},
 	{"save-path", ConfigData("~/", ConfigDataType::PATH)},
 	{"scrolloff", ConfigData("0", ConfigDataType::INT)},
 	{
@@ -325,9 +326,6 @@ ConfigContainer::ConfigContainer()
 	{
 		"wrap-scroll",
 		ConfigData("no", ConfigDataType::BOOL)},
-	{
-		"ascii-only-filename",
-		ConfigData("yes", ConfigDataType::BOOL)},
 	}
 {
 }

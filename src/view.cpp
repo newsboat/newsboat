@@ -289,11 +289,11 @@ std::string View::get_filename_suggestion(const std::string& s)
 {
 	/*
 	 * With this function, we generate normalized filenames for saving
-	 * articles to files if the setting `ascii-only-filename` is enabled.
+	 * articles to files if the setting `restrict-filename` is enabled.
 	 */
 	std::string retval;
 
-	if (cfg->get_configvalue_as_bool("ascii-only-filename")) {
+	if (cfg->get_configvalue_as_bool("restrict-filename")) {
 		for (unsigned int i = 0; i < s.length(); ++i) {
 			if (isalnum(s[i])) {
 				retval.push_back(s[i]);
