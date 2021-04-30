@@ -6,6 +6,7 @@
 
 #include "remoteapi.h"
 #include "rss/feed.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -25,13 +26,13 @@ public:
 	rsspp::Feed fetch_feed(const std::string& feed_id);
 
 private:
-	typedef std::map<std::string, std::pair<rsspp::Feed, long>> FeedMap;
 	std::string retrieve_auth();
 	bool query(const std::string& query,
 		json_object** result = nullptr,
 		const std::string& post = "");
-	std::string auth;
-	std::string server;
+	Utf8String auth;
+	Utf8String server;
+	typedef std::map<Utf8String, std::pair<rsspp::Feed, long>> FeedMap;
 	FeedMap known_feeds;
 };
 

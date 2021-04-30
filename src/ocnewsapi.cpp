@@ -20,18 +20,19 @@ typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> CurlUptr;
 OcNewsApi::OcNewsApi(ConfigContainer* c)
 	: RemoteApi(c)
 {
-	server = cfg->get_configvalue("ocnews-url");
+	server = Utf8String::from_utf8(cfg->get_configvalue("ocnews-url"));
 
-	if (server.empty())
+	if (server.empty()) {
 		LOG(Level::CRITICAL,
 			"OcNewsApi::OcNewsApi: No owncloud server set");
+	}
 }
 
 OcNewsApi::~OcNewsApi() {}
 
 bool OcNewsApi::authenticate()
 {
-	auth = retrieve_auth();
+	auth = Utf8String::from_utf8(retrieve_auth());
 	if (auth.empty()) {
 		return false;
 	}
@@ -87,7 +88,7 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 
 	rsspp::Feed starred;
 	starred.title = "Starred";
-	starred.link = server;
+	starred.link = server.to_utf8();
 	starred.rss_version = rsspp::Feed::OCNEWS_JSON;
 
 	known_feeds["Starred"] = std::make_pair(starred, 0);
@@ -116,12 +117,12 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 		json_object_object_get_ex(feed, "url", &node);
 		current_feed.link = json_object_get_string(node);
 
-		while (known_feeds.find(current_feed.title) !=
+		while (known_feeds.find(Utf8String::from_utf8(current_feed.title)) !=
 			known_feeds.end()) {
 			current_feed.title += "*";
 		}
-		known_feeds[current_feed.title] =
-			std::make_pair(current_feed, feed_id);
+		known_feeds[Utf8String::from_utf8(current_feed.title)] = std::make_pair(current_feed,
+				feed_id);
 
 		json_object_object_get_ex(feed, "folderId", &node);
 		long folder_id = json_object_get_int(node);
@@ -145,7 +146,7 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 
 bool OcNewsApi::mark_all_read(const std::string& feedurl)
 {
-	long id = known_feeds[feedurl].second;
+	long id = known_feeds[Utf8String::from_utf8(feedurl)].second;
 
 	std::string max = std::to_string(std::numeric_limits<long>::max());
 	std::string query =
@@ -206,8 +207,10 @@ bool OcNewsApi::update_article_flags(const std::string& oldflags,
 	return this->query(query, nullptr, "{}");
 }
 
-rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
+rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id_)
 {
+	const auto feed_id = Utf8String::from_utf8(feed_id_);
+
 	rsspp::Feed feed = known_feeds[feed_id].first;
 
 	std::string query = "items?";
@@ -315,7 +318,7 @@ bool OcNewsApi::query(const std::string& query,
 	CurlUptr curlhandle(curl_easy_init(), curl_easy_cleanup);
 	CURL* handle = curlhandle.get();
 
-	std::string url = server + OCNEWS_API + query;
+	std::string url = server.to_utf8() + OCNEWS_API + query;
 	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
 	curl_slist* headers = NULL;
 
@@ -342,7 +345,7 @@ bool OcNewsApi::query(const std::string& query,
 	}
 
 	curl_easy_setopt(handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-	curl_easy_setopt(handle, CURLOPT_USERPWD, auth.c_str());
+	curl_easy_setopt(handle, CURLOPT_USERPWD, auth.to_utf8().c_str());
 
 	CURLcode res = curl_easy_perform(handle);
 
