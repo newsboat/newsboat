@@ -7,8 +7,6 @@
 #include "rss/feed.h"
 #include "utils.h"
 
-#define ID_SEPARATOR "/////"
-
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {

@@ -4,8 +4,6 @@
 #include "rss/feed.h"
 #include "urlreader.h"
 
-#define ID_SEPARATOR "/////"
-
 namespace newsboat {
 
 class RemoteApi;

@@ -24,6 +24,8 @@
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
 
+static const char* ID_SEPARATOR = "/////";
+
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
