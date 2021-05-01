@@ -123,6 +123,7 @@ reload-only-visible-feeds||[yes/no]||no||If set to `yes`, then manually reloadin
 reload-threads||<number>||1||The number of parallel reload threads that shall be started when all feeds are reloaded.||reload-threads 3
 reload-time||<number>||60||The number of minutes between automatic reloads.||reload-time 120
 reset-unread-on-update||<url> [<url>...]||n/a||Specifies one or more feed URLs for whose articles the unread flag will be reset if an article has been updated, i.e. its content has been changed. This is especially useful for RSS feeds where single articles are updated after publication, and you want to be notified of the updates. This option can be specified multiple times.||reset-unread-on-update "https://blog.fefe.de/rss.xml?html"
+restrict-filename||[yes/no]||yes||If set to `no`, Newsboat will not limit saved article filenames to ASCII characters.||restrict-filename no
 run-on-startup||<list of operations>||n/a||Specifies one or more <<_newsboat_operations,Newsboat operations>>, separated by semicolons, which are executed on Newsboat startup.||run-on-startup next-unread; open; random-unread; open
 save-path||<path-to-directory>||~/||The default path where articles shall be saved to. If an invalid path is specified, the current directory is used.||save-path "~/Saved Articles"
 scrolloff||<number>||0||Keep the configured number of lines above and below the selected item in lists. Configure a high number to keep the selected item in the center of the screen.||scrolloff 5

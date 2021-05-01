@@ -217,6 +217,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("false", ConfigDataType::BOOL)},
 	{"reload-threads", ConfigData("1", ConfigDataType::INT)},
 	{"reload-time", ConfigData("60", ConfigDataType::INT)},
+	{"restrict-filename", ConfigData("yes", ConfigDataType::BOOL)},
 	{"save-path", ConfigData("~/", ConfigDataType::PATH)},
 	{"scrolloff", ConfigData("0", ConfigDataType::INT)},
 	{
@@ -324,7 +325,8 @@ ConfigContainer::ConfigContainer()
 		ConfigData(_("%N %V - URLs"), ConfigDataType::STR)},
 	{
 		"wrap-scroll",
-		ConfigData("no", ConfigDataType::BOOL)}}
+		ConfigData("no", ConfigDataType::BOOL)},
+}
 {
 }
 
