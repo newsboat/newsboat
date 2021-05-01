@@ -12,12 +12,10 @@ using namespace newsboat;
 TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", "[View]")
 {
 
-	std::string
-	example_ru("Инженеры из MIT придумали остроумный способ очистки металлов от соли и грязи");
-	std::string example_fr("Les mathématiques ont-elles pris le pouvoir sur le réel ?");
+	const std::string example_ru("Инженеры из MIT");
+	const std::string example_fr("Les mathématiques");
 
-	std::string example_en("Comparing Visual Reasoning in Humans and AI");
-	std::string example_en_default("Comparing_Visual_Reasoning_in_Humans_and_AI.txt");
+	const std::string example_en("Comparing Visual");
 
 	ConfigPaths paths{};
 	Controller c(paths);
@@ -30,13 +28,16 @@ TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", 
 	c.set_view(&v);
 
 	// Default case is exclusively ASCII characters. Should never fail.
-	REQUIRE(v.get_filename_suggestion(example_en).compare(example_en_default) == 0);
+	REQUIRE(v.get_filename_suggestion(example_en).compare("Comparing_Visual.txt") ==
+		0);
 
-	REQUIRE(v.get_filename_suggestion(example_ru).compare(example_ru.append(".txt")) != 0);
-	REQUIRE(v.get_filename_suggestion(example_fr).compare(example_fr.append(".txt")) != 0);
+	REQUIRE(v.get_filename_suggestion(
+			example_ru).compare("Инженеры_из_MIT.txt") != 0);
+	REQUIRE(v.get_filename_suggestion(example_fr).compare("Les_mathématiques.txt") != 0);
 
 	cfg.toggle("restrict-filename");
 
-	REQUIRE(v.get_filename_suggestion(example_ru).compare(example_ru.append(".txt")) == 0);
-	REQUIRE(v.get_filename_suggestion(example_fr).compare(example_fr.append(".txt")) == 0);
+	REQUIRE(v.get_filename_suggestion(
+			example_ru).compare("Инженеры из MIT.txt") == 0);
+	REQUIRE(v.get_filename_suggestion(example_fr).compare("Les mathématiques.txt") == 0);
 }
