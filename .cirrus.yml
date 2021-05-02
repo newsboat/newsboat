@@ -206,7 +206,7 @@ linux_task:
                 cc: gcc-11
                 cxx: g++-11
           env: &extra_warnings_and_checks_env
-            CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-strong -Wstack-protector --param=ssp-buffer-size=4 -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
+            CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 12, more warnings and checks (Ubuntu 21.04)
           container:
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
