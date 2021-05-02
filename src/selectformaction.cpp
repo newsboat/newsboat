@@ -161,7 +161,7 @@ void SelectFormAction::prepare()
 				listfmt.add_line(
 					utils::quote_for_stfl(
 						format_line(selecttag_format,
-							tag,
+							tag.to_utf8(),
 							i + 1,
 							width)));
 				i++;

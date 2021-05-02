@@ -4,6 +4,7 @@
 #include "filtercontainer.h"
 #include "formaction.h"
 #include "listwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -18,15 +19,24 @@ public:
 	KeyMapHintEntry* get_keymap_hint() override;
 	std::string get_selected_value()
 	{
-		return value;
+		return value.to_utf8();
 	}
 	void set_tags(const std::vector<std::string>& t)
 	{
-		tags = t;
+		tags.clear();
+		for (const auto& tag : t) {
+			tags.push_back(Utf8String::from_utf8(tag));
+		}
 	}
 	void set_filters(const std::vector<FilterNameExprPair>& ff)
 	{
-		filters = ff;
+		filters.clear();
+		for (const auto& filter : ff) {
+			InternalFilterNameExprPair entry;
+			entry.name = Utf8String::from_utf8(filter.name);
+			entry.expr = Utf8String::from_utf8(filter.expr);
+			filters.push_back(entry);
+		}
 	}
 	void set_type(SelectionType t)
 	{
@@ -46,9 +56,9 @@ private:
 		std::vector<std::string>* args = nullptr) override;
 	bool quit;
 	SelectionType type;
-	std::string value;
-	std::vector<std::string> tags;
-	std::vector<FilterNameExprPair> filters;
+	Utf8String value;
+	std::vector<Utf8String> tags;
+	std::vector<InternalFilterNameExprPair> filters;
 
 	std::string format_line(const std::string& selecttag_format,
 		const std::string& tag,
