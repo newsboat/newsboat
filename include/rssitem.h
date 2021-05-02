@@ -7,6 +7,7 @@
 
 #include "matchable.h"
 #include "matcher.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -18,6 +19,11 @@ struct Description {
 	std::string mime;
 };
 
+struct InnerDescription {
+	Utf8String text;
+	Utf8String mime;
+};
+
 class RssItem : public Matchable {
 public:
 	explicit RssItem(Cache* c);
@@ -25,20 +31,21 @@ public:
 
 	std::string title() const
 	{
-		return title_;
+		return title_.to_utf8();
 	}
 	void set_title(const std::string& t);
 
 	/// \brief Feed's canonical URL. Empty if feed was never fetched.
-	const std::string& link() const
+	// FIXME(utf8): change this back to const std::string&
+	std::string link() const
 	{
-		return link_;
+		return link_.to_utf8();
 	}
 	void set_link(const std::string& l);
 
 	std::string author() const
 	{
-		return author_;
+		return author_.to_utf8();
 	}
 	void set_author(const std::string& a);
 
@@ -46,7 +53,10 @@ public:
 	{
 		std::lock_guard<std::mutex> guard(description_mutex);
 		if (description_.has_value()) {
-			return description_.value();
+			Description result;
+			result.text = description_.value().text.to_utf8();
+			result.mime = description_.value().mime.to_utf8();
+			return result;
 		}
 		return {"", ""};
 	}
@@ -72,9 +82,10 @@ public:
 		return item.pubDate_ < this->pubDate_; // new items come first
 	}
 
-	const std::string& guid() const
+	// FIXME(utf8): change this back to const std::string&
+	std::string guid() const
 	{
-		return guid_;
+		return guid_.to_utf8();
 	}
 	void set_guid(const std::string& g);
 
@@ -92,21 +103,24 @@ public:
 	}
 	void set_feedurl(const std::string& f)
 	{
-		feedurl_ = f;
+		feedurl_ = Utf8String::from_utf8(f);
 	}
 
-	const std::string& feedurl() const
+	// FIXME(utf8): change this back to const std::string&
+	std::string feedurl() const
 	{
-		return feedurl_;
+		return feedurl_.to_utf8();
 	}
 
-	const std::string& enclosure_url() const
+	// FIXME(utf8): change this back to const std::string&
+	std::string enclosure_url() const
 	{
-		return enclosure_url_;
+		return enclosure_url_.to_utf8();
 	}
-	const std::string& enclosure_type() const
+	// FIXME(utf8): change this back to const std::string&
+	std::string enclosure_type() const
 	{
-		return enclosure_type_;
+		return enclosure_type_.to_utf8();
 	}
 
 	void set_enclosure_url(const std::string& url);
@@ -163,11 +177,12 @@ public:
 
 	void set_base(const std::string& b)
 	{
-		base = b;
+		base = Utf8String::from_utf8(b);
 	}
-	const std::string& get_base()
+	// FIXME(utf8): change this back to const std::string&
+	std::string get_base()
 	{
-		return base;
+		return base.to_utf8();
 	}
 
 	void set_override_unread(bool b)
@@ -186,18 +201,18 @@ public:
 	}
 
 private:
-	std::string title_;
-	std::string link_;
-	std::string author_;
-	std::string guid_;
-	std::string feedurl_;
+	Utf8String title_;
+	Utf8String link_;
+	Utf8String author_;
+	Utf8String guid_;
+	Utf8String feedurl_;
 	Cache* ch;
-	std::string enclosure_url_;
-	std::string enclosure_type_;
+	Utf8String enclosure_url_;
+	Utf8String enclosure_type_;
 	std::string flags_;
 	std::string oldflags_;
 	std::weak_ptr<RssFeed> feedptr_;
-	std::string base;
+	Utf8String base;
 	unsigned int idx;
 	unsigned int size_;
 	time_t pubDate_;
@@ -207,7 +222,7 @@ private:
 	bool override_unread_;
 
 	mutable std::mutex description_mutex;
-	nonstd::optional<Description> description_;
+	nonstd::optional<InnerDescription> description_;
 };
 
 } // namespace newsboat

@@ -31,26 +31,29 @@ RssItem::~RssItem() {}
 
 void RssItem::set_title(const std::string& t)
 {
-	title_ = utils::consolidate_whitespace(t);
-	utils::trim(title_);
+	std::string tmp = t;
+	tmp = utils::consolidate_whitespace(t);
+	utils::trim(tmp);
+	title_ = Utf8String::from_utf8(tmp);
 }
 
 void RssItem::set_link(const std::string& l)
 {
-	link_ = l;
-	utils::trim(link_);
+	std::string tmp = l;
+	utils::trim(tmp);
+	link_ = Utf8String::from_utf8(tmp);
 }
 
 void RssItem::set_author(const std::string& a)
 {
-	author_ = a;
+	author_ = Utf8String::from_utf8(a);
 }
 
 void RssItem::set_description(const std::string& content,
 	const std::string& mime_type)
 {
 	std::lock_guard<std::mutex> guard(description_mutex);
-	description_ = {content, mime_type};
+	description_ = {Utf8String::from_utf8(content), Utf8String::from_utf8(mime_type)};
 }
 
 void RssItem::set_size(unsigned int size)
@@ -81,7 +84,7 @@ void RssItem::set_pubDate(time_t t)
 
 void RssItem::set_guid(const std::string& g)
 {
-	guid_ = g;
+	guid_ = Utf8String::from_utf8(g);
 }
 
 void RssItem::set_unread_nowrite(bool u)
@@ -94,7 +97,7 @@ void RssItem::set_unread_nowrite_notify(bool u, bool notify)
 	unread_ = u;
 	std::shared_ptr<RssFeed> feedptr = feedptr_.lock();
 	if (feedptr && notify) {
-		feedptr->get_item_by_guid(guid_)->set_unread_nowrite(
+		feedptr->get_item_by_guid(guid_.to_utf8())->set_unread_nowrite(
 			unread_); // notify parent feed
 	}
 }
@@ -106,12 +109,11 @@ void RssItem::set_unread(bool u)
 		unread_ = u;
 		std::shared_ptr<RssFeed> feedptr = feedptr_.lock();
 		if (feedptr)
-			feedptr->get_item_by_guid(guid_)->set_unread_nowrite(
+			feedptr->get_item_by_guid(guid_.to_utf8())->set_unread_nowrite(
 				unread_); // notify parent feed
 		try {
 			if (ch) {
-				ch->update_rssitem_unread_and_enqueued(
-					this, feedurl_);
+				ch->update_rssitem_unread_and_enqueued(this, feedurl_.to_utf8());
 			}
 		} catch (const DbException& e) {
 			// if the update failed, restore the old unread flag and
@@ -129,12 +131,12 @@ std::string RssItem::pubDate() const
 
 void RssItem::set_enclosure_url(const std::string& url)
 {
-	enclosure_url_ = url;
+	enclosure_url_ = Utf8String::from_utf8(url);
 }
 
 void RssItem::set_enclosure_type(const std::string& type)
 {
-	enclosure_type_ = type;
+	enclosure_type_ = Utf8String::from_utf8(type);
 }
 
 nonstd::optional<std::string> RssItem::attribute_value(const std::string&
@@ -150,7 +152,7 @@ nonstd::optional<std::string> RssItem::attribute_value(const std::string&
 		ScopeMeasure sm("RssItem::attribute_value(\"content\")");
 		std::lock_guard<std::mutex> guard(description_mutex);
 		if (description_.has_value()) {
-			const std::string content = description_.value().text;
+			const std::string content = description_.value().text.to_utf8();
 			return utils::utf8_to_locale(content);
 		} else if (ch) {
 			std::string description = ch->fetch_description(*this);
