@@ -423,7 +423,10 @@ void View::set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds)
 
 void View::set_tags(const std::vector<std::string>& t)
 {
-	tags = t;
+	tags.clear();
+	for (const auto& tag : t) {
+		tags.push_back(Utf8String::from_utf8(tag));
+	}
 }
 
 void View::push_searchresult(std::shared_ptr<RssFeed> feed,
@@ -612,7 +615,13 @@ std::string View::select_tag()
 	selecttag->set_type(SelectFormAction::SelectionType::TAG);
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
-	selecttag->set_tags(tags);
+	{
+		std::vector<std::string> tags_;
+		for (const auto& tag : tags) {
+			tags_.push_back(tag.to_utf8());
+		}
+		selecttag->set_tags(tags_);
+	}
 	run_modal(selecttag, "");
 	return selecttag->get_selected_value();
 }
@@ -1174,9 +1183,14 @@ void View::handle_resize()
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 {
 	std::string fragment = fa->get_value("qna_value");
-	if (fragment != last_fragment || fragment == "") {
-		last_fragment = fragment;
-		suggestions = fa->get_suggestions(fragment);
+	if (fragment != last_fragment.to_utf8() || fragment == "") {
+		last_fragment = Utf8String::from_utf8(fragment);
+
+		suggestions.clear();
+		for (const auto& suggestion : fa->get_suggestions(fragment)) {
+			suggestions.push_back(Utf8String::from_utf8(suggestion));
+		}
+
 		tab_count = 0;
 	}
 	tab_count++;
@@ -1192,15 +1206,15 @@ void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 		::beep();
 		return;
 	case 1:
-		suggestion = suggestions[0];
+		suggestion = suggestions[0].to_utf8();
 		break;
 	default:
-		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
+		suggestion = suggestions[(tab_count - 1) % suggestions.size()].to_utf8();
 		break;
 	}
 	fa->set_value("qna_value", suggestion);
 	fa->set_value("qna_value_pos", std::to_string(suggestion.length()));
-	last_fragment = suggestion;
+	last_fragment = Utf8String::from_utf8(suggestion);
 }
 
 void View::ctrl_c_action(int /* sig */)
