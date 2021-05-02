@@ -33,7 +33,7 @@ RssParser::RssParser(const std::string& uri,
 	ConfigContainer* cfg,
 	RssIgnores* ii,
 	RemoteApi* a)
-	: my_uri(uri)
+	: my_uri(Utf8String::from_utf8(uri))
 	, ch(c)
 	, cfgcont(cfg)
 	, ign(ii)
@@ -51,13 +51,13 @@ RssParser::~RssParser() {}
 
 std::shared_ptr<RssFeed> RssParser::parse()
 {
-	retrieve_uri(my_uri);
+	retrieve_uri(my_uri.to_utf8());
 
 	if (f.rss_version == rsspp::Feed::Version::UNKNOWN) {
 		return nullptr;
 	}
 
-	std::shared_ptr<RssFeed> feed(new RssFeed(ch, my_uri));
+	std::shared_ptr<RssFeed> feed(new RssFeed(ch, my_uri.to_utf8()));
 
 	/*
 	 * After parsing is done, we fill our feed object with title,
@@ -157,7 +157,7 @@ void RssParser::retrieve_uri(const std::string& uri)
 	if (is_ttrss) {
 		std::string::size_type pound = uri.find_first_of('#');
 		if (pound != std::string::npos) {
-			fetch_ttrss(my_uri.substr(pound + 1));
+			fetch_ttrss(my_uri.substr(pound + 1).to_utf8());
 		}
 	} else if (is_newsblur) {
 		fetch_newsblur(uri);
@@ -174,10 +174,10 @@ void RssParser::retrieve_uri(const std::string& uri)
 	} else if (utils::is_filter_url(uri)) {
 		const auto parts = utils::extract_filter(uri);
 		download_filterplugin(std::string(parts.script_name), std::string(parts.url));
-	} else if (utils::is_query_url(my_uri)) {
+	} else if (utils::is_query_url(my_uri.to_utf8())) {
 		f.rss_version = rsspp::Feed::Version::UNKNOWN;
 	} else if (my_uri.substr(0, 7) == "file://") {
-		parse_file(my_uri.substr(7, my_uri.length() - 7));
+		parse_file(my_uri.substr(7, my_uri.length() - 7).to_utf8());
 	} else {
 		throw strprintf::fmt(_("Error: unsupported URL: %s"), my_uri);
 	}
@@ -320,7 +320,7 @@ void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
 
 	feed->set_description(f.description);
 
-	feed->set_link(utils::absolute_url(my_uri, f.link));
+	feed->set_link(utils::absolute_url(my_uri.to_utf8(), f.link));
 
 	if (!f.pubDate.empty()) {
 		feed->set_pubDate(parse_date(f.pubDate));

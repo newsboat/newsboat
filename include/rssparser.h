@@ -6,6 +6,7 @@
 
 #include "remoteapi.h"
 #include "rss/feed.h"
+#include "utf8string.h"
 
 namespace rsspp {
 class Item;
@@ -78,7 +79,7 @@ private:
 	void fetch_miniflux(const std::string& feed_id);
 	void fetch_freshrss(const std::string& feed_id);
 
-	std::string my_uri;
+	Utf8String my_uri;
 	Cache* ch;
 	ConfigContainer* cfgcont;
 	RssIgnores* ign;
