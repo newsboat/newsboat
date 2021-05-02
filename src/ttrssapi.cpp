@@ -22,9 +22,9 @@ TtRssApi::TtRssApi(ConfigContainer* c)
 {
 	single = (cfg->get_configvalue("ttrss-mode") == "single");
 	if (single) {
-		auth_info = strprintf::fmt("%s:%s",
-				cfg->get_configvalue("ttrss-login"),
-				cfg->get_configvalue("ttrss-password"));
+		auth_info = Utf8String::from_utf8(strprintf::fmt("%s:%s",
+					cfg->get_configvalue("ttrss-login"),
+					cfg->get_configvalue("ttrss-password")));
 	} else {
 		auth_info = "";
 	}
@@ -36,7 +36,7 @@ TtRssApi::~TtRssApi() {}
 bool TtRssApi::authenticate()
 {
 	if (auth_lock.try_lock()) {
-		sid = retrieve_sid();
+		sid = Utf8String::from_utf8(retrieve_sid());
 		auth_lock.unlock();
 	} else {
 		// wait for other thread to finish and return its result:
@@ -59,7 +59,7 @@ std::string TtRssApi::retrieve_sid()
 	args["user"] = single ? "admin" : cred.user.c_str();
 	args["password"] = cred.pass.c_str();
 	if (single) {
-		auth_info = strprintf::fmt("%s:%s", cred.user, cred.pass);
+		auth_info = Utf8String::from_utf8(strprintf::fmt("%s:%s", cred.user, cred.pass));
 	} else {
 		auth_info = "";
 	}
@@ -137,7 +137,7 @@ json TtRssApi::run_op(const std::string& op,
 
 		requestparam["op"] = op;
 		if (!sid.empty()) {
-			requestparam["sid"] = sid;
+			requestparam["sid"] = sid.to_utf8();
 		}
 
 		// Note: We are violating the upstream-api's types here by
@@ -152,7 +152,7 @@ json TtRssApi::run_op(const std::string& op,
 	}
 
 	std::string result = utils::retrieve_url(
-			url, cfg, auth_info, &req_data, utils::HTTPMethod::POST, cached_handle);
+			url, cfg, auth_info.to_utf8(), &req_data, utils::HTTPMethod::POST, cached_handle);
 
 	LOG(Level::DEBUG,
 		"TtRssApi::run_op(%s,...): post=%s reply = %s",

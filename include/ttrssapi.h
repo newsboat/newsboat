@@ -2,8 +2,10 @@
 #define NEWSBOAT_TTRSSAPI_H_
 
 #include "3rd-party/json.hpp"
+
 #include "cache.h"
 #include "remoteapi.h"
+#include "utf8string.h"
 
 namespace rsspp {
 class Feed;
@@ -41,8 +43,9 @@ private:
 	unsigned int query_api_level();
 	std::string url_to_id(const std::string& url);
 	std::string retrieve_sid();
-	std::string sid;
-	std::string auth_info;
+
+	Utf8String sid;
+	Utf8String auth_info;
 	bool single;
 	std::mutex auth_lock;
 	int api_level = -1;
