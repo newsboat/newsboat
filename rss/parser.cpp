@@ -35,9 +35,9 @@ Parser::Parser(unsigned int timeout,
 	curl_proxytype proxy_type,
 	const bool ssl_verify)
 	: to(timeout)
-	, ua(user_agent)
-	, prx(proxy)
-	, prxauth(proxy_auth)
+	, ua(Utf8String::from_utf8(user_agent))
+	, prx(Utf8String::from_utf8(proxy))
+	, prxauth(Utf8String::from_utf8(proxy_auth))
 	, prxtype(proxy_type)
 	, verify_ssl(ssl_verify)
 	, doc(0)
@@ -120,7 +120,7 @@ Feed Parser::parse_url(const std::string& url,
 	}
 
 	if (!ua.empty()) {
-		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua.c_str());
+		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua.to_utf8().c_str());
 	}
 
 	if (api) {
@@ -146,13 +146,13 @@ Feed Parser::parse_url(const std::string& url,
 	}
 
 	if (!prx.empty()) {
-		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx.c_str());
+		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx.to_utf8().c_str());
 	}
 
 	if (!prxauth.empty()) {
 		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 		curl_easy_setopt(
-			easyhandle, CURLOPT_PROXYUSERPWD, prxauth.c_str());
+			easyhandle, CURLOPT_PROXYUSERPWD, prxauth.to_utf8().c_str());
 	}
 
 	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
@@ -192,7 +192,7 @@ Feed Parser::parse_url(const std::string& url,
 	ret = curl_easy_perform(easyhandle);
 
 	lm = hdrs.lastmodified;
-	et = hdrs.etag;
+	et = Utf8String::from_utf8(hdrs.etag);
 
 	if (custom_headers) {
 		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, 0);

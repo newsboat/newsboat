@@ -5,6 +5,8 @@
 #include <libxml/parser.h>
 #include <string>
 
+#include "utf8string.h"
+
 #include "remoteapi.h"
 #include "feed.h"
 
@@ -32,9 +34,10 @@ public:
 	{
 		return lm;
 	}
-	const std::string& get_etag()
+	// FIXME(utf8): change this back to const std::string&
+	std::string get_etag()
 	{
-		return et;
+		return et.to_utf8();
 	}
 
 	static void global_init();
@@ -43,14 +46,14 @@ public:
 private:
 	Feed parse_xmlnode(xmlNode* node);
 	unsigned int to;
-	const std::string ua;
-	const std::string prx;
-	const std::string prxauth;
+	const newsboat::Utf8String ua;
+	const newsboat::Utf8String prx;
+	const newsboat::Utf8String prxauth;
 	curl_proxytype prxtype;
 	const bool verify_ssl;
 	xmlDocPtr doc;
 	time_t lm;
-	std::string et;
+	newsboat::Utf8String et;
 };
 
 } // namespace rsspp
