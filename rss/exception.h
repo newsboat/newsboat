@@ -4,6 +4,8 @@
 #include <exception>
 #include <string>
 
+#include "utf8string.h"
+
 namespace rsspp {
 
 class Exception : public std::exception {
@@ -13,7 +15,7 @@ public:
 	const char* what() const throw() override;
 
 private:
-	std::string emsg;
+	newsboat::Utf8String emsg;
 };
 
 } // namespace rsspp
