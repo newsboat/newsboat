@@ -38,7 +38,7 @@ std::shared_ptr<AutoDiscardMessage> StatusLine::show_message_until_finished(
 	if (next_message_id == 0) {
 		next_message_id++;
 	}
-	active_messages.push_back(std::make_pair(next_message_id, message));
+	active_messages.push_back(std::make_pair(next_message_id, Utf8String::from_utf8(message)));
 	iStatus.set_status(message);
 	active_message = next_message_id;
 	// It is highly unlikely for `next_message_id` (an std::uint32_t) to wrap
@@ -55,7 +55,7 @@ void StatusLine::mark_finished(std::uint32_t message_id)
 
 	active_messages.erase(
 		std::remove_if(active_messages.begin(),
-	active_messages.end(), [&](std::pair<std::uint32_t, std::string> x) {
+	active_messages.end(), [&](std::pair<std::uint32_t, Utf8String> x) {
 		return x.first == message_id;
 	}));
 
@@ -64,7 +64,7 @@ void StatusLine::mark_finished(std::uint32_t message_id)
 			iStatus.set_status("");
 		} else {
 			active_message = active_messages.back().first;
-			iStatus.set_status(active_messages.back().second);
+			iStatus.set_status(active_messages.back().second.to_utf8());
 		}
 	}
 }

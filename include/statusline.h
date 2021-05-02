@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include "utf8string.h"
+
 namespace newsboat {
 
 // StatusLine manages the array of messages, IStatus abstracts how messages are
@@ -34,7 +36,7 @@ public:
 	void mark_finished(std::uint32_t message_id);
 
 private:
-	std::vector<std::pair<std::uint32_t, std::string>> active_messages;
+	std::vector<std::pair<std::uint32_t, Utf8String>> active_messages;
 	std::uint32_t next_message_id;
 	std::uint32_t active_message;
 

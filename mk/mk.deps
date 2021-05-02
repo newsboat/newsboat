@@ -814,7 +814,8 @@ src/selectformaction.o: src/selectformaction.cpp \
  include/filesystembrowser.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h include/statusline.h
-src/statusline.o: src/statusline.cpp include/statusline.h
+src/statusline.o: src/statusline.cpp include/statusline.h \
+ include/utf8string.h
 src/stflpp.o: src/stflpp.cpp include/stflpp.h include/exception.h \
  include/logger.h config.h include/strprintf.h include/utf8string.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/utils.h \
@@ -1159,7 +1160,7 @@ test/scopemeasure.o: test/scopemeasure.cpp include/scopemeasure.h \
  test/test-helpers/loggerresetter.h test/test-helpers/tempfile.h \
  test/test-helpers/maintempdir.h
 test/statusline.o: test/statusline.cpp include/statusline.h \
- 3rd-party/catch.hpp
+ include/utf8string.h 3rd-party/catch.hpp
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  include/utf8string.h 3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
