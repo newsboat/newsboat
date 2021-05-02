@@ -35,7 +35,7 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 	}
 
 	f.language = get_prop(rootNode, "lang");
-	globalbase = get_prop(rootNode, "base", XML_URI);
+	globalbase = newsboat::Utf8String::from_utf8(get_prop(rootNode, "base", XML_URI));
 
 	for (xmlNode* node = rootNode->children; node != nullptr;
 		node = node->next) {
@@ -51,7 +51,7 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 			std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
 				f.link = newsboat::utils::absolute_url(
-						globalbase, get_prop(node, "href"));
+						globalbase.to_utf8(), get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
@@ -70,7 +70,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 
 	std::string base = get_prop(entryNode, "base", XML_URI);
 	if (base == "") {
-		base = globalbase;
+		base = globalbase.to_utf8();
 	}
 
 	for (xmlNode* node = entryNode->children; node != nullptr;

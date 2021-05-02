@@ -4,6 +4,8 @@
 #include <libxml/tree.h>
 #include <string>
 
+#include "utf8string.h"
+
 namespace rsspp {
 
 class Feed;
@@ -19,7 +21,7 @@ struct RssParser {
 
 protected:
 	xmlDocPtr doc;
-	std::string globalbase;
+	newsboat::Utf8String globalbase;
 };
 
 } // namespace rsspp

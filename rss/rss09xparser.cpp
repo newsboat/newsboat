@@ -21,7 +21,7 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 		throw Exception(_("XML root node is NULL"));
 	}
 
-	globalbase = get_prop(rootNode, "base", XML_URI);
+	globalbase = Utf8String::from_utf8(get_prop(rootNode, "base", XML_URI));
 
 	xmlNode* channel = rootNode->children;
 	while (channel && strcmp((const char*)channel->name, "channel") != 0) {
@@ -39,7 +39,7 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 			f.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
 			f.link = utils::absolute_url(
-					globalbase, get_content(node));
+					globalbase.to_utf8(), get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
 		} else if (node_is(node, "language", ns)) {
@@ -60,7 +60,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 
 	std::string base = get_prop(itemNode, "base", XML_URI);
 	if (base.empty()) {
-		base = globalbase;
+		base = globalbase.to_utf8();
 	}
 
 	for (xmlNode* node = itemNode->children; node != nullptr;
