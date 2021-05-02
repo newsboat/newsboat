@@ -73,7 +73,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 	case OP_BOOKMARK: {
 		if (!links.empty()) {
 			const unsigned int pos = urls_list.get_position();
-			this->start_bookmark_qna("", links[pos].first, "", feed->title());
+			this->start_bookmark_qna("", links[pos].first.to_utf8(), "", feed->title());
 		} else {
 			v->get_statusline().show_error(_("No links available!"));
 		}
@@ -94,7 +94,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 		if (idx < links.size()) {
 			const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
 			const bool interactive = true;
-			v->open_in_browser(links[idx].first, feedurl, interactive);
+			v->open_in_browser(links[idx].first.to_utf8(), feedurl, interactive);
 		}
 	}
 	break;
@@ -125,7 +125,7 @@ void UrlViewFormAction::open_current_position_in_browser(bool interactive)
 	if (!links.empty()) {
 		const unsigned int pos = urls_list.get_position();
 		const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
-		v->open_in_browser(links[pos].first, feedurl, interactive);
+		v->open_in_browser(links[pos].first.to_utf8(), feedurl, interactive);
 	} else {
 		v->get_statusline().show_error(_("No links available!"));
 	}
