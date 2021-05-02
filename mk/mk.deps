@@ -855,8 +855,8 @@ src/ttrssapi.o: src/ttrssapi.cpp include/ttrssapi.h 3rd-party/json.hpp \
  include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/ttrssurlreader.o: src/ttrssurlreader.cpp include/ttrssurlreader.h \
- include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
- include/utf8string.h include/logger.h config.h include/strprintf.h \
+ include/urlreader.h 3rd-party/optional.hpp include/utf8string.h \
+ include/fileurlreader.h include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/remoteapi.h \
  include/configcontainer.h include/configactionhandler.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \

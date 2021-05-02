@@ -2,6 +2,7 @@
 #define NEWSBOAT_TTRSSURLREADER_H_
 
 #include "urlreader.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -15,7 +16,7 @@ public:
 	std::string get_source() override;
 
 private:
-	std::string file;
+	Utf8String file;
 	RemoteApi* api;
 };
 
