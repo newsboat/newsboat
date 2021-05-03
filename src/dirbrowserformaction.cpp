@@ -294,8 +294,8 @@ void DirBrowserFormAction::add_directory(
 		const auto ftype = FileSystemBrowser::mode_to_filetype(sb.st_mode);
 
 		std::string rwxbits = get_rwx(sb.st_mode & 0777);
-		std::string owner = get_owner(sb.st_uid);
-		std::string group = get_group(sb.st_gid);
+		const auto owner = FileSystemBrowser::get_user_padded(sb.st_uid);
+		const auto group = FileSystemBrowser::get_group_padded(sb.st_gid);
 		std::string formatteddirname = get_formatted_dirname(dirname, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt(
@@ -340,32 +340,6 @@ std::string DirBrowserFormAction::get_rwx(unsigned short val)
 		str.insert(0, bitstrs[bits]);
 	}
 	return str;
-}
-
-std::string DirBrowserFormAction::get_owner(uid_t uid)
-{
-	struct passwd* spw = getpwuid(uid);
-	if (spw) {
-		std::string owner = spw->pw_name;
-		for (int i = owner.length(); i < 8; ++i) {
-			owner.append(" ");
-		}
-		return owner;
-	}
-	return "????????";
-}
-
-std::string DirBrowserFormAction::get_group(gid_t gid)
-{
-	struct group* sgr = getgrgid(gid);
-	if (sgr) {
-		std::string group = sgr->gr_name;
-		for (int i = group.length(); i < 8; ++i) {
-			group.append(" ");
-		}
-		return group;
-	}
-	return "????????";
 }
 
 std::string DirBrowserFormAction::title()

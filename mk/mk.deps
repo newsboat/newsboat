@@ -330,7 +330,7 @@ src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/filesystembrowser.o: src/filesystembrowser.cpp \
- include/filesystembrowser.h 3rd-party/optional.hpp
+ include/filesystembrowser.h 3rd-party/optional.hpp include/strprintf.h
 src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/utils.h \
  3rd-party/expected.hpp include/configcontainer.h \

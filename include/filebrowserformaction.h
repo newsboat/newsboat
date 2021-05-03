@@ -44,8 +44,6 @@ private:
 	std::string get_rwx(unsigned short val);
 	std::vector<FileSystemBrowser::FileSystemEntry> id_at_position;
 
-	std::string get_owner(uid_t uid);
-	std::string get_group(gid_t gid);
 	std::string get_formatted_filename(std::string filename, mode_t mode);
 
 	bool quit;

@@ -1,5 +1,11 @@
 #include "filesystembrowser.h"
 
+#include <grp.h>
+#include <pwd.h>
+#include <sys/types.h>
+
+#include "strprintf.h"
+
 namespace newsboat {
 
 namespace FileSystemBrowser {
@@ -79,6 +85,24 @@ nonstd::optional<char> mode_suffix(mode_t mode)
 	}
 
 	return nonstd::nullopt;
+}
+
+std::string get_user_padded(uid_t uid)
+{
+	const struct passwd* spw = ::getpwuid(uid);
+	if (spw != nullptr) {
+		return strprintf::fmt("%-8s", spw->pw_name);
+	}
+	return "????????";
+}
+
+std::string get_group_padded(gid_t gid)
+{
+	const struct group* sgr = ::getgrgid(gid);
+	if (sgr != nullptr) {
+		return strprintf::fmt("%-8s", sgr->gr_name);
+	}
+	return "????????";
 }
 
 } // namespace FileSystemBrowser

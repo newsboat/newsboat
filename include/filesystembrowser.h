@@ -38,6 +38,14 @@ struct FileSystemEntry {
 	std::string name;
 };
 
+/// The name of the user with a given UID, padded on the right to the width of
+/// 8 characters. If the name is unknown, returns 8 question marks.
+std::string get_user_padded(uid_t uid);
+
+/// The name of the group with a given GID, padded on the right to the width of
+/// 8 characters. If the name is unknown, returns 8 question marks.
+std::string get_group_padded(gid_t gid);
+
 } // namespace FileSystemBrowser
 
 } // namespace newsboat
