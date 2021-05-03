@@ -61,7 +61,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				const auto selection = id_at_position[selected_position];
 				switch (selection.filetype) {
 				case FileSystemBrowser::FileType::Directory: {
-					const int status = ::chdir(selection.name.c_str());
+					const int status = ::chdir(selection.name.to_locale_charset().c_str());
 					LOG(Level::DEBUG,
 						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						selection.name,
@@ -94,7 +94,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
 						fn.append(NEWSBOAT_PATH_SEP);
 					}
-					fn.append(selection.name);
+					fn.append(selection.name.to_utf8());
 					set_value("filenametext", fn);
 					f.set_focus("filename");
 				}
@@ -336,7 +336,7 @@ void FileBrowserFormAction::add_file(
 				sizestr,
 				formattedfilename);
 		listfmt.add_line(utils::quote_for_stfl(line));
-		id_at_position.push_back(FileSystemBrowser::FileSystemEntry{ftype, filename});
+		id_at_position.push_back(FileSystemBrowser::FileSystemEntry{ftype, Utf8String::from_utf8(filename)});
 	}
 }
 
