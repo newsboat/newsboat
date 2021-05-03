@@ -318,7 +318,7 @@ void FileBrowserFormAction::add_file(
 	if (::lstat(filename.c_str(), &sb) == 0) {
 		const auto ftype = FileSystemBrowser::mode_to_filetype(sb.st_mode);
 
-		std::string rwxbits = get_rwx(sb.st_mode & 0777);
+		const auto rwxbits = FileSystemBrowser::permissions_string(sb.st_mode);
 		const auto owner = FileSystemBrowser::get_user_padded(sb.st_uid);
 		const auto group = FileSystemBrowser::get_group_padded(sb.st_gid);
 		std::string formattedfilename = get_formatted_filename(filename, sb.st_mode);
@@ -350,20 +350,6 @@ std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
 	} else {
 		return filename;
 	}
-}
-
-std::string FileBrowserFormAction::get_rwx(unsigned short val)
-{
-	std::string str;
-	const char* bitstrs[] = {
-		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
-	};
-	for (int i = 0; i < 3; ++i) {
-		unsigned char bits = val % 8;
-		val /= 8;
-		str.insert(0, bitstrs[bits]);
-	}
-	return str;
 }
 
 std::string FileBrowserFormAction::title()

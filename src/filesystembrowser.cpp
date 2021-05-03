@@ -105,6 +105,22 @@ std::string get_group_padded(gid_t gid)
 	return "????????";
 }
 
+std::string permissions_string(mode_t mode)
+{
+	unsigned int val = mode & 0777;
+
+	std::string str;
+	const char* bitstrs[] = {
+		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
+	};
+	for (int i = 0; i < 3; ++i) {
+		unsigned char bits = val % 8;
+		val /= 8;
+		str.insert(0, bitstrs[bits]);
+	}
+	return str;
+}
+
 } // namespace FileSystemBrowser
 
 } // namespace newsboat

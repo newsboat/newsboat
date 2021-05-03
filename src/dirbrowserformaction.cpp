@@ -293,7 +293,7 @@ void DirBrowserFormAction::add_directory(
 	if (::lstat(dirname.c_str(), &sb) == 0) {
 		const auto ftype = FileSystemBrowser::mode_to_filetype(sb.st_mode);
 
-		std::string rwxbits = get_rwx(sb.st_mode & 0777);
+		const auto rwxbits = FileSystemBrowser::permissions_string(sb.st_mode);
 		const auto owner = FileSystemBrowser::get_user_padded(sb.st_uid);
 		const auto group = FileSystemBrowser::get_group_padded(sb.st_gid);
 		std::string formatteddirname = get_formatted_dirname(dirname, sb.st_mode);
@@ -325,21 +325,6 @@ std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
 	} else {
 		return dirname;
 	}
-}
-
-std::string DirBrowserFormAction::get_rwx(unsigned short val)
-{
-	std::string str;
-	const char* bitstrs[] = {
-		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
-	};
-
-	for (int i = 0; i < 3; ++i) {
-		unsigned char bits = val % 8;
-		val /= 8;
-		str.insert(0, bitstrs[bits]);
-	}
-	return str;
 }
 
 std::string DirBrowserFormAction::title()

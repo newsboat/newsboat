@@ -48,3 +48,20 @@ TEST_CASE("mode_suffix", "[FileSystemBrowser]")
 		REQUIRE(mode_suffix(0645 | S_IFCHR) == nonstd::nullopt);
 	}
 }
+
+TEST_CASE("permissions_string", "[FileSystemBrowser]")
+{
+	REQUIRE(permissions_string(0710) == "rwx--x---");
+	REQUIRE(permissions_string(0257) == "-w-r-xrwx");
+	REQUIRE(permissions_string(0616) == "rw---xrw-");
+	REQUIRE(permissions_string(0227) == "-w--w-rwx");
+	REQUIRE(permissions_string(0006) == "------rw-");
+	REQUIRE(permissions_string(0133) == "--x-wx-wx");
+	REQUIRE(permissions_string(0346) == "-wxr--rw-");
+	REQUIRE(permissions_string(0017) == "-----xrwx");
+	REQUIRE(permissions_string(0254) == "-w-r-xr--");
+	REQUIRE(permissions_string(0646) == "rw-r--rw-");
+	REQUIRE(permissions_string(0326) == "-wx-w-rw-");
+	REQUIRE(permissions_string(0754) == "rwxr-xr--");
+	REQUIRE(permissions_string(0156) == "--xr-xrw-");
+}

@@ -35,7 +35,6 @@ private:
 	void add_directory(ListFormatter& listfmt,
 		std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
 		std::string dirname);
-	std::string get_rwx(unsigned short val);
 	std::vector<FileSystemBrowser::FileSystemEntry> id_at_position;
 
 	std::string get_formatted_dirname(std::string dirname, mode_t mode);

@@ -41,7 +41,6 @@ private:
 		std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
 		std::string filename);
 	std::string get_filename_suggestion(const std::string& s);
-	std::string get_rwx(unsigned short val);
 	std::vector<FileSystemBrowser::FileSystemEntry> id_at_position;
 
 	std::string get_formatted_filename(std::string filename, mode_t mode);

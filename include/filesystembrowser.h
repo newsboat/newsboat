@@ -46,6 +46,9 @@ std::string get_user_padded(uid_t uid);
 /// 8 characters. If the name is unknown, returns 8 question marks.
 std::string get_group_padded(gid_t gid);
 
+/// Convert permissions into an rwxrwxrwx-style string.
+std::string permissions_string(mode_t mode);
+
 } // namespace FileSystemBrowser
 
 } // namespace newsboat
