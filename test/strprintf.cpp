@@ -94,6 +94,8 @@ TEST_CASE("strprintf::fmt() formats char* as a string", "[strprintf]")
 {
 	const char* input = "Hello, world!";
 	REQUIRE(strprintf::fmt("%s", input) == std::string(input));
+	REQUIRE(strprintf::fmt("%15s", input) == "  Hello, world!");
+	REQUIRE(strprintf::fmt("%-15s", input) == "Hello, world!  ");
 }
 
 TEST_CASE("strprintf::fmt() formats int32_t", "[strprintf]")
@@ -212,12 +214,16 @@ TEST_CASE("strprintf::fmt() formats std::string", "[strprintf]")
 {
 	const auto input = std::string("Hello, world!");
 	REQUIRE(strprintf::fmt("%s", input) == input);
+	REQUIRE(strprintf::fmt("%15s", input) == "  Hello, world!");
+	REQUIRE(strprintf::fmt("%-15s", input) == "Hello, world!  ");
 }
 
 TEST_CASE("strprintf::fmt() formats std::string*", "[strprintf]")
 {
 	const auto input = std::string("Hello, world!");
 	REQUIRE(strprintf::fmt("%s", &input) == input);
+	REQUIRE(strprintf::fmt("%15s", input) == "  Hello, world!");
+	REQUIRE(strprintf::fmt("%-15s", input) == "Hello, world!  ");
 }
 
 TEST_CASE("strprintf::fmt() works fine with 2MB format string", "[strprintf]")
