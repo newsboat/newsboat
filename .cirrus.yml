@@ -144,13 +144,13 @@ macos_task:
     before_cache_script: *before_cache_script
 
     matrix:
-        - name: macOS Big Sur, Clang, Rust 1.51.0
+        - name: macOS Big Sur, Clang, Rust 1.52.0
           osx_instance:
               image: big-sur-base
           env:
               CC: clang
               CXX: clang++
-              RUST: 1.51.0
+              RUST: 1.52.0
         # This job tests our minimum supported Rust version, so only bump on
         # Newsboat release day
         - name: macOS Catalina, GCC, Rust 1.48.0
@@ -216,112 +216,112 @@ linux_task:
                 cxx: clang++-12
           env: *extra_warnings_and_checks_env
 
-        - name: Rust 1.51.0, GCC 5 (Ubuntu 18.04)
+        - name: Rust 1.52.0, GCC 5 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-5
                 cc: gcc-5
                 cxx: g++-5
-        - name: Rust 1.51.0, GCC 6 (Ubuntu 18.04)
+        - name: Rust 1.52.0, GCC 6 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-6
                 cc: gcc-6
                 cxx: g++-6
-        - name: Rust 1.51.0, GCC 7 (Ubuntu 18.04)
+        - name: Rust 1.52.0, GCC 7 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-7
                 cc: gcc-7
                 cxx: g++-7
-        - name: Rust 1.51.0, GCC 8 (Ubuntu 18.04)
+        - name: Rust 1.52.0, GCC 8 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-8
                 cc: gcc-8
                 cxx: g++-8
-        - name: Rust 1.51.0, GCC 9 (Ubuntu 20.04)
+        - name: Rust 1.52.0, GCC 9 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-9
                 cc: gcc-9
                 cxx: g++-9
-        - name: Rust 1.51.0, GCC 10 (Ubuntu 20.04)
+        - name: Rust 1.52.0, GCC 10 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-10
                 cc: gcc-10
                 cxx: g++-10
-        - name: Rust 1.51.0, GCC 11 (Ubuntu 21.04)
+        - name: Rust 1.52.0, GCC 11 (Ubuntu 21.04)
           container:
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-11
                 cc: gcc-11
                 cxx: g++-11
-        - name: Rust 1.51.0, Clang 4.0 (Ubuntu 18.04)
+        - name: Rust 1.52.0, Clang 4.0 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-4.0
                 cc: clang-4.0
                 cxx: clang++-4.0
-        - name: Rust 1.51.0, Clang 5.0 (Ubuntu 18.04)
+        - name: Rust 1.52.0, Clang 5.0 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-5.0
                 cc: clang-5.0
                 cxx: clang++-5.0
-        - name: Rust 1.51.0, Clang 6.0 (Ubuntu 18.04)
+        - name: Rust 1.52.0, Clang 6.0 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-6.0
                 cc: clang-6.0
                 cxx: clang++-6.0
-        - name: Rust 1.51.0, Clang 7 (Ubuntu 18.04)
+        - name: Rust 1.52.0, Clang 7 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-7
                 cc: clang-7
                 cxx: clang++-7
-        - name: Rust 1.51.0, Clang 8 (Ubuntu 18.04)
+        - name: Rust 1.52.0, Clang 8 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-8
                 cc: clang-8
                 cxx: clang++-8
-        - name: Rust 1.51.0, Clang 9 (Ubuntu 18.04)
+        - name: Rust 1.52.0, Clang 9 (Ubuntu 18.04)
           container:
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-9
                 cc: clang-9
                 cxx: clang++-9
-        - name: Rust 1.51.0, Clang 10 (Ubuntu 20.04)
+        - name: Rust 1.52.0, Clang 10 (Ubuntu 20.04)
           container:
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-10
                 cc: clang-10
                 cxx: clang++-10
-        - name: Rust 1.51.0, Clang 11 (Ubuntu 20.10)
+        - name: Rust 1.52.0, Clang 11 (Ubuntu 20.10)
           container:
             dockerfile: docker/ubuntu_20.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-11
                 cc: clang-11
                 cxx: clang++-11
-        - name: Rust 1.51.0, Clang 12 (Ubuntu 21.04)
+        - name: Rust 1.52.0, Clang 12 (Ubuntu 21.04)
           container:
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
