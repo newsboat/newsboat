@@ -25,7 +25,8 @@ Nestler.
     `open-in-browser`, but doesn't relinquish the terminal to the browser. It
     still waits for the browser to finish executing, though (Dennis van der
     Schagt)
-- Confirmation for `delete-all-articles` (#1490) (Amrit Brar)
+- Confirmation for `delete-all-articles`. It's enabled by default, but can be
+    disabled with `confirm-delete-all-articles no`. (#1490) (Amrit Brar)
 - `%U` specifier for `feedlist-title-format` which shows the total number of
     unread articles in all feeds (#1495) (Dennis van der Schagt)
 - Display images' alternate text in the article view (#1512)
