@@ -21,7 +21,7 @@ jobs:
   snyk:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.3.4
     - name: Build a Docker image
       run: docker build -t your/image-to-test .
     - name: Run Snyk to check Docker image for vulnerabilities
