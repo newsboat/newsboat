@@ -9,6 +9,7 @@
 #include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -22,7 +23,7 @@ public:
 
 	void set_default_filename(const std::string& fn)
 	{
-		default_filename = fn;
+		default_filename = Utf8String::from_utf8(fn);
 	}
 
 	std::string id() const override
@@ -45,7 +46,7 @@ private:
 
 	std::string get_formatted_filename(std::string filename, mode_t mode);
 
-	std::string default_filename;
+	Utf8String default_filename;
 
 	ListWidget files_list;
 };

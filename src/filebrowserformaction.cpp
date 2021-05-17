@@ -292,7 +292,7 @@ void FileBrowserFormAction::init()
 	const int status = ::chdir(save_path.c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
-	set_value("filenametext", default_filename);
+	set_value("filenametext", default_filename.to_utf8());
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
