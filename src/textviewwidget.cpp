@@ -8,7 +8,7 @@ namespace newsboat {
 
 TextviewWidget::TextviewWidget(const std::string& textview_name,
 	Stfl::Form& form)
-	: textview_name(textview_name)
+	: textview_name(Utf8String::from_utf8(textview_name))
 	, form(form)
 	, num_lines(0)
 {
@@ -18,14 +18,14 @@ void TextviewWidget::stfl_replace_textview(std::uint32_t number_of_lines,
 	std::string stfl)
 {
 	num_lines = number_of_lines;
-	form.modify(textview_name, "replace", stfl);
+	form.modify(textview_name.to_utf8(), "replace", stfl);
 }
 
 void TextviewWidget::stfl_replace_lines(std::uint32_t number_of_lines,
 	std::string stfl)
 {
 	num_lines = number_of_lines;
-	form.modify(textview_name, "replace_inner", stfl);
+	form.modify(textview_name.to_utf8(), "replace_inner", stfl);
 }
 
 void TextviewWidget::scroll_up()
@@ -94,7 +94,7 @@ void TextviewWidget::scroll_page_down()
 
 std::uint32_t TextviewWidget::get_scroll_offset()
 {
-	const std::string offset = form.get(textview_name + "_offset");
+	const std::string offset = form.get((textview_name + "_offset").to_utf8());
 	if (!offset.empty()) {
 		return std::max(0, std::stoi(offset));
 	}
@@ -103,17 +103,17 @@ std::uint32_t TextviewWidget::get_scroll_offset()
 
 void TextviewWidget::set_scroll_offset(std::uint32_t offset)
 {
-	form.set(textview_name + "_offset", std::to_string(offset));
+	form.set((textview_name + "_offset").to_utf8(), std::to_string(offset));
 }
 
 std::uint32_t TextviewWidget::get_width()
 {
-	return utils::to_u(form.get(textview_name + ":w"));
+	return utils::to_u(form.get((textview_name + ":w").to_utf8()));
 }
 
 std::uint32_t TextviewWidget::get_height()
 {
-	return utils::to_u(form.get(textview_name + ":h"));
+	return utils::to_u(form.get((textview_name + ":h").to_utf8()));
 }
 
 } // namespace newsboat

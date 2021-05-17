@@ -6,6 +6,7 @@
 #include <string>
 
 #include "stflpp.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -29,7 +30,7 @@ public:
 	std::uint32_t get_width();
 	std::uint32_t get_height();
 private:
-	const std::string textview_name;
+	const Utf8String textview_name;
 	Stfl::Form& form;
 	std::uint32_t num_lines;
 };

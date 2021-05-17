@@ -844,11 +844,10 @@ src/textformatter.o: src/textformatter.cpp include/textformatter.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/textviewwidget.o: src/textviewwidget.cpp include/textviewwidget.h \
- include/stflpp.h include/utils.h 3rd-party/expected.hpp \
- 3rd-party/optional.hpp include/configcontainer.h \
- include/configactionhandler.h include/utf8string.h include/logger.h \
- config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/stflpp.h include/utf8string.h include/utils.h \
+ 3rd-party/expected.hpp 3rd-party/optional.hpp include/configcontainer.h \
+ include/configactionhandler.h include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/ttrssapi.o: src/ttrssapi.cpp include/ttrssapi.h 3rd-party/json.hpp \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
