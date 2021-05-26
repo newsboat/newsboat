@@ -686,6 +686,8 @@ Nestler, Thanga Ayyanar A.
 - Hangs when `highlight` rule matches an empty string (zaowen)
 - Article disappearing from the pager upon feed reload (zaowen)
     (https://github.com/akrennmair/newsbeuter/issues/534)
+- Leading and trailing spaces not stripped from the URLs in <A> tags (Raphael
+    Nestler)
 
 
 
