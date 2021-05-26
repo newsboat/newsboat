@@ -1613,9 +1613,9 @@ Non-security issues and general questions can be discussed on
 https://github.com/newsboat/newsboat/issues/[the issue tracker] and
 mailto:newsboat@googlegroups.com[the mailing list].
 
-You can also chat with developers and fellow users on #newsboat at Freenode
-(irc.freenode.net or https://webchat.freenode.net/?channels=newsboat[via
-webchat]).
+You can also chat with developers and fellow users on #newsboat at
+https://libera.chat/[irc.libera.chat]. We _do not_ have a channel on Freenode
+anymore.
 
 [appendix]
 == Newsboat Configuration Commands
