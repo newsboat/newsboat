@@ -118,7 +118,7 @@ branch off the latest release and backport the bugfixes onto it.
     * Push the code: `git push && git push --tags`
 8. Tell the world about it:
     * Send an email to the mailing list
-    * Change the topic on #newsboat at Freenode
+    * Change the topic on #newsboat at irc.libera.chat
 9. Release the snap:
     * For minor releases:
         * Go to https://dashboard.snapcraft.io/ and log in.

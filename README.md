@@ -160,8 +160,8 @@ Support
   [the mailing list](https://groups.google.com/group/newsboat)
   (newsboat@googlegroups.com)
 * Chat with developers and fellow users on #newsboat at
-  [Freenode](https://freenode.net) ([webchat
-  available!](https://webchat.freenode.net/?channels=newsboat))
+  [irc.libera.chat](https://libera.chat). We *do not* have a channel on
+  Freenode anymore.
 
 Contributing
 ------------
