@@ -227,8 +227,9 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	}
 }
 
-TEST_CASE("RegexManager::dump_config turns each `highlight` and "
-	"`highlight-article` rule into a string, and appends them onto a vector",
+TEST_CASE("RegexManager::dump_config turns each `highlight`,"
+	"`highlight-article` and `highlight-feed` rule into a string, and appends"
+    "them onto a vector",
 	"[RegexManager]")
 {
 	RegexManager rxman;
@@ -255,6 +256,21 @@ TEST_CASE("RegexManager::dump_config turns each `highlight` and "
 		REQUIRE(result.size() == 2);
 		REQUIRE(result[0] == R"#(highlight "all" "keywords" "red" "blue")#");
 		REQUIRE(result[1] == R"#(highlight-article "title==\"\"" "green" "black")#");
+	}
+
+	SECTION("Three rules") {
+		rxman.handle_action("highlight", {"all", "keywords", "red", "blue"});
+		rxman.handle_action(
+			"highlight-article",
+		{"title==\"\"", "green", "black"});
+		rxman.handle_action(
+			"highlight-feed",
+		{"title==\"\"", "red", "black"});
+		REQUIRE_NOTHROW(rxman.dump_config(result));
+		REQUIRE(result.size() == 3);
+		REQUIRE(result[0] == R"#(highlight "all" "keywords" "red" "blue")#");
+		REQUIRE(result[1] == R"#(highlight-article "title==\"\"" "green" "black")#");
+		REQUIRE(result[2] == R"#(highlight-feed "title==\"\"" "red" "black")#");
 	}
 }
 
@@ -411,6 +427,55 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight-article' definition",
 	REQUIRE_NOTHROW(rxman.handle_action("highlight-article", params));
 }
 
+TEST_CASE("RegexManager throws on invalid `highlight-feed' definition",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::vector<std::string> params;
+
+	SECTION("on `highlight-feed' without parameters") {
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight-feed", params),
+			ConfigHandlerException);
+	}
+
+	SECTION("on invalid filter expression") {
+		params = {"a = b", "red", "green"};
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight-feed", params),
+			ConfigHandlerException);
+	}
+
+	SECTION("on missing colors") {
+		params = {"title==\"\""};
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight-feed", params),
+			ConfigHandlerException);
+	}
+
+	SECTION("on missing background color") {
+		params = {"title==\"\"", "white"};
+		REQUIRE_THROWS_AS(rxman.handle_action("highlight-feed", params),
+			ConfigHandlerException);
+	}
+}
+
+TEST_CASE("RegexManager doesn't throw on valid `highlight-feed' definition",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	std::vector<std::string> params;
+
+	params = {"title == \"\"", "blue", "red"};
+	REQUIRE_NOTHROW(rxman.handle_action("highlight-feed", params));
+
+	params = {"content =~ \"keyword\"", "blue", "red"};
+	REQUIRE_NOTHROW(rxman.handle_action("highlight-feed", params));
+
+	params = {"unread == \"yes\"", "blue", "red", "bold", "underline"};
+	REQUIRE_NOTHROW(rxman.handle_action("highlight-feed", params));
+
+	params = {"age > 3", "blue", "red", "bold", "underline"};
+	REQUIRE_NOTHROW(rxman.handle_action("highlight-feed", params));
+}
+
 struct RegexManagerMockMatchable : public Matchable {
 public:
 	nonstd::optional<std::string> attribute_value(const std::string& attribname)
@@ -473,6 +538,59 @@ TEST_CASE("RegexManager::article_matches returns -1 if there are no Matcher "
 		rxman.handle_action(cmd, {"attr =~ \"hello\"", "green", "white"});
 
 		REQUIRE(rxman.article_matches(&mock) == -1);
+	}
+}
+
+TEST_CASE("RegexManager::feed_matches returns position of the Matcher "
+	"that matches a given Matchable",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	RegexManagerMockMatchable mock;
+
+	const auto cmd = std::string("highlight-feed");
+
+	SECTION("Just one rule") {
+		rxman.handle_action(cmd, {"attr != \"hello\"", "red", "green"});
+
+		REQUIRE(rxman.feed_matches(&mock) == 0);
+	}
+
+	SECTION("Couple rules") {
+		rxman.handle_action(cmd, {"attr != \"val\"", "green", "white"});
+		rxman.handle_action(cmd, {"attr # \"entry\"", "green", "white"});
+		rxman.handle_action(cmd, {"attr == \"val\"", "green", "white"});
+		rxman.handle_action(cmd, {"attr =~ \"hello\"", "green", "white"});
+
+		REQUIRE(rxman.feed_matches(&mock) == 2);
+	}
+}
+
+TEST_CASE("RegexManager::feed_matches returns -1 if there are no Matcher "
+	"to match a given Matchable",
+	"[RegexManager]")
+{
+	RegexManager rxman;
+	RegexManagerMockMatchable mock;
+
+	const auto cmd = std::string("highlight-feed");
+
+	SECTION("No rules") {
+		REQUIRE(rxman.feed_matches(&mock) == -1);
+	}
+
+	SECTION("Just one rule") {
+		rxman.handle_action(cmd, {"attr == \"hello\"", "red", "green"});
+
+		REQUIRE(rxman.feed_matches(&mock) == -1);
+	}
+
+	SECTION("Couple rules") {
+		rxman.handle_action(cmd, {"attr != \"val\"", "green", "white"});
+		rxman.handle_action(cmd, {"attr # \"entry\"", "green", "white"});
+		rxman.handle_action(cmd, {"attr =~ \"hello\"", "green", "white"});
+
+		REQUIRE(rxman.feed_matches(&mock) == -1);
 	}
 }
 
