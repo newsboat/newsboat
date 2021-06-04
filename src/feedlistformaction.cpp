@@ -1091,6 +1091,12 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 
 	auto formattedLine = fmt.do_format(feedlist_format, width);
 	formattedLine = utils::quote_for_stfl(formattedLine);
+
+	const int id = rxman.feed_matches(feed.get());
+	if (id != -1) {
+		formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
+	}
+
 	if (unread_count > 0) {
 		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
 	}
