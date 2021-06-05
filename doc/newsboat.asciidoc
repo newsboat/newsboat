@@ -1296,6 +1296,19 @@ Example:
 Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
 the filter expression.
 
+==== Highlighting Feeds in the Feed List
+
+Similarly, feeds can be highlighted in the feed list based on whether they match
+a certain filter expression. This is done using the <<highlight-feed, `highlight-feed`>>
+configuration command.
+
+Example:
+
+	highlight-feed "unread > 100" white red bold
+
+Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
+the filter expression.
+
 === Advanced Dialog Management
 
 Newsboat supports an advanced concept of dialogs.

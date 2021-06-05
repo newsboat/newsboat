@@ -173,6 +173,7 @@ int Controller::run(const CliArgsParser& args)
 	cfgparser.register_handler("define-filter", filters);
 	cfgparser.register_handler("highlight", rxman);
 	cfgparser.register_handler("highlight-article", rxman);
+	cfgparser.register_handler("highlight-feed", rxman);
 
 	try {
 		cfgparser.parse_file("/etc/" PACKAGE "/config");

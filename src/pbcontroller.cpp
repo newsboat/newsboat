@@ -270,6 +270,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("define-filter", null_cah);
 	cfgparser.register_handler("highlight", null_cah);
 	cfgparser.register_handler("highlight-article", null_cah);
+	cfgparser.register_handler("highlight-feed", null_cah);
 	cfgparser.register_handler("reset-unread-on-update", null_cah);
 	cfgparser.register_handler("run-on-startup", null_cah);
 
