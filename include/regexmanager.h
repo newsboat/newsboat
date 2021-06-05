@@ -42,8 +42,8 @@ private:
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_feed;
 
 	void handle_highlight_action(const std::vector<std::string>& params);
-    void handle_highlight_item_action(const std::string& action,
-        const std::vector<std::string>& params);
+	void handle_highlight_item_action(const std::string& action,
+		const std::vector<std::string>& params);
 };
 
 } // namespace newsboat

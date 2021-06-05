@@ -296,7 +296,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 }
 
 void RegexManager::handle_highlight_item_action(const std::string& action,
-    const std::vector<std::string>& params)
+	const std::vector<std::string>& params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -354,20 +354,20 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 				m->get_parse_error()));
 	}
 
-    if (action == "highlight-article") {
-        int pos = locations["articlelist"].size();
-        locations["articlelist"].push_back({nullptr, colorstr});
-        matchers_article.push_back(
-            std::pair<std::shared_ptr<Matcher>, int>(m, pos));
-    } else if (action == "highlight-feed") {
-        int pos = locations["feedlist"].size();
-        locations["feedlist"].push_back({nullptr, colorstr});
-        matchers_feed.push_back(
-            std::pair<std::shared_ptr<Matcher>, int>(m, pos));
-    } else {
-        throw ConfigHandlerException(
-            ActionHandlerStatus::INVALID_COMMAND);
-    }
+	if (action == "highlight-article") {
+		int pos = locations["articlelist"].size();
+		locations["articlelist"].push_back({nullptr, colorstr});
+		matchers_article.push_back(
+			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+	} else if (action == "highlight-feed") {
+		int pos = locations["feedlist"].size();
+		locations["feedlist"].push_back({nullptr, colorstr});
+		matchers_feed.push_back(
+			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+	} else {
+		throw ConfigHandlerException(
+			ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 std::string RegexManager::get_attrs_stfl_string(const std::string& location,

@@ -227,9 +227,9 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	}
 }
 
-TEST_CASE("RegexManager::dump_config turns each `highlight`,"
-	"`highlight-article` and `highlight-feed` rule into a string, and appends"
-    "them onto a vector",
+TEST_CASE("RegexManager::dump_config turns each `highlight`, "
+	"`highlight-article` and `highlight-feed` rule into a string, and appends "
+	"them onto a vector",
 	"[RegexManager]")
 {
 	RegexManager rxman;
