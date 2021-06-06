@@ -36,9 +36,19 @@ jobs:
     steps:
     - name: Checkout repository
   <<<<<<< master
+  <<<<<<< patch-1
+      uses: actions/checkout@v2
+  =======
+  =======
+  >>>>>>> master
+  <<<<<<< master
       uses: actions/checkout@v2
   =======
       uses: actions/checkout@v2.3.4
+  >>>>>>> master
+  <<<<<<< master
+  >>>>>>> master
+  =======
   >>>>>>> master
 
     # Initializes the CodeQL tools for scanning.

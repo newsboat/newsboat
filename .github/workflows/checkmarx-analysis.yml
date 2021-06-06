@@ -22,15 +22,31 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
   <<<<<<< master
+  <<<<<<< patch-1
+  =======
+  <<<<<<< master
+  >>>>>>> master
+  =======
+  <<<<<<< master
+  >>>>>>> master
     - uses: actions/checkout@v2
     # Runs the Checkmarx Scan leveraging the latest version of CxFlow - REFER to Action README for list of inputs
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.0
+  <<<<<<< master
+  <<<<<<< patch-1
+  =======
+  =======
+  >>>>>>> master
   =======
     - uses: actions/checkout@v2.3.4
     # Runs the Checkmarx Scan leveraging the latest version of CxFlow - REFER to Action README for list of inputs
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.1
+  >>>>>>> master
+  <<<<<<< master
+  >>>>>>> master
+  =======
   >>>>>>> master
       with:
         project: GithubActionTest

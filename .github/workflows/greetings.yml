@@ -7,9 +7,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
   <<<<<<< master
+  <<<<<<< patch-1
+    - uses: actions/first-interaction@v1
+  =======
+  =======
+  >>>>>>> master
+  <<<<<<< master
     - uses: actions/first-interaction@v1
   =======
     - uses: actions/first-interaction@v1.1.0
+  >>>>>>> master
+  <<<<<<< master
+  >>>>>>> master
+  =======
   >>>>>>> master
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}

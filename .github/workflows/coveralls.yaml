@@ -54,9 +54,19 @@ jobs:
 
       - name: Cache ~/.cargo
   <<<<<<< master
+  <<<<<<< patch-1
+        uses: actions/cache@v2.1.5
+  =======
+  =======
+  >>>>>>> master
+  <<<<<<< master
         uses: actions/cache@v2.1.5
   =======
         uses: actions/cache@v2.1.6
+  >>>>>>> master
+  <<<<<<< master
+  >>>>>>> master
+  =======
   >>>>>>> master
         id: cargo_cache
         with:
