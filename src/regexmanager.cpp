@@ -34,8 +34,8 @@ void RegexManager::handle_action(const std::string& action,
 {
 	if (action == "highlight") {
 		handle_highlight_action(params);
-	} else if (action == "highlight-article") {
-		handle_highlight_article_action(params);
+	} else if (action == "highlight-article" || action == "highlight-feed") {
+		handle_highlight_item_action(action, params);
 	} else {
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
@@ -50,8 +50,18 @@ void RegexManager::handle_action(const std::string& action,
 
 int RegexManager::article_matches(Matchable* item)
 {
-	for (const auto& Matcher : matchers) {
+	for (const auto& Matcher : matchers_article) {
 		if (Matcher.first->matches(item)) {
+			return Matcher.second;
+		}
+	}
+	return -1;
+}
+
+int RegexManager::feed_matches(Matchable* feed)
+{
+	for (const auto& Matcher : matchers_feed) {
+		if (Matcher.first->matches(feed)) {
 			return Matcher.second;
 		}
 	}
@@ -285,8 +295,8 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 	}
 }
 
-void RegexManager::handle_highlight_article_action(const
-	std::vector<std::string>& params)
+void RegexManager::handle_highlight_item_action(const std::string& action,
+	const std::vector<std::string>& params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -344,12 +354,20 @@ void RegexManager::handle_highlight_article_action(const
 				m->get_parse_error()));
 	}
 
-	int pos = locations["articlelist"].size();
-
-	locations["articlelist"].push_back({nullptr, colorstr});
-
-	matchers.push_back(
-		std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+	if (action == "highlight-article") {
+		int pos = locations["articlelist"].size();
+		locations["articlelist"].push_back({nullptr, colorstr});
+		matchers_article.push_back(
+			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+	} else if (action == "highlight-feed") {
+		int pos = locations["feedlist"].size();
+		locations["feedlist"].push_back({nullptr, colorstr});
+		matchers_feed.push_back(
+			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+	} else {
+		throw ConfigHandlerException(
+			ActionHandlerStatus::INVALID_COMMAND);
+	}
 }
 
 std::string RegexManager::get_attrs_stfl_string(const std::string& location,

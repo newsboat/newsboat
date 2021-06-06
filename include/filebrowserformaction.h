@@ -5,9 +5,10 @@
 #include <grp.h>
 
 #include "configcontainer.h"
+#include "filesystembrowser.h"
+#include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"
-#include "formaction.h"
 
 namespace newsboat {
 
@@ -37,17 +38,12 @@ private:
 	void update_title(const std::string& working_directory);
 
 	void add_file(ListFormatter& listfmt,
-		std::vector<std::string>& id_at_position,
+		std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
 		std::string filename);
 	std::string get_filename_suggestion(const std::string& s);
-	std::string get_rwx(unsigned short val);
-	std::vector<std::string> id_at_position;
+	std::vector<FileSystemBrowser::FileSystemEntry> id_at_position;
 
-	char get_filetype(mode_t mode);
-	std::string get_owner(uid_t uid);
-	std::string get_group(gid_t gid);
-	std::string get_formatted_filename(std::string filename, char ftype,
-		mode_t mode);
+	std::string get_formatted_filename(std::string filename, mode_t mode);
 
 	bool quit;
 	std::string cwd;

@@ -858,6 +858,27 @@ TEST_CASE("absolute_url()", "[utils]")
 			"bla2.html") == "http://test:test@foobar:33/bla2.html");
 }
 
+TEST_CASE("absolute_url() strips ASCII whitespace", "[utils]")
+{
+	// ASCII whitespace characters are: tab, line feed, form feed, carriage
+	// return, and space
+
+	REQUIRE(utils::absolute_url(" \t https://example.com/page1",
+			"page2") == "https://example.com/page2");
+	REQUIRE(utils::absolute_url("https://example.com/page3  \n ",
+			"page4") == "https://example.com/page4");
+	REQUIRE(utils::absolute_url("  \rhttps://example.com/page5  \f ",
+			"page6") == "https://example.com/page6");
+	REQUIRE(utils::absolute_url("https://example.com/base",
+			" \n replacement") == "https://example.com/replacement");
+	REQUIRE(utils::absolute_url("https://example.com/different",
+			"   another\t") == "https://example.com/another");
+	REQUIRE(utils::absolute_url("https://example.com/~joe/",
+			" \rhello\f") == "https://example.com/~joe/hello");
+	REQUIRE(utils::absolute_url( "\f\n\rhttps://example.com/misc/\t    ",
+			"   \t\feverything_at_once\n\r") == "https://example.com/misc/everything_at_once");
+}
+
 TEST_CASE("quote_for_stfl() adds a \'>\' after every \'<\'", "[utils]")
 {
 	REQUIRE(utils::quote_for_stfl("<<><><><") == "<><>><>><>><>");
