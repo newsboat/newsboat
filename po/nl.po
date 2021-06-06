@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-06-06 20:36+0300\n"
-"PO-Revision-Date: 2021-03-13 11:37+0100\n"
+"PO-Revision-Date: 2021-06-07 21:16+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: newsboat.cpp:31
@@ -140,12 +140,11 @@ msgid "cache"
 msgstr "cache"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:375
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Ondersteuning via het #newsboat kanaal op https://freenode.net of op de "
+"Ondersteuning via het #newsboat kanaal op https://libera.chat of op de "
 "mailinglijst https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:378
@@ -221,33 +220,31 @@ msgid "`%s' is not a valid configuration element"
 msgstr "configuratie-element ‘%s’ is ongeldig"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: klaar met vernieuwen, %f ongelezen feeds (%n ongelezen artikelen "
+"Newsboat: klaar met vernieuwen, %f ongelezen feeds (%n ongelezen artikelen "
 "in totaal)"
 
 #: src/configcontainer.cpp:287
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
-"%N %V - Artikelen in feed ‘%T’ (%u ongelezen, %t totaal)%?F? gefilterd met `"
-"%F'&? - %U"
+"%N %V - Artikelen in feed '%T’ (%u ongelezen, %t totaal)%?F? gefilterd met "
+"'%F'&? - %U"
 
 #: src/configcontainer.cpp:291
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialogen"
 
 #: src/configcontainer.cpp:294
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
-"%N %V - %?F?Feeds&Uw feeds? (%u ongelezen, %t totaal)%?F? gefilterd met `"
-"%F'&?%?T? - tag `%T'&?"
+"%N %V - %?F?Feeds&Uw feeds? (%u ongelezen, %t totaal)%?F? gefilterd met "
+"'%F'&?%?T? - tag '%T'&?"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -266,10 +263,9 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel ‘%T’ (%u ongelezen, %t totaal)"
 
 #: src/configcontainer.cpp:313
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
-"%N %V - Zoekresultaten (%u ongelezen, %t totaal)%?F? gefilterd met `%F'&?"
+"%N %V - Zoekresultaten (%u ongelezen, %t totaal)%?F? gefilterd met '%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -307,9 +303,8 @@ msgid "too few parameters."
 msgstr "te weinig parameters."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "te weinig parameters."
+msgstr "te veel parameters."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -381,20 +376,17 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s is niet toegangelijk en kan ook niet aangemaakt worden\n"
 
 #: src/controller.cpp:289
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
 msgstr ""
-"Error: `miniflux-url` moet ingesteld worden om Miniflux te kunnen "
-"gebruiken.\n"
+"FOUT: `freshrss-url` moet ingesteld worden om FreshRSS te kunnen gebruiken.\n"
 
 #: src/controller.cpp:301
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"FOUT: Configureer `miniflux-login` en één van de volgende opties (`miniflux-"
-"password`, `miniflux-passwordfile` or `miniflux-passwordeval`) om Miniflux "
+"FOUT: Configureer `freshrss-login` en één van de volgende opties (`freshrss-"
+"password`, `freshrss-passwordfile` or `freshrss-passwordeval`) om FreshRSS "
 "te gebruiken\n"
 
 #: src/controller.cpp:316
@@ -971,7 +963,7 @@ msgstr "Ongekoppelde functies:"
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Macros:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1635,9 +1627,9 @@ msgid "`%s' is not a valid key command"
 msgstr "‘%s’ is een ongeldige toetsopdracht"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Mislukt om wachtrij-bestand te openen (%s)"
+msgstr "mislukt om opeenvolging van opdrachten te ontleden in %s"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1772,14 +1764,14 @@ msgid "Mark as Finished"
 msgstr "Maarkeer als afgerond"
 
 #: src/queueloader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
-"Waarschuwing: Comment gevonden in %s. Comments worden overschreven wanneer "
-"podboat wordt afgesloten. Druk op Enter om door te gaan of Ctrl+C om af te "
+"WAARSCHUWING: Comment gevonden in %s. Comments worden overschreven wanneer "
+"Podboat wordt afgesloten. Druk op Enter om door te gaan of Ctrl+C om af te "
 "breken"
 
 #: src/regexmanager.cpp:220
