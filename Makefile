@@ -450,7 +450,11 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-ALL_SRCS:=$(shell ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
+# We reset the locale for the `ls` call to force it into sorting by byte value.
+# Without this, the sorting is locale-dependent, which is annoying because it
+# means the only way to pass the continuous integration check is to see it fail
+# and copy the diff.
+ALL_SRCS:=$(shell LC_ALL=C ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
 ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test-helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
 # This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
 # we need to record those headers in the deps file.

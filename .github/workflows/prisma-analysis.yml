@@ -22,10 +22,17 @@ jobs:
     name: Run Prisma Cloud IaC Scan to check
     steps:
       - name: Checkout
+  <<<<<<< master
         uses: actions/checkout@v2
       - id: iac-scan
         name: Run Scan on CFT files in the repository
         uses: prisma-cloud-shiftleft/iac-scan-action@v1
+  =======
+        uses: actions/checkout@v2.3.4
+      - id: iac-scan
+        name: Run Scan on CFT files in the repository
+        uses: prisma-cloud-shiftleft/iac-scan-action@v1.1
+  >>>>>>> master
         with:
           # You will need Prisma Cloud API Access Token
           # More details in https://github.com/prisma-cloud-shiftleft/iac-scan-action

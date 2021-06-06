@@ -33,11 +33,19 @@ jobs:
     steps:
       # Check out source code
       - name: Check Out Source Code
+  <<<<<<< master
         uses: actions/checkout@v2
 
       # Java 8 required by ScanCentral Client and FoD Uploader(Univeral CI Tool)
       - name: Setup Java
         uses: actions/setup-java@v1
+  =======
+        uses: actions/checkout@v2.3.4
+
+      # Java 8 required by ScanCentral Client and FoD Uploader(Univeral CI Tool)
+      - name: Setup Java
+        uses: actions/setup-java@v2
+  >>>>>>> master
         with:
           java-version: 1.8
 
@@ -60,7 +68,11 @@ jobs:
       #   Credentials and release ID should be obtained from your FoD tenant (either Personal Access Token or API Key can be used).
       #   Automated Audit preference should be configured for the release's Static Scan Settings in the Fortify on Demand portal.
       - name: Download Fortify on Demand Universal CI Tool
+  <<<<<<< master
         uses: fortify/gha-setup-fod-uploader@v1
+  =======
+        uses: fortify/gha-setup-fod-uploader@v1.1
+  >>>>>>> master
       - name: Perform SAST Scan
         run: java -jar $FOD_UPLOAD_JAR -z package.zip -aurl $FOD_API_URL -purl $FOD_URL -rid "$FOD_RELEASE_ID" -tc "$FOD_TENANT" -uc "$FOD_USER" "$FOD_PAT" $FOD_UPLOADER_OPTS -n "$FOD_UPLOADER_NOTES"
         env:

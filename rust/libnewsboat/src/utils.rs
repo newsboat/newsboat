@@ -2026,6 +2026,39 @@ mod tests {
             "http://test:test@foobar:33/bla2.html".to_owned()
         );
         assert_eq!(absolute_url("foo", "bar"), "bar".to_owned());
+
+        // Strips ASCII whitespace: tab, line feed, form feed, carriage return, and space
+        assert_eq!(
+            absolute_url(" \t https://example.com/page1", "page2"),
+            "https://example.com/page2".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://example.com/page3  \n ", "page4"),
+            "https://example.com/page4".to_owned()
+        );
+        assert_eq!(
+            absolute_url("  \rhttps://example.com/page5  \x0c ", "page6"),
+            "https://example.com/page6".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://example.com/base", " \n replacement"),
+            "https://example.com/replacement".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://example.com/different", "   another\t"),
+            "https://example.com/another".to_owned()
+        );
+        assert_eq!(
+            absolute_url("https://example.com/~joe/", " \rhello\x0c"),
+            "https://example.com/~joe/hello".to_owned()
+        );
+        assert_eq!(
+            absolute_url(
+                "\x0c\n\rhttps://example.com/misc/\t    ",
+                "   \t\x0ceverything_at_once\n\r"
+            ),
+            "https://example.com/misc/everything_at_once".to_owned()
+        );
     }
 
     #[test]

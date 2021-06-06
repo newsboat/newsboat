@@ -59,16 +59,13 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		if (focus.length() > 0) {
 			if (focus == "files") {
 				const auto selected_position = files_list.get_position();
-				std::string selection = id_at_position[selected_position];
-				const char filetype = selection[0];
-				selection.erase(0, 1);
-				const std::string filename(selection);
-				switch (filetype) {
-				case 'd': {
-					const int status = ::chdir(filename.c_str());
+				const auto selection = id_at_position[selected_position];
+				switch (selection.filetype) {
+				case FileSystemBrowser::FileType::Directory: {
+					const int status = ::chdir(selection.name.c_str());
 					LOG(Level::DEBUG,
 						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
-						filename,
+						selection.name,
 						status);
 					files_list.set_position(0);
 					std::string fn = utils::getcwd();
@@ -93,12 +90,12 @@ bool FileBrowserFormAction::process_operation(Operation op,
 					do_redraw = true;
 				}
 				break;
-				case '-': {
+				case FileSystemBrowser::FileType::RegularFile: {
 					std::string fn = utils::getcwd();
 					if (fn.back() != NEWSBEUTER_PATH_SEP) {
 						fn.push_back(NEWSBEUTER_PATH_SEP);
 					}
-					fn.append(filename);
+					fn.append(selection.name);
 					set_value("filenametext", fn);
 					f.set_focus("filename");
 				}
@@ -314,18 +311,17 @@ KeyMapHintEntry* FileBrowserFormAction::get_keymap_hint()
 
 void FileBrowserFormAction::add_file(
 	ListFormatter& listfmt,
-	std::vector<std::string>& id_at_position,
+	std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
 	std::string filename)
 {
 	struct stat sb;
 	if (::lstat(filename.c_str(), &sb) == 0) {
-		char ftype = get_filetype(sb.st_mode);
+		const auto ftype = FileSystemBrowser::mode_to_filetype(sb.st_mode);
 
-		std::string rwxbits = get_rwx(sb.st_mode & 0777);
-		std::string owner = get_owner(sb.st_uid);
-		std::string group = get_group(sb.st_gid);
-		std::string formattedfilename =
-			get_formatted_filename(filename, ftype, sb.st_mode);
+		const auto rwxbits = FileSystemBrowser::permissions_string(sb.st_mode);
+		const auto owner = FileSystemBrowser::get_user_padded(sb.st_uid);
+		const auto group = FileSystemBrowser::get_group_padded(sb.st_gid);
+		std::string formattedfilename = get_formatted_filename(filename, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt(
 				"%12" PRIi64,
@@ -334,106 +330,26 @@ void FileBrowserFormAction::add_file(
 				// bits.
 				static_cast<int64_t>(sb.st_size));
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
-				ftype,
+				FileSystemBrowser::filetype_to_char(ftype),
 				rwxbits,
 				owner,
 				group,
 				sizestr,
 				formattedfilename);
 		listfmt.add_line(utils::quote_for_stfl(line));
-		const std::string id = strprintf::fmt("%c%s", ftype, filename);
-		id_at_position.push_back(id);
+		id_at_position.push_back(FileSystemBrowser::FileSystemEntry{ftype, filename});
 	}
 }
 
 std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
-	char ftype,
 	mode_t mode)
 {
-	char suffix = 0;
-
-	switch (ftype) {
-	case 'd':
-		suffix = '/';
-		break;
-	case 'l':
-		suffix = '@';
-		break;
-	case 's':
-		suffix = '=';
-		break;
-	case 'p':
-		suffix = '|';
-		break;
-	default:
-		if (mode & S_IXUSR) {
-			suffix = '*';
-		}
+	const auto suffix = FileSystemBrowser::mode_suffix(mode);
+	if (suffix.has_value()) {
+		return strprintf::fmt("%s%c", filename, suffix.value());
+	} else {
+		return filename;
 	}
-
-	return strprintf::fmt("%s%c", filename, suffix);
-}
-
-std::string FileBrowserFormAction::get_rwx(unsigned short val)
-{
-	std::string str;
-	const char* bitstrs[] = {
-		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
-	};
-	for (int i = 0; i < 3; ++i) {
-		unsigned char bits = val % 8;
-		val /= 8;
-		str.insert(0, bitstrs[bits]);
-	}
-	return str;
-}
-
-char FileBrowserFormAction::get_filetype(mode_t mode)
-{
-	static struct FlagChar {
-		mode_t flag;
-		char ftype;
-	} flags[] = {{S_IFREG, '-'},
-		{S_IFDIR, 'd'},
-		{S_IFBLK, 'b'},
-		{S_IFCHR, 'c'},
-		{S_IFIFO, 'p'},
-		{S_IFLNK, 'l'},
-		{S_IFSOCK, 's'},
-		{0, 0}
-	};
-	for (unsigned int i = 0; flags[i].flag != 0; i++) {
-		if ((mode & S_IFMT) == flags[i].flag) {
-			return flags[i].ftype;
-		}
-	}
-	return '?';
-}
-
-std::string FileBrowserFormAction::get_owner(uid_t uid)
-{
-	struct passwd* spw = getpwuid(uid);
-	if (spw) {
-		std::string owner = spw->pw_name;
-		for (int i = owner.length(); i < 8; ++i) {
-			owner.append(" ");
-		}
-		return owner;
-	}
-	return "????????";
-}
-
-std::string FileBrowserFormAction::get_group(gid_t gid)
-{
-	struct group* sgr = getgrgid(gid);
-	if (sgr) {
-		std::string group = sgr->gr_name;
-		for (int i = group.length(); i < 8; ++i) {
-			group.append(" ");
-		}
-		return group;
-	}
-	return "????????";
 }
 
 std::string FileBrowserFormAction::title()

@@ -46,14 +46,18 @@ jobs:
           sudo locale-gen
 
       - name: Install Rust
-        uses: ATiltedTree/setup-rust@v1
+        uses: ATiltedTree/setup-rust@v1.0.4
         with:
           rust-version: nightly
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
 
       - name: Cache ~/.cargo
+  <<<<<<< master
         uses: actions/cache@v2.1.5
+  =======
+        uses: actions/cache@v2.1.6
+  >>>>>>> master
         id: cargo_cache
         with:
           key: cargo2-${{ hashFiles('Cargo.lock', '**/Cargo.toml') }}

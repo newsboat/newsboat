@@ -411,8 +411,18 @@ bool ItemViewFormAction::process_operation(Operation op,
 		const auto message_lifetime = v->get_statusline().show_message_until_finished(
 				_("Toggling read flag for article..."));
 		try {
-			item->set_unread(true);
-			v->get_ctrl()->mark_article_read(item->guid(), false);
+			if (automatic && args->size() > 0) {
+				if ((*args)[0] == "read") {
+					item->set_unread(false);
+					v->get_ctrl()->mark_article_read(item->guid(), true);
+				} else if ((*args)[0] == "unread") {
+					item->set_unread(true);
+					v->get_ctrl()->mark_article_read(item->guid(), false);
+				}
+			} else {
+				item->set_unread(true);
+				v->get_ctrl()->mark_article_read(item->guid(), false);
+			}
 		} catch (const DbException& e) {
 			v->get_statusline().show_error(strprintf::fmt(
 					_("Error while marking article as unread: %s"),
