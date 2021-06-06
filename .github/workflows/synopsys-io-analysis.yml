@@ -21,11 +21,25 @@ jobs:
     
     steps:
     - name: Checkout repository
+  <<<<<<< patch-1
+  =======
+  <<<<<<< master
+  >>>>>>> master
       uses: actions/checkout@v2
       
     - name: Synopsys Intelligent Security Scan
       id: prescription
       uses: synopsys-sig/intelligent-security-scan@048c2309ca958639783d0eb316ec212310787636
+  <<<<<<< patch-1
+  =======
+  =======
+      uses: actions/checkout@v2.3.4
+      
+    - name: Synopsys Intelligent Security Scan
+      id: prescription
+      uses: synopsys-sig/intelligent-security-scan@47d5f5e93a271258ca360499e405a083bc0f3a76
+  >>>>>>> master
+  >>>>>>> master
       with:
         ioServerUrl: ${{secrets.IO_SERVER_URL}}
         ioServerToken: ${{secrets.IO_SERVER_TOKEN}}
@@ -55,7 +69,15 @@ jobs:
     
     - name: Synopsys Intelligent Security Scan
       if: ${{ steps.prescription.outputs.sastScan == 'true' || steps.prescription.outputs.scaScan == 'true' }}
+  <<<<<<< patch-1
       uses: synopsys-sig/intelligent-security-scan@048c2309ca958639783d0eb316ec212310787636
+  =======
+  <<<<<<< master
+      uses: synopsys-sig/intelligent-security-scan@048c2309ca958639783d0eb316ec212310787636
+  =======
+      uses: synopsys-sig/intelligent-security-scan@47d5f5e93a271258ca360499e405a083bc0f3a76
+  >>>>>>> master
+  >>>>>>> master
       with:
         ioServerUrl: ${{secrets.IO_SERVER_URL}}
         ioServerToken: ${{secrets.IO_SERVER_TOKEN}}

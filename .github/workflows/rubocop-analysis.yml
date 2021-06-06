@@ -18,7 +18,15 @@ jobs:
 
     steps:
     - name: Checkout repository
+  <<<<<<< patch-1
       uses: actions/checkout@v2
+  =======
+  <<<<<<< master
+      uses: actions/checkout@v2
+  =======
+      uses: actions/checkout@v2.3.4
+  >>>>>>> master
+  >>>>>>> master
 
     # If running on a self-hosted runner, check it meets the requirements
     # listed at https://github.com/ruby/setup-ruby#using-self-hosted-runners

@@ -21,10 +21,23 @@ jobs:
     # Steps require - checkout code, run CxFlow Action, Upload SARIF report (optional)
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+  <<<<<<< patch-1
+  =======
+  <<<<<<< master
+  >>>>>>> master
     - uses: actions/checkout@v2
     # Runs the Checkmarx Scan leveraging the latest version of CxFlow - REFER to Action README for list of inputs
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.0
+  <<<<<<< patch-1
+  =======
+  =======
+    - uses: actions/checkout@v2.3.4
+    # Runs the Checkmarx Scan leveraging the latest version of CxFlow - REFER to Action README for list of inputs
+    - name: Checkmarx CxFlow Action
+      uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.1
+  >>>>>>> master
+  >>>>>>> master
       with:
         project: GithubActionTest
         team: '\CxServer\SP\Checkmarx'

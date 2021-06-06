@@ -277,18 +277,44 @@ mod tests {
     fn formats_str_slice() {
         let input = "Hello, world!";
         assert_eq!(fmt!("%s", input), input);
+        assert_eq!(fmt!("%15s", input), "  Hello, world!");
+        assert_eq!(fmt!("%-15s", input), "Hello, world!  ");
     }
 
     #[test]
     fn formats_borrowed_string() {
         let input = String::from("Hello, world!");
         assert_eq!(fmt!("%s", &input), input);
+        assert_eq!(fmt!("%15s", &input), "  Hello, world!");
+        assert_eq!(fmt!("%-15s", &input), "Hello, world!  ");
     }
 
     #[test]
     fn formats_moved_string() {
         let input = String::from("Hello, world!");
         assert_eq!(fmt!("%s", input.clone()), input);
+        assert_eq!(fmt!("%15s", input.clone()), "  Hello, world!");
+        assert_eq!(fmt!("%-15s", input.clone()), "Hello, world!  ");
+
+        // This is pointless, since the string is going to be dropped now anyway, but we have to do
+        // *something* with a string to prevent Clippy from complaining about the last `clone()`
+        // above:
+        //
+        // warning: redundant clone
+        //    --> rust/strprintf/src/lib.rs:299:39
+        //     |
+        // 299 |         assert_eq!(fmt!("%-15s", input.clone()), "Hello, world!  ");
+        //     |                                       ^^^^^^^^ help: remove this
+        //     |
+        //     = note: `#[warn(clippy::redundant_clone)]` on by default
+        // note: this value is dropped without further use
+        //    --> rust/strprintf/src/lib.rs:299:34
+        //     |
+        // 299 |         assert_eq!(fmt!("%-15s", input.clone()), "Hello, world!  ");
+        //     |                                  ^^^^^
+        //     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_clone
+
+        drop(input);
     }
 
     #[test]

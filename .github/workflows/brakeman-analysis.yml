@@ -19,7 +19,15 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
+  <<<<<<< patch-1
       uses: actions/checkout@v2
+  =======
+  <<<<<<< master
+      uses: actions/checkout@v2
+  =======
+      uses: actions/checkout@v2.3.4
+  >>>>>>> master
+  >>>>>>> master
 
     # Customize the ruby version depending on your needs
     - name: Setup Ruby

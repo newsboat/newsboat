@@ -289,17 +289,23 @@ std::string View::get_filename_suggestion(const std::string& s)
 {
 	/*
 	 * With this function, we generate normalized filenames for saving
-	 * articles to files.
+	 * articles to files if the setting `restrict-filename` is enabled.
 	 */
 	std::string retval;
-	for (unsigned int i = 0; i < s.length(); ++i) {
-		if (isalnum(s[i])) {
-			retval.push_back(s[i]);
-		} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
-			s[i] == '\n') {
-			retval.push_back('_');
+
+	if (cfg->get_configvalue_as_bool("restrict-filename")) {
+		for (unsigned int i = 0; i < s.length(); ++i) {
+			if (isalnum(s[i])) {
+				retval.push_back(s[i]);
+			} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
+				s[i] == '\n') {
+				retval.push_back('_');
+			}
 		}
+	} else {
+		retval = s;
 	}
+
 	if (retval.length() == 0) {
 		retval = "article.txt";
 	} else {
@@ -964,11 +970,15 @@ void View::pop_current_formaction()
 			}
 			i++;
 		}
-		std::shared_ptr<FormAction> f = get_current_formaction();
-		if (f) {
-			f->set_redraw(true);
-			f->set_value("msg", "");
-			f->recalculate_widget_dimensions();
+
+		// Skip cleanup steps when returning from a transient EmptyFormAction
+		if (std::dynamic_pointer_cast<EmptyFormAction>(f) == nullptr) {
+			std::shared_ptr<FormAction> fa = get_current_formaction();
+			if (fa) {
+				fa->set_redraw(true);
+				fa->set_value("msg", "");
+				fa->recalculate_widget_dimensions();
+			}
 		}
 	}
 }

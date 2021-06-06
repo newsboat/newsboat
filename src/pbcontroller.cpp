@@ -270,6 +270,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("define-filter", null_cah);
 	cfgparser.register_handler("highlight", null_cah);
 	cfgparser.register_handler("highlight-article", null_cah);
+	cfgparser.register_handler("highlight-feed", null_cah);
 	cfgparser.register_handler("reset-unread-on-update", null_cah);
 	cfgparser.register_handler("run-on-startup", null_cah);
 
@@ -371,7 +372,7 @@ void PbController::print_usage(const char* argv0)
 	}
 
 	std::cout << std::endl
-		<< _("Support at #newsboat at https://freenode.net or on our mailing "
+		<< _("Support at #newsboat at https://libera.chat or on our mailing "
 			"list https://groups.google.com/g/newsboat")
 		<< std::endl
 		<< _("For more information, check out https://newsboat.org/")

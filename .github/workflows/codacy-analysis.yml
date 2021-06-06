@@ -24,11 +24,25 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
+  <<<<<<< patch-1
+  =======
+  <<<<<<< master
+  >>>>>>> master
         uses: actions/checkout@v2
 
       # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@1.1.0
+  <<<<<<< patch-1
+  =======
+  =======
+        uses: actions/checkout@v2.3.4
+
+      # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
+      - name: Run Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@3.0.3
+  >>>>>>> master
+  >>>>>>> master
         with:
           # Check https://github.com/codacy/codacy-analysis-cli#project-token to get your project token from your Codacy repository
           # You can also omit the token and run the tools that support default configurations

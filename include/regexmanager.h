@@ -25,6 +25,7 @@ public:
 	void quote_and_highlight(std::string& str, const std::string& location);
 	void remove_last_regex(const std::string& location);
 	int article_matches(Matchable* item);
+	int feed_matches(Matchable* feed);
 	std::map<size_t, std::string> extract_style_tags(std::string& str);
 	void insert_style_tags(std::string& str, std::map<size_t, std::string>& tags);
 	void merge_style_tag(std::map<size_t, std::string>& tags,
@@ -37,10 +38,11 @@ private:
 		RegexStyleVector;
 	std::map<std::string, RegexStyleVector> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
-	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers;
+	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_article;
+	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_feed;
 
 	void handle_highlight_action(const std::vector<std::string>& params);
-	void handle_highlight_article_action(
+	void handle_highlight_item_action(const std::string& action,
 		const std::vector<std::string>& params);
 };
 
