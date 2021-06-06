@@ -24,7 +24,11 @@ jobs:
       security-events: write
     steps:
       - name: Checkout code
+  <<<<<<< master
+        uses: actions/checkout@v2
+  =======
         uses: actions/checkout@v2.3.4
+  >>>>>>> master
 
       - name: Run kubesec scanner
         uses: controlplaneio/kubesec-action@43d0ddff5ffee89a6bb9f29b64cd865411137b14
