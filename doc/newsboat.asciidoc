@@ -1325,19 +1325,24 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 === Macro Support
 
-In Newsboat, it's possible to define macros to execute more than one command at
-once. A macro is configured using the <<macro,`macro`>> configuration command.
-The first parameter to `macro` is the key, the parameters following it are
-operations (see <<_newsboat_operations>> and <<_podboat_operations>>),
-optionally with parameters on their own, separated by the `;` character.
-A description can be specified at the end (optional). Here's a simple example:
+Bindings created with `bind-key` can only execute a single operation, like
+`open` or `quit`. To execute multiple operations, one has to define a so-called
+"macro". To invoke the macro, the user presses the macro prefix ("," by
+default) and then the macro's key. It's easier to explain with some examples:
 
-  macro k open; reload; quit                            -- "enter feed to reload it"
-  macro o open-in-browser; toggle-article-read "read"   -- "open in browser and mark read"
+  macro k open; reload; quit  -- "enter feed to reload it"
+  macro o open-in-browser; toggle-article-read "read"
 
-When the user presses the macro prefix ("," by default) and then the "k" key,
-the three operations <<open,`open`>>, <<reload,`reload`>> and <<quit,`quit`>>
-will be executed subsequently.
+Here, we define two macros. Now when the user types ",k", Newsboat will enter
+the current feed, reload it, and go back to the feedlist. If the user types
+",o", Newsboat will open current article in the external browser, and also mark
+it read. Note that macros can have a description which will be displayed in the
+help dialog when the user presses "?".
+
+Macros can invoke any of <<_newsboat_operations,Newsboat's operations>>. Keep
+in mind that some operations only make sense in certain situations, e.g.
+`reload` doesn't make sense while viewing an article. If you try to execute an
+operation that is not supported by the current dialog, it will be ignored.
 
 The macro prefix can be changed from the default "," to another key, e.g. "+"
 (if you don't unbind the default "," you're left with two macro prefixes):
