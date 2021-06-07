@@ -1,13 +1,13 @@
 # H. Gökhan SARI <hsa2@difuzyon.net>, 2008
-# Emir SARI <bitigchi@me.com>, 2020-2021
+# Emir SARI <emir_sari@msn.com>, 2020-2021
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-06-06 20:36+0300\n"
-"PO-Revision-Date: 2021-03-09 20:00+0300\n"
-"Last-Translator: Emir SARI <bitigchi@me.com>\n"
+"PO-Revision-Date: 2021-06-06 20:00+0300\n"
+"Last-Translator: Emir SARI <emir_sari@msn.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -140,12 +140,11 @@ msgid "cache"
 msgstr "önbellek"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:375
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Destek için https://freenode.net sunucusunda #newsboat kanalına veya e-posta "
+"Destek için https://libera.chat sunucusunda #newsboat kanalına veya e-posta "
 "listemize (https://groups.google.com/g/newsboat) başvurun"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:378
@@ -221,33 +220,30 @@ msgid "`%s' is not a valid configuration element"
 msgstr "`%s' geçerli bir yapılandırma ögesi değil"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr ""
-"newsboat: Yeniden yükleme tamamlandı, %f okunmamış besleme (%n okunmamış "
-"toplam yazı)"
+msgstr "Newsboat: Yeniden yükleme tamamlandı, %f okunmamış besleme (toplamda %n"
+" okunmamış yazı)"
 
 #: src/configcontainer.cpp:287
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
 "%N %V - '%T' beslemesindeki yazılar (%u okunmamış, %t toplam)%?F? süzgeçle "
-"eşleşen `%F'&? - %U"
+"eşleşen '%F'&? - %U"
 
 #: src/configcontainer.cpp:291
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Diyalog"
 
 #: src/configcontainer.cpp:294
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Beslemeler&Beslemeleriniz? (%u okunmamış, %t toplam)%?F? "
-"süzgeçle eşleşen `%F'&?%?T? - etiket `%T'&?"
+"süzgeçle eşleşen '%F'&?%?T? - etiket `%T'&?"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -266,11 +262,9 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - '%T' yazısı (%u okunmamış, %t toplam) - %U"
 
 #: src/configcontainer.cpp:313
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
-"%N %V - Arama sonuçları (%u okunmamış, %t toplam))%?F? süzgeçle eşleşen `"
-"%F'&?"
+"%N %V - Arama sonuçları (%u okunmamış, %t toplam))%?F? süzgeçle eşleşen '%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -308,9 +302,8 @@ msgid "too few parameters."
 msgstr "pek az parametre."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "pek az parametre."
+msgstr "çok fazla parametre."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -380,18 +373,16 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s erişilemiyor ve oluşturulamaz\n"
 
 #: src/controller.cpp:289
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr "HATA: Miniflux kullanmak için `miniflux-url` ayarlı olmalıdır\n"
+msgstr "HATA: FreshRSS kullanmak için `freshrss-url` ayarlı olmalıdır\n"
 
 #: src/controller.cpp:301
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"HATA: Miniflux'u kullanmak için `miniflux-login` ve `miniflux-password` veya "
-"`miniflux-passwordfile` veya `miniflux-passwordeval` seçeneklerinden biri "
+"HATA: FreshRSS'i kullanmak için `freshrss-login` ve `freshrss-password` veya "
+"`freshrss-passwordfile` veya `freshrss-passwordeval` seçeneklerinden biri "
 "ayarlı olmalıdır\n"
 
 #: src/controller.cpp:316
@@ -966,7 +957,7 @@ msgstr "Bağlı olmayan işlevler:"
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Makrolar:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1628,9 +1619,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' geçerli bir düğme komutu değil"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Kuyruk dosyası açılamadı: %s."
+msgstr "%s için işlem sırası ayrıştırılamadı"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1763,13 +1754,13 @@ msgid "Mark as Finished"
 msgstr "Bitti olarak imle"
 
 #: src/queueloader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
-"UYARI: %s içinde yorum bulundu. Kuyruk dosyası podboat mevcut olduğunda "
+"UYARI: %s içinde yorum bulundu. Kuyruk dosyası Podboat mevcut olduğunda "
 "yeniden oluşturulur ve yorumlar silinir. Sürdürmek için Enter'a basın veya "
 "CTRL+C ile iptal edin."
 
