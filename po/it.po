@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-06-06 20:36+0300\n"
-"PO-Revision-Date: 2021-03-09 21:32+0100\n"
+"PO-Revision-Date: 2021-06-07 19:21+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -139,12 +139,11 @@ msgid "cache"
 msgstr "cache"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:375
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Supporto disponibile in #newsboat su https://freenode.net o alla nostra "
+"Supporto disponibile in #newsboat su https://libera.chat o alla nostra "
 "mailing list https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:378
@@ -220,33 +219,30 @@ msgid "`%s' is not a valid configuration element"
 msgstr "`%s' non è un elemento di configurazione valido"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr ""
-"newsboat: caricamento terminato, %f feed non letti (%n totale articoli non "
-"letti)"
+msgstr "Newsboat: caricamento terminato, %f feed non letti (%n totale "
+"articoli non letti)"
 
 #: src/configcontainer.cpp:287
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
 "%N %V - Articoli nel feed '%T' (%u non letti, %t totali)%?F? corrispondenti "
-"al filtro `%F'&? - %U"
+"al filtro '%F'&? - %U"
 
 #: src/configcontainer.cpp:291
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Schermate"
 
 #: src/configcontainer.cpp:294
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Feed&I tuoi feed? (%u non letti, %t totali)%?F? corrispondenti "
-"al filtro `%F'&?%?T? - tag `%T'&?"
+"al filtro '%F'&?%?T? - tag '%T'&?"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -265,11 +261,9 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Articolo '%T' (%u non letti, %t in totale)"
 
 #: src/configcontainer.cpp:313
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
-msgstr ""
-"%N %V - Risultati della ricerca (%u non letti, %t totali)%?F? corrispondenti "
-"al fitro `%F'&?"
+msgstr "%N %V - Risultati della ricerca (%u non letti, %t totali)%?F? "
+"corrispondenti al fitro '%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -307,9 +301,8 @@ msgid "too few parameters."
 msgstr "parametri insufficienti."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "parametri insufficienti."
+msgstr "troppi parametri."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -379,18 +372,16 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s è inaccessibile e non può essere creato\n"
 
 #: src/controller.cpp:289
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr "ERRORE: Devi impostare `miniflux-url` per usare Miniflux.\n"
+msgstr "ERRORE: Devi impostare `freshrss-url` per usare FreshRSS.\n"
 
 #: src/controller.cpp:301
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"ERRORE: Devi impostare `miniflux-login` e una tra `miniflux-password`, "
-"`miniflux-passwordfile` o `miniflux-passwordeval` per usare Miniflux\n"
+"ERRORE: Devi impostare `freshrss-login` e una tra `freshrss-password`, "
+"`freshrss-passwordfile` o `freshrss-passwordeval` per usare FreshRSS\n"
 
 #: src/controller.cpp:316
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
@@ -962,7 +953,7 @@ msgstr "Funzioni non associate:"
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Macro:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1625,9 +1616,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' non è un tasto di comando valido"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Fallita apertura del file di coda: %s."
+msgstr "fallita l'analisi della sequenza di operazioni per %s"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1764,14 +1755,14 @@ msgid "Mark as Finished"
 msgstr "Segna come completato"
 
 #: src/queueloader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
-"ATTENZIONE: c'è un commento in %s. Il file di coda sará rigenerato "
-"all'uscita di podboat e i commenti saranno cancellati. Premi invio per "
+"ATTENZIONE: Trovato un commento in %s. Il file di coda sará rigenerato "
+"all'uscita di Podboat e i commenti saranno cancellati. Premi Invio per "
 "continuare o Ctrl+C per interrompere"
 
 #: src/regexmanager.cpp:220
@@ -1986,14 +1977,3 @@ msgstr "regcomp ha ritornato codice %i"
 msgid "regexec returned code %i"
 msgstr "regexec ha ritornato codice %i"
 
-#~ msgid "unknown error (bug)."
-#~ msgstr "errore sconosciuto (bug)."
-
-#~ msgid "attribute not found"
-#~ msgstr "attributo non trovato"
-
-#~ msgid "EOF found while reading XML tag"
-#~ msgstr "EOF trovato durante la lettura del tag XML"
-
-#~ msgid "Starting browser..."
-#~ msgstr "Sto avviando il browser..."
