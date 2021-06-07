@@ -224,7 +224,7 @@ msgstr "`%s' nie jest poprawnym elementem konfiguracji"
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"Newsboat: odświeżanie zakończone, %f nieprzeczytanych kanałów(%n "
+"Newsboat: odświeżanie zakończone, %f nieprzeczytanych kanałów (%n "
 "nieprzeczytanych artykułów)"
 
 #: src/configcontainer.cpp:287
