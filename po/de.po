@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-06-06 20:36+0300\n"
-"PO-Revision-Date: 2021-03-14 18:45+0100\n"
+"PO-Revision-Date: 2021-06-08 19:00+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -140,12 +140,11 @@ msgid "cache"
 msgstr "Zwischenspeicher"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:375
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Unterstützung im Kanal #newsboat auf https://freenode.net oder auf unserer "
+"Unterstützung im Kanal #newsboat auf https://libera.chat oder auf unserer "
 "Mailingliste unter https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:378
@@ -208,32 +207,31 @@ msgstr "newsboat::Exception gefangen mit Nachricht: %s"
 #: src/regexmanager.cpp:250 src/regexmanager.cpp:314 src/regexmanager.cpp:326
 #, c-format
 msgid "`%s' is not a valid color"
-msgstr "`%s' ist keine gültige Farbe"
+msgstr "„%s“ ist keine gültige Farbe"
 
 #: src/colormanager.cpp:65 src/regexmanager.cpp:266 src/regexmanager.cpp:341
 #, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "`%s' ist kein gültiges Attribut"
+msgstr "„%s“ ist kein gültiges Attribut"
 
 #: src/colormanager.cpp:81
 #, c-format
 msgid "`%s' is not a valid configuration element"
-msgstr "`%s' ist kein gültiges Konfigurationselement"
+msgstr "„%s“ ist kein gültiges Konfigurationselement"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: Neuladen beendet, %f ungelesene Feeds (%n ungelesene Artikel "
+"Newsboat: Neuladen beendet, %f ungelesene Feeds (%n ungelesene Artikel "
 "insgesamt)"
 
 #: src/configcontainer.cpp:287
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
-"%N %V - Artikel im Feed '%T' (%u ungelesen, %t gesamt)%?F? passend auf "
+"%N %V - Artikel im Feed „%T“ (%u ungelesen, %t gesamt)%?F? passend auf "
 "Filter „%F“&? - %U"
 
 #: src/configcontainer.cpp:291
@@ -241,13 +239,12 @@ msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialoge"
 
 #: src/configcontainer.cpp:294
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Feeds&Ihre Feeds? (%u ungelesen, %t gesamt)%?F? passend auf "
-"Filter „%F“&?%?T? - Tag `%T'&?"
+"Filter „%F“&?%?T? - Tag „%T“&?"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -263,10 +260,9 @@ msgstr "%N %V - Hilfe"
 
 #: src/configcontainer.cpp:309
 msgid "%N %V - Article '%T' (%u unread, %t total)"
-msgstr "%N %V - Artikel '%T' (%u ungelesen, %t gesamt)"
+msgstr "%N %V - Artikel „%T“ (%u ungelesen, %t gesamt)"
 
 #: src/configcontainer.cpp:313
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
 "%N %V - Suchergebnisse (%u ungelesen, %t gesamt)%?F? passend auf Filter "
@@ -287,30 +283,29 @@ msgstr "%N %V - URLs"
 #: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
-msgstr "erwartete Wahrheitswert, fand stattdessen `%s'"
+msgstr "erwartete Wahrheitswert, fand stattdessen „%s“"
 
 #: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
-msgstr "erwartete Ganzzahl, fand stattdessen `%s'"
+msgstr "erwartete Ganzzahl, fand stattdessen „%s“"
 
 #: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
-msgstr "ungültiger Konfigurationswert `%s'"
+msgstr "ungültiger Konfigurationswert „%s“"
 
 #: src/confighandlerexception.cpp:19
 msgid "invalid parameters."
-msgstr "Ungültige Parameter."
+msgstr "ungültige Parameter."
 
 #: src/confighandlerexception.cpp:21
 msgid "too few parameters."
-msgstr "Zu wenige Parameter."
+msgstr "zu wenige Parameter."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "Zu wenige Parameter."
+msgstr "zu viele Parameter."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -328,7 +323,7 @@ msgstr "%s Zeile %u"
 #: src/configparser.cpp:124
 #, c-format
 msgid "unknown command `%s'"
-msgstr "unbekannter Befehl `%s'"
+msgstr "unbekannter Befehl „%s“"
 
 #: src/configparser.cpp:131
 #, c-format
@@ -368,7 +363,7 @@ msgstr "Öffne Zwischenspeicher..."
 #: src/controller.cpp:228 src/controller.cpp:236
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei `%s' schlug fehl: %s"
+msgstr "Fehler: Das Öffnen der Zwischenspeicherdatei „%s“ schlug fehl: %s"
 
 #: src/controller.cpp:267
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
@@ -381,19 +376,17 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "Die Datei %s kann weder gelesen noch erstellt werden\n"
 
 #: src/controller.cpp:289
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
 msgstr ""
-"Fehler: Sie müssen „miniflux-url“ setzen, um Miniflux verwenden zu können\n"
+"Fehler: Sie müssen „freshrss-url“ setzen, um Miniflux verwenden zu können\n"
 
 #: src/controller.cpp:301
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"Fehler: Sie müssen „miniflux-login“ und entweder „miniflux-password“, "
-"„miniflux-passwordfile“ oder „miniflux-passwordeval“ setzen, um Miniflux "
+"Fehler: Sie müssen „freshrss-login“ und entweder „freshrss-password“, "
+"„freshrss-passwordfile“ oder „freshrss-passwordeval“ setzen, um FreshRSS "
 "verwenden zu können\n"
 
 #: src/controller.cpp:316
@@ -508,7 +501,7 @@ msgstr "Fehler beim Laden der Feeds aus der Datenbank: "
 #: src/controller.cpp:457
 #, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Fehler beim Laden von Feed `%s': %s"
+msgstr "Fehler beim Laden des Feeds „%s“: %s"
 
 #: src/controller.cpp:474 src/controller.cpp:559
 msgid "Cleaning up cache..."
@@ -577,7 +570,7 @@ msgstr "%s: %s: unbekannter Befehl"
 #: src/controller.cpp:987
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
-msgstr "Fehler: Konnte Konfigurationsdatei `%s' nicht öffnen!"
+msgstr "Fehler: Konnte Konfigurationsdatei „%s“ nicht öffnen!"
 
 #: src/dialogsformaction.cpp:77
 msgid "Close"
@@ -760,7 +753,7 @@ msgstr "Markiere alle Feeds als gelesen..."
 #: src/feedlistformaction.cpp:434 src/itemlistformaction.cpp:633
 #, c-format
 msgid "Error: couldn't parse filter command `%s': %s"
-msgstr "Fehler: Konnte Filterkommando `%s' nicht parsen: %s"
+msgstr "Fehler: Konnte Filterkommando „%s“ nicht parsen: %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:646
 msgid "No filters defined."
@@ -841,7 +834,7 @@ msgstr "Suche..."
 #: src/feedlistformaction.cpp:1006 src/itemlistformaction.cpp:891
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "Fehler beim Suchen nach `%s': %s"
+msgstr "Fehler beim Suchen nach „%s“: %s"
 
 #: src/feedlistformaction.cpp:1017 src/itemlistformaction.cpp:898
 msgid "No results."
@@ -887,7 +880,7 @@ msgstr "Fehler: Öffnen der Datei „%s“ fehlgeschlagen: %s"
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:352 src/rssignores.cpp:42
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "Fehler: Konnte Filterkommando `%s' nicht parsen: %s"
+msgstr "Fehler: Konnte Filterausdruck „%s“ nicht parsen: %s"
 
 #: src/formaction.cpp:145
 msgid "usage: set <config-option> <value>"
@@ -921,7 +914,7 @@ msgstr "Operation nicht gefunden"
 #: src/formaction.cpp:347
 #, c-format
 msgid "Not a command: %s"
-msgstr "Kein Befehl: `%s'"
+msgstr "Kein Befehl: „%s“"
 
 #: src/formaction.cpp:414
 msgid "Saving bookmark..."
@@ -957,7 +950,7 @@ msgid ""
 "`bookmark-cmd' accordingly."
 msgstr ""
 "Die Lesezeichen-Unterstützung ist nicht konfiguriert. Bitte setzen Sie die "
-"Konfigurationsvariable `bookmark-cmd' entsprechend."
+"Konfigurationsvariable „bookmark-cmd“ entsprechend."
 
 #: src/helpformaction.cpp:143
 msgid "Generic bindings:"
@@ -969,7 +962,7 @@ msgstr "Unbelegte Funktionen:"
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Makros:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1146,7 +1139,7 @@ msgstr "Fehler: Konnte Artikel nicht nach %s speichern"
 #: src/itemlistformaction.cpp:1469
 #, c-format
 msgid "Search Result - '%s'"
-msgstr "Suchergebnis - '%s'"
+msgstr "Suchergebnis - „%s“"
 
 #: src/itemlistformaction.cpp:1472
 #, c-format
@@ -1226,7 +1219,7 @@ msgstr "%s ist bereits eingereiht."
 #: src/itemviewformaction.cpp:233
 #, c-format
 msgid "Invalid URL: '%s'"
-msgstr "Ungültige URL: '%s'"
+msgstr "Ungültige URL: „%s“"
 
 #: src/itemviewformaction.cpp:255
 #, c-format
@@ -1628,17 +1621,17 @@ msgstr "zum Ende der Seite/Liste gehen"
 #: src/keymap.cpp:722
 #, c-format
 msgid "`%s' is not a valid context"
-msgstr "`%s' ist kein gültiger Kontext"
+msgstr "„%s“ ist kein gültiger Kontext"
 
 #: src/keymap.cpp:727
 #, c-format
 msgid "`%s' is not a valid key command"
-msgstr "`%s' ist kein gültiges Tastenkommando"
+msgstr "„%s“ ist kein gültiges Tastenkommando"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Öffnen der Warteschlangendatei fehlgeschlagen: %s."
+msgstr "Parsen der Operationssequenz von %s fehlgeschlagen"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1648,12 +1641,12 @@ msgstr "„%s“ ist keine gültige Operation"
 #: src/matcherexception.cpp:15
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr "Attribut `%s' ist nicht verfügbar."
+msgstr "Attribut „%s“ ist nicht verfügbar."
 
 #: src/matcherexception.cpp:19
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
-msgstr "Regulärer Ausdruck '%s' ist ungültig: %s"
+msgstr "Regulärer Ausdruck „%s“ ist ungültig: %s"
 
 #: src/opml.cpp:165
 #, c-format
@@ -1664,8 +1657,8 @@ msgstr "Fehler: Parsen der OPML-Datei „%s“ fehlgeschlagen"
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
 msgstr ""
-"XDG: Konfigurationsverzeichnis '%s' nicht zugänglich, benutze stattdessen "
-"'%s'."
+"XDG: Konfigurationsverzeichnis „%s“ nicht zugänglich, benutze stattdessen "
+"„%s“."
 
 #: src/pbcontroller.cpp:137
 msgid "Fatal error: couldn't determine home directory!"
@@ -1777,25 +1770,25 @@ msgid "Mark as Finished"
 msgstr "als fertig markieren"
 
 #: src/queueloader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
 "WARNUNG: Kommentar in %s gefunden. Die Warteschlangendatei wird beim Beenden "
-"von podboat neu generiert und alle Kommentare dabei gelöscht. Drücken Sie "
-"Enter, um fortzufahren oder Strg+C, um abzubrechen."
+"von Podboat neu generiert und alle Kommentare dabei gelöscht. Drücken Sie "
+"Enter, um fortzufahren oder Strg+C, um abzubrechen"
 
 #: src/regexmanager.cpp:220
 #, c-format
 msgid "`%s' is an invalid dialog type"
-msgstr "`%s' ist ein ungültiger Dialogtyp"
+msgstr "„%s“ ist ein ungültiger Dialogtyp"
 
 #: src/regexmanager.cpp:227
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
-msgstr "`%s' is kein gültiger regulärer Ausdruck: %s"
+msgstr "„%s“ is kein gültiger regulärer Ausdruck: %s"
 
 #: src/reloader.cpp:78
 #, c-format
@@ -1818,7 +1811,7 @@ msgstr "zu wenige Parameter"
 #: src/rssfeed.cpp:64
 #, c-format
 msgid "`%s' is not a valid filter expression"
-msgstr "`%s' ist kein gültiger Filterausdruck"
+msgstr "„%s“ ist kein gültiger Filterausdruck"
 
 #: src/rssitem.cpp:127
 msgid "%a, %d %b %Y %T %z"
