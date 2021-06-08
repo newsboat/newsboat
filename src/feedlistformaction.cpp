@@ -433,7 +433,7 @@ REDO:
 						v->get_statusline().show_error(strprintf::fmt(
 								_("Error: couldn't "
 									"parse filter "
-									"command `%s': %s"),
+									"expression `%s': %s"),
 								newfilter,
 								matcher.get_parse_error()));
 					} else {
@@ -975,8 +975,9 @@ void FeedListFormAction::op_end_setfilter()
 	filterhistory.add_line(filtertext);
 	if (filtertext.length() > 0) {
 		if (!matcher.parse(filtertext)) {
-			v->get_statusline().show_error(
-				_("Error: couldn't parse filter command!"));
+			v->get_statusline().show_error(strprintf::fmt(
+					_("Error: couldn't parse filter expression `%s': %s"),
+					filtertext, matcher.get_parse_error()));
 		} else {
 			save_filterpos();
 			apply_filter = true;

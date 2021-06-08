@@ -61,8 +61,8 @@ RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 		Matcher m;
 		if (!m.parse(query)) {
 			throw strprintf::fmt(
-				_("`%s' is not a valid filter expression"),
-				query);
+				_("couldn't parse filter expression `%s': %s"),
+				query, m.get_parse_error());
 		}
 
 		LOG(Level::DEBUG,
