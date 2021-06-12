@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
 
 		return c.run(v);
 	} catch (const newsboat::Exception& e) {
+		Stfl::reset();
 		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
 					"message: %s"),
 				e.what())
