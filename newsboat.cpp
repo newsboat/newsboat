@@ -256,22 +256,22 @@ int main(int argc, char* argv[])
 	try {
 		ret = c.run(args);
 	} catch (const newsboat::DbException& e) {
+		Stfl::reset();
 		std::cerr << strprintf::fmt(
-				_("Caught newsboat::DbException with "
-					"message: %s"),
+				_("Caught newsboat::DbException with message: %s"),
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::MatcherException& e) {
+		Stfl::reset();
 		std::cerr << strprintf::fmt(
-				_("Caught newsboat::MatcherException with "
-					"message: %s"),
+				_("Caught newsboat::MatcherException with message: %s"),
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
 	} catch (const newsboat::Exception& e) {
-		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
-					"message: %s"),
+		Stfl::reset();
+		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with message: %s"),
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
