@@ -684,8 +684,9 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/curlhandle.h \
  include/dbexception.h include/downloadthread.h include/fmtstrformatter.h \
- include/reloadrangethread.h include/reloadthread.h include/controller.h \
- rss/exception.h include/rssfeed.h include/utils.h 3rd-party/expected.hpp \
+ include/matcherexception.h include/reloadrangethread.h \
+ include/reloadthread.h include/controller.h rss/exception.h \
+ include/rssfeed.h include/utils.h 3rd-party/expected.hpp \
  include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/rssparser.h \
