@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-06-06 20:36+0300\n"
-"PO-Revision-Date: 2021-03-14 20:47+0300\n"
+"PO-Revision-Date: 2021-06-16 15:30+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -141,12 +141,11 @@ msgid "cache"
 msgstr "кеш"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:375
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Підтримку шукайте на #newsboat у https://freenode.net чи у нашому списку "
+"Підтримку шукайте на #newsboat у https://libera.chat чи у нашому списку "
 "розсилки https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:378
@@ -222,33 +221,31 @@ msgid "`%s' is not a valid configuration element"
 msgstr "`%s' недійсний елемент конфігурації"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: завантаження завершено, %f непрочитаних тем (%n всього "
+"Newsboat: завантаження завершено, %f непрочитаних тем (%n всього "
 "непрочитаних статей)"
 
 #: src/configcontainer.cpp:287
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
 "%N %V - Статті у темі '%T' (%u непрочитано, всього %t)%?F? що відповідають "
-"фільтру `%F'&? - %U"
+"фільтру '%F'&? - %U"
 
 #: src/configcontainer.cpp:291
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Діалоги"
 
 #: src/configcontainer.cpp:294
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Новини&Ваші новини? (%u непрочитано, всього %t)%?F? що "
-"відповідають фільтру `%F'&?%?T? - мітка `%T'&?"
+"відповідають фільтру '%F'&?%?T? - мітка '%T'&?"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -267,11 +264,10 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Стаття '%T' (%u непрочитано, всього %t)"
 
 #: src/configcontainer.cpp:313
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
 "%N %V - Результат пошуку (%u непрочитано, всього %t)%?F? що відповідають "
-"фільтру `%F'&?"
+"фільтру '%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -309,9 +305,8 @@ msgid "too few parameters."
 msgstr "замало параметрів."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "замало параметрів."
+msgstr "забагато параметрів."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -382,19 +377,17 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s недоступний і не може бути створеним\n"
 
 #: src/controller.cpp:289
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
 msgstr ""
-"Помилка: для використання Miniflux потрібно налаштувати `miniflux-url`\n"
+"Помилка: для використання FreshRSS потрібно налаштувати `freshrss-url`\n"
 
 #: src/controller.cpp:301
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"Помилка: для використання Miniflux потрібно задати `miniflux-login` та одне "
-"із: `miniflux-password`, `miniflux-passwordfile` чи `miniflux-passwordeval`\n"
+"Помилка: для використання FreshRSS потрібно задати `freshrss-login` та одне "
+"із: `freshrss-password`, `freshrss-passwordfile` чи `freshrss-passwordeval`\n"
 
 #: src/controller.cpp:316
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
@@ -967,7 +960,7 @@ msgstr "Незастосовані функції:"
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Макроси:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1633,9 +1626,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' недійсна ключова команда"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Не вдалося відкрити файл черги: %s."
+msgstr "не вдалося розібрати послідовність операцій для %s"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1769,7 +1762,7 @@ msgid "Mark as Finished"
 msgstr "Позначити як завершене"
 
 #: src/queueloader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
