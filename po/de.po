@@ -1995,15 +1995,3 @@ msgstr "regcomp brach mit Rückgabestatus %i ab"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec brach mit Rückgabestatus %i ab"
-
-#~ msgid "unknown error (bug)."
-#~ msgstr "Unbekannter Fehler (Bug)."
-
-#~ msgid "attribute not found"
-#~ msgstr "Attribut nicht gefunden"
-
-#~ msgid "EOF found while reading XML tag"
-#~ msgstr "Ende der Datei gefunden beim Lesen eines XML-Tags"
-
-#~ msgid "Starting browser..."
-#~ msgstr "Starte Browser..."
