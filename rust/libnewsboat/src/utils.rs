@@ -1574,11 +1574,11 @@ mod tests {
         let mode: u32 = 0o700;
         let tmp_dir = TempDir::new().unwrap();
         let path = tmp_dir.path().join("parent/dir");
-        assert_eq!(path.exists(), false);
+        assert!(!path.exists());
 
         let result = mkdir_parents(&path, mode);
         assert!(result.is_ok());
-        assert_eq!(path.exists(), true);
+        assert!(path.exists());
 
         let file_type_mask = 0o7777;
         let metadata = fs::metadata(&path).unwrap();
