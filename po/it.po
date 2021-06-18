@@ -221,8 +221,9 @@ msgstr "`%s' non è un elemento di configurazione valido"
 #: src/configcontainer.cpp:159
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "Newsboat: caricamento terminato, %f feed non letti (%n totale "
-"articoli non letti)"
+msgstr ""
+"Newsboat: caricamento terminato, %f feed non letti (%n totale articoli non "
+"letti)"
 
 #: src/configcontainer.cpp:287
 msgid ""
@@ -262,8 +263,9 @@ msgstr "%N %V - Articolo '%T' (%u non letti, %t in totale)"
 
 #: src/configcontainer.cpp:313
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
-msgstr "%N %V - Risultati della ricerca (%u non letti, %t totali)%?F? "
-"corrispondenti al fitro '%F'&?"
+msgstr ""
+"%N %V - Risultati della ricerca (%u non letti, %t totali)%?F? corrispondenti "
+"al fitro '%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -1976,4 +1978,3 @@ msgstr "regcomp ha ritornato codice %i"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec ha ritornato codice %i"
-

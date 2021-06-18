@@ -1982,15 +1982,3 @@ msgstr "regcomp вернула код %i"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec вернула код %i"
-
-#~ msgid "unknown error (bug)."
-#~ msgstr "неизвестная ошибка (сбой)."
-
-#~ msgid "attribute not found"
-#~ msgstr "атрибут не найден"
-
-#~ msgid "EOF found while reading XML tag"
-#~ msgstr "Во время чтения тега XML обнаружен конец файла"
-
-#~ msgid "Starting browser..."
-#~ msgstr "Запускаю браузер..."

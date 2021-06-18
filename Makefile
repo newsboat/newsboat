@@ -369,7 +369,10 @@ extract:
 
 
 msgmerge:
-	for f in $(POFILES) ; do msgmerge --backup=off -U $$f $(POTFILE) ; done
+	for f in $(POFILES) ; do \
+		msgmerge --backup=off -U $$f $(POTFILE) ; \
+		msgattrib --no-obsolete --output-file=$$f $$f ; \
+	done
 
 %.mo: %.po
 	$(MSGFMT) --check --statistics -o $@ $<

@@ -1926,17 +1926,3 @@ msgstr ""
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr ""
-
-#~ msgid "Starting browser..."
-#~ msgstr "ブラウザーを起動中…"
-
-#, fuzzy
-#~ msgid "config"
-#~ msgstr "<設定>"
-
-#, fuzzy
-#~ msgid "'%s' is not a valid key command"
-#~ msgstr "「%s」は無効な色です。"
-
-#~ msgid "clean up cache thoroughly"
-#~ msgstr "キャッシュの細かい整理を行う"

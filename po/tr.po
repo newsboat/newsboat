@@ -222,8 +222,9 @@ msgstr "`%s' geçerli bir yapılandırma ögesi değil"
 #: src/configcontainer.cpp:159
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "Newsboat: Yeniden yükleme tamamlandı, %f okunmamış besleme (toplamda %n"
-" okunmamış yazı)"
+msgstr ""
+"Newsboat: Yeniden yükleme tamamlandı, %f okunmamış besleme (toplamda %n "
+"okunmamış yazı)"
 
 #: src/configcontainer.cpp:287
 msgid ""
@@ -264,7 +265,8 @@ msgstr "%N %V - '%T' yazısı (%u okunmamış, %t toplam) - %U"
 #: src/configcontainer.cpp:313
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
-"%N %V - Arama sonuçları (%u okunmamış, %t toplam))%?F? süzgeçle eşleşen '%F'&?"
+"%N %V - Arama sonuçları (%u okunmamış, %t toplam))%?F? süzgeçle eşleşen "
+"'%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -1975,12 +1977,3 @@ msgstr "regcomp %i kodunu döndürdü"
 #: rust/regex-rs/src/lib.rs:246 rust/regex-rs/src/lib.rs:250
 msgid "regexec returned code %i"
 msgstr "regexec %i kodunu döndürdü"
-
-#~ msgid "unknown error (bug)."
-#~ msgstr "bilinmeyen hata (hata)."
-
-#~ msgid "attribute not found"
-#~ msgstr "özellik bulunamadı"
-
-#~ msgid "EOF found while reading XML tag"
-#~ msgstr "XML etiketi okunurken EOF (dosya sonu) bulundu"
