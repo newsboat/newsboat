@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-06-06 20:36+0300\n"
-"PO-Revision-Date: 2021-03-14 20:37+0300\n"
+"PO-Revision-Date: 2021-06-16 15:05+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -142,13 +142,12 @@ msgid "cache"
 msgstr "кэш лент"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:375
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Поддержка может быть найдена на #newsboat во https://freenode.net или в "
-"нашем списке рассылки https://groups.google.com/g/newsboat"
+"Поддержка может быть найдена на #newsboat в https://libera.chat или в нашем "
+"списке рассылки https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:378
 msgid "For more information, check out https://newsboat.org/"
@@ -223,33 +222,31 @@ msgid "`%s' is not a valid configuration element"
 msgstr "элемента конфигурации `%s' не существует"
 
 #: src/configcontainer.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: обновление завершено, %f не прочитанных лент (всего %n заметок не "
+"Newsboat: обновление завершено, %f не прочитанных лент (всего %n заметок не "
 "прочитано)"
 
 #: src/configcontainer.cpp:287
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
 "%N %V - Заметки в ленте '%T' (непрочитанно %u, всего %t)%?F? соответствующие "
-"фильтру `%F'&? - %U"
+"фильтру '%F'&? - %U"
 
 #: src/configcontainer.cpp:291
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Ссылки"
 
 #: src/configcontainer.cpp:294
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Ленты&Ваши ленты? (непрочитанно %u, всего %t)%?F? "
-"соответствующие фильтру `%F'&?%?T? - метка `%T'&?"
+"соответствующие фильтру '%F'&?%?T? - метка '%T'&?"
 
 #: src/configcontainer.cpp:298
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -268,11 +265,10 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t)"
 
 #: src/configcontainer.cpp:313
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
 "%N %V - Результаты поиска (непрочитанно %u, всего %t)%?F? соответствующие "
-"фильтру `%F'&?"
+"фильтру '%F'&?"
 
 #: src/configcontainer.cpp:317
 msgid "%N %V - Select Filter"
@@ -310,9 +306,8 @@ msgid "too few parameters."
 msgstr "слишком мало параметров."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "слишком мало параметров."
+msgstr "слишком много параметров."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -382,18 +377,16 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s недоступен и не может быть создан\n"
 
 #: src/controller.cpp:289
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr "Ошибка: для пользования Miniflux нужно задать `miniflux-url`\n"
+msgstr "Ошибка: для пользования FreshRSS нужно задать `freshrss-url`\n"
 
 #: src/controller.cpp:301
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"Ошибка: Для использования Miniflux нужно задать `miniflux-login` и одно из: "
-"`miniflux-password`, `miniflux-passwordfile`, `miniflux-passwordeval`\n"
+"Ошибка: Для использования FreshRSS нужно задать `freshrss-login` и одно из: "
+"`freshrss-password`, `freshrss-passwordfile`, `freshrss-passwordeval`\n"
 
 #: src/controller.cpp:316
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
@@ -965,7 +958,7 @@ msgstr "Отвязанные функции:"
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Макросы:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1631,9 +1624,9 @@ msgid "`%s' is not a valid key command"
 msgstr "команда `%s' не поддерживается"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Не удалось открыть файл очереди: %s."
+msgstr "не удалось разобрать последовательность операций для %s"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1767,7 +1760,7 @@ msgid "Mark as Finished"
 msgstr "Отметить как завершенную"
 
 #: src/queueloader.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
