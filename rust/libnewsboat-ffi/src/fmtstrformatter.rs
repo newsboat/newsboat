@@ -1,74 +1,38 @@
-use crate::abort_on_panic;
-use libc::{c_char, c_void};
-use libnewsboat::fmtstrformatter::FmtStrFormatter;
-use std::ffi::{CStr, CString};
-use std::mem;
+use cxx::CxxString;
+use libnewsboat::fmtstrformatter;
 
-#[no_mangle]
-pub extern "C" fn rs_fmtstrformatter_new() -> *mut c_void {
-    abort_on_panic(|| Box::into_raw(Box::new(FmtStrFormatter::new())) as *mut c_void)
+// cxx doesn't allow to share types from other crates, so we have to wrap it
+// cf. https://github.com/dtolnay/cxx/issues/496
+struct FmtStrFormatter(fmtstrformatter::FmtStrFormatter);
+
+#[cxx::bridge(namespace = "newsboat::fmtstrformatter::bridged")]
+mod bridged {
+    extern "Rust" {
+        type FmtStrFormatter;
+
+        fn create() -> Box<FmtStrFormatter>;
+
+        fn register_fmt(fmt: &mut FmtStrFormatter, key: &CxxString, value: &CxxString);
+        fn do_format(fmt: &mut FmtStrFormatter, format: &CxxString, width: u32) -> String;
+    }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_fmtstrformatter_free(fmt: *mut c_void) {
-    abort_on_panic(|| {
-        if fmt.is_null() {
-            return;
-        }
-        Box::from_raw(fmt as *mut FmtStrFormatter);
-    })
+fn create() -> Box<FmtStrFormatter> {
+    Box::new(FmtStrFormatter(fmtstrformatter::FmtStrFormatter::new()))
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_fmtstrformatter_register_fmt(
-    fmt: *mut c_void,
-    key: c_char,
-    value: *const c_char,
-) {
-    abort_on_panic(|| {
-        let mut fmt = {
-            assert!(!fmt.is_null());
-            Box::from_raw(fmt as *mut FmtStrFormatter)
-        };
-        let value = {
-            assert!(!value.is_null());
-            CStr::from_ptr(value)
-        }
-        .to_string_lossy()
-        .into_owned();
-        // Keys are ASCII, so it's safe to cast c_char (i8) to u8 (0-127 map to the same bits).
-        // From there, it's safe to cast to Rust's char.
-        let key = key as u8 as char;
-        fmt.register_fmt(key as char, value);
+// key should contain exactly 1 char
+fn register_fmt(fmt: &mut FmtStrFormatter, key: &CxxString, value: &CxxString) {
+    let key = key.to_string_lossy().into_owned();
+    let value = value.to_string_lossy().into_owned();
 
-        // Do not deallocate the object - C still has a pointer to it
-        mem::forget(fmt);
-    })
+    if let Some(key) = key.chars().next() {
+        fmt.0.register_fmt(key, value);
+    }
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn rs_fmtstrformatter_do_format(
-    fmt: *mut c_void,
-    format: *const c_char,
-    width: u32,
-) -> *mut c_char {
-    abort_on_panic(|| {
-        let fmt = {
-            assert!(!fmt.is_null());
-            Box::from_raw(fmt as *mut FmtStrFormatter)
-        };
-        let format = {
-            assert!(!format.is_null());
-            CStr::from_ptr(format)
-        }
-        .to_str()
-        .expect("format contained invalid UTF-8");
-        let result = fmt.do_format(format, width);
-        let result = CString::new(result).unwrap().into_raw();
+fn do_format(fmt: &mut FmtStrFormatter, format: &CxxString, width: u32) -> String {
+    let format = format.to_string_lossy().into_owned();
 
-        // Do not deallocate the object - C still has a pointer to it
-        mem::forget(fmt);
-
-        result
-    })
+    fmt.0.do_format(&format, width)
 }
