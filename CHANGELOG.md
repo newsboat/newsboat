@@ -1,15 +1,58 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2021-06-21
+## 2.24 - 2021-06-20
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes Alexandre Alapetite.
 
 ### Added
-### Changed
-- Bumped minimum supported Rust version to 1.48.0
 
-### Deprecated
-### Removed
+- FreshRSS support (Petra Lamborn)
+- Ability to add descriptions to macros (#228) (Dennis van der Schagt)
+- Support for plain-text Atom entries (YouTube is the most prominent publisher
+    of those) (#468, #1022, #1010) (Dennis van der Schagt)
+- `restrict-filename` setting to control if non-alphanumeric symbols will get
+    replaced by underscores when saving an article (#1110) (crimsonskylark)
+- `highlight-feed` setting to highlight feedlist entries according to the filter
+    expressions (same as `highlight-article` in the article list) (#1510)
+    (Vonter)
+
+### Changed
+
+- IRC channel moved from Freenode to Libera.Chat network
+- Newsboat will now fail to start if settings are passed more parameters than
+    they expect. To fix this, read the doc for the setting and try using double
+    quotes as necessary (Alexander Batischev)
+- Newsboat will now quit if you try to open a query feed whose expression
+    contains an unknown attribute. This is a temporary workaround; the next
+    version will display an error instead. The proper fix couldn't be added to
+    2.24 because that'd disrupt the freeze on translations (#1665) (Dennis van
+    der Schagt)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Michał Siemek), Russian
+    (Alexander Batischev), Turkish (Emir Sari), Ukrainian (Alexander Batischev)
+- Bumped minimum supported Rust version to 1.48.0
+- Updated vendored library Catch2 to 2.13.6
+
 ### Fixed
-### Security
+
+- Segfault in Podboat when purging the list where the last item is finished or
+    deleted (#1546) (Dennis van der Schagt)
+- `mark-feed-read` applying to invisible items (e.g. the ones that are filtered
+    out, or read ones when `show-read-articles` is in effect) (#1364) (Dennis
+    van der Schagt)
+- Supplying garbage instead of a correct Newsboat version to FeedHQ and The Old
+    Reader (Alexander Batischev)
+- Sorting in ascending order partially reversing the results of the previous
+    sort (#1561) (tau3)
+- Compile errors when building with a stack protector (#1598) (Alexander
+    Batischev)
+- `toggle-article-read` ignoring its argument in macros when executed from an
+    article view (#1637) (ysh16)
+- Article view scrolling back to top after opening a link (#1463) (Dennis van
+    der Schagt)
+- The build system trying to find `iconv()` in libc instead of linking with
+    libiconv (Theo Buehler)
 
 
 

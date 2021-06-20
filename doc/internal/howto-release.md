@@ -60,7 +60,8 @@ branch off the latest release and backport the bugfixes onto it.
     * _rust/libnewsboat/Cargo.toml_
     * _rust/libnewsboat-ffi/Cargo.toml_
     * `cargo update --package libnewsboat --package libnewsboat-ffi`.
-2. Update links to docs and FAQ in README.
+2. Update links to docs and FAQ in README (do it with a regex, there's lots of
+   them).
 3. Commit the changes with message "Release VERSION".
 4. *If you're making a patch release*, push the branch and wait for CI to succeed
    before proceeding.
