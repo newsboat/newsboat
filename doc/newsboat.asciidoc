@@ -16,9 +16,6 @@ Unix-like systems such as GNU/Linux, FreeBSD or macOS.
 
 Newsboat has been tested on Linux (with glibc and musl-libc), FreeBSD and macOS.
 
-NetBSD is currently not supported, due to technical limitations in the `iconv()`
-implementation.
-
 === Why "Newsboat"?
 
 "Newsboat" is a play on the name of its ancestor, "Newsbeuter". They're spelled
