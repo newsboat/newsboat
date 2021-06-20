@@ -1,5 +1,17 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2021-09-20
+
+### Added
+### Changed
+- Bumped minimum supported Rust version to 1.51.0
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.24 - 2021-06-20
 
 Lists below only mention user-visible changes, but the full list of contributors

@@ -110,25 +110,21 @@ branch off the latest release and backport the bugfixes onto it.
                 `newsboat.html`.
             * `<title>`: "Newsboat VERSION is out".
             * Gzip the result: `gzip --best --keep --force newsboat/news.atom`.
-    * Prepare an email to the mailing list:
-        * Same topic and contents as in `news.atom` entry.
-        * Clear-sign instead of detach-sign: select the body and run it through
-            `gpg2 --clearsign`.
     * Deploy the directory on the server:
         `sudo cp -rv newsboat/ /usr/local/www/newsboat.org/www/ && sudo chmod -R a+r /usr/local/www/newsboat.org/www/`.
     * Push the code: `git push && git push --tags`
 8. Tell the world about it:
     * Send an email to the mailing list
+        * newsboat@googlegroups.com
+        * Same topic and contents as in `news.atom` entry.
+        * Clear-sign instead of detach-sign: select the body and run it through
+            `gpg2 --clearsign`.
     * Change the topic on #newsboat at irc.libera.chat
 9. Release the snap:
     * For minor releases:
-        * Go to https://dashboard.snapcraft.io/ and log in.
-        * Go to https://dashboard.snapcraft.io/snaps/newsboat/revisions/ and for
-          each revision that corresponds to the release:
-            * Click on the revision number.
-            * In "Channels" row, click "Release".
-            * Tick all checkboxes ("stable", "candidate", "beta", and "edge").
-            * Click "Release".
+        * Go to https://snapcraft.io/newsboat/releases and drag the line with
+            the latest release onto "stable", "candidate", and "beta" lines;
+            then click "Save"
     * For patch releases:
         * Follow _howto-update-snap.markdown_ to build and release a new version.
         * Run `git fetch origin --tags` to fetch the tag you just pushed.
@@ -161,10 +157,6 @@ branch off the latest release and backport the bugfixes onto it.
         git checkout -b feature/prepare-next-release
         git commit -am'Prepare for next release'
         git push origin -u feature/prepare-next-release
-    * Once the new MSRV checks passed, go to Settings → Branches → Branch
-        protection rules, "Edit" the rules for "master" and:
-        - make the old MSRV checks *not* required
-        - make the new MSRV checks *required*
 
 
 ## If you're making a patch release (x.y.Z)

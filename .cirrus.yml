@@ -159,7 +159,7 @@ macos_task:
           env:
               CC: gcc
               CXX: g++
-              RUST: 1.48.0
+              RUST: 1.51.0
 
 formatting_task:
     name: Code formatting
@@ -188,7 +188,7 @@ linux_task:
                 cxx_package: g++-5
                 cc: gcc-5
                 cxx: g++-5
-                rust_version: 1.48.0
+                rust_version: 1.51.0
         - name: MSRV, GCC 11 (Ubuntu 21.04)
           container:
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
@@ -196,7 +196,7 @@ linux_task:
                 cxx_package: g++-11
                 cc: gcc-11
                 cxx: g++-11
-                rust_version: 1.48.0
+                rust_version: 1.51.0
 
         - name: GCC 11, more warnings and checks (Ubuntu 21.04)
           container:
