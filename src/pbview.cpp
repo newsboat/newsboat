@@ -221,13 +221,16 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_MARK_FINISHED: {
-			if (ctrl->downloads().size() >= 1) {
+			auto& downloads = ctrl->downloads();
+			if (downloads.size() >= 1) {
 				const auto idx = downloads_list.get_position();
 				DlStatus status =
-					ctrl->downloads()[idx].status();
+					downloads[idx].status();
 				if (status == DlStatus::PLAYED) {
-					ctrl->downloads()[idx].set_status(
-						DlStatus::FINISHED);
+					downloads[idx].set_status(DlStatus::FINISHED);
+					if (idx + 1 < downloads.size()) {
+						downloads_list.set_position(idx + 1);
+					}
 				}
 			}
 		}
@@ -244,12 +247,15 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_DELETE: {
-			if (ctrl->downloads().size() >= 1) {
+			auto& downloads = ctrl->downloads();
+			if (downloads.size() >= 1) {
 				const auto idx = downloads_list.get_position();
-				if (ctrl->downloads()[idx].status() !=
+				if (downloads[idx].status() !=
 					DlStatus::DOWNLOADING) {
-					ctrl->downloads()[idx].set_status(
-						DlStatus::DELETED);
+					downloads[idx].set_status(DlStatus::DELETED);
+					if (idx + 1 < downloads.size()) {
+						downloads_list.set_position(idx + 1);
+					}
 				}
 			}
 		}
