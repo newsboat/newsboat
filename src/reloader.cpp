@@ -11,6 +11,7 @@
 #include "dbexception.h"
 #include "downloadthread.h"
 #include "fmtstrformatter.h"
+#include "matcherexception.h"
 #include "reloadrangethread.h"
 #include "reloadthread.h"
 #include "rss/exception.h"
@@ -179,8 +180,12 @@ void Reloader::reload_all(bool unattended)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
 	for (const auto& feed : ctrl->get_feedcontainer()->get_all_feeds()) {
 		if (feed->is_query_feed()) {
-			ctrl->get_view()->prepare_query_feed(feed);
-			feed->set_status(DlStatus::SUCCESS);
+			try {
+				ctrl->get_view()->prepare_query_feed(feed);
+				feed->set_status(DlStatus::SUCCESS);
+			} catch (const MatcherException& /* e */) {
+				feed->set_status(DlStatus::DL_ERROR);
+			}
 		}
 	}
 
