@@ -632,7 +632,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						v->get_statusline().show_error(strprintf::fmt(
 								_("Error: couldn't "
 									"parse filter "
-									"command `%s': %s"),
+									"expression `%s': %s"),
 								newfilter,
 								matcher.get_parse_error()));
 					} else {
@@ -842,8 +842,9 @@ void ItemListFormAction::qna_end_setfilter()
 
 	if (filtertext.length() > 0) {
 		if (!matcher.parse(filtertext)) {
-			v->get_statusline().show_error(
-				_("Error: couldn't parse filter command!"));
+			v->get_statusline().show_error(strprintf::fmt(
+					_("Error: couldn't parse filter expression `%s': %s"),
+					filtertext, matcher.get_parse_error()));
 			return;
 		}
 
