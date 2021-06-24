@@ -16,8 +16,7 @@ FmtStrFormatter::FmtStrFormatter()
 
 void FmtStrFormatter::register_fmt(char f, const std::string& value)
 {
-	std::string key(1, f);
-	fmtstrformatter::bridged::register_fmt(*rs_object, key, value);
+	fmtstrformatter::bridged::register_fmt(*rs_object, f, value);
 }
 
 std::string FmtStrFormatter::do_format(const std::string& fmt,

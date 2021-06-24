@@ -12,7 +12,7 @@ mod bridged {
 
         fn create() -> Box<FmtStrFormatter>;
 
-        fn register_fmt(fmt: &mut FmtStrFormatter, key: &CxxString, value: &CxxString);
+        fn register_fmt(fmt: &mut FmtStrFormatter, key: u8, value: &CxxString);
         fn do_format(fmt: &mut FmtStrFormatter, format: &CxxString, width: u32) -> String;
     }
 }
@@ -21,14 +21,10 @@ fn create() -> Box<FmtStrFormatter> {
     Box::new(FmtStrFormatter(fmtstrformatter::FmtStrFormatter::new()))
 }
 
-// key should contain exactly 1 char
-fn register_fmt(fmt: &mut FmtStrFormatter, key: &CxxString, value: &CxxString) {
-    let key = key.to_string_lossy().into_owned();
+fn register_fmt(fmt: &mut FmtStrFormatter, key: u8, value: &CxxString) {
     let value = value.to_string_lossy().into_owned();
 
-    if let Some(key) = key.chars().next() {
-        fmt.0.register_fmt(key, value);
-    }
+    fmt.0.register_fmt(key as char, value);
 }
 
 fn do_format(fmt: &mut FmtStrFormatter, format: &CxxString, width: u32) -> String {
