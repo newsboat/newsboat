@@ -26,6 +26,10 @@ public:
 		keys = k;
 	}
 	void apply_colors_to_all_forms();
+	void set_view_update_necessary()
+	{
+		update_view = true;
+	}
 
 private:
 	struct KeyMapHintEntry {
@@ -44,6 +48,8 @@ private:
 		const Download& dl,
 		unsigned int pos,
 		unsigned int width);
+
+	bool update_view;
 	PbController* ctrl;
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
