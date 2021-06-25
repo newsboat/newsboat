@@ -60,21 +60,16 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			const double total_kbps = ctrl->get_total_kbps();
 			const auto speed = get_speed_human_readable(total_kbps);
 
-			char parbuf[128] = "";
-			if (ctrl->get_maxdownloads() > 1) {
-				snprintf(parbuf,
-					sizeof(parbuf),
-					_(" - %u parallel downloads"),
-					ctrl->get_maxdownloads());
-			}
-
-			const auto title = strprintf::fmt(
-					_("Queue (%u downloads in progress, %u total) - %.2f %s total%s"),
+			auto title = strprintf::fmt(
+					_("Queue (%u downloads in progress, %u total) - %.2f %s total"),
 					static_cast<unsigned int>(ctrl->downloads_in_progress()),
 					static_cast<unsigned int>(ctrl->downloads().size()),
 					speed.first,
-					speed.second,
-					parbuf);
+					speed.second);
+
+			if (ctrl->get_maxdownloads() > 1) {
+				title += strprintf::fmt(_(" - %u parallel downloads"), ctrl->get_maxdownloads());
+			}
 
 			dllist_form.set("head", title);
 
