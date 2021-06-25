@@ -4,29 +4,6 @@
 
 #include "ruststring.h"
 
-extern "C" {
-	void* rs_history_new();
-
-	void rs_history_free(void* hst);
-
-	void rs_history_add_line(
-		void* hst,
-		const char* line);
-
-	char* rs_history_previous_line(void* hst);
-
-	char* rs_history_next_line(void* hst);
-
-	void rs_history_load_from_file(
-		void* hst,
-		const char* file);
-
-	void rs_history_save_to_file(
-		void* fmt,
-		const char* file,
-		unsigned int limit);
-}
-
 namespace newsboat {
 
 History::History()
