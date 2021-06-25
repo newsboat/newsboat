@@ -68,20 +68,15 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 					ctrl->get_maxdownloads());
 			}
 
-			char buf[1024];
-			snprintf(buf,
-				sizeof(buf),
-				_("Queue (%u downloads in progress, %u total) "
-					"- %.2f %s total%s"),
-				static_cast<unsigned int>(
-					ctrl->downloads_in_progress()),
-				static_cast<unsigned int>(
-					ctrl->downloads().size()),
-				speed.first,
-				speed.second.c_str(),
-				parbuf);
+			const auto title = strprintf::fmt(
+					_("Queue (%u downloads in progress, %u total) - %.2f %s total%s"),
+					static_cast<unsigned int>(ctrl->downloads_in_progress()),
+					static_cast<unsigned int>(ctrl->downloads().size()),
+					speed.first,
+					speed.second,
+					parbuf);
 
-			dllist_form.set("head", buf);
+			dllist_form.set("head", title);
 
 			LOG(Level::DEBUG,
 				"PbView::run: updating view... "
