@@ -95,14 +95,14 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 			downloads_list.stfl_replace_lines(listfmt);
 
-			// If there's no status message, we know there's no error to show
-			// Thus, it's safe to replace with the download's status
-			if (i >= 1 && dllist_form.get("msg").empty()) {
-				const auto idx = downloads_list.get_position();
-				dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
-			}
-
 			update_view = false;
+		}
+
+		// If there's no status message, we know there's no error to show
+		// Thus, it's safe to replace with the download's status
+		if (dllist_form.get("msg").empty() && ctrl->downloads().size() > 0) {
+			const auto idx = downloads_list.get_position();
+			dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
 		}
 
 		const char* event = dllist_form.run(500);
@@ -137,28 +137,22 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PREV:
 		case OP_SK_UP:
 			downloads_list.move_up(wrap_scroll);
-			update_view = true;
 			break;
 		case OP_NEXT:
 		case OP_SK_DOWN:
 			downloads_list.move_down(wrap_scroll);
-			update_view = true;
 			break;
 		case OP_SK_HOME:
 			downloads_list.move_to_first();
-			update_view = true;
 			break;
 		case OP_SK_END:
 			downloads_list.move_to_last();
-			update_view = true;
 			break;
 		case OP_SK_PGUP:
 			downloads_list.move_page_up(wrap_scroll);
-			update_view = true;
 			break;
 		case OP_SK_PGDOWN:
 			downloads_list.move_page_down(wrap_scroll);
-			update_view = true;
 			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;
