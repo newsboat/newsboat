@@ -24,14 +24,6 @@ public:
 	void initialize(int argc, char* argv[]);
 	int run(PbView& v);
 
-	bool view_update_necessary() const
-	{
-		return view_update_;
-	}
-	void set_view_update_necessary(bool b)
-	{
-		view_update_ = b;
-	}
 	std::vector<Download>& downloads()
 	{
 		return downloads_;
@@ -68,7 +60,6 @@ private:
 	std::string config_file;
 	std::string queue_file;
 	newsboat::ConfigContainer cfg;
-	bool view_update_;
 	std::vector<Download> downloads_;
 
 	std::string config_dir;

@@ -123,7 +123,6 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 PbController::PbController()
 	: config_file("config")
 	, queue_file("queue")
-	, view_update_(true)
 	, max_dls(1)
 	, lock_file("pb-lock.pid")
 	, keys(KM_PODBOAT)
@@ -291,8 +290,8 @@ int PbController::run(PbView& v)
 
 	std::cout << _("done.") << std::endl;
 
-	ql.reset(new QueueLoader(queue_file, cfg, [this]() {
-		this->set_view_update_necessary(true);
+	ql.reset(new QueueLoader(queue_file, cfg, [&]() {
+		v.set_view_update_necessary();
 	}));
 	ql->reload(downloads_);
 

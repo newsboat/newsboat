@@ -24,7 +24,8 @@ using namespace newsboat;
 namespace podboat {
 
 PbView::PbView(PbController* c)
-	: ctrl(c)
+	: update_view(true)
+	, ctrl(c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
 	, keys(0)
@@ -55,32 +56,22 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 	set_dllist_keymap_hint();
 
 	do {
-		if (ctrl->view_update_necessary()) {
+		if (update_view) {
 			const double total_kbps = ctrl->get_total_kbps();
 			const auto speed = get_speed_human_readable(total_kbps);
 
-			char parbuf[128] = "";
+			auto title = strprintf::fmt(
+					_("Queue (%u downloads in progress, %u total) - %.2f %s total"),
+					static_cast<unsigned int>(ctrl->downloads_in_progress()),
+					static_cast<unsigned int>(ctrl->downloads().size()),
+					speed.first,
+					speed.second);
+
 			if (ctrl->get_maxdownloads() > 1) {
-				snprintf(parbuf,
-					sizeof(parbuf),
-					_(" - %u parallel downloads"),
-					ctrl->get_maxdownloads());
+				title += strprintf::fmt(_(" - %u parallel downloads"), ctrl->get_maxdownloads());
 			}
 
-			char buf[1024];
-			snprintf(buf,
-				sizeof(buf),
-				_("Queue (%u downloads in progress, %u total) "
-					"- %.2f %s total%s"),
-				static_cast<unsigned int>(
-					ctrl->downloads_in_progress()),
-				static_cast<unsigned int>(
-					ctrl->downloads().size()),
-				speed.first,
-				speed.second.c_str(),
-				parbuf);
-
-			dllist_form.set("head", buf);
+			dllist_form.set("head", title);
 
 			LOG(Level::DEBUG,
 				"PbView::run: updating view... "
@@ -104,14 +95,14 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 			downloads_list.stfl_replace_lines(listfmt);
 
-			// If there's no status message, we know there's no error to show
-			// Thus, it's safe to replace with the download's status
-			if (i >= 1 && dllist_form.get("msg").empty()) {
-				const auto idx = downloads_list.get_position();
-				dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
-			}
+			update_view = false;
+		}
 
-			ctrl->set_view_update_necessary(false);
+		// If there's no status message, we know there's no error to show
+		// Thus, it's safe to replace with the download's status
+		if (dllist_form.get("msg").empty() && ctrl->downloads().size() > 0) {
+			const auto idx = downloads_list.get_position();
+			dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
 		}
 
 		const char* event = dllist_form.run(500);
@@ -136,7 +127,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 		if (dllist_form.get("msg").length() > 0) {
 			dllist_form.set("msg", "");
-			ctrl->set_view_update_necessary(true);
+			update_view = true;
 		}
 
 		switch (op) {
@@ -146,28 +137,22 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PREV:
 		case OP_SK_UP:
 			downloads_list.move_up(wrap_scroll);
-			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_NEXT:
 		case OP_SK_DOWN:
 			downloads_list.move_down(wrap_scroll);
-			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_HOME:
 			downloads_list.move_to_first();
-			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_END:
 			downloads_list.move_to_last();
-			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_PGUP:
 			downloads_list.move_page_up(wrap_scroll);
-			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_SK_PGDOWN:
 			downloads_list.move_page_down(wrap_scroll);
-			ctrl->set_view_update_necessary(true);
 			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;
@@ -175,10 +160,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			if (ctrl->downloads_in_progress() > 0) {
-				dllist_form.set("msg",
-					_("Error: can't quit: download(s) in "
-						"progress."));
-				ctrl->set_view_update_necessary(true);
+				dllist_form.set("msg", _("Error: can't quit: download(s) in progress."));
+				update_view = true;
 			} else {
 				quit = true;
 			}
@@ -268,7 +251,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			} else {
 				ctrl->purge_queue();
 			}
-			ctrl->set_view_update_necessary(true);
+			update_view = true;
 			break;
 		case OP_HELP:
 			run_help();
@@ -286,7 +269,7 @@ void PbView::handle_resize()
 	for (const auto& form : forms) {
 		form.get().run(-3);
 	}
-	ctrl->set_view_update_necessary(true);
+	update_view = true;
 }
 
 void PbView::apply_colors_to_all_forms()
