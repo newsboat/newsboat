@@ -486,13 +486,20 @@ bool ItemListFormAction::process_operation(Operation op,
 		try {
 			const auto message_lifetime = v->get_statusline().show_message_until_finished(
 					_("Marking feed read..."));
+
 			std::vector<std::string> guids;
 			for (const auto& item : visible_items) {
 				const std::string guid = item.first->guid();
 				guids.push_back(guid);
 			}
 			rsscache->mark_items_read_by_guid(guids);
-			v->get_ctrl()->mark_all_read(guids);
+
+			if (apply_filter) {
+				// We're only viewing a subset of items, so mark them off one by one.
+				v->get_ctrl()->mark_all_read(guids);
+			} else {
+				v->get_ctrl()->mark_all_read(pos);
+			}
 
 			if (visible_items.size() > 0) {
 				std::lock_guard<std::mutex> lock(feed->item_mutex);
