@@ -367,6 +367,7 @@ address_sanitizer_task:
 
 depslist_task:
     name: Dependencies list is up to date
+    skip: "!changesInclude('.cirrus.yml', '**.{h,cpp}')"
 
     container:
       dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
@@ -415,6 +416,7 @@ undefined_behavior_sanitizer_task:
 
 asciidoctor_warnings_task:
     name: Asciidoctor with warnings-as-errors
+    skip: "!changesInclude('.cirrus.yml', 'doc/*')"
 
     container:
       cpu: 1
@@ -428,6 +430,7 @@ asciidoctor_warnings_task:
 
 i18nspector_task:
     name: .po files
+    skip: "!changesInclude('.cirrus.yml', 'po/*.{po,pot}')"
 
     container:
       cpu: 1
@@ -443,6 +446,7 @@ i18nspector_task:
 
 no_dbg_macros_task:
     name: "No dbg! macros in Rust code"
+    skip: "!changesInclude('.cirrus.yml', '**.rs')"
 
     container:
       cpu: 1
