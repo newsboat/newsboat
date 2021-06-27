@@ -1,6 +1,24 @@
 name: Coveralls
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - '*.md'
+      - '.cirrus.yml'
+      - 'contrib/**'
+      - 'doc/**'
+      - 'docker/**'
+      - 'po/**'
+      - 'snap/**'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - '.cirrus.yml'
+      - 'contrib/**'
+      - 'doc/**'
+      - 'docker/**'
+      - 'po/**'
+      - 'snap/**'
 
 jobs:
   gen_coverage:
