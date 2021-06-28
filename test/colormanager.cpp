@@ -17,9 +17,7 @@ TEST_CASE(
 {
 	ColorManager c;
 
-	{
-		INFO("By default, the list is empty");
-
+	SECTION("By default, the list is empty") {
 		unsigned int counter = 0;
 		c.apply_colors([&counter](const std::string&, const std::string&) {
 			counter++;
@@ -27,13 +25,12 @@ TEST_CASE(
 		REQUIRE(counter == 0);
 	}
 
-	{
-		INFO("Each processed action adds corresponding entry to return "
-			"value");
-
+	SECTION("Each processed action adds corresponding entry to return value") {
 		c.handle_action("color", {"listnormal", "default", "default"});
-		c.handle_action("color", {"listfocus", "cyan", "default", "bold", "underline"});
+		c.handle_action("color", {"listfocus_unread", "cyan", "default", "bold", "underline"});
 		c.handle_action("color", {"background", "red", "yellow"});
+		c.handle_action("color", {"info", "green", "white", "reverse"});
+		c.handle_action("color", {"end-of-text-marker", "color123", "default", "dim", "protect"});
 
 		std::map<std::string, std::string> styles;
 		c.apply_colors([&styles](const std::string& element, const std::string& style) {
@@ -41,9 +38,27 @@ TEST_CASE(
 			styles[element] = style;
 		});
 
+		REQUIRE(styles.size() == 5);
 		REQUIRE(styles["listnormal"] == "");
-		REQUIRE(styles["listfocus"] == "fg=cyan,attr=bold,attr=underline");
+		REQUIRE(styles["listfocus_unread"] == "fg=cyan,attr=bold,attr=underline");
 		REQUIRE(styles["background"] == "fg=red,bg=yellow");
+		REQUIRE(styles["info"] == "fg=green,bg=white,attr=reverse");
+		REQUIRE(styles["end-of-text-marker"] == "fg=color123,attr=dim,attr=protect");
+	}
+
+	SECTION("For `article` element, two additional elements are emitted") {
+		c.handle_action("color", {"article", "white", "blue", "reverse"});
+
+		std::map<std::string, std::string> styles;
+		c.apply_colors([&styles](const std::string& element, const std::string& style) {
+			REQUIRE(styles.find(element) == styles.end());
+			styles[element] = style;
+		});
+
+		REQUIRE(styles.size() == 3);
+		REQUIRE(styles["article"] == "fg=white,bg=blue,attr=reverse");
+		REQUIRE(styles["color_bold"] == "fg=white,bg=blue,attr=reverse,attr=bold");
+		REQUIRE(styles["color_underline"] == "fg=white,bg=blue,attr=reverse,attr=underline");
 	}
 }
 
@@ -200,16 +215,16 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 	REQUIRE(config.size() == 1);
 	REQUIRE(equivalent());
 
-	expected.emplace("color background green cyan bold");
-	c.handle_action("color", {"background", "green", "cyan", "bold"});
+	expected.emplace("color article green cyan bold");
+	c.handle_action("color", {"article", "green", "cyan", "bold"});
 	config.clear();
 	c.dump_config(config);
 	REQUIRE(config.size() == 2);
 	REQUIRE(equivalent());
 
-	expected.emplace("color listnormal black yellow underline standout");
+	expected.emplace("color listnormal_unread black yellow underline standout");
 	c.handle_action("color",
-	{"listnormal", "black", "yellow", "underline", "standout"});
+	{"listnormal_unread", "black", "yellow", "underline", "standout"});
 	config.clear();
 	c.dump_config(config);
 	REQUIRE(config.size() == 3);
