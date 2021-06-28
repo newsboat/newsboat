@@ -11,18 +11,49 @@
 
 using namespace newsboat;
 
+class StylesCollector {
+	std::map<std::string, std::string> styles;
+
+public:
+	StylesCollector() = default;
+
+	std::function<void(const std::string&, const std::string&)> setter()
+	{
+		return [this](const std::string& element, const std::string& style) {
+			if (this->styles.find(element) != this->styles.cend()) {
+				throw std::invalid_argument(std::string("Multiple styles for element ") + element);
+			}
+
+			this->styles[element] = style;
+		};
+	}
+
+	size_t styles_count() const
+	{
+		return styles.size();
+	}
+
+	std::string style(const std::string& element) const
+	{
+		const auto style = styles.find(element);
+		if (style != styles.cend()) {
+			return style->second;
+		} else {
+			return {};
+		}
+	}
+};
+
 TEST_CASE(
 	"apply_colors() invokes the callback for each element, supplying the element name and its style",
 	"[ColorManager]")
 {
 	ColorManager c;
+	StylesCollector collector;
 
 	SECTION("By default, the list is empty") {
-		unsigned int counter = 0;
-		c.apply_colors([&counter](const std::string&, const std::string&) {
-			counter++;
-		});
-		REQUIRE(counter == 0);
+		c.apply_colors(collector.setter());
+		REQUIRE(collector.styles_count() == 0);
 	}
 
 	SECTION("Each processed action adds corresponding entry to return value") {
@@ -32,33 +63,26 @@ TEST_CASE(
 		c.handle_action("color", {"info", "green", "white", "reverse"});
 		c.handle_action("color", {"end-of-text-marker", "color123", "default", "dim", "protect"});
 
-		std::map<std::string, std::string> styles;
-		c.apply_colors([&styles](const std::string& element, const std::string& style) {
-			REQUIRE(styles.find(element) == styles.end());
-			styles[element] = style;
-		});
+		c.apply_colors(collector.setter());
 
-		REQUIRE(styles.size() == 5);
-		REQUIRE(styles["listnormal"] == "");
-		REQUIRE(styles["listfocus_unread"] == "fg=cyan,attr=bold,attr=underline");
-		REQUIRE(styles["background"] == "fg=red,bg=yellow");
-		REQUIRE(styles["info"] == "fg=green,bg=white,attr=reverse");
-		REQUIRE(styles["end-of-text-marker"] == "fg=color123,attr=dim,attr=protect");
+		REQUIRE(collector.styles_count() == 5);
+		REQUIRE(collector.style("listnormal") == "");
+		REQUIRE(collector.style("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
+		REQUIRE(collector.style("background") == "fg=red,bg=yellow");
+		REQUIRE(collector.style("info") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(collector.style("end-of-text-marker") == "fg=color123,attr=dim,attr=protect");
 	}
 
 	SECTION("For `article` element, two additional elements are emitted") {
 		c.handle_action("color", {"article", "white", "blue", "reverse"});
 
-		std::map<std::string, std::string> styles;
-		c.apply_colors([&styles](const std::string& element, const std::string& style) {
-			REQUIRE(styles.find(element) == styles.end());
-			styles[element] = style;
-		});
+		c.apply_colors(collector.setter());
 
-		REQUIRE(styles.size() == 3);
-		REQUIRE(styles["article"] == "fg=white,bg=blue,attr=reverse");
-		REQUIRE(styles["color_bold"] == "fg=white,bg=blue,attr=reverse,attr=bold");
-		REQUIRE(styles["color_underline"] == "fg=white,bg=blue,attr=reverse,attr=underline");
+		REQUIRE(collector.styles_count() == 3);
+		REQUIRE(collector.style("article") == "fg=white,bg=blue,attr=reverse");
+		REQUIRE(collector.style("color_bold") == "fg=white,bg=blue,attr=reverse,attr=bold");
+		REQUIRE(collector.style("color_underline") ==
+			"fg=white,bg=blue,attr=reverse,attr=underline");
 	}
 }
 
@@ -68,20 +92,17 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 	ConfigParser cfg;
 	ColorManager clr;
 
-	unsigned int counter = 0;
-	const auto tester = [&counter](const std::string&, const std::string&) {
-		counter++;
-	};
+	StylesCollector collector;
 
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
-	clr.apply_colors(tester);
-	REQUIRE(counter == 0);
+	clr.apply_colors(collector.setter());
+	REQUIRE(collector.styles_count() == 0);
 
 	cfg.parse_file("data/config-with-colors");
 
-	clr.apply_colors(tester);
-	REQUIRE(counter == 2);
+	clr.apply_colors(collector.setter());
+	REQUIRE(collector.styles_count() == 2);
 }
 
 TEST_CASE(
