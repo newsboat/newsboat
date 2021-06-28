@@ -1,6 +1,7 @@
 vbox
   @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
+  @title#style_normal[title]:bg=blue,fg=yellow,attr=bold
   @bind_up[bind_up]:
   @bind_down[bind_down]:
   @bind_page_up[bind_page_up]:
@@ -8,7 +9,7 @@ vbox
   @bind_home[bind_home]:
   @bind_end[bind_end]:
   @on_TAB:"TAB"
-  label#info[title]
+  label#title[title]
     text[head]:"Article '#'"
     .expand:h
     .display[showtitle]:1

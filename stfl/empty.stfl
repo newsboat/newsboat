@@ -1,5 +1,5 @@
 vbox
-  label#info[title]
+  label#title[title]
     text[head]:"empty formaction"
     .expand:h
     .display[showtitle]:1

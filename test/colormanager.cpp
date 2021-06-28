@@ -65,11 +65,12 @@ TEST_CASE(
 
 		c.apply_colors(collector.setter());
 
-		REQUIRE(collector.styles_count() == 5);
+		REQUIRE(collector.styles_count() == 6);
 		REQUIRE(collector.style("listnormal") == "");
 		REQUIRE(collector.style("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
 		REQUIRE(collector.style("background") == "fg=red,bg=yellow");
 		REQUIRE(collector.style("info") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(collector.style("title") == "fg=green,bg=white,attr=reverse");
 		REQUIRE(collector.style("end-of-text-marker") == "fg=color123,attr=dim,attr=protect");
 	}
 
@@ -250,4 +251,58 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 	c.dump_config(config);
 	REQUIRE(config.size() == 3);
 	REQUIRE(equivalent());
+}
+
+TEST_CASE("If no colors were specified for the `title` element, then use colors "
+	"from the `info` element (if any)",
+	"[ColorManager]")
+{
+	ColorManager c;
+	StylesCollector collector;
+
+	SECTION("`title` style can be changed as usual") {
+		c.handle_action("color", {"title", "green", "default", "underline"});
+
+		c.apply_colors(collector.setter());
+
+		REQUIRE(collector.styles_count() == 1);
+		REQUIRE(collector.style("title") == "fg=green,attr=underline");
+	}
+
+	SECTION("`title` and `info` don't interfere with each other") {
+		SECTION("`title` is set before `info`") {
+			c.handle_action("color", {"title", "blue", "black"});
+			c.handle_action("color", {"info", "green", "yellow", "bold"});
+		}
+
+		SECTION("`title` is set after `info`") {
+			c.handle_action("color", {"info", "green", "yellow", "bold"});
+			c.handle_action("color", {"title", "blue", "black"});
+		}
+
+		c.apply_colors(collector.setter());
+
+		REQUIRE(collector.styles_count() == 2);
+		REQUIRE(collector.style("title") == "fg=blue,bg=black");
+		REQUIRE(collector.style("info") == "fg=green,bg=yellow,attr=bold");
+	}
+
+	SECTION("`title` inherits the `info` style when available") {
+		c.handle_action("color", {"info", "red", "magenta", "reverse"});
+
+		c.apply_colors(collector.setter());
+
+		REQUIRE(collector.styles_count() == 2);
+		REQUIRE(collector.style("title") == "fg=red,bg=magenta,attr=reverse");
+		REQUIRE(collector.style("info") == "fg=red,bg=magenta,attr=reverse");
+	}
+
+	SECTION("`title` has no style if there is no style for `info` either") {
+		c.handle_action("color", {"listnormal", "black", "white"});
+
+		c.apply_colors(collector.setter());
+
+		REQUIRE(collector.styles_count() == 1);
+		REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
+	}
 }

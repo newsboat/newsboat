@@ -79,7 +79,8 @@ void ColorManager::handle_action(const std::string& action,
 			"info",
 			"background",
 			"article",
-			"end-of-text-marker"
+			"end-of-text-marker",
+			"title"
 		});
 		const auto element_is_supported = std::find(supported_elements.cbegin(),
 				supported_elements.cend(), element) != supported_elements.cend();
@@ -113,6 +114,32 @@ void ColorManager::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
+std::string format_style(const TextStyle& style)
+{
+	std::string result;
+
+	if (style.fg_color != "default") {
+		result.append("fg=");
+		result.append(style.fg_color);
+	}
+	if (style.bg_color != "default") {
+		if (!result.empty()) {
+			result.append(",");
+		}
+		result.append("bg=");
+		result.append(style.bg_color);
+	}
+	for (const auto& attr : style.attributes) {
+		if (!result.empty()) {
+			result.append(",");
+		}
+		result.append("attr=");
+		result.append(attr);
+	}
+
+	return result;
+}
+
 void ColorManager::apply_colors(
 	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
 const
@@ -120,25 +147,7 @@ const
 	for (const auto& element_style : element_styles) {
 		const std::string& element = element_style.first;
 		const TextStyle& style = element_style.second;
-		std::string colorattr;
-		if (style.fg_color != "default") {
-			colorattr.append("fg=");
-			colorattr.append(style.fg_color);
-		}
-		if (style.bg_color != "default") {
-			if (!colorattr.empty()) {
-				colorattr.append(",");
-			}
-			colorattr.append("bg=");
-			colorattr.append(style.bg_color);
-		}
-		for (const auto& attr : style.attributes) {
-			if (!colorattr.empty()) {
-				colorattr.append(",");
-			}
-			colorattr.append("attr=");
-			colorattr.append(attr);
-		}
+		const auto colorattr = format_style(style);
 
 		LOG(Level::DEBUG,
 			"ColorManager::apply_colors: %s %s\n",
@@ -165,6 +174,15 @@ const
 			LOG(Level::DEBUG, "ColorManager::apply_colors: color_underline %s\n", underline);
 			stfl_value_setter("color_underline", underline);
 		}
+	}
+
+	const auto title_style = element_styles.find("title");
+	const auto info_style = element_styles.find("info");
+	if (title_style == element_styles.cend() && info_style != element_styles.cend()) {
+		// `title` falls back to `info` when available
+		const auto style = format_style(info_style->second);
+		LOG(Level::DEBUG, "ColorManager::apply_colors: title inherited from info %s\n", style);
+		stfl_value_setter("title", style);
 	}
 }
 
