@@ -24,7 +24,7 @@ vbox
     .expand:0
     .display[showhint]:1
     label#info
-      text[help]:"q:Quit ENTER:Open Feed"
+      text[help]:""
       .expand:h
   hbox[lastline]
     .expand:0

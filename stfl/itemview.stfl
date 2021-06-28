@@ -25,7 +25,7 @@ vbox
     hbox
       .expand:0
       label#info
-        text[help]:"q:Quit s:Save o:Open in Browser n:Next Unread"
+        text[help]:""
         .expand:h
       label#info
         text[percent]:""

@@ -35,7 +35,7 @@ vbox
     .display[showhint]:1
     label#info
       .expand:h .height:1
-      text[help]:"q:Abort"
+      text[help]:""
   hbox[lastline]
     .expand:0
     label[msglabel]

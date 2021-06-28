@@ -24,7 +24,7 @@ vbox
     .expand:0
     .display[showhint]:1
     label#info
-      text[help]:"q:Close ENTER:Goto Dialog ^X:Close Dialog"
+      text[help]:""
       .expand:h
   hbox[lastline]
     .expand:0

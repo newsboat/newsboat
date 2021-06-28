@@ -24,7 +24,7 @@ vbox
     .expand:0
     .display[showhint]:1
     label#info
-      text[help]:"q:Quit d:Download c:Cancel D:Delete P:Purge Finished"
+      text[help]:""
       .expand:h
   label
     text[msg]:""
