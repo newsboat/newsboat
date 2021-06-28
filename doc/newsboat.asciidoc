@@ -193,8 +193,8 @@ supported:
 
 The `default` color means that the terminal's default color will be used. The
 `color<n>` color name (where `<n>` is a decimal number *not* starting with zero)
-can be used if your terminal support 256 colors (e.g. `gnome-terminal`, `xterm`
-with `$TERM` set to `xterm-256color`). Newsboat contains support for 256 color
+can be used if your terminal supports 256 colors (e.g. `gnome-terminal`, or `xterm`
+with `TERM` set to `xterm-256color`). Newsboat contains support for 256 color
 terminals since version 2.1. For a complete chart of colors and their
 corresponding numbers, please see
 https://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
@@ -219,9 +219,12 @@ Currently, the following elements are supported:
 - `listnormal_unread`: an unread list item
 - `listfocus_unread`: the currently selected unread list item
 - `title` (_added in 2.25_): current dialog's title, which is usually at the
-  top of the screen. If you don't specify a style for this element, then the
-  `info` style is used
-- `info`: the hints bar, which is usually at the bottom of the screen
+  top of the screen (but see <<show-title-bar,`show-title-bar`>> and
+  <<swap-title-and-hints,`swap-title-and-hints`>>). If you don't specify
+  a style for this element, then the `info` style is used
+- `info`: the hints bar, which is usually at the bottom of the screen (but see
+  <<show-keymap-hint,`show-keymap-hint`>> and
+  <<swap-title-and-hints,`swap-title-and-hints`>>)
 - `article`: the article text
 - `end-of-text-marker`: filler lines (~) below blocks of text
 
