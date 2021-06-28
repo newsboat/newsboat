@@ -33,10 +33,6 @@ public:
 	void dump_config(std::vector<std::string>& config_output) const override;
 	void apply_colors(std::function<void(const std::string&, const std::string&)>
 		stfl_value_setter) const;
-	std::map<std::string, TextStyle> get_styles() const
-	{
-		return element_styles;
-	}
 
 private:
 	std::map<std::string, TextStyle> element_styles;

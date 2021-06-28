@@ -12,15 +12,19 @@
 using namespace newsboat;
 
 TEST_CASE(
-	"get_styles() returns foreground/background colors and attributes for each "
-	"element that was processed",
+	"apply_colors() invokes the callback for each element, supplying the element name and its style",
 	"[ColorManager]")
 {
 	ColorManager c;
 
 	{
 		INFO("By default, the list is empty");
-		REQUIRE(c.get_styles().size() == 0);
+
+		unsigned int counter = 0;
+		c.apply_colors([&counter](const std::string&, const std::string&) {
+			counter++;
+		});
+		REQUIRE(counter == 0);
 	}
 
 	{
@@ -28,30 +32,18 @@ TEST_CASE(
 			"value");
 
 		c.handle_action("color", {"listnormal", "default", "default"});
-		REQUIRE(c.get_styles().size() == 1);
-		REQUIRE(c.get_styles().count("listnormal") == 1);
-
 		c.handle_action("color", {"listfocus", "cyan", "default", "bold", "underline"});
-		REQUIRE(c.get_styles().size() == 2);
-		REQUIRE(c.get_styles().count("listfocus") == 1);
-
 		c.handle_action("color", {"background", "red", "yellow"});
-		REQUIRE(c.get_styles().size() == 3);
-		REQUIRE(c.get_styles().count("background") == 1);
 
-		REQUIRE(c.get_styles()["listnormal"].fg_color == "default");
-		REQUIRE(c.get_styles()["listnormal"].bg_color == "default");
-		REQUIRE(c.get_styles()["listnormal"].attributes.size() == 0);
+		std::map<std::string, std::string> styles;
+		c.apply_colors([&styles](const std::string& element, const std::string& style) {
+			REQUIRE(styles.find(element) == styles.end());
+			styles[element] = style;
+		});
 
-		REQUIRE(c.get_styles()["listfocus"].fg_color == "cyan");
-		REQUIRE(c.get_styles()["listfocus"].bg_color == "default");
-		REQUIRE(c.get_styles()["listfocus"].attributes.size() == 2);
-		REQUIRE(c.get_styles()["listfocus"].attributes[0] == "bold");
-		REQUIRE(c.get_styles()["listfocus"].attributes[1] == "underline");
-
-		REQUIRE(c.get_styles()["background"].fg_color == "red");
-		REQUIRE(c.get_styles()["background"].bg_color == "yellow");
-		REQUIRE(c.get_styles()["background"].attributes.size() == 0);
+		REQUIRE(styles["listnormal"] == "");
+		REQUIRE(styles["listfocus"] == "fg=cyan,attr=bold,attr=underline");
+		REQUIRE(styles["background"] == "fg=red,bg=yellow");
 	}
 }
 
@@ -61,13 +53,20 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 	ConfigParser cfg;
 	ColorManager clr;
 
+	unsigned int counter = 0;
+	const auto tester = [&counter](const std::string&, const std::string&) {
+		counter++;
+	};
+
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
-	REQUIRE(clr.get_styles().size() == 0);
+	clr.apply_colors(tester);
+	REQUIRE(counter == 0);
 
 	cfg.parse_file("data/config-with-colors");
 
-	REQUIRE(clr.get_styles().size() == 2);
+	clr.apply_colors(tester);
+	REQUIRE(counter == 2);
 }
 
 TEST_CASE(
