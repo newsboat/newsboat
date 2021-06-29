@@ -333,6 +333,9 @@ TEST_CASE("If no colors were specified for the "
 
 				REQUIRE(collector.styles_count() >= 1);
 				REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
+
+				REQUIRE(collector.style(element) == "");
+				REQUIRE(collector.style("info") == "");
 			}
 		}
 	}

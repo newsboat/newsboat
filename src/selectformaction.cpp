@@ -262,7 +262,7 @@ const std::vector<KeyMapHintEntry>& SelectFormAction::get_keymap_hint() const
 	}
 
 	// The above `switch` handles all the cases, but GCC doesn't understand
-	// that and wants a `return` here. This lines will never actually be
+	// that and wants a `return` here. These lines will never actually be
 	// reached, so it's fine to return an empty vector here.
 	static const std::vector<KeyMapHintEntry> no_hints;
 	return no_hints;
