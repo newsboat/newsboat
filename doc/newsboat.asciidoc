@@ -225,6 +225,17 @@ Currently, the following elements are supported:
 - `info`: the hints bar, which is usually at the bottom of the screen (but see
   <<show-keymap-hint,`show-keymap-hint`>> and
   <<swap-title-and-hints,`swap-title-and-hints`>>)
+- `hint-key` (_added in 2.25_): a key in the hints bar. If you don't specify
+  a style for this element, then the `info` style is used
+- `hint-keys-delimiter` (_added in 2.25_): the comma that separates keys in the
+  hints bar. If you don't specify a style for this element, then the `info`
+  style is used
+- `hint-separator` (_added in 2.25_): the colon separating keys from their
+  descriptions in the hints bar. If you don't specify a style for this element,
+  then the `info` style is used
+- `hint-description` (_added in 2.25_): a description of a key in the hints
+  bar. If you don't specify a style for this element, then the `info` style is
+  used
 - `article`: the article text
 - `end-of-text-marker`: filler lines (~) below blocks of text
 
@@ -235,8 +246,12 @@ The default color configuration of Newsboat looks like this:
 	color listfocus           yellow  blue   bold
 	color listnormal_unread   magenta black
 	color listfocus_unread    magenta blue   bold
-	color info                yellow  blue   bold
 	color title               yellow  blue   bold
+	color info                yellow  blue   bold
+	color hint-key            yellow  blue   bold
+	color hint-keys-delimiter yellow  white
+	color hint-separator      yellow  white  bold
+	color hint-description    yellow  white
 	color article             white   black
 
 

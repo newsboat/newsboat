@@ -80,7 +80,11 @@ void ColorManager::handle_action(const std::string& action,
 			"background",
 			"article",
 			"end-of-text-marker",
-			"title"
+			"title",
+			"hint-key",
+			"hint-keys-delimiter",
+			"hint-separator",
+			"hint-description"
 		});
 		const auto element_is_supported = std::find(supported_elements.cbegin(),
 				supported_elements.cend(), element) != supported_elements.cend();
@@ -140,6 +144,20 @@ std::string format_style(const TextStyle& style)
 	return result;
 }
 
+void ColorManager::emit_fallback_from_to(const std::string& from_element,
+	const std::string& to_element,
+	const std::function<void(const std::string&, const std::string&)>& stfl_value_setter) const
+{
+	const auto from_style = element_styles.find(from_element);
+	const auto to_style = element_styles.find(to_element);
+	if (from_style == element_styles.cend() && to_style != element_styles.cend()) {
+		const auto style = format_style(to_style->second);
+		LOG(Level::DEBUG, "ColorManager::apply_colors: %s inherited from %s %s\n", from_element,
+			to_element, style);
+		stfl_value_setter(from_element, style);
+	}
+}
+
 void ColorManager::apply_colors(
 	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
 const
@@ -176,14 +194,11 @@ const
 		}
 	}
 
-	const auto title_style = element_styles.find("title");
-	const auto info_style = element_styles.find("info");
-	if (title_style == element_styles.cend() && info_style != element_styles.cend()) {
-		// `title` falls back to `info` when available
-		const auto style = format_style(info_style->second);
-		LOG(Level::DEBUG, "ColorManager::apply_colors: title inherited from info %s\n", style);
-		stfl_value_setter("title", style);
-	}
+	emit_fallback_from_to("title", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-key", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-keys-delimiter", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-separator", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-description", "info", stfl_value_setter);
 }
 
 } // namespace newsboat

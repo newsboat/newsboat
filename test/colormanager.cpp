@@ -62,16 +62,24 @@ TEST_CASE(
 		c.handle_action("color", {"background", "red", "yellow"});
 		c.handle_action("color", {"info", "green", "white", "reverse"});
 		c.handle_action("color", {"end-of-text-marker", "color123", "default", "dim", "protect"});
+		c.handle_action("color", {"hint-key", "default", "color2"});
+		c.handle_action("color", {"hint-description", "color3", "default"});
 
 		c.apply_colors(collector.setter());
 
-		REQUIRE(collector.styles_count() == 6);
+		REQUIRE(collector.styles_count() == 10);
 		REQUIRE(collector.style("listnormal") == "");
 		REQUIRE(collector.style("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
 		REQUIRE(collector.style("background") == "fg=red,bg=yellow");
 		REQUIRE(collector.style("info") == "fg=green,bg=white,attr=reverse");
 		REQUIRE(collector.style("title") == "fg=green,bg=white,attr=reverse");
 		REQUIRE(collector.style("end-of-text-marker") == "fg=color123,attr=dim,attr=protect");
+		REQUIRE(collector.style("hint-key") == "bg=color2");
+		REQUIRE(collector.style("hint-description") == "fg=color3");
+
+		// These two weren't set explicitly and fell back to `info`
+		REQUIRE(collector.style("hint-keys-delimiter") == "fg=green,bg=white,attr=reverse");
+		REQUIRE(collector.style("hint-separator") == "fg=green,bg=white,attr=reverse");
 	}
 
 	SECTION("For `article` element, two additional elements are emitted") {
@@ -251,58 +259,81 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 	c.dump_config(config);
 	REQUIRE(config.size() == 3);
 	REQUIRE(equivalent());
+
+	expected.emplace("color hint-keys-delimiter color5 default dim");
+	c.handle_action("color", {"hint-keys-delimiter", "color5", "default", "dim"});
+	config.clear();
+	c.dump_config(config);
+	REQUIRE(config.size() == 4);
+	REQUIRE(equivalent());
+
+	expected.emplace("color hint-separator color7 color8");
+	c.handle_action("color", {"hint-separator", "color7", "color8"});
+	config.clear();
+	c.dump_config(config);
+	REQUIRE(config.size() == 5);
+	REQUIRE(equivalent());
+
 }
 
-TEST_CASE("If no colors were specified for the `title` element, then use colors "
-	"from the `info` element (if any)",
+TEST_CASE("If no colors were specified for the "
+	"`title`/`hint-key`/`hint-keys-delimiter`/`hint-separator`/`hint-description` elements, "
+	"then use colors from the `info` element (if any)",
 	"[ColorManager]")
 {
-	ColorManager c;
-	StylesCollector collector;
+	const std::vector<std::string> elements {
+		"title", "hint-key", "hint-keys-delimiter", "hint-separator", "hint-description"};
 
-	SECTION("`title` style can be changed as usual") {
-		c.handle_action("color", {"title", "green", "default", "underline"});
+	for (const auto& element : elements) {
+		DYNAMIC_SECTION("element: " << element) {
+			ColorManager c;
+			StylesCollector collector;
 
-		c.apply_colors(collector.setter());
+			SECTION("Element's style can be changed as usual") {
+				c.handle_action("color", {element, "green", "default", "underline"});
 
-		REQUIRE(collector.styles_count() == 1);
-		REQUIRE(collector.style("title") == "fg=green,attr=underline");
-	}
+				c.apply_colors(collector.setter());
 
-	SECTION("`title` and `info` don't interfere with each other") {
-		SECTION("`title` is set before `info`") {
-			c.handle_action("color", {"title", "blue", "black"});
-			c.handle_action("color", {"info", "green", "yellow", "bold"});
+				REQUIRE(collector.styles_count() >= 1);
+				REQUIRE(collector.style(element) == "fg=green,attr=underline");
+			}
+
+			SECTION("Element and `info` don't interfere with each other") {
+				SECTION("Element's style is set before `info`") {
+					c.handle_action("color", {element, "blue", "black"});
+					c.handle_action("color", {"info", "green", "yellow", "bold"});
+				}
+
+				SECTION("Element's style is set after `info`") {
+					c.handle_action("color", {"info", "green", "yellow", "bold"});
+					c.handle_action("color", {element, "blue", "black"});
+				}
+
+				c.apply_colors(collector.setter());
+
+				REQUIRE(collector.styles_count() >= 2);
+				REQUIRE(collector.style(element) == "fg=blue,bg=black");
+				REQUIRE(collector.style("info") == "fg=green,bg=yellow,attr=bold");
+			}
+
+			SECTION("Element inherits the `info` style when available") {
+				c.handle_action("color", {"info", "red", "magenta", "reverse"});
+
+				c.apply_colors(collector.setter());
+
+				REQUIRE(collector.styles_count() >= 2);
+				REQUIRE(collector.style(element) == "fg=red,bg=magenta,attr=reverse");
+				REQUIRE(collector.style("info") == "fg=red,bg=magenta,attr=reverse");
+			}
+
+			SECTION("Element has no style if there is no style for `info` either") {
+				c.handle_action("color", {"listnormal", "black", "white"});
+
+				c.apply_colors(collector.setter());
+
+				REQUIRE(collector.styles_count() >= 1);
+				REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
+			}
 		}
-
-		SECTION("`title` is set after `info`") {
-			c.handle_action("color", {"info", "green", "yellow", "bold"});
-			c.handle_action("color", {"title", "blue", "black"});
-		}
-
-		c.apply_colors(collector.setter());
-
-		REQUIRE(collector.styles_count() == 2);
-		REQUIRE(collector.style("title") == "fg=blue,bg=black");
-		REQUIRE(collector.style("info") == "fg=green,bg=yellow,attr=bold");
-	}
-
-	SECTION("`title` inherits the `info` style when available") {
-		c.handle_action("color", {"info", "red", "magenta", "reverse"});
-
-		c.apply_colors(collector.setter());
-
-		REQUIRE(collector.styles_count() == 2);
-		REQUIRE(collector.style("title") == "fg=red,bg=magenta,attr=reverse");
-		REQUIRE(collector.style("info") == "fg=red,bg=magenta,attr=reverse");
-	}
-
-	SECTION("`title` has no style if there is no style for `info` either") {
-		c.handle_action("color", {"listnormal", "black", "white"});
-
-		c.apply_colors(collector.setter());
-
-		REQUIRE(collector.styles_count() == 1);
-		REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
 	}
 }
