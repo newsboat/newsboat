@@ -13,7 +13,7 @@ public:
 	~HelpFormAction() override;
 	void prepare() override;
 	void init() override;
-	KeyMapHintEntry* get_keymap_hint() override;
+	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 	std::string id() const override
 	{
 		return "help";

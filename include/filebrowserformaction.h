@@ -18,7 +18,7 @@ public:
 	~FileBrowserFormAction() override;
 	void prepare() override;
 	void init() override;
-	KeyMapHintEntry* get_keymap_hint() override;
+	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
 	void set_default_filename(const std::string& fn)
 	{

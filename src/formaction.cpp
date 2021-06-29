@@ -56,24 +56,17 @@ void FormAction::set_keymap_hints()
 
 FormAction::~FormAction() {}
 
-std::string FormAction::prepare_keymap_hint(KeyMapHintEntry* hints)
+std::string FormAction::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints)
 {
-	/*
-	 * This function generates the "keymap hint" line by putting
-	 * together the elements of a structure, and looking up the
-	 * currently set keybinding so that the "keymap hint" line always
-	 * reflects the current configuration.
-	 */
 	std::string keymap_hint;
-	for (int i = 0; hints[i].op != OP_NIL; ++i) {
-		std::string bound_keys = utils::join(v->get_keymap()->get_keys(hints[i].op,
-					this->id()), ",");
+	for (const auto& hint : hints) {
+		std::string bound_keys = utils::join(v->get_keymap()->get_keys(hint.op, this->id()), ",");
 		if (bound_keys.empty()) {
 			bound_keys = "<none>";
 		}
 		keymap_hint.append(bound_keys);
 		keymap_hint.append(":");
-		keymap_hint.append(hints[i].text);
+		keymap_hint.append(hint.text);
 		keymap_hint.append(" ");
 	}
 	return keymap_hint;

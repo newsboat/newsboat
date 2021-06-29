@@ -43,7 +43,7 @@ private:
 	std::pair<double, std::string> get_speed_human_readable(double kbps);
 	void handle_resize();
 
-	std::string prepare_keymaphint(KeyMapHintEntry* hints);
+	std::string prepare_keymaphint(const std::vector<KeyMapHintEntry>& hints);
 	std::string format_line(const std::string& podlist_format,
 		const Download& dl,
 		unsigned int pos,

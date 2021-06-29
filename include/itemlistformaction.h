@@ -46,7 +46,7 @@ public:
 		pos = p;
 	}
 	std::string get_guid();
-	KeyMapHintEntry* get_keymap_hint() override;
+	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
 	bool jump_to_next_unread_item(bool start_with_first);
 	bool jump_to_previous_unread_item(bool start_with_last);

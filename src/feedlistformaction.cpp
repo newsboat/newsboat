@@ -630,9 +630,9 @@ void FeedListFormAction::set_feedlist(
 	update_form_title(width);
 }
 
-KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& FeedListFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_RELOAD, _("Reload")},
@@ -640,8 +640,7 @@ KeyMapHintEntry* FeedListFormAction::get_keymap_hint()
 		{OP_MARKFEEDREAD, _("Mark Read")},
 		{OP_MARKALLFEEDSREAD, _("Mark All Read")},
 		{OP_SEARCH, _("Search")},
-		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}
+		{OP_HELP, _("Help")}
 	};
 	return hints;
 }

@@ -16,7 +16,7 @@ public:
 	void init() override;
 	void prepare() override;
 
-	KeyMapHintEntry* get_keymap_hint() override;
+	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
 protected:
 	bool process_operation(Operation op,

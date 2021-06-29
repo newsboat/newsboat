@@ -72,12 +72,11 @@ void DialogsFormAction::update_heading()
 	set_value("head", fmt.do_format(title_format, width));
 }
 
-KeyMapHintEntry* DialogsFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& DialogsFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Close")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Close")},
 		{OP_OPEN, _("Goto Dialog")},
-		{OP_CLOSEDIALOG, _("Close Dialog")},
-		{OP_NIL, nullptr}
+		{OP_CLOSEDIALOG, _("Close Dialog")}
 	};
 	return hints;
 }

@@ -518,15 +518,14 @@ bool ItemViewFormAction::open_link_in_browser(const std::string& link,
 	return true;
 }
 
-KeyMapHintEntry* ItemViewFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& ItemViewFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
 		{OP_SAVE, _("Save")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_OPENINBROWSER, _("Open in Browser")},
 		{OP_ENQUEUE, _("Enqueue")},
-		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}
+		{OP_HELP, _("Help")}
 	};
 	return hints;
 }

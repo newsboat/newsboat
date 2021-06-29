@@ -16,7 +16,7 @@ public:
 	~UrlViewFormAction() override;
 	void prepare() override;
 	void init() override;
-	KeyMapHintEntry* get_keymap_hint() override;
+	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 	void set_links(const std::vector<LinkPair>& l)
 	{
 		links = l;

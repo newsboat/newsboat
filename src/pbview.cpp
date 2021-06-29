@@ -358,18 +358,17 @@ void PbView::run_help()
 	} while (!quit);
 }
 
-std::string PbView::prepare_keymaphint(KeyMapHintEntry* hints)
+std::string PbView::prepare_keymaphint(const std::vector<KeyMapHintEntry>& hints)
 {
 	std::string keymap_hint;
-	for (int i = 0; hints[i].op != OP_NIL; ++i) {
-		std::string bound_keys = utils::join(keys->get_keys(hints[i].op, "podboat"),
-				",");
+	for (const auto& hint : hints) {
+		std::string bound_keys = utils::join(keys->get_keys(hint.op, "podboat"), ",");
 		if (bound_keys.empty()) {
 			bound_keys = "<none>";
 		}
 		keymap_hint.append(bound_keys);
 		keymap_hint.append(":");
-		keymap_hint.append(hints[i].text);
+		keymap_hint.append(hint.text);
 		keymap_hint.append(" ");
 	}
 	return keymap_hint;
@@ -377,14 +376,14 @@ std::string PbView::prepare_keymaphint(KeyMapHintEntry* hints)
 
 void PbView::set_help_keymap_hint()
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")}, {OP_NIL, nullptr}};
-	std::string keymap_hint = prepare_keymaphint(hints);
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
+	const auto keymap_hint = prepare_keymaphint(hints);
 	help_form.set("help", keymap_hint);
 }
 
 void PbView::set_dllist_keymap_hint()
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
 		{OP_PB_DOWNLOAD, _("Download")},
 		{OP_PB_CANCEL, _("Cancel")},
 		{OP_PB_DELETE, _("Delete")},
@@ -392,11 +391,10 @@ void PbView::set_dllist_keymap_hint()
 		{OP_PB_TOGGLE_DLALL, _("Toggle Automatic Download")},
 		{OP_PB_PLAY, _("Play")},
 		{OP_PB_MARK_FINISHED, _("Mark as Finished")},
-		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}
+		{OP_HELP, _("Help")}
 	};
 
-	std::string keymap_hint = prepare_keymaphint(hints);
+	const auto keymap_hint = prepare_keymaphint(hints);
 	dllist_form.set("help", keymap_hint);
 }
 

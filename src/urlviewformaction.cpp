@@ -169,13 +169,12 @@ void UrlViewFormAction::update_heading()
 			cfg->get_configvalue("urlview-title-format"), width));
 }
 
-KeyMapHintEntry* UrlViewFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& UrlViewFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open in Browser")},
 		{OP_BOOKMARK, _("Save Bookmark")},
-		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}
+		{OP_HELP, _("Help")}
 	};
 	return hints;
 }
