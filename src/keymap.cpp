@@ -862,4 +862,22 @@ unsigned short KeyMap::get_flag_from_context(const std::string& context)
 	return 0; // shouldn't happen
 }
 
+
+std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
+	const std::string& context)
+{
+	std::string keymap_hint;
+	for (const auto& hint : hints) {
+		std::string bound_keys = utils::join(get_keys(hint.op, context), ",");
+		if (bound_keys.empty()) {
+			bound_keys = "<none>";
+		}
+		keymap_hint.append(bound_keys);
+		keymap_hint.append(":");
+		keymap_hint.append(hint.text);
+		keymap_hint.append(" ");
+	}
+	return keymap_hint;
+}
+
 } // namespace newsboat

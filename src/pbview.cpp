@@ -358,26 +358,10 @@ void PbView::run_help()
 	} while (!quit);
 }
 
-std::string PbView::prepare_keymaphint(const std::vector<KeyMapHintEntry>& hints)
-{
-	std::string keymap_hint;
-	for (const auto& hint : hints) {
-		std::string bound_keys = utils::join(keys->get_keys(hint.op, "podboat"), ",");
-		if (bound_keys.empty()) {
-			bound_keys = "<none>";
-		}
-		keymap_hint.append(bound_keys);
-		keymap_hint.append(":");
-		keymap_hint.append(hint.text);
-		keymap_hint.append(" ");
-	}
-	return keymap_hint;
-}
-
 void PbView::set_help_keymap_hint()
 {
 	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
-	const auto keymap_hint = prepare_keymaphint(hints);
+	const auto keymap_hint = keys->prepare_keymap_hint(hints, "podboat");
 	help_form.set("help", keymap_hint);
 }
 
@@ -394,7 +378,7 @@ void PbView::set_dllist_keymap_hint()
 		{OP_HELP, _("Help")}
 	};
 
-	const auto keymap_hint = prepare_keymaphint(hints);
+	const auto keymap_hint = keys->prepare_keymap_hint(hints, "podboat");
 	dllist_form.set("help", keymap_hint);
 }
 
