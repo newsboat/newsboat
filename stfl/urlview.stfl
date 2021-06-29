@@ -1,6 +1,10 @@
 vbox
   @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
+  @info#style_key_normal[hint-key]:bg=blue,fg=yellow,attr=bold
+  @info#style_comma_normal[hint-keys-delimiter]:bg=blue,fg=white
+  @info#style_colon_normal[hint-separator]:bg=blue,fg=white,attr=bold
+  @info#style_desc_normal[hint-description]:bg=blue,fg=white
   @title#style_normal[title]:bg=blue,fg=yellow,attr=bold
   @bind_up[bind_up]:
   @bind_down[bind_down]:
@@ -25,6 +29,7 @@ vbox
     .display[showhint]:1
     label#info
       text[help]:""
+      richtext:1
       .expand:h
   hbox[lastline]
     .expand:0

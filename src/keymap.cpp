@@ -868,13 +868,19 @@ std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hint
 {
 	std::string keymap_hint;
 	for (const auto& hint : hints) {
-		std::string bound_keys = utils::join(get_keys(hint.op, context), ",");
-		if (bound_keys.empty()) {
-			bound_keys = "<none>";
+		std::vector<std::string> keys = get_keys(hint.op, context);
+
+		if (keys.empty()) {
+			keys = {"<none>"};
 		}
-		keymap_hint.append(bound_keys);
-		keymap_hint.append(":");
-		keymap_hint.append(hint.text);
+
+		for (auto& key : keys) {
+			key = strprintf::fmt("<key>%s</>", utils::quote_for_stfl(key));
+		}
+
+		keymap_hint.append(utils::join(keys, "<comma>,</>"));
+		keymap_hint.append("<colon>:</>");
+		keymap_hint.append(strprintf::fmt("<desc>%s</>", utils::quote_for_stfl(hint.text)));
 		keymap_hint.append(" ");
 	}
 	return keymap_hint;

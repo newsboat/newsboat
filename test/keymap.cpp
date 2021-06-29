@@ -646,14 +646,14 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 
 	k.handle_action("bind-key", "w help");
 	k.handle_action("bind-key", "x open");
-	k.handle_action("bind-key", "z open");
+	k.handle_action("bind-key", "< open");
 	k.handle_action("unbind-key", "r");
 	k.handle_action("bind-key", "O reload");
 	// This frees up OP_SEARCH
 	k.handle_action("unbind-key", "/");
 
 	const std::vector<KeyMapHintEntry> hints {
-		{OP_QUIT, "Get out of this dialog"},
+		{OP_QUIT, "Get out of <this> dialog"},
 		{OP_HELP, "HALP"},
 		{OP_OPEN, "Open"},
 		{OP_RELOAD, "Reload current entry"},
@@ -661,9 +661,9 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 	};
 
 	REQUIRE(k.prepare_keymap_hint(hints, "feedlist") ==
-		"q:Get out of this dialog "
-		"?,w:HALP "
-		"ENTER,x,z:Open "
-		"O:Reload current entry "
-		"<none>:Go find me ");
+		"<key>q</><colon>:</><desc>Get out of <>this> dialog</> "
+		"<key>?</><comma>,</><key>w</><colon>:</><desc>HALP</> "
+		"<key><></><comma>,</><key>ENTER</><comma>,</><key>x</><colon>:</><desc>Open</> "
+		"<key>O</><colon>:</><desc>Reload current entry</> "
+		"<key><>none></><colon>:</><desc>Go find me</> ");
 }
