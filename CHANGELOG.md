@@ -230,6 +230,8 @@ for this release also includes David Brito and panvicka.
 - Failing to parse macros which contain semicolons in operations' arguments
     (#1200) (Alexander Batischev)
 - Not installing some of the contrib scripts (Alexander Batischev)
+- `newsboat -x` not reporting that another instance is already running (#483)
+    (Dennis van der Schagt)
 
 
 
