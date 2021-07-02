@@ -1,6 +1,11 @@
 vbox
   @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
+  @info#style_key_normal[hint-key]:bg=blue,fg=yellow,attr=bold
+  @info#style_comma_normal[hint-keys-delimiter]:bg=blue,fg=white
+  @info#style_colon_normal[hint-separator]:bg=blue,fg=white,attr=bold
+  @info#style_desc_normal[hint-description]:bg=blue,fg=white
+  @title#style_normal[title]:bg=blue,fg=yellow,attr=bold
   @bind_up[bind_up]:
   @bind_down[bind_down]:
   @bind_page_up[bind_page_up]:
@@ -8,7 +13,7 @@ vbox
   @bind_home[bind_home]:
   @bind_end[bind_end]:
   @on_TAB:"TAB"
-  label#info[title]
+  label#title[title]
     text[head]:"File Browser"
     .expand:h
     .display[showtitle]:1
@@ -33,8 +38,10 @@ vbox
     .expand:0
     .display[showhint]:1
     label#info
-      .expand:h .height:1
-      text[help]:"q:Abort"
+      text[help]:""
+      richtext:1
+      .expand:h
+      .height:1
   hbox[lastline]
     .expand:0
     label[msglabel]

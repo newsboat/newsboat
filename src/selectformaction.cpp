@@ -246,15 +246,13 @@ void SelectFormAction::update_heading()
 	set_value("head", title);
 }
 
-KeyMapHintEntry* SelectFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& SelectFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints_tag[] = {{OP_QUIT, _("Cancel")},
-		{OP_OPEN, _("Select Tag")},
-		{OP_NIL, nullptr}
+	static const std::vector<KeyMapHintEntry> hints_tag = {{OP_QUIT, _("Cancel")},
+		{OP_OPEN, _("Select Tag")}
 	};
-	static KeyMapHintEntry hints_filter[] = {{OP_QUIT, _("Cancel")},
-		{OP_OPEN, _("Select Filter")},
-		{OP_NIL, nullptr}
+	static const std::vector<KeyMapHintEntry> hints_filter = {{OP_QUIT, _("Cancel")},
+		{OP_OPEN, _("Select Filter")}
 	};
 	switch (type) {
 	case SelectionType::TAG:
@@ -262,7 +260,12 @@ KeyMapHintEntry* SelectFormAction::get_keymap_hint()
 	case SelectionType::FILTER:
 		return hints_filter;
 	}
-	return nullptr;
+
+	// The above `switch` handles all the cases, but GCC doesn't understand
+	// that and wants a `return` here. These lines will never actually be
+	// reached, so it's fine to return an empty vector here.
+	static const std::vector<KeyMapHintEntry> no_hints;
+	return no_hints;
 }
 
 std::string SelectFormAction::title()

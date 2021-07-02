@@ -45,9 +45,9 @@ void ColorManager::handle_action(const std::string& action,
 		 * the command syntax is:
 		 * color <element> <fgcolor> <bgcolor> [<attribute> ...]
 		 */
-		std::string element = params[0];
-		std::string fgcolor = params[1];
-		std::string bgcolor = params[2];
+		const std::string element = params[0];
+		const std::string fgcolor = params[1];
+		const std::string bgcolor = params[2];
 
 		if (!utils::is_valid_color(fgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
@@ -58,30 +58,44 @@ void ColorManager::handle_action(const std::string& action,
 					_("`%s' is not a valid color"), bgcolor));
 		}
 
-		std::vector<std::string> attribs;
-		for (unsigned int i = 3; i < params.size(); ++i) {
-			if (!utils::is_valid_attribute(params[i])) {
+		const std::vector<std::string> attribs(
+			std::next(params.cbegin(), 3),
+			params.cend());
+		for (const auto& attr : attribs) {
+			if (!utils::is_valid_attribute(attr)) {
 				throw ConfigHandlerException(strprintf::fmt(
 						_("`%s' is not a valid attribute"),
-						params[i]));
+						attr));
 			}
-			attribs.push_back(params[i]);
 		}
 
 		/* we only allow certain elements to be configured, also to
 		 * indicate the user possible mis-spellings */
-		if (element == "listnormal" || element == "listfocus" ||
-			element == "listnormal_unread" ||
-			element == "listfocus_unread" || element == "info" ||
-			element == "background" || element == "article" ||
-			element == "end-of-text-marker") {
+		const std::vector<std::string> supported_elements({
+			"listnormal",
+			"listfocus",
+			"listnormal_unread",
+			"listfocus_unread",
+			"info",
+			"background",
+			"article",
+			"end-of-text-marker",
+			"title",
+			"hint-key",
+			"hint-keys-delimiter",
+			"hint-separator",
+			"hint-description"
+		});
+		const auto element_is_supported = std::find(supported_elements.cbegin(),
+				supported_elements.cend(), element) != supported_elements.cend();
+
+		if (element_is_supported) {
 			element_styles[element] = {fgcolor, bgcolor, attribs};
 		} else {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("`%s' is not a valid configuration element"),
 					element));
 		}
-
 	} else {
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
 	}
@@ -104,6 +118,46 @@ void ColorManager::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
+std::string format_style(const TextStyle& style)
+{
+	std::string result;
+
+	if (style.fg_color != "default") {
+		result.append("fg=");
+		result.append(style.fg_color);
+	}
+	if (style.bg_color != "default") {
+		if (!result.empty()) {
+			result.append(",");
+		}
+		result.append("bg=");
+		result.append(style.bg_color);
+	}
+	for (const auto& attr : style.attributes) {
+		if (!result.empty()) {
+			result.append(",");
+		}
+		result.append("attr=");
+		result.append(attr);
+	}
+
+	return result;
+}
+
+void ColorManager::emit_fallback_from_to(const std::string& from_element,
+	const std::string& to_element,
+	const std::function<void(const std::string&, const std::string&)>& stfl_value_setter) const
+{
+	const auto from_style = element_styles.find(from_element);
+	const auto to_style = element_styles.find(to_element);
+	if (from_style == element_styles.cend() && to_style != element_styles.cend()) {
+		const auto style = format_style(to_style->second);
+		LOG(Level::DEBUG, "ColorManager::apply_colors: %s inherited from %s %s\n", from_element,
+			to_element, style);
+		stfl_value_setter(from_element, style);
+	}
+}
+
 void ColorManager::apply_colors(
 	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
 const
@@ -111,28 +165,10 @@ const
 	for (const auto& element_style : element_styles) {
 		const std::string& element = element_style.first;
 		const TextStyle& style = element_style.second;
-		std::string colorattr;
-		if (style.fg_color != "default") {
-			colorattr.append("fg=");
-			colorattr.append(style.fg_color);
-		}
-		if (style.bg_color != "default") {
-			if (colorattr.length() > 0) {
-				colorattr.append(",");
-			}
-			colorattr.append("bg=");
-			colorattr.append(style.bg_color);
-		}
-		for (const auto& attr : style.attributes) {
-			if (colorattr.length() > 0) {
-				colorattr.append(",");
-			}
-			colorattr.append("attr=");
-			colorattr.append(attr);
-		}
+		const auto colorattr = format_style(style);
 
 		LOG(Level::DEBUG,
-			"ColorManager::set_pb_colors: %s %s\n",
+			"ColorManager::apply_colors: %s %s\n",
 			element,
 			colorattr);
 
@@ -140,21 +176,29 @@ const
 
 		if (element == "article") {
 			std::string bold = colorattr;
-			std::string ul = colorattr;
-			if (bold.length() > 0) {
+			std::string underline = colorattr;
+			if (!bold.empty()) {
 				bold.append(",");
 			}
-			if (ul.length() > 0) {
-				ul.append(",");
+			if (!underline.empty()) {
+				underline.append(",");
 			}
 			bold.append("attr=bold");
-			ul.append("attr=underline");
+			underline.append("attr=underline");
 			// STFL will just ignore those in forms which don't have the
 			// `color_bold` and `color_underline` variables.
+			LOG(Level::DEBUG, "ColorManager::apply_colors: color_bold %s\n", bold);
 			stfl_value_setter("color_bold", bold);
-			stfl_value_setter("color_underline", ul);
+			LOG(Level::DEBUG, "ColorManager::apply_colors: color_underline %s\n", underline);
+			stfl_value_setter("color_underline", underline);
 		}
 	}
+
+	emit_fallback_from_to("title", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-key", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-keys-delimiter", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-separator", "info", stfl_value_setter);
+	emit_fallback_from_to("hint-description", "info", stfl_value_setter);
 }
 
 } // namespace newsboat

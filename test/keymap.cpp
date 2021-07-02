@@ -638,3 +638,32 @@ TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
 	REQUIRE(macro[1].op == OP_OPENINBROWSER);
 	REQUIRE(macro[1].args == std::vector<std::string>({}));
 }
+
+TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given operations are bound",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	k.handle_action("bind-key", "w help");
+	k.handle_action("bind-key", "x open");
+	k.handle_action("bind-key", "< open");
+	k.handle_action("unbind-key", "r");
+	k.handle_action("bind-key", "O reload");
+	// This frees up OP_SEARCH
+	k.handle_action("unbind-key", "/");
+
+	const std::vector<KeyMapHintEntry> hints {
+		{OP_QUIT, "Get out of <this> dialog"},
+		{OP_HELP, "HALP"},
+		{OP_OPEN, "Open"},
+		{OP_RELOAD, "Reload current entry"},
+		{OP_SEARCH, "Go find me"}
+	};
+
+	REQUIRE(k.prepare_keymap_hint(hints, "feedlist") ==
+		"<key>q</><colon>:</><desc>Get out of <>this> dialog</> "
+		"<key>?</><comma>,</><key>w</><colon>:</><desc>HALP</> "
+		"<key><></><comma>,</><key>ENTER</><comma>,</><key>x</><colon>:</><desc>Open</> "
+		"<key>O</><colon>:</><desc>Reload current entry</> "
+		"<key><>none></><colon>:</><desc>Go find me</> ");
+}

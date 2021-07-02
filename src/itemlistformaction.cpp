@@ -1298,17 +1298,16 @@ std::string ItemListFormAction::get_guid()
 	return visible_items[itempos].first->guid();
 }
 
-KeyMapHintEntry* ItemListFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& ItemListFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_SAVE, _("Save")},
 		{OP_RELOAD, _("Reload")},
 		{OP_NEXTUNREAD, _("Next Unread")},
 		{OP_MARKFEEDREAD, _("Mark All Read")},
 		{OP_SEARCH, _("Search")},
-		{OP_HELP, _("Help")},
-		{OP_NIL, nullptr}
+		{OP_HELP, _("Help")}
 	};
 	return hints;
 }

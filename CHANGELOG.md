@@ -3,8 +3,16 @@
 ## Unreleased - expected 2021-09-20
 
 ### Added
+- New elements to style with `color` command: `title`, `hint-key`,
+    `hint-keys-delimiter`, `hint-separator`, and `hint-description`. If there is
+    no style for one of those elements, the style of `info` is used instead. See
+    "Configuring Colors" section in the docs (Alexander Batischev)
 ### Changed
 - Bumped minimum supported Rust version to 1.51.0
+- Key hints (at the bottom of the screen) are now styled to make them easier to
+    read. If you're using a custom colorscheme and want to use these new
+    elements, you need to update it; see the "Configuring Colors" section in the
+    docs (#1016) (Alexander Batischev)
 ### Deprecated
 ### Removed
 ### Fixed

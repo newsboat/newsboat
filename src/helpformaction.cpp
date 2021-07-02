@@ -204,12 +204,11 @@ void HelpFormAction::init()
 	set_keymap_hints();
 }
 
-KeyMapHintEntry* HelpFormAction::get_keymap_hint()
+const std::vector<KeyMapHintEntry>& HelpFormAction::get_keymap_hint() const
 {
-	static KeyMapHintEntry hints[] = {{OP_QUIT, _("Quit")},
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
 		{OP_SEARCH, _("Search")},
-		{OP_CLEARFILTER, _("Clear")},
-		{OP_NIL, nullptr}
+		{OP_CLEARFILTER, _("Clear")}
 	};
 	return hints;
 }

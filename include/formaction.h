@@ -15,11 +15,6 @@ class ConfigContainer;
 class RssFeed;
 class View;
 
-struct KeyMapHintEntry {
-	Operation op;
-	char* text;
-};
-
 typedef std::pair<std::string, std::string> QnaPair;
 
 class FormAction {
@@ -33,7 +28,7 @@ public:
 		do_redraw = b;
 	}
 
-	virtual KeyMapHintEntry* get_keymap_hint() = 0;
+	virtual const std::vector<KeyMapHintEntry>& get_keymap_hint() const = 0;
 
 	virtual std::string id() const = 0;
 
@@ -113,7 +108,6 @@ protected:
 	std::vector<std::string> valid_cmds;
 
 private:
-	std::string prepare_keymap_hint(KeyMapHintEntry* hints);
 	void start_next_question();
 
 	std::vector<QnaPair> qna_prompts;

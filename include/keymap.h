@@ -181,6 +181,11 @@ struct ParsedOperations {
 	std::string description;
 };
 
+struct KeyMapHintEntry {
+	Operation op;
+	std::string text;
+};
+
 class KeyMap : public ConfigActionHandler {
 public:
 	explicit KeyMap(unsigned int flags);
@@ -205,6 +210,9 @@ public:
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
+
+	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
+		const std::string& context);
 
 private:
 	bool is_valid_context(const std::string& context);
