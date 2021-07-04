@@ -111,3 +111,14 @@ Newsboat's Snap uses strict confinement, so the only allowed browser is
 your default browser:
 
     browser "xdg-open %u"
+
+== How can I fetch all items of the feed, not just the 10/15/100 latest ones?
+
+You can't. Feeds only contain a few latest items, e.g. YouTube posts 15.
+
+And no, `max-items` setting has nothing to do with this.
+
+(Technically, this answer is a lie: https://www.ietf.org/rfc/rfc5005.txt[RFC
+5005] describes a solution, but Newsboat doesn't implement it, and neither do
+most publishers. https://github.com/newsboat/newsboat/issues/628[Get in touch]
+if you'd like to add support to Newsboat.)
