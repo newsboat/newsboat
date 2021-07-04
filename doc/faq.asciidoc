@@ -104,11 +104,10 @@ important bit.
 +
     browser "~/bin/newsboat-browser.sh"
 
-== Regarding Newsboat snap installations
+== Can't start browser (I'm using Newsboat's Snap package)
 
-The Newsboat snap will also issue error messages related to browser error codes,
-because it is being prevented from accessing resources outside its strict
-confinement. Add the following to your Newsboat's config so that it can open
+Newsboat's Snap uses strict confinement, so the only allowed browser is
+`xdg-open`. Add the following to your Newsboat's config so that it can open
 your default browser:
 
     browser "xdg-open %u"
