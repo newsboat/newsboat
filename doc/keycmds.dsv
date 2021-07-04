@@ -6,8 +6,8 @@ reload-all||R||Reload all feeds.
 mark-feed-read||A||Mark all articles in the currently selected feed read.
 mark-all-feeds-read||C||Mark articles in all feeds read.
 mark-all-above-as-read||n/a||Mark all above as read.
-save||s||Export the currently selected article to a plain text file.
-save-all||n/a||Export all articles from the currently selected feed to plain text files.
+save||s||Export the currently selected article to a plain text file, word-wrapped according to the `text-width` setting.
+save-all||n/a||Export all articles from the currently selected feed to plain text files, word-wrapped according to the `text-width` setting.
 next-unread||n||Jump to the next unread article.
 prev-unread||p||Jump to the previous unread article.
 next||J||Jump to next list entry.
@@ -58,7 +58,7 @@ view-dialogs||v||View list of open dialogs.
 close-dialog||^X||Close currently selected dialog.
 next-dialog||^V||Go to next dialog.
 prev-dialog||^G||Go to previous dialog.
-pipe-to||| ||Pipe article to command.
+pipe-to||| ||Pipe article to command. The text will be word-wrapped according to the `text-width` setting.
 sort||g||Sort feeds/articles by interactively choosing the sort method.
 rev-sort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
 up||UP||Go up one item in the list.
