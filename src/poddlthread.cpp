@@ -120,10 +120,10 @@ void PodDlThread::run()
 			LOG(Level::DEBUG,
 				"PodDlThread::run: download complete, deleting "
 				"temporary suffix");
-			if(rename(filename.c_str(), dl->filename().c_str()) == 0){
+			if(rename(filename.c_str(), dl->filename().c_str()) == 0) {
 				dl->set_status(DlStatus::READY);
-			}else{
-				dl->set_status(DlStatus::RENAME_FAILED,"Unable to rename downloaded file. Please check if you have sufficient permissions.");
+			} else {
+				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
 			}
 		} else if (dl->status() != DlStatus::CANCELLED) {
 			// attempt complete re-download

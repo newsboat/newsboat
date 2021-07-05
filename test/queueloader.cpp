@@ -66,7 +66,8 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 		DlStatus::FAILED,
 		DlStatus::ALREADY_DOWNLOADED,
 		DlStatus::READY,
-		DlStatus::PLAYED
+		DlStatus::PLAYED,
+		DlStatus::RENAME_FAILED
 		// Not including DlStatus::Downloading because that aborts the reload
 	};
 
@@ -371,7 +372,8 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 		DlStatus::ALREADY_DOWNLOADED,
 		DlStatus::READY,
 		DlStatus::PLAYED,
-		DlStatus::FINISHED
+		DlStatus::FINISHED,
+		DlStatus::RENAME_FAILED
 	};
 	for (const auto status : other_statuses) {
 		downloads.emplace_back(empty_callback);
@@ -429,7 +431,8 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 		DlStatus::FAILED,
 		DlStatus::ALREADY_DOWNLOADED,
 		DlStatus::READY,
-		DlStatus::PLAYED
+		DlStatus::PLAYED,
+		DlStatus::RENAME_FAILED
 	};
 	for (const auto status : other_statuses) {
 		downloads.emplace_back(empty_callback);
