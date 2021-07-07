@@ -367,7 +367,7 @@ std::string utils::retrieve_url(const std::string& url,
 
 	std::stringstream logprefix;
 	logprefix << "utils::retrieve_url(" << http_method_str(method) << " " << url << ")"
-	          << "[" << (body != nullptr ? body->c_str() : "-") << "]";
+		<< "[" << (body != nullptr ? body->c_str() : "-") << "]";
 
 	if (res != CURLE_OK) {
 		std::string errmsg(errbuf);
