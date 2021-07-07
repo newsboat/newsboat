@@ -370,11 +370,10 @@ std::string utils::retrieve_url(const std::string& url,
 		std::string errmsg(errbuf);
 		if (errmsg.empty()) {
 			errmsg = curl_easy_strerror(res);
-		} else {
-			if (*errmsg.crbegin() != '\n') {
-				// Prettify: end logmessage with newline if not already done by libcurl
-				errmsg += "\n";
-			}
+		}
+		if (!errmsg.empty() && errmsg.back() == '\n') {
+			// Prettify: drop superflous newlines introduced by libcurl
+			errmsg.pop_back();
 		}
 
 		if (body != nullptr) {
