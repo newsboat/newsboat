@@ -355,9 +355,51 @@ std::string utils::retrieve_url(const std::string& url,
 		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo.c_str());
 	}
 
-	curl_easy_perform(easyhandle);
+	// Error handling as per https://curl.se/libcurl/c/CURLOPT_ERRORBUFFER.html
+	char errbuf[CURL_ERROR_SIZE];
+	// Please note that we clobber CURLOPT_ERRORBUFFER here in case of cached handles
+	// Currently, this is the only place we do this, so this should be fine.
+	// There does not seem to be a way to query curlopts, so we cannot save the old errorbuf value here...
+	curl_easy_setopt(easyhandle, CURLOPT_ERRORBUFFER, errbuf);
+	errbuf[0] = '\0';
+
+	CURLcode res = curl_easy_perform(easyhandle);
+
+	// Report curl errors
+	if (res != CURLE_OK) {
+		std::string errmsg(errbuf);
+		if (errmsg.empty()) {
+			errmsg = curl_easy_strerror(res);
+		} else {
+			if (*errmsg.crbegin() != '\n') {
+				// Prettify: end logmessage with newline if not already done by libcurl
+				errmsg += "\n";
+			}
+		}
+
+		if (body != nullptr) {
+			LOG(Level::ERROR,
+				"utils::retrieve_url(%s %s)[%s]: LibCURL error (%d): %s",
+				http_method_str(method),
+				url,
+				body,
+				res,
+				errmsg);
+		} else {
+			LOG(Level::ERROR, "utils::retrieve_url(%s)[-]: LibCURL error (%d): %s", url, res, errmsg);
+		}
+
+		return std::string("");
+	}
+
+	// Successful query
 	if (!cached_handle) {
 		curl_easy_cleanup(easyhandle);
+	} else {
+		// Reset ERRORBUFFER: has to be valid for the whole lifetime of the handle
+		// NULL is the default value of this property according to man (3) CURLOPT_ERRORBUFFER
+		// See the clobbering note above.
+		curl_easy_setopt(easyhandle, CURLOPT_ERRORBUFFER, NULL);
 	}
 
 	if (body != nullptr) {
