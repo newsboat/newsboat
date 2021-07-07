@@ -365,7 +365,10 @@ std::string utils::retrieve_url(const std::string& url,
 
 	CURLcode res = curl_easy_perform(easyhandle);
 
-	// Report curl errors
+	std::stringstream logprefix;
+	logprefix << "utils::retrieve_url(" << http_method_str(method) << " " << url << ")"
+	          << "[" << (body != nullptr ? body->c_str() : "-") << "]";
+
 	if (res != CURLE_OK) {
 		std::string errmsg(errbuf);
 		if (errmsg.empty()) {
@@ -376,33 +379,12 @@ std::string utils::retrieve_url(const std::string& url,
 			errmsg.pop_back();
 		}
 
-		if (body != nullptr) {
-			LOG(Level::ERROR,
-				"utils::retrieve_url(%s %s)[%s]: LibCURL error (%d): %s",
-				http_method_str(method),
-				url,
-				body,
-				res,
-				errmsg);
-		} else {
-			LOG(Level::ERROR, "utils::retrieve_url(%s)[-]: LibCURL error (%d): %s", url, res, errmsg);
-		}
-
+		LOG(Level::ERROR, "%s: LibCURL error (%d): %s", logprefix.str(), res, errmsg);
 		buf = "";
 	} else {
-		if (body != nullptr) {
-			LOG(Level::DEBUG,
-				"utils::retrieve_url(%s %s)[%s]: %s",
-				http_method_str(method),
-				url,
-				body,
-				buf);
-		} else {
-			LOG(Level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url, buf);
-		}
+		LOG(Level::DEBUG, "%s: %s", logprefix.str(), buf);
 	}
 
-	// Successful query
 	if (!cached_handle) {
 		curl_easy_cleanup(easyhandle);
 	} else {
