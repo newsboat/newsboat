@@ -389,7 +389,18 @@ std::string utils::retrieve_url(const std::string& url,
 			LOG(Level::ERROR, "utils::retrieve_url(%s)[-]: LibCURL error (%d): %s", url, res, errmsg);
 		}
 
-		return std::string("");
+		buf = "";
+	} else {
+		if (body != nullptr) {
+			LOG(Level::DEBUG,
+				"utils::retrieve_url(%s %s)[%s]: %s",
+				http_method_str(method),
+				url,
+				body,
+				buf);
+		} else {
+			LOG(Level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url, buf);
+		}
 	}
 
 	// Successful query
@@ -400,17 +411,6 @@ std::string utils::retrieve_url(const std::string& url,
 		// NULL is the default value of this property according to man (3) CURLOPT_ERRORBUFFER
 		// See the clobbering note above.
 		curl_easy_setopt(easyhandle, CURLOPT_ERRORBUFFER, NULL);
-	}
-
-	if (body != nullptr) {
-		LOG(Level::DEBUG,
-			"utils::retrieve_url(%s %s)[%s]: %s",
-			http_method_str(method),
-			url,
-			body,
-			buf);
-	} else {
-		LOG(Level::DEBUG, "utils::retrieve_url(%s)[-]: %s", url, buf);
 	}
 
 	return buf;
