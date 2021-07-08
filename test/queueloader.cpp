@@ -135,7 +135,7 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 		"another.mp3",
 		"a different one.ogg",
 		"episode 0024.ogg",
-		"one more.mp3"
+		"another one.mp3"
 	};
 	const auto statuses = std::vector<DlStatus> {
 		DlStatus::QUEUED,
@@ -167,7 +167,7 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 		R"(https://pods.example.com/new%20one "a different one.ogg" played)");
 	REQUIRE(queue_contents[3] ==
 		R"(https://pods.example.com/another "episode 0024.ogg" downloaded)");
-	REQUIRE(queue_contents[4] == R"(https://example.com/sample "one more.mp3")");
+	REQUIRE(queue_contents[4] == R"(https://example.com/sample "another one.mp3")");
 	REQUIRE(queue_contents[5] == R"(https://example.com/sentry.mp4 "sentry.mp4")");
 	REQUIRE(queue_contents[6] == R"()");
 }
