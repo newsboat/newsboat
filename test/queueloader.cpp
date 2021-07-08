@@ -66,7 +66,8 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 		DlStatus::FAILED,
 		DlStatus::ALREADY_DOWNLOADED,
 		DlStatus::READY,
-		DlStatus::PLAYED
+		DlStatus::PLAYED,
+		DlStatus::RENAME_FAILED
 		// Not including DlStatus::Downloading because that aborts the reload
 	};
 
@@ -127,18 +128,21 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 		"https://www.example.com/url2",
 		"https://pods.example.com/new%20one",
 		"https://pods.example.com/another",
+		"https://example.com/sample"
 	};
 	const auto filenames = std::vector<std::string> {
 		"first.mp4",
 		"another.mp3",
 		"a different one.ogg",
 		"episode 0024.ogg",
+		"another one.mp3"
 	};
 	const auto statuses = std::vector<DlStatus> {
 		DlStatus::QUEUED,
 		DlStatus::FINISHED,
 		DlStatus::PLAYED,
-		DlStatus::READY
+		DlStatus::READY,
+		DlStatus::RENAME_FAILED
 	};
 
 	for (size_t i = 0; i < urls.size(); ++i) {
@@ -148,14 +152,14 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 		downloads.back().set_status(statuses[i]);
 	}
 
-	REQUIRE(downloads.size() == 4);
+	REQUIRE(downloads.size() == 5);
 
 	queue_loader.reload(downloads);
 
-	REQUIRE(downloads.size() == 5);
+	REQUIRE(downloads.size() == 6);
 
 	const auto queue_contents = TestHelpers::file_contents(queueFile.get_path());
-	REQUIRE(queue_contents.size() == 6);
+	REQUIRE(queue_contents.size() == 7);
 	REQUIRE(queue_contents[0] == R"(https://example.com/url1 "first.mp4")");
 	REQUIRE(queue_contents[1] ==
 		R"(https://www.example.com/url2 "another.mp3" finished)");
@@ -163,8 +167,9 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 		R"(https://pods.example.com/new%20one "a different one.ogg" played)");
 	REQUIRE(queue_contents[3] ==
 		R"(https://pods.example.com/another "episode 0024.ogg" downloaded)");
-	REQUIRE(queue_contents[4] == R"(https://example.com/sentry.mp4 "sentry.mp4")");
-	REQUIRE(queue_contents[5] == R"()");
+	REQUIRE(queue_contents[4] == R"(https://example.com/sample "another one.mp3")");
+	REQUIRE(queue_contents[5] == R"(https://example.com/sentry.mp4 "sentry.mp4")");
+	REQUIRE(queue_contents[6] == R"()");
 }
 
 TEST_CASE("reload() adds downloads from the queue file to the array",
@@ -371,7 +376,8 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 		DlStatus::ALREADY_DOWNLOADED,
 		DlStatus::READY,
 		DlStatus::PLAYED,
-		DlStatus::FINISHED
+		DlStatus::FINISHED,
+		DlStatus::RENAME_FAILED
 	};
 	for (const auto status : other_statuses) {
 		downloads.emplace_back(empty_callback);
@@ -429,7 +435,8 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 		DlStatus::FAILED,
 		DlStatus::ALREADY_DOWNLOADED,
 		DlStatus::READY,
-		DlStatus::PLAYED
+		DlStatus::PLAYED,
+		DlStatus::RENAME_FAILED
 	};
 	for (const auto status : other_statuses) {
 		downloads.emplace_back(empty_callback);

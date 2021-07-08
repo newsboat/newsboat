@@ -79,6 +79,8 @@ const std::string Download::status_text() const
 		return _s("ready");
 	case DlStatus::PLAYED:
 		return _s("played");
+	case DlStatus::RENAME_FAILED:
+		return _s("rename failed");
 	default:
 		return _s("unknown (bug).");
 	}

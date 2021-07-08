@@ -120,8 +120,11 @@ void PodDlThread::run()
 			LOG(Level::DEBUG,
 				"PodDlThread::run: download complete, deleting "
 				"temporary suffix");
-			rename(filename.c_str(), dl->filename().c_str());
-			dl->set_status(DlStatus::READY);
+			if (rename(filename.c_str(), dl->filename().c_str()) == 0) {
+				dl->set_status(DlStatus::READY);
+			} else {
+				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
+			}
 		} else if (dl->status() != DlStatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {

@@ -15,7 +15,8 @@ enum class DlStatus {
 	FAILED,
 	ALREADY_DOWNLOADED,
 	READY,
-	PLAYED
+	PLAYED,
+	RENAME_FAILED
 };
 
 class Download {

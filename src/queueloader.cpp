@@ -69,6 +69,7 @@ nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_down
 		case DlStatus::ALREADY_DOWNLOADED:
 		case DlStatus::READY:
 		case DlStatus::PLAYED:
+		case DlStatus::RENAME_FAILED:
 			LOG(Level::DEBUG,
 				"QueueLoader::reload: storing %s to new vector",
 				dl.url());
@@ -231,6 +232,7 @@ void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 		case DlStatus::DELETED:
 		case DlStatus::FAILED:
 		case DlStatus::ALREADY_DOWNLOADED:
+		case DlStatus::RENAME_FAILED:
 			break;
 		}
 		f << std::endl;
