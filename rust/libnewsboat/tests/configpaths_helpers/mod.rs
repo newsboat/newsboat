@@ -7,7 +7,6 @@
 pub use libc;
 
 use libnewsboat::configpaths::ConfigPaths;
-use rand::random;
 use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::{fs, path};
@@ -34,12 +33,12 @@ impl FileSentries {
     /// Create a new struct with random strings for sentries.
     pub fn new() -> FileSentries {
         FileSentries {
-            config: random::<u32>().to_string() + "config",
-            urls: random::<u32>().to_string() + "urls",
-            cache: random::<u32>().to_string() + "cache",
-            queue: random::<u32>().to_string() + "queue",
-            search: random::<u32>().to_string() + "search",
-            cmdline: random::<u32>().to_string() + "cmdline",
+            config: fastrand::u32(..).to_string() + "config",
+            urls: fastrand::u32(..).to_string() + "urls",
+            cache: fastrand::u32(..).to_string() + "cache",
+            queue: fastrand::u32(..).to_string() + "queue",
+            search: fastrand::u32(..).to_string() + "search",
+            cmdline: fastrand::u32(..).to_string() + "cmdline",
         }
     }
 }

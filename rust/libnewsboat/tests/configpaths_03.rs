@@ -1,5 +1,4 @@
 use libnewsboat::configpaths::ConfigPaths;
-use rand::random;
 use section_testing::{enable_sections, section};
 use std::{env, fs, path};
 use tempfile::TempDir;
@@ -84,7 +83,7 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
             let config_home = tmp
                 .path()
                 .join("config")
-                .join(random::<u32>().to_string());
+                .join(fastrand::u32(..).to_string());
             env::set_var("XDG_CONFIG_HOME", &config_home);
 
             env::remove_var("XDG_DATA_HOME");
@@ -122,7 +121,7 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
             let data_home = tmp
                 .path()
                 .join("data")
-                .join(random::<u32>().to_string());
+                .join(fastrand::u32(..).to_string());
             env::set_var("XDG_DATA_HOME", &data_home);
 
             let config_dir = tmp.path().join(".config").join("newsboat");
@@ -156,13 +155,13 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
             let config_home = tmp
                 .path()
                 .join("config")
-                .join(random::<u32>().to_string());
+                .join(fastrand::u32(..).to_string());
             env::set_var("XDG_CONFIG_HOME", &config_home);
 
             let data_home = tmp
                 .path()
                 .join("data")
-                .join(random::<u32>().to_string());
+                .join(fastrand::u32(..).to_string());
             env::set_var("XDG_DATA_HOME", &data_home);
 
             let config_dir = config_home.join("newsboat");

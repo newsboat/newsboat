@@ -176,7 +176,7 @@ pub fn quote_if_necessary(input: String) -> String {
 }
 
 pub fn get_random_value(max: u32) -> u32 {
-    rand::random::<u32>() % max
+    fastrand::u32(..) % max
 }
 
 pub fn is_valid_color(color: &str) -> bool {
