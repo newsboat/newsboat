@@ -563,6 +563,14 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	if (!tokens.empty()) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);
+			const std::string save_path = cfg->get_configvalue("save-path");
+
+			if (utils::resolve_tilde("~/") == save_path) {
+				LOG(Level::INFO, "No save-path configuration found");
+				filename = tokens[1][0] != '~' ? save_path + filename : filename;
+			} else { 
+				filename = tokens[1][0] != '~' ? save_path + "/" + filename : filename;
+			}
 
 			if (filename == "") {
 				v->get_statusline().show_error(_("Aborted saving."));
