@@ -2,7 +2,7 @@ freebsd_resource_settings: &freebsd_resource_settings
   cpu: 4
   memory: 8GB
 
-freebsd_task:
+task:
     matrix:
         - name: FreeBSD 11.4
           freebsd_instance:
@@ -74,7 +74,7 @@ freebsd_task:
         - mv $HOME/.cargo/registry/ $HOME/cargo-cache/ || true
         - mv $HOME/.cargo/git/db/ $HOME/cargo-cache/git/ || true
 
-32bit_ubuntu_task:
+task:
     name: Linux i686 (Ubuntu 18.04)
     container:
         greedy: true
@@ -99,7 +99,7 @@ freebsd_task:
         - cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints -A unknown-lints
     before_cache_script: *before_cache_script
 
-macos_task:
+task:
     cargo_cache: *cargo_cache
 
     after_cache_script: *after_cache_script
@@ -162,7 +162,7 @@ macos_task:
               CXX: g++
               RUST: 1.51.0
 
-formatting_task:
+task:
     name: Code formatting
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
@@ -174,7 +174,7 @@ formatting_task:
           # changes; that'll fail the build, which is exactly what we need
         - git diff --exit-code
 
-linux_task:
+task:
     env:
         RUSTFLAGS: '-D warnings'
         JOBS: 12
@@ -359,7 +359,7 @@ linux_task:
     clippy_script: *clippy_script
     before_cache_script: *before_cache_script
 
-address_sanitizer_task:
+task:
     name: AddressSanitizer (Clang 12, Ubuntu 21.04)
 
     container:
@@ -387,7 +387,7 @@ address_sanitizer_task:
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
 
-depslist_task:
+task:
     name: Dependencies list is up to date
     skip: "!changesInclude('.cirrus.yml', '**.{h,cpp}')"
 
@@ -410,7 +410,7 @@ depslist_task:
           # Otherwise this whole script exits with 0
         - git diff --exit-code || (echo 'WARNING: the above diff is produced by GCC. Copy it if you only have Clang installed; otherwise just run `make depslist` and commit the result'; false)
 
-undefined_behavior_sanitizer_task:
+task:
     name: UB Sanitizer (Clang 12, Ubuntu 21.04)
 
     container:
@@ -438,7 +438,7 @@ undefined_behavior_sanitizer_task:
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
 
-asciidoctor_warnings_task:
+task:
     name: Asciidoctor with warnings-as-errors
     skip: "!changesInclude('.cirrus.yml', 'doc/*')"
 
@@ -452,7 +452,7 @@ asciidoctor_warnings_task:
 
     script: make doc
 
-i18nspector_task:
+task:
     name: .po files
     skip: "!changesInclude('.cirrus.yml', 'po/*.{po,pot}')"
 
@@ -468,7 +468,7 @@ i18nspector_task:
     # warnings.
     script: make run-i18nspector | tee i18nspector.log && ! egrep --silent "^(E|W):" i18nspector.log
 
-no_dbg_macros_task:
+task:
     name: "No dbg! macros in Rust code"
     skip: "!changesInclude('.cirrus.yml', '**.rs')"
 
