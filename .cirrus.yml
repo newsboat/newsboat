@@ -2,7 +2,7 @@ freebsd_resource_settings: &freebsd_resource_settings
   cpu: 4
   memory: 8GB
 
-freebsd_task:
+task:
     matrix:
         - name: FreeBSD 11.4
           freebsd_instance:
@@ -74,14 +74,15 @@ freebsd_task:
         - mv $HOME/.cargo/registry/ $HOME/cargo-cache/ || true
         - mv $HOME/.cargo/git/db/ $HOME/cargo-cache/git/ || true
 
-32bit_ubuntu_task:
+task:
     name: Linux i686 (Ubuntu 18.04)
     container:
+        greedy: true
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
     cargo_cache: *cargo_cache
     env:
         RUSTFLAGS: '-D warnings'
-        JOBS: 3
+        JOBS: 12
     after_cache_script: *after_cache_script
     build_script: &build_script
         - make -j${JOBS} --keep-going all test
@@ -98,7 +99,7 @@ freebsd_task:
         - cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints -A unknown-lints
     before_cache_script: *before_cache_script
 
-macos_task:
+task:
     cargo_cache: *cargo_cache
 
     after_cache_script: *after_cache_script
@@ -161,7 +162,7 @@ macos_task:
               CXX: g++
               RUST: 1.51.0
 
-formatting_task:
+task:
     name: Code formatting
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
@@ -173,16 +174,17 @@ formatting_task:
           # changes; that'll fail the build, which is exactly what we need
         - git diff --exit-code
 
-linux_task:
+task:
     env:
         RUSTFLAGS: '-D warnings'
-        JOBS: 3
+        JOBS: 12
 
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
         # Newsboat release day
         - name: MSRV, GCC 5 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-5
@@ -191,6 +193,7 @@ linux_task:
                 rust_version: 1.51.0
         - name: MSRV, GCC 11 (Ubuntu 21.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-11
@@ -200,6 +203,7 @@ linux_task:
 
         - name: GCC 11, more warnings and checks (Ubuntu 21.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-11
@@ -209,6 +213,7 @@ linux_task:
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 12, more warnings and checks (Ubuntu 21.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-12
@@ -218,6 +223,7 @@ linux_task:
 
         - name: Rust stable, GCC 5 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-5
@@ -225,6 +231,7 @@ linux_task:
                 cxx: g++-5
         - name: Rust stable, GCC 6 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-6
@@ -232,6 +239,7 @@ linux_task:
                 cxx: g++-6
         - name: Rust stable, GCC 7 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-7
@@ -239,6 +247,7 @@ linux_task:
                 cxx: g++-7
         - name: Rust stable, GCC 8 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-8
@@ -246,6 +255,7 @@ linux_task:
                 cxx: g++-8
         - name: Rust stable, GCC 9 (Ubuntu 20.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-9
@@ -253,6 +263,7 @@ linux_task:
                 cxx: g++-9
         - name: Rust stable, GCC 10 (Ubuntu 20.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-10
@@ -260,6 +271,7 @@ linux_task:
                 cxx: g++-10
         - name: Rust stable, GCC 11 (Ubuntu 21.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-11
@@ -267,6 +279,7 @@ linux_task:
                 cxx: g++-11
         - name: Rust stable, Clang 4.0 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-4.0
@@ -274,6 +287,7 @@ linux_task:
                 cxx: clang++-4.0
         - name: Rust stable, Clang 5.0 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-5.0
@@ -281,6 +295,7 @@ linux_task:
                 cxx: clang++-5.0
         - name: Rust stable, Clang 6.0 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-6.0
@@ -288,6 +303,7 @@ linux_task:
                 cxx: clang++-6.0
         - name: Rust stable, Clang 7 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-7
@@ -295,6 +311,7 @@ linux_task:
                 cxx: clang++-7
         - name: Rust stable, Clang 8 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-8
@@ -302,6 +319,7 @@ linux_task:
                 cxx: clang++-8
         - name: Rust stable, Clang 9 (Ubuntu 18.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-9
@@ -309,6 +327,7 @@ linux_task:
                 cxx: clang++-9
         - name: Rust stable, Clang 10 (Ubuntu 20.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-10
@@ -316,6 +335,7 @@ linux_task:
                 cxx: clang++-10
         - name: Rust stable, Clang 11 (Ubuntu 20.10)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_20.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-11
@@ -323,6 +343,7 @@ linux_task:
                 cxx: clang++-11
         - name: Rust stable, Clang 12 (Ubuntu 21.04)
           container:
+            greedy: true
             dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-12
@@ -338,10 +359,11 @@ linux_task:
     clippy_script: *clippy_script
     before_cache_script: *before_cache_script
 
-address_sanitizer_task:
+task:
     name: AddressSanitizer (Clang 12, Ubuntu 21.04)
 
     container:
+      greedy: true
       dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
       docker_arguments:
           # We need llvm-symbolizer from llvm-12-tools to demangle symbols in
@@ -353,7 +375,7 @@ address_sanitizer_task:
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
       ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
-      JOBS: 3
+      JOBS: 12
 
     cargo_cache: *cargo_cache
 
@@ -365,11 +387,12 @@ address_sanitizer_task:
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
 
-depslist_task:
+task:
     name: Dependencies list is up to date
     skip: "!changesInclude('.cirrus.yml', '**.{h,cpp}')"
 
     container:
+      greedy: true
       dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
       docker_arguments:
           cxx_package: g++-9
@@ -377,7 +400,7 @@ depslist_task:
           cxx: g++-9
 
     env:
-      JOBS: 3
+      JOBS: 12
 
     script:
           # Build in debug mode to speed things up
@@ -387,10 +410,11 @@ depslist_task:
           # Otherwise this whole script exits with 0
         - git diff --exit-code || (echo 'WARNING: the above diff is produced by GCC. Copy it if you only have Clang installed; otherwise just run `make depslist` and commit the result'; false)
 
-undefined_behavior_sanitizer_task:
+task:
     name: UB Sanitizer (Clang 12, Ubuntu 21.04)
 
     container:
+      greedy: true
       dockerfile: docker/ubuntu_21.04-build-tools.dockerfile
       docker_arguments:
           # We need llvm-symbolizer from llvm-12-tools to demangle symbols in
@@ -402,7 +426,7 @@ undefined_behavior_sanitizer_task:
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
       UBSAN_OPTIONS: "suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1"
-      JOBS: 3
+      JOBS: 12
 
     cargo_cache: *cargo_cache
 
@@ -414,7 +438,7 @@ undefined_behavior_sanitizer_task:
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
 
-asciidoctor_warnings_task:
+task:
     name: Asciidoctor with warnings-as-errors
     skip: "!changesInclude('.cirrus.yml', 'doc/*')"
 
@@ -428,7 +452,7 @@ asciidoctor_warnings_task:
 
     script: make doc
 
-i18nspector_task:
+task:
     name: .po files
     skip: "!changesInclude('.cirrus.yml', 'po/*.{po,pot}')"
 
@@ -444,7 +468,7 @@ i18nspector_task:
     # warnings.
     script: make run-i18nspector | tee i18nspector.log && ! egrep --silent "^(E|W):" i18nspector.log
 
-no_dbg_macros_task:
+task:
     name: "No dbg! macros in Rust code"
     skip: "!changesInclude('.cirrus.yml', '**.rs')"
 
