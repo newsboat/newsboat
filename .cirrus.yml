@@ -3,7 +3,7 @@ freebsd_resource_settings: &freebsd_resource_settings
   memory: 8GB
 
 task:
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'docker/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     matrix:
         - name: FreeBSD 11.4
           freebsd_instance:
@@ -77,7 +77,7 @@ task:
 
 task:
     name: Linux i686 (Ubuntu 18.04)
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     container:
         greedy: true
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
@@ -102,7 +102,7 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     cargo_cache: *cargo_cache
 
     after_cache_script: *after_cache_script
@@ -167,7 +167,7 @@ task:
 
 task:
     name: Code formatting
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
         cpu: 1
@@ -179,7 +179,7 @@ task:
         - git diff --exit-code
 
 task:
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     env:
         RUSTFLAGS: '-D warnings'
         JOBS: 10
@@ -366,7 +366,7 @@ task:
 
 task:
     name: AddressSanitizer (Clang 12, Ubuntu 21.04)
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
@@ -395,7 +395,7 @@ task:
 
 task:
     name: Dependencies list is up to date
-    skip: "!changesInclude('.cirrus.yml', '**.{h,cpp}')"
+    skip: "!changesInclude('.cirrus.yml', '*.{h.cpp}', '**/*.{h,cpp}')"
 
     container:
       greedy: true
@@ -418,7 +418,7 @@ task:
 
 task:
     name: UB Sanitizer (Clang 12, Ubuntu 21.04)
-    skip: "changesIncludeOnly('contrib/**', 'doc/**', 'po/**', 'snap/**')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
@@ -447,7 +447,7 @@ task:
 
 task:
     name: Asciidoctor with warnings-as-errors
-    skip: "!changesInclude('.cirrus.yml', 'doc/*')"
+    skip: "!changesInclude('.cirrus.yml', 'doc/*', 'doc/**/*')"
 
     container:
       cpu: 1
@@ -477,7 +477,7 @@ task:
 
 task:
     name: "No dbg! macros in Rust code"
-    skip: "!changesInclude('.cirrus.yml', '**.rs')"
+    skip: "!changesInclude('.cirrus.yml', '*.rs', '**/*.rs')"
 
     container:
       cpu: 1
