@@ -250,6 +250,44 @@ TEST_CASE(
 	}
 }
 
+TEST_CASE("Supports combined short options", "[CliArgsParser]")
+{
+	const std::string filename("cache.db");
+
+	TestHelpers::Opts opts = {"newsboat", "-vc", filename};
+	CliArgsParser args(opts.argc(), opts.argv());
+
+	REQUIRE(args.cache_file() == filename);
+	REQUIRE(args.lock_file() == filename + ".lock");
+	REQUIRE(args.using_nonstandard_configs());
+	REQUIRE(args.show_version() == 1);
+}
+
+TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
+{
+	const std::string filename("cache.db");
+
+	TestHelpers::Opts opts = {"newsboat", "-c" + filename};
+	CliArgsParser args(opts.argc(), opts.argv());
+
+	REQUIRE(args.cache_file() == filename);
+	REQUIRE(args.lock_file() == filename + ".lock");
+	REQUIRE(args.using_nonstandard_configs());
+}
+
+TEST_CASE("Supports `=` between combined short option and value",
+	"[CliArgsParser]")
+{
+	const std::string filename("cache.db");
+
+	TestHelpers::Opts opts = {"newsboat", "-c=" + filename};
+	CliArgsParser args(opts.argc(), opts.argv());
+
+	REQUIRE(args.cache_file() == filename);
+	REQUIRE(args.lock_file() == filename + ".lock");
+	REQUIRE(args.using_nonstandard_configs());
+}
+
 TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 {
 	TestHelpers::TempDir tmp;
