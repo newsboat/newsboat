@@ -481,6 +481,65 @@ mod tests {
     }
 
     #[test]
+    fn t_supports_combined_short_options() {
+        let filename = "cache.db";
+
+        let opts = vec![
+            "newsboat".to_string(),
+            "-vc".to_string(),
+            filename.to_string(),
+        ];
+
+        let args = CliArgsParser::new(opts);
+
+        assert_eq!(args.cache_file, Some(PathBuf::from(filename)));
+        assert_eq!(
+            args.lock_file,
+            Some(PathBuf::from(filename.to_string() + LOCK_SUFFIX))
+        );
+        assert!(args.using_nonstandard_configs());
+        assert_eq!(args.show_version, 1)
+    }
+
+    #[test]
+    fn t_supports_combined_short_option_and_value() {
+        let filename = "cache.db";
+
+        let opts = vec![
+            "newsboat".to_string(),
+            "-c".to_string() + &filename.to_string(),
+        ];
+
+        let args = CliArgsParser::new(opts);
+
+        assert_eq!(args.cache_file, Some(PathBuf::from(filename)));
+        assert_eq!(
+            args.lock_file,
+            Some(PathBuf::from(filename.to_string() + LOCK_SUFFIX))
+        );
+        assert!(args.using_nonstandard_configs());
+    }
+
+    #[test]
+    fn t_supports_equals_between_combined_short_option_and_value() {
+        let filename = "cache.db";
+
+        let opts = vec![
+            "newsboat".to_string(),
+            "-c=".to_string() + &filename.to_string(),
+        ];
+
+        let args = CliArgsParser::new(opts);
+
+        assert_eq!(args.cache_file, Some(PathBuf::from(filename)));
+        assert_eq!(
+            args.lock_file,
+            Some(PathBuf::from(filename.to_string() + LOCK_SUFFIX))
+        );
+        assert!(args.using_nonstandard_configs());
+    }
+
+    #[test]
     fn t_sets_config_file_if_dash_capital_c_is_provided() {
         let filename = "config file";
 
