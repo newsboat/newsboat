@@ -238,13 +238,11 @@ void PbController::initialize(int argc, char* argv[])
 	std::string error_message;
 	if (!fslock->try_lock(lock_file, pid, error_message)) {
 		if (pid != 0) {
-			// pid_t size could vary so cast to known integer format to get correct print format
-			std::int64_t p = pid;
 			std::cout << strprintf::fmt(
 					_("Error: an instance of %s is already "
-						"running (PID: %" PRId64 ")"),
+						"running (PID: %s)"),
 					"Podboat",
-					p)
+					std::to_string(pid))
 				<< std::endl;
 		} else {
 			std::cout << _("Error: ") << error_message << std::endl;

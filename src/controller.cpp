@@ -203,13 +203,11 @@ int Controller::run(const CliArgsParser& args)
 	std::string error;
 	if (!fslock.try_lock(configpaths.lock_file(), pid, error)) {
 		if (pid != 0) {
-			// pid_t size could vary so cast to known integer format to get correct print format
-			std::int64_t p = pid;
 			std::cout << strprintf::fmt(
 					_("Error: an instance of %s is "
-						"already running (PID: %" PRId64 ")"),
+						"already running (PID: %s)"),
 					PROGRAM_NAME,
-					p)
+					std::to_string(pid))
 				<< std::endl;
 		} else {
 			std::cout << _("Error: ") << error << std::endl;

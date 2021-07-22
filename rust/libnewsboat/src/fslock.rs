@@ -109,12 +109,11 @@ impl FsLock {
                 pid
             );
             Err(fmt!(
-                &gettext("Failed to lock '%s', already locked by process with PID %{}"),
+                &gettext("Failed to lock '%s', already locked by process with PID %s"),
                 new_lock_path
                     .to_str()
                     .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
-                PRIi64,
-                *pid as i64
+                &(*pid).to_string()
             ))
         }
     }
