@@ -53,6 +53,12 @@ You can also configure local files as feeds, by prefixing the local path with
 
 	file:///var/log/rss_eventlog.xml
 
+The _urls_ file can also contain comments: lines that start with `#` can
+contain anything you want. Comments are ignored by Newsboat, but can serve as
+documentation for you. Please note, that commenting out URLs for debugging
+purposes might lead to unexpected data loss, see the
+<<cleanup-on-quit,`cleanup-on-quit`>> setting below for details.
+
 Now you can run Newsboat again, and it will present you with a controllable
 list of the URLs that you configured previously. You can now start downloading
 the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
