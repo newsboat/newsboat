@@ -492,8 +492,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		auto parent_itemlist = std::dynamic_pointer_cast<ItemListFormAction>
 			(get_parent_formaction());
 		if (parent_itemlist != nullptr) {
-			parent_itemlist->invalidate_list();
 			parent_itemlist->restore_selected_position();
+			if(!parent_itemlist->unread())
+				parent_itemlist->jump_to_next_item(false);
 		}
 	}
 

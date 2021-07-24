@@ -506,28 +506,31 @@ bool ItemListFormAction::process_operation(Operation op,
 				bool notify = visible_items[0].first->feedurl() != feed->rssurl();
 				for (const auto& item : visible_items) {
 					item.first->set_unread_nowrite_notify(false, notify);
+					invalidate(&item - &visible_items[0]);
 				}
 			}
 			if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
+				invalidate_list();
 			} else { // reposition to first/last item
-				std::string sortorder =
-					cfg->get_configvalue("article-sort-order");
+				if (cfg->get_configvalue_as_bool("show-read-articles")) {
+					std::string sortorder =
+						cfg->get_configvalue("article-sort-order");
 
-				if (sortorder == "date-desc") {
-					LOG(Level::DEBUG,
-						"ItemListFormAction:: "
-						"reset itempos to last");
-					list.set_position(visible_items.size() - 1);
-				}
-				if (sortorder == "date-asc") {
-					LOG(Level::DEBUG,
-						"ItemListFormAction:: "
-						"reset itempos to first");
-					list.set_position(0);
+					if (sortorder == "date-desc") {
+						LOG(Level::DEBUG,
+							"ItemListFormAction:: "
+							"reset itempos to last");
+						list.set_position(visible_items.size() - 1);
+					}
+					if (sortorder == "date-asc") {
+						LOG(Level::DEBUG,
+							"ItemListFormAction:: "
+							"reset itempos to first");
+						list.set_position(0);
+					}
 				}
 			}
-			invalidate_list();
 		} catch (const DbException& e) {
 			v->get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't mark feed read: %s"),
@@ -549,8 +552,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						true);
 				}
 			}
-			if (!cfg->get_configvalue_as_bool(
-					"show-read-articles")) {
+			if (!cfg->get_configvalue_as_bool("show-read-articles")) {
 				list.set_position(0);
 			}
 			invalidate_list();
@@ -1383,8 +1385,13 @@ void ItemListFormAction::restore_selected_position()
 		list.set_position(old_itempos);
 		old_itempos = -1; // Reset
 	}
-
 }
+
+bool ItemListFormAction::unread() {
+	const unsigned int itempos = list.get_position();
+	return visible_items[itempos].first->unread();
+}
+
 
 void ItemListFormAction::save_article(const std::string& filename,
 	std::shared_ptr<RssItem> item)

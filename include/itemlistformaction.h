@@ -73,6 +73,7 @@ public:
 	}
 
 	void restore_selected_position();
+	bool unread();
 
 private:
 	void register_format_styles();
