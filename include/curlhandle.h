@@ -11,22 +11,41 @@ namespace newsboat {
 class CurlHandle {
 private:
 	CURL* h;
-	CurlHandle(const CurlHandle&);
-	CurlHandle& operator=(const CurlHandle&);
+	CurlHandle(const CurlHandle&) = delete;
+	CurlHandle& operator=(const CurlHandle&) = delete;
+
+	void cleanup()
+	{
+		if (h != nullptr) {
+			curl_easy_cleanup(h);
+		}
+	}
 
 public:
 	CurlHandle()
-		: h(0)
+		: h(curl_easy_init())
 	{
-		h = curl_easy_init();
 		if (!h) {
 			throw std::runtime_error("Can't obtain curl handle");
 		}
 	}
 	~CurlHandle()
 	{
-		curl_easy_cleanup(h);
+		cleanup();
 	}
+	CurlHandle(CurlHandle&& other)
+		: h(other.h)
+	{
+		other.h = nullptr;
+	}
+	CurlHandle& operator=(CurlHandle&& other)
+	{
+		cleanup();
+		h = other.h;
+		other.h = nullptr;
+		return *this;
+	}
+
 	CURL* ptr()
 	{
 		return h;
