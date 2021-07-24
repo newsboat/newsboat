@@ -424,17 +424,17 @@ pub fn parse(expr: &str) -> Result<Expression, String> {
         Err(error) => {
             let err = match error {
                 Error::TrailingCharacters(pos, tail) => fmt!(
-                    // The "%{}" thing is a number, a zero-based offset into a string.
-                    &gettext("Parse error: trailing characters after position %{}: %s"),
-                    PRIu64,
-                    pos as u64,
+                    // The first %s is an integer offset at which trailing characters start, the
+                    // second %s is the tail itself.
+                    &gettext("Parse error: trailing characters after position %s: %s"),
+                    &pos.to_string(),
                     tail
                 ),
                 Error::AtPos(pos, expected) => fmt!(
-                    // The "%{}" thing is a number, a zero-based offset into a string.
-                    &gettext("Parse error at position %{}: expected %s"),
-                    PRIu64,
-                    pos as u64,
+                    // The first %s is a zero-based offset into the string, the second %s is the
+                    // description of what the program expected at that point.
+                    &gettext("Parse error at position %s: expected %s"),
+                    &pos.to_string(),
                     &translate_expected(expected)
                 ),
                 Error::Internal => fmt!(&gettext("Internal parse error")),
