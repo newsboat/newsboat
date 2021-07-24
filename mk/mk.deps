@@ -275,9 +275,10 @@ src/feedcontainer.o: src/feedcontainer.cpp include/feedcontainer.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/utils.h
 src/feedhqapi.o: src/feedhqapi.cpp include/feedhqapi.h include/cache.h \
  include/configcontainer.h include/configactionhandler.h \
- include/remoteapi.h config.h include/strprintf.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/remoteapi.h config.h include/curlhandle.h include/strprintf.h \
+ include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
+ include/logger.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/feedhqurlreader.o: src/feedhqurlreader.cpp include/feedhqurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/configcontainer.h \
@@ -380,8 +381,8 @@ src/freshrssapi.o: src/freshrssapi.cpp include/freshrssapi.h \
  include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
  include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/strprintf.h \
- include/utils.h
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/curlhandle.h \
+ include/strprintf.h include/utils.h
 src/freshrssurlreader.o: src/freshrssurlreader.cpp \
  include/freshrssurlreader.h include/urlreader.h 3rd-party/optional.hpp \
  include/configcontainer.h include/configactionhandler.h \
@@ -428,8 +429,8 @@ src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
 src/inoreaderapi.o: src/inoreaderapi.cpp include/inoreaderapi.h \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
  include/remoteapi.h include/urlreader.h 3rd-party/optional.hpp config.h \
- include/strprintf.h include/utils.h 3rd-party/expected.hpp \
- include/logger.h include/strprintf.h \
+ include/curlhandle.h include/strprintf.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/inoreaderurlreader.o: src/inoreaderurlreader.cpp \
@@ -587,9 +588,10 @@ src/newsblururlreader.o: src/newsblururlreader.cpp \
  include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/ocnewsapi.o: src/ocnewsapi.cpp include/ocnewsapi.h \
  include/remoteapi.h include/configcontainer.h \
- include/configactionhandler.h rss/feed.h rss/item.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h config.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/configactionhandler.h rss/feed.h rss/item.h include/curlhandle.h \
+ include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
+ include/logger.h config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/ocnewsurlreader.o: src/ocnewsurlreader.cpp include/ocnewsurlreader.h \
  include/urlreader.h 3rd-party/optional.hpp include/fileurlreader.h \
@@ -600,9 +602,10 @@ src/ocnewsurlreader.o: src/ocnewsurlreader.cpp include/ocnewsurlreader.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/oldreaderapi.o: src/oldreaderapi.cpp include/oldreaderapi.h \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
- include/remoteapi.h config.h include/strprintf.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/remoteapi.h config.h include/curlhandle.h include/strprintf.h \
+ include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
+ include/logger.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/oldreaderurlreader.o: src/oldreaderurlreader.cpp \
  include/oldreaderurlreader.h include/urlreader.h 3rd-party/optional.hpp \
@@ -656,10 +659,10 @@ src/pbview.o: src/pbview.cpp include/pbview.h include/colormanager.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/poddlthread.o: src/poddlthread.cpp include/poddlthread.h \
  include/configcontainer.h include/configactionhandler.h \
- include/download.h config.h include/logger.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/utils.h \
- 3rd-party/expected.hpp 3rd-party/optional.hpp include/logger.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
+ include/download.h include/curlhandle.h config.h include/logger.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
+ include/logger.h target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/queueloader.o: src/queueloader.cpp include/queueloader.h \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/download.h config.h \
