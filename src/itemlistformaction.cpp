@@ -1387,7 +1387,8 @@ void ItemListFormAction::restore_selected_position()
 	}
 }
 
-bool ItemListFormAction::unread() {
+bool ItemListFormAction::unread()
+{
 	const unsigned int itempos = list.get_position();
 	return visible_items[itempos].first->unread();
 }
