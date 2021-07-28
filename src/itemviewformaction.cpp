@@ -488,14 +488,6 @@ bool ItemViewFormAction::process_operation(Operation op,
 		}
 	} else if (quit) {
 		v->pop_current_formaction();
-
-		auto parent_itemlist = std::dynamic_pointer_cast<ItemListFormAction>
-			(get_parent_formaction());
-		if (parent_itemlist != nullptr) {
-			parent_itemlist->restore_selected_position();
-			if(!parent_itemlist->unread())
-				parent_itemlist->jump_to_next_item(false);
-		}
 	}
 
 	update_percent();

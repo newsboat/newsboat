@@ -72,9 +72,6 @@ public:
 		invalidation_mode = InvalidationMode::COMPLETE;
 	}
 
-	void restore_selected_position();
-	bool unread();
-
 private:
 	void register_format_styles();
 
@@ -144,7 +141,6 @@ private:
 	RegexManager& rxman;
 
 	unsigned int old_width;
-	int old_itempos;
 	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
 
 	InvalidationMode invalidation_mode;

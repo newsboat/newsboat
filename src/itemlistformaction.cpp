@@ -36,7 +36,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, filterpos(0)
 	, rxman(r)
 	, old_width(0)
-	, old_itempos(-1)
 	, invalidation_mode(InvalidationMode::NONE)
 	, listfmt(&rxman, "articlelist")
 	, rsscache(cc)
@@ -68,7 +67,6 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			// no need to mark item as read, the itemview already do
 			// that
-			old_itempos = itempos;
 			v->push_itemview(feed,
 				visible_items[itempos].first->guid(),
 				show_searchresult ? search_phrase : "");
@@ -512,24 +510,6 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
 				process_operation(OP_NEXTUNREAD);
 				invalidate_list();
-			} else { // reposition to first/last item
-				if (cfg->get_configvalue_as_bool("show-read-articles")) {
-					std::string sortorder =
-						cfg->get_configvalue("article-sort-order");
-
-					if (sortorder == "date-desc") {
-						LOG(Level::DEBUG,
-							"ItemListFormAction:: "
-							"reset itempos to last");
-						list.set_position(visible_items.size() - 1);
-					}
-					if (sortorder == "date-asc") {
-						LOG(Level::DEBUG,
-							"ItemListFormAction:: "
-							"reset itempos to first");
-						list.set_position(0);
-					}
-				}
 			}
 		} catch (const DbException& e) {
 			v->get_statusline().show_error(strprintf::fmt(
@@ -1370,29 +1350,6 @@ int ItemListFormAction::get_pos(unsigned int realidx)
 	}
 	return -1;
 }
-
-void ItemListFormAction::restore_selected_position()
-{
-	// If the old position was set and it is less than the current itempos, use
-	// it for the feed's itempos.
-	// This corrects a problem which occurs when you open an article, move to
-	// the next article (one or more times), and then exit to the itemlist. If
-	// `"show-read-articles" == false`, the itempos would be "wrong" without
-	// this fix.
-	const unsigned int itempos = list.get_position();
-	if ((old_itempos != -1) && itempos > (unsigned int)old_itempos &&
-		!cfg->get_configvalue_as_bool("show-read-articles")) {
-		list.set_position(old_itempos);
-		old_itempos = -1; // Reset
-	}
-}
-
-bool ItemListFormAction::unread()
-{
-	const unsigned int itempos = list.get_position();
-	return visible_items[itempos].first->unread();
-}
-
 
 void ItemListFormAction::save_article(const std::string& filename,
 	std::shared_ptr<RssItem> item)
