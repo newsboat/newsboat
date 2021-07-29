@@ -208,7 +208,7 @@ pub fn assert_dotdir_not_migrated(dotdir: &path::Path) {
 
 pub fn assert_create_dirs_returns_false(tmp: &TempDir) {
     let readonly = libc::S_IRUSR | libc::S_IXUSR;
-    let _home_chmod = Chmod::new(&tmp.path(), readonly);
+    let _home_chmod = Chmod::new(tmp.path(), readonly);
 
     let paths = ConfigPaths::new();
     assert!(paths.initialized());

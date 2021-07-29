@@ -112,9 +112,9 @@ fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
         "Newsboat version: {}",
         env!("CARGO_PKG_VERSION")
     )?;
-    writeln!(&mut stderr, "{}", get_crash_cause(&panic_info))?;
-    writeln!(&mut stderr, "{}", get_error_message(&panic_info))?;
-    writeln!(&mut stderr, "{}", get_location(&panic_info))?;
+    writeln!(&mut stderr, "{}", get_crash_cause(panic_info))?;
+    writeln!(&mut stderr, "{}", get_error_message(panic_info))?;
+    writeln!(&mut stderr, "{}", get_location(panic_info))?;
 
     writeln!(&mut stderr, "{:#?}", Backtrace::new())?;
 

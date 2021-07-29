@@ -1965,7 +1965,7 @@ mod tests {
             0x81, 0xc3, 0x82, 0xc3, 0x83,
         ];
 
-        let result = convert_text(&input, "ISO-8859-1", "UTF-8");
+        let result = convert_text(input, "ISO-8859-1", "UTF-8");
         // We can't spell out an expected result because different platforms
         // might follow different transliteration rules.
         assert_ne!(result, &[]);

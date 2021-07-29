@@ -132,7 +132,7 @@ mod tests {
             ref input in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
-            s.push_str(&input);
+            s.push_str(input);
             assert!(s.length() <= limit);
         }
 
@@ -143,9 +143,9 @@ mod tests {
             ref input2 in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
-            s.push_str(&input1);
+            s.push_str(input1);
             assert!(s.length() <= limit);
-            s.push_str(&input2);
+            s.push_str(input2);
             assert!(s.length() <= limit);
         }
 
@@ -157,11 +157,11 @@ mod tests {
             ref input3 in "\\PC*")
         {
             let mut s = LimitedString::new(Some(limit));
-            s.push_str(&input1);
+            s.push_str(input1);
             assert!(s.length() <= limit);
-            s.push_str(&input2);
+            s.push_str(input2);
             assert!(s.length() <= limit);
-            s.push_str(&input3);
+            s.push_str(input3);
             assert!(s.length() <= limit);
         }
 

@@ -25,5 +25,5 @@ fn register_fmt(fmt: &mut FmtStrFormatter, key: u8, value: &str) {
 }
 
 fn do_format(fmt: &mut FmtStrFormatter, format: &str, width: u32) -> String {
-    fmt.0.do_format(&format, width)
+    fmt.0.do_format(format, width)
 }

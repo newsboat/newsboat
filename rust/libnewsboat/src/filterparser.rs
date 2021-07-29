@@ -68,8 +68,8 @@ impl Value {
         });
 
         match regex {
-            Ok(regex) => Ok(&regex),
-            Err(message) => Err(&message),
+            Ok(regex) => Ok(regex),
+            Err(message) => Err(message),
         }
     }
 }
@@ -384,10 +384,7 @@ fn internal_parse(expr: &str) -> Result<Expression, Error> {
             if leftovers.is_empty() {
                 Ok(expression)
             } else {
-                Err(Error::TrailingCharacters(
-                    expr.offset(leftovers),
-                    &leftovers,
-                ))
+                Err(Error::TrailingCharacters(expr.offset(leftovers), leftovers))
             }
         }
         Err(error) => {
@@ -940,13 +937,13 @@ mod tests {
         #[test]
         fn does_not_crash_on_any_input(ref input in "\\PC*") {
             // Result explicitly ignored because we just want to make sure this call doesn't panic.
-            let _ = internal_parse(&input);
+            let _ = internal_parse(input);
         }
 
         #[test]
         fn whitespace_doesnt_affect_results_1(ref input in r#" *a *!= *"b" *"#) {
             assert_eq!(
-                internal_parse(&input),
+                internal_parse(input),
                 Ok(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::NotEquals,
@@ -958,7 +955,7 @@ mod tests {
         #[test]
         fn whitespace_doesnt_affect_results_2(ref input in r#" *( *a *!= *"b" *) *"#) {
             assert_eq!(
-                internal_parse(&input),
+                internal_parse(input),
                 Ok(Comparison {
                     attribute: "a".to_string(),
                     op: Operator::NotEquals,
@@ -970,7 +967,7 @@ mod tests {
         #[test]
         fn attribute_names_can_contain_alphanumerics_underscore_dash_and_dot(ref input in r#"[-A-Za-z0-9_.]+ == 0"#) {
             assert!(
-                internal_parse(&input).is_ok(),
+                internal_parse(input).is_ok(),
             );
         }
 
@@ -978,7 +975,7 @@ mod tests {
         fn no_internal_parsing_errors(ref input in "\\PC*") {
             // We should return either a parsed expression or a descriptive error -- never
             // a nondescript "internal error".
-            assert_ne!(internal_parse(&input), Err(Error::Internal));
+            assert_ne!(internal_parse(input), Err(Error::Internal));
         }
     }
 }

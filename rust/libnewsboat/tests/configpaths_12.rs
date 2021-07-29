@@ -20,7 +20,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_dotdir
 
     // Making home directory unwriteable makes it impossible to create
     // a directory there
-    let _dotdir_chmod = configpaths_helpers::Chmod::new(&tmp.path(), S_IRUSR | S_IXUSR);
+    let _dotdir_chmod = configpaths_helpers::Chmod::new(tmp.path(), S_IRUSR | S_IXUSR);
 
     configpaths_helpers::assert_dotdir_not_migrated(&tmp.path().join(".newsboat"));
 }
