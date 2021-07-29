@@ -65,13 +65,11 @@ impl Operator {
             Operator::NotRegexMatches => Operator::RegexMatches
                 .apply(attr, value)
                 .map(|result| !result),
-            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(&value.literal())),
-            Operator::GreaterThan => Ok(string_to_num(attr) > string_to_num(&value.literal())),
-            Operator::LessThanOrEquals => {
-                Ok(string_to_num(attr) <= string_to_num(&value.literal()))
-            }
+            Operator::LessThan => Ok(string_to_num(attr) < string_to_num(value.literal())),
+            Operator::GreaterThan => Ok(string_to_num(attr) > string_to_num(value.literal())),
+            Operator::LessThanOrEquals => Ok(string_to_num(attr) <= string_to_num(value.literal())),
             Operator::GreaterThanOrEquals => {
-                Ok(string_to_num(attr) >= string_to_num(&value.literal()))
+                Ok(string_to_num(attr) >= string_to_num(value.literal()))
             }
             Operator::Between => {
                 let fields = value.literal().split(':').collect::<Vec<_>>();
@@ -134,12 +132,12 @@ fn evaluate_expression(expr: &Expression, item: &impl Matchable) -> Result<bool,
             attribute,
             op,
             value,
-        } => match item.attribute_value(&attribute) {
+        } => match item.attribute_value(attribute) {
             None => Err(MatcherError::AttributeUnavailable {
                 attr: attribute.clone(),
             }),
 
-            Some(ref attr) => op.apply(attr, &value),
+            Some(ref attr) => op.apply(attr, value),
         },
         And(left, right) => evaluate_expression(left, item).and_then(|result| {
             if result {

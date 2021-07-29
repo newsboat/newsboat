@@ -180,7 +180,7 @@ fn resolve_tilde(path: &str) -> String {
 fn resolve_relative(reference: &str, path: &str) -> String {
     let reference = Path::new(reference);
     let path = Path::new(path);
-    let result = utils::resolve_relative(&reference, &path);
+    let result = utils::resolve_relative(reference, path);
     result.to_string_lossy().to_string()
 }
 
@@ -212,7 +212,7 @@ fn unescape_url(url: String, success: &mut bool) -> String {
 }
 
 fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool {
-    match utils::podcast_mime_to_link_type(&mime_type) {
+    match utils::podcast_mime_to_link_type(mime_type) {
         Some(link_type) => {
             *result = link_type as i64;
             true

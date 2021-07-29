@@ -70,7 +70,7 @@ impl<'a> Iterator for SpecifiersIterator<'a> {
             None => {
                 let retval = self.current_string;
                 self.current_string = "";
-                Some(&retval)
+                Some(retval)
             }
         }
     }

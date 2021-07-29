@@ -157,7 +157,7 @@ impl FmtStrFormatter {
             }
             _ => {
                 if let Some(ref els) = *els {
-                    result.push_str(&self.formatting_helper(&els, width))
+                    result.push_str(&self.formatting_helper(els, width))
                 }
             }
         }
@@ -180,7 +180,7 @@ impl FmtStrFormatter {
                 }
 
                 Specifier::Format(c, ref padding) => {
-                    self.format_format(c, &padding, width, &mut result);
+                    self.format_format(c, padding, width, &mut result);
                 }
 
                 Specifier::Text(s) => {
@@ -188,9 +188,9 @@ impl FmtStrFormatter {
                         result.push_str(s);
                     } else {
                         let remaining = width as usize - result.length();
-                        let count = utils::strwidth(&s);
+                        let count = utils::strwidth(s);
                         if remaining >= count {
-                            result.push_str(&s);
+                            result.push_str(s);
                         } else {
                             result.push_str(&utils::substr_with_width(s, remaining));
                         }
@@ -198,7 +198,7 @@ impl FmtStrFormatter {
                 }
 
                 Specifier::Conditional(cond, ref then, ref els) => {
-                    self.format_conditional(cond, &then, &els, width, &mut result)
+                    self.format_conditional(cond, then, els, width, &mut result)
                 }
             }
         }
@@ -621,7 +621,7 @@ mod tests {
         #[test]
         fn does_not_crash_when_formatting_with_no_formats_registered(ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
-            fmt.do_format(&input, 0);
+            fmt.do_format(input, 0);
         }
 
         #[test]
@@ -641,7 +641,7 @@ mod tests {
         #[test]
         fn result_is_never_longer_than_specified_width(length in 1u32..10000, ref input in "\\PC*") {
             let fmt = FmtStrFormatter::new();
-            let result = fmt.do_format(&input, length);
+            let result = fmt.do_format(input, length);
             assert!(utils::strwidth(&result) <= length as usize);
         }
     }

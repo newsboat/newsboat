@@ -72,7 +72,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
 
         let beuter_config_dir = &config_dir.join("newsbeuter");
         let beuter_data_dir = tmp.path().join(".local").join("share").join("newsbeuter");
-        let beuter_sentries = configpaths_helpers::mock_xdg_dirs(&beuter_config_dir, &beuter_data_dir);
+        let beuter_sentries = configpaths_helpers::mock_xdg_dirs(beuter_config_dir, &beuter_data_dir);
 
         let boat_config_dir = config_dir.join("newsboat");
         let boat_data_dir = tmp.path().join(".local").join("share").join("newsboat");
@@ -86,7 +86,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
 
         let beuter_config_dir = tmp.path().join(".config").join("newsbeuter");
         let beuter_data_dir = &data_dir.join("newsbeuter");
-        let beuter_sentries = configpaths_helpers::mock_xdg_dirs(&beuter_config_dir, &beuter_data_dir);
+        let beuter_sentries = configpaths_helpers::mock_xdg_dirs(&beuter_config_dir, beuter_data_dir);
 
         let boat_config_dir = tmp.path().join(".config").join("newsboat");
         let boat_data_dir = data_dir.join("newsboat");
@@ -104,7 +104,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
 
         let beuter_config_dir = &config_dir.join("newsbeuter");
         let beuter_data_dir = &data_dir.join("newsbeuter");
-        let beuter_sentries = configpaths_helpers::mock_xdg_dirs(&beuter_config_dir, &beuter_data_dir);
+        let beuter_sentries = configpaths_helpers::mock_xdg_dirs(beuter_config_dir, beuter_data_dir);
 
         let boat_config_dir = config_dir.join("newsboat");
         let boat_data_dir = data_dir.join("newsboat");

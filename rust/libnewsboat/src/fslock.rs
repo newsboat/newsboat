@@ -71,10 +71,7 @@ impl FsLock {
                 new_lock_path.display()
             );
             let pid = process::id().to_string();
-            if let Err(reason) = file
-                .set_len(0)
-                .and_then(|_| file.write_all(&pid.as_bytes()))
-            {
+            if let Err(reason) = file.set_len(0).and_then(|_| file.write_all(pid.as_bytes())) {
                 log!(Level::Debug, "FsLock: Failed to write PID");
                 return Err(fmt!(
                     &gettext("Failed to write PID to lock file '%s': %s"),

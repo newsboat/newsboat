@@ -1965,7 +1965,7 @@ mod tests {
             0x81, 0xc3, 0x82, 0xc3, 0x83,
         ];
 
-        let result = convert_text(&input, "ISO-8859-1", "UTF-8");
+        let result = convert_text(input, "ISO-8859-1", "UTF-8");
         // We can't spell out an expected result because different platforms
         // might follow different transliteration rules.
         assert_ne!(result, &[]);
@@ -2067,10 +2067,6 @@ mod tests {
 
     #[test]
     fn t_gentabs() {
-        fn genstring(len: usize) -> String {
-            std::iter::repeat("a").take(len).collect::<String>()
-        }
-
         assert_eq!(gentabs(""), 4);
         assert_eq!(gentabs("a"), 4);
         assert_eq!(gentabs("aa"), 4);
@@ -2080,14 +2076,14 @@ mod tests {
         assert_eq!(gentabs("aaaaaa"), 4);
         assert_eq!(gentabs("aaaaaaa"), 4);
         assert_eq!(gentabs("aaaaaaaa"), 3);
-        assert_eq!(gentabs(&genstring(8)), 3);
-        assert_eq!(gentabs(&genstring(9)), 3);
-        assert_eq!(gentabs(&genstring(15)), 3);
-        assert_eq!(gentabs(&genstring(16)), 2);
-        assert_eq!(gentabs(&genstring(20)), 2);
-        assert_eq!(gentabs(&genstring(24)), 1);
-        assert_eq!(gentabs(&genstring(32)), 1);
-        assert_eq!(gentabs(&genstring(100)), 1);
+        assert_eq!(gentabs(&"a".repeat(8)), 3);
+        assert_eq!(gentabs(&"a".repeat(9)), 3);
+        assert_eq!(gentabs(&"a".repeat(15)), 3);
+        assert_eq!(gentabs(&"a".repeat(16)), 2);
+        assert_eq!(gentabs(&"a".repeat(20)), 2);
+        assert_eq!(gentabs(&"a".repeat(24)), 1);
+        assert_eq!(gentabs(&"a".repeat(32)), 1);
+        assert_eq!(gentabs(&"a".repeat(100)), 1);
     }
 
     #[test]
