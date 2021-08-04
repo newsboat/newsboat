@@ -950,6 +950,29 @@ void ItemListFormAction::do_update_visible_items()
 		"ItemListFormAction::do_update_visible_items: size = %" PRIu64,
 		static_cast<uint64_t>(visible_items.size()));
 
+	const unsigned int pos = list.get_position();
+	unsigned int new_pos = pos;
+	for (unsigned int old_i = 0, new_i = 0;
+		old_i < visible_items.size() &&
+		new_i < new_visible_items.size() &&
+		old_i < pos; ) {
+		int cmp = visible_items[old_i].second < new_visible_items[new_i].second ? -1 :
+			(visible_items[old_i].second == new_visible_items[new_i].second ? 0 : 1);
+		if (cmp < 0) {
+			if (new_pos > 0) {
+				new_pos--;
+			}
+			old_i++;
+		} else if (cmp == 0) {
+			old_i++;
+			new_i++;
+		} else {
+			new_pos++;
+			new_i++;
+		}
+	}
+	list.set_position(new_pos);
+
 	visible_items = new_visible_items;
 }
 
