@@ -757,7 +757,7 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 			return true;
 		}
 	}
-	for (unsigned int i = 0; i <= curpos; ++i) {
+	for (unsigned int i = 0; i <= curpos && i < visible_feeds.size(); ++i) {
 		LOG(Level::DEBUG,
 			"FeedListFormAction::jump_to_next_unread_feed: "
 			"visible_feeds[%u] unread items: %u",
