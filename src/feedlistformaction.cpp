@@ -649,38 +649,29 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 {
 	const unsigned int curpos = list.get_position();
 	LOG(Level::DEBUG,
-		"FeedListFormAction::jump_to_previous_unread_feed: searching "
-		"for "
-		"unread feed");
+		"FeedListFormAction::jump_to_previous_unread_feed: searching for unread feed");
 
 	for (int i = curpos - 1; i >= 0; --i) {
+		const auto unread = visible_feeds[i].first->unread_item_count();
 		LOG(Level::DEBUG,
-			"FeedListFormAction::jump_to_previous_unread_feed: "
-			"visible_feeds[%u] unread items: %u",
+			"FeedListFormAction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u",
 			i,
-			visible_feeds[i].first->unread_item_count());
-		if (visible_feeds[i].first->unread_item_count() > 0) {
-			LOG(Level::DEBUG,
-				"FeedListFormAction::jump_to_previous_unread_"
-				"feed:"
-				" hit");
+			unread);
+		if (unread > 0) {
+			LOG(Level::DEBUG, "FeedListFormAction::jump_to_previous_unread_feed: hit");
 			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
 	}
-	for (int i = visible_feeds.size() - 1; i >= static_cast<int>(curpos);
-		--i) {
+	for (int i = visible_feeds.size() - 1; i >= static_cast<int>(curpos); --i) {
+		const auto unread = visible_feeds[i].first->unread_item_count();
 		LOG(Level::DEBUG,
-			"FeedListFormAction::jump_to_previous_unread_feed: "
-			"visible_feeds[%u] unread items: %u",
+			"FeedListFormAction::jump_to_previous_unread_feed: visible_feeds[%u] unread items: %u",
 			i,
-			visible_feeds[i].first->unread_item_count());
-		if (visible_feeds[i].first->unread_item_count() > 0) {
-			LOG(Level::DEBUG,
-				"FeedListFormAction::jump_to_previous_unread_"
-				"feed:"
-				" hit");
+			unread);
+		if (unread > 0) {
+			LOG(Level::DEBUG, "FeedListFormAction::jump_to_previous_unread_feed: hit");
 			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
@@ -738,36 +729,29 @@ bool FeedListFormAction::jump_to_next_unread_feed(unsigned int& feedpos)
 {
 	const unsigned int curpos = list.get_position();
 	LOG(Level::DEBUG,
-		"FeedListFormAction::jump_to_next_unread_feed: searching for "
-		"unread feed");
+		"FeedListFormAction::jump_to_next_unread_feed: searching for unread feed");
 
 	for (unsigned int i = curpos + 1; i < visible_feeds.size(); ++i) {
+		const auto unread = visible_feeds[i].first->unread_item_count();
 		LOG(Level::DEBUG,
-			"FeedListFormAction::jump_to_next_unread_feed: "
-			"visible_feeds[%u] unread items: %u",
+			"FeedListFormAction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u",
 			i,
-			visible_feeds[i].first->unread_item_count());
-		if (visible_feeds[i].first->unread_item_count() > 0) {
-			LOG(Level::DEBUG,
-				"FeedListFormAction::jump_to_next_unread_feed:"
-				" "
-				"hit");
+			unread);
+		if (unread > 0) {
+			LOG(Level::DEBUG, "FeedListFormAction::jump_to_next_unread_feed: hit");
 			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
 		}
 	}
-	for (unsigned int i = 0; i <= curpos; ++i) {
+	for (unsigned int i = 0; i <= curpos && i < visible_feeds.size(); ++i) {
+		const auto unread = visible_feeds[i].first->unread_item_count();
 		LOG(Level::DEBUG,
-			"FeedListFormAction::jump_to_next_unread_feed: "
-			"visible_feeds[%u] unread items: %u",
+			"FeedListFormAction::jump_to_next_unread_feed: visible_feeds[%u] unread items: %u",
 			i,
-			visible_feeds[i].first->unread_item_count());
-		if (visible_feeds[i].first->unread_item_count() > 0) {
-			LOG(Level::DEBUG,
-				"FeedListFormAction::jump_to_next_unread_feed:"
-				" "
-				"hit");
+			unread);
+		if (unread > 0) {
+			LOG(Level::DEBUG, "FeedListFormAction::jump_to_next_unread_feed: hit");
 			list.set_position(i);
 			feedpos = visible_feeds[i].second;
 			return true;
