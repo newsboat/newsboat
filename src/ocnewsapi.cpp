@@ -8,6 +8,7 @@
 #include <memory>
 #include <time.h>
 
+#include "curlhandle.h"
 #include "utils.h"
 
 #define OCNEWS_API "/index.php/apps/news/api/v1-2/"
@@ -15,7 +16,6 @@
 namespace newsboat {
 
 typedef std::unique_ptr<json_object, decltype(*json_object_put)> JsonUptr;
-typedef std::unique_ptr<CURL, decltype(*curl_easy_cleanup)> CurlUptr;
 
 OcNewsApi::OcNewsApi(ConfigContainer* c)
 	: RemoteApi(c)
@@ -312,14 +312,13 @@ bool OcNewsApi::query(const std::string& query,
 	json_object** result,
 	const std::string& post)
 {
-	CurlUptr curlhandle(curl_easy_init(), curl_easy_cleanup);
-	CURL* handle = curlhandle.get();
+	CurlHandle handle;
 
 	std::string url = server + OCNEWS_API + query;
-	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
 	curl_slist* headers = NULL;
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle.ptr(), cfg);
 
 	static auto write_fn =
 	[](void* buffer, size_t size, size_t nmemb, void* userp) {
@@ -329,22 +328,22 @@ bool OcNewsApi::query(const std::string& query,
 		return size * nmemb;
 	};
 	std::string buff;
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, *write_fn);
-	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &buff);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, *write_fn);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &buff);
 
 	if (!post.empty()) {
-		curl_easy_setopt(handle, CURLOPT_POST, 1);
-		curl_easy_setopt(handle, CURLOPT_POSTFIELDS, post.c_str());
-		curl_easy_setopt(handle, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_easy_setopt(handle.ptr(), CURLOPT_POST, 1);
+		curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, post.c_str());
+		curl_easy_setopt(handle.ptr(), CURLOPT_CUSTOMREQUEST, "PUT");
 
 		headers = curl_slist_append(headers, "Content-Type: application/json");
-		curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, headers);
 	}
 
-	curl_easy_setopt(handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-	curl_easy_setopt(handle, CURLOPT_USERPWD, auth.c_str());
+	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	curl_easy_setopt(handle.ptr(), CURLOPT_USERPWD, auth.c_str());
 
-	CURLcode res = curl_easy_perform(handle);
+	CURLcode res = curl_easy_perform(handle.ptr());
 
 	curl_slist_free_all(headers);
 
@@ -357,7 +356,7 @@ bool OcNewsApi::query(const std::string& query,
 	}
 
 	long response_code;
-	curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &response_code);
+	curl_easy_getinfo(handle.ptr(), CURLINFO_RESPONSE_CODE, &response_code);
 	if (response_code != 200) {
 		if (response_code == 401)
 			LOG(Level::CRITICAL,

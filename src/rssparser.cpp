@@ -516,16 +516,16 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 		cfgcont->get_configvalue_as_bool("download-full-page") &&
 		!x->link().empty()) {
 
-		CURL* easyhandle = curl_easy_init();
+		CurlHandle handle;
 		const std::string content = utils::retrieve_url(x->link(), cfgcont, "", nullptr,
-				HTTPMethod::GET, easyhandle);
+				HTTPMethod::GET, handle.ptr());
 		std::string content_mime_type;
 
 		// Determine mime-type based on Content-type header:
 		// Content-type: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 		// Format: https://tools.ietf.org/html/rfc7231#section-3.1.1.1
 		char* value = nullptr;
-		curl_easy_getinfo(easyhandle, CURLINFO_CONTENT_TYPE, &value);
+		curl_easy_getinfo(handle.ptr(), CURLINFO_CONTENT_TYPE, &value);
 		if (value != nullptr) {
 			std::string content_type(value);
 			content_mime_type = content_type.substr(0, content_type.find_first_of(";"));
@@ -534,7 +534,6 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 		}
 
 		x->set_description(content, content_mime_type);
-		curl_easy_cleanup(easyhandle);
 	}
 
 	LOG(Level::DEBUG,

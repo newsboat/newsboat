@@ -24,8 +24,6 @@ class CliArgsParser;
 class ConfigPaths;
 class View;
 
-class CurlHandle;
-
 class Controller {
 public:
 	Controller(ConfigPaths& configpaths);

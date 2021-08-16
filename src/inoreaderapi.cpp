@@ -7,6 +7,7 @@
 #include <thread>
 
 #include "config.h"
+#include "curlhandle.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -44,14 +45,14 @@ static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 
 std::string InoreaderApi::retrieve_auth()
 {
-	CURL* handle = curl_easy_init();
+	CurlHandle handle;
 	Credentials cred = get_credentials("inoreader", "Inoreader");
 	if (cred.user.empty() || cred.pass.empty()) {
 		return "";
 	}
 
-	char* username = curl_easy_escape(handle, cred.user.c_str(), 0);
-	char* password = curl_easy_escape(handle, cred.pass.c_str(), 0);
+	char* username = curl_easy_escape(handle.ptr(), cred.user.c_str(), 0);
+	char* password = curl_easy_escape(handle.ptr(), cred.pass.c_str(), 0);
 
 	std::string postcontent =
 		strprintf::fmt("Email=%s&Passwd=%s", username, password);
@@ -64,13 +65,12 @@ std::string InoreaderApi::retrieve_auth()
 	curl_slist* list = NULL;
 	list = add_app_headers(list);
 
-	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postcontent.c_str());
-	curl_easy_setopt(handle, CURLOPT_URL, INOREADER_LOGIN);
-	curl_easy_perform(handle);
-	curl_easy_cleanup(handle);
+	utils::set_common_curl_options(handle.ptr(), cfg);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
+	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_LOGIN);
+	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(list);
 
 	std::vector<std::string> lines = utils::tokenize(result);
@@ -93,17 +93,16 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 	std::vector<TaggedFeedUrl> urls;
 	curl_slist* custom_headers{};
 
-	CURL* handle = curl_easy_init();
+	CurlHandle handle;
 	std::string result;
 	add_custom_headers(&custom_headers);
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
+	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle, CURLOPT_URL, INOREADER_SUBSCRIPTION_LIST);
-	curl_easy_perform(handle);
-	curl_easy_cleanup(handle);
+	utils::set_common_curl_options(handle.ptr(), cfg);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_SUBSCRIPTION_LIST);
+	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
 	LOG(Level::DEBUG,
@@ -134,7 +133,7 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 
 		json_object_object_get_ex(sub, "id", &node);
 		const char* id = json_object_get_string(node);
-		char* id_uenc = curl_easy_escape(handle, id, 0);
+		char* id_uenc = curl_easy_escape(handle.ptr(), id, 0);
 
 		json_object_object_get_ex(sub, "title", &node);
 		const char* title = json_object_get_string(node);
@@ -312,16 +311,15 @@ std::string InoreaderApi::post_content(const std::string& url,
 	std::string result;
 	curl_slist* custom_headers{};
 
-	CURL* handle = curl_easy_init();
-	utils::set_common_curl_options(handle, cfg);
+	CurlHandle handle;
+	utils::set_common_curl_options(handle.ptr(), cfg);
 	add_custom_headers(&custom_headers);
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle, CURLOPT_POSTFIELDS, postdata.c_str());
-	curl_easy_setopt(handle, CURLOPT_URL, url.c_str());
-	curl_easy_perform(handle);
-	curl_easy_cleanup(handle);
+	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
+	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
+	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
 	LOG(Level::DEBUG,

@@ -10,6 +10,7 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 
+#include "curlhandle.h"
 #include "config.h"
 #include "logger.h"
 #include "utils.h"
@@ -49,25 +50,25 @@ void PodDlThread::run()
 	tv1 = std::chrono::steady_clock::now();
 	++bytecount;
 
-	CURL* easyhandle = curl_easy_init();
-	utils::set_common_curl_options(easyhandle, cfg);
+	CurlHandle handle;
+	utils::set_common_curl_options(handle.ptr(), cfg);
 
-	curl_easy_setopt(easyhandle, CURLOPT_URL, dl->url().c_str());
-	curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, 0);
+	curl_easy_setopt(handle.ptr(), CURLOPT_URL, dl->url().c_str());
+	curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, 0);
 	// set up write functions:
-	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, this);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, this);
 
 	// set up progress notification:
-	curl_easy_setopt(easyhandle, CURLOPT_NOPROGRESS, 0);
+	curl_easy_setopt(handle.ptr(), CURLOPT_NOPROGRESS, 0);
 	curl_easy_setopt(
-		easyhandle, CURLOPT_PROGRESSFUNCTION, progress_callback);
-	curl_easy_setopt(easyhandle, CURLOPT_PROGRESSDATA, this);
+		handle.ptr(), CURLOPT_PROGRESSFUNCTION, progress_callback);
+	curl_easy_setopt(handle.ptr(), CURLOPT_PROGRESSDATA, this);
 
 	// set up max download speed
 	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
 	if (max_dl_speed > 0) {
-		curl_easy_setopt(easyhandle,
+		curl_easy_setopt(handle.ptr(),
 			CURLOPT_MAX_RECV_SPEED_LARGE,
 			(curl_off_t)(max_dl_speed * 1024));
 	}
@@ -98,7 +99,7 @@ void PodDlThread::run()
 			// it's 64 bits. Thus, this cast is either a no-op, or an up-cast
 			// which are always safe.
 			static_cast<int64_t>(sb.st_size));
-		curl_easy_setopt(easyhandle, CURLOPT_RESUME_FROM, sb.st_size);
+		curl_easy_setopt(handle.ptr(), CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
 		f->open(filename, std::fstream::out | std::fstream::app);
 		resumed_download = true;
@@ -107,7 +108,7 @@ void PodDlThread::run()
 	if (f->is_open()) {
 		dl->set_status(DlStatus::DOWNLOADING);
 
-		CURLcode success = curl_easy_perform(easyhandle);
+		CURLcode success = curl_easy_perform(handle.ptr());
 
 		f->close();
 
@@ -138,8 +139,6 @@ void PodDlThread::run()
 	} else {
 		dl->set_status(DlStatus::FAILED, strerror(errno));
 	}
-
-	curl_easy_cleanup(easyhandle);
 }
 
 static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
