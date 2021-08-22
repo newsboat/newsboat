@@ -485,8 +485,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 
 		const int pos = wcrtomb(mbc, static_cast<wchar_t>(wc), &mb_state);
 		if (pos > 0) {
-			mbc[pos] = '\0';
-			result.append(mbc);
+			result.append(mbc, pos);
 		}
 		LOG(Level::DEBUG,
 			"TagSoupPullParser::decode_entity: wc = %u pos = %d "
