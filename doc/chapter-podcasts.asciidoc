@@ -8,3 +8,9 @@ Podcast content is transported in RSS feeds via special tags called
 "enclosures". Newsboat recognizes these enclosures and stores the relevant
 information for every podcast item it finds in an RSS feed. Since version 2.0,
 it also recognizes and handles the Yahoo Media RSS extensions.
+
+Remote APIs don't always list those "enclosures", so podcasts might be missing
+from Newsboat. Such APIs are marked
+<<#_newsboat_as_a_client_for_newsreading_services,in the relevant section of our
+docs>>. If a note is missing but you still don't see enclosures in Newsboat,
+please file an issue and we'll get to the bottom of it!

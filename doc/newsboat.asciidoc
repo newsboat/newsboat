@@ -4,6 +4,7 @@
 :sectanchors:
 :sectlinks:
 :nofooter:
+:warning-caption: pass:[<span style='font-size: 3rem'>&#x26a0;</span>]
 
 == Introduction
 
@@ -659,6 +660,9 @@ OwnCloud News' folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 === Inoreader
+
+WARNING: As of 2021-08-23, Inoreader's API doesn't list enclosures, so Newsboat
+won't display podcasts, cover images etc.
 
 https://inoreader.com/[Inoreader] is a successor to Google Reader.
 
