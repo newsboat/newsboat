@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-09-07 17:49+0300\n"
-"PO-Revision-Date: 2021-06-07 10:10+0200\n"
+"PO-Revision-Date: 2021-09-07 17:43+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
 
@@ -349,9 +349,9 @@ msgid "done."
 msgstr "gotowe."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "Błąd: inny proces %s jest już uruchomiony (PID: %<PRId64>)"
+msgstr "Błąd: inny proces %s jest już uruchomiony (PID: %s)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -646,9 +646,8 @@ msgid "played"
 msgstr "odtworzony"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "nieudany"
+msgstr "nie udało się zmienić nazwy"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -756,9 +755,9 @@ msgstr "Oznaczam wszystkie kanały jako przeczytane..."
 
 #: src/feedlistformaction.cpp:434 src/feedlistformaction.cpp:962
 #: src/itemlistformaction.cpp:640 src/itemlistformaction.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "błąd składniowy komendy filtra `%s': %s"
+msgstr "Błąd: nie udało się przetworzyć filtra `%s': %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:653
 msgid "No filters defined."
@@ -1709,9 +1708,9 @@ msgid "start download on startup"
 msgstr "rozpocznij pobieranie przy starcie"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "Kolejka (%u pobieranych plików, %u wszystkich) - %.2f %s całość%s"
+msgstr "Kolejka (%u pobieranych plików, %u wszystkich) - %.2f %s wszystkich"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1861,9 +1860,9 @@ msgstr "Błąd: kanał jest pusty!"
 #: src/view.cpp:461 src/view.cpp:712 src/view.cpp:759 src/view.cpp:785
 #: src/view.cpp:804 src/view.cpp:842 src/view.cpp:881 src/view.cpp:919
 #: src/view.cpp:945 src/view.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Błąd: nie udało się oznaczyć kanału jako przeczytanego: %s"
+msgstr "Błąd: nie udało się przygotować kanału zapytania: %s"
 
 #: src/view.cpp:613
 msgid "No tags defined."
@@ -1958,16 +1957,14 @@ msgstr "jeden z: ciąg znaków ujęty w znaki cudzysłowu, zakres, liczba"
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
-#, fuzzy
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr "Błąd przetwarzania: dodatkowe znaki po pozycji %{}: %s"
+msgstr "Błąd przetwarzania: dodatkowe znaki po pozycji %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
-#, fuzzy
 msgid "Parse error at position %s: expected %s"
-msgstr "Błąd przetwarzania na pozycji %{}: oczekiwano %s"
+msgstr "Błąd przetwarzania na pozycji %s: oczekiwano %s"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
@@ -1987,10 +1984,9 @@ msgid "Failed to write PID to lock file '%s': %s"
 msgstr "Nie udało się zapisać identyfikatora procesu do pliku blokady '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
-#, fuzzy
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
-"Nie udało się zablokować '%s', zablokowany przez proces o identyfikatorze %{}"
+"Nie udało się zablokować '%s', zablokowany przez proces o identyfikatorze %s"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
