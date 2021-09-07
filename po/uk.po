@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-09-07 17:49+0300\n"
-"PO-Revision-Date: 2021-06-16 15:30+0300\n"
+"PO-Revision-Date: 2021-09-07 17:57+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -349,9 +349,9 @@ msgid "done."
 msgstr "готово."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "Помилка: вже працює копія %s (PID: %<PRId64>)"
+msgstr "Помилка: вже працює копія %s (PID: %s)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -647,9 +647,8 @@ msgid "played"
 msgstr "програно"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "невдало"
+msgstr "не вдалося перейменувати"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -755,9 +754,9 @@ msgstr "Позначаю всі теми як прочитані..."
 
 #: src/feedlistformaction.cpp:434 src/feedlistformaction.cpp:962
 #: src/itemlistformaction.cpp:640 src/itemlistformaction.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "неможливо парсувати вираз фільра `%s': %s"
+msgstr "неможливо розібрати вираз фільтра `%s': %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:653
 msgid "No filters defined."
@@ -1706,9 +1705,9 @@ msgid "start download on startup"
 msgstr "починати завантаження при запуску"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "Черга (%u активних завантажень, всього %u) - %.2f %s всього%s"
+msgstr "Черга (%u активних завантажень, всього %u) - %.2f %s всього"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1858,9 +1857,9 @@ msgstr "Помилка: теми не містять елементів!"
 #: src/view.cpp:461 src/view.cpp:712 src/view.cpp:759 src/view.cpp:785
 #: src/view.cpp:804 src/view.cpp:842 src/view.cpp:881 src/view.cpp:919
 #: src/view.cpp:945 src/view.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Помилка: не можу позначити тему: %s як прочитану"
+msgstr "Помилка: не вдалося підготувати динамічну тему: %s"
 
 #: src/view.cpp:613
 msgid "No tags defined."
@@ -1953,16 +1952,14 @@ msgstr "одне із: рядок у лапках, інтервал, число"
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
-#, fuzzy
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr "Помилка парсеру: зайві символи після позиції %{}: %s"
+msgstr "Помилка парсеру: зайві символи після позиції %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
-#, fuzzy
 msgid "Parse error at position %s: expected %s"
-msgstr "Помилка парсеру на позиціїї %{}: очікувалося %s"
+msgstr "Помилка парсеру на позиції %s: очікувалося %s"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
@@ -1982,10 +1979,9 @@ msgid "Failed to write PID to lock file '%s': %s"
 msgstr "Не вдалося записати PID у блокуючий файл '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
-#, fuzzy
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
-"Не вдалося заблокувати файл '%s', котрий вже заблокований процесом із PID %{}"
+"Не вдалося заблокувати файл '%s', котрий вже заблокований процесом із PID %s"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
