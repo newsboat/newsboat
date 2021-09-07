@@ -757,7 +757,7 @@ msgstr "Oznaczam wszystkie kanały jako przeczytane..."
 #: src/itemlistformaction.cpp:640 src/itemlistformaction.cpp:853
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "Błąd:  nie udało się przetworzyć filtra `%s': %s"
+msgstr "Błąd: nie udało się przetworzyć filtra `%s': %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:653
 msgid "No filters defined."
