@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-09-07 17:49+0300\n"
-"PO-Revision-Date: 2021-06-07 21:16+0200\n"
+"PO-Revision-Date: 2021-09-07 17:29+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: newsboat.cpp:31
@@ -347,9 +347,9 @@ msgid "done."
 msgstr "klaar."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "Fout: er draait al een %s process (PID: %<PRId64>)"
+msgstr "Fout: er draait al een %s process (PID: %s)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -650,9 +650,8 @@ msgid "played"
 msgstr "afgespeeld"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "mislukt"
+msgstr "hernoemen is mislukt"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -758,9 +757,9 @@ msgstr "Bezig met alle feeds als gelezen te markeren..."
 
 #: src/feedlistformaction.cpp:434 src/feedlistformaction.cpp:962
 #: src/itemlistformaction.cpp:640 src/itemlistformaction.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "filterexpressie ‘%s’ ontleden is mislukt: %s"
+msgstr "Fout: filterexpressie '%s’ ontleden is mislukt: %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:653
 msgid "No filters defined."
@@ -1708,9 +1707,9 @@ msgid "start download on startup"
 msgstr "start automatisch met downloaden"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "Wachtrij (%u downloads bezig, %u totaal) - %.2f %s totaal%s"
+msgstr "Wachtrij (%u downloads bezig, %u totaal) - %.2f %s totaal"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1860,9 +1859,9 @@ msgstr "Fout: feed bevat geen items!"
 #: src/view.cpp:461 src/view.cpp:712 src/view.cpp:759 src/view.cpp:785
 #: src/view.cpp:804 src/view.cpp:842 src/view.cpp:881 src/view.cpp:919
 #: src/view.cpp:945 src/view.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Fout: feed als gelezen markeren is mislukt: %s"
+msgstr "Fout: voorbereiden van feed-zoekopdrachten is mislukt: %s"
 
 #: src/view.cpp:613
 msgid "No tags defined."
@@ -1958,16 +1957,14 @@ msgstr "een van: tekst tussen aanhalingstekens, inverval, nummer"
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
-#, fuzzy
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr "Fout tijdens ontleding: onverwachte tekens na positie %{}: %s"
+msgstr "Fout tijdens ontleding: onverwachte tekens na positie %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
-#, fuzzy
 msgid "Parse error at position %s: expected %s"
-msgstr "Fout tijdens ontleding op positie %{}: verwachtte %s"
+msgstr "Fout tijdens ontleding op positie %s: verwachtte %s"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
@@ -1987,11 +1984,10 @@ msgid "Failed to write PID to lock file '%s': %s"
 msgstr "PID naar lock bestand schrijven is mislukt: '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
-#, fuzzy
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
 "Het is mislukt om '%s' te vergrendelen, het is al vergrendeld door een "
-"proces met PID %{}"
+"proces met PID %s"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
