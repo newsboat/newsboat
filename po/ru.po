@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-09-07 17:49+0300\n"
-"PO-Revision-Date: 2021-06-16 15:05+0300\n"
+"PO-Revision-Date: 2021-09-07 17:55+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -350,9 +350,9 @@ msgid "done."
 msgstr "сделано."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "Ошибка: уже запущена копия %s (PID: %<PRId64>)"
+msgstr "Ошибка: уже запущена копия %s (PID: %s)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -645,9 +645,8 @@ msgid "played"
 msgstr "проиграно"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "неудачно"
+msgstr "не удалось переименовать"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -753,9 +752,9 @@ msgstr "Отмечаю все ленты как прочитанные..."
 
 #: src/feedlistformaction.cpp:434 src/feedlistformaction.cpp:962
 #: src/itemlistformaction.cpp:640 src/itemlistformaction.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "не удалось разобрать команду фильтрации `%s': %s"
+msgstr "Ошибка: не удалось разобрать выражение фильтра `%s': %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:653
 msgid "No filters defined."
@@ -1704,9 +1703,9 @@ msgid "start download on startup"
 msgstr "начать загрузку сразу после запуска"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "Очередь (активных загрузок %u, всего %u) - %.2f %s всего%s"
+msgstr "Очередь (активных загрузок %u, всего %u) - %.2f %s всего"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1856,9 +1855,9 @@ msgstr "Ошибка: лента не содержит ни одного эле�
 #: src/view.cpp:461 src/view.cpp:712 src/view.cpp:759 src/view.cpp:785
 #: src/view.cpp:804 src/view.cpp:842 src/view.cpp:881 src/view.cpp:919
 #: src/view.cpp:945 src/view.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Ошибка: невозможно отметить ленту как прочитанную: %s"
+msgstr "Ошибка: не удалось подготовить динамическую ленту: %s"
 
 #: src/view.cpp:613
 msgid "No tags defined."
@@ -1951,16 +1950,14 @@ msgstr "одно из: взятая в кавычки строка, интерв
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
-#, fuzzy
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr "Ошибка разбора: лишние символы после позиции %{}: %s"
+msgstr "Ошибка разбора: лишние символы после позиции %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
-#, fuzzy
 msgid "Parse error at position %s: expected %s"
-msgstr "Ошибка разбора в позиции %{}: ожидалось %s"
+msgstr "Ошибка разбора в позиции %s: ожидалось %s"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
@@ -1980,10 +1977,9 @@ msgid "Failed to write PID to lock file '%s': %s"
 msgstr "Не удалось записать PID в файл блокировки '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
-#, fuzzy
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
-"Не удалось заблокировать '%s', который уже заблокирован процессом с PID %{}"
+"Не удалось заблокировать '%s', который уже заблокирован процессом с PID %s"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
