@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-09-07 17:49+0300\n"
-"PO-Revision-Date: 2021-06-06 20:00+0300\n"
+"PO-Revision-Date: 2021-09-08 20:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@msn.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -348,9 +348,9 @@ msgid "done."
 msgstr "bitti."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "Hata: Bir %s oluşumu halihazırda çalışıyor (PID: %<PRId64>)"
+msgstr "Hata: Bir %s oluşumu halihazırda çalışıyor (PID: %s)"
 
 #: src/controller.cpp:213 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -645,9 +645,8 @@ msgid "played"
 msgstr "oynatıldı"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "tamamlanamadı"
+msgstr "yeniden adlandırma başarısız"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -754,9 +753,9 @@ msgstr "Tüm beslemeler okundu olarak imleniyor..."
 
 #: src/feedlistformaction.cpp:434 src/feedlistformaction.cpp:962
 #: src/itemlistformaction.cpp:640 src/itemlistformaction.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "süzgeç ifadesi `%s' ayrıştırılamadı: %s"
+msgstr "Hata: Süzgeç ifadesi `%s' ayrıştırılamadı: %s"
 
 #: src/feedlistformaction.cpp:447 src/itemlistformaction.cpp:653
 msgid "No filters defined."
@@ -1701,9 +1700,9 @@ msgid "start download on startup"
 msgstr "başlangıçta indirmeyi başlat"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "Kuyruk (%u indirme sürüyor, %u toplam) - %.2f %s toplam%s"
+msgstr "Kuyruk (%u indirme sürüyor, %u toplam) - %.2f %s toplam"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1852,9 +1851,9 @@ msgstr "Hata: Beslemede bir şey yok!"
 #: src/view.cpp:461 src/view.cpp:712 src/view.cpp:759 src/view.cpp:785
 #: src/view.cpp:804 src/view.cpp:842 src/view.cpp:881 src/view.cpp:919
 #: src/view.cpp:945 src/view.cpp:964
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Hata: Besleme okundu olarak imlenemedi: %s"
+msgstr "Hata: Sorgu beslemesi hazırlanamadı: %s"
 
 #: src/view.cpp:613
 msgid "No tags defined."
@@ -1946,16 +1945,14 @@ msgstr "şunlardan biri: tırnak içinde dizi, erim, sayı"
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
-#, fuzzy
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr "Ayrıştırma hatası: %{} konumundan sonra fazladan karakterler: %s"
+msgstr "Ayrıştırma hatası: %s konumundan sonra fazladan karakterler: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
-#, fuzzy
 msgid "Parse error at position %s: expected %s"
-msgstr "%{} konumunda ayrıştırma hatası: %s bekleniyordu"
+msgstr "%s konumunda ayrıştırma hatası: %s bekleniyordu"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
@@ -1975,10 +1972,9 @@ msgid "Failed to write PID to lock file '%s': %s"
 msgstr "PID, '%s' kilit dosyasına yazılamadı: %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
-#, fuzzy
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
-"'%s' kilitlenemedi, halihazırda PID'si %{} olan işlem tarafından kiilitlenmiş"
+"'%s' kilitlenemedi, halihazırda PID'si %s olan işlem tarafından kilitlenmiş"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
