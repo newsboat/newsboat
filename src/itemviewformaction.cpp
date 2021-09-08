@@ -203,8 +203,14 @@ bool ItemViewFormAction::process_operation(Operation op,
 		do_redraw = true;
 		break;
 	case OP_ENQUEUE: {
-		if (item->enclosure_url().length() > 0 &&
-			utils::is_http_url(item->enclosure_url())) {
+		if (item->enclosure_url().empty()) {
+			v->get_statusline().show_error(_("Item has no enclosures."));
+			return false;
+		} else if (!utils::is_http_url(item->enclosure_url())) {
+			v->get_statusline().show_error(strprintf::fmt(
+					_("Item's enclosure has non-http link: '%s'"), item->enclosure_url()));
+			return false;
+		} else {
 			const EnqueueResult result = v->get_ctrl()->enqueue_url(item, feed);
 			rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
 			switch (result.status) {
@@ -228,10 +234,6 @@ bool ItemViewFormAction::process_operation(Operation op,
 					strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
 				return false;
 			}
-		} else {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Invalid URL: '%s'"), item->enclosure_url()));
-			return false;
 		}
 	}
 	break;
