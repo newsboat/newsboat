@@ -64,8 +64,9 @@ try:
 
     for line in lines:
 
-        if len(line)<2:
-            # lines must be `url "tag"`, so ignore this line
+        if len(line)<2 or line[0].startswith("#"):
+            # Ignore lines that are not `url "tag"` (at least 2 parts)
+            # and ignore all comments in the file
             print(f"ignoring this line:\n{' '.join(line)}", file=sys.stderr)
             continue
 
