@@ -240,6 +240,8 @@ for this release also includes David Brito and panvicka.
 - Not installing some of the contrib scripts (Alexander Batischev)
 - `newsboat -x` not reporting that another instance is already running (#483)
     (Dennis van der Schagt)
+- Itemlist refreshing while a macro is executing, causing the macro to operate
+    on the wrong items (#70) (Dennis van der Schagt)
 
 
 
