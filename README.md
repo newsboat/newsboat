@@ -21,7 +21,7 @@ Wikipedia](https://en.wikipedia.org/wiki/News_aggregator).
 
 <img
     style="display: block; margin-left: auto; margin-right: auto;"
-    src="https://newsboat.org/images/2.23-screenshot_2x-ec3449d9.png"
+    src="https://newsboat.org/images/2.25-screenshot_2x-33f26153.png"
     alt="Viewing an article in Newsboat"
     />
 
