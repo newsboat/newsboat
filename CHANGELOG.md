@@ -1,22 +1,46 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2021-09-20
+## 2.25 - 2021-09-20
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes: Amrit Brar, noctux, and shenlebantongying.
 
 ### Added
+
 - New elements to style with `color` command: `title`, `hint-key`,
     `hint-keys-delimiter`, `hint-separator`, and `hint-description`. If there is
     no style for one of those elements, the style of `info` is used instead. See
     "Configuring Colors" section in the docs (Alexander Batischev)
+- Podboat: show an error when a podcast can't be renamed (#545) (Kartikeya
+    Gupta)
+- A note that the urls file can contain comments (Lysander Trischler)
+
 ### Changed
+
 - Bumped minimum supported Rust version to 1.51.0
 - Key hints (at the bottom of the screen) are now styled to make them easier to
     read. If you're using a custom colorscheme and want to use these new
     elements, you need to update it; see the "Configuring Colors" section in the
     docs (#1016) (Alexander Batischev)
-### Deprecated
-### Removed
+- Podboat: move to the next item after marking a podcast finished or deleted
+    (Dennis van der Schagt)
+- `purge-deleted` now keeps the cursor near where it was in the list, rather
+    than the *line* it was on (#1728) (Allan Wind)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Michał Siemek), Russian,
+    Ukrainian (Alexander Batischev), and Turkish (Emir Sari)
+- Updated vendored library Catch2 to 2.13.7, and json.hpp to 3.10.2
+
 ### Fixed
-### Security
+
+- A crash when entering a feed with an invalid filter expression (#1665)
+    (Alexander Batischev)
+- Slow scrolling in Podboat (#1375) (Dennis van der Schagt)
+- Slow `mark-all-read` with remote APIs. It's still slow when a filter is
+    applied, but without a filter it's as fast as possible (Alexander Batischev)
+- A crash when `next-unread` is invoked while viewing a tag with no unread feeds
+    (#1734) (Alexander Batischev)
+- A crash on feeds that contain wide characters (e.g. emojis) (mcz)
 
 
 
