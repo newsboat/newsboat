@@ -294,30 +294,35 @@ REDO:
 		}
 		break;
 	case OP_MARKFEEDREAD: {
-		LOG(Level::INFO,
-			"FeedListFormAction: marking feed read at position "
-			"`%s'",
-			feedpos);
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
-			try {
-				{
-					const auto message_lifetime = v->get_statusline().show_message_until_finished(
-							_("Marking feed read..."));
-					v->get_ctrl()->mark_all_read(pos);
-					do_redraw = true;
+		if (!cfg->get_configvalue_as_bool(
+				"confirm-mark-feed-read") ||
+			v->confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
+				_("yn")) == *_("y")) {
+			LOG(Level::INFO,
+				"FeedListFormAction: marking feed read at position "
+				"`%s'",
+				feedpos);
+			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+				try {
+					{
+						const auto message_lifetime = v->get_statusline().show_message_until_finished(
+								_("Marking feed read..."));
+						v->get_ctrl()->mark_all_read(pos);
+						do_redraw = true;
+					}
+					bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
+					if (visible_feeds.size() > (pos + 1) && show_read) {
+						list.set_position(pos + 1);
+					}
+				} catch (const DbException& e) {
+					v->get_statusline().show_error(strprintf::fmt(
+							_("Error: couldn't mark feed read: %s"),
+							e.what()));
 				}
-				bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
-				if (visible_feeds.size() > (pos + 1) && show_read) {
-					list.set_position(pos + 1);
-				}
-			} catch (const DbException& e) {
-				v->get_statusline().show_error(strprintf::fmt(
-						_("Error: couldn't mark feed read: %s"),
-						e.what()));
+			} else {
+				v->get_statusline().show_error(
+					_("No feed selected!")); // should not happen
 			}
-		} else {
-			v->get_statusline().show_error(
-				_("No feed selected!")); // should not happen
 		}
 	}
 	break;

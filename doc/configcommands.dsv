@@ -13,6 +13,7 @@ cache-file||<path>||"~/.newsboat/cache.db" or "~/.local/share/cache.db" (see "Fi
 cleanup-on-quit||[yes/no]||yes||If set to `yes`, then the cache gets locked and superfluous feeds and items are removed, such as feeds that can't be found in the urls configuration file anymore.||cleanup-on-quit no
 color||<element> <fgcolor> <bgcolor> [<attribute> ...]||n/a||Set the foreground color, background color and optional attributes for a certain element.||color background white black
 confirm-delete-all-articles||[yes/no]||yes||If set to `yes`, then Newsboat will ask for confirmation whether the user wants to delete all articles.||confirm-delete-all-articles no
+confirm-mark-feed-read||[yes/no]||yes||If set to `yes`, then Newsboat will ask for confirmation on whether the user wants to mark a feed as read.||confirm-mark-feed-read no
 confirm-mark-all-feeds-read||[yes/no]||yes||If set to `yes`, then Newsboat will ask for confirmation whether the user wants to mark all feeds as read.||confirm-mark-all-feeds-read no
 confirm-exit||[yes/no]||no||If set to `yes`, then Newsboat will ask for confirmation whether the user really wants to quit Newsboat.||confirm-exit yes
 cookie-cache||<path>||""||Set a cookie cache. If set, cookies will be cached in (i.e. read from and written to) this file, using http://www.cookiecentral.com/faq/#3.5[Netscape format].||cookie-cache "~/.newsboat/cookies.txt"

@@ -46,6 +46,7 @@ ConfigContainer::ConfigContainer()
 	{"cleanup-on-quit", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-delete-all-articles", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-mark-all-feeds-read", ConfigData("yes", ConfigDataType::BOOL)},
+	{"confirm-mark-feed-read", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-exit", ConfigData("no", ConfigDataType::BOOL)},
 	{"cookie-cache", ConfigData("", ConfigDataType::PATH)},
 	{"datetime-format", ConfigData("%b %d", ConfigDataType::STR)},

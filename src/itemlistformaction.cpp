@@ -482,56 +482,61 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_MARKFEEDREAD:
-		LOG(Level::INFO, "ItemListFormAction: marking feed read");
-		try {
-			const auto message_lifetime = v->get_statusline().show_message_until_finished(
-					_("Marking feed read..."));
+		if (!cfg->get_configvalue_as_bool(
+				"confirm-mark-feed-read") ||
+			v->confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
+				_("yn")) == *_("y")) {
+			LOG(Level::INFO, "ItemListFormAction: marking feed read");
+			try {
+				const auto message_lifetime = v->get_statusline().show_message_until_finished(
+						_("Marking feed read..."));
 
-			std::vector<std::string> guids;
-			for (const auto& item : visible_items) {
-				const std::string guid = item.first->guid();
-				guids.push_back(guid);
-			}
-			rsscache->mark_items_read_by_guid(guids);
-
-			if (apply_filter) {
-				// We're only viewing a subset of items, so mark them off one by one.
-				v->get_ctrl()->mark_all_read(guids);
-			} else {
-				v->get_ctrl()->mark_all_read(pos);
-			}
-
-			if (visible_items.size() > 0) {
-				std::lock_guard<std::mutex> lock(feed->item_mutex);
-				bool notify = visible_items[0].first->feedurl() != feed->rssurl();
+				std::vector<std::string> guids;
 				for (const auto& item : visible_items) {
-					item.first->set_unread_nowrite_notify(false, notify);
+					const std::string guid = item.first->guid();
+					guids.push_back(guid);
 				}
-			}
-			if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
-				process_operation(OP_NEXTUNREAD);
-			} else { // reposition to first/last item
-				std::string sortorder =
-					cfg->get_configvalue("article-sort-order");
+				rsscache->mark_items_read_by_guid(guids);
 
-				if (sortorder == "date-desc") {
-					LOG(Level::DEBUG,
-						"ItemListFormAction:: "
-						"reset itempos to last");
-					list.set_position(visible_items.size() - 1);
+				if (apply_filter) {
+					// We're only viewing a subset of items, so mark them off one by one.
+					v->get_ctrl()->mark_all_read(guids);
+				} else {
+					v->get_ctrl()->mark_all_read(pos);
 				}
-				if (sortorder == "date-asc") {
-					LOG(Level::DEBUG,
-						"ItemListFormAction:: "
-						"reset itempos to first");
-					list.set_position(0);
+
+				if (visible_items.size() > 0) {
+					std::lock_guard<std::mutex> lock(feed->item_mutex);
+					bool notify = visible_items[0].first->feedurl() != feed->rssurl();
+					for (const auto& item : visible_items) {
+						item.first->set_unread_nowrite_notify(false, notify);
+					}
 				}
+				if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
+					process_operation(OP_NEXTUNREAD);
+				} else { // reposition to first/last item
+					std::string sortorder =
+						cfg->get_configvalue("article-sort-order");
+
+					if (sortorder == "date-desc") {
+						LOG(Level::DEBUG,
+							"ItemListFormAction:: "
+							"reset itempos to last");
+						list.set_position(visible_items.size() - 1);
+					}
+					if (sortorder == "date-asc") {
+						LOG(Level::DEBUG,
+							"ItemListFormAction:: "
+							"reset itempos to first");
+						list.set_position(0);
+					}
+				}
+				invalidate_list();
+			} catch (const DbException& e) {
+				v->get_statusline().show_error(strprintf::fmt(
+						_("Error: couldn't mark feed read: %s"),
+						e.what()));
 			}
-			invalidate_list();
-		} catch (const DbException& e) {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't mark feed read: %s"),
-					e.what()));
 		}
 		break;
 	case OP_MARKALLABOVEASREAD: {
