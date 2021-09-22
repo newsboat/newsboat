@@ -284,6 +284,7 @@ fmt:
 		*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp \
 		test/*.cpp test/test-helpers/*.h test/test-helpers/*.cpp
 	$(CARGO) fmt
+	sort -t '|' -k 1,1 -o doc/configcommands.dsv doc/configcommands.dsv
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
