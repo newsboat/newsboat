@@ -292,10 +292,10 @@ pub fn get_instance() -> &'static Logger {
 #[macro_export]
 macro_rules! log {
     ( $level:expr, $message:expr ) => {
-        logger::get_instance().log($level, $message);
+        logger::get_instance().log($level, $message)
     };
     ( $level:expr, $format:expr, $( $arg:expr ),+ ) => {
-        logger::get_instance().log($level, &format!($format, $( $arg ),+));
+        logger::get_instance().log($level, &format!($format, $( $arg ),+))
     }
 }
 
