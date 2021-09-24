@@ -286,7 +286,7 @@ pub fn get_instance() -> &'static Logger {
 /// use libnewsboat::{log, logger::{self, Level}};
 ///
 /// fn super_cool_function(value: u32) {
-///     log(Level::Debug, "super_cool_function(): value = {}", value);
+///     log!(Level::Debug, "super_cool_function(): value = {}", value);
 /// }
 /// ```
 #[macro_export]
