@@ -242,6 +242,14 @@ int View::run()
 std::string View::run_modal(std::shared_ptr<FormAction> f,
 	const std::string& value)
 {
+	// Modal dialogs should not allow changing to a different dialog (except by
+	// closing the modal dialog)
+	const std::set<Operation> ignoredOperations = {
+		OP_VIEWDIALOGS,
+		OP_NEXTDIALOG,
+		OP_PREVDIALOG,
+	};
+
 	f->init();
 	unsigned int stacksize = formaction_stack.size();
 
@@ -272,6 +280,11 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		if (OP_REDRAW == op) {
 			Stfl::reset();
+			continue;
+		}
+
+		if (ignoredOperations.count(op)) {
+			status_line.show_message(_("Operation ignored in modal dialog"));
 			continue;
 		}
 
