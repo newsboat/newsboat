@@ -451,7 +451,7 @@ pub fn run_command(cmd: &str, param: &str) {
                     cmd,
                     param
                 ),
-            };
+            }
         }
 
         // Child process or grand child in case of failure to execvp, in both cases nothing to do.
@@ -561,7 +561,7 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
             log!(
                 Level::Warn,
                 &format!("{}: Couldn't create child process: {}", caller, err)
-            )
+            );
         })
         .ok()
         .and_then(|exit_status| exit_status.code())
@@ -583,7 +583,7 @@ pub fn run_non_interactively(command: &str, caller: &str) -> Option<u8> {
             log!(
                 Level::Warn,
                 &format!("{}: Couldn't create child process: {}", caller, err)
-            )
+            );
         })
         .ok()
         .and_then(|exit_status| exit_status.code())
