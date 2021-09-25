@@ -459,8 +459,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		}
 
 		// if url or title is missing, abort autopilot and ask user
-		if (default_url.empty() || new_title.empty() ||
-			default_feed_title.empty()) {
+		if (default_url.empty() || new_title.empty()) {
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
 			v->get_statusline().show_message(_("Saving bookmark on autopilot..."));
