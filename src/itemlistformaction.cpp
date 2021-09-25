@@ -333,7 +333,6 @@ bool ItemListFormAction::process_operation(Operation op,
 					this->start_bookmark_qna(
 						visible_items[itempos].first->title(),
 						visible_items[itempos].first->link(),
-						"",
 						feed->title());
 				}
 			}

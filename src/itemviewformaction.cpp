@@ -286,7 +286,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 				args->size() > 0 ? (*args)[0] : "");
 			qna_responses.push_back(feed->title());
 		} else {
-			this->start_bookmark_qna(utils::utf8_to_locale(item->title()), item->link(), "",
+			this->start_bookmark_qna(
+				utils::utf8_to_locale(item->title()),
+				item->link(),
 				feed->title());
 		}
 		break;
