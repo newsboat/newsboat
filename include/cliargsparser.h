@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_CLIARGSPARSER_H_
 #define NEWSBOAT_CLIARGSPARSER_H_
 
-#include "cliargsparser.rs.h"
+#include "libnewsboat-ffi/src/cliargsparser.rs.h"
 
 #include <string>
 #include <vector>

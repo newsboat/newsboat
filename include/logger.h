@@ -4,7 +4,7 @@
 #include "config.h"
 #include "strprintf.h"
 
-#include "logger.rs.h"
+#include "libnewsboat-ffi/src/logger.rs.h"
 
 namespace newsboat {
 

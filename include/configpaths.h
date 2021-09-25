@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_CONFIGPATHS_H_
 #define NEWSBOAT_CONFIGPATHS_H_
 
-#include "configpaths.rs.h"
+#include "libnewsboat-ffi/src/configpaths.rs.h"
 
 #include <string>
 

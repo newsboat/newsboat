@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "scopemeasure.rs.h"
+#include "libnewsboat-ffi/src/scopemeasure.rs.h"
 
 namespace newsboat {
 

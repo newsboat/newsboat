@@ -13,7 +13,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-#include "keymap.rs.h"
+#include "libnewsboat-ffi/src/keymap.rs.h"
 
 namespace newsboat {
 

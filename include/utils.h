@@ -16,7 +16,7 @@
 #include "configcontainer.h"
 #include "logger.h"
 
-#include "utils.rs.h"
+#include "libnewsboat-ffi/src/utils.rs.h"
 
 namespace newsboat {
 
