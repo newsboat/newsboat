@@ -91,7 +91,7 @@ void ItemViewFormAction::prepare()
 	 */
 	if (do_redraw) {
 		{
-			ScopeMeasure("itemview::prepare: rendering");
+			ScopeMeasure sm("itemview::prepare: rendering");
 			// XXX HACK: render once so that we get a proper widget width
 			recalculate_widget_dimensions();
 		}
