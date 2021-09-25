@@ -13,9 +13,11 @@ newsboat.o: newsboat.cpp include/cache.h include/configcontainer.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h config.h \
- include/configpaths.h include/cliargsparser.h include/controller.h \
- include/cache.h include/colormanager.h include/configparser.h \
- include/feedcontainer.h include/filtercontainer.h include/fslock.h \
+ include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
+ include/cliargsparser.h include/controller.h include/cache.h \
+ include/colormanager.h include/configparser.h include/feedcontainer.h \
+ include/filtercontainer.h include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/opml.h \
  include/fileurlreader.h include/urlreader.h include/queuemanager.h \
  include/regexmanager.h include/matcher.h filter/FilterParser.h \
@@ -164,11 +166,11 @@ src/configparser.o: src/configparser.cpp include/configparser.h \
  3rd-party/expected.hpp include/configcontainer.h include/logger.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/configpaths.o: src/configpaths.cpp include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
  include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/globals.h \
- include/ruststring.h include/strprintf.h
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
 src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configcontainer.h include/configactionhandler.h \
  include/colormanager.h include/configparser.h include/feedcontainer.h \
@@ -183,10 +185,12 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/colormanager.h \
  include/configcontainer.h include/configexception.h \
- include/configpaths.h include/cliargsparser.h include/dbexception.h \
- include/downloadthread.h include/exception.h include/feedhqapi.h \
- include/feedhqurlreader.h include/freshrssapi.h rss/feed.h rss/item.h \
- 3rd-party/json.hpp include/utils.h 3rd-party/expected.hpp \
+ include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
+ include/cliargsparser.h include/dbexception.h include/downloadthread.h \
+ include/exception.h include/feedhqapi.h include/feedhqurlreader.h \
+ include/freshrssapi.h rss/feed.h rss/item.h 3rd-party/json.hpp \
+ include/utils.h 3rd-party/expected.hpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
  include/freshrssurlreader.h include/fileurlreader.h include/globals.h \
  include/inoreaderapi.h include/inoreaderurlreader.h \
@@ -942,6 +946,7 @@ test/configparser.o: test/configparser.cpp include/configparser.h \
  3rd-party/optional.hpp test/test-helpers/tempfile.h \
  test/test-helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
  include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
@@ -1007,7 +1012,9 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  include/filesystembrowser.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h 3rd-party/catch.hpp \
- include/cache.h include/configpaths.h include/cliargsparser.h \
+ include/cache.h include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
+ include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
  config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
@@ -1187,7 +1194,9 @@ test/view.o: test/view.cpp include/view.h 3rd-party/optional.hpp \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h 3rd-party/catch.hpp \
- include/controller.h include/configpaths.h include/cliargsparser.h \
+ include/controller.h include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
+ include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
  config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/cache.h
