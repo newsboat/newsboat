@@ -432,37 +432,33 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		default_feed_title);
 	std::vector<QnaPair> prompts;
 
-	std::string new_title = "";
-	bool is_bm_autopilot =
-		cfg->get_configvalue_as_bool("bookmark-autopilot");
+	bool is_bm_autopilot = cfg->get_configvalue_as_bool("bookmark-autopilot");
 	prompts.push_back(QnaPair(_("URL: "), default_url));
 	// call the function to figure out title from url only if the default_title is no good
 	if (default_title.empty()) {
-		new_title = utils::make_title(default_url);
-		prompts.push_back(QnaPair(_("Title: "), new_title));
+		prompts.push_back(QnaPair(_("Title: "), utils::make_title(default_url)));
 	} else {
 		prompts.push_back(QnaPair(_("Title: "), utils::utf8_to_locale(default_title)));
 	}
 	prompts.push_back(QnaPair(_("Description: "), ""));
 	prompts.push_back(QnaPair(_("Feed title: "), default_feed_title));
 
-	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't
-		// prompt for url, title, desc
+	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't prompt for url, title, desc
+		std::string title;
 		if (default_title.empty()) {
-			new_title = utils::make_title(
-					default_url); // try to make the title from url
+			title = utils::make_title(default_url); // try to make the title from url
 		} else {
 			// assignment just to make the call to bookmark() below easier
-			new_title = utils::utf8_to_locale(default_title);
+			title = utils::utf8_to_locale(default_title);
 		}
 
 		// if url or title is missing, abort autopilot and ask user
-		if (default_url.empty() || new_title.empty()) {
+		if (default_url.empty() || title.empty()) {
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
 			v->get_statusline().show_message(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
-					new_title,
+					title,
 					"",
 					default_feed_title);
 			if (retval.length() == 0) {
