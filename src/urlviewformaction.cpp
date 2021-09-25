@@ -73,7 +73,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 	case OP_BOOKMARK: {
 		if (!links.empty()) {
 			const unsigned int pos = urls_list.get_position();
-			this->start_bookmark_qna("", links[pos].first, "", feed->title());
+			this->start_bookmark_qna("", links[pos].first, feed->title());
 		} else {
 			v->get_statusline().show_error(_("No links available!"));
 		}
