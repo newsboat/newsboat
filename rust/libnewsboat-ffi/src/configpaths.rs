@@ -1,4 +1,4 @@
-use libnewsboat::cliargsparser;
+use crate::cliargsparser::CliArgsParser;
 use libnewsboat::configpaths;
 use std::path::Path;
 
@@ -6,15 +6,16 @@ use std::path::Path;
 // cf. https://github.com/dtolnay/cxx/issues/496
 pub struct ConfigPaths(configpaths::ConfigPaths);
 
-// cxx doesn't allow to share types from other crates, so we have to wrap it
-// cf. https://github.com/dtolnay/cxx/issues/496
-pub struct FfiCliArgsParser(cliargsparser::CliArgsParser);
-
 #[cxx::bridge(namespace = "newsboat::configpaths::bridged")]
 mod bridged {
+    #[namespace = "newsboat::cliargsparser::bridged"]
+    extern "C++" {
+        include!("libnewsboat-ffi/src/cliargsparser.rs.h");
+        type CliArgsParser = crate::cliargsparser::CliArgsParser;
+    }
+
     extern "Rust" {
         type ConfigPaths;
-        type FfiCliArgsParser;
 
         fn create() -> Box<ConfigPaths>;
 
@@ -23,7 +24,7 @@ mod bridged {
         fn initialized(configpaths: &ConfigPaths) -> bool;
         fn error_message(configpaths: &ConfigPaths) -> String;
 
-        fn process_args(configpaths: &mut ConfigPaths, args: &FfiCliArgsParser);
+        fn process_args(configpaths: &mut ConfigPaths, args: &CliArgsParser);
 
         fn try_migrate_from_newsbeuter(configpaths: &mut ConfigPaths) -> bool;
 
@@ -54,7 +55,7 @@ fn error_message(configpaths: &ConfigPaths) -> String {
     configpaths.0.error_message().to_owned()
 }
 
-fn process_args(configpaths: &mut ConfigPaths, args: &FfiCliArgsParser) {
+fn process_args(configpaths: &mut ConfigPaths, args: &CliArgsParser) {
     configpaths.0.process_args(&args.0);
 }
 

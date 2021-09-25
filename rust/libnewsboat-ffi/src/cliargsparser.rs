@@ -1,8 +1,15 @@
+use cxx::{type_id, ExternType};
+
 use libnewsboat::cliargsparser;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
-struct CliArgsParser(cliargsparser::CliArgsParser);
+pub struct CliArgsParser(pub cliargsparser::CliArgsParser);
+
+unsafe impl ExternType for CliArgsParser {
+    type Id = type_id!("newsboat::cliargsparser::bridged::CliArgsParser");
+    type Kind = cxx::kind::Opaque;
+}
 
 #[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
 mod bridged {

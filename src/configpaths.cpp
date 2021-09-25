@@ -19,8 +19,7 @@ std::string ConfigPaths::error_message() const
 
 void ConfigPaths::process_args(const CliArgsParser& args)
 {
-	newsboat::configpaths::bridged::process_args(*rs_object,
-		*(newsboat::configpaths::bridged::FfiCliArgsParser*)args.get_rust_pointer());
+	newsboat::configpaths::bridged::process_args(*rs_object, args.get_rust_ref());
 }
 
 bool ConfigPaths::try_migrate_from_newsbeuter()

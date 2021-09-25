@@ -79,11 +79,11 @@ public:
 
 	nonstd::optional<Level> log_level() const;
 
-	/// Returns the pointer to the Rust object.
+	/// Returns the reference to the Rust object.
 	///
 	/// This is only meant to be used in situations when one wants to pass
-	/// a pointer to CliArgsParser back to Rust.
-	void* get_rust_pointer() const;
+	/// a reference back to Rust.
+	const cliargsparser::bridged::CliArgsParser& get_rust_ref() const;
 
 private:
 	rust::Box<cliargsparser::bridged::CliArgsParser> rs_object;

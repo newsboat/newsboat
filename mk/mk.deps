@@ -167,10 +167,9 @@ src/configparser.o: src/configparser.cpp include/configparser.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/configpaths.o: src/configpaths.cpp include/configpaths.h \
  target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
- include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
+ include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
 src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/configcontainer.h include/configactionhandler.h \
  include/colormanager.h include/configparser.h include/feedcontainer.h \
@@ -947,11 +946,10 @@ test/configparser.o: test/configparser.cpp include/configparser.h \
  test/test-helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
  target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
- include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
- 3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h 3rd-party/catch.hpp \
- test/test-helpers/chmod.h test/test-helpers/envvar.h \
+ include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
  test/test-helpers/misc.h test/test-helpers/opts.h \
  test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
  include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
@@ -1014,9 +1012,8 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  include/textformatter.h include/statusline.h 3rd-party/catch.hpp \
  include/cache.h include/configpaths.h \
  target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
- include/cliargsparser.h \
- target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
- config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/feedlistformaction.h stfl/itemlist.h include/keymap.h \
  include/regexmanager.h include/rssfeed.h include/utils.h \
@@ -1196,7 +1193,6 @@ test/view.o: test/view.cpp include/view.h 3rd-party/optional.hpp \
  include/textformatter.h include/statusline.h 3rd-party/catch.hpp \
  include/controller.h include/configpaths.h \
  target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
- include/cliargsparser.h \
- target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h include/logger.h \
- config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/cache.h

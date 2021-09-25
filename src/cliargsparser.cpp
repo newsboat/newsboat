@@ -178,9 +178,9 @@ nonstd::optional<Level> CliArgsParser::log_level() const
 	return nonstd::nullopt;
 }
 
-void* CliArgsParser::get_rust_pointer() const
+const cliargsparser::bridged::CliArgsParser& CliArgsParser::get_rust_ref() const
 {
-	return (void*)&*rs_object;
+	return *rs_object;
 }
 
 } // namespace newsboat
