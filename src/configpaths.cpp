@@ -1,151 +1,75 @@
 #include "configpaths.h"
 
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <pwd.h>
-#include <string>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include "config.h"
-#include "globals.h"
-#include "ruststring.h"
-#include "strprintf.h"
-
-extern "C" {
-	void* create_rs_configpaths();
-
-	void destroy_rs_configpaths(void* rs_configpaths);
-
-	bool rs_configpaths_initialized(void* rs_configpaths);
-
-	char* rs_configpaths_error_message(void* rs_configpaths);
-
-	void rs_configpaths_process_args(void* rs_configpaths, void* rs_cliargsparser);
-
-	bool rs_configpaths_try_migrate_from_newsbeuter(void* rs_configpaths);
-
-	bool rs_configpaths_create_dirs(void* rs_configpaths);
-
-	char* rs_configpaths_url_file(void* rs_configpaths);
-
-	char* rs_configpaths_cache_file(void* rs_configpaths);
-
-	void rs_configpaths_set_cache_file(void* rs_configpaths, const char*);
-
-	char* rs_configpaths_config_file(void* rs_configpaths);
-
-	char* rs_configpaths_lock_file(void* rs_configpaths);
-
-	char* rs_configpaths_queue_file(void* rs_configpaths);
-
-	char* rs_configpaths_search_file(void* rs_configpaths);
-
-	char* rs_configpaths_cmdline_file(void* rs_configpaths);
-}
-
-#define SIMPLY_RUN(NAME) \
-	if (rs_configpaths) { \
-		rs_configpaths_ ## NAME (rs_configpaths); \
-	}
-
-#define GET_VALUE(NAME, DEFAULT) \
-	if (rs_configpaths) { \
-		return rs_configpaths_ ## NAME (rs_configpaths); \
-	} else { \
-		return DEFAULT; \
-	}
-
-#define GET_STRING(NAME) \
-	if (rs_configpaths) { \
-		return RustString(rs_configpaths_ ## NAME (rs_configpaths)); \
-	} else { \
-		return {}; \
-	}
-
 namespace newsboat {
 
 ConfigPaths::ConfigPaths()
+	: rs_object(configpaths::bridged::create())
 {
-	rs_configpaths = create_rs_configpaths();
-}
-
-ConfigPaths::~ConfigPaths()
-{
-	if (rs_configpaths) {
-		destroy_rs_configpaths(rs_configpaths);
-	}
 }
 
 bool ConfigPaths::initialized() const
 {
-	GET_VALUE(initialized, false);
+	return newsboat::configpaths::bridged::initialized(*rs_object);
 }
 
 std::string ConfigPaths::error_message() const
 {
-	GET_STRING(error_message);
+	return std::string(newsboat::configpaths::bridged::error_message(*rs_object));
 }
 
 void ConfigPaths::process_args(const CliArgsParser& args)
 {
-	if (rs_configpaths) {
-		rs_configpaths_process_args(rs_configpaths, args.get_rust_pointer());
-	}
+	newsboat::configpaths::bridged::process_args(*rs_object, args.get_rust_ref());
 }
 
 bool ConfigPaths::try_migrate_from_newsbeuter()
 {
-	GET_VALUE(try_migrate_from_newsbeuter, false);
+	return newsboat::configpaths::bridged::try_migrate_from_newsbeuter(*rs_object);
 }
 
 bool ConfigPaths::create_dirs() const
 {
-	GET_VALUE(create_dirs, false);
+	return newsboat::configpaths::bridged::create_dirs(*rs_object);
 }
 
 void ConfigPaths::set_cache_file(const std::string& new_cachefile)
 {
-	if (rs_configpaths) {
-		rs_configpaths_set_cache_file(rs_configpaths, new_cachefile.c_str());
-	}
+	newsboat::configpaths::bridged::set_cache_file(*rs_object, new_cachefile);
 }
 
 std::string ConfigPaths::url_file() const
 {
-	GET_STRING(url_file);
+	return std::string(newsboat::configpaths::bridged::url_file(*rs_object));
 }
 
 std::string ConfigPaths::cache_file() const
 {
-	GET_STRING(cache_file);
+	return std::string(newsboat::configpaths::bridged::cache_file(*rs_object));
 }
 
 std::string ConfigPaths::config_file() const
 {
-	GET_STRING(config_file);
+	return std::string(newsboat::configpaths::bridged::config_file(*rs_object));
 }
 
 std::string ConfigPaths::lock_file() const
 {
-	GET_STRING(lock_file);
+	return std::string(newsboat::configpaths::bridged::lock_file(*rs_object));
 }
 
 std::string ConfigPaths::queue_file() const
 {
-	GET_STRING(queue_file);
+	return std::string(newsboat::configpaths::bridged::queue_file(*rs_object));
 }
 
 std::string ConfigPaths::search_file() const
 {
-	GET_STRING(search_file);
+	return std::string(newsboat::configpaths::bridged::search_file(*rs_object));
 }
 
 std::string ConfigPaths::cmdline_file() const
 {
-	GET_STRING(cmdline_file);
+	return std::string(newsboat::configpaths::bridged::cmdline_file(*rs_object));
 }
 
 } // namespace newsboat

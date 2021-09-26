@@ -1,18 +1,17 @@
 #ifndef NEWSBOAT_CONFIGPATHS_H_
 #define NEWSBOAT_CONFIGPATHS_H_
 
+#include "libnewsboat-ffi/src/configpaths.rs.h"
+
 #include <string>
 
 #include "cliargsparser.h"
 
 namespace newsboat {
 class ConfigPaths {
-	void* rs_configpaths = nullptr;
-
 public:
 	ConfigPaths();
-
-	~ConfigPaths();
+	~ConfigPaths() = default;
 
 	/// \brief Indicates if the object can be used.
 	///
@@ -71,6 +70,8 @@ public:
 
 	/// Path to the file with command-line history.
 	std::string cmdline_file() const;
+private:
+	rust::Box<configpaths::bridged::ConfigPaths> rs_object;
 };
 } // namespace newsboat
 

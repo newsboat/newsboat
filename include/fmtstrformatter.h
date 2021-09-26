@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_FORMATSTRING_H_
 #define NEWSBOAT_FORMATSTRING_H_
 
-#include "fmtstrformatter.rs.h"
+#include "libnewsboat-ffi/src/fmtstrformatter.rs.h"
 
 #include <string>
 

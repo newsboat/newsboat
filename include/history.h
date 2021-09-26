@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_HISTORY_H_
 #define NEWSBOAT_HISTORY_H_
 
-#include "history.rs.h"
+#include "libnewsboat-ffi/src/history.rs.h"
 
 #include <string>
 
