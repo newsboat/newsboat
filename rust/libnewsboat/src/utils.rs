@@ -445,12 +445,14 @@ pub fn run_command(cmd: &str, param: &str) {
                     let c_arg = [c_cmd.as_ptr(), c_param.as_ptr(), ptr::null()];
                     execvp(c_cmd.as_ptr(), c_arg.as_ptr());
                 }
-                _ => log!(
-                    Level::UserError,
-                    "Conversion of \"{}\" and/or \"{}\" to CString failed.",
-                    cmd,
-                    param
-                ),
+                _ => {
+                    log!(
+                        Level::UserError,
+                        "Conversion of \"{}\" and/or \"{}\" to CString failed.",
+                        cmd,
+                        param
+                    );
+                }
             }
         }
 
