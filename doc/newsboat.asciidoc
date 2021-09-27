@@ -514,6 +514,8 @@ password.
 
 === FreshRSS
 
+_Supported since Newsboat 2.24_.
+
 https://freshrss.org[FreshRSS] is a self-hosted feed reader that also uses a
 "Google Reader API", but is incompatable with the <<_feedhq,FeedHQ>> API. To
 use FreshRSS support, ensure that
