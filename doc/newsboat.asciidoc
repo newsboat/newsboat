@@ -663,6 +663,8 @@ filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 === Inoreader
 
+_Supported since Newsboat 2.10.2._
+
 WARNING: As of 2021-08-23, Inoreader's API doesn't list enclosures, so Newsboat
 won't display podcasts, cover images etc.
 
@@ -736,6 +738,8 @@ You can disable these feeds by setting the following configuration variable:
 	inoreader-show-special-feeds no
 
 === Miniflux
+
+_Supported since Newsboat 2.21._
 
 https://miniflux.app[Miniflux] is a "minimalist and opinionated feed reader"
 that is self-hostable.
