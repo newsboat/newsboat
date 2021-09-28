@@ -620,6 +620,8 @@ feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 === ownCloud News and nextCloud News
 
+_Supported since Newsboat 2.10._
+
 https://github.com/owncloudarchive/news[ownCloud News] and
 https://github.com/nextcloud/news[nextCloud News] implement the same protocol,
 so Newsboat treats them as equivalent. Instructions below apply to both.
