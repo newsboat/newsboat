@@ -514,6 +514,8 @@ password.
 
 === FreshRSS
 
+_Supported since Newsboat 2.24_.
+
 https://freshrss.org[FreshRSS] is a self-hosted feed reader that also uses a
 "Google Reader API", but is incompatable with the <<_feedhq,FeedHQ>> API. To
 use FreshRSS support, ensure that
@@ -618,6 +620,8 @@ feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 === ownCloud News and nextCloud News
 
+_Supported since Newsboat 2.10._
+
 https://github.com/owncloudarchive/news[ownCloud News] and
 https://github.com/nextcloud/news[nextCloud News] implement the same protocol,
 so Newsboat treats them as equivalent. Instructions below apply to both.
@@ -660,6 +664,8 @@ OwnCloud News' folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 === Inoreader
+
+_Supported since Newsboat 2.10.2._
 
 WARNING: As of 2021-08-23, Inoreader's API doesn't list enclosures, so Newsboat
 won't display podcasts, cover images etc.
@@ -734,6 +740,8 @@ You can disable these feeds by setting the following configuration variable:
 	inoreader-show-special-feeds no
 
 === Miniflux
+
+_Supported since Newsboat 2.21._
 
 https://miniflux.app[Miniflux] is a "minimalist and opinionated feed reader"
 that is self-hostable.
