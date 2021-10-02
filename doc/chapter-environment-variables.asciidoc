@@ -17,6 +17,20 @@ certificate information, and you can't rebuild the library yourself.
         environment variable is set. If this variable doesn't exist either, a
         default of `vi(1)` will be used.
 
+[[NO_PROXY]]<<NO_PROXY,`NO_PROXY`>>::
+        Tells Newsboat to ignore <<proxy,`proxy`>> setting for certain sites.
++
+This variable contains a comma-separated list of hostnames, domain names, and
+IP addresses.
++
+Domain names match subdomains, i.e. "example.com" also matches
+"foo.example.com". Domain names that start with a dot only match subdomains,
+e.g. ".example.com" matches "bar.example.com" but not "example.com" itself.
++
+IPv6 addresses are written without square brackets, and _are matched as
+strings_. Thus "::1" doesn't match "::0:1" even though this is the same
+address.
+
 [[PAGER]]<<PAGER,`PAGER`>>::
         Tells Newsboat what pager to use if the <<pager,`pager`>> setting in
         the config file is explicitly set to an empty string.
