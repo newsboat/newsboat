@@ -61,7 +61,16 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
 
 RUN apt-get update \
-    && apt-get upgrade --assume-yes
+    && apt-get upgrade --assume-yes \
+    && apt install --assume-yes --no-install-recommends ca-certificates wget gnupg2
+
+# This image is meant to be used in Cirrus CI, where COPY and ADD instructions
+# are dangerous:
+# https://cirrus-ci.org/guide/docker-builder-vm/#dockerfile-as-a-ci-environment
+# So we fetch the list and key from the Internet rather than adding them to our
+# repo.
+RUN echo 'deb http://apt.llvm.org/hirsute/ llvm-toolchain-hirsute-13 main' > /etc/apt/sources.list.d/llvm-toolchain-hirsute-13.list \
+    && wget -O/etc/apt/trusted.gpg.d/apt.llvm.org.asc https://apt.llvm.org/llvm-snapshot.gpg.key
 
 ARG cxx_package=g++-10
 
@@ -69,7 +78,7 @@ RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
         build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
         libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext git \
-        pkg-config zlib1g-dev asciidoctor wget \
+        pkg-config zlib1g-dev asciidoctor \
     && apt-get autoremove \
     && apt-get clean
 
