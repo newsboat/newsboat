@@ -79,6 +79,7 @@ max-browser-tabs||<number>||10||Set the maximum number of articles to open in a 
 max-download-speed||<number>||0||If set to a number greater than 0, the download speed per download is set to that limit (in KB/s).||max-download-speed 50
 max-items||<number>||0||Set the number of articles to maximally keep per feed. If the number is set to 0, then all articles are kept.||max-items 100
 miniflux-login||<username>||""||Sets the username for use with Miniflux.||miniflux-login "admin"
+miniflux-min-items||<number>||100||This variable sets the number of articles that are loaded from Miniflux per feed.||miniflux-min-items 20
 miniflux-password||<password>||""||Configures the password for use with Miniflux. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||miniflux-password "here_goesAquote:\""
 miniflux-passwordeval||<command>||""||A more secure alternative to the above, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||miniflux-passwordeval "gpg --decrypt ~/.newsboat/miniflux-password.gpg"
 miniflux-passwordfile||<path>||""||Another alternative, by storing your plaintext password elsewhere in your system.||miniflux-passwordfile "~/.newsboat/miniflux-pw.txt"
