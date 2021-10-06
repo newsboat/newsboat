@@ -137,7 +137,9 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	feed.rss_version = rsspp::Feed::MINIFLUX_JSON;
 
 	const std::string query =
-		strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc", id);
+		strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc&limit=%u",
+			id,
+			cfg->get_configvalue_as_int("miniflux-min-items"));
 
 	const json content = run_op(query, json(), HTTPMethod::GET, cached_handle);
 	if (content.is_null()) {

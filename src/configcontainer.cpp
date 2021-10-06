@@ -262,6 +262,7 @@ ConfigContainer::ConfigContainer()
 	{"ocnews-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"ocnews-url", ConfigData("", ConfigDataType::STR)},
 	{"miniflux-login", ConfigData("", ConfigDataType::STR)},
+	{"miniflux-min-items", ConfigData("100", ConfigDataType::INT)},
 	{"miniflux-password", ConfigData("", ConfigDataType::STR)},
 	{"miniflux-passwordfile", ConfigData("", ConfigDataType::PATH)},
 	{"miniflux-passwordeval", ConfigData("", ConfigDataType::STR)},
