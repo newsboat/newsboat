@@ -112,8 +112,7 @@ src/cache.o: src/cache.cpp include/cache.h include/configcontainer.h \
 src/cliargsparser.o: src/cliargsparser.cpp include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/globals.h \
- include/ruststring.h include/strprintf.h
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
 src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  include/configactionhandler.h config.h include/confighandlerexception.h \
  include/feedlistformaction.h 3rd-party/optional.hpp \
@@ -354,9 +353,7 @@ src/filtercontainer.o: src/filtercontainer.cpp include/filtercontainer.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
 src/fmtstrformatter.o: src/fmtstrformatter.cpp include/fmtstrformatter.h \
- target/cxxbridge/libnewsboat-ffi/src/fmtstrformatter.rs.h \
- include/logger.h config.h include/strprintf.h \
- target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/ruststring.h
+ target/cxxbridge/libnewsboat-ffi/src/fmtstrformatter.rs.h
 src/formaction.o: src/formaction.cpp include/formaction.h \
  include/history.h target/cxxbridge/libnewsboat-ffi/src/history.rs.h \
  include/keymap.h include/configactionhandler.h include/stflpp.h config.h \
@@ -421,7 +418,7 @@ src/helpformaction.o: src/helpformaction.cpp include/helpformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h
 src/history.o: src/history.cpp include/history.h \
- target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/ruststring.h
+ target/cxxbridge/libnewsboat-ffi/src/history.rs.h
 src/htmlrenderer.o: src/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h config.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/strprintf.h \
@@ -880,8 +877,7 @@ src/utils.o: src/utils.cpp include/utils.h 3rd-party/expected.hpp \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/htmlrenderer.h \
- include/textformatter.h include/logger.h include/ruststring.h \
- include/strprintf.h
+ include/textformatter.h include/logger.h include/strprintf.h
 src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/colormanager.h include/configactionhandler.h \
  include/configcontainer.h include/controller.h include/cache.h \

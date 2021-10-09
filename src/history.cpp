@@ -1,9 +1,5 @@
 #include "history.h"
 
-#include <fstream>
-
-#include "ruststring.h"
-
 namespace newsboat {
 
 History::History()

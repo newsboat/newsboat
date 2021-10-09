@@ -29,7 +29,6 @@
 #include "config.h"
 #include "htmlrenderer.h"
 #include "logger.h"
-#include "ruststring.h"
 #include "strprintf.h"
 
 #if HAVE_GCRYPT
