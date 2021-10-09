@@ -1092,6 +1092,69 @@ mod tests {
     }
 
     #[test]
+    fn t_extract_token_quoted_ignores_comments() {
+        let delimiters = " \r\n\t";
+        assert_eq!(
+            extract_token_quoted("\t\t  # commented out", delimiters),
+            (None, "")
+        );
+
+        // ignores '#' if it is inside quotes
+        assert_eq!(
+            extract_token_quoted(r##""# in quoted token" other tokens"##, delimiters),
+            (Some(r#"# in quoted token"#.to_owned()), " other tokens")
+        );
+
+        // token before start of comment
+        assert_eq!(
+            extract_token_quoted(r#"some-token # some comment"#, delimiters),
+            (Some("some-token".to_owned()), " # some comment")
+        );
+    }
+
+    #[test]
+    fn t_extract_token_quoted_ignores_delimiters_in_front_of_tokens() {
+        // empty delimiters
+        assert_eq!(
+            extract_token_quoted("\n\r\t \n\t\r token-name", ""),
+            (Some("\n\r\t \n\t\r token-name".to_owned()), "")
+        );
+
+        // single delimiter
+        assert_eq!(
+            extract_token_quoted("--token name--", "-"),
+            (Some("token name".to_owned()), "--")
+        );
+
+        // two delimiters
+        assert_eq!(
+            extract_token_quoted("--token name--", " -"),
+            (Some("token".to_owned()), " name--")
+        );
+    }
+
+    #[test]
+    fn t_extract_token_quoted_ignores_delimiters_in_quoted_strings() {
+        assert_eq!(
+            extract_token_quoted(r#"  "token name"  "#, " \r\n\t"),
+            (Some("token name".to_owned()), "  ")
+        );
+
+        assert_eq!(
+            extract_token_quoted(r#"--"token name"--"#, " -"),
+            (Some("token name".to_owned()), "--")
+        );
+    }
+
+    #[test]
+    fn t_extract_token_quoted_processes_escape_sequences_in_quoted_strings() {
+        assert_eq!(
+            extract_token_quoted(r#"  "\n \r \t \" \` \\ " remainder"#, " \r\n\t"),
+            (Some("\n \r \t \" \\` \\ ".to_owned()), " remainder")
+        );
+    }
+
+    #[test]
     fn t_to_u() {
         assert_eq!(to_u(String::from("0"), 10), 0);
         assert_eq!(to_u(String::from("23"), 1), 23);
