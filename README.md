@@ -114,6 +114,10 @@ There are numerous ways:
 
   [snap-browser]: https://newsboat.org/releases/2.25/docs/faq.html#_regarding_newsboat_snap_installations
 
+- (macOS) install via [MacPorts](https://www.macports.org):
+
+      $ sudo port install newsboat
+
 - [build from source with Docker](doc/docker.md). Note that the resulting binary
     might not run outside of that same Docker container if your system doesn't
     have all the necessary libraries, or if their versions are too old;
