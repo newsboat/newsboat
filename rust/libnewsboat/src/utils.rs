@@ -733,11 +733,11 @@ pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<Stri
         None => return (None, ""),
     };
 
-    if line.chars().nth(0) == Some('#') {
+    if line.starts_with('#') {
         return (None, "");
     }
 
-    if line.chars().nth(0) == Some('"') {
+    if line.starts_with('"') {
         let mut token = String::new();
         let mut it = line.chars().enumerate();
         it.next(); // Ignore opening quotation mark
