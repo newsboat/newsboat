@@ -68,6 +68,7 @@ mod bridged {
         fn get_basename(input: &str) -> String;
         fn program_version() -> String;
         fn strip_comments(line: &str) -> &str;
+        fn extract_token_quoted(line: &mut String, delimiters: &str, token: &mut String) -> bool;
         fn is_valid_podcast_type(mimetype: &str) -> bool;
 
         fn resolve_tilde(path: &str) -> String;
@@ -151,6 +152,18 @@ fn read_text_file(
             }
             false
         }
+    }
+}
+
+fn extract_token_quoted(line: &mut String, delimiters: &str, token: &mut String) -> bool {
+    let (token_opt, remainder) = utils::extract_token_quoted(line, delimiters);
+    *line = remainder.to_owned();
+    match token_opt {
+        Some(t) => {
+            *token = t;
+            true
+        }
+        None => false,
     }
 }
 

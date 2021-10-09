@@ -712,6 +712,56 @@ pub fn strip_comments(line: &str) -> &str {
     &line[0..first_pound_chr_idx]
 }
 
+fn get_escape_value(c: char) -> String {
+    match c {
+        'n' => "\n".to_owned(),
+        'r' => "\r".to_owned(),
+        't' => "\t".to_owned(),
+        '"' => "\"".to_owned(),
+        // escaped backticks are passed through, still escaped. We un-escape
+        // them in ConfigParser::evaluate_backticks
+        '`' => "\\`".to_owned(),
+        '\\' => "\\".to_owned(),
+        x => x.to_owned().to_string(),
+    }
+}
+
+pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<String>, &'a str) {
+    let first_non_delimiter = line.find(|c| !delimiters.contains(c));
+    let line = match first_non_delimiter {
+        Some(x) => &line[x..],
+        None => return (None, ""),
+    };
+
+    if line.chars().nth(0) == Some('#') {
+        return (None, "");
+    }
+
+    if line.chars().nth(0) == Some('"') {
+        let mut token = String::new();
+        let mut it = line.chars().enumerate();
+        it.next(); // Ignore opening quotation mark
+        while let Some((i, c)) = it.next() {
+            if c == '"' {
+                return (Some(token), &line[i + 1..]);
+            } else if c == '\\' {
+                if let Some((_, escaped_char)) = it.next() {
+                    token.push_str(&get_escape_value(escaped_char));
+                }
+            } else {
+                token.push(c);
+            }
+        }
+        (Some(token), "")
+    } else {
+        let end_of_token = line.find(|c| delimiters.contains(c));
+        match end_of_token {
+            Some(x) => (Some(line[..x].to_owned()), &line[x..]),
+            None => (Some(line.to_owned()), ""),
+        }
+    }
+}
+
 /// The result of executing `extract_filter()`.
 pub struct FilterUrlParts {
     /// "~/bin/foo.sh" in "filter:~/bin/foo.sh:https://example.com/news.atom"
