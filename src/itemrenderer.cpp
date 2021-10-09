@@ -100,6 +100,8 @@ std::string get_item_base_link(const std::shared_ptr<RssItem>& item)
 {
 	if (!item->get_base().empty()) {
 		return item->get_base();
+	} else if (!item->link().empty()) {
+		return item->link();
 	} else {
 		return item->feedurl();
 	}
