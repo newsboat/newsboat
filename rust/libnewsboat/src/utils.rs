@@ -762,6 +762,22 @@ pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<Stri
     }
 }
 
+/// Tokenize strings, obeying quotes and throwing away commants that start with a '#'
+pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
+    let mut tokens = Vec::new();
+
+    let mut todo = line;
+    while !todo.is_empty() {
+        let (token, remainder) = extract_token_quoted(todo, delimiters);
+        if let Some(x) = token {
+            tokens.push(x);
+        }
+        todo = remainder;
+    }
+
+    tokens
+}
+
 /// The result of executing `extract_filter()`.
 pub struct FilterUrlParts {
     /// "~/bin/foo.sh" in "filter:~/bin/foo.sh:https://example.com/news.atom"
@@ -1151,6 +1167,120 @@ mod tests {
         assert_eq!(
             extract_token_quoted(r#"  "\n \r \t \" \` \\ " remainder"#, " \r\n\t"),
             (Some("\n \r \t \" \\` \\ ".to_owned()), " remainder")
+        );
+    }
+
+    #[test]
+    fn t_tokenize_quoted_splits_on_delimiters() {
+        assert_eq!(
+            tokenize_quoted("asdf \"foobar bla\" \"foo\\r\\n\\tbar\"", " \r\n\t"),
+            vec!["asdf", "foobar bla", "foo\r\n\tbar"]
+        );
+
+        assert_eq!(
+            tokenize_quoted("  \"foo \\\\xxx\"\t\r \" \"", " \r\n\t"),
+            vec!["foo \\xxx", " "]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_quoted_stops_at_closing_quotation_mark() {
+        assert_eq!(
+            tokenize_quoted(r#"set browser "mpv %u";"#, " "),
+            vec!["set", "browser", "mpv %u", ";"]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_quoted_implicitly_closes_quotes_at_end_of_string() {
+        assert_eq!(tokenize_quoted("\"\\\\", " "), vec!["\\"]);
+
+        assert_eq!(
+            tokenize_quoted("\"\\\\\" and \"some other stuff", " "),
+            vec!["\\", "and", "some other stuff"]
+        );
+
+        // Backslash at end of string is ignored
+        assert_eq!(tokenize_quoted(r#""abc\"#, " "), vec!["abc"]);
+    }
+
+    #[test]
+    fn t_tokenize_quoted_interprets_double_backslash_as_literal_backslash() {
+        assert_eq!(tokenize_quoted(r#""""#, ""), vec![""]);
+
+        assert_eq!(tokenize_quoted(r#""\\""#, ""), vec![r#"\"#]);
+
+        assert_eq!(tokenize_quoted(r##""#\\""##, ""), vec!["#\\"]);
+
+        assert_eq!(tokenize_quoted(r#""'#\\'""#, ""), vec!["'#\\'"]);
+
+        assert_eq!(tokenize_quoted(r#""'#\\ \\'""#, ""), vec![r#"'#\ \'"#]);
+
+        assert_eq!(tokenize_quoted("\"\\\\\\\\", ""), vec![r#"\\"#]);
+
+        assert_eq!(tokenize_quoted("\"\\\\\\\\\\\\", ""), vec![r#"\\\"#]);
+
+        assert_eq!(tokenize_quoted("\"\\\\\\\\\"", ""), vec![r#"\\"#]);
+
+        assert_eq!(tokenize_quoted("\"\\\\\\\\\\\\\"", ""), vec![r#"\\\"#]);
+
+        assert_eq!(tokenize_quoted(r#""\\bgit\\b""#, ""), vec![r#"\bgit\b"#]);
+
+        assert_eq!(
+            tokenize_quoted(
+                r#"browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u""#,
+                " "
+            ),
+            vec![
+                "browser",
+                r#"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app %u"#
+            ]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_quoted_keeps_backticks_escaped() {
+        assert_eq!(
+            tokenize_quoted("asdf \"\\`foobar `bla`\\`\"", " "),
+            vec!["asdf", "\\`foobar `bla`\\`"]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_quoted_stops_at_comment_starting_with_pound_character() {
+        //	A string consisting of just a comment
+        assert!(tokenize_quoted("# just a comment", " ").is_empty());
+
+        //	A string with one quoted substring
+        assert_eq!(
+            tokenize_quoted(r#""a test substring" # !!!"#, " "),
+            vec!["a test substring"]
+        );
+
+        //	A string with two quoted substrings
+        assert_eq!(
+            tokenize_quoted(r#""first sub" "snd" # comment"#, " "),
+            vec!["first sub", "snd"]
+        );
+
+        //	A comment containing # character
+        assert_eq!(
+            tokenize_quoted(r#"one # a comment with # char"#, " "),
+            vec!["one"]
+        );
+
+        //	A # character inside quoted substring is ignored
+        assert_eq!(
+            tokenize_quoted(r#"this "will # be" ignored"#, " "),
+            vec!["this", "will # be", "ignored"]
+        );
+    }
+
+    #[test]
+    fn t_tokenize_quoted_ignores_escaped_pound_sign_start_of_token() {
+        assert_eq!(
+            tokenize_quoted(r#"one \# two three # ???"#, " "),
+            vec!["one", "\\#", "two", "three"]
         );
     }
 
