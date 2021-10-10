@@ -1,11 +1,6 @@
 #include "cliargsparser.h"
 
-#include <getopt.h>
 #include <cstdlib>
-
-#include "globals.h"
-#include "ruststring.h"
-#include "strprintf.h"
 
 namespace newsboat {
 

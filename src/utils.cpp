@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <iostream>
 
 #include <algorithm>
 #include <cinttypes>
@@ -29,7 +30,6 @@
 #include "config.h"
 #include "htmlrenderer.h"
 #include "logger.h"
-#include "ruststring.h"
 #include "strprintf.h"
 
 #if HAVE_GCRYPT
@@ -47,37 +47,6 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
-
-namespace utils {
-void append_escapes(std::string& str, char c)
-{
-	switch (c) {
-	case 'n':
-		str.append("\n");
-		break;
-	case 'r':
-		str.append("\r");
-		break;
-	case 't':
-		str.append("\t");
-		break;
-	case '"':
-		str.append("\"");
-		break;
-	// escaped backticks are passed through, still escaped. We un-escape
-	// them in ConfigParser::evaluate_backticks
-	case '`':
-		str.append("\\`");
-		break;
-	case '\\':
-		str.append("\\");
-		break;
-	default:
-		str.push_back(c);
-		break;
-	}
-}
-}
 
 std::string utils::strip_comments(const std::string& line)
 {
@@ -124,49 +93,14 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 nonstd::optional<std::string> utils::extract_token_quoted(std::string& str,
 	std::string delimiters)
 {
-	auto first_non_delimiter = str.find_first_not_of(delimiters, 0);
-	if (first_non_delimiter == std::string::npos) {
-		str = "";
-		return {};
+	rust::String remaining = str;
+	rust::String token;
+	if (utils::bridged::extract_token_quoted(remaining, delimiters, token)) {
+		str = std::string(remaining);
+		return std::string(token);
 	}
-	str = str.substr(first_non_delimiter);
-
-	if (str[0] == '#') { // stop as soon as we find a comment
-		str = "";
-		return {};
-	}
-
-	std::string token;
-	if (str[0] == '"') {
-		std::string::size_type pos = 1;
-		while (pos < str.length()) {
-			if (str[pos] == '"') {
-				// We've reached the end of this quoted token.
-				++pos;
-				break;
-			} else if (str[pos] == '\\') {
-				pos += 1;
-				if (pos < str.length()) {
-					append_escapes(token, str[pos]);
-					pos += 1;
-				}
-			} else {
-				token.push_back(str[pos]);
-				++pos;
-			}
-		}
-		str = str.substr(pos);
-	} else {
-		auto end_of_token = str.find_first_of(delimiters);
-		token = str.substr(0, end_of_token);
-		if (end_of_token == std::string::npos) {
-			str = "";
-		} else {
-			str = str.substr(end_of_token);
-		}
-	}
-
-	return token;
+	str = std::string(remaining);
+	return {};
 }
 
 std::vector<std::string> utils::tokenize(const std::string& str,

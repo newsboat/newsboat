@@ -1,12 +1,5 @@
 #include "fmtstrformatter.h"
 
-#include <cstdlib>
-#include <sstream>
-#include <vector>
-
-#include "logger.h"
-#include "ruststring.h"
-
 namespace newsboat {
 
 FmtStrFormatter::FmtStrFormatter()
