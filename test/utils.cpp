@@ -345,6 +345,15 @@ TEST_CASE("extract_token_quoted() processes escape sequences within quoted strin
 	REQUIRE(str == " remainder");
 }
 
+TEST_CASE("extract_token_quoted() works with Unicode strings too", "[utils]")
+{
+	std::string str = R"("привет мир" Юникода)";
+	const auto token = utils::extract_token_quoted(str);
+	REQUIRE(token.has_value());
+	REQUIRE(token.value() == "привет мир");
+	REQUIRE(str == " Юникода");
+}
+
 TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 {
 	std::vector<std::string> tokens;

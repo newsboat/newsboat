@@ -739,13 +739,13 @@ pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<Stri
 
     if line.starts_with('"') {
         let mut token = String::new();
-        let mut it = line.chars().enumerate();
+        let mut it = line.chars();
         it.next(); // Ignore opening quotation mark
-        while let Some((i, c)) = it.next() {
+        while let Some(c) = it.next() {
             if c == '"' {
-                return (Some(token), &line[i + 1..]);
+                return (Some(token), it.as_str());
             } else if c == '\\' {
-                if let Some((_, escaped_char)) = it.next() {
+                if let Some(escaped_char) = it.next() {
                     token.push_str(&get_escape_value(escaped_char));
                 }
             } else {
@@ -1281,6 +1281,14 @@ mod tests {
         assert_eq!(
             tokenize_quoted(r#"one \# two three # ???"#, " "),
             vec!["one", "\\#", "two", "three"]
+        );
+    }
+
+    #[test]
+    fn t_extract_token_quoted_works_with_unicode_strings() {
+        assert_eq!(
+            extract_token_quoted(r#""привет мир" Юникода"#, " \r\n\t"),
+            (Some("привет мир".to_owned()), " Юникода")
         );
     }
 
