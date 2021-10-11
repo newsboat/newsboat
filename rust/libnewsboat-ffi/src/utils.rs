@@ -69,6 +69,7 @@ mod bridged {
         fn program_version() -> String;
         fn strip_comments(line: &str) -> &str;
         fn extract_token_quoted(line: &mut String, delimiters: &str, token: &mut String) -> bool;
+        fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String>;
         fn is_valid_podcast_type(mimetype: &str) -> bool;
 
         fn resolve_tilde(path: &str) -> String;

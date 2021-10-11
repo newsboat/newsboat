@@ -56,38 +56,13 @@ std::string utils::strip_comments(const std::string& line)
 std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	std::string delimiters)
 {
-	/*
-	 * This function tokenizes strings, obeying quotes and throwing away
-	 * comments that start with a '#'.
-	 *
-	 * e.g. line: foo bar "foo bar" "a test"
-	 * is parsed to 4 elements:
-	 * 	[0]: foo
-	 * 	[1]: bar
-	 * 	[2]: foo bar
-	 * 	[3]: a test
-	 *
-	 * e.g. line: yes great "x\ny" # comment
-	 * is parsed to 3 elements:
-	 * 	[0]: yes
-	 * 	[1]: great
-	 * 	[2]: x
-	 * 	y
-	 *
-	 * 	\", \r, \n, and \t are replaced with the literals that you
-	 * know from C/C++ strings.
-	 *
-	 */
-	std::vector<std::string> tokens;
-	std::string remaining = str;
-	while (!remaining.empty()) {
-		auto token = extract_token_quoted(remaining, delimiters);
-		if (token.has_value()) {
-			tokens.push_back(token.value());
-		}
-	}
+	const auto tokens = utils::bridged::tokenize_quoted(str, delimiters);
 
-	return tokens;
+	std::vector<std::string> result;
+	for (const auto& token : tokens) {
+		result.push_back(std::string(token));
+	}
+	return result;
 }
 
 nonstd::optional<std::string> utils::extract_token_quoted(std::string& str,
