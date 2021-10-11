@@ -29,7 +29,6 @@ public:
 	}
 	void set_title(const std::string& t);
 
-	/// \brief Feed's canonical URL. Empty if feed was never fetched.
 	const std::string& link() const
 	{
 		return link_;
