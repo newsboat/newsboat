@@ -762,7 +762,7 @@ pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<Stri
     }
 }
 
-/// Tokenize strings, obeying quotes and throwing away commants that start with a '#'
+/// Tokenize strings, obeying quotes and throwing away comments that start with a '#'
 pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
     let mut tokens = Vec::new();
 
