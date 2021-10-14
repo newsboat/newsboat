@@ -20,7 +20,8 @@ TEST_CASE("items in search result can be marked read", "[Cache]")
 	REQUIRE(feed->total_item_count() == 8);
 	rsscache.externalize_rssfeed(feed, false);
 
-	auto search_items = rsscache.search_for_items("Botox", "");
+	RssIgnores ign;
+	auto search_items = rsscache.search_for_items("Botox", "", ign);
 	REQUIRE(search_items.size() == 1);
 	auto item = search_items.front();
 	REQUIRE(item->unread());
@@ -28,7 +29,7 @@ TEST_CASE("items in search result can be marked read", "[Cache]")
 	item->set_unread(false);
 	search_items.clear();
 
-	search_items = rsscache.search_for_items("Botox", "");
+	search_items = rsscache.search_for_items("Botox", "", ign);
 	REQUIRE(search_items.size() == 1);
 	auto updatedItem = search_items.front();
 	REQUIRE_FALSE(updatedItem->unread());
@@ -554,18 +555,19 @@ TEST_CASE("search_for_items finds all items with matching title or content",
 	auto query = "content";
 	std::vector<std::shared_ptr<RssItem>> items;
 
+	RssIgnores ign;
 	SECTION("Search the whole DB") {
-		REQUIRE_NOTHROW(items = rsscache.search_for_items(query, ""));
+		REQUIRE_NOTHROW(items = rsscache.search_for_items(query, "", ign));
 		REQUIRE(items.size() == 4);
 	}
 
 	SECTION("Search specific feed") {
 		REQUIRE_NOTHROW(
-			items = rsscache.search_for_items(query, feedurls[0]));
+			items = rsscache.search_for_items(query, feedurls[0], ign));
 		REQUIRE(items.size() == 3);
 
 		REQUIRE_NOTHROW(
-			items = rsscache.search_for_items(query, feedurls[1]));
+			items = rsscache.search_for_items(query, feedurls[1], ign));
 		REQUIRE(items.size() == 1);
 	}
 }
@@ -1039,4 +1041,23 @@ TEST_CASE("search_in_items returns empty set if input set is empty", "[Cache]")
 	std::unordered_set<std::string> empty;
 	const guids result = rsscache.search_in_items("Botox", empty);
 	REQUIRE(result.empty());
+}
+
+TEST_CASE("Ignoring articles in search", "[Cache]")
+{
+	ConfigContainer cfg{};
+	Cache rsscache(":memory:", &cfg);
+
+	RssParser parser("file://data/rss.xml", &rsscache, &cfg, nullptr);
+	std::shared_ptr<RssFeed> feed = parser.parse();
+	REQUIRE(feed->total_item_count() == 8);
+	rsscache.externalize_rssfeed(feed, false);
+
+	RssIgnores ign, empty_ign;
+	ign.handle_action("ignore-article", {"*", "title =~ \"Botox\""});
+	auto search_items = rsscache.search_for_items("Botox", "", ign);
+	auto no_ignore_items = rsscache.search_for_items("Botox", "", empty_ign);
+
+	REQUIRE(search_items.size() == 0 );
+	REQUIRE(no_ignore_items.size() == 1);
 }
