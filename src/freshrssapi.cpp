@@ -397,7 +397,7 @@ std::string FreshRssApi::post_content(const std::string& url,
 	return result;
 }
 
-rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
+rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle* cached_handle)
 {
 	rsspp::Feed feed;
 	feed.rss_version = rsspp::Feed::FRESHRSS_JSON;
@@ -406,26 +406,26 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 			id,
 			cfg->get_configvalue_as_int("freshrss-min-items"));
 
-	CURL* handle;
+	CurlHandle* handle;
 	if (cached_handle) {
 		handle = cached_handle;
 	} else {
-		handle = curl_easy_init();
+		handle = new CurlHandle();
 	}
 	std::string result;
 	curl_slist* custom_headers{};
 	add_custom_headers(&custom_headers);
-	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, custom_headers);
+	curl_easy_setopt(handle->ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle, CURLOPT_WRITEDATA, &result);
-	curl_easy_setopt(handle,
+	utils::set_common_curl_options(handle->ptr(), cfg);
+	curl_easy_setopt(handle->ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(handle->ptr(), CURLOPT_WRITEDATA, &result);
+	curl_easy_setopt(handle->ptr(),
 		CURLOPT_URL,
 		query.c_str());
-	curl_easy_perform(handle);
+	curl_easy_perform(handle->ptr());
 	if (!cached_handle) {
-		curl_easy_cleanup(handle);
+		delete handle;
 	}
 	curl_slist_free_all(custom_headers);
 

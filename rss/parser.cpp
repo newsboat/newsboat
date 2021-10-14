@@ -7,6 +7,7 @@
 #include <libxml/tree.h>
 
 #include "config.h"
+#include "curlhandle.h"
 #include "exception.h"
 #include "logger.h"
 #include "remoteapi.h"
@@ -105,19 +106,23 @@ Feed Parser::parse_url(const std::string& url,
 	const std::string& etag,
 	newsboat::RemoteApi* api,
 	const std::string& cookie_cache,
-	CURL* ehandle)
+	newsboat::CurlHandle* ehandle)
 {
 	std::string buf;
 	CURLcode ret;
 	curl_slist* custom_headers{};
 
-	CURL* easyhandle = ehandle;
-	if (!easyhandle) {
-		easyhandle = curl_easy_init();
-		if (!easyhandle) {
+	newsboat::CurlHandle* handle = ehandle;
+	CURL * easyhandle;
+
+	if (!handle) {
+		handle = new CurlHandle();
+		if (!handle || !handle->ptr()) {
 			throw Exception(_("couldn't initialize libcurl"));
 		}
 	}
+
+	easyhandle=handle->ptr();
 
 	if (!ua.empty()) {
 		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua.c_str());
@@ -215,7 +220,8 @@ Feed Parser::parse_url(const std::string& url,
 	}
 
 	if (!ehandle) {
-		curl_easy_cleanup(easyhandle);
+		delete handle;
+		easyhandle=nullptr;
 	}
 
 	if (ret != 0) {

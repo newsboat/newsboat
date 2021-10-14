@@ -2,6 +2,7 @@
 #define NEWSBOAT_MINIFLUXAPI_H_
 
 #include "3rd-party/json.hpp"
+#include "curlhandle.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
 #include "utils.h"
@@ -22,13 +23,13 @@ public:
 		const std::string& newflags,
 		const std::string& guid) override;
 	void add_custom_headers(curl_slist**) override;
-	rsspp::Feed fetch_feed(const std::string& id, CURL* cached_handle);
+	rsspp::Feed fetch_feed(const std::string& id, CurlHandle* cached_handle);
 
 private:
 	virtual nlohmann::json run_op(const std::string& path,
 		const nlohmann::json& req_data,
 		const HTTPMethod method = HTTPMethod::GET,
-		CURL* cached_handle = nullptr);
+		CurlHandle* cached_handle = nullptr);
 	TaggedFeedUrl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);
 	bool flag_changed(const std::string& oldflags,

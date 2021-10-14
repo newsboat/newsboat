@@ -131,7 +131,7 @@ bool MinifluxApi::update_article_flags(const std::string& /* oldflags */,
 	return false;
 }
 
-rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CURL* cached_handle)
+rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle* cached_handle)
 {
 	rsspp::Feed feed;
 	feed.rss_version = rsspp::Feed::MINIFLUX_JSON;
@@ -213,17 +213,17 @@ void MinifluxApi::add_custom_headers(curl_slist** /* custom_headers */)
 json MinifluxApi::run_op(const std::string& path,
 	const json& args,
 	const HTTPMethod method, /* = GET */
-	CURL* cached_handle /* = nullptr */)
+	CurlHandle* cached_handle /* = nullptr */)
 {
-	CURL* easyhandle;
+	CurlHandle* easyhandle;
 	if (cached_handle) {
 		easyhandle = cached_handle;
 	} else {
-		easyhandle = curl_easy_init();
+		easyhandle = new CurlHandle();
 	}
 	// follow redirects and keep the same request type
-	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+	curl_easy_setopt(easyhandle->ptr(), CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle->ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
 	const std::string url = server + path;
 
@@ -235,10 +235,10 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	const std::string result = utils::retrieve_url(
-			url, cfg, auth_info, body, method, easyhandle);
+			url, cfg, auth_info, body, method,easyhandle);
 
 	if (!cached_handle) {
-		curl_easy_cleanup(easyhandle);
+		delete easyhandle;
 	}
 
 	LOG(Level::DEBUG,

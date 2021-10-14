@@ -13,6 +13,7 @@
 #include "3rd-party/expected.hpp"
 #include "3rd-party/optional.hpp"
 
+#include "curlhandle.h"
 #include "configcontainer.h"
 #include "logger.h"
 
@@ -63,7 +64,7 @@ std::string retrieve_url(const std::string& url,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET,
-	CURL* easyhandle = nullptr);
+	CurlHandle* easyhandle = nullptr);
 std::string run_program(const char* argv[], const std::string& input);
 
 std::string resolve_tilde(const std::string&);

@@ -5,6 +5,7 @@
 #include <libxml/parser.h>
 #include <string>
 
+#include "curlhandle.h"
 #include "remoteapi.h"
 #include "feed.h"
 
@@ -24,7 +25,7 @@ public:
 		const std::string& etag = "",
 		newsboat::RemoteApi* api = 0,
 		const std::string& cookie_cache = "",
-		CURL* ehandle = 0);
+		newsboat::CurlHandle* ehandle = 0);
 	Feed parse_buffer(const std::string& buffer,
 		const std::string& url = "");
 	Feed parse_file(const std::string& filename);

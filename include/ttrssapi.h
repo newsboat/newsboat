@@ -3,6 +3,7 @@
 
 #include "3rd-party/json.hpp"
 #include "cache.h"
+#include "curlhandle.h"
 #include "remoteapi.h"
 
 namespace rsspp {
@@ -19,7 +20,7 @@ public:
 	virtual nlohmann::json run_op(const std::string& op,
 		const std::map<std::string, std::string>& args,
 		bool try_login = true,
-		CURL* cached_handle = nullptr);
+		CurlHandle* cached_handle = nullptr);
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
 	bool mark_all_read(const std::string& feedurl) override;
@@ -27,7 +28,7 @@ public:
 	bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) override;
-	rsspp::Feed fetch_feed(const std::string& id, CURL* cached_handle);
+	rsspp::Feed fetch_feed(const std::string& id, CurlHandle* cached_handle);
 	bool update_article(const std::string& guid, int mode, int field);
 
 private:

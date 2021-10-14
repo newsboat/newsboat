@@ -221,7 +221,7 @@ void RssParser::download_http(const std::string& uri)
 				etag,
 				api,
 				cfgcont->get_configvalue("cookie-cache"),
-				easyhandle ? easyhandle->ptr() : 0);
+				easyhandle ? easyhandle : 0);
 		LOG(Level::DEBUG,
 			"RssParser::download_http: lm = %" PRId64 " etag = %s",
 			// On GCC, `time_t` is `long int`, which is at least 32 bits
@@ -518,7 +518,7 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 
 		CurlHandle handle;
 		const std::string content = utils::retrieve_url(x->link(), cfgcont, "", nullptr,
-				HTTPMethod::GET, handle.ptr());
+				HTTPMethod::GET, &handle);
 		std::string content_mime_type;
 
 		// Determine mime-type based on Content-type header:
@@ -644,7 +644,7 @@ void RssParser::fetch_ttrss(const std::string& feed_id)
 	TtRssApi* tapi = dynamic_cast<TtRssApi*>(api);
 	if (tapi) {
 		f = tapi->fetch_feed(
-				feed_id, easyhandle ? easyhandle->ptr() : nullptr);
+				feed_id, easyhandle ? easyhandle : nullptr);
 	}
 	LOG(Level::DEBUG,
 		"RssParser::fetch_ttrss: f.items.size = %" PRIu64,
@@ -677,7 +677,7 @@ void RssParser::fetch_miniflux(const std::string& feed_id)
 {
 	MinifluxApi* mapi = dynamic_cast<MinifluxApi*>(api);
 	if (mapi) {
-		f = mapi->fetch_feed(feed_id, easyhandle ? easyhandle->ptr() : nullptr);
+		f = mapi->fetch_feed(feed_id, easyhandle ? easyhandle : nullptr);
 	}
 	LOG(Level::INFO,
 		"RssParser::fetch_miniflux: f.items.size = %" PRIu64,
@@ -688,7 +688,7 @@ void RssParser::fetch_freshrss(const std::string& feed_id)
 {
 	FreshRssApi* fapi = dynamic_cast<FreshRssApi*>(api);
 	if (fapi) {
-		f = fapi->fetch_feed(feed_id, easyhandle ? easyhandle->ptr() : nullptr);
+		f = fapi->fetch_feed(feed_id, easyhandle ? easyhandle : nullptr);
 	}
 	LOG(Level::INFO,
 		"RssParser::fetch_freshrss: f.items.size = %" PRIu64,

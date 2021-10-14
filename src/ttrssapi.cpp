@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "3rd-party/json.hpp"
+#include "curlhandle.h"
 #include "logger.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
@@ -125,7 +126,7 @@ unsigned int TtRssApi::query_api_level()
 json TtRssApi::run_op(const std::string& op,
 	const std::map<std::string, std::string>& args,
 	bool try_login, /* = true */
-	CURL* cached_handle /* = nullptr */)
+	CurlHandle* cached_handle /* = nullptr */)
 {
 	std::string url =
 		strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
@@ -368,7 +369,7 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 	return success;
 }
 
-rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
+rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle* cached_handle)
 {
 	rsspp::Feed f;
 
@@ -393,6 +394,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	LOG(Level::DEBUG,
 		"TtRssApi::fetch_feed: %" PRIu64 " items",
 		static_cast<uint64_t>(content.size()));
+
 
 	try {
 		for (const auto& item_obj : content) {
