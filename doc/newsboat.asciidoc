@@ -1341,7 +1341,7 @@ configuration command.
 
 Example:
 
-	highlight-feed "unread > 100" white red bold
+	highlight-feed "unread_count > 100" white red bold
 
 Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
 the filter expression.
