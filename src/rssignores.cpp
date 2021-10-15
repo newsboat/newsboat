@@ -36,14 +36,14 @@ void RssIgnores::handle_action(const std::string& action,
 		}
 		std::string ignore_rssurl = params[0];
 		std::string ignore_expr = params[1];
-		Matcher m;
-		if (!m.parse(ignore_expr)) {
+		auto m = std::make_shared<Matcher>();
+		if (!m->parse(ignore_expr)) {
 			throw ConfigHandlerException(strprintf::fmt(
 					_("couldn't parse filter expression `%s': %s"),
 					ignore_expr,
-					m.get_parse_error()));
+					m->get_parse_error()));
 		}
-		ignores.push_back(FeedUrlExprPair(ignore_rssurl, new Matcher(ignore_expr)));
+		ignores.push_back(FeedUrlExprPair(ignore_rssurl, m));
 	} else if (action == "always-download") {
 		if (params.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -85,13 +85,6 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 	for (const auto& rf : resetflag) {
 		config_output.push_back(strprintf::fmt(
 				"reset-unread-on-update %s", utils::quote(rf)));
-	}
-}
-
-RssIgnores::~RssIgnores()
-{
-	for (const auto& ign : ignores) {
-		delete ign.second;
 	}
 }
 
