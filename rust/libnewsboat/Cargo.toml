@@ -19,6 +19,7 @@ unicode-width = "0.1.9"
 nom = "7"
 libc = "0.2"
 natord = "1.0.9"
+md5 = "0.7.0"
 
 [dependencies.clap]
 version = "2.33"

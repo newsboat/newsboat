@@ -4,6 +4,7 @@ use libc::{
     c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t, waitpid, E2BIG, EILSEQ,
     EINVAL,
 };
+use md5;
 use percent_encoding::*;
 use std::ffi::CString;
 use std::fs::DirBuilder;
@@ -150,6 +151,12 @@ pub fn get_basename(input: &str) -> String {
 pub fn get_default_browser() -> String {
     use std::env;
     env::var("BROWSER").unwrap_or_else(|_| "lynx".to_string())
+}
+
+pub fn md5hash(input: &str) -> String {
+    let digest = md5::compute(input);
+    let hash = format!("{:x}", digest);
+    hash
 }
 
 pub fn trim(rs_str: String) -> String {
