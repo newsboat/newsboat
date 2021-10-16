@@ -655,7 +655,8 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 }
 
 std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
-		const std::string& querystr, const std::string& feedurl)
+		const std::string& querystr, const std::string& feedurl,
+		RssIgnores& ign)
 {
 	assert(!utils::is_query_url(feedurl));
 	std::string query;
@@ -694,6 +695,23 @@ std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
 	for (const auto& item : items) {
 		item->set_cache(this);
 	}
+	items.erase(
+		std::remove_if(
+			items.begin(),
+			items.end(),
+	[&](std::shared_ptr<RssItem> item) -> bool {
+		try
+		{
+			return ign.matches(item.get());
+		} catch (const MatcherException& ex)
+		{
+			LOG(Level::DEBUG,
+				"Cache::search_for_items: oops, Matcher exception: %s",
+				ex.what());
+			return false;
+		}
+	}),
+	items.end());
 
 	return items;
 }

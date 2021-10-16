@@ -775,7 +775,7 @@ std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
 		}
 	} else {
 		items = rsscache->search_for_items(
-				query, (feed != nullptr ? feed->rssurl() : ""));
+				query, (feed != nullptr ? feed->rssurl() : ""), ign);
 		for (const auto& item : items) {
 			item->set_feedptr(
 				feedcontainer.get_feed_by_url(item->feedurl()));

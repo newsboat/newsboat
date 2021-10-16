@@ -58,7 +58,8 @@ public:
 	void do_vacuum();
 	std::vector<std::shared_ptr<RssItem>> search_for_items(
 			const std::string& querystr,
-			const std::string& feedurl);
+			const std::string& feedurl,
+			RssIgnores& ign);
 	std::unordered_set<std::string> search_in_items(
 		const std::string& querystr,
 		const std::unordered_set<std::string>& guids);
