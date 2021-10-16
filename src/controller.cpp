@@ -925,7 +925,7 @@ void Controller::write_item(std::shared_ptr<RssItem> item,
 		path = filename;
 		break;
 	case '~':
-		path = utils::resolve_tilde("~/") + filename;
+		path = utils::resolve_tilde(filename);
 		break;
 	default:
 		path = spath + filename;
