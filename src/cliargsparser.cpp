@@ -5,11 +5,20 @@
 namespace newsboat {
 
 
-rust::Vec<rust::String> argv_to_rust_args(int argc, char* argv[])
+rust::Vec<cliargsparser::bridged::BytesVec> argv_to_rust_args(int argc, char* argv[])
 {
-	rust::Vec<rust::String> args;
+	rust::Vec<cliargsparser::bridged::BytesVec> args;
+	args.reserve(argc);
 	for (int i = 0; i < argc; ++i) {
-		args.push_back(argv[i]);
+		cliargsparser::bridged::BytesVec arg;
+		rust::Vec<uint8_t> data;
+		auto j = 0;
+		while(argv[i][j] != '\0') {
+			data.push_back(argv[i][j]);
+			++j;
+		}
+		arg.data = std::move(data);
+		args.push_back(arg);
 	}
 	return args;
 }

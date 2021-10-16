@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 use gettextrs::gettext;
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
+use std::ffi::OsString;
 use std::path::PathBuf;
 
 use crate::logger::Level;
@@ -74,7 +75,7 @@ pub struct CliArgsParser {
 const LOCK_SUFFIX: &str = ".lock";
 
 impl CliArgsParser {
-    pub fn new(opts: Vec<String>) -> CliArgsParser {
+    pub fn new(opts: Vec<OsString>) -> CliArgsParser {
         const CACHE_FILE: &str = "cache-file";
         const CONFIG_FILE: &str = "config-file";
         const EXECUTE: &str = "execute";
@@ -173,7 +174,11 @@ impl CliArgsParser {
 
         let mut args = CliArgsParser::default();
 
-        if let Some(program_name) = opts.get(0).cloned() {
+        if let Some(program_name) = opts
+            .get(0)
+            .and_then(|prg| prg.to_str())
+            .map(|prg| prg.to_string())
+        {
             args.program_name = program_name;
         }
 
@@ -292,7 +297,7 @@ impl CliArgsParser {
                 _ => {
                     args.display_msg = fmt!(
                         &gettext("%s: %s: invalid loglevel value"),
-                        &opts[0],
+                        &args.program_name,
                         log_level_str
                     );
                     args.return_code = Some(EXIT_FAILURE);
@@ -321,7 +326,7 @@ mod tests {
         };
 
         check(vec![
-            "newsboat".to_string(),
+            "newsboat"..into(),
             "--some-unknown-option".to_string(),
         ]);
 
