@@ -10,12 +10,12 @@
 
 namespace newsboat {
 
-typedef std::pair<std::string, Matcher*> FeedUrlExprPair;
+typedef std::pair<std::string, std::shared_ptr<Matcher>> FeedUrlExprPair;
 
 class RssIgnores : public ConfigActionHandler {
 public:
 	RssIgnores() {}
-	~RssIgnores() override;
+	~RssIgnores() override {}
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
