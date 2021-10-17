@@ -66,20 +66,13 @@ mod bridged {
 }
 
 fn create(argv: Vec<bridged::BytesVec>) -> Box<CliArgsParser> {
-    #[cfg(target_os = "windows")]
-    {
-        compile_error!("Windows OsString conversion from rust::Vec<u8> not currently supported. Windows does not have trait method OsString::from_vec either.");
-    }
-    #[cfg(all(unix))]
-    {
-        let os_str_argv: Vec<OsString> = argv
-            .into_iter()
-            .map(|arg_bytes| OsString::from_vec(arg_bytes.data))
-            .collect();
-        Box::new(CliArgsParser(cliargsparser::CliArgsParser::new(
-            os_str_argv,
-        )))
-    }
+    let os_str_argv: Vec<OsString> = argv
+        .into_iter()
+        .map(|arg_bytes| OsString::from_vec(arg_bytes.data))
+        .collect();
+    Box::new(CliArgsParser(cliargsparser::CliArgsParser::new(
+        os_str_argv,
+    )))
 }
 
 fn do_import(cliargsparser: &CliArgsParser) -> bool {

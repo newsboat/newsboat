@@ -12,10 +12,8 @@ rust::Vec<cliargsparser::bridged::BytesVec> argv_to_rust_args(int argc, char* ar
 	for (int i = 0; i < argc; ++i) {
 		cliargsparser::bridged::BytesVec arg;
 		rust::Vec<uint8_t> data;
-		auto j = 0;
-		while (argv[i][j] != '\0') {
+		for (auto j = 0; argv[i][j] != '\0'; ++j) {
 			data.push_back(argv[i][j]);
-			++j;
 		}
 		arg.data = std::move(data);
 		args.push_back(arg);

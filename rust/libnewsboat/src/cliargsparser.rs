@@ -176,8 +176,7 @@ impl CliArgsParser {
 
         if let Some(program_name) = opts
             .get(0)
-            .and_then(|prg| prg.to_str())
-            .map(|prg| prg.to_string())
+            .map(|program_name| program_name.to_string_lossy().into_owned())
         {
             args.program_name = program_name;
         }
