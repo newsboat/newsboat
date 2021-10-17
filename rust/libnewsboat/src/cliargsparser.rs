@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 use gettextrs::gettext;
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
+use std::ffi::OsString;
 use std::path::PathBuf;
 
 use crate::logger::Level;
@@ -74,7 +75,7 @@ pub struct CliArgsParser {
 const LOCK_SUFFIX: &str = ".lock";
 
 impl CliArgsParser {
-    pub fn new(opts: Vec<String>) -> CliArgsParser {
+    pub fn new(opts: Vec<OsString>) -> CliArgsParser {
         const CACHE_FILE: &str = "cache-file";
         const CONFIG_FILE: &str = "config-file";
         const EXECUTE: &str = "execute";
@@ -173,7 +174,10 @@ impl CliArgsParser {
 
         let mut args = CliArgsParser::default();
 
-        if let Some(program_name) = opts.get(0).cloned() {
+        if let Some(program_name) = opts
+            .get(0)
+            .map(|program_name| program_name.to_string_lossy().into_owned())
+        {
             args.program_name = program_name;
         }
 
@@ -292,7 +296,7 @@ impl CliArgsParser {
                 _ => {
                     args.display_msg = fmt!(
                         &gettext("%s: %s: invalid loglevel value"),
-                        &opts[0],
+                        &args.program_name,
                         log_level_str
                     );
                     args.return_code = Some(EXIT_FAILURE);
@@ -320,15 +324,12 @@ mod tests {
             assert_eq!(args.return_code, Some(EXIT_FAILURE));
         };
 
-        check(vec![
-            "newsboat".to_string(),
-            "--some-unknown-option".to_string(),
-        ]);
+        check(vec!["newsboat".into(), "--some-unknown-option".into()]);
 
-        check(vec!["newsboat".to_string(), "-s".to_string()]);
-        check(vec!["newsboat".to_string(), "-s".to_string()]);
-        check(vec!["newsboat".to_string(), "-m ix".to_string()]);
-        check(vec!["newsboat".to_string(), "-wtf".to_string()]);
+        check(vec!["newsboat".into(), "-s".into()]);
+        check(vec!["newsboat".into(), "-s".into()]);
+        check(vec!["newsboat".into(), "-m ix".into()]);
+        check(vec!["newsboat".into(), "-wtf".into()]);
     }
 
     #[test]
@@ -340,21 +341,17 @@ mod tests {
             assert_eq!(args.importfile, Some(PathBuf::from(filename)));
         };
 
+        check(vec!["newsboat".into(), "-i".into(), filename.into()]);
         check(vec![
-            "newsboat".to_string(),
-            "-i".to_string(),
-            filename.to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--import-from-opml=".to_string() + filename,
+            "newsboat".into(),
+            format!("--import-from-opml={}", filename).into(),
         ]);
     }
 
     #[test]
     fn t_asks_to_print_usage_and_exit_with_failure_if_both_import_and_export_are_provided() {
-        let importf = "import.opml".to_string();
-        let exportf = "export.opml".to_string();
+        let importf: OsString = "import.opml".into();
+        let exportf: OsString = "export.opml".into();
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
@@ -364,17 +361,17 @@ mod tests {
         };
 
         check(vec![
-            "newsboat".to_string(),
-            "-i".to_string(),
+            "newsboat".into(),
+            "-i".into(),
             importf.clone(),
-            "-e".to_string(),
-            exportf.to_string(),
+            "-e".into(),
+            exportf.clone(),
         ]);
         check(vec![
-            "newsboat".to_string(),
-            "-e".to_string(),
+            "newsboat".into(),
+            "-e".into(),
             exportf,
-            "-i".to_string(),
+            "-i".into(),
             importf,
         ]);
     }
@@ -387,11 +384,8 @@ mod tests {
             assert!(args.refresh_on_start);
         };
 
-        check(vec!["newsboat".to_string(), "-r".to_string()]);
-        check(vec![
-            "newsboat".to_string(),
-            "--refresh-on-start".to_string(),
-        ]);
+        check(vec!["newsboat".into(), "-r".into()]);
+        check(vec!["newsboat".into(), "--refresh-on-start".into()]);
     }
 
     #[test]
@@ -402,8 +396,8 @@ mod tests {
             assert!(args.silent);
         };
 
-        check(vec!["newsboat".to_string(), "-e".to_string()]);
-        check(vec!["newsboat".to_string(), "--export-to-opml".to_string()]);
+        check(vec!["newsboat".into(), "-e".into()]);
+        check(vec!["newsboat".into(), "--export-to-opml".into()]);
     }
 
     #[test]
@@ -414,8 +408,8 @@ mod tests {
             assert!(args.do_export);
         };
 
-        check(vec!["newsboat".to_string(), "-e".to_string()]);
-        check(vec!["newsboat".to_string(), "--export-to-opml".to_string()]);
+        check(vec!["newsboat".into(), "-e".into()]);
+        check(vec!["newsboat".into(), "--export-to-opml".into()]);
     }
 
     #[test]
@@ -427,8 +421,8 @@ mod tests {
             assert_eq!(args.return_code, Some(EXIT_SUCCESS));
         };
 
-        check(vec!["newsboat".to_string(), "-h".to_string()]);
-        check(vec!["newsboat".to_string(), "--help".to_string()]);
+        check(vec!["newsboat".into(), "-h".into()]);
+        check(vec!["newsboat".into(), "--help".into()]);
     }
 
     #[test]
@@ -442,15 +436,11 @@ mod tests {
             assert!(args.using_nonstandard_configs());
         };
 
-        check(vec![
-            "newsboat".to_string(),
-            "-u".to_string(),
-            filename.to_string(),
-        ]);
+        check(vec!["newsboat".into(), "-u".into(), filename.into()]);
 
         check(vec![
-            "newsboat".to_string(),
-            "--url-file=".to_string() + filename,
+            "newsboat".into(),
+            format!("--url-file={}", filename).into(),
         ]);
     }
 
@@ -469,14 +459,10 @@ mod tests {
             assert!(args.using_nonstandard_configs());
         };
 
+        check(vec!["newsboat".into(), "-c".into(), filename.into()]);
         check(vec![
-            "newsboat".to_string(),
-            "-c".to_string(),
-            filename.to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--cache-file=".to_string() + filename,
+            "newsboat".into(),
+            format!("--cache-file={}", filename).into(),
         ]);
     }
 
@@ -484,11 +470,7 @@ mod tests {
     fn t_supports_combined_short_options() {
         let filename = "cache.db";
 
-        let opts = vec![
-            "newsboat".to_string(),
-            "-vc".to_string(),
-            filename.to_string(),
-        ];
+        let opts = vec!["newsboat".into(), "-vc".into(), filename.into()];
 
         let args = CliArgsParser::new(opts);
 
@@ -505,10 +487,7 @@ mod tests {
     fn t_supports_combined_short_option_and_value() {
         let filename = "cache.db";
 
-        let opts = vec![
-            "newsboat".to_string(),
-            "-c".to_string() + &filename.to_string(),
-        ];
+        let opts = vec!["newsboat".into(), format!("-c{}", &filename).into()];
 
         let args = CliArgsParser::new(opts);
 
@@ -524,10 +503,7 @@ mod tests {
     fn t_supports_equals_between_combined_short_option_and_value() {
         let filename = "cache.db";
 
-        let opts = vec![
-            "newsboat".to_string(),
-            "-c=".to_string() + &filename.to_string(),
-        ];
+        let opts = vec!["newsboat".into(), format!("-c={}", &filename).into()];
 
         let args = CliArgsParser::new(opts);
 
@@ -550,14 +526,10 @@ mod tests {
             assert!(args.using_nonstandard_configs());
         };
 
+        check(vec!["newsboat".into(), "-C".into(), filename.into()]);
         check(vec![
-            "newsboat".to_string(),
-            "-C".to_string(),
-            filename.to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--config-file=".to_string() + filename,
+            "newsboat".into(),
+            format!("--config-file={}", filename).into(),
         ]);
     }
 
@@ -569,8 +541,8 @@ mod tests {
             assert!(args.do_vacuum);
         };
 
-        check(vec!["newsboat".to_string(), "-X".to_string()]);
-        check(vec!["newsboat".to_string(), "--vacuum".to_string()]);
+        check(vec!["newsboat".into(), "-X".into()]);
+        check(vec!["newsboat".into(), "--vacuum".into()]);
     }
 
     #[test]
@@ -581,7 +553,7 @@ mod tests {
             assert!(args.do_cleanup);
         };
 
-        check(vec!["newsboat".to_string(), "--cleanup".to_string()]);
+        check(vec!["newsboat".into(), "--cleanup".into()]);
     }
 
     #[test]
@@ -592,29 +564,22 @@ mod tests {
             assert_eq!(args.show_version, expected_version);
         };
 
-        check(vec!["newsboat".to_string(), "-v".to_string()], 1);
-        check(vec!["newsboat".to_string(), "-V".to_string()], 1);
-        check(vec!["newsboat".to_string(), "--version".to_string()], 1);
-        check(vec!["newsboat".to_string(), "-vvvv".to_string()], 4);
-        check(vec!["newsboat".to_string(), "-vV".to_string()], 2);
+        check(vec!["newsboat".into(), "-v".into()], 1);
+        check(vec!["newsboat".into(), "-V".into()], 1);
+        check(vec!["newsboat".into(), "--version".into()], 1);
+        check(vec!["newsboat".into(), "-vvvv".into()], 4);
+        check(vec!["newsboat".into(), "-vV".into()], 2);
+        check(vec!["newsboat".into(), "--version".into(), "-v".into()], 2);
         check(
             vec![
-                "newsboat".to_string(),
-                "--version".to_string(),
-                "-v".to_string(),
-            ],
-            2,
-        );
-        check(
-            vec![
-                "newsboat".to_string(),
-                "-V".to_string(),
-                "--version".to_string(),
-                "-v".to_string(),
+                "newsboat".into(),
+                "-V".into(),
+                "--version".into(),
+                "-v".into(),
             ],
             3,
         );
-        check(vec!["newsboat".to_string(), "-VvVVvvvvV".to_string()], 9);
+        check(vec!["newsboat".into(), "-VvVVvvvvV".into()], 9);
     }
 
     #[test]
@@ -625,69 +590,53 @@ mod tests {
             assert!(args.silent);
         };
 
-        check(vec![
-            "newsboat".to_string(),
-            "-x".to_string(),
-            "reload".to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--execute".to_string(),
-            "reload".to_string(),
-        ]);
+        check(vec!["newsboat".into(), "-x".into(), "reload".into()]);
+        check(vec!["newsboat".into(), "--execute".into(), "reload".into()]);
     }
 
     #[test]
     fn t_inserts_commands_to_cmds_to_execute_if_dash_x_is_provided() {
-        let check = |opts, cmds| {
+        let check = |opts, cmds: Vec<String>| {
             let args = CliArgsParser::new(opts);
 
             assert_eq!(args.cmds_to_execute, cmds);
         };
 
         check(
-            vec![
-                "newsboat".to_string(),
-                "-x".to_string(),
-                "reload".to_string(),
-            ],
-            vec!["reload".to_string()],
+            vec!["newsboat".into(), "-x".into(), "reload".into()],
+            vec!["reload".into()],
+        );
+        check(
+            vec!["newsboat".into(), "--execute".into(), "reload".into()],
+            vec!["reload".into()],
         );
         check(
             vec![
-                "newsboat".to_string(),
-                "--execute".to_string(),
-                "reload".to_string(),
+                "newsboat".into(),
+                "-x".into(),
+                "reload".into(),
+                "print-unread".into(),
             ],
-            vec!["reload".to_string()],
+            vec!["reload".into(), "print-unread".into()],
         );
         check(
             vec![
-                "newsboat".to_string(),
-                "-x".to_string(),
-                "reload".to_string(),
-                "print-unread".to_string(),
+                "newsboat".into(),
+                "--execute".into(),
+                "reload".into(),
+                "print-unread".into(),
             ],
-            vec!["reload".to_string(), "print-unread".to_string()],
+            vec!["reload".into(), "print-unread".into()],
         );
         check(
             vec![
-                "newsboat".to_string(),
-                "--execute".to_string(),
-                "reload".to_string(),
-                "print-unread".to_string(),
+                "newsboat".into(),
+                "-x".into(),
+                "print-unread".into(),
+                "--execute".into(),
+                "reload".into(),
             ],
-            vec!["reload".to_string(), "print-unread".to_string()],
-        );
-        check(
-            vec![
-                "newsboat".to_string(),
-                "-x".to_string(),
-                "print-unread".to_string(),
-                "--execute".to_string(),
-                "reload".to_string(),
-            ],
-            vec!["print-unread".to_string(), "reload".to_string()],
+            vec!["print-unread".into(), "reload".into()],
         );
     }
 
@@ -699,8 +648,8 @@ mod tests {
             assert!(args.silent);
         };
 
-        check(vec!["newsboat".to_string(), "-q".to_string()]);
-        check(vec!["newsboat".to_string(), "--quiet".to_string()]);
+        check(vec!["newsboat".into(), "-q".into()]);
+        check(vec!["newsboat".into(), "--quiet".into()]);
     }
 
     #[test]
@@ -713,14 +662,10 @@ mod tests {
             assert_eq!(args.readinfo_import_file, Some(PathBuf::from(filename)));
         };
 
+        check(vec!["newsboat".into(), "-I".into(), filename.into()]);
         check(vec![
-            "newsboat".to_string(),
-            "-I".to_string(),
-            filename.to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--import-from-file=".to_string() + filename,
+            "newsboat".into(),
+            format!("--import-from-file={}", filename).into(),
         ]);
     }
 
@@ -734,21 +679,17 @@ mod tests {
             assert_eq!(args.readinfo_export_file, Some(PathBuf::from(filename)));
         };
 
+        check(vec!["newsboat".into(), "-E".into(), filename.into()]);
         check(vec![
-            "newsboat".to_string(),
-            "-E".to_string(),
-            filename.to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--export-to-file=".to_string() + filename,
+            "newsboat".into(),
+            format!("--export-to-file={}", filename).into(),
         ]);
     }
 
     #[test]
     fn t_asks_to_print_usage_and_exit_with_failure_if_both_capital_e_and_capital_i_are_provided() {
-        let importf = "import.opml".to_string();
-        let exportf = "export.opml".to_string();
+        let importf: OsString = "import.opml".into();
+        let exportf: OsString = "export.opml".into();
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
@@ -758,17 +699,17 @@ mod tests {
         };
 
         check(vec![
-            "newsboat".to_string(),
-            "-I".to_string(),
+            "newsboat".into(),
+            "-I".into(),
             importf.clone(),
-            "-E".to_string(),
-            exportf.to_string(),
+            "-E".into(),
+            exportf.clone(),
         ]);
         check(vec![
-            "newsboat".to_string(),
-            "-E".to_string(),
+            "newsboat".into(),
+            "-E".into(),
             exportf,
-            "-I".to_string(),
+            "-I".into(),
             importf,
         ]);
     }
@@ -783,14 +724,10 @@ mod tests {
             assert_eq!(args.log_file, Some(PathBuf::from(filename)));
         };
 
+        check(vec!["newsboat".into(), "-d".into(), filename.into()]);
         check(vec![
-            "newsboat".to_string(),
-            "-d".to_string(),
-            filename.to_string(),
-        ]);
-        check(vec![
-            "newsboat".to_string(),
-            "--log-file=".to_string() + filename,
+            "newsboat".into(),
+            format!("--log-file={}", filename).into(),
         ]);
     }
 
@@ -804,36 +741,27 @@ mod tests {
 
         // --log-level=1 means UserError
         check(
-            vec!["newsboat".to_string(), "--log-level=1".to_string()],
+            vec!["newsboat".into(), "--log-level=1".into()],
             Level::UserError,
         );
 
         // --log-level=2 means Critical
         check(
-            vec!["newsboat".to_string(), "--log-level=2".to_string()],
+            vec!["newsboat".into(), "--log-level=2".into()],
             Level::Critical,
         );
 
         // -l3 means Error
-        check(
-            vec!["newsboat".to_string(), "-l3".to_string()],
-            Level::Error,
-        );
+        check(vec!["newsboat".into(), "-l3".into()], Level::Error);
 
         // --log-level=4 means Warn
-        check(
-            vec!["newsboat".to_string(), "--log-level=4".to_string()],
-            Level::Warn,
-        );
+        check(vec!["newsboat".into(), "--log-level=4".into()], Level::Warn);
 
         // -l5 means Info
-        check(vec!["newsboat".to_string(), "-l5".to_string()], Level::Info);
+        check(vec!["newsboat".into(), "-l5".into()], Level::Info);
 
         // -l6 means Debug
-        check(
-            vec!["newsboat".to_string(), "-l6".to_string()],
-            Level::Debug,
-        );
+        check(vec!["newsboat".into(), "-l6".into()], Level::Debug);
     }
 
     #[test]
@@ -846,39 +774,33 @@ mod tests {
             assert_eq!(args.return_code, Some(EXIT_FAILURE));
         };
 
-        check(vec!["newsboat".to_string(), "-l0".to_string()]);
-        check(vec!["newsboat".to_string(), "--log-level=7".to_string()]);
-        check(vec![
-            "newsboat".to_string(),
-            "--log-level=90001".to_string(),
-        ]);
+        check(vec!["newsboat".into(), "-l0".into()]);
+        check(vec!["newsboat".into(), "--log-level=7".into()]);
+        check(vec!["newsboat".into(), "--log-level=90001".into()]);
     }
 
     #[test]
     fn t_sets_program_name_to_the_first_string_of_the_options_list() {
-        let check = |opts, expected| {
+        let check = |opts, expected: String| {
             let args = CliArgsParser::new(opts);
 
             assert_eq!(args.program_name, expected);
         };
 
-        check(vec!["newsboat".to_string()], "newsboat".to_string());
-        check(
-            vec!["podboat".to_string(), "-h".to_string()],
-            "podboat".to_string(),
-        );
+        check(vec!["newsboat".into()], "newsboat".into());
+        check(vec!["podboat".into(), "-h".into()], "podboat".into());
         check(
             vec![
-                "something else entirely".to_string(),
-                "--foo".to_string(),
-                "--bar".to_string(),
-                "--baz".to_string(),
+                "something else entirely".into(),
+                "--foo".into(),
+                "--bar".into(),
+                "--baz".into(),
             ],
-            "something else entirely".to_string(),
+            "something else entirely".into(),
         );
         check(
-            vec!["/usr/local/bin/app-with-a-path".to_string()],
-            "/usr/local/bin/app-with-a-path".to_string(),
+            vec!["/usr/local/bin/app-with-a-path".into()],
+            "/usr/local/bin/app-with-a-path".into(),
         );
     }
 }

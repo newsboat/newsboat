@@ -16,14 +16,10 @@ fn t_cliargsparser_dash_capital_e_resolves_tilde_to_homedir() {
         assert_eq!(args.readinfo_export_file, Some(tmp.path().join(filename)));
     };
 
-    check(vec![
-        "newsboat".to_string(),
-        "-E".to_string(),
-        arg.to_string(),
-    ]);
+    check(vec!["newsboat".into(), "-E".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".to_string(),
-        "--export-to-file=".to_string() + &arg,
+        "newsboat".into(),
+        format!("--export-to-file={}", &arg).into(),
     ]);
 }

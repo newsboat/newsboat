@@ -16,14 +16,14 @@ fn t_configpaths_process_args_replaces_paths_with_the_ones_supplied_by_cliargspa
     let config_file = Path::new("this is a/config");
 
     let parser = CliArgsParser::new(vec![
-        "newsboat".to_string(),
-        "-u".to_string(),
-        url_file.to_string_lossy().into_owned(),
-        "-c".to_string(),
-        cache_file.to_string_lossy().into_owned(),
-        "-C".to_string(),
-        config_file.to_string_lossy().into_owned(),
-        "-q".to_string(),
+        "newsboat".into(),
+        "-u".into(),
+        url_file.into(),
+        "-c".into(),
+        cache_file.into(),
+        "-C".into(),
+        config_file.into(),
+        "-q".into(),
     ]);
 
     let mut paths = ConfigPaths::new();
