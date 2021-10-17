@@ -49,14 +49,14 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_config_paths_we
     ));
 
     let parser = CliArgsParser::new(vec![
-        "newsboat".to_string(),
-        "-u".to_string(),
-        url_file.to_string_lossy().into_owned(),
-        "-c".to_string(),
-        cache_file.to_string_lossy().into_owned(),
-        "-C".to_string(),
-        config_file.to_string_lossy().into_owned(),
-        "-q".to_string(),
+        "newsboat".into(),
+        "-u".into(),
+        url_file.clone().into(),
+        "-c".into(),
+        cache_file.clone().into(),
+        "-C".into(),
+        config_file.clone().into(),
+        "-q".into(),
     ]);
 
     let mut paths = ConfigPaths::new();

@@ -16,14 +16,10 @@ fn t_cliargsparser_dash_capital_c_resolves_tilde_to_homedir() {
         assert_eq!(args.config_file, Some(tmp.path().join(filename)));
     };
 
-    check(vec![
-        "newsboat".to_string(),
-        "-C".to_string(),
-        arg.to_string(),
-    ]);
+    check(vec!["newsboat".into(), "-C".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".to_string(),
-        "--config-file=".to_string() + &arg,
+        "newsboat".into(),
+        format!("--config-file={}", &arg).into(),
     ]);
 }

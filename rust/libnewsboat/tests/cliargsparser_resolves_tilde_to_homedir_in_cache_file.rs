@@ -20,14 +20,10 @@ fn t_cliargsparser_dash_c_resolves_tilde_to_homedir() {
         );
     };
 
-    check(vec![
-        "newsboat".to_string(),
-        "-c".to_string(),
-        arg.to_string(),
-    ]);
+    check(vec!["newsboat".into(), "-c".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".to_string(),
-        "--cache-file=".to_string() + &arg,
+        "newsboat".into(),
+        format!("--cache-file={}", &arg).into(),
     ]);
 }
