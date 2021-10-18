@@ -87,6 +87,11 @@ public:
 		unsigned int pos,
 		bool unattended);
 
+	ConfigContainer* get_config()
+	{
+		return &cfg;
+	}
+
 	RssIgnores* get_ignores()
 	{
 		return &ign;
