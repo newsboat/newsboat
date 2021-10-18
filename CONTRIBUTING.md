@@ -38,33 +38,54 @@ Remember to write clear and concise commit messages describing your changes and 
 sure to reference any issues and/or other commits. An example of a well written
 commit message can be found [here](https://chris.beams.io/posts/git-commit/).
 
+Please follow our [style guide](doc/internal/code-style.markdown) when
+contributing code. See also [the Newsboat hacker's
+guide](doc/internal/hackers-guide.asciidoc).
+
+Patches can be submitted by sending a
+[GitHub Pull Request](https://github.com/newsboat/newsboat/pull/new/master) or
+emailing a patch to the Newsboat
+[mailing list](https://groups.google.com/group/newsboat) (newsboat@googlegroups.com).
+To learn more about patches, see
+[here](https://www.kernel.org/doc/html/latest/process/submitting-patches.html) and
+[here](https://github.com/git/git/blob/master/Documentation/SubmittingPatches). To
+learn more about pull requests,
+see the [GitHub docs](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+### Building
+
+Newsboat can be built by running:
+
+	$ make -jN
+
+Where `N` is again the number of threads you want to use. Please note that if
+you make changes to the included headers in any of the source files you have
+to run:
+
+	make depslist
+
+This command resolves all of the necessary dependencies and writes the list
+to `mk/mk.deps`. It's important to note here that the command above only
+works correctly if your default compiler is set to GCC. If your default
+compiler is Clang you can use GCC just for this one operation:
+
+	CXX=g++ make depslist
+
+Newsboat can also be [built in Docker](doc/docker.md).
+
+### Testing
+
 When contributing code, it's wise to test your code to ensure it it hasn't
 broken existing functionality. This can by done by running:
 
 	$ TMPDIR=/dev/shm make -j5 PROFILE=1 check
 
-The "5" here is the number of CPU cores in your machine *plus one*. This
+The `5` here is the number of CPU cores in your machine *plus one*. This
 parallelises the build. Rust tests already utilize as many cores as they can,
 but if you want to limit them, use the `RUST_TEST_THREADS` environment variable.
 `/dev/shm` is a "ramdisk", i.e. a virtual disk stored in the RAM. The tests
 create a lot of temporary files, and benefit from fast storage; a ramdisk is
 even better than an SSD.
-
-Newsboat can also be [built in Docker](doc/docker.md).
-
-Please follow our [style guide](doc/internal/code-style.markdown) when
-contributing code. See also [the Newsboat hacker's
-guide](doc/internal/hackers-guide.asciidoc).
-
-Patches can be submitted by sending a 
-[GitHub Pull Request](https://github.com/newsboat/newsboat/pull/new/master) or 
-emailing a patch to the Newsboat 
-[mailing list](https://groups.google.com/group/newsboat) (newsboat@googlegroups.com). 
-To learn more about patches, see 
-[here](https://www.kernel.org/doc/html/latest/process/submitting-patches.html) and 
-[here](https://github.com/git/git/blob/master/Documentation/SubmittingPatches). To
-learn more about pull requests, 
-see the [GitHub docs](https://docs.github.com/en/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 
 ## Documentation
