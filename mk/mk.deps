@@ -951,6 +951,24 @@ test/configpaths.o: test/configpaths.cpp include/configpaths.h \
  include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
  include/configactionhandler.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
+test/controller.o: test/controller.cpp include/controller.h \
+ include/cache.h include/configcontainer.h include/configactionhandler.h \
+ include/colormanager.h include/configparser.h include/feedcontainer.h \
+ include/filtercontainer.h include/fslock.h \
+ target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/opml.h \
+ include/fileurlreader.h include/urlreader.h 3rd-party/optional.hpp \
+ include/queuemanager.h include/regexmanager.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/reloader.h \
+ include/remoteapi.h include/rssignores.h include/rssitem.h \
+ include/matchable.h include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ include/cliargsparser.h include/logger.h config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/cache.h \
+ include/utils.h 3rd-party/expected.hpp \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/rssitem.h \
+ 3rd-party/catch.hpp test/test-helpers/tempdir.h \
+ test/test-helpers/maintempdir.h test/test-helpers/envvar.h
 test/download.o: test/download.cpp include/download.h 3rd-party/catch.hpp
 test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
