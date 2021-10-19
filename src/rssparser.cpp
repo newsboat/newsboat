@@ -692,7 +692,7 @@ void RssParser::fetch_miniflux(const std::string& feed_id)
 	if (mapi) {
 		if (easyhandle) {
 			f = mapi->fetch_feed(feed_id, *easyhandle);
-		} else{ 
+		} else { 
 			f = mapi->fetch_feed(feed_id);
 		}
 	}

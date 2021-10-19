@@ -232,7 +232,7 @@ std::string utils::retrieve_url(const std::string& url,
 }
 
 std::string utils::retrieve_url(const std::string& url,
-	CurlHandle &easyhandle,
+	CurlHandle& easyhandle,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
