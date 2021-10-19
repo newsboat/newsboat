@@ -20,17 +20,7 @@ nom = "7"
 libc = "0.2"
 natord = "1.0.9"
 md5 = "0.7.0"
-
-[dependencies.clap]
-version = "2.33"
-# This disables three features, for the following reasons:
-# - "suggestions" and "color" features: we provide our own help text, so don't
-#   need those
-# - "vec_map": this provides "a slight performance improvement" at the cost of
-#   an additional dependency. At the time of writing Rust is still a new kid on
-#   the block, distros are still figuring out the ways to package crates, so
-#   I want as little dependencies as practically possible.
-default-features = false
+lexopt = "0.1.0"
 
 [dependencies.gettext-rs]
 version = "0.7.0"
