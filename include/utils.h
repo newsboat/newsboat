@@ -59,12 +59,18 @@ std::string locale_to_utf8(const std::string& text);
 
 std::string get_command_output(const std::string& cmd);
 std::string http_method_str(const HTTPMethod method);
+
 std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
-	const HTTPMethod method = HTTPMethod::GET,
-	CurlHandle* easyhandle = nullptr);
+	const HTTPMethod method = HTTPMethod::GET);
+std::string retrieve_url(const std::string& url,
+	CurlHandle& easyhandle,
+	ConfigContainer* cfgcont = nullptr,
+	const std::string& authinfo = "",
+	const std::string* body = nullptr,
+	const HTTPMethod method = HTTPMethod::GET);
 std::string run_program(const char* argv[], const std::string& input);
 
 std::string resolve_tilde(const std::string&);

@@ -19,8 +19,11 @@ public:
 	bool authenticate() override;
 	virtual nlohmann::json run_op(const std::string& op,
 		const std::map<std::string, std::string>& args,
-		bool try_login = true,
-		CurlHandle* cached_handle = nullptr);
+		bool try_login = true);
+	virtual nlohmann::json run_op(const std::string& op,
+		const std::map<std::string, std::string>& args,
+		CurlHandle& cached_handle,
+		bool try_login = true);
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
 	bool mark_all_read(const std::string& feedurl) override;
@@ -28,7 +31,8 @@ public:
 	bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) override;
-	rsspp::Feed fetch_feed(const std::string& id, CurlHandle* cached_handle);
+	rsspp::Feed fetch_feed(const std::string& id);
+	rsspp::Feed fetch_feed(const std::string& id, CurlHandle& cached_handle);
 	bool update_article(const std::string& guid, int mode, int field);
 
 private:

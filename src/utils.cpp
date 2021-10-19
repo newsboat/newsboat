@@ -220,49 +220,53 @@ std::string utils::http_method_str(const HTTPMethod method)
 
 	return str;
 }
-
 std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
-	const HTTPMethod method, /* = GET */
-	CurlHandle* cached_handle)
+	const HTTPMethod method /* = GET */)
+{
+
+	CurlHandle handle;
+	return retrieve_url(url,handle,cfgcont,authinfo,body,method);
+}
+
+std::string utils::retrieve_url(const std::string& url,
+	CurlHandle &easyhandle,
+	ConfigContainer* cfgcont,
+	const std::string& authinfo,
+	const std::string* body,
+	const HTTPMethod method /* = GET */)
 {
 	std::string buf;
 
-	CurlHandle * easyhandle;
-	if (cached_handle) {
-		easyhandle = cached_handle;
-	} else {
-		easyhandle = new CurlHandle();
-	}
-	set_common_curl_options(easyhandle->ptr(), cfgcont);
-	curl_easy_setopt(easyhandle->ptr(), CURLOPT_URL, url.c_str());
-	curl_easy_setopt(easyhandle->ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(easyhandle->ptr(), CURLOPT_WRITEDATA, &buf);
+	set_common_curl_options(easyhandle.ptr(), cfgcont);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
 
 	switch (method) {
 	case HTTPMethod::GET:
 		break;
 	case HTTPMethod::POST:
-		curl_easy_setopt(easyhandle->ptr(), CURLOPT_POST, 1);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_POST, 1);
 		break;
 	case HTTPMethod::PUT:
 	case HTTPMethod::DELETE:
 		const std::string method_str = http_method_str(method);
-		curl_easy_setopt(easyhandle->ptr(), CURLOPT_CUSTOMREQUEST, method_str.c_str());
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_CUSTOMREQUEST, method_str.c_str());
 		break;
 	}
 
 	if (body != nullptr) {
 		curl_easy_setopt(
-			easyhandle->ptr(), CURLOPT_POSTFIELDS, body->c_str());
+			easyhandle.ptr(), CURLOPT_POSTFIELDS, body->c_str());
 	}
 
 	if (!authinfo.empty()) {
 		const auto auth_method = cfgcont->get_configvalue("http-auth-method");
-		curl_easy_setopt(easyhandle->ptr(), CURLOPT_HTTPAUTH, get_auth_method(auth_method));
-		curl_easy_setopt(easyhandle->ptr(), CURLOPT_USERPWD, authinfo.c_str());
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPAUTH, get_auth_method(auth_method));
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERPWD, authinfo.c_str());
 	}
 
 	// Error handling as per https://curl.se/libcurl/c/CURLOPT_ERRORBUFFER.html
@@ -270,10 +274,10 @@ std::string utils::retrieve_url(const std::string& url,
 	// Please note that we clobber CURLOPT_ERRORBUFFER here in case of cached handles
 	// Currently, this is the only place we do this, so this should be fine.
 	// There does not seem to be a way to query curlopts, so we cannot save the old errorbuf value here...
-	curl_easy_setopt(easyhandle->ptr(), CURLOPT_ERRORBUFFER, errbuf);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, errbuf);
 	errbuf[0] = '\0';
 
-	CURLcode res = curl_easy_perform(easyhandle->ptr());
+	CURLcode res = curl_easy_perform(easyhandle.ptr());
 
 	std::stringstream logprefix;
 	logprefix << "utils::retrieve_url(" << http_method_str(method) << " " << url << ")"
@@ -295,14 +299,10 @@ std::string utils::retrieve_url(const std::string& url,
 		LOG(Level::DEBUG, "%s: %s", logprefix.str(), buf);
 	}
 
-	if (!cached_handle) {
-		delete easyhandle;
-	} else {
-		// Reset ERRORBUFFER: has to be valid for the whole lifetime of the handle
-		// NULL is the default value of this property according to man (3) CURLOPT_ERRORBUFFER
-		// See the clobbering note above.
-		curl_easy_setopt(easyhandle->ptr(), CURLOPT_ERRORBUFFER, NULL);
-	}
+	// Reset ERRORBUFFER: has to be valid for the whole lifetime of the handle
+	// NULL is the default value of this property according to man (3) CURLOPT_ERRORBUFFER
+	// See the clobbering note above.
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
 
 	return buf;
 }

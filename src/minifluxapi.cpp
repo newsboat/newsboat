@@ -92,7 +92,7 @@ bool MinifluxApi::mark_all_read(const std::string& id)
 {
 	// TODO create Miniflux PR to add endpoint for marking all entries in feed
 	// as read
-	const rsspp::Feed feed = fetch_feed(id, nullptr);
+	const rsspp::Feed feed = fetch_feed(id);
 
 	std::vector<std::string> guids;
 	for (const auto& item : feed.items) {
@@ -131,7 +131,13 @@ bool MinifluxApi::update_article_flags(const std::string& /* oldflags */,
 	return false;
 }
 
-rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle* cached_handle)
+rsspp::Feed MinifluxApi::fetch_feed(const std::string& id)
+{
+	CurlHandle handle;
+	return fetch_feed(id,handle);
+}
+
+rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle& cached_handle)
 {
 	rsspp::Feed feed;
 	feed.rss_version = rsspp::Feed::MINIFLUX_JSON;
@@ -141,7 +147,7 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle* cached_ha
 			id,
 			cfg->get_configvalue_as_int("miniflux-min-items"));
 
-	const json content = run_op(query, json(), HTTPMethod::GET, cached_handle);
+	const json content = run_op(query, json(), cached_handle, HTTPMethod::GET);
 	if (content.is_null()) {
 		return feed;
 	}
@@ -209,21 +215,22 @@ void MinifluxApi::add_custom_headers(curl_slist** /* custom_headers */)
 {
 	// nothing required
 }
+json MinifluxApi::run_op(const std::string& path,
+	const json& args,
+	const HTTPMethod method /* = GET */)
+{
+	CurlHandle handle;
+	return run_op(path, args, handle, method);
+}
 
 json MinifluxApi::run_op(const std::string& path,
 	const json& args,
-	const HTTPMethod method, /* = GET */
-	CurlHandle* cached_handle /* = nullptr */)
+	CurlHandle& easyhandle,
+	const HTTPMethod method /* = GET */)
 {
-	CurlHandle* easyhandle;
-	if (cached_handle) {
-		easyhandle = cached_handle;
-	} else {
-		easyhandle = new CurlHandle();
-	}
 	// follow redirects and keep the same request type
-	curl_easy_setopt(easyhandle->ptr(), CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(easyhandle->ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
 	const std::string url = server + path;
 
@@ -235,11 +242,8 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	const std::string result = utils::retrieve_url(
-			url, cfg, auth_info, body, method,easyhandle);
+			url, easyhandle, cfg, auth_info, body, method);
 
-	if (!cached_handle) {
-		delete easyhandle;
-	}
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",
