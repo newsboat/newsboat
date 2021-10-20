@@ -77,7 +77,7 @@ pub struct CliArgsParser {
 const LOCK_SUFFIX: &str = ".lock";
 
 fn strip_eq(value: &OsString) -> &OsStr {
-    const EQUAL_SIGN: u8 = b'=' as u8;
+    const EQUAL_SIGN: u8 = b'=';
     if let Some(&EQUAL_SIGN) = value.as_bytes().get(0) {
         OsStr::from_bytes(&value.as_bytes()[1..])
     } else {
