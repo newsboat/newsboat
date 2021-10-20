@@ -108,6 +108,7 @@ impl LexoptWrapper {
                 self.last_seen = MultiValueOption::None;
             }
             Ok(Some(lexopt::prelude::Long(_))) => {
+                self.last_was_short = false;
                 self.last_seen = MultiValueOption::None;
             }
             _ => self.last_was_short = false,
