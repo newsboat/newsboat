@@ -7,6 +7,7 @@
 #include <libxml/tree.h>
 
 #include "config.h"
+#include "curlhandle.h"
 #include "exception.h"
 #include "logger.h"
 #include "remoteapi.h"
@@ -104,73 +105,75 @@ Feed Parser::parse_url(const std::string& url,
 	time_t lastmodified,
 	const std::string& etag,
 	newsboat::RemoteApi* api,
-	const std::string& cookie_cache,
-	CURL* ehandle)
+	const std::string& cookie_cache)
+{
+	CurlHandle handle;
+	return parse_url(url, handle, lastmodified, etag, api, cookie_cache);
+}
+
+Feed Parser::parse_url(const std::string& url,
+	newsboat::CurlHandle& easyhandle,
+	time_t lastmodified,
+	const std::string& etag,
+	newsboat::RemoteApi* api,
+	const std::string& cookie_cache)
 {
 	std::string buf;
 	CURLcode ret;
 	curl_slist* custom_headers{};
 
-	CURL* easyhandle = ehandle;
-	if (!easyhandle) {
-		easyhandle = curl_easy_init();
-		if (!easyhandle) {
-			throw Exception(_("couldn't initialize libcurl"));
-		}
-	}
-
 	if (!ua.empty()) {
-		curl_easy_setopt(easyhandle, CURLOPT_USERAGENT, ua.c_str());
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERAGENT, ua.c_str());
 	}
 
 	if (api) {
 		api->add_custom_headers(&custom_headers);
 	}
-	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(easyhandle, CURLOPT_SSL_VERIFYPEER, verify_ssl);
-	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
-	curl_easy_setopt(easyhandle, CURLOPT_NOSIGNAL, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_MAXREDIRS, 10);
-	curl_easy_setopt(easyhandle, CURLOPT_FAILONERROR, 1);
-	curl_easy_setopt(easyhandle, CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_SSL_VERIFYPEER, verify_ssl);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_MAXREDIRS, 10);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FAILONERROR, 1);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
 	if (cookie_cache != "") {
 		curl_easy_setopt(
-			easyhandle, CURLOPT_COOKIEFILE, cookie_cache.c_str());
+			easyhandle.ptr(), CURLOPT_COOKIEFILE, cookie_cache.c_str());
 		curl_easy_setopt(
-			easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
+			easyhandle.ptr(), CURLOPT_COOKIEJAR, cookie_cache.c_str());
 	}
 	if (to != 0) {
-		curl_easy_setopt(easyhandle, CURLOPT_TIMEOUT, to);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_TIMEOUT, to);
 	}
 
 	if (!prx.empty()) {
-		curl_easy_setopt(easyhandle, CURLOPT_PROXY, prx.c_str());
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_PROXY, prx.c_str());
 	}
 
 	if (!prxauth.empty()) {
-		curl_easy_setopt(easyhandle, CURLOPT_PROXYAUTH, CURLAUTH_ANY);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_PROXYAUTH, CURLAUTH_ANY);
 		curl_easy_setopt(
-			easyhandle, CURLOPT_PROXYUSERPWD, prxauth.c_str());
+			easyhandle.ptr(), CURLOPT_PROXYUSERPWD, prxauth.c_str());
 	}
 
-	curl_easy_setopt(easyhandle, CURLOPT_PROXYTYPE, prxtype);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_PROXYTYPE, prxtype);
 
 	const char* curl_ca_bundle = ::getenv("CURL_CA_BUNDLE");
 	if (curl_ca_bundle != nullptr) {
-		curl_easy_setopt(easyhandle, CURLOPT_CAINFO, curl_ca_bundle);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_CAINFO, curl_ca_bundle);
 	}
 
 	HeaderValues hdrs;
-	curl_easy_setopt(easyhandle, CURLOPT_HEADERDATA, &hdrs);
-	curl_easy_setopt(easyhandle, CURLOPT_HEADERFUNCTION, handle_headers);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERDATA, &hdrs);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERFUNCTION, handle_headers);
 
 	if (lastmodified != 0) {
-		curl_easy_setopt(easyhandle,
+		curl_easy_setopt(easyhandle.ptr(),
 			CURLOPT_TIMECONDITION,
 			CURL_TIMECOND_IFMODSINCE);
-		curl_easy_setopt(easyhandle, CURLOPT_TIMEVALUE, lastmodified);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_TIMEVALUE, lastmodified);
 	}
 
 	if (etag.length() > 0) {
@@ -186,16 +189,16 @@ Feed Parser::parse_url(const std::string& url,
 
 	if (custom_headers) {
 		curl_easy_setopt(
-			easyhandle, CURLOPT_HTTPHEADER, custom_headers);
+			easyhandle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	}
 
-	ret = curl_easy_perform(easyhandle);
+	ret = curl_easy_perform(easyhandle.ptr());
 
 	lm = hdrs.lastmodified;
 	et = hdrs.etag;
 
 	if (custom_headers) {
-		curl_easy_setopt(easyhandle, CURLOPT_HTTPHEADER, 0);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, 0);
 		curl_slist_free_all(custom_headers);
 	}
 
@@ -206,16 +209,12 @@ Feed Parser::parse_url(const std::string& url,
 
 	long status;
 	CURLcode infoOk =
-		curl_easy_getinfo(easyhandle, CURLINFO_RESPONSE_CODE, &status);
+		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
 
-	curl_easy_reset(easyhandle);
+	curl_easy_reset(easyhandle.ptr());
 	if (cookie_cache != "") {
 		curl_easy_setopt(
-			easyhandle, CURLOPT_COOKIEJAR, cookie_cache.c_str());
-	}
-
-	if (!ehandle) {
-		curl_easy_cleanup(easyhandle);
+			easyhandle.ptr(), CURLOPT_COOKIEJAR, cookie_cache.c_str());
 	}
 
 	if (ret != 0) {

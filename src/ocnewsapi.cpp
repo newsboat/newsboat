@@ -324,7 +324,7 @@ bool OcNewsApi::query(const std::string& query,
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
 	curl_slist* headers = NULL;
 
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 
 	static auto write_fn =
 	[](void* buffer, size_t size, size_t nmemb, void* userp) {

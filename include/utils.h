@@ -20,6 +20,8 @@
 
 namespace newsboat {
 
+class CurlHandle;
+
 // Forward declaration for a type from htmlrenderer.h
 enum class LinkType;
 
@@ -58,12 +60,18 @@ std::string locale_to_utf8(const std::string& text);
 
 std::string get_command_output(const std::string& cmd);
 std::string http_method_str(const HTTPMethod method);
+
 std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
-	const HTTPMethod method = HTTPMethod::GET,
-	CURL* easyhandle = nullptr);
+	const HTTPMethod method = HTTPMethod::GET);
+std::string retrieve_url(const std::string& url,
+	CurlHandle& easyhandle,
+	ConfigContainer* cfgcont = nullptr,
+	const std::string& authinfo = "",
+	const std::string* body = nullptr,
+	const HTTPMethod method = HTTPMethod::GET);
 std::string run_program(const char* argv[], const std::string& input);
 
 std::string resolve_tilde(const std::string&);
@@ -113,7 +121,7 @@ std::string quote(const std::string& str);
 
 std::string quote_if_necessary(const std::string& str);
 
-void set_common_curl_options(CURL* handle, ConfigContainer* cfg);
+void set_common_curl_options(CurlHandle& handle, ConfigContainer* cfg);
 
 curl_proxytype get_proxy_type(const std::string& type);
 

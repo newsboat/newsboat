@@ -8,6 +8,12 @@
 #include "remoteapi.h"
 #include "feed.h"
 
+namespace newsboat {
+
+class CurlHandle;
+
+}
+
 namespace rsspp {
 
 class Parser {
@@ -20,11 +26,16 @@ public:
 		const bool ssl_verify = true);
 	~Parser();
 	Feed parse_url(const std::string& url,
+		newsboat::CurlHandle& easyhandle,
 		time_t lastmodified = 0,
 		const std::string& etag = "",
 		newsboat::RemoteApi* api = 0,
-		const std::string& cookie_cache = "",
-		CURL* ehandle = 0);
+		const std::string& cookie_cache = "");
+	Feed parse_url(const std::string& url,
+		time_t lastmodified = 0,
+		const std::string& etag = "",
+		newsboat::RemoteApi* api = 0,
+		const std::string& cookie_cache = "");
 	Feed parse_buffer(const std::string& buffer,
 		const std::string& url = "");
 	Feed parse_file(const std::string& filename);

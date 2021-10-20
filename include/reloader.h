@@ -43,8 +43,12 @@ public:
 	/// a temporary handle which is destroyed before returning from it.
 	void reload(unsigned int pos,
 		bool show_progress = false,
-		bool unattended = false,
-		CurlHandle* easyhandle = nullptr);
+		bool unattended = false);
+
+	void reload(unsigned int pos,
+		CurlHandle& easyhandle,
+		bool show_progress = false,
+		bool unattended = false);
 
 	/// \brief Reloads all feeds, spawning threads as necessary.
 	///

@@ -10,6 +10,8 @@ using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
 
+class CurlHandle;
+
 class MinifluxApi : public RemoteApi {
 public:
 	explicit MinifluxApi(ConfigContainer* cfg);
@@ -22,13 +24,17 @@ public:
 		const std::string& newflags,
 		const std::string& guid) override;
 	void add_custom_headers(curl_slist**) override;
-	rsspp::Feed fetch_feed(const std::string& id, CURL* cached_handle);
+	rsspp::Feed fetch_feed(const std::string& id);
+	rsspp::Feed fetch_feed(const std::string& id, CurlHandle& easyhandle);
 
 private:
 	virtual nlohmann::json run_op(const std::string& path,
 		const nlohmann::json& req_data,
-		const HTTPMethod method = HTTPMethod::GET,
-		CURL* cached_handle = nullptr);
+		const HTTPMethod method = HTTPMethod::GET);
+	virtual nlohmann::json run_op(const std::string& path,
+		const nlohmann::json& req_data,
+		CurlHandle& cached_handle,
+		const HTTPMethod method = HTTPMethod::GET);
 	TaggedFeedUrl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);
 	bool flag_changed(const std::string& oldflags,
