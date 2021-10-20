@@ -106,7 +106,7 @@ impl LexoptWrapper {
             Ok(Some(lexopt::prelude::Short(_))) => {
                 self.last_was_short = true;
             }
-            _ => self.last_was_short = true,
+            _ => self.last_was_short = false,
         }
         arg
     }
