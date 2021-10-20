@@ -5,9 +5,14 @@
 #include <libxml/parser.h>
 #include <string>
 
-#include "curlhandle.h"
 #include "remoteapi.h"
 #include "feed.h"
+
+namespace newsboat {
+
+class CurlHandle;
+
+}
 
 namespace rsspp {
 

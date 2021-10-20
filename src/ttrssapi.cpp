@@ -128,8 +128,9 @@ json TtRssApi::run_op(const std::string& op,
 	bool try_login /* = true */)
 {
 	CurlHandle handle;
-	return TtRssApi::run_op(op,args,handle,try_login);
+	return TtRssApi::run_op(op, args, handle, try_login);
 }
+
 json TtRssApi::run_op(const std::string& op,
 	const std::map<std::string, std::string>& args,
 	CurlHandle& cached_handle,
@@ -379,9 +380,9 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 rsspp::Feed TtRssApi::fetch_feed(const std::string& id)
 {
 	CurlHandle handle;
-	return fetch_feed(id,handle);
-
+	return fetch_feed(id, handle);
 }
+
 rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handle)
 {
 	rsspp::Feed f;
@@ -407,7 +408,6 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handl
 	LOG(Level::DEBUG,
 		"TtRssApi::fetch_feed: %" PRIu64 " items",
 		static_cast<uint64_t>(content.size()));
-
 
 	try {
 		for (const auto& item_obj : content) {

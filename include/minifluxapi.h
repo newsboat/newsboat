@@ -2,7 +2,6 @@
 #define NEWSBOAT_MINIFLUXAPI_H_
 
 #include "3rd-party/json.hpp"
-#include "curlhandle.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
 #include "utils.h"
@@ -10,6 +9,8 @@
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
+
+class CurlHandle;
 
 class MinifluxApi : public RemoteApi {
 public:

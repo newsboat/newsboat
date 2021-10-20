@@ -110,6 +110,7 @@ Feed Parser::parse_url(const std::string& url,
 	CurlHandle handle;
 	return parse_url(url, handle, lastmodified, etag, api, cookie_cache);
 }
+
 Feed Parser::parse_url(const std::string& url,
 	newsboat::CurlHandle& easyhandle,
 	time_t lastmodified,
@@ -120,10 +121,6 @@ Feed Parser::parse_url(const std::string& url,
 	std::string buf;
 	CURLcode ret;
 	curl_slist* custom_headers{};
-
-	if (!easyhandle.ptr()) {
-		throw Exception(_("couldn't initialize libcurl"));
-	}
 
 	if (!ua.empty()) {
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERAGENT, ua.c_str());

@@ -71,7 +71,7 @@ std::string FreshRssApi::retrieve_auth()
 
 	std::string result;
 
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
@@ -101,7 +101,7 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
@@ -262,7 +262,7 @@ std::string FreshRssApi::get_new_token()
 	std::string result;
 	curl_slist* custom_headers{};
 
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
@@ -378,7 +378,7 @@ std::string FreshRssApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
@@ -417,7 +417,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(cached_handle.ptr(), cfg);
+	utils::set_common_curl_options(cached_handle, cfg);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(cached_handle.ptr(),

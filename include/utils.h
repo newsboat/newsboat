@@ -13,13 +13,14 @@
 #include "3rd-party/expected.hpp"
 #include "3rd-party/optional.hpp"
 
-#include "curlhandle.h"
 #include "configcontainer.h"
 #include "logger.h"
 
 #include "libnewsboat-ffi/src/utils.rs.h"
 
 namespace newsboat {
+
+class CurlHandle;
 
 // Forward declaration for a type from htmlrenderer.h
 enum class LinkType;
@@ -120,7 +121,7 @@ std::string quote(const std::string& str);
 
 std::string quote_if_necessary(const std::string& str);
 
-void set_common_curl_options(CURL* handle, ConfigContainer* cfg);
+void set_common_curl_options(CurlHandle& handle, ConfigContainer* cfg);
 
 curl_proxytype get_proxy_type(const std::string& type);
 

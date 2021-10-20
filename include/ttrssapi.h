@@ -3,7 +3,6 @@
 
 #include "3rd-party/json.hpp"
 #include "cache.h"
-#include "curlhandle.h"
 #include "remoteapi.h"
 
 namespace rsspp {
@@ -11,6 +10,8 @@ class Feed;
 }
 
 namespace newsboat {
+
+class CurlHandle;
 
 class TtRssApi : public RemoteApi {
 public:

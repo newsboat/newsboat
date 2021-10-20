@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "3rd-party/json.hpp"
+#include "curlhandle.h"
 #include "logger.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
@@ -215,6 +216,7 @@ void MinifluxApi::add_custom_headers(curl_slist** /* custom_headers */)
 {
 	// nothing required
 }
+
 json MinifluxApi::run_op(const std::string& path,
 	const json& args,
 	const HTTPMethod method /* = GET */)
