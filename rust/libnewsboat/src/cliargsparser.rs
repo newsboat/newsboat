@@ -105,6 +105,10 @@ impl LexoptWrapper {
         match arg {
             Ok(Some(lexopt::prelude::Short(_))) => {
                 self.last_was_short = true;
+                self.last_seen = MultiValueOption::None;
+            }
+            Ok(Some(lexopt::prelude::Long(_))) => {
+                self.last_seen = MultiValueOption::None;
             }
             _ => self.last_was_short = false,
         }
