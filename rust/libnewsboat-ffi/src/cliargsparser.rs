@@ -1,6 +1,8 @@
 use cxx::{type_id, ExternType};
 
 use libnewsboat::cliargsparser;
+use std::ffi::OsString;
+use std::os::unix::ffi::OsStringExt;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
@@ -13,10 +15,16 @@ unsafe impl ExternType for CliArgsParser {
 
 #[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
 mod bridged {
+    /// Shared data structure between C++/Rust. We need to do this, because
+    /// Vec<Vec<T>> is an unsupported CXX type.
+    struct BytesVec {
+        pub data: Vec<u8>,
+    }
+
     extern "Rust" {
         type CliArgsParser;
 
-        fn create(argv: Vec<String>) -> Box<CliArgsParser>;
+        fn create(argv: Vec<BytesVec>) -> Box<CliArgsParser>;
 
         fn do_import(cliargsparser: &CliArgsParser) -> bool;
         fn do_export(cliargsparser: &CliArgsParser) -> bool;
@@ -57,8 +65,14 @@ mod bridged {
     }
 }
 
-fn create(argv: Vec<String>) -> Box<CliArgsParser> {
-    Box::new(CliArgsParser(cliargsparser::CliArgsParser::new(argv)))
+fn create(argv: Vec<bridged::BytesVec>) -> Box<CliArgsParser> {
+    let os_str_argv: Vec<OsString> = argv
+        .into_iter()
+        .map(|arg_bytes| OsString::from_vec(arg_bytes.data))
+        .collect();
+    Box::new(CliArgsParser(cliargsparser::CliArgsParser::new(
+        os_str_argv,
+    )))
 }
 
 fn do_import(cliargsparser: &CliArgsParser) -> bool {

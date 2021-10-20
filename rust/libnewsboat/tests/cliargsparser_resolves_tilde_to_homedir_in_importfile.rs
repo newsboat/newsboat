@@ -16,14 +16,10 @@ fn t_cliargsparser_dash_capital_i_resolves_tilde_to_homedir() {
         assert_eq!(args.readinfo_import_file, Some(tmp.path().join(filename)));
     };
 
-    check(vec![
-        "newsboat".to_string(),
-        "-I".to_string(),
-        arg.to_string(),
-    ]);
+    check(vec!["newsboat".into(), "-I".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".to_string(),
-        "--import-from-file=".to_string() + &arg,
+        "newsboat".into(),
+        format!("--import-from-file={}", arg).into(),
     ]);
 }

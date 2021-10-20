@@ -164,6 +164,8 @@ nonstd::optional<LinkType> podcast_mime_to_link_type(const std::string&
 
 std::string get_default_browser();
 
+std::string md5hash(const std::string& input);
+
 /// The tag and Git commit ID the program was built from, or a pre-defined
 /// value from config.h if there is no Git directory.
 std::string program_version();

@@ -798,6 +798,11 @@ std::string utils::get_default_browser()
 	return std::string(utils::bridged::get_default_browser());
 }
 
+std::string utils::md5hash(const std::string& input)
+{
+	return std::string(utils::bridged::md5hash(input));
+}
+
 std::string utils::program_version()
 {
 	return std::string(utils::bridged::program_version());

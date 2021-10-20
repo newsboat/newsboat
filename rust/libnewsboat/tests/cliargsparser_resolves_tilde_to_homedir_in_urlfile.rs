@@ -16,14 +16,10 @@ fn t_cliargsparser_dash_u_resolves_tilde_to_homedir() {
         assert_eq!(args.url_file, Some(tmp.path().join(filename)));
     };
 
-    check(vec![
-        "newsboat".to_string(),
-        "-u".to_string(),
-        arg.to_string(),
-    ]);
+    check(vec!["newsboat".into(), "-u".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".to_string(),
-        "--url-file=".to_string() + &arg,
+        "newsboat".into(),
+        format!("--url-file={}", &arg).into(),
     ]);
 }

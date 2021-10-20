@@ -185,10 +185,16 @@ bool OcNewsApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("ocnews-flag-star");
-	std::string query = "items/";
-	query += guid.substr(guid.find_first_of(":") + 1);
+	const auto feedIdStart = guid.find_first_of(":") + 1;
+	const auto feedIdEnd = guid.find_first_of("/");
+	const std::string feedId = guid.substr(feedIdStart, feedIdEnd - feedIdStart);
 
+	const std::string ocnewsGuid = guid.substr(guid.find_first_of("/") + 1);
+	const std::string guidHash = utils::md5hash(ocnewsGuid);
+
+	std::string query = strprintf::fmt("items/%s/%s", feedId, guidHash);
+
+	std::string star_flag = cfg->get_configvalue("ocnews-flag-star");
 	if (star_flag.length() > 0) {
 		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
 			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
