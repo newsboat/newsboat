@@ -916,7 +916,23 @@ std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
 void Controller::write_item(std::shared_ptr<RssItem> item,
 	const std::string& filename)
 {
-	std::fstream f(filename, std::fstream::out);
+	const std::string save_path = cfg.get_configvalue("save-path");
+	auto spath = save_path.back() == '/' ? save_path : save_path + "/";
+
+	std::string path;
+	switch (filename[0]) {
+	case '/':
+		path = filename;
+		break;
+	case '~':
+		path = utils::resolve_tilde(filename);
+		break;
+	default:
+		path = spath + filename;
+		break;
+	}
+
+	std::fstream f(path, std::fstream::out);
 	if (!f.is_open()) {
 		throw Exception(errno);
 	}
