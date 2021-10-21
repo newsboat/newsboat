@@ -527,7 +527,11 @@ mod tests {
         );
 
         check_not_eq(
-            vec!["newsboat".into(), "--execute=reload".into(), "print-unread".into()],
+            vec![
+                "newsboat".into(),
+                "--execute=reload".into(),
+                "print-unread".into(),
+            ],
             vec!["reload".into(), "print-unread".into()],
         );
     }
