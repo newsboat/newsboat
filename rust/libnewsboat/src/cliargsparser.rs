@@ -1,10 +1,10 @@
 use gettextrs::gettext;
-use lexopt::Parser;
+use lexopt::{Parser, ValueExt};
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 use std::ffi::{OsStr, OsString};
 use std::os::unix::ffi::OsStrExt;
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::logger::Level;
 use crate::utils;
@@ -74,9 +74,7 @@ pub struct CliArgsParser {
     pub log_level: Option<Level>,
 }
 
-const LOCK_SUFFIX: &str = ".lock";
-
-fn strip_eq(value: &OsString) -> &OsStr {
+fn strip_eq(value: &OsStr) -> &OsStr {
     const EQUAL_SIGN: u8 = b'=';
     if let Some(&EQUAL_SIGN) = value.as_bytes().get(0) {
         OsStr::from_bytes(&value.as_bytes()[1..])
@@ -85,71 +83,207 @@ fn strip_eq(value: &OsString) -> &OsStr {
     }
 }
 
+/// Returns new path with an added extension
+fn make_sibling_file(path: &Path, extension: impl AsRef<Path>) -> PathBuf {
+    let mut result = path.to_path_buf();
+    match path.extension() {
+        Some(current_extension) => {
+            let mut new_extension = current_extension.to_os_string();
+            new_extension.push(".");
+            new_extension.push(extension.as_ref());
+            result.set_extension(new_extension);
+        }
+        None => {
+            result.set_extension(extension.as_ref());
+        }
+    }
+    result
+}
+
+#[derive(Clone, Copy)]
 enum MultiValueOption {
     Execute,
     None,
 }
 
-// Wrapper around the Lexopt parser
-// Keeps info about what option type we saw last, whether it was in short form or long form
-// Also keeps track of if we're parsing a multi value option
-struct LexoptWrapper {
-    pub parser: lexopt::Parser,
-    pub last_seen: MultiValueOption,
-    pub last_was_short: bool,
+use std::convert::TryFrom;
+impl TryFrom<&OsStr> for Level {
+    type Error = ();
+
+    fn try_from(value: &OsStr) -> Result<Self, <Level as TryFrom<&OsStr>>::Error> {
+        match value.to_owned().parse::<u8>() {
+            Ok(1) => Ok(Level::UserError),
+            Ok(2) => Ok(Level::Critical),
+            Ok(3) => Ok(Level::Error),
+            Ok(4) => Ok(Level::Warn),
+            Ok(5) => Ok(Level::Info),
+            Ok(6) => Ok(Level::Debug),
+            _ => Err(()),
+        }
+    }
+}
+#[derive(Debug)]
+pub enum CliParseError {
+    LexoptError(lexopt::Error),
+    InvalidLogLevel(String),
+    PrintAndExit,
 }
 
-impl LexoptWrapper {
-    pub fn next(&mut self) -> Result<Option<lexopt::Arg>, lexopt::Error> {
-        let arg = self.parser.next();
-        match arg {
-            Ok(Some(lexopt::prelude::Short(_))) => {
-                self.last_was_short = true;
-                self.last_seen = MultiValueOption::None;
-            }
-            Ok(Some(lexopt::prelude::Long(_))) => {
-                self.last_was_short = false;
-                self.last_seen = MultiValueOption::None;
-            }
-            _ => self.last_was_short = false,
+impl std::fmt::Display for CliParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CliParseError::LexoptError(lexopt) => write!(f, "{}", lexopt),
+            CliParseError::InvalidLogLevel(log_message) => write!(f, "{}", log_message),
+            CliParseError::PrintAndExit => write!(f, "Erroneous command line arguments"),
         }
-        arg
+    }
+}
+
+impl From<lexopt::Error> for CliParseError {
+    fn from(err: lexopt::Error) -> CliParseError {
+        CliParseError::LexoptError(err)
+    }
+}
+
+/// Parses command line arguments and stores them in parameter args.
+/// Returns Ok(()) or a CliParseError to indicate additional values on CliArgParser that needs
+/// setting.
+pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<(), CliParseError> {
+    use lexopt::prelude::*;
+
+    let correct_input_make_pathbuf = |string: &OsString, last_was_short| -> Option<PathBuf> {
+        if last_was_short {
+            let removed_front = strip_eq(string);
+            Some(utils::resolve_tilde(PathBuf::from(removed_front)))
+        } else {
+            Some(utils::resolve_tilde(PathBuf::from(&string)))
+        }
+    };
+
+    let mut parser = Parser::from_args(opts.into_iter());
+    let mut last_seen = MultiValueOption::None;
+    let mut collected_multis = 0;
+    let mut last_was_short = false;
+
+    while let Some(arg) = parser.next()? {
+        last_was_short = match arg {
+            lexopt::prelude::Short(_) => true,
+            lexopt::prelude::Long(_) => false,
+            _ => last_was_short,
+        };
+
+        match arg {
+            Short('i') | Long("import-from-opml") => {
+                let import_file_str = parser.value()?;
+                args.importfile = correct_input_make_pathbuf(&import_file_str, last_was_short);
+            }
+            Short('e') | Long("export-to-opml") => {
+                args.do_export = true;
+                args.silent = true;
+            }
+            Short('r') | Long("refresh-on-start") => args.refresh_on_start = true,
+            Short('h') | Long("help") => {
+                args.should_print_usage = true;
+                args.return_code = Some(EXIT_SUCCESS);
+            }
+            Short('u') | Long("url-file") => {
+                let url_file = parser.value()?;
+                args.url_file = correct_input_make_pathbuf(&url_file, last_was_short);
+            }
+            Short('c') | Long("cache-file") => {
+                let cache_file = parser.value()?;
+                let cache_file = correct_input_make_pathbuf(&cache_file, last_was_short);
+                // unwrap won't panic on cache_file.unwrap(), we know we return Some(...) from ^ utility closure
+                let lock_file = make_sibling_file(cache_file.as_ref().unwrap(), "lock");
+                args.cache_file = cache_file;
+                args.lock_file = Some(lock_file);
+            }
+            Short('C') | Long("config-file") => {
+                let config_file = parser.value()?;
+                args.config_file = correct_input_make_pathbuf(&config_file, last_was_short);
+            }
+            Short('X') | Long("vacuum") => args.do_vacuum = true,
+            Long("cleanup") => args.do_cleanup = true,
+            Short('v') | Long("version") | Short('V') | Long("-V") => args.show_version += 1,
+            Short('x') | Long("execute") => {
+                let cmd_value = parser.value()?;
+                last_seen = MultiValueOption::Execute;
+                let cmd = if last_was_short {
+                    strip_eq(&cmd_value)
+                } else {
+                    &cmd_value
+                };
+                args.cmds_to_execute.push(cmd.to_string_lossy().into());
+                args.silent = true;
+            }
+            Short('q') | Long("quiet") => args.silent = true,
+            Short('I') | Long("import-from-file") => {
+                let importfile = parser.value()?;
+                args.readinfo_import_file = correct_input_make_pathbuf(&importfile, last_was_short);
+            }
+            Short('E') | Long("export-to-file") => {
+                let exportfile = parser.value()?;
+                args.readinfo_export_file = correct_input_make_pathbuf(&exportfile, last_was_short);
+            }
+            Short('d') | Long("log-file") => {
+                let log_file = parser.value()?;
+                args.log_file = correct_input_make_pathbuf(&log_file, last_was_short);
+            }
+            Short('l') | Long("log-level") => {
+                let log_level_str = parser.value()?;
+                let log_level_str_checked = if last_was_short {
+                    strip_eq(&log_level_str)
+                } else {
+                    &log_level_str
+                };
+
+                match Level::try_from(log_level_str_checked) {
+                    Ok(level) => {
+                        args.log_level = Some(level);
+                    }
+                    Err(()) => {
+                        return Err(CliParseError::InvalidLogLevel(fmt!(
+                            &gettext("%s: %s: invalid loglevel value"),
+                            &args.program_name,
+                            log_level_str.to_string_lossy().to_string()
+                        )));
+                    }
+                }
+            }
+            // Here is where we collect (possible) multi values to multi value options
+            Value(positional_arg_string) => {
+                match last_seen {
+                    MultiValueOption::Execute => {
+                        if collected_multis >= 1 {
+                            return Err(CliParseError::PrintAndExit);
+                        }
+                        args.cmds_to_execute
+                            .push(positional_arg_string.to_string_lossy().into());
+                        collected_multis += 1;
+                    }
+                    MultiValueOption::None => {
+                        // means we found free standing args -> exit
+                        return Err(CliParseError::PrintAndExit);
+                    }
+                }
+            }
+            _ => return Err(CliParseError::from(arg.unexpected())),
+        }
     }
 
-    // Sets last seen multi value option
-    // Currently we only have "Execute" that does this. This was such a tiny addition
-    // That I thought it worth it, should other multi value options ever be added
-    // it would simply require adding to MultiValueOption enum & handling it under the
-    // Value(_) pattern match
-    pub fn set_last_seen(&mut self, last_seen: MultiValueOption) {
-        self.last_seen = last_seen;
+    if args.do_export && args.importfile.is_some() {
+        return Err(CliParseError::PrintAndExit);
     }
 
-    pub fn value(&mut self) -> Result<OsString, lexopt::Error> {
-        self.parser.value()
+    if args.readinfo_import_file.is_some() && args.readinfo_export_file.is_some() {
+        return Err(CliParseError::PrintAndExit);
     }
+
+    Ok(())
 }
 
 impl CliArgsParser {
     pub fn new(mut opts: Vec<OsString>) -> CliArgsParser {
-        use lexopt::prelude::*;
-        const CACHE_FILE: &str = "cache-file";
-        const CONFIG_FILE: &str = "config-file";
-        const EXECUTE: &str = "execute";
-        const EXPORT_TO_FILE: &str = "export-to-file";
-        const EXPORT_TO_OPML: &str = "export-to-opml";
-        const HELP: &str = "help";
-        const IMPORT_FROM_FILE: &str = "import-from-file";
-        const IMPORT_FROM_OPML: &str = "import-from-opml";
-        const LOG_FILE: &str = "log-file";
-        const LOG_LEVEL: &str = "log-level";
-        const QUIET: &str = "quiet";
-        const REFRESH_ON_START: &str = "refresh-on-start";
-        const URL_FILE: &str = "url-file";
-        const VACUUM: &str = "vacuum";
-        const CLEANUP: &str = "cleanup";
-        const VERSION: &str = "version";
-        const VERSION_V: &str = "-V";
         let mut args = CliArgsParser::default();
 
         if let Some(program_name) = opts
@@ -160,205 +294,37 @@ impl CliArgsParser {
             opts.remove(0);
         }
 
-        let parser = Parser::from_args(opts.into_iter());
-        let mut parser_wrapper = LexoptWrapper {
-            parser,
-            last_was_short: false,
-            last_seen: MultiValueOption::None,
-        };
-        while let Ok(Some(arg)) = parser_wrapper.next() {
-            match arg {
-                Short('i') | Long(IMPORT_FROM_OPML) => match parser_wrapper.value() {
-                    Ok(import_file_str) => {
-                        args.importfile = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(
-                                &import_file_str,
-                            ))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&import_file_str)))
-                        };
+        match parse_cliargs(opts, &mut args) {
+            Ok(()) => args,
+            Err(err) => {
+                match err {
+                    CliParseError::InvalidLogLevel(display_msg) => {
+                        args.display_msg = display_msg;
                     }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('e') | Long(EXPORT_TO_OPML) => {
-                    args.do_export = true;
-                    args.silent = true;
+                    CliParseError::LexoptError(err) => {
+                        // if we've entered an invalid option/undefined one, this gets set to "invalid option <option>"
+                        args.display_msg = format!("{}", err);
+                        args.should_print_usage = true;
+                    }
+                    _ => {
+                        args.should_print_usage = true;
+                    }
                 }
-                Short('r') | Long(REFRESH_ON_START) => args.refresh_on_start = true,
-                Short('h') | Long(HELP) => {
-                    args.should_print_usage = true;
-                    args.return_code = Some(EXIT_SUCCESS);
-                }
-                Short('u') | Long(URL_FILE) => match parser_wrapper.value() {
-                    Ok(url_file) => {
-                        args.url_file = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(&url_file))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&url_file)))
-                        };
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('c') | Long(CACHE_FILE) => match parser_wrapper.value() {
-                    Ok(cache_file) => {
-                        args.cache_file = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(&cache_file))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&cache_file)))
-                        };
-
-                        let mut lock_cache_file = args.cache_file.as_ref().unwrap().clone();
-                        lock_cache_file.set_file_name(
-                            args.cache_file
-                                .as_ref()
-                                .unwrap()
-                                .file_name()
-                                .map(|p| {
-                                    OsString::from(p.to_string_lossy().to_string() + LOCK_SUFFIX)
-                                })
-                                .unwrap(),
-                        );
-                        args.lock_file = Some(lock_cache_file);
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('C') | Long(CONFIG_FILE) => match parser_wrapper.value() {
-                    Ok(config_file) => {
-                        args.config_file = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(&config_file))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&config_file)))
-                        };
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('X') | Long(VACUUM) => args.do_vacuum = true,
-                Long(CLEANUP) => args.do_cleanup = true,
-                Short('v') | Long(VERSION) | Short('V') | Long(VERSION_V) => args.show_version += 1,
-                Short('x') | Long(EXECUTE) => match parser_wrapper.value() {
-                    Ok(cmd) => {
-                        parser_wrapper.set_last_seen(MultiValueOption::Execute);
-                        let cmd = if parser_wrapper.last_was_short {
-                            strip_eq(&cmd)
-                        } else {
-                            &cmd
-                        };
-                        args.cmds_to_execute.push(cmd.to_string_lossy().into());
-                        args.silent = true;
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('q') | Long(QUIET) => args.silent = true,
-                Short('I') | Long(IMPORT_FROM_FILE) => match parser_wrapper.value() {
-                    Ok(importfile) => {
-                        args.readinfo_import_file = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(&importfile))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&importfile)))
-                        };
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('E') | Long(EXPORT_TO_FILE) => match parser_wrapper.value() {
-                    Ok(exportfile) => {
-                        args.readinfo_export_file = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(&exportfile))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&exportfile)))
-                        };
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('d') | Long(LOG_FILE) => match parser_wrapper.value() {
-                    Ok(log_file) => {
-                        args.log_file = if parser_wrapper.last_was_short {
-                            Some(utils::resolve_tilde(PathBuf::from(strip_eq(&log_file))))
-                        } else {
-                            Some(utils::resolve_tilde(PathBuf::from(&log_file)))
-                        };
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                Short('l') | Long(LOG_LEVEL) => match parser_wrapper.value() {
-                    Ok(log_level_str) => {
-                        let log_level_str_checked = if parser_wrapper.last_was_short {
-                            strip_eq(&log_level_str)
-                        } else {
-                            &log_level_str
-                        };
-                        match log_level_str_checked.to_owned().parse::<u8>() {
-                            Ok(1) => {
-                                args.log_level = Some(Level::UserError);
-                            }
-                            Ok(2) => {
-                                args.log_level = Some(Level::Critical);
-                            }
-                            Ok(3) => {
-                                args.log_level = Some(Level::Error);
-                            }
-                            Ok(4) => {
-                                args.log_level = Some(Level::Warn);
-                            }
-                            Ok(5) => {
-                                args.log_level = Some(Level::Info);
-                            }
-                            Ok(6) => {
-                                args.log_level = Some(Level::Debug);
-                            }
-                            _ => {
-                                args.display_msg = fmt!(
-                                    &gettext("%s: %s: invalid loglevel value"),
-                                    &args.program_name,
-                                    log_level_str.to_string_lossy().to_string()
-                                );
-                                args.return_code = Some(EXIT_FAILURE);
-                            }
-                        }
-                    }
-                    _ => return CliArgsParser::should_print_and_exit(args),
-                },
-                // Here is where we collect (possible) multi values to multi value options
-                Value(positional_arg_string) => match parser_wrapper.last_seen {
-                    MultiValueOption::Execute => {
-                        args.cmds_to_execute
-                            .push(positional_arg_string.to_string_lossy().into());
-                    }
-                    MultiValueOption::None => {
-                        // means we found free standing args -> exit
-                        return CliArgsParser::should_print_and_exit(args);
-                    }
-                },
-                _ => {
-                    return args.should_print_and_exit();
-                }
+                args.return_code = Some(EXIT_FAILURE);
+                args
             }
         }
-
-        if args.do_export && args.importfile.is_some() {
-            return CliArgsParser::should_print_and_exit(args);
-        }
-
-        if args.readinfo_import_file.is_some() && args.readinfo_export_file.is_some() {
-            return CliArgsParser::should_print_and_exit(args);
-        }
-        args
     }
 
     pub fn using_nonstandard_configs(&self) -> bool {
         self.url_file.is_some() || self.cache_file.is_some() || self.config_file.is_some()
-    }
-
-    fn should_print_and_exit(mut self) -> CliArgsParser {
-        self.should_print_usage = true;
-        self.return_code = Some(EXIT_FAILURE);
-        self
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    const LOCK_SUFFIX: &str = ".lock";
     #[test]
     fn t_asks_to_print_usage_info_and_exit_with_failure_on_unknown_option() {
         let check = |opts| {
