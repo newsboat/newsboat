@@ -162,7 +162,6 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
 
     let mut parser = Parser::from_args(opts.into_iter());
     let mut last_seen = MultiValueOption::None;
-    let mut collected_multis = 0;
     let mut last_was_short = false;
 
     while let Some(arg) = parser.next()? {
@@ -254,12 +253,8 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
             Value(positional_arg_string) => {
                 match last_seen {
                     MultiValueOption::Execute => {
-                        if collected_multis >= 1 {
-                            return Err(CliParseError::PrintAndExit);
-                        }
                         args.cmds_to_execute
                             .push(positional_arg_string.to_string_lossy().into());
-                        collected_multis += 1;
                     }
                     MultiValueOption::None => {
                         // means we found free standing args -> exit
