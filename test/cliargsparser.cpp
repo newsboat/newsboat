@@ -776,6 +776,6 @@ TEST_CASE("newsboat should print usage if '-x='/'--execute=' is passed a list of
 		REQUIRE(args.return_code() == EXIT_FAILURE);
 	};
 
-	check({"newsboat", "--execute=print-unread", "print-unread"})
-	check({"newsboat", "-x=print-unread", "print-unread"})
+	check({"newsboat", "--execute=print-unread", "print-unread"});
+	check({"newsboat", "-x=print-unread", "print-unread"});
 }
