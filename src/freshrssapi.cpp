@@ -400,7 +400,7 @@ std::string FreshRssApi::post_content(const std::string& url,
 rsspp::Feed FreshRssApi::fetch_feed(const std::string& id)
 {
 	CurlHandle handle;
-	return fetch_feed(id,handle);
+	return fetch_feed(id, handle);
 }
 
 rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handle)

@@ -12,3 +12,4 @@
 --attach-return-type-decl
 --max-code-length=91
 --indent-after-parens
+--pad-comma

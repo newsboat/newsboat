@@ -28,7 +28,7 @@ public:
 		const std::string& newflags,
 		const std::string& guid) override;
 	rsspp::Feed fetch_feed(const std::string& id);
-	rsspp::Feed fetch_feed(const std::string& id,CurlHandle& cached_handle);
+	rsspp::Feed fetch_feed(const std::string& id, CurlHandle& cached_handle);
 
 private:
 	std::vector<std::string> get_tags(xmlNode* node);

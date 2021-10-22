@@ -384,7 +384,7 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 	}
 
 	SECTION("custom delimiter") {
-		tokens = utils::tokenize_nl("first\nsecond\nthird","i");
+		tokens = utils::tokenize_nl("first\nsecond\nthird", "i");
 
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "f");
@@ -1390,29 +1390,29 @@ TEST_CASE("strnaturalcmp() compares strings using natural numeric ordering",
 	"[utils]")
 {
 	// Tests copied over from 3rd-party/alphanum.hpp
-	REQUIRE(utils::strnaturalcmp("","") == 0);
-	REQUIRE(utils::strnaturalcmp("","a") < 0);
-	REQUIRE(utils::strnaturalcmp("a","") > 0);
-	REQUIRE(utils::strnaturalcmp("a","a") == 0);
-	REQUIRE(utils::strnaturalcmp("","9") < 0);
-	REQUIRE(utils::strnaturalcmp("9","") > 0);
-	REQUIRE(utils::strnaturalcmp("1","1") == 0);
-	REQUIRE(utils::strnaturalcmp("1","2") < 0);
-	REQUIRE(utils::strnaturalcmp("3","2") > 0);
-	REQUIRE(utils::strnaturalcmp("a1","a1") == 0);
-	REQUIRE(utils::strnaturalcmp("a1","a2") < 0);
-	REQUIRE(utils::strnaturalcmp("a2","a1") > 0);
-	REQUIRE(utils::strnaturalcmp("a1a2","a1a3") < 0);
-	REQUIRE(utils::strnaturalcmp("a1a2","a1a0") > 0);
-	REQUIRE(utils::strnaturalcmp("134","122") > 0);
-	REQUIRE(utils::strnaturalcmp("12a3","12a3") == 0);
-	REQUIRE(utils::strnaturalcmp("12a1","12a0") > 0);
-	REQUIRE(utils::strnaturalcmp("12a1","12a2") < 0);
-	REQUIRE(utils::strnaturalcmp("a","aa") < 0);
-	REQUIRE(utils::strnaturalcmp("aaa","aa") > 0);
-	REQUIRE(utils::strnaturalcmp("Alpha 2","Alpha 2") == 0);
-	REQUIRE(utils::strnaturalcmp("Alpha 2","Alpha 2A") < 0);
-	REQUIRE(utils::strnaturalcmp("Alpha 2 B","Alpha 2") > 0);
+	REQUIRE(utils::strnaturalcmp("", "") == 0);
+	REQUIRE(utils::strnaturalcmp("", "a") < 0);
+	REQUIRE(utils::strnaturalcmp("a", "") > 0);
+	REQUIRE(utils::strnaturalcmp("a", "a") == 0);
+	REQUIRE(utils::strnaturalcmp("", "9") < 0);
+	REQUIRE(utils::strnaturalcmp("9", "") > 0);
+	REQUIRE(utils::strnaturalcmp("1", "1") == 0);
+	REQUIRE(utils::strnaturalcmp("1", "2") < 0);
+	REQUIRE(utils::strnaturalcmp("3", "2") > 0);
+	REQUIRE(utils::strnaturalcmp("a1", "a1") == 0);
+	REQUIRE(utils::strnaturalcmp("a1", "a2") < 0);
+	REQUIRE(utils::strnaturalcmp("a2", "a1") > 0);
+	REQUIRE(utils::strnaturalcmp("a1a2", "a1a3") < 0);
+	REQUIRE(utils::strnaturalcmp("a1a2", "a1a0") > 0);
+	REQUIRE(utils::strnaturalcmp("134", "122") > 0);
+	REQUIRE(utils::strnaturalcmp("12a3", "12a3") == 0);
+	REQUIRE(utils::strnaturalcmp("12a1", "12a0") > 0);
+	REQUIRE(utils::strnaturalcmp("12a1", "12a2") < 0);
+	REQUIRE(utils::strnaturalcmp("a", "aa") < 0);
+	REQUIRE(utils::strnaturalcmp("aaa", "aa") > 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2", "Alpha 2") == 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2", "Alpha 2A") < 0);
+	REQUIRE(utils::strnaturalcmp("Alpha 2 B", "Alpha 2") > 0);
 
 	REQUIRE(utils::strnaturalcmp("aa10", "aa2") > 0);
 }

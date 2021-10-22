@@ -161,7 +161,7 @@ json TtRssApi::run_op(const std::string& op,
 	}
 
 	std::string result = utils::retrieve_url(
-			url,cached_handle, cfg, auth_info, &req_data, utils::HTTPMethod::POST);
+			url, cached_handle, cfg, auth_info, &req_data, utils::HTTPMethod::POST);
 
 	LOG(Level::DEBUG,
 		"TtRssApi::run_op(%s,...): post=%s reply = %s",
@@ -393,7 +393,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handl
 	args["feed_id"] = id;
 	args["show_content"] = "1";
 	args["include_attachments"] = "1";
-	json content = run_op("getHeadlines", args, cached_handle,true);
+	json content = run_op("getHeadlines", args, cached_handle, true);
 
 	if (content.is_null()) {
 		return f;
