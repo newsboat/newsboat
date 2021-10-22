@@ -37,6 +37,6 @@ pub unsafe extern "C" fn rs_cstring_free(string: *mut c_char) {
         if string.is_null() {
             return;
         }
-        CString::from_raw(string);
+        drop(CString::from_raw(string));
     })
 }
