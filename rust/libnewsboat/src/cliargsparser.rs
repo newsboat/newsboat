@@ -1,5 +1,5 @@
 use gettextrs::gettext;
-use lexopt::{Parser, ValueExt, ValueType};
+use lexopt::{Parser, ValueExt};
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 use std::ffi::{OsStr, OsString};
 
@@ -90,12 +90,6 @@ fn make_sibling_file(path: &Path, extension: impl AsRef<Path>) -> PathBuf {
     result
 }
 
-#[derive(Clone, Copy)]
-enum MultiValueOption {
-    Execute,
-    None,
-}
-
 use std::convert::TryFrom;
 impl TryFrom<&OsStr> for Level {
     type Error = ();
@@ -146,7 +140,6 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
     };
 
     let mut parser = Parser::from_args(opts.into_iter());
-    let mut last_seen = MultiValueOption::None;
 
     while let Some(arg) = parser.next()? {
         match arg {
@@ -183,20 +176,12 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
             Long("cleanup") => args.do_cleanup = true,
             Short('v') | Long("version") | Short('V') | Long("-V") => args.show_version += 1,
             Short('x') | Long("execute") => {
-                let cmd_value = match parser.key_value()? {
-                    ValueType::Normal(val) => {
-                        // we can collect multiple values
-                        last_seen = MultiValueOption::Execute;
-                        val
-                    }
-                    ValueType::KVPValue(val) => {
-                        // we can not
-                        last_seen = MultiValueOption::None;
-                        val
-                    }
-                };
-                args.cmds_to_execute
-                    .push(cmd_value.to_string_lossy().into());
+                for cmd in parser.values()? {
+                    args.cmds_to_execute.push(cmd.to_string_lossy().into());
+                }
+                if args.cmds_to_execute.is_empty() {
+                    return Err(CliParseError::PrintAndExit);
+                }
                 args.silent = true;
             }
             Short('q') | Long("quiet") => args.silent = true,
@@ -224,19 +209,6 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
                             &args.program_name,
                             log_level_str.to_string_lossy().to_string()
                         )));
-                    }
-                }
-            }
-            // Here is where we collect (possible) multi values to multi value options
-            Value(positional_arg_string) => {
-                match last_seen {
-                    MultiValueOption::Execute => {
-                        args.cmds_to_execute
-                            .push(positional_arg_string.to_string_lossy().into());
-                    }
-                    MultiValueOption::None => {
-                        // means we found free standing args -> exit
-                        return Err(CliParseError::PrintAndExit);
                     }
                 }
             }
@@ -279,7 +251,7 @@ impl CliArgsParser {
                         args.display_msg = format!("{}", err);
                         args.should_print_usage = true;
                     }
-                    _ => {
+                    CliParseError::PrintAndExit => {
                         args.should_print_usage = true;
                     }
                 }

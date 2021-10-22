@@ -284,7 +284,7 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 [[package]]
 name = "lexopt"
 version = "0.1.0"
-source = "git+https://github.com/theIDinside/lexopt?branch=key_value_pair#6be872f1c31dad38d76fa905601b09bd15b27858"
+source = "git+https://github.com/blyxxyz/lexopt?branch=values-method#95575e784c3b08c91f81356b0c9d71f1f195ec58"
 
 [[package]]
 name = "libc"
