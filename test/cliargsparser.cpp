@@ -288,19 +288,6 @@ TEST_CASE("Supports `=` between short option and value",
 	REQUIRE(args.using_nonstandard_configs());
 }
 
-TEST_CASE("Supports `=` between combined short options and value",
-	"[CliArgsParser]")
-{
-	const std::string filename("cache.db");
-
-	TestHelpers::Opts opts = {"newsboat", "-vc=" + filename};
-	CliArgsParser args(opts.argc(), opts.argv());
-
-	REQUIRE(args.cache_file() == filename);
-	REQUIRE(args.lock_file() == filename + ".lock");
-	REQUIRE(args.using_nonstandard_configs());
-}
-
 TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 {
 	TestHelpers::TempDir tmp;
@@ -767,15 +754,25 @@ TEST_CASE("Sets `program_name` to the first string of the options list",
 		"/usr/local/bin/app-with-a-path");
 }
 
-TEST_CASE("newsboat should print usage if '-x='/'--execute=' is passed a list of commands, to adhere to clap-rs backwards compatibility",
+TEST_CASE("Test should fail on equal sign with multiple values",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](TestHelpers::Opts opts, const std::vector<std::string>& cmds) {
 		CliArgsParser args(opts.argc(), opts.argv());
 		REQUIRE(args.should_print_usage());
-		REQUIRE(args.return_code() == EXIT_FAILURE);
+		REQUIRE(args.cmds_to_execute() != cmds);
 	};
 
-	check({"newsboat", "--execute=print-unread", "print-unread"});
-	check({"newsboat", "-x=print-unread", "print-unread"});
+	check({"newsboat", "-x=reload", "print-unread" }, { "reload", "print-unread" });
+	check({"newsboat", "--execute=reload", "print-unread" }, { "reload", "print-unread" });
+
+}
+
+TEST_CASE("Supports combined short options where last has equal sign",
+	"[CliArgsParser]")
+{
+	TestHelpers::Opts opts = {"newsboat", "-rx=reload"};
+	CliArgsParser args(opts.argc(), opts.argv());
+	std::vector<std::string> commands{"reload"};
+	REQUIRE(args.cmds_to_execute() == commands);
 }
