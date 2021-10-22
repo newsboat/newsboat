@@ -246,7 +246,7 @@ impl CliArgsParser {
                     CliParseError::InvalidLogLevel(display_msg) => {
                         args.display_msg = display_msg;
                     }
-                    CliParseError::LexoptError(err) => {
+                    CliParseError::LexoptError(_) => {
                         args.should_print_usage = true;
                     }
                     CliParseError::PrintAndExit => {
