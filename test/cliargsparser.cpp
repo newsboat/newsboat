@@ -275,7 +275,7 @@ TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 	REQUIRE(args.using_nonstandard_configs());
 }
 
-TEST_CASE("Supports `=` between combined short option and value",
+TEST_CASE("Supports `=` between short option and value",
 	"[CliArgsParser]")
 {
 	const std::string filename("cache.db");
@@ -752,4 +752,27 @@ TEST_CASE("Sets `program_name` to the first string of the options list",
 		"something else entirely");
 	check({"/usr/local/bin/app-with-a-path"},
 		"/usr/local/bin/app-with-a-path");
+}
+
+TEST_CASE("Test should fail on equal sign with multiple values",
+	"[CliArgsParser]")
+{
+	auto check = [](TestHelpers::Opts opts, const std::vector<std::string>& cmds) {
+		CliArgsParser args(opts.argc(), opts.argv());
+		REQUIRE(args.should_print_usage());
+		REQUIRE(args.cmds_to_execute() != cmds);
+	};
+
+	check({"newsboat", "-x=reload", "print-unread" }, { "reload", "print-unread" });
+	check({"newsboat", "--execute=reload", "print-unread" }, { "reload", "print-unread" });
+
+}
+
+TEST_CASE("Supports combined short options where last has equal sign",
+	"[CliArgsParser]")
+{
+	TestHelpers::Opts opts = {"newsboat", "-rx=reload"};
+	CliArgsParser args(opts.argc(), opts.argv());
+	std::vector<std::string> commands{"reload"};
+	REQUIRE(args.cmds_to_execute() == commands);
 }

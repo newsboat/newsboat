@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "3rd-party/json.hpp"
+#include "curlhandle.h"
 #include "logger.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
@@ -124,8 +125,16 @@ unsigned int TtRssApi::query_api_level()
 
 json TtRssApi::run_op(const std::string& op,
 	const std::map<std::string, std::string>& args,
-	bool try_login, /* = true */
-	CURL* cached_handle /* = nullptr */)
+	bool try_login /* = true */)
+{
+	CurlHandle handle;
+	return TtRssApi::run_op(op, args, handle, try_login);
+}
+
+json TtRssApi::run_op(const std::string& op,
+	const std::map<std::string, std::string>& args,
+	CurlHandle& cached_handle,
+	bool try_login /* = true */)
 {
 	std::string url =
 		strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
@@ -152,7 +161,7 @@ json TtRssApi::run_op(const std::string& op,
 	}
 
 	std::string result = utils::retrieve_url(
-			url, cfg, auth_info, &req_data, utils::HTTPMethod::POST, cached_handle);
+			url,cached_handle, cfg, auth_info, &req_data, utils::HTTPMethod::POST);
 
 	LOG(Level::DEBUG,
 		"TtRssApi::run_op(%s,...): post=%s reply = %s",
@@ -193,7 +202,7 @@ json TtRssApi::run_op(const std::string& op,
 	if (status != 0) {
 		if (content["error"] == "NOT_LOGGED_IN" && try_login) {
 			if (authenticate()) {
-				return run_op(op, args, false, cached_handle);
+				return run_op(op, args, cached_handle, false);
 			} else {
 				return json(nullptr);
 			}
@@ -368,7 +377,13 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 	return success;
 }
 
-rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
+rsspp::Feed TtRssApi::fetch_feed(const std::string& id)
+{
+	CurlHandle handle;
+	return fetch_feed(id, handle);
+}
+
+rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handle)
 {
 	rsspp::Feed f;
 
@@ -378,7 +393,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CURL* cached_handle)
 	args["feed_id"] = id;
 	args["show_content"] = "1";
 	args["include_attachments"] = "1";
-	json content = run_op("getHeadlines", args, true, cached_handle);
+	json content = run_op("getHeadlines", args, cached_handle,true);
 
 	if (content.is_null()) {
 		return f;

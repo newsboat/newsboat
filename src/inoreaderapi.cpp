@@ -65,7 +65,7 @@ std::string InoreaderApi::retrieve_auth()
 	curl_slist* list = NULL;
 	list = add_app_headers(list);
 
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
@@ -98,7 +98,7 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_SUBSCRIPTION_LIST);
@@ -312,7 +312,7 @@ std::string InoreaderApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);

@@ -28,6 +28,7 @@
 #include <unordered_set>
 
 #include "config.h"
+#include "curlhandle.h"
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "strprintf.h"
@@ -224,44 +225,48 @@ std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
-	const HTTPMethod method, /* = GET */
-	CURL* cached_handle)
+	const HTTPMethod method /* = GET */)
+{
+	CurlHandle handle;
+	return retrieve_url(url, handle, cfgcont, authinfo, body, method);
+}
+
+std::string utils::retrieve_url(const std::string& url,
+	CurlHandle& easyhandle,
+	ConfigContainer* cfgcont,
+	const std::string& authinfo,
+	const std::string* body,
+	const HTTPMethod method /* = GET */)
 {
 	std::string buf;
 
-	CURL* easyhandle;
-	if (cached_handle) {
-		easyhandle = cached_handle;
-	} else {
-		easyhandle = curl_easy_init();
-	}
 	set_common_curl_options(easyhandle, cfgcont);
-	curl_easy_setopt(easyhandle, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, &buf);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
 
 	switch (method) {
 	case HTTPMethod::GET:
 		break;
 	case HTTPMethod::POST:
-		curl_easy_setopt(easyhandle, CURLOPT_POST, 1);
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_POST, 1);
 		break;
 	case HTTPMethod::PUT:
 	case HTTPMethod::DELETE:
 		const std::string method_str = http_method_str(method);
-		curl_easy_setopt(easyhandle, CURLOPT_CUSTOMREQUEST, method_str.c_str());
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_CUSTOMREQUEST, method_str.c_str());
 		break;
 	}
 
 	if (body != nullptr) {
 		curl_easy_setopt(
-			easyhandle, CURLOPT_POSTFIELDS, body->c_str());
+			easyhandle.ptr(), CURLOPT_POSTFIELDS, body->c_str());
 	}
 
 	if (!authinfo.empty()) {
 		const auto auth_method = cfgcont->get_configvalue("http-auth-method");
-		curl_easy_setopt(easyhandle, CURLOPT_HTTPAUTH, get_auth_method(auth_method));
-		curl_easy_setopt(easyhandle, CURLOPT_USERPWD, authinfo.c_str());
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPAUTH, get_auth_method(auth_method));
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERPWD, authinfo.c_str());
 	}
 
 	// Error handling as per https://curl.se/libcurl/c/CURLOPT_ERRORBUFFER.html
@@ -269,10 +274,10 @@ std::string utils::retrieve_url(const std::string& url,
 	// Please note that we clobber CURLOPT_ERRORBUFFER here in case of cached handles
 	// Currently, this is the only place we do this, so this should be fine.
 	// There does not seem to be a way to query curlopts, so we cannot save the old errorbuf value here...
-	curl_easy_setopt(easyhandle, CURLOPT_ERRORBUFFER, errbuf);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, errbuf);
 	errbuf[0] = '\0';
 
-	CURLcode res = curl_easy_perform(easyhandle);
+	CURLcode res = curl_easy_perform(easyhandle.ptr());
 
 	std::stringstream logprefix;
 	logprefix << "utils::retrieve_url(" << http_method_str(method) << " " << url << ")"
@@ -294,14 +299,10 @@ std::string utils::retrieve_url(const std::string& url,
 		LOG(Level::DEBUG, "%s: %s", logprefix.str(), buf);
 	}
 
-	if (!cached_handle) {
-		curl_easy_cleanup(easyhandle);
-	} else {
-		// Reset ERRORBUFFER: has to be valid for the whole lifetime of the handle
-		// NULL is the default value of this property according to man (3) CURLOPT_ERRORBUFFER
-		// See the clobbering note above.
-		curl_easy_setopt(easyhandle, CURLOPT_ERRORBUFFER, NULL);
-	}
+	// Reset ERRORBUFFER: has to be valid for the whole lifetime of the handle
+	// NULL is the default value of this property according to man (3) CURLOPT_ERRORBUFFER
+	// See the clobbering note above.
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
 
 	return buf;
 }
@@ -499,24 +500,24 @@ std::string utils::quote_if_necessary(const std::string& str)
 	return std::string(utils::bridged::quote_if_necessary(str));
 }
 
-void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
+void utils::set_common_curl_options(CurlHandle& handle, ConfigContainer* cfg)
 {
 	if (cfg) {
 		if (cfg->get_configvalue_as_bool("use-proxy")) {
 			const std::string proxy = cfg->get_configvalue("proxy");
 			if (proxy != "")
 				curl_easy_setopt(
-					handle, CURLOPT_PROXY, proxy.c_str());
+					handle.ptr(), CURLOPT_PROXY, proxy.c_str());
 
 			const std::string proxyauth =
 				cfg->get_configvalue("proxy-auth");
 			const std::string proxyauthmethod =
 				cfg->get_configvalue("proxy-auth-method");
 			if (proxyauth != "") {
-				curl_easy_setopt(handle,
+				curl_easy_setopt(handle.ptr(),
 					CURLOPT_PROXYAUTH,
 					get_auth_method(proxyauthmethod));
-				curl_easy_setopt(handle,
+				curl_easy_setopt(handle.ptr(),
 					CURLOPT_PROXYUSERPWD,
 					proxyauth.c_str());
 			}
@@ -529,48 +530,48 @@ void utils::set_common_curl_options(CURL* handle, ConfigContainer* cfg)
 					"proxytype "
 					"= %s",
 					proxytype);
-				curl_easy_setopt(handle,
+				curl_easy_setopt(handle.ptr(),
 					CURLOPT_PROXYTYPE,
 					get_proxy_type(proxytype));
 			}
 		}
 
 		const std::string useragent = utils::get_useragent(cfg);
-		curl_easy_setopt(handle, CURLOPT_USERAGENT, useragent.c_str());
+		curl_easy_setopt(handle.ptr(), CURLOPT_USERAGENT, useragent.c_str());
 
 		const unsigned int dl_timeout =
 			cfg->get_configvalue_as_int("download-timeout");
-		curl_easy_setopt(handle, CURLOPT_TIMEOUT, dl_timeout);
+		curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, dl_timeout);
 
 		const std::string cookie_cache =
 			cfg->get_configvalue("cookie-cache");
 		if (cookie_cache != "") {
-			curl_easy_setopt(handle,
+			curl_easy_setopt(handle.ptr(),
 				CURLOPT_COOKIEFILE,
 				cookie_cache.c_str());
-			curl_easy_setopt(handle,
+			curl_easy_setopt(handle.ptr(),
 				CURLOPT_COOKIEJAR,
 				cookie_cache.c_str());
 		}
 
-		curl_easy_setopt(handle,
+		curl_easy_setopt(handle.ptr(),
 			CURLOPT_SSL_VERIFYHOST,
 			cfg->get_configvalue_as_bool("ssl-verifyhost") ? 2 : 0);
-		curl_easy_setopt(handle,
+		curl_easy_setopt(handle.ptr(),
 			CURLOPT_SSL_VERIFYPEER,
 			cfg->get_configvalue_as_bool("ssl-verifypeer"));
 	}
 
-	curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
-	curl_easy_setopt(handle, CURLOPT_ENCODING, "gzip, deflate");
+	curl_easy_setopt(handle.ptr(), CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(handle.ptr(), CURLOPT_ENCODING, "gzip, deflate");
 
-	curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1);
-	curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 10);
-	curl_easy_setopt(handle, CURLOPT_FAILONERROR, 1);
+	curl_easy_setopt(handle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
+	curl_easy_setopt(handle.ptr(), CURLOPT_MAXREDIRS, 10);
+	curl_easy_setopt(handle.ptr(), CURLOPT_FAILONERROR, 1);
 
 	const char* curl_ca_bundle = ::getenv("CURL_CA_BUNDLE");
 	if (curl_ca_bundle != nullptr) {
-		curl_easy_setopt(handle, CURLOPT_CAINFO, curl_ca_bundle);
+		curl_easy_setopt(handle.ptr(), CURLOPT_CAINFO, curl_ca_bundle);
 	}
 }
 

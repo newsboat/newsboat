@@ -55,8 +55,16 @@ bool Reloader::trylock_reload_mutex()
 
 void Reloader::reload(unsigned int pos,
 	bool show_progress,
-	bool unattended,
-	CurlHandle* easyhandle)
+	bool unattended)
+{
+	CurlHandle handle;
+	reload(pos, handle, show_progress, unattended);
+}
+
+void Reloader::reload(unsigned int pos,
+	CurlHandle& easyhandle,
+	bool show_progress,
+	bool unattended)
 {
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u", pos);
 	std::shared_ptr<RssFeed> oldfeed = ctrl->get_feedcontainer()->get_feed(pos);
@@ -89,7 +97,7 @@ void Reloader::reload(unsigned int pos,
 			cfg,
 			ignore_dl ? ctrl->get_ignores() : nullptr,
 			ctrl->get_api());
-		parser.set_easyhandle(easyhandle);
+		parser.set_easyhandle(&easyhandle);
 		LOG(Level::DEBUG, "Reloader::reload: created parser");
 		try {
 			const auto inner_message_lifetime = message_lifetime;
@@ -245,7 +253,7 @@ void Reloader::reload_range(unsigned int start,
 		LOG(Level::DEBUG,
 			"Reloader::reload_range: reloading feed #%u",
 			i);
-		reload(i, true, unattended, &easyhandle);
+		reload(i, easyhandle, true, unattended);
 	}
 }
 

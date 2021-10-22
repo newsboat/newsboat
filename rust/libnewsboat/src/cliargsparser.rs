@@ -454,6 +454,44 @@ mod tests {
     }
 
     #[test]
+    fn t_supports_combined_short_options_last_has_equalsign() {
+        let check = |opts, cmds: Vec<String>| {
+            let args = CliArgsParser::new(opts);
+
+            assert_eq!(args.cmds_to_execute, cmds);
+        };
+
+        check(
+            vec!["newsboat".into(), "-rx=reload".into()],
+            vec!["reload".into()],
+        );
+    }
+
+    #[test]
+    fn t_should_fail_on_equal_sign_with_multiple_values() {
+        let check_not_eq = |opts, cmds: Vec<String>| {
+            let args = CliArgsParser::new(opts);
+
+            assert_ne!(args.cmds_to_execute, cmds);
+            assert!(args.should_print_usage);
+        };
+
+        check_not_eq(
+            vec!["newsboat".into(), "-x=reload".into(), "print-unread".into()],
+            vec!["reload".into(), "print-unread".into()],
+        );
+
+        check_not_eq(
+            vec![
+                "newsboat".into(),
+                "--execute=reload".into(),
+                "print-unread".into(),
+            ],
+            vec!["reload".into(), "print-unread".into()],
+        );
+    }
+
+    #[test]
     fn t_supports_equals_between_combined_short_option_and_value() {
         let filename = "cache.db";
 

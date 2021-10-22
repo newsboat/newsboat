@@ -51,7 +51,7 @@ void PodDlThread::run()
 	++bytecount;
 
 	CurlHandle handle;
-	utils::set_common_curl_options(handle.ptr(), cfg);
+	utils::set_common_curl_options(handle, cfg);
 
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, dl->url().c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, 0);
