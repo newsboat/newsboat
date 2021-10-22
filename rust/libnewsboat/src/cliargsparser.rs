@@ -247,8 +247,6 @@ impl CliArgsParser {
                         args.display_msg = display_msg;
                     }
                     CliParseError::LexoptError(err) => {
-                        // if we've entered an invalid option/undefined one, this gets set to "invalid option <option>"
-                        args.display_msg = format!("{}", err);
                         args.should_print_usage = true;
                     }
                     CliParseError::PrintAndExit => {
