@@ -275,12 +275,25 @@ TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 	REQUIRE(args.using_nonstandard_configs());
 }
 
-TEST_CASE("Supports `=` between combined short option and value",
+TEST_CASE("Supports `=` between short option and value",
 	"[CliArgsParser]")
 {
 	const std::string filename("cache.db");
 
 	TestHelpers::Opts opts = {"newsboat", "-c=" + filename};
+	CliArgsParser args(opts.argc(), opts.argv());
+
+	REQUIRE(args.cache_file() == filename);
+	REQUIRE(args.lock_file() == filename + ".lock");
+	REQUIRE(args.using_nonstandard_configs());
+}
+
+TEST_CASE("Supports `=` between combined short options and value",
+	"[CliArgsParser]")
+{
+	const std::string filename("cache.db");
+
+	TestHelpers::Opts opts = {"newsboat", "-vc=" + filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -752,4 +765,17 @@ TEST_CASE("Sets `program_name` to the first string of the options list",
 		"something else entirely");
 	check({"/usr/local/bin/app-with-a-path"},
 		"/usr/local/bin/app-with-a-path");
+}
+
+TEST_CASE("newsboat should print usage if '-x='/'--execute=' is passed a list of commands, to adhere to clap-rs backwards compatibility",
+	"[CliArgsParser]")
+{
+	auto check = [](TestHelpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+		REQUIRE(args.should_print_usage());
+		REQUIRE(args.return_code() == EXIT_FAILURE);
+	};
+
+	check({"newsboat", "--execute=print-unread", "print-unread"})
+	check({"newsboat", "-x=print-unread", "print-unread"})
 }
