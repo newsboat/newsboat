@@ -519,6 +519,7 @@ mod tests {
             let args = CliArgsParser::new(opts);
 
             assert_ne!(args.cmds_to_execute, cmds);
+            assert_eq!(args.should_print_usage, true);
         };
 
         check_not_eq(
