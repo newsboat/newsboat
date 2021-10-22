@@ -2,14 +2,12 @@ use gettextrs::gettext;
 use lexopt::{Parser, ValueExt, ValueType};
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 use std::ffi::{OsStr, OsString};
-use std::os::unix::ffi::OsStrExt;
 
 use std::path::{Path, PathBuf};
 
 use crate::logger::Level;
 use crate::utils;
 use strprintf::fmt;
-
 
 #[derive(Default)]
 pub struct CliArgsParser {
@@ -73,15 +71,6 @@ pub struct CliArgsParser {
 
     /// If this contains some value, it's the log level specified by the user.
     pub log_level: Option<Level>,
-}
-
-fn strip_eq(value: &OsStr) -> &OsStr {
-    const EQUAL_SIGN: u8 = b'=';
-    if let Some(&EQUAL_SIGN) = value.as_bytes().get(0) {
-        OsStr::from_bytes(&value.as_bytes()[1..])
-    } else {
-        OsStr::from_bytes(value.as_bytes())
-    }
 }
 
 /// Returns new path with an added extension
@@ -152,30 +141,18 @@ impl From<lexopt::Error> for CliParseError {
 pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<(), CliParseError> {
     use lexopt::prelude::*;
 
-    let correct_input_make_pathbuf = |string: &OsString, last_was_short| -> Option<PathBuf> {
-        if last_was_short {
-            let removed_front = strip_eq(string);
-            Some(utils::resolve_tilde(PathBuf::from(removed_front)))
-        } else {
-            Some(utils::resolve_tilde(PathBuf::from(&string)))
-        }
+    let resolve_path = |string: &OsString| -> Option<PathBuf> {
+        Some(utils::resolve_tilde(PathBuf::from(&string)))
     };
 
     let mut parser = Parser::from_args(opts.into_iter());
     let mut last_seen = MultiValueOption::None;
-    let mut last_was_short = false;
 
     while let Some(arg) = parser.next()? {
-        last_was_short = match arg {
-            lexopt::prelude::Short(_) => true,
-            lexopt::prelude::Long(_) => false,
-            _ => last_was_short,
-        };
-
         match arg {
             Short('i') | Long("import-from-opml") => {
                 let import_file_str = parser.value()?;
-                args.importfile = correct_input_make_pathbuf(&import_file_str, last_was_short);
+                args.importfile = resolve_path(&import_file_str);
             }
             Short('e') | Long("export-to-opml") => {
                 args.do_export = true;
@@ -188,11 +165,11 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
             }
             Short('u') | Long("url-file") => {
                 let url_file = parser.value()?;
-                args.url_file = correct_input_make_pathbuf(&url_file, last_was_short);
+                args.url_file = resolve_path(&url_file);
             }
             Short('c') | Long("cache-file") => {
                 let cache_file = parser.value()?;
-                let cache_file = correct_input_make_pathbuf(&cache_file, last_was_short);
+                let cache_file = resolve_path(&cache_file);
                 // unwrap won't panic on cache_file.unwrap(), we know we return Some(...) from ^ utility closure
                 let lock_file = make_sibling_file(cache_file.as_ref().unwrap(), "lock");
                 args.cache_file = cache_file;
@@ -200,54 +177,44 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
             }
             Short('C') | Long("config-file") => {
                 let config_file = parser.value()?;
-                args.config_file = correct_input_make_pathbuf(&config_file, last_was_short);
+                args.config_file = resolve_path(&config_file);
             }
             Short('X') | Long("vacuum") => args.do_vacuum = true,
             Long("cleanup") => args.do_cleanup = true,
             Short('v') | Long("version") | Short('V') | Long("-V") => args.show_version += 1,
             Short('x') | Long("execute") => {
-
                 let cmd_value = match parser.key_value()? {
-                    ValueType::Normal(val) => {     // we can collect multiple values
+                    ValueType::Normal(val) => {
+                        // we can collect multiple values
                         last_seen = MultiValueOption::Execute;
                         val
-                    },
-                    ValueType::KVPValue(val) => {   // we can not
+                    }
+                    ValueType::KVPValue(val) => {
+                        // we can not
                         last_seen = MultiValueOption::None;
                         val
-                    },
+                    }
                 };
-
-                let cmd = if last_was_short {
-                    strip_eq(&cmd_value)
-                } else {
-                    &cmd_value
-                };
-                args.cmds_to_execute.push(cmd.to_string_lossy().into());
+                args.cmds_to_execute
+                    .push(cmd_value.to_string_lossy().into());
                 args.silent = true;
             }
             Short('q') | Long("quiet") => args.silent = true,
             Short('I') | Long("import-from-file") => {
                 let importfile = parser.value()?;
-                args.readinfo_import_file = correct_input_make_pathbuf(&importfile, last_was_short);
+                args.readinfo_import_file = resolve_path(&importfile);
             }
             Short('E') | Long("export-to-file") => {
                 let exportfile = parser.value()?;
-                args.readinfo_export_file = correct_input_make_pathbuf(&exportfile, last_was_short);
+                args.readinfo_export_file = resolve_path(&exportfile);
             }
             Short('d') | Long("log-file") => {
                 let log_file = parser.value()?;
-                args.log_file = correct_input_make_pathbuf(&log_file, last_was_short);
+                args.log_file = resolve_path(&log_file);
             }
             Short('l') | Long("log-level") => {
                 let log_level_str = parser.value()?;
-                let log_level_str_checked = if last_was_short {
-                    strip_eq(&log_level_str)
-                } else {
-                    &log_level_str
-                };
-
-                match Level::try_from(log_level_str_checked) {
+                match Level::try_from(log_level_str.as_ref()) {
                     Ok(level) => {
                         args.log_level = Some(level);
                     }
