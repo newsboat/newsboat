@@ -1,5 +1,5 @@
 use gettextrs::gettext;
-use lexopt::{Parser, ValueExt};
+use lexopt::{Parser, ValueExt, ValueType};
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
 use std::ffi::{OsStr, OsString};
 use std::os::unix::ffi::OsStrExt;
@@ -9,6 +9,7 @@ use std::path::{Path, PathBuf};
 use crate::logger::Level;
 use crate::utils;
 use strprintf::fmt;
+
 
 #[derive(Default)]
 pub struct CliArgsParser {
@@ -205,8 +206,18 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
             Long("cleanup") => args.do_cleanup = true,
             Short('v') | Long("version") | Short('V') | Long("-V") => args.show_version += 1,
             Short('x') | Long("execute") => {
-                let cmd_value = parser.value()?;
-                last_seen = MultiValueOption::Execute;
+
+                let cmd_value = match parser.key_value()? {
+                    ValueType::Normal(val) => {     // we can collect multiple values
+                        last_seen = MultiValueOption::Execute;
+                        val
+                    },
+                    ValueType::KVPValue(val) => {   // we can not
+                        last_seen = MultiValueOption::None;
+                        val
+                    },
+                };
+
                 let cmd = if last_was_short {
                     strip_eq(&cmd_value)
                 } else {
