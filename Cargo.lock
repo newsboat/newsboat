@@ -283,8 +283,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lexopt"
-version = "0.1.0"
-source = "git+https://github.com/blyxxyz/lexopt?branch=values-method#95575e784c3b08c91f81356b0c9d71f1f195ec58"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "de7513aea7d10dc0694d719ac53de3b74f1600e41b9f81ed9f395d8ec36a2a70"
 
 [[package]]
 name = "libc"

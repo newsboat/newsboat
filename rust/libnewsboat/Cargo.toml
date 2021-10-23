@@ -21,7 +21,7 @@ libc = "0.2"
 natord = "1.0.9"
 md5 = "0.7.0"
 
-lexopt = { git = "https://github.com/blyxxyz/lexopt", branch = "values-method" }
+lexopt = "0.2.0"
 
 [dependencies.gettext-rs]
 version = "0.7.0"
