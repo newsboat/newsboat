@@ -1,8 +1,9 @@
-use clap::{App, Arg};
 use gettextrs::gettext;
+use lexopt::{Parser, ValueExt};
 use libc::{EXIT_FAILURE, EXIT_SUCCESS};
-use std::ffi::OsString;
-use std::path::PathBuf;
+use std::ffi::{OsStr, OsString};
+
+use std::path::{Path, PathBuf};
 
 use crate::logger::Level;
 use crate::utils;
@@ -72,106 +73,162 @@ pub struct CliArgsParser {
     pub log_level: Option<Level>,
 }
 
-const LOCK_SUFFIX: &str = ".lock";
+/// Returns new path with an added extension
+fn make_sibling_file(path: &Path, extension: impl AsRef<Path>) -> PathBuf {
+    let mut result = path.to_path_buf();
+    match path.extension() {
+        Some(current_extension) => {
+            let mut new_extension = current_extension.to_os_string();
+            new_extension.push(".");
+            new_extension.push(extension.as_ref());
+            result.set_extension(new_extension);
+        }
+        None => {
+            result.set_extension(extension.as_ref());
+        }
+    }
+    result
+}
+
+use std::convert::TryFrom;
+impl TryFrom<&OsStr> for Level {
+    type Error = ();
+
+    fn try_from(value: &OsStr) -> Result<Self, <Level as TryFrom<&OsStr>>::Error> {
+        match value.to_owned().parse::<u8>() {
+            Ok(1) => Ok(Level::UserError),
+            Ok(2) => Ok(Level::Critical),
+            Ok(3) => Ok(Level::Error),
+            Ok(4) => Ok(Level::Warn),
+            Ok(5) => Ok(Level::Info),
+            Ok(6) => Ok(Level::Debug),
+            _ => Err(()),
+        }
+    }
+}
+#[derive(Debug)]
+pub enum CliParseError {
+    LexoptError(lexopt::Error),
+    InvalidLogLevel(String),
+    PrintAndExit,
+}
+
+impl std::fmt::Display for CliParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CliParseError::LexoptError(lexopt) => write!(f, "{}", lexopt),
+            CliParseError::InvalidLogLevel(log_message) => write!(f, "{}", log_message),
+            CliParseError::PrintAndExit => write!(f, "Erroneous command line arguments"),
+        }
+    }
+}
+
+impl From<lexopt::Error> for CliParseError {
+    fn from(err: lexopt::Error) -> CliParseError {
+        CliParseError::LexoptError(err)
+    }
+}
+
+/// Parses command line arguments and stores them in parameter args.
+/// Returns Ok(()) or a CliParseError to indicate additional values on CliArgParser that needs
+/// setting.
+pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<(), CliParseError> {
+    use lexopt::prelude::*;
+
+    let resolve_path = |string: &OsString| -> Option<PathBuf> {
+        Some(utils::resolve_tilde(PathBuf::from(&string)))
+    };
+
+    let mut parser = Parser::from_args(opts.into_iter());
+
+    while let Some(arg) = parser.next()? {
+        match arg {
+            Short('i') | Long("import-from-opml") => {
+                let import_file_str = parser.value()?;
+                args.importfile = resolve_path(&import_file_str);
+            }
+            Short('e') | Long("export-to-opml") => {
+                args.do_export = true;
+                args.silent = true;
+            }
+            Short('r') | Long("refresh-on-start") => args.refresh_on_start = true,
+            Short('h') | Long("help") => {
+                args.should_print_usage = true;
+                args.return_code = Some(EXIT_SUCCESS);
+            }
+            Short('u') | Long("url-file") => {
+                let url_file = parser.value()?;
+                args.url_file = resolve_path(&url_file);
+            }
+            Short('c') | Long("cache-file") => {
+                let cache_file = parser.value()?;
+                let cache_file = resolve_path(&cache_file);
+                // unwrap won't panic on cache_file.unwrap(), we know we return Some(...) from ^ utility closure
+                let lock_file = make_sibling_file(cache_file.as_ref().unwrap(), "lock");
+                args.cache_file = cache_file;
+                args.lock_file = Some(lock_file);
+            }
+            Short('C') | Long("config-file") => {
+                let config_file = parser.value()?;
+                args.config_file = resolve_path(&config_file);
+            }
+            Short('X') | Long("vacuum") => args.do_vacuum = true,
+            Long("cleanup") => args.do_cleanup = true,
+            Short('v') | Long("version") | Short('V') | Long("-V") => args.show_version += 1,
+            Short('x') | Long("execute") => {
+                for cmd in parser.values()? {
+                    args.cmds_to_execute.push(cmd.to_string_lossy().into());
+                }
+                if args.cmds_to_execute.is_empty() {
+                    return Err(CliParseError::PrintAndExit);
+                }
+                args.silent = true;
+            }
+            Short('q') | Long("quiet") => args.silent = true,
+            Short('I') | Long("import-from-file") => {
+                let importfile = parser.value()?;
+                args.readinfo_import_file = resolve_path(&importfile);
+            }
+            Short('E') | Long("export-to-file") => {
+                let exportfile = parser.value()?;
+                args.readinfo_export_file = resolve_path(&exportfile);
+            }
+            Short('d') | Long("log-file") => {
+                let log_file = parser.value()?;
+                args.log_file = resolve_path(&log_file);
+            }
+            Short('l') | Long("log-level") => {
+                let log_level_str = parser.value()?;
+                match Level::try_from(log_level_str.as_ref()) {
+                    Ok(level) => {
+                        args.log_level = Some(level);
+                    }
+                    Err(()) => {
+                        return Err(CliParseError::InvalidLogLevel(fmt!(
+                            &gettext("%s: %s: invalid loglevel value"),
+                            &args.program_name,
+                            log_level_str.to_string_lossy().to_string()
+                        )));
+                    }
+                }
+            }
+            _ => return Err(CliParseError::from(arg.unexpected())),
+        }
+    }
+
+    if args.do_export && args.importfile.is_some() {
+        return Err(CliParseError::PrintAndExit);
+    }
+
+    if args.readinfo_import_file.is_some() && args.readinfo_export_file.is_some() {
+        return Err(CliParseError::PrintAndExit);
+    }
+
+    Ok(())
+}
 
 impl CliArgsParser {
-    pub fn new(opts: Vec<OsString>) -> CliArgsParser {
-        const CACHE_FILE: &str = "cache-file";
-        const CONFIG_FILE: &str = "config-file";
-        const EXECUTE: &str = "execute";
-        const EXPORT_TO_FILE: &str = "export-to-file";
-        const EXPORT_TO_OPML: &str = "export-to-opml";
-        const HELP: &str = "help";
-        const IMPORT_FROM_FILE: &str = "import-from-file";
-        const IMPORT_FROM_OPML: &str = "import-from-opml";
-        const LOG_FILE: &str = "log-file";
-        const LOG_LEVEL: &str = "log-level";
-        const QUIET: &str = "quiet";
-        const REFRESH_ON_START: &str = "refresh-on-start";
-        const URL_FILE: &str = "url-file";
-        const VACUUM: &str = "vacuum";
-        const CLEANUP: &str = "cleanup";
-        const VERSION: &str = "version";
-        const VERSION_V: &str = "-V";
-
-        let app = App::new("Newsboat")
-            .arg(
-                Arg::with_name(IMPORT_FROM_OPML)
-                    .short("i")
-                    .long(IMPORT_FROM_OPML)
-                    .takes_value(true),
-            )
-            .arg(
-                Arg::with_name(EXPORT_TO_OPML)
-                    .short("e")
-                    .long(EXPORT_TO_OPML),
-            )
-            .arg(
-                Arg::with_name(REFRESH_ON_START)
-                    .short("r")
-                    .long(REFRESH_ON_START),
-            )
-            .arg(Arg::with_name(HELP).short("h").long(HELP))
-            .arg(
-                Arg::with_name(URL_FILE)
-                    .short("u")
-                    .long(URL_FILE)
-                    .takes_value(true),
-            )
-            .arg(
-                Arg::with_name(CACHE_FILE)
-                    .short("c")
-                    .long(CACHE_FILE)
-                    .takes_value(true),
-            )
-            .arg(
-                Arg::with_name(CONFIG_FILE)
-                    .short("C")
-                    .long(CONFIG_FILE)
-                    .takes_value(true),
-            )
-            .arg(Arg::with_name(VACUUM).short("X").long(VACUUM))
-            .arg(Arg::with_name(CLEANUP).long(CLEANUP))
-            .arg(
-                Arg::with_name(VERSION)
-                    .short("v")
-                    .long(VERSION)
-                    .multiple(true),
-            )
-            .arg(Arg::with_name(VERSION_V).short("V").multiple(true))
-            .arg(
-                Arg::with_name(EXECUTE)
-                    .short("x")
-                    .long(EXECUTE)
-                    .takes_value(true)
-                    .multiple(true),
-            )
-            .arg(Arg::with_name(QUIET).short("q").long(QUIET))
-            .arg(
-                Arg::with_name(IMPORT_FROM_FILE)
-                    .short("I")
-                    .long(IMPORT_FROM_FILE)
-                    .takes_value(true),
-            )
-            .arg(
-                Arg::with_name(EXPORT_TO_FILE)
-                    .short("E")
-                    .long(EXPORT_TO_FILE)
-                    .takes_value(true),
-            )
-            .arg(
-                Arg::with_name(LOG_FILE)
-                    .short("d")
-                    .long(LOG_FILE)
-                    .takes_value(true),
-            )
-            .arg(
-                Arg::with_name(LOG_LEVEL)
-                    .short("l")
-                    .long(LOG_LEVEL)
-                    .takes_value(true),
-            );
-
+    pub fn new(mut opts: Vec<OsString>) -> CliArgsParser {
         let mut args = CliArgsParser::default();
 
         if let Some(program_name) = opts
@@ -179,132 +236,27 @@ impl CliArgsParser {
             .map(|program_name| program_name.to_string_lossy().into_owned())
         {
             args.program_name = program_name;
+            opts.remove(0);
         }
 
-        let matches = match app.get_matches_from_safe(&opts) {
-            Ok(matches) => matches,
-            Err(_) => {
-                args.should_print_usage = true;
+        match parse_cliargs(opts, &mut args) {
+            Ok(()) => args,
+            Err(err) => {
+                match err {
+                    CliParseError::InvalidLogLevel(display_msg) => {
+                        args.display_msg = display_msg;
+                    }
+                    CliParseError::LexoptError(_) => {
+                        args.should_print_usage = true;
+                    }
+                    CliParseError::PrintAndExit => {
+                        args.should_print_usage = true;
+                    }
+                }
                 args.return_code = Some(EXIT_FAILURE);
-                return args;
-            }
-        };
-
-        if matches.is_present(EXPORT_TO_OPML) {
-            if args.importfile.is_some() {
-                args.should_print_usage = true;
-                args.return_code = Some(EXIT_FAILURE);
-            } else {
-                args.do_export = true;
-                args.silent = true;
-            }
-        }
-
-        args.refresh_on_start = matches.is_present(REFRESH_ON_START);
-
-        if matches.is_present(HELP) {
-            args.should_print_usage = true;
-            args.return_code = Some(EXIT_SUCCESS);
-        }
-
-        args.do_vacuum = matches.is_present(VACUUM);
-
-        args.do_cleanup = matches.is_present(CLEANUP);
-
-        args.silent = args.silent || matches.is_present(QUIET);
-
-        if let Some(importfile) = matches.value_of(IMPORT_FROM_OPML) {
-            if args.do_export {
-                args.should_print_usage = true;
-                args.return_code = Some(EXIT_FAILURE);
-            } else {
-                args.importfile = Some(utils::resolve_tilde(PathBuf::from(importfile)));
+                args
             }
         }
-
-        if let Some(url_file) = matches.value_of(URL_FILE) {
-            args.url_file = Some(utils::resolve_tilde(PathBuf::from(url_file)));
-        }
-
-        if let Some(cache_file) = matches.value_of(CACHE_FILE) {
-            args.cache_file = Some(utils::resolve_tilde(PathBuf::from(cache_file)));
-            args.lock_file = Some(utils::resolve_tilde(PathBuf::from(
-                cache_file.to_string() + LOCK_SUFFIX,
-            )));
-        }
-
-        if let Some(config_file) = matches.value_of(CONFIG_FILE) {
-            args.config_file = Some(utils::resolve_tilde(PathBuf::from(config_file)));
-        }
-
-        // Casting u64 to usize. Highly unlikely that the user will hit the limit, even if we were
-        // running on an 8-bit platform.
-        //
-        // There are three "version" options, two of which (-v and --version) are grouped into
-        // VERSION, and the other one (-V) is under VERSION_V. This is because Clap won't let us
-        // have short aliases.
-        args.show_version =
-            (matches.occurrences_of(VERSION) + matches.occurrences_of(VERSION_V)) as usize;
-
-        if let Some(mut commands) = matches.values_of_lossy(EXECUTE) {
-            args.silent = true;
-            args.cmds_to_execute.append(&mut commands);
-        }
-
-        if let Some(importfile) = matches.value_of(IMPORT_FROM_FILE) {
-            if args.readinfo_export_file.is_some() {
-                args.should_print_usage = true;
-                args.return_code = Some(EXIT_FAILURE);
-            } else {
-                args.readinfo_import_file = Some(utils::resolve_tilde(PathBuf::from(importfile)));
-            }
-        }
-
-        if let Some(exportfile) = matches.value_of(EXPORT_TO_FILE) {
-            if args.readinfo_import_file.is_some() {
-                args.should_print_usage = true;
-                args.return_code = Some(EXIT_FAILURE);
-            } else {
-                args.readinfo_export_file = Some(utils::resolve_tilde(PathBuf::from(exportfile)));
-            }
-        }
-
-        if let Some(log_file) = matches.value_of(LOG_FILE) {
-            args.log_file = Some(utils::resolve_tilde(PathBuf::from(log_file)));
-        }
-
-        if let Some(log_level_str) = matches.value_of(LOG_LEVEL) {
-            match log_level_str.parse::<u8>() {
-                Ok(1) => {
-                    args.log_level = Some(Level::UserError);
-                }
-                Ok(2) => {
-                    args.log_level = Some(Level::Critical);
-                }
-                Ok(3) => {
-                    args.log_level = Some(Level::Error);
-                }
-                Ok(4) => {
-                    args.log_level = Some(Level::Warn);
-                }
-                Ok(5) => {
-                    args.log_level = Some(Level::Info);
-                }
-                Ok(6) => {
-                    args.log_level = Some(Level::Debug);
-                }
-                _ => {
-                    args.display_msg = fmt!(
-                        &gettext("%s: %s: invalid loglevel value"),
-                        &args.program_name,
-                        log_level_str
-                    );
-                    args.return_code = Some(EXIT_FAILURE);
-                }
-            };
-        }
-
-        args
     }
 
     pub fn using_nonstandard_configs(&self) -> bool {
@@ -315,7 +267,7 @@ impl CliArgsParser {
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    const LOCK_SUFFIX: &str = ".lock";
     #[test]
     fn t_asks_to_print_usage_info_and_exit_with_failure_on_unknown_option() {
         let check = |opts| {
