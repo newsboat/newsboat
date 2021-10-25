@@ -191,8 +191,8 @@ std::vector<std::string> FormAction::get_suggestions(
 		}
 	}
 	if (result.empty()) {
-		std::vector<std::string> tokens =
-			utils::tokenize_quoted(fragment, " \t=");
+		constexpr auto delimiters = " \t=";
+		auto tokens = FormAction::tokenize_quoted(fragment, delimiters);
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
@@ -255,8 +255,8 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	 * It works the same way basically everywhere: first the command line
 	 * is tokenized, and then the tokens are looked at.
 	 */
-	std::vector<std::string> tokens =
-		utils::tokenize_quoted(cmdline, " \t=");
+	constexpr auto delimiters = " \t=";
+	auto tokens = FormAction::tokenize_quoted(cmdline, delimiters);
 	assert(cfg != nullptr);
 	if (!tokens.empty()) {
 		std::string cmd = tokens[0];
@@ -476,6 +476,12 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	} else {
 		start_qna(prompts, OP_INT_BM_END);
 	}
+}
+
+std::vector<std::string> FormAction::tokenize_quoted(const std::string& input,
+	std::string delimiters)
+{
+	return utils::tokenize_quoted(input, delimiters);
 }
 
 void FormAction::start_next_question()

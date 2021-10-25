@@ -1360,7 +1360,7 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		handle_cmdline_num(idx);
 	} else {
-		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
+		auto tokens = FormAction::tokenize_quoted(cmd);
 		if (tokens.empty()) {
 			return;
 		}

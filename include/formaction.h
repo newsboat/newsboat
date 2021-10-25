@@ -94,6 +94,9 @@ protected:
 		const std::string& default_url,
 		const std::string& default_feed_title);
 
+	static std::vector<std::string> tokenize_quoted(const std::string& input,
+		std::string delimiters = " \r\n\t");
+
 	View* v;
 	ConfigContainer* cfg;
 	Stfl::Form f;

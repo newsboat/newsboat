@@ -563,7 +563,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 {
-	std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
+	auto tokens = FormAction::tokenize_quoted(cmd);
 	if (!tokens.empty()) {
 		if (tokens[0] == "save" && tokens.size() >= 2) {
 			std::string filename = utils::resolve_tilde(tokens[1]);

@@ -829,8 +829,8 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 		handle_cmdline_num(idx);
 	} else {
 		// hand over all other commands to formaction
-		std::vector<std::string> tokens =
-			utils::tokenize_quoted(cmd, " \t");
+		constexpr auto delimiters = " \t";
+		auto tokens = FormAction::tokenize_quoted(cmd, delimiters);
 		if (!tokens.empty()) {
 			if (tokens[0] == "tag") {
 				if (tokens.size() >= 2 && tokens[1] != "") {
