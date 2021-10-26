@@ -72,6 +72,7 @@ private:
 		std::string source);
 
 	void do_search();
+	void handle_save(const std::string& filename_param);
 
 	std::string guid;
 	std::shared_ptr<RssFeed> feed;

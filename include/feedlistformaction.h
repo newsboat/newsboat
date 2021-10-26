@@ -71,7 +71,8 @@ private:
 	void op_start_search();
 
 	void handle_cmdline_num(unsigned int idx);
-
+	void handle_tag(const std::string& params);
+	void handle_goto(const std::string& param);
 	void set_pos();
 
 	std::string get_title(std::shared_ptr<RssFeed> feed);

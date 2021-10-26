@@ -833,14 +833,12 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 		auto tokens = FormAction::tokenize_quoted(cmd, delimiters);
 		if (!tokens.empty()) {
 			if (tokens[0] == "tag") {
-				if (tokens.size() >= 2 && tokens[1] != "") {
-					tag = tokens[1];
-					do_redraw = true;
-					zero_feedpos = true;
+				if (tokens.size() >= 2) {
+					handle_tag(tokens[1]);
 				}
 			} else if (tokens[0] == "goto") {
-				if (tokens.size() >= 2 && tokens[1] != "") {
-					goto_feed(tokens[1]);
+				if (tokens.size() >= 2) {
+					handle_goto(tokens[1]);
 				}
 			} else {
 				FormAction::handle_cmdline(cmd);
@@ -1020,6 +1018,22 @@ void FeedListFormAction::handle_cmdline_num(unsigned int idx)
 		}
 	} else {
 		v->get_statusline().show_error(_("Invalid position!"));
+	}
+}
+
+void FeedListFormAction::handle_tag(const std::string& tag_param)
+{
+	if (tag_param != "") {
+		tag = tag_param;
+		do_redraw = true;
+		zero_feedpos = true;
+	}
+}
+
+void FeedListFormAction::handle_goto(const std::string& param)
+{
+	if (param != "") {
+		goto_feed(param);
 	}
 }
 

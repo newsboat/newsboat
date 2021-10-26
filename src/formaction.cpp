@@ -12,6 +12,7 @@
 #include "utils.h"
 #include "view.h"
 
+
 namespace newsboat {
 
 History FormAction::searchhistory;

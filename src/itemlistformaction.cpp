@@ -1364,22 +1364,10 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		if (tokens.empty()) {
 			return;
 		}
-		if (tokens[0] == "save") {
-			if (tokens.size() < 2) {
-				v->get_statusline().show_error(_("Error: no filename provided"));
-				return;
-			}
-			if (visible_items.empty()) {
-				v->get_statusline().show_error(_("Error: no item selected!"));
-				return;
-			}
-			const std::string filename = utils::resolve_tilde(tokens[1]);
-			const unsigned int itempos = list.get_position();
-			LOG(Level::INFO,
-				"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
-				itempos,
-				filename);
-			save_article(filename, visible_items[itempos].first);
+		auto cmd = tokens[0];
+		tokens.erase(tokens.begin());
+		if (cmd == "save") {
+			handle_save(tokens);
 		} else {
 			FormAction::handle_cmdline(cmd);
 		}
@@ -1429,6 +1417,25 @@ void ItemListFormAction::save_article(const std::string& filename,
 					filename));
 		}
 	}
+}
+
+void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
+{
+	if (cmd_args.size() < 1) {
+		v->get_statusline().show_error(_("Error: no filename provided"));
+		return;
+	}
+	if (visible_items.empty()) {
+		v->get_statusline().show_error(_("Error: no item selected!"));
+		return;
+	}
+	const std::string filename = utils::resolve_tilde(cmd_args[0]);
+	const unsigned int itempos = list.get_position();
+	LOG(Level::INFO,
+		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
+		itempos,
+		filename);
+	save_article(filename, visible_items[itempos].first);
 }
 
 void ItemListFormAction::save_filterpos()
