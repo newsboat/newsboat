@@ -847,6 +847,22 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
+void FeedListFormAction::handle_tag(const std::string& tag_param)
+{
+	if (tag_param != "") {
+		tag = tag_param;
+		do_redraw = true;
+		zero_feedpos = true;
+	}
+}
+
+void FeedListFormAction::handle_goto(const std::string& param)
+{
+	if (param != "") {
+		goto_feed(param);
+	}
+}
+
 void FeedListFormAction::finished_qna(Operation op)
 {
 	FormAction::finished_qna(op); // important!
@@ -1018,22 +1034,6 @@ void FeedListFormAction::handle_cmdline_num(unsigned int idx)
 		}
 	} else {
 		v->get_statusline().show_error(_("Invalid position!"));
-	}
-}
-
-void FeedListFormAction::handle_tag(const std::string& tag_param)
-{
-	if (tag_param != "") {
-		tag = tag_param;
-		do_redraw = true;
-		zero_feedpos = true;
-	}
-}
-
-void FeedListFormAction::handle_goto(const std::string& param)
-{
-	if (param != "") {
-		goto_feed(param);
 	}
 }
 
