@@ -262,30 +262,7 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	constexpr auto delimiters = " \t=";
 	const auto command = FormAction::parse_command(cmdline, delimiters);
 	assert(cfg != nullptr);
-	switch(command.type) {
-		case CommandType::SET:
-			handle_set(command.args);
-			break;
-		case CommandType::QUIT:
-			handle_quit();
-			break;
-		case CommandType::SOURCE:
-			handle_source(command.args);
-		break;
-		case CommandType::DUMPCONFIG:
-			handle_dumpconfig(command.args);
-		break;
-		case CommandType::EXEC:
-			handle_exec(command.args);
-		break;
-		case CommandType::UNKNOWN:
-			v->get_statusline().show_error(strprintf::fmt(_("Not a command: %s"), cmdline));
-		break;
-		case CommandType::INVALID: 
-			break;
-		default:
-			throw std::runtime_error{"Unhandled command"};
-	}
+	handle_parsed_command(command);
 }
 
 void FormAction::handle_set(const std::vector<std::string>& args) {
