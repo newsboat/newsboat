@@ -192,8 +192,8 @@ std::vector<std::string> FormAction::get_suggestions(
 		}
 	}
 	if (result.empty()) {
-		constexpr auto delimiters = " \t=";
-		auto tokens = FormAction::tokenize_quoted(fragment, delimiters);
+		std::vector<std::string> tokens =
+			utils::tokenize_quoted(fragment, " \t=");
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
