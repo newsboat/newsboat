@@ -265,7 +265,8 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	handle_parsed_command(command);
 }
 
-void FormAction::handle_set(const std::vector<std::string>& args) {
+void FormAction::handle_set(const std::vector<std::string>& args)
+{
 	if (args.size() == 1) {
 		if (handle_single_argument_set(args[0])) {
 			return;
@@ -285,13 +286,15 @@ void FormAction::handle_set(const std::vector<std::string>& args) {
 	}
 }
 
-void FormAction::handle_quit() {
+void FormAction::handle_quit()
+{
 	while (v->formaction_stack_size() > 0) {
 		v->pop_current_formaction();
 	}
 }
 
-void FormAction::handle_source(const std::vector<std::string>& args) {
+void FormAction::handle_source(const std::vector<std::string>& args)
+{
 	if (args.empty()) {
 		v->get_statusline().show_error(_("usage: source <file> [...]"));
 	} else {
@@ -308,7 +311,8 @@ void FormAction::handle_source(const std::vector<std::string>& args) {
 	}
 }
 
-void FormAction::handle_dumpconfig(const std::vector<std::string>& args) {
+void FormAction::handle_dumpconfig(const std::vector<std::string>& args)
+{
 	if (args.size() != 1) {
 		v->get_statusline().show_error(_("usage: dumpconfig <file>"));
 	} else {
@@ -320,7 +324,8 @@ void FormAction::handle_dumpconfig(const std::vector<std::string>& args) {
 	}
 }
 
-void FormAction::handle_exec(const std::vector<std::string>& args) {
+void FormAction::handle_exec(const std::vector<std::string>& args)
+{
 	if (args.size() != 1) {
 		v->get_statusline().show_error(_("usage: exec <operation>"));
 	} else {
@@ -334,29 +339,30 @@ void FormAction::handle_exec(const std::vector<std::string>& args) {
 }
 
 
-void FormAction::handle_parsed_command(const Command& command) {
-	switch(command.type) {
-		case CommandType::SET:
-			handle_set(command.args);
-			break;
-		case CommandType::QUIT:
-			handle_quit();
-			break;
-		case CommandType::SOURCE:
-			handle_source(command.args);
+void FormAction::handle_parsed_command(const Command& command)
+{
+	switch (command.type) {
+	case CommandType::SET:
+		handle_set(command.args);
 		break;
-		case CommandType::DUMPCONFIG:
-			handle_dumpconfig(command.args);
+	case CommandType::QUIT:
+		handle_quit();
 		break;
-		case CommandType::EXEC:
-			handle_exec(command.args);
+	case CommandType::SOURCE:
+		handle_source(command.args);
 		break;
-		case CommandType::UNKNOWN:
-			v->get_statusline().show_error(strprintf::fmt(_("Not a command: %s"), command.args[0]));
+	case CommandType::DUMPCONFIG:
+		handle_dumpconfig(command.args);
 		break;
-		case CommandType::INVALID:
+	case CommandType::EXEC:
+		handle_exec(command.args);
 		break;
-		default:
+	case CommandType::UNKNOWN:
+		v->get_statusline().show_error(strprintf::fmt(_("Not a command: %s"), command.args[0]));
+		break;
+	case CommandType::INVALID:
+		break;
+	default:
 		break;
 	}
 }
@@ -516,26 +522,26 @@ Command FormAction::parse_command(const std::string& input,
 	std::string delimiters)
 {
 	auto tokens = utils::tokenize_quoted(input, delimiters);
-	if(tokens.empty()) {
+	if (tokens.empty()) {
 		return Command { .type = CommandType::INVALID, .args = {} };
 	} else {
 		auto cmd_name = tokens.front();
 		tokens.erase(tokens.begin());
-		if(cmd_name == "set") {
+		if (cmd_name == "set") {
 			return Command { .type = CommandType::SET, .args = std::move(tokens) };
-		} else if(cmd_name == "q" || cmd_name == "quit") {
+		} else if (cmd_name == "q" || cmd_name == "quit") {
 			return Command { .type = CommandType::QUIT, .args = std::move(tokens) };
-		} else if(cmd_name == "source") {
+		} else if (cmd_name == "source") {
 			return Command { .type = CommandType::SOURCE, .args = std::move(tokens) };
-		} else if(cmd_name == "dumpconfig") {
+		} else if (cmd_name == "dumpconfig") {
 			return Command { .type = CommandType::DUMPCONFIG, .args = std::move(tokens) };
-		} else if(cmd_name == "exec") {
+		} else if (cmd_name == "exec") {
 			return Command { .type = CommandType::EXEC, .args = std::move(tokens) };
-		} else if(cmd_name == "tag") {
+		} else if (cmd_name == "tag") {
 			return Command { .type = CommandType::TAG, .args = std::move(tokens) };
-		} else if(cmd_name == "goto") {
+		} else if (cmd_name == "goto") {
 			return Command { .type = CommandType::GOTO, .args = std::move(tokens) };
-		} else if(cmd_name == "save") {
+		} else if (cmd_name == "save") {
 			return Command { .type = CommandType::SAVE, .args = std::move(tokens) };
 		} else {
 			return Command { .type = CommandType::UNKNOWN, .args = { std::move(cmd_name) } };

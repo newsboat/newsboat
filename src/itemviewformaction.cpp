@@ -564,12 +564,14 @@ void ItemViewFormAction::set_head(const std::string& s,
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 {
 	const auto command = FormAction::parse_command(cmd);
-	switch(command.type) {
-		case CommandType::SAVE:
-			if(!command.args.empty()) handle_save(command.args.front());
+	switch (command.type) {
+	case CommandType::SAVE:
+		if (!command.args.empty()) {
+			handle_save(command.args.front());
+		}
 		break;
-		default:
-			FormAction::handle_parsed_command(command);
+	default:
+		FormAction::handle_parsed_command(command);
 	}
 }
 

@@ -831,15 +831,19 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 		// hand over all other commands to formaction
 		constexpr auto delimiters = " \t";
 		const auto command = FormAction::parse_command(cmd, delimiters);
-		switch(command.type) {
-			case CommandType::TAG: 
-				if(!command.args.empty()) handle_tag(command.args.front());
+		switch (command.type) {
+		case CommandType::TAG:
+			if (!command.args.empty()) {
+				handle_tag(command.args.front());
+			}
 			break;
-			case CommandType::GOTO: 
-				if(!command.args.empty()) handle_goto(command.args.front());
+		case CommandType::GOTO:
+			if (!command.args.empty()) {
+				handle_goto(command.args.front());
+			}
 			break;
-			default:
-				FormAction::handle_parsed_command(command);
+		default:
+			FormAction::handle_parsed_command(command);
 		}
 	}
 }

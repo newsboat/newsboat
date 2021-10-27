@@ -1362,12 +1362,14 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 		handle_cmdline_num(idx);
 	} else {
 		const auto command = FormAction::parse_command(cmd);
-		switch(command.type) {
-			case CommandType::SAVE:
-				if(!command.args.empty()) handle_save(command.args);
+		switch (command.type) {
+		case CommandType::SAVE:
+			if (!command.args.empty()) {
+				handle_save(command.args);
+			}
 			break;
-			default:
-				FormAction::handle_parsed_command(command);
+		default:
+			FormAction::handle_parsed_command(command);
 		}
 	}
 }

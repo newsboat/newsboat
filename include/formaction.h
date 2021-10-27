@@ -26,7 +26,7 @@ enum class CommandType {
 	SOURCE,
 	DUMPCONFIG,
 	EXEC,
-	UNKNOWN,	/// Unknown/non-existing command. Input is stored in Command.args[0] of 
+	UNKNOWN,	/// Unknown/non-existing command. Input is stored in Command.args[0] of
 	INVALID, 	/// differs from UNKNOWN in that no input was parsed
 };
 
