@@ -830,19 +830,16 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 	} else {
 		// hand over all other commands to formaction
 		constexpr auto delimiters = " \t";
-		auto tokens = FormAction::tokenize_quoted(cmd, delimiters);
-		if (!tokens.empty()) {
-			if (tokens[0] == "tag") {
-				if (tokens.size() >= 2) {
-					handle_tag(tokens[1]);
-				}
-			} else if (tokens[0] == "goto") {
-				if (tokens.size() >= 2) {
-					handle_goto(tokens[1]);
-				}
-			} else {
-				FormAction::handle_cmdline(cmd);
-			}
+		const auto command = FormAction::parse_command(cmd, delimiters);
+		switch(command.type) {
+			case CommandType::TAG: 
+				if(!command.args.empty()) handle_tag(command.args.front());
+			break;
+			case CommandType::GOTO: 
+				if(!command.args.empty()) handle_goto(command.args.front());
+			break;
+			default:
+				FormAction::handle_parsed_command(command);
 		}
 	}
 }

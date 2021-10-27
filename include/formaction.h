@@ -17,6 +17,24 @@ class View;
 
 typedef std::pair<std::string, std::string> QnaPair;
 
+enum class CommandType {
+	QUIT,
+	SAVE,
+	GOTO,
+	TAG,
+	SET,
+	SOURCE,
+	DUMPCONFIG,
+	EXEC,
+	UNKNOWN,	/// Unknown/non-existing command. Input is stored in Command.args[0] of 
+	INVALID, 	/// differs from UNKNOWN in that no input was parsed
+};
+
+struct Command {
+	CommandType type;
+	std::vector<std::string> args;
+};
+
 class FormAction {
 public:
 	FormAction(View*, std::string formstr, ConfigContainer* cfg);
@@ -39,8 +57,15 @@ public:
 	std::string draw_form_wait_for_event(unsigned int timeout);
 	void recalculate_widget_dimensions();
 
+	virtual void handle_parsed_command(const Command& command);
 	virtual void handle_cmdline(const std::string& cmd);
 	bool handle_single_argument_set(std::string argument);
+
+	void handle_set(const std::vector<std::string>& args);
+	void handle_quit();
+	void handle_source(const std::vector<std::string>& args);
+	void handle_dumpconfig(const std::vector<std::string>& args);
+	void handle_exec(const std::vector<std::string>& args);
 
 	bool process_op(Operation op,
 		bool automatic = false,
@@ -94,7 +119,7 @@ protected:
 		const std::string& default_url,
 		const std::string& default_feed_title);
 
-	static std::vector<std::string> tokenize_quoted(const std::string& input,
+	static Command parse_command(const std::string& input,
 		std::string delimiters = " \r\n\t");
 
 	View* v;
