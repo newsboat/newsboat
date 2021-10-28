@@ -13,7 +13,6 @@
 #include "utils.h"
 #include "view.h"
 
-
 namespace newsboat {
 
 History FormAction::searchhistory;
@@ -246,12 +245,9 @@ std::vector<std::string> FormAction::get_suggestions(
 	return result;
 }
 
-
-
-void FormAction::handle_cmdline(const std::string& cmdline)
-{
+void FormAction::handle_cmdline(const std::string& cmdline) {
 	/*
-	 * this is the command line handling that is available on all dialogs.
+	 * this is the command line handling that is available on all dia	logs.
 	 * It is only called when the handle_cmdline() methods of the derived
 	 * classes are unable to handle to command line or when the derived
 	 * class doesn't implement the handle_cmdline() method by itself.
@@ -544,7 +540,8 @@ Command FormAction::parse_command(const std::string& input,
 		} else if (cmd_name == "save") {
 			return Command { .type = CommandType::SAVE, .args = std::move(tokens) };
 		} else {
-			return Command { .type = CommandType::UNKNOWN, .args = { std::move(cmd_name) } };
+			tokens.insert(tokens.begin(), std::move(cmd_name));
+			return Command { .type = CommandType::UNKNOWN, .args = std::move(tokens) };
 		}
 	}
 }

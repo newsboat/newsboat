@@ -26,7 +26,7 @@ enum class CommandType {
 	SOURCE,
 	DUMPCONFIG,
 	EXEC,
-	UNKNOWN,	/// Unknown/non-existing command. Input is stored in Command.args[0] of
+	UNKNOWN,	/// Unknown/non-existing command. Tokenized input is stored in Command.args
 	INVALID, 	/// differs from UNKNOWN in that no input was parsed
 };
 
@@ -57,7 +57,6 @@ public:
 	std::string draw_form_wait_for_event(unsigned int timeout);
 	void recalculate_widget_dimensions();
 
-	virtual void handle_parsed_command(const Command& command);
 	virtual void handle_cmdline(const std::string& cmd);
 	bool handle_single_argument_set(std::string argument);
 
@@ -121,6 +120,8 @@ protected:
 
 	static Command parse_command(const std::string& input,
 		std::string delimiters = " \r\n\t");
+
+	void handle_parsed_command(const Command& command);
 
 	View* v;
 	ConfigContainer* cfg;
