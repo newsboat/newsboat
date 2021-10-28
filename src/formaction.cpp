@@ -245,7 +245,8 @@ std::vector<std::string> FormAction::get_suggestions(
 	return result;
 }
 
-void FormAction::handle_cmdline(const std::string& cmdline) {
+void FormAction::handle_cmdline(const std::string& cmdline)
+{
 	/*
 	 * this is the command line handling that is available on all dia	logs.
 	 * It is only called when the handle_cmdline() methods of the derived
