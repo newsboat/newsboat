@@ -460,7 +460,7 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  include/textformatter.h include/statusline.h config.h \
  include/controller.h include/dbexception.h include/fmtstrformatter.h \
  target/cxxbridge/libnewsboat-ffi/src/fmtstrformatter.rs.h \
- include/logger.h include/strprintf.h \
+ include/formaction.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/matcherexception.h include/rssfeed.h include/utils.h \
  3rd-party/expected.hpp include/logger.h \
