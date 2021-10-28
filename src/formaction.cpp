@@ -335,7 +335,6 @@ void FormAction::handle_exec(const std::vector<std::string>& args)
 	}
 }
 
-
 void FormAction::handle_parsed_command(const Command& command)
 {
 	switch (command.type) {
