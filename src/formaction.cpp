@@ -248,7 +248,7 @@ std::vector<std::string> FormAction::get_suggestions(
 void FormAction::handle_cmdline(const std::string& cmdline)
 {
 	/*
-	 * this is the command line handling that is available on all dia	logs.
+	 * this is the command line handling that is available on all dialogs.
 	 * It is only called when the handle_cmdline() methods of the derived
 	 * classes are unable to handle to command line or when the derived
 	 * class doesn't implement the handle_cmdline() method by itself.
