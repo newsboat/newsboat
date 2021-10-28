@@ -829,23 +829,38 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 		handle_cmdline_num(idx);
 	} else {
 		// hand over all other commands to formaction
-		std::vector<std::string> tokens =
-			utils::tokenize_quoted(cmd, " \t");
-		if (!tokens.empty()) {
-			if (tokens[0] == "tag") {
-				if (tokens.size() >= 2 && tokens[1] != "") {
-					tag = tokens[1];
-					do_redraw = true;
-					zero_feedpos = true;
-				}
-			} else if (tokens[0] == "goto") {
-				if (tokens.size() >= 2 && tokens[1] != "") {
-					goto_feed(tokens[1]);
-				}
-			} else {
-				FormAction::handle_cmdline(cmd);
+		constexpr auto delimiters = " \t";
+		const auto command = FormAction::parse_command(cmd, delimiters);
+		switch (command.type) {
+		case CommandType::TAG:
+			if (!command.args.empty()) {
+				handle_tag(command.args.front());
 			}
+			break;
+		case CommandType::GOTO:
+			if (!command.args.empty()) {
+				handle_goto(command.args.front());
+			}
+			break;
+		default:
+			FormAction::handle_parsed_command(command);
 		}
+	}
+}
+
+void FeedListFormAction::handle_tag(const std::string& tag_param)
+{
+	if (tag_param != "") {
+		tag = tag_param;
+		do_redraw = true;
+		zero_feedpos = true;
+	}
+}
+
+void FeedListFormAction::handle_goto(const std::string& param)
+{
+	if (param != "") {
+		goto_feed(param);
 	}
 }
 

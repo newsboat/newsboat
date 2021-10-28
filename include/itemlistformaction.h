@@ -96,6 +96,8 @@ private:
 	void save_article(const std::string& filename,
 		std::shared_ptr<RssItem> item);
 
+	void handle_save(const std::vector<std::string>& cmd_args);
+
 	void save_filterpos();
 
 	void qna_end_setfilter();

@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <exception>
 #include <ncurses.h>
 
 #include "config.h"
@@ -255,75 +256,110 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	 * It works the same way basically everywhere: first the command line
 	 * is tokenized, and then the tokens are looked at.
 	 */
-	std::vector<std::string> tokens =
-		utils::tokenize_quoted(cmdline, " \t=");
+	constexpr auto delimiters = " \t=";
+	const auto command = FormAction::parse_command(cmdline, delimiters);
 	assert(cfg != nullptr);
-	if (!tokens.empty()) {
-		std::string cmd = tokens[0];
-		tokens.erase(tokens.begin());
-		if (cmd == "set") {
-			if (tokens.size() == 1) {
-				const std::string var = tokens[0];
-				if (handle_single_argument_set(var)) {
-					return;
-				}
-				v->get_statusline().show_message(strprintf::fmt("  %s=%s",
-						var,
-						utils::quote_if_necessary(cfg->get_configvalue(var))));
-			} else if (tokens.size() == 2) {
-				std::string result = ConfigParser::evaluate_backticks(tokens[1]);
-				utils::trim_end(result);
-				cfg->set_configvalue(tokens[0], result);
-				// because some configuration value might have changed something UI-related
-				set_redraw(true);
-			} else {
-				v->get_statusline().show_error(
-					_("usage: set <variable>[=<value>]"));
-			}
-		} else if (cmd == "q" || cmd == "quit") {
-			while (v->formaction_stack_size() > 0) {
-				v->pop_current_formaction();
-			}
-		} else if (cmd == "source") {
-			if (tokens.empty()) {
-				v->get_statusline().show_error(_("usage: source <file> [...]"));
-			} else {
-				for (const auto& token : tokens) {
-					try {
-						v->get_ctrl()->load_configfile(
-							utils::resolve_tilde(
-								token));
-					} catch (const ConfigException& ex) {
-						v->get_statusline().show_error(ex.what());
-						break;
-					}
-				}
-			}
-		} else if (cmd == "dumpconfig") {
-			if (tokens.size() != 1) {
-				v->get_statusline().show_error(_("usage: dumpconfig <file>"));
-			} else {
-				v->get_ctrl()->dump_config(
-					utils::resolve_tilde(tokens[0]));
-				v->get_statusline().show_message(strprintf::fmt(
-						_("Saved configuration to %s"),
-						tokens[0]));
-			}
-		} else if (cmd == "exec") {
-			if (tokens.size() != 1) {
-				v->get_statusline().show_error(_("usage: exec <operation>"));
-			} else {
-				const auto op = v->get_keymap()->get_opcode(tokens[0]);
-				if (op != OP_NIL) {
-					process_op(op);
-				} else {
-					v->get_statusline().show_error(_("Operation not found"));
-				}
-			}
-		} else {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Not a command: %s"), cmdline));
+	handle_parsed_command(command);
+}
+
+void FormAction::handle_set(const std::vector<std::string>& args)
+{
+	if (args.size() == 1) {
+		if (handle_single_argument_set(args[0])) {
+			return;
 		}
+		v->get_statusline().show_message(strprintf::fmt("  %s=%s",
+				args[0],
+				utils::quote_if_necessary(cfg->get_configvalue(args[0]))));
+	} else if (args.size() == 2) {
+		std::string result = ConfigParser::evaluate_backticks(args[1]);
+		utils::trim_end(result);
+		cfg->set_configvalue(args[0], result);
+		// because some configuration value might have changed something UI-related
+		set_redraw(true);
+	} else {
+		v->get_statusline().show_error(
+			_("usage: set <variable>[=<value>]"));
+	}
+}
+
+void FormAction::handle_quit()
+{
+	while (v->formaction_stack_size() > 0) {
+		v->pop_current_formaction();
+	}
+}
+
+void FormAction::handle_source(const std::vector<std::string>& args)
+{
+	if (args.empty()) {
+		v->get_statusline().show_error(_("usage: source <file> [...]"));
+	} else {
+		for (const auto& param : args) {
+			try {
+				v->get_ctrl()->load_configfile(
+					utils::resolve_tilde(
+						param));
+			} catch (const ConfigException& ex) {
+				v->get_statusline().show_error(ex.what());
+				break;
+			}
+		}
+	}
+}
+
+void FormAction::handle_dumpconfig(const std::vector<std::string>& args)
+{
+	if (args.size() != 1) {
+		v->get_statusline().show_error(_("usage: dumpconfig <file>"));
+	} else {
+		v->get_ctrl()->dump_config(
+			utils::resolve_tilde(args[0]));
+		v->get_statusline().show_message(strprintf::fmt(
+				_("Saved configuration to %s"),
+				args[0]));
+	}
+}
+
+void FormAction::handle_exec(const std::vector<std::string>& args)
+{
+	if (args.size() != 1) {
+		v->get_statusline().show_error(_("usage: exec <operation>"));
+	} else {
+		const auto op = v->get_keymap()->get_opcode(args[0]);
+		if (op != OP_NIL) {
+			process_op(op);
+		} else {
+			v->get_statusline().show_error(_("Operation not found"));
+		}
+	}
+}
+
+void FormAction::handle_parsed_command(const Command& command)
+{
+	switch (command.type) {
+	case CommandType::SET:
+		handle_set(command.args);
+		break;
+	case CommandType::QUIT:
+		handle_quit();
+		break;
+	case CommandType::SOURCE:
+		handle_source(command.args);
+		break;
+	case CommandType::DUMPCONFIG:
+		handle_dumpconfig(command.args);
+		break;
+	case CommandType::EXEC:
+		handle_exec(command.args);
+		break;
+	case CommandType::UNKNOWN:
+		v->get_statusline().show_error(strprintf::fmt(_("Not a command: %s"), command.args[0]));
+		break;
+	case CommandType::INVALID:
+		break;
+	default:
+		break;
 	}
 }
 
@@ -475,6 +511,38 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 		}
 	} else {
 		start_qna(prompts, OP_INT_BM_END);
+	}
+}
+
+Command FormAction::parse_command(const std::string& input,
+	std::string delimiters)
+{
+	auto tokens = utils::tokenize_quoted(input, delimiters);
+	if (tokens.empty()) {
+		return Command { .type = CommandType::INVALID, .args = {} };
+	} else {
+		auto cmd_name = tokens.front();
+		tokens.erase(tokens.begin());
+		if (cmd_name == "set") {
+			return Command { .type = CommandType::SET, .args = std::move(tokens) };
+		} else if (cmd_name == "q" || cmd_name == "quit") {
+			return Command { .type = CommandType::QUIT, .args = std::move(tokens) };
+		} else if (cmd_name == "source") {
+			return Command { .type = CommandType::SOURCE, .args = std::move(tokens) };
+		} else if (cmd_name == "dumpconfig") {
+			return Command { .type = CommandType::DUMPCONFIG, .args = std::move(tokens) };
+		} else if (cmd_name == "exec") {
+			return Command { .type = CommandType::EXEC, .args = std::move(tokens) };
+		} else if (cmd_name == "tag") {
+			return Command { .type = CommandType::TAG, .args = std::move(tokens) };
+		} else if (cmd_name == "goto") {
+			return Command { .type = CommandType::GOTO, .args = std::move(tokens) };
+		} else if (cmd_name == "save") {
+			return Command { .type = CommandType::SAVE, .args = std::move(tokens) };
+		} else {
+			tokens.insert(tokens.begin(), std::move(cmd_name));
+			return Command { .type = CommandType::UNKNOWN, .args = std::move(tokens) };
+		}
 	}
 }
 

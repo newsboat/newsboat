@@ -563,30 +563,35 @@ void ItemViewFormAction::set_head(const std::string& s,
 
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 {
-	std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
-	if (!tokens.empty()) {
-		if (tokens[0] == "save" && tokens.size() >= 2) {
-			std::string filename = utils::resolve_tilde(tokens[1]);
+	const auto command = FormAction::parse_command(cmd);
+	switch (command.type) {
+	case CommandType::SAVE:
+		if (!command.args.empty()) {
+			handle_save(command.args.front());
+		}
+		break;
+	default:
+		FormAction::handle_parsed_command(command);
+	}
+}
 
-			if (filename == "") {
-				v->get_statusline().show_error(_("Aborted saving."));
-			} else {
-				try {
-					v->get_ctrl()->write_item(
-						item, filename);
-					v->get_statusline().show_message(strprintf::fmt(
-							_("Saved article to %s"),
-							filename));
-				} catch (...) {
-					v->get_statusline().show_error(strprintf::fmt(
-							_("Error: couldn't save "
-								"article to %s"),
-							filename));
-				}
-			}
-
-		} else {
-			FormAction::handle_cmdline(cmd);
+void ItemViewFormAction::handle_save(const std::string& filename_param)
+{
+	std::string filename = utils::resolve_tilde(filename_param);
+	if (filename == "") {
+		v->get_statusline().show_error(_("Aborted saving."));
+	} else {
+		try {
+			v->get_ctrl()->write_item(
+				item, filename);
+			v->get_statusline().show_message(strprintf::fmt(
+					_("Saved article to %s"),
+					filename));
+		} catch (...) {
+			v->get_statusline().show_error(strprintf::fmt(
+					_("Error: couldn't save "
+						"article to %s"),
+					filename));
 		}
 	}
 }

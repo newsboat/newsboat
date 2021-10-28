@@ -12,6 +12,7 @@
 #include "controller.h"
 #include "dbexception.h"
 #include "fmtstrformatter.h"
+#include "formaction.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "rssfeed.h"
@@ -1360,28 +1361,15 @@ void ItemListFormAction::handle_cmdline(const std::string& cmd)
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		handle_cmdline_num(idx);
 	} else {
-		std::vector<std::string> tokens = utils::tokenize_quoted(cmd);
-		if (tokens.empty()) {
-			return;
-		}
-		if (tokens[0] == "save") {
-			if (tokens.size() < 2) {
-				v->get_statusline().show_error(_("Error: no filename provided"));
-				return;
+		const auto command = FormAction::parse_command(cmd);
+		switch (command.type) {
+		case CommandType::SAVE:
+			if (!command.args.empty()) {
+				handle_save(command.args);
 			}
-			if (visible_items.empty()) {
-				v->get_statusline().show_error(_("Error: no item selected!"));
-				return;
-			}
-			const std::string filename = utils::resolve_tilde(tokens[1]);
-			const unsigned int itempos = list.get_position();
-			LOG(Level::INFO,
-				"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
-				itempos,
-				filename);
-			save_article(filename, visible_items[itempos].first);
-		} else {
-			FormAction::handle_cmdline(cmd);
+			break;
+		default:
+			FormAction::handle_parsed_command(command);
 		}
 	}
 }
@@ -1429,6 +1417,25 @@ void ItemListFormAction::save_article(const std::string& filename,
 					filename));
 		}
 	}
+}
+
+void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
+{
+	if (cmd_args.size() < 1) {
+		v->get_statusline().show_error(_("Error: no filename provided"));
+		return;
+	}
+	if (visible_items.empty()) {
+		v->get_statusline().show_error(_("Error: no item selected!"));
+		return;
+	}
+	const std::string filename = utils::resolve_tilde(cmd_args.front());
+	const unsigned int itempos = list.get_position();
+	LOG(Level::INFO,
+		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
+		itempos,
+		filename);
+	save_article(filename, visible_items[itempos].first);
 }
 
 void ItemListFormAction::save_filterpos()
