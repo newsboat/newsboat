@@ -96,6 +96,8 @@ notify-format||<string>||"Newsboat: finished reload, %f unread feeds (%n unread 
 notify-program||<command>||""||If set, then the configured program will be executed if new articles arrived (through a reload) or if `notify-always` is `yes`. The first parameter of the called program contains the notification message. In order to pass other hard-coded arguments to the program, write an appropriate wrapper shell script and use it as <command> instead.||notify-program "~/bin/my-notifier"
 notify-screen||[yes/no]||no||If set to `yes`, then a "privacy message" will be sent to the terminal, containing a notification message about new articles. This is especially useful if you use terminal emulations such as GNU screen which implement privacy messages.||notify-screen yes
 notify-xterm||[yes/no]||no||If set to `yes`, then the xterm window title will be set to a notification message about new articles.||notify-xterm yes
+set-xterm-title||[yes/no]||no||If set to `yes`, then the xterm window title will be set on start.||set-xterm-title yes
+xterm-title||<string>||"Newsboat"||xterm title.||xterm-title "Newsboat"
 ocnews-flag-star||<character>||""||If set and ownCloud News support is used, then all articles that are flagged with the specified flag are being "starred" in ownCloud News.||ocnews-flag-star "s"
 ocnews-login||<username>||""||Sets the username to use with the ownCloud instance.||ocnews-login "user"
 ocnews-password||<password>||""||Configures the password to use with the ownCloud instance. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||ocnews-password "here_goesAquote:\""

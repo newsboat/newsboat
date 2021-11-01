@@ -163,6 +163,8 @@ ConfigContainer::ConfigContainer()
 	{"notify-program", ConfigData("", ConfigDataType::PATH)},
 	{"notify-screen", ConfigData("no", ConfigDataType::BOOL)},
 	{"notify-xterm", ConfigData("no", ConfigDataType::BOOL)},
+	{"set-xterm-title", ConfigData("no", ConfigDataType::BOOL)},
+	{"xterm-title", ConfigData("Newsboat", ConfigDataType::STR)},
 	{"oldreader-flag-share", ConfigData("", ConfigDataType::STR)},
 	{"oldreader-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"oldreader-login", ConfigData("", ConfigDataType::STR)},

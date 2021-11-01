@@ -165,6 +165,13 @@ int View::run()
 		return EXIT_FAILURE;
 	}
 
+	if (get_cfg()->get_configvalue_as_bool(
+			"set-xterm-title")) {
+		LOG(Level::DEBUG, "view::run: setting title");
+		std::cout << "\033]2;" << get_cfg()->get_configvalue("xterm-title") << "\033\\";
+		std::cout.flush();
+	}
+
 	/*
 	 * This is the main "event" loop of newsboat.
 	 */
