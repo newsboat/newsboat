@@ -107,11 +107,6 @@ task:
 
     after_cache_script: *after_cache_script
     install_script:
-        # Fix https://cirrus-ci.com/task/5763464897495040?command=install#L5.
-        # This only applies to macOS Catalina, and will fail on Big Sur because
-        # the clone there is *not* shallow. To prevent that failure from
-        # failing our build, we ignore the failure using `|| true`.
-        - git -C /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core fetch --unshallow || true
         - brew update
         - brew install rustup-init
         - brew install gcc || brew link --overwrite gcc
@@ -148,18 +143,18 @@ task:
     before_cache_script: *before_cache_script
 
     matrix:
-        - name: macOS Big Sur, Clang, Rust stable
+        - name: macOS Monterey, Clang, Rust stable
           osx_instance:
-              image: big-sur-base
+              image: monterey-base
           env:
               CC: clang
               CXX: clang++
               RUST: stable
         # This job tests our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: macOS Catalina, GCC, MSRV
+        - name: macOS Big Sur, GCC, MSRV
           osx_instance:
-              image: catalina-base
+              image: big-sur-base
           env:
               CC: gcc
               CXX: g++
