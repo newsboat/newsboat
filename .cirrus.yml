@@ -148,18 +148,18 @@ task:
     before_cache_script: *before_cache_script
 
     matrix:
-        - name: macOS Big Sur, Clang, Rust stable
+        - name: macOS Monterey, Clang, Rust stable
           osx_instance:
-              image: big-sur-base
+              image: monterey-base
           env:
               CC: clang
               CXX: clang++
               RUST: stable
         # This job tests our minimum supported Rust version, so only bump on
         # Newsboat release day
-        - name: macOS Catalina, GCC, MSRV
+        - name: macOS Big Sur, GCC, MSRV
           osx_instance:
-              image: catalina-base
+              image: big-sur-base
           env:
               CC: gcc
               CXX: g++
