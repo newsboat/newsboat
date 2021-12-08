@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-09-07 17:30+0200\n"
+"PO-Revision-Date: 2021-12-08 17:45+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -714,9 +714,8 @@ msgid "Browser returned error code %i"
 msgstr "Browser brach mit Rückgabestatus %i ab"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Möchten Sie wirklich alle Feeds als gelesen markieren (j:Ja n:Nein)? "
+msgstr "Möchten Sie wirklich diesen Feed als gelesen markieren (j:Ja n:Nein)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -1217,12 +1216,12 @@ msgstr "Fehler beim Markieren des Artikels als gelesen: %s"
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "Der Eintrag hat keine Anlage."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "Die Anlage des Eintrags besitzt einen Nicht-HTTP-Link: „%s“"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1866,7 +1865,7 @@ msgstr "Fehler: Konnte die Programmstartbefehle nicht ausführen"
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Operation in modalem Dialog ignoriert"
 
 #: src/view.cpp:396
 #, c-format
