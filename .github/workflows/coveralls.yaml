@@ -46,7 +46,7 @@ jobs:
           sudo locale-gen
 
       - name: Install Rust
-        uses: ATiltedTree/setup-rust@v1.0.4
+        uses: ATiltedTree/setup-rust@v1.0.5
         with:
           rust-version: nightly
 
