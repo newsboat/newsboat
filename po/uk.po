@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-09-07 17:57+0300\n"
+"PO-Revision-Date: 2021-12-08 20:28+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -712,9 +712,8 @@ msgid "Browser returned error code %i"
 msgstr "Браузер повернув код помилки %i"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Ви впевнені, що хочете відмітити усі теми як прочитані (y:Так n:Ні)? "
+msgstr "Ви впевнені, що хочете відмітити цю тему як прочитану (y:Так n:Ні)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -763,7 +762,7 @@ msgstr "Позначаю всі теми як прочитані..."
 #: src/itemlistformaction.cpp:645 src/itemlistformaction.cpp:858
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "неможливо розібрати вираз фільтра `%s': %s"
+msgstr "Помилка: неможливо розібрати вираз фільтра `%s': %s"
 
 #: src/feedlistformaction.cpp:452 src/itemlistformaction.cpp:658
 msgid "No filters defined."
@@ -1217,12 +1216,12 @@ msgstr "Помилка при позначенні статті як прочи�
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "У статті немає додатків."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "Посилання додатку статті не HTTP: '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1858,7 +1857,7 @@ msgstr "Помилка: не вдалося виконати стартові к
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "В модальних діалогах операція ігнорується"
 
 #: src/view.cpp:396
 #, c-format

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-09-07 17:55+0300\n"
+"PO-Revision-Date: 2021-12-08 20:27+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -710,9 +710,8 @@ msgid "Browser returned error code %i"
 msgstr "Браузер вернул код ошибки %i"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Вы правда хотите отметить все ленты прочитанными (y:Да n:Нет)? "
+msgstr "Вы правда хотите отметить эту ленту прочитанной (y:Да n:Нет)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -1215,12 +1214,12 @@ msgstr "Ошибка во время пометки заметки как про
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "У записи нет вложений."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "У вложения записи ссылка не HTTP: '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1856,7 +1855,7 @@ msgstr "Ошибка: не удалось выполнить стартовые 
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "В модальных диалогах операция игнорируется"
 
 #: src/view.cpp:396
 #, c-format
