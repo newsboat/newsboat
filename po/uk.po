@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-12-08 18:57+0300\n"
+"PO-Revision-Date: 2021-12-08 20:28+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -1221,7 +1221,7 @@ msgstr "У статті немає додатків."
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr "Додаток статті не має HTTP-посилань: '%s'"
+msgstr "Посилання додатку статті не HTTP: '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1857,7 +1857,7 @@ msgstr "Помилка: не вдалося виконати стартові к
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr "У модальному діалозі операція ігнорується"
+msgstr "В модальних діалогах операція ігнорується"
 
 #: src/view.cpp:396
 #, c-format
