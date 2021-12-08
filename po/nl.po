@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-09-07 17:29+0200\n"
+"PO-Revision-Date: 2021-12-08 18:09+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -715,9 +715,8 @@ msgid "Browser returned error code %i"
 msgstr "Browser gaf error code %i terug"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Weet u zeker dat u alle feeds als gelezen wilt markeren (j:ja n:nee)? "
+msgstr "Weet u zeker dat u deze feed als gelezen wilt markeren (j:ja n:nee)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -1219,12 +1218,12 @@ msgstr "Fout bij het als gelezen markeren van het artikel: %s"
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "Het item heeft geen bijlage."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "De bijlage van het item heeft een niet-HTTP link: '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1860,7 +1859,7 @@ msgstr "Fout: Het uitvoeren van de opstart commando's is mislukt"
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Opdracht genegeerd in modale dialoog"
 
 #: src/view.cpp:396
 #, c-format
