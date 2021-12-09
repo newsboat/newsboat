@@ -234,9 +234,9 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	Controller c(configpaths);
-	newsboat::View v(&c);
-	c.set_view(&v);
+	Controller *c = new Controller(configpaths);
+	newsboat::View *v = new newsboat::View(c);
+	c->set_view(v);
 	CliArgsParser args(argc, argv);
 
 	configpaths.process_args(args);
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
 
 	int ret;
 	try {
-		ret = c.run(args);
+		ret = c->run(args);
 	} catch (const newsboat::DbException& e) {
 		Stfl::reset();
 		std::cerr << strprintf::fmt(
