@@ -289,9 +289,9 @@ checksum = "de7513aea7d10dc0694d719ac53de3b74f1600e41b9f81ed9f395d8ec36a2a70"
 
 [[package]]
 name = "libc"
-version = "0.2.109"
+version = "0.2.110"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f98a04dce437184842841303488f70d0188c5f51437d2a834dc097eafa909a01"
+checksum = "b58a4469763e4e3a906c4ed786e1c70512d16aa88f84dded826da42640fc6a1c"
 
 [[package]]
 name = "libnewsboat"
