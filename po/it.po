@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-06-10 16:52+0200\n"
+"PO-Revision-Date: 2021-12-10 06:52+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -707,9 +707,8 @@ msgid "Browser returned error code %i"
 msgstr "Il browser ha ritornato il codice errore %i"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Vuoi veramente segnare tutti i feeds come letti' (s:Sì n:No)? "
+msgstr "Vuoi veramente segnare questo feed come letto' (s:Sì n:No)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -1210,12 +1209,12 @@ msgstr "Errore contrassegnando l'articolo come letto: %s"
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "L'elemento non ha allegati."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "L'allegato dell'elemento contiene un link non http: '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1853,7 +1852,7 @@ msgstr "Errore: fallita esecuzione comandi d'avvio"
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Operazione ignorata in maschera modale"
 
 #: src/view.cpp:396
 #, c-format
