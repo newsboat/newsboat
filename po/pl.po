@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2021-09-07 17:43+0200\n"
+"PO-Revision-Date: 2021-12-11 13:20+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -711,11 +711,9 @@ msgid "Browser returned error code %i"
 msgstr "Przeglądarka internetowa zwróciła kod błędu %i"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
 msgstr ""
-"Czy na pewno chcesz oznaczyć wszystkie kanały jako przeczytane (t:Tak n:"
-"Nie)? "
+"Czy na pewno chcesz oznaczyć ten kanał jako przeczytany (t:Tak n:Nie)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -1218,12 +1216,12 @@ msgstr "Błąd podczas oznaczania artykułu jako przeczytanego: %s"
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "Element nie ma żadnych załączników."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "Załącznik zawiera odnośnik innego typu niż http: '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1863,7 +1861,7 @@ msgstr "Błąd: nie udało się uruchomić poleceń startowych"
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Operacja ignorowana w oknie modalnym"
 
 #: src/view.cpp:396
 #, c-format
