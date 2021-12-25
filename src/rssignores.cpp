@@ -11,6 +11,7 @@
 #include <sys/utsname.h>
 #include <string.h>
 #include <time.h>
+#include <regex>
 
 #include "cache.h"
 #include "config.h"
@@ -91,11 +92,12 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 bool RssIgnores::matches(RssItem* item)
 {
 	for (const auto& ign : ignores) {
+		auto matched = regex_match (item->feedurl(), std::regex(ign.first));
 		LOG(Level::DEBUG,
-			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
+			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s': %d",
 			ign.first,
-			item->feedurl());
-		if (ign.first == "*" || item->feedurl() == ign.first) {
+			item->feedurl(), matched);
+		if (matched) {
 			if (ign.second->matches(item)) {
 				LOG(Level::DEBUG,
 					"RssIgnores::matches: found match");
