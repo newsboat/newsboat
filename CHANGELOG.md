@@ -1,17 +1,44 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2021-12-20
+## 2.26 - 2021-12-27
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: [list people here]
+for this release also includes: Amrit Brar, Ben Armstead, Max, Simon Farre, and
+twittumz.
 
 ### Added
+
+- `confirm-mark-feed-read` setting (enabled by default) (#1781) (aflyingpumpkin)
+- `miniflux-min-items` setting to control how many articles to load for each
+    feed (Damian Korbuszewski)
+- A script to bookmark articles to buku (Greg Fitzgerald)
+- A gruvbox color scheme (Greg Fitzgerald)
+
 ### Changed
+
 - Bumped minimum supported Rust version to 1.53.0
-### Deprecated
+- Accept empty feed title when bookmarking on autopilot (#243) (Dennis van der
+    Schagt)
+- Do not show ignored articles in search results (#1812) (Q-I-U)
+- `:save` command now uses `save-path` setting to resolve relative paths (#1689)
+    (Q-I-U)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Michał Siemek), Russian,
+    Ukrainian (Alexander Batischev), and Turkish (Emir Sari)
+- Updated vendored library optional-lite to 3.5.0, json.hpp to 3.10.4
+
 ### Removed
+
+- Ability to switch away from modal dialogs (e.g. FileBrowser) (#117) (Dennis
+    van der Schagt)
+
 ### Fixed
-### Security
+
+- Relative URLs in articles are now resolved relative to their permalink when
+    the feed doesn't set the `xml:base` (#1818,
+    https://github.com/akrennmair/newsbeuter/issues/507) (Alexander Batischev)
+- Starred items not being synchronized to NextCloud News (#743) (Dennis van der
+    Schagt)
 
 
 
