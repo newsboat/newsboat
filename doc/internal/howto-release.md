@@ -87,7 +87,7 @@ branch off the latest release and backport the bugfixes onto it.
 
 8. Publish the release:
     * Prepare the directory on the server:
-        * `cp -rfv /usr/local/www/newsboat.org/www/ newsboat`.
+        * `cp -rfv /var/www/newsboat.org/www/ newsboat`.
         * Prepare directories: `mkdir -p newsboat/releases/VERSION/docs`.
         * Move tarball and its signature:
             `mv newsboat-VERSION* newsboat/releases/VERSION/`.
@@ -111,7 +111,7 @@ branch off the latest release and backport the bugfixes onto it.
             * `<title>`: "Newsboat VERSION is out".
             * Gzip the result: `gzip --best --keep --force newsboat/news.atom`.
     * Deploy the directory on the server:
-        `sudo cp -rv newsboat/ /usr/local/www/newsboat.org/www/ && sudo chmod -R a+r /usr/local/www/newsboat.org/www/`.
+        `sudo cp -rv newsboat/* /var/www/newsboat.org/www/ && sudo chmod -R a+r /var/www/newsboat.org/www/`.
     * Push the code: `git push && git push --tags`
 8. Tell the world about it:
     * Send an email to the mailing list
