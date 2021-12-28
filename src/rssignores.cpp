@@ -11,7 +11,6 @@
 #include <sys/utsname.h>
 #include <string.h>
 #include <time.h>
-#include <regex>
 
 #include "cache.h"
 #include "config.h"
@@ -22,6 +21,7 @@
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
+#include "regexowner.h"
 #include "strprintf.h"
 #include "tagsouppullparser.h"
 #include "utils.h"
@@ -91,18 +91,36 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 
 bool RssIgnores::matches(RssItem* item)
 {
+	std::string prefix = "regex:";
+	int prefix_len = prefix.length();
 	for (const auto& ign : ignores) {
-		auto matched = regex_match (item->feedurl(), std::regex(ign.first));
+		bool matched = false;
 		LOG(Level::DEBUG,
-			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s': %d",
+			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
 			ign.first,
-			item->feedurl(), matched);
-		if (matched) {
-			if (ign.second->matches(item)) {
-				LOG(Level::DEBUG,
-					"RssIgnores::matches: found match");
-				return true;
+			item->feedurl());
+			
+		if(!ign.first.compare(0, prefix_len, prefix)) {
+			std::string errorMessage;
+			std::string pattern = ign.first.substr(prefix_len, ign.first.length() - prefix_len);
+			auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
+			if (regex == nullptr) {
+				throw ConfigHandlerException(strprintf::fmt(
+					_("`%s' is not a valid regular expression: %s"),
+					pattern, errorMessage));
 			}
+			const auto matches = regex->matches(item->feedurl(), 1, 0);
+			matched = !matches.empty();
+		}
+		else 
+		{
+			matched = ign.first == "*" || item->feedurl() == ign.first;
+		}
+
+		if (matched && ign.second->matches(item)) {
+			LOG(Level::DEBUG,
+				"RssIgnores::matches: found match");
+			return true;
 		}
 	}
 	return false;
