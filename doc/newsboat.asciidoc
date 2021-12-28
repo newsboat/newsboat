@@ -961,15 +961,18 @@ is <<ignore-article,`ignore-article`>>:
 
 	ignore-article "*" "title =~ \"Gentoo\""
 	ignore-article "https://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
+	ignore-article "regex:https?://nitter.net/.*" "title =~ \"^RT by\""
 
-It takes two parameters. The first one is either a URL of a feed, or `"*"` to
-match any feed (asterisk is _not_ a pattern, glob or regex—we simply reserve it
-to mean "all feeds").  The second argument is <<_filter_language,a filter
-expression>> for an article, probably <<_using_double_quotes,in double quotes
-to preserve spaces inside>>. If Newsboat hits an article in the specified RSS
-feed that matches the specified filter expression, then this article is ignored
-and never presented to the user. The configuration itself can contain as many
-<<ignore-article,`ignore-article`>> commands as desired.
+It takes two parameters. The first one is either a URL of a feed, a pattern 
+prefixed with `regex:`, this pattern being in the POSIX extended reg format, 
+which will be matched case-insensitive, or `"*"` to match any feed (asterisk is 
+_not_ a pattern, glob or regex—we simply reserve it to mean "all feeds"). The 
+second argument is <<_filter_language,a filter expression>> for an article, 
+probably <<_using_double_quotes,in double quotes to preserve spaces inside>>. If 
+Newsboat hits an article in the specified RSS feed that matches the specified 
+filter expression, then this article is ignored and never presented to the user. 
+The configuration itself can contain as many <<ignore-article,`ignore-article`>> 
+commands as desired.
 
 You can also specify the way an article is ignored. There are
 two ways available:
