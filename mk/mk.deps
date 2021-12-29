@@ -756,8 +756,8 @@ src/rssignores.o: src/rssignores.cpp include/rssignores.h \
  include/textformatter.h include/logger.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h include/rssfeed.h \
  include/utils.h 3rd-party/expected.hpp include/logger.h \
- target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/strprintf.h \
- include/tagsouppullparser.h include/utils.h
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/regexowner.h \
+ include/strprintf.h include/tagsouppullparser.h include/utils.h
 src/rssitem.o: src/rssitem.cpp include/rssitem.h include/matchable.h \
  3rd-party/optional.hpp include/matcher.h filter/FilterParser.h \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
