@@ -99,21 +99,19 @@ bool RssIgnores::matches(RssItem* item)
 			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
 			ign.first,
 			item->feedurl());
-			
-		if(!ign.first.compare(0, prefix_len, prefix)) {
+
+		if (!ign.first.compare(0, prefix_len, prefix)) {
 			std::string errorMessage;
 			std::string pattern = ign.first.substr(prefix_len, ign.first.length() - prefix_len);
 			auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
 			if (regex == nullptr) {
 				throw ConfigHandlerException(strprintf::fmt(
-					_("`%s' is not a valid regular expression: %s"),
-					pattern, errorMessage));
+						_("`%s' is not a valid regular expression: %s"),
+						pattern, errorMessage));
 			}
 			const auto matches = regex->matches(item->feedurl(), 1, 0);
 			matched = !matches.empty();
-		}
-		else 
-		{
+		} else {
 			matched = ign.first == "*" || item->feedurl() == ign.first;
 		}
 
