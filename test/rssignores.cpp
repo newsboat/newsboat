@@ -262,6 +262,20 @@ TEST_CASE("RssIgnores::matches() returns true if given RssItem matches any "
 		}
 	}
 
+	SECTION("Pattern matching rules prefixed with \"regex:\"") {
+		SECTION("Matching feeds starting with https://") {
+			ignores.handle_action("ignore-article", {"regex:^https://.*", "author = \"John Doe\""});
+
+			REQUIRE(ignores.matches(&item));
+		}
+
+		SECTION("Matching feeds containing example.com and ending with xml") {
+			ignores.handle_action("ignore-article", {"regex:.*example.com/.*\\.xml", "author = \"John Doe\""});
+
+			REQUIRE(ignores.matches(&item));
+		}
+	}
+
 	SECTION("Rules with URL of \"*\" match any feed") {
 		ignores.handle_action("ignore-article", {"*", "author = \"John Doe\""});
 
