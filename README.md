@@ -67,7 +67,9 @@ Newsboat can be compiled.
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
     manager) (1.55.0 or newer; might work with older versions, but we don't
     check that)
-- [STFL (version 0.21 or newer)](http://www.clifford.at/stfl/)
+- [STFL (version 0.21 or newer)](https://github.com/newsboat/stfl) (the link
+    points to our own fork because [the upstream](http://www.clifford.at/stfl/)
+    is dead)
 - [SQLite3 (version 3.5 or newer)](https://www.sqlite.org/download.html)
 - [libcurl (version 7.21.6 or newer)](https://curl.haxx.se/download.html)
 - Header files for the SSL library that libcurl uses. You can find out which
