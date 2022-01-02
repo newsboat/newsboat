@@ -274,6 +274,11 @@ TEST_CASE("RssIgnores::matches() returns true if given RssItem matches any "
 
 			REQUIRE(ignores.matches(&item));
 		}
+
+		SECTION("Throws ConfigHandlerException if second param can't be parsed as filter expression") {
+			REQUIRE_THROWS_AS(ignores.handle_action("ignore-article", {"regex:a{1z", "author = \"John Doe\""}),
+				ConfigHandlerException);
+		}
 	}
 
 	SECTION("Rules with URL of \"*\" match any feed") {
