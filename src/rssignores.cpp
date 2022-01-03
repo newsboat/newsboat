@@ -118,7 +118,7 @@ bool RssIgnores::matches(RssItem* item)
 		if (!ign.first.compare(0, prefix_len, REGEX_PREFIX)) {
 			const std::string pattern = ign.first.substr(prefix_len, ign.first.length() - prefix_len);
 			std::string errorMessage;
-			auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
+			const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
 			const auto matches = regex->matches(item->feedurl(), 1, 0);
 			matched = !matches.empty();
 		} else {
