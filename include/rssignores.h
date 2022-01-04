@@ -27,6 +27,8 @@ private:
 	std::vector<FeedUrlExprPair> ignores;
 	std::vector<std::string> ignores_lastmodified;
 	std::vector<std::string> resetflag;
+
+	static const std::string REGEX_PREFIX;
 };
 
 } // namespace newsboat

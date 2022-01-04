@@ -66,6 +66,11 @@ TEST_CASE("RssIgnores::handle_action() handles `ignore-article`",
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url", "expression = 1", "more"}));
 		REQUIRE_NOTHROW(ignores.handle_action(action, {"url", "expression = 1", "way", "more different", "parameters"}));
 	}
+
+	SECTION("Throws ConfigHandlerException if second param can't be parsed as a filter expression") {
+		REQUIRE_THROWS_AS(ignores.handle_action("ignore-article", {"regex:a{1z", "author = \"John Doe\""}),
+			ConfigHandlerException);
+	}
 }
 
 TEST_CASE("RssIgnores::handle_action() handles `always-download`",
@@ -257,6 +262,20 @@ TEST_CASE("RssIgnores::matches() returns true if given RssItem matches any "
 		SECTION("Multiple rules that match both the feed and the item") {
 			ignores.handle_action("ignore-article", {feedurl, "title = \"Updates\""});
 			ignores.handle_action("ignore-article", {feedurl, "author = \"John Doe\""});
+
+			REQUIRE(ignores.matches(&item));
+		}
+	}
+
+	SECTION("Pattern matching rules prefixed with \"regex:\"") {
+		SECTION("Matching feeds starting with https://") {
+			ignores.handle_action("ignore-article", {"regex:^https://.*", "author = \"John Doe\""});
+
+			REQUIRE(ignores.matches(&item));
+		}
+
+		SECTION("Matching feeds containing example.com and ending with xml") {
+			ignores.handle_action("ignore-article", {"regex:.*example.com/.*\\.xml", "author = \"John Doe\""});
 
 			REQUIRE(ignores.matches(&item));
 		}

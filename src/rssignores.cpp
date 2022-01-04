@@ -21,11 +21,14 @@
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
+#include "regexowner.h"
 #include "strprintf.h"
 #include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {
+
+const std::string RssIgnores::REGEX_PREFIX = "regex:";
 
 void RssIgnores::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
@@ -43,6 +46,20 @@ void RssIgnores::handle_action(const std::string& action,
 					ignore_expr,
 					m->get_parse_error()));
 		}
+
+		const int prefix_len = REGEX_PREFIX.length();
+		if (!ignore_rssurl.compare(0, prefix_len, REGEX_PREFIX)) {
+			std::string errorMessage;
+			const std::string pattern = ignore_rssurl.substr(prefix_len,
+					ignore_rssurl.length() - prefix_len);
+			const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
+			if (regex == nullptr) {
+				throw ConfigHandlerException(strprintf::fmt(
+						_("`%s' is not a valid regular expression: %s"),
+						pattern, errorMessage));
+			}
+		}
+
 		ignores.push_back(FeedUrlExprPair(ignore_rssurl, m));
 	} else if (action == "always-download") {
 		if (params.empty()) {
@@ -90,17 +107,28 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 
 bool RssIgnores::matches(RssItem* item)
 {
+	const int prefix_len = REGEX_PREFIX.length();
 	for (const auto& ign : ignores) {
+		bool matched = false;
 		LOG(Level::DEBUG,
 			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
 			ign.first,
 			item->feedurl());
-		if (ign.first == "*" || item->feedurl() == ign.first) {
-			if (ign.second->matches(item)) {
-				LOG(Level::DEBUG,
-					"RssIgnores::matches: found match");
-				return true;
-			}
+
+		if (!ign.first.compare(0, prefix_len, REGEX_PREFIX)) {
+			const std::string pattern = ign.first.substr(prefix_len, ign.first.length() - prefix_len);
+			std::string errorMessage;
+			const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
+			const auto matches = regex->matches(item->feedurl(), 1, 0);
+			matched = !matches.empty();
+		} else {
+			matched = ign.first == "*" || item->feedurl() == ign.first;
+		}
+
+		if (matched && ign.second->matches(item)) {
+			LOG(Level::DEBUG,
+				"RssIgnores::matches: found match");
+			return true;
 		}
 	}
 	return false;
