@@ -873,7 +873,7 @@ msgid "Save File - %s"
 msgstr "Dosyaya Kaydet - %s"
 
 #: src/fileurlreader.cpp:28
-#, c-format
+#, fuzzy, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
 msgstr "Hata: URL'ler \"%s\" dosyasından okunamadı: %s"
 
