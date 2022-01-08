@@ -874,7 +874,7 @@ msgstr "Зберегти Файл - %s"
 
 #: src/fileurlreader.cpp:28
 #, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s"
+msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
 msgstr "Помилка: не вдалося прочитати адреси тем з файлу \"%s\": %s"
 
 #: src/fileurlreader.cpp:66

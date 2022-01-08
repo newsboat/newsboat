@@ -861,7 +861,7 @@ msgstr "Uložiť súbor - %s"
 
 #: src/fileurlreader.cpp:28
 #, fuzzy, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s"
+msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 
 #: src/fileurlreader.cpp:66

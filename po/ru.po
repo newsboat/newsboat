@@ -872,8 +872,8 @@ msgstr "Сохранить файл - %s"
 
 #: src/fileurlreader.cpp:28
 #, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Ошибка: не удалось прочесть адреса лент из файла \"%s\": %s"
+msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
+msgstr "Ошибка: не удалось прочесть адреса лент из файла \"%s\": %s. Пожалуйста убедитесь, что файл существует и у вас есть права на чтение."
 
 #: src/fileurlreader.cpp:66
 #, c-format

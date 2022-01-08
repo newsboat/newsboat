@@ -876,7 +876,7 @@ msgstr "Zapisz plik - %s"
 
 #: src/fileurlreader.cpp:28
 #, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s"
+msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
 msgstr "Błąd: Nie udało się wczytać odnośników z pliku \"%s\": %s"
 
 #: src/fileurlreader.cpp:66
