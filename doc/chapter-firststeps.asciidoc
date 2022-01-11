@@ -122,7 +122,7 @@ last 100 search phrases are stored, but this limited can be influenced through
 the <<history-limit,`history-limit`>> configuration variable. To disable search
 history saving, simply set the `history-limit` to `0`.
 
-Keys, as used in the bind-key configuration command, use a special syntax.
+Keys, as used in the <<bind-key,`bind-key`>> configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
 The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
 written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.

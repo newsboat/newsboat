@@ -1372,8 +1372,8 @@ open dialogs by selecting them and pressing "Ctrl-X".
 
 === Macro Support
 
-Bindings created with `bind-key` can only execute a single operation, like
-`open` or `quit`. To execute multiple operations, one has to define a so-called
+Bindings created with <<bind-key,`bind-key`>> can only execute a single operation, like
+<<open,`open`>> or <<quit,`quit`>>. To execute multiple operations, one has to define a so-called
 "macro". To invoke the macro, the user presses the macro prefix ("," by
 default) and then the macro's key. It's easier to explain with some examples:
 
@@ -1715,9 +1715,9 @@ Operation:Default key:Description
 [[pb-mark-as-finished]]<<pb-mark-as-finished,+pb-mark-as-finished+>>:m:Mark currently selected entry as finished.
 [[pb-delete]]<<pb-delete,+pb-delete+>>:D:Delete the currently selected URL from the queue.
 [[pb-purge]]<<pb-purge,+pb-purge+>>:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
-[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The "max-downloads" configuration option controls how many downloads are done in parallel.
-[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the "max-downloads" option by 1.
-[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the "max-downloads" option by 1. If the option is already 1, no further decrease is possible.
+[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The <<max-downloads,`max-downloads`>> configuration option controls how many downloads are done in parallel.
+[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the <<max-download,`max-downloads`>> option by 1.
+[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the <<max-download,`max-downloads`>> option by 1. If the option is already 1, no further decrease is possible.
 |=========================================================================
 
 
