@@ -3,6 +3,7 @@
 #include <cstring>
 #include <fstream>
 
+#include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -17,7 +18,7 @@ std::string FileUrlReader::get_source()
 	return filename;
 }
 
-nonstd::optional<std::string> FileUrlReader::reload()
+nonstd::optional<utils::ReadTextFileError> FileUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -25,10 +26,13 @@ nonstd::optional<std::string> FileUrlReader::reload()
 
 	auto result = utils::read_text_file(filename);
 	if (!result) {
+		/**
 		return strprintf::fmt(
 				_("Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."),
 				filename,
 				result.error().message);
+		*/
+		return result.error();
 	}
 	std::vector<std::string> lines = result.value();
 

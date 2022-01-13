@@ -36,7 +36,7 @@ OldReaderUrlReader::~OldReaderUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-nonstd::optional<std::string> OldReaderUrlReader::reload()
+nonstd::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -54,7 +54,7 @@ nonstd::optional<std::string> OldReaderUrlReader::reload()
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
-		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 

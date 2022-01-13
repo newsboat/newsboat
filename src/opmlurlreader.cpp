@@ -11,7 +11,7 @@ OpmlUrlReader::OpmlUrlReader(ConfigContainer* c)
 {
 }
 
-nonstd::optional<std::string> OpmlUrlReader::reload()
+nonstd::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

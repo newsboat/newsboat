@@ -5,7 +5,7 @@
 #include <set>
 #include <string>
 #include <vector>
-
+#include "utils.h"
 #include "3rd-party/optional.hpp"
 
 namespace newsboat {
@@ -20,7 +20,7 @@ public:
 	///
 	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`, so
 	/// make sure to save your modifications with `write_config()`.
-	virtual nonstd::optional<std::string> reload() = 0;
+	virtual nonstd::optional<utils::ReadTextFileError> reload() = 0;
 
 	/// \brief User-visible description of where URLs come from.
 	///

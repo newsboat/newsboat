@@ -4,6 +4,7 @@
 #include <string>
 
 #include "urlreader.h"
+#include "utils.h"
 
 namespace newsboat {
 
@@ -14,7 +15,7 @@ public:
 	/// \brief Load URLs from the urls file.
 	///
 	/// \return A non-value on success, an error message otherwise.
-	nonstd::optional<std::string> reload() override;
+	nonstd::optional<utils::ReadTextFileError> reload() override;
 
 	std::string get_source() override;
 
