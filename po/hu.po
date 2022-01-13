@@ -705,7 +705,7 @@ msgstr ""
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
 #, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Biztos felülírod `%s'-t (y:Yes n:No)? "
+msgstr "Biztos olvasottnak jelölöd ezt a forrást (i:Igen n:Nem)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
