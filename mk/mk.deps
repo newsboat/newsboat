@@ -1006,7 +1006,8 @@ test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp \
  test/test-helpers/chmod.h test/test-helpers/misc.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
+ test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ include/utils.h
 test/filtercontainer.o: test/filtercontainer.cpp \
  include/filtercontainer.h include/configactionhandler.h \
  3rd-party/catch.hpp include/confighandlerexception.h
