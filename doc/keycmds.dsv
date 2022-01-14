@@ -6,15 +6,15 @@ reload-all||R||Reload all feeds.
 mark-feed-read||A||Mark all articles in the currently selected feed read.
 mark-all-feeds-read||C||Mark articles in all feeds read.
 mark-all-above-as-read||n/a||Mark all above as read.
-save||s||Export the currently selected article to a plain text file, word-wrapped according to the `text-width` setting.
-save-all||n/a||Export all articles from the currently selected feed to plain text files, word-wrapped according to the `text-width` setting.
+save||s||Export the currently selected article to a plain text file, word-wrapped according to the <<text-width,`text-width`>> setting.
+save-all||n/a||Export all articles from the currently selected feed to plain text files, word-wrapped according to the <<text-width,`text-width`>> setting.
 next-unread||n||Jump to the next unread article.
 prev-unread||p||Jump to the previous unread article.
 next||J||Jump to next list entry.
 prev||K||Jump to previous list entry.
 random-unread||^K||Jump to a random unread article.
 open-in-browser||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view.
-open-in-browser-noninteractively||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to `open-in-browser`, but the output of the browser (stdout and stderr) is not shown, and the browser doesn't receive keyboard input. You would probably add `&` at the end of the `browser` command to put it into background, too.
+open-in-browser-noninteractively||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to <<open-in-browser,`open-in-browser`>>, but the output of the browser (stdout and stderr) is not shown, and the browser doesn't receive keyboard input. You would probably add `&` at the end of the <<browser,`browser`>> command to put it into background, too.
 open-in-browser-and-mark-read||O||Use browser to open the URL associated with the current article, or entry in the URL view. When used in the article list, it will also mark the article as read.
 open-all-unread-in-browser||n/a||Open all the unread URLs in the current feed.
 open-all-unread-in-browser-and-mark-read||n/a||Open all the unread URLs in the current feed and mark them as read.
@@ -52,13 +52,13 @@ prev-unread-feed||^P||Go to the previous feed with unread articles. This only wo
 next-feed||j||Go to the next feed. This only works from the article list.
 prev-feed||k||Go to the previous feed. This only works from the article list.
 delete-article||D||Delete the currently selected article.
-delete-all-articles||^D||Delete all articles in the articlelist. Note that the articlelist might contain a subset of feed's articles (because of filters or `show-read-articles no`), or it might contain a mix of articles from different feeds (if you're viewing a query feed) — in either case, `delete-all-articles` affects just those articles, not all articles of the respective feed(s).
+delete-all-articles||^D||Delete all articles in the articlelist. Note that the articlelist might contain a subset of feed's articles (because of filters or <<show-read-articles,`show-read-articles no`>>), or it might contain a mix of articles from different feeds (if you're viewing a query feed) — in either case, `delete-all-articles` affects just those articles, not all articles of the respective feed(s).
 purge-deleted||$||Purge all articles that are marked as deleted from the article list.
 view-dialogs||v||View list of open dialogs.
 close-dialog||^X||Close currently selected dialog.
 next-dialog||^V||Go to next dialog.
 prev-dialog||^G||Go to previous dialog.
-pipe-to||| ||Pipe article to command. The text will be word-wrapped according to the `text-width` setting.
+pipe-to||| ||Pipe article to command. The text will be word-wrapped according to the <<text-width,`text-width`>> setting.
 sort||g||Sort feeds/articles by interactively choosing the sort method.
 rev-sort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
 up||UP||Go up one item in the list.
