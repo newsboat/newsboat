@@ -191,7 +191,7 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  include/cliargsparser.h include/dbexception.h include/downloadthread.h \
  include/exception.h include/feedhqapi.h include/feedhqurlreader.h \
  include/freshrssapi.h rss/feed.h rss/item.h 3rd-party/json.hpp \
- include/freshrssurlreader.h include/fileurlreader.h include/globals.h \
+ include/freshrssurlreader.h include/fileurlreader.h \
  include/inoreaderapi.h include/inoreaderurlreader.h \
  include/itemrenderer.h include/htmlrenderer.h include/textformatter.h \
  include/logger.h include/minifluxapi.h include/minifluxurlreader.h \
@@ -643,8 +643,8 @@ src/pbcontroller.o: src/pbcontroller.cpp include/pbcontroller.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/keymap.h \
  include/queueloader.h 3rd-party/optional.hpp config.h \
  include/configcontainer.h include/configexception.h \
- include/configparser.h include/globals.h include/logger.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/configparser.h include/logger.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  include/matcherexception.h include/nullconfigactionhandler.h \
  include/pbview.h include/listwidget.h include/listformatter.h \
  include/regexmanager.h include/matcher.h filter/FilterParser.h \

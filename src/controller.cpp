@@ -38,7 +38,6 @@
 #include "freshrssapi.h"
 #include "freshrssurlreader.h"
 #include "fileurlreader.h"
-#include "globals.h"
 #include "inoreaderapi.h"
 #include "inoreaderurlreader.h"
 #include "itemrenderer.h"
