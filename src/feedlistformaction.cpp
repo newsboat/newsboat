@@ -311,8 +311,8 @@ REDO:
 						do_redraw = true;
 					}
 					bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
-					if (visible_feeds.size() > (pos + 1) && show_read) {
-						list.set_position(pos + 1);
+					if (visible_feeds.size() > (list.get_position() + 1) && show_read) {
+						list.set_position(list.get_position() + 1);
 					}
 				} catch (const DbException& e) {
 					v->get_statusline().show_error(strprintf::fmt(
