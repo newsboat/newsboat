@@ -850,7 +850,7 @@ msgstr "儲存檔案 - %s"
 
 #: src/fileurlreader.cpp:28
 #, fuzzy, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
+msgid "Error: failed to read URLs from file \"%s\": %s"
 msgstr "載入 `%s'的時候發生錯誤: %s"
 
 #: src/fileurlreader.cpp:66

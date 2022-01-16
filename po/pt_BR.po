@@ -876,7 +876,7 @@ msgstr "Salvar Arquivo - %s"
 
 #: src/fileurlreader.cpp:28
 #, fuzzy, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
+msgid "Error: failed to read URLs from file \"%s\": %s"
 msgstr "Erro carregando fonte '%s': %s"
 
 #: src/fileurlreader.cpp:66

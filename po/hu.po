@@ -867,7 +867,7 @@ msgstr "File mentése - %s"
 
 #: src/fileurlreader.cpp:28
 #, fuzzy, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."
+msgid "Error: failed to read URLs from file \"%s\": %s"
 msgstr "Hiba a `%s' forrás betöltése közben: %s"
 
 #: src/fileurlreader.cpp:66
