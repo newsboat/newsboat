@@ -18,7 +18,6 @@
 #include "configcontainer.h"
 #include "configexception.h"
 #include "configparser.h"
-#include "globals.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "nullconfigactionhandler.h"
@@ -113,6 +112,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		config_dir + NEWSBEUTER_PATH_SEP + config_file;
 
 	/* in data */
+	const std::string LOCK_SUFFIX(".lock");
 	lock_file = xdg_data_dir + NEWSBEUTER_PATH_SEP + LOCK_SUFFIX;
 	queue_file =
 		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
