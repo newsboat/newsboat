@@ -26,12 +26,6 @@ nonstd::optional<utils::ReadTextFileError> FileUrlReader::reload()
 
 	auto result = utils::read_text_file(filename);
 	if (!result) {
-		/**
-		return strprintf::fmt(
-				_("Error: failed to read URLs from file \"%s\": %s. Please make sure the file exists and you have read permissions."),
-				filename,
-				result.error().message);
-		*/
 		return result.error();
 	}
 	std::vector<std::string> lines = result.value();

@@ -361,7 +361,6 @@ int Controller::run(const CliArgsParser& args)
 	const auto error_message = urlcfg->reload();
 	if (error_message.has_value()) {
 		std::cout << error_message.value().message << std::endl << std::endl;
-		//return EXIT_FAILURE;
 	} else if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
@@ -724,7 +723,7 @@ int Controller::import_opml(const std::string& opmlFile,
 	const auto error_message = urlReader.reload(); // Load existing URLs
 	if (error_message.has_value()) {
 		std::cout << strprintf::fmt(
-				_("An error occured while importing OPML to url file %s : %s"),
+				_("Error importing OPML to urls file %s : %s"),
 				urlFile, error_message.value().message)
 			<< std::endl;
 		return EXIT_FAILURE;
