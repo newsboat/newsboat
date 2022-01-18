@@ -723,7 +723,7 @@ int Controller::import_opml(const std::string& opmlFile,
 	const auto error_message = urlReader.reload(); // Load existing URLs
 	if (error_message.has_value()) {
 		std::cout << strprintf::fmt(
-				_("Error importing OPML to urls file %s : %s"),
+				_("Error importing OPML to urls file %s: %s"),
 				urlFile, error_message.value().message)
 			<< std::endl;
 		return EXIT_FAILURE;
