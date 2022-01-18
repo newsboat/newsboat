@@ -116,7 +116,7 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 		REQUIRE(error_message.has_value());
 		SECTION("the error structure contains error message and kind of an error") {
 			INFO("error_message: " + error_message.value().message);
-			REQUIRE(!error_message.value().message.empty());
+			REQUIRE_FALSE(error_message.value().message.empty());
 		}
 	}
 
