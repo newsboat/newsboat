@@ -16,7 +16,7 @@ NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file,
 
 NewsBlurUrlReader::~NewsBlurUrlReader() {}
 
-nonstd::optional<std::string> NewsBlurUrlReader::reload()
+nonstd::optional<utils::ReadTextFileError> NewsBlurUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -25,7 +25,7 @@ nonstd::optional<std::string> NewsBlurUrlReader::reload()
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
-		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 

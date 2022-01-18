@@ -8,6 +8,7 @@
 #include "test-helpers/chmod.h"
 #include "test-helpers/misc.h"
 #include "test-helpers/tempfile.h"
+#include "utils.h"
 
 using namespace newsboat;
 
@@ -102,7 +103,7 @@ TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 		R"_(exec:curl --silent https://feeds.metaebene.me/raumzeit/m4a  | sed 's#\(</guid>\|</id>\)#-M4A&#')_");
 }
 
-TEST_CASE("URL reader returns error message if file cannot be opened",
+TEST_CASE("URL reader returns error structure if file cannot be opened",
 	"[FileUrlReader]")
 {
 	const std::string testDataPath("data/test-urls.txt");
@@ -110,13 +111,12 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 	TestHelpers::TempFile urlsFile;
 	FileUrlReader u(urlsFile.get_path());
 
-	SECTION("reload() returns error message if file does not exist") {
+	SECTION("reload() returns error structure if file does not exist") {
 		const auto error_message = u.reload();
 		REQUIRE(error_message.has_value());
-
-		SECTION("the error message contains the filename") {
-			INFO("error_message: " + error_message.value());
-			REQUIRE(error_message.value().find(urlsFile.get_path()) != std::string::npos);
+		SECTION("the error structure contains error message and kind of an error") {
+			INFO("error_message: " + error_message.value().message);
+			REQUIRE_FALSE(error_message.value().message.empty());
 		}
 	}
 
@@ -143,11 +143,6 @@ TEST_CASE("URL reader returns error message if file cannot be opened",
 		THEN("reload() returns an error message") {
 			const auto error_message = u.reload();
 			REQUIRE(error_message.has_value());
-
-			SECTION("the error message contains the filename") {
-				INFO("error_message: " + error_message.value());
-				REQUIRE(error_message.value().find(urlsFile.get_path()) != std::string::npos);
-			}
 		}
 
 		THEN("write_config() still works fine") {
@@ -190,7 +185,7 @@ TEST_CASE("URL reader returns error message if file contains invalid UTF-8 codep
 	FileUrlReader u(urlsFile.get_path());
 	auto error_message = u.reload();
 	REQUIRE(error_message.has_value());
-	REQUIRE(error_message.value().size() > 0);
+	REQUIRE(error_message.value().message.size() > 0);
 }
 
 TEST_CASE("FileUrlReader::get_alltags() returns all unique tags across all feeds, "

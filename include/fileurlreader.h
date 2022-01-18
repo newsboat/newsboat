@@ -13,8 +13,8 @@ public:
 
 	/// \brief Load URLs from the urls file.
 	///
-	/// \return A non-value on success, an error message otherwise.
-	nonstd::optional<std::string> reload() override;
+	/// \return A non-value on success, a structure with error info otherwise.
+	nonstd::optional<utils::ReadTextFileError> reload() override;
 
 	std::string get_source() override;
 

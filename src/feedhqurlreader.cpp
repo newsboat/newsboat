@@ -35,7 +35,7 @@ FeedHqUrlReader::~FeedHqUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-nonstd::optional<std::string> FeedHqUrlReader::reload()
+nonstd::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -53,7 +53,7 @@ nonstd::optional<std::string> FeedHqUrlReader::reload()
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
-		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 

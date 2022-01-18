@@ -15,7 +15,7 @@ TtRssUrlReader::TtRssUrlReader(const std::string& url_file, RemoteApi* a)
 
 TtRssUrlReader::~TtRssUrlReader() {}
 
-nonstd::optional<std::string> TtRssUrlReader::reload()
+nonstd::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -24,7 +24,7 @@ nonstd::optional<std::string> TtRssUrlReader::reload()
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
 	if (error_message.has_value()) {
-		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value());
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 
