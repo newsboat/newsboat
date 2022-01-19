@@ -212,6 +212,7 @@ ConfigContainer::ConfigContainer()
 			"socks4a",
 			"socks5",
 			"socks5h"}))},
+	{"quiet", ConfigData("no", ConfigDataType::BOOL)},
 	{"refresh-on-startup", ConfigData("no", ConfigDataType::BOOL)},
 	{
 		"reload-only-visible-feeds",

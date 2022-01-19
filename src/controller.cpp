@@ -143,19 +143,6 @@ int Controller::run(const CliArgsParser& args)
 
 	LOG(Level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
 
-	if (!args.do_export()) {
-		if (!args.silent())
-			std::cout << strprintf::fmt(_("Starting %s %s..."),
-					PROGRAM_NAME,
-					utils::program_version())
-				<< std::endl;
-	}
-
-	if (!args.silent()) {
-		std::cout << _("Loading configuration...");
-	}
-	std::cout.flush();
-
 	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
@@ -188,7 +175,21 @@ int Controller::run(const CliArgsParser& args)
 
 	update_config();
 
-	if (!args.silent()) {
+	if (!args.do_export()) {
+		if (!(args.silent() || cfg.get_configvalue_as_bool("quiet")))
+			std::cout << strprintf::fmt(_("Starting %s %s..."),
+					PROGRAM_NAME,
+					utils::program_version())
+				<< std::endl;
+	}
+
+	if (!(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
+		std::cout << _("Loading configuration...");
+	}
+	std::cout.flush();
+
+
+	if (!(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -214,7 +215,7 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.silent()) {
+	if (!(args.silent()) || cfg.get_configvalue_as_bool("quiet")) {
 		std::cout << _("Opening cache...");
 		std::cout.flush();
 	}
@@ -238,7 +239,7 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.silent()) {
+	if (!(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -347,7 +348,7 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_FAILURE;
 	}
 
-	if (!args.do_export() && !args.silent()) {
+	if (!args.do_export() && !(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << strprintf::fmt(
 				_("Loading URLs from %s..."), urlcfg->get_source());
 		std::cout.flush();
@@ -361,7 +362,7 @@ int Controller::run(const CliArgsParser& args)
 	const auto error_message = urlcfg->reload();
 	if (error_message.has_value()) {
 		std::cout << error_message.value().message << std::endl << std::endl;
-	} else if (!args.do_export() && !args.silent()) {
+	} else if (!args.do_export() && !(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -426,7 +427,7 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_SUCCESS;
 	}
 
-	if (!args.do_export() && !args.silent()) {
+	if (!args.do_export() && !(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << _("Loading articles from cache...");
 	}
 	std::cout.flush();
@@ -462,7 +463,7 @@ int Controller::run(const CliArgsParser& args)
 
 	std::vector<std::string> tags = urlcfg->get_alltags();
 
-	if (!args.do_export() && !args.silent()) {
+	if (!args.do_export() && !(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << _("done.") << std::endl;
 	}
 
@@ -478,14 +479,14 @@ int Controller::run(const CliArgsParser& args)
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
 	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {
-		if (!args.do_export() && !args.silent()) {
+		if (!args.do_export() && !(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 			std::cout << _("Prepopulating query feeds...");
 			std::cout.flush();
 		}
 
 		feedcontainer.populate_query_feeds();
 
-		if (!args.do_export() && !args.silent()) {
+		if (!args.do_export() && !(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 			std::cout << _("done.") << std::endl;
 		}
 	}
@@ -551,14 +552,14 @@ int Controller::run(const CliArgsParser& args)
 		configpaths.cmdline_file(),
 		history_limit);
 
-	if (!args.silent()) {
+	if (!(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 		std::cout << _("Cleaning up cache...");
 		std::cout.flush();
 	}
 	try {
 		const std::uint64_t amt = rsscache->cleanup_cache(
 				feedcontainer.get_all_feeds());
-		if (!args.silent()) {
+		if (!(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 			std::cout << _("done.") << std::endl;
 			if (amt > 0u) {
 				std::cout << _("Unreachable feeds found, consider setting "
@@ -568,7 +569,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 	} catch (const DbException& e) {
 		LOG(Level::USERERROR, "Cleaning up cache failed: %s", e.what());
-		if (!args.silent()) {
+		if (!(args.silent() || cfg.get_configvalue_as_bool("quiet"))) {
 			std::cout << _("failed: ") << e.what() << std::endl;
 			ret = EXIT_FAILURE;
 		}
