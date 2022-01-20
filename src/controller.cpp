@@ -137,8 +137,7 @@ int Controller::run(const CliArgsParser& args)
 
 	if (args.do_import()) {
 		LOG(Level::INFO, "Importing OPML file from %s", args.importfile());
-		import_opml(args.importfile(), configpaths.url_file());
-		return EXIT_SUCCESS;
+		return import_opml(args.importfile(), configpaths.url_file());
 	}
 
 	LOG(Level::INFO, "nl_langinfo(CODESET): %s", nl_langinfo(CODESET));
