@@ -1,14 +1,13 @@
 # Zsolt Udvari <udvzsolt@gmail.com>, 2008-2009.
-# Zsolt Szakács <maxigaz at protonmail dot com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2022-01-13 20:45+0100\n"
-"Last-Translator: Zsolt Szakács <maxigaz@protonmail.com>\n"
-"Language-Team: Zsolt Udvari <udvzsolt@gmail.com>\n"
+"PO-Revision-Date: 2022-01-21 11:45+0100\n"
+"Last-Translator: Zsolt Udvari <udvzsolt@gmail.com>\n"
+"Language-Team: \n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
