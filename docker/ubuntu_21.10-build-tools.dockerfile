@@ -1,27 +1,27 @@
 # All the programs and libraries necessary to build Newsboat with newer
-# compilers. Contains GCC 10 and Rust 1.57.0 by default.
+# compilers. Contains GCC 11 and Rust 1.57.0 by default.
 #
 # Configurable via build-args:
 #
-# - cxx_package -- additional Ubuntu packages to install. Default: g++-10
+# - cxx_package -- additional Ubuntu packages to install. Default: g++-11
 # - rust_version -- Rust version to install. Default: 1.57.0
 # - cc -- C compiler to use. This gets copied into CC environment variable.
-#       Default: gcc-10
+#       Default: gcc-11
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
-#       Default: g++-10
+#       Default: g++-11
 #
 # Build with defaults:
 #
 #   docker build \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_21.04-build-tools.dockerfile \
+#       --file=docker/ubuntu_21.10-build-tools.dockerfile \
 #       docker
 #
 # Build with non-default compiler and Rust version:
 #
 #   docker build \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_21.04-build-tools.dockerfile \
+#       --file=docker/ubuntu_21.10-build-tools.dockerfile \
 #       --build-arg cxx_package=clang-1
 #       --build-arg cc=clang-11 \
 #       --build-arg cxx=clang++-11 \
@@ -55,7 +55,7 @@
 #
 #   make distclean
 
-FROM ubuntu:21.04
+FROM ubuntu:21.10
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
@@ -64,15 +64,7 @@ RUN apt-get update \
     && apt-get upgrade --assume-yes \
     && apt install --assume-yes --no-install-recommends ca-certificates wget gnupg2
 
-# This image is meant to be used in Cirrus CI, where COPY and ADD instructions
-# are dangerous:
-# https://cirrus-ci.org/guide/docker-builder-vm/#dockerfile-as-a-ci-environment
-# So we fetch the list and key from the Internet rather than adding them to our
-# repo.
-RUN echo 'deb http://apt.llvm.org/hirsute/ llvm-toolchain-hirsute-13 main' > /etc/apt/sources.list.d/llvm-toolchain-hirsute-13.list \
-    && wget -O/etc/apt/trusted.gpg.d/apt.llvm.org.asc https://apt.llvm.org/llvm-snapshot.gpg.key
-
-ARG cxx_package=g++-10
+ARG cxx_package=g++-11
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -111,8 +103,8 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
 
 ENV HOME /home/builder
 
-ARG cc=gcc-10
-ARG cxx=g++-10
+ARG cc=gcc-11
+ARG cxx=g++-11
 
 ENV CC=$cc
 ENV CXX=$cxx
