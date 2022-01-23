@@ -19,7 +19,7 @@
 # On continuous integration, we fail a build if i18nspector prints out any
 # errors or warnings (lines that start with "E:" and "W:").
 
-FROM ubuntu:20.10
+FROM ubuntu:21.10
 
 ENV DEBIAN_FRONTEND noninteractive
 

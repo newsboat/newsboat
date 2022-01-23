@@ -16,10 +16,10 @@ one that we use for Continuous Integration:
     # In the root of Newsboat's repository
     $ docker build \
         --tag=newsboat-build-tools \
-        --file=docker/ubuntu_20.10-build-tools.dockerfile \
+        --file=docker/ubuntu_21.10-build-tools.dockerfile \
         docker
 
-This will use the description from "docker/ubuntu_20.10-build-tools.dockerfile"
+This will use the description from "docker/ubuntu_21.10-build-tools.dockerfile"
 to build an image named "newsboat-build-tools". That image contains all the
 compilers and libraries that one needs to build Newsboat from source.
 
