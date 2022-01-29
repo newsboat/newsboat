@@ -46,6 +46,10 @@ branch off the latest release and backport the bugfixes onto it.
 
 ## Common steps
 
+0. Update copyright years:
+    * `git grep -- -2021` to find potentionally outdated copyrights
+    * fix them
+    * `git commit -am'Bump copyright notices'`
 0. Update CHANGELOG:
     * Go through the list you already opened.
     * Mention issue number ("#X" for Newsboat issues, full link to issue tracker
