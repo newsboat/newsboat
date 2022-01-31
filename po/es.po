@@ -883,7 +883,7 @@ msgstr "no se pudo procesar la expresión de filtrado `%s': %s"
 
 #: src/formaction.cpp:124
 msgid "usage: set <config-option> <value>"
-msgstr "uso: set <opcion><valor>"
+msgstr "uso: set <opcion> <valor>"
 
 #: src/formaction.cpp:282
 msgid "usage: set <variable>[=<value>]"
