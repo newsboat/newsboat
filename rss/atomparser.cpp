@@ -96,7 +96,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			std::string mode = get_prop(node, "mode");
 			std::string type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
-				if (type == "html" || type == "text") {
+				if (type == "html" || type == "text" || type == "text/plain") {
 					it.description = get_content(node);
 				} else {
 					it.description = get_xml_content(node, doc);
