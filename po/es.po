@@ -833,8 +833,8 @@ msgstr "Buscando..."
 
 #: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:904
 #, c-format
-msgid "Error while searching for '%s': %s"
-msgstr "Error al buscar '%s': %s"
+msgid "Error while searching for `%s': %s"
+msgstr "Error al buscar `%s': %s"
 
 #: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:911
 msgid "No results."
