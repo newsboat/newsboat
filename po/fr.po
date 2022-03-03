@@ -1,21 +1,21 @@
-# Nicolas Martyanoff <khaelin@gmail.com>, 2007–2008
-# Sabrina Dubroca <sd@queasysnail.net>, 2013
-# rugie <fliehen@posteo.net>, 2017
 #
+# Nicolas Martyanoff <khaelin@gmail.com>, 2007–2008.
+# Sabrina Dubroca <sd@queasysnail.net>, 2013.
+# rugie <fliehen@posteo.net>, 2017, 2022.
+# antoine <tonus1@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2021-12-08 18:49+0300\n"
-"PO-Revision-Date: 2020-12-10 21:26+0100\n"
-"Last-Translator: Tanguy Kerdoncuff <t.kerdonc@gmail.com>\n"
-"Language-Team: Nicolas Martyanoff <khaelin@gmail.com, Tanguy Kerdoncuff <t."
-"kerdonc@gmail.com>\n"
+"PO-Revision-Date: 2022-03-03 14:28+0000\n"
+"Last-Translator: antoine <tonus1@gmail.com>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Lokalize 21.12.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: newsboat.cpp:31
@@ -143,12 +143,11 @@ msgid "cache"
 msgstr "cache"
 
 #: newsboat.cpp:148 src/pbcontroller.cpp:372
-#, fuzzy
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Support à #newsboat sur https://freenode.net ou sur notre liste de diffusion "
+"Support à #newsboat sur https://libera.chat ou sur notre liste de diffusion "
 "https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:151 src/pbcontroller.cpp:375
@@ -224,13 +223,12 @@ msgid "`%s' is not a valid configuration element"
 msgstr "`%s' n'est pas un élément de configuration valide"
 
 #: src/configcontainer.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "newsboat : rechargement terminé, %f fils à lire (%n articles à lire au total)"
 
 #: src/configcontainer.cpp:289
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
@@ -243,7 +241,6 @@ msgid "%N %V - Dialogs"
 msgstr "%N %V - Vues"
 
 #: src/configcontainer.cpp:296
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
@@ -268,7 +265,6 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Article '%T' (%u à lire, %t au total) - %U"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
 msgstr ""
 "%N %V - Résultat de la recherche (%u à lire, %t au total)%?F? correspondant "
@@ -310,9 +306,8 @@ msgid "too few parameters."
 msgstr "paramètres insuffisants."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "paramètres insuffisants."
+msgstr "trop de paramètres."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -355,7 +350,7 @@ msgid "done."
 msgstr "fait."
 
 #: src/controller.cpp:207 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
 msgstr "Erreur : %s est déjà en cours d'exécution (PID : %<PRId64>)"
 
@@ -533,6 +528,9 @@ msgid ""
 "Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
+"Des fils inaccessibles ont été trouvés, voir le réglage 'cleanup-on-quit "
+" yes' "
+"ou lancer 'newsboat --cleanup'"
 
 #: src/controller.cpp:574
 msgid "failed: "
@@ -546,15 +544,15 @@ msgstr "Erreur : Tous les fils n'ont pu être marqués comme lus : %s"
 #: src/controller.cpp:701 src/itemviewformaction.cpp:229
 #, c-format
 msgid "Generated filename (%s) is used already."
-msgstr ""
+msgstr "Le nom de fichier généré (%s) est déjà utilisé."
 
 #: src/controller.cpp:706 src/itemviewformaction.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open queue file: %s."
-msgstr "Echec d'ouverture du fichier (%s)"
+msgstr "Echec d'ouverture du fichier de la file d'attente (%s)"
 
 #: src/controller.cpp:734
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while parsing %s: %s"
 msgstr "Une erreur est survenue lors de l'analyse de %s."
 
@@ -655,9 +653,8 @@ msgid "played"
 msgstr "lu"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "erreur"
+msgstr "erreur de renommage"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -721,10 +718,9 @@ msgid "Browser returned error code %i"
 msgstr "Code d'erreur %i retourné par le navigateur"
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
 msgstr ""
-"Souhaitez-vous réellement marquer tout les fils comme lus `%s' (o : Oui n : "
+"Souhaitez-vous réellement marquer ce fil comme lu `%s' (o : Oui n : "
 "No)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
@@ -774,7 +770,7 @@ msgstr "Tous les fils sont marqués comme lus..."
 
 #: src/feedlistformaction.cpp:439 src/feedlistformaction.cpp:982
 #: src/itemlistformaction.cpp:645 src/itemlistformaction.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "échec de l'analyse de l'expression de filtrage `%s' : %s"
 
@@ -888,12 +884,12 @@ msgid "Save File - %s"
 msgstr "Enregistrer le fichier - %s"
 
 #: src/fileurlreader.cpp:28
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s"
 msgstr "Erreur : Echec de lecture d'URLS depuis le fichier \"%s\" (%s)"
 
 #: src/fileurlreader.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to open file \"%s\": %s"
 msgstr "Erreur : Echec lors de l'ouverture du fichier \"%s\" (%s)"
 
@@ -904,9 +900,8 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "échec de l'analyse de l'expression de filtrage `%s' : %s"
 
 #: src/formaction.cpp:124
-#, fuzzy
 msgid "usage: set <config-option> <value>"
-msgstr "utilisation : set <variable>[=<valeur>]"
+msgstr "utilisation : set <config-option> <valeur>"
 
 #: src/formaction.cpp:282
 msgid "usage: set <variable>[=<value>]"
@@ -984,7 +979,7 @@ msgstr "Fonctions non attribuées : "
 
 #: src/helpformaction.cpp:180
 msgid "Macros:"
-msgstr ""
+msgstr "Macros:"
 
 #: src/helpformaction.cpp:211
 msgid "Clear"
@@ -1013,7 +1008,7 @@ msgstr "flash embarqué"
 
 #: src/htmlrenderer.cpp:1059
 msgid "iframe"
-msgstr ""
+msgstr "iframe"
 
 #: src/htmlrenderer.cpp:1061
 msgid "video"
@@ -1047,9 +1042,10 @@ msgid "No item selected!"
 msgstr "Aucun élément sélectionné !"
 
 #: src/itemlistformaction.cpp:108
-#, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "Souhaitez-vous réellement écraser `%s' (y : Oui n : No)? "
+msgstr ""
+"Souhaitez-vous réellement supprimer tous les articles "
+"`%s' (y : Oui n : No)? "
 
 #: src/itemlistformaction.cpp:221 src/itemviewformaction.cpp:416
 msgid "Toggling read flag for article..."
@@ -1231,12 +1227,12 @@ msgstr "Erreur lors du passage de l'article à l'état lu : %s"
 
 #: src/itemviewformaction.cpp:207
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "L'élément n'a pas de clôture."
 
 #: src/itemviewformaction.cpp:211
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "La clôture de l'élément est un lien non-http : '%s'"
 
 #: src/itemviewformaction.cpp:219
 #, c-format
@@ -1246,7 +1242,7 @@ msgstr "Ajout de %s à la file d'attente."
 #: src/itemviewformaction.cpp:224
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s est déjà dans la file"
 
 #: src/itemviewformaction.cpp:257
 #, c-format
@@ -1369,9 +1365,10 @@ msgid "Open URL of article, feed, or entry in URL view"
 msgstr "Ouvrir l'URL de l'article, fil ou élément en vue URL"
 
 #: src/keymap.cpp:155
-#, fuzzy
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "Ouvrir l'URL de l'article, fil ou élément en vue URL"
+msgstr ""
+"Ouvrir l'URL de l'article, le fil ou l'élément dans le navigateur, sans"
+" interaction"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
@@ -1656,9 +1653,9 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' n'est pas un raccourci correct"
 
 #: src/keymap.cpp:775
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Echec d'ouverture du fichier (%s)"
+msgstr "Echec d'analyse de la séquence d'opérations sur (%s)"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1676,7 +1673,7 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "l'expression régulière '%s' est invalide : %s"
 
 #: src/opml.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Erreur : échec d'analyse du fichier OPML %s"
 
@@ -1738,7 +1735,7 @@ msgid "start download on startup"
 msgstr "commencer le téléchargement au démarrage"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
 msgstr ""
 "File d'attente (%u téléchargements en cours, %u au total) - %.2f %s au total"
@@ -1799,7 +1796,7 @@ msgid "Mark as Finished"
 msgstr "Marquer comme terminé"
 
 #: src/queueloader.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
@@ -1867,28 +1864,27 @@ msgid "URLs"
 msgstr "Liens"
 
 #: src/utils.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file: %s"
 msgstr "Echec d'ouverture du fichier (%s)"
 
 #: src/utils.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read line %u: %s"
 msgstr "Echec de lecture de ligne %u (%s)"
 
 #: src/view.cpp:164
-#, fuzzy
 msgid "Error: failed to execute startup commands"
 msgstr "Erreur : Echec d'éxécution des commandes de démarrage"
 
 #: src/view.cpp:287
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Opération ignorée dans le dialogue modal"
 
 #: src/view.cpp:396
 #, c-format
 msgid "Running browser: %s"
-msgstr ""
+msgstr "Lancement du navigateur : %s"
 
 #: src/view.cpp:460 src/view.cpp:491
 msgid "Error: feed contains no items!"
@@ -1897,9 +1893,9 @@ msgstr "Erreur : le fil est vide !"
 #: src/view.cpp:474 src/view.cpp:725 src/view.cpp:772 src/view.cpp:798
 #: src/view.cpp:817 src/view.cpp:855 src/view.cpp:894 src/view.cpp:932
 #: src/view.cpp:958 src/view.cpp:977
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Erreur : Le fil n'a pu être marqué comme étant lu : %s"
+msgstr "Erreur : impossible de préparer la requête pour le fil : %s"
 
 #: src/view.cpp:626
 msgid "No tags defined."
@@ -2007,7 +2003,6 @@ msgid "Internal parse error"
 msgstr "Erreur d'analyse interne"
 
 #: rust/libnewsboat/src/fslock.rs:57
-#, fuzzy
 msgid "Failed to open lock file '%s': %s"
 msgstr "Echec d'ouverture du fichier de verrouillage : '%s' (%s)"
 
@@ -2017,7 +2012,6 @@ msgid "<filename containing invalid UTF-8 codepoint>"
 msgstr "<fichier contenant un code UTF-8 invalide>"
 
 #: rust/libnewsboat/src/fslock.rs:77
-#, fuzzy
 msgid "Failed to write PID to lock file '%s': %s"
 msgstr "Echec d'écriture du PID dans le fichier de verrouillage : '%s' (%s)"
 
