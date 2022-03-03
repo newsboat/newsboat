@@ -2,7 +2,7 @@
 # Nicolas Martyanoff <khaelin@gmail.com>, 2007–2008.
 # Sabrina Dubroca <sd@queasysnail.net>, 2013.
 # rugie <fliehen@posteo.net>, 2017, 2022.
-# antoine <tonus1@gmail.com>, 2022.
+# Tonus <tonus1@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.6\n"
