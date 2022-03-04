@@ -107,7 +107,7 @@ fn string_to_num(input: &str) -> i32 {
 
     let numerics_end = input[search_start..]
         .find(|c: char| !c.is_numeric())
-        .unwrap_or_else(|| input.len())
+        .unwrap_or(input.len())
         + search_start; // Adding the starting offset to get an index inside the original input
 
     if numerics_end - search_start == 0 {
