@@ -683,7 +683,9 @@ void HtmlRenderer::render(std::istream& input,
 						tables.size() ? 0
 						: indent_level);
 				}
-				list_elements_stack.pop_back();
+				if (!list_elements_stack.empty()) {
+					list_elements_stack.pop_back();
+				}
 				add_nonempty_line(curline, tables, lines);
 				add_line("", tables, lines);
 				prepare_new_line(curline,
