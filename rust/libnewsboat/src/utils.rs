@@ -134,7 +134,7 @@ pub fn censor_url(url: &str) -> String {
 
 /// Quote a string for use with stfl by replacing all occurences of "<" with "<>"
 pub fn quote_for_stfl(string: &str) -> String {
-    string.replace("<", "<>")
+    string.replace('<', "<>")
 }
 
 /// Get basename from a URL if available else return an empty string
@@ -169,7 +169,7 @@ pub fn trim_end(rs_str: String) -> String {
 }
 
 pub fn quote(input: String) -> String {
-    let mut input = input.replace("\"", "\\\"");
+    let mut input = input.replace('\"', "\\\"");
     input.insert(0, '"');
     input.push('"');
     input
@@ -391,7 +391,7 @@ pub fn get_auth_method(method: &str) -> c_ulong {
 
 pub fn unescape_url(rs_str: String) -> Option<String> {
     let decoded = percent_decode(rs_str.as_bytes()).decode_utf8();
-    decoded.ok().map(|s| s.replace("\0", ""))
+    decoded.ok().map(|s| s.replace('\0', ""))
 }
 
 /// Runs given command in a shell, and returns the output (from stdout; stderr is printed to the

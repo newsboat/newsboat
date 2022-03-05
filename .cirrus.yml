@@ -62,7 +62,7 @@ task:
     # which causes some C++ classes to be re-compiled as they depend on cxx
     # bridges.
     fake_install_script: su testuser -c 'cd ~ && mkdir fakeroot && gmake DESTDIR=fakeroot install && gmake DESTDIR=fakeroot uninstall && [ $(find fakeroot -type f -print | wc -l) -eq 0 ]'
-    clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints -A unknown-lints'
+    clippy_script: su testuser -c 'cd ~ && cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints'
     before_cache_script: &before_cache_script
         # Cirrus CI sometimes fails to unpack the cache. In that case, it
         # removes the "cache folder" and tries again.
@@ -98,7 +98,7 @@ task:
         - make DESTDIR=fakeroot uninstall
         - test $(find fakeroot -type f -print | wc -l) -eq 0
     clippy_script: &clippy_script
-        - cargo clippy --all-targets --all-features -- -D warnings -A clippy::unknown-clippy-lints -A unknown-lints
+        - cargo clippy --all-targets --all-features -- -D warnings -A unknown-lints
     before_cache_script: *before_cache_script
 
 task:
@@ -139,7 +139,6 @@ task:
     build_script: *build_script
     test_script: *test_script
     fake_install_script: *fake_install_script
-    clippy_script: *clippy_script
     before_cache_script: *before_cache_script
 
     matrix:
