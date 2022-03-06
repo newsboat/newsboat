@@ -2004,7 +2004,7 @@ msgstr "Erreur d'analyse interne"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file '%s': %s"
-msgstr "Echec d'ouverture du fichier de verrouillage : '%s' : %s"
+msgstr "Echec d'ouverture du fichier de verrouillage '%s' : %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:80
 #: rust/libnewsboat/src/fslock.rs:112
