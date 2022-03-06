@@ -1685,3 +1685,17 @@ TEST_CASE("<div> is always rendered on a new line", "[HtmlRenderer]")
 	REQUIRE(lines[8] == p(LineType::wrappable, "hehe"));
 	REQUIRE(links.size() == 0);
 }
+
+TEST_CASE("HtmlRenderer does not crash on extra closing OL/UL tags", "[HtmlRenderer]")
+{
+	// This is a regression test for https://github.com/newsboat/newsboat/issues/1974
+
+	HtmlRenderer rnd;
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	const std::string input =
+		"<ul><li>Double closed list</li></ul></ul><ol><li>Other double closed list</li></ol></ol><ul><li>Test</li></ul>";
+
+	rnd.render(input, lines, links, "");
+}
