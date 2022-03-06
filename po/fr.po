@@ -891,7 +891,7 @@ msgstr "Erreur : échec de lecture d'URLS depuis le fichier \"%s\" : %s"
 #: src/fileurlreader.cpp:66
 #, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "Erreur : Echec lors de l'ouverture du fichier \"%s\" : %s"
+msgstr "Erreur : échec lors de l'ouverture du fichier \"%s\" : %s"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:352 src/rssfeed.cpp:64
 #: src/rssignores.cpp:42
@@ -1655,7 +1655,7 @@ msgstr "`%s' n'est pas un raccourci correct"
 #: src/keymap.cpp:775
 #, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Echec d'analyse de la séquence d'opérations sur %s"
+msgstr "échec d'analyse de la séquence d'opérations sur %s"
 
 #: src/keymap.cpp:793
 #, c-format
@@ -1739,7 +1739,6 @@ msgstr "commencer le téléchargement au démarrage"
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
 msgstr ""
 "File d'attente (%u téléchargements en cours, %u au total) - %.2f %s au total"
-"%s"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1866,7 +1865,7 @@ msgstr "Liens"
 #: src/utils.cpp:707
 #, c-format
 msgid "Failed to open file: %s"
-msgstr "Echec d'ouverture du fichier (%s)"
+msgstr "Echec d'ouverture du fichier %s"
 
 #: src/utils.cpp:711
 #, c-format
