@@ -554,7 +554,7 @@ msgstr "Echec d'ouverture du fichier de la file d'attente : %s"
 #: src/controller.cpp:734
 #, c-format
 msgid "An error occurred while parsing %s: %s"
-msgstr "Une erreur est survenue lors de l'analyse de %s: %s"
+msgstr "Une erreur est survenue lors de l'analyse de %s : %s"
 
 #: src/controller.cpp:741
 #, c-format
