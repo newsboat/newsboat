@@ -772,7 +772,7 @@ msgstr "Tous les fils sont marqués comme lus..."
 #: src/itemlistformaction.cpp:645 src/itemlistformaction.cpp:858
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "Erreur:  analyse de l'expression de filtrage impossible `%s' : %s"
+msgstr "Erreur : analyse de l'expression de filtrage impossible `%s' : %s"
 
 #: src/feedlistformaction.cpp:452 src/itemlistformaction.cpp:658
 msgid "No filters defined."
