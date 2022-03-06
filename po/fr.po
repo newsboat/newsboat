@@ -886,7 +886,7 @@ msgstr "Enregistrer le fichier - %s"
 #: src/fileurlreader.cpp:28
 #, c-format
 msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Erreur : échec de lecture d'URLS depuis le fichier \"%s\": %s"
+msgstr "Erreur : échec de lecture d'URLS depuis le fichier \"%s\" : %s"
 
 #: src/fileurlreader.cpp:66
 #, c-format
