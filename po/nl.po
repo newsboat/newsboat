@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-03-08 21:17+0300\n"
-"PO-Revision-Date: 2021-12-08 18:09+0100\n"
+"PO-Revision-Date: 2022-03-08 19:45+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -549,9 +549,9 @@ msgid "Failed to open queue file: %s."
 msgstr "Mislukt om wachtrij-bestand te openen (%s)"
 
 #: src/controller.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Fout: Openen van ‘%s’ is mislukt: %s"
+msgstr "Fout bij het importeren van OPML naar urls bestand %s: %s"
 
 #: src/controller.cpp:734
 #, c-format
