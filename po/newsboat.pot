@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-12-08 18:49+0300\n"
+"POT-Creation-Date: 2022-03-08 21:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -310,191 +310,196 @@ msgstr ""
 msgid "Error while processing command `%s' (%s): %s"
 msgstr ""
 
-#: src/controller.cpp:149 src/pbcontroller.cpp:233
+#: src/controller.cpp:147 src/pbcontroller.cpp:233
 #, c-format
 msgid "Starting %s %s..."
 msgstr ""
 
-#: src/controller.cpp:156 src/pbcontroller.cpp:253
+#: src/controller.cpp:154 src/pbcontroller.cpp:253
 msgid "Loading configuration..."
 msgstr ""
 
-#: src/controller.cpp:193 src/controller.cpp:243 src/controller.cpp:367
-#: src/controller.cpp:423 src/controller.cpp:427 src/controller.cpp:468
-#: src/controller.cpp:475 src/controller.cpp:491 src/controller.cpp:509
-#: src/controller.cpp:520 src/controller.cpp:564 src/pbcontroller.cpp:289
+#: src/controller.cpp:191 src/controller.cpp:241 src/controller.cpp:364
+#: src/controller.cpp:420 src/controller.cpp:424 src/controller.cpp:465
+#: src/controller.cpp:472 src/controller.cpp:488 src/controller.cpp:506
+#: src/controller.cpp:517 src/controller.cpp:561 src/pbcontroller.cpp:289
 #: src/pbcontroller.cpp:307
 msgid "done."
 msgstr ""
 
-#: src/controller.cpp:207 src/pbcontroller.cpp:242
+#: src/controller.cpp:205 src/pbcontroller.cpp:242
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
 msgstr ""
 
-#: src/controller.cpp:213 src/pbcontroller.cpp:248
+#: src/controller.cpp:211 src/pbcontroller.cpp:248
 msgid "Error: "
 msgstr ""
 
-#: src/controller.cpp:219 src/controller.cpp:422
+#: src/controller.cpp:217 src/controller.cpp:419
 msgid "Opening cache..."
 msgstr ""
 
-#: src/controller.cpp:226 src/controller.cpp:234
+#: src/controller.cpp:224 src/controller.cpp:232
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr ""
 
-#: src/controller.cpp:265
+#: src/controller.cpp:263
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr ""
 
-#: src/controller.cpp:273
+#: src/controller.cpp:271
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr ""
 
-#: src/controller.cpp:287
+#: src/controller.cpp:285
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
 msgstr ""
 
-#: src/controller.cpp:299
+#: src/controller.cpp:297
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
 
-#: src/controller.cpp:314
+#: src/controller.cpp:312
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
 msgstr ""
 
-#: src/controller.cpp:326
+#: src/controller.cpp:324
 msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
 
-#: src/controller.cpp:339
+#: src/controller.cpp:337
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
 
-#: src/controller.cpp:346
+#: src/controller.cpp:344
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:353
+#: src/controller.cpp:351
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr ""
 
-#: src/controller.cpp:375
+#: src/controller.cpp:372
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
 msgstr ""
 
-#: src/controller.cpp:381
+#: src/controller.cpp:378
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
 
-#: src/controller.cpp:386
+#: src/controller.cpp:383
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:391
+#: src/controller.cpp:388
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:396
+#: src/controller.cpp:393
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:401
+#: src/controller.cpp:398
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:406
+#: src/controller.cpp:403
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:411
+#: src/controller.cpp:408
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
 
-#: src/controller.cpp:424
+#: src/controller.cpp:421
 msgid "Cleaning up cache thoroughly..."
 msgstr ""
 
-#: src/controller.cpp:432
+#: src/controller.cpp:429
 msgid "Loading articles from cache..."
 msgstr ""
 
-#: src/controller.cpp:449
+#: src/controller.cpp:446
 msgid "Error while loading feeds from database: "
 msgstr ""
 
-#: src/controller.cpp:455
+#: src/controller.cpp:452
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr ""
 
-#: src/controller.cpp:472 src/controller.cpp:557
+#: src/controller.cpp:469 src/controller.cpp:554
 msgid "Cleaning up cache..."
 msgstr ""
 
-#: src/controller.cpp:484
+#: src/controller.cpp:481
 msgid "Prepopulating query feeds..."
 msgstr ""
 
-#: src/controller.cpp:506
+#: src/controller.cpp:503
 msgid "Importing list of read articles..."
 msgstr ""
 
-#: src/controller.cpp:517
+#: src/controller.cpp:514
 msgid "Exporting list of read articles..."
 msgstr ""
 
-#: src/controller.cpp:566
+#: src/controller.cpp:563
 msgid ""
 "Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
 
-#: src/controller.cpp:574
+#: src/controller.cpp:571
 msgid "failed: "
 msgstr ""
 
-#: src/controller.cpp:598
+#: src/controller.cpp:595
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr ""
 
-#: src/controller.cpp:701 src/itemviewformaction.cpp:229
+#: src/controller.cpp:698 src/itemviewformaction.cpp:229
 #, c-format
 msgid "Generated filename (%s) is used already."
 msgstr ""
 
-#: src/controller.cpp:706 src/itemviewformaction.cpp:234
+#: src/controller.cpp:703 src/itemviewformaction.cpp:234
 #, c-format
 msgid "Failed to open queue file: %s."
+msgstr ""
+
+#: src/controller.cpp:725
+#, c-format
+msgid "Error importing OPML to urls file %s: %s"
 msgstr ""
 
 #: src/controller.cpp:734
@@ -820,18 +825,13 @@ msgstr ""
 msgid "Save File - %s"
 msgstr ""
 
-#: src/fileurlreader.cpp:28
-#, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr ""
-
-#: src/fileurlreader.cpp:66
+#: src/fileurlreader.cpp:65
 #, c-format
 msgid "Error: failed to open file \"%s\": %s"
 msgstr ""
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:352 src/rssfeed.cpp:64
-#: src/rssignores.cpp:42
+#: src/rssignores.cpp:45
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
 msgstr ""
@@ -924,36 +924,36 @@ msgstr ""
 msgid "embedded flash:"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1001
+#: src/htmlrenderer.cpp:1003
 msgid "Links: "
 msgstr ""
 
-#: src/htmlrenderer.cpp:1032 src/htmlrenderer.cpp:1035
-#: src/htmlrenderer.cpp:1053
+#: src/htmlrenderer.cpp:1034 src/htmlrenderer.cpp:1037
+#: src/htmlrenderer.cpp:1055
 msgid "link"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1055
+#: src/htmlrenderer.cpp:1057
 msgid "image"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1057
+#: src/htmlrenderer.cpp:1059
 msgid "embedded flash"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1059
+#: src/htmlrenderer.cpp:1061
 msgid "iframe"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1061
+#: src/htmlrenderer.cpp:1063
 msgid "video"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1063
+#: src/htmlrenderer.cpp:1065
 msgid "audio"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1065
+#: src/htmlrenderer.cpp:1067
 msgid "unknown (bug)"
 msgstr ""
 
@@ -1599,7 +1599,7 @@ msgstr ""
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr ""
 
-#: src/pbcontroller.cpp:85
+#: src/pbcontroller.cpp:84
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
 msgstr ""
@@ -1718,7 +1718,7 @@ msgstr ""
 msgid "`%s' is an invalid dialog type"
 msgstr ""
 
-#: src/regexmanager.cpp:227
+#: src/regexmanager.cpp:227 src/rssignores.cpp:58
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
 msgstr ""

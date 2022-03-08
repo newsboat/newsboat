@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2021-12-08 18:49+0300\n"
+"POT-Creation-Date: 2022-03-08 21:17+0300\n"
 "PO-Revision-Date: 2018-08-08 10:17+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
@@ -332,89 +332,89 @@ msgstr "okänt kommando `%s'"
 msgid "Error while processing command `%s' (%s): %s"
 msgstr "Fel vid behandling av kommando `%s' (%s rad %u): %s"
 
-#: src/controller.cpp:149 src/pbcontroller.cpp:233
+#: src/controller.cpp:147 src/pbcontroller.cpp:233
 #, c-format
 msgid "Starting %s %s..."
 msgstr "Startar %s %s..."
 
-#: src/controller.cpp:156 src/pbcontroller.cpp:253
+#: src/controller.cpp:154 src/pbcontroller.cpp:253
 msgid "Loading configuration..."
 msgstr "Läser in konfiguration..."
 
-#: src/controller.cpp:193 src/controller.cpp:243 src/controller.cpp:367
-#: src/controller.cpp:423 src/controller.cpp:427 src/controller.cpp:468
-#: src/controller.cpp:475 src/controller.cpp:491 src/controller.cpp:509
-#: src/controller.cpp:520 src/controller.cpp:564 src/pbcontroller.cpp:289
+#: src/controller.cpp:191 src/controller.cpp:241 src/controller.cpp:364
+#: src/controller.cpp:420 src/controller.cpp:424 src/controller.cpp:465
+#: src/controller.cpp:472 src/controller.cpp:488 src/controller.cpp:506
+#: src/controller.cpp:517 src/controller.cpp:561 src/pbcontroller.cpp:289
 #: src/pbcontroller.cpp:307
 msgid "done."
 msgstr "färdig."
 
-#: src/controller.cpp:207 src/pbcontroller.cpp:242
+#: src/controller.cpp:205 src/pbcontroller.cpp:242
 #, fuzzy, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
 msgstr "Fel: en instans av %s körs redan (PID: %u)"
 
-#: src/controller.cpp:213 src/pbcontroller.cpp:248
+#: src/controller.cpp:211 src/pbcontroller.cpp:248
 msgid "Error: "
 msgstr ""
 
-#: src/controller.cpp:219 src/controller.cpp:422
+#: src/controller.cpp:217 src/controller.cpp:419
 msgid "Opening cache..."
 msgstr "Öppnar cache..."
 
-#: src/controller.cpp:226 src/controller.cpp:234
+#: src/controller.cpp:224 src/controller.cpp:232
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
 msgstr "Fel: öppnande av cache-fil `%s' misslyckades: %s"
 
-#: src/controller.cpp:265
+#: src/controller.cpp:263
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
 msgstr "FEL: Du måste sätta 'cookie-cache' till att använda NewsBlur.\n"
 
-#: src/controller.cpp:273
+#: src/controller.cpp:271
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
 msgstr "%s är oåtkomlig och kan inte skapas\n"
 
-#: src/controller.cpp:287
+#: src/controller.cpp:285
 #, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
 msgstr "FEL: Du måste sätta 'cookie-cache' till att använda NewsBlur.\n"
 
-#: src/controller.cpp:299
+#: src/controller.cpp:297
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
 
-#: src/controller.cpp:314
+#: src/controller.cpp:312
 #, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
 msgstr "FEL: Du måste sätta 'cookie-cache' till att använda NewsBlur.\n"
 
-#: src/controller.cpp:326
+#: src/controller.cpp:324
 msgid ""
 "ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
 "`miniflux-passwordfile` or `miniflux-passwordeval` to use Miniflux\n"
 msgstr ""
 
-#: src/controller.cpp:339
+#: src/controller.cpp:337
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
 
-#: src/controller.cpp:346
+#: src/controller.cpp:344
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
 msgstr ""
 
-#: src/controller.cpp:353
+#: src/controller.cpp:351
 #, c-format
 msgid "Loading URLs from %s..."
 msgstr "Läser in URL:er från %s..."
 
-#: src/controller.cpp:375
+#: src/controller.cpp:372
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
@@ -423,7 +423,7 @@ msgstr ""
 "Fel: inga URL:er konfigurerade. Var god fyll filen %s med URL:er till RSS-"
 "kanaler eller importera en OPML-fil."
 
-#: src/controller.cpp:381
+#: src/controller.cpp:378
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
@@ -431,7 +431,7 @@ msgstr ""
 "Det ser ut som om OPML-flödet som du valde att prenumerera på inte "
 "innehåller några webbflöden. Var god fyll den med webbflöden och prova igen."
 
-#: src/controller.cpp:386
+#: src/controller.cpp:383
 msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
@@ -439,7 +439,7 @@ msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt The Old "
 "Reader-konto. Var god gör det och prova igen."
 
-#: src/controller.cpp:391
+#: src/controller.cpp:388
 msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
@@ -447,7 +447,7 @@ msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt Tiny Tiny "
 "RSS-konto. Var god gör det och prova igen."
 
-#: src/controller.cpp:396
+#: src/controller.cpp:393
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
@@ -455,7 +455,7 @@ msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt NewsBlur-"
 "konto. Var god gör det och prova igen."
 
-#: src/controller.cpp:401
+#: src/controller.cpp:398
 msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
@@ -463,7 +463,7 @@ msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt Inoreader-"
 "konto. Var god gör det och prova igen."
 
-#: src/controller.cpp:406
+#: src/controller.cpp:403
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
@@ -472,7 +472,7 @@ msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt NewsBlur-"
 "konto. Var god gör det och prova igen."
 
-#: src/controller.cpp:411
+#: src/controller.cpp:408
 #, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
@@ -481,62 +481,67 @@ msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt NewsBlur-"
 "konto. Var god gör det och prova igen."
 
-#: src/controller.cpp:424
+#: src/controller.cpp:421
 msgid "Cleaning up cache thoroughly..."
 msgstr "Tömmer noggrant cache..."
 
-#: src/controller.cpp:432
+#: src/controller.cpp:429
 msgid "Loading articles from cache..."
 msgstr "Läser in artiklar från cache..."
 
-#: src/controller.cpp:449
+#: src/controller.cpp:446
 msgid "Error while loading feeds from database: "
 msgstr "Fel vid inläsning av webbflöden från databasen: "
 
-#: src/controller.cpp:455
+#: src/controller.cpp:452
 #, c-format
 msgid "Error while loading feed '%s': %s"
 msgstr "Fel vid inläsning av webbflöde `%s': %s"
 
-#: src/controller.cpp:472 src/controller.cpp:557
+#: src/controller.cpp:469 src/controller.cpp:554
 msgid "Cleaning up cache..."
 msgstr "Tömmer cache..."
 
-#: src/controller.cpp:484
+#: src/controller.cpp:481
 msgid "Prepopulating query feeds..."
 msgstr "Förbefolkar förfrågansflöden..."
 
-#: src/controller.cpp:506
+#: src/controller.cpp:503
 msgid "Importing list of read articles..."
 msgstr "Importerar lista över lästa artiklar..."
 
-#: src/controller.cpp:517
+#: src/controller.cpp:514
 msgid "Exporting list of read articles..."
 msgstr "Exporterar lista över lästa artiklar..."
 
-#: src/controller.cpp:566
+#: src/controller.cpp:563
 msgid ""
 "Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
 
-#: src/controller.cpp:574
+#: src/controller.cpp:571
 msgid "failed: "
 msgstr "misslyckades: "
 
-#: src/controller.cpp:598
+#: src/controller.cpp:595
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Fel: kunde inte markera alla webbflödeer som lästa: %s"
 
-#: src/controller.cpp:701 src/itemviewformaction.cpp:229
+#: src/controller.cpp:698 src/itemviewformaction.cpp:229
 #, c-format
 msgid "Generated filename (%s) is used already."
 msgstr ""
 
-#: src/controller.cpp:706 src/itemviewformaction.cpp:234
+#: src/controller.cpp:703 src/itemviewformaction.cpp:234
 #, fuzzy, c-format
 msgid "Failed to open queue file: %s."
+msgstr "Fel vid inläsning av webbflöde `%s': %s"
+
+#: src/controller.cpp:725
+#, fuzzy, c-format
+msgid "Error importing OPML to urls file %s: %s"
 msgstr "Fel vid inläsning av webbflöde `%s': %s"
 
 #: src/controller.cpp:734
@@ -870,18 +875,13 @@ msgstr "Fil: "
 msgid "Save File - %s"
 msgstr "Spara fil - %s"
 
-#: src/fileurlreader.cpp:28
-#, fuzzy, c-format
-msgid "Error: failed to read URLs from file \"%s\": %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
-
-#: src/fileurlreader.cpp:66
+#: src/fileurlreader.cpp:65
 #, fuzzy, c-format
 msgid "Error: failed to open file \"%s\": %s"
 msgstr "Fel vid inläsning av webbflöde `%s': %s"
 
 #: src/filtercontainer.cpp:35 src/regexmanager.cpp:352 src/rssfeed.cpp:64
-#: src/rssignores.cpp:42
+#: src/rssignores.cpp:45
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
 msgstr "kunde inte tolka filteruttryck `%s': %s"
@@ -978,36 +978,36 @@ msgstr "Töm"
 msgid "embedded flash:"
 msgstr "inbäddat flash:"
 
-#: src/htmlrenderer.cpp:1001
+#: src/htmlrenderer.cpp:1003
 msgid "Links: "
 msgstr "Länkar: "
 
-#: src/htmlrenderer.cpp:1032 src/htmlrenderer.cpp:1035
-#: src/htmlrenderer.cpp:1053
+#: src/htmlrenderer.cpp:1034 src/htmlrenderer.cpp:1037
+#: src/htmlrenderer.cpp:1055
 msgid "link"
 msgstr "länk"
 
-#: src/htmlrenderer.cpp:1055
+#: src/htmlrenderer.cpp:1057
 msgid "image"
 msgstr "bild"
 
-#: src/htmlrenderer.cpp:1057
+#: src/htmlrenderer.cpp:1059
 msgid "embedded flash"
 msgstr "inbäddat flash"
 
-#: src/htmlrenderer.cpp:1059
+#: src/htmlrenderer.cpp:1061
 msgid "iframe"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1061
+#: src/htmlrenderer.cpp:1063
 msgid "video"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1063
+#: src/htmlrenderer.cpp:1065
 msgid "audio"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1065
+#: src/htmlrenderer.cpp:1067
 msgid "unknown (bug)"
 msgstr "okänt (bugg)"
 
@@ -1668,7 +1668,7 @@ msgstr "reguljärt uttryck '%s' är ogiltigt: %s"
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Fel: kunde inte skriva artikel till fil %s"
 
-#: src/pbcontroller.cpp:85
+#: src/pbcontroller.cpp:84
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
 msgstr "XDG: konfigurationskatalog '%s' inte åtkomlig, använder '%s' istället."
@@ -1791,7 +1791,7 @@ msgstr ""
 msgid "`%s' is an invalid dialog type"
 msgstr "`%s' är en ogiltig typ av dialogruta"
 
-#: src/regexmanager.cpp:227
+#: src/regexmanager.cpp:227 src/rssignores.cpp:58
 #, c-format
 msgid "`%s' is not a valid regular expression: %s"
 msgstr "`%s' är inte ett giltigt reguljärt uttryck: %s"
