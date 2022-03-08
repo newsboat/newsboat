@@ -1,5 +1,6 @@
 pub struct TagSoupPullParser {
     input: String,
+    current_event: Event,
 }
 
 pub enum Event {
@@ -14,6 +15,7 @@ impl TagSoupPullParser {
     pub fn new(input: &str) -> TagSoupPullParser {
         TagSoupPullParser {
             input: input.to_string(),
+            current_event: Event::StartDocument,
         }
     }
 
@@ -25,8 +27,8 @@ impl TagSoupPullParser {
         panic!("Unimplemented");
     }
 
-    pub fn get_event_type() -> Event {
-        panic!("Unimplemented");
+    pub fn get_event_type(self: &TagSoupPullParser) -> &Event {
+        &self.current_event
     }
 
     pub fn get_text() -> String {
