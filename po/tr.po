@@ -1,5 +1,5 @@
 # H. Gökhan SARI <hsa2@difuzyon.net>, 2008
-# Emir SARI <emir_sari@msn.com>, 2020-2021
+# Emir SARI <emir_sari@icloud.com>, 2020-2022
 #
 msgid ""
 msgstr ""
@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-03-08 21:17+0300\n"
 "PO-Revision-Date: 2021-12-10 20:00+0300\n"
-"Last-Translator: Emir SARI <emir_sari@msn.com>\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -122,7 +122,7 @@ msgstr "başvurulmamış ögeleri önbellekten kaldır"
 
 #: newsboat.cpp:128
 msgid "Files:"
-msgstr "Dosyalar: "
+msgstr "Dosyalar:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:130
@@ -297,7 +297,7 @@ msgstr "geçersiz yapılandırma değeri `%s'"
 
 #: src/confighandlerexception.cpp:19
 msgid "invalid parameters."
-msgstr "geçersiz parametre"
+msgstr "geçersiz parametreler."
 
 #: src/confighandlerexception.cpp:21
 msgid "too few parameters."
@@ -522,7 +522,7 @@ msgid ""
 "`newsboat --cleanup`"
 msgstr ""
 "Erişilemeyen beslemeler bulundu; 'cleanup-on-quit' ayarını açın veya "
-"'newsboat --cleanup' çalıştırın."
+"'newsboat --cleanup' çalıştırın"
 
 #: src/controller.cpp:571
 msgid "failed: "
@@ -544,9 +544,9 @@ msgid "Failed to open queue file: %s."
 msgstr "Kuyruk dosyası açılamadı: %s."
 
 #: src/controller.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Hata: \"%s\" dosyası açılamadı: %s"
+msgstr "%s URL'ler dosyasını açmak için OPML içe aktarılırken hata: %s"
 
 #: src/controller.cpp:734
 #, c-format
