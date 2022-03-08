@@ -1865,7 +1865,7 @@ msgstr "Liens"
 #: src/utils.cpp:707
 #, c-format
 msgid "Failed to open file: %s"
-msgstr "Echec d'ouverture du fichier %s"
+msgstr "Echec d'ouverture du fichier : %s"
 
 #: src/utils.cpp:711
 #, c-format
