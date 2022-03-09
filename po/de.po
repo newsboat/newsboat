@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-03-08 21:17+0300\n"
-"PO-Revision-Date: 2021-12-08 17:45+0100\n"
+"PO-Revision-Date: 2022-03-09 19:45+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -548,9 +548,9 @@ msgid "Failed to open queue file: %s."
 msgstr "Öffnen der Warteschlangendatei fehlgeschlagen: %s."
 
 #: src/controller.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Fehler: Öffnen der Datei „%s“ fehlgeschlagen: %s"
+msgstr "Fehler beim OPML-Import in die urls-Datei %s: %s"
 
 #: src/controller.cpp:734
 #, c-format
