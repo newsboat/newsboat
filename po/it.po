@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-03-08 21:17+0300\n"
-"PO-Revision-Date: 2021-12-10 06:52+0200\n"
+"PO-Revision-Date: 2021-03-09 08:17+0100\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -541,9 +541,9 @@ msgid "Failed to open queue file: %s."
 msgstr "Fallita apertura del file di coda: %s."
 
 #: src/controller.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Errore: impossibile aprire il file \"%s\": %s"
+msgstr "Errore importando OPML in file url %s: %s"
 
 #: src/controller.cpp:734
 #, c-format
