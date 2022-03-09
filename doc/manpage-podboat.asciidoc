@@ -9,7 +9,7 @@ podboat - a podcast download manager for text terminals
 
 == SYNOPSIS
 
-*podboat* [-C configfile] [-q queuefile] [-a] [-h]
+*podboat* [*-C* _configfile_] [*-q* _queuefile_] [*-a*] [*-h*]
 
 
 == DESCRIPTION
@@ -21,24 +21,24 @@ can then be download with _Podboat_.
 
 == OPTIONS
 
--h, --help::
+*-h*, *--help*::
         Display help
 
--C configfile, --config-file=configfile::
+*-C* _configfile_, *--config-file*=_configfile_::
        Use an alternative configuration file
 
--q queuefile, --queue-file=queuefile::
+*-q* _queuefile_, *--queue-file*=_queuefile_::
        Use an alternative queue file
 
--a, --autodownload::
+*-a*, *--autodownload*::
        Start automatic download of all queued files on startup
 
--l loglevel, --log-level=loglevel::
-       Generate a logfile with a certain loglevel. Valid loglevels are 1 to 6. An
+*-l* _loglevel_, *--log-level*=_loglevel_::
+       Generate a logfile with a certain _loglevel_. Valid loglevels are 1 to 6. An
        actual logfile will only be written when you provide a logfile name.
 
--d logfile, --log-file=logfile::
-       Use this logfile as output when logging debug messages. Please note that this
+*-d* _logfile_, *--log-file*=_logfile_::
+       Use this _logfile_ as output when logging debug messages. Please note that this
        only works when providing a loglevel.
 
 
