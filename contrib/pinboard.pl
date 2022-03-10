@@ -7,14 +7,14 @@ use URI::Escape;
 
 ######## User settings #############
 # Daemonise the bookmarking process
-# Use this only if you are sure things 
+# Use this only if you are sure things
 # are working as expected. Needs the
 # Proc::Daemon Perl module
 # set to '0' if not needed
 my $daemon = 1;
 
 
-# Change the tag value to what you 
+# Change the tag value to what you
 # want the bookmarks to be tagged as
 # at Pinboard
 my $tag='newsbeuter';

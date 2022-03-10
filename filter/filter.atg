@@ -57,7 +57,7 @@ PRODUCTIONS
 				  stringlit<lit>					(. gen->add_matchexpr(name, op, lit); .)
 				.
 
-	blockexpr 
+	blockexpr
 				= openblock 						(. gen->open_block(); .)
 				  expr
 				  closeblock						(. gen->close_block(); .)

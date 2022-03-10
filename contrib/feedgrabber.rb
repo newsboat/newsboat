@@ -29,7 +29,7 @@ require 'gdbm'
       @maxRetries = retries
       @maxDepth = depth
       @timeout = timeout
-    
+
       @usedURLs = Array.new                               # empty array to hold used URLs
     end
 

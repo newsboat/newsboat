@@ -9,11 +9,11 @@ cols=$(tput cols)
 img_x=2
 if [[ $lines < 70 && $lines > 50 ]]; then # my full height
     img_width=80
-    img_height=20 
+    img_height=20
     img_y=35
 elif [[ $lines = 27 ]]; then # my half height
     img_width=40
-    img_height=20 
+    img_height=20
     img_y=8
 else
     notify-send "newsboat: unsupported size"
@@ -53,7 +53,7 @@ while read line; do
 	    imgfile=$((wget "https://apod.nasa.gov/$url") 2>&1 | grep "saved" | sed 1q | awk '{print $6}')
 	    ~/.config/vifm/scripts/vifmimg draw $img_x $img_y $img_width $img_height  ${imgfile:1:-1}
 	fi
-    fi    
+    fi
 done < $1 1>/dev/null & # && xdotool key --window "$(xdotool search --name nbrun | head -1)" h+q &
 
 w3m -dump -T text/html <$1 | less +k && ~/.config/vifm/scripts/vifmimg clear
