@@ -380,20 +380,18 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s est inaccessible et ne peut être créé\n"
 
 #: src/controller.cpp:285
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
 msgstr ""
-"ERREUR : Une valeur de `miniflux-url` est requise pour utiliser Miniflux\n"
+"ERREUR : Une valeur de `freshrss-url` est requise pour utiliser FreshRSS\n"
 
 #: src/controller.cpp:297
-#, fuzzy
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"ERREUR: Une valeur de `miniflux-login`, ainsi que l'une des valeurs de "
-"`miniflux-password`, `miniflux-passwordfile` ou `miniflux-passwordeval` sont "
-"requise pour utiliser Miniflux\n"
+"ERREUR: Une valeur de `freshrss-login`, ainsi que l'une des valeurs de "
+"`freshrss-password`, `freshrss-passwordfile` ou `freshrss-passwordeval` sont "
+"requise pour utiliser FreshRSS\n"
 
 #: src/controller.cpp:312
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
@@ -553,9 +551,9 @@ msgid "Failed to open queue file: %s."
 msgstr "Echec d'ouverture du fichier de la file d'attente : %s"
 
 #: src/controller.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Erreur : échec lors de l'ouverture du fichier \"%s\" : %s"
+msgstr "Erreur : échec lors de l'importation de OPML dans le fichier d'urls %s : %s"
 
 #: src/controller.cpp:734
 #, c-format
@@ -1343,10 +1341,9 @@ msgid "Go to a random unread article"
 msgstr "Lire un article au hasard"
 
 #: src/keymap.cpp:126
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read"
 msgstr ""
-"Ouvrir l'article ou l'élément dans le navigateur et le marquer comme lu"
+"Ouvrir l'article ou l'élément dans la vue URL. Marquer comme lu"
 
 #: src/keymap.cpp:133
 msgid "Open all unread items of selected feed in browser"
@@ -1984,16 +1981,14 @@ msgstr ""
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
-#, fuzzy
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr "Erreur d'analyse : caractères surnuméraires après la position %{} : %s"
+msgstr "Erreur d'analyse : caractères surnuméraires après la position %s : %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
-#, fuzzy
 msgid "Parse error at position %s: expected %s"
-msgstr "Erreur d'analyse à la position %{} : %s était attentu"
+msgstr "Erreur d'analyse à la position %s : %s était attendu"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
@@ -2013,10 +2008,9 @@ msgid "Failed to write PID to lock file '%s': %s"
 msgstr "Echec d'écriture du PID dans le fichier de verrouillage '%s' : %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
-#, fuzzy
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr ""
-"Echec de verrouillage de '%s', déjà verrouillé par le processus de PID %{}"
+"Echec du verrouillage de '%s', déjà verrouillé par le processus de PID %s"
 
 #: rust/regex-rs/src/lib.rs:161 rust/regex-rs/src/lib.rs:166
 msgid "regcomp returned code %i"
