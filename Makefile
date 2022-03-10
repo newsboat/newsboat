@@ -260,8 +260,8 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
-		doc/chapter-files.asciidoc
-	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=manpage doc/manpage-newsboat.asciidoc
+		doc/chapter-files.asciidoc doc/man.rb
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
 
 doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
 	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
@@ -270,8 +270,8 @@ doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
 		doc/chapter-podcasts.asciidoc doc/chapter-podboat.asciidoc \
 		doc/podboat-cfgcmds.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
-		doc/chapter-files.asciidoc
-	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=manpage doc/manpage-podboat.asciidoc
+		doc/chapter-files.asciidoc doc/man.rb
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-podboat.asciidoc
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/gen-example-config doc/gen-example-config.cpp
