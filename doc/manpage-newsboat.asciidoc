@@ -9,7 +9,7 @@ newsboat - an RSS/Atom feed reader for text terminals
 
 == SYNOPSIS
 
-*newsboat* [-r] [-e] [-i opmlfile] [-u urlfile] [-c cachefile] [-C configfile] [-X] [-o] [-x <command> ...] [-h]
+*newsboat* [*-r*] [*-e*] [*-i* _opmlfile_] [*-u* _urlfile_] [*-c* _cachefile_] [*-C* _configfile_] [*-X*] [*-o*] [*-x* _command_...] [*-h*]
 
 
 == DESCRIPTION
@@ -22,23 +22,23 @@ terminals on Unix or Unix-like systems such as GNU/Linux, BSD or macOS.
 
 == OPTIONS
 
--h, --help::
+*-h*, *--help*::
         Display help
 
--r, --refresh-on-start::
+*-r*, *--refresh-on-start*::
         Refresh feeds on start
 
--e, --export-to-opml::
+*-e*, *--export-to-opml*::
         Export feeds as OPML to stdout
 
--X, --vacuum::
+*-X*, *--vacuum*::
         Compact the cache by: 1) reclaiming the space that was left empty when
         data was deleted; and 2) defragmenting the entries in the cache. This
         *doesn't* delete the entries; for that, see _cleanup-on-quit_,
         _delete-read-articles-on-quit_, _keep-articles-days_, and _max-items_
         settings.
 
---cleanup::
+*--cleanup*::
         Remove unreferenced entries from the cache and quit Newsboat. Feeds and
         their articles will be removed if the feedurl is no longer in the
         _urls_ file.
@@ -47,40 +47,40 @@ Additionally, if the _delete-read-articles-on-quit_ configuration is set, all
 read articles will be deleted (including articles of feeds which are still in
 the _urls_ file).
 
--v, -V, --version::
+*-v*, *-V*, *--version*::
         Get version information about Newsboat and the libraries it uses
 
--i opmlfile, --import-from-opml=opmlfile::
+*-i* _opmlfile_, *--import-from-opml*=_opmlfile_::
        Import an OPML file
 
--u urlfile, --url-file=urlfile::
+*-u* _urlfile_, *--url-file*=_urlfile_::
        Use an alternative URL file
 
--c cachefile, --cache-file=cachefile::
+*-c* _cachefile_, *--cache-file*=_cachefile_::
        Use an alternative cache file
 
--C configfile, --config-file=configfile::
+*-C* _configfile_, *--config-file*=_configfile_::
        Use an alternative configuration file
 
--x command ..., --execute=command...::
+*-x* _command_ ..., *--execute*=_command_...::
        Execute one or more commands to run Newsboat unattended. Currently available
-       commands are "reload" and "print-unread".
+       commands are _reload_ and _print-unread_.
 
--l loglevel, --log-level=loglevel::
-       Generate a logfile with a certain loglevel. Valid loglevels are 1 to 6. An
+*-l* _loglevel_, *--log-level*=_loglevel_::
+       Generate a logfile with a certain _loglevel_. Valid loglevels are 1 to 6. An
        actual logfile will only be written when you provide a logfile name.
 
--d logfile, --log-file=logfile::
-       Use this logfile as output when logging debug messages. Please note that this
+*-d* _logfile_, *--log-file*=_logfile_::
+       Use this _logfile_ as output when logging debug messages. Please note that this
        only works when providing a loglevel.
 
--E file, --export-to-file=file::
+*-E* _file_, *--export-to-file*=_file_::
        Export a list of read articles (resp. their GUIDs). This can be used to
        transfer information about read articles between different computers.
 
--I file, --import-from-file=file::
+*-I* _file_, *--import-from-file*=_file_::
       Import a list of read articles and mark them as read if they are held in the
-      cache. This is to be used in conjunction with the -E commandline parameter.
+      cache. This is to be used in conjunction with the *-E* commandline parameter.
 
 == FIRST STEPS
 
