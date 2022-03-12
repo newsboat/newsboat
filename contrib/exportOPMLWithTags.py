@@ -52,8 +52,12 @@ try:
     body = ET.SubElement(root, 'body')
 
     try:
-        # get titles from ~/.newsboat/cache.db:
-        with sqlite3.connect(f"{os.environ['HOME']}/.newsboat/cache.db") as conn:
+        # get titles from cache.db
+        cache_path = f"{os.environ['HOME']}/.local/share/newsboat/cache.db"
+        if not os.path.exists(cache_path):
+            cache_path = f"{os.environ['HOME']}/.newsboat/cache.db"
+
+        with sqlite3.connect(cache_path) as conn:
             conn.row_factory = sqlite3.Row
             c = conn.cursor()
             c.execute("select rssurl,title from rss_feed")
