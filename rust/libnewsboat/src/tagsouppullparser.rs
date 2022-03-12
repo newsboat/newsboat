@@ -1,3 +1,5 @@
+use crate::utils::remove_soft_hyphens;
+
 struct Attribute {
     name: String,
     value: String,
@@ -70,7 +72,28 @@ impl TagSoupPullParser {
         panic!("Unimplemented");
     }
 
-    fn handle_text(self: &TagSoupPullParser, c: char) {
+    fn handle_text(self: &mut TagSoupPullParser, c: char) {
+        self.text.push(c);
+
+        let (text, remainder) = TagSoupPullParser::split_once(&self.input, '<');
+        self.text.push_str(text);
+        self.input = remainder.unwrap_or("").to_string();
+
+        self.text = TagSoupPullParser::decode_entities(&self.text);
+
+        remove_soft_hyphens(&mut self.text);
+
+        self.current_event = Event::Text;
+    }
+
+    fn decode_entities(input: &str) -> String {
         panic!("Unimplemented");
+    }
+
+    fn split_once(input: &str, split_at: char) -> (&str, Option<&str>) {
+        let mut x = input.splitn(2, split_at);
+        let text_before = x.next().unwrap_or("");
+        let remainder = x.next();
+        (text_before, remainder)
     }
 }
