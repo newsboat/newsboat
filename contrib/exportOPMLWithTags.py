@@ -58,7 +58,7 @@ try:
             c = conn.cursor()
             c.execute("select rssurl,title from rss_feed")
             db_rows = c.fetchall()
-    except sqlite.OperationalError:
+    except sqlite3.OperationalError:
         pass
 
 
