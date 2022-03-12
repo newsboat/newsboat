@@ -18,5 +18,6 @@ fn main() {
     add_cxxbridge("keymap");
     add_cxxbridge("logger");
     add_cxxbridge("scopemeasure");
+    add_cxxbridge("tagsouppullparser");
     add_cxxbridge("utils");
 }
