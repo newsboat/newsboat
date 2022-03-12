@@ -68,8 +68,39 @@ impl TagSoupPullParser {
         &self.text
     }
 
-    fn handle_tag(self: &TagSoupPullParser) {
+    fn read_tag(self: &mut TagSoupPullParser) -> Option<String> {
+        let (tag_content, remainder) = TagSoupPullParser::split_once(&self.input, '>');
+
+        let tag_content = if remainder.is_some() {
+            Some(tag_content.to_string())
+        } else {
+            None
+        };
+
+        self.input = remainder.unwrap_or("").to_string();
+        tag_content
+    }
+
+    fn parse_tag(self: &mut TagSoupPullParser, tag_content: &str) {
         panic!("Unimplemented");
+    }
+
+    fn determine_tag_type(self: &mut TagSoupPullParser) -> Event {
+        if self.text.starts_with('/') {
+            self.text = self.text[1..].to_string();
+            Event::EndTag
+        } else {
+            Event::StartTag
+        }
+    }
+
+    fn handle_tag(self: &mut TagSoupPullParser) {
+        if let Some(s) = self.read_tag() {
+            self.parse_tag(&s);
+            self.current_event = self.determine_tag_type();
+        } else {
+            self.current_event = Event::EndDocument;
+        }
     }
 
     fn handle_text(self: &mut TagSoupPullParser, c: char) {
