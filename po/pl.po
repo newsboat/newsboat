@@ -547,7 +547,7 @@ msgstr "Nie udało się otworzyć pliku kolejki: %s."
 #: src/controller.cpp:725
 #, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Nie udało się wczytać odnośników z pliku OPML \"%s\": %s"
+msgstr "Nie udało się wczytać odnośników z pliku OPML %s: %s"
 
 #: src/controller.cpp:734
 #, c-format
