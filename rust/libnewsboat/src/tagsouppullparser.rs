@@ -85,7 +85,107 @@ impl TagSoupPullParser {
     }
 
     fn parse_tag(self: &mut TagSoupPullParser, tag_content: &str) {
-        panic!("Unimplemented");
+        let whitespace = " \r\n\t";
+
+        let mut remaining = tag_content;
+
+        // Discard whitespace
+        let first_non_whitespace = remaining.find(|c| !whitespace.contains(c));
+        match first_non_whitespace {
+            Some(pos) => remaining = &remaining[pos..],
+            None => return,
+        }
+
+        // Find end of attribute name
+        let first_whitespace = remaining.find(|c| whitespace.contains(c));
+        match first_whitespace {
+            Some(pos) => self.text = remaining[..pos].to_string(),
+            None => {
+                if let Some(remaining) = remaining.strip_suffix('/') {
+                    self.text = remaining.to_string();
+                } else {
+                    self.text = remaining.to_string();
+                }
+                return;
+            }
+        }
+
+        // Handle attributes
+        while let Some(pos) = remaining.find(|c| !whitespace.contains(c)) {
+            remaining = &remaining[pos..];
+
+            let eq_or_ws_pos = remaining.find(|c| " =".contains(c));
+            let attribute_end = match eq_or_ws_pos {
+                Some(pos) => {
+                    if remaining[pos..].starts_with('=') {
+                        // TODO: Cleanup
+                        match remaining[pos..].chars().nth(1) {
+                            Some('\'') => {
+                                pos + 3
+                                    + remaining[pos + 2..]
+                                        .find('\'')
+                                        .unwrap_or_else(|| remaining[pos + 2..].len())
+                            }
+                            Some('"') => {
+                                pos + 3
+                                    + remaining[pos + 2..]
+                                        .find('"')
+                                        .unwrap_or_else(|| remaining[pos + 2..].len())
+                            }
+                            Some(_) => {
+                                pos + remaining[pos..]
+                                    .find(|c| whitespace.contains(c))
+                                    .unwrap_or_else(|| remaining[pos..].len())
+                            }
+                            None => pos + 1,
+                        }
+                    } else {
+                        pos
+                    }
+                }
+                None => remaining.len(),
+            };
+
+            self.add_attribute(&remaining[..attribute_end]);
+            remaining = &remaining[attribute_end..];
+        }
+    }
+
+    fn decode_attribute(value: &str) -> String {
+        let value = if (value.starts_with('\'') && value.ends_with('\''))
+            || (value.starts_with('"') && value.ends_with('"'))
+        {
+            if value.len() == 1 {
+                ""
+            } else {
+                &value[1..value.len() - 1]
+            }
+        } else {
+            value
+        };
+
+        Self::decode_entities(value)
+    }
+
+    fn add_attribute(self: &mut TagSoupPullParser, attribute: &str) {
+        let attribute = attribute.strip_prefix('/').unwrap_or(attribute);
+
+        if attribute.is_empty() {
+            return;
+        }
+
+        let (name, value) = Self::split_once(attribute, '=');
+        let value = match value {
+            Some(v) => v,
+            None => name,
+        };
+
+        let value = Self::decode_attribute(value);
+
+        self.attributes.push(Attribute {
+            name: name.to_lowercase(),
+            value,
+        });
     }
 
     fn determine_tag_type(self: &mut TagSoupPullParser) -> Event {
