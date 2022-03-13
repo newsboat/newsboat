@@ -42,8 +42,11 @@ impl TagSoupPullParser {
             Event::StartDocument | Event::StartTag | Event::EndTag => {
                 match self.input.chars().next() {
                     None => self.current_event = Event::EndDocument,
-                    Some('<') => self.handle_tag(),
-                    Some(c) => self.handle_text(c),
+                    Some('<') => {
+                        self.input = self.input[1..].to_string();
+                        self.handle_tag();
+                    }
+                    Some(_) => self.handle_text(),
                 }
             }
             Event::Text => self.handle_tag(),
@@ -103,9 +106,7 @@ impl TagSoupPullParser {
         }
     }
 
-    fn handle_text(self: &mut TagSoupPullParser, c: char) {
-        self.text.push(c);
-
+    fn handle_text(self: &mut TagSoupPullParser) {
         let (text, remainder) = TagSoupPullParser::split_once(&self.input, '<');
         self.text.push_str(text);
         self.input = remainder.unwrap_or("").to_string();
