@@ -114,6 +114,8 @@ void HtmlRenderer::render(std::istream& input,
 	int indent_level = 0;
 	std::vector<HtmlTag> list_elements_stack;
 	bool inside_pre = false;
+	bool pre_just_started = false;
+	size_t pre_consecutive_nl = 0;
 	bool itunes_hack = false;
 	bool inside_script = false;
 	size_t inside_style = 0;
@@ -279,6 +281,7 @@ void HtmlRenderer::render(std::istream& input,
 
 			case HtmlTag::PRE:
 				inside_pre = true;
+				pre_just_started = true;
 				add_nonempty_line(curline, tables, lines);
 				prepare_new_line(curline,
 					tables.size() ? 0 : indent_level);
@@ -757,10 +760,16 @@ void HtmlRenderer::render(std::istream& input,
 				break;
 
 			case HtmlTag::PRE:
-				add_line_softwrappable(curline, lines);
-				prepare_new_line(curline,
-					tables.size() ? 0 : indent_level);
+				if (pre_consecutive_nl > 1) {
+					lines.pop_back();
+				} else if (pre_consecutive_nl == 0) {
+					add_line_softwrappable(curline, lines);
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
+				}
 				inside_pre = false;
+				pre_just_started = false;
+				pre_consecutive_nl = 0;
 				break;
 
 			case HtmlTag::SUB:
@@ -941,18 +950,26 @@ void HtmlRenderer::render(std::istream& input,
 				}
 			} else if (inside_pre) {
 				std::vector<std::string> paragraphs =
-					utils::tokenize_nl(text);
+					utils::tokenize_spaced(text, "\r\n");
 				for (const auto& paragraph : paragraphs) {
-					if (paragraph == "\n") {
-						add_line_softwrappable(
-							curline, lines);
-						prepare_new_line(curline,
-							tables.size()
-							? 0
-							: indent_level);
+					if (paragraph.find_first_not_of("\r\n") == std::string::npos) {
+						for (size_t i = 0; i < paragraph.size(); i++) {
+							if (pre_just_started && i == 0) {
+								continue;
+							}
+							add_line_softwrappable(
+								curline, lines);
+							prepare_new_line(curline,
+								tables.size()
+								? 0
+								: indent_level);
+							pre_consecutive_nl++;
+						}
 					} else {
 						curline.append(paragraph);
+						pre_consecutive_nl = 0;
 					}
+					pre_just_started = false;
 				}
 			} else if (inside_style || inside_video || inside_audio) {
 				// skip scripts, CSS styles and fallback text for media elements
@@ -978,6 +995,11 @@ void HtmlRenderer::render(std::istream& input,
 			/* do nothing */
 			break;
 		}
+	}
+
+	// remove trailing line break if <pre> is still open
+	if (pre_consecutive_nl > 1) {
+		lines.pop_back();
 	}
 
 	// and the rest
