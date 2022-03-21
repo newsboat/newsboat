@@ -445,7 +445,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 	if (s.length() > 1 && s[0] == '#') {
 		std::string result;
 		unsigned int wc;
-		char mbc[MB_LEN_MAX];
+		char mbc[MB_LEN_MAX + 1];
 		mbc[0] = '\0';
 		if (s[1] == 'x') {
 			s.erase(0, 2);
@@ -486,6 +486,7 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 		const int pos = wcrtomb(mbc, static_cast<wchar_t>(wc), &mb_state);
 		if (pos > 0) {
 			result.append(mbc, pos);
+			mbc[pos] = '\0';
 		}
 		LOG(Level::DEBUG,
 			"TagSoupPullParser::decode_entity: wc = %u pos = %d "
