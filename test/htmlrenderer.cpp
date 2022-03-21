@@ -474,6 +474,26 @@ TEST_CASE("tags still work inside <pre>", "[HtmlRenderer]")
 	REQUIRE(links.size() == 0);
 }
 
+TEST_CASE("line breaks are preserved in tags inside <pre>", "[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<pre><span>\n\n\n"
+		"very cool</span><span>very cool indeed\n\n\n"
+		"</span></pre>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 4);
+	REQUIRE(lines[0] == p(LineType::softwrappable, ""));
+	REQUIRE(lines[1] == p(LineType::softwrappable, ""));
+	REQUIRE(lines[2] == p(LineType::softwrappable, "very coolvery cool indeed"));
+	REQUIRE(lines[3] == p(LineType::softwrappable, ""));
+	REQUIRE(links.size() == 0);
+}
+
 TEST_CASE("<img> results in a placeholder and a link", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
