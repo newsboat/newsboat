@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-03-08 21:17+0300\n"
-"PO-Revision-Date: 2022-01-31 18:32+0100\n"
+"PO-Revision-Date: 2022-03-17 21:12+0100\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -540,9 +540,9 @@ msgid "Failed to open queue file: %s."
 msgstr "Error al abrir el archivo de cola: %s."
 
 #: src/controller.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Error: no se pudo abrir el archivo \"%s\": %s"
+msgstr "Error importando OPML al archivo de URLs %s: %s"
 
 #: src/controller.cpp:734
 #, c-format
