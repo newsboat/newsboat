@@ -295,7 +295,7 @@ checksum = "1bf2e165bb3457c8e098ea76f3e3bc9db55f87aa90d52d0e6be741470916aaa4"
 
 [[package]]
 name = "libnewsboat"
-version = "2.26.0"
+version = "2.27.0"
 dependencies = [
  "backtrace",
  "chrono",
@@ -321,7 +321,7 @@ dependencies = [
 
 [[package]]
 name = "libnewsboat-ffi"
-version = "2.26.0"
+version = "2.27.0"
 dependencies = [
  "cxx",
  "cxx-build",

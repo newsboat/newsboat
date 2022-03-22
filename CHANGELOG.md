@@ -1,17 +1,57 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2022-03-20
-
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: [list people here]
+## 2.27 - 2022-03-22
 
 ### Added
+
+- Support for regexes in `ignore-article`; for example, you can now use
+    `ignore-article "https://nitter.net/.*" "title =~ \"RT by\""` to ignore all
+    retweets in your Nitter feeds. This is more efficient than matching on
+    `feedurl` from the filter expression, because this new form is only
+    evaluated for the feeds that match the regex, while the old form would run
+    for all articles of all feeds (#1913) (duarm)
+- A "universal" color scheme (Yurii H)
+- A user-contributed script to show images in Kitty terminal emulator:
+    contrib/kitty-img-pager.sh (Timm Heuss)
+- Support for XDG directories in contrib/exportOPMLWithTags.py (frogtile)
+
 ### Changed
+
 - Bumped minimum supported Rust version to 1.55.0
-### Deprecated
-### Removed
+- We now link to our own STFL fork: https://github.com/newsboat/stfl. The
+    upstream's SVN is down, and we never managed to get any of our bugfixes in
+    there anyway. Since we seem to be the last remaining STFL user, we advise
+    downstream maintainers to rely on our repo instead. Our fork is maintained to
+    the extent necessary for Newsboat
+- In manpages, command line options are now set in bold and are underlined,
+    while inline code is underlined. These changes improve readability (Lysander
+    Trischler)
+- Clarified error messages in OPML import (#1919) (bogdasar1985)
+- Updated translations: Dutch (Dennis van der Schagt), French (Tonus), German
+    (Lysander Trischler), Hungarian (maxigaz), Italian (Mauro Scomparin), Polish
+    (Michał Siemek), Russian, Ukrainian (Alexander Batischev), Spanish (Roboron3042),
+    Turkish (Emir SARI)
+- Updated vendored library json.hpp to 3.10.5, Catch2 to 2.13.8
+
 ### Fixed
+
+- Cursor jumping too far after marking a feed read when hidden feeds are present
+    (#1934) (Dennis van der Schagt)
+- Newsboat exiting with code 0 when OPML import fails (bogdasar1985)
+- XML entities not being decoded in "text/plain" entries (#1938) (bogdasar1985)
+- Crash when "ol" or "ul" tags are closed multiple times (#1974) (Dennis van der
+    Schagt)
+- Confirmation and Q&A text being almost invisible with "nord" color scheme
+    (Daryl Manning)
+- Some invalid code in contrib/exportOPMLWithTags.py (frogtile)
+- Blank lines inside tags not being preserved when inside a "pre" tag (#2003)
+    (blank X)
+- A potential crash in HTML entities decoding code (blank X)
+
 ### Security
+
+- Addressed CVE-2022-24713 (a.k.a. RUSTSEC-2022-0013) by updating "regex" crate
+    to 1.5.5 (#2008) (Alexander Batischev)
 
 
 
