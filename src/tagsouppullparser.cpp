@@ -152,19 +152,29 @@ std::string TagSoupPullParser::decode_attribute(const std::string& s)
 std::string TagSoupPullParser::decode_entities(const std::string& s)
 {
 	std::string result;
-	std::istringstream sbuf(s);
-	std::string tmp;
-	getline(sbuf, tmp, '&');
-	while (!sbuf.eof()) {
-		result.append(tmp);
-		getline(sbuf, tmp, ';');
-		if (sbuf.eof()) {
+	std::string encoded_entity;
+	size_t offset = 0;
+	size_t ampersand_offset;
+	size_t semicolon_offset;
+	while ((ampersand_offset = s.find('&', offset)) != std::string::npos) {
+		semicolon_offset = s.find(';', ampersand_offset + 1);
+		if (semicolon_offset == std::string::npos) {
 			break;
 		}
-		result.append(decode_entity(tmp));
-		getline(sbuf, tmp, '&');
+		result.append(s, offset, ampersand_offset - offset);
+		encoded_entity = decode_entity(s.substr(ampersand_offset + 1,
+					semicolon_offset - ampersand_offset - 1));
+		if (!encoded_entity.empty()) {
+			result.append(encoded_entity);
+			offset = semicolon_offset + 1;
+		} else {
+			result.push_back('&');
+			offset = ampersand_offset + 1;
+		}
 	}
-	result.append(tmp);
+	if (s.size() > offset) {
+		result.append(s, offset, std::string::npos);
+	}
 	return result;
 }
 
