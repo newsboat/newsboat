@@ -244,3 +244,58 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 	}
 }
+
+TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
+	"[TagSoupPullParser]")
+{
+	SECTION("Missing semicolon") {
+		std::istringstream input_stream("some & text");
+
+		TagSoupPullParser xpp(input_stream);
+		TagSoupPullParser::Event e;
+
+		e = xpp.get_event_type();
+		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::TEXT);
+		REQUIRE(xpp.get_text() == "some & text");
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+	}
+
+	SECTION("Unknown entity") {
+		std::istringstream input_stream("some &more; text");
+
+		TagSoupPullParser xpp(input_stream);
+		TagSoupPullParser::Event e;
+
+		e = xpp.get_event_type();
+		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::TEXT);
+		REQUIRE(xpp.get_text() == "some &more; text");
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+	}
+
+	SECTION("Valid entities after invalid entities") {
+		std::istringstream input_stream("a lone ampersand: &, and some entities: &lt;&gt;");
+
+		TagSoupPullParser xpp(input_stream);
+		TagSoupPullParser::Event e;
+
+		e = xpp.get_event_type();
+		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::TEXT);
+		REQUIRE(xpp.get_text() == "a lone ampersand: &, and some entities: <>");
+
+		e = xpp.next();
+		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+	}
+}
