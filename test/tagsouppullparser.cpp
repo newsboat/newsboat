@@ -169,7 +169,7 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 {
 	SECTION("Numbered entites") {
 		SECTION("Decimal") {
-			// 133 is used in its non-standard meaning here, designating a horizontal ellipsis
+			// 133 designates a horizontal ellipsis
 			std::istringstream input_stream("&#020;&#42;&#189;&#133;&#963;");
 
 			TagSoupPullParser xpp(input_stream);
@@ -187,7 +187,7 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 		}
 
 		SECTION("Hexadecimal") {
-			// x97 is used in its non-standard meaning here, designating an mdash
+			// x97 designates an mdash
 			std::istringstream input_stream("&#x97;&#x20;&#x048;&#x0069;");
 
 			TagSoupPullParser xpp(input_stream);
@@ -199,6 +199,28 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 			e = xpp.next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
 			REQUIRE(xpp.get_text() == "— Hi");
+
+			e = xpp.next();
+			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
+		}
+
+		SECTION("Windows codepoints") {
+			std::istringstream input_stream(
+				"&#x80;&#x82;&#x83;&#x84;&#x85;&#x86;&#x87;"
+				"&#x88;&#x89;&#x8A;&#x8B;&#x8C;&#x8E;&#x91;"
+				"&#x92;&#x93;&#x94;&#x95;&#x96;&#x97;&#x98;"
+				"&#x99;&#x9A;&#x9B;&#x9C;&#x9E;&#x9F;");
+
+			TagSoupPullParser xpp(input_stream);
+			TagSoupPullParser::Event e;
+
+			e = xpp.get_event_type();
+			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
+
+			e = xpp.next();
+			REQUIRE(e == TagSoupPullParser::Event::TEXT);
+			REQUIRE(xpp.get_text() ==
+				"€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ");
 
 			e = xpp.next();
 			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);

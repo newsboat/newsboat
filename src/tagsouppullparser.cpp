@@ -455,32 +455,90 @@ std::string TagSoupPullParser::decode_entity(std::string s)
 			s.erase(0, 1);
 			wc = utils::to_u(s);
 		}
-		// convert some common but unknown numeric entities
+		// convert some windows entities according to the spec
+		// https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state
 		switch (wc) {
-		case 133:
-			wc = 8230;
-			break; // &hellip;
-		case 134:
-			wc = 8224;
-			break; // &dagger;
-		case 135:
-			wc = 8225;
-			break; // &Dagger; (double dagger)
-		case 150:
-			wc = 8211;
-			break; // &ndash;
-		case 151:
-			wc = 8212;
-			break; // &mdash;
-		case 152:
-			wc = 732;
-			break; // &tilde;
-		case 153:
-			wc = 8482;
-			break; // &trade;
-		case 156:
-			wc = 339;
-			break; // &oelig;
+		case 0x80:
+			wc = 0x20AC;
+			break; // EURO SIGN (€)
+		case 0x82:
+			wc = 0x201A;
+			break; // SINGLE LOW-9 QUOTATION MARK (‚)
+		case 0x83:
+			wc = 0x0192;
+			break; // LATIN SMALL LETTER F WITH HOOK (ƒ)
+		case 0x84:
+			wc = 0x201E;
+			break; // DOUBLE LOW-9 QUOTATION MARK („)
+		case 0x85:
+			wc = 0x2026;
+			break; // HORIZONTAL ELLIPSIS (…)
+		case 0x86:
+			wc = 0x2020;
+			break; // DAGGER (†)
+		case 0x87:
+			wc = 0x2021;
+			break; // DOUBLE DAGGER (‡)
+		case 0x88:
+			wc = 0x02C6;
+			break; // MODIFIER LETTER CIRCUMFLEX ACCENT (ˆ)
+		case 0x89:
+			wc = 0x2030;
+			break; // PER MILLE SIGN (‰)
+		case 0x8A:
+			wc = 0x0160;
+			break; // LATIN CAPITAL LETTER S WITH CARON (Š)
+		case 0x8B:
+			wc = 0x2039;
+			break; // SINGLE LEFT-POINTING ANGLE QUOTATION MARK (‹)
+		case 0x8C:
+			wc = 0x0152;
+			break; // LATIN CAPITAL LIGATURE OE (Œ)
+		case 0x8E:
+			wc = 0x017D;
+			break; // LATIN CAPITAL LETTER Z WITH CARON (Ž)
+		case 0x91:
+			wc = 0x2018;
+			break; // LEFT SINGLE QUOTATION MARK (‘)
+		case 0x92:
+			wc = 0x2019;
+			break; // RIGHT SINGLE QUOTATION MARK (’)
+		case 0x93:
+			wc = 0x201C;
+			break; // LEFT DOUBLE QUOTATION MARK (“)
+		case 0x94:
+			wc = 0x201D;
+			break; // RIGHT DOUBLE QUOTATION MARK (”)
+		case 0x95:
+			wc = 0x2022;
+			break; // BULLET (•)
+		case 0x96:
+			wc = 0x2013;
+			break; // EN DASH (–)
+		case 0x97:
+			wc = 0x2014;
+			break; // EM DASH (—)
+		case 0x98:
+			wc = 0x02DC;
+			break; // SMALL TILDE (˜)
+		case 0x99:
+			wc = 0x2122;
+			break; // TRADE MARK SIGN (™)
+		case 0x9A:
+			wc = 0x0161;
+			break; // LATIN SMALL LETTER S WITH CARON (š)
+		case 0x9B:
+			wc = 0x203A;
+			break; // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (›)
+		case 0x9C:
+			wc = 0x0153;
+			break; // LATIN SMALL LIGATURE OE (œ)
+		case 0x9E:
+			wc = 0x017E;
+			break; // LATIN SMALL LETTER Z WITH CARON (ž)
+		case 0x9F:
+			wc = 0x0178;
+			break; // LATIN CAPITAL LETTER Y WITH DIAERESIS (Ÿ)
 		}
 
 		const int pos = wcrtomb(mbc, static_cast<wchar_t>(wc), &mb_state);
