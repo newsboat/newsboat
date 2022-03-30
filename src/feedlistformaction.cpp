@@ -771,13 +771,15 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 
 	if (curpos > 0) {
 		unsigned int i = curpos - 1;
-		LOG(Level::DEBUG,
-			"FeedListFormAction::jump_to_previous_feed: "
-			"visible_feeds[%u]",
-			i);
-		list.set_position(i);
-		feedpos = visible_feeds[i].second;
-		return true;
+		if(visible_feeds[i].first->items().size() > 0) {
+			LOG(Level::DEBUG,
+				"FeedListFormAction::jump_to_previous_feed: "
+				"visible_feeds[%u]",
+				i);
+			list.set_position(i);
+			feedpos = visible_feeds[i].second;
+			return true;
+		}
 	}
 	return false;
 }
