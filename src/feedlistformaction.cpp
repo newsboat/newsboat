@@ -771,7 +771,7 @@ bool FeedListFormAction::jump_to_previous_feed(unsigned int& feedpos)
 
 	if (curpos > 0) {
 		unsigned int i = curpos - 1;
-		if(visible_feeds[i].first->items().size() > 0) {
+		if (visible_feeds[i].first->items().size() > 0) {
 			LOG(Level::DEBUG,
 				"FeedListFormAction::jump_to_previous_feed: "
 				"visible_feeds[%u]",
