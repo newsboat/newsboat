@@ -366,14 +366,20 @@ configuration.
 
 === Key Bindings
 
-Keys, as used in the <<bind-key,`bind-key`>> configuration command, use a special syntax.
+You can bind a key to an operation with the <<bind-key,`bind-key`>> configuration command.
+An example keybinding looks like this:
+
+`bind-key <key> <operation> [<dialog>]`
+
+==== Key
+
 Lowercase keys, uppercase keys and special characters are written literally.
-The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
-written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.
-The "Space" key is written as `SPACE`. Key combinations with the "Ctrl" key,
-such as "Ctrl-R", are written as `^R`. Please be aware that all Ctrl-related
-key combinations need to be written in uppercase. The following identifiers for
-keys are supported:
+
+Key combinations with `Ctrl` are written using the caret `^`.
+For instance `Ctrl-R` equals to `^R`.
+Please be aware that all Ctrl-related key combinations need to be written in uppercase.
+
+The following identifiers for special keys are supported:
 
 - `ENTER` (Enter key)
 - `BACKSPACE` (backspace key)
@@ -387,6 +393,29 @@ keys are supported:
 - `END` (cursor to end of list/article)
 - `ESC` (Esc key)
 - `TAB` (Tab key)
+- `F1` to `F12` (F1 key to F12 key)
+
+==== Operation
+
+An operation gets executed when pressing the corresponding key.
+For a complete list of available operations see <<_newsboat_operations>> and <<_podboat_operations>>.
+
+==== Dialog
+
+A dialog is a context in which the key binding is active and is optional.
+Available dialogs are:
+
+* all (default if not specified)
+* feedlist
+* filebrowser
+* help
+* articlelist
+* article
+* tagselection
+* filterselection
+* urlview
+* podboat
+* dirbrowser
 
 === Colors
 
