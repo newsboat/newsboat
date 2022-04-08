@@ -8,7 +8,7 @@ The configuration file can contain comments, which start with the `+#+` characte
 far as the end of line.
 
 ****
-Newsboat also comes with user contributed content like scripts and color
+*User contrib* Newsboat also comes with user contributed content like scripts and color
 themes. The user contributed content can be found in
 `/usr/share/doc/newsboat/contrib/`. End users are encouraged to take a look as
 they may find something useful.
@@ -28,10 +28,12 @@ bind-key ^R reload-all # Multi argument config
 
 === Using Double Quotes
 
-_**TL;DR**: use double quotes for strings that contain spaces or double quotes.
-Escape double quotes (use `\"`) and backslashes (use `\\`). Don't escape stuff
+****
+*TL;DR* Use double quotes for strings that contain spaces or double quotes.
+Escape double quotes (use \") and backslashes (use \\). Don't escape stuff
 outside of double quotes, and don't use single quotes for quoting — Newsboat
-doesn't support that._
+doesn't support that.
+****
 
 Many of Newsboat's options expect strings as arguments, be it commands,
 passwords, dialog titles, URLs etc. Some options even take _multiple_ strings
@@ -77,7 +79,7 @@ An example keybinding looks like this:
 
 `bind-key <key> <operation> [<dialog>]`
 
-==== Key
+*Key*
 
 Lowercase keys, uppercase keys and special characters are written literally.
 
@@ -101,12 +103,12 @@ The following identifiers for special keys are supported:
 - `TAB` (Tab key)
 - `F1` to `F12` (F1 key to F12 key)
 
-==== Operation
+*Operation*
 
 An operation gets executed when pressing the corresponding key.
 For a complete list of available operations see <<_newsboat_operations>> and <<_podboat_operations>>.
 
-==== Dialog
+*Dialog*
 
 A dialog is a context in which the key binding is active and is optional.
 Available dialogs are:

@@ -37,15 +37,16 @@ configuration file:
 
 You can also import an OPML file by running `newsboat -i blogroll.opml`
 
+
 ****
-*Adding comments:* Lines that start with `#` can contain anything you want.
+*Adding comments* Lines that start with `#` can contain anything you want.
 Comments are ignored by Newsboat, but can serve as documentation for you.
 Please note, that commenting out URLs for debugging
 purposes might lead to unexpected data loss, see
 <<cleanup-on-quit,`cleanup-on-quit`>> for more details.
 ****
 
-==== Feeds with restricted access
+*Feeds with restricted access*
 
 If you need to add URLs that have restricted access, simply
 provide username/password:
@@ -63,14 +64,12 @@ for _~/.newsboat/urls_ to you and optionally your group:
 
 Newsboat makes sure to not display usernames and passwords its user interface.
 
-==== Local files as feeds
+*Local files as feeds*
 
 You can also configure local files as feeds, by prefixing the local path with
 `file://` and adding it to the _urls_ file:
 
 	file:///var/log/rss_eventlog.xml
-
-
 
 === First UI Interaction
 
@@ -85,15 +84,14 @@ You can also search for articles by pressing `/` on the _Feed List View_ or the 
 When opening an article from a search result dialog, the search phrase is highlighted.
 
 ****
-*Search history:* The history of all your searches is saved to the filesystem, to the
+*Search history* The history of all your searches is saved to the filesystem, to the
 _history.search_ file (stored next to the _cache.db_ file). By default, the
 last 100 search phrases are stored.
 
 You can influence how many search phrases are stored by configuring <<history-limit,`history-limit`>>.
 ****
 
-
-==== Feed List View
+*Feed List View*
 
 If you start Newsboat, it presents you with a list of feeds that you added previously.
 
@@ -106,7 +104,7 @@ You can now
 * press `q` to close Newsboat.
 
 ****
-*Local articles:* Newsboat keeps the articles that it downloads.
+*Local articles* Newsboat keeps the articles that it downloads.
 When you start Newsboat again and reload a feed, old articles can still be
 read even if they aren't in the current RSS feeds anymore.
 
@@ -115,7 +113,7 @@ grow endlessly by configuring <<max-items,`max-items`>>.
 ****
 
 ****
-*Caching:* Newsboat uses a number of measures to preserve the users' and feed
+*Caching* Newsboat uses a number of measures to preserve the users' and feed
 providers' bandwidth through the use of conditional HTTP downloading.
 It saves every feed's "Last-Modified" and "ETag" response header values
 (if present) and advises the feed's HTTP server to only send data if the feed
@@ -126,7 +124,7 @@ You can disable conditional HTTP downloading per feed by configuring
 <<always-download,`always-download`>>.
 ****
 
-==== Article List View
+*Article List View*
 
 After you selected a feed, you can see the list of available articles
 by their title.
@@ -138,7 +136,7 @@ You can now
 * press `/` to search all articles of this feed.
 * press `Enter` to read a selected article.
 
-==== Article View
+*Article View*
 
 On an article you can scroll through the text and read it.
 Each link in the article has a number next to it.
@@ -152,7 +150,7 @@ For numbers larger than 9 type `#`, then the number and press `Enter`.
 
 
 ****
-*Browser view:* Sometimes the content of an article is empty or just
+*Browser view* Sometimes the content of an article is empty or just
 an abstract / short description.
 You can always press `o` to view the complete article in a browser.
 The default browser is _lynx_.
