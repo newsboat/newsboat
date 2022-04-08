@@ -258,7 +258,8 @@ You can disable conditional HTTP downloading per feed by configuring
 
 ==== Article List View
 
-After you selected a feed, you can see the list of available articles by their title.
+After you selected a feed, you can see the list of available articles
+by their title.
 A `N` on the left indicates that an article wasn't read yet.
 
 You can now
@@ -274,74 +275,50 @@ Each link in the article has a number next to it.
 
 You can now
 
-* press any number to open an article link in the browser. For numbers larger than 9 type `#`, then the number and press `Enter`.
+* press any number to open an article link in the browser.
+For numbers larger than 9 type `#`, then the number and press `Enter`.
 * press `o` to open the article in the browser.
 * press `q` to go back to the _Article List View_.
 
 
 ****
-*Browser view:* Sometimes the content of an article is empty or just an abstract / short description.
+*Browser view:* Sometimes the content of an article is empty or just
+an abstract / short description.
 You can always press `o` to view the complete article in a browser.
 The default browser is _lynx_.
 
 You can use your browser of choice by configuring <<browser,`browser`>>.
 ****
 
-=== Configuration
+== Configuration
 
-Several aspects of Newsboat's behaviour can be configured via a configuration
-file _config_, which is stored next to the _urls_ file. This configuration file
-contains lines in the form `<config-command> <arg1> ...`.  The configuration
-file can also contain comments, which start with the `+#+` character and go as
-far as the end of line. If you need to enter a configuration argument that
-contains spaces, use quotes (`"`) around the whole argument. It's even possible
-to integrate the output of external commands into the configuration. The text
-between two backticks (`{backtick}`) is evaluated as shell command, and its
-output is put on its place instead. This works like backtick evaluation in
-Bourne-compatible shells and allows users to use external information from the
-system within the configuration. Backticks and `+#+` characters can be escaped
-with a backslash (e.g. `{backslash}{backtick}` and `{backslash}#`); in that
-case, they'll be replaced with literal `{backtick}` or `+#+` in the
-configuration.
+Several aspects of Newsboat can be configured via a _config_ file,
+which is stored next to the _urls_ file.
+A configuration line looks like this in general
 
-Keys, as used in the <<bind-key,`bind-key`>> configuration command, use a special syntax.
-Lowercase keys, uppercase keys and special characters are written literally.
-The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
-written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.
-The "Space" key is written as `SPACE`. Key combinations with the "Ctrl" key,
-such as "Ctrl-R", are written as `^R`. Please be aware that all Ctrl-related
-key combinations need to be written in uppercase. The following identifiers for
-keys are supported:
+`<config-command> <arg1> ...`
 
-- `ENTER` (Enter key)
-- `BACKSPACE` (backspace key)
-- `LEFT` (left cursor)
-- `RIGHT` (right cursor)
-- `UP` (up cursor)
-- `DOWN` (down cursor)
-- `PPAGE` (page up cursor)
-- `NPAGE` (page down cursor)
-- `HOME` (cursor to beginning of list/article)
-- `END` (cursor to end of list/article)
-- `ESC` (Esc key)
-- `TAB` (Tab key)
+The configuration file can contain comments, which start with the `+#+` character and go as
+far as the end of line.
 
+****
 Newsboat also comes with user contributed content like scripts and color
 themes. The user contributed content can be found in
 `/usr/share/doc/newsboat/contrib/`. End users are encouraged to take a look as
 they may find something useful.
+****
 
-=== Example Configuration
+=== Example
+
+An example configuration looks like this
 
 ----
-# a comment
-max-items        100 # such comments are possible, too
-browser          links
-show-read-feeds  no
-
-unbind-key       R
-bind-key         ^R    reload-all
+# This is a comment
+max-items 100 # Inline comments are possible, too
+unbind-key R # Single argument config
+bind-key ^R reload-all # Multi argument config
 ----
+
 
 === Using Double Quotes
 
@@ -371,7 +348,47 @@ to add _another_ layer of escaping. Thus, you end up with a command like this:
 
     pager "/usr/bin/my\\ favourite\\ pager"
 
-=== Configuring Colors
+
+=== Shell Evaluation
+
+It is also possible to integrate the output of external commands
+into the configuration. The text between two `{backtick}` backticks is evaluated
+as shell command, and its output is used. This works like backtick evaluation in
+Bourne-compatible shells and allows users to use external information from the
+system within the configuration.
+
+=== Escaping
+
+Backticks and `+#+` characters can be escaped with a backslash
+(e.g. `{backslash}{backtick}` and `{backslash}#`).
+In this case, they are replaced with literal `{backtick}` or `+#+` in the
+configuration.
+
+=== Key Bindings
+
+Keys, as used in the <<bind-key,`bind-key`>> configuration command, use a special syntax.
+Lowercase keys, uppercase keys and special characters are written literally.
+The "Enter" key is written as `ENTER`, "Tab" key as `TAB`, and the "Esc" key is
+written as `ESC`. The function keys "F1" to "F12" are written as `F1` to `F12`.
+The "Space" key is written as `SPACE`. Key combinations with the "Ctrl" key,
+such as "Ctrl-R", are written as `^R`. Please be aware that all Ctrl-related
+key combinations need to be written in uppercase. The following identifiers for
+keys are supported:
+
+- `ENTER` (Enter key)
+- `BACKSPACE` (backspace key)
+- `LEFT` (left cursor)
+- `RIGHT` (right cursor)
+- `UP` (up cursor)
+- `DOWN` (down cursor)
+- `PPAGE` (page up cursor)
+- `NPAGE` (page down cursor)
+- `HOME` (cursor to beginning of list/article)
+- `END` (cursor to end of list/article)
+- `ESC` (Esc key)
+- `TAB` (Tab key)
+
+=== Colors
 
 It is possible to configure custom color settings in Newsboat. The basic configuration
 syntax is:
@@ -462,12 +479,12 @@ The default color configuration of Newsboat looks like this:
 include::chapter-files.asciidoc[]
 
 
-=== Migrating from other RSS Feed Readers
+== Migrating from other RSS Feed Readers
 
 It is very likely that you have used other RSS feed readers before. In this
 case, it is practical to migrate the previous configuration to Newsboat.
 
-==== Newsbeuter (automatic migration)
+=== Newsbeuter (automatic migration)
 
 Newsboat is a fork of Newsbeuter, so the migration from the latter is partially
 automated. Simple enough configurations will be transferred without any user
@@ -511,7 +528,7 @@ for Newsbeuter, _~/.newsboat/_ exists and _~/.newsboat/urls_ doesn't exist, then
 Newsboat will migrate XDG files and proceed, ignoring the dotdir. Please don't
 confuse the poor program like that!
 
-==== Other readers (via OPML)
+=== Other readers (via OPML)
 
 The vast amount of RSS feed readers allows the export of subscriptions via OPML
 files. OPML is an XML file format that was designed to save outlines, and has
