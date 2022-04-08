@@ -1,0 +1,209 @@
+Several aspects of Newsboat can be configured via a _config_ file,
+which is stored next to the _urls_ file.
+A configuration line looks like this in general
+
+`<config-command> <arg1> ...`
+
+The configuration file can contain comments, which start with the `+#+` character and go as
+far as the end of line.
+
+****
+Newsboat also comes with user contributed content like scripts and color
+themes. The user contributed content can be found in
+`/usr/share/doc/newsboat/contrib/`. End users are encouraged to take a look as
+they may find something useful.
+****
+
+=== Example
+
+An example configuration looks like this
+
+----
+# This is a comment
+max-items 100 # Inline comments are possible, too
+unbind-key R # Single argument config
+bind-key ^R reload-all # Multi argument config
+----
+
+
+=== Using Double Quotes
+
+_**TL;DR**: use double quotes for strings that contain spaces or double quotes.
+Escape double quotes (use `\"`) and backslashes (use `\\`). Don't escape stuff
+outside of double quotes, and don't use single quotes for quoting — Newsboat
+doesn't support that._
+
+Many of Newsboat's options expect strings as arguments, be it commands,
+passwords, dialog titles, URLs etc. Some options even take _multiple_ strings
+at once. These strings can contain spaces, which might confuse Newsboat since
+it already uses spaces to separate option names from option arguments.
+
+To help Newsboat understand your intent, put such strings into double quotes:
+
+    browser "firefox --new-tab %u"
+
+What if you need a double quote inside a string? Escape it with a backslash:
+
+    ocnews-password "UnbalancedQuotes\"AreSoFun!"
+
+And what about the backslash itself? Escape it, too! Suppose you have a program
+called `my favourite pager`, and you want to view articles with it. Newsboat
+ultimately passes commands to the shell, and shell expects spaces to be escaped
+if you want them preserved. But since Newsboat interprets backslashes, you have
+to add _another_ layer of escaping. Thus, you end up with a command like this:
+
+    pager "/usr/bin/my\\ favourite\\ pager"
+
+
+=== Shell Evaluation
+
+It is also possible to integrate the output of external commands
+into the configuration. The text between two `{backtick}` backticks is evaluated
+as shell command, and its output is used. This works like backtick evaluation in
+Bourne-compatible shells and allows users to use external information from the
+system within the configuration.
+
+=== Escaping
+
+Backticks and `+#+` characters can be escaped with a backslash
+(e.g. `{backslash}{backtick}` and `{backslash}#`).
+In this case, they are replaced with literal `{backtick}` or `+#+` in the
+configuration.
+
+=== Key Bindings
+
+You can bind a key to an operation with the <<bind-key,`bind-key`>> configuration command.
+An example keybinding looks like this:
+
+`bind-key <key> <operation> [<dialog>]`
+
+==== Key
+
+Lowercase keys, uppercase keys and special characters are written literally.
+
+Key combinations with `Ctrl` are written using the caret `^`.
+For instance `Ctrl-R` equals to `^R`.
+Please be aware that all Ctrl-related key combinations need to be written in uppercase.
+
+The following identifiers for special keys are supported:
+
+- `ENTER` (Enter key)
+- `BACKSPACE` (backspace key)
+- `LEFT` (left cursor)
+- `RIGHT` (right cursor)
+- `UP` (up cursor)
+- `DOWN` (down cursor)
+- `PPAGE` (page up cursor)
+- `NPAGE` (page down cursor)
+- `HOME` (cursor to beginning of list/article)
+- `END` (cursor to end of list/article)
+- `ESC` (Esc key)
+- `TAB` (Tab key)
+- `F1` to `F12` (F1 key to F12 key)
+
+==== Operation
+
+An operation gets executed when pressing the corresponding key.
+For a complete list of available operations see <<_newsboat_operations>> and <<_podboat_operations>>.
+
+==== Dialog
+
+A dialog is a context in which the key binding is active and is optional.
+Available dialogs are:
+
+* all (default if not specified)
+* feedlist
+* filebrowser
+* help
+* articlelist
+* article
+* tagselection
+* filterselection
+* urlview
+* podboat
+* dirbrowser
+
+=== Colors
+
+It is possible to configure custom color settings in Newsboat. The basic configuration
+syntax is:
+
+	color <element> <foreground color> <background color> [<attribute> ...]
+
+This means that if you configure colors for a certain element, you need to provide
+a foreground color and a background color as a minimum. The following colors are
+supported:
+
+- `black`
+- `red`
+- `green`
+- `yellow`
+- `blue`
+- `magenta`
+- `cyan`
+- `white`
+- `default`
+- `color<n>`, e.g. `color123`
+
+The `default` color means that the terminal's default color will be used. The
+`color<n>` color name (where `<n>` is a decimal number *not* starting with zero)
+can be used if your terminal supports 256 colors (e.g. `gnome-terminal`, or `xterm`
+with `TERM` set to `xterm-256color`). Newsboat contains support for 256 color
+terminals since version 2.1. For a complete chart of colors and their
+corresponding numbers, please see
+https://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
+
+Optionally, you can also add one or more attributes. The following attributes are
+supported:
+
+- `standout`
+- `underline`
+- `reverse`
+- `blink`
+- `dim`
+- `bold`
+- `protect`
+- `invis`
+
+Currently, the following elements are supported:
+
+- `background`: the application background
+- `listnormal`: a normal list item
+- `listfocus`: the currently selected list item
+- `listnormal_unread`: an unread list item
+- `listfocus_unread`: the currently selected unread list item
+- `title` (_added in 2.25_): current dialog's title, which is usually at the
+  top of the screen (but see <<show-title-bar,`show-title-bar`>> and
+  <<swap-title-and-hints,`swap-title-and-hints`>>). If you don't specify
+  a style for this element, then the `info` style is used
+- `info`: the hints bar, which is usually at the bottom of the screen (but see
+  <<show-keymap-hint,`show-keymap-hint`>> and
+  <<swap-title-and-hints,`swap-title-and-hints`>>)
+- `hint-key` (_added in 2.25_): a key in the hints bar. If you don't specify
+  a style for this element, then the `info` style is used
+- `hint-keys-delimiter` (_added in 2.25_): the comma that separates keys in the
+  hints bar. If you don't specify a style for this element, then the `info`
+  style is used
+- `hint-separator` (_added in 2.25_): the colon separating keys from their
+  descriptions in the hints bar. If you don't specify a style for this element,
+  then the `info` style is used
+- `hint-description` (_added in 2.25_): a description of a key in the hints
+  bar. If you don't specify a style for this element, then the `info` style is
+  used
+- `article`: the article text
+- `end-of-text-marker`: filler lines (~) below blocks of text
+
+The default color configuration of Newsboat looks like this:
+
+	color background          white   black
+	color listnormal          white   black
+	color listfocus           yellow  blue   bold
+	color listnormal_unread   magenta black
+	color listfocus_unread    magenta blue   bold
+	color title               yellow  blue   bold
+	color info                yellow  blue   bold
+	color hint-key            yellow  blue   bold
+	color hint-keys-delimiter yellow  white
+	color hint-separator      yellow  white  bold
+	color hint-description    yellow  white
+	color article             white   black
