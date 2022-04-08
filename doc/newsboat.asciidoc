@@ -206,12 +206,22 @@ You can also configure local files as feeds, by prefixing the local path with
 
 The main UI of Newsboat consists of three views
 
-****
-_Feed List View_ -> _Article List View_ -> _Article View_
-****
+_Feed List View -> Article List View -> Article View_
 
 You can drill down those views by pressing `Enter` and move to the previous one by pressing
 `q`. Pressing `q` on the _Feed List View_ — or pressing `Q` from anywhere — closes Newsboat.
+
+You can also search for articles by pressing `/` on the _Feed List View_ or the _Article List View_.
+When opening an article from a search result dialog, the search phrase is highlighted.
+
+****
+*Search history:* The history of all your searches is saved to the filesystem, to the
+_history.search_ file (stored next to the _cache.db_ file). By default, the
+last 100 search phrases are stored.
+
+You can influence how many search phrases are stored by configuring <<history-limit,`history-limit`>>.
+****
+
 
 ==== Feed List View
 
@@ -221,7 +231,9 @@ You can now
 
 * press `R` to download articles for all feeds.
 * press `r` to download articles for the selected feed.
+* press `/` to search all articles in all feeds.
 * press `Enter` to go to the article list of a selected feed (works while downloading).
+* press `q` to close Newsboat.
 
 ****
 *Local articles:* Newsboat keeps the articles that it downloads.
@@ -251,19 +263,19 @@ A `N` on the left indicates that an article wasn't read yet.
 
 You can now
 
-* press `Enter` to read a selected article.
 * press `q` to go back to the _Feed List View_.
+* press `/` to search all articles of this feed.
+* press `Enter` to read a selected article.
 
 ==== Article View
 
 On an article you can scroll through the text and read it.
-
 Each link in the article has a number next to it.
-Simply press that number to open its URL in the browser.
-For numbers larger than 9 type `#`, then the number and press `Enter`.
 
 You can now
 
+* press any number to open an article link in the browser. For numbers larger than 9 type `#`, then the number and press `Enter`.
+* press `o` to open the article in the browser.
 * press `q` to go back to the _Article List View_.
 
 
@@ -291,19 +303,6 @@ system within the configuration. Backticks and `+#+` characters can be escaped
 with a backslash (e.g. `{backslash}{backtick}` and `{backslash}#`); in that
 case, they'll be replaced with literal `{backtick}` or `+#+` in the
 configuration.
-
-Searching for articles is possible in Newsboat, too. Just press the "/" key,
-enter your search phrase, and the title and content of all articles are
-searched for it. When you do a search from the list of feeds, all articles of
-all feeds will be searched. When you do a search from the article list of a
-feed, only the articles of the currently viewed feed are searched. When opening
-an article from a search result dialog, the search phrase is highlighted.
-
-The history of all your searches is saved to the filesystem, to the
-_history.search_ file (stored next to the _cache.db_ file). By default, the
-last 100 search phrases are stored, but this limited can be influenced through
-the <<history-limit,`history-limit`>> configuration variable. To disable search
-history saving, simply set the `history-limit` to `0`.
 
 Keys, as used in the <<bind-key,`bind-key`>> configuration command, use a special syntax.
 Lowercase keys, uppercase keys and special characters are written literally.
