@@ -191,7 +191,7 @@ for _~/.newsboat/urls_ to you and optionally your group:
 
     $ chmod u=rw,g=r,o= ~/.newsboat/urls
 
-Newsboat makes sure to not display usernames and passwords its user interface.
+Newsboat makes sure to not display usernames and passwords in its user interface.
 
 ==== Local files as feeds
 
@@ -402,7 +402,7 @@ For a complete list of available operations see <<_newsboat_operations>> and <<_
 
 ==== Dialog
 
-A dialog is a context in which the key binding is active and is optional.
+A dialog is an optional context in which the key binding is active.
 Available dialogs are:
 
 * all (default if not specified)
