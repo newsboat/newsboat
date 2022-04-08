@@ -155,75 +155,127 @@ usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> .
         --cleanup                   remove unreferenced items from cache
 ----
 
-This means that Newsboat can't start without any configured feeds. To add
-feeds to Newsboat, you can either add URLs to the configuration file
-_~/.newsboat/urls_ or you can import an OPML file by running `newsboat -i
-blogroll.opml`. To manually add URLs, open the file with your favorite text
-editor and add the URLs, one per line:
+This means that Newsboat can't start without any configured feeds.
+
+=== Adding Feeds
+
+To add feeds to Newsboat, you can simply add one feed URL per line to the _~/.newsboat/urls_
+configuration file:
 
 	http://rss.cnn.com/rss/cnn_topstories.rss
 	http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
 
-If you need to add URLs that have restricted access via username/password, simply
-provide the username/password in the following way:
+You can also import an OPML file by running `newsboat -i blogroll.opml`
+
+****
+*Adding comments:* Lines that start with `#` can contain anything you want.
+Comments are ignored by Newsboat, but can serve as documentation for you.
+Please note, that commenting out URLs for debugging
+purposes might lead to unexpected data loss, see
+<<cleanup-on-quit,`cleanup-on-quit`>> for more details.
+****
+
+==== Feeds with restricted access
+
+If you need to add URLs that have restricted access, simply
+provide username/password:
 
 	https://username:password@hostname.domain.tld/feed.rss
 
-In order to protect username and password, make sure that
-_~/.newsboat/urls_ is only readable by you and, optionally, your group:
+In case there is a _@_ in the username, you need to write it as _%40_.
+This way it can be distinguished from the _@_ in the
+`username:password@hostname` part.
+
+In order to protect usernames and passwords, make sure to restrict read access
+for _~/.newsboat/urls_ to you and optionally your group:
 
     $ chmod u=rw,g=r,o= ~/.newsboat/urls
 
-Newsboat also makes sure that usernames and passwords within URLs aren't
-displayed in its user interface. In case there is a _@_ in the username, you
-need to write it as _%40_ instead so that it can be distinguished from the _@_
-that separates the username/password part from the hostname part.
+Newsboat makes sure to not display usernames and passwords its user interface.
+
+==== Local files as feeds
 
 You can also configure local files as feeds, by prefixing the local path with
 `file://` and adding it to the _urls_ file:
 
 	file:///var/log/rss_eventlog.xml
 
-The _urls_ file can also contain comments: lines that start with `#` can
-contain anything you want. Comments are ignored by Newsboat, but can serve as
-documentation for you. Please note, that commenting out URLs for debugging
-purposes might lead to unexpected data loss, see the
-<<cleanup-on-quit,`cleanup-on-quit`>> setting below for details.
 
-Now you can run Newsboat again, and it will present you with a controllable
-list of the URLs that you configured previously. You can now start downloading
-the feeds, either by pressing "R" to download all feeds, or by pressing "r" to
-download the currently selected feed. You can then select a feed you want to
-read, and by pressing "Enter", you can go to the article list for this feed.
-This works even while the downloading is still in progress.
 
-You can now see the list of available articles by their title. A "N" on the
-left indicates that an article wasn't read yet. Pressing "Enter" brings you to
-the content of the article. You can scroll through this text, and also run
-a browser (default: lynx) to view the complete article if the content is empty
-or just an abstract or a short description. Each URL in the article has
-a number next to it; to open it, type `#` and then the number, then press
-"Enter". For single-digit links, like 3, you can just press that number on the
-keyboard.
+=== First UI Interaction
 
-Pressing "q" brings you back to the article list, and pressing "q" again brings
-you back to the feed list. Pressing "q" a third time then closes Newsboat.
+The main UI of Newsboat consists of three views
 
-Newsboat caches the article that it downloads. This means that when you start
-Newsboat again and reload a feed, the old articles can still be read even if
-they aren't in the current RSS feeds anymore. Optionally you can configure how
-many articles shall be preserved by feed so that the article backlog doesn't
-grow endlessly (see <<max-items,`max-items`>> below).
+****
+_Feed List View_ -> _Article List View_ -> _Article View_
+****
 
-Newsboat also uses a number of measures to preserve the users' and feed
-providers' bandwidth, by trying to avoid unnecessary feed downloads through the
-use of conditional HTTP downloading. It saves every feed's "Last-Modified" and
-"ETag" response header values (if present) and advises the feed's HTTP server
-to only send data if the feed has been updated by modification date/time or
-"ETag" header. This doesn't only make feed downloads for RSS feeds with no new
+You can drill down those views by pressing `Enter` and move to the previous one by pressing
+`q`. Pressing `q` on the _Feed List View_ — or pressing `Q` from anywhere — closes Newsboat.
+
+==== Feed List View
+
+If you start Newsboat, it presents you with a list of feeds that you added previously.
+
+You can now
+
+* press `R` to download articles for all feeds.
+* press `r` to download articles for the selected feed.
+* press `Enter` to go to the article list of a selected feed (works while downloading).
+
+****
+*Local articles:* Newsboat keeps the articles that it downloads.
+When you start Newsboat again and reload a feed, old articles can still be
+read even if they aren't in the current RSS feeds anymore.
+
+You can configure how many articles are kept per feed so that the article backlog doesn't
+grow endlessly by configuring <<max-items,`max-items`>>.
+****
+
+****
+*Caching:* Newsboat uses a number of measures to preserve the users' and feed
+providers' bandwidth through the use of conditional HTTP downloading.
+It saves every feed's "Last-Modified" and "ETag" response header values
+(if present) and advises the feed's HTTP server to only send data if the feed
+has been updated. This doesn't only make feed downloads for RSS feeds with no new
 updates faster, it also reduces the amount of transferred data per request.
-Conditional HTTP downloading can be optionally disabled per feed by using the
-<<always-download,`always-download`>> configuration command.
+
+You can disable conditional HTTP downloading per feed by configuring
+<<always-download,`always-download`>>.
+****
+
+==== Article List View
+
+After you selected a feed, you can see the list of available articles by their title.
+A `N` on the left indicates that an article wasn't read yet.
+
+You can now
+
+* press `Enter` to read a selected article.
+* press `q` to go back to the _Feed List View_.
+
+==== Article View
+
+On an article you can scroll through the text and read it.
+
+Each link in the article has a number next to it.
+Simply press that number to open its URL in the browser.
+For numbers larger than 9 type `#`, then the number and press `Enter`.
+
+You can now
+
+* press `q` to go back to the _Article List View_.
+
+
+****
+*Browser view:* Sometimes the content of an article is empty or just an abstract / short description.
+You can always press `o` to view the complete article in a browser.
+The default browser is _lynx_.
+
+You can use your browser of choice by configuring <<browser,`browser`>>.
+****
+
+=== Configuration
 
 Several aspects of Newsboat's behaviour can be configured via a configuration
 file _config_, which is stored next to the _urls_ file. This configuration file
