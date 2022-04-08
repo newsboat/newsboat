@@ -228,7 +228,9 @@ doc/cmdline-commands-linked.asciidoc: doc/cmdline-commands.dsv
 
 doc/xhtml/newsboat.html: doc/chapter-tagging.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-snownews.asciidoc
+doc/xhtml/newsboat.html: doc/chapter-firststeps.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-cmdline.asciidoc
+doc/xhtml/newsboat.html: doc/chapter-configuration.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-podcasts.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-podboat.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-files.asciidoc
@@ -254,10 +256,10 @@ doc/generate2: doc/generate2.cpp
 doc/newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
 	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
 
-doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc \
+doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/newsboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
-		doc/chapter-cmdline.asciidoc \
+		doc/chapter-cmdline.asciidoc doc/chapter-configuration.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
