@@ -146,7 +146,7 @@ Each link in the article has a number next to it.
 You can now
 
 * press any number to open an article link in the browser.
-For numbers larger than 9 type `#`, then the number and press `Enter`.
+  For numbers larger than 9 type `#`, then the number and press `Enter`.
 * press `o` to open the article in the browser.
 * press `q` to go back to the _Article List View_.
 
