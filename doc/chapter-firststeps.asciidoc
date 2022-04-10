@@ -80,7 +80,9 @@ _Feed List View -> Article List View -> Article View_
 You can drill down those views by pressing `Enter` and move to the previous one by pressing
 `q`. Pressing `q` on the _Feed List View_ — or pressing `Q` from anywhere — closes Newsboat.
 
-You can also search for articles by pressing `/` on the _Feed List View_ or the _Article List View_.
+You can also search an articles' title or content by pressing `/` on the _Feed List View_ or the _Article List View_.
+On the _Feed List View_ all articles of all feeds are taken into account.
+On the _Article List View_ the articles of the current feed are taken into account.
 When opening an article from a search result dialog, the search phrase is highlighted.
 
 ****
