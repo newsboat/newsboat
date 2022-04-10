@@ -1,4 +1,3 @@
-
 After you've installed Newsboat, you can run it for the first time by typing
 `newsboat` on your command prompt. This will bring you the following message:
 
@@ -97,13 +96,13 @@ You can influence how many search phrases are stored by configuring <<history-li
 
 When you start Newsboat, it presents you with a list of feeds that you added previously.
 
-You can now
+You can now:
 
-* press `R` to download articles for all feeds.
-* press `r` to download articles for the selected feed.
-* press `/` to search all articles in all feeds.
-* press `Enter` to go to the article list of a selected feed.
-* press `q` to close Newsboat.
+* Press `R` to download articles for all feeds.
+* Press `r` to download articles for the selected feed.
+* Press `/` to search all articles in all feeds.
+* Press `Enter` to go to the article list of a selected feed.
+* Press `q` to close Newsboat.
 
 ****
 *Local articles* Newsboat keeps the articles that it downloads.
@@ -132,23 +131,23 @@ After you entered a feed, you can see the list of available articles
 by their title.
 A `N` on the left indicates that an article wasn't read yet.
 
-You can now
+You can now:
 
-* press `q` to go back to the _Feed List View_.
-* press `/` to search all articles of this feed.
-* press `Enter` to read a selected article.
+* Press `q` to go back to the _Feed List View_.
+* Press `/` to search all articles of this feed.
+* Press `Enter` to read a selected article.
 
 *Article View*
 
 On an article you can scroll through the text and read it.
 Each link in the article has a number next to it.
 
-You can now
+You can now:
 
-* press any number to open an article link in the browser.
+* Press any number to open an article link in the browser.
   For numbers larger than 9 type `#`, then the number and press `Enter`.
-* press `o` to open the article in the browser.
-* press `q` to go back to the _Article List View_.
+* Press `o` to open the article in the browser.
+* Press `q` to go back to the _Article List View_.
 
 
 ****
