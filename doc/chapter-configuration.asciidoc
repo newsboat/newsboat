@@ -75,7 +75,9 @@ configuration.
 === Key Bindings
 
 You can bind a key to an operation with the <<bind-key,`bind-key`>> configuration command.
-An example keybinding looks like this:
+You can specify an optional dialog. This is the context in which the key binding is active.
+
+The syntax for a key binding looks like this:
 
     bind-key <key> <operation> [<dialog>]
 
@@ -110,20 +112,20 @@ For a complete list of available operations see <<_newsboat_operations>> and <<_
 
 *Dialog*
 
-A dialog is a context in which the key binding is active and is optional.
+A dialog is a context in which the key binding is active.
 Available dialogs are:
 
-* all (default if not specified)
-* feedlist
-* filebrowser
-* help
-* articlelist
-* article
-* tagselection
-* filterselection
-* urlview
-* podboat
-* dirbrowser
+* `all` (default if not specified)
+* `feedlist`
+* `filebrowser`
+* `help`
+* `articlelist`
+* `article`
+* `tagselection`
+* `filterselection`
+* `urlview`
+* `podboat`
+* `dirbrowser`
 
 === Colors
 
