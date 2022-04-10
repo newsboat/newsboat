@@ -52,6 +52,8 @@ provide username/password:
 
 	https://username:password@hostname.domain.tld/feed.rss
 
+In case there is a _@_ in the username, you need to write it as _%40_.
+
 In order to protect usernames and passwords, make sure to restrict read access
 for _~/.newsboat/urls_ to you and optionally your group:
 
