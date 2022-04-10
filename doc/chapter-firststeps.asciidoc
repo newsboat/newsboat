@@ -62,7 +62,7 @@ for _~/.newsboat/urls_ to you and optionally your group:
 
     $ chmod u=rw,g=r,o= ~/.newsboat/urls
 
-Newsboat makes sure to not display usernames and passwords its user interface.
+Newsboat makes sure to not display usernames and passwords in its user interface.
 
 *Local files as feeds*
 
@@ -80,7 +80,7 @@ _Feed List View -> Article List View -> Article View_
 You can drill down those views by pressing `Enter` and move to the previous one by pressing
 `q`. Pressing `q` on the _Feed List View_ — or pressing `Q` from anywhere — closes Newsboat.
 
-You can also search an articles' title or content by pressing `/` on the _Feed List View_ or the _Article List View_.
+You can also search articles' title or content by pressing `/` on the _Feed List View_ or the _Article List View_.
 On the _Feed List View_ all articles of all feeds are taken into account.
 On the _Article List View_ the articles of the current feed are taken into account.
 When opening an article from a search result dialog, the search phrase is highlighted.
@@ -95,14 +95,14 @@ You can influence how many search phrases are stored by configuring <<history-li
 
 *Feed List View*
 
-If you start Newsboat, it presents you with a list of feeds that you added previously.
+When you start Newsboat, it presents you with a list of feeds that you added previously.
 
 You can now
 
 * press `R` to download articles for all feeds.
 * press `r` to download articles for the selected feed.
 * press `/` to search all articles in all feeds.
-* press `Enter` to go to the article list of a selected feed (works while downloading).
+* press `Enter` to go to the article list of a selected feed.
 * press `q` to close Newsboat.
 
 ****
@@ -128,7 +128,7 @@ You can disable conditional HTTP downloading per feed by configuring
 
 *Article List View*
 
-After you selected a feed, you can see the list of available articles
+After you entered a feed, you can see the list of available articles
 by their title.
 A `N` on the left indicates that an article wasn't read yet.
 

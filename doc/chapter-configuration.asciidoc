@@ -1,8 +1,8 @@
 Several aspects of Newsboat can be configured via a _config_ file,
 which is stored next to the _urls_ file.
-A configuration line looks like this in general
+A configuration line looks like this in general:
 
-`<config-command> <arg1> ...`
+    <config-command> <arg1> ...
 
 The configuration file can contain comments, which start with the `+#+` character and go as
 far as the end of line.
@@ -77,7 +77,7 @@ configuration.
 You can bind a key to an operation with the <<bind-key,`bind-key`>> configuration command.
 An example keybinding looks like this:
 
-`bind-key <key> <operation> [<dialog>]`
+    bind-key <key> <operation> [<dialog>]
 
 *Key*
 
