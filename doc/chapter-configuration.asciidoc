@@ -19,12 +19,14 @@ they may find something useful.
 An example configuration looks like this
 
 ----
-# This is a comment
-max-items 100 # Inline comments are possible, too
-unbind-key R # Single argument config
-bind-key ^R reload-all # Multi argument config
-----
+# a comment
+max-items        100 # such comments are possible, too
+browser          links
+show-read-feeds  no
 
+unbind-key       R
+bind-key         ^R    reload-all
+----
 
 === Using Double Quotes
 
@@ -55,7 +57,6 @@ if you want them preserved. But since Newsboat interprets backslashes, you have
 to add _another_ layer of escaping. Thus, you end up with a command like this:
 
     pager "/usr/bin/my\\ favourite\\ pager"
-
 
 === Shell Evaluation
 
