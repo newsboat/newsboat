@@ -74,7 +74,7 @@ public:
 
 	void restore_selected_position();
 
-private:
+protected:
 	void register_format_styles();
 
 	void do_update_visible_items();

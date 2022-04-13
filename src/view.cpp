@@ -53,6 +53,7 @@ extern "C" {
 #include "urlview.h"
 #include "urlviewformaction.h"
 #include "utils.h"
+#include "searchresultsformaction.h"
 
 namespace {
 bool ctrl_c_hit = false;
@@ -444,18 +445,25 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 {
 	assert(feed != nullptr);
 	LOG(Level::DEBUG, "View::push_searchresult: pushing search result");
-
 	if (feed->total_item_count() > 0) {
-		auto searchresult = std::make_shared<ItemListFormAction>(
+		if(this->get_current_formaction()->id() != "searchresultslist") {
+			auto searchresult = std::make_shared<SearchResultsFormAction>(
 				this, itemlist_str, rsscache, filters, cfg, rxman);
-		searchresult->set_feed(feed);
-		searchresult->set_show_searchresult(true);
-		searchresult->set_searchphrase(phrase);
-		apply_colors(searchresult);
-		searchresult->set_parent_formaction(get_current_formaction());
-		searchresult->init();
-		formaction_stack.push_back(searchresult);
-		current_formaction = formaction_stack_size() - 1;
+			searchresult->set_feed(feed);
+			searchresult->set_show_searchresult(true);
+			searchresult->set_searchphrase(phrase);
+			apply_colors(searchresult);
+			searchresult->set_parent_formaction(get_current_formaction());
+			searchresult->add_history(feed);
+			searchresult->init();
+			formaction_stack.push_back(searchresult);
+			current_formaction = formaction_stack_size() - 1;
+		} else {
+			auto searchresult = std::static_pointer_cast<SearchResultsFormAction>(this->get_current_formaction());
+			searchresult->set_feed(feed);
+			searchresult->add_history(feed);
+			searchresult->set_searchphrase(phrase);
+		}
 	} else {
 		status_line.show_error(_("Error: feed contains no items!"));
 	}
