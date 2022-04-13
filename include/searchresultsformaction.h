@@ -18,12 +18,12 @@ public:
 		ConfigContainer* cfg,
 		RegexManager& r)
 		: ItemListFormAction(
-				vv,
-				formstr,
-				cc,
-				f,
-				cfg,
-				r) {};
+			  vv,
+			  formstr,
+			  cc,
+			  f,
+			  cfg,
+			  r) {};
 
 	std::string id() const override
 	{
@@ -49,16 +49,14 @@ protected:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override
 	{
-		switch(op) {
+		switch (op) {
 		case OP_NEXTSEARCHRESULTS:
-			if(searchistorypos != searchresultshistory.size() - 1)
-			{
+			if (searchistorypos != searchresultshistory.size() - 1) {
 				this->set_feed(searchresultshistory[++searchistorypos]);
 			}
 			break;
 		case OP_PREVSEARCHRESULTS:
-			if(searchistorypos > 0)
-			{
+			if (searchistorypos > 0) {
 				this->set_feed(searchresultshistory[--searchistorypos]);
 			}
 			break;
