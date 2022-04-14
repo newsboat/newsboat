@@ -43,6 +43,7 @@ public:
 	void add_history(const std::shared_ptr<RssFeed>& feed)
 	{
 		searchresultshistory.push_back(feed);
+		searchistorypos++;
 	}
 protected:
 	bool process_operation(Operation op,
