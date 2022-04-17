@@ -131,144 +131,20 @@ To uninstall, run `sudo make uninstall`.
 
 include::chapter-firststeps.asciidoc[]
 
+== Configuration
 
-=== Example Configuration
-
-----
-# a comment
-max-items        100 # such comments are possible, too
-browser          links
-show-read-feeds  no
-
-unbind-key       R
-bind-key         ^R    reload-all
-----
-
-=== Using Double Quotes
-
-_**TL;DR**: use double quotes for strings that contain spaces or double quotes.
-Escape double quotes (use `\"`) and backslashes (use `\\`). Don't escape stuff
-outside of double quotes, and don't use single quotes for quoting — Newsboat
-doesn't support that._
-
-Many of Newsboat's options expect strings as arguments, be it commands,
-passwords, dialog titles, URLs etc. Some options even take _multiple_ strings
-at once. These strings can contain spaces, which might confuse Newsboat since
-it already uses spaces to separate option names from option arguments.
-
-To help Newsboat understand your intent, put such strings into double quotes:
-
-    browser "firefox --new-tab %u"
-
-What if you need a double quote inside a string? Escape it with a backslash:
-
-    ocnews-password "UnbalancedQuotes\"AreSoFun!"
-
-And what about the backslash itself? Escape it, too! Suppose you have a program
-called `my favourite pager`, and you want to view articles with it. Newsboat
-ultimately passes commands to the shell, and shell expects spaces to be escaped
-if you want them preserved. But since Newsboat interprets backslashes, you have
-to add _another_ layer of escaping. Thus, you end up with a command like this:
-
-    pager "/usr/bin/my\\ favourite\\ pager"
-
-=== Configuring Colors
-
-It is possible to configure custom color settings in Newsboat. The basic configuration
-syntax is:
-
-	color <element> <foreground color> <background color> [<attribute> ...]
-
-This means that if you configure colors for a certain element, you need to provide
-a foreground color and a background color as a minimum. The following colors are
-supported:
-
-- `black`
-- `red`
-- `green`
-- `yellow`
-- `blue`
-- `magenta`
-- `cyan`
-- `white`
-- `default`
-- `color<n>`, e.g. `color123`
-
-The `default` color means that the terminal's default color will be used. The
-`color<n>` color name (where `<n>` is a decimal number *not* starting with zero)
-can be used if your terminal supports 256 colors (e.g. `gnome-terminal`, or `xterm`
-with `TERM` set to `xterm-256color`). Newsboat contains support for 256 color
-terminals since version 2.1. For a complete chart of colors and their
-corresponding numbers, please see
-https://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html[].
-
-Optionally, you can also add one or more attributes. The following attributes are
-supported:
-
-- `standout`
-- `underline`
-- `reverse`
-- `blink`
-- `dim`
-- `bold`
-- `protect`
-- `invis`
-
-Currently, the following elements are supported:
-
-- `background`: the application background
-- `listnormal`: a normal list item
-- `listfocus`: the currently selected list item
-- `listnormal_unread`: an unread list item
-- `listfocus_unread`: the currently selected unread list item
-- `title` (_added in 2.25_): current dialog's title, which is usually at the
-  top of the screen (but see <<show-title-bar,`show-title-bar`>> and
-  <<swap-title-and-hints,`swap-title-and-hints`>>). If you don't specify
-  a style for this element, then the `info` style is used
-- `info`: the hints bar, which is usually at the bottom of the screen (but see
-  <<show-keymap-hint,`show-keymap-hint`>> and
-  <<swap-title-and-hints,`swap-title-and-hints`>>)
-- `hint-key` (_added in 2.25_): a key in the hints bar. If you don't specify
-  a style for this element, then the `info` style is used
-- `hint-keys-delimiter` (_added in 2.25_): the comma that separates keys in the
-  hints bar. If you don't specify a style for this element, then the `info`
-  style is used
-- `hint-separator` (_added in 2.25_): the colon separating keys from their
-  descriptions in the hints bar. If you don't specify a style for this element,
-  then the `info` style is used
-- `hint-description` (_added in 2.25_): a description of a key in the hints
-  bar. If you don't specify a style for this element, then the `info` style is
-  used
-- `article`: the article text
-- `end-of-text-marker`: filler lines (~) below blocks of text
-
-The default color configuration of Newsboat looks like this:
-
-	color background          white   black
-	color listnormal          white   black
-	color listfocus           yellow  blue   bold
-	color listnormal_unread   magenta black
-	color listfocus_unread    magenta blue   bold
-	color title               yellow  blue   bold
-	color info                yellow  blue   bold
-	color hint-key            yellow  blue   bold
-	color hint-keys-delimiter yellow  white
-	color hint-separator      yellow  white  bold
-	color hint-description    yellow  white
-	color article             white   black
-
+include::chapter-configuration.asciidoc[]
 
 === Files
 
 include::chapter-files.asciidoc[]
 
-
-=== Migrating from other RSS Feed Readers
+== Migrating from other RSS Feed Readers
 
 It is very likely that you have used other RSS feed readers before. In this
 case, it is practical to migrate the previous configuration to Newsboat.
 
-==== Newsbeuter (automatic migration)
+=== Newsbeuter (automatic migration)
 
 Newsboat is a fork of Newsbeuter, so the migration from the latter is partially
 automated. Simple enough configurations will be transferred without any user
@@ -312,7 +188,7 @@ for Newsbeuter, _~/.newsboat/_ exists and _~/.newsboat/urls_ doesn't exist, then
 Newsboat will migrate XDG files and proceed, ignoring the dotdir. Please don't
 confuse the poor program like that!
 
-==== Other readers (via OPML)
+=== Other readers (via OPML)
 
 The vast amount of RSS feed readers allows the export of subscriptions via OPML
 files. OPML is an XML file format that was designed to save outlines, and has
@@ -965,20 +841,20 @@ is <<ignore-article,`ignore-article`>>:
 	ignore-article "regex:https?://nitter.net/.*" "title =~ \"^RT by\""
 	ignore-article "*" "title =~ \"Gentoo\""
 
-It takes two parameters. The first one is either: 
+It takes two parameters. The first one is either:
 
  - The URL of a feed.
  - A pattern prefixed with `regex:`. The pattern must be
  a https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html[POSIX
- extended regular expression], which will be matched case-insensitive. 
- - `"*"` to match any feed (asterisk is _not_ a pattern, glob or regex—we simply 
+ extended regular expression], which will be matched case-insensitive.
+ - `"*"` to match any feed (asterisk is _not_ a pattern, glob or regex—we simply
  reserve it to mean "all feeds").
 
-The second argument is <<_filter_language,a filter expression>> for an article, 
-probably <<_using_double_quotes,in double quotes to preserve spaces inside>>. If 
-Newsboat hits an article in the specified RSS feed that matches the specified 
-filter expression, then this article is ignored and never presented to the user. 
-The configuration itself can contain as many <<ignore-article,`ignore-article`>> 
+The second argument is <<_filter_language,a filter expression>> for an article,
+probably <<_using_double_quotes,in double quotes to preserve spaces inside>>. If
+Newsboat hits an article in the specified RSS feed that matches the specified
+filter expression, then this article is ignored and never presented to the user.
+The configuration itself can contain as many <<ignore-article,`ignore-article`>>
 commands as desired.
 
 You can also specify the way an article is ignored. There are
