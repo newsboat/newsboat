@@ -486,14 +486,6 @@ static const std::vector<OpDesc> opdescs = {
 	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},
 
 	{
-		OP_NEXTSEARCHRESULTS,
-		"nextsearchresults",
-		"x",
-		translatable("Next search results"),
-		KM_SEARCHRESULTSLIST
-	},
-
-	{
 		OP_PREVSEARCHRESULTS,
 		"prevsearchresults",
 		"z",

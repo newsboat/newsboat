@@ -14,7 +14,6 @@ const std::vector<KeyMapHintEntry>& SearchResultsFormAction::get_keymap_hint() c
 {
 	static const std::vector<KeyMapHintEntry> hints = {
 		{OP_OPEN, _("Open")},
-		{OP_NEXTSEARCHRESULTS, _("Next search results")},
 		{OP_PREVSEARCHRESULTS, _("Prev search results")}
 	};
 	return hints;
@@ -32,11 +31,6 @@ bool SearchResultsFormAction::process_operation(
 	std::vector<std::string>* args)
 {
 	switch (op) {
-	case OP_NEXTSEARCHRESULTS:
-		if (searchistorypos != searchresultshistory.size() - 1) {
-			this->set_feed(searchresultshistory[++searchistorypos]);
-		}
-		break;
 	case OP_PREVSEARCHRESULTS:
 		if (searchistorypos > 0) {
 			this->set_feed(searchresultshistory[--searchistorypos]);

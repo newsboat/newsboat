@@ -93,7 +93,6 @@ enum Operation {
 	OP_SORT,
 	OP_REVSORT,
 	OP_NB_MAX,
-	OP_NEXTSEARCHRESULTS,
 	OP_PREVSEARCHRESULTS,
 
 	// podboat-specific operations:
