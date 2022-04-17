@@ -40,7 +40,7 @@ require 'asciidoctor/converter/manpage'
 class ManPageConverter < Asciidoctor::Converter::ManPageConverter
 
   def convert_inline_monospaced node
-    %[#{ESC_BS}fI<BOUNDARY>#{node.text}</BOUNDARY>#{ESC_BS}fP]
+    %[#{ESC_BS}fI#{node.text}#{ESC_BS}fP]
   end
 
   # In Asciidoctor version 1.x the method didn't have a 'convert' prefix.
@@ -81,4 +81,3 @@ else
   # `register_for 'manpage'` in the class definition itself.
   Asciidoctor::Converter.register ManPageConverter, 'manpage'
 end
-

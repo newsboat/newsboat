@@ -197,7 +197,7 @@ clean-libnewsboat:
 	$(CARGO) clean
 
 clean-doc:
-	$(RM) -r doc/xhtml 
+	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
 		doc/example-config doc/generate doc/generate2 \
@@ -226,10 +226,11 @@ doc/podboat-cmds-linked.asciidoc: doc/podboat-cmds.dsv
 doc/cmdline-commands-linked.asciidoc: doc/cmdline-commands.dsv
 	sed 's/||/\t/g' doc/cmdline-commands.dsv | awk -f doc/createAvailableCommandlineCommandsListView.awk > doc/cmdline-commands-linked.asciidoc
 
-doc/xhtml/newsboat.html: doc/chapter-firststeps.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-tagging.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-snownews.asciidoc
+doc/xhtml/newsboat.html: doc/chapter-firststeps.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-cmdline.asciidoc
+doc/xhtml/newsboat.html: doc/chapter-configuration.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-podcasts.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-podboat.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-files.asciidoc
@@ -258,7 +259,7 @@ doc/newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
 doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/newsboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
-		doc/chapter-cmdline.asciidoc \
+		doc/chapter-cmdline.asciidoc doc/chapter-configuration.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
