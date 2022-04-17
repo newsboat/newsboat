@@ -13,6 +13,7 @@ SearchResultsFormAction::SearchResultsFormAction(View* vv,
 const std::vector<KeyMapHintEntry>& SearchResultsFormAction::get_keymap_hint() const
 {
 	static const std::vector<KeyMapHintEntry> hints = {
+		{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
 		{OP_PREVSEARCHRESULTS, _("Prev search results")}
 	};
