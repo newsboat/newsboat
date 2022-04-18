@@ -7,6 +7,7 @@
 #include "rssfeed.h"
 #include "view.h"
 #include "keymap.h"
+#include <stack>
 
 namespace newsboat {
 
@@ -33,8 +34,7 @@ protected:
 		std::vector<std::string>* args = nullptr) override;
 
 private:
-	std::vector<std::shared_ptr<RssFeed>> searchresultshistory;
-	unsigned int searchistorypos;
+	std::stack<std::shared_ptr<RssFeed>> searchresultshistory;
 };
 
 } // namespace newsboat

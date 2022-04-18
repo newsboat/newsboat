@@ -7,8 +7,7 @@ SearchResultsFormAction::SearchResultsFormAction(View* vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ItemListFormAction(vv, formstr, cc, f, cfg, r)
-	, searchistorypos(0) {};
+	: ItemListFormAction(vv, formstr, cc, f, cfg, r) {};
 
 const std::vector<KeyMapHintEntry>& SearchResultsFormAction::get_keymap_hint() const
 {
@@ -22,8 +21,7 @@ const std::vector<KeyMapHintEntry>& SearchResultsFormAction::get_keymap_hint() c
 
 void SearchResultsFormAction::add_history(const std::shared_ptr<RssFeed>& feed)
 {
-	searchresultshistory.push_back(feed);
-	searchistorypos++;
+	searchresultshistory.push(feed);
 }
 
 bool SearchResultsFormAction::process_operation(
@@ -33,8 +31,9 @@ bool SearchResultsFormAction::process_operation(
 {
 	switch (op) {
 	case OP_PREVSEARCHRESULTS:
-		if (searchistorypos > 0) {
-			this->set_feed(searchresultshistory[--searchistorypos]);
+		if (searchresultshistory.size() > 1) {
+			searchresultshistory.pop();
+			this->set_feed(searchresultshistory.top());
 		}
 		break;
 	default:
