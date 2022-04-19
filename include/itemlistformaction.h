@@ -75,14 +75,15 @@ public:
 	void restore_selected_position();
 
 protected:
+	bool process_operation(Operation op,
+		bool automatic = false,
+		std::vector<std::string>* args = nullptr) override;
+
+private:
 	void register_format_styles();
 
 	void do_update_visible_items();
 	void draw_items();
-
-	bool process_operation(Operation op,
-		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
 
 	bool open_position_in_browser(unsigned int pos,
 		bool interactive) const;
