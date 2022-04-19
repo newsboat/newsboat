@@ -36,6 +36,8 @@ bool SearchResultsListFormAction::process_operation(
 		if (searchresultshistory.size() > 1) {
 			searchresultshistory.pop();
 			this->set_feed(searchresultshistory.top());
+		} else {
+			v->get_statusline().show_message(_("Already in first search result."));
 		}
 		break;
 	default:
