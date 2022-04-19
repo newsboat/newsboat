@@ -174,7 +174,7 @@ static const std::vector<OpDesc> opdescs = {
 		"toggle-article-read",
 		"N",
 		translatable("Toggle read status for article"),
-		KM_ARTICLELIST  | KM_SEARCHRESULTSLIST | KM_ARTICLE
+		KM_ARTICLELIST | KM_SEARCHRESULTSLIST | KM_ARTICLE
 	},
 	{
 		OP_TOGGLESHOWREAD,
