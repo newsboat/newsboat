@@ -298,27 +298,27 @@ static const std::vector<OpDesc> opdescs = {
 		translatable("Edit flags"),
 		KM_ARTICLELIST | KM_SEARCHRESULTSLIST | KM_ARTICLE
 	},
-	{OP_NEXTFEED, "next-feed", "j", translatable("Go to next feed"), KM_ARTICLELIST | KM_SEARCHRESULTSLIST},
+	{OP_NEXTFEED, "next-feed", "j", translatable("Go to next feed"), KM_ARTICLELIST},
 	{
 		OP_PREVFEED,
 		"prev-feed",
 		"k",
 		translatable("Go to previous feed"),
-		KM_ARTICLELIST | KM_SEARCHRESULTSLIST
+		KM_ARTICLELIST
 	},
 	{
 		OP_NEXTUNREADFEED,
 		"next-unread-feed",
 		"^N",
 		translatable("Go to next unread feed"),
-		KM_ARTICLELIST | KM_SEARCHRESULTSLIST
+		KM_ARTICLELIST
 	},
 	{
 		OP_PREVUNREADFEED,
 		"prev-unread-feed",
 		"^P",
 		translatable("Go to previous unread feed"),
-		KM_ARTICLELIST | KM_SEARCHRESULTSLIST
+		KM_ARTICLELIST
 	},
 	{OP_MACROPREFIX, "macro-prefix", ",", translatable("Call a macro"), KM_NEWSBOAT},
 	{
