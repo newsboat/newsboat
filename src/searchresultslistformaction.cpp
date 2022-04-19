@@ -1,7 +1,7 @@
-#include "searchresultsformaction.h"
+#include "searchresultslistformaction.h"
 
 namespace newsboat {
-SearchResultsFormAction::SearchResultsFormAction(View* vv,
+SearchResultsListFormAction::SearchResultsListFormAction(View* vv,
 	std::string formstr,
 	Cache* cc,
 	FilterContainer& f,
@@ -9,7 +9,7 @@ SearchResultsFormAction::SearchResultsFormAction(View* vv,
 	RegexManager& r)
 	: ItemListFormAction(vv, formstr, cc, f, cfg, r) {};
 
-const std::vector<KeyMapHintEntry>& SearchResultsFormAction::get_keymap_hint() const
+const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint() const
 {
 	static const std::vector<KeyMapHintEntry> hints = {
 		{OP_QUIT, _("Quit")},
@@ -19,12 +19,12 @@ const std::vector<KeyMapHintEntry>& SearchResultsFormAction::get_keymap_hint() c
 	return hints;
 };
 
-void SearchResultsFormAction::add_history(const std::shared_ptr<RssFeed>& feed)
+void SearchResultsListFormAction::add_history(const std::shared_ptr<RssFeed>& feed)
 {
 	searchresultshistory.push(feed);
 }
 
-bool SearchResultsFormAction::process_operation(
+bool SearchResultsListFormAction::process_operation(
 	Operation op,
 	bool automatic,
 	std::vector<std::string>* args)

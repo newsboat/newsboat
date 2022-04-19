@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_SEARCHRESULTSFORMACTION_H_
-#define NEWSBOAT_SEARCHRESULTSFORMACTION_H_
+#ifndef NEWSBOAT_SEARCHRESULTSLISTFORMACTION_H_
+#define NEWSBOAT_SEARCHRESULTSLISTFORMACTION_H_
 
 #include <stack>
 
@@ -12,9 +12,9 @@
 
 namespace newsboat {
 
-class SearchResultsFormAction : public ItemListFormAction {
+class SearchResultsListFormAction : public ItemListFormAction {
 public:
-	SearchResultsFormAction(View* vv,
+	SearchResultsListFormAction(View* vv,
 		std::string formstr,
 		Cache* cc,
 		FilterContainer& f,
@@ -40,5 +40,5 @@ private:
 
 } // namespace newsboat
 
-#endif /* NEWSBOAT_SEARCHRESULTSFORMACTION_H_ */
+#endif /* NEWSBOAT_SEARCHRESULTSLISTFORMACTION_H_ */
 

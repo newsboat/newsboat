@@ -796,8 +796,8 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
 src/ruststring.o: src/ruststring.cpp include/ruststring.h
 src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h
-src/searchresultsformaction.o: src/searchresultsformaction.cpp \
- include/searchresultsformaction.h include/configcontainer.h \
+src/searchresultslistformaction.o: src/searchresultslistformaction.cpp \
+ include/searchresultslistformaction.h include/configcontainer.h \
  include/configactionhandler.h include/itemlistformaction.h \
  3rd-party/optional.hpp include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h \
@@ -947,7 +947,7 @@ src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/matcherexception.h include/regexmanager.h include/reloadthread.h \
  include/rssfeed.h include/selectformaction.h stfl/selecttag.h \
  include/strprintf.h stfl/urlview.h include/urlviewformaction.h \
- include/utils.h include/searchresultsformaction.h \
+ include/utils.h include/searchresultslistformaction.h \
  include/itemlistformaction.h include/rssfeed.h
 test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/configactionhandler.h 3rd-party/catch.hpp \

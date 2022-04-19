@@ -53,7 +53,7 @@ extern "C" {
 #include "urlview.h"
 #include "urlviewformaction.h"
 #include "utils.h"
-#include "searchresultsformaction.h"
+#include "searchresultslistformaction.h"
 
 namespace {
 bool ctrl_c_hit = false;
@@ -447,7 +447,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 	LOG(Level::DEBUG, "View::push_searchresult: pushing search result");
 	if (feed->total_item_count() > 0) {
 		if (this->get_current_formaction()->id() != "searchresultslist") {
-			auto searchresult = std::make_shared<SearchResultsFormAction>(
+			auto searchresult = std::make_shared<SearchResultsListFormAction>(
 					this, itemlist_str, rsscache, filters, cfg, rxman);
 			searchresult->set_feed(feed);
 			searchresult->set_show_searchresult(true);
@@ -459,7 +459,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 			formaction_stack.push_back(searchresult);
 			current_formaction = formaction_stack_size() - 1;
 		} else {
-			auto searchresult = std::static_pointer_cast<SearchResultsFormAction>
+			auto searchresult = std::static_pointer_cast<SearchResultsListFormAction>
 				(this->get_current_formaction());
 			searchresult->set_feed(feed);
 			searchresult->add_history(feed);
