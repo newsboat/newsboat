@@ -26,7 +26,6 @@ namespace newsboat {
 class ItemListFormAction;
 class ItemViewFormAction;
 class FeedListFormAction;
-class SearchResultsFormAction;
 
 class View : public IStatus {
 public:
