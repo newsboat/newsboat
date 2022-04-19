@@ -1,13 +1,14 @@
 #ifndef NEWSBOAT_SEARCHRESULTSFORMACTION_H_
 #define NEWSBOAT_SEARCHRESULTSFORMACTION_H_
 
+#include <stack>
+
 #include "configcontainer.h"
 #include "itemlistformaction.h"
 #include "regexmanager.h"
 #include "rssfeed.h"
 #include "view.h"
 #include "keymap.h"
-#include <stack>
 
 namespace newsboat {
 
