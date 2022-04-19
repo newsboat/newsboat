@@ -489,7 +489,7 @@ static const std::vector<OpDesc> opdescs = {
 		OP_PREVSEARCHRESULTS,
 		"prevsearchresults",
 		"z",
-		translatable("Previous search results"),
+		translatable("Return to previous search results (if any)"),
 		KM_SEARCHRESULTSLIST
 	}
 };
