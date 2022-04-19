@@ -39,7 +39,7 @@ bool SearchResultsListFormAction::process_operation(
 		}
 		break;
 	default:
-		ItemListFormAction::process_operation(op, automatic, args);
+		return ItemListFormAction::process_operation(op, automatic, args);
 	}
 	return true;
 }
