@@ -1,5 +1,6 @@
 #ifndef NEWSBOAT_SEARCHRESULTSFORMACTION_H_
 #define NEWSBOAT_SEARCHRESULTSFORMACTION_H_
+
 #include "configcontainer.h"
 #include "itemlistformaction.h"
 #include "regexmanager.h"
