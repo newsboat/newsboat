@@ -14,7 +14,9 @@ const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint
 	static const std::vector<KeyMapHintEntry> hints = {
 		{OP_QUIT, _("Quit")},
 		{OP_OPEN, _("Open")},
-		{OP_PREVSEARCHRESULTS, _("Prev search results")}
+		{OP_PREVSEARCHRESULTS, _("Prev search results")},
+		{OP_SEARCH, _("Search")},
+		{OP_HELP, _("Help")}
 	};
 	return hints;
 };
