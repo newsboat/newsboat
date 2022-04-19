@@ -188,7 +188,7 @@ static const std::vector<OpDesc> opdescs = {
 		"show-urls",
 		"u",
 		translatable("Show URLs in current article"),
-		KM_ARTICLE  | KM_SEARCHRESULTSLIST | KM_ARTICLELIST
+		KM_ARTICLE | KM_SEARCHRESULTSLIST | KM_ARTICLELIST
 	},
 	{OP_CLEARTAG, "clear-tag", "^T", translatable("Clear current tag"), KM_FEEDLIST},
 	{OP_SETTAG, "set-tag", "t", translatable("Select tag"), KM_FEEDLIST},
