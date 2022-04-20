@@ -399,6 +399,14 @@ static const std::vector<OpDesc> opdescs = {
 		KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
 
+	{
+		OP_PREVSEARCHRESULTS,
+		"prevsearchresults",
+		"z",
+		translatable("Return to previous search results (if any)"),
+		KM_SEARCHRESULTSLIST
+	},
+
 	{OP_OPEN_URL_1, "one", "1", translatable("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_2, "two", "2", translatable("Open URL 2"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_3, "three", "3", translatable("Open URL 3"), KM_URLVIEW | KM_ARTICLE},
@@ -484,14 +492,6 @@ static const std::vector<OpDesc> opdescs = {
 	{OP_INT_SET, "set", "internal-set", "", KM_INTERNAL},
 
 	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},
-
-	{
-		OP_PREVSEARCHRESULTS,
-		"prevsearchresults",
-		"z",
-		translatable("Return to previous search results (if any)"),
-		KM_SEARCHRESULTSLIST
-	}
 };
 
 static const std::map<std::string, std::uint32_t> contexts = {
