@@ -127,6 +127,7 @@ Available dialogs are:
 * `urlview`
 * `podboat`
 * `dirbrowser`
+* `searchresultslist`
 
 === Colors
 
