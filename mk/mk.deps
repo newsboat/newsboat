@@ -796,6 +796,27 @@ src/rssparser.o: src/rssparser.cpp include/rssparser.h \
 src/ruststring.o: src/ruststring.cpp include/ruststring.h
 src/scopemeasure.o: src/scopemeasure.cpp include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h
+src/searchresultslistformaction.o: src/searchresultslistformaction.cpp \
+ include/searchresultslistformaction.h include/configcontainer.h \
+ include/configactionhandler.h include/itemlistformaction.h \
+ 3rd-party/optional.hpp include/history.h \
+ target/cxxbridge/libnewsboat-ffi/src/history.rs.h \
+ include/listformaction.h include/formaction.h include/keymap.h \
+ include/stflpp.h include/listwidget.h include/listformatter.h \
+ include/regexmanager.h include/matcher.h filter/FilterParser.h \
+ include/regexowner.h include/view.h include/colormanager.h \
+ include/controller.h include/cache.h include/configparser.h \
+ include/feedcontainer.h include/filtercontainer.h include/fslock.h \
+ target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/opml.h \
+ include/fileurlreader.h include/urlreader.h include/utils.h \
+ 3rd-party/expected.hpp include/logger.h config.h include/strprintf.h \
+ target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
+ include/reloader.h include/remoteapi.h include/rssignores.h \
+ include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
+ include/filesystembrowser.h include/feedlistformaction.h \
+ include/filebrowserformaction.h include/htmlrenderer.h \
+ include/textformatter.h include/statusline.h include/rssfeed.h
 src/selectformaction.o: src/selectformaction.cpp \
  include/selectformaction.h include/filtercontainer.h \
  include/configactionhandler.h include/formaction.h include/history.h \
@@ -926,7 +947,8 @@ src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/matcherexception.h include/regexmanager.h include/reloadthread.h \
  include/rssfeed.h include/selectformaction.h stfl/selecttag.h \
  include/strprintf.h stfl/urlview.h include/urlviewformaction.h \
- include/utils.h
+ include/utils.h include/searchresultslistformaction.h \
+ include/itemlistformaction.h include/rssfeed.h
 test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/configcontainer.h include/rssfeed.h include/matchable.h \
