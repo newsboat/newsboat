@@ -449,21 +449,17 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 		if (this->get_current_formaction()->id() != "searchresultslist") {
 			auto searchresult = std::make_shared<SearchResultsListFormAction>(
 					this, itemlist_str, rsscache, filters, cfg, rxman);
-			searchresult->set_feed(feed);
 			searchresult->set_show_searchresult(true);
-			searchresult->set_searchphrase(phrase);
 			apply_colors(searchresult);
 			searchresult->set_parent_formaction(get_current_formaction());
-			searchresult->add_history(feed);
+			searchresult->add_to_history(feed, phrase);
 			searchresult->init();
 			formaction_stack.push_back(searchresult);
 			current_formaction = formaction_stack_size() - 1;
 		} else {
 			auto searchresult = std::static_pointer_cast<SearchResultsListFormAction>
 				(this->get_current_formaction());
-			searchresult->set_feed(feed);
-			searchresult->add_history(feed);
-			searchresult->set_searchphrase(phrase);
+			searchresult->add_to_history(feed, phrase);
 		}
 	} else {
 		status_line.show_error(_("Error: feed contains no items!"));

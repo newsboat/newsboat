@@ -27,7 +27,8 @@ public:
 	}
 
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
-	void add_history(const std::shared_ptr<RssFeed>& feed);
+
+	void add_to_history(const std::shared_ptr<RssFeed>& feed, const std::string& str);
 
 protected:
 	bool process_operation(Operation op,

@@ -21,9 +21,12 @@ const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint
 	return hints;
 };
 
-void SearchResultsListFormAction::add_history(const std::shared_ptr<RssFeed>& feed)
+void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>& feed,
+	const std::string& str)
 {
+	this->set_feed(feed);
 	searchresultshistory.push(feed);
+	this->set_searchphrase(str);
 }
 
 bool SearchResultsListFormAction::process_operation(
