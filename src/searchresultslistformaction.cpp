@@ -1,4 +1,5 @@
 #include "searchresultslistformaction.h"
+#include "keymap.h"
 
 namespace newsboat {
 SearchResultsListFormAction::SearchResultsListFormAction(View* vv,
@@ -34,7 +35,24 @@ bool SearchResultsListFormAction::process_operation(
 	bool automatic,
 	std::vector<std::string>* args)
 {
+
+	const unsigned int itempos = list.get_position();
+
 	switch (op) {
+	case OP_OPEN:
+		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
+			// no need to mark item as read, the itemview already do
+			// that
+			old_itempos = itempos;
+			v->push_itemview(feed,
+				visible_items[itempos].first->guid(), search_phrase);
+			invalidate(itempos);
+		} else {
+			v->get_statusline().show_error(
+				_("No item selected!")); // should not happen
+		}
+		break;
 	case OP_PREVSEARCHRESULTS:
 		if (searchresultshistory.size() > 1) {
 			searchresultshistory.pop();
@@ -43,10 +61,43 @@ bool SearchResultsListFormAction::process_operation(
 			v->get_statusline().show_message(_("Already in first search result."));
 		}
 		break;
+	case OP_RELOAD:
+		v->get_statusline().show_error(
+			_("Error: you can't reload search results."));
+		break;
 	default:
 		return ItemListFormAction::process_operation(op, automatic, args);
 	}
 	return true;
+}
+
+void SearchResultsListFormAction::set_head(const std::string& s,
+	unsigned int unread,
+	unsigned int total,
+	const std::string& url)
+{
+	std::string title;
+	FmtStrFormatter fmt;
+
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+
+	fmt.register_fmt('u', std::to_string(unread));
+	fmt.register_fmt('t', std::to_string(total));
+
+	auto feedtitle = s;
+	utils::remove_soft_hyphens(feedtitle);
+	fmt.register_fmt('T', feedtitle);
+
+	fmt.register_fmt('U', utils::censor_url(url));
+
+	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+
+	const unsigned int width = utils::to_u(f.get("title:w"));
+	title = fmt.do_format(
+			cfg->get_configvalue("searchresult-title-format"),
+			width);
+	set_value("head", title);
 }
 
 } // namespace newsboat

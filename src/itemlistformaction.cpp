@@ -32,7 +32,6 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	: ListFormAction(vv, formstr, "items", cfg)
 	, pos(0)
 	, apply_filter(false)
-	, show_searchresult(false)
 	, set_filterpos(false)
 	, filterpos(0)
 	, rxman(r)
@@ -71,8 +70,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			// that
 			old_itempos = itempos;
 			v->push_itemview(feed,
-				visible_items[itempos].first->guid(),
-				show_searchresult ? search_phrase : "");
+				visible_items[itempos].first->guid(), "");
 			invalidate(itempos);
 		} else {
 			v->get_statusline().show_error(
@@ -396,15 +394,10 @@ bool ItemListFormAction::process_operation(Operation op,
 		v->push_help();
 		break;
 	case OP_RELOAD:
-		if (!show_searchresult) {
-			LOG(Level::INFO,
-				"ItemListFormAction: reloading current feed");
-			v->get_ctrl()->get_reloader()->reload(pos);
-			invalidate_list();
-		} else {
-			v->get_statusline().show_error(
-				_("Error: you can't reload search results."));
-		}
+		LOG(Level::INFO,
+			"ItemListFormAction: reloading current feed");
+		v->get_ctrl()->get_reloader()->reload(pos);
+		invalidate_list();
 		break;
 	case OP_QUIT:
 		LOG(Level::INFO, "ItemListFormAction: quitting");
@@ -1175,10 +1168,6 @@ void ItemListFormAction::set_head(const std::string& s,
 	unsigned int total,
 	const std::string& url)
 {
-	/*
-	 * Since the ItemListFormAction is also used to display search results,
-	 * we always need to set the right title
-	 */
 	std::string title;
 	FmtStrFormatter fmt;
 
@@ -1197,15 +1186,9 @@ void ItemListFormAction::set_head(const std::string& s,
 	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
-	if (!show_searchresult) {
-		title = fmt.do_format(
-				cfg->get_configvalue("articlelist-title-format"),
-				width);
-	} else {
-		title = fmt.do_format(
-				cfg->get_configvalue("searchresult-title-format"),
-				width);
-	}
+	title = fmt.do_format(
+			cfg->get_configvalue("articlelist-title-format"),
+			width);
 	set_value("head", title);
 }
 

@@ -449,7 +449,6 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 		if (this->get_current_formaction()->id() != "searchresultslist") {
 			auto searchresult = std::make_shared<SearchResultsListFormAction>(
 					this, itemlist_str, rsscache, filters, cfg, rxman);
-			searchresult->set_show_searchresult(true);
 			apply_colors(searchresult);
 			searchresult->set_parent_formaction(get_current_formaction());
 			searchresult->add_to_history(feed, phrase);
@@ -485,7 +484,6 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 		auto itemlist = std::make_shared<ItemListFormAction>(
 				this, itemlist_str, rsscache, filters, cfg, rxman);
 		itemlist->set_feed(feed);
-		itemlist->set_show_searchresult(false);
 		apply_colors(itemlist);
 		itemlist->set_parent_formaction(get_current_formaction());
 		itemlist->init();

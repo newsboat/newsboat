@@ -9,6 +9,7 @@
 #include "rssfeed.h"
 #include "view.h"
 #include "keymap.h"
+#include "fmtstrformatter.h"
 
 namespace newsboat {
 
@@ -29,6 +30,10 @@ public:
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
 	void add_to_history(const std::shared_ptr<RssFeed>& feed, const std::string& str);
+	void set_head(const std::string& s,
+		unsigned int unread,
+		unsigned int total,
+		const std::string& url);
 
 protected:
 	bool process_operation(Operation op,
