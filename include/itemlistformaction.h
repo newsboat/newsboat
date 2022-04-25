@@ -5,6 +5,7 @@
 
 #include "3rd-party/optional.hpp"
 
+#include "fmtstrformatter.h"
 #include "history.h"
 #include "listformaction.h"
 #include "listformatter.h"
@@ -84,6 +85,12 @@ protected:
 		invalidation_mode = InvalidationMode::PARTIAL;
 		invalidated_itempos.push_back(invalidated_pos);
 	}
+
+	void setup_head_formatter(const std::string& s,
+		unsigned int unread,
+		unsigned int total,
+		const std::string& url,
+		FmtStrFormatter& fmt);
 
 private:
 	void register_format_styles();

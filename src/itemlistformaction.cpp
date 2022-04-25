@@ -1162,14 +1162,12 @@ void ItemListFormAction::init()
 	invalidate_list();
 }
 
-void ItemListFormAction::set_head(const std::string& s,
+void ItemListFormAction::setup_head_formatter(const std::string& s,
 	unsigned int unread,
 	unsigned int total,
-	const std::string& url)
+	const std::string& url,
+	FmtStrFormatter& fmt)
 {
-	std::string title;
-	FmtStrFormatter fmt;
-
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 
@@ -1183,6 +1181,17 @@ void ItemListFormAction::set_head(const std::string& s,
 	fmt.register_fmt('U', utils::censor_url(url));
 
 	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+}
+
+void ItemListFormAction::set_head(const std::string& s,
+	unsigned int unread,
+	unsigned int total,
+	const std::string& url)
+{
+	std::string title;
+
+	FmtStrFormatter fmt;
+	setup_head_formatter(s, unread, total, url, fmt);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
 	title = fmt.do_format(

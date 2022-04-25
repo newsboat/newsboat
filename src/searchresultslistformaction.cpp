@@ -74,19 +74,7 @@ void SearchResultsListFormAction::set_head(const std::string& s,
 	std::string title;
 	FmtStrFormatter fmt;
 
-	fmt.register_fmt('N', PROGRAM_NAME);
-	fmt.register_fmt('V', utils::program_version());
-
-	fmt.register_fmt('u', std::to_string(unread));
-	fmt.register_fmt('t', std::to_string(total));
-
-	auto feedtitle = s;
-	utils::remove_soft_hyphens(feedtitle);
-	fmt.register_fmt('T', feedtitle);
-
-	fmt.register_fmt('U', utils::censor_url(url));
-
-	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+	setup_head_formatter(s, unread, total, url, fmt);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
 	title = fmt.do_format(
