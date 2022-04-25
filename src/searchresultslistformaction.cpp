@@ -60,10 +60,6 @@ bool SearchResultsListFormAction::process_operation(
 			v->get_statusline().show_message(_("Already in first search result."));
 		}
 		break;
-	case OP_RELOAD:
-		v->get_statusline().show_error(
-			_("Error: you can't reload search results."));
-		break;
 	default:
 		return ItemListFormAction::process_operation(op, automatic, args);
 	}
