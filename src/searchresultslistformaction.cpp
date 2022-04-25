@@ -40,7 +40,7 @@ bool SearchResultsListFormAction::process_operation(
 
 	switch (op) {
 	case OP_OPEN:
-		LOG(Level::INFO, "ItemListFormAction: opening item at pos `%u'", itempos);
+		LOG(Level::INFO, "SearchResultsListFormAction: opening item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			// no need to mark item as read, the itemview already do
 			// that
