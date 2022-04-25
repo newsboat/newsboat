@@ -816,7 +816,7 @@ Attribute:Context:Meaning
 [[attr-rssurl]]<<attr-rssurl,+rssurl+>>:feed, article:RSS URL of the feed
 [[attr-unread_count]]<<attr-unread_count,+unread_count+>>:feed, article:number of unread articles in the feed
 [[attr-total_count]]<<attr-total_count,+total_count+>>:feed, article:total number of articles in the feed
-[[attr-tags]]<<attr-tags,+tags+>>:feed, article:all tags that are associated with the feed
+[[attr-tags]]<<attr-tags,+tags+>>:feed, article:space-separated list of tags that are associated with the feed. Note that for tags that have spaces in them, it's impossible to tell where they start and end, so +#+ and +!#+ operators don't work for such tags.
 [[attr-feedindex]]<<attr-feedindex,+feedindex+>>:feed, article:Index of a feed in the feed list
 |=========================================================================
 
