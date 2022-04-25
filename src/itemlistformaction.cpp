@@ -70,7 +70,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			// that
 			old_itempos = itempos;
 			v->push_itemview(feed,
-				visible_items[itempos].first->guid(), "");
+				visible_items[itempos].first->guid());
 			invalidate(itempos);
 		} else {
 			v->get_statusline().show_error(
