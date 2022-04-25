@@ -86,11 +86,10 @@ protected:
 		invalidated_itempos.push_back(invalidated_pos);
 	}
 
-	void setup_head_formatter(const std::string& s,
+	FmtStrFormatter setup_head_formatter(const std::string& s,
 		unsigned int unread,
 		unsigned int total,
-		const std::string& url,
-		FmtStrFormatter& fmt);
+		const std::string& url);
 
 	std::vector<ItemPtrPosPair> visible_items;
 	int old_itempos;

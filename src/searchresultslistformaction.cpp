@@ -72,9 +72,7 @@ void SearchResultsListFormAction::set_head(const std::string& s,
 	const std::string& url)
 {
 	std::string title;
-	FmtStrFormatter fmt;
-
-	setup_head_formatter(s, unread, total, url, fmt);
+	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
 	title = fmt.do_format(
