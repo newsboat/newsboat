@@ -75,6 +75,17 @@ protected:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 
+	void invalidate(const unsigned int invalidated_pos)
+	{
+		if (invalidation_mode == InvalidationMode::COMPLETE) {
+			return;
+		}
+
+		invalidation_mode = InvalidationMode::PARTIAL;
+		invalidated_itempos.push_back(invalidated_pos);
+	}
+
+private:
 	void register_format_styles();
 
 	void do_update_visible_items();
@@ -106,16 +117,6 @@ protected:
 
 	void prepare_set_filterpos();
 
-	void invalidate(const unsigned int invalidated_pos)
-	{
-		if (invalidation_mode == InvalidationMode::COMPLETE) {
-			return;
-		}
-
-		invalidation_mode = InvalidationMode::PARTIAL;
-		invalidated_itempos.push_back(invalidated_pos);
-	}
-
 	std::string item2formatted_line(const ItemPtrPosPair& item,
 		const unsigned int width,
 		const std::string& itemlist_format,
@@ -123,12 +124,18 @@ protected:
 
 	void goto_item(const std::string& title);
 
-	unsigned int pos;
+	void handle_op_saveall();
+
+protected:
+	std::vector<ItemPtrPosPair> visible_items;
+	int old_itempos;
 	std::shared_ptr<RssFeed> feed;
+	std::string search_phrase;
 	bool apply_filter;
 	Matcher matcher;
-	std::vector<ItemPtrPosPair> visible_items;
-	std::string search_phrase;
+
+private:
+	unsigned int pos;
 
 	History filterhistory;
 
@@ -140,7 +147,6 @@ protected:
 	RegexManager& rxman;
 
 	unsigned int old_width;
-	int old_itempos;
 	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
 
 	InvalidationMode invalidation_mode;
@@ -149,8 +155,6 @@ protected:
 	ListFormatter listfmt;
 	Cache* rsscache;
 	FilterContainer& filters;
-
-	void handle_op_saveall();
 };
 
 } // namespace newsboat
