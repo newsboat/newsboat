@@ -92,6 +92,13 @@ protected:
 		const std::string& url,
 		FmtStrFormatter& fmt);
 
+	std::vector<ItemPtrPosPair> visible_items;
+	int old_itempos;
+	std::shared_ptr<RssFeed> feed;
+	std::string search_phrase;
+	bool apply_filter;
+	Matcher matcher;
+
 private:
 	void register_format_styles();
 
@@ -134,15 +141,6 @@ private:
 
 	void handle_op_saveall();
 
-protected:
-	std::vector<ItemPtrPosPair> visible_items;
-	int old_itempos;
-	std::shared_ptr<RssFeed> feed;
-	std::string search_phrase;
-	bool apply_filter;
-	Matcher matcher;
-
-private:
 	unsigned int pos;
 
 	History filterhistory;
