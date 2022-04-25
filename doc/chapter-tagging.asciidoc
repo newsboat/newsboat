@@ -29,9 +29,9 @@ Another special type of tag are tags that start with the exclamation mark (`!`).
 such a tag is found, the feed is hidden from the regular list of feeds and its 
 content can only be found through a query feed.
 
-	https://rss.orf.at/news.xml ! "World News"
-	http://feeds.bbci.co.uk/news/world/rss.xml ! "World News"
-	"query:News from around the globe:tags # \"World News\""
+	https://rss.orf.at/news.xml ! news
+	http://feeds.bbci.co.uk/news/world/rss.xml ! news
+	"query:News from around the globe:tags # \"news\""
 
 In this example, the first two feeds won't appear in the feedlist, but their
 articles will still be accessible through the query feed titled "News from
