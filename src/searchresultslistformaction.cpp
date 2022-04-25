@@ -35,7 +35,6 @@ bool SearchResultsListFormAction::process_operation(
 	bool automatic,
 	std::vector<std::string>* args)
 {
-
 	const unsigned int itempos = list.get_position();
 
 	switch (op) {
