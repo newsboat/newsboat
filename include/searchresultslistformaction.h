@@ -33,7 +33,7 @@ public:
 	void set_head(const std::string& s,
 		unsigned int unread,
 		unsigned int total,
-		const std::string& url);
+		const std::string& url) override;
 
 protected:
 	bool process_operation(Operation op,

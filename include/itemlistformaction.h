@@ -94,10 +94,11 @@ private:
 	bool open_position_in_browser(unsigned int pos,
 		bool interactive) const;
 
-	void set_head(const std::string& s,
+	virtual void set_head(const std::string& s,
 		unsigned int unread,
 		unsigned int total,
 		const std::string& url);
+
 	int get_pos(unsigned int idx);
 
 	void save_article(const std::string& filename,
