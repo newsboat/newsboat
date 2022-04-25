@@ -394,8 +394,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		v->push_help();
 		break;
 	case OP_RELOAD:
-		LOG(Level::INFO,
-			"ItemListFormAction: reloading current feed");
+		LOG(Level::INFO, "ItemListFormAction: reloading current feed");
 		v->get_ctrl()->get_reloader()->reload(pos);
 		invalidate_list();
 		break;
