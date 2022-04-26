@@ -95,8 +95,6 @@ protected:
 	int old_itempos;
 	std::shared_ptr<RssFeed> feed;
 	std::string search_phrase;
-	bool apply_filter;
-	Matcher matcher;
 
 private:
 	void register_format_styles();
@@ -140,12 +138,15 @@ private:
 
 	void handle_op_saveall();
 
+	Matcher matcher;
+
 	unsigned int pos;
 
 	History filterhistory;
 
 	std::mutex redraw_mtx;
 
+	bool apply_filter;
 	bool set_filterpos;
 	unsigned int filterpos;
 
