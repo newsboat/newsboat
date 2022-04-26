@@ -59,11 +59,6 @@ public:
 
 	void finished_qna(Operation op) override;
 
-	void set_searchphrase(const std::string& s)
-	{
-		search_phrase = s;
-	}
-
 	void invalidate_list()
 	{
 		invalidation_mode = InvalidationMode::COMPLETE;
@@ -94,7 +89,6 @@ protected:
 	std::vector<ItemPtrPosPair> visible_items;
 	int old_itempos;
 	std::shared_ptr<RssFeed> feed;
-	std::string search_phrase;
 
 private:
 	void register_format_styles();

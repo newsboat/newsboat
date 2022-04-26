@@ -1495,19 +1495,15 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 
 std::string ItemListFormAction::title()
 {
-	if (feed->rssurl() == "") {
-		return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
+	if (feed->is_query_feed()) {
+		return strprintf::fmt(_("Query Feed - %s"),
+				feed->rssurl().substr(
+					6, feed->rssurl().length() - 6));
 	} else {
-		if (feed->is_query_feed()) {
-			return strprintf::fmt(_("Query Feed - %s"),
-					feed->rssurl().substr(
-						6, feed->rssurl().length() - 6));
-		} else {
-			auto feedtitle = feed->title();
-			utils::remove_soft_hyphens(feedtitle);
-			return strprintf::fmt(
-					_("Article List - %s"), feedtitle);
-		}
+		auto feedtitle = feed->title();
+		utils::remove_soft_hyphens(feedtitle);
+		return strprintf::fmt(
+				_("Article List - %s"), feedtitle);
 	}
 }
 
