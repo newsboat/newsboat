@@ -41,7 +41,6 @@ public:
 		unsigned int total,
 		const std::string& url) override;
 
-
 	std::string title() override;
 
 protected:
