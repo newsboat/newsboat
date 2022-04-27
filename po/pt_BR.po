@@ -1,20 +1,21 @@
 # Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008, 2009, 2010.
 # Alexandre Erwin Ittner <alexandre@ittner.com.br>, 2011.
+# Alexandre Provencio <dev@aleprovencio.net>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-03-08 21:17+0300\n"
-"PO-Revision-Date: 2018-03-06 20:35-0300\n"
-"Last-Translator: Alexandre Erwin Ittner <alexandre@ittner.com.br>\n"
+"PO-Revision-Date: 2022-04-26 17:27-0300\n"
+"Last-Translator: Alexandre Provencio <dev@aleprovencio.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -122,19 +123,16 @@ msgid "remove unreferenced items from cache"
 msgstr ""
 
 #: newsboat.cpp:128
-#, fuzzy
 msgid "Files:"
-msgstr "Arquivo: "
+msgstr "Arquivo:"
 
 #. / This is printed out by --help before the path to the config file
 #: newsboat.cpp:130
-#, fuzzy
 msgid "configuration"
-msgstr "Carregando configuração..."
+msgstr "configuração"
 
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:132
-#, fuzzy
 msgid "feed URLs"
 msgstr "URLs"
 
@@ -297,7 +295,7 @@ msgstr "um valor inteiro era esperado, mas '%s' foi encontrado"
 #: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
-msgstr "Valer de configuração '%s' é inválido"
+msgstr "valor de configuração `%s' é inválido"
 
 #: src/confighandlerexception.cpp:19
 msgid "invalid parameters."
@@ -717,9 +715,8 @@ msgid "Browser returned error code %i"
 msgstr ""
 
 #: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Tem certeza que deseja sobrescrever '%s' (s: Sim n:Não)?"
+msgstr "Tem certeza que deseja marcar esta fonte como lida (s: Sim n:Não)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
@@ -750,11 +747,11 @@ msgstr "Nenhuma fonte RSS com artigos não lidos."
 
 #: src/feedlistformaction.cpp:362 src/itemlistformaction.cpp:476
 msgid "Already on last feed."
-msgstr "Já na última fonte"
+msgstr "Já na última fonte."
 
 #: src/feedlistformaction.cpp:371 src/itemlistformaction.cpp:481
 msgid "Already on first feed."
-msgstr "Já na primeira fonte"
+msgstr "Já na primeira fonte."
 
 #: src/feedlistformaction.cpp:387
 #, fuzzy
@@ -791,7 +788,7 @@ msgstr "Filtro: "
 
 #: src/feedlistformaction.cpp:512 src/view.cpp:187
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "Tem certeza que deseja sair (s: Sim n: Não)?"
+msgstr "Tem certeza que deseja sair (s: Sim n: Não)? "
 
 #: src/feedlistformaction.cpp:552
 msgid "Cannot open query feeds in the browser!"
@@ -864,7 +861,7 @@ msgstr "Lista de Fontes - %u não lidas, %u no total"
 #: src/filebrowserformaction.cpp:122
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "Tem certeza que deseja sobrescrever '%s' (s: Sim n:Não)?"
+msgstr "Tem certeza que deseja sobrescrever `%s' (s: Sim n:Não)? "
 
 #: src/filebrowserformaction.cpp:125
 msgid "n"
@@ -1075,12 +1072,12 @@ msgstr "Nenhum artigo não lido."
 #: src/itemlistformaction.cpp:444 src/itemviewformaction.cpp:389
 #: src/view.cpp:926
 msgid "Already on last item."
-msgstr "Já no último item"
+msgstr "Já no último item."
 
 #: src/itemlistformaction.cpp:453 src/itemviewformaction.cpp:399
 #: src/view.cpp:888
 msgid "Already on first item."
-msgstr "Já no primeiro item"
+msgstr "Já no primeiro item."
 
 #: src/itemlistformaction.cpp:466 src/itemlistformaction.cpp:471
 msgid "No unread feeds."
@@ -1618,7 +1615,7 @@ msgstr ""
 
 #: src/keymap.cpp:423
 msgid "Move to the previous entry"
-msgstr "Ir para o item anterior "
+msgstr "Ir para o item anterior"
 
 #: src/keymap.cpp:424
 msgid "Move to the next entry"
@@ -1739,7 +1736,7 @@ msgstr " - %u transferências simultâneas"
 
 #: src/pbview.cpp:163
 msgid "Error: can't quit: download(s) in progress."
-msgstr "Erro: não é possível sair: transferência(s) em progresso"
+msgstr "Erro: não é possível sair: transferência(s) em progresso."
 
 #: src/pbview.cpp:199
 msgid "Error: download needs to be finished before the file can be played."
@@ -1910,7 +1907,7 @@ msgstr "não foi possível analisar o arquivo"
 
 #: rss/parser.cpp:314
 msgid "no RSS version"
-msgstr "RSS sem versão"
+msgstr "sem versão RSS"
 
 #: rss/parser.cpp:330
 msgid "invalid RSS version"
@@ -1922,7 +1919,7 @@ msgstr "versão de Atom inválida"
 
 #: rss/parser.cpp:367
 msgid "no Atom version"
-msgstr "Atom sem versão"
+msgstr "sem versão ATOM"
 
 #: rss/rss09xparser.cpp:32
 msgid "no RSS channel found"
