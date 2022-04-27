@@ -81,4 +81,9 @@ void SearchResultsListFormAction::set_head(const std::string& s,
 	set_value("head", title);
 }
 
+std::string SearchResultsListFormAction::title()
+{
+	return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
+}
+
 } // namespace newsboat
