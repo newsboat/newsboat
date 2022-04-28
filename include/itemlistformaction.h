@@ -5,6 +5,7 @@
 
 #include "3rd-party/optional.hpp"
 
+#include "fmtstrformatter.h"
 #include "history.h"
 #include "listformaction.h"
 #include "listformatter.h"
@@ -58,15 +59,6 @@ public:
 
 	void finished_qna(Operation op) override;
 
-	void set_show_searchresult(bool b)
-	{
-		show_searchresult = b;
-	}
-	void set_searchphrase(const std::string& s)
-	{
-		search_phrase = s;
-	}
-
 	void invalidate_list()
 	{
 		invalidation_mode = InvalidationMode::COMPLETE;
@@ -79,6 +71,25 @@ protected:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 
+	void invalidate(const unsigned int invalidated_pos)
+	{
+		if (invalidation_mode == InvalidationMode::COMPLETE) {
+			return;
+		}
+
+		invalidation_mode = InvalidationMode::PARTIAL;
+		invalidated_itempos.push_back(invalidated_pos);
+	}
+
+	FmtStrFormatter setup_head_formatter(const std::string& s,
+		unsigned int unread,
+		unsigned int total,
+		const std::string& url);
+
+	std::vector<ItemPtrPosPair> visible_items;
+	int old_itempos;
+	std::shared_ptr<RssFeed> feed;
+
 private:
 	void register_format_styles();
 
@@ -88,10 +99,11 @@ private:
 	bool open_position_in_browser(unsigned int pos,
 		bool interactive) const;
 
-	void set_head(const std::string& s,
+	virtual void set_head(const std::string& s,
 		unsigned int unread,
 		unsigned int total,
 		const std::string& url);
+
 	int get_pos(unsigned int idx);
 
 	void save_article(const std::string& filename,
@@ -111,16 +123,6 @@ private:
 
 	void prepare_set_filterpos();
 
-	void invalidate(const unsigned int invalidated_pos)
-	{
-		if (invalidation_mode == InvalidationMode::COMPLETE) {
-			return;
-		}
-
-		invalidation_mode = InvalidationMode::PARTIAL;
-		invalidated_itempos.push_back(invalidated_pos);
-	}
-
 	std::string item2formatted_line(const ItemPtrPosPair& item,
 		const unsigned int width,
 		const std::string& itemlist_format,
@@ -128,25 +130,23 @@ private:
 
 	void goto_item(const std::string& title);
 
-	unsigned int pos;
-	std::shared_ptr<RssFeed> feed;
-	bool apply_filter;
+	void handle_op_saveall();
+
 	Matcher matcher;
-	std::vector<ItemPtrPosPair> visible_items;
-	bool show_searchresult;
-	std::string search_phrase;
+
+	unsigned int pos;
 
 	History filterhistory;
 
 	std::mutex redraw_mtx;
 
+	bool apply_filter;
 	bool set_filterpos;
 	unsigned int filterpos;
 
 	RegexManager& rxman;
 
 	unsigned int old_width;
-	int old_itempos;
 	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
 
 	InvalidationMode invalidation_mode;
@@ -155,8 +155,6 @@ private:
 	ListFormatter listfmt;
 	Cache* rsscache;
 	FilterContainer& filters;
-
-	void handle_op_saveall();
 };
 
 } // namespace newsboat
