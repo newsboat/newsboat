@@ -13,6 +13,11 @@
 
 namespace newsboat {
 
+struct SearchResult {
+	std::shared_ptr<RssFeed> search_result_feed;
+	std::string search_phrase;
+};
+
 class SearchResultsListFormAction : public ItemListFormAction {
 public:
 	SearchResultsListFormAction(View* vv,
@@ -49,7 +54,7 @@ protected:
 		std::vector<std::string>* args = nullptr) override;
 
 private:
-	std::stack<std::shared_ptr<RssFeed>> searchresultshistory;
+	std::stack<SearchResult> search_results;
 	std::string search_phrase;
 };
 
