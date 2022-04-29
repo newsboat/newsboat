@@ -25,9 +25,11 @@ const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint
 void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>& feed,
 	const std::string& str)
 {
-	this->set_feed(feed);
-	searchresultshistory.push(feed);
-	this->set_searchphrase(str);
+	if (search_phrase != str) {
+		this->set_feed(feed);
+		search_results.push({feed, str});
+		this->set_searchphrase(str);
+	}
 }
 
 bool SearchResultsListFormAction::process_operation(
@@ -53,9 +55,10 @@ bool SearchResultsListFormAction::process_operation(
 		}
 		break;
 	case OP_PREVSEARCHRESULTS:
-		if (searchresultshistory.size() > 1) {
-			searchresultshistory.pop();
-			this->set_feed(searchresultshistory.top());
+		if (search_results.size() > 1) {
+			search_results.pop();
+			this->set_feed(search_results.top().search_result_feed);
+			this->set_searchphrase(search_results.top().search_phrase);
 		} else {
 			v->get_statusline().show_message(_("Already in first search result."));
 		}
