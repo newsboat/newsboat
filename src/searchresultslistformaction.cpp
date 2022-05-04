@@ -89,4 +89,33 @@ std::string SearchResultsListFormAction::title()
 	return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
 }
 
+FmtStrFormatter SearchResultsListFormAction::setup_head_formatter(
+	const std::string& s,
+	unsigned int unread,
+	unsigned int total,
+	const std::string& url)
+{
+	FmtStrFormatter fmt;
+
+	fmt.register_fmt('N', PROGRAM_NAME);
+	fmt.register_fmt('V', utils::program_version());
+
+	fmt.register_fmt('u', std::to_string(unread));
+	fmt.register_fmt('t', std::to_string(total));
+
+	auto feedtitle = s;
+	utils::remove_soft_hyphens(feedtitle);
+	fmt.register_fmt('T', feedtitle);
+
+	fmt.register_fmt('U', utils::censor_url(url));
+
+	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+
+	fmt.register_fmt('s', search_phrase);
+
+	return fmt;
+
+};
+
+
 } // namespace newsboat
