@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cinttypes>
 #include <cstdio>
+#include <cstring>
 #include <langinfo.h>
 #include <sstream>
 #include <string>
