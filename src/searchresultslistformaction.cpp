@@ -1,4 +1,5 @@
 #include "searchresultslistformaction.h"
+#include "keymap.h"
 
 namespace newsboat {
 SearchResultsListFormAction::SearchResultsListFormAction(View* vv,
@@ -24,9 +25,11 @@ const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint
 void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>& feed,
 	const std::string& str)
 {
-	this->set_feed(feed);
-	searchresultshistory.push(feed);
-	this->set_searchphrase(str);
+	if (search_phrase != str) {
+		this->set_feed(feed);
+		search_results.push({feed, str});
+		this->set_searchphrase(str);
+	}
 }
 
 bool SearchResultsListFormAction::process_operation(
@@ -34,11 +37,28 @@ bool SearchResultsListFormAction::process_operation(
 	bool automatic,
 	std::vector<std::string>* args)
 {
+	const unsigned int itempos = list.get_position();
+
 	switch (op) {
+	case OP_OPEN:
+		LOG(Level::INFO, "SearchResultsListFormAction: opening item at pos `%u'", itempos);
+		if (!visible_items.empty()) {
+			// no need to mark item as read, the itemview already do
+			// that
+			old_itempos = itempos;
+			v->push_itemview(feed,
+				visible_items[itempos].first->guid(), search_phrase);
+			invalidate(itempos);
+		} else {
+			v->get_statusline().show_error(
+				_("No item selected!")); // should not happen
+		}
+		break;
 	case OP_PREVSEARCHRESULTS:
-		if (searchresultshistory.size() > 1) {
-			searchresultshistory.pop();
-			this->set_feed(searchresultshistory.top());
+		if (search_results.size() > 1) {
+			search_results.pop();
+			this->set_feed(search_results.top().search_result_feed);
+			this->set_searchphrase(search_results.top().search_phrase);
 		} else {
 			v->get_statusline().show_message(_("Already in first search result."));
 		}
@@ -47,6 +67,26 @@ bool SearchResultsListFormAction::process_operation(
 		return ItemListFormAction::process_operation(op, automatic, args);
 	}
 	return true;
+}
+
+void SearchResultsListFormAction::set_head(const std::string& s,
+	unsigned int unread,
+	unsigned int total,
+	const std::string& url)
+{
+	std::string title;
+	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
+
+	const unsigned int width = utils::to_u(f.get("title:w"));
+	title = fmt.do_format(
+			cfg->get_configvalue("searchresult-title-format"),
+			width);
+	set_value("head", title);
+}
+
+std::string SearchResultsListFormAction::title()
+{
+	return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
 }
 
 } // namespace newsboat

@@ -10,6 +10,8 @@ namespace newsboat {
 class FmtStrFormatter {
 public:
 	FmtStrFormatter();
+	FmtStrFormatter(FmtStrFormatter&&) = default;
+	FmtStrFormatter& operator=(FmtStrFormatter&&) = default;
 	~FmtStrFormatter() = default;
 	void register_fmt(char f, const std::string& value);
 	std::string do_format(const std::string& fmt, unsigned int width = 0);

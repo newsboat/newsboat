@@ -30,14 +30,13 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	ConfigContainer* cfg,
 	RegexManager& r)
 	: ListFormAction(vv, formstr, "items", cfg)
+	, old_itempos(-1)
 	, pos(0)
 	, apply_filter(false)
-	, show_searchresult(false)
 	, set_filterpos(false)
 	, filterpos(0)
 	, rxman(r)
 	, old_width(0)
-	, old_itempos(-1)
 	, invalidation_mode(InvalidationMode::NONE)
 	, listfmt(&rxman, "articlelist")
 	, rsscache(cc)
@@ -71,8 +70,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			// that
 			old_itempos = itempos;
 			v->push_itemview(feed,
-				visible_items[itempos].first->guid(),
-				show_searchresult ? search_phrase : "");
+				visible_items[itempos].first->guid());
 			invalidate(itempos);
 		} else {
 			v->get_statusline().show_error(
@@ -396,15 +394,9 @@ bool ItemListFormAction::process_operation(Operation op,
 		v->push_help();
 		break;
 	case OP_RELOAD:
-		if (!show_searchresult) {
-			LOG(Level::INFO,
-				"ItemListFormAction: reloading current feed");
-			v->get_ctrl()->get_reloader()->reload(pos);
-			invalidate_list();
-		} else {
-			v->get_statusline().show_error(
-				_("Error: you can't reload search results."));
-		}
+		LOG(Level::INFO, "ItemListFormAction: reloading current feed");
+		v->get_ctrl()->get_reloader()->reload(pos);
+		invalidate_list();
 		break;
 	case OP_QUIT:
 		LOG(Level::INFO, "ItemListFormAction: quitting");
@@ -1170,16 +1162,11 @@ void ItemListFormAction::init()
 	invalidate_list();
 }
 
-void ItemListFormAction::set_head(const std::string& s,
+FmtStrFormatter ItemListFormAction::setup_head_formatter(const std::string& s,
 	unsigned int unread,
 	unsigned int total,
 	const std::string& url)
 {
-	/*
-	 * Since the ItemListFormAction is also used to display search results,
-	 * we always need to set the right title
-	 */
-	std::string title;
 	FmtStrFormatter fmt;
 
 	fmt.register_fmt('N', PROGRAM_NAME);
@@ -1196,16 +1183,22 @@ void ItemListFormAction::set_head(const std::string& s,
 
 	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
 
+	return fmt;
+}
+
+void ItemListFormAction::set_head(const std::string& s,
+	unsigned int unread,
+	unsigned int total,
+	const std::string& url)
+{
+	std::string title;
+
+	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
+
 	const unsigned int width = utils::to_u(f.get("title:w"));
-	if (!show_searchresult) {
-		title = fmt.do_format(
-				cfg->get_configvalue("articlelist-title-format"),
-				width);
-	} else {
-		title = fmt.do_format(
-				cfg->get_configvalue("searchresult-title-format"),
-				width);
-	}
+	title = fmt.do_format(
+			cfg->get_configvalue("articlelist-title-format"),
+			width);
 	set_value("head", title);
 }
 
@@ -1502,19 +1495,15 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 
 std::string ItemListFormAction::title()
 {
-	if (feed->rssurl() == "") {
-		return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
+	if (feed->is_query_feed()) {
+		return strprintf::fmt(_("Query Feed - %s"),
+				feed->rssurl().substr(
+					6, feed->rssurl().length() - 6));
 	} else {
-		if (feed->is_query_feed()) {
-			return strprintf::fmt(_("Query Feed - %s"),
-					feed->rssurl().substr(
-						6, feed->rssurl().length() - 6));
-		} else {
-			auto feedtitle = feed->title();
-			utils::remove_soft_hyphens(feedtitle);
-			return strprintf::fmt(
-					_("Article List - %s"), feedtitle);
-		}
+		auto feedtitle = feed->title();
+		utils::remove_soft_hyphens(feedtitle);
+		return strprintf::fmt(
+				_("Article List - %s"), feedtitle);
 	}
 }
 
