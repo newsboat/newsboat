@@ -387,6 +387,14 @@ static const schema_patches schemaPatches{
 
 			"ALTER TABLE rss_item ADD COLUMN content_mime_type VARCHAR(255) NOT NULL DEFAULT \"\";"
 		}
+	},
+	{	{2, 27},
+		{
+			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 27;",
+
+			"CREATE INDEX idx_feedurl_deleted ON rss_item(feedurl, deleted);",
+			"CREATE INDEX idx_unread ON rss_item(unread);"
+		}
 	}
 
 	// Note: schema changes should use the version number of the release that introduced them.
