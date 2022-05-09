@@ -13,7 +13,7 @@ you can help:
 ## Security Vulnerabilities
 
 If you happen to stumble upon a security vulnerability, **do not open a GitHub issue**.
-Instead, send an email to security@newsboat.org and encrypt your emails using 
+Instead, send an email to security@newsboat.org and encrypt your emails using
 [PGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp).
 
 
@@ -28,7 +28,7 @@ have been already fulfilled. But if in doubt, please file an issue anyway!
 
 ## Patches/Pull Requests
 
-If you are looking for a place to start contributing, take a look at the issues labeled 
+If you are looking for a place to start contributing, take a look at the issues labeled
 [good first issue](https://github.com/newsboat/newsboat/labels/good%20first%20issue)
 and [docs](https://github.com/newsboat/newsboat/labels/docs) on the issue tracker.
 Contributions that modernize the C++ and clean up the codebase are also great places
@@ -92,7 +92,7 @@ even better than an SSD.
 
 Fixing and/or adding documentation is an easy way to get involved. The Newsboat
 documentation can be found in `doc/` and related issues can be found under the
-`docs` label in the 
+`docs` label in the
 [issue tracker](https://github.com/newsboat/newsboat/labels/docs). New features
 that are added should also be documented.
 
@@ -101,5 +101,5 @@ that are added should also be documented.
 
 Fixing and/or adding translations helps localize Newsboat to different regions
 around the globe. Translations for the Newsboat interface can be found in `po/`
-and related issues can be found under the `i18n` tag in the 
+and related issues can be found under the `i18n` tag in the
 [issue tracker](https://github.com/newsboat/newsboat/labels/i18n).

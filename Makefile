@@ -165,6 +165,7 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 	cococpp -frames filter filter/filter.atg
+	sed -i 's/\s\+$$//' filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 
 target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 	@# This rule declares a dependency and doesn't need to run any
@@ -287,6 +288,14 @@ fmt:
 	$(CARGO) fmt
 	# We reset the locale to make the sorting reproducible.
 	LC_ALL=C sort -t '|' -k 1,1 -o doc/configcommands.dsv doc/configcommands.dsv
+	# Remove trailing whitespace. The purpose of the 'grep' in between is that
+	# files without trailing whitespace will not be touched by 'sed'. Otherwise
+	# editors might detect some external file modification and ask to reload.
+	# With '-I' we guard against any potentially introduced binary (test) files
+	# in the future.
+	for f in $$(git ls-files | xargs grep -lI '[ 	]$$'); do \
+		sed -i 's/[ \t]\+$$//' $$f; \
+	done
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \

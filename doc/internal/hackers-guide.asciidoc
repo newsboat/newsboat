@@ -152,15 +152,15 @@ C++ has many advantages compared to other programming languages.
 
 - C++ is backwards-compatible to C. That means we can theoretically use all the
   C libraries.
-- C++ makes it easier to structure your program in an object-oriented way, and 
+- C++ makes it easier to structure your program in an object-oriented way, and
   helps maintain inheritance hierarchies without a lot of fuzz.
 - C++ compiles to fast, native code.
 - C++ comes with an extensive standard library (see next section).
 - C++ is widespread.
-- C++ on Linux/Unix systems does not require any exotic compilers to be 
+- C++ on Linux/Unix systems does not require any exotic compilers to be
   installed in order to compile newsbeuter. g++ (part of GCC) is enough.
 
-These were the reasons why C++ was initially chosen, and it proved to be a 
+These were the reasons why C++ was initially chosen, and it proved to be a
 useable language during the development process.
 
 

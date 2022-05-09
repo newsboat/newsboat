@@ -73,7 +73,7 @@ do
 	i=$((i+1))
 	url2=$(echo "$url" | sed 's/http:/https:/')
 	printf "\r\e[K%s/%s %s\n" "$i" "$feeds" "$url"
-	_replace 
+	_replace
 done
 
 # check all feeds return valid http codes
@@ -95,13 +95,13 @@ do
 			case "$url2" in
 				http*)
 					echo "                            moved to $url2"
-					_replace 
+					_replace
 					;;
 				/*)
 					domain=$(echo "$url" | awk -F/ '{printf("%s//%s",$1,$3)}')
 					url2="$domain$url2"
 					echo "                            moved to $url2"
-					_replace 
+					_replace
 					;;
 				*)
 					printf "\n"
