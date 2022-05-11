@@ -1104,7 +1104,7 @@ title text may vary unless you customize it.
 Dialog:Configuration Variable:Default Value
 Feed List:<<feedlist-title-format,+feedlist-title-format+>>:%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter `%F'&?%?T? - tag `%T'&?
 Article List:<<articlelist-title-format,+articlelist-title-format+>>:%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter `%F'&? - %U
-Search Result:<<searchresult-title-format,+searchresult-title-format+>>:%N %V - Search results (%u unread, %t total)%?F? matching filter `%F'&?
+Search Result:<<searchresult-title-format,+searchresult-title-format+>>:%N %V - Search results:\"%s\" (%u unread, %t total)%?F? matching filter `%F'&?
 File Browser:<<filebrowser-title-format,+filebrowser-title-format+>>:%N %V - %?O?Open File&Save File? - %f
 Directory Browser:<<dirbrowser-title-format,+dirbrowser-title-format+>>:%N %V - %?O?Open Directory&Save File? - %f
 Help:<<help-title-format,+help-title-format+>>:%N %V - Help
@@ -1170,6 +1170,14 @@ Identifier:Meaning
 [[articleview-title-format-u]]<<articleview-title-format-u,+u+>>:Number of unread articles
 [[articleview-title-format-t]]<<articleview-title-format-t,+t+>>:Number of total articles
 |======================================================================
+
+.Search Result Title Format Identifiers
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[searchresult-title-format-s]]<<searchresult-title-format-s,+s+>>:Search phrase
+|======================================================================
+
 
 === Highlighting Text
 
