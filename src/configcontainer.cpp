@@ -312,7 +312,7 @@ ConfigContainer::ConfigContainer()
 			ConfigDataType::STR)},
 	{
 		"searchresult-title-format",
-		ConfigData(_("%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"),
+		ConfigData(_("%N %V - Search results:\"%s\" (%u unread, %t total)%?F? matching filter '%F'&?"),
 			ConfigDataType::STR)},
 	{
 		"selectfilter-title-format",
