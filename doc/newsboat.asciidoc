@@ -1146,10 +1146,14 @@ Identifier:Meaning
 |======================================================================
 
 .Search Result Title Format Identifiers
-[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+[frame="all", grid="all", options="header", cols="30,70"]
 |======================================================================
-Identifier:Meaning
-[[searchresult-title-format-s]]<<searchresult-title-format-s,+s+>>:Search phrase
+|Identifier|Meaning
+
+|[[searchresult-title-format-s]]<<searchresult-title-format-s,+s+>>
+|Search phrase
+
+2+|…Plus all the ones supported by <<articlelist-title-format,+articlelist-title-format+>> (see table above)
 |======================================================================
 
 .File Browser Title Format Identifiers
