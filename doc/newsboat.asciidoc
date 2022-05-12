@@ -1145,6 +1145,13 @@ Identifier:Meaning
 [[articlelist-title-format-F]]<<articlelist-title-format-F,+F+>>:Current filter expression (empty if no filter is active)
 |======================================================================
 
+.Search Result Title Format Identifiers
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Identifier:Meaning
+[[searchresult-title-format-s]]<<searchresult-title-format-s,+s+>>:Search phrase
+|======================================================================
+
 .File Browser Title Format Identifiers
 [frame="all", grid="all", format="dsv", options="header", cols="30,70"]
 |======================================================================
@@ -1169,13 +1176,6 @@ Identifier:Meaning
 [[articleview-title-format-F]]<<articleview-title-format-F,+F+>>:Feed title
 [[articleview-title-format-u]]<<articleview-title-format-u,+u+>>:Number of unread articles
 [[articleview-title-format-t]]<<articleview-title-format-t,+t+>>:Number of total articles
-|======================================================================
-
-.Search Result Title Format Identifiers
-[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
-|======================================================================
-Identifier:Meaning
-[[searchresult-title-format-s]]<<searchresult-title-format-s,+s+>>:Search phrase
 |======================================================================
 
 
