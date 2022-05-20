@@ -285,3 +285,16 @@ TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
 	REQUIRE(f.items[1].description_mime_type == "text/html");
 	REQUIRE(f.items[1].link == "http://example.com/player.html");
 }
+
+TEST_CASE("Multiple links in item", "[rsspp::Parser]")
+{
+	rsspp::Parser p;
+	rsspp::Feed f;
+
+	REQUIRE_NOTHROW(f = p.parse_file("data/multiple_item_links.atom"));
+
+	REQUIRE(f.items.size() == 1u);
+
+	REQUIRE(f.items[0].title == "Multiple links");
+	REQUIRE(f.items[0].link == "http://www.test.org/tests");
+}
