@@ -119,8 +119,10 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
-				it.link = newsboat::utils::absolute_url(
-						base, get_prop(node, "href"));
+				if (it.link.empty() || !newsboat::utils::is_http_url(it.link)) {
+					it.link = newsboat::utils::absolute_url(
+							base, get_prop(node, "href"));
+				}
 			} else if (rel == "enclosure") {
 				const std::string type = get_prop(node, "type");
 				if (newsboat::utils::is_valid_podcast_type(

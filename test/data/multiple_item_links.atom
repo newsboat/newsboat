@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>Test</title>
+  <updated>2022-05-13T05:18:05Z</updated>
+  <id>http://www.test.org/</id>
+
+  <link
+	rel      = "self"
+	type     = "application/atom+xml"
+	hreflang = "en-US"
+	href     = "http://www.test.org/index.atom"
+	title    = "Test"
+  />
+
+  <link
+	rel	 = "alternate"
+	type	 = "text/html"
+	hreflang = "en-US"
+	href	 = "http://www.test.org/"
+	title	 = "Test"
+  />
+
+  <author>
+    <name>Tester</name>
+    <email>tester@test.org</email>
+    <uri>http://www.test.org/people/spc/</uri>
+  </author>
+
+  <rights>All Rights Reserved</rights>
+
+    <entry>
+    <title type="text">Multiple links</title>
+    <updated>2022-05-13T05:18:02Z</updated>
+    <link rel="alternate" type="text/gemini" hreflang="en-US" href="gemini://gemini.test.org/tests" />
+    <link rel="alternate" type="text/html"   hreflang="en-US" href="http://www.test.org/tests" />
+    <link rel="alternate" type="text/plain"  hreflang="en-US" href="gopher://gopher.test.org/Test:test" />
+
+    <content type="html">Some content</content>
+  </entry>
+
+
+</feed>
