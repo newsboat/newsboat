@@ -119,7 +119,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 		} else if (node_is(node, "link", ns)) {
 			std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
-				if (it.link.empty() || it.link.substr(0, 4) != "http") {
+				if (it.link.empty() || !newsboat::utils::is_http_url(it.link)) {
 					it.link = newsboat::utils::absolute_url(
 							base, get_prop(node, "href"));
 				}
