@@ -133,7 +133,9 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	REQUIRE(input == "a<b>");
 
 	SECTION("encode `<` as `<>` for stfl") {
-		input = "<";
+		// Construct the string explicitly to work around GCC 12 bug:
+		// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329
+		input = std::string("<");
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == "<>");
 	}

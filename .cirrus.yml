@@ -185,24 +185,24 @@ task:
                 cc: gcc-5
                 cxx: g++-5
                 rust_version: 1.57.0
-        - name: MSRV, GCC 11 (Ubuntu 21.10)
+        - name: MSRV, GCC 12 (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-11
-                cc: gcc-11
-                cxx: g++-11
+                cxx_package: g++-12
+                cc: gcc-12
+                cxx: g++-12
                 rust_version: 1.57.0
 
-        - name: GCC 11, more warnings and checks (Ubuntu 21.10)
+        - name: GCC 12, more warnings and checks (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-11
-                cc: gcc-11
-                cxx: g++-11
+                cxx_package: g++-12
+                cc: gcc-12
+                cxx: g++-12
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 13, more warnings and checks (Ubuntu 21.10)
@@ -271,6 +271,14 @@ task:
                 cxx_package: g++-11
                 cc: gcc-11
                 cxx: g++-11
+        - name: Rust stable, GCC 12 (Ubuntu 22.04)
+          container:
+            greedy: true
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: g++-12
+                cc: gcc-12
+                cxx: g++-12
         - name: Rust stable, Clang 4.0 (Ubuntu 18.04)
           container:
             greedy: true
