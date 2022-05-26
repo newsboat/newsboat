@@ -90,22 +90,36 @@ void ItemViewFormAction::prepare()
 	 * HTML. The links extracted by the renderer are then appended, too.
 	 */
 	if (do_redraw) {
-		{
-			ScopeMeasure sm("itemview::prepare: rendering");
-			// XXX HACK: render once so that we get a proper widget width
-			recalculate_widget_dimensions();
+		recalculate_widget_dimensions(); // Make sure we know the width of the window
+
+		const unsigned int window_width = utils::to_u(f.get("main_area:w"));
+		const unsigned int text_width = cfg->get_configvalue_as_int("text-width");
+		unsigned int left_margin = 0;
+		unsigned int right_margin = 0;
+		if (text_width != 0 && text_width <= window_width) {
+			const unsigned int free_space = window_width - text_width;
+			if (cfg->get_configvalue_as_bool("center-text")) {
+				left_margin = free_space / 2;
+				right_margin = (free_space + 1) / 2; // rounding up
+			} else {
+				left_margin = 0;
+				right_margin = free_space;
+			}
 		}
+		f.set("left_margin", std::to_string(left_margin));
+		f.set("right_margin", std::to_string(right_margin));
+
+		recalculate_widget_dimensions(); // Make sure the width of the textview is recalculated
 
 		update_head(item);
 
-		const unsigned int window_width = textview.get_width();
+		const unsigned int textview_width = textview.get_width();
 
-		unsigned int text_width =
-			cfg->get_configvalue_as_int("text-width");
-		if (text_width == 0 || text_width > window_width) {
-			text_width = window_width;
-			if (text_width > 5) {
-				text_width -= 5;
+		unsigned int text_render_width = text_width;
+		if (text_render_width == 0 || text_render_width > textview_width) {
+			text_render_width = textview_width;
+			if (text_render_width > 5) {
+				text_render_width -= 5;
 			}
 		}
 
@@ -114,8 +128,8 @@ void ItemViewFormAction::prepare()
 			std::tie(formatted_text, num_lines) =
 				item_renderer::source_to_stfl_list(
 					item,
-					text_width,
-					window_width,
+					text_render_width,
+					textview_width,
 					&rxman,
 					"article");
 		} else {
@@ -133,8 +147,8 @@ void ItemViewFormAction::prepare()
 					// created at the very start of the program.
 					*cfg,
 					item,
-					text_width,
-					window_width,
+					text_render_width,
+					textview_width,
 					&rxman,
 					"article",
 					links);
@@ -554,11 +568,11 @@ void ItemViewFormAction::set_head(const std::string& s,
 	fmt.register_fmt('u', std::to_string(unread));
 	fmt.register_fmt('t', std::to_string(total));
 
-	const unsigned int width = textview.get_width();
+	const unsigned int window_width = utils::to_u(f.get("main_area:w"));
 
 	set_value("head",
 		fmt.do_format(
-			cfg->get_configvalue("itemview-title-format"), width));
+			cfg->get_configvalue("itemview-title-format"), window_width));
 }
 
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)

@@ -17,12 +17,22 @@ vbox
     text[head]:"Article '#'"
     .expand:h
     .display[showtitle]:1
-  textview[article]
-    style_normal[article]:
-    style_end[end-of-text-marker]:fg=blue,attr=bold
+  hbox[main_area]
     .expand:vh
-    offset[article_offset]:0
-    richtext:1
+    vbox
+      .width[left_margin]:0
+      .expand:0
+      text:""
+    textview[article]
+      style_normal[article]:
+      style_end[end-of-text-marker]:fg=blue,attr=bold
+      .expand:vh
+      offset[article_offset]:0
+      richtext:1
+    vbox
+      .width[right_margin]:0
+      .expand:0
+      text:""
   vbox[hints]
     .expand:0
     .display[showhint]:1

@@ -43,6 +43,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData(utils::get_default_browser(),
 			ConfigDataType::PATH)},
 	{"cache-file", ConfigData("", ConfigDataType::PATH)},
+	{"center-text", ConfigData("no", ConfigDataType::BOOL)},
 	{"cleanup-on-quit", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-delete-all-articles", ConfigData("yes", ConfigDataType::BOOL)},
 	{"confirm-mark-all-feeds-read", ConfigData("yes", ConfigDataType::BOOL)},
