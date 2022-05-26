@@ -1234,9 +1234,29 @@ test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  3rd-party/catch.hpp include/regexmanager.h include/configactionhandler.h \
  include/matcher.h filter/FilterParser.h include/regexowner.h
 test/textviewwidget.o: test/textviewwidget.cpp include/textviewwidget.h \
- include/stflpp.h 3rd-party/catch.hpp include/listformatter.h \
- include/regexmanager.h include/configactionhandler.h include/matcher.h \
- filter/FilterParser.h include/regexowner.h include/stflpp.h
+ include/stflpp.h 3rd-party/catch.hpp include/configpaths.h \
+ target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
+ include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ include/controller.h include/cache.h include/configcontainer.h \
+ include/configactionhandler.h include/colormanager.h \
+ include/configparser.h include/feedcontainer.h include/filtercontainer.h \
+ include/fslock.h target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h \
+ include/opml.h include/fileurlreader.h include/urlreader.h \
+ include/utils.h 3rd-party/expected.hpp \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
+ include/regexmanager.h include/matcher.h filter/FilterParser.h \
+ include/regexowner.h include/reloader.h include/remoteapi.h \
+ include/rssignores.h include/rssitem.h include/matchable.h \
+ include/view.h include/controller.h include/dirbrowserformaction.h \
+ include/filesystembrowser.h include/formaction.h include/history.h \
+ target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
+ include/listformatter.h include/listwidget.h \
+ include/feedlistformaction.h include/listformaction.h include/view.h \
+ include/filebrowserformaction.h include/htmlrenderer.h \
+ include/textformatter.h include/statusline.h include/listformatter.h \
+ include/stflpp.h
 test/utils.o: test/utils.cpp include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
