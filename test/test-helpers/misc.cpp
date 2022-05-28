@@ -5,7 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 
-void TestHelpers::assert_article_file_content(const std::string& path,
+void test_helpers::assert_article_file_content(const std::string& path,
 	const std::string& title,
 	const std::string& author,
 	const std::string& date,
@@ -41,7 +41,7 @@ void TestHelpers::assert_article_file_content(const std::string& path,
 	REQUIRE(line == "");
 };
 
-void TestHelpers::copy_file(const std::string& source,
+void test_helpers::copy_file(const std::string& source,
 	const std::string& destination)
 {
 	std::ifstream  src(source, std::ios::binary);
@@ -53,7 +53,7 @@ void TestHelpers::copy_file(const std::string& source,
 	dst << src.rdbuf();
 }
 
-std::vector<std::string> TestHelpers::file_contents(const std::string& filepath)
+std::vector<std::string> test_helpers::file_contents(const std::string& filepath)
 {
 	std::vector<std::string> lines;
 
@@ -67,13 +67,13 @@ std::vector<std::string> TestHelpers::file_contents(const std::string& filepath)
 	return lines;
 }
 
-bool TestHelpers::starts_with(const std::string& prefix,
+bool test_helpers::starts_with(const std::string& prefix,
 	const std::string& input)
 {
 	return input.substr(0, prefix.size()) == prefix;
 }
 
-bool TestHelpers::ends_with(const std::string& suffix,
+bool test_helpers::ends_with(const std::string& suffix,
 	const std::string& input)
 {
 	if (input.size() < suffix.size()) {
@@ -83,18 +83,18 @@ bool TestHelpers::ends_with(const std::string& suffix,
 	}
 }
 
-bool TestHelpers::file_exists(const std::string& filepath)
+bool test_helpers::file_exists(const std::string& filepath)
 {
 	return access(filepath.c_str(), F_OK) == 0;
 }
 
-TEST_CASE("ends_with", "[TestHelpers]")
+TEST_CASE("ends_with", "[test_helpers]")
 {
-	REQUIRE_FALSE(TestHelpers::ends_with("bye", "hello"));
-	REQUIRE_FALSE(TestHelpers::ends_with("bye", "hi"));
+	REQUIRE_FALSE(test_helpers::ends_with("bye", "hello"));
+	REQUIRE_FALSE(test_helpers::ends_with("bye", "hi"));
 
-	REQUIRE(TestHelpers::ends_with("ype", "type"));
-	REQUIRE(TestHelpers::ends_with("pe", "type"));
-	REQUIRE(TestHelpers::ends_with("e", "type"));
-	REQUIRE(TestHelpers::ends_with("", "type"));
+	REQUIRE(test_helpers::ends_with("ype", "type"));
+	REQUIRE(test_helpers::ends_with("pe", "type"));
+	REQUIRE(test_helpers::ends_with("e", "type"));
+	REQUIRE(test_helpers::ends_with("", "type"));
 }

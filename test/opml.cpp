@@ -88,9 +88,9 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 
 TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 
-	TestHelpers::copy_file("data/test-urls.txt", urlsFile.get_path());
+	test_helpers::copy_file("data/test-urls.txt", urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -151,7 +151,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	"into `exec:` URLs (Liferea convention)", "[Opml]")
 {
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 
 	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
@@ -186,7 +186,7 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	"(appears to be Liferea convention)",
 	"[Opml]")
 {
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 
 	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
@@ -220,9 +220,9 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 TEST_CASE("import() skips URLs that are already present in UrlReader",
 	"[Opml]")
 {
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 
-	TestHelpers::copy_file("data/test-urls.txt", urlsFile.get_path());
+	test_helpers::copy_file("data/test-urls.txt", urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;

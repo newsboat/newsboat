@@ -1,6 +1,6 @@
 #include "opts.h"
 
-TestHelpers::Opts::Opts(std::initializer_list<std::string> opts)
+test_helpers::Opts::Opts(std::initializer_list<std::string> opts)
 	: m_argc(opts.size())
 {
 	m_opts.reserve(m_argc);
@@ -29,12 +29,12 @@ TestHelpers::Opts::Opts(std::initializer_list<std::string> opts)
 	m_data.get()[i] = nullptr;
 }
 
-std::size_t TestHelpers::Opts::argc() const
+std::size_t test_helpers::Opts::argc() const
 {
 	return m_argc;
 }
 
-char** TestHelpers::Opts::argv() const
+char** test_helpers::Opts::argv() const
 {
 	return m_data.get();
 }

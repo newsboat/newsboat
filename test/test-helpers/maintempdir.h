@@ -4,7 +4,7 @@
 #include <exception>
 #include <string>
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /* Objects of MainTempDir class create Newsboat's temporary directory, and try
  * to remove it when they are destroyed. Other classes (TempFile and TempDir)
@@ -30,6 +30,6 @@ private:
 	std::string tempdir;
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_MAINTEMPDIR_H_ */

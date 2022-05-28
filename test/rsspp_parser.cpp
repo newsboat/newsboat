@@ -6,7 +6,7 @@
 
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::Parser]")
 {
-	using TestHelpers::ExceptionWithMsg;
+	using test_helpers::ExceptionWithMsg;
 
 	rsspp::Parser p;
 
@@ -17,7 +17,7 @@ TEST_CASE("Throws exception if file doesn't exist", "[rsspp::Parser]")
 
 TEST_CASE("Throws exception if file can't be parsed", "[rsspp::Parser]")
 {
-	using TestHelpers::ExceptionWithMsg;
+	using test_helpers::ExceptionWithMsg;
 
 	rsspp::Parser p;
 

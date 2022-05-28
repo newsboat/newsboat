@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <vector>
 
-TestHelpers::TempFile::TempFile()
+test_helpers::TempFile::TempFile()
 {
 	const auto filepath_template = tempdir.get_path() + "tmp.XXXXXX";
 	std::vector<char> filepath_template_c(
@@ -33,12 +33,12 @@ TestHelpers::TempFile::TempFile()
 	::unlink(filepath.c_str());
 }
 
-TestHelpers::TempFile::~TempFile()
+test_helpers::TempFile::~TempFile()
 {
 	::unlink(filepath.c_str());
 }
 
-const std::string TestHelpers::TempFile::get_path() const
+const std::string test_helpers::TempFile::get_path() const
 {
 	return filepath;
 }

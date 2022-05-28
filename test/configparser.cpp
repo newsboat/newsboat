@@ -274,8 +274,8 @@ TEST_CASE("`include` directive includes other config files", "[ConfigParser]")
 		REQUIRE_NOTHROW(cfgparser.parse_file("data/diamond-of-death/A"));
 	}
 	SECTION("File including itself only gets evaluated once") {
-		TestHelpers::TempFile testfile;
-		TestHelpers::EnvVar tmpfile("TMPFILE"); // $TMPFILE used in conf file
+		test_helpers::TempFile testfile;
+		test_helpers::EnvVar tmpfile("TMPFILE"); // $TMPFILE used in conf file
 		tmpfile.set(testfile.get_path());
 
 		// recursive includes don't fail

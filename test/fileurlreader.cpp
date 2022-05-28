@@ -64,9 +64,9 @@ TEST_CASE("URL reader writes files that it can understand later",
 	"[FileUrlReader]")
 {
 	const std::string testDataPath("data/test-urls.txt");
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 
-	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
+	test_helpers::copy_file(testDataPath, urlsFile.get_path());
 
 	FileUrlReader u(urlsFile.get_path());
 	u.reload();
@@ -108,7 +108,7 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 {
 	const std::string testDataPath("data/test-urls.txt");
 
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 	FileUrlReader u(urlsFile.get_path());
 
 	SECTION("reload() returns error structure if file does not exist") {
@@ -130,7 +130,7 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 		}
 	}
 
-	TestHelpers::copy_file(testDataPath, urlsFile.get_path());
+	test_helpers::copy_file(testDataPath, urlsFile.get_path());
 
 	SECTION("reload() succeeds if url file exists") {
 		const auto error_message = u.reload();
@@ -138,7 +138,7 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 	}
 
 	GIVEN("that the urls file is not readable") {
-		TestHelpers::Chmod notReadable(urlsFile.get_path(), S_IWUSR);
+		test_helpers::Chmod notReadable(urlsFile.get_path(), S_IWUSR);
 
 		THEN("reload() returns an error message") {
 			const auto error_message = u.reload();
@@ -152,7 +152,7 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 	}
 
 	GIVEN("that the urls file is not writable") {
-		TestHelpers::Chmod notWritable(urlsFile.get_path(), S_IRUSR);
+		test_helpers::Chmod notWritable(urlsFile.get_path(), S_IRUSR);
 
 		THEN("write_config() returns an error message") {
 			const auto error_message = u.write_config();
@@ -174,7 +174,7 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 TEST_CASE("URL reader returns error message if file contains invalid UTF-8 codepoint",
 	"[FileUrlReader]")
 {
-	TestHelpers::TempFile urlsFile;
+	test_helpers::TempFile urlsFile;
 
 	{
 		std::ofstream f(urlsFile.get_path());

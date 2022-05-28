@@ -6,7 +6,7 @@
 
 #include "3rd-party/optional.hpp"
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /* \brief Automatically restores environment variable to its original state
  * when the test finishes running.
@@ -111,6 +111,6 @@ private:
 	using EnvVar::on_change;
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_ENVVAR_H_ */

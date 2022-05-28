@@ -2,7 +2,7 @@
 
 #include "logger.h"
 
-namespace TestHelpers {
+namespace test_helpers {
 
 void reset_logger()
 {
@@ -21,4 +21,4 @@ LoggerResetter::~LoggerResetter()
 	reset_logger();
 }
 
-} /* namespace TestHelpers */
+} /* namespace test_helpers */

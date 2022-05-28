@@ -5,7 +5,7 @@
 
 #include "maintempdir.h"
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /* Objects of TempDir class create a temporary directory and remove it (along
  * with everything it contains) when the object is destructed. */
@@ -22,6 +22,6 @@ private:
 	std::string dirpath;
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_TEMPDIR_H_ */

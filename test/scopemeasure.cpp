@@ -26,10 +26,10 @@ unsigned int file_lines_count(const std::string& filepath)
 TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 	"[ScopeMeasure]")
 {
-	TestHelpers::TempFile tmp;
+	test_helpers::TempFile tmp;
 
 	{
-		TestHelpers::LoggerResetter logReset;
+		test_helpers::LoggerResetter logReset;
 		Logger::set_logfile(tmp.get_path());
 		Logger::set_loglevel(Level::DEBUG);
 
@@ -42,14 +42,14 @@ TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 TEST_CASE("stopover() adds an extra line to the log upon each call",
 	"[ScopeMeasure]")
 {
-	TestHelpers::TempFile tmp;
+	test_helpers::TempFile tmp;
 
 	// initialized to an impossible value to catch logical errors in the test
 	// itself
 	unsigned int expected_line_count = 100500;
 
 	{
-		TestHelpers::LoggerResetter logReset;
+		test_helpers::LoggerResetter logReset;
 		Logger::set_logfile(tmp.get_path());
 		Logger::set_loglevel(Level::DEBUG);
 

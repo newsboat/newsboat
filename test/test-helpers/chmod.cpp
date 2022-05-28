@@ -4,12 +4,12 @@
 #include <iostream>
 #include <stdexcept>
 
-TestHelpers::Chmod::Chmod(const std::string& path, mode_t newMode)
+test_helpers::Chmod::Chmod(const std::string& path, mode_t newMode)
 	: m_path(path)
 {
 	const auto throw_error = [this](std::string msg) {
 		const auto saved_errno = errno;
-		const auto message = std::string("TestHelpers::Chmod: ")
+		const auto message = std::string("test_helpers::Chmod: ")
 			+ msg
 			+ " `"
 			+ this->m_path
@@ -32,12 +32,12 @@ TestHelpers::Chmod::Chmod(const std::string& path, mode_t newMode)
 	}
 }
 
-TestHelpers::Chmod::~Chmod()
+test_helpers::Chmod::~Chmod()
 {
 	if (0 != ::chmod(m_path.c_str(), m_originalMode)) {
 		const auto saved_errno = errno;
 		std::cerr
-				<< "TestHelpers::Chmod: couldn't change back the mode for `"
+				<< "test_helpers::Chmod: couldn't change back the mode for `"
 					<< m_path
 					<< "': ("
 					<< std::to_string(saved_errno)

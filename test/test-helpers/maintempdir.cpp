@@ -6,18 +6,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-TestHelpers::MainTempDir::tempfileexception::tempfileexception(
+test_helpers::MainTempDir::tempfileexception::tempfileexception(
 	const std::string& error)
 	: msg("tempfileexception: " + error)
 {
 };
 
-const char* TestHelpers::MainTempDir::tempfileexception::what() const throw()
+const char* test_helpers::MainTempDir::tempfileexception::what() const throw()
 {
 	return msg.c_str();
 }
 
-TestHelpers::MainTempDir::MainTempDir()
+test_helpers::MainTempDir::MainTempDir()
 {
 	char* tmpdir_p = ::getenv("TMPDIR");
 
@@ -55,14 +55,14 @@ TestHelpers::MainTempDir::MainTempDir()
 	}
 }
 
-TestHelpers::MainTempDir::~MainTempDir()
+test_helpers::MainTempDir::~MainTempDir()
 {
 	// Try to remove the tempdir, but don't try *too* hard: there might be
 	// other objects still using it. The last one will hopefully delete it.
 	::rmdir(tempdir.c_str());
 }
 
-const std::string TestHelpers::MainTempDir::get_path() const
+const std::string test_helpers::MainTempDir::get_path() const
 {
 	return tempdir;
 }

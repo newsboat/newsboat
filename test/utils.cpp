@@ -592,7 +592,7 @@ TEST_CASE("run_program()", "[utils]")
 TEST_CASE("run_command() executes the given command with a given argument",
 	"[utils]")
 {
-	TestHelpers::TempFile sentry;
+	test_helpers::TempFile sentry;
 	const auto argument = sentry.get_path();
 
 	{
@@ -650,7 +650,7 @@ TEST_CASE("run_command() doesn't wait for the command to finish",
 TEST_CASE("resolve_tilde() replaces ~ with the path to the home directory",
 	"[utils]")
 {
-	TestHelpers::EnvVar envVar("HOME");
+	test_helpers::EnvVar envVar("HOME");
 	envVar.set("test");
 	REQUIRE(utils::resolve_tilde("~") == "test/");
 	REQUIRE(utils::resolve_tilde("~/") == "test/");
@@ -1340,12 +1340,12 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 	SECTION("Returns empty string if current directory doesn't exist") {
 		// Create a temporary directory, change to it and delete it. This leads
 		// getcwd to fail.
-		TestHelpers::TempDir tempdir;
+		test_helpers::TempDir tempdir;
 
 		const std::string tempdir_path = tempdir.get_path();
 		INFO("tempdir = " << tempdir_path);
 
-		TestHelpers::Chdir chdir(tempdir_path);
+		test_helpers::Chdir chdir(tempdir_path);
 
 		REQUIRE(0 == ::rmdir(tempdir_path.c_str()));
 
@@ -1355,7 +1355,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 
 TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 {
-	TestHelpers::TempFile tempfile;
+	test_helpers::TempFile tempfile;
 
 	SECTION("succesful if test file contains only valid UTF-8") {
 		{
@@ -1538,7 +1538,7 @@ TEST_CASE(
 	"\"lynx\" if the variable is not set",
 	"[utils]")
 {
-	TestHelpers::EnvVar browserEnv("BROWSER");
+	test_helpers::EnvVar browserEnv("BROWSER");
 
 	// If BROWSER is not set, default browser is lynx(1)
 	browserEnv.unset();
@@ -1654,7 +1654,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	"the path now exists",
 	"[utils]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
 	const auto require_return_zero = [](const std::string& path) {
 		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
@@ -1741,7 +1741,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 	"[utils]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
 	const auto path = tmp.get_path() + std::to_string(rand());
 
@@ -1763,7 +1763,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 	"by locale in LC_CTYPE class",
 	"[utils]")
 {
-	TestHelpers::LcCtypeEnvVar lc_ctype;
+	test_helpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
 		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
 		{
@@ -1821,7 +1821,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale's encoding",
 	"[utils]")
 {
-	TestHelpers::LcCtypeEnvVar lc_ctype;
+	test_helpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
 		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
 		{
@@ -1869,7 +1869,7 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 	"in LC_CTYPE class to UTF-8",
 	"[utils]")
 {
-	TestHelpers::LcCtypeEnvVar lc_ctype;
+	test_helpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
 		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
 		{

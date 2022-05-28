@@ -31,8 +31,8 @@ TEST_CASE("Passes the callback to Download objects", "[QueueLoader]")
 		sentry = true;
 	};
 
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/nonempty-queue-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/nonempty-queue-file", queueFile.get_path());
 
 	ConfigContainer cfg;
 
@@ -54,7 +54,7 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 {
 	auto empty_callback = []() {};
 	newsboat::ConfigContainer cfg;
-	TestHelpers::TempFile queueFile;
+	test_helpers::TempFile queueFile;
 
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
@@ -113,8 +113,8 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 TEST_CASE("reload() appends downloads from the array to the queue file",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/sentry-queue-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/sentry-queue-file", queueFile.get_path());
 
 	ConfigContainer cfg;
 	auto empty_callback = []() {};
@@ -158,7 +158,7 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 
 	REQUIRE(downloads.size() == 6);
 
-	const auto queue_contents = TestHelpers::file_contents(queueFile.get_path());
+	const auto queue_contents = test_helpers::file_contents(queueFile.get_path());
 	REQUIRE(queue_contents.size() == 7);
 	REQUIRE(queue_contents[0] == R"(https://example.com/url1 "first.mp4")");
 	REQUIRE(queue_contents[1] ==
@@ -175,8 +175,8 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 TEST_CASE("reload() adds downloads from the queue file to the array",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/nonempty-queue-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/nonempty-queue-file", queueFile.get_path());
 
 	ConfigContainer cfg;
 	auto empty_callback = []() {};
@@ -217,8 +217,8 @@ TEST_CASE("reload() adds downloads from the queue file to the array",
 
 TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/queue-file-for-merging", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/queue-file-for-merging", queueFile.get_path());
 
 	ConfigContainer cfg;
 	auto empty_callback = []() {};
@@ -266,8 +266,8 @@ TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLo
 TEST_CASE("Ignores status in the queue file if the podcast is missing from the filesystem",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/queue-with-missing-files", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/queue-with-missing-files", queueFile.get_path());
 
 	ConfigContainer cfg;
 	auto empty_callback = []() {};
@@ -287,8 +287,8 @@ TEST_CASE(
 	"is already present in the filesystem",
 	"[QueueFile]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/queue-with-unmarked-downloaded-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/queue-with-unmarked-downloaded-file", queueFile.get_path());
 
 	ConfigContainer cfg;
 	auto empty_callback = []() {};
@@ -306,8 +306,8 @@ TEST_CASE(
 TEST_CASE("Generates filename if it's absent from the queue file",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/queue-without-filenames", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/queue-without-filenames", queueFile.get_path());
 
 	ConfigContainer cfg;
 
@@ -339,15 +339,15 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 		"here%27s_one_with_a_quote.mp4");
 	// These two downloads should have filenames based on current time, so we
 	// only check their prefixes.
-	REQUIRE(TestHelpers::starts_with(download_path, downloads[3].filename()));
-	REQUIRE(TestHelpers::starts_with(download_path, downloads[4].filename()));
+	REQUIRE(test_helpers::starts_with(download_path, downloads[3].filename()));
+	REQUIRE(test_helpers::starts_with(download_path, downloads[4].filename()));
 }
 
 TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 	"if `delete-played-files` is set",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
+	test_helpers::TempFile queueFile;
 	auto empty_callback = []() {};
 
 	ConfigContainer cfg;
@@ -355,11 +355,11 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
-	TestHelpers::TempFile fileToBeDeleted;
-	TestHelpers::copy_file("data/empty-file", fileToBeDeleted.get_path());
+	test_helpers::TempFile fileToBeDeleted;
+	test_helpers::copy_file("data/empty-file", fileToBeDeleted.get_path());
 
-	TestHelpers::TempFile fileToBePreserved;
-	TestHelpers::copy_file("data/empty-file", fileToBePreserved.get_path());
+	test_helpers::TempFile fileToBePreserved;
+	test_helpers::copy_file("data/empty-file", fileToBePreserved.get_path());
 
 	std::vector<Download> downloads;
 	downloads.emplace_back(empty_callback);
@@ -386,20 +386,20 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 		downloads.back().set_status(status);
 	}
 
-	REQUIRE(TestHelpers::file_exists(fileToBeDeleted.get_path()));
-	REQUIRE(TestHelpers::file_exists(fileToBePreserved.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBeDeleted.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
 
 	queue_loader.reload(downloads);
 
-	REQUIRE_FALSE(TestHelpers::file_exists(fileToBeDeleted.get_path()));
-	REQUIRE(TestHelpers::file_exists(fileToBePreserved.get_path()));
+	REQUIRE_FALSE(test_helpers::file_exists(fileToBeDeleted.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
 }
 
 TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 	"if passed `true` as a second parameter and `delete-played-files` is set",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
+	test_helpers::TempFile queueFile;
 	auto empty_callback = []() {};
 
 	ConfigContainer cfg;
@@ -407,14 +407,14 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
-	TestHelpers::TempFile fileInDeletedStatte;
-	TestHelpers::copy_file("data/empty-file", fileInDeletedStatte.get_path());
+	test_helpers::TempFile fileInDeletedStatte;
+	test_helpers::copy_file("data/empty-file", fileInDeletedStatte.get_path());
 
-	TestHelpers::TempFile fileInFinishedState;
-	TestHelpers::copy_file("data/empty-file", fileInFinishedState.get_path());
+	test_helpers::TempFile fileInFinishedState;
+	test_helpers::copy_file("data/empty-file", fileInFinishedState.get_path());
 
-	TestHelpers::TempFile fileToBePreserved;
-	TestHelpers::copy_file("data/empty-file", fileToBePreserved.get_path());
+	test_helpers::TempFile fileToBePreserved;
+	test_helpers::copy_file("data/empty-file", fileToBePreserved.get_path());
 
 	std::vector<Download> downloads;
 	downloads.emplace_back(empty_callback);
@@ -445,23 +445,23 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 		downloads.back().set_status(status);
 	}
 
-	REQUIRE(TestHelpers::file_exists(fileInDeletedStatte.get_path()));
-	REQUIRE(TestHelpers::file_exists(fileInFinishedState.get_path()));
-	REQUIRE(TestHelpers::file_exists(fileToBePreserved.get_path()));
+	REQUIRE(test_helpers::file_exists(fileInDeletedStatte.get_path()));
+	REQUIRE(test_helpers::file_exists(fileInFinishedState.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
 
 	queue_loader.reload(downloads, true);
 
-	REQUIRE_FALSE(TestHelpers::file_exists(fileInDeletedStatte.get_path()));
-	REQUIRE_FALSE(TestHelpers::file_exists(fileInFinishedState.get_path()));
-	REQUIRE(TestHelpers::file_exists(fileToBePreserved.get_path()));
+	REQUIRE_FALSE(test_helpers::file_exists(fileInDeletedStatte.get_path()));
+	REQUIRE_FALSE(test_helpers::file_exists(fileInFinishedState.get_path()));
+	REQUIRE(test_helpers::file_exists(fileToBePreserved.get_path()));
 }
 
 TEST_CASE("reload() does nothing if one of the downloads in the vector "
 	"is in DOWNLOADING state",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/nonempty-queue-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/nonempty-queue-file", queueFile.get_path());
 
 	auto empty_callback = []() {};
 	ConfigContainer cfg;
@@ -486,8 +486,8 @@ TEST_CASE("reload() does nothing if one of the downloads in the vector "
 		queue_loader.reload(downloads, true);
 	}
 
-	REQUIRE(TestHelpers::file_contents(queueFile.get_path()) ==
-		TestHelpers::file_contents("data/nonempty-queue-file"));
+	REQUIRE(test_helpers::file_contents(queueFile.get_path()) ==
+		test_helpers::file_contents("data/nonempty-queue-file"));
 	REQUIRE(downloads.size() == 2);
 	REQUIRE(downloads[0].filename() == "whatever1");
 	REQUIRE(downloads[0].url() == "https://nonempty.example.com/1");
@@ -499,8 +499,8 @@ TEST_CASE("reload() does nothing if one of the downloads in the vector "
 
 TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/queue-file-with-empty-lines", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/queue-file-with-empty-lines", queueFile.get_path());
 
 	auto empty_callback = []() {};
 	ConfigContainer cfg;
@@ -549,8 +549,8 @@ TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 
 TEST_CASE("reload() removes empty lines from the queue file", "[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/queue-file-with-empty-lines", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/queue-file-with-empty-lines", queueFile.get_path());
 
 	auto empty_callback = []() {};
 	ConfigContainer cfg;
@@ -566,17 +566,17 @@ TEST_CASE("reload() removes empty lines from the queue file", "[QueueLoader]")
 		queue_loader.reload(downloads, true);
 	}
 
-	REQUIRE(TestHelpers::file_contents(queueFile.get_path()) ==
-		TestHelpers::file_contents("data/queue-file-with-empty-lines-removed"));
+	REQUIRE(test_helpers::file_contents(queueFile.get_path()) ==
+		test_helpers::file_contents("data/queue-file-with-empty-lines-removed"));
 }
 
 TEST_CASE("No exceptions are thrown if reload() can't read the queue file",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/empty-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/empty-file", queueFile.get_path());
 	// Make the file write-only.
-	TestHelpers::Chmod queueFileMode(queueFile.get_path(), 0200);
+	test_helpers::Chmod queueFileMode(queueFile.get_path(), 0200);
 
 	auto empty_callback = []() {};
 	ConfigContainer cfg;
@@ -590,10 +590,10 @@ TEST_CASE("No exceptions are thrown if reload() can't read the queue file",
 TEST_CASE("No exceptions are thrown if reload() can't write the queue file",
 	"[QueueLoader]")
 {
-	TestHelpers::TempFile queueFile;
-	TestHelpers::copy_file("data/empty-file", queueFile.get_path());
+	test_helpers::TempFile queueFile;
+	test_helpers::copy_file("data/empty-file", queueFile.get_path());
 	// Make the file read-only.
-	TestHelpers::Chmod queueFileMode(queueFile.get_path(), 0400);
+	test_helpers::Chmod queueFileMode(queueFile.get_path(), 0400);
 
 	auto empty_callback = []() {};
 	ConfigContainer cfg;

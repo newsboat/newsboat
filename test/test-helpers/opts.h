@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /// Helper class to create argc and argv arguments for CliArgsParser
 ///
@@ -37,6 +37,6 @@ public:
 	char** argv() const;
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_OPTS_H_ */

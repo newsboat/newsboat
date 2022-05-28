@@ -65,7 +65,7 @@ TEST_CASE(
 	auto input = "2008-12-30T10:03:15-08:00";
 	auto expected = "Tue, 30 Dec 2008 18:03:15 +0000";
 
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 
 	// US/Pacific and Australia/Sydney have pretty much opposite DST
 	// schedules, so for any given moment in time one of the following two
