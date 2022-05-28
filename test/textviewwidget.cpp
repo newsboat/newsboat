@@ -1,9 +1,6 @@
 #include <textviewwidget.h>
 
 #include "3rd-party/catch.hpp"
-#include "configpaths.h"
-#include "controller.h"
-#include "view.h"
 #include "listformatter.h"
 #include "stflpp.h"
 
@@ -62,23 +59,12 @@ TEST_CASE("stfl_replace_lines() keeps text in view", "[TextviewWidget]")
 
 TEST_CASE("Basic movements work as expected", "[TextviewWidget]")
 {
-	ConfigPaths paths;
-	Controller c(paths);
-	newsboat::View v(&c);
-
 	Stfl::Form form(stflTextviewForm);
 	TextviewWidget widget(widgetName, form);
 
-	// The following sections have some interactions with STFL.
-	// We call `Stfl::reset()` to make sure the terminal is in a regular mode
-	// before calling Catch2 functions. Without the reset, Catch2 might output
-	// text while the terminal is in application mode, which makes it invisble
-	// when back in regular mode.
-	// The `View` object calls `Stfl::reset()` in its destructor so we can be
-	// sure we always return to the regular terminal mode, even when an
-	// exception is thrown.
-
-	form.run(-3); // Recalculate widget dimensions (updates effective width/height fields of textview)
+	// Recalculate widget dimensions (updates effective width/height fields of textview)
+	form.run(-3);
+	// Exit STFL's application mode to make errors show up in regular terminal output
 	Stfl::reset();
 
 	REQUIRE(widget.get_height() == 5);
