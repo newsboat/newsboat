@@ -60,7 +60,7 @@ TEST_CASE("stfl_replace_lines() keeps text in view", "[TextviewWidget]")
 	}
 }
 
-TEST_CASE("basic movements work as expected", "[TextviewWidget]")
+TEST_CASE("Basic movements work as expected", "[TextviewWidget]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
@@ -129,7 +129,7 @@ TEST_CASE("basic movements work as expected", "[TextviewWidget]")
 		REQUIRE(widget.get_scroll_offset() == 6);
 	}
 
-	SECTION("scroll_page_up() moves up just enough such that there is a single line of overlap between old and niw view") {
+	SECTION("scroll_page_up() moves up just enough such that there is a single line of overlap between old and new view") {
 		widget.set_scroll_offset(6);
 		REQUIRE(widget.get_scroll_offset() == 6);
 
@@ -140,7 +140,7 @@ TEST_CASE("basic movements work as expected", "[TextviewWidget]")
 		REQUIRE(widget.get_scroll_offset() == 0);
 	}
 
-	SECTION("scroll_page_down() moves down just enough such that there is a single line of overlap between old and niw view") {
+	SECTION("scroll_page_down() moves down just enough such that there is a single line of overlap between old and new view") {
 		widget.set_scroll_offset(3);
 		REQUIRE(widget.get_scroll_offset() == 3);
 
