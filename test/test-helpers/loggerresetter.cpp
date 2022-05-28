@@ -6,9 +6,9 @@ namespace test_helpers {
 
 void reset_logger()
 {
-	::newsboat::Logger::set_logfile("/dev/null");
-	::newsboat::Logger::set_user_error_logfile("/dev/null");
-	::newsboat::Logger::unset_loglevel();
+	::newsboat::logger::set_logfile("/dev/null");
+	::newsboat::logger::set_user_error_logfile("/dev/null");
+	::newsboat::logger::unset_loglevel();
 }
 
 LoggerResetter::LoggerResetter()
