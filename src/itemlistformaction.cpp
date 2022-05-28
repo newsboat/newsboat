@@ -1085,6 +1085,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	fmt.register_fmt('n', item.first->unread() ? "N" : " ");
 	fmt.register_fmt('d', item.first->deleted() ? "D" : " ");
 	fmt.register_fmt('F', item.first->flags());
+	fmt.register_fmt('e', item.first->enclosure_url());
 
 	using namespace std::chrono;
 	const auto article_time_point = system_clock::from_time_t(
