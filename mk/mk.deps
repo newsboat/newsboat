@@ -1233,6 +1233,10 @@ test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
 test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  3rd-party/catch.hpp include/regexmanager.h include/configactionhandler.h \
  include/matcher.h filter/FilterParser.h include/regexowner.h
+test/textviewwidget.o: test/textviewwidget.cpp include/textviewwidget.h \
+ include/stflpp.h 3rd-party/catch.hpp include/listformatter.h \
+ include/regexmanager.h include/configactionhandler.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/stflpp.h
 test/utils.o: test/utils.cpp include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \

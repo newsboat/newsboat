@@ -47,6 +47,7 @@ void ItemViewFormAction::init()
 {
 	set_value("msg", "");
 	do_redraw = true;
+	textview.set_scroll_offset(0);
 	links.clear();
 	num_lines = 0;
 	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
@@ -141,7 +142,7 @@ void ItemViewFormAction::prepare()
 		}
 
 		textview.stfl_replace_lines(num_lines, formatted_text);
-		set_value("article_offset", "0");
+		update_percent();
 
 		if (in_search) {
 			rxman.remove_last_regex("article");
@@ -201,6 +202,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
 		show_source = !show_source;
 		do_redraw = true;
+		textview.set_scroll_offset(0);
 		break;
 	case OP_ENQUEUE: {
 		if (item->enclosure_url().empty()) {
@@ -363,6 +365,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to next unread article");
 		if (v->get_next_unread(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("No unread items."));
@@ -374,6 +377,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"article");
 		if (v->get_previous_unread(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("No unread items."));
@@ -384,6 +388,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to next article");
 		if (v->get_next(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("Already on last item."));
@@ -394,6 +399,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to previous article");
 		if (v->get_previous(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("Already on first item."));
@@ -404,6 +410,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to random unread article");
 		if (v->get_random_unread(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("No unread items."));

@@ -26,6 +26,17 @@ void TextviewWidget::stfl_replace_lines(std::uint32_t number_of_lines,
 {
 	num_lines = number_of_lines;
 	form.modify(textview_name, "replace_inner", stfl);
+
+	if (num_lines == 0) {
+		set_scroll_offset(0);
+	} else {
+		const std::uint32_t max_offset = num_lines - 1;
+		const std::uint32_t current_offset = get_scroll_offset();
+
+		if (current_offset > max_offset) {
+			set_scroll_offset(max_offset);
+		}
+	}
 }
 
 void TextviewWidget::scroll_up()
