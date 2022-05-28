@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_FILESYSTEMBROWSER_H
-#define NEWSBOAT_FILESYSTEMBROWSER_H
+#ifndef NEWSBOAT_FILE_SYSTEM_H_
+#define NEWSBOAT_FILE_SYSTEM_H_
 
 #include <string>
 #include <sys/stat.h>
@@ -53,4 +53,4 @@ std::string permissions_string(mode_t mode);
 
 } // namespace newsboat
 
-#endif //NEWSBOAT_FILESYSTEMBROWSER_H
+#endif //NEWSBOAT_FILE_SYSTEM_H_
