@@ -756,7 +756,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_ENQUEUE:
 		if (!visible_items.empty() && itempos < visible_items.size()) {
 			const auto item = visible_items[itempos].first;
-			return EnqueueItemEnclosure(item, feed, *v, *rsscache);
+			return enqueue_item_enclosure(item, feed, *v, *rsscache);
 		} else {
 			v->get_statusline().show_error(_("No item selected!"));
 			return false;

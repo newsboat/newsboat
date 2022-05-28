@@ -2,7 +2,7 @@
 
 namespace newsboat {
 
-bool EnqueueItemEnclosure(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed,
+bool enqueue_item_enclosure(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed,
 	View& v, Cache& cache)
 {
 	if (item->enclosure_url().empty()) {

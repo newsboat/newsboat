@@ -16,7 +16,7 @@ namespace newsboat {
 ///
 /// Returns true if URL was successfully added to queue or was already queued before,
 ///         false otherwise.
-bool EnqueueItemEnclosure(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed,
+bool enqueue_item_enclosure(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed,
 	View& v, Cache& cache);
 
 } // namespace newsboat

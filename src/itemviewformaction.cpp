@@ -204,7 +204,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		do_redraw = true;
 		break;
 	case OP_ENQUEUE:
-		return EnqueueItemEnclosure(item, feed, *v, *rsscache);
+		return enqueue_item_enclosure(item, feed, *v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;

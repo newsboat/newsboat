@@ -83,7 +83,7 @@ Drop hyphens, e.g. a class dealing with TT-RSS service would be named
 "TtRssReader".
 
 
-### Method names
+### Method/function names
 
 Use snake case, e.g. "do_the_work".
 
