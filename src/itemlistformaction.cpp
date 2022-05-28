@@ -758,7 +758,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			const auto item = visible_items[itempos].first;
 			return EnqueueItemEnclosure(item, feed, *v, *rsscache);
 		} else {
-			v->get_statusline().show_error(_("No item selected"));
+			v->get_statusline().show_error(_("No item selected!"));
 			return false;
 		}
 		break;
