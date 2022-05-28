@@ -202,7 +202,7 @@ static const std::vector<OpDesc> opdescs = {
 	},
 	{OP_GOTO_URL, "goto-url", "#", translatable("Goto URL #"), KM_ARTICLE},
 	{OP_GOTO_TITLE, "goto-title", "", translatable("Goto item with title"), KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST},
-	{OP_ENQUEUE, "enqueue", "e", translatable("Add download to queue"), KM_ARTICLE},
+	{OP_ENQUEUE, "enqueue", "e", translatable("Add download to queue"), KM_ARTICLELIST | KM_SEARCHRESULTSLIST | KM_ARTICLE},
 	{
 		OP_RELOADURLS,
 		"reload-urls",

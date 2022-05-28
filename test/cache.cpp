@@ -7,7 +7,7 @@
 #include "rssfeed.h"
 #include "rssignores.h"
 #include "rssparser.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 
@@ -37,7 +37,7 @@ TEST_CASE("items in search result can be marked read", "[Cache]")
 
 TEST_CASE("Cleaning old articles works", "[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	std::unique_ptr<ConfigContainer> cfg(new ConfigContainer());
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), cfg.get()));
 	RssParser parser(
@@ -78,7 +78,7 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 TEST_CASE("Last-Modified and ETag values are persisted to DB", "[Cache]")
 {
 	std::unique_ptr<ConfigContainer> cfg(new ConfigContainer());
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), cfg.get()));
 	const auto feedurl = "file://data/rss.xml";
 	RssParser parser(feedurl, rsscache.get(), cfg.get(), nullptr);
@@ -233,7 +233,7 @@ TEST_CASE(
 	"and `delete-read-articles-on-quit` settings",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 
 	std::vector<std::string> feedurls = {
 		"file://data/rss.xml", "file://data/atom10_1.xml"
@@ -369,7 +369,7 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 
@@ -429,7 +429,7 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	auto feedurl = "file://data/rss.xml";
@@ -451,7 +451,7 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	auto feedurl = "file://data/rss.xml";
@@ -575,7 +575,7 @@ TEST_CASE("search_for_items finds all items with matching title or content",
 TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	const auto feedurl = "file://data/rss.xml";
@@ -598,7 +598,7 @@ TEST_CASE(
 	"\"enqueued\" fields",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	const auto feedurl = "file://data/rss.xml";
@@ -697,7 +697,7 @@ TEST_CASE(
 		}
 	};
 
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	const auto feedurl = "file://data/rss.xml";
@@ -733,7 +733,7 @@ TEST_CASE(
 TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	std::unique_ptr<ConfigContainer> cfg(new ConfigContainer());
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), cfg.get()));
 
@@ -760,7 +760,7 @@ TEST_CASE(
 	"not counting the flagged ones",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	std::unique_ptr<ConfigContainer> cfg(new ConfigContainer());
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), cfg.get()));
 
@@ -840,7 +840,7 @@ TEST_CASE(
 	"changed and reset_unread = \"yes\"",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	auto feedurl = "file://data/rss.xml";
@@ -876,7 +876,7 @@ TEST_CASE(
 	"is set",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	auto feedurl = "file://data/rss.xml";
@@ -911,7 +911,7 @@ TEST_CASE(
 	"when passed a query feed",
 	"[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 
@@ -967,7 +967,7 @@ TEST_CASE(
 
 TEST_CASE("do_vacuum doesn't throw an exception", "[Cache]")
 {
-	TestHelpers::TempFile dbfile;
+	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
 	std::unique_ptr<Cache> rsscache(new Cache(dbfile.get_path(), &cfg));
 	RssParser parser("file://data/rss.xml", rsscache.get(), &cfg, nullptr);

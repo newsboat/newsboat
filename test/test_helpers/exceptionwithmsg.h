@@ -6,7 +6,7 @@
 
 #include "3rd-party/catch.hpp"
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /* \brief Matcher for an exception with specified message.
  *
@@ -46,6 +46,6 @@ public:
 	}
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_EXCEPTIONWITHMSG_H_ */

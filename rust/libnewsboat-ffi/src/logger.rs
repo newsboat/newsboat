@@ -1,6 +1,6 @@
 use libnewsboat::logger;
 
-#[cxx::bridge(namespace = "newsboat::Logger")]
+#[cxx::bridge(namespace = "newsboat::logger")]
 mod ffi {
     // This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
     enum Level {

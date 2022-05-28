@@ -6,7 +6,7 @@
 
 #include "matchable.h"
 #include "matcherexception.h"
-#include "test-helpers/stringmaker/optional.h"
+#include "test_helpers/stringmaker/optional.h"
 
 using namespace newsboat;
 

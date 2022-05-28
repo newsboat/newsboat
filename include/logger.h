@@ -8,9 +8,9 @@
 
 namespace newsboat {
 
-using Level = Logger::Level;
+using Level = logger::Level;
 
-namespace Logger {
+namespace logger {
 
 template<typename... Args>
 void log(Level l, const std::string& format, Args... args)
@@ -31,7 +31,7 @@ void log(Level l, const std::string& format, Args... args)
 #else
 #define LOG(x, ...)                                        \
 	do {                                               \
-		newsboat::Logger::log(x, __VA_ARGS__); \
+		newsboat::logger::log(x, __VA_ARGS__); \
 	} while (0)
 #endif
 

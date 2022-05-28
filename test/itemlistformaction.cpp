@@ -11,8 +11,8 @@
 #include "keymap.h"
 #include "regexmanager.h"
 #include "rssfeed.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 
@@ -22,7 +22,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile pagerfile;
+	test_helpers::TempFile pagerfile;
 
 	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
@@ -61,7 +61,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
 
-	TestHelpers::assert_article_file_content(pagerfile.get_path(),
+	test_helpers::assert_article_file_content(pagerfile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -108,7 +108,7 @@ TEST_CASE(
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile browserfile;
+	test_helpers::TempFile browserfile;
 
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -179,7 +179,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile browserfile;
+	test_helpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
 	std::string line;
 
@@ -213,7 +213,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile browserfile;
+	test_helpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
 	std::string line;
 
@@ -247,7 +247,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile browserfile;
+	test_helpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -331,7 +331,7 @@ TEST_CASE(
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile browserfile;
+	test_helpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -418,7 +418,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 	RegexManager rxman;
-	TestHelpers::TempFile urlFile;
+	test_helpers::TempFile urlFile;
 
 	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
@@ -452,7 +452,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
 
-		TestHelpers::assert_article_file_content(urlFile.get_path(),
+		test_helpers::assert_article_file_content(urlFile.get_path(),
 			test_title,
 			test_author,
 			test_pubDate_str,
@@ -481,7 +481,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
 	RegexManager rxman;
-	TestHelpers::TempFile bookmarkFile;
+	test_helpers::TempFile bookmarkFile;
 	std::string line;
 	std::vector<std::string> bookmark_args;
 
@@ -615,7 +615,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile saveFile;
+	test_helpers::TempFile saveFile;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -654,7 +654,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, true, &op_args));
 
-	TestHelpers::assert_article_file_content(saveFile.get_path(),
+	test_helpers::assert_article_file_content(saveFile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,
@@ -718,7 +718,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	// updated.
 	ConfigPaths paths;
 	Controller c(paths);
-	TestHelpers::TempFile articleFile;
+	test_helpers::TempFile articleFile;
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
@@ -805,7 +805,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	ConfigPaths paths;
 	Controller c(paths);
 	newsboat::View v(&c);
-	TestHelpers::TempFile articleFile;
+	test_helpers::TempFile articleFile;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -844,7 +844,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 
 	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, true, &op_args));
 
-	TestHelpers::assert_article_file_content(articleFile.get_path(),
+	test_helpers::assert_article_file_content(articleFile.get_path(),
 		test_title,
 		test_author,
 		test_pubDate_str,

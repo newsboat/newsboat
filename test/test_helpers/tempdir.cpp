@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <vector>
 
-TestHelpers::TempDir::TempDir()
+test_helpers::TempDir::TempDir()
 {
 	const auto dirpath_template = tempdir.get_path() + "tmp.XXXXXX";
 	std::vector<char> dirpath_template_c(
@@ -31,7 +31,7 @@ TestHelpers::TempDir::TempDir()
 	dirpath.push_back('/');
 }
 
-TestHelpers::TempDir::~TempDir()
+test_helpers::TempDir::~TempDir()
 {
 	const pid_t pid = ::fork();
 	if (pid == -1) {
@@ -50,7 +50,7 @@ TestHelpers::TempDir::~TempDir()
 	}
 }
 
-const std::string TestHelpers::TempDir::get_path() const
+const std::string test_helpers::TempDir::get_path() const
 {
 	return dirpath;
 }

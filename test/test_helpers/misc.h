@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /*
  * The assert_article_file_content opens a file where the content of an article
@@ -41,6 +41,6 @@ bool ends_with(const std::string& suffix, const std::string& input);
  */
 bool file_exists(const std::string& filepath);
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_MISC_H_ */

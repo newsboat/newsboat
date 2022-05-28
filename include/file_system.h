@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_FILESYSTEMBROWSER_H
-#define NEWSBOAT_FILESYSTEMBROWSER_H
+#ifndef NEWSBOAT_FILE_SYSTEM_H_
+#define NEWSBOAT_FILE_SYSTEM_H_
 
 #include <string>
 #include <sys/stat.h>
@@ -8,7 +8,7 @@
 
 namespace newsboat {
 
-namespace FileSystemBrowser {
+namespace file_system {
 
 enum class FileType {
 	Unknown,
@@ -49,8 +49,8 @@ std::string get_group_padded(gid_t gid);
 /// Convert permissions into an rwxrwxrwx-style string.
 std::string permissions_string(mode_t mode);
 
-} // namespace FileSystemBrowser
+} // namespace file_system
 
 } // namespace newsboat
 
-#endif //NEWSBOAT_FILESYSTEMBROWSER_H
+#endif //NEWSBOAT_FILE_SYSTEM_H_

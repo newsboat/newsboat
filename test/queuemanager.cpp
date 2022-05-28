@@ -1,10 +1,10 @@
 #include "queuemanager.h"
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/chmod.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/chmod.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/tempfile.h"
 
 #include "cache.h"
 #include "configcontainer.h"
@@ -28,11 +28,11 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
-		TestHelpers::TempFile queue_file;
+		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
 		THEN("the queue file is not automatically created") {
-			REQUIRE_FALSE(TestHelpers::file_exists(queue_file.get_path()));
+			REQUIRE_FALSE(test_helpers::file_exists(queue_file.get_path()));
 		}
 
 		WHEN("enqueue_url() is called") {
@@ -44,12 +44,12 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 			}
 
 			THEN("the queue file contains an entry") {
-				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(queue_file.get_path());
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(TestHelpers::starts_with(enclosure_url, lines[0]));
-				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(test_helpers::starts_with(enclosure_url, lines[0]));
+				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -69,12 +69,12 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 			}
 
 			THEN("the queue file contains a single entry") {
-				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(queue_file.get_path());
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(TestHelpers::starts_with(enclosure_url, lines[0]));
-				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(test_helpers::starts_with(enclosure_url, lines[0]));
+				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -109,9 +109,9 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 			}
 
 			THEN("the queue file contains three entries") {
-				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(queue_file.get_path());
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 4);
 				REQUIRE(lines[0] != "");
 				REQUIRE(lines[1] != "");
@@ -147,7 +147,7 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
-		TestHelpers::TempFile queue_file;
+		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
 		WHEN("first item is enqueued") {
@@ -159,12 +159,12 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 			}
 
 			THEN("the queue file contains a corresponding entry") {
-				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(queue_file.get_path());
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(TestHelpers::starts_with(enclosure_url1, lines[0]));
-				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
+				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -184,12 +184,12 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 				}
 
 				THEN("the queue file still contains a single entry") {
-					REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+					REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-					const auto lines = TestHelpers::file_contents(queue_file.get_path());
+					const auto lines = test_helpers::file_contents(queue_file.get_path());
 					REQUIRE(lines.size() == 2);
-					REQUIRE(TestHelpers::starts_with(enclosure_url1, lines[0]));
-					REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
+					REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
+					REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
 					REQUIRE(lines[1] == "");
 				}
@@ -217,12 +217,12 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
-		TestHelpers::TempFile queue_file;
+		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		TestHelpers::copy_file("data/empty-file", queue_file.get_path());
+		test_helpers::copy_file("data/empty-file", queue_file.get_path());
 		// The file is read-only
-		TestHelpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
+		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
 		WHEN("enqueue_url() is called") {
 			const auto result = manager.enqueue_url(item, feed);
@@ -264,7 +264,7 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 
 	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/podcasts.atom");
 
-	TestHelpers::TempFile queue_file;
+	test_helpers::TempFile queue_file;
 	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result1 = manager.enqueue_url(item1, feed);
@@ -279,9 +279,9 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 
 	REQUIRE(item2->enqueued());
 
-	REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-	const auto lines = TestHelpers::file_contents(queue_file.get_path());
+	const auto lines = test_helpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] ==
 		R"(https://example.com/podcast.mp3 "/tmp/nonexistent-newsboat/podcast.mp3")");
@@ -306,7 +306,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/podcasts.atom");
 
-	TestHelpers::TempFile queue_file;
+	test_helpers::TempFile queue_file;
 	QueueManager manager(&cfg, queue_file.get_path());
 
 	SECTION("%n for current feed title, with slashes replaced by underscores") {
@@ -315,7 +315,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(queue_file.get_path());
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/Feed title_theme")");
@@ -327,7 +327,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(queue_file.get_path());
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] == R"(https://example.com/~adam/podcast.mp3 "/example/example.com")");
 		REQUIRE(lines[1] == "");
@@ -338,7 +338,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(queue_file.get_path());
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] == R"(https://example.com/~adam/podcast.mp3 "/example/podcast.mp3")");
 		REQUIRE(lines[1] == "");
@@ -346,7 +346,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 	SECTION("%F, %m, %b, %d, %H, %M, %S, %y, and %Y to render items's publication date with strftime") {
 		// %H is sensitive to the timezone, so reset it to UTC for a time being
-		TestHelpers::TzEnvVar tzEnv;
+		test_helpers::TzEnvVar tzEnv;
 		tzEnv.set("UTC");
 
 		cfg.set_configvalue("download-filename-format", "%F, %m, %b, %d, %H, %M, %S, %y, and %Y");
@@ -355,7 +355,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(queue_file.get_path());
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/2021-04-06, 04, Apr, 06, 15, 38, 19, 21, and 2021")");
@@ -368,7 +368,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(queue_file.get_path());
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/Rain_snow_sun in a single day")");
@@ -380,7 +380,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 		manager.enqueue_url(item, feed);
 
-		const auto lines = TestHelpers::file_contents(queue_file.get_path());
+		const auto lines = test_helpers::file_contents(queue_file.get_path());
 		REQUIRE(lines.size() == 2);
 		REQUIRE(lines[0] ==
 			R"(https://example.com/~adam/podcast.mp3 "/example/mp3")");
@@ -401,7 +401,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 			manager.enqueue_url(item, irrelevant_feed);
 
-			const auto lines = TestHelpers::file_contents(queue_file.get_path());
+			const auto lines = test_helpers::file_contents(queue_file.get_path());
 			REQUIRE(lines.size() == 2);
 			REQUIRE(lines[0] ==
 				R"(https://example.com/~adam/podcast.mp3 "/example/Relevant feed")");
@@ -414,7 +414,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 			manager.enqueue_url(item, feed);
 
-			const auto lines = TestHelpers::file_contents(queue_file.get_path());
+			const auto lines = test_helpers::file_contents(queue_file.get_path());
 			REQUIRE(lines.size() == 2);
 			REQUIRE(lines[0] ==
 				R"(https://example.com/~adam/podcast.mp3 "/example/Relevant feed")");
@@ -447,7 +447,7 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 		item3->set_enclosure_type("image/jpeg");
 		feed->add_item(item3);
 
-		TestHelpers::TempFile queue_file;
+		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
@@ -459,9 +459,9 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 			}
 
 			THEN("the queue file contains three entries") {
-				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(queue_file.get_path());
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 4);
 				REQUIRE(lines[0] != "");
 				REQUIRE(lines[1] != "");
@@ -499,7 +499,7 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 		item2->set_enclosure_type("audio/mpeg");
 		feed->add_item(item2);
 
-		TestHelpers::TempFile queue_file;
+		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
 		WHEN("autoenqueue() is called") {
@@ -513,12 +513,12 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 			}
 
 			THEN("the queue file still contains a single entry") {
-				REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-				const auto lines = TestHelpers::file_contents(queue_file.get_path());
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
 				REQUIRE(lines.size() == 2);
-				REQUIRE(TestHelpers::starts_with(enclosure_url1, lines[0]));
-				REQUIRE(TestHelpers::ends_with(R"(/podcast.mp3")", lines[0]));
+				REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
+				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
 				REQUIRE(lines[1] == "");
 			}
@@ -546,12 +546,12 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 		item->set_enclosure_type("audio/mpeg");
 		feed->add_item(item);
 
-		TestHelpers::TempFile queue_file;
+		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		TestHelpers::copy_file("data/empty-file", queue_file.get_path());
+		test_helpers::copy_file("data/empty-file", queue_file.get_path());
 		// The file is read-only
-		TestHelpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
+		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
 		WHEN("autoenqueue() is called") {
 			const auto result = manager.autoenqueue(feed);
@@ -595,16 +595,16 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 	item3->set_enclosure_type("audio/mpeg");
 	feed->add_item(item3);
 
-	TestHelpers::TempFile queue_file;
+	test_helpers::TempFile queue_file;
 	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(result.extra_info == "");
 
-	REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-	const auto lines = TestHelpers::file_contents(queue_file.get_path());
+	const auto lines = test_helpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == R"(https://example.com/podcast.mp3 "/example/podcast.mp3")");
 	REQUIRE(lines[1] == R"(https://example.com/podcast3.mp3 "/example/podcast3.mp3")");
@@ -637,16 +637,16 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 	item3->set_enclosure_type("audio/mpeg");
 	feed->add_item(item3);
 
-	TestHelpers::TempFile queue_file;
+	test_helpers::TempFile queue_file;
 	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(result.extra_info == "");
 
-	REQUIRE(TestHelpers::file_exists(queue_file.get_path()));
+	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
-	const auto lines = TestHelpers::file_contents(queue_file.get_path());
+	const auto lines = test_helpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == R"(https://example.com/podcast.mp3 "/example/podcast.mp3")");
 	REQUIRE(lines[1] == R"(http://example.com/podcast2.mp3 "/example/podcast2.mp3")");

@@ -61,7 +61,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				const auto selected_position = files_list.get_position();
 				const auto selection = id_at_position[selected_position];
 				switch (selection.filetype) {
-				case FileSystemBrowser::FileType::Directory: {
+				case file_system::FileType::Directory: {
 					const int status = ::chdir(selection.name.c_str());
 					LOG(Level::DEBUG,
 						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
@@ -79,7 +79,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 					do_redraw = true;
 				}
 				break;
-				case FileSystemBrowser::FileType::RegularFile: {
+				case file_system::FileType::RegularFile: {
 					std::string fn = utils::getcwd();
 					if (fn.back() != NEWSBEUTER_PATH_SEP) {
 						fn.push_back(NEWSBEUTER_PATH_SEP);
@@ -201,8 +201,8 @@ std::vector<std::string> get_sorted_dirlist()
 				auto dpath = strprintf::fmt(
 						"%s/%s", cwdtmp, de->d_name);
 				if (::lstat(dpath.c_str(), &sb) == 0) {
-					const auto ftype = FileSystemBrowser::mode_to_filetype(sb.st_mode);
-					if (ftype == FileSystemBrowser::FileType::Directory) {
+					const auto ftype = file_system::mode_to_filetype(sb.st_mode);
+					if (ftype == file_system::FileType::Directory) {
 						ret.push_back(de->d_name);
 					}
 				}
@@ -287,16 +287,16 @@ const std::vector<KeyMapHintEntry>& DirBrowserFormAction::get_keymap_hint() cons
 
 void DirBrowserFormAction::add_directory(
 	ListFormatter& listfmt,
-	std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
+	std::vector<file_system::FileSystemEntry>& id_at_position,
 	std::string dirname)
 {
 	struct stat sb;
 	if (::lstat(dirname.c_str(), &sb) == 0) {
-		const auto ftype = FileSystemBrowser::mode_to_filetype(sb.st_mode);
+		const auto ftype = file_system::mode_to_filetype(sb.st_mode);
 
-		const auto rwxbits = FileSystemBrowser::permissions_string(sb.st_mode);
-		const auto owner = FileSystemBrowser::get_user_padded(sb.st_uid);
-		const auto group = FileSystemBrowser::get_group_padded(sb.st_gid);
+		const auto rwxbits = file_system::permissions_string(sb.st_mode);
+		const auto owner = file_system::get_user_padded(sb.st_uid);
+		const auto group = file_system::get_group_padded(sb.st_gid);
 		std::string formatteddirname = get_formatted_dirname(dirname, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt(
@@ -306,21 +306,21 @@ void DirBrowserFormAction::add_directory(
 				// bits.
 				static_cast<int64_t>(sb.st_size));
 		std::string line = strprintf::fmt("%c%s %s %s %s %s",
-				FileSystemBrowser::filetype_to_char(ftype),
+				file_system::filetype_to_char(ftype),
 				rwxbits,
 				owner,
 				group,
 				sizestr,
 				formatteddirname);
 		listfmt.add_line(utils::quote_for_stfl(line));
-		id_at_position.push_back(FileSystemBrowser::FileSystemEntry{ftype, dirname});
+		id_at_position.push_back(file_system::FileSystemEntry{ftype, dirname});
 	}
 }
 
 std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
 	mode_t mode)
 {
-	const auto suffix = FileSystemBrowser::mode_suffix(mode);
+	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
 		return strprintf::fmt("%s%c", dirname, suffix.value());
 	} else {

@@ -2,17 +2,17 @@
 
 #include "3rd-party/catch.hpp"
 
-TestHelpers::EnvVar::EnvVar(std::string name_)
+test_helpers::EnvVar::EnvVar(std::string name_)
 	: EnvVar(name_, true)
 {
 	if (name_ == "TZ") {
-		throw std::invalid_argument("Using EnvVar(\"TZ\") is discouraged. Try TestHelpers::TzEnvVar instead.");
+		throw std::invalid_argument("Using EnvVar(\"TZ\") is discouraged. Try test_helpers::TzEnvVar instead.");
 	} else if (name_ == "LC_CTYPE") {
-		throw std::invalid_argument("Using EnvVar(\"LC_CTYPE\") is discouraged. Try TestHelpers::LcCtypeEnvVar instead.");
+		throw std::invalid_argument("Using EnvVar(\"LC_CTYPE\") is discouraged. Try test_helpers::LcCtypeEnvVar instead.");
 	}
 }
 
-TestHelpers::EnvVar::EnvVar(std::string name_, bool /* unused */)
+test_helpers::EnvVar::EnvVar(std::string name_, bool /* unused */)
 	: name(std::move(name_))
 {
 	const char* original = ::getenv(name.c_str());
@@ -22,7 +22,7 @@ TestHelpers::EnvVar::EnvVar(std::string name_, bool /* unused */)
 	}
 }
 
-TestHelpers::EnvVar::~EnvVar()
+test_helpers::EnvVar::~EnvVar()
 {
 	if (was_set) {
 		set(value);
@@ -31,7 +31,7 @@ TestHelpers::EnvVar::~EnvVar()
 	}
 }
 
-void TestHelpers::EnvVar::set(const std::string& new_value) const
+void test_helpers::EnvVar::set(const std::string& new_value) const
 {
 	const auto overwrite = true;
 	::setenv(name.c_str(), new_value.c_str(), overwrite);
@@ -40,7 +40,7 @@ void TestHelpers::EnvVar::set(const std::string& new_value) const
 	}
 }
 
-void TestHelpers::EnvVar::unset() const
+void test_helpers::EnvVar::unset() const
 {
 	::unsetenv(name.c_str());
 	if (on_change_fn) {
@@ -48,13 +48,13 @@ void TestHelpers::EnvVar::unset() const
 	}
 }
 
-void TestHelpers::EnvVar::on_change(
+void test_helpers::EnvVar::on_change(
 	std::function<void(nonstd::optional<std::string>)> fn)
 {
 	on_change_fn = std::move(fn);
 }
 
-TestHelpers::TzEnvVar::TzEnvVar()
+test_helpers::TzEnvVar::TzEnvVar()
 	: EnvVar("TZ", true)
 {
 	on_change([](nonstd::optional<std::string>) {
@@ -62,7 +62,7 @@ TestHelpers::TzEnvVar::TzEnvVar()
 	});
 }
 
-TestHelpers::LcCtypeEnvVar::LcCtypeEnvVar()
+test_helpers::LcCtypeEnvVar::LcCtypeEnvVar()
 	: EnvVar("LC_CTYPE", true)
 {
 	on_change([](nonstd::optional<std::string> new_charset) {
@@ -77,7 +77,7 @@ TestHelpers::LcCtypeEnvVar::LcCtypeEnvVar()
 
 TEST_CASE("EnvVar object restores the environment variable to its original "
 	"state when the object is destroyed",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -93,7 +93,7 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 	REQUIRE(expected == ::getenv(var));
 
 	{
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		REQUIRE(expected == ::getenv(var));
 
 		const auto newValue = std::string("totally new value");
@@ -108,7 +108,7 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 }
 
 TEST_CASE("EnvVar::set() changes the current state of the environment variable",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -118,7 +118,7 @@ TEST_CASE("EnvVar::set() changes the current state of the environment variable",
 
 	const auto expected = std::string("let's try this out, shall we?");
 
-	TestHelpers::EnvVar envVar(var);
+	test_helpers::EnvVar envVar(var);
 
 	envVar.set("absolutely new value");
 	REQUIRE_FALSE(expected == ::getenv(var));
@@ -129,7 +129,7 @@ TEST_CASE("EnvVar::set() changes the current state of the environment variable",
 
 TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 	"variable is restored",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -144,7 +144,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 	REQUIRE(expected == ::getenv(var));
 
 	{
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.set("some new value");
 	}
 
@@ -155,7 +155,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 
 TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	"the environment variable",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -177,7 +177,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		const auto newValue = std::string("totally new value here");
 		auto valueChanged = false;
 
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&valueChanged,
 		&var](nonstd::optional<std::string> new_value) {
 			valueChanged = new_value.has_value() && (new_value.value() == ::getenv(var));
@@ -191,7 +191,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	SECTION("The function is ran *once* per change") {
 		auto counter = unsigned{};
 
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&counter](nonstd::optional<std::string>) {
 			counter++;
 		});
@@ -211,7 +211,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		const auto expected_new_value = std::string("test sentry");
 		auto checks_ok = false;
 
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&expected_new_value,
 		&checks_ok](nonstd::optional<std::string> new_value) {
 			checks_ok = new_value.has_value() && (new_value.value() == expected_new_value);
@@ -226,7 +226,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 }
 
 TEST_CASE("EnvVar::unset() completely removes the variable from the environment",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -245,7 +245,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 	value = nullptr;
 
 	{
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 
 		value = ::getenv(var);
 		REQUIRE_FALSE(value == nullptr);
@@ -264,7 +264,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 
 TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	"variable is restored",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -283,7 +283,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	value = nullptr;
 
 	{
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 
 		value = ::getenv(var);
 		REQUIRE_FALSE(value == nullptr);
@@ -307,7 +307,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 
 TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	"the environment variable",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -323,7 +323,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	SECTION("The function is ran *after* the change") {
 		auto value_unset = false;
 
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&value_unset, &var](nonstd::optional<std::string> new_value) {
 			value_unset = !new_value.has_value() && (nullptr == ::getenv(var));
 		});
@@ -336,7 +336,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	SECTION("The function is run *once* per change") {
 		auto counter = unsigned{};
 
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&counter](nonstd::optional<std::string>) {
 			counter++;
 		});
@@ -353,7 +353,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	SECTION("Function is passed `nullopt`") {
 		auto checks_ok = false;
 
-		TestHelpers::EnvVar envVar(var);
+		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&checks_ok](nonstd::optional<std::string> new_value) {
 			checks_ok = !new_value.has_value();
 		});
@@ -369,7 +369,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 
 TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 	"restoring the variable to its original state",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -383,7 +383,7 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 		auto counter = unsigned{};
 
 		{
-			TestHelpers::EnvVar envVar(var);
+			test_helpers::EnvVar envVar(var);
 			envVar.on_change([&counter](nonstd::optional<std::string>) {
 				counter++;
 			});
@@ -418,12 +418,12 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 	REQUIRE(::unsetenv(var) == 0);
 }
 
-TEST_CASE("EnvVar can't be constructed for TZ variable", "[test-helpers]")
+TEST_CASE("EnvVar can't be constructed for TZ variable", "[test_helpers]")
 {
-	REQUIRE_THROWS_AS(TestHelpers::EnvVar("TZ"), std::invalid_argument);
+	REQUIRE_THROWS_AS(test_helpers::EnvVar("TZ"), std::invalid_argument);
 }
 
-TEST_CASE("EnvVar can't be constructed for LC_CTYPE variable", "[test-helpers]")
+TEST_CASE("EnvVar can't be constructed for LC_CTYPE variable", "[test_helpers]")
 {
-	REQUIRE_THROWS_AS(TestHelpers::EnvVar("LC_CTYPE"), std::invalid_argument);
+	REQUIRE_THROWS_AS(test_helpers::EnvVar("LC_CTYPE"), std::invalid_argument);
 }

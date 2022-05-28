@@ -5,13 +5,13 @@
 
 #include "utils.h"
 
-TestHelpers::Chdir::Chdir(const std::string& path)
+test_helpers::Chdir::Chdir(const std::string& path)
 {
 	m_old_path = newsboat::utils::getcwd();
 	const int result = ::chdir(path.c_str());
 	if (result != 0) {
 		const auto saved_errno = errno;
-		auto msg = std::string("TestHelpers::Chdir: ")
+		auto msg = std::string("test_helpers::Chdir: ")
 			+ "couldn't change current directory to `"
 			+ path
 			+ "': ("
@@ -22,7 +22,7 @@ TestHelpers::Chdir::Chdir(const std::string& path)
 	}
 }
 
-TestHelpers::Chdir::~Chdir()
+test_helpers::Chdir::~Chdir()
 {
 	// Ignore the return value, because even if the call failed, we
 	// can't do anything useful.

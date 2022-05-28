@@ -1022,6 +1022,7 @@ Identifier:Meaning
 [[articlelist-format-t]]<<articlelist-format-t,+t+>>:Article title
 [[articlelist-format-T]]<<articlelist-format-T,+T+>>:If the article list displays articles from different feeds, then this identifier contains the title of the feed to which the article belongs.
 [[articlelist-format-L]]<<articlelist-format-L,+L+>>:Article length
+[[articlelist-format-e]]<<articlelist-format-e,+e+>>:Article enclosure URL
 |======================================================================
 
 .Available Identifiers for selecttag-format
