@@ -11,11 +11,11 @@
 
 #include "3rd-party/catch.hpp"
 #include "htmlrenderer.h"
-#include "test-helpers/chdir.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/stringmaker/optional.h"
-#include "test-helpers/tempdir.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/chdir.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/stringmaker/optional.h"
+#include "test_helpers/tempdir.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 

@@ -11,8 +11,8 @@
 #include "keymap.h"
 #include "regexmanager.h"
 #include "rssfeed.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 

@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/tempdir.h"
+#include "test_helpers/tempdir.h"
 
 using namespace newsboat;
 

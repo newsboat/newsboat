@@ -8,8 +8,8 @@
 #include "utils.h"
 #include "rssitem.h"
 #include "3rd-party/catch.hpp"
-#include "test-helpers/tempdir.h"
-#include "test-helpers/envvar.h"
+#include "test_helpers/tempdir.h"
+#include "test_helpers/envvar.h"
 
 using namespace newsboat;
 

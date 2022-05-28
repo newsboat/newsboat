@@ -3,10 +3,10 @@
 #include <cstring>
 
 #include "cliargsparser.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/opts.h"
-#include "test-helpers/stringmaker/optional.h"
-#include "test-helpers/tempdir.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/opts.h"
+#include "test_helpers/stringmaker/optional.h"
+#include "test_helpers/tempdir.h"
 
 using namespace newsboat;
 

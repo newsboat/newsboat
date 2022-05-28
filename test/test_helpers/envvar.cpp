@@ -77,7 +77,7 @@ test_helpers::LcCtypeEnvVar::LcCtypeEnvVar()
 
 TEST_CASE("EnvVar object restores the environment variable to its original "
 	"state when the object is destroyed",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -108,7 +108,7 @@ TEST_CASE("EnvVar object restores the environment variable to its original "
 }
 
 TEST_CASE("EnvVar::set() changes the current state of the environment variable",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -129,7 +129,7 @@ TEST_CASE("EnvVar::set() changes the current state of the environment variable",
 
 TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 	"variable is restored",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -155,7 +155,7 @@ TEST_CASE("EnvVar::set() doesn't change the value to which the environment "
 
 TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 	"the environment variable",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -226,7 +226,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 }
 
 TEST_CASE("EnvVar::unset() completely removes the variable from the environment",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -264,7 +264,7 @@ TEST_CASE("EnvVar::unset() completely removes the variable from the environment"
 
 TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 	"variable is restored",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -307,7 +307,7 @@ TEST_CASE("EnvVar::unset() doesn't change the value to which the environment "
 
 TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 	"the environment variable",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -369,7 +369,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 
 TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 	"restoring the variable to its original state",
-	"[test-helpers]")
+	"[test_helpers]")
 {
 	const char var[] = "nEwSb0a7-tEsT-eNvIroNm3Nt-v4rIabLe";
 	{
@@ -418,12 +418,12 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 	REQUIRE(::unsetenv(var) == 0);
 }
 
-TEST_CASE("EnvVar can't be constructed for TZ variable", "[test-helpers]")
+TEST_CASE("EnvVar can't be constructed for TZ variable", "[test_helpers]")
 {
 	REQUIRE_THROWS_AS(test_helpers::EnvVar("TZ"), std::invalid_argument);
 }
 
-TEST_CASE("EnvVar can't be constructed for LC_CTYPE variable", "[test-helpers]")
+TEST_CASE("EnvVar can't be constructed for LC_CTYPE variable", "[test_helpers]")
 {
 	REQUIRE_THROWS_AS(test_helpers::EnvVar("LC_CTYPE"), std::invalid_argument);
 }

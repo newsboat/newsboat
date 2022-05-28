@@ -1,10 +1,10 @@
 #include "queuemanager.h"
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/chmod.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/chmod.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/tempfile.h"
 
 #include "cache.h"
 #include "configcontainer.h"

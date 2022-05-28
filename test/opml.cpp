@@ -6,8 +6,8 @@
 #include "cache.h"
 #include "fileurlreader.h"
 #include "rssfeed.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 

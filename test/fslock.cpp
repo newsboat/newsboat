@@ -8,8 +8,8 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/tempdir.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/tempdir.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 

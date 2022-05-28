@@ -4,11 +4,11 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/chmod.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/opts.h"
-#include "test-helpers/tempdir.h"
+#include "test_helpers/chmod.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/opts.h"
+#include "test_helpers/tempdir.h"
 #include "utils.h"
 
 using namespace newsboat;

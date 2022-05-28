@@ -2,7 +2,7 @@
 
 #include "3rd-party/catch.hpp"
 #include "rss/exception.h"
-#include "test-helpers/exceptionwithmsg.h"
+#include "test_helpers/exceptionwithmsg.h"
 
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::Parser]")
 {

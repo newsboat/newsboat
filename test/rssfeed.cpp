@@ -5,8 +5,8 @@
 #include "configcontainer.h"
 #include "rssparser.h"
 
-#include "test-helpers/envvar.h"
-#include "test-helpers/stringmaker/optional.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/stringmaker/optional.h"
 
 using namespace newsboat;
 

@@ -6,8 +6,8 @@
 
 #include "logger.h"
 
-#include "test-helpers/loggerresetter.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/loggerresetter.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 

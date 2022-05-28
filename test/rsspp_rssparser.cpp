@@ -1,7 +1,7 @@
 #include "rss/rssparser.h"
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/envvar.h"
+#include "test_helpers/envvar.h"
 
 TEST_CASE("W3CDTF parser extracts date and time from any valid string",
 	"[rsspp::RssParser]")

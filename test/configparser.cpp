@@ -8,8 +8,8 @@
 
 #include "configexception.h"
 #include "keymap.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 
