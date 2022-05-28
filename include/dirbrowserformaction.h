@@ -5,7 +5,7 @@
 #include <grp.h>
 
 #include "configcontainer.h"
-#include "filesystembrowser.h"
+#include "file_system.h"
 #include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"

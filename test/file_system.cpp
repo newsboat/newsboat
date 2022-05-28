@@ -1,6 +1,6 @@
 #include "3rd-party/catch.hpp"
 
-#include "filesystembrowser.h"
+#include "file_system.h"
 
 using namespace newsboat::file_system;
 
