@@ -38,10 +38,10 @@ private:
 	void update_title(const std::string& working_directory);
 
 	void add_file(ListFormatter& listfmt,
-		std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
+		std::vector<file_system::FileSystemEntry>& id_at_position,
 		std::string filename);
 	std::string get_filename_suggestion(const std::string& s);
-	std::vector<FileSystemBrowser::FileSystemEntry> id_at_position;
+	std::vector<file_system::FileSystemEntry> id_at_position;
 
 	std::string get_formatted_filename(std::string filename, mode_t mode);
 

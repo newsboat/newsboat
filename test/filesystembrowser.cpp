@@ -2,9 +2,9 @@
 
 #include "filesystembrowser.h"
 
-using namespace newsboat::FileSystemBrowser;
+using namespace newsboat::file_system;
 
-TEST_CASE("mode_suffix", "[FileSystemBrowser]")
+TEST_CASE("mode_suffix", "[file_system]")
 {
 	SECTION("Basic checks") {
 		REQUIRE(mode_suffix(0644 | S_IFREG) == nonstd::nullopt);
@@ -49,7 +49,7 @@ TEST_CASE("mode_suffix", "[FileSystemBrowser]")
 	}
 }
 
-TEST_CASE("permissions_string", "[FileSystemBrowser]")
+TEST_CASE("permissions_string", "[file_system]")
 {
 	REQUIRE(permissions_string(0710) == "rwx--x---");
 	REQUIRE(permissions_string(0257) == "-w-r-xrwx");

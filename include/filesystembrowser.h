@@ -8,7 +8,7 @@
 
 namespace newsboat {
 
-namespace FileSystemBrowser {
+namespace file_system {
 
 enum class FileType {
 	Unknown,
@@ -49,7 +49,7 @@ std::string get_group_padded(gid_t gid);
 /// Convert permissions into an rwxrwxrwx-style string.
 std::string permissions_string(mode_t mode);
 
-} // namespace FileSystemBrowser
+} // namespace file_system
 
 } // namespace newsboat
 
