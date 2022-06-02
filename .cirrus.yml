@@ -205,10 +205,10 @@ task:
                 cxx: g++-12
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-        - name: Clang 13, more warnings and checks (Ubuntu 21.10)
+        - name: Clang 13, more warnings and checks (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-13
                 cc: clang-13
@@ -263,10 +263,10 @@ task:
                 cxx_package: g++-10
                 cc: gcc-10
                 cxx: g++-10
-        - name: Rust stable, GCC 11 (Ubuntu 21.10)
+        - name: Rust stable, GCC 11 (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-11
                 cc: gcc-11
@@ -335,26 +335,26 @@ task:
                 cxx_package: clang-10
                 cc: clang-10
                 cxx: clang++-10
-        - name: Rust stable, Clang 11 (Ubuntu 21.10)
+        - name: Rust stable, Clang 11 (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-11
                 cc: clang-11
                 cxx: clang++-11
-        - name: Rust stable, Clang 12 (Ubuntu 21.10)
+        - name: Rust stable, Clang 12 (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-12
                 cc: clang-12
                 cxx: clang++-12
-        - name: Rust stable, Clang 13 (Ubuntu 21.10)
+        - name: Rust stable, Clang 13 (Ubuntu 22.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-13
                 cc: clang-13
@@ -370,12 +370,12 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: AddressSanitizer (Clang 13, Ubuntu 21.10)
+    name: AddressSanitizer (Clang 13, Ubuntu 22.04)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+      dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
       docker_arguments:
           # We need llvm-symbolizer from llvm-13-tools to demangle symbols in
           # sanitizer's reports
@@ -422,12 +422,12 @@ task:
         - git diff --exit-code || (echo 'WARNING: the above diff is produced by GCC. Copy it if you only have Clang installed; otherwise just run `make depslist` and commit the result'; false)
 
 task:
-    name: UB Sanitizer (Clang 13, Ubuntu 21.10)
+    name: UB Sanitizer (Clang 13, Ubuntu 22.04)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_21.10-build-tools.dockerfile
+      dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
       docker_arguments:
           # We need llvm-symbolizer from llvm-13-tools to demangle symbols in
           # sanitizer's reports
