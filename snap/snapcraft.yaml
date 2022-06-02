@@ -1,6 +1,6 @@
 name: newsboat
 version: git
-base: core18
+base: core20
 summary: An RSS/Atom feed reader for text terminals
 description: |
   Newsboat is an RSS/Atom feed reader for the text console. It's an actively
@@ -13,6 +13,7 @@ apps:
     command: usr/local/bin/newsboat
     environment:
       LOCPATH: "$SNAP/usr/lib/locale"
+      TERMINFO_DIRS: "$SNAP/lib/terminfo:$SNAP/usr/share/terminfo"
     plugs:
       - network
       - home
@@ -21,6 +22,7 @@ apps:
     command: usr/local/bin/podboat
     environment:
       LOCPATH: "$SNAP/usr/lib/locale"
+      TERMINFO_DIRS: "$SNAP/lib/terminfo:$SNAP/usr/share/terminfo"
     plugs:
       - network
       - home
@@ -56,3 +58,6 @@ parts:
       - locales-all
       - libcurl4
       - libstfl0
+      - kitty-terminfo
+      - ncurses-base
+      - ncurses-term
