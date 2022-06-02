@@ -1919,7 +1919,7 @@ msgstr "versão de Atom inválida"
 
 #: rss/parser.cpp:367
 msgid "no Atom version"
-msgstr "sem versão ATOM"
+msgstr "sem versão Atom"
 
 #: rss/rss09xparser.cpp:32
 msgid "no RSS channel found"
