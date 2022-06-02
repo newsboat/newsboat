@@ -134,7 +134,7 @@ msgstr "configuração"
 #. / This is printed out by --help before the path to the urls file
 #: newsboat.cpp:132
 msgid "feed URLs"
-msgstr "URLs"
+msgstr "URLs da fonte"
 
 #. / This is printed out by --help before the path to the cache file
 #: newsboat.cpp:134
