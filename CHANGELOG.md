@@ -7,6 +7,8 @@
 - Bumped minimum supported Rust version to 1.57.0
 ### Deprecated
 ### Removed
+- i386 support in Snap. The package is now based on Ubuntu 20.04, which doesn't
+    support i386.
 ### Fixed
 ### Security
 
