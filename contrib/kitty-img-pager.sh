@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Shows images, scaled to terminal dimensions, via kitty's icat.
 # Designed for image-feeds like xkcd.com.
-# by Timm Heuss (https://github.com/heussd/) - CC-BY 4.0 
+# by Timm Heuss (https://github.com/heussd/) - CC-BY 4.0
 #
 # Usage:
 # 1) Define a new macro in your config:
@@ -16,7 +16,7 @@ set -o nounset
 image=$(grep -E -o "https?://[a-zA-Z0-9./?=_%:-]*" < "${1}" | tail -1)
 
 # Detect terminal dimensions
-dims="$(tput cols)x$(tput lines)@0x0" 
+dims="$(tput cols)x$(tput lines)@0x0"
 
 clear
 kitty +kitten icat --clear

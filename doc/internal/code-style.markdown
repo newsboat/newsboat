@@ -56,7 +56,7 @@ Put your `#include` statements in the following order:
 4. a blank line;
 5. *headers from inside the repository*, in double quotes.
 
-*Rationale*: 
+*Rationale*:
 
 - putting related header in a prominent place makes it easier to navigate the
   code;
@@ -83,7 +83,7 @@ Drop hyphens, e.g. a class dealing with TT-RSS service would be named
 "TtRssReader".
 
 
-### Method names
+### Method/function names
 
 Use snake case, e.g. "do_the_work".
 

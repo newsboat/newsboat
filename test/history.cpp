@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/tempdir.h"
+#include "test_helpers/tempdir.h"
 
 using namespace newsboat;
 
@@ -41,7 +41,7 @@ TEST_CASE("History can be iterated on in any direction", "[History]")
 
 TEST_CASE("History can be saved and loaded from file", "[History]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 	const auto filepath = tmp.get_path() + "history.cmdline";
 
 	History h;
@@ -72,7 +72,7 @@ TEST_CASE("History can be saved and loaded from file", "[History]")
 TEST_CASE("Only the most recent lines are saved when limiting history",
 	"[History]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 	const auto filepath = tmp.get_path() + "history.cmdline";
 	const int max_lines = 3;
 

@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_TEST_HELPERS_LOGGERRESETTER_H_
 #define NEWSBOAT_TEST_HELPERS_LOGGERRESETTER_H_
 
-namespace TestHelpers {
+namespace test_helpers {
 
 // Upon construction *and* upon destruction, sets empty log file and "NONE"
 // logging level. Create this object early in your test to ensure that it runs
@@ -13,6 +13,6 @@ public:
 	~LoggerResetter();
 };
 
-} /* namespace TestHelpers */
+} /* namespace test_helpers */
 
 #endif /* NEWSBOAT_TEST_HELPERS_LOGGERRESETTER_H_ */

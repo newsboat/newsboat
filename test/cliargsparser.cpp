@@ -3,10 +3,10 @@
 #include <cstring>
 
 #include "cliargsparser.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/opts.h"
-#include "test-helpers/stringmaker/optional.h"
-#include "test-helpers/tempdir.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/opts.h"
+#include "test_helpers/stringmaker/optional.h"
+#include "test_helpers/tempdir.h"
 
 using namespace newsboat;
 
@@ -15,7 +15,7 @@ TEST_CASE(
 	"provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
@@ -46,7 +46,7 @@ TEST_CASE(
 {
 	const std::string filename("blogroll.opml");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_import());
@@ -65,15 +65,15 @@ TEST_CASE(
 TEST_CASE("Resolves tilde to homedir in -i/--import-from-opml",
 	"[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("feedlist.opml");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_import());
@@ -97,7 +97,7 @@ TEST_CASE(
 	const std::string importf("import.opml");
 	const std::string exportf("export.opml");
 
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
@@ -116,7 +116,7 @@ TEST_CASE(
 TEST_CASE("Sets `refresh_on_start` if -r/--refresh-on-start is provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.refresh_on_start());
@@ -134,7 +134,7 @@ TEST_CASE("Sets `refresh_on_start` if -r/--refresh-on-start is provided",
 TEST_CASE("Requests silent mode if -e/--export-to-opml is provided",
 	"[CliArgsParser]")
 {
-	const TestHelpers::Opts opts{"newsboat", "-e"};
+	const test_helpers::Opts opts{"newsboat", "-e"};
 
 	CliArgsParser args(opts.argc(), opts.argv());
 
@@ -144,7 +144,7 @@ TEST_CASE("Requests silent mode if -e/--export-to-opml is provided",
 TEST_CASE("Sets `do_export` if -e/--export-to-opml is provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_export());
@@ -162,7 +162,7 @@ TEST_CASE("Sets `do_export` if -e/--export-to-opml is provided",
 TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
@@ -185,7 +185,7 @@ TEST_CASE(
 {
 	const std::string filename("urlfile");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.url_file() == filename);
@@ -203,15 +203,15 @@ TEST_CASE(
 
 TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("urlfile");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.url_file() == tmp.get_path() + filename);
@@ -233,7 +233,7 @@ TEST_CASE(
 {
 	const std::string filename("cache.db");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.cache_file() == filename);
@@ -254,7 +254,7 @@ TEST_CASE("Supports combined short options", "[CliArgsParser]")
 {
 	const std::string filename("cache.db");
 
-	TestHelpers::Opts opts = {"newsboat", "-vc", filename};
+	test_helpers::Opts opts = {"newsboat", "-vc", filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -267,7 +267,7 @@ TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 {
 	const std::string filename("cache.db");
 
-	TestHelpers::Opts opts = {"newsboat", "-c" + filename};
+	test_helpers::Opts opts = {"newsboat", "-c" + filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -280,7 +280,7 @@ TEST_CASE("Supports `=` between short option and value",
 {
 	const std::string filename("cache.db");
 
-	TestHelpers::Opts opts = {"newsboat", "-c=" + filename};
+	test_helpers::Opts opts = {"newsboat", "-c=" + filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -290,15 +290,15 @@ TEST_CASE("Supports `=` between short option and value",
 
 TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("mycache.db");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.cache_file() == tmp.get_path() + filename);
@@ -321,7 +321,7 @@ TEST_CASE(
 {
 	const std::string filename("config file");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.config_file() == filename);
@@ -339,15 +339,15 @@ TEST_CASE(
 
 TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("newsboat-config");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.config_file() == tmp.get_path() + filename);
@@ -365,7 +365,7 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 
 TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_vacuum());
@@ -382,7 +382,7 @@ TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 
 TEST_CASE("Sets `do_cleanup` if --cleanup is provided", "[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_cleanup());
@@ -396,7 +396,7 @@ TEST_CASE("Sets `do_cleanup` if --cleanup is provided", "[CliArgsParser]")
 TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, unsigned int expected_version) {
+	auto check = [](test_helpers::Opts opts, unsigned int expected_version) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.show_version() == expected_version);
@@ -433,7 +433,7 @@ TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 
 TEST_CASE("Requests silent mode if -x/--execute is provided", "[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.silent());
@@ -450,7 +450,7 @@ TEST_CASE("Requests silent mode if -x/--execute is provided", "[CliArgsParser]")
 
 TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE_FALSE(args.cmds_to_execute().empty());
@@ -468,7 +468,7 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, const std::vector<std::string>& cmds) {
+	auto check = [](test_helpers::Opts opts, const std::vector<std::string>& cmds) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.cmds_to_execute() == cmds);
@@ -500,7 +500,7 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 
 TEST_CASE("Requests silent mode if -q/--quiet is provided", "[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.silent());
@@ -521,7 +521,7 @@ TEST_CASE(
 {
 	const std::string filename("filename");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.readinfo_import_file() == filename);
@@ -539,15 +539,15 @@ TEST_CASE(
 TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 	"[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("read.txt");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.readinfo_import_file() == tmp.get_path() + filename);
@@ -568,7 +568,7 @@ TEST_CASE(
 {
 	const std::string filename("filename");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.readinfo_export_file() == filename);
@@ -585,15 +585,15 @@ TEST_CASE(
 
 TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("read.txt");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.readinfo_export_file() == tmp.get_path() + filename);
@@ -616,7 +616,7 @@ TEST_CASE(
 	const std::string importf("import.opml");
 	const std::string exportf("export.opml");
 
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.should_print_usage());
@@ -637,7 +637,7 @@ TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 {
 	const std::string filename("log file.txt");
 
-	auto check = [&filename](TestHelpers::Opts opts) {
+	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.log_file() == filename);
@@ -654,15 +654,15 @@ TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 
 TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	const std::string filename("newsboat.log");
 	const std::string arg = std::string("~/") + filename;
 
-	auto check = [&filename, &tmp](TestHelpers::Opts opts) {
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.log_file() == tmp.get_path() + filename);
@@ -681,7 +681,7 @@ TEST_CASE(
 	"Sets `log_level` if argument to -l/--log-level is in range of [1; 6]",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, Level expected) {
+	auto check = [](test_helpers::Opts opts, Level expected) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.log_level() == expected);
@@ -717,7 +717,7 @@ TEST_CASE(
 	"-l/--log-level is outside of [1; 6]",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts) {
+	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE_FALSE(args.display_msg() == "");
@@ -740,7 +740,7 @@ TEST_CASE(
 TEST_CASE("Sets `program_name` to the first string of the options list",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, std::string expected) {
+	auto check = [](test_helpers::Opts opts, std::string expected) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.program_name() == expected);
@@ -757,7 +757,7 @@ TEST_CASE("Sets `program_name` to the first string of the options list",
 TEST_CASE("Test should fail on equal sign with multiple values",
 	"[CliArgsParser]")
 {
-	auto check = [](TestHelpers::Opts opts, const std::vector<std::string>& cmds) {
+	auto check = [](test_helpers::Opts opts, const std::vector<std::string>& cmds) {
 		CliArgsParser args(opts.argc(), opts.argv());
 		REQUIRE(args.should_print_usage());
 		REQUIRE(args.cmds_to_execute() != cmds);
@@ -771,7 +771,7 @@ TEST_CASE("Test should fail on equal sign with multiple values",
 TEST_CASE("Supports combined short options where last has equal sign",
 	"[CliArgsParser]")
 {
-	TestHelpers::Opts opts = {"newsboat", "-rx=reload"};
+	test_helpers::Opts opts = {"newsboat", "-rx=reload"};
 	CliArgsParser args(opts.argc(), opts.argv());
 	std::vector<std::string> commands{"reload"};
 	REQUIRE(args.cmds_to_execute() == commands);

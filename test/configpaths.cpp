@@ -4,11 +4,11 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/chmod.h"
-#include "test-helpers/envvar.h"
-#include "test-helpers/misc.h"
-#include "test-helpers/opts.h"
-#include "test-helpers/tempdir.h"
+#include "test_helpers/chmod.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
+#include "test_helpers/opts.h"
+#include "test_helpers/tempdir.h"
 #include "utils.h"
 
 using namespace newsboat;
@@ -17,18 +17,18 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 	"exist",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 	const auto newsboat_dir = tmp.get_path() + ".newsboat";
 	REQUIRE(0 == utils::mkdir_parents(newsboat_dir, 0700));
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	ConfigPaths paths;
@@ -46,20 +46,20 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 	"the dotdir doesn't",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 	const auto config_dir = tmp.get_path() + ".config/newsboat";
 	REQUIRE(0 == utils::mkdir_parents(config_dir, 0700));
 	const auto data_dir = tmp.get_path() + ".local/share/newsboat";
 	REQUIRE(0 == utils::mkdir_parents(data_dir, 0700));
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	const auto check = [&]() {
@@ -75,34 +75,34 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 	};
 
 	SECTION("XDG_CONFIG_HOME is set") {
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+		test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 		xdg_config.set(tmp.get_path() + ".config");
 
 		SECTION("XDG_DATA_HOME is set") {
-			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 			xdg_data.set(tmp.get_path() + ".local/share");
 			check();
 		}
 
 		SECTION("XDG_DATA_HOME is not set") {
-			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 			xdg_data.unset();
 			check();
 		}
 	}
 
 	SECTION("XDG_CONFIG_HOME is not set") {
-		TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+		test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 		xdg_config.unset();
 
 		SECTION("XDG_DATA_HOME is set") {
-			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 			xdg_data.set(tmp.get_path() + ".local/share");
 			check();
 		}
 
 		SECTION("XDG_DATA_HOME is not set") {
-			TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 			xdg_data.unset();
 			check();
 		}
@@ -115,18 +115,18 @@ TEST_CASE("ConfigPaths::process_args replaces paths with the ones supplied by "
 {
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.unset();
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	const auto url_file = std::string("my urls file");
 	const auto cache_file = std::string("/path/to/cache file.db");
 	const auto lock_file = cache_file + ".lock";
 	const auto config_file = std::string("this is a/config");
-	TestHelpers::Opts opts({
+	test_helpers::Opts opts({
 		"newsboat",
 		"-u", url_file,
 		"-c", cache_file,
@@ -148,14 +148,14 @@ TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
 	const auto test_dir = std::string("some/dir/we/use/as/home");
 	const auto newsboat_dir = test_dir + "/.newsboat/";
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(test_dir);
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	ConfigPaths paths;
@@ -173,30 +173,30 @@ TEST_CASE("ConfigPaths::set_cache_file changes paths to cache and lock files",
 TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs "
 	"were successfully created or already existed", "[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	const auto require_exists = [&tmp](std::vector<std::string> dirs) {
 		ConfigPaths paths;
 		REQUIRE(paths.initialized());
 
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.url_file()));
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.config_file()));
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.cache_file()));
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.lock_file()));
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.queue_file()));
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.search_file()));
-		REQUIRE(TestHelpers::starts_with(tmp.get_path(), paths.cmdline_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.url_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.config_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.cache_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.lock_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.queue_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.search_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.cmdline_file()));
 
 		REQUIRE(paths.create_dirs());
 
@@ -225,9 +225,9 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 
 	SECTION("Using XDG dirs") {
 		SECTION("No XDG environment variables") {
-			TestHelpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
+			test_helpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
 			xdg_config_home.unset();
-			TestHelpers::EnvVar xdg_data_home("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data_home("XDG_DATA_HOME");
 			xdg_data_home.unset();
 
 			SECTION("No dirs existed => dotdir created") {
@@ -261,10 +261,10 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 			INFO("Config home is " << config_home);
 			const auto config_dir = config_home + "/newsboat";
 
-			TestHelpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
+			test_helpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
 			xdg_config_home.set(config_home);
 
-			TestHelpers::EnvVar xdg_data_home("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data_home("XDG_DATA_HOME");
 			xdg_data_home.unset();
 
 			SECTION("No dirs existed => dotdir created") {
@@ -293,7 +293,7 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		}
 
 		SECTION("XDG_DATA_HOME redefined") {
-			TestHelpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
+			test_helpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
 			xdg_config_home.unset();
 
 			const auto data_home =
@@ -301,7 +301,7 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 			INFO("Data home is " << data_home);
 			const auto data_dir = data_home + "/newsboat";
 
-			TestHelpers::EnvVar xdg_data_home("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data_home("XDG_DATA_HOME");
 			xdg_data_home.set(data_home);
 
 			SECTION("No dirs existed => dotdir created") {
@@ -340,10 +340,10 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 			INFO("Data home is " << data_home);
 			const auto data_dir = data_home + "/newsboat";
 
-			TestHelpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
+			test_helpers::EnvVar xdg_config_home("XDG_CONFIG_HOME");
 			xdg_config_home.set(config_home);
 
-			TestHelpers::EnvVar xdg_data_home("XDG_DATA_HOME");
+			test_helpers::EnvVar xdg_data_home("XDG_DATA_HOME");
 			xdg_data_home.set(data_home);
 
 			SECTION("No dirs existed => dotdir created") {
@@ -399,7 +399,7 @@ struct FileSentries {
 };
 
 void mock_newsbeuter_dotdir(
-	const TestHelpers::TempDir& tmp,
+	const test_helpers::TempDir& tmp,
 	const FileSentries& sentries)
 {
 	const auto dotdir_path = tmp.get_path() + ".newsbeuter/";
@@ -429,7 +429,7 @@ void mock_newsbeuter_xdg_dirs(
 }
 
 void mock_newsbeuter_xdg_dirs(
-	const TestHelpers::TempDir& tmp,
+	const test_helpers::TempDir& tmp,
 	const FileSentries& sentries)
 {
 	const auto config_dir_path = tmp.get_path() + ".config/newsbeuter/";
@@ -438,7 +438,7 @@ void mock_newsbeuter_xdg_dirs(
 }
 
 void mock_newsboat_dotdir(
-	const TestHelpers::TempDir& tmp,
+	const test_helpers::TempDir& tmp,
 	const FileSentries& sentries)
 {
 	const auto dotdir_path = tmp.get_path() + ".newsboat/";
@@ -460,7 +460,7 @@ void mock_newsboat_xdg_dirs(
 }
 
 void mock_newsboat_xdg_dirs(
-	const TestHelpers::TempDir& tmp,
+	const test_helpers::TempDir& tmp,
 	const FileSentries& sentries)
 {
 	const auto config_dir_path = tmp.get_path() + ".config/newsboat/";
@@ -472,17 +472,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 	"were specified on the command line",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries beuter_sentries;
@@ -499,7 +499,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 		const auto config_file = tmp.get_path() + "custom config file";
 		REQUIRE(create_file(config_file, boat_sentries.config));
 
-		TestHelpers::Opts opts({
+		test_helpers::Opts opts({
 			"newsboat",
 			"-u", url_file,
 			"-c", cache_file,
@@ -514,13 +514,13 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if config paths "
 		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
 
 		INFO("Newsbeuter's urls file sentry: " << beuter_sentries.urls);
-		REQUIRE(TestHelpers::file_contents(url_file).at(0) == boat_sentries.urls);
+		REQUIRE(test_helpers::file_contents(url_file).at(0) == boat_sentries.urls);
 
 		INFO("Newsbeuter's config file sentry: " << beuter_sentries.config);
-		REQUIRE(TestHelpers::file_contents(config_file).at(0) == boat_sentries.config);
+		REQUIRE(test_helpers::file_contents(config_file).at(0) == boat_sentries.config);
 
 		INFO("Newsbeuter's cache file sentry: " << beuter_sentries.cache);
-		REQUIRE(TestHelpers::file_contents(cache_file).at(0) == boat_sentries.cache);
+		REQUIRE(test_helpers::file_contents(cache_file).at(0) == boat_sentries.cache);
 	};
 
 	SECTION("Newsbeuter dotdir exists") {
@@ -538,17 +538,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 	"already exists",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries beuter_sentries;
@@ -562,7 +562,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate if urls file "
 		REQUIRE_FALSE(paths.try_migrate_from_newsbeuter());
 
 		INFO("Newsbeuter's urls file sentry: " << beuter_sentries.urls);
-		REQUIRE(TestHelpers::file_contents(urls_filepath).at(0) == boat_sentries.urls);
+		REQUIRE(test_helpers::file_contents(urls_filepath).at(0) == boat_sentries.urls);
 	};
 
 	SECTION("Newsbeuter dotdir exists") {
@@ -726,17 +726,17 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 	"default location to default location of Newsboat dotdir",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -751,14 +751,14 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter dotdir from "
 
 	const auto dotdir = tmp.get_path() + ".newsboat/";
 
-	REQUIRE(TestHelpers::file_contents(dotdir + "config").at(0) == sentries.config);
-	REQUIRE(TestHelpers::file_contents(dotdir + "urls").at(0) == sentries.urls);
-	REQUIRE(TestHelpers::file_contents(dotdir + "cache.db").at(
+	REQUIRE(test_helpers::file_contents(dotdir + "config").at(0) == sentries.config);
+	REQUIRE(test_helpers::file_contents(dotdir + "urls").at(0) == sentries.urls);
+	REQUIRE(test_helpers::file_contents(dotdir + "cache.db").at(
 			0) == sentries.cache);
-	REQUIRE(TestHelpers::file_contents(dotdir + "queue").at(0) == sentries.queue);
-	REQUIRE(TestHelpers::file_contents(dotdir + "history.search").at(0) ==
+	REQUIRE(test_helpers::file_contents(dotdir + "queue").at(0) == sentries.queue);
+	REQUIRE(test_helpers::file_contents(dotdir + "history.search").at(0) ==
 		sentries.search);
-	REQUIRE(TestHelpers::file_contents(dotdir + "history.cmdline").at(0) ==
+	REQUIRE(test_helpers::file_contents(dotdir + "history.cmdline").at(0) ==
 		sentries.cmdline);
 }
 
@@ -766,17 +766,17 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 	"their default location to default locations of Newsboat XDG dirs",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -790,16 +790,16 @@ TEST_CASE("try_migrate_from_newsbeuter() migrates Newsbeuter XDG dirs from "
 		// Files should be migrated, so should return true.
 		REQUIRE(paths.try_migrate_from_newsbeuter());
 
-		REQUIRE(TestHelpers::file_contents(config_dir + "config").at(
+		REQUIRE(test_helpers::file_contents(config_dir + "config").at(
 				0) == sentries.config);
-		REQUIRE(TestHelpers::file_contents(config_dir + "urls").at(0) == sentries.urls);
+		REQUIRE(test_helpers::file_contents(config_dir + "urls").at(0) == sentries.urls);
 
-		REQUIRE(TestHelpers::file_contents(data_dir + "cache.db").at(
+		REQUIRE(test_helpers::file_contents(data_dir + "cache.db").at(
 				0) == sentries.cache);
-		REQUIRE(TestHelpers::file_contents(data_dir + "queue").at(0) == sentries.queue);
-		REQUIRE(TestHelpers::file_contents(data_dir + "history.search").at(0) ==
+		REQUIRE(test_helpers::file_contents(data_dir + "queue").at(0) == sentries.queue);
+		REQUIRE(test_helpers::file_contents(data_dir + "history.search").at(0) ==
 			sentries.search);
-		REQUIRE(TestHelpers::file_contents(data_dir + "history.cmdline").at(0) ==
+		REQUIRE(test_helpers::file_contents(data_dir + "history.cmdline").at(0) ==
 			sentries.cmdline);
 	};
 
@@ -877,17 +877,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	"Newsboat XDG config dir already exists",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -954,17 +954,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	"Newsboat XDG data dir already exists",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -1030,17 +1030,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	"config dir couldn't be created",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -1051,7 +1051,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
 		const auto config_home = tmp.get_path() + ".config/";
-		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		const auto config_dir = config_home + "newsboat/";
 		const auto data_dir = tmp.get_path() + ".local/share/newsboat/";
@@ -1069,7 +1069,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
-		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
 			config_home + "newsboat/",
@@ -1088,7 +1088,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
 		const auto config_home = tmp.get_path() + ".config/";
-		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
 			config_home + "newsboat/",
@@ -1111,7 +1111,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		// Making XDG .config unwriteable makes it impossible to create
 		// a directory there
-		TestHelpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod config_home_chmod(config_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
 			config_home + "newsboat/",
@@ -1123,17 +1123,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 	"data dir couldn't be created",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -1144,7 +1144,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
 		const auto data_home = tmp.get_path() + ".local/share/";
-		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		const auto config_dir = tmp.get_path() + ".config/newsboat/";
 		const auto data_dir = data_home + "newsboat/";
@@ -1163,7 +1163,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
 		const auto data_home = tmp.get_path() + ".local/share/";
-		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
 			config_home + "newsboat/",
@@ -1181,7 +1181,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
-		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
 			tmp.get_path() + ".config/newsboat/",
@@ -1204,7 +1204,7 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat XDG "
 
 		// Making XDG .local/share unwriteable makes it impossible to create
 		// a directory there
-		TestHelpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
+		test_helpers::Chmod data_home_chmod(data_home, S_IRUSR | S_IXUSR);
 
 		verify_xdg_not_migrated(
 			config_home + "newsboat/",
@@ -1233,17 +1233,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if empty "
 	"Newsboat dotdir already exists",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -1260,17 +1260,17 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat "
 	"dotdir couldn't be created",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	FileSentries sentries;
@@ -1279,15 +1279,15 @@ TEST_CASE("try_migrate_from_newsbeuter() doesn't migrate files if Newsboat "
 
 	// Making home directory unwriteable makes it impossible to create
 	// a directory there
-	TestHelpers::Chmod dotdir_chmod(tmp.get_path(), S_IRUSR | S_IXUSR);
+	test_helpers::Chmod dotdir_chmod(tmp.get_path(), S_IRUSR | S_IXUSR);
 
 	verify_dotdir_not_migrated(tmp.get_path() + ".newsboat/");
 }
 
-void verify_create_dirs_returns_false(const TestHelpers::TempDir& tmp)
+void verify_create_dirs_returns_false(const test_helpers::TempDir& tmp)
 {
 	const mode_t readonly = S_IRUSR | S_IXUSR;
-	TestHelpers::Chmod home_chmod(tmp.get_path(), readonly);
+	test_helpers::Chmod home_chmod(tmp.get_path(), readonly);
 
 	ConfigPaths paths;
 	REQUIRE(paths.initialized());
@@ -1298,17 +1298,17 @@ TEST_CASE("create_dirs() returns false if dotdir doesn't exist and couldn't "
 	"be created",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	verify_create_dirs_returns_false(tmp);
@@ -1318,17 +1318,17 @@ TEST_CASE("create_dirs() returns false if XDG config dir exists but data dir "
 	"doesn't exist and couldn't be created",
 	"[ConfigPaths]")
 {
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 	INFO("Temporary directory (used as HOME): " << tmp.get_path());
 
 	// ConfigPaths rely on these variables, so let's sanitize them to ensure
 	// that the tests aren't affected
-	TestHelpers::EnvVar xdg_config("XDG_CONFIG_HOME");
+	test_helpers::EnvVar xdg_config("XDG_CONFIG_HOME");
 	xdg_config.unset();
-	TestHelpers::EnvVar xdg_data("XDG_DATA_HOME");
+	test_helpers::EnvVar xdg_data("XDG_DATA_HOME");
 	xdg_data.unset();
 
 	SECTION("Default XDG locations") {

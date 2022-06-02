@@ -38,7 +38,7 @@ parts:
       - rust
     plugin: make
     source: .
-    build-packages: 
+    build-packages:
       - pkg-config
       - libsqlite3-dev
       - libcurl4-openssl-dev

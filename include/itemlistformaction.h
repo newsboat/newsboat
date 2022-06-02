@@ -81,7 +81,7 @@ protected:
 		invalidated_itempos.push_back(invalidated_pos);
 	}
 
-	FmtStrFormatter setup_head_formatter(const std::string& s,
+	virtual FmtStrFormatter setup_head_formatter(const std::string& s,
 		unsigned int unread,
 		unsigned int total,
 		const std::string& url);
@@ -89,6 +89,10 @@ protected:
 	std::vector<ItemPtrPosPair> visible_items;
 	int old_itempos;
 	std::shared_ptr<RssFeed> feed;
+
+	Matcher matcher;
+
+	bool apply_filter;
 
 private:
 	void register_format_styles();
@@ -132,15 +136,12 @@ private:
 
 	void handle_op_saveall();
 
-	Matcher matcher;
-
 	unsigned int pos;
 
 	History filterhistory;
 
 	std::mutex redraw_mtx;
 
-	bool apply_filter;
 	bool set_filterpos;
 	unsigned int filterpos;
 

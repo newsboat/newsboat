@@ -5,7 +5,7 @@
 #include <grp.h>
 
 #include "configcontainer.h"
-#include "filesystembrowser.h"
+#include "file_system.h"
 #include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"
@@ -33,9 +33,9 @@ private:
 	void update_title(const std::string& working_directory);
 
 	void add_directory(ListFormatter& listfmt,
-		std::vector<FileSystemBrowser::FileSystemEntry>& id_at_position,
+		std::vector<file_system::FileSystemEntry>& id_at_position,
 		std::string dirname);
-	std::vector<FileSystemBrowser::FileSystemEntry> id_at_position;
+	std::vector<file_system::FileSystemEntry> id_at_position;
 
 	std::string get_formatted_dirname(std::string dirname, mode_t mode);
 

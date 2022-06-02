@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cinttypes>
 #include <cstdio>
+#include <cstring>
 #include <langinfo.h>
 #include <sstream>
 #include <string>
@@ -13,6 +14,7 @@
 #include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "formaction.h"
+#include "itemutils.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "rssfeed.h"
@@ -31,8 +33,8 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	RegexManager& r)
 	: ListFormAction(vv, formstr, "items", cfg)
 	, old_itempos(-1)
-	, pos(0)
 	, apply_filter(false)
+	, pos(0)
 	, set_filterpos(false)
 	, filterpos(0)
 	, rxman(r)
@@ -751,6 +753,15 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_ENQUEUE:
+		if (!visible_items.empty() && itempos < visible_items.size()) {
+			const auto item = visible_items[itempos].first;
+			return enqueue_item_enclosure(item, feed, *v, *rsscache);
+		} else {
+			v->get_statusline().show_error(_("No item selected!"));
+			return false;
+		}
+		break;
 	default:
 		ListFormAction::process_operation(op, automatic, args);
 		break;
@@ -1074,6 +1085,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	fmt.register_fmt('n', item.first->unread() ? "N" : " ");
 	fmt.register_fmt('d', item.first->deleted() ? "D" : " ");
 	fmt.register_fmt('F', item.first->flags());
+	fmt.register_fmt('e', item.first->enclosure_url());
 
 	using namespace std::chrono;
 	const auto article_time_point = system_clock::from_time_t(

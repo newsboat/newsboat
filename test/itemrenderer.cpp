@@ -6,7 +6,7 @@
 #include "configcontainer.h"
 #include "regexmanager.h"
 #include "rssfeed.h"
-#include "test-helpers/envvar.h"
+#include "test_helpers/envvar.h"
 
 using namespace newsboat;
 
@@ -57,7 +57,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	"of an RSS item, ready to be displayed to the user",
 	"[item_renderer]")
 {
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
@@ -161,7 +161,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 	"in `text-width` setting",
 	"[item_renderer]")
 {
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
@@ -268,7 +268,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
 	"[item_renderer]")
 {
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
@@ -300,7 +300,7 @@ TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
 
 TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 {
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
@@ -416,7 +416,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 	"[item_renderer]")
 {
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;
@@ -601,7 +601,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use with stfl",
 	"[item_renderer]")
 {
-	TestHelpers::TzEnvVar tzEnv;
+	test_helpers::TzEnvVar tzEnv;
 	tzEnv.set("UTC");
 
 	ConfigContainer cfg;

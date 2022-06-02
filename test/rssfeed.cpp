@@ -5,8 +5,8 @@
 #include "configcontainer.h"
 #include "rssparser.h"
 
-#include "test-helpers/envvar.h"
-#include "test-helpers/stringmaker/optional.h"
+#include "test_helpers/envvar.h"
+#include "test_helpers/stringmaker/optional.h"
 
 using namespace newsboat;
 
@@ -422,7 +422,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 			// we can't compare results to a known-good value. Instead, we
 			// merely check that the result is *not* UTF-8.
 
-			TestHelpers::LcCtypeEnvVar lc_ctype;
+			test_helpers::LcCtypeEnvVar lc_ctype;
 			lc_ctype.set("C"); // This means ASCII
 
 			const auto title = "こんにちは";// "good afternoon" in Japanese
@@ -444,7 +444,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 			// we can't compare results to a known-good value. Instead, we
 			// merely check that the result is *not* UTF-8.
 
-			TestHelpers::LcCtypeEnvVar lc_ctype;
+			test_helpers::LcCtypeEnvVar lc_ctype;
 			lc_ctype.set("C"); // This means ASCII
 
 			const auto description = "こんにちは";// "good afternoon" in Japanese
@@ -463,7 +463,7 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 	}
 
 	SECTION("feeddate, feed's publication date") {
-		TestHelpers::TzEnvVar tzEnv;
+		test_helpers::TzEnvVar tzEnv;
 		tzEnv.set("UTC");
 
 		f.set_pubDate(1); // one second into the Unix epoch

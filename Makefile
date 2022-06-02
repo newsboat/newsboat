@@ -165,6 +165,7 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 	cococpp -frames filter filter/filter.atg
+	sed -i 's/\s\+$$//' filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 
 target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 	@# This rule declares a dependency and doesn't need to run any
@@ -283,10 +284,18 @@ doc/example-config: doc/gen-example-config doc/configcommands.dsv
 fmt:
 	astyle --project \
 		*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp \
-		test/*.cpp test/test-helpers/*.h test/test-helpers/*.cpp
+		test/*.cpp test/test_helpers/*.h test/test_helpers/*.cpp
 	$(CARGO) fmt
 	# We reset the locale to make the sorting reproducible.
 	LC_ALL=C sort -t '|' -k 1,1 -o doc/configcommands.dsv doc/configcommands.dsv
+	# Remove trailing whitespace. The purpose of the 'grep' in between is that
+	# files without trailing whitespace will not be touched by 'sed'. Otherwise
+	# editors might detect some external file modification and ask to reload.
+	# With '-I' we guard against any potentially introduced binary (test) files
+	# in the future.
+	for f in $$(git ls-files | xargs grep -lI '[ 	]$$'); do \
+		sed -i 's/[ \t]\+$$//' $$f; \
+	done
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
@@ -410,7 +419,7 @@ test: test/test rust-test
 rust-test:
 	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
 
-TEST_SRCS:=$(wildcard test/*.cpp test/test-helpers/*.cpp)
+TEST_SRCS:=$(wildcard test/*.cpp test/test_helpers/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
 SRC_SRCS:=$(wildcard src/*.cpp)
 SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
@@ -418,7 +427,7 @@ test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(POD
 	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 clean-test:
-	$(RM) test/test test/*.o test/test-helpers/*.o
+	$(RM) test/test test/*.o test/test_helpers/*.o
 
 profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
@@ -460,8 +469,8 @@ xlicense.h: LICENSE
 # Without this, the sorting is locale-dependent, which is annoying because it
 # means the only way to pass the continuous integration check is to see it fail
 # and copy the diff.
-ALL_SRCS:=$(shell LC_ALL=C ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test-helpers/*.cpp)
-ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test-helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
+ALL_SRCS:=$(shell LC_ALL=C ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test_helpers/*.cpp)
+ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
 # This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
 # we need to record those headers in the deps file.
 depslist: $(NEWSBOATLIB_OUTPUT) $(ALL_SRCS) $(ALL_HDRS)

@@ -4,7 +4,7 @@
 #include <string>
 #include <sys/stat.h>
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /// Sets new permissions on a given path, and restores them back when the
 /// object is destroyed.
@@ -18,6 +18,6 @@ public:
 	~Chmod();
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_CHMOD_H_ */

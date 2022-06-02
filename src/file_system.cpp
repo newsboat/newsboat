@@ -1,4 +1,4 @@
-#include "filesystembrowser.h"
+#include "file_system.h"
 
 #include <grp.h>
 #include <pwd.h>
@@ -8,7 +8,7 @@
 
 namespace newsboat {
 
-namespace FileSystemBrowser {
+namespace file_system {
 
 FileType mode_to_filetype(mode_t mode)
 {
@@ -121,6 +121,6 @@ std::string permissions_string(mode_t mode)
 	return str;
 }
 
-} // namespace FileSystemBrowser
+} // namespace file_system
 
 } // namespace newsboat

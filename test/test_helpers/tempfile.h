@@ -5,7 +5,7 @@
 
 #include "maintempdir.h"
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /* Objects of TempFile class generate a temporary filename and delete the
  * corresponding file when they are destructed.
@@ -25,6 +25,6 @@ private:
 	std::string filepath;
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_TEMPFILE_H_ */

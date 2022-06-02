@@ -1,6 +1,6 @@
 BEGIN {
 	# Switch field separator from space to tabulator.
-	FS="\t"	
+	FS="\t"
 }
 
 {

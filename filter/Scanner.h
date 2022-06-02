@@ -59,7 +59,7 @@ char* coco_string_create_char(const wchar_t *value);
 void  coco_string_delete(char* &data);
 
 
-class Token  
+class Token
 {
 public:
 	int kind;     // token kind
@@ -89,10 +89,10 @@ private:
 	int bufPos;         // current position in buffer
 	FILE* stream;       // input stream (seekable)
 	bool isUserStream;  // was the stream opened by the user?
-	
+
 	int ReadNextStreamChunk();
 	bool CanSeek();     // true if stream can be seeked otherwise false
-	
+
 public:
 	static const int EoF = COCO_WCHAR_MAX + 1;
 
@@ -100,7 +100,7 @@ public:
 	Buffer(const unsigned char* buf, int len);
 	Buffer(Buffer *b);
 	virtual ~Buffer();
-	
+
 	virtual void Close();
 	virtual int Read();
 	virtual int Peek();
@@ -243,7 +243,7 @@ private:
 
 public:
 	Buffer *buffer;   // scanner buffer
-	
+
 	Scanner(const unsigned char* buf, int len);
 	Scanner(const wchar_t* fileName);
 	Scanner(FILE* s);

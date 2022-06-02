@@ -10,6 +10,7 @@
 #include "fmtstrformatter.h"
 #include "itemlistformaction.h"
 #include "itemrenderer.h"
+#include "itemutils.h"
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
@@ -47,6 +48,7 @@ void ItemViewFormAction::init()
 {
 	set_value("msg", "");
 	do_redraw = true;
+	textview.set_scroll_offset(0);
 	links.clear();
 	num_lines = 0;
 	if (!cfg->get_configvalue_as_bool("display-article-progress")) {
@@ -141,7 +143,7 @@ void ItemViewFormAction::prepare()
 		}
 
 		textview.stfl_replace_lines(num_lines, formatted_text);
-		set_value("article_offset", "0");
+		update_percent();
 
 		if (in_search) {
 			rxman.remove_last_regex("article");
@@ -201,42 +203,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
 		show_source = !show_source;
 		do_redraw = true;
+		textview.set_scroll_offset(0);
 		break;
-	case OP_ENQUEUE: {
-		if (item->enclosure_url().empty()) {
-			v->get_statusline().show_error(_("Item has no enclosures."));
-			return false;
-		} else if (!utils::is_http_url(item->enclosure_url())) {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Item's enclosure has non-http link: '%s'"), item->enclosure_url()));
-			return false;
-		} else {
-			const EnqueueResult result = v->get_ctrl()->enqueue_url(item, feed);
-			rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
-			switch (result.status) {
-			case EnqueueStatus::QUEUED_SUCCESSFULLY:
-				v->get_statusline().show_message(
-					strprintf::fmt(_("Added %s to download queue."),
-						item->enclosure_url()));
-				return true;
-			case EnqueueStatus::URL_QUEUED_ALREADY:
-				v->get_statusline().show_message(
-					strprintf::fmt(_("%s is already queued."),
-						item->enclosure_url()));
-				return true; // Not a failure, just an idempotent action
-			case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
-				v->get_statusline().show_error(
-					strprintf::fmt(_("Generated filename (%s) is used already."),
-						result.extra_info));
-				return false;
-			case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
-				v->get_statusline().show_error(
-					strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
-				return false;
-			}
-		}
-	}
-	break;
+	case OP_ENQUEUE:
+		return enqueue_item_enclosure(item, feed, *v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
@@ -363,6 +333,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to next unread article");
 		if (v->get_next_unread(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("No unread items."));
@@ -374,6 +345,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"article");
 		if (v->get_previous_unread(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("No unread items."));
@@ -384,6 +356,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to next article");
 		if (v->get_next(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("Already on last item."));
@@ -394,6 +367,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to previous article");
 		if (v->get_previous(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("Already on first item."));
@@ -404,6 +378,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			"ItemViewFormAction::process_operation: jumping to random unread article");
 		if (v->get_random_unread(*itemlist, this)) {
 			do_redraw = true;
+			textview.set_scroll_offset(0);
 		} else {
 			v->pop_current_formaction();
 			v->get_statusline().show_error(_("No unread items."));

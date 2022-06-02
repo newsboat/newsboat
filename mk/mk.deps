@@ -27,7 +27,7 @@ newsboat.o: newsboat.cpp include/cache.h include/configcontainer.h \
  include/matchable.h include/dbexception.h include/exception.h \
  include/matcherexception.h rss/parser.h include/remoteapi.h rss/feed.h \
  rss/item.h include/utils.h include/view.h include/controller.h \
- include/dirbrowserformaction.h include/filesystembrowser.h \
+ include/dirbrowserformaction.h include/file_system.h \
  include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/listwidget.h \
@@ -133,7 +133,7 @@ src/colormanager.o: src/colormanager.cpp include/colormanager.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h \
  include/filebrowserformaction.h include/helpformaction.h \
@@ -205,7 +205,7 @@ src/controller.o: src/controller.cpp include/controller.h include/cache.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h include/stflpp.h \
  include/strprintf.h include/ttrssapi.h include/ttrssurlreader.h \
  include/utils.h include/view.h include/controller.h \
- include/dirbrowserformaction.h include/filesystembrowser.h \
+ include/dirbrowserformaction.h include/file_system.h \
  include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/listwidget.h \
@@ -230,13 +230,13 @@ src/dialogsformaction.o: src/dialogsformaction.cpp \
  include/opml.h include/fileurlreader.h include/urlreader.h \
  include/utils.h include/queuemanager.h include/reloader.h \
  include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
- include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h include/statusline.h
+ include/matchable.h include/dirbrowserformaction.h include/file_system.h \
+ include/feedlistformaction.h include/listformaction.h include/view.h \
+ include/filebrowserformaction.h include/htmlrenderer.h \
+ include/textformatter.h include/statusline.h
 src/dirbrowserformaction.o: src/dirbrowserformaction.cpp \
  include/dirbrowserformaction.h include/configcontainer.h \
- include/configactionhandler.h include/filesystembrowser.h \
+ include/configactionhandler.h include/file_system.h \
  3rd-party/optional.hpp include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/regexmanager.h \
@@ -311,7 +311,7 @@ src/feedlistformaction.o: src/feedlistformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h include/dbexception.h \
  include/feedcontainer.h include/fmtstrformatter.h \
@@ -320,9 +320,11 @@ src/feedlistformaction.o: src/feedlistformaction.cpp \
  include/rssfeed.h include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h include/view.h
+src/file_system.o: src/file_system.cpp include/file_system.h \
+ 3rd-party/optional.hpp include/strprintf.h
 src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/filebrowserformaction.h include/configcontainer.h \
- include/configactionhandler.h include/filesystembrowser.h \
+ include/configactionhandler.h include/file_system.h \
  3rd-party/optional.hpp include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/regexmanager.h \
@@ -343,8 +345,6 @@ src/filebrowserformaction.o: src/filebrowserformaction.cpp \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h
-src/filesystembrowser.o: src/filesystembrowser.cpp \
- include/filesystembrowser.h 3rd-party/optional.hpp include/strprintf.h
 src/fileurlreader.o: src/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
@@ -377,11 +377,11 @@ src/formaction.o: src/formaction.cpp include/formaction.h \
  include/queuemanager.h include/regexmanager.h include/matcher.h \
  filter/FilterParser.h include/regexowner.h include/reloader.h \
  include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/formaction.h include/listformatter.h \
- include/listwidget.h include/feedlistformaction.h \
- include/listformaction.h include/view.h include/filebrowserformaction.h \
- include/htmlrenderer.h include/textformatter.h include/statusline.h
+ include/matchable.h include/dirbrowserformaction.h include/file_system.h \
+ include/formaction.h include/listformatter.h include/listwidget.h \
+ include/feedlistformaction.h include/listformaction.h include/view.h \
+ include/filebrowserformaction.h include/htmlrenderer.h \
+ include/textformatter.h include/statusline.h
 src/freshrssapi.o: src/freshrssapi.cpp include/freshrssapi.h \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
  include/remoteapi.h rss/feed.h rss/item.h 3rd-party/json.hpp \
@@ -420,8 +420,8 @@ src/helpformaction.o: src/helpformaction.cpp include/helpformaction.h \
  include/opml.h include/fileurlreader.h include/urlreader.h \
  include/utils.h include/queuemanager.h include/reloader.h \
  include/remoteapi.h include/rssignores.h include/rssitem.h \
- include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/listformatter.h include/listwidget.h \
+ include/matchable.h include/dirbrowserformaction.h include/file_system.h \
+ include/listformatter.h include/listwidget.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h
@@ -468,12 +468,12 @@ src/itemlistformaction.o: src/itemlistformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h include/controller.h \
  include/dbexception.h include/fmtstrformatter.h include/formaction.h \
- include/logger.h include/matcherexception.h include/rssfeed.h \
- include/scopemeasure.h \
+ include/itemutils.h include/rssfeed.h include/logger.h \
+ include/matcherexception.h include/rssfeed.h include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/utils.h include/view.h
 src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
@@ -485,6 +485,25 @@ src/itemrenderer.o: src/itemrenderer.cpp include/itemrenderer.h \
  config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/textformatter.h
+src/itemutils.o: src/itemutils.cpp include/itemutils.h include/cache.h \
+ include/configcontainer.h include/configactionhandler.h \
+ include/rssfeed.h include/matchable.h 3rd-party/optional.hpp \
+ include/rssitem.h include/matcher.h filter/FilterParser.h \
+ include/utils.h 3rd-party/expected.hpp include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
+ target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/view.h \
+ include/colormanager.h include/controller.h include/configparser.h \
+ include/feedcontainer.h include/filtercontainer.h include/fslock.h \
+ target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/opml.h \
+ include/fileurlreader.h include/urlreader.h include/queuemanager.h \
+ include/regexmanager.h include/regexowner.h include/reloader.h \
+ include/remoteapi.h include/rssignores.h include/dirbrowserformaction.h \
+ include/file_system.h include/formaction.h include/history.h \
+ target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
+ include/stflpp.h include/listformatter.h include/listwidget.h \
+ include/feedlistformaction.h include/listformaction.h \
+ include/filebrowserformaction.h include/htmlrenderer.h \
+ include/textformatter.h include/statusline.h
 src/itemviewformaction.o: src/itemviewformaction.cpp \
  include/itemviewformaction.h include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
@@ -506,10 +525,11 @@ src/itemviewformaction.o: src/itemviewformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/statusline.h \
- include/itemrenderer.h include/htmlrenderer.h include/logger.h \
- include/rssfeed.h include/scopemeasure.h \
+ include/itemrenderer.h include/itemutils.h include/rssfeed.h \
+ include/htmlrenderer.h include/logger.h include/rssfeed.h \
+ include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  include/strprintf.h include/textformatter.h include/utils.h \
  include/view.h
@@ -538,7 +558,7 @@ src/listformaction.o: src/listformaction.cpp include/listformaction.h \
  include/opml.h include/fileurlreader.h include/urlreader.h \
  include/queuemanager.h include/reloader.h include/remoteapi.h \
  include/rssignores.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/listformaction.h include/view.h include/filebrowserformaction.h \
  include/htmlrenderer.h include/textformatter.h include/statusline.h
 src/listformatter.o: src/listformatter.cpp include/listformatter.h \
@@ -721,8 +741,8 @@ src/reloader.o: src/reloader.cpp include/reloader.h \
  include/rssfeed.h include/rssparser.h rss/feed.h rss/item.h \
  include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h include/utils.h \
- include/view.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/formaction.h include/history.h \
+ include/view.h include/dirbrowserformaction.h include/file_system.h \
+ include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/listwidget.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
@@ -818,7 +838,7 @@ src/searchresultslistformaction.o: src/searchresultslistformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h include/rssfeed.h \
  include/keymap.h
@@ -841,7 +861,7 @@ src/selectformaction.o: src/selectformaction.cpp \
  include/fileurlreader.h include/urlreader.h include/utils.h \
  include/queuemanager.h include/reloader.h include/remoteapi.h \
  include/rssignores.h include/rssitem.h include/matchable.h \
- include/dirbrowserformaction.h include/filesystembrowser.h \
+ include/dirbrowserformaction.h include/file_system.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h
@@ -912,7 +932,7 @@ src/urlviewformaction.o: src/urlviewformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h include/opml.h \
  include/fileurlreader.h include/urlreader.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
- include/dirbrowserformaction.h include/filesystembrowser.h \
+ include/dirbrowserformaction.h include/file_system.h \
  include/feedlistformaction.h include/listformaction.h include/view.h \
  include/filebrowserformaction.h include/statusline.h
 src/utils.o: src/utils.cpp include/utils.h 3rd-party/expected.hpp \
@@ -934,7 +954,7 @@ src/view.o: src/view.cpp include/view.h 3rd-party/optional.hpp \
  include/regexmanager.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h include/reloader.h include/remoteapi.h \
  include/rssignores.h include/rssitem.h include/matchable.h \
- include/dirbrowserformaction.h include/filesystembrowser.h \
+ include/dirbrowserformaction.h include/file_system.h \
  include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/listwidget.h \
@@ -963,15 +983,15 @@ test/cache.o: test/cache.cpp include/cache.h include/configcontainer.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/rssignores.h \
  include/rssparser.h include/remoteapi.h rss/feed.h rss/item.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
+ test/test_helpers/tempfile.h test/test_helpers/maintempdir.h
 test/cliargsparser.o: test/cliargsparser.cpp 3rd-party/catch.hpp \
  include/cliargsparser.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
- test/test-helpers/envvar.h test/test-helpers/opts.h \
- test/test-helpers/stringmaker/optional.h test/test-helpers/tempdir.h \
- test/test-helpers/maintempdir.h
+ test/test_helpers/envvar.h test/test_helpers/opts.h \
+ test/test_helpers/stringmaker/optional.h test/test_helpers/tempdir.h \
+ test/test_helpers/maintempdir.h
 test/colormanager.o: test/colormanager.cpp include/colormanager.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/confighandlerexception.h include/configparser.h
@@ -983,17 +1003,17 @@ test/configdata.o: test/configdata.cpp 3rd-party/catch.hpp \
  include/configdata.h 3rd-party/expected.hpp
 test/configparser.o: test/configparser.cpp include/configparser.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
- include/configexception.h include/keymap.h test/test-helpers/envvar.h \
- 3rd-party/optional.hpp test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h
+ include/configexception.h include/keymap.h test/test_helpers/envvar.h \
+ 3rd-party/optional.hpp test/test_helpers/tempfile.h \
+ test/test_helpers/maintempdir.h
 test/configpaths.o: test/configpaths.cpp include/configpaths.h \
  target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  include/cliargsparser.h 3rd-party/optional.hpp include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
- 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
- test/test-helpers/misc.h test/test-helpers/opts.h \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
+ 3rd-party/catch.hpp test/test_helpers/chmod.h test/test_helpers/envvar.h \
+ test/test_helpers/misc.h test/test_helpers/opts.h \
+ test/test_helpers/tempdir.h test/test_helpers/maintempdir.h \
  include/utils.h 3rd-party/expected.hpp include/configcontainer.h \
  include/configactionhandler.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
@@ -1013,8 +1033,8 @@ test/controller.o: test/controller.cpp include/controller.h \
  target/cxxbridge/libnewsboat-ffi/src/configpaths.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  include/cliargsparser.h include/cache.h include/utils.h \
- include/rssitem.h 3rd-party/catch.hpp test/test-helpers/tempdir.h \
- test/test-helpers/maintempdir.h test/test-helpers/envvar.h
+ include/rssitem.h 3rd-party/catch.hpp test/test_helpers/tempdir.h \
+ test/test_helpers/maintempdir.h test/test_helpers/envvar.h
 test/download.o: test/download.cpp include/download.h 3rd-party/catch.hpp
 test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
@@ -1024,16 +1044,16 @@ test/feedcontainer.o: test/feedcontainer.cpp 3rd-party/catch.hpp \
  3rd-party/expected.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
-test/filesystembrowser.o: test/filesystembrowser.cpp 3rd-party/catch.hpp \
- include/filesystembrowser.h 3rd-party/optional.hpp
+test/file_system.o: test/file_system.cpp 3rd-party/catch.hpp \
+ include/file_system.h 3rd-party/optional.hpp
 test/fileurlreader.o: test/fileurlreader.cpp include/fileurlreader.h \
  include/urlreader.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp \
- test/test-helpers/chmod.h test/test-helpers/misc.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ test/test_helpers/chmod.h test/test_helpers/misc.h \
+ test/test_helpers/tempfile.h test/test_helpers/maintempdir.h \
  include/utils.h
 test/filtercontainer.o: test/filtercontainer.cpp \
  include/filtercontainer.h include/configactionhandler.h \
@@ -1046,11 +1066,11 @@ test/fmtstrformatter.o: test/fmtstrformatter.cpp \
  3rd-party/catch.hpp
 test/fslock.o: test/fslock.cpp include/fslock.h \
  target/cxxbridge/libnewsboat-ffi/src/fslock.rs.h 3rd-party/catch.hpp \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
- test/test-helpers/tempfile.h
+ test/test_helpers/tempdir.h test/test_helpers/maintempdir.h \
+ test/test_helpers/tempfile.h
 test/history.o: test/history.cpp include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h 3rd-party/catch.hpp \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
+ test/test_helpers/tempdir.h test/test_helpers/maintempdir.h
 test/htmlrenderer.o: test/htmlrenderer.cpp include/htmlrenderer.h \
  include/textformatter.h 3rd-party/catch.hpp include/strprintf.h \
  include/utils.h 3rd-party/expected.hpp 3rd-party/optional.hpp \
@@ -1077,7 +1097,7 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h include/queuemanager.h \
  include/reloader.h include/remoteapi.h include/rssignores.h \
  include/rssitem.h include/matchable.h include/dirbrowserformaction.h \
- include/filesystembrowser.h include/feedlistformaction.h \
+ include/file_system.h include/feedlistformaction.h \
  include/filebrowserformaction.h include/htmlrenderer.h \
  include/textformatter.h include/statusline.h 3rd-party/catch.hpp \
  include/cache.h include/configpaths.h \
@@ -1085,8 +1105,8 @@ test/itemlistformaction.o: test/itemlistformaction.cpp \
  target/cxxbridge/libnewsboat-ffi/src/cliargsparser.rs.h \
  include/cliargsparser.h include/feedlistformaction.h stfl/itemlist.h \
  include/keymap.h include/regexmanager.h include/rssfeed.h \
- test/test-helpers/misc.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h
+ test/test_helpers/misc.h test/test_helpers/tempfile.h \
+ test/test_helpers/maintempdir.h
 test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
  include/htmlrenderer.h include/textformatter.h 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
@@ -1096,7 +1116,7 @@ test/itemrenderer.o: test/itemrenderer.cpp include/itemrenderer.h \
  include/utils.h 3rd-party/expected.hpp include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- test/test-helpers/envvar.h
+ test/test_helpers/envvar.h
 test/keymap.o: test/keymap.cpp include/keymap.h \
  include/configactionhandler.h 3rd-party/catch.hpp \
  include/confighandlerexception.h
@@ -1113,7 +1133,7 @@ test/listwidget.o: test/listwidget.cpp include/listwidget.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp
 test/matcher.o: test/matcher.cpp include/matcher.h filter/FilterParser.h \
  3rd-party/catch.hpp include/matchable.h 3rd-party/optional.hpp \
- include/matcherexception.h test/test-helpers/stringmaker/optional.h
+ include/matcherexception.h test/test_helpers/stringmaker/optional.h
 test/matcherexception.o: test/matcherexception.cpp \
  include/matcherexception.h 3rd-party/catch.hpp
 test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
@@ -1124,26 +1144,26 @@ test/opml.o: test/opml.cpp include/opml.h include/feedcontainer.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp \
  include/cache.h include/fileurlreader.h include/rssfeed.h \
  include/matchable.h include/rssitem.h include/matcher.h \
- filter/FilterParser.h test/test-helpers/misc.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
+ filter/FilterParser.h test/test_helpers/misc.h \
+ test/test_helpers/tempfile.h test/test_helpers/maintempdir.h
 test/opmlurlreader.o: test/opmlurlreader.cpp include/opmlurlreader.h \
  include/configcontainer.h include/configactionhandler.h \
  include/urlreader.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp \
- test/test-helpers/misc.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h include/utils.h
+ test/test_helpers/misc.h test/test_helpers/tempfile.h \
+ test/test_helpers/maintempdir.h include/utils.h
 test/queueloader.o: test/queueloader.cpp include/queueloader.h \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/download.h 3rd-party/catch.hpp \
- test/test-helpers/chmod.h test/test-helpers/misc.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ test/test_helpers/chmod.h test/test_helpers/misc.h \
+ test/test_helpers/tempfile.h test/test_helpers/maintempdir.h \
  include/configcontainer.h include/download.h
 test/queuemanager.o: test/queuemanager.cpp include/queuemanager.h \
- 3rd-party/catch.hpp test/test-helpers/chmod.h test/test-helpers/envvar.h \
- 3rd-party/optional.hpp test/test-helpers/misc.h \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h \
+ 3rd-party/catch.hpp test/test_helpers/chmod.h test/test_helpers/envvar.h \
+ 3rd-party/optional.hpp test/test_helpers/misc.h \
+ test/test_helpers/tempfile.h test/test_helpers/maintempdir.h \
  include/cache.h include/configcontainer.h include/configactionhandler.h \
  include/configcontainer.h include/rssfeed.h include/matchable.h \
  include/rssitem.h include/matcher.h filter/FilterParser.h \
@@ -1169,8 +1189,8 @@ test/rssfeed.o: test/rssfeed.cpp include/rssfeed.h include/matchable.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp \
  include/cache.h include/configcontainer.h include/rssparser.h \
- include/remoteapi.h rss/feed.h rss/item.h test/test-helpers/envvar.h \
- test/test-helpers/stringmaker/optional.h
+ include/remoteapi.h rss/feed.h rss/item.h test/test_helpers/envvar.h \
+ test/test_helpers/stringmaker/optional.h
 test/rssignores.o: test/rssignores.cpp include/rssignores.h \
  include/configactionhandler.h include/matcher.h filter/FilterParser.h \
  include/rssitem.h include/matchable.h 3rd-party/optional.hpp \
@@ -1184,64 +1204,68 @@ test/rssitem.o: test/rssitem.cpp include/rssitem.h include/matchable.h \
  3rd-party/expected.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h \
- test/test-helpers/envvar.h test/test-helpers/stringmaker/optional.h
+ test/test_helpers/envvar.h test/test_helpers/stringmaker/optional.h
 test/rsspp_parser.o: test/rsspp_parser.cpp rss/parser.h \
  include/remoteapi.h include/configcontainer.h \
  include/configactionhandler.h rss/feed.h rss/item.h 3rd-party/catch.hpp \
- rss/exception.h test/test-helpers/exceptionwithmsg.h
+ rss/exception.h test/test_helpers/exceptionwithmsg.h
 test/rsspp_rssparser.o: test/rsspp_rssparser.cpp rss/rssparser.h \
- 3rd-party/catch.hpp test/test-helpers/envvar.h 3rd-party/optional.hpp
+ 3rd-party/catch.hpp test/test_helpers/envvar.h 3rd-party/optional.hpp
 test/ruststring.o: test/ruststring.cpp include/ruststring.h \
  3rd-party/catch.hpp
 test/scopemeasure.o: test/scopemeasure.cpp include/scopemeasure.h \
  target/cxxbridge/libnewsboat-ffi/src/scopemeasure.rs.h \
  3rd-party/catch.hpp include/logger.h config.h include/strprintf.h \
  target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
- test/test-helpers/loggerresetter.h test/test-helpers/tempfile.h \
- test/test-helpers/maintempdir.h
+ test/test_helpers/loggerresetter.h test/test_helpers/tempfile.h \
+ test/test_helpers/maintempdir.h
 test/statusline.o: test/statusline.cpp include/statusline.h \
  3rd-party/catch.hpp
 test/strprintf.o: test/strprintf.cpp include/strprintf.h \
  3rd-party/catch.hpp
 test/tagsouppullparser.o: test/tagsouppullparser.cpp \
  include/tagsouppullparser.h 3rd-party/optional.hpp 3rd-party/catch.hpp
-test/test-helpers/chdir.o: test/test-helpers/chdir.cpp \
- test/test-helpers/chdir.h include/utils.h 3rd-party/expected.hpp \
+test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
+ include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
+test/test_helpers/chdir.o: test/test_helpers/chdir.cpp \
+ test/test_helpers/chdir.h include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h
-test/test-helpers/chmod.o: test/test-helpers/chmod.cpp \
- test/test-helpers/chmod.h
-test/test-helpers/envvar.o: test/test-helpers/envvar.cpp \
- test/test-helpers/envvar.h 3rd-party/optional.hpp 3rd-party/catch.hpp
-test/test-helpers/loggerresetter.o: test/test-helpers/loggerresetter.cpp \
- test/test-helpers/loggerresetter.h include/logger.h config.h \
+test/test_helpers/chmod.o: test/test_helpers/chmod.cpp \
+ test/test_helpers/chmod.h
+test/test_helpers/envvar.o: test/test_helpers/envvar.cpp \
+ test/test_helpers/envvar.h 3rd-party/optional.hpp 3rd-party/catch.hpp
+test/test_helpers/loggerresetter.o: test/test_helpers/loggerresetter.cpp \
+ test/test_helpers/loggerresetter.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
-test/test-helpers/maintempdir.o: test/test-helpers/maintempdir.cpp \
- test/test-helpers/maintempdir.h
-test/test-helpers/misc.o: test/test-helpers/misc.cpp \
- test/test-helpers/misc.h 3rd-party/catch.hpp
-test/test-helpers/opts.o: test/test-helpers/opts.cpp \
- test/test-helpers/opts.h
-test/test-helpers/tempdir.o: test/test-helpers/tempdir.cpp \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h
-test/test-helpers/tempfile.o: test/test-helpers/tempfile.cpp \
- test/test-helpers/tempfile.h test/test-helpers/maintempdir.h
-test/test.o: test/test.cpp 3rd-party/catch.hpp include/logger.h config.h \
- include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h
+test/test_helpers/maintempdir.o: test/test_helpers/maintempdir.cpp \
+ test/test_helpers/maintempdir.h
+test/test_helpers/misc.o: test/test_helpers/misc.cpp \
+ test/test_helpers/misc.h 3rd-party/catch.hpp
+test/test_helpers/opts.o: test/test_helpers/opts.cpp \
+ test/test_helpers/opts.h
+test/test_helpers/tempdir.o: test/test_helpers/tempdir.cpp \
+ test/test_helpers/tempdir.h test/test_helpers/maintempdir.h
+test/test_helpers/tempfile.o: test/test_helpers/tempfile.cpp \
+ test/test_helpers/tempfile.h test/test_helpers/maintempdir.h
 test/textformatter.o: test/textformatter.cpp include/textformatter.h \
  3rd-party/catch.hpp include/regexmanager.h include/configactionhandler.h \
  include/matcher.h filter/FilterParser.h include/regexowner.h
+test/textviewwidget.o: test/textviewwidget.cpp include/textviewwidget.h \
+ include/stflpp.h 3rd-party/catch.hpp include/listformatter.h \
+ include/regexmanager.h include/configactionhandler.h include/matcher.h \
+ filter/FilterParser.h include/regexowner.h include/stflpp.h
 test/utils.o: test/utils.cpp include/utils.h 3rd-party/expected.hpp \
  3rd-party/optional.hpp include/configcontainer.h \
  include/configactionhandler.h include/logger.h config.h \
  include/strprintf.h target/cxxbridge/libnewsboat-ffi/src/logger.rs.h \
  target/cxxbridge/libnewsboat-ffi/src/utils.rs.h 3rd-party/catch.hpp \
- include/htmlrenderer.h include/textformatter.h test/test-helpers/chdir.h \
- test/test-helpers/envvar.h test/test-helpers/stringmaker/optional.h \
- test/test-helpers/tempdir.h test/test-helpers/maintempdir.h \
- test/test-helpers/tempfile.h
+ include/htmlrenderer.h include/textformatter.h test/test_helpers/chdir.h \
+ test/test_helpers/envvar.h test/test_helpers/stringmaker/optional.h \
+ test/test_helpers/tempdir.h test/test_helpers/maintempdir.h \
+ test/test_helpers/tempfile.h
 test/view.o: test/view.cpp include/view.h 3rd-party/optional.hpp \
  include/colormanager.h include/configactionhandler.h \
  include/configcontainer.h include/controller.h include/cache.h \
@@ -1254,7 +1278,7 @@ test/view.o: test/view.cpp include/view.h 3rd-party/optional.hpp \
  include/regexmanager.h include/matcher.h filter/FilterParser.h \
  include/regexowner.h include/reloader.h include/remoteapi.h \
  include/rssignores.h include/rssitem.h include/matchable.h \
- include/dirbrowserformaction.h include/filesystembrowser.h \
+ include/dirbrowserformaction.h include/file_system.h \
  include/formaction.h include/history.h \
  target/cxxbridge/libnewsboat-ffi/src/history.rs.h include/keymap.h \
  include/stflpp.h include/listformatter.h include/listwidget.h \

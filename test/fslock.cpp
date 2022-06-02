@@ -8,8 +8,8 @@
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "test-helpers/tempdir.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/tempdir.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 
@@ -75,7 +75,7 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 {
 
 	GIVEN("An invalid lock location") {
-		const TestHelpers::TempDir test_directory;
+		const test_helpers::TempDir test_directory;
 		const std::string non_existing_dir = test_directory.get_path() +
 			"does-not-exist/";
 		const std::string lock_location = non_existing_dir + "lockfile";
@@ -93,7 +93,7 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 	}
 
 	GIVEN("A lock file which does not grant write access") {
-		const TestHelpers::TempFile lock_location;
+		const test_helpers::TempFile lock_location;
 		const int fd = ::open(lock_location.get_path().c_str(), O_RDWR | O_CREAT, 0400);
 		::close(fd);
 
@@ -110,7 +110,7 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 
 TEST_CASE("try_lock() fails if lock was already created", "[FsLock]")
 {
-	const TestHelpers::TempFile lock_location;
+	const test_helpers::TempFile lock_location;
 
 	WHEN("A different process has called try_lock()") {
 		LockProcess lock_process(lock_location.get_path());
@@ -135,7 +135,7 @@ TEST_CASE("try_lock() fails if lock was already created", "[FsLock]")
 TEST_CASE("try_lock() succeeds if lock file location is valid and not locked by a different process",
 	"[FsLock]")
 {
-	const TestHelpers::TempFile lock_location;
+	const test_helpers::TempFile lock_location;
 	FsLock lock;
 	pid_t pid = 0;
 
@@ -151,7 +151,7 @@ TEST_CASE("try_lock() succeeds if lock file location is valid and not locked by 
 	}
 
 	SECTION("Calling try_lock() a second time with a different location succeeds and cleans up old lock file") {
-		const TestHelpers::TempFile new_lock_location;
+		const test_helpers::TempFile new_lock_location;
 
 		REQUIRE(0 == ::access(lock_location.get_path().c_str(), F_OK));
 		REQUIRE(lock.try_lock(new_lock_location.get_path(), pid, error_message));

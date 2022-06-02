@@ -69,7 +69,9 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 			it.title = get_content(node);
 			it.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
-			it.link = utils::absolute_url(base, get_content(node));
+			if (it.link.empty() || !utils::is_http_url(it.link)) {
+				it.link = utils::absolute_url(base, get_content(node));
+			}
 		} else if (node_is(node, "description", ns)) {
 			it.base = get_prop(node, "base", XML_URI);
 			if (it.base.empty()) {

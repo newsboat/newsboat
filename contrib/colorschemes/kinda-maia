@@ -5,7 +5,7 @@
 
 color listfocus         color192 default
 color listfocus_unread  color155 default
-color info              color35 default reverse 
+color info              color35 default reverse
 
 # highlights
 highlight article "https?://[^ ]+" 		color117 default

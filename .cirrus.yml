@@ -9,9 +9,9 @@ task:
           freebsd_instance:
             image: freebsd-12-3-release-amd64
             << : *freebsd_resource_settings
-        - name: FreeBSD 13.0
+        - name: FreeBSD 13.1
           freebsd_instance:
-            image: freebsd-13-0-release-amd64
+            image: freebsd-13-1-release-amd64
             << : *freebsd_resource_settings
 
     cargo_cache: &cargo_cache
@@ -34,7 +34,7 @@ task:
     install_script:
         # Make sure we use the same package repository for all images. Snapshots
         # (like 11.3-STABLE) default to latest, while releases default to quarterly.
-        - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf        
+        - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf
         - pkg update -f
         - pkg upgrade -y
         - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools libxml2
@@ -157,7 +157,6 @@ task:
 
 task:
     name: Code formatting
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
         cpu: 1

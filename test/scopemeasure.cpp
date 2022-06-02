@@ -6,8 +6,8 @@
 
 #include "logger.h"
 
-#include "test-helpers/loggerresetter.h"
-#include "test-helpers/tempfile.h"
+#include "test_helpers/loggerresetter.h"
+#include "test_helpers/tempfile.h"
 
 using namespace newsboat;
 
@@ -26,12 +26,12 @@ unsigned int file_lines_count(const std::string& filepath)
 TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 	"[ScopeMeasure]")
 {
-	TestHelpers::TempFile tmp;
+	test_helpers::TempFile tmp;
 
 	{
-		TestHelpers::LoggerResetter logReset;
-		Logger::set_logfile(tmp.get_path());
-		Logger::set_loglevel(Level::DEBUG);
+		test_helpers::LoggerResetter logReset;
+		logger::set_logfile(tmp.get_path());
+		logger::set_loglevel(Level::DEBUG);
 
 		ScopeMeasure sm("test");
 	}
@@ -42,16 +42,16 @@ TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 TEST_CASE("stopover() adds an extra line to the log upon each call",
 	"[ScopeMeasure]")
 {
-	TestHelpers::TempFile tmp;
+	test_helpers::TempFile tmp;
 
 	// initialized to an impossible value to catch logical errors in the test
 	// itself
 	unsigned int expected_line_count = 100500;
 
 	{
-		TestHelpers::LoggerResetter logReset;
-		Logger::set_logfile(tmp.get_path());
-		Logger::set_loglevel(Level::DEBUG);
+		test_helpers::LoggerResetter logReset;
+		logger::set_logfile(tmp.get_path());
+		logger::set_loglevel(Level::DEBUG);
 
 		ScopeMeasure sm("test");
 

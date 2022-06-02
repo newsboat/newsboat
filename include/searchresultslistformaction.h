@@ -49,6 +49,11 @@ public:
 	std::string title() override;
 
 protected:
+	FmtStrFormatter setup_head_formatter(const std::string& s,
+		unsigned int unread,
+		unsigned int total,
+		const std::string& url) override;
+
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;

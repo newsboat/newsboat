@@ -109,11 +109,11 @@ int Controller::run(const CliArgsParser& args)
 	refresh_on_start = args.refresh_on_start();
 
 	if (args.log_file().has_value()) {
-		Logger::set_logfile(args.log_file().value());
+		logger::set_logfile(args.log_file().value());
 	}
 
 	if (args.log_level().has_value()) {
-		Logger::set_loglevel(args.log_level().value());
+		logger::set_loglevel(args.log_level().value());
 	}
 
 	if (!args.display_msg().empty()) {
@@ -980,7 +980,7 @@ void Controller::update_config()
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
 		try {
-			Logger::set_user_error_logfile(cfg.get_configvalue("error-log"));
+			logger::set_user_error_logfile(cfg.get_configvalue("error-log"));
 		} catch (const Exception& e) {
 			const std::string msg =
 				strprintf::fmt("Couldn't open %s: %s",

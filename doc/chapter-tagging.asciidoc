@@ -26,7 +26,7 @@ With this feature, you can give feeds any title you want in your feed list:
 	https://rss.orf.at/news.xml "~ORF News"
 
 Another special type of tag are tags that start with the exclamation mark (`!`). When
-such a tag is found, the feed is hidden from the regular list of feeds and its 
+such a tag is found, the feed is hidden from the regular list of feeds and its
 content can only be found through a query feed.
 
 	https://rss.orf.at/news.xml ! news

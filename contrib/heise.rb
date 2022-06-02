@@ -116,7 +116,7 @@ xml.elements.each("//entry") do |item|
     comments =""
   end
   article_text = shortenArticle(article_text)
-  
+
   article_text += "<p><a href=\"http://www.heise.de#{comments}\">Kommentare</a></p>" if comments.length > 5 && comments.length < 150
 
   # insert full text article into feed
@@ -127,6 +127,6 @@ xml.elements.each("//entry") do |item|
 end
 
 fg.cleanupDB
-  
+
 # reproduce the content enriched feed
 xml.write($stdout, -1)

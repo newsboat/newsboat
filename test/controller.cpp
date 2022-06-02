@@ -8,21 +8,21 @@
 #include "utils.h"
 #include "rssitem.h"
 #include "3rd-party/catch.hpp"
-#include "test-helpers/tempdir.h"
-#include "test-helpers/envvar.h"
+#include "test_helpers/tempdir.h"
+#include "test_helpers/envvar.h"
 
 using namespace newsboat;
 
 TEST_CASE("write_item correctly parses path", "[Controller]")
 {
 	std::string name = "myitem";
-	TestHelpers::TempDir tmp;
+	test_helpers::TempDir tmp;
 	const auto home_dir = tmp.get_path() + "home/";
 	REQUIRE(0 == utils::mkdir_parents(home_dir, 0700));
 	const auto save_path = tmp.get_path() + "save/";
 	REQUIRE(0 == utils::mkdir_parents(save_path, 0700));
 
-	TestHelpers::EnvVar home("HOME");
+	test_helpers::EnvVar home("HOME");
 	home.set(home_dir);
 
 	ConfigPaths paths{};

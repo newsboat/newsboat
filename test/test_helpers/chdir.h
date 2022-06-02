@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace TestHelpers {
+namespace test_helpers {
 
 /// Changes current working directory and restores it back when the object is
 /// destroyed.
@@ -16,6 +16,6 @@ public:
 	~Chdir();
 };
 
-} // namespace TestHelpers
+} // namespace test_helpers
 
 #endif /* NEWSBOAT_TEST_HELPERS_CHDIR_H_ */

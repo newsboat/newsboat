@@ -89,4 +89,18 @@ std::string SearchResultsListFormAction::title()
 	return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
 }
 
+FmtStrFormatter SearchResultsListFormAction::setup_head_formatter(
+	const std::string& s,
+	unsigned int unread,
+	unsigned int total,
+	const std::string& url)
+{
+	FmtStrFormatter fmt = ItemListFormAction::setup_head_formatter(s, unread, total, url);
+
+	fmt.register_fmt('s', search_phrase);
+
+	return fmt;
+};
+
+
 } // namespace newsboat
