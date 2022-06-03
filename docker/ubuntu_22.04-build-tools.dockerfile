@@ -1,30 +1,30 @@
 # All the programs and libraries necessary to build Newsboat with newer
-# compilers. Contains GCC 11 and Rust 1.61.0 by default.
+# compilers. Contains GCC 12 and Rust 1.61.0 by default.
 #
 # Configurable via build-args:
 #
-# - cxx_package -- additional Ubuntu packages to install. Default: g++-11
+# - cxx_package -- additional Ubuntu packages to install. Default: g++-12
 # - rust_version -- Rust version to install. Default: 1.61.0
 # - cc -- C compiler to use. This gets copied into CC environment variable.
-#       Default: gcc-11
+#       Default: gcc-12
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
-#       Default: g++-11
+#       Default: g++-12
 #
 # Build with defaults:
 #
 #   docker build \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_21.10-build-tools.dockerfile \
+#       --file=docker/ubuntu_22.04-build-tools.dockerfile \
 #       docker
 #
 # Build with non-default compiler and Rust version:
 #
 #   docker build \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_21.10-build-tools.dockerfile \
-#       --build-arg cxx_package=clang-1
-#       --build-arg cc=clang-11 \
-#       --build-arg cxx=clang++-11 \
+#       --file=docker/ubuntu_22.04-build-tools.dockerfile \
+#       --build-arg cxx_package=clang-13 \
+#       --build-arg cc=clang-13 \
+#       --build-arg cxx=clang++-13 \
 #       --build-arg rust_version=1.40.0 \
 #       docker
 #
@@ -55,7 +55,7 @@
 #
 #   make distclean
 
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
@@ -64,7 +64,7 @@ RUN apt-get update \
     && apt-get upgrade --assume-yes \
     && apt install --assume-yes --no-install-recommends ca-certificates wget gnupg2
 
-ARG cxx_package=g++-11
+ARG cxx_package=g++-12
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -103,8 +103,8 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
 
 ENV HOME /home/builder
 
-ARG cc=gcc-11
-ARG cxx=g++-11
+ARG cc=gcc-12
+ARG cxx=g++-12
 
 ENV CC=$cc
 ENV CXX=$cxx
