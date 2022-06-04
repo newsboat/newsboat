@@ -10,4 +10,5 @@ src/poddlthread.cpp
 src/queueloader.cpp
 src/regexmanager.cpp
 src/regexowner.cpp
+src/stflrichtext.cpp
 src/textviewwidget.cpp
