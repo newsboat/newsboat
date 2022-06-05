@@ -4,6 +4,7 @@
 #include <limits.h>
 
 #include "stflpp.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 
@@ -25,17 +26,16 @@ void ListFormatter::add_line(const std::string& text)
 void ListFormatter::set_line(const unsigned int itempos,
 	const std::string& text)
 {
-	std::vector<std::string> formatted_text;
+	const std::string formatted_text = utils::wstr2str(utils::clean_nonprintable_characters(
+				utils::str2wstr(text)));
 
-	formatted_text.push_back(utils::wstr2str(utils::clean_nonprintable_characters(
-				utils::str2wstr(text))));
+	// TODO: Propagate usage of StflRichText
+	const StflRichText stflRichText = StflRichText::from_quoted(formatted_text);
 
 	if (itempos == UINT_MAX) {
-		lines.insert(lines.cend(),
-			formatted_text.cbegin(),
-			formatted_text.cend());
+		lines.push_back(stflRichText);
 	} else {
-		lines[itempos] = formatted_text[0];
+		lines[itempos] = stflRichText;
 	}
 }
 
@@ -47,7 +47,7 @@ std::string ListFormatter::format_list() const
 			rxman->quote_and_highlight(str, location);
 		}
 		format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", Stfl::quote(str)));
+				"{listitem text:%s}", Stfl::quote(str.stfl_quoted_string())));
 	}
 	format_cache.push_back('}');
 	return format_cache;

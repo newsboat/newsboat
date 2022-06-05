@@ -79,12 +79,11 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.pop_back();
 }
 
-void RegexManager::quote_and_highlight(std::string& str,
+void RegexManager::quote_and_highlight(StflRichText& stflString,
 	const std::string& location)
 {
 	auto& regexes = locations[location];
 
-	auto stflString = StflRichText::from_quoted(str);
 	const std::string text = stflString.get_plaintext();
 
 	for (unsigned int i = 0; i < regexes.size(); ++i) {
@@ -112,8 +111,6 @@ void RegexManager::quote_and_highlight(std::string& str,
 			}
 		}
 	}
-
-	str = stflString.stfl_quoted_string();
 }
 
 void RegexManager::handle_highlight_action(const std::vector<std::string>&
