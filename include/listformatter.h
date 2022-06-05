@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "regexmanager.h"
+#include "stflrichtext.h"
 
 namespace newsboat {
 
@@ -28,7 +29,7 @@ public:
 	}
 
 private:
-	std::vector<std::string> lines;
+	std::vector<StflRichText> lines;
 	RegexManager* rxman;
 	std::string location;
 };
