@@ -553,7 +553,7 @@ won't display podcasts, cover images etc.
 
 https://inoreader.com/[Inoreader] is a successor to Google Reader.
 
-To use Newsboat with Inoreader, you should first get Inoreader Pro subscription
+To use Newsboat with Inoreader, you should first get an Inoreader Pro subscription
 and https://www.inoreader.com/developers/register-app[register your own
 application]. This is needed because app credentials have to be kept secret,
 and https://github.com/newsboat/newsboat/issues/35[Newsboat developers don't
