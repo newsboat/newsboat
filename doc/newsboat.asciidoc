@@ -545,18 +545,23 @@ filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
 
 _Supported since Newsboat 2.10.2._
 
+WARNING: As of 2022-04-21, this only works for Inoreader Pro users, and only if
+they don't have too many feeds and/or don't reload them too often.
+
 WARNING: As of 2021-08-23, Inoreader's API doesn't list enclosures, so Newsboat
 won't display podcasts, cover images etc.
 
 https://inoreader.com/[Inoreader] is a successor to Google Reader.
 
-To use Newsboat with Inoreader, you should first
-https://www.inoreader.com/developers/register-app[register your own
-application]. Inoreader's API doesn't provide efficient access to all the data
-Newsboat needs, so the program has to scrape feeds. That generates a lot of API
-requests, which are rate-limited per application. Thus we ask users to register
-their own apps, to avoid interfering with others. Please also be mindful of
-this when enabling <<auto-reload,`auto-reload`>> or lowering
+To use Newsboat with Inoreader, you should first get an Inoreader Pro subscription
+and https://www.inoreader.com/developers/register-app[register your own
+application]. This is needed because app credentials have to be kept secret,
+and https://github.com/newsboat/newsboat/issues/35[Newsboat developers don't
+want to operate a proxy] needed to achieve that.
+
+Please note that API requests to Inoreader are rate-limited, so you might have
+problems reloading a lot of feeds, or doing so often. Keep this in mind when
+enabling <<auto-reload,`auto-reload`>> or lowering
 <<reload-time,`reload-time`>>.
 
 With app ID and key in hand, tell Newsboat you'd like to use Inoreader:
