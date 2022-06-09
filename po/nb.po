@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2022-03-08 21:17+0300\n"
+"POT-Creation-Date: 2022-06-09 20:50+0300\n"
 "PO-Revision-Date: 2012-08-08 20:07+0100\n"
 "Last-Translator: Daniel Aleksandersen <code@daniel.priv.no>\n"
 "Language-Team: \n"
@@ -259,7 +259,9 @@ msgstr ""
 
 #: src/configcontainer.cpp:315
 #, fuzzy
-msgid "%N %V - Search results (%u unread, %t total)%?F? matching filter '%F'&?"
+msgid ""
+"%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
+"'%F'&?"
 msgstr "%N %V - Søkeresultater (%u ulest, %t totalt)"
 
 #: src/configcontainer.cpp:319
@@ -525,12 +527,12 @@ msgstr "feilet: "
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Feil: kunne ikke markere alle nyhetsstrømmene som lest: %s"
 
-#: src/controller.cpp:698 src/itemviewformaction.cpp:229
+#: src/controller.cpp:698 src/itemutils.cpp:31
 #, c-format
 msgid "Generated filename (%s) is used already."
 msgstr ""
 
-#: src/controller.cpp:703 src/itemviewformaction.cpp:234
+#: src/controller.cpp:703 src/itemutils.cpp:36
 #, fuzzy, c-format
 msgid "Failed to open queue file: %s."
 msgstr "Feil under innlastning av nyhetsstrømmen '%s': %s"
@@ -582,7 +584,7 @@ msgid "Error: you can't remove the feed list!"
 msgstr "Feil: du kan ikke fjerne nyhetsstrømlisten!"
 
 #: src/dialogsformaction.cpp:146 src/feedlistformaction.cpp:1037
-#: src/itemlistformaction.cpp:1354 src/urlviewformaction.cpp:187
+#: src/itemlistformaction.cpp:1355 src/urlviewformaction.cpp:187
 msgid "Invalid position!"
 msgstr "ugyldig posisjon!"
 
@@ -596,7 +598,7 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 #: src/dirbrowserformaction.cpp:282 src/filebrowserformaction.cpp:308
-#: src/itemlistformaction.cpp:1333 src/itemviewformaction.cpp:528
+#: src/itemlistformaction.cpp:1334 src/itemviewformaction.cpp:503
 msgid "Save"
 msgstr "Lagre"
 
@@ -697,43 +699,43 @@ msgstr ""
 
 #: src/feedlistformaction.cpp:239 src/feedlistformaction.cpp:269
 #: src/feedlistformaction.cpp:580 src/itemlistformaction.cpp:182
-#: src/itemlistformaction.cpp:205 src/itemlistformaction.cpp:789
-#: src/itemviewformaction.cpp:515
+#: src/itemlistformaction.cpp:205 src/itemlistformaction.cpp:792
+#: src/itemviewformaction.cpp:490
 #, fuzzy
 msgid "Failed to spawn browser"
 msgstr "Åpne artikkel i en nettleser"
 
 #: src/feedlistformaction.cpp:242 src/feedlistformaction.cpp:272
 #: src/feedlistformaction.cpp:583 src/itemlistformaction.cpp:185
-#: src/itemlistformaction.cpp:208 src/itemlistformaction.cpp:792
-#: src/itemviewformaction.cpp:518
+#: src/itemlistformaction.cpp:208 src/itemlistformaction.cpp:795
+#: src/itemviewformaction.cpp:493
 #, c-format
 msgid "Browser returned error code %i"
 msgstr ""
 
-#: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:487
+#: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:481
 #, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
 msgstr "Vil du virkelig overskrive `%s' (j:Ja n:Nei)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/filebrowserformaction.cpp:125
-#: src/itemlistformaction.cpp:109 src/itemlistformaction.cpp:488
-#: src/view.cpp:189
+#: src/itemlistformaction.cpp:109 src/itemlistformaction.cpp:482
+#: src/view.cpp:190
 msgid "yn"
 msgstr "jn"
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:388
 #: src/feedlistformaction.cpp:513 src/itemlistformaction.cpp:109
-#: src/itemlistformaction.cpp:488 src/view.cpp:189
+#: src/itemlistformaction.cpp:482 src/view.cpp:190
 msgid "y"
 msgstr "j"
 
-#: src/feedlistformaction.cpp:309 src/itemlistformaction.cpp:492
+#: src/feedlistformaction.cpp:309 src/itemlistformaction.cpp:486
 msgid "Marking feed read..."
 msgstr "Markerer nyhetsstrømmen som lest..."
 
-#: src/feedlistformaction.cpp:319 src/itemlistformaction.cpp:537
+#: src/feedlistformaction.cpp:319 src/itemlistformaction.cpp:531
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Feil: kunne ikke markere nyhetsstrømmen som lest: %s"
@@ -743,11 +745,11 @@ msgstr "Feil: kunne ikke markere nyhetsstrømmen som lest: %s"
 msgid "No feeds with unread items."
 msgstr "Ingen nyhetsstrømmer med uleste innlegg."
 
-#: src/feedlistformaction.cpp:362 src/itemlistformaction.cpp:476
+#: src/feedlistformaction.cpp:362 src/itemlistformaction.cpp:470
 msgid "Already on last feed."
 msgstr "Allerede i den siste nyhetsstrømmen."
 
-#: src/feedlistformaction.cpp:371 src/itemlistformaction.cpp:481
+#: src/feedlistformaction.cpp:371 src/itemlistformaction.cpp:475
 msgid "Already on first feed."
 msgstr "Allerede i den første nyhetsstrømmen."
 
@@ -761,30 +763,30 @@ msgid "Marking all feeds read..."
 msgstr "Markerer alle nyhetsstrømmer som lest..."
 
 #: src/feedlistformaction.cpp:439 src/feedlistformaction.cpp:982
-#: src/itemlistformaction.cpp:645 src/itemlistformaction.cpp:858
+#: src/itemlistformaction.cpp:639 src/itemlistformaction.cpp:861
 #, fuzzy, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "kunne ikke tolke filteruttrykket `%s': %s"
 
-#: src/feedlistformaction.cpp:452 src/itemlistformaction.cpp:658
+#: src/feedlistformaction.cpp:452 src/itemlistformaction.cpp:652
 msgid "No filters defined."
 msgstr "Ingen angitte filtere."
 
 #: src/feedlistformaction.cpp:466 src/helpformaction.cpp:63
-#: src/itemlistformaction.cpp:604 src/itemviewformaction.cpp:304
+#: src/itemlistformaction.cpp:598 src/itemviewformaction.cpp:274
 msgid "Search for: "
 msgstr "Søk etter: "
 
 #: src/feedlistformaction.cpp:479 src/formaction.cpp:475 src/formaction.cpp:477
-#: src/itemlistformaction.cpp:618 src/itemrenderer.cpp:75
+#: src/itemlistformaction.cpp:612 src/itemrenderer.cpp:75
 msgid "Title: "
 msgstr "Tittel: "
 
-#: src/feedlistformaction.cpp:495 src/itemlistformaction.cpp:671
+#: src/feedlistformaction.cpp:495 src/itemlistformaction.cpp:665
 msgid "Filter: "
 msgstr "Filter: "
 
-#: src/feedlistformaction.cpp:512 src/view.cpp:187
+#: src/feedlistformaction.cpp:512 src/view.cpp:188
 msgid "Do you really want to quit (y:Yes n:No)? "
 msgstr "Vil du virkelig avslutte (j:Ja n:Nei)? "
 
@@ -793,21 +795,23 @@ msgid "Cannot open query feeds in the browser!"
 msgstr ""
 
 #: src/feedlistformaction.cpp:640 src/helpformaction.cpp:209
-#: src/itemlistformaction.cpp:1331 src/itemviewformaction.cpp:527
-#: src/pbview.cpp:363 src/pbview.cpp:370 src/urlviewformaction.cpp:174
+#: src/itemlistformaction.cpp:1332 src/itemviewformaction.cpp:502
+#: src/pbview.cpp:363 src/pbview.cpp:370 src/searchresultslistformaction.cpp:16
+#: src/urlviewformaction.cpp:174
 msgid "Quit"
 msgstr "Avslutt"
 
-#: src/feedlistformaction.cpp:641 src/itemlistformaction.cpp:1332
+#: src/feedlistformaction.cpp:641 src/itemlistformaction.cpp:1333
+#: src/searchresultslistformaction.cpp:17
 msgid "Open"
 msgstr "Åpne"
 
-#: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1335
-#: src/itemviewformaction.cpp:529
+#: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1336
+#: src/itemviewformaction.cpp:504
 msgid "Next Unread"
 msgstr "Neste uleste"
 
-#: src/feedlistformaction.cpp:643 src/itemlistformaction.cpp:1334
+#: src/feedlistformaction.cpp:643 src/itemlistformaction.cpp:1335
 msgid "Reload"
 msgstr "Oppdater"
 
@@ -819,35 +823,36 @@ msgstr "Oppdater alle"
 msgid "Mark Read"
 msgstr "Merk som lest"
 
-#: src/feedlistformaction.cpp:646 src/itemlistformaction.cpp:1336
+#: src/feedlistformaction.cpp:646 src/itemlistformaction.cpp:1337
 msgid "Mark All Read"
 msgstr "Marker alle som lest"
 
 #: src/feedlistformaction.cpp:647 src/helpformaction.cpp:210
-#: src/itemlistformaction.cpp:1337
+#: src/itemlistformaction.cpp:1338 src/searchresultslistformaction.cpp:19
 msgid "Search"
 msgstr "Søk"
 
 #: src/feedlistformaction.cpp:648 src/helpformaction.cpp:233
-#: src/itemlistformaction.cpp:1338 src/itemviewformaction.cpp:532
-#: src/pbview.cpp:299 src/pbview.cpp:378 src/urlviewformaction.cpp:177
+#: src/itemlistformaction.cpp:1339 src/itemviewformaction.cpp:507
+#: src/pbview.cpp:299 src/pbview.cpp:378 src/searchresultslistformaction.cpp:20
+#: src/urlviewformaction.cpp:177
 msgid "Help"
 msgstr "Hjelp"
 
-#: src/feedlistformaction.cpp:1001 src/itemlistformaction.cpp:898
+#: src/feedlistformaction.cpp:1001 src/itemlistformaction.cpp:901
 msgid "Searching..."
 msgstr "Leter..."
 
-#: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:904
+#: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:907
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Feil under søket etter `%s': %s"
 
-#: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:911
+#: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:914
 msgid "No results."
 msgstr "Ingen resultater."
 
-#: src/feedlistformaction.cpp:1032 src/itemlistformaction.cpp:1349
+#: src/feedlistformaction.cpp:1032 src/itemlistformaction.cpp:1350
 msgid "Position not visible!"
 msgstr "Posisjonen er ikke synlig!"
 
@@ -975,40 +980,40 @@ msgstr ""
 msgid "Clear"
 msgstr "Tøm"
 
-#: src/htmlrenderer.cpp:227
+#: src/htmlrenderer.cpp:229
 msgid "embedded flash:"
 msgstr "innbakt Flash-tillegg"
 
-#: src/htmlrenderer.cpp:1003
+#: src/htmlrenderer.cpp:1025
 msgid "Links: "
 msgstr "Lenker: "
 
-#: src/htmlrenderer.cpp:1034 src/htmlrenderer.cpp:1037
-#: src/htmlrenderer.cpp:1055
+#: src/htmlrenderer.cpp:1056 src/htmlrenderer.cpp:1059
+#: src/htmlrenderer.cpp:1077
 msgid "link"
 msgstr "lenke"
 
-#: src/htmlrenderer.cpp:1057
+#: src/htmlrenderer.cpp:1079
 msgid "image"
 msgstr "bilde"
 
-#: src/htmlrenderer.cpp:1059
+#: src/htmlrenderer.cpp:1081
 msgid "embedded flash"
 msgstr "innbakt Flash-tillegg"
 
-#: src/htmlrenderer.cpp:1061
+#: src/htmlrenderer.cpp:1083
 msgid "iframe"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1063
+#: src/htmlrenderer.cpp:1085
 msgid "video"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1065
+#: src/htmlrenderer.cpp:1087
 msgid "audio"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1067
+#: src/htmlrenderer.cpp:1089
 msgid "unknown (bug)"
 msgstr "ukjent (programfeil)"
 
@@ -1028,8 +1033,9 @@ msgstr ""
 
 #: src/itemlistformaction.cpp:79 src/itemlistformaction.cpp:102
 #: src/itemlistformaction.cpp:314 src/itemlistformaction.cpp:342
-#: src/itemlistformaction.cpp:368 src/itemlistformaction.cpp:592
-#: src/itemlistformaction.cpp:798 src/itemlistformaction.cpp:872
+#: src/itemlistformaction.cpp:368 src/itemlistformaction.cpp:586
+#: src/itemlistformaction.cpp:761 src/itemlistformaction.cpp:801
+#: src/itemlistformaction.cpp:875 src/searchresultslistformaction.cpp:54
 msgid "No item selected!"
 msgstr "Ingen innlegg merket!"
 
@@ -1038,7 +1044,7 @@ msgstr "Ingen innlegg merket!"
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
 msgstr "Vil du virkelig overskrive `%s' (j:Ja n:Nei)? "
 
-#: src/itemlistformaction.cpp:221 src/itemviewformaction.cpp:416
+#: src/itemlistformaction.cpp:221 src/itemviewformaction.cpp:391
 msgid "Toggling read flag for article..."
 msgstr "Setter lestflagg for artikkelen..."
 
@@ -1047,77 +1053,73 @@ msgstr "Setter lestflagg for artikkelen..."
 msgid "Error while toggling read flag: %s"
 msgstr "Feil under setting av lestflagg: %s"
 
-#: src/itemlistformaction.cpp:304 src/itemviewformaction.cpp:346
+#: src/itemlistformaction.cpp:304 src/itemviewformaction.cpp:316
 msgid "URL list empty."
 msgstr "URL-listen er tom."
 
 #: src/itemlistformaction.cpp:359 src/itemrenderer.cpp:80
-#: src/itemviewformaction.cpp:334
+#: src/itemviewformaction.cpp:304
 msgid "Flags: "
 msgstr "Flagg: "
 
-#: src/itemlistformaction.cpp:388 src/itemlistformaction.cpp:1429
+#: src/itemlistformaction.cpp:388 src/itemlistformaction.cpp:1430
 msgid "Error: no item selected!"
 msgstr "Feil: ingen markerte innlegg!"
 
-#: src/itemlistformaction.cpp:406
-msgid "Error: you can't reload search results."
-msgstr "Feil: du kan ikke oppdatere søkeresultater."
-
-#: src/itemlistformaction.cpp:427 src/itemlistformaction.cpp:436
-#: src/itemlistformaction.cpp:460 src/itemviewformaction.cpp:368
-#: src/itemviewformaction.cpp:379 src/itemviewformaction.cpp:409
-#: src/view.cpp:764 src/view.cpp:847
+#: src/itemlistformaction.cpp:421 src/itemlistformaction.cpp:430
+#: src/itemlistformaction.cpp:454 src/itemviewformaction.cpp:339
+#: src/itemviewformaction.cpp:351 src/itemviewformaction.cpp:384
+#: src/view.cpp:767 src/view.cpp:850
 msgid "No unread items."
 msgstr "Ingen uleste innlegg."
 
-#: src/itemlistformaction.cpp:444 src/itemviewformaction.cpp:389
-#: src/view.cpp:926
+#: src/itemlistformaction.cpp:438 src/itemviewformaction.cpp:362
+#: src/view.cpp:929
 msgid "Already on last item."
 msgstr "Allerede på siste innlegg."
 
-#: src/itemlistformaction.cpp:453 src/itemviewformaction.cpp:399
-#: src/view.cpp:888
+#: src/itemlistformaction.cpp:447 src/itemviewformaction.cpp:373
+#: src/view.cpp:891
 msgid "Already on first item."
 msgstr "Allerede på første innlegg."
 
-#: src/itemlistformaction.cpp:466 src/itemlistformaction.cpp:471
+#: src/itemlistformaction.cpp:460 src/itemlistformaction.cpp:465
 msgid "No unread feeds."
 msgstr "Ingen uleste nyhetsstrømmer."
 
-#: src/itemlistformaction.cpp:546
+#: src/itemlistformaction.cpp:540
 #, fuzzy
 msgid "Marking all above as read..."
 msgstr "Markerer alle nyhetsstrømmer som lest..."
 
-#: src/itemlistformaction.cpp:587 src/itemviewformaction.cpp:320
+#: src/itemlistformaction.cpp:581 src/itemviewformaction.cpp:290
 msgid "Pipe article to command: "
 msgstr "Send artikkel til kommando: "
 
 #. / This string is related to the letters in parentheses in the
 #. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. / messages
-#: src/itemlistformaction.cpp:685 src/itemlistformaction.cpp:723
+#: src/itemlistformaction.cpp:679 src/itemlistformaction.cpp:717
 #, fuzzy
 msgid "dtfalgr"
 msgstr "dtfolg"
 
-#: src/itemlistformaction.cpp:687
+#: src/itemlistformaction.cpp:681
 #, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr "Sorter etter (d)ato)/(t)ittel/(f)lagg/f(o)rfatter/(l)enke/(g)uide?"
 
-#: src/itemlistformaction.cpp:725
+#: src/itemlistformaction.cpp:719
 #, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Sorter synkende etter (d)ato)/(t)ittel/(f)lagg/f(o)rfatter/(l)enke/(g)uide?"
 
-#: src/itemlistformaction.cpp:880 src/itemviewformaction.cpp:607
+#: src/itemlistformaction.cpp:883 src/itemviewformaction.cpp:582
 msgid "Flags updated."
 msgstr "Flagg oppdatert."
 
-#: src/itemlistformaction.cpp:1039 src/view.cpp:410 src/view.cpp:433
+#: src/itemlistformaction.cpp:1038 src/view.cpp:411 src/view.cpp:434
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Feil: bruk av filteret feilet: %s"
@@ -1129,53 +1131,48 @@ msgid_plural "%u days ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/itemlistformaction.cpp:1408 src/itemviewformaction.cpp:252
-#: src/itemviewformaction.cpp:582
+#: src/itemlistformaction.cpp:1409 src/itemviewformaction.cpp:222
+#: src/itemviewformaction.cpp:557
 msgid "Aborted saving."
 msgstr "Avbrøt lagringen."
 
-#: src/itemlistformaction.cpp:1413 src/itemviewformaction.cpp:588
+#: src/itemlistformaction.cpp:1414 src/itemviewformaction.cpp:563
 #, c-format
 msgid "Saved article to %s"
 msgstr "Lagret artikkelen til %s"
 
-#: src/itemlistformaction.cpp:1416 src/itemviewformaction.cpp:592
+#: src/itemlistformaction.cpp:1417 src/itemviewformaction.cpp:567
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Feil: kunne ikke lagre artikkelen til %s"
 
-#: src/itemlistformaction.cpp:1425
+#: src/itemlistformaction.cpp:1426
 #, fuzzy
 msgid "Error: no filename provided"
 msgstr "Feil: ingen markerte innlegg!"
 
-#: src/itemlistformaction.cpp:1510
-#, c-format
-msgid "Search Result - '%s'"
-msgstr "Søkeresultater - '%s'"
-
-#: src/itemlistformaction.cpp:1513
+#: src/itemlistformaction.cpp:1511
 #, c-format
 msgid "Query Feed - %s"
 msgstr "Spørringsstrøm - %s"
 
-#: src/itemlistformaction.cpp:1520
+#: src/itemlistformaction.cpp:1518
 #, c-format
 msgid "Article List - %s"
 msgstr "Artikkelliste - %s"
 
-#: src/itemlistformaction.cpp:1568
+#: src/itemlistformaction.cpp:1565
 msgid "yanq"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1590
+#: src/itemlistformaction.cpp:1587
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1597
+#: src/itemlistformaction.cpp:1594
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
 msgstr ""
@@ -1204,71 +1201,71 @@ msgstr "Podkastnedlastings-URL: "
 msgid "type: "
 msgstr "slag: "
 
-#: src/itemviewformaction.cpp:60 src/itemviewformaction.cpp:677
-msgid "Top"
-msgstr "Toppen"
-
-#: src/itemviewformaction.cpp:61 src/itemviewformaction.cpp:679
-msgid "Bottom"
-msgstr "Bunnen"
-
-#: src/itemviewformaction.cpp:177 src/view.cpp:545
-#, c-format
-msgid "Error while marking article as read: %s"
-msgstr "Feil mens artikkelen ble markert som lest: %s"
-
-#: src/itemviewformaction.cpp:207
+#: src/itemutils.cpp:9
 msgid "Item has no enclosures."
 msgstr ""
 
-#: src/itemviewformaction.cpp:211
+#: src/itemutils.cpp:13
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
 msgstr ""
 
-#: src/itemviewformaction.cpp:219
+#: src/itemutils.cpp:21
 #, c-format
 msgid "Added %s to download queue."
 msgstr "La til %s til nedlastingskøen."
 
-#: src/itemviewformaction.cpp:224
+#: src/itemutils.cpp:26
 #, c-format
 msgid "%s is already queued."
 msgstr ""
 
-#: src/itemviewformaction.cpp:257
+#: src/itemviewformaction.cpp:62 src/itemviewformaction.cpp:652
+msgid "Top"
+msgstr "Toppen"
+
+#: src/itemviewformaction.cpp:63 src/itemviewformaction.cpp:654
+msgid "Bottom"
+msgstr "Bunnen"
+
+#: src/itemviewformaction.cpp:179 src/view.cpp:548
+#, c-format
+msgid "Error while marking article as read: %s"
+msgstr "Feil mens artikkelen ble markert som lest: %s"
+
+#: src/itemviewformaction.cpp:227
 #, c-format
 msgid "Saved article to %s."
 msgstr "Lagret artikkel til %s."
 
-#: src/itemviewformaction.cpp:260
+#: src/itemviewformaction.cpp:230
 #, c-format
 msgid "Error: couldn't write article to file %s"
 msgstr "Feil: kunne ikke skrive artikkelen til filen %s"
 
-#: src/itemviewformaction.cpp:432
+#: src/itemviewformaction.cpp:407
 #, c-format
 msgid "Error while marking article as unread: %s"
 msgstr "Feil mens artikkelen ble markert som lest: %s"
 
-#: src/itemviewformaction.cpp:480 src/keymap.cpp:203
+#: src/itemviewformaction.cpp:455 src/keymap.cpp:203
 msgid "Goto URL #"
 msgstr "Gå til URL #"
 
-#: src/itemviewformaction.cpp:530 src/urlviewformaction.cpp:175
+#: src/itemviewformaction.cpp:505 src/urlviewformaction.cpp:175
 msgid "Open in Browser"
 msgstr "Åpne i nettleseren"
 
-#: src/itemviewformaction.cpp:531
+#: src/itemviewformaction.cpp:506
 msgid "Enqueue"
 msgstr "Legg til i køen"
 
-#: src/itemviewformaction.cpp:690
+#: src/itemviewformaction.cpp:665
 #, c-format
 msgid "Article - %s"
 msgstr "Artikkel - %s"
 
-#: src/itemviewformaction.cpp:740
+#: src/itemviewformaction.cpp:715
 msgid "Error: invalid regular expression!"
 msgstr "Feil: ugyldig regulært uttrykk!"
 
@@ -1539,122 +1536,127 @@ msgstr "Sorter denne listen stigende"
 msgid "Sort current list (reverse)"
 msgstr "Sorter denne listen synkende"
 
-#: src/keymap.cpp:402
+#: src/keymap.cpp:406
+#, fuzzy
+msgid "Return to previous search results (if any)"
+msgstr "Vend tilbake til forrige dialog/avslutt"
+
+#: src/keymap.cpp:410
 msgid "Open URL 1"
 msgstr "Åpne URL 1"
 
-#: src/keymap.cpp:403
+#: src/keymap.cpp:411
 msgid "Open URL 2"
 msgstr "Åpne URL 2"
 
-#: src/keymap.cpp:404
+#: src/keymap.cpp:412
 msgid "Open URL 3"
 msgstr "Åpne URL 3"
 
-#: src/keymap.cpp:405
+#: src/keymap.cpp:413
 msgid "Open URL 4"
 msgstr "Åpne URL 4"
 
-#: src/keymap.cpp:406
+#: src/keymap.cpp:414
 msgid "Open URL 5"
 msgstr "Åpne URL 5"
 
-#: src/keymap.cpp:407
+#: src/keymap.cpp:415
 msgid "Open URL 6"
 msgstr "Åpne URL 6"
 
-#: src/keymap.cpp:408
+#: src/keymap.cpp:416
 msgid "Open URL 7"
 msgstr "Åpne URL 7"
 
-#: src/keymap.cpp:409
+#: src/keymap.cpp:417
 msgid "Open URL 8"
 msgstr "Åpne URL 8"
 
-#: src/keymap.cpp:410
+#: src/keymap.cpp:418
 msgid "Open URL 9"
 msgstr "Åpne URL 9"
 
-#: src/keymap.cpp:411
+#: src/keymap.cpp:419
 msgid "Open URL 10"
 msgstr "Åpne URL 10"
 
-#: src/keymap.cpp:413
+#: src/keymap.cpp:421
 msgid "Start cmdline with 1"
 msgstr ""
 
-#: src/keymap.cpp:414
+#: src/keymap.cpp:422
 msgid "Start cmdline with 2"
 msgstr ""
 
-#: src/keymap.cpp:415
+#: src/keymap.cpp:423
 msgid "Start cmdline with 3"
 msgstr ""
 
-#: src/keymap.cpp:416
+#: src/keymap.cpp:424
 msgid "Start cmdline with 4"
 msgstr ""
 
-#: src/keymap.cpp:417
+#: src/keymap.cpp:425
 msgid "Start cmdline with 5"
 msgstr ""
 
-#: src/keymap.cpp:418
+#: src/keymap.cpp:426
 msgid "Start cmdline with 6"
 msgstr ""
 
-#: src/keymap.cpp:419
+#: src/keymap.cpp:427
 msgid "Start cmdline with 7"
 msgstr ""
 
-#: src/keymap.cpp:420
+#: src/keymap.cpp:428
 msgid "Start cmdline with 8"
 msgstr ""
 
-#: src/keymap.cpp:421
+#: src/keymap.cpp:429
 msgid "Start cmdline with 9"
 msgstr ""
 
-#: src/keymap.cpp:423
+#: src/keymap.cpp:431
 msgid "Move to the previous entry"
 msgstr "Gå til forrige innlegg"
 
-#: src/keymap.cpp:424
+#: src/keymap.cpp:432
 msgid "Move to the next entry"
 msgstr "Gå til neste innlegg"
 
-#: src/keymap.cpp:429
+#: src/keymap.cpp:437
 msgid "Move to the previous page"
 msgstr "Gå til forrige side"
 
-#: src/keymap.cpp:436
+#: src/keymap.cpp:444
 msgid "Move to the next page"
 msgstr "Gå til neste side"
 
-#: src/keymap.cpp:444
+#: src/keymap.cpp:452
 msgid "Move to the start of page/list"
 msgstr "Gå til starten av siden/listen"
 
-#: src/keymap.cpp:451
+#: src/keymap.cpp:459
 msgid "Move to the end of page/list"
 msgstr "Gå til slutten av siden/listen"
 
-#: src/keymap.cpp:722
+#: src/keymap.cpp:731
 #, c-format
 msgid "`%s' is not a valid context"
 msgstr "`%s' er ikke en gyldig kontekst"
 
-#: src/keymap.cpp:727
+#: src/keymap.cpp:736
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "`%s' er en ugyldig nøkkelkommando"
 
-#: src/keymap.cpp:775
+#: src/keymap.cpp:784
 #, fuzzy, c-format
 msgid "failed to parse operation sequence for %s"
 msgstr "Feil under innlastning av nyhetsstrømmen '%s': %s"
 
-#: src/keymap.cpp:793
+#: src/keymap.cpp:802
 #, fuzzy, c-format
 msgid "`%s' is not a valid operation"
 msgstr "`%s' er ikke en gyldig kontekst"
@@ -1833,6 +1835,21 @@ msgstr ""
 msgid "Error: unsupported URL: %s"
 msgstr "Feil: URLen støttes ikke: %s"
 
+#: src/searchresultslistformaction.cpp:18
+#, fuzzy
+msgid "Prev search results"
+msgstr "Søkeresultater - '%s'"
+
+#: src/searchresultslistformaction.cpp:63
+#, fuzzy
+msgid "Already in first search result."
+msgstr "Allerede i den første nyhetsstrømmen."
+
+#: src/searchresultslistformaction.cpp:89
+#, c-format
+msgid "Search Result - '%s'"
+msgstr "Søkeresultater - '%s'"
+
 #: src/selectformaction.cpp:252 src/selectformaction.cpp:275
 msgid "Select Tag"
 msgstr "Velg etikett"
@@ -1864,35 +1881,35 @@ msgstr "Feil under innlastning av nyhetsstrømmen '%s': %s"
 msgid "Failed to read line %u: %s"
 msgstr "Feil under innlastning av nyhetsstrømmen '%s': %s"
 
-#: src/view.cpp:164
+#: src/view.cpp:165
 msgid "Error: failed to execute startup commands"
 msgstr ""
 
-#: src/view.cpp:287
+#: src/view.cpp:288
 msgid "Operation ignored in modal dialog"
 msgstr ""
 
-#: src/view.cpp:396
+#: src/view.cpp:397
 #, c-format
 msgid "Running browser: %s"
 msgstr ""
 
-#: src/view.cpp:460 src/view.cpp:491
+#: src/view.cpp:464 src/view.cpp:494
 msgid "Error: feed contains no items!"
 msgstr "Feil: nyhetsstrømmen inneholder ingen innlegg!"
 
-#: src/view.cpp:474 src/view.cpp:725 src/view.cpp:772 src/view.cpp:798
-#: src/view.cpp:817 src/view.cpp:855 src/view.cpp:894 src/view.cpp:932
-#: src/view.cpp:958 src/view.cpp:977
+#: src/view.cpp:478 src/view.cpp:728 src/view.cpp:775 src/view.cpp:801
+#: src/view.cpp:820 src/view.cpp:858 src/view.cpp:897 src/view.cpp:935
+#: src/view.cpp:961 src/view.cpp:980
 #, fuzzy, c-format
 msgid "Error: couldn't prepare query feed: %s"
 msgstr "Feil: kunne ikke markere nyhetsstrømmen som lest: %s"
 
-#: src/view.cpp:626
+#: src/view.cpp:629
 msgid "No tags defined."
 msgstr "Ingen etiketter angitt."
 
-#: src/view.cpp:997
+#: src/view.cpp:1000
 msgid "Updating query feed..."
 msgstr "Frisker opp spørringsstrømmen..."
 
