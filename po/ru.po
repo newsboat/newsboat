@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-06-09 20:50+0300\n"
-"PO-Revision-Date: 2022-03-08 21:24+0300\n"
+"PO-Revision-Date: 2022-06-09 21:37+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -265,13 +265,12 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Заметок в ленте '%T' (непрочитанно %u, всего %t)"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Результаты поиска (непрочитанно %u, всего %t)%?F? соответствующие "
-"фильтру '%F'&?"
+"%N %V - Результаты поиска '%s' (непрочитанно %u, всего %t)%?F?, "
+"соответствующие фильтру '%F'&?"
 
 #: src/configcontainer.cpp:319
 msgid "%N %V - Select Filter"
@@ -1524,9 +1523,8 @@ msgid "Sort current list (reverse)"
 msgstr "Отсортировать список в обратном порядке"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Вернуться в предыдущий диалог/Выйти"
+msgstr "Вернуться к результатам предыдущего поиска (если они есть)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1823,14 +1821,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Ошибка: ссылка не поддерживается: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Результат поиска - '%s'"
+msgstr "Результаты предыдущего поиска"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Уже на первой ленте."
+msgstr "Уже на первом результате поиска."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
