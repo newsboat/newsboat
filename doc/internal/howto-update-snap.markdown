@@ -34,4 +34,4 @@ You'll need:
 
     $ for i in *.snap; do snapcraft upload --release=beta,candidate,stable $i ; done
 
-6. Remove built snaps: `rm -f *.snap newsboat*txt`.
+6. Remove built snaps: `rm -f *.snap *.snap.xdelta3 newsboat*txt`.
