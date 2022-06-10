@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-06-09 20:50+0300\n"
-"PO-Revision-Date: 2021-12-10 20:00+0300\n"
+"PO-Revision-Date: 2022-06-09 21:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -263,13 +263,11 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - '%T' yazısı (%u okunmamış, %t toplam) - %U"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Arama sonuçları (%u okunmamış, %t toplam))%?F? süzgeçle eşleşen "
-"'%F'&?"
+"%N %V - '%s' için%?F? '%F' süzgeciyle eşleşen&? arama sonuçları (%u okunmamış, %t toplam)"
 
 #: src/configcontainer.cpp:319
 msgid "%N %V - Select Filter"
@@ -428,7 +426,7 @@ msgid ""
 "import an OPML file."
 msgstr ""
 "Hata: Hiçbir adres ayarlanmamış. Lütfen %s içine RSS besleme kaynakları "
-"ekleyin ya da bir OPML dosyasını içeri aktarın."
+"ekleyin ya da bir OPML dosyasını içe aktarın."
 
 #: src/controller.cpp:378
 msgid ""
@@ -559,7 +557,7 @@ msgstr "%s ayrıştırılırken bir hata oluştu: %s"
 #: src/controller.cpp:741
 #, c-format
 msgid "Import of %s finished."
-msgstr "%s içeri aktarımı tamamlandı."
+msgstr "%s içe aktarımı tamamlandı."
 
 #: src/controller.cpp:877
 #, c-format
@@ -1507,7 +1505,7 @@ msgstr "Sonraki diyaloga git"
 
 #: src/keymap.cpp:377
 msgid "Go to previous dialog"
-msgstr "Önceki diyaloğa dön/Çık"
+msgstr "Önceki diyaloga dön/Çık"
 
 #: src/keymap.cpp:384
 msgid "Pipe article to command"
@@ -1522,9 +1520,8 @@ msgid "Sort current list (reverse)"
 msgstr "Mevcut listeyi sırala (tersten)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Önceki diyaloğa dön/Çık"
+msgstr "Önceki arama sonuçlarına dön (varsa)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1820,14 +1817,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Hata: Desteklenmeyen URL: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Arama Sonucu - '%s'"
+msgstr "Önceki arama sonuçları"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Halihazırda ilk besleme üzerinde."
+msgstr "Halihazırda ilk arama sonucunda."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
