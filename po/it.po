@@ -262,12 +262,11 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Articolo '%T' (%u non letti, %t in totale)"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Risultati della ricerca (%u non letti, %t totali)%?F? corrispondenti "
+"%N %V - Risultati della ricerca per '%s' (%u non letti, %t totali)%?F? corrispondenti "
 "al fitro '%F'&?"
 
 #: src/configcontainer.cpp:319
@@ -1518,9 +1517,8 @@ msgid "Sort current list (reverse)"
 msgstr "Ordina la lista corrente (inverso)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Torna alla schermata precedente/Esci"
+msgstr "Riorna ai risultati di ricerca precedenti (se disponibili)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1820,14 +1818,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Errore: URL non supportato: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Risultati della ricerca - '%s'"
+msgstr "Risultati ricerca precedente"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Già al primo feed."
+msgstr "Già al primo risultato ricercato corrispondente."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
