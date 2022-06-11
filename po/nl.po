@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-06-09 20:50+0300\n"
-"PO-Revision-Date: 2022-03-08 19:45+0100\n"
+"PO-Revision-Date: 2022-06-11 09:01+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -263,12 +263,12 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel ‘%T’ (%u ongelezen, %t totaal)"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Zoekresultaten (%u ongelezen, %t totaal)%?F? gefilterd met '%F'&?"
+"%N %V - Zoekresultaten voor '%s' (%u ongelezen, %t totaal)%?F? gefilterd met "
+"'%F'&?"
 
 #: src/configcontainer.cpp:319
 msgid "%N %V - Select Filter"
@@ -1527,9 +1527,8 @@ msgid "Sort current list (reverse)"
 msgstr "Huidige lijst omgekeerd sorteren"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Naar vorige dialoogvenster terugkeren/afsluiten"
+msgstr "Terugkeren naar vorige zoekresultaten (als die er zijn)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1827,14 +1826,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Fout: niet ondersteunde URL: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Zoekresultaat - ‘%s’"
+msgstr "Vorige zoekresultaten"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Dit is reeds de eerste feed."
+msgstr "Dit zijn al de eerste zoekresultaten."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
