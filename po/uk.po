@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-06-09 20:50+0300\n"
-"PO-Revision-Date: 2022-03-08 21:24+0300\n"
+"PO-Revision-Date: 2022-06-09 21:39+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -264,13 +264,12 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Стаття '%T' (%u непрочитано, всього %t)"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Результат пошуку (%u непрочитано, всього %t)%?F? що відповідають "
-"фільтру '%F'&?"
+"%N %V - Результати пошуку '%s' (%u непрочитано, всього %t)%?F?, що "
+"відповідають фільтру '%F'&?"
 
 #: src/configcontainer.cpp:319
 msgid "%N %V - Select Filter"
@@ -1526,9 +1525,8 @@ msgid "Sort current list (reverse)"
 msgstr "Сортувати поточний список (реверсно)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Повернутись до попереднього діалогу/Вийти"
+msgstr "Повернутися до результатів попереднього пошуку (якщо вони є)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1825,14 +1823,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Помилка: посилання не підтримується: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Результати Пошуку - '%s'"
+msgstr "Результати попереднього пошуку"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Вже на першій темі."
+msgstr "Вже на перших результатах пошуку."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
