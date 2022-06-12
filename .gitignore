@@ -32,3 +32,4 @@ doc/podboat-cmds-linked.asciidoc
 .vscode
 /cppcheck.log
 *.dSYM
+/.deps/

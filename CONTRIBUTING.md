@@ -58,18 +58,7 @@ Newsboat can be built by running:
 
 	$ make -jN
 
-Where `N` is again the number of threads you want to use. Please note that if
-you make changes to the included headers in any of the source files you have
-to run:
-
-	make depslist
-
-This command resolves all of the necessary dependencies and writes the list
-to `mk/mk.deps`. It's important to note here that the command above only
-works correctly if your default compiler is set to GCC. If your default
-compiler is Clang you can use GCC just for this one operation:
-
-	CXX=g++ make depslist
+Where `N` is again the number of threads you want to use.
 
 Newsboat can also be [built in Docker](doc/docker.md).
 

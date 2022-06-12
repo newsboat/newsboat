@@ -5,34 +5,7 @@ datadir?=$(prefix)/share
 localedir?=$(datadir)/locale
 docdir?=$(datadir)/doc/$(PACKAGE)
 
-# Here's a problem:
-# 1. our "Rust 1.44, GCC 10, Ubuntu 20.04" build fails: cxx-0.5 crate can't
-#    find the target directory, thus doesn't symlink cxxbridge headers into the
-#    expected location, thus C++ compilation fails.
-# 2. cxx-0.5 can take a hint from CARGO_TARGET_DIR, but it wants the path to be
-#    absolute.
-# 3. Cargo docs say that CARGO_TARGET_DIR is relative to current working
-#    directory, but in reality, Cargo works fine with an absolute path too.
-# 4. We actually need a relative path for a different purpose: to tell GCC
-#    where to find cxxbridge headers. Unfortunately, if we use an absolute path
-#    there, GCC will also print out absolute paths when printing out dependency
-#    info (see `depslist` target). So we have to supply GCC a relative path.
-#
-# So here's what we do:
-#
-# 1. if someone set CARGO_TARGET_DIR env var, we **hope** they followed Cargo
-#    docs' advice and used a relative path. If the var is not set, we use
-#    a default of "target" (which is Cargo's default, so nothing changes from
-#    the user's point of view).
-#
-#    We remember this path in a variable `relative_cargo_target_dir`, which we
-#    pass to GCC.
-# 2. we override CARGO_TARGET_DIR, turning it into an absolute path.
-#
-#    That fixes cxx-0.5.
-CARGO_TARGET_DIR?=target
-relative_cargo_target_dir:=$(CARGO_TARGET_DIR)
-export CARGO_TARGET_DIR:=$(abspath $(CARGO_TARGET_DIR))
+export CARGO_TARGET_DIR?=$(abspath target)
 
 CPPCHECK_JOBS?=5
 
@@ -50,7 +23,7 @@ CXX_FOR_BUILD?=$(CXX)
 DEFINES=-DLOCALEDIR='"$(localedir)"'
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
-INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(relative_cargo_target_dir)/cxxbridge/
+INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(CARGO_TARGET_DIR)/cxxbridge/
 BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
@@ -100,6 +73,10 @@ SRC_SRCS:=$(wildcard src/*.cpp)
 SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
 
 CPP_SRCS:=$(LIB_SRCS) $(FILTERLIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS)
+CPP_DEPS:=$(addprefix .deps/,$(CPP_SRCS))
+# Sorting removes duplicate items, which prevents Make from spewing warnings
+# about repeated items in the target that creates these directories
+CPP_DEPS_SUBDIRS:=$(sort $(dir $(CPP_DEPS)))
 
 STFL_HDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 
@@ -190,8 +167,19 @@ target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 	@# requires a recipe for pattern rules. So here you go, Make, have
 	@# a comment.
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+$(CPP_DEPS_SUBDIRS):
+	$(MKDIR) $@
+
+%.o: %.cpp # Cancel default rule for C++ code
+%.o: %.cpp | $(NEWSBOATLIB_OUTPUT) $(STFL_HDRS) $(CPP_DEPS_SUBDIRS)
+	$(CXX) $(CXXFLAGS) -MD -MP -MF $(addprefix .deps/,$<) -o $@ -c $<
+
+# This prevents Make from thinking that STFL headers are an intermediate
+# dependency of C++ object files, which in turn prevents Make from removing the
+# headers once the object files are compiled. That fixes the problem where
+# re-running Make causes it to re-create the headers and then re-compile all
+# the object files that depend on those headers.
+$(STFL_HDRS):
 
 %.h: %.stfl
 	$(TEXTCONV) $< .stfl > $@
@@ -226,6 +214,7 @@ clean-test:
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
 	$(RM) $(STFL_HDRS) xlicense.h
+	$(RM) -r .deps
 
 profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
@@ -323,8 +312,8 @@ fmt:
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
-		--config-exclude=3rd-party --config-exclude=$(relative_cargo_target_dir) --config-exclude=/usr/include \
-		--suppress=*:3rd-party/* --suppress=*:$(relative_cargo_target_dir)/* --suppress=*:/usr/include/* \
+		--config-exclude=3rd-party --config-exclude=$(CARGO_TARGET_DIR) --config-exclude=/usr/include \
+		--suppress=*:3rd-party/* --suppress=*:$(CARGO_TARGET_DIR)/* --suppress=*:/usr/include/* \
 		--inline-suppr -DDEBUG=1 -U__VERSION__ \
 		$(INCLUDES) $(DEFINES) \
 		include newsboat.cpp podboat.cpp rss src stfl test \
@@ -468,19 +457,4 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-# We reset the locale for the `ls` call to force it into sorting by byte value.
-# Without this, the sorting is locale-dependent, which is annoying because it
-# means the only way to pass the continuous integration check is to see it fail
-# and copy the diff.
-CPP_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFL_HDRS) xlicense.h
-# This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
-# we need to record those headers in the deps file.
-depslist: $(NEWSBOATLIB_OUTPUT) $(CPP_SRCS) $(CPP_HDRS)
-	> mk/mk.deps
-	for file in $(CPP_SRCS) ; do \
-		target=`echo $$file | sed 's/cpp$$/o/'`; \
-		$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
-		echo $$file ; \
-	done;
-
-include mk/mk.deps
+-include $(CPP_DEPS)

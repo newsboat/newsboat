@@ -107,9 +107,9 @@ task:
         - brew install rustup-init
         - brew install gcc || brew link --overwrite gcc
         - brew install python
-        - export PATH=/usr/local/opt/python/libexec/bin:$PATH
         - brew uninstall rbenv ruby-build # ...so that it won't be upgraded when pkg-config is upgraded, because upgrading ruby-build fails; see https://github.com/newsboat/newsboat/issues/866
         - brew outdated "pkg-config" || brew upgrade "pkg-config"
+        - brew install "make"
         - brew install "gettext" && brew link --force "gettext"
         - brew outdated "sqlite" || brew upgrade "sqlite"
         - brew outdated "curl" || brew upgrade "curl"
@@ -124,7 +124,7 @@ task:
     env:
         GCOV: /usr/bin/gcov
         PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
-        PATH: $HOME/.cargo/bin:/usr/local/opt/gettext/bin:$PATH
+        PATH: $HOME/.cargo/bin:/usr/local/opt/gettext/bin:/usr/local/opt/python/libexec/bin:/usr/local/opt/make/libexec/gnubin:$PATH
         LDFLAGS: -L/usr/local/opt/gettext/lib
         CFLAGS: -I/usr/local/opt/gettext/include
         CXXFLAGS: -I/usr/local/opt/gettext/include
@@ -397,29 +397,6 @@ task:
     build_script: make -j${JOBS} test/test
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
-
-task:
-    name: Dependencies list is up to date
-    skip: "!changesInclude('.cirrus.yml', 'docker/*', 'docker/**/*', '*.{h,cpp}', '**/*.{h,cpp}')"
-
-    container:
-      greedy: true
-      dockerfile: docker/ubuntu_20.04-build-tools.dockerfile
-      docker_arguments:
-          cxx_package: g++-9
-          cc: gcc-9
-          cxx: g++-9
-
-    env:
-      JOBS: 8
-
-    script:
-          # Build in debug mode to speed things up
-        - make -j${JOBS} PROFILE=1 depslist
-          # --exit-code forces git-diff to exit with code 1 if there were
-          # changes. If it does, we print a warning, and propagate the error.
-          # Otherwise this whole script exits with 0
-        - git diff --exit-code || (echo 'WARNING: the above diff is produced by GCC. Copy it if you only have Clang installed; otherwise just run `make depslist` and commit the result'; false)
 
 task:
     name: UB Sanitizer (Clang 13, Ubuntu 22.04)
