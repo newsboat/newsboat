@@ -89,6 +89,26 @@ RSSPPLIB_SRCS=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SRCS))
 RSSPPLIB_OUTPUT=librsspp.a
 
+PODBOAT=podboat
+PODBOAT_SRCS:=$(shell cat mk/podboat.deps)
+PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SRCS))
+PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
+
+TEST_SRCS:=$(wildcard test/*.cpp test/test_helpers/*.cpp)
+TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
+SRC_SRCS:=$(wildcard src/*.cpp)
+SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
+
+CPP_SRCS:=$(LIB_SRCS) $(FILTERLIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS)
+
+STFL_HDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
+
+POFILES:=$(wildcard po/*.po)
+MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
+POTFILE=po/newsboat.pot
+
+RUST_SRCS:=Cargo.toml $(shell find rust -type f)
+
 CARGO_BUILD_FLAGS+=--verbose
 
 ifeq ($(PROFILE),1)
@@ -106,11 +126,6 @@ NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/libnewsboat.a
 LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
 endif
 
-PODBOAT=podboat
-PODBOAT_SRCS:=$(shell cat mk/podboat.deps)
-PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SRCS))
-PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
-
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBOAT_LIBS+=-liconv -lintl
 PODBOAT_LIBS+=-liconv -lintl
@@ -124,12 +139,6 @@ MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
 CARGO=cargo
-
-STFL_HDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
-POFILES:=$(wildcard po/*.po)
-MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/newsboat.pot
-RUST_SRCS:=Cargo.toml $(shell find rust -type f)
 
 TEXTCONV=./txt2h
 RM=rm -f
@@ -161,6 +170,14 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 	$(RM) $@
 	$(AR) qc $@ $^
 	$(RANLIB) $@
+
+test: test/test rust-test
+
+rust-test:
+	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
+
+test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
 
 regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
@@ -204,8 +221,15 @@ clean-doc:
 		doc/example-config doc/generate doc/generate2 \
 		doc/gen-example-config
 
+clean-test:
+	$(RM) test/test test/*.o test/test_helpers/*.o
+
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
 	$(RM) $(STFL_HDRS) xlicense.h
+
+profclean:
+	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
+	$(RM) app*.info
 
 distclean: clean profclean
 	$(RM) core *.core core.* config.mk
@@ -412,27 +436,6 @@ uninstall-mo:
 		echo "Uninstalling $$dir/$(PACKAGE).mo" ; \
 	done
 
-# tests and coverage reports
-
-test: test/test rust-test
-
-rust-test:
-	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
-
-TEST_SRCS:=$(wildcard test/*.cpp test/test_helpers/*.cpp)
-TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
-SRC_SRCS:=$(wildcard src/*.cpp)
-SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
-test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
-
-clean-test:
-	$(RM) test/test test/*.o test/test_helpers/*.o
-
-profclean:
-	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
-	$(RM) app*.info
-
 check: test
 	(cd test && ./test --order=rand --rng-seed=time)
 	$(CARGO) test $(CARGO_TEST_FLAGS)
@@ -469,13 +472,12 @@ xlicense.h: LICENSE
 # Without this, the sorting is locale-dependent, which is annoying because it
 # means the only way to pass the continuous integration check is to see it fail
 # and copy the diff.
-ALL_SRCS:=$(shell LC_ALL=C ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test_helpers/*.cpp)
-ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFL_HDRS) xlicense.h
+CPP_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFL_HDRS) xlicense.h
 # This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
 # we need to record those headers in the deps file.
-depslist: $(NEWSBOATLIB_OUTPUT) $(ALL_SRCS) $(ALL_HDRS)
+depslist: $(NEWSBOATLIB_OUTPUT) $(CPP_SRCS) $(CPP_HDRS)
 	> mk/mk.deps
-	for file in $(ALL_SRCS) ; do \
+	for file in $(CPP_SRCS) ; do \
 		target=`echo $$file | sed 's/cpp$$/o/'`; \
 		$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
 		echo $$file ; \
