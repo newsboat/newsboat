@@ -72,21 +72,21 @@ endif
 CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
 CXXFLAGS_FOR_BUILD?=$(CXXFLAGS)
 
-LIB_SOURCES:=$(shell cat mk/libboat.deps)
-LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
+LIB_SRCS:=$(shell cat mk/libboat.deps)
+LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SRCS))
 LIB_OUTPUT=libboat.a
 
-FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
-FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
+FILTERLIB_SRCS=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
+FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SRCS))
 FILTERLIB_OUTPUT=libfilter.a
 
 NEWSBOAT=newsboat
-NEWSBOAT_SOURCES:=$(shell cat mk/newsboat.deps)
-NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SOURCES))
+NEWSBOAT_SRCS:=$(shell cat mk/newsboat.deps)
+NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SRCS))
 NEWSBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -lrsspp -ldl
 
-RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
-RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
+RSSPPLIB_SRCS=$(sort $(wildcard rss/*.cpp))
+RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SRCS))
 RSSPPLIB_OUTPUT=librsspp.a
 
 CARGO_BUILD_FLAGS+=--verbose
@@ -107,8 +107,8 @@ LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
 endif
 
 PODBOAT=podboat
-PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
-PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SOURCES))
+PODBOAT_SRCS:=$(shell cat mk/podboat.deps)
+PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SRCS))
 PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
 
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
@@ -125,7 +125,7 @@ RANLIB?=ranlib
 AR?=ar
 CARGO=cargo
 
-STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
+STFL_HDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
 POTFILE=po/newsboat.pot
@@ -205,7 +205,7 @@ clean-doc:
 		doc/gen-example-config
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
-	$(RM) $(STFLHDRS) xlicense.h
+	$(RM) $(STFL_HDRS) xlicense.h
 
 distclean: clean profclean
 	$(RM) core *.core core.* config.mk
@@ -470,7 +470,7 @@ xlicense.h: LICENSE
 # means the only way to pass the continuous integration check is to see it fail
 # and copy the diff.
 ALL_SRCS:=$(shell LC_ALL=C ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test_helpers/*.cpp)
-ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
+ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFL_HDRS) xlicense.h
 # This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
 # we need to record those headers in the deps file.
 depslist: $(NEWSBOATLIB_OUTPUT) $(ALL_SRCS) $(ALL_HDRS)
