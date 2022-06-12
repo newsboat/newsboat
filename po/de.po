@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-06-09 20:50+0300\n"
-"PO-Revision-Date: 2022-03-09 19:45+0100\n"
+"PO-Revision-Date: 2022-06-12 10:30+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -263,12 +263,11 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel „%T“ (%u ungelesen, %t gesamt)"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Suchergebnisse (%u ungelesen, %t gesamt)%?F? passend auf Filter "
+"%N %V - Suchergebnis für „%s“ (%u ungelesen, %t gesamt)%?F? passend auf Filter "
 "„%F“&?"
 
 #: src/configcontainer.cpp:319
@@ -1529,9 +1528,8 @@ msgid "Sort current list (reverse)"
 msgstr "aktuelle Liste sortieren (umgekehrt)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "zum vorherigen Dialog zurückkehren/Beenden"
+msgstr "zum vorherigen Suchergebnis zurückkehren (sofern vorhanden)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1833,14 +1831,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Fehler: Nicht unterstützte URL: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Suchergebnis - „%s“"
+msgstr "Vorheriges Suchergebnis"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Bereits beim ersten Feed."
+msgstr "Bereits beim ersten Suchergebnis."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
