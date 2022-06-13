@@ -60,6 +60,7 @@ std::string locale_to_utf8(const std::string& text);
 
 std::string get_command_output(const std::string& cmd);
 std::string http_method_str(const HTTPMethod method);
+std::string link_type_str(LinkType type);
 
 std::string retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont = nullptr,

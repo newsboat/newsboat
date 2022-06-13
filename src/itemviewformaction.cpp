@@ -238,13 +238,13 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_OPENBROWSER_AND_MARK: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		const bool interactive = true;
-		return open_link_in_browser(item->link(), interactive);
+		return open_link_in_browser(item->link(), "article", interactive);
 	}
 	break;
 	case OP_OPENINBROWSER_NONINTERACTIVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: starting browser");
 		const bool interactive = false;
-		return open_link_in_browser(item->link(), interactive);
+		return open_link_in_browser(item->link(), "article", interactive);
 	}
 	break;
 	case OP_BOOKMARK:
@@ -439,7 +439,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 			idx);
 		if (idx < links.size()) {
 			const bool interactive = true;
-			return open_link_in_browser(links[idx].first, interactive);
+			return open_link_in_browser(links[idx].first, utils::link_type_str(links[idx].second),
+					interactive);
 		}
 	}
 	break;
@@ -482,10 +483,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 }
 
 bool ItemViewFormAction::open_link_in_browser(const std::string& link,
-	bool interactive) const
+	const std::string& type, bool interactive) const
 {
 	const std::string feedurl = item->feedurl();
-	const auto exit_code = v->open_in_browser(link, feedurl, interactive);
+	const auto exit_code = v->open_in_browser(link, feedurl, type, interactive);
 	if (!exit_code.has_value()) {
 		v->get_statusline().show_error(_("Failed to spawn browser"));
 		return false;
@@ -606,7 +607,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 		sscanf(qna_responses[0].c_str(), "%u", &idx);
 		if (idx && idx - 1 < links.size()) {
 			const bool interactive = true;
-			open_link_in_browser(links[idx - 1].first, interactive);
+			open_link_in_browser(links[idx - 1].first, utils::link_type_str(links[idx - 1].second),
+				interactive);
 		}
 	}
 	break;

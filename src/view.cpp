@@ -362,19 +362,22 @@ void View::open_in_pager(const std::string& filename)
 }
 
 nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
-	const std::string& feedurl, bool interactive)
+	const std::string& feedurl, const std::string& type, bool interactive)
 {
 	std::string cmdline;
 	const std::string browser = cfg->get_configvalue("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
 	const std::string escaped_feedurl = "'" + utils::replace_all(feedurl, "'",
 			"%27") + "'";
+	const std::string quoted_type = "'" + type + "'";
 
 	if (browser.find("%u") != std::string::npos
-		|| browser.find("%F") != std::string::npos) {
+		|| browser.find("%F") != std::string::npos
+		|| browser.find("%t") != std::string::npos) {
 		cmdline = utils::replace_all(browser, {
 			{"%u", escaped_url},
-			{"%F", escaped_feedurl}
+			{"%F", escaped_feedurl},
+			{"%t", quoted_type}
 		});
 	} else {
 		if (browser != "") {

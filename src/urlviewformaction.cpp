@@ -94,7 +94,8 @@ bool UrlViewFormAction::process_operation(Operation op,
 		if (idx < links.size()) {
 			const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
 			const bool interactive = true;
-			v->open_in_browser(links[idx].first, feedurl, interactive);
+			v->open_in_browser(links[idx].first, feedurl, utils::link_type_str(links[idx].second),
+				interactive);
 		}
 	}
 	break;
@@ -125,7 +126,8 @@ void UrlViewFormAction::open_current_position_in_browser(bool interactive)
 	if (!links.empty()) {
 		const unsigned int pos = urls_list.get_position();
 		const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
-		v->open_in_browser(links[pos].first, feedurl, interactive);
+		v->open_in_browser(links[pos].first, feedurl, utils::link_type_str(links[pos].second),
+			interactive);
 	} else {
 		v->get_statusline().show_error(_("No links available!"));
 	}
