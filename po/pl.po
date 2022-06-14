@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-06-09 20:50+0300\n"
-"PO-Revision-Date: 2022-03-12 20:01+0100\n"
+"PO-Revision-Date: 2022-06-14 20:19+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -264,12 +264,11 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artykuł '%T' (%u nieprzeczytanych, %t wszystkich)"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Wynik wyszukiwania (%u nieprzeczytanych, %t wszystkich)%F? "
+"%N %V - Wynik wyszukiwania dla '%s' (%u nieprzeczytanych, %t wszystkich)%F? "
 "pasujących do filtra '%F'&?"
 
 #: src/configcontainer.cpp:319
@@ -1529,9 +1528,8 @@ msgid "Sort current list (reverse)"
 msgstr "Posortuj obecną listę (odwrotnie)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Powrót do poprzedniego okna/Wyjście"
+msgstr "Powrót do wyników poprzedniego wyszukiwania (jeśli istnieją)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1829,14 +1827,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Błąd: nieobsługiwany adres: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Wyniki wyszukiwania - '%s'"
+msgstr "Poprzednie wyniki wyszukiwania"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "To już pierwszy kanał."
+msgstr "To już pierwszy wynik wyszukiwania."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
