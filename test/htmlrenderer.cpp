@@ -1396,19 +1396,19 @@ TEST_CASE("<video> results in a placeholder and a link for each valid source",
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 6);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
-			"[video 2 (link #2)]"
-			"[video 2 (link #3)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
+	REQUIRE(lines.size() == 8);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, "[video 2 (link #2)]"));
+	REQUIRE(lines[2] == p(LineType::wrappable, "[video 2 (link #3)]"));
+	REQUIRE(lines[3] == p(LineType::wrappable, ""));
+	REQUIRE(lines[4] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[5] ==
 		p(LineType::softwrappable,
 			"[1]: http://example.com/video.avi (video)"));
-	REQUIRE(lines[4] ==
+	REQUIRE(lines[6] ==
 		p(LineType::softwrappable,
 			"[2]: http://example.com/video2.avi (video)"));
-	REQUIRE(lines[5] ==
+	REQUIRE(lines[7] ==
 		p(LineType::softwrappable,
 			"[3]: http://example.com/video2.mkv (video)"));
 	REQUIRE(links.size() == 3);
@@ -1456,19 +1456,19 @@ TEST_CASE("<audio> results in a placeholder and a link for each valid source",
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 6);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[audio 1 (link #1)]"
-			"[audio 2 (link #2)]"
-			"[audio 2 (link #3)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
+	REQUIRE(lines.size() == 8);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[audio 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, "[audio 2 (link #2)]"));
+	REQUIRE(lines[2] == p(LineType::wrappable, "[audio 2 (link #3)]"));
+	REQUIRE(lines[3] == p(LineType::wrappable, ""));
+	REQUIRE(lines[4] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[5] ==
 		p(LineType::softwrappable,
 			"[1]: http://example.com/audio.oga (audio)"));
-	REQUIRE(lines[4] ==
+	REQUIRE(lines[6] ==
 		p(LineType::softwrappable,
 			"[2]: http://example.com/audio2.mp3 (audio)"));
-	REQUIRE(lines[5] ==
+	REQUIRE(lines[7] ==
 		p(LineType::softwrappable,
 			"[3]: http://example.com/audio2.m4a (audio)"));
 	REQUIRE(links.size() == 3);
@@ -1526,26 +1526,28 @@ TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 8);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
-			"[video 2 (link #2)][audio 1 (link #3)]"
-			"[audio 1 (link #4)][audio 2 (link #5)]"
-			"Here comes the text!"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
+	REQUIRE(lines.size() == 13);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, "[video 2 (link #2)]"));
+	REQUIRE(lines[2] == p(LineType::wrappable, "[audio 1 (link #3)]"));
+	REQUIRE(lines[3] == p(LineType::wrappable, "[audio 1 (link #4)]"));
+	REQUIRE(lines[4] == p(LineType::wrappable, "[audio 2 (link #5)]"));
+	REQUIRE(lines[5] == p(LineType::wrappable, "Here comes the text!"));
+	REQUIRE(lines[6] == p(LineType::wrappable, ""));
+	REQUIRE(lines[7] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[8] ==
 		p(LineType::softwrappable,
 			"[1]: http://example.com/video.avi (video)"));
-	REQUIRE(lines[4] ==
+	REQUIRE(lines[9] ==
 		p(LineType::softwrappable,
 			"[2]: http://example.com/video2.avi (video)"));
-	REQUIRE(lines[5] ==
+	REQUIRE(lines[10] ==
 		p(LineType::softwrappable,
 			"[3]: http://example.com/audio.oga (audio)"));
-	REQUIRE(lines[6] ==
+	REQUIRE(lines[11] ==
 		p(LineType::softwrappable,
 			"[4]: http://example.com/audio.m4a (audio)"));
-	REQUIRE(lines[7] ==
+	REQUIRE(lines[12] ==
 		p(LineType::softwrappable,
 			"[5]: http://example.com/audio2.mp3 (audio)"));
 	REQUIRE(links.size() == 5);
@@ -1585,22 +1587,23 @@ TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
 	std::vector<LinkPair> links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 7);
-	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"
-			"[video 1 (link #2)][audio 1 (link #3)]"
-			"[audio 1 (link #4)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
+	REQUIRE(lines.size() == 10);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, "[video 1 (link #2)]"));
+	REQUIRE(lines[2] == p(LineType::wrappable, "[audio 1 (link #3)]"));
+	REQUIRE(lines[3] == p(LineType::wrappable, "[audio 1 (link #4)]"));
+	REQUIRE(lines[4] == p(LineType::wrappable, ""));
+	REQUIRE(lines[5] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[6] ==
 		p(LineType::softwrappable,
 			"[1]: http://example.com/video.avi (video)"));
-	REQUIRE(lines[4] ==
+	REQUIRE(lines[7] ==
 		p(LineType::softwrappable,
 			"[2]: http://example.com/video.mkv (video)"));
-	REQUIRE(lines[5] ==
+	REQUIRE(lines[8] ==
 		p(LineType::softwrappable,
 			"[3]: http://example.com/audio.mp3 (audio)"));
-	REQUIRE(lines[6] ==
+	REQUIRE(lines[9] ==
 		p(LineType::softwrappable,
 			"[4]: http://example.com/audio.oga (audio)"));
 	REQUIRE(links.size() == 4);
@@ -1612,6 +1615,37 @@ TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
 	REQUIRE(links[2].second == LinkType::AUDIO);
 	REQUIRE(links[3].first == "http://example.com/audio.oga");
 	REQUIRE(links[3].second == LinkType::AUDIO);
+}
+
+TEST_CASE("Back-to-back <video> and <audio> tags are seperated by a new line",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<video src='https://example.com/video.mp4'></video>"
+		"<audio src='https://example.com/audio.mp3'></audio>";
+
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 6);
+	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, "[audio 1 (link #2)]"));
+	REQUIRE(lines[2] == p(LineType::wrappable, ""));
+	REQUIRE(lines[3] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[4] ==
+		p(LineType::softwrappable,
+			"[1]: https://example.com/video.mp4 (video)"));
+	REQUIRE(lines[5] ==
+		p(LineType::softwrappable,
+			"[2]: https://example.com/audio.mp3 (audio)"));
+	REQUIRE(links.size() == 2);
+	REQUIRE(links[0].first == "https://example.com/video.mp4");
+	REQUIRE(links[0].second == LinkType::VIDEO);
+	REQUIRE(links[1].first == "https://example.com/audio.mp3");
+	REQUIRE(links[1].second == LinkType::AUDIO);
 }
 
 TEST_CASE("Ordered list can contain unordered list in its items",

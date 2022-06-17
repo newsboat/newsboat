@@ -577,6 +577,10 @@ void HtmlRenderer::render(std::istream& input,
 					add_media_link(curline, links, url,
 						video_url, "", video_count,
 						LinkType::VIDEO);
+
+					add_line(curline, tables, lines);
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
 				}
 			}
 			break;
@@ -623,6 +627,10 @@ void HtmlRenderer::render(std::istream& input,
 					add_media_link(curline, links, url,
 						audio_url, "", audio_count,
 						LinkType::AUDIO);
+
+					add_line(curline, tables, lines);
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
 				}
 			}
 			break;
@@ -642,12 +650,20 @@ void HtmlRenderer::render(std::istream& input,
 					add_media_link(curline, links, url,
 						source_url, "", video_count,
 						LinkType::VIDEO);
+
+					add_line(curline, tables, lines);
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
 				}
 				if (inside_audio && !source_url.empty()) {
 					source_count++;
 					add_media_link(curline, links, url,
 						source_url, "", audio_count,
 						LinkType::AUDIO);
+
+					add_line(curline, tables, lines);
+					prepare_new_line(curline,
+						tables.size() ? 0 : indent_level);
 				}
 			}
 			}
