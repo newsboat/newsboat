@@ -183,8 +183,7 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 			auto url = strprintf::fmt("%s%s?n=%u",
 					OLDREADER_FEED_PREFIX,
 					id,
-					cfg->get_configvalue_as_int(
-						"oldreader-min-items"));
+					cfg->get_configvalue_as_int("oldreader-min-items"));
 			urls.push_back(TaggedFeedUrl(url, tags));
 		}
 	}

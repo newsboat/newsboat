@@ -129,12 +129,10 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 			current_feed.link = link;
 		}
 
-		while (known_feeds.find(current_feed.title) !=
-			known_feeds.end()) {
+		while (known_feeds.find(current_feed.title) != known_feeds.end()) {
 			current_feed.title += "*";
 		}
-		known_feeds[current_feed.title] =
-			std::make_pair(current_feed, feed_id);
+		known_feeds[current_feed.title] = std::make_pair(current_feed, feed_id);
 
 		json_object_object_get_ex(feed, "folderId", &node);
 		long folder_id = json_object_get_int(node);
@@ -285,10 +283,8 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		{
 			json_object* type_obj;
 
-			json_object_object_get_ex(
-				item_j, "enclosureMime", &type_obj);
-			json_object_object_get_ex(
-				item_j, "enclosureLink", &node);
+			json_object_object_get_ex(item_j, "enclosureMime", &type_obj);
+			json_object_object_get_ex(item_j, "enclosureLink", &node);
 
 			const auto type_ptr = json_object_get_string(type_obj);
 			const auto url_ptr = json_object_get_string(node);

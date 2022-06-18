@@ -165,17 +165,12 @@ std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
 
 		// invariant: `tag_to_feed_ids` is a JSON object
 
-		json_object_object_foreach(
-			tag_to_feed_ids, key, feeds_with_tag_obj) {
+		json_object_object_foreach(tag_to_feed_ids, key, feeds_with_tag_obj) {
 			std::string std_key(key);
-			array_list* feeds_with_tag_arr =
-				json_object_get_array(feeds_with_tag_obj);
-			int feeds_with_tag_len =
-				array_list_length(feeds_with_tag_arr);
+			array_list* feeds_with_tag_arr = json_object_get_array(feeds_with_tag_obj);
+			int feeds_with_tag_len = array_list_length(feeds_with_tag_arr);
 			for (int j = 0; j < feeds_with_tag_len; ++j) {
-				json_object* feed_id_obj =
-					json_object_array_get_idx(
-						feeds_with_tag_obj, j);
+				json_object* feed_id_obj = json_object_array_get_idx(feeds_with_tag_obj, j);
 				const auto id = json_object_get_string(feed_id_obj);
 				if (id == nullptr) {
 					LOG(Level::WARN, "Skipping subscription's tag whose name is a null value");
@@ -294,8 +289,7 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 			items_size);
 
 		for (int i = 0; i < items_size; i++) {
-			json_object* item_obj =
-				(json_object*)array_list_get_idx(items, i);
+			json_object* item_obj = (json_object*)array_list_get_idx(items, i);
 
 			rsspp::Item item;
 
@@ -330,19 +324,14 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 			}
 
 			const char* article_id{};
-			if (json_object_object_get_ex(item_obj, "id", &node) ==
-				TRUE) {
+			if (json_object_object_get_ex(item_obj, "id", &node) == TRUE) {
 				article_id = json_object_get_string(node);
 			}
-			item.guid = id + ID_SEPARATOR +
-				(article_id ? article_id : "");
+			item.guid = id + ID_SEPARATOR + (article_id ? article_id : "");
 
-			if (json_object_object_get_ex(
-					item_obj, "read_status", &node) == TRUE) {
-				if (!static_cast<bool>(
-						json_object_get_int(node))) {
-					item.labels.push_back(
-						"newsblur:unread");
+			if (json_object_object_get_ex(item_obj, "read_status", &node) == TRUE) {
+				if (!static_cast<bool>(json_object_get_int(node))) {
+					item.labels.push_back("newsblur:unread");
 				} else {
 					item.labels.push_back("newsblur:read");
 				}

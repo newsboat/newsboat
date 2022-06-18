@@ -130,8 +130,7 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 
 	for (int i = 0; i < len; i++) {
 		std::vector<std::string> tags;
-		json_object* sub =
-			json_object_array_get_idx(subscription_obj, i);
+		json_object* sub = json_object_array_get_idx(subscription_obj, i);
 
 		json_object* id_str{};
 		json_object_object_get_ex(sub, "id", &id_str);
