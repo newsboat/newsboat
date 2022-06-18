@@ -133,12 +133,20 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 
 		json_object_object_get_ex(sub, "id", &node);
 		const char* id = json_object_get_string(node);
+		if (id == nullptr) {
+			LOG(Level::WARN, "Skipping a subscription without an id");
+			continue;
+		}
 		char* id_uenc = curl_easy_escape(handle.ptr(), id, 0);
 
 		json_object_object_get_ex(sub, "title", &node);
 		const char* title = json_object_get_string(node);
-
-		tags.push_back(std::string("~") + title);
+		if (title != nullptr) {
+			tags.push_back(std::string("~") + title);
+		} else {
+			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
+			tags.push_back(std::string("~") + std::to_string(i));
+		}
 
 		json_object_object_get_ex(sub, "categories", &node);
 		struct array_list* categories = json_object_get_array(node);
@@ -152,6 +160,10 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 			json_object* label_node{};
 			json_object_object_get_ex(cat, "label", &label_node);
 			const char* label = json_object_get_string(label_node);
+			if (label == nullptr) {
+				LOG(Level::WARN, "Skipping subscription's label whose name is a null value");
+				continue;
+			}
 			tags.push_back(std::string(label));
 		}
 

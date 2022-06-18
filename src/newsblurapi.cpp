@@ -109,10 +109,21 @@ std::vector<TaggedFeedUrl> NewsBlurApi::get_subscribed_urls()
 
 		json_object* feed_json = json_object_iter_peek_value(&it);
 		json_object_object_get_ex(feed_json, "feed_title", &node);
-		current_feed.title = json_object_get_string(node);
+		const auto title = json_object_get_string(node);
+		if (title != nullptr) {
+			current_feed.title = title;
+		} else {
+			LOG(Level::WARN, "Subscription has no title, so let's call it \"%s\"", feed_id);
+			current_feed.title = feed_id;
+		}
 		json_object_object_get_ex(feed_json, "feed_link", &node);
 		if (node) {
-			current_feed.link = json_object_get_string(node);
+			const auto link = json_object_get_string(node);
+			if (link == nullptr) {
+				LOG(Level::WARN, "Skipping a subscription without a link");
+				continue;
+			}
+			current_feed.link = link;
 
 			known_feeds[feed_id] = current_feed;
 			std::string std_feed_id(feed_id);
@@ -152,6 +163,8 @@ std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
 			continue;
 		}
 
+		// invariant: `tag_to_feed_ids` is a JSON object
+
 		json_object_object_foreach(
 			tag_to_feed_ids, key, feeds_with_tag_obj) {
 			std::string std_key(key);
@@ -163,9 +176,12 @@ std::map<std::string, std::vector<std::string>> NewsBlurApi::mk_feeds_to_tags(
 				json_object* feed_id_obj =
 					json_object_array_get_idx(
 						feeds_with_tag_obj, j);
-				std::string feed_id(
-					json_object_get_string(feed_id_obj));
-				result[feed_id].push_back(std_key);
+				const auto id = json_object_get_string(feed_id_obj);
+				if (id == nullptr) {
+					LOG(Level::WARN, "Skipping subscription's tag whose name is a null value");
+					continue;
+				}
+				result[std::string(id)].push_back(std_key);
 			}
 		}
 	}
@@ -183,7 +199,8 @@ bool request_successfull(json_object* payload)
 	if (json_object_object_get_ex(payload, "result", &result) == FALSE) {
 		return false;
 	} else {
-		return !strcmp("ok", json_object_get_string(result));
+		const auto result_str = json_object_get_string(result);
+		return result_str != nullptr && strcmp("ok", result_str) == 0;
 	}
 }
 
@@ -284,26 +301,32 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 
 			json_object* node{};
 
-			if (json_object_object_get_ex(
-					item_obj, "story_title", &node) == TRUE) {
-				item.title = json_object_get_string(node);
+			if (json_object_object_get_ex(item_obj, "story_title", &node) == TRUE) {
+				const auto title = json_object_get_string(node);
+				if (title != nullptr) {
+					item.title = title;
+				}
 			}
 
-			if (json_object_object_get_ex(
-					item_obj, "story_authors", &node) == TRUE) {
-				item.author = json_object_get_string(node);
+			if (json_object_object_get_ex(item_obj, "story_authors", &node) == TRUE) {
+				const auto author = json_object_get_string(node);
+				if (author != nullptr) {
+					item.author = author;
+				}
 			}
 
-			if (json_object_object_get_ex(item_obj,
-					"story_permalink",
-					&node) == TRUE) {
-				item.link = json_object_get_string(node);
+			if (json_object_object_get_ex(item_obj, "story_permalink", &node) == TRUE) {
+				const auto link = json_object_get_string(node);
+				if (link != nullptr) {
+					item.link = link;
+				}
 			}
 
-			if (json_object_object_get_ex(
-					item_obj, "story_content", &node) == TRUE) {
-				item.content_encoded =
-					json_object_get_string(node);
+			if (json_object_object_get_ex(item_obj, "story_content", &node) == TRUE) {
+				const auto content_encoded = json_object_get_string(node);
+				if (content_encoded != nullptr) {
+					item.content_encoded = content_encoded;
+				}
 			}
 
 			const char* article_id{};
@@ -325,11 +348,13 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 				}
 			}
 
-			if (json_object_object_get_ex(
-					item_obj, "story_date", &node) == TRUE) {
-				const char* pub_date =
-					json_object_get_string(node);
-				item.pubDate_ts = parse_date(pub_date);
+			if (json_object_object_get_ex(item_obj, "story_date", &node) == TRUE) {
+				const char* pub_date = json_object_get_string(node);
+				if (pub_date != nullptr) {
+					item.pubDate_ts = parse_date(pub_date);
+				} else {
+					item.pubDate_ts = ::time(nullptr);
+				}
 
 				item.pubDate = utils::mt_strf_localtime(
 						"%a, %d %b %Y %H:%M:%S %z",

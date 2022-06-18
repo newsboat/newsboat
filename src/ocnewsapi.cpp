@@ -82,7 +82,11 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 		long folder_id = json_object_get_int(node);
 
 		json_object_object_get_ex(folder, "name", &node);
-		folders_map[folder_id] = json_object_get_string(node);
+		const auto name = json_object_get_string(node);
+
+		if (name != nullptr) {
+			folders_map[folder_id] = name;
+		}
 	}
 
 	rsspp::Feed starred;
@@ -111,10 +115,19 @@ std::vector<TaggedFeedUrl> OcNewsApi::get_subscribed_urls()
 		long feed_id = json_object_get_int(node);
 
 		json_object_object_get_ex(feed, "title", &node);
-		current_feed.title = json_object_get_string(node);
+		const auto title = json_object_get_string(node);
+		if (title != nullptr) {
+			current_feed.title = title;
+		} else {
+			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
+			current_feed.title = std::string("~") + std::to_string(i);
+		}
 
 		json_object_object_get_ex(feed, "url", &node);
-		current_feed.link = json_object_get_string(node);
+		const auto link = json_object_get_string(node);
+		if (link != nullptr) {
+			current_feed.link = link;
+		}
 
 		while (known_feeds.find(current_feed.title) !=
 			known_feeds.end()) {
@@ -246,18 +259,28 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		rsspp::Item item;
 
 		json_object_object_get_ex(item_j, "title", &node);
-		item.title = json_object_get_string(node);
+		const auto title = json_object_get_string(node);
+		if (title != nullptr) {
+			item.title = title;
+		}
 
 		json_object_object_get_ex(item_j, "url", &node);
-		if (node) {
-			item.link = json_object_get_string(node);
+		const auto link = json_object_get_string(node);
+		if (link != nullptr) {
+			item.link = link;
 		}
 
 		json_object_object_get_ex(item_j, "author", &node);
-		item.author = json_object_get_string(node);
+		const auto author = json_object_get_string(node);
+		if (author != nullptr) {
+			item.author = author;
+		}
 
 		json_object_object_get_ex(item_j, "body", &node);
-		item.content_encoded = json_object_get_string(node);
+		const auto content_encoded = json_object_get_string(node);
+		if (content_encoded != nullptr) {
+			item.content_encoded = content_encoded;
+		}
 
 		{
 			json_object* type_obj;
@@ -267,13 +290,14 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 			json_object_object_get_ex(
 				item_j, "enclosureLink", &node);
 
-			if (type_obj && node) {
-				const std::string type =
-					json_object_get_string(type_obj);
-				if (utils::is_valid_podcast_type(type)) {
-					item.enclosure_url =
-						json_object_get_string(node);
-					item.enclosure_type = std::move(type);
+			const auto type_ptr = json_object_get_string(type_obj);
+			const auto url_ptr = json_object_get_string(node);
+
+			if (type_ptr != nullptr) {
+				const std::string type = type_ptr;
+				if (utils::is_valid_podcast_type(type) && url_ptr != nullptr) {
+					item.enclosure_url = url_ptr;
+					item.enclosure_type = type;
 				}
 			}
 		}
@@ -285,8 +309,9 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		long f_id = json_object_get_int(node);
 
 		json_object_object_get_ex(item_j, "guid", &node);
+		const auto guid = json_object_get_string(node);
 		item.guid = std::to_string(id) + ":" + std::to_string(f_id) +
-			"/" + json_object_get_string(node);
+			"/" + (guid ? std::string(guid) : std::to_string(i));
 
 		json_object_object_get_ex(item_j, "unread", &node);
 		bool unread = json_object_get_boolean(node);
