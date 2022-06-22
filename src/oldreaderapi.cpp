@@ -136,9 +136,20 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 
 		json_object_object_get_ex(sub, "id", &node);
 		const char* id = json_object_get_string(node);
+		if (id == nullptr) {
+			LOG(Level::WARN, "Skipping a subscription without an id");
+			continue;
+		}
 
 		json_object_object_get_ex(sub, "title", &node);
-		const char* title = json_object_get_string(node);
+		const char* title_ptr = json_object_get_string(node);
+		std::string title;
+		if (title_ptr != nullptr) {
+			title = title_ptr;
+		} else {
+			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
+			title = std::to_string(i);
+		}
 
 		// Ignore URLs where ID start with given prefix - those never
 		// load, always returning 404 and annoying people
@@ -161,16 +172,18 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 				json_object* label_node{};
 				json_object_object_get_ex(
 					cat, "label", &label_node);
-				const char* label =
-					json_object_get_string(label_node);
+				const char* label = json_object_get_string(label_node);
+				if (label == nullptr) {
+					LOG(Level::WARN, "Skipping subscription's label whose name is a null value");
+					continue;
+				}
 				tags.push_back(std::string(label));
 			}
 
 			auto url = strprintf::fmt("%s%s?n=%u",
 					OLDREADER_FEED_PREFIX,
 					id,
-					cfg->get_configvalue_as_int(
-						"oldreader-min-items"));
+					cfg->get_configvalue_as_int("oldreader-min-items"));
 			urls.push_back(TaggedFeedUrl(url, tags));
 		}
 	}

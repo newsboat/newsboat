@@ -135,11 +135,23 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 		json_object* sub =
 			json_object_array_get_idx(subscription_obj, i);
 
+		json_object* id_str{};
+		json_object_object_get_ex(sub, "id", &id_str);
+		const char* id = json_object_get_string(id_str);
+		if (id == nullptr) {
+			LOG(Level::WARN, "Skipping a subscription without an id");
+			continue;
+		}
+
 		json_object* title_str{};
 		json_object_object_get_ex(sub, "title", &title_str);
 		const char* title = json_object_get_string(title_str);
-
-		tags.push_back(std::string("~") + title);
+		if (title != nullptr) {
+			tags.push_back(std::string("~") + title);
+		} else {
+			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
+			tags.push_back(std::string("~") + std::to_string(i));
+		}
 
 		json_object* cats_obj{};
 		json_object_object_get_ex(sub, "categories", &cats_obj);
@@ -151,19 +163,19 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 			json_object* cat_name{};
 			json_object_object_get_ex(cat, "label", &cat_name);
 			const char* category = json_object_get_string(cat_name);
+			if (category == nullptr) {
+				LOG(Level::WARN, "Skipping subscription's category whose name is a null value");
+				continue;
+			}
 			tags.push_back(category);
 		}
 
-		json_object* id_str{};
-		json_object_object_get_ex(sub, "id", &id_str);
-		const char* id = json_object_get_string(id_str);
 		char* escaped_id = curl_easy_escape(handle.ptr(), id, 0);
 		auto url = strprintf::fmt("%s%s%s",
 				cfg->get_configvalue("freshrss-url"),
 				FRESHRSS_FEED_PREFIX,
 				escaped_id);
 		urls.push_back(TaggedFeedUrl(url, tags));
-
 		curl_free(escaped_id);
 	}
 

@@ -130,18 +130,25 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 
 	for (int i = 0; i < len; i++) {
 		std::vector<std::string> tags;
-		json_object* sub =
-			json_object_array_get_idx(subscription_obj, i);
+		json_object* sub = json_object_array_get_idx(subscription_obj, i);
 
 		json_object* id_str{};
 		json_object_object_get_ex(sub, "id", &id_str);
 		const char* id = json_object_get_string(id_str);
+		if (id == nullptr) {
+			LOG(Level::WARN, "Skipping a subscription without an id");
+			continue;
+		}
 
 		json_object* title_str{};
 		json_object_object_get_ex(sub, "title", &title_str);
 		const char* title = json_object_get_string(title_str);
-
-		tags.push_back(std::string("~") + title);
+		if (title != nullptr) {
+			tags.push_back(std::string("~") + title);
+		} else {
+			LOG(Level::WARN, "Subscription has no title, so let's call it \"%i\"", i);
+			tags.push_back(std::string("~") + std::to_string(i));
+		}
 
 		char* escaped_id = curl_easy_escape(handle.ptr(), id, 0);
 
