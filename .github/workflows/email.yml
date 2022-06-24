@@ -6,7 +6,10 @@ name: Email about Cirrus CI failures
 jobs:
   continue:
     name: After Cirrus CI Failure
-    if: github.event.check_suite.app.name == 'Cirrus CI' && github.event.check_suite.conclusion != 'success'
+    if: >-
+      github.event.check_suite.app.name == 'Cirrus CI'
+      && github.event.check_suite.conclusion != 'success'
+      && github.event.check_suite.conclusion != 'cancelled'
     runs-on: ubuntu-latest
     steps:
       - uses: octokit/request-action@v2.x
