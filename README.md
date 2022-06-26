@@ -65,7 +65,7 @@ Newsboat can be compiled.
 -->
 - GCC 5.0 or newer, or Clang 3.6 or newer
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
-    manager) (1.57.0 or newer; might work with older versions, but we don't
+    manager) (1.59.0 or newer; might work with older versions, but we don't
     check that)
 - [STFL (version 0.21 or newer)](https://github.com/newsboat/stfl) (the link
     points to our own fork because [the upstream](http://www.clifford.at/stfl/)
