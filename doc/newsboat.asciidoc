@@ -69,7 +69,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 // UPDATE README.md IF YOU CHANGE THIS LIST
 - GCC 5.0 or newer, or Clang 3.6 or newer
 - Stable https://www.rust-lang.org/en-US/[Rust] and Cargo (Rust's package
-  manager) (1.57.0 or newer; might work with older versions, but we don't check
+  manager) (1.59.0 or newer; might work with older versions, but we don't check
   that)
 - https://github.com/newsboat/stfl[STFL (version 0.21 or newer)] (the link
   points to our own fork because http://www.clifford.at/stfl/[the upstream] is
