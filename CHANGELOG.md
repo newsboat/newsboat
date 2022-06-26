@@ -1,16 +1,49 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2022-06-25
+## 2.28 - 2022-06-26
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes: Jan Staněk, blank X, and sebashwa.
 
 ### Added
+
+- Ability to go back to the previous set of search results. This introduces
+    a new dialog, `searchresultslist`, which supports a new operation,
+    `previoussearchresults` (bound to `z` key by default). The
+    `searchresult-title-format` setting now supports one more placeholder, `%s`,
+    which is replaced by the term you searched for (#1785, #2043) (bogdasar1985)
+- Support for `enqueue` operation in the article list (#2023) (Dennis van der
+    Schagt)
+- New placeholder for `articlelist-format`, `%e`, which is replaced by the URL
+    of the article's enclosure (#2023) (Dennis van der Schagt)
+
 ### Changed
+
+- If an article has multiple links, `open-in-browser` will open the HTTP or
+    HTTPS one. If article has no such links, then the last one to appear in the
+    feed's source is picked. (Note: this is about the link that you see in the
+    item's header, prefixed by "Link:" -- NOT about the links in the article
+    itself) (#2060) (bogdasar1985)
+- Updated translations: Brazilian Portuguese (Alexandre Provencio), Dutch
+    (Dennis van der Schagt), German (Lysander Trischler), Italian (Mauro
+    Scomparin), Polish (Michał Siemek), Russian, Ukrainian (Alexander
+    Batischev), Spanish (Roboron3042), Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.57.0
-### Deprecated
+- Updated vendored library Catch2 to 2.13.9, expected-lite to 0.6.0
+
 ### Removed
-- i386 support in Snap. The package is now based on Ubuntu 20.04, which doesn't
-    support i386.
+
+- Snap: i386 support. The package is now based on Ubuntu 20.04, which doesn't
+    support i386 (#2058)
+
 ### Fixed
-### Security
+
+- Stop scrolling to top of article when window is resized (#1298) (Dennis van
+    der Schagt)
+- NextCloud News 18.1.0+: crashes when reloading feeds that have no author or
+    title (#2102) (Alexander Batischev)
+- Snap: "Error opening terminal: xterm-kitty". This fix comes at the cost of
+    i386 support in Snap (#2058) (Gianluca Della Vedova, Alexander Batischev)
 
 
 
