@@ -267,13 +267,12 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Article '%T' (%u à lire, %t au total) - %U"
 
 #: src/configcontainer.cpp:315
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr ""
-"%N %V - Résultat de la recherche (%u à lire, %t au total)%?F? correspondant "
-"au filtre '%F'&?"
+"%N %V - Résultat pour la recherche '%s' (%u à lire, %t au total)%?F? "
+"correspondant au filtre '%F'&?"
 
 #: src/configcontainer.cpp:319
 msgid "%N %V - Select Filter"
@@ -1536,9 +1535,8 @@ msgid "Sort current list (reverse)"
 msgstr "Trier la liste (sens inverse)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Retourner à la vue précédente/Quitter"
+msgstr "Retourner aux résultats de la recheche précédente (si existants)"
 
 #: src/keymap.cpp:410
 msgid "Open URL 1"
@@ -1841,14 +1839,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Erreur : le format du lien n'est pas pris en charge : %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Résultats de la recherche - '%s'"
+msgstr "Précédents résultats de recherche"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Vous êtes déjà au premier fil."
+msgstr "Déjà au premier résultat de la recherche."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
