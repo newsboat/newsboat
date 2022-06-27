@@ -59,7 +59,8 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 
-	bool open_link_in_browser(const std::string& link, bool interactive) const;
+	bool open_link_in_browser(const std::string& link, const std::string& type,
+		bool interactive) const;
 
 	void update_head(const std::shared_ptr<RssItem>& item);
 	void set_head(const std::string& s,

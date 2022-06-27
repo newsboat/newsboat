@@ -84,7 +84,7 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 			if (item->unread()) {
 				const bool interactive = true;
 				const auto exit_code = v->open_in_browser(item->link(), item->feedurl(),
-						interactive);
+						"article", interactive);
 				if (!exit_code.has_value() || *exit_code != 0) {
 					return_value = exit_code;
 					break;

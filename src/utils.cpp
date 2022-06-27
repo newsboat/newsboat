@@ -221,6 +221,28 @@ std::string utils::http_method_str(const HTTPMethod method)
 	return str;
 }
 
+std::string utils::link_type_str(LinkType type)
+{
+	// Different from HtmlRenderer::type2str because the string returned
+	// isn't localized
+	switch (type) {
+	case LinkType::HREF:
+		return "link";
+	case LinkType::IMG:
+		return "image";
+	case LinkType::EMBED:
+		return "embed_flash";
+	case LinkType::IFRAME:
+		return "iframe";
+	case LinkType::VIDEO:
+		return "video";
+	case LinkType::AUDIO:
+		return "audio";
+	default:
+		return "unknown (bug)";
+	}
+}
+
 std::string utils::retrieve_url(const std::string& url,
 	ConfigContainer* cfgcont,
 	const std::string& authinfo,

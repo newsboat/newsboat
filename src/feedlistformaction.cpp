@@ -558,10 +558,13 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 		interactive ? "true" : "false");
 
 	std::string url;
+	std::string type;
 	if (!feed->link().empty()) {
 		url = feed->link();
+		type = "feed";
 	} else if (!feed->rssurl().empty()) {
 		url = feed->rssurl();
+		type = "rssfeed";
 	} else {
 		// rssurl can't be empty, so if we got to this branch,
 		// something is clearly wrong with Newsboat internals.
@@ -575,7 +578,7 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 
 	if (!url.empty()) {
 		const std::string feedurl = feed->rssurl();
-		const auto exit_code = v->open_in_browser(url, feedurl, interactive);
+		const auto exit_code = v->open_in_browser(url, feedurl, type, interactive);
 		if (!exit_code.has_value()) {
 			v->get_statusline().show_error(_("Failed to spawn browser"));
 			return false;

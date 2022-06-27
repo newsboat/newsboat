@@ -1302,10 +1302,32 @@ normally run, such as a web browser or an executable script. For example:
   browser firefox
 
 The browser command also takes an optional `%u` to specify at which point the
-URL sould be expanded. If `%u` is not set, the URL will be appended at the end of
-the command. Therefore, the following example is equivalent to the last one:
+URL should be expanded, along with `%t` specifying where the type of the URL
+should be expanded and `%F` specifying where the URL of the feed's website (or
+the URL of the feed itself if not available) should be expanded. All parameters
+will be enclosed in single quotes, making it unnecessary to quote them yourself.
+If none of the parameters are used, the URL will be appended at the end of the
+command. Therefore, the previous example is equivalent to:
 
   browser "firefox %u"
+
+The following table shows the available link types for `%t`:
+
+.Available Link Types
+[frame="all", grid="all", format="dsv", options="header", cols="30,70"]
+|======================================================================
+Type:Meaning
+feed:URL of the feed's website
+rssfeed:URL of the feed
+article:URL of the article
+link:A URL in an article
+image:An image in an article
+embed_flash:A flash embed in an article
+iframe:An iframe in an article
+video:A video in an article
+audio:Audio in an article
+unknown (bug):An unknown link type, should not appear
+|======================================================================
 
 To open any link with your browser, the versatile
 <<open-in-browser,`open-in-browser`>> operation can be used. Its behavior is
