@@ -26,7 +26,7 @@ You'll need:
 2. Check out the latest release tag: `git checkout r2.20.1`.
 3. Submit a remote build for all architectures mentioned in the email:
 
-    $ snapcraft remote-build --build-on=s390x,ppc64el,arm64,armhf,amd64,i386
+    $ snapcraft remote-build --build-on=s390x,ppc64el,arm64,armhf,amd64
 
 4. Wait for the build to finish. It will create .snap files in the current
    directory.
