@@ -72,8 +72,8 @@ fn padded_format(input: &str) -> IResult<&str, Specifier> {
     let width = width.parse::<isize>().unwrap_or(0);
     let padding = match width.cmp(&0isize) {
         Ordering::Equal => Padding::None,
-        Ordering::Greater => Padding::Left(width.abs() as usize),
-        Ordering::Less => Padding::Right(width.abs() as usize),
+        Ordering::Greater => Padding::Left(width.unsigned_abs()),
+        Ordering::Less => Padding::Right(width.unsigned_abs()),
     };
 
     Ok((input, Specifier::Format(format, padding)))
