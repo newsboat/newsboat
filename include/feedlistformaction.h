@@ -87,7 +87,8 @@ private:
 	std::string tag;
 
 	Matcher matcher;
-	bool apply_filter;
+	bool filter_active;
+	void apply_filter(const std::string& filter_query);
 
 	History filterhistory;
 
