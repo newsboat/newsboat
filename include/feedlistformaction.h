@@ -97,7 +97,7 @@ private:
 
 	RegexManager& rxman;
 
-	FilterContainer& filters;
+	FilterContainer& filter_container;
 
 	nonstd::optional<FeedSortStrategy> old_sort_strategy;
 

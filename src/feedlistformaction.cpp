@@ -35,7 +35,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	, filterpos(0)
 	, set_filterpos(false)
 	, rxman(r)
-	, filters(f)
+	, filter_container(f)
 	, cache(cc)
 {
 	valid_cmds.push_back("tag");
@@ -423,19 +423,27 @@ REDO:
 	}
 	break;
 	case OP_SELECTFILTER:
-		if (filters.size() > 0) {
-			std::string newfilter;
+		if (filter_container.size() > 0) {
 			if (automatic && args->size() > 0) {
-				newfilter = (*args)[0];
+				const std::string filter_name = (*args)[0];
+				const auto filters = filter_container.get_filters();
+				const auto filter = std::find_if(filters.begin(),
+				filters.end(), [&](const FilterNameExprPair& pair) {
+					return pair.name == filter_name;
+				});
+
+				if (filter != filters.end()) {
+					apply_filter(filter->expr);
+				} else {
+					v->get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
+							filter_name));
+				}
 			} else {
-				newfilter = v->select_filter(
-						filters.get_filters());
-			}
-			if (newfilter != "") {
-				apply_filter(newfilter);
+				const std::string filter_text = v->select_filter(filter_container.get_filters());
+				apply_filter(filter_text);
 			}
 		} else {
-			v->get_statusline().show_error(_("No filters defined."));
+			v->get_statusline().show_error(_("No filter_container defined."));
 		}
 		break;
 	case OP_SEARCH:
@@ -1095,18 +1103,20 @@ std::string FeedListFormAction::title()
 
 void FeedListFormAction::apply_filter(const std::string& filtertext)
 {
+	if (filtertext.empty()) {
+		return;
+	}
+
 	filterhistory.add_line(filtertext);
-	if (filtertext.length() > 0) {
-		if (!matcher.parse(filtertext)) {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't parse filter expression `%s': %s"),
-					filtertext,
-					matcher.get_parse_error()));
-		} else {
-			save_filterpos();
-			filter_active = true;
-			do_redraw = true;
-		}
+	if (!matcher.parse(filtertext)) {
+		v->get_statusline().show_error(strprintf::fmt(
+				_("Error: couldn't parse filter expression `%s': %s"),
+				filtertext,
+				matcher.get_parse_error()));
+	} else {
+		save_filterpos();
+		filter_active = true;
+		do_redraw = true;
 	}
 }
 
