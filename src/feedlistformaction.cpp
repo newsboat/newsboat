@@ -443,7 +443,7 @@ REDO:
 				apply_filter(filter_text);
 			}
 		} else {
-			v->get_statusline().show_error(_("No filter_container defined."));
+			v->get_statusline().show_error(_("No filters defined."));
 		}
 		break;
 	case OP_SEARCH:
