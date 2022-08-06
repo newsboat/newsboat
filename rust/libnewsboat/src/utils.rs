@@ -315,7 +315,7 @@ pub fn substr_with_width_stfl(string: &str, max_width: usize) -> String {
 }
 
 /// Remove all soft-hyphens as they can behave unpredictably (see
-/// https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490) and inadvertently
+/// <https://github.com/akrennmair/newsbeuter/issues/259#issuecomment-259609490>) and inadvertently
 /// render as hyphens
 pub fn remove_soft_hyphens(text: &mut String) {
     text.retain(|c| c != '\u{00AD}')
@@ -787,9 +787,11 @@ pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
 
 /// The result of executing `extract_filter()`.
 pub struct FilterUrlParts {
+    #[allow(rustdoc::bare_urls)]
     /// "~/bin/foo.sh" in "filter:~/bin/foo.sh:https://example.com/news.atom"
     pub script_name: String,
 
+    #[allow(rustdoc::bare_urls)]
     /// "https://example.com/news.atom" in "filter:~/bin/foo.sh:https://example.com/news.atom"
     pub url: String,
 }
