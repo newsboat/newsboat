@@ -720,8 +720,9 @@ std::unordered_set<std::string> Cache::search_in_items(
 	const std::string& querystr,
 	const std::unordered_set<std::string>& guids)
 {
-	std::string list = "(";
+	std::lock_guard<std::mutex> lock(mtx);
 
+	std::string list = "(";
 	for (const auto& guid : guids) {
 		list.append(prepare_query("%Q, ", guid));
 	}
@@ -758,6 +759,9 @@ void Cache::do_vacuum()
 std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {
+	// we don't use the std::lock_guard<> here... see comments below
+	mtx.lock();
+
 	std::uint64_t unreachable = 0u;
 	std::string list = "(";
 
@@ -767,9 +771,6 @@ std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 		list.append(", ");
 	}
 	list.append("'')");
-
-	// we don't use the std::lock_guard<> here... see comments below
-	mtx.lock();
 
 	/*
 	 * cache cleanup means that all entries in both the RssFeed and
@@ -1074,6 +1075,7 @@ void Cache::remove_old_deleted_items(RssFeed* feed)
 void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 {
 	ScopeMeasure m1("Cache::mark_items_read_by_guid");
+	std::lock_guard<std::mutex> lock(mtx);
 	std::string guidset("(");
 	for (const auto& guid : guids) {
 		guidset.append(prepare_query("'%q', ", guid));
@@ -1085,7 +1087,6 @@ void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 			"%s;",
 			guidset);
 
-	std::lock_guard<std::mutex> lock(mtx);
 	run_sql(updatequery);
 }
 
