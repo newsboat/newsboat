@@ -5,6 +5,10 @@
 ### Added
 ### Changed
 - Bumped minimum supported Rust version to 1.59.0
+- When `select-filter` is used with an argument (e.g. from a macro), that
+  argument is now used to look up a predefined filter by name. The old
+  behaviour (applying the argument as filter) is still available by using
+  `set-filter` instead (#2137) (Dennis van der Schagt)
 ### Deprecated
 ### Removed
 ### Fixed
