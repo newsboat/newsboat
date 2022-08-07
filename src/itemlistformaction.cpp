@@ -33,7 +33,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	RegexManager& r)
 	: ListFormAction(vv, formstr, "items", cfg)
 	, old_itempos(-1)
-	, apply_filter(false)
+	, filter_active(false)
 	, pos(0)
 	, set_filterpos(false)
 	, filterpos(0)
@@ -492,7 +492,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 				rsscache->mark_items_read_by_guid(guids);
 
-				if (apply_filter) {
+				if (filter_active) {
 					// We're only viewing a subset of items, so mark them off one by one.
 					v->get_ctrl()->mark_all_read(guids);
 				} else {
@@ -631,23 +631,8 @@ bool ItemListFormAction::process_operation(Operation op,
 					"= %s",
 					newfilter);
 			}
-			if (newfilter != "") {
-				filterhistory.add_line(newfilter);
-				if (newfilter.length() > 0) {
-					if (!matcher.parse(newfilter)) {
-						v->get_statusline().show_error(strprintf::fmt(
-								_("Error: couldn't "
-									"parse filter "
-									"expression `%s': %s"),
-								newfilter,
-								matcher.get_parse_error()));
-					} else {
-						apply_filter = true;
-						invalidate_list();
-						save_filterpos();
-					}
-				}
-			}
+
+			apply_filter(newfilter);
 		} else {
 			v->get_statusline().show_error(_("No filters defined."));
 		}
@@ -668,7 +653,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_CLEARFILTER:
-		apply_filter = false;
+		filter_active = false;
 		invalidate_list();
 		save_filterpos();
 		break;
@@ -853,20 +838,7 @@ void ItemListFormAction::finished_qna(Operation op)
 void ItemListFormAction::qna_end_setfilter()
 {
 	std::string filtertext = qna_responses[0];
-	filterhistory.add_line(filtertext);
-
-	if (filtertext.length() > 0) {
-		if (!matcher.parse(filtertext)) {
-			v->get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't parse filter expression `%s': %s"),
-					filtertext, matcher.get_parse_error()));
-			return;
-		}
-
-		apply_filter = true;
-		invalidate_list();
-		save_filterpos();
-	}
+	apply_filter(filtertext);
 }
 
 void ItemListFormAction::qna_end_editflags()
@@ -944,7 +916,7 @@ void ItemListFormAction::do_update_visible_items()
 	for (const auto& item : items) {
 		item->set_index(i + 1);
 		if ((show_read || item->unread()) &&
-			(!apply_filter || matcher.matches(item.get()))) {
+			(!filter_active || matcher.matches(item.get()))) {
 			new_visible_items.push_back(ItemPtrPosPair(item, i));
 		}
 		i++;
@@ -1193,7 +1165,7 @@ FmtStrFormatter ItemListFormAction::setup_head_formatter(const std::string& s,
 
 	fmt.register_fmt('U', utils::censor_url(url));
 
-	fmt.register_fmt('F', apply_filter ? matcher.get_expression() : "");
+	fmt.register_fmt('F', filter_active ? matcher.get_expression() : "");
 
 	return fmt;
 }
@@ -1614,6 +1586,25 @@ void ItemListFormAction::handle_op_saveall()
 			// Create file since it does not exist
 			save_article(filepath, item);
 		}
+	}
+}
+
+void ItemListFormAction::apply_filter(const std::string& filtertext)
+{
+	if (filtertext.empty()) {
+		return;
+	}
+
+	filterhistory.add_line(filtertext);
+	if (!matcher.parse(filtertext)) {
+		v->get_statusline().show_error(strprintf::fmt(
+				_("Error: couldn't parse filter expression `%s': %s"),
+				filtertext,
+				matcher.get_parse_error()));
+	} else {
+		save_filterpos();
+		filter_active = true;
+		invalidate_list();
 	}
 }
 

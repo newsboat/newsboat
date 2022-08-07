@@ -91,8 +91,8 @@ protected:
 	std::shared_ptr<RssFeed> feed;
 
 	Matcher matcher;
-
-	bool apply_filter;
+	bool filter_active;
+	void apply_filter(const std::string& filter_query);
 
 private:
 	void register_format_styles();
