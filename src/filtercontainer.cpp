@@ -1,5 +1,7 @@
 #include "filtercontainer.h"
 
+#include <algorithm>
+
 #include "config.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
@@ -49,6 +51,20 @@ void FilterContainer::dump_config(std::vector<std::string>& config_output) const
 		config_output.push_back(strprintf::fmt("define-filter %s %s",
 				utils::quote(filter.name),
 				utils::quote(filter.expr)));
+	}
+}
+
+nonstd::optional<std::string> FilterContainer::get_filter(const std::string& name)
+{
+	const auto filter = std::find_if(filters.begin(),
+	filters.end(), [&](const FilterNameExprPair& pair) {
+		return pair.name == name;
+	});
+
+	if (filter != filters.end()) {
+		return filter->expr;
+	} else {
+		return {};
 	}
 }
 

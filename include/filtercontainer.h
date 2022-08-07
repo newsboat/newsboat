@@ -3,6 +3,8 @@
 
 #include "configactionhandler.h"
 
+#include "3rd-party/optional.hpp"
+
 namespace newsboat {
 
 /// Stores the name of the filter and the filter expression that user added via
@@ -30,6 +32,8 @@ public:
 	{
 		return filters.size();
 	}
+
+	nonstd::optional<std::string> get_filter(const std::string& name);
 
 private:
 	std::vector<FilterNameExprPair> filters;

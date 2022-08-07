@@ -426,14 +426,10 @@ REDO:
 		if (filter_container.size() > 0) {
 			if (automatic && args->size() > 0) {
 				const std::string filter_name = (*args)[0];
-				const auto filters = filter_container.get_filters();
-				const auto filter = std::find_if(filters.begin(),
-				filters.end(), [&](const FilterNameExprPair& pair) {
-					return pair.name == filter_name;
-				});
+				const auto filter = filter_container.get_filter(filter_name);
 
-				if (filter != filters.end()) {
-					apply_filter(filter->expr);
+				if (filter.has_value()) {
+					apply_filter(filter.value());
 				} else {
 					v->get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
 							filter_name));
