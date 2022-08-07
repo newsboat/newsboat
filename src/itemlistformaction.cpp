@@ -42,7 +42,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	, invalidation_mode(InvalidationMode::NONE)
 	, listfmt(&rxman, "articlelist")
 	, rsscache(cc)
-	, filters(f)
+	, filter_container(f)
 {
 	register_format_styles();
 }
@@ -617,22 +617,22 @@ bool ItemListFormAction::process_operation(Operation op,
 		v->get_ctrl()->edit_urls_file();
 		break;
 	case OP_SELECTFILTER:
-		if (filters.size() > 0) {
+		if (filter_container.size() > 0) {
 			std::string newfilter;
-			if (automatic) {
-				if (args->size() > 0) {
-					newfilter = (*args)[0];
+			if (automatic && args->size() > 0) {
+				const std::string filter_name = (*args)[0];
+				const auto filter = filter_container.get_filter(filter_name);
+
+				if (filter.has_value()) {
+					apply_filter(filter.value());
+				} else {
+					v->get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
+							filter_name));
 				}
 			} else {
-				newfilter = v->select_filter(
-						filters.get_filters());
-				LOG(Level::DEBUG,
-					"ItemListFormAction::run: newfilters "
-					"= %s",
-					newfilter);
+				const std::string filter_text = v->select_filter(filter_container.get_filters());
+				apply_filter(filter_text);
 			}
-
-			apply_filter(newfilter);
 		} else {
 			v->get_statusline().show_error(_("No filters defined."));
 		}
