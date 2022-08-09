@@ -80,7 +80,7 @@ task:
     cargo_cache: *cargo_cache
     env:
         RUSTFLAGS: '-D warnings'
-        JOBS: 10
+        JOBS: 8
     after_cache_script: *after_cache_script
     build_script: &build_script
         - make -j${JOBS} --keep-going all test
@@ -171,7 +171,7 @@ task:
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     env:
         RUSTFLAGS: '-D warnings'
-        JOBS: 10
+        JOBS: 8
 
     matrix:
         # These two jobs test our minimum supported Rust version, so only bump on
@@ -386,7 +386,7 @@ task:
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
       ASAN_OPTIONS: "check_initialization_order=1:detect_stack_use_after_return=1"
-      JOBS: 10
+      JOBS: 8
 
     cargo_cache: *cargo_cache
 
@@ -411,7 +411,7 @@ task:
           cxx: g++-9
 
     env:
-      JOBS: 10
+      JOBS: 8
 
     script:
           # Build in debug mode to speed things up
@@ -438,7 +438,7 @@ task:
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
       UBSAN_OPTIONS: "suppressions=.undefined-sanitizer-suppressions:print_stacktrace=1:halt_on_error=1"
-      JOBS: 10
+      JOBS: 8
 
     cargo_cache: *cargo_cache
 
