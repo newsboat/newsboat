@@ -287,6 +287,7 @@ Cache::~Cache()
 
 void Cache::set_pragmas()
 {
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	// first, we need to swithc off synchronous writing as it's slow as hell
 	run_sql("PRAGMA synchronous = OFF;");
 
@@ -394,6 +395,7 @@ static const schema_patches schemaPatches{
 
 void Cache::populate_tables()
 {
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	const SchemaVersion version = get_schema_version();
 	LOG(Level::INFO,
 		"Cache::populate_tables: DB schema version %u.%u",
@@ -432,7 +434,7 @@ void Cache::fetch_lastmodified(const std::string& feedurl,
 	time_t& t,
 	std::string& etag)
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::string query = prepare_query(
 			"SELECT lastmodified, etag FROM rss_feed WHERE rssurl = '%q';",
 			feedurl);
@@ -459,7 +461,7 @@ void Cache::update_lastmodified(const std::string& feedurl,
 			"empty, not updating anything");
 		return;
 	}
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::string query = "UPDATE rss_feed SET ";
 	if (t > 0) {
 		query.append(prepare_query("lastmodified = '%d'", t));
@@ -476,7 +478,7 @@ void Cache::update_lastmodified(const std::string& feedurl,
 
 void Cache::mark_item_deleted(const std::string& guid, bool b)
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::string query = prepare_query(
 			"UPDATE rss_item SET deleted = %u WHERE guid = '%q'",
 			b ? 1 : 0,
@@ -493,7 +495,7 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 		return;
 	}
 
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
 	// scope_transaction dbtrans(db);
 
@@ -571,7 +573,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		return feed;
 	}
 
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
 
 	/* first, we check whether the feed is there at all */
@@ -637,7 +639,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		for (unsigned int j = max_items; j < feed->total_item_count();
 			++j) {
 			if (feed->items()[j]->flags().length() == 0) {
-				delete_item(feed->items()[j]);
+				delete_item_unlocked(feed->items()[j]);
 			} else {
 				flagged_items.push_back(feed->items()[j]);
 			}
@@ -662,7 +664,7 @@ std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
 	std::string query;
 	std::vector<std::shared_ptr<RssItem>> items;
 
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	if (feedurl.length() > 0) {
 		query = prepare_query(
 				"SELECT guid, title, author, url, pubDate, "
@@ -720,8 +722,9 @@ std::unordered_set<std::string> Cache::search_in_items(
 	const std::string& querystr,
 	const std::unordered_set<std::string>& guids)
 {
-	std::string list = "(";
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 
+	std::string list = "(";
 	for (const auto& guid : guids) {
 		list.append(prepare_query("%Q, ", guid));
 	}
@@ -737,12 +740,11 @@ std::unordered_set<std::string> Cache::search_in_items(
 			list);
 
 	std::unordered_set<std::string> items;
-	std::lock_guard<std::mutex> lock(mtx);
 	run_sql(query, guid_callback, &items);
 	return items;
 }
 
-void Cache::delete_item(const std::shared_ptr<RssItem>& item)
+void Cache::delete_item_unlocked(const std::shared_ptr<RssItem>& item)
 {
 	const std::string query = prepare_query(
 			"DELETE FROM rss_item WHERE guid = '%q';", item->guid());
@@ -751,13 +753,16 @@ void Cache::delete_item(const std::shared_ptr<RssItem>& item)
 
 void Cache::do_vacuum()
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	run_sql("VACUUM;");
 }
 
 std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {
+	// we don't use the std::lock_guard<> here... see comments below
+	mtx.lock();
+
 	std::uint64_t unreachable = 0u;
 	std::string list = "(";
 
@@ -767,9 +772,6 @@ std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 		list.append(", ");
 	}
 	list.append("'')");
-
-	// we don't use the std::lock_guard<> here... see comments below
-	mtx.lock();
 
 	/*
 	 * cache cleanup means that all entries in both the RssFeed and
@@ -934,7 +936,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 
 void Cache::mark_all_read(std::shared_ptr<RssFeed> feed)
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::lock_guard<std::mutex> itemlock(feed->item_mutex);
 	std::string query =
 		"UPDATE rss_item SET unread = '0' WHERE unread != '0' AND guid "
@@ -952,7 +954,7 @@ void Cache::mark_all_read(std::shared_ptr<RssFeed> feed)
  */
 void Cache::mark_all_read(const std::string& feedurl)
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 
 	std::string query;
 	if (feedurl.length() > 0) {
@@ -974,7 +976,7 @@ void Cache::mark_all_read(const std::string& feedurl)
 void Cache::update_rssitem_unread_and_enqueued(RssItem* item,
 	const std::string& /* feedurl */)
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 
 	const auto query = prepare_query(
 			"UPDATE rss_item "
@@ -1027,7 +1029,7 @@ std::string Cache::prepare_query(const std::string& format, const T& argument,
 
 void Cache::update_rssitem_flags(RssItem* item)
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 
 	const std::string update = prepare_query(
 			"UPDATE rss_item SET flags = '%q' WHERE guid = '%q';",
@@ -1041,7 +1043,7 @@ void Cache::remove_old_deleted_items(RssFeed* feed)
 {
 	ScopeMeasure m1("Cache::remove_old_deleted_items");
 
-	std::lock_guard<std::mutex> cache_lock(mtx);
+	std::lock_guard<std::recursive_mutex> cache_lock(mtx);
 	std::lock_guard<std::mutex> feed_lock(feed->item_mutex);
 
 	std::vector<std::string> guids;
@@ -1074,6 +1076,7 @@ void Cache::remove_old_deleted_items(RssFeed* feed)
 void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 {
 	ScopeMeasure m1("Cache::mark_items_read_by_guid");
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::string guidset("(");
 	for (const auto& guid : guids) {
 		guidset.append(prepare_query("'%q', ", guid));
@@ -1085,7 +1088,6 @@ void Cache::mark_items_read_by_guid(const std::vector<std::string>& guids)
 			"%s;",
 			guidset);
 
-	std::lock_guard<std::mutex> lock(mtx);
 	run_sql(updatequery);
 }
 
@@ -1094,7 +1096,7 @@ std::vector<std::string> Cache::get_read_item_guids()
 	std::vector<std::string> guids;
 	const std::string query = "SELECT guid FROM rss_item WHERE unread = 0;";
 
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	run_sql(query, vectorofstring_callback, &guids);
 
 	return guids;
@@ -1102,7 +1104,7 @@ std::vector<std::string> Cache::get_read_item_guids()
 
 void Cache::clean_old_articles()
 {
-	std::lock_guard<std::mutex> lock(mtx);
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 
 	const unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
 	if (days > 0) {
@@ -1128,6 +1130,7 @@ void Cache::clean_old_articles()
 
 void Cache::fetch_descriptions(RssFeed* feed)
 {
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	std::vector<std::string> guids;
 	for (const auto& item : feed->items()) {
 		guids.push_back(prepare_query("'%q'", item->guid()));
@@ -1143,6 +1146,7 @@ void Cache::fetch_descriptions(RssFeed* feed)
 
 std::string Cache::fetch_description(const RssItem& item)
 {
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	const std::string in_clause = prepare_query("'%q'", item.guid());
 
 	const std::string query = prepare_query(
@@ -1165,6 +1169,7 @@ SchemaVersion Cache::get_schema_version()
 	sqlite3_stmt* stmt{};
 	SchemaVersion result;
 
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 	int rc = sqlite3_prepare_v2(db,
 			"SELECT db_schema_version_major, db_schema_version_minor "
 			"FROM metadata",

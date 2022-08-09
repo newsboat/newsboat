@@ -83,7 +83,7 @@ private:
 	SchemaVersion get_schema_version();
 	void populate_tables();
 	void set_pragmas();
-	void delete_item(const std::shared_ptr<RssItem>& item);
+	void delete_item_unlocked(const std::shared_ptr<RssItem>& item);
 	void clean_old_articles();
 	void update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 		const std::string& feedurl,
@@ -111,7 +111,7 @@ private:
 
 	sqlite3* db;
 	ConfigContainer* cfg;
-	std::mutex mtx;
+	std::recursive_mutex mtx;
 };
 
 } // namespace newsboat
