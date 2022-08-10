@@ -9,6 +9,9 @@
   argument is now used to look up a predefined filter by name. The old
   behaviour (applying the argument as filter) is still available by using
   `set-filter` instead (#2137) (Dennis van der Schagt)
+- When `select-filter` is used without an argument, it will now open the filter
+  selection dialog. Previously, `set-filter` from a macro without arguements
+  was ignored in the itemlist dialog (#2137) (Dennis van der Schagt)
 ### Deprecated
 ### Removed
 ### Fixed
