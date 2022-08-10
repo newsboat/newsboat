@@ -120,3 +120,41 @@ TEST_CASE("FilterContainer::dump_config() writes out all configured settings to 
 	REQUIRE(config[2] == R"#(define-filter "second" "author = \"Me\"")#");
 	REQUIRE(config[3] == R"#(define-filter "third" "content =~ \"Linux\"")#");
 }
+
+TEST_CASE("FilterContainer::get_filter() returns non-value when filter does not exist",
+	"[FilterContainer]")
+{
+	FilterContainer filters;
+
+	const auto filter1_expression = R"(title = "title 1")";
+
+	REQUIRE_FALSE(filters.get_filter("non-existing").has_value());
+	REQUIRE_FALSE(filters.get_filter("filter1").has_value());
+
+	REQUIRE_NOTHROW(filters.handle_action("define-filter", {"filter1", filter1_expression}));
+
+	REQUIRE_FALSE(filters.get_filter("non-existing").has_value());
+	REQUIRE(filters.get_filter("filter1").has_value());
+	REQUIRE(filters.get_filter("filter1") == filter1_expression);
+}
+
+TEST_CASE("FilterContainer::get_filter() returns first filter with given name",
+	"[FilterContainer]")
+{
+	FilterContainer filters;
+
+	const auto action = "define-filter";
+	const auto filter_name = "arbitrary name";
+
+	const auto filter1 = R"(title = "title 1")";
+	const auto filter2 = R"(title = "title 2")";
+	const auto filter3 = R"(title = "title 3")";
+
+	REQUIRE_NOTHROW(filters.handle_action(action, {"other filter", filter1}));
+	REQUIRE_NOTHROW(filters.handle_action(action, {filter_name, filter2}));
+	REQUIRE_NOTHROW(filters.handle_action(action, {filter_name, filter3}));
+
+	REQUIRE(filters.size() == 3);
+
+	REQUIRE(filters.get_filter(filter_name) == filter2);
+}
