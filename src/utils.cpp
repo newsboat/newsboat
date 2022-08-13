@@ -585,7 +585,8 @@ void utils::set_common_curl_options(CurlHandle& handle, ConfigContainer* cfg)
 	}
 
 	curl_easy_setopt(handle.ptr(), CURLOPT_NOSIGNAL, 1);
-	curl_easy_setopt(handle.ptr(), CURLOPT_ENCODING, "gzip, deflate");
+	// Accept all of curl's built-in encodings
+	curl_easy_setopt(handle.ptr(), CURLOPT_ACCEPT_ENCODING, "");
 
 	curl_easy_setopt(handle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(handle.ptr(), CURLOPT_MAXREDIRS, 10);

@@ -137,7 +137,8 @@ Feed Parser::parse_url(const std::string& url,
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_MAXREDIRS, 10);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FAILONERROR, 1);
-	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ACCEPT_ENCODING, "gzip, deflate");
+	// Accept all of curl's built-in encodings
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ACCEPT_ENCODING, "");
 	if (cookie_cache != "") {
 		curl_easy_setopt(
 			easyhandle.ptr(), CURLOPT_COOKIEFILE, cookie_cache.c_str());
