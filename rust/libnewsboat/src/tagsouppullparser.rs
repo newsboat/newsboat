@@ -583,3 +583,201 @@ const ENTITY_TABLE: &[(&'static str, u32)] = &[
     ("hearts", 9829),
     ("diams", 9830),
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    macro_rules! expect_text {
+        ($name:ident, $input:literal, $expected:literal) => {
+            #[test]
+            fn $name() {
+                let mut xpp = TagSoupPullParser::new($input.to_string());
+
+                let event = xpp.current_event;
+                assert_eq!(event, Event::StartDocument);
+
+                let event = xpp.next();
+                assert_eq!(event, Event::Text);
+                assert_eq!(xpp.get_text(), $expected.to_string());
+
+                let event = xpp.next();
+                assert_eq!(event, Event::EndDocument);
+            }
+        };
+    }
+
+    #[test]
+    fn t_br_tags_behave_the_same_way() {
+        for input in ["<br>", "<br/>", "<br />"] {
+            let mut xpp = TagSoupPullParser::new(input.to_string());
+            let event = xpp.current_event;
+            assert_eq!(event, Event::StartDocument);
+
+            let event = xpp.next();
+            assert_eq!(event, Event::StartTag);
+            assert_eq!(xpp.get_text(), "br");
+
+            let event = xpp.next();
+            assert_eq!(event, Event::EndDocument);
+        }
+    }
+
+    expect_text!(
+        t_ignores_invalid_entity_missing_semicolon,
+        "some & text",
+        "some & text"
+    );
+
+    expect_text!(
+        t_ignores_unknown_entity,
+        "some &more; text",
+        "some &more; text"
+    );
+
+    expect_text!(
+        t_valid_entities_after_invalid_entities,
+        "a lone ampersand: &, and some entities: &lt;&gt;",
+        "a lone ampersand: &, and some entities: <>"
+    );
+
+    // 133 designates a horizontal ellipsis
+    expect_text!(
+        t_numbered_entities_decimal,
+        "&#020;&#42;&#189;&#133;&#963;",
+        "\x14*½…σ"
+    );
+
+    // x97 designates an mdash
+    expect_text!(
+        t_numbered_entities_hexadecimal,
+        "&#x97;&#x20;&#x048;&#x0069;",
+        "— Hi"
+    );
+
+    expect_text!(
+        t_numbered_entities_windows_codepoints,
+        "&#x80;&#x82;&#x83;&#x84;&#x85;&#x86;&#x87;&#x88;&#x89;&#x8A;&#x8B;&#x8C;&#x8E;&#x91;&#x92;&#x93;&#x94;&#x95;&#x96;&#x97;&#x98;&#x99;&#x9A;&#x9B;&#x9C;&#x9E;&#x9F;",
+        "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ"
+    );
+
+    expect_text!(t_named_entities, "&sigma;&trade;", "σ™");
+
+    #[test]
+    fn t_turns_document_into_stream_of_events() {
+        let input = "<test><foo quux='asdf' bar=\"qqq\">text</foo>more text<more>&quot;&#33;&#x40;</more><xxx foo=bar baz=\"qu ux\" hi='ho ho ho'></xxx></test>";
+
+        let mut xpp = TagSoupPullParser::new(input.to_string());
+
+        let e = xpp.current_event;
+        assert_eq!(e, Event::StartDocument);
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "test");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "foo");
+        assert_eq!(xpp.get_attribute_value("quux"), Some("asdf".to_string()));
+        assert_eq!(xpp.get_attribute_value("bar"), Some("qqq".to_string()));
+
+        let e = xpp.next();
+        assert_eq!(e, Event::Text);
+        assert_eq!(xpp.get_text(), "text");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "foo");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::Text);
+        assert_eq!(xpp.get_text(), "more text");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "more");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::Text);
+        assert_eq!(xpp.get_text(), "\"!@");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "more");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "xxx");
+        assert_eq!(xpp.get_attribute_value("foo"), Some("bar".to_string()));
+        assert_eq!(xpp.get_attribute_value("baz"), Some("qu ux".to_string()));
+        assert_eq!(xpp.get_attribute_value("hi"), Some("ho ho ho".to_string()));
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "xxx");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "test");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndDocument);
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndDocument);
+    }
+
+    #[test]
+    fn t_emits_whitespace_as_is() {
+        let input =
+            "<test>    &lt;4 spaces\n<pre>\n    <span>should have seen spaces</span></pre></test>";
+
+        let mut xpp = TagSoupPullParser::new(input.to_string());
+
+        let e = xpp.current_event;
+        assert_eq!(e, Event::StartDocument);
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "test");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::Text);
+        assert_eq!(xpp.get_text(), "    <4 spaces\n");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "pre");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::Text);
+        assert_eq!(xpp.get_text(), "\n    ");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::StartTag);
+        assert_eq!(xpp.get_text(), "span");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::Text);
+        assert_eq!(xpp.get_text(), "should have seen spaces");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "span");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "pre");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndTag);
+        assert_eq!(xpp.get_text(), "test");
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndDocument);
+
+        let e = xpp.next();
+        assert_eq!(e, Event::EndDocument);
+    }
+}
