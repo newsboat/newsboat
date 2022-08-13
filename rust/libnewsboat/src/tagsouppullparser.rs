@@ -55,26 +55,18 @@ impl TagSoupPullParser {
         self.text.clear();
 
         if self.chars.is_empty() {
-            self.current_event = Event::EndDocument;
+            return Event::EndDocument;
         }
 
-        match self.current_event {
+        self.current_event = match self.current_event {
             Event::StartDocument | Event::StartTag | Event::EndTag => match self.chars.pop() {
-                None => {
-                    self.current_event = Event::EndDocument;
-                }
-                Some('<') => {
-                    self.handle_tag();
-                }
-                Some(c) => {
-                    self.handle_text(c);
-                }
+                None => Event::EndDocument,
+                Some('<') => self.handle_tag(),
+                Some(c) => self.handle_text(c),
             },
-            Event::Text => {
-                self.handle_tag();
-            }
-            Event::EndDocument => {}
-        }
+            Event::Text => self.handle_tag(),
+            Event::EndDocument => Event::EndDocument,
+        };
 
         self.current_event
     }
@@ -90,16 +82,16 @@ impl TagSoupPullParser {
         None
     }
 
-    fn handle_tag(&mut self) {
+    fn handle_tag(&mut self) -> Event {
         if let Some(s) = self.read_tag() {
             self.parse_tag(&s);
-            self.current_event = self.determine_tag_type();
+            self.determine_tag_type()
         } else {
-            self.current_event = Event::EndDocument;
+            Event::EndDocument
         }
     }
 
-    fn handle_text(&mut self, c: char) {
+    fn handle_text(&mut self, c: char) -> Event {
         self.text.push(c);
         while let Some(c) = self.chars.pop() {
             if c == '<' {
@@ -109,7 +101,7 @@ impl TagSoupPullParser {
         }
         self.text = decode_entities(&self.text);
         utils::remove_soft_hyphens(&mut self.text);
-        self.current_event = Event::Text;
+        Event::Text
     }
 
     fn determine_tag_type(&mut self) -> Event {
@@ -122,73 +114,25 @@ impl TagSoupPullParser {
     }
 
     fn parse_tag(&mut self, tagstr: &str) {
-        let mut s = tagstr.trim();
-        let mut pos = s.find(|c: char| c.is_whitespace());
-        let mut count = 0;
+        log!(Level::Debug, "parse_tag: parsing '{}'", tagstr);
 
-        log!(
-            Level::Debug,
-            "parse_tag: parsing '{}', pos = {:?}",
-            tagstr,
-            pos
-        );
+        let tagstr = tagstr.trim_start();
+        let (tag, mut s) = tagstr
+            .split_once(|c: char| c.is_whitespace())
+            .unwrap_or((tagstr, ""));
 
-        while !s.is_empty() {
-            if count == 0 {
-                // first token: tag name
-                let end = pos.unwrap_or(s.len());
-                self.text = s[..end].to_string();
-                if self.text.ends_with('/') {
-                    // a kludge for <br/>
-                    self.text.pop();
-                }
-                log!(Level::Debug, "parse_tag: tag name = {}", self.text);
-                s = &s[end..];
-            } else {
-                pos = s.find(|c| c == '=' || c == ' ');
-                if let Some(idx) = pos {
-                    let mut rest = &s[idx..];
-                    log!(Level::Debug, "parse_tag: found = or space");
-                    if rest.starts_with('=') {
-                        rest = &rest[1..];
-                        log!(Level::Debug, "parse_tag: found =");
-                        if rest.starts_with('\'') || rest.starts_with('"') {
-                            let quote = &rest[..1];
-                            pos = rest[1..].find(quote).map(|i| i + idx + 3);
-                            log!(
-                                Level::Debug,
-                                "parse_tag: finding ending quote, pos = {:?}",
-                                pos
-                            );
-                        } else {
-                            pos = rest.find(|c: char| c.is_whitespace()).map(|i| i + idx + 1);
-                            log!(Level::Debug, "parse_tag: finding end of unquoted attribute");
-                        }
-                    }
-                }
+        // first token: tag name
+        self.text = tag.to_string();
+        if self.text.ends_with('/') {
+            // a kludge for <br/>
+            self.text.pop();
+        }
+        log!(Level::Debug, "parse_tag: tag name = {}", self.text);
 
-                let attr = if let Some(idx) = pos {
-                    let attr = &s[..idx];
-                    s = &s[idx..];
-                    attr
-                } else {
-                    log!(
-                        Level::Debug,
-                        "parse_tag: found end of string, correcting end position"
-                    );
-                    let attr = s;
-                    s = "";
-                    attr
-                };
-                log!(
-                    Level::Debug,
-                    "parse_tag: extracted attribute is '{}', adding",
-                    attr
-                );
-                self.add_attribute(attr);
-            }
-            s = s.trim_start();
-            count += 1;
+        while let Some((attr, rest)) = parse_next_attribute(s) {
+            log!(Level::Debug, "parse_tag: adding attribute '{}'", attr);
+            self.add_attribute(attr);
+            s = rest;
         }
     }
 
@@ -200,10 +144,38 @@ impl TagSoupPullParser {
         if s.is_empty() {
             return;
         }
-        let (attribname, attribvalue) = s.split_once('=').unwrap_or((s, s));
+        let (name, value) = s.split_once('=').unwrap_or((s, s));
         self.attributes
-            .push((attribname.to_lowercase(), decode_attribute(attribvalue)));
+            .push((name.to_lowercase(), decode_attribute(value)));
     }
+}
+
+fn parse_next_attribute(s: &str) -> Option<(&str, &str)> {
+    let s = s.trim_start();
+    if s.is_empty() {
+        return None;
+    }
+
+    let mut idx = s.find(|c| c == '=' || c == ' ').unwrap_or(s.len());
+    if idx < s.len() {
+        log!(Level::Debug, "parse_tag: found = or space");
+    }
+    let mut rest = &s[idx..];
+    if rest.starts_with('=') {
+        rest = &rest[1..];
+        log!(Level::Debug, "parse_tag: found =");
+        let pos = if rest.starts_with('\'') || rest.starts_with('"') {
+            log!(Level::Debug, "parse_tag: finding ending quote");
+            let quote = &rest[..1];
+            rest[1..].find(quote).map(|i| i + 2) // + 2 for the quotes
+        } else {
+            log!(Level::Debug, "parse_tag: finding end of unquoted attribute");
+            rest.find(|c: char| c.is_whitespace())
+        };
+        idx = pos.map(|i| idx + i + 1 /* for the = */).unwrap_or(s.len());
+    }
+
+    Some((&s[..idx], &s[idx..]))
 }
 
 fn parse_hex_prefix(s: &str) -> u32 {
@@ -218,17 +190,13 @@ fn parse_hex_prefix(s: &str) -> u32 {
     result
 }
 
-fn decode_entity(s: &str) -> String {
-    log!(
-        Level::Debug,
-        "TagSoupPullParser::decode_entity: decoding '{}'...",
-        s
-    );
+fn decode_entity(s: &str) -> Option<char> {
+    log!(Level::Debug, "decode_entity: decoding '{}'...", s);
     if s.len() > 1 && s.starts_with('#') {
         let wc = if s.starts_with("#x") {
             parse_hex_prefix(&s[2..])
         } else {
-            utils::to_u(s[1..].to_string(), 0)
+            s[1..].parse().unwrap_or(0)
         };
         // convert some windows entities according to the spec
         // https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state
@@ -263,47 +231,34 @@ fn decode_entity(s: &str) -> String {
             c => c,
         };
 
-        log!(
-            Level::Debug,
-            "TagSoupPullParser::decode_entity: wc = {}",
-            wc
-        );
+        log!(Level::Debug, "decode_entity: wc = {}", wc);
 
-        if let Some(c) = char::from_u32(wc) {
-            return c.to_string();
-        }
+        return char::from_u32(wc);
     } else {
         for &(entity, value) in ENTITY_TABLE {
             if s == entity {
-                if let Some(c) = char::from_u32(value) {
-                    return c.to_string();
-                } else {
-                    return String::new();
-                }
+                return char::from_u32(value);
             }
         }
     }
-    String::new()
+    None
 }
 
 fn decode_entities(s: &str) -> String {
     let mut s = s;
     let mut result = String::new();
-    while let Some(ampersand_offset) = s.find('&') {
-        let rest = &s[ampersand_offset + 1..];
-        let semicolon_offset = match rest.find(';') {
-            Some(offset) => offset,
-            None => break,
-        };
-        result += &s[..ampersand_offset];
-        let entity = &rest[..semicolon_offset];
-        let encoded_entity = decode_entity(entity);
-        if !encoded_entity.is_empty() {
-            result += &encoded_entity;
-            s = &rest[semicolon_offset + 1..];
+    while let Some((pre, after_ampersand)) = s.split_once('&') {
+        if let Some((entity, post)) = after_ampersand.split_once(';') {
+            result += pre;
+            if let Some(decoded) = decode_entity(entity) {
+                result.push(decoded);
+                s = post;
+            } else {
+                result.push('&');
+                s = after_ampersand;
+            }
         } else {
-            result.push('&');
-            s = rest;
+            break;
         }
     }
     result += s;
@@ -313,11 +268,10 @@ fn decode_entities(s: &str) -> String {
 fn decode_attribute(s: &str) -> String {
     let mut s = s;
     if (s.starts_with('"') && s.ends_with('"')) || (s.starts_with('\'') && s.ends_with('\'')) {
-        if !s.is_empty() {
-            s = &s[1..];
-        }
-        if !s.is_empty() {
-            s = &s[..s.len() - 1];
+        if s.len() == 1 {
+            s = "";
+        } else {
+            s = &s[1..s.len() - 1];
         }
     }
     decode_entities(s)
