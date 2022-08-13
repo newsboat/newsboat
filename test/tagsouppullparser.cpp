@@ -20,9 +20,6 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	TagSoupPullParser xpp(input_stream);
 	TagSoupPullParser::Event e;
 
-	e = xpp.get_event_type();
-	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
-
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "test");
@@ -90,10 +87,6 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 			std::string input_stream(input);
 			TagSoupPullParser Parser(input_stream);
 
-			event = Parser.get_event_type();
-			REQUIRE(event ==
-				TagSoupPullParser::Event::START_DOCUMENT);
-
 			event = Parser.next();
 			REQUIRE(event == TagSoupPullParser::Event::START_TAG);
 			REQUIRE(Parser.get_text() == "br");
@@ -117,9 +110,6 @@ TEST_CASE("Tagsoup pull parser emits whitespace as is",
 
 	TagSoupPullParser xpp(input_stream);
 	TagSoupPullParser::Event e;
-
-	e = xpp.get_event_type();
-	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
 	e = xpp.next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
@@ -174,9 +164,6 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 			TagSoupPullParser xpp(input_stream);
 			TagSoupPullParser::Event e;
 
-			e = xpp.get_event_type();
-			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
-
 			e = xpp.next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
 			REQUIRE(xpp.get_text() == "\x14*½…σ");
@@ -191,9 +178,6 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 
 			TagSoupPullParser xpp(input_stream);
 			TagSoupPullParser::Event e;
-
-			e = xpp.get_event_type();
-			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
 			e = xpp.next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
@@ -213,9 +197,6 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 			TagSoupPullParser xpp(input_stream);
 			TagSoupPullParser::Event e;
 
-			e = xpp.get_event_type();
-			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
-
 			e = xpp.next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
 			REQUIRE(xpp.get_text() ==
@@ -231,9 +212,6 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
-
-		e = xpp.get_event_type();
-		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
 		e = xpp.next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
@@ -253,9 +231,6 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
 
-		e = xpp.get_event_type();
-		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
-
 		e = xpp.next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
 		REQUIRE(xpp.get_text() == "some & text");
@@ -270,9 +245,6 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
 
-		e = xpp.get_event_type();
-		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
-
 		e = xpp.next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
 		REQUIRE(xpp.get_text() == "some &more; text");
@@ -286,9 +258,6 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
-
-		e = xpp.get_event_type();
-		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
 		e = xpp.next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
