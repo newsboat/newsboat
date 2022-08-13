@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_TAGSOUPPULLPARSER_H_
 #define NEWSBOAT_TAGSOUPPULLPARSER_H_
 
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -19,15 +20,16 @@ public:
 		TEXT
 	};
 
-	TagSoupPullParser(std::istream& is);
-	virtual ~TagSoupPullParser();
+	TagSoupPullParser(std::string s);
+	~TagSoupPullParser() = default;
 	nonstd::optional<std::string> get_attribute_value(const std::string& name) const;
 	Event get_event_type() const;
 	std::string get_text() const;
 	Event next();
 
+
 private:
-	std::istream& inputstream;
+	std::istringstream inputstream;
 
 	typedef std::pair<std::string, std::string> Attribute;
 	std::vector<Attribute> attributes;

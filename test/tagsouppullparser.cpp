@@ -1,6 +1,6 @@
 #include "tagsouppullparser.h"
 
-#include <sstream>
+#include <string>
 
 #include "3rd-party/catch.hpp"
 
@@ -9,7 +9,7 @@ using namespace newsboat;
 TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	"[TagSoupPullParser]")
 {
-	std::istringstream input_stream(
+	std::string input_stream(
 		"<test>"
 		"<foo quux='asdf' bar=\"qqq\">text</foo>"
 		"more text"
@@ -81,14 +81,13 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 
 TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 {
-	std::istringstream input_stream;
 	TagSoupPullParser::Event event;
 
 	for (auto input : {
 			"<br>", "<br/>", "<br />"
 		}) {
 		SECTION(input) {
-			input_stream.str(input);
+			std::string input_stream(input);
 			TagSoupPullParser Parser(input_stream);
 
 			event = Parser.get_event_type();
@@ -109,7 +108,7 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 TEST_CASE("Tagsoup pull parser emits whitespace as is",
 	"[TagSoupPullParser]")
 {
-	std::istringstream input_stream(
+	std::string input_stream(
 		"<test>    &lt;4 spaces\n"
 		"<pre>\n"
 		"    <span>should have seen spaces</span>"
@@ -170,7 +169,7 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 	SECTION("Numbered entites") {
 		SECTION("Decimal") {
 			// 133 designates a horizontal ellipsis
-			std::istringstream input_stream("&#020;&#42;&#189;&#133;&#963;");
+			std::string input_stream("&#020;&#42;&#189;&#133;&#963;");
 
 			TagSoupPullParser xpp(input_stream);
 			TagSoupPullParser::Event e;
@@ -188,7 +187,7 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 
 		SECTION("Hexadecimal") {
 			// x97 designates an mdash
-			std::istringstream input_stream("&#x97;&#x20;&#x048;&#x0069;");
+			std::string input_stream("&#x97;&#x20;&#x048;&#x0069;");
 
 			TagSoupPullParser xpp(input_stream);
 			TagSoupPullParser::Event e;
@@ -205,7 +204,7 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 		}
 
 		SECTION("Windows codepoints") {
-			std::istringstream input_stream(
+			std::string input_stream(
 				"&#x80;&#x82;&#x83;&#x84;&#x85;&#x86;&#x87;"
 				"&#x88;&#x89;&#x8A;&#x8B;&#x8C;&#x8E;&#x91;"
 				"&#x92;&#x93;&#x94;&#x95;&#x96;&#x97;&#x98;"
@@ -228,7 +227,7 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 	}
 
 	SECTION("Named entities") {
-		std::istringstream input_stream("&sigma;&trade;");
+		std::string input_stream("&sigma;&trade;");
 
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
@@ -249,7 +248,7 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 	"[TagSoupPullParser]")
 {
 	SECTION("Missing semicolon") {
-		std::istringstream input_stream("some & text");
+		std::string input_stream("some & text");
 
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
@@ -266,7 +265,7 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 	}
 
 	SECTION("Unknown entity") {
-		std::istringstream input_stream("some &more; text");
+		std::string input_stream("some &more; text");
 
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;
@@ -283,7 +282,7 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 	}
 
 	SECTION("Valid entities after invalid entities") {
-		std::istringstream input_stream("a lone ampersand: &, and some entities: &lt;&gt;");
+		std::string input_stream("a lone ampersand: &, and some entities: &lt;&gt;");
 
 		TagSoupPullParser xpp(input_stream);
 		TagSoupPullParser::Event e;

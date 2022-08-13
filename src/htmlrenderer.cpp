@@ -6,7 +6,6 @@
 #include <cstring>
 #include <iostream>
 #include <libgen.h>
-#include <sstream>
 #include <stdexcept>
 
 #include "config.h"
@@ -66,8 +65,17 @@ void HtmlRenderer::render(const std::string& source,
 	std::vector<LinkPair>& links,
 	const std::string& url)
 {
-	std::istringstream input(source);
-	render(input, lines, links, url);
+	/*
+	 * to render the HTML, we use a self-developed "XML" pull parser.
+	 *
+	 * A pull parser works like this:
+	 *   - we feed it with an XML stream
+	 *   - we then gather an iterator
+	 *   - we then can iterate over all continuous elements, such as start
+	 * tag, close tag, text element, ...
+	 */
+	TagSoupPullParser xpp(source);
+	render(xpp, lines, links, url);
 }
 
 unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
@@ -100,7 +108,7 @@ HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
 	return tags[tagname];
 }
 
-void HtmlRenderer::render(std::istream& input,
+void HtmlRenderer::render(TagSoupPullParser& xpp,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	std::vector<LinkPair>& links,
 	const std::string& url)
@@ -125,17 +133,6 @@ void HtmlRenderer::render(std::istream& input,
 	std::vector<char> ol_types;
 	int link_num = -1;
 	std::vector<Table> tables;
-
-	/*
-	 * to render the HTML, we use a self-developed "XML" pull parser.
-	 *
-	 * A pull parser works like this:
-	 *   - we feed it with an XML stream
-	 *   - we then gather an iterator
-	 *   - we then can iterate over all continuous elements, such as start
-	 * tag, close tag, text element, ...
-	 */
-	TagSoupPullParser xpp(input);
 
 	for (TagSoupPullParser::Event e = xpp.next();
 		e != TagSoupPullParser::Event::END_DOCUMENT;

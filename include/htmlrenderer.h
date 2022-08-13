@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_HTMLRENDERER_H_
 #define NEWSBOAT_HTMLRENDERER_H_
 
-#include <istream>
 #include <map>
 #include <string>
 #include <vector>
@@ -64,10 +63,6 @@ public:
 		std::vector<std::pair<LineType, std::string>>& lines,
 		std::vector<LinkPair>& links,
 		const std::string& url);
-	void render(std::istream& input,
-		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<LinkPair>& links,
-		const std::string& url);
 	static std::string render_hr(const unsigned int width);
 	// only public for unit testing purposes:
 	std::string format_ol_count(unsigned int count, char type);
@@ -114,6 +109,10 @@ public:
 	};
 
 private:
+	void render(TagSoupPullParser& xpp,
+		std::vector<std::pair<LineType, std::string>>& lines,
+		std::vector<LinkPair>& links,
+		const std::string& url);
 	void prepare_new_line(std::string& line, int indent_level);
 	bool line_is_nonempty(const std::string& line);
 	unsigned int add_link(std::vector<LinkPair>& links,

@@ -22,13 +22,11 @@ namespace newsboat {
  * remotely looks like XML. We use this parser for the HTML renderer.
  */
 
-TagSoupPullParser::TagSoupPullParser(std::istream& is)
-	: inputstream(is)
+TagSoupPullParser::TagSoupPullParser(std::string s)
+	: inputstream(s)
 	, current_event(Event::START_DOCUMENT)
 {
 }
-
-TagSoupPullParser::~TagSoupPullParser() {}
 
 nonstd::optional<std::string> TagSoupPullParser::get_attribute_value(
 	const std::string& name) const
@@ -86,7 +84,7 @@ TagSoupPullParser::Event TagSoupPullParser::next()
 	case Event::END_DOCUMENT:
 		break;
 	}
-	return get_event_type();
+	return current_event;
 }
 
 void TagSoupPullParser::add_attribute(std::string s)
