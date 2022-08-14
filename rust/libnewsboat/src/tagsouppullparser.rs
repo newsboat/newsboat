@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::logger::{self, Level};
 use crate::utils;
 
@@ -7,68 +9,58 @@ use crate::utils;
  * remotely looks like XML. We use this parser for the HTML renderer.
  */
 
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
+#[derive(Clone, PartialEq, Eq, Debug)]
 pub enum Event {
-    StartDocument,
-    EndDocument,
-    StartTag,
-    EndTag,
-    Text,
+    StartTag(String, HashMap<String, String>),
+    EndTag(String),
+    Text(String),
 }
-
-type Attribute = (String, String);
 
 pub struct TagSoupPullParser {
     /// characters of the source in reverse order
     chars: Vec<char>,
-    attributes: Vec<Attribute>,
+    attributes: HashMap<String, String>,
     text: String,
-    current_event: Event,
+    current_event: Option<Event>,
+}
+
+impl Iterator for TagSoupPullParser {
+    type Item = Event;
+
+    /// the next() method returns the next event by parsing the
+    /// next element of the XML stream, depending on the current
+    /// event.
+    fn next(&mut self) -> Option<Self::Item> {
+        self.attributes.clear();
+        self.text.clear();
+
+        if self.chars.is_empty() {
+            return None;
+        }
+
+        self.current_event = match &self.current_event {
+            &None | &Some(Event::StartTag(_, _)) | &Some(Event::EndTag(_)) => {
+                match self.chars.pop() {
+                    None => None,
+                    Some('<') => self.handle_tag(),
+                    Some(c) => Some(self.handle_text(c)),
+                }
+            }
+            &Some(Event::Text(_)) => self.handle_tag(),
+        };
+
+        self.current_event.clone()
+    }
 }
 
 impl TagSoupPullParser {
     pub fn new(source: String) -> Self {
         TagSoupPullParser {
             chars: source.chars().rev().collect(),
-            attributes: Vec::new(),
+            attributes: HashMap::new(),
             text: String::new(),
-            current_event: Event::StartDocument,
+            current_event: None,
         }
-    }
-
-    pub fn get_attribute_value(&self, name: &str) -> Option<String> {
-        self.attributes
-            .iter()
-            .find(|(key, _)| key == name)
-            .map(|(_, value)| value.clone())
-    }
-
-    pub fn get_text(&self) -> String {
-        self.text.clone()
-    }
-
-    /// the next() method returns the next event by parsing the
-    /// next element of the XML stream, depending on the current
-    /// event.
-    pub fn next(&mut self) -> Event {
-        self.attributes.clear();
-        self.text.clear();
-
-        if self.chars.is_empty() {
-            return Event::EndDocument;
-        }
-
-        self.current_event = match self.current_event {
-            Event::StartDocument | Event::StartTag | Event::EndTag => match self.chars.pop() {
-                None => Event::EndDocument,
-                Some('<') => self.handle_tag(),
-                Some(c) => self.handle_text(c),
-            },
-            Event::Text => self.handle_tag(),
-            Event::EndDocument => Event::EndDocument,
-        };
-
-        self.current_event
     }
 
     fn read_tag(&mut self) -> Option<String> {
@@ -82,13 +74,11 @@ impl TagSoupPullParser {
         None
     }
 
-    fn handle_tag(&mut self) -> Event {
-        if let Some(s) = self.read_tag() {
+    fn handle_tag(&mut self) -> Option<Event> {
+        self.read_tag().map(|s| {
             self.parse_tag(&s);
             self.determine_tag_type()
-        } else {
-            Event::EndDocument
-        }
+        })
     }
 
     fn handle_text(&mut self, c: char) -> Event {
@@ -101,15 +91,15 @@ impl TagSoupPullParser {
         }
         self.text = decode_entities(&self.text);
         utils::remove_soft_hyphens(&mut self.text);
-        Event::Text
+        Event::Text(self.text.clone())
     }
 
     fn determine_tag_type(&mut self) -> Event {
         if self.text.starts_with('/') {
             self.text.remove(0);
-            Event::EndTag
+            Event::EndTag(self.text.clone())
         } else {
-            Event::StartTag
+            Event::StartTag(self.text.clone(), self.attributes.clone())
         }
     }
 
@@ -146,7 +136,8 @@ impl TagSoupPullParser {
         }
         let (name, value) = s.split_once('=').unwrap_or((s, s));
         self.attributes
-            .push((name.to_lowercase(), decode_attribute(value)));
+            .entry(name.to_lowercase())
+            .or_insert_with(|| decode_attribute(value));
     }
 }
 
@@ -542,21 +533,41 @@ const ENTITY_TABLE: &[(&'static str, u32)] = &[
 mod tests {
     use super::*;
 
+    macro_rules! event {
+        (Text, $content:expr) => {
+            Some(Event::Text($content.to_string()))
+        };
+        (End, $tag:expr) => {
+            Some(Event::EndTag($tag.to_string()))
+        };
+        (Start, $tag:expr, $attr:expr) => {
+            Some(Event::StartTag(
+                $tag.to_string(),
+                $attr
+                    .iter()
+                    .map(|(k, v)| (k.to_string(), v.to_string()))
+                    .collect(),
+            ))
+        };
+        (Start, $tag:expr) => {
+            Some(Event::StartTag($tag.to_string(), HashMap::new()))
+        };
+        () => {
+            None
+        };
+    }
+
     macro_rules! expect_text {
         ($name:ident, $input:literal, $expected:literal) => {
             #[test]
             fn $name() {
                 let mut xpp = TagSoupPullParser::new($input.to_string());
 
-                let event = xpp.current_event;
-                assert_eq!(event, Event::StartDocument);
+                let event = xpp.next();
+                assert_eq!(event, event!(Text, $expected));
 
                 let event = xpp.next();
-                assert_eq!(event, Event::Text);
-                assert_eq!(xpp.get_text(), $expected.to_string());
-
-                let event = xpp.next();
-                assert_eq!(event, Event::EndDocument);
+                assert_eq!(event, None);
             }
         };
     }
@@ -565,15 +576,15 @@ mod tests {
     fn t_br_tags_behave_the_same_way() {
         for input in ["<br>", "<br/>", "<br />"] {
             let mut xpp = TagSoupPullParser::new(input.to_string());
-            let event = xpp.current_event;
-            assert_eq!(event, Event::StartDocument);
 
             let event = xpp.next();
-            assert_eq!(event, Event::StartTag);
-            assert_eq!(xpp.get_text(), "br");
+            assert_eq!(
+                event,
+                Some(Event::StartTag("br".to_string(), HashMap::new()))
+            );
 
             let event = xpp.next();
-            assert_eq!(event, Event::EndDocument);
+            assert_eq!(event, None);
         }
     }
 
@@ -623,63 +634,51 @@ mod tests {
 
         let mut xpp = TagSoupPullParser::new(input.to_string());
 
-        let e = xpp.current_event;
-        assert_eq!(e, Event::StartDocument);
+        let e = xpp.next();
+        assert_eq!(e, event!(Start, "test"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "test");
+        assert_eq!(e, event!(Start, "foo", [("quux", "asdf"), ("bar", "qqq")]));
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "foo");
-        assert_eq!(xpp.get_attribute_value("quux"), Some("asdf".to_string()));
-        assert_eq!(xpp.get_attribute_value("bar"), Some("qqq".to_string()));
+        assert_eq!(e, event!(Text, "text"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::Text);
-        assert_eq!(xpp.get_text(), "text");
+        assert_eq!(e, event!(End, "foo"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "foo");
+        assert_eq!(e, event!(Text, "more text"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::Text);
-        assert_eq!(xpp.get_text(), "more text");
+        assert_eq!(e, event!(Start, "more"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "more");
+        assert_eq!(e, event!(Text, "\"!@"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::Text);
-        assert_eq!(xpp.get_text(), "\"!@");
+        assert_eq!(e, event!(End, "more"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "more");
+        assert_eq!(
+            e,
+            event!(
+                Start,
+                "xxx",
+                [("foo", "bar"), ("baz", "qu ux"), ("hi", "ho ho ho")]
+            )
+        );
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "xxx");
-        assert_eq!(xpp.get_attribute_value("foo"), Some("bar".to_string()));
-        assert_eq!(xpp.get_attribute_value("baz"), Some("qu ux".to_string()));
-        assert_eq!(xpp.get_attribute_value("hi"), Some("ho ho ho".to_string()));
+        assert_eq!(e, event!(End, "xxx"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "xxx");
+        assert_eq!(e, event!(End, "test"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "test");
+        assert_eq!(e, None);
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndDocument);
-
-        let e = xpp.next();
-        assert_eq!(e, Event::EndDocument);
+        assert_eq!(e, None);
     }
 
     #[test]
@@ -689,49 +688,37 @@ mod tests {
 
         let mut xpp = TagSoupPullParser::new(input.to_string());
 
-        let e = xpp.current_event;
-        assert_eq!(e, Event::StartDocument);
+        let e = xpp.next();
+        assert_eq!(e, event!(Start, "test"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "test");
+        assert_eq!(e, Some(Event::Text("    <4 spaces\n".to_string())));
 
         let e = xpp.next();
-        assert_eq!(e, Event::Text);
-        assert_eq!(xpp.get_text(), "    <4 spaces\n");
+        assert_eq!(e, event!(Start, "pre"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "pre");
+        assert_eq!(e, Some(Event::Text("\n    ".to_string())));
 
         let e = xpp.next();
-        assert_eq!(e, Event::Text);
-        assert_eq!(xpp.get_text(), "\n    ");
+        assert_eq!(e, event!(Start, "span"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::StartTag);
-        assert_eq!(xpp.get_text(), "span");
+        assert_eq!(e, Some(Event::Text("should have seen spaces".to_string())));
 
         let e = xpp.next();
-        assert_eq!(e, Event::Text);
-        assert_eq!(xpp.get_text(), "should have seen spaces");
+        assert_eq!(e, event!(End, "span"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "span");
+        assert_eq!(e, event!(End, "pre"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "pre");
+        assert_eq!(e, event!(End, "test"));
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndTag);
-        assert_eq!(xpp.get_text(), "test");
+        assert_eq!(e, None);
 
         let e = xpp.next();
-        assert_eq!(e, Event::EndDocument);
-
-        let e = xpp.next();
-        assert_eq!(e, Event::EndDocument);
+        assert_eq!(e, None);
     }
 }

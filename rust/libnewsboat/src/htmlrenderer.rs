@@ -272,29 +272,27 @@ impl HtmlRenderer {
         let mut ol_types = Vec::new();
         let mut tables = Vec::new();
 
-        loop {
-            let e = xpp.next();
-            if e == Event::EndDocument {
-                break;
-            }
+        while let Some(e) = xpp.next() {
             if inside_script {
                 // <script> tags can't be nested[1], so we simply ignore all input
                 // while we're looking for the closing tag.
                 //
                 // 1. https://rules.sonarsource.com/html/RSPEC-4645
 
-                if e == Event::EndTag && self.extract_tag(&mut xpp) == HtmlTag::SCRIPT {
-                    inside_script = false;
+                if let Event::EndTag(tag) = &e {
+                    if self.extract_tag(&tag) == HtmlTag::SCRIPT {
+                        inside_script = false;
+                    }
                 }
 
                 // Go on to the next XML node
                 continue;
             }
             match e {
-                Event::StartTag => {
-                    match self.extract_tag(&mut xpp) {
+                Event::StartTag(tag, attr) => {
+                    match self.extract_tag(&tag) {
                         HtmlTag::A => {
-                            if let Some(link) = xpp.get_attribute_value("href") {
+                            if let Some(link) = attr.get("href") {
                                 if link.len() > 0 {
                                     link_num = add_link(
                                         links,
@@ -328,9 +326,9 @@ impl HtmlRenderer {
                             }
                         }
                         HtmlTag::EMBED => {
-                            if let Some(type_) = xpp.get_attribute_value("type") {
+                            if let Some(type_) = attr.get("type") {
                                 if type_ == "application/x-shockwave-flash" {
-                                    if let Some(link) = xpp.get_attribute_value("src") {
+                                    if let Some(link) = attr.get("src") {
                                         if link.len() > 0 {
                                             link_num = add_link(
                                                 links,
@@ -354,15 +352,17 @@ impl HtmlRenderer {
                             }
                         }
                         HtmlTag::IFRAME => {
-                            let iframe_url = xpp.get_attribute_value("src").unwrap_or_else(|| {
-                                log!(
+                            let iframe_url =
+                                attr.get("src").map(|s| s.as_str()).unwrap_or_else(|| {
+                                    log!(
                                     Level::Warn,
                                     "HtmlRenderer::render: found iframe tag without src attribute"
                                 );
-                                String::new()
-                            });
+                                    ""
+                                });
 
-                            let iframe_title = xpp.get_attribute_value("title").unwrap_or_default();
+                            let iframe_title =
+                                attr.get("title").map(|s| s.as_str()).unwrap_or_default();
 
                             if !iframe_url.is_empty() {
                                 add_nonempty_line(&curline, &mut tables, lines);
@@ -411,18 +411,20 @@ impl HtmlRenderer {
                             itunes_hack = true;
                         }
                         HtmlTag::IMG => {
-                            let img_url = xpp.get_attribute_value("src").unwrap_or_else(|| {
-                                log!(
-                                    Level::Warn,
-                                    "HtmlRenderer::render: found img tag with no src attribute"
-                                );
-                                String::new()
-                            });
+                            let img_url =
+                                attr.get("src").map(|s| s.as_str()).unwrap_or_else(|| {
+                                    log!(
+                                        Level::Warn,
+                                        "HtmlRenderer::render: found img tag with no src attribute"
+                                    );
+                                    ""
+                                });
 
                             // Prefer `alt' over `title'
-                            let mut img_label = xpp.get_attribute_value("alt").unwrap_or_default();
+                            let mut img_label =
+                                attr.get("alt").map(|s| s.as_str()).unwrap_or_default();
                             if img_label.is_empty() {
-                                if let Some(title) = xpp.get_attribute_value("title") {
+                                if let Some(title) = attr.get("title") {
                                     img_label = title;
                                 }
                             }
@@ -466,20 +468,18 @@ impl HtmlRenderer {
                         HtmlTag::OL => {
                             list_elements_stack.push(HtmlTag::OL);
 
-                            let ol_count_str =
-                                xpp.get_attribute_value("start").unwrap_or("1".to_string());
-                            let ol_count = utils::to_u(ol_count_str, 1);
+                            let ol_count_str = attr.get("start").map(|s| s.as_str()).unwrap_or("1");
+                            let ol_count = utils::to_u(ol_count_str.to_string(), 1);
                             ol_counts.push(ol_count);
 
-                            let mut ol_type =
-                                xpp.get_attribute_value("type").unwrap_or("1".to_string());
+                            let mut ol_type = attr.get("type").map(|s| s.as_str()).unwrap_or("1");
                             if ol_type != "1"
                                 && ol_type != "a"
                                 && ol_type != "A"
                                 && ol_type != "i"
                                 && ol_type != "I"
                             {
-                                ol_type = "1".to_string();
+                                ol_type = "1";
                             }
                             // TODO: could the attribute value be empty?
                             ol_types
@@ -579,9 +579,9 @@ impl HtmlRenderer {
                             add_nonempty_line(&curline, &mut tables, lines);
                             curline = prepare_new_line(0); // no indent in tables
 
-                            let has_border = xpp
-                                .get_attribute_value("border")
-                                .map(|b| utils::to_u(b, 0) > 0)
+                            let has_border = attr
+                                .get("border")
+                                .map(|b| utils::to_u(b.clone(), 0) > 0)
                                 .unwrap_or(false);
                             tables.push(Table::new(has_border));
                         }
@@ -591,9 +591,9 @@ impl HtmlRenderer {
                             }
                         }
                         HtmlTag::TH => {
-                            let span = xpp
-                                .get_attribute_value("colspan")
-                                .map(|colspan| utils::to_u(colspan, 1))
+                            let span = attr
+                                .get("colspan")
+                                .map(|colspan| utils::to_u(colspan.clone(), 1))
                                 .unwrap_or(1);
                             if let Some(last) = tables.last_mut() {
                                 last.start_cell(span);
@@ -601,9 +601,9 @@ impl HtmlRenderer {
                             curline += "<b>";
                         }
                         HtmlTag::TD => {
-                            let span = xpp
-                                .get_attribute_value("colspan")
-                                .map(|colspan| utils::to_u(colspan, 1))
+                            let span = attr
+                                .get("colspan")
+                                .map(|colspan| utils::to_u(colspan.clone(), 1))
                                 .unwrap_or(1);
                             if let Some(last) = tables.last_mut() {
                                 last.start_cell(span);
@@ -637,8 +637,7 @@ impl HtmlRenderer {
                             // <source> elements
                             video_count += 1;
 
-                            let video_url = xpp.get_attribute_value("src").unwrap_or_default();
-
+                            let video_url = attr.get("src").map(|s| s.as_str()).unwrap_or_default();
                             if !video_url.is_empty() {
                                 // Video source retrieved from `src'
                                 // attribute
@@ -688,7 +687,7 @@ impl HtmlRenderer {
                             // <source> elements
                             audio_count += 1;
 
-                            let audio_url = xpp.get_attribute_value("src").unwrap_or_default();
+                            let audio_url = attr.get("src").map(|s| s.as_str()).unwrap_or_default();
                             if !audio_url.is_empty() {
                                 // Audio source retrieved from `src'
                                 // attribute
@@ -711,13 +710,14 @@ impl HtmlRenderer {
                             }
                         }
                         HtmlTag::SOURCE => {
-                            let source_url = xpp.get_attribute_value("src").unwrap_or_else(|| {
-                                log!(
+                            let source_url =
+                                attr.get("src").map(|s| s.as_str()).unwrap_or_else(|| {
+                                    log!(
                                     Level::Warn,
                                     "HtmlRenderer::render: found source tag with no src attribute"
                                 );
-                                String::new()
-                            });
+                                    ""
+                                });
 
                             if inside_video && !source_url.is_empty() {
                                 source_count += 1;
@@ -761,8 +761,8 @@ impl HtmlRenderer {
                         _ => {}
                     }
                 }
-                Event::EndTag => {
-                    let tag = self.extract_tag(&mut xpp);
+                Event::EndTag(tag) => {
+                    let tag = self.extract_tag(&tag);
                     match tag {
                         HtmlTag::BLOCKQUOTE => {
                             indent_level -= 1;
@@ -989,8 +989,7 @@ impl HtmlRenderer {
                         _ => {}
                     }
                 }
-                Event::Text => {
-                    let mut text = xpp.get_text();
+                Event::Text(mut text) => {
                     if !raw_ {
                         text = utils::quote_for_stfl(&text);
                     }
@@ -1045,9 +1044,6 @@ impl HtmlRenderer {
                         curline += &text;
                     }
                 }
-                _ => {
-                    // do nothing
-                }
             }
         }
 
@@ -1091,8 +1087,8 @@ impl HtmlRenderer {
         result
     }
 
-    fn extract_tag(&self, parser: &mut TagSoupPullParser) -> HtmlTag {
-        let tagname = parser.get_text().to_lowercase();
+    fn extract_tag(&self, tag: &str) -> HtmlTag {
+        let tagname = tag.to_lowercase();
         *self.tags.get(tagname.as_str()).unwrap_or(&HtmlTag::Unknown)
     }
 }
