@@ -67,6 +67,7 @@ public:
 	// only public for unit testing purposes:
 	std::string format_ol_count(unsigned int count, char type);
 
+private:
 	struct TableCell {
 		explicit TableCell(size_t s)
 			: span(s)
@@ -108,7 +109,6 @@ public:
 		std::vector<TableRow> rows;
 	};
 
-private:
 	void render(TagSoupPullParser& xpp,
 		std::vector<std::pair<LineType, std::string>>& lines,
 		std::vector<LinkPair>& links,
