@@ -272,6 +272,15 @@ impl HtmlRenderer {
         let mut ol_types = Vec::new();
         let mut tables = Vec::new();
 
+        macro_rules! indent {
+            () => {
+                indent!(if !tables.is_empty() { 0 } else { indent_level })
+            };
+            ($value:expr) => {
+                prepare_new_line($value)
+            };
+        }
+
         while let Some(e) = xpp.next() {
             if inside_script {
                 // <script> tags can't be nested[1], so we simply ignore all input
@@ -326,26 +335,24 @@ impl HtmlRenderer {
                             }
                         }
                         HtmlTag::EMBED => {
-                            if let Some(type_) = attr.get("type") {
-                                if type_ == "application/x-shockwave-flash" {
-                                    if let Some(link) = attr.get("src") {
-                                        if link.len() > 0 {
-                                            link_num = add_link(
-                                                links,
-                                                &utils::censor_url(&utils::absolute_url(
-                                                    url, &link,
-                                                )),
-                                                LinkType::Embed,
-                                            );
-                                            curline += &format!(
-                                                "[{} {}]",
-                                                gettext("embedded flash:"),
-                                                link_num
-                                            );
-                                        }
-                                    } else {
-                                        log!(Level::Warn, "HtmlRenderer::render: found embed object without src attribute");
+                            if let Some("application/x-shockwave-flash") =
+                                attr.get("type").map(|s| s.as_str())
+                            {
+                                if let Some(link) = attr.get("src") {
+                                    if !link.is_empty() {
+                                        link_num = add_link(
+                                            links,
+                                            &utils::censor_url(&utils::absolute_url(url, &link)),
+                                            LinkType::Embed,
+                                        );
+                                        curline += &format!(
+                                            "[{} {}]",
+                                            gettext("embedded flash:"),
+                                            link_num
+                                        );
                                     }
+                                } else {
+                                    log!(Level::Warn, "HtmlRenderer::render: found embed object without src attribute");
                                 }
                             } else {
                                 log!(Level::Warn, "HtmlRenderer::render: found embed object without type attribute");
@@ -372,11 +379,7 @@ impl HtmlRenderer {
                                     }
                                 }
 
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
 
                                 iframe_count += 1;
                                 curline += &add_media_link(
@@ -388,24 +391,18 @@ impl HtmlRenderer {
                                     LinkType::Iframe,
                                 );
                                 add_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
                         }
                         HtmlTag::BR => {
                             add_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::PRE => {
                             inside_pre = true;
                             pre_just_started = true;
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::ITUNESHACK => {
                             itunes_hack = true;
@@ -444,8 +441,7 @@ impl HtmlRenderer {
                             indent_level += 1;
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
 
                         HtmlTag::H1
@@ -462,14 +458,13 @@ impl HtmlRenderer {
                                     add_line("", &mut tables, lines);
                                 }
                             }
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::OL => {
                             list_elements_stack.push(HtmlTag::OL);
 
                             let ol_count_str = attr.get("start").map(|s| s.as_str()).unwrap_or("1");
-                            let ol_count = utils::to_u(ol_count_str.to_string(), 1);
+                            let ol_count = ol_count_str.parse().unwrap_or(1);
                             ol_counts.push(ol_count);
 
                             let mut ol_type = attr.get("type").map(|s| s.as_str()).unwrap_or("1");
@@ -487,15 +482,13 @@ impl HtmlRenderer {
 
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::UL => {
                             list_elements_stack.push(HtmlTag::UL);
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::LI => {
                             if list_elements_stack.last() == Some(&HtmlTag::LI) {
@@ -505,17 +498,12 @@ impl HtmlRenderer {
                                     indent_level = 0;
                                 }
                                 add_nonempty_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
 
                             list_elements_stack.push(HtmlTag::LI);
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                             indent_level += 2;
 
                             let latest_list = list_elements_stack
@@ -540,14 +528,12 @@ impl HtmlRenderer {
                         }
                         HtmlTag::DT => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::DD => {
                             indent_level += 4;
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::DL => {
                             // ignore tag
@@ -560,14 +546,12 @@ impl HtmlRenderer {
                         }
                         HtmlTag::HR => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                             add_hr(lines);
                         }
                         HtmlTag::SCRIPT => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
 
                             // don't render scripts, ignore current line
                             inside_script = true;
@@ -577,11 +561,11 @@ impl HtmlRenderer {
                         }
                         HtmlTag::TABLE => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline = prepare_new_line(0); // no indent in tables
+                            curline = indent!(0); // no indent in tables
 
                             let has_border = attr
                                 .get("border")
-                                .map(|b| utils::to_u(b.clone(), 0) > 0)
+                                .map(|b| b.parse::<u32>().unwrap_or(0) > 0)
                                 .unwrap_or(false);
                             tables.push(Table::new(has_border));
                         }
@@ -593,7 +577,7 @@ impl HtmlRenderer {
                         HtmlTag::TH => {
                             let span = attr
                                 .get("colspan")
-                                .map(|colspan| utils::to_u(colspan.clone(), 1))
+                                .and_then(|colspan| colspan.parse().ok())
                                 .unwrap_or(1);
                             if let Some(last) = tables.last_mut() {
                                 last.start_cell(span);
@@ -603,7 +587,7 @@ impl HtmlRenderer {
                         HtmlTag::TD => {
                             let span = attr
                                 .get("colspan")
-                                .map(|colspan| utils::to_u(colspan.clone(), 1))
+                                .and_then(|colspan| colspan.parse().ok())
                                 .unwrap_or(1);
                             if let Some(last) = tables.last_mut() {
                                 last.start_cell(span);
@@ -652,11 +636,7 @@ impl HtmlRenderer {
                                 );
 
                                 add_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
                         }
                         HtmlTag::AUDIO => {
@@ -702,11 +682,7 @@ impl HtmlRenderer {
                                 );
 
                                 add_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
                         }
                         HtmlTag::SOURCE => {
@@ -731,11 +707,7 @@ impl HtmlRenderer {
                                 );
 
                                 add_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
 
                             if inside_audio && !source_url.is_empty() {
@@ -750,11 +722,7 @@ impl HtmlRenderer {
                                 );
 
                                 add_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
                         }
 
@@ -771,8 +739,7 @@ impl HtmlRenderer {
                             }
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::OL | HtmlTag::UL => {
                             if tag == HtmlTag::OL && !ol_types.is_empty() {
@@ -786,23 +753,17 @@ impl HtmlRenderer {
                                     indent_level = 0;
                                 }
                                 add_nonempty_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
                             list_elements_stack.pop();
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::DT => {
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::DD => {
                             indent_level -= 4;
@@ -811,8 +772,7 @@ impl HtmlRenderer {
                             }
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::DL => {
                             // ignore tag
@@ -826,8 +786,7 @@ impl HtmlRenderer {
                                 list_elements_stack.pop();
                             }
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::H1 => {
                             if line_is_nonempty(&curline) {
@@ -835,8 +794,7 @@ impl HtmlRenderer {
                                 let llen = utils::strwidth_stfl(&curline);
                                 add_line(&"-".repeat(llen), &mut tables, lines);
                             }
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::H2
                         | HtmlTag::H3
@@ -846,19 +804,14 @@ impl HtmlRenderer {
                         | HtmlTag::P
                         | HtmlTag::DIV => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::PRE => {
                             if pre_consecutive_nl > 1 {
                                 lines.pop();
                             } else if pre_consecutive_nl == 0 {
                                 add_line_softwrappable(&curline, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                             }
                             inside_pre = false;
                             pre_just_started = false;
@@ -938,13 +891,11 @@ impl HtmlRenderer {
                                     }
                                 }
                             }
-                            curline =
-                                prepare_new_line(if !tables.is_empty() { 0 } else { indent_level });
+                            curline = indent!();
                         }
                         HtmlTag::TR => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline = prepare_new_line(0); // no indent in tables
-                                                           //
+                            curline = indent!(0); // no indent in tables
                             if let Some(last) = tables.last_mut() {
                                 last.complete_row();
                             }
@@ -955,7 +906,7 @@ impl HtmlRenderer {
                             }
 
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline = prepare_new_line(0); // no indent in tables
+                            curline = indent!(0); // no indent in tables
 
                             if let Some(last) = tables.last_mut() {
                                 last.complete_cell();
@@ -963,7 +914,7 @@ impl HtmlRenderer {
                         }
                         HtmlTag::TD => {
                             add_nonempty_line(&curline, &mut tables, lines);
-                            curline = prepare_new_line(0); // no indent in tables
+                            curline = indent!(0); // no indent in tables
 
                             if let Some(last) = tables.last_mut() {
                                 last.complete_cell();
@@ -998,11 +949,7 @@ impl HtmlRenderer {
                         for paragraph in paragraphs {
                             if paragraph != "\n" {
                                 add_nonempty_line(&curline, &mut tables, lines);
-                                curline = prepare_new_line(if !tables.is_empty() {
-                                    0
-                                } else {
-                                    indent_level
-                                });
+                                curline = indent!();
                                 curline += &paragraph;
                             }
                         }
@@ -1016,11 +963,7 @@ impl HtmlRenderer {
                                         continue;
                                     }
                                     add_line_softwrappable(&curline, lines);
-                                    curline = prepare_new_line(if !tables.is_empty() {
-                                        0
-                                    } else {
-                                        indent_level
-                                    });
+                                    curline = indent!();
                                     pre_consecutive_nl += 1;
                                 }
                             } else {
@@ -1040,7 +983,7 @@ impl HtmlRenderer {
                             curline.push(' ');
                         }
                         // strip newlines
-                        text = utils::replace_all(text, "\n", " ");
+                        text = text.replace("\n", " ");
                         curline += &text;
                     }
                 }
@@ -1133,18 +1076,13 @@ fn add_media_link(
 
 fn render_table(table: &Table, lines: &mut Vec<(LineType, String)>) {
     // get maximum number of cells
-    let mut cells: usize = 0;
+    let mut cells = 0;
     for row in &table.rows {
-        let mut count = 0;
-        for cell in &row.cells {
-            count += cell.span;
-        }
-        cells = cells.max(count as usize);
+        cells = cells.max(row.cells.iter().map(|cell| cell.span).sum());
     }
 
     // get width of each row
-    let mut cell_widths = Vec::new();
-    cell_widths.resize(cells, 0);
+    let mut cell_widths = vec![0; cells as usize];
     for row in &table.rows {
         for (i, cell) in row.cells.iter().enumerate() {
             let mut width = 0;
@@ -1162,9 +1100,9 @@ fn render_table(table: &Table, lines: &mut Vec<(LineType, String)>) {
     }
 
     let hsep = '-';
-    let mut vsep = '|';
+    let vsep = if table.has_border { '|' } else { ' ' };
     let hvsep = '+';
-    //
+
     // create a row separator
     let mut separator = String::new();
     if table.has_border {
@@ -1175,19 +1113,15 @@ fn render_table(table: &Table, lines: &mut Vec<(LineType, String)>) {
         separator.push(hvsep);
     }
 
-    if !table.has_border {
-        vsep = ' ';
-    }
-
     // render the table
     if table.has_border {
         lines.push((LineType::Nonwrappable, separator.clone()));
     }
 
-    for (row, _) in table.rows.iter().enumerate() {
+    for (i, row) in table.rows.iter().enumerate() {
         // calc height of this row
         let mut height = 0;
-        for cell in &table.rows[row].cells {
+        for cell in &row.cells {
             height = height.max(cell.text.len());
         }
 
@@ -1197,23 +1131,23 @@ fn render_table(table: &Table, lines: &mut Vec<(LineType, String)>) {
                 line.push(vsep);
             }
 
-            for (cell, _) in table.rows[row].cells.iter().enumerate() {
+            for (j, cell) in row.cells.iter().enumerate() {
                 let mut cell_width = 0;
-                if idx < table.rows[row].cells[cell].text.len() {
+                if idx < cell.text.len() {
                     log!(
                         Level::Debug,
                         "row = {} cell = {} text = {}",
-                        row,
-                        cell,
-                        table.rows[row].cells[cell].text[idx]
+                        i,
+                        j,
+                        cell.text[idx]
                     );
-                    cell_width = utils::strwidth_stfl(&table.rows[row].cells[cell].text[idx]);
-                    line += &table.rows[row].cells[cell].text[idx];
+                    cell_width = utils::strwidth_stfl(&cell.text[idx]);
+                    line += &cell.text[idx];
                 }
 
-                let mut reference_width = cell_widths[cell];
-                if table.rows[row].cells[cell].span > 1 {
-                    for ic in cell + 1..cell + table.rows[row].cells[cell].span as usize {
+                let mut reference_width = cell_widths[j];
+                if row.cells[j].span > 1 {
+                    for ic in j + 1..j + cell.span as usize {
                         reference_width += cell_widths[ic] + 1;
                     }
                 }
@@ -1229,7 +1163,7 @@ fn render_table(table: &Table, lines: &mut Vec<(LineType, String)>) {
                     line += &" ".repeat(reference_width - cell_width);
                 }
 
-                if cell < table.rows[row].cells.len() - 1 {
+                if j < row.cells.len() - 1 {
                     line.push(vsep);
                 }
             }
@@ -1263,8 +1197,7 @@ fn add_nonempty_line(line: &str, tables: &mut Vec<Table>, lines: &mut Vec<(LineT
 }
 
 fn line_is_nonempty(line: &str) -> bool {
-    line.chars()
-        .any(|c| !c.is_whitespace() && c != '\n' && c != '\r')
+    line.chars().any(|c| !c.is_whitespace())
 }
 
 fn prepare_new_line(indent_level: i32) -> String {
