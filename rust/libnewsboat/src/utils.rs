@@ -769,6 +769,30 @@ pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<Stri
     }
 }
 
+pub fn tokenize_spaced(s: &str, delimiters: Option<&str>) -> Vec<String> {
+    let delimiters = delimiters.unwrap_or(" \r\n\t");
+    let mut tokens = Vec::new();
+
+    let mut token = String::new();
+    let mut delims = false;
+    for c in s.chars() {
+        if delimiters.contains(c) != delims {
+            if !token.is_empty() {
+                tokens.push(token);
+            }
+            token = String::new();
+            delims = !delims;
+        }
+        token.push(c);
+    }
+
+    if !token.is_empty() {
+        tokens.push(token);
+    }
+
+    tokens
+}
+
 /// Tokenize strings, obeying quotes and throwing away comments that start with a '#'
 pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
     let mut tokens = Vec::new();
@@ -780,6 +804,30 @@ pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
             tokens.push(x);
         }
         todo = remainder;
+    }
+
+    tokens
+}
+
+pub fn tokenize_nl(s: &str, delimiters: Option<&str>) -> Vec<String> {
+    let delimiters = delimiters.unwrap_or("\r\n");
+    let mut tokens = Vec::new();
+
+    let mut token = String::new();
+    for c in s.chars() {
+        if delimiters.contains(c) {
+            if !token.is_empty() {
+                tokens.push(token);
+                token = String::new();
+            }
+            tokens.push("\n".to_string());
+        } else {
+            token.push(c);
+        }
+    }
+
+    if !token.is_empty() {
+        tokens.push(token);
     }
 
     tokens
