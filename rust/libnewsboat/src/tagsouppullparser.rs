@@ -16,15 +16,15 @@ pub enum Event {
     Text(String),
 }
 
-pub struct TagSoupPullParser {
+pub struct TagSoupPullParser<'a> {
     /// characters of the source in reverse order
-    chars: Vec<char>,
+    source: &'a str,
     attributes: HashMap<String, String>,
-    text: String,
+    text: &'a str,
     current_event: Option<Event>,
 }
 
-impl Iterator for TagSoupPullParser {
+impl Iterator for TagSoupPullParser<'_> {
     type Item = Event;
 
     /// the next() method returns the next event by parsing the
@@ -32,18 +32,19 @@ impl Iterator for TagSoupPullParser {
     /// event.
     fn next(&mut self) -> Option<Self::Item> {
         self.attributes.clear();
-        self.text.clear();
+        self.text = "";
 
-        if self.chars.is_empty() {
+        if self.source.is_empty() {
             return None;
         }
 
         self.current_event = match &self.current_event {
             &None | &Some(Event::StartTag(_, _)) | &Some(Event::EndTag(_)) => {
-                match self.chars.pop() {
-                    None => None,
-                    Some('<') => self.handle_tag(),
-                    Some(c) => Some(self.handle_text(c)),
+                if self.source.starts_with('<') {
+                    self.source = &self.source[1..];
+                    self.handle_tag()
+                } else {
+                    Some(self.handle_text())
                 }
             }
             &Some(Event::Text(_)) => self.handle_tag(),
@@ -53,25 +54,24 @@ impl Iterator for TagSoupPullParser {
     }
 }
 
-impl TagSoupPullParser {
-    pub fn new(source: String) -> Self {
+impl<'a> TagSoupPullParser<'a> {
+    pub fn new(source: &'a str) -> Self {
         TagSoupPullParser {
-            chars: source.chars().rev().collect(),
+            source,
             attributes: HashMap::new(),
-            text: String::new(),
+            text: "",
             current_event: None,
         }
     }
 
-    fn read_tag(&mut self) -> Option<String> {
-        let mut s = String::new();
-        while let Some(c) = self.chars.pop() {
-            if c == '>' {
-                return Some(s);
-            }
-            s.push(c);
+    fn read_tag(&mut self) -> Option<&'a str> {
+        if let Some((pre, post)) = self.source.split_once('>') {
+            self.source = post;
+            Some(pre)
+        } else {
+            self.source = "";
+            None
         }
-        None
     }
 
     fn handle_tag(&mut self) -> Option<Event> {
@@ -81,29 +81,28 @@ impl TagSoupPullParser {
         })
     }
 
-    fn handle_text(&mut self, c: char) -> Event {
-        self.text.push(c);
-        while let Some(c) = self.chars.pop() {
-            if c == '<' {
-                break;
-            }
-            self.text.push(c);
+    fn handle_text(&mut self) -> Event {
+        if let Some((pre, post)) = self.source.split_once('<') {
+            self.text = pre;
+            self.source = post;
+        } else {
+            self.text = self.source;
+            self.source = "";
         }
-        self.text = decode_entities(&self.text);
-        utils::remove_soft_hyphens(&mut self.text);
-        Event::Text(self.text.clone())
+        let mut text = decode_entities(self.text);
+        utils::remove_soft_hyphens(&mut text);
+        Event::Text(text)
     }
 
     fn determine_tag_type(&mut self) -> Event {
         if self.text.starts_with('/') {
-            self.text.remove(0);
-            Event::EndTag(self.text.clone())
+            Event::EndTag(self.text[1..].to_string())
         } else {
-            Event::StartTag(self.text.clone(), self.attributes.clone())
+            Event::StartTag(self.text.to_string(), self.attributes.clone())
         }
     }
 
-    fn parse_tag(&mut self, tagstr: &str) {
+    fn parse_tag(&mut self, tagstr: &'a str) {
         log!(Level::Debug, "parse_tag: parsing '{}'", tagstr);
 
         let tagstr = tagstr.trim_start();
@@ -112,11 +111,12 @@ impl TagSoupPullParser {
             .unwrap_or((tagstr, ""));
 
         // first token: tag name
-        self.text = tag.to_string();
-        if self.text.ends_with('/') {
+        self.text = if tag.ends_with('/') {
             // a kludge for <br/>
-            self.text.pop();
-        }
+            &tag[..tag.len() - 1]
+        } else {
+            tag
+        };
         log!(Level::Debug, "parse_tag: tag name = {}", self.text);
 
         while let Some((attr, rest)) = parse_next_attribute(s) {
@@ -561,7 +561,7 @@ mod tests {
         ($name:ident, $input:literal, $expected:literal) => {
             #[test]
             fn $name() {
-                let mut xpp = TagSoupPullParser::new($input.to_string());
+                let mut xpp = TagSoupPullParser::new($input);
 
                 let event = xpp.next();
                 assert_eq!(event, event!(Text, $expected));
@@ -575,7 +575,7 @@ mod tests {
     #[test]
     fn t_br_tags_behave_the_same_way() {
         for input in ["<br>", "<br/>", "<br />"] {
-            let mut xpp = TagSoupPullParser::new(input.to_string());
+            let mut xpp = TagSoupPullParser::new(input);
 
             let event = xpp.next();
             assert_eq!(
@@ -632,7 +632,7 @@ mod tests {
     fn t_turns_document_into_stream_of_events() {
         let input = "<test><foo quux='asdf' bar=\"qqq\">text</foo>more text<more>&quot;&#33;&#x40;</more><xxx foo=bar baz=\"qu ux\" hi='ho ho ho'></xxx></test>";
 
-        let mut xpp = TagSoupPullParser::new(input.to_string());
+        let mut xpp = TagSoupPullParser::new(input);
 
         let e = xpp.next();
         assert_eq!(e, event!(Start, "test"));
@@ -686,7 +686,7 @@ mod tests {
         let input =
             "<test>    &lt;4 spaces\n<pre>\n    <span>should have seen spaces</span></pre></test>";
 
-        let mut xpp = TagSoupPullParser::new(input.to_string());
+        let mut xpp = TagSoupPullParser::new(input);
 
         let e = xpp.next();
         assert_eq!(e, event!(Start, "test"));

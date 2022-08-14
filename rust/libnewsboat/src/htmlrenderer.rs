@@ -246,7 +246,7 @@ impl HtmlRenderer {
          *   - we then can iterate over all continuous elements, such as start
          * tag, close tag, text element, ...
          */
-        let mut xpp = TagSoupPullParser::new(source.to_string());
+        let mut xpp = TagSoupPullParser::new(source);
         let raw_ = self.raw_;
 
         let mut link_num = -1;
