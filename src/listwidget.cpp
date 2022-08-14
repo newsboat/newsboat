@@ -191,16 +191,24 @@ void ListWidget::update_scroll_offset(std::uint32_t pos)
 			} else { // "pos" is towards the beginning of the list; don't scroll
 				set_scroll_offset(0);
 			}
+			return;
 		}
 
 		// Check if items at the top of the "context" are visible. If not,
 		// we'll have to scroll up.
 		if (pos < cur_scroll_offset + num_context_lines) {
 			if (pos >= num_context_lines) {
-				set_scroll_offset(pos - num_context_lines);
+				const std::uint32_t target_offset = pos - num_context_lines;
+				set_scroll_offset(std::min(target_offset, max_offset));
 			} else { // "pos" is towards the beginning of the list; don't scroll
 				set_scroll_offset(0);
 			}
+			return;
+		}
+
+		if (cur_scroll_offset > max_offset) {
+			set_scroll_offset(max_offset);
+			return;
 		}
 	} else { // Keep selected item in the middle
 		if (pos > h / 2) {
@@ -209,6 +217,7 @@ void ListWidget::update_scroll_offset(std::uint32_t pos)
 		} else { // "pos" is towards the beginning of the list; don't scroll
 			set_scroll_offset(0);
 		}
+		return;
 	}
 }
 
