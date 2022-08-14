@@ -1347,3 +1347,1438 @@ fn get_char_numbering(count: u32) -> String {
 
     result.chars().rev().collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const URL: &str = "http://example.com/feed.rss";
+
+    macro_rules! line {
+        ($ty:ident, $content:literal) => {
+            (LineType::$ty, $content.to_string())
+        };
+    }
+
+    macro_rules! link {
+        ($content:literal, $ty:ident) => {
+            ($content.to_string(), LinkType::$ty)
+        };
+    }
+
+    macro_rules! render {
+        ($source:expr) => {
+            render!($source, "")
+        };
+        ($source:expr, $url:expr) => {{
+            let rnd = HtmlRenderer::new(false);
+            let mut lines = Vec::new();
+            let mut links = Vec::new();
+            rnd.render($source, &mut lines, &mut links, $url);
+            (lines, links)
+        }};
+    }
+
+    #[test]
+    fn t_htmlrenderer_links_are_rendered_as_underlined_text_with_reference_number_in_square_brackets(
+    ) {
+        let (lines, links) = render!("<a href=\"http://slashdot.org/\">slashdot</a>");
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "<u>slashdot</>[1]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://slashdot.org/ (link)")
+            ]
+        );
+
+        assert_eq!(links, [link!("http://slashdot.org/", Href)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_br_tag_results_in_a_line_break() {
+        for tag in ["<br>", "<br/>", "<br />"] {
+            let input = format!("hello{}world!", &tag);
+            let (lines, _) = render!(&input);
+            assert_eq!(
+                lines,
+                [line!(Wrappable, "hello"), line!(Wrappable, "world!"),]
+            );
+        }
+    }
+
+    #[test]
+    fn t_htmlrenderer_superscript_is_rendered_with_caret_symbol() {
+        let (lines, _) = render!("3<sup>10</sup>");
+        assert_eq!(lines, [line!(Wrappable, "3^10")]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_subscript_is_rendered_with_square_brackets() {
+        let (lines, _) = render!("A<sub>i</sub>");
+        assert_eq!(lines, [line!(Wrappable, "A[i]")]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_script_tags_are_ignored() {
+        let (lines, _) = render!("abc<script></script>");
+        assert_eq!(lines, [line!(Wrappable, "abc")]);
+    }
+
+    macro_rules! check_format_ol_count {
+        ($name:ident, $format:literal, $cases:expr) => {
+            #[test]
+            fn $name() {
+                for (count, expected) in $cases {
+                    assert_eq!(format_ol_count(count, $format), expected);
+                }
+            }
+        };
+    }
+
+    check_format_ol_count!(
+        t_htmlrenderer_format_ol_count_formats_list_count_to_digit,
+        '1',
+        [(1, " 1"), (3, " 3")]
+    );
+
+    check_format_ol_count!(
+        t_htmlrenderer_format_ol_count_formats_list_count_to_alphabetic,
+        'a',
+        [(3, "c"), (26 + 3, "ac"), (3 * 26 * 26 + 5 * 26 + 2, "ceb")]
+    );
+
+    check_format_ol_count!(
+        t_htmlrenderer_format_ol_count_formats_list_count_to_alphabetic_uppercase,
+        'A',
+        [
+            (3, "C"),
+            (26 + 5, "AE"),
+            (27, "AA"),
+            (26, "Z"),
+            (26 * 26 + 26, "ZZ"),
+            (25 * 26 * 26 + 26 * 26 + 26, "YZZ"),
+        ]
+    );
+
+    check_format_ol_count!(
+        t_htmlrenderer_format_ol_count_formats_list_count_to_roman_numerals,
+        'i',
+        [
+            (1, "i"),
+            (2, "ii"),
+            (5, "v"),
+            (4, "iv"),
+            (6, "vi"),
+            (7, "vii"),
+            (10, "x"),
+            (32, "xxxii"),
+            (1972, "mcmlxxii"),
+        ]
+    );
+
+    check_format_ol_count!(
+        t_htmlrenderer_format_ol_count_formats_list_count_to_roman_numerals_uppercase,
+        'I',
+        [(2011, "MMXI")]
+    );
+
+    #[test]
+    fn t_htmlrenderer_links_with_same_url_are_coalesced_under_one_number() {
+        let input = concat!(
+            "<a href='http://example.com/about'>About us</a>",
+            "<a href='http://example.com/about'>Another link</a>"
+        );
+
+        let (_, links) = render!(input, URL);
+        assert_eq!(links, [link!("http://example.com/about", Href)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_links_with_different_urls_have_different_numbers() {
+        let input = concat!(
+            "<a href='http://example.com/one'>One</a>",
+            "<a href='http://example.com/two'>Two</a>"
+        );
+
+        let (_, links) = render!(input, URL);
+
+        assert_eq!(
+            links,
+            [
+                link!("http://example.com/one", Href),
+                link!("http://example.com/two", Href),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_link_without_href_is_neither_highlighted_nor_added_to_links_list() {
+        let input = "<a>test</a>";
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(lines, [line!(Wrappable, "test")]);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_link_with_empty_href_is_neither_highlighted_nor_added_to_links_list() {
+        let input = "<a href=''>test</a>";
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(lines, [line!(Wrappable, "test")]);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_strong_is_rendered_in_bold_font() {
+        let input = "<strong>test</strong>";
+        let (lines, _) = render!(input, URL);
+        assert_eq!(lines, [line!(Wrappable, "<b>test</>")]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_u_is_rendered_as_underlined_text() {
+        let input = "<u>test</u>";
+        let (lines, _) = render!(input, URL);
+        assert_eq!(lines, [line!(Wrappable, "<u>test</>")]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_q_is_rendered_as_text_in_quotes() {
+        let input = "<q>test</q>";
+        let (lines, _) = render!(input, URL);
+        assert_eq!(lines, [line!(Wrappable, "\"test\"")]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_flash_embed_s_are_added_to_links_if_src_is_set() {
+        let input = concat!(
+            "<embed type='application/x-shockwave-flash'",
+            "src='http://example.com/game.swf'>",
+            "</embed>"
+        );
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[embedded flash: 1]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(
+                    Softwrappable,
+                    "[1]: http://example.com/game.swf (embedded flash)"
+                ),
+            ]
+        );
+
+        assert_eq!(links, [link!("http://example.com/game.swf", Embed)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_flash_embed_s_are_ignored_if_src_is_not_set() {
+        let input = "<embed type='application/x-shockwave-flash'></embed>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, []);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_non_flash_embed_s_are_ignored() {
+        let input = concat!(
+            "<embed type='whatever'",
+            "src='http://example.com/thingy'></embed>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, []);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_embed_s_are_ignored_if_type_is_not_set() {
+        let input = "<embed src='http://example.com/yet.another.thingy'></embed>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, []);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_iframe_s_are_added_to_links_if_src_is_set() {
+        let input = concat!(
+            "<iframe src=\"https://www.youtube.com/embed/0123456789A\"",
+            "        width=\"640\" height=\"360\"></iframe>"
+        );
+
+        let (lines, links) = render!(input);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[iframe 1 (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(
+                    Softwrappable,
+                    "[1]: https://www.youtube.com/embed/0123456789A (iframe)"
+                ),
+            ]
+        );
+
+        assert_eq!(
+            links,
+            [link!("https://www.youtube.com/embed/0123456789A", Iframe)]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_iframe_s_are_rendered_with_a_title_if_title_is_set() {
+        let input = concat!(
+            "<iframe src=\"https://www.youtube.com/embed/0123456789A\"",
+            "        title=\"My Video\" width=\"640\" height=\"360\"></iframe>"
+        );
+
+        let (lines, links) = render!(input);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[iframe 1: My Video (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(
+                    Softwrappable,
+                    "[1]: https://www.youtube.com/embed/0123456789A (iframe)"
+                ),
+            ]
+        );
+        assert_eq!(
+            links,
+            [link!("https://www.youtube.com/embed/0123456789A", Iframe)]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_iframe_s_are_ignored_if_src_is_not_set() {
+        let input = "<iframe width=\"640\" height=\"360\"></iframe>";
+        let (lines, links) = render!(input);
+        assert_eq!(lines, []);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_spaces_and_line_breaks_are_preserved_inside_pre() {
+        let input = concat!(
+            "<pre>oh cool\n",
+            "\n",
+            "  check this\tstuff  out!\n",
+            "     \n",
+            "neat huh?\n",
+            "</pre>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Softwrappable, "oh cool"),
+                line!(Softwrappable, ""),
+                line!(Softwrappable, "  check this\tstuff  out!"),
+                line!(Softwrappable, "     "),
+                line!(Softwrappable, "neat huh?"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_tags_still_work_inside_pre() {
+        let input = concat!(
+            "<pre>",
+            "<strong>bold text</strong>",
+            "<u>underlined text</u>",
+            "</pre>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [line!(Softwrappable, "<b>bold text</><u>underlined text</>")]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_line_breaks_are_preserved_in_tags_inside_pre() {
+        let input = concat!(
+            "<pre><span>\n\n\n",
+            "very cool</span><span>very cool indeed\n\n\n",
+            "</span></pre>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Softwrappable, ""),
+                line!(Softwrappable, ""),
+                line!(Softwrappable, "very coolvery cool indeed"),
+                line!(Softwrappable, ""),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_img_results_in_a_placeholder_and_a_link() {
+        let input = "<img src='http://example.com/image.png'></img>";
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[image 1 (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/image.png (image)"),
+            ]
+        );
+        assert_eq!(links, [link!("http://example.com/image.png", Img)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_img_results_in_a_placeholder_with_the_correct_index_and_a_link() {
+        let input = concat!(
+            "<a href='http://example.com/index.html'>My Page</a>",
+            " and an image: ",
+            "<img src='http://example.com/image.png'></img>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(
+                    Wrappable,
+                    "<u>My Page</>[1] and an image: [image 1 (link #2)]"
+                ),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/index.html (link)"),
+                line!(Softwrappable, "[2]: http://example.com/image.png (image)"),
+            ]
+        );
+
+        assert_eq!(
+            links,
+            [
+                link!("http://example.com/index.html", Href),
+                link!("http://example.com/image.png", Img),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_img_without_src_or_empty_src_are_ignored() {
+        let input = concat!(
+            "<img></img>",
+            "<img src=''></img>",
+            "<img src='http://example.com/image.png'>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[image 1 (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/image.png (image)"),
+            ]
+        );
+        assert_eq!(links.len(), 1);
+    }
+
+    #[test]
+    fn t_htmlrenderer_alt_is_mentioned_in_placeholder_if_img_has_alt() {
+        let input = concat!(
+            "<img src='http://example.com/image.png'",
+            "alt='Just a test image'></img>",
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[image 1: Just a test image (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/image.png (image)"),
+            ]
+        );
+        assert_eq!(links, [link!("http://example.com/image.png", Img)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_alt_is_mentioned_in_placeholder_if_img_has_alt_and_title() {
+        let input = concat!(
+            "<img src='http://example.com/image.png'",
+            "alt='Just a test image' title='Image title'></img>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[image 1: Just a test image (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/image.png (image)"),
+            ]
+        );
+        assert_eq!(links, [link!("http://example.com/image.png", Img)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_title_is_mentioned_in_placeholder_if_img_has_title_but_not_alt() {
+        let input = concat!(
+            "<img src='http://example.com/image.png'",
+            "title='Just a test image'></img>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[image 1: Just a test image (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/image.png (image)"),
+            ]
+        );
+        assert_eq!(links, [link!("http://example.com/image.png", Img)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_url_of_img_with_data_inside_src_is_replaced_with_string_inline_image() {
+        let input = concat!(
+            "<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA",
+            "AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO",
+            "9TXL0Y4OHwAAAABJRU5ErkJggg==' alt='Red dot' />"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[image 1: Red dot (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: inline image (image)"),
+            ]
+        );
+        assert_eq!(links, [link!("inline image", Img)]);
+    }
+
+    #[test]
+    fn t_htmlrenderer_blockquote_is_indented_and_is_separated_by_empty_lines() {
+        let input = concat!(
+            "<blockquote>",
+            "Experience is what you get when you didn't get what you ",
+            "wanted. ",
+            "&mdash;Randy Pausch",
+            "</blockquote>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, [
+            line!(Wrappable, ""),
+            line!(Wrappable, "  Experience is what you get when you didn't get what you wanted. —Randy Pausch"),
+            line!(Wrappable, ""),
+        ]);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn dl_dt_and_dd_are_rendered_as_a_set_of_paragraphs_with_term_descriptions_indented_to_the_right(
+    ) {
+        let input = concat!(
+            // Opinions are lifted from the "Monstrous Regiment" by Terry
+            // Pratchett
+            "<dl>",
+            "<dt>Coffee</dt>",
+            "<dd>Foul muck</dd>",
+            "<dt>Tea</dt>",
+            "<dd>Soldier's friend</dd>",
+            "</dl>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "Coffee"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "        Foul muck"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Tea"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "        Soldier's friend"),
+                line!(Wrappable, ""),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrendered_h1_is_rendered_with_setext_style_underlining() {
+        let input = "<h1>Why are we here?</h1>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "Why are we here?"),
+                line!(Wrappable, "----------------"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrendered_when_alone_heading_and_p_tags_generates_only_one_line() {
+        for tag in ["<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"] {
+            let mut closing_tag = tag.to_string();
+            closing_tag.insert(1, '/');
+
+            let input = format!("{}hello world{}", tag, closing_tag);
+            let (lines, links) = render!(&input, URL);
+            assert_eq!(lines, [line!(Wrappable, "hello world")]);
+            assert_eq!(links, []);
+        }
+    }
+
+    #[test]
+    fn t_htmlrenderer_there_s_always_an_empty_line_between_header_paragraph_list_and_paragraph() {
+        // h1
+        let input = "<h1>header</h1><p>paragraph</p>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(lines[2], line!(Wrappable, ""));
+        assert_eq!(links, []);
+
+        // other headings and p
+        for tag in ["<h2>", "<h3>", "<h4>", "<h5>", "<h6>", "<p>"] {
+            let mut closing_tag = tag.to_string();
+            closing_tag.insert(1, '/');
+
+            let input = format!("{}header{}<p>paragraph</p>", tag, closing_tag);
+            let (lines, links) = render!(&input, URL);
+            assert_eq!(lines.len(), 3);
+            assert_eq!(lines[1], line!(Wrappable, ""));
+            assert_eq!(links, []);
+        }
+
+        // ul
+        let input = "<ul><li>one</li><li>two</li></ul><p>paragraph</p>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 5);
+        assert_eq!(lines[3], line!(Wrappable, ""));
+        assert_eq!(links, []);
+
+        // ol
+        let input = "<ol><li>one</li><li>two</li></ol><p>paragraph</p>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 5);
+        assert_eq!(lines[3], line!(Wrappable, ""));
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_whitespace_is_erased_at_the_beginning_of_the_paragraph() {
+        let input = "<p>     \nhere comes the text</p>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, [line!(Wrappable, "here comes the text")]);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_newlines_are_replaced_with_space() {
+        let input = "newlines\nshould\nbe\nreplaced\nwith\na\nspace\ncharacter.";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [line!(
+                Wrappable,
+                "newlines should be replaced with a space character."
+            )]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_paragraph_is_just_a_long_line_of_text() {
+        let input = concat!(
+            "<p>",
+            "here comes a long, boring chunk text that we have to fit to ",
+            "width",
+            "</p>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [line!(
+                Wrappable,
+                "here comes a long, boring chunk text that we have to fit to width"
+            )]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_default_style_for_ol_is_arabic_numerals() {
+        // no `type' attribute
+        let input = "<ol><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, " 1. one"), line!(Wrappable, " 2. two"),]
+        );
+        assert_eq!(links, []);
+
+        // invalid `type' attribute
+        let input = "<ol type='invalid value'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, " 1. one"), line!(Wrappable, " 2. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_default_starting_number_for_ol_is_1() {
+        // no `start` attribute
+        let input = "<ol><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, " 1. one"), line!(Wrappable, " 2. two"),]
+        );
+        assert_eq!(links, []);
+
+        // invalid `start` attribute
+        let input = "<ol start='whatever'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, " 1. one"), line!(Wrappable, " 2. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_type_1_for_ol_means_arabic_numbering() {
+        let input = "<ol type='1'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, " 1. one"), line!(Wrappable, " 2. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_type_a_for_ol_means_lowercase_alphabetic_numbering() {
+        let input = "<ol type='a'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, "a. one"), line!(Wrappable, "b. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_type_uppercase_a_for_ol_means_uppercase_alphabetic_numbering() {
+        let input = "<ol type='A'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, "A. one"), line!(Wrappable, "B. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_type_i_for_ol_means_lowercase_roman_numbering() {
+        let input = "<ol type='i'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, "i. one"), line!(Wrappable, "ii. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_type_uppercase_i_for_ol_means_uppercase_roman_numbering() {
+        let input = "<ol type='I'><li>one</li><li>two</li></ol>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(
+            lines[1..3],
+            [line!(Wrappable, "I. one"), line!(Wrappable, "II. two"),]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_every_next_li_implicitly_closes_the_previous_one() {
+        let input = concat!(
+            "<ol type='I'>",
+            "<li>one",
+            "<li>two</li>",
+            "<li>three</li>",
+            "</li>",
+            "<li>four</li>",
+            "</ol>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines.len(), 6);
+        assert_eq!(
+            lines[1..5],
+            [
+                line!(Wrappable, "I. one"),
+                line!(Wrappable, "II. two"),
+                line!(Wrappable, "III. three"),
+                line!(Wrappable, "IV. four"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_style_tags_are_ignored() {
+        let input = "<style><h1>ignore me</h1><p>and me</p> body{width: 100%;}</style>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, []);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_hr_is_not_a_string_but_a_special_type_of_line() {
+        let input = "<hr>";
+        let (lines, links) = render!(input, URL);
+        assert_eq!(links, []);
+        assert_eq!(lines.len(), 1);
+        assert_eq!(lines[0].0, LineType::Hr);
+    }
+
+    #[test]
+    fn t_htmlrenderer_header_rows_of_tables_are_in_bold() {
+        let input = concat!("<table>", "<tr>", "<th>header</th>", "</tr>", "</table>");
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, [line!(Nonwrappable, "<b>header</>"),]);
+        assert_eq!(links, []);
+
+        let input = concat!(
+            "<table>",
+            "<tr>",
+            "<th>another</th>",
+            "<th>header</th>",
+            "</tr>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, [line!(Nonwrappable, "<b>another</> <b>header</>")]);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_cells_are_separated_by_space_if_border_is_not_set() {
+        let input = concat!(
+            "<table>",
+            "<tr>",
+            "<td>hello</td>",
+            "<td>world</td>",
+            "</tr>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(lines, [line!(Nonwrappable, "hello world"),]);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_cells_are_separated_by_vertical_bar_if_border_is_set_regardless_of_actual_value(
+    ) {
+        for border_width in 1..10 {
+            let input = format!(
+                "<table border='{}'><tr><td>hello</td><td>world</td></tr></table>",
+                border_width
+            );
+            let (lines, links) = render!(&input, URL);
+            assert_eq!(lines.len(), 3);
+            assert_eq!(lines[1], line!(Nonwrappable, "|hello|world|"));
+            assert_eq!(links, []);
+        }
+    }
+
+    #[test]
+    fn t_htmlrenderer_tables_with_border_have_borders() {
+        let input = concat!(
+            "<table border='1'>",
+            "<tr>",
+            "<td>hello</td>",
+            "<td>world</td>",
+            "</tr>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Nonwrappable, "+-----+-----+"),
+                line!(Nonwrappable, "|hello|world|"),
+                line!(Nonwrappable, "+-----+-----+"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_if_document_ends_before_table_is_found_table_is_rendered_anyway() {
+        let input = concat!(
+            "<table border='1'>",
+            "<tr>",
+            "<td>hello</td>",
+            "<td>world</td>",
+            "</tr>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Nonwrappable, "+-----+-----+"),
+                line!(Nonwrappable, "|hello|world|"),
+                line!(Nonwrappable, "+-----+-----+"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_tables_can_be_nested() {
+        let input = concat!(
+            "<table border='1'>",
+            "<tr>",
+            "<td>",
+            "<table border='1'>",
+            "<tr>",
+            "<td>hello</td>",
+            "<td>world</td>",
+            "</tr>",
+            "<tr>",
+            "<td>another</td>",
+            "<td>row</td>",
+            "</tr>",
+            "</table>",
+            "</td>",
+            "<td>lonely cell</td>",
+            "</tr>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Nonwrappable, "+---------------+-----------+"),
+                line!(Nonwrappable, "|+-------+-----+|lonely cell|"),
+                line!(Nonwrappable, "||hello  |world||           |"),
+                line!(Nonwrappable, "|+-------+-----+|           |"),
+                line!(Nonwrappable, "||another|row  ||           |"),
+                line!(Nonwrappable, "|+-------+-----+|           |"),
+                line!(Nonwrappable, "+---------------+-----------+"),
+            ]
+        );
+
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn if_td_appears_inside_table_but_outside_of_a_row_one_is_created_implicitly() {
+        let input = concat!(
+            "<table border='1'>",
+            "<td>hello</td>",
+            "<td>world</td>",
+            "</tr>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Nonwrappable, "+-----+-----+"),
+                line!(Nonwrappable, "|hello|world|"),
+                line!(Nonwrappable, "+-----+-----+"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_previous_row_is_implicitly_closed_when_tr_is_found() {
+        let input = concat!(
+            "<table border='1'>",
+            "<tr><td>hello</td>",
+            "<tr><td>world</td>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Nonwrappable, "+-----+"),
+                line!(Nonwrappable, "|hello|"),
+                line!(Nonwrappable, "+-----+"),
+                line!(Nonwrappable, "|world|"),
+                line!(Nonwrappable, "+-----+"),
+            ]
+        );
+
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_free_standing_text_outside_of_td_is_implicitly_concatenated_with_the_next_cell(
+    ) {
+        let input = concat!(
+            "<table border='1'>",
+            "hello",
+            "<td> world</td>",
+            "</tr>",
+            "</table>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Nonwrappable, "+-----------+"),
+                line!(Nonwrappable, "|hello world|"),
+                line!(Nonwrappable, "+-----------+"),
+            ]
+        );
+
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_text_within_ituneshack_is_to_be_treated_specially() {
+        let input = concat!(
+            "<ituneshack>",
+            "hello world!\n",
+            "I'm a description from an iTunes feed. ",
+            "Apple just puts plain text into &lt;summary&gt; tag.",
+            "</ituneshack>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "hello world!"),
+                line!(Wrappable, "I'm a description from an iTunes feed. Apple just puts plain text into <>summary> tag."),
+            ]
+        );
+
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_when_rendering_text_strips_leading_whitespace() {
+        // issue204
+
+        let input = concat!(
+            "		<br />\n",
+            "		\n",      // tabs
+            "       \n", // spaces
+            "		\n",      // tabs
+            "       \n", // spaces
+            "		\n",      // tabs
+            "		\n",      // tabs
+            "		Text preceded by whitespace."
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, ""),
+                line!(Wrappable, "Text preceded by whitespace."),
+            ]
+        );
+
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_video_results_in_a_placeholder_and_a_link_for_each_valid_source() {
+        let input = concat!(
+            "<video src='http://example.com/video.avi'></video>",
+            "<video>",
+            "	<source src='http://example.com/video2.avi'>",
+            "	<source src='http://example.com/video2.mkv'>",
+            "</video>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[video 1 (link #1)]"),
+                line!(Wrappable, "[video 2 (link #2)]"),
+                line!(Wrappable, "[video 2 (link #3)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/video.avi (video)"),
+                line!(Softwrappable, "[2]: http://example.com/video2.avi (video)"),
+                line!(Softwrappable, "[3]: http://example.com/video2.mkv (video)"),
+            ]
+        );
+
+        assert_eq!(
+            links,
+            [
+                link!("http://example.com/video.avi", Video),
+                link!("http://example.com/video2.avi", Video),
+                link!("http://example.com/video2.mkv", Video),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_video_s_without_valid_sources_are_ignored() {
+        let input = concat!(
+            "<video></video>",
+            "<video><source><source></video>",
+            "<video src=''></video>",
+            "<video src='http://example.com/video.avi'></video>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[video 1 (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/video.avi (video)"),
+            ]
+        );
+        assert_eq!(links.len(), 1);
+    }
+
+    #[test]
+    fn t_htmlrenderer_audio_results_in_a_placeholder_and_a_link_for_each_valid_source() {
+        let input = concat!(
+            "<audio src='http://example.com/audio.oga'></audio>",
+            "<audio>",
+            "	<source src='http://example.com/audio2.mp3'>",
+            "	<source src='http://example.com/audio2.m4a'>",
+            "</audio>"
+        );
+
+        let (lines, links) = render!(input, URL);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[audio 1 (link #1)]"),
+                line!(Wrappable, "[audio 2 (link #2)]"),
+                line!(Wrappable, "[audio 2 (link #3)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/audio.oga (audio)"),
+                line!(Softwrappable, "[2]: http://example.com/audio2.mp3 (audio)"),
+                line!(Softwrappable, "[3]: http://example.com/audio2.m4a (audio)"),
+            ]
+        );
+
+        assert_eq!(
+            links,
+            [
+                link!("http://example.com/audio.oga", Audio),
+                link!("http://example.com/audio2.mp3", Audio),
+                link!("http://example.com/audio2.m4a", Audio),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_audios_without_valid_sources_are_ignored() {
+        let input = concat!(
+            "<audio></audio>",
+            "<audio><source><source></audio>",
+            "<audio src=''></audio>",
+            "<audio src='http://example.com/audio.oga'></audio>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[audio 1 (link #1)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/audio.oga (audio)"),
+            ]
+        );
+        assert_eq!(links.len(), 1);
+    }
+
+    #[test]
+    fn t_htmlrenderer_unclosed_video_and_audio_tags_are_closed_upon_encounter_with_a_new_media_element(
+    ) {
+        let input = concat!(
+            "<video src='http://example.com/video.avi'>",
+            "	This is fallback text for `the video` element",
+            "<video>",
+            "	<source src='http://example.com/video2.avi'>",
+            "This maybe isn't fallback text, but the spec says that",
+            " anything before the closing tag is transparent content",
+            "<audio>",
+            "	<source src='http://example.com/audio.oga'>",
+            "	<source src='http://example.com/audio.m4a'>",
+            "	This text should also be interpreted as fallback",
+            "<audio src='http://example.com/audio2.mp3'>",
+            "	This is additional fallback text",
+            "<audio></audio>",
+            "Here comes the text!"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[video 1 (link #1)]"),
+                line!(Wrappable, "[video 2 (link #2)]"),
+                line!(Wrappable, "[audio 1 (link #3)]"),
+                line!(Wrappable, "[audio 1 (link #4)]"),
+                line!(Wrappable, "[audio 2 (link #5)]"),
+                line!(Wrappable, "Here comes the text!"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/video.avi (video)"),
+                line!(Softwrappable, "[2]: http://example.com/video2.avi (video)"),
+                line!(Softwrappable, "[3]: http://example.com/audio.oga (audio)"),
+                line!(Softwrappable, "[4]: http://example.com/audio.m4a (audio)"),
+                line!(Softwrappable, "[5]: http://example.com/audio2.mp3 (audio)"),
+            ]
+        );
+
+        assert_eq!(
+            links,
+            [
+                link!("http://example.com/video.avi", Video),
+                link!("http://example.com/video2.avi", Video),
+                link!("http://example.com/audio.oga", Audio),
+                link!("http://example.com/audio.m4a", Audio),
+                link!("http://example.com/audio2.mp3", Audio),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_empty_source_tags_do_not_increase_the_link_count_media_elements_without_valid_sources_do_not_increase_the_element_count(
+    ) {
+        let input = concat!(
+            "<video></video>",
+            "<video>",
+            "	<source src='http://example.com/video.avi'>",
+            "	<source>",
+            "	<source src='http://example.com/video.mkv'>",
+            "</video>",
+            "<audio></audio>",
+            "<audio>",
+            "	<source src='http://example.com/audio.mp3'>",
+            "	<source>",
+            "	<source src='http://example.com/audio.oga'>",
+            "</audio>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[video 1 (link #1)]"),
+                line!(Wrappable, "[video 1 (link #2)]"),
+                line!(Wrappable, "[audio 1 (link #3)]"),
+                line!(Wrappable, "[audio 1 (link #4)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: http://example.com/video.avi (video)"),
+                line!(Softwrappable, "[2]: http://example.com/video.mkv (video)"),
+                line!(Softwrappable, "[3]: http://example.com/audio.mp3 (audio)"),
+                line!(Softwrappable, "[4]: http://example.com/audio.oga (audio)"),
+            ]
+        );
+
+        assert_eq!(
+            links,
+            [
+                link!("http://example.com/video.avi", Video),
+                link!("http://example.com/video.mkv", Video),
+                link!("http://example.com/audio.mp3", Audio),
+                link!("http://example.com/audio.oga", Audio),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_back_to_back_video_and_audio_tags_are_seperated_by_a_new_line() {
+        let input = concat!(
+            "<video src='https://example.com/video.mp4'></video>",
+            "<audio src='https://example.com/audio.mp3'></audio>"
+        );
+
+        let (lines, links) = render!(input, URL);
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "[video 1 (link #1)]"),
+                line!(Wrappable, "[audio 1 (link #2)]"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "Links: "),
+                line!(Softwrappable, "[1]: https://example.com/video.mp4 (video)"),
+                line!(Softwrappable, "[2]: https://example.com/audio.mp3 (audio)"),
+            ]
+        );
+        assert_eq!(
+            links,
+            [
+                link!("https://example.com/video.mp4", Video),
+                link!("https://example.com/audio.mp3", Audio),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_ordered_list_can_contain_unordered_list_in_its_items() {
+        let input = concat!(
+            "<ol>",
+            "	<li>",
+            "		<ul>",
+            "			<li>first item of sublist A</li>",
+            "			<li>second item of sublist A</li>",
+            "		</ul>",
+            "	</li>",
+            "	<li>",
+            "		<ul>",
+            "			<li>first item of sublist B</li>",
+            "			<li>second item of sublist B</li>",
+            "			<li>third item of sublist B</li>",
+            "		</ul>",
+            "	</li>",
+            "</ol>"
+        );
+        let (lines, links) = render!(input);
+
+        assert_eq!(links, []);
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, ""),
+                line!(Wrappable, " 1.  "),
+                line!(Wrappable, ""),
+                line!(Wrappable, "      * first item of sublist A"),
+                line!(Wrappable, "      * second item of sublist A"),
+                line!(Wrappable, ""),
+                line!(Wrappable, " 2.  "),
+                line!(Wrappable, ""),
+                line!(Wrappable, "      * first item of sublist B"),
+                line!(Wrappable, "      * second item of sublist B"),
+                line!(Wrappable, "      * third item of sublist B"),
+                line!(Wrappable, ""),
+                line!(Wrappable, ""),
+            ]
+        );
+    }
+
+    #[test]
+    fn t_htmlrenderer_skips_contents_of_script_tags() {
+        // This is a regression test for https://github.com/newsboat/newsboat/issues/1300
+
+        let input = include_str!("../../../test/data/1300-reproducer.html");
+        let (lines, links) = render!(input);
+        assert_eq!(lines, []);
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_div_is_always_rendered_on_a_new_line() {
+        let (lines, links) = render!(concat!(
+            "<div>oh</div>",
+            "<div>hello there,</div>",
+            "<p>world</p>",
+            "<div>!</div>",
+            "<div>",
+            "    <div>",
+            "        <p>hehe</p>",
+            "    </div>",
+            "</div>"
+        ));
+
+        assert_eq!(
+            lines,
+            [
+                line!(Wrappable, "oh"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "hello there,"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "world"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "!"),
+                line!(Wrappable, ""),
+                line!(Wrappable, "hehe"),
+            ]
+        );
+        assert_eq!(links, []);
+    }
+
+    #[test]
+    fn t_htmlrenderer_does_not_crash_on_extra_closing_ol_ul_tags() {
+        // This is a regression test for https://github.com/newsboat/newsboat/issues/1974
+        render!("<ul><li>Double closed list</li></ul></ul><ol><li>Other double closed list</li></ol></ol><ul><li>Test</li></ul>");
+    }
+}
