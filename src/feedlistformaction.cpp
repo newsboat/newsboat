@@ -413,7 +413,7 @@ REDO:
 		if (automatic && args->size() > 0) {
 			newtag = (*args)[0];
 		} else {
-			newtag = v->select_tag();
+			newtag = v->select_tag(tag);
 		}
 		if (newtag != "") {
 			tag = newtag;

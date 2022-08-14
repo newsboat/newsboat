@@ -626,7 +626,7 @@ std::string View::run_dirbrowser()
 	return run_modal(dirbrowser, "filenametext");
 }
 
-std::string View::select_tag()
+std::string View::select_tag(const std::string& current_tag)
 {
 	if (tags.size() == 0) {
 		status_line.show_error(_("No tags defined."));
@@ -638,6 +638,7 @@ std::string View::select_tag()
 	apply_colors(selecttag);
 	selecttag->set_parent_formaction(get_current_formaction());
 	selecttag->set_tags(tags);
+	selecttag->set_selected_value(current_tag);
 	run_modal(selecttag, "");
 	return selecttag->get_selected_value();
 }

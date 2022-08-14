@@ -1,5 +1,6 @@
 #include "selectformaction.h"
 
+#include <algorithm>
 #include <cassert>
 #include <sstream>
 #include <string>
@@ -25,7 +26,9 @@ SelectFormAction::SelectFormAction(View* vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
+	, is_first_draw(true)
 	, type(SelectionType::TAG)
+	, value("")
 	, tags_list("taglist", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
@@ -144,7 +147,6 @@ bool SelectFormAction::process_operation(Operation op,
 	}
 	return true;
 }
-
 void SelectFormAction::prepare()
 {
 	if (do_redraw) {
@@ -180,6 +182,15 @@ void SelectFormAction::prepare()
 		}
 		tags_list.stfl_replace_lines(listfmt);
 
+		if (is_first_draw && type == SelectionType::TAG && !value.empty()) {
+			const auto it = std::find(tags.begin(), tags.end(), value);
+			if (it != tags.end()) {
+				const auto index = std::distance(tags.begin(), it);
+				tags_list.set_position(index);
+			}
+		}
+
+		is_first_draw = false;
 		do_redraw = false;
 	}
 }
@@ -188,7 +199,6 @@ void SelectFormAction::init()
 {
 	do_redraw = true;
 	quit = false;
-	value = "";
 
 	recalculate_widget_dimensions();
 

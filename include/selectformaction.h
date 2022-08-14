@@ -16,6 +16,10 @@ public:
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
+	void set_selected_value(const std::string& new_value)
+	{
+		value = new_value;
+	}
 	std::string get_selected_value()
 	{
 		return value;
@@ -45,6 +49,7 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	bool quit;
+	bool is_first_draw;
 	SelectionType type;
 	std::string value;
 	std::vector<std::string> tags;
