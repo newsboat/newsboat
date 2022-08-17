@@ -14,7 +14,7 @@ next||J||Jump to next list entry.
 prev||K||Jump to previous list entry.
 random-unread||^K||Jump to a random unread article.
 open-in-browser||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view.
-open-in-browser-noninteractively||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to <<open-in-browser,`open-in-browser`>>, but the output of the browser (stdout and stderr) is not shown, and the browser doesn't receive keyboard input. You would probably add `&` at the end of the <<browser,`browser`>> command to put it into background, too.
+open-in-browser-noninteractively||n/a||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to <<open-in-browser,`open-in-browser`>>, but the output of the browser (stdout and stderr) is not shown, and the browser doesn't receive keyboard input. You would probably add `&` at the end of the <<browser,`browser`>> command to put it into background, too.
 open-in-browser-and-mark-read||O||Use browser to open the URL associated with the current article, or entry in the URL view. When used in the article list, it will also mark the article as read.
 open-all-unread-in-browser||n/a||Open all the unread URLs in the current feed.
 open-all-unread-in-browser-and-mark-read||n/a||Open all the unread URLs in the current feed and mark them as read.
@@ -69,5 +69,5 @@ home||HOME||Go to the first item in the list.
 end||END||Go to the last item in the list.
 macro-prefix||,||Initiate macro execution. The next key press selects the actual macro and runs it.
 switch-focus||TAB||Switch focus between widgets. This is currently only applicable to the `filebrowser` and `dirbrowser` contexts.
-goto-title||||Go to item whose title contains the specified string (case-insensitive).
+goto-title||n/a||Go to item whose title contains the specified string (case-insensitive).
 prevsearchresults||z||Return to previous search results (if any). This only works from `searchresultslist`.
