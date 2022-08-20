@@ -31,6 +31,7 @@ extern "C" {
 #include "empty.h"
 #include "exception.h"
 #include "feedlist.h"
+#include "feedlistformaction.h"
 #include "filebrowser.h"
 #include "fmtstrformatter.h"
 #include "formaction.h"

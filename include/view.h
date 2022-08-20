@@ -13,7 +13,6 @@
 #include "configcontainer.h"
 #include "controller.h"
 #include "dirbrowserformaction.h"
-#include "feedlistformaction.h"
 #include "filebrowserformaction.h"
 #include "htmlrenderer.h"
 #include "keymap.h"
