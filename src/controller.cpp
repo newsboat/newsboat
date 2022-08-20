@@ -35,6 +35,7 @@
 #include "exception.h"
 #include "feedhqapi.h"
 #include "feedhqurlreader.h"
+#include "formaction.h"
 #include "freshrssapi.h"
 #include "freshrssurlreader.h"
 #include "fileurlreader.h"

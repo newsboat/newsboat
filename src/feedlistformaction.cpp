@@ -9,6 +9,7 @@
 #include <string>
 
 #include "config.h"
+#include "controller.h"
 #include "dbexception.h"
 #include "feedcontainer.h"
 #include "fmtstrformatter.h"

@@ -14,6 +14,7 @@
 #include "exception.h"
 #include "matcherexception.h"
 #include "rss/parser.h"
+#include "stflpp.h"
 #include "utils.h"
 #include "view.h"
 #include "xlicense.h"

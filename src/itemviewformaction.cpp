@@ -6,6 +6,7 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
+#include "controller.h"
 #include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "itemlistformaction.h"

@@ -5,6 +5,7 @@
 
 #include "3rd-party/optional.hpp"
 
+#include "configcontainer.h"
 #include "fmtstrformatter.h"
 #include "history.h"
 #include "listformaction.h"
@@ -13,6 +14,8 @@
 #include "view.h"
 
 namespace newsboat {
+
+class RssItem;
 
 typedef std::pair<std::shared_ptr<RssItem>, unsigned int> ItemPtrPosPair;
 

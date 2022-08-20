@@ -2,29 +2,31 @@
 #define NEWSBOAT_VIEW_H_
 
 #include <cstdint>
-#include <list>
 #include <mutex>
 #include <string>
 #include <vector>
 
 #include "3rd-party/optional.hpp"
 
-#include "colormanager.h"
-#include "configcontainer.h"
-#include "controller.h"
-#include "dirbrowserformaction.h"
-#include "filebrowserformaction.h"
 #include "htmlrenderer.h"
-#include "keymap.h"
-#include "regexmanager.h"
 #include "statusline.h"
-#include "stflpp.h"
 
 namespace newsboat {
 
+class Cache;
+class ColorManager;
+class Controller;
+class ConfigContainer;
+class FeedListFormAction;
+class FilterContainer;
+struct FilterNameExprPair;
+class FormAction;
 class ItemListFormAction;
 class ItemViewFormAction;
-class FeedListFormAction;
+class KeyMap;
+struct MacroCmd;
+class RegexManager;
+class RssFeed;
 
 class View : public IStatus {
 public:
@@ -167,8 +169,6 @@ protected:
 	std::vector<std::string> tags;
 
 	RegexManager& rxman;
-
-	std::map<std::string, TextStyle> text_styles;
 
 	bool is_inside_qna;
 	bool is_inside_cmdline;

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "config.h"
+#include "controller.h"
 #include "fmtstrformatter.h"
 #include "listformatter.h"
 #include "strprintf.h"

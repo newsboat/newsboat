@@ -7,6 +7,7 @@
 
 #include "config.h"
 #include "configexception.h"
+#include "controller.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "strprintf.h"
