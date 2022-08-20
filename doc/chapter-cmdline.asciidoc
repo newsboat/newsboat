@@ -1,29 +1,31 @@
+:experimental:
+
 Like other text-oriented software, Newsboat contains an internal commandline to
 modify configuration variables ad hoc and to run own commands. It provides a flexible
 access to the functionality of Newsboat which is especially useful for
 advanced users.
 
-To start the commandline, type ":". You will see a ":" prompt at the bottom of
+To start the commandline, type kbd:[:]. You will see a ":" prompt at the bottom of
 the screen, similar to tools like vi(m) or mutt. You can now enter commands.
-Pressing the "Enter" key executes the command (possibly giving feedback to the
+Pressing the kbd:[Enter] key executes the command (possibly giving feedback to the
 user) and closes the commandline. You can cancel entering commands by pressing
-the "Esc" key. The history of all the commands that you enter will be saved to
+the kbd:[Esc] key. The history of all the commands that you enter will be saved to
 the _history.cmdline_ file, stored next to the _cache.db_ file. The backlog is
 limited to 100 entries by default, but can be influenced by setting the
 <<history-limit,`history-limit`>> configuration variable. To disable history
 saving, set the `history-limit` to `0`.
 
 The commandline provides you with some help if you can't remember the full
-names of commandline commands. By pressing the "Tab" key, Newsboat will try to
+names of commandline commands. By pressing the kbd:[Tab] key, Newsboat will try to
 automatically complete your command. If there is more than one possible
-completion, you can subsequently press the "Tab" key to cycle through all
+completion, you can subsequently press the kbd:[Tab] key to cycle through all
 results. If no match is found, no suggestion will be inserted into the
 commandline. For the <<cmd-set,`set`>> command, the completion also works for configuration
 variable names.
 
-In addition, some common key combination such as "Ctrl-G" (to cancel input),
-"Ctrl-K" (to delete text from the cursor position to the end of line), "Ctrl-U" (to
-clear the whole line) and "Ctrl-W" (to delete the word before the current cursor
+In addition, some common key combination such as kbd:[Ctrl+G] (to cancel input),
+kbd:[Ctrl+K] (to delete text from the cursor position to the end of line), kbd:[Ctrl+U] (to
+clear the whole line) and kbd:[Ctrl+W] (to delete the word before the current cursor
 position) were added.
 
 Please be aware that the input history of both the command line and the search
