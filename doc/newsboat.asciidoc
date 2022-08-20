@@ -5,6 +5,7 @@
 :sectlinks:
 :nofooter:
 :warning-caption: pass:[<span style='font-size: 3rem'>&#x26a0;</span>]
+:experimental: 
 
 == Introduction
 
@@ -1619,21 +1620,21 @@ include::podboat-cmds-linked.asciidoc[]
 == Podboat Operations
 
 .Available Operations in Podboat
-[frame="all", grid="all", format="dsv", options="header", cols="20,20,60"]
+[frame="all", grid="all", format="psv", options="header", cols="20,20,60"]
 |=========================================================================
-Operation:Default key:Description
-[[pb-quit]]<<pb-quit,+quit+>>:q:Quit the program.
-[[pb-hard-quit]]<<pb-hard-quit,+hard-quit+>>:Q:Quit the program without confirmation.
-[[pb-help]]<<pb-help,+help+>>:?:Show the help screen.
-[[pb-download]]<<pb-download,+pb-download+>>:d:Download the currently selected URL.
-[[pb-cancel]]<<pb-cancel,+pb-cancel+>>:c:Cancel the currently selected download.
-[[pb-play]]<<pb-play,+pb-play+>>:p:Start player with currently selected download.
-[[pb-mark-as-finished]]<<pb-mark-as-finished,+pb-mark-as-finished+>>:m:Mark currently selected entry as finished.
-[[pb-delete]]<<pb-delete,+pb-delete+>>:D:Delete the currently selected URL from the queue.
-[[pb-purge]]<<pb-purge,+pb-purge+>>:P:Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
-[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>:a:Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The <<max-downloads,`max-downloads`>> configuration option controls how many downloads are done in parallel.
-[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>:+:Increase the <<max-download,`max-downloads`>> option by 1.
-[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>:-:Decrease the <<max-download,`max-downloads`>> option by 1. If the option is already 1, no further decrease is possible.
+|Operation|Default key|Description
+|[[pb-quit]]<<pb-quit,+quit+>>|kbd:[Q]|Quit the program.
+|[[pb-hard-quit]]<<pb-hard-quit,+hard-quit+>>|kbd:[Shift+Q]|Quit the program without confirmation.
+|[[pb-help]]<<pb-help,+help+>>|kbd:[?]|Show the help screen.
+|[[pb-download]]<<pb-download,+pb-download+>>|kbd:[D]|Download the currently selected URL.
+|[[pb-cancel]]<<pb-cancel,+pb-cancel+>>|kbd:[C]|Cancel the currently selected download.
+|[[pb-play]]<<pb-play,+pb-play+>>|kbd:[P]|Start player with currently selected download.
+|[[pb-mark-as-finished]]<<pb-mark-as-finished,+pb-mark-as-finished+>>|kbd:[M]|Mark currently selected entry as finished.
+|[[pb-delete]]<<pb-delete,+pb-delete+>>|kbd:[Shift+D]|Delete the currently selected URL from the queue.
+|[[pb-purge]]<<pb-purge,+pb-purge+>>|kbd:[Shift+P]|Remove all finished and deleted downloads from the queue and load URLs that were newly added to the queue.
+|[[pb-toggle-download-all]]<<pb-toggle-download-all,+pb-toggle-download-all+>>|kbd:[A]|Toggle the "automatic download" feature where all queued URLs are downloaded one after the other. The <<max-downloads,`max-downloads`>> configuration option controls how many downloads are done in parallel.
+|[[pb-increase-max-dls]]<<pb-increase-max-dls,+pb-increase-max-dls+>>|kbd:[+]|Increase the <<max-download,`max-downloads`>> option by 1.
+|[[pb-decrease-max-dls]]<<pb-decrease-max-dls,+pb-decrease-max-dls+>>|kbd:[-]|Decrease the <<max-download,`max-downloads`>> option by 1. If the option is already 1, no further decrease is possible.
 |=========================================================================
 
 
