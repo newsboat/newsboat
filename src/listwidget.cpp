@@ -155,8 +155,23 @@ std::uint32_t ListWidget::get_scroll_offset()
 	return 0;
 }
 
+std::uint32_t ListWidget::max_offset()
+{
+	const auto h = get_height();
+	// An offset at which the last item of the list is at the bottom of the
+	// widget. We shouldn't set "offset" to more than this value, otherwise
+	// we'll have an empty "gap" at the bottom of the list. That's only
+	// acceptable if the list is shorter than the widget's height.
+	if (num_lines >= h) {
+		return num_lines - h;
+	} else {
+		return 0;
+	}
+}
+
 void ListWidget::set_scroll_offset(std::uint32_t offset)
 {
+	offset = std::min(offset, max_offset());
 	form.set(list_name + "_offset", std::to_string(offset));
 }
 
@@ -175,11 +190,6 @@ void ListWidget::update_scroll_offset(std::uint32_t pos)
 
 	const auto h = get_height();
 	const auto cur_scroll_offset = get_scroll_offset();
-	// An offset at which the last item of the list is at the bottom of the
-	// widget. We shouldn't set "offset" to more than this value, otherwise
-	// we'll have an empty "gap" at the bottom of the list. That's only
-	// acceptable if the list is shorter than the widget's height.
-	const std::uint32_t max_offset = (num_lines >= h ? num_lines - h : 0);
 
 	if (2 * num_context_lines < h) {
 		// Check if items at the bottom of the "context" are visible. If not,
@@ -187,7 +197,7 @@ void ListWidget::update_scroll_offset(std::uint32_t pos)
 		if (pos + num_context_lines >= cur_scroll_offset + h) {
 			if (pos + num_context_lines >= h) {
 				const std::uint32_t target_offset = pos + num_context_lines - h + 1;
-				set_scroll_offset(std::min(target_offset, max_offset));
+				set_scroll_offset(target_offset);
 			} else { // "pos" is towards the beginning of the list; don't scroll
 				set_scroll_offset(0);
 			}
@@ -199,21 +209,21 @@ void ListWidget::update_scroll_offset(std::uint32_t pos)
 		if (pos < cur_scroll_offset + num_context_lines) {
 			if (pos >= num_context_lines) {
 				const std::uint32_t target_offset = pos - num_context_lines;
-				set_scroll_offset(std::min(target_offset, max_offset));
+				set_scroll_offset(target_offset);
 			} else { // "pos" is towards the beginning of the list; don't scroll
 				set_scroll_offset(0);
 			}
 			return;
 		}
 
-		if (cur_scroll_offset > max_offset) {
-			set_scroll_offset(max_offset);
+		if (cur_scroll_offset > max_offset()) {
+			set_scroll_offset(max_offset());
 			return;
 		}
 	} else { // Keep selected item in the middle
 		if (pos > h / 2) {
 			const std::uint32_t target_offset = pos - h / 2;
-			set_scroll_offset(std::min(target_offset, max_offset));
+			set_scroll_offset(target_offset);
 		} else { // "pos" is towards the beginning of the list; don't scroll
 			set_scroll_offset(0);
 		}

@@ -29,10 +29,12 @@ public:
 
 	std::uint32_t get_width();
 	std::uint32_t get_height();
+
 private:
 	std::uint32_t get_scroll_offset();
 	void set_scroll_offset(std::uint32_t pos);
 
+	std::uint32_t max_offset();
 	void update_scroll_offset(std::uint32_t pos);
 
 	const std::string list_name;
