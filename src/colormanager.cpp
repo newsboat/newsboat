@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
+#include "configparser.h"
 #include "feedlistformaction.h"
 #include "filebrowserformaction.h"
 #include "helpformaction.h"

@@ -1,5 +1,6 @@
 #include "listformaction.h"
 
+#include "controller.h"
 #include "rssfeed.h"
 #include "view.h"
 

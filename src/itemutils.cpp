@@ -1,3 +1,4 @@
+#include "controller.h"
 #include "itemutils.h"
 
 namespace newsboat {

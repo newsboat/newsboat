@@ -155,10 +155,6 @@ public:
 	{
 		idx = i;
 	}
-	unsigned int get_index()
-	{
-		return idx;
-	}
 
 	void set_base(const std::string& b)
 	{
