@@ -7,6 +7,7 @@
 
 #include "history.h"
 #include "keymap.h"
+#include "listwidget.h"
 #include "stflpp.h"
 
 namespace newsboat {
@@ -110,6 +111,8 @@ protected:
 		std::string delimiters = " \r\n\t");
 
 	void handle_parsed_command(const Command& command);
+
+	bool handle_list_operations(ListWidget& list, Operation op);
 
 	View* v;
 	ConfigContainer* cfg;

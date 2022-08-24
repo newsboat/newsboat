@@ -8,6 +8,8 @@
 #include "config.h"
 #include "configexception.h"
 #include "controller.h"
+#include "listmovementcontrol.h"
+#include "listwidgetbackend.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "strprintf.h"
@@ -362,6 +364,33 @@ void FormAction::handle_parsed_command(const Command& command)
 	default:
 		break;
 	}
+}
+
+bool FormAction::handle_list_operations(ListWidget& list, Operation op)
+{
+	switch (op) {
+	case OP_SK_UP:
+		list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	case OP_SK_DOWN:
+		list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	case OP_SK_HOME:
+		list.move_to_first();
+		break;
+	case OP_SK_END:
+		list.move_to_last();
+		break;
+	case OP_SK_PGUP:
+		list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	case OP_SK_PGDOWN:
+		list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+		break;
+	default:
+		return false;
+	}
+	return true;
 }
 
 bool FormAction::handle_single_argument_set(std::string argument)

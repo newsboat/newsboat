@@ -11,8 +11,9 @@ ListFormAction::ListFormAction(View* v,
 	std::string list_name,
 	ConfigContainer* cfg)
 	: FormAction(v, formstr, cfg)
-	, list(list_name, FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
+	, list(list_name, FormAction::f)
 {
+	list.set_num_context_lines(cfg->get_configvalue_as_int("scrolloff"));
 }
 
 bool ListFormAction::process_operation(Operation op,
@@ -48,25 +49,10 @@ bool ListFormAction::process_operation(Operation op,
 		FormAction::start_cmdline("9");
 		break;
 
-	case OP_SK_UP:
-		list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_DOWN:
-		list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_HOME:
-		list.move_to_first();
-		break;
-	case OP_SK_END:
-		list.move_to_last();
-		break;
-	case OP_SK_PGUP:
-		list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_PGDOWN:
-		list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
 	default:
+		if (handle_list_operations(list, op)) {
+			break;
+		}
 		break;
 	}
 	return true;

@@ -29,8 +29,10 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
-	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
+	, files_list("files", FormAction::f)
 {
+	files_list.set_num_context_lines(cfg->get_configvalue_as_int("scrolloff"));
+
 	// In filebrowser, keyboard focus is at the input field, so user will be
 	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
 	// can't quit with the default `q` bind).
@@ -156,7 +158,8 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	case OP_NEXT:
 	case OP_SK_DOWN:
 		if (f.get_focus() == "files") {
-			if (!files_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"))) {
+			if (!files_list.move_down(
+					cfg->get_configvalue_as_bool("wrap-scroll"))) {
 				f.set_focus("filename");
 			}
 		}
@@ -178,12 +181,14 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		break;
 	case OP_SK_PGUP:
 		if (f.get_focus() == "files") {
-			files_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
+			files_list.move_page_up(
+				cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_SK_PGDOWN:
 		if (f.get_focus() == "files") {
-			files_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
+			files_list.move_page_down(
+				cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_QUIT:
