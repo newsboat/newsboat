@@ -1,3 +1,5 @@
+:experimental:
+
 After you've installed Newsboat, you can run it for the first time by typing
 `newsboat` on your command prompt. This will bring you the following message:
 
@@ -74,10 +76,10 @@ The main UI of Newsboat consists of three views
 
 _Feed List View -> Article List View -> Article View_
 
-You can drill down those views by pressing `Enter` and move to the previous one by pressing
-`q`. Pressing `q` on the _Feed List View_ — or pressing `Q` from anywhere — closes Newsboat.
+You can drill down those views by pressing kbd:[Enter] and move to the previous one by pressing
+kbd:[Q]. Pressing kbd:[Q] on the _Feed List View_ — or pressing kbd:[Shift+Q] from anywhere — closes Newsboat.
 
-You can also search articles' title or content by pressing `/` on the _Feed List View_ or the _Article List View_.
+You can also search articles' title or content by pressing kbd:[/] on the _Feed List View_ or the _Article List View_.
 On the _Feed List View_ all articles of all feeds are taken into account.
 On the _Article List View_ the articles of the current feed are taken into account.
 When opening an article from a search result dialog, the search phrase is highlighted.
@@ -96,11 +98,11 @@ When you start Newsboat, it presents you with a list of feeds that you added pre
 
 You can now:
 
-* Press `R` to download articles for all feeds.
-* Press `r` to download articles for the selected feed.
-* Press `/` to search all articles in all feeds.
-* Press `Enter` to go to the article list of a selected feed.
-* Press `q` to close Newsboat.
+* Press kbd:[Shift+R] to download articles for all feeds.
+* Press kbd:[R] to download articles for the selected feed.
+* Press kbd:[/] to search all articles in all feeds.
+* Press kbd:[Enter] to go to the article list of a selected feed.
+* Press kbd:[Q] to close Newsboat.
 
 ****
 *Local articles* Newsboat keeps the articles that it downloads.
@@ -131,9 +133,9 @@ A `N` on the left indicates that an article wasn't read yet.
 
 You can now:
 
-* Press `q` to go back to the _Feed List View_.
-* Press `/` to search all articles of this feed.
-* Press `Enter` to read a selected article.
+* Press kbd:[Q] to go back to the _Feed List View_.
+* Press kbd:[/] to search all articles of this feed.
+* Press kbd:[Enter] to read a selected article.
 
 *Article View*
 
@@ -143,15 +145,15 @@ Each link in the article has a number next to it.
 You can now:
 
 * Press any number to open an article link in the browser.
-  For numbers larger than 9 type `#`, then the number and press `Enter`.
-* Press `o` to open the article in the browser.
-* Press `q` to go back to the _Article List View_.
+  For numbers larger than 9 type kbd:[#], then the number and press kbd:[Enter].
+* Press kbd:[O] to open the article in the browser.
+* Press kbd:[Q] to go back to the _Article List View_.
 
 
 ****
 *Browser view* Sometimes the content of an article is empty or just
 an abstract or short description.
-You can always press `o` to view the complete article in a browser.
+You can always press kbd:[O] to view the complete article in a browser.
 The default browser is _lynx_.
 
 You can use your browser of choice by configuring <<browser,`browser`>>.

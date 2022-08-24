@@ -1,73 +1,73 @@
-open||ENTER||Open the currently selected feed or article.
-quit||q||Quit the program or return to the previous dialog (depending on the context).
-hard-quit||Q||Quit the program without confirmation.
-reload||r||Reload the currently selected feed.
-reload-all||R||Reload all feeds.
-mark-feed-read||A||Mark all articles in the currently selected feed read.
-mark-all-feeds-read||C||Mark articles in all feeds read.
+open||kbd:[ENTER]||Open the currently selected feed or article.
+quit||kbd:[Q]||Quit the program or return to the previous dialog (depending on the context).
+hard-quit||kbd:[Shift+Q]||Quit the program without confirmation.
+reload||kbd:[R]||Reload the currently selected feed.
+reload-all||kbd:[Shift+R]||Reload all feeds.
+mark-feed-read||kbd:[Shift+A]||Mark all articles in the currently selected feed read.
+mark-all-feeds-read||kbd:[Shift+C]||Mark articles in all feeds read.
 mark-all-above-as-read||n/a||Mark all above as read.
-save||s||Export the currently selected article to a plain text file, word-wrapped according to the <<text-width,`text-width`>> setting.
+save||kbd:[S]||Export the currently selected article to a plain text file, word-wrapped according to the <<text-width,`text-width`>> setting.
 save-all||n/a||Export all articles from the currently selected feed to plain text files, word-wrapped according to the <<text-width,`text-width`>> setting.
-next-unread||n||Jump to the next unread article.
-prev-unread||p||Jump to the previous unread article.
-next||J||Jump to next list entry.
-prev||K||Jump to previous list entry.
-random-unread||^K||Jump to a random unread article.
-open-in-browser||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view.
-open-in-browser-noninteractively||o||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to <<open-in-browser,`open-in-browser`>>, but the output of the browser (stdout and stderr) is not shown, and the browser doesn't receive keyboard input. You would probably add `&` at the end of the <<browser,`browser`>> command to put it into background, too.
-open-in-browser-and-mark-read||O||Use browser to open the URL associated with the current article, or entry in the URL view. When used in the article list, it will also mark the article as read.
+next-unread||kbd:[N]||Jump to the next unread article.
+prev-unread||kbd:[P]||Jump to the previous unread article.
+next||kbd:[Shift+J]||Jump to next list entry.
+prev||kbd:[Shift+K]||Jump to previous list entry.
+random-unread||kbd:[Ctrl+K]||Jump to a random unread article.
+open-in-browser||kbd:[O]||Use browser to open the URL associated with the current article, feed, or entry in the URL view.
+open-in-browser-noninteractively||n/a||Use browser to open the URL associated with the current article, feed, or entry in the URL view. This operation works similar to <<open-in-browser,`open-in-browser`>>, but the output of the browser (stdout and stderr) is not shown, and the browser doesn't receive keyboard input. You would probably add `&` at the end of the <<browser,`browser`>> command to put it into background, too.
+open-in-browser-and-mark-read||kbd:[Shift+O]||Use browser to open the URL associated with the current article, or entry in the URL view. When used in the article list, it will also mark the article as read.
 open-all-unread-in-browser||n/a||Open all the unread URLs in the current feed.
 open-all-unread-in-browser-and-mark-read||n/a||Open all the unread URLs in the current feed and mark them as read.
-help||?||Run the help screen.
-toggle-source-view||^U||Toggle between the HTML view and the source view in the article view.
-toggle-article-read||N||Toggle the read flag for the currently selected article, and clear the delete flag if set.
-toggle-show-read-feeds||l||Toggle whether read feeds should be shown in the feed list.
-show-urls||u||Show all URLs in the article in a list (similar to urlview).
-clear-tag||^T||Clear current tag.
-set-tag||t||Select tag.
-open-search||/||Open the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
-goto-url||#||Open the URL dialog and then open a specified URL in the browser.
-one||1||Open URL 1 in the browser.
-two||2||Open URL 2 in the browser.
-three||3||Open URL 3 in the browser.
-four||4||Open URL 4 in the browser.
-five||5||Open URL 5 in the browser.
-six||6||Open URL 6 in the browser.
-seven||7||Open URL 7 in the browser.
-eight||8||Open URL 8 in the browser.
-nine||9||Open URL 9 in the browser.
-zero||0||Open URL 10 in the browser.
-enqueue||e||Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support).
-edit-urls||E||Edit the list of subscribed URLs. Newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, Newsboat will reload the URLs file.
-reload-urls||^R||Reload the URLs configuration file.
-redraw||^L||Redraw the screen.
-cmdline||:||Open the command line.
-set-filter||F||Set a filter.
-select-filter||f||Select a predefined filter.
-clear-filter||^F||Clear currently set filter.
-bookmark||^B||Bookmark currently selected article or URL.
-edit-flags||^E||Edit the flags of the currently selected article.
-next-unread-feed||^N||Go to the next feed with unread articles. This only works from the article list.
-prev-unread-feed||^P||Go to the previous feed with unread articles. This only works from the article list.
-next-feed||j||Go to the next feed. This only works from the article list.
-prev-feed||k||Go to the previous feed. This only works from the article list.
-delete-article||D||Delete the currently selected article.
-delete-all-articles||^D||Delete all articles in the articlelist. Note that the articlelist might contain a subset of feed's articles (because of filters or <<show-read-articles,`show-read-articles no`>>), or it might contain a mix of articles from different feeds (if you're viewing a query feed) — in either case, `delete-all-articles` affects just those articles, not all articles of the respective feed(s).
-purge-deleted||$||Purge all articles that are marked as deleted from the article list.
-view-dialogs||v||View list of open dialogs.
-close-dialog||^X||Close currently selected dialog.
-next-dialog||^V||Go to next dialog.
-prev-dialog||^G||Go to previous dialog.
-pipe-to||| ||Pipe article to command. The text will be word-wrapped according to the <<text-width,`text-width`>> setting.
-sort||g||Sort feeds/articles by interactively choosing the sort method.
-rev-sort||G||Sort feeds/articles by interactively choosing the sort method (reversed).
-up||UP||Go up one item in the list.
-down||DOWN||Go down one item in the list.
-pageup||PPAGE||Go up one page in the list.
-pagedown||NPAGE||Go down one page in the list.
-home||HOME||Go to the first item in the list.
-end||END||Go to the last item in the list.
-macro-prefix||,||Initiate macro execution. The next key press selects the actual macro and runs it.
-switch-focus||TAB||Switch focus between widgets. This is currently only applicable to the `filebrowser` and `dirbrowser` contexts.
-goto-title||||Go to item whose title contains the specified string (case-insensitive).
-prevsearchresults||z||Return to previous search results (if any). This only works from `searchresultslist`.
+help||kbd:[?]||Run the help screen.
+toggle-source-view||kbd:[Ctrl+U]||Toggle between the HTML view and the source view in the article view.
+toggle-article-read||kbd:[Shift+N]||Toggle the read flag for the currently selected article, and clear the delete flag if set.
+toggle-show-read-feeds||kbd:[L]||Toggle whether read feeds should be shown in the feed list.
+show-urls||kbd:[U]||Show all URLs in the article in a list (similar to urlview).
+clear-tag||kbd:[Ctrl+T]||Clear current tag.
+set-tag||kbd:[T]||Select tag.
+open-search||kbd:[/]||Open the search dialog. When a search is done in the article list, then the search operation only applies to the articles of the current feed, otherwise to all articles.
+goto-url||kbd:[#]||Open the URL dialog and then open a specified URL in the browser.
+one||kbd:[1]||Open URL 1 in the browser.
+two||kbd:[2]||Open URL 2 in the browser.
+three||kbd:[3]||Open URL 3 in the browser.
+four||kbd:[4]||Open URL 4 in the browser.
+five||kbd:[5]||Open URL 5 in the browser.
+six||kbd:[6]||Open URL 6 in the browser.
+seven||kbd:[7]||Open URL 7 in the browser.
+eight||kbd:[8]||Open URL 8 in the browser.
+nine||kbd:[9]||Open URL 9 in the browser.
+zero||kbd:[0]||Open URL 10 in the browser.
+enqueue||kbd:[E]||Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support).
+edit-urls||kbd:[Shift+E]||Edit the list of subscribed URLs. Newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, Newsboat will reload the URLs file.
+reload-urls||kbd:[Ctrl+R]||Reload the URLs configuration file.
+redraw||kbd:[Ctrl+L]||Redraw the screen.
+cmdline||kbd:[:]||Open the command line.
+set-filter||kbd:[Shift+F]||Set a filter.
+select-filter||kbd:[F]||Select a predefined filter.
+clear-filter||kbd:[Ctrl+F]||Clear currently set filter.
+bookmark||kbd:[Ctrl+B]||Bookmark currently selected article or URL.
+edit-flags||kbd:[Ctrl+E]||Edit the flags of the currently selected article.
+next-unread-feed||kbd:[Ctrl+N]||Go to the next feed with unread articles. This only works from the article list.
+prev-unread-feed||kbd:[Ctrl+P]||Go to the previous feed with unread articles. This only works from the article list.
+next-feed||kbd:[J]||Go to the next feed. This only works from the article list.
+prev-feed||kbd:[K]||Go to the previous feed. This only works from the article list.
+delete-article||kbd:[Shift+D]||Delete the currently selected article.
+delete-all-articles||kbd:[Ctrl+D]||Delete all articles in the articlelist. Note that the articlelist might contain a subset of feed's articles (because of filters or <<show-read-articles,`show-read-articles no`>>), or it might contain a mix of articles from different feeds (if you're viewing a query feed) — in either case, `delete-all-articles` affects just those articles, not all articles of the respective feed(s).
+purge-deleted||kbd:[$]||Purge all articles that are marked as deleted from the article list.
+view-dialogs||kbd:[V]||View list of open dialogs.
+close-dialog||kbd:[Ctrl+X]||Close currently selected dialog.
+next-dialog||kbd:[Ctrl+V]||Go to next dialog.
+prev-dialog||kbd:[Ctrl+G]||Go to previous dialog.
+pipe-to||kbd:[| ]||Pipe article to command. The text will be word-wrapped according to the <<text-width,`text-width`>> setting.
+sort||kbd:[G]||Sort feeds/articles by interactively choosing the sort method.
+rev-sort||kbd:[Shift+G]||Sort feeds/articles by interactively choosing the sort method (reversed).
+up||kbd:[UP]||Go up one item in the list.
+down||kbd:[DOWN]||Go down one item in the list.
+pageup||kbd:[PPAGE]||Go up one page in the list.
+pagedown||kbd:[NPAGE]||Go down one page in the list.
+home||kbd:[HOME]||Go to the first item in the list.
+end||kbd:[END]||Go to the last item in the list.
+macro-prefix||kbd:[,]||Initiate macro execution. The next key press selects the actual macro and runs it.
+switch-focus||kbd:[TAB]||Switch focus between widgets. This is currently only applicable to the `filebrowser` and `dirbrowser` contexts.
+goto-title||n/a||Go to item whose title contains the specified string (case-insensitive).
+prevsearchresults||kbd:[Z]||Return to previous search results (if any). This only works from `searchresultslist`.

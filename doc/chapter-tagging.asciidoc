@@ -1,3 +1,5 @@
+:experimental:
+
 Newsboat comes with the possibility to categorize or "tag", as we call it,
 RSS feeds. Every RSS feed can be assigned 0 or more tags. Within Newsboat, you
 can then select to only show RSS feeds that match a certain tag. That makes it
@@ -12,10 +14,10 @@ around the tag (see example below). An example _urls_ file may look like this:
 	https://rss.orf.at/news.xml news orf
 	https://www.heise.de/newsticker/heise.rdf news interesting
 
-When you now start Newsboat with this configuration, you can press "t" to select
+When you now start Newsboat with this configuration, you can press kbd:[T] to select
 a tag. When you select the tag "news", you will see all three RSS feeds. Pressing
-"t" again and e.g. selecting the "conspiracy" tag, you will only see the
-https://blog.fefe.de/rss.xml?html RSS feed. Pressing "^T" clears the current tag,
+kbd:[T] again and e.g. selecting the "conspiracy" tag, you will only see the
+https://blog.fefe.de/rss.xml?html RSS feed. Pressing kbd:[Ctrl+T] clears the current tag,
 and again shows all RSS feeds, regardless of their assigned tags.
 
 A special type of tag are tags that start with the tilde character (`~`). When such
