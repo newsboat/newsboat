@@ -5,6 +5,8 @@
 ### Added
 ### Changed
 - Bumped minimum supported Rust version to 1.59.0
+- Bumped minimum supported GNU Make version to 4.0 (released on October 9th,
+    2013)
 - When `select-filter` is used with an argument (e.g. from a macro), that
   argument is now used to look up a predefined filter by name. The old
   behaviour (applying the argument as filter) is still available by using

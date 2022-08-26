@@ -5,34 +5,7 @@ datadir?=$(prefix)/share
 localedir?=$(datadir)/locale
 docdir?=$(datadir)/doc/$(PACKAGE)
 
-# Here's a problem:
-# 1. our "Rust 1.44, GCC 10, Ubuntu 20.04" build fails: cxx-0.5 crate can't
-#    find the target directory, thus doesn't symlink cxxbridge headers into the
-#    expected location, thus C++ compilation fails.
-# 2. cxx-0.5 can take a hint from CARGO_TARGET_DIR, but it wants the path to be
-#    absolute.
-# 3. Cargo docs say that CARGO_TARGET_DIR is relative to current working
-#    directory, but in reality, Cargo works fine with an absolute path too.
-# 4. We actually need a relative path for a different purpose: to tell GCC
-#    where to find cxxbridge headers. Unfortunately, if we use an absolute path
-#    there, GCC will also print out absolute paths when printing out dependency
-#    info (see `depslist` target). So we have to supply GCC a relative path.
-#
-# So here's what we do:
-#
-# 1. if someone set CARGO_TARGET_DIR env var, we **hope** they followed Cargo
-#    docs' advice and used a relative path. If the var is not set, we use
-#    a default of "target" (which is Cargo's default, so nothing changes from
-#    the user's point of view).
-#
-#    We remember this path in a variable `relative_cargo_target_dir`, which we
-#    pass to GCC.
-# 2. we override CARGO_TARGET_DIR, turning it into an absolute path.
-#
-#    That fixes cxx-0.5.
-CARGO_TARGET_DIR?=target
-relative_cargo_target_dir:=$(CARGO_TARGET_DIR)
-export CARGO_TARGET_DIR:=$(abspath $(CARGO_TARGET_DIR))
+export CARGO_TARGET_DIR?=$(abspath target)
 
 CPPCHECK_JOBS?=5
 
@@ -50,7 +23,7 @@ CXX_FOR_BUILD?=$(CXX)
 DEFINES=-DLOCALEDIR='"$(localedir)"'
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
-INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(relative_cargo_target_dir)/cxxbridge/
+INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(CARGO_TARGET_DIR)/cxxbridge/
 BARE_CXXFLAGS=-std=c++11 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
@@ -72,22 +45,46 @@ endif
 CXXFLAGS:=$(BARE_CXXFLAGS) $(WARNFLAGS) $(DEFINES) $(CXXFLAGS)
 CXXFLAGS_FOR_BUILD?=$(CXXFLAGS)
 
-LIB_SOURCES:=$(shell cat mk/libboat.deps)
-LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SOURCES))
+LIB_SRCS:=$(shell cat mk/libboat.deps)
+LIB_OBJS:=$(patsubst %.cpp,%.o,$(LIB_SRCS))
 LIB_OUTPUT=libboat.a
 
-FILTERLIB_SOURCES=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
-FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SOURCES))
+FILTERLIB_SRCS=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
+FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SRCS))
 FILTERLIB_OUTPUT=libfilter.a
 
 NEWSBOAT=newsboat
-NEWSBOAT_SOURCES:=$(shell cat mk/newsboat.deps)
-NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SOURCES))
+NEWSBOAT_SRCS:=$(shell cat mk/newsboat.deps)
+NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SRCS))
 NEWSBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -lrsspp -ldl
 
-RSSPPLIB_SOURCES=$(sort $(wildcard rss/*.cpp))
-RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SOURCES))
+RSSPPLIB_SRCS=$(sort $(wildcard rss/*.cpp))
+RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SRCS))
 RSSPPLIB_OUTPUT=librsspp.a
+
+PODBOAT=podboat
+PODBOAT_SRCS:=$(shell cat mk/podboat.deps)
+PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SRCS))
+PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
+
+TEST_SRCS:=$(wildcard test/*.cpp test/test_helpers/*.cpp)
+TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
+SRC_SRCS:=$(wildcard src/*.cpp)
+SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
+
+CPP_SRCS:=$(LIB_SRCS) $(FILTERLIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS)
+CPP_DEPS:=$(addprefix .deps/,$(CPP_SRCS))
+# Sorting removes duplicate items, which prevents Make from spewing warnings
+# about repeated items in the target that creates these directories
+CPP_DEPS_SUBDIRS:=$(sort $(dir $(CPP_DEPS)))
+
+STFL_HDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
+
+POFILES:=$(wildcard po/*.po)
+MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
+POTFILE=po/newsboat.pot
+
+RUST_SRCS:=Cargo.toml $(shell find rust -type f)
 
 CARGO_BUILD_FLAGS+=--verbose
 
@@ -106,11 +103,6 @@ NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/libnewsboat.a
 LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
 endif
 
-PODBOAT=podboat
-PODBOAT_SOURCES:=$(shell cat mk/podboat.deps)
-PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SOURCES))
-PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
-
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBOAT_LIBS+=-liconv -lintl
 PODBOAT_LIBS+=-liconv -lintl
@@ -124,12 +116,6 @@ MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
 CARGO=cargo
-
-STFLHDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
-POFILES:=$(wildcard po/*.po)
-MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/newsboat.pot
-RUST_SRCS:=Cargo.toml $(shell find rust -type f)
 
 TEXTCONV=./txt2h
 RM=rm -f
@@ -162,6 +148,14 @@ $(FILTERLIB_OUTPUT): $(FILTERLIB_OBJS)
 	$(AR) qc $@ $^
 	$(RANLIB) $@
 
+test: test/test rust-test
+
+rust-test:
+	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
+
+test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
+
 regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 	cococpp -frames filter filter/filter.atg
@@ -173,8 +167,19 @@ target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 	@# requires a recipe for pattern rules. So here you go, Make, have
 	@# a comment.
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+$(CPP_DEPS_SUBDIRS):
+	$(MKDIR) $@
+
+%.o: %.cpp # Cancel default rule for C++ code
+%.o: %.cpp | $(NEWSBOATLIB_OUTPUT) $(STFL_HDRS) $(CPP_DEPS_SUBDIRS)
+	$(CXX) $(CXXFLAGS) -MD -MP -MF $(addprefix .deps/,$<) -o $@ -c $<
+
+# This prevents Make from thinking that STFL headers are an intermediate
+# dependency of C++ object files, which in turn prevents Make from removing the
+# headers once the object files are compiled. That fixes the problem where
+# re-running Make causes it to re-create the headers and then re-compile all
+# the object files that depend on those headers.
+$(STFL_HDRS):
 
 %.h: %.stfl
 	$(TEXTCONV) $< .stfl > $@
@@ -204,8 +209,16 @@ clean-doc:
 		doc/example-config doc/generate doc/generate2 \
 		doc/gen-example-config
 
+clean-test:
+	$(RM) test/test test/*.o test/test_helpers/*.o
+
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
-	$(RM) $(STFLHDRS) xlicense.h
+	$(RM) $(STFL_HDRS) xlicense.h
+	$(RM) -r .deps
+
+profclean:
+	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
+	$(RM) app*.info
 
 distclean: clean profclean
 	$(RM) core *.core core.* config.mk
@@ -299,8 +312,8 @@ fmt:
 
 cppcheck:
 	cppcheck -j$(CPPCHECK_JOBS) --force --enable=all --suppress=unusedFunction \
-		--config-exclude=3rd-party --config-exclude=$(relative_cargo_target_dir) --config-exclude=/usr/include \
-		--suppress=*:3rd-party/* --suppress=*:$(relative_cargo_target_dir)/* --suppress=*:/usr/include/* \
+		--config-exclude=3rd-party --config-exclude=$(CARGO_TARGET_DIR) --config-exclude=/usr/include \
+		--suppress=*:3rd-party/* --suppress=*:$(CARGO_TARGET_DIR)/* --suppress=*:/usr/include/* \
 		--inline-suppr -DDEBUG=1 -U__VERSION__ \
 		$(INCLUDES) $(DEFINES) \
 		include newsboat.cpp podboat.cpp rss src stfl test \
@@ -412,27 +425,6 @@ uninstall-mo:
 		echo "Uninstalling $$dir/$(PACKAGE).mo" ; \
 	done
 
-# tests and coverage reports
-
-test: test/test rust-test
-
-rust-test:
-	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
-
-TEST_SRCS:=$(wildcard test/*.cpp test/test_helpers/*.cpp)
-TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
-SRC_SRCS:=$(wildcard src/*.cpp)
-SRC_OBJS:=$(patsubst %.cpp,%.o,$(SRC_SRCS))
-test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
-
-clean-test:
-	$(RM) test/test test/*.o test/test_helpers/*.o
-
-profclean:
-	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
-	$(RM) app*.info
-
 check: test
 	(cd test && ./test --order=rand --rng-seed=time)
 	$(CARGO) test $(CARGO_TEST_FLAGS)
@@ -465,20 +457,4 @@ config.mk:
 xlicense.h: LICENSE
 	$(TEXTCONV) $< > $@
 
-# We reset the locale for the `ls` call to force it into sorting by byte value.
-# Without this, the sorting is locale-dependent, which is annoying because it
-# means the only way to pass the continuous integration check is to see it fail
-# and copy the diff.
-ALL_SRCS:=$(shell LC_ALL=C ls -1 *.cpp filter/*.cpp rss/*.cpp src/*.cpp test/*.cpp test/test_helpers/*.cpp)
-ALL_HDRS:=$(wildcard filter/*.h rss/*.h test/test_helpers/*.h 3rd-party/*.hpp) $(STFLHDRS) xlicense.h
-# This depends on NEWSBOATLIB_OUTPUT because it produces cxxbridge headers, and
-# we need to record those headers in the deps file.
-depslist: $(NEWSBOATLIB_OUTPUT) $(ALL_SRCS) $(ALL_HDRS)
-	> mk/mk.deps
-	for file in $(ALL_SRCS) ; do \
-		target=`echo $$file | sed 's/cpp$$/o/'`; \
-		$(CXX) $(BARE_CXXFLAGS) -MM -MG -MQ $$target $$file >> mk/mk.deps ; \
-		echo $$file ; \
-	done;
-
-include mk/mk.deps
+-include $(CPP_DEPS)
