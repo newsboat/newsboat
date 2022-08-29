@@ -555,13 +555,17 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		const std::uint64_t amt = rsscache->cleanup_cache(
+		const auto unreachable_feeds = rsscache->cleanup_cache(
 				feedcontainer.get_all_feeds());
 		if (!args.silent()) {
 			std::cout << _("done.") << std::endl;
-			if (amt > 0u) {
-				std::cout << _("Unreachable feeds found, consider setting "
-						"`cleanup-on-quit yes` or run `newsboat --cleanup`")
+			if (!unreachable_feeds.empty()) {
+				for (const auto& feed : unreachable_feeds) {
+					LOG(Level::USERERROR, "Unreachable feed found: %s", feed);
+				}
+
+				std::cout << strprintf::fmt(_("%d Unreachable feeds found, consider setting "
+							"`cleanup-on-quit yes` or run `newsboat --cleanup`"), unreachable_feeds.size())
 					<< std::endl;
 			}
 		}

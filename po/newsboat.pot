@@ -476,7 +476,7 @@ msgstr ""
 
 #: src/controller.cpp:564
 msgid ""
-"Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
+"%d Unreachable feeds found, consider setting `cleanup-on-quit yes` or run "
 "`newsboat --cleanup`"
 msgstr ""
 
