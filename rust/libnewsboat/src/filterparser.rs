@@ -16,7 +16,7 @@ use std::vec::Vec;
 use strprintf::fmt;
 
 /// Operators that can be used in comparisons.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Operator {
     Equals,
     NotEquals,
