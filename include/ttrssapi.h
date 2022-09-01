@@ -27,14 +27,14 @@ public:
 		bool try_login = true);
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	void add_custom_headers(curl_slist** custom_headers) override;
-	bool mark_all_read(const std::string& feedurl) override;
+	bool mark_all_read(const std::string& feed_url) override;
 	bool mark_article_read(const std::string& guid, bool read) override;
 	bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) override;
 	rsspp::Feed fetch_feed(const std::string& id);
 	rsspp::Feed fetch_feed(const std::string& id, CurlHandle& cached_handle);
-	bool update_article(const std::string& guid, int mode, int field);
+	bool update_article(const std::string& guid, int field, int mode);
 
 private:
 	void fetch_feeds_per_category(const nlohmann::json& cat,
