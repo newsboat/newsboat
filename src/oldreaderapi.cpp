@@ -301,23 +301,15 @@ bool OldReaderApi::update_article_flags(const std::string& oldflags,
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
-			success = star_article(guid, true);
-		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
-			success = star_article(guid, false);
-		}
+		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
+			success = star_article(guid, added);
+		});
 	}
 
 	if (share_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), share_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), share_flag[0]) != nullptr) {
-			success = share_article(guid, true);
-		} else if (strchr(oldflags.c_str(), share_flag[0]) != nullptr &&
-			strchr(newflags.c_str(), share_flag[0]) == nullptr) {
-			success = share_article(guid, false);
-		}
+		update_flag(oldflags, newflags, share_flag[0], [&](bool added) {
+			success = share_article(guid, added);
+		});
 	}
 
 	return success;

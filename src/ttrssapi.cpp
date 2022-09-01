@@ -350,24 +350,15 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
-			success = star_article(guid, true);
-		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
-			success = star_article(guid, false);
-		}
+		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
+			success = star_article(guid, added);
+		});
 	}
 
 	if (publish_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), publish_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), publish_flag[0]) != nullptr) {
-			success = publish_article(guid, true);
-		} else if (strchr(oldflags.c_str(), publish_flag[0]) !=
-			nullptr &&
-			strchr(newflags.c_str(), publish_flag[0]) == nullptr) {
-			success = publish_article(guid, false);
-		}
+		update_flag(oldflags, newflags, publish_flag[0], [&](bool added) {
+			success = publish_article(guid, added);
+		});
 	}
 
 	return success;
