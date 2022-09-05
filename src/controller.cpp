@@ -564,8 +564,8 @@ int Controller::run(const CliArgsParser& args)
 					LOG(Level::USERERROR, "Unreachable feed found: %s", feed);
 				}
 
-				std::cout << strprintf::fmt(_("%d Unreachable feeds found, consider setting "
-							"`cleanup-on-quit yes` or run `newsboat --cleanup`"), unreachable_feeds.size())
+				std::cout << strprintf::fmt(_("%d unreachable feeds found. See "
+							"`cleanup-on-quit` in newsboat(1) for details."), unreachable_feeds.size())
 					<< std::endl;
 			}
 		}
