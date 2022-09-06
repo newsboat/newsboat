@@ -130,6 +130,7 @@ Feed Parser::parse_url(const std::string& url,
 		api->add_custom_headers(&custom_headers);
 	}
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_SSL_VERIFYPEER, verify_ssl);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
