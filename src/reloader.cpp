@@ -89,9 +89,8 @@ void Reloader::reload(unsigned int pos,
 		std::string errmsg;
 		std::shared_ptr<AutoDiscardMessage> message_lifetime;
 		if (!unattended) {
-			const auto max = ctrl->get_feedcontainer()->feeds_size();
 			const std::string progress = show_progress ?
-				strprintf::fmt("(%u/%u) ", pos + 1, max) :
+				strprintf::fmt("(%u/%u) ", ++reload_progress, reload_progress_max) :
 				"";
 			message_lifetime = ctrl->get_view()->get_statusline().show_message_until_finished(
 					strprintf::fmt(_("%sLoading %s..."),
@@ -168,6 +167,8 @@ void Reloader::reload_all(bool unattended)
 	num_threads = std::max(min_threads, std::min(num_threads, max_threads));
 
 	LOG(Level::DEBUG, "Reloader::reload_all: starting with reload all...");
+	reload_progress = 0;
+	reload_progress_max = num_feeds;
 	if (num_threads == 1) {
 		reload_range(0, num_feeds - 1, unattended);
 	} else {
@@ -222,6 +223,8 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
 
+	reload_progress = 0;
+	reload_progress_max = indexes.size();
 	for (const auto& idx : indexes) {
 		reload(idx, true, unattended);
 	}
