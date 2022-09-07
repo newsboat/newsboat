@@ -48,9 +48,6 @@ is the connector between view and cache. It parses the command line option,
 controls the configuration parser and hands over data to the view. It also
 contains code to control the reloading of feeds.
 
-*class downloadthread*: a thread that does nothing but start a reload operation
-for all feeds. Derived from thread.
-
 *class htmlrenderer*: takes a string and renders the HTML it contains into a
 textual representation. It also extracts URLs from a and img tag for later use.
 
@@ -63,8 +60,8 @@ Logging can be enabled by developers (see below).
 
 *class mutex*: a C++ wrapper around the pthread mutex.
 
-*class reloadthread*: similar to downloadthread, but starts a reload every n
-minutes (configurable).
+*class reloadthread*: a thread that does nothing but starts a reload every n
+minutes (configurable) for all feeds.
 
 *class rss_feed*: represents an RSS feed, including RSS url, page link, title,
 author, description and RSS items (articles). Uses the cache to persist itself.

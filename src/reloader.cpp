@@ -9,10 +9,8 @@
 #include "controller.h"
 #include "curlhandle.h"
 #include "dbexception.h"
-#include "downloadthread.h"
 #include "fmtstrformatter.h"
 #include "matcherexception.h"
-#include "reloadrangethread.h"
 #include "reloadthread.h"
 #include "rss/exception.h"
 #include "rssfeed.h"
@@ -39,7 +37,19 @@ void Reloader::spawn_reloadthread()
 void Reloader::start_reload_all_thread(const std::vector<int>& indexes)
 {
 	LOG(Level::INFO, "starting reload all thread");
-	std::thread t(DownloadThread(*this, indexes));
+	std::thread t([=]() {
+		LOG(Level::DEBUG,
+			"Reloader::start_reload_all_thread: inside thread, reloading all "
+			"feeds...");
+		if (trylock_reload_mutex()) {
+			if (indexes.empty()) {
+				reload_all();
+			} else {
+				reload_indexes(indexes);
+			}
+			unlock_reload_mutex();
+		}
+	});
 	t.detach();
 }
 
@@ -167,10 +177,10 @@ void Reloader::reload_all(bool unattended)
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: starting reload threads...");
 		for (int i = 0; i < num_threads - 1; i++) {
-			threads.push_back(std::thread(ReloadRangeThread(*this,
-						partitions[i].first,
-						partitions[i].second,
-						unattended)));
+			auto range = partitions[i];
+			threads.emplace_back([=]() {
+				reload_range(range.first, range.second, unattended);
+			});
 		}
 		LOG(Level::DEBUG,
 			"Reloader::reload_all: starting my own reload...");

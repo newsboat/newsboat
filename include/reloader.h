@@ -26,12 +26,6 @@ public:
 	/// If \a indexes is empty, all feeds will be reloaded.
 	void start_reload_all_thread(const std::vector<int>& indexes = {});
 
-	void unlock_reload_mutex()
-	{
-		reload_mutex.unlock();
-	}
-	bool trylock_reload_mutex();
-
 	/// \brief Reloads given feed.
 	///
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
@@ -85,6 +79,12 @@ private:
 
 	void notify_reload_finished(unsigned int unread_feeds_before,
 		unsigned int unread_articles_before);
+
+	void unlock_reload_mutex()
+	{
+		reload_mutex.unlock();
+	}
+	bool trylock_reload_mutex();
 
 	Controller* ctrl;
 	Cache* rsscache;
