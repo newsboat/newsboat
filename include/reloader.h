@@ -2,6 +2,7 @@
 #define NEWSBOAT_RELOADER_H_
 
 #include <atomic>
+#include <functional>
 #include <mutex>
 #include <vector>
 
@@ -95,6 +96,10 @@ private:
 		reload_mutex.unlock();
 	}
 	bool trylock_reload_mutex();
+
+	void partition_reload_to_threads(
+		std::function<void(unsigned int start, unsigned int end)> handle_range,
+		unsigned int num_feeds);
 
 	Controller* ctrl;
 	Cache* rsscache;
