@@ -30,7 +30,7 @@ impl TagSoupPullParser {
         }
     }
 
-    pub fn next(self: &mut TagSoupPullParser) -> &Event {
+    pub fn extract_next(self: &mut TagSoupPullParser) -> &Event {
         self.attributes.clear();
         self.text.clear();
 

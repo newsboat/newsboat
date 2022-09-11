@@ -23,59 +23,59 @@ TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	e = xpp.get_event_type();
 	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "test");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "foo");
 	REQUIRE(xpp.get_attribute_value("quux").value() == "asdf");
 	REQUIRE(xpp.get_attribute_value("bar").value() == "qqq");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
 	REQUIRE(xpp.get_text() == "text");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "foo");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
 	REQUIRE(xpp.get_text() == "more text");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "more");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
 	REQUIRE(xpp.get_text() == "\"!@");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "more");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "xxx");
 	REQUIRE(xpp.get_attribute_value("foo").value() == "bar");
 	REQUIRE(xpp.get_attribute_value("baz").value() == "qu ux");
 	REQUIRE(xpp.get_attribute_value("hi").value() == "ho ho ho");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "xxx");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "test");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 }
 
@@ -95,11 +95,11 @@ TEST_CASE("<br>, <br/> and <br /> behave the same way", "[TagSoupPullParser]")
 			REQUIRE(event ==
 				TagSoupPullParser::Event::START_DOCUMENT);
 
-			event = Parser.next();
+			event = Parser.extract_next();
 			REQUIRE(event == TagSoupPullParser::Event::START_TAG);
 			REQUIRE(Parser.get_text() == "br");
 
-			event = Parser.next();
+			event = Parser.extract_next();
 			REQUIRE(event ==
 				TagSoupPullParser::Event::END_DOCUMENT);
 		}
@@ -122,46 +122,46 @@ TEST_CASE("Tagsoup pull parser emits whitespace as is",
 	e = xpp.get_event_type();
 	REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "test");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
 	REQUIRE(xpp.get_text() == "    <4 spaces\n");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "pre");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
 	REQUIRE(xpp.get_text() == "\n    ");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::START_TAG);
 	REQUIRE(xpp.get_text() == "span");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::TEXT);
 	REQUIRE(xpp.get_text() == "should have seen spaces");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "span");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "pre");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_TAG);
 	REQUIRE(xpp.get_text() == "test");
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 
-	e = xpp.next();
+	e = xpp.extract_next();
 	REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 }
 
@@ -178,11 +178,11 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 			e = xpp.get_event_type();
 			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-			e = xpp.next();
+			e = xpp.extract_next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
 			REQUIRE(xpp.get_text() == "\x14*½…σ");
 
-			e = xpp.next();
+			e = xpp.extract_next();
 			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 		}
 
@@ -196,11 +196,11 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 			e = xpp.get_event_type();
 			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-			e = xpp.next();
+			e = xpp.extract_next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
 			REQUIRE(xpp.get_text() == "— Hi");
 
-			e = xpp.next();
+			e = xpp.extract_next();
 			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 		}
 
@@ -217,12 +217,12 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 			e = xpp.get_event_type();
 			REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-			e = xpp.next();
+			e = xpp.extract_next();
 			REQUIRE(e == TagSoupPullParser::Event::TEXT);
 			REQUIRE(xpp.get_text() ==
 				"€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ");
 
-			e = xpp.next();
+			e = xpp.extract_next();
 			REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 		}
 	}
@@ -236,11 +236,11 @@ TEST_CASE("TagSoupPullParser can decode HTML entities", "[TagSoupPullParser]")
 		e = xpp.get_event_type();
 		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
 		REQUIRE(xpp.get_text() == "σ™");
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 	}
 }
@@ -257,11 +257,11 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 		e = xpp.get_event_type();
 		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
 		REQUIRE(xpp.get_text() == "some & text");
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 	}
 
@@ -274,11 +274,11 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 		e = xpp.get_event_type();
 		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
 		REQUIRE(xpp.get_text() == "some &more; text");
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 	}
 
@@ -291,11 +291,11 @@ TEST_CASE("TagSoupPullParser ignores unknown and invalid entities",
 		e = xpp.get_event_type();
 		REQUIRE(e == TagSoupPullParser::Event::START_DOCUMENT);
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::TEXT);
 		REQUIRE(xpp.get_text() == "a lone ampersand: &, and some entities: <>");
 
-		e = xpp.next();
+		e = xpp.extract_next();
 		REQUIRE(e == TagSoupPullParser::Event::END_DOCUMENT);
 	}
 }

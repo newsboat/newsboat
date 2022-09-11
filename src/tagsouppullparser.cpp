@@ -48,9 +48,9 @@ std::string TagSoupPullParser::get_text() const
 	return std::string(newsboat::tagsouppullparser::bridged::get_text(*rs_object));
 }
 
-TagSoupPullParser::Event TagSoupPullParser::next()
+TagSoupPullParser::Event TagSoupPullParser::extract_next()
 {
-	return newsboat::tagsouppullparser::bridged::next(*rs_object);
+	return newsboat::tagsouppullparser::bridged::extract_next(*rs_object);
 }
 
 } // namespace newsboat

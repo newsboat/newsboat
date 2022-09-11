@@ -19,7 +19,7 @@ public:
 	nonstd::optional<std::string> get_attribute_value(const std::string& name) const;
 	Event get_event_type() const;
 	std::string get_text() const;
-	Event next();
+	Event extract_next();
 
 private:
 	rust::Box<tagsouppullparser::bridged::TagSoupPullParser> rs_object;

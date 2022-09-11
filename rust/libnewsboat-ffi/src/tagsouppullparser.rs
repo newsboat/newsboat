@@ -18,7 +18,7 @@ mod bridged {
         type TagSoupPullParser;
 
         fn create(input: &str) -> Box<TagSoupPullParser>;
-        fn next(parser: &mut TagSoupPullParser) -> Event;
+        fn extract_next(parser: &mut TagSoupPullParser) -> Event;
         fn get_attribute_value(
             parser: &TagSoupPullParser,
             name: &str,
@@ -45,8 +45,8 @@ fn create(input: &str) -> Box<TagSoupPullParser> {
     ))
 }
 
-fn next(parser: &mut TagSoupPullParser) -> bridged::Event {
-    map_event_for_ffi(parser.0.next())
+fn extract_next(parser: &mut TagSoupPullParser) -> bridged::Event {
+    map_event_for_ffi(parser.0.extract_next())
 }
 
 fn get_attribute_value(parser: &TagSoupPullParser, name: &str, out_value: &mut String) -> bool {

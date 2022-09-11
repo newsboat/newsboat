@@ -137,9 +137,9 @@ void HtmlRenderer::render(std::istream& input,
 	 */
 	TagSoupPullParser xpp(input);
 
-	for (TagSoupPullParser::Event e = xpp.next();
+	for (TagSoupPullParser::Event e = xpp.extract_next();
 		e != TagSoupPullParser::Event::END_DOCUMENT;
-		e = xpp.next()) {
+		e = xpp.extract_next()) {
 		if (inside_script) {
 			// <script> tags can't be nested[1], so we simply ignore all input
 			// while we're looking for the closing tag.
