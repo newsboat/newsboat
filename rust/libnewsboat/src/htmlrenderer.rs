@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::Write as _;
 
 use gettextrs::gettext;
 
@@ -104,9 +105,9 @@ impl TableRow {
         if !self.inside {
             self.start_cell(1); // colspan 1
         }
-        self.cells
-            .last_mut()
-            .map(|cell| cell.text.push(s.to_string()));
+        if let Some(cell) = self.cells.last_mut() {
+            cell.text.push(s.to_string())
+        }
     }
 
     fn start_cell(&mut self, span: u32) {
@@ -139,15 +140,17 @@ impl Table {
         if !self.inside {
             self.start_row();
         }
-        self.rows.last_mut().map(|row| row.add_text(s));
+        if let Some(row) = self.rows.last_mut() {
+            row.add_text(s)
+        }
     }
 
     fn start_row(&mut self) {
-        self.rows.last_mut().map(|row| {
+        if let Some(row) = self.rows.last_mut() {
             if row.inside {
                 row.complete_cell();
             }
-        });
+        }
         self.inside = true;
         self.rows.push(TableRow::new());
     }
@@ -160,11 +163,15 @@ impl Table {
         if !self.inside {
             self.start_row();
         }
-        self.rows.last_mut().map(|row| row.start_cell(span));
+        if let Some(row) = self.rows.last_mut() {
+            row.start_cell(span)
+        }
     }
 
     fn complete_cell(&mut self) {
-        self.rows.last_mut().map(|row| row.complete_cell());
+        if let Some(row) = self.rows.last_mut() {
+            row.complete_cell()
+        }
     }
 }
 
@@ -246,7 +253,7 @@ impl HtmlRenderer {
          *   - we then can iterate over all continuous elements, such as start
          * tag, close tag, text element, ...
          */
-        let mut xpp = TagSoupPullParser::new(source);
+        let xpp = TagSoupPullParser::new(source);
         let raw_ = self.raw_;
 
         let mut link_num = -1;
@@ -281,7 +288,7 @@ impl HtmlRenderer {
             };
         }
 
-        while let Some(e) = xpp.next() {
+        for e in xpp {
             if inside_script {
                 // <script> tags can't be nested[1], so we simply ignore all input
                 // while we're looking for the closing tag.
@@ -289,7 +296,7 @@ impl HtmlRenderer {
                 // 1. https://rules.sonarsource.com/html/RSPEC-4645
 
                 if let Event::EndTag(tag) = &e {
-                    if self.extract_tag(&tag) == HtmlTag::SCRIPT {
+                    if self.extract_tag(tag) == HtmlTag::SCRIPT {
                         inside_script = false;
                     }
                 }
@@ -302,10 +309,10 @@ impl HtmlRenderer {
                     match self.extract_tag(&tag) {
                         HtmlTag::A => {
                             if let Some(link) = attr.get("href") {
-                                if link.len() > 0 {
+                                if !link.is_empty() {
                                     link_num = add_link(
                                         links,
-                                        &utils::censor_url(&utils::absolute_url(url, &link)),
+                                        &utils::censor_url(&utils::absolute_url(url, link)),
                                         LinkType::Href,
                                     );
                                     if !raw_ {
@@ -342,10 +349,11 @@ impl HtmlRenderer {
                                     if !link.is_empty() {
                                         link_num = add_link(
                                             links,
-                                            &utils::censor_url(&utils::absolute_url(url, &link)),
+                                            &utils::censor_url(&utils::absolute_url(url, link)),
                                             LinkType::Embed,
                                         );
-                                        curline += &format!(
+                                        _ = write!(
+                                            curline,
                                             "[{} {}]",
                                             gettext("embedded flash:"),
                                             link_num
@@ -385,8 +393,8 @@ impl HtmlRenderer {
                                 curline += &add_media_link(
                                     links,
                                     url,
-                                    &iframe_url,
-                                    &iframe_title,
+                                    iframe_url,
+                                    iframe_title,
                                     iframe_count,
                                     LinkType::Iframe,
                                 );
@@ -430,8 +438,8 @@ impl HtmlRenderer {
                                 curline += &add_media_link(
                                     links,
                                     url,
-                                    &img_url,
-                                    &img_label,
+                                    img_url,
+                                    img_label,
                                     image_count,
                                     LinkType::Img,
                                 );
@@ -513,7 +521,8 @@ impl HtmlRenderer {
                             let inside_ordered_list = latest_list == Some(&HtmlTag::OL);
 
                             if inside_ordered_list && !ol_counts.is_empty() {
-                                curline += &format!(
+                                _ = write!(
+                                    curline,
                                     "{}. ",
                                     format_ol_count(
                                         ol_counts[ol_counts.len() - 1],
@@ -629,7 +638,7 @@ impl HtmlRenderer {
                                 curline += &add_media_link(
                                     links,
                                     url,
-                                    &video_url,
+                                    video_url,
                                     "",
                                     video_count,
                                     LinkType::Video,
@@ -675,7 +684,7 @@ impl HtmlRenderer {
                                 curline += &add_media_link(
                                     links,
                                     url,
-                                    &audio_url,
+                                    audio_url,
                                     "",
                                     audio_count,
                                     LinkType::Audio,
@@ -700,7 +709,7 @@ impl HtmlRenderer {
                                 curline += &add_media_link(
                                     links,
                                     url,
-                                    &source_url,
+                                    source_url,
                                     "",
                                     video_count,
                                     LinkType::Video,
@@ -715,7 +724,7 @@ impl HtmlRenderer {
                                 curline += &add_media_link(
                                     links,
                                     url,
-                                    &source_url,
+                                    source_url,
                                     "",
                                     audio_count,
                                     LinkType::Audio,
@@ -828,7 +837,7 @@ impl HtmlRenderer {
                                 if !raw_ {
                                     curline += "</>";
                                 }
-                                curline += &format!("[{}]", link_num);
+                                _ = write!(curline, "[{}]", link_num);
                                 link_num = -1;
                             }
                         }
@@ -983,7 +992,7 @@ impl HtmlRenderer {
                             curline.push(' ');
                         }
                         // strip newlines
-                        text = text.replace("\n", " ");
+                        text = text.replace('\n', " ");
                         curline += &text;
                     }
                 }
@@ -1007,7 +1016,7 @@ impl HtmlRenderer {
                 while s.starts_with('\n') {
                     s.remove(0);
                 }
-                add_line_nonwrappable(&s, lines);
+                add_line_nonwrappable(s, lines);
             }
         }
 
@@ -1147,8 +1156,8 @@ fn render_table(table: &Table, lines: &mut Vec<(LineType, String)>) {
 
                 let mut reference_width = cell_widths[j];
                 if row.cells[j].span > 1 {
-                    for ic in j + 1..j + cell.span as usize {
-                        reference_width += cell_widths[ic] + 1;
+                    for ic in 1..cell.span as usize {
+                        reference_width += cell_widths[j + ic] + 1;
                     }
                 }
 
@@ -1190,7 +1199,7 @@ fn add_hr(lines: &mut Vec<(LineType, String)>) {
     lines.push((LineType::Hr, String::new()));
 }
 
-fn add_nonempty_line(line: &str, tables: &mut Vec<Table>, lines: &mut Vec<(LineType, String)>) {
+fn add_nonempty_line(line: &str, tables: &mut [Table], lines: &mut Vec<(LineType, String)>) {
     if line_is_nonempty(line) {
         add_line(line, tables, lines);
     }
@@ -1204,7 +1213,7 @@ fn prepare_new_line(indent_level: i32) -> String {
     " ".repeat(0.max(indent_level) as usize * 2)
 }
 
-fn add_line(curline: &str, tables: &mut Vec<Table>, lines: &mut Vec<(LineType, String)>) {
+fn add_line(curline: &str, tables: &mut [Table], lines: &mut Vec<(LineType, String)>) {
     if let Some(last) = tables.last_mut() {
         last.add_text(curline);
     } else {
@@ -1241,7 +1250,8 @@ fn format_ol_count(count: u32, ty: char) -> String {
         'A' => get_char_numbering(count).to_uppercase(),
         'i' => get_roman_numbering(count),
         'I' => get_roman_numbering(count).to_uppercase(),
-        '1' | _ => format!("{:2}", count),
+        '1' => format!("{:2}", count),
+        _ => format!("{:2}", count),
     }
 }
 

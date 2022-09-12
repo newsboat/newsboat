@@ -17,7 +17,6 @@ pub enum Event {
 }
 
 pub struct TagSoupPullParser<'a> {
-    /// characters of the source in reverse order
     source: &'a str,
     attributes: HashMap<String, String>,
     text: &'a str,
@@ -40,8 +39,8 @@ impl Iterator for TagSoupPullParser<'_> {
 
         self.current_event = match &self.current_event {
             &None | &Some(Event::StartTag(_, _)) | &Some(Event::EndTag(_)) => {
-                if self.source.starts_with('<') {
-                    self.source = &self.source[1..];
+                if let Some(rest) = self.source.strip_prefix('<') {
+                    self.source = rest;
                     self.handle_tag()
                 } else {
                     Some(self.handle_text())
@@ -76,7 +75,7 @@ impl<'a> TagSoupPullParser<'a> {
 
     fn handle_tag(&mut self) -> Option<Event> {
         self.read_tag().map(|s| {
-            self.parse_tag(&s);
+            self.parse_tag(s);
             self.determine_tag_type()
         })
     }
@@ -95,8 +94,8 @@ impl<'a> TagSoupPullParser<'a> {
     }
 
     fn determine_tag_type(&mut self) -> Event {
-        if self.text.starts_with('/') {
-            Event::EndTag(self.text[1..].to_string())
+        if let Some(tag) = self.text.strip_prefix('/') {
+            Event::EndTag(tag.to_string())
         } else {
             Event::StartTag(self.text.to_string(), self.attributes.clone())
         }
@@ -111,12 +110,9 @@ impl<'a> TagSoupPullParser<'a> {
             .unwrap_or((tagstr, ""));
 
         // first token: tag name
-        self.text = if tag.ends_with('/') {
-            // a kludge for <br/>
-            &tag[..tag.len() - 1]
-        } else {
-            tag
-        };
+        self.text = tag
+            .strip_suffix('/') // a kludge for <br/>
+            .unwrap_or(tag);
         log!(Level::Debug, "parse_tag: tag name = {}", self.text);
 
         while let Some((attr, rest)) = parse_next_attribute(s) {
@@ -151,9 +147,7 @@ fn parse_next_attribute(s: &str) -> Option<(&str, &str)> {
     if idx < s.len() {
         log!(Level::Debug, "parse_tag: found = or space");
     }
-    let mut rest = &s[idx..];
-    if rest.starts_with('=') {
-        rest = &rest[1..];
+    if let Some(rest) = s[idx..].strip_prefix('=') {
         log!(Level::Debug, "parse_tag: found =");
         let pos = if rest.starts_with('\'') || rest.starts_with('"') {
             log!(Level::Debug, "parse_tag: finding ending quote");
@@ -184,44 +178,12 @@ fn parse_hex_prefix(s: &str) -> u32 {
 fn decode_entity(s: &str) -> Option<char> {
     log!(Level::Debug, "decode_entity: decoding '{}'...", s);
     if s.len() > 1 && s.starts_with('#') {
-        let wc = if s.starts_with("#x") {
-            parse_hex_prefix(&s[2..])
-        } else {
-            s[1..].parse().unwrap_or(0)
-        };
-        // convert some windows entities according to the spec
-        // https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state
-        let wc = match wc {
-            0x80 => 0x20AC, // EURO SIGN (€)
-            0x82 => 0x201A, // SINGLE LOW-9 QUOTATION MARK (‚)
-            0x83 => 0x0192, // LATIN SMALL LETTER F WITH HOOK (ƒ)
-            0x84 => 0x201E, // DOUBLE LOW-9 QUOTATION MARK („)
-            0x85 => 0x2026, // HORIZONTAL ELLIPSIS (…)
-            0x86 => 0x2020, // DAGGER (†)
-            0x87 => 0x2021, // DOUBLE DAGGER (‡)
-            0x88 => 0x02C6, // MODIFIER LETTER CIRCUMFLEX ACCENT (ˆ)
-            0x89 => 0x2030, // PER MILLE SIGN (‰)
-            0x8A => 0x0160, // LATIN CAPITAL LETTER S WITH CARON (Š)
-            0x8B => 0x2039, // SINGLE LEFT-POINTING ANGLE QUOTATION MARK (‹)
-            0x8C => 0x0152, // LATIN CAPITAL LIGATURE OE (Œ)
-            0x8E => 0x017D, // LATIN CAPITAL LETTER Z WITH CARON (Ž)
-            0x91 => 0x2018, // LEFT SINGLE QUOTATION MARK (‘)
-            0x92 => 0x2019, // RIGHT SINGLE QUOTATION MARK (’)
-            0x93 => 0x201C, // LEFT DOUBLE QUOTATION MARK (“)
-            0x94 => 0x201D, // RIGHT DOUBLE QUOTATION MARK (”)
-            0x95 => 0x2022, // BULLET (•)
-            0x96 => 0x2013, // EN DASH (–)
-            0x97 => 0x2014, // EM DASH (—)
-            0x98 => 0x02DC, // SMALL TILDE (˜)
-            0x99 => 0x2122, // TRADE MARK SIGN (™)
-            0x9A => 0x0161, // LATIN SMALL LETTER S WITH CARON (š)
-            0x9B => 0x203A, // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (›)
-            0x9C => 0x0153, // LATIN SMALL LIGATURE OE (œ)
-            0x9E => 0x017E, // LATIN SMALL LETTER Z WITH CARON (ž)
-            0x9F => 0x0178, // LATIN CAPITAL LETTER Y WITH DIAERESIS (Ÿ)
-            c => c,
-        };
-
+        let wc = s
+            .strip_prefix("#x")
+            .map(parse_hex_prefix)
+            .or_else(|| s[1..].parse().ok())
+            .map(convert_windows_entity)
+            .unwrap_or(0);
         log!(Level::Debug, "decode_entity: wc = {}", wc);
 
         return char::from_u32(wc);
@@ -233,6 +195,41 @@ fn decode_entity(s: &str) -> Option<char> {
         }
     }
     None
+}
+
+fn convert_windows_entity(c: u32) -> u32 {
+    // convert some windows entities according to the spec
+    // https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state
+    match c {
+        0x80 => 0x20AC, // EURO SIGN (€)
+        0x82 => 0x201A, // SINGLE LOW-9 QUOTATION MARK (‚)
+        0x83 => 0x0192, // LATIN SMALL LETTER F WITH HOOK (ƒ)
+        0x84 => 0x201E, // DOUBLE LOW-9 QUOTATION MARK („)
+        0x85 => 0x2026, // HORIZONTAL ELLIPSIS (…)
+        0x86 => 0x2020, // DAGGER (†)
+        0x87 => 0x2021, // DOUBLE DAGGER (‡)
+        0x88 => 0x02C6, // MODIFIER LETTER CIRCUMFLEX ACCENT (ˆ)
+        0x89 => 0x2030, // PER MILLE SIGN (‰)
+        0x8A => 0x0160, // LATIN CAPITAL LETTER S WITH CARON (Š)
+        0x8B => 0x2039, // SINGLE LEFT-POINTING ANGLE QUOTATION MARK (‹)
+        0x8C => 0x0152, // LATIN CAPITAL LIGATURE OE (Œ)
+        0x8E => 0x017D, // LATIN CAPITAL LETTER Z WITH CARON (Ž)
+        0x91 => 0x2018, // LEFT SINGLE QUOTATION MARK (‘)
+        0x92 => 0x2019, // RIGHT SINGLE QUOTATION MARK (’)
+        0x93 => 0x201C, // LEFT DOUBLE QUOTATION MARK (“)
+        0x94 => 0x201D, // RIGHT DOUBLE QUOTATION MARK (”)
+        0x95 => 0x2022, // BULLET (•)
+        0x96 => 0x2013, // EN DASH (–)
+        0x97 => 0x2014, // EM DASH (—)
+        0x98 => 0x02DC, // SMALL TILDE (˜)
+        0x99 => 0x2122, // TRADE MARK SIGN (™)
+        0x9A => 0x0161, // LATIN SMALL LETTER S WITH CARON (š)
+        0x9B => 0x203A, // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK (›)
+        0x9C => 0x0153, // LATIN SMALL LIGATURE OE (œ)
+        0x9E => 0x017E, // LATIN SMALL LETTER Z WITH CARON (ž)
+        0x9F => 0x0178, // LATIN CAPITAL LETTER Y WITH DIAERESIS (Ÿ)
+        _ => c,
+    }
 }
 
 fn decode_entities(s: &str) -> String {
@@ -268,7 +265,7 @@ fn decode_attribute(s: &str) -> String {
     decode_entities(s)
 }
 
-const ENTITY_TABLE: &[(&'static str, u32)] = &[
+const ENTITY_TABLE: &[(&str, u32)] = &[
     /* semi-automatically generated from:
         - http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent
         - http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent
