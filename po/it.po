@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-09-11 21:34+0300\n"
-"PO-Revision-Date: 2021-06-10 16:17+0100\n"
+"PO-Revision-Date: 2022-09-12 05:45+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -761,9 +761,9 @@ msgid "Marking all feeds read..."
 msgstr "Sto segnando tutti i feed come letti..."
 
 #: src/feedlistformaction.cpp:435 src/itemlistformaction.cpp:629
-#, fuzzy, c-format
+#, c-format
 msgid "No filter found with name `%s'."
-msgstr "Nessun filtro definito."
+msgstr "Nessun filtro trovato con nome `%s'."
 
 #: src/feedlistformaction.cpp:443 src/itemlistformaction.cpp:637
 msgid "No filters defined."
