@@ -71,6 +71,8 @@ mod bridged {
         fn strip_comments(line: &str) -> &str;
         fn extract_token_quoted(line: &mut String, delimiters: &str, token: &mut String) -> bool;
         fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String>;
+        fn tokenize_nl(s: &str, delimiters: &str) -> Vec<String>;
+        fn tokenize_spaced(s: &str, delimiters: &str) -> Vec<String>;
         fn is_valid_podcast_type(mimetype: &str) -> bool;
 
         fn resolve_tilde(path: &str) -> String;
@@ -99,6 +101,14 @@ mod bridged {
         // cxx uses a non-C++ name of the type.
         include!("stddef.h");
     }
+}
+
+fn tokenize_nl(s: &str, delimiters: &str) -> Vec<String> {
+    utils::tokenize_nl(s, Some(delimiters))
+}
+
+fn tokenize_spaced(s: &str, delimiters: &str) -> Vec<String> {
+    utils::tokenize_spaced(s, Some(delimiters))
 }
 
 fn get_auth_method(method: &str) -> u64 {

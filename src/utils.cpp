@@ -47,6 +47,20 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
+namespace {
+
+std::vector<std::string> to_std_string_vector(const rust::Vec<rust::String>& vec)
+{
+	std::vector<std::string> result;
+	result.reserve(vec.size());
+	for (const auto& elem : vec) {
+		result.push_back(std::string(elem));
+	}
+	return result;
+}
+
+}
+
 namespace newsboat {
 
 std::string utils::strip_comments(const std::string& line)
@@ -58,12 +72,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	std::string delimiters)
 {
 	const auto tokens = utils::bridged::tokenize_quoted(str, delimiters);
-
-	std::vector<std::string> result;
-	for (const auto& token : tokens) {
-		result.push_back(std::string(token));
-	}
-	return result;
+	return to_std_string_vector(tokens);
 }
 
 nonstd::optional<std::string> utils::extract_token_quoted(std::string& str,
@@ -100,24 +109,8 @@ std::vector<std::string> utils::tokenize(const std::string& str,
 std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	std::string delimiters)
 {
-	std::vector<std::string> tokens;
-	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
-	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
-
-	if (last_pos != 0) {
-		tokens.push_back(str.substr(0, last_pos));
-	}
-
-	while (std::string::npos != pos || std::string::npos != last_pos) {
-		tokens.push_back(str.substr(last_pos, pos - last_pos));
-		last_pos = str.find_first_not_of(delimiters, pos);
-		if (last_pos > pos) {
-			tokens.push_back(str.substr(pos, last_pos - pos));
-		}
-		pos = str.find_first_of(delimiters, last_pos);
-	}
-
-	return tokens;
+	const auto tokens = utils::bridged::tokenize_spaced(str, delimiters);
+	return to_std_string_vector(tokens);
 }
 
 std::string utils::consolidate_whitespace(const std::string& str)
@@ -128,42 +121,8 @@ std::string utils::consolidate_whitespace(const std::string& str)
 std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	std::string delimiters)
 {
-	std::vector<std::string> tokens;
-	std::string::size_type last_pos = str.find_first_not_of(delimiters, 0);
-	std::string::size_type pos = str.find_first_of(delimiters, last_pos);
-	unsigned int i;
-
-	LOG(Level::DEBUG,
-		"utils::tokenize_nl: last_pos = %" PRIu64,
-		static_cast<uint64_t>(last_pos));
-	if (last_pos != std::string::npos) {
-		for (i = 0; i < last_pos; ++i) {
-			tokens.push_back(std::string("\n"));
-		}
-	} else {
-		for (i = 0; i < str.length(); ++i) {
-			tokens.push_back(std::string("\n"));
-		}
-	}
-
-	while (std::string::npos != pos || std::string::npos != last_pos) {
-		tokens.push_back(str.substr(last_pos, pos - last_pos));
-		LOG(Level::DEBUG,
-			"utils::tokenize_nl: substr = %s",
-			str.substr(last_pos, pos - last_pos));
-		last_pos = str.find_first_not_of(delimiters, pos);
-		LOG(Level::DEBUG,
-			"utils::tokenize_nl: pos - last_pos = %" PRIu64,
-			static_cast<uint64_t>(last_pos - pos));
-		for (i = 0; last_pos != std::string::npos &&
-			pos != std::string::npos && i < (last_pos - pos);
-			++i) {
-			tokens.push_back(std::string("\n"));
-		}
-		pos = str.find_first_of(delimiters, last_pos);
-	}
-
-	return tokens;
+	const auto tokens = utils::bridged::tokenize_nl(str, delimiters);
+	return to_std_string_vector(tokens);
 }
 
 std::string utils::translit(const std::string& tocode, const std::string& fromcode)
@@ -717,11 +676,7 @@ nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read
 			error_reason);
 
 	if (result) {
-		std::vector<std::string> contents;
-		for (const auto& line : c) {
-			contents.push_back(std::string(line));
-		}
-		return contents;
+		return to_std_string_vector(c);
 	} else {
 		ReadTextFileError error;
 
