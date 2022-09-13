@@ -370,9 +370,9 @@ impl HtmlRenderer {
                             let iframe_url =
                                 attr.get("src").map(|s| s.as_str()).unwrap_or_else(|| {
                                     log!(
-                                    Level::Warn,
-                                    "HtmlRenderer::render: found iframe tag without src attribute"
-                                );
+                                        Level::Warn,
+                                        "HtmlRenderer::render: found iframe tag without src attribute"
+                                    );
                                     ""
                                 });
 
@@ -382,7 +382,7 @@ impl HtmlRenderer {
                             if !iframe_url.is_empty() {
                                 add_nonempty_line(&curline, &mut tables, lines);
                                 if let Some(last) = lines.last() {
-                                    if last.1.len() > (indent_level as usize * 2) {
+                                    if last.1.len() > (indent_level * 2) {
                                         add_line("", &mut tables, lines);
                                     }
                                 }
@@ -501,10 +501,7 @@ impl HtmlRenderer {
                         HtmlTag::LI => {
                             if list_elements_stack.last() == Some(&HtmlTag::LI) {
                                 list_elements_stack.pop();
-                                indent_level -= 2;
-                                if indent_level < 0 {
-                                    indent_level = 0;
-                                }
+                                indent_level = indent_level.saturating_sub(2);
                                 add_nonempty_line(&curline, &mut tables, lines);
                                 curline = indent!();
                             }
@@ -572,10 +569,10 @@ impl HtmlRenderer {
                             add_nonempty_line(&curline, &mut tables, lines);
                             curline = indent!(0); // no indent in tables
 
-                            let has_border = attr
+                            let has_border = 0 < attr
                                 .get("border")
-                                .map(|b| b.parse::<u32>().unwrap_or(0) > 0)
-                                .unwrap_or(false);
+                                .and_then(|b| b.parse::<u32>().ok())
+                                .unwrap_or(0);
                             tables.push(Table::new(has_border));
                         }
                         HtmlTag::TR => {
@@ -632,8 +629,7 @@ impl HtmlRenderer {
 
                             let video_url = attr.get("src").map(|s| s.as_str()).unwrap_or_default();
                             if !video_url.is_empty() {
-                                // Video source retrieved from `src'
-                                // attribute
+                                // Video source retrieved from `src' attribute
                                 source_count += 1;
                                 curline += &add_media_link(
                                     links,
@@ -678,8 +674,7 @@ impl HtmlRenderer {
 
                             let audio_url = attr.get("src").map(|s| s.as_str()).unwrap_or_default();
                             if !audio_url.is_empty() {
-                                // Audio source retrieved from `src'
-                                // attribute
+                                // Audio source retrieved from `src' attribute
                                 source_count += 1;
                                 curline += &add_media_link(
                                     links,
@@ -742,10 +737,7 @@ impl HtmlRenderer {
                     let tag = self.extract_tag(&tag);
                     match tag {
                         HtmlTag::BLOCKQUOTE => {
-                            indent_level -= 1;
-                            if indent_level < 0 {
-                                indent_level = 0;
-                            }
+                            indent_level = indent_level.saturating_sub(1);
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
                             curline = indent!();
@@ -757,10 +749,7 @@ impl HtmlRenderer {
                             }
                             if list_elements_stack.last() == Some(&HtmlTag::LI) {
                                 list_elements_stack.pop();
-                                indent_level -= 2;
-                                if indent_level < 0 {
-                                    indent_level = 0;
-                                }
+                                indent_level = indent_level.saturating_sub(2);
                                 add_nonempty_line(&curline, &mut tables, lines);
                                 curline = indent!();
                             }
@@ -775,10 +764,7 @@ impl HtmlRenderer {
                             curline = indent!();
                         }
                         HtmlTag::DD => {
-                            indent_level -= 4;
-                            if indent_level < 0 {
-                                indent_level = 0;
-                            }
+                            indent_level = indent_level.saturating_sub(4);
                             add_nonempty_line(&curline, &mut tables, lines);
                             add_line("", &mut tables, lines);
                             curline = indent!();
@@ -787,10 +773,7 @@ impl HtmlRenderer {
                             // ignore tag
                         }
                         HtmlTag::LI => {
-                            indent_level -= 2;
-                            if indent_level < 0 {
-                                indent_level = 0;
-                            }
+                            indent_level = indent_level.saturating_sub(2);
                             if list_elements_stack.last() == Some(&HtmlTag::LI) {
                                 list_elements_stack.pop();
                             }
@@ -1209,8 +1192,8 @@ fn line_is_nonempty(line: &str) -> bool {
     line.chars().any(|c| !c.is_whitespace())
 }
 
-fn prepare_new_line(indent_level: i32) -> String {
-    " ".repeat(0.max(indent_level) as usize * 2)
+fn prepare_new_line(indent_level: usize) -> String {
+    " ".repeat(0.max(indent_level) * 2)
 }
 
 fn add_line(curline: &str, tables: &mut [Table], lines: &mut Vec<(LineType, String)>) {

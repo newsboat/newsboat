@@ -55,7 +55,7 @@ impl Iterator for TagSoupPullParser<'_> {
 
 impl<'a> TagSoupPullParser<'a> {
     pub fn new(source: &'a str) -> Self {
-        TagSoupPullParser {
+        Self {
             source,
             attributes: HashMap::new(),
             text: "",
@@ -123,10 +123,7 @@ impl<'a> TagSoupPullParser<'a> {
     }
 
     fn add_attribute(&mut self, s: &str) {
-        let mut s = s;
-        if s.ends_with('/') {
-            s = &s[..s.len() - 1];
-        }
+        let s = s.strip_suffix('/').unwrap_or(s);
         if s.is_empty() {
             return;
         }
@@ -160,7 +157,7 @@ fn parse_next_attribute(s: &str) -> Option<(&str, &str)> {
         idx = pos.map(|i| idx + i + 1 /* for the = */).unwrap_or(s.len());
     }
 
-    Some((&s[..idx], &s[idx..]))
+    Some(s.split_at(idx))
 }
 
 fn parse_hex_prefix(s: &str) -> u32 {
