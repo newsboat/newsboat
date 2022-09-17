@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-09-11 21:34+0300\n"
-"PO-Revision-Date: 2022-06-09 21:37+0300\n"
+"PO-Revision-Date: 2022-09-17 12:57+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -764,9 +764,9 @@ msgid "Marking all feeds read..."
 msgstr "Отмечаю все ленты как прочитанные..."
 
 #: src/feedlistformaction.cpp:435 src/itemlistformaction.cpp:629
-#, fuzzy, c-format
+#, c-format
 msgid "No filter found with name `%s'."
-msgstr "Не определено ни одного фильтра."
+msgstr "Фильтр `%s' не найден."
 
 #: src/feedlistformaction.cpp:443 src/itemlistformaction.cpp:637
 msgid "No filters defined."
