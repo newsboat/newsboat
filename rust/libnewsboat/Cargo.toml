@@ -11,7 +11,7 @@ regex-rs = { path="../regex-rs" }
 chrono = "0.4"
 fastrand = "1.8.0"
 once_cell = "1.14.0"
-url = "2.2.2"
+url = "2.3.0"
 percent-encoding = "2.0.0"
 xdg = "2.4.1"
 backtrace = "= 0.3"
