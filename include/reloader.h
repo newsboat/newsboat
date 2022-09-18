@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_RELOADER_H_
 #define NEWSBOAT_RELOADER_H_
 
+#include <atomic>
+#include <functional>
 #include <mutex>
 #include <vector>
 
@@ -26,29 +28,14 @@ public:
 	/// If \a indexes is empty, all feeds will be reloaded.
 	void start_reload_all_thread(const std::vector<int>& indexes = {});
 
-	void unlock_reload_mutex()
-	{
-		reload_mutex.unlock();
-	}
-	bool trylock_reload_mutex();
-
 	/// \brief Reloads given feed.
 	///
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
-	/// feedscontainer). \a show_progress specifies if a progress indicator
-	/// (`[<pos>/<total_feeds>]`) should be included when updating the status
-	/// message (at the bottom of the screen). Status messages are only shown
-	/// if \a unattended is false. All network requests are made through
-	/// \a easyhandle, unless it is a nullptr, in which case this method creates
-	/// a temporary handle which is destroyed before returning from it.
-	void reload(unsigned int pos,
-		bool show_progress = false,
-		bool unattended = false);
-
-	void reload(unsigned int pos,
-		CurlHandle& easyhandle,
-		bool show_progress = false,
-		bool unattended = false);
+	/// feedscontainer). Only updates status bar if \a unattended is false.
+	void reload(unsigned int pos, bool unattended = false)
+	{
+		reload(pos, false, unattended);
+	}
 
 	/// \brief Reloads all feeds, spawning threads as necessary.
 	///
@@ -72,6 +59,24 @@ public:
 		bool unattended = false);
 
 private:
+	/// \brief Reloads given feed.
+	///
+	/// Reloads the feed at position \a pos in the feeds list (as kept by
+	/// feedscontainer). \a show_progress specifies if a progress indicator
+	/// (`[<progress>/<total_feeds>]`) should be included when updating the status
+	/// message (at the bottom of the screen). Status messages are only shown
+	/// if \a unattended is false. All network requests are made through
+	/// \a easyhandle. If the handle is not provided, this method creates
+	/// a temporary handle which is destroyed before returning from it.
+	void reload(unsigned int pos,
+		bool show_progress,
+		bool unattended);
+
+	void reload(unsigned int pos,
+		CurlHandle& easyhandle,
+		bool show_progress,
+		bool unattended);
+
 	/// \brief Notify in various ways that there are new unread feeds or
 	/// articles.
 	///
@@ -86,10 +91,22 @@ private:
 	void notify_reload_finished(unsigned int unread_feeds_before,
 		unsigned int unread_articles_before);
 
+	void unlock_reload_mutex()
+	{
+		reload_mutex.unlock();
+	}
+	bool trylock_reload_mutex();
+
+	void partition_reload_to_threads(
+		std::function<void(unsigned int start, unsigned int end)> handle_range,
+		unsigned int num_feeds);
+
 	Controller* ctrl;
 	Cache* rsscache;
 	ConfigContainer* cfg;
 	std::mutex reload_mutex;
+	std::atomic<unsigned int> reload_progress;
+	unsigned int reload_progress_max;
 };
 
 } // namespace newsboat

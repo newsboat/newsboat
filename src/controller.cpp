@@ -31,7 +31,6 @@
 #include "configexception.h"
 #include "configpaths.h"
 #include "dbexception.h"
-#include "downloadthread.h"
 #include "exception.h"
 #include "feedhqapi.h"
 #include "feedhqurlreader.h"

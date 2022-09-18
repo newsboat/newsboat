@@ -287,6 +287,11 @@ REDO:
 					"reload-only-visible-feeds");
 			std::vector<int> idxs;
 			if (reload_only_visible_feeds) {
+				if (visible_feeds.empty()) {
+					// Do not reload *all* feeds, when
+					// there is no visible feeds at all.
+					break;
+				}
 				for (const auto& feed : visible_feeds) {
 					idxs.push_back(feed.second);
 				}
