@@ -23,7 +23,6 @@
 #include "rssfeed.h"
 #include "regexowner.h"
 #include "strprintf.h"
-#include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {

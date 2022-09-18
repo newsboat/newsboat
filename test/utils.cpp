@@ -50,38 +50,6 @@ TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 }
 
 TEST_CASE(
-	"tokenize_spaced() splits string into runs of delimiter characters "
-	"interspersed with runs of non-delimiter chars",
-	"[utils]")
-{
-	std::vector<std::string> tokens;
-
-	SECTION("Default delimiters include space and tab") {
-		tokens = utils::tokenize_spaced("a b");
-		REQUIRE(tokens.size() == 3);
-		REQUIRE(tokens[1] == " ");
-
-		tokens = utils::tokenize_spaced(" a\t b ");
-		REQUIRE(tokens.size() == 5);
-		REQUIRE(tokens[0] == " ");
-		REQUIRE(tokens[1] == "a");
-		REQUIRE(tokens[2] == "\t ");
-		REQUIRE(tokens[3] == "b");
-		REQUIRE(tokens[4] == " ");
-	}
-
-	SECTION("Comma-separated values containing spaces and tabs") {
-		tokens = utils::tokenize_spaced("123,John Doe,\t\t$8", ",");
-		REQUIRE(tokens.size() == 5);
-		REQUIRE(tokens[0] == "123");
-		REQUIRE(tokens[1] == ",");
-		REQUIRE(tokens[2] == "John Doe");
-		REQUIRE(tokens[3] == ",");
-		REQUIRE(tokens[4] == "\t\t$8");
-	}
-}
-
-TEST_CASE(
 	"tokenize_quoted() splits string on delimiters, treating strings "
 	"inside double quotes as single token",
 	"[utils]")
@@ -352,63 +320,6 @@ TEST_CASE("extract_token_quoted() works with Unicode strings too", "[utils]")
 	REQUIRE(token.has_value());
 	REQUIRE(token.value() == "привет мир");
 	REQUIRE(str == " Юникода");
-}
-
-TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
-{
-	std::vector<std::string> tokens;
-
-	SECTION("a few words separated by newlines") {
-		tokens = utils::tokenize_nl("first\nsecond\nthird");
-
-		REQUIRE(tokens.size() == 5);
-		REQUIRE(tokens[0] == "first");
-		REQUIRE(tokens[2] == "second");
-		REQUIRE(tokens[4] == "third");
-	}
-
-	SECTION("several preceding delimiters") {
-		tokens = utils::tokenize_nl("\n\n\nonly");
-
-		REQUIRE(tokens.size() == 4);
-		REQUIRE(tokens[3] == "only");
-	}
-
-	SECTION("redundant internal delimiters") {
-		tokens = utils::tokenize_nl("first\nsecond\n\nthird");
-
-		REQUIRE(tokens.size() == 6);
-		REQUIRE(tokens[0] == "first");
-		REQUIRE(tokens[2] == "second");
-		REQUIRE(tokens[5] == "third");
-	}
-
-	SECTION("custom delimiter") {
-		tokens = utils::tokenize_nl("first\nsecond\nthird", "i");
-
-		REQUIRE(tokens.size() == 5);
-		REQUIRE(tokens[0] == "f");
-		REQUIRE(tokens[2] == "rst\nsecond\nth");
-		REQUIRE(tokens[4] == "rd");
-	}
-
-	SECTION("no non-delimiter text") {
-		SECTION("single newline") {
-			tokens = utils::tokenize_nl("\n");
-
-			REQUIRE(tokens.size() == 1);
-			REQUIRE(tokens[0] == "\n");
-		}
-
-		SECTION("multiple newlines") {
-			tokens = utils::tokenize_nl("\n\n\n");
-
-			REQUIRE(tokens.size() == 3);
-			REQUIRE(tokens[0] == "\n");
-			REQUIRE(tokens[1] == "\n");
-			REQUIRE(tokens[2] == "\n");
-		}
-	}
 }
 
 TEST_CASE(

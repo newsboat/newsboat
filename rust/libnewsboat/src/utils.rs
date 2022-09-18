@@ -769,6 +769,30 @@ pub fn extract_token_quoted<'a>(line: &'a str, delimiters: &str) -> (Option<Stri
     }
 }
 
+pub fn tokenize_spaced(s: &str, delimiters: Option<&str>) -> Vec<String> {
+    let delimiters = delimiters.unwrap_or(" \r\n\t");
+    let mut tokens = Vec::new();
+
+    let mut token = String::new();
+    let mut delims = false;
+    for c in s.chars() {
+        if delimiters.contains(c) != delims {
+            if !token.is_empty() {
+                tokens.push(token);
+            }
+            token = String::new();
+            delims = !delims;
+        }
+        token.push(c);
+    }
+
+    if !token.is_empty() {
+        tokens.push(token);
+    }
+
+    tokens
+}
+
 /// Tokenize strings, obeying quotes and throwing away comments that start with a '#'
 pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
     let mut tokens = Vec::new();
@@ -780,6 +804,30 @@ pub fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String> {
             tokens.push(x);
         }
         todo = remainder;
+    }
+
+    tokens
+}
+
+pub fn tokenize_nl(s: &str, delimiters: Option<&str>) -> Vec<String> {
+    let delimiters = delimiters.unwrap_or("\r\n");
+    let mut tokens = Vec::new();
+
+    let mut token = String::new();
+    for c in s.chars() {
+        if delimiters.contains(c) {
+            if !token.is_empty() {
+                tokens.push(token);
+                token = String::new();
+            }
+            tokens.push("\n".to_string());
+        } else {
+            token.push(c);
+        }
+    }
+
+    if !token.is_empty() {
+        tokens.push(token);
     }
 
     tokens
@@ -2453,5 +2501,70 @@ mod tests {
             &censor_url("query:name:age between 1:10"),
             "query:name:age between 1:10"
         );
+    }
+
+    #[test]
+    fn t_tokenize_spaced_default_delimiters_include_space_and_tab() {
+        let tokens = tokenize_spaced("a b", None);
+        assert_eq!(tokens, ["a", " ", "b"]);
+
+        let tokens = tokenize_spaced(" a\t b ", None);
+        assert_eq!(tokens, [" ", "a", "\t ", "b", " "]);
+    }
+
+    #[test]
+    fn t_tokenize_spaced_comma_separated_containing_spaces_and_tabs() {
+        let tokens = tokenize_spaced("123,John Doe,\t\t$8", Some(","));
+        assert_eq!(tokens, ["123", ",", "John Doe", ",", "\t\t$8"]);
+    }
+
+    #[test]
+    fn t_tokenize_nl_few_words_separated_by_newlines() {
+        let tokens = tokenize_nl("first\nsecond\nthird", None);
+        assert_eq!(tokens, ["first", "\n", "second", "\n", "third"]);
+    }
+
+    #[test]
+    fn t_tokenize_nl_several_preceding_delimiters() {
+        let tokens = tokenize_nl("\n\n\nonly", None);
+        assert_eq!(tokens, ["\n", "\n", "\n", "only"]);
+    }
+
+    #[test]
+    fn t_tokenize_nl_several_trailing_delimiters() {
+        let tokens = tokenize_nl("only\n\n\n", None);
+        assert_eq!(tokens, ["only", "\n", "\n", "\n"]);
+    }
+
+    #[test]
+    fn t_tokenize_nl_redundant_internal_delimiters() {
+        let tokens = tokenize_nl("first\nsecond\n\nthird", None);
+
+        assert_eq!(tokens.len(), 6);
+        assert_eq!(tokens[0], "first");
+        assert_eq!(tokens[2], "second");
+        assert_eq!(tokens[5], "third");
+    }
+
+    #[test]
+    fn t_tokenize_nl_custom_delimiter() {
+        let tokens = tokenize_nl("first\nsecond\nthird", Some("i"));
+
+        assert_eq!(tokens.len(), 5);
+        assert_eq!(tokens[0], "f");
+        assert_eq!(tokens[2], "rst\nsecond\nth");
+        assert_eq!(tokens[4], "rd");
+    }
+
+    #[test]
+    fn t_tokenize_nl_only_delimiters_one() {
+        let tokens = tokenize_nl("\n", None);
+        assert_eq!(tokens, ["\n"]);
+    }
+
+    #[test]
+    fn t_tokenize_nl_only_delimiters_many() {
+        let tokens = tokenize_nl("\n\n\n", None);
+        assert_eq!(tokens, ["\n"; 3]);
     }
 }

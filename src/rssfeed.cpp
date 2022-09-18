@@ -22,7 +22,6 @@
 #include "logger.h"
 #include "scopemeasure.h"
 #include "strprintf.h"
-#include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {

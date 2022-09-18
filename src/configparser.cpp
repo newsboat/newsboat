@@ -12,7 +12,6 @@
 #include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"
-#include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {
