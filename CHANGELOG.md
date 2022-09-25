@@ -1,12 +1,24 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2022-12-25
+
+### Added
+### Changed
+- Bumped minimum supported Rust version to 1.62.0
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
 ## 2.29 - 2022-09-25
 
 ### Added
 
 - New placeholder for `browser`, `%t`, which is replaced by the type of the URL
     (#1954) (blank X)
-- contib: a script to reorder lines in the `urls` file (#1918) (T3SQ8)
+- contrib: a script to reorder lines in the `urls` file (#1918) (T3SQ8)
 - Support for Brotli compression. In fact, Newsboat will now use all the methods
     supported by the libcurl it's linked to (#2152) (Dennis van der Schagt)
 - In tags dialog, put the cursor on the currently selected tag, or the first tag
@@ -37,7 +49,7 @@
 
 ### Fixed
 
-- Segfault on sqlite3DbMallocRawNN (#1980) (Juho Eerola)
+- Segfault on `sqlite3DbMallocRawNN` (#1980) (Juho Eerola)
 - Scrolling when toggling `show-read-feeds` (#2138) (Dennis van der Schagt)
 - Feeds not reloading in parallel when reloading only visible feeds (#2067)
     (Juho Eerola)
