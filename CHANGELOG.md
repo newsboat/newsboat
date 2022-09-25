@@ -1,23 +1,46 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2022-09-25
+## 2.29 - 2022-09-25
 
 ### Added
+
+- New placeholder for `browser`, `%t`, which is replaced by the type of the URL
+    (#1954) (blank X)
+- contib: a script to reorder lines in the `urls` file (#1918) (T3SQ8)
+- Support for Brotli compression. In fact, Newsboat will now use all the methods
+    supported by the libcurl it's linked to (#2152) (Dennis van der Schagt)
+- In tags dialog, put the cursor on the currently selected tag, or the first tag
+    if none is selected at the moment (#2093) (Dennis van der Schagt)
+
 ### Changed
-- Bumped minimum supported Rust version to 1.59.0
-- Bumped minimum supported GNU Make version to 4.0 (released on October 9th,
-    2013)
+
+- When rendering an article, put a newline between consecutive `<audio>` and
+    `<video>` tags (#2103) (blank X)
 - When `select-filter` is used with an argument (e.g. from a macro), that
   argument is now used to look up a predefined filter by name. The old
   behaviour (applying the argument as filter) is still available by using
   `set-filter` instead (#2137) (Dennis van der Schagt)
 - When `select-filter` is used without an argument, it will now open the filter
-  selection dialog. Previously, `set-filter` from a macro without arguements
-  was ignored in the itemlist dialog (#2137) (Dennis van der Schagt)
-### Deprecated
-### Removed
+  selection dialog. Previously, `set-filter` from a macro without arguments
+  was ignored in the article list (#2137) (Dennis van der Schagt)
+- Docs: use a new style for keys. It should be more readable than the old one,
+    please file issues if you disagree! (#2028) (Dennis van der Schagt)
+- When reloading feeds in parallel, status line now shows the progress rather
+    than the number of the currently reloaded feed (#2065) (Juho Eerola)
+- Updated translations: Dutch (Dennis van der Schagt), French (Tonus), German
+    (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian and
+    Ukrainian (Alexander Batischev), Spanish (Roboron3042), Turkish (Emir SARI)
+- Bumped minimum supported Rust version to 1.59.0
+- Bumped minimum supported GNU Make version to 4.0 (released on
+    October 9th, 2013)
+- Updated vendored libraries: expected-lite to 0.6.2, json.hpp to 3.11.2
+
 ### Fixed
-### Security
+
+- Segfault on sqlite3DbMallocRawNN (#1980) (Juho Eerola)
+- Scrolling when toggling `show-read-feeds` (#2138) (Dennis van der Schagt)
+- Feeds not reloading in parallel when reloading only visible feeds (#2067)
+    (Juho Eerola)
 
 
 
