@@ -30,6 +30,15 @@ You'll need:
 
 4. Wait for the build to finish. It will create .snap files in the current
    directory.
+
+5. If it doesn't exist yet, create _~/snapcraft.cred_ file:
+
+    $ snapcraft export-login ~/snapcraft.cred
+
+6. Load the credentials into an environment variable:
+
+    $ export SNAPCRAFT_STORE_CREDENTIALS=$(cat ~/snapcraft.cred)
+
 5. Upload built snaps to the Store, releasing them into all channels:
 
     $ for i in *.snap; do snapcraft upload --release=beta,candidate,stable $i ; done
