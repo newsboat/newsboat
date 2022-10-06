@@ -205,14 +205,14 @@ task:
                 cxx: g++-12
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-        - name: Clang 13, more warnings and checks (Ubuntu 22.04)
+        - name: Clang 14, more warnings and checks (Ubuntu 22.04)
           container:
             greedy: true
             dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-13
-                cc: clang-13
-                cxx: clang++-13
+                cxx_package: clang-14
+                cc: clang-14
+                cxx: clang++-14
           env: *extra_warnings_and_checks_env
 
         - name: Rust stable, GCC 5 (Ubuntu 18.04)
@@ -359,6 +359,14 @@ task:
                 cxx_package: clang-13
                 cc: clang-13
                 cxx: clang++-13
+        - name: Rust stable, Clang 14 (Ubuntu 22.04)
+          container:
+            greedy: true
+            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: clang-14
+                cc: clang-14
+                cxx: clang++-14
 
     cargo_cache: *cargo_cache
 
@@ -370,18 +378,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: AddressSanitizer (Clang 13, Ubuntu 22.04)
+    name: AddressSanitizer (Clang 14, Ubuntu 22.04)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
       dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-13-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-14-tools to demangle symbols in
           # sanitizer's reports
-          cxx_package: "clang-13 llvm-13"
-          cc: clang-13
-          cxx: clang++-13
+          cxx_package: "clang-14 llvm-14"
+          cc: clang-14
+          cxx: clang++-14
 
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
@@ -399,18 +407,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: UB Sanitizer (Clang 13, Ubuntu 22.04)
+    name: UB Sanitizer (Clang 14, Ubuntu 22.04)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
       dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-13-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-14-tools to demangle symbols in
           # sanitizer's reports
-          cxx_package: "clang-13 llvm-13"
-          cc: clang-13
-          cxx: clang++-13
+          cxx_package: "clang-14 llvm-14"
+          cc: clang-14
+          cxx: clang++-14
 
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
