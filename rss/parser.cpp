@@ -5,6 +5,7 @@
 #include <curl/curl.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <vector>
 
 #include "config.h"
 #include "curlhandle.h"
@@ -56,9 +57,11 @@ Parser::~Parser()
 struct HeaderValues {
 	time_t lastmodified;
 	std::string etag;
+	std::string charset;
 
 	HeaderValues()
 		: lastmodified(0)
+		, charset("utf-8")
 	{
 	}
 };
@@ -94,6 +97,20 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 		values->etag = std::string(header + 5);
 		utils::trim(values->etag);
 		LOG(Level::DEBUG, "handle_headers: got etag %s", values->etag);
+	} else if (!strncasecmp("Content-Type:", header, 13)) {
+		std::string header_str = std::string(header, size * nmemb);
+		const std::string key = "charset=";
+		const auto charset_index = header_str.find(key);
+		if (charset_index != std::string::npos) {
+			auto charset = header_str.substr(charset_index + key.size());
+			utils::trim(charset);
+			if (charset.size() >= 2 && charset[0] == '"' && charset[charset.size() - 1] == '"') {
+				charset = charset.substr(1, charset.size() - 2);
+			}
+			if (charset.size() > 0) {
+				values->charset = charset;
+			}
+		}
 	}
 
 	delete[] header;
@@ -246,10 +263,13 @@ Feed Parser::parse_url(const std::string& url,
 		buf);
 
 	if (buf.length() > 0) {
-		LOG(Level::DEBUG,
-			"Parser::parse_url: handing over data to "
-			"parse_buffer()");
-		return parse_buffer(buf, url);
+		LOG(Level::DEBUG, "Parser::parse_url: converting data from %s to utf-8", hdrs.charset);
+		const auto utf8_buf = (hdrs.charset == "utf-8"
+				? buf
+				: utils::convert_text(buf, "utf-8", hdrs.charset));
+
+		LOG(Level::DEBUG, "Parser::parse_url: handing over data to parse_buffer()");
+		return parse_buffer(utf8_buf, url);
 	}
 
 	return Feed();
