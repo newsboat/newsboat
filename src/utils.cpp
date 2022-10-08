@@ -40,6 +40,7 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "links.h"
+#include "libnewsboat-ffi/src/utils.rs.h"
 #include "logger.h"
 #include "strprintf.h"
 
@@ -182,6 +183,19 @@ std::string utils::locale_to_utf8(const std::string& text)
 			reinterpret_cast<const unsigned char*>(text.c_str()),
 			text.length());
 	return std::string(utils::bridged::locale_to_utf8(text_slice));
+}
+
+std::string utils::convert_text(const std::string& text, const std::string& tocode,
+	const std::string& fromcode)
+{
+	const auto text_slice =
+		rust::Slice<const unsigned char>(
+			reinterpret_cast<const unsigned char*>(text.c_str()),
+			text.length());
+
+	const auto result = utils::bridged::convert_text(text_slice, tocode, fromcode);
+
+	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
 std::string utils::get_command_output(const std::string& cmd)
