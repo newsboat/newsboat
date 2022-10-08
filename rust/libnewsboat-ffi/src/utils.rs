@@ -89,6 +89,7 @@ mod bridged {
         fn translit(tocode: &str, fromcode: &str) -> String;
         fn utf8_to_locale(text: &str) -> Vec<u8>;
         fn locale_to_utf8(text: &[u8]) -> String;
+        fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8>;
     }
 
     extern "C++" {
