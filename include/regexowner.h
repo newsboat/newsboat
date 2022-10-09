@@ -17,9 +17,9 @@ private:
 public:
 	~Regex();
 
-	static std::unique_ptr<Regex> compile(std::string reg_expression,
+	static std::unique_ptr<Regex> compile(const std::string& reg_expression,
 		int regcomp_flags, std::string& error);
-	std::vector<std::pair<int, int>> matches(std::string input, int max_matches,
+	std::vector<std::pair<int, int>> matches(const std::string& input, int max_matches,
 			int flags) const;
 
 private:

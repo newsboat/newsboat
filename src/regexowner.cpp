@@ -14,7 +14,7 @@ Regex::~Regex()
 	regfree(&regex);
 }
 
-std::unique_ptr<Regex> Regex::compile(std::string reg_expression,
+std::unique_ptr<Regex> Regex::compile(const std::string& reg_expression,
 	int regcomp_flags, std::string& error)
 {
 	regex_t regex;
@@ -30,20 +30,20 @@ std::unique_ptr<Regex> Regex::compile(std::string reg_expression,
 	return std::unique_ptr<Regex>(new Regex(regex));
 }
 
-std::vector<std::pair<int, int>> Regex::matches(std::string input,
+std::vector<std::pair<int, int>> Regex::matches(const std::string& input,
 		int max_matches, int flags) const
 {
 	std::vector<regmatch_t> regMatches(max_matches);
 	if (regexec(&regex, input.c_str(), max_matches,
 			regMatches.data(), flags) == 0) {
-		std::vector<std::pair<int, int>>  matches;
+		std::vector<std::pair<int, int>> results;
 		for (const auto& regMatch : regMatches) {
 			if (regMatch.rm_so < 0 || regMatch.rm_eo < 0) {
 				break;
 			}
-			matches.push_back({regMatch.rm_so, regMatch.rm_eo});
+			results.push_back({regMatch.rm_so, regMatch.rm_eo});
 		}
-		return matches;
+		return results;
 	}
 	return {};
 }
