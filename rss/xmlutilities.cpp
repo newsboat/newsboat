@@ -10,7 +10,7 @@ std::string get_content(xmlNode* node)
 	if (node) {
 		xmlChar* content = xmlNodeGetContent(node);
 		if (content) {
-			retval = (const char*)content;
+			retval = reinterpret_cast<const char*>(content);
 			xmlFree(content);
 		}
 	}
@@ -29,7 +29,7 @@ std::string get_xml_content(xmlNode* node, xmlDocPtr doc)
 			ptr = ptr->next) {
 			if (xmlNodeDump(buf, doc, ptr, 0, 0) >= 0) {
 				result.append(
-					(const char*)xmlBufferContent(buf));
+					reinterpret_cast<const char*>(xmlBufferContent(buf)));
 				xmlBufferEmpty(buf);
 			} else {
 				result.append(get_content(ptr));
@@ -79,7 +79,7 @@ bool has_namespace(xmlNode* node, const char* ns_uri)
 		return true;
 	}
 	if (ns_uri && node->ns && node->ns->href &&
-		strcmp((const char*)node->ns->href, ns_uri) == 0) {
+		strcmp(reinterpret_cast<const char*>(node->ns->href), ns_uri) == 0) {
 		return true;
 	}
 	return false;
@@ -91,7 +91,7 @@ bool node_is(xmlNode* node, const char* name, const char* ns_uri)
 		return false;
 	}
 
-	if (strcmp((const char*)node->name, name) == 0) {
+	if (strcmp(reinterpret_cast<const char*>(node->name), name) == 0) {
 		return has_namespace(node, ns_uri);
 	}
 	return false;
