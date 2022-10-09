@@ -26,9 +26,9 @@ const char* MatcherException::what() const throw()
 
 MatcherException MatcherException::from_rust_error(MatcherErrorFfi error)
 {
-	const std::string info = RustString(error.info);
-	const std::string info2 = RustString(error.info2);
-	return MatcherException(error.type, info, info2);
+	const std::string info_ = RustString(error.info);
+	const std::string info2_ = RustString(error.info2);
+	return MatcherException(error.type, info_, info2_);
 }
 
 } // namespace newsboat

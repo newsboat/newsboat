@@ -36,14 +36,14 @@ std::vector<std::pair<int, int>> Regex::matches(std::string input,
 	std::vector<regmatch_t> regMatches(max_matches);
 	if (regexec(&regex, input.c_str(), max_matches,
 			regMatches.data(), flags) == 0) {
-		std::vector<std::pair<int, int>>  matches;
+		std::vector<std::pair<int, int>> results;
 		for (const auto& regMatch : regMatches) {
 			if (regMatch.rm_so < 0 || regMatch.rm_eo < 0) {
 				break;
 			}
-			matches.push_back({regMatch.rm_so, regMatch.rm_eo});
+			results.push_back({regMatch.rm_so, regMatch.rm_eo});
 		}
-		return matches;
+		return results;
 	}
 	return {};
 }
