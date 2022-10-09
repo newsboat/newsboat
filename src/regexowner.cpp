@@ -14,7 +14,7 @@ Regex::~Regex()
 	regfree(&regex);
 }
 
-std::unique_ptr<Regex> Regex::compile(std::string reg_expression,
+std::unique_ptr<Regex> Regex::compile(const std::string& reg_expression,
 	int regcomp_flags, std::string& error)
 {
 	regex_t regex;
@@ -30,7 +30,7 @@ std::unique_ptr<Regex> Regex::compile(std::string reg_expression,
 	return std::unique_ptr<Regex>(new Regex(regex));
 }
 
-std::vector<std::pair<int, int>> Regex::matches(std::string input,
+std::vector<std::pair<int, int>> Regex::matches(const std::string& input,
 		int max_matches, int flags) const
 {
 	std::vector<regmatch_t> regMatches(max_matches);
