@@ -21,6 +21,7 @@
 #include <regex>
 #include <sstream>
 #include <stfl.h>
+#include <string>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
@@ -267,6 +268,38 @@ std::string utils::retrieve_url(const std::string& url,
 	return retrieve_url(url, handle, cfgcont, authinfo, body, method);
 }
 
+struct UtilsHeaderValues {
+	std::string charset;
+
+	UtilsHeaderValues()
+		: charset("utf-8")
+	{
+	}
+};
+
+static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
+{
+	const auto header = std::string(reinterpret_cast<const char*>(ptr), size * nmemb);
+	UtilsHeaderValues* values = static_cast<UtilsHeaderValues*>(data);
+
+	if (header.find("Content-Type:") != std::string::npos) {
+		const std::string key = "charset=";
+		const auto charset_index = header.find(key);
+		if (charset_index != std::string::npos) {
+			auto charset = header.substr(charset_index + key.size());
+			utils::trim(charset);
+			if (charset.size() >= 2 && charset[0] == '"' && charset[charset.size() - 1] == '"') {
+				charset = charset.substr(1, charset.size() - 2);
+			}
+			if (charset.size() > 0) {
+				values->charset = charset;
+			}
+		}
+	}
+
+	return size * nmemb;
+}
+
 std::string utils::retrieve_url(const std::string& url,
 	CurlHandle& easyhandle,
 	ConfigContainer* cfgcont,
@@ -280,6 +313,10 @@ std::string utils::retrieve_url(const std::string& url,
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
+
+	UtilsHeaderValues hdrs;
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERDATA, &hdrs);
+	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERFUNCTION, handle_headers);
 
 	switch (method) {
 	case HTTPMethod::GET:
@@ -340,7 +377,12 @@ std::string utils::retrieve_url(const std::string& url,
 	// See the clobbering note above.
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
 
-	return buf;
+	if (hdrs.charset == "utf-8") {
+		return buf;
+	} else {
+		LOG(Level::DEBUG, "Parser::parse_url: converting data from %s to utf-8", hdrs.charset);
+		return utils::convert_text(buf, "utf-8", hdrs.charset);
+	}
 }
 
 std::string utils::run_program(const char* argv[], const std::string& input)
