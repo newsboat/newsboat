@@ -54,6 +54,8 @@ Parser::~Parser()
 	}
 }
 
+namespace {
+
 struct HeaderValues {
 	time_t lastmodified;
 	std::string etag;
@@ -65,6 +67,8 @@ struct HeaderValues {
 	{
 	}
 };
+
+}
 
 static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 {

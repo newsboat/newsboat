@@ -268,19 +268,23 @@ std::string utils::retrieve_url(const std::string& url,
 	return retrieve_url(url, handle, cfgcont, authinfo, body, method);
 }
 
-struct UtilsHeaderValues {
+namespace {
+
+struct HeaderValues {
 	std::string charset;
 
-	UtilsHeaderValues()
+	HeaderValues()
 		: charset("utf-8")
 	{
 	}
 };
 
+}
+
 static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 {
 	const auto header = std::string(reinterpret_cast<const char*>(ptr), size * nmemb);
-	UtilsHeaderValues* values = static_cast<UtilsHeaderValues*>(data);
+	HeaderValues* values = static_cast<HeaderValues*>(data);
 
 	if (header.find("Content-Type:") != std::string::npos) {
 		const std::string key = "charset=";
@@ -314,7 +318,7 @@ std::string utils::retrieve_url(const std::string& url,
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
 
-	UtilsHeaderValues hdrs;
+	HeaderValues hdrs;
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERDATA, &hdrs);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERFUNCTION, handle_headers);
 
