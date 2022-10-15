@@ -27,10 +27,8 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, files_list("files", FormAction::f)
+	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
-	files_list.set_num_context_lines(cfg->get_configvalue_as_int("scrolloff"));
-
 	// In dirbrowser, keyboard focus is at the input field, so user will be
 	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
 	// can't quit with the default `q` bind).

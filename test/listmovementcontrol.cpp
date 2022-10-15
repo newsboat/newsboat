@@ -10,7 +10,7 @@ namespace {
 
 class ListStub {
 public:
-	ListStub()
+	ListStub(const std::string&, Stfl::Form&)
 		: height(80)
 		, num_lines(0)
 		, position(0)
@@ -45,12 +45,22 @@ public: // Stub
 	std::uint32_t scroll_offset;
 };
 
+const static std::string stflListForm =
+	"vbox\n"
+	"  list[list-name]\n"
+	"    richtext:1\n"
+	"    pos[list-name_pos]:0\n"
+	"    offset[list-name_offset]:0";
+
+const std::string dummyFormName = "dummy";
+Stfl::Form dummyForm(stflListForm);
+
 }
 
 TEST_CASE("get_position() returns position of selected item in list",
 	"[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the 5th item is selected") {
@@ -63,7 +73,7 @@ TEST_CASE("get_position() returns position of selected item in list",
 
 TEST_CASE("on_lines_changed() makes sure `position < num_lines`", "[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the 5th item is selected") {
@@ -95,7 +105,7 @@ TEST_CASE("on_lines_changed() makes sure `position < num_lines`", "[ListMovement
 TEST_CASE("move_up() moves up by 1 line, and respects `wrap_scroll`",
 	"[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the first item is selected") {
@@ -152,7 +162,7 @@ TEST_CASE("move_up() moves up by 1 line, and respects `wrap_scroll`",
 TEST_CASE("move_down() moves down by 1 line, and respects `wrap_scroll`",
 	"[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the last item is selected") {
@@ -208,7 +218,7 @@ TEST_CASE("move_down() moves down by 1 line, and respects `wrap_scroll`",
 
 TEST_CASE("move_to_first() moves to the topmost item", "[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the first item is selected") {
@@ -242,7 +252,7 @@ TEST_CASE("move_to_first() moves to the topmost item", "[ListMovementControl]")
 
 TEST_CASE("move_to_last() moves to the bottom item", "[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the last item is selected") {
@@ -277,7 +287,7 @@ TEST_CASE("move_to_last() moves to the bottom item", "[ListMovementControl]")
 TEST_CASE("move_page_up() moves up by `list height` lines, and respects `wrap_scroll`",
 	"[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the first item is selected") {
@@ -332,7 +342,7 @@ TEST_CASE("move_page_up() moves up by `list height` lines, and respects `wrap_sc
 TEST_CASE("move_page_down() moves up by `list height` lines, and respects `wrap_scroll`",
 	"[ListMovementControl]")
 {
-	auto list_movement = ListMovementControl<ListStub>();
+	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
 
 	GIVEN("a list of 10 items, where the last item is selected") {

@@ -26,9 +26,8 @@ UrlViewFormAction::UrlViewFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, feed(feed)
-	, urls_list("urls", FormAction::f)
+	, urls_list("urls", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
-	urls_list.set_num_context_lines(cfg->get_configvalue_as_int("scrolloff"));
 }
 
 UrlViewFormAction::~UrlViewFormAction() {}

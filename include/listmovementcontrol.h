@@ -15,18 +15,16 @@ namespace newsboat {
 template<class Backend>
 class ListMovementControl : public Backend {
 public:
-	using Backend::Backend;
+	ListMovementControl(const std::string& list_name, Stfl::Form& form,
+		std::uint32_t scrolloff)
+		: Backend(list_name, form)
+	{
+		num_context_lines = scrolloff;
+		set_position(current_position);
+	}
 
 	// Make sure the backend's destructor is marked virtual
 	~ListMovementControl() override = default;
-
-	void set_num_context_lines(std::uint32_t context_lines)
-	{
-		num_context_lines = context_lines;
-
-		// Force a recalculation of the scroll offset
-		set_position(current_position);
-	}
 
 	bool move_up(bool wrap_scroll)
 	{

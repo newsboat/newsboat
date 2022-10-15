@@ -16,9 +16,8 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, dialogs_list("dialogs", FormAction::f)
+	, dialogs_list("dialogs", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
-	dialogs_list.set_num_context_lines(cfg->get_configvalue_as_int("scrolloff"));
 }
 
 DialogsFormAction::~DialogsFormAction() {}

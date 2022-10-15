@@ -30,9 +30,8 @@ SelectFormAction::SelectFormAction(View* vv,
 	, is_first_draw(true)
 	, type(SelectionType::TAG)
 	, value("")
-	, tags_list("taglist", FormAction::f)
+	, tags_list("taglist", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
-	tags_list.set_num_context_lines(cfg->get_configvalue_as_int("scrolloff"));
 }
 
 SelectFormAction::~SelectFormAction() {}

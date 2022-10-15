@@ -30,12 +30,10 @@ PbView::PbView(PbController* c)
 	, help_form(help_str)
 	, keys(0)
 	, colorman(ctrl->get_colormanager())
-	, downloads_list("dls", dllist_form)
+	, downloads_list("dls", dllist_form,
+		  ctrl->get_cfgcont()->get_configvalue_as_int("scrolloff"))
 	, help_textview("helptext", help_form)
 {
-	downloads_list.set_num_context_lines(
-		ctrl->get_cfgcont()->get_configvalue_as_int("scrolloff"));
-
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
 	}

@@ -25,8 +25,7 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[ListWidget
 	fmt.add_line("line 2");
 	fmt.add_line("line 3");
 
-	ListWidget listWidget("list-name", listForm);
-	listWidget.set_num_context_lines(scrolloff);
+	ListWidget listWidget("list-name", listForm, scrolloff);
 
 	GIVEN("a ListWidget with 3 lines and position=2") {
 		listWidget.stfl_replace_lines(fmt);
@@ -74,8 +73,7 @@ TEST_CASE("stfl_replace_list() makes sure `position < num_lines`", "[ListWidget]
 	fmt.add_line("line 2");
 	fmt.add_line("line 3");
 
-	ListWidget listWidget("list-name", listForm);
-	listWidget.set_num_context_lines(scrolloff);
+	ListWidget listWidget("list-name", listForm, scrolloff);
 
 	const std::string stflListPrototype =
 		"{list[list-name] "
