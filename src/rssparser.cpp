@@ -574,14 +574,29 @@ std::string RssParser::get_guid(const rsspp::Item& item) const
 void RssParser::set_item_enclosure(std::shared_ptr<RssItem> x,
 	const rsspp::Item& item)
 {
-	x->set_enclosure_url(item.enclosure_url);
-	x->set_enclosure_type(item.enclosure_type);
+	std::string enclosure_url;
+	std::string enclosure_type;
+	bool found_valid_enclosure = false;
+
+	for (const auto& enclosure : item.enclosures) {
+		if (utils::is_valid_podcast_type(enclosure.type)) {
+			found_valid_enclosure = true;
+			enclosure_url = enclosure.url;
+			enclosure_type = enclosure.type;
+		} else if (!found_valid_enclosure) {
+			enclosure_url = enclosure.url;
+			enclosure_type = enclosure.type;
+		}
+	}
+
+	x->set_enclosure_url(enclosure_url);
+	x->set_enclosure_type(enclosure_type);
 	LOG(Level::DEBUG,
 		"RssParser::parse: found enclosure_url: %s",
-		item.enclosure_url);
+		enclosure_url);
 	LOG(Level::DEBUG,
 		"RssParser::parse: found enclosure_type: %s",
-		item.enclosure_type);
+		enclosure_type);
 }
 
 void RssParser::add_item_to_feed(std::shared_ptr<RssFeed> feed,

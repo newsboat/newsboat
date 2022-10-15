@@ -124,13 +124,12 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 							base, get_prop(node, "href"));
 				}
 			} else if (rel == "enclosure") {
-				const std::string type = get_prop(node, "type");
-				if (newsboat::utils::is_valid_podcast_type(
-						type)) {
-					it.enclosure_url =
-						get_prop(node, "href");
-					it.enclosure_type = std::move(type);
+				it.enclosures.push_back(
+				Enclosure {
+					get_prop(node, "href"),
+					get_prop(node, "type"),
 				}
+				);
 			}
 		} else if (node_is(node, "summary", ns)) {
 			const std::string mode = get_prop(node, "mode");

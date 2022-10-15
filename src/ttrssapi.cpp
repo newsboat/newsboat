@@ -431,11 +431,13 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handl
 
 			if (!item_obj["attachments"].is_null()) {
 				for (const json& a : item_obj["attachments"]) {
-					if (!a["content_url"].is_null() && !a["content_type"].is_null()
-						&& newsboat::utils::is_valid_podcast_type(a["content_type"])) {
-						item.enclosure_type =
-							a["content_type"];
-						item.enclosure_url = a["content_url"];
+					if (!a["content_url"].is_null() && !a["content_type"].is_null()) {
+						item.enclosures.push_back(
+						rsspp::Enclosure {
+							a["content_url"],
+							a["content_type"],
+						}
+						);
 						break;
 					}
 				}

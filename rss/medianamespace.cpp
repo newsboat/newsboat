@@ -23,11 +23,12 @@ void parse_media_node(xmlNode* node, Item& it)
 			parse_media_node(mnode, it);
 		}
 	} else if (node_is(node, "content", MEDIA_RSS_URI)) {
-		const std::string type = get_prop(node, "type");
-		if (utils::is_valid_podcast_type(type)) {
-			it.enclosure_url = get_prop(node, "url");
-			it.enclosure_type = std::move(type);
+		it.enclosures.push_back(
+		Enclosure {
+			get_prop(node, "url"),
+			get_prop(node, "type"),
 		}
+		);
 		for (xmlNode* mnode = node->children; mnode != nullptr; mnode = mnode->next) {
 			parse_media_node(mnode, it);
 		}
