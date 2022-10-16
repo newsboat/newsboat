@@ -317,11 +317,12 @@ int Controller::run(const CliArgsParser& args)
 		const std::string pass = cfg.get_configvalue("miniflux-password");
 		const std::string pass_file = cfg.get_configvalue("miniflux-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("miniflux-passwordeval");
-		const bool creds_set = !user.empty() &&
-			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+		const std::string token = cfg.get_configvalue("miniflux-token");
+		const bool creds_set = !token.empty()
+			|| (!user.empty() && (!pass.empty() || !pass_file.empty() || !pass_eval.empty()));
 		if (!creds_set) {
 			std::cerr <<
-				_("ERROR: You must set `miniflux-login` and one of `miniflux-password`, "
+				_("ERROR: You must set `miniflux-token` or `miniflux-login` and one of `miniflux-password`, "
 					"`miniflux-passwordfile` or `miniflux-passwordeval` to use "
 					"Miniflux\n");
 			return EXIT_FAILURE;

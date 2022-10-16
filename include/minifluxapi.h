@@ -44,6 +44,7 @@ private:
 		nlohmann::json& args);
 	bool update_article(const std::string& guid, nlohmann::json& args);
 	std::string auth_info;
+	std::string auth_token;
 	std::string server;
 };
 

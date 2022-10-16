@@ -15,6 +15,7 @@ typedef std::pair<std::string, std::vector<std::string>> TaggedFeedUrl;
 typedef struct {
 	std::string user;
 	std::string pass;
+	std::string token;
 } Credentials;
 
 class RemoteApi {

@@ -648,6 +648,10 @@ In addition, Miniflux requires username and password for authentication:
 	miniflux-login "myusername"
 	miniflux-password "mypassword"
 
+Alternatively, an API Token can be specified:
+
+	miniflux-token "my-api-token"
+
 Note that double quotes and backslashes in your password
 <<_using_double_quotes,should be escaped>>.
 
