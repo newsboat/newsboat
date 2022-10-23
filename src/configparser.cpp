@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
+#include <cwctype>
 #include <fstream>
+#include <numeric>
 #include <pwd.h>
 #include <sys/types.h>
 
@@ -96,15 +98,29 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	}
 
 	unsigned int linecounter = 0;
+	std::string multi_line_buffer{};
 	for (const auto& line : lines.value()) {
-		++linecounter;
-
-		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
-
-		const std::string location = strprintf::fmt(_("%s line %u"), filename,
-				linecounter);
-
-		parse_line(line, location);
+		linecounter++;
+		const auto ln_del = line.rfind('\\');
+		const auto trailing_ws = [](bool& acc, char ch) {
+			return acc && std::iswspace(ch);
+		};
+		if (ln_del != std::string::npos &&
+				std::accumulate(line.begin()+ln_del+1, line.end(), true, trailing_ws)) {
+			multi_line_buffer.append(line.substr(0, ln_del));
+			multi_line_buffer.push_back(' ');
+		} else {
+			const std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
+			if (!multi_line_buffer.empty()) {
+				multi_line_buffer.append(line);
+				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", multi_line_buffer);
+				parse_line(multi_line_buffer, location);
+				multi_line_buffer.clear();
+			} else {
+				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
+				parse_line(line, location);
+			}
+		}
 	}
 	included_files.pop_back();
 	return true;
