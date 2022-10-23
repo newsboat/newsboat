@@ -289,12 +289,15 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 			const auto type_ptr = json_object_get_string(type_obj);
 			const auto url_ptr = json_object_get_string(node);
 
-			if (type_ptr != nullptr) {
+			if (type_ptr != nullptr && url_ptr != nullptr) {
 				const std::string type = type_ptr;
-				if (utils::is_valid_podcast_type(type) && url_ptr != nullptr) {
-					item.enclosure_url = url_ptr;
-					item.enclosure_type = type;
+				const std::string url = url_ptr;
+				item.enclosures.push_back(
+				rsspp::Enclosure {
+					url,
+					type,
 				}
+				);
 			}
 		}
 

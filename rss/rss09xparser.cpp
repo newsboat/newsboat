@@ -115,11 +115,12 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 		} else if (node_is(node, "creator", DC_URI)) {
 			author = get_content(node);
 		} else if (node_is(node, "enclosure", ns)) {
-			const std::string type = get_prop(node, "type");
-			if (utils::is_valid_podcast_type(type)) {
-				it.enclosure_url = get_prop(node, "url");
-				it.enclosure_type = std::move(type);
+			it.enclosures.push_back(
+			Enclosure {
+				get_prop(node, "url"),
+				get_prop(node, "type"),
 			}
+			);
 		} else if (is_media_node(node)) {
 			parse_media_node(node, it);
 		}

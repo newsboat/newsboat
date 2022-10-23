@@ -520,10 +520,13 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 			if (entry.contains("enclosure") && !entry["enclosure"].is_null()) {
 				for (const auto& a : entry["enclosure"]) {
 					if (a.contains("href") && a.contains("type")
-						&& !a["href"].is_null() && !a["type"].is_null()
-						&& newsboat::utils::is_valid_podcast_type(a["type"])) {
-						item.enclosure_type = a["type"];
-						item.enclosure_url = a["href"];
+						&& !a["href"].is_null() && !a["type"].is_null()) {
+						item.enclosures.push_back(
+						rsspp::Enclosure {
+							a["href"],
+							a["type"],
+						}
+						);
 						break;
 					}
 				}

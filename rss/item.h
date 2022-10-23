@@ -7,6 +7,11 @@
 
 namespace rsspp {
 
+struct Enclosure {
+	std::string url;
+	std::string type;
+};
+
 class Item {
 public:
 	Item()
@@ -28,8 +33,7 @@ public:
 	std::string guid;
 	bool guid_isPermaLink;
 
-	std::string enclosure_url;
-	std::string enclosure_type;
+	std::vector<Enclosure> enclosures;
 
 	// extensions:
 	std::string content_encoded;
