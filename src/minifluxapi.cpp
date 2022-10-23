@@ -36,6 +36,16 @@ bool MinifluxApi::authenticate()
 	// error check handled in Controller
 	const Credentials creds = get_credentials("miniflux", "");
 	auth_info = strprintf::fmt("%s:%s", creds.user, creds.pass);
+
+	CurlHandle handle;
+	long response_code = 0;
+	run_op("/v1/me", json(), handle);
+	curl_easy_getinfo(handle.ptr(), CURLINFO_RESPONSE_CODE, &response_code);
+
+	if (response_code == 401) {
+		return false;
+	}
+
 	return true;
 }
 
