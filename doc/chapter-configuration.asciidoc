@@ -30,6 +30,22 @@ unbind-key       R
 bind-key         ^R    reload-all
 ----
 
+=== Splitting macros into multiple lines
+
+Macros defined in config files which are long can be split up into multiple
+lines using backslashes; these must be the last character on the line and will
+immediately concatenate it with the following line. It's important that _nothing_
+follows the \ on the same line, otherwise the \ character is treated "as is".
+
+Dummy example
+
+---
+macro p open; \
+reload; quit; \
+quit;         \
+quit -- "Opens, reloads then makes sure to quit newsboat"
+---
+
 === Using Double Quotes
 
 ****

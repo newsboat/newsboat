@@ -102,13 +102,8 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	for (const auto& line : lines.value()) {
 		linecounter++;
 		const auto ln_del = line.rfind('\\');
-		const auto trailing_ws = [](bool& acc, char ch) {
-			return acc && std::iswspace(ch);
-		};
-		if (ln_del != std::string::npos &&
-				std::accumulate(line.begin()+ln_del+1, line.end(), true, trailing_ws)) {
+		if (ln_del != std::string::npos && ln_del == line.size()-1) {
 			multi_line_buffer.append(line.substr(0, ln_del));
-			multi_line_buffer.push_back(' ');
 		} else {
 			const std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
 			if (!multi_line_buffer.empty()) {
