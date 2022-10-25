@@ -3,9 +3,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
-#include <cwctype>
 #include <fstream>
-#include <numeric>
 #include <pwd.h>
 #include <sys/types.h>
 
@@ -101,9 +99,8 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	std::string multi_line_buffer{};
 	for (const auto& line : lines.value()) {
 		linecounter++;
-		const auto ln_del = line.rfind('\\');
-		if (ln_del != std::string::npos && ln_del == line.size()-1) {
-			multi_line_buffer.append(line.substr(0, ln_del));
+		if (!line.empty() && line.back() == '\\') {
+			multi_line_buffer.append(line.substr(0, line.size()-1));
 		} else {
 			const std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
 			if (!multi_line_buffer.empty()) {

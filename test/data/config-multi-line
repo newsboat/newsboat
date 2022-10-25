@@ -10,11 +10,3 @@ it;\
 q\
 uit;\
 quit -- "Dummy macro"
-
-
-macro f open;  \
-reload;        \
-quit;          \
-quit  -- "Spaces before \ are ok. Not after, if concatenation is what the user is after. Otherwise treated as-is"
-
-macro a open; quit; reload -- "some macro description"
