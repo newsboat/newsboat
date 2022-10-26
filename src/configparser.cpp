@@ -96,15 +96,23 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	}
 
 	unsigned int linecounter = 0;
+	std::string multi_line_buffer{};
 	for (const auto& line : lines.value()) {
-		++linecounter;
-
-		LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
-
-		const std::string location = strprintf::fmt(_("%s line %u"), filename,
-				linecounter);
-
-		parse_line(line, location);
+		linecounter++;
+		if (!line.empty() && line.back() == '\\') {
+			multi_line_buffer.append(line.substr(0, line.size()-1));
+		} else {
+			const std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
+			if (!multi_line_buffer.empty()) {
+				multi_line_buffer.append(line);
+				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", multi_line_buffer);
+				parse_line(multi_line_buffer, location);
+				multi_line_buffer.clear();
+			} else {
+				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", line);
+				parse_line(line, location);
+			}
+		}
 	}
 	included_files.pop_back();
 	return true;

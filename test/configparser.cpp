@@ -248,6 +248,27 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 	}
 }
 
+TEST_CASE("Concatenates lines that end with a backslash", "[ConfigParser]")
+{
+	ConfigParser cfgparser;
+	KeyMap k(KM_NEWSBOAT);
+	cfgparser.register_handler("macro", k);
+	REQUIRE_NOTHROW(cfgparser.parse_file("data/config-multi-line"));
+	auto p_macro = k.get_macro("p");
+	REQUIRE(!p_macro.empty());
+	REQUIRE(p_macro[0].op == newsboat::OP_OPEN);
+	REQUIRE(p_macro[1].op == newsboat::OP_RELOAD);
+	REQUIRE(p_macro[2].op == newsboat::OP_QUIT);
+	REQUIRE(p_macro[3].op == newsboat::OP_QUIT);
+
+	auto contrived = k.get_macro("j");
+	REQUIRE(!contrived.empty());
+	REQUIRE(contrived[0].op == newsboat::OP_QUIT);
+	REQUIRE(contrived[1].op == newsboat::OP_QUIT);
+	REQUIRE(contrived[2].op == newsboat::OP_QUIT);
+	REQUIRE(contrived[3].op == newsboat::OP_QUIT);
+}
+
 TEST_CASE("`include` directive includes other config files", "[ConfigParser]")
 {
 	// TODO: error messages should be more descriptive than "file couldn't be opened"

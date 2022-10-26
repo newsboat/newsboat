@@ -1,0 +1,12 @@
+macro p open;\
+reload;\
+quit;\
+quit -- "opens, reloads, quits, then quits newsboat"
+
+macro j qui\
+t;\
+qu\
+it;\
+q\
+uit;\
+quit -- "Dummy macro"
