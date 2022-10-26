@@ -35,7 +35,7 @@ bind-key         ^R    reload-all
 Configuration items, such as macros defined in config files which are long can be split
 up into multiple ones using backslashes; these must be the last character on the line and will
 immediately concatenate it with the following line. It's important that _nothing_
-follows the \ on the same line, otherwise the \ character is treated "as is".
+follows the `{backslash}` on the same line, otherwise the `{backslash}` character is treated "as is".
 
 Dummy example:
 
