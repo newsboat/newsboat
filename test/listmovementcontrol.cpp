@@ -205,7 +205,7 @@ TEST_CASE("move_down() moves down by 1 line, and respects `wrap_scroll`",
 		}
 
 		WHEN("move_down() is called with wrapping enabled") {
-			bool moved = list_movement.move_down(false);
+			bool moved = list_movement.move_down(true);
 
 			THEN("the 6th item is selected") {
 				REQUIRE(moved == true);
@@ -316,22 +316,23 @@ TEST_CASE("move_page_up() moves up by `list height` lines, and respects `wrap_sc
 	GIVEN("a list of height 4 with 10 items, where the 8th item is selected") {
 		list.num_lines = 10;
 		list.height = 4;
+		// Hide some of the top items so the selected item fits into view
 		list.scroll_offset = 6;
 		list_movement.set_position(7);
 
 		WHEN("move_page_up() is called with wrapping disabled") {
 			list_movement.move_page_up(false);
 
-			THEN("the first item is selected") {
+			THEN("cursor moves 4 positions up, and the scroll offset is adjusted to display the newly selected item at the top") {
 				REQUIRE(list.position == 3);
 				REQUIRE(list.scroll_offset == 3);
 			}
 		}
 
 		WHEN("move_page_up() is called with wrapping enabled") {
-			list_movement.move_page_up(false);
+			list_movement.move_page_up(true);
 
-			THEN("the first item is selected") {
+			THEN("cursor moves 4 positions up, and the scroll offset is adjusted to display the newly selected item at the top") {
 				REQUIRE(list.position == 3);
 				REQUIRE(list.scroll_offset == 3);
 			}
@@ -339,7 +340,7 @@ TEST_CASE("move_page_up() moves up by `list height` lines, and respects `wrap_sc
 	}
 }
 
-TEST_CASE("move_page_down() moves up by `list height` lines, and respects `wrap_scroll`",
+TEST_CASE("move_page_down() moves down by `list height` lines, and respects `wrap_scroll`",
 	"[ListMovementControl]")
 {
 	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
@@ -376,16 +377,16 @@ TEST_CASE("move_page_down() moves up by `list height` lines, and respects `wrap_
 		WHEN("move_page_down() is called with wrapping disabled") {
 			list_movement.move_page_down(false);
 
-			THEN("the 6th item is selected") {
+			THEN("cursor moves 4 positions down, and the scroll offset is adjusted to display the newly selected item at the bottom") {
 				REQUIRE(list.position == 5);
 				REQUIRE(list.scroll_offset == 2);
 			}
 		}
 
 		WHEN("move_page_down() is called with wrapping enabled") {
-			list_movement.move_page_down(false);
+			list_movement.move_page_down(true);
 
-			THEN("the 6th item is selected") {
+			THEN("cursor moves 4 positions down, and the scroll offset is adjusted to display the newly selected item at the bottom") {
 				REQUIRE(list.position == 5);
 				REQUIRE(list.scroll_offset == 2);
 			}

@@ -1,10 +1,6 @@
 #ifndef NEWSBOAT_LISTWIDGET_H_
 #define NEWSBOAT_LISTWIDGET_H_
 
-#include <cstdint>
-#include <string>
-
-#include "listformatter.h"
 #include "listmovementcontrol.h"
 #include "listwidgetbackend.h"
 

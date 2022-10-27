@@ -390,7 +390,7 @@ bool FormAction::handle_list_operations(ListWidget& list, Operation op)
 	default:
 		return false;
 	}
-	return true;
+	return false;
 }
 
 bool FormAction::handle_single_argument_set(std::string argument)

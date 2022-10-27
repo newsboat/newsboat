@@ -92,7 +92,7 @@ TEST_CASE("stfl_replace_list() makes sure `position < num_lines`", "[ListWidget]
 					R"({listitem text:"line 1"}{listitem text:"line 2"})");
 			listWidget.stfl_replace_list(2, stflList);
 
-			THEN("the position is changed to 0") {
+			THEN("the position is changed to 1") {
 				REQUIRE(listWidget.get_position() == 1);
 			}
 		}
@@ -111,7 +111,7 @@ TEST_CASE("stfl_replace_list() makes sure `position < num_lines`", "[ListWidget]
 					R"({listitem text:"line 1"}{listitem text:"line 2"}{listitem text:"line 3"}{listitem text:"line 4"})");
 			listWidget.stfl_replace_list(4, stflList);
 
-			THEN("the position is changed to 0") {
+			THEN("the position is changed to 2") {
 				REQUIRE(listWidget.get_position() == 2);
 			}
 		}
