@@ -39,24 +39,10 @@ bool UrlViewFormAction::process_operation(Operation op,
 	bool hardquit = false;
 	switch (op) {
 	case OP_PREV:
-	case OP_SK_UP:
 		urls_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_NEXT:
-	case OP_SK_DOWN:
 		urls_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_HOME:
-		urls_list.move_to_first();
-		break;
-	case OP_SK_END:
-		urls_list.move_to_last();
-		break;
-	case OP_SK_PGUP:
-		urls_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_PGDOWN:
-		urls_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_OPENINBROWSER:
 	case OP_OPENBROWSER_AND_MARK:
@@ -108,7 +94,10 @@ bool UrlViewFormAction::process_operation(Operation op,
 	case OP_HARDQUIT:
 		hardquit = true;
 		break;
-	default: // nothing
+	default:
+		if (handle_list_operations(urls_list, op)) {
+			break;
+		}
 		break;
 	}
 	if (hardquit) {

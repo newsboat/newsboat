@@ -58,24 +58,10 @@ bool SelectFormAction::process_operation(Operation op,
 	bool hardquit = false;
 	switch (op) {
 	case OP_PREV:
-	case OP_SK_UP:
 		tags_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_NEXT:
-	case OP_SK_DOWN:
 		tags_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_HOME:
-		tags_list.move_to_first();
-		break;
-	case OP_SK_END:
-		tags_list.move_to_last();
-		break;
-	case OP_SK_PGUP:
-		tags_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_PGDOWN:
-		tags_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_CMD_START_1:
 		FormAction::start_cmdline("1");
@@ -136,6 +122,9 @@ bool SelectFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
+		if (handle_list_operations(tags_list, op)) {
+			break;
+		}
 		break;
 	}
 

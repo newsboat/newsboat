@@ -63,7 +63,7 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[ListWidget
 	}
 }
 
-TEST_CASE("stfl_replace_list() resets selected position to 0", "[ListWidget]")
+TEST_CASE("stfl_replace_list() makes sure `position < num_lines`", "[ListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
@@ -74,6 +74,7 @@ TEST_CASE("stfl_replace_list() resets selected position to 0", "[ListWidget]")
 	fmt.add_line("line 3");
 
 	ListWidget listWidget("list-name", listForm, scrolloff);
+
 	const std::string stflListPrototype =
 		"{list[list-name] "
 		"richtext:1 "
@@ -91,8 +92,8 @@ TEST_CASE("stfl_replace_list() resets selected position to 0", "[ListWidget]")
 					R"({listitem text:"line 1"}{listitem text:"line 2"})");
 			listWidget.stfl_replace_list(2, stflList);
 
-			THEN("the position is changed to 0") {
-				REQUIRE(listWidget.get_position() == 0);
+			THEN("the position is changed to 1") {
+				REQUIRE(listWidget.get_position() == 1);
 			}
 		}
 
@@ -110,8 +111,8 @@ TEST_CASE("stfl_replace_list() resets selected position to 0", "[ListWidget]")
 					R"({listitem text:"line 1"}{listitem text:"line 2"}{listitem text:"line 3"}{listitem text:"line 4"})");
 			listWidget.stfl_replace_list(4, stflList);
 
-			THEN("the position is changed to 0") {
-				REQUIRE(listWidget.get_position() == 0);
+			THEN("the position is changed to 2") {
+				REQUIRE(listWidget.get_position() == 2);
 			}
 		}
 	}

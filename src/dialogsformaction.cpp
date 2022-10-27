@@ -16,8 +16,7 @@ DialogsFormAction::DialogsFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, dialogs_list("dialogs", FormAction::f,
-		  cfg->get_configvalue_as_int("scrolloff"))
+	, dialogs_list("dialogs", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
 
@@ -103,29 +102,18 @@ bool DialogsFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_PREV:
-	case OP_SK_UP:
 		dialogs_list.move_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_NEXT:
-	case OP_SK_DOWN:
 		dialogs_list.move_down(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_HOME:
-		dialogs_list.move_to_first();
-		break;
-	case OP_SK_END:
-		dialogs_list.move_to_last();
-		break;
-	case OP_SK_PGUP:
-		dialogs_list.move_page_up(cfg->get_configvalue_as_bool("wrap-scroll"));
-		break;
-	case OP_SK_PGDOWN:
-		dialogs_list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_QUIT:
 		v->pop_current_formaction();
 		break;
 	default:
+		if (handle_list_operations(dialogs_list, op)) {
+			break;
+		}
 		break;
 	}
 	return true;
