@@ -50,7 +50,7 @@ impl FsLock {
         // first we open (and possibly create) the lock file
         let mut options = OpenOptions::new();
         options.create(true).read(true).write(true).mode(0o600);
-        let mut file = match options.open(&new_lock_path) {
+        let mut file = match options.open(new_lock_path) {
             Ok(file) => file,
             Err(reason) => {
                 return Err(fmt!(

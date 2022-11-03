@@ -3,7 +3,7 @@ use std::process::Command;
 fn main() {
     // Code lifted from https://stackoverflow.com/a/44407625/2350060
     let command_output = Command::new("git")
-        .args(&["describe", "--abbrev=4", "--dirty", "--always", "--tags"])
+        .args(["describe", "--abbrev=4", "--dirty", "--always", "--tags"])
         .output();
     match command_output {
         Ok(ref hash_output) if hash_output.status.success() => {

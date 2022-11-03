@@ -8,7 +8,7 @@ fn t_getcwd_value_depends_on_current_directory() {
 
     let tmp = TempDir::new().unwrap();
     assert_ne!(&initial_dir, tmp.path());
-    let chdir_result = env::set_current_dir(&tmp.path());
+    let chdir_result = env::set_current_dir(tmp.path());
     assert!(chdir_result.is_ok());
 
     let new_dir = utils::getcwd().unwrap();

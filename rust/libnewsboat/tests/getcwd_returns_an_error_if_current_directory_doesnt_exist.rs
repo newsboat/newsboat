@@ -6,7 +6,7 @@ use tempfile::TempDir;
 fn t_getcwd_returns_an_error_if_current_directory_doesnt_exist() {
     {
         let tmp = TempDir::new().unwrap();
-        let chdir_result = env::set_current_dir(&tmp.path());
+        let chdir_result = env::set_current_dir(tmp.path());
         assert!(chdir_result.is_ok());
     }
 
