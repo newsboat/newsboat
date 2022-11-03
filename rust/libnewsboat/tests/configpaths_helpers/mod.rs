@@ -44,7 +44,7 @@ impl FileSentries {
 }
 
 fn mock_dotdir(dotdir_path: &path::Path, sentries: &FileSentries) {
-    assert!(fs::create_dir(&dotdir_path).is_ok());
+    assert!(fs::create_dir(dotdir_path).is_ok());
     assert!(create_file(&dotdir_path.join("config"), &sentries.config));
     assert!(create_file(&dotdir_path.join("urls"), &sentries.urls));
     assert!(create_file(&dotdir_path.join("cache.db"), &sentries.cache));
@@ -80,11 +80,11 @@ pub fn mock_newsboat_dotdir(tmp: &TempDir) -> FileSentries {
 pub fn mock_xdg_dirs(config_dir: &path::Path, data_dir: &path::Path) -> FileSentries {
     let sentries = FileSentries::new();
 
-    assert!(fs::create_dir_all(&config_dir).is_ok());
+    assert!(fs::create_dir_all(config_dir).is_ok());
     assert!(create_file(&config_dir.join("config"), &sentries.config));
     assert!(create_file(&config_dir.join("urls"), &sentries.urls));
 
-    assert!(fs::create_dir_all(&data_dir).is_ok());
+    assert!(fs::create_dir_all(data_dir).is_ok());
     assert!(create_file(&data_dir.join("cache.db"), &sentries.cache));
     assert!(create_file(&data_dir.join("queue"), &sentries.queue));
     assert!(create_file(
@@ -132,7 +132,7 @@ pub fn file_contents(path: &path::Path) -> String {
 }
 
 fn is_readable(filepath: &path::Path) -> bool {
-    fs::File::open(&filepath).is_ok()
+    fs::File::open(filepath).is_ok()
 }
 
 pub fn assert_xdg_not_migrated(config_dir: &path::Path, data_dir: &path::Path) {
