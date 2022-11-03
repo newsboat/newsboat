@@ -540,7 +540,7 @@ pub fn make_title(rs_str: String) -> String {
         .trim_end_matches(".htm");
 
     // 'title with dashes'
-    let result = result.replace('-', " ").replace('_', " ");
+    let result = result.replace(['-', '_'], " ");
 
     //'Title with dashes'
     //let result = "";
