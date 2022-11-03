@@ -103,7 +103,7 @@ impl Operator {
 /// Return 0 if there is no numeric prefix. On underflow, return `std::i32::MIN`. On overflow,
 /// return `std::i32::MAX`.
 fn string_to_num(input: &str) -> i32 {
-    let search_start = if input.starts_with('-') { 1 } else { 0 };
+    let search_start = usize::from(input.starts_with('-'));
 
     let numerics_end = input[search_start..]
         .find(|c: char| !c.is_numeric())
