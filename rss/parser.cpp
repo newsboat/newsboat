@@ -62,9 +62,15 @@ struct HeaderValues {
 	std::string charset;
 
 	HeaderValues()
-		: lastmodified(0)
-		, charset("utf-8")
 	{
+		reset();
+	}
+
+	void reset()
+	{
+		lastmodified = 0;
+		charset = "utf-8";
+		etag = "";
 	}
 };
 
@@ -75,7 +81,10 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 	const auto header = std::string(reinterpret_cast<const char*>(ptr), size * nmemb);
 	HeaderValues* values = static_cast<HeaderValues*>(data);
 
-	if (header.find("Last-Modified:") == 0) {
+	if (header.find("HTTP/") == 0) {
+		// Reset headers if a new response is detected (there might be multiple responses per request in case of a redirect)
+		values->reset();
+	} else if (header.find("Last-Modified:") == 0) {
 		const std::string header_value = header.substr(14);
 		time_t r = curl_getdate(header_value.c_str(), nullptr);
 		if (r == -1) {
@@ -86,7 +95,7 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 				header_value.c_str());
 		} else {
 			values->lastmodified = r;
-				curl_getdate(header_value.c_str(), nullptr);
+			curl_getdate(header_value.c_str(), nullptr);
 			LOG(Level::DEBUG,
 				"handle_headers: got last-modified %s (%" PRId64 ")",
 				header_value.c_str(),
