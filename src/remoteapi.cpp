@@ -61,8 +61,20 @@ Credentials RemoteApi::get_credentials(const std::string& scope,
 	std::string pass_file = cfg->get_configvalue(scope + "-passwordfile");
 	std::string pass_eval = cfg->get_configvalue(scope + "-passwordeval");
 	std::string token = cfg->get_configvalue(scope + "-token");
+	std::string token_file = cfg->get_configvalue(scope + "-tokenfile");
+	std::string token_eval = cfg->get_configvalue(scope + "-tokeneval");
 
 	if (!token.empty()) {
+		return {"", "", token};
+	}
+
+	if (!token_file.empty()) {
+		token = read_password(token_file);
+		return {"", "", token};
+	}
+
+	if (!token_eval.empty()) {
+		token = eval_password(token_eval);
 		return {"", "", token};
 	}
 

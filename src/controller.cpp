@@ -318,7 +318,11 @@ int Controller::run(const CliArgsParser& args)
 		const std::string pass_file = cfg.get_configvalue("miniflux-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("miniflux-passwordeval");
 		const std::string token = cfg.get_configvalue("miniflux-token");
+		const std::string token_file = cfg.get_configvalue("miniflux-tokenfile");
+		const std::string token_eval = cfg.get_configvalue("miniflux-tokeneval");
 		const bool creds_set = !token.empty()
+			|| !token_file.empty()
+			|| !token_eval.empty()
 			|| (!user.empty() && (!pass.empty() || !pass_file.empty() || !pass_eval.empty()));
 		if (!creds_set) {
 			std::cerr <<

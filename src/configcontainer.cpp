@@ -267,6 +267,8 @@ ConfigContainer::ConfigContainer()
 	{"miniflux-passwordfile", ConfigData("", ConfigDataType::PATH)},
 	{"miniflux-passwordeval", ConfigData("", ConfigDataType::STR)},
 	{"miniflux-token", ConfigData("", ConfigDataType::STR)},
+	{"miniflux-tokenfile", ConfigData("", ConfigDataType::PATH)},
+	{"miniflux-tokeneval", ConfigData("", ConfigDataType::STR)},
 	{"miniflux-url", ConfigData("", ConfigDataType::STR)},
 	{
 		"urls-source",

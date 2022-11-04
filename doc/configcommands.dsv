@@ -84,6 +84,8 @@ miniflux-password||<password>||""||Configures the password for use with Miniflux
 miniflux-passwordeval||<command>||""||A more secure alternative to the above, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||miniflux-passwordeval "gpg --decrypt ~/.newsboat/miniflux-password.gpg"
 miniflux-passwordfile||<path>||""||Another alternative, by storing your plaintext password elsewhere in your system.||miniflux-passwordfile "~/.newsboat/miniflux-pw.txt"
 miniflux-token||<API Token>||""||Sets the API Token for use with Miniflux.||miniflux-token "E-uTqU8r55KucuHz26tJbXfrZVRndwY_mZAsEfcC8Bg="
+miniflux-tokeneval||<command>||""||A more secure alternative to the above, is providing your API token from an external command that is evaluated during login. This can be used to read your token from a gpg encrypted file or your system keyring.||miniflux-tokeneval "gpg --decrypt ~/.newsboat/miniflux-token.gpg"
+miniflux-tokenfile||<API Token>||""||Another alternative, by storing your plaintext token elsewhere in your system.||miniflux-tokenfile "~/.newsboat/miniflux-token.txt"
 miniflux-url||<url>||""||Configures the URL where the Miniflux installation you want to use resides.||miniflux-url "https://example.com/miniflux/"
 newsblur-login||<login>||""||This variable sets your NewsBlur login for NewsBlur support.||newsblur-login "your-login"
 newsblur-min-items||<number>||20||This variable sets the number of articles that are loaded from NewsBlur per feed.||newsblur-min-items 100
