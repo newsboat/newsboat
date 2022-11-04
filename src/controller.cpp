@@ -322,9 +322,7 @@ int Controller::run(const CliArgsParser& args)
 			|| (!user.empty() && (!pass.empty() || !pass_file.empty() || !pass_eval.empty()));
 		if (!creds_set) {
 			std::cerr <<
-				_("ERROR: You must set `miniflux-token` or `miniflux-login` and one of `miniflux-password`, "
-					"`miniflux-passwordfile` or `miniflux-passwordeval` to use "
-					"Miniflux\n");
+				_("ERROR: You must provide an API token or a login/password pair to use Miniflux. Please set the appropriate miniflux-* settings\n");
 			return EXIT_FAILURE;
 		}
 

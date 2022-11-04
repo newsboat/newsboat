@@ -648,10 +648,6 @@ In addition, Miniflux requires username and password for authentication:
 	miniflux-login "myusername"
 	miniflux-password "mypassword"
 
-Alternatively, an API Token can be specified:
-
-	miniflux-token "my-api-token"
-
 Note that double quotes and backslashes in your password
 <<_using_double_quotes,should be escaped>>.
 
@@ -659,11 +655,16 @@ See also <<miniflux-passwordfile,`miniflux-passwordfile`>>,
 <<miniflux-passwordeval,`miniflux-passwordeval`>>, and
 <<_passwords_for_external_apis>>.
 
-The Miniflux backend will default to using the `basic` HTTP authentication
-method, since Newsboat sends extraneous requests when trying to determine the
-appropriate method automatically. If your Miniflux instance uses a special setup
-that doesn't function with `basic` authentication, it may be necessary to
-explicitly set the `http-auth-method` variable in the configuration.
+When a username/password are specified, the Miniflux backend will default to
+using the `basic` HTTP authentication method, since Newsboat sends extraneous
+requests when trying to determine the appropriate method automatically. If your
+Miniflux instance uses a special setup that doesn't function with `basic`
+authentication, it may be necessary to explicitly set the `http-auth-method`
+variable in the configuration.
+
+It is also possible to specify an API token instead of the username/password combination:
+
+	miniflux-token "my-api-token"
 
 Unlike with other backends, Miniflux's starring/bookmarking feature is not
 currently supported in Newsboat.
