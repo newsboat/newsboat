@@ -268,9 +268,7 @@ Feed Parser::parse_url(const std::string& url,
 
 	if (buf.length() > 0) {
 		LOG(Level::DEBUG, "Parser::parse_url: converting data from %s to utf-8", hdrs.charset);
-		const auto utf8_buf = (hdrs.charset == "utf-8"
-				? buf
-				: utils::convert_text(buf, "utf-8", hdrs.charset));
+		const auto utf8_buf = utils::convert_text(buf, "utf-8", hdrs.charset);
 
 		LOG(Level::DEBUG, "Parser::parse_url: handing over data to parse_buffer()");
 		return parse_buffer(utf8_buf, url);

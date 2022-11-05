@@ -1995,86 +1995,19 @@ void verify_convert_text(const std::vector<unsigned char>& input,
 	REQUIRE(utils::convert_text(input_str, tocode, fromcode) == expected_str);
 }
 
-TEST_CASE("convert_text() returns input string if fromcode and tocode are literally the same",
+TEST_CASE("convert_text() returns input string if fromcode and tocode are the same",
 	"[utils]")
 {
-	std::vector<std::vector<unsigned char>> inputs = {
-		{ 0x81, 0x13, 0xa0 },       // \x81 is not valid UTF-8
-		{ 0x01 },                   // incomplete UTF-16
-		{ 0x01, 0x1f, 0x80, 0x9b }, // those bytes are not defined in ISO-8859-1
-		{ 0x7f, 0x1e, 0x03 },       // these bytes are not defined in KOI8-R
+	std::vector<unsigned char> input = {
+		// \x81 is not valid UTF-8
+		0x81, 0x13, 0x41,
 	};
 
-	std::vector<std::string> codes = {
-		"utf-8",
-		"utf-16",
-		"iso-8859-1",
-		"koi8-r",
+	std::vector<unsigned char> expected = {
+		0x3f, 0x13, 0x41,
 	};
 
-	for (const auto& code : codes) {
-		for (const auto& input : inputs) {
-			verify_convert_text(input, code, code, input);
-		}
-	}
-}
-
-TEST_CASE("convert_text() returns input string if fromcode is uppercase of tocode",
-	"[utils]")
-{
-	std::vector<std::vector<unsigned char>> inputs = {
-		{ 0x81, 0x13, 0xa0 },       // \x81 is not valid UTF-8
-		{ 0x01 },                   // incomplete UTF-16
-		{ 0x01, 0x1f, 0x80, 0x9b }, // those bytes are not defined in ISO-8859-1
-		{ 0x7f, 0x1e, 0x03 },       // these bytes are not defined in KOI8-R
-	};
-
-	std::vector<std::string> codes = {
-		"utf-8",
-		"utf-16",
-		"iso-8859-1",
-		"koi8-r",
-	};
-
-	for (const auto& code : codes) {
-		for (const auto& input : inputs) {
-			const std::string tocode = code;
-
-			std::string fromcode = code;
-			std::transform(fromcode.begin(), fromcode.end(), fromcode.begin(), ::toupper);
-
-			verify_convert_text(input, fromcode, tocode, input);
-		}
-	}
-}
-
-TEST_CASE("convert_text() returns input string if tocode is uppercase of fromcode",
-	"[utils]")
-{
-	std::vector<std::vector<unsigned char>> inputs = {
-		{ 0x81, 0x13, 0xa0 },       // \x81 is not valid UTF-8
-		{ 0x01 },                   // incomplete UTF-16
-		{ 0x01, 0x1f, 0x80, 0x9b }, // those bytes are not defined in ISO-8859-1
-		{ 0x7f, 0x1e, 0x03 },       // these bytes are not defined in KOI8-R
-	};
-
-	std::vector<std::string> codes = {
-		"utf-8",
-		"utf-16",
-		"iso-8859-1",
-		"koi8-r",
-	};
-
-	for (const auto& code : codes) {
-		for (const auto& input : inputs) {
-			const std::string fromcode = code;
-
-			std::string tocode = code;
-			std::transform(tocode.begin(), tocode.end(), tocode.begin(), ::toupper);
-
-			verify_convert_text(input, tocode, fromcode, input);
-		}
-	}
+	verify_convert_text(input, "UTF-8", "UTF-8", expected);
 }
 
 TEST_CASE("convert_text() replaces incomplete multibyte sequences with a question mark: utf8 to utf16le",

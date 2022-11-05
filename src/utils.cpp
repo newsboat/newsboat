@@ -381,12 +381,8 @@ std::string utils::retrieve_url(const std::string& url,
 	// See the clobbering note above.
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
 
-	if (hdrs.charset == "utf-8") {
-		return buf;
-	} else {
-		LOG(Level::DEBUG, "Parser::parse_url: converting data from %s to utf-8", hdrs.charset);
-		return utils::convert_text(buf, "utf-8", hdrs.charset);
-	}
+	LOG(Level::DEBUG, "Parser::parse_url: converting data from %s to utf-8", hdrs.charset);
+	return utils::convert_text(buf, "utf-8", hdrs.charset);
 }
 
 std::string utils::run_program(const char* argv[], const std::string& input)
