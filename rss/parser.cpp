@@ -97,7 +97,7 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 			values->lastmodified = r;
 			LOG(Level::DEBUG,
 				"handle_headers: got last-modified %s (%" PRId64 ")",
-				header_value.c_str(),
+				header_value,
 				// On GCC, `time_t` is `long int`, which is at least 32 bits.
 				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
 				// or an up-cast which is always safe.
