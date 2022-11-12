@@ -1,1 +1,17 @@
-src/configdata.cpp src/configcontainer.cpp src/configparser.cpp src/colormanager.cpp src/keymap.cpp src/stflpp.cpp src/exception.cpp src/utils.cpp src/fslock.cpp src/matcher.cpp src/fmtstrformatter.cpp src/strprintf.cpp src/confighandlerexception.cpp src/matcherexception.cpp src/scopemeasure.cpp src/history.cpp src/ruststring.cpp
+src/colormanager.cpp
+src/configcontainer.cpp
+src/configdata.cpp
+src/confighandlerexception.cpp
+src/configparser.cpp
+src/exception.cpp
+src/fmtstrformatter.cpp
+src/fslock.cpp
+src/history.cpp
+src/keymap.cpp
+src/matcher.cpp
+src/matcherexception.cpp
+src/ruststring.cpp
+src/scopemeasure.cpp
+src/stflpp.cpp
+src/strprintf.cpp
+src/utils.cpp
