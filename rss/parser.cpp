@@ -95,7 +95,6 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 				header_value.c_str());
 		} else {
 			values->lastmodified = r;
-			curl_getdate(header_value.c_str(), nullptr);
 			LOG(Level::DEBUG,
 				"handle_headers: got last-modified %s (%" PRId64 ")",
 				header_value.c_str(),
