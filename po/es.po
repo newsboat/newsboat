@@ -155,7 +155,7 @@ msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"Newsboat es un programa libre con licencia MIT. (Escribe `%s --vv' para ver "
+"Newsboat es un programa libre con licencia MIT. (Escribe `%s -vv' para ver "
 "el texto completo)."
 
 #: newsboat.cpp:178
