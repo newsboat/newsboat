@@ -62,9 +62,15 @@ struct HeaderValues {
 	std::string charset;
 
 	HeaderValues()
-		: lastmodified(0)
-		, charset("utf-8")
 	{
+		reset();
+	}
+
+	void reset()
+	{
+		lastmodified = 0;
+		charset = "utf-8";
+		etag = "";
 	}
 };
 
@@ -72,41 +78,40 @@ struct HeaderValues {
 
 static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 {
-	char* header = new char[size * nmemb + 1];
+	const auto header = std::string(reinterpret_cast<const char*>(ptr), size * nmemb);
 	HeaderValues* values = static_cast<HeaderValues*>(data);
 
-	memcpy(header, ptr, size * nmemb);
-	header[size * nmemb] = '\0';
-
-	if (!strncasecmp("Last-Modified:", header, 14)) {
-		time_t r = curl_getdate(header + 14, nullptr);
+	if (header.find("HTTP/") == 0) {
+		// Reset headers if a new response is detected (there might be multiple responses per request in case of a redirect)
+		values->reset();
+	} else if (header.find("Last-Modified:") == 0) {
+		const std::string header_value = header.substr(14);
+		time_t r = curl_getdate(header_value.c_str(), nullptr);
 		if (r == -1) {
 			LOG(Level::DEBUG,
 				"handle_headers: last-modified %s "
 				"(curl_getdate "
 				"FAILED)",
-				header + 14);
+				header_value.c_str());
 		} else {
-			values->lastmodified =
-				curl_getdate(header + 14, nullptr);
+			values->lastmodified = r;
 			LOG(Level::DEBUG,
 				"handle_headers: got last-modified %s (%" PRId64 ")",
-				header + 14,
+				header_value,
 				// On GCC, `time_t` is `long int`, which is at least 32 bits.
 				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
 				// or an up-cast which is always safe.
 				static_cast<int64_t>(values->lastmodified));
 		}
-	} else if (!strncasecmp("ETag:", header, 5)) {
-		values->etag = std::string(header + 5);
+	} else if (header.find("ETag:") == 0) {
+		values->etag = header.substr(5);
 		utils::trim(values->etag);
 		LOG(Level::DEBUG, "handle_headers: got etag %s", values->etag);
-	} else if (!strncasecmp("Content-Type:", header, 13)) {
-		std::string header_str = std::string(header, size * nmemb);
+	} else if (header.find("Content-Type:") == 0) {
 		const std::string key = "charset=";
-		const auto charset_index = header_str.find(key);
+		const auto charset_index = header.find(key);
 		if (charset_index != std::string::npos) {
-			auto charset = header_str.substr(charset_index + key.size());
+			auto charset = header.substr(charset_index + key.size());
 			utils::trim(charset);
 			if (charset.size() >= 2 && charset[0] == '"' && charset[charset.size() - 1] == '"') {
 				charset = charset.substr(1, charset.size() - 2);
@@ -116,8 +121,6 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 			}
 		}
 	}
-
-	delete[] header;
 
 	return size * nmemb;
 }

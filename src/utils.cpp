@@ -274,8 +274,13 @@ struct HeaderValues {
 	std::string charset;
 
 	HeaderValues()
-		: charset("utf-8")
 	{
+		reset();
+	}
+
+	void reset()
+	{
+		charset = "utf-8";
 	}
 };
 
@@ -286,7 +291,10 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 	const auto header = std::string(reinterpret_cast<const char*>(ptr), size * nmemb);
 	HeaderValues* values = static_cast<HeaderValues*>(data);
 
-	if (header.find("Content-Type:") != std::string::npos) {
+	if (header.find("HTTP/") == 0) {
+		// Reset headers if a new response is detected (there might be multiple responses per request in case of a redirect)
+		values->reset();
+	} else if (header.find("Content-Type:") == 0) {
 		const std::string key = "charset=";
 		const auto charset_index = header.find(key);
 		if (charset_index != std::string::npos) {
