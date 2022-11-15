@@ -406,6 +406,13 @@ static const std::vector<OpDesc> opdescs = {
 		translatable("Return to previous search results (if any)"),
 		KM_SEARCHRESULTSLIST
 	},
+	{
+		OP_ARTICLEFEED,
+		"article-feed",
+		"",
+		translatable("Go to the feed of the article"),
+		KM_ARTICLE | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
+	},
 
 	{OP_OPEN_URL_1, "one", "1", translatable("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_2, "two", "2", translatable("Open URL 2"), KM_URLVIEW | KM_ARTICLE},

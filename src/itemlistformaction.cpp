@@ -747,6 +747,20 @@ bool ItemListFormAction::process_operation(Operation op,
 			return false;
 		}
 		break;
+	case OP_ARTICLEFEED: {
+		auto feeds = v->get_ctrl()->get_feedcontainer()->get_all_feeds();
+		size_t pos;
+		auto article_feed = visible_items[itempos].first->get_feedptr();
+		for (pos = 0; pos < feeds.size(); pos++) {
+			if (feeds[pos] == article_feed) {
+				break;
+			}
+		}
+		if (pos != feeds.size()) {
+			v->push_itemlist(pos);
+		}
+	}
+	break;
 	default:
 		ListFormAction::process_operation(op, automatic, args);
 		break;
