@@ -14,6 +14,10 @@
     <link href="http://example.com/1.html"/>
     <id>tag:example.com,2008-12-30:/1</id>
     <content type="html">regular html content</content>
+    <author>
+      <name>A Person</name>
+      <uri>http://example.com/</uri>
+    </author>
   </entry>
 
   <entry>

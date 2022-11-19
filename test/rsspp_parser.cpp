@@ -236,27 +236,32 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.items[0].title == "using regular content");
 	REQUIRE(f.items[0].description == "regular html content");
 	REQUIRE(f.items[0].description_mime_type == "text/html");
+	REQUIRE(f.items[0].author == "A Person");
 
 	REQUIRE(f.items[1].title == "using media:description");
 	REQUIRE(f.items[1].description == "media plaintext content");
 	REQUIRE(f.items[1].description_mime_type == "text/plain");
+	REQUIRE(f.items[1].author == "John Doe");
 
 	REQUIRE(f.items[2].title == "using multiple media tags");
 	REQUIRE(f.items[2].description == "media html content");
 	REQUIRE(f.items[2].description_mime_type == "text/html");
 	REQUIRE(f.items[2].link == "http://example.com/player.html");
+	REQUIRE(f.items[2].author == "John Doe");
 
 	REQUIRE(f.items[3].title ==
 		"using multiple media tags nested in group/content");
 	REQUIRE(f.items[3].description == "nested media html content");
 	REQUIRE(f.items[3].description_mime_type == "text/html");
 	REQUIRE(f.items[3].link == "http://example.com/player.html");
+	REQUIRE(f.items[3].author == "John Doe");
 
 	SECTION("media:{title,description,player} does not overwrite regular title, description, and link if they exist") {
 		REQUIRE(f.items[4].title == "regular title");
 		REQUIRE(f.items[4].description == "regular content");
 		REQUIRE(f.items[4].description_mime_type == "text/html");
 		REQUIRE(f.items[4].link == "http://example.com/regular-link");
+		REQUIRE(f.items[4].author == "John Doe");
 	}
 }
 
@@ -297,4 +302,36 @@ TEST_CASE("Multiple links in item", "[rsspp::Parser]")
 
 	REQUIRE(f.items[0].title == "Multiple links");
 	REQUIRE(f.items[0].link == "http://www.test.org/tests");
+}
+
+TEST_CASE("Feed authors in atom feed", "[rsspp::Parser]")
+{
+	rsspp::Parser p;
+	rsspp::Feed f;
+
+	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_feed_authors.xml"));
+
+	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
+
+	REQUIRE(f.title == "Author Test Feed");
+	REQUIRE(f.title_type == "text");
+	REQUIRE(f.pubDate == "Mon, 28 Nov 2022 13:01:25 +0000");
+	REQUIRE(f.link == "http://example.com/");
+
+	REQUIRE(f.items.size() == 4u);
+	REQUIRE(f.items[0].title == "Entry Without Author");
+	REQUIRE(f.items[0].description == "Feed authors should be used.");
+	REQUIRE(f.items[0].author == "First Feed Author, Second Feed Author");
+
+	REQUIRE(f.items[1].title == "Entry With Single Author");
+	REQUIRE(f.items[1].description == "Entry author should be used.");
+	REQUIRE(f.items[1].author == "Entry Author");
+
+	REQUIRE(f.items[2].title == "Entry With Multiple Authors");
+	REQUIRE(f.items[2].description == "Both entry authors should be used.");
+	REQUIRE(f.items[2].author == "Entry Author 1, Entry Author 2");
+
+	REQUIRE(f.items[3].title == "Entry With Empty Author Names");
+	REQUIRE(f.items[3].description == "Both feed authors should be used.");
+	REQUIRE(f.items[3].author == "First Feed Author, Second Feed Author");
 }
