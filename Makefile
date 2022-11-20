@@ -56,7 +56,7 @@ FILTERLIB_OUTPUT=libfilter.a
 NEWSBOAT=newsboat
 NEWSBOAT_SRCS:=$(shell cat mk/newsboat.deps)
 NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SRCS))
-NEWSBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -lrsspp -ldl -lmpdclient
+NEWSBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -lrsspp -ldl
 
 RSSPPLIB_SRCS=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SRCS))
