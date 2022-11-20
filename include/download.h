@@ -2,7 +2,10 @@
 #define PODBOAT_DOWNLOAD_H_
 
 #include <functional>
-#include <string>
+
+#include "utf8string.h"
+
+using newsboat::Utf8String;
 
 namespace podboat {
 
@@ -24,22 +27,22 @@ public:
 	explicit Download(std::function<void()> cb_require_view_update);
 	~Download();
 	double percents_finished() const;
-	const std::string status_text() const;
+	const Utf8String status_text() const;
 	DlStatus status() const
 	{
 		return download_status;
 	}
-	const std::string& status_msg() const
+	const Utf8String& status_msg() const
 	{
 		return msg;
 	}
-	const std::string filename() const;
-	const std::string basename() const;
-	const std::string url() const;
-	void set_filename(const std::string& str);
-	void set_url(const std::string& url);
+	const Utf8String filename() const;
+	const Utf8String basename() const;
+	const Utf8String url() const;
+	void set_filename(const Utf8String& str);
+	void set_url(const Utf8String& url);
 	void set_progress(double downloaded, double total);
-	void set_status(DlStatus dls, const std::string& msg_ = {});
+	void set_status(DlStatus dls, const Utf8String& msg_ = {});
 	void set_kbps(double kbps);
 	double kbps() const;
 	void set_offset(unsigned long offset);
@@ -54,10 +57,10 @@ public:
 	}
 
 private:
-	std::string fn;
-	std::string url_;
+	Utf8String fn;
+	Utf8String url_;
 	DlStatus download_status;
-	std::string msg;
+	Utf8String msg;
 	double cursize;
 	double totalsize;
 	double curkbps;

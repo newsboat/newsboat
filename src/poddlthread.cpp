@@ -124,7 +124,7 @@ void PodDlThread::run()
 			if (rename(filename.c_str(), dl->filename().c_str()) == 0) {
 				dl->set_status(DlStatus::READY);
 			} else {
-				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
+				dl->set_status(DlStatus::RENAME_FAILED, Utf8String::from_utf8(strerror(errno)));
 			}
 		} else if (dl->status() != DlStatus::CANCELLED) {
 			// attempt complete re-download
@@ -132,12 +132,12 @@ void PodDlThread::run()
 				::unlink(filename.c_str());
 				this->run();
 			} else {
-				dl->set_status(DlStatus::FAILED, curl_easy_strerror(success));
+				dl->set_status(DlStatus::FAILED, Utf8String::from_utf8(curl_easy_strerror(success)));
 				::unlink(filename.c_str());
 			}
 		}
 	} else {
-		dl->set_status(DlStatus::FAILED, strerror(errno));
+		dl->set_status(DlStatus::FAILED, Utf8String::from_utf8(strerror(errno)));
 	}
 }
 

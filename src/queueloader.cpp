@@ -118,7 +118,7 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 		LOG(Level::DEBUG,
 			"QueueLoader::reload: loaded `%s' from queue file",
 			line);
-		const std::vector<std::string> fields = utils::tokenize_quoted(line);
+		const auto fields = utils::tokenize_quoted(line);
 		bool url_found = false;
 
 		if (fields.empty()) {
@@ -211,7 +211,7 @@ void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 	}
 
 	for (const auto& dl : downloads.to_keep) {
-		f << dl.url() << " " << utils::quote(dl.filename());
+		f << dl.url().to_locale_charset() << " " << utils::quote(dl.filename());
 		switch (dl.status()) {
 		case DlStatus::READY:
 			f << " downloaded";
@@ -243,7 +243,7 @@ void QueueLoader::delete_played_files(const CategorizedDownloads& downloads)
 const
 {
 	for (const auto& dl : downloads.to_delete) {
-		const std::string filename = dl.filename();
+		const auto filename = dl.filename();
 		LOG(Level::INFO, "Deleting file %s", filename);
 		if (std::remove(filename.c_str()) != 0) {
 			if (errno != ENOENT) {
@@ -257,7 +257,7 @@ const
 
 std::string QueueLoader::get_filename(const std::string& str) const
 {
-	std::string fn = cfg.get_configvalue("download-path");
+	auto fn = cfg.get_configvalue("download-path");
 
 	if (!utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
 		fn.append(NEWSBOAT_PATH_SEP);

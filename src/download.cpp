@@ -24,27 +24,29 @@ Download::Download(std::function<void()> cb_require_view_update_)
 
 Download::~Download() {}
 
-const std::string Download::filename() const
+const Utf8String Download::filename() const
 {
 	return fn;
 }
 
-const std::string Download::basename() const
+const Utf8String Download::basename() const
 {
-	std::string::size_type start = fn.rfind(NEWSBOAT_PATH_SEP);
+	auto start = fn.rfind(NEWSBOAT_PATH_SEP);
 
 	if (start != std::string::npos) {
-		return fn.substr(start+1);
+		return fn.map([&](std::string s) {
+			return s.substr(start+1);
+		});
 	}
 	return fn;
 }
 
-const std::string Download::url() const
+const Utf8String Download::url() const
 {
 	return url_;
 }
 
-void Download::set_filename(const std::string& str)
+void Download::set_filename(const Utf8String& str)
 {
 	fn = str;
 }
@@ -58,7 +60,7 @@ double Download::percents_finished() const
 	}
 }
 
-const std::string Download::status_text() const
+const Utf8String Download::status_text() const
 {
 	switch (download_status) {
 	case DlStatus::QUEUED:
@@ -86,7 +88,7 @@ const std::string Download::status_text() const
 	}
 }
 
-void Download::set_url(const std::string& u)
+void Download::set_url(const Utf8String& u)
 {
 	url_ = u;
 }
@@ -100,7 +102,7 @@ void Download::set_progress(double downloaded, double total)
 	totalsize = total;
 }
 
-void Download::set_status(DlStatus dls, const std::string& msg_)
+void Download::set_status(DlStatus dls, const Utf8String& msg_)
 {
 	if (download_status != dls) {
 		cb_require_view_update();
