@@ -381,12 +381,12 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 	if (browser.find("%u") != std::string::npos
 		|| browser.find("%F") != std::string::npos
 		|| browser.find("%t") != std::string::npos
-        || browser.find("%T") != std::string::npos) {
+        	|| browser.find("%T") != std::string::npos) {
 		cmdline = utils::replace_all(browser, {
 			{"%u", escaped_url},
 			{"%F", escaped_feedurl},
 			{"%t", quoted_type},
-            {"%T", quoted_title}
+            		{"%T", quoted_title}
 		});
 	} else {
 		if (browser != "") {
