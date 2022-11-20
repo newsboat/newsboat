@@ -1,7 +1,6 @@
 #include "queuemanager.h"
 
 #include <fstream>
-#include <iostream>
 #include <libxml/uri.h>
 #include <mpd/connection.h>
 #include <mpd/queue.h>
