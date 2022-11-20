@@ -7,27 +7,27 @@ History::History()
 {
 }
 
-void History::add_line(const std::string& line)
+void History::add_line(const Utf8String& line)
 {
 	history::bridged::add_line(*rs_object, line);
 }
 
-std::string History::previous_line()
+Utf8String History::previous_line()
 {
-	return std::string(history::bridged::previous_line(*rs_object));
+	return Utf8String(history::bridged::previous_line(*rs_object));
 }
 
-std::string History::next_line()
+Utf8String History::next_line()
 {
-	return std::string(history::bridged::next_line(*rs_object));
+	return Utf8String(history::bridged::next_line(*rs_object));
 }
 
-void History::load_from_file(const std::string& file)
+void History::load_from_file(const Utf8String& file)
 {
 	history::bridged::load_from_file(*rs_object, file);
 }
 
-void History::save_to_file(const std::string& file, unsigned int limit)
+void History::save_to_file(const Utf8String& file, unsigned int limit)
 {
 	history::bridged::save_to_file(*rs_object, file, limit);
 }

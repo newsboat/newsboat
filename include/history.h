@@ -3,7 +3,7 @@
 
 #include "libnewsboat-ffi/src/history.rs.h"
 
-#include <string>
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -11,11 +11,11 @@ class History {
 public:
 	History();
 	~History() = default;
-	void add_line(const std::string& line);
-	std::string previous_line();
-	std::string next_line();
-	void load_from_file(const std::string& file);
-	void save_to_file(const std::string& file, unsigned int limit);
+	void add_line(const Utf8String& line);
+	Utf8String previous_line();
+	Utf8String next_line();
+	void load_from_file(const Utf8String& file);
+	void save_to_file(const Utf8String& file, unsigned int limit);
 
 private:
 	rust::Box<history::bridged::History> rs_object;
