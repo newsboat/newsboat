@@ -7,22 +7,22 @@
 #include "config.h"
 #include "strprintf.h"
 
-bool is_bool(const std::string& s)
+bool is_bool(const newsboat::Utf8String& s)
 {
-	const auto bool_values = std::vector<std::string>(
+	const auto bool_values = std::vector<newsboat::Utf8String>(
 	{"yes", "no", "true", "false"});
 	return (std::find(bool_values.begin(), bool_values.end(), s) !=
 			bool_values.end());
 }
 
-bool is_int(const std::string& s)
+bool is_int(const newsboat::Utf8String& s)
 {
-	return std::all_of(s.begin(), s.end(), ::isdigit);
+	return std::all_of(s.utf8().begin(), s.utf8().end(), ::isdigit);
 }
 
 namespace newsboat {
 
-ConfigData::ConfigData(const std::string& v, ConfigDataType t,
+ConfigData::ConfigData(const Utf8String& v, ConfigDataType t,
 	bool multi_option)
 	: value_(v)
 	, default_value_(v)
@@ -31,8 +31,8 @@ ConfigData::ConfigData(const std::string& v, ConfigDataType t,
 {
 }
 
-ConfigData::ConfigData(const std::string& v,
-	const std::unordered_set<std::string>& values)
+ConfigData::ConfigData(const Utf8String& v,
+	const std::unordered_set<Utf8String>& values)
 	: value_(v)
 	, default_value_(v)
 	, type_(ConfigDataType::ENUM)
@@ -41,8 +41,8 @@ ConfigData::ConfigData(const std::string& v,
 {
 }
 
-nonstd::expected<void, std::string> ConfigData::set_value(
-	std::string new_value)
+nonstd::expected<void, Utf8String> ConfigData::set_value(
+	Utf8String new_value)
 {
 	switch (type_) {
 	case ConfigDataType::BOOL:

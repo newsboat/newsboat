@@ -107,7 +107,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"http-auth-method",
 		ConfigData("any",
-		std::unordered_set<std::string>({"any",
+		std::unordered_set<Utf8String>({"any",
 			"basic",
 			"digest",
 			"digest_ie",
@@ -117,7 +117,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"ignore-mode",
 		ConfigData("download",
-			std::unordered_set<std::string>(
+			std::unordered_set<Utf8String>(
 		{"download", "display"}))},
 	{"inoreader-app-id", ConfigData("", ConfigDataType::STR)},
 	{"inoreader-app-key", ConfigData("", ConfigDataType::STR)},
@@ -157,7 +157,7 @@ ConfigContainer::ConfigContainer()
 	{"notify-beep", ConfigData("no", ConfigDataType::BOOL)},
 	{
 		"notify-format",
-		ConfigData(_("Newsboat: finished reload, %f unread "
+		ConfigData(_s("Newsboat: finished reload, %f unread "
 				"feeds (%n unread articles total)"),
 			ConfigDataType::STR)},
 	{"notify-program", ConfigData("", ConfigDataType::PATH)},
@@ -197,7 +197,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"proxy-auth-method",
 		ConfigData("any",
-		std::unordered_set<std::string>({"any",
+		std::unordered_set<Utf8String>({"any",
 			"basic",
 			"digest",
 			"digest_ie",
@@ -207,7 +207,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"proxy-type",
 		ConfigData("http",
-		std::unordered_set<std::string>({"http",
+		std::unordered_set<Utf8String>({"http",
 			"socks4",
 			"socks4a",
 			"socks5",
@@ -249,7 +249,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"ttrss-mode",
 		ConfigData("multi",
-			std::unordered_set<std::string>(
+			std::unordered_set<Utf8String>(
 		{"single", "multi"}))},
 	{"ttrss-password", ConfigData("", ConfigDataType::STR)},
 	{"ttrss-passwordfile", ConfigData("", ConfigDataType::PATH)},
@@ -273,7 +273,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"urls-source",
 		ConfigData("local",
-		std::unordered_set<std::string>({"local",
+		std::unordered_set<Utf8String>({"local",
 			"opml",
 			"oldreader",
 			"ttrss",
@@ -289,45 +289,45 @@ ConfigContainer::ConfigContainer()
 	/* title formats: */
 	{
 		"articlelist-title-format",
-		ConfigData(_("%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter '%F'&? - %U"),
+		ConfigData(_s("%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter '%F'&? - %U"),
 			ConfigDataType::STR)},
 	{
 		"dialogs-title-format",
-		ConfigData(_("%N %V - Dialogs"), ConfigDataType::STR)},
+		ConfigData(_s("%N %V - Dialogs"), ConfigDataType::STR)},
 	{
 		"feedlist-title-format",
-		ConfigData(_("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?%?T? - tag '%T'&?"),
+		ConfigData(_s("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?%?T? - tag '%T'&?"),
 			ConfigDataType::STR)},
 	{
 		"filebrowser-title-format",
-		ConfigData(_("%N %V - %?O?Open File&Save File? - %f"),
+		ConfigData(_s("%N %V - %?O?Open File&Save File? - %f"),
 			ConfigDataType::STR)},
 	{
 		"dirbrowser-title-format",
-		ConfigData(_("%N %V - %?O?Open Directory&Save File? - %f"),
+		ConfigData(_s("%N %V - %?O?Open Directory&Save File? - %f"),
 			ConfigDataType::STR)},
 	{
 		"help-title-format",
-		ConfigData(_("%N %V - Help"), ConfigDataType::STR)},
+		ConfigData(_s("%N %V - Help"), ConfigDataType::STR)},
 	{
 		"itemview-title-format",
-		ConfigData(_("%N %V - Article '%T' (%u unread, %t total)"),
+		ConfigData(_s("%N %V - Article '%T' (%u unread, %t total)"),
 			ConfigDataType::STR)},
 	{
 		"searchresult-title-format",
-		ConfigData(_("%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter '%F'&?"),
+		ConfigData(_s("%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter '%F'&?"),
 			ConfigDataType::STR)},
 	{
 		"selectfilter-title-format",
-		ConfigData(_("%N %V - Select Filter"),
+		ConfigData(_s("%N %V - Select Filter"),
 			ConfigDataType::STR)},
 	{
 		"selecttag-title-format",
-		ConfigData(_("%N %V - Select Tag"),
+		ConfigData(_s("%N %V - Select Tag"),
 			ConfigDataType::STR)},
 	{
 		"urlview-title-format",
-		ConfigData(_("%N %V - URLs"), ConfigDataType::STR)},
+		ConfigData(_s("%N %V - URLs"), ConfigDataType::STR)},
 	{
 		"wrap-scroll",
 		ConfigData("no", ConfigDataType::BOOL)},

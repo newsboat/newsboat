@@ -1,10 +1,11 @@
 #ifndef NEWSBOAT_CONFIGDATA_H_
 #define NEWSBOAT_CONFIGDATA_H_
 
-#include <string>
 #include <unordered_set>
 
 #include "3rd-party/expected.hpp"
+
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -17,15 +18,15 @@ public:
 	/// Construct a value of type `t` and equal to `v`. If `multi_option` is
 	/// true and config file contains this option multiple times, the values
 	/// will be combined instead of rewritten.
-	ConfigData(const std::string& v = "",
+	ConfigData(const Utf8String& v = "",
 		ConfigDataType t = ConfigDataType::INVALID, bool multi_option = false);
 
 	/// Construct a value that can take any of given `values`, and currently
 	/// equal to `v` (which *must* be one of `values`).
-	ConfigData(const std::string& v, const std::unordered_set<std::string>& values);
+	ConfigData(const Utf8String& v, const std::unordered_set<Utf8String>& values);
 
 	/// Current value of the setting.
-	std::string value() const
+	Utf8String value() const
 	{
 		return value_;
 	}
@@ -33,10 +34,10 @@ public:
 	/// Change the setting's value to `new_value`.
 	///
 	/// On error, returns internationalized error message.
-	nonstd::expected<void, std::string> set_value(std::string new_value);
+	nonstd::expected<void, Utf8String> set_value(Utf8String new_value);
 
 	/// Default value of the setting.
-	std::string default_value() const
+	Utf8String default_value() const
 	{
 		return default_value_;
 	}
@@ -54,7 +55,7 @@ public:
 	}
 
 	/// Possible values of this setting if `type` is `ENUM`.
-	const std::unordered_set<std::string>& enum_values() const
+	const std::unordered_set<Utf8String>& enum_values() const
 	{
 		return enum_values_;
 	}
@@ -67,10 +68,10 @@ public:
 	}
 
 private:
-	std::string value_;
-	std::string default_value_;
+	Utf8String value_;
+	Utf8String default_value_;
 	ConfigDataType type_;
-	std::unordered_set<std::string> enum_values_;
+	std::unordered_set<Utf8String> enum_values_;
 	bool multi_option_;
 };
 
