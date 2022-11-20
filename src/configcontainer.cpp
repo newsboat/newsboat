@@ -185,6 +185,18 @@ ConfigContainer::ConfigContainer()
 		"podcast-auto-enqueue",
 		ConfigData("no", ConfigDataType::BOOL)},
 	{
+		"podcast-to-mpd",
+		ConfigData("no", ConfigDataType::BOOL)},
+	{
+		"mpd-host",
+		ConfigData("", ConfigDataType::STR)},
+	{
+		"mpd-port",
+		ConfigData("0", ConfigDataType::INT)},
+	{
+		"mpd-timeout",
+		ConfigData("30", ConfigDataType::INT)},
+	{
 		"podlist-format",
 		ConfigData( "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F", ConfigDataType::STR)},
 	{

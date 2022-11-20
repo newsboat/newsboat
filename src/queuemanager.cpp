@@ -1,7 +1,13 @@
 #include "queuemanager.h"
 
 #include <fstream>
+#include <iostream>
 #include <libxml/uri.h>
+#include <mpd/connection.h>
+#include <mpd/queue.h>
+#include <mpd/search.h>
+#include <mpd/song.h>
+#include <mpd/error.h>
 
 #include "fmtstrformatter.h"
 #include "rssfeed.h"
@@ -19,6 +25,78 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 {
 	const std::string& url = item->enclosure_url();
 	const std::string filename = generate_enqueue_filename(item, feed);
+
+	/*
+	 * If "podcast-to-mpd" option is set to "yes" the url is passed to mpd
+	 * by opening a new connection using the libmpdclient function.
+	 * The newly created connection life cycle is this submission execution,
+	 * so it is closed in case of any connection error, or when the url is
+	 * enqueued successfully of course.
+	 * Using the mpd queue search function, the case of already enqueued uri
+	 * is also checked out.
+	 * Since the standard enqueue behaviour is also preserved, the following
+	 * conditional statement is completely self consistent, so if the
+	 * "podcast-to-mpd" option is set to "no" (default value), it is bypassed
+	 * in favour of podboat.
+	 */
+	if (cfg->get_configvalue_as_bool("podcast-to-mpd")) {
+		EnqueueResult res;
+		struct mpd_connection* mpd_connection;
+		mpd_error err;
+		int songs = 0;
+		std::string mpd_host = cfg->get_configvalue("mpd-host");
+
+		if (!mpd_host.empty())
+			mpd_connection =
+				mpd_connection_new(mpd_host.c_str(),
+						   cfg->get_configvalue_as_int("mpd-port"),
+						   cfg->get_configvalue_as_int("mpd-timeout") * 1000);
+		else
+			mpd_connection =
+				mpd_connection_new(nullptr,
+						   cfg->get_configvalue_as_int("mpd-port"),
+						   cfg->get_configvalue_as_int("mpd-timeout") * 1000);
+
+		err = mpd_connection_get_error(mpd_connection);
+                if (err != MPD_ERROR_SUCCESS) {
+			std::string err_msg(mpd_connection_get_error_message(mpd_connection));
+			mpd_connection_free(mpd_connection);
+                        return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, "Error connecting to MPD (" + err_msg + ")"};
+                }
+
+		mpd_search_queue_songs(mpd_connection, true);
+		mpd_search_add_uri_constraint(mpd_connection,
+					      MPD_OPERATOR_DEFAULT,
+					      url.c_str());
+		mpd_search_commit(mpd_connection);
+
+		err = mpd_connection_get_error(mpd_connection);
+                if (err != MPD_ERROR_SUCCESS) {
+			std::string err_msg(mpd_connection_get_error_message(mpd_connection));
+			mpd_connection_free(mpd_connection);
+                        return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, "MPD search failed (" + err_msg + ")"};
+                }
+
+		struct mpd_song* song;
+		while ((song = mpd_recv_song(mpd_connection)) != NULL) {
+			songs++;
+		}
+
+                if (songs > 0) {
+			mpd_connection_free(mpd_connection);
+			return {EnqueueStatus::URL_QUEUED_ALREADY, url};
+                }
+
+		mpd_run_add(mpd_connection, url.c_str());
+		err = mpd_connection_get_error(mpd_connection);
+                if (err != MPD_ERROR_SUCCESS) {
+			std::string err_msg(mpd_connection_get_error_message(mpd_connection));
+			mpd_connection_free(mpd_connection);
+                        return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, "MPD connection error (" + err_msg + ")"};
+		}
+		mpd_connection_free(mpd_connection);
+		return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
+	}
 
 	std::fstream f;
 	f.open(queue_file, std::fstream::in);
