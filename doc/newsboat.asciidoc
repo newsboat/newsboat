@@ -1312,12 +1312,12 @@ normally run, such as a web browser or an executable script. For example:
   browser firefox
 
 The browser command also takes an optional `%u` to specify at which point the
-URL should be expanded, along with `%t` specifying where the type of the URL
-should be expanded and `%F` specifying where the URL of the feed's website (or
-the URL of the feed itself if not available) should be expanded. All parameters
-will be enclosed in single quotes, making it unnecessary to quote them yourself.
-If none of the parameters are used, the URL will be appended at the end of the
-command. Therefore, the previous example is equivalent to:
+URL should be expanded, `%t` specifying where the type of the URL should be
+expanded, `%T` for the title of the feed/article, and `%F` specifying where
+the URL of the feed's website (or the URL of the feed itself if not available)
+should be expanded. All parameters will be enclosed in single quotes, making it
+unnecessary to quote them yourself. If none of the parameters are used, the URL
+will be appended at the end of the command. Therefore, the previous example is equivalent to:
 
   browser "firefox %u"
 

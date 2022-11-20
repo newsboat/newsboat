@@ -786,7 +786,7 @@ bool ItemListFormAction::open_position_in_browser(
 		const auto item = visible_items[pos].first;
 		const auto link = item->link();
 		const auto feedurl = item->feedurl();
-		const auto exit_code = v->open_in_browser(link, feedurl, "article", interactive);
+		const auto exit_code = v->open_in_browser(link, feedurl, "article", item->title(), interactive);
 		if (!exit_code.has_value()) {
 			v->get_statusline().show_error(_("Failed to spawn browser"));
 			return false;
