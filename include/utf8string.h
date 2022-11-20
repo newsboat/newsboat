@@ -1,13 +1,34 @@
 #ifndef NEWSBOAT_UTF8STRING_H_
 #define NEWSBOAT_UTF8STRING_H_
 
+#include <functional>
 #include <string>
+
+namespace rust {
+inline namespace cxxbridge1 {
+class String;
+}
+}
 
 namespace newsboat {
 
 /// A string that's guaranteed to contain valid UTF-8.
 class Utf8String {
 public:
+	Utf8String() = default;
+
+	/// Construct an object from a String received from Rust.
+	///
+	/// This performs no validations because Rust strings are known to be
+	/// represented in UTF-8.
+	Utf8String(const rust::String&);
+
+	/// Convert the object to a Rust String.
+	///
+	/// This constructs a new Rust String from the UTF-8 data.
+	operator rust::String() const;
+
+
 	/// Construct an object from a string literal, which is assumed to be in
 	/// UTF-8 since Newsboat's source code is in UTF-8.
 	///
@@ -47,8 +68,63 @@ public:
 	Utf8String& operator=(const Utf8String&) = default;
 	Utf8String& operator=(Utf8String&&) = default;
 
+	using size_type = std::string::size_type;
+
+	static const size_type npos = std::string::npos;
+
+	// We do not provide an overload that takes char* because we don't want to
+	// introduce a channel by which non-UTF-8 data can slip through. Any other
+	// string type will have to be converter into Utf8String in order to be
+	// mixed with Utf8String.
+	Utf8String& append(const Utf8String& other)
+	{
+		inner.append(other.inner);
+		return *this;
+	}
+
+	Utf8String& operator+=(const Utf8String& other)
+	{
+		return append(other);
+	}
+
+	size_type length() const noexcept
+	{
+		return inner.length();
+	}
+
+	size_type size() const noexcept
+	{
+		return inner.size();
+	}
+
+	bool empty() const noexcept
+	{
+		return inner.empty();
+	}
+
+	void clear() noexcept
+	{
+		inner.clear();
+	}
+
+	size_type rfind(const Utf8String& str, size_type pos = npos) const noexcept
+	{
+		return inner.rfind(str.inner, pos);
+	}
+
+	size_type find(const Utf8String& str, size_type pos = 0) const noexcept
+	{
+		return inner.find(str.inner, pos);
+	}
+
 	friend bool operator==(const Utf8String& lhs, const Utf8String& rhs);
 	friend bool operator!=(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator<(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator<=(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator>(const Utf8String& lhs, const Utf8String& rhs);
+	friend bool operator>=(const Utf8String& lhs, const Utf8String& rhs);
+
+	friend Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs);
 
 private:
 	explicit Utf8String(std::string input);
@@ -67,7 +143,41 @@ inline bool operator!=(const Utf8String& lhs, const Utf8String& rhs)
 	return lhs.inner != rhs.inner;
 }
 
+inline bool operator<(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner < rhs.inner;
+}
+
+inline bool operator<=(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner <= rhs.inner;
+}
+
+inline bool operator>(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner > rhs.inner;
+}
+
+inline bool operator>=(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return lhs.inner >= rhs.inner;
+}
+
+inline Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs)
+{
+	return Utf8String(lhs.inner + rhs.inner);
+}
+
 } // namespace newsboat
+
+namespace std {
+template<> struct hash<::newsboat::Utf8String> {
+	std::size_t operator()(const ::newsboat::Utf8String& s) const noexcept
+	{
+		return std::hash<std::string> {}(s.to_utf8());
+	}
+};
+} // namespace std
 
 #endif /* NEWSBOAT_UTF8STRING_H_ */
 

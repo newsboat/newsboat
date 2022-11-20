@@ -1,8 +1,23 @@
 #include "utf8string.h"
 
+#include <stfl.h>
+#include <wctype.h>
+
+#include "rust/cxx.h"
+
 #include "utils.h"
 
 namespace newsboat {
+
+Utf8String::Utf8String(const rust::String& input)
+{
+	inner = std::string(input);
+}
+
+Utf8String::operator rust::String() const
+{
+	return rust::String(inner);
+}
 
 Utf8String::Utf8String(std::string input)
 {

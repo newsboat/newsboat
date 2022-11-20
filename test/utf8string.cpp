@@ -9,6 +9,19 @@
 
 using namespace newsboat;
 
+namespace Catch {
+template<>
+struct StringMaker<Utf8String> {
+	static std::string convert(const Utf8String& value)
+	{
+		std::string result("Utf8String( \"");
+		result.append(value.to_utf8());
+		result.append("\" )");
+		return result;
+	}
+};
+}
+
 TEST_CASE("Utf8String can be constructed from valid UTF-8", "[Utf8String]")
 {
 	const auto str1 = Utf8String::from_utf8("");
