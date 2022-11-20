@@ -142,6 +142,12 @@ public:
 
 	friend Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs);
 
+	/// Convenience method to operate directly on the std::string.
+	Utf8String map(std::function<std::string(std::string)>&& f) const
+	{
+		return Utf8String::from_utf8(f(inner));
+	}
+
 private:
 	// TODO: add back once the implicit conversion hack is served its purpose
 	// explicit Utf8String(std::string input);
