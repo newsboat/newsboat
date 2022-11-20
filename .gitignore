@@ -33,3 +33,4 @@ doc/podboat-cmds-linked.asciidoc
 /cppcheck.log
 *.dSYM
 /.deps/
+.ccls-cache/
