@@ -5,13 +5,14 @@
 #include "confighandlerexception.h"
 #include "matchable.h"
 #include "matcherexception.h"
+#include "utf8string.h"
 
 using namespace newsboat;
 
 TEST_CASE("RegexManager throws on invalid command", "[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	SECTION("on invalid command") {
 		REQUIRE_THROWS_AS(
@@ -24,7 +25,7 @@ TEST_CASE("RegexManager throws on invalid `highlight' definition",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	SECTION("on `highlight' without parameters") {
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight", params),
@@ -48,7 +49,7 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	params = {"articlelist", "foo", "blue", "red"};
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
@@ -66,7 +67,7 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight' definition",
 TEST_CASE("RegexManager highlights according to definition", "[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input;
+	Utf8String input;
 
 	SECTION("In articlelist") {
 		rxman.handle_action("highlight", {"articlelist", "foo", "blue", "red"});
@@ -87,7 +88,7 @@ TEST_CASE("quote_and_highlight() only matches `^` at the start of the line",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "This is a test";
+	Utf8String input = "This is a test";
 
 	SECTION("^.") {
 		rxman.handle_action("highlight", {"article", "^.", "blue", "red"});
@@ -115,7 +116,7 @@ TEST_CASE("RegexManager::quote_and_highlight works fine even if there were "
 	rxman.handle_action("highlight", {"articlelist", "foo", "blue", "red"});
 	rxman.handle_action("highlight-article", {"title==\"\"", "blue", "red"});
 
-	std::string input = "xfoox";
+	Utf8String input = "xfoox";
 	rxman.quote_and_highlight(input, "articlelist");
 	REQUIRE(input == "x<0>foo</>x");
 }
@@ -124,7 +125,7 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "xbarx";
+	Utf8String input = "xbarx";
 	rxman.quote_and_highlight(input, "feedlist");
 	REQUIRE(input == "xbarx");
 
@@ -135,7 +136,7 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 	SECTION("encode `<` as `<>` for stfl") {
 		// Construct the string explicitly to work around GCC 12 bug:
 		// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105329
-		input = std::string("<");
+		input = Utf8String("<");
 		rxman.quote_and_highlight(input, "feedlist");
 		REQUIRE(input == "<>");
 	}
@@ -144,15 +145,15 @@ TEST_CASE("RegexManager preserves text when there's nothing to highlight",
 TEST_CASE("`highlight all` adds rules for all locations", "[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params = {"all", "foo", "red"};
+	std::vector<Utf8String> params = {"all", "foo", "red"};
 	REQUIRE_NOTHROW(rxman.handle_action("highlight", params));
-	std::string input = "xxfooyy";
+	Utf8String input = "xxfooyy";
 
 	for (auto location : {
 			"article", "articlelist", "feedlist"
 		}) {
 		SECTION(location) {
-			rxman.quote_and_highlight(input, location);
+			rxman.quote_and_highlight(input, Utf8String::from_utf8(location));
 			REQUIRE(input == "xx<0>foo</>yy");
 		}
 	}
@@ -162,7 +163,7 @@ TEST_CASE("RegexManager does not hang on regexes that can match empty strings",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "The quick brown fox jumps over the lazy dog";
+	Utf8String input = "The quick brown fox jumps over the lazy dog";
 
 	rxman.handle_action("highlight", {"feedlist", "w*", "blue", "red"});
 	rxman.quote_and_highlight(input, "feedlist");
@@ -173,8 +174,8 @@ TEST_CASE("RegexManager does not hang on regexes that match empty strings",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "The quick brown fox jumps over the lazy dog";
-	const std::string compare = input;
+	Utf8String input = "The quick brown fox jumps over the lazy dog";
+	const Utf8String compare = input;
 
 	SECTION("testing end of line empty.") {
 		rxman.handle_action("highlight", {"feedlist", "$", "blue", "red"});
@@ -199,10 +200,10 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input =  "The quick brown fox jumps over the lazy dog";
+	Utf8String input =  "The quick brown fox jumps over the lazy dog";
 
 	SECTION("Beginning of line match first") {
-		const std::string output =
+		const Utf8String output =
 			"<0>The</> quick <1>brown</> fox jumps over <0>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "the", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
@@ -211,7 +212,7 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	}
 
 	SECTION("Beginning of line match second") {
-		const std::string output =
+		const Utf8String output =
 			"<1>The</> quick <0>brown</> fox jumps over <1>the</> lazy dog";
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
 		rxman.handle_action("highlight", {"article", "the", "red"});
@@ -220,7 +221,7 @@ TEST_CASE("quote_and_highlight wraps highlighted text in numbered tags",
 	}
 
 	SECTION("2 non-overlapping highlights") {
-		const std::string output =
+		const Utf8String output =
 			"The <0>quick</> <1>brown</> fox jumps over the lazy dog";
 		rxman.handle_action("highlight", {"article", "quick", "red"});
 		rxman.handle_action("highlight", {"article", "brown", "blue"});
@@ -235,7 +236,7 @@ TEST_CASE("RegexManager::dump_config turns each `highlight`, "
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> result;
+	std::vector<Utf8String> result;
 
 	SECTION("Empty object returns empty vector") {
 		REQUIRE_NOTHROW(rxman.dump_config(result));
@@ -279,7 +280,7 @@ TEST_CASE("RegexManager::dump_config turns each `highlight`, "
 TEST_CASE("RegexManager::dump_config appends to given vector", "[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> result;
+	std::vector<Utf8String> result;
 
 	result.emplace_back("sentinel");
 
@@ -384,7 +385,7 @@ TEST_CASE("RegexManager throws on invalid `highlight-article' definition",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	SECTION("on `highlight-article' without parameters") {
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight-article", params),
@@ -414,7 +415,7 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight-article' definition",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	params = {"title == \"\"", "blue", "red"};
 	REQUIRE_NOTHROW(rxman.handle_action("highlight-article", params));
@@ -433,7 +434,7 @@ TEST_CASE("RegexManager throws on invalid `highlight-feed' definition",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	SECTION("on `highlight-feed' without parameters") {
 		REQUIRE_THROWS_AS(rxman.handle_action("highlight-feed", params),
@@ -463,7 +464,7 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight-feed' definition",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 
 	params = {"title == \"\"", "blue", "red"};
 	REQUIRE_NOTHROW(rxman.handle_action("highlight-feed", params));
@@ -497,7 +498,7 @@ TEST_CASE("RegexManager::article_matches returns position of the Matcher "
 	RegexManager rxman;
 	RegexManagerMockMatchable mock;
 
-	const auto cmd = std::string("highlight-article");
+	const auto cmd = Utf8String("highlight-article");
 
 	SECTION("Just one rule") {
 		rxman.handle_action(cmd, {"attr != \"hello\"", "red", "green"});
@@ -522,7 +523,7 @@ TEST_CASE("RegexManager::article_matches returns -1 if there are no Matcher "
 	RegexManager rxman;
 	RegexManagerMockMatchable mock;
 
-	const auto cmd = std::string("highlight-article");
+	const auto cmd = Utf8String("highlight-article");
 
 	SECTION("No rules") {
 		REQUIRE(rxman.article_matches(&mock) == -1);
@@ -550,7 +551,7 @@ TEST_CASE("RegexManager::feed_matches returns position of the Matcher "
 	RegexManager rxman;
 	RegexManagerMockMatchable mock;
 
-	const auto cmd = std::string("highlight-feed");
+	const auto cmd = Utf8String("highlight-feed");
 
 	SECTION("Just one rule") {
 		rxman.handle_action(cmd, {"attr != \"hello\"", "red", "green"});
@@ -575,7 +576,7 @@ TEST_CASE("RegexManager::feed_matches returns -1 if there are no Matcher "
 	RegexManager rxman;
 	RegexManagerMockMatchable mock;
 
-	const auto cmd = std::string("highlight-feed");
+	const auto cmd = Utf8String("highlight-feed");
 
 	SECTION("No rules") {
 		REQUIRE(rxman.feed_matches(&mock) == -1);
@@ -604,7 +605,7 @@ TEST_CASE("RegexManager::remove_last_regex removes last added `highlight` rule",
 	rxman.handle_action("highlight", {"articlelist", "foo", "blue", "red"});
 	rxman.handle_action("highlight", {"articlelist", "bar", "blue", "red"});
 
-	const auto INPUT = std::string("xfoobarx");
+	const auto INPUT = Utf8String("xfoobarx");
 
 	auto input = INPUT;
 	rxman.quote_and_highlight(input, "articlelist");
@@ -688,12 +689,12 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		try {
 			rxman.handle_action("highlight", {"articlelist", R"#(\Q*]+\E)#", "red"});
 		} catch (const ConfigHandlerException& e) {
-			const std::string expected(
+			const auto expected(
 				R"#(`\Q*]+\E' is not a valid regular expression: trailing backslash (\))#");
 			REQUIRE(e.what() == expected);
 		}
 
-		std::string input = "*]+";
+		Utf8String input = "*]+";
 		rxman.quote_and_highlight(input, "articlelist");
 		REQUIRE(input == "*]+");
 	}
@@ -702,12 +703,12 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		try {
 			rxman.handle_action("highlight", {"articlelist", R"#(^va\x6Cue)#", "red"});
 		} catch (const ConfigHandlerException& e) {
-			const std::string expected(
+			const auto expected(
 				R"#(`^va\x6Cue' is not a valid regular expression: trailing backslash (\))#");
 			REQUIRE(e.what() == expected);
 		}
 
-		std::string input = "value";
+		Utf8String input = "value";
 		rxman.quote_and_highlight(input, "articlelist");
 		REQUIRE(input == "value");
 	}
@@ -716,12 +717,12 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		try {
 			rxman.handle_action("highlight", {"articlelist", R"#(\a)#", "red"});
 		} catch (const ConfigHandlerException& e) {
-			const std::string expected(
+			const auto expected(
 				R"#(`\a' is not a valid regular expression: trailing backslash (\))#");
 			REQUIRE(e.what() == expected);
 		}
 
-		std::string input = "\x07";
+		Utf8String input = "\x07";
 		rxman.quote_and_highlight(input, "articlelist");
 		REQUIRE(input == "\x07");
 	}
@@ -730,12 +731,12 @@ TEST_CASE("RegexManager uses POSIX extended regex syntax",
 		try {
 			rxman.handle_action("highlight", {"articlelist", R"#(\b)#", "red"});
 		} catch (const ConfigHandlerException& e) {
-			const std::string expected(
+			const auto expected(
 				R"#(`\b' is not a valid regular expression: trailing backslash (\))#");
 			REQUIRE(e.what() == expected);
 		}
 
-		std::string input = "\x08";
+		Utf8String input = "\x08";
 		rxman.quote_and_highlight(input, "articlelist");
 		REQUIRE(input == "\x08");
 	}
@@ -747,17 +748,17 @@ TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input =  "<unread>This entry is unread</>";
+	Utf8String input =  "<unread>This entry is unread</>";
 
 	WHEN("matching `read`") {
-		const std::string output = "<unread>This entry is un<0>read</>";
+		const Utf8String output = "<unread>This entry is un<0>read</>";
 		rxman.handle_action("highlight", {"article", "read", "red"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
 
 	WHEN("matching `unread`") {
-		const std::string output = "<unread>This entry is <0>unread</>";
+		const Utf8String output = "<unread>This entry is <0>unread</>";
 		rxman.handle_action("highlight", {"article", "unread", "red"});
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
@@ -767,7 +768,7 @@ TEST_CASE("quote_and_highlight() does not break existing tags like <unread>",
 		rxman.handle_action("highlight", {"article", "^.*$", "red"});
 
 		THEN("the <unread> tag is overwritten") {
-			const std::string output = "<0>This entry is unread</>";
+			const Utf8String output = "<0>This entry is unread</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
@@ -778,13 +779,13 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input =  "<unread>This entry is unread</>";
+	Utf8String input =  "<unread>This entry is unread</>";
 
 	WHEN("matching text at the start of the line") {
 		rxman.handle_action("highlight", {"article", "^This", "red"});
 
 		THEN("the <unread> tag should be ignored") {
-			const std::string output = "<0>This<unread> entry is unread</>";
+			const Utf8String output = "<0>This<unread> entry is unread</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
@@ -794,7 +795,7 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 		rxman.handle_action("highlight", {"article", "unread$", "red"});
 
 		THEN("the closing tag `</>` (related to <unread>) should be ignored") {
-			const std::string output = "<unread>This entry is <0>unread</>";
+			const Utf8String output = "<unread>This entry is <0>unread</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
@@ -805,7 +806,7 @@ TEST_CASE("quote_and_highlight() ignores tags when matching the regular expressi
 		rxman.handle_action("highlight", {"article", "Something", "red"});
 
 		THEN("the tags should be ignored when matching text with a regular expression") {
-			const std::string output = "<0>Something</> is underlined";
+			const Utf8String output = "<0>Something</> is underlined";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
 		}
@@ -816,14 +817,14 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "The quick brown fox jumps over the lazy dog";
+	Utf8String input = "The quick brown fox jumps over the lazy dog";
 
 	WHEN("a second match is completely inside of the first match") {
 		rxman.handle_action("highlight", {"article", "The quick brown", "red"});
 		rxman.handle_action("highlight", {"article", "quick", "red"});
 
 		THEN("the first style should be restored at the end of the second match") {
-			const std::string output =
+			const Utf8String output =
 				"<0>The <1>quick<0> brown</> fox jumps over the lazy dog";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
@@ -835,7 +836,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		rxman.handle_action("highlight", {"article", "The quick brown", "red"});
 
 		THEN("the first style should not be present anymore") {
-			const std::string output =
+			const Utf8String output =
 				"<1>The quick brown</> fox jumps over the lazy dog";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
@@ -847,7 +848,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		rxman.handle_action("highlight", {"article", "brown fox", "red"});
 
 		THEN("the first style should only be overwritten for the part where the matches intersect") {
-			const std::string output =
+			const Utf8String output =
 				"The <0>quick <1>brown fox</> jumps over the lazy dog";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
@@ -859,7 +860,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		rxman.handle_action("highlight", {"article", "quick brown", "red"});
 
 		THEN("the first style should only be overwritten for the part where the matches intersect") {
-			const std::string output =
+			const Utf8String output =
 				"The <1>quick brown<0> fox</> jumps over the lazy dog";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
@@ -872,7 +873,7 @@ TEST_CASE("quote_and_highlight() generates a sensible output when multiple match
 		rxman.handle_action("highlight", {"article", "brown fox", "red"});
 
 		THEN("newer matches overwrite older matches") {
-			const std::string output =
+			const Utf8String output =
 				"The <0>quick <2>brown fox<1> jumps over<0> the lazy dog</>";
 			rxman.quote_and_highlight(input, "article");
 			REQUIRE(input == output);
@@ -884,16 +885,16 @@ TEST_CASE("quote_and_highlight() keeps stfl-encoded angle brackets and allows ma
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "<unread>title with <>literal> angle brackets</>";
+	Utf8String input = "<unread>title with <>literal> angle brackets</>";
 
 	SECTION("stfl-encoded angle brackets are kept/restored") {
-		const std::string output = "<unread>title with <>literal> angle brackets</>";
+		const Utf8String output = "<unread>title with <>literal> angle brackets</>";
 		rxman.quote_and_highlight(input, "article");
 		REQUIRE(input == output);
 	}
 
 	SECTION("angle brackets can be matched directly") {
-		const std::string output =
+		const Utf8String output =
 			"<unread>title with <0><>literal><unread> angle brackets</>";
 		rxman.handle_action("highlight", {"article", "<literal>", "red"});
 		rxman.quote_and_highlight(input, "article");
@@ -907,16 +908,16 @@ TEST_CASE("extract_style_tags() returns map which links locations to tags from i
 	RegexManager rxman;
 
 	SECTION("input with no tags at all") {
-		std::string input = "The quick brown fox jumps over the lazy dog";
-		const std::string output = "The quick brown fox jumps over the lazy dog";
+		Utf8String input = "The quick brown fox jumps over the lazy dog";
+		const Utf8String output = "The quick brown fox jumps over the lazy dog";
 		auto tags = rxman.extract_style_tags(input);
 		REQUIRE(input == output);
 		REQUIRE(tags.size() == 0);
 	}
 
 	SECTION("input with various tags") {
-		std::string input = "<unread>title <0>with <u>underline<0> and style</>";
-		const std::string output = "title with underline and style";
+		Utf8String input = "<unread>title <0>with <u>underline<0> and style</>";
+		const Utf8String output = "title with underline and style";
 		auto tags = rxman.extract_style_tags(input);
 		REQUIRE(input == output);
 		REQUIRE(tags[0]  == "<unread>");
@@ -934,8 +935,8 @@ TEST_CASE("extract_style_tags() keeps stfl-encoded angle brackets in string",
 	RegexManager rxman;
 
 	SECTION("stfl-encoded angle brackets should be preserved") {
-		std::string input = "<unread>title with <>literal> angle brackets</>";
-		const std::string output = "title with <literal> angle brackets";
+		Utf8String input = "<unread>title with <>literal> angle brackets</>";
+		const Utf8String output = "title with <literal> angle brackets";
 		auto tags = rxman.extract_style_tags(input);
 		REQUIRE(input == output);
 		REQUIRE(tags[0]  == "<unread>");
@@ -952,8 +953,8 @@ TEST_CASE("extract_style_tags() ignores invalid characters",
 	// invalid but it makes sense to keep a consistent result when refactoring.
 
 	SECTION("double tag open") {
-		std::string input = "<unread>title <with <u>repeated tag opening bracket</>";
-		const std::string output = "title <with repeated tag opening bracket";
+		Utf8String input = "<unread>title <with <u>repeated tag opening bracket</>";
+		const Utf8String output = "title <with repeated tag opening bracket";
 		auto tags = rxman.extract_style_tags(input);
 		REQUIRE(input == output);
 		REQUIRE(tags[0]  == "<unread>");
@@ -963,8 +964,8 @@ TEST_CASE("extract_style_tags() ignores invalid characters",
 	}
 
 	SECTION("unmatched '<' at end of line") {
-		std::string input = "some <u>underlining</>, nothing else<";
-		const std::string output = "some underlining, nothing else<";
+		Utf8String input = "some <u>underlining</>, nothing else<";
+		const Utf8String output = "some underlining, nothing else<";
 		auto tags = rxman.extract_style_tags(input);
 		REQUIRE(input == output);
 		REQUIRE(tags[5]  == "<u>");
@@ -977,23 +978,23 @@ TEST_CASE("insert_style_tags() adds tags into string at correct positions",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "This is a sentence";
+	Utf8String input = "This is a sentence";
 
 	SECTION("string does not change if no tags are specified") {
-		std::map<size_t, std::string> tags;
-		const std::string output = "This is a sentence";
+		std::map<size_t, Utf8String> tags;
+		const Utf8String output = "This is a sentence";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}
 
 	SECTION("tags are added at the correct location") {
-		std::map<size_t, std::string> tags = {
+		std::map<size_t, Utf8String> tags = {
 			{0, "<0>"},
 			{1, "<1>"},
 			{10, "<hello>"},
 			{18, "</>"},
 		};
-		const std::string output = "<0>T<1>his is a <hello>sentence</>";
+		const Utf8String output = "<0>T<1>his is a <hello>sentence</>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}
@@ -1003,23 +1004,23 @@ TEST_CASE("insert_style_tags() stfl-encodes angle brackets existing in input str
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = ">>This <is> a sentence with brackets<<";
+	Utf8String input = ">>This <is> a sentence with brackets<<";
 
 	SECTION("brackets are stfl-encoded") {
-		std::map<size_t, std::string> tags;
-		const std::string output = ">>This <>is> a sentence with brackets<><>";
+		std::map<size_t, Utf8String> tags;
+		const Utf8String output = ">>This <>is> a sentence with brackets<><>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}
 
 	SECTION("brackets are stfl-encoded and tags are inserted") {
-		std::map<size_t, std::string> tags = {
+		std::map<size_t, Utf8String> tags = {
 			{0, "<0>"},
 			{1, "<1>"},
 			{6, "<hello>"},
 			{38, "</>"},
 		};
-		const std::string output =
+		const Utf8String output =
 			"<0>><1>>This<hello> <>is> a sentence with brackets<><></>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
@@ -1030,15 +1031,15 @@ TEST_CASE("insert_style_tags() does not crash on invalid input",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "test this";
+	Utf8String input = "test this";
 
 	SECTION("tags with a position outside  of the string are ignored") {
-		std::map<size_t, std::string> tags = {
+		std::map<size_t, Utf8String> tags = {
 			{0, "<test>"},
 			{9, "<in>"},
 			{10, "<out>"},
 		};
-		const std::string output = "<test>test this<in>";
+		const Utf8String output = "<test>test this<in>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
 	}
@@ -1048,8 +1049,8 @@ TEST_CASE("merge_style_tag() removes tags between start and end positions",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	const std::string new_tag = "<test>";
-	std::map<size_t, std::string> tags = {
+	const Utf8String new_tag = "<test>";
+	std::map<size_t, Utf8String> tags = {
 		{0, "<0>"},
 		{5, "<1>"},
 		{7, "<2>"},
@@ -1069,8 +1070,8 @@ TEST_CASE("merge_style_tag() restores previous tag after the inserted tag if nec
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	const std::string new_tag = "<test>";
-	std::map<size_t, std::string> tags = {
+	const Utf8String new_tag = "<test>";
+	std::map<size_t, Utf8String> tags = {
 		{0, "<0>"},
 		{5, "<1>"},
 		{10, "</>"},
@@ -1114,8 +1115,8 @@ TEST_CASE("merge_style_tag() does not crash on invalid input",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::map<size_t, std::string> tags;
-	const std::string new_tag = "<test>";
+	std::map<size_t, Utf8String> tags;
+	const Utf8String new_tag = "<test>";
 
 	SECTION("ignore tag merging if `end <= start`") {
 		rxman.merge_style_tag(tags, new_tag, 0, 0);

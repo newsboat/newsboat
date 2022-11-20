@@ -636,15 +636,15 @@ void FeedListFormAction::set_feedlist(
 
 const std::vector<KeyMapHintEntry>& FeedListFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_OPEN, _("Open")},
-		{OP_NEXTUNREAD, _("Next Unread")},
-		{OP_RELOAD, _("Reload")},
-		{OP_RELOADALL, _("Reload All")},
-		{OP_MARKFEEDREAD, _("Mark Read")},
-		{OP_MARKALLFEEDSREAD, _("Mark All Read")},
-		{OP_SEARCH, _("Search")},
-		{OP_HELP, _("Help")}
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Quit")},
+		{OP_OPEN, _s("Open")},
+		{OP_NEXTUNREAD, _s("Next Unread")},
+		{OP_RELOAD, _s("Reload")},
+		{OP_RELOADALL, _s("Reload All")},
+		{OP_MARKFEEDREAD, _s("Mark Read")},
+		{OP_MARKALLFEEDSREAD, _s("Mark All Read")},
+		{OP_SEARCH, _s("Search")},
+		{OP_HELP, _s("Help")}
 	};
 	return hints;
 }

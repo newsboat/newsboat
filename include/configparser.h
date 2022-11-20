@@ -5,6 +5,7 @@
 #include <map>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -20,11 +21,11 @@ class ConfigParser : public ConfigActionHandler {
 public:
 	ConfigParser();
 	~ConfigParser() override;
-	void register_handler(const std::string& cmd,
+	void register_handler(const Utf8String& cmd,
 		ConfigActionHandler& handler);
-	void handle_action(const std::string& action,
-		const std::vector<std::string>& params) override;
-	void dump_config(std::vector<std::string>&) const override
+	void handle_action(const Utf8String& action,
+		const std::vector<Utf8String>& params) override;
+	void dump_config(std::vector<Utf8String>&) const override
 	{
 		/* nothing because ConfigParser itself only handles include */
 	}
@@ -37,17 +38,17 @@ public:
 	///
 	/// If the file contains any errors, throws `ConfigException` with
 	/// a message explaining the problem.
-	bool parse_file(const std::string& filename);
+	bool parse_file(const Utf8String& filename);
 
-	void parse_line(const std::string& line, const std::string& location);
-	static std::string evaluate_backticks(std::string token);
+	void parse_line(const Utf8String& line, const Utf8String& location);
+	static Utf8String evaluate_backticks(Utf8String token);
 
 private:
-	static std::string evaluate_cmd(const std::string& cmd);
-	std::vector<std::vector<std::string>> parsed_content;
-	std::map<std::string, std::reference_wrapper<ConfigActionHandler>>
+	static Utf8String evaluate_cmd(const Utf8String& cmd);
+	std::vector<std::vector<Utf8String>> parsed_content;
+	std::map<Utf8String, std::reference_wrapper<ConfigActionHandler>>
 		action_handlers;
-	std::vector<std::string> included_files;
+	std::vector<Utf8String> included_files;
 };
 
 } // namespace newsboat

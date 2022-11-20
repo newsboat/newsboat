@@ -17,7 +17,7 @@
 
 namespace newsboat {
 
-const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
+const Utf8String ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
 ConfigContainer::ConfigContainer()
 // create the config options and set their resp. default value and type
@@ -352,8 +352,8 @@ void ConfigContainer::register_commands(ConfigParser& cfgparser)
 	}
 }
 
-void ConfigContainer::handle_action(const std::string& action,
-	const std::vector<std::string>& params)
+void ConfigContainer::handle_action(const Utf8String& action,
+	const std::vector<Utf8String>& params)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	ConfigData& cfgdata = config_data[action];
@@ -404,13 +404,13 @@ void ConfigContainer::handle_action(const std::string& action,
 	}
 }
 
-std::string ConfigContainer::get_configvalue(const std::string& key) const
+Utf8String ConfigContainer::get_configvalue(const Utf8String& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	auto it = config_data.find(key);
 	if (it != config_data.cend()) {
 		const auto& entry = it->second;
-		std::string value = entry.value();
+		auto value = entry.value();
 		if (entry.type() == ConfigDataType::PATH) {
 			value = utils::resolve_tilde(value);
 		}
@@ -420,7 +420,7 @@ std::string ConfigContainer::get_configvalue(const std::string& key) const
 	return {};
 }
 
-int ConfigContainer::get_configvalue_as_int(const std::string& key) const
+int ConfigContainer::get_configvalue_as_int(const Utf8String& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	auto it = config_data.find(key);
@@ -435,7 +435,7 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 	return 0;
 }
 
-bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const
+bool ConfigContainer::get_configvalue_as_bool(const Utf8String& key) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	auto it = config_data.find(key);
@@ -447,8 +447,8 @@ bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const
 	return false;
 }
 
-void ConfigContainer::set_configvalue(const std::string& key,
-	const std::string& value)
+void ConfigContainer::set_configvalue(const Utf8String& key,
+	const Utf8String& value)
 {
 	LOG(Level::DEBUG,
 		"ConfigContainer::set_configvalue(%s, %s) called",
@@ -458,27 +458,29 @@ void ConfigContainer::set_configvalue(const std::string& key,
 	config_data[key].set_value(value);
 }
 
-void ConfigContainer::reset_to_default(const std::string& key)
+void ConfigContainer::reset_to_default(const Utf8String& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	config_data[key].reset_to_default();
 }
 
-void ConfigContainer::toggle(const std::string& key)
+void ConfigContainer::toggle(const Utf8String& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	if (config_data[key].type() == ConfigDataType::BOOL) {
-		set_configvalue(key,
-			std::string(get_configvalue_as_bool(key) ? "false"
-				: "true"));
+		if (get_configvalue_as_bool(key)) {
+			set_configvalue(key, "false");
+		} else {
+			set_configvalue(key, "true");
+		}
 	}
 }
 
-void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
+void ConfigContainer::dump_config(std::vector<Utf8String>& config_output) const
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		std::string configline = cfg.first + " ";
+		auto configline = cfg.first + " ";
 		assert(cfg.second.type() != ConfigDataType::INVALID);
 		switch (cfg.second.type()) {
 		case ConfigDataType::BOOL:
@@ -495,8 +497,7 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 		case ConfigDataType::STR:
 		case ConfigDataType::PATH:
 			if (cfg.second.multi_option()) {
-				const std::vector<std::string> tokens = utils::tokenize(cfg.second.value(),
-						" ");
+				const auto tokens = utils::tokenize(cfg.second.value(), " ");
 				for (const auto& token : tokens) {
 					configline.append(utils::quote(token) + " ");
 				}
@@ -518,13 +519,13 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-std::vector<std::string> ConfigContainer::get_suggestions(
-	const std::string& fragment) const
+std::vector<Utf8String> ConfigContainer::get_suggestions(
+	const Utf8String& fragment) const
 {
-	std::vector<std::string> result;
+	std::vector<Utf8String> result;
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
-		if (cfg.first.substr(0, fragment.length()) == fragment) {
+		if (utils::starts_with(fragment, cfg.first)) {
 			result.push_back(cfg.first);
 		}
 	}
@@ -542,7 +543,7 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
 	}
 
 	const auto sortmethod_info = utils::tokenize(setting, "-");
-	const std::string sortmethod = sortmethod_info[0];
+	const auto sortmethod = sortmethod_info[0];
 
 	if (sortmethod == "none") {
 		ss.sm = FeedSortMethod::NONE;
@@ -558,7 +559,7 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
 		ss.sm = FeedSortMethod::LAST_UPDATED;
 	}
 
-	std::string direction = "desc";
+	Utf8String direction = "desc";
 	if (sortmethod_info.size() > 1) {
 		direction = sortmethod_info[1];
 	}

@@ -1008,7 +1008,7 @@ void Controller::load_configfile(const std::string& filename)
 
 void Controller::dump_config(const std::string& filename) const
 {
-	std::vector<std::string> configlines;
+	std::vector<Utf8String> configlines;
 	cfg.dump_config(configlines);
 	if (v) {
 		v->get_keymap()->dump_config(configlines);
@@ -1020,7 +1020,7 @@ void Controller::dump_config(const std::string& filename) const
 	std::fstream f(filename, std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& line : configlines) {
-			f << line << std::endl;
+			f << line.to_locale_charset() << std::endl;
 		}
 	}
 }

@@ -6,6 +6,7 @@
 #include "confighandlerexception.h"
 #include "configparser.h"
 #include "keymap.h"
+#include "utf8string.h"
 
 using namespace newsboat;
 
@@ -118,19 +119,19 @@ TEST_CASE("reset_to_default changes setting to its default value",
 {
 	ConfigContainer cfg;
 
-	const std::string default_value = "any";
-	const std::vector<std::string> tests{"any",
+	const Utf8String default_value = "any";
+	const std::vector<Utf8String> tests{"any",
 		"basic",
 		"digest",
 		"digest_ie",
 		"gssnegotiate",
 		"ntlm",
 		"anysafe"};
-	const std::string key("http-auth-method");
+	const Utf8String key = "http-auth-method";
 
 	REQUIRE(cfg.get_configvalue(key) == default_value);
 
-	for (const std::string& test_value : tests) {
+	for (const auto& test_value : tests) {
 		cfg.set_configvalue(key, test_value);
 		REQUIRE(cfg.get_configvalue(key) == test_value);
 		REQUIRE_NOTHROW(cfg.reset_to_default(key));
@@ -183,8 +184,8 @@ TEST_CASE("get_configvalue_as_int() returns zero if setting doesn't exist",
 TEST_CASE("get_configvalue_as_int() returns zero if value can't be parsed as int",
 	"[ConfigContainer]")
 {
-	const auto key = std::string("auto-reload");
-	const auto value = std::string("true");
+	const auto key = Utf8String("auto-reload");
+	const auto value = Utf8String("true");
 
 	ConfigContainer cfg;
 	cfg.set_configvalue(key, value);
@@ -198,7 +199,7 @@ TEST_CASE("toggle() inverts the value of a boolean setting",
 {
 	ConfigContainer cfg;
 
-	const std::string key("always-display-description");
+	const Utf8String key("always-display-description");
 	SECTION("\"true\" becomes \"false\"") {
 		cfg.set_configvalue(key, "true");
 		REQUIRE_NOTHROW(cfg.toggle(key));
@@ -217,7 +218,7 @@ TEST_CASE("toggle() does nothing if setting is non-boolean",
 {
 	ConfigContainer cfg;
 
-	const std::vector<std::string> tests{"articlelist-title-format",
+	const std::vector<Utf8String> tests{"articlelist-title-format",
 		"cache-file",
 		"http-auth-method",
 		"inoreader-passwordeval",
@@ -226,8 +227,8 @@ TEST_CASE("toggle() does nothing if setting is non-boolean",
 		"oldreader-min-items",
 		"save-path"};
 
-	for (const std::string& key : tests) {
-		const std::string expected = cfg.get_configvalue(key);
+	for (const auto& key : tests) {
+		const auto expected = cfg.get_configvalue(key);
 		REQUIRE_NOTHROW(cfg.toggle(key));
 		REQUIRE(cfg.get_configvalue(key) == expected);
 	}
@@ -241,8 +242,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 
 	auto all_values_found =
-		[](std::unordered_set<std::string>& expected,
-	const std::vector<std::string>& result) {
+		[](std::unordered_set<Utf8String>& expected,
+	const std::vector<Utf8String>& result) {
 		for (const auto& line : result) {
 			auto it = expected.find(line);
 			if (it != expected.end()) {
@@ -253,10 +254,10 @@ TEST_CASE(
 		return expected.empty();
 	};
 
-	std::vector<std::string> result;
+	std::vector<Utf8String> result;
 
 	SECTION("By default, simply enumerates all settings") {
-		std::unordered_set<std::string> expected{
+		std::unordered_set<Utf8String> expected{
 			"always-display-description false",
 			"download-timeout 30",
 			"ignore-mode \"download\"",
@@ -278,7 +279,7 @@ TEST_CASE(
 		cfg.set_configvalue("download-timeout", "100");
 		cfg.set_configvalue("http-auth-method", "digest");
 
-		std::unordered_set<std::string> expected{
+		std::unordered_set<Utf8String> expected{
 			"download-timeout 100 # default: 30",
 			"http-auth-method \"digest\" # default: any",
 		};
@@ -299,8 +300,8 @@ TEST_CASE(
 {
 	ConfigContainer cfg;
 
-	const std::string key1("d");
-	const std::unordered_set<std::string> expected1{
+	const Utf8String key1("d");
+	const std::unordered_set<Utf8String> expected1{
 		"datetime-format",
 		"delete-played-files",
 		"delete-read-articles-on-quit",
@@ -313,13 +314,13 @@ TEST_CASE(
 		"download-retries",
 		"download-timeout",
 	};
-	std::vector<std::string> results = cfg.get_suggestions(key1);
-	const std::unordered_set<std::string> results_set1(
+	std::vector<Utf8String> results = cfg.get_suggestions(key1);
+	const std::unordered_set<Utf8String> results_set1(
 		results.begin(), results.end());
 	REQUIRE(results_set1 == expected1);
 
-	const std::string key2("feed");
-	const std::unordered_set<std::string> expected2{
+	const Utf8String key2("feed");
+	const std::unordered_set<Utf8String> expected2{
 		"feed-sort-order",
 		"feedhq-flag-share",
 		"feedhq-flag-star",
@@ -334,7 +335,7 @@ TEST_CASE(
 		"feedlist-title-format",
 	};
 	results = cfg.get_suggestions(key2);
-	const std::unordered_set<std::string> results_set2(
+	const std::unordered_set<Utf8String> results_set2(
 		results.begin(), results.end());
 	REQUIRE(results_set2 == expected2);
 }
@@ -344,15 +345,15 @@ TEST_CASE("get_suggestions() returns results in alphabetical order",
 {
 	ConfigContainer cfg;
 
-	const std::vector<std::string> keys{"dow", "rel", "us", "d"};
+	const std::vector<Utf8String> keys{"dow", "rel", "us", "d"};
 	for (const auto& key : keys) {
-		const std::vector<std::string> results =
+		const std::vector<Utf8String> results =
 			cfg.get_suggestions(key);
 		for (auto one = results.begin(), two = one + 1;
 			two != results.end();
 			one = two, ++two) {
-			INFO("Previous: " << *one);
-			INFO("Current:  " << *two);
+			INFO("Previous: " << one->utf8());
+			INFO("Current:  " << two->utf8());
 			REQUIRE(*one <= *two);
 		}
 	}

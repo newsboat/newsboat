@@ -73,9 +73,9 @@ void DialogsFormAction::update_heading()
 
 const std::vector<KeyMapHintEntry>& DialogsFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Close")},
-		{OP_OPEN, _("Goto Dialog")},
-		{OP_CLOSEDIALOG, _("Close Dialog")}
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Close")},
+		{OP_OPEN, _s("Goto Dialog")},
+		{OP_CLOSEDIALOG, _s("Close Dialog")}
 	};
 	return hints;
 }

@@ -9,6 +9,7 @@
 #include "regexmanager.h"
 #include "stflpp.h"
 #include "strprintf.h"
+#include "utf8string.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -160,7 +161,9 @@ std::vector<std::string> format_text_plain_helper(
 			static_cast<unsigned int>(type));
 
 		if (rxman && type != LineType::hr) {
-			rxman->quote_and_highlight(text, location);
+			auto s = Utf8String::from_utf8(text);
+			rxman->quote_and_highlight(s, location);
+			text = s.utf8();
 		}
 
 		switch (type) {

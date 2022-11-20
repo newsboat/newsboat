@@ -1314,14 +1314,14 @@ std::string ItemListFormAction::get_guid()
 
 const std::vector<KeyMapHintEntry>& ItemListFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_OPEN, _("Open")},
-		{OP_SAVE, _("Save")},
-		{OP_RELOAD, _("Reload")},
-		{OP_NEXTUNREAD, _("Next Unread")},
-		{OP_MARKFEEDREAD, _("Mark All Read")},
-		{OP_SEARCH, _("Search")},
-		{OP_HELP, _("Help")}
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Quit")},
+		{OP_OPEN, _s("Open")},
+		{OP_SAVE, _s("Save")},
+		{OP_RELOAD, _s("Reload")},
+		{OP_NEXTUNREAD, _s("Next Unread")},
+		{OP_MARKFEEDREAD, _s("Mark All Read")},
+		{OP_SEARCH, _s("Search")},
+		{OP_HELP, _s("Help")}
 	};
 	return hints;
 }

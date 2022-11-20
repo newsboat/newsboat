@@ -5,6 +5,7 @@
 #include "cache.h"
 #include "confighandlerexception.h"
 #include "rssitem.h"
+#include "utf8string.h"
 
 using namespace newsboat;
 
@@ -49,7 +50,7 @@ TEST_CASE("RssIgnores::handle_action() handles `ignore-article`",
 {
 	RssIgnores ignores;
 
-	const std::string action = "ignore-article";
+	const Utf8String action = "ignore-article";
 
 	SECTION("Throws ConfigHandlerException if less than 2 parameters") {
 		REQUIRE_THROWS_AS(ignores.handle_action(action, {}), ConfigHandlerException);
@@ -78,7 +79,7 @@ TEST_CASE("RssIgnores::handle_action() handles `always-download`",
 {
 	RssIgnores ignores;
 
-	const std::string action = "always-download";
+	const Utf8String action = "always-download";
 
 	SECTION("Throws ConfigHandlerException if given zero parameters") {
 		REQUIRE_THROWS_AS(ignores.handle_action(action, {}), ConfigHandlerException);
@@ -96,7 +97,7 @@ TEST_CASE("RssIgnores::handle_action() handles `reset-unread-on-update`",
 {
 	RssIgnores ignores;
 
-	const std::string action = "reset-unread-on-update";
+	const Utf8String action = "reset-unread-on-update";
 
 	SECTION("Throws ConfigHandlerException if given zero parameters") {
 		REQUIRE_THROWS_AS(ignores.handle_action(action, {}), ConfigHandlerException);
@@ -130,14 +131,14 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 	RssIgnores ignores;
 
 	SECTION("`ignore-article`") {
-		const std::string action = "ignore-article";
+		const Utf8String action = "ignore-article";
 
 		ignores.handle_action(action, {"https://example.com/feed.xml", "author =~ \"Joe\""});
 		ignores.handle_action(action, {"*", "title # \"interesting\""});
 		ignores.handle_action(action, {"https://blog.example.com/joe/posts.xml", "guid # 123"});
 
-		std::vector<std::string> config;
-		const auto comment =
+		std::vector<Utf8String> config;
+		const Utf8String comment =
 			"# Comment to check that RssIgnores::dump_config() doesn't clear the vector";
 		config.push_back(comment);
 
@@ -153,13 +154,13 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 	}
 
 	SECTION("`always-download`") {
-		const std::string action = "always-download";
+		const Utf8String action = "always-download";
 
 		ignores.handle_action(action, {"url1"});
 		ignores.handle_action(action, {"url2", "url3", "url4"});
 
-		std::vector<std::string> config;
-		const auto comment =
+		std::vector<Utf8String> config;
+		const Utf8String comment =
 			"# Comment to check that RssIgnores::dump_config() doesn't clear the vector";
 		config.push_back(comment);
 
@@ -174,13 +175,13 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 	}
 
 	SECTION("`reset-unread-on-update`") {
-		const std::string action = "reset-unread-on-update";
+		const Utf8String action = "reset-unread-on-update";
 
 		ignores.handle_action(action, {"url1"});
 		ignores.handle_action(action, {"url2", "url3", "url4"});
 
-		std::vector<std::string> config;
-		const auto comment =
+		std::vector<Utf8String> config;
+		const Utf8String comment =
 			"# Comment to check that RssIgnores::dump_config() doesn't clear the vector";
 		config.push_back(comment);
 
@@ -202,8 +203,8 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 		ignores.handle_action("reset-unread-on-update", {"url2", "url3"});
 		ignores.handle_action("always-download", {"url2", "url3", "url4"});
 
-		std::vector<std::string> config;
-		const auto comment =
+		std::vector<Utf8String> config;
+		const Utf8String comment =
 			"# Comment to check that RssIgnores::dump_config() doesn't clear the vector";
 		config.push_back(comment);
 
@@ -234,7 +235,7 @@ TEST_CASE("RssIgnores::matches() returns true if given RssItem matches any "
 	Cache rsscache(":memory:", &cfg);
 	RssItem item(&rsscache);
 
-	const auto feedurl = "https://example.com/feed.xml";
+	const Utf8String feedurl = "https://example.com/feed.xml";
 
 	item.set_title("Updates");
 	item.set_author("John Doe");

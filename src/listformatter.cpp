@@ -5,6 +5,7 @@
 
 #include "stflpp.h"
 #include "strprintf.h"
+#include "utf8string.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -44,7 +45,9 @@ std::string ListFormatter::format_list() const
 	std::string format_cache = "{list";
 	for (auto str : lines) {
 		if (rxman) {
-			rxman->quote_and_highlight(str, location);
+			auto s = Utf8String::from_utf8(str);
+			rxman->quote_and_highlight(s, location);
+			str = s.utf8();
 		}
 		format_cache.append(strprintf::fmt(
 				"{listitem text:%s}", Stfl::quote(str)));

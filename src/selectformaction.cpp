@@ -248,11 +248,11 @@ void SelectFormAction::update_heading()
 
 const std::vector<KeyMapHintEntry>& SelectFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints_tag = {{OP_QUIT, _("Cancel")},
-		{OP_OPEN, _("Select Tag")}
+	static const std::vector<KeyMapHintEntry> hints_tag = {{OP_QUIT, _s("Cancel")},
+		{OP_OPEN, _s("Select Tag")}
 	};
-	static const std::vector<KeyMapHintEntry> hints_filter = {{OP_QUIT, _("Cancel")},
-		{OP_OPEN, _("Select Filter")}
+	static const std::vector<KeyMapHintEntry> hints_filter = {{OP_QUIT, _s("Cancel")},
+		{OP_OPEN, _s("Select Filter")}
 	};
 	switch (type) {
 	case SelectionType::TAG:

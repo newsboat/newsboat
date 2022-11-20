@@ -3,10 +3,10 @@
 
 #include <map>
 #include <mutex>
-#include <string>
 #include <vector>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -61,24 +61,24 @@ public:
 	ConfigContainer();
 	~ConfigContainer() override;
 	void register_commands(ConfigParser& cfgparser);
-	void handle_action(const std::string& action,
-		const std::vector<std::string>& params) override;
-	void dump_config(std::vector<std::string>& config_output) const override;
+	void handle_action(const Utf8String& action,
+		const std::vector<Utf8String>& params) override;
+	void dump_config(std::vector<Utf8String>& config_output) const override;
 
-	bool get_configvalue_as_bool(const std::string& key) const;
-	int get_configvalue_as_int(const std::string& key) const;
-	std::string get_configvalue(const std::string& key) const;
-	void set_configvalue(const std::string& key, const std::string& value);
-	void reset_to_default(const std::string& key);
-	void toggle(const std::string& key);
-	std::vector<std::string> get_suggestions(const std::string& fragment) const;
+	bool get_configvalue_as_bool(const Utf8String& key) const;
+	int get_configvalue_as_int(const Utf8String& key) const;
+	Utf8String get_configvalue(const Utf8String& key) const;
+	void set_configvalue(const Utf8String& key, const Utf8String& value);
+	void reset_to_default(const Utf8String& key);
+	void toggle(const Utf8String& key);
+	std::vector<Utf8String> get_suggestions(const Utf8String& fragment) const;
 	FeedSortStrategy get_feed_sort_strategy() const;
 	ArticleSortStrategy get_article_sort_strategy() const;
 
-	static const std::string PARTIAL_FILE_SUFFIX;
+	static const Utf8String PARTIAL_FILE_SUFFIX;
 
 private:
-	std::map<std::string, ConfigData> config_data;
+	std::map<Utf8String, ConfigData> config_data;
 	mutable std::recursive_mutex config_data_mtx;
 };
 

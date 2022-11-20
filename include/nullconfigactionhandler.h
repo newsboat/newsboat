@@ -2,6 +2,7 @@
 #define NEWSBOAT_NULLCONFIGACTIONHANDLER_H_
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -9,11 +10,11 @@ class NullConfigActionHandler : public ConfigActionHandler {
 public:
 	NullConfigActionHandler() {}
 	~NullConfigActionHandler() override {}
-	void handle_action(const std::string&,
-		const std::vector<std::string>&) override
+	void handle_action(const Utf8String&,
+		const std::vector<Utf8String>&) override
 	{
 	}
-	void dump_config(std::vector<std::string>&) const override {}
+	void dump_config(std::vector<Utf8String>&) const override {}
 };
 
 } // namespace newsboat

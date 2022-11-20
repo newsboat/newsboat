@@ -13,8 +13,8 @@ namespace newsboat {
 
 FilterContainer::~FilterContainer() {}
 
-void FilterContainer::handle_action(const std::string& action,
-	const std::vector<std::string>& params)
+void FilterContainer::handle_action(const Utf8String& action,
+	const std::vector<Utf8String>& params)
 {
 	/*
 	 * FilterContainer does nothing but to save (filter name, filter
@@ -45,7 +45,7 @@ void FilterContainer::handle_action(const std::string& action,
 	}
 }
 
-void FilterContainer::dump_config(std::vector<std::string>& config_output) const
+void FilterContainer::dump_config(std::vector<Utf8String>& config_output) const
 {
 	for (const auto& filter : filters) {
 		config_output.push_back(strprintf::fmt("define-filter %s %s",
@@ -54,7 +54,7 @@ void FilterContainer::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-nonstd::optional<std::string> FilterContainer::get_filter(const std::string& name)
+nonstd::optional<Utf8String> FilterContainer::get_filter(const Utf8String& name)
 {
 	const auto filter = std::find_if(filters.begin(),
 	filters.end(), [&](const FilterNameExprPair& pair) {

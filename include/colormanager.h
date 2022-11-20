@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 namespace podboat {
 class PbView;
@@ -18,9 +19,9 @@ namespace newsboat {
 class ConfigParser;
 
 struct TextStyle {
-	std::string fg_color;
-	std::string bg_color;
-	std::vector<std::string> attributes;
+	Utf8String fg_color;
+	Utf8String bg_color;
+	std::vector<Utf8String> attributes;
 };
 
 class ColorManager : public ConfigActionHandler {
@@ -28,18 +29,18 @@ public:
 	ColorManager();
 	~ColorManager() override;
 	void register_commands(ConfigParser& cfgparser);
-	void handle_action(const std::string& action,
-		const std::vector<std::string>& params) override;
-	void dump_config(std::vector<std::string>& config_output) const override;
-	void apply_colors(std::function<void(const std::string&, const std::string&)>
+	void handle_action(const Utf8String& action,
+		const std::vector<Utf8String>& params) override;
+	void dump_config(std::vector<Utf8String>& config_output) const override;
+	void apply_colors(std::function<void(const Utf8String&, const Utf8String&)>
 		stfl_value_setter) const;
 
 private:
-	void emit_fallback_from_to(const std::string& from_element, const std::string& to_element,
-		const std::function<void(const std::string&, const std::string&)>& stfl_value_setter)
+	void emit_fallback_from_to(const Utf8String& from_element, const Utf8String& to_element,
+		const std::function<void(const Utf8String&, const Utf8String&)>& stfl_value_setter)
 	const;
 
-	std::map<std::string, TextStyle> element_styles;
+	std::map<Utf8String, TextStyle> element_styles;
 };
 
 } // namespace newsboat

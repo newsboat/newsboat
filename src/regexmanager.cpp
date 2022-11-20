@@ -22,15 +22,15 @@ RegexManager::RegexManager()
 	locations["feedlist"];
 }
 
-void RegexManager::dump_config(std::vector<std::string>& config_output) const
+void RegexManager::dump_config(std::vector<Utf8String>& config_output) const
 {
 	for (const auto& foo : cheat_store_for_dump_config) {
 		config_output.push_back(foo);
 	}
 }
 
-void RegexManager::handle_action(const std::string& action,
-	const std::vector<std::string>& params)
+void RegexManager::handle_action(const Utf8String& action,
+	const std::vector<Utf8String>& params)
 {
 	if (action == "highlight") {
 		handle_highlight_action(params);
@@ -40,7 +40,7 @@ void RegexManager::handle_action(const std::string& action,
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);
 	}
-	std::string line = action;
+	auto line = action;
 	for (const auto& param : params) {
 		line.append(" ");
 		line.append(utils::quote(param));
@@ -68,7 +68,7 @@ int RegexManager::feed_matches(Matchable* feed)
 	return -1;
 }
 
-void RegexManager::remove_last_regex(const std::string& location)
+void RegexManager::remove_last_regex(const Utf8String& location)
 {
 	auto& regexes = locations[location];
 	if (regexes.empty()) {
@@ -78,51 +78,54 @@ void RegexManager::remove_last_regex(const std::string& location)
 	regexes.pop_back();
 }
 
-std::map<size_t, std::string> RegexManager::extract_style_tags(std::string& str)
+std::map<size_t, Utf8String> RegexManager::extract_style_tags(Utf8String& str)
 {
-	std::map<size_t, std::string> tags;
+	std::map<size_t, Utf8String> tags;
 
-	size_t pos = 0;
-	while (pos < str.size()) {
-		auto tag_start = str.find_first_of("<>", pos);
-		if (tag_start == std::string::npos) {
-			break;
+	str = str.map([&tags](std::string str) {
+		size_t pos = 0;
+		while (pos < str.size()) {
+			auto tag_start = str.find_first_of("<>", pos);
+			if (tag_start == std::string::npos) {
+				break;
+			}
+			if (str[tag_start] == '>') {
+				// Keep unmatched '>' (stfl way of encoding a literal '>')
+				pos = tag_start + 1;
+				continue;
+			}
+			auto tag_end = str.find_first_of("<>", tag_start + 1);
+			if (tag_end == std::string::npos) {
+				break;
+			}
+			if (str[tag_end] == '<') {
+				// First '<' bracket is unmatched, ignoring it
+				pos = tag_start + 1;
+				continue;
+			}
+			if (tag_end - tag_start == 1) {
+				// Convert "<>" into "<" (stfl way of encoding a literal '<')
+				str.erase(tag_end, 1);
+				pos = tag_start + 1;
+				continue;
+			}
+			tags[tag_start] = Utf8String::from_utf8(str.substr(tag_start, tag_end - tag_start + 1));
+			str.erase(tag_start, tag_end - tag_start + 1);
+			pos = tag_start;
 		}
-		if (str[tag_start] == '>') {
-			// Keep unmatched '>' (stfl way of encoding a literal '>')
-			pos = tag_start + 1;
-			continue;
-		}
-		auto tag_end = str.find_first_of("<>", tag_start + 1);
-		if (tag_end == std::string::npos) {
-			break;
-		}
-		if (str[tag_end] == '<') {
-			// First '<' bracket is unmatched, ignoring it
-			pos = tag_start + 1;
-			continue;
-		}
-		if (tag_end - tag_start == 1) {
-			// Convert "<>" into "<" (stfl way of encoding a literal '<')
-			str.erase(tag_end, 1);
-			pos = tag_start + 1;
-			continue;
-		}
-		tags[tag_start] = str.substr(tag_start, tag_end - tag_start + 1);
-		str.erase(tag_start, tag_end - tag_start + 1);
-		pos = tag_start;
-	}
+		return str;
+	});
 	return tags;
 }
 
-void RegexManager::insert_style_tags(std::string& str,
-	std::map<size_t, std::string>& tags)
+void RegexManager::insert_style_tags(Utf8String& str,
+	std::map<size_t, Utf8String>& tags)
 {
 	// Expand "<" into "<>" (reverse of what happened in extract_style_tags()
 	size_t pos = 0;
 	while (pos < str.size()) {
-		auto bracket = str.find_first_of("<", pos);
-		if (bracket == std::string::npos) {
+		auto bracket = str.find("<", pos);
+		if (bracket == Utf8String::npos) {
 			break;
 		}
 		pos = bracket + 1;
@@ -136,12 +139,15 @@ void RegexManager::insert_style_tags(std::string& str,
 			// Ignore tags outside of string
 			continue;
 		}
-		str.insert(it->first, it->second);
+		str = str.map([&](std::string s) {
+			s.insert(it->first, it->second.utf8());
+			return s;
+		});
 	}
 }
 
-void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
-	const std::string& tag, size_t start, size_t end)
+void RegexManager::merge_style_tag(std::map<size_t, Utf8String>& tags,
+	const Utf8String& tag, size_t start, size_t end)
 {
 	if (end <= start) {
 		return;
@@ -149,7 +155,7 @@ void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
 
 	// Find the latest tag occurring before `end`.
 	// It is important that looping executes in ascending order of location.
-	std::string latest_tag = "</>";
+	Utf8String latest_tag = "</>";
 	for (const auto& location_tag : tags) {
 		size_t location = location_tag.first;
 		if (location > end) {
@@ -170,8 +176,8 @@ void RegexManager::merge_style_tag(std::map<size_t, std::string>& tags,
 	}
 }
 
-void RegexManager::quote_and_highlight(std::string& str,
-	const std::string& location)
+void RegexManager::quote_and_highlight(Utf8String& str,
+	const Utf8String& location)
 {
 	auto& regexes = locations[location];
 
@@ -185,14 +191,14 @@ void RegexManager::quote_and_highlight(std::string& str,
 		unsigned int offset = 0;
 		int eflags = 0;
 		while (offset < str.length()) {
-			const auto matches = regex->matches(str.substr(offset), 1, eflags);
+			const auto matches = regex->matches(str.utf8().substr(offset), 1, eflags);
 			eflags |= REG_NOTBOL; // Don't match beginning-of-line operator (^) in following checks
 			if (matches.empty()) {
 				break;
 			}
 			const auto& match = matches[0];
 			if (match.first != match.second) {
-				const std::string marker = strprintf::fmt("<%u>", i);
+				const auto marker = strprintf::fmt("<%u>", i);
 				const int match_start = offset + match.first;
 				const int match_end = offset + match.second;
 				merge_style_tag(tag_locations, marker, match_start, match_end);
@@ -206,14 +212,14 @@ void RegexManager::quote_and_highlight(std::string& str,
 	insert_style_tags(str, tag_locations);
 }
 
-void RegexManager::handle_highlight_action(const std::vector<std::string>&
+void RegexManager::handle_highlight_action(const std::vector<Utf8String>&
 	params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
-	std::string location = params[0];
+	const auto& location = params[0];
 	if (location != "all" && location != "article" &&
 		location != "articlelist" && location != "feedlist") {
 		throw ConfigHandlerException(strprintf::fmt(
@@ -228,7 +234,7 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 				params[1],
 				errorMessage));
 	}
-	std::string colorstr;
+	Utf8String colorstr;
 	if (params[2] != "default") {
 		colorstr.append("fg=");
 		if (!utils::is_valid_color(params[2])) {
@@ -295,18 +301,17 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 	}
 }
 
-void RegexManager::handle_highlight_item_action(const std::string& action,
-	const std::vector<std::string>& params)
+void RegexManager::handle_highlight_item_action(const Utf8String& action,
+	const std::vector<Utf8String>& params)
 {
 	if (params.size() < 3) {
 		throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 	}
 
-	std::string expr = params[0];
-	std::string fgcolor = params[1];
-	std::string bgcolor = params[2];
+	auto fgcolor = params[1];
+	auto bgcolor = params[2];
 
-	std::string colorstr;
+	Utf8String colorstr;
 	if (fgcolor != "default") {
 		colorstr.append("fg=");
 		if (!utils::is_valid_color(fgcolor)) {
@@ -370,13 +375,13 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 	}
 }
 
-std::string RegexManager::get_attrs_stfl_string(const std::string& location,
+Utf8String RegexManager::get_attrs_stfl_string(const Utf8String& location,
 	bool hasFocus)
 {
 	const auto& attributes = locations[location];
-	std::string attrstr;
+	Utf8String attrstr;
 	for (unsigned int i = 0; i < attributes.size(); ++i) {
-		const std::string& attribute = attributes[i].second;
+		const auto& attribute = attributes[i].second;
 		attrstr.append(strprintf::fmt("@style_%u_normal:%s ", i, attribute));
 		if (hasFocus) {
 			attrstr.append(strprintf::fmt("@style_%u_focus:%s ", i, attribute));

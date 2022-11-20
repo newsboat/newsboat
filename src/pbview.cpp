@@ -17,6 +17,7 @@
 #include "logger.h"
 #include "pbcontroller.h"
 #include "strprintf.h"
+#include "utf8string.h"
 #include "utils.h"
 
 using namespace newsboat;
@@ -123,7 +124,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			continue;
 		}
 
-		Operation op = keys->get_operation(event, "podboat");
+		Operation op = keys->get_operation(Utf8String::from_utf8(event), "podboat");
 
 		if (dllist_form.get("msg").length() > 0) {
 			dllist_form.set("msg", "");
@@ -327,7 +328,7 @@ void PbView::run_help()
 			continue;
 		}
 
-		Operation op = keys->get_operation(event, "help");
+		Operation op = keys->get_operation(Utf8String::from_utf8(event), "help");
 
 		switch (op) {
 		case OP_SK_UP:
@@ -360,22 +361,22 @@ void PbView::run_help()
 
 void PbView::set_help_keymap_hint()
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Quit")}};
 	const auto keymap_hint = keys->prepare_keymap_hint(hints, "podboat");
 	help_form.set("help", keymap_hint);
 }
 
 void PbView::set_dllist_keymap_hint()
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_PB_DOWNLOAD, _("Download")},
-		{OP_PB_CANCEL, _("Cancel")},
-		{OP_PB_DELETE, _("Delete")},
-		{OP_PB_PURGE, _("Purge Finished")},
-		{OP_PB_TOGGLE_DLALL, _("Toggle Automatic Download")},
-		{OP_PB_PLAY, _("Play")},
-		{OP_PB_MARK_FINISHED, _("Mark as Finished")},
-		{OP_HELP, _("Help")}
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Quit")},
+		{OP_PB_DOWNLOAD, _s("Download")},
+		{OP_PB_CANCEL, _s("Cancel")},
+		{OP_PB_DELETE, _s("Delete")},
+		{OP_PB_PURGE, _s("Purge Finished")},
+		{OP_PB_TOGGLE_DLALL, _s("Toggle Automatic Download")},
+		{OP_PB_PLAY, _s("Play")},
+		{OP_PB_MARK_FINISHED, _s("Mark as Finished")},
+		{OP_HELP, _s("Help")}
 	};
 
 	const auto keymap_hint = keys->prepare_keymap_hint(hints, "podboat");

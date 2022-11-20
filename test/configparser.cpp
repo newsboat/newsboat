@@ -17,15 +17,15 @@ namespace {
 
 class ConfigHandlerHistoryDummy : public ConfigActionHandler {
 public:
-	void handle_action(const std::string& action,
-		const std::vector<std::string>& params) override
+	void handle_action(const Utf8String& action,
+		const std::vector<Utf8String>& params) override
 	{
 		history.emplace_back(action, params);
 	};
 
-	void dump_config(std::vector<std::string>&) const override {};
+	void dump_config(std::vector<Utf8String>&) const override {};
 
-	std::vector<std::pair<std::string, std::vector<std::string>>> history;
+	std::vector<std::pair<Utf8String, std::vector<Utf8String>>> history;
 };
 
 } // Anonymous namespace
@@ -38,7 +38,7 @@ TEST_CASE("parse_line() handles both lines with and without quoting",
 	ConfigHandlerHistoryDummy handler;
 	cfgParser.register_handler("command-name", handler);
 
-	const std::string location = "dummy-location";
+	const Utf8String location = "dummy-location";
 
 	SECTION("unknown command results in exception") {
 		REQUIRE_THROWS_AS(cfgParser.parse_line("foo", location), ConfigException);
@@ -47,7 +47,7 @@ TEST_CASE("parse_line() handles both lines with and without quoting",
 	}
 
 	SECTION("different combinations of (un)quoted commands/arguments have the same result") {
-		const std::vector<std::string> inputs = {
+		const std::vector<Utf8String> inputs = {
 			R"(command-name arg1 arg2)",
 			R"("command-name" "arg1" "arg2")",
 			R"(command-name "arg1" arg2)",
@@ -55,13 +55,13 @@ TEST_CASE("parse_line() handles both lines with and without quoting",
 			R"("command-name""arg1""arg2")", // whitespace can be omitted between quoted arguments
 		};
 
-		for (std::string input : inputs) {
-			DYNAMIC_SECTION("input: " << input) {
+		for (auto input : inputs) {
+			DYNAMIC_SECTION("input: " << input.utf8()) {
 				cfgParser.parse_line(input, location);
 
 				REQUIRE(handler.history.size() == 1);
 				REQUIRE(handler.history[0].first == "command-name");
-				REQUIRE(handler.history[0].second == std::vector<std::string>({"arg1", "arg2"}));
+				REQUIRE(handler.history[0].second == std::vector<Utf8String>({"arg1", "arg2"}));
 			}
 		}
 	}
@@ -75,30 +75,30 @@ TEST_CASE("parse_line() does not care about whitespace at start or end of line",
 	ConfigHandlerHistoryDummy handler;
 	cfgParser.register_handler("command-name", handler);
 
-	const std::string location = "dummy-location";
+	const Utf8String location = "dummy-location";
 
 	SECTION("no whitespace") {
 		cfgParser.parse_line("command-name arg1", location);
 
 		REQUIRE(handler.history.size() == 1);
 		REQUIRE(handler.history[0].first == "command-name");
-		REQUIRE(handler.history[0].second == std::vector<std::string>({"arg1"}));
+		REQUIRE(handler.history[0].second == std::vector<Utf8String>({"arg1"}));
 	}
 
 	SECTION("some whitespace") {
-		const std::vector<std::string> inputs = {
+		const std::vector<Utf8String> inputs = {
 			"\r\n\t command-name arg1",
 			"command-name arg1\r\n\t ",
 			"\r\n\t command-name\t\targ1\r\n\t ",
 		};
 
-		for (std::string input : inputs) {
-			DYNAMIC_SECTION("input: " << input) {
+		for (auto input : inputs) {
+			DYNAMIC_SECTION("input: " << input.utf8()) {
 				cfgParser.parse_line(input, location);
 
 				REQUIRE(handler.history.size() == 1);
 				REQUIRE(handler.history[0].first == "command-name");
-				REQUIRE(handler.history[0].second == std::vector<std::string>({"arg1"}));
+				REQUIRE(handler.history[0].second == std::vector<Utf8String>({"arg1"}));
 			}
 		}
 	}
@@ -112,11 +112,11 @@ TEST_CASE("parse_line() processes backslash escapes in quoted commands and argum
 	ConfigHandlerHistoryDummy handler;
 	cfgParser.register_handler("command", handler);
 
-	const std::string location = "dummy-location";
+	const Utf8String location = "dummy-location";
 
-	auto check_output = [&](const std::string& input,
-			const std::string& expected_command,
-	const std::vector<std::string>& expected_arguments) {
+	auto check_output = [&](const Utf8String& input,
+			const Utf8String& expected_command,
+	const std::vector<Utf8String>& expected_arguments) {
 		cfgParser.parse_line(input, location);
 		REQUIRE(handler.history.size() >= 1);
 		REQUIRE(handler.history.back().first == expected_command);
@@ -186,11 +186,11 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 	}
 
 	SECTION("Unbalanced backtick does *not* start a command") {
-		const auto input1 = std::string("one `echo two three");
+		const auto input1 = Utf8String("one `echo two three");
 		REQUIRE(ConfigParser::evaluate_backticks(input1) == input1);
 
-		const auto input2 = std::string("this `echo is a` test `here");
-		const auto expected2 = std::string("this is a test `here");
+		const auto input2 = Utf8String("this `echo is a` test `here");
+		const auto expected2 = Utf8String("this is a test `here");
 		REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
 	}
 
@@ -199,15 +199,15 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 	// shouldn't: when parsing a config, we need to evaluate *all* commands
 	// there are, no matter where they're placed.
 	SECTION("Backticks inside double quotes are not ignored") {
-		const auto input1 = std::string(R"#("`echo hello`")#");
+		const auto input1 = Utf8String(R"#("`echo hello`")#");
 		REQUIRE(ConfigParser::evaluate_backticks(input1) == R"#("hello")#");
 
-		const auto input2 = std::string(R"#(a "b `echo c" d e` f)#");
+		const auto input2 = Utf8String(R"#(a "b `echo c" d e` f)#");
 		// The line above asks the shell to run 'echo c" d e', which is an
 		// invalid command--the double quotes are not closed. The standard
 		// output of that command would be empty, so nothing will be inserted
 		// in place of backticks.
-		const auto expected2 = std::string(R"#(a "b  f)#");
+		const auto expected2 = Utf8String(R"#(a "b  f)#");
 		REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
 	}
 }
@@ -223,9 +223,9 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"feedlist") == std::vector<std::string>());
+					"feedlist") == std::vector<Utf8String>());
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"podboat") == std::vector<std::string>());
+					"podboat") == std::vector<Utf8String>());
 		}
 	}
 
@@ -243,7 +243,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"article") == std::vector<std::string>());
+					"article") == std::vector<Utf8String>());
 		}
 	}
 }

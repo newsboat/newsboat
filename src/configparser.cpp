@@ -24,8 +24,8 @@ ConfigParser::ConfigParser()
 
 ConfigParser::~ConfigParser() {}
 
-void ConfigParser::handle_action(const std::string& action,
-	const std::vector<std::string>& params)
+void ConfigParser::handle_action(const Utf8String& action,
+	const std::vector<Utf8String>& params)
 {
 	/*
 	 * ConfigParser also acts as ConfigActionHandler to implement
@@ -36,8 +36,8 @@ void ConfigParser::handle_action(const std::string& action,
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		const std::string tilde_expanded = utils::resolve_tilde(params[0]);
-		const std::string current_fpath = included_files.back();
+		const auto tilde_expanded = utils::resolve_tilde(params[0]);
+		const auto current_fpath = included_files.back();
 		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
 			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
 		}
@@ -46,7 +46,7 @@ void ConfigParser::handle_action(const std::string& action,
 	}
 }
 
-bool ConfigParser::parse_file(const std::string& tmp_filename)
+bool ConfigParser::parse_file(const Utf8String& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -65,7 +65,7 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
-	const std::string filename = utils::starts_with(NEWSBOAT_PATH_SEP, tmp_filename) ?
+	const auto filename = utils::starts_with(NEWSBOAT_PATH_SEP, tmp_filename) ?
 		tmp_filename :
 		utils::getcwd() + NEWSBOAT_PATH_SEP + tmp_filename;
 
@@ -102,7 +102,7 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 		if (!line.empty() && line.back() == '\\') {
 			multi_line_buffer.append(line.substr(0, line.size()-1));
 		} else {
-			const std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
+			const auto location = strprintf::fmt(_("%s line %u"), filename, linecounter);
 			if (!multi_line_buffer.empty()) {
 				multi_line_buffer.append(line);
 				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", multi_line_buffer);
@@ -118,15 +118,15 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	return true;
 }
 
-void ConfigParser::parse_line(const std::string& line,
-	const std::string& location)
+void ConfigParser::parse_line(const Utf8String& line,
+	const Utf8String& location)
 {
 	auto stripped = utils::strip_comments(line);
 	auto evaluated = evaluate_backticks(std::move(stripped));
 	const auto token = utils::extract_token_quoted(evaluated);
 	if (token.has_value()) {
-		const std::string cmd = token.value();
-		const std::string params = evaluated;
+		const auto cmd = token.value();
+		const auto params = evaluated;
 
 		if (action_handlers.count(cmd) < 1) {
 			throw ConfigException(strprintf::fmt(_("unknown command `%s'"), cmd));
@@ -144,7 +144,7 @@ void ConfigParser::parse_line(const std::string& line,
 	}
 }
 
-void ConfigParser::register_handler(const std::string& cmd,
+void ConfigParser::register_handler(const Utf8String& cmd,
 	ConfigActionHandler& handler)
 {
 	action_handlers.erase(cmd);
@@ -177,25 +177,26 @@ std::string::size_type find_non_escaped_backtick(std::string& input,
 	return result;
 }
 
-std::string ConfigParser::evaluate_backticks(std::string token)
+Utf8String ConfigParser::evaluate_backticks(Utf8String token)
 {
-	std::string::size_type pos1 = find_non_escaped_backtick(token, 0);
-	std::string::size_type pos2 =
-		find_non_escaped_backtick(token, pos1 + 1);
+	return token.map([](std::string token) {
+		auto pos1 = find_non_escaped_backtick(token, 0);
+		auto pos2 = find_non_escaped_backtick(token, pos1 + 1);
 
-	while (pos1 != std::string::npos && pos2 != std::string::npos) {
-		const std::string cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
-		token.erase(pos1, pos2 - pos1 + 1);
-		std::string result = utils::get_command_output(cmd);
-		utils::trim_end(result);
-		token.insert(pos1, result);
+		while (pos1 != std::string::npos && pos2 != std::string::npos) {
+			const auto cmd = token.substr(pos1 + 1, pos2 - pos1 - 1);
+			token.erase(pos1, pos2 - pos1 + 1);
+			auto result = utils::get_command_output(cmd);
+			utils::trim_end(result);
+			token.insert(pos1, result);
 
-		pos1 = find_non_escaped_backtick(
-				token, pos1 + result.length() + 1);
-		pos2 = find_non_escaped_backtick(token, pos1 + 1);
-	}
+			pos1 = find_non_escaped_backtick(
+					token, pos1 + result.length() + 1);
+			pos2 = find_non_escaped_backtick(token, pos1 + 1);
+		}
 
-	return token;
+		return token;
+	});
 }
 
 } // namespace newsboat

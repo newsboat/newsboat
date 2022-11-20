@@ -18,6 +18,7 @@
 #include "scopemeasure.h"
 #include "strprintf.h"
 #include "textformatter.h"
+#include "utf8string.h"
 #include "utils.h"
 #include "view.h"
 
@@ -515,12 +516,12 @@ bool ItemViewFormAction::open_link_in_browser(const std::string& link,
 
 const std::vector<KeyMapHintEntry>& ItemViewFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_SAVE, _("Save")},
-		{OP_NEXTUNREAD, _("Next Unread")},
-		{OP_OPENINBROWSER, _("Open in Browser")},
-		{OP_ENQUEUE, _("Enqueue")},
-		{OP_HELP, _("Help")}
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Quit")},
+		{OP_SAVE, _s("Save")},
+		{OP_NEXTUNREAD, _s("Next Unread")},
+		{OP_OPENINBROWSER, _s("Open in Browser")},
+		{OP_ENQUEUE, _s("Enqueue")},
+		{OP_HELP, _s("Help")}
 	};
 	return hints;
 }
@@ -705,11 +706,11 @@ void ItemViewFormAction::do_search()
 
 void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 {
-	std::vector<std::string> params;
+	std::vector<Utf8String> params;
 	params.push_back("article");
 	params.push_back(searchphrase);
 
-	std::vector<std::string> colors = utils::tokenize(
+	auto colors = utils::tokenize(
 			cfg->get_configvalue("search-highlight-colors"), " ");
 	std::copy(colors.begin(), colors.end(), std::back_inserter(params));
 

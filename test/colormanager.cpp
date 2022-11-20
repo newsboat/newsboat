@@ -8,18 +8,19 @@
 
 #include "confighandlerexception.h"
 #include "configparser.h"
+#include "utf8string.h"
 
 using namespace newsboat;
 
 class StylesCollector {
-	std::map<std::string, std::string> styles;
+	std::map<Utf8String, Utf8String> styles;
 
 public:
 	StylesCollector() = default;
 
-	std::function<void(const std::string&, const std::string&)> setter()
+	std::function<void(const Utf8String&, const Utf8String&)> setter()
 	{
-		return [this](const std::string& element, const std::string& style) {
+		return [this](const Utf8String& element, const Utf8String& style) {
 			if (this->styles.find(element) != this->styles.cend()) {
 				throw std::invalid_argument(std::string("Multiple styles for element ") + element);
 			}
@@ -33,7 +34,7 @@ public:
 		return styles.size();
 	}
 
-	std::string style(const std::string& element) const
+	Utf8String style(const Utf8String& element) const
 	{
 		const auto style = styles.find(element);
 		if (style != styles.cend()) {
@@ -135,7 +136,7 @@ TEST_CASE(
 {
 	ColorManager c;
 
-	const std::vector<std::string> non_colors{
+	const std::vector<Utf8String> non_colors{
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(c.handle_action("color",
@@ -151,7 +152,7 @@ TEST_CASE(
 {
 	ColorManager c;
 
-	const std::vector<std::string> non_colors{
+	const std::vector<Utf8String> non_colors{
 		{"awesome", "but", "nonexistent", "colors"}};
 	for (const auto& color : non_colors) {
 		CHECK_THROWS_AS(c.handle_action("color",
@@ -167,7 +168,7 @@ TEST_CASE(
 {
 	ColorManager c;
 
-	const std::vector<std::string> non_attributes{
+	const std::vector<Utf8String> non_attributes{
 		{"awesome", "but", "nonexistent", "attributes"}};
 	for (const auto& attr : non_attributes) {
 		CHECK_THROWS_AS(c.handle_action("color",
@@ -183,7 +184,7 @@ TEST_CASE(
 {
 	ColorManager c;
 
-	const std::vector<std::string> non_elements{
+	const std::vector<Utf8String> non_elements{
 		{"awesome", "but", "nonexistent", "elements"}};
 	for (const auto& element : non_elements) {
 		CHECK_THROWS_AS(
@@ -199,7 +200,7 @@ TEST_CASE(
 {
 	ColorManager c;
 
-	const std::vector<std::string> other_commands{
+	const std::vector<Utf8String> other_commands{
 		{"browser", "include", "auto-reload", "ocnews-flag-star"}};
 	for (const auto& command : other_commands) {
 		CHECK_THROWS_AS(
@@ -212,8 +213,8 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 {
 	ColorManager c;
 
-	std::unordered_set<std::string> expected;
-	std::vector<std::string> config;
+	std::unordered_set<Utf8String> expected;
+	std::vector<Utf8String> config;
 
 	// Checks that `expected` contains the same lines as `config` contains,
 	// and nothing more.
@@ -281,11 +282,11 @@ TEST_CASE("If no colors were specified for the "
 	"then use colors from the `info` element (if any)",
 	"[ColorManager]")
 {
-	const std::vector<std::string> elements {
+	const std::vector<Utf8String> elements {
 		"title", "hint-key", "hint-keys-delimiter", "hint-separator", "hint-description"};
 
 	for (const auto& element : elements) {
-		DYNAMIC_SECTION("element: " << element) {
+		DYNAMIC_SECTION("element: " << element.utf8()) {
 			ColorManager c;
 			StylesCollector collector;
 

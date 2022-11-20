@@ -31,8 +31,8 @@ void ColorManager::register_commands(ConfigParser& cfgparser)
 	cfgparser.register_handler("color", *this);
 }
 
-void ColorManager::handle_action(const std::string& action,
-	const std::vector<std::string>& params)
+void ColorManager::handle_action(const Utf8String& action,
+	const std::vector<Utf8String>& params)
 {
 	LOG(Level::DEBUG,
 		"ColorManager::handle_action(%s,...) was called",
@@ -46,9 +46,9 @@ void ColorManager::handle_action(const std::string& action,
 		 * the command syntax is:
 		 * color <element> <fgcolor> <bgcolor> [<attribute> ...]
 		 */
-		const std::string element = params[0];
-		const std::string fgcolor = params[1];
-		const std::string bgcolor = params[2];
+		const auto element = params[0];
+		const auto fgcolor = params[1];
+		const auto bgcolor = params[2];
 
 		if (!utils::is_valid_color(fgcolor)) {
 			throw ConfigHandlerException(strprintf::fmt(
@@ -59,7 +59,7 @@ void ColorManager::handle_action(const std::string& action,
 					_("`%s' is not a valid color"), bgcolor));
 		}
 
-		const std::vector<std::string> attribs(
+		const std::vector<Utf8String> attribs(
 			std::next(params.cbegin(), 3),
 			params.cend());
 		for (const auto& attr : attribs) {
@@ -72,7 +72,7 @@ void ColorManager::handle_action(const std::string& action,
 
 		/* we only allow certain elements to be configured, also to
 		 * indicate the user possible mis-spellings */
-		const std::vector<std::string> supported_elements({
+		const std::vector<Utf8String> supported_elements({
 			"listnormal",
 			"listfocus",
 			"listnormal_unread",
@@ -102,12 +102,12 @@ void ColorManager::handle_action(const std::string& action,
 	}
 }
 
-void ColorManager::dump_config(std::vector<std::string>& config_output) const
+void ColorManager::dump_config(std::vector<Utf8String>& config_output) const
 {
 	for (const auto& element_style : element_styles) {
-		const std::string& element = element_style.first;
+		const auto& element = element_style.first;
 		const TextStyle& style = element_style.second;
-		std::string configline = strprintf::fmt("color %s %s %s",
+		auto configline = strprintf::fmt("color %s %s %s",
 				element,
 				style.fg_color,
 				style.bg_color);
@@ -119,9 +119,9 @@ void ColorManager::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-std::string format_style(const TextStyle& style)
+Utf8String format_style(const TextStyle& style)
 {
-	std::string result;
+	Utf8String result;
 
 	if (style.fg_color != "default") {
 		result.append("fg=");
@@ -145,9 +145,9 @@ std::string format_style(const TextStyle& style)
 	return result;
 }
 
-void ColorManager::emit_fallback_from_to(const std::string& from_element,
-	const std::string& to_element,
-	const std::function<void(const std::string&, const std::string&)>& stfl_value_setter) const
+void ColorManager::emit_fallback_from_to(const Utf8String& from_element,
+	const Utf8String& to_element,
+	const std::function<void(const Utf8String&, const Utf8String&)>& stfl_value_setter) const
 {
 	const auto from_style = element_styles.find(from_element);
 	const auto to_style = element_styles.find(to_element);
@@ -160,11 +160,11 @@ void ColorManager::emit_fallback_from_to(const std::string& from_element,
 }
 
 void ColorManager::apply_colors(
-	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
+	std::function<void(const Utf8String&, const Utf8String&)> stfl_value_setter)
 const
 {
 	for (const auto& element_style : element_styles) {
-		const std::string& element = element_style.first;
+		const auto& element = element_style.first;
 		const TextStyle& style = element_style.second;
 		const auto colorattr = format_style(style);
 
@@ -176,8 +176,8 @@ const
 		stfl_value_setter(element, colorattr);
 
 		if (element == "article") {
-			std::string bold = colorattr;
-			std::string underline = colorattr;
+			auto bold = colorattr;
+			auto underline = colorattr;
 			if (!bold.empty()) {
 				bold.append(",");
 			}

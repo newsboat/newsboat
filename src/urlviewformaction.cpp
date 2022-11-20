@@ -162,10 +162,10 @@ void UrlViewFormAction::update_heading()
 
 const std::vector<KeyMapHintEntry>& UrlViewFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_OPEN, _("Open in Browser")},
-		{OP_BOOKMARK, _("Save Bookmark")},
-		{OP_HELP, _("Help")}
+	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _s("Quit")},
+		{OP_OPEN, _s("Open in Browser")},
+		{OP_BOOKMARK, _s("Save Bookmark")},
+		{OP_HELP, _s("Help")}
 	};
 	return hints;
 }

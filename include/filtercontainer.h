@@ -2,6 +2,7 @@
 #define NEWSBOAT_FILTERCONTAINER_H_
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 #include "3rd-party/optional.hpp"
 
@@ -11,19 +12,19 @@ namespace newsboat {
 /// `define-filter` configuration option
 struct FilterNameExprPair {
 	/// Name of the filter
-	std::string name;
+	Utf8String name;
 
 	/// Filter expression for this named filter
-	std::string expr;
+	Utf8String expr;
 };
 
 class FilterContainer : public ConfigActionHandler {
 public:
 	FilterContainer() = default;
 	~FilterContainer() override;
-	void handle_action(const std::string& action,
-		const std::vector<std::string>& params) override;
-	void dump_config(std::vector<std::string>& config_output) const override;
+	void handle_action(const Utf8String& action,
+		const std::vector<Utf8String>& params) override;
+	void dump_config(std::vector<Utf8String>& config_output) const override;
 	const std::vector<FilterNameExprPair>& get_filters() const
 	{
 		return filters;
@@ -33,7 +34,7 @@ public:
 		return filters.size();
 	}
 
-	nonstd::optional<std::string> get_filter(const std::string& name);
+	nonstd::optional<Utf8String> get_filter(const Utf8String& name);
 
 private:
 	std::vector<FilterNameExprPair> filters;

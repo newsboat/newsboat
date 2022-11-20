@@ -4,15 +4,19 @@
 
 namespace newsboat {
 
-void ConfigActionHandler::handle_action(const std::string& action,
-	const std::string& params)
+void ConfigActionHandler::handle_action(const Utf8String& action,
+	const Utf8String& params)
 {
-	const std::vector<std::string> tokens = utils::tokenize_quoted(params);
+	const auto raw_tokens = utils::tokenize_quoted(params);
+	std::vector<Utf8String> tokens;
+	for (const auto& raw : raw_tokens) {
+		tokens.push_back(raw);
+	}
 	handle_action(action, tokens);
 }
 
-void ConfigActionHandler::handle_action(const std::string&,
-	const std::vector<std::string>&)
+void ConfigActionHandler::handle_action(const Utf8String&,
+	const std::vector<Utf8String>&)
 {
 }
 

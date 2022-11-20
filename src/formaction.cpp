@@ -200,19 +200,17 @@ std::vector<std::string> FormAction::get_suggestions(
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
-					std::vector<std::string>
-					variable_suggestions;
 					std::string variable_fragment;
 					if (tokens.size() > 1) {
 						variable_fragment = tokens[1];
 					}
-					variable_suggestions =
+					auto variable_suggestions =
 						cfg->get_suggestions(
 							variable_fragment);
 					for (const auto& suggestion :
 						variable_suggestions) {
 						std::string line = fragment +
-							suggestion.substr(
+							suggestion.utf8().substr(
 								variable_fragment
 								.length(),
 								suggestion.length() -

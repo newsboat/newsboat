@@ -2,11 +2,11 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
-#include <string>
 #include <utility>
 #include <vector>
 
 #include "configactionhandler.h"
+#include "utf8string.h"
 
 // in configuration: bind-key <key> <operation>
 
@@ -162,31 +162,31 @@ enum Operation {
 };
 
 struct KeyMapDesc {
-	std::string key;
-	std::string cmd;
-	std::string desc;
-	std::string ctx;
+	Utf8String key;
+	Utf8String cmd;
+	Utf8String desc;
+	Utf8String ctx;
 	unsigned short flags;
 };
 
 struct MacroCmd {
 	Operation op;
-	std::vector<std::string> args;
+	std::vector<Utf8String> args;
 };
 
 struct MacroBinding {
 	std::vector<MacroCmd> cmds;
-	std::string description;
+	Utf8String description;
 };
 
 struct ParsedOperations {
 	std::vector<MacroCmd> operations;
-	std::string description;
+	Utf8String description;
 };
 
 struct KeyMapHintEntry {
 	Operation op;
-	std::string text;
+	Utf8String text;
 };
 
 class KeyMap : public ConfigActionHandler {
@@ -194,37 +194,37 @@ public:
 	explicit KeyMap(unsigned int flags);
 	~KeyMap() override;
 	void set_key(Operation op,
-		const std::string& key,
-		const std::string& context);
-	void unset_key(const std::string& key, const std::string& context);
-	void unset_all_keys(const std::string& context);
-	Operation get_opcode(const std::string& opstr);
-	Operation get_operation(const std::string& keycode,
-		const std::string& context);
-	std::vector<MacroCmd> get_macro(const std::string& key);
-	char get_key(const std::string& keycode);
-	std::vector<std::string> get_keys(Operation op, const std::string& context);
-	void handle_action(const std::string& action,
-		const std::string& params) override;
-	void dump_config(std::vector<std::string>& config_output) const override;
-	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
-	const std::map<std::string, MacroBinding>& get_macro_descriptions();
+		const Utf8String& key,
+		const Utf8String& context);
+	void unset_key(const Utf8String& key, const Utf8String& context);
+	void unset_all_keys(const Utf8String& context);
+	Operation get_opcode(const Utf8String& opstr);
+	Operation get_operation(const Utf8String& keycode,
+		const Utf8String& context);
+	std::vector<MacroCmd> get_macro(const Utf8String& key);
+	char get_key(const Utf8String& keycode);
+	std::vector<Utf8String> get_keys(Operation op, const Utf8String& context);
+	void handle_action(const Utf8String& action,
+		const Utf8String& params) override;
+	void dump_config(std::vector<Utf8String>& config_output) const override;
+	std::vector<KeyMapDesc> get_keymap_descriptions(Utf8String context);
+	const std::map<Utf8String, MacroBinding>& get_macro_descriptions();
 
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
-	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
-		const std::string& context);
+	Utf8String prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
+		const Utf8String& context);
 
 private:
-	bool is_valid_context(const std::string& context);
-	unsigned short get_flag_from_context(const std::string& context);
-	std::map<std::string, Operation> get_internal_operations() const;
-	std::string getopname(Operation op) const;
-	ParsedOperations parse_operation_sequence(const std::string& line,
-		const std::string& command_name, bool allow_description = true);
+	bool is_valid_context(const Utf8String& context);
+	unsigned short get_flag_from_context(const Utf8String& context);
+	std::map<Utf8String, Operation> get_internal_operations() const;
+	Utf8String getopname(Operation op) const;
+	ParsedOperations parse_operation_sequence(const Utf8String& line,
+		const Utf8String& command_name, bool allow_description = true);
 
-	std::map<std::string, std::map<std::string, Operation>> keymap_;
-	std::map<std::string, MacroBinding> macros_;
+	std::map<Utf8String, std::map<Utf8String, Operation>> keymap_;
+	std::map<Utf8String, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };
 
