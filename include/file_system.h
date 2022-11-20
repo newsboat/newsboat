@@ -4,6 +4,8 @@
 #include <string>
 #include <sys/stat.h>
 
+#include "utf8string.h"
+
 #include "3rd-party/optional.hpp"
 
 namespace newsboat {
@@ -35,19 +37,19 @@ nonstd::optional<char> mode_suffix(mode_t mode);
 /// An entry in a listing, e.g. a file, a directory or suchlike.
 struct FileSystemEntry {
 	FileType filetype;
-	std::string name;
+	Utf8String name;
 };
 
 /// The name of the user with a given UID, padded on the right to the width of
 /// 8 characters. If the name is unknown, returns 8 question marks.
-std::string get_user_padded(uid_t uid);
+Utf8String get_user_padded(uid_t uid);
 
 /// The name of the group with a given GID, padded on the right to the width of
 /// 8 characters. If the name is unknown, returns 8 question marks.
-std::string get_group_padded(gid_t gid);
+Utf8String get_group_padded(gid_t gid);
 
 /// Convert permissions into an rwxrwxrwx-style string.
-std::string permissions_string(mode_t mode);
+Utf8String permissions_string(mode_t mode);
 
 } // namespace file_system
 

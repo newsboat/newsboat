@@ -87,38 +87,43 @@ nonstd::optional<char> mode_suffix(mode_t mode)
 	return nonstd::nullopt;
 }
 
-std::string get_user_padded(uid_t uid)
+Utf8String get_user_padded(uid_t uid)
 {
 	const struct passwd* spw = ::getpwuid(uid);
 	if (spw != nullptr) {
-		return strprintf::fmt("%-8s", spw->pw_name);
+		// Manpages give no indication regarding the encoding of the username.
+		// However, according to https://serverfault.com/a/578264 POSIX
+		// suggests to use alphanumerics, period, hyphen, and underscore, and
+		// the hyphen can't be the first character. All of these fit into
+		// ASCII, which is a subset of UTF-8, so we'll treat the username as
+		// UTF-8.
+		return Utf8String::from_utf8(strprintf::fmt("%-8s", spw->pw_name));
 	}
 	return "????????";
 }
 
-std::string get_group_padded(gid_t gid)
+Utf8String get_group_padded(gid_t gid)
 {
 	const struct group* sgr = ::getgrgid(gid);
 	if (sgr != nullptr) {
+		// See the comment in get_user_padded() and
+		// https://unix.stackexchange.com/questions/11477/what-are-the-allowed-group-names-for-groupadd
 		return strprintf::fmt("%-8s", sgr->gr_name);
 	}
 	return "????????";
 }
 
-std::string permissions_string(mode_t mode)
+Utf8String permissions_string(mode_t mode)
 {
-	unsigned int val = mode & 0777;
-
-	std::string str;
-	const char* bitstrs[] = {
+	Utf8String bitstrs[] = {
 		"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
 	};
-	for (int i = 0; i < 3; ++i) {
-		unsigned char bits = val % 8;
-		val /= 8;
-		str.insert(0, bitstrs[bits]);
-	}
-	return str;
+
+	Utf8String result;
+	result.append(bitstrs[(mode & 0700) >> 6]);
+	result.append(bitstrs[(mode & 0070) >> 3]);
+	result.append(bitstrs[(mode & 0007)]);
+	return result;
 }
 
 } // namespace file_system
