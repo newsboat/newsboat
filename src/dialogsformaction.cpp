@@ -13,7 +13,7 @@
 namespace newsboat {
 
 DialogsFormAction::DialogsFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, dialogs_list("dialogs", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
@@ -64,11 +64,11 @@ void DialogsFormAction::update_heading()
 {
 
 	const unsigned int width = dialogs_list.get_width();
-	const std::string title_format = cfg->get_configvalue("dialogs-title-format");
+	const auto title_format = cfg->get_configvalue("dialogs-title-format");
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	set_value("head", fmt.do_format(title_format, width));
+	set_value("head", fmt.do_format(title_format.utf8(), width));
 }
 
 const std::vector<KeyMapHintEntry>& DialogsFormAction::get_keymap_hint() const
@@ -82,7 +82,7 @@ const std::vector<KeyMapHintEntry>& DialogsFormAction::get_keymap_hint() const
 
 bool DialogsFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<Utf8String>* /* args */)
 {
 	switch (op) {
 	case OP_OPEN: {
@@ -119,12 +119,12 @@ bool DialogsFormAction::process_operation(Operation op,
 	return true;
 }
 
-std::string DialogsFormAction::title()
+Utf8String DialogsFormAction::title()
 {
 	return ""; // will never be displayed
 }
 
-void DialogsFormAction::handle_cmdline(const std::string& cmd)
+void DialogsFormAction::handle_cmdline(const Utf8String& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {

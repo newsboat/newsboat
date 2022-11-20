@@ -25,7 +25,7 @@
 namespace newsboat {
 
 FeedListFormAction::FeedListFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	Cache* cc,
 	FilterContainer& f,
 	ConfigContainer* cfg,
@@ -86,7 +86,7 @@ void FeedListFormAction::prepare()
 
 bool FeedListFormAction::process_operation(Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	std::vector<Utf8String>* args)
 {
 	unsigned int pos = 0;
 	if (visible_feeds.size() >= 1) {
@@ -459,7 +459,7 @@ REDO:
 			finished_qna(OP_INT_START_SEARCH);
 		} else {
 			std::vector<QnaPair> qna;
-			qna.push_back(QnaPair(_("Search for: "), ""));
+			qna.push_back(QnaPair(_s("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
@@ -472,7 +472,7 @@ REDO:
 			}
 		} else {
 			std::vector<QnaPair> qna;
-			qna.push_back(QnaPair(_("Title: "), ""));
+			qna.push_back(QnaPair(_s("Title: "), ""));
 			this->start_qna(qna, OP_INT_GOTO_TITLE);
 		}
 		break;
@@ -488,7 +488,7 @@ REDO:
 			finished_qna(OP_INT_END_SETFILTER);
 		} else {
 			std::vector<QnaPair> qna;
-			qna.push_back(QnaPair(_("Filter: "), ""));
+			qna.push_back(QnaPair(_s("Filter: "), ""));
 			this->start_qna(
 				qna, OP_INT_END_SETFILTER, &filterhistory);
 		}
@@ -553,8 +553,8 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 		feed->link(),
 		interactive ? "true" : "false");
 
-	std::string url;
-	std::string type;
+	Utf8String url;
+	Utf8String type;
 	if (!feed->link().empty()) {
 		url = feed->link();
 		type = "feed";
@@ -573,7 +573,7 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 	}
 
 	if (!url.empty()) {
-		const std::string feedurl = feed->rssurl();
+		const auto feedurl = feed->rssurl();
 		const auto exit_code = v->open_in_browser(url, feedurl, type, interactive);
 		if (!exit_code.has_value()) {
 			v->get_statusline().show_error(_("Failed to spawn browser"));
@@ -616,7 +616,7 @@ void FeedListFormAction::set_feedlist(
 
 	const unsigned int width = list.get_width();
 
-	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
+	auto feedlist_format = cfg->get_configvalue("feedlist-format");
 
 	ListFormatter listfmt(&rxman, "feedlist");
 
@@ -684,7 +684,7 @@ bool FeedListFormAction::jump_to_previous_unread_feed(unsigned int& feedpos)
 	return false;
 }
 
-void FeedListFormAction::goto_feed(const std::string& str)
+void FeedListFormAction::goto_feed(const Utf8String& str)
 {
 	if (visible_feeds.empty()) {
 		return;
@@ -814,7 +814,7 @@ int FeedListFormAction::get_pos(unsigned int realidx)
 	return -1;
 }
 
-void FeedListFormAction::handle_cmdline(const std::string& cmd)
+void FeedListFormAction::handle_cmdline(const Utf8String& cmd)
 {
 	unsigned int idx = 0;
 	/*
@@ -828,7 +828,7 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 		handle_cmdline_num(idx);
 	} else {
 		// hand over all other commands to formaction
-		constexpr auto delimiters = " \t";
+		const Utf8String delimiters = " \t";
 		const auto command = FormAction::parse_command(cmd, delimiters);
 		switch (command.type) {
 		case CommandType::TAG:
@@ -847,7 +847,7 @@ void FeedListFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-void FeedListFormAction::handle_tag(const std::string& tag_param)
+void FeedListFormAction::handle_tag(const Utf8String& tag_param)
 {
 	if (tag_param != "") {
 		tag = tag_param;
@@ -856,7 +856,7 @@ void FeedListFormAction::handle_tag(const std::string& tag_param)
 	}
 }
 
-void FeedListFormAction::handle_goto(const std::string& param)
+void FeedListFormAction::handle_goto(const Utf8String& param)
 {
 	if (param != "") {
 		goto_feed(param);
@@ -926,8 +926,8 @@ void FeedListFormAction::save_filterpos()
 
 void FeedListFormAction::register_format_styles()
 {
-	const std::string attrstr = rxman.get_attrs_stfl_string("feedlist", true);
-	const std::string textview = strprintf::fmt(
+	const auto attrstr = rxman.get_attrs_stfl_string("feedlist", true);
+	const auto textview = strprintf::fmt(
 			"{!list[feeds] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos[feeds_pos]:0 offset[feeds_offset]:0 %s richtext:1}",
@@ -937,7 +937,7 @@ void FeedListFormAction::register_format_styles()
 
 void FeedListFormAction::update_form_title(unsigned int width)
 {
-	std::string title_format =
+	auto title_format =
 		cfg->get_configvalue("feedlist-title-format");
 
 	FmtStrFormatter fmt;
@@ -973,7 +973,7 @@ unsigned int FeedListFormAction::count_unread_articles()
 
 void FeedListFormAction::op_end_setfilter()
 {
-	std::string filtertext = qna_responses[0];
+	auto filtertext = qna_responses[0];
 	apply_filter(filtertext);
 }
 
@@ -1048,9 +1048,9 @@ void FeedListFormAction::set_pos()
 	}
 }
 
-std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
+Utf8String FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 {
-	std::string title = feed->title();
+	auto title = feed->title();
 	utils::remove_soft_hyphens(title);
 	if (title.length() == 0) {
 		title = utils::censor_url(feed->rssurl());
@@ -1061,7 +1061,7 @@ std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 	return title;
 }
 
-std::string FeedListFormAction::format_line(const std::string& feedlist_format,
+Utf8String FeedListFormAction::format_line(const Utf8String& feedlist_format,
 	std::shared_ptr<RssFeed> feed,
 	unsigned int pos,
 	unsigned int width)
@@ -1099,14 +1099,14 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	return formattedLine;
 }
 
-std::string FeedListFormAction::title()
+Utf8String FeedListFormAction::title()
 {
 	return strprintf::fmt(_("Feed List - %u unread, %u total"),
 			count_unread_feeds(),
 			static_cast<unsigned int>(visible_feeds.size()));
 }
 
-void FeedListFormAction::apply_filter(const std::string& filtertext)
+void FeedListFormAction::apply_filter(const Utf8String& filtertext)
 {
 	if (filtertext.empty()) {
 		return;

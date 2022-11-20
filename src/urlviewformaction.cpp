@@ -21,7 +21,7 @@ namespace newsboat {
 
 UrlViewFormAction::UrlViewFormAction(View* vv,
 	std::shared_ptr<RssFeed>& feed,
-	std::string formstr,
+	Utf8String formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
@@ -34,7 +34,7 @@ UrlViewFormAction::~UrlViewFormAction() {}
 
 bool UrlViewFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<Utf8String>* /* args */)
 {
 	bool hardquit = false;
 	switch (op) {
@@ -78,7 +78,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 		unsigned int idx = op - OP_OPEN_URL_1;
 
 		if (idx < links.size()) {
-			const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
+			const auto feedurl = (feed != nullptr ?  feed->rssurl() : "");
 			const bool interactive = true;
 			v->open_in_browser(links[idx].first, feedurl, utils::link_type_str(links[idx].second),
 				interactive);
@@ -114,7 +114,7 @@ void UrlViewFormAction::open_current_position_in_browser(bool interactive)
 {
 	if (!links.empty()) {
 		const unsigned int pos = urls_list.get_position();
-		const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
+		const auto feedurl = (feed != nullptr ?  feed->rssurl() : "");
 		v->open_in_browser(links[pos].first, feedurl, utils::link_type_str(links[pos].second),
 			interactive);
 	} else {
@@ -170,7 +170,7 @@ const std::vector<KeyMapHintEntry>& UrlViewFormAction::get_keymap_hint() const
 	return hints;
 }
 
-void UrlViewFormAction::handle_cmdline(const std::string& cmd)
+void UrlViewFormAction::handle_cmdline(const Utf8String& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
@@ -184,9 +184,9 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-std::string UrlViewFormAction::title()
+Utf8String UrlViewFormAction::title()
 {
-	return _("URLs");
+	return _s("URLs");
 }
 
 } // namespace newsboat

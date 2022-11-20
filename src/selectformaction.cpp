@@ -23,7 +23,7 @@ namespace newsboat {
  */
 
 SelectFormAction::SelectFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
@@ -36,7 +36,7 @@ SelectFormAction::SelectFormAction(View* vv,
 
 SelectFormAction::~SelectFormAction() {}
 
-void SelectFormAction::handle_cmdline(const std::string& cmd)
+void SelectFormAction::handle_cmdline(const Utf8String& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
@@ -53,7 +53,7 @@ void SelectFormAction::handle_cmdline(const std::string& cmd)
 
 bool SelectFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<Utf8String>* /* args */)
 {
 	bool hardquit = false;
 	switch (op) {
@@ -161,7 +161,7 @@ void SelectFormAction::prepare()
 			break;
 		case SelectionType::FILTER:
 			for (const auto& filter : filters) {
-				std::string tagstr = strprintf::fmt(
+				auto tagstr = strprintf::fmt(
 						"%4u  %s", i + 1, filter.name);
 				listfmt.add_line(utils::quote_for_stfl(tagstr));
 				i++;
@@ -195,8 +195,8 @@ void SelectFormAction::init()
 	set_keymap_hints();
 }
 
-std::string SelectFormAction::format_line(const std::string& selecttag_format,
-	const std::string& tag,
+Utf8String SelectFormAction::format_line(const Utf8String& selecttag_format,
+	const Utf8String& tag,
 	unsigned int pos,
 	unsigned int width)
 {
@@ -223,7 +223,7 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 
 void SelectFormAction::update_heading()
 {
-	std::string title;
+	Utf8String title;
 	const unsigned int width = tags_list.get_width();
 
 	FmtStrFormatter fmt;
@@ -268,13 +268,13 @@ const std::vector<KeyMapHintEntry>& SelectFormAction::get_keymap_hint() const
 	return no_hints;
 }
 
-std::string SelectFormAction::title()
+Utf8String SelectFormAction::title()
 {
 	switch (type) {
 	case SelectionType::TAG:
-		return _("Select Tag");
+		return _s("Select Tag");
 	case SelectionType::FILTER:
-		return _("Select Filter");
+		return _s("Select Filter");
 	default:
 		return "";
 	}

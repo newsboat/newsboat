@@ -24,7 +24,7 @@
 namespace newsboat {
 
 DirBrowserFormAction::DirBrowserFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
@@ -42,7 +42,7 @@ DirBrowserFormAction::~DirBrowserFormAction() {}
 
 bool DirBrowserFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<Utf8String>* /* args */)
 {
 	switch (op) {
 	case OP_OPEN: {
@@ -55,7 +55,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		 * needs to be returned.
 		 */
 		LOG(Level::DEBUG, "DirBrowserFormAction: 'opening' item");
-		const std::string focus = f.get_focus();
+		const auto focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
 				const auto selected_position = files_list.get_position();
@@ -68,7 +68,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					update_title(fn);
 
 					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
@@ -80,7 +80,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
 						fn.append(NEWSBOAT_PATH_SEP);
 					}
@@ -102,7 +102,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	break;
 	case OP_SWITCH_FOCUS: {
 		LOG(Level::DEBUG, "view::dirbrowser: focusing different widget");
-		const std::string focus = f.get_focus();
+		const auto focus = f.get_focus();
 		if (focus == "files") {
 			f.set_focus("filename");
 		} else {
@@ -173,7 +173,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	return true;
 }
 
-void DirBrowserFormAction::update_title(const std::string& working_directory)
+void DirBrowserFormAction::update_title(const Utf8String& working_directory)
 {
 	const unsigned int width = files_list.get_width();
 
@@ -182,17 +182,17 @@ void DirBrowserFormAction::update_title(const std::string& working_directory)
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('f', working_directory);
 
-	const std::string title = fmt.do_format(
+	const auto title = fmt.do_format(
 			cfg->get_configvalue("dirbrowser-title-format"), width);
 
 	set_value("head", title);
 }
 
-std::vector<std::string> get_sorted_dirlist()
+std::vector<Utf8String> get_sorted_dirlist()
 {
-	std::vector<std::string> ret;
+	std::vector<Utf8String> ret;
 
-	const std::string cwdtmp = utils::getcwd();
+	const auto cwdtmp = utils::getcwd();
 
 	DIR* dirp = ::opendir(cwdtmp.c_str());
 	if (dirp) {
@@ -233,15 +233,15 @@ void DirBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		const std::string cwdtmp = utils::getcwd();
+		const auto cwdtmp = utils::getcwd();
 		update_title(cwdtmp);
 
-		std::vector<std::string> directories = get_sorted_dirlist();
+		auto directories = get_sorted_dirlist();
 
 		ListFormatter listfmt;
 
 		id_at_position.clear();
-		for (std::string directory : directories) {
+		for (auto directory : directories) {
 			add_directory(listfmt, id_at_position, directory);
 		}
 
@@ -249,7 +249,7 @@ void DirBrowserFormAction::prepare()
 		do_redraw = false;
 	}
 
-	std::string focus = f.get_focus();
+	auto focus = f.get_focus();
 	if (focus == "files") {
 		curs_set(0);
 	} else {
@@ -261,9 +261,9 @@ void DirBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	set_value("fileprompt", _("Directory: "));
+	set_value("fileprompt", _s("Directory: "));
 
-	const std::string save_path = cfg->get_configvalue("save-path");
+	const auto save_path = cfg->get_configvalue("save-path");
 
 	LOG(Level::DEBUG,
 		"view::dirbrowser: save-path is '%s'",
@@ -291,7 +291,7 @@ const std::vector<KeyMapHintEntry>& DirBrowserFormAction::get_keymap_hint() cons
 void DirBrowserFormAction::add_directory(
 	ListFormatter& listfmt,
 	std::vector<file_system::FileSystemEntry>& id_at_position,
-	std::string dirname)
+	Utf8String dirname)
 {
 	struct stat sb;
 	if (::lstat(dirname.c_str(), &sb) == 0) {
@@ -300,15 +300,15 @@ void DirBrowserFormAction::add_directory(
 		const auto rwxbits = file_system::permissions_string(sb.st_mode);
 		const auto owner = file_system::get_user_padded(sb.st_uid);
 		const auto group = file_system::get_group_padded(sb.st_gid);
-		std::string formatteddirname = get_formatted_dirname(dirname, sb.st_mode);
+		auto formatteddirname = get_formatted_dirname(dirname, sb.st_mode);
 
-		std::string sizestr = strprintf::fmt(
+		auto sizestr = strprintf::fmt(
 				"%12" PRIi64,
 				// `st_size` is `off_t`, which is a signed integer type of
 				// unspecified size. We'll have to bet it's no larger than 64
 				// bits.
 				static_cast<int64_t>(sb.st_size));
-		std::string line = strprintf::fmt("%c%s %s %s %s %s",
+		auto line = strprintf::fmt("%c%s %s %s %s %s",
 				file_system::filetype_to_char(ftype),
 				rwxbits,
 				owner,
@@ -320,7 +320,7 @@ void DirBrowserFormAction::add_directory(
 	}
 }
 
-std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
+Utf8String DirBrowserFormAction::get_formatted_dirname(Utf8String dirname,
 	mode_t mode)
 {
 	const auto suffix = file_system::mode_suffix(mode);
@@ -331,7 +331,7 @@ std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
 	}
 }
 
-std::string DirBrowserFormAction::title()
+Utf8String DirBrowserFormAction::title()
 {
 	return strprintf::fmt(_("Save Files - %s"), utils::getcwd());
 }

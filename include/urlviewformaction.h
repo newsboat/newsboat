@@ -4,6 +4,7 @@
 #include "formaction.h"
 #include "htmlrenderer.h"
 #include "listwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -11,7 +12,7 @@ class UrlViewFormAction : public FormAction {
 public:
 	UrlViewFormAction(View*,
 		std::shared_ptr<RssFeed>& feed,
-		std::string formstr,
+		Utf8String formstr,
 		ConfigContainer* cfg);
 	~UrlViewFormAction() override;
 	void prepare() override;
@@ -21,17 +22,17 @@ public:
 	{
 		links = l;
 	}
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "urlview";
 	}
-	std::string title() override;
-	void handle_cmdline(const std::string& cmd) override;
+	Utf8String title() override;
+	void handle_cmdline(const Utf8String& cmd) override;
 
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		std::vector<Utf8String>* args = nullptr) override;
 	void open_current_position_in_browser(bool interactive);
 	void update_heading();
 

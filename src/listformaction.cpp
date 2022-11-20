@@ -7,8 +7,8 @@
 namespace newsboat {
 
 ListFormAction::ListFormAction(View* v,
-	std::string formstr,
-	std::string list_name,
+	Utf8String formstr,
+	Utf8String list_name,
 	ConfigContainer* cfg)
 	: FormAction(v, formstr, cfg)
 	, list(list_name, FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
@@ -17,7 +17,7 @@ ListFormAction::ListFormAction(View* v,
 
 bool ListFormAction::process_operation(Operation op,
 	bool,
-	std::vector<std::string>*)
+	std::vector<Utf8String>*)
 {
 	switch (op) {
 	case OP_CMD_START_1:

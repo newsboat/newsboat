@@ -21,7 +21,7 @@ namespace newsboat {
 History FormAction::searchhistory;
 History FormAction::cmdlinehistory;
 
-FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
+FormAction::FormAction(View* vv, Utf8String formstr, ConfigContainer* cfg)
 	: v(vv)
 	, cfg(cfg)
 	, f(formstr)
@@ -38,8 +38,8 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 		}
 		if (cfg->get_configvalue_as_bool("swap-title-and-hints") ==
 			true) {
-			std::string hints = f.dump("hints", "", 0);
-			std::string title = f.dump("title", "", 0);
+			auto hints = f.dump("hints", "", 0);
+			auto title = f.dump("title", "", 0);
 			f.modify("title", "replace", "label[swap-title]");
 			f.modify("hints", "replace", "label[swap-hints]");
 			f.modify("swap-title", "replace", hints);
@@ -61,12 +61,12 @@ void FormAction::set_keymap_hints()
 
 FormAction::~FormAction() {}
 
-std::string FormAction::get_value(const std::string& name)
+Utf8String FormAction::get_value(const Utf8String& name)
 {
 	return f.get(name);
 }
 
-void FormAction::set_value(const std::string& name, const std::string& value)
+void FormAction::set_value(const Utf8String& name, const Utf8String& value)
 {
 	f.set(name, value);
 }
@@ -76,13 +76,13 @@ void FormAction::draw_form()
 	f.run(-1);
 }
 
-std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
+Utf8String FormAction::draw_form_wait_for_event(unsigned int timeout)
 {
 	const char* event = f.run(timeout);
 	if (event == nullptr) {
 		return "";
 	}
-	return std::string(event);
+	return Utf8String::from_utf8(event);
 }
 
 void FormAction::recalculate_widget_dimensions()
@@ -90,7 +90,7 @@ void FormAction::recalculate_widget_dimensions()
 	f.run(-3);
 }
 
-void FormAction::start_cmdline(std::string default_value)
+void FormAction::start_cmdline(Utf8String default_value)
 {
 	std::vector<QnaPair> qna;
 	qna.push_back(QnaPair(":", default_value));
@@ -100,7 +100,7 @@ void FormAction::start_cmdline(std::string default_value)
 
 bool FormAction::process_op(Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	std::vector<Utf8String>* args)
 {
 	switch (op) {
 	case OP_REDRAW:
@@ -113,8 +113,8 @@ bool FormAction::process_op(Operation op,
 	case OP_INT_SET:
 		if (automatic) {
 			if (args && args->size() == 2) {
-				const std::string key = args->at(0);
-				const std::string value = args->at(1);
+				const auto key = args->at(0);
+				const auto value = args->at(1);
 				cfg->set_configvalue(key, value);
 				set_redraw(true);
 				return true;
@@ -142,14 +142,14 @@ bool FormAction::process_op(Operation op,
 		break;
 	case OP_INT_QNA_NEXTHIST:
 		if (qna_history) {
-			std::string entry = qna_history->next_line();
+			auto entry = qna_history->next_line();
 			set_value("qna_value", entry);
 			set_value("qna_value_pos", std::to_string(entry.length()));
 		}
 		break;
 	case OP_INT_QNA_PREVHIST:
 		if (qna_history) {
-			std::string entry = qna_history->previous_line();
+			auto entry = qna_history->previous_line();
 			set_value("qna_value", entry);
 			set_value("qna_value_pos", std::to_string(entry.length()));
 		}
@@ -177,30 +177,29 @@ bool FormAction::process_op(Operation op,
 	return true;
 }
 
-std::vector<std::string> FormAction::get_suggestions(
-	const std::string& fragment)
+std::vector<Utf8String> FormAction::get_suggestions(
+	const Utf8String& fragment)
 {
 	LOG(Level::DEBUG,
 		"FormAction::get_suggestions: fragment = %s",
 		fragment);
-	std::vector<std::string> result;
+	std::vector<Utf8String> result;
 	// first check all formaction command suggestions
 	for (const auto& cmd : valid_cmds) {
 		LOG(Level::DEBUG,
 			"FormAction::get_suggestions: extracted part: %s",
-			cmd.substr(0, fragment.length()));
-		if (cmd.substr(0, fragment.length()) == fragment) {
+			cmd.utf8().substr(0, fragment.length()));
+		if (utils::starts_with(fragment, cmd)) {
 			LOG(Level::DEBUG, "...and it matches.");
 			result.push_back(cmd);
 		}
 	}
 	if (result.empty()) {
-		std::vector<std::string> tokens =
-			utils::tokenize_quoted(fragment, " \t=");
+		auto tokens = utils::tokenize_quoted(fragment, " \t=");
 		if (tokens.size() >= 1) {
 			if (tokens[0] == "set") {
 				if (tokens.size() < 3) {
-					std::string variable_fragment;
+					Utf8String variable_fragment;
 					if (tokens.size() > 1) {
 						variable_fragment = tokens[1];
 					}
@@ -209,7 +208,7 @@ std::vector<std::string> FormAction::get_suggestions(
 							variable_fragment);
 					for (const auto& suggestion :
 						variable_suggestions) {
-						std::string line = fragment +
+						auto line = fragment +
 							suggestion.utf8().substr(
 								variable_fragment
 								.length(),
@@ -226,14 +225,14 @@ std::vector<std::string> FormAction::get_suggestions(
 				}
 			} else if (tokens[0] == "exec") {
 				if (tokens.size() <= 2) {
-					const std::string start = (tokens.size() == 2) ? tokens[1] : "";
+					const auto start = (tokens.size() == 2) ? tokens[1] : "";
 					const std::vector<KeyMapDesc> descs = v->get_keymap()->get_keymap_descriptions(
 							this->id()
 						);
 					for (const KeyMapDesc& desc: descs) {
-						const std::string cmd = desc.cmd;
+						const auto cmd = desc.cmd;
 						if (cmd.rfind(start, 0) == 0) {
-							result.push_back(std::string("exec ") + cmd);
+							result.push_back("exec " + cmd);
 						}
 					}
 				}
@@ -246,7 +245,7 @@ std::vector<std::string> FormAction::get_suggestions(
 	return result;
 }
 
-void FormAction::handle_cmdline(const std::string& cmdline)
+void FormAction::handle_cmdline(const Utf8String& cmdline)
 {
 	/*
 	 * this is the command line handling that is available on all dialogs.
@@ -257,13 +256,13 @@ void FormAction::handle_cmdline(const std::string& cmdline)
 	 * It works the same way basically everywhere: first the command line
 	 * is tokenized, and then the tokens are looked at.
 	 */
-	constexpr auto delimiters = " \t=";
+	const Utf8String delimiters = " \t=";
 	const auto command = FormAction::parse_command(cmdline, delimiters);
 	assert(cfg != nullptr);
 	handle_parsed_command(command);
 }
 
-void FormAction::handle_set(const std::vector<std::string>& args)
+void FormAction::handle_set(const std::vector<Utf8String>& args)
 {
 	if (args.size() == 1) {
 		if (handle_single_argument_set(args[0])) {
@@ -273,7 +272,7 @@ void FormAction::handle_set(const std::vector<std::string>& args)
 				args[0],
 				utils::quote_if_necessary(cfg->get_configvalue(args[0]))));
 	} else if (args.size() == 2) {
-		std::string result = ConfigParser::evaluate_backticks(args[1]);
+		auto result = ConfigParser::evaluate_backticks(args[1]);
 		utils::trim_end(result);
 		cfg->set_configvalue(args[0], result);
 		// because some configuration value might have changed something UI-related
@@ -291,7 +290,7 @@ void FormAction::handle_quit()
 	}
 }
 
-void FormAction::handle_source(const std::vector<std::string>& args)
+void FormAction::handle_source(const std::vector<Utf8String>& args)
 {
 	if (args.empty()) {
 		v->get_statusline().show_error(_("usage: source <file> [...]"));
@@ -309,7 +308,7 @@ void FormAction::handle_source(const std::vector<std::string>& args)
 	}
 }
 
-void FormAction::handle_dumpconfig(const std::vector<std::string>& args)
+void FormAction::handle_dumpconfig(const std::vector<Utf8String>& args)
 {
 	if (args.size() != 1) {
 		v->get_statusline().show_error(_("usage: dumpconfig <file>"));
@@ -322,7 +321,7 @@ void FormAction::handle_dumpconfig(const std::vector<std::string>& args)
 	}
 }
 
-void FormAction::handle_exec(const std::vector<std::string>& args)
+void FormAction::handle_exec(const std::vector<Utf8String>& args)
 {
 	if (args.size() != 1) {
 		v->get_statusline().show_error(_("usage: exec <operation>"));
@@ -391,17 +390,18 @@ bool FormAction::handle_list_operations(ListWidget& list, Operation op)
 	return false;
 }
 
-bool FormAction::handle_single_argument_set(std::string argument)
+bool FormAction::handle_single_argument_set(Utf8String argument)
 {
-	if (argument.size() >= 1 && argument.back() == '!') {
-		argument.pop_back();
-		cfg->toggle(argument);
+	auto raw = argument.utf8();
+	if (raw.size() >= 1 && raw.back() == '!') {
+		raw.pop_back();
+		cfg->toggle(raw);
 		set_redraw(true);
 		return true;
 	}
-	if (argument.size() >= 1 && argument.back() == '&') {
-		argument.pop_back();
-		cfg->reset_to_default(argument);
+	if (raw.size() >= 1 && raw.back() == '&') {
+		raw.pop_back();
+		cfg->reset_to_default(raw);
 		set_redraw(true);
 		return true;
 	}
@@ -454,7 +454,7 @@ void FormAction::finished_qna(Operation op)
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
 		v->get_statusline().show_message(_("Saving bookmark..."));
-		std::string retval = bookmark(qna_responses[0],
+		auto retval = bookmark(qna_responses[0],
 				qna_responses[1],
 				qna_responses[2],
 				qna_responses[3]);
@@ -472,7 +472,7 @@ void FormAction::finished_qna(Operation op)
 	break;
 	case OP_INT_END_CMDLINE: {
 		f.set_focus("feeds");
-		std::string cmdline = qna_responses[0];
+		auto cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
 		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);
 		this->handle_cmdline(cmdline);
@@ -483,9 +483,9 @@ void FormAction::finished_qna(Operation op)
 	}
 }
 
-void FormAction::start_bookmark_qna(const std::string& default_title,
-	const std::string& default_url,
-	const std::string& default_feed_title)
+void FormAction::start_bookmark_qna(const Utf8String& default_title,
+	const Utf8String& default_url,
+	const Utf8String& default_feed_title)
 {
 	LOG(Level::DEBUG,
 		"FormAction::start_bookmark_qna: starting bookmark Q&A... "
@@ -497,18 +497,18 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	std::vector<QnaPair> prompts;
 
 	bool is_bm_autopilot = cfg->get_configvalue_as_bool("bookmark-autopilot");
-	prompts.push_back(QnaPair(_("URL: "), default_url));
+	prompts.push_back(QnaPair(_s("URL: "), default_url));
 	// call the function to figure out title from url only if the default_title is no good
 	if (default_title.empty()) {
-		prompts.push_back(QnaPair(_("Title: "), utils::make_title(default_url)));
+		prompts.push_back(QnaPair(_s("Title: "), utils::make_title(default_url)));
 	} else {
-		prompts.push_back(QnaPair(_("Title: "), utils::utf8_to_locale(default_title)));
+		prompts.push_back(QnaPair(_s("Title: "), utils::utf8_to_locale(default_title)));
 	}
-	prompts.push_back(QnaPair(_("Description: "), ""));
-	prompts.push_back(QnaPair(_("Feed title: "), default_feed_title));
+	prompts.push_back(QnaPair(_s("Description: "), ""));
+	prompts.push_back(QnaPair(_s("Feed title: "), default_feed_title));
 
 	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't prompt for url, title, desc
-		std::string title;
+		Utf8String title;
 		if (default_title.empty()) {
 			title = utils::make_title(default_url); // try to make the title from url
 		} else {
@@ -521,7 +521,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			start_qna(prompts, OP_INT_BM_END);
 		} else {
 			v->get_statusline().show_message(_("Saving bookmark on autopilot..."));
-			std::string retval = bookmark(default_url,
+			auto retval = bookmark(default_url,
 					title,
 					"",
 					default_feed_title);
@@ -542,8 +542,8 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	}
 }
 
-Command FormAction::parse_command(const std::string& input,
-	std::string delimiters)
+Command FormAction::parse_command(const Utf8String& input,
+	Utf8String delimiters)
 {
 	auto tokens = utils::tokenize_quoted(input, delimiters);
 	if (tokens.empty()) {
@@ -580,7 +580,7 @@ void FormAction::start_next_question()
 	 * If there is one more prompt to be presented to the user, set it up.
 	 */
 	if (qna_prompts.size() > 0) {
-		std::string replacestr(
+		Utf8String replacestr(
 			"{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(Stfl::quote(qna_prompts[0].first));
 		replacestr.append(
@@ -614,31 +614,31 @@ void FormAction::start_next_question()
 	}
 }
 
-void FormAction::load_histories(const std::string& searchfile,
-	const std::string& cmdlinefile)
+void FormAction::load_histories(const Utf8String& searchfile,
+	const Utf8String& cmdlinefile)
 {
 	searchhistory.load_from_file(searchfile);
 	cmdlinehistory.load_from_file(cmdlinefile);
 }
 
-void FormAction::save_histories(const std::string& searchfile,
-	const std::string& cmdlinefile,
+void FormAction::save_histories(const Utf8String& searchfile,
+	const Utf8String& cmdlinefile,
 	unsigned int limit)
 {
 	searchhistory.save_to_file(searchfile, limit);
 	cmdlinehistory.save_to_file(cmdlinefile, limit);
 }
 
-std::string FormAction::bookmark(const std::string& url,
-	const std::string& title,
-	const std::string& description,
-	const std::string& feed_title)
+Utf8String FormAction::bookmark(const Utf8String& url,
+	const Utf8String& title,
+	const Utf8String& description,
+	const Utf8String& feed_title)
 {
-	std::string bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
+	auto bookmark_cmd = cfg->get_configvalue("bookmark-cmd");
 	bool is_interactive =
 		cfg->get_configvalue_as_bool("bookmark-interactive");
 	if (bookmark_cmd.length() > 0) {
-		std::string cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
+		auto cmdline = strprintf::fmt("%s '%s' '%s' '%s' '%s'",
 				bookmark_cmd,
 				utils::replace_all(url, "'", "%27"),
 				utils::replace_all(title, "'", "%27"),
@@ -663,7 +663,7 @@ std::string FormAction::bookmark(const std::string& url,
 			return utils::run_program(my_argv, "");
 		}
 	} else {
-		return _(
+		return _s(
 				"bookmarking support is not configured. Please set the "
 				"configuration variable `bookmark-cmd' accordingly.");
 	}

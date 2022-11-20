@@ -10,6 +10,7 @@
 
 #include "htmlrenderer.h"
 #include "statusline.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -166,7 +167,7 @@ protected:
 	void show_error(const std::string& msg) override;
 	StatusLine status_line;
 
-	std::vector<std::string> tags;
+	std::vector<Utf8String> tags;
 
 	RegexManager& rxman;
 
@@ -178,7 +179,7 @@ protected:
 	Cache* rsscache;
 	FilterContainer& filters;
 	const ColorManager& colorman;
-	std::vector<std::string> suggestions;
+	std::vector<Utf8String> suggestions;
 };
 
 } // namespace newsboat

@@ -14,6 +14,7 @@
 #include "rssfeed.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
+#include "utf8string.h"
 
 using namespace newsboat;
 
@@ -25,10 +26,10 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	newsboat::View v(&c);
 	test_helpers::TempFile pagerfile;
 
-	const std::string test_url = "http://test_url";
-	std::string test_title = "Article Title";
-	std::string test_author = "Article Author";
-	std::string test_description = "Article Description";
+	const Utf8String test_url = "http://test_url";
+	Utf8String test_title = "Article Title";
+	Utf8String test_author = "Article Author";
+	Utf8String test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
 	strftime(test_pubDate_str,
@@ -111,7 +112,7 @@ TEST_CASE(
 	newsboat::View v(&c);
 	test_helpers::TempFile browserfile;
 
-	const std::string test_url = "http://test_url";
+	const Utf8String test_url = "http://test_url";
 	std::string line;
 
 	ConfigContainer cfg;
@@ -149,7 +150,7 @@ TEST_CASE(
 	Controller c(paths);
 	newsboat::View v(&c);
 
-	const std::string test_url = "http://test_url";
+	const Utf8String test_url = "http://test_url";
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "false %u");
@@ -181,7 +182,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	Controller c(paths);
 	newsboat::View v(&c);
 	test_helpers::TempFile browserfile;
-	const std::string test_url = "http://test_url";
+	const Utf8String test_url = "http://test_url";
 	std::string line;
 
 	ConfigContainer cfg;
@@ -215,7 +216,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	Controller c(paths);
 	newsboat::View v(&c);
 	test_helpers::TempFile browserfile;
-	const std::string test_url = "http://test_url";
+	const Utf8String test_url = "http://test_url";
 	std::string line;
 
 	ConfigContainer cfg;
@@ -249,8 +250,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	Controller c(paths);
 	newsboat::View v(&c);
 	test_helpers::TempFile browserfile;
-	std::unordered_set<std::string> url_set;
-	const std::string test_url = "http://test_url";
+	std::unordered_set<Utf8String> url_set;
+	const Utf8String test_url = "http://test_url";
 	std::string line;
 	int itemCount = 6;
 
@@ -333,8 +334,8 @@ TEST_CASE(
 	Controller c(paths);
 	newsboat::View v(&c);
 	test_helpers::TempFile browserfile;
-	std::unordered_set<std::string> url_set;
-	const std::string test_url = "http://test_url";
+	std::unordered_set<Utf8String> url_set;
+	const Utf8String test_url = "http://test_url";
 	std::string line;
 	const unsigned int itemCount = 6;
 
@@ -421,10 +422,10 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	RegexManager rxman;
 	test_helpers::TempFile urlFile;
 
-	const std::string test_url = "http://test_url";
-	std::string test_title = "Article Title";
-	std::string test_author = "Article Author";
-	std::string test_description = "Article Description";
+	const Utf8String test_url = "http://test_url";
+	Utf8String test_title = "Article Title";
+	Utf8String test_author = "Article Author";
+	Utf8String test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
 	strftime(test_pubDate_str,
@@ -484,13 +485,13 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	RegexManager rxman;
 	test_helpers::TempFile bookmarkFile;
 	std::string line;
-	std::vector<std::string> bookmark_args;
+	std::vector<Utf8String> bookmark_args;
 
-	const std::string test_url = "http://test_url";
-	std::string test_title = "Article Title";
-	std::string feed_title = "Feed Title";
-	std::string separator = " ";
-	std::string extra_arg = "extra arg";
+	const Utf8String test_url = "http://test_url";
+	Utf8String test_title = "Article Title";
+	Utf8String feed_title = "Feed Title";
+	Utf8String separator = " ";
+	Utf8String extra_arg = "extra arg";
 
 	v.set_config_container(&cfg);
 	c.set_view(&v);
@@ -532,7 +533,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::vector<std::string> op_args;
+	std::vector<Utf8String> op_args;
 
 	v.set_config_container(&cfg);
 	c.set_view(&v);
@@ -546,7 +547,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	itemlist.set_feed(feed);
 
 	SECTION("Single flag") {
-		std::string flags = "G";
+		Utf8String flags = "G";
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
@@ -555,8 +556,8 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	}
 
 	SECTION("Unordered flags") {
-		std::string flags = "abdefc";
-		std::string ordered_flags = "abcdef";
+		Utf8String flags = "abdefc";
+		Utf8String ordered_flags = "abcdef";
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
@@ -565,7 +566,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	}
 
 	SECTION("Duplicate flag in argument") {
-		std::string flags = "Abd";
+		Utf8String flags = "Abd";
 		op_args.push_back(flags + "ddd");
 
 		REQUIRE_NOTHROW(
@@ -574,7 +575,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	}
 
 	SECTION("Unauthorized values in arguments") {
-		std::string flags = "Abd";
+		Utf8String flags = "Abd";
 		SECTION("Numbers") {
 			op_args.push_back(flags + "1236");
 
@@ -600,7 +601,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	}
 
 	SECTION("All possible flags at once") {
-		std::string flags =
+		Utf8String flags =
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		op_args.push_back(flags);
 
@@ -622,13 +623,13 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::vector<std::string> op_args;
+	std::vector<Utf8String> op_args;
 	op_args.push_back(saveFile.get_path());
 
-	const std::string test_url = "http://test_url";
-	std::string test_title = "Article Title";
-	std::string test_author = "Article Author";
-	std::string test_description = "Article Description";
+	const Utf8String test_url = "http://test_url";
+	Utf8String test_title = "Article Title";
+	Utf8String test_author = "Article Author";
+	Utf8String test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
 	strftime(test_pubDate_str,
@@ -727,9 +728,9 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	Cache rsscache(":memory:", &cfg);
 	std::string line;
 
-	std::string first_article_title = "First_Article";
-	std::string second_article_title = "Second_Article";
-	std::string prefix_title = "Title: ";
+	Utf8String first_article_title = "First_Article";
+	Utf8String second_article_title = "Second_Article";
+	Utf8String prefix_title = "Title: ";
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
@@ -812,13 +813,13 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	std::vector<std::string> op_args;
+	std::vector<Utf8String> op_args;
 	op_args.push_back("tee > " + articleFile.get_path());
 
-	const std::string test_url = "http://test_url";
-	std::string test_title = "Article Title";
-	std::string test_author = "Article Author";
-	std::string test_description = "Article Description";
+	const Utf8String test_url = "http://test_url";
+	Utf8String test_title = "Article Title";
+	Utf8String test_author = "Article Author";
+	Utf8String test_description = "Article Description";
 	time_t test_pubDate = 42;
 	char test_pubDate_str[128];
 	strftime(test_pubDate_str,

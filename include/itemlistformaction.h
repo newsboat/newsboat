@@ -12,6 +12,7 @@
 #include "listformatter.h"
 #include "regexmanager.h"
 #include "view.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -24,7 +25,7 @@ enum class InvalidationMode { NONE, PARTIAL, COMPLETE };
 class ItemListFormAction : public ListFormAction {
 public:
 	ItemListFormAction(View*,
-		std::string formstr,
+		Utf8String formstr,
 		Cache* cc,
 		FilterContainer& f,
 		ConfigContainer* cfg,
@@ -35,11 +36,11 @@ public:
 
 	void set_feed(std::shared_ptr<RssFeed> fd);
 
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "articlelist";
 	}
-	std::string title() override;
+	Utf8String title() override;
 
 	std::shared_ptr<RssFeed> get_feed()
 	{
@@ -49,7 +50,7 @@ public:
 	{
 		pos = p;
 	}
-	std::string get_guid();
+	Utf8String get_guid();
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
 	bool jump_to_next_unread_item(bool start_with_first);
@@ -58,7 +59,7 @@ public:
 	bool jump_to_previous_item(bool start_with_last);
 	bool jump_to_random_unread_item();
 
-	void handle_cmdline(const std::string& cmd) override;
+	void handle_cmdline(const Utf8String& cmd) override;
 
 	void finished_qna(Operation op) override;
 
@@ -72,7 +73,7 @@ public:
 protected:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		std::vector<Utf8String>* args = nullptr) override;
 
 	void invalidate(const unsigned int invalidated_pos)
 	{
@@ -84,10 +85,10 @@ protected:
 		invalidated_itempos.push_back(invalidated_pos);
 	}
 
-	virtual FmtStrFormatter setup_head_formatter(const std::string& s,
+	virtual FmtStrFormatter setup_head_formatter(const Utf8String& s,
 		unsigned int unread,
 		unsigned int total,
-		const std::string& url);
+		const Utf8String& url);
 
 	std::vector<ItemPtrPosPair> visible_items;
 	int old_itempos;
@@ -95,7 +96,7 @@ protected:
 
 	Matcher matcher;
 	bool filter_active;
-	void apply_filter(const std::string& filter_query);
+	void apply_filter(const Utf8String& filter_query);
 
 private:
 	void register_format_styles();
@@ -106,17 +107,17 @@ private:
 	bool open_position_in_browser(unsigned int pos,
 		bool interactive) const;
 
-	virtual void set_head(const std::string& s,
+	virtual void set_head(const Utf8String& s,
 		unsigned int unread,
 		unsigned int total,
-		const std::string& url);
+		const Utf8String& url);
 
 	int get_pos(unsigned int idx);
 
-	void save_article(const std::string& filename,
+	void save_article(const Utf8String& filename,
 		std::shared_ptr<RssItem> item);
 
-	void handle_save(const std::vector<std::string>& cmd_args);
+	void handle_save(const std::vector<Utf8String>& cmd_args);
 
 	void save_filterpos();
 
@@ -126,16 +127,16 @@ private:
 
 	void handle_cmdline_num(unsigned int idx);
 
-	std::string gen_flags(std::shared_ptr<RssItem> item);
+	Utf8String gen_flags(std::shared_ptr<RssItem> item);
 
 	void prepare_set_filterpos();
 
-	std::string item2formatted_line(const ItemPtrPosPair& item,
+	Utf8String item2formatted_line(const ItemPtrPosPair& item,
 		const unsigned int width,
-		const std::string& itemlist_format,
-		const std::string& datetime_format);
+		const Utf8String& itemlist_format,
+		const Utf8String& datetime_format);
 
-	void goto_item(const std::string& title);
+	void goto_item(const Utf8String& title);
 
 	void handle_op_saveall();
 

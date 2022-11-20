@@ -6,6 +6,7 @@
 #include "regexmanager.h"
 #include "textformatter.h"
 #include "textviewwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -17,14 +18,14 @@ class ItemViewFormAction : public FormAction {
 public:
 	ItemViewFormAction(View*,
 		std::shared_ptr<ItemListFormAction> il,
-		std::string formstr,
+		Utf8String formstr,
 		Cache* cc,
 		ConfigContainer* cfg,
 		RegexManager& r);
 	~ItemViewFormAction() override;
 	void prepare() override;
 	void init() override;
-	void set_guid(const std::string& guid_)
+	void set_guid(const Utf8String& guid_)
 	{
 		guid = guid_;
 	}
@@ -32,23 +33,23 @@ public:
 	{
 		feed = fd;
 	}
-	void set_highlightphrase(const std::string& text);
+	void set_highlightphrase(const Utf8String& text);
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
-	void handle_cmdline(const std::string& cmd) override;
+	void handle_cmdline(const Utf8String& cmd) override;
 
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "article";
 	}
-	std::string title() override;
+	Utf8String title() override;
 
 	void finished_qna(Operation op) override;
 
 	void render_html(
-		const std::string& source,
-		std::vector<std::pair<LineType, std::string>>& lines,
+		const Utf8String& source,
+		std::vector<std::pair<LineType, Utf8String>>& lines,
 		std::vector<LinkPair>& thelinks,
-		const std::string& url);
+		const Utf8String& url);
 
 	void update_percent();
 
@@ -57,25 +58,25 @@ private:
 
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		std::vector<Utf8String>* args = nullptr) override;
 
-	bool open_link_in_browser(const std::string& link, const std::string& type,
+	bool open_link_in_browser(const Utf8String& link, const Utf8String& type,
 		bool interactive) const;
 
 	void update_head(const std::shared_ptr<RssItem>& item);
-	void set_head(const std::string& s,
-		const std::string& feedtitle,
+	void set_head(const Utf8String& s,
+		const Utf8String& feedtitle,
 		unsigned int unread,
 		unsigned int total);
-	void highlight_text(const std::string& searchphrase);
+	void highlight_text(const Utf8String& searchphrase);
 
-	void render_source(std::vector<std::pair<LineType, std::string>>& lines,
-		std::string source);
+	void render_source(std::vector<std::pair<LineType, Utf8String>>& lines,
+		Utf8String source);
 
 	void do_search();
-	void handle_save(const std::string& filename_param);
+	void handle_save(const Utf8String& filename_param);
 
-	std::string guid;
+	Utf8String guid;
 	std::shared_ptr<RssFeed> feed;
 	std::shared_ptr<RssItem> item;
 	bool show_source;

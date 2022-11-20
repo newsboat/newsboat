@@ -3,7 +3,7 @@
 
 namespace newsboat {
 SearchResultsListFormAction::SearchResultsListFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	Cache* cc,
 	FilterContainer& f,
 	ConfigContainer* cfg,
@@ -23,7 +23,7 @@ const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint
 };
 
 void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>& feed,
-	const std::string& str)
+	const Utf8String& str)
 {
 	if (search_phrase != str) {
 		this->set_feed(feed);
@@ -35,7 +35,7 @@ void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>&
 bool SearchResultsListFormAction::process_operation(
 	Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	std::vector<Utf8String>* args)
 {
 	const unsigned int itempos = list.get_position();
 
@@ -69,31 +69,30 @@ bool SearchResultsListFormAction::process_operation(
 	return true;
 }
 
-void SearchResultsListFormAction::set_head(const std::string& s,
+void SearchResultsListFormAction::set_head(const Utf8String& s,
 	unsigned int unread,
 	unsigned int total,
-	const std::string& url)
+	const Utf8String& url)
 {
-	std::string title;
 	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
-	title = fmt.do_format(
+	auto title = fmt.do_format(
 			cfg->get_configvalue("searchresult-title-format"),
 			width);
 	set_value("head", title);
 }
 
-std::string SearchResultsListFormAction::title()
+Utf8String SearchResultsListFormAction::title()
 {
 	return strprintf::fmt(_("Search Result - '%s'"), search_phrase);
 }
 
 FmtStrFormatter SearchResultsListFormAction::setup_head_formatter(
-	const std::string& s,
+	const Utf8String& s,
 	unsigned int unread,
 	unsigned int total,
-	const std::string& url)
+	const Utf8String& url)
 {
 	FmtStrFormatter fmt = ItemListFormAction::setup_head_formatter(s, unread, total, url);
 

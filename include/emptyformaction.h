@@ -2,16 +2,17 @@
 #define NEWSBOAT_EMPTYFORMACTION_H_
 
 #include "formaction.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
 class EmptyFormAction : public FormAction {
 public:
-	EmptyFormAction(View* v, const std::string& formstr, ConfigContainer* cfg);
+	EmptyFormAction(View* v, const Utf8String& formstr, ConfigContainer* cfg);
 	virtual ~EmptyFormAction() = default;
 
-	std::string id() const override;
-	std::string title() override;
+	Utf8String id() const override;
+	Utf8String title() override;
 
 	void init() override;
 	void prepare() override;
@@ -21,7 +22,7 @@ public:
 protected:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		std::vector<Utf8String>* args = nullptr) override;
 };
 
 } // namespace newsboat

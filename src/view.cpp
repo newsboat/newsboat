@@ -142,11 +142,7 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
 		fa->draw_form();
-		std::vector<std::string> args;
-		for (const auto& arg : command.args) {
-			args.push_back(arg.utf8());
-		}
-		if (!fa->process_op(command.op, true, &args)) {
+		if (!fa->process_op(command.op, true, &command.args)) {
 			// Operation failed, abort
 			return false;
 		}
@@ -450,7 +446,10 @@ void View::set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds)
 
 void View::set_tags(const std::vector<std::string>& t)
 {
-	tags = t;
+	tags.clear();
+	for (const auto& s : t) {
+		tags.push_back(Utf8String::from_utf8(s));
+	}
 }
 
 void View::push_searchresult(std::shared_ptr<RssFeed> feed,
@@ -1267,14 +1266,14 @@ void View::handle_resize()
 
 void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
 {
-	std::string fragment = fa->get_value("qna_value");
+	auto fragment = fa->get_value("qna_value");
 	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = fa->get_suggestions(fragment);
 		tab_count = 0;
 	}
 	tab_count++;
-	std::string suggestion;
+	Utf8String suggestion;
 	switch (suggestions.size()) {
 	case 0:
 		LOG(Level::DEBUG,

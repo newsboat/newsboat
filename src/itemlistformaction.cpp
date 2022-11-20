@@ -26,7 +26,7 @@
 namespace newsboat {
 
 ItemListFormAction::ItemListFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	Cache* cc,
 	FilterContainer& f,
 	ConfigContainer* cfg,
@@ -51,7 +51,7 @@ ItemListFormAction::~ItemListFormAction() {}
 
 bool ItemListFormAction::process_operation(Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	std::vector<Utf8String>* args)
 {
 	bool quit = false;
 	bool hardquit = false;
@@ -275,7 +275,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SHOWURLS:
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				std::string urlviewer = cfg->get_configvalue(
+				auto urlviewer = cfg->get_configvalue(
 						"external-url-viewer");
 				if (urlviewer == "") {
 					std::vector<LinkPair> links;
@@ -356,7 +356,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					}
 				} else {
 					std::vector<QnaPair> qna;
-					qna.push_back(QnaPair(_("Flags: "),
+					qna.push_back(QnaPair(_s("Flags: "),
 							visible_items[itempos]
 							.first->flags()));
 					this->start_qna(
@@ -487,7 +487,7 @@ bool ItemListFormAction::process_operation(Operation op,
 
 				std::vector<std::string> guids;
 				for (const auto& item : visible_items) {
-					const std::string guid = item.first->guid();
+					const auto guid = item.first->guid();
 					guids.push_back(guid);
 				}
 				rsscache->mark_items_read_by_guid(guids);
@@ -509,7 +509,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
 					process_operation(OP_NEXTUNREAD);
 				} else { // reposition to first/last item
-					std::string sortorder =
+					auto sortorder =
 						cfg->get_configvalue("article-sort-order");
 
 					if (sortorder == "date-desc") {
@@ -578,7 +578,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				}
 			} else {
 				qna.push_back(QnaPair(
-						_("Pipe article to command: "), ""));
+						_s("Pipe article to command: "), ""));
 				this->start_qna(
 					qna, OP_PIPE_TO, &cmdlinehistory);
 			}
@@ -595,7 +595,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				finished_qna(OP_INT_START_SEARCH);
 			}
 		} else {
-			qna.push_back(QnaPair(_("Search for: "), ""));
+			qna.push_back(QnaPair(_s("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
@@ -609,7 +609,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 		} else {
 			std::vector<QnaPair> qna;
-			qna.push_back(QnaPair(_("Title: "), ""));
+			qna.push_back(QnaPair(_s("Title: "), ""));
 			this->start_qna(qna, OP_INT_GOTO_TITLE);
 		}
 		break;
@@ -620,7 +620,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (filter_container.size() > 0) {
 			std::string newfilter;
 			if (automatic && args->size() > 0) {
-				const std::string filter_name = (*args)[0];
+				const auto filter_name = (*args)[0];
 				const auto filter = filter_container.get_filter(filter_name);
 
 				if (filter.has_value()) {
@@ -630,7 +630,7 @@ bool ItemListFormAction::process_operation(Operation op,
 							filter_name));
 				}
 			} else {
-				const std::string filter_text = v->select_filter(filter_container.get_filters());
+				const auto filter_text = v->select_filter(filter_container.get_filters());
 				apply_filter(filter_text);
 			}
 		} else {
@@ -647,7 +647,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 		} else {
 			std::vector<QnaPair> qna;
-			qna.push_back(QnaPair(_("Filter: "), ""));
+			qna.push_back(QnaPair(_s("Filter: "), ""));
 			this->start_qna(
 				qna, OP_INT_END_SETFILTER, &filterhistory);
 		}
@@ -826,7 +826,7 @@ void ItemListFormAction::finished_qna(Operation op)
 	case OP_PIPE_TO: {
 		if (!visible_items.empty()) {
 			unsigned int itempos = list.get_position();
-			std::string cmd = qna_responses[0];
+			auto cmd = qna_responses[0];
 			std::ostringstream ostr;
 			v->get_ctrl()->write_item(
 				visible_items[itempos].first, ostr);
@@ -851,7 +851,7 @@ void ItemListFormAction::finished_qna(Operation op)
 
 void ItemListFormAction::qna_end_setfilter()
 {
-	std::string filtertext = qna_responses[0];
+	auto filtertext = qna_responses[0];
 	apply_filter(filtertext);
 }
 
@@ -1059,10 +1059,10 @@ void ItemListFormAction::prepare()
 	prepare_set_filterpos();
 }
 
-std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
+Utf8String ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const unsigned int width,
-	const std::string& itemlist_format,
-	const std::string& datetime_format)
+	const Utf8String& itemlist_format,
+	const Utf8String& datetime_format)
 {
 	FmtStrFormatter fmt;
 	fmt.register_fmt('i', strprintf::fmt("%u", item.second + 1));
@@ -1078,7 +1078,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	using days = duration<int, std::ratio<86400>>;
 	const auto article_age = duration_cast<days>(
 			system_clock::now() - article_time_point).count();
-	const std::string new_datetime_format = utils::replace_all(
+	const auto new_datetime_format = utils::replace_all(
 			datetime_format, "%L", strprintf::fmt(
 				ngettext("1 day ago", "%u days ago", article_age), article_age));
 	fmt.register_fmt('D', utils::mt_strf_localtime(new_datetime_format,
@@ -1116,7 +1116,7 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	return formattedLine;
 }
 
-void ItemListFormAction::goto_item(const std::string& title)
+void ItemListFormAction::goto_item(const Utf8String& title)
 {
 	if (visible_items.empty()) {
 		return;
@@ -1159,10 +1159,10 @@ void ItemListFormAction::init()
 	invalidate_list();
 }
 
-FmtStrFormatter ItemListFormAction::setup_head_formatter(const std::string& s,
+FmtStrFormatter ItemListFormAction::setup_head_formatter(const Utf8String& s,
 	unsigned int unread,
 	unsigned int total,
-	const std::string& url)
+	const Utf8String& url)
 {
 	FmtStrFormatter fmt;
 
@@ -1183,17 +1183,15 @@ FmtStrFormatter ItemListFormAction::setup_head_formatter(const std::string& s,
 	return fmt;
 }
 
-void ItemListFormAction::set_head(const std::string& s,
+void ItemListFormAction::set_head(const Utf8String& s,
 	unsigned int unread,
 	unsigned int total,
-	const std::string& url)
+	const Utf8String& url)
 {
-	std::string title;
-
 	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
-	title = fmt.do_format(
+	auto title = fmt.do_format(
 			cfg->get_configvalue("articlelist-title-format"),
 			width);
 	set_value("head", title);
@@ -1306,7 +1304,7 @@ bool ItemListFormAction::jump_to_next_item(bool start_with_first)
 	return false;
 }
 
-std::string ItemListFormAction::get_guid()
+Utf8String ItemListFormAction::get_guid()
 {
 	const unsigned int itempos = list.get_position();
 	return visible_items[itempos].first->guid();
@@ -1341,7 +1339,7 @@ void ItemListFormAction::handle_cmdline_num(unsigned int idx)
 	}
 }
 
-void ItemListFormAction::handle_cmdline(const std::string& cmd)
+void ItemListFormAction::handle_cmdline(const Utf8String& cmd)
 {
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
@@ -1387,7 +1385,7 @@ void ItemListFormAction::restore_selected_position()
 
 }
 
-void ItemListFormAction::save_article(const std::string& filename,
+void ItemListFormAction::save_article(const Utf8String& filename,
 	std::shared_ptr<RssItem> item)
 {
 	if (filename == "") {
@@ -1405,7 +1403,7 @@ void ItemListFormAction::save_article(const std::string& filename,
 	}
 }
 
-void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
+void ItemListFormAction::handle_save(const std::vector<Utf8String>& cmd_args)
 {
 	if (cmd_args.size() < 1) {
 		v->get_statusline().show_error(_("Error: no filename provided"));
@@ -1415,7 +1413,7 @@ void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
 		v->get_statusline().show_error(_("Error: no item selected!"));
 		return;
 	}
-	const std::string filename = utils::resolve_tilde(cmd_args.front());
+	const auto filename = utils::resolve_tilde(cmd_args.front());
 	const unsigned int itempos = list.get_position();
 	LOG(Level::INFO,
 		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
@@ -1435,8 +1433,8 @@ void ItemListFormAction::save_filterpos()
 
 void ItemListFormAction::register_format_styles()
 {
-	const std::string attrstr = rxman.get_attrs_stfl_string("articlelist", true);
-	const std::string textview = strprintf::fmt(
+	const auto attrstr = rxman.get_attrs_stfl_string("articlelist", true);
+	const auto textview = strprintf::fmt(
 			"{list[items] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos[items_pos]:0 offset[items_offset]:0 %s richtext:1}",
@@ -1444,9 +1442,9 @@ void ItemListFormAction::register_format_styles()
 	list.stfl_replace_list(0, textview);
 }
 
-std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)
+Utf8String ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)
 {
-	std::string flags;
+	Utf8String flags;
 	if (item->deleted()) {
 		flags.append("D");
 	} else if (item->unread()) {
@@ -1490,7 +1488,7 @@ void ItemListFormAction::set_feed(std::shared_ptr<RssFeed> fd)
 	do_update_visible_items();
 }
 
-std::string ItemListFormAction::title()
+Utf8String ItemListFormAction::title()
 {
 	if (feed->is_query_feed()) {
 		return strprintf::fmt(_("Query Feed - %s"),
@@ -1513,7 +1511,7 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	std::string directory = v->run_dirbrowser();
+	auto directory = v->run_dirbrowser();
 
 	if (directory.empty()) {
 		return;
@@ -1523,13 +1521,12 @@ void ItemListFormAction::handle_op_saveall()
 		directory.append(NEWSBOAT_PATH_SEP);
 	}
 
-	std::vector<std::string> filenames;
+	std::vector<Utf8String> filenames;
 	for (const auto& item : visible_items) {
-		filenames.emplace_back( utils::utf8_to_locale(v->get_filename_suggestion(
-					item.first->title())));
+		filenames.emplace_back(v->get_filename_suggestion(item.first->title()));
 	}
 
-	const auto unique_filenames = std::set<std::string>(
+	const auto unique_filenames = std::set<Utf8String>(
 			std::begin(filenames),
 			std::end(filenames));
 
@@ -1537,7 +1534,7 @@ void ItemListFormAction::handle_op_saveall()
 	for (const auto& filename : unique_filenames) {
 		const auto filepath = directory + filename;
 		struct stat sbuf;
-		if (::stat(filepath.c_str(), &sbuf) != -1) {
+		if (::stat(filepath.to_locale_charset().c_str(), &sbuf) != -1) {
 			nfiles_exist++;
 		}
 	}
@@ -1560,7 +1557,7 @@ void ItemListFormAction::handle_op_saveall()
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
-		if (::stat(filepath.c_str(), &sbuf) != -1) {
+		if (::stat(filepath.to_locale_charset().c_str(), &sbuf) != -1) {
 			if (overwrite_all) {
 				save_article(filepath, item);
 				continue;
@@ -1602,7 +1599,7 @@ void ItemListFormAction::handle_op_saveall()
 	}
 }
 
-void ItemListFormAction::apply_filter(const std::string& filtertext)
+void ItemListFormAction::apply_filter(const Utf8String& filtertext)
 {
 	if (filtertext.empty()) {
 		return;

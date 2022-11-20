@@ -9,15 +9,16 @@
 #include "matcher.h"
 #include "regexmanager.h"
 #include "view.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
-typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> FeedPtrPosPair;
+using FeedPtrPosPair = std::pair<std::shared_ptr<RssFeed>, unsigned int>;
 
 class FeedListFormAction : public ListFormAction {
 public:
 	FeedListFormAction(View*,
-		std::string formstr,
+		Utf8String formstr,
 		Cache* cc,
 		FilterContainer& f,
 		ConfigContainer* cfg,
@@ -30,11 +31,11 @@ public:
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 	std::shared_ptr<RssFeed> get_feed();
 
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "feedlist";
 	}
-	std::string title() override;
+	Utf8String title() override;
 
 	bool jump_to_next_unread_feed(unsigned int& feedpos);
 	bool jump_to_previous_unread_feed(unsigned int& feedpos);
@@ -42,7 +43,7 @@ public:
 	bool jump_to_previous_feed(unsigned int& feedpos);
 	bool jump_to_random_unread_feed(unsigned int& feedpos);
 
-	void handle_cmdline(const std::string& cmd) override;
+	void handle_cmdline(const Utf8String& cmd) override;
 
 	void finished_qna(Operation op) override;
 
@@ -59,11 +60,11 @@ private:
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		std::vector<Utf8String>* args = nullptr) override;
 
 	bool open_position_in_browser(unsigned int pos, bool interactive) const;
 
-	void goto_feed(const std::string& str);
+	void goto_feed(const Utf8String& str);
 
 	void save_filterpos();
 
@@ -71,24 +72,24 @@ private:
 	void op_start_search();
 
 	void handle_cmdline_num(unsigned int idx);
-	void handle_tag(const std::string& params);
-	void handle_goto(const std::string& param);
+	void handle_tag(const Utf8String& params);
+	void handle_goto(const Utf8String& param);
 	void set_pos();
 
-	std::string get_title(std::shared_ptr<RssFeed> feed);
+	Utf8String get_title(std::shared_ptr<RssFeed> feed);
 
-	std::string format_line(const std::string& feedlist_format,
+	Utf8String format_line(const Utf8String& feedlist_format,
 		std::shared_ptr<RssFeed> feed,
 		unsigned int pos,
 		unsigned int width);
 
 	bool zero_feedpos;
 	std::vector<FeedPtrPosPair> visible_feeds;
-	std::string tag;
+	Utf8String tag;
 
 	Matcher matcher;
 	bool filter_active;
-	void apply_filter(const std::string& filter_query);
+	void apply_filter(const Utf8String& filter_query);
 
 	History filterhistory;
 

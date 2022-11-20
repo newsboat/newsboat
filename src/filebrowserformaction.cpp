@@ -25,7 +25,7 @@
 namespace newsboat {
 
 FileBrowserFormAction::FileBrowserFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
@@ -43,7 +43,7 @@ FileBrowserFormAction::~FileBrowserFormAction() {}
 
 bool FileBrowserFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<Utf8String>* /* args */)
 {
 	switch (op) {
 	case OP_OPEN: {
@@ -56,7 +56,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		 * needs to be returned.
 		 */
 		LOG(Level::DEBUG, "FileBrowserFormAction: 'opening' item");
-		const std::string focus = f.get_focus();
+		const auto focus = f.get_focus();
 		if (focus.length() > 0) {
 			if (focus == "files") {
 				const auto selected_position = files_list.get_position();
@@ -69,17 +69,17 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					update_title(fn);
 
 					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
 						fn.append(NEWSBOAT_PATH_SEP);
 					}
 
-					const std::string fnstr =
+					const auto fnstr =
 						f.get("filenametext");
-					const std::string::size_type base =
-						fnstr.find_last_of(NEWSBOAT_PATH_SEP);
+					const auto base =
+						fnstr.utf8().find_last_of(NEWSBOAT_PATH_SEP);
 					if (base == std::string::npos) {
 						fn.append(fnstr);
 					} else {
@@ -92,7 +92,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					if (utils::ends_with(NEWSBOAT_PATH_SEP, fn)) {
 						fn.append(NEWSBOAT_PATH_SEP);
 					}
@@ -107,7 +107,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 			} else {
 				bool do_pop = true;
-				std::string fn = f.get("filenametext");
+				auto fn = f.get("filenametext");
 				struct stat sbuf;
 				/*
 				 * this check is very important, as people will
@@ -136,7 +136,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	break;
 	case OP_SWITCH_FOCUS: {
 		LOG(Level::DEBUG, "view::filebrowser: focusing different widget");
-		const std::string focus = f.get_focus();
+		const auto focus = f.get_focus();
 		if (focus == "files") {
 			f.set_focus("filename");
 		} else {
@@ -207,7 +207,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	return true;
 }
 
-void FileBrowserFormAction::update_title(const std::string& working_directory)
+void FileBrowserFormAction::update_title(const Utf8String& working_directory)
 {
 	const unsigned int width = files_list.get_width();
 
@@ -216,17 +216,17 @@ void FileBrowserFormAction::update_title(const std::string& working_directory)
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('f', working_directory);
 
-	const std::string title = fmt.do_format(
+	const auto title = fmt.do_format(
 			cfg->get_configvalue("filebrowser-title-format"), width);
 
 	set_value("head", title);
 }
 
-std::vector<std::string> get_sorted_filelist()
+std::vector<Utf8String> get_sorted_filelist()
 {
-	std::vector<std::string> ret;
+	std::vector<Utf8String> ret;
 
-	const std::string cwdtmp = utils::getcwd();
+	const auto cwdtmp = utils::getcwd();
 
 	DIR* dirp = ::opendir(cwdtmp.c_str());
 	if (dirp) {
@@ -258,15 +258,15 @@ void FileBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		const std::string cwdtmp = utils::getcwd();
+		const auto cwdtmp = utils::getcwd();
 		update_title(cwdtmp);
 
-		std::vector<std::string> files = get_sorted_filelist();
+		auto files = get_sorted_filelist();
 
 		ListFormatter listfmt;
 
 		id_at_position.clear();
-		for (std::string filename : files) {
+		for (auto filename : files) {
 			add_file(listfmt, id_at_position, filename);
 		}
 
@@ -274,7 +274,7 @@ void FileBrowserFormAction::prepare()
 		do_redraw = false;
 	}
 
-	std::string focus = f.get_focus();
+	auto focus = f.get_focus();
 	if (focus == "files") {
 		curs_set(0);
 	} else {
@@ -286,9 +286,9 @@ void FileBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	set_value("fileprompt", _("File: "));
+	set_value("fileprompt", _s("File: "));
 
-	const std::string save_path = cfg->get_configvalue("save-path");
+	const auto save_path = cfg->get_configvalue("save-path");
 
 	LOG(Level::DEBUG,
 		"view::filebrowser: save-path is '%s'",
@@ -315,7 +315,7 @@ const std::vector<KeyMapHintEntry>& FileBrowserFormAction::get_keymap_hint() con
 void FileBrowserFormAction::add_file(
 	ListFormatter& listfmt,
 	std::vector<file_system::FileSystemEntry>& id_at_position,
-	std::string filename)
+	Utf8String filename)
 {
 	struct stat sb;
 	if (::lstat(filename.c_str(), &sb) == 0) {
@@ -324,15 +324,15 @@ void FileBrowserFormAction::add_file(
 		const auto rwxbits = file_system::permissions_string(sb.st_mode);
 		const auto owner = file_system::get_user_padded(sb.st_uid);
 		const auto group = file_system::get_group_padded(sb.st_gid);
-		std::string formattedfilename = get_formatted_filename(filename, sb.st_mode);
+		auto formattedfilename = get_formatted_filename(filename, sb.st_mode);
 
-		std::string sizestr = strprintf::fmt(
+		auto sizestr = strprintf::fmt(
 				"%12" PRIi64,
 				// `st_size` is `off_t`, which is a signed integer type of
 				// unspecified size. We'll have to bet it's no larger than 64
 				// bits.
 				static_cast<int64_t>(sb.st_size));
-		std::string line = strprintf::fmt("%c%s %s %s %s %s",
+		auto line = strprintf::fmt("%c%s %s %s %s %s",
 				file_system::filetype_to_char(ftype),
 				rwxbits,
 				owner,
@@ -344,7 +344,7 @@ void FileBrowserFormAction::add_file(
 	}
 }
 
-std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
+Utf8String FileBrowserFormAction::get_formatted_filename(Utf8String filename,
 	mode_t mode)
 {
 	const auto suffix = file_system::mode_suffix(mode);
@@ -355,7 +355,7 @@ std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
 	}
 }
 
-std::string FileBrowserFormAction::title()
+Utf8String FileBrowserFormAction::title()
 {
 	return strprintf::fmt(_("Save File - %s"), utils::getcwd());
 }

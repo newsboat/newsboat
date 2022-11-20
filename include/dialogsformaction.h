@@ -3,27 +3,28 @@
 
 #include "formaction.h"
 #include "listwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
 class DialogsFormAction : public FormAction {
 public:
-	DialogsFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	DialogsFormAction(View*, Utf8String formstr, ConfigContainer* cfg);
 	~DialogsFormAction() override;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "dialogs";
 	}
-	std::string title() override;
-	void handle_cmdline(const std::string& cmd) override;
+	Utf8String title() override;
+	void handle_cmdline(const Utf8String& cmd) override;
 
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		std::vector<Utf8String>* args = nullptr) override;
 	void update_heading();
 
 	ListWidget dialogs_list;

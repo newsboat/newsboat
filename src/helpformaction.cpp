@@ -15,9 +15,9 @@
 namespace newsboat {
 
 HelpFormAction::HelpFormAction(View* vv,
-	std::string formstr,
+	Utf8String formstr,
 	ConfigContainer* cfg,
-	const std::string& ctx)
+	const Utf8String& ctx)
 	: FormAction(vv, formstr, cfg)
 	, quit(false)
 	, apply_search(false)
@@ -30,7 +30,7 @@ HelpFormAction::~HelpFormAction() {}
 
 bool HelpFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<Utf8String>* /* args */)
 {
 	bool hardquit = false;
 	switch (op) {
@@ -60,7 +60,7 @@ bool HelpFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		qna.push_back(QnaPair(_("Search for: "), ""));
+		qna.push_back(QnaPair(_s("Search for: "), ""));
 		this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 	}
 	break;
@@ -96,9 +96,9 @@ void HelpFormAction::prepare()
 
 		const auto descs = v->get_keymap()->get_keymap_descriptions(context);
 
-		std::string highlighted_searchphrase =
+		auto highlighted_searchphrase =
 			strprintf::fmt("<hl>%s</>", searchphrase);
-		std::vector<std::string> colors = utils::tokenize(
+		auto colors = utils::tokenize(
 				cfg->get_configvalue("search-highlight-colors"), " ");
 		set_value("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
@@ -166,7 +166,7 @@ void HelpFormAction::prepare()
 					continue;
 				}
 				if (should_be_visible(desc)) {
-					std::string line = strprintf::fmt("%-39s %s", desc.cmd, desc.desc);
+					auto line = strprintf::fmt("%-39s %s", desc.cmd, desc.desc);
 					line = utils::quote_for_stfl(line);
 					line = apply_highlights(line);
 					listfmt.add_line(line);
@@ -181,11 +181,11 @@ void HelpFormAction::prepare()
 			listfmt.add_line("");
 
 			for (const auto& macro : macros) {
-				const std::string key = macro.first;
-				const std::string description = macro.second.description;
+				const auto key = macro.first;
+				const auto description = macro.second.description;
 
 				// "macro-prefix" is not translated because it refers to an operation name
-				std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
+				auto line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
 				line = utils::quote_for_stfl(line);
 				line = apply_highlights(line);
 				listfmt.add_line(line);
@@ -228,15 +228,15 @@ void HelpFormAction::finished_qna(Operation op)
 	}
 }
 
-std::string HelpFormAction::title()
+Utf8String HelpFormAction::title()
 {
-	return _("Help");
+	return _s("Help");
 }
 
-std::string HelpFormAction::make_colorstring(
-	const std::vector<std::string>& colors)
+Utf8String HelpFormAction::make_colorstring(
+	const std::vector<Utf8String>& colors)
 {
-	std::string result;
+	Utf8String result;
 	if (colors.size() > 0) {
 		if (colors[0] != "default") {
 			result.append("fg=");

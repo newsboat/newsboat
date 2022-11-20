@@ -9,43 +9,44 @@
 #include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
 class FileBrowserFormAction : public FormAction {
 public:
-	FileBrowserFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	FileBrowserFormAction(View*, Utf8String formstr, ConfigContainer* cfg);
 	~FileBrowserFormAction() override;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
-	void set_default_filename(const std::string& fn)
+	void set_default_filename(const Utf8String& fn)
 	{
 		default_filename = fn;
 	}
 
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "filebrowser";
 	}
-	std::string title() override;
+	Utf8String title() override;
 
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
-	void update_title(const std::string& working_directory);
+		std::vector<Utf8String>* args = nullptr) override;
+	void update_title(const Utf8String& working_directory);
 
 	void add_file(ListFormatter& listfmt,
 		std::vector<file_system::FileSystemEntry>& id_at_position,
-		std::string filename);
-	std::string get_filename_suggestion(const std::string& s);
+		Utf8String filename);
+	Utf8String get_filename_suggestion(const Utf8String& s);
 	std::vector<file_system::FileSystemEntry> id_at_position;
 
-	std::string get_formatted_filename(std::string filename, mode_t mode);
+	Utf8String get_formatted_filename(Utf8String filename, mode_t mode);
 
-	std::string default_filename;
+	Utf8String default_filename;
 
 	ListWidget files_list;
 };

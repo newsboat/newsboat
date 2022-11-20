@@ -9,35 +9,36 @@
 #include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"
+#include "utf8string.h"
 
 namespace newsboat {
 
 class DirBrowserFormAction : public FormAction {
 public:
-	DirBrowserFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	DirBrowserFormAction(View*, Utf8String formstr, ConfigContainer* cfg);
 	~DirBrowserFormAction() override;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
-	std::string id() const override
+	Utf8String id() const override
 	{
 		return "dirbrowser";
 	}
-	std::string title() override;
+	Utf8String title() override;
 
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
-	void update_title(const std::string& working_directory);
+		std::vector<Utf8String>* args = nullptr) override;
+	void update_title(const Utf8String& working_directory);
 
 	void add_directory(ListFormatter& listfmt,
 		std::vector<file_system::FileSystemEntry>& id_at_position,
-		std::string dirname);
+		Utf8String dirname);
 	std::vector<file_system::FileSystemEntry> id_at_position;
 
-	std::string get_formatted_dirname(std::string dirname, mode_t mode);
+	Utf8String get_formatted_dirname(Utf8String dirname, mode_t mode);
 
 	ListWidget files_list;
 };

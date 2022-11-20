@@ -26,7 +26,7 @@ namespace newsboat {
 
 ItemViewFormAction::ItemViewFormAction(View* vv,
 	std::shared_ptr<ItemListFormAction> il,
-	std::string formstr,
+	Utf8String formstr,
 	Cache* cc,
 	ConfigContainer* cfg,
 	RegexManager& r)
@@ -71,7 +71,7 @@ void ItemViewFormAction::init()
 
 void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
 {
-	const std::string feedtitle = item_renderer::get_feedtitle(item);
+	const auto feedtitle = item_renderer::get_feedtitle(item);
 
 	unsigned int unread_item_count = feed->unread_item_count();
 	// we need to subtract because the current item isn't yet marked
@@ -158,7 +158,7 @@ void ItemViewFormAction::prepare()
 
 bool ItemViewFormAction::process_operation(Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	std::vector<Utf8String>* args)
 {
 	bool hardquit = false;
 	bool quit = false;
@@ -273,7 +273,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 				finished_qna(OP_INT_START_SEARCH);
 			}
 		} else {
-			qna.push_back(QnaPair(_("Search for: "), ""));
+			qna.push_back(QnaPair(_s("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
 		}
@@ -289,7 +289,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 		} else {
 			qna.push_back(
-				QnaPair(_("Pipe article to command: "), ""));
+				QnaPair(_s("Pipe article to command: "), ""));
 			this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 		}
 	}
@@ -303,12 +303,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 		} else {
 			std::vector<QnaPair> qna;
-			qna.push_back(QnaPair(_("Flags: "), item->flags()));
+			qna.push_back(QnaPair(_s("Flags: "), item->flags()));
 			this->start_qna(qna, OP_INT_EDITFLAGS_END);
 		}
 		break;
 	case OP_SHOWURLS: {
-		std::string urlviewer =
+		auto urlviewer =
 			cfg->get_configvalue("external-url-viewer");
 		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
 		if (urlviewer == "") {
@@ -455,7 +455,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 				finished_qna(OP_INT_GOTO_URL);
 			}
 		} else {
-			qna.push_back(QnaPair(_("Goto URL #"), ""));
+			qna.push_back(QnaPair(_s("Goto URL #"), ""));
 			this->start_qna(qna, OP_INT_GOTO_URL);
 		}
 	}
@@ -498,10 +498,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 	return true;
 }
 
-bool ItemViewFormAction::open_link_in_browser(const std::string& link,
-	const std::string& type, bool interactive) const
+bool ItemViewFormAction::open_link_in_browser(const Utf8String& link,
+	const Utf8String& type, bool interactive) const
 {
-	const std::string feedurl = item->feedurl();
+	const auto feedurl = item->feedurl();
 	const auto exit_code = v->open_in_browser(link, feedurl, type, interactive);
 	if (!exit_code.has_value()) {
 		v->get_statusline().show_error(_("Failed to spawn browser"));
@@ -526,8 +526,8 @@ const std::vector<KeyMapHintEntry>& ItemViewFormAction::get_keymap_hint() const
 	return hints;
 }
 
-void ItemViewFormAction::set_head(const std::string& s,
-	const std::string& feedtitle,
+void ItemViewFormAction::set_head(const Utf8String& s,
+	const Utf8String& feedtitle,
 	unsigned int unread,
 	unsigned int total)
 {
@@ -553,7 +553,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 			cfg->get_configvalue("itemview-title-format"), width));
 }
 
-void ItemViewFormAction::handle_cmdline(const std::string& cmd)
+void ItemViewFormAction::handle_cmdline(const Utf8String& cmd)
 {
 	const auto command = FormAction::parse_command(cmd);
 	switch (command.type) {
@@ -567,9 +567,9 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-void ItemViewFormAction::handle_save(const std::string& filename_param)
+void ItemViewFormAction::handle_save(const Utf8String& filename_param)
 {
-	std::string filename = utils::resolve_tilde(filename_param);
+	auto filename = utils::resolve_tilde(filename_param);
 	if (filename == "") {
 		v->get_statusline().show_error(_("Aborted saving."));
 	} else {
@@ -603,7 +603,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		do_search();
 		break;
 	case OP_PIPE_TO: {
-		std::string cmd = qna_responses[0];
+		auto cmd = qna_responses[0];
 		std::ostringstream ostr;
 		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
 		v->push_empty_formaction();
@@ -635,11 +635,11 @@ void ItemViewFormAction::finished_qna(Operation op)
 
 void ItemViewFormAction::register_format_styles()
 {
-	std::string attrstr = rxman.get_attrs_stfl_string("article", false);
+	auto attrstr = rxman.get_attrs_stfl_string("article", false);
 	attrstr.append(
 		"@style_b_normal[color_bold]:attr=bold "
 		"@style_u_normal[color_underline]:attr=underline ");
-	std::string stfl_textview = strprintf::fmt(
+	auto stfl_textview = strprintf::fmt(
 			"{textview[article] style_normal[article]: "
 			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "
 			"offset[article_offset]:0 richtext:1}",
@@ -667,23 +667,23 @@ void ItemViewFormAction::update_percent()
 			percent);
 
 		if (offset == 0 || percent == 0) {
-			set_value("percent", _("Top"));
+			set_value("percent", _s("Top"));
 		} else if (offset == (num_lines - 1)) {
-			set_value("percent", _("Bottom"));
+			set_value("percent", _s("Bottom"));
 		} else {
 			set_value("percent", strprintf::fmt("%3u %% ", percent));
 		}
 	}
 }
 
-std::string ItemViewFormAction::title()
+Utf8String ItemViewFormAction::title()
 {
 	auto title = item->title();
 	utils::remove_soft_hyphens(title);
 	return strprintf::fmt(_("Article - %s"), utils::utf8_to_locale(title));
 }
 
-void ItemViewFormAction::set_highlightphrase(const std::string& text)
+void ItemViewFormAction::set_highlightphrase(const Utf8String& text)
 {
 	highlight_text(text);
 }
@@ -704,7 +704,7 @@ void ItemViewFormAction::do_search()
 	highlight_text(searchphrase);
 }
 
-void ItemViewFormAction::highlight_text(const std::string& searchphrase)
+void ItemViewFormAction::highlight_text(const Utf8String& searchphrase)
 {
 	std::vector<Utf8String> params;
 	params.push_back("article");
