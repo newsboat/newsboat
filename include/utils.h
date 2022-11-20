@@ -15,6 +15,7 @@
 
 #include "configcontainer.h"
 #include "logger.h"
+#include "utf8string.h"
 
 #include "libnewsboat-ffi/src/utils.rs.h"
 
@@ -112,6 +113,8 @@ std::vector<std::pair<unsigned int, unsigned int>> partition_indexes(
 
 std::string join(const std::vector<std::string>& strings,
 	const std::string& separator);
+Utf8String join(const std::vector<Utf8String>& strings,
+	const Utf8String& separator);
 
 std::string censor_url(const std::string& url);
 

@@ -556,6 +556,25 @@ std::string utils::join(const std::vector<std::string>& strings,
 	return result;
 }
 
+Utf8String utils::join(const std::vector<Utf8String>& strings,
+	const Utf8String& separator)
+{
+	Utf8String result;
+
+	bool first = true;
+	for (const auto& str : strings) {
+		if (first) {
+			first = false;
+		} else {
+			result.append(separator);
+		}
+		result.append(str);
+	}
+
+	return result;
+}
+
+
 std::string utils::censor_url(const std::string& url)
 {
 	return std::string(utils::bridged::censor_url(url));
