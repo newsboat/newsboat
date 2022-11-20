@@ -47,6 +47,9 @@ std::vector<std::string> tokenize_quoted(const std::string& str,
 nonstd::optional<std::string> extract_token_quoted(std::string& str,
 	std::string delimiters = " \r\n\t");
 
+nonstd::optional<Utf8String> extract_token_quoted(Utf8String& str,
+	Utf8String delimiters = " \r\n\t");
+
 std::string consolidate_whitespace(const std::string& str);
 
 std::string translit(const std::string& tocode,

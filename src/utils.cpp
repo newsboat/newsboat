@@ -81,6 +81,19 @@ nonstd::optional<std::string> utils::extract_token_quoted(std::string& str,
 	return {};
 }
 
+nonstd::optional<Utf8String> utils::extract_token_quoted(Utf8String& str,
+	Utf8String delimiters)
+{
+	rust::String remaining = str;
+	rust::String token;
+	if (utils::bridged::extract_token_quoted(remaining, delimiters, token)) {
+		str = Utf8String(remaining);
+		return Utf8String(token);
+	}
+	str = Utf8String(remaining);
+	return {};
+}
+
 std::vector<std::string> utils::tokenize(const std::string& str,
 	std::string delimiters)
 {
