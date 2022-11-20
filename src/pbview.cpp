@@ -161,7 +161,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			if (ctrl->downloads_in_progress() > 0) {
-				dllist_form.set("msg", _("Error: can't quit: download(s) in progress."));
+				dllist_form.set("msg", _s("Error: can't quit: download(s) in progress."));
 				update_view = true;
 			} else {
 				quit = true;
@@ -197,7 +197,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 						DlStatus::PLAYED);
 				} else {
 					dllist_form.set("msg",
-						_("Error: download needs to be "
+						_s("Error: download needs to be "
 							"finished before the file "
 							"can be played."));
 				}
@@ -247,7 +247,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PB_PURGE:
 			if (ctrl->downloads_in_progress() > 0) {
 				dllist_form.set("msg",
-					_("Error: unable to perform operation: "
+					_s("Error: unable to perform operation: "
 						"download(s) in progress."));
 			} else {
 				ctrl->purge_queue();
@@ -297,7 +297,7 @@ void PbView::run_help()
 {
 	set_help_keymap_hint();
 
-	help_form.set("head", _("Help"));
+	help_form.set("head", _s("Help"));
 
 	const auto descs = keys->get_keymap_descriptions("podboat");
 

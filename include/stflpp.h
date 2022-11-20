@@ -5,7 +5,7 @@ extern "C" {
 #include <stfl.h>
 }
 
-#include <string>
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -13,7 +13,7 @@ namespace Stfl {
 
 class Form {
 public:
-	explicit Form(const std::string& text);
+	explicit Form(const Utf8String& text);
 	~Form();
 
 	// Make sure this class cannot accidentally get copied.
@@ -27,18 +27,18 @@ public:
 
 	const char* run(int timeout);
 
-	std::string get(const std::string& name);
-	void set(const std::string& name, const std::string& value);
+	Utf8String get(const Utf8String& name);
+	void set(const Utf8String& name, const Utf8String& value);
 
-	std::string get_focus();
-	void set_focus(const std::string& name);
+	Utf8String get_focus();
+	void set_focus(const Utf8String& name);
 
-	std::string dump(const std::string& name,
-		const std::string& prefix,
+	Utf8String dump(const Utf8String& name,
+		const Utf8String& prefix,
 		int focus);
-	void modify(const std::string& name,
-		const std::string& mode,
-		const std::string& text);
+	void modify(const Utf8String& name,
+		const Utf8String& mode,
+		const Utf8String& text);
 
 private:
 	stfl_form* f;
@@ -46,7 +46,7 @@ private:
 };
 
 void reset();
-std::string quote(const std::string& text);
+Utf8String quote(const Utf8String& text);
 
 } // namespace Stfl
 
