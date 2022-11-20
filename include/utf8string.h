@@ -53,15 +53,20 @@ public:
 	static Utf8String from_locale_charset(std::string input);
 
 	/// Return inner UTF-8 string.
-	const std::string& utf8() const
+	[[nodiscard]] const std::string& utf8() const
 	{
 		return inner;
+	}
+
+	[[nodiscard]] const char *c_str() const
+	{
+		return inner.c_str();
 	}
 
 	/// Return the string re-coded to the locale charset.
 	///
 	/// Invalid characters will be replaces by a question mark.
-	std::string to_locale_charset() const;
+	[[nodiscard]] std::string to_locale_charset() const;
 
 	Utf8String(const Utf8String&) = default;
 	Utf8String(Utf8String&&) = default;
@@ -87,17 +92,17 @@ public:
 		return append(other);
 	}
 
-	size_type length() const noexcept
+	[[nodiscard]] size_type length() const noexcept
 	{
 		return inner.length();
 	}
 
-	size_type size() const noexcept
+	[[nodiscard]] size_type size() const noexcept
 	{
 		return inner.size();
 	}
 
-	bool empty() const noexcept
+	[[nodiscard]] bool empty() const noexcept
 	{
 		return inner.empty();
 	}
@@ -107,12 +112,12 @@ public:
 		inner.clear();
 	}
 
-	size_type rfind(const Utf8String& str, size_type pos = npos) const noexcept
+	[[nodiscard]] size_type rfind(const Utf8String& str, size_type pos = npos) const noexcept
 	{
 		return inner.rfind(str.inner, pos);
 	}
 
-	size_type find(const Utf8String& str, size_type pos = 0) const noexcept
+	[[nodiscard]] size_type find(const Utf8String& str, size_type pos = 0) const noexcept
 	{
 		return inner.find(str.inner, pos);
 	}
