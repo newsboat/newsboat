@@ -22,28 +22,28 @@ using namespace newsboat;
 
 TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
 	SECTION("Default delimiters") {
-		tokens = utils::tokenize("as df qqq");
+		tokens = utils::tokenize(Utf8String("as df qqq"));
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "as");
 		REQUIRE(tokens[1] == "df");
 		REQUIRE(tokens[2] == "qqq");
 
-		tokens = utils::tokenize(" aa ");
+		tokens = utils::tokenize(Utf8String(" aa "));
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "aa");
 
-		tokens = utils::tokenize("	");
+		tokens = utils::tokenize(Utf8String("	"));
 		REQUIRE(tokens.size() == 0);
 
-		tokens = utils::tokenize("");
+		tokens = utils::tokenize(Utf8String(""));
 		REQUIRE(tokens.size() == 0);
 	}
 
 	SECTION("Splitting by tabulation characters") {
-		tokens = utils::tokenize("hello world\thow are you?", "\t");
+		tokens = utils::tokenize(Utf8String("hello world\thow are you?"), "\t");
 		REQUIRE(tokens.size() == 2);
 		REQUIRE(tokens[0] == "hello world");
 		REQUIRE(tokens[1] == "how are you?");
@@ -55,14 +55,14 @@ TEST_CASE(
 	"interspersed with runs of non-delimiter chars",
 	"[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
 	SECTION("Default delimiters include space and tab") {
-		tokens = utils::tokenize_spaced("a b");
+		tokens = utils::tokenize_spaced(Utf8String("a b"));
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[1] == " ");
 
-		tokens = utils::tokenize_spaced(" a\t b ");
+		tokens = utils::tokenize_spaced(Utf8String(" a\t b "));
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == " ");
 		REQUIRE(tokens[1] == "a");
@@ -72,7 +72,7 @@ TEST_CASE(
 	}
 
 	SECTION("Comma-separated values containing spaces and tabs") {
-		tokens = utils::tokenize_spaced("123,John Doe,\t\t$8", ",");
+		tokens = utils::tokenize_spaced(Utf8String("123,John Doe,\t\t$8"), ",");
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "123");
 		REQUIRE(tokens[1] == ",");
@@ -87,24 +87,24 @@ TEST_CASE(
 	"inside double quotes as single token",
 	"[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
 	SECTION("Default delimiters include spaces, newlines and tabs") {
 		tokens = utils::tokenize_quoted(
-				"asdf \"foobar bla\" \"foo\\r\\n\\tbar\"");
+				Utf8String("asdf \"foobar bla\" \"foo\\r\\n\\tbar\""));
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "asdf");
 		REQUIRE(tokens[1] == "foobar bla");
 		REQUIRE(tokens[2] == "foo\r\n\tbar");
 
-		tokens = utils::tokenize_quoted("  \"foo \\\\xxx\"\t\r \" \"");
+		tokens = utils::tokenize_quoted(Utf8String("  \"foo \\\\xxx\"\t\r \" \""));
 		REQUIRE(tokens.size() == 2);
 		REQUIRE(tokens[0] == "foo \\xxx");
 		REQUIRE(tokens[1] == " ");
 	}
 
 	SECTION("Closing double quote marks the end of a token") {
-		tokens = utils::tokenize_quoted(R"(set browser "mpv %u";)");
+		tokens = utils::tokenize_quoted(Utf8String(R"(set browser "mpv %u";)"));
 
 		REQUIRE(tokens.size() == 4);
 		REQUIRE(tokens[0] == "set");
@@ -117,19 +117,19 @@ TEST_CASE(
 TEST_CASE("tokenize_quoted() implicitly closes quotes at the end of the string",
 	"[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
-	tokens = utils::tokenize_quoted("\"\\\\");
+	tokens = utils::tokenize_quoted(Utf8String("\"\\\\"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\");
 
-	tokens = utils::tokenize_quoted("\"\\\\\" and \"some other stuff");
+	tokens = utils::tokenize_quoted(Utf8String("\"\\\\\" and \"some other stuff"));
 	REQUIRE(tokens.size() == 3);
 	REQUIRE(tokens[0] == "\\");
 	REQUIRE(tokens[1] == "and");
 	REQUIRE(tokens[2] == "some other stuff");
 
-	tokens = utils::tokenize_quoted(R"("abc\)");
+	tokens = utils::tokenize_quoted(Utf8String(R"("abc\)"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "abc");
 }
@@ -139,52 +139,52 @@ TEST_CASE(
 	"single backslash in output",
 	"[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
-	tokens = utils::tokenize_quoted(R"_("")_");
+	tokens = utils::tokenize_quoted(Utf8String(R"_("")_"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "");
 
-	tokens = utils::tokenize_quoted(R"_("\\")_");
+	tokens = utils::tokenize_quoted(Utf8String(R"_("\\")_"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"_(\)_");
 
-	tokens = utils::tokenize_quoted(R"_("#\\")_");
+	tokens = utils::tokenize_quoted(Utf8String(R"_("#\\")_"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"_(#\)_");
 
-	tokens = utils::tokenize_quoted(R"_("'#\\'")_");
+	tokens = utils::tokenize_quoted(Utf8String(R"_("'#\\'")_"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"_('#\')_");
 
-	tokens = utils::tokenize_quoted(R"_("'#\\ \\'")_");
+	tokens = utils::tokenize_quoted(Utf8String(R"_("'#\\ \\'")_"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"_('#\ \')_");
 
-	tokens = utils::tokenize_quoted("\"\\\\\\\\");
+	tokens = utils::tokenize_quoted(Utf8String("\"\\\\\\\\"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\\\");
 
-	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\");
+	tokens = utils::tokenize_quoted(Utf8String("\"\\\\\\\\\\\\"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\\\\\");
 
-	tokens = utils::tokenize_quoted("\"\\\\\\\\\"");
+	tokens = utils::tokenize_quoted(Utf8String("\"\\\\\\\\\""));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\\\");
 
-	tokens = utils::tokenize_quoted("\"\\\\\\\\\\\\\"");
+	tokens = utils::tokenize_quoted(Utf8String("\"\\\\\\\\\\\\\""));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\\\\\");
 
 	// https://github.com/newsboat/newsboat/issues/642
-	tokens = utils::tokenize_quoted(R"("\\bgit\\b")");
+	tokens = utils::tokenize_quoted(Utf8String(R"("\\bgit\\b")"));
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"(\bgit\b)");
 
 	// https://github.com/newsboat/newsboat/issues/536
 	tokens = utils::tokenize_quoted(
-			R"(browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u")");
+			Utf8String(R"(browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u")"));
 	REQUIRE(tokens.size() == 2);
 	REQUIRE(tokens[0] == "browser");
 	REQUIRE(tokens[1] ==
@@ -193,9 +193,9 @@ TEST_CASE(
 
 TEST_CASE("tokenize_quoted() doesn't un-escape escaped backticks", "[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
-	tokens = utils::tokenize_quoted("asdf \"\\`foobar `bla`\\`\"");
+	tokens = utils::tokenize_quoted(Utf8String("asdf \"\\`foobar `bla`\\`\""));
 
 	REQUIRE(tokens.size() == 2);
 	REQUIRE(tokens[0] == "asdf");
@@ -206,34 +206,34 @@ TEST_CASE("tokenize_quoted stops tokenizing once it found a # character "
 	"(outside of double quotes)",
 	"[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
 	SECTION("A string consisting of just a comment") {
-		tokens = utils::tokenize_quoted("# just a comment");
+		tokens = utils::tokenize_quoted(Utf8String("# just a comment"));
 		REQUIRE(tokens.empty());
 	}
 
 	SECTION("A string with one quoted substring") {
-		tokens = utils::tokenize_quoted(R"#("a test substring" # !!!)#");
+		tokens = utils::tokenize_quoted(Utf8String(R"#("a test substring" # !!!)#"));
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "a test substring");
 	}
 
 	SECTION("A string with two quoted substrings") {
-		tokens = utils::tokenize_quoted(R"#("first sub" "snd" # comment)#");
+		tokens = utils::tokenize_quoted(Utf8String(R"#("first sub" "snd" # comment)#"));
 		REQUIRE(tokens.size() == 2);
 		REQUIRE(tokens[0] == "first sub");
 		REQUIRE(tokens[1] == "snd");
 	}
 
 	SECTION("A comment containing # character") {
-		tokens = utils::tokenize_quoted(R"#(one # a comment with # char)#");
+		tokens = utils::tokenize_quoted(Utf8String(R"#(one # a comment with # char)#"));
 		REQUIRE(tokens.size() == 1);
 		REQUIRE(tokens[0] == "one");
 	}
 
 	SECTION("A # character inside quoted substring is ignored") {
-		tokens = utils::tokenize_quoted(R"#(this "will # be" ignored)#");
+		tokens = utils::tokenize_quoted(Utf8String(R"#(this "will # be" ignored)#"));
 		REQUIRE(tokens.size() == 3);
 		REQUIRE(tokens[0] == "this");
 		REQUIRE(tokens[1] == "will # be");
@@ -245,7 +245,7 @@ TEST_CASE("tokenize_quoted does not consider escaped pound sign (\\#) "
 	"a beginning of a comment",
 	"[utils]")
 {
-	const auto tokens = utils::tokenize_quoted(R"#(one \# two three # ???)#");
+	const auto tokens = utils::tokenize_quoted(Utf8String(R"#(one \# two three # ???)#"));
 	REQUIRE(tokens.size() == 4);
 	REQUIRE(tokens[0] == "one");
 	REQUIRE(tokens[1] == "\\#");
@@ -357,10 +357,10 @@ TEST_CASE("extract_token_quoted() works with Unicode strings too", "[utils]")
 
 TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 {
-	std::vector<std::string> tokens;
+	std::vector<Utf8String> tokens;
 
 	SECTION("a few words separated by newlines") {
-		tokens = utils::tokenize_nl("first\nsecond\nthird");
+		tokens = utils::tokenize_nl(Utf8String("first\nsecond\nthird"));
 
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "first");
@@ -369,14 +369,14 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 	}
 
 	SECTION("several preceding delimiters") {
-		tokens = utils::tokenize_nl("\n\n\nonly");
+		tokens = utils::tokenize_nl(Utf8String("\n\n\nonly"));
 
 		REQUIRE(tokens.size() == 4);
 		REQUIRE(tokens[3] == "only");
 	}
 
 	SECTION("redundant internal delimiters") {
-		tokens = utils::tokenize_nl("first\nsecond\n\nthird");
+		tokens = utils::tokenize_nl(Utf8String("first\nsecond\n\nthird"));
 
 		REQUIRE(tokens.size() == 6);
 		REQUIRE(tokens[0] == "first");
@@ -385,7 +385,7 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 	}
 
 	SECTION("custom delimiter") {
-		tokens = utils::tokenize_nl("first\nsecond\nthird", "i");
+		tokens = utils::tokenize_nl(Utf8String("first\nsecond\nthird"), "i");
 
 		REQUIRE(tokens.size() == 5);
 		REQUIRE(tokens[0] == "f");
@@ -395,14 +395,14 @@ TEST_CASE("tokenize_nl() split a string into delimiters and fields", "[utils]")
 
 	SECTION("no non-delimiter text") {
 		SECTION("single newline") {
-			tokens = utils::tokenize_nl("\n");
+			tokens = utils::tokenize_nl(Utf8String("\n"));
 
 			REQUIRE(tokens.size() == 1);
 			REQUIRE(tokens[0] == "\n");
 		}
 
 		SECTION("multiple newlines") {
-			tokens = utils::tokenize_nl("\n\n\n");
+			tokens = utils::tokenize_nl(Utf8String("\n\n\n"));
 
 			REQUIRE(tokens.size() == 3);
 			REQUIRE(tokens[0] == "\n");
@@ -417,28 +417,27 @@ TEST_CASE(
 	"[utils]")
 {
 	SECTION("no comments in line") {
-		REQUIRE(utils::strip_comments("") == "");
-		REQUIRE(utils::strip_comments("\t\n") == "\t\n");
-		REQUIRE(utils::strip_comments("some directive ") == "some directive ");
+		REQUIRE(utils::strip_comments(Utf8String("")) == "");
+		REQUIRE(utils::strip_comments(Utf8String("\t\n")) == "\t\n");
+		REQUIRE(utils::strip_comments(Utf8String("some directive ")) == "some directive ");
 	}
 
 	SECTION("fully commented line") {
-		REQUIRE(utils::strip_comments("#") == "");
-		REQUIRE(utils::strip_comments("# #") == "");
-		REQUIRE(utils::strip_comments("# comment") == "");
+		REQUIRE(utils::strip_comments(Utf8String("#")) == "");
+		REQUIRE(utils::strip_comments(Utf8String("# #")) == "");
+		REQUIRE(utils::strip_comments(Utf8String("# comment")) == "");
 	}
 
 	SECTION("partially commented line") {
-		REQUIRE(utils::strip_comments("directive # comment") == "directive ");
-		REQUIRE(utils::strip_comments("directive # comment # another") == "directive ");
-		REQUIRE(utils::strip_comments("directive#comment") == "directive");
+		REQUIRE(utils::strip_comments(Utf8String("directive # comment")) == "directive ");
+		REQUIRE(utils::strip_comments(Utf8String("directive # comment # another")) == "directive ");
+		REQUIRE(utils::strip_comments(Utf8String("directive#comment")) == "directive");
 	}
 }
 
 TEST_CASE("strip_comments ignores escaped # characters (\\#)")
 {
-	const auto expected =
-		std::string(R"#(one two \# three four)#");
+	const Utf8String expected = R"#(one two \# three four)#";
 	const auto input = expected + "# and a comment";
 	REQUIRE(utils::strip_comments(input) == expected);
 }
@@ -447,22 +446,19 @@ TEST_CASE("strip_comments ignores # characters inside double quotes",
 	"[utils][issue652]")
 {
 	SECTION("Real-world cases from issue 652") {
-		const auto expected1 =
-			std::string(R"#(highlight article "[-=+#_*~]{3,}.*" green default)#");
+		const Utf8String expected1 = R"#(highlight article "[-=+#_*~]{3,}.*" green default)#";
 		const auto input1 = expected1 + "# this is a comment";
 		REQUIRE(utils::strip_comments(input1) == expected1);
 
-		const auto expected2 =
-			std::string(
-				R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
+		const Utf8String expected2 =
+			R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#";
 		const auto input2 = expected2 + "#heresacomment";
 		REQUIRE(utils::strip_comments(input2) == expected2);
 	}
 
 	SECTION("Escaped double quote inside double quotes is not treated "
 		"as closing quote") {
-		const auto expected =
-			std::string(R"#(test "here \"goes # nothing\" etc" hehe)#");
+		const Utf8String expected = R"#(test "here \"goes # nothing\" etc" hehe)#";
 		const auto input = expected + "# and here is a comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
@@ -471,14 +467,13 @@ TEST_CASE("strip_comments ignores # characters inside double quotes",
 TEST_CASE("strip_comments ignores # characters inside backticks", "[utils]")
 {
 	SECTION("Simple case") {
-		const auto expected = std::string(R"#(one `two # three` four)#");
+		const Utf8String expected = R"#(one `two # three` four)#";
 		const auto input = expected + "# and a comment, of course";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 
 	SECTION("Escaped backtick inside backticks is not treated as closing") {
-		const auto expected =
-			std::string(R"#(some `other \` tricky # test` hehe)#");
+		const Utf8String expected = R"#(some `other \` tricky # test` hehe)#";
 		const auto input = expected + "#here goescomment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
@@ -488,20 +483,19 @@ TEST_CASE("strip_comments is not confused by nested double quotes and backticks"
 	"[utils]")
 {
 	{
-		const auto expected = std::string(R"#("`" ... ` `"` ")#");
+		const Utf8String expected = R"#("`" ... ` `"` ")#";
 		const auto input = expected + "#comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 
 	{
-		const auto expected = std::string(R"#(aaa ` bbb "ccc ddd" e` dd)#");
+		const Utf8String expected = R"#(aaa ` bbb "ccc ddd" e` dd)#";
 		const auto input = expected + "# a comment string";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 
 	{
-		const auto expected =
-			std::string(R"#(option "this `weird " command` for value")#");
+		const Utf8String expected = R"#(option "this `weird " command` for value")#";
 		const auto input = expected + "#and a comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
