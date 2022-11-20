@@ -2,13 +2,14 @@
 #define NEWSBOAT_CONFIGEXCEPTION_H_
 
 #include <stdexcept>
-#include <string>
+
+#include "utf8string.h"
 
 namespace newsboat {
 
 class ConfigException : public std::exception {
 public:
-	explicit ConfigException(const std::string& errmsg)
+	explicit ConfigException(const Utf8String& errmsg)
 		: msg(errmsg)
 	{
 	}
@@ -19,7 +20,7 @@ public:
 	}
 
 private:
-	std::string msg;
+	Utf8String msg;
 };
 
 } // namespace newsboat

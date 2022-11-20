@@ -2,7 +2,8 @@
 #define NEWSBOAT_CONFIGHANDLEREXCEPTION_H_
 
 #include <stdexcept>
-#include <string>
+
+#include "utf8string.h"
 
 namespace newsboat {
 
@@ -10,7 +11,7 @@ enum class ActionHandlerStatus;
 
 class ConfigHandlerException : public std::exception {
 public:
-	explicit ConfigHandlerException(const std::string& emsg)
+	explicit ConfigHandlerException(const Utf8String& emsg)
 		: msg(emsg)
 	{
 	}
@@ -26,8 +27,8 @@ public:
 	}
 
 private:
-	const char* get_errmsg(ActionHandlerStatus e);
-	std::string msg;
+	Utf8String get_errmsg(ActionHandlerStatus e);
+	Utf8String msg;
 };
 
 } // namespace newsboat
