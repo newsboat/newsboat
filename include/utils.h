@@ -47,6 +47,15 @@ std::vector<std::string> tokenize_quoted(const std::string& str,
 nonstd::optional<std::string> extract_token_quoted(std::string& str,
 	std::string delimiters = " \r\n\t");
 
+Utf8String strip_comments(const Utf8String& line);
+std::vector<Utf8String> tokenize(const Utf8String& str,
+	Utf8String delimiters = " \r\n\t");
+std::vector<Utf8String> tokenize_spaced(const Utf8String& str,
+	Utf8String delimiters = " \r\n\t");
+std::vector<Utf8String> tokenize_nl(const Utf8String& str,
+	Utf8String delimiters = "\r\n");
+std::vector<Utf8String> tokenize_quoted(const Utf8String& str,
+	Utf8String delimiters = " \r\n\t");
 nonstd::optional<Utf8String> extract_token_quoted(Utf8String& str,
 	Utf8String delimiters = " \r\n\t");
 
@@ -127,6 +136,10 @@ void trim_end(std::string& str);
 
 void trim(std::string& str);
 
+void trim_end(Utf8String& str);
+
+void trim(Utf8String& str);
+
 std::string quote(const std::string& str);
 
 std::string quote_if_necessary(const std::string& str);
@@ -166,6 +179,7 @@ nonstd::expected<std::vector<std::string>, ReadTextFileError> read_text_file(
 	const std::string& filename);
 
 void remove_soft_hyphens(std::string& text);
+void remove_soft_hyphens(Utf8String& text);
 
 bool is_valid_podcast_type(const std::string& mimetype);
 

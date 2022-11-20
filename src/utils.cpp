@@ -49,11 +49,28 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
+namespace {
+	std::vector<newsboat::Utf8String> string_to_utf8_vector(std::vector<std::string> input)
+	{
+		std::vector<newsboat::Utf8String> output;
+		output.reserve(input.size());
+		for (auto s : input) {
+			output.push_back(newsboat::Utf8String::from_utf8(s));
+		}
+		return output;
+	}
+}
+
 namespace newsboat {
 
 std::string utils::strip_comments(const std::string& line)
 {
 	return std::string(utils::bridged::strip_comments(line));
+}
+
+Utf8String utils::strip_comments(const Utf8String& line)
+{
+	return Utf8String(utils::bridged::strip_comments(line));
 }
 
 std::vector<std::string> utils::tokenize_quoted(const std::string& str,
@@ -64,6 +81,18 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	std::vector<std::string> result;
 	for (const auto& token : tokens) {
 		result.push_back(std::string(token));
+	}
+	return result;
+}
+
+std::vector<Utf8String> utils::tokenize_quoted(const Utf8String& str,
+	Utf8String delimiters)
+{
+	const auto tokens = utils::bridged::tokenize_quoted(str, delimiters);
+
+	std::vector<Utf8String> result;
+	for (const auto& token : tokens) {
+		result.push_back(token);
 	}
 	return result;
 }
@@ -112,6 +141,12 @@ std::vector<std::string> utils::tokenize(const std::string& str,
 	return tokens;
 }
 
+std::vector<Utf8String> utils::tokenize(const Utf8String& str,
+	Utf8String delimiters)
+{
+	return string_to_utf8_vector(tokenize(str.utf8(), delimiters.utf8()));
+}
+
 std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	std::string delimiters)
 {
@@ -133,6 +168,12 @@ std::vector<std::string> utils::tokenize_spaced(const std::string& str,
 	}
 
 	return tokens;
+}
+
+std::vector<Utf8String> utils::tokenize_spaced(const Utf8String& str,
+	Utf8String delimiters)
+{
+	return string_to_utf8_vector(tokenize_spaced(str.utf8(), delimiters.utf8()));
 }
 
 std::string utils::consolidate_whitespace(const std::string& str)
@@ -179,6 +220,12 @@ std::vector<std::string> utils::tokenize_nl(const std::string& str,
 	}
 
 	return tokens;
+}
+
+std::vector<Utf8String> utils::tokenize_nl(const Utf8String& str,
+	Utf8String delimiters)
+{
+	return string_to_utf8_vector(tokenize_nl(str.utf8(), delimiters.utf8()));
 }
 
 std::string utils::translit(const std::string& tocode, const std::string& fromcode)
@@ -608,6 +655,16 @@ void utils::trim_end(std::string& str)
 	str = std::string(utils::bridged::trim_end(str));
 }
 
+void utils::trim(Utf8String& str)
+{
+	str = Utf8String(utils::bridged::trim(str));
+}
+
+void utils::trim_end(Utf8String& str)
+{
+	str = Utf8String(utils::bridged::trim_end(str));
+}
+
 std::string utils::quote(const std::string& str)
 {
 	return std::string(utils::bridged::quote(str));
@@ -840,6 +897,13 @@ void utils::remove_soft_hyphens(std::string& text)
 	rust::String tmp(text);
 	utils::bridged::remove_soft_hyphens(tmp);
 	text = std::string(tmp);
+}
+
+void utils::remove_soft_hyphens(Utf8String& text)
+{
+	rust::String tmp(text.utf8());
+	utils::bridged::remove_soft_hyphens(tmp);
+	text = Utf8String(tmp);
 }
 
 bool utils::is_valid_podcast_type(const std::string& mimetype)
