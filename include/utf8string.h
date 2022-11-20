@@ -32,6 +32,7 @@ public:
 	/// This performs no validations because Rust strings are known to be
 	/// represented in UTF-8.
 	Utf8String(const rust::String&);
+	Utf8String(const rust::Str&);
 
 	/// Convert the object to a Rust String.
 	///
