@@ -53,7 +53,7 @@ public:
 	static Utf8String from_locale_charset(std::string input);
 
 	/// Return inner UTF-8 string.
-	const std::string& to_utf8() const
+	const std::string& utf8() const
 	{
 		return inner;
 	}
@@ -174,7 +174,7 @@ namespace std {
 template<> struct hash<::newsboat::Utf8String> {
 	std::size_t operator()(const ::newsboat::Utf8String& s) const noexcept
 	{
-		return std::hash<std::string> {}(s.to_utf8());
+		return std::hash<std::string> {}(s.utf8());
 	}
 };
 } // namespace std

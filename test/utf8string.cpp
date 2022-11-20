@@ -15,7 +15,7 @@ struct StringMaker<Utf8String> {
 	static std::string convert(const Utf8String& value)
 	{
 		std::string result("Utf8String( \"");
-		result.append(value.to_utf8());
+		result.append(value.utf8());
 		result.append("\" )");
 		return result;
 	}
@@ -25,18 +25,18 @@ struct StringMaker<Utf8String> {
 TEST_CASE("Utf8String can be constructed from valid UTF-8", "[Utf8String]")
 {
 	const auto str1 = Utf8String::from_utf8("");
-	REQUIRE(str1.to_utf8() == "");
+	REQUIRE(str1.utf8() == "");
 
 	// Russian "Привет", "hello"
 	const auto str2 =
 		Utf8String::from_utf8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
-	REQUIRE(str2.to_utf8() == "Привет");
+	REQUIRE(str2.utf8() == "Привет");
 }
 
 TEST_CASE("Utf8String can be implicitly constructed from a string literal", "[Utf8String]")
 {
 	const auto check = [](Utf8String actual, std::string expected) {
-		REQUIRE(actual.to_utf8() == expected);
+		REQUIRE(actual.utf8() == expected);
 	};
 
 	check("", "");
@@ -67,7 +67,7 @@ SCENARIO("Utf8String can be constructed from strings in locale locale charset",
 			const auto str = Utf8String::from_locale_charset("");
 
 			THEN("the result is empty") {
-				REQUIRE(str.to_utf8() == "");
+				REQUIRE(str.utf8() == "");
 			}
 
 			THEN("the result in locale encoding is empty") {
@@ -82,7 +82,7 @@ SCENARIO("Utf8String can be constructed from strings in locale locale charset",
 			const auto str = Utf8String::from_locale_charset(input);
 
 			THEN("the result is that string in UTF-8") {
-				REQUIRE(str.to_utf8() == "проверка");
+				REQUIRE(str.utf8() == "проверка");
 			}
 
 			THEN("the result in locale encoding is the same as input") {
@@ -100,7 +100,7 @@ SCENARIO("Utf8String can be constructed from strings in locale locale charset",
 			const auto str = Utf8String::from_locale_charset("");
 
 			THEN("the result is empty") {
-				REQUIRE(str.to_utf8() == "");
+				REQUIRE(str.utf8() == "");
 			}
 
 			THEN("the result in locale encoding is empty") {
@@ -114,7 +114,7 @@ SCENARIO("Utf8String can be constructed from strings in locale locale charset",
 			const auto str = Utf8String::from_locale_charset(input);
 
 			THEN("the result is that string in UTF-8") {
-				REQUIRE(str.to_utf8() == "строка");
+				REQUIRE(str.utf8() == "строка");
 			}
 
 			THEN("the result in locale encoding is the same as input") {
@@ -132,7 +132,7 @@ SCENARIO("Utf8String can be constructed from strings in locale locale charset",
 			const auto str = Utf8String::from_locale_charset("");
 
 			THEN("the result is empty") {
-				REQUIRE(str.to_utf8() == "");
+				REQUIRE(str.utf8() == "");
 			}
 
 			THEN("the result in locale encoding is empty") {
@@ -146,7 +146,7 @@ SCENARIO("Utf8String can be constructed from strings in locale locale charset",
 			const auto str = Utf8String::from_locale_charset(input);
 
 			THEN("the result is that string in UTF-8") {
-				REQUIRE(str.to_utf8() == "окна");
+				REQUIRE(str.utf8() == "окна");
 			}
 
 			THEN("the result in locale encoding is the same as input") {
@@ -179,7 +179,7 @@ TEST_CASE("Utf8String::from_locale_charset() replaces invalid codepoints of loca
 		const std::string input("\xd0\xbc\xd0\xbe\xd1\x82\xbe\xd1\xd0\xb8\xd0\xba\xd0\xbb");
 		const auto str = Utf8String::from_locale_charset(input);
 
-		REQUIRE(str.to_utf8() == "мот??икл");
+		REQUIRE(str.utf8() == "мот??икл");
 	}
 
 	// There is no tests for KOI8-R and CP1251 because there is no invalid codepoints there.
@@ -210,7 +210,7 @@ TEST_CASE("Utf8String::to_locale_charset() replaces invalid characters with ques
 			const auto str = Utf8String::from_utf8(input);
 
 			THEN("the result represents the string faithfully") {
-				REQUIRE(str.to_utf8() == input);
+				REQUIRE(str.utf8() == input);
 			}
 
 			THEN("the result in locale encoding is the same as input") {
@@ -230,7 +230,7 @@ TEST_CASE("Utf8String::to_locale_charset() replaces invalid characters with ques
 			const auto str = Utf8String::from_utf8(input);
 
 			THEN("the result represents the string faithfully") {
-				REQUIRE(str.to_utf8() == input);
+				REQUIRE(str.utf8() == input);
 			}
 
 			THEN("the result in locale encoding has a question mark where \"і\" should be") {
@@ -253,7 +253,7 @@ TEST_CASE("Utf8String::to_locale_charset() replaces invalid characters with ques
 			const auto str = Utf8String::from_utf8(input);
 
 			THEN("the result represents the string faithfully") {
-				REQUIRE(str.to_utf8() == input);
+				REQUIRE(str.utf8() == input);
 			}
 
 			THEN("the result in locale encoding has question marks instead of Japanese characters") {

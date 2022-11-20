@@ -102,7 +102,7 @@ std::string fmt(const std::string& format,
 	const Utf8String& argument,
 	Args... args)
 {
-	return fmt(format, argument.to_utf8(), args...);
+	return fmt(format, argument.utf8(), args...);
 }
 
 namespace detail {
