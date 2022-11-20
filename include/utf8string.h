@@ -7,6 +7,7 @@
 namespace rust {
 inline namespace cxxbridge1 {
 class String;
+class Str;
 }
 }
 
@@ -36,6 +37,7 @@ public:
 	///
 	/// This constructs a new Rust String from the UTF-8 data.
 	operator rust::String() const;
+	operator rust::Str() const;
 
 
 	/// Construct an object from a string literal, which is assumed to be in

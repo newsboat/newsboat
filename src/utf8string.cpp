@@ -19,6 +19,11 @@ Utf8String::operator rust::String() const
 	return rust::String(inner);
 }
 
+Utf8String::operator rust::Str() const
+{
+	return rust::Str(inner);
+}
+
 Utf8String::Utf8String(std::string input)
 {
 	inner = std::move(input);
