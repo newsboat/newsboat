@@ -17,6 +17,15 @@ class Utf8String {
 public:
 	Utf8String() = default;
 
+	// XXX: Hack for the duration of converting.
+	// These should reduce some of the churn, when working
+	// between converted and old interfaces.
+	Utf8String(std::string input);
+	operator std::string() const
+	{
+		return inner;
+	}
+
 	/// Construct an object from a String received from Rust.
 	///
 	/// This performs no validations because Rust strings are known to be
@@ -132,7 +141,8 @@ public:
 	friend Utf8String operator+(const Utf8String& lhs, const Utf8String& rhs);
 
 private:
-	explicit Utf8String(std::string input);
+	// TODO: add back once the implicit conversion hack is served its purpose
+	// explicit Utf8String(std::string input);
 
 	// UTF-8 encoded string
 	std::string inner;
