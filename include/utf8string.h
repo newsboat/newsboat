@@ -70,7 +70,7 @@ public:
 		return inner;
 	}
 
-	[[nodiscard]] const char *c_str() const
+	[[nodiscard]] const char* c_str() const
 	{
 		return inner.c_str();
 	}

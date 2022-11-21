@@ -184,7 +184,8 @@ TEST_CASE(
 
 	// https://github.com/newsboat/newsboat/issues/536
 	tokens = utils::tokenize_quoted(
-			Utf8String(R"(browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u")"));
+			Utf8String(
+				R"(browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u")"));
 	REQUIRE(tokens.size() == 2);
 	REQUIRE(tokens[0] == "browser");
 	REQUIRE(tokens[1] ==
@@ -430,7 +431,8 @@ TEST_CASE(
 
 	SECTION("partially commented line") {
 		REQUIRE(utils::strip_comments(Utf8String("directive # comment")) == "directive ");
-		REQUIRE(utils::strip_comments(Utf8String("directive # comment # another")) == "directive ");
+		REQUIRE(utils::strip_comments(Utf8String("directive # comment # another")) ==
+			"directive ");
 		REQUIRE(utils::strip_comments(Utf8String("directive#comment")) == "directive");
 	}
 }

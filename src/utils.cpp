@@ -50,15 +50,15 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace {
-	std::vector<newsboat::Utf8String> string_to_utf8_vector(std::vector<std::string> input)
-	{
-		std::vector<newsboat::Utf8String> output;
-		output.reserve(input.size());
-		for (auto s : input) {
-			output.push_back(newsboat::Utf8String::from_utf8(s));
-		}
-		return output;
+std::vector<newsboat::Utf8String> string_to_utf8_vector(std::vector<std::string> input)
+{
+	std::vector<newsboat::Utf8String> output;
+	output.reserve(input.size());
+	for (auto s : input) {
+		output.push_back(newsboat::Utf8String::from_utf8(s));
 	}
+	return output;
+}
 }
 
 namespace newsboat {
