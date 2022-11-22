@@ -564,8 +564,10 @@ int Controller::run(const CliArgsParser& args)
 					LOG(Level::USERERROR, "Unreachable feed found: %s", feed);
 				}
 
-				std::cout << strprintf::fmt(_("%d unreachable feeds found. See "
-							"`cleanup-on-quit` in newsboat(1) for details."), unreachable_feeds.size())
+				// Workaround for missing overload of strprintf::fmt for size_type on macOS.
+				std::uint64_t num_feeds = unreachable_feeds.size();
+				std::cout << strprintf::fmt(_("%" PRIu64 " unreachable feeds found. See "
+							"`cleanup-on-quit` in newsboat(1) for details."), num_feeds)
 					<< std::endl;
 			}
 		}
