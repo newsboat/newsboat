@@ -243,6 +243,9 @@ ConfigContainer::ConfigContainer()
 	{
 		"toggleitemread-jumps-to-next-unread",
 		ConfigData("false", ConfigDataType::BOOL)},
+	{
+		"toggleitemread-jumps-to-previous",
+		ConfigData("false", ConfigDataType::BOOL)},
 	{"ttrss-flag-publish", ConfigData("", ConfigDataType::STR)},
 	{"ttrss-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"ttrss-login", ConfigData("", ConfigDataType::STR)},

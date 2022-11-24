@@ -260,13 +260,18 @@ bool ItemListFormAction::process_operation(Operation op,
 						_("Error while toggling read flag: %s"),
 						e.what()));
 			}
-			if (!cfg->get_configvalue_as_bool(
+			if (cfg->get_configvalue_as_bool(
 					"toggleitemread-jumps-to-next-unread")) {
+				process_operation(OP_NEXTUNREAD);
+			} else if (cfg->get_configvalue_as_bool(
+					"toggleitemread-jumps-to-previous")) {
+				if (itempos > 0) {
+					list.set_position(itempos - 1);
+				}
+			} else {
 				if (itempos < visible_items.size() - 1) {
 					list.set_position(itempos + 1);
 				}
-			} else {
-				process_operation(OP_NEXTUNREAD);
 			}
 			invalidate(itempos);
 		}
