@@ -2,6 +2,7 @@
 #define NEWSBOAT_REMOTEAPI_H_
 
 #include <curl/curl.h>
+#include <functional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -38,6 +39,10 @@ public:
 	static const std::string eval_password(const std::string& cmd);
 
 protected:
+	static void update_flag(const std::string& oldflags,
+		const std::string& newflags,
+		char flag, std::function<void(bool added)>&& do_update);
+
 	ConfigContainer* cfg;
 	Credentials get_credentials(const std::string& scope,
 		const std::string& name);

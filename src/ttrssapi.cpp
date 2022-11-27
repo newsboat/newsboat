@@ -57,8 +57,8 @@ std::string TtRssApi::retrieve_sid()
 		return "";
 	}
 
-	args["user"] = single ? "admin" : cred.user.c_str();
-	args["password"] = cred.pass.c_str();
+	args["user"] = single ? "admin" : cred.user;
+	args["password"] = cred.pass;
 	if (single) {
 		auth_info = strprintf::fmt("%s:%s", cred.user, cred.pass);
 	} else {
@@ -321,11 +321,7 @@ bool TtRssApi::mark_all_read(const std::string& feed_url)
 	args["feed_id"] = url_to_id(feed_url);
 	json content = run_op("catchupFeed", args);
 
-	if (content.is_null()) {
-		return false;
-	}
-
-	return true;
+	return !content.is_null();
 }
 
 bool TtRssApi::mark_article_read(const std::string& guid, bool read)
@@ -354,24 +350,15 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 	bool success = true;
 
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
-			success = star_article(guid, true);
-		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
-			success = star_article(guid, false);
-		}
+		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
+			success = star_article(guid, added);
+		});
 	}
 
 	if (publish_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), publish_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), publish_flag[0]) != nullptr) {
-			success = publish_article(guid, true);
-		} else if (strchr(oldflags.c_str(), publish_flag[0]) !=
-			nullptr &&
-			strchr(newflags.c_str(), publish_flag[0]) == nullptr) {
-			success = publish_article(guid, false);
-		}
+		update_flag(oldflags, newflags, publish_flag[0], [&](bool added) {
+			success = publish_article(guid, added);
+		});
 	}
 
 	return success;
@@ -551,11 +538,7 @@ bool TtRssApi::update_article(const std::string& guid, int field, int mode)
 	args["mode"] = std::to_string(mode);
 	json content = run_op("updateArticle", args);
 
-	if (content.is_null()) {
-		return false;
-	}
-
-	return true;
+	return !content.is_null();
 }
 
 std::string TtRssApi::url_to_id(const std::string& url)
