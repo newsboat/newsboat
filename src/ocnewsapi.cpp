@@ -392,9 +392,9 @@ bool OcNewsApi::query(const std::string& query,
 			LOG(Level::CRITICAL,
 				"OcNewsApi::query: authentication error");
 		else {
-			std::string msg = "OcNewsApi::query: error ";
-			msg += response_code;
-			LOG(Level::CRITICAL, msg);
+			LOG(Level::CRITICAL,
+				"OcNewsApi::query: error %" PRIi64,
+				static_cast<int64_t>(response_code));
 		}
 		return false;
 	}
