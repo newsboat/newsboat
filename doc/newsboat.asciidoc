@@ -56,7 +56,7 @@ Newsboat binaries are available in a number of repositories:
 The most up-to-date source code can always be downloaded from the Git
 repository:
 
-	$ git clone git://github.com/newsboat/newsboat.git
+	$ git clone https://github.com/newsboat/newsboat.git
 
 There are also signed release tarballs available from https://newsboat.org/[our
 website].

@@ -52,7 +52,7 @@ https://newsboat.org/
 
 Alternatively, you can check out the latest version from the Git repository:
 
-	$ git clone git://github.com/newsboat/newsboat.git
+	$ git clone https://github.com/newsboat/newsboat.git
 
 Dependencies
 ------------
