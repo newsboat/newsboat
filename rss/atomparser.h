@@ -21,6 +21,7 @@ struct AtomParser : public RssParser {
 
 private:
 	Item parse_entry(xmlNode* itemNode);
+	void parse_and_update_author(xmlNode* authorNode, std::string& author);
 	static std::string content_type_to_mime(const std::string& type);
 	const char* ns;
 };

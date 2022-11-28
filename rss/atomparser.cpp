@@ -36,6 +36,7 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 
 	f.language = get_prop(rootNode, "lang");
 	globalbase = get_prop(rootNode, "base", XML_URI);
+	std::string author;
 
 	for (xmlNode* node = rootNode->children; node != nullptr;
 		node = node->next) {
@@ -48,15 +49,25 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 		} else if (node_is(node, "subtitle", ns)) {
 			f.description = get_content(node);
 		} else if (node_is(node, "link", ns)) {
-			std::string rel = get_prop(node, "rel");
+			const std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
 				f.link = newsboat::utils::absolute_url(
 						globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
+		} else if (node_is(node, "author", ns)) {
+			parse_and_update_author(node, author);
 		} else if (node_is(node, "entry", ns)) {
 			f.items.push_back(parse_entry(node));
+		}
+	}
+
+	if (!author.empty()) {
+		for (auto& it : f.items) {
+			if (it.author.empty()) {
+				it.author = author;
+			}
 		}
 	}
 }
@@ -76,16 +87,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 	for (xmlNode* node = entryNode->children; node != nullptr;
 		node = node->next) {
 		if (node_is(node, "author", ns)) {
-			for (xmlNode* authornode = node->children;
-				authornode != nullptr;
-				authornode = authornode->next) {
-				if (node_is(authornode, "name", ns)) {
-					if (!it.author.empty()) {
-						it.author += ", ";
-					}
-					it.author += get_content(authornode);
-				} // TODO: is there more?
-			}
+			parse_and_update_author(node, it.author);
 		} else if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = get_prop(node, "type");
@@ -93,8 +95,8 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 				it.title_type = "text";
 			}
 		} else if (node_is(node, "content", ns)) {
-			std::string mode = get_prop(node, "mode");
-			std::string type = get_prop(node, "type");
+			const std::string mode = get_prop(node, "mode");
+			const std::string type = get_prop(node, "type");
 			if (mode == "xml" || mode == "") {
 				if (type == "html" || type == "text" || type == "text/plain") {
 					it.description = get_content(node);
@@ -117,7 +119,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 		} else if (node_is(node, "updated", ns)) {
 			updated = w3cdtf_to_rfc822(get_content(node));
 		} else if (node_is(node, "link", ns)) {
-			std::string rel = get_prop(node, "rel");
+			const std::string rel = get_prop(node, "rel");
 			if (rel == "" || rel == "alternate") {
 				if (it.link.empty() || !newsboat::utils::is_http_url(it.link)) {
 					it.link = newsboat::utils::absolute_url(
@@ -164,6 +166,19 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 	}
 
 	return it;
+}
+
+void AtomParser::parse_and_update_author(xmlNode* authorNode, std::string& author)
+{
+	for (xmlNode* child = authorNode->children; child != nullptr;
+		child = child->next) {
+		if (node_is(child, "name", ns)) {
+			if (!author.empty()) {
+				author += ", ";
+			}
+			author += get_content(child);
+		}
+	}
 }
 
 std::string AtomParser::content_type_to_mime(const std::string& type)
