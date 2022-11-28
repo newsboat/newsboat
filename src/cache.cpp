@@ -761,13 +761,13 @@ void Cache::do_vacuum()
 	run_sql("VACUUM;");
 }
 
-std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
+std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {
 	// we don't use the std::lock_guard<> here... see comments below
 	mtx.lock();
 
-	std::uint64_t unreachable = 0u;
+	std::vector<std::string> unreachable_feeds{};
 	std::string list = "(";
 
 	for (const auto& feed : feeds) {
@@ -816,7 +816,7 @@ std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 			"Cache::cleanup_cache: NOT cleaning up cache...");
 
 		std::string query = (
-				"SELECT count(rss) "
+				"SELECT DISTINCT rss "
 				"FROM ("
 				"SELECT feedurl AS rss FROM rss_item "
 				"UNION ALL "
@@ -827,15 +827,13 @@ std::uint64_t Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 		query.append(list);
 		query.push_back(';');
 
-		CbHandler count_cbh;
-		run_sql(query, count_callback, &count_cbh);
-		unreachable = count_cbh.count();
+		run_sql(query, vectorofstring_callback, &unreachable_feeds);
 	}
 
 	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
 	// PURPOSE! It's missing so that no database operation can occur
 	// after the cache cleanup! mtx->unlock();
-	return unreachable;
+	return unreachable_feeds;
 }
 
 void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,

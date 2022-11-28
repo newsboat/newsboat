@@ -558,13 +558,19 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		const std::uint64_t amt = rsscache->cleanup_cache(
+		const auto unreachable_feeds = rsscache->cleanup_cache(
 				feedcontainer.get_all_feeds());
 		if (!args.silent()) {
 			std::cout << _("done.") << std::endl;
-			if (amt > 0u) {
-				std::cout << _("Unreachable feeds found, consider setting "
-						"`cleanup-on-quit yes` or run `newsboat --cleanup`")
+			if (!unreachable_feeds.empty()) {
+				for (const auto& feed : unreachable_feeds) {
+					LOG(Level::USERERROR, "Unreachable feed found: %s", feed);
+				}
+
+				// Workaround for missing overload of strprintf::fmt for size_type on macOS.
+				std::uint64_t num_feeds = unreachable_feeds.size();
+				std::cout << strprintf::fmt(_("%" PRIu64 " unreachable feeds found. See "
+							"`cleanup-on-quit` in newsboat(1) for details."), num_feeds)
 					<< std::endl;
 			}
 		}
