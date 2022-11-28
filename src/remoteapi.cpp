@@ -114,4 +114,17 @@ Credentials RemoteApi::get_credentials(const std::string& scope,
 	return {user, pass, token};
 }
 
+void RemoteApi::update_flag(const std::string& oldflags,
+	const std::string& newflags,
+	char flag, std::function<void(bool added)>&& do_update)
+{
+	const bool old_has = oldflags.find(flag) != std::string::npos;
+	const bool new_has = newflags.find(flag) != std::string::npos;
+	if (!old_has && new_has) {
+		do_update(true);
+	} else if (old_has && !new_has) {
+		do_update(false);
+	}
+}
+
 } // namespace newsboat

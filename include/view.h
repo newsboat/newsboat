@@ -179,6 +179,9 @@ protected:
 	FilterContainer& filters;
 	const ColorManager& colorman;
 	std::vector<std::string> suggestions;
+
+private:
+	bool try_prepare_query_feed(std::shared_ptr<RssFeed> feed);
 };
 
 } // namespace newsboat

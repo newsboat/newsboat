@@ -196,31 +196,23 @@ bool OcNewsApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	const auto feedIdStart = guid.find_first_of(":") + 1;
-	const auto feedIdEnd = guid.find_first_of("/");
-	const std::string feedId = guid.substr(feedIdStart, feedIdEnd - feedIdStart);
-
-	const std::string ocnewsGuid = guid.substr(guid.find_first_of("/") + 1);
-	const std::string guidHash = utils::md5hash(ocnewsGuid);
-
-	std::string query = strprintf::fmt("items/%s/%s", feedId, guidHash);
-
 	std::string star_flag = cfg->get_configvalue("ocnews-flag-star");
+	bool success = true;
 	if (star_flag.length() > 0) {
-		if (strchr(oldflags.c_str(), star_flag[0]) == nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) != nullptr) {
-			query += "/star";
-		} else if (strchr(oldflags.c_str(), star_flag[0]) != nullptr &&
-			strchr(newflags.c_str(), star_flag[0]) == nullptr) {
-			query += "/unstar";
-		} else {
-			return true;
-		}
-	} else {
-		return true;
+		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
+			const auto feedIdStart = guid.find_first_of(':') + 1;
+			const auto feedIdEnd = guid.find_first_of('/');
+			const auto feedId = guid.substr(feedIdStart, feedIdEnd - feedIdStart);
+			const auto ocnewsGuid = guid.substr(feedIdEnd + 1);
+			const auto query = strprintf::fmt(
+					"items/%s/%s/%s",
+					feedId,
+					utils::md5hash(ocnewsGuid),
+					added ? "star" : "unstar");
+			success = this->query(query, nullptr, "{}");
+		});
 	}
-
-	return this->query(query, nullptr, "{}");
+	return success;
 }
 
 rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
@@ -392,9 +384,9 @@ bool OcNewsApi::query(const std::string& query,
 			LOG(Level::CRITICAL,
 				"OcNewsApi::query: authentication error");
 		else {
-			std::string msg = "OcNewsApi::query: error ";
-			msg += response_code;
-			LOG(Level::CRITICAL, msg);
+			LOG(Level::CRITICAL,
+				"OcNewsApi::query: error %" PRIi64,
+				static_cast<int64_t>(response_code));
 		}
 		return false;
 	}
