@@ -20,7 +20,6 @@ QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 void QueueManager::deinit()
 {
 	if (cfg->get_configvalue_as_bool("podcast-to-mpd") && (mpd_handle != NULL)) {
-		mpd_connection_free_(mpd_connection);
 		int ret = dlclose(mpd_handle);
                 if (ret > 0) {
 			std::cout << "Unloading libmpdclient failed: " << dlerror() << "\n";
@@ -32,8 +31,6 @@ bool QueueManager::init()
 {
 	if (cfg->get_configvalue_as_bool("podcast-to-mpd")) {
 		std::cout << "Setting up mpd...";
-		std::string mpd_host = cfg->get_configvalue("mpd-host");
-		mpd_error err;
 
 		mpd_handle = dlopen("libmpdclient.so.2", RTLD_LAZY);
 
@@ -50,24 +47,6 @@ bool QueueManager::init()
 		mpd_run_add_ = (mpd_run_add_t) dlsym(mpd_handle, "mpd_run_add");
 		mpd_connection_free_ = (mpd_connection_free_t) dlsym(mpd_handle, "mpd_connection_free");
 		mpd_connection_new_ = (mpd_connection_new_t) dlsym(mpd_handle, "mpd_connection_new");
-
-		if (!mpd_host.empty())
-			mpd_connection =
-				mpd_connection_new_(mpd_host.c_str(),
-						    cfg->get_configvalue_as_int("mpd-port"),
-						    cfg->get_configvalue_as_int("mpd-timeout") * 1000);
-		else
-			mpd_connection =
-				mpd_connection_new_(nullptr,
-						    cfg->get_configvalue_as_int("mpd-port"),
-						    cfg->get_configvalue_as_int("mpd-timeout") * 1000);
-
-		err = mpd_connection_get_error_(mpd_connection);
-		if (err != MPD_ERROR_SUCCESS) {
-			std::string err_msg(mpd_connection_get_error_message_(mpd_connection));
-			std::cout << "Error connecting to MPD (" + err_msg + ")";
-                        return false;
-                }
 
 		std::cout << "done" << "\n";
 		return true;
@@ -97,8 +76,22 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	 */
 	if (cfg->get_configvalue_as_bool("podcast-to-mpd")) {
 		EnqueueResult res;
+		std::string mpd_host = cfg->get_configvalue("mpd-host");
 		mpd_error err;
 		int songs = 0;
+
+                if (!mpd_host.empty())
+			mpd_connection = mpd_connection_new_(mpd_host.c_str(), cfg->get_configvalue_as_int("mpd-port"),
+							     cfg->get_configvalue_as_int("mpd-timeout") * 1000);
+                else
+			mpd_connection = mpd_connection_new_(nullptr, cfg->get_configvalue_as_int("mpd-port"),
+							     cfg->get_configvalue_as_int("mpd-timeout") * 1000);
+
+                err = mpd_connection_get_error_(mpd_connection);
+		if (err != MPD_ERROR_SUCCESS) {
+			std::string err_msg(mpd_connection_get_error_message_(mpd_connection));
+                        return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, "Error connecting to MPD (" + err_msg + ")"};
+                }
 
 		mpd_search_queue_songs_(mpd_connection, true);
 		mpd_search_add_uri_constraint_(mpd_connection,
@@ -109,6 +102,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 		err = mpd_connection_get_error_(mpd_connection);
                 if (err != MPD_ERROR_SUCCESS) {
 			std::string err_msg(mpd_connection_get_error_message_(mpd_connection));
+			mpd_connection_free_(mpd_connection);
                         return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, "MPD search failed (" + err_msg + ")"};
                 }
 
@@ -118,6 +112,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 		}
 
                 if (songs > 0) {
+			mpd_connection_free_(mpd_connection);
 			return {EnqueueStatus::URL_QUEUED_ALREADY, url};
                 }
 
@@ -125,8 +120,10 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 		err = mpd_connection_get_error_(mpd_connection);
                 if (err != MPD_ERROR_SUCCESS) {
 			std::string err_msg(mpd_connection_get_error_message_(mpd_connection));
+			mpd_connection_free_(mpd_connection);
                         return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, "MPD connection error (" + err_msg + ")"};
 		}
+		mpd_connection_free_(mpd_connection);
 		return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
 	}
 
