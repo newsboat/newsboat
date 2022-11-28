@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>Author Test Feed</title>
+  <link rel="alternate" href="http://example.com/"/>
+  <updated>2022-11-28T14:01:25+01:00</updated>
+  <author>
+    <name>First Feed Author</name>
+  </author>
+  <id>urn:uuid:b5997c2b-110f-47e2-9007-5327f8d948da</id>
+
+  <entry>
+    <title>Entry Without Author</title>
+    <link href="http://example.com/1.html"/>
+    <id>http://example.com/1.html</id>
+    <content type="text">Feed authors should be used.</content>
+  </entry>
+
+  <entry>
+    <title>Entry With Single Author</title>
+    <link href="http://example.com/2.html"/>
+    <id>http://example.com/2.html</id>
+    <content type="text">Entry author should be used.</content>
+    <author>
+      <name>Entry Author</name>
+      <uri>http://example.com/</uri>
+    </author>
+  </entry>
+
+  <author>
+    <name>Second Feed Author</name>
+	<uri>http://example.com/actually-illegal-since-feed-author-must-appear-before-entry</uri>
+  </author>
+
+  <entry>
+    <title>Entry With Multiple Authors</title>
+    <author>
+      <name>Entry Author 1</name>
+      <uri>http://example.com/</uri>
+    </author>
+    <link href="http://example.com/3.html"/>
+    <id>http://example.com/3.html</id>
+    <content type="text">Both entry authors should be used.</content>
+    <author>
+      <name>Entry Author 2</name>
+      <uri>http://example.com/</uri>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Entry With Empty Author Names</title>
+    <author>
+      <name></name>
+      <uri>http://example.com/</uri>
+    </author>
+    <link href="http://example.com/4.html"/>
+    <id>http://example.com/4.html</id>
+    <content type="text">Both feed authors should be used.</content>
+    <author>
+      <uri>http://example.com/</uri>
+    </author>
+  </entry>
+
+</feed>
