@@ -344,6 +344,7 @@ you can configure in Newsboat regarding NewsBlur.
 
 NewsBlur's folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
+NewsBlur's starring/saving feature is currently unsuppored by Newsboat.
 
 === FeedHQ
 
