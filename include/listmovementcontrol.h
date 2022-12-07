@@ -91,6 +91,11 @@ public:
 	void move_page_down(bool wrap_scroll)
 	{
 		const auto num_lines = Backend::get_num_lines();
+		if (num_lines == 0) {
+			// Ignore if list is empty
+			return;
+		}
+
 		const std::uint32_t maxpos = num_lines - 1;
 		const std::uint32_t list_height = Backend::get_height();
 
@@ -124,6 +129,11 @@ public:
 	void scroll_halfpage_down()
 	{
 		const auto num_lines = Backend::get_num_lines();
+		if (num_lines == 0) {
+			// Ignore if list is empty
+			return;
+		}
+
 		const std::uint32_t maxpos = num_lines - 1;
 		const std::uint32_t list_height = Backend::get_height();
 		const std::uint32_t scroll_amount = (list_height + 1) / 2;

@@ -51,6 +51,7 @@ void TextviewWidget::scroll_down()
 {
 	if (num_lines == 0) {
 		// Ignore if list is empty
+		return;
 	}
 	const std::uint32_t maxoffset = num_lines - 1;
 	const std::uint32_t offset = get_scroll_offset();
@@ -67,6 +68,7 @@ void TextviewWidget::scroll_to_bottom()
 {
 	if (num_lines == 0) {
 		// Ignore if list is empty
+		return;
 	}
 	const std::uint32_t maxoffset = num_lines - 1;
 	const std::uint32_t widget_height = get_height();
@@ -92,6 +94,7 @@ void TextviewWidget::scroll_page_down()
 {
 	if (num_lines == 0) {
 		// Ignore if list is empty
+		return;
 	}
 	const std::uint32_t maxoffset = num_lines - 1;
 	const std::uint32_t offset = get_scroll_offset();
@@ -119,6 +122,7 @@ void TextviewWidget::scroll_halfpage_down()
 {
 	if (num_lines == 0) {
 		// Ignore if list is empty
+		return;
 	}
 	const std::uint32_t maxoffset = num_lines - 1;
 	const std::uint32_t offset = get_scroll_offset();
