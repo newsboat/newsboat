@@ -22,6 +22,8 @@ public:
 	void scroll_to_bottom();
 	void scroll_page_up();
 	void scroll_page_down();
+	void scroll_halfpage_up();
+	void scroll_halfpage_down();
 
 	std::uint32_t get_scroll_offset();
 	void set_scroll_offset(std::uint32_t offset);

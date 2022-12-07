@@ -103,6 +103,44 @@ public:
 		}
 	}
 
+	void scroll_halfpage_up()
+	{
+		const std::uint32_t list_height = Backend::get_height();
+		const std::uint32_t scroll_amount = (list_height + 1) / 2;
+
+		if (current_scroll_offset >= scroll_amount) {
+			current_scroll_offset -= scroll_amount;
+		} else {
+			current_scroll_offset = 0;
+		}
+
+		if (current_position >= scroll_amount) {
+			set_position(current_position - scroll_amount);
+		} else {
+			set_position(0);
+		}
+	}
+
+	void scroll_halfpage_down()
+	{
+		const auto num_lines = Backend::get_num_lines();
+		const std::uint32_t maxpos = num_lines - 1;
+		const std::uint32_t list_height = Backend::get_height();
+		const std::uint32_t scroll_amount = (list_height + 1) / 2;
+
+		if (current_scroll_offset + scroll_amount <= max_offset()) {
+			current_scroll_offset += scroll_amount;
+		} else {
+			current_scroll_offset = max_offset();
+		}
+
+		if (current_position + scroll_amount <= maxpos) {
+			set_position(current_position + scroll_amount);
+		} else {
+			set_position(maxpos);
+		}
+	}
+
 	std::uint32_t get_position()
 	{
 		return current_position;

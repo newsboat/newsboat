@@ -451,6 +451,8 @@ static const std::vector<OpDesc> opdescs = {
 		translatable("Move to the next page"),
 		KM_SYSKEYS
 	},
+	{OP_SK_HALF_PAGE_UP, "halfpageup", "", translatable("Move half page up"), KM_SYSKEYS},
+	{OP_SK_HALF_PAGE_DOWN, "halfpagedown", "", translatable("Move half page down"), KM_SYSKEYS},
 
 	{
 		OP_SK_HOME,

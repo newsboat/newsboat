@@ -154,6 +154,16 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
+	case OP_SK_HALF_PAGE_UP:
+		if (f.get_focus() == "files") {
+			files_list.scroll_halfpage_up();
+		}
+		break;
+	case OP_SK_HALF_PAGE_DOWN:
+		if (f.get_focus() == "files") {
+			files_list.scroll_halfpage_down();
+		}
+		break;
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);
