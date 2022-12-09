@@ -745,6 +745,9 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		const std::string macrokey = token.value();
 
 		macros_[macrokey] = {cmds, description};
+	} else if (action == "bind") {
+		const auto binding = parse_binding(params);
+		// TODO
 	} else if (action == "run-on-startup") {
 		startup_operations_sequence = parse_operation_sequence(params, action, false).operations;
 	} else {
@@ -765,6 +768,17 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 				command_name));
 	}
 
+	auto cmds = convert_operations(operations);
+
+	return ParsedOperations{
+		.operations = cmds,
+		.description = std::string(description)
+	};
+}
+
+std::vector<MacroCmd> KeyMap::convert_operations(const
+	rust::Vec<keymap::bridged::Operation>& operations)
+{
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {
 		const auto& tokens = keymap::bridged::operation_tokens(operation);
@@ -787,9 +801,31 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 		cmds.push_back(cmd);
 	}
 
-	return ParsedOperations{
-		.operations = cmds,
-		.description = std::string(description)
+	return cmds;
+}
+
+ParsedBinding KeyMap::parse_binding(const std::string& line)
+{
+	bool parsing_failed = false;
+	const auto binding = keymap::bridged::tokenize_binding(line, parsing_failed);
+	if (parsing_failed) {
+		throw ConfigHandlerException(strprintf::fmt(_("failed to parse key binding")));
+	}
+
+	const auto keySequence = std::string(keymap::bridged::binding_key_sequence(*binding));
+	const auto contextsRs = keymap::bridged::binding_contexts(*binding);
+	const auto contexts = std::vector<std::string>(std::begin(contextsRs),
+			std::end(contextsRs));
+	const auto description = std::string(keymap::bridged::binding_description(*binding));
+	const auto operations = convert_operations(keymap::bridged::binding_operations(*binding));
+
+	return ParsedBinding{
+		.keySequence = keySequence,
+		.contexts = contexts,
+		.effect = {
+			.operations = operations,
+			.description = description,
+		},
 	};
 }
 

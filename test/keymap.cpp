@@ -666,3 +666,25 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 		"<key>O</><colon>:</><desc>Reload current entry</> "
 		"<key><>none></><colon>:</><desc>Go find me</> ");
 }
+
+TEST_CASE("parse_binding() returns a binding with its key-sequence and description",
+	"[KeyMap]")
+{
+	const std::string input =
+		R"(o everywhere set browser "firefox" ; open-in-browser -- "Open with regular browser")";
+
+	KeyMap k(KM_NEWSBOAT);
+	const auto binding = k.parse_binding(input);
+
+	REQUIRE(binding.keySequence == "o");
+	REQUIRE(binding.contexts.size() == 1);
+	REQUIRE(binding.contexts[0] == "everywhere");
+	REQUIRE(binding.effect.operations.size() == 2);
+	REQUIRE(binding.effect.operations[0].op == OP_INT_SET);
+	REQUIRE(binding.effect.operations[0].args.size() == 2);
+	REQUIRE(binding.effect.operations[0].args[0] == "browser");
+	REQUIRE(binding.effect.operations[0].args[1] == "firefox");
+	REQUIRE(binding.effect.operations[1].op == OP_OPENINBROWSER);
+	REQUIRE(binding.effect.operations[1].args.size() == 0);
+	REQUIRE(binding.effect.description == "Open with regular browser");
+}

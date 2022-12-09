@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "libnewsboat-ffi/src/keymap.rs.h"
 
 // in configuration: bind-key <key> <operation>
 
@@ -180,6 +181,12 @@ struct ParsedOperations {
 	std::string description;
 };
 
+struct ParsedBinding {
+	std::string keySequence;
+	std::vector<std::string> contexts;
+	ParsedOperations effect;
+};
+
 struct KeyMapHintEntry {
 	Operation op;
 	std::string text;
@@ -208,6 +215,7 @@ public:
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
+	ParsedBinding parse_binding(const std::string& line);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
@@ -216,8 +224,11 @@ public:
 private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
+	std::vector<MacroCmd> convert_operations(const rust::Vec<keymap::bridged::Operation>&
+		operations);
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
+
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;

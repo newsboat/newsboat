@@ -21,7 +21,16 @@ mod ffi {
             allow_description: bool,
             parsing_failed: &mut bool,
         ) -> Vec<Operation>;
+
+        type Binding;
+        fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Box<Binding>;
+
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
+
+        fn binding_key_sequence(binding: &Binding) -> &String;
+        fn binding_contexts(binding: &Binding) -> &Vec<String>;
+        fn binding_operations(binding: &Binding) -> &Vec<Operation>;
+        fn binding_description(binding: &Binding) -> &String;
     }
 
     extern "C++" {
@@ -36,6 +45,14 @@ mod ffi {
 
 struct Operation {
     tokens: Vec<String>,
+}
+
+#[derive(Default)]
+struct Binding {
+    key_sequence: String,
+    contexts: Vec<String>,
+    operations: Vec<Operation>,
+    description: String,
 }
 
 fn tokenize_operation_sequence(
@@ -60,6 +77,44 @@ fn tokenize_operation_sequence(
     }
 }
 
+fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Box<Binding> {
+    match libnewsboat::keymap::tokenize_binding(input) {
+        Some((keys, contexts, operations, opt_description)) => {
+            *parsing_failed = false;
+            let operations = operations
+                .into_iter()
+                .map(|tokens| Operation { tokens })
+                .collect::<Vec<_>>();
+            Box::new(Binding {
+                key_sequence: keys,
+                contexts: contexts.into_iter().map(|s| s.to_string()).collect(),
+                operations,
+                description: opt_description.unwrap_or_default(),
+            })
+        }
+        None => {
+            *parsing_failed = true;
+            Box::new(Binding::default())
+        }
+    }
+}
+
 fn operation_tokens(input: &Operation) -> &Vec<String> {
     &input.tokens
+}
+
+fn binding_key_sequence(binding: &Binding) -> &String {
+    &binding.key_sequence
+}
+
+fn binding_contexts(binding: &Binding) -> &Vec<String> {
+    &binding.contexts
+}
+
+fn binding_operations(binding: &Binding) -> &Vec<Operation> {
+    &binding.operations
+}
+
+fn binding_description(binding: &Binding) -> &String {
+    &binding.description
 }

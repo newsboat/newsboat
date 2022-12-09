@@ -1,12 +1,16 @@
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
-    character::complete::one_of,
+    character::complete::{alpha1, one_of},
     combinator::{complete, cond, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::{delimited, preceded, terminated, tuple},
+    sequence::{delimited, preceded, separated_pair, terminated, tuple},
     IResult,
 };
+
+fn whitespace(input: &str) -> IResult<&str, char> {
+    one_of(" \t")(input)
+}
 
 fn unquoted_token(input: &str) -> IResult<&str, String> {
     let parser = map(recognize(is_not("\t\" ;")), String::from);
@@ -39,16 +43,16 @@ fn token(input: &str) -> IResult<&str, String> {
 }
 
 fn operation_with_args(input: &str) -> IResult<&str, Vec<String>> {
-    let mut parser = separated_list1(many1(one_of(" \t")), token);
+    let mut parser = separated_list1(many1(whitespace), token);
     parser(input)
 }
 
 fn semicolon(input: &str) -> IResult<&str, &str> {
-    delimited(many0(one_of(" \t")), tag(";"), many0(one_of(" \t")))(input)
+    delimited(many0(whitespace), tag(";"), many0(whitespace))(input)
 }
 
 fn operation_description(input: &str) -> IResult<&str, String> {
-    let start_token = delimited(many0(one_of(" \t")), tag("--"), many0(one_of(" \t")));
+    let start_token = delimited(many0(whitespace), tag("--"), many0(whitespace));
 
     let string_content = escaped_transform(
         is_not(r#""\"#),
@@ -81,7 +85,7 @@ fn operation_sequence(
     let parser = separated_list0(many1(semicolon), operation_with_args);
     let parser = delimited(many0(semicolon), parser, many0(semicolon));
     let parser = tuple((parser, conditional_optional_description));
-    let parser = delimited(many0(one_of(" \t")), parser, many0(one_of(" \t")));
+    let parser = delimited(many0(whitespace), parser, many0(whitespace));
     let parser = terminated(parser, eof);
 
     let mut parser = complete(parser);
@@ -113,8 +117,57 @@ pub fn tokenize_operation_sequence(
     }
 }
 
+fn key_sequence(input: &str) -> IResult<&str, String> {
+    token(input)
+}
+
+fn context(input: &str) -> IResult<&str, &str> {
+    alpha1(input)
+}
+
+fn contexts(input: &str) -> IResult<&str, Vec<&str>> {
+    let mut parser = separated_list1(tag(","), context);
+
+    parser(input)
+}
+
+fn operation_sequence_with_optional_description(
+    input: &str,
+) -> IResult<&str, (Vec<Vec<String>>, Option<String>)> {
+    operation_sequence(input, true)
+}
+
+fn binding(
+    input: &str,
+) -> IResult<&str, ((String, Vec<&str>), (Vec<Vec<String>>, Option<String>))> {
+    let parser = separated_pair(key_sequence, many1(whitespace), contexts);
+    let parser = preceded(many0(whitespace), parser);
+    let mut parser = separated_pair(
+        parser,
+        many1(whitespace),
+        operation_sequence_with_optional_description,
+    );
+
+    parser(input)
+}
+
+pub fn tokenize_binding(
+    input: &str,
+) -> Option<(String, Vec<&str>, Vec<Vec<String>>, Option<String>)> {
+    match binding(input) {
+        Ok((_leftovers, ((keys, contexts), (operations, description)))) => {
+            Some((keys, contexts, operations, description))
+        }
+        Err(_error) => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use super::contexts;
+    use super::key_sequence;
+
+    use super::tokenize_binding;
     use super::tokenize_operation_sequence;
 
     macro_rules! vec_of_strings {
@@ -537,5 +590,49 @@ mod tests {
     #[test]
     fn t_tokenize_operation_sequence_passes_through_unknown_escaped_characters_in_description() {
         verify_parsed_description(r#"open -- "\f\o\o\"\\\b\a\r""#, r#"foo"\bar"#);
+    }
+
+    #[test]
+    fn t_key_sequence() {
+        assert_eq!(key_sequence("x").unwrap().1, "x");
+        assert_eq!(key_sequence("\"x\"").unwrap().1, "x");
+        assert_eq!(key_sequence("gg").unwrap().1, "gg");
+        assert_eq!(key_sequence("<ENTER>").unwrap().1, "<ENTER>");
+        assert_eq!(key_sequence("^U<ENTER>").unwrap().1, "^U<ENTER>");
+    }
+
+    #[test]
+    fn t_contexts() {
+        assert_eq!(contexts("everywhere").unwrap().1, vec!["everywhere"]);
+        assert_eq!(contexts("feedlist").unwrap().1, vec!["feedlist"]);
+        assert_eq!(
+            contexts("feedlist,articlelist").unwrap().1,
+            vec!["feedlist", "articlelist"]
+        );
+    }
+
+    #[test]
+    fn t_test_tokenize_binding() {
+        let input = "gg feedlist,articlelist home ; open -- \"Open entry at top of list\"";
+        assert_eq!(tokenize_binding(input).unwrap().0, "gg");
+        assert_eq!(
+            tokenize_binding(input).unwrap().1,
+            vec!["feedlist", "articlelist"]
+        );
+        assert_eq!(
+            tokenize_binding(input).unwrap().2,
+            vec![vec_of_strings!("home"), vec_of_strings!("open")]
+        );
+        assert_eq!(
+            tokenize_binding(input).unwrap().3,
+            Some("Open entry at top of list".to_string())
+        );
+    }
+
+    #[test]
+    fn t_test_tokenize_binding_missing_parts() {
+        assert_eq!(tokenize_binding(""), None);
+        assert_eq!(tokenize_binding("gg"), None);
+        assert_eq!(tokenize_binding("gg everywhere"), None);
     }
 }
