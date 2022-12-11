@@ -98,64 +98,6 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
-    cargo_cache: *cargo_cache
-
-    after_cache_script: *after_cache_script
-    install_script:
-        - brew update
-        - brew install rustup-init
-        - brew install gcc || brew link --overwrite gcc
-        - brew install python
-        - brew uninstall rbenv ruby-build # ...so that it won't be upgraded when pkg-config is upgraded, because upgrading ruby-build fails; see https://github.com/newsboat/newsboat/issues/866
-        - brew outdated "pkg-config" || brew upgrade "pkg-config"
-        - brew install "make"
-        - brew install "gettext" && brew link --force "gettext"
-        - brew outdated "sqlite" || brew upgrade "sqlite"
-        - brew outdated "curl" || brew upgrade "curl"
-        - brew install "libstfl"
-        - brew install "json-c"
-        - brew install "asciidoctor"
-        - brew install "libxml2"
-        - brew install "pyenv" || brew upgrade "pyenv"
-        - rustup-init -y --default-toolchain $RUST
-        - rustc --version && cargo --version
-
-    env:
-        GCOV: /usr/bin/gcov
-        PKG_CONFIG_PATH: /usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH
-        PATH: $HOME/.cargo/bin:/usr/local/opt/gettext/bin:/usr/local/opt/python/libexec/bin:/usr/local/opt/make/libexec/gnubin:$PATH
-        LDFLAGS: -L/usr/local/opt/gettext/lib
-        CFLAGS: -I/usr/local/opt/gettext/include
-        CXXFLAGS: -I/usr/local/opt/gettext/include
-        GETTEXT_DIR: /usr/local/opt/gettext
-        RUSTFLAGS: '-D warnings'
-        JOBS: 13
-
-    build_script: *build_script
-    test_script: *test_script
-    fake_install_script: *fake_install_script
-    before_cache_script: *before_cache_script
-
-    matrix:
-        - name: macOS Monterey, Clang, Rust stable
-          osx_instance:
-              image: monterey-base
-          env:
-              CC: clang
-              CXX: clang++
-              RUST: stable
-        # This job tests our minimum supported Rust version, so only bump on
-        # Newsboat release day
-        - name: macOS Big Sur, GCC, MSRV
-          osx_instance:
-              image: big-sur-base
-          env:
-              CC: gcc
-              CXX: g++
-              RUST: 1.62.0
-
-task:
     name: Code formatting
     container:
         dockerfile: docker/code-formatting-tools.dockerfile
