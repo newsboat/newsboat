@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-12-12 23:03+0300\n"
-"PO-Revision-Date: 2022-09-12 05:45+0200\n"
+"PO-Revision-Date: 2022-12-14 08:27+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -396,6 +396,8 @@ msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
+"ERRORE: Devi fornire un API token o una coppia utente/password per usare "
+"Miniflux. Per favore configura le appropriate impostazioni miniflux-*\n"
 
 #: src/controller.cpp:340
 msgid ""
@@ -514,13 +516,13 @@ msgid "Exporting list of read articles..."
 msgstr "Sto esportando la lista degli articoli letti..."
 
 #: src/controller.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
-"Trovati feed non raggiungibili, considera impostare `cleanup-on-quit yes` o "
-"esegui `newsboat --cleanup`"
+"%<PRIu64> feed non raggiungibili trovati. Vedi `cleanup-on-quit` in "
+"newsboat(1) per dettagli."
 
 #: src/controller.cpp:580
 msgid "failed: "
@@ -1524,9 +1526,8 @@ msgid "Return to previous search results (if any)"
 msgstr "Riorna ai risultati di ricerca precedenti (se disponibili)"
 
 #: src/keymap.cpp:413
-#, fuzzy
 msgid "Go to the feed of the article"
-msgstr "Vai al prossimo articolo non letto"
+msgstr "Vai al feed dell'articolo"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
