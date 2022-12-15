@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-12-12 23:03+0300\n"
-"PO-Revision-Date: 2022-09-11 22:02+0200\n"
+"PO-Revision-Date: 2022-12-13 21:48+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2.1\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -403,6 +403,9 @@ msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
+"FOUT: Configureer een API token of een combinatie van gebruikersnaam/"
+"wachtwoord om Miniflux the gebruiken via the relevante miniflux-* "
+"instellingen\n"
 
 #: src/controller.cpp:340
 msgid ""
@@ -521,14 +524,13 @@ msgid "Exporting list of read articles..."
 msgstr "Exporteren van lijst van gelezen artikelen..."
 
 #: src/controller.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
-"Er zijn onbereikbare feeds gevonden. Het is mogelijk deze automatisch op te "
-"ruimen met optie `cleanup-on-quit yes` of door newsboat te starten met "
-"`newsboat --cleanup`"
+"Er zijn %<PRIu64> onbereikbare feeds gevonden. Zie `cleanup-on-quit` van "
+"newsboat(1) voor details."
 
 #: src/controller.cpp:580
 msgid "failed: "
@@ -1533,9 +1535,8 @@ msgid "Return to previous search results (if any)"
 msgstr "Terugkeren naar vorige zoekresultaten (als die er zijn)"
 
 #: src/keymap.cpp:413
-#, fuzzy
 msgid "Go to the feed of the article"
-msgstr "Ga naar volgend ongelezen artikel"
+msgstr "Ga naar feed van artikel"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
