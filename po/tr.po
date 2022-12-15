@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-12-12 23:03+0300\n"
-"PO-Revision-Date: 2022-09-11 22:00+0300\n"
+"PO-Revision-Date: 2022-12-13 20:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -30,11 +30,11 @@ msgstr ""
 
 #: newsboat.cpp:47
 msgid "export OPML feed to stdout"
-msgstr "beslemeleri OPML olarak stdout'a dışa aktar"
+msgstr "stdout'a OPML beslemesi dışa aktar"
 
 #: newsboat.cpp:48
 msgid "refresh feeds on start"
-msgstr "beslemeleri başlangıçta yenile"
+msgstr "başlangıçta beslemeleri yenile"
 
 #: newsboat.cpp:49 newsboat.cpp:94 newsboat.cpp:100
 msgid "<file>"
@@ -42,7 +42,7 @@ msgstr "<dosya>"
 
 #: newsboat.cpp:49
 msgid "import OPML file"
-msgstr "OPML dosyasını içe aktar"
+msgstr "OPML dosyası içe aktar"
 
 #: newsboat.cpp:53
 msgid "<urlfile>"
@@ -50,7 +50,7 @@ msgstr "<url-dosyası>"
 
 #: newsboat.cpp:54
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "RSS beslemesi adreslerini <url-dosyası>'ndan oku"
+msgstr "<url-dosyası>'ndan RSS beslemesi URL'lerini oku"
 
 #: newsboat.cpp:59
 msgid "<cachefile>"
@@ -78,7 +78,7 @@ msgstr "<komut>..."
 
 #: newsboat.cpp:73
 msgid "execute list of commands"
-msgstr "bir dizi komut çalıştır"
+msgstr "komut listesi yürüt"
 
 #: newsboat.cpp:75
 msgid "quiet startup"
@@ -90,27 +90,27 @@ msgstr "sürüm bilgisini al"
 
 #: newsboat.cpp:80 src/pbcontroller.cpp:345
 msgid "<loglevel>"
-msgstr "<kayıt-düzeyi>"
+msgstr "<günlük-düzeyi>"
 
 #: newsboat.cpp:81 src/pbcontroller.cpp:346
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
-msgstr "kayıt tutarken düzey belirle (geçerli değerler: 1 - 6)"
+msgstr "günlük tutarken düzey belirle (geçerli değerler: 1 - 6)"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:353
 msgid "<logfile>"
-msgstr "<kayıt-dosyası>"
+msgstr "<günlük-dosyası>"
 
 #: newsboat.cpp:89 src/pbcontroller.cpp:354
 msgid "use <logfile> as output log file"
-msgstr "<kayıt-dosyası>'nı çıktı kaydı için kullan"
+msgstr "<günlük-dosyası>'nı çıktı kaydı için kullan"
 
 #: newsboat.cpp:95
 msgid "export list of read articles to <file>"
-msgstr "okunmuş yazıların listesini <dosya>'ya aktar"
+msgstr "okunmuş yazıların listesini <dosya>'ya dışa aktar"
 
 #: newsboat.cpp:101
 msgid "import list of read articles from <file>"
-msgstr "okunmuş yazıları <dosya>'dan aktar"
+msgstr "okunmuş yazıları <dosya>'dan içe aktar"
 
 #: newsboat.cpp:103 src/pbcontroller.cpp:356
 msgid "this help"
@@ -398,6 +398,8 @@ msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
+"HATA: Miniflux'ı kullanmak için bir API jetonu veya kullanıcı adı/parola "
+"çifti sağlamalısınız. Lütfen ilgili miniflux-* ayarlarını yapın\n"
 
 #: src/controller.cpp:340
 msgid ""
@@ -516,17 +518,17 @@ msgid "Exporting list of read articles..."
 msgstr "Okunmuş yazıların listesi dışa aktarılıyor..."
 
 #: src/controller.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
-"Erişilemeyen beslemeler bulundu; 'cleanup-on-quit' ayarını açın veya "
-"'newsboat --cleanup' çalıştırın"
+"%<PRIu64> erişilemeyen besleme bulundu. Ayrıntılar için newsboat(1) içinde "
+"'cleanup-on-quit'e bakın."
 
 #: src/controller.cpp:580
 msgid "failed: "
-msgstr "başarız: "
+msgstr "başarısız: "
 
 #: src/controller.cpp:604
 #, c-format
@@ -1527,9 +1529,8 @@ msgid "Return to previous search results (if any)"
 msgstr "Önceki arama sonuçlarına dön (varsa)"
 
 #: src/keymap.cpp:413
-#, fuzzy
 msgid "Go to the feed of the article"
-msgstr "Sonraki okunmamış yazıya git"
+msgstr "Yazının beslemesine git"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
@@ -1869,7 +1870,7 @@ msgstr "%u. satır okunamadı: %s"
 
 #: src/view.cpp:171
 msgid "Error: failed to execute startup commands"
-msgstr "Hata: Başlangıç komutları çalıştırılamadı"
+msgstr "Hata: Başlangıç komutları yürütülemedi"
 
 #: src/view.cpp:294
 msgid "Operation ignored in modal dialog"
