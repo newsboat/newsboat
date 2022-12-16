@@ -1643,6 +1643,35 @@ TEST_CASE("unescape_url() takes a percent-encoded string and returns the string 
 
 }
 
+TEST_CASE("preserve_quotes() preserves single quotes and double quotes, if any",
+	"[utils]")
+{
+	REQUIRE(utils::preserve_quotes("") == "''");
+	REQUIRE(utils::preserve_quotes("sss") == "'sss'");
+
+	SECTION("Preserves double quotes") {
+		REQUIRE(utils::preserve_quotes("\"sss\"") == "'\"sss\"'");
+		REQUIRE(utils::preserve_quotes("sss\"") == "'sss\"'");
+		REQUIRE(utils::preserve_quotes("\"sss") == "'\"sss'");
+		REQUIRE(utils::preserve_quotes("ss\"s") == "'ss\"s'");
+	}
+
+	SECTION("Preserves single quotes") {
+		REQUIRE(utils::preserve_quotes("'sss'") == "\\\''sss'\\\'");
+		REQUIRE(utils::preserve_quotes("'sss") == "\\\''sss'");
+		REQUIRE(utils::preserve_quotes("sss'") == "'sss'\\\'");
+		REQUIRE(utils::preserve_quotes("ss's") == "'ss'\\\''s'");
+	}
+
+	SECTION("Preserves a combination of single and double quotes") {
+		REQUIRE(utils::preserve_quotes("'\"sss\"'") == "\\\''\"sss\"'\\\'");
+		REQUIRE(utils::preserve_quotes("\"'sss'\"") == "'\"'\\\''sss'\\\''\"'");
+		REQUIRE(utils::preserve_quotes("\"sss'") == "'\"sss'\\\'");
+		REQUIRE(utils::preserve_quotes("'sss\"") == "\\\''sss\"'");
+		REQUIRE(utils::preserve_quotes("ss\"'s") == "'ss\"'\\\''s'");
+	}
+}
+
 TEST_CASE("gentabs() calculates padding tabs based on stringwidth", "[utils]")
 {
 	REQUIRE(utils::gentabs("") == 4);
