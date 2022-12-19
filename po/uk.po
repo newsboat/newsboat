@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2022-12-12 23:03+0300\n"
-"PO-Revision-Date: 2022-09-17 12:58+0300\n"
+"PO-Revision-Date: 2022-12-19 21:03+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -14,9 +14,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -401,6 +401,8 @@ msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
+"Помилка: для використання Miniflux потрібно налаштувати токен API або пару "
+"логін-пароль. Будь ласка, налаштуйте miniflux-*\n"
 
 #: src/controller.cpp:340
 msgid ""
@@ -519,13 +521,12 @@ msgid "Exporting list of read articles..."
 msgstr "Зберігаю список прочитаних статей..."
 
 #: src/controller.cpp:572
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
-"Знайдено недосяжні теми; скористайтесь налаштуванням `cleanup-on-quit yes` "
-"або запустіть `newsboat --cleanup`"
+"Знайдено %<PRIu64> недосяжних тем. За деталями див. `cleanup` у newsboat(1)."
 
 #: src/controller.cpp:580
 msgid "failed: "
@@ -1532,9 +1533,8 @@ msgid "Return to previous search results (if any)"
 msgstr "Повернутися до результатів попереднього пошуку (якщо вони є)"
 
 #: src/keymap.cpp:413
-#, fuzzy
 msgid "Go to the feed of the article"
-msgstr "Перейти до наступної непрочитаної статті"
+msgstr "Перейти до теми, котрій належить стаття"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
