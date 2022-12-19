@@ -450,6 +450,22 @@ std::string utils::replace_all(const std::string& str,
 	return output;
 }
 
+std::string utils::preserve_quotes(const std::string& str)
+{
+	std::string escaped_string = "";
+	std::vector<std::string> string_tokenized = tokenize_spaced(str, "'");
+	for (std::string string_chunk : string_tokenized) {
+		if (string_chunk[0] == '\'') {
+			for (size_t i = 0; i < string_chunk.length(); i++) {
+				escaped_string += "\\\'";
+			}
+		} else {
+			escaped_string += "'" + string_chunk + "'";
+		}
+	}
+	return escaped_string;
+}
+
 std::wstring utils::str2wstr(const std::string& str)
 {
 	const char* codeset = nl_langinfo(CODESET);

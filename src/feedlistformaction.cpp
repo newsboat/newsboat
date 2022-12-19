@@ -574,7 +574,7 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 
 	if (!url.empty()) {
 		const std::string feedurl = feed->rssurl();
-		const auto exit_code = v->open_in_browser(url, feedurl, type, interactive);
+		const auto exit_code = v->open_in_browser(url, feedurl, type, feed->title(), interactive);
 		if (!exit_code.has_value()) {
 			v->get_statusline().show_error(_("Failed to spawn browser"));
 			return false;
