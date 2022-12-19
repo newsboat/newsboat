@@ -1654,6 +1654,7 @@ TEST_CASE("preserve_quotes() preserves single quotes and double quotes, if any",
 		REQUIRE(utils::preserve_quotes("sss\"") == "'sss\"'");
 		REQUIRE(utils::preserve_quotes("\"sss") == "'\"sss'");
 		REQUIRE(utils::preserve_quotes("ss\"s") == "'ss\"s'");
+		REQUIRE(utils::preserve_quotes("ss\"\"s") == "'ss\"\"s'");
 	}
 
 	SECTION("Preserves single quotes") {
@@ -1661,6 +1662,7 @@ TEST_CASE("preserve_quotes() preserves single quotes and double quotes, if any",
 		REQUIRE(utils::preserve_quotes("'sss") == "\\\''sss'");
 		REQUIRE(utils::preserve_quotes("sss'") == "'sss'\\\'");
 		REQUIRE(utils::preserve_quotes("ss's") == "'ss'\\\''s'");
+		REQUIRE(utils::preserve_quotes("ss''s") == "'ss'\\\'\\\''s'");
 	}
 
 	SECTION("Preserves a combination of single and double quotes") {

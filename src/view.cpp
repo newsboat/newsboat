@@ -377,8 +377,7 @@ nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 	const std::string escaped_feedurl = "'" + utils::replace_all(feedurl, "'",
 			"%27") + "'";
 	const std::string quoted_type = "'" + type + "'";
-	std::vector<std::string> tokenized_title = utils::tokenize_spaced(title, "'");
-	std::string escaped_title = utils::preserve_quotes(title);
+	const std::string escaped_title = utils::preserve_quotes(title);
 
 	if (browser.find("%u") != std::string::npos
 		|| browser.find("%F") != std::string::npos

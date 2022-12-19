@@ -455,8 +455,10 @@ std::string utils::preserve_quotes(const std::string& str)
 	std::string escaped_string = "";
 	std::vector<std::string> string_tokenized = tokenize_spaced(str, "'");
 	for (std::string string_chunk : string_tokenized) {
-		if (string_chunk == "'") {
-			escaped_string += "\\\'";
+		if (string_chunk[0] == '\'') {
+			for (size_t i = 0; i < string_chunk.length(); i++) {
+				escaped_string += "\\\'";
+			}
 		} else {
 			escaped_string += "'" + string_chunk + "'";
 		}
