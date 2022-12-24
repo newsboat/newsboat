@@ -19,7 +19,7 @@ fn t_configpaths_create_dirs_returns_false_if_xdg_config_dir_exists_but_data_dir
 
     if section!("Default XDG locations") {
         let config_dir = tmp.path().join(".config").join("newsboat");
-        assert!(fs::create_dir_all(&config_dir).is_ok());
+        assert!(fs::create_dir_all(config_dir).is_ok());
 
         configpaths_helpers::assert_create_dirs_returns_false(&tmp);
     }
@@ -29,17 +29,17 @@ fn t_configpaths_create_dirs_returns_false_if_xdg_config_dir_exists_but_data_dir
         env::set_var("XDG_CONFIG_HOME", &config_home);
 
         let config_dir = config_home.join("newsboat");
-        assert!(fs::create_dir_all(&config_dir).is_ok());
+        assert!(fs::create_dir_all(config_dir).is_ok());
 
         configpaths_helpers::assert_create_dirs_returns_false(&tmp);
     }
 
     if section!("XDG_DATA_HOME redefined") {
         let config_dir = tmp.path().join(".config").join("newsboat");
-        assert!(fs::create_dir_all(&config_dir).is_ok());
+        assert!(fs::create_dir_all(config_dir).is_ok());
 
         let data_home = tmp.path().join("xdg-data");
-        env::set_var("XDG_DATA_HOME", &data_home);
+        env::set_var("XDG_DATA_HOME", data_home);
         // It's important to set the variable, but *not* create the directory
         // - it's the pre-condition of the test that the data dir doesn't exist
 
@@ -51,10 +51,10 @@ fn t_configpaths_create_dirs_returns_false_if_xdg_config_dir_exists_but_data_dir
         env::set_var("XDG_CONFIG_HOME", &config_home);
 
         let config_dir = config_home.join("newsboat");
-        assert!(fs::create_dir_all(&config_dir).is_ok());
+        assert!(fs::create_dir_all(config_dir).is_ok());
 
         let data_home = tmp.path().join("xdg-data");
-        env::set_var("XDG_DATA_HOME", &data_home);
+        env::set_var("XDG_DATA_HOME", data_home);
         // It's important to set the variable, but *not* create the directory
         // - it's the pre-condition of the test that the data dir doesn't exist
 
