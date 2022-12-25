@@ -75,6 +75,7 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 Item AtomParser::parse_entry(xmlNode* entryNode)
 {
 	Item it;
+	std::string author;
 	std::string summary;
 	std::string summary_mime_type;
 	std::string updated;
@@ -88,6 +89,13 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 		node = node->next) {
 		if (node_is(node, "author", ns)) {
 			parse_and_update_author(node, it.author);
+		} else if (node_is(node, "source", ns)) {
+			for (xmlNode* child = node->children; child != nullptr;
+				child = child->next) {
+				if (node_is(child, "author", ns)) {
+					parse_and_update_author(child, author);
+				}
+			}
 		} else if (node_is(node, "title", ns)) {
 			it.title = get_content(node);
 			it.title_type = get_prop(node, "type");
@@ -155,6 +163,10 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			parse_media_node(node, it);
 		}
 	} // for
+
+	if (it.author == "") {
+		it.author = author;
+	}
 
 	if (it.description == "") {
 		it.description = summary;

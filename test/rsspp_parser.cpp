@@ -304,7 +304,7 @@ TEST_CASE("Multiple links in item", "[rsspp::Parser]")
 	REQUIRE(f.items[0].link == "http://www.test.org/tests");
 }
 
-TEST_CASE("Feed authors in atom feed", "[rsspp::Parser]")
+TEST_CASE("Feed authors and source authors in atom feed", "[rsspp::Parser]")
 {
 	rsspp::Parser p;
 	rsspp::Feed f;
@@ -318,7 +318,7 @@ TEST_CASE("Feed authors in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.pubDate == "Mon, 28 Nov 2022 13:01:25 +0000");
 	REQUIRE(f.link == "http://example.com/");
 
-	REQUIRE(f.items.size() == 4u);
+	REQUIRE(f.items.size() == 9u);
 	REQUIRE(f.items[0].title == "Entry Without Author");
 	REQUIRE(f.items[0].description == "Feed authors should be used.");
 	REQUIRE(f.items[0].author == "First Feed Author, Second Feed Author");
@@ -334,4 +334,25 @@ TEST_CASE("Feed authors in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.items[3].title == "Entry With Empty Author Names");
 	REQUIRE(f.items[3].description == "Both feed authors should be used.");
 	REQUIRE(f.items[3].author == "First Feed Author, Second Feed Author");
+
+	REQUIRE(f.items[4].title == "Entry With Single Source Author");
+	REQUIRE(f.items[4].description == "Entry source author should be used.");
+	REQUIRE(f.items[4].author == "Entry Source Author");
+
+	REQUIRE(f.items[5].title == "Entry With Multiple Source Authors");
+	REQUIRE(f.items[5].description == "All entry source authors should be used.");
+	REQUIRE(f.items[5].author ==
+		"Entry Source Author 1, Entry Source Author 2, Entry Source Author 3");
+
+	REQUIRE(f.items[6].title == "Entry With Empty Source Author Names");
+	REQUIRE(f.items[6].description == "Both feed authors should be used.");
+	REQUIRE(f.items[6].author == "First Feed Author, Second Feed Author");
+
+	REQUIRE(f.items[7].title == "Entry With Single Author And Source Author");
+	REQUIRE(f.items[7].description == "Entry author should be used.");
+	REQUIRE(f.items[7].author == "Entry Author");
+
+	REQUIRE(f.items[8].title == "Entry With Multiple Author And Source Authors");
+	REQUIRE(f.items[8].description == "Both entry authors should be used.");
+	REQUIRE(f.items[8].author == "Entry Author 1, Entry Author 2");
 }

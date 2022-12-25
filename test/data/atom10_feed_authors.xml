@@ -29,7 +29,7 @@
 
   <author>
     <name>Second Feed Author</name>
-	<uri>http://example.com/actually-illegal-since-feed-author-must-appear-before-entry</uri>
+    <uri>http://example.com/actually-illegal-since-feed-author-must-appear-before-entry</uri>
   </author>
 
   <entry>
@@ -59,6 +59,108 @@
     <author>
       <uri>http://example.com/</uri>
     </author>
+  </entry>
+
+  <entry>
+    <title>Entry With Single Source Author</title>
+    <link href="http://example.com/5.html"/>
+    <id>http://example.com/4.html</id>
+    <content type="text">Entry source author should be used.</content>
+    <source>
+      <author>
+        <name>Entry Source Author</name>
+        <uri>http://example.com/</uri>
+      </author>
+    </source>
+  </entry>
+
+  <entry>
+    <title>Entry With Multiple Source Authors</title>
+    <source>
+      <author>
+        <name>Entry Source Author 1</name>
+        <uri>http://example.com/</uri>
+      </author>
+    </source>
+    <link href="http://example.com/6.html"/>
+    <id>http://example.com/4.html</id>
+    <content type="text">All entry source authors should be used.</content>
+    <source>
+      <author>
+        <name>Entry Source Author 2</name>
+        <uri>http://example.com/actually-illegal-since-entry-must-have-at-most-one-source</uri>
+      </author>
+      <author>
+        <name>Entry Source Author 3</name>
+        <uri>http://example.com/actually-illegal-since-entry-must-have-at-most-one-source</uri>
+      </author>
+    </source>
+  </entry>
+
+  <entry>
+    <title>Entry With Empty Source Author Names</title>
+    <source>
+      <author>
+        <name></name>
+        <uri>http://example.com/</uri>
+      </author>
+    </source>
+    <link href="http://example.com/7.html"/>
+    <id>http://example.com/4.html</id>
+    <content type="text">Both feed authors should be used.</content>
+    <source>
+      <author>
+        <uri>http://example.com/actually-illegal-since-entry-must-have-at-most-one-source</uri>
+      </author>
+    </source>
+  </entry>
+
+  <entry>
+    <title>Entry With Single Author And Source Author</title>
+    <source>
+      <author>
+        <name>Entry Source Author</name>
+        <uri>http://example.com/</uri>
+      </author>
+    </source>
+    <link href="http://example.com/8.html"/>
+    <id>http://example.com/4.html</id>
+    <content type="text">Entry author should be used.</content>
+    <author>
+      <name>Entry Author</name>
+      <uri>http://example.com/</uri>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Entry With Multiple Author And Source Authors</title>
+    <source>
+      <author>
+        <name>Entry Source Author 1</name>
+        <uri>http://example.com/</uri>
+      </author>
+    </source>
+    <author>
+      <name>Entry Author 1</name>
+      <uri>http://example.com/</uri>
+    </author>
+    <link href="http://example.com/9.html"/>
+    <id>http://example.com/4.html</id>
+    <content type="text">Both entry authors should be used.</content>
+    <author>
+      <name>Entry Author 2</name>
+      <uri>http://example.com/</uri>
+    </author>
+    <source>
+      <author>
+        <name>Entry Source Author 2</name>
+        <uri>http://example.com/actually-illegal-since-entry-must-have-at-most-one-source</uri>
+      </author>
+      <author>
+        <name>Entry Source Author 3</name>
+        <uri>http://example.com/actually-illegal-since-entry-must-have-at-most-one-source</uri>
+      </author>
+    </source>
   </entry>
 
 </feed>
