@@ -58,9 +58,6 @@ std::string utf8_to_locale(const std::string& text);
 /// nl_langinfo(CODESET)) to UTF-8.
 std::string locale_to_utf8(const std::string& text);
 
-std::string convert_text(const std::string& text, const std::string& tocode,
-	const std::string& fromcode);
-
 std::string get_command_output(const std::string& cmd);
 std::string http_method_str(const HTTPMethod method);
 std::string link_type_str(LinkType type);

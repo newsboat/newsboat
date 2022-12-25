@@ -5,7 +5,6 @@
 #include <curl/curl.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include <vector>
 
 #include "config.h"
 #include "curlhandle.h"
@@ -54,73 +53,50 @@ Parser::~Parser()
 	}
 }
 
-namespace {
-
 struct HeaderValues {
 	time_t lastmodified;
 	std::string etag;
-	std::string charset;
 
 	HeaderValues()
+		: lastmodified(0)
 	{
-		reset();
-	}
-
-	void reset()
-	{
-		lastmodified = 0;
-		charset = "utf-8";
-		etag = "";
 	}
 };
 
-}
-
 static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 {
-	const auto header = std::string(reinterpret_cast<const char*>(ptr), size * nmemb);
+	char* header = new char[size * nmemb + 1];
 	HeaderValues* values = static_cast<HeaderValues*>(data);
 
-	if (header.find("HTTP/") == 0) {
-		// Reset headers if a new response is detected (there might be multiple responses per request in case of a redirect)
-		values->reset();
-	} else if (header.find("Last-Modified:") == 0) {
-		const std::string header_value = header.substr(14);
-		time_t r = curl_getdate(header_value.c_str(), nullptr);
+	memcpy(header, ptr, size * nmemb);
+	header[size * nmemb] = '\0';
+
+	if (!strncasecmp("Last-Modified:", header, 14)) {
+		time_t r = curl_getdate(header + 14, nullptr);
 		if (r == -1) {
 			LOG(Level::DEBUG,
 				"handle_headers: last-modified %s "
 				"(curl_getdate "
 				"FAILED)",
-				header_value.c_str());
+				header + 14);
 		} else {
-			values->lastmodified = r;
+			values->lastmodified =
+				curl_getdate(header + 14, nullptr);
 			LOG(Level::DEBUG,
 				"handle_headers: got last-modified %s (%" PRId64 ")",
-				header_value,
+				header + 14,
 				// On GCC, `time_t` is `long int`, which is at least 32 bits.
 				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
 				// or an up-cast which is always safe.
 				static_cast<int64_t>(values->lastmodified));
 		}
-	} else if (header.find("ETag:") == 0) {
-		values->etag = header.substr(5);
+	} else if (!strncasecmp("ETag:", header, 5)) {
+		values->etag = std::string(header + 5);
 		utils::trim(values->etag);
 		LOG(Level::DEBUG, "handle_headers: got etag %s", values->etag);
-	} else if (header.find("Content-Type:") == 0) {
-		const std::string key = "charset=";
-		const auto charset_index = header.find(key);
-		if (charset_index != std::string::npos) {
-			auto charset = header.substr(charset_index + key.size());
-			utils::trim(charset);
-			if (charset.size() >= 2 && charset[0] == '"' && charset[charset.size() - 1] == '"') {
-				charset = charset.substr(1, charset.size() - 2);
-			}
-			if (charset.size() > 0) {
-				values->charset = charset;
-			}
-		}
 	}
+
+	delete[] header;
 
 	return size * nmemb;
 }
@@ -270,11 +246,10 @@ Feed Parser::parse_url(const std::string& url,
 		buf);
 
 	if (buf.length() > 0) {
-		LOG(Level::DEBUG, "Parser::parse_url: converting data from %s to utf-8", hdrs.charset);
-		const auto utf8_buf = utils::convert_text(buf, "utf-8", hdrs.charset);
-
-		LOG(Level::DEBUG, "Parser::parse_url: handing over data to parse_buffer()");
-		return parse_buffer(utf8_buf, url);
+		LOG(Level::DEBUG,
+			"Parser::parse_url: handing over data to "
+			"parse_buffer()");
+		return parse_buffer(buf, url);
 	}
 
 	return Feed();

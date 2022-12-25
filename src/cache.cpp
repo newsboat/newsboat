@@ -54,8 +54,6 @@ void Cache::run_sql_nothrow(const std::string& query,
 	run_sql_impl(query, callback, callback_argument, false);
 }
 
-namespace {
-
 struct CbHandler {
 	CbHandler()
 		: c(-1)
@@ -78,8 +76,6 @@ struct HeaderValues {
 	time_t lastmodified;
 	std::string etag;
 };
-
-}
 
 static int count_callback(void* handler, int argc, char** argv,
 	char** /* azColName */)
