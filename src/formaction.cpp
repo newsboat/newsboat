@@ -388,10 +388,10 @@ bool FormAction::handle_list_operations(ListWidget& list, Operation op)
 		list.move_page_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HALF_PAGE_UP:
-		list.scroll_halfpage_up();
+		list.scroll_halfpage_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	case OP_SK_HALF_PAGE_DOWN:
-		list.scroll_halfpage_down();
+		list.scroll_halfpage_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	default:
 		return false;

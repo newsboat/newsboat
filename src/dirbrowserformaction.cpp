@@ -156,12 +156,12 @@ bool DirBrowserFormAction::process_operation(Operation op,
 		break;
 	case OP_SK_HALF_PAGE_UP:
 		if (f.get_focus() == "files") {
-			files_list.scroll_halfpage_up();
+			files_list.scroll_halfpage_up(cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_SK_HALF_PAGE_DOWN:
 		if (f.get_focus() == "files") {
-			files_list.scroll_halfpage_down();
+			files_list.scroll_halfpage_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_QUIT:

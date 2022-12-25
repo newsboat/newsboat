@@ -155,10 +155,10 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			downloads_list.move_page_down(wrap_scroll);
 			break;
 		case OP_SK_HALF_PAGE_UP:
-			downloads_list.scroll_halfpage_up();
+			downloads_list.scroll_halfpage_up(wrap_scroll);
 			break;
 		case OP_SK_HALF_PAGE_DOWN:
-			downloads_list.scroll_halfpage_down();
+			downloads_list.scroll_halfpage_down(wrap_scroll);
 			break;
 		case OP_PB_TOGGLE_DLALL:
 			auto_download = !auto_download;

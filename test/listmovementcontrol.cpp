@@ -404,11 +404,20 @@ TEST_CASE("scroll_halfpage_up() moves up by half of `list height` lines",
 		list.num_lines = 10;
 		list_movement.set_position(0);
 
-		WHEN("scroll_halfpage_up() is called") {
-			list_movement.scroll_halfpage_up();
+		WHEN("scroll_halfpage_up() is called with wrapping disabled") {
+			list_movement.scroll_halfpage_up(false);
 
 			THEN("the first item is still selected") {
 				REQUIRE(list.position == 0);
+				REQUIRE(list.scroll_offset == 0);
+			}
+		}
+
+		WHEN("scroll_halfpage_up() is called with wrapping enabled") {
+			list_movement.scroll_halfpage_up(true);
+
+			THEN("the last item is selected") {
+				REQUIRE(list.position == 9);
 				REQUIRE(list.scroll_offset == 0);
 			}
 		}
@@ -425,22 +434,51 @@ TEST_CASE("scroll_halfpage_up() moves up by half of `list height` lines",
 		REQUIRE(list.position == 7);
 		REQUIRE(list.scroll_offset == 5);
 
-		WHEN("scroll_halfpage_up() is called repeatedly") {
+		WHEN("scroll_halfpage_up() is called repeatedly with wrapping disabled") {
 			THEN("both the scroll offset and the selected item move up by 3 until at the top") {
-				list_movement.scroll_halfpage_up();
+				list_movement.scroll_halfpage_up(false);
 
 				REQUIRE(list.position == 4);
 				REQUIRE(list.scroll_offset == 2);
 
-				list_movement.scroll_halfpage_up();
+				list_movement.scroll_halfpage_up(false);
 
 				REQUIRE(list.position == 1);
 				REQUIRE(list.scroll_offset == 0);
 
-				list_movement.scroll_halfpage_up();
+				list_movement.scroll_halfpage_up(false);
 
 				REQUIRE(list.position == 0);
 				REQUIRE(list.scroll_offset == 0);
+
+				list_movement.scroll_halfpage_up(false);
+
+				REQUIRE(list.position == 0);
+				REQUIRE(list.scroll_offset == 0);
+			}
+		}
+
+		WHEN("scroll_halfpage_up() is called repeatedly with wrapping enabled") {
+			THEN("both the scroll offset and the selected item move up by 3 until at the top") {
+				list_movement.scroll_halfpage_up(true);
+
+				REQUIRE(list.position == 4);
+				REQUIRE(list.scroll_offset == 2);
+
+				list_movement.scroll_halfpage_up(true);
+
+				REQUIRE(list.position == 1);
+				REQUIRE(list.scroll_offset == 0);
+
+				list_movement.scroll_halfpage_up(false);
+
+				REQUIRE(list.position == 0);
+				REQUIRE(list.scroll_offset == 0);
+
+				list_movement.scroll_halfpage_up(true);
+
+				REQUIRE(list.position == 9);
+				REQUIRE(list.scroll_offset == 5);
 			}
 		}
 	}
@@ -457,10 +495,19 @@ TEST_CASE("scroll_halfpage_down() moves down by `list height` lines, and respect
 		list_movement.set_position(9);
 
 		WHEN("scroll_halfpage_down() is called with wrapping disabled") {
-			list_movement.scroll_halfpage_down();
+			list_movement.scroll_halfpage_down(false);
 
 			THEN("the last item is still selected") {
 				REQUIRE(list.position == 9);
+				REQUIRE(list.scroll_offset == 0);
+			}
+		}
+
+		WHEN("scroll_halfpage_down() is called with wrapping enabled") {
+			list_movement.scroll_halfpage_down(true);
+
+			THEN("the first item is selected") {
+				REQUIRE(list.position == 0);
 				REQUIRE(list.scroll_offset == 0);
 			}
 		}
@@ -471,23 +518,53 @@ TEST_CASE("scroll_halfpage_down() moves down by `list height` lines, and respect
 		list.height = 5;
 		list_movement.set_position(1);
 
-		WHEN("scroll_halfpage_down() is called repeatedly") {
+		WHEN("scroll_halfpage_down() is called repeatedly with wrapping disabled") {
 
 			THEN("cursor moves 4 positions down, and the scroll offset is adjusted to display the newly selected item at the bottom") {
-				list_movement.scroll_halfpage_down();
+				list_movement.scroll_halfpage_down(false);
 
 				REQUIRE(list.position == 4);
 				REQUIRE(list.scroll_offset == 3);
 
-				list_movement.scroll_halfpage_down();
+				list_movement.scroll_halfpage_down(false);
 
 				REQUIRE(list.position == 7);
 				REQUIRE(list.scroll_offset == 5);
 
-				list_movement.scroll_halfpage_down();
+				list_movement.scroll_halfpage_down(false);
 
 				REQUIRE(list.position == 9);
 				REQUIRE(list.scroll_offset == 5);
+
+				list_movement.scroll_halfpage_down(false);
+
+				REQUIRE(list.position == 9);
+				REQUIRE(list.scroll_offset == 5);
+			}
+		}
+
+		WHEN("scroll_halfpage_down() is called repeatedly with wrapping enabled") {
+
+			THEN("cursor moves 4 positions down, and the scroll offset is adjusted to display the newly selected item at the bottom") {
+				list_movement.scroll_halfpage_down(true);
+
+				REQUIRE(list.position == 4);
+				REQUIRE(list.scroll_offset == 3);
+
+				list_movement.scroll_halfpage_down(true);
+
+				REQUIRE(list.position == 7);
+				REQUIRE(list.scroll_offset == 5);
+
+				list_movement.scroll_halfpage_down(true);
+
+				REQUIRE(list.position == 9);
+				REQUIRE(list.scroll_offset == 5);
+
+				list_movement.scroll_halfpage_down(true);
+
+				REQUIRE(list.position == 0);
+				REQUIRE(list.scroll_offset == 0);
 			}
 		}
 	}
