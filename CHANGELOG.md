@@ -1,14 +1,59 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2022-12-25
+## 2.30 - 2022-12-25
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes: Arttano, Danny Kirkham, Juho Eerola, and Pepe
+Doval.
 
 ### Added
+
+- In config, long lines can now be broken into multiple ones with `\`. When
+    parsing the config, Newsboat would remove the backslash and append the
+    following line to the current one. Be careful when indenting the lines that
+    follow the backslash, as the indentation will be included in the
+    concatenated string; this can change the meaning of some commands, e.g. if
+    the indentation ends up inside a regex (#2212) (Simon Farre)
+- `article-feed` operation, to go to the feed of the currently selected article.
+    This can come in handy in query feeds (phire)
+- New placeholder for `browser`, `%T`, which is replaced by the title of the
+    selected feed or item (#2224) (Aneesh)
+- Miniflux: fail on startup if credentials are wrong (#2220) (Dennis van der
+    Schagt)
+- Miniflux: support for API token authentication, which is available since
+    Miniflux 2.0.21 and is the preferred authentication method:
+    https://miniflux.app/docs/api.html#authentication See `miniflux-token`,
+    `miniflux-tokeneval`, and `miniflux-tokenfile` settings (#2122) (Dennis van
+    der Schagt)
+
 ### Changed
+
 - Bumped minimum supported Rust version to 1.62.0
-### Deprecated
-### Removed
+- When `cleanup-on-quit` is disabled and the cache contains unreachable feeds,
+    print their number, and write their URLs to `error-log` (#1548) (Maximilian
+    Winkler)
+- If an item contains enclosure(s) but doesn't specify their type(s), pick the
+    last one (as Newsboat only displays a single enclosure per item). This won't
+    always do the right thing, e.g. it could pick cover art instead of the
+    podcast, but *sometimes* it will, so it's still better than nothing (#2050)
+    (Dennis van der Schagt)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian (Alexander
+    Batischev), Turkish (Emir SARI), Ukrainian (Alexander Batischev)
+- Updated vendored library Catch2 to 2.13.10
+
 ### Fixed
+
+- Atom: if an item doesn't specify the `atom:author`, use the field from the
+    contained `atom:source`; if that's not specified either, use `atom:author`
+    of the feed itself. This is dictated by RFC 4287 §4.2.1 (#2256) (Lysander
+    Trischler)
+
 ### Security
+
+- Remove transitive dependency on the vulnerable `time` 0.1 crate:
+    CVE-2020-26235 https://osv.dev/vulnerability/RUSTSEC-2020-0071 (#2288)
+    (Alexander Batischev, thanks to the prod from critkitten)
 
 
 
