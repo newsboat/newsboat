@@ -22,10 +22,10 @@ namespace podboat {
 static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 	void* userp);
 static int progress_callback(void* clientp,
-	double dltotal,
-	double dlnow,
-	double ultotal,
-	double ulnow);
+	curl_off_t dltotal,
+	curl_off_t dlnow,
+	curl_off_t ultotal,
+	curl_off_t ulnow);
 
 PodDlThread::PodDlThread(Download* dl_, newsboat::ConfigContainer* c)
 	: dl(dl_)
@@ -62,8 +62,8 @@ void PodDlThread::run()
 	// set up progress notification:
 	curl_easy_setopt(handle.ptr(), CURLOPT_NOPROGRESS, 0);
 	curl_easy_setopt(
-		handle.ptr(), CURLOPT_PROGRESSFUNCTION, progress_callback);
-	curl_easy_setopt(handle.ptr(), CURLOPT_PROGRESSDATA, this);
+		handle.ptr(), CURLOPT_XFERINFOFUNCTION, progress_callback);
+	curl_easy_setopt(handle.ptr(), CURLOPT_XFERINFODATA, this);
 
 	// set up max download speed
 	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
@@ -149,10 +149,10 @@ static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 }
 
 static int progress_callback(void* clientp,
-	double dltotal,
-	double dlnow,
-	double /* ultotal */,
-	double /*ulnow*/)
+	curl_off_t dltotal,
+	curl_off_t dlnow,
+	curl_off_t /* ultotal */,
+	curl_off_t /*ulnow*/)
 {
 	PodDlThread* thread = static_cast<PodDlThread*>(clientp);
 	return thread->progress(dlnow, dltotal);
