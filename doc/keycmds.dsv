@@ -65,6 +65,8 @@ up||kbd:[UP]||Go up one item in the list.
 down||kbd:[DOWN]||Go down one item in the list.
 pageup||kbd:[PPAGE]||Go up one page in the list.
 pagedown||kbd:[NPAGE]||Go down one page in the list.
+halfpageup||n/a||Go up half a page.
+halfpagedown||n/a||Go down half a page.
 home||kbd:[HOME]||Go to the first item in the list.
 end||kbd:[END]||Go to the last item in the list.
 macro-prefix||kbd:[,]||Initiate macro execution. The next key press selects the actual macro and runs it.

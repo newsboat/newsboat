@@ -136,4 +136,27 @@ TEST_CASE("Basic movements work as expected", "[TextviewWidget]")
 		widget.scroll_page_down();
 		REQUIRE(widget.get_scroll_offset() == 9);
 	}
+
+	SECTION("scroll_halfpage_up() moves up by half of the screen height") {
+		widget.set_scroll_offset(5);
+		REQUIRE(widget.get_scroll_offset() == 5);
+
+		widget.scroll_halfpage_up();
+		REQUIRE(widget.get_scroll_offset() == 2);
+
+		widget.scroll_halfpage_up();
+		REQUIRE(widget.get_scroll_offset() == 0);
+	}
+
+	SECTION("scroll_halfpage_down() moves down by half of the screen height") {
+		widget.set_scroll_offset(4);
+		REQUIRE(widget.get_scroll_offset() == 4);
+
+		widget.scroll_halfpage_down();
+		REQUIRE(widget.get_scroll_offset() == 7);
+
+		widget.scroll_halfpage_down();
+		REQUIRE(widget.get_scroll_offset() == 9);
+	}
+
 }

@@ -91,6 +91,11 @@ public:
 	void move_page_down(bool wrap_scroll)
 	{
 		const auto num_lines = Backend::get_num_lines();
+		if (num_lines == 0) {
+			// Ignore if list is empty
+			return;
+		}
+
 		const std::uint32_t maxpos = num_lines - 1;
 		const std::uint32_t list_height = Backend::get_height();
 
@@ -98,6 +103,53 @@ public:
 			set_position(current_position + list_height);
 		} else if (wrap_scroll && current_position == maxpos) {
 			move_to_first();
+		} else {
+			set_position(maxpos);
+		}
+	}
+
+	void scroll_halfpage_up(bool wrap_scroll)
+	{
+		const std::uint32_t list_height = Backend::get_height();
+		const std::uint32_t scroll_amount = (list_height + 1) / 2;
+
+		if (current_scroll_offset >= scroll_amount) {
+			current_scroll_offset -= scroll_amount;
+		} else {
+			current_scroll_offset = 0;
+		}
+
+		if (wrap_scroll && current_position == 0) {
+			move_to_last();
+		} else if (current_position >= scroll_amount) {
+			set_position(current_position - scroll_amount);
+		} else {
+			set_position(0);
+		}
+	}
+
+	void scroll_halfpage_down(bool wrap_scroll)
+	{
+		const auto num_lines = Backend::get_num_lines();
+		if (num_lines == 0) {
+			// Ignore if list is empty
+			return;
+		}
+
+		const std::uint32_t maxpos = num_lines - 1;
+		const std::uint32_t list_height = Backend::get_height();
+		const std::uint32_t scroll_amount = (list_height + 1) / 2;
+
+		if (current_scroll_offset + scroll_amount <= max_offset()) {
+			current_scroll_offset += scroll_amount;
+		} else {
+			current_scroll_offset = max_offset();
+		}
+
+		if (wrap_scroll && current_position == maxpos) {
+			move_to_first();
+		} else if (current_position + scroll_amount <= maxpos) {
+			set_position(current_position + scroll_amount);
 		} else {
 			set_position(maxpos);
 		}

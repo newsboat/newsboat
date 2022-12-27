@@ -200,6 +200,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_SK_PGDOWN:
 		textview.scroll_page_down();
 		break;
+	case OP_SK_HALF_PAGE_UP:
+		textview.scroll_halfpage_up();
+		break;
+	case OP_SK_HALF_PAGE_DOWN:
+		textview.scroll_halfpage_down();
+		break;
 	case OP_TOGGLESOURCEVIEW:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
 		show_source = !show_source;
