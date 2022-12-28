@@ -169,7 +169,7 @@ size_t PodDlThread::write_data(void* buffer, size_t size, size_t nmemb)
 		"PodDlThread::write_data: bad = %u size = %" PRIu64,
 		f->bad(),
 		static_cast<uint64_t>(size * nmemb));
-	return f->bad() ? 0 : size * nmemb;
+	return f->bad() ? CURL_WRITEFUNC_ERROR : size * nmemb;
 }
 
 int PodDlThread::progress(double dlnow, double dltotal)
