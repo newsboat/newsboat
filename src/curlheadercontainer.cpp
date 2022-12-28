@@ -42,6 +42,11 @@ size_t CurlHeaderContainer::handle_headers(char* buffer, size_t size, size_t nit
 
 void CurlHeaderContainer::handle_header(const std::string& line)
 {
+	if (line.find("HTTP/") == 0) {
+		// Reset headers if a new response is detected (there might be multiple responses per request in case of a redirect)
+		mHeaderLines.clear();
+	}
+
 	mHeaderLines.push_back(line);
 }
 
