@@ -16,20 +16,19 @@ public:
 		CurlHandle& curlHandle);
 
 	const std::vector<std::string>& get_header_lines() const;
+	virtual ~CurlHeaderContainer();
 
-private:
+protected:
 	explicit CurlHeaderContainer(CurlHandle& curlHandle);
-public:
-	~CurlHeaderContainer();
+	void handle_header(const std::string& line);
 
-private:
 	CurlHeaderContainer(const CurlHeaderContainer&) = delete;
 	CurlHeaderContainer(CurlHeaderContainer&&) = delete;
 	CurlHeaderContainer& operator=(const CurlHeaderContainer&) = delete;
 	CurlHeaderContainer& operator=(CurlHeaderContainer&&) = delete;
 
+private:
 	static size_t handle_headers(char* buffer, size_t size, size_t nitems, void* data);
-	void handle_header(const std::string& line);
 
 	CurlHandle& mCurlHandle;
 	std::vector<std::string> mHeaderLines;
