@@ -7,6 +7,7 @@
 #include <thread>
 
 #include "config.h"
+#include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -35,14 +36,6 @@ bool InoreaderApi::authenticate()
 	return auth != "";
 }
 
-static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
-	void* userp)
-{
-	std::string* pbuf = static_cast<std::string*>(userp);
-	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
-	return size * nmemb;
-}
-
 std::string InoreaderApi::retrieve_auth()
 {
 	CurlHandle handle;
@@ -60,19 +53,19 @@ std::string InoreaderApi::retrieve_auth()
 	curl_free(username);
 	curl_free(password);
 
-	std::string result;
-
 	curl_slist* list = NULL;
 	list = add_app_headers(list);
 
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_LOGIN);
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(list);
 
+	const std::string result = curlDataReceiver->get_data();
 	std::vector<std::string> lines = utils::tokenize(result);
 	for (const auto& line : lines) {
 		LOG(Level::DEBUG,
@@ -94,17 +87,18 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
-	std::string result;
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, INOREADER_SUBSCRIPTION_LIST);
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const std::string result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"InoreaderApi::get_subscribed_urls: document = %s",
 		result);
@@ -312,20 +306,21 @@ bool InoreaderApi::share_article(const std::string& guid, bool share)
 std::string InoreaderApi::post_content(const std::string& url,
 	const std::string& postdata)
 {
-	std::string result;
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
 	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const std::string result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"InoreaderApi::post_content: url = %s postdata = %s result = "
 		"%s",

@@ -8,6 +8,7 @@
 #include <memory>
 #include <time.h>
 
+#include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "utils.h"
 
@@ -342,17 +343,6 @@ bool OcNewsApi::query(const std::string& query,
 
 	utils::set_common_curl_options(handle, cfg);
 
-	static auto write_fn =
-	[](void* buffer, size_t size, size_t nmemb, void* userp) {
-		std::string* pbuf = static_cast<std::string*>(userp);
-		pbuf->append(
-			static_cast<const char*>(buffer), size * nmemb);
-		return size * nmemb;
-	};
-	std::string buff;
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, *write_fn);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &buff);
-
 	if (!post.empty()) {
 		curl_easy_setopt(handle.ptr(), CURLOPT_POST, 1);
 		curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, post.c_str());
@@ -364,6 +354,8 @@ bool OcNewsApi::query(const std::string& query,
 
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 	curl_easy_setopt(handle.ptr(), CURLOPT_USERPWD, auth.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
 
 	CURLcode res = curl_easy_perform(handle.ptr());
 
@@ -392,6 +384,7 @@ bool OcNewsApi::query(const std::string& query,
 	}
 
 	if (result) {
+		const std::string buff = curlDataReceiver->get_data();
 		*result = json_tokener_parse(buff.c_str());
 	}
 	return true;

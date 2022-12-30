@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "config.h"
+#include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -36,14 +37,6 @@ bool FeedHqApi::authenticate()
 	return auth != "";
 }
 
-static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
-	void* userp)
-{
-	std::string* pbuf = static_cast<std::string*>(userp);
-	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
-	return size * nmemb;
-}
-
 std::string FeedHqApi::retrieve_auth()
 {
 	CurlHandle handle;
@@ -67,17 +60,17 @@ std::string FeedHqApi::retrieve_auth()
 	curl_free(username);
 	curl_free(password);
 
-	std::string result;
-
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
 		(cfg->get_configvalue("feedhq-url") + FEEDHQ_LOGIN).c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 
+	const auto result = curlDataReceiver->get_data();
 	for (const auto& line : utils::tokenize(result)) {
 		LOG(Level::DEBUG, "FeedHqApi::retrieve_auth: line = %s", line);
 		if (line.substr(0, 5) == "Auth=") {
@@ -94,21 +87,21 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 	std::vector<TaggedFeedUrl> urls;
 
 	CurlHandle handle;
-	std::string result;
 	curl_slist* custom_headers{};
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
 		(cfg->get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST)
 		.c_str());
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const auto result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"FeedHqApi::get_subscribed_urls: document = %s",
 		result);
@@ -253,21 +246,22 @@ bool FeedHqApi::mark_article_read_with_token(const std::string& guid,
 std::string FeedHqApi::get_new_token()
 {
 	CurlHandle handle;
-	std::string result;
 	curl_slist* custom_headers{};
 
 	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
 		(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL)
 		.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const auto result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG, "FeedHqApi::get_new_token: token = %s", result);
 
 	return result;
@@ -347,20 +341,21 @@ bool FeedHqApi::share_article(const std::string& guid, bool share)
 std::string FeedHqApi::post_content(const std::string& url,
 	const std::string& postdata)
 {
-	std::string result;
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
 	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const auto result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"FeedHqApi::post_content: url = %s postdata = %s result = %s",
 		url,

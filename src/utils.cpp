@@ -28,6 +28,7 @@
 #include <unordered_set>
 
 #include "config.h"
+#include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "htmlrenderer.h"
 #include "logger.h"
@@ -191,14 +192,6 @@ std::string utils::get_command_output(const std::string& cmd)
 	return std::string(utils::bridged::get_command_output(cmd));
 }
 
-static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
-	void* userp)
-{
-	std::string* pbuf = static_cast<std::string*>(userp);
-	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
-	return size * nmemb;
-}
-
 std::string utils::http_method_str(const HTTPMethod method)
 {
 	std::string str = "";
@@ -260,12 +253,10 @@ std::string utils::retrieve_url(const std::string& url,
 	const std::string* body,
 	const HTTPMethod method /* = GET */)
 {
-	std::string buf;
-
 	set_common_curl_options(easyhandle, cfgcont);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
-	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(easyhandle);
 
 	switch (method) {
 	case HTTPMethod::GET:
@@ -305,6 +296,7 @@ std::string utils::retrieve_url(const std::string& url,
 	logprefix << "utils::retrieve_url(" << http_method_str(method) << " " << url << ")"
 		<< "[" << (body != nullptr ? body->c_str() : "-") << "]";
 
+	std::string buf = curlDataReceiver->get_data();
 	if (res != CURLE_OK) {
 		std::string errmsg(errbuf);
 		if (errmsg.empty()) {

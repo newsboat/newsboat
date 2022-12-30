@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "config.h"
+#include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -40,14 +41,6 @@ bool FreshRssApi::authenticate()
 	return auth != "";
 }
 
-static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
-	void* userp)
-{
-	std::string* pbuf = static_cast<std::string*>(userp);
-	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
-	return size * nmemb;
-}
-
 std::string FreshRssApi::retrieve_auth()
 {
 	CurlHandle handle;
@@ -69,17 +62,17 @@ std::string FreshRssApi::retrieve_auth()
 	curl_free(username);
 	curl_free(password);
 
-	std::string result;
-
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
 		(cfg->get_configvalue("freshrss-url") + FRESHRSS_LOGIN).c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 
+	const std::string result = curlDataReceiver->get_data();
 	for (const auto& line : utils::tokenize(result)) {
 		LOG(Level::DEBUG, "FreshRssApi::retrieve_auth: line = %s", line);
 		if (line.substr(0, 5) == "Auth=") {
@@ -96,21 +89,22 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 	std::vector<TaggedFeedUrl> urls;
 
 	CurlHandle handle;
-	std::string result;
 	curl_slist* custom_headers{};
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(handle, cfg);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
 		(cfg->get_configvalue("freshrss-url") + FRESHRSS_SUBSCRIPTION_LIST)
 		.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const std::string result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"FreshRssApi::get_subscribed_urls: document = %s",
 		result);
@@ -271,21 +265,22 @@ bool FreshRssApi::mark_article_read_with_token(const std::string& guid,
 std::string FreshRssApi::get_new_token()
 {
 	CurlHandle handle;
-	std::string result;
 	curl_slist* custom_headers{};
 
 	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
 		(cfg->get_configvalue("freshrss-url") + FRESHRSS_API_TOKEN_URL)
 		.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const std::string result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG, "FreshRssApi::get_new_token: token = %s", result);
 
 	return result;
@@ -378,20 +373,21 @@ bool FreshRssApi::share_article(const std::string& guid, bool share)
 std::string FreshRssApi::post_content(const std::string& url,
 	const std::string& postdata)
 {
-	std::string result;
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
 	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postdata.c_str());
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, url.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(handle);
+
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
 
+	const std::string result = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"FreshRssApi::post_content: url = %s postdata = %s result = %s",
 		url,
@@ -416,21 +412,22 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 			id,
 			cfg->get_configvalue_as_int("freshrss-min-items"));
 
-	std::string result;
 	curl_slist* custom_headers{};
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
 	utils::set_common_curl_options(cached_handle, cfg);
-	curl_easy_setopt(cached_handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(cached_handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(cached_handle.ptr(),
 		CURLOPT_URL,
 		query.c_str());
+
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(cached_handle);
+
 	curl_easy_perform(cached_handle.ptr());
 
 	curl_slist_free_all(custom_headers);
 
+	const std::string result = curlDataReceiver->get_data();
 	if (result.empty()) {
 		LOG(Level::ERROR,
 			"FreshRssApi::fetch_feed: Empty response: %s",

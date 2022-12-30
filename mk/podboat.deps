@@ -1,5 +1,6 @@
 podboat.cpp
 src/configactionhandler.cpp
+src/curldatareceiver.cpp
 src/download.cpp
 src/listformatter.cpp
 src/listwidgetbackend.cpp
