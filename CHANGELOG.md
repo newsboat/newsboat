@@ -21,6 +21,27 @@ for this release also includes: TK
 
 
 
+## 2.30.1 - 2022-12-30
+
+### Fixed
+
+- Build failure with curl 7.87.
+
+  It was caused by us using a deprecated curl constant, which in 7.87 started
+  emitting a warning. Since we turn warnings into errors (-Werror), this failed
+  the build. This wasn't spotted by our CI because curl 7.87 only came out a few
+  days before Newsboat 2.30 did, and our CI uses Ubuntu LTS which doesn't pull
+  updates *that* fast.
+
+  The fix replaces the deprecated constant with a newer one. This also required
+  a bump of minimum supported curl version from 7.21.6 (released 16 June 2010)
+  to 7.32.0 (released 11 August 2013), which shouldn't affect anyone because of
+  how low the new requirement is.
+
+  (#2297) (Dennis van der Schagt)
+
+
+
 ## 2.30 - 2022-12-25
 
 Lists below only mention user-visible changes, but the full list of contributors

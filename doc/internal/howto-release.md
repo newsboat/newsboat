@@ -23,6 +23,7 @@ makes the process for a patch release a bit different from the ordinary release;
 instead of prepping and pushing the contents of the `master` branch, we have to
 branch off the latest release and backport the bugfixes onto it.
 
+
 0. Open this document in Vim, add an empty line at the end, but **do not save
    it**.
 
