@@ -77,7 +77,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
   points to our own fork because http://www.clifford.at/stfl/[the upstream] is
   dead)
 - https://www.sqlite.org/download.html[SQLite3 (version 3.5 or newer)]
-- https://curl.haxx.se/download.html[libcurl (version 7.21.6 or newer)]
+- https://curl.haxx.se/download.html[libcurl (version 7.32.0 or newer)]
 - Header files for the SSL library that libcurl uses. You can find out which
     library that is from the output of `curl --version`; most often that's
     OpenSSL, sometimes GnuTLS, or maybe something else.
