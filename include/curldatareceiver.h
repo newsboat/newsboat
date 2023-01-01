@@ -11,7 +11,8 @@ namespace newsboat {
 
 class CurlDataReceiver {
 public:
-	[[nodiscard("Registration is only valid as long as the pointer is alive")]]
+	// Registration is only valid as long as the pointer is alive
+	[[nodiscard]]
 	static std::unique_ptr<CurlDataReceiver> register_data_handler(CurlHandle& curlHandle);
 
 	const std::string& get_data() const;
