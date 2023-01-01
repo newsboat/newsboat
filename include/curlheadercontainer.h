@@ -16,6 +16,7 @@ public:
 		CurlHandle& curlHandle);
 
 	const std::vector<std::string>& get_header_lines() const;
+	std::vector<std::string> get_header_lines(const std::string& key) const;
 	virtual ~CurlHeaderContainer();
 
 protected:

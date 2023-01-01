@@ -68,3 +68,52 @@ TEST_CASE("CurlHeaderContainer::handle_header() discards previous headers when r
 		}
 	}
 }
+
+TEST_CASE("get_header_lines() with given key returns matched header lines (case insensitively)",
+	"[CurlHeaderContainer]")
+{
+	CurlHandle curlHandle;
+	CurlHeaderContainerForTesting curlHeaderContainer(curlHandle);
+
+	GIVEN("A few header lines as input") {
+		curlHeaderContainer.handle_header("HTTP/1.1 200 OK");
+		curlHeaderContainer.handle_header("Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT");
+		curlHeaderContainer.handle_header("Cache-Control:no-cache");
+		curlHeaderContainer.handle_header("Cache-Control:no-store");
+		curlHeaderContainer.handle_header("whitespace-test: \tvalue with spaces\t ");
+		curlHeaderContainer.handle_header("");
+
+		WHEN("get_header_lines() is called with a non-existent key") {
+			const auto values = curlHeaderContainer.get_header_lines("non-existent");
+
+			THEN("Nothing is returned") {
+				REQUIRE(values.size() == 0);
+			}
+		}
+
+		WHEN("get_header_lines() is called with an existing key") {
+			const auto values = curlHeaderContainer.get_header_lines("Cache-Control");
+
+			THEN("all relevant values are returned") {
+				REQUIRE(values.size() == 2);
+				REQUIRE(values[0] == "no-cache");
+				REQUIRE(values[1] == "no-store");
+			}
+		}
+
+		SECTION("get_header_lines() matches keys case-insensitively") {
+			const auto values = curlHeaderContainer.get_header_lines("CACHE-CONTROL");
+
+			REQUIRE(values.size() == 2);
+			REQUIRE(values[0] == "no-cache");
+			REQUIRE(values[1] == "no-store");
+		}
+
+		SECTION("get_header_lines() removes whitespace at start and end of value") {
+			const auto values = curlHeaderContainer.get_header_lines("whitespace-test");
+
+			REQUIRE(values.size() == 1);
+			REQUIRE(values[0] == "value with spaces");
+		}
+	}
+}
