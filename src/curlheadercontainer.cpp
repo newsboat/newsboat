@@ -2,6 +2,8 @@
 
 #include <curl/curl.h>
 
+#include "utils.h"
+
 namespace newsboat {
 
 std::unique_ptr<CurlHeaderContainer> CurlHeaderContainer::register_header_handler(
@@ -13,6 +15,22 @@ std::unique_ptr<CurlHeaderContainer> CurlHeaderContainer::register_header_handle
 const std::vector<std::string>& CurlHeaderContainer::get_header_lines() const
 {
 	return mHeaderLines;
+}
+
+std::vector<std::string> CurlHeaderContainer::get_header_lines(const std::string& key)
+const
+{
+	std::vector<std::string> values;
+	std::string search_string = utils::to_lowercase(key) + ":";
+
+	for (const auto& header_line : mHeaderLines) {
+		if (utils::to_lowercase(header_line).find(search_string) == 0) {
+			std::string value = header_line.substr(search_string.length());
+			utils::trim(value);
+			values.push_back(value);
+		}
+	}
+	return values;
 }
 
 CurlHeaderContainer::CurlHeaderContainer(CurlHandle& curlHandle)

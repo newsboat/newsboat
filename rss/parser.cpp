@@ -127,34 +127,29 @@ Feed Parser::parse_url(const std::string& url,
 
 	ret = curl_easy_perform(easyhandle.ptr());
 
-	const auto& header_lines = curlHeaderHandler->get_header_lines();
-	for (const auto& header_line : header_lines) {
-		std::string lower_case_line;
-		std::transform(header_line.begin(), header_line.end(), std::back_inserter(lower_case_line),
-		[](unsigned char c) {
-			return std::tolower(c);
-		});
-		if (lower_case_line.find("etag:") == 0) {
-			std::string etag = header_line.substr(std::string("ETag:").length());
-			utils::trim(etag);
-			LOG(Level::DEBUG, "parse_url: got etag %s", etag);
-			et = etag;
-		} else if (lower_case_line.find("last-modified:") == 0) {
-			const std::string header_value = header_line.substr(
-					std::string("Last-Modified:").length());
-			time_t time = curl_getdate(header_value.c_str(), nullptr);
-			if (time == -1) {
-				LOG(Level::DEBUG, "parse_url: last-modified %s (curl_getdate FAILED)", header_value);
-			} else {
-				LOG(Level::DEBUG,
-					"parse_url: got last-modified %s (%" PRId64 ")",
-					header_value,
-					// On GCC, `time_t` is `long int`, which is at least 32 bits.
-					// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
-					// or an up-cast which is always safe.
-					static_cast<int64_t>(time));
-				lm = time;
-			}
+	const auto etag_headers = curlHeaderHandler->get_header_lines("ETag");
+	if (etag_headers.size() >= 1) {
+		std::string etag = etag_headers.back();
+		utils::trim(etag);
+		LOG(Level::DEBUG, "parse_url: got etag %s", etag);
+		et = etag;
+	}
+
+	const auto last_modified_headers = curlHeaderHandler->get_header_lines("Last-Modified");
+	if (last_modified_headers.size() >= 1) {
+		const std::string header_value = last_modified_headers.back();
+		time_t time = curl_getdate(header_value.c_str(), nullptr);
+		if (time == -1) {
+			LOG(Level::DEBUG, "parse_url: last-modified %s (curl_getdate FAILED)", header_value);
+		} else {
+			LOG(Level::DEBUG,
+				"parse_url: got last-modified %s (%" PRId64 ")",
+				header_value,
+				// On GCC, `time_t` is `long int`, which is at least 32 bits.
+				// On x86_64, it's 64 bits. Thus, this cast is either a no-op,
+				// or an up-cast which is always safe.
+				static_cast<int64_t>(time));
+			lm = time;
 		}
 	}
 
