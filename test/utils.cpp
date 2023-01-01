@@ -976,13 +976,13 @@ TEST_CASE("join()", "[utils]")
 	}
 }
 
-TEST_CASE("trim()", "[utils]")
+TEST_CASE("trim() removes whitespace at start and end of string", "[utils]")
 {
 	std::string str = "  xxx\r\n";
 	utils::trim(str);
 	REQUIRE(str == "xxx");
 
-	str = "\n\n abc  foobar\n";
+	str = "\n\n \tabc  foobar\n";
 	utils::trim(str);
 	REQUIRE(str == "abc  foobar");
 
