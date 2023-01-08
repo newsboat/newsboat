@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_LISTWIDGETBACKEND_H_
 #define NEWSBOAT_LISTWIDGETBACKEND_H_
 
+#include <cstdint>
 #include <string>
 
 #include "listformatter.h"
