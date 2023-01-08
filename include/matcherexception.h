@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_MATCHEREXCEPTON_H_
 #define NEWSBOAT_MATCHEREXCEPTON_H_
 
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 
