@@ -55,4 +55,13 @@
     <media:player url="http://example.com/player.html"/>
   </entry>
 
+  <entry>
+    <title>using media:content</title>
+    <link href="http://example.com/4.html"/>
+    <id>tag:example.com,2008-12-30:/4</id>
+    <content type="html">regular content</content>
+    <media:content url="http://example.com/media-test.png" type="image/png" />
+    <media:content url="http://example.com/movie.mov" type="video/quicktime" />
+  </entry>
+
 </feed>

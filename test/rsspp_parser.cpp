@@ -232,7 +232,7 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.pubDate == "Tue, 30 Dec 2008 18:26:15 +0000");
 	REQUIRE(f.link == "http://example.com/");
 
-	REQUIRE(f.items.size() == 5u);
+	REQUIRE(f.items.size() == 6u);
 	REQUIRE(f.items[0].title == "using regular content");
 	REQUIRE(f.items[0].description == "regular html content");
 	REQUIRE(f.items[0].description_mime_type == "text/html");
@@ -263,6 +263,16 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 		REQUIRE(f.items[4].link == "http://example.com/regular-link");
 		REQUIRE(f.items[4].author == "John Doe");
 	}
+
+	REQUIRE(f.items[5].title == "using media:content");
+	REQUIRE(f.items[5].description == "regular content");
+	REQUIRE(f.items[5].description_mime_type == "text/html");
+	REQUIRE(f.items[5].link == "http://example.com/4.html");
+	REQUIRE(f.items[5].enclosures.size() == 2);
+	REQUIRE(f.items[5].enclosures[0].url == "http://example.com/media-test.png");
+	REQUIRE(f.items[5].enclosures[0].type == "image/png");
+	REQUIRE(f.items[5].enclosures[1].url == "http://example.com/movie.mov");
+	REQUIRE(f.items[5].enclosures[1].type == "video/quicktime");
 }
 
 TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
