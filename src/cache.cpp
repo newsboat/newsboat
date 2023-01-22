@@ -299,7 +299,7 @@ void Cache::set_pragmas()
 static const schema_patches schemaPatches{
 	{	{2, 10},
 		{
-			"CREATE TABLE rss_feed ( "
+			"CREATE TABLE rss_feed ( " // NOLINT(bugprone-suspicious-missing-comma)
 			" rssurl VARCHAR(1024) PRIMARY KEY NOT NULL, "
 			" url VARCHAR(1024) NOT NULL, "
 			" title VARCHAR(1024) NOT NULL ); ",
