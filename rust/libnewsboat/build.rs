@@ -8,7 +8,7 @@ fn main() {
     match command_output {
         Ok(ref hash_output) if hash_output.status.success() => {
             let hash = String::from_utf8_lossy(&hash_output.stdout);
-            println!("cargo:rustc-env=NEWSBOAT_VERSION={}", hash);
+            println!("cargo:rustc-env=NEWSBOAT_VERSION={hash}");
             // Re-build this crate when Git HEAD changes. Idea lifted from vergen crate.
             println!("cargo:rebuild-if-changed=.git/HEAD");
         }

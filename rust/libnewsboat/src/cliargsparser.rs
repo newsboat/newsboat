@@ -116,8 +116,8 @@ pub enum CliParseError {
 impl std::fmt::Display for CliParseError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            CliParseError::LexoptError(lexopt) => write!(f, "{}", lexopt),
-            CliParseError::InvalidLogLevel(log_message) => write!(f, "{}", log_message),
+            CliParseError::LexoptError(lexopt) => write!(f, "{lexopt}"),
+            CliParseError::InvalidLogLevel(log_message) => write!(f, "{log_message}"),
             CliParseError::PrintAndExit => write!(f, "Erroneous command line arguments"),
         }
     }
@@ -296,7 +296,7 @@ mod tests {
         check(vec!["newsboat".into(), "-i".into(), filename.into()]);
         check(vec![
             "newsboat".into(),
-            format!("--import-from-opml={}", filename).into(),
+            format!("--import-from-opml={filename}").into(),
         ]);
     }
 
@@ -392,7 +392,7 @@ mod tests {
 
         check(vec![
             "newsboat".into(),
-            format!("--url-file={}", filename).into(),
+            format!("--url-file={filename}").into(),
         ]);
     }
 
@@ -414,7 +414,7 @@ mod tests {
         check(vec!["newsboat".into(), "-c".into(), filename.into()]);
         check(vec![
             "newsboat".into(),
-            format!("--cache-file={}", filename).into(),
+            format!("--cache-file={filename}").into(),
         ]);
     }
 
@@ -519,7 +519,7 @@ mod tests {
         check(vec!["newsboat".into(), "-C".into(), filename.into()]);
         check(vec![
             "newsboat".into(),
-            format!("--config-file={}", filename).into(),
+            format!("--config-file={filename}").into(),
         ]);
     }
 
@@ -655,7 +655,7 @@ mod tests {
         check(vec!["newsboat".into(), "-I".into(), filename.into()]);
         check(vec![
             "newsboat".into(),
-            format!("--import-from-file={}", filename).into(),
+            format!("--import-from-file={filename}").into(),
         ]);
     }
 
@@ -672,7 +672,7 @@ mod tests {
         check(vec!["newsboat".into(), "-E".into(), filename.into()]);
         check(vec![
             "newsboat".into(),
-            format!("--export-to-file={}", filename).into(),
+            format!("--export-to-file={filename}").into(),
         ]);
     }
 
@@ -717,7 +717,7 @@ mod tests {
         check(vec!["newsboat".into(), "-d".into(), filename.into()]);
         check(vec![
             "newsboat".into(),
-            format!("--log-file={}", filename).into(),
+            format!("--log-file={filename}").into(),
         ]);
     }
 

@@ -147,7 +147,7 @@ impl Logger {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
                 files.logfile = Some(file);
             }
-            Err(error) => eprintln!("Couldn't open `{}' as a logfile: {}", filename, error),
+            Err(error) => eprintln!("Couldn't open `{filename}' as a logfile: {error}"),
         }
     }
 
@@ -170,10 +170,7 @@ impl Logger {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
                 files.user_error_logfile = Some(file)
             }
-            Err(error) => eprintln!(
-                "Couldn't open `{}' as a user error logfile: {}",
-                filename, error
-            ),
+            Err(error) => eprintln!("Couldn't open `{filename}' as a user error logfile: {error}"),
         }
     }
 
@@ -220,7 +217,7 @@ impl Logger {
 
         if level as isize <= self.get_loglevel() {
             if let Some(ref mut logfile) = files.logfile {
-                let level = format!("{}: ", level);
+                let level = format!("{level}: ");
 
                 // Ignoring the error since checking every log() call will be too bothersome.
                 let _ = logfile.write_all(timestamp.as_bytes());

@@ -251,7 +251,7 @@ fn number<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a st
 
 fn range<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Value, E> {
     separated_pair(number, tag(":"), number)(input)
-        .map(|(leftovers, (a, b))| (leftovers, Value::new(format!("{}:{}", a, b))))
+        .map(|(leftovers, (a, b))| (leftovers, Value::new(format!("{a}:{b}"))))
 }
 
 /// Skips zero or more space characters.

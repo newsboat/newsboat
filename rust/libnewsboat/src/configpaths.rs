@@ -405,6 +405,6 @@ fn mkdir<R: AsRef<Path>>(path: R, mode: u32) -> io::Result<()> {
 fn migrate_file<R: AsRef<Path>>(newsbeuter_dir: R, newsboat_dir: R, file: &str) -> io::Result<()> {
     let input_filepath = newsbeuter_dir.as_ref().join(file);
     let output_filepath = newsboat_dir.as_ref().join(file);
-    eprintln!("{:?} -> {:?}", input_filepath, output_filepath);
+    eprintln!("{input_filepath:?} -> {output_filepath:?}");
     fs::copy(input_filepath, output_filepath).map(|_| ())
 }

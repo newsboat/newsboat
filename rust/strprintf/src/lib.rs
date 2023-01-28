@@ -153,53 +153,53 @@ mod tests {
 
     #[test]
     fn formats_i32() {
-        assert_eq!(fmt!(&format!("%{}", PRIi32), 42i32), "42");
-        assert_eq!(fmt!(&format!("%{}", PRId32), 42i32), "42");
+        assert_eq!(fmt!(&format!("%{PRIi32}"), 42i32), "42");
+        assert_eq!(fmt!(&format!("%{PRId32}"), 42i32), "42");
 
-        assert_eq!(fmt!(&format!("%{}", PRIi32), std::i32::MIN), "-2147483648");
-        assert_eq!(fmt!(&format!("%{}", PRId32), std::i32::MIN), "-2147483648");
+        assert_eq!(fmt!(&format!("%{PRIi32}"), std::i32::MIN), "-2147483648");
+        assert_eq!(fmt!(&format!("%{PRId32}"), std::i32::MIN), "-2147483648");
 
-        assert_eq!(fmt!(&format!("%{}", PRIi32), std::i32::MAX), "2147483647");
-        assert_eq!(fmt!(&format!("%{}", PRId32), std::i32::MAX), "2147483647");
+        assert_eq!(fmt!(&format!("%{PRIi32}"), std::i32::MAX), "2147483647");
+        assert_eq!(fmt!(&format!("%{PRId32}"), std::i32::MAX), "2147483647");
     }
 
     #[test]
     fn formats_u32() {
-        assert_eq!(fmt!(&format!("%{}", PRIu32), 42u32), "42");
-        assert_eq!(fmt!(&format!("%{}", PRIu32), 0u32), "0");
-        assert_eq!(fmt!(&format!("%{}", PRIu32), std::u32::MAX), "4294967295");
+        assert_eq!(fmt!(&format!("%{PRIu32}"), 42u32), "42");
+        assert_eq!(fmt!(&format!("%{PRIu32}"), 0u32), "0");
+        assert_eq!(fmt!(&format!("%{PRIu32}"), std::u32::MAX), "4294967295");
     }
 
     #[test]
     fn formats_i64() {
-        assert_eq!(fmt!(&format!("%{}", PRIi64), 42i64), "42");
-        assert_eq!(fmt!(&format!("%{}", PRId64), 42i64), "42");
+        assert_eq!(fmt!(&format!("%{PRIi64}"), 42i64), "42");
+        assert_eq!(fmt!(&format!("%{PRId64}"), 42i64), "42");
 
         assert_eq!(
-            fmt!(&format!("%{}", PRIi64), std::i64::MIN),
+            fmt!(&format!("%{PRIi64}"), std::i64::MIN),
             "-9223372036854775808"
         );
         assert_eq!(
-            fmt!(&format!("%{}", PRId64), std::i64::MIN),
+            fmt!(&format!("%{PRId64}"), std::i64::MIN),
             "-9223372036854775808"
         );
 
         assert_eq!(
-            fmt!(&format!("%{}", PRIi64), std::i64::MAX),
+            fmt!(&format!("%{PRIi64}"), std::i64::MAX),
             "9223372036854775807"
         );
         assert_eq!(
-            fmt!(&format!("%{}", PRId64), std::i64::MAX),
+            fmt!(&format!("%{PRId64}"), std::i64::MAX),
             "9223372036854775807"
         );
     }
 
     #[test]
     fn formats_u64() {
-        assert_eq!(fmt!(&format!("%{}", PRIu64), 42u64), "42");
-        assert_eq!(fmt!(&format!("%{}", PRIu64), 0u64), "0");
+        assert_eq!(fmt!(&format!("%{PRIu64}"), 42u64), "42");
+        assert_eq!(fmt!(&format!("%{PRIu64}"), 0u64), "0");
         assert_eq!(
-            fmt!(&format!("%{}", PRIu64), std::u64::MAX),
+            fmt!(&format!("%{PRIu64}"), std::u64::MAX),
             "18446744073709551615"
         );
     }

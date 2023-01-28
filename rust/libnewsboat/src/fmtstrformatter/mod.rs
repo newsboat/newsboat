@@ -91,7 +91,7 @@ impl FmtStrFormatter {
                 }
             };
 
-            let padding_value = &format!("{}", c);
+            let padding_value = &format!("{c}");
             let padding = padding_value.repeat(padding_width);
             result.push_str(&padding);
         };
@@ -627,14 +627,14 @@ mod tests {
         #[test]
         fn does_not_crash_on_any_spacing_character(ref c in "\\PC") {
             let fmt = FmtStrFormatter::new();
-            let format = format!("%>{}", c);
+            let format = format!("%>{c}");
             fmt.do_format(&format, 0);
         }
 
         #[test]
         fn does_not_crash_on_any_character_in_conditional(ref c in "\\PC") {
             let fmt = FmtStrFormatter::new();
-            let format = format!("%?{}?hello?%", c);
+            let format = format!("%?{c}?hello?%");
             fmt.do_format(&format, 0);
         }
 

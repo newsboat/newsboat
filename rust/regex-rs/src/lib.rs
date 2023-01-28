@@ -157,7 +157,7 @@ impl Regex {
                 match regex_error_to_str(errcode, &regex) {
                     Some(regcomp_errmsg) => {
                         let msg = fmt!(&gettext("regcomp returned code %i"), errcode);
-                        let msg = format!("{}: {}", msg, regcomp_errmsg);
+                        let msg = format!("{msg}: {regcomp_errmsg}");
                         Err(msg)
                     }
 
@@ -242,7 +242,7 @@ impl Regex {
                 match regex_error_to_str(errcode, &self.regex) {
                     Some(regexec_errmsg) => {
                         let msg = fmt!(&gettext("regexec returned code %i"), errcode);
-                        let msg = format!("{}: {}", msg, regexec_errmsg);
+                        let msg = format!("{msg}: {regexec_errmsg}");
                         Err(msg)
                     }
                     None => Err(fmt!(&gettext("regexec returned code %i"), errcode)),
