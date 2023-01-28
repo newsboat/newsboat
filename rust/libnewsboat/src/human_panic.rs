@@ -129,7 +129,7 @@ fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
 #[cfg(feature = "nightly")]
 fn get_crash_cause(panic_info: &PanicInfo) -> String {
     match panic_info.message() {
-        Some(m) => format!("Crash cause: {}", m),
+        Some(m) => format!("Crash cause: {m}"),
         None => "Crash cause unknown".into(),
     };
 }

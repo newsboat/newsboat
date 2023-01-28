@@ -67,7 +67,7 @@ impl History {
             .iter()
             .take(limit)
             .rev()
-            .try_for_each(|ln| writeln!(f, "{}", ln))
+            .try_for_each(|ln| writeln!(f, "{ln}"))
     }
 }
 

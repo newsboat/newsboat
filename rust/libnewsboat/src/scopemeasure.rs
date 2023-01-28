@@ -37,9 +37,8 @@ impl ScopeMeasure {
         log!(
             Level::Debug,
             &format!(
-                "ScopeMeasure: function `{}' (stop over `{}') took {:.6} s so far",
+                "ScopeMeasure: function `{}' (stop over `{stopover_name}') took {:.6} s so far",
                 self.scope_name,
-                stopover_name,
                 self.start_time.elapsed().as_secs_f64()
             )
         );

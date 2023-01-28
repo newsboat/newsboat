@@ -9,7 +9,7 @@ fn t_cliargsparser_dash_d_resolves_tilde_to_homedir() {
     env::set_var("HOME", tmp.path());
 
     let filename = "newsboat.log";
-    let arg = format!("~/{}", filename);
+    let arg = format!("~/{filename}");
 
     let check = |opts| {
         let args = CliArgsParser::new(opts);
@@ -18,8 +18,5 @@ fn t_cliargsparser_dash_d_resolves_tilde_to_homedir() {
 
     check(vec!["newsboat".into(), "-d".into(), arg.clone().into()]);
 
-    check(vec![
-        "newsboat".into(),
-        format!("--log-file={}", arg).into(),
-    ]);
+    check(vec!["newsboat".into(), format!("--log-file={arg}").into()]);
 }

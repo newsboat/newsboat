@@ -29,7 +29,7 @@ fn stopover_adds_an_extra_line_to_the_log_upon_each_call() {
             let sm = ScopeMeasure::new(String::from("test"));
 
             for i in 0..*calls {
-                sm.stopover(&format!("stopover No.{}", i));
+                sm.stopover(&format!("stopover No.{i}"));
             }
         }
 

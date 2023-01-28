@@ -9,7 +9,7 @@ fn t_cliargsparser_dash_u_resolves_tilde_to_homedir() {
     env::set_var("HOME", tmp.path());
 
     let filename = "urlfile";
-    let arg = format!("~/{}", filename);
+    let arg = format!("~/{filename}");
 
     let check = |opts| {
         let args = CliArgsParser::new(opts);

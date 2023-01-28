@@ -1,12 +1,12 @@
 fn add_cxxbridge(module: &str) {
-    cxx_build::bridge(format!("src/{}.rs", module))
+    cxx_build::bridge(format!("src/{module}.rs"))
         .flag("-std=c++11")
         // Disable warnings in generated code, since we can't affect them directly. We have to do
         // this because these warnings are turned into errors when we pass `-D warnings` to Cargo
         // on CI.
         .flag("-w")
-        .compile(&format!("libnewsboat-ffi-{}", module));
-    println!("cargo:rerun-if-changed=src/{}.rs", module);
+        .compile(&format!("libnewsboat-ffi-{module}"));
+    println!("cargo:rerun-if-changed=src/{module}.rs");
 }
 
 fn main() {

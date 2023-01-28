@@ -155,7 +155,7 @@ pub fn get_default_browser() -> String {
 
 pub fn md5hash(input: &str) -> String {
     let digest = md5::compute(input);
-    let hash = format!("{:x}", digest);
+    let hash = format!("{digest:x}");
     hash
 }
 
@@ -561,7 +561,7 @@ pub fn make_title(rs_str: String) -> String {
 /// Run the given command interactively with inherited stdin and stdout/stderr. Return the lowest
 /// 8 bits of its exit code, or `None` if the command failed to start.
 pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
-    log!(Level::Debug, &format!("{}: running `{}'", caller, command));
+    log!(Level::Debug, &format!("{caller}: running `{command}'"));
     Command::new("sh")
         .arg("-c")
         .arg(command)
@@ -569,7 +569,7 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
         .map_err(|err| {
             log!(
                 Level::Warn,
-                &format!("{}: Couldn't create child process: {}", caller, err)
+                &format!("{caller}: Couldn't create child process: {err}")
             );
         })
         .ok()
@@ -580,7 +580,7 @@ pub fn run_interactively(command: &str, caller: &str) -> Option<u8> {
 /// Run the given command non-interactively with closed stdin and stdout/stderr. Return the lowest
 /// 8 bits of its exit code, or `None` if the command failed to start.
 pub fn run_non_interactively(command: &str, caller: &str) -> Option<u8> {
-    log!(Level::Debug, &format!("{}: running `{}'", caller, command));
+    log!(Level::Debug, &format!("{caller}: running `{command}'"));
     Command::new("sh")
         .arg("-c")
         .arg(command)
@@ -591,7 +591,7 @@ pub fn run_non_interactively(command: &str, caller: &str) -> Option<u8> {
         .map_err(|err| {
             log!(
                 Level::Warn,
-                &format!("{}: Couldn't create child process: {}", caller, err)
+                &format!("{caller}: Couldn't create child process: {err}")
             );
         })
         .ok()
@@ -863,7 +863,7 @@ pub fn translit(tocode: &str, fromcode: &str) -> String {
         return tocode.to_string();
     }
 
-    let tocode_translit = format!("{}//TRANSLIT", tocode);
+    let tocode_translit = format!("{tocode}//TRANSLIT");
 
     unsafe {
         if STATE == TranslitState::Unknown {
@@ -889,15 +889,12 @@ pub fn translit(tocode: &str, fromcode: &str) -> String {
                         iconv_close(cd);
                     } else {
                         let errno = std::io::Error::last_os_error();
-                        eprintln!("iconv_open('{}', '{}') failed: {}", tocode, fromcode, errno);
+                        eprintln!("iconv_open('{tocode}', '{fromcode}') failed: {errno}");
                         std::process::abort();
                     }
                 } else {
                     let errno = std::io::Error::last_os_error();
-                    eprintln!(
-                        "iconv_open('{}', '{}') failed: {}",
-                        tocode_translit, fromcode, errno
-                    );
+                    eprintln!("iconv_open('{tocode_translit}', '{fromcode}') failed: {errno}");
                     std::process::abort();
                 }
             } else {
@@ -2034,7 +2031,7 @@ mod tests {
 
         let check = |fromcode, tocode| {
             let expected1 = tocode;
-            let expected2 = format!("{}//TRANSLIT", tocode);
+            let expected2 = format!("{tocode}//TRANSLIT");
 
             let actual = translit(tocode, fromcode);
 
