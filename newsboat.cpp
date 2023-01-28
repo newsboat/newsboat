@@ -78,9 +78,8 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 			'l',
 			"log-level",
 			_s("<loglevel>"),
-			_s("write a log with a certain loglevel (valid values: "
-				"1 to "
-				"6)")
+			_s("write a log with a certain loglevel (valid values: 1 to 6,"
+				" for UserError, Critical, Error, Warning, Info, Debug respectively)")
 		},
 		{
 			'd',
