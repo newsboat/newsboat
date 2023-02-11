@@ -47,10 +47,6 @@ vbox
       text[qna_prompt]:""
       .display[show_qna_label]:0
     input[qnainput]
-      on_ESC:cancel-qna
-      on_UP:qna-prev-history
-      on_DOWN:qna-next-history
-      on_ENTER:end-question
       modal:1
       .expand:h
       @bind_home:**
