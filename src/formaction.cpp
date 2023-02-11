@@ -133,10 +133,14 @@ bool FormAction::process_op(Operation op,
 		}
 		break;
 	case OP_INT_CANCEL_QNA:
-		f.modify("lastline",
-			"replace",
-			"{hbox[lastline] .expand:0 {label[msglabel] .expand:h "
-			"text[msg]:\"\"}}");
+		f.set("show_qna_label", "0");
+		f.set("show_qna_input", "0");
+		f.set("show_msg", "1");
+		f.set("msg", "");
+
+		f.set_focus(focus_before_qna);
+		focus_before_qna.clear();
+
 		v->inside_qna(false);
 		v->inside_cmdline(false);
 		break;
@@ -588,18 +592,17 @@ void FormAction::start_next_question()
 	 * If there is one more prompt to be presented to the user, set it up.
 	 */
 	if (qna_prompts.size() > 0) {
-		std::string replacestr(
-			"{hbox[lastline] .expand:0 {label .expand:0 text:");
-		replacestr.append(Stfl::quote(qna_prompts[0].first));
-		replacestr.append(
-			"}{input[qnainput] on_ESC:cancel-qna "
-			"on_UP:qna-prev-history on_DOWN:qna-next-history "
-			"on_ENTER:end-question modal:1 .expand:h @bind_home:** "
-			"@bind_end:** text[qna_value]:");
-		replacestr.append(Stfl::quote(qna_prompts[0].second));
-		replacestr.append(" pos[qna_value_pos]:0");
-		replacestr.append("}}");
-		f.modify("lastline", "replace", replacestr);
+		f.set("qna_prompt", qna_prompts[0].first);
+		f.set("qna_value", Stfl::quote(qna_prompts[0].second));
+
+		f.set("show_qna_label", "1");
+		f.set("show_qna_input", "1");
+		f.set("show_msg", "0");
+
+		if (focus_before_qna.empty()) {
+			focus_before_qna = f.get_focus();
+		}
+
 		f.set_focus("qnainput");
 
 		// Set position to 0 and back to ensure that the text is visible
@@ -614,10 +617,14 @@ void FormAction::start_next_question()
 		 * usual label, and signal the end of the "Q&A" to the
 		 * finished_qna() method.
 		 */
-		f.modify("lastline",
-			"replace",
-			"{hbox[lastline] .expand:0 {label[msglabel] .expand:h "
-			"text[msg]:\"\"}}");
+		f.set("show_qna_label", "0");
+		f.set("show_qna_input", "0");
+		f.set("show_msg", "1");
+		f.set("msg", "");
+
+		f.set_focus(focus_before_qna);
+		focus_before_qna.clear();
+
 		this->finished_qna(finish_operation);
 	}
 }
