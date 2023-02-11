@@ -132,40 +132,6 @@ bool FormAction::process_op(Operation op,
 				"not automatic");
 		}
 		break;
-	case OP_INT_CANCEL_QNA:
-		f.set("show_qna_label", "0");
-		f.set("show_qna_input", "0");
-		f.set("show_msg", "1");
-		f.set("msg", "");
-
-		f.set_focus(focus_before_qna);
-		focus_before_qna.clear();
-
-		v->inside_qna(false);
-		v->inside_cmdline(false);
-		break;
-	case OP_INT_QNA_NEXTHIST:
-		if (qna_history) {
-			std::string entry = qna_history->next_line();
-			set_value("qna_value", entry);
-			set_value("qna_value_pos", std::to_string(entry.length()));
-		}
-		break;
-	case OP_INT_QNA_PREVHIST:
-		if (qna_history) {
-			std::string entry = qna_history->previous_line();
-			set_value("qna_value", entry);
-			set_value("qna_value_pos", std::to_string(entry.length()));
-		}
-		break;
-	case OP_INT_END_QUESTION:
-		/*
-		 * An answer has been entered, we save the value, and ask the
-		 * next question.
-		 */
-		qna_responses.push_back(get_value("qna_value"));
-		start_next_question();
-		break;
 	case OP_VIEWDIALOGS:
 		v->view_dialogs();
 		break;
@@ -445,6 +411,46 @@ void FormAction::start_qna(const std::vector<QnaPair>& prompts,
 	qna_history = h;
 	v->inside_qna(true);
 	start_next_question();
+}
+
+void FormAction::finish_qna_question()
+{
+	qna_responses.push_back(get_value("qna_value"));
+	start_next_question();
+}
+
+void FormAction::cancel_qna()
+{
+	LOG(Level::DEBUG, "FormAction::cancel_qna");
+
+	f.set("show_qna_label", "0");
+	f.set("show_qna_input", "0");
+	f.set("show_msg", "1");
+	f.set("msg", "");
+
+	f.set_focus(focus_before_qna);
+	focus_before_qna.clear();
+
+	v->inside_qna(false);
+	v->inside_cmdline(false);
+}
+
+void FormAction::qna_next_history()
+{
+	if (qna_history) {
+		std::string entry = qna_history->next_line();
+		set_value("qna_value", entry);
+		set_value("qna_value_pos", std::to_string(entry.length()));
+	}
+}
+
+void FormAction::qna_previous_history()
+{
+	if (qna_history) {
+		std::string entry = qna_history->previous_line();
+		set_value("qna_value", entry);
+		set_value("qna_value_pos", std::to_string(entry.length()));
+	}
 }
 
 void FormAction::finished_qna(Operation op)

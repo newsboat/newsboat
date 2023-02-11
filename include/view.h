@@ -148,7 +148,6 @@ protected:
 	void handle_cmdline_completion(std::shared_ptr<FormAction> fa);
 	void clear_line(std::shared_ptr<FormAction> fa);
 	void clear_eol(std::shared_ptr<FormAction> fa);
-	void cancel_input(std::shared_ptr<FormAction> fa);
 	void delete_word(std::shared_ptr<FormAction> fa);
 	bool handle_qna_event(const std::string& event, std::shared_ptr<FormAction> fa);
 	void handle_resize();
