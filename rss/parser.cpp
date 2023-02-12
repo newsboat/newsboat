@@ -165,6 +165,22 @@ Feed Parser::parse_url(const std::string& url,
 		}
 	}
 
+	const auto contentTypeHeaders = curlHeaderHandler->get_header_lines("Content-Type");
+	std::string content_charset = "";
+	if (contentTypeHeaders.size() >= 1) {
+		const std::string header_value = contentTypeHeaders.back();
+		const std::string key = "charset=";
+		const auto charset_index = header_value.find(key);
+		if (charset_index != std::string::npos) {
+			auto charset = header_value.substr(charset_index + key.size());
+			utils::trim(charset);
+			if (charset.size() >= 2 && charset[0] == '"' && charset[charset.size() - 1] == '"') {
+				charset = charset.substr(1, charset.size() - 2);
+			}
+			content_charset = charset;
+		}
+	}
+
 	if (custom_headers) {
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, 0);
 		curl_slist_free_all(custom_headers);
@@ -217,19 +233,29 @@ Feed Parser::parse_url(const std::string& url,
 		LOG(Level::DEBUG,
 			"Parser::parse_url: handing over data to "
 			"parse_buffer()");
-		return parse_buffer(buf, url);
+		return parse_buffer(buf, url, content_charset);
 	}
 
 	return Feed();
 }
 
-Feed Parser::parse_buffer(const std::string& buffer, const std::string& url)
+Feed Parser::parse_buffer(const std::string& buffer, const std::string& url,
+	const std::string& charset)
 {
-	doc = xmlReadMemory(buffer.c_str(),
-			buffer.length(),
-			url.c_str(),
-			nullptr,
-			XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+	if (charset.empty()) {
+		doc = xmlReadMemory(buffer.c_str(),
+				buffer.length(),
+				url.c_str(),
+				nullptr,
+				XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+	} else {
+		const auto buffer_utf8 = utils::convert_text(buffer, "utf-8", charset);
+		doc = xmlReadMemory(buffer_utf8.c_str(),
+				buffer_utf8.length(),
+				url.c_str(),
+				"UTF-8",
+				XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING | XML_PARSE_IGNORE_ENC);
+	}
 	if (doc == nullptr) {
 		throw Exception(_("could not parse buffer"));
 	}
