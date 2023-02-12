@@ -1,12 +1,12 @@
 #ifndef NEWSBOAT_DIALOGSFORMACTION_H_
 #define NEWSBOAT_DIALOGSFORMACTION_H_
 
-#include "formaction.h"
+#include "listformaction.h"
 #include "listwidget.h"
 
 namespace newsboat {
 
-class DialogsFormAction : public FormAction {
+class DialogsFormAction : public ListFormAction {
 public:
 	DialogsFormAction(View*, std::string formstr, ConfigContainer* cfg);
 	~DialogsFormAction() override;
@@ -31,8 +31,6 @@ private:
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
 	void update_heading();
-
-	ListWidget dialogs_list;
 };
 
 } // namespace newsboat

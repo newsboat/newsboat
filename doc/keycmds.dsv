@@ -37,6 +37,15 @@ seven||kbd:[7]||Open URL 7 in the browser.
 eight||kbd:[8]||Open URL 8 in the browser.
 nine||kbd:[9]||Open URL 9 in the browser.
 zero||kbd:[0]||Open URL 10 in the browser.
+cmd-one||kbd:[1]||Start cmdline with 1.
+cmd-two||kbd:[2]||Start cmdline with 2.
+cmd-three||kbd:[3]||Start cmdline with 3.
+cmd-four||kbd:[4]||Start cmdline with 4.
+cmd-five||kbd:[5]||Start cmdline with 5.
+cmd-six||kbd:[6]||Start cmdline with 6.
+cmd-seven||kbd:[7]||Start cmdline with 7.
+cmd-eight||kbd:[8]||Start cmdline with 8.
+cmd-nine||kbd:[9]||Start cmdline with 9.
 enqueue||kbd:[E]||Add the podcast download URL of the current article (if any is found) to the podcast download queue (see the respective section in the documentation for more information on podcast support).
 edit-urls||kbd:[Shift+E]||Edit the list of subscribed URLs. Newsboat will start the editor configured through the <<VISUAL,`VISUAL`>> environment variable (if unset, <<EDITOR,`EDITOR`>> is used; fallback: `vi`). When editing is finished, Newsboat will reload the URLs file.
 reload-urls||kbd:[Ctrl+R]||Reload the URLs configuration file.
