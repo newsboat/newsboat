@@ -11,7 +11,7 @@ namespace newsboat {
 
 class CurlHeaderContainer {
 public:
-	[[nodiscard("Registration is only valid as long as the pointer is alive")]]
+	// Registration is cleaned up on destruction
 	static std::unique_ptr<CurlHeaderContainer> register_header_handler(
 		CurlHandle& curlHandle);
 
