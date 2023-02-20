@@ -8,12 +8,6 @@ description: |
 grade: stable
 confinement: strict
 
-plugs:
-  dot-config-newsboat:
-    interface: personal-files
-    read: [$HOME/.newsboat]
-    write: [$HOME/.newsboat]
-
 apps:
   newsboat:
     command: usr/local/bin/newsboat
@@ -21,7 +15,6 @@ apps:
       LOCPATH: "$SNAP/usr/lib/locale"
       TERMINFO_DIRS: "$SNAP/lib/terminfo:$SNAP/usr/share/terminfo"
     plugs:
-      - dot-config-newsboat
       - network
       - home
       - desktop
