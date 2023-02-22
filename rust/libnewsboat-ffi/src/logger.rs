@@ -1,3 +1,4 @@
+use cxx::CxxString;
 use libnewsboat::logger;
 
 #[cxx::bridge(namespace = "newsboat::logger")]
@@ -17,7 +18,7 @@ mod ffi {
         fn set_logfile(logfile: &str);
         fn get_loglevel() -> i64;
         fn set_loglevel(level: Level);
-        fn log_internal(level: Level, message: &str);
+        fn log_internal(level: Level, message: &CxxString);
         fn set_user_error_logfile(user_error_logfile: &str);
     }
 }
@@ -51,9 +52,9 @@ fn set_loglevel(level: ffi::Level) {
     logger::get_instance().set_loglevel(level);
 }
 
-fn log_internal(level: ffi::Level, message: &str) {
+fn log_internal(level: ffi::Level, message: &CxxString) {
     let level = ffi_level_to_log_level(level);
-    logger::get_instance().log(level, message);
+    logger::get_instance().log_raw(level, message.as_bytes());
 }
 
 fn set_user_error_logfile(user_error_logfile: &str) {
