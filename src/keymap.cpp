@@ -469,35 +469,6 @@ static const std::vector<OpDesc> opdescs = {
 		KM_SYSKEYS
 	},
 
-	{
-		OP_INT_END_QUESTION,
-		"XXXNOKEY-end-question",
-		"end-question",
-		"",
-		KM_INTERNAL
-	},
-	{
-		OP_INT_CANCEL_QNA,
-		"XXXNOKEY-cancel-qna",
-		"cancel-qna",
-		"",
-		KM_INTERNAL
-	},
-	{
-		OP_INT_QNA_NEXTHIST,
-		"XXXNOKEY-qna-next-history",
-		"qna-next-history",
-		"",
-		KM_INTERNAL
-	},
-	{
-		OP_INT_QNA_PREVHIST,
-		"XXXNOKEY-qna-prev-history",
-		"qna-prev-history",
-		"",
-		KM_INTERNAL
-	},
-
 	{OP_INT_SET, "set", "internal-set", "", KM_INTERNAL},
 
 	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},

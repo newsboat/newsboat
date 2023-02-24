@@ -188,7 +188,7 @@ int View::run()
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
-			cancel_input(fa);
+			fa->cancel_qna();
 			if (!get_cfg()->get_configvalue_as_bool(
 					"confirm-exit") ||
 				confirm(_("Do you really want to quit "
@@ -1166,12 +1166,6 @@ void View::clear_eol(std::shared_ptr<FormAction> fa)
 	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
 }
 
-void View::cancel_input(std::shared_ptr<FormAction> fa)
-{
-	fa->process_op(OP_INT_CANCEL_QNA);
-	LOG(Level::DEBUG, "View::cancel_input: cancelled input");
-}
-
 void View::delete_word(std::shared_ptr<FormAction> fa)
 {
 	std::string::size_type curpos =
@@ -1209,19 +1203,25 @@ bool View::handle_qna_event(const std::string& event,
 			handle_cmdline_completion(fa);
 			return true;
 		}
-		if (event == "^U") {
+		if (event == "ESC") {
+			fa->cancel_qna();
+		} else if (event == "UP") {
+			fa->qna_previous_history();
+		} else if (event == "DOWN") {
+			fa->qna_next_history();
+		} else if (event == "ENTER") {
+			fa->finish_qna_question();
+		} else if (event == "^U") {
 			clear_line(fa);
-			return true;
 		} else if (event == "^K") {
 			clear_eol(fa);
-			return true;
 		} else if (event == "^G") {
-			cancel_input(fa);
-			return true;
+			fa->cancel_qna();
 		} else if (event == "^W") {
 			delete_word(fa);
-			return true;
 		}
+
+		return true;
 	}
 	return false;
 }
