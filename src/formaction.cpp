@@ -599,7 +599,7 @@ void FormAction::start_next_question()
 	 */
 	if (qna_prompts.size() > 0) {
 		f.set("qna_prompt", qna_prompts[0].first);
-		f.set("qna_value", Stfl::quote(qna_prompts[0].second));
+		f.set("qna_value", qna_prompts[0].second);
 
 		f.set("show_qna_label", "1");
 		f.set("show_qna_input", "1");
