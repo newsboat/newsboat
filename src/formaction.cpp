@@ -425,6 +425,7 @@ void FormAction::cancel_qna()
 
 	f.set("show_qna_label", "0");
 	f.set("show_qna_input", "0");
+	f.set("allow_qna_focus", "0");
 	f.set("show_msg", "1");
 	f.set("msg", "");
 
@@ -603,6 +604,7 @@ void FormAction::start_next_question()
 
 		f.set("show_qna_label", "1");
 		f.set("show_qna_input", "1");
+		f.set("allow_qna_focus", "1");
 		f.set("show_msg", "0");
 
 		if (focus_before_qna.empty()) {
@@ -625,6 +627,7 @@ void FormAction::start_next_question()
 		 */
 		f.set("show_qna_label", "0");
 		f.set("show_qna_input", "0");
+		f.set("allow_qna_focus", "0");
 		f.set("show_msg", "1");
 		f.set("msg", "");
 

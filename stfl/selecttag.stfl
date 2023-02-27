@@ -49,3 +49,4 @@ vbox
       text[qna_value]:""
       pos[qna_value_pos]:0
       .display[show_qna_input]:0
+      can_focus[allow_qna_focus]:0
