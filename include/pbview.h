@@ -47,7 +47,7 @@ private:
 	newsboat::KeyMap& keys;
 	const newsboat::ColorManager& colorman;
 
-	ListWidget downloads_list;
+	OldListWidget downloads_list;
 	TextviewWidget help_textview;
 };
 

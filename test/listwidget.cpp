@@ -15,7 +15,7 @@ const static std::string stflListForm =
 	"    offset[list-name_offset]:0";
 
 
-TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[ListWidget]")
+TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[OldListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
@@ -25,9 +25,9 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[ListWidget
 	fmt.add_line("line 2");
 	fmt.add_line("line 3");
 
-	ListWidget listWidget("list-name", listForm, scrolloff);
+	OldListWidget listWidget("list-name", listForm, scrolloff);
 
-	GIVEN("a ListWidget with 3 lines and position=2") {
+	GIVEN("a OldListWidget with 3 lines and position=2") {
 		listWidget.stfl_replace_lines(fmt);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);
@@ -63,7 +63,7 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[ListWidget
 	}
 }
 
-TEST_CASE("stfl_replace_list() makes sure the position is reset", "[ListWidget]")
+TEST_CASE("stfl_replace_list() makes sure the position is reset", "[OldListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
@@ -73,7 +73,7 @@ TEST_CASE("stfl_replace_list() makes sure the position is reset", "[ListWidget]"
 	fmt.add_line("line 2");
 	fmt.add_line("line 3");
 
-	ListWidget listWidget("list-name", listForm, scrolloff);
+	OldListWidget listWidget("list-name", listForm, scrolloff);
 
 	const std::string stflListPrototype =
 		"{list[list-name] "
@@ -82,7 +82,7 @@ TEST_CASE("stfl_replace_list() makes sure the position is reset", "[ListWidget]"
 		"offset[list-name_offset]:0 "
 		"}";
 
-	GIVEN("a ListWidget with 3 lines and position=2") {
+	GIVEN("a OldListWidget with 3 lines and position=2") {
 		listWidget.stfl_replace_lines(fmt);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);

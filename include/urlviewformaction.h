@@ -44,7 +44,7 @@ private:
 	Links links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;
-	ListWidget urls_list;
+	OldListWidget urls_list;
 };
 
 } // namespace newsboat

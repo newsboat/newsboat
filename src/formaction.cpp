@@ -336,7 +336,7 @@ void FormAction::handle_parsed_command(const Command& command)
 	}
 }
 
-bool FormAction::handle_list_operations(ListWidget& list, Operation op)
+bool FormAction::handle_list_operations(OldListWidget& list, Operation op)
 {
 	switch (op) {
 	case OP_SK_UP:

@@ -6,7 +6,7 @@
 
 namespace newsboat {
 
-using ListWidget = ListMovementControl<ListWidgetBackend>;
+using OldListWidget = ListMovementControl<ListWidgetBackend>;
 
 } // namespace newsboat
 

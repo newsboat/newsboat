@@ -23,7 +23,7 @@ protected:
 		std::shared_ptr<RssFeed> feed,
 		bool markread);
 
-	ListWidget list;
+	OldListWidget list;
 };
 
 } // namespace newsboat
