@@ -1,8 +1,11 @@
 #ifndef NEWSBOAT_LISTMOVEMENTCONTROL_H_
 #define NEWSBOAT_LISTMOVEMENTCONTROL_H_
 
-#include "listwidgetbackend.h"
+#include <cstdint>
 #include <string>
+
+#include "listwidgetbackend.h"
+#include "regexmanager.h"
 
 namespace newsboat {
 
@@ -18,6 +21,14 @@ public:
 	ListMovementControl(const std::string& list_name, Stfl::Form& form,
 		std::uint32_t scrolloff)
 		: Backend(list_name, form)
+	{
+		num_context_lines = scrolloff;
+		set_position(current_position);
+	}
+
+	ListMovementControl(const std::string& list_name, const std::string& context,
+		Stfl::Form& form, RegexManager& rxman, std::uint32_t scrolloff)
+		: Backend(list_name, context, form, rxman)
 	{
 		num_context_lines = scrolloff;
 		set_position(current_position);

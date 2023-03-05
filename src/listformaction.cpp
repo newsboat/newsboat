@@ -7,11 +7,12 @@
 namespace newsboat {
 
 ListFormAction::ListFormAction(View* v,
+	const std::string& context,
 	std::string formstr,
 	std::string list_name,
-	ConfigContainer* cfg)
+	ConfigContainer* cfg, RegexManager& r)
 	: FormAction(v, formstr, cfg)
-	, list(list_name, FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
+	, list(list_name, context, FormAction::f, r, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
 

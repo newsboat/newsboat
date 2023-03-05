@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <cstring>
 #include <langinfo.h>
 #include <numeric>
@@ -30,7 +31,7 @@ FeedListFormAction::FeedListFormAction(View* vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ListFormAction(vv, formstr, "feeds", cfg)
+	: ListFormAction(vv, "feedlist", formstr, "feeds", cfg, r)
 	, zero_feedpos(false)
 	, filter_active(false)
 	, filterpos(0)
@@ -622,14 +623,16 @@ void FeedListFormAction::set_feedlist(
 
 	update_visible_feeds(feeds);
 
-	for (const auto& feed : visible_feeds) {
-		listfmt.add_line(format_line(feedlist_format,
-				feed.first,
-				feed.second,
-				width));
-	}
-
-	list.stfl_replace_lines(listfmt);
+	auto render_line = [this, feedlist_format](std::uint32_t line,
+	std::uint32_t width) -> std::string {
+		if (line >= visible_feeds.size())
+		{
+			return "ERROR";
+		}
+		auto& feed = visible_feeds[line];
+		return format_line(feedlist_format, feed.first, feed.second, width);
+	};
+	list.invalidate_list_content(visible_feeds.size(), render_line);
 
 	update_form_title(width);
 }

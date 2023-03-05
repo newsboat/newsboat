@@ -121,6 +121,7 @@ protected:
 	void handle_parsed_command(const Command& command);
 
 	bool handle_list_operations(OldListWidget& list, Operation op);
+	bool handle_list_operations(NewListWidget& list, Operation op);
 
 	View* v;
 	ConfigContainer* cfg;
