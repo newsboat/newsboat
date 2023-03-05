@@ -1443,7 +1443,7 @@ void ItemListFormAction::register_format_styles()
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos[items_pos]:0 offset[items_offset]:0 %s richtext:1}",
 			attrstr);
-	list.stfl_replace_list(0, textview);
+	list.stfl_replace_list(textview);
 }
 
 std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)

@@ -63,7 +63,7 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[ListWidget
 	}
 }
 
-TEST_CASE("stfl_replace_list() makes sure `position < num_lines`", "[ListWidget]")
+TEST_CASE("stfl_replace_list() makes sure the position is reset", "[ListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
@@ -80,39 +80,18 @@ TEST_CASE("stfl_replace_list() makes sure `position < num_lines`", "[ListWidget]
 		"richtext:1 "
 		"pos[list-name_pos]:0 "
 		"offset[list-name_offset]:0 "
-		"%s}";
+		"}";
 
 	GIVEN("a ListWidget with 3 lines and position=2") {
 		listWidget.stfl_replace_lines(fmt);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);
 
-		WHEN("the number of lines is reduced") {
-			const std::string stflList = strprintf::fmt(stflListPrototype,
-					R"({listitem text:"line 1"}{listitem text:"line 2"})");
-			listWidget.stfl_replace_list(2, stflList);
-
-			THEN("the position is changed to 1") {
-				REQUIRE(listWidget.get_position() == 1);
-			}
-		}
-
-		WHEN("all lines are removed") {
-			const std::string stflList = strprintf::fmt(stflListPrototype, "");
-			listWidget.stfl_replace_list(0, stflList);
+		WHEN("the list is replaced") {
+			listWidget.stfl_replace_list(stflListPrototype);
 
 			THEN("the position is changed to 0") {
 				REQUIRE(listWidget.get_position() == 0);
-			}
-		}
-
-		WHEN("a line is added") {
-			const std::string stflList = strprintf::fmt(stflListPrototype,
-					R"({listitem text:"line 1"}{listitem text:"line 2"}{listitem text:"line 3"}{listitem text:"line 4"})");
-			listWidget.stfl_replace_list(4, stflList);
-
-			THEN("the position is changed to 2") {
-				REQUIRE(listWidget.get_position() == 2);
 			}
 		}
 	}

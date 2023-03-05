@@ -14,7 +14,7 @@ public:
 	ListWidgetBackend(const std::string& list_name, Stfl::Form& form);
 	virtual ~ListWidgetBackend() = default;
 
-	void stfl_replace_list(std::uint32_t number_of_lines, std::string stfl);
+	void stfl_replace_list(std::string stfl);
 	void stfl_replace_lines(const ListFormatter& listfmt);
 
 	std::uint32_t get_width();

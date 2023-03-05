@@ -11,9 +11,9 @@ ListWidgetBackend::ListWidgetBackend(const std::string& list_name, Stfl::Form& f
 {
 }
 
-void ListWidgetBackend::stfl_replace_list(std::uint32_t number_of_lines, std::string stfl)
+void ListWidgetBackend::stfl_replace_list(std::string stfl)
 {
-	num_lines = number_of_lines;
+	num_lines = 0;
 	form.modify(list_name, "replace", stfl);
 
 	on_list_changed();

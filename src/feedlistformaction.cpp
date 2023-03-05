@@ -932,7 +932,7 @@ void FeedListFormAction::register_format_styles()
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos[feeds_pos]:0 offset[feeds_offset]:0 %s richtext:1}",
 			attrstr);
-	list.stfl_replace_list(0, textview);
+	list.stfl_replace_list(textview);
 }
 
 void FeedListFormAction::update_form_title(unsigned int width)
