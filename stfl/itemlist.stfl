@@ -19,7 +19,7 @@ vbox
     text[head]:"Articles for '#'"
     .expand:h
     .display[showtitle]:1
-  list[items]
+  !list[items]
     .expand:vh
     richtext:1
     style_normal[listnormal]:
