@@ -62,10 +62,11 @@ fn tokenize_operation_sequence(
     parsing_failed: &mut bool,
 ) -> Vec<Operation> {
     match libnewsboat::keymap::tokenize_operation_sequence(input, allow_description) {
-        Some((operations, opt_description)) => {
+        Some(operation_sequence) => {
             *parsing_failed = false;
-            *description = opt_description.unwrap_or_default();
-            operations
+            *description = operation_sequence.description.unwrap_or_default();
+            operation_sequence
+                .operations
                 .into_iter()
                 .map(|tokens| Operation { tokens })
                 .collect::<Vec<_>>()
@@ -79,22 +80,27 @@ fn tokenize_operation_sequence(
 
 fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Box<Binding> {
     match libnewsboat::keymap::tokenize_binding(input) {
-        Some((keys, contexts, operations, opt_description)) => {
+        Some((binding_source, operation_sequence)) => {
             *parsing_failed = false;
-            let operations = operations
+            let operations = operation_sequence
+                .operations
                 .into_iter()
                 .map(|tokens| Operation { tokens })
                 .collect::<Vec<_>>();
             Box::new(Binding {
-                key_sequence: keys,
-                contexts: contexts.into_iter().map(|s| s.to_string()).collect(),
+                key_sequence: binding_source.key_sequence,
+                contexts: binding_source
+                    .contexts
+                    .into_iter()
+                    .map(|s| s.to_string())
+                    .collect(),
                 operations,
-                description: opt_description.unwrap_or_default(),
+                description: operation_sequence.description.unwrap_or_default(),
             })
         }
         None => {
             *parsing_failed = true;
-            Box::new(Binding::default())
+            Box::<Binding>::default()
         }
     }
 }
