@@ -71,10 +71,6 @@ public:
 	void start_qna(const std::vector<QnaPair>& prompts,
 		Operation finish_op,
 		History* h = nullptr);
-	void finish_qna_question();
-	void cancel_qna();
-	void qna_next_history();
-	void qna_previous_history();
 
 	void set_parent_formaction(std::shared_ptr<FormAction> fa)
 	{
@@ -143,7 +139,6 @@ private:
 	Operation finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;
-	std::string focus_before_qna;
 };
 
 } // namespace newsboat

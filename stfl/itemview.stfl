@@ -41,16 +41,3 @@ vbox
     label[msglabel]
       text[msg]:""
       .expand:h
-      .display[show_msg]:1
-    label[qna-label]
-      .expand:0
-      text[qna_prompt]:""
-      .display[show_qna_label]:0
-    input[qnainput]
-      modal:1
-      .expand:h
-      @bind_home:**
-      @bind_end:**
-      text[qna_value]:""
-      pos[qna_value_pos]:0
-      .display[show_qna_input]:0
