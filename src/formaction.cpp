@@ -592,9 +592,7 @@ void FormAction::start_next_question()
 			"{hbox[lastline] .expand:0 {label .expand:0 text:");
 		replacestr.append(Stfl::quote(qna_prompts[0].first));
 		replacestr.append(
-			"}{input[qnainput] on_ESC:cancel-qna "
-			"on_UP:qna-prev-history on_DOWN:qna-next-history "
-			"on_ENTER:end-question modal:1 .expand:h @bind_home:** "
+			"}{input[qnainput] modal:1 .expand:h @bind_home:** "
 			"@bind_end:** text[qna_value]:");
 		replacestr.append(Stfl::quote(qna_prompts[0].second));
 		replacestr.append(" pos[qna_value_pos]:0");

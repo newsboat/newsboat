@@ -1209,19 +1209,26 @@ bool View::handle_qna_event(const std::string& event,
 			handle_cmdline_completion(fa);
 			return true;
 		}
-		if (event == "^U") {
+
+		if (event == "ESC") {
+			cancel_input(fa);
+		} else if (event == "UP") {
+			fa->process_op(OP_INT_QNA_PREVHIST);
+		} else if (event == "DOWN") {
+			fa->process_op(OP_INT_QNA_NEXTHIST);
+		} else if (event == "ENTER") {
+			fa->process_op(OP_INT_END_QUESTION);
+		} else if (event == "^U") {
 			clear_line(fa);
-			return true;
 		} else if (event == "^K") {
 			clear_eol(fa);
-			return true;
 		} else if (event == "^G") {
 			cancel_input(fa);
-			return true;
 		} else if (event == "^W") {
 			delete_word(fa);
-			return true;
 		}
+
+		return true;
 	}
 	return false;
 }
