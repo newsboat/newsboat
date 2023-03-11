@@ -176,6 +176,8 @@ int View::run()
 	 * This is the main "event" loop of newsboat.
 	 */
 
+	std::vector<std::string> key_sequence;
+
 	while (formaction_stack_size() > 0) {
 		// first, we take the current formaction.
 		std::shared_ptr<FormAction> fa = get_current_formaction();
@@ -222,21 +224,28 @@ int View::run()
 				event);
 			run_commands(keys->get_macro(event));
 		} else {
-			const Operation op = keys->get_operation(event, fa->id());
-
-			LOG(Level::DEBUG,
-				"View::run: event = %s op = %u",
-				event,
-				op);
-
-			if (OP_MACROPREFIX == op) {
-				have_macroprefix = true;
-				status_line.show_message("macro-");
+			if (event == "ESC" && !key_sequence.empty()) {
+				key_sequence.clear();
+			} else {
+				key_sequence.push_back(event);
 			}
+			Operation decision = OP_NIL;
+			const auto commands = keys->get_operation(key_sequence, fa->id(), decision);
+			if (decision != OP_INTERNAL_UNFINISHED_KEY_SEQUENCE) {
+				key_sequence.clear();
 
-			// now we handle the operation to the
-			// formaction.
-			fa->process_op(op);
+				//LOG(Level::DEBUG,
+				//	"View::run: event = %s op = %u",
+				//	event,
+				//	op);
+
+				run_commands(commands);
+
+				if (commands.size() >= 1 && commands.back().op == OP_MACROPREFIX) {
+					have_macroprefix = true;
+					status_line.show_message("macro-");
+				}
+			}
 		}
 	}
 
