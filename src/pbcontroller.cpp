@@ -262,6 +262,7 @@ void PbController::initialize(int argc, char* argv[])
 
 	NullConfigActionHandler null_cah;
 	cfgparser.register_handler("macro", null_cah);
+	cfgparser.register_handler("bind", null_cah);
 	cfgparser.register_handler("ignore-article", null_cah);
 	cfgparser.register_handler("always-download", null_cah);
 	cfgparser.register_handler("define-filter", null_cah);

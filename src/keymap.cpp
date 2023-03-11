@@ -1,9 +1,12 @@
 #include "keymap.h"
 
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "config.h"
@@ -33,7 +36,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_OPEN,
 		"open",
-		"ENTER",
+		"<ENTER>",
 		translatable("Open feed/article"),
 		KM_FEEDLIST | KM_FILEBROWSER | KM_ARTICLELIST | KM_TAGSELECT |
 		KM_FILTERSELECT | KM_URLVIEW | KM_DIALOGS | KM_DIRBROWSER | KM_SEARCHRESULTSLIST
@@ -41,7 +44,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_SWITCH_FOCUS,
 		"switch-focus",
-		"TAB",
+		"<TAB>",
 		translatable("Switch focus between widgets"),
 		KM_FILEBROWSER | KM_DIRBROWSER
 	},
@@ -435,19 +438,19 @@ static const std::vector<OpDesc> opdescs = {
 	{OP_CMD_START_8, "cmd-eight", "8", translatable("Start cmdline with 8"), KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST | KM_TAGSELECT | KM_FILTERSELECT | KM_DIALOGS},
 	{OP_CMD_START_9, "cmd-nine", "9", translatable("Start cmdline with 9"), KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST | KM_TAGSELECT | KM_FILTERSELECT | KM_DIALOGS},
 
-	{OP_SK_UP, "up", "UP", translatable("Move to the previous entry"), KM_SYSKEYS},
-	{OP_SK_DOWN, "down", "DOWN", translatable("Move to the next entry"), KM_SYSKEYS},
+	{OP_SK_UP, "up", "<UP>", translatable("Move to the previous entry"), KM_SYSKEYS},
+	{OP_SK_DOWN, "down", "<DOWN>", translatable("Move to the next entry"), KM_SYSKEYS},
 	{
 		OP_SK_PGUP,
 		"pageup",
-		"PPAGE",
+		"<PPAGE>",
 		translatable("Move to the previous page"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_PGDOWN,
 		"pagedown",
-		"NPAGE",
+		"<NPAGE>",
 		translatable("Move to the next page"),
 		KM_SYSKEYS
 	},
@@ -457,21 +460,21 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_SK_HOME,
 		"home",
-		"HOME",
+		"<HOME>",
 		translatable("Move to the start of page/list"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_END,
 		"end",
-		"END",
+		"<END>",
 		translatable("Move to the end of page/list"),
 		KM_SYSKEYS
 	},
 
-	{OP_INT_SET, "set", "internal-set", "", KM_INTERNAL},
+	{OP_INT_SET, "set", "<internal-set>", "", KM_INTERNAL},
 
-	{OP_INT_GOTO_URL, "gotourl", "internal-goto-url", "", KM_INTERNAL},
+	{OP_INT_GOTO_URL, "gotourl", "<internal-goto-url>", "", KM_INTERNAL},
 };
 
 static const std::map<std::string, std::uint32_t> contexts = {
@@ -509,8 +512,27 @@ KeyMap::KeyMap(unsigned flags)
 		for (const auto& ctx : contexts) {
 			const std::string& context = ctx.first;
 			const std::uint32_t context_flag = ctx.second;
+			std::string key = op_desc.default_key;
+			if (key[0] == '<' && key[key.size() - 1] == '>') {
+				key = key.substr(1, key.size() - 2);
+			}
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
-				keymap_[context][op_desc.default_key] = op_desc.op;
+				keymap_[context][key] = op_desc.op;
+
+				const auto binding = ParsedBinding {
+					.keySequence = op_desc.default_key,
+					.contexts = { context, },
+					.effect = {
+						.operations = {
+							{
+								.op = op_desc.op,
+								.args = {},
+							}
+						},
+						.description = op_desc.help_text,
+					},
+				};
+				register_binding(binding);
 			}
 		}
 	}
@@ -747,7 +769,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		macros_[macrokey] = {cmds, description};
 	} else if (action == "bind") {
 		const auto binding = parse_binding(params);
-		// TODO
+		register_binding(binding);
 	} else if (action == "run-on-startup") {
 		startup_operations_sequence = parse_operation_sequence(params, action, false).operations;
 	} else {
@@ -755,6 +777,81 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	}
 }
 
+void KeyMap::register_binding(const ParsedBinding& binding)
+{
+	std::vector<std::string> all_context_names;
+	all_context_names.reserve(contexts.size());
+	for (const auto& kv : contexts) {
+		all_context_names.push_back(kv.first);
+	}
+
+	bool bind_everywhere = (std::find(binding.contexts.begin(), binding.contexts.end(),
+				"everywhere") != binding.contexts.end());
+	auto binding_contexts = bind_everywhere ? all_context_names : binding.contexts;
+
+	for (const auto& context : binding_contexts) {
+		register_binding(binding, context);
+	}
+}
+
+void KeyMap::register_binding(const ParsedBinding& binding, const std::string& context)
+{
+	const auto keys = keysequence_to_keys(binding.keySequence);
+
+	//if (new_keymap_.find(context) == new_keymap_.end()) {
+	//	throw ConfigHandlerException(strprintf::fmt(_("unknown context: %s"), context));
+	//}
+
+	if (new_keymap_.find(context) == new_keymap_.end()) {
+		new_keymap_.insert(std::make_pair(context, KeyNode{}));
+	}
+
+	KeyNode* keyNode = &new_keymap_[context];
+	for (const auto& key : keys) {
+		if (keyNode->isLeafNode) {
+			keyNode->isLeafNode = false;
+			keyNode->action.cmds.clear();
+			keyNode->action.description.clear();
+		}
+
+		if (keyNode->bindings.find(key) == keyNode->bindings.end()) {
+			keyNode->bindings.insert(std::make_pair(key, std::unique_ptr<KeyNode>(new KeyNode{})));
+		}
+		keyNode = keyNode->bindings[key].get();
+	}
+
+	if (!keyNode->isLeafNode) {
+		keyNode->bindings.clear();
+		keyNode->isLeafNode = true;
+	}
+
+	keyNode->action.cmds = binding.effect.operations;
+	keyNode->action.description = binding.effect.description;
+}
+
+std::vector<std::string> KeyMap::keysequence_to_keys(const std::string& key_sequence)
+{
+	std::vector<std::string> keys;
+	std::string remaining = key_sequence;
+	while (remaining.size() > 0) {
+		if (remaining[0] == '<' && (remaining.find('>') != std::string::npos)) {
+			// TODO: Allow specifying literal '<' characters in some way (e.g. via "<LT>", "\<", "<<>", or "<<")
+			const std::string key = remaining.substr(1, remaining.find('>') - 1);
+			remaining = remaining.substr(remaining.find('>') + 1);
+			keys.push_back(key);
+		} else if (remaining[0] == '^' && remaining.size() >= 2) {
+			const std::string key = remaining.substr(0, 2);
+			remaining = remaining.substr(2);
+			keys.push_back(key);
+		} else {
+			const std::string key = remaining.substr(0, 1);
+			remaining = remaining.substr(1);
+			keys.push_back(key);
+		}
+	}
+
+	return keys;
+}
 
 ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 	const std::string& command_name, bool allow_description)

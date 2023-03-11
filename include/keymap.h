@@ -2,6 +2,7 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -192,6 +193,12 @@ struct KeyMapHintEntry {
 	std::string text;
 };
 
+struct KeyNode {
+	bool isLeafNode = false;
+	std::map<std::string, std::unique_ptr<KeyNode>> bindings = {};
+	MacroBinding action = {};
+};
+
 class KeyMap : public ConfigActionHandler {
 public:
 	explicit KeyMap(unsigned int flags);
@@ -226,9 +233,13 @@ private:
 	unsigned short get_flag_from_context(const std::string& context);
 	std::vector<MacroCmd> convert_operations(const rust::Vec<keymap::bridged::Operation>&
 		operations);
+	void register_binding(const ParsedBinding& binding);
+	void register_binding(const ParsedBinding& binding, const std::string& context);
+	std::vector<std::string> keysequence_to_keys(const std::string& key_sequence);
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
 
+	std::map<std::string, KeyNode> new_keymap_;
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
