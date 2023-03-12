@@ -2,7 +2,7 @@ podboat.cpp
 src/configactionhandler.cpp
 src/download.cpp
 src/listformatter.cpp
-src/listwidgetbackend.cpp
+src/newlistwidgetbackend.cpp
 src/pbcontroller.cpp
 src/pbview.cpp
 src/poddlthread.cpp

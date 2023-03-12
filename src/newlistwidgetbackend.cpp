@@ -8,9 +8,18 @@ namespace newsboat {
 NewListWidgetBackend::NewListWidgetBackend(const std::string& list_name,
 	const std::string& context, Stfl::Form& form, RegexManager& rxman)
 	: list_name(list_name)
-	, context(context)
 	, form(form)
-	, rxman(rxman)
+	, listfmt(&rxman, context)
+	, num_lines(0)
+	, scroll_offset(0)
+	, get_formatted_line({})
+{
+}
+
+NewListWidgetBackend::NewListWidgetBackend(const std::string& list_name, Stfl::Form& form)
+	: list_name(list_name)
+	, form(form)
+	, listfmt()
 	, num_lines(0)
 	, scroll_offset(0)
 	, get_formatted_line({})
@@ -70,7 +79,8 @@ void NewListWidgetBackend::render()
 	const auto viewport_width = get_width();
 	const auto viewport_height = get_height();
 	const auto visible_content_lines = std::min(viewport_height, num_lines - scroll_offset);
-	ListFormatter listfmt(&rxman, context);
+
+	listfmt.clear();
 	for (std::uint32_t i = 0; i < visible_content_lines; ++i) {
 		std::string formatted_line = "NO FORMATTER DEFINED";
 		if (get_formatted_line) {

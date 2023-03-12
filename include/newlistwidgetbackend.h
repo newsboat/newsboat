@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 
+#include "listformatter.h"
 #include "regexmanager.h"
 #include "stflpp.h"
 
@@ -15,6 +16,7 @@ class NewListWidgetBackend {
 public:
 	NewListWidgetBackend(const std::string& list_name, const std::string& context,
 		Stfl::Form& form, RegexManager& rxman);
+	NewListWidgetBackend(const std::string& list_name, Stfl::Form& form);
 	virtual ~NewListWidgetBackend() = default;
 
 	void stfl_replace_list(std::string stfl);
@@ -34,9 +36,8 @@ private:
 	void render();
 
 	const std::string list_name;
-	std::string context;
 	Stfl::Form& form;
-	RegexManager& rxman;
+	ListFormatter listfmt;
 	std::uint32_t num_lines;
 	std::uint32_t scroll_offset;
 	std::function<std::string(std::uint32_t, std::uint32_t)> get_formatted_line;

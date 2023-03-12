@@ -84,16 +84,14 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				ctrl.get_cfgcont()->get_configvalue("podlist-format");
 
 			dllist_form.run(-3); // compute all widget dimensions
-			const unsigned int width = downloads_list.get_width();
 
-			unsigned int i = 0;
-			for (const auto& dl : ctrl.downloads()) {
-				auto lbuf = format_line(line_format, dl, i, width);
-				listfmt.add_line(lbuf);
-				i++;
-			}
-
-			downloads_list.stfl_replace_lines(listfmt);
+			auto render_line = [this, line_format](std::uint32_t line,
+			std::uint32_t width) -> std::string {
+				const auto& downloads = ctrl.downloads();
+				const auto& dl = downloads.at(line);
+				return format_line(line_format, dl, line, width);
+			};
+			downloads_list.invalidate_list_content(ctrl.downloads().size(), render_line);
 
 			update_view = false;
 		}
