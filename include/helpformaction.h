@@ -22,6 +22,12 @@ public:
 
 	void finished_qna(Operation op) override;
 
+protected:
+	std::string main_widget() const override
+	{
+		return "helptext";
+	}
+
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,

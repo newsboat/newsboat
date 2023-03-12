@@ -489,7 +489,7 @@ void FormAction::finished_qna(Operation op)
 	}
 	break;
 	case OP_INT_END_CMDLINE: {
-		f.set_focus("feeds");
+		f.set_focus(main_widget());
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
 		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);

@@ -48,6 +48,12 @@ public:
 
 	void mark_pos_if_visible(unsigned int pos);
 
+protected:
+	std::string main_widget() const override
+	{
+		return "feeds";
+	}
+
 private:
 	void register_format_styles();
 

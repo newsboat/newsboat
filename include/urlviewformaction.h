@@ -28,6 +28,12 @@ public:
 	std::string title() override;
 	void handle_cmdline(const std::string& cmd) override;
 
+protected:
+	std::string main_widget() const override
+	{
+		return "urls";
+	}
+
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,
