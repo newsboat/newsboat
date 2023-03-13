@@ -147,7 +147,6 @@ private:
 	Operation finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;
-	std::string focus_before_qna;
 };
 
 } // namespace newsboat

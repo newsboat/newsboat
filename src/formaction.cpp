@@ -428,8 +428,7 @@ void FormAction::cancel_qna()
 	f.set("show_msg", "1");
 	f.set("msg", "");
 
-	f.set_focus(focus_before_qna);
-	focus_before_qna.clear();
+	f.set_focus(main_widget());
 
 	v->inside_qna(false);
 	v->inside_cmdline(false);
@@ -605,10 +604,6 @@ void FormAction::start_next_question()
 		f.set("show_qna_input", "1");
 		f.set("show_msg", "0");
 
-		if (focus_before_qna.empty()) {
-			focus_before_qna = f.get_focus();
-		}
-
 		f.set_focus("qnainput");
 
 		// Set position to 0 and back to ensure that the text is visible
@@ -628,8 +623,7 @@ void FormAction::start_next_question()
 		f.set("show_msg", "1");
 		f.set("msg", "");
 
-		f.set_focus(focus_before_qna);
-		focus_before_qna.clear();
+		f.set_focus(main_widget());
 
 		this->finished_qna(finish_operation);
 	}
