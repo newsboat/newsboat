@@ -34,7 +34,7 @@ public:
 protected:
 	std::string main_widget() const override
 	{
-		return "files";
+		return "filename";
 	}
 
 private:
