@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-03-15 23:28+0300\n"
-"PO-Revision-Date: 2022-12-13 21:48+0100\n"
+"PO-Revision-Date: 2023-03-16 19:13+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -93,11 +93,13 @@ msgid "<loglevel>"
 msgstr "<niveau>"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "log niveaus 1..<niveau> wegschrijven (geldige waarden: 1 tot 6)"
+msgstr ""
+"log regels met gegeven niveau wegschrijven (geldige waarden: 1 tot 6, "
+"respectievelijk: gebruikers fout, kritieke fout, fout, waarschuwing, info, "
+"en debug)"
 
 #: newsboat.cpp:87 src/pbcontroller.cpp:353
 msgid "<logfile>"
@@ -1635,11 +1637,11 @@ msgstr "Ga naar volgende pagina"
 
 #: src/keymap.cpp:454
 msgid "Move half page up"
-msgstr ""
+msgstr "Halve pagina omhoog bewegen"
 
 #: src/keymap.cpp:455
 msgid "Move half page down"
-msgstr ""
+msgstr "Halve pagin omlaag bewegen"
 
 #: src/keymap.cpp:461
 msgid "Move to the start of page/list"
