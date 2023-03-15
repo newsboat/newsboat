@@ -17,7 +17,7 @@ vbox
     text[head]:"Select Tag"
     .expand:h
     .display[showtitle]:1
-  list[taglist]
+  !list[taglist]
     .expand:vh
     richtext:1
     style_normal[listnormal]:

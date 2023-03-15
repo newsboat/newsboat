@@ -1,4 +1,4 @@
-vbox
+!vbox
   @style_normal[background]:
   @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
   @info#style_key_normal[hint-key]:bg=blue,fg=yellow,attr=bold

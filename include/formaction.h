@@ -107,6 +107,10 @@ protected:
 		std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();
 
+	/// The name of the "main" STFL widget, i.e. the one that should be focused
+	/// by default.
+	virtual std::string main_widget() const = 0;
+
 	void start_bookmark_qna(const std::string& default_title,
 		const std::string& default_url,
 		const std::string& default_feed_title);
@@ -143,7 +147,6 @@ private:
 	Operation finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;
-	std::string focus_before_qna;
 };
 
 } // namespace newsboat

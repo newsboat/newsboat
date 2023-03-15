@@ -44,6 +44,12 @@ public:
 	}
 	std::string title() override;
 
+protected:
+	std::string main_widget() const override
+	{
+		return "taglist";
+	}
+
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,

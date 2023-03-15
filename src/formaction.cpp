@@ -428,8 +428,7 @@ void FormAction::cancel_qna()
 	f.set("show_msg", "1");
 	f.set("msg", "");
 
-	f.set_focus(focus_before_qna);
-	focus_before_qna.clear();
+	f.set_focus(main_widget());
 
 	v->inside_qna(false);
 	v->inside_cmdline(false);
@@ -489,7 +488,7 @@ void FormAction::finished_qna(Operation op)
 	}
 	break;
 	case OP_INT_END_CMDLINE: {
-		f.set_focus("feeds");
+		f.set_focus(main_widget());
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
 		LOG(Level::DEBUG, "FormAction: commandline = `%s'", cmdline);
@@ -599,15 +598,11 @@ void FormAction::start_next_question()
 	 */
 	if (qna_prompts.size() > 0) {
 		f.set("qna_prompt", qna_prompts[0].first);
-		f.set("qna_value", Stfl::quote(qna_prompts[0].second));
+		f.set("qna_value", qna_prompts[0].second);
 
 		f.set("show_qna_label", "1");
 		f.set("show_qna_input", "1");
 		f.set("show_msg", "0");
-
-		if (focus_before_qna.empty()) {
-			focus_before_qna = f.get_focus();
-		}
 
 		f.set_focus("qnainput");
 
@@ -628,8 +623,7 @@ void FormAction::start_next_question()
 		f.set("show_msg", "1");
 		f.set("msg", "");
 
-		f.set_focus(focus_before_qna);
-		focus_before_qna.clear();
+		f.set_focus(main_widget());
 
 		this->finished_qna(finish_operation);
 	}

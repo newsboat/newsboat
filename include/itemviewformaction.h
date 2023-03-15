@@ -52,6 +52,12 @@ public:
 
 	void update_percent();
 
+protected:
+	std::string main_widget() const override
+	{
+		return "article";
+	}
+
 private:
 	void register_format_styles();
 
