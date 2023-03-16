@@ -444,7 +444,7 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 
 		auto item3 = std::make_shared<RssItem>(&cache);
 		item3->set_enclosure_url("https://example.com/~fae/painting.jpg");
-		item3->set_enclosure_type("image/jpeg");
+		item3->set_enclosure_type("");
 		feed->add_item(item3);
 
 		test_helpers::TempFile queue_file;
@@ -651,4 +651,65 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 	REQUIRE(lines[0] == R"(https://example.com/podcast.mp3 "/example/podcast.mp3")");
 	REQUIRE(lines[1] == R"(http://example.com/podcast2.mp3 "/example/podcast2.mp3")");
 	REQUIRE(lines[2] == "");
+}
+
+TEST_CASE("autoenqueue() does not enqueue items with an invalid podcast type",
+	"[QueueManager]")
+{
+	GIVEN("Pristine QueueManager and a feed of three items with one of them having an image enclosure") {
+		ConfigContainer cfg;
+		Cache cache(":memory:", &cfg);
+
+		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
+
+		auto item1 = std::make_shared<RssItem>(&cache);
+		item1->set_enclosure_url("https://example.com/podcast1.mp3");
+		item1->set_enclosure_type("audio/mpeg");
+		feed->add_item(item1);
+
+		auto item2 = std::make_shared<RssItem>(&cache);
+		item2->set_enclosure_url("http://example.com/not-a-podcast.jpg");
+		item2->set_enclosure_type("image/jpeg");
+		feed->add_item(item2);
+
+		auto item3 = std::make_shared<RssItem>(&cache);
+		item3->set_enclosure_url("https://example.com/podcast2.mp3");
+		item3->set_enclosure_type("audio/mpeg");
+		feed->add_item(item3);
+
+		auto item4 = std::make_shared<RssItem>(&cache);
+		item4->set_enclosure_url("https://example.com/podcast3.mp3");
+		item4->set_enclosure_type("");
+		feed->add_item(item4);
+
+		test_helpers::TempFile queue_file;
+		QueueManager manager(&cfg, queue_file.get_path());
+
+		WHEN("autoenqueue() is called") {
+			const auto result = manager.autoenqueue(feed);
+
+			THEN("the return value indicates success") {
+				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
+				REQUIRE(result.extra_info == "");
+			}
+
+			THEN("the queue file contains two entries") {
+				REQUIRE(test_helpers::file_exists(queue_file.get_path()));
+
+				const auto lines = test_helpers::file_contents(queue_file.get_path());
+				REQUIRE(lines.size() == 4);
+				REQUIRE(lines[0] != "");
+				REQUIRE(lines[1] != "");
+				REQUIRE(lines[2] != "");
+				REQUIRE(lines[3] == "");
+			}
+
+			THEN("items with an empty or a valid podcast type are marked as enqueued") {
+				REQUIRE(item1->enqueued());
+				REQUIRE_FALSE(item2->enqueued());
+				REQUIRE(item3->enqueued());
+				REQUIRE(item4->enqueued());
+			}
+		}
+	}
 }
