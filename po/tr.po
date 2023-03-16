@@ -1,12 +1,12 @@
 # H. Gökhan SARI <hsa2@difuzyon.net>, 2008
-# Emir SARI <emir_sari@icloud.com>, 2020-2022
+# Emir SARI <emir_sari@icloud.com>, 2020-2023
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-03-15 23:28+0300\n"
-"PO-Revision-Date: 2022-12-13 20:00+0300\n"
+"PO-Revision-Date: 2023-03-16 13:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -15,7 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Language: tr_TR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -93,11 +92,12 @@ msgid "<loglevel>"
 msgstr "<günlük-düzeyi>"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
 msgstr "günlük tutarken düzey belirle (geçerli değerler: 1 - 6)"
+"belirli bir günlük düzeyiyle bir günlük yaz (geçerli değerler: 1-6; sırasıyla "
+"kullanıcı hatası, kritik, hata, uyarı, bilgi ve hata ayıklama)"
 
 #: newsboat.cpp:87 src/pbcontroller.cpp:353
 msgid "<logfile>"
@@ -1629,11 +1629,11 @@ msgstr "Sonraki sayfaya taşı"
 
 #: src/keymap.cpp:454
 msgid "Move half page up"
-msgstr ""
+msgstr "Yarım sayfa yukarı çık"
 
 #: src/keymap.cpp:455
 msgid "Move half page down"
-msgstr ""
+msgstr "Yarım sayfa aşağı in"
 
 #: src/keymap.cpp:461
 msgid "Move to the start of page/list"
