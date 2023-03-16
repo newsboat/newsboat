@@ -127,7 +127,7 @@ EnqueueResult QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 
 		if (!enclosure_type.empty() && !utils::is_valid_podcast_type(enclosure_type)) {
 			LOG(Level::DEBUG, "QueueManager::autoenqueue: Skipping enclosure with url `%s'"
-				" becausoe of invalid podcast type `%s'", enclosure_url, enclosure_type);
+				" because of invalid podcast type `%s'", enclosure_url, enclosure_type);
 			continue;
 		}
 
