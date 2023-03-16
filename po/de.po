@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-03-15 23:28+0300\n"
-"PO-Revision-Date: 2022-12-13 19:00+0200\n"
+"PO-Revision-Date: 2023-03-15 22:30+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -92,12 +92,12 @@ msgid "<loglevel>"
 msgstr "<loglevel>"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
 msgstr ""
-"Logdatei mit einem bestimmten Loglevel (gültige Werte: 1 bis 6) schreiben"
+"Logdatei mit einem bestimmten Loglevel schreiben (gültige Werte: 1 bis 6 "
+"für Benutzerfehler, kritischer Fehler, Fehler, Warnung, Info und Debug)"
 
 #: newsboat.cpp:87 src/pbcontroller.cpp:353
 msgid "<logfile>"
@@ -1283,7 +1283,7 @@ msgstr "Fokus zwischen Steuerelementen wechseln"
 
 #: src/keymap.cpp:48
 msgid "Return to previous dialog/Quit"
-msgstr "zum vorherigen Dialog zurückkehren/Beenden"
+msgstr "Zum vorherigen Dialog zurückkehren/Beenden"
 
 #: src/keymap.cpp:53
 msgid "Quit program, no confirmation"
@@ -1291,11 +1291,11 @@ msgstr "Programm beenden, keine Bestätigung"
 
 #: src/keymap.cpp:60
 msgid "Reload currently selected feed"
-msgstr "aktuell ausgewählten Feed neu laden"
+msgstr "Aktuell ausgewählten Feed neu laden"
 
 #: src/keymap.cpp:63
 msgid "Reload all feeds"
-msgstr "alle Feeds neu laden"
+msgstr "Alle Feeds neu laden"
 
 #: src/keymap.cpp:68
 msgid "Mark feed read"
@@ -1303,11 +1303,11 @@ msgstr "Feed als gelesen markieren"
 
 #: src/keymap.cpp:75
 msgid "Mark all feeds read"
-msgstr "alle Feeds als gelesen markieren"
+msgstr "Alle Feeds als gelesen markieren"
 
 #: src/keymap.cpp:82
 msgid "Mark all above as read"
-msgstr "alle obenstehenden Artikel als gelesen markieren"
+msgstr "Alle obenstehenden Artikel als gelesen markieren"
 
 #: src/keymap.cpp:85
 msgid "Save article"
@@ -1319,23 +1319,23 @@ msgstr "Artikel speichern"
 
 #: src/keymap.cpp:91
 msgid "Go to next entry"
-msgstr "zum nächsten Eintrag gehen"
+msgstr "Zum nächsten Eintrag gehen"
 
 #: src/keymap.cpp:98
 msgid "Go to previous entry"
-msgstr "zum vorhergehenden Eintrag gehen"
+msgstr "Zum vorherigen Eintrag gehen"
 
 #: src/keymap.cpp:105
 msgid "Go to next unread article"
-msgstr "zum nächsten ungelesenen Artikel gehen"
+msgstr "Zum nächsten ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:112
 msgid "Go to previous unread article"
-msgstr "zum vorhergehenden ungelesenen Artikel gehen"
+msgstr "Zum vorherigen ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:119
 msgid "Go to a random unread article"
-msgstr "zu einem zufälligen, ungelesenen Artikel gehen"
+msgstr "Zu einem zufälligen, ungelesenen Artikel gehen"
 
 #: src/keymap.cpp:126
 msgid "Open URL of article, or entry in URL view. Mark read"
@@ -1384,7 +1384,7 @@ msgstr "URLs im aktuellen Artikel zeigen"
 
 #: src/keymap.cpp:193
 msgid "Clear current tag"
-msgstr "aktuellen Tag löschen"
+msgstr "Aktuellen Tag löschen"
 
 #: src/keymap.cpp:194 src/keymap.cpp:195
 msgid "Select tag"
@@ -1420,11 +1420,11 @@ msgstr "Download als gelöscht markieren"
 
 #: src/keymap.cpp:226
 msgid "Purge finished and deleted downloads from queue"
-msgstr "fertige und gelöschte Downloads aus Warteschlange aufräumen"
+msgstr "Fertige und gelöschte Downloads aus Warteschlange aufräumen"
 
 #: src/keymap.cpp:233
 msgid "Toggle automatic download on/off"
-msgstr "automatisches Herunterladen ein-/ausschalten"
+msgstr "Automatisches Herunterladen ein-/ausschalten"
 
 #: src/keymap.cpp:240
 msgid "Start player with currently selected download"
@@ -1432,7 +1432,7 @@ msgstr "Player mit aktuell ausgewähltem Download starten"
 
 #: src/keymap.cpp:247
 msgid "Mark file as finished (not played)"
-msgstr "markiere Datei as fertig (nicht gespielt)"
+msgstr "Markiere Datei als fertig (nicht gespielt)"
 
 #: src/keymap.cpp:254
 msgid "Increase the number of concurrent downloads"
@@ -1448,19 +1448,19 @@ msgstr "Bildschirm neu zeichnen"
 
 #: src/keymap.cpp:265
 msgid "Open the commandline"
-msgstr "die Kommandozeile öffnen"
+msgstr "Die Kommandozeile öffnen"
 
 #: src/keymap.cpp:270
 msgid "Set a filter"
-msgstr "einen Filter setzen"
+msgstr "Einen Filter setzen"
 
 #: src/keymap.cpp:277
 msgid "Select a predefined filter"
-msgstr "einen vordefinierten Filter auswählen"
+msgstr "Einen vordefinierten Filter auswählen"
 
 #: src/keymap.cpp:284
 msgid "Clear currently set filter"
-msgstr "aktuell gesetzten Filter löschen"
+msgstr "Aktuell gesetzten Filter löschen"
 
 #: src/keymap.cpp:291
 msgid "Bookmark current link/article"
@@ -1472,19 +1472,19 @@ msgstr "Flags bearbeiten"
 
 #: src/keymap.cpp:301
 msgid "Go to next feed"
-msgstr "zum nächsten Feed gehen"
+msgstr "Zum nächsten Feed gehen"
 
 #: src/keymap.cpp:306
 msgid "Go to previous feed"
-msgstr "zum vorhergehenden Feed gehen"
+msgstr "Zum vorherigen Feed gehen"
 
 #: src/keymap.cpp:313
 msgid "Go to next unread feed"
-msgstr "zum nächsten ungelesenen Feed gehen"
+msgstr "Zum nächsten ungelesenen Feed gehen"
 
 #: src/keymap.cpp:320
 msgid "Go to previous unread feed"
-msgstr "zum vorhergehenden ungelesenen Feed gehen"
+msgstr "Zum vorherigen ungelesenen Feed gehen"
 
 #: src/keymap.cpp:323
 msgid "Call a macro"
@@ -1500,15 +1500,15 @@ msgstr "Alle Artikel löschen"
 
 #: src/keymap.cpp:342
 msgid "Purge deleted articles"
-msgstr "gelöschte Artikel entfernen"
+msgstr "Gelöschte Artikel entfernen"
 
 #: src/keymap.cpp:349
 msgid "Edit subscribed URLs"
-msgstr "abonnierte URLs bearbeiten"
+msgstr "Abonnierte URLs bearbeiten"
 
 #: src/keymap.cpp:356
 msgid "Close currently selected dialog"
-msgstr "aktuell ausgewählten Feed schließen"
+msgstr "Aktuell ausgewählten Feed schließen"
 
 #: src/keymap.cpp:363
 msgid "View list of open dialogs"
@@ -1516,11 +1516,11 @@ msgstr "Liste von offenen Dialogen ansehen"
 
 #: src/keymap.cpp:370
 msgid "Go to next dialog"
-msgstr "zum nächsten Dialog gehen"
+msgstr "Zum nächsten Dialog gehen"
 
 #: src/keymap.cpp:377
 msgid "Go to previous dialog"
-msgstr "zum vorherigen Dialog gehen"
+msgstr "Zum vorherigen Dialog gehen"
 
 #: src/keymap.cpp:384
 msgid "Pipe article to command"
@@ -1528,59 +1528,59 @@ msgstr "Artikel zu Befehl umleiten"
 
 #: src/keymap.cpp:391
 msgid "Sort current list"
-msgstr "aktuelle Liste sortieren"
+msgstr "Aktuelle Liste sortieren"
 
 #: src/keymap.cpp:398
 msgid "Sort current list (reverse)"
-msgstr "aktuelle Liste sortieren (umgekehrt)"
+msgstr "Aktuelle Liste sortieren (umgekehrt)"
 
 #: src/keymap.cpp:406
 msgid "Return to previous search results (if any)"
-msgstr "zum vorherigen Suchergebnis zurückkehren (sofern vorhanden)"
+msgstr "Zum vorherigen Suchergebnis zurückkehren (sofern vorhanden)"
 
 #: src/keymap.cpp:413
 msgid "Go to the feed of the article"
-msgstr "zum Feed des Artikels gehen"
+msgstr "Zum Feed des Artikels gehen"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
-msgstr "öffne URL 1"
+msgstr "Öffne URL 1"
 
 #: src/keymap.cpp:418
 msgid "Open URL 2"
-msgstr "öffne URL 2"
+msgstr "Öffne URL 2"
 
 #: src/keymap.cpp:419
 msgid "Open URL 3"
-msgstr "öffne URL 3"
+msgstr "Öffne URL 3"
 
 #: src/keymap.cpp:420
 msgid "Open URL 4"
-msgstr "öffne URL 4"
+msgstr "Öffne URL 4"
 
 #: src/keymap.cpp:421
 msgid "Open URL 5"
-msgstr "öffne URL 5"
+msgstr "Öffne URL 5"
 
 #: src/keymap.cpp:422
 msgid "Open URL 6"
-msgstr "öffne URL 6"
+msgstr "Öffne URL 6"
 
 #: src/keymap.cpp:423
 msgid "Open URL 7"
-msgstr "öffne URL 7"
+msgstr "Öffne URL 7"
 
 #: src/keymap.cpp:424
 msgid "Open URL 8"
-msgstr "öffne URL 8"
+msgstr "Öffne URL 8"
 
 #: src/keymap.cpp:425
 msgid "Open URL 9"
-msgstr "öffne URL 9"
+msgstr "Öffne URL 9"
 
 #: src/keymap.cpp:426
 msgid "Open URL 10"
-msgstr "öffne URL 10"
+msgstr "Öffne URL 10"
 
 #: src/keymap.cpp:428
 msgid "Start cmdline with 1"
@@ -1620,35 +1620,35 @@ msgstr "Kommandozeile mit 9 starten"
 
 #: src/keymap.cpp:438
 msgid "Move to the previous entry"
-msgstr "zum vorhergehenden Eintrag gehen"
+msgstr "Zum vorherigen Eintrag gehen"
 
 #: src/keymap.cpp:439
 msgid "Move to the next entry"
-msgstr "zum nächsten Eintrag gehen"
+msgstr "Zum nächsten Eintrag gehen"
 
 #: src/keymap.cpp:444
 msgid "Move to the previous page"
-msgstr "zur vorherigen Seite gehen"
+msgstr "Zur vorherigen Seite gehen"
 
 #: src/keymap.cpp:451
 msgid "Move to the next page"
-msgstr "zur nächsten Seite gehen"
+msgstr "Zur nächsten Seite gehen"
 
 #: src/keymap.cpp:454
 msgid "Move half page up"
-msgstr ""
+msgstr "Halbe Seite nach oben gehen"
 
 #: src/keymap.cpp:455
 msgid "Move half page down"
-msgstr ""
+msgstr "Halbe Seite nach unten gehen"
 
 #: src/keymap.cpp:461
 msgid "Move to the start of page/list"
-msgstr "zum Anfang der Seite/Liste gehen"
+msgstr "Zum Anfang der Seite/Liste gehen"
 
 #: src/keymap.cpp:468
 msgid "Move to the end of page/list"
-msgstr "zum Ende der Seite/Liste gehen"
+msgstr "Zum Ende der Seite/Liste gehen"
 
 #: src/keymap.cpp:711
 #, c-format
