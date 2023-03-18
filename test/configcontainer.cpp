@@ -202,13 +202,13 @@ TEST_CASE("toggle() inverts the value of a boolean setting",
 	SECTION("\"true\" becomes \"false\"") {
 		cfg.set_configvalue(key, "true");
 		REQUIRE_NOTHROW(cfg.toggle(key));
-		REQUIRE(cfg.get_configvalue_as_bool(key) == false);
+		REQUIRE_FALSE(cfg.get_configvalue_as_bool(key));
 	}
 
 	SECTION("\"false\" becomes \"true\"") {
 		cfg.set_configvalue(key, "false");
 		REQUIRE_NOTHROW(cfg.toggle(key));
-		REQUIRE(cfg.get_configvalue_as_bool(key) == true);
+		REQUIRE(cfg.get_configvalue_as_bool(key));
 	}
 }
 
