@@ -26,29 +26,29 @@ public:
 	{
 		return get_credentials(scope, name).pass;
 	}
-	bool authenticate()
+	bool authenticate() override
 	{
 		throw 0;
 	}
-	std::vector<TaggedFeedUrl> get_subscribed_urls()
+	std::vector<TaggedFeedUrl> get_subscribed_urls() override
 	{
 		throw 0;
 	}
-	void add_custom_headers(curl_slist**)
+	void add_custom_headers(curl_slist**) override
 	{
 		throw 0;
 	}
-	bool mark_all_read(const std::string&)
+	bool mark_all_read(const std::string&) override
 	{
 		throw 0;
 	}
-	bool mark_article_read(const std::string&, bool)
+	bool mark_article_read(const std::string&, bool) override
 	{
 		throw 0;
 	}
 	bool update_article_flags(const std::string&,
 		const std::string&,
-		const std::string&)
+		const std::string&) override
 	{
 		throw 0;
 	}
