@@ -4,6 +4,8 @@
 #include "utils.h"
 
 #include "3rd-party/catch.hpp"
+#include <cstdint>
+#include <string>
 
 using namespace newsboat;
 
@@ -14,29 +16,26 @@ const static std::string stflListForm =
 	"    pos[list-name_pos]:0\n"
 	"    offset[list-name_offset]:0";
 
+std::string render_empty_line(std::uint32_t, std::uint32_t)
+{
+	return "";
+}
 
-TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[OldListWidget]")
+
+TEST_CASE("invalidate_list_content() makes sure `position < num_lines`", "[NewListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
 
-	ListFormatter fmt;
-	fmt.add_line("line 1");
-	fmt.add_line("line 2");
-	fmt.add_line("line 3");
+	NewListWidget listWidget("list-name", listForm, scrolloff);
 
-	OldListWidget listWidget("list-name", listForm, scrolloff);
-
-	GIVEN("a OldListWidget with 3 lines and position=2") {
-		listWidget.stfl_replace_lines(fmt);
+	GIVEN("a NewListWidget with 3 lines and position=2") {
+		listWidget.invalidate_list_content(3, render_empty_line);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);
 
 		WHEN("the number of lines is reduced") {
-			fmt.clear();
-			fmt.add_line("line 1");
-			fmt.add_line("line 2");
-			listWidget.stfl_replace_lines(fmt);
+			listWidget.invalidate_list_content(2, render_empty_line);
 
 			THEN("the position is equal to the bottom item of the new list") {
 				REQUIRE(listWidget.get_position() == 1);
@@ -44,8 +43,7 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[OldListWid
 		}
 
 		WHEN("all lines are removed") {
-			fmt.clear();
-			listWidget.stfl_replace_lines(fmt);
+			listWidget.invalidate_list_content(0, render_empty_line);
 
 			THEN("the position is changed to 0") {
 				REQUIRE(listWidget.get_position() == 0);
@@ -53,8 +51,7 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[OldListWid
 		}
 
 		WHEN("a line is added") {
-			fmt.add_line("line 4");
-			listWidget.stfl_replace_lines(fmt);
+			listWidget.invalidate_list_content(4, render_empty_line);
 
 			THEN("the position is not changed") {
 				REQUIRE(listWidget.get_position() == 2);
@@ -63,17 +60,12 @@ TEST_CASE("stfl_replace_lines() makes sure `position < num_lines`", "[OldListWid
 	}
 }
 
-TEST_CASE("stfl_replace_list() makes sure the position is reset", "[OldListWidget]")
+TEST_CASE("stfl_replace_list() makes sure the position is reset", "[NewListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
 
-	ListFormatter fmt;
-	fmt.add_line("line 1");
-	fmt.add_line("line 2");
-	fmt.add_line("line 3");
-
-	OldListWidget listWidget("list-name", listForm, scrolloff);
+	NewListWidget listWidget("list-name", listForm, scrolloff);
 
 	const std::string stflListPrototype =
 		"{list[list-name] "
@@ -82,8 +74,8 @@ TEST_CASE("stfl_replace_list() makes sure the position is reset", "[OldListWidge
 		"offset[list-name_offset]:0 "
 		"}";
 
-	GIVEN("a OldListWidget with 3 lines and position=2") {
-		listWidget.stfl_replace_lines(fmt);
+	GIVEN("a NewListWidget with 3 lines and position=2") {
+		listWidget.invalidate_list_content(3, render_empty_line);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);
 
