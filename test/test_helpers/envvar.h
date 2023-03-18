@@ -51,14 +51,14 @@ public:
 	/// restore the variable when the test finished running. The variable is
 	/// always restored to the state it was in when EnvVar object was
 	/// constructed.
-	virtual void set(const std::string& new_value) const;
+	void set(const std::string& new_value) const;
 
 	/// \brief Unsets the environment variable.
 	///
 	/// \note This does \emph{not} change the value to which EnvVar will
 	/// restore the variable when the test finished running. The variable is
 	/// always restored to the state it was in when EnvVar object was
-	virtual void unset() const;
+	void unset() const;
 
 	/// \brief Specifies a function that should be ran after each call to set()
 	/// or unset() methods, and also during object destruction.
@@ -70,7 +70,7 @@ public:
 	/// - nonstd::nullopt  --  meaning the environment variable is now unset
 	/// - std::string      --  meaning the environment variable is now set to
 	///                        this value
-	virtual void on_change(std::function<void(nonstd::optional<std::string> new_value)> fn);
+	void on_change(std::function<void(nonstd::optional<std::string> new_value)> fn);
 
 protected:
 	// The main constructor throws for some values of `name`; this one doesn't.
