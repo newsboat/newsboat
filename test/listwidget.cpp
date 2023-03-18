@@ -5,6 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 #include <cstdint>
+#include <set>
 #include <string>
 
 using namespace newsboat;
@@ -84,6 +85,39 @@ TEST_CASE("stfl_replace_list() makes sure the position is reset", "[ListWidget]"
 
 			THEN("the position is changed to 0") {
 				REQUIRE(listWidget.get_position() == 0);
+			}
+		}
+	}
+}
+
+TEST_CASE("invalidate_list_content() clears internal caches", "[ListWidget]")
+{
+	const std::uint32_t scrolloff = 0;
+	Stfl::Form listForm(stflListForm);
+	// Recalculate list dimensions
+	listForm.run(-3);
+	Stfl::reset();
+
+	ListWidget listWidget("list-name", listForm, scrolloff);
+
+	std::set<std::uint32_t> requested_lines;
+	auto render_line = [&](std::uint32_t line, std::uint32_t) -> std::string {
+		requested_lines.insert(line);
+		return "";
+	};
+
+	GIVEN("a ListWidget with 3 lines") {
+		listWidget.invalidate_list_content(3, render_empty_line);
+
+		WHEN("the invalidate_list_content() is called") {
+			requested_lines.clear();
+			listWidget.invalidate_list_content(3, render_line);
+
+			THEN("all lines are requested again") {
+				REQUIRE(requested_lines.size() == 3);
+				REQUIRE(requested_lines.count(0) == 1);
+				REQUIRE(requested_lines.count(1) == 1);
+				REQUIRE(requested_lines.count(2) == 1);
 			}
 		}
 	}

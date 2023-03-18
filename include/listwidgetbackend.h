@@ -40,6 +40,7 @@ private:
 	ListFormatter listfmt;
 	std::uint32_t num_lines;
 	std::uint32_t scroll_offset;
+	std::map<std::uint32_t, std::string> line_cache;
 	std::function<std::string(std::uint32_t, std::uint32_t)> get_formatted_line;
 };
 

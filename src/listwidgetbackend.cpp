@@ -30,6 +30,7 @@ void ListWidgetBackend::stfl_replace_list(std::string stfl)
 {
 	num_lines = 0;
 	scroll_offset = 0;
+	line_cache.clear();
 	get_formatted_line = {};
 
 	form.modify(list_name, "replace", stfl);
@@ -56,6 +57,7 @@ std::uint32_t ListWidgetBackend::get_num_lines()
 void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
 	std::function<std::string(std::uint32_t, std::uint32_t)> get_line_method)
 {
+	line_cache.clear();
 	get_formatted_line = get_line_method;
 	num_lines = line_count;
 
@@ -82,9 +84,13 @@ void ListWidgetBackend::render()
 
 	listfmt.clear();
 	for (std::uint32_t i = 0; i < visible_content_lines; ++i) {
+		const std::uint32_t line = scroll_offset + i;
 		std::string formatted_line = "NO FORMATTER DEFINED";
-		if (get_formatted_line) {
-			formatted_line = get_formatted_line(scroll_offset + i, viewport_width);
+		if (line_cache.count(line) >= 1) {
+			formatted_line = line_cache[line];
+		} else if (get_formatted_line) {
+			formatted_line = get_formatted_line(line, viewport_width);
+			line_cache.insert({line, formatted_line});
 		}
 		listfmt.add_line(formatted_line);
 	}
