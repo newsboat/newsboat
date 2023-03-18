@@ -142,35 +142,41 @@ void SelectFormAction::prepare()
 	if (do_redraw) {
 		update_heading();
 
-		ListFormatter listfmt;
-		unsigned int i = 0;
 		const auto selecttag_format = cfg->get_configvalue("selecttag-format");
-		const auto width = tags_list.get_width();
+
+		std::uint32_t num_lines = 0;
+		std::function<std::string(std::uint32_t, std::uint32_t)> render_line;
 
 		switch (type) {
 		case SelectionType::TAG:
-			for (const auto& tag : tags) {
-				listfmt.add_line(
-					utils::quote_for_stfl(
-						format_line(selecttag_format,
-							tag,
-							i + 1,
-							width)));
-				i++;
-			}
+			num_lines = tags.size();
+			render_line = [this, selecttag_format](std::uint32_t line,
+			std::uint32_t width) -> std::string {
+				const auto& tag = tags[line];
+				return utils::quote_for_stfl(
+					format_line(selecttag_format,
+						tag,
+						line + 1,
+						width));
+			};
 			break;
 		case SelectionType::FILTER:
-			for (const auto& filter : filters) {
-				std::string tagstr = strprintf::fmt(
-						"%4u  %s", i + 1, filter.name);
-				listfmt.add_line(utils::quote_for_stfl(tagstr));
-				i++;
-			}
+			num_lines = filters.size();
+			render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+				(void)width;
+				const auto& filter = filters[line];
+				return utils::quote_for_stfl(
+					strprintf::fmt(
+						"%4u  %s",
+						line + 1,
+						filter.name));
+			};
 			break;
 		default:
 			assert(0);
 		}
-		tags_list.stfl_replace_lines(listfmt);
+
+		tags_list.invalidate_list_content(num_lines, render_line);
 
 		if (is_first_draw && type == SelectionType::TAG && !value.empty()) {
 			const auto it = std::find(tags.begin(), tags.end(), value);
