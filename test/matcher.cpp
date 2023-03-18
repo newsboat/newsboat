@@ -660,7 +660,7 @@ TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
 {
 	// Inspired by https://github.com/newsboat/newsboat/issues/642
 
-	const auto require_matches = [](std::string regex) {
+	const auto require_matches = [](const std::string& regex) {
 		MatcherMockMatchable mock({{"abcd", "xyz"}});
 		Matcher m;
 
@@ -798,7 +798,7 @@ TEST_CASE("get_parse_error() returns textual description of last "
 TEST_CASE("Space characters in filter expression don't affect parsing",
 	"[Matcher]")
 {
-	const auto check = [](std::string expression) {
+	const auto check = [](const std::string& expression) {
 		INFO("input expression: " << expression);
 
 		MatcherMockMatchable mock({{"array", "foo bar baz"}});
@@ -820,7 +820,7 @@ TEST_CASE("Space characters in filter expression don't affect parsing",
 TEST_CASE("Only space characters are considered whitespace by filter parser",
 	"[Matcher]")
 {
-	const auto check = [](std::string expression) {
+	const auto check = [](const std::string& expression) {
 		INFO("input expression: " << expression);
 
 		MatcherMockMatchable mock({{"attr", "value"}});
