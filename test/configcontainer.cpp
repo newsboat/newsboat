@@ -256,19 +256,17 @@ TEST_CASE(
 	std::vector<std::string> result;
 
 	SECTION("By default, simply enumerates all settings") {
-		std::unordered_set<std::string> expected{
-			"always-display-description false",
-			"download-timeout 30",
-			"ignore-mode \"download\"",
-			"newsblur-min-items 20",
-			"oldreader-password \"\"",
-			"proxy-type \"http\"",
-			"ttrss-mode \"multi\""};
-
 		REQUIRE_NOTHROW(cfg.dump_config(result));
 		{
-			INFO("Checking that all the expected values were "
-				"found");
+			INFO("Checking that all the expected values were found");
+			std::unordered_set<std::string> expected{
+				"always-display-description false",
+				"download-timeout 30",
+				"ignore-mode \"download\"",
+				"newsblur-min-items 20",
+				"oldreader-password \"\"",
+				"proxy-type \"http\"",
+				"ttrss-mode \"multi\""};
 			REQUIRE(all_values_found(expected, result));
 		}
 	}
@@ -278,15 +276,13 @@ TEST_CASE(
 		cfg.set_configvalue("download-timeout", "100");
 		cfg.set_configvalue("http-auth-method", "digest");
 
-		std::unordered_set<std::string> expected{
-			"download-timeout 100 # default: 30",
-			"http-auth-method \"digest\" # default: any",
-		};
-
 		REQUIRE_NOTHROW(cfg.dump_config(result));
 		{
-			INFO("Checking that all the expected values were "
-				"found");
+			INFO("Checking that all the expected values were found");
+			std::unordered_set<std::string> expected{
+				"download-timeout 100 # default: 30",
+				"http-auth-method \"digest\" # default: any",
+			};
 			REQUIRE(all_values_found(expected, result));
 		}
 	}

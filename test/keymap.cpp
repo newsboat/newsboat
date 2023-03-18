@@ -492,8 +492,6 @@ TEST_CASE("dump_config() stores a description if it is present", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	std::vector<std::string> dumpOutput;
-
 	GIVEN("a few macros, some with a description") {
 		k.unset_all_keys("all");
 
@@ -502,6 +500,7 @@ TEST_CASE("dump_config() stores a description if it is present", "[KeyMap]")
 		k.handle_action("macro", R"(z set var I)");
 
 		WHEN("calling dump_config()") {
+			std::vector<std::string> dumpOutput;
 			k.dump_config(dumpOutput);
 
 			THEN("there is one line per configured macro ; all given descriptions are included") {

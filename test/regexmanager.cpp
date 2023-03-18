@@ -11,9 +11,9 @@ using namespace newsboat;
 TEST_CASE("RegexManager throws on invalid command", "[RegexManager]")
 {
 	RegexManager rxman;
-	std::vector<std::string> params;
 
 	SECTION("on invalid command") {
+		std::vector<std::string> params;
 		REQUIRE_THROWS_AS(
 			rxman.handle_action("an-invalid-command", params),
 			ConfigHandlerException);
@@ -1030,7 +1030,6 @@ TEST_CASE("insert_style_tags() does not crash on invalid input",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::string input = "test this";
 
 	SECTION("tags with a position outside  of the string are ignored") {
 		std::map<size_t, std::string> tags = {
@@ -1038,6 +1037,7 @@ TEST_CASE("insert_style_tags() does not crash on invalid input",
 			{9, "<in>"},
 			{10, "<out>"},
 		};
+		std::string input = "test this";
 		const std::string output = "<test>test this<in>";
 		rxman.insert_style_tags(input, tags);
 		REQUIRE(input == output);
@@ -1114,10 +1114,10 @@ TEST_CASE("merge_style_tag() does not crash on invalid input",
 	"[RegexManager]")
 {
 	RegexManager rxman;
-	std::map<size_t, std::string> tags;
-	const std::string new_tag = "<test>";
 
 	SECTION("ignore tag merging if `end <= start`") {
+		std::map<size_t, std::string> tags;
+		const std::string new_tag = "<test>";
 		rxman.merge_style_tag(tags, new_tag, 0, 0);
 		rxman.merge_style_tag(tags, new_tag, 1, 0);
 		rxman.merge_style_tag(tags, new_tag, 5, 4);
