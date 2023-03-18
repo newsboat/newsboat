@@ -38,16 +38,16 @@ private:
 		std::vector<std::string>* args = nullptr) override;
 	void update_title(const std::string& working_directory);
 
-	void add_directory(ListFormatter& listfmt,
-		std::vector<file_system::FileSystemEntry>& id_at_position,
+	void add_directory(std::vector<file_system::FileSystemEntry>& id_at_position,
 		std::string dirname);
 	std::vector<file_system::FileSystemEntry> id_at_position;
+	std::vector<std::string> lines;
 
 	std::string get_formatted_dirname(std::string dirname, mode_t mode);
 
 	std::string cwd;
 
-	OldListWidget files_list;
+	NewListWidget files_list;
 };
 
 } // namespace newsboat
