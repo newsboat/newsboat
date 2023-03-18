@@ -31,7 +31,6 @@ src/itemviewformaction.cpp
 src/links.cpp
 src/listformaction.cpp
 src/listformatter.cpp
-src/listwidgetbackend.cpp
 src/minifluxapi.cpp
 src/minifluxurlreader.cpp
 src/newlistwidgetbackend.cpp

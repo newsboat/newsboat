@@ -4,10 +4,11 @@
 #include <cstdint>
 #include <string>
 
-#include "listwidgetbackend.h"
-#include "regexmanager.h"
+#include "stflpp.h"
 
 namespace newsboat {
+
+class RegexManager;
 
 // Backend is required to implement:
 // std::uint32_t get_height()
