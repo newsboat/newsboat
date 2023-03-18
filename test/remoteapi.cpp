@@ -14,7 +14,7 @@ using namespace newsboat;
  */
 class test_api : public RemoteApi {
 public:
-	test_api(ConfigContainer* c)
+	explicit test_api(ConfigContainer* c)
 		: RemoteApi(c)
 	{
 	}

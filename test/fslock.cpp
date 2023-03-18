@@ -16,7 +16,7 @@ using namespace newsboat;
 // Forks and calls FsLock::try_lock() in the child process.
 class LockProcess {
 public:
-	LockProcess(std::string lock_location)
+	explicit LockProcess(std::string lock_location)
 	{
 		sem_start = sem_open(sem_start_name, O_CREAT, 0644, 0);
 		sem_stop = sem_open(sem_stop_name, O_CREAT, 0644, 0);
