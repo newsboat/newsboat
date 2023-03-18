@@ -67,7 +67,7 @@ private:
 		unsigned int width);
 	void update_heading();
 
-	NewListWidget tags_list;
+	ListWidget tags_list;
 };
 
 } // namespace newsboat

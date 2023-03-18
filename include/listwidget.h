@@ -2,11 +2,11 @@
 #define NEWSBOAT_LISTWIDGET_H_
 
 #include "listmovementcontrol.h"
-#include "newlistwidgetbackend.h"
+#include "listwidgetbackend.h"
 
 namespace newsboat {
 
-using NewListWidget = ListMovementControl<NewListWidgetBackend>;
+using ListWidget = ListMovementControl<ListWidgetBackend>;
 
 } // namespace newsboat
 

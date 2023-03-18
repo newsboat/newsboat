@@ -1,5 +1,5 @@
-#ifndef NEWSBOAT_NEWLISTWIDGETBACKEND_H_
-#define NEWSBOAT_NEWLISTWIDGETBACKEND_H_
+#ifndef NEWSBOAT_LISTWIDGETBACKEND_H_
+#define NEWSBOAT_LISTWIDGETBACKEND_H_
 
 #include <cstdint>
 #include <functional>
@@ -12,12 +12,12 @@
 
 namespace newsboat {
 
-class NewListWidgetBackend {
+class ListWidgetBackend {
 public:
-	NewListWidgetBackend(const std::string& list_name, const std::string& context,
+	ListWidgetBackend(const std::string& list_name, const std::string& context,
 		Stfl::Form& form, RegexManager& rxman);
-	NewListWidgetBackend(const std::string& list_name, Stfl::Form& form);
-	virtual ~NewListWidgetBackend() = default;
+	ListWidgetBackend(const std::string& list_name, Stfl::Form& form);
+	virtual ~ListWidgetBackend() = default;
 
 	void stfl_replace_list(std::string stfl);
 
@@ -45,4 +45,4 @@ private:
 
 } // namespace newsboat
 
-#endif /* NEWSBOAT_NEWLISTWIDGETBACKEND_H_ */
+#endif /* NEWSBOAT_LISTWIDGETBACKEND_H_ */

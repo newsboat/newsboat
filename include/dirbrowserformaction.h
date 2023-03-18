@@ -47,7 +47,7 @@ private:
 
 	std::string cwd;
 
-	NewListWidget files_list;
+	ListWidget files_list;
 };
 
 } // namespace newsboat

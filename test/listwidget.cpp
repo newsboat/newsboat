@@ -22,14 +22,14 @@ std::string render_empty_line(std::uint32_t, std::uint32_t)
 }
 
 
-TEST_CASE("invalidate_list_content() makes sure `position < num_lines`", "[NewListWidget]")
+TEST_CASE("invalidate_list_content() makes sure `position < num_lines`", "[ListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
 
-	NewListWidget listWidget("list-name", listForm, scrolloff);
+	ListWidget listWidget("list-name", listForm, scrolloff);
 
-	GIVEN("a NewListWidget with 3 lines and position=2") {
+	GIVEN("a ListWidget with 3 lines and position=2") {
 		listWidget.invalidate_list_content(3, render_empty_line);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);
@@ -60,12 +60,12 @@ TEST_CASE("invalidate_list_content() makes sure `position < num_lines`", "[NewLi
 	}
 }
 
-TEST_CASE("stfl_replace_list() makes sure the position is reset", "[NewListWidget]")
+TEST_CASE("stfl_replace_list() makes sure the position is reset", "[ListWidget]")
 {
 	const std::uint32_t scrolloff = 0;
 	Stfl::Form listForm(stflListForm);
 
-	NewListWidget listWidget("list-name", listForm, scrolloff);
+	ListWidget listWidget("list-name", listForm, scrolloff);
 
 	const std::string stflListPrototype =
 		"{list[list-name] "
@@ -74,7 +74,7 @@ TEST_CASE("stfl_replace_list() makes sure the position is reset", "[NewListWidge
 		"offset[list-name_offset]:0 "
 		"}";
 
-	GIVEN("a NewListWidget with 3 lines and position=2") {
+	GIVEN("a ListWidget with 3 lines and position=2") {
 		listWidget.invalidate_list_content(3, render_empty_line);
 		listWidget.set_position(2);
 		REQUIRE(listWidget.get_position() == 2);

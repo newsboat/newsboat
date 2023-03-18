@@ -1,11 +1,11 @@
-#include "newlistwidgetbackend.h"
+#include "listwidgetbackend.h"
 
 #include "listformatter.h"
 #include "utils.h"
 
 namespace newsboat {
 
-NewListWidgetBackend::NewListWidgetBackend(const std::string& list_name,
+ListWidgetBackend::ListWidgetBackend(const std::string& list_name,
 	const std::string& context, Stfl::Form& form, RegexManager& rxman)
 	: list_name(list_name)
 	, form(form)
@@ -16,7 +16,7 @@ NewListWidgetBackend::NewListWidgetBackend(const std::string& list_name,
 {
 }
 
-NewListWidgetBackend::NewListWidgetBackend(const std::string& list_name, Stfl::Form& form)
+ListWidgetBackend::ListWidgetBackend(const std::string& list_name, Stfl::Form& form)
 	: list_name(list_name)
 	, form(form)
 	, listfmt()
@@ -26,7 +26,7 @@ NewListWidgetBackend::NewListWidgetBackend(const std::string& list_name, Stfl::F
 {
 }
 
-void NewListWidgetBackend::stfl_replace_list(std::string stfl)
+void ListWidgetBackend::stfl_replace_list(std::string stfl)
 {
 	num_lines = 0;
 	scroll_offset = 0;
@@ -38,22 +38,22 @@ void NewListWidgetBackend::stfl_replace_list(std::string stfl)
 	on_list_changed();
 }
 
-std::uint32_t NewListWidgetBackend::get_width()
+std::uint32_t ListWidgetBackend::get_width()
 {
 	return utils::to_u(form.get(list_name + ":w"));
 }
 
-std::uint32_t NewListWidgetBackend::get_height()
+std::uint32_t ListWidgetBackend::get_height()
 {
 	return utils::to_u(form.get(list_name + ":h"));
 }
 
-std::uint32_t NewListWidgetBackend::get_num_lines()
+std::uint32_t ListWidgetBackend::get_num_lines()
 {
 	return num_lines;
 }
 
-void NewListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
+void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
 	std::function<std::string(std::uint32_t, std::uint32_t)> get_line_method)
 {
 	get_formatted_line = get_line_method;
@@ -64,7 +64,7 @@ void NewListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
 	render();
 }
 
-void NewListWidgetBackend::update_position(std::uint32_t pos,
+void ListWidgetBackend::update_position(std::uint32_t pos,
 	std::uint32_t new_scroll_offset)
 {
 	scroll_offset = new_scroll_offset;
@@ -74,7 +74,7 @@ void NewListWidgetBackend::update_position(std::uint32_t pos,
 	render();
 }
 
-void NewListWidgetBackend::render()
+void ListWidgetBackend::render()
 {
 	const auto viewport_width = get_width();
 	const auto viewport_height = get_height();
