@@ -95,7 +95,7 @@ msgstr "<günlük-düzeyi>"
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "günlük tutarken düzey belirle (geçerli değerler: 1 - 6)"
+msgstr ""
 "belirli bir günlük düzeyiyle bir günlük yaz (geçerli değerler: 1-6; sırasıyla "
 "kullanıcı hatası, kritik, hata, uyarı, bilgi ve hata ayıklama)"
 
