@@ -826,28 +826,61 @@ std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFee
 		run_sql(query, vectorofstring_callback, &unreachable_feeds);
 	}
 
+	std::string clear_data_for_deleted_items(
+		"UPDATE rss_item SET content = '', title = '', author = '', url = '', flags = '', base = '', content_mime_type = '' WHERE deleted = 1");
+	run_sql(clear_data_for_deleted_items);
+
 	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
 	// PURPOSE! It's missing so that no database operation can occur
 	// after the cache cleanup! mtx->unlock();
 	return unreachable_feeds;
 }
 
+static int is_deleted_callback(void* handler, int argc, char** argv,
+	char** /* azColName */)
+{
+	bool* is_deleted = static_cast<bool*>(handler);
+
+	assert(argc == 1);
+
+	if (std::string(argv[0]) == "1") {
+		*is_deleted = true;
+	} else {
+		*is_deleted = false;
+	}
+
+	return 0;
+}
+
+
 void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 	const std::string& feedurl,
 	bool reset_unread)
 {
 	std::string query = prepare_query(
-			"SELECT count(*) FROM rss_item WHERE guid = '%q';",
+			"SELECT count(*) FROM rss_item WHERE feedurl = '%q' AND guid = '%q';",
+			feedurl,
 			item->guid());
 	CbHandler count_cbh;
 	run_sql(query, count_callback, &count_cbh);
 	const auto description = item->description();
 	if (count_cbh.count() > 0) {
+		std::string check_deleted_query =
+			prepare_query("SELECT deleted FROM rss_item WHERE feedurl = '%q' AND guid = '%q';",
+				feedurl, item->guid());
+		bool is_deleted = false;
+		run_sql(check_deleted_query, is_deleted_callback, &is_deleted);
+
+		if (is_deleted) {
+			LOG(Level::DEBUG, "Not updating item which is marked as deleted (feedurl = '%s', guid = '%s')", feedurl, item->guid());
+			return;
+		}
+
 		if (reset_unread) {
 			std::string content;
 			query = prepare_query(
-					"SELECT content FROM rss_item WHERE guid = "
-					"'%q';",
+					"SELECT content FROM rss_item WHERE feedurl = '%q' AND guid = '%q';",
+					feedurl,
 					item->guid());
 			run_sql(query, single_string_callback, &content);
 			if (content != description.text) {
@@ -859,7 +892,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					description.text);
 				query = prepare_query(
 						"UPDATE rss_item SET unread = 1 WHERE "
-						"guid = '%q';",
+						"feedurl = '%q' AND guid = '%q';",
+						feedurl,
 						item->guid());
 				run_sql(query);
 			}
@@ -873,7 +907,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"content = '%q', content_mime_type = '%q', enclosure_url = '%q', "
 					"enclosure_type = '%q', base = '%q', unread = "
 					"'%d' "
-					"WHERE guid = '%q'",
+					"WHERE feedurl = '%q' AND guid = '%q'",
 					item->title(),
 					item->author(),
 					item->link(),
@@ -884,6 +918,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					item->enclosure_type(),
 					item->get_base(),
 					(item->unread() ? 1 : 0),
+					feedurl,
 					item->guid());
 		} else {
 			update = prepare_query(
@@ -892,7 +927,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"feedurl = '%q', "
 					"content = '%q', content_mime_type = '%q', enclosure_url = '%q', "
 					"enclosure_type = '%q', base = '%q' "
-					"WHERE guid = '%q'",
+					"WHERE feedurl = '%q' AND guid = '%q'",
 					item->title(),
 					item->author(),
 					item->link(),
@@ -902,34 +937,42 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					item->enclosure_url(),
 					item->enclosure_type(),
 					item->get_base(),
+					feedurl,
 					item->guid());
 		}
 		run_sql(update);
 	} else {
-		std::string insert = prepare_query(
-				"INSERT INTO rss_item (guid, title, author, url, "
-				"feedurl, "
-				"pubDate, content, content_mime_type, unread, enclosure_url, "
-				"enclosure_type, enqueued, base) "
-				"VALUES "
-				"('%q','%q','%q','%q','%q','%u','%q','%q','%d','%q','%q',%d,"
-				" "
-				"'%q')",
-				item->guid(),
-				item->title(),
-				item->author(),
-				item->link(),
-				feedurl,
-				item->pubDate_timestamp(),
-				description.text,
-				description.mime,
-				(item->unread() ? 1 : 0),
-				item->enclosure_url(),
-				item->enclosure_type(),
-				item->enqueued() ? 1 : 0,
-				item->get_base());
-		run_sql(insert);
+		insert_rssitem_unlocked(item, feedurl);
 	}
+}
+
+void Cache::insert_rssitem_unlocked(std::shared_ptr<RssItem> item,
+	const std::string& feedurl)
+{
+	const auto description = item->description();
+	std::string insert = prepare_query(
+			"INSERT INTO rss_item (guid, title, author, url, "
+			"feedurl, "
+			"pubDate, content, content_mime_type, unread, enclosure_url, "
+			"enclosure_type, enqueued, base) "
+			"VALUES "
+			"('%q','%q','%q','%q','%q','%u','%q','%q','%d','%q','%q',%d,"
+			" "
+			"'%q')",
+			item->guid(),
+			item->title(),
+			item->author(),
+			item->link(),
+			feedurl,
+			item->pubDate_timestamp(),
+			description.text,
+			description.mime,
+			(item->unread() ? 1 : 0),
+			item->enclosure_url(),
+			item->enclosure_type(),
+			item->enqueued() ? 1 : 0,
+			item->get_base());
+	run_sql(insert);
 }
 
 void Cache::mark_all_read(std::shared_ptr<RssFeed> feed)

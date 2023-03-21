@@ -88,6 +88,7 @@ private:
 	void update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 		const std::string& feedurl,
 		bool reset_unread);
+	void insert_rssitem_unlocked(std::shared_ptr<RssItem> item, const std::string& feedurl);
 
 	std::string prepare_query(const std::string& format);
 	template<typename... Args>
