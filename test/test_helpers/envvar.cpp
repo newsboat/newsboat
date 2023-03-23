@@ -3,11 +3,11 @@
 #include "3rd-party/catch.hpp"
 
 test_helpers::EnvVar::EnvVar(std::string name_)
-	: EnvVar(name_, true)
+	: EnvVar(std::move(name_), true)
 {
-	if (name_ == "TZ") {
+	if (name == "TZ") {
 		throw std::invalid_argument("Using EnvVar(\"TZ\") is discouraged. Try test_helpers::TzEnvVar instead.");
-	} else if (name_ == "LC_CTYPE") {
+	} else if (name == "LC_CTYPE") {
 		throw std::invalid_argument("Using EnvVar(\"LC_CTYPE\") is discouraged. Try test_helpers::LcCtypeEnvVar instead.");
 	}
 }

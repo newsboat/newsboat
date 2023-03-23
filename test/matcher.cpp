@@ -62,13 +62,13 @@ TEST_CASE("Operator `=` checks if field has given value", "[Matcher]")
 		REQUIRE_FALSE(m.matches(&mock));
 
 		SECTION("...but converts arguments to strings to compare") {
-			MatcherMockMatchable mock({{"agent", "007"}});
+			MatcherMockMatchable mock2({{"agent", "007"}});
 
 			REQUIRE(m.parse("agent = 7"));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("agent = 007"));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 		}
 	}
 
@@ -113,13 +113,13 @@ TEST_CASE("Operator `!=` checks if field doesn't have given value", "[Matcher]")
 		REQUIRE_FALSE(m.matches(&mock));
 
 		SECTION("...but converts arguments to strings to compare") {
-			MatcherMockMatchable mock({{"agent", "007"}});
+			MatcherMockMatchable mock2({{"agent", "007"}});
 
 			REQUIRE(m.parse("agent != 7"));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("agent != 007"));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 		}
 	}
 
@@ -501,50 +501,50 @@ TEST_CASE(
 		}
 
 		SECTION("Only numeric prefix is used for conversion") {
-			MatcherMockMatchable mock({{"AAAA", "12345xx"}});
+			MatcherMockMatchable mock2({{"AAAA", "12345xx"}});
 
 			REQUIRE(m.parse("AAAA >= \"12345\""));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("AAAA > \"1234a\""));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("AAAA < \"12345a\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("AAAA < \"1234a\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("AAAA < \"9999b\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 		}
 
 		SECTION("If conversion fails, zero is used") {
-			MatcherMockMatchable mock({{"zero", "0"}, {"same_zero", "yeah"}});
+			MatcherMockMatchable mock2({{"zero", "0"}, {"same_zero", "yeah"}});
 
 			REQUIRE(m.parse("zero < \"unknown\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("zero > \"unknown\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("zero <= \"unknown\""));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("zero >= \"unknown\""));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("same_zero < \"0\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("same_zero > \"0\""));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("same_zero <= \"0\""));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("same_zero >= \"0\""));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 		}
 	}
 
@@ -628,19 +628,19 @@ TEST_CASE("Operator `between` checks if field's value is in given range",
 		REQUIRE(m.matches(&mock));
 
 		SECTION("...converting numeric prefix of the attribute if necessary") {
-			MatcherMockMatchable mock({{"value", "123four"}, {"practically_zero", "sure"}});
+			MatcherMockMatchable mock2({{"value", "123four"}, {"practically_zero", "sure"}});
 
 			REQUIRE(m.parse("value between 122:124"));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("value between 124:130"));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 
 			REQUIRE(m.parse("practically_zero between 0:1"));
-			REQUIRE(m.matches(&mock));
+			REQUIRE(m.matches(&mock2));
 
 			REQUIRE(m.parse("practically_zero between 1:100"));
-			REQUIRE_FALSE(m.matches(&mock));
+			REQUIRE_FALSE(m.matches(&mock2));
 		}
 	}
 }
@@ -660,7 +660,7 @@ TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
 {
 	// Inspired by https://github.com/newsboat/newsboat/issues/642
 
-	const auto require_matches = [](std::string regex) {
+	const auto require_matches = [](const std::string& regex) {
 		MatcherMockMatchable mock({{"abcd", "xyz"}});
 		Matcher m;
 
@@ -798,7 +798,7 @@ TEST_CASE("get_parse_error() returns textual description of last "
 TEST_CASE("Space characters in filter expression don't affect parsing",
 	"[Matcher]")
 {
-	const auto check = [](std::string expression) {
+	const auto check = [](const std::string& expression) {
 		INFO("input expression: " << expression);
 
 		MatcherMockMatchable mock({{"array", "foo bar baz"}});
@@ -820,7 +820,7 @@ TEST_CASE("Space characters in filter expression don't affect parsing",
 TEST_CASE("Only space characters are considered whitespace by filter parser",
 	"[Matcher]")
 {
-	const auto check = [](std::string expression) {
+	const auto check = [](const std::string& expression) {
 		INFO("input expression: " << expression);
 
 		MatcherMockMatchable mock({{"attr", "value"}});

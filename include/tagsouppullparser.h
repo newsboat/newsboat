@@ -19,7 +19,7 @@ public:
 		TEXT
 	};
 
-	TagSoupPullParser(std::istream& is);
+	explicit TagSoupPullParser(std::istream& is);
 	virtual ~TagSoupPullParser();
 	nonstd::optional<std::string> get_attribute_value(const std::string& name) const;
 	Event get_event_type() const;

@@ -16,12 +16,10 @@ using namespace podboat;
 bool contains_download_with_status(const std::vector<Download>& downloads,
 	DlStatus status)
 {
-	for (const Download& d : downloads) {
-		if (d.status() == status) {
-			return true;
-		}
-	}
-	return false;
+	return std::any_of(
+			std::begin(downloads),
+			std::end(downloads),
+			[status](const Download& d) -> bool { return d.status() == status; });
 }
 
 TEST_CASE("Passes the callback to Download objects", "[QueueLoader]")
