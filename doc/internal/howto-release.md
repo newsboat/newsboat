@@ -59,7 +59,7 @@ branch off the latest release and backport the bugfixes onto it.
     * Acknowledge contributions from people whose changes didn't make it into
         the lists. The full list of contributors can be got with:
         ```
-        $ git shortlog PREVIOUS_VERSION.. | egrep -v '^(\s|$)' | sed -r 's# \([[:digit:]]+\):$##'
+        $ git shortlog PREVIOUS_VERSION.. | cut -f2
         ```
 1. Update version:
     * _rust/libnewsboat/Cargo.toml_

@@ -1,23 +1,31 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2023-03-25
+## 2.31 - 2023-03-26
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK
+for this release also includes: Sergei Trofimovich and giuliano.
 
 ### Added
 
+- Operations for scrolling by half a page (`halfpageup`, `halfpagedown`) (#36)
+    (Dennis van der Schagt)
+- If `--log-level` is specified but `--log-file` isn't, write the log to a file
+    named after the template `newsboat_%Y-%m-%d_%H.%M.%S.log`, i.e. use the
+    current date and time (Dennis van der Schagt)
+- _contrib/move_url.py_ for moving feeds in Newsboat's database while keeping
+    articles (blankie)
+
 ### Changed
 
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian and Ukrainian
+    (Alexander Batischev), Spanish (Roboron3042), Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.64.0
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 
-### Security
+- Inability to exit search mode when `quit` is bound to `BACKSPACE` (#2336)
+    (Dennis van der Schagt, Alexander Batischev)
 
 
 
