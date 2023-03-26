@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-03-15 23:28+0300\n"
-"PO-Revision-Date: 2022-12-19 21:03+0300\n"
+"PO-Revision-Date: 2023-03-24 00:37+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -94,11 +94,13 @@ msgid "<loglevel>"
 msgstr "<рівеньлогу>"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "записувати лог з визначеним рівнем (дійсні значення: від 1 до 6)"
+msgstr ""
+"записувати лог з визначеним рівнем (дійсні значення: від 1 до 6, для "
+"користувацьких помилок, критичних, звичайних помилок, попереджень, "
+"інформаційних повідомлень та налагоджувальної інформації відповідно)"
 
 #: newsboat.cpp:87 src/pbcontroller.cpp:353
 msgid "<logfile>"
@@ -1633,11 +1635,11 @@ msgstr "Перемістити до наступної сторінки"
 
 #: src/keymap.cpp:454
 msgid "Move half page up"
-msgstr ""
+msgstr "Перемістити на півсторінки вгору"
 
 #: src/keymap.cpp:455
 msgid "Move half page down"
-msgstr ""
+msgstr "Перемістити на півсторінки вниз"
 
 #: src/keymap.cpp:461
 msgid "Move to the start of page/list"
