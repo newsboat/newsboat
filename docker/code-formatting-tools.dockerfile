@@ -20,7 +20,7 @@
 #       newsboat-code-formatting-tools \
 #       make fmt
 
-FROM rust:1.64.0-alpine
+FROM rust:1.66.1-alpine
 WORKDIR /workspace
-RUN apk add --no-cache astyle==3.1-r2 git make
+RUN apk add --no-cache astyle==3.1-r3 git make
 RUN rustup component add rustfmt
