@@ -173,7 +173,7 @@ static int rssitem_callback(void* myfeed, int argc, char** argv,
 {
 	std::shared_ptr<RssFeed>* feed =
 		static_cast<std::shared_ptr<RssFeed>*>(myfeed);
-	assert(argc == 13);
+	assert(argc == 15);
 	std::shared_ptr<RssItem> item(new RssItem(nullptr));
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
@@ -192,9 +192,11 @@ static int rssitem_callback(void* myfeed, int argc, char** argv,
 
 	item->set_enclosure_url(argv[8] ? argv[8] : "");
 	item->set_enclosure_type(argv[9] ? argv[9] : "");
-	item->set_enqueued((std::string("1") == (argv[10] ? argv[10] : "")));
-	item->set_flags(argv[11] ? argv[11] : "");
-	item->set_base(argv[12] ? argv[12] : "");
+	item->set_enclosure_description(argv[10] ? argv[10] : "");
+	item->set_enclosure_description_mime_type(argv[11] ? argv[11] : "");
+	item->set_enqueued((std::string("1") == (argv[12] ? argv[12] : "")));
+	item->set_flags(argv[13] ? argv[13] : "");
+	item->set_base(argv[14] ? argv[14] : "");
 
 	//(*feed)->items().push_back(item);
 	(*feed)->add_item(item);
@@ -223,7 +225,7 @@ static int search_item_callback(void* myfeed,
 {
 	std::vector<std::shared_ptr<RssItem>>* items =
 			static_cast<std::vector<std::shared_ptr<RssItem>>*>(myfeed);
-	assert(argc == 13);
+	assert(argc == 15);
 	std::shared_ptr<RssItem> item(new RssItem(nullptr));
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
@@ -241,9 +243,11 @@ static int search_item_callback(void* myfeed,
 
 	item->set_enclosure_url(argv[8] ? argv[8] : "");
 	item->set_enclosure_type(argv[9] ? argv[9] : "");
-	item->set_enqueued((std::string("1") == argv[10]));
-	item->set_flags(argv[11] ? argv[11] : "");
-	item->set_base(argv[12] ? argv[12] : "");
+	item->set_enclosure_description(argv[10] ? argv[10] : "");
+	item->set_enclosure_description_mime_type(argv[11] ? argv[11] : "");
+	item->set_enqueued((std::string("1") == argv[12]));
+	item->set_flags(argv[13] ? argv[13] : "");
+	item->set_base(argv[14] ? argv[14] : "");
 
 	items->push_back(item);
 	return 0;
@@ -388,7 +392,13 @@ static const schema_patches schemaPatches{
 
 			"ALTER TABLE rss_item ADD COLUMN content_mime_type VARCHAR(255) NOT NULL DEFAULT \"\";"
 		}
-	}
+	},
+	{	{2, 32},
+		{
+			"ALTER TABLE rss_item ADD COLUMN enclosure_description VARCHAR(1024) NOT NULL DEFAULT \"\";",
+			"ALTER TABLE rss_item ADD COLUMN enclosure_description_mime_type VARCHAR(128) NOT NULL DEFAULT \"\";",
+		}
+	},
 
 	// Note: schema changes should use the version number of the release that introduced them.
 };
@@ -596,7 +606,8 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	query = prepare_query(
 			"SELECT guid, title, author, url, pubDate, length(content), "
 			"unread, "
-			"feedurl, enclosure_url, enclosure_type, enqueued, flags, base "
+			"feedurl, enclosure_url, enclosure_type, enclosure_description, enclosure_description_mime_type, "
+			"enqueued, flags, base "
 			"FROM rss_item "
 			"WHERE feedurl = '%q' "
 			"AND deleted = 0 "
@@ -670,6 +681,7 @@ std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
 				"SELECT guid, title, author, url, pubDate, "
 				"length(content), "
 				"unread, feedurl, enclosure_url, enclosure_type, "
+				"enclosure_description, enclosure_description_mime_type, "
 				"enqueued, flags, base "
 				"FROM rss_item "
 				"WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') "
@@ -684,6 +696,7 @@ std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
 				"SELECT guid, title, author, url, pubDate, "
 				"length(content), "
 				"unread, feedurl, enclosure_url, enclosure_type, "
+				"enclosure_description, enclosure_description_mime_type, "
 				"enqueued, flags, base "
 				"FROM rss_item "
 				"WHERE (title LIKE '%%%q%%' OR content LIKE '%%%q%%') "
@@ -871,7 +884,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"SET title = '%q', author = '%q', url = '%q', "
 					"feedurl = '%q', "
 					"content = '%q', content_mime_type = '%q', enclosure_url = '%q', "
-					"enclosure_type = '%q', base = '%q', unread = "
+					"enclosure_type = '%q', enclosure_description = '%q', "
+					"enclosure_description_mime_type = '%q', base = '%q', unread = "
 					"'%d' "
 					"WHERE guid = '%q'",
 					item->title(),
@@ -882,6 +896,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					description.mime,
 					item->enclosure_url(),
 					item->enclosure_type(),
+					item->enclosure_description(),
+					item->enclosure_description_mime_type(),
 					item->get_base(),
 					(item->unread() ? 1 : 0),
 					item->guid());
@@ -891,7 +907,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					"SET title = '%q', author = '%q', url = '%q', "
 					"feedurl = '%q', "
 					"content = '%q', content_mime_type = '%q', enclosure_url = '%q', "
-					"enclosure_type = '%q', base = '%q' "
+					"enclosure_type = '%q', enclosure_description = '%q', "
+					"enclosure_description_mime_type = '%q', base = '%q' "
 					"WHERE guid = '%q'",
 					item->title(),
 					item->author(),
@@ -901,6 +918,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 					description.mime,
 					item->enclosure_url(),
 					item->enclosure_type(),
+					item->enclosure_description(),
+					item->enclosure_description_mime_type(),
 					item->get_base(),
 					item->guid());
 		}
@@ -910,11 +929,10 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 				"INSERT INTO rss_item (guid, title, author, url, "
 				"feedurl, "
 				"pubDate, content, content_mime_type, unread, enclosure_url, "
-				"enclosure_type, enqueued, base) "
+				"enclosure_type, enclosure_description, enclosure_description_mime_type, "
+				"enqueued, base) "
 				"VALUES "
-				"('%q','%q','%q','%q','%q','%u','%q','%q','%d','%q','%q',%d,"
-				" "
-				"'%q')",
+				"('%q','%q','%q','%q','%q','%u','%q','%q','%d','%q','%q','%q','%q',%d, '%q')",
 				item->guid(),
 				item->title(),
 				item->author(),
@@ -926,6 +944,8 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 				(item->unread() ? 1 : 0),
 				item->enclosure_url(),
 				item->enclosure_type(),
+				item->enclosure_description(),
+				item->enclosure_description_mime_type(),
 				item->enqueued() ? 1 : 0,
 				item->get_base());
 		run_sql(insert);

@@ -394,6 +394,8 @@ void RssParser::set_item_enclosure(std::shared_ptr<RssItem> x,
 {
 	std::string enclosure_url;
 	std::string enclosure_type;
+	std::string enclosure_description;
+	std::string enclosure_description_mime_type;
 	bool found_valid_enclosure = false;
 
 	for (const auto& enclosure : item.enclosures) {
@@ -401,14 +403,20 @@ void RssParser::set_item_enclosure(std::shared_ptr<RssItem> x,
 			found_valid_enclosure = true;
 			enclosure_url = enclosure.url;
 			enclosure_type = enclosure.type;
+			enclosure_description = enclosure.description;
+			enclosure_description_mime_type = enclosure.description_mime_type;
 		} else if (!found_valid_enclosure) {
 			enclosure_url = enclosure.url;
 			enclosure_type = enclosure.type;
+			enclosure_description = enclosure.description;
+			enclosure_description_mime_type = enclosure.description_mime_type;
 		}
 	}
 
 	x->set_enclosure_url(enclosure_url);
 	x->set_enclosure_type(enclosure_type);
+	x->set_enclosure_description(enclosure_description);
+	x->set_enclosure_description_mime_type(enclosure_description_mime_type);
 	LOG(Level::DEBUG,
 		"RssParser::parse: found enclosure_url: %s",
 		enclosure_url);

@@ -119,6 +119,8 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 			Enclosure {
 				get_prop(node, "url"),
 				get_prop(node, "type"),
+				"",
+				"",
 			}
 			);
 		} else if (is_media_node(node)) {

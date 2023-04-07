@@ -255,6 +255,9 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	REQUIRE(f.items[3].description_mime_type == "text/html");
 	REQUIRE(f.items[3].link == "http://example.com/player.html");
 	REQUIRE(f.items[3].author == "John Doe");
+	REQUIRE(f.items[3].enclosures.size() == 1);
+	REQUIRE(f.items[3].enclosures[0].description == "nested media html content");
+	REQUIRE(f.items[3].enclosures[0].description_mime_type == "text/html");
 
 	SECTION("media:{title,description,player} does not overwrite regular title, description, and link if they exist") {
 		REQUIRE(f.items[4].title == "regular title");
@@ -287,7 +290,7 @@ TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
 	REQUIRE(f.link == "http://example.com/blog/");
 	REQUIRE(f.description == "my description");
 
-	REQUIRE(f.items.size() == 2u);
+	REQUIRE(f.items.size() == 3u);
 
 	REQUIRE(f.items[0].title == "using multiple media tags");
 	REQUIRE(f.items[0].description == "media html content");
@@ -299,6 +302,15 @@ TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
 	REQUIRE(f.items[1].description == "nested media html content");
 	REQUIRE(f.items[1].description_mime_type == "text/html");
 	REQUIRE(f.items[1].link == "http://example.com/player.html");
+	REQUIRE(f.items[1].enclosures.size() == 1);
+	REQUIRE(f.items[1].enclosures[0].description == "nested media html content");
+	REQUIRE(f.items[1].enclosures[0].description_mime_type == "text/html");
+
+	REQUIRE(f.items[2].enclosures.size() == 2);
+	REQUIRE(f.items[2].enclosures[0].url == "http://example.com/media-test.png");
+	REQUIRE(f.items[2].enclosures[0].type == "image/png");
+	REQUIRE(f.items[2].enclosures[1].url == "http://example.com/movie.mov");
+	REQUIRE(f.items[2].enclosures[1].type == "video/quicktime");
 }
 
 TEST_CASE("Multiple links in item", "[rsspp::Parser]")

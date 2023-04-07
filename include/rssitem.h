@@ -94,22 +94,16 @@ public:
 		feedurl_ = f;
 	}
 
-	const std::string& feedurl() const
-	{
-		return feedurl_;
-	}
-
-	const std::string& enclosure_url() const
-	{
-		return enclosure_url_;
-	}
-	const std::string& enclosure_type() const
-	{
-		return enclosure_type_;
-	}
+	const std::string& feedurl() const;
+	const std::string& enclosure_url() const;
+	const std::string& enclosure_type() const;
+	const std::string& enclosure_description() const;
+	const std::string& enclosure_description_mime_type() const;
 
 	void set_enclosure_url(const std::string& url);
 	void set_enclosure_type(const std::string& type);
+	void set_enclosure_description(const std::string& description);
+	void set_enclosure_description_mime_type(const std::string& type);
 
 	bool enqueued()
 	{
@@ -189,6 +183,8 @@ private:
 	Cache* ch;
 	std::string enclosure_url_;
 	std::string enclosure_type_;
+	std::string enclosure_description_;
+	std::string enclosure_description_mime_type_;
 	std::string flags_;
 	std::string oldflags_;
 	std::weak_ptr<RssFeed> feedptr_;

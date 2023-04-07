@@ -10,6 +10,8 @@ namespace rsspp {
 struct Enclosure {
 	std::string url;
 	std::string type;
+	std::string description;
+	std::string description_mime_type;
 };
 
 class Item {

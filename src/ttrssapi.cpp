@@ -421,6 +421,8 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handl
 						rsspp::Enclosure {
 							a["content_url"],
 							a["content_type"],
+							"",
+							"",
 						}
 						);
 						break;
