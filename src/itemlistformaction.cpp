@@ -213,6 +213,43 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 	}
 	break;
+	case OP_MARKITEMREAD: {
+		LOG(Level::INFO, "ItemListFormAction: marking item read at pos `%u'", itempos);
+		if (!visible_items.empty()) {
+			try {
+				const auto message_lifetime = v->get_statusline().show_message_until_finished(
+						_("Marking read flag for article..."));
+				// mark as undeleted
+				visible_items[itempos]
+				.first->set_deleted(false);
+				rsscache->mark_item_deleted(
+					visible_items[itempos]
+					.first->guid(),
+					false);
+				// toggle read
+				visible_items[itempos]
+				.first->set_unread(false);
+				v->get_ctrl()->mark_article_read(
+					visible_items[itempos]
+					.first->guid(),
+					false);
+			} catch (const DbException& e) {
+				v->get_statusline().show_error(strprintf::fmt(
+						_("Error while toggling read flag: %s"),
+						e.what()));
+			}
+			if (!cfg->get_configvalue_as_bool(
+					"toggleitemread-jumps-to-next-unread")) {
+				if (itempos < visible_items.size() - 1) {
+					list.set_position(itempos + 1);
+				}
+			} else {
+				process_operation(OP_NEXTUNREAD);
+			}
+			invalidate(itempos);
+		}
+	}
+	break;
 	case OP_TOGGLEITEMREAD: {
 		LOG(Level::INFO, "ItemListFormAction: toggling item read at pos `%u'", itempos);
 		if (!visible_items.empty()) {
@@ -259,14 +296,6 @@ bool ItemListFormAction::process_operation(Operation op,
 				v->get_statusline().show_error(strprintf::fmt(
 						_("Error while toggling read flag: %s"),
 						e.what()));
-			}
-			if (!cfg->get_configvalue_as_bool(
-					"toggleitemread-jumps-to-next-unread")) {
-				if (itempos < visible_items.size() - 1) {
-					list.set_position(itempos + 1);
-				}
-			} else {
-				process_operation(OP_NEXTUNREAD);
 			}
 			invalidate(itempos);
 		}

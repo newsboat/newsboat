@@ -170,6 +170,13 @@ static const std::vector<OpDesc> opdescs = {
 		KM_ARTICLE
 	},
 	{
+		OP_MARKITEMREAD,
+		"mark-article-read",
+		"y",
+		translatable("Mark read status for article"),
+		KM_ARTICLELIST | KM_ARTICLE
+	},
+	{
 		OP_TOGGLEITEMREAD,
 		"toggle-article-read",
 		"N",
