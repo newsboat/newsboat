@@ -116,7 +116,7 @@ public:
 
 	void set_tags(const std::vector<std::string>& tags);
 	bool matches_tag(const std::string& tag);
-	std::string get_tags() const;
+	std::vector<std::string> get_tags() const;
 	std::string get_firsttag();
 
 	nonstd::optional<std::string> attribute_value(const std::string& attr) const

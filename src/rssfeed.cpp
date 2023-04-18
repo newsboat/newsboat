@@ -107,13 +107,12 @@ std::string RssFeed::get_firsttag()
 	return "";
 }
 
-std::string RssFeed::get_tags() const
+std::vector<std::string> RssFeed::get_tags() const
 {
-	std::string tags;
+	std::vector<std::string> tags;
 	for (const auto& t : tags_) {
 		if (t.substr(0, 1) != "~" && t.substr(0, 1) != "!") {
-			tags.append(t);
-			tags.append(" ");
+			tags.push_back(t);
 		}
 	}
 	return tags;
@@ -190,7 +189,12 @@ nonstd::optional<std::string> RssFeed::attribute_value(const std::string&
 	} else if (attribname == "total_count") {
 		return std::to_string(items_.size());
 	} else if (attribname == "tags") {
-		return get_tags();
+		std::string tags;
+		for (const std::string& t : get_tags()) {
+			tags.append(t);
+			tags.append(" ");
+		}
+		return tags;
 	} else if (attribname == "feedindex") {
 		return std::to_string(idx);
 	}
