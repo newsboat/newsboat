@@ -79,9 +79,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "bitflags"
-version = "2.0.2"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "487f1e0fcbe47deb8b0574e646def1c903389d95241dd1bbcc6ce4a715dfc0c1"
+checksum = "07d1372b52fa64b8af7cf6e3848cfa2dadb81c21e810f144bdd9c26e21895235"
 
 [[package]]
 name = "block"
@@ -747,7 +747,7 @@ dependencies = [
 name = "regex-rs"
 version = "0.1.0"
 dependencies = [
- "bitflags 2.0.2",
+ "bitflags 2.2.0",
  "gettext-rs",
  "libc",
  "strprintf",
