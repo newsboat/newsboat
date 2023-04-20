@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Set the classpath to the directory containing the script
+classpath="$(dirname "$0")"
+
 # Run the Scala program and capture its output
-scala -classpath "$(dirname "$0")" imagePager "$@" | read command
+result=$(scala -classpath "$classpath" imagePager "$@")
 
-echo "Command: $command"
+# Print the result
+#echo "Received result: $result"
 
-# Run the command returned by the Scala program
-eval "$command"
+eval "$result"

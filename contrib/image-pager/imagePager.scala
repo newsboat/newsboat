@@ -32,7 +32,6 @@ def imagePager(kittyString: String, newsboatArticle: String) = {
 
     val filteredImages = Await.result(Future.sequence(images), Duration.Inf)
         .collect { case (url, true) => url }
-        .mkString(" ")
 
     if (!filteredImages.isEmpty) {
         kitty match {
@@ -41,20 +40,19 @@ def imagePager(kittyString: String, newsboatArticle: String) = {
                 //val lines = s"tput lines".!!
                 //val dimensions = s"${cols}x${lines}@0x0".replaceAll("\n", "")
 
-                for (command <- Seq(
-                    // This code is mostly from @heussd's kitty-imager-pager.sh bash script
-                    // for rendering images with kitty (pull request #1956 on newsboat)
+                // This code is mostly from @heussd's kitty-imager-pager.sh bash script
+                // for rendering images with kitty (pull request #1956 on newsboat)
+                val kittyImages = filteredImages
+                    .map(image => s"kitty +kitten icat --hold --scale-up --place \"$$dims\" $image")
+                    .toSeq
+
+                (Seq(
                     "dims=\"$(tput cols)x$(tput lines)@0x0\"",
                     "clear",
                     "kitty +kitten icat --clear",
-                    s"kitty +kitten icat --hold --scale-up --place \"$$dims\" $filteredImages",
-                    "clear",
-                )) {
-                    // Pass the command to `bootstrap_image_pager.sh`
-                    println(command)
-                }
+                ) ++ kittyImages :+ "clear").foreach(println)
             }
-            case false => s"feh $filteredImages".!!
+            case false => s"feh ${filteredImages.mkString(" ")}".!!
         }
     }
 }
