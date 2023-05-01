@@ -1595,6 +1595,10 @@ just works.
 
 include::chapter-environment-variables.asciidoc[]
 
+=== `vim` Mode
+
+include::chapter-vim-mode.asciidoc[]
+
 == Feedback and security
 
 Please report security vulnerabilities to security@newsboat.org, encrypting your

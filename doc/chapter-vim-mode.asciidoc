@@ -1,0 +1,8 @@
+To browse with `vim` keybindings, add the following to your config file:
+
+----
+bind-key h quit
+bind-key l open
+bind-key j up
+bind-key k down
+----
