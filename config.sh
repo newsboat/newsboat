@@ -6,7 +6,7 @@ PKG_CONFIG=${PKG_CONFIG:-pkg-config}
 check_cmd() {
 	cmd=$1
 	printf "Checking for command ${cmd}... "
-    if command -v ${cmd} &> /dev/null ; then
+    if command -v ${cmd} > /dev/null 2>&1 ; then
         echo "found"
     else
         echo "not found"
