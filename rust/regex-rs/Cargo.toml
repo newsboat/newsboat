@@ -10,6 +10,6 @@ license = "MIT"
 [dependencies]
 strprintf = { path="../strprintf" }
 
-bitflags = "2.2"
+bitflags = "2.3"
 libc = ">=0.2.69"
 gettext-rs = "0.7.0"
