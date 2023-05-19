@@ -259,10 +259,10 @@ void PbController::initialize(int argc, char* argv[])
 
 	cfgparser.register_handler("bind-key", keys);
 	cfgparser.register_handler("unbind-key", keys);
+	cfgparser.register_handler("bind", keys);
 
 	NullConfigActionHandler null_cah;
 	cfgparser.register_handler("macro", null_cah);
-	cfgparser.register_handler("bind", null_cah);
 	cfgparser.register_handler("ignore-article", null_cah);
 	cfgparser.register_handler("always-download", null_cah);
 	cfgparser.register_handler("define-filter", null_cah);

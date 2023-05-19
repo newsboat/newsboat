@@ -2,6 +2,7 @@
 #define PODBOAT_VIEW_H_
 
 #include "colormanager.h"
+#include "keymap.h"
 #include "listwidget.h"
 #include "textviewwidget.h"
 #include "stflpp.h"
@@ -34,6 +35,7 @@ private:
 	void set_help_keymap_hint();
 	std::pair<double, std::string> get_speed_human_readable(double kbps);
 	void handle_resize();
+	bool execute_operation(newsboat::Operation op, bool wrap_scroll);
 
 	std::string format_line(const std::string& podlist_format,
 		const Download& dl,
@@ -41,6 +43,8 @@ private:
 		unsigned int width);
 
 	bool update_view;
+	bool quit;
+	bool download_automatically;
 	PbController& ctrl;
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
