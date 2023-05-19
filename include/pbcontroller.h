@@ -24,6 +24,8 @@ public:
 	void initialize(int argc, char* argv[]);
 	int run(PbView& v);
 
+	newsboat::KeyMap& get_keymap();
+
 	std::vector<Download>& downloads()
 	{
 		return downloads_;

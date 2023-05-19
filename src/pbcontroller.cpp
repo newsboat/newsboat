@@ -293,8 +293,6 @@ int PbController::run(PbView& v)
 	}));
 	ql->reload(downloads_);
 
-	v.set_keymap(&keys);
-
 	v.run(automatic_dl, cfg.get_configvalue_as_bool("wrap-scroll"));
 
 	Stfl::reset();
@@ -307,6 +305,11 @@ int PbController::run(PbView& v)
 	std::cout << _("done.") << std::endl;
 
 	return EXIT_SUCCESS;
+}
+
+newsboat::KeyMap& PbController::get_keymap()
+{
+	return keys;
 }
 
 void PbController::print_usage(const char* argv0)

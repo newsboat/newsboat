@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	try {
 		c.initialize(argc, argv);
 
-		podboat::PbView v(&c);
+		podboat::PbView v(c);
 
 		return c.run(v);
 	} catch (const newsboat::Exception& e) {
