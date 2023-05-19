@@ -4,7 +4,7 @@ use nom::{
     character::complete::{alpha1, one_of},
     combinator::{complete, cond, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::{delimited, preceded, separated_pair, terminated, tuple},
+    sequence::{delimited, preceded, terminated, tuple},
     IResult,
 };
 
@@ -162,26 +162,23 @@ fn operation_sequence_with_optional_description(input: &str) -> IResult<&str, Op
 }
 
 fn binding(input: &str) -> IResult<&str, (BindingSource, OperationSequence)> {
-    let parser = separated_pair(key_sequence, many1(whitespace), contexts);
-    let parser = preceded(many0(whitespace), parser);
-    let mut parser = separated_pair(
-        parser,
-        many1(whitespace),
-        operation_sequence_with_optional_description,
-    );
+    let (input, _) = many0(whitespace)(input)?;
+    let (input, key_sequence) = key_sequence(input)?;
+    let (input, _) = many1(whitespace)(input)?;
+    let (input, contexts) = contexts(input)?;
+    let (input, _) = many1(whitespace)(input)?;
+    let (input, operation_sequence) = operation_sequence_with_optional_description(input)?;
 
-    parser(input).map(|result| {
+    Ok((
+        input,
         (
-            result.0,
-            (
-                BindingSource {
-                    key_sequence: result.1 .0 .0,
-                    contexts: result.1 .0 .1,
-                },
-                result.1 .1,
-            ),
-        )
-    })
+            BindingSource {
+                key_sequence,
+                contexts,
+            },
+            operation_sequence,
+        ),
+    ))
 }
 
 pub fn tokenize_binding(input: &str) -> Option<(BindingSource, OperationSequence)> {
