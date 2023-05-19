@@ -352,7 +352,8 @@ void PbView::run_help()
 	help_textview.stfl_replace_lines(listfmt.get_lines_count(),
 		listfmt.format_list());
 
-	bool quit = false;
+	bool quit_help = false;
+	std::vector<std::string> key_sequence;
 
 	do {
 		const char* event = help_form.run(0);
@@ -365,41 +366,61 @@ void PbView::run_help()
 			continue;
 		}
 
-		Operation op = keys.get_operation(event, "help");
-
-		switch (op) {
-		case OP_SK_UP:
-			help_textview.scroll_up();
-			break;
-		case OP_SK_DOWN:
-			help_textview.scroll_down();
-			break;
-		case OP_SK_HOME:
-			help_textview.scroll_to_top();
-			break;
-		case OP_SK_END:
-			help_textview.scroll_to_bottom();
-			break;
-		case OP_SK_PGUP:
-			help_textview.scroll_page_up();
-			break;
-		case OP_SK_PGDOWN:
-			help_textview.scroll_page_down();
-			break;
-		case OP_SK_HALF_PAGE_UP:
-			help_textview.scroll_halfpage_up();
-			break;
-		case OP_SK_HALF_PAGE_DOWN:
-			help_textview.scroll_halfpage_down();
-			break;
-		case OP_HARDQUIT:
-		case OP_QUIT:
-			quit = true;
-			break;
-		default:
-			break;
+		if ((strcmp(event, "ESC") == 0) && !key_sequence.empty()) {
+			key_sequence.clear();
+		} else {
+			key_sequence.push_back(event);
 		}
-	} while (!quit);
+
+		Operation decision = OP_NIL;
+		const auto commands = keys.get_operation(key_sequence, "help", decision);
+
+		if (decision != OP_INTERNAL_UNFINISHED_KEY_SEQUENCE) {
+			key_sequence.clear();
+
+			for (const auto& command : commands) {
+				if (!execute_help_operation(command.op, quit_help)) {
+					break;
+				}
+			}
+		}
+	} while (!quit_help);
+}
+
+bool PbView::execute_help_operation(newsboat::Operation op, bool& quit_help)
+{
+	switch (op) {
+	case OP_SK_UP:
+		help_textview.scroll_up();
+		return true;
+	case OP_SK_DOWN:
+		help_textview.scroll_down();
+		return true;
+	case OP_SK_HOME:
+		help_textview.scroll_to_top();
+		return true;
+	case OP_SK_END:
+		help_textview.scroll_to_bottom();
+		return true;
+	case OP_SK_PGUP:
+		help_textview.scroll_page_up();
+		return true;
+	case OP_SK_PGDOWN:
+		help_textview.scroll_page_down();
+		return true;
+	case OP_SK_HALF_PAGE_UP:
+		help_textview.scroll_halfpage_up();
+		return true;
+	case OP_SK_HALF_PAGE_DOWN:
+		help_textview.scroll_halfpage_down();
+		return true;
+	case OP_HARDQUIT:
+	case OP_QUIT:
+		quit_help = true;
+		return false;
+	default:
+		return false;
+	}
 }
 
 void PbView::set_help_keymap_hint()

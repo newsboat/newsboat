@@ -36,6 +36,7 @@ private:
 	std::pair<double, std::string> get_speed_human_readable(double kbps);
 	void handle_resize();
 	bool execute_operation(newsboat::Operation op, bool wrap_scroll);
+	bool execute_help_operation(newsboat::Operation op, bool& quit_help);
 
 	std::string format_line(const std::string& podlist_format,
 		const Download& dl,
