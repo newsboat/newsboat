@@ -643,22 +643,6 @@ char KeyMap::get_key(const std::string& keycode)
 	return 0;
 }
 
-Operation KeyMap::get_operation(const std::string& keycode,
-	const std::string& context)
-{
-	std::string key;
-	LOG(Level::DEBUG,
-		"KeyMap::get_operation: keycode = %s context = %s",
-		keycode,
-		context);
-	if (keycode.length() > 0) {
-		key = keycode;
-	} else {
-		key = "NIL";
-	}
-	return keymap_[context][key];
-}
-
 std::vector<MacroCmd> KeyMap::get_operation(const std::vector<std::string>& key_sequence,
 	const std::string& context, Operation& decision)
 {

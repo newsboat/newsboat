@@ -14,21 +14,6 @@ static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
 	"dialogs", "dirbrowser"
 };
 
-TEST_CASE("get_operation()", "[KeyMap]")
-{
-	KeyMap k(KM_NEWSBOAT);
-
-	REQUIRE(k.get_operation("u", "article") == OP_SHOWURLS);
-	REQUIRE(k.get_operation("X", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-
-	SECTION("Returns OP_NIL after unset_key()") {
-		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
-	}
-}
-
 TEST_CASE("get_operation() supports multi-key bindings", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -53,25 +38,6 @@ TEST_CASE("get_operation() supports multi-key bindings", "[KeyMap]")
 		REQUIRE(commands.size() == 1);
 		REQUIRE(commands.at(0).op == OP_OPEN);
 		REQUIRE(commands.at(0).args.size() == 0);
-	}
-}
-
-TEST_CASE("unset_key() and set_key()", "[KeyMap]")
-{
-	KeyMap k(KM_NEWSBOAT);
-
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
-
-	SECTION("unset_key() removes the mapping") {
-		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
-
-		SECTION("set_key() sets the mapping") {
-			k.set_key(OP_OPEN, "ENTER", "all");
-			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
-		}
 	}
 }
 

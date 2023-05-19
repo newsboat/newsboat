@@ -1,1 +1,1 @@
-bind-key `echo s` sort
+bind `echo s` everywhere sort
