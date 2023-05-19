@@ -62,7 +62,7 @@ public:
 
 	bool process_op(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr);
+		const std::vector<std::string>* args = nullptr);
 
 	virtual void finished_qna(Operation op);
 
@@ -104,7 +104,7 @@ public:
 protected:
 	virtual bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) = 0;
+		const std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();
 
 	/// The name of the "main" STFL widget, i.e. the one that should be focused

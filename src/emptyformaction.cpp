@@ -34,7 +34,7 @@ const std::vector<KeyMapHintEntry>& EmptyFormAction::get_keymap_hint() const
 
 bool EmptyFormAction::process_operation(Operation /*op*/,
 	bool /*automatic*/,
-	std::vector<std::string>* /*args*/)
+	const std::vector<std::string>* /*args*/)
 {
 	return false;
 }

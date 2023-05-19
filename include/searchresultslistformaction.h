@@ -56,7 +56,7 @@ protected:
 
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		const std::vector<std::string>* args = nullptr) override;
 
 private:
 	std::stack<SearchResult> search_results;

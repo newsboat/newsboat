@@ -18,7 +18,7 @@ public:
 protected:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		const std::vector<std::string>* args = nullptr) override;
 	nonstd::optional<std::uint8_t> open_unread_items_in_browser(
 		std::shared_ptr<RssFeed> feed,
 		bool markread);

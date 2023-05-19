@@ -86,7 +86,7 @@ void FeedListFormAction::prepare()
 
 bool FeedListFormAction::process_operation(Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	const std::vector<std::string>* args)
 {
 	unsigned int pos = 0;
 	if (visible_feeds.size() >= 1) {

@@ -17,7 +17,7 @@ ListFormAction::ListFormAction(View* v,
 
 bool ListFormAction::process_operation(Operation op,
 	bool,
-	std::vector<std::string>*)
+	const std::vector<std::string>*)
 {
 	switch (op) {
 	case OP_CMD_START_1:

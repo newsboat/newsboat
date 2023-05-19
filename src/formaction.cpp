@@ -100,7 +100,7 @@ void FormAction::start_cmdline(std::string default_value)
 
 bool FormAction::process_op(Operation op,
 	bool automatic,
-	std::vector<std::string>* args)
+	const std::vector<std::string>* args)
 {
 	switch (op) {
 	case OP_REDRAW:

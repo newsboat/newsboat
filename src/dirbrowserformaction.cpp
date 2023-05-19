@@ -42,7 +42,7 @@ DirBrowserFormAction::~DirBrowserFormAction() {}
 
 bool DirBrowserFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	const std::vector<std::string>* /* args */)
 {
 	switch (op) {
 	case OP_OPEN: {
