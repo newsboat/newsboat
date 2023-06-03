@@ -490,15 +490,15 @@ void RssParser::set_item_author(std::shared_ptr<RssItem> x,
 	 * some feeds only have a feed-wide managingEditor, which we use as an
 	 * item's author if there is no item-specific one available.
 	 */
-	if (item.author.empty()) {
-		if (!f.managingeditor.empty()) {
-			x->set_author(f.managingeditor);
-		} else {
-			x->set_author(f.dc_creator);
-		}
-	} else {
-		x->set_author(item.author);
+	std::string author = item.author;
+	if (author.empty()) {
+		author = f.managingeditor;
 	}
+	if (author.empty()) {
+		author = f.dc_creator;
+	}
+	replace_newline_characters(author);
+	x->set_author(author);
 }
 
 void RssParser::set_item_content(std::shared_ptr<RssItem> x,
