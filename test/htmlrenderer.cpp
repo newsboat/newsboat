@@ -670,6 +670,41 @@ TEST_CASE(
 	REQUIRE(links[0].second == LinkType::IMG);
 }
 
+TEST_CASE(
+	"Links in tags like <img> and <iframe> have a \"higher priority\" than <a>",
+	"[HtmlRenderer]")
+{
+	HtmlRenderer r;
+
+	const std::string input =
+		"<a href='https://example.com/test.jpg'>"
+		"<img src='https://example.com/test.jpg' />"
+		"</a>"
+		"<p>Check out <a href='https://attachment.zip'>this amazing site</a>!</p>"
+		"<iframe src='https://attachment.zip'></iframe>";
+	std::vector<std::pair<LineType, std::string>> lines;
+	std::vector<LinkPair> links;
+
+	REQUIRE_NOTHROW(r.render(input, lines, links, url));
+	REQUIRE(lines.size() == 9);
+	REQUIRE(lines[0] == p(LineType::wrappable, "<u>[image 1 (link #1)]</>[1]"));
+	REQUIRE(lines[1] == p(LineType::wrappable, ""));
+	REQUIRE(lines[2] == p(LineType::wrappable, "Check out <u>this amazing site</>[2]!"));
+	REQUIRE(lines[3] == p(LineType::wrappable, ""));
+	REQUIRE(lines[4] == p(LineType::wrappable, "[iframe 1 (link #2)]"));
+	REQUIRE(lines[5] == p(LineType::wrappable, ""));
+	REQUIRE(lines[6] == p(LineType::wrappable, "Links: "));
+	REQUIRE(lines[7] ==
+		p(LineType::softwrappable, "[1]: https://example.com/test.jpg (image)"));
+	REQUIRE(lines[8] ==
+		p(LineType::softwrappable, "[2]: https://attachment.zip/ (iframe)"));
+	REQUIRE(links.size() == 2);
+	REQUIRE(links[0].first == "https://example.com/test.jpg");
+	REQUIRE(links[0].second == LinkType::IMG);
+	REQUIRE(links[1].first == "https://attachment.zip/");
+	REQUIRE(links[1].second == LinkType::IFRAME);
+}
+
 TEST_CASE("<blockquote> is indented and is separated by empty lines",
 	"[HtmlRenderer]")
 {

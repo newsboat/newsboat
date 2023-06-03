@@ -85,6 +85,8 @@ unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
 	}
 	if (!found) {
 		links.push_back(LinkPair(link, type));
+	} else if (links[i - 1].second == LinkType::HREF) {
+		links[i - 1].second = type;
 	}
 
 	return i;
