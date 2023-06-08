@@ -386,7 +386,7 @@ mo-files: $(MOFILES)
 
 extract:
 	$(RM) $(POTFILE)
-	xgettext -c/ -k_ -k_s -ktranslatable -o po/cpp.pot *.cpp src/*.cpp rss/*.cpp
+	xgettext -c/ -k_ -k_s -ktranslatable --language=C++ -o po/cpp.pot *.cpp src/*.cpp rss/*.cpp
 	xtr rust/libnewsboat/src/lib.rs rust/regex-rs/src/lib.rs --omit-header -o po/rust.pot
 	cat po/cpp.pot po/rust.pot > $(POTFILE)
 	$(RM) -f po/cpp.pot po/rust.pot
