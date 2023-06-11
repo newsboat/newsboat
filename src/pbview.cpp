@@ -23,15 +23,15 @@ using namespace newsboat;
 
 namespace podboat {
 
-PbView::PbView(PbController* c)
+PbView::PbView(PbController& c)
 	: update_view(true)
 	, ctrl(c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
-	, keys(0)
-	, colorman(ctrl->get_colormanager())
+	, keys(ctrl.get_keymap())
+	, colorman(ctrl.get_colormanager())
 	, downloads_list("dls", dllist_form,
-		  ctrl->get_cfgcont()->get_configvalue_as_int("scrolloff"))
+		  ctrl.get_cfgcont()->get_configvalue_as_int("scrolloff"))
 	, help_textview("helptext", help_form)
 {
 	if (getenv("ESCDELAY") == nullptr) {
@@ -57,18 +57,18 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 	do {
 		if (update_view) {
-			const double total_kbps = ctrl->get_total_kbps();
+			const double total_kbps = ctrl.get_total_kbps();
 			const auto speed = get_speed_human_readable(total_kbps);
 
 			auto title = strprintf::fmt(
 					_("Queue (%u downloads in progress, %u total) - %.2f %s total"),
-					static_cast<unsigned int>(ctrl->downloads_in_progress()),
-					static_cast<unsigned int>(ctrl->downloads().size()),
+					static_cast<unsigned int>(ctrl.downloads_in_progress()),
+					static_cast<unsigned int>(ctrl.downloads().size()),
 					speed.first,
 					speed.second);
 
-			if (ctrl->get_maxdownloads() > 1) {
-				title += strprintf::fmt(_(" - %u parallel downloads"), ctrl->get_maxdownloads());
+			if (ctrl.get_maxdownloads() > 1) {
+				title += strprintf::fmt(_(" - %u parallel downloads"), ctrl.get_maxdownloads());
 			}
 
 			dllist_form.set("head", title);
@@ -77,17 +77,17 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				"PbView::run: updating view... "
 				"downloads().size() "
 				"= %" PRIu64,
-				static_cast<uint64_t>(ctrl->downloads().size()));
+				static_cast<uint64_t>(ctrl.downloads().size()));
 
 			ListFormatter listfmt;
 			const std::string line_format =
-				ctrl->get_cfgcont()->get_configvalue("podlist-format");
+				ctrl.get_cfgcont()->get_configvalue("podlist-format");
 
 			dllist_form.run(-3); // compute all widget dimensions
 			const unsigned int width = downloads_list.get_width();
 
 			unsigned int i = 0;
-			for (const auto& dl : ctrl->downloads()) {
+			for (const auto& dl : ctrl.downloads()) {
 				auto lbuf = format_line(line_format, dl, i, width);
 				listfmt.add_line(lbuf);
 				i++;
@@ -100,17 +100,17 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 		// If there's no status message, we know there's no error to show
 		// Thus, it's safe to replace with the download's status
-		if (dllist_form.get("msg").empty() && ctrl->downloads().size() > 0) {
+		if (dllist_form.get("msg").empty() && ctrl.downloads().size() > 0) {
 			const auto idx = downloads_list.get_position();
-			dllist_form.set("msg", ctrl->downloads()[idx].status_msg());
+			dllist_form.set("msg", ctrl.downloads()[idx].status_msg());
 		}
 
 		const char* event = dllist_form.run(500);
 
 		if (auto_download) {
-			if (ctrl->get_maxdownloads() >
-				ctrl->downloads_in_progress()) {
-				ctrl->start_downloads();
+			if (ctrl.get_maxdownloads() >
+				ctrl.downloads_in_progress()) {
+				ctrl.start_downloads();
 			}
 		}
 
@@ -123,7 +123,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			continue;
 		}
 
-		Operation op = keys->get_operation(event, "podboat");
+		Operation op = keys.get_operation(event, "podboat");
 
 		if (dllist_form.get("msg").length() > 0) {
 			dllist_form.set("msg", "");
@@ -165,7 +165,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			break;
 		case OP_HARDQUIT:
 		case OP_QUIT:
-			if (ctrl->downloads_in_progress() > 0) {
+			if (ctrl.downloads_in_progress() > 0) {
 				dllist_form.set("msg", _("Error: can't quit: download(s) in progress."));
 				update_view = true;
 			} else {
@@ -173,32 +173,32 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			}
 			break;
 		case OP_PB_MOREDL:
-			ctrl->increase_parallel_downloads();
+			ctrl.increase_parallel_downloads();
 			break;
 		case OP_PB_LESSDL:
-			ctrl->decrease_parallel_downloads();
+			ctrl.decrease_parallel_downloads();
 			break;
 		case OP_PB_DOWNLOAD: {
-			if (ctrl->downloads().size() >= 1) {
+			if (ctrl.downloads().size() >= 1) {
 				const auto idx = downloads_list.get_position();
-				auto& item = ctrl->downloads()[idx];
+				auto& item = ctrl.downloads()[idx];
 				if (item.status() != DlStatus::DOWNLOADING) {
-					ctrl->start_download(item);
+					ctrl.start_download(item);
 				}
 			}
 		}
 		break;
 		case OP_PB_PLAY: {
-			if (ctrl->downloads().size() >= 1) {
+			if (ctrl.downloads().size() >= 1) {
 				const auto idx = downloads_list.get_position();
 				DlStatus status =
-					ctrl->downloads()[idx].status();
+					ctrl.downloads()[idx].status();
 				if (status == DlStatus::FINISHED ||
 					status == DlStatus::PLAYED ||
 					status == DlStatus::READY) {
-					ctrl->play_file(ctrl->downloads()[idx]
+					ctrl.play_file(ctrl.downloads()[idx]
 						.filename());
-					ctrl->downloads()[idx].set_status(
+					ctrl.downloads()[idx].set_status(
 						DlStatus::PLAYED);
 				} else {
 					dllist_form.set("msg",
@@ -210,7 +210,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_MARK_FINISHED: {
-			auto& downloads = ctrl->downloads();
+			auto& downloads = ctrl.downloads();
 			if (downloads.size() >= 1) {
 				const auto idx = downloads_list.get_position();
 				DlStatus status =
@@ -225,18 +225,18 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_CANCEL: {
-			if (ctrl->downloads().size() >= 1) {
+			if (ctrl.downloads().size() >= 1) {
 				const auto idx = downloads_list.get_position();
-				if (ctrl->downloads()[idx].status() ==
+				if (ctrl.downloads()[idx].status() ==
 					DlStatus::DOWNLOADING) {
-					ctrl->downloads()[idx].set_status(
+					ctrl.downloads()[idx].set_status(
 						DlStatus::CANCELLED);
 				}
 			}
 		}
 		break;
 		case OP_PB_DELETE: {
-			auto& downloads = ctrl->downloads();
+			auto& downloads = ctrl.downloads();
 			if (downloads.size() >= 1) {
 				const auto idx = downloads_list.get_position();
 				if (downloads[idx].status() !=
@@ -250,12 +250,12 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		break;
 		case OP_PB_PURGE:
-			if (ctrl->downloads_in_progress() > 0) {
+			if (ctrl.downloads_in_progress() > 0) {
 				dllist_form.set("msg",
 					_("Error: unable to perform operation: "
 						"download(s) in progress."));
 			} else {
-				ctrl->purge_queue();
+				ctrl.purge_queue();
 			}
 			update_view = true;
 			break;
@@ -304,7 +304,7 @@ void PbView::run_help()
 
 	help_form.set("head", _("Help"));
 
-	const auto descs = keys->get_keymap_descriptions("podboat");
+	const auto descs = keys.get_keymap_descriptions("podboat");
 
 	ListFormatter listfmt;
 
@@ -333,7 +333,7 @@ void PbView::run_help()
 			continue;
 		}
 
-		Operation op = keys->get_operation(event, "help");
+		Operation op = keys.get_operation(event, "help");
 
 		switch (op) {
 		case OP_SK_UP:
@@ -373,7 +373,7 @@ void PbView::run_help()
 void PbView::set_help_keymap_hint()
 {
 	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
-	const auto keymap_hint = keys->prepare_keymap_hint(hints, "podboat");
+	const auto keymap_hint = keys.prepare_keymap_hint(hints, "podboat");
 	help_form.set("help", keymap_hint);
 }
 
@@ -390,7 +390,7 @@ void PbView::set_dllist_keymap_hint()
 		{OP_HELP, _("Help")}
 	};
 
-	const auto keymap_hint = keys->prepare_keymap_hint(hints, "podboat");
+	const auto keymap_hint = keys.prepare_keymap_hint(hints, "podboat");
 	dllist_form.set("help", keymap_hint);
 }
 

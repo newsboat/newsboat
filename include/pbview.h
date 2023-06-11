@@ -19,13 +19,9 @@ class Download;
 
 class PbView {
 public:
-	explicit PbView(PbController* c = 0);
+	explicit PbView(PbController& c);
 	~PbView();
 	void run(bool auto_download, bool wrap_scroll);
-	void set_keymap(newsboat::KeyMap* k)
-	{
-		keys = k;
-	}
 	void apply_colors_to_all_forms();
 	void set_view_update_necessary()
 	{
@@ -45,10 +41,10 @@ private:
 		unsigned int width);
 
 	bool update_view;
-	PbController* ctrl;
+	PbController& ctrl;
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
-	newsboat::KeyMap* keys;
+	newsboat::KeyMap& keys;
 	const newsboat::ColorManager& colorman;
 
 	ListWidget downloads_list;
