@@ -122,10 +122,19 @@ EnqueueResult QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
 			continue;
 		}
 
+		const auto enclosure_type = item->enclosure_type();
+		const auto enclosure_url = item->enclosure_url();
+
+		if (!enclosure_type.empty() && !utils::is_valid_podcast_type(enclosure_type)) {
+			LOG(Level::DEBUG, "QueueManager::autoenqueue: Skipping enclosure with url `%s'"
+				" because of invalid podcast type `%s'", enclosure_url, enclosure_type);
+			continue;
+		}
+
 		LOG(Level::DEBUG,
 			"QueueManager::autoenqueue: enclosure_url = `%s' enclosure_type = `%s'",
-			item->enclosure_url(),
-			item->enclosure_type());
+			enclosure_url,
+			enclosure_type);
 		if (utils::is_http_url(item->enclosure_url())) {
 			LOG(Level::INFO,
 				"QueueManager::autoenqueue: enqueuing `%s'",
