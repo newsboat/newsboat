@@ -6,5 +6,5 @@ share_capture_1='s|<a class="button primary" href="https://[^>]*><span>Share</sp
 ps_capture='s|<p></p>||g'
 
 cat |  xmllint --format - | sed "$subscription_capture_1" | sed "$subscription_capture_2" | sed "$share_capture_1" | sed "$ps_capture"
-## see <https://stackoverflow.com/questions/19408649/pipe-input-into-a-script> 
+## see <https://stackoverflow.com/questions/19408649/pipe-input-into-a-script>
 ## https://stackoverflow.com/questions/16090869/how-to-pretty-print-xml-from-the-command-line

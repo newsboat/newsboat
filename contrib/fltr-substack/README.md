@@ -29,7 +29,7 @@ wget https://raw.githubusercontent.com/newsboat/newsboat/master/contrib/fltr-sub
 
 #### Add filters automatically (may break stuff!, make backups)
 
-Run `make-fltr-substack.sh` in the same directory which contains your `urls` file. 
+Run `make-fltr-substack.sh` in the same directory which contains your `urls` file.
 
 It will add a filter to all `.substack.com` domains. Though note that there are also substacks which are hosted on their own domain; these would have to be adjusted manually.
 
