@@ -6,7 +6,7 @@ PKG_CONFIG=${PKG_CONFIG:-pkg-config}
 check_cmd() {
 	cmd=$1
 	printf "Checking for command ${cmd}... "
-    if command -v ${cmd} &> /dev/null ; then
+    if command -v ${cmd} > /dev/null 2>&1 ; then
         echo "found"
     else
         echo "not found"
@@ -89,7 +89,7 @@ all_aboard_the_fail_boat() {
 	if [ "x$FAILSTATUS" != "x" ] ; then
 		rm -f config.mk
 		echo ""
-		echo "One or more dependencies couldn't be found. Please install"
+		echo "One or more required dependencies couldn't be found. Please install"
 		echo "these packages and retry compilation."
 		exit 1
 	fi
@@ -113,7 +113,7 @@ check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
 check_pkg "libxml-2.0" || check_custom "libxml2" "xml2-config" || fail "libxml2"
 check_pkg "stfl" || fail "stfl"
-check_cmd "asciidoctor" || fail "asciidoctor"
+check_cmd "asciidoctor" || echo "Install asciidoctor if you plan to build the documentation"
 check_cmd "cargo" || fail "cargo"
 ( check_pkg "json" "" 0.11 || check_pkg "json-c" "" 0.11 ) || fail "json-c"
 
