@@ -696,14 +696,14 @@ void FeedListFormAction::goto_feed(const std::string& str)
 		curpos,
 		str);
 	for (unsigned int i = curpos + 1; i < visible_feeds.size(); ++i) {
-		if (strcasestr(visible_feeds[i].first->title().c_str(),
+		if (strcasestr(get_title(visible_feeds[i].first).c_str(),
 				str.c_str()) != nullptr) {
 			list.set_position(i);
 			return;
 		}
 	}
 	for (unsigned int i = 0; i <= curpos; ++i) {
-		if (strcasestr(visible_feeds[i].first->title().c_str(),
+		if (strcasestr(get_title(visible_feeds[i].first).c_str(),
 				str.c_str()) != nullptr) {
 			list.set_position(i);
 			return;
