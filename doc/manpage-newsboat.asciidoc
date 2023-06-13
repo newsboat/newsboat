@@ -29,7 +29,11 @@ terminals on Unix or Unix-like systems such as GNU/Linux, BSD or macOS.
         Refresh feeds on start
 
 *-e*, *--export-to-opml*::
-        Export feeds as OPML to stdout
+        Export feeds as OPML to stdout. This currently outputs OPML 1.0, losing
+        all tag information, but this is subject to change to 2.0 in the future.
+
+*--export-to-opml2*::
+        Export feeds as OPML 2.0, including tags, to stdout
 
 *-X*, *--vacuum*::
         Compact the cache by: 1) reclaiming the space that was left empty when

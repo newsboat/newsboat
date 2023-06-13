@@ -125,12 +125,15 @@ if you'd like to add support to Newsboat.)
 
 == How can I include tags when exporting to OPML?
 
-In general, you can't. OPML is a hierarchy, i.e. each "category" is either
-nested under some other category, or is at the root of the hierarchy. On the
-other hand, Newsboat's tags are just labels, with no explicit relationships
-between them. Since each feed can have multiple tags, it's not always possible
-to represent the _urls_ file as a hierarchy. Thus, we don't even try.
+You can export an OPML 2.0 file with tags using `--export-to-opml2`.
+
+Not all feed readers support OPML 2.0 files with flat tags. In this case, there
+is not a good way; OPML is primarily designed as a hierarchy, i.e. each
+"category" is either nested under some other category, or is at the root of the
+hierarchy. On the other hand, Newsboat's tags are just labels, with no explicit
+relationships between them. Since each feed can have multiple tags, it's not
+always possible to represent the _urls_ file as a hierarchy.
 
 However, if your feeds have one tag each, you can use
 https://github.com/newsboat/newsboat/blob/master/contrib/exportOPMLWithTags.py[_contrib/exportOPMLWithTags.py_
-script] which will do the job.
+script] which will export in a hierarchy your feed reader should understand.

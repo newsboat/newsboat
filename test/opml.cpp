@@ -16,9 +16,9 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 {
 	const auto check =
 		[]
-		(const FeedContainer& feedcontainer)
+		(const FeedContainer& feedcontainer, bool version2)
 	-> std::string {
-		xmlDocPtr opml = opml::generate(feedcontainer);
+		xmlDocPtr opml = opml::generate(feedcontainer, version2);
 
 		xmlBufferPtr buffer = xmlBufferCreate();
 
@@ -43,11 +43,11 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 
 		const std::string expectedOpmlText(
 			"<?xml version=\"1.0\"?>\n"
-			"<opml version=\"1.0\">"
+			"<opml version=\"2.0\">"
 			"<head><title>Newsboat - Exported Feeds</title></head>"
 			"<body/></opml>\n");
 
-		REQUIRE(check(feeds) == expectedOpmlText);
+		REQUIRE(check(feeds, true) == expectedOpmlText);
 	}
 
 	SECTION("A few feeds") {
@@ -64,9 +64,10 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 		feed = std::make_shared<RssFeed>(&rsscache, "https://example.com/feed2.xml");
 		feed->set_title("Feed 2");
 		feed->set_link("https://example.com/feed2/");
+		feed->set_tags({"tag", "tag,with,commas", "tag/with/slashes", "tag with spaces"});
 		feeds.add_feed(std::move(feed));
 
-		const std::string expectedOpmlText(
+		const std::string expectedOpml1Text(
 			"<?xml version=\"1.0\"?>\n"
 			"<opml version=\"1.0\">"
 			"<head><title>Newsboat - Exported Feeds</title></head>"
@@ -82,7 +83,26 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 			"</body>"
 			"</opml>\n");
 
-		REQUIRE(check(feeds) == expectedOpmlText);
+		const std::string expectedOpml2Text(
+			"<?xml version=\"1.0\"?>\n"
+			"<opml version=\"2.0\">"
+			"<head><title>Newsboat - Exported Feeds</title></head>"
+			"<body>"
+			"<outline type=\"rss\" "
+			"xmlUrl=\"https://example.com/feed1.xml\" "
+			"htmlUrl=\"https://example.com/feed1/\" "
+			"title=\"Feed 1\" "
+			"category=\"\"/>"
+			"<outline type=\"rss\" "
+			"xmlUrl=\"https://example.com/feed2.xml\" "
+			"htmlUrl=\"https://example.com/feed2/\" "
+			"title=\"Feed 2\" "
+			"category=\"tag,tag_with_commas,tag/with/slashes,tag with spaces\"/>"
+			"</body>"
+			"</opml>\n");
+
+		REQUIRE(check(feeds, false) == expectedOpml1Text);
+		REQUIRE(check(feeds, true) == expectedOpml2Text);
 	}
 }
 

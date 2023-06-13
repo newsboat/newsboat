@@ -338,10 +338,10 @@ TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[RssFeed]")
 
 	std::vector<std::string> tags = {"One", "Two"};
 	f.set_tags(tags);
+	REQUIRE(f.get_tags() == tags);
 	tags = {"One", "Three"};
-	REQUIRE(f.get_tags() == "One Two ");
 	f.set_tags(tags);
-	REQUIRE(f.get_tags() == "One Three ");
+	REQUIRE(f.get_tags() == tags);
 }
 
 TEST_CASE(
