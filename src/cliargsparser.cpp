@@ -36,6 +36,11 @@ bool CliArgsParser::do_export() const
 	return newsboat::cliargsparser::bridged::do_export(*rs_object);
 }
 
+bool CliArgsParser::export_as_opml2() const
+{
+	return newsboat::cliargsparser::bridged::export_as_opml2(*rs_object);
+}
+
 bool CliArgsParser::do_vacuum() const
 {
 	return newsboat::cliargsparser::bridged::do_vacuum(*rs_object);

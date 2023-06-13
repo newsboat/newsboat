@@ -28,6 +28,7 @@ mod bridged {
 
         fn do_import(cliargsparser: &CliArgsParser) -> bool;
         fn do_export(cliargsparser: &CliArgsParser) -> bool;
+        fn export_as_opml2(cliargsparser: &CliArgsParser) -> bool;
         fn do_vacuum(cliargsparser: &CliArgsParser) -> bool;
         fn do_cleanup(cliargsparser: &CliArgsParser) -> bool;
         fn do_show_version(cliargsparser: &CliArgsParser) -> u64;
@@ -81,6 +82,10 @@ fn do_import(cliargsparser: &CliArgsParser) -> bool {
 
 fn do_export(cliargsparser: &CliArgsParser) -> bool {
     cliargsparser.0.do_export
+}
+
+fn export_as_opml2(cliargsparser: &CliArgsParser) -> bool {
+    cliargsparser.0.export_as_opml2
 }
 
 fn do_vacuum(cliargsparser: &CliArgsParser) -> bool {

@@ -12,6 +12,7 @@ use strprintf::fmt;
 #[derive(Default)]
 pub struct CliArgsParser {
     pub do_export: bool,
+    pub export_as_opml2: bool,
     pub do_vacuum: bool,
     pub do_cleanup: bool,
     pub program_name: String,
@@ -149,6 +150,12 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
             }
             Short('e') | Long("export-to-opml") => {
                 args.do_export = true;
+                args.export_as_opml2 = false;
+                args.silent = true;
+            }
+            Long("export-to-opml2") => {
+                args.do_export = true;
+                args.export_as_opml2 = true;
                 args.silent = true;
             }
             Short('r') | Long("refresh-on-start") => args.refresh_on_start = true,

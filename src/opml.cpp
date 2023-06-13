@@ -9,12 +9,14 @@
 
 namespace newsboat {
 
-xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
+xmlDocPtr opml::generate(const FeedContainer& feedcontainer, bool version2)
 {
 	xmlDocPtr root = xmlNewDoc((const xmlChar*)"1.0");
 	xmlNodePtr opml_node =
 		xmlNewDocNode(root, nullptr, (const xmlChar*)"opml", nullptr);
-	xmlSetProp(opml_node, (const xmlChar*)"version", (const xmlChar*)"1.0");
+	xmlSetProp(opml_node,
+		(const xmlChar*)"version",
+		(const xmlChar*)(version2 ? "2.0" : "1.0"));
 	xmlDocSetRootElement(root, opml_node);
 
 	xmlNodePtr head = xmlNewTextChild(
@@ -48,6 +50,27 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer)
 			xmlSetProp(outline,
 				(const xmlChar*)"title",
 				(const xmlChar*)title.c_str());
+
+			if (version2) {
+				// OPML 2.0 supports including tags
+				std::vector<std::string> tags = feed->get_tags();
+				std::string opml_tags;
+
+				bool first_tag = true;
+				for (auto t : tags) {
+					utils::trim(t);
+					t = utils::replace_all(t, ",", "_");
+					if (first_tag) {
+						first_tag = false;
+					} else {
+						opml_tags.append(",");
+					}
+					opml_tags.append(t);
+				}
+				xmlSetProp(outline,
+					(const xmlChar*)"category",
+					(const xmlChar*)opml_tags.c_str());
+			}
 		}
 	}
 

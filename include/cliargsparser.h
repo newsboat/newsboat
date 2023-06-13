@@ -20,6 +20,8 @@ public:
 
 	bool do_export() const;
 
+	bool export_as_opml2() const;
+
 	bool do_vacuum() const;
 
 	bool do_cleanup() const;
