@@ -658,9 +658,9 @@ bool ItemListFormAction::process_operation(Operation op,
 		save_filterpos();
 		break;
 	case OP_SORT: {
-		/// This string is related to the letters in parentheses in the
-		/// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
-		/// messages
+		// i18n: This string is related to the letters in parentheses in the
+		// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
+		// messages
 		std::string input_options = _("dtfalgr");
 		char c = v->confirm(
 				_("Sort by "

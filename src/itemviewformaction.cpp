@@ -676,8 +676,8 @@ void ItemViewFormAction::update_percent()
 		} else if (offset == (num_lines - 1)) {
 			set_value("percent", _("Bottom"));
 		} else {
-			/// For translators: `%3u` gets replaced by a number between 0 and 100.
-			/// The `%%` is replaced by a single percent sign.
+			// i18n: For translators: `%3u` gets replaced by a number between 0 and 100.
+			// The `%%` is replaced by a single percent sign.
 			set_value("percent", strprintf::fmt(_("%3u %% "), percent));
 		}
 	}
