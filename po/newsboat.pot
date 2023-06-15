@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2023-03-15 23:28+0300\n"
+"POT-Creation-Date: 2023-06-16 00:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,164 +31,168 @@ msgid "export OPML feed to stdout"
 msgstr ""
 
 #: newsboat.cpp:48
-msgid "refresh feeds on start"
-msgstr ""
-
-#: newsboat.cpp:49 newsboat.cpp:93 newsboat.cpp:99
-msgid "<file>"
+msgid "export OPML 2.0 feed including tags to stdout"
 msgstr ""
 
 #: newsboat.cpp:49
+msgid "refresh feeds on start"
+msgstr ""
+
+#: newsboat.cpp:50 newsboat.cpp:94 newsboat.cpp:100
+msgid "<file>"
+msgstr ""
+
+#: newsboat.cpp:50
 msgid "import OPML file"
 msgstr ""
 
-#: newsboat.cpp:53
+#: newsboat.cpp:54
 msgid "<urlfile>"
 msgstr ""
 
-#: newsboat.cpp:54
+#: newsboat.cpp:55
 msgid "read RSS feed URLs from <urlfile>"
 msgstr ""
 
-#: newsboat.cpp:59
+#: newsboat.cpp:60
 msgid "<cachefile>"
 msgstr ""
 
-#: newsboat.cpp:60
+#: newsboat.cpp:61
 msgid "use <cachefile> as cache file"
 msgstr ""
 
-#: newsboat.cpp:65 src/pbcontroller.cpp:332
+#: newsboat.cpp:66 src/pbcontroller.cpp:335
 msgid "<configfile>"
 msgstr ""
 
-#: newsboat.cpp:66 src/pbcontroller.cpp:333
+#: newsboat.cpp:67 src/pbcontroller.cpp:336
 msgid "read configuration from <configfile>"
 msgstr ""
 
-#: newsboat.cpp:68
+#: newsboat.cpp:69
 msgid "compact the cache"
 msgstr ""
 
-#: newsboat.cpp:72
+#: newsboat.cpp:73
 msgid "<command>..."
 msgstr ""
 
-#: newsboat.cpp:73
+#: newsboat.cpp:74
 msgid "execute list of commands"
 msgstr ""
 
-#: newsboat.cpp:75
+#: newsboat.cpp:76
 msgid "quiet startup"
 msgstr ""
 
-#: newsboat.cpp:76
+#: newsboat.cpp:77
 msgid "get version information"
 msgstr ""
 
-#: newsboat.cpp:80 src/pbcontroller.cpp:345
+#: newsboat.cpp:81 src/pbcontroller.cpp:348
 msgid "<loglevel>"
 msgstr ""
 
-#: newsboat.cpp:81
+#: newsboat.cpp:82
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
 msgstr ""
 
-#: newsboat.cpp:87 src/pbcontroller.cpp:353
+#: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
 msgstr ""
 
-#: newsboat.cpp:88 src/pbcontroller.cpp:354
+#: newsboat.cpp:89 src/pbcontroller.cpp:357
 msgid "use <logfile> as output log file"
 msgstr ""
 
-#: newsboat.cpp:94
+#: newsboat.cpp:95
 msgid "export list of read articles to <file>"
 msgstr ""
 
-#: newsboat.cpp:100
+#: newsboat.cpp:101
 msgid "import list of read articles from <file>"
 msgstr ""
 
-#: newsboat.cpp:102 src/pbcontroller.cpp:356
+#: newsboat.cpp:103 src/pbcontroller.cpp:359
 msgid "this help"
 msgstr ""
 
-#: newsboat.cpp:103
+#: newsboat.cpp:104
 msgid "remove unreferenced items from cache"
 msgstr ""
 
-#: newsboat.cpp:128
+#: newsboat.cpp:129
 msgid "Files:"
 msgstr ""
 
-#. / This is printed out by --help before the path to the config file
-#: newsboat.cpp:130
+#. i18n: This is printed out by --help before the path to the config file
+#: newsboat.cpp:131
 msgid "configuration"
 msgstr ""
 
-#. / This is printed out by --help before the path to the urls file
-#: newsboat.cpp:132
+#. i18n This is printed out by --help before the path to the urls file
+#: newsboat.cpp:133
 msgid "feed URLs"
 msgstr ""
 
-#. / This is printed out by --help before the path to the cache file
-#: newsboat.cpp:134
+#. i18n This is printed out by --help before the path to the cache file
+#: newsboat.cpp:135
 msgid "cache"
 msgstr ""
 
-#: newsboat.cpp:148 src/pbcontroller.cpp:372
+#: newsboat.cpp:149 src/pbcontroller.cpp:375
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
 
-#: newsboat.cpp:151 src/pbcontroller.cpp:375
+#: newsboat.cpp:152 src/pbcontroller.cpp:378
 msgid "For more information, check out https://newsboat.org/"
 msgstr ""
 
-#: newsboat.cpp:172
+#: newsboat.cpp:173
 #, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
 
-#: newsboat.cpp:177
+#: newsboat.cpp:178
 msgid "It bundles:"
 msgstr ""
 
-#: newsboat.cpp:178
+#: newsboat.cpp:179
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
 
-#: newsboat.cpp:181
+#: newsboat.cpp:182
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
 
-#: newsboat.cpp:184
+#: newsboat.cpp:185
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
 
-#: newsboat.cpp:261
+#: newsboat.cpp:262
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
 msgstr ""
 
-#: newsboat.cpp:268
+#: newsboat.cpp:269
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
 msgstr ""
 
-#: newsboat.cpp:274 podboat.cpp:41
+#: newsboat.cpp:275 podboat.cpp:41
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
 msgstr ""
@@ -212,6 +216,10 @@ msgstr ""
 #: src/configcontainer.cpp:160
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
+msgstr ""
+
+#: src/configcontainer.cpp:189
+msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 msgstr ""
 
 #: src/configcontainer.cpp:292
@@ -327,7 +335,7 @@ msgstr ""
 #: src/controller.cpp:430 src/controller.cpp:434 src/controller.cpp:475
 #: src/controller.cpp:482 src/controller.cpp:498 src/controller.cpp:516
 #: src/controller.cpp:527 src/controller.cpp:571 src/pbcontroller.cpp:289
-#: src/pbcontroller.cpp:307
+#: src/pbcontroller.cpp:305
 msgid "done."
 msgstr ""
 
@@ -635,9 +643,9 @@ msgstr ""
 msgid "No feed selected!"
 msgstr ""
 
-#. / This string is related to the letters in parentheses in the
-#. / "Sort by (f)irsttag/..." and "Reverse Sort by
-#. / (f)irsttag/..." messages
+#. i18n: This string is related to the letters in parentheses in the
+#. "Sort by (f)irsttag/..." and "Reverse Sort by
+#. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:137 src/feedlistformaction.cpp:177
 msgid "ftauln"
 msgstr ""
@@ -730,7 +738,7 @@ msgstr ""
 msgid "Search for: "
 msgstr ""
 
-#: src/feedlistformaction.cpp:475 src/formaction.cpp:521 src/formaction.cpp:523
+#: src/feedlistformaction.cpp:475 src/formaction.cpp:520 src/formaction.cpp:522
 #: src/itemlistformaction.cpp:612 src/itemrenderer.cpp:75
 msgid "Title: "
 msgstr ""
@@ -882,35 +890,35 @@ msgstr ""
 msgid "Not a command: %s"
 msgstr ""
 
-#: src/formaction.cpp:474
+#: src/formaction.cpp:473
 msgid "Saving bookmark..."
 msgstr ""
 
-#: src/formaction.cpp:480 src/formaction.cpp:547
+#: src/formaction.cpp:479 src/formaction.cpp:546
 msgid "Saved bookmark."
 msgstr ""
 
-#: src/formaction.cpp:483 src/formaction.cpp:550
+#: src/formaction.cpp:482 src/formaction.cpp:549
 msgid "Error while saving bookmark: "
 msgstr ""
 
-#: src/formaction.cpp:518
+#: src/formaction.cpp:517
 msgid "URL: "
 msgstr ""
 
-#: src/formaction.cpp:525
+#: src/formaction.cpp:524
 msgid "Description: "
 msgstr ""
 
-#: src/formaction.cpp:526
+#: src/formaction.cpp:525
 msgid "Feed title: "
 msgstr ""
 
-#: src/formaction.cpp:541
+#: src/formaction.cpp:540
 msgid "Saving bookmark on autopilot..."
 msgstr ""
 
-#: src/formaction.cpp:688
+#: src/formaction.cpp:682
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -932,40 +940,40 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: src/htmlrenderer.cpp:229
+#: src/htmlrenderer.cpp:231
 msgid "embedded flash:"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1041
+#: src/htmlrenderer.cpp:1043
 msgid "Links: "
 msgstr ""
 
-#: src/htmlrenderer.cpp:1072 src/htmlrenderer.cpp:1075
-#: src/htmlrenderer.cpp:1093
+#: src/htmlrenderer.cpp:1074 src/htmlrenderer.cpp:1077
+#: src/htmlrenderer.cpp:1095
 msgid "link"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1095
+#: src/htmlrenderer.cpp:1097
 msgid "image"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1097
+#: src/htmlrenderer.cpp:1099
 msgid "embedded flash"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1099
+#: src/htmlrenderer.cpp:1101
 msgid "iframe"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1101
+#: src/htmlrenderer.cpp:1103
 msgid "video"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1103
+#: src/htmlrenderer.cpp:1105
 msgid "audio"
 msgstr ""
 
-#: src/htmlrenderer.cpp:1105
+#: src/htmlrenderer.cpp:1107
 msgid "unknown (bug)"
 msgstr ""
 
@@ -1044,9 +1052,9 @@ msgstr ""
 msgid "Pipe article to command: "
 msgstr ""
 
-#. / This string is related to the letters in parentheses in the
-#. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
-#. / messages
+#. i18n: This string is related to the letters in parentheses in the
+#. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
+#. messages
 #: src/itemlistformaction.cpp:664 src/itemlistformaction.cpp:702
 msgid "dtfalgr"
 msgstr ""
@@ -1203,12 +1211,19 @@ msgstr ""
 msgid "Enqueue"
 msgstr ""
 
-#: src/itemviewformaction.cpp:688
+#. i18n: `%3u` gets replaced by a number between 0 and 100.
+#. The `%%` is replaced by a single percent sign.
+#: src/itemviewformaction.cpp:681
+#, c-format
+msgid "%3u %% "
+msgstr ""
+
+#: src/itemviewformaction.cpp:690
 #, c-format
 msgid "Article - %s"
 msgstr ""
 
-#: src/itemviewformaction.cpp:738
+#: src/itemviewformaction.cpp:740
 msgid "Error: invalid regular expression!"
 msgstr ""
 
@@ -1614,7 +1629,7 @@ msgstr ""
 msgid "regular expression '%s' is invalid: %s"
 msgstr ""
 
-#: src/opml.cpp:165
+#: src/opml.cpp:188
 #, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr ""
@@ -1644,30 +1659,30 @@ msgstr ""
 msgid "%s: %d: invalid loglevel value"
 msgstr ""
 
-#: src/pbcontroller.cpp:302
+#: src/pbcontroller.cpp:300
 msgid "Cleaning up queue..."
 msgstr ""
 
-#: src/pbcontroller.cpp:315
+#: src/pbcontroller.cpp:318
 #, c-format
 msgid ""
 "%s %s\n"
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 
-#: src/pbcontroller.cpp:338
+#: src/pbcontroller.cpp:341
 msgid "<queuefile>"
 msgstr ""
 
-#: src/pbcontroller.cpp:339
+#: src/pbcontroller.cpp:342
 msgid "use <queuefile> as queue file"
 msgstr ""
 
-#: src/pbcontroller.cpp:341
+#: src/pbcontroller.cpp:344
 msgid "start download on startup"
 msgstr ""
 
-#: src/pbcontroller.cpp:346
+#: src/pbcontroller.cpp:349
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr ""
 
@@ -1884,7 +1899,7 @@ msgstr ""
 msgid "unsupported feed format"
 msgstr ""
 
-#: rust/libnewsboat/src/cliargsparser.rs:208
+#: rust/libnewsboat/src/cliargsparser.rs:215
 msgid "%s: %s: invalid loglevel value"
 msgstr ""
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2023-03-15 23:28+0300\n"
+"POT-Creation-Date: 2023-06-16 00:38+0300\n"
 "PO-Revision-Date: 2023-03-24 00:37+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
@@ -34,66 +34,71 @@ msgid "export OPML feed to stdout"
 msgstr "експорт теми OPML до стандартного виводу"
 
 #: newsboat.cpp:48
+#, fuzzy
+msgid "export OPML 2.0 feed including tags to stdout"
+msgstr "експорт теми OPML до стандартного виводу"
+
+#: newsboat.cpp:49
 msgid "refresh feeds on start"
 msgstr "оновити теми при старті"
 
-#: newsboat.cpp:49 newsboat.cpp:93 newsboat.cpp:99
+#: newsboat.cpp:50 newsboat.cpp:94 newsboat.cpp:100
 msgid "<file>"
 msgstr "<файл>"
 
-#: newsboat.cpp:49
+#: newsboat.cpp:50
 msgid "import OPML file"
 msgstr "імпортувати файл OPML"
 
-#: newsboat.cpp:53
+#: newsboat.cpp:54
 msgid "<urlfile>"
 msgstr "<файлпосилання>"
 
-#: newsboat.cpp:54
+#: newsboat.cpp:55
 msgid "read RSS feed URLs from <urlfile>"
 msgstr "читати посилання на RSS теми з <файлпосилання>"
 
-#: newsboat.cpp:59
+#: newsboat.cpp:60
 msgid "<cachefile>"
 msgstr "<файлкешу>"
 
-#: newsboat.cpp:60
+#: newsboat.cpp:61
 msgid "use <cachefile> as cache file"
 msgstr "використайте <файлкешу> як файл кешу"
 
-#: newsboat.cpp:65 src/pbcontroller.cpp:332
+#: newsboat.cpp:66 src/pbcontroller.cpp:335
 msgid "<configfile>"
 msgstr "<файлналаштування>"
 
-#: newsboat.cpp:66 src/pbcontroller.cpp:333
+#: newsboat.cpp:67 src/pbcontroller.cpp:336
 msgid "read configuration from <configfile>"
 msgstr "читати налаштування з <файлналаштування>"
 
-#: newsboat.cpp:68
+#: newsboat.cpp:69
 msgid "compact the cache"
 msgstr "стиснути кеш"
 
-#: newsboat.cpp:72
+#: newsboat.cpp:73
 msgid "<command>..."
 msgstr "<команда>..."
 
-#: newsboat.cpp:73
+#: newsboat.cpp:74
 msgid "execute list of commands"
 msgstr "виконати список команд"
 
-#: newsboat.cpp:75
+#: newsboat.cpp:76
 msgid "quiet startup"
 msgstr "мовчазний запуск"
 
-#: newsboat.cpp:76
+#: newsboat.cpp:77
 msgid "get version information"
 msgstr "отримати інформацію про версію"
 
-#: newsboat.cpp:80 src/pbcontroller.cpp:345
+#: newsboat.cpp:81 src/pbcontroller.cpp:348
 msgid "<loglevel>"
 msgstr "<рівеньлогу>"
 
-#: newsboat.cpp:81
+#: newsboat.cpp:82
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
@@ -102,50 +107,50 @@ msgstr ""
 "користувацьких помилок, критичних, звичайних помилок, попереджень, "
 "інформаційних повідомлень та налагоджувальної інформації відповідно)"
 
-#: newsboat.cpp:87 src/pbcontroller.cpp:353
+#: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
 msgstr "<файллогу>"
 
-#: newsboat.cpp:88 src/pbcontroller.cpp:354
+#: newsboat.cpp:89 src/pbcontroller.cpp:357
 msgid "use <logfile> as output log file"
 msgstr "використовуйте <файллогу> як вихідний файл логу"
 
-#: newsboat.cpp:94
+#: newsboat.cpp:95
 msgid "export list of read articles to <file>"
 msgstr "експортувати список прочитаних статей у <файл>"
 
-#: newsboat.cpp:100
+#: newsboat.cpp:101
 msgid "import list of read articles from <file>"
 msgstr "імпортувати список прочитаних статей з <файл>"
 
-#: newsboat.cpp:102 src/pbcontroller.cpp:356
+#: newsboat.cpp:103 src/pbcontroller.cpp:359
 msgid "this help"
 msgstr "ця довідка"
 
-#: newsboat.cpp:103
+#: newsboat.cpp:104
 msgid "remove unreferenced items from cache"
 msgstr "видалити з кешу статті, що більше не потрібні"
 
-#: newsboat.cpp:128
+#: newsboat.cpp:129
 msgid "Files:"
 msgstr "Файли:"
 
-#. / This is printed out by --help before the path to the config file
-#: newsboat.cpp:130
+#. i18n: This is printed out by --help before the path to the config file
+#: newsboat.cpp:131
 msgid "configuration"
 msgstr "налаштування"
 
-#. / This is printed out by --help before the path to the urls file
-#: newsboat.cpp:132
+#. i18n This is printed out by --help before the path to the urls file
+#: newsboat.cpp:133
 msgid "feed URLs"
 msgstr "адреси тем"
 
-#. / This is printed out by --help before the path to the cache file
-#: newsboat.cpp:134
+#. i18n This is printed out by --help before the path to the cache file
+#: newsboat.cpp:135
 msgid "cache"
 msgstr "кеш"
 
-#: newsboat.cpp:148 src/pbcontroller.cpp:372
+#: newsboat.cpp:149 src/pbcontroller.cpp:375
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
@@ -153,11 +158,11 @@ msgstr ""
 "Підтримку шукайте на #newsboat у https://libera.chat чи у нашому списку "
 "розсилки https://groups.google.com/g/newsboat"
 
-#: newsboat.cpp:151 src/pbcontroller.cpp:375
+#: newsboat.cpp:152 src/pbcontroller.cpp:378
 msgid "For more information, check out https://newsboat.org/"
 msgstr "За додатковою інформацією див. https://newsboat.org/"
 
-#: newsboat.cpp:172
+#: newsboat.cpp:173
 #, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
@@ -166,11 +171,11 @@ msgstr ""
 "Newsboat є вільним програмним забезпеченням за ліцензією MIT. (Наберіть `%s -"
 "vv', щоб переглянути повний текст)."
 
-#: newsboat.cpp:177
+#: newsboat.cpp:178
 msgid "It bundles:"
 msgstr "Програма включає в себе:"
 
-#: newsboat.cpp:178
+#: newsboat.cpp:179
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
@@ -178,7 +183,7 @@ msgstr ""
 "- бібліотеку «JSON for Modern C++» за ліцензією MIT: https://github.com/"
 "nlohmann/json"
 
-#: newsboat.cpp:181
+#: newsboat.cpp:182
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
@@ -186,7 +191,7 @@ msgstr ""
 "- бібліотеку «optional-lite» за ліцензією Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 
-#: newsboat.cpp:184
+#: newsboat.cpp:185
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
@@ -194,17 +199,17 @@ msgstr ""
 "- бібліотеку «expected-lite» за ліцензією Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 
-#: newsboat.cpp:261
+#: newsboat.cpp:262
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
 msgstr "Впіймали newsboat::DbException із повідомленням: %s"
 
-#: newsboat.cpp:268
+#: newsboat.cpp:269
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
 msgstr "Впіймали newsboat::MatcherException із повідомленням: %s"
 
-#: newsboat.cpp:274 podboat.cpp:41
+#: newsboat.cpp:275 podboat.cpp:41
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
 msgstr "Впіймали newsboat::Exception із повідомленням: %s"
@@ -231,6 +236,10 @@ msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
 "Newsboat: завантаження завершено, %f непрочитаних тем (%n всього "
 "непрочитаних статей)"
+
+#: src/configcontainer.cpp:189
+msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
+msgstr ""
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -351,7 +360,7 @@ msgstr "Завантаження налаштувань..."
 #: src/controller.cpp:430 src/controller.cpp:434 src/controller.cpp:475
 #: src/controller.cpp:482 src/controller.cpp:498 src/controller.cpp:516
 #: src/controller.cpp:527 src/controller.cpp:571 src/pbcontroller.cpp:289
-#: src/pbcontroller.cpp:307
+#: src/pbcontroller.cpp:305
 msgid "done."
 msgstr "готово."
 
@@ -685,9 +694,9 @@ msgstr "Розшарені статті"
 msgid "No feed selected!"
 msgstr "Не вибрано тем!"
 
-#. / This string is related to the letters in parentheses in the
-#. / "Sort by (f)irsttag/..." and "Reverse Sort by
-#. / (f)irsttag/..." messages
+#. i18n: This string is related to the letters in parentheses in the
+#. "Sort by (f)irsttag/..." and "Reverse Sort by
+#. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:137 src/feedlistformaction.cpp:177
 msgid "ftauln"
 msgstr "ftauln"
@@ -784,7 +793,7 @@ msgstr "Не визначено фільтри."
 msgid "Search for: "
 msgstr "Шукати: "
 
-#: src/feedlistformaction.cpp:475 src/formaction.cpp:521 src/formaction.cpp:523
+#: src/feedlistformaction.cpp:475 src/formaction.cpp:520 src/formaction.cpp:522
 #: src/itemlistformaction.cpp:612 src/itemrenderer.cpp:75
 msgid "Title: "
 msgstr "Назва: "
@@ -936,35 +945,35 @@ msgstr "Операцію не знайдено"
 msgid "Not a command: %s"
 msgstr "Не є командою: `%s'"
 
-#: src/formaction.cpp:474
+#: src/formaction.cpp:473
 msgid "Saving bookmark..."
 msgstr "Зберігаю закладки..."
 
-#: src/formaction.cpp:480 src/formaction.cpp:547
+#: src/formaction.cpp:479 src/formaction.cpp:546
 msgid "Saved bookmark."
 msgstr "Збережені закладки."
 
-#: src/formaction.cpp:483 src/formaction.cpp:550
+#: src/formaction.cpp:482 src/formaction.cpp:549
 msgid "Error while saving bookmark: "
 msgstr "Помилка при зберіганні закладок: "
 
-#: src/formaction.cpp:518
+#: src/formaction.cpp:517
 msgid "URL: "
 msgstr "URL: "
 
-#: src/formaction.cpp:525
+#: src/formaction.cpp:524
 msgid "Description: "
 msgstr "Опис: "
 
-#: src/formaction.cpp:526
+#: src/formaction.cpp:525
 msgid "Feed title: "
 msgstr "Назва теми: "
 
-#: src/formaction.cpp:541
+#: src/formaction.cpp:540
 msgid "Saving bookmark on autopilot..."
 msgstr "Зберігаю закладку на автоматі..."
 
-#: src/formaction.cpp:688
+#: src/formaction.cpp:682
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -988,40 +997,40 @@ msgstr "Макроси:"
 msgid "Clear"
 msgstr "Очистити"
 
-#: src/htmlrenderer.cpp:229
+#: src/htmlrenderer.cpp:231
 msgid "embedded flash:"
 msgstr "вбудований флеш:"
 
-#: src/htmlrenderer.cpp:1041
+#: src/htmlrenderer.cpp:1043
 msgid "Links: "
 msgstr "Посилання: "
 
-#: src/htmlrenderer.cpp:1072 src/htmlrenderer.cpp:1075
-#: src/htmlrenderer.cpp:1093
+#: src/htmlrenderer.cpp:1074 src/htmlrenderer.cpp:1077
+#: src/htmlrenderer.cpp:1095
 msgid "link"
 msgstr "посилання"
 
-#: src/htmlrenderer.cpp:1095
+#: src/htmlrenderer.cpp:1097
 msgid "image"
 msgstr "зображення"
 
-#: src/htmlrenderer.cpp:1097
+#: src/htmlrenderer.cpp:1099
 msgid "embedded flash"
 msgstr "вбудований флеш"
 
-#: src/htmlrenderer.cpp:1099
+#: src/htmlrenderer.cpp:1101
 msgid "iframe"
 msgstr "iframe"
 
-#: src/htmlrenderer.cpp:1101
+#: src/htmlrenderer.cpp:1103
 msgid "video"
 msgstr "відео"
 
-#: src/htmlrenderer.cpp:1103
+#: src/htmlrenderer.cpp:1105
 msgid "audio"
 msgstr "аудіо"
 
-#: src/htmlrenderer.cpp:1105
+#: src/htmlrenderer.cpp:1107
 msgid "unknown (bug)"
 msgstr "невідомо (помилка)"
 
@@ -1100,9 +1109,9 @@ msgstr "Позначаю все, що вище, як прочитані..."
 msgid "Pipe article to command: "
 msgstr "Пайпувати статтю до каманди: "
 
-#. / This string is related to the letters in parentheses in the
-#. / "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
-#. / messages
+#. i18n: This string is related to the letters in parentheses in the
+#. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
+#. messages
 #: src/itemlistformaction.cpp:664 src/itemlistformaction.cpp:702
 msgid "dtfalgr"
 msgstr "dtfalgr"
@@ -1266,12 +1275,19 @@ msgstr "Відкрити у браузері"
 msgid "Enqueue"
 msgstr "Поставити у чергу"
 
-#: src/itemviewformaction.cpp:688
+#. i18n: `%3u` gets replaced by a number between 0 and 100.
+#. The `%%` is replaced by a single percent sign.
+#: src/itemviewformaction.cpp:681
+#, c-format
+msgid "%3u %% "
+msgstr ""
+
+#: src/itemviewformaction.cpp:690
 #, c-format
 msgid "Article - %s"
 msgstr "Стаття - %s"
 
-#: src/itemviewformaction.cpp:738
+#: src/itemviewformaction.cpp:740
 msgid "Error: invalid regular expression!"
 msgstr "Помилка: неправильний вираз!"
 
@@ -1679,7 +1695,7 @@ msgstr "атрибут `%s' не доступний."
 msgid "regular expression '%s' is invalid: %s"
 msgstr "вживаний вираз '%s' неправильний %s"
 
-#: src/opml.cpp:165
+#: src/opml.cpp:188
 #, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Помилка: не вдалося розібрати OPML-файл \"%s\""
@@ -1711,11 +1727,11 @@ msgstr "Помилка: не можу створити конфігурацій�
 msgid "%s: %d: invalid loglevel value"
 msgstr "%s: %d: неправильний рівень логування"
 
-#: src/pbcontroller.cpp:302
+#: src/pbcontroller.cpp:300
 msgid "Cleaning up queue..."
 msgstr "Очищую чергу..."
 
-#: src/pbcontroller.cpp:315
+#: src/pbcontroller.cpp:318
 #, c-format
 msgid ""
 "%s %s\n"
@@ -1724,19 +1740,19 @@ msgstr ""
 "%s %s\n"
 "використання: %s [-C <файл>] [-q <файл>|-e] [-h]\n"
 
-#: src/pbcontroller.cpp:338
+#: src/pbcontroller.cpp:341
 msgid "<queuefile>"
 msgstr "<файл черги>"
 
-#: src/pbcontroller.cpp:339
+#: src/pbcontroller.cpp:342
 msgid "use <queuefile> as queue file"
 msgstr "використовувати <файл черги> як файл черги"
 
-#: src/pbcontroller.cpp:341
+#: src/pbcontroller.cpp:344
 msgid "start download on startup"
 msgstr "починати завантаження при запуску"
 
-#: src/pbcontroller.cpp:346
+#: src/pbcontroller.cpp:349
 msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "записувати лог з визначеним рівнем (дійсні значення: від 1 до 6)"
 
@@ -1957,7 +1973,7 @@ msgstr "не знайдено каналу RSS"
 msgid "unsupported feed format"
 msgstr "формат теми не підтримується"
 
-#: rust/libnewsboat/src/cliargsparser.rs:208
+#: rust/libnewsboat/src/cliargsparser.rs:215
 msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %s: неправильний рівень логування"
 
