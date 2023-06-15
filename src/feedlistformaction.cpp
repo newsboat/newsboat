@@ -131,9 +131,9 @@ REDO:
 		v->get_ctrl()->reload_urls_file();
 		break;
 	case OP_SORT: {
-		/// This string is related to the letters in parentheses in the
-		/// "Sort by (f)irsttag/..." and "Reverse Sort by
-		/// (f)irsttag/..." messages
+		// i18n: This string is related to the letters in parentheses in the
+		// "Sort by (f)irsttag/..." and "Reverse Sort by
+		// (f)irsttag/..." messages
 		std::string input_options = _("ftauln");
 		char c = v->confirm(
 				_("Sort by "
