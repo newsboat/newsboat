@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2023-03-17 08:03+0200\n"
+"PO-Revision-Date: 2023-06-19 08:00+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -32,9 +32,8 @@ msgid "export OPML feed to stdout"
 msgstr "esporta il feed OPML sullo stdout"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "esporta il feed OPML sullo stdout"
+msgstr "esporta il feed OPML 2.0 ed i tag sullo stdout"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -237,7 +236,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -1274,7 +1273,7 @@ msgstr "Accoda"
 #: src/itemviewformaction.cpp:681
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "%3u %% "
 
 #: src/itemviewformaction.cpp:690
 #, c-format
