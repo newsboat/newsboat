@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2023-03-16 19:13+0100\n"
+"PO-Revision-Date: 2023-06-17 11:15+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -33,9 +33,8 @@ msgid "export OPML feed to stdout"
 msgstr "exporteer OPML-feed naar stdout"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "exporteer OPML-feed naar stdout"
+msgstr "exporteer OPML 2.0 feed inclusief tags naar stdout"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -238,7 +237,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -1283,7 +1282,7 @@ msgstr "Aan downloadlijst toevoegen"
 #: src/itemviewformaction.cpp:681
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "%3u %% "
 
 #: src/itemviewformaction.cpp:690
 #, c-format

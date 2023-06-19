@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2023-03-16 13:00+0300\n"
+"PO-Revision-Date: 2023-06-17 14:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -32,9 +32,8 @@ msgid "export OPML feed to stdout"
 msgstr "stdout'a OPML beslemesi dışa aktar"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "stdout'a OPML beslemesi dışa aktar"
+msgstr "etiketler içerilecek biçimde OPML 2.0 beslemesini stdout'a dışa aktar"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -236,7 +235,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%%%-6p] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -585,7 +584,7 @@ msgstr "%s: %s: Bilinmeyen komut"
 #: src/controller.cpp:1017
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
-msgstr "Hata: Yapılandırma dosyası '%s', kaydedilemedi!"
+msgstr "Hata: Yapılandırma dosyası '%s' açılamadı!"
 
 #: src/dialogsformaction.cpp:76
 msgid "Close"
@@ -1265,7 +1264,7 @@ msgstr "URL'ye git: #"
 
 #: src/itemviewformaction.cpp:527 src/urlviewformaction.cpp:166
 msgid "Open in Browser"
-msgstr "Tarayıcıda Görüntüle"
+msgstr "Tarayıcıda Aç"
 
 #: src/itemviewformaction.cpp:528
 msgid "Enqueue"
@@ -1276,7 +1275,7 @@ msgstr "Kuyruğa Ekle"
 #: src/itemviewformaction.cpp:681
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "  %%%u"
 
 #: src/itemviewformaction.cpp:690
 #, c-format
@@ -1553,43 +1552,43 @@ msgstr "Yazının beslemesine git"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
-msgstr "URL 1'i aç"
+msgstr "Aç: URL 1"
 
 #: src/keymap.cpp:418
 msgid "Open URL 2"
-msgstr "URL 2'yi aç"
+msgstr "Aç: URL 2"
 
 #: src/keymap.cpp:419
 msgid "Open URL 3"
-msgstr "URL 3'ü aç"
+msgstr "Aç: URL 3"
 
 #: src/keymap.cpp:420
 msgid "Open URL 4"
-msgstr "URL 4'ü aç"
+msgstr "Aç: URL 4"
 
 #: src/keymap.cpp:421
 msgid "Open URL 5"
-msgstr "URL 5'i aç"
+msgstr "Aç: URL 5"
 
 #: src/keymap.cpp:422
 msgid "Open URL 6"
-msgstr "URL 6'yı aç"
+msgstr "Aç: URL 6"
 
 #: src/keymap.cpp:423
 msgid "Open URL 7"
-msgstr "URL 7'yi aç"
+msgstr "Aç: URL 7"
 
 #: src/keymap.cpp:424
 msgid "Open URL 8"
-msgstr "URL 8'i aç"
+msgstr "Aç: URL 8"
 
 #: src/keymap.cpp:425
 msgid "Open URL 9"
-msgstr "URL 9'u aç"
+msgstr "Aç: URL 9"
 
 #: src/keymap.cpp:426
 msgid "Open URL 10"
-msgstr "URL 10'u aç"
+msgstr "Aç: URL 10"
 
 #: src/keymap.cpp:428
 msgid "Start cmdline with 1"
