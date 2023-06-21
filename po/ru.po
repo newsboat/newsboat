@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2023-03-24 00:33+0300\n"
+"PO-Revision-Date: 2023-06-21 22:24+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -35,9 +35,8 @@ msgid "export OPML feed to stdout"
 msgstr "экспорт ленты OPML в стандартный вывод"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "экспорт ленты OPML в стандартный вывод"
+msgstr "экспорт ленты OPML 2.0 в стандартный вывод"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -241,7 +240,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -1280,7 +1279,7 @@ msgstr "Поставить в очередь"
 #: src/itemviewformaction.cpp:681
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "%3u %% "
 
 #: src/itemviewformaction.cpp:690
 #, c-format
