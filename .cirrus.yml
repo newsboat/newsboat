@@ -127,24 +127,24 @@ task:
                 cc: gcc-5
                 cxx: g++-5
                 rust_version: 1.66.1
-        - name: MSRV, GCC 12 (Ubuntu 22.04)
+        - name: MSRV, GCC 13 (Ubuntu 23.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-12
-                cc: gcc-12
-                cxx: g++-12
+                cxx_package: g++-13
+                cc: gcc-13
+                cxx: g++-13
                 rust_version: 1.66.1
 
-        - name: GCC 12, more warnings and checks (Ubuntu 22.04)
+        - name: GCC 13, more warnings and checks (Ubuntu 23.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_22.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-12
-                cc: gcc-12
-                cxx: g++-12
+                cxx_package: g++-13
+                cc: gcc-13
+                cxx: g++-13
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 14, more warnings and checks (Ubuntu 22.04)
@@ -221,6 +221,14 @@ task:
                 cxx_package: g++-12
                 cc: gcc-12
                 cxx: g++-12
+        - name: Rust stable, GCC 13 (Ubuntu 23.04)
+          container:
+            greedy: true
+            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: g++-13
+                cc: gcc-13
+                cxx: g++-13
         - name: Rust stable, Clang 4.0 (Ubuntu 18.04)
           container:
             greedy: true
