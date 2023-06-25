@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2018-08-08 10:17+0200\n"
+"PO-Revision-Date: 2023-06-24 21:03+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -32,9 +32,8 @@ msgid "export OPML feed to stdout"
 msgstr "exportera OPML-flöde till stdout"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "exportera OPML-flöde till stdout"
+msgstr "exportera OPML 2.0-flöde inklusive taggar till stdout"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -97,11 +96,12 @@ msgid "<loglevel>"
 msgstr "<loggnivå>"
 
 #: newsboat.cpp:82
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "skriv en logg med en särskild loggnivå (giltiga värden: 1 till 6)"
+msgstr ""
+"skriv en logg med en särskild loggnivå (giltiga värden: 1 till 6, för "
+"användarfel, kritiskt, fel, varning, info och debug, in den ordningen)"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
@@ -125,40 +125,38 @@ msgstr "denna hjälp"
 
 #: newsboat.cpp:104
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "ta bort icke-refererade poster från cache"
 
 #: newsboat.cpp:129
-#, fuzzy
 msgid "Files:"
-msgstr "Fil: "
+msgstr "Filer:"
 
 #. i18n: This is printed out by --help before the path to the config file
 #: newsboat.cpp:131
-#, fuzzy
 msgid "configuration"
-msgstr "Läser in konfiguration..."
+msgstr "konfiguration"
 
 #. i18n This is printed out by --help before the path to the urls file
 #: newsboat.cpp:133
-#, fuzzy
 msgid "feed URLs"
-msgstr "URL:er"
+msgstr "webbflödes-URL:er"
 
 #. i18n This is printed out by --help before the path to the cache file
 #: newsboat.cpp:135
-#, fuzzy
 msgid "cache"
-msgstr "<cache-fil>"
+msgstr "cache"
 
 #: newsboat.cpp:149 src/pbcontroller.cpp:375
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Support i #newsboat på https://libera.chat eller på vår e-postlista https://"
+"groups.google.com/g/newsboat"
 
 #: newsboat.cpp:152 src/pbcontroller.cpp:378
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "För mer information, kika in på https://newsboat.org/"
 
 #: newsboat.cpp:173
 #, c-format
@@ -171,49 +169,46 @@ msgstr ""
 
 #: newsboat.cpp:178
 msgid "It bundles:"
-msgstr ""
+msgstr "Den innehåller:"
 
 #: newsboat.cpp:179
-#, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"Det inkluderar biblioteket JSON for Modern C++, licensierat under MIT-"
-"licensen: https://github.com/nlohmann/json"
+"- biblioteket JSON for Modern C++, licensierat under MIT-licensen: https://"
+"github.com/nlohmann/json"
 
 #: newsboat.cpp:182
-#, fuzzy
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"Det inkluderar biblioteket JSON for Modern C++, licensierat under MIT-"
-"licensen: https://github.com/nlohmann/json"
+"- biblioteket optional-lite, licensierat under Boost Software License: "
+"https://github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:185
-#, fuzzy
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"Det inkluderar biblioteket JSON for Modern C++, licensierat under MIT-"
-"licensen: https://github.com/nlohmann/json"
+"- biblioteket expected-lite, licensierat under Boost Software License: "
+"https://github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr "Fångade newsboat::dbexception med meddelande: %s"
+msgstr "Fångade newsboat::DbException med meddelande: %s"
 
 #: newsboat.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr "Fångade newsboat::matcherexception med meddelande: %s"
+msgstr "Fångade newsboat::MatcherException med meddelande: %s"
 
 #: newsboat.cpp:275 podboat.cpp:41
-#, fuzzy, c-format
+#, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr "Fångade newsboat::exception med meddelande: %s"
+msgstr "Fångade newsboat::Exception med meddelande: %s"
 
 #: src/colormanager.cpp:55 src/colormanager.cpp:59 src/regexmanager.cpp:236
 #: src/regexmanager.cpp:250 src/regexmanager.cpp:314 src/regexmanager.cpp:326
@@ -232,41 +227,42 @@ msgid "`%s' is not a valid configuration element"
 msgstr "`%s' är inte ett giltigt konfigurationselement"
 
 #: src/configcontainer.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: omläsning färdig, %f olästa webbflöden (%n olästa artiklar totalt)"
+"Newsboat: omläsning färdig, %f olästa flöden (%n olästa artiklar totalt)"
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 msgstr ""
 
 #: src/configcontainer.cpp:292
-#, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
-msgstr "%N %V - Artiklar i webbflöden '%T' (%u olästa, %t totalt) - %U"
+msgstr ""
+"%N %V - Artiklar i webbflödet '%T' (%u olästa, %t totalt)%?F? matchande "
+"filter '%F'&? - %U"
 
 #: src/configcontainer.cpp:296
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialogrutor"
 
 #: src/configcontainer.cpp:299
-#, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
-msgstr "%N %V - Dina webbflöden (%u olästa, %t totalt)%?T? - tag `%T'&?"
+msgstr ""
+"%N %V - %?F?Flöden&Dina flöden? (%u olästa, %t totalt)%?F? matchande "
+"filter '%F'&?%?T? - tagg '%T'&?"
 
 #: src/configcontainer.cpp:303
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Öppna fil&Spara fil? - %f"
 
 #: src/configcontainer.cpp:307
-#, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
-msgstr "%N %V - %?O?Öppna fil&Spara fil? - %f"
+msgstr "%N %V - %?O?Öppna katalog&Spara fil? - %f"
 
 #: src/configcontainer.cpp:311
 msgid "%N %V - Help"
@@ -277,11 +273,12 @@ msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Artikel '%T' (%u olästa, %t totalt)"
 
 #: src/configcontainer.cpp:318
-#, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
-msgstr "%N %V - Sökresultat (%u olästa, %t totalt)"
+msgstr ""
+"%N %V - Sökresultat för '%s' (%u olästa, %t totalt)%?F? matchande filter "
+"'%F'&?"
 
 #: src/configcontainer.cpp:322
 msgid "%N %V - Select Filter"
@@ -319,9 +316,8 @@ msgid "too few parameters."
 msgstr "för få parametrar."
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "för få parametrar."
+msgstr "för många parametrar."
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
@@ -334,7 +330,7 @@ msgstr "fil kunde inte öppnas."
 #: src/configparser.cpp:105
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s rad %u"
 
 #: src/configparser.cpp:132
 #, c-format
@@ -342,9 +338,9 @@ msgid "unknown command `%s'"
 msgstr "okänt kommando `%s'"
 
 #: src/configparser.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "Fel vid behandling av kommando `%s' (%s rad %u): %s"
+msgstr "Fel vid behandling av kommando `%s' (%s): %s"
 
 #: src/controller.cpp:154 src/pbcontroller.cpp:233
 #, c-format
@@ -364,13 +360,13 @@ msgid "done."
 msgstr "färdig."
 
 #: src/controller.cpp:212 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "Fel: en instans av %s körs redan (PID: %u)"
+msgstr "Fel: en instans av %s körs redan (PID: %s)"
 
 #: src/controller.cpp:218 src/pbcontroller.cpp:248
 msgid "Error: "
-msgstr ""
+msgstr "Fel: "
 
 #: src/controller.cpp:224 src/controller.cpp:429
 msgid "Opening cache..."
@@ -391,37 +387,43 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s är oåtkomlig och kan inte skapas\n"
 
 #: src/controller.cpp:292
-#, fuzzy
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr "FEL: Du måste sätta 'cookie-cache' till att använda NewsBlur.\n"
+msgstr "FEL: Du måste ställa in `freshrss-url` för att använda FreshRSS\n"
 
 #: src/controller.cpp:304
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
+"FEL: Du måste ställa in `freshrss-login` och en av `freshrss-password`, "
+"`freshrss-passwordfile` eller `freshrss-passwordeval` för att använda "
+"FreshRSS\n"
 
 #: src/controller.cpp:319
-#, fuzzy
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
-msgstr "FEL: Du måste sätta 'cookie-cache' till att använda NewsBlur.\n"
+msgstr "FEL: Du måste ställa in `miniflux-url` för att använda Miniflux\n"
 
 #: src/controller.cpp:336
 msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
+"FEL: Du måste tillhandahålla en API-token eller ett användarnamn/lösenord-par "
+"för att använda Miniflux. Vänligen ställ in de lämpliga miniflux-*-"
+"inställnignarna\n"
 
 #: src/controller.cpp:347
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"FEL: Du måste ställa in *både* `inoreader-app-id` och `inoreader-app-key` "
+"för att använda Inoreader.\n"
 
 #: src/controller.cpp:354
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "FEL: Okänd urls-källa: `%s'"
 
 #: src/controller.cpp:361
 #, c-format
@@ -478,26 +480,24 @@ msgstr ""
 "konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:413
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt NewsBlur-"
+"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Miniflux-"
 "konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:418
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt NewsBlur-"
-"konto. Var god gör det och prova igen."
+"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Owncloud/"
+"Nextcloud-konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:431
 msgid "Cleaning up cache thoroughly..."
-msgstr "Tömmer noggrant cache..."
+msgstr "Tömmer cache noggrant..."
 
 #: src/controller.cpp:439
 msgid "Loading articles from cache..."
@@ -534,6 +534,8 @@ msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
+"%<PRIu64> oåtkomliga webbflöden hittade. Se `cleanup-on-quit` i newsboat(1) "
+"för detaljer."
 
 #: src/controller.cpp:587
 msgid "failed: "
@@ -547,22 +549,22 @@ msgstr "Fel: kunde inte markera alla webbflödeer som lästa: %s"
 #: src/controller.cpp:714 src/itemutils.cpp:32
 #, c-format
 msgid "Generated filename (%s) is used already."
-msgstr ""
+msgstr "Det genererade filnamnet (%s) används redan."
 
 #: src/controller.cpp:719 src/itemutils.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open queue file: %s."
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Kunde inte öppna köfil: %s."
 
 #: src/controller.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Fel vid inläsning av OPML till urls-fil %s: %s"
 
 #: src/controller.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while parsing %s: %s"
-msgstr "Ett fel inträffade vid tolkning av %s."
+msgstr "Ett fel inträffade vid tolkning av %s: %s"
 
 #: src/controller.cpp:757
 #, c-format
@@ -607,7 +609,7 @@ msgstr "Ogiltig position!"
 
 #: src/dirbrowserformaction.cpp:274
 msgid "Directory: "
-msgstr ""
+msgstr "Katalog: "
 
 #: src/dirbrowserformaction.cpp:294 src/filebrowserformaction.cpp:320
 #: src/pbview.cpp:384 src/selectformaction.cpp:251 src/selectformaction.cpp:254
@@ -620,9 +622,9 @@ msgid "Save"
 msgstr "Spara"
 
 #: src/dirbrowserformaction.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Save Files - %s"
-msgstr "Spara fil - %s"
+msgstr "Spara filer - %s"
 
 #: src/download.cpp:65
 msgid "queued"
@@ -661,9 +663,8 @@ msgid "played"
 msgstr "uppspelad"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "misslyckad"
+msgstr "namnbyte misslyckades"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -715,9 +716,8 @@ msgstr ""
 #: src/feedlistformaction.cpp:579 src/itemlistformaction.cpp:182
 #: src/itemlistformaction.cpp:205 src/itemlistformaction.cpp:792
 #: src/itemviewformaction.cpp:512
-#, fuzzy
 msgid "Failed to spawn browser"
-msgstr "Öppna artikel i webbläsare"
+msgstr "Misslyckades att starta webbläsare"
 
 #: src/feedlistformaction.cpp:243 src/feedlistformaction.cpp:273
 #: src/feedlistformaction.cpp:582 src/itemlistformaction.cpp:185
@@ -725,12 +725,11 @@ msgstr "Öppna artikel i webbläsare"
 #: src/itemviewformaction.cpp:515
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Webbläsare returnerade felkod %i"
 
 #: src/feedlistformaction.cpp:305 src/itemlistformaction.cpp:481
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Vill du verkligen skriva över %s' (j:Ja n:Nej)? "
+msgstr "Vill du verkligen markera detta webbflöde som läst (j:Ja n:Nej)? "
 
 #: src/feedlistformaction.cpp:306 src/feedlistformaction.cpp:394
 #: src/feedlistformaction.cpp:509 src/filebrowserformaction.cpp:125
@@ -768,18 +767,17 @@ msgid "Already on first feed."
 msgstr "Redan på första webbflödet."
 
 #: src/feedlistformaction.cpp:393
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "Vill du verkligen skriva över %s' (j:Ja n:Nej)? "
+msgstr "Vill du verkligen markera alla flöden som lästa (j:Ja n:Nej)? "
 
 #: src/feedlistformaction.cpp:397
 msgid "Marking all feeds read..."
 msgstr "Markerar alla webbflöden som lästa..."
 
 #: src/feedlistformaction.cpp:440 src/itemlistformaction.cpp:629
-#, fuzzy, c-format
+#, c-format
 msgid "No filter found with name `%s'."
-msgstr "Inga filter definierade."
+msgstr "Inga filter med namn `%s' hittades."
 
 #: src/feedlistformaction.cpp:448 src/itemlistformaction.cpp:637
 msgid "No filters defined."
@@ -875,9 +873,9 @@ msgid "Feed List - %u unread, %u total"
 msgstr "Lista över webbflöden - %u olästa, %u totalt"
 
 #: src/feedlistformaction.cpp:1115 src/itemlistformaction.cpp:1616
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "kunde inte tolka filteruttryck `%s': %s"
+msgstr "Fel: kunde inte tolka filteruttryck `%s': %s"
 
 #: src/filebrowserformaction.cpp:122
 #, c-format
@@ -898,9 +896,9 @@ msgid "Save File - %s"
 msgstr "Spara fil - %s"
 
 #: src/fileurlreader.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Fel: kunde inte öppna filen \"%s\": %s"
 
 #: src/filtercontainer.cpp:37 src/regexmanager.cpp:352 src/rssfeed.cpp:64
 #: src/rssignores.cpp:45
@@ -909,9 +907,8 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "kunde inte tolka filteruttryck `%s': %s"
 
 #: src/formaction.cpp:127
-#, fuzzy
 msgid "usage: set <config-option> <value>"
-msgstr "användning: set <variabel>[=<värde>]"
+msgstr "användning: set <konfigurationsalternativ> <värde>"
 
 #: src/formaction.cpp:255
 msgid "usage: set <variable>[=<value>]"
@@ -932,12 +929,11 @@ msgstr "Sparade konfiguration till %s"
 
 #: src/formaction.cpp:300
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "användning: exec <operation>"
 
 #: src/formaction.cpp:306
-#, fuzzy
 msgid "Operation not found"
-msgstr "attribut hittades inte"
+msgstr "Operation hittades inte"
 
 #: src/formaction.cpp:330
 #, c-format
@@ -990,7 +986,7 @@ msgstr "Icke-bundna funktioner:"
 
 #: src/helpformaction.cpp:186
 msgid "Macros:"
-msgstr ""
+msgstr "Makron:"
 
 #: src/helpformaction.cpp:217
 msgid "Clear"
@@ -1019,15 +1015,15 @@ msgstr "inbäddat flash"
 
 #: src/htmlrenderer.cpp:1101
 msgid "iframe"
-msgstr ""
+msgstr "iframe"
 
 #: src/htmlrenderer.cpp:1103
 msgid "video"
-msgstr ""
+msgstr "video"
 
 #: src/htmlrenderer.cpp:1105
 msgid "audio"
-msgstr ""
+msgstr "ljud"
 
 #: src/htmlrenderer.cpp:1107
 msgid "unknown (bug)"
@@ -1054,9 +1050,8 @@ msgid "No item selected!"
 msgstr "Ingen post markerad!"
 
 #: src/itemlistformaction.cpp:108
-#, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "Vill du verkligen skriva över %s' (j:Ja n:Nej)? "
+msgstr "Vill du verkligen ta bort alla artiklar (j:Ja n:Nej)? "
 
 #: src/itemlistformaction.cpp:221 src/itemviewformaction.cpp:398
 msgid "Toggling read flag for article..."
@@ -1113,20 +1108,20 @@ msgstr "Skicka artikel genom pipe till kommando: "
 #. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. messages
 #: src/itemlistformaction.cpp:664 src/itemlistformaction.cpp:702
-#, fuzzy
 msgid "dtfalgr"
-msgstr "dtFflg"
+msgstr "dtFflgs"
 
 #: src/itemlistformaction.cpp:666
-#, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
-msgstr "Sortera utifrån (d)atum/(t)itel/(F)laggor/(f)örfattare/(l)änk/(g)uid?"
+msgstr ""
+"Sortera utifrån (d)atum/(t)itel/(F)laggor/(f)örfattare/(l)änk/(g)uid/"
+"(s)lumpmässigt?"
 
 #: src/itemlistformaction.cpp:704
-#, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
-"Sortera omvänt utifrån (d)atum/(t)itel/(F)laggor/(f)örfattare/(l)änk/(g)uid?"
+"Sortera omvänt utifrån (d)atum/(t)itel/(F)laggor/(f)örfattare/(l)änk/(g)uid/"
+"(s)lumpmässigt?"
 
 #: src/itemlistformaction.cpp:870 src/itemviewformaction.cpp:604
 msgid "Flags updated."
@@ -1141,8 +1136,8 @@ msgstr "Fel: verkställande av filtret misslyckades: %s"
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 dag sedan"
+msgstr[1] "%u dagar sedan"
 
 #: src/itemlistformaction.cpp:1396 src/itemviewformaction.cpp:229
 #: src/itemviewformaction.cpp:579
@@ -1160,9 +1155,8 @@ msgid "Error: couldn't save article to %s"
 msgstr "Fel: kunde inte spara artikel till %s"
 
 #: src/itemlistformaction.cpp:1413
-#, fuzzy
 msgid "Error: no filename provided"
-msgstr "Fel: ingen post markerad!"
+msgstr "Fel: inget filnamn angivet"
 
 #: src/itemlistformaction.cpp:1498
 #, c-format
@@ -1176,7 +1170,7 @@ msgstr "Artikellista - %s"
 
 #: src/itemlistformaction.cpp:1552
 msgid "yanq"
-msgstr ""
+msgstr "janq"
 
 #: src/itemlistformaction.cpp:1574
 #, c-format
@@ -1184,11 +1178,13 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Skriv över `%s' i `%s'? Det finns ytterligare %d konflikter som denna (j:Ja "
+"a:Ja till alla n:Nej q:Nej till alla)"
 
 #: src/itemlistformaction.cpp:1581
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr ""
+msgstr "Skriv över `%s' i `%s'? (j:Ja n:Nej)"
 
 #: src/itemrenderer.cpp:73
 msgid "Feed: "
@@ -1231,7 +1227,7 @@ msgstr "Lade till %s i hämtningskö."
 #: src/itemutils.cpp:27
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s är redan kölagd."
 
 #: src/itemviewformaction.cpp:63 src/itemviewformaction.cpp:675
 msgid "Top"
@@ -1278,7 +1274,7 @@ msgstr "Kölägg"
 #: src/itemviewformaction.cpp:681
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "%3u %% "
 
 #: src/itemviewformaction.cpp:690
 #, c-format
@@ -1295,7 +1291,7 @@ msgstr "Öppna webbflöde/artikel"
 
 #: src/keymap.cpp:45
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Växla fokus mellan widgets"
 
 #: src/keymap.cpp:48
 msgid "Return to previous dialog/Quit"
@@ -1330,19 +1326,16 @@ msgid "Save article"
 msgstr "Spara artikel"
 
 #: src/keymap.cpp:86
-#, fuzzy
 msgid "Save articles"
-msgstr "Spara artikel"
+msgstr "Spara artiklar"
 
 #: src/keymap.cpp:91
-#, fuzzy
 msgid "Go to next entry"
-msgstr "Flytta till nästa post"
+msgstr "Gå till nästa post"
 
 #: src/keymap.cpp:98
-#, fuzzy
 msgid "Go to previous entry"
-msgstr "Flytta till föregående post"
+msgstr "Gå till föregående post"
 
 #: src/keymap.cpp:105
 msgid "Go to next unread article"
@@ -1357,9 +1350,8 @@ msgid "Go to a random unread article"
 msgstr "Gå till en slumpmässigt vald oläst artikel"
 
 #: src/keymap.cpp:126
-#, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read"
-msgstr "Öppna artikel i webbläsare och markera som läst"
+msgstr "Öppna artikelns URL, eller posten i URL-vyn. Markera som läst"
 
 #: src/keymap.cpp:133
 msgid "Open all unread items of selected feed in browser"
@@ -1372,14 +1364,13 @@ msgstr ""
 "lästa"
 
 #: src/keymap.cpp:148
-#, fuzzy
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr "Öppna artikel i webbläsare och markera som läst"
+msgstr "Öppna artikelns, flödets eller postens URL i URL-vyn"
 
 #: src/keymap.cpp:155
-#, fuzzy
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "Öppna artikel i webbläsare och markera som läst"
+msgstr ""
+"Öppna artikelns, flödets eller postens URL i en webbläsare, icke-interaktivt"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
@@ -1415,7 +1406,7 @@ msgstr "Öppna sökdialogrutan"
 
 #: src/keymap.cpp:204
 msgid "Goto item with title"
-msgstr ""
+msgstr "Gå till post med titel"
 
 #: src/keymap.cpp:205
 msgid "Add download to queue"
@@ -1514,9 +1505,8 @@ msgid "Delete article"
 msgstr "Ta bort artikel"
 
 #: src/keymap.cpp:335
-#, fuzzy
 msgid "Delete all articles"
-msgstr "Ta bort artikel"
+msgstr "Ta bort alla artiklar"
 
 #: src/keymap.cpp:342
 msgid "Purge deleted articles"
@@ -1555,14 +1545,12 @@ msgid "Sort current list (reverse)"
 msgstr "Sortera aktuell lista (omvänt)"
 
 #: src/keymap.cpp:406
-#, fuzzy
 msgid "Return to previous search results (if any)"
-msgstr "Återvänd till föregående dialogruta/Avsluta"
+msgstr "Återvänd till föregående sökresultat (om sådana finns)"
 
 #: src/keymap.cpp:413
-#, fuzzy
 msgid "Go to the feed of the article"
-msgstr "Gå till nästa olästa artikel"
+msgstr "Gå till webbflödet som artikeln hör till"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
@@ -1606,39 +1594,39 @@ msgstr "Öppna url 10"
 
 #: src/keymap.cpp:428
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Starta cmdline med 1"
 
 #: src/keymap.cpp:429
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Starta cmdline med 2"
 
 #: src/keymap.cpp:430
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Starta cmdline med 3"
 
 #: src/keymap.cpp:431
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Starta cmdline med 4"
 
 #: src/keymap.cpp:432
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Starta cmdline med 5"
 
 #: src/keymap.cpp:433
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Starta cmdline med 6"
 
 #: src/keymap.cpp:434
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Starta cmdline med 7"
 
 #: src/keymap.cpp:435
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Starta cmdline med 8"
 
 #: src/keymap.cpp:436
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Starta cmdline med 9"
 
 #: src/keymap.cpp:438
 msgid "Move to the previous entry"
@@ -1658,11 +1646,11 @@ msgstr "Flytta till nästa sida"
 
 #: src/keymap.cpp:454
 msgid "Move half page up"
-msgstr ""
+msgstr "Flytta en halv sida uppåt"
 
 #: src/keymap.cpp:455
 msgid "Move half page down"
-msgstr ""
+msgstr "Flytta en halv sida nedåt"
 
 #: src/keymap.cpp:461
 msgid "Move to the start of page/list"
@@ -1683,14 +1671,14 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' är inte ett giltigt tangentkommando"
 
 #: src/keymap.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr ""
 
 #: src/keymap.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid operation"
-msgstr "`%s' är inte en giltig kontext"
+msgstr "`%s' är inte en giltig operation"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1703,9 +1691,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr "reguljärt uttryck '%s' är ogiltigt: %s"
 
 #: src/opml.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to parse OPML file \"%s\""
-msgstr "Fel: kunde inte skriva artikel till fil %s"
+msgstr "Fel: kunde inte tolka OPML-fil \"%s\""
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1764,9 +1752,9 @@ msgid "write a log with a certain loglevel (valid values: 1 to 6)"
 msgstr "skriv en logg med en särskild loggnivå (giltiga värden: 1 till 6)"
 
 #: src/pbview.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "Kölista (%u pågående hämtningar, %u totalt) - %.2f kb/s totalt%s"
+msgstr "Kölista (%u pågående hämtningar, %u totalt) - %.2f %s totalt"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1787,15 +1775,15 @@ msgstr "Fel: kan inte utföra åtgärd: hämtning(ar) pågår."
 
 #: src/pbview.cpp:293
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: src/pbview.cpp:295
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: src/pbview.cpp:297
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: src/pbview.cpp:383
 msgid "Download"
@@ -1828,6 +1816,9 @@ msgid ""
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
+"VARNING: Kommentar hittades i %s. Köfilen genereras om när Podboat avslutas "
+"och kommenterar kommer att raderas. Tryck Enter för att fortsätta eller "
+"Ctrl+C för att avbryta"
 
 #: src/regexmanager.cpp:220
 #, c-format
@@ -1867,14 +1858,12 @@ msgid "Error: unsupported URL: %s"
 msgstr "Fel: URL stöds inte: %s"
 
 #: src/searchresultslistformaction.cpp:18
-#, fuzzy
 msgid "Prev search results"
-msgstr "Sökresultat - '%s'"
+msgstr "Föreg. sökresultat"
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "Redan på första webbflödet."
+msgstr "Redan på första sökresultatet."
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
@@ -1890,9 +1879,8 @@ msgid "Select Filter"
 msgstr "Välj filter"
 
 #: src/urlviewformaction.cpp:64 src/urlviewformaction.cpp:121
-#, fuzzy
 msgid "No links available!"
-msgstr "Ingen länk markerad!"
+msgstr "Inga länkar tillgängliga!"
 
 #: src/urlviewformaction.cpp:167
 msgid "Save Bookmark"
@@ -1903,18 +1891,18 @@ msgid "URLs"
 msgstr "URL:er"
 
 #: src/utils.cpp:746
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file: %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Kunde inte öppna fil: %s"
 
 #: src/utils.cpp:750
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read line %u: %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Kunde inte läsa rad %u: %s"
 
 #: src/view.cpp:171
 msgid "Error: failed to execute startup commands"
-msgstr ""
+msgstr "Fel: misslyckades att köra uppstartskommandon"
 
 #: src/view.cpp:294
 msgid "Operation ignored in modal dialog"
@@ -1923,7 +1911,7 @@ msgstr ""
 #: src/view.cpp:410
 #, c-format
 msgid "Running browser: %s"
-msgstr ""
+msgstr "Kör webbläsare: %s"
 
 #: src/view.cpp:477 src/view.cpp:503
 msgid "Error: feed contains no items!"
@@ -1938,9 +1926,9 @@ msgid "Updating query feed..."
 msgstr "Uppdaterar query feed..."
 
 #: src/view.cpp:987
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "Fel: kunde inte markera webbflöde som läst: %s"
+msgstr "Fel: kunde inte förbereda frågeflöde: %s"
 
 #: rss/atomparser.cpp:19 rss/parser.cpp:382 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:20 rss/rss20parser.cpp:21
@@ -1980,9 +1968,8 @@ msgid "unsupported feed format"
 msgstr "format på webbflödet stöds inte"
 
 #: rust/libnewsboat/src/cliargsparser.rs:215
-#, fuzzy
 msgid "%s: %s: invalid loglevel value"
-msgstr "%s: %d: ogiltigt loggnivåvärde"
+msgstr "%s: %s: ogiltigt loggnivåvärde"
 
 #: rust/libnewsboat/src/configpaths.rs:85
 msgid ""
@@ -1995,21 +1982,19 @@ msgstr ""
 
 #: rust/libnewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr ""
+msgstr "Migrerar konfigurationer och data från Newsbeuters XDG-kataloger..."
 
 #: rust/libnewsboat/src/configpaths.rs:202
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr ""
+msgstr "Migrerar konfigurationer och data från ~/.newsbeuter/..."
 
 #: rust/libnewsboat/src/configpaths.rs:214
-#, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
-msgstr "Fel: öppnande av cache-fil `%s' misslyckades: %s"
+msgstr "Avbryter migration på grund av att mkdir på `%s' misslyckades: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:129
-#, fuzzy
 msgid "attribute name"
-msgstr "attribut hittades inte"
+msgstr ""
 
 #. Don't translate "between" -- it's a keyword, not an English word.
 #: rust/libnewsboat/src/filterparser.rs:131
@@ -2025,40 +2010,39 @@ msgstr ""
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr ""
+msgstr "Tolkningsfel: släpande tecken efter position %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
 msgid "Parse error at position %s: expected %s"
-msgstr ""
+msgstr "Tolkningsfel vid position %s: förväntade %s"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
-msgstr ""
+msgstr "Internt tolkningsfel"
 
 #: rust/libnewsboat/src/fslock.rs:57
-#, fuzzy
 msgid "Failed to open lock file '%s': %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Kunde inte öppna låsfil '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:80
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<filnamn innehållande ogiltig UTF-8-kodpunkt>"
 
 #: rust/libnewsboat/src/fslock.rs:77
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr ""
+msgstr "Misslyckades att skriva PID till låsfil '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
 msgid "Failed to lock '%s', already locked by process with PID %s"
-msgstr ""
+msgstr "Misslyckades att låsa '%s', redan låst av process med PID %s"
 
 #: rust/regex-rs/src/lib.rs:159 rust/regex-rs/src/lib.rs:164
 msgid "regcomp returned code %i"
-msgstr ""
+msgstr "regcomp returnerade kod %i"
 
 #: rust/regex-rs/src/lib.rs:244 rust/regex-rs/src/lib.rs:248
 msgid "regexec returned code %i"
-msgstr ""
+msgstr "regexec returnerade kod %i"
