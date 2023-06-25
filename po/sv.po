@@ -254,7 +254,7 @@ msgid ""
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
 "%N %V - %?F?Flöden&Dina flöden? (%u olästa, %t totalt)%?F? matchande "
-"filter'%F'&?%?T? - tagg '%T'&?"
+"filter '%F'&?%?T? - tagg '%T'&?"
 
 #: src/configcontainer.cpp:303
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -388,7 +388,7 @@ msgstr "%s är oåtkomlig och kan inte skapas\n"
 
 #: src/controller.cpp:292
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr "FEL: Du måste ställa in `freshrss-url` för att använda FreshRSS\\n\n"
+msgstr "FEL: Du måste ställa in `freshrss-url` för att använda FreshRSS\n"
 
 #: src/controller.cpp:304
 msgid ""
@@ -408,7 +408,7 @@ msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
-"FEL:Du måste tillhandahålla en API-token eller ett användarnamn/lösenord-par "
+"FEL: Du måste tillhandahålla en API-token eller ett användarnamn/lösenord-par "
 "för att använda Miniflux. Vänligen ställ in de lämpliga miniflux-*-"
 "inställnignarna\n"
 
@@ -2024,7 +2024,7 @@ msgstr "Internt tolkningsfel"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file '%s': %s"
-msgstr "Kunde inte öppna låsfil`%s': %s"
+msgstr "Kunde inte öppna låsfil '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:80
 #: rust/libnewsboat/src/fslock.rs:112
@@ -2033,7 +2033,7 @@ msgstr "<filnamn innehållande ogiltig UTF-8-kodpunkt>"
 
 #: rust/libnewsboat/src/fslock.rs:77
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr "Misslyckades att skriva PID till låsfil: '%s': %s"
+msgstr "Misslyckades att skriva PID till låsfil '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
 msgid "Failed to lock '%s', already locked by process with PID %s"
