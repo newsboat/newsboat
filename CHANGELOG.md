@@ -1,23 +1,43 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2023-06-25
-
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK.
+## 2.32 - 2023-06-25
 
 ## Added
 
+- contrib: a filter to remove Substack's "Subscribe now" prompts from the posts
+    (NunoSempere)
+- contrib: an image pager which can spot all the images in a post and display
+    them with either `feh` or `kitty`'s `icat` (whyrgola)
+- Tags in OPML export. This is implemented as a new option, `--export-to-opml2`,
+    because the output format is OPML version 2.0 rather than the 1.0 that
+    `--export-to-opml` produces. We intend to make OPML 2.0 the default in some
+    future major release of Newsboat (#871) (Gwyneth Morgan)
+
 ## Changed
 
+- Enclosures are only enqueued if their MIME type looks like a podcast or is
+    empty. This prevents Newsboat from e.g. enqueueing images from Mastodon
+    feeds (#2367) (Dennis van der Schagt)
+- Asciidoctor is a truly optional dependency now. `make all` still builds docs,
+    but at least one can `make newsboat` and such without installing Asciidoctor
+    (#2353) (Alexander Batischev)
+- Newlines are now removed from the author's name (#2434) (blankie)
+- If the same URL is used in `<a>` and/or `<img>`/`<iframe>`, it's marked as
+    "image" or "iframe" rather than simply a "link" (#2432) (blankie)
+- `goto-title` operation now searches for the titles *as you see them*, i.e. if
+    a feed doesn't have a title and Newsboat displays its URL instead,
+    `goto-feed` will use that URL rather than the (empty) title (#2451)
+    (blankie)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian and Ukrainian
+    (Alexander Batischev), Swedish (Dennis Öberg), Turkish (Emir SARI)
+- Updated vendored library expected-lite to 0.6.3
 - Bumped minimum supported Rust version to 1.66.1
-
-## Deprecated
-
-## Removed
 
 ## Fixed
 
-## Security
+- Detection of Cargo and Asciidoctor: it succeeded even if these programs were
+    missing (Alexander Batischev)
 
 
 

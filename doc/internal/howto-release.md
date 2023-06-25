@@ -10,6 +10,10 @@ dashboard.
 ## If you're making a minor release (x.Y.z)
 
 0. Pull all the latest changes from the main repo.
+0. Create a branch for the new release:
+
+        $ git checkout -b feature/r2.32
+
 1. Run `git log --reverse PREVIOUS_VERISION..`, search for "^commit".
 2. Proceed to the "Common steps" section.
 
@@ -59,7 +63,7 @@ branch off the latest release and backport the bugfixes onto it.
     * Acknowledge contributions from people whose changes didn't make it into
         the lists. The full list of contributors can be got with:
         ```
-        $ git shortlog PREVIOUS_VERSION.. | cut -f2
+        $ git shortlog -s PREVIOUS_VERSION.. | cut -f2
         ```
 1. Update version:
     * _rust/libnewsboat/Cargo.toml_
