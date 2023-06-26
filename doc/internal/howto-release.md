@@ -10,10 +10,6 @@ dashboard.
 ## If you're making a minor release (x.Y.z)
 
 0. Pull all the latest changes from the main repo.
-0. Create a branch for the new release:
-
-        $ git checkout -b feature/r2.32
-
 1. Run `git log --reverse PREVIOUS_VERISION..`, search for "^commit".
 2. Proceed to the "Common steps" section.
 
@@ -122,6 +118,7 @@ branch off the latest release and backport the bugfixes onto it.
             * Gzip the result: `gzip --best --keep --force newsboat/news.atom`.
     * Deploy the directory on the server:
         `sudo cp -rv newsboat/* /var/www/newsboat.org/www/ && sudo chmod -R a+r /var/www/newsboat.org/www/`.
+    * Remove the staging directory on the server: `rm -rf newsboat`
     * Push the code: `git push && git push --tags`
 8. Tell the world about it:
     * Send an email to the mailing list
