@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2023-06-24 21:03+0200\n"
+"PO-Revision-Date: 2023-06-25 18:58+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language: sv\n"
@@ -20,8 +20,8 @@ msgstr ""
 #, c-format
 msgid ""
 "%s %s\n"
-"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] "
-"[-h]\n"
+"usage: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-"
+"h]\n"
 msgstr ""
 "%s %s\n"
 "användning: %s [-i <fil>|-e] [-u <url-fil>] [-c <cache-fil>] [-x "
@@ -101,7 +101,7 @@ msgid ""
 "critical, error, warning, info, and debug respectively)"
 msgstr ""
 "skriv en logg med en särskild loggnivå (giltiga värden: 1 till 6, för "
-"användarfel, kritiskt, fel, varning, info och debug, in den ordningen)"
+"användarfel, kritiskt, fel, varning, info och debug, i den ordningen)"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
@@ -173,8 +173,8 @@ msgstr "Den innehåller:"
 
 #: newsboat.cpp:179
 msgid ""
-"- JSON for Modern C++ library, licensed under the MIT License: https://"
-"github.com/nlohmann/json"
+"- JSON for Modern C++ library, licensed under the MIT License: https://github."
+"com/nlohmann/json"
 msgstr ""
 "- biblioteket JSON for Modern C++, licensierat under MIT-licensen: https://"
 "github.com/nlohmann/json"
@@ -234,7 +234,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -250,11 +250,11 @@ msgstr "%N %V - Dialogrutor"
 
 #: src/configcontainer.cpp:299
 msgid ""
-"%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
-"'%F'&?%?T? - tag '%T'&?"
+"%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?"
+"%?T? - tag '%T'&?"
 msgstr ""
-"%N %V - %?F?Flöden&Dina flöden? (%u olästa, %t totalt)%?F? matchande "
-"filter '%F'&?%?T? - tagg '%T'&?"
+"%N %V - %?F?Flöden&Dina flöden? (%u olästa, %t totalt)%?F? matchande filter "
+"'%F'&?%?T? - tagg '%T'&?"
 
 #: src/configcontainer.cpp:303
 msgid "%N %V - %?O?Open File&Save File? - %f"
@@ -379,7 +379,7 @@ msgstr "Fel: öppnande av cache-fil `%s' misslyckades: %s"
 
 #: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
-msgstr "FEL: Du måste sätta 'cookie-cache' till att använda NewsBlur.\n"
+msgstr "FEL: Du måste sätta 'cookie-cache' för att använda NewsBlur.\n"
 
 #: src/controller.cpp:278
 #, c-format
@@ -417,8 +417,8 @@ msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
-"FEL: Du måste ställa in *både* `inoreader-app-id` och `inoreader-app-key` "
-"för att använda Inoreader.\n"
+"FEL: Du måste ställa in *både* `inoreader-app-id` och `inoreader-app-key` för "
+"att använda Inoreader.\n"
 
 #: src/controller.cpp:354
 #, c-format
@@ -444,8 +444,8 @@ msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
 msgstr ""
-"Det ser ut som om OPML-flödet som du valde att prenumerera på inte "
-"innehåller några webbflöden. Var god fyll den med webbflöden och prova igen."
+"Det ser ut som om OPML-flödet som du valde att prenumerera på inte innehåller "
+"några webbflöden. Var god fyll den med webbflöden och prova igen."
 
 #: src/controller.cpp:393
 msgid ""
@@ -457,8 +457,8 @@ msgstr ""
 
 #: src/controller.cpp:398
 msgid ""
-"It looks like you haven't configured any feeds in your Tiny Tiny RSS "
-"account. Please do so, and try again."
+"It looks like you haven't configured any feeds in your Tiny Tiny RSS account. "
+"Please do so, and try again."
 msgstr ""
 "Det ser ut som om du inte har konfigurerat några webbflöden i ditt Tiny Tiny "
 "RSS-konto. Var god gör det och prova igen."
@@ -518,7 +518,7 @@ msgstr "Tömmer cache..."
 
 #: src/controller.cpp:491
 msgid "Prepopulating query feeds..."
-msgstr "Förbefolkar förfrågansflöden..."
+msgstr "Förbefolkar frågeflöden..."
 
 #: src/controller.cpp:513
 msgid "Importing list of read articles..."
@@ -569,7 +569,7 @@ msgstr "Ett fel inträffade vid tolkning av %s: %s"
 #: src/controller.cpp:757
 #, c-format
 msgid "Import of %s finished."
-msgstr "Importering av %s färdig."
+msgstr "Import av %s färdig."
 
 #: src/controller.cpp:893
 #, c-format
@@ -777,7 +777,7 @@ msgstr "Markerar alla webbflöden som lästa..."
 #: src/feedlistformaction.cpp:440 src/itemlistformaction.cpp:629
 #, c-format
 msgid "No filter found with name `%s'."
-msgstr "Inga filter med namn `%s' hittades."
+msgstr "Inget filter med namn `%s' hittades."
 
 #: src/feedlistformaction.cpp:448 src/itemlistformaction.cpp:637
 msgid "No filters defined."
@@ -803,7 +803,7 @@ msgstr "Vill du verkligen avsluta (j:Ja n:Nej)? "
 
 #: src/feedlistformaction.cpp:548
 msgid "Cannot open query feeds in the browser!"
-msgstr "Kan inte öppna query feeds i webbläsaren!"
+msgstr "Kan inte öppna frågeflöden i webbläsaren!"
 
 #: src/feedlistformaction.cpp:639 src/helpformaction.cpp:215
 #: src/itemlistformaction.cpp:1319 src/itemviewformaction.cpp:524
@@ -1000,8 +1000,7 @@ msgstr "inbäddat flash:"
 msgid "Links: "
 msgstr "Länkar: "
 
-#: src/htmlrenderer.cpp:1074 src/htmlrenderer.cpp:1077
-#: src/htmlrenderer.cpp:1095
+#: src/htmlrenderer.cpp:1074 src/htmlrenderer.cpp:1077 src/htmlrenderer.cpp:1095
 msgid "link"
 msgstr "länk"
 
@@ -1102,7 +1101,7 @@ msgstr "Markerar allt ovanför som läst..."
 
 #: src/itemlistformaction.cpp:581 src/itemviewformaction.cpp:297
 msgid "Pipe article to command: "
-msgstr "Skicka artikel genom pipe till kommando: "
+msgstr "Skicka artikel genom rör till kommando: "
 
 #. i18n: This string is related to the letters in parentheses in the
 #. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
@@ -1161,7 +1160,7 @@ msgstr "Fel: inget filnamn angivet"
 #: src/itemlistformaction.cpp:1498
 #, c-format
 msgid "Query Feed - %s"
-msgstr "Förfrågansflöde - %s"
+msgstr "Frågeflöde - %s"
 
 #: src/itemlistformaction.cpp:1505
 #, c-format
@@ -1175,11 +1174,11 @@ msgstr "janq"
 #: src/itemlistformaction.cpp:1574
 #, c-format
 msgid ""
-"Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
-"to all n:No q:No to all)"
+"Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes to "
+"all n:No q:No to all)"
 msgstr ""
-"Skriv över `%s' i `%s'? Det finns ytterligare %d konflikter som denna (j:Ja "
-"a:Ja till alla n:Nej q:Nej till alla)"
+"Skriv över `%s' i `%s'? Det finns ytterligare %d konflikter som denna (j:Ja a:"
+"Ja till alla n:Nej q:Nej till alla)"
 
 #: src/itemlistformaction.cpp:1581
 #, c-format
@@ -1212,12 +1211,12 @@ msgstr "typ: "
 
 #: src/itemutils.cpp:10
 msgid "Item has no enclosures."
-msgstr ""
+msgstr "Posten har inga bilagor."
 
 #: src/itemutils.cpp:14
 #, c-format
 msgid "Item's enclosure has non-http link: '%s'"
-msgstr ""
+msgstr "Postens bilaga har en icke-http-länk: '%s'"
 
 #: src/itemutils.cpp:22
 #, c-format
@@ -1231,11 +1230,11 @@ msgstr "%s är redan kölagd."
 
 #: src/itemviewformaction.cpp:63 src/itemviewformaction.cpp:675
 msgid "Top"
-msgstr "Överkant"
+msgstr "Längst upp"
 
 #: src/itemviewformaction.cpp:64 src/itemviewformaction.cpp:677
 msgid "Bottom"
-msgstr "Nederkant"
+msgstr "Längst ned"
 
 #: src/itemviewformaction.cpp:180 src/view.cpp:557
 #, c-format
@@ -1534,7 +1533,7 @@ msgstr "Gå till föregående dialogruta"
 
 #: src/keymap.cpp:384
 msgid "Pipe article to command"
-msgstr "Skicka artikel genom pipe till kommando"
+msgstr "Skicka artikel genom rör till kommando"
 
 #: src/keymap.cpp:391
 msgid "Sort current list"
@@ -1673,7 +1672,7 @@ msgstr "`%s' är inte ett giltigt tangentkommando"
 #: src/keymap.cpp:764
 #, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr ""
+msgstr "misslyckades att tolka operationsekvens för %s"
 
 #: src/keymap.cpp:782
 #, c-format
@@ -1706,8 +1705,7 @@ msgstr "Fatalt fel: kunde inte fastställa hemkatalog!"
 
 #: src/pbcontroller.cpp:140
 #, c-format
-msgid ""
-"Please set the HOME environment variable or add a valid user for UID %u!"
+msgid "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "Var god ställ in HOME-miljövariabeln eller lägg till en giltig användare för "
 "UID %u!"
@@ -1813,8 +1811,7 @@ msgstr "Markera som klar"
 #, c-format
 msgid ""
 "WARNING: Comment found in %s. The queue file is regenerated when Podboat "
-"exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
-"abort"
+"exits and comments will be deleted. Press Enter to continue or Ctrl+C to abort"
 msgstr ""
 "VARNING: Kommentar hittades i %s. Köfilen genereras om när Podboat avslutas "
 "och kommenterar kommer att raderas. Tryck Enter för att fortsätta eller "
@@ -1906,7 +1903,7 @@ msgstr "Fel: misslyckades att köra uppstartskommandon"
 
 #: src/view.cpp:294
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Operation ignorerad i modal dialogruta"
 
 #: src/view.cpp:410
 #, c-format
@@ -1923,7 +1920,7 @@ msgstr "Inga taggar definierade."
 
 #: src/view.cpp:974
 msgid "Updating query feed..."
-msgstr "Uppdaterar query feed..."
+msgstr "Uppdaterar frågeflöde..."
 
 #: src/view.cpp:987
 #, c-format
@@ -1933,11 +1930,11 @@ msgstr "Fel: kunde inte förbereda frågeflöde: %s"
 #: rss/atomparser.cpp:19 rss/parser.cpp:382 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:20 rss/rss20parser.cpp:21
 msgid "XML root node is NULL"
-msgstr "XML root node är NULL"
+msgstr "XML-rotnoden är NULL"
 
 #: rss/parser.cpp:266
 msgid "could not parse buffer"
-msgstr "kunde inte tolka buffer"
+msgstr "kunde inte tolka buffert"
 
 #: rss/parser.cpp:290
 msgid "could not parse file"
@@ -1994,17 +1991,17 @@ msgstr "Avbryter migration på grund av att mkdir på `%s' misslyckades: %s"
 
 #: rust/libnewsboat/src/filterparser.rs:129
 msgid "attribute name"
-msgstr ""
+msgstr "attributnamn"
 
 #. Don't translate "between" -- it's a keyword, not an English word.
 #: rust/libnewsboat/src/filterparser.rs:131
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
-msgstr ""
+msgstr "en av: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 
 #. The options ("quoted string" etc.) are not keywords, so please translate them.
 #: rust/libnewsboat/src/filterparser.rs:133
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "en av: sträng omgiven av citattecken, intervall, tal"
 
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
