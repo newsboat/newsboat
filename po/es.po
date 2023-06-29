@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-06-16 00:38+0300\n"
-"PO-Revision-Date: 2023-02-28 11:34+0100\n"
+"PO-Revision-Date: 2023-06-29 20:35+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -31,9 +31,8 @@ msgid "export OPML feed to stdout"
 msgstr "exportar la fuente OPML a la salida estándar"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "exportar la fuente OPML a la salida estándar"
+msgstr "exportar la fuente OPML 2.0 incluyendo etiquetas a la salida estándar"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -96,11 +95,13 @@ msgid "<loglevel>"
 msgstr "<nivel>"
 
 #: newsboat.cpp:82
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "nivel de detalle para el archivo de registro (rango: 1 a 6)"
+msgstr ""
+"escribir un registro con un cierto nivel de registro (valores válidos: 1 a "
+"6, para error de usuario, crítico, error, advertencia, información y "
+"depuración respectivamente)"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
@@ -234,7 +235,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:292
 msgid ""
@@ -1271,7 +1272,7 @@ msgstr "Añadir a la cola"
 #: src/itemviewformaction.cpp:681
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "%3u %% "
 
 #: src/itemviewformaction.cpp:690
 #, c-format
@@ -1646,11 +1647,11 @@ msgstr "Ir a la página siguiente"
 
 #: src/keymap.cpp:454
 msgid "Move half page up"
-msgstr ""
+msgstr "Subir media página"
 
 #: src/keymap.cpp:455
 msgid "Move half page down"
-msgstr ""
+msgstr "Bajar media página"
 
 #: src/keymap.cpp:461
 msgid "Move to the start of page/list"
