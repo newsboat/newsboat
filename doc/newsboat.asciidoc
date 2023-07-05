@@ -1302,6 +1302,13 @@ The macro prefix can be changed from the default "," to another key, e.g. "+"
   bind-key + macro-prefix
   unbind-key ,
 
+Macros may be executed using a single key by creating a <<bind-key,`bind-key`>>
+to a <<run-macro,`run-macro`>> operation associated with the same key as the macro:
+
+  bind-key k run-macro
+
+This binding will run the "k" macro when the "k" key is pressed.
+
 === Open Links with External Commands
 
 ==== Using Browser
