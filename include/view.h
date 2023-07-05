@@ -142,6 +142,7 @@ public:
 
 protected:
 	bool run_commands(const std::vector<MacroCmd>& commands);
+	void run_macro(const std::string& event);
 
 	void apply_colors(std::shared_ptr<FormAction> fa);
 

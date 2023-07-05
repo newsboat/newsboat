@@ -413,6 +413,13 @@ static const std::vector<OpDesc> opdescs = {
 		translatable("Go to the feed of the article"),
 		KM_ARTICLE | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
+	{
+		OP_RUNMACRO,
+		"run-macro",
+		"",
+		translatable("Runs the macro defined for the key bound to this operation"),
+		KM_NEWSBOAT | KM_PODBOAT
+	},
 
 	{OP_OPEN_URL_1, "one", "1", translatable("Open URL 1"), KM_URLVIEW | KM_ARTICLE},
 	{OP_OPEN_URL_2, "two", "2", translatable("Open URL 2"), KM_URLVIEW | KM_ARTICLE},

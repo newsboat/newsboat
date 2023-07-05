@@ -150,6 +150,15 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 	return true;
 }
 
+void View::run_macro(const std::string& event)
+{
+	status_line.show_message("");
+	LOG(Level::DEBUG,
+		"View::run: running macro `%s'",
+		event);
+	run_commands(keys->get_macro(event));
+}
+
 int View::run()
 {
 	bool have_macroprefix = false;
@@ -216,11 +225,7 @@ int View::run()
 
 		if (have_macroprefix) {
 			have_macroprefix = false;
-			status_line.show_message("");
-			LOG(Level::DEBUG,
-				"View::run: running macro `%s'",
-				event);
-			run_commands(keys->get_macro(event));
+			run_macro(event);
 		} else {
 			const Operation op = keys->get_operation(event, fa->id());
 
@@ -233,10 +238,14 @@ int View::run()
 				have_macroprefix = true;
 				status_line.show_message("macro-");
 			}
-
-			// now we handle the operation to the
-			// formaction.
-			fa->process_op(op);
+			else if (OP_RUNMACRO == op) {
+				run_macro(event);
+			}
+			else {
+				// now we hand the operation to the
+				// formaction.
+				fa->process_op(op);
+			}
 		}
 	}
 
