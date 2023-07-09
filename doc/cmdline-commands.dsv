@@ -7,4 +7,4 @@ goto||<case-insensitive substring>||Search for a feed whose name contains the ca
 source||<filename> [...]||Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.||source ~/.newsboat/colors
 dumpconfig||<filename>||Save current internal state of configuration to file, so that it can be instantly reused as configuration file.||dumpconfig ~/.newsboat/config.saved
 exec||<operation>||Run a keybind operation in the current context.||exec open-all-unread-in-browser-and-mark-read
-number||||Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list, article list, tag selection and filter selection forms.||30
+number||||Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list, article list, tag selection, filter selection, and dialog selection forms.||30
