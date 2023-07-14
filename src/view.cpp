@@ -237,11 +237,9 @@ int View::run()
 			if (OP_MACROPREFIX == op) {
 				have_macroprefix = true;
 				status_line.show_message("macro-");
-			}
-			else if (OP_RUNMACRO == op) {
+			} else if (OP_RUNMACRO == op) {
 				run_macro(event);
-			}
-			else {
+			} else {
 				// now we hand the operation to the
 				// formaction.
 				fa->process_op(op);
