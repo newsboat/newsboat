@@ -63,14 +63,14 @@ HtmlRenderer::HtmlRenderer(bool raw)
 
 void HtmlRenderer::render(const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& links,
+	Links& links,
 	const std::string& url)
 {
 	std::istringstream input(source);
 	render(input, lines, links, url);
 }
 
-unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
+unsigned int HtmlRenderer::add_link(Links& links,
 	const std::string& link,
 	LinkType type)
 {
@@ -84,7 +84,7 @@ unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
 		i++;
 	}
 	if (!found) {
-		links.push_back(LinkPair(link, type));
+		links.add_link(link, type);
 	} else if (links[i - 1].second == LinkType::HREF) {
 		links[i - 1].second = type;
 	}
@@ -104,7 +104,7 @@ HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
 
 void HtmlRenderer::render(std::istream& input,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& links,
+	Links& links,
 	const std::string& url)
 {
 	unsigned int image_count = 0;
@@ -1052,7 +1052,7 @@ void HtmlRenderer::render(std::istream& input,
 }
 
 void HtmlRenderer::add_media_link(std::string& curline,
-	std::vector<LinkPair>& links, const std::string& url,
+	Links& links, const std::string& url,
 	const std::string& media_url, const std::string& media_title,
 	unsigned int media_count, LinkType type)
 {

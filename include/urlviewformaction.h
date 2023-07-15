@@ -17,7 +17,7 @@ public:
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
-	void set_links(const std::vector<LinkPair>& l)
+	void set_links(const Links& l)
 	{
 		links = l;
 	}
@@ -41,7 +41,7 @@ private:
 	void open_current_position_in_browser(bool interactive);
 	void update_heading();
 
-	std::vector<LinkPair> links;
+	Links links;
 	bool quit;
 	std::shared_ptr<RssFeed> feed;
 	ListWidget urls_list;

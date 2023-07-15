@@ -76,7 +76,7 @@ public:
 		const std::string& searchphrase = "");
 	void push_empty_formaction();
 	void push_help();
-	void push_urlview(const std::vector<LinkPair>& links,
+	void push_urlview(const Links& links,
 		std::shared_ptr<RssFeed>& feed);
 	void push_searchresult(std::shared_ptr<RssFeed> feed,
 		const std::string& phrase = "");

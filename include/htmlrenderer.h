@@ -7,13 +7,11 @@
 #include <vector>
 
 #include "textformatter.h"
+#include "links.h"
 
 namespace newsboat {
 
 class TagSoupPullParser;
-
-// This enum has to be kept in sync with enum LinkType in rust/libnewsboat/src/htmlrenderer.rs
-enum class LinkType { HREF, IMG, EMBED, IFRAME, VIDEO, AUDIO };
 
 enum class HtmlTag {
 	A = 1,
@@ -55,18 +53,16 @@ enum class HtmlTag {
 	SOURCE
 };
 
-typedef std::pair<std::string, LinkType> LinkPair;
-
 class HtmlRenderer {
 public:
 	explicit HtmlRenderer(bool raw = false);
 	void render(const std::string& source,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<LinkPair>& links,
+		Links& links,
 		const std::string& url);
 	void render(std::istream& input,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<LinkPair>& links,
+		Links& links,
 		const std::string& url);
 	static std::string render_hr(const unsigned int width);
 	// only public for unit testing purposes:
@@ -116,7 +112,7 @@ public:
 private:
 	void prepare_new_line(std::string& line, int indent_level);
 	bool line_is_nonempty(const std::string& line);
-	unsigned int add_link(std::vector<LinkPair>& links,
+	unsigned int add_link(Links& links,
 		const std::string& link,
 		LinkType type);
 	std::string absolute_url(const std::string& url,
@@ -138,7 +134,7 @@ private:
 	void add_hr(std::vector<std::pair<LineType, std::string>>& lines);
 	std::string get_char_numbering(unsigned int count);
 	std::string get_roman_numbering(unsigned int count);
-	void add_media_link(std::string& line, std::vector<LinkPair>& links,
+	void add_media_link(std::string& line, Links& links,
 		const std::string& url, const std::string& media_url,
 		const std::string& media_title, unsigned int media_count,
 		LinkType type);

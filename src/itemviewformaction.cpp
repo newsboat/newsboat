@@ -126,7 +126,7 @@ void ItemViewFormAction::prepare()
 			if (!item->enclosure_url().empty()) {
 				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type());
 				if (link_type.has_value()) {
-					links.push_back(LinkPair(item->enclosure_url(), link_type.value()));
+					links.add_link(item->enclosure_url(), link_type.value());
 				}
 			}
 

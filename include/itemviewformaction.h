@@ -47,7 +47,7 @@ public:
 	void render_html(
 		const std::string& source,
 		std::vector<std::pair<LineType, std::string>>& lines,
-		std::vector<LinkPair>& thelinks,
+		Links& links,
 		const std::string& url);
 
 	void update_percent();
@@ -85,7 +85,7 @@ private:
 	std::shared_ptr<RssFeed> feed;
 	std::shared_ptr<RssItem> item;
 	bool show_source;
-	std::vector<LinkPair> links;
+	Links links;
 	RegexManager& rxman;
 	unsigned int num_lines;
 	std::shared_ptr<ItemListFormAction> itemlist;
