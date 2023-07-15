@@ -39,11 +39,11 @@ public:
 		return links.end();
 	}
 
-	const_iterator cbegin()
+	const_iterator cbegin() const
 	{
 		return links.cbegin();
 	}
-	const_iterator cend()
+	const_iterator cend() const
 	{
 		return links.cend();
 	}
