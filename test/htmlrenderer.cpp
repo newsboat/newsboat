@@ -82,7 +82,7 @@ TEST_CASE(
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>",
 		lines,
@@ -105,7 +105,7 @@ TEST_CASE("<br>, <br/> and <br /> result in a line break", "[HtmlRenderer]")
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	for (std::string tag : {
 			"<br>", "<br/>", "<br />"
@@ -124,7 +124,7 @@ TEST_CASE("Superscript is rendered with caret symbol", "[HtmlRenderer]")
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	rnd.render("3<sup>10</sup>", lines, links, "");
 	REQUIRE(lines.size() == 1);
@@ -135,7 +135,7 @@ TEST_CASE("Subscript is rendered with square brackets", "[HtmlRenderer]")
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	rnd.render("A<sub>i</sub>", lines, links, "");
 	REQUIRE(lines.size() == 1);
@@ -146,7 +146,7 @@ TEST_CASE("Script tags are ignored", "[HtmlRenderer]")
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	rnd.render("abc<script></script>", lines, links, "");
 	REQUIRE(lines.size() == 1);
@@ -206,7 +206,7 @@ TEST_CASE("links with same URL are coalesced under one number",
 		"<a href='http://example.com/about'>About us</a>"
 		"<a href='http://example.com/about'>Another link</a>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(links.size() == 1);
@@ -222,7 +222,7 @@ TEST_CASE("links with different URLs have different numbers", "[HtmlRenderer]")
 		"<a href='http://example.com/one'>One</a>"
 		"<a href='http://example.com/two'>Two</a>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(links.size() == 2);
@@ -239,7 +239,7 @@ TEST_CASE("link without `href' is neither highlighted nor added to links list",
 
 	const std::string input = "<a>test</a>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -255,7 +255,7 @@ TEST_CASE(
 
 	const std::string input = "<a href=''>test</a>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -269,7 +269,7 @@ TEST_CASE("<strong> is rendered in bold font", "[HtmlRenderer]")
 
 	const std::string input = "<strong>test</strong>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -282,7 +282,7 @@ TEST_CASE("<u> is rendered as underlined text", "[HtmlRenderer]")
 
 	const std::string input = "<u>test</u>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -295,7 +295,7 @@ TEST_CASE("<q> is rendered as text in quotes", "[HtmlRenderer]")
 
 	const std::string input = "<q>test</q>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -311,7 +311,7 @@ TEST_CASE("Flash <embed>s are added to links if `src' is set", "[HtmlRenderer]")
 		"src='http://example.com/game.swf'>"
 		"</embed>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -333,7 +333,7 @@ TEST_CASE("Flash <embed>s are ignored if `src' is not set", "[HtmlRenderer]")
 	const std::string input =
 		"<embed type='application/x-shockwave-flash'></embed>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 0);
@@ -348,7 +348,7 @@ TEST_CASE("non-flash <embed>s are ignored", "[HtmlRenderer]")
 		"<embed type='whatever'"
 		"src='http://example.com/thingy'></embed>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 0);
@@ -362,7 +362,7 @@ TEST_CASE("<embed>s are ignored if `type' is not set", "[HtmlRenderer]")
 	const std::string input =
 		"<embed src='http://example.com/yet.another.thingy'></embed>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 0);
@@ -377,7 +377,7 @@ TEST_CASE("<iframe>s are added to links if `src' is set", "[HtmlRenderer]")
 		"<iframe src=\"https://www.youtube.com/embed/0123456789A\""
 		"        width=\"640\" height=\"360\"></iframe>");
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
 	REQUIRE(lines.size() == 4);
@@ -400,7 +400,7 @@ TEST_CASE("<iframe>s are rendered with a title if `title' is set",
 		"<iframe src=\"https://www.youtube.com/embed/0123456789A\""
 		"        title=\"My Video\" width=\"640\" height=\"360\"></iframe>");
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
 	REQUIRE(lines.size() == 4);
@@ -422,7 +422,7 @@ TEST_CASE("<iframe>s are ignored if `src' is not set", "[HtmlRenderer]")
 	const std::string input(
 		"<iframe width=\"640\" height=\"360\"></iframe>");
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
 	REQUIRE(lines.size() == 0);
@@ -441,7 +441,7 @@ TEST_CASE("spaces and line breaks are preserved inside <pre>", "[HtmlRenderer]")
 		"neat huh?\n"
 		"</pre>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 5);
@@ -464,7 +464,7 @@ TEST_CASE("tags still work inside <pre>", "[HtmlRenderer]")
 		"<u>underlined text</u>"
 		"</pre>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -483,7 +483,7 @@ TEST_CASE("line breaks are preserved in tags inside <pre>", "[HtmlRenderer]")
 		"very cool</span><span>very cool indeed\n\n\n"
 		"</span></pre>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -501,7 +501,7 @@ TEST_CASE("<img> results in a placeholder and a link", "[HtmlRenderer]")
 	const std::string input =
 		"<img src='http://example.com/image.png'></img>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -528,7 +528,7 @@ TEST_CASE(
 		" and an image: "
 		"<img src='http://example.com/image.png'></img>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 5);
@@ -558,7 +558,7 @@ TEST_CASE(
 		"<img src=''></img>"
 		"<img src='http://example.com/image.png'>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -579,7 +579,7 @@ TEST_CASE("alt is mentioned in placeholder if <img> has `alt'",
 		"<img src='http://example.com/image.png'"
 		"alt='Just a test image'></img>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -603,7 +603,7 @@ TEST_CASE("alt is mentioned in placeholder if <img> has `alt' and `title",
 		"<img src='http://example.com/image.png'"
 		"alt='Just a test image' title='Image title'></img>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -628,7 +628,7 @@ TEST_CASE(
 		"<img src='http://example.com/image.png'"
 		"title='Just a test image'></img>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -656,7 +656,7 @@ TEST_CASE(
 		"AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO"
 		"9TXL0Y4OHwAAAABJRU5ErkJggg==' alt='Red dot' />";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -683,7 +683,7 @@ TEST_CASE(
 		"<p>Check out <a href='https://attachment.zip'>this amazing site</a>!</p>"
 		"<iframe src='https://attachment.zip'></iframe>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 9);
@@ -717,7 +717,7 @@ TEST_CASE("<blockquote> is indented and is separated by empty lines",
 		"&mdash;Randy Pausch"
 		"</blockquote>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 3);
@@ -747,7 +747,7 @@ TEST_CASE(
 		"<dd>Soldier's friend</dd>"
 		"</dl>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 8);
@@ -766,7 +766,7 @@ TEST_CASE("<h[2-6]> and <p>", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	SECTION("<h1> is rendered with setext-style underlining") {
 		const std::string input = "<h1>Why are we here?</h1>";
@@ -858,7 +858,7 @@ TEST_CASE("whitespace is erased at the beginning of the paragraph",
 		"here comes the text"
 		"</p>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -873,7 +873,7 @@ TEST_CASE("newlines are replaced with space", "[HtmlRenderer]")
 	const std::string input =
 		"newlines\nshould\nbe\nreplaced\nwith\na\nspace\ncharacter.";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -893,7 +893,7 @@ TEST_CASE("paragraph is just a long line of text", "[HtmlRenderer]")
 		"width"
 		"</p>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 1);
@@ -908,7 +908,7 @@ TEST_CASE("default style for <ol> is Arabic numerals", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	SECTION("no `type' attribute") {
 		const std::string input =
@@ -943,7 +943,7 @@ TEST_CASE("default starting number for <ol> is 1", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	SECTION("no `start' attribute") {
 		const std::string input =
@@ -978,7 +978,7 @@ TEST_CASE("type='1' for <ol> means Arabic numbering", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<ol type='1'>"
 		"<li>one</li>"
@@ -997,7 +997,7 @@ TEST_CASE("type='a' for <ol> means lowercase alphabetic numbering",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<ol type='a'>"
 		"<li>one</li>"
@@ -1016,7 +1016,7 @@ TEST_CASE("type='A' for <ol> means uppercase alphabetic numbering",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<ol type='A'>"
 		"<li>one</li>"
@@ -1034,7 +1034,7 @@ TEST_CASE("type='i' for <ol> means lowercase Roman numbering", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<ol type='i'>"
 		"<li>one</li>"
@@ -1052,7 +1052,7 @@ TEST_CASE("type='I' for <ol> means uppercase Roman numbering", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<ol type='I'>"
 		"<li>one</li>"
@@ -1071,7 +1071,7 @@ TEST_CASE("every next <li> implicitly closes the previous one",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<ol type='I'>"
 		"<li>one"
@@ -1094,7 +1094,7 @@ TEST_CASE("<style> tags are ignored", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const std::string input =
 		"<style><h1>ignore me</h1><p>and me</p> body{width: "
 		"100%;}</style>";
@@ -1107,7 +1107,7 @@ TEST_CASE("<style> tags are ignored", "[HtmlRenderer]")
 TEST_CASE("<hr> is not a string, but a special type of line", "[HtmlRenderer]")
 {
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	HtmlRenderer r;
 	const std::string input = "<hr>";
 
@@ -1122,7 +1122,7 @@ TEST_CASE("header rows of tables are in bold", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	SECTION("one column") {
 		const std::string input =
@@ -1161,7 +1161,7 @@ TEST_CASE("cells are separated by space if `border' is not set",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table>"
@@ -1184,7 +1184,7 @@ TEST_CASE(
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	for (auto border_width = 1; border_width < 10; ++border_width) {
 		DYNAMIC_SECTION("`border' = " << border_width) {
@@ -1211,7 +1211,7 @@ TEST_CASE("tables with `border' have borders", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table border='1'>"
@@ -1234,7 +1234,7 @@ TEST_CASE("if document ends before </table> is found, table is rendered anyway",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table border='1'>"
@@ -1255,7 +1255,7 @@ TEST_CASE("tables can be nested", "[HtmlRenderer]")
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table border='1'>"
@@ -1303,7 +1303,7 @@ TEST_CASE(
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table border='1'>"
@@ -1325,7 +1325,7 @@ TEST_CASE("previous row is implicitly closed when <tr> is found",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table border='1'>"
@@ -1350,7 +1350,7 @@ TEST_CASE(
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<table border='1'>"
@@ -1372,7 +1372,7 @@ TEST_CASE("text within <ituneshack> is to be treated specially",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<ituneshack>"
@@ -1396,7 +1396,7 @@ TEST_CASE("When rendeing text, HtmlRenderer strips leading whitespace",
 {
 	HtmlRenderer r;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"		<br />\n"
@@ -1428,7 +1428,7 @@ TEST_CASE("<video> results in a placeholder and a link for each valid source",
 		"	<source src='http://example.com/video2.mkv'>"
 		"</video>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 8);
@@ -1464,7 +1464,7 @@ TEST_CASE("<video>s without valid sources are ignored", "[HtmlRenderer]")
 		"<video src=''></video>"
 		"<video src='http://example.com/video.avi'></video>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -1488,7 +1488,7 @@ TEST_CASE("<audio> results in a placeholder and a link for each valid source",
 		"	<source src='http://example.com/audio2.m4a'>"
 		"</audio>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 8);
@@ -1524,7 +1524,7 @@ TEST_CASE("<audio>s without valid sources are ignored", "[HtmlRenderer]")
 		"<audio src=''></audio>"
 		"<audio src='http://example.com/audio.oga'></audio>";
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 4);
@@ -1558,7 +1558,7 @@ TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
 		"Here comes the text!";
 
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 13);
@@ -1619,7 +1619,7 @@ TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
 		"</audio>";
 
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 10);
@@ -1662,7 +1662,7 @@ TEST_CASE("Back-to-back <video> and <audio> tags are seperated by a new line",
 		"<audio src='https://example.com/audio.mp3'></audio>";
 
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(lines.size() == 6);
@@ -1688,7 +1688,7 @@ TEST_CASE("Ordered list can contain unordered list in its items",
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const auto input = std::string(
 			"<ol>"
@@ -1732,7 +1732,7 @@ TEST_CASE("Skips contents of <script> tags", "[HtmlRenderer]")
 
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	std::ifstream input_file("data/1300-reproducer.html");
 	std::string input;
@@ -1748,7 +1748,7 @@ TEST_CASE("<div> is always rendered on a new line", "[HtmlRenderer]")
 {
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string
 	input("<div>oh</div>"
@@ -1782,7 +1782,7 @@ TEST_CASE("HtmlRenderer does not crash on extra closing OL/UL tags", "[HtmlRende
 
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	const std::string input =
 		"<ul><li>Double closed list</li></ul></ul><ol><li>Other double closed list</li></ol></ol><ul><li>Test</li></ul>";
