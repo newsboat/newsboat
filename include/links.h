@@ -14,15 +14,6 @@ public:
 	using iterator = std::vector<LinkPair>::iterator;
 	using const_iterator = std::vector<LinkPair>::const_iterator;
 
-	Links() {};
-	Links(const Links& links) : links(links.links) {};
-	Links& operator=(const Links& links)
-	{
-		this->links = links.links;
-		return *this;
-	}
-	~Links() {};
-
 	unsigned int add_link(const std::string& url, LinkType type);
 
 	LinkPair& operator[] (size_t idx)
