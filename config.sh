@@ -80,6 +80,7 @@ fail() {
 
 fail_custom() {
 	err=$1
+	rm -f config.mk
 	echo ""
 	echo "ERROR: ${err}"
 	FAILSTATUS="1"
@@ -108,6 +109,9 @@ check_ssl_implementation() {
 }
 
 echo "" > config.mk
+
+command -v "$PKG_CONFIG" || fail_custom "$PKG_CONFIG not found, which is necessary to check for required build dependencies"
+all_aboard_the_fail_boat # Exit early if $PKG_CONFIG cannot be found
 
 check_pkg "sqlite3" || fail "sqlite3"
 check_pkg "libcurl" || check_custom "libcurl" "curl-config" || fail "libcurl"
