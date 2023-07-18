@@ -26,7 +26,7 @@ pub fn consolidate_whitespace(input: String) -> String {
 
     if let Some(found) = found {
         let (leading, rest) = input.split_at(found);
-        let lastchar = input.chars().rev().next().unwrap();
+        let lastchar = input.chars().next_back().unwrap();
 
         result.push_str(leading);
 
