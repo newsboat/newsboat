@@ -97,8 +97,8 @@ TEST_CASE(
 	REQUIRE(lines[3] ==
 		p(LineType::softwrappable, "[1]: http://slashdot.org/ (link)"));
 
-	REQUIRE(links[0].first == "http://slashdot.org/");
-	REQUIRE(links[0].second == LinkType::HREF);
+	REQUIRE(links[0].url == "http://slashdot.org/");
+	REQUIRE(links[0].type == LinkType::HREF);
 }
 
 TEST_CASE("<br>, <br/> and <br /> result in a line break", "[HtmlRenderer]")
@@ -210,8 +210,8 @@ TEST_CASE("links with same URL are coalesced under one number",
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "http://example.com/about");
-	REQUIRE(links[0].second == LinkType::HREF);
+	REQUIRE(links[0].url == "http://example.com/about");
+	REQUIRE(links[0].type == LinkType::HREF);
 }
 
 TEST_CASE("links with different URLs have different numbers", "[HtmlRenderer]")
@@ -226,10 +226,10 @@ TEST_CASE("links with different URLs have different numbers", "[HtmlRenderer]")
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
 	REQUIRE(links.size() == 2);
-	REQUIRE(links[0].first == "http://example.com/one");
-	REQUIRE(links[0].second == LinkType::HREF);
-	REQUIRE(links[1].first == "http://example.com/two");
-	REQUIRE(links[1].second == LinkType::HREF);
+	REQUIRE(links[0].url == "http://example.com/one");
+	REQUIRE(links[0].type == LinkType::HREF);
+	REQUIRE(links[1].url == "http://example.com/two");
+	REQUIRE(links[1].type == LinkType::HREF);
 }
 
 TEST_CASE("link without `href' is neither highlighted nor added to links list",
@@ -322,8 +322,8 @@ TEST_CASE("Flash <embed>s are added to links if `src' is set", "[HtmlRenderer]")
 		p(LineType::softwrappable,
 			"[1]: http://example.com/game.swf (embedded flash)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "http://example.com/game.swf");
-	REQUIRE(links[0].second == LinkType::EMBED);
+	REQUIRE(links[0].url == "http://example.com/game.swf");
+	REQUIRE(links[0].type == LinkType::EMBED);
 }
 
 TEST_CASE("Flash <embed>s are ignored if `src' is not set", "[HtmlRenderer]")
@@ -387,8 +387,8 @@ TEST_CASE("<iframe>s are added to links if `src' is set", "[HtmlRenderer]")
 	REQUIRE(lines[3] == p(LineType::softwrappable,
 			"[1]: https://www.youtube.com/embed/0123456789A (iframe)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "https://www.youtube.com/embed/0123456789A");
-	REQUIRE(links[0].second == LinkType::IFRAME);
+	REQUIRE(links[0].url == "https://www.youtube.com/embed/0123456789A");
+	REQUIRE(links[0].type == LinkType::IFRAME);
 }
 
 TEST_CASE("<iframe>s are rendered with a title if `title' is set",
@@ -411,8 +411,8 @@ TEST_CASE("<iframe>s are rendered with a title if `title' is set",
 	REQUIRE(lines[3] == p(LineType::softwrappable,
 			"[1]: https://www.youtube.com/embed/0123456789A (iframe)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "https://www.youtube.com/embed/0123456789A");
-	REQUIRE(links[0].second == LinkType::IFRAME);
+	REQUIRE(links[0].url == "https://www.youtube.com/embed/0123456789A");
+	REQUIRE(links[0].type == LinkType::IFRAME);
 }
 
 TEST_CASE("<iframe>s are ignored if `src' is not set", "[HtmlRenderer]")
@@ -512,8 +512,8 @@ TEST_CASE("<img> results in a placeholder and a link", "[HtmlRenderer]")
 		p(LineType::softwrappable,
 			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "http://example.com/image.png");
-	REQUIRE(links[0].second == LinkType::IMG);
+	REQUIRE(links[0].url == "http://example.com/image.png");
+	REQUIRE(links[0].type == LinkType::IMG);
 }
 
 TEST_CASE(
@@ -541,10 +541,10 @@ TEST_CASE(
 	REQUIRE(lines[4] == p(LineType::softwrappable,
 			"[2]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 2);
-	REQUIRE(links[0].first == "http://example.com/index.html");
-	REQUIRE(links[0].second == LinkType::HREF);
-	REQUIRE(links[1].first == "http://example.com/image.png");
-	REQUIRE(links[1].second == LinkType::IMG);
+	REQUIRE(links[0].url == "http://example.com/index.html");
+	REQUIRE(links[0].type == LinkType::HREF);
+	REQUIRE(links[1].url == "http://example.com/image.png");
+	REQUIRE(links[1].type == LinkType::IMG);
 }
 
 TEST_CASE(
@@ -590,8 +590,8 @@ TEST_CASE("alt is mentioned in placeholder if <img> has `alt'",
 	REQUIRE(lines[3] == p(LineType::softwrappable,
 			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "http://example.com/image.png");
-	REQUIRE(links[0].second == LinkType::IMG);
+	REQUIRE(links[0].url == "http://example.com/image.png");
+	REQUIRE(links[0].type == LinkType::IMG);
 }
 
 TEST_CASE("alt is mentioned in placeholder if <img> has `alt' and `title",
@@ -614,8 +614,8 @@ TEST_CASE("alt is mentioned in placeholder if <img> has `alt' and `title",
 	REQUIRE(lines[3] == p(LineType::softwrappable,
 			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "http://example.com/image.png");
-	REQUIRE(links[0].second == LinkType::IMG);
+	REQUIRE(links[0].url == "http://example.com/image.png");
+	REQUIRE(links[0].type == LinkType::IMG);
 }
 
 TEST_CASE(
@@ -640,8 +640,8 @@ TEST_CASE(
 		p(LineType::softwrappable,
 			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "http://example.com/image.png");
-	REQUIRE(links[0].second == LinkType::IMG);
+	REQUIRE(links[0].url == "http://example.com/image.png");
+	REQUIRE(links[0].type == LinkType::IMG);
 }
 
 TEST_CASE(
@@ -666,8 +666,8 @@ TEST_CASE(
 	REQUIRE(lines[3] ==
 		p(LineType::softwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
-	REQUIRE(links[0].first == "inline image");
-	REQUIRE(links[0].second == LinkType::IMG);
+	REQUIRE(links[0].url == "inline image");
+	REQUIRE(links[0].type == LinkType::IMG);
 }
 
 TEST_CASE(
@@ -699,10 +699,10 @@ TEST_CASE(
 	REQUIRE(lines[8] ==
 		p(LineType::softwrappable, "[2]: https://attachment.zip/ (iframe)"));
 	REQUIRE(links.size() == 2);
-	REQUIRE(links[0].first == "https://example.com/test.jpg");
-	REQUIRE(links[0].second == LinkType::IMG);
-	REQUIRE(links[1].first == "https://attachment.zip/");
-	REQUIRE(links[1].second == LinkType::IFRAME);
+	REQUIRE(links[0].url == "https://example.com/test.jpg");
+	REQUIRE(links[0].type == LinkType::IMG);
+	REQUIRE(links[1].url == "https://attachment.zip/");
+	REQUIRE(links[1].type == LinkType::IFRAME);
 }
 
 TEST_CASE("<blockquote> is indented and is separated by empty lines",
@@ -1447,12 +1447,12 @@ TEST_CASE("<video> results in a placeholder and a link for each valid source",
 		p(LineType::softwrappable,
 			"[3]: http://example.com/video2.mkv (video)"));
 	REQUIRE(links.size() == 3);
-	REQUIRE(links[0].first == "http://example.com/video.avi");
-	REQUIRE(links[0].second == LinkType::VIDEO);
-	REQUIRE(links[1].first == "http://example.com/video2.avi");
-	REQUIRE(links[1].second == LinkType::VIDEO);
-	REQUIRE(links[2].first == "http://example.com/video2.mkv");
-	REQUIRE(links[2].second == LinkType::VIDEO);
+	REQUIRE(links[0].url == "http://example.com/video.avi");
+	REQUIRE(links[0].type == LinkType::VIDEO);
+	REQUIRE(links[1].url == "http://example.com/video2.avi");
+	REQUIRE(links[1].type == LinkType::VIDEO);
+	REQUIRE(links[2].url == "http://example.com/video2.mkv");
+	REQUIRE(links[2].type == LinkType::VIDEO);
 }
 
 TEST_CASE("<video>s without valid sources are ignored", "[HtmlRenderer]")
@@ -1507,12 +1507,12 @@ TEST_CASE("<audio> results in a placeholder and a link for each valid source",
 		p(LineType::softwrappable,
 			"[3]: http://example.com/audio2.m4a (audio)"));
 	REQUIRE(links.size() == 3);
-	REQUIRE(links[0].first == "http://example.com/audio.oga");
-	REQUIRE(links[0].second == LinkType::AUDIO);
-	REQUIRE(links[1].first == "http://example.com/audio2.mp3");
-	REQUIRE(links[1].second == LinkType::AUDIO);
-	REQUIRE(links[2].first == "http://example.com/audio2.m4a");
-	REQUIRE(links[2].second == LinkType::AUDIO);
+	REQUIRE(links[0].url == "http://example.com/audio.oga");
+	REQUIRE(links[0].type == LinkType::AUDIO);
+	REQUIRE(links[1].url == "http://example.com/audio2.mp3");
+	REQUIRE(links[1].type == LinkType::AUDIO);
+	REQUIRE(links[2].url == "http://example.com/audio2.m4a");
+	REQUIRE(links[2].type == LinkType::AUDIO);
 }
 
 TEST_CASE("<audio>s without valid sources are ignored", "[HtmlRenderer]")
@@ -1586,16 +1586,16 @@ TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
 		p(LineType::softwrappable,
 			"[5]: http://example.com/audio2.mp3 (audio)"));
 	REQUIRE(links.size() == 5);
-	REQUIRE(links[0].first == "http://example.com/video.avi");
-	REQUIRE(links[0].second == LinkType::VIDEO);
-	REQUIRE(links[1].first == "http://example.com/video2.avi");
-	REQUIRE(links[1].second == LinkType::VIDEO);
-	REQUIRE(links[2].first == "http://example.com/audio.oga");
-	REQUIRE(links[2].second == LinkType::AUDIO);
-	REQUIRE(links[3].first == "http://example.com/audio.m4a");
-	REQUIRE(links[3].second == LinkType::AUDIO);
-	REQUIRE(links[4].first == "http://example.com/audio2.mp3");
-	REQUIRE(links[4].second == LinkType::AUDIO);
+	REQUIRE(links[0].url == "http://example.com/video.avi");
+	REQUIRE(links[0].type == LinkType::VIDEO);
+	REQUIRE(links[1].url == "http://example.com/video2.avi");
+	REQUIRE(links[1].type == LinkType::VIDEO);
+	REQUIRE(links[2].url == "http://example.com/audio.oga");
+	REQUIRE(links[2].type == LinkType::AUDIO);
+	REQUIRE(links[3].url == "http://example.com/audio.m4a");
+	REQUIRE(links[3].type == LinkType::AUDIO);
+	REQUIRE(links[4].url == "http://example.com/audio2.mp3");
+	REQUIRE(links[4].type == LinkType::AUDIO);
 }
 
 TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
@@ -1642,14 +1642,14 @@ TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
 		p(LineType::softwrappable,
 			"[4]: http://example.com/audio.oga (audio)"));
 	REQUIRE(links.size() == 4);
-	REQUIRE(links[0].first == "http://example.com/video.avi");
-	REQUIRE(links[0].second == LinkType::VIDEO);
-	REQUIRE(links[1].first == "http://example.com/video.mkv");
-	REQUIRE(links[1].second == LinkType::VIDEO);
-	REQUIRE(links[2].first == "http://example.com/audio.mp3");
-	REQUIRE(links[2].second == LinkType::AUDIO);
-	REQUIRE(links[3].first == "http://example.com/audio.oga");
-	REQUIRE(links[3].second == LinkType::AUDIO);
+	REQUIRE(links[0].url == "http://example.com/video.avi");
+	REQUIRE(links[0].type == LinkType::VIDEO);
+	REQUIRE(links[1].url == "http://example.com/video.mkv");
+	REQUIRE(links[1].type == LinkType::VIDEO);
+	REQUIRE(links[2].url == "http://example.com/audio.mp3");
+	REQUIRE(links[2].type == LinkType::AUDIO);
+	REQUIRE(links[3].url == "http://example.com/audio.oga");
+	REQUIRE(links[3].type == LinkType::AUDIO);
 }
 
 TEST_CASE("Back-to-back <video> and <audio> tags are seperated by a new line",
@@ -1677,10 +1677,10 @@ TEST_CASE("Back-to-back <video> and <audio> tags are seperated by a new line",
 		p(LineType::softwrappable,
 			"[2]: https://example.com/audio.mp3 (audio)"));
 	REQUIRE(links.size() == 2);
-	REQUIRE(links[0].first == "https://example.com/video.mp4");
-	REQUIRE(links[0].second == LinkType::VIDEO);
-	REQUIRE(links[1].first == "https://example.com/audio.mp3");
-	REQUIRE(links[1].second == LinkType::AUDIO);
+	REQUIRE(links[0].url == "https://example.com/video.mp4");
+	REQUIRE(links[0].type == LinkType::VIDEO);
+	REQUIRE(links[1].url == "https://example.com/audio.mp3");
+	REQUIRE(links[1].type == LinkType::AUDIO);
 }
 
 TEST_CASE("Ordered list can contain unordered list in its items",

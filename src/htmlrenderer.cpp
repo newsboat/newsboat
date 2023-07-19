@@ -1020,8 +1020,8 @@ void HtmlRenderer::render(std::istream& input,
 		for (unsigned int i = 0; i < links.size(); ++i) {
 			auto link_text = strprintf::fmt("[%u]: %s (%s)",
 					i + 1,
-					links[i].first,
-					type2str(links[i].second));
+					links[i].url,
+					type2str(links[i].type));
 			add_line_softwrappable(link_text, lines);
 		}
 	}

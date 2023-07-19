@@ -18,7 +18,7 @@ TEST_CASE("Password and username are censored", "[Links]")
 	Links links;
 
 	links.add_link("http://user:pass@somesite.com/feed", LinkType::HREF);
-	REQUIRE(links.begin()->first == "http://*:*@somesite.com/feed");
+	REQUIRE(links.begin()->url == "http://*:*@somesite.com/feed");
 	links.add_link("http://user:pass@somesite.com/feed", LinkType::HREF);
 	REQUIRE(links.size() == 1);
 }
