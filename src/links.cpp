@@ -6,7 +6,7 @@ unsigned int Links::add_link(const std::string& url, LinkType type)
 	bool found = false;
 	unsigned int i = 1;
 	for (const auto& l : links) {
-		if (l.first == url) {
+		if (l.first == newsboat::utils::censor_url(url)) {
 			found = true;
 			break;
 		}
