@@ -112,9 +112,6 @@ public:
 private:
 	void prepare_new_line(std::string& line, int indent_level);
 	bool line_is_nonempty(const std::string& line);
-	unsigned int add_link(Links& links,
-		const std::string& link,
-		LinkType type);
 	std::string absolute_url(const std::string& url,
 		const std::string& link);
 	std::string type2str(LinkType type);

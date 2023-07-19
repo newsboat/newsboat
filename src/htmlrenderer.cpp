@@ -70,28 +70,6 @@ void HtmlRenderer::render(const std::string& source,
 	render(input, lines, links, url);
 }
 
-unsigned int HtmlRenderer::add_link(Links& links,
-	const std::string& link,
-	LinkType type)
-{
-	bool found = false;
-	unsigned int i = 1;
-	for (const auto& l : links) {
-		if (l.first == link) {
-			found = true;
-			break;
-		}
-		i++;
-	}
-	if (!found) {
-		links.add_link(link, type);
-	} else if (links[i - 1].second == LinkType::HREF) {
-		links[i - 1].second = type;
-	}
-
-	return i;
-}
-
 HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
 {
 	std::string tagname = parser.get_text();
@@ -176,10 +154,9 @@ void HtmlRenderer::render(std::istream& input,
 					LOG(Level::WARN, "HtmlRenderer::render: found a tag with no href attribute");
 				}
 				if (link.length() > 0) {
-					link_num = add_link(links,
-							utils::censor_url(
-								utils::absolute_url(
-									url, link)),
+					link_num = links.add_link(
+							utils::absolute_url(
+								url, link),
 							LinkType::HREF);
 					if (!raw_) {
 						curline.append("<u>");
@@ -220,11 +197,10 @@ void HtmlRenderer::render(std::istream& input,
 						LOG(Level::WARN, "HtmlRenderer::render: found embed object without src attribute");
 					}
 					if (link.length() > 0) {
-						link_num = add_link(links,
-								utils::censor_url(
-									utils::absolute_url(
-										url,
-										link)),
+						link_num = links.add_link(
+								utils::absolute_url(
+									url,
+									link),
 								LinkType::EMBED);
 						curline.append(strprintf::fmt(
 								"[%s %u]",
@@ -1066,7 +1042,7 @@ void HtmlRenderer::add_media_link(std::string& curline,
 	}
 
 	const std::string type_str = type2str(type);
-	const unsigned int link_num = add_link(links, link_url, type);
+	const unsigned int link_num = links.add_link(link_url, type);
 	std::string output;
 
 	if (!media_title.empty()) {
