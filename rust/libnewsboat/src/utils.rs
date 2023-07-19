@@ -341,10 +341,7 @@ const PODCAST_MIME_TO_LINKTYPE: [MimeMatcher; 2] = [
         },
         links::LinkType::Audio,
     ),
-    (
-        |mime| mime.starts_with("video/"),
-        links::LinkType::Video,
-    ),
+    (|mime| mime.starts_with("video/"), links::LinkType::Video),
 ];
 
 /// Returns `true` if given MIME type is considered to be a podcast by Newsboat.
