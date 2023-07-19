@@ -1,4 +1,4 @@
-use crate::htmlrenderer;
+use crate::links;
 use crate::logger::{self, Level};
 use libc::{
     c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t, waitpid, E2BIG, EILSEQ,
@@ -330,7 +330,7 @@ pub fn remove_soft_hyphens(text: &mut String) {
 ///
 /// 2. figuring out the `LinkType` for a particular enclosure, given its MIME type
 ///    (`utils::podcast_mime_to_link_type`).
-type MimeMatcher = (fn(&str) -> bool, htmlrenderer::LinkType);
+type MimeMatcher = (fn(&str) -> bool, links::LinkType);
 const PODCAST_MIME_TO_LINKTYPE: [MimeMatcher; 2] = [
     (
         |mime| {
@@ -339,11 +339,11 @@ const PODCAST_MIME_TO_LINKTYPE: [MimeMatcher; 2] = [
             // https://tools.ietf.org/html/rfc5334#section-10.1
             mime.starts_with("audio/") || mime == "application/ogg"
         },
-        htmlrenderer::LinkType::Audio,
+        links::LinkType::Audio,
     ),
     (
         |mime| mime.starts_with("video/"),
-        htmlrenderer::LinkType::Video,
+        links::LinkType::Video,
     ),
 ];
 
@@ -357,7 +357,7 @@ pub fn is_valid_podcast_type(mimetype: &str) -> bool {
 /// Converts podcast's MIME type into an HtmlRenderer's "link type"
 ///
 /// Returns None if given MIME type is not a podcast type. See `is_valid_podcast_type()`.
-pub fn podcast_mime_to_link_type(mime_type: &str) -> Option<htmlrenderer::LinkType> {
+pub fn podcast_mime_to_link_type(mime_type: &str) -> Option<links::LinkType> {
     PODCAST_MIME_TO_LINKTYPE
         .iter()
         .find_map(|(matcher, link_type)| {
@@ -1573,7 +1573,7 @@ mod tests {
 
     #[test]
     fn t_podcast_mime_to_link_type() {
-        use crate::htmlrenderer::LinkType::*;
+        use crate::links::LinkType::*;
 
         assert_eq!(podcast_mime_to_link_type("audio/mpeg"), Some(Audio));
         assert_eq!(podcast_mime_to_link_type("audio/mp3"), Some(Audio));

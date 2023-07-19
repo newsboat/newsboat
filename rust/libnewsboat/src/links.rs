@@ -18,5 +18,5 @@ pub enum LinkType {
 
     /// HTML `<audio>`
     Audio,
-    // This enum has to be kept in sync with enum LinkType in include/htmlrenderer.h
+    // This enum has to be kept in sync with enum LinkType in include/links.h
 }

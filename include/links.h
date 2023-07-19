@@ -4,7 +4,7 @@
 #include <utility>
 #include <string>
 namespace newsboat {
-// This enum has to be kept in sync with enum LinkType in rust/libnewsboat/src/htmlrenderer.rs
+// This enum has to be kept in sync with enum LinkType in rust/libnewsboat/src/links.rs
 enum class LinkType { HREF, IMG, EMBED, IFRAME, VIDEO, AUDIO };
 
 typedef std::pair<std::string, LinkType> LinkPair;
