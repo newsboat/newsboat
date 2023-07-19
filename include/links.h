@@ -1,5 +1,5 @@
-#ifndef LINKS_H_
-#define LINKS_H_
+#ifndef NEWSBOAT_LINKS_H_
+#define NEWSBOAT_LINKS_H_
 #include <vector>
 #include <utility>
 #include <string>
