@@ -4,6 +4,7 @@ src/configdata.cpp
 src/confighandlerexception.cpp
 src/configparser.cpp
 src/exception.cpp
+src/filepath.cpp
 src/fmtstrformatter.cpp
 src/fslock.cpp
 src/history.cpp
