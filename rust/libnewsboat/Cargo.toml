@@ -8,7 +8,7 @@ edition = "2018"
 strprintf = { path="../strprintf" }
 regex-rs = { path="../regex-rs" }
 
-fastrand = "1.9.0"
+fastrand = "2.0.0"
 once_cell = "1.18.0"
 url = "2.4.0"
 percent-encoding = "2.3.0"
