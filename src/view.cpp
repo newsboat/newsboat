@@ -600,7 +600,7 @@ void View::push_help()
 	current_formaction = formaction_stack_size() - 1;
 }
 
-void View::push_urlview(const std::vector<LinkPair>& links,
+void View::push_urlview(const Links& links,
 	std::shared_ptr<RssFeed>& feed)
 {
 	auto urlview = std::make_shared<UrlViewFormAction>(

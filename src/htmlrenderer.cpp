@@ -63,33 +63,11 @@ HtmlRenderer::HtmlRenderer(bool raw)
 
 void HtmlRenderer::render(const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& links,
+	Links& links,
 	const std::string& url)
 {
 	std::istringstream input(source);
 	render(input, lines, links, url);
-}
-
-unsigned int HtmlRenderer::add_link(std::vector<LinkPair>& links,
-	const std::string& link,
-	LinkType type)
-{
-	bool found = false;
-	unsigned int i = 1;
-	for (const auto& l : links) {
-		if (l.first == link) {
-			found = true;
-			break;
-		}
-		i++;
-	}
-	if (!found) {
-		links.push_back(LinkPair(link, type));
-	} else if (links[i - 1].second == LinkType::HREF) {
-		links[i - 1].second = type;
-	}
-
-	return i;
 }
 
 HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
@@ -104,7 +82,7 @@ HtmlTag HtmlRenderer::extract_tag(TagSoupPullParser& parser)
 
 void HtmlRenderer::render(std::istream& input,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& links,
+	Links& links,
 	const std::string& url)
 {
 	unsigned int image_count = 0;
@@ -176,10 +154,9 @@ void HtmlRenderer::render(std::istream& input,
 					LOG(Level::WARN, "HtmlRenderer::render: found a tag with no href attribute");
 				}
 				if (link.length() > 0) {
-					link_num = add_link(links,
-							utils::censor_url(
-								utils::absolute_url(
-									url, link)),
+					link_num = links.add_link(
+							utils::absolute_url(
+								url, link),
 							LinkType::HREF);
 					if (!raw_) {
 						curline.append("<u>");
@@ -220,11 +197,10 @@ void HtmlRenderer::render(std::istream& input,
 						LOG(Level::WARN, "HtmlRenderer::render: found embed object without src attribute");
 					}
 					if (link.length() > 0) {
-						link_num = add_link(links,
-								utils::censor_url(
-									utils::absolute_url(
-										url,
-										link)),
+						link_num = links.add_link(
+								utils::absolute_url(
+									url,
+									link),
 								LinkType::EMBED);
 						curline.append(strprintf::fmt(
 								"[%s %u]",
@@ -1044,15 +1020,15 @@ void HtmlRenderer::render(std::istream& input,
 		for (unsigned int i = 0; i < links.size(); ++i) {
 			auto link_text = strprintf::fmt("[%u]: %s (%s)",
 					i + 1,
-					links[i].first,
-					type2str(links[i].second));
+					links[i].url,
+					type2str(links[i].type));
 			add_line_softwrappable(link_text, lines);
 		}
 	}
 }
 
 void HtmlRenderer::add_media_link(std::string& curline,
-	std::vector<LinkPair>& links, const std::string& url,
+	Links& links, const std::string& url,
 	const std::string& media_url, const std::string& media_title,
 	unsigned int media_count, LinkType type)
 {
@@ -1066,7 +1042,7 @@ void HtmlRenderer::add_media_link(std::string& curline,
 	}
 
 	const std::string type_str = type2str(type);
-	const unsigned int link_num = add_link(links, link_url, type);
+	const unsigned int link_num = links.add_link(link_url, type);
 	std::string output;
 
 	if (!media_title.empty()) {

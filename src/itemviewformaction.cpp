@@ -126,7 +126,7 @@ void ItemViewFormAction::prepare()
 			if (!item->enclosure_url().empty()) {
 				const auto link_type = utils::podcast_mime_to_link_type(item->enclosure_type());
 				if (link_type.has_value()) {
-					links.push_back(LinkPair(item->enclosure_url(), link_type.value()));
+					links.add_link(item->enclosure_url(), link_type.value());
 				}
 			}
 
@@ -446,7 +446,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			idx);
 		if (idx < links.size()) {
 			const bool interactive = true;
-			return open_link_in_browser(links[idx].first, utils::link_type_str(links[idx].second),
+			return open_link_in_browser(links[idx].url, utils::link_type_str(links[idx].type),
 					item->title(), interactive);
 		}
 	}
@@ -628,7 +628,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 		sscanf(qna_responses[0].c_str(), "%u", &idx);
 		if (idx && idx - 1 < links.size()) {
 			const bool interactive = true;
-			open_link_in_browser(links[idx - 1].first, utils::link_type_str(links[idx - 1].second),
+			open_link_in_browser(links[idx - 1].url, utils::link_type_str(links[idx - 1].type),
 				item->title(), interactive);
 		}
 	}

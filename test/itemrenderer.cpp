@@ -631,7 +631,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 			"{listitem text:\"<>test>\"}" +
 			"}";
 
-		std::vector<LinkPair> links;
+		Links links;
 		const auto result = item_renderer::to_stfl_list(cfg, item, 80, 80, &rxman,
 				"article", links);
 		REQUIRE(result.first == expected);
@@ -650,7 +650,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 			"{listitem text:\"<>html>&lt;test&gt;<>/html>\"}" +
 			"}";
 
-		std::vector<LinkPair> links;
+		Links links;
 		const auto result = item_renderer::source_to_stfl_list(item, 80, 80, &rxman,
 				"article");
 		REQUIRE(result.first == expected);

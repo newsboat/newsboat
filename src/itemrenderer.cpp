@@ -46,7 +46,7 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
 void prepare_header(
 	std::shared_ptr<RssItem> item,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& /*links*/, bool raw = false)
+	Links& /*links*/, bool raw = false)
 {
 	const auto add_line =
 		[&lines]
@@ -111,7 +111,7 @@ void render_html(
 	ConfigContainer& cfg,
 	const std::string& source,
 	std::vector<std::pair<LineType, std::string>>& lines,
-	std::vector<LinkPair>& thelinks,
+	Links& thelinks,
 	const std::string& url,
 	bool raw)
 {
@@ -179,7 +179,7 @@ std::string item_renderer::to_plain_text(
 	std::shared_ptr<RssItem> item)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 	const auto item_description = item->description();
 
 	prepare_header(item, lines, links, true);
@@ -210,7 +210,7 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	unsigned int window_width,
 	RegexManager* rxman,
 	const std::string& location,
-	std::vector<LinkPair>& links)
+	Links& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	const auto item_description = item->description();
@@ -261,7 +261,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	const std::string& location)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
-	std::vector<LinkPair> links;
+	Links links;
 
 	prepare_header(item, lines, links);
 	render_source(lines, utils::quote_for_stfl(utils::utf8_to_locale(

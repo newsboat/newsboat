@@ -278,7 +278,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				std::string urlviewer = cfg->get_configvalue(
 						"external-url-viewer");
 				if (urlviewer == "") {
-					std::vector<LinkPair> links;
+					Links links;
 					std::vector<std::pair<LineType,
 					    std::string>>
 					    lines;

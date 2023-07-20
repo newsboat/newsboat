@@ -27,6 +27,7 @@ src/itemlistformaction.cpp
 src/itemrenderer.cpp
 src/itemutils.cpp
 src/itemviewformaction.cpp
+src/links.cpp
 src/listformaction.cpp
 src/listformatter.cpp
 src/listwidgetbackend.cpp
