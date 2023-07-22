@@ -65,9 +65,7 @@ test_helpers::MainTempDir::~MainTempDir()
 	::rmdir(tempdir_str.c_str());
 }
 
-const std::string test_helpers::MainTempDir::get_path() const
+newsboat::Filepath test_helpers::MainTempDir::get_path() const
 {
-	auto result = tempdir.to_locale_string();
-	result.push_back('/');
-	return result;
+	return tempdir.clone();
 }
