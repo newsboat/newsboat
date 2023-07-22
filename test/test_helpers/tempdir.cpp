@@ -21,7 +21,7 @@ test_helpers::TempDir::TempDir()
 		msg += std::to_string(saved_errno);
 		msg += ") ";
 		msg += ::strerror(saved_errno);
-		throw MainTempDir::tempfileexception(msg);
+		throw MainTempDir::tempfileexception(newsboat::Filepath(), msg);
 	}
 
 	// cned()-1 so we don't copy terminating null byte - std::string
