@@ -233,3 +233,9 @@ TEST_CASE("strprintf::fmt() works fine with 2MB format string", "[strprintf]")
 	const auto expected = spacer + "42" + spacer + "100500";
 	REQUIRE(strprintf::fmt(format, 42, 100500) == expected);
 }
+
+TEST_CASE("strprintf::fmt() formats Filepath", "[strprintf]")
+{
+	const auto input = Filepath::from_locale_string("/run/shm/");
+	REQUIRE(strprintf::fmt("%s", input) == "/run/shm/");
+}
