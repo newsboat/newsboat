@@ -5,6 +5,9 @@
 #include <string>
 
 #include "filepath.h"
+// Users of this class might use the path in assertions, so let's include the
+// string maker for their convenience.
+#include "stringmaker/filepath.h"
 
 namespace test_helpers {
 
@@ -28,7 +31,7 @@ public:
 
 	~MainTempDir();
 
-	const std::string get_path() const;
+	newsboat::Filepath get_path() const;
 
 private:
 	newsboat::Filepath tempdir;
