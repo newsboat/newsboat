@@ -19,7 +19,7 @@ public:
 
 private:
 	MainTempDir tempdir;
-	std::string dirpath;
+	newsboat::Filepath dirpath;
 };
 
 } // namespace test_helpers
