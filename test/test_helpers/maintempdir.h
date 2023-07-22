@@ -4,6 +4,8 @@
 #include <exception>
 #include <string>
 
+#include "filepath.h"
+
 namespace test_helpers {
 
 /* Objects of MainTempDir class create Newsboat's temporary directory, and try
@@ -13,7 +15,9 @@ class MainTempDir {
 public:
 	class tempfileexception : public std::exception {
 	public:
-		explicit tempfileexception(const std::string& error);
+		explicit tempfileexception(
+			const newsboat::Filepath& filepath,
+			const std::string& error);
 		virtual const char* what() const throw();
 
 	private:
@@ -27,7 +31,7 @@ public:
 	const std::string get_path() const;
 
 private:
-	std::string tempdir;
+	newsboat::Filepath tempdir;
 };
 
 } // namespace test_helpers
