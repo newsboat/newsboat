@@ -24,6 +24,11 @@ public:
 	// FIXME: remove these once the codebase is fully migrated from std::string
 	// to Filepath
 
+	Filepath(const char* input)
+		: rs_object(std::move(Filepath::from_locale_string(std::string(input)).rs_object))
+	{
+	}
+
 	Filepath(const std::string& input)
 		: rs_object(std::move(Filepath::from_locale_string(input).rs_object))
 	{
