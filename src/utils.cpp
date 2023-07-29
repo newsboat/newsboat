@@ -700,7 +700,7 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
-int utils::mkdir_parents(const std::string& p, mode_t mode)
+int utils::mkdir_parents(const Filepath& p, mode_t mode)
 {
 	return utils::bridged::mkdir_parents(p, static_cast<std::uint32_t>(mode));
 }
