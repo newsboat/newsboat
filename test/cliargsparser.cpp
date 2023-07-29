@@ -1,3 +1,7 @@
+// This has to be included before Catch2 in order to provide the comparison
+// operator
+#include "filepath.h"
+
 #include "3rd-party/catch.hpp"
 
 #include "cliargsparser.h"
@@ -75,7 +79,7 @@ TEST_CASE("Resolves tilde to homedir in -i/--import-from-opml",
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_import());
-		REQUIRE(args.importfile() == tmp.get_path() + filename);
+		REQUIRE(args.importfile() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-i") {
@@ -212,7 +216,7 @@ TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.url_file() == tmp.get_path() + filename);
+		REQUIRE(args.url_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-u") {
@@ -299,8 +303,8 @@ TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cache_file() == tmp.get_path() + filename);
-		REQUIRE(args.lock_file() == tmp.get_path() + filename + ".lock");
+		REQUIRE(args.cache_file() == tmp.get_path().join(filename));
+		REQUIRE(args.lock_file() == tmp.get_path().join(filename + ".lock"));
 	};
 
 	SECTION("-c") {
@@ -348,7 +352,7 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.config_file() == tmp.get_path() + filename);
+		REQUIRE(args.config_file() == tmp.get_path().join(filename));
 		REQUIRE(args.using_nonstandard_configs());
 	};
 
@@ -393,7 +397,7 @@ TEST_CASE("Resolves tilde to homedir in --queue-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.queue_file() == tmp.get_path() + filename);
+		REQUIRE(args.queue_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("--queue-file") {
@@ -433,7 +437,7 @@ TEST_CASE("Resolves tilde to homedir in --search-history-file", "[CliArgsParser]
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.search_history_file() == tmp.get_path() + filename);
+		REQUIRE(args.search_history_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("--search-history-file") {
@@ -473,7 +477,7 @@ TEST_CASE("Resolves tilde to homedir in --cmdline-history-file", "[CliArgsParser
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cmdline_history_file() == tmp.get_path() + filename);
+		REQUIRE(args.cmdline_history_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("--cmdline-history-file") {
@@ -668,7 +672,7 @@ TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.readinfo_import_file() == tmp.get_path() + filename);
+		REQUIRE(args.readinfo_import_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-I") {
@@ -714,7 +718,7 @@ TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.readinfo_export_file() == tmp.get_path() + filename);
+		REQUIRE(args.readinfo_export_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-E") {
@@ -783,7 +787,7 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.log_file() == tmp.get_path() + filename);
+		REQUIRE(args.log_file() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-d") {

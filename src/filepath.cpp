@@ -46,6 +46,13 @@ void Filepath::push(const Filepath& component)
 	filepath::bridged::push(*rs_object, *component.rs_object);
 }
 
+Filepath Filepath::join(const Filepath& component) const
+{
+	auto result = clone();
+	result.push(component);
+	return result;
+}
+
 Filepath Filepath::clone() const
 {
 	Filepath result;
