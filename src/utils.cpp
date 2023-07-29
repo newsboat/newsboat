@@ -869,9 +869,11 @@ void utils::initialize_ssl_implementation(void)
 #endif
 }
 
-std::string utils::get_default_browser()
+Filepath utils::get_default_browser()
 {
-	return std::string(utils::bridged::get_default_browser());
+	// The function is in utils.rs, but its binding is in filepath.rs because
+	// I can't make it return `Box<PathBuf>` any other way
+	return filepath::bridged::get_default_browser();
 }
 
 std::string utils::md5hash(const std::string& input)
