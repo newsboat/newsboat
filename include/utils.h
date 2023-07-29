@@ -164,7 +164,7 @@ bool is_valid_podcast_type(const std::string& mimetype);
 nonstd::optional<LinkType> podcast_mime_to_link_type(const std::string&
 	mimetype);
 
-std::string get_default_browser();
+Filepath get_default_browser();
 
 std::string md5hash(const std::string& input);
 
