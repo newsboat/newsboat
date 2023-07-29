@@ -1349,7 +1349,7 @@ TEST_CASE(
 TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 {
 	SECTION("Returns non-empty string") {
-		REQUIRE(utils::getcwd().length() > 0);
+		REQUIRE(utils::getcwd() != Filepath());
 	}
 
 	SECTION("Value depends on current directory") {
@@ -1388,7 +1388,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 
 		REQUIRE(0 == ::rmdir(tempdir_path.c_str()));
 
-		REQUIRE("" == utils::getcwd());
+		REQUIRE(Filepath() == utils::getcwd());
 	}
 }
 
