@@ -6,6 +6,11 @@
 #include <cstdint>
 #include <string>
 
+#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+
+#endif
+
 namespace newsboat {
 
 /// A path in the file system.
@@ -15,6 +20,21 @@ namespace newsboat {
 /// https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html
 class Filepath {
 public:
+#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+	// FIXME: remove these once the codebase is fully migrated from std::string
+	// to Filepath
+
+	Filepath(const std::string& input)
+		: rs_object(std::move(Filepath::from_locale_string(input).rs_object))
+	{
+	}
+
+	operator const filepath::bridged::PathBuf& () const
+	{
+		return *rs_object;
+	}
+#endif
+
 	/// Constructs an empty path.
 	Filepath();
 
