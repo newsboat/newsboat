@@ -15,6 +15,7 @@
 #include "links.h"
 #include "test_helpers/chdir.h"
 #include "test_helpers/envvar.h"
+#include "test_helpers/stringmaker/filepath.h"
 #include "test_helpers/stringmaker/optional.h"
 #include "test_helpers/tempdir.h"
 #include "test_helpers/tempfile.h"
@@ -1598,13 +1599,13 @@ TEST_CASE(
 
 	// If BROWSER is not set, default browser is lynx(1)
 	browserEnv.unset();
-	REQUIRE(utils::get_default_browser() == "lynx");
+	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("lynx"));
 
 	browserEnv.set("firefox");
-	REQUIRE(utils::get_default_browser() == "firefox");
+	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("firefox"));
 
 	browserEnv.set("opera");
-	REQUIRE(utils::get_default_browser() == "opera");
+	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("opera"));
 }
 
 TEST_CASE(
