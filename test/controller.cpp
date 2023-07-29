@@ -10,6 +10,7 @@
 #include "3rd-party/catch.hpp"
 #include "test_helpers/tempdir.h"
 #include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
 
 using namespace newsboat;
 
@@ -17,9 +18,9 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 {
 	std::string name = "myitem";
 	test_helpers::TempDir tmp;
-	const auto home_dir = tmp.get_path() + "home/";
+	const auto home_dir = tmp.get_path().join("home");
 	REQUIRE(0 == utils::mkdir_parents(home_dir, 0700));
-	const auto save_path = tmp.get_path() + "save/";
+	const auto save_path = tmp.get_path().join("save");
 	REQUIRE(0 == utils::mkdir_parents(save_path, 0700));
 
 	test_helpers::EnvVar home("HOME");
@@ -38,11 +39,11 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	const auto description = "First line.\nSecond one.\nAnd finally the third";
 	item.set_description(description, "text/plain");
 
-	c.write_item(item, tmp.get_path() + name);
+	c.write_item(item, tmp.get_path().join(name));
 	c.write_item(item, "~/" + name);
 	c.write_item(item, name);
 
-	REQUIRE(::access(std::string(tmp.get_path() + name).c_str(), R_OK) == 0);
-	REQUIRE(::access(std::string(home_dir + name).c_str(), R_OK) == 0);
-	REQUIRE(::access(std::string(save_path + name).c_str(), R_OK) == 0);
+	REQUIRE(test_helpers::file_available_for_reading(tmp.get_path().join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(home_dir.join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(save_path.join(name)));
 }
