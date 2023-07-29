@@ -49,19 +49,6 @@ public:
 	{
 		return *rs_object;
 	}
-
-	Filepath operator+(const Filepath& component)
-	{
-		push(component);
-		return std::move(*this);
-	}
-
-	Filepath operator+(const Filepath& component) const
-	{
-		auto result = clone();
-		result.push(component);
-		return result;
-	}
 #endif
 
 	/// Constructs an empty path.
@@ -88,6 +75,10 @@ public:
 	///
 	/// If component is an absolute path, it replaces the current path.
 	void push(const Filepath& component);
+
+	/// Creates a new Filepath with a given component appended to the current
+	/// path (with a separator in between).
+	Filepath join(const Filepath& component) const;
 
 	/// Returns a copy of this path.
 	Filepath clone() const;
