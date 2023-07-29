@@ -1,7 +1,7 @@
+use crate::filepath::PathBuf;
 use libc::{c_char, c_ulong};
 use libnewsboat::utils::{self, *};
 use std::ffi::{CStr, CString};
-use std::path::{Path, PathBuf};
 
 #[cxx::bridge(namespace = "newsboat::utils")]
 mod ffi {
@@ -37,6 +37,13 @@ mod ffi {
 // Functions that should be wrapped on the C++ side for ease of use.
 #[cxx::bridge(namespace = "newsboat::utils::bridged")]
 mod bridged {
+    #[namespace = "newsboat::filepath::bridged"]
+    extern "C++" {
+        include!("libnewsboat-ffi/src/filepath.rs.h");
+
+        type PathBuf = crate::filepath::PathBuf;
+    }
+
     extern "Rust" {
         fn to_u(input: String, default_value: u32) -> u32;
 
@@ -44,7 +51,7 @@ mod bridged {
         fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> bool;
 
         fn read_text_file(
-            filename: String,
+            filename: &PathBuf,
             contents: &mut Vec<String>,
             error_line_number: &mut u64,
             error_reason: &mut String,
@@ -128,12 +135,12 @@ fn run_non_interactively(command: &str, caller: &str, exit_code: &mut u8) -> boo
 }
 
 fn read_text_file(
-    filename: String,
+    filename: &PathBuf,
     contents: &mut Vec<String>,
     error_line_number: &mut u64,
     error_reason: &mut String,
 ) -> bool {
-    match utils::read_text_file(Path::new(&filename)) {
+    match utils::read_text_file(&filename.0) {
         Ok(c) => {
             *contents = c;
             true
@@ -192,14 +199,14 @@ fn extract_filter(line: &str) -> ffi::FilterUrlParts {
 }
 
 fn resolve_tilde(path: &str) -> String {
-    let path = PathBuf::from(path);
+    let path = std::path::PathBuf::from(path);
     let result = utils::resolve_tilde(path);
     result.to_string_lossy().to_string()
 }
 
 fn resolve_relative(reference: &str, path: &str) -> String {
-    let reference = Path::new(reference);
-    let path = Path::new(path);
+    let reference = std::path::Path::new(reference);
+    let path = std::path::Path::new(path);
     let result = utils::resolve_relative(reference, path);
     result.to_string_lossy().to_string()
 }
@@ -211,7 +218,7 @@ fn getcwd() -> String {
 }
 
 fn mkdir_parents(path: &str, mode: u32) -> isize {
-    let path = Path::new(path);
+    let path = std::path::Path::new(path);
     match utils::mkdir_parents(&path, mode) {
         Ok(_) => 0,
         Err(_) => -1,
