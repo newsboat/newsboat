@@ -41,6 +41,14 @@ TEST_CASE("push() adds a new component to the path", "[Filepath]")
 	REQUIRE(dir == Filepath::from_locale_string("/tmp/newsboat/.local/share/cache/cache.db"));
 }
 
+TEST_CASE("Can be extended with join()", "[Filepath]")
+{
+	const auto tmp = Filepath::from_locale_string("/tmp");
+
+	const auto subdir = tmp.join("newsboat").join("tests");
+	REQUIRE(subdir == Filepath::from_locale_string("/tmp/newsboat/tests"));
+}
+
 TEST_CASE("Can be cloned", "[Filepath]")
 {
 	auto original = Filepath::from_locale_string("/etc/hosts");
