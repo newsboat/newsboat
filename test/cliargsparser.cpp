@@ -1,3 +1,7 @@
+// This has to be included before Catch2 in order to provide the comparison
+// operator
+#include "filepath.h"
+
 #include "3rd-party/catch.hpp"
 
 #include <cstring>

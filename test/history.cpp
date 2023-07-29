@@ -7,6 +7,14 @@
 
 using namespace newsboat;
 
+inline namespace {
+bool file_available_for_reading_and_writing(const Filepath& filepath)
+{
+	const auto filepath_str = filepath.to_locale_string();
+	return (0 == ::access(filepath_str.c_str(), R_OK | W_OK));
+}
+}
+
 TEST_CASE("History can be iterated on in any direction", "[History]")
 {
 	History h;
@@ -50,12 +58,12 @@ TEST_CASE("History can be saved and loaded from file", "[History]")
 
 	SECTION("Nothing is saved to file if limit is zero") {
 		h.save_to_file(filepath, 0);
-		REQUIRE_FALSE(0 == ::access(filepath.c_str(), R_OK | W_OK));
+		REQUIRE_FALSE(file_available_for_reading_and_writing(filepath));
 	}
 
 	SECTION("Save to file") {
 		h.save_to_file(filepath, 10);
-		REQUIRE(0 == ::access(filepath.c_str(), R_OK | W_OK));
+		REQUIRE(file_available_for_reading_and_writing(filepath));
 
 		SECTION("Load from file") {
 			History loaded_h;
@@ -84,7 +92,7 @@ TEST_CASE("Only the most recent lines are saved when limiting history",
 
 	SECTION("file with history lines is created") {
 		h.save_to_file(filepath, max_lines);
-		REQUIRE(0 == ::access(filepath.c_str(), R_OK | W_OK));
+		REQUIRE(file_available_for_reading_and_writing(filepath));
 
 		SECTION("when loading, only a limited number of lines are returned") {
 			History loaded_h;

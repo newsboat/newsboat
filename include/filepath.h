@@ -4,6 +4,7 @@
 #include "libnewsboat-ffi/src/filepath.rs.h"
 
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 #define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
@@ -48,6 +49,19 @@ public:
 	{
 		return *rs_object;
 	}
+
+	Filepath operator+(const Filepath& component)
+	{
+		push(component);
+		return std::move(*this);
+	}
+
+	Filepath operator+(const Filepath& component) const
+	{
+		auto result = clone();
+		result.push(component);
+		return result;
+	}
 #endif
 
 	/// Constructs an empty path.
@@ -91,5 +105,26 @@ private:
 };
 
 } // namespace newsboat
+
+// Used in Catch2's INFO macro.
+inline std::ostream& operator<<(std::ostream& out, const newsboat::Filepath& p)
+{
+	out << p.display();
+	return out;
+}
+
+#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+inline bool operator==(const std::string& lhs, const newsboat::Filepath& rhs)
+{
+	return lhs == rhs.to_locale_string();
+}
+
+#include "3rd-party/optional.hpp"
+inline bool operator==(const nonstd::optional<std::string>& lhs,
+	const newsboat::Filepath& rhs)
+{
+	return lhs && lhs.value() == rhs;
+}
+#endif
 
 #endif /* NEWSBOAT_FILEPATH_H_ */
