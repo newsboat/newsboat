@@ -55,9 +55,7 @@ test_helpers::TempDir::~TempDir()
 	}
 }
 
-const std::string test_helpers::TempDir::get_path() const
+newsboat::Filepath test_helpers::TempDir::get_path() const
 {
-	auto result = dirpath.to_locale_string();
-	result.push_back('/');
-	return result;
+	return dirpath.clone();
 }
