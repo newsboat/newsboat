@@ -29,6 +29,16 @@ public:
 	{
 	}
 
+	Filepath(rust::Box<filepath::bridged::PathBuf> rs_object)
+		: rs_object(std::move(rs_object))
+	{
+	}
+
+	operator std::string() const
+	{
+		return to_locale_string();
+	}
+
 	operator const filepath::bridged::PathBuf& () const
 	{
 		return *rs_object;
