@@ -63,7 +63,7 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	// tests are easier as relative paths
 	const std::string filename = (tmp_filename.front() == NEWSBEUTER_PATH_SEP) ?
 		tmp_filename :
-		utils::getcwd() + NEWSBEUTER_PATH_SEP + tmp_filename;
+		utils::getcwd().to_locale_string() + NEWSBEUTER_PATH_SEP + tmp_filename;
 
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {

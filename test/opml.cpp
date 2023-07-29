@@ -142,7 +142,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 
 	REQUIRE_NOTHROW(
 		opml::import(
-			"file://" + utils::getcwd() + "/data/example.opml",
+			"file://" + utils::getcwd().to_locale_string() + "/data/example.opml",
 			urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
@@ -182,7 +182,7 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 
 	REQUIRE_NOTHROW(
 		opml::import(
-			"file://" + utils::getcwd() + "/data/piped.opml",
+			"file://" + utils::getcwd().to_locale_string() + "/data/piped.opml",
 			urlcfg));
 
 	using URL = std::string;
@@ -217,7 +217,7 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 
 	REQUIRE_NOTHROW(
 		opml::import(
-			"file://" + utils::getcwd() + "/data/filtered.opml",
+			"file://" + utils::getcwd().to_locale_string() + "/data/filtered.opml",
 			urlcfg));
 
 	using URL = std::string;
@@ -274,7 +274,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 
 	REQUIRE_NOTHROW(
 		opml::import(
-			"file://" + utils::getcwd() + "/data/test-urls+.opml",
+			"file://" + utils::getcwd().to_locale_string() + "/data/test-urls+.opml",
 			urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
@@ -302,7 +302,8 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 {
 	FileUrlReader urlcfg;
 	REQUIRE_NOTHROW(
-		opml::import("file://" + utils::getcwd() + "/data/category.opml", urlcfg)
+		opml::import("file://" + utils::getcwd().to_locale_string() + "/data/category.opml",
+			urlcfg)
 	);
 
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};

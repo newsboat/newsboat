@@ -22,9 +22,12 @@ mod bridged {
         fn push(filepath: &mut PathBuf, component: &PathBuf);
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
 
-        // This function is actually in utils.rs, but I couldn't find a way to return
-        // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the binding here
+        // These functions are actually in utils.rs, but I couldn't find a way to return
+        // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the bindings here
         fn get_default_browser() -> Box<PathBuf>;
+        fn resolve_tilde(path: &PathBuf) -> Box<PathBuf>;
+        fn resolve_relative(reference: &PathBuf, path: &PathBuf) -> Box<PathBuf>;
+        fn getcwd() -> Box<PathBuf>;
     }
 }
 
@@ -64,4 +67,20 @@ fn clone(filepath: &PathBuf) -> Box<PathBuf> {
 
 fn get_default_browser() -> Box<PathBuf> {
     Box::new(PathBuf(libnewsboat::utils::get_default_browser()))
+}
+
+fn resolve_tilde(path: &PathBuf) -> Box<PathBuf> {
+    Box::new(PathBuf(libnewsboat::utils::resolve_tilde(path.0.clone())))
+}
+
+fn resolve_relative(reference: &PathBuf, path: &PathBuf) -> Box<PathBuf> {
+    Box::new(PathBuf(libnewsboat::utils::resolve_relative(
+        &reference.0,
+        &path.0,
+    )))
+}
+
+fn getcwd() -> Box<PathBuf> {
+    let result = libnewsboat::utils::getcwd().unwrap_or_else(|_| std::path::PathBuf::new());
+    Box::new(PathBuf(result))
 }
