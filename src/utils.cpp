@@ -736,12 +736,15 @@ std::string utils::getcwd()
 }
 
 nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read_text_file(
-	const std::string& filename)
+	const Filepath& filename)
 {
 	rust::Vec<rust::String> c;
 	std::uint64_t error_line_number{};
 	rust::String error_reason;
-	const bool result = bridged::read_text_file(filename, c, error_line_number,
+	const bool result = bridged::read_text_file(
+			filename,
+			c,
+			error_line_number,
 			error_reason);
 
 	if (result) {
