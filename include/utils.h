@@ -135,7 +135,7 @@ std::string get_basename(const std::string& url);
 std::string unescape_url(const std::string& url);
 void initialize_ssl_implementation(void);
 
-int mkdir_parents(const std::string& pathname,
+int mkdir_parents(const Filepath& pathname,
 	mode_t mode = 0755);
 
 std::string make_title(const std::string& url);
