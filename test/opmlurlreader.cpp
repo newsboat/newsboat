@@ -31,7 +31,7 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 	ConfigContainer cfg;
 	cfg.set_configvalue(
 		"opml-url",
-		"file://" + utils::getcwd() + "/data/example.opml");
+		"file://" + utils::getcwd().to_locale_string() + "/data/example.opml");
 
 	OpmlUrlReader reader(cfg, "");
 
@@ -77,7 +77,7 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 	"[OpmlUrlReader]")
 {
-	const auto cwd = utils::getcwd();
+	const std::string cwd = utils::getcwd();
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url",
@@ -136,7 +136,7 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 	"[OpmlUrlReader]")
 {
-	const auto cwd = utils::getcwd();
+	const std::string cwd = utils::getcwd();
 
 	ConfigContainer cfg;
 	cfg.set_configvalue("opml-url",
