@@ -12,6 +12,7 @@
 #include "3rd-party/optional.hpp"
 
 #include "configcontainer.h"
+#include "filepath.h"
 
 #include "libnewsboat-ffi/src/utils.rs.h"
 
@@ -151,7 +152,7 @@ struct ReadTextFileError {
 	std::string message;
 };
 nonstd::expected<std::vector<std::string>, ReadTextFileError> read_text_file(
-	const std::string& filename);
+	const Filepath& filename);
 
 void remove_soft_hyphens(std::string& text);
 
