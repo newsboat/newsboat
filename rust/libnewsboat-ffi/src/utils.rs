@@ -67,7 +67,6 @@ mod bridged {
         fn quote(input: String) -> String;
         fn quote_if_necessary(input: String) -> String;
         fn make_title(rs_str: String) -> String;
-        fn get_default_browser() -> String;
         fn md5hash(input: &str) -> String;
         fn substr_with_width(string: &str, max_width: usize) -> String;
         fn substr_with_width_stfl(string: &str, max_width: usize) -> String;

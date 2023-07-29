@@ -21,6 +21,10 @@ mod bridged {
         fn display(filepath: &PathBuf) -> String;
         fn push(filepath: &mut PathBuf, component: &PathBuf);
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
+
+        // This function is actually in utils.rs, but I couldn't find a way to return
+        // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the binding here
+        fn get_default_browser() -> Box<PathBuf>;
     }
 }
 
@@ -56,4 +60,8 @@ fn push(filepath: &mut PathBuf, component: &PathBuf) {
 
 fn clone(filepath: &PathBuf) -> Box<PathBuf> {
     Box::new(PathBuf(filepath.0.clone()))
+}
+
+fn get_default_browser() -> Box<PathBuf> {
+    Box::new(PathBuf(libnewsboat::utils::get_default_browser()))
 }
