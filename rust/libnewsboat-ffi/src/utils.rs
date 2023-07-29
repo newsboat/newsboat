@@ -78,9 +78,6 @@ mod bridged {
         fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String>;
         fn is_valid_podcast_type(mimetype: &str) -> bool;
 
-        fn resolve_tilde(path: &str) -> String;
-        fn resolve_relative(reference: &str, path: &str) -> String;
-        fn getcwd() -> String;
         fn mkdir_parents(path: &str, mode: u32) -> isize;
 
         fn unescape_url(url: String, success: &mut bool) -> String;
@@ -195,25 +192,6 @@ fn extract_filter(line: &str) -> ffi::FilterUrlParts {
         script_name: result.script_name,
         url: result.url,
     }
-}
-
-fn resolve_tilde(path: &str) -> String {
-    let path = std::path::PathBuf::from(path);
-    let result = utils::resolve_tilde(path);
-    result.to_string_lossy().to_string()
-}
-
-fn resolve_relative(reference: &str, path: &str) -> String {
-    let reference = std::path::Path::new(reference);
-    let path = std::path::Path::new(path);
-    let result = utils::resolve_relative(reference, path);
-    result.to_string_lossy().to_string()
-}
-
-fn getcwd() -> String {
-    utils::getcwd()
-        .map(|path| path.to_string_lossy().to_string())
-        .unwrap_or_else(|_| String::new())
 }
 
 fn mkdir_parents(path: &str, mode: u32) -> isize {

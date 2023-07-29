@@ -76,8 +76,8 @@ std::string retrieve_url(const std::string& url,
 	const HTTPMethod method = HTTPMethod::GET);
 std::string run_program(const char* argv[], const std::string& input);
 
-std::string resolve_tilde(const std::string&);
-std::string resolve_relative(const std::string&, const std::string&);
+Filepath resolve_tilde(const Filepath&);
+Filepath resolve_relative(const Filepath&, const Filepath&);
 std::string replace_all(std::string str,
 	const std::string& from,
 	const std::string& to);
@@ -146,7 +146,7 @@ std::optional<std::uint8_t> run_interactively(const std::string& command,
 std::optional<std::uint8_t> run_non_interactively(const std::string& command,
 	const std::string& caller);
 
-std::string getcwd();
+Filepath getcwd();
 
 enum class ReadTextFileErrorKind {
 	CantOpen,
