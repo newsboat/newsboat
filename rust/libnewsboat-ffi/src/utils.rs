@@ -78,7 +78,7 @@ mod bridged {
         fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String>;
         fn is_valid_podcast_type(mimetype: &str) -> bool;
 
-        fn mkdir_parents(path: &str, mode: u32) -> isize;
+        fn mkdir_parents(path: &PathBuf, mode: u32) -> isize;
 
         fn unescape_url(url: String, success: &mut bool) -> String;
 
@@ -194,9 +194,8 @@ fn extract_filter(line: &str) -> ffi::FilterUrlParts {
     }
 }
 
-fn mkdir_parents(path: &str, mode: u32) -> isize {
-    let path = std::path::Path::new(path);
-    match utils::mkdir_parents(&path, mode) {
+fn mkdir_parents(path: &PathBuf, mode: u32) -> isize {
+    match utils::mkdir_parents(&path.0, mode) {
         Ok(_) => 0,
         Err(_) => -1,
     }
