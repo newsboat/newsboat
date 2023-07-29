@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "filepath.h"
+
 namespace test_helpers {
 
 /*
@@ -45,6 +47,14 @@ bool ends_with(const std::string& suffix, const std::string& input);
 /* \brief Returns `true` if the file at `filepath` exists.
  */
 bool file_exists(const std::string& filepath);
+
+/* \brief Returns 0 on success, or -1 if an error occured.
+ */
+int mkdir(const newsboat::Filepath& dirpath, mode_t mode);
+
+/* \brief Return `true` if file available for reading.
+ */
+bool file_available_for_reading(const newsboat::Filepath& filepath);
 
 } // namespace test_helpers
 

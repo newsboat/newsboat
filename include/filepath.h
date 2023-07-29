@@ -4,6 +4,7 @@
 #include "libnewsboat-ffi/src/filepath.rs.h"
 
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 #define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
@@ -75,6 +76,10 @@ public:
 	/// If component is an absolute path, it replaces the current path.
 	void push(const Filepath& component);
 
+	/// Creates a new Filepath with a given component appended to the current
+	/// path (with a separator in between).
+	Filepath join(const Filepath& component) const;
+
 	/// Returns a copy of this path.
 	Filepath clone() const;
 
@@ -91,5 +96,26 @@ private:
 };
 
 } // namespace newsboat
+
+// Used in Catch2's INFO macro.
+inline std::ostream& operator<<(std::ostream& out, const newsboat::Filepath& p)
+{
+	out << p.display();
+	return out;
+}
+
+#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+inline bool operator==(const std::string& lhs, const newsboat::Filepath& rhs)
+{
+	return lhs == rhs.to_locale_string();
+}
+
+#include <optional>
+inline bool operator==(const std::optional<std::string>& lhs,
+	const newsboat::Filepath& rhs)
+{
+	return lhs && lhs.value() == rhs;
+}
+#endif
 
 #endif /* NEWSBOAT_FILEPATH_H_ */

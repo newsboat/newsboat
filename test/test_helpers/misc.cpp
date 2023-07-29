@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include "3rd-party/catch.hpp"
 
@@ -97,6 +98,18 @@ bool test_helpers::ends_with(const std::string& suffix,
 bool test_helpers::file_exists(const std::string& filepath)
 {
 	return access(filepath.c_str(), F_OK) == 0;
+}
+
+int test_helpers::mkdir(const newsboat::Filepath& dirpath, mode_t mode)
+{
+	const auto dirpath_str = dirpath.to_locale_string();
+	return ::mkdir(dirpath_str.c_str(), mode);
+}
+
+bool test_helpers::file_available_for_reading(const newsboat::Filepath& filepath)
+{
+	const auto filepath_str = filepath.to_locale_string();
+	return (0 == ::access(filepath_str.c_str(), R_OK));
 }
 
 TEST_CASE("ends_with", "[test_helpers]")
