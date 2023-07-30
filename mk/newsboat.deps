@@ -11,6 +11,7 @@ src/feedcontainer.cpp
 src/feedhqapi.cpp
 src/feedhqurlreader.cpp
 src/feedlistformaction.cpp
+src/feedretriever.cpp
 src/filebrowserformaction.cpp
 src/file_system.cpp
 src/fileurlreader.cpp

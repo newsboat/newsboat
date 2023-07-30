@@ -25,10 +25,9 @@ public:
 	RssParser(const std::string& uri,
 		Cache* c,
 		ConfigContainer*,
-		RssIgnores* ii,
-		RemoteApi* a = 0);
+		RssIgnores* ii);
 	~RssParser();
-	std::shared_ptr<RssFeed> parse();
+	std::shared_ptr<RssFeed> parse(const rsspp::Feed& ff);
 	bool check_and_update_lastmodified();
 
 	void set_easyhandle(CurlHandle* h)
@@ -42,13 +41,6 @@ private:
 		const std::string& link);
 	time_t parse_date(const std::string& datestr);
 	void set_rtl(std::shared_ptr<RssFeed> feed, const std::string& lang);
-
-	void retrieve_uri(const std::string& uri);
-	void download_http(const std::string& uri);
-	void get_execplugin(const std::string& plugin);
-	void download_filterplugin(const std::string& filter,
-		const std::string& uri);
-	void parse_file(const std::string& file);
 
 	void fill_feed_fields(std::shared_ptr<RssFeed> feed);
 	void fill_feed_items(std::shared_ptr<RssFeed> feed);
@@ -72,23 +64,12 @@ private:
 	void handle_itunes_summary(std::shared_ptr<RssItem> x,
 		const rsspp::Item& item);
 	bool is_html_type(const std::string& type);
-	void fetch_ttrss(const std::string& feed_id);
-	void fetch_newsblur(const std::string& feed_id);
-	void fetch_ocnews(const std::string& feed_id);
-	void fetch_miniflux(const std::string& feed_id);
-	void fetch_freshrss(const std::string& feed_id);
 
 	std::string my_uri;
 	Cache* ch;
 	ConfigContainer* cfgcont;
 	RssIgnores* ign;
 	rsspp::Feed f;
-	RemoteApi* api;
-	bool is_ttrss;
-	bool is_newsblur;
-	bool is_ocnews;
-	bool is_miniflux;
-	bool is_freshrss;
 
 	CurlHandle* easyhandle;
 };

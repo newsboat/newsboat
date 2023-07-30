@@ -9,6 +9,7 @@
 #include "controller.h"
 #include "curlhandle.h"
 #include "dbexception.h"
+#include "feedretriever.h"
 #include "fmtstrformatter.h"
 #include "matcherexception.h"
 #include "reloadthread.h"
@@ -101,18 +102,22 @@ void Reloader::reload(unsigned int pos,
 		const bool ignore_dl =
 			(cfg->get_configvalue("ignore-mode") == "download");
 
-		RssParser parser(oldfeed->rssurl(),
-			rsscache,
-			cfg,
-			ignore_dl ? ctrl->get_ignores() : nullptr,
-			ctrl->get_api());
-		parser.set_easyhandle(&easyhandle);
-		LOG(Level::DEBUG, "Reloader::reload: created parser");
 		try {
 			const auto inner_message_lifetime = message_lifetime;
 			message_lifetime.reset();
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
-			std::shared_ptr<RssFeed> newfeed = parser.parse();
+
+			RssIgnores* ign = ignore_dl ? ctrl->get_ignores() : nullptr;
+
+			LOG(Level::INFO, "Reloader::reload: retrieving feed");
+			FeedRetriever feed_retriever(*cfg, *rsscache, ign, ctrl->get_api(), &easyhandle);
+			const rsspp::Feed feed = feed_retriever.retrieve(oldfeed->rssurl());
+
+			LOG(Level::INFO, "Reloader::reload: parsing feed");
+			RssParser parser(oldfeed->rssurl(), rsscache, cfg, ign);
+			parser.set_easyhandle(&easyhandle);
+
+			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
 			if (newfeed != nullptr) {
 				ctrl->replace_feed(
 					oldfeed, newfeed, pos, unattended);
