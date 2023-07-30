@@ -27,7 +27,7 @@ static int progress_callback(void* clientp,
 	curl_off_t ultotal,
 	curl_off_t ulnow);
 
-PodDlThread::PodDlThread(Download* dl_, newsboat::ConfigContainer* c)
+PodDlThread::PodDlThread(Download* dl_, newsboat::ConfigContainer& c)
 	: dl(dl_)
 	, f(new std::ofstream())
 	, bytecount(0)
@@ -66,7 +66,7 @@ void PodDlThread::run()
 	curl_easy_setopt(handle.ptr(), CURLOPT_XFERINFODATA, this);
 
 	// set up max download speed
-	int max_dl_speed = cfg->get_configvalue_as_int("max-download-speed");
+	int max_dl_speed = cfg.get_configvalue_as_int("max-download-speed");
 	if (max_dl_speed > 0) {
 		curl_easy_setopt(handle.ptr(),
 			CURLOPT_MAX_RECV_SPEED_LARGE,

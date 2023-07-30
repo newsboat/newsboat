@@ -70,7 +70,7 @@ std::string OldReaderApi::retrieve_auth()
 
 	std::string result;
 
-	utils::set_common_curl_options(handle, &cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
@@ -101,7 +101,7 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle, &cfg);
+	utils::set_common_curl_options(handle, cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, OLDREADER_SUBSCRIPTION_LIST);
@@ -278,7 +278,7 @@ std::string OldReaderApi::get_new_token()
 	std::string result;
 	curl_slist* custom_headers{};
 
-	utils::set_common_curl_options(handle, &cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
@@ -368,7 +368,7 @@ std::string OldReaderApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
-	utils::set_common_curl_options(handle, &cfg);
+	utils::set_common_curl_options(handle, cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);

@@ -177,7 +177,7 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 
 	for (unsigned int i = 0; i < retrycount
 		&& f.rss_version == rsspp::Feed::Version::UNKNOWN; i++) {
-		std::string useragent = utils::get_useragent(&cfg);
+		std::string useragent = utils::get_useragent(cfg);
 		LOG(Level::DEBUG,
 			"FeedRetriever::download_http: user-agent = %s",
 			useragent);
