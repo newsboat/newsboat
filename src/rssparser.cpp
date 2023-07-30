@@ -24,7 +24,7 @@
 namespace newsboat {
 
 RssParser::RssParser(const std::string& uri,
-	Cache* c,
+	Cache& c,
 	ConfigContainer* cfg,
 	RssIgnores* ii)
 	: my_uri(uri)
@@ -43,7 +43,7 @@ std::shared_ptr<RssFeed> RssParser::parse(const rsspp::Feed& upstream_feed)
 		return nullptr;
 	}
 
-	std::shared_ptr<RssFeed> feed(new RssFeed(ch, my_uri));
+	std::shared_ptr<RssFeed> feed(new RssFeed(&ch, my_uri));
 
 	/*
 	 * After parsing is done, we fill our feed object with title,
@@ -58,7 +58,7 @@ std::shared_ptr<RssFeed> RssParser::parse(const rsspp::Feed& upstream_feed)
 	fill_feed_fields(feed, upstream_feed);
 	fill_feed_items(feed, upstream_feed);
 
-	ch->remove_old_deleted_items(feed.get());
+	ch.remove_old_deleted_items(feed.get());
 
 	return feed;
 }
@@ -171,7 +171,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed,
 	 * structure.
 	 */
 	for (const auto& item : upstream_feed.items) {
-		std::shared_ptr<RssItem> x(new RssItem(ch));
+		std::shared_ptr<RssItem> x(new RssItem(&ch));
 
 		set_item_title(feed, x, item);
 

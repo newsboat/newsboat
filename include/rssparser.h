@@ -23,7 +23,7 @@ class RssItem;
 class RssParser {
 public:
 	RssParser(const std::string& uri,
-		Cache* c,
+		Cache& c,
 		ConfigContainer*,
 		RssIgnores* ii);
 	~RssParser();
@@ -66,7 +66,7 @@ private:
 	bool is_html_type(const std::string& type);
 
 	std::string my_uri;
-	Cache* ch;
+	Cache& ch;
 	ConfigContainer* cfgcont;
 	RssIgnores* ign;
 

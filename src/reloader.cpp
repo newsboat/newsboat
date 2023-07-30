@@ -114,7 +114,7 @@ void Reloader::reload(unsigned int pos,
 			const rsspp::Feed feed = feed_retriever.retrieve(oldfeed->rssurl());
 
 			LOG(Level::INFO, "Reloader::reload: parsing feed");
-			RssParser parser(oldfeed->rssurl(), rsscache, cfg, ign);
+			RssParser parser(oldfeed->rssurl(), *rsscache, cfg, ign);
 			parser.set_easyhandle(&easyhandle);
 
 			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
