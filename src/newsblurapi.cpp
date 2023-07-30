@@ -368,7 +368,7 @@ json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	const HTTPMethod method /* = GET */)
 {
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, cfg, "", body, method);
+	std::string data = utils::retrieve_url(url, *cfg, "", body, method);
 
 	json_object* result = json_tokener_parse(data.c_str());
 	if (!result)

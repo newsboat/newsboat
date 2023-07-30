@@ -374,7 +374,7 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	const std::string uri = "file://data/items_without_titles.xml";
 	RssParser p(uri,
 		rsscache,
-		&cfg,
+		cfg,
 		nullptr);
 	auto feed = p.parse(feed_retriever.retrieve(uri));
 

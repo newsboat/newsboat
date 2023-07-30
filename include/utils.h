@@ -63,13 +63,13 @@ std::string http_method_str(const HTTPMethod method);
 std::string link_type_str(LinkType type);
 
 std::string retrieve_url(const std::string& url,
-	ConfigContainer* cfgcont = nullptr,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);
 std::string retrieve_url(const std::string& url,
 	CurlHandle& easyhandle,
-	ConfigContainer* cfgcont = nullptr,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);

@@ -24,7 +24,7 @@ class RssParser {
 public:
 	RssParser(const std::string& uri,
 		Cache& c,
-		ConfigContainer*,
+		ConfigContainer&,
 		RssIgnores* ii);
 	~RssParser();
 	std::shared_ptr<RssFeed> parse(const rsspp::Feed& upstream_feed);
@@ -67,7 +67,7 @@ private:
 
 	std::string my_uri;
 	Cache& ch;
-	ConfigContainer* cfgcont;
+	ConfigContainer& cfgcont;
 	RssIgnores* ign;
 
 	CurlHandle* easyhandle;

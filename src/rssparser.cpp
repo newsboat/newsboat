@@ -25,7 +25,7 @@ namespace newsboat {
 
 RssParser::RssParser(const std::string& uri,
 	Cache& c,
-	ConfigContainer* cfg,
+	ConfigContainer& cfg,
 	RssIgnores* ii)
 	: my_uri(uri)
 	, ch(c)
@@ -330,7 +330,7 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 	if (x->description().text.empty()) {
 		x->set_description(item.description, item.description_mime_type);
 	} else {
-		if (cfgcont->get_configvalue_as_bool(
+		if (cfgcont.get_configvalue_as_bool(
 				"always-display-description") &&
 			!item.description.empty())
 			x->set_description(
@@ -340,7 +340,7 @@ void RssParser::set_item_content(std::shared_ptr<RssItem> x,
 	/* if it's still empty and we shall download the full page, then we do
 	 * so. */
 	if (x->description().text.empty() &&
-		cfgcont->get_configvalue_as_bool("download-full-page") &&
+		cfgcont.get_configvalue_as_bool("download-full-page") &&
 		!x->link().empty()) {
 
 		CurlHandle handle;

@@ -268,7 +268,7 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	const std::string result = utils::retrieve_url(
-			url, easyhandle, cfg, auth_info, body, method);
+			url, easyhandle, *cfg, auth_info, body, method);
 
 
 	LOG(Level::DEBUG,

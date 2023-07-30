@@ -244,7 +244,7 @@ std::string utils::link_type_str(LinkType type)
 }
 
 std::string utils::retrieve_url(const std::string& url,
-	ConfigContainer* cfgcont,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
 	const HTTPMethod method /* = GET */)
@@ -255,14 +255,14 @@ std::string utils::retrieve_url(const std::string& url,
 
 std::string utils::retrieve_url(const std::string& url,
 	CurlHandle& easyhandle,
-	ConfigContainer* cfgcont,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
 	const HTTPMethod method /* = GET */)
 {
 	std::string buf;
 
-	set_common_curl_options(easyhandle, cfgcont);
+	set_common_curl_options(easyhandle, &cfgcont);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
@@ -286,7 +286,7 @@ std::string utils::retrieve_url(const std::string& url,
 	}
 
 	if (!authinfo.empty()) {
-		const auto auth_method = cfgcont->get_configvalue("http-auth-method");
+		const auto auth_method = cfgcont.get_configvalue("http-auth-method");
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPAUTH, get_auth_method(auth_method));
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERPWD, authinfo.c_str());
 	}

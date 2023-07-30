@@ -266,7 +266,7 @@ rsspp::Feed FeedRetriever::get_execplugin(const std::string& plugin)
 rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 	const std::string& uri)
 {
-	std::string buf = utils::retrieve_url(uri, &cfg);
+	std::string buf = utils::retrieve_url(uri, cfg);
 
 	const char* argv[4] = {"/bin/sh",
 			"-c",
