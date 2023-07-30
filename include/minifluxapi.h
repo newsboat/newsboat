@@ -14,8 +14,8 @@ class CurlHandle;
 
 class MinifluxApi : public RemoteApi {
 public:
-	explicit MinifluxApi(ConfigContainer* cfg);
-	~MinifluxApi() override;
+	explicit MinifluxApi(ConfigContainer& cfg);
+	~MinifluxApi() override = default;
 	bool authenticate() override;
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;
 	bool mark_all_read(const std::string& feedurl) override;

@@ -28,22 +28,20 @@ using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
 
-NewsBlurApi::NewsBlurApi(ConfigContainer* c)
+NewsBlurApi::NewsBlurApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
-	api_location = cfg->get_configvalue("newsblur-url");
-	min_pages = (cfg->get_configvalue_as_int("newsblur-min-items") +
+	api_location = cfg.get_configvalue("newsblur-url");
+	min_pages = (cfg.get_configvalue_as_int("newsblur-min-items") +
 			(NEWSBLUR_ITEMS_PER_PAGE + 1)) /
 		NEWSBLUR_ITEMS_PER_PAGE;
 
-	if (cfg->get_configvalue("cookie-cache").empty()) {
+	if (cfg.get_configvalue("cookie-cache").empty()) {
 		LOG(Level::CRITICAL,
 			"NewsBlurApi::NewsBlurApi: No cookie-cache has been "
 			"configured the login won't work.");
 	}
 }
-
-NewsBlurApi::~NewsBlurApi() {}
 
 bool NewsBlurApi::authenticate()
 {
@@ -64,7 +62,7 @@ bool NewsBlurApi::authenticate()
 		"cached "
 		"in %s",
 		result,
-		cfg->get_configvalue("cookie-cache"));
+		cfg.get_configvalue("cookie-cache"));
 
 	return result;
 }
@@ -368,7 +366,7 @@ json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	const HTTPMethod method /* = GET */)
 {
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, *cfg, "", body, method);
+	std::string data = utils::retrieve_url(url, cfg, "", body, method);
 
 	json_object* result = json_tokener_parse(data.c_str());
 	if (!result)

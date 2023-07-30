@@ -5,9 +5,15 @@
 #include <iostream>
 #include <unistd.h>
 
+#include "configcontainer.h"
 #include "utils.h"
 
 namespace newsboat {
+
+RemoteApi::RemoteApi(ConfigContainer& c)
+	: cfg(c)
+{
+}
 
 bool RemoteApi::mark_articles_read(const std::vector<std::string>& guids)
 {
@@ -56,13 +62,13 @@ const std::string RemoteApi::eval_password(const std::string& cmd)
 Credentials RemoteApi::get_credentials(const std::string& scope,
 	const std::string& name)
 {
-	std::string user = cfg->get_configvalue(scope + "-login");
-	std::string pass = cfg->get_configvalue(scope + "-password");
-	std::string pass_file = cfg->get_configvalue(scope + "-passwordfile");
-	std::string pass_eval = cfg->get_configvalue(scope + "-passwordeval");
-	std::string token = cfg->get_configvalue(scope + "-token");
-	std::string token_file = cfg->get_configvalue(scope + "-tokenfile");
-	std::string token_eval = cfg->get_configvalue(scope + "-tokeneval");
+	std::string user = cfg.get_configvalue(scope + "-login");
+	std::string pass = cfg.get_configvalue(scope + "-password");
+	std::string pass_file = cfg.get_configvalue(scope + "-passwordfile");
+	std::string pass_eval = cfg.get_configvalue(scope + "-passwordeval");
+	std::string token = cfg.get_configvalue(scope + "-token");
+	std::string token_file = cfg.get_configvalue(scope + "-tokenfile");
+	std::string token_eval = cfg.get_configvalue(scope + "-tokeneval");
 
 	if (!token.empty()) {
 		return {"", "", token};

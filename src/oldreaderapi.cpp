@@ -26,7 +26,7 @@
 
 namespace newsboat {
 
-OldReaderApi::OldReaderApi(ConfigContainer* c)
+OldReaderApi::OldReaderApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
 }
@@ -70,7 +70,7 @@ std::string OldReaderApi::retrieve_auth()
 
 	std::string result;
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
@@ -101,7 +101,7 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_URL, OLDREADER_SUBSCRIPTION_LIST);
@@ -183,7 +183,7 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 			auto url = strprintf::fmt("%s%s?n=%u",
 					OLDREADER_FEED_PREFIX,
 					id,
-					cfg->get_configvalue_as_int("oldreader-min-items"));
+					cfg.get_configvalue_as_int("oldreader-min-items"));
 			urls.push_back(TaggedFeedUrl(url, tags));
 		}
 	}
@@ -278,7 +278,7 @@ std::string OldReaderApi::get_new_token()
 	std::string result;
 	curl_slist* custom_headers{};
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
@@ -296,8 +296,8 @@ bool OldReaderApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("oldreader-flag-star");
-	std::string share_flag = cfg->get_configvalue("oldreader-flag-share");
+	std::string star_flag = cfg.get_configvalue("oldreader-flag-star");
+	std::string share_flag = cfg.get_configvalue("oldreader-flag-share");
 	bool success = true;
 
 	if (star_flag.length() > 0) {
@@ -368,7 +368,7 @@ std::string OldReaderApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);

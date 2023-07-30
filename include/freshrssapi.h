@@ -17,7 +17,7 @@ namespace newsboat {
 
 class FreshRssApi : public RemoteApi {
 public:
-	explicit FreshRssApi(ConfigContainer* c);
+	explicit FreshRssApi(ConfigContainer& c);
 	~FreshRssApi() override = default;
 	bool authenticate() override;
 	std::vector<TaggedFeedUrl> get_subscribed_urls() override;

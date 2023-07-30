@@ -4,6 +4,7 @@
 
 #include "3rd-party/catch.hpp"
 
+#include "configcontainer.h"
 #include "configparser.h"
 
 using namespace newsboat;
@@ -14,7 +15,7 @@ using namespace newsboat;
  */
 class test_api : public RemoteApi {
 public:
-	explicit test_api(ConfigContainer* c)
+	explicit test_api(ConfigContainer& c)
 		: RemoteApi(c)
 	{
 	}
@@ -61,7 +62,7 @@ TEST_CASE("get_credentials() returns the users name and password",
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
 	cfgparser.parse_file("data/test-config-credentials.txt");
-	std::unique_ptr<test_api> api(new test_api(&cfg));
+	std::unique_ptr<test_api> api(new test_api(cfg));
 	REQUIRE(api->get_user("ttrss", "") == "ttrss-user");
 	REQUIRE(api->get_pass("ttrss", "") == "my-birthday");
 	REQUIRE(api->get_pass("ocnews", "") == "dadada");

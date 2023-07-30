@@ -257,11 +257,11 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "opml") {
 		urlcfg = new OpmlUrlReader(cfg);
 	} else if (type == "oldreader") {
-		api = new OldReaderApi(&cfg);
+		api = new OldReaderApi(cfg);
 		urlcfg = new OldReaderUrlReader(
 			&cfg, configpaths.url_file(), api);
 	} else if (type == "ttrss") {
-		api = new TtRssApi(&cfg);
+		api = new TtRssApi(cfg);
 		urlcfg = new TtRssUrlReader(configpaths.url_file(), api);
 	} else if (type == "newsblur") {
 		const auto cookies = cfg.get_configvalue("cookie-cache");
@@ -280,10 +280,10 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new NewsBlurApi(&cfg);
+		api = new NewsBlurApi(cfg);
 		urlcfg = new NewsBlurUrlReader(configpaths.url_file(), api);
 	} else if (type == "feedhq") {
-		api = new FeedHqApi(&cfg);
+		api = new FeedHqApi(cfg);
 		urlcfg = new FeedHqUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "freshrss") {
 		const auto freshrss_url = cfg.get_configvalue("freshrss-url");
@@ -307,10 +307,10 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new FreshRssApi(&cfg);
+		api = new FreshRssApi(cfg);
 		urlcfg = new FreshRssUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "ocnews") {
-		api = new OcNewsApi(&cfg);
+		api = new OcNewsApi(cfg);
 		urlcfg = new OcNewsUrlReader(configpaths.url_file(), api);
 	} else if (type == "miniflux") {
 		const auto miniflux_url = cfg.get_configvalue("miniflux-url");
@@ -337,7 +337,7 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new MinifluxApi(&cfg);
+		api = new MinifluxApi(cfg);
 		urlcfg = new MinifluxUrlReader(configpaths.url_file(), api);
 	} else if (type == "inoreader") {
 		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
@@ -348,7 +348,7 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new InoreaderApi(&cfg);
+		api = new InoreaderApi(cfg);
 		urlcfg = new InoreaderUrlReader(&cfg, configpaths.url_file(), api);
 	} else {
 		std::cerr << strprintf::fmt(_("ERROR: Unknown urls-source `%s'"),

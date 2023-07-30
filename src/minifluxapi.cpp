@@ -16,20 +16,18 @@ using json = nlohmann::json;
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
 namespace newsboat {
-MinifluxApi::MinifluxApi(ConfigContainer* c)
+MinifluxApi::MinifluxApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
-	server = cfg->get_configvalue("miniflux-url");
-	const std::string http_auth_method = cfg->get_configvalue("http-auth-method");
+	server = cfg.get_configvalue("miniflux-url");
+	const std::string http_auth_method = cfg.get_configvalue("http-auth-method");
 	if (http_auth_method == "any") {
 		// default to basic HTTP auth to prevent Newsboat from doubling up on HTTP
 		// requests, since it doesn't "guess" the correct auth type on the first
 		// try.
-		cfg->set_configvalue("http-auth-method", "basic");
+		cfg.set_configvalue("http-auth-method", "basic");
 	}
 }
-
-MinifluxApi::~MinifluxApi() {}
 
 bool MinifluxApi::authenticate()
 {
@@ -162,7 +160,7 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 	const std::string query =
 		strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc&limit=%u",
 			id,
-			cfg->get_configvalue_as_int("miniflux-min-items"));
+			cfg.get_configvalue_as_int("miniflux-min-items"));
 
 	const json content = run_op(query, json(), cached_handle, HTTPMethod::GET);
 	if (content.is_null()) {
@@ -268,7 +266,7 @@ json MinifluxApi::run_op(const std::string& path,
 	}
 
 	const std::string result = utils::retrieve_url(
-			url, easyhandle, *cfg, auth_info, body, method);
+			url, easyhandle, cfg, auth_info, body, method);
 
 
 	LOG(Level::DEBUG,

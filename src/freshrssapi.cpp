@@ -27,7 +27,7 @@
 
 namespace newsboat {
 
-FreshRssApi::FreshRssApi(ConfigContainer* c)
+FreshRssApi::FreshRssApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
 	token_expired = true;
@@ -71,13 +71,13 @@ std::string FreshRssApi::retrieve_auth()
 
 	std::string result;
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
-		(cfg->get_configvalue("freshrss-url") + FRESHRSS_LOGIN).c_str());
+		(cfg.get_configvalue("freshrss-url") + FRESHRSS_LOGIN).c_str());
 	curl_easy_perform(handle.ptr());
 
 	for (const auto& line : utils::tokenize(result)) {
@@ -101,12 +101,12 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
-		(cfg->get_configvalue("freshrss-url") + FRESHRSS_SUBSCRIPTION_LIST)
+		(cfg.get_configvalue("freshrss-url") + FRESHRSS_SUBSCRIPTION_LIST)
 		.c_str());
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -172,7 +172,7 @@ std::vector<TaggedFeedUrl> FreshRssApi::get_subscribed_urls()
 
 		char* escaped_id = curl_easy_escape(handle.ptr(), id, 0);
 		auto url = strprintf::fmt("%s%s%s",
-				cfg->get_configvalue("freshrss-url"),
+				cfg.get_configvalue("freshrss-url"),
 				FRESHRSS_FEED_PREFIX,
 				escaped_id);
 		urls.push_back(TaggedFeedUrl(url, tags));
@@ -200,7 +200,7 @@ void FreshRssApi::add_custom_headers(curl_slist** custom_headers)
 bool FreshRssApi::mark_all_read(const std::string& feedurl)
 {
 	std::string prefix =
-		cfg->get_configvalue("freshrss-url") + FRESHRSS_FEED_PREFIX;
+		cfg.get_configvalue("freshrss-url") + FRESHRSS_FEED_PREFIX;
 	std::string real_feedurl = feedurl.substr(
 			prefix.length(), feedurl.length() - prefix.length());
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
@@ -220,7 +220,7 @@ bool FreshRssApi::mark_all_read(const std::string& feedurl)
 	std::string postcontent =
 		strprintf::fmt("s=%s&T=%s", real_feedurl, token);
 
-	std::string result = post_content(cfg->get_configvalue("freshrss-url") +
+	std::string result = post_content(cfg.get_configvalue("freshrss-url") +
 			FRESHRSS_API_MARK_ALL_READ_URL,
 			postcontent);
 
@@ -255,7 +255,7 @@ bool FreshRssApi::mark_article_read_with_token(const std::string& guid,
 	}
 
 	std::string result = post_content(
-			cfg->get_configvalue("freshrss-url") + FRESHRSS_API_EDIT_TAG_URL,
+			cfg.get_configvalue("freshrss-url") + FRESHRSS_API_EDIT_TAG_URL,
 			postcontent);
 
 	LOG(Level::DEBUG,
@@ -274,14 +274,14 @@ std::string FreshRssApi::get_new_token()
 	std::string result;
 	curl_slist* custom_headers{};
 
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
-		(cfg->get_configvalue("freshrss-url") + FRESHRSS_API_TOKEN_URL)
+		(cfg.get_configvalue("freshrss-url") + FRESHRSS_API_TOKEN_URL)
 		.c_str());
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -308,8 +308,8 @@ bool FreshRssApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("freshrss-flag-star");
-	std::string share_flag = cfg->get_configvalue("freshrss-flag-share");
+	std::string star_flag = cfg.get_configvalue("freshrss-flag-star");
+	std::string share_flag = cfg.get_configvalue("freshrss-flag-share");
 	bool success = true;
 
 	if (star_flag.length() > 0) {
@@ -345,7 +345,7 @@ bool FreshRssApi::star_article(const std::string& guid, bool star)
 	}
 
 	std::string result = post_content(
-			cfg->get_configvalue("freshrss-url") + FRESHRSS_API_EDIT_TAG_URL,
+			cfg.get_configvalue("freshrss-url") + FRESHRSS_API_EDIT_TAG_URL,
 			postcontent);
 
 	return result == "OK";
@@ -369,7 +369,7 @@ bool FreshRssApi::share_article(const std::string& guid, bool share)
 	}
 
 	std::string result = post_content(
-			cfg->get_configvalue("freshrss-url") + FRESHRSS_API_EDIT_TAG_URL,
+			cfg.get_configvalue("freshrss-url") + FRESHRSS_API_EDIT_TAG_URL,
 			postcontent);
 
 	return result == "OK";
@@ -382,7 +382,7 @@ std::string FreshRssApi::post_content(const std::string& url,
 	curl_slist* custom_headers{};
 
 	CurlHandle handle;
-	utils::set_common_curl_options(handle, cfg);
+	utils::set_common_curl_options(handle, &cfg);
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
@@ -414,14 +414,14 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 
 	const std::string query = strprintf::fmt("%s?n=%u",
 			id,
-			cfg->get_configvalue_as_int("freshrss-min-items"));
+			cfg.get_configvalue_as_int("freshrss-min-items"));
 
 	std::string result;
 	curl_slist* custom_headers{};
 	add_custom_headers(&custom_headers);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_HTTPHEADER, custom_headers);
 
-	utils::set_common_curl_options(cached_handle, cfg);
+	utils::set_common_curl_options(cached_handle, &cfg);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
 	curl_easy_setopt(cached_handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(cached_handle.ptr(),
