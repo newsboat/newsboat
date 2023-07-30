@@ -21,23 +21,21 @@ public:
 	rsspp::Feed retrieve(const std::string& uri);
 
 private:
-	void fetch_ttrss(const std::string& feed_id);
-	void fetch_newsblur(const std::string& feed_id);
-	void fetch_ocnews(const std::string& feed_id);
-	void fetch_miniflux(const std::string& feed_id);
-	void fetch_freshrss(const std::string& feed_id);
-	void download_http(const std::string& uri);
-	void get_execplugin(const std::string& plugin);
-	void download_filterplugin(const std::string& filter, const std::string& uri);
-	void parse_file(const std::string& file);
+	rsspp::Feed fetch_ttrss(const std::string& feed_id);
+	rsspp::Feed fetch_newsblur(const std::string& feed_id);
+	rsspp::Feed fetch_ocnews(const std::string& feed_id);
+	rsspp::Feed fetch_miniflux(const std::string& feed_id);
+	rsspp::Feed fetch_freshrss(const std::string& feed_id);
+	rsspp::Feed download_http(const std::string& uri);
+	rsspp::Feed get_execplugin(const std::string& plugin);
+	rsspp::Feed download_filterplugin(const std::string& filter, const std::string& uri);
+	rsspp::Feed parse_file(const std::string& file);
 
 	ConfigContainer& cfg;
 	Cache& ch;
 	RssIgnores* ign;
 	RemoteApi* api;
 	CurlHandle* easyhandle;
-
-	rsspp::Feed f;
 };
 
 } // namespace newsboat

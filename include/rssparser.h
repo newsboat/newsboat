@@ -27,7 +27,7 @@ public:
 		ConfigContainer*,
 		RssIgnores* ii);
 	~RssParser();
-	std::shared_ptr<RssFeed> parse(const rsspp::Feed& ff);
+	std::shared_ptr<RssFeed> parse(const rsspp::Feed& upstream_feed);
 	bool check_and_update_lastmodified();
 
 	void set_easyhandle(CurlHandle* h)
@@ -42,14 +42,14 @@ private:
 	time_t parse_date(const std::string& datestr);
 	void set_rtl(std::shared_ptr<RssFeed> feed, const std::string& lang);
 
-	void fill_feed_fields(std::shared_ptr<RssFeed> feed);
-	void fill_feed_items(std::shared_ptr<RssFeed> feed);
+	void fill_feed_fields(std::shared_ptr<RssFeed> feed, const rsspp::Feed& upstream_feed);
+	void fill_feed_items(std::shared_ptr<RssFeed> feed, const rsspp::Feed& upstream_feed);
 
 	void set_item_title(std::shared_ptr<RssFeed> feed,
 		std::shared_ptr<RssItem> x,
 		const rsspp::Item& item);
 	void set_item_author(std::shared_ptr<RssItem> x,
-		const rsspp::Item& item);
+		const rsspp::Item& item, const rsspp::Feed& upstream_feed);
 	void set_item_content(std::shared_ptr<RssItem> x,
 		const rsspp::Item& item);
 	void set_item_enclosure(std::shared_ptr<RssItem> x,
@@ -69,7 +69,6 @@ private:
 	Cache* ch;
 	ConfigContainer* cfgcont;
 	RssIgnores* ign;
-	rsspp::Feed f;
 
 	CurlHandle* easyhandle;
 };

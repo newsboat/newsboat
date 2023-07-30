@@ -46,37 +46,39 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 	 *	- query: URLs are ignored
 	 */
 	if (is_ttrss) {
-		std::string::size_type pound = uri.find_first_of('#');
+		const std::string::size_type pound = uri.find_first_of('#');
 		if (pound != std::string::npos) {
-			fetch_ttrss(uri.substr(pound + 1));
+			return fetch_ttrss(uri.substr(pound + 1));
+		} else {
+			return {};
 		}
 	} else if (is_newsblur) {
-		fetch_newsblur(uri);
+		return fetch_newsblur(uri);
 	} else if (is_ocnews) {
-		fetch_ocnews(uri);
+		return fetch_ocnews(uri);
 	} else if (is_miniflux) {
-		fetch_miniflux(uri);
+		return fetch_miniflux(uri);
 	} else if (is_freshrss) {
-		fetch_freshrss(uri);
+		return fetch_freshrss(uri);
 	} else if (utils::is_http_url(uri)) {
-		download_http(uri);
+		return download_http(uri);
 	} else if (utils::is_exec_url(uri)) {
-		get_execplugin(uri.substr(5, uri.length() - 5));
+		return get_execplugin(uri.substr(5, uri.length() - 5));
 	} else if (utils::is_filter_url(uri)) {
 		const auto parts = utils::extract_filter(uri);
-		download_filterplugin(std::string(parts.script_name), std::string(parts.url));
+		return download_filterplugin(std::string(parts.script_name), std::string(parts.url));
 	} else if (utils::is_query_url(uri)) {
-		f.rss_version = rsspp::Feed::Version::UNKNOWN;
+		return {};
 	} else if (uri.substr(0, 7) == "file://") {
-		parse_file(uri.substr(7, uri.length() - 7));
+		return parse_file(uri.substr(7, uri.length() - 7));
 	} else {
 		throw strprintf::fmt(_("Error: unsupported URL: %s"), uri);
 	}
-	return f;
 }
 
-void FeedRetriever::fetch_ttrss(const std::string& feed_id)
+rsspp::Feed FeedRetriever::fetch_ttrss(const std::string& feed_id)
 {
+	rsspp::Feed f;
 	TtRssApi* tapi = dynamic_cast<TtRssApi*>(api);
 	if (tapi) {
 		if (easyhandle) {
@@ -90,10 +92,13 @@ void FeedRetriever::fetch_ttrss(const std::string& feed_id)
 	LOG(Level::DEBUG,
 		"FeedRetriever::fetch_ttrss: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
+
+	return f;
 }
 
-void FeedRetriever::fetch_newsblur(const std::string& feed_id)
+rsspp::Feed FeedRetriever::fetch_newsblur(const std::string& feed_id)
 {
+	rsspp::Feed f;
 	NewsBlurApi* napi = dynamic_cast<NewsBlurApi*>(api);
 	if (napi) {
 		f = napi->fetch_feed(feed_id);
@@ -101,10 +106,13 @@ void FeedRetriever::fetch_newsblur(const std::string& feed_id)
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_newsblur: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
+
+	return f;
 }
 
-void FeedRetriever::fetch_ocnews(const std::string& feed_id)
+rsspp::Feed FeedRetriever::fetch_ocnews(const std::string& feed_id)
 {
+	rsspp::Feed f;
 	OcNewsApi* napi = dynamic_cast<OcNewsApi*>(api);
 	if (napi) {
 		f = napi->fetch_feed(feed_id);
@@ -112,10 +120,13 @@ void FeedRetriever::fetch_ocnews(const std::string& feed_id)
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_ocnews: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
+
+	return f;
 }
 
-void FeedRetriever::fetch_miniflux(const std::string& feed_id)
+rsspp::Feed FeedRetriever::fetch_miniflux(const std::string& feed_id)
 {
+	rsspp::Feed f;
 	MinifluxApi* mapi = dynamic_cast<MinifluxApi*>(api);
 	if (mapi) {
 		if (easyhandle) {
@@ -127,10 +138,13 @@ void FeedRetriever::fetch_miniflux(const std::string& feed_id)
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_miniflux: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
+
+	return f;
 }
 
-void FeedRetriever::fetch_freshrss(const std::string& feed_id)
+rsspp::Feed FeedRetriever::fetch_freshrss(const std::string& feed_id)
 {
+	rsspp::Feed f;
 	FreshRssApi* fapi = dynamic_cast<FreshRssApi*>(api);
 	if (fapi) {
 		if (easyhandle) {
@@ -143,11 +157,14 @@ void FeedRetriever::fetch_freshrss(const std::string& feed_id)
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_freshrss: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
+
+	return f;
 }
 
-void FeedRetriever::download_http(const std::string& uri)
+rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 {
-	unsigned int retrycount = cfg.get_configvalue_as_int("download-retries");
+	rsspp::Feed f;
+	const unsigned int retrycount = cfg.get_configvalue_as_int("download-retries");
 	std::string proxy;
 	std::string proxy_auth;
 	std::string proxy_type;
@@ -229,20 +246,24 @@ void FeedRetriever::download_http(const std::string& uri)
 		"FeedRetriever::download_http: http URL %s, valid: %s",
 		uri,
 		(f.rss_version != rsspp::Feed::Version::UNKNOWN) ? "true" : "false");
+
+	return f;
 }
 
-void FeedRetriever::get_execplugin(const std::string& plugin)
+rsspp::Feed FeedRetriever::get_execplugin(const std::string& plugin)
 {
 	std::string buf = utils::get_command_output(plugin);
 	rsspp::Parser p;
-	f = p.parse_buffer(buf);
+	const rsspp::Feed f = p.parse_buffer(buf);
 	LOG(Level::DEBUG,
 		"FeedRetriever::get_execplugin: execplugin %s, valid = %s",
 		plugin,
 		(f.rss_version != rsspp::Feed::Version::UNKNOWN) ? "true" : "false");
+
+	return f;
 }
 
-void FeedRetriever::download_filterplugin(const std::string& filter,
+rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 	const std::string& uri)
 {
 	std::string buf = utils::retrieve_url(uri, &cfg);
@@ -252,27 +273,31 @@ void FeedRetriever::download_filterplugin(const std::string& filter,
 			filter.c_str(),
 			nullptr
 		};
-	std::string result = utils::run_program(argv, buf);
+	const std::string result = utils::run_program(argv, buf);
 	LOG(Level::DEBUG,
 		"FeedRetriever::download_filterplugin: output of `%s' is: %s",
 		filter,
 		result);
 	rsspp::Parser p;
-	f = p.parse_buffer(result);
+	const rsspp::Feed f = p.parse_buffer(result);
 	LOG(Level::DEBUG,
 		"FeedRetriever::download_filterplugin: filterplugin %s, valid = %s",
 		filter,
 		(f.rss_version != rsspp::Feed::Version::UNKNOWN) ? "true" : "false");
+
+	return f;
 }
 
-void FeedRetriever::parse_file(const std::string& file)
+rsspp::Feed FeedRetriever::parse_file(const std::string& file)
 {
 	rsspp::Parser p;
-	f = p.parse_file(file);
+	const rsspp::Feed f = p.parse_file(file);
 	LOG(Level::DEBUG,
 		"FeedRetriever::parse: parsed file %s, valid = %s",
 		file,
 		(f.rss_version != rsspp::Feed::Version::UNKNOWN) ? "true" : "false");
+
+	return f;
 }
 
 

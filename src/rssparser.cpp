@@ -37,10 +37,9 @@ RssParser::RssParser(const std::string& uri,
 
 RssParser::~RssParser() {}
 
-std::shared_ptr<RssFeed> RssParser::parse(const rsspp::Feed& ff)
+std::shared_ptr<RssFeed> RssParser::parse(const rsspp::Feed& upstream_feed)
 {
-	f = ff;
-	if (f.rss_version == rsspp::Feed::Version::UNKNOWN) {
+	if (upstream_feed.rss_version == rsspp::Feed::Version::UNKNOWN) {
 		return nullptr;
 	}
 
@@ -56,8 +55,8 @@ std::shared_ptr<RssFeed> RssParser::parse(const rsspp::Feed& ff)
 	 * unlike other non-Unicode encodings.
 	 */
 
-	fill_feed_fields(feed);
-	fill_feed_items(feed);
+	fill_feed_fields(feed, upstream_feed);
+	fill_feed_items(feed, upstream_feed);
 
 	ch->remove_old_deleted_items(feed.get());
 
@@ -132,29 +131,30 @@ void RssParser::set_rtl(std::shared_ptr<RssFeed> feed,
 	}
 }
 
-void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
+void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed,
+	const rsspp::Feed& upstream_feed)
 {
 	/*
 	 * we fill all the feed members with the appropriate values from the
 	 * rsspp data structure
 	 */
-	if (is_html_type(f.title_type)) {
-		feed->set_title(render_xhtml_title(f.title, feed->link()));
+	if (is_html_type(upstream_feed.title_type)) {
+		feed->set_title(render_xhtml_title(upstream_feed.title, feed->link()));
 	} else {
-		feed->set_title(f.title);
+		feed->set_title(upstream_feed.title);
 	}
 
-	feed->set_description(f.description);
+	feed->set_description(upstream_feed.description);
 
-	feed->set_link(utils::absolute_url(my_uri, f.link));
+	feed->set_link(utils::absolute_url(my_uri, upstream_feed.link));
 
-	if (!f.pubDate.empty()) {
-		feed->set_pubDate(parse_date(f.pubDate));
+	if (!upstream_feed.pubDate.empty()) {
+		feed->set_pubDate(parse_date(upstream_feed.pubDate));
 	} else {
 		feed->set_pubDate(::time(nullptr));
 	}
 
-	set_rtl(feed, f.language);
+	set_rtl(feed, upstream_feed.language);
 
 	LOG(Level::DEBUG,
 		"RssParser::parse: feed title = `%s' link = `%s'",
@@ -162,14 +162,15 @@ void RssParser::fill_feed_fields(std::shared_ptr<RssFeed> feed)
 		feed->link());
 }
 
-void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
+void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed,
+	const rsspp::Feed& upstream_feed)
 {
 	/*
 	 * we iterate over all items of a feed, create an RssItem object for
 	 * each item, and fill it with the appropriate values from the data
 	 * structure.
 	 */
-	for (const auto& item : f.items) {
+	for (const auto& item : upstream_feed.items) {
 		std::shared_ptr<RssItem> x(new RssItem(ch));
 
 		set_item_title(feed, x, item);
@@ -183,19 +184,19 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed)
 			x->set_link(item.guid);
 		}
 
-		set_item_author(x, item);
+		set_item_author(x, item, upstream_feed);
 
 		x->set_feedurl(feed->rssurl());
 		x->set_feedptr(feed);
 
 		// TODO: replace this with a switch to get compiler errors when new
 		// entry is added to the enum.
-		if ((f.rss_version == rsspp::Feed::ATOM_1_0 ||
-				f.rss_version == rsspp::Feed::TTRSS_JSON ||
-				f.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
-				f.rss_version == rsspp::Feed::OCNEWS_JSON ||
-				f.rss_version == rsspp::Feed::MINIFLUX_JSON ||
-				f.rss_version == rsspp::Feed::FRESHRSS_JSON) &&
+		if ((upstream_feed.rss_version == rsspp::Feed::ATOM_1_0 ||
+				upstream_feed.rss_version == rsspp::Feed::TTRSS_JSON ||
+				upstream_feed.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
+				upstream_feed.rss_version == rsspp::Feed::OCNEWS_JSON ||
+				upstream_feed.rss_version == rsspp::Feed::MINIFLUX_JSON ||
+				upstream_feed.rss_version == rsspp::Feed::FRESHRSS_JSON) &&
 			item.labels.size() > 0) {
 			auto start = item.labels.begin();
 			auto finish = item.labels.end();
@@ -302,7 +303,7 @@ void RssParser::set_item_title(std::shared_ptr<RssFeed> feed,
 }
 
 void RssParser::set_item_author(std::shared_ptr<RssItem> x,
-	const rsspp::Item& item)
+	const rsspp::Item& item, const rsspp::Feed& upstream_feed)
 {
 	/*
 	 * some feeds only have a feed-wide managingEditor, which we use as an
@@ -310,10 +311,10 @@ void RssParser::set_item_author(std::shared_ptr<RssItem> x,
 	 */
 	std::string author = item.author;
 	if (author.empty()) {
-		author = f.managingeditor;
+		author = upstream_feed.managingeditor;
 	}
 	if (author.empty()) {
-		author = f.dc_creator;
+		author = upstream_feed.dc_creator;
 	}
 	replace_newline_characters(author);
 	x->set_author(author);
