@@ -6,7 +6,7 @@
 
 namespace newsboat {
 
-OpmlUrlReader::OpmlUrlReader(ConfigContainer* c)
+OpmlUrlReader::OpmlUrlReader(ConfigContainer& c)
 	: cfg(c)
 {
 }
@@ -24,7 +24,7 @@ nonstd::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 		LOG(Level::DEBUG,
 			"OpmlUrlReader::reload: downloading `%s'",
 			url);
-		std::string urlcontent = utils::retrieve_url(url, *cfg);
+		std::string urlcontent = utils::retrieve_url(url, cfg);
 
 		xmlDoc* doc =
 			xmlParseMemory(urlcontent.c_str(), urlcontent.length());
@@ -109,7 +109,7 @@ void OpmlUrlReader::rec_find_rss_outlines(xmlNode* node, std::string tag)
 
 std::string OpmlUrlReader::get_source()
 {
-	return cfg->get_configvalue("opml-url");
+	return cfg.get_configvalue("opml-url");
 }
 
 }

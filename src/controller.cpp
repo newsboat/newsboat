@@ -255,7 +255,7 @@ int Controller::run(const CliArgsParser& args)
 	if (type == "local") {
 		urlcfg = new FileUrlReader(configpaths.url_file());
 	} else if (type == "opml") {
-		urlcfg = new OpmlUrlReader(&cfg);
+		urlcfg = new OpmlUrlReader(cfg);
 	} else if (type == "oldreader") {
 		api = new OldReaderApi(&cfg);
 		urlcfg = new OldReaderUrlReader(
