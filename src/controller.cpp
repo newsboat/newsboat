@@ -249,7 +249,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	reloader =
-		std::unique_ptr<Reloader>(new Reloader(this, rsscache, &cfg));
+		std::unique_ptr<Reloader>(new Reloader(this, rsscache, cfg));
 
 	std::string type = cfg.get_configvalue("urls-source");
 	if (type == "local") {

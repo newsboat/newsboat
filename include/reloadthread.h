@@ -10,7 +10,7 @@ namespace newsboat {
 
 class ReloadThread {
 public:
-	ReloadThread(Controller* c, ConfigContainer* cf);
+	ReloadThread(Controller* c, ConfigContainer& cf);
 	virtual ~ReloadThread();
 	void operator()();
 
@@ -19,7 +19,7 @@ private:
 	time_t oldtime;
 	time_t waittime_sec;
 	bool suppressed_first;
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 };
 
 } // namespace newsboat

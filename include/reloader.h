@@ -17,7 +17,7 @@ class CurlHandle;
 /// \brief Updates feeds (fetches, parses, puts results into Controller).
 class Reloader {
 public:
-	Reloader(Controller* c, Cache* cc, ConfigContainer* cfg);
+	Reloader(Controller* c, Cache* cc, ConfigContainer& cfg);
 
 	/// \brief Creates detached thread that runs periodic updates.
 	void spawn_reloadthread();
@@ -103,7 +103,7 @@ private:
 
 	Controller* ctrl;
 	Cache* rsscache;
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 	std::mutex reload_mutex;
 	std::atomic<unsigned int> reload_progress;
 	unsigned int reload_progress_max;

@@ -7,7 +7,7 @@
 
 namespace newsboat {
 
-ReloadThread::ReloadThread(Controller* c, ConfigContainer* cf)
+ReloadThread::ReloadThread(Controller* c, ConfigContainer& cf)
 	: ctrl(c)
 	, oldtime(0)
 	, waittime_sec(0)
@@ -30,17 +30,17 @@ void ReloadThread::operator()()
 		oldtime = time(nullptr);
 		LOG(Level::INFO, "ReloadThread: starting reload");
 
-		waittime_sec = 60 * cfg->get_configvalue_as_int("reload-time");
+		waittime_sec = 60 * cfg.get_configvalue_as_int("reload-time");
 		if (waittime_sec == 0) {
 			waittime_sec = 60;
 		}
 
-		if (cfg->get_configvalue_as_bool("auto-reload")) {
+		if (cfg.get_configvalue_as_bool("auto-reload")) {
 			if (suppressed_first) {
 				ctrl->get_reloader()->start_reload_all_thread();
 			} else {
 				suppressed_first = true;
-				if (!cfg->get_configvalue_as_bool(
+				if (!cfg.get_configvalue_as_bool(
 						"suppress-first-reload")) {
 					ctrl->get_reloader()
 					->start_reload_all_thread();
