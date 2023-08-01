@@ -29,6 +29,33 @@ TEST_CASE("get_operation()", "[KeyMap]")
 	}
 }
 
+TEST_CASE("get_operation() supports multi-key bindings", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	k.handle_action("bind", "go feedlist open");
+
+	Operation decision = OP_QUIT;
+
+	SECTION("incomplete key sequence") {
+		k.get_operation({"g"}, "feedlist", decision);
+		REQUIRE(decision == OP_INTERNAL_UNFINISHED_KEY_SEQUENCE);
+	}
+
+	SECTION("unknown key sequence") {
+		k.get_operation({"g", "x"}, "feedlist", decision);
+		REQUIRE(decision == OP_NIL);
+	}
+
+	SECTION("complete key sequence") {
+		const auto commands = k.get_operation({"g", "o"}, "feedlist", decision);
+		REQUIRE(decision == newsboat::OP_INTERNAL_OPERATION_LIST);
+		REQUIRE(commands.size() == 1);
+		REQUIRE(commands.at(0).op == OP_OPEN);
+		REQUIRE(commands.at(0).args.size() == 0);
+	}
+}
+
 TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -94,8 +121,8 @@ TEST_CASE(
 		unset_keymap.unset_all_keys("all");
 
 		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist")
-				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist"));
+			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist").empty()
+				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist").empty());
 		}
 	}
 
@@ -107,8 +134,8 @@ TEST_CASE(
 			unset_keymap.unset_all_keys(context);
 
 			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context)
-					== unset_keymap.get_keys(static_cast<Operation>(i), context));
+				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context).empty()
+					== unset_keymap.get_keys(static_cast<Operation>(i), context).empty());
 			}
 		}
 	}

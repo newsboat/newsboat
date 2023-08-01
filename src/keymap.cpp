@@ -659,6 +659,27 @@ Operation KeyMap::get_operation(const std::string& keycode,
 	return keymap_[context][key];
 }
 
+std::vector<MacroCmd> KeyMap::get_operation(const std::vector<std::string>& key_sequence,
+	const std::string& context, Operation& decision)
+{
+	KeyNode* keyNode = &new_keymap_[context];
+	for (const auto& key : key_sequence) {
+		if (keyNode->bindings.find(key) == keyNode->bindings.end()) {
+			decision = OP_NIL;
+			return {};
+		}
+		keyNode = keyNode->bindings[key].get();
+	}
+
+	if (!keyNode->isLeafNode) {
+		decision = OP_INTERNAL_UNFINISHED_KEY_SEQUENCE;
+		return {};
+	}
+
+	decision = OP_INTERNAL_OPERATION_LIST;
+	return keyNode->action.cmds;
+}
+
 void KeyMap::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& ctx : contexts) {
