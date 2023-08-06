@@ -500,8 +500,7 @@ REDO:
 			goto REDO;
 		}
 		LOG(Level::INFO, "FeedListFormAction: quitting");
-		if (automatic ||
-			!cfg->get_configvalue_as_bool("confirm-exit") ||
+		if (!cfg->get_configvalue_as_bool("confirm-exit") ||
 			v->confirm(
 				_("Do you really want to quit (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
