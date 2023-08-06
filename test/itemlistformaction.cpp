@@ -507,8 +507,8 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	cfg.set_configvalue(
-		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
+	cfg.set_configvalue("bookmark-cmd", "echo > " + bookmarkFile.get_path());
+	cfg.set_configvalue("bookmark-autopilot", "yes");
 
 	bookmark_args.push_back(extra_arg);
 	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, true, &bookmark_args));

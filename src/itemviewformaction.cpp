@@ -156,7 +156,7 @@ void ItemViewFormAction::prepare()
 }
 
 bool ItemViewFormAction::process_operation(Operation op,
-	bool automatic,
+	bool /* automatic */,
 	std::vector<std::string>* args)
 {
 	bool hardquit = false;
@@ -253,19 +253,11 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_BOOKMARK:
-		if (automatic) {
-			qna_responses.clear();
-			qna_responses.push_back(item->link());
-			qna_responses.push_back(utils::utf8_to_locale(item->title()));
-			qna_responses.push_back(
-				args->size() > 0 ? (*args)[0] : "");
-			qna_responses.push_back(feed->title());
-		} else {
-			this->start_bookmark_qna(
-				utils::utf8_to_locale(item->title()),
-				item->link(),
-				feed->title());
-		}
+		this->start_bookmark_qna(
+			utils::utf8_to_locale(item->title()),
+			item->link(),
+			feed->title(),
+			args->size() > 0 ? args->front() : "");
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;

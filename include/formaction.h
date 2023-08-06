@@ -113,7 +113,8 @@ protected:
 
 	void start_bookmark_qna(const std::string& default_title,
 		const std::string& default_url,
-		const std::string& default_feed_title);
+		const std::string& default_feed_title,
+		const std::string& default_description);
 
 	static Command parse_command(const std::string& input,
 		std::string delimiters = " \r\n\t");

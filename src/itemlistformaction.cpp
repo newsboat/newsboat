@@ -318,24 +318,11 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: bookmarking item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				if (automatic) {
-					qna_responses.clear();
-					qna_responses.push_back(
-						visible_items[itempos]
-						.first->link());
-					qna_responses.push_back(utils::utf8_to_locale(
-							visible_items[itempos].first->title()));
-					qna_responses.push_back(args->size() > 0
-						? (*args)[0]
-						: "");
-					qna_responses.push_back(feed->title());
-					this->finished_qna(OP_INT_BM_END);
-				} else {
-					this->start_bookmark_qna(
-						visible_items[itempos].first->title(),
-						visible_items[itempos].first->link(),
-						feed->title());
-				}
+				this->start_bookmark_qna(
+					visible_items[itempos].first->title(),
+					visible_items[itempos].first->link(),
+					feed->title(),
+					args->size() > 0 ? args->front() : "");
 			}
 		} else {
 			v->get_statusline().show_error(

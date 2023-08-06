@@ -503,7 +503,8 @@ void FormAction::finished_qna(Operation op)
 
 void FormAction::start_bookmark_qna(const std::string& default_title,
 	const std::string& default_url,
-	const std::string& default_feed_title)
+	const std::string& default_feed_title,
+	const std::string& default_description)
 {
 	LOG(Level::DEBUG,
 		"FormAction::start_bookmark_qna: starting bookmark Q&A... "
@@ -522,7 +523,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 	} else {
 		prompts.push_back(QnaPair(_("Title: "), utils::utf8_to_locale(default_title)));
 	}
-	prompts.push_back(QnaPair(_("Description: "), ""));
+	prompts.push_back(QnaPair(_("Description: "), default_description));
 	prompts.push_back(QnaPair(_("Feed title: "), default_feed_title));
 
 	if (is_bm_autopilot) { // If bookmarking is set to autopilot don't prompt for url, title, desc
@@ -541,7 +542,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			v->get_statusline().show_message(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
 					title,
-					"",
+					default_description,
 					default_feed_title);
 			if (retval.length() == 0) {
 				v->get_statusline().show_message(_("Saved bookmark."));

@@ -34,7 +34,7 @@ UrlViewFormAction::~UrlViewFormAction() {}
 
 bool UrlViewFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	std::vector<std::string>* args)
 {
 	bool hardquit = false;
 	switch (op) {
@@ -59,7 +59,11 @@ bool UrlViewFormAction::process_operation(Operation op,
 	case OP_BOOKMARK: {
 		if (!links.empty()) {
 			const unsigned int pos = urls_list.get_position();
-			this->start_bookmark_qna("", links[pos].url, feed->title());
+			this->start_bookmark_qna(
+				"",
+				links[pos].url,
+				feed->title(),
+				args->size() > 0 ? args->front() : "");
 		} else {
 			v->get_statusline().show_error(_("No links available!"));
 		}
