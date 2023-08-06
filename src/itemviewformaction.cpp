@@ -397,7 +397,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		const auto message_lifetime = v->get_statusline().show_message_until_finished(
 				_("Toggling read flag for article..."));
 		try {
-			if (automatic && args->size() > 0) {
+			if (args->size() > 0) {
 				if ((*args)[0] == "read") {
 					item->set_unread(false);
 					v->get_ctrl()->mark_article_read(item->guid(), true);
