@@ -70,9 +70,7 @@ public:
 	void restore_selected_position();
 
 protected:
-	bool process_operation(Operation op,
-		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+	bool process_operation(Operation op, std::vector<std::string>* args = nullptr) override;
 	std::string main_widget() const override
 	{
 		return "items";

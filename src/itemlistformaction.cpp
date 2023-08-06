@@ -49,9 +49,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 
 ItemListFormAction::~ItemListFormAction() {}
 
-bool ItemListFormAction::process_operation(Operation op,
-	bool automatic,
-	std::vector<std::string>* args)
+bool ItemListFormAction::process_operation(Operation op, std::vector<std::string>* args)
 {
 	bool quit = false;
 	bool hardquit = false;
@@ -732,7 +730,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
-		ListFormAction::process_operation(op, automatic, args);
+		ListFormAction::process_operation(op, args);
 		break;
 	}
 	if (hardquit) {

@@ -28,9 +28,7 @@ HelpFormAction::HelpFormAction(View* vv,
 
 HelpFormAction::~HelpFormAction() {}
 
-bool HelpFormAction::process_operation(Operation op,
-	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+bool HelpFormAction::process_operation(Operation op, std::vector<std::string>* /* args */)
 {
 	bool hardquit = false;
 	switch (op) {

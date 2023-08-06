@@ -155,9 +155,7 @@ void ItemViewFormAction::prepare()
 	}
 }
 
-bool ItemViewFormAction::process_operation(Operation op,
-	bool /* automatic */,
-	std::vector<std::string>* args)
+bool ItemViewFormAction::process_operation(Operation op, std::vector<std::string>* args)
 {
 	bool hardquit = false;
 	bool quit = false;

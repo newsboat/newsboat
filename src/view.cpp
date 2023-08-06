@@ -142,7 +142,7 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
 		fa->draw_form();
-		if (!fa->process_op(command.op, true, &command.args)) {
+		if (!fa->process_op(command.op, &command.args)) {
 			// Operation failed, abort
 			return false;
 		}

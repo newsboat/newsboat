@@ -63,9 +63,7 @@ private:
 	unsigned int count_unread_articles();
 
 	int get_pos(unsigned int realidx);
-	bool process_operation(Operation op,
-		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+	bool process_operation(Operation op, std::vector<std::string>* args = nullptr) override;
 
 	bool open_position_in_browser(unsigned int pos, bool interactive) const;
 

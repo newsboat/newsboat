@@ -98,9 +98,7 @@ void FormAction::start_cmdline(std::string default_value)
 	this->start_qna(qna, OP_INT_END_CMDLINE, &FormAction::cmdlinehistory);
 }
 
-bool FormAction::process_op(Operation op,
-	bool automatic,
-	std::vector<std::string>* args)
+bool FormAction::process_op(Operation op, std::vector<std::string>* args)
 {
 	switch (op) {
 	case OP_REDRAW:
@@ -143,7 +141,7 @@ bool FormAction::process_op(Operation op,
 		v->goto_prev_dialog();
 		break;
 	default:
-		return this->process_operation(op, automatic, args);
+		return this->process_operation(op, args);
 	}
 	return true;
 }

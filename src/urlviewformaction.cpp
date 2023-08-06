@@ -32,9 +32,7 @@ UrlViewFormAction::UrlViewFormAction(View* vv,
 
 UrlViewFormAction::~UrlViewFormAction() {}
 
-bool UrlViewFormAction::process_operation(Operation op,
-	bool /* automatic */,
-	std::vector<std::string>* args)
+bool UrlViewFormAction::process_operation(Operation op, std::vector<std::string>* args)
 {
 	bool hardquit = false;
 	switch (op) {

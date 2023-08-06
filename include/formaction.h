@@ -60,9 +60,7 @@ public:
 
 	virtual void handle_cmdline(const std::string& cmd);
 
-	bool process_op(Operation op,
-		bool automatic = false,
-		std::vector<std::string>* args = nullptr);
+	bool process_op(Operation op, std::vector<std::string>* args = nullptr);
 
 	virtual void finished_qna(Operation op);
 
@@ -102,9 +100,7 @@ public:
 		const std::string& feed_title);
 
 protected:
-	virtual bool process_operation(Operation op,
-		bool automatic = false,
-		std::vector<std::string>* args = nullptr) = 0;
+	virtual bool process_operation(Operation op, std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();
 
 	/// The name of the "main" STFL widget, i.e. the one that should be focused
