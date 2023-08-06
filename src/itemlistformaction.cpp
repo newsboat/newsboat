@@ -219,7 +219,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			try {
 				const auto message_lifetime = v->get_statusline().show_message_until_finished(
 						_("Toggling read flag for article..."));
-				if (automatic && args->size() > 0) {
+				if (args->size() > 0) {
 					if ((*args)[0] == "read") {
 						visible_items[itempos]
 						.first->set_unread(
@@ -619,7 +619,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SELECTFILTER:
 		if (filter_container.size() > 0) {
 			std::string newfilter;
-			if (automatic && args->size() > 0) {
+			if (args->size() > 0) {
 				const std::string filter_name = (*args)[0];
 				const auto filter = filter_container.get_filter(filter_name);
 

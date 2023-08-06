@@ -99,7 +99,7 @@ REDO:
 	switch (op) {
 	case OP_OPEN: {
 		if (f.get_focus() == "feeds") {
-			if (automatic && args->size() > 0) {
+			if (args->size() > 0) {
 				pos = utils::to_u((*args)[0]);
 			}
 			LOG(Level::INFO,
@@ -416,7 +416,7 @@ REDO:
 		break;
 	case OP_SETTAG: {
 		std::string newtag;
-		if (automatic && args->size() > 0) {
+		if (args->size() > 0) {
 			newtag = (*args)[0];
 		} else {
 			newtag = v->select_tag(tag);
@@ -430,7 +430,7 @@ REDO:
 	break;
 	case OP_SELECTFILTER:
 		if (filter_container.size() > 0) {
-			if (automatic && args->size() > 0) {
+			if (args->size() > 0) {
 				const std::string filter_name = (*args)[0];
 				const auto filter = filter_container.get_filter(filter_name);
 
@@ -449,9 +449,9 @@ REDO:
 		}
 		break;
 	case OP_SEARCH:
-		if (automatic && args->size() > 0) {
+		if (args->size() > 0) {
 			qna_responses.clear();
-			// when in automatic mode, we manually fill the
+			// If arguments are specified, we manually fill the
 			// qna_responses vector from the arguments and then run
 			// the finished_qna() by ourselves to simulate a "Q&A"
 			// session that is in fact macro-driven.
@@ -482,7 +482,7 @@ REDO:
 		save_filterpos();
 		break;
 	case OP_SETFILTER:
-		if (automatic && args->size() > 0) {
+		if (args->size() > 0) {
 			qna_responses.clear();
 			qna_responses.push_back((*args)[0]);
 			finished_qna(OP_INT_END_SETFILTER);
