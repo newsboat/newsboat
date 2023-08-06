@@ -346,21 +346,18 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_EDITFLAGS: {
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				if (automatic) {
-					if (args->size() > 0) {
-						qna_responses.clear();
-						qna_responses.push_back(
-							(*args)[0]);
-						finished_qna(
-							OP_INT_EDITFLAGS_END);
-					}
+				if (args->size() > 0) {
+					qna_responses.clear();
+					qna_responses.push_back(
+						(*args)[0]);
+					finished_qna(
+						OP_INT_EDITFLAGS_END);
 				} else {
 					std::vector<QnaPair> qna;
 					qna.push_back(QnaPair(_("Flags: "),
 							visible_items[itempos]
 							.first->flags()));
-					this->start_qna(
-						qna, OP_INT_EDITFLAGS_END);
+					this->start_qna(qna, OP_INT_EDITFLAGS_END);
 				}
 			}
 		} else {
@@ -374,10 +371,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
 			std::string filename;
-			if (automatic) {
-				if (args->size() > 0) {
-					filename = (*args)[0];
-				}
+			if (args->size() > 0) {
+				filename = (*args)[0];
 			} else {
 				const auto title = utils::utf8_to_locale(item->title());
 				const auto suggestion = v->get_filename_suggestion(title);
@@ -570,17 +565,13 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
 			std::vector<QnaPair> qna;
-			if (automatic) {
-				if (args->size() > 0) {
-					qna_responses.clear();
-					qna_responses.push_back((*args)[0]);
-					finished_qna(OP_PIPE_TO);
-				}
+			if (args->size() > 0) {
+				qna_responses.clear();
+				qna_responses.push_back((*args)[0]);
+				finished_qna(OP_PIPE_TO);
 			} else {
-				qna.push_back(QnaPair(
-						_("Pipe article to command: "), ""));
-				this->start_qna(
-					qna, OP_PIPE_TO, &cmdlinehistory);
+				qna.push_back(QnaPair(_("Pipe article to command: "), ""));
+				this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 			}
 		} else {
 			v->get_statusline().show_error(_("No item selected!"));
@@ -588,25 +579,20 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
-			if (args->size() > 0) {
-				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
-				finished_qna(OP_INT_START_SEARCH);
-			}
+		if (args->size() > 0) {
+			qna_responses.clear();
+			qna_responses.push_back((*args)[0]);
+			finished_qna(OP_INT_START_SEARCH);
 		} else {
 			qna.push_back(QnaPair(_("Search for: "), ""));
-			this->start_qna(
-				qna, OP_INT_START_SEARCH, &searchhistory);
+			this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 		}
 	}
 	break;
 	case OP_GOTO_TITLE:
-		if (automatic) {
-			if (args->size() >= 1) {
-				qna_responses = {args[0]};
-				finished_qna(OP_INT_GOTO_TITLE);
-			}
+		if (args->size() >= 1) {
+			qna_responses = {args[0]};
+			finished_qna(OP_INT_GOTO_TITLE);
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Title: "), ""));
@@ -639,17 +625,14 @@ bool ItemListFormAction::process_operation(Operation op,
 
 		break;
 	case OP_SETFILTER:
-		if (automatic) {
-			if (args->size() > 0) {
-				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
-				this->finished_qna(OP_INT_END_SETFILTER);
-			}
+		if (args->size() > 0) {
+			qna_responses.clear();
+			qna_responses.push_back((*args)[0]);
+			this->finished_qna(OP_INT_END_SETFILTER);
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Filter: "), ""));
-			this->start_qna(
-				qna, OP_INT_END_SETFILTER, &filterhistory);
+			this->start_qna(qna, OP_INT_END_SETFILTER, &filterhistory);
 		}
 		break;
 	case OP_CLEARFILTER:

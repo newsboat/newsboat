@@ -465,11 +465,9 @@ REDO:
 		}
 		break;
 	case OP_GOTO_TITLE:
-		if (automatic) {
-			if (args->size() >= 1) {
-				qna_responses = {args[0]};
-				finished_qna(OP_INT_GOTO_TITLE);
-			}
+		if (args->size() >= 1) {
+			qna_responses = {args[0]};
+			finished_qna(OP_INT_GOTO_TITLE);
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Title: "), ""));

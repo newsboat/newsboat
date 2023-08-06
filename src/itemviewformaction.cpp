@@ -217,10 +217,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
-		if (automatic) {
-			if (args->size() > 0) {
-				filename = (*args)[0];
-			}
+		if (args->size() > 0) {
+			filename = (*args)[0];
 		} else {
 			filename = v->run_filebrowser( utils::utf8_to_locale(v->get_filename_suggestion(
 							item->title())));
@@ -271,27 +269,22 @@ bool ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
-			if (args->size() > 0) {
-				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
-				finished_qna(OP_INT_START_SEARCH);
-			}
+		if (args->size() > 0) {
+			qna_responses.clear();
+			qna_responses.push_back((*args)[0]);
+			finished_qna(OP_INT_START_SEARCH);
 		} else {
 			qna.push_back(QnaPair(_("Search for: "), ""));
-			this->start_qna(
-				qna, OP_INT_START_SEARCH, &searchhistory);
+			this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
 		}
 	}
 	break;
 	case OP_PIPE_TO: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
-			if (args->size() > 0) {
-				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
-				finished_qna(OP_PIPE_TO);
-			}
+		if (args->size() > 0) {
+			qna_responses.clear();
+			qna_responses.push_back((*args)[0]);
+			finished_qna(OP_PIPE_TO);
 		} else {
 			qna.push_back(
 				QnaPair(_("Pipe article to command: "), ""));
@@ -300,12 +293,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_EDITFLAGS:
-		if (automatic) {
+		if (args->size() > 0) {
 			qna_responses.clear();
-			if (args->size() > 0) {
-				qna_responses.push_back((*args)[0]);
-				this->finished_qna(OP_INT_EDITFLAGS_END);
-			}
+			qna_responses.push_back((*args)[0]);
+			this->finished_qna(OP_INT_EDITFLAGS_END);
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Flags: "), item->flags()));
@@ -453,12 +444,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 	break;
 	case OP_GOTO_URL: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
-			if (args->size() > 0) {
-				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
-				finished_qna(OP_INT_GOTO_URL);
-			}
+		if (args->size() > 0) {
+			qna_responses.clear();
+			qna_responses.push_back((*args)[0]);
+			finished_qna(OP_INT_GOTO_URL);
 		} else {
 			qna.push_back(QnaPair(_("Goto URL #"), ""));
 			this->start_qna(qna, OP_INT_GOTO_URL);

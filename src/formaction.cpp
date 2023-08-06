@@ -111,26 +111,27 @@ bool FormAction::process_op(Operation op,
 		start_cmdline();
 		break;
 	case OP_INT_SET:
-		if (automatic) {
-			if (args && args->size() == 2) {
+		if (args && args->size() > 0) {
+			if (args->size() == 2) {
 				const std::string key = args->at(0);
 				const std::string value = args->at(1);
 				cfg->set_configvalue(key, value);
 				set_redraw(true);
 				return true;
 			}
-			if (args && args->size() == 1) {
+			if (args->size() == 1) {
 				if (handle_single_argument_set(args->at(0))) {
 					return true;
 				}
+				return false;
 			}
-			v->get_statusline().show_error(_("usage: set <config-option> <value>"));
-			return false;
-		} else {
 			LOG(Level::WARN,
-				"FormAction::process_op: got OP_INT_SET, but "
-				"not automatic");
+				"FormAction::process_op: got OP_INT_SET, but incorrect number of arguments");
+		} else {
+			LOG(Level::WARN, "FormAction::process_op: got OP_INT_SET, but no arguments");
 		}
+		v->get_statusline().show_error(_("usage: set <config-option> <value>"));
+		return false;
 		break;
 	case OP_VIEWDIALOGS:
 		v->view_dialogs();
