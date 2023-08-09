@@ -1,11 +1,14 @@
 #include "utils.h"
 
 #include <algorithm>
+#include <atomic>
 #include <chrono>
 #include <ctype.h>
 #include <fstream>
+#include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <thread>
 #include <tuple>
 #include <unistd.h>
 
@@ -587,6 +590,47 @@ TEST_CASE("run_program()", "[utils]")
 	argv[2] = "hello world";
 	argv[3] = nullptr;
 	REQUIRE(utils::run_program(argv, "") == "hello world");
+}
+
+TEST_CASE("run_program() works for large inputs", "[utils]")
+{
+	const std::string large_input(1000000, 'a');
+
+	// Calling std::thread::~thread() on a thread that's still running will
+	// make it call `std::terminate`, crashing our entire test suite. To avoid
+	// that, this wrapper kills the thread with SIGKILL and detaches it from
+	// the thread handle.
+	struct Runner {
+		std::thread runner;
+
+		Runner(std::thread runner)
+			: runner(std::move(runner))
+		{}
+
+		~Runner()
+		{
+			pthread_kill(runner.native_handle(), SIGKILL);
+			runner.detach();
+		}
+	};
+
+	std::atomic_flag thread_finished = ATOMIC_FLAG_INIT;
+	std::string result;
+	Runner runner(std::thread([large_input, &thread_finished, &result]() {
+		const char* argv[4];
+		argv[0] = "sh";
+		argv[1] = "-c";
+		argv[2] = "cat";
+		argv[3] = nullptr;
+		result = utils::run_program(argv, large_input);
+		thread_finished.test_and_set();
+	}));
+
+	// cat should be able to process 1MB of input in under a second
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	REQUIRE(thread_finished.test_and_set());
+	REQUIRE(result == large_input);
 }
 
 TEST_CASE("run_command() executes the given command with a given argument",

@@ -84,7 +84,7 @@ mod bridged {
 
         fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool;
 
-        fn run_program(argv: &[&str], input: &str) -> String;
+        fn run_program(argv: &[&str], input: String) -> String;
 
         fn translit(tocode: &str, fromcode: &str) -> String;
         fn utf8_to_locale(text: &str) -> Vec<u8>;
