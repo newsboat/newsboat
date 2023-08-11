@@ -465,7 +465,7 @@ pub fn run_command(cmd: &str, param: &str) {
     }
 }
 
-pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
+pub fn run_program(cmd_with_args: &[&str], input: String) -> String {
     if cmd_with_args.is_empty() {
         return String::new();
     }
@@ -482,19 +482,21 @@ pub fn run_program(cmd_with_args: &[&str], input: &str) -> String {
                 "utils::run_program: spawning a child for \"{:?}\" \
                  with input \"{}\" failed: {}",
                 cmd_with_args,
-                input,
+                &input,
                 error
             );
         })
         .and_then(|mut child| {
-            if let Some(stdin) = child.stdin.as_mut() {
-                if let Err(error) = stdin.write_all(input.as_bytes()) {
-                    log!(
-                        Level::Debug,
-                        "utils::run_program: failed to write to child's stdin: {}",
-                        error
-                    );
-                }
+            if let Some(mut stdin) = child.stdin.take() {
+                std::thread::spawn(move || {
+                    if let Err(error) = stdin.write_all(input.as_bytes()) {
+                        log!(
+                            Level::Debug,
+                            "utils::run_program: failed to write to child's stdin: {}",
+                            error
+                        );
+                    }
+                });
             }
 
             child
@@ -1698,10 +1700,10 @@ mod tests {
     #[test]
     fn t_run_program() {
         let input1 = "this is a multine-line\ntest string";
-        assert_eq!(run_program(&["cat"], input1), input1);
+        assert_eq!(run_program(&["cat"], input1.to_owned()), input1);
 
         assert_eq!(
-            run_program(&["echo", "-n", "hello world"], ""),
+            run_program(&["echo", "-n", "hello world"], String::new()),
             "hello world"
         );
     }

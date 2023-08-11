@@ -2,10 +2,14 @@
 
 #include <algorithm>
 #include <chrono>
+#include <condition_variable>
 #include <ctype.h>
 #include <fstream>
+#include <mutex>
+#include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <thread>
 #include <tuple>
 #include <unistd.h>
 
@@ -587,6 +591,64 @@ TEST_CASE("run_program()", "[utils]")
 	argv[2] = "hello world";
 	argv[3] = nullptr;
 	REQUIRE(utils::run_program(argv, "") == "hello world");
+}
+
+TEST_CASE("run_program() works for large inputs", "[utils]")
+{
+	const std::string large_input(1000000, 'a');
+
+	// Calling std::thread::~thread() on a thread that's still running will
+	// make it call `std::terminate`, crashing our entire test suite. To avoid
+	// that, this wrapper kills the thread with SIGKILL and detaches it from
+	// the thread handle.
+	struct Runner {
+		std::thread runner;
+
+		Runner(std::thread runner)
+			: runner(std::move(runner))
+		{}
+
+		~Runner()
+		{
+			pthread_kill(runner.native_handle(), SIGKILL);
+			runner.detach();
+		}
+	};
+
+	struct {
+		bool flag = false;
+		std::mutex mtx;
+		std::condition_variable condvar;
+	} thread_finished;
+	std::string result;
+	Runner runner(std::thread([large_input, &thread_finished, &result]() {
+		const char* argv[4];
+		argv[0] = "sh";
+		argv[1] = "-c";
+		argv[2] = "cat";
+		argv[3] = nullptr;
+		result = utils::run_program(argv, large_input);
+
+		{
+			std::lock_guard<std::mutex> g(thread_finished.mtx);
+			thread_finished.flag = true;
+		}
+		thread_finished.condvar.notify_one();
+	}));
+
+	{
+		std::unique_lock<std::mutex> g(thread_finished.mtx);
+		// cat should be able to process 1MB of input in under a second
+		thread_finished.condvar.wait_for(g, std::chrono::seconds(1), [&]() {
+			return thread_finished.flag;
+		});
+	}
+
+	{
+		std::lock_guard<std::mutex> g(thread_finished.mtx);
+		REQUIRE(thread_finished.flag);
+	}
+	REQUIRE(result == large_input);
 }
 
 TEST_CASE("run_command() executes the given command with a given argument",
