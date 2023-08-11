@@ -1,10 +1,11 @@
 #include "utils.h"
 
 #include <algorithm>
-#include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <ctype.h>
 #include <fstream>
+#include <mutex>
 #include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -614,7 +615,11 @@ TEST_CASE("run_program() works for large inputs", "[utils]")
 		}
 	};
 
-	std::atomic_flag thread_finished = ATOMIC_FLAG_INIT;
+	struct {
+		bool flag = false;
+		std::mutex mtx;
+		std::condition_variable condvar;
+	} thread_finished;
 	std::string result;
 	Runner runner(std::thread([large_input, &thread_finished, &result]() {
 		const char* argv[4];
@@ -623,13 +628,26 @@ TEST_CASE("run_program() works for large inputs", "[utils]")
 		argv[2] = "cat";
 		argv[3] = nullptr;
 		result = utils::run_program(argv, large_input);
-		thread_finished.test_and_set();
+
+		{
+			std::lock_guard<std::mutex> g(thread_finished.mtx);
+			thread_finished.flag = true;
+		}
+		thread_finished.condvar.notify_one();
 	}));
 
-	// cat should be able to process 1MB of input in under a second
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	{
+		std::unique_lock<std::mutex> g(thread_finished.mtx);
+		// cat should be able to process 1MB of input in under a second
+		thread_finished.condvar.wait_for(g, std::chrono::seconds(1), [&]() {
+			return thread_finished.flag;
+		});
+	}
 
-	REQUIRE(thread_finished.test_and_set());
+	{
+		std::lock_guard<std::mutex> g(thread_finished.mtx);
+		REQUIRE(thread_finished.flag);
+	}
 	REQUIRE(result == large_input);
 }
 
