@@ -14,7 +14,7 @@ namespace podboat {
 
 class PodDlThread {
 public:
-	PodDlThread(Download* dl_, newsboat::ConfigContainer*);
+	PodDlThread(Download* dl_, newsboat::ConfigContainer& c);
 	virtual ~PodDlThread();
 	size_t write_data(void* buffer, size_t size, size_t nmemb);
 	int progress(double dlnow, double dltotal);
@@ -30,7 +30,7 @@ private:
 	std::chrono::time_point<std::chrono::steady_clock> tv1;
 	std::chrono::time_point<std::chrono::steady_clock> tv2;
 	size_t bytecount;
-	newsboat::ConfigContainer* cfg;
+	newsboat::ConfigContainer& cfg;
 };
 
 } // namespace podboat

@@ -23,7 +23,7 @@
 
 namespace newsboat {
 
-InoreaderApi::InoreaderApi(ConfigContainer* c)
+InoreaderApi::InoreaderApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
 }
@@ -170,7 +170,7 @@ std::vector<TaggedFeedUrl> InoreaderApi::get_subscribed_urls()
 		auto url = strprintf::fmt("%s%s?n=%u",
 				INOREADER_FEED_PREFIX,
 				id_uenc,
-				cfg->get_configvalue_as_int("inoreader-min-items"));
+				cfg.get_configvalue_as_int("inoreader-min-items"));
 		urls.push_back(TaggedFeedUrl(url, tags));
 
 		curl_free(id_uenc);
@@ -250,8 +250,8 @@ bool InoreaderApi::update_article_flags(const std::string& inoflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("inoreader-flag-star");
-	std::string share_flag = cfg->get_configvalue("inoreader-flag-share");
+	std::string star_flag = cfg.get_configvalue("inoreader-flag-star");
+	std::string share_flag = cfg.get_configvalue("inoreader-flag-share");
 	bool success = true;
 
 	if (star_flag.length() > 0) {
@@ -340,12 +340,12 @@ curl_slist* InoreaderApi::add_app_headers(curl_slist* headers)
 {
 	const auto app_id = strprintf::fmt(
 			"AppId: %s",
-			cfg->get_configvalue("inoreader-app-id"));
+			cfg.get_configvalue("inoreader-app-id"));
 	headers = curl_slist_append(headers, app_id.c_str());
 
 	const auto app_key = strprintf::fmt(
 			"AppKey: %s",
-			cfg->get_configvalue("inoreader-app-key"));
+			cfg.get_configvalue("inoreader-app-key"));
 	headers = curl_slist_append(headers, app_key.c_str());
 
 	return headers;

@@ -7,9 +7,9 @@
 #include <utility>
 #include <vector>
 
-#include "configcontainer.h"
-
 namespace newsboat {
+
+class ConfigContainer;
 
 typedef std::pair<std::string, std::vector<std::string>> TaggedFeedUrl;
 
@@ -21,11 +21,8 @@ typedef struct {
 
 class RemoteApi {
 public:
-	explicit RemoteApi(ConfigContainer* c)
-		: cfg(c)
-	{
-	}
-	virtual ~RemoteApi() {}
+	explicit RemoteApi(ConfigContainer& c);
+	virtual ~RemoteApi() = default;
 	virtual bool authenticate() = 0;
 	virtual std::vector<TaggedFeedUrl> get_subscribed_urls() = 0;
 	virtual void add_custom_headers(curl_slist** custom_headers) = 0;
@@ -43,7 +40,7 @@ protected:
 		const std::string& newflags,
 		char flag, std::function<void(bool added)>&& do_update);
 
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 	Credentials get_credentials(const std::string& scope,
 		const std::string& name);
 };

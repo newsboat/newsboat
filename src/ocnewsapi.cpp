@@ -17,17 +17,15 @@ namespace newsboat {
 
 typedef std::unique_ptr<json_object, decltype(*json_object_put)> JsonUptr;
 
-OcNewsApi::OcNewsApi(ConfigContainer* c)
+OcNewsApi::OcNewsApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
-	server = cfg->get_configvalue("ocnews-url");
+	server = cfg.get_configvalue("ocnews-url");
 
 	if (server.empty())
 		LOG(Level::CRITICAL,
 			"OcNewsApi::OcNewsApi: No owncloud server set");
 }
-
-OcNewsApi::~OcNewsApi() {}
 
 bool OcNewsApi::authenticate()
 {
@@ -196,7 +194,7 @@ bool OcNewsApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("ocnews-flag-star");
+	std::string star_flag = cfg.get_configvalue("ocnews-flag-star");
 	bool success = true;
 	if (star_flag.length() > 0) {
 		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {

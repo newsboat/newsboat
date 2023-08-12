@@ -15,8 +15,8 @@ class CurlHandle;
 
 class TtRssApi : public RemoteApi {
 public:
-	explicit TtRssApi(ConfigContainer* c);
-	~TtRssApi() override;
+	explicit TtRssApi(ConfigContainer& c);
+	~TtRssApi() override = default;
 	bool authenticate() override;
 	virtual nlohmann::json run_op(const std::string& op,
 		const std::map<std::string, std::string>& args,

@@ -18,21 +18,19 @@ using json = nlohmann::json;
 
 namespace newsboat {
 
-TtRssApi::TtRssApi(ConfigContainer* c)
+TtRssApi::TtRssApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
-	single = (cfg->get_configvalue("ttrss-mode") == "single");
+	single = (cfg.get_configvalue("ttrss-mode") == "single");
 	if (single) {
 		auth_info = strprintf::fmt("%s:%s",
-				cfg->get_configvalue("ttrss-login"),
-				cfg->get_configvalue("ttrss-password"));
+				cfg.get_configvalue("ttrss-login"),
+				cfg.get_configvalue("ttrss-password"));
 	} else {
 		auth_info = "";
 	}
 	sid = "";
 }
-
-TtRssApi::~TtRssApi() {}
 
 bool TtRssApi::authenticate()
 {
@@ -137,7 +135,7 @@ json TtRssApi::run_op(const std::string& op,
 	bool try_login /* = true */)
 {
 	std::string url =
-		strprintf::fmt("%s/api/", cfg->get_configvalue("ttrss-url"));
+		strprintf::fmt("%s/api/", cfg.get_configvalue("ttrss-url"));
 
 	// First build the request payload
 	std::string req_data;
@@ -345,8 +343,8 @@ bool TtRssApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("ttrss-flag-star");
-	std::string publish_flag = cfg->get_configvalue("ttrss-flag-publish");
+	std::string star_flag = cfg.get_configvalue("ttrss-flag-star");
+	std::string publish_flag = cfg.get_configvalue("ttrss-flag-publish");
 	bool success = true;
 
 	if (star_flag.length() > 0) {

@@ -63,13 +63,13 @@ std::string http_method_str(const HTTPMethod method);
 std::string link_type_str(LinkType type);
 
 std::string retrieve_url(const std::string& url,
-	ConfigContainer* cfgcont = nullptr,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);
 std::string retrieve_url(const std::string& url,
 	CurlHandle& easyhandle,
-	ConfigContainer* cfgcont = nullptr,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);
@@ -91,7 +91,7 @@ std::wstring clean_nonprintable_characters(std::wstring text);
 std::string absolute_url(const std::string& url,
 	const std::string& link);
 
-std::string get_useragent(ConfigContainer* cfgcont);
+std::string get_useragent(ConfigContainer& cfgcont);
 
 std::string substr_with_width(const std::string& str,
 	const size_t max_width);
@@ -122,7 +122,7 @@ std::string quote(const std::string& str);
 
 std::string quote_if_necessary(const std::string& str);
 
-void set_common_curl_options(CurlHandle& handle, ConfigContainer* cfg);
+void set_common_curl_options(CurlHandle& handle, ConfigContainer& cfg);
 
 curl_proxytype get_proxy_type(const std::string& type);
 

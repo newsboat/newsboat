@@ -244,7 +244,7 @@ std::string utils::link_type_str(LinkType type)
 }
 
 std::string utils::retrieve_url(const std::string& url,
-	ConfigContainer* cfgcont,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
 	const HTTPMethod method /* = GET */)
@@ -255,7 +255,7 @@ std::string utils::retrieve_url(const std::string& url,
 
 std::string utils::retrieve_url(const std::string& url,
 	CurlHandle& easyhandle,
-	ConfigContainer* cfgcont,
+	ConfigContainer& cfgcont,
 	const std::string& authinfo,
 	const std::string* body,
 	const HTTPMethod method /* = GET */)
@@ -286,7 +286,7 @@ std::string utils::retrieve_url(const std::string& url,
 	}
 
 	if (!authinfo.empty()) {
-		const auto auth_method = cfgcont->get_configvalue("http-auth-method");
+		const auto auth_method = cfgcont.get_configvalue("http-auth-method");
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPAUTH, get_auth_method(auth_method));
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERPWD, authinfo.c_str());
 	}
@@ -426,9 +426,9 @@ std::string utils::absolute_url(const std::string& url, const std::string& link)
 	return std::string(utils::bridged::absolute_url(url, link));
 }
 
-std::string utils::get_useragent(ConfigContainer* cfgcont)
+std::string utils::get_useragent(ConfigContainer& cfgcont)
 {
-	std::string ua_pref = cfgcont->get_configvalue("user-agent");
+	std::string ua_pref = cfgcont.get_configvalue("user-agent");
 	if (ua_pref.length() == 0) {
 		struct utsname buf;
 		uname(&buf);
@@ -538,67 +538,65 @@ std::string utils::quote_if_necessary(const std::string& str)
 	return std::string(utils::bridged::quote_if_necessary(str));
 }
 
-void utils::set_common_curl_options(CurlHandle& handle, ConfigContainer* cfg)
+void utils::set_common_curl_options(CurlHandle& handle, ConfigContainer& cfg)
 {
-	if (cfg) {
-		if (cfg->get_configvalue_as_bool("use-proxy")) {
-			const std::string proxy = cfg->get_configvalue("proxy");
-			if (proxy != "")
-				curl_easy_setopt(
-					handle.ptr(), CURLOPT_PROXY, proxy.c_str());
+	if (cfg.get_configvalue_as_bool("use-proxy")) {
+		const std::string proxy = cfg.get_configvalue("proxy");
+		if (proxy != "")
+			curl_easy_setopt(
+				handle.ptr(), CURLOPT_PROXY, proxy.c_str());
 
-			const std::string proxyauth =
-				cfg->get_configvalue("proxy-auth");
-			const std::string proxyauthmethod =
-				cfg->get_configvalue("proxy-auth-method");
-			if (proxyauth != "") {
-				curl_easy_setopt(handle.ptr(),
-					CURLOPT_PROXYAUTH,
-					get_auth_method(proxyauthmethod));
-				curl_easy_setopt(handle.ptr(),
-					CURLOPT_PROXYUSERPWD,
-					proxyauth.c_str());
-			}
-
-			const std::string proxytype =
-				cfg->get_configvalue("proxy-type");
-			if (proxytype != "") {
-				LOG(Level::DEBUG,
-					"utils::set_common_curl_options: "
-					"proxytype "
-					"= %s",
-					proxytype);
-				curl_easy_setopt(handle.ptr(),
-					CURLOPT_PROXYTYPE,
-					get_proxy_type(proxytype));
-			}
+		const std::string proxyauth =
+			cfg.get_configvalue("proxy-auth");
+		const std::string proxyauthmethod =
+			cfg.get_configvalue("proxy-auth-method");
+		if (proxyauth != "") {
+			curl_easy_setopt(handle.ptr(),
+				CURLOPT_PROXYAUTH,
+				get_auth_method(proxyauthmethod));
+			curl_easy_setopt(handle.ptr(),
+				CURLOPT_PROXYUSERPWD,
+				proxyauth.c_str());
 		}
 
-		const std::string useragent = utils::get_useragent(cfg);
-		curl_easy_setopt(handle.ptr(), CURLOPT_USERAGENT, useragent.c_str());
-
-		const unsigned int dl_timeout =
-			cfg->get_configvalue_as_int("download-timeout");
-		curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, dl_timeout);
-
-		const std::string cookie_cache =
-			cfg->get_configvalue("cookie-cache");
-		if (cookie_cache != "") {
+		const std::string proxytype =
+			cfg.get_configvalue("proxy-type");
+		if (proxytype != "") {
+			LOG(Level::DEBUG,
+				"utils::set_common_curl_options: "
+				"proxytype "
+				"= %s",
+				proxytype);
 			curl_easy_setopt(handle.ptr(),
-				CURLOPT_COOKIEFILE,
-				cookie_cache.c_str());
-			curl_easy_setopt(handle.ptr(),
-				CURLOPT_COOKIEJAR,
-				cookie_cache.c_str());
+				CURLOPT_PROXYTYPE,
+				get_proxy_type(proxytype));
 		}
-
-		curl_easy_setopt(handle.ptr(),
-			CURLOPT_SSL_VERIFYHOST,
-			cfg->get_configvalue_as_bool("ssl-verifyhost") ? 2 : 0);
-		curl_easy_setopt(handle.ptr(),
-			CURLOPT_SSL_VERIFYPEER,
-			cfg->get_configvalue_as_bool("ssl-verifypeer"));
 	}
+
+	const std::string useragent = utils::get_useragent(cfg);
+	curl_easy_setopt(handle.ptr(), CURLOPT_USERAGENT, useragent.c_str());
+
+	const unsigned int dl_timeout =
+		cfg.get_configvalue_as_int("download-timeout");
+	curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, dl_timeout);
+
+	const std::string cookie_cache =
+		cfg.get_configvalue("cookie-cache");
+	if (cookie_cache != "") {
+		curl_easy_setopt(handle.ptr(),
+			CURLOPT_COOKIEFILE,
+			cookie_cache.c_str());
+		curl_easy_setopt(handle.ptr(),
+			CURLOPT_COOKIEJAR,
+			cookie_cache.c_str());
+	}
+
+	curl_easy_setopt(handle.ptr(),
+		CURLOPT_SSL_VERIFYHOST,
+		cfg.get_configvalue_as_bool("ssl-verifyhost") ? 2 : 0);
+	curl_easy_setopt(handle.ptr(),
+		CURLOPT_SSL_VERIFYPEER,
+		cfg.get_configvalue_as_bool("ssl-verifypeer"));
 
 	curl_easy_setopt(handle.ptr(), CURLOPT_NOSIGNAL, 1);
 	// Accept all of curl's built-in encodings

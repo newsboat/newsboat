@@ -9,6 +9,7 @@
 #include "controller.h"
 #include "curlhandle.h"
 #include "dbexception.h"
+#include "feedretriever.h"
 #include "fmtstrformatter.h"
 #include "matcherexception.h"
 #include "reloadthread.h"
@@ -21,7 +22,7 @@
 
 namespace newsboat {
 
-Reloader::Reloader(Controller* c, Cache* cc, ConfigContainer* cfg)
+Reloader::Reloader(Controller* c, Cache* cc, ConfigContainer& cfg)
 	: ctrl(c)
 	, rsscache(cc)
 	, cfg(cfg)
@@ -99,20 +100,23 @@ void Reloader::reload(unsigned int pos,
 		}
 
 		const bool ignore_dl =
-			(cfg->get_configvalue("ignore-mode") == "download");
+			(cfg.get_configvalue("ignore-mode") == "download");
 
-		RssParser parser(oldfeed->rssurl(),
-			rsscache,
-			cfg,
-			ignore_dl ? ctrl->get_ignores() : nullptr,
-			ctrl->get_api());
-		parser.set_easyhandle(&easyhandle);
-		LOG(Level::DEBUG, "Reloader::reload: created parser");
 		try {
 			const auto inner_message_lifetime = message_lifetime;
 			message_lifetime.reset();
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
-			std::shared_ptr<RssFeed> newfeed = parser.parse();
+
+			RssIgnores* ign = ignore_dl ? ctrl->get_ignores() : nullptr;
+
+			LOG(Level::INFO, "Reloader::reload: retrieving feed");
+			FeedRetriever feed_retriever(cfg, *rsscache, ign, ctrl->get_api(), &easyhandle);
+			const rsspp::Feed feed = feed_retriever.retrieve(oldfeed->rssurl());
+
+			LOG(Level::INFO, "Reloader::reload: parsing feed");
+			RssParser parser(oldfeed->rssurl(), *rsscache, cfg, ign);
+
+			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
 			if (newfeed != nullptr) {
 				ctrl->replace_feed(
 					oldfeed, newfeed, pos, unattended);
@@ -152,7 +156,7 @@ void Reloader::partition_reload_to_threads(
 	std::function<void(unsigned int start, unsigned int end)> handle_range,
 	unsigned int num_feeds)
 {
-	int num_threads = cfg->get_configvalue_as_int("reload-threads");
+	int num_threads = cfg.get_configvalue_as_int("reload-threads");
 	// TODO: change to std::clamp in C++17
 	const int min_threads = 1;
 	const int max_threads = num_feeds;
@@ -216,7 +220,7 @@ void Reloader::reload_all(bool unattended)
 		}
 	}
 
-	ctrl->get_feedcontainer()->sort_feeds(cfg->get_feed_sort_strategy());
+	ctrl->get_feedcontainer()->sort_feeds(cfg.get_feed_sort_strategy());
 	ctrl->update_feedlist();
 	ctrl->get_view()->force_redraw();
 
@@ -280,22 +284,22 @@ void Reloader::reload_range(unsigned int start,
 
 void Reloader::notify(const std::string& msg)
 {
-	if (cfg->get_configvalue_as_bool("notify-screen")) {
+	if (cfg.get_configvalue_as_bool("notify-screen")) {
 		LOG(Level::DEBUG, "reloader:notify: notifying screen");
 		std::cout << "\033^" << msg << "\033\\";
 		std::cout.flush();
 	}
-	if (cfg->get_configvalue_as_bool("notify-xterm")) {
+	if (cfg.get_configvalue_as_bool("notify-xterm")) {
 		LOG(Level::DEBUG, "reloader:notify: notifying xterm");
 		std::cout << "\033]2;" << msg << "\033\\";
 		std::cout.flush();
 	}
-	if (cfg->get_configvalue_as_bool("notify-beep")) {
+	if (cfg.get_configvalue_as_bool("notify-beep")) {
 		LOG(Level::DEBUG, "reloader:notify: notifying beep");
 		::beep();
 	}
-	if (cfg->get_configvalue("notify-program").length() > 0) {
-		std::string prog = cfg->get_configvalue("notify-program");
+	if (cfg.get_configvalue("notify-program").length() > 0) {
+		std::string prog = cfg.get_configvalue("notify-program");
 		LOG(Level::DEBUG,
 			"reloader:notify: notifying external program `%s'",
 			prog);
@@ -310,7 +314,7 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 		ctrl->get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
 		ctrl->get_feedcontainer()->unread_item_count();
-	const bool notify_always = cfg->get_configvalue_as_bool("notify-always");
+	const bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 
 	if (notify_always || unread_feeds > unread_feeds_before ||
 		unread_articles > unread_articles_before) {
@@ -330,7 +334,7 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 			std::to_string(article_count >= 0 ? article_count : 0));
 		fmt.register_fmt(
 			'D', std::to_string(feed_count >= 0 ? feed_count : 0));
-		notify(fmt.do_format(cfg->get_configvalue("notify-format")));
+		notify(fmt.do_format(cfg.get_configvalue("notify-format")));
 	}
 }
 

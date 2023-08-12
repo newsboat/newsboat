@@ -11,7 +11,7 @@ namespace newsboat {
 
 class InoreaderApi : public RemoteApi {
 public:
-	explicit InoreaderApi(ConfigContainer* c);
+	explicit InoreaderApi(ConfigContainer& c);
 	virtual ~InoreaderApi() = default;
 	virtual bool authenticate();
 	virtual std::vector<TaggedFeedUrl> get_subscribed_urls();

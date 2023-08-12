@@ -24,7 +24,7 @@
 
 namespace newsboat {
 
-FeedHqApi::FeedHqApi(ConfigContainer* c)
+FeedHqApi::FeedHqApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
 }
@@ -75,7 +75,7 @@ std::string FeedHqApi::retrieve_auth()
 	curl_easy_setopt(handle.ptr(), CURLOPT_POSTFIELDS, postcontent.c_str());
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
-		(cfg->get_configvalue("feedhq-url") + FEEDHQ_LOGIN).c_str());
+		(cfg.get_configvalue("feedhq-url") + FEEDHQ_LOGIN).c_str());
 	curl_easy_perform(handle.ptr());
 
 	for (const auto& line : utils::tokenize(result)) {
@@ -104,7 +104,7 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
-		(cfg->get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST)
+		(cfg.get_configvalue("feedhq-url") + FEEDHQ_SUBSCRIPTION_LIST)
 		.c_str());
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -153,10 +153,10 @@ std::vector<TaggedFeedUrl> FeedHqApi::get_subscribed_urls()
 		char* escaped_id = curl_easy_escape(handle.ptr(), id, 0);
 
 		auto url = strprintf::fmt("%s%s%s?n=%u",
-				cfg->get_configvalue("feedhq-url"),
+				cfg.get_configvalue("feedhq-url"),
 				FEEDHQ_FEED_PREFIX,
 				escaped_id,
-				cfg->get_configvalue_as_int("feedhq-min-items"));
+				cfg.get_configvalue_as_int("feedhq-min-items"));
 		urls.push_back(TaggedFeedUrl(url, tags));
 
 		curl_free(escaped_id);
@@ -183,7 +183,7 @@ void FeedHqApi::add_custom_headers(curl_slist** custom_headers)
 bool FeedHqApi::mark_all_read(const std::string& feedurl)
 {
 	std::string prefix =
-		cfg->get_configvalue("feedhq-url") + FEEDHQ_FEED_PREFIX;
+		cfg.get_configvalue("feedhq-url") + FEEDHQ_FEED_PREFIX;
 	std::string real_feedurl = feedurl.substr(
 			prefix.length(), feedurl.length() - prefix.length());
 	std::vector<std::string> elems = utils::tokenize(real_feedurl, "?");
@@ -202,7 +202,7 @@ bool FeedHqApi::mark_all_read(const std::string& feedurl)
 	std::string postcontent =
 		strprintf::fmt("s=%s&T=%s", real_feedurl, token);
 
-	std::string result = post_content(cfg->get_configvalue("feedhq-url") +
+	std::string result = post_content(cfg.get_configvalue("feedhq-url") +
 			FEEDHQ_API_MARK_ALL_READ_URL,
 			postcontent);
 
@@ -237,7 +237,7 @@ bool FeedHqApi::mark_article_read_with_token(const std::string& guid,
 	}
 
 	std::string result = post_content(
-			cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
+			cfg.get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
 			postcontent);
 
 	LOG(Level::DEBUG,
@@ -263,7 +263,7 @@ std::string FeedHqApi::get_new_token()
 	curl_easy_setopt(handle.ptr(), CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(handle.ptr(),
 		CURLOPT_URL,
-		(cfg->get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL)
+		(cfg.get_configvalue("feedhq-url") + FEEDHQ_API_TOKEN_URL)
 		.c_str());
 	curl_easy_perform(handle.ptr());
 	curl_slist_free_all(custom_headers);
@@ -277,8 +277,8 @@ bool FeedHqApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("feedhq-flag-star");
-	std::string share_flag = cfg->get_configvalue("feedhq-flag-share");
+	std::string star_flag = cfg.get_configvalue("feedhq-flag-star");
+	std::string share_flag = cfg.get_configvalue("feedhq-flag-share");
 	bool success = true;
 
 	if (star_flag.length() > 0) {
@@ -314,7 +314,7 @@ bool FeedHqApi::star_article(const std::string& guid, bool star)
 	}
 
 	std::string result = post_content(
-			cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
+			cfg.get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
 			postcontent);
 
 	return result == "OK";
@@ -338,7 +338,7 @@ bool FeedHqApi::share_article(const std::string& guid, bool share)
 	}
 
 	std::string result = post_content(
-			cfg->get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
+			cfg.get_configvalue("feedhq-url") + FEEDHQ_API_EDIT_TAG_URL,
 			postcontent);
 
 	return result == "OK";

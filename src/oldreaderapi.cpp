@@ -26,7 +26,7 @@
 
 namespace newsboat {
 
-OldReaderApi::OldReaderApi(ConfigContainer* c)
+OldReaderApi::OldReaderApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
 }
@@ -183,7 +183,7 @@ std::vector<TaggedFeedUrl> OldReaderApi::get_subscribed_urls()
 			auto url = strprintf::fmt("%s%s?n=%u",
 					OLDREADER_FEED_PREFIX,
 					id,
-					cfg->get_configvalue_as_int("oldreader-min-items"));
+					cfg.get_configvalue_as_int("oldreader-min-items"));
 			urls.push_back(TaggedFeedUrl(url, tags));
 		}
 	}
@@ -296,8 +296,8 @@ bool OldReaderApi::update_article_flags(const std::string& oldflags,
 	const std::string& newflags,
 	const std::string& guid)
 {
-	std::string star_flag = cfg->get_configvalue("oldreader-flag-star");
-	std::string share_flag = cfg->get_configvalue("oldreader-flag-share");
+	std::string star_flag = cfg.get_configvalue("oldreader-flag-star");
+	std::string share_flag = cfg.get_configvalue("oldreader-flag-share");
 	bool success = true;
 
 	if (star_flag.length() > 0) {

@@ -430,7 +430,7 @@ void PbController::start_downloads()
 
 void PbController::start_download(Download& item)
 {
-	std::thread t{PodDlThread(&item, &cfg)};
+	std::thread t{PodDlThread(&item, cfg)};
 	t.detach();
 }
 
