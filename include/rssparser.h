@@ -30,11 +30,6 @@ public:
 	std::shared_ptr<RssFeed> parse(const rsspp::Feed& upstream_feed);
 	bool check_and_update_lastmodified();
 
-	void set_easyhandle(CurlHandle* h)
-	{
-		easyhandle = h;
-	}
-
 private:
 	void replace_newline_characters(std::string& str);
 	std::string render_xhtml_title(const std::string& title,
@@ -69,8 +64,6 @@ private:
 	Cache& ch;
 	ConfigContainer& cfgcont;
 	RssIgnores* ign;
-
-	CurlHandle* easyhandle;
 };
 
 } // namespace newsboat

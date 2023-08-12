@@ -31,7 +31,6 @@ RssParser::RssParser(const std::string& uri,
 	, ch(c)
 	, cfgcont(cfg)
 	, ign(ii)
-	, easyhandle(0)
 {
 }
 
