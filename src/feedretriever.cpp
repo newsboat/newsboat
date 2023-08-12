@@ -32,12 +32,6 @@ FeedRetriever::FeedRetriever(ConfigContainer& cfg, Cache& ch, RssIgnores* ign,
 
 rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 {
-	bool is_ttrss = cfg.get_configvalue("urls-source") == "ttrss";
-	bool is_newsblur = cfg.get_configvalue("urls-source") == "newsblur";
-	bool is_ocnews = cfg.get_configvalue("urls-source") == "ocnews";
-	bool is_miniflux = cfg.get_configvalue("urls-source") == "miniflux";
-	bool is_freshrss = cfg.get_configvalue("urls-source") == "freshrss";
-
 	/*
 	 *	- http:// and https:// URLs are downloaded and parsed regularly
 	 *	- exec: URLs are executed and their output is parsed
@@ -45,20 +39,21 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 	 *parsed
 	 *	- query: URLs are ignored
 	 */
-	if (is_ttrss) {
+	const std::string urls_source = cfg.get_configvalue("urls-source");
+	if (urls_source == "ttrss") {
 		const std::string::size_type pound = uri.find_first_of('#');
 		if (pound != std::string::npos) {
 			return fetch_ttrss(uri.substr(pound + 1));
 		} else {
 			return {};
 		}
-	} else if (is_newsblur) {
+	} else if (urls_source == "newsblur") {
 		return fetch_newsblur(uri);
-	} else if (is_ocnews) {
+	} else if (urls_source == "ocnews") {
 		return fetch_ocnews(uri);
-	} else if (is_miniflux) {
+	} else if (urls_source == "miniflux") {
 		return fetch_miniflux(uri);
-	} else if (is_freshrss) {
+	} else if (urls_source == "freshrss") {
 		return fetch_freshrss(uri);
 	} else if (utils::is_http_url(uri)) {
 		return download_http(uri);
