@@ -3,12 +3,13 @@
 
 #include "listformaction.h"
 #include "listwidget.h"
+#include "regexmanager.h"
 
 namespace newsboat {
 
 class DialogsFormAction : public ListFormAction {
 public:
-	DialogsFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	DialogsFormAction(View*, std::string formstr, ConfigContainer* cfg, RegexManager& r);
 	~DialogsFormAction() override;
 	void prepare() override;
 	void init() override;

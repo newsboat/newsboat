@@ -7,13 +7,15 @@
 
 #include "formaction.h"
 #include "listwidget.h"
+#include "regexmanager.h"
 
 namespace newsboat {
 
 class ListFormAction : public FormAction {
 public:
-	ListFormAction(View*, std::string formstr, std::string list_name,
-		ConfigContainer* cfg);
+	ListFormAction(View* v, const std::string& context, std::string formstr,
+		std::string list_name,
+		ConfigContainer* cfg, RegexManager& r);
 
 protected:
 	bool process_operation(Operation op,

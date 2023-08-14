@@ -14,8 +14,8 @@ namespace newsboat {
 
 DialogsFormAction::DialogsFormAction(View* vv,
 	std::string formstr,
-	ConfigContainer* cfg)
-	: ListFormAction(vv, formstr, "dialogs", cfg)
+	ConfigContainer* cfg, RegexManager& r)
+	: ListFormAction(vv, "dialoglist", formstr, "dialogs", cfg, r)
 {
 }
 
@@ -33,27 +33,20 @@ void DialogsFormAction::prepare()
 	if (do_redraw) {
 		update_heading();
 
-		ListFormatter listfmt;
+		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+			(void)width;
+			const auto formaction_names = v->get_formaction_names();
+			const auto& fa = formaction_names[line];
+			const bool is_current_formaction =
+			v->get_formaction(fa.first) == get_parent_formaction();
+			return utils::quote_for_stfl(
+				strprintf::fmt("%4u %s %s",
+					line + 1,
+					is_current_formaction ? "*" : " ",
+					fa.second));
+		};
 
-		unsigned int i = 1;
-		for (const auto& fa : v->get_formaction_names()) {
-			LOG(Level::DEBUG,
-				"DialogsFormAction::prepare: p1 = %p p2 = %p",
-				v->get_formaction(fa.first).get(),
-				get_parent_formaction().get());
-			listfmt.add_line(
-				utils::quote_for_stfl(
-					strprintf::fmt("%4u %s %s",
-						i,
-						(v->get_formaction(fa.first).get() ==
-							get_parent_formaction().get())
-						? "*"
-						: " ",
-						fa.second)));
-			i++;
-		}
-
-		list.stfl_replace_lines(listfmt);
+		list.invalidate_list_content(v->get_formaction_names().size(), render_line);
 
 		do_redraw = false;
 	}

@@ -566,7 +566,7 @@ void View::view_dialogs()
 	auto fa = get_current_formaction();
 	if (fa != nullptr && fa->id() != "dialogs") {
 		auto dialogs = std::make_shared<DialogsFormAction>(
-				this, dialogs_str, cfg);
+				this, dialogs_str, cfg, rxman);
 		dialogs->set_parent_formaction(fa);
 		apply_colors(dialogs);
 		dialogs->init();

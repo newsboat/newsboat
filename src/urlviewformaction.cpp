@@ -127,14 +127,13 @@ void UrlViewFormAction::prepare()
 	if (do_redraw) {
 		update_heading();
 
-		ListFormatter listfmt;
-		unsigned int i = 0;
-		for (const auto& link : links) {
-			listfmt.add_line(utils::quote_for_stfl(strprintf::fmt("%2u  %s", i + 1,
-						link.url)));
-			i++;
-		}
-		urls_list.stfl_replace_lines(listfmt);
+		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+			(void)width;
+			const auto& link = links[line];
+			return utils::quote_for_stfl(strprintf::fmt("%2u  %s", line + 1, link.url));
+		};
+
+		urls_list.invalidate_list_content(links.size(), render_line);
 	}
 }
 

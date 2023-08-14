@@ -31,7 +31,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ListFormAction(vv, formstr, "items", cfg)
+	: ListFormAction(vv, "articlelist", formstr, "items", cfg, r)
 	, old_itempos(-1)
 	, filter_active(false)
 	, pos(0)
@@ -969,39 +969,20 @@ void ItemListFormAction::do_update_visible_items()
 
 void ItemListFormAction::draw_items()
 {
-	const unsigned int width = list.get_width();
 	auto datetime_format = cfg->get_configvalue("datetime-format");
 	auto itemlist_format =
 		cfg->get_configvalue("articlelist-format");
 
-	switch (invalidation_mode) {
-	case InvalidationMode::COMPLETE:
-		listfmt.clear();
-
-		for (const auto& item : visible_items) {
-			auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-			listfmt.add_line(line);
+	auto render_line = [this, itemlist_format, datetime_format](std::uint32_t line,
+	std::uint32_t width) -> std::string {
+		if (line >= visible_items.size())
+		{
+			return "ERROR";
 		}
-		break;
-
-	case InvalidationMode::PARTIAL:
-		for (const auto& itempos : invalidated_itempos) {
-			auto item = visible_items[itempos];
-			auto line = item2formatted_line(item,
-					width,
-					itemlist_format,
-					datetime_format);
-			listfmt.set_line(itempos, line);
-		}
-		break;
-	case InvalidationMode::NONE:
-		break;
-	}
-
-	list.stfl_replace_lines(listfmt);
+		auto& item = visible_items[line];
+		return item2formatted_line(item, width, itemlist_format, datetime_format);
+	};
+	list.invalidate_list_content(visible_items.size(), render_line);
 
 	invalidated_itempos.clear();
 	invalidation_mode = InvalidationMode::NONE;
@@ -1443,7 +1424,7 @@ void ItemListFormAction::register_format_styles()
 			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
 			"pos[items_pos]:0 offset[items_offset]:0 %s richtext:1}",
 			attrstr);
-	list.stfl_replace_list(0, textview);
+	list.stfl_replace_list(textview);
 }
 
 std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)

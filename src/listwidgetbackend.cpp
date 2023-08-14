@@ -1,29 +1,41 @@
 #include "listwidgetbackend.h"
 
+#include "listformatter.h"
 #include "utils.h"
 
 namespace newsboat {
 
+ListWidgetBackend::ListWidgetBackend(const std::string& list_name,
+	const std::string& context, Stfl::Form& form, RegexManager& rxman)
+	: list_name(list_name)
+	, form(form)
+	, listfmt(&rxman, context)
+	, num_lines(0)
+	, scroll_offset(0)
+	, get_formatted_line({})
+{
+}
+
 ListWidgetBackend::ListWidgetBackend(const std::string& list_name, Stfl::Form& form)
 	: list_name(list_name)
 	, form(form)
+	, listfmt()
 	, num_lines(0)
+	, scroll_offset(0)
+	, get_formatted_line({})
 {
 }
 
-void ListWidgetBackend::stfl_replace_list(std::uint32_t number_of_lines, std::string stfl)
+void ListWidgetBackend::stfl_replace_list(std::string stfl)
 {
-	num_lines = number_of_lines;
+	num_lines = 0;
+	scroll_offset = 0;
+	line_cache.clear();
+	get_formatted_line = {};
+
 	form.modify(list_name, "replace", stfl);
 
-	on_list_changed();
-}
-
-void ListWidgetBackend::stfl_replace_lines(const ListFormatter& listfmt)
-{
-	num_lines = listfmt.get_lines_count();
-	form.modify(list_name, "replace_inner", listfmt.format_list());
-
+	invalidate_list_content(0, {});
 	on_list_changed();
 }
 
@@ -42,10 +54,48 @@ std::uint32_t ListWidgetBackend::get_num_lines()
 	return num_lines;
 }
 
-void ListWidgetBackend::update_position(std::uint32_t pos, std::uint32_t scroll_offset)
+void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
+	std::function<std::string(std::uint32_t, std::uint32_t)> get_line_method)
 {
-	form.set(list_name + "_pos", std::to_string(pos));
-	form.set(list_name + "_offset", std::to_string(scroll_offset));
+	line_cache.clear();
+	get_formatted_line = get_line_method;
+	num_lines = line_count;
+
+	on_list_changed();
+
+	render();
+}
+
+void ListWidgetBackend::update_position(std::uint32_t pos,
+	std::uint32_t new_scroll_offset)
+{
+	scroll_offset = new_scroll_offset;
+	form.set(list_name + "_pos", std::to_string(pos - scroll_offset));
+	form.set(list_name + "_offset", "0");
+
+	render();
+}
+
+void ListWidgetBackend::render()
+{
+	const auto viewport_width = get_width();
+	const auto viewport_height = get_height();
+	const auto visible_content_lines = std::min(viewport_height, num_lines - scroll_offset);
+
+	listfmt.clear();
+	for (std::uint32_t i = 0; i < visible_content_lines; ++i) {
+		const std::uint32_t line = scroll_offset + i;
+		std::string formatted_line = "NO FORMATTER DEFINED";
+		if (line_cache.count(line) >= 1) {
+			formatted_line = line_cache[line];
+		} else if (get_formatted_line) {
+			formatted_line = get_formatted_line(line, viewport_width);
+			line_cache.insert({line, formatted_line});
+		}
+		listfmt.add_line(formatted_line);
+	}
+
+	form.modify(list_name, "replace_inner", listfmt.format_list());
 }
 
 } // namespace newsboat

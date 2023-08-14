@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cinttypes>
+#include <cstdint>
 #include <cstring>
 #include <ncurses.h>
 #include <dirent.h>
@@ -274,14 +275,19 @@ void FileBrowserFormAction::prepare()
 
 		std::vector<std::string> files = get_sorted_filelist();
 
-		ListFormatter listfmt;
-
 		id_at_position.clear();
+		lines.clear();
 		for (std::string filename : files) {
-			add_file(listfmt, id_at_position, filename);
+			add_file(id_at_position, filename);
 		}
 
-		files_list.stfl_replace_lines(listfmt);
+
+		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+			(void)width;
+			return lines[line];
+		};
+
+		files_list.invalidate_list_content(lines.size(), render_line);
 		do_redraw = false;
 	}
 
@@ -324,7 +330,6 @@ const std::vector<KeyMapHintEntry>& FileBrowserFormAction::get_keymap_hint() con
 }
 
 void FileBrowserFormAction::add_file(
-	ListFormatter& listfmt,
 	std::vector<file_system::FileSystemEntry>& id_at_position,
 	std::string filename)
 {
@@ -350,7 +355,7 @@ void FileBrowserFormAction::add_file(
 				group,
 				sizestr,
 				formattedfilename);
-		listfmt.add_line(utils::quote_for_stfl(line));
+		lines.push_back(utils::quote_for_stfl(line));
 		id_at_position.push_back(file_system::FileSystemEntry{ftype, filename});
 	}
 }

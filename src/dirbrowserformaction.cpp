@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cinttypes>
+#include <cstdint>
 #include <cstring>
 #include <ncurses.h>
 #include <dirent.h>
@@ -248,14 +249,19 @@ void DirBrowserFormAction::prepare()
 
 		std::vector<std::string> directories = get_sorted_dirlist();
 
-		ListFormatter listfmt;
-
 		id_at_position.clear();
+		lines.clear();
 		for (std::string directory : directories) {
-			add_directory(listfmt, id_at_position, directory);
+			add_directory(id_at_position, directory);
 		}
 
-		files_list.stfl_replace_lines(listfmt);
+		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+			(void)width;
+			return lines[line];
+		};
+
+		files_list.invalidate_list_content(lines.size(), render_line);
+
 		do_redraw = false;
 	}
 
@@ -299,7 +305,6 @@ const std::vector<KeyMapHintEntry>& DirBrowserFormAction::get_keymap_hint() cons
 }
 
 void DirBrowserFormAction::add_directory(
-	ListFormatter& listfmt,
 	std::vector<file_system::FileSystemEntry>& id_at_position,
 	std::string dirname)
 {
@@ -325,7 +330,7 @@ void DirBrowserFormAction::add_directory(
 				group,
 				sizestr,
 				formatteddirname);
-		listfmt.add_line(utils::quote_for_stfl(line));
+		lines.push_back(utils::quote_for_stfl(line));
 		id_at_position.push_back(file_system::FileSystemEntry{ftype, dirname});
 	}
 }

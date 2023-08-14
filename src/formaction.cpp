@@ -9,7 +9,6 @@
 #include "configexception.h"
 #include "controller.h"
 #include "listmovementcontrol.h"
-#include "listwidgetbackend.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "strprintf.h"
