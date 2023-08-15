@@ -620,18 +620,13 @@ TEST_CASE("run_program() works for large inputs", "[utils]")
 		sync->condvar.notify_one();
 	}).detach();
 
-	{
-		std::unique_lock<std::mutex> g(sync->mtx);
-		// cat should be able to process 1MB of input in under a second
-		sync->condvar.wait_for(g, std::chrono::seconds(1), [&]() {
-			return sync->thread_finished;
-		});
-	}
+	std::unique_lock<std::mutex> g(sync->mtx);
+	// cat should be able to process 1MB of input in under a second
+	sync->condvar.wait_for(g, std::chrono::seconds(1), [&]() {
+		return sync->thread_finished;
+	});
 
-	{
-		std::lock_guard<std::mutex> g(sync->mtx);
-		REQUIRE(sync->thread_finished);
-	}
+	REQUIRE(sync->thread_finished);
 	REQUIRE(sync->output == *large_input);
 }
 
