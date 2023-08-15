@@ -148,12 +148,12 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
                 let import_file_str = parser.value()?;
                 args.importfile = resolve_path(&import_file_str);
             }
-            Short('e') | Long("export-to-opml") => {
+            Long("export-to-opml1") => {
                 args.do_export = true;
                 args.export_as_opml2 = false;
                 args.silent = true;
             }
-            Long("export-to-opml2") => {
+            Short('e') | Long("export-to-opml") => {
                 args.do_export = true;
                 args.export_as_opml2 = true;
                 args.silent = true;

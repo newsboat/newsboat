@@ -44,8 +44,8 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 	};
 
 	static const std::vector<arg> args = {
-		{'e', "export-to-opml", "", _s("export OPML feed to stdout")},
-		{'-', "export-to-opml2", "", _s("export OPML 2.0 feed including tags to stdout")},
+		{'-', "export-to-opml1", "", _s("export OPML feed to stdout")},
+		{'e', "export-to-opml", "", _s("export OPML 2.0 feed including tags to stdout")},
 		{'r', "refresh-on-start", "", _s("refresh feeds on start")},
 		{'i', "import-from-opml", _s("<file>"), _s("import OPML file")},
 		{
