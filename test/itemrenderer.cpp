@@ -30,9 +30,12 @@ static const auto ITEM_PUBDATE = time_t
 static const auto ITEM_LINK = std::string("https://example.com/see-more");
 static const auto ITEM_DESCRIPTON = std::string("<p>Hello, world!</p>");
 static const auto ITEM_DESCRIPTON_RENDERED = std::string("Hello, world!");
-static const auto ITEM_ENCLOSURE_URL =
+static const auto ITEM_PODCAST_ENCLOSURE_URL =
 	std::string("https://example.com/see-more.mp3");
-static const auto ITEM_ENCLOSURE_TYPE = std::string("audio/mpeg");
+static const auto ITEM_IMAGE_ENCLOSURE_URL =
+	std::string("https://example.com/see-more.png");
+static const auto ITEM_PODCAST_ENCLOSURE_TYPE = std::string("audio/mpeg");
+static const auto ITEM_IMAGE_ENCLOSURE_TYPE = std::string("image/png");
 static const auto ITEM_FLAGS = std::string("wasdhjkl");
 // Flags are sorted for rendering.
 static const auto ITEM_FLAGS_RENDERED = std::string("adhjklsw");
@@ -91,7 +94,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 
 	SECTION("Item with an enclosure") {
 		item->set_description(ITEM_DESCRIPTON, "text/html");
-		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
+		item->set_enclosure_url(ITEM_PODCAST_ENCLOSURE_URL);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -102,17 +105,17 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
 			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			"Podcast Download URL: " + ITEM_ENCLOSURE_URL + '\n' +
+			"Podcast Download URL: " + ITEM_PODCAST_ENCLOSURE_URL + '\n' +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
 
 		REQUIRE(result == expected);
 	}
 
-	SECTION("Item with an enclosure that has a MIME type") {
+	SECTION("Item with an enclosure that has a podcast MIME type") {
 		item->set_description(ITEM_DESCRIPTON, "text/html");
-		item->set_enclosure_url(ITEM_ENCLOSURE_URL);
-		item->set_enclosure_type(ITEM_ENCLOSURE_TYPE);
+		item->set_enclosure_url(ITEM_PODCAST_ENCLOSURE_URL);
+		item->set_enclosure_type(ITEM_PODCAST_ENCLOSURE_TYPE);
 
 		const auto result = item_renderer::to_plain_text(cfg, item);
 
@@ -123,10 +126,35 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
 			"Link: " + ITEM_LINK + '\n' +
 			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
-			"Podcast Download URL: " + ITEM_ENCLOSURE_URL
-			+ " (type: " + ITEM_ENCLOSURE_TYPE + ")\n" +
+			"Podcast Download URL: " + ITEM_PODCAST_ENCLOSURE_URL
+			+ " (type: " + ITEM_PODCAST_ENCLOSURE_TYPE + ")\n" +
 			" \n" +
 			ITEM_DESCRIPTON_RENDERED + '\n';
+
+		REQUIRE(result == expected);
+	}
+
+	SECTION("Item with an enclosure that has an image MIME type") {
+		item->set_description(ITEM_DESCRIPTON, "text/html");
+		item->set_enclosure_url(ITEM_IMAGE_ENCLOSURE_URL);
+		item->set_enclosure_type(ITEM_IMAGE_ENCLOSURE_TYPE);
+
+		const auto result = item_renderer::to_plain_text(cfg, item);
+
+		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+			" \n" +
+			"Image[1]\n" +
+			" \n" +
+			ITEM_DESCRIPTON_RENDERED + '\n' +
+			" \n" +
+			"Links: \n" +
+			"[1]: " + ITEM_IMAGE_ENCLOSURE_URL + " (image)\n";
 
 		REQUIRE(result == expected);
 	}

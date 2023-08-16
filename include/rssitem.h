@@ -154,7 +154,7 @@ public:
 	{
 		base = b;
 	}
-	const std::string& get_base()
+	const std::string& get_base() const
 	{
 		return base;
 	}
