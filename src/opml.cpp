@@ -50,6 +50,9 @@ xmlDocPtr opml::generate(const FeedContainer& feedcontainer, bool version2)
 			xmlSetProp(outline,
 				(const xmlChar*)"title",
 				(const xmlChar*)title.c_str());
+			xmlSetProp(outline,
+				(const xmlChar*)"text",
+				(const xmlChar*)title.c_str());
 
 			if (version2) {
 				// OPML 2.0 supports including tags
