@@ -121,3 +121,72 @@ TEST_CASE("parse() renders html titles into plaintext if type indicates html",
 		REQUIRE(feed->items().front()->title() == "title of article");
 	}
 }
+
+TEST_CASE("parse() extracts best enclosure", "[RssParser]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssIgnores ignores;
+	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+
+	rsspp::Feed upstream_feed;
+	upstream_feed.rss_version = rsspp::Feed::ATOM_1_0;
+	upstream_feed.items.push_back({});
+	rsspp::Item& upstream_item = upstream_feed.items[0];
+
+	rsspp::Enclosure image_enclosure1 = {
+		.url = "http://example.com/enclosure1",
+		.type = "image/png",
+		.description = "description1",
+		.description_mime_type = "text/plain",
+	};
+	rsspp::Enclosure image_enclosure2 = {
+		.url = "http://example.com/enclosure2",
+		.type = "image/jpg",
+		.description = "description2",
+		.description_mime_type = "text/plain",
+	};
+	rsspp::Enclosure audio_enclosure = {
+		.url = "http://example.com/enclosure3",
+		.type = "audio/ogg",
+		.description = "description3",
+		.description_mime_type = "text/plain",
+	};
+
+	SECTION("podcast preferred over non-podcast enclosure") {
+		const auto run_validation = [&]() {
+			const auto feed = parser.parse(upstream_feed);
+			REQUIRE(feed != nullptr);
+			REQUIRE(feed->items().size() == 1);
+			REQUIRE(feed->items()[0]->enclosure_url() == "http://example.com/enclosure3");
+			REQUIRE(feed->items()[0]->enclosure_type() == "audio/ogg");
+			REQUIRE(feed->items()[0]->enclosure_description() == "description3");
+			REQUIRE(feed->items()[0]->enclosure_description_mime_type() == "text/plain");
+		};
+
+		SECTION("podcast first") {
+			upstream_item.enclosures.push_back(audio_enclosure);
+			upstream_item.enclosures.push_back(image_enclosure1);
+			run_validation();
+		}
+
+		SECTION("podcast last") {
+			upstream_item.enclosures.push_back(image_enclosure1);
+			upstream_item.enclosures.push_back(audio_enclosure);
+			run_validation();
+		}
+	}
+
+	SECTION("last enclosure picked if both are non-podcast enclosures") {
+		upstream_item.enclosures.push_back(image_enclosure1);
+		upstream_item.enclosures.push_back(image_enclosure2);
+
+		const auto feed = parser.parse(upstream_feed);
+		REQUIRE(feed != nullptr);
+		REQUIRE(feed->items().size() == 1);
+		REQUIRE(feed->items()[0]->enclosure_url() == "http://example.com/enclosure2");
+		REQUIRE(feed->items()[0]->enclosure_type() == "image/jpg");
+		REQUIRE(feed->items()[0]->enclosure_description() == "description2");
+		REQUIRE(feed->items()[0]->enclosure_description_mime_type() == "text/plain");
+	}
+}
