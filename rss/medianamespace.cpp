@@ -45,11 +45,6 @@ void parse_media_node(xmlNode* node, Item& it, Enclosure* enclosure)
 		if (enclosure) {
 			enclosure->description = description;
 			enclosure->description_mime_type = mime_type;
-		} else {
-			if (it.description.empty()) {
-				it.description = description;
-				it.description_mime_type = mime_type;
-			}
 		}
 	} else if (node_is(node, "title", MEDIA_RSS_URI)) {
 		const std::string title = get_content(node);
@@ -63,10 +58,6 @@ void parse_media_node(xmlNode* node, Item& it, Enclosure* enclosure)
 			if (enclosure->description.empty()) {
 				enclosure->description = title;
 				enclosure->description_mime_type = mime_type;
-			}
-		} else {
-			if (it.title.empty()) {
-				it.title = title;
 			}
 		}
 	} else if (node_is(node, "player", MEDIA_RSS_URI)) {
