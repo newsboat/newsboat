@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cinttypes>
 #include <cstring>
+#include <sstream>
 
 #include "rssfeed.h"
 
@@ -160,6 +161,24 @@ void rec_find_rss_outlines(
 						"opml::import: url = %s is already in list",
 						quoted_url);
 				}
+
+				// Add tags
+				std::string token;
+				std::istringstream ss;
+				char* category = (char*)xmlGetProp(node, (const xmlChar*)"category");
+				if (category) {
+					ss = std::istringstream(category);
+				}
+
+				auto& urltags = urlcfg.get_tags(quoted_url);
+				while (std::getline(ss, token, ',')) {
+					if (std::find(urltags.begin(), urltags.end(), token) == urltags.end()) {
+						urltags.push_back(token);
+					}
+				}
+
+				xmlFree(category);
+
 			} else {
 				char* text = (char*)xmlGetProp(
 						node, (const xmlChar*)"text");
