@@ -8,8 +8,6 @@
 #include "rssfeed.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
-#include "urlreader.h"
-#include "utils.h"
 
 using namespace newsboat;
 
