@@ -21,7 +21,7 @@ public:
 protected:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		const std::vector<std::string>* args = nullptr) override;
 	std::string main_widget() const override
 	{
 		return "lastline";

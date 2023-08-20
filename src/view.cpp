@@ -176,6 +176,8 @@ int View::run()
 	 * This is the main "event" loop of newsboat.
 	 */
 
+	std::vector<std::string> key_sequence;
+
 	while (formaction_stack_size() > 0) {
 		// first, we take the current formaction.
 		std::shared_ptr<FormAction> fa = get_current_formaction();
@@ -222,21 +224,28 @@ int View::run()
 				event);
 			run_commands(keys->get_macro(event));
 		} else {
-			const Operation op = keys->get_operation(event, fa->id());
-
-			LOG(Level::DEBUG,
-				"View::run: event = %s op = %u",
-				event,
-				op);
-
-			if (OP_MACROPREFIX == op) {
-				have_macroprefix = true;
-				status_line.show_message("macro-");
+			if (event == "ESC" && !key_sequence.empty()) {
+				key_sequence.clear();
+			} else {
+				key_sequence.push_back(event);
 			}
+			Operation decision = OP_NIL;
+			const auto commands = keys->get_operation(key_sequence, fa->id(), decision);
+			if (decision != OP_INTERNAL_UNFINISHED_KEY_SEQUENCE) {
+				key_sequence.clear();
 
-			// now we handle the operation to the
-			// formaction.
-			fa->process_op(op);
+				//LOG(Level::DEBUG,
+				//	"View::run: event = %s op = %u",
+				//	event,
+				//	op);
+
+				run_commands(commands);
+
+				if (commands.size() >= 1 && commands.back().op == OP_MACROPREFIX) {
+					have_macroprefix = true;
+					status_line.show_message("macro-");
+				}
+			}
 		}
 	}
 
@@ -262,6 +271,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 	formaction_stack.push_back(f);
 	current_formaction = formaction_stack_size() - 1;
+	std::vector<std::string> key_sequence;
 
 	while (formaction_stack.size() > stacksize) {
 		std::shared_ptr<FormAction> fa = get_current_formaction();
@@ -269,7 +279,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 		fa->prepare();
 
 		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
-		LOG(Level::DEBUG, "View::run: event = %s", event);
+		LOG(Level::DEBUG, "View::run_modal: event = %s", event);
 		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
@@ -283,19 +293,35 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 			continue;
 		}
 
-		Operation op = keys->get_operation(event, fa->id());
-
-		if (OP_REDRAW == op) {
-			Stfl::reset();
-			continue;
+		if (event == "ESC" && !key_sequence.empty()) {
+			key_sequence.clear();
+		} else {
+			key_sequence.push_back(event);
 		}
 
-		if (ignoredOperations.count(op)) {
-			status_line.show_message(_("Operation ignored in modal dialog"));
-			continue;
-		}
+		Operation decision = OP_NIL;
+		const auto commands = keys->get_operation(key_sequence, fa->id(), decision);
 
-		fa->process_op(op);
+		if (decision != OP_INTERNAL_UNFINISHED_KEY_SEQUENCE) {
+			key_sequence.clear();
+
+			for (const auto& command : commands) {
+				if (OP_REDRAW == command.op) {
+					Stfl::reset();
+					continue;
+				}
+
+				if (ignoredOperations.count(command.op)) {
+					status_line.show_message(_("Operation ignored in modal dialog"));
+					break;
+				}
+
+				if (!fa->process_op(command.op, true, &command.args)) {
+					// Operation failed, abort
+					break;
+				}
+			}
+		}
 	}
 
 	if (value == "") {

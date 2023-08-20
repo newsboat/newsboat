@@ -259,6 +259,7 @@ void PbController::initialize(int argc, char* argv[])
 
 	cfgparser.register_handler("bind-key", keys);
 	cfgparser.register_handler("unbind-key", keys);
+	cfgparser.register_handler("bind", keys);
 
 	NullConfigActionHandler null_cah;
 	cfgparser.register_handler("macro", null_cah);

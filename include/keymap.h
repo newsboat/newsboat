@@ -2,11 +2,13 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "configactionhandler.h"
+#include "libnewsboat-ffi/src/keymap.rs.h"
 
 // in configuration: bind-key <key> <operation>
 
@@ -155,6 +157,9 @@ enum Operation {
 	OP_CMD_START_7,
 	OP_CMD_START_8,
 	OP_CMD_START_9,
+
+	OP_INTERNAL_UNFINISHED_KEY_SEQUENCE,
+	OP_INTERNAL_OPERATION_LIST,
 };
 
 struct KeyMapDesc {
@@ -180,9 +185,21 @@ struct ParsedOperations {
 	std::string description;
 };
 
+struct ParsedBinding {
+	std::string keySequence;
+	std::vector<std::string> contexts;
+	ParsedOperations effect;
+};
+
 struct KeyMapHintEntry {
 	Operation op;
 	std::string text;
+};
+
+struct KeyNode {
+	bool isLeafNode = false;
+	std::map<std::string, std::unique_ptr<KeyNode>> bindings = {};
+	MacroBinding action = {};
 };
 
 class KeyMap : public ConfigActionHandler {
@@ -195,8 +212,8 @@ public:
 	void unset_key(const std::string& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
 	Operation get_opcode(const std::string& opstr);
-	Operation get_operation(const std::string& keycode,
-		const std::string& context);
+	std::vector<MacroCmd> get_operation(const std::vector<std::string>& key_sequence,
+		const std::string& context, Operation& decision);
 	std::vector<MacroCmd> get_macro(const std::string& key);
 	char get_key(const std::string& keycode);
 	std::vector<std::string> get_keys(Operation op, const std::string& context);
@@ -208,6 +225,7 @@ public:
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
+	ParsedBinding parse_binding(const std::string& line);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
 	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
@@ -216,8 +234,15 @@ public:
 private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
+	std::vector<MacroCmd> convert_operations(const rust::Vec<keymap::bridged::Operation>&
+		operations);
+	void register_binding(const ParsedBinding& binding);
+	void register_binding(const ParsedBinding& binding, const std::string& context);
+	std::vector<std::string> keysequence_to_keys(const std::string& key_sequence);
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
+
+	std::map<std::string, KeyNode> new_keymap_;
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
 	std::map<std::string, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;

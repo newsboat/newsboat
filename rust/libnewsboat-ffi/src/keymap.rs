@@ -21,7 +21,16 @@ mod ffi {
             allow_description: bool,
             parsing_failed: &mut bool,
         ) -> Vec<Operation>;
+
+        type Binding;
+        fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Box<Binding>;
+
         fn operation_tokens(operation: &Operation) -> &Vec<String>;
+
+        fn binding_key_sequence(binding: &Binding) -> &String;
+        fn binding_contexts(binding: &Binding) -> &Vec<String>;
+        fn binding_operations(binding: &Binding) -> &Vec<Operation>;
+        fn binding_description(binding: &Binding) -> &String;
     }
 
     extern "C++" {
@@ -38,6 +47,14 @@ struct Operation {
     tokens: Vec<String>,
 }
 
+#[derive(Default)]
+struct Binding {
+    key_sequence: String,
+    contexts: Vec<String>,
+    operations: Vec<Operation>,
+    description: String,
+}
+
 fn tokenize_operation_sequence(
     input: &str,
     description: &mut String,
@@ -45,10 +62,11 @@ fn tokenize_operation_sequence(
     parsing_failed: &mut bool,
 ) -> Vec<Operation> {
     match libnewsboat::keymap::tokenize_operation_sequence(input, allow_description) {
-        Some((operations, opt_description)) => {
+        Some(operation_sequence) => {
             *parsing_failed = false;
-            *description = opt_description.unwrap_or_default();
-            operations
+            *description = operation_sequence.description.unwrap_or_default();
+            operation_sequence
+                .operations
                 .into_iter()
                 .map(|tokens| Operation { tokens })
                 .collect::<Vec<_>>()
@@ -60,6 +78,49 @@ fn tokenize_operation_sequence(
     }
 }
 
+fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Box<Binding> {
+    match libnewsboat::keymap::tokenize_binding(input) {
+        Some((binding_source, operation_sequence)) => {
+            *parsing_failed = false;
+            let operations = operation_sequence
+                .operations
+                .into_iter()
+                .map(|tokens| Operation { tokens })
+                .collect::<Vec<_>>();
+            Box::new(Binding {
+                key_sequence: binding_source.key_sequence,
+                contexts: binding_source
+                    .contexts
+                    .into_iter()
+                    .map(|s| s.to_string())
+                    .collect(),
+                operations,
+                description: operation_sequence.description.unwrap_or_default(),
+            })
+        }
+        None => {
+            *parsing_failed = true;
+            Box::<Binding>::default()
+        }
+    }
+}
+
 fn operation_tokens(input: &Operation) -> &Vec<String> {
     &input.tokens
+}
+
+fn binding_key_sequence(binding: &Binding) -> &String {
+    &binding.key_sequence
+}
+
+fn binding_contexts(binding: &Binding) -> &Vec<String> {
+    &binding.contexts
+}
+
+fn binding_operations(binding: &Binding) -> &Vec<Operation> {
+    &binding.operations
+}
+
+fn binding_description(binding: &Binding) -> &String {
+    &binding.description
 }

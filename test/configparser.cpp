@@ -180,9 +180,13 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 	SECTION("commands with space are evaluated by backticks") {
 		ConfigParser cfgparser;
 		KeyMap keys(KM_NEWSBOAT);
-		cfgparser.register_handler("bind-key", keys);
+		cfgparser.register_handler("bind", keys);
 		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-space-backticks"));
-		REQUIRE(keys.get_operation("s", "feedlist") == OP_SORT);
+		Operation decision = OP_NIL;
+		const auto commands = keys.get_operation({"s"}, "feedlist", decision);
+		REQUIRE(decision == newsboat::OP_INTERNAL_OPERATION_LIST);
+		REQUIRE(commands.size() == 1);
+		REQUIRE(commands.front().op == OP_SORT);
 	}
 
 	SECTION("Unbalanced backtick does *not* start a command") {

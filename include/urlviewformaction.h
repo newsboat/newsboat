@@ -37,7 +37,7 @@ protected:
 private:
 	bool process_operation(Operation op,
 		bool automatic = false,
-		std::vector<std::string>* args = nullptr) override;
+		const std::vector<std::string>* args = nullptr) override;
 	void open_current_position_in_browser(bool interactive);
 	void update_heading();
 

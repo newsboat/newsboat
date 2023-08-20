@@ -14,37 +14,30 @@ static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
 	"dialogs", "dirbrowser"
 };
 
-TEST_CASE("get_operation()", "[KeyMap]")
+TEST_CASE("get_operation() supports multi-key bindings", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation("u", "article") == OP_SHOWURLS);
-	REQUIRE(k.get_operation("X", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+	k.handle_action("bind", "go feedlist open");
 
-	SECTION("Returns OP_NIL after unset_key()") {
-		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
+	Operation decision = OP_QUIT;
+
+	SECTION("incomplete key sequence") {
+		k.get_operation({"g"}, "feedlist", decision);
+		REQUIRE(decision == OP_INTERNAL_UNFINISHED_KEY_SEQUENCE);
 	}
-}
 
-TEST_CASE("unset_key() and set_key()", "[KeyMap]")
-{
-	KeyMap k(KM_NEWSBOAT);
+	SECTION("unknown key sequence") {
+		k.get_operation({"g", "x"}, "feedlist", decision);
+		REQUIRE(decision == OP_NIL);
+	}
 
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
-
-	SECTION("unset_key() removes the mapping") {
-		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
-
-		SECTION("set_key() sets the mapping") {
-			k.set_key(OP_OPEN, "ENTER", "all");
-			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
-			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
-		}
+	SECTION("complete key sequence") {
+		const auto commands = k.get_operation({"g", "o"}, "feedlist", decision);
+		REQUIRE(decision == newsboat::OP_INTERNAL_OPERATION_LIST);
+		REQUIRE(commands.size() == 1);
+		REQUIRE(commands.at(0).op == OP_OPEN);
+		REQUIRE(commands.at(0).args.size() == 0);
 	}
 }
 
@@ -94,8 +87,8 @@ TEST_CASE(
 		unset_keymap.unset_all_keys("all");
 
 		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist")
-				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist"));
+			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist").empty()
+				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist").empty());
 		}
 	}
 
@@ -107,8 +100,8 @@ TEST_CASE(
 			unset_keymap.unset_all_keys(context);
 
 			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context)
-					== unset_keymap.get_keys(static_cast<Operation>(i), context));
+				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context).empty()
+					== unset_keymap.get_keys(static_cast<Operation>(i), context).empty());
 			}
 		}
 	}
@@ -665,4 +658,26 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 		"<key><></><comma>,</><key>ENTER</><comma>,</><key>x</><colon>:</><desc>Open</> "
 		"<key>O</><colon>:</><desc>Reload current entry</> "
 		"<key><>none></><colon>:</><desc>Go find me</> ");
+}
+
+TEST_CASE("parse_binding() returns a binding with its key-sequence and description",
+	"[KeyMap]")
+{
+	const std::string input =
+		R"(o everywhere set browser "firefox" ; open-in-browser -- "Open with regular browser")";
+
+	KeyMap k(KM_NEWSBOAT);
+	const auto binding = k.parse_binding(input);
+
+	REQUIRE(binding.keySequence == "o");
+	REQUIRE(binding.contexts.size() == 1);
+	REQUIRE(binding.contexts[0] == "everywhere");
+	REQUIRE(binding.effect.operations.size() == 2);
+	REQUIRE(binding.effect.operations[0].op == OP_INT_SET);
+	REQUIRE(binding.effect.operations[0].args.size() == 2);
+	REQUIRE(binding.effect.operations[0].args[0] == "browser");
+	REQUIRE(binding.effect.operations[0].args[1] == "firefox");
+	REQUIRE(binding.effect.operations[1].op == OP_OPENINBROWSER);
+	REQUIRE(binding.effect.operations[1].args.size() == 0);
+	REQUIRE(binding.effect.description == "Open with regular browser");
 }

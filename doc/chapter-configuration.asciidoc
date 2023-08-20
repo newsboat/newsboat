@@ -27,7 +27,7 @@ browser          links
 show-read-feeds  no
 
 unbind-key       R
-bind-key         ^R    reload-all
+bind ^R feedlist reload-all
 ----
 
 === Splitting long lines into multiple ones
@@ -146,6 +146,26 @@ Available dialogs are:
 * `podboat`
 * `dirbrowser`
 * `searchresultslist`
+
+=== New key bindings
+
+You can bind sequences of keys to lists of commands with the <<bind,`bind`>> configuration command.
+This combines the posibilites of <<bind-key,`bind-key`>> (option to have single-key bindings) with the posibilies of <<macro,`macros`>> (option to bind multiple commands).
+
+The syntax for a key binding looks like this:
+
+    bind <key-sequence> <dialogs> <command list> -- "<description>"
+
+The key-sequence can contain a single key, or a combination of keys to be pressed in order.
+Alphanumeric keys are written as-is (e.g. using `a` for the kbd:[A] key, and `A` for the kbd:[Shift+A] key combination).
+Special keys like kbd:[ENTER], kbd:[UP], and function keys are specified within angle brackets (e.g. `<ENTER>`, `<UP>`, and `<F1>`).
+The full list of special keys can be found in the "Keys" subsection above.
+
+The dialogs part of the binding specifies in which types of dialogs the binding should be active.
+This can be either the keyword `everywhere` or a comma-separated list of dialogs from the list in the "Dialog" subsection above.
+
+There can be one or more commands, separated by semicolons.
+The syntax for commands and the optional description is the same as the command list specified in <<macro_support>>.
 
 === Colors
 

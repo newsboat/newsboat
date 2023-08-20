@@ -30,7 +30,7 @@ HelpFormAction::~HelpFormAction() {}
 
 bool HelpFormAction::process_operation(Operation op,
 	bool /* automatic */,
-	std::vector<std::string>* /* args */)
+	const std::vector<std::string>* /* args */)
 {
 	bool hardquit = false;
 	switch (op) {
