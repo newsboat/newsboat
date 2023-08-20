@@ -308,7 +308,7 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	);
 
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
-	const auto &urls = urlcfg.get_urls();
+	const auto& urls = urlcfg.get_urls();
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urlcfg.get_tags(urls[0]) == tags);
 }
