@@ -8,6 +8,8 @@
 #include "rssfeed.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
+#include "urlreader.h"
+#include "utils.h"
 
 using namespace newsboat;
 
@@ -298,6 +300,18 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 	}
 }
 
+TEST_CASE("import() tags from category attribute", "[Opml]")
+{
+	FileUrlReader urlcfg;
+	REQUIRE_NOTHROW(
+		opml::import("file://" + utils::getcwd() + "/data/category.opml", urlcfg)
+	);
+
+	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
+	const auto &urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urlcfg.get_tags(urls[0]) == tags);
+}
 // falls back to "url" if "xmlUrl" is absent
 
 // skips an entry if xmlUrl/url is absent

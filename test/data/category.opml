@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<opml version="2.0">
+  <head>
+    <title>Newsboat - Exported Feeds</title>
+  </head>
+  <body>
+    <outline type="rss" xmlUrl="http://feeds.bbci.co.uk/news/business/rss.xml?edition=int" htmlUrl="" title="" category="tag one,tag_two,tag/three"/>
+  </body>
+</opml>
