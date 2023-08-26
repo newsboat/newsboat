@@ -4,6 +4,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      cxx:
+        patterns:
+          - "cxx"
+          - "cxx-build"
 
   - package-ecosystem: "github-actions"
     directory: "/"
