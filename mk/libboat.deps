@@ -3,6 +3,7 @@ src/configcontainer.cpp
 src/configdata.cpp
 src/confighandlerexception.cpp
 src/configparser.cpp
+src/curldatareceiver.cpp
 src/exception.cpp
 src/fmtstrformatter.cpp
 src/fslock.cpp
