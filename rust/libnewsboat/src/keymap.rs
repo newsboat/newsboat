@@ -19,7 +19,7 @@ fn quoted_token<'a>(input: &'a str) -> IResult<&'a str, String> {
     let parser = escaped_transform(is_not(r#""\"#), '\\', |control_char: &'a str| {
         alt((
             value(r#"""#, tag(r#"""#)),
-            value(r#"\"#, tag(r#"\"#)),
+            value(r"\", tag(r"\")),
             value("\r", tag("r")),
             value("\n", tag("n")),
             value("\t", tag("t")),
@@ -306,24 +306,24 @@ mod tests {
     #[test]
     fn t_tokenize_operation_sequence_ignores_escaped_sequences_outside_double_quotes() {
         assert_eq!(
-            tokenize_operation_sequence(r#"\t"#, true).unwrap(),
-            (vec![vec_of_strings![r#"\t"#]], None)
+            tokenize_operation_sequence(r"\t", true).unwrap(),
+            (vec![vec_of_strings![r"\t"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\r"#, true).unwrap(),
-            (vec![vec_of_strings![r#"\r"#]], None)
+            tokenize_operation_sequence(r"\r", true).unwrap(),
+            (vec![vec_of_strings![r"\r"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\n"#, true).unwrap(),
-            (vec![vec_of_strings![r#"\n"#]], None)
+            tokenize_operation_sequence(r"\n", true).unwrap(),
+            (vec![vec_of_strings![r"\n"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\v"#, true).unwrap(),
-            (vec![vec_of_strings![r#"\v"#]], None)
+            tokenize_operation_sequence(r"\v", true).unwrap(),
+            (vec![vec_of_strings![r"\v"]], None)
         );
         assert_eq!(
-            tokenize_operation_sequence(r#"\\"#, true).unwrap(),
-            (vec![vec_of_strings![r#"\\"#]], None)
+            tokenize_operation_sequence(r"\\", true).unwrap(),
+            (vec![vec_of_strings![r"\\"]], None)
         );
     }
 
@@ -526,7 +526,7 @@ mod tests {
     fn t_tokenize_operation_sequence_handles_escaped_backslashes_in_description() {
         verify_parsed_description(
             r#"open -- "internal \\ backslash""#,
-            r#"internal \ backslash"#,
+            r"internal \ backslash",
         );
         verify_parsed_description(
             r#"open -- "\"internal \\\\\\ backslashes\"""#,
