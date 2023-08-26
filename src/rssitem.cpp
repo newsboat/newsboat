@@ -127,6 +127,31 @@ std::string RssItem::pubDate() const
 	return utils::mt_strf_localtime(_("%a, %d %b %Y %T %z"), pubDate_);
 }
 
+const std::string& RssItem::feedurl() const
+{
+	return feedurl_;
+}
+
+const std::string& RssItem::enclosure_url() const
+{
+	return enclosure_url_;
+}
+
+const std::string& RssItem::enclosure_type() const
+{
+	return enclosure_type_;
+}
+
+const std::string& RssItem::enclosure_description() const
+{
+	return enclosure_description_;
+}
+
+const std::string& RssItem::enclosure_description_mime_type() const
+{
+	return enclosure_description_mime_type_;
+}
+
 void RssItem::set_enclosure_url(const std::string& url)
 {
 	enclosure_url_ = url;
@@ -135,6 +160,16 @@ void RssItem::set_enclosure_url(const std::string& url)
 void RssItem::set_enclosure_type(const std::string& type)
 {
 	enclosure_type_ = type;
+}
+
+void RssItem::set_enclosure_description(const std::string& description)
+{
+	enclosure_description_ = description;
+}
+
+void RssItem::set_enclosure_description_mime_type(const std::string& type)
+{
+	enclosure_description_mime_type_ = type;
 }
 
 nonstd::optional<std::string> RssItem::attribute_value(const std::string&

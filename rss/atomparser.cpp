@@ -138,6 +138,8 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 				Enclosure {
 					get_prop(node, "href"),
 					get_prop(node, "type"),
+					"",
+					"",
 				}
 				);
 			}

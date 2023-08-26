@@ -8,7 +8,7 @@
 namespace rsspp {
 
 bool is_media_node(xmlNode* node);
-void parse_media_node(xmlNode* node, Item& it);
+void parse_media_node(xmlNode* node, Item& it, Enclosure* enclosure = nullptr);
 
 } // namespace rsspp
 

@@ -31,5 +31,15 @@
       </media:content>
     </media:group>
 </item>
+
+<item>
+    <comments>http://example.com/blog/this_is_an_item.html#comments</comments>
+    <author>blog@synflood.at (Andreas Krennmair)</author>
+    <pubDate>Fri, 12 Dec 2008 02:36:10 +0100</pubDate>
+    <guid isPermaLink="false">http://example.com/blog/using-media-content.html</guid>
+
+    <media:content url="http://example.com/media-test.png" type="image/png" />
+    <media:content url="http://example.com/movie.mov" type="video/quicktime" />
+</item>
 </channel>
 </rss>

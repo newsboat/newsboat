@@ -517,6 +517,8 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 						rsspp::Enclosure {
 							a["href"],
 							a["type"],
+							"",
+							"",
 						}
 						);
 						break;

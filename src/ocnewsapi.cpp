@@ -286,6 +286,8 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 				rsspp::Enclosure {
 					url,
 					type,
+					"",
+					"",
 				}
 				);
 			}
