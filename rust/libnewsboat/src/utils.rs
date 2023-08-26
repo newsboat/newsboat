@@ -1209,23 +1209,23 @@ mod tests {
     fn t_tokenize_quoted_interprets_double_backslash_as_literal_backslash() {
         assert_eq!(tokenize_quoted(r#""""#, ""), vec![""]);
 
-        assert_eq!(tokenize_quoted(r#""\\""#, ""), vec![r#"\"#]);
+        assert_eq!(tokenize_quoted(r#""\\""#, ""), vec![r"\"]);
 
         assert_eq!(tokenize_quoted(r##""#\\""##, ""), vec!["#\\"]);
 
         assert_eq!(tokenize_quoted(r#""'#\\'""#, ""), vec!["'#\\'"]);
 
-        assert_eq!(tokenize_quoted(r#""'#\\ \\'""#, ""), vec![r#"'#\ \'"#]);
+        assert_eq!(tokenize_quoted(r#""'#\\ \\'""#, ""), vec![r"'#\ \'"]);
 
-        assert_eq!(tokenize_quoted("\"\\\\\\\\", ""), vec![r#"\\"#]);
+        assert_eq!(tokenize_quoted("\"\\\\\\\\", ""), vec![r"\\"]);
 
-        assert_eq!(tokenize_quoted("\"\\\\\\\\\\\\", ""), vec![r#"\\\"#]);
+        assert_eq!(tokenize_quoted("\"\\\\\\\\\\\\", ""), vec![r"\\\"]);
 
-        assert_eq!(tokenize_quoted("\"\\\\\\\\\"", ""), vec![r#"\\"#]);
+        assert_eq!(tokenize_quoted("\"\\\\\\\\\"", ""), vec![r"\\"]);
 
-        assert_eq!(tokenize_quoted("\"\\\\\\\\\\\\\"", ""), vec![r#"\\\"#]);
+        assert_eq!(tokenize_quoted("\"\\\\\\\\\\\\\"", ""), vec![r"\\\"]);
 
-        assert_eq!(tokenize_quoted(r#""\\bgit\\b""#, ""), vec![r#"\bgit\b"#]);
+        assert_eq!(tokenize_quoted(r#""\\bgit\\b""#, ""), vec![r"\bgit\b"]);
 
         assert_eq!(
             tokenize_quoted(
@@ -1234,7 +1234,7 @@ mod tests {
             ),
             vec![
                 "browser",
-                r#"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app %u"#
+                r"/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app %u"
             ]
         );
     }
@@ -1280,7 +1280,7 @@ mod tests {
     #[test]
     fn t_tokenize_quoted_ignores_escaped_pound_sign_start_of_token() {
         assert_eq!(
-            tokenize_quoted(r#"one \# two three # ???"#, " "),
+            tokenize_quoted(r"one \# two three # ???", " "),
             vec!["one", "\\#", "two", "three"]
         );
     }
@@ -1972,12 +1972,12 @@ mod tests {
         assert_eq!(strip_comments(&input), expected);
 
         // Escaped backtick inside backticks is not treated as closing
-        let expected = r#"some `other \` tricky # test` hehe"#;
+        let expected = r"some `other \` tricky # test` hehe";
         let input = expected.to_owned() + "#here goescomment";
         assert_eq!(strip_comments(&input), expected);
 
         // Ignores escaped # characters (\\#)
-        let expected = r#"one two \# three four"#;
+        let expected = r"one two \# three four";
         let input = expected.to_owned() + "# and a comment";
         assert_eq!(strip_comments(&input), expected);
     }

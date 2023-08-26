@@ -1,5 +1,5 @@
 edition = "2015"
-fn_args_layout = "Tall"
+fn_params_layout = "Tall"
 force_explicit_abi = true
 hard_tabs = false
 max_width = 100

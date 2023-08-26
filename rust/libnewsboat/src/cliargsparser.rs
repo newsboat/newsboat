@@ -140,7 +140,7 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
         Some(utils::resolve_tilde(PathBuf::from(&string)))
     };
 
-    let mut parser = Parser::from_args(opts.into_iter());
+    let mut parser = Parser::from_args(opts);
 
     while let Some(arg) = parser.next()? {
         match arg {
