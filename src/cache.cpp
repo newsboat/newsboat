@@ -395,6 +395,7 @@ static const schema_patches schemaPatches{
 	},
 	{	{2, 33},
 		{
+			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 33;",
 			"ALTER TABLE rss_item ADD COLUMN enclosure_description VARCHAR(1024) NOT NULL DEFAULT \"\";",
 			"ALTER TABLE rss_item ADD COLUMN enclosure_description_mime_type VARCHAR(128) NOT NULL DEFAULT \"\";",
 		}
