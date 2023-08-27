@@ -7,6 +7,7 @@
 #include <libxml/tree.h>
 
 #include "config.h"
+#include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "exception.h"
 #include "logger.h"
@@ -18,14 +19,6 @@
 #include "utils.h"
 
 using namespace newsboat;
-
-static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
-	void* userp)
-{
-	std::string* pbuf = static_cast<std::string*>(userp);
-	pbuf->append(static_cast<const char*>(buffer), size * nmemb);
-	return size * nmemb;
-}
 
 namespace rsspp {
 
@@ -118,7 +111,6 @@ Feed Parser::parse_url(const std::string& url,
 	newsboat::RemoteApi* api,
 	const std::string& cookie_cache)
 {
-	std::string buf;
 	CURLcode ret;
 	curl_slist* custom_headers{};
 
@@ -131,8 +123,6 @@ Feed Parser::parse_url(const std::string& url,
 	}
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_URL, url.c_str());
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_SSL_VERIFYPEER, verify_ssl);
-	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEFUNCTION, my_write_data);
-	curl_easy_setopt(easyhandle.ptr(), CURLOPT_WRITEDATA, &buf);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_NOSIGNAL, 1);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_MAXREDIRS, 10);
@@ -169,6 +159,7 @@ Feed Parser::parse_url(const std::string& url,
 	HeaderValues hdrs;
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERDATA, &hdrs);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_HEADERFUNCTION, handle_headers);
+	auto curlDataReceiver = CurlDataReceiver::register_data_handler(easyhandle);
 
 	if (lastmodified != 0) {
 		curl_easy_setopt(easyhandle.ptr(),
@@ -240,6 +231,7 @@ Feed Parser::parse_url(const std::string& url,
 		throw Exception(msg);
 	}
 
+	const std::string buf = curlDataReceiver->get_data();
 	LOG(Level::INFO,
 		"Parser::parse_url: retrieved data for %s: %s",
 		url,
