@@ -122,6 +122,35 @@ TEST_CASE("parse() renders html titles into plaintext if type indicates html",
 	}
 }
 
+TEST_CASE("parse() generates a title when title element is missing",
+	"[RssParser]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssIgnores ignores;
+	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+
+	rsspp::Feed upstream_feed;
+	upstream_feed.rss_version = rsspp::Feed::ATOM_1_0;
+	upstream_feed.items.push_back({});
+	rsspp::Item& upstream_item = upstream_feed.items[0];
+	upstream_item.description = "<b>Just saying hello</b>";
+
+	SECTION("creates a title from the URL") {
+		upstream_item.link = "http://example.com/2023/08/29/hello-world.html";
+		const auto feed = parser.parse(upstream_feed);
+		auto item = feed->items()[0];
+		REQUIRE(item->title() == "Hello world");
+	}
+
+	SECTION("creates a title from the content if the URL is numeric") {
+		upstream_item.link = "http://example.com/1234567";
+		const auto feed = parser.parse(upstream_feed);
+		auto item = feed->items()[0];
+		REQUIRE(item->title() == "Just saying hello");
+	}
+}
+
 TEST_CASE("parse() extracts best enclosure", "[RssParser]")
 {
 	ConfigContainer cfg;

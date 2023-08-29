@@ -289,8 +289,13 @@ void RssParser::set_item_title(std::shared_ptr<RssFeed> feed,
 {
 	std::string title = item.title;
 
-	if (item.title.empty()) {
+	if (title.empty()) {
 		title = utils::make_title(item.link);
+		if (title.empty()) {
+			title = item.description;
+			x->set_title(render_xhtml_title(title, feed->link()));
+			return;
+		}
 	}
 
 	if (is_html_type(item.title_type)) {
