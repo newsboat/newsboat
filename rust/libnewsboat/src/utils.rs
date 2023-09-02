@@ -557,7 +557,7 @@ pub fn make_title(rs_str: String) -> String {
     };
 
     // If it contains only digits, assume it's an id, not a proper title
-    if result.chars().all(char::is_ascii_digit) {
+    if result.chars().all(|c| c.is_ascii_digit()) {
         String::new()
     } else {
         result
