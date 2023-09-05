@@ -24,8 +24,8 @@ msgid ""
 "[-h]\n"
 msgstr ""
 "%s %s\n"
-"kullanım: %s [-i <dosya>|-e] [-u <url-dosyası>] [-c <önbellek-dosyası>] [-x "
-"<komut> ...] [-h]\n"
+"kullanım: %s [-i <dosya>|-e] [-u <dosya>] [-c <dosya>] [-x <komut> ...]\n"
+"             [-h]\n"
 
 #: newsboat.cpp:47
 msgid "export OPML feed to stdout"
@@ -33,7 +33,7 @@ msgstr "stdout'a OPML beslemesi dışa aktar"
 
 #: newsboat.cpp:48
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "etiketler içerilecek biçimde OPML 2.0 beslemesini stdout'a dışa aktar"
+msgstr "etiketli OPML 2.0'yi stdout'a aktar"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -49,27 +49,29 @@ msgstr "OPML dosyası içe aktar"
 
 #: newsboat.cpp:54
 msgid "<urlfile>"
-msgstr "<url-dosyası>"
+msgstr "<dosya>"
 
 #: newsboat.cpp:55
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "<url-dosyası>'ndan RSS beslemesi URL'lerini oku"
+msgstr ""
+"<dosya>'dan RSS beslemesi URL'lerini oku"
 
 #: newsboat.cpp:60
 msgid "<cachefile>"
-msgstr "<önbellek-dosyası>"
+msgstr "<dosya>"
 
 #: newsboat.cpp:61
 msgid "use <cachefile> as cache file"
-msgstr "<önbellek-dosyası>'nı önbellek dosyası olarak kullan"
+msgstr ""
+"<dosya>'yı önbellek dosyası olarak kullan"
 
 #: newsboat.cpp:66 src/pbcontroller.cpp:335
 msgid "<configfile>"
-msgstr "<yapılandırma-dosyası>"
+msgstr "<dosya>"
 
 #: newsboat.cpp:67 src/pbcontroller.cpp:336
 msgid "read configuration from <configfile>"
-msgstr "yapılandırmayı <yapılandırma-dosyası>'ndan oku"
+msgstr "yapılandırmayı <dosya>'dan oku"
 
 #: newsboat.cpp:69
 msgid "compact the cache"
@@ -100,8 +102,10 @@ msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
 msgstr ""
-"belirli bir günlük düzeyiyle bir günlük yaz (geçerli değerler: 1-6; "
-"sırasıyla kullanıcı hatası, kritik, hata, uyarı, bilgi ve hata ayıklama)"
+"belirli bir günlük düzeyiyle bir günlük\n"
+"yaz (geçerli değerler: 1-6; sırasıyla\n"
+"kullanıcı hatası, kritik, hata, uyarı,\n"
+"bilgi ve hata ayıklama)"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
@@ -109,15 +113,18 @@ msgstr "<günlük-dosyası>"
 
 #: newsboat.cpp:89 src/pbcontroller.cpp:357
 msgid "use <logfile> as output log file"
-msgstr "<günlük-dosyası>'nı çıktı kaydı için kullan"
+msgstr ""
+"<günlük-dosyası>'na çıktı kaydı yap"
 
 #: newsboat.cpp:95
 msgid "export list of read articles to <file>"
-msgstr "okunmuş yazıların listesini <dosya>'ya dışa aktar"
+msgstr ""
+"okunan yazı listesini <dosya>'ya aktar"
 
 #: newsboat.cpp:101
 msgid "import list of read articles from <file>"
-msgstr "okunmuş yazıları <dosya>'dan içe aktar"
+msgstr ""
+"okunan yazıları <dosya>'dan aktar"
 
 #: newsboat.cpp:103 src/pbcontroller.cpp:359
 msgid "this help"
@@ -125,7 +132,7 @@ msgstr "bu yardım"
 
 #: newsboat.cpp:104
 msgid "remove unreferenced items from cache"
-msgstr "başvurulmamış ögeleri önbellekten kaldır"
+msgstr "başvurulmayan ögeleri önbellekten kaldır"
 
 #: newsboat.cpp:129
 msgid "Files:"
@@ -151,8 +158,8 @@ msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
-"Destek için https://libera.chat sunucusunda #newsboat kanalına veya e-posta "
-"listemize (https://groups.google.com/g/newsboat) başvurun"
+"Destek için https://libera.chat sunucusunda #newsboat kanalına veya\n"
+"e-posta listemize (https://groups.google.com/g/newsboat) başvurun"
 
 #: newsboat.cpp:152 src/pbcontroller.cpp:378
 msgid "For more information, check out https://newsboat.org/"
@@ -164,8 +171,8 @@ msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"Newsboat, MIT Lisansı ile lisanslanmış özgür yazılımdır. (Tüm metni görmek "
-"için `%s -vv' yazın.)"
+"Newsboat, MIT Lisansı ile lisanslanmış özgür yazılımdır.\n"
+"(Tüm metni görmek için `%s -vv' yazın.)"
 
 #: newsboat.cpp:178
 msgid "It bundles:"
