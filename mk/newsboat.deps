@@ -15,6 +15,7 @@ src/feedretriever.cpp
 src/filebrowserformaction.cpp
 src/file_system.cpp
 src/fileurlreader.cpp
+src/filestring.cpp
 src/filtercontainer.cpp
 src/formaction.cpp
 src/freshrssapi.cpp
