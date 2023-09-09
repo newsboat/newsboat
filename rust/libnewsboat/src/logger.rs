@@ -302,7 +302,7 @@ macro_rules! log {
 mod tests {
     use super::*;
 
-    use chrono::{Duration, TimeZone};
+    use chrono::{Duration, NaiveDateTime};
     use std::io::{self, BufRead, BufReader};
     use std::path;
     use tempfile::TempDir;
@@ -491,10 +491,11 @@ mod tests {
                     let (timestamp_str, _level, message) =
                         parse_log_line(&line).expect("Failed to split the log line into parts");
 
-                    let timestamp = Local::now()
-                        .timezone()
-                        .datetime_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
-                        .expect("Failed to parse the timestamp from the log file");
+                    let timestamp =
+                        NaiveDateTime::parse_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
+                            .expect("Failed to parse the timestamp from the log file")
+                            .and_local_timezone(Local::now().timezone())
+                            .unwrap();
                     // `start_time` and `end_time` may have millisecond precision or better,
                     // whereas `timestamp` is limited to seconds. Therefore, we account for
                     // a situation where `start_time` is slightly bigger than `timestamp`.
@@ -821,10 +822,11 @@ mod tests {
                     let (timestamp_str, message) = parse_errorlog_line(&line)
                         .expect("Failed to split the error log line into parts");
 
-                    let timestamp = Local::now()
-                        .timezone()
-                        .datetime_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
-                        .expect("Failed to parse the timestamp from the error log file");
+                    let timestamp =
+                        NaiveDateTime::parse_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S")
+                            .expect("Failed to parse the timestamp from the log file")
+                            .and_local_timezone(Local::now().timezone())
+                            .unwrap();
                     // `start_time` and `end_time` may have millisecond precision or better,
                     // whereas `timestamp` is limited to seconds. Therefore, we account for
                     // a situation where `start_time` is slightly bigger than `timestamp`.
