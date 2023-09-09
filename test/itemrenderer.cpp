@@ -183,6 +183,31 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 
 		REQUIRE(result == expected);
 	}
+
+	SECTION("Item with enclosure and plaintext description") {
+		item->set_description(ITEM_DESCRIPTON, "text/plain");
+		item->set_enclosure_url("https://example.com/test.png");
+		item->set_enclosure_type("image/png");
+
+		const auto result = item_renderer::to_plain_text(cfg, item);
+
+		const auto expected = std::string() +
+			"Feed: " + FEED_TITLE + '\n' +
+			"Title: " + ITEM_TITLE + '\n' +
+			"Author: " + ITEM_AUTHOR + '\n' +
+			"Date: Sun, 30 Sep 2018 19:34:25 +0000\n" +
+			"Link: " + ITEM_LINK + '\n' +
+			"Flags: " + ITEM_FLAGS_RENDERED + '\n' +
+			" \n" +
+			"Image[1]\n" +
+			" \n" +
+			ITEM_DESCRIPTON + '\n' +
+			" \n" +
+			"Links: \n" +
+			"[1]: https://example.com/test.png (image)\n";
+
+		REQUIRE(result == expected);
+	}
 }
 
 TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
