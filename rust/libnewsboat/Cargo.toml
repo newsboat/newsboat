@@ -19,8 +19,8 @@ nom = "7"
 libc = "0.2"
 natord = "1.0.9"
 md5 = "0.7.0"
-
 lexopt = "0.3.0"
+chrono = "0.4"
 
 [dependencies.gettext-rs]
 version = "0.7.0"
@@ -46,15 +46,6 @@ version = "0.4.65"
 # exists even if we're linking (via libcurl) against another SSL library like
 # GnuTLS. We disable this feature to avoid the dependency.
 default-features = false
-
-[dependencies.chrono]
-version = "0.4"
-default-features = false
-# This is the same as default features for 0.4.23, minus "oldtime" and
-# "wasmbind". We disable "oldtime" to get rid of dependency on `time` 0.1,
-# which is vulnerable (CVE-2020-26235) and which we don't use. We disable
-# `wasmbind` because we don't use WASM.
-features = [ "alloc", "std", "clock" ]
 
 [dev-dependencies]
 tempfile = "3"
