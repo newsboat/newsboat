@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2023-06-21 22:24+0300\n"
+"PO-Revision-Date: 2023-09-14 12:02+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -1192,14 +1192,12 @@ msgid "type: "
 msgstr "тип: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
-msgstr "изображение"
+msgstr "Изображение"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "Ссылка: "
+msgstr "Ссылка"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
