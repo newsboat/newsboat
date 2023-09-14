@@ -4,6 +4,11 @@
 #include <exception>
 #include <string>
 
+#include "filepath.h"
+// Users of this class might use the path in assertions, so let's include the
+// string maker for their convenience.
+#include "stringmaker/filepath.h"
+
 namespace test_helpers {
 
 /* Objects of MainTempDir class create Newsboat's temporary directory, and try
@@ -13,7 +18,9 @@ class MainTempDir {
 public:
 	class tempfileexception : public std::exception {
 	public:
-		explicit tempfileexception(const std::string& error);
+		explicit tempfileexception(
+			const newsboat::Filepath& filepath,
+			const std::string& error);
 		virtual const char* what() const throw();
 
 	private:
@@ -24,10 +31,10 @@ public:
 
 	~MainTempDir();
 
-	const std::string get_path() const;
+	newsboat::Filepath get_path() const;
 
 private:
-	std::string tempdir;
+	newsboat::Filepath tempdir;
 };
 
 } // namespace test_helpers

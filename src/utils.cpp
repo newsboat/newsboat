@@ -333,15 +333,19 @@ std::string utils::run_program(const char* argv[], const std::string& input)
 	return std::string(utils::bridged::run_program(rs_argv, input));
 }
 
-std::string utils::resolve_tilde(const std::string& str)
+Filepath utils::resolve_tilde(const Filepath& path)
 {
-	return std::string(utils::bridged::resolve_tilde(str));
+	// The function is in utils.rs, but its binding is in filepath.rs because
+	// I can't make it return `Box<PathBuf>` any other way
+	return filepath::bridged::resolve_tilde(path);
 }
 
-std::string utils::resolve_relative(const std::string& reference,
-	const std::string& fname)
+Filepath utils::resolve_relative(const Filepath& reference,
+	const Filepath& fname)
 {
-	return std::string(utils::bridged::resolve_relative(reference, fname));
+	// The function is in utils.rs, but its binding is in filepath.rs because
+	// I can't make it return `Box<PathBuf>` any other way
+	return filepath::bridged::resolve_relative(reference, fname);
 }
 
 std::string utils::replace_all(std::string str,
@@ -674,7 +678,7 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
-int utils::mkdir_parents(const std::string& p, mode_t mode)
+int utils::mkdir_parents(const Filepath& p, mode_t mode)
 {
 	return utils::bridged::mkdir_parents(p, static_cast<std::uint32_t>(mode));
 }
@@ -708,18 +712,23 @@ nonstd::optional<std::uint8_t> utils::run_non_interactively(
 	return nonstd::nullopt;
 }
 
-std::string utils::getcwd()
+Filepath utils::getcwd()
 {
-	return std::string(utils::bridged::getcwd());
+	// The function is in utils.rs, but its binding is in filepath.rs because
+	// I can't make it return `Box<PathBuf>` any other way
+	return filepath::bridged::getcwd();
 }
 
 nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read_text_file(
-	const std::string& filename)
+	const Filepath& filename)
 {
 	rust::Vec<rust::String> c;
 	std::uint64_t error_line_number{};
 	rust::String error_reason;
-	const bool result = bridged::read_text_file(filename, c, error_line_number,
+	const bool result = bridged::read_text_file(
+			filename,
+			c,
+			error_line_number,
 			error_reason);
 
 	if (result) {
@@ -822,9 +831,11 @@ void utils::initialize_ssl_implementation(void)
 #endif
 }
 
-std::string utils::get_default_browser()
+Filepath utils::get_default_browser()
 {
-	return std::string(utils::bridged::get_default_browser());
+	// The function is in utils.rs, but its binding is in filepath.rs because
+	// I can't make it return `Box<PathBuf>` any other way
+	return filepath::bridged::get_default_browser();
 }
 
 std::string utils::md5hash(const std::string& input)

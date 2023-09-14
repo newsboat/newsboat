@@ -15,11 +15,11 @@ public:
 
 	~TempDir();
 
-	const std::string get_path() const;
+	newsboat::Filepath get_path() const;
 
 private:
 	MainTempDir tempdir;
-	std::string dirpath;
+	newsboat::Filepath dirpath;
 };
 
 } // namespace test_helpers

@@ -17,11 +17,20 @@
 #include "htmlrenderer.h"
 #include "test_helpers/chdir.h"
 #include "test_helpers/envvar.h"
+#include "test_helpers/stringmaker/filepath.h"
 #include "test_helpers/stringmaker/optional.h"
 #include "test_helpers/tempdir.h"
 #include "test_helpers/tempfile.h"
 
 using namespace newsboat;
+
+inline namespace {
+int mkdir(const Filepath& dirpath, mode_t mode)
+{
+	const auto dirpath_str = dirpath.to_locale_string();
+	return ::mkdir(dirpath_str.c_str(), mode);
+}
+}
 
 TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 {
@@ -1351,7 +1360,7 @@ TEST_CASE(
 TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 {
 	SECTION("Returns non-empty string") {
-		REQUIRE(utils::getcwd().length() > 0);
+		REQUIRE(utils::getcwd() != Filepath());
 	}
 
 	SECTION("Value depends on current directory") {
@@ -1390,7 +1399,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 
 		REQUIRE(0 == ::rmdir(tempdir_path.c_str()));
 
-		REQUIRE("" == utils::getcwd());
+		REQUIRE(Filepath() == utils::getcwd());
 	}
 }
 
@@ -1583,13 +1592,13 @@ TEST_CASE(
 
 	// If BROWSER is not set, default browser is lynx(1)
 	browserEnv.unset();
-	REQUIRE(utils::get_default_browser() == "lynx");
+	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("lynx"));
 
 	browserEnv.set("firefox");
-	REQUIRE(utils::get_default_browser() == "firefox");
+	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("firefox"));
 
 	browserEnv.set("opera");
-	REQUIRE(utils::get_default_browser() == "opera");
+	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("opera"));
 }
 
 TEST_CASE(
@@ -1740,7 +1749,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	}
 
 	SECTION("Zero intermediate directories") {
-		const auto path = tmp.get_path() + std::to_string(rand());
+		const auto path = tmp.get_path().join(std::to_string(rand()));
 		INFO("Path is " << path);
 
 		SECTION("Target doesn't yet exist") {
@@ -1748,14 +1757,14 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 
 		SECTION("Target already exists") {
-			REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+			REQUIRE(mkdir(path, 0700) == 0);
 			require_return_zero(path);
 		}
 	}
 
 	SECTION("One intermediate directory") {
-		const auto intermediate_path = tmp.get_path() + std::to_string(rand());
-		const auto path = intermediate_path + "/" + std::to_string(rand());
+		const auto intermediate_path = tmp.get_path().join(std::to_string(rand()));
+		const auto path = intermediate_path.join(std::to_string(rand()));
 		INFO("Path is " << path);
 
 		SECTION("Which doesn't exist") {
@@ -1763,24 +1772,23 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 
 		SECTION("Which exists") {
-			REQUIRE(::mkdir(intermediate_path.c_str(), 0700) == 0);
+			REQUIRE(mkdir(intermediate_path, 0700) == 0);
 
 			SECTION("Target doesn't exist") {
 				require_return_zero(path);
 			}
 
 			SECTION("Target exists") {
-				REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+				REQUIRE(mkdir(path, 0700) == 0);
 				require_return_zero(path);
 			}
 		}
 	}
 
 	SECTION("Two intermediate directories") {
-		const auto intermediate_path1 = tmp.get_path() + std::to_string(rand());
-		const auto intermediate_path2 =
-			intermediate_path1 + "/" + std::to_string(rand());
-		const auto path = intermediate_path2 + "/" + std::to_string(rand());
+		const auto intermediate_path1 = tmp.get_path().join(std::to_string(rand()));
+		const auto intermediate_path2 = intermediate_path1.join(std::to_string(rand()));
+		const auto path = intermediate_path2.join(std::to_string(rand()));
 		INFO("Path is " << path);
 
 		SECTION("Which don't exist") {
@@ -1788,13 +1796,13 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 
 		SECTION("First one exists") {
-			REQUIRE(::mkdir(intermediate_path1.c_str(), 0700) == 0);
+			REQUIRE(mkdir(intermediate_path1, 0700) == 0);
 
 			SECTION("Second one exists") {
-				REQUIRE(::mkdir(intermediate_path2.c_str(), 0700) == 0);
+				REQUIRE(mkdir(intermediate_path2, 0700) == 0);
 
 				SECTION("Target exists") {
-					REQUIRE(::mkdir(path.c_str(), 0700) == 0);
+					REQUIRE(mkdir(path, 0700) == 0);
 					require_return_zero(path);
 				}
 
@@ -1815,19 +1823,24 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 {
 	test_helpers::TempDir tmp;
 
-	const auto path = tmp.get_path() + std::to_string(rand());
+	const auto path = tmp.get_path().join(std::to_string(rand()));
 
-	const auto check = [](const std::string& path) {
+	const auto check = [](const Filepath& path) {
 		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
-		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
+		const auto path_str = path.to_locale_string();
+		REQUIRE(::access(path_str.c_str(), R_OK | X_OK) == 0);
 	};
 
+	auto path_as_string = path.to_locale_string();
 	SECTION("Path doesn't end in slash => directory created") {
+		REQUIRE(path_as_string.back() != '/');
 		check(path);
 	}
 
 	SECTION("Path ends in slash => directory created") {
-		check(path + "/");
+		REQUIRE(path_as_string.back() != '/');
+		path_as_string.push_back('/');
+		check(Filepath::from_locale_string(path_as_string));
 	}
 }
 
