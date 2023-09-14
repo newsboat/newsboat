@@ -89,13 +89,9 @@ TEST_CASE(
 		links,
 		"");
 
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 
 	REQUIRE(lines[0] == p(LineType::wrappable, "<u>slashdot</>[1]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
-		p(LineType::softwrappable, "[1]: http://slashdot.org/ (link)"));
 
 	REQUIRE(links[0].url == "http://slashdot.org/");
 	REQUIRE(links[0].type == LinkType::HREF);
@@ -314,13 +310,9 @@ TEST_CASE("Flash <embed>s are added to links if `src' is set", "[HtmlRenderer]")
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[embedded flash: 1]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/game.swf (embedded flash)"));
+
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "http://example.com/game.swf");
 	REQUIRE(links[0].type == LinkType::EMBED);
@@ -380,12 +372,9 @@ TEST_CASE("<iframe>s are added to links if `src' is set", "[HtmlRenderer]")
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[iframe 1 (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: https://www.youtube.com/embed/0123456789A (iframe)"));
+
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "https://www.youtube.com/embed/0123456789A");
 	REQUIRE(links[0].type == LinkType::IFRAME);
@@ -403,13 +392,10 @@ TEST_CASE("<iframe>s are rendered with a title if `title' is set",
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, ""));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable,
 			"[iframe 1: My Video (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: https://www.youtube.com/embed/0123456789A (iframe)"));
+
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "https://www.youtube.com/embed/0123456789A");
 	REQUIRE(links[0].type == LinkType::IFRAME);
@@ -504,13 +490,9 @@ TEST_CASE("<img> results in a placeholder and a link", "[HtmlRenderer]")
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1 (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/image.png (image)"));
+
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "http://example.com/image.png");
 	REQUIRE(links[0].type == LinkType::IMG);
@@ -531,15 +513,10 @@ TEST_CASE(
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 5);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable,
 			"<u>My Page</>[1] and an image: [image 1 (link #2)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: http://example.com/index.html (link)"));
-	REQUIRE(lines[4] == p(LineType::softwrappable,
-			"[2]: http://example.com/image.png (image)"));
+
 	REQUIRE(links.size() == 2);
 	REQUIRE(links[0].url == "http://example.com/index.html");
 	REQUIRE(links[0].type == LinkType::HREF);
@@ -561,13 +538,11 @@ TEST_CASE(
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1 (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].url == "http://example.com/image.png");
+	REQUIRE(links[0].type == LinkType::IMG);
 }
 
 TEST_CASE("alt is mentioned in placeholder if <img> has `alt'",
@@ -582,13 +557,9 @@ TEST_CASE("alt is mentioned in placeholder if <img> has `alt'",
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable,
 			"[image 1: Just a test image (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "http://example.com/image.png");
 	REQUIRE(links[0].type == LinkType::IMG);
@@ -606,13 +577,9 @@ TEST_CASE("alt is mentioned in placeholder if <img> has `alt' and `title",
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable,
 			"[image 1: Just a test image (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "http://example.com/image.png");
 	REQUIRE(links[0].type == LinkType::IMG);
@@ -631,14 +598,9 @@ TEST_CASE(
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] ==
 		p(LineType::wrappable, "[image 1: Just a test image (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/image.png (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "http://example.com/image.png");
 	REQUIRE(links[0].type == LinkType::IMG);
@@ -659,12 +621,8 @@ TEST_CASE(
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[image 1: Red dot (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] ==
-		p(LineType::softwrappable, "[1]: inline image (image)"));
 	REQUIRE(links.size() == 1);
 	REQUIRE(links[0].url == "inline image");
 	REQUIRE(links[0].type == LinkType::IMG);
@@ -686,18 +644,12 @@ TEST_CASE(
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 9);
+	REQUIRE(lines.size() == 5);
 	REQUIRE(lines[0] == p(LineType::wrappable, "<u>[image 1 (link #1)]</>[1]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, ""));
 	REQUIRE(lines[2] == p(LineType::wrappable, "Check out <u>this amazing site</>[2]!"));
 	REQUIRE(lines[3] == p(LineType::wrappable, ""));
 	REQUIRE(lines[4] == p(LineType::wrappable, "[iframe 1 (link #2)]"));
-	REQUIRE(lines[5] == p(LineType::wrappable, ""));
-	REQUIRE(lines[6] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[7] ==
-		p(LineType::softwrappable, "[1]: https://example.com/test.jpg (image)"));
-	REQUIRE(lines[8] ==
-		p(LineType::softwrappable, "[2]: https://attachment.zip/ (iframe)"));
 	REQUIRE(links.size() == 2);
 	REQUIRE(links[0].url == "https://example.com/test.jpg");
 	REQUIRE(links[0].type == LinkType::IMG);
@@ -1431,21 +1383,10 @@ TEST_CASE("<video> results in a placeholder and a link for each valid source",
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 8);
+	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, "[video 2 (link #2)]"));
 	REQUIRE(lines[2] == p(LineType::wrappable, "[video 2 (link #3)]"));
-	REQUIRE(lines[3] == p(LineType::wrappable, ""));
-	REQUIRE(lines[4] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[5] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/video.avi (video)"));
-	REQUIRE(lines[6] ==
-		p(LineType::softwrappable,
-			"[2]: http://example.com/video2.avi (video)"));
-	REQUIRE(lines[7] ==
-		p(LineType::softwrappable,
-			"[3]: http://example.com/video2.mkv (video)"));
 	REQUIRE(links.size() == 3);
 	REQUIRE(links[0].url == "http://example.com/video.avi");
 	REQUIRE(links[0].type == LinkType::VIDEO);
@@ -1467,13 +1408,11 @@ TEST_CASE("<video>s without valid sources are ignored", "[HtmlRenderer]")
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: http://example.com/video.avi (video)"));
 	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].url == "http://example.com/video.avi");
+	REQUIRE(links[0].type == LinkType::VIDEO);
 }
 
 TEST_CASE("<audio> results in a placeholder and a link for each valid source",
@@ -1491,21 +1430,10 @@ TEST_CASE("<audio> results in a placeholder and a link for each valid source",
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 8);
+	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[audio 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, "[audio 2 (link #2)]"));
 	REQUIRE(lines[2] == p(LineType::wrappable, "[audio 2 (link #3)]"));
-	REQUIRE(lines[3] == p(LineType::wrappable, ""));
-	REQUIRE(lines[4] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[5] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/audio.oga (audio)"));
-	REQUIRE(lines[6] ==
-		p(LineType::softwrappable,
-			"[2]: http://example.com/audio2.mp3 (audio)"));
-	REQUIRE(lines[7] ==
-		p(LineType::softwrappable,
-			"[3]: http://example.com/audio2.m4a (audio)"));
 	REQUIRE(links.size() == 3);
 	REQUIRE(links[0].url == "http://example.com/audio.oga");
 	REQUIRE(links[0].type == LinkType::AUDIO);
@@ -1527,13 +1455,11 @@ TEST_CASE("<audio>s without valid sources are ignored", "[HtmlRenderer]")
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 4);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[audio 1 (link #1)]"));
-	REQUIRE(lines[1] == p(LineType::wrappable, ""));
-	REQUIRE(lines[2] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[3] == p(LineType::softwrappable,
-			"[1]: http://example.com/audio.oga (audio)"));
 	REQUIRE(links.size() == 1);
+	REQUIRE(links[0].url == "http://example.com/audio.oga");
+	REQUIRE(links[0].type == LinkType::AUDIO);
 }
 
 TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
@@ -1561,30 +1487,13 @@ TEST_CASE("Unclosed <video> and <audio> tags are closed upon encounter with a "
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 13);
+	REQUIRE(lines.size() == 6);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, "[video 2 (link #2)]"));
 	REQUIRE(lines[2] == p(LineType::wrappable, "[audio 1 (link #3)]"));
 	REQUIRE(lines[3] == p(LineType::wrappable, "[audio 1 (link #4)]"));
 	REQUIRE(lines[4] == p(LineType::wrappable, "[audio 2 (link #5)]"));
 	REQUIRE(lines[5] == p(LineType::wrappable, "Here comes the text!"));
-	REQUIRE(lines[6] == p(LineType::wrappable, ""));
-	REQUIRE(lines[7] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[8] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/video.avi (video)"));
-	REQUIRE(lines[9] ==
-		p(LineType::softwrappable,
-			"[2]: http://example.com/video2.avi (video)"));
-	REQUIRE(lines[10] ==
-		p(LineType::softwrappable,
-			"[3]: http://example.com/audio.oga (audio)"));
-	REQUIRE(lines[11] ==
-		p(LineType::softwrappable,
-			"[4]: http://example.com/audio.m4a (audio)"));
-	REQUIRE(lines[12] ==
-		p(LineType::softwrappable,
-			"[5]: http://example.com/audio2.mp3 (audio)"));
 	REQUIRE(links.size() == 5);
 	REQUIRE(links[0].url == "http://example.com/video.avi");
 	REQUIRE(links[0].type == LinkType::VIDEO);
@@ -1622,25 +1531,11 @@ TEST_CASE("Empty <source> tags do not increase the link count. Media elements"
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 10);
+	REQUIRE(lines.size() == 4);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, "[video 1 (link #2)]"));
 	REQUIRE(lines[2] == p(LineType::wrappable, "[audio 1 (link #3)]"));
 	REQUIRE(lines[3] == p(LineType::wrappable, "[audio 1 (link #4)]"));
-	REQUIRE(lines[4] == p(LineType::wrappable, ""));
-	REQUIRE(lines[5] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[6] ==
-		p(LineType::softwrappable,
-			"[1]: http://example.com/video.avi (video)"));
-	REQUIRE(lines[7] ==
-		p(LineType::softwrappable,
-			"[2]: http://example.com/video.mkv (video)"));
-	REQUIRE(lines[8] ==
-		p(LineType::softwrappable,
-			"[3]: http://example.com/audio.mp3 (audio)"));
-	REQUIRE(lines[9] ==
-		p(LineType::softwrappable,
-			"[4]: http://example.com/audio.oga (audio)"));
 	REQUIRE(links.size() == 4);
 	REQUIRE(links[0].url == "http://example.com/video.avi");
 	REQUIRE(links[0].type == LinkType::VIDEO);
@@ -1665,17 +1560,9 @@ TEST_CASE("Back-to-back <video> and <audio> tags are seperated by a new line",
 	Links links;
 
 	REQUIRE_NOTHROW(r.render(input, lines, links, url));
-	REQUIRE(lines.size() == 6);
+	REQUIRE(lines.size() == 2);
 	REQUIRE(lines[0] == p(LineType::wrappable, "[video 1 (link #1)]"));
 	REQUIRE(lines[1] == p(LineType::wrappable, "[audio 1 (link #2)]"));
-	REQUIRE(lines[2] == p(LineType::wrappable, ""));
-	REQUIRE(lines[3] == p(LineType::wrappable, "Links: "));
-	REQUIRE(lines[4] ==
-		p(LineType::softwrappable,
-			"[1]: https://example.com/video.mp4 (video)"));
-	REQUIRE(lines[5] ==
-		p(LineType::softwrappable,
-			"[2]: https://example.com/audio.mp3 (audio)"));
 	REQUIRE(links.size() == 2);
 	REQUIRE(links[0].url == "https://example.com/video.mp4");
 	REQUIRE(links[0].type == LinkType::VIDEO);

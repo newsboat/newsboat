@@ -1012,19 +1012,6 @@ void HtmlRenderer::render(std::istream& input,
 			add_line_nonwrappable(s, lines);
 		}
 	}
-
-	// add link list
-	if (links.size() > 0) {
-		add_line("", tables, lines);
-		add_line(_("Links: "), tables, lines);
-		for (unsigned int i = 0; i < links.size(); ++i) {
-			auto link_text = strprintf::fmt("[%u]: %s (%s)",
-					i + 1,
-					links[i].url,
-					type2str(links[i].type));
-			add_line_softwrappable(link_text, lines);
-		}
-	}
 }
 
 void HtmlRenderer::add_media_link(std::string& curline,
@@ -1041,7 +1028,7 @@ void HtmlRenderer::add_media_link(std::string& curline,
 		link_url = utils::censor_url(utils::absolute_url(url, media_url));
 	}
 
-	const std::string type_str = type2str(type);
+	const std::string type_str = Links::type2str(type);
 	const unsigned int link_num = links.add_link(link_url, type);
 	std::string output;
 
@@ -1062,26 +1049,6 @@ std::string HtmlRenderer::render_hr(const unsigned int width)
 	result += " \n";
 
 	return result;
-}
-
-std::string HtmlRenderer::type2str(LinkType type)
-{
-	switch (type) {
-	case LinkType::HREF:
-		return _("link");
-	case LinkType::IMG:
-		return _("image");
-	case LinkType::EMBED:
-		return _("embedded flash");
-	case LinkType::IFRAME:
-		return _("iframe");
-	case LinkType::VIDEO:
-		return _("video");
-	case LinkType::AUDIO:
-		return _("audio");
-	default:
-		return _("unknown (bug)");
-	}
 }
 
 void HtmlRenderer::add_nonempty_line(const std::string& curline,

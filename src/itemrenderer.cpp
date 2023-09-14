@@ -212,6 +212,22 @@ void item_renderer::render_plaintext(
 	}
 }
 
+void render_links_summary(std::vector<std::pair<LineType, std::string>>& lines,
+	const Links& links)
+{
+	if (links.size() > 0) {
+		lines.push_back(std::make_pair(LineType::wrappable, ""));
+		lines.push_back(std::make_pair(LineType::wrappable, _("Links: ")));
+		for (unsigned int i = 0; i < links.size(); ++i) {
+			auto link_text = strprintf::fmt("[%u]: %s (%s)",
+					i + 1,
+					links[i].url,
+					Links::type2str(links[i].type));
+			lines.push_back(std::make_pair(LineType::softwrappable, link_text));
+		}
+	}
+}
+
 std::string item_renderer::to_plain_text(
 	ConfigContainer& cfg,
 	std::shared_ptr<RssItem> item)
@@ -231,6 +247,8 @@ std::string item_renderer::to_plain_text(
 	} else {
 		render_plaintext(body, lines, OutputFormat::PlainText);
 	}
+
+	render_links_summary(lines, links);
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
@@ -266,6 +284,8 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	} else {
 		render_plaintext(body, lines, OutputFormat::StflRichText);
 	}
+
+	render_links_summary(lines, links);
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);
