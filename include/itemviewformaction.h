@@ -6,6 +6,7 @@
 #include "regexmanager.h"
 #include "textformatter.h"
 #include "textviewwidget.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -79,7 +80,7 @@ private:
 		std::string source);
 
 	void do_search();
-	void handle_save(const std::string& filename_param);
+	void handle_save(const Filepath& filename_param);
 
 	std::string guid;
 	std::shared_ptr<RssFeed> feed;
