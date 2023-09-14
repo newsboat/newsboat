@@ -302,7 +302,7 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 {
 	FileUrlReader urlcfg;
 	REQUIRE_NOTHROW(
-		opml::import("file://" + utils::getcwd() + "/data/category.opml", urlcfg)
+		opml::import("file://" + std::string(utils::getcwd()) + "/data/category.opml", urlcfg)
 	);
 
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
