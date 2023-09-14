@@ -623,9 +623,9 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-void ItemViewFormAction::handle_save(const std::string& filename_param)
+void ItemViewFormAction::handle_save(const Filepath& filename_param)
 {
-	std::string filename = utils::resolve_tilde(filename_param);
+	Filepath filename = utils::resolve_tilde(filename_param);
 	if (filename == "") {
 		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
