@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2023-06-19 08:00+0200\n"
+"PO-Revision-Date: 2023-09-14 21:52+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -1186,14 +1186,12 @@ msgid "type: "
 msgstr "tipo: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
-msgstr "immagine"
+msgstr "Immagine"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "Collegamento: "
+msgstr "Collegamento"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
