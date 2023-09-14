@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2023-06-17 17:20+0200\n"
+"PO-Revision-Date: 2023-09-14 16:45+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -1190,14 +1190,12 @@ msgid "type: "
 msgstr "Typ: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
 msgstr "Bild"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "Link: "
+msgstr "Link"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
