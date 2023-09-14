@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2023-06-17 14:00+0300\n"
+"PO-Revision-Date: 2023-09-14 23:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -957,7 +957,7 @@ msgstr "Yer imi kaydedildi."
 
 #: src/formaction.cpp:481 src/formaction.cpp:548
 msgid "Error while saving bookmark: "
-msgstr "Yer imi kaydedilirken hata oluştu: "
+msgstr "Yer imi kaydedilirken hata: "
 
 #: src/formaction.cpp:516
 msgid "URL: "
@@ -985,7 +985,7 @@ msgstr ""
 
 #: src/helpformaction.cpp:149
 msgid "Generic bindings:"
-msgstr "Genel bindirmeler:"
+msgstr "Genel bağıntılar:"
 
 #: src/helpformaction.cpp:167
 msgid "Unbound functions:"
@@ -1181,21 +1181,19 @@ msgstr "Bağlantı: "
 
 #: src/itemrenderer.cpp:89
 msgid "Podcast Download URL: "
-msgstr "Podcast İndirme Adresi: "
+msgstr "Pod yayını indirme adresi: "
 
 #: src/itemrenderer.cpp:94
 msgid "type: "
-msgstr "biçim: "
+msgstr "tür: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
-msgstr "görsel"
+msgstr "Görsel"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "Bağlantı: "
+msgstr "Bağlantı"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
