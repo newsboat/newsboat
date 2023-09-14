@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2023-06-17 11:15+0200\n"
+"PO-Revision-Date: 2023-09-14 19:24+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -1195,14 +1195,12 @@ msgid "type: "
 msgstr "type: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
-msgstr "afbeelding"
+msgstr "Afbeelding"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "Koppeling: "
+msgstr "Koppeling"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
