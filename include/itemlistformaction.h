@@ -71,7 +71,7 @@ public:
 
 protected:
 	bool process_operation(Operation op,
-		bool automatic = false,
+		BindingType bindingType = BindingType::BindKey,
 		std::vector<std::string>* args = nullptr) override;
 	std::string main_widget() const override
 	{

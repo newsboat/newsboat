@@ -86,7 +86,7 @@ void FeedListFormAction::prepare()
 }
 
 bool FeedListFormAction::process_operation(Operation op,
-	bool automatic,
+	BindingType bindingType,
 	std::vector<std::string>* args)
 {
 	unsigned int pos = 0;
@@ -466,7 +466,7 @@ REDO:
 		}
 		break;
 	case OP_GOTO_TITLE:
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() >= 1) {
 				qna_responses = {args[0]};
 				finished_qna(OP_INT_GOTO_TITLE);
@@ -503,7 +503,7 @@ REDO:
 			goto REDO;
 		}
 		LOG(Level::INFO, "FeedListFormAction: quitting");
-		if (automatic ||
+		if (bindingType == BindingType::Macro ||
 			!cfg->get_configvalue_as_bool("confirm-exit") ||
 			v->confirm(
 				_("Do you really want to quit (y:Yes n:No)? "),
@@ -519,7 +519,7 @@ REDO:
 		v->push_help();
 		break;
 	default:
-		ListFormAction::process_operation(op, automatic, args);
+		ListFormAction::process_operation(op, bindingType, args);
 		break;
 	}
 	if (quit) {

@@ -52,7 +52,7 @@ void SelectFormAction::handle_cmdline(const std::string& cmd)
 }
 
 bool SelectFormAction::process_operation(Operation op,
-	bool /* automatic */,
+	BindingType /*bindingType*/,
 	std::vector<std::string>* /* args */)
 {
 	bool hardquit = false;

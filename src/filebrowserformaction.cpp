@@ -44,7 +44,7 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 FileBrowserFormAction::~FileBrowserFormAction() {}
 
 bool FileBrowserFormAction::process_operation(Operation op,
-	bool /* automatic */,
+	BindingType /*bindingType*/,
 	std::vector<std::string>* /* args */)
 {
 	switch (op) {

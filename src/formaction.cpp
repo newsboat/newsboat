@@ -98,7 +98,7 @@ void FormAction::start_cmdline(std::string default_value)
 }
 
 bool FormAction::process_op(Operation op,
-	bool automatic,
+	BindingType bindingType,
 	std::vector<std::string>* args)
 {
 	switch (op) {
@@ -110,7 +110,7 @@ bool FormAction::process_op(Operation op,
 		start_cmdline();
 		break;
 	case OP_INT_SET:
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args && args->size() == 2) {
 				const std::string key = args->at(0);
 				const std::string value = args->at(1);
@@ -127,8 +127,7 @@ bool FormAction::process_op(Operation op,
 			return false;
 		} else {
 			LOG(Level::WARN,
-				"FormAction::process_op: got OP_INT_SET, but "
-				"not automatic");
+				"FormAction::process_op: got OP_INT_SET, but not from a macro");
 		}
 		break;
 	case OP_VIEWDIALOGS:
@@ -141,7 +140,7 @@ bool FormAction::process_op(Operation op,
 		v->goto_prev_dialog();
 		break;
 	default:
-		return this->process_operation(op, automatic, args);
+		return this->process_operation(op, bindingType, args);
 	}
 	return true;
 }

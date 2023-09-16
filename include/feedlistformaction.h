@@ -64,7 +64,7 @@ private:
 
 	int get_pos(unsigned int realidx);
 	bool process_operation(Operation op,
-		bool automatic = false,
+		BindingType bindingType = BindingType::BindKey,
 		std::vector<std::string>* args = nullptr) override;
 
 	bool open_position_in_browser(unsigned int pos, bool interactive) const;

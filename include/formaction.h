@@ -31,6 +31,11 @@ enum class CommandType {
 	INVALID, 	/// differs from UNKNOWN in that no input was parsed
 };
 
+enum class BindingType {
+	BindKey,
+	Macro,
+};
+
 struct Command {
 	CommandType type;
 	std::vector<std::string> args;
@@ -61,7 +66,7 @@ public:
 	virtual void handle_cmdline(const std::string& cmd);
 
 	bool process_op(Operation op,
-		bool automatic = false,
+		BindingType bindingType = BindingType::BindKey,
 		std::vector<std::string>* args = nullptr);
 
 	virtual void finished_qna(Operation op);
@@ -103,7 +108,7 @@ public:
 
 protected:
 	virtual bool process_operation(Operation op,
-		bool automatic = false,
+		BindingType bindingType = BindingType::BindKey,
 		std::vector<std::string>* args = nullptr) = 0;
 	virtual void set_keymap_hints();
 

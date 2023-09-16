@@ -50,7 +50,7 @@ ItemListFormAction::ItemListFormAction(View* vv,
 ItemListFormAction::~ItemListFormAction() {}
 
 bool ItemListFormAction::process_operation(Operation op,
-	bool automatic,
+	BindingType bindingType,
 	std::vector<std::string>* args)
 {
 	bool quit = false;
@@ -318,7 +318,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: bookmarking item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				if (automatic) {
+				if (bindingType == BindingType::Macro) {
 					qna_responses.clear();
 					qna_responses.push_back(
 						visible_items[itempos]
@@ -346,7 +346,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_EDITFLAGS: {
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				if (automatic) {
+				if (bindingType == BindingType::Macro) {
 					if (args->size() > 0) {
 						qna_responses.clear();
 						qna_responses.push_back(
@@ -374,7 +374,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
 			std::string filename;
-			if (automatic) {
+			if (bindingType == BindingType::Macro) {
 				if (args->size() > 0) {
 					filename = (*args)[0];
 				}
@@ -570,7 +570,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
 			std::vector<QnaPair> qna;
-			if (automatic) {
+			if (bindingType == BindingType::Macro) {
 				if (args->size() > 0) {
 					qna_responses.clear();
 					qna_responses.push_back((*args)[0]);
@@ -588,7 +588,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
@@ -602,7 +602,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_GOTO_TITLE:
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() >= 1) {
 				qna_responses = {args[0]};
 				finished_qna(OP_INT_GOTO_TITLE);
@@ -639,7 +639,7 @@ bool ItemListFormAction::process_operation(Operation op,
 
 		break;
 	case OP_SETFILTER:
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
@@ -762,7 +762,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
-		ListFormAction::process_operation(op, automatic, args);
+		ListFormAction::process_operation(op, bindingType, args);
 		break;
 	}
 	if (hardquit) {

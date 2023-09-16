@@ -62,7 +62,7 @@ private:
 	void register_format_styles();
 
 	bool process_operation(Operation op,
-		bool automatic = false,
+		BindingType bindingType = BindingType::BindKey,
 		std::vector<std::string>* args = nullptr) override;
 
 	bool open_link_in_browser(const std::string& link, const std::string& type,

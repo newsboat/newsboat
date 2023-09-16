@@ -17,7 +17,7 @@ ListFormAction::ListFormAction(View* v,
 }
 
 bool ListFormAction::process_operation(Operation op,
-	bool,
+	BindingType /*bindingType*/,
 	std::vector<std::string>*)
 {
 	switch (op) {

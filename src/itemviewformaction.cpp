@@ -156,7 +156,7 @@ void ItemViewFormAction::prepare()
 }
 
 bool ItemViewFormAction::process_operation(Operation op,
-	bool automatic,
+	BindingType bindingType,
 	std::vector<std::string>* args)
 {
 	bool hardquit = false;
@@ -217,7 +217,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() > 0) {
 				filename = (*args)[0];
 			}
@@ -255,7 +255,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_BOOKMARK:
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			qna_responses.clear();
 			qna_responses.push_back(item->link());
 			qna_responses.push_back(utils::utf8_to_locale(item->title()));
@@ -271,7 +271,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
@@ -286,7 +286,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	break;
 	case OP_PIPE_TO: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
@@ -300,7 +300,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_EDITFLAGS:
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			qna_responses.clear();
 			if (args->size() > 0) {
 				qna_responses.push_back((*args)[0]);
@@ -453,7 +453,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	break;
 	case OP_GOTO_URL: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		if (bindingType == BindingType::Macro) {
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
