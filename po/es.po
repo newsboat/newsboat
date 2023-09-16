@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2023-06-29 20:35+0200\n"
+"PO-Revision-Date: 2023-09-16 10:50+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -1185,14 +1185,12 @@ msgid "type: "
 msgstr "tipo: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
-msgstr "imagen"
+msgstr "Imagen"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "Enlace: "
+msgstr "Enlace"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
