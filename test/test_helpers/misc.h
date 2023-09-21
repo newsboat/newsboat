@@ -14,7 +14,7 @@ namespace test_helpers {
  * appropriate "pager" config value ) and checks its content according to the
  * expected values passed as parameters.
  */
-void assert_article_file_content(const std::string& path,
+void assert_article_file_content(const newsboat::Filepath& path,
 	const std::string& title,
 	const std::string& author,
 	const std::string& date,
@@ -23,13 +23,13 @@ void assert_article_file_content(const std::string& path,
 
 /* \brief Copy a file
  */
-void copy_file(const std::string& source, const std::string& destination);
+void copy_file(const newsboat::Filepath& source, const newsboat::Filepath& destination);
 
 /* \brief Returns the contents of the file at `filepath` (each line represented
  * by a separate string, without the newline character), or an empty vector if
  * the file couldn't be opened.
  */
-std::vector<std::string> file_contents(const std::string& filepath);
+std::vector<std::string> file_contents(const newsboat::Filepath& filepath);
 
 /* \brief Returns `true` if `input` starts with `prefix`.
  */
@@ -41,7 +41,7 @@ bool ends_with(const std::string& suffix, const std::string& input);
 
 /* \brief Returns `true` if the file at `filepath` exists.
  */
-bool file_exists(const std::string& filepath);
+bool file_exists(const newsboat::Filepath& filepath);
 
 /* \brief Returns 0 on success, or -1 if an error occured.
  */
