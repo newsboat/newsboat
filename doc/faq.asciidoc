@@ -104,13 +104,18 @@ important bit.
 +
     browser "~/bin/newsboat-browser.sh"
 
-== Can't start browser (I'm using Newsboat's Snap package)
+== With Snap, I can't start browser/bookmarking script/exec:/filter:/run program from macro
 
-Newsboat's Snap uses strict confinement, so the only allowed browser is
-`xdg-open`. Add the following to your Newsboat's config so that it can open
-your default browser:
+Newsboat's Snap uses strict confinement, so the only program that Newsboat can
+invoke is `xdg-open`. This is a tradeoff we make to gain better security.
+
+If all you need is make Newsboat open your default browser, add the following
+to the config file:
 
     browser "xdg-open %u"
+
+If you need more than that, please install a native package for Newsboat, or
+compile it from source.
 
 == How can I fetch all items of the feed, not just the 10/15/100 latest ones?
 
