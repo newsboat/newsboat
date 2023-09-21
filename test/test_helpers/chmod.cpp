@@ -4,15 +4,15 @@
 #include <iostream>
 #include <stdexcept>
 
-test_helpers::Chmod::Chmod(const std::string& path, mode_t newMode)
-	: m_path(path)
+test_helpers::Chmod::Chmod(const newsboat::Filepath& path, mode_t newMode)
 {
+	m_path = path.clone();
 	const auto throw_error = [this](std::string msg) {
 		const auto saved_errno = errno;
 		const auto message = std::string("test_helpers::Chmod: ")
 			+ msg
 			+ " `"
-			+ this->m_path
+			+ this->m_path.display()
 			+ "': ("
 			+ std::to_string(saved_errno)
 			+ ") "
@@ -21,20 +21,20 @@ test_helpers::Chmod::Chmod(const std::string& path, mode_t newMode)
 	};
 
 	struct stat sb;
-	const int result = ::stat(m_path.c_str(), &sb);
+	const int result = ::stat(m_path.to_locale_string().c_str(), &sb);
 	if (result != 0) {
 		throw_error("couldn't obtain current mode for");
 	}
 	m_originalMode = sb.st_mode;
 
-	if (0 != ::chmod(m_path.c_str(), newMode)) {
+	if (0 != ::chmod(m_path.to_locale_string().c_str(), newMode)) {
 		throw_error("couldn't change the mode for");
 	}
 }
 
 test_helpers::Chmod::~Chmod()
 {
-	if (0 != ::chmod(m_path.c_str(), m_originalMode)) {
+	if (0 != ::chmod(m_path.to_locale_string().c_str(), m_originalMode)) {
 		const auto saved_errno = errno;
 		std::cerr
 				<< "test_helpers::Chmod: couldn't change back the mode for `"
