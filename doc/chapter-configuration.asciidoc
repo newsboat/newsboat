@@ -32,8 +32,8 @@ bind-key         ^R    reload-all
 
 === Splitting long lines into multiple ones
 
-Long lines in configs (e.g. macros) can be split into multiple ones using
-backslashes. These must be the last character on the line and will immediately
+Long lines in configurations (e.g. macros) can be split into multiple ones using
+backslashes. A backslash must be the last character on the line and will immediately
 concatenate it with the following line. It's important that _nothing_ follows
 the `{backslash}` on the same line, otherwise the `{backslash}` character is
 treated "as is". For example:
@@ -45,7 +45,7 @@ quit;         \
 quit -- "Opens, reloads then makes sure to quit newsboat"
 ----
 
-Please note that backslash only makes Newsboat ignore the following newline. It
+Please note that a backslash only makes Newsboat ignore the following newline. It
 doesn't do _anything_ else at all. For example, this nicely formatted option:
 
 ----
