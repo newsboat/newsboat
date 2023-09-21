@@ -5,7 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 
-void test_helpers::assert_article_file_content(const std::string& path,
+void test_helpers::assert_article_file_content(const newsboat::Filepath& path,
 	const std::string& title,
 	const std::string& author,
 	const std::string& date,
@@ -41,8 +41,8 @@ void test_helpers::assert_article_file_content(const std::string& path,
 	REQUIRE(line == "");
 };
 
-void test_helpers::copy_file(const std::string& source,
-	const std::string& destination)
+void test_helpers::copy_file(const newsboat::Filepath& source,
+	const newsboat::Filepath& destination)
 {
 	std::ifstream  src(source, std::ios::binary);
 	std::ofstream  dst(destination, std::ios::binary);
@@ -53,7 +53,7 @@ void test_helpers::copy_file(const std::string& source,
 	dst << src.rdbuf();
 }
 
-std::vector<std::string> test_helpers::file_contents(const std::string& filepath)
+std::vector<std::string> test_helpers::file_contents(const newsboat::Filepath& filepath)
 {
 	std::vector<std::string> lines;
 
@@ -83,9 +83,9 @@ bool test_helpers::ends_with(const std::string& suffix,
 	}
 }
 
-bool test_helpers::file_exists(const std::string& filepath)
+bool test_helpers::file_exists(const newsboat::Filepath& filepath)
 {
-	return access(filepath.c_str(), F_OK) == 0;
+	return access(std::string(filepath).c_str(), F_OK) == 0;
 }
 
 TEST_CASE("ends_with", "[test_helpers]")
