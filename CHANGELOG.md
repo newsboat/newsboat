@@ -1,23 +1,38 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2023-09-24
-
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK.
+## 2.33 - 2023-09-24
 
 ## Added
 
+- Support for `0`..`9` keys in dialog overview. If you never used dialog
+    overview, it's invoked by `V` key by default and is very useful if you also
+    employ `^V`/`^G`/`^X` to keep multiple dialogs open within Newsboat (Dennis
+    van der Schagt)
+- Support importing OPML 2.0 with `--import-from-opml` (#2448) (bogdasar1985)
+
 ## Changed
 
+- Image enclosures are now displayed at the start of the article. This improves
+    support for Mastodon feeds (#2305, #2495) (Dennis van der Schagt)
+- In feeds that lack title and whose URLs end entirely in digits, use the
+    description as a title instead. This improves support for Mastodon feeds and
+    hopefully doesn't break others (#2530) (Martin Vilcans)
+- Taught contrib/image-preview/nbrun to take Newsboat's CLI arguments (venomega)
+- Updated translations: Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian and Ukrainian
+    (Alexander Batischev), Spanish (Roboron3042), Swedish (Dennis Öberg),
+    Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.68.2
-
-## Deprecated
-
-## Removed
 
 ## Fixed
 
-## Security
+- Hanging if scripts used by `filter:`, `bookmark-cmd`, or `html-renderer`
+    process their input in a streaming fashion rather than reading it entirely
+    before outputting anything (Alexander Batischev)
+- Slowness in opening and navigating feeds that contain many items (#229)
+    (Dennis van der Schagt)
+- `--export-to-opml` producing invalid OPML documents (missing `text` attribute)
+    (#2518) (bogdasar1985)
 
 
 
