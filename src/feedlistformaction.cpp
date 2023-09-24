@@ -466,15 +466,18 @@ REDO:
 		}
 		break;
 	case OP_GOTO_TITLE:
-		if (bindingType == BindingType::Macro) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() >= 1) {
 				qna_responses = {args[0]};
 				finished_qna(OP_INT_GOTO_TITLE);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Title: "), ""));
 			this->start_qna(qna, OP_INT_GOTO_TITLE);
+			break;
 		}
 		break;
 	case OP_CLEARFILTER:

@@ -318,7 +318,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: bookmarking item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				if (bindingType == BindingType::Macro) {
+				switch (bindingType) {
+				case BindingType::Macro:
 					qna_responses.clear();
 					qna_responses.push_back(
 						visible_items[itempos]
@@ -330,11 +331,13 @@ bool ItemListFormAction::process_operation(Operation op,
 						: "");
 					qna_responses.push_back(feed->title());
 					this->finished_qna(OP_INT_BM_END);
-				} else {
+					break;
+				case BindingType::BindKey:
 					this->start_bookmark_qna(
 						visible_items[itempos].first->title(),
 						visible_items[itempos].first->link(),
 						feed->title());
+					break;
 				}
 			}
 		} else {
@@ -346,7 +349,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_EDITFLAGS: {
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				if (bindingType == BindingType::Macro) {
+				switch (bindingType) {
+				case BindingType::Macro:
 					if (args->size() > 0) {
 						qna_responses.clear();
 						qna_responses.push_back(
@@ -354,13 +358,15 @@ bool ItemListFormAction::process_operation(Operation op,
 						finished_qna(
 							OP_INT_EDITFLAGS_END);
 					}
-				} else {
+					break;
+				case BindingType::BindKey:
 					std::vector<QnaPair> qna;
 					qna.push_back(QnaPair(_("Flags: "),
 							visible_items[itempos]
 							.first->flags()));
 					this->start_qna(
 						qna, OP_INT_EDITFLAGS_END);
+					break;
 				}
 			}
 		} else {
@@ -374,14 +380,17 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
 			std::string filename;
-			if (bindingType == BindingType::Macro) {
+			switch (bindingType) {
+			case BindingType::Macro:
 				if (args->size() > 0) {
 					filename = (*args)[0];
 				}
-			} else {
+				break;
+			case BindingType::BindKey:
 				const auto title = utils::utf8_to_locale(item->title());
 				const auto suggestion = v->get_filename_suggestion(title);
 				filename = v->run_filebrowser(suggestion);
+				break;
 			}
 			save_article(filename, item);
 		} else {
@@ -570,17 +579,20 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_PIPE_TO:
 		if (visible_items.size() != 0) {
 			std::vector<QnaPair> qna;
-			if (bindingType == BindingType::Macro) {
+			switch (bindingType) {
+			case BindingType::Macro:
 				if (args->size() > 0) {
 					qna_responses.clear();
 					qna_responses.push_back((*args)[0]);
 					finished_qna(OP_PIPE_TO);
 				}
-			} else {
+				break;
+			case BindingType::BindKey:
 				qna.push_back(QnaPair(
 						_("Pipe article to command: "), ""));
 				this->start_qna(
 					qna, OP_PIPE_TO, &cmdlinehistory);
+				break;
 			}
 		} else {
 			v->get_statusline().show_error(_("No item selected!"));
@@ -588,29 +600,35 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		if (bindingType == BindingType::Macro) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
 				finished_qna(OP_INT_START_SEARCH);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			qna.push_back(QnaPair(_("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
+			break;
 		}
 	}
 	break;
 	case OP_GOTO_TITLE:
-		if (bindingType == BindingType::Macro) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() >= 1) {
 				qna_responses = {args[0]};
 				finished_qna(OP_INT_GOTO_TITLE);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Title: "), ""));
 			this->start_qna(qna, OP_INT_GOTO_TITLE);
+			break;
 		}
 		break;
 	case OP_EDIT_URLS:
@@ -639,17 +657,20 @@ bool ItemListFormAction::process_operation(Operation op,
 
 		break;
 	case OP_SETFILTER:
-		if (bindingType == BindingType::Macro) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
 				this->finished_qna(OP_INT_END_SETFILTER);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Filter: "), ""));
 			this->start_qna(
 				qna, OP_INT_END_SETFILTER, &filterhistory);
+			break;
 		}
 		break;
 	case OP_CLEARFILTER:

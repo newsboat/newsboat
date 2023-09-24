@@ -110,7 +110,8 @@ bool FormAction::process_op(Operation op,
 		start_cmdline();
 		break;
 	case OP_INT_SET:
-		if (bindingType == BindingType::Macro) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args && args->size() == 2) {
 				const std::string key = args->at(0);
 				const std::string value = args->at(1);
@@ -125,9 +126,10 @@ bool FormAction::process_op(Operation op,
 			}
 			v->get_statusline().show_error(_("usage: set <config-option> <value>"));
 			return false;
-		} else {
+		case BindingType::BindKey:
 			LOG(Level::WARN,
 				"FormAction::process_op: got OP_INT_SET, but not from a macro");
+			break;
 		}
 		break;
 	case OP_VIEWDIALOGS:
