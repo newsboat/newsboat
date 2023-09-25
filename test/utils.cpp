@@ -24,12 +24,10 @@
 
 using namespace newsboat;
 
-inline namespace {
 int mkdir(const Filepath& dirpath, mode_t mode)
 {
 	const auto dirpath_str = dirpath.to_locale_string();
 	return ::mkdir(dirpath_str.c_str(), mode);
-}
 }
 
 TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")

@@ -13,12 +13,10 @@
 
 using namespace newsboat;
 
-inline namespace {
 bool file_available_for_reading(const Filepath& filepath)
 {
 	const auto filepath_str = filepath.to_locale_string();
 	return (0 == ::access(filepath_str.c_str(), R_OK));
-}
 }
 
 TEST_CASE("write_item correctly parses path", "[Controller]")

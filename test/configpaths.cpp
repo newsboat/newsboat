@@ -13,19 +13,8 @@
 
 using namespace newsboat;
 
-inline namespace {
-int mkdir(const Filepath& dirpath, mode_t mode)
-{
-	const auto dirpath_str = dirpath.to_locale_string();
-	return ::mkdir(dirpath_str.c_str(), mode);
-}
-
-bool file_available_for_reading(const Filepath& filepath)
-{
-	const auto filepath_str = filepath.to_locale_string();
-	return (0 == ::access(filepath_str.c_str(), R_OK));
-}
-}
+int mkdir(const Filepath& dirpath, mode_t mode);
+bool file_available_for_reading(const Filepath& filepath);
 
 TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 	"exist",
