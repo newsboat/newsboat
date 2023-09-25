@@ -150,7 +150,7 @@ pub fn get_basename(input: &str) -> String {
 
 pub fn get_default_browser() -> PathBuf {
     std::env::var_os("BROWSER")
-        .map(|os_string| PathBuf::from(os_string))
+        .map(PathBuf::from)
         .unwrap_or_else(|| Path::new("lynx").to_path_buf())
 }
 
