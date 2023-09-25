@@ -85,7 +85,7 @@ bool test_helpers::ends_with(const std::string& suffix,
 
 bool test_helpers::file_exists(const newsboat::Filepath& filepath)
 {
-	return access(std::string(filepath).c_str(), F_OK) == 0;
+	return access(filepath.to_locale_string().c_str(), F_OK) == 0;
 }
 
 TEST_CASE("ends_with", "[test_helpers]")
