@@ -126,7 +126,7 @@ task:
                 cxx_package: g++-5
                 cc: gcc-5
                 cxx: g++-5
-                rust_version: 1.68.2
+                rust_version: 1.70.0
         - name: MSRV, GCC 13 (Ubuntu 23.04)
           container:
             greedy: true
@@ -135,7 +135,7 @@ task:
                 cxx_package: g++-13
                 cc: gcc-13
                 cxx: g++-13
-                rust_version: 1.68.2
+                rust_version: 1.70.0
 
         - name: GCC 13, more warnings and checks (Ubuntu 23.04)
           container:
