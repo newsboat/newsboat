@@ -22,5 +22,5 @@
 
 FROM rust:1.70.0-alpine
 WORKDIR /workspace
-RUN apk add --no-cache astyle==3.1-r3 git make
+RUN apk add --no-cache astyle==3.1-r4 git make
 RUN rustup component add rustfmt
