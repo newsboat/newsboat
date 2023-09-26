@@ -32,12 +32,12 @@ bind-key         ^R    reload-all
 
 === Splitting long lines into multiple ones
 
-Settings such as <<_macro_support,macros>> and <<ignore-article,`ignore-article`>> can be quite lengthy.
-A long line can be broken into multiple ones
-using backslashes. A backslash must be the last character on the line and will
-immediately concatenate it with the following line. It's important that
-_nothing_ follows the `{backslash}` on the same line, otherwise the
-`{backslash}` character is treated "as is". For example:
+Settings such as <<_macro_support,macros>> and
+<<ignore-article,`ignore-article`>> can be quite lengthy. A long line can be
+broken into multiple ones using backslashes. A backslash must be the last
+character on the line and will immediately concatenate it with the following
+line. It's important that _nothing_ follows the `{backslash}` on the same line,
+otherwise the `{backslash}` character is treated "as is". For example:
 
 ----
 macro p open; \
