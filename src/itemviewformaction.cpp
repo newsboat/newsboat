@@ -156,7 +156,7 @@ void ItemViewFormAction::prepare()
 }
 
 bool ItemViewFormAction::process_operation(Operation op,
-	bool automatic,
+	BindingType bindingType,
 	std::vector<std::string>* args)
 {
 	bool hardquit = false;
@@ -217,13 +217,16 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		std::string filename;
-		if (automatic) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() > 0) {
 				filename = (*args)[0];
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			filename = v->run_filebrowser( utils::utf8_to_locale(v->get_filename_suggestion(
 							item->title())));
+			break;
 		}
 		if (filename == "") {
 			v->get_statusline().show_error(_("Aborted saving."));
@@ -255,14 +258,16 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_BOOKMARK:
-		if (automatic) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			qna_responses.clear();
 			qna_responses.push_back(item->link());
 			qna_responses.push_back(utils::utf8_to_locale(item->title()));
 			qna_responses.push_back(
 				args->size() > 0 ? (*args)[0] : "");
 			qna_responses.push_back(feed->title());
-		} else {
+			break;
+		case BindingType::BindKey:
 			this->start_bookmark_qna(
 				utils::utf8_to_locale(item->title()),
 				item->link(),
@@ -271,45 +276,54 @@ bool ItemViewFormAction::process_operation(Operation op,
 		break;
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
 				finished_qna(OP_INT_START_SEARCH);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			qna.push_back(QnaPair(_("Search for: "), ""));
 			this->start_qna(
 				qna, OP_INT_START_SEARCH, &searchhistory);
+			break;
 		}
 	}
 	break;
 	case OP_PIPE_TO: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
 				finished_qna(OP_PIPE_TO);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			qna.push_back(
 				QnaPair(_("Pipe article to command: "), ""));
 			this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
+			break;
 		}
 	}
 	break;
 	case OP_EDITFLAGS:
-		if (automatic) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			qna_responses.clear();
 			if (args->size() > 0) {
 				qna_responses.push_back((*args)[0]);
 				this->finished_qna(OP_INT_EDITFLAGS_END);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Flags: "), item->flags()));
 			this->start_qna(qna, OP_INT_EDITFLAGS_END);
+			break;
 		}
 		break;
 	case OP_SHOWURLS: {
@@ -397,7 +411,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		const auto message_lifetime = v->get_statusline().show_message_until_finished(
 				_("Toggling read flag for article..."));
 		try {
-			if (automatic && args->size() > 0) {
+			if (args->size() > 0) {
 				if ((*args)[0] == "read") {
 					item->set_unread(false);
 					v->get_ctrl()->mark_article_read(item->guid(), true);
@@ -453,15 +467,18 @@ bool ItemViewFormAction::process_operation(Operation op,
 	break;
 	case OP_GOTO_URL: {
 		std::vector<QnaPair> qna;
-		if (automatic) {
+		switch (bindingType) {
+		case BindingType::Macro:
 			if (args->size() > 0) {
 				qna_responses.clear();
 				qna_responses.push_back((*args)[0]);
 				finished_qna(OP_INT_GOTO_URL);
 			}
-		} else {
+			break;
+		case BindingType::BindKey:
 			qna.push_back(QnaPair(_("Goto URL #"), ""));
 			this->start_qna(qna, OP_INT_GOTO_URL);
+			break;
 		}
 	}
 	break;

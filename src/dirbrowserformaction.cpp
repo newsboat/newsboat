@@ -42,7 +42,7 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 DirBrowserFormAction::~DirBrowserFormAction() {}
 
 bool DirBrowserFormAction::process_operation(Operation op,
-	bool /* automatic */,
+	BindingType /*bindingType*/,
 	std::vector<std::string>* /* args */)
 {
 	switch (op) {

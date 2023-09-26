@@ -29,7 +29,7 @@ HelpFormAction::HelpFormAction(View* vv,
 HelpFormAction::~HelpFormAction() {}
 
 bool HelpFormAction::process_operation(Operation op,
-	bool /* automatic */,
+	BindingType /*bindingType*/,
 	std::vector<std::string>* /* args */)
 {
 	bool hardquit = false;

@@ -511,7 +511,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
 
 	bookmark_args.push_back(extra_arg);
-	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, true, &bookmark_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, BindingType::Macro, &bookmark_args));
 
 	std::ifstream browserFileStream(bookmarkFile.get_path());
 
@@ -550,7 +550,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
 		REQUIRE(item->flags() == flags);
 	}
 
@@ -560,7 +560,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
 		REQUIRE(item->flags() == ordered_flags);
 	}
 
@@ -569,7 +569,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags + "ddd");
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
 		REQUIRE(item->flags() == flags);
 	}
 
@@ -579,7 +579,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 			op_args.push_back(flags + "1236");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, true, &op_args));
+					OP_EDITFLAGS, BindingType::Macro, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
 		SECTION("Symbols") {
@@ -587,14 +587,14 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 				"%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, true, &op_args));
+					OP_EDITFLAGS, BindingType::Macro, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
 		SECTION("Accents") {
 			op_args.push_back(flags + "¨^");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, true, &op_args));
+					OP_EDITFLAGS, BindingType::Macro, &op_args));
 			REQUIRE(item->flags() == flags);
 		}
 	}
@@ -605,7 +605,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, true, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
 		REQUIRE(item->flags() == flags);
 	}
 }
@@ -653,7 +653,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, true, &op_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, BindingType::Macro, &op_args));
 
 	test_helpers::assert_article_file_content(saveFile.get_path(),
 		test_title,
@@ -843,7 +843,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, true, &op_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, BindingType::Macro, &op_args));
 
 	test_helpers::assert_article_file_content(articleFile.get_path(),
 		test_title,
