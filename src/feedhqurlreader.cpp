@@ -9,12 +9,12 @@
 namespace newsboat {
 
 FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
-	const std::string& url_file,
+	const newsboat::Filepath& url_file,
 	RemoteApi* a)
 	: cfg(c)
-	, file(url_file)
 	, api(a)
 {
+	file = url_file.clone();
 }
 
 FeedHqUrlReader::~FeedHqUrlReader() {}
