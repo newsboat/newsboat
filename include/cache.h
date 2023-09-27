@@ -7,6 +7,7 @@
 #include <unordered_set>
 
 #include "configcontainer.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -41,7 +42,7 @@ using schema_patches = std::map<SchemaVersion, std::vector<std::string>>;
 
 class Cache {
 public:
-	Cache(const std::string& cachefile, ConfigContainer* c);
+	Cache(const Filepath& cachefile, ConfigContainer* c);
 	~Cache();
 	void externalize_rssfeed(RssFeed& feed,
 		bool reset_unread);
