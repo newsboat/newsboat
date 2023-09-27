@@ -256,10 +256,10 @@ static int guid_callback(void* myguids, int argc, char** argv,
 	return 0;
 }
 
-Cache::Cache(const std::string& cachefile, ConfigContainer* c)
+Cache::Cache(const Filepath& cachefile, ConfigContainer* c)
 	: cfg(c)
 {
-	const int error = sqlite3_open(cachefile.c_str(), &db);
+	const int error = sqlite3_open(cachefile.to_locale_string().c_str(), &db);
 	if (error != SQLITE_OK) {
 		LOG(Level::ERROR,
 			"couldn't sqlite3_open(%s): error = %d",
