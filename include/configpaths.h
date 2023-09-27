@@ -40,10 +40,10 @@ public:
 	bool create_dirs() const;
 
 	/// Path to the URLs file.
-	std::string url_file() const;
+	newsboat::Filepath url_file() const;
 
 	/// Path to the cache file.
-	std::string cache_file() const;
+	newsboat::Filepath cache_file() const;
 
 	/// Sets path to the cache file.
 	// FIXME: this is actually a kludge that lets Controller change the path
@@ -52,24 +52,24 @@ public:
 	void set_cache_file(const std::string&);
 
 	/// Path to the config file.
-	std::string config_file() const;
+	newsboat::Filepath config_file() const;
 
 	/// Path to the lock file.
 	///
 	/// \note This changes when path to config file changes.
-	std::string lock_file() const;
+	newsboat::Filepath lock_file() const;
 
 	/// \brief Path to the queue file.
 	///
 	/// Queue file stores enqueued podcasts. It's written by Newsboat, and
 	/// read by Podboat.
-	std::string queue_file() const;
+	newsboat::Filepath queue_file() const;
 
 	/// Path to the file with previous search queries.
-	std::string search_file() const;
+	newsboat::Filepath search_file() const;
 
 	/// Path to the file with command-line history.
-	std::string cmdline_file() const;
+	newsboat::Filepath cmdline_file() const;
 private:
 	rust::Box<configpaths::bridged::ConfigPaths> rs_object;
 };
