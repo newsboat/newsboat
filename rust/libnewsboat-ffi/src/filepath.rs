@@ -1,4 +1,4 @@
-use cxx::{type_id, ExternType};
+use cxx::{ExternType, type_id};
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
