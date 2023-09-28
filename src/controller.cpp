@@ -105,7 +105,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	if (args.log_file().has_value()) {
-		logger::set_logfile(args.log_file().value());
+		logger::set_logfile(args.log_file().value().to_locale_string());
 	}
 
 	if (!args.log_file().has_value() && args.log_level().has_value()) {
