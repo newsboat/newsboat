@@ -102,7 +102,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	if (args.log_file().has_value()) {
-		logger::set_logfile(args.log_file().value());
+		logger::set_logfile(args.log_file().value().to_locale_string());
 	} else if (args.log_level().has_value()) {
 		const std::string date_time_string = utils::mt_strf_localtime("%Y-%m-%d_%H.%M.%S",
 				std::time(nullptr));
