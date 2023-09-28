@@ -51,12 +51,12 @@ bool CliArgsParser::do_cleanup() const
 	return newsboat::cliargsparser::bridged::do_cleanup(*rs_object);
 }
 
-std::string CliArgsParser::importfile() const
+newsboat::Filepath CliArgsParser::importfile() const
 {
 	return std::string(newsboat::cliargsparser::bridged::importfile(*rs_object));
 }
 
-nonstd::optional<std::string> CliArgsParser::readinfo_import_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::readinfo_import_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::readinfo_import_file(*rs_object, path)) {
@@ -65,7 +65,7 @@ nonstd::optional<std::string> CliArgsParser::readinfo_import_file() const
 	return nonstd::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::readinfo_export_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::readinfo_export_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::readinfo_export_file(*rs_object, path)) {
@@ -118,7 +118,7 @@ bool CliArgsParser::refresh_on_start() const
 	return newsboat::cliargsparser::bridged::refresh_on_start(*rs_object);
 }
 
-nonstd::optional<std::string> CliArgsParser::url_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::url_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::url_file(*rs_object, path)) {
@@ -127,7 +127,7 @@ nonstd::optional<std::string> CliArgsParser::url_file() const
 	return nonstd::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::lock_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::lock_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::lock_file(*rs_object, path)) {
@@ -136,7 +136,7 @@ nonstd::optional<std::string> CliArgsParser::lock_file() const
 	return nonstd::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::cache_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::cache_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::cache_file(*rs_object, path)) {
@@ -145,7 +145,7 @@ nonstd::optional<std::string> CliArgsParser::cache_file() const
 	return nonstd::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::config_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::config_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::config_file(*rs_object, path)) {
@@ -167,7 +167,7 @@ const
 	return cmds;
 }
 
-nonstd::optional<std::string> CliArgsParser::log_file() const
+nonstd::optional<newsboat::Filepath> CliArgsParser::log_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::log_file(*rs_object, path)) {

@@ -26,15 +26,15 @@ public:
 
 	bool do_cleanup() const;
 
-	std::string importfile() const;
+	newsboat::Filepath importfile() const;
 
 	/// If non-null, Newsboat should import read articles info from this
 	/// filepath.
-	nonstd::optional<std::string> readinfo_import_file() const;
+	nonstd::optional<newsboat::Filepath> readinfo_import_file() const;
 
 	/// If non-null, Newsboat should export read articles info to this
 	/// filepath.
-	nonstd::optional<std::string> readinfo_export_file() const;
+	nonstd::optional<newsboat::Filepath> readinfo_export_file() const;
 
 	std::string program_name() const;
 
@@ -64,20 +64,20 @@ public:
 
 	bool refresh_on_start() const;
 
-	nonstd::optional<std::string> url_file() const;
+	nonstd::optional<newsboat::Filepath> url_file() const;
 
-	nonstd::optional<std::string> lock_file() const;
+	nonstd::optional<newsboat::Filepath> lock_file() const;
 
-	nonstd::optional<std::string> cache_file() const;
+	nonstd::optional<newsboat::Filepath> cache_file() const;
 
-	nonstd::optional<std::string> config_file() const;
+	nonstd::optional<newsboat::Filepath> config_file() const;
 
 	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
 	/// \note The parser does not check if the passed commands are valid.
 	std::vector<std::string> cmds_to_execute() const;
 
-	nonstd::optional<std::string> log_file() const;
+	nonstd::optional<newsboat::Filepath> log_file() const;
 
 	nonstd::optional<Level> log_level() const;
 
