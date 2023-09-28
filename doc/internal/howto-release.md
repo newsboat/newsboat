@@ -164,6 +164,30 @@ branch off the latest release and backport the bugfixes onto it.
         git checkout -b feature/prepare-next-release
         git commit -am'Prepare for next release'
         git push origin -u feature/prepare-next-release
+3. If it's September, bump the expiry date on the GPG key:
+
+    * edit the key, upload it to keyservers and export it to a file:
+
+        $ gpg --edit-key 4ED6CD61932B9EBE
+        gpg> key 0
+        gpg> expire
+        Key is valid for? (0) 54w
+
+        gpg> key 1
+        gpg> expire
+        Key is valid for? (0) 54w
+
+        gpg> save
+    * upload it to the keyserver:
+        `gpg --keyserver pgp.mit.edu --send-keys 4ED6CD61932B9EBE`
+    * export it to a file:
+        `gpg --armour --export 4ED6CD61932B9EBE > newsboat.pgp`
+    * upload the file to newsboat.org staging area
+    * on newsboat.org, put the key into the www directory
+
+        sudo chown www-data:www-data newsboat.pgp
+        sudo chmod u=rw,go=r newsboat.pgp
+        sudo mv newsboat.pgp /var/www/newsboat.org/www/newsboat.pgp
 
 
 ## If you're making a patch release (x.y.Z)
