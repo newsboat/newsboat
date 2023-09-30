@@ -108,8 +108,8 @@ public:
 
 protected:
 	virtual bool process_operation(Operation op,
-		BindingType bindingType = BindingType::BindKey,
-		const std::vector<std::string>* args = nullptr) = 0;
+		const std::vector<std::string>& args,
+		BindingType bindingType = BindingType::BindKey) = 0;
 	virtual void set_keymap_hints();
 
 	/// The name of the "main" STFL widget, i.e. the one that should be focused

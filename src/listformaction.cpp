@@ -17,8 +17,8 @@ ListFormAction::ListFormAction(View* v,
 }
 
 bool ListFormAction::process_operation(Operation op,
-	BindingType /*bindingType*/,
-	const std::vector<std::string>*)
+	const std::vector<std::string>& /* args */,
+	BindingType /*bindingType*/)
 {
 	switch (op) {
 	case OP_CMD_START_1:

@@ -142,7 +142,7 @@ bool FormAction::process_op(Operation op,
 		v->goto_prev_dialog();
 		break;
 	default:
-		return this->process_operation(op, bindingType, &args);
+		return this->process_operation(op, args, bindingType);
 	}
 	return true;
 }

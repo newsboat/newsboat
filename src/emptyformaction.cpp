@@ -33,8 +33,8 @@ const std::vector<KeyMapHintEntry>& EmptyFormAction::get_keymap_hint() const
 }
 
 bool EmptyFormAction::process_operation(Operation /*op*/,
-	BindingType /*bindingType*/,
-	const std::vector<std::string>* /*args*/)
+	const std::vector<std::string>& /*args*/,
+	BindingType /*bindingType*/)
 {
 	return false;
 }

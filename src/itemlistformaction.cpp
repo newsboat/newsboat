@@ -50,8 +50,8 @@ ItemListFormAction::ItemListFormAction(View* vv,
 ItemListFormAction::~ItemListFormAction() {}
 
 bool ItemListFormAction::process_operation(Operation op,
-	BindingType bindingType,
-	const std::vector<std::string>* args)
+	const std::vector<std::string>& args,
+	BindingType bindingType)
 {
 	bool quit = false;
 	bool hardquit = false;
@@ -146,7 +146,8 @@ bool ItemListFormAction::process_operation(Operation op,
 		item->set_unread(false);
 		v->get_ctrl()->mark_article_read(item->guid(), true);
 		if (cfg->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
-			process_operation(OP_NEXTUNREAD);
+			std::vector<std::string> args;
+			process_operation(OP_NEXTUNREAD, args);
 		} else {
 			if (itempos < visible_items.size() - 1) {
 				list.set_position(itempos + 1);
@@ -219,8 +220,8 @@ bool ItemListFormAction::process_operation(Operation op,
 			try {
 				const auto message_lifetime = v->get_statusline().show_message_until_finished(
 						_("Toggling read flag for article..."));
-				if (args->size() > 0) {
-					if ((*args)[0] == "read") {
+				if (args.size() > 0) {
+					if (args.front() == "read") {
 						visible_items[itempos]
 						.first->set_unread(
 							false);
@@ -228,7 +229,7 @@ bool ItemListFormAction::process_operation(Operation op,
 							visible_items[itempos]
 							.first->guid(),
 							true);
-					} else if ((*args)[0] == "unread") {
+					} else if (args.front() == "unread") {
 						visible_items[itempos]
 						.first->set_unread(
 							true);
@@ -266,7 +267,8 @@ bool ItemListFormAction::process_operation(Operation op,
 					list.set_position(itempos + 1);
 				}
 			} else {
-				process_operation(OP_NEXTUNREAD);
+				std::vector<std::string> args;
+				process_operation(OP_NEXTUNREAD, args);
 			}
 			invalidate(itempos);
 		}
@@ -326,8 +328,8 @@ bool ItemListFormAction::process_operation(Operation op,
 						.first->link());
 					qna_responses.push_back(utils::utf8_to_locale(
 							visible_items[itempos].first->title()));
-					qna_responses.push_back(args->size() > 0
-						? (*args)[0]
+					qna_responses.push_back(args.size() > 0
+						? args.front()
 						: "");
 					qna_responses.push_back(feed->title());
 					this->finished_qna(OP_INT_BM_END);
@@ -351,10 +353,10 @@ bool ItemListFormAction::process_operation(Operation op,
 			if (itempos < visible_items.size()) {
 				switch (bindingType) {
 				case BindingType::Macro:
-					if (args->size() > 0) {
+					if (args.size() > 0) {
 						qna_responses.clear();
 						qna_responses.push_back(
-							(*args)[0]);
+							args.front());
 						finished_qna(
 							OP_INT_EDITFLAGS_END);
 					}
@@ -382,8 +384,8 @@ bool ItemListFormAction::process_operation(Operation op,
 			std::string filename;
 			switch (bindingType) {
 			case BindingType::Macro:
-				if (args->size() > 0) {
-					filename = (*args)[0];
+				if (args.size() > 0) {
+					filename = args.front();
 				}
 				break;
 			case BindingType::BindKey:
@@ -516,7 +518,8 @@ bool ItemListFormAction::process_operation(Operation op,
 					}
 				}
 				if (cfg->get_configvalue_as_bool("markfeedread-jumps-to-next-unread")) {
-					process_operation(OP_NEXTUNREAD);
+					std::vector<std::string> args;
+					process_operation(OP_NEXTUNREAD, args);
 				} else { // reposition to first/last item
 					std::string sortorder =
 						cfg->get_configvalue("article-sort-order");
@@ -581,9 +584,9 @@ bool ItemListFormAction::process_operation(Operation op,
 			std::vector<QnaPair> qna;
 			switch (bindingType) {
 			case BindingType::Macro:
-				if (args->size() > 0) {
+				if (args.size() > 0) {
 					qna_responses.clear();
-					qna_responses.push_back((*args)[0]);
+					qna_responses.push_back(args.front());
 					finished_qna(OP_PIPE_TO);
 				}
 				break;
@@ -602,9 +605,9 @@ bool ItemListFormAction::process_operation(Operation op,
 		std::vector<QnaPair> qna;
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() > 0) {
+			if (args.size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(args.front());
 				finished_qna(OP_INT_START_SEARCH);
 			}
 			break;
@@ -619,7 +622,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_GOTO_TITLE:
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() >= 1) {
+			if (args.size() >= 1) {
 				qna_responses = {args[0]};
 				finished_qna(OP_INT_GOTO_TITLE);
 			}
@@ -637,8 +640,8 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SELECTFILTER:
 		if (filter_container.size() > 0) {
 			std::string newfilter;
-			if (args->size() > 0) {
-				const std::string filter_name = (*args)[0];
+			if (args.size() > 0) {
+				const std::string filter_name = args.front();
 				const auto filter = filter_container.get_filter(filter_name);
 
 				if (filter.has_value()) {
@@ -659,9 +662,9 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SETFILTER:
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() > 0) {
+			if (args.size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(args.front());
 				this->finished_qna(OP_INT_END_SETFILTER);
 			}
 			break;
@@ -783,7 +786,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
-		ListFormAction::process_operation(op, bindingType, args);
+		ListFormAction::process_operation(op, args, bindingType);
 		break;
 	}
 	if (hardquit) {

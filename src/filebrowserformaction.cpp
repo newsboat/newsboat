@@ -44,8 +44,8 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 FileBrowserFormAction::~FileBrowserFormAction() {}
 
 bool FileBrowserFormAction::process_operation(Operation op,
-	BindingType /*bindingType*/,
-	const std::vector<std::string>* /* args */)
+	const std::vector<std::string>& /* args */,
+	BindingType /*bindingType*/)
 {
 	switch (op) {
 	case OP_OPEN: {
