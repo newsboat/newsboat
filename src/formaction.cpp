@@ -101,6 +101,8 @@ bool FormAction::process_op(Operation op,
 	BindingType bindingType,
 	std::vector<std::string>* args)
 {
+	std::vector<std::string> no_args;
+
 	switch (op) {
 	case OP_REDRAW:
 		LOG(Level::DEBUG, "FormAction::process_op: redrawing screen");
@@ -142,7 +144,7 @@ bool FormAction::process_op(Operation op,
 		v->goto_prev_dialog();
 		break;
 	default:
-		return this->process_operation(op, bindingType, args);
+		return this->process_operation(op, bindingType, args ? args : &no_args);
 	}
 	return true;
 }
