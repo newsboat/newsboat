@@ -31,7 +31,7 @@ protected:
 private:
 	bool process_operation(Operation op,
 		BindingType bindingType = BindingType::BindKey,
-		std::vector<std::string>* args = nullptr) override;
+		const std::vector<std::string>* args = nullptr) override;
 	std::string make_colorstring(const std::vector<std::string>& colors);
 	bool quit;
 	bool apply_search;

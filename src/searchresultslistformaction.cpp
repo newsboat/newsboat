@@ -35,7 +35,7 @@ void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>&
 bool SearchResultsListFormAction::process_operation(
 	Operation op,
 	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>* args)
 {
 	const unsigned int itempos = list.get_position();
 

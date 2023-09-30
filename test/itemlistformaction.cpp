@@ -60,7 +60,8 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN));
+	const std::vector<std::string> args;
+	REQUIRE_NOTHROW(itemlist.process_op(OP_OPEN, args));
 
 	test_helpers::assert_article_file_content(pagerfile.get_path(),
 		test_title,
@@ -91,13 +92,15 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	itemlist.set_feed(feed);
 
 	SECTION("No items to purge") {
-		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED, args));
 		REQUIRE(feed->total_item_count() == 1);
 	}
 
 	SECTION("Deleted items are purged") {
 		item->set_deleted(true);
-		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist.process_op(OP_PURGE_DELETED, args));
 		REQUIRE(feed->total_item_count() == 0);
 	}
 }
@@ -132,7 +135,8 @@ TEST_CASE(
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
-	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
+	const std::vector<std::string> args;
+	itemlist.process_op(OP_OPENBROWSER_AND_MARK, args);
 	std::ifstream browserFileStream(browserfile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
@@ -169,7 +173,8 @@ TEST_CASE(
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
-	itemlist.process_op(OP_OPENBROWSER_AND_MARK);
+	const std::vector<std::string> args;
+	itemlist.process_op(OP_OPENBROWSER_AND_MARK, args);
 
 	REQUIRE(feed->unread_item_count() == 1);
 }
@@ -201,7 +206,8 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
-	itemlist.process_op(OP_OPENINBROWSER);
+	const std::vector<std::string> args;
+	itemlist.process_op(OP_OPENINBROWSER, args);
 	std::ifstream browserFileStream(browserfile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
@@ -235,7 +241,8 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
-	itemlist.process_op(newsboat::OP_OPENINBROWSER_NONINTERACTIVE);
+	const std::vector<std::string> args;
+	itemlist.process_op(newsboat::OP_OPENINBROWSER_NONINTERACTIVE, args);
 	std::ifstream browserFileStream(browserfile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
@@ -284,7 +291,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		cfg.set_configvalue(
 			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
-		itemlist.process_op(OP_OPENALLUNREADINBROWSER);
+		const std::vector<std::string> args;
+		itemlist.process_op(OP_OPENALLUNREADINBROWSER, args);
 
 		std::ifstream browserFileStream(browserfile.get_path());
 		openedItemsCount = 0;
@@ -307,7 +315,8 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		cfg.set_configvalue(
 			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
-		itemlist.process_op(OP_OPENALLUNREADINBROWSER);
+		const std::vector<std::string> args;
+		itemlist.process_op(OP_OPENALLUNREADINBROWSER, args);
 
 		std::ifstream browserFileStream(browserfile.get_path());
 		if (browserFileStream.is_open()) {
@@ -368,7 +377,8 @@ TEST_CASE(
 		cfg.set_configvalue(
 			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
-		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK);
+		const std::vector<std::string> args;
+		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK, args);
 
 		std::ifstream browserFileStream(browserfile.get_path());
 		if (browserFileStream.is_open()) {
@@ -392,7 +402,8 @@ TEST_CASE(
 		cfg.set_configvalue(
 			"max-browser-tabs", std::to_string(maxItemsToOpen));
 
-		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK);
+		const std::vector<std::string> args;
+		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK, args);
 
 		std::ifstream browserFileStream(browserfile.get_path());
 		if (browserFileStream.is_open()) {
@@ -451,7 +462,8 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 		cfg.set_configvalue(
 			"external-url-viewer", "tee > " + urlFile.get_path());
 
-		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS, args));
 
 		test_helpers::assert_article_file_content(urlFile.get_path(),
 			test_title,
@@ -464,11 +476,13 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	SECTION("internal url viewer") {
 		feed->add_item(item);
 		itemlist.set_feed(feed);
-		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS, args));
 	}
 
 	SECTION("no feed in formaction") {
-		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS, args));
 	}
 }
 
@@ -511,7 +525,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
 
 	bookmark_args.push_back(extra_arg);
-	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, BindingType::Macro, &bookmark_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, bookmark_args, BindingType::Macro));
 
 	std::ifstream browserFileStream(bookmarkFile.get_path());
 
@@ -550,7 +564,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
 		REQUIRE(item->flags() == flags);
 	}
 
@@ -560,7 +574,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
 		REQUIRE(item->flags() == ordered_flags);
 	}
 
@@ -569,7 +583,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags + "ddd");
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
 		REQUIRE(item->flags() == flags);
 	}
 
@@ -579,7 +593,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 			op_args.push_back(flags + "1236");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, BindingType::Macro, &op_args));
+					OP_EDITFLAGS, op_args, BindingType::Macro));
 			REQUIRE(item->flags() == flags);
 		}
 		SECTION("Symbols") {
@@ -587,14 +601,14 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 				"%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, BindingType::Macro, &op_args));
+					OP_EDITFLAGS, op_args, BindingType::Macro));
 			REQUIRE(item->flags() == flags);
 		}
 		SECTION("Accents") {
 			op_args.push_back(flags + "¨^");
 
 			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, BindingType::Macro, &op_args));
+					OP_EDITFLAGS, op_args, BindingType::Macro));
 			REQUIRE(item->flags() == flags);
 		}
 	}
@@ -605,7 +619,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 		op_args.push_back(flags);
 
 		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, BindingType::Macro, &op_args));
+			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
 		REQUIRE(item->flags() == flags);
 	}
 }
@@ -653,7 +667,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, BindingType::Macro, &op_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, op_args, BindingType::Macro));
 
 	test_helpers::assert_article_file_content(saveFile.get_path(),
 		test_title,
@@ -684,7 +698,8 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 
 	std::shared_ptr<ItemListFormAction> itemlist = v.push_itemlist(feed);
 
-	REQUIRE_NOTHROW(itemlist->process_op(OP_HELP));
+	const std::vector<std::string> args;
+	REQUIRE_NOTHROW(itemlist->process_op(OP_HELP, args));
 }
 
 TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
@@ -708,7 +723,8 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	ItemListFormAction itemlist(&v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT));
+	const std::vector<std::string> args;
+	REQUIRE_NOTHROW(itemlist.process_op(OP_HARDQUIT, args));
 }
 
 TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
@@ -749,15 +765,16 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 
 	std::shared_ptr<ItemListFormAction> itemlist = v.push_itemlist(feed);
 
-	REQUIRE_NOTHROW(itemlist->process_op(OP_NEXT));
-	itemlist->process_op(OP_SHOWURLS);
+	const std::vector<std::string> args;
+	REQUIRE_NOTHROW(itemlist->process_op(OP_NEXT, args));
+	itemlist->process_op(OP_SHOWURLS, args);
 
 	std::ifstream fileStream(articleFile.get_path());
 	std::getline(fileStream, line);
 	REQUIRE(line == prefix_title + second_article_title);
 
-	REQUIRE_NOTHROW(itemlist->process_op(OP_PREV));
-	itemlist->process_op(OP_SHOWURLS);
+	REQUIRE_NOTHROW(itemlist->process_op(OP_PREV, args));
+	itemlist->process_op(OP_SHOWURLS, args);
 
 	fileStream.seekg(0);
 	std::getline(fileStream, line);
@@ -788,13 +805,15 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 
 	SECTION("True to False") {
 		v.get_cfg()->set_configvalue("show-read-articles", "yes");
-		REQUIRE_NOTHROW(itemlist->process_op(OP_TOGGLESHOWREAD));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist->process_op(OP_TOGGLESHOWREAD, args));
 		REQUIRE_FALSE(v.get_cfg()->get_configvalue_as_bool(
 				"show-read-articles"));
 	}
 	SECTION("False to True") {
 		v.get_cfg()->set_configvalue("show-read-articles", "no");
-		REQUIRE_NOTHROW(itemlist->process_op(OP_TOGGLESHOWREAD));
+		const std::vector<std::string> args;
+		REQUIRE_NOTHROW(itemlist->process_op(OP_TOGGLESHOWREAD, args));
 		REQUIRE(v.get_cfg()->get_configvalue_as_bool(
 				"show-read-articles"));
 	}
@@ -843,7 +862,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, BindingType::Macro, &op_args));
+	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, op_args, BindingType::Macro));
 
 	test_helpers::assert_article_file_content(articleFile.get_path(),
 		test_title,
@@ -912,7 +931,8 @@ TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
 		auto itemlist = v.push_itemlist(feed);
 		itemlist->prepare();
 
-		bool success = itemlist->process_op(OP_OPENINBROWSER);
+		const std::vector<std::string> args;
+		bool success = itemlist->process_op(OP_OPENINBROWSER, args);
 		Stfl::reset();
 		REQUIRE(success);
 

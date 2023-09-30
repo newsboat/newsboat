@@ -98,11 +98,9 @@ void FormAction::start_cmdline(std::string default_value)
 }
 
 bool FormAction::process_op(Operation op,
-	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>& args,
+	BindingType bindingType)
 {
-	std::vector<std::string> no_args;
-
 	switch (op) {
 	case OP_REDRAW:
 		LOG(Level::DEBUG, "FormAction::process_op: redrawing screen");
@@ -114,15 +112,15 @@ bool FormAction::process_op(Operation op,
 	case OP_INT_SET:
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args && args->size() == 2) {
-				const std::string key = args->at(0);
-				const std::string value = args->at(1);
+			if (args.size() == 2) {
+				const std::string key = args.at(0);
+				const std::string value = args.at(1);
 				cfg->set_configvalue(key, value);
 				set_redraw(true);
 				return true;
 			}
-			if (args && args->size() == 1) {
-				if (handle_single_argument_set(args->at(0))) {
+			if (args.size() == 1) {
+				if (handle_single_argument_set(args.at(0))) {
 					return true;
 				}
 			}
@@ -144,7 +142,7 @@ bool FormAction::process_op(Operation op,
 		v->goto_prev_dialog();
 		break;
 	default:
-		return this->process_operation(op, bindingType, args ? args : &no_args);
+		return this->process_operation(op, bindingType, &args);
 	}
 	return true;
 }
@@ -303,7 +301,8 @@ void FormAction::handle_exec(const std::vector<std::string>& args)
 	} else {
 		const auto op = v->get_keymap()->get_opcode(args[0]);
 		if (op != OP_NIL) {
-			process_op(op);
+			std::vector<std::string> args;
+			process_op(op, args);
 		} else {
 			v->get_statusline().show_error(_("Operation not found"));
 		}

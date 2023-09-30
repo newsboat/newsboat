@@ -142,7 +142,7 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
 		fa->draw_form();
-		if (!fa->process_op(command.op, BindingType::Macro, &command.args)) {
+		if (!fa->process_op(command.op, command.args, BindingType::Macro)) {
 			// Operation failed, abort
 			return false;
 		}
@@ -236,7 +236,8 @@ int View::run()
 
 			// now we handle the operation to the
 			// formaction.
-			fa->process_op(op);
+			const std::vector<std::string> args;
+			fa->process_op(op, args);
 		}
 	}
 
@@ -295,7 +296,8 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 			continue;
 		}
 
-		fa->process_op(op);
+		const std::vector<std::string> args;
+		fa->process_op(op, args);
 	}
 
 	if (value == "") {

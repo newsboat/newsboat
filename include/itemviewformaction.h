@@ -63,7 +63,7 @@ private:
 
 	bool process_operation(Operation op,
 		BindingType bindingType = BindingType::BindKey,
-		std::vector<std::string>* args = nullptr) override;
+		const std::vector<std::string>* args = nullptr) override;
 
 	bool open_link_in_browser(const std::string& link, const std::string& type,
 		const std::string& title, bool interactive) const;

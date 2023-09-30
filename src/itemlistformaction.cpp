@@ -51,7 +51,7 @@ ItemListFormAction::~ItemListFormAction() {}
 
 bool ItemListFormAction::process_operation(Operation op,
 	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>* args)
 {
 	bool quit = false;
 	bool hardquit = false;

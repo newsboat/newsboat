@@ -74,7 +74,7 @@ const std::vector<KeyMapHintEntry>& DialogsFormAction::get_keymap_hint() const
 
 bool DialogsFormAction::process_operation(Operation op,
 	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>* args)
 {
 	switch (op) {
 	case OP_OPEN: {
