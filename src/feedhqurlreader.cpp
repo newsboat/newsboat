@@ -12,9 +12,9 @@ FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
 	const newsboat::Filepath& url_file,
 	RemoteApi* a)
 	: cfg(c)
+	, file(url_file.clone())
 	, api(a)
 {
-	file = url_file.clone();
 }
 
 FeedHqUrlReader::~FeedHqUrlReader() {}
