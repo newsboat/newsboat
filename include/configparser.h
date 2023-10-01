@@ -5,6 +5,7 @@
 #include <map>
 
 #include "configactionhandler.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -37,7 +38,7 @@ public:
 	///
 	/// If the file contains any errors, throws `ConfigException` with
 	/// a message explaining the problem.
-	bool parse_file(const std::string& filename);
+	bool parse_file(const Filepath& filename);
 
 	void parse_line(const std::string& line, const std::string& location);
 	static std::string evaluate_backticks(std::string token);
@@ -47,7 +48,7 @@ private:
 	std::vector<std::vector<std::string>> parsed_content;
 	std::map<std::string, std::reference_wrapper<ConfigActionHandler>>
 		action_handlers;
-	std::vector<std::string> included_files;
+	std::vector<Filepath> included_files;
 };
 
 } // namespace newsboat
