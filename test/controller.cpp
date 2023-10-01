@@ -10,14 +10,9 @@
 #include "3rd-party/catch.hpp"
 #include "test_helpers/tempdir.h"
 #include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
 
 using namespace newsboat;
-
-bool file_available_for_reading(const Filepath& filepath)
-{
-	const auto filepath_str = filepath.to_locale_string();
-	return (0 == ::access(filepath_str.c_str(), R_OK));
-}
 
 TEST_CASE("write_item correctly parses path", "[Controller]")
 {
@@ -48,7 +43,7 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	c.write_item(item, "~/" + name);
 	c.write_item(item, name);
 
-	REQUIRE(file_available_for_reading(tmp.get_path().join(name)));
-	REQUIRE(file_available_for_reading(home_dir.join(name)));
-	REQUIRE(file_available_for_reading(save_path.join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(tmp.get_path().join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(home_dir.join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(save_path.join(name)));
 }

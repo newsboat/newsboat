@@ -21,14 +21,9 @@
 #include "test_helpers/stringmaker/optional.h"
 #include "test_helpers/tempdir.h"
 #include "test_helpers/tempfile.h"
+#include "test_helpers/misc.h"
 
 using namespace newsboat;
-
-int mkdir(const Filepath& dirpath, mode_t mode)
-{
-	const auto dirpath_str = dirpath.to_locale_string();
-	return ::mkdir(dirpath_str.c_str(), mode);
-}
 
 TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 {
@@ -1755,7 +1750,7 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 
 		SECTION("Target already exists") {
-			REQUIRE(mkdir(path, 0700) == 0);
+			REQUIRE(test_helpers::mkdir(path, 0700) == 0);
 			require_return_zero(path);
 		}
 	}
@@ -1770,14 +1765,14 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 
 		SECTION("Which exists") {
-			REQUIRE(mkdir(intermediate_path, 0700) == 0);
+			REQUIRE(test_helpers::mkdir(intermediate_path, 0700) == 0);
 
 			SECTION("Target doesn't exist") {
 				require_return_zero(path);
 			}
 
 			SECTION("Target exists") {
-				REQUIRE(mkdir(path, 0700) == 0);
+				REQUIRE(test_helpers::mkdir(path, 0700) == 0);
 				require_return_zero(path);
 			}
 		}
@@ -1794,13 +1789,13 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 		}
 
 		SECTION("First one exists") {
-			REQUIRE(mkdir(intermediate_path1, 0700) == 0);
+			REQUIRE(test_helpers::mkdir(intermediate_path1, 0700) == 0);
 
 			SECTION("Second one exists") {
-				REQUIRE(mkdir(intermediate_path2, 0700) == 0);
+				REQUIRE(test_helpers::mkdir(intermediate_path2, 0700) == 0);
 
 				SECTION("Target exists") {
-					REQUIRE(mkdir(path, 0700) == 0);
+					REQUIRE(test_helpers::mkdir(path, 0700) == 0);
 					require_return_zero(path);
 				}
 
