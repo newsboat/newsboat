@@ -21,6 +21,7 @@ mod bridged {
         fn display(filepath: &PathBuf) -> String;
         fn push(filepath: &mut PathBuf, component: &PathBuf);
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
+        fn is_absolute(filepath: &PathBuf) -> bool;
 
         // These functions are actually in utils.rs, but I couldn't find a way to return
         // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the bindings here
@@ -83,4 +84,8 @@ fn resolve_relative(reference: &PathBuf, path: &PathBuf) -> Box<PathBuf> {
 fn getcwd() -> Box<PathBuf> {
     let result = libnewsboat::utils::getcwd().unwrap_or_else(|_| std::path::PathBuf::new());
     Box::new(PathBuf(result))
+}
+
+fn is_absolute(filepath: &PathBuf) -> bool {
+    filepath.0.is_absolute()
 }
