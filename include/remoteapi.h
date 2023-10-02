@@ -7,6 +7,8 @@
 #include <utility>
 #include <vector>
 
+#include "filepath.h"
+
 namespace newsboat {
 
 class ConfigContainer;
@@ -32,7 +34,7 @@ public:
 	virtual bool update_article_flags(const std::string& oldflags,
 		const std::string& newflags,
 		const std::string& guid) = 0;
-	static const std::string read_password(const std::string& file);
+	static const std::string read_password(const Filepath& file);
 	static const std::string eval_password(const std::string& cmd);
 
 protected:
