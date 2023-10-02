@@ -45,16 +45,15 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 {
 	const char* env_xdg_config;
 	const char* env_xdg_data;
-	std::string xdg_config_dir;
-	std::string xdg_data_dir;
+	newsboat::Filepath xdg_config_dir;
+	newsboat::Filepath xdg_data_dir;
 
 	env_xdg_config = ::getenv("XDG_CONFIG_HOME");
 	if (env_xdg_config) {
 		xdg_config_dir = env_xdg_config;
 	} else {
 		xdg_config_dir = env_home;
-		xdg_config_dir.push_back(NEWSBEUTER_PATH_SEP);
-		xdg_config_dir.append(".config");
+		xdg_config_dir.push(".config");
 	}
 
 	env_xdg_data = ::getenv("XDG_DATA_HOME");
@@ -62,20 +61,16 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_data_dir = env_xdg_data;
 	} else {
 		xdg_data_dir = env_home;
-		xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
-		xdg_data_dir.append(".local");
-		xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
-		xdg_data_dir.append("share");
+		xdg_data_dir.push(".local");
+		xdg_data_dir.push("share");
 	}
 
-	xdg_config_dir.push_back(NEWSBEUTER_PATH_SEP);
-	xdg_config_dir.append(NEWSBOAT_SUBDIR_XDG);
+	xdg_config_dir.push(NEWSBOAT_SUBDIR_XDG);
 
-	xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
-	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
+	xdg_data_dir.push(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists =
-		0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
+		0 == access(xdg_config_dir.to_locale_string().c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
 		std::cerr << strprintf::fmt(
@@ -94,7 +89,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	 * At this point, we're confident we'll be using XDG. We don't check if
 	 * data dir exists, because if it doesn't we'll create it. */
 
-	config_dir = xdg_config_dir;
+	config_dir = xdg_config_dir.clone();
 
 	// create data directory if it doesn't exist
 	int ret = utils::mkdir_parents(xdg_data_dir, 0700);
@@ -107,13 +102,13 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 
 	/* in config */
 	config_file =
-		config_dir + NEWSBEUTER_PATH_SEP + config_file;
+		config_dir.join(config_file);
 
 	/* in data */
 	const std::string LOCK_SUFFIX(".lock");
-	lock_file = xdg_data_dir + NEWSBEUTER_PATH_SEP + LOCK_SUFFIX;
+	lock_file = xdg_data_dir.join(LOCK_SUFFIX);
 	queue_file =
-		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
+		xdg_data_dir.join(queue_file);
 
 	return true;
 }
@@ -149,11 +144,10 @@ PbController::PbController()
 		return;
 	}
 
-	config_dir.push_back(NEWSBEUTER_PATH_SEP);
-	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
+	config_dir.push(NEWSBOAT_CONFIG_SUBDIR);
 
 	// create configuration directory if it doesn't exist
-	int ret = ::mkdir(config_dir.c_str(), 0700);
+	int ret = ::mkdir(config_dir.to_locale_string().c_str(), 0700);
 	if (ret && errno != EEXIST) {
 		std::cerr << strprintf::fmt(
 				_("Fatal error: couldn't create "
@@ -165,9 +159,9 @@ PbController::PbController()
 		::exit(EXIT_FAILURE);
 	}
 
-	config_file = config_dir + NEWSBEUTER_PATH_SEP + config_file;
-	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
-	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
+	config_file = config_dir.join(config_file);
+	queue_file = config_dir.join(queue_file);
+	lock_file = config_dir.join(lock_file);
 }
 
 void PbController::initialize(int argc, char* argv[])
@@ -481,7 +475,7 @@ void PbController::decrease_parallel_downloads()
 	}
 }
 
-void PbController::play_file(const std::string& file)
+void PbController::play_file(const newsboat::Filepath& file)
 {
 	std::string cmdline;
 	std::string player = cfg.get_configvalue("player");
