@@ -62,11 +62,9 @@ bool ConfigParser::parse_file(const Filepath& tmp_filename)
 
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
-	const Filepath filename = (tmp_filename.to_locale_string().front() ==
-			NEWSBEUTER_PATH_SEP) ?
+	const Filepath filename = tmp_filename.is_absolute() ?
 		tmp_filename.clone() :
-		Filepath::from_locale_string(utils::getcwd().to_locale_string() +
-			NEWSBEUTER_PATH_SEP + tmp_filename.to_locale_string());
+		utils::getcwd().join(tmp_filename);
 
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {
