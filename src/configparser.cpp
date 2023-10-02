@@ -103,7 +103,7 @@ bool ConfigParser::parse_file(const Filepath& tmp_filename)
 		if (!line.empty() && line.back() == '\\') {
 			multi_line_buffer.append(line.substr(0, line.size()-1));
 		} else {
-			const Filepath location = strprintf::fmt(_("%s line %u"), filename, linecounter);
+			const std::string location = strprintf::fmt(_("%s line %u"), filename, linecounter);
 			if (!multi_line_buffer.empty()) {
 				multi_line_buffer.append(line);
 				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", multi_line_buffer);
