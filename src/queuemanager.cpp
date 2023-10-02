@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
+QueueManager::QueueManager(ConfigContainer* cfg_, Filepath queue_file)
 	: cfg(cfg_)
 	, queue_file(std::move(queue_file))
 {}
@@ -19,7 +19,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
 	const std::string& url = item->enclosure_url();
-	const std::string filename = generate_enqueue_filename(item, feed);
+	const Filepath filename = generate_enqueue_filename(item, feed);
 
 	std::fstream f;
 	f.open(queue_file, std::fstream::in);
@@ -63,7 +63,7 @@ std::string get_hostname_from_url(const std::string& url)
 	return hostname;
 }
 
-std::string QueueManager::generate_enqueue_filename(
+Filepath QueueManager::generate_enqueue_filename(
 	std::shared_ptr<RssItem> item,
 	std::shared_ptr<RssFeed> feed)
 {
