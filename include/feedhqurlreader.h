@@ -11,7 +11,7 @@ class RemoteApi;
 class FeedHqUrlReader : public UrlReader {
 public:
 	FeedHqUrlReader(ConfigContainer* c,
-		const newsboat::Filepath& url_file,
+		const Filepath& url_file,
 		RemoteApi* a);
 	~FeedHqUrlReader() override;
 	nonstd::optional<utils::ReadTextFileError> reload() override;
@@ -19,7 +19,7 @@ public:
 
 private:
 	ConfigContainer* cfg;
-	newsboat::Filepath file;
+	Filepath file;
 	RemoteApi* api;
 };
 

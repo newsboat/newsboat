@@ -37,8 +37,8 @@ void ConfigParser::handle_action(const std::string& action,
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		const newsboat::Filepath tilde_expanded = utils::resolve_tilde(params[0]);
-		const newsboat::Filepath current_fpath = included_files.back().clone();
+		const Filepath tilde_expanded = utils::resolve_tilde(params[0]);
+		const Filepath current_fpath = included_files.back().clone();
 		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
 			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
 		}
@@ -47,7 +47,7 @@ void ConfigParser::handle_action(const std::string& action,
 	}
 }
 
-bool ConfigParser::parse_file(const newsboat::Filepath& tmp_filename)
+bool ConfigParser::parse_file(const Filepath& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -66,10 +66,10 @@ bool ConfigParser::parse_file(const newsboat::Filepath& tmp_filename)
 
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
-	const newsboat::Filepath filename = (tmp_filename.to_locale_string().front() ==
+	const Filepath filename = (tmp_filename.to_locale_string().front() ==
 			NEWSBEUTER_PATH_SEP) ?
 		tmp_filename.clone() :
-		newsboat::Filepath::from_locale_string(utils::getcwd().to_locale_string() +
+		Filepath::from_locale_string(utils::getcwd().to_locale_string() +
 			NEWSBEUTER_PATH_SEP + tmp_filename.to_locale_string());
 
 	if (std::find(included_files.begin(), included_files.end(),
@@ -105,7 +105,7 @@ bool ConfigParser::parse_file(const newsboat::Filepath& tmp_filename)
 		if (!line.empty() && line.back() == '\\') {
 			multi_line_buffer.append(line.substr(0, line.size()-1));
 		} else {
-			const newsboat::Filepath location = strprintf::fmt(_("%s line %u"), filename, linecounter);
+			const Filepath location = strprintf::fmt(_("%s line %u"), filename, linecounter);
 			if (!multi_line_buffer.empty()) {
 				multi_line_buffer.append(line);
 				LOG(Level::DEBUG, "ConfigParser::parse_file: tokenizing %s", multi_line_buffer);

@@ -37,37 +37,37 @@ void ConfigPaths::set_cache_file(const std::string& new_cachefile)
 	newsboat::configpaths::bridged::set_cache_file(*rs_object, new_cachefile);
 }
 
-newsboat::Filepath ConfigPaths::url_file() const
+Filepath ConfigPaths::url_file() const
 {
 	return std::string(newsboat::configpaths::bridged::url_file(*rs_object));
 }
 
-newsboat::Filepath ConfigPaths::cache_file() const
+Filepath ConfigPaths::cache_file() const
 {
 	return std::string(newsboat::configpaths::bridged::cache_file(*rs_object));
 }
 
-newsboat::Filepath ConfigPaths::config_file() const
+Filepath ConfigPaths::config_file() const
 {
 	return std::string(newsboat::configpaths::bridged::config_file(*rs_object));
 }
 
-newsboat::Filepath ConfigPaths::lock_file() const
+Filepath ConfigPaths::lock_file() const
 {
 	return std::string(newsboat::configpaths::bridged::lock_file(*rs_object));
 }
 
-newsboat::Filepath ConfigPaths::queue_file() const
+Filepath ConfigPaths::queue_file() const
 {
 	return std::string(newsboat::configpaths::bridged::queue_file(*rs_object));
 }
 
-newsboat::Filepath ConfigPaths::search_file() const
+Filepath ConfigPaths::search_file() const
 {
 	return std::string(newsboat::configpaths::bridged::search_file(*rs_object));
 }
 
-newsboat::Filepath ConfigPaths::cmdline_file() const
+Filepath ConfigPaths::cmdline_file() const
 {
 	return std::string(newsboat::configpaths::bridged::cmdline_file(*rs_object));
 }

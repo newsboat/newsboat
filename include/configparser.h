@@ -38,7 +38,7 @@ public:
 	///
 	/// If the file contains any errors, throws `ConfigException` with
 	/// a message explaining the problem.
-	bool parse_file(const newsboat::Filepath& filename);
+	bool parse_file(const Filepath& filename);
 
 	void parse_line(const std::string& line, const std::string& location);
 	static std::string evaluate_backticks(std::string token);
@@ -48,7 +48,7 @@ private:
 	std::vector<std::vector<std::string>> parsed_content;
 	std::map<std::string, std::reference_wrapper<ConfigActionHandler>>
 		action_handlers;
-	std::vector<newsboat::Filepath> included_files;
+	std::vector<Filepath> included_files;
 };
 
 } // namespace newsboat

@@ -262,7 +262,7 @@ static int guid_callback(void* myguids, int argc, char** argv,
 	return 0;
 }
 
-Cache::Cache(const newsboat::Filepath& cachefile, ConfigContainer* c)
+Cache::Cache(const Filepath& cachefile, ConfigContainer* c)
 	: db(0)
 	, cfg(c)
 {

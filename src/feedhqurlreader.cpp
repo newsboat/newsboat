@@ -9,7 +9,7 @@
 namespace newsboat {
 
 FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
-	const newsboat::Filepath& url_file,
+	const Filepath& url_file,
 	RemoteApi* a)
 	: cfg(c)
 	, file(url_file.clone())
