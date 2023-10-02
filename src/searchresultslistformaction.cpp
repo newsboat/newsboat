@@ -34,8 +34,8 @@ void SearchResultsListFormAction::add_to_history(const std::shared_ptr<RssFeed>&
 
 bool SearchResultsListFormAction::process_operation(
 	Operation op,
-	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>& args,
+	BindingType bindingType)
 {
 	const unsigned int itempos = list.get_position();
 
@@ -64,7 +64,7 @@ bool SearchResultsListFormAction::process_operation(
 		}
 		break;
 	default:
-		return ItemListFormAction::process_operation(op, bindingType, args);
+		return ItemListFormAction::process_operation(op, args, bindingType);
 	}
 	return true;
 }

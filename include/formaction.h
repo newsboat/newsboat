@@ -66,8 +66,8 @@ public:
 	virtual void handle_cmdline(const std::string& cmd);
 
 	bool process_op(Operation op,
-		BindingType bindingType = BindingType::BindKey,
-		std::vector<std::string>* args = nullptr);
+		const std::vector<std::string>& args,
+		BindingType bindingType = BindingType::BindKey);
 
 	virtual void finished_qna(Operation op);
 
@@ -108,8 +108,8 @@ public:
 
 protected:
 	virtual bool process_operation(Operation op,
-		BindingType bindingType = BindingType::BindKey,
-		std::vector<std::string>* args = nullptr) = 0;
+		const std::vector<std::string>& args,
+		BindingType bindingType = BindingType::BindKey) = 0;
 	virtual void set_keymap_hints();
 
 	/// The name of the "main" STFL widget, i.e. the one that should be focused

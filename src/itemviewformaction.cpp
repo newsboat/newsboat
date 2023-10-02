@@ -156,8 +156,8 @@ void ItemViewFormAction::prepare()
 }
 
 bool ItemViewFormAction::process_operation(Operation op,
-	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>& args,
+	BindingType bindingType)
 {
 	bool hardquit = false;
 	bool quit = false;
@@ -219,8 +219,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 		std::string filename;
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() > 0) {
-				filename = (*args)[0];
+			if (args.size() > 0) {
+				filename = args.front();
 			}
 			break;
 		case BindingType::BindKey:
@@ -264,7 +264,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			qna_responses.push_back(item->link());
 			qna_responses.push_back(utils::utf8_to_locale(item->title()));
 			qna_responses.push_back(
-				args->size() > 0 ? (*args)[0] : "");
+				args.size() > 0 ? args.front() : "");
 			qna_responses.push_back(feed->title());
 			break;
 		case BindingType::BindKey:
@@ -278,9 +278,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		std::vector<QnaPair> qna;
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() > 0) {
+			if (args.size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(args.front());
 				finished_qna(OP_INT_START_SEARCH);
 			}
 			break;
@@ -296,9 +296,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		std::vector<QnaPair> qna;
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() > 0) {
+			if (args.size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(args.front());
 				finished_qna(OP_PIPE_TO);
 			}
 			break;
@@ -314,8 +314,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 		switch (bindingType) {
 		case BindingType::Macro:
 			qna_responses.clear();
-			if (args->size() > 0) {
-				qna_responses.push_back((*args)[0]);
+			if (args.size() > 0) {
+				qna_responses.push_back(args.front());
 				this->finished_qna(OP_INT_EDITFLAGS_END);
 			}
 			break;
@@ -411,11 +411,11 @@ bool ItemViewFormAction::process_operation(Operation op,
 		const auto message_lifetime = v->get_statusline().show_message_until_finished(
 				_("Toggling read flag for article..."));
 		try {
-			if (args->size() > 0) {
-				if ((*args)[0] == "read") {
+			if (args.size() > 0) {
+				if (args.front() == "read") {
 					item->set_unread(false);
 					v->get_ctrl()->mark_article_read(item->guid(), true);
-				} else if ((*args)[0] == "unread") {
+				} else if (args.front() == "unread") {
 					item->set_unread(true);
 					v->get_ctrl()->mark_article_read(item->guid(), false);
 				}
@@ -469,9 +469,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		std::vector<QnaPair> qna;
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() > 0) {
+			if (args.size() > 0) {
 				qna_responses.clear();
-				qna_responses.push_back((*args)[0]);
+				qna_responses.push_back(args.front());
 				finished_qna(OP_INT_GOTO_URL);
 			}
 			break;

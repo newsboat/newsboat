@@ -73,8 +73,8 @@ const std::vector<KeyMapHintEntry>& DialogsFormAction::get_keymap_hint() const
 }
 
 bool DialogsFormAction::process_operation(Operation op,
-	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>& args,
+	BindingType bindingType)
 {
 	switch (op) {
 	case OP_OPEN: {
@@ -103,7 +103,7 @@ bool DialogsFormAction::process_operation(Operation op,
 		v->pop_current_formaction();
 		break;
 	default:
-		ListFormAction::process_operation(op, bindingType, args);
+		ListFormAction::process_operation(op, args, bindingType);
 		break;
 	}
 	return true;

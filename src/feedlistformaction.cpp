@@ -86,8 +86,8 @@ void FeedListFormAction::prepare()
 }
 
 bool FeedListFormAction::process_operation(Operation op,
-	BindingType bindingType,
-	std::vector<std::string>* args)
+	const std::vector<std::string>& args,
+	BindingType bindingType)
 {
 	unsigned int pos = 0;
 	if (visible_feeds.size() >= 1) {
@@ -100,8 +100,8 @@ REDO:
 	switch (op) {
 	case OP_OPEN: {
 		if (f.get_focus() == "feeds") {
-			if (args->size() > 0) {
-				pos = utils::to_u((*args)[0]);
+			if (args.size() > 0) {
+				pos = utils::to_u(args.front());
 			}
 			LOG(Level::INFO,
 				"FeedListFormAction: opening feed at position "
@@ -417,8 +417,8 @@ REDO:
 		break;
 	case OP_SETTAG: {
 		std::string newtag;
-		if (args->size() > 0) {
-			newtag = (*args)[0];
+		if (args.size() > 0) {
+			newtag = args.front();
 		} else {
 			newtag = v->select_tag(tag);
 		}
@@ -431,8 +431,8 @@ REDO:
 	break;
 	case OP_SELECTFILTER:
 		if (filter_container.size() > 0) {
-			if (args->size() > 0) {
-				const std::string filter_name = (*args)[0];
+			if (args.size() > 0) {
+				const std::string filter_name = args.front();
 				const auto filter = filter_container.get_filter(filter_name);
 
 				if (filter.has_value()) {
@@ -450,13 +450,13 @@ REDO:
 		}
 		break;
 	case OP_SEARCH:
-		if (args->size() > 0) {
+		if (args.size() > 0) {
 			qna_responses.clear();
 			// If arguments are specified, we manually fill the
 			// qna_responses vector from the arguments and then run
 			// the finished_qna() by ourselves to simulate a "Q&A"
 			// session that is in fact macro-driven.
-			qna_responses.push_back((*args)[0]);
+			qna_responses.push_back(args.front());
 			finished_qna(OP_INT_START_SEARCH);
 		} else {
 			std::vector<QnaPair> qna;
@@ -468,7 +468,7 @@ REDO:
 	case OP_GOTO_TITLE:
 		switch (bindingType) {
 		case BindingType::Macro:
-			if (args->size() >= 1) {
+			if (args.size() >= 1) {
 				qna_responses = {args[0]};
 				finished_qna(OP_INT_GOTO_TITLE);
 			}
@@ -486,9 +486,9 @@ REDO:
 		save_filterpos();
 		break;
 	case OP_SETFILTER:
-		if (args->size() > 0) {
+		if (args.size() > 0) {
 			qna_responses.clear();
-			qna_responses.push_back((*args)[0]);
+			qna_responses.push_back(args.front());
 			finished_qna(OP_INT_END_SETFILTER);
 		} else {
 			std::vector<QnaPair> qna;
@@ -522,7 +522,7 @@ REDO:
 		v->push_help();
 		break;
 	default:
-		ListFormAction::process_operation(op, bindingType, args);
+		ListFormAction::process_operation(op, args, bindingType);
 		break;
 	}
 	if (quit) {
