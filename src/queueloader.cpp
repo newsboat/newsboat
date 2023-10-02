@@ -18,10 +18,10 @@ using namespace newsboat;
 
 namespace podboat {
 
-QueueLoader::QueueLoader(const std::string& filepath,
+QueueLoader::QueueLoader(const Filepath& filepath,
 	const ConfigContainer& cfg_,
 	std::function<void()> cb_require_view_update_)
-	: queuefile(filepath)
+	: queuefile(filepath.clone())
 	, cfg(cfg_)
 	, cb_require_view_update(cb_require_view_update_)
 {
@@ -253,9 +253,9 @@ void QueueLoader::delete_played_files(const CategorizedDownloads& downloads)
 const
 {
 	for (const auto& dl : downloads.to_delete) {
-		const std::string filename = dl.filename();
+		const Filepath filename = dl.filename();
 		LOG(Level::INFO, "Deleting file %s", filename);
-		if (std::remove(filename.c_str()) != 0) {
+		if (std::remove(filename.to_locale_string().c_str()) != 0) {
 			if (errno != ENOENT) {
 				LOG(Level::ERROR,
 					"Failed to delete file %s, error code: %d (%s)",
@@ -265,7 +265,7 @@ const
 	}
 }
 
-std::string QueueLoader::get_filename(const std::string& str) const
+newsboat::Filepath QueueLoader::get_filename(const std::string& str) const
 {
 	std::string fn = cfg.get_configvalue("download-path");
 
