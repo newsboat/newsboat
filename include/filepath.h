@@ -83,6 +83,9 @@ public:
 	/// Returns a copy of this path.
 	Filepath clone() const;
 
+	// Return `true` if path is absolute.
+	bool is_absolute() const;
+
 	Filepath(const Filepath&) = delete;
 	Filepath& operator=(const Filepath&) = delete;
 	Filepath(Filepath&&) = default;

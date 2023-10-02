@@ -60,4 +60,9 @@ Filepath Filepath::clone() const
 	return result;
 }
 
+bool Filepath::is_absolute() const
+{
+	return filepath::bridged::is_absolute(*rs_object);
+};
+
 } // namespace newsboat
