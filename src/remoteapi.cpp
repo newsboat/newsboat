@@ -27,13 +27,13 @@ bool RemoteApi::mark_articles_read(const std::vector<std::string>& guids)
 	return success;
 }
 
-const std::string RemoteApi::read_password(const std::string& file)
+const std::string RemoteApi::read_password(const Filepath& file)
 {
 	glob_t exp;
 	std::ifstream ifs;
 	std::string pass = "";
 
-	int res = glob(file.c_str(), GLOB_ERR, nullptr, &exp);
+	int res = glob(file.to_locale_string().c_str(), GLOB_ERR, nullptr, &exp);
 	if (!res && exp.gl_pathc == 1 && exp.gl_pathv) {
 		ifs.open(exp.gl_pathv[0]);
 	}
