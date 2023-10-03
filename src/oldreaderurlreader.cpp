@@ -10,10 +10,10 @@
 namespace newsboat {
 
 OldReaderUrlReader::OldReaderUrlReader(ConfigContainer* c,
-	const std::string& url_file,
+	const Filepath& url_file,
 	RemoteApi* a)
 	: cfg(c)
-	, file(url_file)
+	, file(url_file.clone())
 	, api(a)
 {
 }
