@@ -11,7 +11,7 @@ class RemoteApi;
 class InoreaderUrlReader : public UrlReader {
 public:
 	InoreaderUrlReader(ConfigContainer* c,
-		const std::string& url_file,
+		const Filepath& url_file,
 		RemoteApi* a);
 	virtual ~InoreaderUrlReader();
 	virtual nonstd::optional<utils::ReadTextFileError> reload();
@@ -19,7 +19,7 @@ public:
 
 private:
 	ConfigContainer* cfg;
-	std::string file;
+	Filepath file;
 	RemoteApi* api;
 };
 
