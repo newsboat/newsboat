@@ -7,9 +7,9 @@
 
 namespace newsboat {
 
-NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file,
+NewsBlurUrlReader::NewsBlurUrlReader(const Filepath& url_file,
 	RemoteApi* a)
-	: file(url_file)
+	: file(url_file.clone())
 	, api(a)
 {
 }
