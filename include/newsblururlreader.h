@@ -14,13 +14,13 @@ typedef std::map<std::string, rsspp::Feed> FeedMap;
 
 class NewsBlurUrlReader : public UrlReader {
 public:
-	NewsBlurUrlReader(const std::string& url_file, RemoteApi* a);
+	NewsBlurUrlReader(const Filepath& url_file, RemoteApi* a);
 	~NewsBlurUrlReader() override;
 	std::optional<utils::ReadTextFileError> reload() override;
 	std::string get_source() override;
 
 private:
-	std::string file;
+	Filepath file;
 	RemoteApi* api;
 };
 
