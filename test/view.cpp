@@ -6,6 +6,7 @@
 #include "controller.h"
 #include "configpaths.h"
 #include "cache.h"
+#include "filepath.h"
 
 using namespace newsboat;
 
@@ -28,16 +29,17 @@ TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", 
 	c.set_view(&v);
 
 	// Default case is exclusively ASCII characters. Should never fail.
-	REQUIRE(v.get_filename_suggestion(example_en).compare("Comparing_Visual.txt") ==
-		0);
-
-	REQUIRE(v.get_filename_suggestion(
-			example_ru).compare("Инженеры_из_MIT.txt") != 0);
-	REQUIRE(v.get_filename_suggestion(example_fr).compare("Les_mathématiques.txt") != 0);
+	REQUIRE(v.get_filename_suggestion(example_en) ==
+		Filepath::from_locale_string("Comparing_Visual.txt"));
+	REQUIRE(v.get_filename_suggestion(example_ru) !=
+		Filepath::from_locale_string("Инженеры_из_MIT.txt"));
+	REQUIRE(v.get_filename_suggestion(example_fr) !=
+		Filepath::from_locale_string("Les_mathématiques.txt"));
 
 	cfg.toggle("restrict-filename");
 
-	REQUIRE(v.get_filename_suggestion(
-			example_ru).compare("Инженеры из MIT.txt") == 0);
-	REQUIRE(v.get_filename_suggestion(example_fr).compare("Les mathématiques.txt") == 0);
+	REQUIRE(v.get_filename_suggestion(example_ru) ==
+		Filepath::from_locale_string("Инженеры из MIT.txt"));
+	REQUIRE(v.get_filename_suggestion(example_fr) ==
+		Filepath::from_locale_string("Les mathématiques.txt"));
 }
