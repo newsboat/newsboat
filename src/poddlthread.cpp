@@ -72,10 +72,10 @@ void PodDlThread::run()
 	}
 
 	struct stat sb;
-	std::string filename =
+	Filepath filename =
 		dl->filename() + newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX;
 
-	if (stat(filename.c_str(), &sb) == -1) {
+	if (stat(filename.to_locale_string().c_str(), &sb) == -1) {
 		LOG(Level::INFO,
 			"PodDlThread::run: stat failed: starting normal "
 			"download");
@@ -83,7 +83,8 @@ void PodDlThread::run()
 		// Have to copy the string into a vector in order to be able to
 		// get a char* pointer. std::string::c_str() won't do because it
 		// returns const char*, whereas ::dirname() needs non-const.
-		std::vector<char> directory(filename.begin(), filename.end());
+		std::vector<char> directory(filename.to_locale_string().begin(),
+			filename.to_locale_string().end());
 		directory.push_back('\0');
 		utils::mkdir_parents(dirname(&directory[0]));
 
@@ -119,7 +120,7 @@ void PodDlThread::run()
 			LOG(Level::DEBUG,
 				"PodDlThread::run: download complete, deleting "
 				"temporary suffix");
-			if (rename(filename.c_str(), dl->filename().c_str()) == 0) {
+			if (rename(filename.to_locale_string().c_str(), dl->filename().c_str()) == 0) {
 				dl->set_status(DlStatus::READY);
 			} else {
 				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
@@ -127,11 +128,11 @@ void PodDlThread::run()
 		} else if (dl->status() != DlStatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
-				::unlink(filename.c_str());
+				::unlink(filename.to_locale_string().c_str());
 				this->run();
 			} else {
 				dl->set_status(DlStatus::FAILED, curl_easy_strerror(success));
-				::unlink(filename.c_str());
+				::unlink(filename.to_locale_string().c_str());
 			}
 		}
 	} else {
