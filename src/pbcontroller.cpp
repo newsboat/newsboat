@@ -55,7 +55,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_config_dir = env_xdg_config;
 	} else {
 		xdg_config_dir = env_home;
-		xdg_config_dir.join(".config");
+		xdg_config_dir.push(".config");
 	}
 
 	env_xdg_data = ::getenv("XDG_DATA_HOME");
@@ -63,13 +63,13 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 		xdg_data_dir = env_xdg_data;
 	} else {
 		xdg_data_dir = env_home;
-		xdg_data_dir.join(".local");
-		xdg_data_dir.join("share");
+		xdg_data_dir.push(".local");
+		xdg_data_dir.push("share");
 	}
 
-	xdg_config_dir.join(NEWSBOAT_SUBDIR_XDG);
+	xdg_config_dir.push(NEWSBOAT_SUBDIR_XDG);
 
-	xdg_data_dir.join(NEWSBOAT_SUBDIR_XDG);
+	xdg_data_dir.push(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists =
 		0 == access(xdg_config_dir.to_locale_string().c_str(), R_OK | X_OK);
@@ -108,7 +108,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 
 	/* in data */
 	const std::string LOCK_SUFFIX(".lock");
-	lock_file= xdg_data_dir.join(LOCK_SUFFIX);
+	lock_file = xdg_data_dir.join(LOCK_SUFFIX);
 	queue_file =
 		xdg_data_dir.join(queue_file);
 
@@ -146,7 +146,7 @@ PbController::PbController()
 		return;
 	}
 
-	config_dir.join(NEWSBOAT_CONFIG_SUBDIR);
+	config_dir.push(NEWSBOAT_CONFIG_SUBDIR);
 
 	// create configuration directory if it doesn't exist
 	int ret = ::mkdir(config_dir.to_locale_string().c_str(), 0700);
