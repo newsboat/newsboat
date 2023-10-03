@@ -7,8 +7,8 @@
 
 namespace newsboat {
 
-OcNewsUrlReader::OcNewsUrlReader(const std::string& url_file, RemoteApi* a)
-	: file(url_file)
+OcNewsUrlReader::OcNewsUrlReader(const Filepath& url_file, RemoteApi* a)
+	: file(url_file.clone())
 	, api(a)
 {
 }
