@@ -309,7 +309,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 	}
 }
 
-std::string View::get_filename_suggestion(const std::string& s)
+Filepath View::get_filename_suggestion(const std::string& s)
 {
 	/*
 	 * With this function, we generate normalized filenames for saving
@@ -344,7 +344,7 @@ void View::drop_queued_input()
 	flushinp();
 }
 
-void View::open_in_pager(const std::string& filename)
+void View::open_in_pager(const Filepath& filename)
 {
 	std::string cmdline;
 	std::string pager = cfg->get_configvalue("pager");
@@ -547,7 +547,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		current_formaction = formaction_stack_size() - 1;
 	} else {
 		std::shared_ptr<RssItem> item = f->get_item_by_guid(guid);
-		std::string filename = get_ctrl()->write_temporary_item(item);
+		Filepath filename = get_ctrl()->write_temporary_item(item);
 		open_in_pager(filename);
 		try {
 			bool old_unread = item->unread();
@@ -561,7 +561,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 					_("Error while marking article as read: %s"),
 					e.what()));
 		}
-		::unlink(filename.c_str());
+		::unlink(filename.to_locale_string().c_str());
 	}
 }
 
@@ -617,7 +617,7 @@ void View::push_urlview(const Links& links,
 	current_formaction = formaction_stack_size() - 1;
 }
 
-nonstd::optional<std::string> View::run_filebrowser(const std::string& default_filename)
+nonstd::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 {
 	auto filebrowser = std::make_shared<FileBrowserFormAction>(
 			this, filebrowser_str, cfg);
@@ -631,7 +631,7 @@ nonstd::optional<std::string> View::run_filebrowser(const std::string& default_f
 	return res;
 }
 
-nonstd::optional<std::string> View::run_dirbrowser()
+nonstd::optional<Filepath> View::run_dirbrowser()
 {
 	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
 			this, filebrowser_str, cfg);
