@@ -9,13 +9,13 @@ class RemoteApi;
 
 class MinifluxUrlReader : public UrlReader {
 public:
-	MinifluxUrlReader(const std::string& url_file, RemoteApi* a);
+	MinifluxUrlReader(const Filepath& url_file, RemoteApi* a);
 	~MinifluxUrlReader() override;
 	nonstd::optional<utils::ReadTextFileError> reload() override;
 	std::string get_source() override;
 
 private:
-	std::string file;
+	Filepath file;
 	RemoteApi* api;
 };
 
