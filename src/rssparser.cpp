@@ -292,9 +292,14 @@ void RssParser::set_item_title(std::shared_ptr<RssFeed> feed,
 	if (title.empty()) {
 		title = utils::make_title(item.link);
 		if (title.empty()) {
-			title = item.description;
-			x->set_title(render_xhtml_title(title, feed->link()));
-			return;
+			if (!item.description.empty()) {
+				x->set_title(render_xhtml_title(item.description, feed->link()));
+				return;
+			}
+			if (!item.content_encoded.empty()) {
+				x->set_title(render_xhtml_title(item.content_encoded, feed->link()));
+				return;
+			}
 		}
 	}
 

@@ -145,9 +145,20 @@ TEST_CASE("parse() generates a title when title element is missing",
 
 	SECTION("creates a title from the content if the URL is numeric") {
 		upstream_item.link = "http://example.com/1234567";
-		const auto feed = parser.parse(upstream_feed);
-		auto item = feed->items()[0];
-		REQUIRE(item->title() == "Just saying hello");
+
+		SECTION("title from description") {
+			const auto feed = parser.parse(upstream_feed);
+			auto item = feed->items()[0];
+			REQUIRE(item->title() == "Just saying hello");
+		}
+
+		SECTION("title from content_encoded") {
+			upstream_item.description.clear();
+			upstream_item.content_encoded = "<b>article text</b>";
+			const auto feed = parser.parse(upstream_feed);
+			auto item = feed->items()[0];
+			REQUIRE(item->title() == "article text");
+		}
 	}
 }
 
