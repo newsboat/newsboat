@@ -744,7 +744,7 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 int Controller::import_opml(const std::string& opmlFile,
 	const std::string& urlFile)
 {
-	auto urlReader = FileUrlReader(urlFile);
+	FileUrlReader urlReader(urlFile);
 	const auto error_message = urlReader.reload(); // Load existing URLs
 	if (error_message.has_value()) {
 		std::cout << strprintf::fmt(
