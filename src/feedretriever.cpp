@@ -283,7 +283,7 @@ rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 	return f;
 }
 
-rsspp::Feed FeedRetriever::parse_file(const std::string& file)
+rsspp::Feed FeedRetriever::parse_file(const newsboat::Filepath& file)
 {
 	rsspp::Parser p;
 	const rsspp::Feed f = p.parse_file(file);
