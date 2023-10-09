@@ -20,9 +20,9 @@ public:
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
 
-	void set_default_filename(const std::string& fn)
+	void set_default_filename(const Filepath& fn)
 	{
-		default_filename = fn;
+		default_filename = fn.clone();
 	}
 
 	std::string id() const override
@@ -41,19 +41,19 @@ private:
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	void update_title(const std::string& working_directory);
+	void update_title(const Filepath& working_directory);
 
 	void add_file(std::vector<file_system::FileSystemEntry>& id_at_position,
-		std::string filename);
-	std::string get_filename_suggestion(const std::string& s);
+		Filepath filename);
+	std::string get_filename_suggestion(const std::string& s); // Probably unnecessary method!
 	std::vector<file_system::FileSystemEntry> id_at_position;
 	std::vector<std::string> lines;
 
-	std::string get_formatted_filename(std::string filename, mode_t mode);
+	Filepath get_formatted_filename(Filepath filename, mode_t mode);
 
-	bool quit;
-	std::string cwd;
-	std::string default_filename;
+	bool quit; // Probably unnecessary variable!
+	std::string cwd; // Probably unnecessary variable!
+	Filepath default_filename;
 
 	ListWidget files_list;
 };

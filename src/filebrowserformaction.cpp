@@ -219,7 +219,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	return true;
 }
 
-void FileBrowserFormAction::update_title(const std::string& working_directory)
+void FileBrowserFormAction::update_title(const Filepath& working_directory)
 {
 	const unsigned int width = files_list.get_width();
 
@@ -318,7 +318,8 @@ void FileBrowserFormAction::init()
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
-	set_value("filenametext_pos", std::to_string(default_filename.length()));
+	set_value("filenametext_pos",
+		std::to_string(default_filename.to_locale_string().length()));
 }
 
 const std::vector<KeyMapHintEntry>& FileBrowserFormAction::get_keymap_hint() const
@@ -331,16 +332,16 @@ const std::vector<KeyMapHintEntry>& FileBrowserFormAction::get_keymap_hint() con
 
 void FileBrowserFormAction::add_file(
 	std::vector<file_system::FileSystemEntry>& id_at_position,
-	std::string filename)
+	Filepath filename)
 {
 	struct stat sb;
-	if (::lstat(filename.c_str(), &sb) == 0) {
+	if (::lstat(filename.to_locale_string().c_str(), &sb) == 0) {
 		const auto ftype = file_system::mode_to_filetype(sb.st_mode);
 
 		const auto rwxbits = file_system::permissions_string(sb.st_mode);
 		const auto owner = file_system::get_user_padded(sb.st_uid);
 		const auto group = file_system::get_group_padded(sb.st_gid);
-		std::string formattedfilename = get_formatted_filename(filename, sb.st_mode);
+		std::string formattedfilename = get_formatted_filename(filename.clone(), sb.st_mode);
 
 		std::string sizestr = strprintf::fmt(
 				"%12" PRIi64,
@@ -360,7 +361,7 @@ void FileBrowserFormAction::add_file(
 	}
 }
 
-std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
+Filepath FileBrowserFormAction::get_formatted_filename(Filepath filename,
 	mode_t mode)
 {
 	const auto suffix = file_system::mode_suffix(mode);
