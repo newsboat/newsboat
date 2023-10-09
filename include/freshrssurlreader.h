@@ -11,7 +11,7 @@ class RemoteApi;
 class FreshRssUrlReader : public UrlReader {
 public:
 	FreshRssUrlReader(ConfigContainer* c,
-		const std::string& url_file,
+		const Filepath& url_file,
 		RemoteApi* a);
 	~FreshRssUrlReader() override;
 	std::optional<utils::ReadTextFileError> reload() override;
@@ -19,7 +19,7 @@ public:
 
 private:
 	ConfigContainer* cfg;
-	std::string file;
+	Filepath file;
 	RemoteApi* api;
 };
 
