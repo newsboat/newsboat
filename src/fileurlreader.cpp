@@ -8,8 +8,8 @@
 
 namespace newsboat {
 
-FileUrlReader::FileUrlReader(const std::string& file)
-	: filename(file)
+FileUrlReader::FileUrlReader(const Filepath& file)
+	: filename(file.clone())
 {
 }
 
