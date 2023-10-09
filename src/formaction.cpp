@@ -769,15 +769,15 @@ void FormAction::start_next_question()
 	}
 }
 
-void FormAction::load_histories(const std::string& searchfile,
-	const std::string& cmdlinefile)
+void FormAction::load_histories(const Filepath& searchfile,
+	const Filepath& cmdlinefile)
 {
 	searchhistory.load_from_file(searchfile);
 	cmdlinehistory.load_from_file(cmdlinefile);
 }
 
-void FormAction::save_histories(const std::string& searchfile,
-	const std::string& cmdlinefile,
+void FormAction::save_histories(const Filepath& searchfile,
+	const Filepath& cmdlinefile,
 	unsigned int limit)
 {
 	searchhistory.save_to_file(searchfile, limit);
