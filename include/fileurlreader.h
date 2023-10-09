@@ -9,7 +9,7 @@ namespace newsboat {
 
 class FileUrlReader : public UrlReader {
 public:
-	explicit FileUrlReader(const std::string& file = "");
+	explicit FileUrlReader(const Filepath& file = "");
 
 	/// \brief Load URLs from the urls file.
 	///
@@ -24,7 +24,7 @@ public:
 	nonstd::optional<std::string> write_config();
 
 private:
-	const std::string filename;
+	const Filepath filename;
 };
 
 }
