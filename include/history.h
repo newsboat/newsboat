@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "filepath.h"
+
 namespace newsboat {
 
 class History {
@@ -14,8 +16,8 @@ public:
 	void add_line(const std::string& line);
 	std::string previous_line();
 	std::string next_line();
-	void load_from_file(const std::string& file);
-	void save_to_file(const std::string& file, unsigned int limit);
+	void load_from_file(const Filepath& file);
+	void save_to_file(const Filepath& file, unsigned int limit);
 
 private:
 	rust::Box<history::bridged::History> rs_object;
