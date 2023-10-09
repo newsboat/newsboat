@@ -117,10 +117,10 @@ public:
 	virtual std::vector<std::string> get_suggestions(
 		const std::string& fragment);
 
-	static void load_histories(const std::string& searchfile,
-		const std::string& cmdlinefile);
-	static void save_histories(const std::string& searchfile,
-		const std::string& cmdlinefile,
+	static void load_histories(const Filepath& searchfile,
+		const Filepath& cmdlinefile);
+	static void save_histories(const Filepath& searchfile,
+		const Filepath& cmdlinefile,
 		unsigned int limit);
 
 	std::string bookmark(const std::string& url,
