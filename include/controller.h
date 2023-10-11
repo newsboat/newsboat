@@ -65,15 +65,15 @@ public:
 	}
 
 	void write_item(std::shared_ptr<RssItem> item,
-		const std::string& filename);
+		const Filepath& filename);
 	void write_item(std::shared_ptr<RssItem> item, std::ostream& ostr);
-	std::string write_temporary_item(std::shared_ptr<RssItem> item);
+	Filepath write_temporary_item(std::shared_ptr<RssItem> item);
 
 	void update_config();
 
-	void load_configfile(const std::string& filename);
+	void load_configfile(const Filepath& filename);
 
-	void dump_config(const std::string& filename) const;
+	void dump_config(const Filepath& filename) const;
 
 	void update_flags(std::shared_ptr<RssItem> item);
 
@@ -118,13 +118,13 @@ public:
 	}
 
 private:
-	int import_opml(const std::string& opmlFile, const std::string& urlFile);
+	int import_opml(const Filepath& opmlFile, const Filepath& urlFile);
 	void export_opml(bool version2);
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
 	int execute_commands(const std::vector<std::string>& cmds);
 
-	void import_read_information(const std::string& readinfofile);
-	void export_read_information(const std::string& readinfofile);
+	void import_read_information(const Filepath& readinfofile);
+	void export_read_information(const Filepath& readinfofile);
 
 	View* v;
 	UrlReader* urlcfg;
