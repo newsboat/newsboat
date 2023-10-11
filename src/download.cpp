@@ -23,19 +23,48 @@ Download::Download(std::function<void()> cb_require_view_update_)
 
 Download::~Download() {}
 
-const std::string Download::filename() const
+Download::Download(const Download& download) :
+	url_(download.url_),
+	download_status(download.download_status),
+	msg(download.msg),
+	cursize(download.cursize),
+	totalsize(download.totalsize),
+	curkbps(download.curkbps),
+	offs(download.offs),
+	cb_require_view_update(download.cb_require_view_update)
 {
-	return fn;
+	fn = download.fn.clone();
 }
 
-const std::string Download::basename() const
+Download& Download::operator=(const Download& download)
 {
-	std::string::size_type start = fn.rfind(NEWSBEUTER_PATH_SEP);
+	if (this == &download) {
+		return *this;
+	}
+	url_ = download.url_;
+	download_status = download.download_status;
+	msg = download.msg;
+	cursize = download.cursize;
+	totalsize = download.totalsize;
+	curkbps = download.curkbps;
+	offs = download.offs;
+	fn = download.fn.clone();
+	return *this;
+}
+
+const newsboat::Filepath Download::filename() const
+{
+	return fn.clone();
+}
+
+const newsboat::Filepath Download::basename() const
+{
+	std::string::size_type start = fn.to_locale_string().rfind(NEWSBEUTER_PATH_SEP);
 
 	if (start != std::string::npos) {
-		return fn.substr(start+1);
+		return fn.to_locale_string().substr(start+1);
 	}
-	return fn;
+	return fn.clone();
 }
 
 const std::string Download::url() const
@@ -43,9 +72,9 @@ const std::string Download::url() const
 	return url_;
 }
 
-void Download::set_filename(const std::string& str)
+void Download::set_filename(const newsboat::Filepath& str)
 {
-	fn = str;
+	fn = str.clone();
 }
 
 double Download::percents_finished() const
