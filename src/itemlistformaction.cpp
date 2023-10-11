@@ -408,7 +408,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
-			nonstd::optional<std::string> filename;
+			nonstd::optional<Filepath> filename;
 			switch (bindingType) {
 			case BindingType::Bind:
 				if (args.empty()) {
@@ -1467,7 +1467,7 @@ void ItemListFormAction::restore_selected_position()
 
 }
 
-void ItemListFormAction::save_article(const nonstd::optional<std::string>& filename,
+void ItemListFormAction::save_article(const nonstd::optional<Filepath>& filename,
 	std::shared_ptr<RssItem> item)
 {
 	if (!filename.has_value()) {
@@ -1495,13 +1495,13 @@ void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
 		v->get_statusline().show_error(_("Error: no item selected!"));
 		return;
 	}
-	const std::string filename = utils::resolve_tilde(cmd_args.front());
+	const Filepath filename = utils::resolve_tilde(cmd_args.front());
 	const unsigned int itempos = list.get_position();
 	LOG(Level::INFO,
 		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
 		itempos,
 		filename);
-	save_article(filename, visible_items[itempos].first);
+	save_article(filename.clone(), visible_items[itempos].first);
 }
 
 void ItemListFormAction::save_filterpos()
@@ -1593,17 +1593,12 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	nonstd::optional<std::string> directory = v->run_dirbrowser();
-
+	const nonstd::optional<Filepath> directory = v->run_dirbrowser();
 	if (!directory.has_value()) {
 		return;
 	}
 
-	if (directory.value().back() != NEWSBEUTER_PATH_SEP) {
-		directory.value().push_back(NEWSBEUTER_PATH_SEP);
-	}
-
-	std::vector<std::string> filenames;
+	std::vector<Filepath> filenames;
 	for (const auto& item : visible_items) {
 		filenames.emplace_back( utils::utf8_to_locale(v->get_filename_suggestion(
 					item.first->title())));
@@ -1615,9 +1610,9 @@ void ItemListFormAction::handle_op_saveall()
 
 	int nfiles_exist = filenames.size() - unique_filenames.size();
 	for (const auto& filename : unique_filenames) {
-		const auto filepath = directory.value() + filename;
+		const auto filepath = directory.value().join(filename);
 		struct stat sbuf;
-		if (::stat(filepath.c_str(), &sbuf) != -1) {
+		if (::stat(filepath.to_locale_string().c_str(), &sbuf) != -1) {
 			nfiles_exist++;
 		}
 	}
@@ -1635,14 +1630,14 @@ void ItemListFormAction::handle_op_saveall()
 
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
-		const auto filename = filenames[item_idx];
-		const auto filepath = directory.value() + filename;
+		const auto filename = filenames[item_idx].clone();
+		const auto filepath = directory.value().join(filename);
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
-		if (::stat(filepath.c_str(), &sbuf) != -1) {
+		if (::stat(filepath.to_locale_string().c_str(), &sbuf) != -1) {
 			if (overwrite_all) {
-				save_article(filepath, item);
+				save_article(filepath.clone(), item);
 				continue;
 			}
 
@@ -1666,10 +1661,10 @@ void ItemListFormAction::handle_op_saveall()
 			}
 
 			if (c == input_options.at(0)) {
-				save_article(filepath, item);
+				save_article(filepath.clone(), item);
 			} else if (c == input_options.at(1)) {
 				overwrite_all = true;
-				save_article(filepath, item);
+				save_article(filepath.clone(), item);
 			} else if (c == input_options.at(2)) {
 				continue;
 			} else if (c == input_options.at(3)) {
@@ -1677,7 +1672,7 @@ void ItemListFormAction::handle_op_saveall()
 			}
 		} else {
 			// Create file since it does not exist
-			save_article(filepath, item);
+			save_article(filepath.clone(), item);
 		}
 	}
 }
