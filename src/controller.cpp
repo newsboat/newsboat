@@ -743,8 +743,8 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 	}
 }
 
-int Controller::import_opml(const std::string& opmlFile,
-	const std::string& urlFile)
+int Controller::import_opml(const Filepath& opmlFile,
+	const Filepath& urlFile)
 {
 	FileUrlReader urlReader(urlFile);
 	const auto error_message = urlReader.reload(); // Load existing URLs
@@ -916,7 +916,7 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 	return EXIT_SUCCESS;
 }
 
-std::string Controller::write_temporary_item(RssItem& item)
+Filepath Controller::write_temporary_item(RssItem& item)
 {
 	char filename[_POSIX_PATH_MAX];
 	char* tmpdir = getenv("TMPDIR");
@@ -940,21 +940,21 @@ std::string Controller::write_temporary_item(RssItem& item)
 	}
 }
 
-void Controller::write_item(RssItem& item, const std::string& filename)
+void Controller::write_item(RssItem& item, const Filepath& filename)
 {
 	const std::string save_path = cfg.get_configvalue("save-path");
-	auto spath = save_path.back() == '/' ? save_path : save_path + "/";
+	Filepath spath = save_path.back() == '/' ? save_path : save_path + "/";
 
-	std::string path;
-	switch (filename[0]) {
+	Filepath path;
+	switch (filename.to_locale_string()[0]) {
 	case '/':
-		path = filename;
+		path.push(filename);
 		break;
 	case '~':
 		path = utils::resolve_tilde(filename);
 		break;
 	default:
-		path = spath + filename;
+		path = spath.join(filename);
 		break;
 	}
 
@@ -971,7 +971,7 @@ void Controller::write_item(RssItem& item, std::ostream& ostr)
 	ostr << item_renderer::to_plain_text(cfg, item) << std::endl;
 }
 
-void Controller::import_read_information(const std::string& readinfofile)
+void Controller::import_read_information(const Filepath& readinfofile)
 {
 	std::vector<std::string> guids;
 
@@ -988,7 +988,7 @@ void Controller::import_read_information(const std::string& readinfofile)
 	rsscache->mark_items_read_by_guid(guids);
 }
 
-void Controller::export_read_information(const std::string& readinfofile)
+void Controller::export_read_information(const Filepath& readinfofile)
 {
 	std::vector<std::string> guids = rsscache->get_read_item_guids();
 
@@ -1018,7 +1018,7 @@ void Controller::update_config()
 	}
 }
 
-void Controller::load_configfile(const std::string& filename)
+void Controller::load_configfile(const Filepath& filename)
 {
 	if (cfgparser.parse_file(filename)) {
 		update_config();
@@ -1029,7 +1029,7 @@ void Controller::load_configfile(const std::string& filename)
 	}
 }
 
-void Controller::dump_config(const std::string& filename) const
+void Controller::dump_config(const Filepath& filename) const
 {
 	std::vector<std::string> configlines;
 	cfg.dump_config(configlines);
