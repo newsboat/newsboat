@@ -176,7 +176,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	return true;
 }
 
-void DirBrowserFormAction::update_title(const std::string& working_directory)
+void DirBrowserFormAction::update_title(const Filepath& working_directory)
 {
 	const unsigned int width = files_list.get_width();
 
@@ -304,10 +304,10 @@ std::vector<KeyMapHintEntry> DirBrowserFormAction::get_keymap_hint() const
 
 void DirBrowserFormAction::add_directory(
 	std::vector<file_system::FileSystemEntry>& id_at_position,
-	std::string dirname)
+	Filepath dirname)
 {
 	struct stat sb;
-	if (::lstat(dirname.c_str(), &sb) == 0) {
+	if (::lstat(dirname.to_locale_string().c_str(), &sb) == 0) {
 		const auto ftype = file_system::mode_to_filetype(sb.st_mode);
 
 		const auto rwxbits = file_system::permissions_string(sb.st_mode);
@@ -333,14 +333,14 @@ void DirBrowserFormAction::add_directory(
 	}
 }
 
-std::string DirBrowserFormAction::get_formatted_dirname(std::string dirname,
+Filepath DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
 	mode_t mode)
 {
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
 		return strprintf::fmt("%s%c", dirname, suffix.value());
 	} else {
-		return dirname;
+		return dirname.clone();
 	}
 }
 
