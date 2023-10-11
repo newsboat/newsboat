@@ -36,16 +36,16 @@ private:
 	bool process_operation(Operation op,
 		bool automatic = false,
 		std::vector<std::string>* args = nullptr) override;
-	void update_title(const std::string& working_directory);
+	void update_title(const Filepath& working_directory);
 
 	void add_directory(std::vector<file_system::FileSystemEntry>& id_at_position,
-		std::string dirname);
+		Filepath dirname);
 	std::vector<file_system::FileSystemEntry> id_at_position;
 	std::vector<std::string> lines;
 
-	std::string get_formatted_dirname(std::string dirname, mode_t mode);
+	Filepath get_formatted_dirname(const Filepath& dirname, mode_t mode);
 
-	std::string cwd;
+	//std::string cwd;
 
 	ListWidget files_list;
 };
