@@ -253,7 +253,7 @@ void QueueLoader::delete_played_files(const CategorizedDownloads& downloads)
 const
 {
 	for (const auto& dl : downloads.to_delete) {
-		const Filepath filename = dl.filename();
+		const Filepath filename = dl.filename().clone();
 		LOG(Level::INFO, "Deleting file %s", filename);
 		if (std::remove(filename.to_locale_string().c_str()) != 0) {
 			if (errno != ENOENT) {
