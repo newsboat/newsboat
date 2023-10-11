@@ -73,7 +73,7 @@ void PodDlThread::run()
 
 	struct stat sb;
 	Filepath filename =
-		dl->filename() + newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX;
+		dl->filename().join(newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX);
 
 	if (stat(filename.to_locale_string().c_str(), &sb) == -1) {
 		LOG(Level::INFO,
@@ -120,7 +120,8 @@ void PodDlThread::run()
 			LOG(Level::DEBUG,
 				"PodDlThread::run: download complete, deleting "
 				"temporary suffix");
-			if (rename(filename.to_locale_string().c_str(), dl->filename().c_str()) == 0) {
+			if (rename(filename.to_locale_string().c_str(),
+					dl->filename().to_locale_string().c_str()) == 0) {
 				dl->set_status(DlStatus::READY);
 			} else {
 				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
