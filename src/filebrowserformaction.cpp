@@ -317,6 +317,8 @@ void FileBrowserFormAction::init()
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
+	// TODO: #2326 use length by graphemes
+	// See: https://github.com/newsboat/newsboat/pull/2561#discussion_r1357376071
 	set_value("filenametext_pos",
 		std::to_string(default_filename.to_locale_string().length()));
 }
