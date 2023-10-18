@@ -1,7 +1,6 @@
 #include "view.h"
 
 #include <string>
-#include <iostream>
 
 #include "3rd-party/catch.hpp"
 #include "controller.h"

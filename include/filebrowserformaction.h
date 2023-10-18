@@ -51,8 +51,6 @@ private:
 
 	Filepath get_formatted_filename(Filepath filename, mode_t mode);
 
-	bool quit; // Probably unnecessary variable!
-	std::string cwd; // Probably unnecessary variable!
 	Filepath default_filename;
 
 	ListWidget files_list;

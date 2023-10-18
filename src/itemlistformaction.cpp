@@ -1514,7 +1514,7 @@ void ItemListFormAction::handle_op_saveall()
 
 	int nfiles_exist = filenames.size() - unique_filenames.size();
 	for (const auto& filename : unique_filenames) {
-		const auto filepath = directory.join(filename).clone();
+		const auto filepath = directory.join(filename);
 		struct stat sbuf;
 		if (::stat(filepath.to_locale_string().c_str(), &sbuf) != -1) {
 			nfiles_exist++;
@@ -1535,7 +1535,7 @@ void ItemListFormAction::handle_op_saveall()
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
 		const auto filename = filenames[item_idx].clone();
-		const auto filepath = directory.join(filename).clone();
+		const auto filepath = directory.join(filename);
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;

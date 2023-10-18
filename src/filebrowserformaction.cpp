@@ -29,7 +29,6 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, quit(false)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 	// In filebrowser, keyboard focus is at the input field, so user will be

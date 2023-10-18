@@ -45,8 +45,6 @@ private:
 
 	Filepath get_formatted_dirname(const Filepath& dirname, mode_t mode);
 
-	//std::string cwd;
-
 	ListWidget files_list;
 };
 

@@ -944,7 +944,7 @@ void Controller::write_item(std::shared_ptr<RssItem> item,
 		path = utils::resolve_tilde(filename);
 		break;
 	default:
-		path = spath.join(filename).clone();
+		path = spath.join(filename);
 		break;
 	}
 
