@@ -44,11 +44,11 @@ private:
 	void update_title(const Filepath& working_directory);
 
 	void add_file(std::vector<file_system::FileSystemEntry>& id_at_position,
-		Filepath filename);
+		const Filepath& filename);
 	std::vector<file_system::FileSystemEntry> id_at_position;
 	std::vector<std::string> lines;
 
-	Filepath get_formatted_filename(Filepath filename, mode_t mode);
+	Filepath get_formatted_filename(const Filepath& filename, mode_t mode);
 
 	Filepath default_filename;
 

@@ -331,7 +331,7 @@ const std::vector<KeyMapHintEntry>& FileBrowserFormAction::get_keymap_hint() con
 
 void FileBrowserFormAction::add_file(
 	std::vector<file_system::FileSystemEntry>& id_at_position,
-	Filepath filename)
+	const Filepath& filename)
 {
 	struct stat sb;
 	if (::lstat(filename.to_locale_string().c_str(), &sb) == 0) {
@@ -360,14 +360,14 @@ void FileBrowserFormAction::add_file(
 	}
 }
 
-Filepath FileBrowserFormAction::get_formatted_filename(Filepath filename,
+Filepath FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
 	mode_t mode)
 {
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
 		return strprintf::fmt("%s%c", filename, suffix.value());
 	} else {
-		return filename;
+		return filename.clone();
 	}
 }
 
