@@ -45,7 +45,6 @@ private:
 
 	void add_file(std::vector<file_system::FileSystemEntry>& id_at_position,
 		Filepath filename);
-	std::string get_filename_suggestion(const std::string& s); // Probably unnecessary method!
 	std::vector<file_system::FileSystemEntry> id_at_position;
 	std::vector<std::string> lines;
 
