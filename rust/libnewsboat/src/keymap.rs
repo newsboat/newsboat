@@ -1,7 +1,7 @@
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
-    character::complete::{space0, space1},
+    character::complete::{alpha1, space0, space1},
     combinator::{complete, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
     sequence::{delimited, preceded},
@@ -89,6 +89,33 @@ fn operation_sequence(
     Ok((input, (operations, optional_description)))
 }
 
+fn contexts(input: &str) -> IResult<&str, Vec<&str>> {
+    separated_list1(tag(","), alpha1)(input)
+}
+
+fn key_sequence(input: &str) -> IResult<&str, String> {
+    token(input)
+}
+
+fn binding(input: &str) -> IResult<&str, Binding> {
+    let (input, _) = space0(input)?;
+    let (input, key_sequence) = key_sequence(input)?;
+    let (input, _) = space1(input)?;
+    let (input, contexts) = contexts(input)?;
+    let (input, _) = space1(input)?;
+    let (input, (operations, description)) = operation_sequence(input, true)?;
+
+    Ok((
+        input,
+        Binding {
+            key_sequence,
+            contexts: contexts.into_iter().map(|s| s.to_owned()).collect(),
+            operations,
+            description,
+        },
+    ))
+}
+
 /// Split a semicolon-separated list of operations into a vector. Each operation is represented by
 /// a non-empty sub-vector, where the first element is the name of the operation, and the rest of
 /// the elements are operation's arguments.
@@ -113,8 +140,26 @@ pub fn tokenize_operation_sequence(
     }
 }
 
+#[derive(Debug, PartialEq)]
+pub struct Binding {
+    pub key_sequence: String,
+    pub contexts: Vec<String>,
+    pub operations: Vec<Vec<String>>,
+    pub description: Option<String>,
+}
+
+pub fn tokenize_binding(input: &str) -> Option<Binding> {
+    match binding(input) {
+        Ok((_, binding)) => Some(binding),
+        Err(_error) => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use super::contexts;
+    use super::key_sequence;
+    use super::tokenize_binding;
     use super::tokenize_operation_sequence;
 
     macro_rules! vec_of_strings {
@@ -537,5 +582,66 @@ mod tests {
     #[test]
     fn t_tokenize_operation_sequence_passes_through_unknown_escaped_characters_in_description() {
         verify_parsed_description(r#"open -- "\f\o\o\"\\\b\a\r""#, r#"foo"\bar"#);
+    }
+
+    #[test]
+    fn t_key_sequence() {
+        assert_eq!(key_sequence("x").unwrap().1, "x");
+        assert_eq!(key_sequence("\"x\"").unwrap().1, "x");
+        assert_eq!(key_sequence("gg").unwrap().1, "gg");
+        assert_eq!(key_sequence("<ENTER>").unwrap().1, "<ENTER>");
+        assert_eq!(key_sequence("^U<ENTER>").unwrap().1, "^U<ENTER>");
+    }
+
+    #[test]
+    fn t_contexts() {
+        assert_eq!(contexts("everywhere").unwrap().1, vec!["everywhere"]);
+        assert_eq!(contexts("feedlist").unwrap().1, vec!["feedlist"]);
+        assert_eq!(
+            contexts("feedlist,articlelist").unwrap().1,
+            vec!["feedlist", "articlelist"]
+        );
+    }
+
+    #[test]
+    fn t_test_tokenize_binding_no_description() {
+        let input = "q everywhere quit";
+
+        let parsed_binding = tokenize_binding(input).unwrap();
+
+        assert_eq!(parsed_binding.key_sequence, "q");
+        assert_eq!(parsed_binding.contexts, vec!["everywhere"]);
+        assert_eq!(parsed_binding.operations, vec![vec_of_strings!("quit")]);
+        assert_eq!(parsed_binding.description, None);
+    }
+
+    #[test]
+    fn t_test_tokenize_binding_with_description() {
+        let input = "gg feedlist,articlelist home ; open -- \"Open entry at top of list\"";
+
+        let parsed_binding = tokenize_binding(input).unwrap();
+
+        assert_eq!(parsed_binding.key_sequence, "gg");
+        assert_eq!(parsed_binding.contexts, vec!["feedlist", "articlelist"]);
+        assert_eq!(
+            parsed_binding.operations,
+            vec![vec_of_strings!("home"), vec_of_strings!("open")]
+        );
+        assert_eq!(
+            parsed_binding.description,
+            Some("Open entry at top of list".to_string())
+        );
+    }
+
+    #[test]
+    fn t_test_tokenize_binding_missing_parts() {
+        assert_eq!(tokenize_binding(""), None);
+        assert_eq!(tokenize_binding("gg"), None);
+        assert_eq!(tokenize_binding("gg everywhere"), None);
+    }
+
+    #[test]
+    fn t_test_tokenize_binding_incomplete_description_syntax() {
+        assert_eq!(tokenize_binding("q everywhere quit -- "), None);
     }
 }
