@@ -1,7 +1,7 @@
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
-    character::complete::one_of,
+    character::complete::{space0, space1},
     combinator::{complete, cond, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
     sequence::{delimited, preceded, terminated, tuple},
@@ -39,16 +39,16 @@ fn token(input: &str) -> IResult<&str, String> {
 }
 
 fn operation_with_args(input: &str) -> IResult<&str, Vec<String>> {
-    let mut parser = separated_list1(many1(one_of(" \t")), token);
+    let mut parser = separated_list1(space1, token);
     parser(input)
 }
 
 fn semicolon(input: &str) -> IResult<&str, &str> {
-    delimited(many0(one_of(" \t")), tag(";"), many0(one_of(" \t")))(input)
+    delimited(space0, tag(";"), space0)(input)
 }
 
 fn operation_description(input: &str) -> IResult<&str, String> {
-    let start_token = delimited(many0(one_of(" \t")), tag("--"), many0(one_of(" \t")));
+    let start_token = delimited(space0, tag("--"), space0);
 
     let string_content = escaped_transform(
         is_not(r#""\"#),
@@ -81,7 +81,7 @@ fn operation_sequence(
     let parser = separated_list0(many1(semicolon), operation_with_args);
     let parser = delimited(many0(semicolon), parser, many0(semicolon));
     let parser = tuple((parser, conditional_optional_description));
-    let parser = delimited(many0(one_of(" \t")), parser, many0(one_of(" \t")));
+    let parser = delimited(space0, parser, space0);
     let parser = terminated(parser, eof);
 
     let mut parser = complete(parser);
