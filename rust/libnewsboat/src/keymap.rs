@@ -2,9 +2,9 @@ use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
     character::complete::{space0, space1},
-    combinator::{complete, cond, eof, map, opt, recognize, value, verify},
+    combinator::{complete, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
-    sequence::{delimited, preceded, terminated, tuple},
+    sequence::{delimited, preceded},
     IResult,
 };
 
@@ -72,21 +72,21 @@ fn operation_sequence(
     input: &str,
     allow_description: bool,
 ) -> IResult<&str, (Vec<Vec<String>>, Option<String>)> {
-    let conditional_optional_description = cond(allow_description, opt(operation_description));
-    let conditional_optional_description = map(
-        conditional_optional_description,
-        |x: Option<Option<String>>| x.flatten(),
-    );
+    let (input, _) = space0(input)?;
+    let (input, _) = many0(semicolon)(input)?;
+    let (input, operations) = separated_list0(many1(semicolon), operation_with_args)(input)?;
+    let (input, _) = many0(semicolon)(input)?;
 
-    let parser = separated_list0(many1(semicolon), operation_with_args);
-    let parser = delimited(many0(semicolon), parser, many0(semicolon));
-    let parser = tuple((parser, conditional_optional_description));
-    let parser = delimited(space0, parser, space0);
-    let parser = terminated(parser, eof);
+    let (input, optional_description) = if allow_description {
+        opt(operation_description)(input)?
+    } else {
+        (input, None)
+    };
 
-    let mut parser = complete(parser);
+    let (input, _) = space0(input)?;
+    let (input, _) = complete(eof)(input)?;
 
-    parser(input)
+    Ok((input, (operations, optional_description)))
 }
 
 /// Split a semicolon-separated list of operations into a vector. Each operation is represented by
