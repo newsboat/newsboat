@@ -107,10 +107,8 @@ You can now:
 ****
 *Local articles* Newsboat keeps the articles that it downloads.
 When you start Newsboat again and reload a feed, old articles can still be
-read even if they aren't in the current RSS feeds anymore.
-
-You can configure how many articles are kept per feed so that the article backlog doesn't
-grow endlessly by configuring <<max-items,`max-items`>>.
+read even if they aren't in the current RSS feeds anymore. The maximum number
+of articles is controlled by <<max-items,`max-items`>>.
 ****
 
 ****
