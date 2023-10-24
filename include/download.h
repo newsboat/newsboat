@@ -37,8 +37,8 @@ public:
 	{
 		return msg;
 	}
-	const newsboat::Filepath filename() const;
-	const newsboat::Filepath basename() const;
+	newsboat::Filepath filename() const;
+	newsboat::Filepath basename() const;
 	const std::string url() const;
 	void set_filename(const newsboat::Filepath& str);
 	void set_url(const std::string& url);
