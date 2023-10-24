@@ -102,21 +102,24 @@ void HelpFormAction::prepare()
 
 		const auto descs = v->get_keymap()->get_keymap_descriptions(context);
 
-		std::string highlighted_searchphrase =
-			strprintf::fmt("<hl>%s</>", searchphrase);
 		std::vector<std::string> colors = utils::tokenize(
 				cfg->get_configvalue("search-highlight-colors"), " ");
 		set_value("highlight", make_colorstring(colors));
 		ListFormatter listfmt;
 
-		const unsigned int unbound_count = std::count_if(descs.begin(),
-		descs.end(), [](const KeyMapDesc& desc) {
-			return desc.key.length() == 0;
-		});
-		const unsigned int syskey_count = std::count_if(descs.begin(),
-		descs.end(), [](const KeyMapDesc& desc) {
-			return desc.flags & KM_SYSKEYS;
-		});
+		std::vector<KeyMapDesc> syskey_descriptions;
+		std::vector<KeyMapDesc> unbound_descriptions;
+		std::vector<KeyMapDesc> bound_descriptions;
+
+		for (const auto& desc : descs) {
+			if (desc.flags & KM_SYSKEYS) {
+				syskey_descriptions.push_back(desc);
+			} else if (desc.key.empty()) {
+				unbound_descriptions.push_back(desc);
+			} else {
+				bound_descriptions.push_back(desc);
+			}
+		}
 
 		const auto should_be_visible = [&](const KeyMapDesc& desc) {
 			return !apply_search
@@ -125,6 +128,7 @@ void HelpFormAction::prepare()
 				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
 		};
 
+		std::string highlighted_searchphrase = strprintf::fmt("<hl>%s</>", searchphrase);
 		const auto apply_highlights = [&](const std::string& line) {
 			if (apply_search && searchphrase.length() > 0) {
 				return utils::replace_all(line, searchphrase, highlighted_searchphrase);
@@ -132,10 +136,7 @@ void HelpFormAction::prepare()
 			return line;
 		};
 
-		for (const auto& desc : descs) {
-			if (desc.key.length() == 0 || desc.flags & KM_SYSKEYS) {
-				continue;
-			}
+		for (const auto& desc : bound_descriptions) {
 			if (should_be_visible(desc)) {
 				auto line = strprintf::fmt("%-15s %-23s %s", desc.key, desc.cmd, desc.desc);
 				line = utils::quote_for_stfl(line);
@@ -144,15 +145,12 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		if (syskey_count > 0) {
+		if (!syskey_descriptions.empty()) {
 			listfmt.add_line("");
 			listfmt.add_line(_("Generic bindings:"));
 			listfmt.add_line("");
 
-			for (const auto& desc : descs) {
-				if (!(desc.flags & KM_SYSKEYS)) {
-					continue;
-				}
+			for (const auto& desc : syskey_descriptions) {
 				if (should_be_visible(desc)) {
 					auto line = strprintf::fmt("%-15s %-23s %s", desc.key, desc.cmd, desc.desc);
 					line = utils::quote_for_stfl(line);
@@ -162,15 +160,12 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		if (unbound_count > 0) {
+		if (!unbound_descriptions.empty()) {
 			listfmt.add_line("");
 			listfmt.add_line(_("Unbound functions:"));
 			listfmt.add_line("");
 
-			for (const auto& desc : descs) {
-				if (desc.key.length() > 0 || desc.flags & KM_SYSKEYS) {
-					continue;
-				}
+			for (const auto& desc : unbound_descriptions) {
 				if (should_be_visible(desc)) {
 					std::string line = strprintf::fmt("%-39s %s", desc.cmd, desc.desc);
 					line = utils::quote_for_stfl(line);
