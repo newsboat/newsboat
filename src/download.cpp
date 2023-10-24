@@ -52,12 +52,12 @@ Download& Download::operator=(const Download& download)
 	return *this;
 }
 
-const newsboat::Filepath Download::filename() const
+newsboat::Filepath Download::filename() const
 {
 	return fn.clone();
 }
 
-const newsboat::Filepath Download::basename() const
+newsboat::Filepath Download::basename() const
 {
 	std::string::size_type start = fn.to_locale_string().rfind(NEWSBEUTER_PATH_SEP);
 
