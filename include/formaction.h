@@ -14,6 +14,7 @@ namespace newsboat {
 
 class ConfigContainer;
 class RssFeed;
+class TextviewWidget;
 class View;
 
 typedef std::pair<std::string, std::string> QnaPair;
@@ -126,6 +127,7 @@ protected:
 	void handle_parsed_command(const Command& command);
 
 	bool handle_list_operations(ListWidget& list, Operation op);
+	bool handle_textview_operations(TextviewWidget& textview, Operation op);
 
 	View* v;
 	ConfigContainer* cfg;

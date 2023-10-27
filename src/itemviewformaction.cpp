@@ -182,30 +182,6 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 
 	switch (op) {
-	case OP_SK_UP:
-		textview.scroll_up();
-		break;
-	case OP_SK_DOWN:
-		textview.scroll_down();
-		break;
-	case OP_SK_HOME:
-		textview.scroll_to_top();
-		break;
-	case OP_SK_END:
-		textview.scroll_to_bottom();
-		break;
-	case OP_SK_PGUP:
-		textview.scroll_page_up();
-		break;
-	case OP_SK_PGDOWN:
-		textview.scroll_page_down();
-		break;
-	case OP_SK_HALF_PAGE_UP:
-		textview.scroll_halfpage_up();
-		break;
-	case OP_SK_HALF_PAGE_DOWN:
-		textview.scroll_halfpage_down();
-		break;
 	case OP_TOGGLESOURCEVIEW:
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: toggling source view");
 		show_source = !show_source;
@@ -497,6 +473,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
+		if (handle_textview_operations(textview, op)) {
+			break;
+		}
 		break;
 	}
 
