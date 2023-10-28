@@ -61,3 +61,13 @@ TEST_CASE("Can be cloned", "[Filepath]")
 	REQUIRE(original.display() == "/etc/hosts/ a bit more");
 	REQUIRE(clone.display() == "/etc/hosts");
 }
+
+TEST_CASE("Set extension", "[Filepath]")
+{
+	Filepath path;
+	REQUIRE_FALSE(path.set_extension("exe"));
+
+	path.push("file");
+	REQUIRE(path.set_extension("exe"));
+	REQUIRE(path == "file.exe");
+}
