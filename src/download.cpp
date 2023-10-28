@@ -21,35 +21,6 @@ Download::Download(std::function<void()> cb_require_view_update_)
 {
 }
 
-Download::Download(const Download& download) :
-	url_(download.url_),
-	download_status(download.download_status),
-	msg(download.msg),
-	cursize(download.cursize),
-	totalsize(download.totalsize),
-	curkbps(download.curkbps),
-	offs(download.offs),
-	cb_require_view_update(download.cb_require_view_update)
-{
-	fn = download.fn.clone();
-}
-
-Download& Download::operator=(const Download& download)
-{
-	if (this == &download) {
-		return *this;
-	}
-	url_ = download.url_;
-	download_status = download.download_status;
-	msg = download.msg;
-	cursize = download.cursize;
-	totalsize = download.totalsize;
-	curkbps = download.curkbps;
-	offs = download.offs;
-	fn = download.fn.clone();
-	return *this;
-}
-
 newsboat::Filepath Download::filename() const
 {
 	return fn.clone();

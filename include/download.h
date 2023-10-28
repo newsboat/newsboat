@@ -24,8 +24,6 @@ enum class DlStatus {
 class Download {
 public:
 	explicit Download(std::function<void()> cb_require_view_update);
-	Download(const Download& download);
-	Download& operator=(const Download& download);
 	double percents_finished() const;
 	const std::string status_text() const;
 	DlStatus status() const
