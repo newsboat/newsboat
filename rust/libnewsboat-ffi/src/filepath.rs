@@ -22,6 +22,7 @@ mod bridged {
         fn push(filepath: &mut PathBuf, component: &PathBuf);
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
+        fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool;
 
         // These functions are actually in utils.rs, but I couldn't find a way to return
         // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the bindings here
@@ -88,4 +89,8 @@ fn getcwd() -> Box<PathBuf> {
 
 fn is_absolute(filepath: &PathBuf) -> bool {
     filepath.0.is_absolute()
+}
+
+fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool {
+    filepath.0.set_extension(extension)
 }
