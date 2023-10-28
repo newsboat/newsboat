@@ -93,7 +93,7 @@ fn is_absolute(filepath: &PathBuf) -> bool {
 }
 
 fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool {
-    filepath.0.set_extension(&extension)
+    filepath.0.set_extension(extension)
 }
 
 fn starts_with(filepath: &PathBuf, str: &str) -> bool {
