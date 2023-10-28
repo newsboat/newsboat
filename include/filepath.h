@@ -103,6 +103,9 @@ public:
 	// Return `false` and do nothing if Filepath is empty, set extension and return `true` otherwise.
 	bool set_extension(const std::string& str);
 
+	// Return `true` if Filepath start with `str`, `false` otherwise.
+	bool starts_with(const std::string& str) const;
+
 	Filepath(Filepath&&) = default;
 	Filepath& operator=(Filepath&&) = default;
 
