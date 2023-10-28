@@ -946,16 +946,12 @@ void Controller::write_item(RssItem& item, const Filepath& filename)
 	Filepath spath = save_path.back() == '/' ? save_path : save_path + "/";
 
 	Filepath path;
-	switch (filename.to_locale_string()[0]) {
-	case '/':
+	if (filename.starts_with("/")) {
 		path.push(filename);
-		break;
-	case '~':
+	} else if (filename.starts_with("~")) {
 		path = utils::resolve_tilde(filename);
-		break;
-	default:
+	} else {
 		path = spath.join(filename);
-		break;
 	}
 
 	std::fstream f(path, std::fstream::out);
