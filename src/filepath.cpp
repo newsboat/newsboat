@@ -63,6 +63,11 @@ Filepath Filepath::clone() const
 bool Filepath::is_absolute() const
 {
 	return filepath::bridged::is_absolute(*rs_object);
-};
+}
+
+bool Filepath::set_extension(const std::string& str)
+{
+	return filepath::bridged::set_extension(*rs_object, str);
+}
 
 } // namespace newsboat

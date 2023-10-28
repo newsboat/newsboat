@@ -336,12 +336,12 @@ void DirBrowserFormAction::add_directory(
 Filepath DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
 	mode_t mode)
 {
+	Filepath tmp = dirname;
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		return strprintf::fmt("%s%c", dirname, suffix.value());
-	} else {
-		return dirname.clone();
+		tmp.set_extension(std::to_string(suffix.value()));
 	}
+	return tmp;
 }
 
 std::string DirBrowserFormAction::title()
