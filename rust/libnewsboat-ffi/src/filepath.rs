@@ -23,6 +23,7 @@ mod bridged {
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool;
+        fn starts_with(filepath: &PathBuf, str: &str) -> bool;
 
         // These functions are actually in utils.rs, but I couldn't find a way to return
         // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the bindings here
@@ -93,4 +94,8 @@ fn is_absolute(filepath: &PathBuf) -> bool {
 
 fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool {
     filepath.0.set_extension(extension)
+}
+
+fn starts_with(filepath: &PathBuf, str: &str) -> bool {
+    filepath.0.starts_with(str)
 }

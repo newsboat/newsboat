@@ -70,4 +70,9 @@ bool Filepath::set_extension(const std::string& str)
 	return filepath::bridged::set_extension(*rs_object, str);
 }
 
+bool Filepath::starts_with(const std::string& str) const
+{
+	return filepath::bridged::starts_with(*rs_object, str);
+}
+
 } // namespace newsboat
