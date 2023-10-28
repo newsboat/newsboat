@@ -40,6 +40,20 @@ public:
 	{
 	}
 
+	Filepath(const Filepath& filepath) :
+		rs_object(filepath::bridged::clone(*filepath.rs_object))
+	{
+	}
+
+	Filepath& operator=(const Filepath& filepath)
+	{
+		if (this == &filepath) {
+			return *this;
+		}
+		rs_object = filepath::bridged::clone(*filepath.rs_object);
+		return *this;
+	}
+
 	operator std::string() const
 	{
 		return to_locale_string();
@@ -86,8 +100,6 @@ public:
 	// Return `true` if path is absolute.
 	bool is_absolute() const;
 
-	Filepath(const Filepath&) = delete;
-	Filepath& operator=(const Filepath&) = delete;
 	Filepath(Filepath&&) = default;
 	Filepath& operator=(Filepath&&) = default;
 
