@@ -2,6 +2,7 @@
 #define NEWSBOAT_FILEPATH_H_
 
 #include "libnewsboat-ffi/src/filepath.rs.h"
+#include "3rd-party/optional.hpp"
 
 #include <cstdint>
 #include <ostream>
@@ -105,6 +106,9 @@ public:
 
 	// Return `true` if Filepath start with `str`, `false` otherwise.
 	bool starts_with(const std::string& str) const;
+
+	/// Returns the final component of the path, if there is one.
+	nonstd::optional<Filepath> file_name() const;
 
 	Filepath(Filepath&&) = default;
 	Filepath& operator=(Filepath&&) = default;
