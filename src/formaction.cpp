@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "matcherexception.h"
 #include "strprintf.h"
+#include "textviewwidget.h"
 #include "utils.h"
 #include "view.h"
 
@@ -368,6 +369,39 @@ bool FormAction::handle_list_operations(ListWidget& list, Operation op)
 		return false;
 	}
 	return false;
+}
+
+bool FormAction::handle_textview_operations(TextviewWidget& textview, Operation op)
+{
+	switch (op) {
+	case OP_SK_UP:
+		textview.scroll_up();
+		break;
+	case OP_SK_DOWN:
+		textview.scroll_down();
+		break;
+	case OP_SK_HOME:
+		textview.scroll_to_top();
+		break;
+	case OP_SK_END:
+		textview.scroll_to_bottom();
+		break;
+	case OP_SK_PGUP:
+		textview.scroll_page_up();
+		break;
+	case OP_SK_PGDOWN:
+		textview.scroll_page_down();
+		break;
+	case OP_SK_HALF_PAGE_UP:
+		textview.scroll_halfpage_up();
+		break;
+	case OP_SK_HALF_PAGE_DOWN:
+		textview.scroll_halfpage_down();
+		break;
+	default:
+		return false;
+	}
+	return true;
 }
 
 bool FormAction::handle_single_argument_set(std::string argument)
