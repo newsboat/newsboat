@@ -77,9 +77,12 @@ void Reloader::reload(unsigned int pos,
 	bool show_progress,
 	bool unattended)
 {
+	ScopeMeasure sm("Reloader::reload");
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u", pos);
 	std::shared_ptr<RssFeed> oldfeed = ctrl->get_feedcontainer()->get_feed(pos);
 	if (oldfeed) {
+		LOG(Level::INFO, "Reloader::reload: starting reload of %s", oldfeed->rssurl());
+
 		// Query feed reloading should be handled by the calling functions
 		// (e.g.  Reloader::reload_all() calling View::prepare_query_feed())
 		if (oldfeed->is_query_feed()) {
@@ -110,13 +113,16 @@ void Reloader::reload(unsigned int pos,
 			RssIgnores* ign = ignore_dl ? ctrl->get_ignores() : nullptr;
 
 			LOG(Level::INFO, "Reloader::reload: retrieving feed");
+			sm.stopover("start retrieving");
 			FeedRetriever feed_retriever(cfg, *rsscache, ign, ctrl->get_api(), &easyhandle);
 			const rsspp::Feed feed = feed_retriever.retrieve(oldfeed->rssurl());
 
 			LOG(Level::INFO, "Reloader::reload: parsing feed");
+			sm.stopover("start parsing");
 			RssParser parser(oldfeed->rssurl(), *rsscache, cfg, ign);
 
 			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
+			sm.stopover("start replacing feed");
 			if (newfeed != nullptr) {
 				ctrl->replace_feed(
 					oldfeed, newfeed, pos, unattended);

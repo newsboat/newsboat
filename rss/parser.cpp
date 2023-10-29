@@ -232,7 +232,7 @@ Feed Parser::parse_url(const std::string& url,
 	}
 
 	const std::string buf = curlDataReceiver->get_data();
-	LOG(Level::INFO,
+	LOG(Level::DEBUG,
 		"Parser::parse_url: retrieved data for %s: %s",
 		url,
 		buf);
