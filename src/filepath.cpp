@@ -75,4 +75,15 @@ bool Filepath::starts_with(const std::string& str) const
 	return filepath::bridged::starts_with(*rs_object, str);
 }
 
+std::optional<Filepath> Filepath::file_name() const
+{
+	auto str = filepath::bridged::file_name(*rs_object);
+	auto res = std::string(str.begin(), str.end());
+	if (res.empty()) {
+		return std::nullopt;
+	} else {
+		return res;
+	}
+}
+
 } // namespace newsboat

@@ -4,6 +4,7 @@
 #include "libnewsboat-ffi/src/filepath.rs.h"
 
 #include <cstdint>
+#include <optional>
 #include <ostream>
 #include <string>
 
@@ -106,6 +107,9 @@ public:
 	// Return `true` if Filepath start with `str`, `false` otherwise.
 	bool starts_with(const std::string& str) const;
 
+	/// Returns the final component of the path, if there is one.
+	std::optional<Filepath> file_name() const;
+
 	Filepath(Filepath&&) = default;
 	Filepath& operator=(Filepath&&) = default;
 
@@ -131,7 +135,6 @@ inline bool operator==(const std::string& lhs, const newsboat::Filepath& rhs)
 	return lhs == rhs.to_locale_string();
 }
 
-#include <optional>
 inline bool operator==(const std::optional<std::string>& lhs,
 	const newsboat::Filepath& rhs)
 {
