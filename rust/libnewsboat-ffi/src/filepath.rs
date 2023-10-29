@@ -24,6 +24,7 @@ mod bridged {
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool;
         fn starts_with(filepath: &PathBuf, str: &str) -> bool;
+        fn file_name(filepath: &PathBuf) -> Vec<u8>;
 
         // These functions are actually in utils.rs, but I couldn't find a way to return
         // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the bindings here
@@ -98,4 +99,13 @@ fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool {
 
 fn starts_with(filepath: &PathBuf, str: &str) -> bool {
     filepath.0.starts_with(str)
+}
+
+fn file_name(filepath: &PathBuf) -> Vec<u8> {
+    use std::os::unix::ffi::OsStrExt;
+    if let Some(res) = filepath.0.file_name() {
+        res.as_bytes().to_vec()
+    } else {
+        Vec::new()
+    }
 }
