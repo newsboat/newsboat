@@ -31,12 +31,7 @@ newsboat::Filepath Download::filename() const
 
 newsboat::Filepath Download::basename() const
 {
-	std::string::size_type start = fn.to_locale_string().rfind(NEWSBEUTER_PATH_SEP);
-
-	if (start != std::string::npos) {
-		return fn.to_locale_string().substr(start+1);
-	}
-	return fn.clone();
+	return fn.file_name();
 }
 
 const std::string Download::url() const
