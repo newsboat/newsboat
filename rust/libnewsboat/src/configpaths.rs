@@ -358,7 +358,7 @@ impl ConfigPaths {
             let current_extension = path
                 .extension()
                 .map(|p| p.to_string_lossy().into_owned())
-                .unwrap_or_else(String::new);
+                .unwrap_or_default();
             path.set_extension(current_extension + LOCK_SUFFIX);
             path
         };
