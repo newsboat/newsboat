@@ -112,6 +112,6 @@ fn file_name(filepath: &PathBuf) -> String {
             .into_string()
             .unwrap()
     } else {
-        String::from_str(filepath.0.to_str().unwrap()).unwrap()
+        String::from_str("").unwrap()
     }
 }
