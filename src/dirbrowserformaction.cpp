@@ -54,7 +54,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				const auto selection = id_at_position[selected_position];
 				switch (selection.filetype) {
 				case file_system::FileType::Directory: {
-					const int status = ::chdir(selection.name.c_str());
+					const int status = ::chdir(selection.name.to_locale_string().c_str());
 					LOG(Level::DEBUG,
 						"DirBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						selection.name,
