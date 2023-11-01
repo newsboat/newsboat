@@ -24,7 +24,7 @@ std::string History::next_line()
 
 void History::load_from_file(const Filepath& file)
 {
-	history::bridged::load_from_file(*rs_object, file.to_locale_string());
+	history::bridged::load_from_file(*rs_object, file);
 }
 
 void History::save_to_file(const Filepath& file, unsigned int limit)
