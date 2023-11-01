@@ -29,7 +29,7 @@ void History::load_from_file(const Filepath& file)
 
 void History::save_to_file(const Filepath& file, unsigned int limit)
 {
-	history::bridged::save_to_file(*rs_object, file.to_locale_string(), limit);
+	history::bridged::save_to_file(*rs_object, file, limit);
 }
 
 } // namespace newsboat
