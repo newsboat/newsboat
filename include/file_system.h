@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 
 #include "3rd-party/optional.hpp"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -35,7 +36,7 @@ nonstd::optional<char> mode_suffix(mode_t mode);
 /// An entry in a listing, e.g. a file, a directory or suchlike.
 struct FileSystemEntry {
 	FileType filetype;
-	std::string name;
+	Filepath name;
 };
 
 /// The name of the user with a given UID, padded on the right to the width of
