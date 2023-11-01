@@ -23,7 +23,7 @@ mod bridged {
         fn previous_line(history: &mut History) -> String;
         fn next_line(history: &mut History) -> String;
         fn load_from_file(history: &mut History, file: &PathBuf);
-        fn save_to_file(history: &mut History, file: &str, limit: usize);
+        fn save_to_file(history: &mut History, file: &PathBuf, limit: usize);
     }
 }
 
@@ -49,8 +49,8 @@ fn load_from_file(history: &mut History, file: &PathBuf) {
     let _ = history.0.load_from_file(&file.0);
 }
 
-fn save_to_file(history: &mut History, file: &str, limit: usize) {
+fn save_to_file(history: &mut History, file: &PathBuf, limit: usize) {
     // Original C++ code did nothing if it failed to open file.
     // Returns a [must_use] type so safely ignoring the value.
-    let _ = history.0.save_to_file(file, limit);
+    let _ = history.0.save_to_file(&file.0, limit);
 }
