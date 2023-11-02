@@ -89,7 +89,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	 * At this point, we're confident we'll be using XDG. We don't check if
 	 * data dir exists, because if it doesn't we'll create it. */
 
-	config_dir = xdg_config_dir.clone();
+	config_dir = xdg_config_dir;
 
 	// create data directory if it doesn't exist
 	int ret = utils::mkdir_parents(xdg_data_dir, 0700);

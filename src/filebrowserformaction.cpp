@@ -338,7 +338,7 @@ void FileBrowserFormAction::add_file(
 		const auto rwxbits = file_system::permissions_string(sb.st_mode);
 		const auto owner = file_system::get_user_padded(sb.st_uid);
 		const auto group = file_system::get_group_padded(sb.st_gid);
-		std::string formattedfilename = get_formatted_filename(filename.clone(), sb.st_mode);
+		std::string formattedfilename = get_formatted_filename(filename, sb.st_mode);
 
 		std::string sizestr = strprintf::fmt(
 				"%12" PRIi64,
@@ -365,7 +365,7 @@ Filepath FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
 	if (suffix.has_value()) {
 		return strprintf::fmt("%s%c", filename, suffix.value());
 	} else {
-		return filename.clone();
+		return filename;
 	}
 }
 

@@ -1503,7 +1503,7 @@ void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
 		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
 		itempos,
 		filename);
-	save_article(filename.clone(), visible_items[itempos].first);
+	save_article(filename, visible_items[itempos].first);
 }
 
 void ItemListFormAction::save_filterpos()
@@ -1632,14 +1632,14 @@ void ItemListFormAction::handle_op_saveall()
 
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
-		const auto filename = filenames[item_idx].clone();
+		const auto filename = filenames[item_idx];
 		const auto filepath = directory.value().join(filename);
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
 		if (::stat(filepath.to_locale_string().c_str(), &sbuf) != -1) {
 			if (overwrite_all) {
-				save_article(filepath.clone(), item);
+				save_article(filepath, item);
 				continue;
 			}
 
@@ -1663,10 +1663,10 @@ void ItemListFormAction::handle_op_saveall()
 			}
 
 			if (c == input_options.at(0)) {
-				save_article(filepath.clone(), item);
+				save_article(filepath, item);
 			} else if (c == input_options.at(1)) {
 				overwrite_all = true;
-				save_article(filepath.clone(), item);
+				save_article(filepath, item);
 			} else if (c == input_options.at(2)) {
 				continue;
 			} else if (c == input_options.at(3)) {
@@ -1674,7 +1674,7 @@ void ItemListFormAction::handle_op_saveall()
 			}
 		} else {
 			// Create file since it does not exist
-			save_article(filepath.clone(), item);
+			save_article(filepath, item);
 		}
 	}
 }
