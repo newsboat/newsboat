@@ -201,7 +201,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			break;
 		case BindingType::BindKey:
 			filename = v->run_filebrowser( utils::utf8_to_locale(v->get_filename_suggestion(
-							item->title())));
+							item->title()))).value();
 			break;
 		}
 		if (filename == "") {

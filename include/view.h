@@ -33,7 +33,7 @@ public:
 	explicit View(Controller*);
 	~View();
 	int run();
-	std::string run_modal(std::shared_ptr<FormAction> f,
+	nonstd::optional<std::string> run_modal(std::shared_ptr<FormAction> f,
 		const std::string& value = "");
 
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds);
@@ -82,8 +82,8 @@ public:
 		const std::string& phrase = "");
 	void view_dialogs();
 
-	std::string run_filebrowser(const std::string& default_filename = "");
-	std::string run_dirbrowser();
+	nonstd::optional<std::string> run_filebrowser(const std::string& default_filename = "");
+	nonstd::optional<std::string> run_dirbrowser();
 	std::string select_tag(const std::string& current_tag);
 	std::string select_filter(
 		const std::vector<FilterNameExprPair>& filters);

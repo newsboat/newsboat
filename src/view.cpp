@@ -1,4 +1,5 @@
 #include "view.h"
+#include "3rd-party/optional.hpp"
 
 #include <assert.h>
 #include <cerrno>
@@ -247,7 +248,7 @@ int View::run()
 	return EXIT_SUCCESS;
 }
 
-std::string View::run_modal(std::shared_ptr<FormAction> f,
+nonstd::optional<std::string> View::run_modal(std::shared_ptr<FormAction> f,
 	const std::string& value)
 {
 	// Modal dialogs should not allow changing to a different dialog (except by
@@ -300,8 +301,8 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 		fa->process_op(op, args);
 	}
 
-	if (value == "") {
-		return "";
+	if (value.empty()) {
+		return nonstd::nullopt;
 	} else {
 		return f->get_value(value);
 	}
@@ -615,7 +616,7 @@ void View::push_urlview(const Links& links,
 	current_formaction = formaction_stack_size() - 1;
 }
 
-std::string View::run_filebrowser(const std::string& default_filename)
+nonstd::optional<std::string> View::run_filebrowser(const std::string& default_filename)
 {
 	auto filebrowser = std::make_shared<FileBrowserFormAction>(
 			this, filebrowser_str, cfg);
@@ -625,7 +626,7 @@ std::string View::run_filebrowser(const std::string& default_filename)
 	return run_modal(filebrowser, "filenametext");
 }
 
-std::string View::run_dirbrowser()
+nonstd::optional<std::string> View::run_dirbrowser()
 {
 	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
 			this, filebrowser_str, cfg);

@@ -9,6 +9,7 @@
 #include <string>
 #include <sys/stat.h>
 
+#include "3rd-party/optional.hpp"
 #include "config.h"
 #include "controller.h"
 #include "dbexception.h"
@@ -391,7 +392,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			case BindingType::BindKey:
 				const auto title = utils::utf8_to_locale(item->title());
 				const auto suggestion = v->get_filename_suggestion(title);
-				filename = v->run_filebrowser(suggestion);
+				filename = v->run_filebrowser(suggestion).value();
 				break;
 			}
 			save_article(filename, item);
@@ -1520,14 +1521,14 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	std::string directory = v->run_dirbrowser();
+	nonstd::optional<std::string> directory = v->run_dirbrowser();
 
-	if (directory.empty()) {
+	if (!directory.has_value()) {
 		return;
 	}
 
-	if (directory.back() != NEWSBEUTER_PATH_SEP) {
-		directory.push_back(NEWSBEUTER_PATH_SEP);
+	if (directory.value().back() != NEWSBEUTER_PATH_SEP) {
+		directory.value().push_back(NEWSBEUTER_PATH_SEP);
 	}
 
 	std::vector<std::string> filenames;
@@ -1542,7 +1543,7 @@ void ItemListFormAction::handle_op_saveall()
 
 	int nfiles_exist = filenames.size() - unique_filenames.size();
 	for (const auto& filename : unique_filenames) {
-		const auto filepath = directory + filename;
+		const auto filepath = directory.value() + filename;
 		struct stat sbuf;
 		if (::stat(filepath.c_str(), &sbuf) != -1) {
 			nfiles_exist++;
@@ -1563,7 +1564,7 @@ void ItemListFormAction::handle_op_saveall()
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
 		const auto filename = filenames[item_idx];
-		const auto filepath = directory + filename;
+		const auto filepath = directory.value() + filename;
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
@@ -1579,13 +1580,13 @@ void ItemListFormAction::handle_op_saveall()
 							_("Overwrite `%s' in `%s'? "
 								"There are %d more conflicts like this "
 								"(y:Yes a:Yes to all n:No q:No to all)"),
-							filename, directory, --nfiles_exist),
+							filename, directory.value(), --nfiles_exist),
 						input_options);
 			} else {
 				c = v->confirm(strprintf::fmt(
 							_("Overwrite `%s' in `%s'? "
 								"(y:Yes n:No)"),
-							filename, directory),
+							filename, directory.value()),
 						input_options);
 			}
 			if (!c) {
