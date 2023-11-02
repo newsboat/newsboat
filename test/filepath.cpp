@@ -49,17 +49,17 @@ TEST_CASE("Can be extended with join()", "[Filepath]")
 	REQUIRE(subdir == Filepath::from_locale_string("/tmp/newsboat/tests"));
 }
 
-TEST_CASE("Can be cloned", "[Filepath]")
+TEST_CASE("Can be copied", "[Filepath]")
 {
 	auto original = Filepath::from_locale_string("/etc/hosts");
-	const auto clone = original.clone();
-	REQUIRE(original == clone);
+	const auto copy = original;
+	REQUIRE(original == copy);
 	REQUIRE(original.display() == "/etc/hosts");
 
-	// Demonstrate that changing the original object doesn't modify the clone
+	// Demonstrate that changing the original object doesn't modify the copy
 	original.push(Filepath::from_locale_string(" a bit more"));
 	REQUIRE(original.display() == "/etc/hosts/ a bit more");
-	REQUIRE(clone.display() == "/etc/hosts");
+	REQUIRE(copy.display() == "/etc/hosts");
 }
 
 TEST_CASE("Set extension", "[Filepath]")
