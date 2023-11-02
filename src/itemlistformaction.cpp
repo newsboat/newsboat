@@ -1534,7 +1534,7 @@ void ItemListFormAction::handle_op_saveall()
 
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
-		const auto filename = filenames[item_idx].clone();
+		const auto filename = filenames[item_idx];
 		const auto filepath = directory.join(filename);
 		auto item = visible_items[item_idx].first;
 
