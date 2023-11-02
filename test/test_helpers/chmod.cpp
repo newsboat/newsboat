@@ -6,7 +6,7 @@
 
 test_helpers::Chmod::Chmod(const newsboat::Filepath& path, mode_t newMode)
 {
-	m_path = path.clone();
+	m_path = path;
 	const auto throw_error = [this](std::string msg) {
 		const auto saved_errno = errno;
 		const auto message = std::string("test_helpers::Chmod: ")
