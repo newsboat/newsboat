@@ -9,7 +9,7 @@
 namespace newsboat {
 
 FileUrlReader::FileUrlReader(const Filepath& file)
-	: filename(file.clone())
+	: filename(file)
 {
 }
 

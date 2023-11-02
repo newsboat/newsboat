@@ -26,7 +26,7 @@ Download::~Download() {}
 
 newsboat::Filepath Download::filename() const
 {
-	return fn.clone();
+	return fn;
 }
 
 newsboat::Filepath Download::basename() const
@@ -41,7 +41,7 @@ const std::string Download::url() const
 
 void Download::set_filename(const newsboat::Filepath& str)
 {
-	fn = str.clone();
+	fn = str;
 }
 
 double Download::percents_finished() const

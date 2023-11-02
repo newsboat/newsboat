@@ -12,7 +12,7 @@ InoreaderUrlReader::InoreaderUrlReader(ConfigContainer* c,
 	const Filepath& url_file,
 	RemoteApi* a)
 	: cfg(c)
-	, file(url_file.clone())
+	, file(url_file)
 	, api(a)
 {
 }

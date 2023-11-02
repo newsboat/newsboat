@@ -8,7 +8,7 @@
 namespace newsboat {
 
 MinifluxUrlReader::MinifluxUrlReader(const Filepath& url_file, RemoteApi* a)
-	: file(url_file.clone())
+	: file(url_file)
 	, api(a)
 {
 }
