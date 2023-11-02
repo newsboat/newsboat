@@ -22,7 +22,7 @@ public:
 
 	void set_default_filename(const Filepath& fn)
 	{
-		default_filename = fn.clone();
+		default_filename = fn;
 	}
 
 	std::string id() const override

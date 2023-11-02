@@ -21,7 +21,7 @@ namespace podboat {
 QueueLoader::QueueLoader(const Filepath& filepath,
 	const ConfigContainer& cfg_,
 	std::function<void()> cb_require_view_update_)
-	: queuefile(filepath.clone())
+	: queuefile(filepath)
 	, cfg(cfg_)
 	, cb_require_view_update(cb_require_view_update_)
 {

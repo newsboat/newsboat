@@ -34,7 +34,7 @@ void ConfigParser::handle_action(const std::string& action,
 		}
 
 		const Filepath tilde_expanded = utils::resolve_tilde(params[0]);
-		const Filepath current_fpath = included_files.back().clone();
+		const Filepath current_fpath = included_files.back();
 		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
 			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
 		}
@@ -63,7 +63,7 @@ bool ConfigParser::parse_file(const Filepath& tmp_filename)
 	// It would be nice if this function was only give absolute paths, but the
 	// tests are easier as relative paths
 	const Filepath filename = tmp_filename.is_absolute() ?
-		tmp_filename.clone() :
+		tmp_filename :
 		utils::getcwd().join(tmp_filename);
 
 	if (std::find(included_files.begin(), included_files.end(),
@@ -74,7 +74,7 @@ bool ConfigParser::parse_file(const Filepath& tmp_filename)
 			filename);
 		return true;
 	}
-	included_files.push_back(filename.clone());
+	included_files.push_back(filename);
 
 	const auto lines = utils::read_text_file(filename);
 	if (!lines) {

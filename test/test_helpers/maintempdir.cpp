@@ -67,5 +67,5 @@ test_helpers::MainTempDir::~MainTempDir()
 
 newsboat::Filepath test_helpers::MainTempDir::get_path() const
 {
-	return tempdir.clone();
+	return tempdir;
 }

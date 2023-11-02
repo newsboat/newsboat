@@ -95,9 +95,6 @@ public:
 	/// path (with a separator in between).
 	Filepath join(const Filepath& component) const;
 
-	/// Returns a copy of this path.
-	Filepath clone() const;
-
 	// Return `true` if path is absolute.
 	bool is_absolute() const;
 
