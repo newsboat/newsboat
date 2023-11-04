@@ -382,7 +382,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
-			std::string filename;
+			nonstd::optional<std::string> filename;
 			switch (bindingType) {
 			case BindingType::Macro:
 				if (args.size() > 0) {
@@ -392,7 +392,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			case BindingType::BindKey:
 				const auto title = utils::utf8_to_locale(item->title());
 				const auto suggestion = v->get_filename_suggestion(title);
-				filename = v->run_filebrowser(suggestion).value();
+				filename = v->run_filebrowser(suggestion);
 				break;
 			}
 			save_article(filename, item);
@@ -1395,20 +1395,20 @@ void ItemListFormAction::restore_selected_position()
 
 }
 
-void ItemListFormAction::save_article(const std::string& filename,
+void ItemListFormAction::save_article(const nonstd::optional<std::string>& filename,
 	std::shared_ptr<RssItem> item)
 {
-	if (filename == "") {
+	if (!filename.has_value()) {
 		v->get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v->get_ctrl()->write_item(item, filename);
+			v->get_ctrl()->write_item(item, filename.value());
 			v->get_statusline().show_message(strprintf::fmt(
-					_("Saved article to %s"), filename));
+					_("Saved article to %s"), filename.value()));
 		} catch (...) {
 			v->get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't save article to %s"),
-					filename));
+					filename.value()));
 		}
 	}
 }
