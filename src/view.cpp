@@ -249,7 +249,7 @@ int View::run()
 	return EXIT_SUCCESS;
 }
 
-nonstd::optional<std::string> View::run_modal(std::shared_ptr<FormAction> f,
+std::string View::run_modal(std::shared_ptr<FormAction> f,
 	const std::string& value)
 {
 	// Modal dialogs should not allow changing to a different dialog (except by
@@ -303,7 +303,7 @@ nonstd::optional<std::string> View::run_modal(std::shared_ptr<FormAction> f,
 	}
 
 	if (value.empty()) {
-		return nonstd::nullopt;
+		return "";
 	} else {
 		return f->get_value(value);
 	}
