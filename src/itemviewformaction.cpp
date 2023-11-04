@@ -192,7 +192,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		return enqueue_item_enclosure(item, feed, *v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
-		std::string filename;
+		nonstd::optional<std::string> filename;
 		switch (bindingType) {
 		case BindingType::Macro:
 			if (args.size() > 0) {
@@ -201,21 +201,21 @@ bool ItemViewFormAction::process_operation(Operation op,
 			break;
 		case BindingType::BindKey:
 			filename = v->run_filebrowser( utils::utf8_to_locale(v->get_filename_suggestion(
-							item->title()))).value();
+							item->title())));
 			break;
 		}
-		if (filename == "") {
+		if (!filename.has_value()) {
 			v->get_statusline().show_error(_("Aborted saving."));
 		} else {
 			try {
-				v->get_ctrl()->write_item(item, filename);
+				v->get_ctrl()->write_item(item, filename.value());
 				v->get_statusline().show_message(strprintf::fmt(
-						_("Saved article to %s."), filename));
+						_("Saved article to %s."), filename.value()));
 			} catch (...) {
 				v->get_statusline().show_error(strprintf::fmt(
 						_("Error: couldn't write article to "
 							"file %s"),
-						filename));
+						filename.value()));
 			}
 		}
 	}
