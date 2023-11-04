@@ -767,7 +767,7 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {
-		const auto& tokens = keymap::bridged::operation_tokens(operation);
+		const auto& tokens = operation.tokens;
 		if (tokens.empty()) {
 			continue;
 		}
