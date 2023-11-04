@@ -733,6 +733,14 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		} else {
 			unset_key(tokens[0], context);
 		}
+	} else if (action == "bind") {
+		bool parsing_failed = false;
+		const auto binding = keymap::bridged::tokenize_binding(params, parsing_failed);
+		if (parsing_failed) {
+			throw ConfigHandlerException(strprintf::fmt(_("failed to parse binding")));
+		}
+		// TODO: Keep track of bindings
+		(void)binding;
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
