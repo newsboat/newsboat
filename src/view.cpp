@@ -1,5 +1,4 @@
 #include "view.h"
-#include "3rd-party/optional.hpp"
 
 #include <assert.h>
 #include <cerrno>
@@ -23,6 +22,8 @@
 extern "C" {
 #include <stfl.h>
 }
+
+#include "3rd-party/optional.hpp"
 
 #include "config.h"
 #include "colormanager.h"
