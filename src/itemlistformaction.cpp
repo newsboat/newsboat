@@ -9,6 +9,8 @@
 #include <string>
 #include <sys/stat.h>
 
+#include "3rd-party/optional.hpp"
+
 #include "config.h"
 #include "controller.h"
 #include "dbexception.h"
@@ -381,7 +383,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
-			std::string filename;
+			nonstd::optional<std::string> filename;
 			switch (bindingType) {
 			case BindingType::Macro:
 				if (args.size() > 0) {
@@ -1394,20 +1396,20 @@ void ItemListFormAction::restore_selected_position()
 
 }
 
-void ItemListFormAction::save_article(const std::string& filename,
+void ItemListFormAction::save_article(const nonstd::optional<std::string>& filename,
 	std::shared_ptr<RssItem> item)
 {
-	if (filename == "") {
+	if (!filename.has_value()) {
 		v->get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v->get_ctrl()->write_item(item, filename);
+			v->get_ctrl()->write_item(item, filename.value());
 			v->get_statusline().show_message(strprintf::fmt(
-					_("Saved article to %s"), filename));
+					_("Saved article to %s"), filename.value()));
 		} catch (...) {
 			v->get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't save article to %s"),
-					filename));
+					filename.value()));
 		}
 	}
 }
@@ -1520,14 +1522,14 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	std::string directory = v->run_dirbrowser();
+	nonstd::optional<std::string> directory = v->run_dirbrowser();
 
-	if (directory.empty()) {
+	if (!directory.has_value()) {
 		return;
 	}
 
-	if (directory.back() != NEWSBEUTER_PATH_SEP) {
-		directory.push_back(NEWSBEUTER_PATH_SEP);
+	if (directory.value().back() != NEWSBEUTER_PATH_SEP) {
+		directory.value().push_back(NEWSBEUTER_PATH_SEP);
 	}
 
 	std::vector<std::string> filenames;
@@ -1542,7 +1544,7 @@ void ItemListFormAction::handle_op_saveall()
 
 	int nfiles_exist = filenames.size() - unique_filenames.size();
 	for (const auto& filename : unique_filenames) {
-		const auto filepath = directory + filename;
+		const auto filepath = directory.value() + filename;
 		struct stat sbuf;
 		if (::stat(filepath.c_str(), &sbuf) != -1) {
 			nfiles_exist++;
@@ -1563,7 +1565,7 @@ void ItemListFormAction::handle_op_saveall()
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
 		const auto filename = filenames[item_idx];
-		const auto filepath = directory + filename;
+		const auto filepath = directory.value() + filename;
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
@@ -1579,13 +1581,13 @@ void ItemListFormAction::handle_op_saveall()
 							_("Overwrite `%s' in `%s'? "
 								"There are %d more conflicts like this "
 								"(y:Yes a:Yes to all n:No q:No to all)"),
-							filename, directory, --nfiles_exist),
+							filename, directory.value(), --nfiles_exist),
 						input_options);
 			} else {
 				c = v->confirm(strprintf::fmt(
 							_("Overwrite `%s' in `%s'? "
 								"(y:Yes n:No)"),
-							filename, directory),
+							filename, directory.value()),
 						input_options);
 			}
 			if (!c) {

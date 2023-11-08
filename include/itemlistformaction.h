@@ -117,7 +117,7 @@ private:
 
 	int get_pos(unsigned int idx);
 
-	void save_article(const std::string& filename,
+	void save_article(const nonstd::optional<std::string>& filename,
 		std::shared_ptr<RssItem> item);
 
 	void handle_save(const std::vector<std::string>& cmd_args);

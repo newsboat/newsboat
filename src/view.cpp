@@ -23,6 +23,8 @@ extern "C" {
 #include <stfl.h>
 }
 
+#include "3rd-party/optional.hpp"
+
 #include "config.h"
 #include "colormanager.h"
 #include "controller.h"
@@ -300,7 +302,7 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 		fa->process_op(op, args);
 	}
 
-	if (value == "") {
+	if (value.empty()) {
 		return "";
 	} else {
 		return f->get_value(value);
@@ -615,23 +617,31 @@ void View::push_urlview(const Links& links,
 	current_formaction = formaction_stack_size() - 1;
 }
 
-std::string View::run_filebrowser(const std::string& default_filename)
+nonstd::optional<std::string> View::run_filebrowser(const std::string& default_filename)
 {
 	auto filebrowser = std::make_shared<FileBrowserFormAction>(
 			this, filebrowser_str, cfg);
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	return run_modal(filebrowser, "filenametext");
+	std::string res = run_modal(filebrowser, "filenametext");
+	if (res.empty()) {
+		return nonstd::nullopt;
+	}
+	return res;
 }
 
-std::string View::run_dirbrowser()
+nonstd::optional<std::string> View::run_dirbrowser()
 {
 	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
 			this, filebrowser_str, cfg);
 	apply_colors(dirbrowser);
 	dirbrowser->set_parent_formaction(get_current_formaction());
-	return run_modal(dirbrowser, "filenametext");
+	std::string res = run_modal(dirbrowser, "filenametext");
+	if (res.empty()) {
+		return nonstd::nullopt;
+	}
+	return res;
 }
 
 std::string View::select_tag(const std::string& current_tag)
