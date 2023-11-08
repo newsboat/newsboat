@@ -223,6 +223,23 @@ TEST_CASE("handle_action()", "[KeyMap]")
 	}
 }
 
+TEST_CASE("handle_action() for bind", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	SECTION("supports optional description") {
+		REQUIRE_NOTHROW(k.handle_action("bind", R"(a everywhere open -- "a description")"));
+		REQUIRE_NOTHROW(k.handle_action("bind", R"(a everywhere open)"));
+	}
+
+	SECTION("throws if incomplete") {
+		REQUIRE_NOTHROW(k.handle_action("bind", "a everywhere open"));
+		REQUIRE_THROWS_AS(k.handle_action("bind", "a everywhere open --"), ConfigHandlerException);
+		REQUIRE_THROWS_AS(k.handle_action("bind", "a everywhere"), ConfigHandlerException);
+		REQUIRE_THROWS_AS(k.handle_action("bind", "a"), ConfigHandlerException);
+	}
+}
+
 TEST_CASE("verify get_keymap_descriptions() behavior",
 	"[KeyMap]")
 {
