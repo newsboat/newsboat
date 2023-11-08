@@ -71,11 +71,10 @@ bool Filepath::starts_with(const std::string& str) const
 nonstd::optional<Filepath> Filepath::file_name() const
 {
 	auto str = filepath::bridged::file_name(*rs_object);
-	auto res = std::string(str.begin(), str.end());
-	if (res.empty()) {
+	if (filepath::bridged::is_empty(*rs_object)) {
 		return nonstd::nullopt;
 	} else {
-		return res;
+		return str;
 	}
 }
 
