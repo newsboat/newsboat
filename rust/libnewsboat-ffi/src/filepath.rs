@@ -107,7 +107,7 @@ fn file_name(filepath: &PathBuf) -> Box<PathBuf> {
         let res = filepath.0.file_name().unwrap();
         Box::new(PathBuf(std::path::Path::new(res).to_path_buf()))
     } else {
-        Box::new(PathBuf(std::path::PathBuf::new().to_path_buf()))
+        Box::new(PathBuf(std::path::PathBuf::new()))
     }
 }
 
