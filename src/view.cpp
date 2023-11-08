@@ -624,7 +624,11 @@ nonstd::optional<std::string> View::run_filebrowser(const std::string& default_f
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	return run_modal(filebrowser, "filenametext");
+	std::string res = run_modal(filebrowser, "filenametext");
+	if (res.empty()) {
+		return nonstd::nullopt;
+	}
+	return res;
 }
 
 nonstd::optional<std::string> View::run_dirbrowser()
@@ -633,7 +637,11 @@ nonstd::optional<std::string> View::run_dirbrowser()
 			this, filebrowser_str, cfg);
 	apply_colors(dirbrowser);
 	dirbrowser->set_parent_formaction(get_current_formaction());
-	return run_modal(dirbrowser, "filenametext");
+	std::string res = run_modal(dirbrowser, "filenametext");
+	if (res.empty()) {
+		return nonstd::nullopt;
+	}
+	return res;
 }
 
 std::string View::select_tag(const std::string& current_tag)
