@@ -103,8 +103,7 @@ fn starts_with(filepath: &PathBuf, str: &str) -> bool {
 }
 
 fn file_name(filepath: &PathBuf) -> Box<PathBuf> {
-    if filepath.0.file_name().is_some() {
-        let res = filepath.0.file_name().unwrap();
+    if let Some(res) = filepath.0.file_name() {
         Box::new(PathBuf(std::path::Path::new(res).to_path_buf()))
     } else {
         Box::new(PathBuf(std::path::PathBuf::new()))
