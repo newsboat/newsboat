@@ -102,18 +102,10 @@ fn starts_with(filepath: &PathBuf, str: &str) -> bool {
 }
 
 fn file_name(filepath: &PathBuf) -> Vec<u8> {
-    use std::str::FromStr;
-    if filepath.0.file_name().is_some() {
-        filepath
-            .0
-            .file_name()
-            .unwrap()
-            .to_os_string()
-            .into_string()
-            .unwrap()
-            .as_bytes()
-            .to_vec()
+    use std::os::unix::ffi::OsStrExt;
+    if let Some(res) = filepath.0.file_name() {
+        res.as_bytes().to_vec()
     } else {
-        String::from_str("").unwrap().as_bytes().to_vec()
+        Vec::new()
     }
 }
