@@ -24,8 +24,7 @@ mod bridged {
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool;
         fn starts_with(filepath: &PathBuf, str: &str) -> bool;
-        fn file_name(filepath: &PathBuf) -> Box<PathBuf>;
-        fn is_empty(filepath: &PathBuf) -> bool;
+        fn file_name(filepath: &PathBuf) -> Vec<u8>;
 
         // These functions are actually in utils.rs, but I couldn't find a way to return
         // `Box<PathBuf>` from libnewsboat-ffi/src/utils.rs, so I moved the bindings here
@@ -102,14 +101,19 @@ fn starts_with(filepath: &PathBuf, str: &str) -> bool {
     filepath.0.starts_with(str)
 }
 
-fn file_name(filepath: &PathBuf) -> Box<PathBuf> {
-    if let Some(res) = filepath.0.file_name() {
-        Box::new(PathBuf(std::path::Path::new(res).to_path_buf()))
+fn file_name(filepath: &PathBuf) -> Vec<u8> {
+    use std::str::FromStr;
+    if filepath.0.file_name().is_some() {
+        filepath
+            .0
+            .file_name()
+            .unwrap()
+            .to_os_string()
+            .into_string()
+            .unwrap()
+            .as_bytes()
+            .to_vec()
     } else {
-        Box::new(PathBuf(std::path::PathBuf::new().to_path_buf()))
+        String::from_str("").unwrap().as_bytes().to_vec()
     }
-}
-
-fn is_empty(filepath: &PathBuf) -> bool {
-    filepath.0.to_string_lossy().is_empty()
 }
