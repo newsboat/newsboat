@@ -94,7 +94,6 @@ bool FeedListFormAction::process_operation(Operation op,
 		const auto selected_pos = list.get_position();
 		pos = visible_feeds[selected_pos].second;
 	}
-	const std::string feedpos = std::to_string(pos);
 	bool quit = false;
 REDO:
 	switch (op) {
@@ -104,10 +103,8 @@ REDO:
 				pos = utils::to_u(args.front());
 			}
 			LOG(Level::INFO,
-				"FeedListFormAction: opening feed at position "
-				"`%s'",
-				feedpos);
-			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+				"FeedListFormAction: opening feed at position `%d'", pos);
+			if (visible_feeds.size() > 0) {
 				v->push_itemlist(pos);
 			} else {
 				// should not happen
@@ -118,9 +115,8 @@ REDO:
 	break;
 	case OP_RELOAD: {
 		LOG(Level::INFO,
-			"FeedListFormAction: reloading feed at position `%s'",
-			feedpos);
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+			"FeedListFormAction: reloading feed at position `%d'", pos);
+		if (visible_feeds.size() > 0) {
 			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v->get_statusline().show_error(
@@ -222,15 +218,13 @@ REDO:
 		return open_position_in_browser(pos, interactive);
 	}
 	case OP_OPENALLUNREADINBROWSER:
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				LOG(Level::INFO,
-					"FeedListFormAction: opening all "
-					"unread "
-					"items in feed at position `%s'",
-					feedpos.c_str());
+					"FeedListFormAction: opening all unread items in feed at position `%d'",
+					pos);
 
 				// We can't just `const auto exit_code = ...` here because this
 				// triggers -Wmaybe-initialized in GCC 9 with -O2.
@@ -251,16 +245,13 @@ REDO:
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				LOG(Level::INFO,
-					"FeedListFormAction: opening all "
-					"unread "
-					"items in feed at position `%s' and "
-					"marking read",
-					feedpos.c_str());
+					"FeedListFormAction: opening all unread items in feed at position `%d' and marking read",
+					pos);
 
 				// We can't just `const auto exit_code = ...` here because this
 				// triggers -Wmaybe-initialized in GCC 9 with -O2.
@@ -305,11 +296,8 @@ REDO:
 				"confirm-mark-feed-read") ||
 			v->confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
-			LOG(Level::INFO,
-				"FeedListFormAction: marking feed read at position "
-				"`%s'",
-				feedpos);
-			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+			LOG(Level::INFO, "FeedListFormAction: marking feed read at position `%d'", pos);
+			if (visible_feeds.size() > 0) {
 				try {
 					{
 						const auto message_lifetime = v->get_statusline().show_message_until_finished(
