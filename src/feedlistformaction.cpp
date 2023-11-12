@@ -107,7 +107,7 @@ REDO:
 				"FeedListFormAction: opening feed at position "
 				"`%s'",
 				feedpos);
-			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+			if (visible_feeds.size() > 0) {
 				v->push_itemlist(pos);
 			} else {
 				// should not happen
@@ -120,7 +120,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: reloading feed at position `%s'",
 			feedpos);
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0) {
 			v->get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v->get_statusline().show_error(
@@ -222,7 +222,7 @@ REDO:
 		return open_position_in_browser(pos, interactive);
 	}
 	case OP_OPENALLUNREADINBROWSER:
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
@@ -251,7 +251,7 @@ REDO:
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
-		if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
 				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
@@ -309,7 +309,7 @@ REDO:
 				"FeedListFormAction: marking feed read at position "
 				"`%s'",
 				feedpos);
-			if (visible_feeds.size() > 0 && feedpos.length() > 0) {
+			if (visible_feeds.size() > 0) {
 				try {
 					{
 						const auto message_lifetime = v->get_statusline().show_message_until_finished(
