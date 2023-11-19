@@ -35,6 +35,7 @@ enum class CommandType {
 enum class BindingType {
 	BindKey,
 	Macro,
+	Bind,
 };
 
 struct Command {

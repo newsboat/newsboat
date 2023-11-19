@@ -455,6 +455,17 @@ REDO:
 		break;
 	case OP_GOTO_TITLE:
 		switch (bindingType) {
+		case BindingType::Bind:
+			if (args.empty()) {
+				std::vector<QnaPair> qna {
+					QnaPair(_("Title: "), "")
+				};
+				this->start_qna(qna, OP_INT_GOTO_TITLE);
+			} else {
+				qna_responses = {args[0]};
+				finished_qna(OP_INT_GOTO_TITLE);
+			}
+			break;
 		case BindingType::Macro:
 			if (args.size() >= 1) {
 				qna_responses = {args[0]};
