@@ -59,7 +59,7 @@ msgstr "缓存文件"
 
 #: newsboat.cpp:61
 msgid "use <cachefile> as cache file"
-msgstr "使用<cachefile>作为保存缓存数据的文件"
+msgstr "使用<缓存文件>作为保存缓存数据的文件"
 
 #: newsboat.cpp:66 src/pbcontroller.cpp:335
 msgid "<configfile>"
@@ -71,11 +71,11 @@ msgstr "从<配置文件>里读取配置信息"
 
 #: newsboat.cpp:69
 msgid "compact the cache"
-msgstr ""
+msgstr "压缩缓存"
 
 #: newsboat.cpp:73
 msgid "<command>..."
-msgstr "命令 ..."
+msgstr "<命令> ..."
 
 #: newsboat.cpp:74
 msgid "execute list of commands"
@@ -83,7 +83,7 @@ msgstr "执行一系列命令"
 
 #: newsboat.cpp:76
 msgid "quiet startup"
-msgstr ""
+msgstr "启动时不输出信息"
 
 #: newsboat.cpp:77
 msgid "get version information"
@@ -91,22 +91,22 @@ msgstr "获得版本信息"
 
 #: newsboat.cpp:81 src/pbcontroller.cpp:348
 msgid "<loglevel>"
-msgstr "记录等级"
+msgstr "<日志等级>"
 
 #: newsboat.cpp:82
 #, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "以某一等级做记录（有效值：1 - 6）"
+msgstr "以某一等级记录日志（有效值：1 - 6）"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
-msgstr "<记录文件>"
+msgstr "<日志文件>"
 
 #: newsboat.cpp:89 src/pbcontroller.cpp:357
 msgid "use <logfile> as output log file"
-msgstr "使用<记录文件>作为导出记录的文件"
+msgstr "使用<日志文件>作为记录日志的文件"
 
 #: newsboat.cpp:95
 msgid "export list of read articles to <file>"
@@ -114,15 +114,15 @@ msgstr "将已阅读文章导出到<文件>"
 
 #: newsboat.cpp:101
 msgid "import list of read articles from <file>"
-msgstr "从<文件>里导入阅读的文章列表"
+msgstr "从<文件>里导入已阅读文章列表"
 
 #: newsboat.cpp:103 src/pbcontroller.cpp:359
 msgid "this help"
-msgstr "该帮助"
+msgstr "帮助"
 
 #: newsboat.cpp:104
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "清除缓存中未被使用的项"
 
 #: newsboat.cpp:129
 #, fuzzy
@@ -151,11 +151,12 @@ msgstr "缓存文件"
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
-msgstr ""
+msgstr "支持我们：https://libera.chat 上的 #newsboat 频道"
+"或加入我们的邮件列表 https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:152 src/pbcontroller.cpp:378
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "更多信息请访问 https://newsboat.org/"
 
 #: newsboat.cpp:173
 #, c-format
@@ -163,64 +164,72 @@ msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
+"Newsboat 是一个自由软件，根据 MIT 许可证授权。（输入 `%s -vv' 以"
+"查看许可证全文。）"
 
 #: newsboat.cpp:178
 msgid "It bundles:"
-msgstr ""
+msgstr "它使用了"
 
 #: newsboat.cpp:179
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
+"- 现代 C++ JSON 库，根据 MIT 许可证授权： https://"
+"github.com/nlohmann/json"
 
 #: newsboat.cpp:182
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
+"- optional-lite 库，根据 Boost 软件许可证授权： https://"
+"github.com/martinmoene/optional-lite"
 
 #: newsboat.cpp:185
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
+"- expected-lite 库，根据 Boost 软件许可证授权： https://"
+"github.com/martinmoene/expected-lite"
 
 #: newsboat.cpp:262
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr ""
+msgstr "捕获到 newsboat::DbException 异常，消息为：%s"
 
 #: newsboat.cpp:269
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr ""
+msgstr "捕获到 newsboat::MatcherException 异常，消息为：%s"
 
 #: newsboat.cpp:275 podboat.cpp:41
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr ""
+msgstr "捕获到 newsboat::Exception 异常，消息为：%s"
 
 #: src/colormanager.cpp:55 src/colormanager.cpp:59 src/regexmanager.cpp:236
 #: src/regexmanager.cpp:250 src/regexmanager.cpp:314 src/regexmanager.cpp:326
 #, c-format
 msgid "`%s' is not a valid color"
-msgstr ""
+msgstr "`%s' 不是一个有效的颜色"
 
 #: src/colormanager.cpp:68 src/regexmanager.cpp:266 src/regexmanager.cpp:341
 #, fuzzy, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "无效的属性索引"
+msgstr "`%s' 不是一个有效的属性索引"
 
 #: src/colormanager.cpp:97
 #, c-format
 msgid "`%s' is not a valid configuration element"
-msgstr ""
+msgstr "`%s' 不是一个有效的配置元素"
 
 #: src/configcontainer.cpp:160
 #, fuzzy, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "newsboat:重新加载完毕, %f个种子含未读文章(共有 %n 篇未读文章)"
+msgstr "Newsboat:重新加载完毕, %f个种子含未读文章(共有 %n 篇未读文章)"
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
@@ -353,11 +362,11 @@ msgstr "完毕."
 #: src/controller.cpp:212 src/pbcontroller.cpp:242
 #, fuzzy, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "错误：%s的一个进程已经在运行中（PID: %u)"
+msgstr "错误：%s的一个实例已经在运行中（PID: %u）"
 
 #: src/controller.cpp:218 src/pbcontroller.cpp:248
 msgid "Error: "
-msgstr ""
+msgstr "错误："
 
 #: src/controller.cpp:224 src/controller.cpp:429
 msgid "Opening cache..."
@@ -370,43 +379,46 @@ msgstr "错误:打开缓存文件`%s' 失败:%s"
 
 #: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
-msgstr ""
+msgstr "错误：你必须设置`cookie-cache`后才能使用NewsBlur。\n"
 
 #: src/controller.cpp:278
 #, c-format
 msgid "%s is inaccessible and can't be created\n"
-msgstr ""
+msgstr "不能访问或创建 %s\n"
 
 #: src/controller.cpp:292
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr ""
+msgstr "错误：你必须设置`freshrss-url`后才能使用FreshRSS\n"
 
 #: src/controller.cpp:304
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
-msgstr ""
+msgstr "错误：你必须设置 `freshrss-login` 和一个`freshrss-password`，"
+"`freshrss-passwordfile`或`freshrss-passwordeval`后才能使用FreshRSS\n"
 
 #: src/controller.cpp:319
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
-msgstr ""
+msgstr "错误：你必须设置`miniflux-url`后才能使用Miniflux\n"
 
 #: src/controller.cpp:336
 msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
-msgstr ""
+msgstr "错误：你必须提供一个API令牌或者一对用户名/密码才能使用"
+"Miniflux。请提供适当的miniflux-*设置项\n"
 
 #: src/controller.cpp:347
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
-msgstr ""
+msgstr "错误：你必须*同时*设置`inoreader-app-id`和`inoreader-app-key`才能使用"
+"Inoreader。\n"
 
 #: src/controller.cpp:354
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "错误：未知的url-source `%s'"
 
 #: src/controller.cpp:361
 #, c-format
@@ -588,7 +600,7 @@ msgstr "无效位置！"
 
 #: src/dirbrowserformaction.cpp:280
 msgid "Directory: "
-msgstr ""
+msgstr "目录："
 
 #: src/dirbrowserformaction.cpp:300 src/filebrowserformaction.cpp:326
 #: src/pbview.cpp:382 src/selectformaction.cpp:257 src/selectformaction.cpp:260
@@ -635,7 +647,7 @@ msgstr "未完毕"
 
 #: src/download.cpp:79
 msgid "ready"
-msgstr ""
+msgstr "就绪"
 
 #: src/download.cpp:81
 msgid "played"
@@ -652,7 +664,7 @@ msgstr "未知（bug）"
 
 #: src/feedhqurlreader.cpp:47 src/oldreaderurlreader.cpp:48
 msgid "People you follow"
-msgstr ""
+msgstr "你关注的"
 
 #: src/feedhqurlreader.cpp:49 src/freshrssurlreader.cpp:33
 #: src/inoreaderurlreader.cpp:49 src/oldreaderurlreader.cpp:50
@@ -676,19 +688,19 @@ msgstr "没有选择种子"
 #. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:138 src/feedlistformaction.cpp:178
 msgid "ftauln"
-msgstr ""
+msgstr "ftauln"
 
 #: src/feedlistformaction.cpp:140
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "(n)one?"
-msgstr ""
+msgstr "使用以下方法排序？(f)第一个标签/(t)标题/(a)文章总数/(u)未读文章总数/(l)最后更新时间/(n)无"
 
 #: src/feedlistformaction.cpp:180
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/(n)one?"
-msgstr ""
+msgstr "使用以下方法逆序排序？(f)第一个标签/(t)标题/(a)文章总数/(u)未读文章总数/(l)最后更新时间/(n)无"
 
 #: src/feedlistformaction.cpp:241 src/feedlistformaction.cpp:271
 #: src/feedlistformaction.cpp:580 src/itemlistformaction.cpp:182
@@ -696,7 +708,7 @@ msgstr ""
 #: src/itemviewformaction.cpp:512
 #, fuzzy
 msgid "Failed to spawn browser"
-msgstr "在浏览器里打开文章"
+msgstr "打开浏览器失败"
 
 #: src/feedlistformaction.cpp:244 src/feedlistformaction.cpp:274
 #: src/feedlistformaction.cpp:583 src/itemlistformaction.cpp:185
@@ -704,12 +716,12 @@ msgstr "在浏览器里打开文章"
 #: src/itemviewformaction.cpp:515
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "浏览器返回错误代码 %i"
 
 #: src/feedlistformaction.cpp:306 src/itemlistformaction.cpp:481
 #, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "你真的想覆盖 `%s'么(y:是的  n:不是)?"
+msgstr "你真的想把这个种子标记为已读吗(y:是的  n:不是)?"
 
 #: src/feedlistformaction.cpp:307 src/feedlistformaction.cpp:395
 #: src/feedlistformaction.cpp:510 src/filebrowserformaction.cpp:126
@@ -740,16 +752,16 @@ msgstr "任何种子里都没有未读的文章"
 
 #: src/feedlistformaction.cpp:369 src/itemlistformaction.cpp:470
 msgid "Already on last feed."
-msgstr ""
+msgstr "已经位于最后一个种子。"
 
 #: src/feedlistformaction.cpp:378 src/itemlistformaction.cpp:475
 msgid "Already on first feed."
-msgstr ""
+msgstr "已经位于第一个种子。"
 
 #: src/feedlistformaction.cpp:394
 #, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "你真的想覆盖 `%s'么(y:是的  n:不是)?"
+msgstr "你真的想标记所有种子为已读吗(y:是的  n:不是)?"
 
 #: src/feedlistformaction.cpp:398
 msgid "Marking all feeds read..."
@@ -780,18 +792,18 @@ msgstr "过滤器: "
 
 #: src/feedlistformaction.cpp:509 src/view.cpp:194
 msgid "Do you really want to quit (y:Yes n:No)? "
-msgstr "你真的想离开么（y:是的 n:不是)?"
+msgstr "你真的想离开么（y:是的 n:不是）?"
 
 #: src/feedlistformaction.cpp:549
 msgid "Cannot open query feeds in the browser!"
-msgstr ""
+msgstr "不能在浏览器中打开查询的种子！"
 
 #: src/feedlistformaction.cpp:642 src/helpformaction.cpp:215
 #: src/itemlistformaction.cpp:1300 src/itemviewformaction.cpp:524
 #: src/pbview.cpp:373 src/pbview.cpp:380 src/searchresultslistformaction.cpp:16
 #: src/urlviewformaction.cpp:164
 msgid "Quit"
-msgstr "放弃"
+msgstr "退出"
 
 #: src/feedlistformaction.cpp:643 src/itemlistformaction.cpp:1301
 #: src/searchresultslistformaction.cpp:17
@@ -817,7 +829,7 @@ msgstr "标记为已读"
 
 #: src/feedlistformaction.cpp:648 src/itemlistformaction.cpp:1305
 msgid "Mark All Read"
-msgstr "将所有都标记为已读"
+msgstr "将所有种子都标记为已读"
 
 #: src/feedlistformaction.cpp:649 src/helpformaction.cpp:216
 #: src/itemlistformaction.cpp:1306 src/searchresultslistformaction.cpp:19
@@ -884,7 +896,7 @@ msgstr "%s %s - 保存文件 - %s"
 #: src/fileurlreader.cpp:65
 #, fuzzy, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "当调用`%s'的时候出错: %s"
+msgstr "当打开文件`%s'的时候出错: %s"
 
 #: src/filtercontainer.cpp:37 src/regexmanager.cpp:352 src/rssfeed.cpp:64
 #: src/rssignores.cpp:45
@@ -903,12 +915,12 @@ msgstr "用法: set <变量>[=<值>]"
 
 #: src/formaction.cpp:268
 msgid "usage: source <file> [...]"
-msgstr ""
+msgstr "用法：source <文件> [...]"
 
 #: src/formaction.cpp:286
 #, fuzzy
 msgid "usage: dumpconfig <file>"
-msgstr "<配置文件>"
+msgstr "用法：dumpconfig <文件>"
 
 #: src/formaction.cpp:291
 #, fuzzy, c-format
@@ -917,12 +929,12 @@ msgstr "把文章保存到 %s"
 
 #: src/formaction.cpp:299
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "用法：exec <操作>"
 
 #: src/formaction.cpp:305
 #, fuzzy
 msgid "Operation not found"
-msgstr "属性没有发现"
+msgstr "没有找到操作"
 
 #: src/formaction.cpp:329
 #, fuzzy, c-format
@@ -1000,7 +1012,7 @@ msgstr "没有未读的文章"
 
 #: src/inoreaderurlreader.cpp:54
 msgid "Saved web pages"
-msgstr ""
+msgstr "保存的网页"
 
 #: src/itemlistformaction.cpp:79 src/itemlistformaction.cpp:102
 #: src/itemlistformaction.cpp:314 src/itemlistformaction.cpp:342
@@ -1013,7 +1025,7 @@ msgstr "没有选择任何项目"
 #: src/itemlistformaction.cpp:108
 #, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "你真的想覆盖 `%s'么(y:是的  n:不是)?"
+msgstr "你真的想删除所有文章吗(y:是的  n:不是)?"
 
 #: src/itemlistformaction.cpp:221 src/itemviewformaction.cpp:398
 msgid "Toggling read flag for article..."
@@ -1035,7 +1047,7 @@ msgstr "标记: "
 
 #: src/itemlistformaction.cpp:388 src/itemlistformaction.cpp:1398
 msgid "Error: no item selected!"
-msgstr "错误：没有选择任何项目！"
+msgstr "错误：没有选择任何项！"
 
 #: src/itemlistformaction.cpp:421 src/itemlistformaction.cpp:430
 #: src/itemlistformaction.cpp:454 src/itemviewformaction.cpp:346
@@ -1047,12 +1059,12 @@ msgstr "没有未读的文章"
 #: src/itemlistformaction.cpp:438 src/itemviewformaction.cpp:369
 #: src/view.cpp:915
 msgid "Already on last item."
-msgstr ""
+msgstr "已经位于最后一项。"
 
 #: src/itemlistformaction.cpp:447 src/itemviewformaction.cpp:380
 #: src/view.cpp:881
 msgid "Already on first item."
-msgstr ""
+msgstr "已经位于第一项"
 
 #: src/itemlistformaction.cpp:460 src/itemlistformaction.cpp:465
 msgid "No unread feeds."
@@ -1073,15 +1085,15 @@ msgstr ""
 #: src/itemlistformaction.cpp:664 src/itemlistformaction.cpp:702
 #, fuzzy
 msgid "dtfalgr"
-msgstr "编辑标记"
+msgstr "dtfalgr"
 
 #: src/itemlistformaction.cpp:666
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
-msgstr ""
+msgstr "使用以下方法排序？(d)日期/(t)标题/(f)标记/(a)作者/(l)链接/(g)唯一标识符/(r)随机"
 
 #: src/itemlistformaction.cpp:704
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
-msgstr ""
+msgstr "使用以下方法逆序排序？(d)日期/(t)标题/(f)标记/(a)作者/(l)链接/(g)唯一标识符/(r)随机"
 
 #: src/itemlistformaction.cpp:870 src/itemviewformaction.cpp:604
 msgid "Flags updated."
@@ -1101,7 +1113,7 @@ msgstr[0] ""
 #: src/itemlistformaction.cpp:1377 src/itemviewformaction.cpp:229
 #: src/itemviewformaction.cpp:579
 msgid "Aborted saving."
-msgstr "放弃保存"
+msgstr "保存中断"
 
 #: src/itemlistformaction.cpp:1382 src/itemviewformaction.cpp:585
 #, c-format
