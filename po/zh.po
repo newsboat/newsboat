@@ -3,9 +3,10 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-09-14 12:00+0300\n"
-"PO-Revision-Date: 2007-11-21 22:51+0100\n"
-"Last-Translator: josh yu <joshyupeng@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2023-11-25 18:00+0800\n"
+"Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
+"Language-Team: josh yu <joshyupeng@gmail.com>, "
+"Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,12 +27,11 @@ msgstr ""
 
 #: newsboat.cpp:47
 msgid "export OPML feed to stdout"
-msgstr "导出OPML种子列表到控制台"
+msgstr "导出OPML种子列表到标准输出"
 
 #: newsboat.cpp:48
-#, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "导出OPML种子列表到控制台"
+msgstr "导出OPML2.0种子列表（包括标签）到标准输出"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -43,7 +43,7 @@ msgstr "文件"
 
 #: newsboat.cpp:50
 msgid "import OPML file"
-msgstr "导入opml文件"
+msgstr "导入OPML文件"
 
 #: newsboat.cpp:54
 msgid "<urlfile>"
@@ -94,11 +94,12 @@ msgid "<loglevel>"
 msgstr "<日志等级>"
 
 #: newsboat.cpp:82
-#, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
 "critical, error, warning, info, and debug respectively)"
-msgstr "以某一等级记录日志（有效值：1 - 6）"
+msgstr ""
+"以某一等级记录日志（有效值：1 - 6，分别对应着用户错误，"
+"严重错误，错误，警告，信息和调试）"
 
 #: newsboat.cpp:88 src/pbcontroller.cpp:356
 msgid "<logfile>"
@@ -125,25 +126,21 @@ msgid "remove unreferenced items from cache"
 msgstr "清除缓存中未被使用的项"
 
 #: newsboat.cpp:129
-#, fuzzy
 msgid "Files:"
 msgstr "文件: "
 
 #. i18n: This is printed out by --help before the path to the config file
 #: newsboat.cpp:131
-#, fuzzy
 msgid "configuration"
-msgstr "加载配置文件..."
+msgstr "配置文件"
 
 #. i18n This is printed out by --help before the path to the urls file
 #: newsboat.cpp:133
-#, fuzzy
 msgid "feed URLs"
-msgstr "链接: "
+msgstr "种子链接"
 
 #. i18n This is printed out by --help before the path to the cache file
 #: newsboat.cpp:135
-#, fuzzy
 msgid "cache"
 msgstr "缓存文件"
 
@@ -169,7 +166,7 @@ msgstr ""
 
 #: newsboat.cpp:178
 msgid "It bundles:"
-msgstr "它使用了"
+msgstr "它使用了："
 
 #: newsboat.cpp:179
 msgid ""
@@ -217,7 +214,7 @@ msgid "`%s' is not a valid color"
 msgstr "`%s' 不是一个有效的颜色"
 
 #: src/colormanager.cpp:68 src/regexmanager.cpp:266 src/regexmanager.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "`%s' is not a valid attribute"
 msgstr "`%s' 不是一个有效的属性索引"
 
@@ -227,9 +224,9 @@ msgid "`%s' is not a valid configuration element"
 msgstr "`%s' 不是一个有效的配置元素"
 
 #: src/configcontainer.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "Newsboat:重新加载完毕, %f个种子含未读文章(共有 %n 篇未读文章)"
+msgstr "Newsboat:重新加载完毕, %f个种子含未读文章（共有 %n 篇未读文章）"
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
@@ -302,30 +299,29 @@ msgid "expected integer value, found `%s' instead"
 msgstr ""
 
 #: src/configdata.cpp:74
-#, fuzzy, c-format
+#, c-format
 msgid "invalid configuration value `%s'"
-msgstr "把文章保存到 %s"
+msgstr "无效的配置参数 `%s'"
 
 #: src/confighandlerexception.cpp:19
 msgid "invalid parameters."
-msgstr "无效参数"
+msgstr "无效参数。"
 
 #: src/confighandlerexception.cpp:21
 msgid "too few parameters."
-msgstr "参数太少"
+msgstr "参数太少。"
 
 #: src/confighandlerexception.cpp:23
-#, fuzzy
 msgid "too many parameters."
-msgstr "参数太少"
+msgstr "参数太多。"
 
 #: src/confighandlerexception.cpp:25
 msgid "unknown command (bug)."
-msgstr "未知的命令（bug）"
+msgstr "未知的命令（bug）。"
 
 #: src/confighandlerexception.cpp:27
 msgid "file couldn't be opened."
-msgstr "无法打开文件"
+msgstr "无法打开文件。"
 
 #: src/configparser.cpp:105
 #, c-format
@@ -360,9 +356,9 @@ msgid "done."
 msgstr "完毕."
 
 #: src/controller.cpp:212 src/pbcontroller.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "错误：%s的一个实例已经在运行中（PID: %u）"
+msgstr "错误：%s的一个实例已经在运行中（PID: %s）"
 
 #: src/controller.cpp:218 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -499,9 +495,9 @@ msgid "Error while loading feeds from database: "
 msgstr "当从数据库中加载种子的时候出错: "
 
 #: src/controller.cpp:462
-#, fuzzy, c-format
+#, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "当调用`%s'的时候出错: %s"
+msgstr "当加载种子'%s'时出错: %s"
 
 #: src/controller.cpp:479 src/controller.cpp:564
 msgid "Cleaning up cache..."
@@ -542,14 +538,14 @@ msgid "Generated filename (%s) is used already."
 msgstr ""
 
 #: src/controller.cpp:719 src/itemutils.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open queue file: %s."
-msgstr "当调用`%s'的时候出错: %s"
+msgstr "当打开队列文件时出错: %s"
 
 #: src/controller.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "当调用`%s'的时候出错: %s"
+msgstr "当导入OPML到链接文件 %s 时出错: %s"
 
 #: src/controller.cpp:750
 #, fuzzy, c-format
@@ -654,9 +650,8 @@ msgid "played"
 msgstr "已播放"
 
 #: src/download.cpp:83
-#, fuzzy
 msgid "rename failed"
-msgstr "已失败"
+msgstr "重命名失败"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
@@ -706,7 +701,6 @@ msgstr "使用以下方法逆序排序？(f)第一个标签/(t)标题/(a)文章�
 #: src/feedlistformaction.cpp:580 src/itemlistformaction.cpp:182
 #: src/itemlistformaction.cpp:205 src/itemlistformaction.cpp:792
 #: src/itemviewformaction.cpp:512
-#, fuzzy
 msgid "Failed to spawn browser"
 msgstr "打开浏览器失败"
 
@@ -719,7 +713,6 @@ msgid "Browser returned error code %i"
 msgstr "浏览器返回错误代码 %i"
 
 #: src/feedlistformaction.cpp:306 src/itemlistformaction.cpp:481
-#, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
 msgstr "你真的想把这个种子标记为已读吗(y:是的  n:不是)?"
 
@@ -759,7 +752,6 @@ msgid "Already on first feed."
 msgstr "已经位于第一个种子。"
 
 #: src/feedlistformaction.cpp:394
-#, fuzzy
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
 msgstr "你真的想标记所有种子为已读吗(y:是的  n:不是)?"
 
@@ -894,9 +886,9 @@ msgid "Save File - %s"
 msgstr "%s %s - 保存文件 - %s"
 
 #: src/fileurlreader.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "当打开文件`%s'的时候出错: %s"
+msgstr "当打开文件\"%s\"的时候出错: %s"
 
 #: src/filtercontainer.cpp:37 src/regexmanager.cpp:352 src/rssfeed.cpp:64
 #: src/rssignores.cpp:45
@@ -918,21 +910,19 @@ msgid "usage: source <file> [...]"
 msgstr "用法：source <文件> [...]"
 
 #: src/formaction.cpp:286
-#, fuzzy
 msgid "usage: dumpconfig <file>"
 msgstr "用法：dumpconfig <文件>"
 
 #: src/formaction.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Saved configuration to %s"
-msgstr "把文章保存到 %s"
+msgstr "把设置保存到 %s"
 
 #: src/formaction.cpp:299
 msgid "usage: exec <operation>"
 msgstr "用法：exec <操作>"
 
 #: src/formaction.cpp:305
-#, fuzzy
 msgid "Operation not found"
 msgstr "没有找到操作"
 
@@ -962,9 +952,8 @@ msgid "Description: "
 msgstr "描述: "
 
 #: src/formaction.cpp:524
-#, fuzzy
 msgid "Feed title: "
-msgstr "文件: "
+msgstr "种子标题: "
 
 #: src/formaction.cpp:539
 #, fuzzy
@@ -1023,7 +1012,6 @@ msgid "No item selected!"
 msgstr "没有选择任何项目"
 
 #: src/itemlistformaction.cpp:108
-#, fuzzy
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
 msgstr "你真的想删除所有文章吗(y:是的  n:不是)?"
 
@@ -1064,11 +1052,11 @@ msgstr "已经位于最后一项。"
 #: src/itemlistformaction.cpp:447 src/itemviewformaction.cpp:380
 #: src/view.cpp:881
 msgid "Already on first item."
-msgstr "已经位于第一项"
+msgstr "已经位于第一项。"
 
 #: src/itemlistformaction.cpp:460 src/itemlistformaction.cpp:465
 msgid "No unread feeds."
-msgstr "没有未读的种子"
+msgstr "没有未读的种子。"
 
 #: src/itemlistformaction.cpp:540
 #, fuzzy
@@ -1083,7 +1071,6 @@ msgstr ""
 #. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. messages
 #: src/itemlistformaction.cpp:664 src/itemlistformaction.cpp:702
-#, fuzzy
 msgid "dtfalgr"
 msgstr "dtfalgr"
 
@@ -1097,7 +1084,7 @@ msgstr "使用以下方法逆序排序？(d)日期/(t)标题/(f)标记/(a)作者
 
 #: src/itemlistformaction.cpp:870 src/itemviewformaction.cpp:604
 msgid "Flags updated."
-msgstr "标记已更新"
+msgstr "标记已更新。"
 
 #: src/itemlistformaction.cpp:1006 src/view.cpp:424 src/view.cpp:447
 #, c-format
@@ -1113,7 +1100,7 @@ msgstr[0] ""
 #: src/itemlistformaction.cpp:1377 src/itemviewformaction.cpp:229
 #: src/itemviewformaction.cpp:579
 msgid "Aborted saving."
-msgstr "保存中断"
+msgstr "保存中断。"
 
 #: src/itemlistformaction.cpp:1382 src/itemviewformaction.cpp:585
 #, c-format
@@ -1174,25 +1161,23 @@ msgstr "链接: "
 
 #: src/itemrenderer.cpp:89
 msgid "Podcast Download URL: "
-msgstr "播客下载的地址: "
+msgstr "播客下载地址: "
 
 #: src/itemrenderer.cpp:94
 msgid "type: "
 msgstr "类型: "
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Image"
 msgstr "图片"
 
 #: src/itemrenderer.cpp:128
-#, fuzzy
 msgid "Link"
-msgstr "链接: "
+msgstr "链接"
 
 #: src/itemrenderer.cpp:220
 msgid "Links: "
-msgstr "所有链接"
+msgstr "所有链接："
 
 #: src/itemutils.cpp:10
 msgid "Item has no enclosures."
@@ -1211,7 +1196,7 @@ msgstr "将 %s 加入下载队列"
 #: src/itemutils.cpp:27
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s 已经在队列中。"
 
 #: src/itemviewformaction.cpp:63 src/itemviewformaction.cpp:675
 msgid "Top"
@@ -1229,7 +1214,7 @@ msgstr "当标记文章为已读的时候出错: %s"
 #: src/itemviewformaction.cpp:234
 #, c-format
 msgid "Saved article to %s."
-msgstr "将文章保存至 %s "
+msgstr "将文章保存至 %s 。"
 
 #: src/itemviewformaction.cpp:237
 #, c-format
@@ -1284,7 +1269,7 @@ msgstr "返回到前一个对话框/退出"
 
 #: src/keymap.cpp:53
 msgid "Quit program, no confirmation"
-msgstr ""
+msgstr "退出程序，无需确认"
 
 #: src/keymap.cpp:60
 msgid "Reload currently selected feed"
@@ -1335,9 +1320,8 @@ msgid "Go to previous unread article"
 msgstr "转到前一篇未读文章"
 
 #: src/keymap.cpp:119
-#, fuzzy
 msgid "Go to a random unread article"
-msgstr "转到下一篇未读文章"
+msgstr "转到随机一篇未读文章"
 
 #: src/keymap.cpp:126
 #, fuzzy
@@ -1474,22 +1458,20 @@ msgid "Edit flags"
 msgstr "编辑标记"
 
 #: src/keymap.cpp:301
-#, fuzzy
 msgid "Go to next feed"
-msgstr "转到下一篇未读的种子"
+msgstr "转到下一个种子"
 
 #: src/keymap.cpp:306
-#, fuzzy
 msgid "Go to previous feed"
-msgstr "转到前一篇未读的种子"
+msgstr "转到前一个种子"
 
 #: src/keymap.cpp:313
 msgid "Go to next unread feed"
-msgstr "转到下一篇未读的种子"
+msgstr "转到下一个未读的种子"
 
 #: src/keymap.cpp:320
 msgid "Go to previous unread feed"
-msgstr "转到前一篇未读的种子"
+msgstr "转到前一个未读的种子"
 
 #: src/keymap.cpp:323
 msgid "Call a macro"
@@ -1500,17 +1482,16 @@ msgid "Delete article"
 msgstr "删除文章"
 
 #: src/keymap.cpp:335
-#, fuzzy
 msgid "Delete all articles"
-msgstr "删除文章"
+msgstr "删除所有文章"
 
 #: src/keymap.cpp:342
 msgid "Purge deleted articles"
-msgstr "压缩已删除文章"
+msgstr "清除已删除的文章"
 
 #: src/keymap.cpp:349
 msgid "Edit subscribed URLs"
-msgstr "编辑已提交链接"
+msgstr "编辑订阅的链接"
 
 #: src/keymap.cpp:356
 #, fuzzy
@@ -1701,9 +1682,9 @@ msgid "regular expression '%s' is invalid: %s"
 msgstr ""
 
 #: src/opml.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Error: failed to parse OPML file \"%s\""
-msgstr "错误：无法将文章写至 %s"
+msgstr "错误：无法解析OPML文件 \"%s\""
 
 #: src/pbcontroller.cpp:84
 #, c-format
@@ -1786,15 +1767,15 @@ msgstr "错误：无法执行操作：有项目在下载中"
 
 #: src/pbview.cpp:291
 msgid "KB/s"
-msgstr ""
+msgstr "KB/秒"
 
 #: src/pbview.cpp:293
 msgid "MB/s"
-msgstr ""
+msgstr "MB/秒"
 
 #: src/pbview.cpp:295
 msgid "GB/s"
-msgstr ""
+msgstr "GB/秒"
 
 #: src/pbview.cpp:381
 msgid "Download"
@@ -1854,7 +1835,6 @@ msgid "Error: invalid feed!"
 msgstr "错误:无效的种子!"
 
 #: src/rssfeed.cpp:49
-#, fuzzy
 msgid "too few arguments"
 msgstr "参数太少"
 
@@ -1867,9 +1847,8 @@ msgid "Prev search results"
 msgstr ""
 
 #: src/searchresultslistformaction.cpp:63
-#, fuzzy
 msgid "Already in first search result."
-msgstr "错误：你不能重新加载所选项目"
+msgstr "已经位于搜索结果的第一条。"
 
 #: src/searchresultslistformaction.cpp:89
 #, c-format
@@ -1894,19 +1873,18 @@ msgid "Save Bookmark"
 msgstr "保存书签"
 
 #: src/urlviewformaction.cpp:188
-#, fuzzy
 msgid "URLs"
-msgstr "链接: "
+msgstr "链接"
 
 #: src/utils.cpp:736
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file: %s"
-msgstr "当调用`%s'的时候出错: %s"
+msgstr "当打开文件时出错: %s"
 
 #: src/utils.cpp:740
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read line %u: %s"
-msgstr "当调用`%s'的时候出错: %s"
+msgstr "当读取第 %u 行时出错: %s"
 
 #: src/view.cpp:171
 msgid "Error: failed to execute startup commands"
