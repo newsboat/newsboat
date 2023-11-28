@@ -443,6 +443,46 @@ TEST_CASE("Resolves tilde to homedir in --history-search", "[CliArgsParser]")
     }
 }
 
+TEST_CASE(
+    "Sets `cmdline_file` and `using_nonstandard_configs` if --history-cmdline "
+    "is provided",
+    "[CliArgsParser]")
+{
+    const std::string filename("cmdlinefile");
+
+    auto check = [&filename](test_helpers::Opts opts) {
+        CliArgsParser args(opts.argc(), opts.argv());
+
+        REQUIRE(args.cmdline_file() == filename);
+        REQUIRE(args.using_nonstandard_configs());
+    };
+
+    SECTION("--history-cmdline") {
+        check({"newsboat", "--history-cmdline=" + filename});
+    }
+}
+
+TEST_CASE("Resolves tilde to homedir in --history-cmdline", "[CliArgsParser]")
+{
+    test_helpers::TempDir tmp;
+
+    test_helpers::EnvVar home("HOME");
+    home.set(tmp.get_path());
+
+    const std::string filename("cmdlinefile");
+    const std::string arg = std::string("~/") + filename;
+
+    auto check = [&filename, &tmp](test_helpers::Opts opts) {
+        CliArgsParser args(opts.argc(), opts.argv());
+
+        REQUIRE(args.cmdline_file() == tmp.get_path() + filename);
+    };
+
+    SECTION("--history-cmdline") {
+        check({"newsboat", "--history-cmdline", arg});
+    }
+}
+
 TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 {
 	auto check = [](test_helpers::Opts opts) {
