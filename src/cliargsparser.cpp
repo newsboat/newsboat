@@ -154,6 +154,33 @@ nonstd::optional<std::string> CliArgsParser::config_file() const
 	return nonstd::nullopt;
 }
 
+nonstd::optional<std::string> CliArgsParser::queue_file() const
+{
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::queue_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
+}
+
+nonstd::optional<std::string> CliArgsParser::search_file() const
+{
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::search_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
+}
+
+nonstd::optional<std::string> CliArgsParser::cmdline_file() const
+{
+	rust::String path;
+	if (newsboat::cliargsparser::bridged::cmdline_file(*rs_object, path)) {
+		return std::string(path);
+	}
+	return nonstd::nullopt;
+}
+
 std::vector<std::string> CliArgsParser::cmds_to_execute()
 const
 {

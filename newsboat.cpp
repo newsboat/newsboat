@@ -26,7 +26,8 @@ extern "C" {
 using namespace newsboat;
 
 void print_usage(const std::string& argv0, const std::string& config_path,
-	const std::string& urls_path, const std::string& cache_path)
+	const std::string& urls_path, const std::string& cache_path, const std::string& queue_path,
+    const std::string& search_path, const std::string& cmdline_path)
 {
 	auto msg = strprintf::fmt(
 			_("%s %s\nusage: %s [-i <file>|-e] [-u <urlfile>] "
@@ -66,6 +67,24 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 			_s("<configfile>"),
 			_s("read configuration from <configfile>")
 		},
+        {
+            '-',
+            "queue-file",
+            _s("<queuefile>"),
+            _s("use <queuefile> as podcast queue file")
+        },
+        {
+            '-',
+            "history-search",
+            _s("<searchfile>"),
+            _s("save the input history of the search functions to <searchfile>")
+        },
+        {
+            '-',
+            "history-cmdline",
+            _s("<cmdlinefile>"),
+            _s("save the input history of the command line to <cmdlinefile>")
+        },
 		{'X', "vacuum", "", _s("compact the cache")},
 		{
 			'x',
@@ -133,7 +152,14 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 	const std::string tr_urls = _("feed URLs");
 	// i18n This is printed out by --help before the path to the cache file
 	const std::string tr_cache = _("cache");
-	const auto widest = std::max({tr_config.length(), tr_urls.length(), tr_cache.length()});
+    // i18n: This is printed out by --help before the path to the queue file
+    const std::string tr_queue = _("podcast queue");
+    // i18n: This is printed out by --help before the path to the history search file
+    const std::string tr_search = _("search history");
+    // i18n: This is printed out by --help before the path to the history cmdline file
+    const std::string tr_cmdline = _("command line history");
+	const auto widest = std::max({tr_config.length(), tr_urls.length(), tr_cache.length(), 
+        tr_search.length(), tr_cmdline.length(), tr_queue.length()});
 
 	const auto print_filepath = [widest](const std::string& name,
 	const std::string& value) {
@@ -144,6 +170,9 @@ void print_usage(const std::string& argv0, const std::string& config_path,
 	print_filepath(tr_config, config_path);
 	print_filepath(tr_urls, urls_path);
 	print_filepath(tr_cache, cache_path);
+    print_filepath(tr_queue, queue_path);
+    print_filepath(tr_search, search_path);
+    print_filepath(tr_cmdline, cmdline_path);
 
 	std::cout << std::endl
 		<< _("Support at #newsboat at https://libera.chat or on our mailing "
@@ -244,7 +273,8 @@ int main(int argc, char* argv[])
 
 	if (args.should_print_usage()) {
 		print_usage(args.program_name(), configpaths.config_file(),
-			configpaths.url_file(), configpaths.cache_file());
+			configpaths.url_file(), configpaths.cache_file(), configpaths.queue_file(),
+            configpaths.search_file(), configpaths.cmdline_file());
 		if (args.return_code().has_value()) {
 			return args.return_code().value();
 		}
