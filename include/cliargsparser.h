@@ -72,11 +72,11 @@ public:
 
 	nonstd::optional<std::string> config_file() const;
 
-    nonstd::optional<std::string> queue_file() const;
+	nonstd::optional<std::string> queue_file() const;
 
-    nonstd::optional<std::string> search_file() const;
+	nonstd::optional<std::string> search_file() const;
 
-    nonstd::optional<std::string> cmdline_file() const;
+	nonstd::optional<std::string> cmdline_file() const;
 
 	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
