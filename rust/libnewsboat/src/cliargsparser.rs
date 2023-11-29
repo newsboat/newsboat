@@ -288,8 +288,12 @@ impl CliArgsParser {
     }
 
     pub fn using_nonstandard_configs(&self) -> bool {
-        self.url_file.is_some() || self.cache_file.is_some() || self.config_file.is_some()
-        || self.queue_file.is_some() || self.search_file.is_some() || self.cmdline_file.is_some()
+        self.url_file.is_some()
+            || self.cache_file.is_some()
+            || self.config_file.is_some()
+            || self.queue_file.is_some()
+            || self.search_file.is_some()
+            || self.cmdline_file.is_some()
     }
 }
 
@@ -563,7 +567,11 @@ mod tests {
             assert!(args.using_nonstandard_configs());
         };
 
-        check(vec!["newsboat".into(), "--queue-file".into(), filename.into()]);
+        check(vec![
+            "newsboat".into(),
+            "--queue-file".into(),
+            filename.into(),
+        ]);
     }
 
     #[test]
@@ -577,7 +585,11 @@ mod tests {
             assert!(args.using_nonstandard_configs());
         };
 
-        check(vec!["newsboat".into(), "--history-search".into(), filename.into()]);
+        check(vec![
+            "newsboat".into(),
+            "--history-search".into(),
+            filename.into(),
+        ]);
     }
 
     #[test]
@@ -591,7 +603,11 @@ mod tests {
             assert!(args.using_nonstandard_configs());
         };
 
-        check(vec!["newsboat".into(), "--history-cmdline".into(), filename.into()]);
+        check(vec![
+            "newsboat".into(),
+            "--history-cmdline".into(),
+            filename.into(),
+        ]);
     }
 
     #[test]
