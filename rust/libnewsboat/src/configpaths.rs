@@ -323,6 +323,18 @@ impl ConfigPaths {
             self.config_file = config_file.to_owned();
         }
 
+        if let Some(ref queue_file) = args.queue_file {
+            self.queue_file = queue_file.to_owned();
+        }
+
+        if let Some(ref search_file) = args.search_file {
+            self.search_file = search_file.to_owned();
+        }
+
+        if let Some(ref cmdline_file) = args.cmdline_file {
+            self.cmdline_file = cmdline_file.to_owned();
+        }
+
         self.silent = args.silent;
         self.using_nonstandard_configs = args.using_nonstandard_configs();
     }
