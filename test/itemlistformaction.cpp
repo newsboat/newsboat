@@ -1,6 +1,7 @@
 #include "itemlistformaction.h"
 
 #include <fstream>
+#include <tuple>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
@@ -525,14 +526,28 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
 
 	bookmark_args.push_back(extra_arg);
-	REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, bookmark_args, BindingType::Macro));
 
-	std::ifstream browserFileStream(bookmarkFile.get_path());
+	auto checkOutput = [&] {
+		std::ifstream browserFileStream(bookmarkFile.get_path());
 
-	REQUIRE(std::getline(browserFileStream, line));
-	REQUIRE(line ==
-		test_url + separator + test_title + separator + extra_arg +
-		separator + feed_title);
+		REQUIRE(std::getline(browserFileStream, line));
+		REQUIRE(line ==
+			test_url + separator + test_title + separator + extra_arg +
+			separator + feed_title);
+	};
+
+	SECTION("Macro") {
+		REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, bookmark_args, BindingType::Macro));
+
+		checkOutput();
+	}
+
+	SECTION("Bind") {
+		REQUIRE_NOTHROW(itemlist.process_op(OP_BOOKMARK, bookmark_args, BindingType::Bind));
+
+		checkOutput();
+	}
+
 }
 
 TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
@@ -559,68 +574,37 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	SECTION("Single flag") {
-		std::string flags = "G";
-		op_args.push_back(flags);
+	// <name, input, expected_result>
+	std::vector<std::tuple<std::string, std::string, std::string>> tests {
+		std::make_tuple("Single flag", "G", "G"),
+		std::make_tuple("Unordered flags", "abdefc", "abcdef"),
+		std::make_tuple("Duplicate flag in argument", "Abdddd", "Abd"),
+		std::make_tuple("Unauthorized values in arguments: Numbers", "Abd1236", "Abd"),
+		std::make_tuple("Unauthorized values in arguments: Symbolds", "Abd%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§", "Abd"),
+		std::make_tuple("Unauthorized values in arguments: Accents", "Abd¨^", "Abd"),
+		std::make_tuple("All possible flags at once", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"),
+	};
 
-		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
-		REQUIRE(item->flags() == flags);
-	}
-
-	SECTION("Unordered flags") {
-		std::string flags = "abdefc";
-		std::string ordered_flags = "abcdef";
-		op_args.push_back(flags);
-
-		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
-		REQUIRE(item->flags() == ordered_flags);
-	}
-
-	SECTION("Duplicate flag in argument") {
-		std::string flags = "Abd";
-		op_args.push_back(flags + "ddd");
-
-		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
-		REQUIRE(item->flags() == flags);
-	}
-
-	SECTION("Unauthorized values in arguments") {
-		std::string flags = "Abd";
-		SECTION("Numbers") {
-			op_args.push_back(flags + "1236");
-
-			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, op_args, BindingType::Macro));
-			REQUIRE(item->flags() == flags);
-		}
-		SECTION("Symbols") {
-			op_args.push_back(flags +
-				"%^\\*;\'\"&~#{([-|`_/@)]=}$£€µ,;:!?./§");
-
-			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, op_args, BindingType::Macro));
-			REQUIRE(item->flags() == flags);
-		}
-		SECTION("Accents") {
-			op_args.push_back(flags + "¨^");
-
-			REQUIRE_NOTHROW(itemlist.process_op(
-					OP_EDITFLAGS, op_args, BindingType::Macro));
-			REQUIRE(item->flags() == flags);
+	SECTION("Macro") {
+		for (const auto& testCase : tests) {
+			DYNAMIC_SECTION("Test " << std::get<0>(testCase)) {
+				std::vector<std::string> args = op_args;
+				args.push_back(std::get<1>(testCase));
+				REQUIRE_NOTHROW( itemlist.process_op(OP_EDITFLAGS, args, BindingType::Macro));
+				REQUIRE(item->flags() == std::get<2>(testCase));
+			}
 		}
 	}
 
-	SECTION("All possible flags at once") {
-		std::string flags =
-			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-		op_args.push_back(flags);
-
-		REQUIRE_NOTHROW(
-			itemlist.process_op(OP_EDITFLAGS, op_args, BindingType::Macro));
-		REQUIRE(item->flags() == flags);
+	SECTION("Bind") {
+		for (const auto& testCase : tests) {
+			DYNAMIC_SECTION("Test " << std::get<0>(testCase)) {
+				std::vector<std::string> args = op_args;
+				args.push_back(std::get<1>(testCase));
+				REQUIRE_NOTHROW( itemlist.process_op(OP_EDITFLAGS, args, BindingType::Bind));
+				REQUIRE(item->flags() == std::get<2>(testCase));
+			}
+		}
 	}
 }
 
@@ -667,14 +651,25 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, op_args, BindingType::Macro));
+	auto check = [&] {
+		test_helpers::assert_article_file_content(saveFile.get_path(),
+			test_title,
+			test_author,
+			test_pubDate_str,
+			test_url,
+			test_description);
+	};
 
-	test_helpers::assert_article_file_content(saveFile.get_path(),
-		test_title,
-		test_author,
-		test_pubDate_str,
-		test_url,
-		test_description);
+	SECTION("Macro") {
+		REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, op_args, BindingType::Macro));
+		check();
+	}
+
+	SECTION("Bind") {
+		REQUIRE_NOTHROW(itemlist.process_op(OP_SAVE, op_args, BindingType::Bind));
+		check();
+	}
+
 }
 
 TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
@@ -862,14 +857,24 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	feed->add_item(item);
 	itemlist.set_feed(feed);
 
-	REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, op_args, BindingType::Macro));
+	auto check = [&] {
+		test_helpers::assert_article_file_content(articleFile.get_path(),
+			test_title,
+			test_author,
+			test_pubDate_str,
+			test_url,
+			test_description);
+	};
 
-	test_helpers::assert_article_file_content(articleFile.get_path(),
-		test_title,
-		test_author,
-		test_pubDate_str,
-		test_url,
-		test_description);
+	SECTION("Macro") {
+		REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, op_args, BindingType::Macro));
+		check();
+	}
+
+	SECTION("Bind") {
+		REQUIRE_NOTHROW(itemlist.process_op(OP_PIPE_TO, op_args, BindingType::Bind));
+		check();
+	}
 }
 
 TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
