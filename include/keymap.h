@@ -95,6 +95,7 @@ enum Operation {
 	OP_NB_MAX,
 	OP_PREVSEARCHRESULTS,
 	OP_ARTICLEFEED,
+	OP_DOWNLOAD_FULL_PAGE,
 
 	// podboat-specific operations:
 	OP_PB_MIN = 1000,
