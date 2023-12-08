@@ -1623,7 +1623,7 @@ msgstr "`%s' 不是一个有效的键盘指令"
 #: src/keymap.cpp:764
 #, c-format
 msgid "failed to parse operation sequence for %s"
-msgstr "解析操作序列失败：%s"
+msgstr "解析操作序列 %s 失败"
 
 #: src/keymap.cpp:782
 #, c-format
@@ -1920,7 +1920,7 @@ msgid ""
 "Fatal error: couldn't determine home directory!\n"
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr "严重错误：无法确定家目录！\n"
-"请设置主目录的环境变量，或者添加一个有效的用户其UID为 %u!"
+"请为 UID 为 %u 的用户设置 HOME 环境变量，或者添加一个有效的用户!"
 
 #: rust/libnewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
@@ -1946,7 +1946,7 @@ msgstr "其中之一：=~、==、=、!~、!=、<=、>=、<、>、between、#、!
 #. The options ("quoted string" etc.) are not keywords, so please translate them.
 #: rust/libnewsboat/src/filterparser.rs:133
 msgid "one of: quoted string, range, number"
-msgstr "其中之一：quoted string、range、number"
+msgstr "其中之一：被引号包裹的字符串、范围、数字"
 
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
