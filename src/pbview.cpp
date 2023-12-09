@@ -28,6 +28,8 @@ PbView::PbView(PbController& c)
 	, ctrl(c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
+	, msg_line_dllist_form(dllist_form, "msg")
+	, msg_line_help_form(help_form, "msg")
 	, keys(ctrl.get_keymap())
 	, colorman(ctrl.get_colormanager())
 	, downloads_list("dls", dllist_form,
@@ -98,9 +100,9 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 		// If there's no status message, we know there's no error to show
 		// Thus, it's safe to replace with the download's status
-		if (dllist_form.get("msg").empty() && ctrl.downloads().size() > 0) {
+		if (msg_line_dllist_form.get_text().empty() && ctrl.downloads().size() > 0) {
 			const auto idx = downloads_list.get_position();
-			dllist_form.set("msg", ctrl.downloads()[idx].status_msg());
+			msg_line_dllist_form.set_text(ctrl.downloads()[idx].status_msg());
 		}
 
 		const char* event = dllist_form.run(500);
@@ -123,8 +125,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 		Operation op = keys.get_operation(event, "podboat");
 
-		if (dllist_form.get("msg").length() > 0) {
-			dllist_form.set("msg", "");
+		if (msg_line_dllist_form.get_text().length() > 0) {
+			msg_line_dllist_form.set_text("");
 			update_view = true;
 		}
 
@@ -164,7 +166,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_HARDQUIT:
 		case OP_QUIT:
 			if (ctrl.downloads_in_progress() > 0) {
-				dllist_form.set("msg", _("Error: can't quit: download(s) in progress."));
+				msg_line_dllist_form.set_text(_("Error: can't quit: download(s) in progress."));
 				update_view = true;
 			} else {
 				quit = true;
@@ -199,10 +201,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 					ctrl.downloads()[idx].set_status(
 						DlStatus::PLAYED);
 				} else {
-					dllist_form.set("msg",
-						_("Error: download needs to be "
-							"finished before the file "
-							"can be played."));
+					msg_line_dllist_form.set_text(_("Error: download needs to be "
+							"finished before the file can be played."));
 				}
 			}
 		}
@@ -249,8 +249,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		break;
 		case OP_PB_PURGE:
 			if (ctrl.downloads_in_progress() > 0) {
-				dllist_form.set("msg",
-					_("Error: unable to perform operation: "
+				msg_line_dllist_form.set_text(_("Error: unable to perform operation: "
 						"download(s) in progress."));
 			} else {
 				ctrl.purge_queue();

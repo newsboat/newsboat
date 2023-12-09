@@ -44,7 +44,7 @@ vbox
       .height:1
   hbox[lastline]
     .expand:0
-    label[msglabel]
+    label
       text[msg]:""
       .expand:h
       .display[show_msg]:1

@@ -1226,7 +1226,7 @@ void ItemListFormAction::init()
 {
 	recalculate_widget_dimensions();
 	list.set_position(0);
-	set_value("msg", "");
+	set_status("");
 	set_keymap_hints();
 	invalidate_list();
 	do_update_visible_items();

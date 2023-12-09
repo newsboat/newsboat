@@ -26,6 +26,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	, cfg(cfg)
 	, f(formstr)
 	, do_redraw(true)
+	, msg_line(f, "msg")
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
 {
@@ -69,6 +70,11 @@ std::string FormAction::get_value(const std::string& name)
 void FormAction::set_value(const std::string& name, const std::string& value)
 {
 	f.set(name, value);
+}
+
+void FormAction::set_status(const std::string& text)
+{
+	msg_line.set_text(text);
 }
 
 void FormAction::draw_form()
@@ -461,8 +467,8 @@ void FormAction::cancel_qna()
 
 	f.set("show_qna_label", "0");
 	f.set("show_qna_input", "0");
-	f.set("show_msg", "1");
-	f.set("msg", "");
+	msg_line.show();
+	msg_line.set_text("");
 
 	f.set_focus(main_widget());
 
@@ -638,7 +644,7 @@ void FormAction::start_next_question()
 
 		f.set("show_qna_label", "1");
 		f.set("show_qna_input", "1");
-		f.set("show_msg", "0");
+		msg_line.hide();
 
 		f.set_focus("qnainput");
 
@@ -656,8 +662,8 @@ void FormAction::start_next_question()
 		 */
 		f.set("show_qna_label", "0");
 		f.set("show_qna_input", "0");
-		f.set("show_msg", "1");
-		f.set("msg", "");
+		msg_line.show();
+		msg_line.set_text("");
 
 		f.set_focus(main_widget());
 

@@ -7,6 +7,7 @@
 
 #include "history.h"
 #include "keymap.h"
+#include "lineview.h"
 #include "listwidget.h"
 #include "stflpp.h"
 
@@ -60,6 +61,7 @@ public:
 
 	std::string get_value(const std::string& name);
 	void set_value(const std::string& name, const std::string& value);
+	void set_status(const std::string& text);
 
 	void draw_form();
 	std::string draw_form_wait_for_event(unsigned int timeout);
@@ -151,6 +153,7 @@ private:
 	void handle_dumpconfig(const std::vector<std::string>& args);
 	void handle_exec(const std::vector<std::string>& args);
 
+	LineView msg_line;
 	std::vector<QnaPair> qna_prompts;
 	Operation finish_operation;
 	History* qna_history;

@@ -47,7 +47,7 @@ ItemViewFormAction::~ItemViewFormAction() {}
 
 void ItemViewFormAction::init()
 {
-	set_value("msg", "");
+	set_status("");
 	do_redraw = true;
 	textview.set_scroll_offset(0);
 	links.clear();
