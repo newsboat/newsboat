@@ -1,12 +1,12 @@
 //! Keeps a record of what the program did.
 
 use chrono::{offset::Local, Datelike, Timelike};
-use once_cell::sync::OnceCell;
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::sync::atomic::{AtomicIsize, Ordering};
 use std::sync::Mutex;
+use std::sync::OnceLock;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 /// "Importance levels" for log messages.
@@ -268,7 +268,7 @@ impl Default for Logger {
     }
 }
 
-static GLOBAL_LOGGER: OnceCell<Logger> = OnceCell::new();
+static GLOBAL_LOGGER: OnceLock<Logger> = OnceLock::new();
 
 /// Returns a global logger instance.
 ///
