@@ -5,6 +5,7 @@
 #include <mutex>
 #include <string>
 
+#include "configcontainer.h"
 #include "matchable.h"
 #include "matcher.h"
 
@@ -173,6 +174,8 @@ public:
 		std::lock_guard<std::mutex> guard(description_mutex);
 		description_.reset();
 	}
+
+	void download_full_page(ConfigContainer& cfg);
 
 private:
 	std::string title_;

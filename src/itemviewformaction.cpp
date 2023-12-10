@@ -537,24 +537,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_DOWNLOAD_FULL_PAGE: {
-		CurlHandle handle;
-		const std::string content = utils::retrieve_url(item->link(), handle, *cfg, "", nullptr,
-				utils::HTTPMethod::GET);
-		std::string content_mime_type;
-
-		// Determine mime-type based on Content-type header:
-		// Content-type: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
-		// Format: https://tools.ietf.org/html/rfc7231#section-3.1.1.1
-		char* value = nullptr;
-		curl_easy_getinfo(handle.ptr(), CURLINFO_CONTENT_TYPE, &value);
-		if (value != nullptr) {
-			std::string content_type(value);
-			content_mime_type = content_type.substr(0, content_type.find_first_of(";"));
-		} else {
-			content_mime_type = "application/octet-stream";
-		}
-
-		item->set_description(content, content_mime_type);
+		item->download_full_page(*cfg);
 		rsscache->externalize_rssfeed(feed, false);
 		v->force_redraw();
 	}

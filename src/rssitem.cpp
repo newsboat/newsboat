@@ -5,6 +5,8 @@
 #include <langinfo.h>
 
 #include "cache.h"
+#include "configcontainer.h"
+#include "curlhandle.h"
 #include "dbexception.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
@@ -258,6 +260,28 @@ void RssItem::set_feedptr(std::shared_ptr<RssFeed> ptr)
 void RssItem::set_feedptr(const std::weak_ptr<RssFeed>& ptr)
 {
 	feedptr_ = ptr;
+}
+
+void RssItem::download_full_page(ConfigContainer& cfg)
+{
+	CurlHandle handle;
+	const std::string content = utils::retrieve_url(this->link(), handle, cfg, "", nullptr,
+			utils::HTTPMethod::GET);
+
+	// Determine mime-type based on Content-type header:
+	// Content-type: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
+	// Format: https://tools.ietf.org/html/rfc7231#section-3.1.1.1
+	std::string content_mime_type;
+	char* value = nullptr;
+	curl_easy_getinfo(handle.ptr(), CURLINFO_CONTENT_TYPE, &value);
+	if (value != nullptr) {
+		std::string content_type(value);
+		content_mime_type = content_type.substr(0, content_type.find_first_of(";"));
+	} else {
+		content_mime_type = "application/octet-stream";
+	}
+
+	this->set_description(content, content_mime_type);
 }
 
 } // namespace newsboat
