@@ -437,10 +437,11 @@ void Cache::populate_tables()
 			std::to_string(patch_version.major) + ", db_schema_version_minor = " +
 			std::to_string(patch_version.minor) + ";";
 
+		if (patch_version > SchemaVersion{2, 11}) {
+			run_sql_nothrow(update_metadata_query);
+		}
+
 		for (const auto& query : patches_it->second) {
-			if (patch_version > SchemaVersion{2, 11}) {
-				run_sql_nothrow(update_metadata_query);
-			}
 			run_sql_nothrow(query);
 		}
 	}
