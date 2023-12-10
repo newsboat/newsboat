@@ -1014,6 +1014,14 @@ void Cache::update_rssitem_unread_and_enqueued(std::shared_ptr<RssItem> item,
 	update_rssitem_unread_and_enqueued(item.get(), feedurl);
 }
 
+void Cache::update_rssitem_locked(std::shared_ptr<RssItem> item,
+	const std::string& feedurl,
+	bool reset_unread)
+{
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+	update_rssitem_unlocked(item, feedurl, reset_unread);
+}
+
 /* helper function to wrap std::string around the sqlite3_*mprintf function */
 std::string Cache::prepare_query(const std::string& format)
 {

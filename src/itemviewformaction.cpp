@@ -538,7 +538,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	break;
 	case OP_DOWNLOAD_FULL_PAGE: {
 		item->download_full_page(*cfg);
-		rsscache->externalize_rssfeed(feed, false);
+		rsscache->update_rssitem_locked(item, feed->rssurl(), false);
 		v->force_redraw();
 	}
 	break;
