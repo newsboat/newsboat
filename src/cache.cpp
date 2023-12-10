@@ -388,14 +388,11 @@ static const schema_patches schemaPatches{
 	},
 	{	{2, 22},
 		{
-			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 22;",
-
 			"ALTER TABLE rss_item ADD COLUMN content_mime_type VARCHAR(255) NOT NULL DEFAULT \"\";"
 		}
 	},
 	{	{2, 33},
 		{
-			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 33;",
 			"ALTER TABLE rss_item ADD COLUMN enclosure_description VARCHAR(1024) NOT NULL DEFAULT \"\";",
 			"ALTER TABLE rss_item ADD COLUMN enclosure_description_mime_type VARCHAR(128) NOT NULL DEFAULT \"\";",
 		}
@@ -435,6 +432,15 @@ void Cache::populate_tables()
 			"for version %u.%u",
 			patch_version.major,
 			patch_version.minor);
+
+		std::string update_metadata_query = "UPDATE metadata SET db_schema_version_major = " +
+			std::to_string(patch_version.major) + ", db_schema_version_minor = " +
+			std::to_string(patch_version.minor) + ";";
+
+		if (patch_version > SchemaVersion{2, 11}) {
+			run_sql_nothrow(update_metadata_query);
+		}
+
 		for (const auto& query : patches_it->second) {
 			run_sql_nothrow(query);
 		}
