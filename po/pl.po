@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-12-11 21:31+0300\n"
-"PO-Revision-Date: 2023-09-14 16:03+0200\n"
+"PO-Revision-Date: 2023-12-11 20:10+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -1670,9 +1670,8 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' nie jest dopuszczalnym poleceniem"
 
 #: src/keymap.cpp:740
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "Nie udało się uruchomić przeglądarki internetowej"
+msgstr "nie udało się przetworzyć przypisania"
 
 #: src/keymap.cpp:772
 #, c-format
