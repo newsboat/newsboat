@@ -228,10 +228,8 @@ void FileBrowserFormAction::update_title(const std::string& working_directory)
 	fmt.register_fmt('V', utils::program_version());
 	fmt.register_fmt('f', working_directory);
 
-	const std::string title = fmt.do_format(
-			cfg->get_configvalue("filebrowser-title-format"), width);
-
-	set_value("head", title);
+	set_title(fmt.do_format(
+			cfg->get_configvalue("filebrowser-title-format"), width));
 }
 
 std::vector<std::string> get_sorted_filelist()

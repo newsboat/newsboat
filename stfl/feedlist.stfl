@@ -15,7 +15,7 @@ vbox
   @style_unread_normal[listnormal_unread]:attr=bold
   @style_unread_focus[listfocus_unread]:fg=yellow,bg=blue,attr=bold
   @on_TAB:"TAB"
-  label#title[title]
+  label#title
     text[head]:"Your feeds"
     .expand:h
     .display[showtitle]:1

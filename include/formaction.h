@@ -120,6 +120,8 @@ protected:
 	/// by default.
 	virtual std::string main_widget() const = 0;
 
+	void set_title(const std::string& title);
+
 	void start_bookmark_qna(const std::string& default_title,
 		const std::string& default_url,
 		const std::string& default_feed_title);
@@ -153,6 +155,7 @@ private:
 	void handle_dumpconfig(const std::vector<std::string>& args);
 	void handle_exec(const std::vector<std::string>& args);
 
+	LineView head_line;
 	LineView msg_line;
 	std::vector<QnaPair> qna_prompts;
 	Operation finish_operation;

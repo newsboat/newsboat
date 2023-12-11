@@ -249,7 +249,7 @@ void SelectFormAction::update_heading()
 	default:
 		assert(0); // should never happen
 	}
-	set_value("head", title);
+	set_title(title);
 }
 
 const std::vector<KeyMapHintEntry>& SelectFormAction::get_keymap_hint() const

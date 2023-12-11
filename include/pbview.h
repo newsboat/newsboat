@@ -45,6 +45,8 @@ private:
 	PbController& ctrl;
 	newsboat::Stfl::Form dllist_form;
 	newsboat::Stfl::Form help_form;
+	LineView title_line_dllist_form;
+	LineView title_line_help_form;
 	LineView msg_line_dllist_form;
 	LineView msg_line_help_form;
 	newsboat::KeyMap& keys;

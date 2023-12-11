@@ -13,7 +13,7 @@ vbox
   @bind_home[bind_home]:
   @bind_end[bind_end]:
   @on_TAB:"TAB"
-  label#title[title]
+  label#title
     text[head]:"URLs"
     .expand:h
     .display[showtitle]:1

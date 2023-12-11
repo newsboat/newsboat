@@ -74,14 +74,12 @@ void SearchResultsListFormAction::set_head(const std::string& s,
 	unsigned int total,
 	const std::string& url)
 {
-	std::string title;
 	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
-	title = fmt.do_format(
+	set_title(fmt.do_format(
 			cfg->get_configvalue("searchresult-title-format"),
-			width);
-	set_value("head", title);
+			width));
 }
 
 std::string SearchResultsListFormAction::title()

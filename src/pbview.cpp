@@ -28,6 +28,8 @@ PbView::PbView(PbController& c)
 	, ctrl(c)
 	, dllist_form(dllist_str)
 	, help_form(help_str)
+	, title_line_dllist_form(dllist_form, "head")
+	, title_line_help_form(help_form, "head")
 	, msg_line_dllist_form(dllist_form, "msg")
 	, msg_line_help_form(help_form, "msg")
 	, keys(ctrl.get_keymap())
@@ -73,7 +75,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				title += strprintf::fmt(_(" - %u parallel downloads"), ctrl.get_maxdownloads());
 			}
 
-			dllist_form.set("head", title);
+			title_line_dllist_form.set_text(title);
 
 			LOG(Level::DEBUG,
 				"PbView::run: updating view... "
@@ -299,7 +301,7 @@ void PbView::run_help()
 {
 	set_help_keymap_hint();
 
-	help_form.set("head", _("Help"));
+	title_line_help_form.set_text(_("Help"));
 
 	const auto descs = keys.get_keymap_descriptions("podboat");
 

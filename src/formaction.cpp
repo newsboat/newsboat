@@ -26,6 +26,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	, cfg(cfg)
 	, f(formstr)
 	, do_redraw(true)
+	, head_line(f, "head")
 	, msg_line(f, "msg")
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
@@ -540,6 +541,11 @@ void FormAction::finished_qna(Operation op)
 	default:
 		break;
 	}
+}
+
+void FormAction::set_title(const std::string& title)
+{
+	head_line.set_text(title);
 }
 
 void FormAction::start_bookmark_qna(const std::string& default_title,
