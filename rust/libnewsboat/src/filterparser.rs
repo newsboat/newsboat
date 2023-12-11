@@ -10,8 +10,8 @@ use nom::{
     sequence::{delimited, separated_pair, terminated, tuple},
     IResult, Offset, Parser,
 };
-use once_cell::unsync::OnceCell;
 use regex_rs::Regex;
+use std::cell::OnceCell;
 use std::vec::Vec;
 use strprintf::fmt;
 

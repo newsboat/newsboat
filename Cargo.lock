@@ -369,7 +369,6 @@ dependencies = [
  "md5",
  "natord",
  "nom",
- "once_cell",
  "percent-encoding",
  "proptest",
  "regex-rs",
