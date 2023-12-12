@@ -51,6 +51,7 @@ private:
 
 	std::string get_formatted_filename(std::string filename, mode_t mode);
 
+	LineView file_prompt_line;
 	bool quit;
 	std::string cwd;
 	std::string default_filename;

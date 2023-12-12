@@ -28,6 +28,7 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
+	, file_prompt_line(f, "fileprompt")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 	// In dirbrowser, keyboard focus is at the input field, so user will be
@@ -275,7 +276,7 @@ void DirBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	set_value("fileprompt", _("Directory: "));
+	file_prompt_line.set_text(_("Directory: "));
 
 	const std::string save_path = cfg->get_configvalue("save-path");
 

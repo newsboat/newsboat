@@ -29,6 +29,7 @@ FileBrowserFormAction::FileBrowserFormAction(View* vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
+	, file_prompt_line(f, "fileprompt")
 	, quit(false)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
@@ -301,7 +302,7 @@ void FileBrowserFormAction::init()
 {
 	set_keymap_hints();
 
-	set_value("fileprompt", _("File: "));
+	file_prompt_line.set_text(_("File: "));
 
 	const std::string save_path = cfg->get_configvalue("save-path");
 
