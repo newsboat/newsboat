@@ -28,6 +28,7 @@ FormAction::FormAction(View* vv, std::string formstr, ConfigContainer* cfg)
 	, do_redraw(true)
 	, head_line(f, "head")
 	, msg_line(f, "msg")
+	, qna_prompt_line(f, "qna_prompt")
 	, finish_operation(OP_NIL)
 	, qna_history(nullptr)
 {
@@ -466,7 +467,7 @@ void FormAction::cancel_qna()
 {
 	LOG(Level::DEBUG, "FormAction::cancel_qna");
 
-	f.set("show_qna_label", "0");
+	qna_prompt_line.hide();
 	f.set("show_qna_input", "0");
 	msg_line.show();
 	msg_line.set_text("");
@@ -645,10 +646,10 @@ void FormAction::start_next_question()
 	 * If there is one more prompt to be presented to the user, set it up.
 	 */
 	if (qna_prompts.size() > 0) {
-		f.set("qna_prompt", qna_prompts[0].first);
+		qna_prompt_line.set_text(qna_prompts[0].first);
 		f.set("qna_value", qna_prompts[0].second);
 
-		f.set("show_qna_label", "1");
+		qna_prompt_line.show();
 		f.set("show_qna_input", "1");
 		msg_line.hide();
 
@@ -666,7 +667,7 @@ void FormAction::start_next_question()
 		 * usual label, and signal the end of the "Q&A" to the
 		 * finished_qna() method.
 		 */
-		f.set("show_qna_label", "0");
+		qna_prompt_line.hide();
 		f.set("show_qna_input", "0");
 		msg_line.show();
 		msg_line.set_text("");
