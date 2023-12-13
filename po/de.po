@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-12-11 21:31+0300\n"
-"PO-Revision-Date: 2023-09-14 16:45+0200\n"
+"PO-Revision-Date: 2023-12-11 21:45+0100\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -1670,9 +1670,8 @@ msgid "`%s' is not a valid key command"
 msgstr "„%s“ ist kein gültiges Tastenkommando"
 
 #: src/keymap.cpp:740
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "Konnte den Browser nicht starten"
+msgstr "Parsen der Tastenbelegung fehlgeschlagen"
 
 #: src/keymap.cpp:772
 #, c-format
