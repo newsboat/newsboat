@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-12-11 21:31+0300\n"
-"PO-Revision-Date: 2023-09-14 12:02+0300\n"
+"PO-Revision-Date: 2023-12-13 21:14+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -1669,9 +1669,8 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' недійсна ключова команда"
 
 #: src/keymap.cpp:740
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "Не вдалося запустити браузер"
+msgstr "не вдалося розібрати прив'язку клавіші"
 
 #: src/keymap.cpp:772
 #, c-format
