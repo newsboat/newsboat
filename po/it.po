@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-12-11 21:31+0300\n"
-"PO-Revision-Date: 2023-09-14 21:52+0200\n"
+"PO-Revision-Date: 2023-12-15 08:12+0100\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -1662,9 +1662,8 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' non è un tasto di comando valido"
 
 #: src/keymap.cpp:740
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "Fallita apertura del browser"
+msgstr "analisi associazione fallita"
 
 #: src/keymap.cpp:772
 #, c-format
