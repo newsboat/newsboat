@@ -38,8 +38,8 @@ TEST_CASE("ConfigPaths returns paths to Newsboat dotdir if no Newsboat dirs "
 	REQUIRE(paths.lock_file() == newsboat_dir + "/cache.db.lock");
 	REQUIRE(paths.config_file() == newsboat_dir + "/config");
 	REQUIRE(paths.queue_file() == newsboat_dir + "/queue");
-	REQUIRE(paths.search_file() == newsboat_dir + "/history.search");
-	REQUIRE(paths.cmdline_file() == newsboat_dir + "/history.cmdline");
+	REQUIRE(paths.search_history_file() == newsboat_dir + "/history.search");
+	REQUIRE(paths.cmdline_history_file() == newsboat_dir + "/history.cmdline");
 }
 
 TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
@@ -70,8 +70,8 @@ TEST_CASE("ConfigPaths returns paths to Newsboat XDG dirs if they exist and "
 		REQUIRE(paths.cache_file() == data_dir + "/cache.db");
 		REQUIRE(paths.lock_file() == data_dir + "/cache.db.lock");
 		REQUIRE(paths.queue_file() == data_dir + "/queue");
-		REQUIRE(paths.search_file() == data_dir + "/history.search");
-		REQUIRE(paths.cmdline_file() == data_dir + "/history.cmdline");
+		REQUIRE(paths.search_history_file() == data_dir + "/history.search");
+		REQUIRE(paths.cmdline_history_file() == data_dir + "/history.cmdline");
 	};
 
 	SECTION("XDG_CONFIG_HOME is set") {
@@ -195,8 +195,8 @@ TEST_CASE("ConfigPaths::create_dirs() returns true if both config and data dirs 
 		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.cache_file()));
 		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.lock_file()));
 		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.queue_file()));
-		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.search_file()));
-		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.cmdline_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.search_history_file()));
+		REQUIRE(test_helpers::starts_with(tmp.get_path(), paths.cmdline_history_file()));
 
 		REQUIRE(paths.create_dirs());
 

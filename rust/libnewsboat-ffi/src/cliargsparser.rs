@@ -50,8 +50,8 @@ mod bridged {
         fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
         fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
         fn queue_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn search_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn cmdline_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn search_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn cmdline_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
         fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
 
         fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String>;
@@ -214,8 +214,8 @@ fn queue_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
     }
 }
 
-fn search_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match &cliargsparser.0.search_file {
+fn search_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match &cliargsparser.0.search_history_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true
@@ -224,8 +224,8 @@ fn search_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
     }
 }
 
-fn cmdline_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
-    match &cliargsparser.0.cmdline_file {
+fn cmdline_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+    match &cliargsparser.0.cmdline_history_file {
         Some(p) => {
             *path = p.to_string_lossy().to_string();
             true

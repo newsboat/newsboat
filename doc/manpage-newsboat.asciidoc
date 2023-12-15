@@ -66,6 +66,15 @@ the _urls_ file).
 *-C* _configfile_, *--config-file*=_configfile_::
        Use an alternative configuration file
 
+*--queue-file*=_queuefile_::
+       Use an alternative queue file
+
+*--search-history-file*=_searchhistoryfile_::
+       Use an alternative search history file
+
+*--cmdline-history-file*=_cmdlinehistoryfile_::
+       Use an alternative command line history file
+
 *-x* _command_ ..., *--execute*=_command_...::
        Execute one or more commands to run Newsboat unattended. Currently available
        commands are _reload_ and _print-unread_.

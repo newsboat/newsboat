@@ -40,5 +40,5 @@ work with _cache.db_ or _queue_. By default, lock files are located as follows:
 
 Newsboat places the lock file next to the cache file, so if you specify
 <<cache-file,cache-file>> setting or pass `--cache-file` command-line argument,
-the path to the lock file will change too. Podboat, on the other hand, always
-places its lock file as shown above.
+the path to the lock file will change too. Podboat, on the other hand, uses
+`--lock-file` command-line argument to specify the path to the lock file.

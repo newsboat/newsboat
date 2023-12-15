@@ -404,7 +404,7 @@ TEST_CASE("Resolves tilde to homedir in --queue-file", "[CliArgsParser]")
 }
 
 TEST_CASE(
-	"Sets `search_file` and `using_nonstandard_configs` if --history-search "
+	"Sets `search_history_file` and `using_nonstandard_configs` if --search-history-file "
 	"is provided",
 	"[CliArgsParser]")
 {
@@ -413,16 +413,16 @@ TEST_CASE(
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.search_file() == filename);
+		REQUIRE(args.search_history_file() == filename);
 		REQUIRE(args.using_nonstandard_configs());
 	};
 
-	SECTION("--history-search") {
-		check({"newsboat", "--history-search=" + filename});
+	SECTION("--search-history-file") {
+		check({"newsboat", "--search-history-file=" + filename});
 	}
 }
 
-TEST_CASE("Resolves tilde to homedir in --history-search", "[CliArgsParser]")
+TEST_CASE("Resolves tilde to homedir in --search-history-file", "[CliArgsParser]")
 {
 	test_helpers::TempDir tmp;
 
@@ -435,16 +435,16 @@ TEST_CASE("Resolves tilde to homedir in --history-search", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.search_file() == tmp.get_path() + filename);
+		REQUIRE(args.search_history_file() == tmp.get_path() + filename);
 	};
 
-	SECTION("--history-search") {
-		check({"newsboat", "--history-search", arg});
+	SECTION("--search-history-file") {
+		check({"newsboat", "--search-history-file", arg});
 	}
 }
 
 TEST_CASE(
-	"Sets `cmdline_file` and `using_nonstandard_configs` if --history-cmdline "
+	"Sets `cmdline_history_file` and `using_nonstandard_configs` if --cmdline-history-file "
 	"is provided",
 	"[CliArgsParser]")
 {
@@ -453,16 +453,16 @@ TEST_CASE(
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cmdline_file() == filename);
+		REQUIRE(args.cmdline_history_file() == filename);
 		REQUIRE(args.using_nonstandard_configs());
 	};
 
-	SECTION("--history-cmdline") {
-		check({"newsboat", "--history-cmdline=" + filename});
+	SECTION("--cmdline-history-file") {
+		check({"newsboat", "--cmdline-history-file=" + filename});
 	}
 }
 
-TEST_CASE("Resolves tilde to homedir in --history-cmdline", "[CliArgsParser]")
+TEST_CASE("Resolves tilde to homedir in --cmdline-history-file", "[CliArgsParser]")
 {
 	test_helpers::TempDir tmp;
 
@@ -475,11 +475,11 @@ TEST_CASE("Resolves tilde to homedir in --history-cmdline", "[CliArgsParser]")
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cmdline_file() == tmp.get_path() + filename);
+		REQUIRE(args.cmdline_history_file() == tmp.get_path() + filename);
 	};
 
-	SECTION("--history-cmdline") {
-		check({"newsboat", "--history-cmdline", arg});
+	SECTION("--cmdline-history-file") {
+		check({"newsboat", "--cmdline-history-file", arg});
 	}
 }
 

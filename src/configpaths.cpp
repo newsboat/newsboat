@@ -62,14 +62,14 @@ std::string ConfigPaths::queue_file() const
 	return std::string(newsboat::configpaths::bridged::queue_file(*rs_object));
 }
 
-std::string ConfigPaths::search_file() const
+std::string ConfigPaths::search_history_file() const
 {
-	return std::string(newsboat::configpaths::bridged::search_file(*rs_object));
+	return std::string(newsboat::configpaths::bridged::search_history_file(*rs_object));
 }
 
-std::string ConfigPaths::cmdline_file() const
+std::string ConfigPaths::cmdline_history_file() const
 {
-	return std::string(newsboat::configpaths::bridged::cmdline_file(*rs_object));
+	return std::string(newsboat::configpaths::bridged::cmdline_history_file(*rs_object));
 }
 
 } // namespace newsboat

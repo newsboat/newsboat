@@ -65,10 +65,10 @@ pub struct CliArgsParser {
     pub queue_file: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the search history file specified by the user.
-    pub search_file: Option<PathBuf>,
+    pub search_history_file: Option<PathBuf>,
 
     /// If this contains some value, it's the path to the command line history file specified by the user.
-    pub cmdline_file: Option<PathBuf>,
+    pub cmdline_history_file: Option<PathBuf>,
 
     /// A vector of Newsboat commands to execute. Empty means user didn't specify any commands to
     /// run.
@@ -192,13 +192,13 @@ pub fn parse_cliargs(opts: Vec<OsString>, args: &mut CliArgsParser) -> Result<()
                 let queue_file = parser.value()?;
                 args.queue_file = resolve_path(&queue_file);
             }
-            Long("history-search") => {
-                let search_file = parser.value()?;
-                args.search_file = resolve_path(&search_file);
+            Long("search-history-file") => {
+                let search_history_file = parser.value()?;
+                args.search_history_file = resolve_path(&search_history_file);
             }
-            Long("history-cmdline") => {
-                let cmdline_file = parser.value()?;
-                args.cmdline_file = resolve_path(&cmdline_file);
+            Long("cmdline-history-file") => {
+                let cmdline_history_file = parser.value()?;
+                args.cmdline_history_file = resolve_path(&cmdline_history_file);
             }
             Short('X') | Long("vacuum") => args.do_vacuum = true,
             Long("cleanup") => args.do_cleanup = true,
@@ -292,8 +292,8 @@ impl CliArgsParser {
             || self.cache_file.is_some()
             || self.config_file.is_some()
             || self.queue_file.is_some()
-            || self.search_file.is_some()
-            || self.cmdline_file.is_some()
+            || self.search_history_file.is_some()
+            || self.cmdline_history_file.is_some()
     }
 }
 
@@ -575,37 +575,37 @@ mod tests {
     }
 
     #[test]
-    fn t_sets_search_file_if_dash_dash_history_search_is_provided() {
-        let filename = "search file";
+    fn t_sets_search_history_file_if_dash_dash_history_search_is_provided() {
+        let filename = "search history file";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.search_file, Some(PathBuf::from(filename)));
+            assert_eq!(args.search_history_file, Some(PathBuf::from(filename)));
             assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
             "newsboat".into(),
-            "--history-search".into(),
+            "--search-history-file".into(),
             filename.into(),
         ]);
     }
 
     #[test]
-    fn t_sets_cmdline_file_if_dash_dash_history_cmdline_is_provided() {
-        let filename = "cmdline file";
+    fn t_sets_cmdline_history_file_if_dash_dash_history_cmdline_is_provided() {
+        let filename = "cmdline history file";
 
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
-            assert_eq!(args.cmdline_file, Some(PathBuf::from(filename)));
+            assert_eq!(args.cmdline_history_file, Some(PathBuf::from(filename)));
             assert!(args.using_nonstandard_configs());
         };
 
         check(vec![
             "newsboat".into(),
-            "--history-cmdline".into(),
+            "--cmdline-history-file".into(),
             filename.into(),
         ]);
     }

@@ -66,10 +66,10 @@ public:
 	std::string queue_file() const;
 
 	/// Path to the file with previous search queries.
-	std::string search_file() const;
+	std::string search_history_file() const;
 
 	/// Path to the file with command-line history.
-	std::string cmdline_file() const;
+	std::string cmdline_history_file() const;
 private:
 	rust::Box<configpaths::bridged::ConfigPaths> rs_object;
 };

@@ -12,8 +12,11 @@ fn assert_paths_are_inside_dirs(config_dir: &path::Path, data_dir: &path::Path) 
     assert_eq!(paths.cache_file(), data_dir.join("cache.db"));
     assert_eq!(paths.lock_file(), data_dir.join("cache.db.lock"));
     assert_eq!(paths.queue_file(), data_dir.join("queue"));
-    assert_eq!(paths.search_file(), data_dir.join("history.search"));
-    assert_eq!(paths.cmdline_file(), data_dir.join("history.cmdline"));
+    assert_eq!(paths.search_history_file(), data_dir.join("history.search"));
+    assert_eq!(
+        paths.cmdline_history_file(),
+        data_dir.join("history.cmdline")
+    );
 }
 
 enable_sections! {
