@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-12-11 21:31+0300\n"
-"PO-Revision-Date: 2023-09-14 19:24+0200\n"
+"PO-Revision-Date: 2023-12-16 12:38+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: newsboat.cpp:32
 #, c-format
@@ -994,7 +994,7 @@ msgstr ""
 
 #: src/helpformaction.cpp:129
 msgid "Generic bindings:"
-msgstr "Algemene sneltoetsen:"
+msgstr "Algemene toetsbindingen:"
 
 #: src/helpformaction.cpp:144
 msgid "Unbound functions:"
@@ -1671,9 +1671,8 @@ msgid "`%s' is not a valid key command"
 msgstr "‘%s’ is een ongeldige toetsopdracht"
 
 #: src/keymap.cpp:740
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "Het starten van een browser is mislukt"
+msgstr "ontleden van toetsbinding is mislukt"
 
 #: src/keymap.cpp:772
 #, c-format
