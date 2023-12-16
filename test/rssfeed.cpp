@@ -570,4 +570,27 @@ TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 		check(65536);
 		check(100500);
 	}
+
+	SECTION("latest_article_age, the number of days since the most recent articles publish date") {
+		const auto attr = "latest_article_age";
+		const auto current_time = ::time(nullptr);
+		const auto seconds_per_day = 24 * 60 * 60;
+
+		SECTION("empty feed => latest_article_age == 0") {
+			REQUIRE(f.attribute_value(attr) == "0");
+		}
+
+		SECTION("feed with two items => latest_article_age == <days since most recent publish date>") {
+			auto item1 = std::make_shared<RssItem>(&rsscache);
+			auto item2 = std::make_shared<RssItem>(&rsscache);
+
+			item1->set_pubDate(current_time - 3 * seconds_per_day);
+			item2->set_pubDate(current_time - 5 * seconds_per_day);
+
+			f.add_item(item1);
+			f.add_item(item2);
+
+			REQUIRE(f.attribute_value(attr) == "3");
+		}
+	}
 }

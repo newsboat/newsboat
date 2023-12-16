@@ -197,6 +197,18 @@ nonstd::optional<std::string> RssFeed::attribute_value(const std::string&
 		return tags;
 	} else if (attribname == "feedindex") {
 		return std::to_string(idx);
+	} else if (attribname == "latest_article_age") {
+		using ItemType = std::shared_ptr<RssItem>;
+		const auto latest_article_iterator = std::max_element(items_.begin(),
+		items_.end(), [](const ItemType& a, const ItemType& b) {
+			return a->pubDate_timestamp() < b->pubDate_timestamp();
+		});
+		if (latest_article_iterator != items_.end()) {
+			const auto latest_article = *latest_article_iterator;
+			const auto timestamp = latest_article->pubDate_timestamp();
+			return std::to_string((time(nullptr) - timestamp) / 86400);
+		}
+		return "0";
 	}
 	return nonstd::nullopt;
 }
