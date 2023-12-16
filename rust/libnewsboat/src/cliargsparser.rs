@@ -575,7 +575,7 @@ mod tests {
     }
 
     #[test]
-    fn t_sets_search_history_file_if_dash_dash_history_search_is_provided() {
+    fn t_sets_search_history_file_if_dash_dash_search_history_file_is_provided() {
         let filename = "search history file";
 
         let check = |opts| {
@@ -593,7 +593,7 @@ mod tests {
     }
 
     #[test]
-    fn t_sets_cmdline_history_file_if_dash_dash_history_cmdline_is_provided() {
+    fn t_sets_cmdline_history_file_if_dash_dash_cmdline_history_file_is_provided() {
         let filename = "cmdline history file";
 
         let check = |opts| {
