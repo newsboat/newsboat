@@ -261,14 +261,20 @@ rsspp::Feed FeedRetriever::get_execplugin(const std::string& plugin)
 rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 	const std::string& uri)
 {
-	std::string buf = utils::retrieve_url(uri, cfg);
+	auto buf = utils::retrieve_url(uri, cfg);
+	if (!buf.has_value()) {
+		LOG(Level::ERROR,
+			"FeedRetriever::download_filterplugin: retrieve_url %s failed with code %d", uri,
+			buf.error().code);
+		return rsspp::Feed();
+	}
 
 	const char* argv[4] = {"/bin/sh",
 			"-c",
 			filter.c_str(),
 			nullptr
 		};
-	const std::string result = utils::run_program(argv, buf);
+	const std::string result = utils::run_program(argv, buf.value());
 	LOG(Level::DEBUG,
 		"FeedRetriever::download_filterplugin: output of `%s' is: %s",
 		filter,

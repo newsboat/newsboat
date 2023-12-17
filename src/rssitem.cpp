@@ -262,11 +262,16 @@ void RssItem::set_feedptr(const std::weak_ptr<RssFeed>& ptr)
 	feedptr_ = ptr;
 }
 
-void RssItem::download_full_page(ConfigContainer& cfg)
+utils::curl_error RssItem::download_full_page(ConfigContainer& cfg)
 {
 	CurlHandle handle;
-	const std::string content = utils::retrieve_url(this->link(), handle, cfg, "", nullptr,
+	const auto content = utils::retrieve_url(this->link(), handle, cfg, "", nullptr,
 			utils::HTTPMethod::GET);
+	if (!content.has_value()) {
+		LOG(Level::ERROR, "RssItem::download_full_page: retrieve_url %s failed with code %d",
+			this->link(), content.error().code);
+		return utils::curl_error{content.error().code, content.error().err_msg};
+	}
 
 	// Determine mime-type based on Content-type header:
 	// Content-type: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
@@ -281,7 +286,8 @@ void RssItem::download_full_page(ConfigContainer& cfg)
 		content_mime_type = "application/octet-stream";
 	}
 
-	this->set_description(content, content_mime_type);
+	this->set_description(content.value(), content_mime_type);
+	return {CURLE_OK, ""};
 }
 
 } // namespace newsboat

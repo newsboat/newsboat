@@ -265,25 +265,29 @@ json MinifluxApi::run_op(const std::string& path,
 		body = &arg_dump;
 	}
 
-	const std::string result = utils::retrieve_url(
+	const auto result = utils::retrieve_url(
 			url, easyhandle, cfg, auth_info, body, method);
-
+	if (!result.has_value()) {
+		LOG(Level::ERROR, "MinifluxApi::run_op: retrieve_url %s failed with code %d", url,
+			result.error().code);
+		return json(nullptr);
+	}
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",
 		utils::http_method_str(method),
 		path,
 		arg_dump,
-		result);
+		result.value());
 
 	json content;
-	if (!result.empty()) {
+	if (!result.value().empty()) {
 		try {
-			content = json::parse(result);
+			content = json::parse(result.value());
 		} catch (json::parse_error& e) {
 			LOG(Level::ERROR,
 				"MinifluxApi::run_op: reply failed to parse: %s",
-				result);
+				result.value());
 			content = json(nullptr);
 		}
 	}

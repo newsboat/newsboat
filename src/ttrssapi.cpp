@@ -158,22 +158,27 @@ json TtRssApi::run_op(const std::string& op,
 		req_data = requestparam.dump();
 	}
 
-	std::string result = utils::retrieve_url(
+	auto result = utils::retrieve_url(
 			url, cached_handle, cfg, auth_info, &req_data, utils::HTTPMethod::POST);
+	if (!result.has_value()) {
+		LOG(Level::ERROR, "TtRssApi::run_op: retrieve_url %s failed with error code %d",
+			url, result.error().code);
+		return json(nullptr);
+	}
 
 	LOG(Level::DEBUG,
 		"TtRssApi::run_op(%s,...): post=%s reply = %s",
 		op,
 		req_data,
-		result);
+		result.value());
 
 	json reply;
 	try {
-		reply = json::parse(result);
+		reply = json::parse(result.value());
 	} catch (json::parse_error& e) {
 		LOG(Level::ERROR,
 			"TtRssApi::run_op: reply failed to parse: %s",
-			result);
+			result.value());
 		return json(nullptr);
 	}
 

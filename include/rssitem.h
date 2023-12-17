@@ -8,6 +8,7 @@
 #include "configcontainer.h"
 #include "matchable.h"
 #include "matcher.h"
+#include "utils.h"
 
 namespace newsboat {
 
@@ -175,7 +176,7 @@ public:
 		description_.reset();
 	}
 
-	void download_full_page(ConfigContainer& cfg);
+	utils::curl_error download_full_page(ConfigContainer& cfg);
 
 private:
 	std::string title_;

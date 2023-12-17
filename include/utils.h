@@ -34,6 +34,11 @@ enum class HTTPMethod {
 	DELETE
 };
 
+struct curl_error {
+	CURLcode code;
+	std::string err_msg;
+};
+
 std::string strip_comments(const std::string& line);
 std::vector<std::string> tokenize(const std::string& str,
 	std::string delimiters = " \r\n\t");
@@ -62,12 +67,12 @@ std::string get_command_output(const std::string& cmd);
 std::string http_method_str(const HTTPMethod method);
 std::string link_type_str(LinkType type);
 
-std::string retrieve_url(const std::string& url,
+nonstd::expected<std::string, curl_error> retrieve_url(const std::string& url,
 	ConfigContainer& cfgcont,
 	const std::string& authinfo = "",
 	const std::string* body = nullptr,
 	const HTTPMethod method = HTTPMethod::GET);
-std::string retrieve_url(const std::string& url,
+nonstd::expected<std::string, curl_error> retrieve_url(const std::string& url,
 	CurlHandle& easyhandle,
 	ConfigContainer& cfgcont,
 	const std::string& authinfo = "",

@@ -537,7 +537,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_DOWNLOAD_FULL_PAGE: {
-		item->download_full_page(*cfg);
+		auto res = item->download_full_page(*cfg);
+		if (res.code != CURLE_OK) {
+			v->get_statusline().show_error("Can't download full page: " + res.err_msg);
+		}
 		rsscache->update_rssitem_locked(item, feed->rssurl(), false);
 		v->force_redraw();
 	}

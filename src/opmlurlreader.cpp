@@ -24,10 +24,17 @@ nonstd::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 		LOG(Level::DEBUG,
 			"OpmlUrlReader::reload: downloading `%s'",
 			url);
-		std::string urlcontent = utils::retrieve_url(url, cfg);
+
+		auto urlcontent = utils::retrieve_url(url, cfg);
+		if (!urlcontent.has_value()) {
+			LOG(Level::ERROR,
+				"OpmlUrlReader::reload: retrieve_url %s failed with error code %d", url,
+				urlcontent.error().code);
+			continue;
+		}
 
 		xmlDoc* doc =
-			xmlParseMemory(urlcontent.c_str(), urlcontent.length());
+			xmlParseMemory(urlcontent.value().c_str(), urlcontent.value().length());
 
 		if (doc == nullptr) {
 			LOG(Level::ERROR,

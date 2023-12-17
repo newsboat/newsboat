@@ -366,9 +366,14 @@ json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	const HTTPMethod method /* = GET */)
 {
 	std::string url = api_location + endpoint;
-	std::string data = utils::retrieve_url(url, cfg, "", body, method);
+	auto data = utils::retrieve_url(url, cfg, "", body, method);
+	if (!data.has_value()) {
+		LOG(Level::ERROR, "NewsBlurApi::query_api: retrieve_url %s failed with error code %d", url,
+			data.error().code);
+		return nullptr;
+	}
 
-	json_object* result = json_tokener_parse(data.c_str());
+	json_object* result = json_tokener_parse(data.value().c_str());
 	if (!result)
 		LOG(Level::WARN,
 			"NewsBlurApi::query_api: request to %s failed",
