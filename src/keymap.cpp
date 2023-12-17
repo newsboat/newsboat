@@ -415,7 +415,7 @@ static const std::vector<OpDesc> opdescs = {
 	},
 	{
 		OP_DOWNLOAD_FULL_PAGE,
-		"download-full-page",
+		"download-full-page-op",
 		"",
 		translatable("Download full content of page"),
 		KM_ARTICLE
