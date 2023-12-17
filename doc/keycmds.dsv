@@ -83,3 +83,4 @@ switch-focus||kbd:[TAB]||Switch focus between widgets. This is currently only ap
 goto-title||n/a||Go to item whose title contains the specified string (case-insensitive).
 prevsearchresults||kbd:[Z]||Return to previous search results (if any). This only works from `searchresultslist`.
 article-feed||n/a||Go to the feed of the currently selected article.
+download-full-page||n/a||Download full content of page.
