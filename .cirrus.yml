@@ -127,34 +127,34 @@ task:
                 cc: gcc-5
                 cxx: g++-5
                 rust_version: 1.70.0
-        - name: MSRV, GCC 13 (Ubuntu 23.04)
+        - name: MSRV, GCC 13 (Ubuntu 23.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-13
                 cc: gcc-13
                 cxx: g++-13
                 rust_version: 1.70.0
 
-        - name: GCC 13, more warnings and checks (Ubuntu 23.04)
+        - name: GCC 13, more warnings and checks (Ubuntu 23.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-13
                 cc: gcc-13
                 cxx: g++-13
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
-        - name: Clang 16, more warnings and checks (Ubuntu 23.04)
+        - name: Clang 17, more warnings and checks (Ubuntu 23.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
             docker_arguments:
-                cxx_package: clang-16
-                cc: clang-16
-                cxx: clang++-16
+                cxx_package: clang-17
+                cc: clang-17
+                cxx: clang++-17
           env: *extra_warnings_and_checks_env
 
         - name: Rust stable, GCC 5 (Ubuntu 18.04)
@@ -221,10 +221,10 @@ task:
                 cxx_package: g++-12
                 cc: gcc-12
                 cxx: g++-12
-        - name: Rust stable, GCC 13 (Ubuntu 23.04)
+        - name: Rust stable, GCC 13 (Ubuntu 23.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: g++-13
                 cc: gcc-13
@@ -317,22 +317,30 @@ task:
                 cxx_package: clang-14
                 cc: clang-14
                 cxx: clang++-14
-        - name: Rust stable, Clang 15 (Ubuntu 23.04)
+        - name: Rust stable, Clang 15 (Ubuntu 23.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-15
                 cc: clang-15
                 cxx: clang++-15
-        - name: Rust stable, Clang 16 (Ubuntu 23.04)
+        - name: Rust stable, Clang 16 (Ubuntu 23.10)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
             docker_arguments:
                 cxx_package: clang-16
                 cc: clang-16
                 cxx: clang++-16
+        - name: Rust stable, Clang 17 (Ubuntu 23.10)
+          container:
+            greedy: true
+            dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: clang-17
+                cc: clang-17
+                cxx: clang++-17
 
     cargo_cache: *cargo_cache
 
@@ -344,18 +352,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: AddressSanitizer (Clang 16, Ubuntu 23.04)
+    name: AddressSanitizer (Clang 17, Ubuntu 23.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-16-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-17-tools to demangle symbols in
           # sanitizer's reports. ASAN library is in libclang-rt-dev
-          cxx_package: "clang-16 llvm-16 libclang-rt-16-dev"
-          cc: clang-16
-          cxx: clang++-16
+          cxx_package: "clang-17 llvm-17 libclang-rt-17-dev"
+          cc: clang-17
+          cxx: clang++-17
 
     env:
       CXXFLAGS: "-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -fno-optimize-sibling-calls -g"
@@ -373,18 +381,18 @@ task:
     before_cache_script: *before_cache_script
 
 task:
-    name: UB Sanitizer (Clang 16, Ubuntu 23.04)
+    name: UB Sanitizer (Clang 17, Ubuntu 23.10)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
-      dockerfile: docker/ubuntu_23.04-build-tools.dockerfile
+      dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
       docker_arguments:
-          # We need llvm-symbolizer from llvm-16-tools to demangle symbols in
+          # We need llvm-symbolizer from llvm-17-tools to demangle symbols in
           # sanitizer's reports. UB sanitizer library is in libclang-rt-dev
-          cxx_package: "clang-16 llvm-16 libclang-rt-16-dev"
-          cc: clang-16
-          cxx: clang++-16
+          cxx_package: "clang-17 llvm-17 libclang-rt-17-dev"
+          cc: clang-17
+          cxx: clang++-17
 
     env:
       CXXFLAGS: "-fsanitize=undefined -g -fno-omit-frame-pointer"
