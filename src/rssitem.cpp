@@ -262,7 +262,7 @@ void RssItem::set_feedptr(const std::weak_ptr<RssFeed>& ptr)
 	feedptr_ = ptr;
 }
 
-utils::curl_error RssItem::download_full_page(ConfigContainer& cfg)
+utils::CurlError RssItem::download_full_page(ConfigContainer& cfg)
 {
 	CurlHandle handle;
 	const auto content = utils::retrieve_url(this->link(), handle, cfg, "", nullptr,
@@ -270,7 +270,7 @@ utils::curl_error RssItem::download_full_page(ConfigContainer& cfg)
 	if (!content.has_value()) {
 		LOG(Level::ERROR, "RssItem::download_full_page: retrieve_url %s failed with code %d",
 			this->link(), content.error().code);
-		return utils::curl_error{content.error().code, content.error().err_msg};
+		return utils::CurlError{content.error().code, content.error().err_msg};
 	}
 
 	// Determine mime-type based on Content-type header:

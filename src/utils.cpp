@@ -236,7 +236,7 @@ std::string utils::link_type_str(LinkType type)
 	}
 }
 
-nonstd::expected<std::string, utils::curl_error> utils::retrieve_url(
+nonstd::expected<std::string, utils::CurlError> utils::retrieve_url(
 	const std::string& url,
 	ConfigContainer& cfgcont,
 	const std::string& authinfo,
@@ -247,7 +247,7 @@ nonstd::expected<std::string, utils::curl_error> utils::retrieve_url(
 	return retrieve_url(url, handle, cfgcont, authinfo, body, method);
 }
 
-nonstd::expected<std::string, utils::curl_error> utils::retrieve_url(
+nonstd::expected<std::string, utils::CurlError> utils::retrieve_url(
 	const std::string& url,
 	CurlHandle& easyhandle,
 	ConfigContainer& cfgcont,
@@ -312,7 +312,7 @@ nonstd::expected<std::string, utils::curl_error> utils::retrieve_url(
 		LOG(Level::ERROR, "%s: LibCURL error (%d): %s", logprefix.str(), res, errmsg);
 		buf = "";
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
-		return nonstd::make_unexpected(curl_error{res, errmsg});
+		return nonstd::make_unexpected(CurlError{res, errmsg});
 	} else {
 		LOG(Level::DEBUG, "%s: %s", logprefix.str(), buf);
 	}

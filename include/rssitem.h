@@ -176,7 +176,7 @@ public:
 		description_.reset();
 	}
 
-	utils::curl_error download_full_page(ConfigContainer& cfg);
+	utils::CurlError download_full_page(ConfigContainer& cfg);
 
 private:
 	std::string title_;
