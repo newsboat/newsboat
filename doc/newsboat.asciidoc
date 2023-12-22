@@ -823,7 +823,7 @@ Attribute:Context:Meaning
 [[attr-enclosure_url]]<<attr-enclosure_url,+enclosure_url+>>:article:the URL of an enclosure (e.g. podcast file), empty if there is no enclosure
 [[attr-enclosure_type]]<<attr-enclosure_type,+enclosure_type+>>:article:the MIME type of the enclosure, empty if there is no enclosure
 [[attr-flags]]<<attr-flags,+flags+>>:article:The set of flags of the article
-[[attr-age]]<<attr-age,+age+>>:article:Age of an article (in days)
+[[attr-age]]<<attr-age,+age+>>:article:Number of days since the article was published
 [[attr-articleindex]]<<attr-articleindex,+articleindex+>>:article:Index of an article in an article list
 [[attr-feedtitle]]<<attr-feedtitle,+feedtitle+>>:feed, article:title of the feed
 [[attr-description]]<<attr-description,+description+>>:feed, article:feed description
@@ -834,6 +834,7 @@ Attribute:Context:Meaning
 [[attr-total_count]]<<attr-total_count,+total_count+>>:feed, article:total number of articles in the feed
 [[attr-tags]]<<attr-tags,+tags+>>:feed, article:space-separated list of tags that are associated with the feed. Note that for tags that have spaces in them, it's impossible to tell where they start and end, so +#+ and +!#+ operators don't work for such tags.
 [[attr-feedindex]]<<attr-feedindex,+feedindex+>>:feed, article:Index of a feed in the feed list
+[[attr-latest_article_age]]<<attr-latest_article_age,+latest_article_age+>>:feed, article:Number of days since the most recent article in a feed was published
 |=========================================================================
 
 Note that it's also possible to filter for feed attributes when you query for
