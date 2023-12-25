@@ -1,19 +1,29 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2023-12-24
+## 2.34 - 2023-12-25
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK.
+for this release also includes bogdasar1985, who made quite a few changes to
+Newsboat internals (and continues work on even more!).
 
 ## Added
+
+- `latest_article_age` feed attribute; it's similar to the `age` attribute of an
+    article, and can be used to e.g. hide feeds which were recently updated
+    (#2619) (Dennis van der Schagt)
+
 ## Changed
 
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev)
+- Updated vendored library json.hpp to 3.11.3
 - Bumped minimum supported Rust version to 1.70.0
 
-## Deprecated
-## Removed
 ## Fixed
-## Security
+
+- Articles in Mastodon feeds having no titles when using Newsboat with NextCloud
+    News (#2573) (Dennis van der Schagt)
 
 
 
