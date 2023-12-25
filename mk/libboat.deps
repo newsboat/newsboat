@@ -8,6 +8,7 @@ src/exception.cpp
 src/fmtstrformatter.cpp
 src/fslock.cpp
 src/history.cpp
+src/keycombination.cpp
 src/keymap.cpp
 src/matcher.cpp
 src/matcherexception.cpp
