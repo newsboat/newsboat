@@ -120,7 +120,7 @@ void View::set_status(const std::string& msg)
 	auto fa = get_current_formaction();
 	if (fa != nullptr
 		&& std::dynamic_pointer_cast<EmptyFormAction>(fa) == nullptr) {
-		fa->set_value("msg", msg);
+		fa->set_status(msg);
 		fa->draw_form();
 	}
 }
@@ -678,9 +678,9 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	LOG(Level::DEBUG, "View::confirm: charset = %s", charset);
 
 	std::shared_ptr<FormAction> f = get_current_formaction();
-	// Push empty formaction so our "msg" is not overwritten
+	// Push empty formaction so our status message is not overwritten on form `f`
 	push_empty_formaction();
-	f->set_value("msg", prompt);
+	f->set_status(prompt);
 
 	char result = 0;
 
@@ -704,7 +704,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 			result);
 	} while (!result || strchr(charset.c_str(), result) == nullptr);
 
-	f->set_value("msg", "");
+	f->set_status("");
 	f->draw_form();
 
 	pop_current_formaction();
@@ -1050,7 +1050,7 @@ void View::pop_current_formaction()
 			std::shared_ptr<FormAction> fa = get_current_formaction();
 			if (fa) {
 				fa->set_redraw(true);
-				fa->set_value("msg", "");
+				f->set_status("");
 				fa->recalculate_widget_dimensions();
 			}
 		}

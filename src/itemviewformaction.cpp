@@ -47,7 +47,7 @@ ItemViewFormAction::~ItemViewFormAction() {}
 
 void ItemViewFormAction::init()
 {
-	set_value("msg", "");
+	set_status("");
 	do_redraw = true;
 	textview.set_scroll_offset(0);
 	links.clear();
@@ -612,9 +612,7 @@ void ItemViewFormAction::set_head(const std::string& s,
 
 	const unsigned int width = textview.get_width();
 
-	set_value("head",
-		fmt.do_format(
-			cfg->get_configvalue("itemview-title-format"), width));
+	set_title(fmt.do_format(cfg->get_configvalue("itemview-title-format"), width));
 }
 
 void ItemViewFormAction::handle_cmdline(const std::string& cmd)

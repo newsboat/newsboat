@@ -76,8 +76,7 @@ void HelpFormAction::prepare()
 		FmtStrFormatter fmt;
 		fmt.register_fmt('N', PROGRAM_NAME);
 		fmt.register_fmt('V', utils::program_version());
-		set_value("head",
-			fmt.do_format(cfg->get_configvalue("help-title-format"), width));
+		set_title(fmt.do_format(cfg->get_configvalue("help-title-format"), width));
 
 		const auto descs = v->get_keymap()->get_keymap_descriptions(context);
 

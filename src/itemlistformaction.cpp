@@ -1226,7 +1226,7 @@ void ItemListFormAction::init()
 {
 	recalculate_widget_dimensions();
 	list.set_position(0);
-	set_value("msg", "");
+	set_status("");
 	set_keymap_hints();
 	invalidate_list();
 	do_update_visible_items();
@@ -1271,15 +1271,12 @@ void ItemListFormAction::set_head(const std::string& s,
 	unsigned int total,
 	const std::string& url)
 {
-	std::string title;
-
 	FmtStrFormatter fmt = setup_head_formatter(s, unread, total, url);
 
 	const unsigned int width = utils::to_u(f.get("title:w"));
-	title = fmt.do_format(
+	set_title(fmt.do_format(
 			cfg->get_configvalue("articlelist-title-format"),
-			width);
-	set_value("head", title);
+			width));
 }
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)

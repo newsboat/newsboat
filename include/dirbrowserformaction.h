@@ -45,6 +45,7 @@ private:
 
 	std::string get_formatted_dirname(std::string dirname, mode_t mode);
 
+	LineView file_prompt_line;
 	std::string cwd;
 
 	ListWidget files_list;

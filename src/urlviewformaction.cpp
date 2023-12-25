@@ -154,9 +154,7 @@ void UrlViewFormAction::update_heading()
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
 
-	set_value("head",
-		fmt.do_format(
-			cfg->get_configvalue("urlview-title-format"), width));
+	set_title(fmt.do_format(cfg->get_configvalue("urlview-title-format"), width));
 }
 
 const std::vector<KeyMapHintEntry>& UrlViewFormAction::get_keymap_hint() const

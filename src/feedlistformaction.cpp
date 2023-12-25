@@ -954,7 +954,7 @@ void FeedListFormAction::update_form_title(unsigned int width)
 	fmt.register_fmt('t', std::to_string(visible_feeds.size()));
 	fmt.register_fmt('F', filter_active ? matcher.get_expression() : "");
 
-	set_value("head", fmt.do_format(title_format, width));
+	set_title(fmt.do_format(title_format, width));
 }
 
 unsigned int FeedListFormAction::count_unread_feeds()

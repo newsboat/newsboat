@@ -38,14 +38,14 @@
         .width[percentwidth]:6
   hbox[lastline]
     .expand:0
-    label[msglabel]
+    label
       text[msg]:""
       .expand:h
       .display[show_msg]:1
-    label[qna-label]
+    label
       .expand:0
       text[qna_prompt]:""
-      .display[show_qna_label]:0
+      .display[show_qna_prompt]:0
     input[qnainput]
       modal:1
       .expand:h
