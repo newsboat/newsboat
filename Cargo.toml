@@ -5,3 +5,4 @@ members = [
     "rust/strprintf",
     "rust/regex-rs",
 ]
+resolver = "2"
