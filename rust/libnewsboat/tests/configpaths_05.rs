@@ -23,6 +23,12 @@ fn t_returns_paths_to_newsboat_dotdir_if_no_newsboat_dirs_exist() {
     assert_eq!(paths.lock_file(), newsboat_dir.join("cache.db.lock"));
     assert_eq!(paths.config_file(), newsboat_dir.join("config"));
     assert_eq!(paths.queue_file(), newsboat_dir.join("queue"));
-    assert_eq!(paths.search_file(), newsboat_dir.join("history.search"));
-    assert_eq!(paths.cmdline_file(), newsboat_dir.join("history.cmdline"));
+    assert_eq!(
+        paths.search_history_file(),
+        newsboat_dir.join("history.search")
+    );
+    assert_eq!(
+        paths.cmdline_history_file(),
+        newsboat_dir.join("history.cmdline")
+    );
 }

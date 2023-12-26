@@ -13,8 +13,8 @@ fn assert_dirs_exist_after_create_dirs(dirs: &[&path::Path], tmp: &TempDir) {
     assert!(paths.cache_file().starts_with(&prefix));
     assert!(paths.lock_file().starts_with(&prefix));
     assert!(paths.queue_file().starts_with(&prefix));
-    assert!(paths.search_file().starts_with(&prefix));
-    assert!(paths.cmdline_file().starts_with(&prefix));
+    assert!(paths.search_history_file().starts_with(&prefix));
+    assert!(paths.cmdline_history_file().starts_with(&prefix));
 
     assert!(paths.create_dirs());
 

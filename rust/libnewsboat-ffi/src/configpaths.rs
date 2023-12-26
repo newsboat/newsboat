@@ -34,8 +34,8 @@ mod bridged {
         fn config_file(configpaths: &ConfigPaths) -> String;
         fn lock_file(configpaths: &ConfigPaths) -> String;
         fn queue_file(configpaths: &ConfigPaths) -> String;
-        fn search_file(configpaths: &ConfigPaths) -> String;
-        fn cmdline_file(configpaths: &ConfigPaths) -> String;
+        fn search_history_file(configpaths: &ConfigPaths) -> String;
+        fn cmdline_history_file(configpaths: &ConfigPaths) -> String;
     }
 }
 
@@ -87,10 +87,18 @@ fn queue_file(configpaths: &ConfigPaths) -> String {
     configpaths.0.queue_file().to_string_lossy().into_owned()
 }
 
-fn search_file(configpaths: &ConfigPaths) -> String {
-    configpaths.0.search_file().to_string_lossy().into_owned()
+fn search_history_file(configpaths: &ConfigPaths) -> String {
+    configpaths
+        .0
+        .search_history_file()
+        .to_string_lossy()
+        .into_owned()
 }
 
-fn cmdline_file(configpaths: &ConfigPaths) -> String {
-    configpaths.0.cmdline_file().to_string_lossy().into_owned()
+fn cmdline_history_file(configpaths: &ConfigPaths) -> String {
+    configpaths
+        .0
+        .cmdline_history_file()
+        .to_string_lossy()
+        .into_owned()
 }

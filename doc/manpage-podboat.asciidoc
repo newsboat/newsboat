@@ -30,6 +30,9 @@ can then be download with _Podboat_.
 *-q* _queuefile_, *--queue-file*=_queuefile_::
        Use an alternative queue file
 
+*--lock-file*=_lockfile_::
+       Use an alternative lock file
+
 *-a*, *--autodownload*::
        Start automatic download of all queued files on startup
 

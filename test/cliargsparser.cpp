@@ -363,6 +363,126 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	}
 }
 
+TEST_CASE(
+	"Sets `queue_file` and `using_nonstandard_configs` if --queue-file "
+	"is provided",
+	"[CliArgsParser]")
+{
+	const std::string filename("queuefile");
+
+	auto check = [&filename](test_helpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.queue_file() == filename);
+		REQUIRE(args.using_nonstandard_configs());
+	};
+
+	SECTION("--queue-file") {
+		check({"newsboat", "--queue-file=" + filename});
+	}
+}
+
+TEST_CASE("Resolves tilde to homedir in --queue-file", "[CliArgsParser]")
+{
+	test_helpers::TempDir tmp;
+
+	test_helpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("queuefile");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.queue_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("--queue-file") {
+		check({"newsboat", "--queue-file", arg});
+	}
+}
+
+TEST_CASE(
+	"Sets `search_history_file` and `using_nonstandard_configs` if --search-history-file "
+	"is provided",
+	"[CliArgsParser]")
+{
+	const std::string filename("searchfile");
+
+	auto check = [&filename](test_helpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.search_history_file() == filename);
+		REQUIRE(args.using_nonstandard_configs());
+	};
+
+	SECTION("--search-history-file") {
+		check({"newsboat", "--search-history-file=" + filename});
+	}
+}
+
+TEST_CASE("Resolves tilde to homedir in --search-history-file", "[CliArgsParser]")
+{
+	test_helpers::TempDir tmp;
+
+	test_helpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("searchfile");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.search_history_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("--search-history-file") {
+		check({"newsboat", "--search-history-file", arg});
+	}
+}
+
+TEST_CASE(
+	"Sets `cmdline_history_file` and `using_nonstandard_configs` if --cmdline-history-file "
+	"is provided",
+	"[CliArgsParser]")
+{
+	const std::string filename("cmdlinefile");
+
+	auto check = [&filename](test_helpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.cmdline_history_file() == filename);
+		REQUIRE(args.using_nonstandard_configs());
+	};
+
+	SECTION("--cmdline-history-file") {
+		check({"newsboat", "--cmdline-history-file=" + filename});
+	}
+}
+
+TEST_CASE("Resolves tilde to homedir in --cmdline-history-file", "[CliArgsParser]")
+{
+	test_helpers::TempDir tmp;
+
+	test_helpers::EnvVar home("HOME");
+	home.set(tmp.get_path());
+
+	const std::string filename("cmdlinefile");
+	const std::string arg = std::string("~/") + filename;
+
+	auto check = [&filename, &tmp](test_helpers::Opts opts) {
+		CliArgsParser args(opts.argc(), opts.argv());
+
+		REQUIRE(args.cmdline_history_file() == tmp.get_path() + filename);
+	};
+
+	SECTION("--cmdline-history-file") {
+		check({"newsboat", "--cmdline-history-file", arg});
+	}
+}
+
 TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 {
 	auto check = [](test_helpers::Opts opts) {

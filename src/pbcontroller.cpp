@@ -182,6 +182,7 @@ void PbController::initialize(int argc, char* argv[])
 	static const struct option longopts[] = {
 		{"config-file", required_argument, 0, 'C'},
 		{"queue-file", required_argument, 0, 'q'},
+		{"lock-file", required_argument, 0, 256},
 		{"log-file", required_argument, 0, 'd'},
 		{"log-level", required_argument, 0, 'l'},
 		{"help", no_argument, 0, 'h'},
@@ -202,6 +203,9 @@ void PbController::initialize(int argc, char* argv[])
 			break;
 		case 'q':
 			queue_file = optarg;
+			break;
+		case 256:
+			lock_file = optarg;
 			break;
 		case 'a':
 			automatic_dl = true;
@@ -341,6 +345,12 @@ void PbController::print_usage(const char* argv0)
 			_s("<queuefile>"),
 			_s("use <queuefile> as queue file")
 		},
+		{
+			'-',
+			"lock-file",
+			_s("<lockfile>"),
+			_s("use <lockfile> as lock file")
+		},
 		{'a', "autodownload", "", _s("start download on startup")},
 		{
 			'l',
@@ -360,9 +370,15 @@ void PbController::print_usage(const char* argv0)
 	};
 
 	for (const auto& a : args) {
-		std::string longcolumn("-");
-		longcolumn += a.name;
-		longcolumn += ", --" + a.longname;
+		std::string longcolumn;
+		if (a.name != '-') {
+			longcolumn += "-";
+			longcolumn += a.name;
+			longcolumn += ", ";
+		} else {
+			longcolumn += "    ";
+		}
+		longcolumn += "--" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
 		std::cout << "\t" << longcolumn;
 		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {

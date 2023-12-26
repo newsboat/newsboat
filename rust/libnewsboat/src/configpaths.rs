@@ -48,8 +48,8 @@ pub struct ConfigPaths {
     config_file: PathBuf,
     lock_file: PathBuf,
     queue_file: PathBuf,
-    search_file: PathBuf,
-    cmdline_file: PathBuf,
+    search_history_file: PathBuf,
+    cmdline_history_file: PathBuf,
 
     silent: bool,
     using_nonstandard_configs: bool,
@@ -69,8 +69,8 @@ impl ConfigPaths {
             config_file: PathBuf::new(),
             lock_file: PathBuf::new(),
             queue_file: PathBuf::new(),
-            search_file: PathBuf::new(),
-            cmdline_file: PathBuf::new(),
+            search_history_file: PathBuf::new(),
+            cmdline_history_file: PathBuf::new(),
 
             silent: false,
             using_nonstandard_configs: false,
@@ -266,8 +266,8 @@ impl ConfigPaths {
         self.cache_file = self.data_dir.join(CACHE_FILENAME);
         self.lock_file = self.data_dir.join(CACHE_FILENAME.to_owned() + LOCK_SUFFIX);
         self.queue_file = self.data_dir.join(QUEUE_FILENAME);
-        self.search_file = self.data_dir.join(SEARCH_HISTORY_FILENAME);
-        self.cmdline_file = self.data_dir.join(CMDLINE_HISTORY_FILENAME);
+        self.search_history_file = self.data_dir.join(SEARCH_HISTORY_FILENAME);
+        self.cmdline_history_file = self.data_dir.join(CMDLINE_HISTORY_FILENAME);
     }
 
     fn find_dirs_xdg(&mut self) {
@@ -321,6 +321,18 @@ impl ConfigPaths {
 
         if let Some(ref config_file) = args.config_file {
             self.config_file = config_file.to_owned();
+        }
+
+        if let Some(ref queue_file) = args.queue_file {
+            self.queue_file = queue_file.to_owned();
+        }
+
+        if let Some(ref search_history_file) = args.search_history_file {
+            self.search_history_file = search_history_file.to_owned();
+        }
+
+        if let Some(ref cmdline_history_file) = args.cmdline_history_file {
+            self.cmdline_history_file = cmdline_history_file.to_owned();
         }
 
         self.silent = args.silent;
@@ -384,13 +396,13 @@ impl ConfigPaths {
     }
 
     /// Path to the file with previous search queries.
-    pub fn search_file(&self) -> &Path {
-        &self.search_file
+    pub fn search_history_file(&self) -> &Path {
+        &self.search_history_file
     }
 
     /// Path to the file with command-line history.
-    pub fn cmdline_file(&self) -> &Path {
-        &self.cmdline_file
+    pub fn cmdline_history_file(&self) -> &Path {
+        &self.cmdline_history_file
     }
 }
 

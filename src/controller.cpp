@@ -548,7 +548,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	FormAction::load_histories(
-		configpaths.search_file(), configpaths.cmdline_file());
+		configpaths.search_history_file(), configpaths.cmdline_history_file());
 
 	// run the View
 	int ret = v->run();
@@ -556,8 +556,8 @@ int Controller::run(const CliArgsParser& args)
 	unsigned int history_limit =
 		cfg.get_configvalue_as_int("history-limit");
 	LOG(Level::DEBUG, "Controller::run: history-limit = %u", history_limit);
-	FormAction::save_histories(configpaths.search_file(),
-		configpaths.cmdline_file(),
+	FormAction::save_histories(configpaths.search_history_file(),
+		configpaths.cmdline_history_file(),
 		history_limit);
 
 	if (!args.silent()) {
