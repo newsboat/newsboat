@@ -37,8 +37,10 @@ can then be download with _Podboat_.
        Start automatic download of all queued files on startup
 
 *-l* _loglevel_, *--log-level*=_loglevel_::
-       Generate a logfile with a certain _loglevel_. Valid loglevels are 1 to 6. An
-       actual logfile will only be written when you provide a logfile name.
+       Generate a logfile with a certain _loglevel_ (valid values: 1 to 6, for user error,
+       critical, error, warning, info, and debug respectively).
+       Filename can be specified using the *--log-file* option. If not specified,
+       a filename is generated of the form podboat_<date-time>.log
 
 *-d* _logfile_, *--log-file*=_logfile_::
        Use this _logfile_ as output when logging debug messages. Please note that this
