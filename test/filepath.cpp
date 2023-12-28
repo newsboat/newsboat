@@ -83,3 +83,31 @@ TEST_CASE("Set extension", "[Filepath]")
 	REQUIRE(path.set_extension("exe"));
 	REQUIRE(path == "file.exe");
 }
+
+TEST_CASE("Can check if path is absolute", "[Filepath]")
+{
+	Filepath path;
+	SECTION("empty path is not absolute") {
+		REQUIRE_FALSE(path.is_absolute());
+	}
+
+	SECTION("path that starts with a slash is absolute") {
+		path.push("/etc");
+		REQUIRE(path.display() == "/etc");
+		REQUIRE(path.is_absolute());
+
+		path.push("ca-certificates");
+		REQUIRE(path.display() == "/etc/ca-certificates");
+		REQUIRE(path.is_absolute());
+	}
+
+	SECTION("path that doesn't start with a slash is not absolute") {
+		path.push("vmlinuz");
+		REQUIRE(path.display() == "vmlinuz");
+		REQUIRE_FALSE(path.is_absolute());
+
+		path.push("undefined");
+		REQUIRE(path.display() == "vmlinuz/undefined");
+		REQUIRE_FALSE(path.is_absolute());
+	}
+}
