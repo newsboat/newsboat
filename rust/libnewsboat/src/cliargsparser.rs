@@ -260,7 +260,7 @@ impl CliArgsParser {
         let mut args = CliArgsParser::default();
 
         if let Some(program_name) = opts
-            .get(0)
+            .first()
             .map(|program_name| program_name.to_string_lossy().into_owned())
         {
             args.program_name = program_name;
