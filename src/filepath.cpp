@@ -2,6 +2,20 @@
 
 namespace newsboat {
 
+inline namespace {
+
+rust::Vec<std::uint8_t> string_to_vec(const std::string& input)
+{
+	rust::Vec<std::uint8_t> result;
+	result.reserve(input.length());
+	for (const auto byte : input) {
+		result.push_back(byte);
+	}
+	return result;
+}
+
+}
+
 Filepath::Filepath()
 	: rs_object(filepath::bridged::create_empty())
 {
@@ -9,14 +23,8 @@ Filepath::Filepath()
 
 Filepath Filepath::from_locale_string(const std::string& filepath)
 {
-	rust::Vec<std::uint8_t> data;
-	data.reserve(filepath.length());
-	for (const auto byte : filepath) {
-		data.push_back(byte);
-	}
-
 	Filepath result;
-	result.rs_object = filepath::bridged::create(std::move(data));
+	result.rs_object = filepath::bridged::create(string_to_vec(filepath));
 	return result;
 }
 
@@ -72,9 +80,9 @@ bool Filepath::is_absolute() const
 	return filepath::bridged::is_absolute(*rs_object);
 }
 
-bool Filepath::set_extension(const std::string& str)
+bool Filepath::set_extension(const std::string& ext)
 {
-	return filepath::bridged::set_extension(*rs_object, str);
+	return filepath::bridged::set_extension(*rs_object, string_to_vec(ext));
 }
 
 bool Filepath::starts_with(const std::string& str) const
