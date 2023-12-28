@@ -22,7 +22,7 @@ mod bridged {
         fn push(filepath: &mut PathBuf, component: &PathBuf);
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
-        fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool;
+        fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
         fn starts_with(filepath: &PathBuf, str: &str) -> bool;
         fn file_name(filepath: &PathBuf) -> Vec<u8>;
 
@@ -93,8 +93,10 @@ fn is_absolute(filepath: &PathBuf) -> bool {
     filepath.0.is_absolute()
 }
 
-fn set_extension(filepath: &mut PathBuf, extension: &str) -> bool {
-    filepath.0.set_extension(extension)
+fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool {
+    use std::ffi::OsStr;
+    use std::os::unix::ffi::OsStrExt;
+    filepath.0.set_extension(OsStr::from_bytes(&extension))
 }
 
 fn starts_with(filepath: &PathBuf, str: &str) -> bool {

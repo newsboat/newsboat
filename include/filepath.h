@@ -93,8 +93,11 @@ public:
 	// Return `true` if path is absolute.
 	bool is_absolute() const;
 
-	// Return `false` and do nothing if Filepath is empty, set extension and return `true` otherwise.
-	bool set_extension(const std::string& str);
+	// Return `false` and do nothing if Filepath is empty, set extension and
+	// return `true` otherwise.
+	//
+	// \note `ext` is interpreted as bytes in locale encoding.
+	bool set_extension(const std::string& ext);
 
 	// Return `true` if Filepath start with `str`, `false` otherwise.
 	bool starts_with(const std::string& str) const;
