@@ -20,6 +20,20 @@ Filepath Filepath::from_locale_string(const std::string& filepath)
 	return result;
 }
 
+Filepath::Filepath(const Filepath& filepath)
+	: rs_object(filepath::bridged::clone(*filepath.rs_object))
+{
+}
+
+Filepath& Filepath::operator=(const Filepath& filepath)
+{
+	if (this == &filepath) {
+		return *this;
+	}
+	rs_object = filepath::bridged::clone(*filepath.rs_object);
+	return *this;
+}
+
 std::string Filepath::to_locale_string() const
 {
 	const auto bytes = filepath::bridged::into_bytes(*rs_object);
