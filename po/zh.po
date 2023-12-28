@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2023-12-11 21:31+0300\n"
-"PO-Revision-Date: 2023-12-14 16:00+0800\n"
+"PO-Revision-Date: 2023-12-28 15:00+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -22,16 +22,16 @@ msgid ""
 "[-h]\n"
 msgstr ""
 "%s %s\n"
-"用法: %s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-"
+"用法：%s [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-"
 "h]\n"
 
 #: newsboat.cpp:47
 msgid "export OPML feed to stdout"
-msgstr "导出OPML种子列表到标准输出"
+msgstr "导出 OPML 种子列表到标准输出"
 
 #: newsboat.cpp:48
 msgid "export OPML 2.0 feed including tags to stdout"
-msgstr "导出OPML2.0种子列表（包括标签）到标准输出"
+msgstr "导出 OPML 2.0 种子列表（包括标签）到标准输出"
 
 #: newsboat.cpp:49
 msgid "refresh feeds on start"
@@ -39,11 +39,11 @@ msgstr "在本软件启动之初刷新种子列表"
 
 #: newsboat.cpp:50 newsboat.cpp:94 newsboat.cpp:100
 msgid "<file>"
-msgstr "文件"
+msgstr "<文件>"
 
 #: newsboat.cpp:50
 msgid "import OPML file"
-msgstr "导入OPML文件"
+msgstr "导入 OPML 文件"
 
 #: newsboat.cpp:54
 msgid "<urlfile>"
@@ -51,11 +51,11 @@ msgstr "<超链文件>"
 
 #: newsboat.cpp:55
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "从超链文件里读取RSS种子列表"
+msgstr "从<超链文件>里读取 RSS 种子列表"
 
 #: newsboat.cpp:60
 msgid "<cachefile>"
-msgstr "缓存文件"
+msgstr "<缓存文件>"
 
 #: newsboat.cpp:61
 msgid "use <cachefile> as cache file"
@@ -75,7 +75,7 @@ msgstr "压缩缓存"
 
 #: newsboat.cpp:73
 msgid "<command>..."
-msgstr "<命令> ..."
+msgstr "<命令>......"
 
 #: newsboat.cpp:74
 msgid "execute list of commands"
@@ -127,7 +127,7 @@ msgstr "清除缓存中未被使用的项"
 
 #: newsboat.cpp:129
 msgid "Files:"
-msgstr "文件: "
+msgstr "文件："
 
 #. i18n: This is printed out by --help before the path to the config file
 #: newsboat.cpp:131
@@ -162,7 +162,7 @@ msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
 "see the full text.)"
 msgstr ""
-"Newsboat 是一个自由软件，根据 MIT 许可证授权。（输入 `%s -vv' 以查看许可证全"
+"Newsboat 是一个自由软件，根据 MIT 许可证授权。（输入`%s -vv'以查看许可证全"
 "文。）"
 
 #: newsboat.cpp:178
@@ -174,14 +174,14 @@ msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
 "github.com/nlohmann/json"
 msgstr ""
-"- 现代 C++ JSON 库，根据 MIT 许可证授权： https://github.com/nlohmann/json"
+"- 现代 C++ JSON 库，根据 MIT 许可证授权：https://github.com/nlohmann/json"
 
 #: newsboat.cpp:182
 msgid ""
 "- optional-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/optional-lite"
 msgstr ""
-"- optional-lite 库，根据 Boost 软件许可证授权： https://github.com/"
+"- optional-lite 库，根据 Boost 软件许可证授权：https://github.com/"
 "martinmoene/optional-lite"
 
 #: newsboat.cpp:185
@@ -189,7 +189,7 @@ msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
 "github.com/martinmoene/expected-lite"
 msgstr ""
-"- expected-lite 库，根据 Boost 软件许可证授权： https://github.com/"
+"- expected-lite 库，根据 Boost 软件许可证授权：https://github.com/"
 "martinmoene/expected-lite"
 
 #: newsboat.cpp:262
@@ -211,22 +211,22 @@ msgstr "捕获到 newsboat::Exception 异常，消息为：%s"
 #: src/regexmanager.cpp:250 src/regexmanager.cpp:314 src/regexmanager.cpp:326
 #, c-format
 msgid "`%s' is not a valid color"
-msgstr "`%s' 不是一个有效的颜色"
+msgstr "`%s'不是一个有效的颜色"
 
 #: src/colormanager.cpp:68 src/regexmanager.cpp:266 src/regexmanager.cpp:341
 #, c-format
 msgid "`%s' is not a valid attribute"
-msgstr "`%s' 不是一个有效的属性索引"
+msgstr "`%s'不是一个有效的属性索引"
 
 #: src/colormanager.cpp:97
 #, c-format
 msgid "`%s' is not a valid configuration element"
-msgstr "`%s' 不是一个有效的配置元素"
+msgstr "`%s'不是一个有效的配置元素"
 
 #: src/configcontainer.cpp:160
 #, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
-msgstr "Newsboat:重新加载完毕, %f个种子含未读文章（共有 %n 篇未读文章）"
+msgstr "Newsboat：重新加载完毕，%f 个种子含未读文章（共有 %n 篇未读文章）"
 
 #: src/configcontainer.cpp:189
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
@@ -248,7 +248,7 @@ msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
-"%N %V - %?F?种子&你的种子? (%u 篇未读, 共有 %t 篇)%?F? 匹配过滤器 '%F'&?%?T? "
+"%N %V - %?F?种子&你的种子?（%u 篇未读, 共有 %t 篇）%?F? 匹配过滤器 '%F'&?%?T? "
 "- 标签 '%T'&?"
 
 #: src/configcontainer.cpp:303
@@ -271,7 +271,7 @@ msgstr "%N %V - 文章 '%T'（%u 未读, 共有 %t 篇）"
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
-msgstr "%N %V - '%s' 的查询结果 (%u 未读, 共有 %t)%?F? 匹配过滤器'%F'&?"
+msgstr "%N %V - '%s' 的查询结果（%u 未读, 共有 %t）%?F? 匹配过滤器'%F'&?"
 
 #: src/configcontainer.cpp:322
 msgid "%N %V - Select Filter"
@@ -288,17 +288,17 @@ msgstr "%N %V - 链接"
 #: src/configdata.cpp:54
 #, c-format
 msgid "expected boolean value, found `%s' instead"
-msgstr "期望得到布尔值，但得到了 `%s'"
+msgstr "期望得到布尔值，但得到了`%s'"
 
 #: src/configdata.cpp:64
 #, c-format
 msgid "expected integer value, found `%s' instead"
-msgstr "期望得到整数值，但得到了 `%s'"
+msgstr "期望得到整数值，但得到了`%s'"
 
 #: src/configdata.cpp:74
 #, c-format
 msgid "invalid configuration value `%s'"
-msgstr "无效的配置参数 `%s'"
+msgstr "无效的配置参数`%s'"
 
 #: src/confighandlerexception.cpp:19
 msgid "invalid parameters."
@@ -328,21 +328,21 @@ msgstr "%s 第 %u 行"
 #: src/configparser.cpp:132
 #, c-format
 msgid "unknown command `%s'"
-msgstr "未知的命令 `%s' "
+msgstr "未知的命令`%s'"
 
 #: src/configparser.cpp:139
 #, c-format
 msgid "Error while processing command `%s' (%s): %s"
-msgstr "当处理命令`%s'(%s)时出错：%s"
+msgstr "当处理命令`%s' (%s)时出错：%s"
 
 #: src/controller.cpp:154 src/pbcontroller.cpp:233
 #, c-format
 msgid "Starting %s %s..."
-msgstr "启动 %s %s..."
+msgstr "启动 %s %s......"
 
 #: src/controller.cpp:161 src/pbcontroller.cpp:253
 msgid "Loading configuration..."
-msgstr "加载配置文件..."
+msgstr "加载配置文件......"
 
 #: src/controller.cpp:198 src/controller.cpp:248 src/controller.cpp:374
 #: src/controller.cpp:430 src/controller.cpp:434 src/controller.cpp:475
@@ -350,12 +350,12 @@ msgstr "加载配置文件..."
 #: src/controller.cpp:527 src/controller.cpp:571 src/pbcontroller.cpp:289
 #: src/pbcontroller.cpp:305
 msgid "done."
-msgstr "完毕."
+msgstr "完毕。"
 
 #: src/controller.cpp:212 src/pbcontroller.cpp:242
 #, c-format
 msgid "Error: an instance of %s is already running (PID: %s)"
-msgstr "错误：%s的一个实例已经在运行中（PID: %s）"
+msgstr "错误：%s 的一个实例已经在运行中（PID: %s）"
 
 #: src/controller.cpp:218 src/pbcontroller.cpp:248
 msgid "Error: "
@@ -363,16 +363,16 @@ msgstr "错误："
 
 #: src/controller.cpp:224 src/controller.cpp:429
 msgid "Opening cache..."
-msgstr "打开缓存..."
+msgstr "打开缓存......"
 
 #: src/controller.cpp:231 src/controller.cpp:239
 #, c-format
 msgid "Error: opening the cache file `%s' failed: %s"
-msgstr "错误:打开缓存文件`%s' 失败:%s"
+msgstr "错误：打开缓存文件`%s'失败：%s"
 
 #: src/controller.cpp:270
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
-msgstr "错误：你必须设置`cookie-cache`后才能使用NewsBlur。\n"
+msgstr "错误：你必须设置`cookie-cache`后才能使用 NewsBlur。\n"
 
 #: src/controller.cpp:278
 #, c-format
@@ -381,58 +381,58 @@ msgstr "不能访问或创建 %s\n"
 
 #: src/controller.cpp:292
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr "错误：你必须设置`freshrss-url`后才能使用FreshRSS\n"
+msgstr "错误：你必须设置`freshrss-url`后才能使用 FreshRSS\n"
 
 #: src/controller.cpp:304
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
-"错误：你必须设置 `freshrss-login` 和一个`freshrss-password`，`freshrss-"
-"passwordfile`或`freshrss-passwordeval`后才能使用FreshRSS\n"
+"错误：你必须设置`freshrss-login`和一个`freshrss-password`、`freshrss-"
+"passwordfile`或`freshrss-passwordeval`后才能使用 FreshRSS\n"
 
 #: src/controller.cpp:319
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
-msgstr "错误：你必须设置`miniflux-url`后才能使用Miniflux\n"
+msgstr "错误：你必须设置`miniflux-url`后才能使用 Miniflux\n"
 
 #: src/controller.cpp:336
 msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
-"错误：你必须提供一个API令牌或者一对用户名/密码才能使用Miniflux。请提供适当的"
-"miniflux-*设置项\n"
+"错误：你必须提供一个 API 令牌或者一对用户名/密码才能使用 Miniflux。请提供适当的 "
+"miniflux-* 设置项\n"
 
 #: src/controller.cpp:347
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
-"错误：你必须*同时*设置`inoreader-app-id`和`inoreader-app-key`才能使用"
+"错误：你必须*同时*设置`inoreader-app-id`和`inoreader-app-key`才能使用 "
 "Inoreader。\n"
 
 #: src/controller.cpp:354
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr "错误：未知的url-source `%s'"
+msgstr "错误：未知的 url-source `%s'"
 
 #: src/controller.cpp:361
 #, c-format
 msgid "Loading URLs from %s..."
-msgstr "从 %s 文件加载链接..."
+msgstr "从 %s 文件加载链接......"
 
 #: src/controller.cpp:382
 #, c-format
 msgid ""
 "Error: no URLs configured. Please fill the file %s with RSS feed URLs or "
 "import an OPML file."
-msgstr "错误：没有配置链接。请用RSS种子的链接替换 %s 或者导入一个OPML文件."
+msgstr "错误：没有配置链接。请用 RSS 种子的链接替换 %s 或者导入一个 OPML 文件。"
 
 #: src/controller.cpp:388
 msgid ""
 "It looks like the OPML feed you subscribed contains no feeds. Please fill it "
 "with feeds, and try again."
-msgstr "看起来你订阅的OPML种子没有包含任何种子请更正之后再尝试一下。"
+msgstr "看起来你订阅的 OPML 种子没有包含任何种子。请更正之后再尝试一下。"
 
 #: src/controller.cpp:393
 msgid ""
@@ -481,37 +481,37 @@ msgstr ""
 
 #: src/controller.cpp:431
 msgid "Cleaning up cache thoroughly..."
-msgstr "彻底清除缓存..."
+msgstr "彻底清除缓存......"
 
 #: src/controller.cpp:439
 msgid "Loading articles from cache..."
-msgstr "从缓存中加载文章..."
+msgstr "从缓存中加载文章......"
 
 #: src/controller.cpp:456
 msgid "Error while loading feeds from database: "
-msgstr "当从数据库中加载种子的时候出错: "
+msgstr "当从数据库中加载种子的时候出错："
 
 #: src/controller.cpp:462
 #, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "当加载种子'%s'时出错: %s"
+msgstr "当加载种子'%s'时出错：%s"
 
 #: src/controller.cpp:479 src/controller.cpp:564
 msgid "Cleaning up cache..."
-msgstr "清空缓存..."
+msgstr "清空缓存......"
 
 #: src/controller.cpp:491
 #, fuzzy
 msgid "Prepopulating query feeds..."
-msgstr "更新查询种子..."
+msgstr "更新查询种子......"
 
 #: src/controller.cpp:513
 msgid "Importing list of read articles..."
-msgstr "导入阅读文章列表..."
+msgstr "导入阅读文章列表......"
 
 #: src/controller.cpp:524
 msgid "Exporting list of read articles..."
-msgstr "导出阅读文章列表"
+msgstr "导出阅读文章列表......"
 
 #: src/controller.cpp:579
 #, c-format
@@ -522,12 +522,12 @@ msgstr ""
 
 #: src/controller.cpp:587
 msgid "failed: "
-msgstr "失败: "
+msgstr "失败："
 
 #: src/controller.cpp:611
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "错误:无法将所有种子都标记为已读: %s"
+msgstr "错误：无法将所有种子都标记为已读：%s"
 
 #: src/controller.cpp:714 src/itemutils.cpp:32
 #, c-format
@@ -537,22 +537,22 @@ msgstr ""
 #: src/controller.cpp:719 src/itemutils.cpp:37
 #, c-format
 msgid "Failed to open queue file: %s."
-msgstr "当打开队列文件时出错: %s"
+msgstr "当打开队列文件时出错：%s"
 
 #: src/controller.cpp:741
 #, c-format
 msgid "Error importing OPML to urls file %s: %s"
-msgstr "当导入OPML到链接文件 %s 时出错: %s"
+msgstr "当导入 OPML 到链接文件 %s 时出错：%s"
 
 #: src/controller.cpp:750
 #, c-format
 msgid "An error occurred while parsing %s: %s"
-msgstr "当解析 %s 的时候出错: %s"
+msgstr "当解析 %s 的时候出错：%s"
 
 #: src/controller.cpp:757
 #, c-format
 msgid "Import of %s finished."
-msgstr "%s 导入完毕"
+msgstr "%s 导入完毕。"
 
 #: src/controller.cpp:893
 #, c-format
@@ -562,7 +562,7 @@ msgstr "%u 篇未读文章"
 #: src/controller.cpp:898
 #, c-format
 msgid "%s: %s: unknown command"
-msgstr "%s: %s: 未知的命令"
+msgstr "%s：%s：未知的命令"
 
 #: src/controller.cpp:1017
 #, c-format
@@ -651,7 +651,7 @@ msgstr "重命名失败"
 
 #: src/download.cpp:85
 msgid "unknown (bug)."
-msgstr "未知（bug）"
+msgstr "未知（bug）。"
 
 #: src/feedhqurlreader.cpp:47 src/oldreaderurlreader.cpp:48
 msgid "People you follow"
@@ -712,7 +712,7 @@ msgstr "浏览器返回错误代码 %i"
 
 #: src/feedlistformaction.cpp:297 src/itemlistformaction.cpp:528
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "你真的想把这个种子标记为已读吗(y:是的  n:不是)?"
+msgstr "你真的想把这个种子标记为已读吗（y：是的 n：不是）？"
 
 #: src/feedlistformaction.cpp:298 src/feedlistformaction.cpp:383
 #: src/feedlistformaction.cpp:512 src/filebrowserformaction.cpp:126
@@ -729,17 +729,17 @@ msgstr "y"
 
 #: src/feedlistformaction.cpp:304 src/itemlistformaction.cpp:533
 msgid "Marking feed read..."
-msgstr "标记该种子已读"
+msgstr "标记该种子已读......"
 
 #: src/feedlistformaction.cpp:314 src/itemlistformaction.cpp:579
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "错误：无法将种子标记为已读: %s"
+msgstr "错误：无法将种子标记为已读：%s"
 
 #: src/feedlistformaction.cpp:340 src/feedlistformaction.cpp:349
 #: src/feedlistformaction.cpp:375
 msgid "No feeds with unread items."
-msgstr "任何种子里都没有未读的文章"
+msgstr "任何种子里都没有未读的文章。"
 
 #: src/feedlistformaction.cpp:357 src/itemlistformaction.cpp:517
 msgid "Already on last feed."
@@ -751,11 +751,11 @@ msgstr "已经位于第一个种子。"
 
 #: src/feedlistformaction.cpp:382
 msgid "Do you really want to mark all feeds as read (y:Yes n:No)? "
-msgstr "你真的想标记所有种子为已读吗(y:是的  n:不是)?"
+msgstr "你真的想标记所有种子为已读吗（y:是的 n:不是）？"
 
 #: src/feedlistformaction.cpp:386
 msgid "Marking all feeds read..."
-msgstr "将所有种子都标记为已读..."
+msgstr "将所有种子都标记为已读......"
 
 #: src/feedlistformaction.cpp:429 src/itemlistformaction.cpp:715
 #, c-format
@@ -764,24 +764,24 @@ msgstr "没有找到过滤器 `%s'。"
 
 #: src/feedlistformaction.cpp:437 src/itemlistformaction.cpp:723
 msgid "No filters defined."
-msgstr "没有定义任何过滤器（filter）"
+msgstr "没有定义任何过滤器（filter）。"
 
 #: src/feedlistformaction.cpp:451 src/helpformaction.cpp:45
 #: src/itemlistformaction.cpp:654 src/itemlistformaction.cpp:669
 #: src/itemviewformaction.cpp:283 src/itemviewformaction.cpp:298
 msgid "Search for: "
-msgstr "查找: "
+msgstr "查找："
 
 #: src/feedlistformaction.cpp:461 src/feedlistformaction.cpp:477
 #: src/formaction.cpp:556 src/formaction.cpp:558 src/itemlistformaction.cpp:681
 #: src/itemlistformaction.cpp:697 src/itemrenderer.cpp:76
 msgid "Title: "
-msgstr "标题: "
+msgstr "标题："
 
 #: src/feedlistformaction.cpp:494 src/itemlistformaction.cpp:732
 #: src/itemlistformaction.cpp:749
 msgid "Filter: "
-msgstr "过滤器: "
+msgstr "过滤器："
 
 #: src/feedlistformaction.cpp:511 src/view.cpp:196
 msgid "Do you really want to quit (y:Yes n:No)? "
@@ -838,40 +838,40 @@ msgstr "帮助"
 
 #: src/feedlistformaction.cpp:994 src/itemlistformaction.cpp:988
 msgid "Searching..."
-msgstr "查找..."
+msgstr "查找......"
 
 #: src/feedlistformaction.cpp:1003 src/itemlistformaction.cpp:994
 #, c-format
 msgid "Error while searching for `%s': %s"
-msgstr "当查找 `%s'的时候出错: %s"
+msgstr "当查找`%s'的时候出错：%s"
 
 #: src/feedlistformaction.cpp:1014 src/itemlistformaction.cpp:1001
 msgid "No results."
-msgstr "没有结果"
+msgstr "没有结果。"
 
 #: src/feedlistformaction.cpp:1025 src/itemlistformaction.cpp:1418
 msgid "Position not visible!"
-msgstr "找不到这个位置"
+msgstr "找不到这个位置！"
 
 #: src/feedlistformaction.cpp:1106
 #, c-format
 msgid "Feed List - %u unread, %u total"
-msgstr "种子列表 - %u 未读, 共有 %u"
+msgstr "种子列表 - %u 未读，共有 %u"
 
 #: src/feedlistformaction.cpp:1120 src/itemlistformaction.cpp:1697
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
-msgstr "错误：无法解析过滤器（filter）表达式 `%s': %s"
+msgstr "错误：无法解析过滤器（filter）表达式`%s'：%s"
 
 #: src/feedretriever.cpp:70
 #, c-format
 msgid "Error: unsupported URL: %s"
-msgstr "错误：不支持的链接: %s"
+msgstr "错误：不支持的链接：%s"
 
 #: src/filebrowserformaction.cpp:123
 #, c-format
 msgid "Do you really want to overwrite `%s' (y:Yes n:No)? "
-msgstr "你真的想覆盖 `%s'么(y:是的  n:不是)?"
+msgstr "你真的想覆盖`%s'么（y:是的 n:不是）？"
 
 #: src/filebrowserformaction.cpp:126
 msgid "n"
@@ -879,7 +879,7 @@ msgstr "n"
 
 #: src/filebrowserformaction.cpp:306
 msgid "File: "
-msgstr "文件: "
+msgstr "文件："
 
 #: src/filebrowserformaction.cpp:376
 #, c-format
@@ -889,21 +889,21 @@ msgstr "保存文件 - %s"
 #: src/fileurlreader.cpp:65
 #, c-format
 msgid "Error: failed to open file \"%s\": %s"
-msgstr "当打开文件\"%s\"的时候出错: %s"
+msgstr "当打开文件\"%s\"的时候出错：%s"
 
 #: src/filtercontainer.cpp:37 src/regexmanager.cpp:352 src/rssfeed.cpp:64
 #: src/rssignores.cpp:45
 #, c-format
 msgid "couldn't parse filter expression `%s': %s"
-msgstr "错误：无法解析过滤器（filter）表达式 `%s': %s"
+msgstr "错误：无法解析过滤器（filter）表达式`%s'：%s"
 
 #: src/formaction.cpp:129
 msgid "usage: set <config-option> <value>"
-msgstr "用法: set <配置选项> <值>"
+msgstr "用法：set <配置选项> <值>"
 
 #: src/formaction.cpp:257
 msgid "usage: set <variable>[=<value>]"
-msgstr "用法: set <变量>[=<值>]"
+msgstr "用法：set <变量>[=<值>]"
 
 #: src/formaction.cpp:271
 msgid "usage: source <file> [...]"
@@ -929,42 +929,42 @@ msgstr "没有找到操作"
 #: src/formaction.cpp:333
 #, fuzzy, c-format
 msgid "Not a command: %s"
-msgstr "未知的命令 `%s' "
+msgstr "未知的命令：%s"
 
 #: src/formaction.cpp:509
 msgid "Saving bookmark..."
-msgstr "保存书签..."
+msgstr "保存书签......"
 
 #: src/formaction.cpp:515 src/formaction.cpp:582
 msgid "Saved bookmark."
-msgstr "已保存的书签."
+msgstr "已保存的书签。"
 
 #: src/formaction.cpp:518 src/formaction.cpp:585
 msgid "Error while saving bookmark: "
-msgstr "当保存书签时出错: "
+msgstr "当保存书签时出错："
 
 #: src/formaction.cpp:553
 msgid "URL: "
-msgstr "链接: "
+msgstr "链接："
 
 #: src/formaction.cpp:560
 msgid "Description: "
-msgstr "描述: "
+msgstr "描述："
 
 #: src/formaction.cpp:561
 msgid "Feed title: "
-msgstr "种子标题: "
+msgstr "种子标题："
 
 #: src/formaction.cpp:576
 #, fuzzy
 msgid "Saving bookmark on autopilot..."
-msgstr "保存书签..."
+msgstr "保存书签......"
 
 #: src/formaction.cpp:718
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
-msgstr "书签支持尚未配置，请在配置文件里设置相应变量 `bookmark-cmd' "
+msgstr "书签支持尚未配置。请在配置文件里设置相应变量`bookmark-cmd'。"
 
 #: src/helpformaction.cpp:129
 msgid "Generic bindings:"
@@ -984,7 +984,7 @@ msgstr "清空"
 
 #: src/htmlrenderer.cpp:207
 msgid "embedded flash:"
-msgstr "内嵌flash"
+msgstr "内嵌 flash："
 
 #: src/htmlrenderer.cpp:1037 src/htmlrenderer.cpp:1040
 msgid "link"
@@ -1008,30 +1008,30 @@ msgstr "保存的网页"
 #: src/itemlistformaction.cpp:846 src/itemlistformaction.cpp:901
 #: src/itemlistformaction.cpp:962 src/searchresultslistformaction.cpp:54
 msgid "No item selected!"
-msgstr "没有选择任何项目"
+msgstr "没有选择任何项目！"
 
 #: src/itemlistformaction.cpp:110
 msgid "Do you really want to delete all articles (y:Yes n:No)? "
-msgstr "你真的想删除所有文章吗(y:是的  n:不是)?"
+msgstr "你真的想删除所有文章吗（y:是的 n:不是）?"
 
 #: src/itemlistformaction.cpp:224 src/itemviewformaction.cpp:442
 msgid "Toggling read flag for article..."
-msgstr "切换文章阅读标记（已读/未读）"
+msgstr "切换文章阅读标记（已读/未读）......"
 
 #: src/itemlistformaction.cpp:263
 #, c-format
 msgid "Error while toggling read flag: %s"
-msgstr "当切换阅读标记（已读/未读）时出错: %s"
+msgstr "当切换阅读标记（已读/未读）时出错：%s"
 
 #: src/itemlistformaction.cpp:308 src/itemviewformaction.cpp:367
 msgid "URL list empty."
-msgstr "空空如也的链接列表"
+msgstr "空空如也的链接列表。"
 
 #: src/itemlistformaction.cpp:376 src/itemlistformaction.cpp:395
 #: src/itemrenderer.cpp:81 src/itemviewformaction.cpp:340
 #: src/itemviewformaction.cpp:354
 msgid "Flags: "
-msgstr "标记: "
+msgstr "标记："
 
 #: src/itemlistformaction.cpp:435 src/itemlistformaction.cpp:1498
 msgid "Error: no item selected!"
@@ -1042,7 +1042,7 @@ msgstr "错误：没有选择任何项！"
 #: src/itemviewformaction.cpp:402 src/itemviewformaction.cpp:435
 #: src/view.cpp:785 src/view.cpp:856
 msgid "No unread items."
-msgstr "没有未读的文章"
+msgstr "没有未读的文章。"
 
 #: src/itemlistformaction.cpp:485 src/itemviewformaction.cpp:413
 #: src/view.cpp:927
@@ -1060,7 +1060,7 @@ msgstr "没有未读的种子。"
 
 #: src/itemlistformaction.cpp:588
 msgid "Marking all above as read..."
-msgstr "将以上所有种子都标记为已读..."
+msgstr "将以上所有种子都标记为已读......"
 
 #: src/itemlistformaction.cpp:624 src/itemlistformaction.cpp:640
 #: src/itemviewformaction.cpp:310 src/itemviewformaction.cpp:326
@@ -1093,7 +1093,7 @@ msgstr "标记已更新。"
 #: src/itemlistformaction.cpp:1106 src/view.cpp:428 src/view.cpp:451
 #, c-format
 msgid "Error: applying the filter failed: %s"
-msgstr "错误: 应用过滤器失败: %s"
+msgstr "错误：应用过滤器失败：%s"
 
 #: src/itemlistformaction.cpp:1166
 #, c-format
@@ -1118,7 +1118,7 @@ msgstr "错误：无法保存文章到 %s"
 
 #: src/itemlistformaction.cpp:1494
 msgid "Error: no filename provided"
-msgstr "错误：没有提供文件名！"
+msgstr "错误：没有提供文件名"
 
 #: src/itemlistformaction.cpp:1579
 #, c-format
@@ -1148,27 +1148,27 @@ msgstr ""
 
 #: src/itemrenderer.cpp:74
 msgid "Feed: "
-msgstr "种子: "
+msgstr "种子："
 
 #: src/itemrenderer.cpp:78
 msgid "Author: "
-msgstr "作者: "
+msgstr "作者："
 
 #: src/itemrenderer.cpp:79
 msgid "Date: "
-msgstr "日期: "
+msgstr "日期："
 
 #: src/itemrenderer.cpp:80
 msgid "Link: "
-msgstr "链接: "
+msgstr "链接："
 
 #: src/itemrenderer.cpp:89
 msgid "Podcast Download URL: "
-msgstr "播客下载地址: "
+msgstr "播客下载地址："
 
 #: src/itemrenderer.cpp:94
 msgid "type: "
-msgstr "类型: "
+msgstr "类型："
 
 #: src/itemrenderer.cpp:128
 msgid "Image"
@@ -1194,7 +1194,7 @@ msgstr ""
 #: src/itemutils.cpp:22
 #, c-format
 msgid "Added %s to download queue."
-msgstr "将 %s 加入下载队列"
+msgstr "将 %s 加入下载队列。"
 
 #: src/itemutils.cpp:27
 #, c-format
@@ -1212,12 +1212,12 @@ msgstr "底部"
 #: src/itemviewformaction.cpp:180 src/view.cpp:561
 #, c-format
 msgid "Error while marking article as read: %s"
-msgstr "当标记文章为已读的时候出错: %s"
+msgstr "当标记文章为已读的时候出错：%s"
 
 #: src/itemviewformaction.cpp:221
 #, c-format
 msgid "Saved article to %s."
-msgstr "将文章保存至 %s 。"
+msgstr "将文章保存至 %s。"
 
 #: src/itemviewformaction.cpp:224
 #, c-format
@@ -1227,7 +1227,7 @@ msgstr "错误：无法将文章写至 %s"
 #: src/itemviewformaction.cpp:458
 #, c-format
 msgid "Error while marking article as unread: %s"
-msgstr "当标记文章为未读的时候出错: %s"
+msgstr "当标记文章为未读的时候出错：%s"
 
 #: src/itemviewformaction.cpp:503 src/itemviewformaction.cpp:518
 #: src/keymap.cpp:203
@@ -1256,7 +1256,7 @@ msgstr "文章 - %s"
 
 #: src/itemviewformaction.cpp:799
 msgid "Error: invalid regular expression!"
-msgstr "错误:无效的正则表达式！"
+msgstr "错误：无效的正则表达式！"
 
 #: src/keymap.cpp:37
 msgid "Open feed/article"
@@ -1304,11 +1304,11 @@ msgstr "保存所有文章"
 
 #: src/keymap.cpp:91
 msgid "Go to next entry"
-msgstr "转到下一个条目(entry)"
+msgstr "转到下一个条目（entry）"
 
 #: src/keymap.cpp:98
 msgid "Go to previous entry"
-msgstr "转到上一个条目(entry)"
+msgstr "转到上一个条目（entry）"
 
 #: src/keymap.cpp:105
 msgid "Go to next unread article"
@@ -1324,7 +1324,7 @@ msgstr "转到随机一篇未读文章"
 
 #: src/keymap.cpp:126
 msgid "Open URL of article, or entry in URL view. Mark read"
-msgstr "在链接视图(URL view)中打开文章或某一条目(entry)。标记为已读"
+msgstr "在链接视图（URL view）中打开文章或某一条目（entry）。标记为已读"
 
 #: src/keymap.cpp:133
 msgid "Open all unread items of selected feed in browser"
@@ -1336,11 +1336,11 @@ msgstr "在浏览器中打开已选种子中的所有未读项并标记为已读
 
 #: src/keymap.cpp:148
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr "在链接视图(URL view)中打开文章、种子或某一条目(entry)的链接。"
+msgstr "在链接视图（URL view）中打开文章、种子或某一条目（entry）的链接。"
 
 #: src/keymap.cpp:155
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "在浏览器中打开文章、种子或某一条目(entry)的链接，非交互式。"
+msgstr "在浏览器中打开文章、种子或某一条目（entry）的链接，非交互式。"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
@@ -1524,43 +1524,43 @@ msgstr "转到该文章的种子"
 
 #: src/keymap.cpp:417
 msgid "Open URL 1"
-msgstr "打开链接1"
+msgstr "打开链接 1"
 
 #: src/keymap.cpp:418
 msgid "Open URL 2"
-msgstr "打开链接2"
+msgstr "打开链接 2"
 
 #: src/keymap.cpp:419
 msgid "Open URL 3"
-msgstr "打开链接3"
+msgstr "打开链接 3"
 
 #: src/keymap.cpp:420
 msgid "Open URL 4"
-msgstr "打开链接4"
+msgstr "打开链接 4"
 
 #: src/keymap.cpp:421
 msgid "Open URL 5"
-msgstr "打开链接5"
+msgstr "打开链接 5"
 
 #: src/keymap.cpp:422
 msgid "Open URL 6"
-msgstr "打开链接6"
+msgstr "打开链接 6"
 
 #: src/keymap.cpp:423
 msgid "Open URL 7"
-msgstr "打开链接7"
+msgstr "打开链接 7"
 
 #: src/keymap.cpp:424
 msgid "Open URL 8"
-msgstr "打开链接8"
+msgstr "打开链接 8"
 
 #: src/keymap.cpp:425
 msgid "Open URL 9"
-msgstr "打开链接9"
+msgstr "打开链接 9"
 
 #: src/keymap.cpp:426
 msgid "Open URL 10"
-msgstr "打开链接10"
+msgstr "打开链接 10"
 
 #: src/keymap.cpp:428
 msgid "Start cmdline with 1"
@@ -1600,11 +1600,11 @@ msgstr ""
 
 #: src/keymap.cpp:438
 msgid "Move to the previous entry"
-msgstr "移动到上一个条目(entry)"
+msgstr "移动到上一个条目（entry）"
 
 #: src/keymap.cpp:439
 msgid "Move to the next entry"
-msgstr "移动到下一个条目(entry)"
+msgstr "移动到下一个条目（entry）"
 
 #: src/keymap.cpp:444
 msgid "Move to the previous page"
@@ -1633,12 +1633,12 @@ msgstr "移动到这一页/这个列表的结尾"
 #: src/keymap.cpp:711
 #, c-format
 msgid "`%s' is not a valid context"
-msgstr "`%s' 不是一个有效的上下文环境(context)"
+msgstr "`%s'不是一个有效的上下文环境（context）"
 
 #: src/keymap.cpp:716
 #, c-format
 msgid "`%s' is not a valid key command"
-msgstr "`%s' 不是一个有效的键盘指令"
+msgstr "`%s'不是一个有效的键盘指令"
 
 #: src/keymap.cpp:740
 msgid "failed to parse binding"
@@ -1652,27 +1652,27 @@ msgstr "解析操作序列 %s 失败"
 #: src/keymap.cpp:790
 #, c-format
 msgid "`%s' is not a valid operation"
-msgstr "`%s' 不是一个有效操作"
+msgstr "`%s'不是一个有效操作"
 
 #: src/matcherexception.cpp:15
 #, c-format
 msgid "attribute `%s' is not available."
-msgstr "属性 `%s' 目前不可用。"
+msgstr "属性`%s'目前不可用。"
 
 #: src/matcherexception.cpp:19
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
-msgstr "正则表达式 '%s' 无效：%s"
+msgstr "正则表达式'%s'无效：%s"
 
 #: src/opml.cpp:210
 #, c-format
 msgid "Error: failed to parse OPML file \"%s\""
-msgstr "错误：无法解析OPML文件 \"%s\""
+msgstr "错误：无法解析OPML文件\"%s\""
 
 #: src/pbcontroller.cpp:84
 #, c-format
 msgid "XDG: configuration directory '%s' not accessible, using '%s' instead."
-msgstr "XDG：配置目录 '%s' 不可访问，使用 '%s' 代替。"
+msgstr "XDG：配置目录'%s'不可访问，使用'%s'代替。"
 
 #: src/pbcontroller.cpp:136
 msgid "Fatal error: couldn't determine home directory!"
@@ -1687,16 +1687,16 @@ msgstr "请设置家目录的环境变量 HOME，或者为 UID %u 添加一个�
 #: src/pbcontroller.cpp:161
 #, c-format
 msgid "Fatal error: couldn't create configuration directory `%s': (%i) %s"
-msgstr "严重错误：无法创建配置文件目录 `%s': (%i) %s"
+msgstr "严重错误：无法创建配置文件目录`%s'：(%i) %s"
 
 #: src/pbcontroller.cpp:217
 #, c-format
 msgid "%s: %d: invalid loglevel value"
-msgstr "%s: %d: 无效的日志等级值"
+msgstr "%s：%d：无效的日志等级值"
 
 #: src/pbcontroller.cpp:300
 msgid "Cleaning up queue..."
-msgstr "清空队列..."
+msgstr "清空队列......"
 
 #: src/pbcontroller.cpp:318
 #, c-format
@@ -1705,7 +1705,7 @@ msgid ""
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 "%s %s\n"
-"用法: %s [-C <文件>] [-q <文件>] [-h]\n"
+"用法：%s [-C <文件>] [-q <文件>] [-h]\n"
 
 #: src/pbcontroller.cpp:341
 msgid "<queuefile>"
@@ -1726,7 +1726,7 @@ msgstr "以某一等级记录日志（有效值：1 - 6）"
 #: src/pbview.cpp:64
 #, c-format
 msgid "Queue (%u downloads in progress, %u total) - %.2f %s total"
-msgstr "队列 (%u 个下载项目在进行，共有 %u 个下载项目) - 总共 %.2f %s"
+msgstr "队列（%u 个下载项目在进行，共有 %u 个下载项目） - 总共 %.2f %s"
 
 #: src/pbview.cpp:71
 #, c-format
@@ -1735,7 +1735,7 @@ msgstr " - %u 个并行下载"
 
 #: src/pbview.cpp:167
 msgid "Error: can't quit: download(s) in progress."
-msgstr "错误: 无法退出: 还有项目在下载"
+msgstr "错误：无法退出：还有项目在下载。"
 
 #: src/pbview.cpp:203
 msgid "Error: download needs to be finished before the file can be played."
@@ -1743,7 +1743,7 @@ msgstr "错误：项目必须下载完毕才可以播放。"
 
 #: src/pbview.cpp:253
 msgid "Error: unable to perform operation: download(s) in progress."
-msgstr "错误：无法执行操作：有项目在下载中"
+msgstr "错误：无法执行操作：有项目在下载中。"
 
 #: src/pbview.cpp:291
 msgid "KB/s"
@@ -1789,7 +1789,7 @@ msgid ""
 "abort"
 msgstr ""
 "警告：%s 中找到注释。当 Podboat 退出时队列文件会被重建，注释将被删除。按回车"
-"键继续或按 Ctrl+C中止"
+"键继续或按 Ctrl+C 中止"
 
 #: src/regexmanager.cpp:220
 #, c-format
@@ -1804,16 +1804,16 @@ msgstr "`%s'不是一个有效的正则表达式：%s"
 #: src/reloader.cpp:100
 #, c-format
 msgid "%sLoading %s..."
-msgstr "%s加载中 %s..."
+msgstr "%s 加载中 %s......"
 
 #: src/reloader.cpp:137 src/reloader.cpp:142 src/reloader.cpp:147
 #, c-format
 msgid "Error while retrieving %s: %s"
-msgstr "当抓取%s的时候出错: %s"
+msgstr "当抓取 %s 的时候出错：%s"
 
 #: src/reloader.cpp:157
 msgid "Error: invalid feed!"
-msgstr "错误:无效的种子!"
+msgstr "错误：无效的种子！"
 
 #: src/rssfeed.cpp:49
 msgid "too few arguments"
@@ -1860,12 +1860,12 @@ msgstr "链接"
 #: src/utils.cpp:736
 #, c-format
 msgid "Failed to open file: %s"
-msgstr "当打开文件时出错: %s"
+msgstr "当打开文件时出错：%s"
 
 #: src/utils.cpp:740
 #, c-format
 msgid "Failed to read line %u: %s"
-msgstr "当读取第 %u 行时出错: %s"
+msgstr "当读取第 %u 行时出错：%s"
 
 #: src/view.cpp:173
 msgid "Error: failed to execute startup commands"
@@ -1882,7 +1882,7 @@ msgstr ""
 
 #: src/view.cpp:481 src/view.cpp:507
 msgid "Error: feed contains no items!"
-msgstr "错误: 种子里没有包含任何项目!"
+msgstr "错误：种子里没有包含任何项目!"
 
 #: src/view.cpp:650
 msgid "No tags defined."
@@ -1890,12 +1890,12 @@ msgstr "没有定义任何标签"
 
 #: src/view.cpp:986
 msgid "Updating query feed..."
-msgstr "更新查询种子..."
+msgstr "更新查询种子......"
 
 #: src/view.cpp:999
 #, fuzzy, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "错误：无法将种子标记为已读: %s"
+msgstr "错误：无法将种子标记为已读：%s"
 
 #: rss/atomparser.cpp:19 rss/parser.cpp:374 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:20 rss/rss20parser.cpp:21
@@ -1936,7 +1936,7 @@ msgstr "不支持的种子格式"
 
 #: rust/libnewsboat/src/cliargsparser.rs:215
 msgid "%s: %s: invalid loglevel value"
-msgstr "%s: %s: 无效的日志等级"
+msgstr "%s：%s：无效的日志等级"
 
 #: rust/libnewsboat/src/configpaths.rs:85
 msgid ""
@@ -1944,15 +1944,15 @@ msgid ""
 "Please set the HOME environment variable or add a valid user for UID %u!"
 msgstr ""
 "严重错误：无法确定家目录！\n"
-"请为 UID 为 %u 的用户设置 HOME 环境变量，或者添加一个有效的用户!"
+"请为 UID 为 %u 的用户设置 HOME 环境变量，或者添加一个有效的用户！"
 
 #: rust/libnewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr "从 Newsbeuter 的 XDG 目录迁移配置和数据..."
+msgstr "从 Newsbeuter 的 XDG 目录迁移配置和数据......"
 
 #: rust/libnewsboat/src/configpaths.rs:202
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr "从 ~/.newsbeuter/ 迁移配置和数据..."
+msgstr "从 ~/.newsbeuter/ 迁移配置和数据......"
 
 #: rust/libnewsboat/src/configpaths.rs:214
 msgid "Aborting migration because mkdir on `%s' failed: %s"
@@ -1990,7 +1990,7 @@ msgstr "内部解析错误"
 
 #: rust/libnewsboat/src/fslock.rs:57
 msgid "Failed to open lock file '%s': %s"
-msgstr "打开锁文件 '%s' 失败: %s"
+msgstr "打开锁文件'%s'失败：%s"
 
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:80
 #: rust/libnewsboat/src/fslock.rs:112
@@ -1999,11 +1999,11 @@ msgstr "<存在无效 UTF-8 编码的文件名>"
 
 #: rust/libnewsboat/src/fslock.rs:77
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr "将进程 PID 写入锁文件 '%s' 失败: %s"
+msgstr "将进程 PID 写入锁文件'%s'失败：%s"
 
 #: rust/libnewsboat/src/fslock.rs:109
 msgid "Failed to lock '%s', already locked by process with PID %s"
-msgstr "为 '%s' 上锁失败，已经被进程(PID: %s) 上锁"
+msgstr "为'%s'上锁失败，已经被进程（PID: %s）上锁"
 
 #: rust/regex-rs/src/lib.rs:159 rust/regex-rs/src/lib.rs:164
 msgid "regcomp returned code %i"
