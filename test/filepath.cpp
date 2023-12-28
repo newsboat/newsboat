@@ -74,14 +74,25 @@ TEST_CASE("Can be copied", "[Filepath]")
 	}
 }
 
-TEST_CASE("Set extension", "[Filepath]")
+TEST_CASE("Can't set extension for an empty path", "[Filepath]")
 {
 	Filepath path;
 	REQUIRE_FALSE(path.set_extension("exe"));
+}
 
-	path.push("file");
-	REQUIRE(path.set_extension("exe"));
-	REQUIRE(path == "file.exe");
+TEST_CASE("Can set extension for non-empty path", "[Filepath]")
+{
+	Filepath path("file");
+
+	SECTION("extension is UTF-8") {
+		REQUIRE(path.set_extension("exe"));
+		REQUIRE(path == "file.exe");
+	}
+
+	SECTION("extension is not a valid UTF-8 string") {
+		REQUIRE(path.set_extension("\x80"));
+		REQUIRE(path == Filepath::from_locale_string("file.\x80"));
+	}
 }
 
 TEST_CASE("Can check if path is absolute", "[Filepath]")
