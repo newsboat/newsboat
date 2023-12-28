@@ -52,14 +52,26 @@ TEST_CASE("Can be extended with join()", "[Filepath]")
 TEST_CASE("Can be copied", "[Filepath]")
 {
 	auto original = Filepath::from_locale_string("/etc/hosts");
-	const auto copy = original;
-	REQUIRE(original == copy);
-	REQUIRE(original.display() == "/etc/hosts");
 
-	// Demonstrate that changing the original object doesn't modify the copy
-	original.push(Filepath::from_locale_string(" a bit more"));
-	REQUIRE(original.display() == "/etc/hosts/ a bit more");
-	REQUIRE(copy.display() == "/etc/hosts");
+	const auto check = [&original](const Filepath& copy) {
+		REQUIRE(original == copy);
+		REQUIRE(original.display() == "/etc/hosts");
+
+		// Demonstrate that changing the original object doesn't modify the copy
+		original.push(Filepath::from_locale_string(" a bit more"));
+		REQUIRE(original.display() == "/etc/hosts/ a bit more");
+		REQUIRE(copy.display() == "/etc/hosts");
+	};
+
+	SECTION("with copy constructor") {
+		const Filepath copy(original);
+		check(copy);
+	}
+
+	SECTION("with copy assignment operator") {
+		const Filepath copy = original;
+		check(copy);
+	}
 }
 
 TEST_CASE("Set extension", "[Filepath]")

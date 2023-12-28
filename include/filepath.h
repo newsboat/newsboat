@@ -41,20 +41,6 @@ public:
 	{
 	}
 
-	Filepath(const Filepath& filepath) :
-		rs_object(filepath::bridged::clone(*filepath.rs_object))
-	{
-	}
-
-	Filepath& operator=(const Filepath& filepath)
-	{
-		if (this == &filepath) {
-			return *this;
-		}
-		rs_object = filepath::bridged::clone(*filepath.rs_object);
-		return *this;
-	}
-
 	operator std::string() const
 	{
 		return to_locale_string();
@@ -78,6 +64,9 @@ public:
 
 	Filepath(Filepath&&) = default;
 	Filepath& operator=(Filepath&&) = default;
+
+	Filepath(const Filepath& filepath);
+	Filepath& operator=(const Filepath& filepath);
 
 	bool operator==(const Filepath&) const;
 	bool operator!=(const Filepath&) const;
