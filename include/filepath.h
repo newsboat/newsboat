@@ -76,6 +76,12 @@ public:
 	/// etc.
 	static Filepath from_locale_string(const std::string&);
 
+	Filepath(Filepath&&) = default;
+	Filepath& operator=(Filepath&&) = default;
+
+	bool operator==(const Filepath&) const;
+	bool operator!=(const Filepath&) const;
+
 	/// Returns the filepath as a string in locale encoding.
 	///
 	/// This is just bytes showed into `std::string`, no conversions are
@@ -106,12 +112,6 @@ public:
 
 	/// Returns the final component of the path, if there is one.
 	std::optional<Filepath> file_name() const;
-
-	Filepath(Filepath&&) = default;
-	Filepath& operator=(Filepath&&) = default;
-
-	bool operator==(const Filepath&) const;
-	bool operator!=(const Filepath&) const;
 
 private:
 	rust::Box<filepath::bridged::PathBuf> rs_object;
