@@ -1,4 +1,6 @@
 use cxx::{ExternType, type_id};
+use std::ffi::OsStr;
+use std::os::unix::ffi::OsStrExt;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
@@ -23,7 +25,7 @@ mod bridged {
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
-        fn starts_with(filepath: &PathBuf, str: &str) -> bool;
+        fn starts_with(filepath: &PathBuf, str: Vec<u8>) -> bool;
         fn file_name(filepath: &PathBuf) -> Vec<u8>;
 
         // These functions are actually in utils.rs, but I couldn't find a way to return
@@ -40,9 +42,6 @@ fn create_empty() -> Box<PathBuf> {
 }
 
 fn create(filepath: Vec<u8>) -> Box<PathBuf> {
-    use std::ffi::OsStr;
-    use std::os::unix::ffi::OsStrExt;
-
     let filepath: &OsStr = OsStrExt::from_bytes(&filepath);
     let filepath = std::path::Path::new(filepath);
     Box::new(PathBuf(filepath.to_path_buf()))
@@ -53,7 +52,6 @@ fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool {
 }
 
 fn into_bytes(filepath: &PathBuf) -> Vec<u8> {
-    use std::os::unix::ffi::OsStrExt;
     filepath.0.as_os_str().as_bytes().to_owned()
 }
 
@@ -94,17 +92,14 @@ fn is_absolute(filepath: &PathBuf) -> bool {
 }
 
 fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool {
-    use std::ffi::OsStr;
-    use std::os::unix::ffi::OsStrExt;
     filepath.0.set_extension(OsStr::from_bytes(&extension))
 }
 
-fn starts_with(filepath: &PathBuf, str: &str) -> bool {
-    filepath.0.starts_with(str)
+fn starts_with(filepath: &PathBuf, base: Vec<u8>) -> bool {
+    filepath.0.starts_with(OsStr::from_bytes(&base))
 }
 
 fn file_name(filepath: &PathBuf) -> Vec<u8> {
-    use std::os::unix::ffi::OsStrExt;
     if let Some(res) = filepath.0.file_name() {
         res.as_bytes().to_vec()
     } else {
