@@ -126,7 +126,7 @@ TEST_CASE("Can check if path is absolute", "[Filepath]")
 TEST_CASE("Can check if path starts with a given base path", "[Filepath]")
 {
 	SECTION("Empty path") {
-		Filepath path;
+		const Filepath path;
 
 		SECTION("Base path is empty") {
 			REQUIRE(path.starts_with(Filepath{}));
@@ -161,5 +161,29 @@ TEST_CASE("Can check if path starts with a given base path", "[Filepath]")
 			const auto base = Filepath::from_locale_string("/test\x81\x82/");
 			REQUIRE(path.starts_with(base));
 		}
+	}
+}
+
+TEST_CASE("Can extract the final component of the path (file or directory name)",
+	"[Filepath]")
+{
+	SECTION("Empty path has no final component") {
+		const Filepath path;
+		REQUIRE(path.file_name() == std::nullopt);
+	}
+
+	SECTION("The final component of a path with single level is the path itself") {
+		const auto path = Filepath::from_locale_string("hello");
+		REQUIRE(path.file_name().value() == path);
+	}
+
+	SECTION("Multi-level path") {
+		const auto path = Filepath::from_locale_string("/dev/pts/0");
+		REQUIRE(path.file_name().value() == Filepath::from_locale_string("0"));
+	}
+
+	SECTION("Final component is not a valid UTF-8 string") {
+		const auto path = Filepath::from_locale_string("/whatever/one\x80two");
+		REQUIRE(path.file_name().value() == Filepath::from_locale_string("one\x80two"));
 	}
 }
