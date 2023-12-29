@@ -99,8 +99,10 @@ public:
 	// \note `ext` is interpreted as bytes in locale encoding.
 	bool set_extension(const std::string& ext);
 
-	// Return `true` if Filepath start with `str`, `false` otherwise.
-	bool starts_with(const std::string& str) const;
+	// Return `true` if Filepath start with `base`, `false` otherwise.
+	//
+	// \note `ext` is interpreted as bytes in locale encoding.
+	bool starts_with(const std::string& base) const;
 
 	/// Returns the final component of the path, if there is one.
 	std::optional<Filepath> file_name() const;

@@ -85,9 +85,9 @@ bool Filepath::set_extension(const std::string& ext)
 	return filepath::bridged::set_extension(*rs_object, string_to_vec(ext));
 }
 
-bool Filepath::starts_with(const std::string& str) const
+bool Filepath::starts_with(const std::string& base) const
 {
-	return filepath::bridged::starts_with(*rs_object, str);
+	return filepath::bridged::starts_with(*rs_object, string_to_vec(base));
 }
 
 std::optional<Filepath> Filepath::file_name() const
