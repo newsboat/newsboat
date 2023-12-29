@@ -122,3 +122,44 @@ TEST_CASE("Can check if path is absolute", "[Filepath]")
 		REQUIRE_FALSE(path.is_absolute());
 	}
 }
+
+TEST_CASE("Can check if path starts with a given base path", "[Filepath]")
+{
+	SECTION("Empty path") {
+		Filepath path;
+
+		SECTION("Base path is empty") {
+			REQUIRE(path.starts_with(Filepath{}));
+		}
+
+		SECTION("Base path is not empty") {
+			REQUIRE_FALSE(path.starts_with(Filepath::from_locale_string("/etc")));
+		}
+	}
+
+	SECTION("Non-empty path that doesn't start with the base") {
+		const auto path = Filepath::from_locale_string("/etcetera");
+		const auto base = Filepath::from_locale_string("/etc");
+		REQUIRE_FALSE(path.starts_with(base));
+	}
+
+	SECTION("Non-empty path that starts with the base") {
+		const auto path = Filepath::from_locale_string("/usr/local/bin/newsboat");
+		const auto base = Filepath::from_locale_string("/usr/local");
+		REQUIRE(path.starts_with(base));
+	}
+
+	SECTION("Base is not a valid UTF-8 string") {
+		const auto path = Filepath::from_locale_string("/test\x81\x82/foobar");
+
+		SECTION("Path doesn't start with base") {
+			const auto base = Filepath::from_locale_string("baz\x80quux");
+			REQUIRE_FALSE(path.starts_with(base));
+		}
+
+		SECTION("Path starts with base") {
+			const auto base = Filepath::from_locale_string("/test\x81\x82/");
+			REQUIRE(path.starts_with(base));
+		}
+	}
+}
