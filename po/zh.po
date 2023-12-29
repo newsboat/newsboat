@@ -75,7 +75,7 @@ msgstr "压缩缓存"
 
 #: newsboat.cpp:73
 msgid "<command>..."
-msgstr "<命令>......"
+msgstr "<命令>..."
 
 #: newsboat.cpp:74
 msgid "execute list of commands"
@@ -237,7 +237,7 @@ msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
-"%N %V - 种子 '%T' 里的文章（%u 未读, 共有 %t 篇）%?F? 匹配过滤器 '%F'&? - %U"
+"%N %V - 种子 '%T' 里的文章（%u 未读, 共有 %t 篇）%?F?匹配过滤器'%F'&? - %U"
 
 #: src/configcontainer.cpp:296
 msgid "%N %V - Dialogs"
@@ -248,7 +248,7 @@ msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr ""
-"%N %V - %?F?种子&你的种子?（%u 篇未读, 共有 %t 篇）%?F? 匹配过滤器 '%F'&?%?T? "
+"%N %V - %?F?种子&你的种子?（%u 篇未读, 共有 %t 篇）%?F?匹配过滤器'%F'&?%?T? "
 "- 标签 '%T'&?"
 
 #: src/configcontainer.cpp:303
@@ -271,7 +271,7 @@ msgstr "%N %V - 文章 '%T'（%u 未读, 共有 %t 篇）"
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
-msgstr "%N %V - '%s' 的查询结果（%u 未读, 共有 %t）%?F? 匹配过滤器'%F'&?"
+msgstr "%N %V - '%s' 的查询结果（%u 未读, 共有 %t）%?F?匹配过滤器'%F'&?"
 
 #: src/configcontainer.cpp:322
 msgid "%N %V - Select Filter"
@@ -537,7 +537,7 @@ msgstr ""
 #: src/controller.cpp:719 src/itemutils.cpp:37
 #, c-format
 msgid "Failed to open queue file: %s."
-msgstr "当打开队列文件时出错：%s"
+msgstr "当打开队列文件时出错：%s。"
 
 #: src/controller.cpp:741
 #, c-format
@@ -1336,11 +1336,11 @@ msgstr "在浏览器中打开已选种子中的所有未读项并标记为已读
 
 #: src/keymap.cpp:148
 msgid "Open URL of article, feed, or entry in URL view"
-msgstr "在链接视图（URL view）中打开文章、种子或某一条目（entry）的链接。"
+msgstr "在链接视图（URL view）中打开文章、种子或某一条目（entry）的链接"
 
 #: src/keymap.cpp:155
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
-msgstr "在浏览器中打开文章、种子或某一条目（entry）的链接，非交互式。"
+msgstr "在浏览器中打开文章、种子或某一条目（entry）的链接，非交互式"
 
 #: src/keymap.cpp:162
 msgid "Open help dialog"
