@@ -124,6 +124,11 @@ void Reloader::reload(unsigned int pos,
 			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
 			sm.stopover("start replacing feed");
 			if (newfeed != nullptr) {
+				for (const auto& i : oldfeed->items()) {
+					if (i->manually_fetched()) {
+						newfeed->get_item_by_guid(i->guid())->download_full_page(cfg);
+					}
+				}
 				ctrl->replace_feed(
 					oldfeed, newfeed, pos, unattended);
 				if (newfeed->total_item_count() == 0) {

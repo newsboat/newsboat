@@ -24,6 +24,7 @@ RssItem::RssItem(Cache* c)
 	, enqueued_(false)
 	, deleted_(0)
 	, override_unread_(false)
+	, manually_fetched_(false)
 {
 }
 
@@ -287,6 +288,8 @@ utils::CurlError RssItem::download_full_page(ConfigContainer& cfg)
 	}
 
 	this->set_description(content.value(), content_mime_type);
+	this->set_manually_fetched(true);
+	ch->set_manually_fetched(true, this->guid());
 	return {CURLE_OK, ""};
 }
 

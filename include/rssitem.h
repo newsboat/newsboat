@@ -178,6 +178,16 @@ public:
 
 	utils::CurlError download_full_page(ConfigContainer& cfg);
 
+	bool manually_fetched() const
+	{
+		return manually_fetched_;
+	}
+
+	void set_manually_fetched(bool b)
+	{
+		manually_fetched_ = b;
+	}
+
 private:
 	std::string title_;
 	std::string link_;
@@ -200,6 +210,7 @@ private:
 	bool enqueued_;
 	bool deleted_;
 	bool override_unread_;
+	bool manually_fetched_;
 
 	mutable std::mutex description_mutex;
 	nonstd::optional<Description> description_;

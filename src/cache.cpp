@@ -173,7 +173,7 @@ static int rssitem_callback(void* myfeed, int argc, char** argv,
 {
 	std::shared_ptr<RssFeed>* feed =
 		static_cast<std::shared_ptr<RssFeed>*>(myfeed);
-	assert(argc == 15);
+	assert(argc == 16);
 	std::shared_ptr<RssItem> item(new RssItem(nullptr));
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
@@ -197,6 +197,7 @@ static int rssitem_callback(void* myfeed, int argc, char** argv,
 	item->set_enqueued((std::string("1") == (argv[12] ? argv[12] : "")));
 	item->set_flags(argv[13] ? argv[13] : "");
 	item->set_base(argv[14] ? argv[14] : "");
+	item->set_manually_fetched((std::string("1") == argv[15]));
 
 	//(*feed)->items().push_back(item);
 	(*feed)->add_item(item);
@@ -400,6 +401,12 @@ static const schema_patches schemaPatches{
 			"ALTER TABLE rss_item ADD COLUMN enclosure_description_mime_type VARCHAR(128) NOT NULL DEFAULT \"\";",
 		}
 	},
+	{	{2, 34},
+		{
+			"UPDATE metadata SET db_schema_version_major = 2, db_schema_version_minor = 34;",
+			"ALTER TABLE rss_item ADD COLUMN manually_fetched BOOLEAN NOT NULL DEFAULT 0;"
+		}
+	}
 
 	// Note: schema changes should use the version number of the release that introduced them.
 };
@@ -608,7 +615,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 			"SELECT guid, title, author, url, pubDate, length(content), "
 			"unread, "
 			"feedurl, enclosure_url, enclosure_type, enclosure_description, enclosure_description_mime_type, "
-			"enqueued, flags, base "
+			"enqueued, flags, base, manually_fetched "
 			"FROM rss_item "
 			"WHERE feedurl = '%q' "
 			"AND deleted = 0 "
@@ -844,6 +851,15 @@ std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFee
 	// PURPOSE! It's missing so that no database operation can occur
 	// after the cache cleanup! mtx->unlock();
 	return unreachable_feeds;
+}
+
+void Cache::set_manually_fetched(bool b, const std::string& guid)
+{
+	std::lock_guard<std::recursive_mutex> lock(mtx);
+	std::string str =
+		prepare_query("UPDATE rss_item SET manually_fetched = %u WHERE guid = '%q';", b ? 1 : 0,
+			guid);
+	run_sql(str);
 }
 
 void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,

@@ -81,6 +81,7 @@ public:
 	std::vector<std::string> get_read_item_guids();
 	void fetch_descriptions(RssFeed* feed);
 	std::string fetch_description(const RssItem& item);
+	void set_manually_fetched(bool b, const std::string& guid);
 
 private:
 	SchemaVersion get_schema_version();
