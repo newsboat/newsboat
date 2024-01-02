@@ -217,9 +217,9 @@ public:
 private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
-	std::map<std::string, Operation> get_internal_operations() const;
+	std::map<KeyCombination, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
-	std::map<std::string, std::map<std::string, Operation>> keymap_;
+	std::map<std::string, std::map<KeyCombination, Operation>> keymap_;
 	std::map<KeyCombination, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };

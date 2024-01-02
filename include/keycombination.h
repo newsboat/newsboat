@@ -8,7 +8,8 @@ namespace newsboat {
 
 class KeyCombination {
 public:
-	KeyCombination(const std::string& key, bool shift, bool control, bool alt);
+	explicit KeyCombination(const std::string& key, bool shift = false, bool control = false,
+		bool alt = false);
 
 	static KeyCombination from_bindkey(const std::string& input);
 	std::string to_bindkey_string() const;
