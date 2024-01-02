@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "keycombination.h"
 
 // in configuration: bind-key <key> <operation>
 
@@ -204,7 +205,7 @@ public:
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
-	const std::map<std::string, MacroBinding>& get_macro_descriptions();
+	const std::map<KeyCombination, MacroBinding>& get_macro_descriptions();
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
@@ -219,7 +220,7 @@ private:
 	std::map<std::string, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
 	std::map<std::string, std::map<std::string, Operation>> keymap_;
-	std::map<std::string, MacroBinding> macros_;
+	std::map<KeyCombination, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };
 

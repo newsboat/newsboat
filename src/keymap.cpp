@@ -550,7 +550,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 	return descs;
 }
 
-const std::map<std::string, MacroBinding>& KeyMap::get_macro_descriptions()
+const std::map<KeyCombination, MacroBinding>& KeyMap::get_macro_descriptions()
 {
 	return macros_;
 }
@@ -656,7 +656,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 	}
 	for (const auto& macro : macros_) {
 		std::string configline = "macro ";
-		configline.append(macro.first);
+		configline.append(macro.first.to_bindkey_string());
 		configline.append(" ");
 		for (unsigned int i = 0; i < macro.second.cmds.size(); ++i) {
 			const auto& cmd = macro.second.cmds[i];
@@ -750,7 +750,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		const std::string macrokey = token.value();
+		const auto macrokey = KeyCombination::from_bindkey(token.value());
 
 		macros_[macrokey] = {cmds, description};
 	} else if (action == "run-on-startup") {
@@ -820,8 +820,9 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 
 std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
 {
-	if (macros_.count(key) >= 1) {
-		return macros_.at(key).cmds;
+	const auto key_combination = KeyCombination::from_bindkey(key);
+	if (macros_.count(key_combination) >= 1) {
+		return macros_.at(key_combination).cmds;
 	}
 	return {};
 }
