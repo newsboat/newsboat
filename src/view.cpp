@@ -217,15 +217,15 @@ int View::run()
 
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 
+		const auto key_combination = KeyCombination::from_bindkey(event);
 		if (have_macroprefix) {
 			have_macroprefix = false;
 			status_line.show_message("");
 			LOG(Level::DEBUG,
 				"View::run: running macro `%s'",
 				event);
-			run_commands(keys->get_macro(event));
+			run_commands(keys->get_macro(key_combination));
 		} else {
-			const auto key_combination = KeyCombination::from_bindkey(event);
 			const Operation op = keys->get_operation(key_combination, fa->id());
 
 			LOG(Level::DEBUG,

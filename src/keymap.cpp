@@ -816,9 +816,8 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 	return keys;
 }
 
-std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
+std::vector<MacroCmd> KeyMap::get_macro(const KeyCombination& key_combination)
 {
-	const auto key_combination = KeyCombination::from_bindkey(key);
 	if (macros_.count(key_combination) >= 1) {
 		return macros_.at(key_combination).cmds;
 	}

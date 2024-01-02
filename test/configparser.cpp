@@ -255,14 +255,14 @@ TEST_CASE("Concatenates lines that end with a backslash", "[ConfigParser]")
 	KeyMap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", k);
 	REQUIRE_NOTHROW(cfgparser.parse_file("data/config-multi-line"));
-	auto p_macro = k.get_macro("p");
+	auto p_macro = k.get_macro(KeyCombination("p"));
 	REQUIRE(!p_macro.empty());
 	REQUIRE(p_macro[0].op == newsboat::OP_OPEN);
 	REQUIRE(p_macro[1].op == newsboat::OP_RELOAD);
 	REQUIRE(p_macro[2].op == newsboat::OP_QUIT);
 	REQUIRE(p_macro[3].op == newsboat::OP_QUIT);
 
-	auto contrived = k.get_macro("j");
+	auto contrived = k.get_macro(KeyCombination("j"));
 	REQUIRE(!contrived.empty());
 	REQUIRE(contrived[0].op == newsboat::OP_QUIT);
 	REQUIRE(contrived[1].op == newsboat::OP_QUIT);

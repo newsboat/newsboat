@@ -198,7 +198,7 @@ public:
 	Operation get_opcode(const std::string& opstr);
 	Operation get_operation(const KeyCombination& key_combination,
 		const std::string& context);
-	std::vector<MacroCmd> get_macro(const std::string& key);
+	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
 	char get_key(const std::string& keycode);
 	std::vector<std::string> get_keys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
