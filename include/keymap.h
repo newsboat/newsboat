@@ -196,7 +196,7 @@ public:
 	void unset_key(const std::string& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
 	Operation get_opcode(const std::string& opstr);
-	Operation get_operation(const std::string& keycode,
+	Operation get_operation(const KeyCombination& key_combination,
 		const std::string& context);
 	std::vector<MacroCmd> get_macro(const std::string& key);
 	char get_key(const std::string& keycode);

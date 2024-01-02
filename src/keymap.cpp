@@ -624,20 +624,14 @@ char KeyMap::get_key(const std::string& keycode)
 	return 0;
 }
 
-Operation KeyMap::get_operation(const std::string& keycode,
+Operation KeyMap::get_operation(const KeyCombination& key_combination,
 	const std::string& context)
 {
 	std::string key;
 	LOG(Level::DEBUG,
 		"KeyMap::get_operation: keycode = %s context = %s",
-		keycode,
+		key_combination.to_bindkey_string(),
 		context);
-	const auto key_combination = KeyCombination::from_bindkey(keycode);
-	if (keycode.length() > 0) {
-		key = keycode;
-	} else {
-		key = "NIL";
-	}
 	return keymap_[context][key_combination];
 }
 

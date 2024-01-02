@@ -125,7 +125,8 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			continue;
 		}
 
-		Operation op = keys.get_operation(event, "podboat");
+		const auto key_combination = KeyCombination::from_bindkey(event);
+		Operation op = keys.get_operation(key_combination, "podboat");
 
 		if (msg_line_dllist_form.get_text().length() > 0) {
 			msg_line_dllist_form.set_text("");
@@ -332,7 +333,8 @@ void PbView::run_help()
 			continue;
 		}
 
-		Operation op = keys.get_operation(event, "help");
+		const auto key_combination = KeyCombination::from_bindkey(event);
+		Operation op = keys.get_operation(key_combination, "help");
 
 		switch (op) {
 		case OP_SK_UP:

@@ -7,6 +7,7 @@
 #include "3rd-party/catch.hpp"
 
 #include "configexception.h"
+#include "keycombination.h"
 #include "keymap.h"
 #include "test_helpers/envvar.h"
 #include "test_helpers/tempfile.h"
@@ -182,7 +183,7 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		KeyMap keys(KM_NEWSBOAT);
 		cfgparser.register_handler("bind-key", keys);
 		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-space-backticks"));
-		REQUIRE(keys.get_operation("s", "feedlist") == OP_SORT);
+		REQUIRE(keys.get_operation(KeyCombination("s"), "feedlist") == OP_SORT);
 	}
 
 	SECTION("Unbalanced backtick does *not* start a command") {

@@ -6,6 +6,7 @@
 #include "3rd-party/catch.hpp"
 
 #include "confighandlerexception.h"
+#include "keycombination.h"
 
 using namespace newsboat;
 
@@ -18,14 +19,14 @@ TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation("u", "article") == OP_SHOWURLS);
-	REQUIRE(k.get_operation("X", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+	REQUIRE(k.get_operation(KeyCombination("u"), "article") == OP_SHOWURLS);
+	REQUIRE(k.get_operation(KeyCombination("x", true), "feedlist") == OP_NIL);
+	REQUIRE(k.get_operation(KeyCombination(""), "feedlist") == OP_NIL);
+	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 
 	SECTION("Returns OP_NIL after unset_key()") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
+		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
 	}
 }
 
@@ -33,16 +34,16 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
+		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
 
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
-			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+			REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 		}
 	}
