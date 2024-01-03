@@ -98,7 +98,8 @@ std::vector<TaggedFeedUrl> FeedbinApi::get_subscribed_urls() {
   return feeds;
 }
 
-bool FeedbinApi::mark_entries_read(const std::vector<std::string> &ids, bool read) {
+bool FeedbinApi::mark_entries_read(const std::vector<std::string> &ids,
+                                   bool read) {
   CurlHandle handle;
   long response_code = 0;
   HTTPMethod method = read ? HTTPMethod::DELETE : HTTPMethod::POST;
@@ -113,14 +114,25 @@ bool FeedbinApi::mark_entries_read(const std::vector<std::string> &ids, bool rea
   return response_code == 200;
 }
 
-bool FeedbinApi::mark_all_read(const std::string &feed_id) {
+bool FeedbinApi::mark_all_read(const std::string &combined_feed_url) {
+  std::string feed_id;
+  const std::string::size_type pound = combined_feed_url.find_first_of('#');
+  if (pound != std::string::npos) {
+    feed_id = combined_feed_url.substr(pound + 1);
+  } else {
+    LOG(Level::ERROR, "FeedbinApi::mark_all_read: Failed to "
+                      "get feed ID from URL.");
+    return false;
+  }
+
   const std::string feed_entries_query =
       strprintf::fmt("/v2/feeds/%s/entries.json", feed_id);
   const json entries = run_op(feed_entries_query, json());
 
   std::vector<std::string> entry_ids;
   for (const auto &entry : entries) {
-    entry_ids.push_back(entry["id"]);
+    uint64_t entry_id = entry["id"];
+    entry_ids.push_back(std::to_string(entry_id));
   }
 
   return mark_entries_read(entry_ids, true);
