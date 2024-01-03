@@ -89,7 +89,9 @@ std::vector<TaggedFeedUrl> FeedbinApi::get_subscribed_urls()
 
 		std::vector<std::string> tags;
 		for (const auto& tagging : taggings) {
-			if (tagging["feed_id"] != feed_id) continue;
+			if (tagging["feed_id"] != feed_id) {
+				continue;
+			}
 
 			const std::string tag_name = tagging["name"];
 			tags.push_back(tagging["name"]);
@@ -101,7 +103,8 @@ std::vector<TaggedFeedUrl> FeedbinApi::get_subscribed_urls()
 	return feeds;
 }
 
-bool FeedbinApi::mark_entries_read(const std::vector<int>& ids, bool read) {
+bool FeedbinApi::mark_entries_read(const std::vector<int>& ids, bool read)
+{
 	CurlHandle handle;
 	long response_code = 0;
 	HTTPMethod method = read ? HTTPMethod::DELETE : HTTPMethod::POST;
