@@ -23,8 +23,7 @@ KeyCombination KeyCombination::from_bindkey(const std::string& input)
 	if (key.length() == 1 && std::isupper(key[0])) {
 		shift = true;
 		key = std::tolower(key[0]);
-	}
-	if (key.length() == 2 && key[0] == '^') {
+	} else if (key.length() == 2 && key[0] == '^') {
 		control = true;
 		key = std::tolower(key[1]);
 	}
@@ -33,14 +32,14 @@ KeyCombination KeyCombination::from_bindkey(const std::string& input)
 
 std::string KeyCombination::to_bindkey_string() const
 {
-	std::string output = key;
-	if (control && output.length() == 1) {
-		output = std::string("^") + static_cast<char>(std::toupper(output[0]));
+	if (control && key.length() == 1) {
+		return std::string("^") + static_cast<char>(std::toupper(key[0]));
 	}
-	if (shift && output.length() == 1) {
-		output = std::toupper(output[0]);
+	else if (shift && key.length() == 1) {
+		return std::string{static_cast<char>(std::toupper(key[0]))};
+	} else {
+		return key;
 	}
-	return output;
 }
 
 bool KeyCombination::operator==(const KeyCombination& other) const
@@ -76,7 +75,5 @@ bool KeyCombination::has_alt() const
 {
 	return alt;
 }
-
-
 
 } // namespace newsboat
