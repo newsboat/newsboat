@@ -39,7 +39,7 @@ private:
 		const HTTPMethod method = HTTPMethod::GET);
 	bool star_article(const std::string& guid, bool star);
 	bool share_article(const std::string& guid, bool share);
-	bool mark_entries_read(const std::vector<int>& ids, bool read);
+	bool mark_entries_read(const std::vector<std::string>& ids, bool read);
 	TaggedFeedUrl feed_from_json(const nlohmann::json& jfeed,
 		const std::vector<std::string>& tags);
 	std::string auth_info;
