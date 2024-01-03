@@ -5,7 +5,8 @@
 
 namespace newsboat {
 
-KeyCombination::KeyCombination(const std::string& key, bool shift, bool control, bool alt)
+KeyCombination::KeyCombination(const std::string& key, ShiftState shift,
+	ControlState control, AltState alt)
 	: key(key)
 	, shift(shift)
 	, control(control)
@@ -16,15 +17,15 @@ KeyCombination::KeyCombination(const std::string& key, bool shift, bool control,
 KeyCombination KeyCombination::from_bindkey(const std::string& input)
 {
 	std::string key = input;
-	bool shift = false;
-	bool control = false;
-	bool alt = false;
+	ShiftState shift = ShiftState::NoShift;
+	ControlState control = ControlState::NoControl;
+	AltState alt = AltState::NoAlt;
 
 	if (key.length() == 1 && std::isupper(key[0])) {
-		shift = true;
+		shift = ShiftState::Shift;
 		key = std::tolower(key[0]);
 	} else if (key.length() == 2 && key[0] == '^') {
-		control = true;
+		control = ControlState::Control;
 		key = std::tolower(key[1]);
 	}
 	return KeyCombination(key, shift, control, alt);
@@ -32,10 +33,9 @@ KeyCombination KeyCombination::from_bindkey(const std::string& input)
 
 std::string KeyCombination::to_bindkey_string() const
 {
-	if (control && key.length() == 1) {
+	if (control == ControlState::Control && key.length() == 1) {
 		return std::string("^") + static_cast<char>(std::toupper(key[0]));
-	}
-	else if (shift && key.length() == 1) {
+	} else if (shift == ShiftState::Shift && key.length() == 1) {
 		return std::string{static_cast<char>(std::toupper(key[0]))};
 	} else {
 		return key;
@@ -63,17 +63,17 @@ std::string KeyCombination::get_key() const
 
 bool KeyCombination::has_shift() const
 {
-	return shift;
+	return shift == ShiftState::Shift;
 }
 
 bool KeyCombination::has_control() const
 {
-	return control;
+	return control == ControlState::Control;
 }
 
 bool KeyCombination::has_alt() const
 {
-	return alt;
+	return alt == AltState::Alt;
 }
 
 } // namespace newsboat

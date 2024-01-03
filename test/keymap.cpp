@@ -20,7 +20,7 @@ TEST_CASE("get_operation()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	REQUIRE(k.get_operation(KeyCombination("u"), "article") == OP_SHOWURLS);
-	REQUIRE(k.get_operation(KeyCombination("x", true), "feedlist") == OP_NIL);
+	REQUIRE(k.get_operation(KeyCombination("x", ShiftState::Shift), "feedlist") == OP_NIL);
 	REQUIRE(k.get_operation(KeyCombination(""), "feedlist") == OP_NIL);
 	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 

@@ -6,10 +6,27 @@
 
 namespace newsboat {
 
+enum class ShiftState {
+	Shift,
+	NoShift,
+};
+
+enum class ControlState {
+	Control,
+	NoControl,
+};
+
+enum class AltState {
+	Alt,
+	NoAlt,
+};
+
 class KeyCombination {
 public:
-	explicit KeyCombination(const std::string& key, bool shift = false, bool control = false,
-		bool alt = false);
+	explicit KeyCombination(const std::string& key,
+		ShiftState shift = ShiftState::NoShift,
+		ControlState control = ControlState::NoControl,
+		AltState alt = AltState::NoAlt);
 
 	static KeyCombination from_bindkey(const std::string& input);
 	std::string to_bindkey_string() const;
@@ -24,9 +41,9 @@ public:
 
 private:
 	std::string key;
-	bool shift;
-	bool control;
-	bool alt;
+	ShiftState shift;
+	ControlState control;
+	AltState alt;
 };
 
 } // namespace newsboat

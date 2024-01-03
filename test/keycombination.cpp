@@ -28,51 +28,55 @@ TEST_CASE("KeyCombination parses bind-key key combinations", "[KeyCombination]")
 
 TEST_CASE("KeyCombination can output bind-key styled strings", "[KeyCombination]")
 {
-	const auto check = [](const std::string& expected, const std::string& key, bool shift,
-	bool control) {
-		REQUIRE(KeyCombination(key, shift, control, false).to_bindkey_string() == expected);
+	const auto check = [](const std::string& expected, const std::string& key,
+	ShiftState shift, ControlState control) {
+		REQUIRE(KeyCombination(key, shift, control,
+				AltState::NoAlt).to_bindkey_string() == expected);
 	};
 
-	check("a", "a", false, false);
-	check("A", "a", true, false);
-	check("^A", "a", false, true);
-	check("^A", "a", true, true);
+	check("a", "a", ShiftState::NoShift, ControlState::NoControl);
+	check("A", "a", ShiftState::Shift, ControlState::NoControl);
+	check("^A", "a", ShiftState::NoShift, ControlState::Control);
+	check("^A", "a", ShiftState::Shift, ControlState::Control);
 
-	check("ENTER", "ENTER", false, false);
+	check("ENTER", "ENTER", ShiftState::NoShift, ControlState::NoControl);
 }
 
 TEST_CASE("KeyCombination equality operator", "[KeyCombination]")
 {
 	SECTION("KeyCombinations equal") {
 		REQUIRE(KeyCombination::from_bindkey("a")
-			== KeyCombination("a", false, false, false));
-		REQUIRE(KeyCombination("a", false, false, false)
-			== KeyCombination("a", false, false, false));
-		REQUIRE(KeyCombination("a", true, true, true)
-			== KeyCombination("a", true, true, true));
+			== KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
+		REQUIRE(KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt)
+			== KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
+		REQUIRE(KeyCombination("a", ShiftState::Shift, ControlState::Control, AltState::Alt)
+			== KeyCombination("a", ShiftState::Shift, ControlState::Control, AltState::Alt));
 	}
 
 	SECTION("KeyCombinations differ") {
 		REQUIRE_FALSE(KeyCombination::from_bindkey("a")
-			== KeyCombination("a", true, false, false));
+			== KeyCombination("a", ShiftState::Shift, ControlState::NoControl, AltState::NoAlt));
 		REQUIRE_FALSE(KeyCombination::from_bindkey("a")
-			== KeyCombination("a", false, true, false));
+			== KeyCombination("a", ShiftState::NoShift, ControlState::Control, AltState::NoAlt));
 		REQUIRE_FALSE(KeyCombination::from_bindkey("a")
-			== KeyCombination("a", false, false, true));
+			== KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::Alt));
 
 		REQUIRE_FALSE(KeyCombination::from_bindkey("^A")
-			== KeyCombination("a", true, true, false));
+			== KeyCombination("a", ShiftState::Shift, ControlState::Control, AltState::NoAlt));
 		REQUIRE_FALSE(KeyCombination::from_bindkey("^A")
-			== KeyCombination("a", false, false, false));
+			== KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
 		REQUIRE_FALSE(KeyCombination::from_bindkey("^A")
-			== KeyCombination("a", false, true, true));
+			== KeyCombination("a", ShiftState::NoShift, ControlState::Control, AltState::Alt));
 
-		REQUIRE_FALSE(KeyCombination("a", false, false, false)
-			== KeyCombination("a", true, false, false));
-		REQUIRE_FALSE(KeyCombination("a", false, false, false)
-			== KeyCombination("a", false, true, false));
-		REQUIRE_FALSE(KeyCombination("a", false, false, false)
-			== KeyCombination("a", false, false, true));
+		REQUIRE_FALSE(
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt)
+			== KeyCombination("a", ShiftState::Shift, ControlState::NoControl, AltState::NoAlt));
+		REQUIRE_FALSE(
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt)
+			== KeyCombination("a", ShiftState::NoShift, ControlState::Control, AltState::NoAlt));
+		REQUIRE_FALSE(
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt)
+			== KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::Alt));
 	}
 }
 
@@ -85,23 +89,25 @@ TEST_CASE("KeyCombination less-than operator", "[KeyCombination]")
 		};
 
 		check_smaller(
-			KeyCombination("a", false, false, false),
-			KeyCombination("b", false, false, false));
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt),
+			KeyCombination("b", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
 		check_smaller(
-			KeyCombination("a", false, false, false),
-			KeyCombination("a", true, false, false));
+			KeyCombination("a", ShiftState::Shift, ControlState::NoControl, AltState::NoAlt),
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
 		check_smaller(
-			KeyCombination("a", false, false, false),
-			KeyCombination("a", false, true, false));
+			KeyCombination("a", ShiftState::NoShift, ControlState::Control, AltState::NoAlt),
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
 		check_smaller(
-			KeyCombination("a", false, false, false),
-			KeyCombination("a", false, false, true));
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::Alt),
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
 	}
 
 	SECTION("Equal values") {
-		REQUIRE_FALSE(KeyCombination("a", false, false, false)
-			< KeyCombination("a", false, false, false));
-		REQUIRE_FALSE(KeyCombination("ENTER", true, true, true)
-			< KeyCombination("ENTER", true, true, true));
+		REQUIRE_FALSE(
+			KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt)
+			< KeyCombination("a", ShiftState::NoShift, ControlState::NoControl, AltState::NoAlt));
+		REQUIRE_FALSE(
+			KeyCombination("ENTER", ShiftState::Shift, ControlState::Control, AltState::Alt)
+			< KeyCombination("ENTER", ShiftState::Shift, ControlState::Control, AltState::Alt));
 	}
 }
