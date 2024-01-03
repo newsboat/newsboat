@@ -8,6 +8,8 @@ src/dialogsformaction.cpp
 src/dirbrowserformaction.cpp
 src/emptyformaction.cpp
 src/feedcontainer.cpp
+src/feedbinapi.cpp
+src/feedbinurlreader.cpp
 src/feedhqapi.cpp
 src/feedhqurlreader.cpp
 src/feedlistformaction.cpp

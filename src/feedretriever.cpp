@@ -6,6 +6,7 @@
 #include "config.h"
 #include "configcontainer.h"
 #include "curlhandle.h"
+#include "feedbinapi.h"
 #include "freshrssapi.h"
 #include "logger.h"
 #include "minifluxapi.h"
@@ -53,6 +54,15 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 		return fetch_ocnews(uri);
 	} else if (urls_source == "miniflux") {
 		return fetch_miniflux(uri);
+	} else if (urls_source == "feedbin") {
+		const std::string::size_type pound = uri.find_first_of('#');
+		if (pound != std::string::npos) {
+			const std::string feed_id = uri.substr(pound + 1);
+			return fetch_feedbin(feed_id);
+		} else {
+			return {};
+		}
+		return fetch_feedbin(uri);
 	} else if (urls_source == "freshrss") {
 		return fetch_freshrss(uri);
 	} else if (utils::is_http_url(uri)) {
@@ -132,6 +142,25 @@ rsspp::Feed FeedRetriever::fetch_miniflux(const std::string& feed_id)
 	}
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_miniflux: f.items.size = %" PRIu64,
+		static_cast<uint64_t>(f.items.size()));
+
+	return f;
+}
+
+rsspp::Feed FeedRetriever::fetch_feedbin(const std::string& feed_id)
+{
+	rsspp::Feed f;
+	FeedbinApi* fapi = dynamic_cast<FeedbinApi*>(api);
+	if (fapi) {
+		if (easyhandle) {
+			f = fapi->fetch_feed(feed_id, *easyhandle);
+		} else {
+			f = fapi->fetch_feed(feed_id);
+		}
+
+	}
+	LOG(Level::INFO,
+		"FeedRetriever::fetch_feedbin: f.items.size = %" PRIu64,
 		static_cast<uint64_t>(f.items.size()));
 
 	return f;

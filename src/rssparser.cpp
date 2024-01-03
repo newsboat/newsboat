@@ -195,6 +195,7 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed,
 				upstream_feed.rss_version == rsspp::Feed::NEWSBLUR_JSON ||
 				upstream_feed.rss_version == rsspp::Feed::OCNEWS_JSON ||
 				upstream_feed.rss_version == rsspp::Feed::MINIFLUX_JSON ||
+				upstream_feed.rss_version == rsspp::Feed::FEEDBIN_JSON ||
 				upstream_feed.rss_version == rsspp::Feed::FRESHRSS_JSON) &&
 			item.labels.size() > 0) {
 			auto start = item.labels.begin();
@@ -246,6 +247,15 @@ void RssParser::fill_feed_items(std::shared_ptr<RssFeed> feed,
 				x->set_override_unread(true);
 			}
 			if (std::find(start, finish, "miniflux:read") != finish) {
+				x->set_unread_nowrite(false);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "feedbin:unread") !=
+				finish) {
+				x->set_unread_nowrite(true);
+				x->set_override_unread(true);
+			}
+			if (std::find(start, finish, "feedbin:read") != finish) {
 				x->set_unread_nowrite(false);
 				x->set_override_unread(true);
 			}

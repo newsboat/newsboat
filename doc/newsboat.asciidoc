@@ -393,6 +393,20 @@ other readers like FeedHQ. Thus, one can leverage Newsboat's support for FeedHQ
 See <<_passwords_for_external_apis>> for other, more secure ways to store your
 password.
 
+=== Feedbin
+
+_Supported since Newsboat TODO_.
+
+https://feedbin.com[Feedbin] is a web-based RSS reader.
+To use it, point Newsboat to your Feedbin account:
+
+	urls-source "feedbin"
+	feedbin-login "myusername"
+	feedbin-password "mypassword"
+
+See <<_passwords_for_external_apis>> for other, more secure ways to store your
+password.
+
 === FreshRSS
 
 _Supported since Newsboat 2.24_.

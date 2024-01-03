@@ -85,6 +85,8 @@ ConfigContainer::ConfigContainer()
 	{
 		"feedhq-url",
 		ConfigData("https://feedhq.org/", ConfigDataType::STR)},
+	{"feedbin-login", ConfigData("", ConfigDataType::STR)},
+	{"feedbin-password", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-login", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-min-items", ConfigData("20", ConfigDataType::INT)},
@@ -279,6 +281,7 @@ ConfigContainer::ConfigContainer()
 			"ttrss",
 			"newsblur",
 			"feedhq",
+			"feedbin",
 			"freshrss",
 			"ocnews",
 			"miniflux",
