@@ -12,6 +12,7 @@
 #include "utils.h"
 
 #define FEEDBIN_AUTHENTICATION_PATH "/v2/authentication.json"
+#define FEEDBIN_STARRED_ENTRIES_PATH "/v2/starred_entries.json"
 #define FEEDBIN_TAGGINGS_PATH "/v2/taggings.json"
 #define FEEDBIN_SUBSCRIPTIONS_PATH "/v2/subscriptions.json"
 #define FEEDBIN_UNREAD_ENTRIES_PATH "/v2/unread_entries.json"
@@ -21,7 +22,7 @@ using json = nlohmann::json;
 namespace newsboat {
 
 FeedbinApi::FeedbinApi(ConfigContainer &c) : RemoteApi(c) {
-	server = cfg.get_configvalue("feedbin-url");
+  server = cfg.get_configvalue("feedbin-url");
   const std::string http_auth_method = cfg.get_configvalue("http-auth-method");
   if (http_auth_method == "any") {
     // default to basic HTTP auth to prevent Newsboat from doubling up on HTTP
@@ -144,12 +145,6 @@ bool FeedbinApi::mark_article_read(const std::string &guid, bool read) {
   return mark_entries_read(entry_ids, read);
 }
 
-bool FeedbinApi::update_article_flags(const std::string & /* oldflags */,
-                                      const std::string & /* newflags */,
-                                      const std::string & /* guid */) {
-  return false;
-}
-
 rsspp::Feed FeedbinApi::fetch_feed(const std::string &id) {
   CurlHandle handle;
   return fetch_feed(id, handle);
@@ -227,8 +222,44 @@ rsspp::Feed FeedbinApi::fetch_feed(const std::string &id,
   return feed;
 }
 
+bool FeedbinApi::update_article_flags(const std::string &oldflags,
+                                      const std::string &newflags,
+                                      const std::string &guid) {
+  std::string star_flag = cfg.get_configvalue("feedbin-flag-star");
+  bool success = true;
+
+  if (star_flag.length() > 0) {
+    update_flag(oldflags, newflags, star_flag[0],
+                [&](bool added) { success = star_article(guid, added); });
+  }
+
+  return success;
+}
+
 void FeedbinApi::add_custom_headers(curl_slist ** /* custom_headers */) {
   // nothing required
+}
+
+bool FeedbinApi::star_article(const std::string &article_id, bool star) {
+  std::vector<std::string> ids;
+  ids.push_back(article_id);
+  json body;
+  body["starred_entries"] = ids;
+
+  CurlHandle handle;
+
+  HTTPMethod method = star ? HTTPMethod::POST : HTTPMethod::DELETE;
+
+  curl_slist *headers = NULL;
+  headers = curl_slist_append(headers, "Content-Type: application/json");
+  curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, headers);
+
+  run_op(FEEDBIN_STARRED_ENTRIES_PATH, body, handle, method);
+
+  long response_code = 0;
+  curl_easy_getinfo(handle.ptr(), CURLINFO_RESPONSE_CODE, &response_code);
+
+  return response_code == 200;
 }
 
 json FeedbinApi::run_op(const std::string &path, const json &args,

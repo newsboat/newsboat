@@ -90,6 +90,7 @@ ConfigContainer::ConfigContainer()
 	{"feedbin-password", ConfigData("", ConfigDataType::STR)},
 	{"feedbin-passwordfile", ConfigData("", ConfigDataType::PATH)},
 	{"feedbin-passwordeval", ConfigData("", ConfigDataType::STR)},
+	{"feedbin-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-flag-star", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-login", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-min-items", ConfigData("20", ConfigDataType::INT)},

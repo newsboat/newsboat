@@ -317,6 +317,7 @@ TEST_CASE(
 	const std::string key2("feed");
 	const std::unordered_set<std::string> expected2{
 		"feed-sort-order",
+		"feedbin-flag-star",
 		"feedbin-url",
 		"feedbin-login",
 		"feedbin-password",
