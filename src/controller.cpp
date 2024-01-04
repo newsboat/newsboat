@@ -303,7 +303,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = new FeedbinApi(cfg);
-		urlcfg = new FeedbinUrlReader(&cfg, configpaths.url_file(), api);
+		urlcfg = new FeedbinUrlReader(configpaths.url_file(), api);
 	} else if (type == "freshrss") {
 		const auto freshrss_url = cfg.get_configvalue("freshrss-url");
 		if (freshrss_url.empty()) {

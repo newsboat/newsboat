@@ -10,7 +10,7 @@ class RemoteApi;
 
 class FeedbinUrlReader : public UrlReader {
 public:
-	FeedbinUrlReader(ConfigContainer* c,
+	FeedbinUrlReader(
 		const std::string& url_file,
 		RemoteApi* a);
 	~FeedbinUrlReader() override;
@@ -18,7 +18,6 @@ public:
 	std::string get_source() override;
 
 private:
-	ConfigContainer* cfg;
 	std::string file;
 	RemoteApi* api;
 };

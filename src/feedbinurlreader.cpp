@@ -1,6 +1,5 @@
 #include "feedbinurlreader.h"
 
-#include "configcontainer.h"
 #include "fileurlreader.h"
 #include "logger.h"
 #include "remoteapi.h"
@@ -8,11 +7,8 @@
 
 namespace newsboat {
 
-FeedbinUrlReader::FeedbinUrlReader(ConfigContainer* c,
-	const std::string& url_file,
-	RemoteApi* a)
-	: cfg(c)
-	, file(url_file)
+FeedbinUrlReader::FeedbinUrlReader(const std::string& url_file, RemoteApi* a)
+	: file(url_file)
 	, api(a)
 {
 }
