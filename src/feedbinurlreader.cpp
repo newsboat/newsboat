@@ -25,21 +25,21 @@ nonstd::optional<utils::ReadTextFileError> FeedbinUrlReader::reload()
 	tags.clear();
 	alltags.clear();
 
-	// FileUrlReader ur(file);
-	// const auto error_message = ur.reload();
-	// if (error_message.has_value()) {
-	// 	LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
-	// 	// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
-	// }
-	//
-	// const std::vector<std::string>& file_urls(ur.get_urls());
-	// 	LOG(Level::INFO, "URL count: %s", file_urls.size());
-	// for (const auto& url : file_urls) {
-	// 	LOG(Level::INFO, "It's a URL: %s", url);
-	// 	if (utils::is_query_url(url)) {
-	// 		urls.push_back(url);
-	// 	}
-	// }
+	FileUrlReader ur(file);
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
+		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
+	}
+
+	const std::vector<std::string>& file_urls(ur.get_urls());
+		LOG(Level::INFO, "URL count: %s", file_urls.size());
+	for (const auto& url : file_urls) {
+		LOG(Level::INFO, "It's a URL: %s", url);
+		if (utils::is_query_url(url)) {
+			urls.push_back(url);
+		}
+	}
 
 	const std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 
