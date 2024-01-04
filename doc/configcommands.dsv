@@ -32,6 +32,8 @@ feed-sort-order||<sortfield>[-<direction>]||none||The <sortfield> specifies whic
 feedbin-url||<url>||"https://api.feedbin.com"||Configures the URL where the Feedbin installation you want to use resides.||feedbin-url "https://example.com/feedbin/"
 feedbin-login||<login>||""||This variable sets your Feedbin login for Feedbin support.||feedbin-login "your-login"
 feedbin-password||<password>||""||This variable sets your Feedbin password for Feedbin support. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||feedbin-password "here_goesAquote:\""
+feedbin-passwordeval||<command>||""||A more secure alternative to the above, is providing your password from an external command that is evaluated during login. This can be used to read your password from a gpg encrypted file or your system keyring.||feedbin-passwordeval "gpg --decrypt ~/.newsboat/feedbin-password.gpg"
+feedbin-passwordfile||<path>||""||Another alternative, by storing your plaintext password elsewhere in your system.||feedbin-passwordfile "~/.newsboat/feedbin-pw.txt"
 feedhq-flag-share||<flag>||""||If set and FeedHQ support is used, then all articles that are flagged with the specified flag are being "shared" in FeedHQ so that people that follow you can see it.||feedhq-flag-share "a"
 feedhq-flag-star||<flag>||""||If set and FeedHQ support is used, then all articles that are flagged with the specified flag are being "starred" in FeedHQ and appear in the list of "Starred items".||feedhq-flag-star "b"
 feedhq-login||<login>||""||This variable sets your FeedHQ login for FeedHQ support.||feedhq-login "your-login"
