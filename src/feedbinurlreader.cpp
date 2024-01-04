@@ -33,7 +33,7 @@ nonstd::optional<utils::ReadTextFileError> FeedbinUrlReader::reload()
 	}
 
 	const std::vector<std::string>& file_urls(ur.get_urls());
-		LOG(Level::INFO, "URL count: %s", file_urls.size());
+	LOG(Level::INFO, "URL count: %s", file_urls.size());
 	for (const auto& url : file_urls) {
 		LOG(Level::INFO, "It's a URL: %s", url);
 		if (utils::is_query_url(url)) {
