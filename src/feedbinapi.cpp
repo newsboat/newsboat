@@ -11,7 +11,6 @@
 #include "strprintf.h"
 #include "utils.h"
 
-#define FEEDBIN_API_URL "https://api.feedbin.com"
 #define FEEDBIN_AUTHENTICATION_PATH "/v2/authentication.json"
 #define FEEDBIN_TAGGINGS_PATH "/v2/taggings.json"
 #define FEEDBIN_SUBSCRIPTIONS_PATH "/v2/subscriptions.json"
@@ -22,6 +21,7 @@ using json = nlohmann::json;
 namespace newsboat {
 
 FeedbinApi::FeedbinApi(ConfigContainer &c) : RemoteApi(c) {
+	server = cfg.get_configvalue("feedbin-url");
   const std::string http_auth_method = cfg.get_configvalue("http-auth-method");
   if (http_auth_method == "any") {
     // default to basic HTTP auth to prevent Newsboat from doubling up on HTTP
@@ -244,7 +244,7 @@ json FeedbinApi::run_op(const std::string &path, const json &args,
   curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt(easyhandle.ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
-  const std::string url = FEEDBIN_API_URL + path;
+  const std::string url = server + path;
 
   std::string *body = nullptr;
   std::string arg_dump;

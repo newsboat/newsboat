@@ -85,6 +85,7 @@ ConfigContainer::ConfigContainer()
 	{
 		"feedhq-url",
 		ConfigData("https://feedhq.org/", ConfigDataType::STR)},
+	{"feedbin-url", ConfigData("https://api.feedbin.com", ConfigDataType::STR)},
 	{"feedbin-login", ConfigData("", ConfigDataType::STR)},
 	{"feedbin-password", ConfigData("", ConfigDataType::STR)},
 	{"freshrss-flag-star", ConfigData("", ConfigDataType::STR)},
