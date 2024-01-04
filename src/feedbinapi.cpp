@@ -22,7 +22,6 @@ using json = nlohmann::json;
 namespace newsboat {
 
 FeedbinApi::FeedbinApi(ConfigContainer &c) : RemoteApi(c) {
-  server = cfg.get_configvalue("feedbin-url");
   const std::string http_auth_method = cfg.get_configvalue("http-auth-method");
   if (http_auth_method == "any") {
     // default to basic HTTP auth to prevent Newsboat from doubling up on HTTP
@@ -275,6 +274,7 @@ json FeedbinApi::run_op(const std::string &path, const json &args,
   curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
   curl_easy_setopt(easyhandle.ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
 
+  const std::string server = cfg.get_configvalue("feedbin-url");
   const std::string url = server + path;
 
   std::string *body = nullptr;
