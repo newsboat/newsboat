@@ -58,15 +58,6 @@ mod bridged {
 
         fn log_level(cliargsparser: &CliArgsParser, level: &mut i8) -> bool;
     }
-
-    extern "C++" {
-        // cxx uses `std::out_of_range`, but doesn't include the header that defines that
-        // exception. So we do it for them.
-        include!("stdexcept");
-        // Also inject a header that defines ptrdiff_t. Note this is *not* a C++ header, because
-        // cxx uses a non-C++ name of the type.
-        include!("stddef.h");
-    }
 }
 
 fn create(argv: Vec<bridged::BytesVec>) -> Box<CliArgsParser> {
