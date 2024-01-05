@@ -36,7 +36,7 @@ public:
 	{
 	}
 
-	Filepath(rust::Box<filepath::bridged::PathBuf> rs_object)
+	Filepath(rust::Box<filepath::bridged::PathBuf>&& rs_object)
 		: rs_object(std::move(rs_object))
 	{
 	}
