@@ -346,17 +346,17 @@ std::string utils::run_program(const char* argv[], const std::string& input)
 
 Filepath utils::resolve_tilde(const Filepath& path)
 {
-	// The function is in utils.rs, but its binding is in filepath.rs because
-	// I can't make it return `Box<PathBuf>` any other way
-	return filepath::bridged::resolve_tilde(path);
+	auto output = filepath::bridged::create_empty();
+	utils::bridged::resolve_tilde(path, *output);
+	return output;
 }
 
 Filepath utils::resolve_relative(const Filepath& reference,
 	const Filepath& fname)
 {
-	// The function is in utils.rs, but its binding is in filepath.rs because
-	// I can't make it return `Box<PathBuf>` any other way
-	return filepath::bridged::resolve_relative(reference, fname);
+	auto output = filepath::bridged::create_empty();
+	utils::bridged::resolve_relative(reference, fname, *output);
+	return output;
 }
 
 std::string utils::replace_all(std::string str,
@@ -736,9 +736,9 @@ std::optional<std::uint8_t> utils::run_non_interactively(
 
 Filepath utils::getcwd()
 {
-	// The function is in utils.rs, but its binding is in filepath.rs because
-	// I can't make it return `Box<PathBuf>` any other way
-	return filepath::bridged::getcwd();
+	auto path = filepath::bridged::create_empty();
+	utils::bridged::getcwd(*path);
+	return path;
 }
 
 nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read_text_file(
@@ -877,9 +877,9 @@ void utils::initialize_ssl_implementation(void)
 
 Filepath utils::get_default_browser()
 {
-	// The function is in utils.rs, but its binding is in filepath.rs because
-	// I can't make it return `Box<PathBuf>` any other way
-	return filepath::bridged::get_default_browser();
+	auto path = filepath::bridged::create_empty();
+	utils::bridged::get_default_browser(*path);
+	return path;
 }
 
 std::string utils::md5hash(const std::string& input)
