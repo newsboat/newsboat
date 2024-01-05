@@ -2,6 +2,7 @@ use crate::filepath::PathBuf;
 use libc::{c_char, c_ulong};
 use libnewsboat::utils::{self, *};
 use std::ffi::{CStr, CString};
+use std::pin::Pin;
 
 #[cxx::bridge(namespace = "newsboat::utils")]
 mod ffi {
@@ -78,6 +79,10 @@ mod bridged {
         fn tokenize_quoted(line: &str, delimiters: &str) -> Vec<String>;
         fn is_valid_podcast_type(mimetype: &str) -> bool;
 
+        fn get_default_browser(mut path: Pin<&mut PathBuf>);
+        fn resolve_tilde(path: &PathBuf, mut output: Pin<&mut PathBuf>);
+        fn resolve_relative(reference: &PathBuf, path: &PathBuf, mut output: Pin<&mut PathBuf>);
+        fn getcwd(mut path: Pin<&mut PathBuf>);
         fn mkdir_parents(path: &PathBuf, mode: u32) -> isize;
 
         fn unescape_url(url: String, success: &mut bool) -> String;
@@ -192,6 +197,22 @@ fn extract_filter(line: &str) -> ffi::FilterUrlParts {
         script_name: result.script_name,
         url: result.url,
     }
+}
+
+fn get_default_browser(mut path: Pin<&mut PathBuf>) {
+    path.0 = utils::get_default_browser();
+}
+
+fn resolve_tilde(path: &PathBuf, mut output: Pin<&mut PathBuf>) {
+    output.0 = utils::resolve_tilde(path.0.clone());
+}
+
+fn resolve_relative(reference: &PathBuf, path: &PathBuf, mut output: Pin<&mut PathBuf>) {
+    output.0 = utils::resolve_relative(&reference.0, &path.0);
+}
+
+fn getcwd(mut path: Pin<&mut PathBuf>) {
+    path.0 = utils::getcwd().unwrap_or_else(|_| std::path::PathBuf::new());
 }
 
 fn mkdir_parents(path: &PathBuf, mode: u32) -> isize {
