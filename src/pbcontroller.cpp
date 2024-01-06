@@ -230,14 +230,16 @@ void PbController::initialize(int argc, char* argv[])
 	}
 
 	if (log_file.has_value()) {
-		logger::set_logfile(log_file.value());
+		const auto filepath = Filepath::from_locale_string(log_file.value());
+		logger::set_logfile(filepath);
 	}
 
 	if (!log_file.has_value() && log_level.has_value()) {
 		const std::string date_time_string = utils::mt_strf_localtime("%Y-%m-%d_%H.%M.%S",
 				std::time(nullptr));
 		const std::string filename = "podboat_" + date_time_string + ".log";
-		logger::set_logfile(filename);
+		const auto filepath = Filepath::from_locale_string(filename);
+		logger::set_logfile(filepath);
 	}
 
 	std::cout << strprintf::fmt(

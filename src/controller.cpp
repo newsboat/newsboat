@@ -102,14 +102,15 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	if (args.log_file().has_value()) {
-		logger::set_logfile(args.log_file().value().to_locale_string());
+		logger::set_logfile(args.log_file().value());
 	}
 
 	if (!args.log_file().has_value() && args.log_level().has_value()) {
 		const std::string date_time_string = utils::mt_strf_localtime("%Y-%m-%d_%H.%M.%S",
 				std::time(nullptr));
 		const std::string filename = "newsboat_" + date_time_string + ".log";
-		logger::set_logfile(filename);
+		const auto filepath = Filepath::from_locale_string(filename);
+		logger::set_logfile(filepath);
 	}
 
 	if (!args.display_msg().empty()) {
@@ -1002,7 +1003,8 @@ void Controller::update_config()
 
 	if (cfg.get_configvalue("error-log").length() > 0) {
 		try {
-			logger::set_user_error_logfile(cfg.get_configvalue("error-log"));
+			const auto filepath = Filepath::from_locale_string(cfg.get_configvalue("error-log"));
+			logger::set_user_error_logfile(filepath);
 		} catch (const Exception& e) {
 			const std::string msg =
 				strprintf::fmt("Couldn't open %s: %s",
