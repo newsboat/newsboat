@@ -6,8 +6,10 @@ namespace test_helpers {
 
 void reset_logger()
 {
-	::newsboat::logger::set_logfile("/dev/null");
-	::newsboat::logger::set_user_error_logfile("/dev/null");
+	const auto path = "/dev/null";
+	const auto filepath = ::newsboat::Filepath::from_locale_string(path);
+	::newsboat::logger::set_logfile(filepath);
+	::newsboat::logger::set_user_error_logfile(filepath);
 	::newsboat::logger::unset_loglevel();
 }
 
