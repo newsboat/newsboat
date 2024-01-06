@@ -61,7 +61,7 @@ nonstd::optional<Filepath> CliArgsParser::readinfo_import_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::readinfo_import_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -70,7 +70,7 @@ nonstd::optional<Filepath> CliArgsParser::readinfo_export_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::readinfo_export_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -123,7 +123,7 @@ nonstd::optional<Filepath> CliArgsParser::url_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::url_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -132,7 +132,7 @@ nonstd::optional<Filepath> CliArgsParser::lock_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::lock_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -141,7 +141,7 @@ nonstd::optional<Filepath> CliArgsParser::cache_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::cache_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -150,7 +150,7 @@ nonstd::optional<Filepath> CliArgsParser::config_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::config_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -159,7 +159,7 @@ nonstd::optional<Filepath> CliArgsParser::queue_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::queue_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -168,7 +168,7 @@ nonstd::optional<Filepath> CliArgsParser::search_history_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::search_history_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -177,7 +177,7 @@ nonstd::optional<Filepath> CliArgsParser::cmdline_history_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::cmdline_history_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
@@ -199,7 +199,7 @@ nonstd::optional<Filepath> CliArgsParser::log_file() const
 {
 	auto path = filepath::bridged::create_empty();
 	if (newsboat::cliargsparser::bridged::log_file(*rs_object, *path)) {
-		return path;
+		return Filepath(std::move(path));
 	}
 	return nonstd::nullopt;
 }
