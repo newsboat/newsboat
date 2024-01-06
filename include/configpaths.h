@@ -49,7 +49,7 @@ public:
 	// FIXME: this is actually a kludge that lets Controller change the path
 	// midway. That logic should be moved into ConfigPaths, and this method
 	// removed.
-	void set_cache_file(const std::string&);
+	void set_cache_file(const Filepath&);
 
 	/// Path to the config file.
 	Filepath config_file() const;
