@@ -30,17 +30,9 @@ DirBrowserFormAction::DirBrowserFormAction(View* vv,
 	: FormAction(vv, formstr, cfg)
 	, file_prompt_line(f, "fileprompt")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
+	, view(*vv)
 {
-	// In dirbrowser, keyboard focus is at the input field, so user will be
-	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
-	// can't quit with the default `q` bind).
-	KeyMap* keys = vv->get_keymap();
-	keys->set_key(OP_OPEN, "ENTER", id());
-	keys->set_key(OP_QUIT, "ESC", id());
-	vv->set_keymap(keys);
 }
-
-DirBrowserFormAction::~DirBrowserFormAction() {}
 
 bool DirBrowserFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
@@ -274,6 +266,14 @@ void DirBrowserFormAction::prepare()
 
 void DirBrowserFormAction::init()
 {
+	// In dirbrowser, keyboard focus is at the input field, so user will be
+	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
+	// can't quit with the default `q` bind).
+	KeyMap* keys = view.get_keymap();
+	keys->set_key(OP_OPEN, "ENTER", id());
+	keys->set_key(OP_QUIT, "ESC", id());
+	view.set_keymap(keys);
+
 	set_keymap_hints();
 
 	file_prompt_line.set_text(_("Directory: "));
