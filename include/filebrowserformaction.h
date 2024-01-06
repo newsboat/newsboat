@@ -14,7 +14,7 @@ namespace newsboat {
 
 class FileBrowserFormAction : public FormAction {
 public:
-	FileBrowserFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	FileBrowserFormAction(View&, std::string formstr, ConfigContainer* cfg);
 	~FileBrowserFormAction() override = default;
 	void prepare() override;
 	void init() override;

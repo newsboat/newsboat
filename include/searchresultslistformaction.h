@@ -20,12 +20,13 @@ struct SearchResult {
 
 class SearchResultsListFormAction : public ItemListFormAction {
 public:
-	SearchResultsListFormAction(View* vv,
+	SearchResultsListFormAction(View& vv,
 		std::string formstr,
 		Cache* cc,
 		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
+	~SearchResultsListFormAction() override = default;
 
 	std::string id() const override
 	{

@@ -25,14 +25,14 @@
 
 namespace newsboat {
 
-FileBrowserFormAction::FileBrowserFormAction(View* vv,
+FileBrowserFormAction::FileBrowserFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, file_prompt_line(f, "fileprompt")
 	, quit(false)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
-	, view(*vv)
+	, view(vv)
 {
 }
 
@@ -111,7 +111,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				 */
 				if (::stat(fn.c_str(), &sbuf) != -1) {
 					f.set_focus("files");
-					if (v->confirm(
+					if (v.confirm(
 							strprintf::fmt(
 								_("Do you really want to overwrite `%s' "
 									"(y:Yes n:No)? "),
@@ -123,7 +123,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 				if (do_pop) {
 					curs_set(0);
-					v->pop_current_formaction();
+					v.pop_current_formaction();
 				}
 			}
 		}
@@ -196,13 +196,13 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::filebrowser: quitting");
 		curs_set(0);
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 		set_value("filenametext", "");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::filebrowser: hard quitting");
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 		set_value("filenametext", "");
 		break;

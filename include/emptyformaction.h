@@ -7,7 +7,7 @@ namespace newsboat {
 
 class EmptyFormAction : public FormAction {
 public:
-	EmptyFormAction(View* v, const std::string& formstr, ConfigContainer* cfg);
+	EmptyFormAction(View& v, const std::string& formstr, ConfigContainer* cfg);
 	virtual ~EmptyFormAction() = default;
 
 	std::string id() const override;

@@ -15,13 +15,13 @@ class RssItem;
 
 class ItemViewFormAction : public FormAction {
 public:
-	ItemViewFormAction(View*,
+	ItemViewFormAction(View&,
 		std::shared_ptr<ItemListFormAction> il,
 		std::string formstr,
 		Cache* cc,
 		ConfigContainer* cfg,
 		RegexManager& r);
-	~ItemViewFormAction() override;
+	~ItemViewFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	void set_guid(const std::string& guid_)

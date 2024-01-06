@@ -46,8 +46,8 @@ struct Command {
 
 class FormAction {
 public:
-	FormAction(View*, std::string formstr, ConfigContainer* cfg);
-	virtual ~FormAction();
+	FormAction(View&, std::string formstr, ConfigContainer* cfg);
+	virtual ~FormAction() = default;
 	virtual void prepare() = 0;
 	virtual void init() = 0;
 	virtual void set_redraw(bool b)
@@ -134,7 +134,7 @@ protected:
 	bool handle_list_operations(ListWidget& list, Operation op);
 	bool handle_textview_operations(TextviewWidget& textview, Operation op);
 
-	View* v;
+	View& v;
 	ConfigContainer* cfg;
 	Stfl::Form f;
 	bool do_redraw;

@@ -25,7 +25,7 @@
 
 namespace newsboat {
 
-FeedListFormAction::FeedListFormAction(View* vv,
+FeedListFormAction::FeedListFormAction(View& vv,
 	std::string formstr,
 	Cache* cc,
 	FilterContainer& f,
@@ -52,10 +52,10 @@ void FeedListFormAction::init()
 
 	recalculate_widget_dimensions();
 
-	if (v->get_ctrl()->get_refresh_on_start()) {
-		v->get_ctrl()->get_reloader()->start_reload_all_thread();
+	if (v.get_ctrl()->get_refresh_on_start()) {
+		v.get_ctrl()->get_reloader()->start_reload_all_thread();
 	}
-	v->get_ctrl()->update_feedlist();
+	v.get_ctrl()->update_feedlist();
 
 	/*
 	 * This is kind of a hack.
@@ -63,23 +63,21 @@ void FeedListFormAction::init()
 	 * ReloadThread, which is responsible for regularly spawning
 	 * DownloadThreads.
 	 */
-	v->get_ctrl()->get_reloader()->spawn_reloadthread();
+	v.get_ctrl()->get_reloader()->spawn_reloadthread();
 }
-
-FeedListFormAction::~FeedListFormAction() {}
 
 void FeedListFormAction::prepare()
 {
 	const auto sort_strategy = cfg->get_feed_sort_strategy();
 	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
-		v->get_ctrl()->get_feedcontainer()->sort_feeds(sort_strategy);
+		v.get_ctrl()->get_feedcontainer()->sort_feeds(sort_strategy);
 		old_sort_strategy = sort_strategy;
 		do_redraw = true;
 	}
 
 	if (do_redraw) {
 		LOG(Level::DEBUG, "FeedListFormAction::prepare: doing redraw");
-		v->get_ctrl()->update_feedlist();
+		v.get_ctrl()->update_feedlist();
 		set_pos();
 		do_redraw = false;
 	}
@@ -105,10 +103,10 @@ REDO:
 			LOG(Level::INFO,
 				"FeedListFormAction: opening feed at position `%d'", pos);
 			if (visible_feeds.size() > 0) {
-				v->push_itemlist(pos);
+				v.push_itemlist(pos);
 			} else {
 				// should not happen
-				v->get_statusline().show_error(_("No feed selected!"));
+				v.get_statusline().show_error(_("No feed selected!"));
 			}
 		}
 	}
@@ -117,22 +115,22 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: reloading feed at position `%d'", pos);
 		if (visible_feeds.size() > 0) {
-			v->get_ctrl()->get_reloader()->reload(pos);
+			v.get_ctrl()->get_reloader()->reload(pos);
 		} else {
-			v->get_statusline().show_error(
+			v.get_statusline().show_error(
 				_("No feed selected!")); // should not happen
 		}
 	}
 	break;
 	case OP_RELOADURLS:
-		v->get_ctrl()->reload_urls_file();
+		v.get_ctrl()->reload_urls_file();
 		break;
 	case OP_SORT: {
 		// i18n: This string is related to the letters in parentheses in the
 		// "Sort by (f)irsttag/..." and "Reverse Sort by
 		// (f)irsttag/..." messages
 		std::string input_options = _("ftauln");
-		char c = v->confirm(
+		char c = v.confirm(
 				_("Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
 					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
@@ -172,7 +170,7 @@ REDO:
 	break;
 	case OP_REVSORT: {
 		std::string input_options = _("ftauln");
-		char c = v->confirm(
+		char c = v.confirm(
 				_("Reverse Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
 					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
@@ -220,7 +218,7 @@ REDO:
 	case OP_OPENALLUNREADINBROWSER:
 		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
-				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
+				v.get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				LOG(Level::INFO,
 					"FeedListFormAction: opening all unread items in feed at position `%d'",
@@ -232,22 +230,22 @@ REDO:
 				exit_code = open_unread_items_in_browser(feed, false);
 
 				if (!exit_code.has_value()) {
-					v->get_statusline().show_error(_("Failed to spawn browser"));
+					v.get_statusline().show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-					v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+					v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
 							*exit_code));
 					return false;
 				}
 			}
 		} else {
-			v->get_statusline().show_error(_("No feed selected!"));
+			v.get_statusline().show_error(_("No feed selected!"));
 		}
 		break;
 	case OP_OPENALLUNREADINBROWSER_AND_MARK:
 		if (visible_feeds.size() > 0) {
 			std::shared_ptr<RssFeed> feed =
-				v->get_ctrl()->get_feedcontainer()->get_feed(pos);
+				v.get_ctrl()->get_feedcontainer()->get_feed(pos);
 			if (feed) {
 				LOG(Level::INFO,
 					"FeedListFormAction: opening all unread items in feed at position `%d' and marking read",
@@ -259,10 +257,10 @@ REDO:
 				exit_code = open_unread_items_in_browser(feed, true);
 
 				if (!exit_code.has_value()) {
-					v->get_statusline().show_error(_("Failed to spawn browser"));
+					v.get_statusline().show_error(_("Failed to spawn browser"));
 					return false;
 				} else if (*exit_code != 0) {
-					v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+					v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
 							*exit_code));
 					return false;
 				}
@@ -288,21 +286,21 @@ REDO:
 					idxs.push_back(feed.second);
 				}
 			}
-			v->get_ctrl()->get_reloader()->start_reload_all_thread(idxs);
+			v.get_ctrl()->get_reloader()->start_reload_all_thread(idxs);
 		}
 		break;
 	case OP_MARKFEEDREAD: {
 		if (!cfg->get_configvalue_as_bool(
 				"confirm-mark-feed-read") ||
-			v->confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
+			v.confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "FeedListFormAction: marking feed read at position `%d'", pos);
 			if (visible_feeds.size() > 0) {
 				try {
 					{
-						const auto message_lifetime = v->get_statusline().show_message_until_finished(
+						const auto message_lifetime = v.get_statusline().show_message_until_finished(
 								_("Marking feed read..."));
-						v->get_ctrl()->mark_all_read(pos);
+						v.get_ctrl()->mark_all_read(pos);
 						do_redraw = true;
 					}
 					bool show_read = cfg->get_configvalue_as_bool("show-read-feeds");
@@ -310,12 +308,12 @@ REDO:
 						list.set_position(list.get_position() + 1);
 					}
 				} catch (const DbException& e) {
-					v->get_statusline().show_error(strprintf::fmt(
+					v.get_statusline().show_error(strprintf::fmt(
 							_("Error: couldn't mark feed read: %s"),
 							e.what()));
 				}
 			} else {
-				v->get_statusline().show_error(
+				v.get_statusline().show_error(
 					_("No feed selected!")); // should not happen
 			}
 		}
@@ -337,7 +335,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to next unread feed");
 		if (!jump_to_next_unread_feed(local_tmp)) {
-			v->get_statusline().show_error(_("No feeds with unread items."));
+			v.get_statusline().show_error(_("No feeds with unread items."));
 		}
 	}
 	break;
@@ -346,7 +344,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to previous unread feed");
 		if (!jump_to_previous_unread_feed(local_tmp)) {
-			v->get_statusline().show_error(_("No feeds with unread items."));
+			v.get_statusline().show_error(_("No feeds with unread items."));
 		}
 	}
 	break;
@@ -354,7 +352,7 @@ REDO:
 		unsigned int local_tmp;
 		LOG(Level::INFO, "FeedListFormAction: jumping to next feed");
 		if (!jump_to_next_feed(local_tmp)) {
-			v->get_statusline().show_error(_("Already on last feed."));
+			v.get_statusline().show_error(_("Already on last feed."));
 		}
 	}
 	break;
@@ -363,7 +361,7 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to previous feed");
 		if (!jump_to_previous_feed(local_tmp)) {
-			v->get_statusline().show_error(_("Already on first feed."));
+			v.get_statusline().show_error(_("Already on first feed."));
 		}
 	}
 	break;
@@ -372,27 +370,27 @@ REDO:
 		LOG(Level::INFO,
 			"FeedListFormAction: jumping to random unread feed");
 		if (!jump_to_random_unread_feed(local_tmp)) {
-			v->get_statusline().show_error(_("No feeds with unread items."));
+			v.get_statusline().show_error(_("No feeds with unread items."));
 		}
 	}
 	break;
 	case OP_MARKALLFEEDSREAD:
 		if (!cfg->get_configvalue_as_bool(
 				"confirm-mark-all-feeds-read") ||
-			v->confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
+			v.confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "FeedListFormAction: marking all feeds read");
-			const auto message_lifetime = v->get_statusline().show_message_until_finished(
+			const auto message_lifetime = v.get_statusline().show_message_until_finished(
 					_("Marking all feeds read..."));
 			if (tag == "") {
-				v->get_ctrl()->mark_all_read("");
+				v.get_ctrl()->mark_all_read("");
 			} else {
 				// we're in tag view, so let's only touch feeds that are
 				// visible
 				for (const auto& feedptr_pos_pair : visible_feeds) {
 					auto rss_feed_ptr = feedptr_pos_pair.first;
 					auto feedurl = rss_feed_ptr->rssurl();
-					v->get_ctrl()->mark_all_read(feedurl);
+					v.get_ctrl()->mark_all_read(feedurl);
 				}
 			}
 			do_redraw = true;
@@ -408,7 +406,7 @@ REDO:
 		if (args.size() > 0) {
 			newtag = args.front();
 		} else {
-			newtag = v->select_tag(tag);
+			newtag = v.select_tag(tag);
 		}
 		if (newtag != "") {
 			tag = newtag;
@@ -426,15 +424,15 @@ REDO:
 				if (filter.has_value()) {
 					apply_filter(filter.value());
 				} else {
-					v->get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
+					v.get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
 							filter_name));
 				}
 			} else {
-				const std::string filter_text = v->select_filter(filter_container.get_filters());
+				const std::string filter_text = v.select_filter(filter_container.get_filters());
 				apply_filter(filter_text);
 			}
 		} else {
-			v->get_statusline().show_error(_("No filters defined."));
+			v.get_statusline().show_error(_("No filters defined."));
 		}
 		break;
 	case OP_SEARCH:
@@ -497,7 +495,7 @@ REDO:
 		}
 		break;
 	case OP_EDIT_URLS:
-		v->get_ctrl()->edit_urls_file();
+		v.get_ctrl()->edit_urls_file();
 		break;
 	case OP_QUIT:
 		if (tag != "") {
@@ -507,7 +505,7 @@ REDO:
 		LOG(Level::INFO, "FeedListFormAction: quitting");
 		if (bindingType == BindingType::Macro ||
 			!cfg->get_configvalue_as_bool("confirm-exit") ||
-			v->confirm(
+			v.confirm(
 				_("Do you really want to quit (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			quit = true;
@@ -518,15 +516,15 @@ REDO:
 		quit = true;
 		break;
 	case OP_HELP:
-		v->push_help();
+		v.push_help();
 		break;
 	default:
 		ListFormAction::process_operation(op, args, bindingType);
 		break;
 	}
 	if (quit) {
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 	}
 	return true;
@@ -536,19 +534,19 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 	bool interactive) const
 {
 	if (visible_feeds.empty()) {
-		v->get_statusline().show_error(_("No feed selected!"));
+		v.get_statusline().show_error(_("No feed selected!"));
 		return false;
 	}
 
-	std::shared_ptr<RssFeed> feed = v->get_ctrl()->get_feedcontainer()->get_feed(
+	std::shared_ptr<RssFeed> feed = v.get_ctrl()->get_feedcontainer()->get_feed(
 			pos);
 	if (feed == nullptr) {
-		v->get_statusline().show_error(_("No feed selected!"));
+		v.get_statusline().show_error(_("No feed selected!"));
 		return false;
 	}
 
 	if (feed->is_query_feed()) {
-		v->get_statusline().show_error(_("Cannot open query feeds in the browser!"));
+		v.get_statusline().show_error(_("Cannot open query feeds in the browser!"));
 		return false;
 	}
 
@@ -577,12 +575,12 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 
 	if (!url.empty()) {
 		const std::string feedurl = feed->rssurl();
-		const auto exit_code = v->open_in_browser(url, feedurl, type, feed->title(), interactive);
+		const auto exit_code = v.open_in_browser(url, feedurl, type, feed->title(), interactive);
 		if (!exit_code.has_value()) {
-			v->get_statusline().show_error(_("Failed to spawn browser"));
+			v.get_statusline().show_error(_("Failed to spawn browser"));
 			return false;
 		} else if (*exit_code != 0) {
-			v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+			v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
 					*exit_code));
 			return false;
 		}
@@ -891,7 +889,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 {
 	ScopeMeasure m1("FeedListFormAction::mark_pos_if_visible");
 	unsigned int vpos = 0;
-	v->get_ctrl()->update_visible_feeds();
+	v.get_ctrl()->update_visible_feeds();
 	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(Level::DEBUG,
@@ -905,7 +903,7 @@ void FeedListFormAction::mark_pos_if_visible(unsigned int pos)
 		vpos++;
 	}
 	vpos = 0;
-	pos = v->get_ctrl()->get_feedcontainer()->get_pos_of_next_unread(pos);
+	pos = v.get_ctrl()->get_feedcontainer()->get_pos_of_next_unread(pos);
 	for (const auto& feed : visible_feeds) {
 		if (feed.second == pos) {
 			LOG(Level::DEBUG,
@@ -990,16 +988,16 @@ void FeedListFormAction::op_start_search()
 		"`%s'",
 		searchphrase);
 	if (searchphrase.length() > 0) {
-		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+		const auto message_lifetime = v.get_statusline().show_message_until_finished(
 				_("Searching..."));
 		searchhistory.add_line(searchphrase);
 		std::vector<std::shared_ptr<RssItem>> items;
 		try {
 			const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
-			items = v->get_ctrl()->search_for_items(
+			items = v.get_ctrl()->search_for_items(
 					utf8searchphrase, nullptr);
 		} catch (const DbException& e) {
-			v->get_statusline().show_error(strprintf::fmt(
+			v.get_statusline().show_error(strprintf::fmt(
 					_("Error while searching for `%s': %s"),
 					searchphrase,
 					e.what()));
@@ -1009,9 +1007,9 @@ void FeedListFormAction::op_start_search()
 			std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(cache, ""));
 			search_dummy_feed->set_search_feed(true);
 			search_dummy_feed->add_items(items);
-			v->push_searchresult(search_dummy_feed, searchphrase);
+			v.push_searchresult(search_dummy_feed, searchphrase);
 		} else {
-			v->get_statusline().show_error(_("No results."));
+			v.get_statusline().show_error(_("No results."));
 		}
 	}
 }
@@ -1022,12 +1020,12 @@ void FeedListFormAction::handle_cmdline_num(unsigned int idx)
 		idx <= (visible_feeds[visible_feeds.size() - 1].second + 1)) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
-			v->get_statusline().show_error(_("Position not visible!"));
+			v.get_statusline().show_error(_("Position not visible!"));
 		} else {
 			list.set_position(i);
 		}
 	} else {
-		v->get_statusline().show_error(_("Invalid position!"));
+		v.get_statusline().show_error(_("Invalid position!"));
 	}
 }
 
@@ -1116,7 +1114,7 @@ void FeedListFormAction::apply_filter(const std::string& filtertext)
 
 	filterhistory.add_line(filtertext);
 	if (!matcher.parse(filtertext)) {
-		v->get_statusline().show_error(strprintf::fmt(
+		v.get_statusline().show_error(strprintf::fmt(
 				_("Error: couldn't parse filter expression `%s': %s"),
 				filtertext,
 				matcher.get_parse_error()));

@@ -23,13 +23,13 @@ enum class InvalidationMode { NONE, PARTIAL, COMPLETE };
 
 class ItemListFormAction : public ListFormAction {
 public:
-	ItemListFormAction(View*,
+	ItemListFormAction(View&,
 		std::string formstr,
 		Cache* cc,
 		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
-	~ItemListFormAction() override;
+	~ItemListFormAction() override = default;
 	void prepare() override;
 	void init() override;
 

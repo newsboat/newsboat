@@ -2,7 +2,7 @@
 #include "keymap.h"
 
 namespace newsboat {
-SearchResultsListFormAction::SearchResultsListFormAction(View* vv,
+SearchResultsListFormAction::SearchResultsListFormAction(View& vv,
 	std::string formstr,
 	Cache* cc,
 	FilterContainer& f,
@@ -46,11 +46,11 @@ bool SearchResultsListFormAction::process_operation(
 			// no need to mark item as read, the itemview already do
 			// that
 			old_itempos = itempos;
-			v->push_itemview(feed,
+			v.push_itemview(feed,
 				visible_items[itempos].first->guid(), search_phrase);
 			invalidate(itempos);
 		} else {
-			v->get_statusline().show_error(
+			v.get_statusline().show_error(
 				_("No item selected!")); // should not happen
 		}
 		break;
@@ -60,7 +60,7 @@ bool SearchResultsListFormAction::process_operation(
 			this->set_feed(search_results.top().search_result_feed);
 			this->set_searchphrase(search_results.top().search_phrase);
 		} else {
-			v->get_statusline().show_message(_("Already in first search result."));
+			v.get_statusline().show_message(_("Already in first search result."));
 		}
 		break;
 	default:

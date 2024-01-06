@@ -14,7 +14,7 @@ namespace newsboat {
 
 class DirBrowserFormAction : public FormAction {
 public:
-	DirBrowserFormAction(View*, std::string formstr, ConfigContainer* cfg);
+	DirBrowserFormAction(View&, std::string formstr, ConfigContainer* cfg);
 	~DirBrowserFormAction() override = default;
 	void prepare() override;
 	void init() override;

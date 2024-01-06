@@ -2,7 +2,7 @@
 
 namespace newsboat {
 
-EmptyFormAction::EmptyFormAction(View* v, const std::string& formstr,
+EmptyFormAction::EmptyFormAction(View& v, const std::string& formstr,
 	ConfigContainer* cfg)
 	: FormAction(v, formstr, cfg)
 {

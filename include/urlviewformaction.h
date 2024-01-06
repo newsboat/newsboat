@@ -9,11 +9,11 @@ namespace newsboat {
 
 class UrlViewFormAction : public FormAction {
 public:
-	UrlViewFormAction(View*,
+	UrlViewFormAction(View&,
 		std::shared_ptr<RssFeed>& feed,
 		std::string formstr,
 		ConfigContainer* cfg);
-	~UrlViewFormAction() override;
+	~UrlViewFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;

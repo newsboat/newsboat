@@ -14,7 +14,7 @@
 
 namespace newsboat {
 
-HelpFormAction::HelpFormAction(View* vv,
+HelpFormAction::HelpFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg,
 	const std::string& ctx)
@@ -25,8 +25,6 @@ HelpFormAction::HelpFormAction(View* vv,
 	, textview("helptext", FormAction::f)
 {
 }
-
-HelpFormAction::~HelpFormAction() {}
 
 bool HelpFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
@@ -57,11 +55,11 @@ bool HelpFormAction::process_operation(Operation op,
 		break;
 	}
 	if (hardquit) {
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 	} else if (quit) {
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 	}
 	return true;
 }
@@ -78,7 +76,7 @@ void HelpFormAction::prepare()
 		fmt.register_fmt('V', utils::program_version());
 		set_title(fmt.do_format(cfg->get_configvalue("help-title-format"), width));
 
-		const auto descs = v->get_keymap()->get_keymap_descriptions(context);
+		const auto descs = v.get_keymap()->get_keymap_descriptions(context);
 
 		std::vector<std::string> colors = utils::tokenize(
 				cfg->get_configvalue("search-highlight-colors"), " ");
@@ -153,7 +151,7 @@ void HelpFormAction::prepare()
 			}
 		}
 
-		const auto macros = v->get_keymap()->get_macro_descriptions();
+		const auto macros = v.get_keymap()->get_macro_descriptions();
 		if (!macros.empty()) {
 			listfmt.add_line("");
 			listfmt.add_line(_("Macros:"));
@@ -194,7 +192,7 @@ const std::vector<KeyMapHintEntry>& HelpFormAction::get_keymap_hint() const
 
 void HelpFormAction::finished_qna(Operation op)
 {
-	v->inside_qna(false);
+	v.inside_qna(false);
 	switch (op) {
 	case OP_INT_START_SEARCH:
 		searchphrase = qna_responses[0];

@@ -24,13 +24,13 @@
 
 namespace newsboat {
 
-DirBrowserFormAction::DirBrowserFormAction(View* vv,
+DirBrowserFormAction::DirBrowserFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, file_prompt_line(f, "fileprompt")
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
-	, view(*vv)
+	, view(vv)
 {
 }
 
@@ -89,7 +89,7 @@ bool DirBrowserFormAction::process_operation(Operation op,
 				}
 			} else {
 				curs_set(0);
-				v->pop_current_formaction();
+				v.pop_current_formaction();
 			}
 		}
 	}
@@ -161,13 +161,13 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: quitting");
 		curs_set(0);
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 		set_value("filenametext", "");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::dirbrowser: hard quitting");
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 		set_value("filenametext", "");
 		break;
