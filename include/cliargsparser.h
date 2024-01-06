@@ -71,11 +71,11 @@ public:
 
 	std::optional<Filepath> config_file() const;
 
-	std::optional<std::string> queue_file() const;
+	std::optional<Filepath> queue_file() const;
 
-	std::optional<std::string> search_history_file() const;
+	std::optional<Filepath> search_history_file() const;
 
-	std::optional<std::string> cmdline_history_file() const;
+	std::optional<Filepath> cmdline_history_file() const;
 
 	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
