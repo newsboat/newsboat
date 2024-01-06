@@ -30,7 +30,8 @@ TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 
 	{
 		test_helpers::LoggerResetter logReset;
-		logger::set_logfile(tmp.get_path());
+		const auto filepath = Filepath::from_locale_string(tmp.get_path());
+		logger::set_logfile(filepath);
 		logger::set_loglevel(Level::DEBUG);
 
 		ScopeMeasure sm("test");
@@ -50,7 +51,8 @@ TEST_CASE("stopover() adds an extra line to the log upon each call",
 
 	{
 		test_helpers::LoggerResetter logReset;
-		logger::set_logfile(tmp.get_path());
+		const auto filepath = Filepath::from_locale_string(tmp.get_path());
+		logger::set_logfile(filepath);
 		logger::set_loglevel(Level::DEBUG);
 
 		ScopeMeasure sm("test");
