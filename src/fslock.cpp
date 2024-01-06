@@ -11,7 +11,7 @@ FsLock::FsLock()
 {
 }
 
-bool FsLock::try_lock(const std::string& new_lock_filepath, pid_t& pid,
+bool FsLock::try_lock(const Filepath& new_lock_filepath, pid_t& pid,
 	std::string& error_message)
 {
 	std::int64_t p;
