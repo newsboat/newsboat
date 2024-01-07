@@ -9,6 +9,7 @@ pub mod logger;
 pub mod human_panic;
 pub mod utils;
 
+pub mod charencoding;
 pub mod cliargsparser;
 pub mod configpaths;
 pub mod filterparser;
