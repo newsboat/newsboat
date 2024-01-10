@@ -1,3 +1,4 @@
+src/charencoding.cpp
 src/colormanager.cpp
 src/configcontainer.cpp
 src/configdata.cpp

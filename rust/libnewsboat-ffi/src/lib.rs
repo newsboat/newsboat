@@ -10,6 +10,7 @@ use std::ffi::CString;
 use std::panic::{catch_unwind, UnwindSafe};
 use std::process::abort;
 
+pub mod charencoding;
 pub mod cliargsparser;
 pub mod configpaths;
 pub mod fmtstrformatter;
