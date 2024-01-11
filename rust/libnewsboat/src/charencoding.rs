@@ -24,6 +24,30 @@ pub fn charset_from_bom(content: &[u8]) -> Option<&'static str> {
 ///
 /// Example XML declaration: `<?xml version="1.0" encoding="UTF-8"?>`
 pub fn charset_from_xml_declaration(content: &[u8]) -> Option<String> {
+    // Check for encodings by recognizing the first character(s) of `<?xml`:
+    // https://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info
+    let encoding_family = match content {
+        [0x00, 0x00, 0x00, 0x3C, ..] => return Some("UTF-32BE".to_owned()),
+        [0x3C, 0x00, 0x00, 0x00, ..] => return Some("UTF-32LE".to_owned()),
+        [0x00, 0x3C, 0x00, 0x3F, ..] => return Some("UTF-16BE".to_owned()),
+        [0x3C, 0x00, 0x3F, 0x00, ..] => return Some("UTF-16LE".to_owned()),
+        [0x3C, 0x3F, 0x78, 0x6D, ..] => EncodingFamily::Ascii,
+        [0x4C, 0x6F, 0xA7, 0x94, ..] => EncodingFamily::Ebcdic,
+        _ => return None,
+    };
+
+    match encoding_family {
+        EncodingFamily::Ascii => charset_from_ascii_xml_declaration(content),
+        EncodingFamily::Ebcdic => None, // Unsupported for now
+    }
+}
+
+enum EncodingFamily {
+    Ascii,
+    Ebcdic,
+}
+
+fn charset_from_ascii_xml_declaration(content: &[u8]) -> Option<String> {
     fn parse_version_info(input: &[u8]) -> IResult<&[u8], ()> {
         let (input, _) = space0(input)?;
         let (input, _) = tag(b"version=")(input)?;
@@ -139,5 +163,27 @@ mod tests {
     fn t_charset_from_xml_declaration_leading_space_fails_parsing() {
         let input = br#" <?xml version="1.0" encoding="koi8-r"?>"#;
         assert_eq!(charset_from_xml_declaration(input), None);
+    }
+
+    #[test]
+    fn t_charset_from_xml_declaration_utf16() {
+        let mut utf16_bytes_le = vec![];
+        let mut utf16_bytes_be = vec![];
+        for c in r#"<?xml version="1.0"?>"#.encode_utf16() {
+            let low = c as u8;
+            let high = (c >> 8) as u8;
+            utf16_bytes_le.push(low);
+            utf16_bytes_le.push(high);
+            utf16_bytes_be.push(high);
+            utf16_bytes_be.push(low);
+        }
+        assert_eq!(
+            charset_from_xml_declaration(&utf16_bytes_le),
+            Some("UTF-16LE".to_owned())
+        );
+        assert_eq!(
+            charset_from_xml_declaration(&utf16_bytes_be),
+            Some("UTF-16BE".to_owned())
+        );
     }
 }
