@@ -27,13 +27,6 @@
 #include <unistd.h>
 #include <unordered_set>
 
-#include "config.h"
-#include "curldatareceiver.h"
-#include "curlhandle.h"
-#include "htmlrenderer.h"
-#include "logger.h"
-#include "strprintf.h"
-
 #if HAVE_GCRYPT
 #include <gnutls/gnutls.h>
 #if GNUTLS_VERSION_NUMBER < 0x020b00
@@ -50,6 +43,13 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include <openssl/crypto.h>
 #endif
 #endif
+
+#include "config.h"
+#include "curldatareceiver.h"
+#include "curlhandle.h"
+#include "htmlrenderer.h"
+#include "logger.h"
+#include "strprintf.h"
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
 
