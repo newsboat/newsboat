@@ -35,15 +35,20 @@
 #include "strprintf.h"
 
 #if HAVE_GCRYPT
+#include <gnutls/gnutls.h>
+#if GNUTLS_VERSION_NUMBER < 0x020b00
 #include <errno.h>
 #include <gcrypt.h>
-#include <gnutls/gnutls.h>
 #include <pthread.h>
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #endif
+#endif
 
-#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
+#if HAVE_OPENSSL
+#include <openssl/opensslv.h>
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 #include <openssl/crypto.h>
+#endif
 #endif
 
 using HTTPMethod = newsboat::utils::HTTPMethod;
@@ -776,8 +781,7 @@ nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
  * These callbacks are deprecated as of OpenSSL 1.1.0; see the
  * changelog: https://www.openssl.org/news/changelog.html#x6
  */
-
-#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
+#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x10100000L
 static std::mutex* openssl_mutexes = nullptr;
 static int openssl_mutexes_size = 0;
 
@@ -807,16 +811,22 @@ static unsigned long openssl_mth_id_function(void)
 }
 #endif
 
+/*
+ * GnuTLS 2.11.0+ uses the system availabe locking procedures and discourages
+ * setting thread locks manually. See the changelog:
+ * https://gitlab.com/gnutls/gnutls/-/blob/master/NEWS?ref_type=heads#L4521
+ * Mind the "<=" typo in the suggestion.
+ */
 void utils::initialize_ssl_implementation(void)
 {
-#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x01010000fL
+#if HAVE_OPENSSL && OPENSSL_VERSION_NUMBER < 0x10100000L
 	openssl_mutexes_size = CRYPTO_num_locks();
 	openssl_mutexes = new std::mutex[openssl_mutexes_size];
 	CRYPTO_set_id_callback(openssl_mth_id_function);
 	CRYPTO_set_locking_callback(openssl_mth_locking_function);
 #endif
 
-#if HAVE_GCRYPT
+#if HAVE_GCRYPT && GNUTLS_VERSION_NUMBER < 0x020b00
 	gcry_control(GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
 	gnutls_global_init();
 #endif
