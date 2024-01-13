@@ -828,7 +828,6 @@ void utils::initialize_ssl_implementation(void)
 
 #if HAVE_GCRYPT && GNUTLS_VERSION_NUMBER < 0x020b00
 	gcry_control(GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
-	gnutls_global_init();
 #endif
 }
 
