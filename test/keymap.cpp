@@ -6,6 +6,7 @@
 #include "3rd-party/catch.hpp"
 
 #include "confighandlerexception.h"
+#include "keycombination.h"
 
 using namespace newsboat;
 
@@ -18,14 +19,14 @@ TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation("u", "article") == OP_SHOWURLS);
-	REQUIRE(k.get_operation("X", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("", "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+	REQUIRE(k.get_operation(KeyCombination("u"), "article") == OP_SHOWURLS);
+	REQUIRE(k.get_operation(KeyCombination("x", ShiftState::Shift), "feedlist") == OP_NIL);
+	REQUIRE(k.get_operation(KeyCombination(""), "feedlist") == OP_NIL);
+	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 
 	SECTION("Returns OP_NIL after unset_key()") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
+		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
 	}
 }
 
@@ -33,16 +34,16 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key("ENTER", "all");
-		REQUIRE(k.get_operation("ENTER", "feedlist") == OP_NIL);
+		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
 
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, "ENTER", "all");
-			REQUIRE(k.get_operation("ENTER", "feedlist") == OP_OPEN);
+			REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
 		}
 	}
@@ -539,7 +540,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 	SECTION("semicolon following quoted argument") {
 		k.handle_action("macro", R"(a set browser "firefox"; open-in-browser)");
 
-		const auto macros = k.get_macro("a");
+		const auto macros = k.get_macro(KeyCombination("a"));
 		REQUIRE(macros.size() == 2);
 		REQUIRE(macros[0].op == OP_INT_SET);
 		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
@@ -550,7 +551,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 	SECTION("semicolon following unquoted argument") {
 		k.handle_action("macro", R"(b set browser firefox; open-in-browser)");
 
-		const auto macros = k.get_macro("b");
+		const auto macros = k.get_macro(KeyCombination("b"));
 		REQUIRE(macros.size() == 2);
 		REQUIRE(macros[0].op == OP_INT_SET);
 		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
@@ -561,7 +562,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 	SECTION("semicolon following unquoted operation") {
 		k.handle_action("macro", R"(c open-in-browser; quit)");
 
-		const auto macros = k.get_macro("c");
+		const auto macros = k.get_macro(KeyCombination("c"));
 		REQUIRE(macros.size() == 2);
 		REQUIRE(macros[0].op == OP_OPENINBROWSER);
 		REQUIRE(macros[0].args == std::vector<std::string>({}));
@@ -575,7 +576,7 @@ TEST_CASE("Whitespace around semicolons in macros is optional", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	const auto check = [&k]() {
-		const auto macro = k.get_macro("x");
+		const auto macro = k.get_macro(KeyCombination("x"));
 
 		REQUIRE(macro.size() == 3);
 
@@ -629,7 +630,7 @@ TEST_CASE("It's not an error to have no operations before a semicolon in "
 		DYNAMIC_SECTION(op_list) {
 			k.handle_action("macro", "r " + op_list);
 
-			const auto macro = k.get_macro("r");
+			const auto macro = k.get_macro(KeyCombination("r"));
 			REQUIRE(macro.size() == 1);
 			REQUIRE(macro[0].op == OP_OPEN);
 			REQUIRE(macro[0].args == std::vector<std::string>({}));
@@ -647,7 +648,7 @@ TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
 	k.handle_action("macro",
 		R"(x set browser "sleep 3; do-something ; echo hi"; open-in-browser)");
 
-	const auto macro = k.get_macro("x");
+	const auto macro = k.get_macro(KeyCombination("x"));
 	REQUIRE(macro.size() == 2);
 	REQUIRE(macro[0].op == OP_INT_SET);
 	REQUIRE(macro[0].args == std::vector<std::string>({"browser", "sleep 3; do-something ; echo hi"}));

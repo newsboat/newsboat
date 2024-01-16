@@ -510,15 +510,16 @@ KeyMap::KeyMap(unsigned flags)
 			const std::string& context = ctx.first;
 			const std::uint32_t context_flag = ctx.second;
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
-				keymap_[context][op_desc.default_key] = op_desc.op;
+				const auto key_combination = KeyCombination::from_bindkey(op_desc.default_key);
+				keymap_[context][key_combination] = op_desc.op;
 			}
 		}
 	}
 
-	keymap_["help"]["b"] = OP_SK_PGUP;
-	keymap_["help"]["SPACE"] = OP_SK_PGDOWN;
-	keymap_["article"]["b"] = OP_SK_PGUP;
-	keymap_["article"]["SPACE"] = OP_SK_PGDOWN;
+	keymap_["help"][KeyCombination::from_bindkey("b")] = OP_SK_PGUP;
+	keymap_["help"][KeyCombination::from_bindkey("SPACE")] = OP_SK_PGDOWN;
+	keymap_["article"][KeyCombination::from_bindkey("b")] = OP_SK_PGUP;
+	keymap_["article"][KeyCombination::from_bindkey("SPACE")] = OP_SK_PGDOWN;
 }
 
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
@@ -532,7 +533,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 
 		bool bound_to_key = false;
 		for (const auto& keymap : keymap_[context]) {
-			const std::string& key = keymap.first;
+			const std::string& key = keymap.first.to_bindkey_string();
 			const Operation op = keymap.second;
 			if (opdesc.op == op) {
 				descs.push_back({key, opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
@@ -550,7 +551,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 	return descs;
 }
 
-const std::map<std::string, MacroBinding>& KeyMap::get_macro_descriptions()
+const std::map<KeyCombination, MacroBinding>& KeyMap::get_macro_descriptions()
 {
 	return macros_;
 }
@@ -562,24 +563,26 @@ void KeyMap::set_key(Operation op,
 	const std::string& context)
 {
 	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key);
+	const auto key_combination = KeyCombination::from_bindkey(key);
 	if (context == "all") {
 		for (const auto& ctx : contexts) {
-			keymap_[ctx.first][key] = op;
+			keymap_[ctx.first][key_combination] = op;
 		}
 	} else {
-		keymap_[context][key] = op;
+		keymap_[context][key_combination] = op;
 	}
 }
 
 void KeyMap::unset_key(const std::string& key, const std::string& context)
 {
 	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key);
+	const auto key_combination = KeyCombination::from_bindkey(key);
 	if (context == "all") {
 		for (const auto& ctx : contexts) {
-			keymap_[ctx.first][key] = OP_NIL;
+			keymap_[ctx.first][key_combination] = OP_NIL;
 		}
 	} else {
-		keymap_[context][key] = OP_NIL;
+		keymap_[context][key_combination] = OP_NIL;
 	}
 }
 
@@ -621,20 +624,15 @@ char KeyMap::get_key(const std::string& keycode)
 	return 0;
 }
 
-Operation KeyMap::get_operation(const std::string& keycode,
+Operation KeyMap::get_operation(const KeyCombination& key_combination,
 	const std::string& context)
 {
 	std::string key;
 	LOG(Level::DEBUG,
 		"KeyMap::get_operation: keycode = %s context = %s",
-		keycode,
+		key_combination.to_bindkey_string(),
 		context);
-	if (keycode.length() > 0) {
-		key = keycode;
-	} else {
-		key = "NIL";
-	}
-	return keymap_[context][key];
+	return keymap_[context][key_combination];
 }
 
 void KeyMap::dump_config(std::vector<std::string>& config_output) const
@@ -645,7 +643,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 		for (const auto& keymap : x) {
 			if (keymap.second < OP_INT_MIN) {
 				std::string configline = "bind-key ";
-				configline.append(utils::quote(keymap.first));
+				configline.append(utils::quote(keymap.first.to_bindkey_string()));
 				configline.append(" ");
 				configline.append(getopname(keymap.second));
 				configline.append(" ");
@@ -656,7 +654,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 	}
 	for (const auto& macro : macros_) {
 		std::string configline = "macro ";
-		configline.append(macro.first);
+		configline.append(macro.first.to_bindkey_string());
 		configline.append(" ");
 		for (unsigned int i = 0; i < macro.second.cmds.size(); ++i) {
 			const auto& cmd = macro.second.cmds[i];
@@ -750,7 +748,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (!token.has_value() || cmds.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		const std::string macrokey = token.value();
+		const auto macrokey = KeyCombination::from_bindkey(token.value());
 
 		macros_[macrokey] = {cmds, description};
 	} else if (action == "run-on-startup") {
@@ -812,16 +810,16 @@ std::vector<std::string> KeyMap::get_keys(Operation op,
 	std::vector<std::string> keys;
 	for (const auto& keymap : keymap_[context]) {
 		if (keymap.second == op) {
-			keys.push_back(keymap.first);
+			keys.push_back(keymap.first.to_bindkey_string());
 		}
 	}
 	return keys;
 }
 
-std::vector<MacroCmd> KeyMap::get_macro(const std::string& key)
+std::vector<MacroCmd> KeyMap::get_macro(const KeyCombination& key_combination)
 {
-	if (macros_.count(key) >= 1) {
-		return macros_.at(key).cmds;
+	if (macros_.count(key_combination) >= 1) {
+		return macros_.at(key_combination).cmds;
 	}
 	return {};
 }
@@ -839,12 +837,13 @@ bool KeyMap::is_valid_context(const std::string& context)
 	return false;
 }
 
-std::map<std::string, Operation> KeyMap::get_internal_operations() const
+std::map<KeyCombination, Operation> KeyMap::get_internal_operations() const
 {
-	std::map<std::string, Operation> internal_ops;
+	std::map<KeyCombination, Operation> internal_ops;
 	for (const auto& opdesc : opdescs) {
 		if (opdesc.flags & KM_INTERNAL) {
-			internal_ops[opdesc.default_key] = opdesc.op;
+			const auto key_combination = KeyCombination::from_bindkey(opdesc.default_key);
+			internal_ops[key_combination] = opdesc.op;
 		}
 	}
 	return internal_ops;

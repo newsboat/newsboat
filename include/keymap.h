@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "keycombination.h"
 
 // in configuration: bind-key <key> <operation>
 
@@ -195,16 +196,16 @@ public:
 	void unset_key(const std::string& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
 	Operation get_opcode(const std::string& opstr);
-	Operation get_operation(const std::string& keycode,
+	Operation get_operation(const KeyCombination& key_combination,
 		const std::string& context);
-	std::vector<MacroCmd> get_macro(const std::string& key);
+	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
 	char get_key(const std::string& keycode);
 	std::vector<std::string> get_keys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
-	const std::map<std::string, MacroBinding>& get_macro_descriptions();
+	const std::map<KeyCombination, MacroBinding>& get_macro_descriptions();
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
@@ -216,10 +217,10 @@ public:
 private:
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
-	std::map<std::string, Operation> get_internal_operations() const;
+	std::map<KeyCombination, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
-	std::map<std::string, std::map<std::string, Operation>> keymap_;
-	std::map<std::string, MacroBinding> macros_;
+	std::map<std::string, std::map<KeyCombination, Operation>> keymap_;
+	std::map<KeyCombination, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };
 

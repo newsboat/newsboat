@@ -160,7 +160,7 @@ void HelpFormAction::prepare()
 			listfmt.add_line("");
 
 			for (const auto& macro : macros) {
-				const std::string key = macro.first;
+				const std::string key = macro.first.to_bindkey_string();
 				const std::string description = macro.second.description;
 
 				// "macro-prefix" is not translated because it refers to an operation name

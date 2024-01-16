@@ -297,7 +297,8 @@ doc/example-config: doc/gen-example-config doc/configcommands.dsv
 fmt:
 	astyle --project \
 		*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp \
-		test/*.cpp test/test_helpers/*.h test/test_helpers/*.cpp
+		test/*.cpp test/test_helpers/*.h test/test_helpers/*.cpp \
+		test/test_helpers/stringmaker/*.h
 	$(CARGO) fmt
 	# We reset the locale to make the sorting reproducible.
 	LC_ALL=C sort -t '|' -k 1,1 -o doc/configcommands.dsv doc/configcommands.dsv
