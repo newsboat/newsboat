@@ -298,7 +298,7 @@ nonstd::expected<std::string, utils::CurlError> utils::retrieve_url(
 	logprefix << "utils::retrieve_url(" << http_method_str(method) << " " << url << ")"
 		<< "[" << (body != nullptr ? body->c_str() : "-") << "]";
 
-	std::string buf = curlDataReceiver->get_data();
+	nonstd::expected<std::string, CurlError> result = curlDataReceiver->get_data();
 	if (res != CURLE_OK) {
 		std::string errmsg(errbuf);
 		if (errmsg.empty()) {
@@ -310,11 +310,9 @@ nonstd::expected<std::string, utils::CurlError> utils::retrieve_url(
 		}
 
 		LOG(Level::ERROR, "%s: LibCURL error (%d): %s", logprefix.str(), res, errmsg);
-		buf = "";
-		curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
-		return nonstd::make_unexpected(CurlError{res, errmsg});
+		result = nonstd::make_unexpected(CurlError{res, errmsg});
 	} else {
-		LOG(Level::DEBUG, "%s: %s", logprefix.str(), buf);
+		LOG(Level::DEBUG, "%s: %s", logprefix.str(), result.value());
 	}
 
 	// Reset ERRORBUFFER: has to be valid for the whole lifetime of the handle
@@ -322,7 +320,7 @@ nonstd::expected<std::string, utils::CurlError> utils::retrieve_url(
 	// See the clobbering note above.
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_ERRORBUFFER, NULL);
 
-	return buf;
+	return result;
 }
 
 std::string utils::run_program(const char* argv[], const std::string& input)
