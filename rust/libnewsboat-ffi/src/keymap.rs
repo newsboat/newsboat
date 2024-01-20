@@ -31,15 +31,6 @@ mod ffi {
 
         fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> Binding;
     }
-
-    extern "C++" {
-        // cxx uses `std::out_of_range`, but doesn't include the header that defines that
-        // exception. So we do it for them.
-        include!("stdexcept");
-        // Also inject a header that defines ptrdiff_t. Note this is *not* a C++ header, because
-        // cxx uses a non-C++ name of the type.
-        include!("stddef.h");
-    }
 }
 
 fn tokenize_operation_sequence(
