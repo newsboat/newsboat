@@ -19,6 +19,7 @@
 #include "reloader.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -624,13 +625,15 @@ void FeedListFormAction::set_feedlist(
 	update_visible_feeds(feeds);
 
 	auto render_line = [this, feedlist_format](std::uint32_t line,
-	std::uint32_t width) -> std::string {
+	std::uint32_t width) -> StflRichText {
 		if (line >= visible_feeds.size())
 		{
-			return "ERROR";
+			return StflRichText::from_plaintext_string("ERROR");
 		}
 		auto& feed = visible_feeds[line];
-		return format_line(feedlist_format, feed.first, feed.second, width);
+		const auto formatted_line = format_line(feedlist_format, feed.first, feed.second, width);
+		// TODO: Propagate usage of StflRichText
+		return StflRichText::from_quoted(formatted_line);
 	};
 	list.invalidate_list_content(visible_feeds.size(), render_line);
 

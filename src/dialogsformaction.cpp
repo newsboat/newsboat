@@ -6,6 +6,7 @@
 #include "config.h"
 #include "fmtstrformatter.h"
 #include "listformatter.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -31,13 +32,13 @@ void DialogsFormAction::prepare()
 	if (do_redraw) {
 		update_heading();
 
-		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 			(void)width;
 			const auto formaction_names = v.get_formaction_names();
 			const auto& fa = formaction_names[line];
 			const bool is_current_formaction =
 			v.get_formaction(fa.first) == get_parent_formaction();
-			return utils::quote_for_stfl(
+			return StflRichText::from_plaintext_string(
 				strprintf::fmt("%4u %s %s",
 					line + 1,
 					is_current_formaction ? "*" : " ",

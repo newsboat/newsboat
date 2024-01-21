@@ -247,7 +247,7 @@ void DirBrowserFormAction::prepare()
 			add_directory(id_at_position, directory);
 		}
 
-		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> std::string {
+		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 			(void)width;
 			return lines[line];
 		};
@@ -330,7 +330,7 @@ void DirBrowserFormAction::add_directory(
 				group,
 				sizestr,
 				formatteddirname);
-		lines.push_back(utils::quote_for_stfl(line));
+		lines.push_back(StflRichText::from_plaintext_string(line));
 		id_at_position.push_back(file_system::FileSystemEntry{ftype, dirname});
 	}
 }

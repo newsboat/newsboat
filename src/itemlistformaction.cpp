@@ -21,6 +21,7 @@
 #include "matcherexception.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -1072,13 +1073,15 @@ void ItemListFormAction::draw_items()
 		cfg->get_configvalue("articlelist-format");
 
 	auto render_line = [this, itemlist_format, datetime_format](std::uint32_t line,
-	std::uint32_t width) -> std::string {
+	std::uint32_t width) -> StflRichText {
 		if (line >= visible_items.size())
 		{
-			return "ERROR";
+			return StflRichText::from_plaintext_string("ERROR");
 		}
 		auto& item = visible_items[line];
-		return item2formatted_line(item, width, itemlist_format, datetime_format);
+		const auto formatted_line = item2formatted_line(item, width, itemlist_format, datetime_format);
+		// TODO: Propagate usage of StflRichText
+		return StflRichText::from_quoted(formatted_line);
 	};
 	list.invalidate_list_content(visible_items.size(), render_line);
 
