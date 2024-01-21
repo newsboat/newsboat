@@ -21,7 +21,6 @@
 #include "matcherexception.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
-#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -1079,9 +1078,7 @@ void ItemListFormAction::draw_items()
 			return StflRichText::from_plaintext_string("ERROR");
 		}
 		auto& item = visible_items[line];
-		const auto formatted_line = item2formatted_line(item, width, itemlist_format, datetime_format);
-		// TODO: Propagate usage of StflRichText
-		return StflRichText::from_quoted(formatted_line);
+		return  item2formatted_line(item, width, itemlist_format, datetime_format);
 	};
 	list.invalidate_list_content(visible_items.size(), render_line);
 
@@ -1143,7 +1140,7 @@ void ItemListFormAction::prepare()
 	prepare_set_filterpos();
 }
 
-std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
+StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const unsigned int width,
 	const std::string& itemlist_format,
 	const std::string& datetime_format)
@@ -1185,19 +1182,20 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 
 	fmt.register_fmt('L', item.first->length());
 
-	auto formattedLine = fmt.do_format(itemlist_format, width);
-	formattedLine = utils::quote_for_stfl(formattedLine);
+	const auto formattedLine = fmt.do_format(itemlist_format, width);
+	auto stflFormattedLine = StflRichText::from_plaintext_string(formattedLine);
 
 	const int id = rxman.article_matches(item.first.get());
 	if (id != -1) {
-		formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
+		const auto tag = strprintf::fmt("<%d>", id);
+		stflFormattedLine.apply_style_tag(tag, 0, formattedLine.length());
 	}
 
 	if (item.first->unread()) {
-		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
+		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
 	}
 
-	return formattedLine;
+	return stflFormattedLine;
 }
 
 void ItemListFormAction::goto_item(const std::string& title)

@@ -19,7 +19,6 @@
 #include "reloader.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
-#include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"
 #include "view.h"
@@ -631,9 +630,7 @@ void FeedListFormAction::set_feedlist(
 			return StflRichText::from_plaintext_string("ERROR");
 		}
 		auto& feed = visible_feeds[line];
-		const auto formatted_line = format_line(feedlist_format, feed.first, feed.second, width);
-		// TODO: Propagate usage of StflRichText
-		return StflRichText::from_quoted(formatted_line);
+		return format_line(feedlist_format, feed.first, feed.second, width);
 	};
 	list.invalidate_list_content(visible_feeds.size(), render_line);
 
@@ -1064,7 +1061,7 @@ std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 	return title;
 }
 
-std::string FeedListFormAction::format_line(const std::string& feedlist_format,
+StflRichText FeedListFormAction::format_line(const std::string& feedlist_format,
 	std::shared_ptr<RssFeed> feed,
 	unsigned int pos,
 	unsigned int width)
@@ -1087,19 +1084,20 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', utils::utf8_to_locale(feed->description()));
 
-	auto formattedLine = fmt.do_format(feedlist_format, width);
-	formattedLine = utils::quote_for_stfl(formattedLine);
+	const auto formattedLine = fmt.do_format(feedlist_format, width);
+	auto stflFormattedLine = StflRichText::from_plaintext_string(formattedLine);
+
+	if (unread_count > 0) {
+		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
+	}
 
 	const int id = rxman.feed_matches(feed.get());
 	if (id != -1) {
-		formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
+		const auto tag = strprintf::fmt("<%d>", id);
+		stflFormattedLine.apply_style_tag(tag, 0, formattedLine.length());
 	}
 
-	if (unread_count > 0) {
-		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
-	}
-
-	return formattedLine;
+	return stflFormattedLine;
 }
 
 std::string FeedListFormAction::title()
