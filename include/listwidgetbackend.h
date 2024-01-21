@@ -9,6 +9,7 @@
 #include "listformatter.h"
 #include "regexmanager.h"
 #include "stflpp.h"
+#include "stflrichtext.h"
 
 namespace newsboat {
 
@@ -26,7 +27,7 @@ public:
 	std::uint32_t get_num_lines();
 
 	void invalidate_list_content(std::uint32_t num_lines,
-		std::function<std::string(std::uint32_t, std::uint32_t)> get_line_method);
+		std::function<StflRichText(std::uint32_t, std::uint32_t)> get_line_method);
 
 protected:
 	virtual void on_list_changed() = 0;
@@ -40,8 +41,8 @@ private:
 	ListFormatter listfmt;
 	std::uint32_t num_lines;
 	std::uint32_t scroll_offset;
-	std::map<std::uint32_t, std::string> line_cache;
-	std::function<std::string(std::uint32_t, std::uint32_t)> get_formatted_line;
+	std::map<std::uint32_t, StflRichText> line_cache;
+	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_formatted_line;
 };
 
 } // namespace newsboat

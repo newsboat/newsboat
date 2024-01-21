@@ -90,7 +90,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			dllist_form.run(-3); // compute all widget dimensions
 
 			auto render_line = [this, line_format](std::uint32_t line,
-			std::uint32_t width) -> std::string {
+			std::uint32_t width) -> StflRichText {
 				const auto& downloads = ctrl.downloads();
 				const auto& dl = downloads.at(line);
 				return format_line(line_format, dl, line, width);
@@ -395,7 +395,7 @@ void PbView::set_dllist_keymap_hint()
 	dllist_form.set("help", keymap_hint);
 }
 
-std::string PbView::format_line(const std::string& podlist_format,
+StflRichText PbView::format_line(const std::string& podlist_format,
 	const Download& dl,
 	unsigned int pos,
 	unsigned int width)
@@ -419,8 +419,7 @@ std::string PbView::format_line(const std::string& podlist_format,
 	fmt.register_fmt('b', strprintf::fmt("%s", dl.basename()));
 
 	auto formattedLine = fmt.do_format(podlist_format, width);
-	formattedLine = utils::quote_for_stfl(formattedLine);
-	return formattedLine;
+	return StflRichText::from_plaintext_string(formattedLine);
 }
 
 } // namespace podboat

@@ -1,6 +1,7 @@
 #include "listwidget.h"
 
 #include "stflpp.h"
+#include "stflrichtext.h"
 #include "utils.h"
 
 #include "3rd-party/catch.hpp"
@@ -17,9 +18,9 @@ const static std::string stflListForm =
 	"    pos[list-name_pos]:0\n"
 	"    offset[list-name_offset]:0";
 
-std::string render_empty_line(std::uint32_t, std::uint32_t)
+StflRichText render_empty_line(std::uint32_t, std::uint32_t)
 {
-	return "";
+	return StflRichText::from_plaintext_string("");
 }
 
 
@@ -101,9 +102,9 @@ TEST_CASE("invalidate_list_content() clears internal caches", "[ListWidget]")
 	ListWidget listWidget("list-name", listForm, scrolloff);
 
 	std::set<std::uint32_t> requested_lines;
-	auto render_line = [&](std::uint32_t line, std::uint32_t) -> std::string {
+	auto render_line = [&](std::uint32_t line, std::uint32_t) -> StflRichText {
 		requested_lines.insert(line);
-		return "";
+		return StflRichText::from_plaintext_string("");
 	};
 
 	GIVEN("a ListWidget with 3 lines") {
