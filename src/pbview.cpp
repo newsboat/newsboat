@@ -314,7 +314,7 @@ void PbView::run_help()
 				desc.cmd,
 				desc.desc);
 
-		listfmt.add_line(descline);
+		listfmt.add_line(StflRichText::from_plaintext_string(descline));
 	}
 
 	help_textview.stfl_replace_lines(listfmt.get_lines_count(),

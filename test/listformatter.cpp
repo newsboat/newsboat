@@ -4,6 +4,17 @@
 
 using namespace newsboat;
 
+namespace {
+
+void add_lines(ListFormatter& listfmt, std::vector<std::string> lines)
+{
+	for (const auto& line : lines) {
+		listfmt.add_line(StflRichText::from_plaintext_string(line));
+	}
+}
+
+}
+
 TEST_CASE("add_line(), get_lines_count() and clear()",
 	"[ListFormatter]")
 {
@@ -12,10 +23,10 @@ TEST_CASE("add_line(), get_lines_count() and clear()",
 	REQUIRE(fmt.get_lines_count() == 0);
 
 	SECTION("add_line() adds a line") {
-		fmt.add_line("one");
+		add_lines(fmt, {"one"});
 		REQUIRE(fmt.get_lines_count() == 1);
 
-		fmt.add_line("two");
+		add_lines(fmt, {"two"});
 		REQUIRE(fmt.get_lines_count() == 2);
 
 		SECTION("clear() removes all lines") {
@@ -29,9 +40,11 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 {
 	ListFormatter fmt;
 
-	fmt.add_line("hello");
-	fmt.add_line("goodb");
-	fmt.add_line("ye");
+	add_lines(fmt, {
+		"hello",
+		"goodb",
+		"ye",
+	});
 
 	std::string expected =
 		"{list"
@@ -41,7 +54,7 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 		"}";
 	REQUIRE(fmt.format_list() == expected);
 
-	fmt.set_line(1, "oh");
+	fmt.set_line(1, StflRichText::from_plaintext_string("oh"));
 
 	expected =
 		"{list"
@@ -58,7 +71,9 @@ TEST_CASE("format_list() uses regex manager if one is passed",
 	RegexManager rxmgr;
 	ListFormatter fmt(&rxmgr, "article");
 
-	fmt.add_line("Highlight me please!");
+	add_lines(fmt, {
+		"Highlight me please!",
+	});
 
 	// the choice of green text on red background does not reflect my
 	// personal taste (or lack thereof) :)

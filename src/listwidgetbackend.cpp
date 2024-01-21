@@ -92,7 +92,8 @@ void ListWidgetBackend::render()
 			formatted_line = get_formatted_line(line, viewport_width);
 			line_cache.insert({line, formatted_line});
 		}
-		listfmt.add_line(formatted_line);
+		// TODO: Propagate usage of StflRichText
+		listfmt.add_line(StflRichText::from_quoted(formatted_line));
 	}
 
 	form.modify(list_name, "replace_inner", listfmt.format_list());
