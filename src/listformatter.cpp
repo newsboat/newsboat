@@ -17,19 +17,18 @@ ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
 
 ListFormatter::~ListFormatter() {}
 
-void ListFormatter::add_line(const std::string& text)
+void ListFormatter::add_line(const StflRichText& text)
 {
+	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text.stfl_quoted_string());
 	set_line(UINT_MAX, text);
-	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text);
 }
 
 void ListFormatter::set_line(const unsigned int itempos,
-	const std::string& text)
+	const StflRichText& text)
 {
-	const std::string formatted_text = utils::wstr2str(utils::clean_nonprintable_characters(
-				utils::str2wstr(text)));
-
-	// TODO: Propagate usage of StflRichText
+	const std::wstring wide = utils::str2wstr(text.stfl_quoted_string());
+	const std::wstring cleaned = utils::clean_nonprintable_characters(wide);
+	const std::string formatted_text = utils::wstr2str(cleaned);
 	const StflRichText stflRichText = StflRichText::from_quoted(formatted_text);
 
 	if (itempos == UINT_MAX) {

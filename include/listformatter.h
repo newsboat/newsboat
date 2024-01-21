@@ -15,9 +15,8 @@ class ListFormatter {
 public:
 	ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
 	~ListFormatter();
-	void add_line(const std::string& text);
-	void set_line(const unsigned int itempos,
-		const std::string& text);
+	void add_line(const StflRichText& text);
+	void set_line(const unsigned int itempos, const StflRichText& text);
 	void clear()
 	{
 		lines.clear();
