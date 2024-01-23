@@ -58,6 +58,70 @@ pub struct FmtStrFormatter {
     fmts: BTreeMap<char, String>,
 }
 
+struct StringParts {
+    head: LimitedString,
+    spaced_tail: Option<(char, LimitedString)>,
+    width: Option<usize>,
+}
+
+impl StringParts {
+    fn new(width: Option<usize>) -> Self {
+        Self {
+            head: LimitedString::new(width),
+            spaced_tail: None,
+            width,
+        }
+    }
+
+    fn add_spacing(&mut self, spacing: char) {
+        if let Some((_, ref mut tail)) = self.spaced_tail {
+            tail.push(spacing);
+        } else {
+            self.head.push(spacing);
+            let remaining = self.width.map(|w| w.saturating_sub(self.head.length()));
+            self.spaced_tail = Some((spacing, LimitedString::new(remaining)));
+        }
+    }
+
+    fn push_str(&mut self, content: &str) {
+        if let Some((_, ref mut tail)) = self.spaced_tail {
+            tail.push_str(content);
+        } else {
+            self.head.push_str(content);
+        }
+    }
+
+    fn join(&mut self, parts: Self) {
+        if let Some((_, ref mut tail)) = self.spaced_tail {
+            tail.push_str(&parts.head.into_string());
+            if let Some((_, rest)) = parts.spaced_tail {
+                tail.push_str(&rest.into_string());
+            }
+        } else {
+            self.head.push_str(&parts.head.into_string());
+            self.spaced_tail = parts.spaced_tail;
+        }
+    }
+
+    fn into_string(self) -> String {
+        let mut result = self.head;
+        if let Some((spacing, rest)) = self.spaced_tail {
+            if let Some(width) = self.width {
+                let padding_width = width
+                    .saturating_sub(result.length())
+                    .saturating_sub(rest.length());
+                if padding_width > 0 {
+                    let padding_value = &format!("{spacing}");
+                    let padding = padding_value.repeat(padding_width);
+                    result.push_str(&padding);
+                }
+            }
+            result.push_str(&rest.into_string());
+        }
+        result.into_string()
+    }
+}
+
 impl FmtStrFormatter {
     /// Construct new `FmtStrFormatter` that contains no keys and no values.
     pub fn new() -> FmtStrFormatter {
@@ -74,31 +138,10 @@ impl FmtStrFormatter {
     /// Takes a format string and replaces format specifiers with their values.
     pub fn do_format(&self, format: &str, width: u32) -> String {
         let ast = parse(format);
-        self.formatting_helper(&ast, width)
+        self.formatting_helper(&ast, width).into_string()
     }
 
-    fn format_spacing(&self, c: char, rest: &[Specifier], width: u32, result: &mut LimitedString) {
-        let rest = self.formatting_helper(rest, 0);
-        if width == 0 {
-            result.push(c);
-        } else {
-            let padding_width = {
-                let content_width = utils::strwidth(&rest) + result.length();
-                if content_width > width as usize {
-                    0
-                } else {
-                    width as usize - content_width
-                }
-            };
-
-            let padding_value = &format!("{c}");
-            let padding = padding_value.repeat(padding_width);
-            result.push_str(&padding);
-        };
-        result.push_str(&rest);
-    }
-
-    fn format_format(&self, c: char, padding: &Padding, width: u32, result: &mut LimitedString) {
+    fn format_format(&self, c: char, padding: &Padding, width: u32, result: &mut StringParts) {
         let empty_string = String::new();
         let value = self.fmts.get(&c).unwrap_or(&empty_string);
         match *padding {
@@ -149,61 +192,37 @@ impl FmtStrFormatter {
         then: &[Specifier],
         els: &Option<Vec<Specifier>>,
         width: u32,
-        result: &mut LimitedString,
+        result: &mut StringParts,
     ) {
         match self.fmts.get(&cond) {
             Some(value) if !value.trim().is_empty() => {
-                result.push_str(&self.formatting_helper(then, width))
+                result.join(self.formatting_helper(then, width));
             }
             _ => {
                 if let Some(ref els) = *els {
-                    result.push_str(&self.formatting_helper(els, width))
+                    result.join(self.formatting_helper(els, width));
                 }
             }
         }
     }
 
-    fn formatting_helper(&self, format_ast: &[Specifier], width: u32) -> String {
-        let mut result = LimitedString::new(if width == 0 {
-            None
-        } else {
-            Some(width as usize)
-        });
+    fn formatting_helper(&self, format_ast: &[Specifier], width: u32) -> StringParts {
+        let mut result = StringParts::new((width != 0).then_some(width as usize));
 
-        for (i, specifier) in format_ast.iter().enumerate() {
+        for specifier in format_ast.iter() {
             match *specifier {
-                Specifier::Spacing(c) => {
-                    let rest = &format_ast[i + 1..];
-                    self.format_spacing(c, rest, width, &mut result);
-                    // format_spacing will also format the rest of the string, so quit the loop
-                    break;
-                }
-
+                Specifier::Spacing(c) => result.add_spacing(c),
                 Specifier::Format(c, ref padding) => {
-                    self.format_format(c, padding, width, &mut result);
+                    self.format_format(c, padding, width, &mut result)
                 }
-
-                Specifier::Text(s) => {
-                    if width == 0 {
-                        result.push_str(s);
-                    } else {
-                        let remaining = width as usize - result.length();
-                        let count = utils::strwidth(s);
-                        if remaining >= count {
-                            result.push_str(s);
-                        } else {
-                            result.push_str(&utils::substr_with_width(s, remaining));
-                        }
-                    }
-                }
-
+                Specifier::Text(s) => result.push_str(s),
                 Specifier::Conditional(cond, ref then, ref els) => {
                     self.format_conditional(cond, then, els, width, &mut result)
                 }
             }
         }
 
-        result.into_string()
+        result
     }
 }
 
@@ -551,6 +570,21 @@ mod tests {
         let format = "%s%>a%s%>b%s";
         assert_eq!(fmt.do_format(format, 0), "_short_a_short_b_short_");
         assert_eq!(fmt.do_format(format, 30), "_short_aaaaaaaa_short_b_short_");
+    }
+
+    #[test]
+    fn t_spacer_pads_to_correct_length_inside_conditional_branch() {
+        let mut fmt = FmtStrFormatter::new();
+
+        fmt.register_fmt('x', "non-empty".to_string());
+        fmt.register_fmt('y', "".to_string());
+
+        assert_eq!(fmt.do_format("A%?x?%>a&%>b?B", 7), "AaaaaaB");
+        assert_eq!(fmt.do_format("A%?y?%>a&%>b?B", 7), "AbbbbbB");
+        assert_eq!(fmt.do_format("A%>_%?x?%>a&%>b?B", 7), "A____aB");
+        assert_eq!(fmt.do_format("A%>_%?y?%>a&%>b?B", 7), "A____bB");
+        assert_eq!(fmt.do_format("A%?x?%>a&%>b?%>_B", 7), "Aaaaa_B");
+        assert_eq!(fmt.do_format("A%?y?%>a&%>b?%>_B", 7), "Abbbb_B");
     }
 
     #[test]
