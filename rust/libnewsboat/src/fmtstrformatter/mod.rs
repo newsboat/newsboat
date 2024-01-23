@@ -84,25 +84,10 @@ impl StringParts {
     }
 
     fn push_str(&mut self, content: &str) {
-        let limit = self.width;
-        let push = |to: &mut LimitedString| {
-            if let Some(remaining) = limit {
-                let remaining = remaining.saturating_sub(to.length());
-                let count = utils::strwidth(content);
-                if remaining >= count {
-                    to.push_str(content);
-                } else {
-                    to.push_str(&utils::substr_with_width(content, remaining));
-                }
-            } else {
-                to.push_str(content);
-            }
-        };
-
         if let Some((_, ref mut tail)) = self.spaced_tail {
-            push(tail);
+            tail.push_str(content);
         } else {
-            push(&mut self.head);
+            self.head.push_str(content);
         }
     }
 
