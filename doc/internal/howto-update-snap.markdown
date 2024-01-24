@@ -26,7 +26,7 @@ You'll need:
 2. Check out the latest release tag: `git checkout r2.20.1`.
 3. Submit a remote build for all architectures mentioned in the email:
 
-    $ snapcraft remote-build --build-on=s390x,ppc64el,arm64,armhf,amd64
+    $ snapcraft remote-build --build-on s390x ppc64el arm64 armhf amd64
 
 4. Wait for the build to finish. It will create .snap files in the current
    directory.
@@ -43,4 +43,4 @@ You'll need:
 
     $ for i in *.snap; do snapcraft upload --release=beta,candidate,stable $i ; done
 
-6. Remove built snaps: `rm -f *.snap *.snap.xdelta3 newsboat*txt`.
+6. Remove built snaps: `rm -f *.snap newsboat*txt`.
