@@ -395,7 +395,7 @@ password.
 
 === Feedbin
 
-_Supported since Newsboat TODO_.
+_Supported since Newsboat 2.35_.
 
 https://feedbin.com[Feedbin] is a web-based RSS reader.
 To use it, point Newsboat to your Feedbin account:
