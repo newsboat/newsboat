@@ -109,9 +109,6 @@ bool FeedbinApi::mark_entries_read(const std::vector<std::string>& ids,
 	HTTPMethod method = read ? HTTPMethod::DELETE : HTTPMethod::POST;
 	json body;
 	body["unread_entries"] = ids;
-	curl_slist* headers = NULL;
-	headers = curl_slist_append(headers, "Content-Type: application/json");
-	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, headers);
 	run_op(FEEDBIN_UNREAD_ENTRIES_PATH, body, handle, method);
 	curl_easy_getinfo(handle.ptr(), CURLINFO_RESPONSE_CODE, &response_code);
 
@@ -262,10 +259,6 @@ bool FeedbinApi::star_article(const std::string& article_id, bool star)
 
 	HTTPMethod method = star ? HTTPMethod::POST : HTTPMethod::DELETE;
 
-	curl_slist* headers = NULL;
-	headers = curl_slist_append(headers, "Content-Type: application/json");
-	curl_easy_setopt(handle.ptr(), CURLOPT_HTTPHEADER, headers);
-
 	run_op(FEEDBIN_STARRED_ENTRIES_PATH, body, handle, method);
 
 	long response_code = 0;
@@ -285,6 +278,12 @@ json FeedbinApi::run_op(const std::string& path, const json& args,
 	CurlHandle& easyhandle,
 	const HTTPMethod method /* = GET */)
 {
+	if (method == HTTPMethod::POST || method == HTTPMethod::DELETE) {
+		curl_slist* headers = NULL;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, headers);
+	}
+
 	// follow redirects and keep the same request type
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(easyhandle.ptr(), CURLOPT_POSTREDIR, CURL_REDIR_POST_ALL);
