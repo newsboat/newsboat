@@ -5,7 +5,6 @@
 
 namespace newsboat {
 
-class ConfigContainer;
 class RemoteApi;
 
 class FeedbinUrlReader : public UrlReader {
