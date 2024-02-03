@@ -126,7 +126,7 @@ bool FeedbinApi::mark_all_read(const std::string& combined_feed_url)
 		feed_id = combined_feed_url.substr(pound + 1);
 	} else {
 		LOG(Level::ERROR, "FeedbinApi::mark_all_read: Failed to "
-			"get feed ID from URL.");
+			"get feed ID from URL: %s", combined_feed_url);
 		return false;
 	}
 
