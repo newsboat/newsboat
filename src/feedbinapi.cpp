@@ -236,7 +236,7 @@ bool FeedbinApi::update_article_flags(const std::string& oldflags,
 	std::string star_flag = cfg.get_configvalue("feedbin-flag-star");
 	bool success = true;
 
-	if (star_flag.length() > 0) {
+	if (!star_flag.empty()) {
 		update_flag(oldflags, newflags, star_flag[0],
 		[&](bool added) {
 			success = star_article(guid, added);
