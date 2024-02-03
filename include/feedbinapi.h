@@ -1,8 +1,6 @@
 #ifndef NEWSBOAT_FEEDBINAPI_H_
 #define NEWSBOAT_FEEDBINAPI_H_
 
-#include <libxml/tree.h>
-
 #include "remoteapi.h"
 #include "rss/feed.h"
 #include "3rd-party/json.hpp"
