@@ -6,6 +6,7 @@
 #include "listwidget.h"
 #include "textviewwidget.h"
 #include "stflpp.h"
+#include "stflrichtext.h"
 
 namespace newsboat {
 class KeyMap;
@@ -36,7 +37,7 @@ private:
 	std::pair<double, std::string> get_speed_human_readable(double kbps);
 	void handle_resize();
 
-	std::string format_line(const std::string& podlist_format,
+	StflRichText format_line(const std::string& podlist_format,
 		const Download& dl,
 		unsigned int pos,
 		unsigned int width);
