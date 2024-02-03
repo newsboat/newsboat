@@ -1,12 +1,12 @@
 #include "feedbinapi.h"
 
+#include <cinttypes>
 #include <cstdint>
 #include <curl/curl.h>
 #include <string>
 
 #include "3rd-party/json.hpp"
 #include "curlhandle.h"
-#include "json.h"
 #include "rss/feed.h"
 #include "strprintf.h"
 #include "utils.h"
