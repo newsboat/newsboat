@@ -218,7 +218,7 @@ rsspp::Feed FeedbinApi::fetch_feed(const std::string& id,
 			feed.items.push_back(item);
 		}
 	} catch (json::exception& e) {
-		LOG(Level::ERROR, "Exception occurred while parsing feeed: ", e.what());
+		LOG(Level::ERROR, "Exception occurred while parsing feed: ", e.what());
 	}
 
 	std::sort(feed.items.begin(), feed.items.end(),
