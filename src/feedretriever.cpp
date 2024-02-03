@@ -62,7 +62,6 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 		} else {
 			return {};
 		}
-		return fetch_feedbin(uri);
 	} else if (urls_source == "freshrss") {
 		return fetch_freshrss(uri);
 	} else if (utils::is_http_url(uri)) {
