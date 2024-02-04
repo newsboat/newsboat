@@ -159,7 +159,7 @@ enum Operation {
 };
 
 struct KeyMapDesc {
-	std::string key;
+	KeyCombination key;
 	std::string cmd;
 	std::string desc;
 	std::string ctx;

@@ -779,7 +779,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 
 		bool bound_to_key = false;
 		for (const auto& keymap : keymap_[context]) {
-			const std::string& key = keymap.first.to_bindkey_string();
+			const auto& key = keymap.first;
 			const Operation op = keymap.second;
 			if (opdesc.op == op) {
 				descs.push_back({key, opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
@@ -791,7 +791,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 				"KeyMap::get_keymap_descriptions: found unbound function: %s context = %s",
 				opdesc.opstr,
 				context);
-			descs.push_back({"", opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
+			descs.push_back({KeyCombination(""), opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
 		}
 	}
 	return descs;

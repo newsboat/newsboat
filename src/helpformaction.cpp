@@ -90,7 +90,7 @@ void HelpFormAction::prepare()
 		for (const auto& desc : descs) {
 			if (desc.flags & KM_SYSKEYS) {
 				syskey_descriptions.push_back(desc);
-			} else if (desc.key.empty()) {
+			} else if (desc.key.get_key().empty()) {
 				unbound_descriptions.push_back(desc);
 			} else {
 				bound_descriptions.push_back(desc);
@@ -99,7 +99,7 @@ void HelpFormAction::prepare()
 
 		const auto should_be_visible = [&](const KeyMapDesc& desc) {
 			return !apply_search
-				|| strcasestr(desc.key.c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(desc.key.to_bindkey_string().c_str(), searchphrase.c_str()) != nullptr
 				|| strcasestr(desc.cmd.c_str(), searchphrase.c_str()) != nullptr
 				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
 		};
@@ -114,7 +114,10 @@ void HelpFormAction::prepare()
 
 		for (const auto& desc : bound_descriptions) {
 			if (should_be_visible(desc)) {
-				auto line = strprintf::fmt("%-15s %-23s %s", desc.key, desc.cmd, desc.desc);
+				auto line = strprintf::fmt("%-15s %-23s %s",
+						desc.key.to_bindkey_string(),
+						desc.cmd,
+						desc.desc);
 				line = utils::quote_for_stfl(line);
 				line = apply_highlights(line);
 				listfmt.add_line(line);
@@ -128,7 +131,10 @@ void HelpFormAction::prepare()
 
 			for (const auto& desc : syskey_descriptions) {
 				if (should_be_visible(desc)) {
-					auto line = strprintf::fmt("%-15s %-23s %s", desc.key, desc.cmd, desc.desc);
+					auto line = strprintf::fmt("%-15s %-23s %s",
+							desc.key.to_bindkey_string(),
+							desc.cmd,
+							desc.desc);
 					line = utils::quote_for_stfl(line);
 					line = apply_highlights(line);
 					listfmt.add_line(line);

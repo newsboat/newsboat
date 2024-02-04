@@ -315,13 +315,13 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 			THEN("there is an entry with the configured key") {
 				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
 				[&key](const KeyMapDesc& x) {
-					return x.key == key.to_bindkey_string();
+					return x.key == key;
 				}));
 			}
 
 			THEN("the entry for the configured key has non-empty command and description fields") {
 				for (const auto& description : descriptions) {
-					if (description.key == key.to_bindkey_string()) {
+					if (description.key == key) {
 						REQUIRE(description.cmd != "");
 						REQUIRE(description.desc != "");
 					}
@@ -331,7 +331,7 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 			THEN("all entries for the operation have non-empty key") {
 				for (const auto& description : descriptions) {
 					if (description.cmd == "open-all-unread-in-browser-and-mark-read") {
-						REQUIRE(description.key != "");
+						REQUIRE(description.key.get_key() != "");
 					}
 				}
 			}
@@ -346,17 +346,17 @@ TEST_CASE("get_keymap_descriptions() returns at most one entry per key",
 
 	const auto descriptions = k.get_keymap_descriptions("feedlist");
 
-	std::set<std::string> keys;
+	std::set<KeyCombination> keys;
 	for (const auto& description : descriptions) {
 		if (description.cmd == "set-tag" || description.cmd == "select-tag") {
 			// Ignore set-tag/select-tag as these have the same operation-enum value
 			continue;
 		}
 
-		const std::string& key = description.key;
-		INFO("key: \"" << key << "\"");
+		const auto& key = description.key;
+		INFO("key: \"" << key.to_bindkey_string() << "\"");
 
-		if (!key.empty()) {
+		if (!key.get_key().empty()) {
 			REQUIRE(keys.count(key) == 0);
 			keys.insert(key);
 		}
@@ -395,15 +395,15 @@ TEST_CASE("get_keymap_descriptions() includes entries which include different "
 
 	const auto descriptions = k.get_keymap_descriptions("feedlist");
 
-	std::set<std::string> keys;
+	std::set<KeyCombination> keys;
 	for (const auto& description : descriptions) {
 		if (description.cmd == operation) {
-			CHECK(description.key != "");
+			CHECK(description.key.get_key() != "");
 			keys.insert(description.key);
 		}
 	}
 
-	REQUIRE(keys == std::set<std::string>({"a", "b", "c"}));
+	REQUIRE(keys == std::set<KeyCombination>({KeyCombination("a"), KeyCombination("b"), KeyCombination("c")}));
 }
 
 TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
