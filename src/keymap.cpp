@@ -1050,13 +1050,13 @@ std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()
 	return startup_operations_sequence;
 }
 
-std::vector<std::string> KeyMap::get_keys(Operation op,
+std::vector<KeyCombination> KeyMap::get_keys(Operation op,
 	const std::string& context)
 {
-	std::vector<std::string> keys;
+	std::vector<KeyCombination> keys;
 	for (const auto& keymap : keymap_[context]) {
 		if (keymap.second == op) {
-			keys.push_back(keymap.first.to_bindkey_string());
+			keys.push_back(keymap.first);
 		}
 	}
 	return keys;
@@ -1110,17 +1110,22 @@ std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hint
 {
 	std::string keymap_hint;
 	for (const auto& hint : hints) {
-		std::vector<std::string> keys = get_keys(hint.op, context);
+		const std::vector<KeyCombination> bound_keys = get_keys(hint.op, context);
 
-		if (keys.empty()) {
-			keys = {"<none>"};
+		std::vector<std::string> key_stfl_strings;
+		if (bound_keys.empty()) {
+			std::string key_string = utils::quote_for_stfl("<none>");
+			key_string = strprintf::fmt("<key>%s</>", key_string);
+			key_stfl_strings = {key_string};
+		} else {
+			for (const auto& key : bound_keys) {
+				std::string key_string = utils::quote_for_stfl(key.to_bindkey_string());
+				key_string = strprintf::fmt("<key>%s</>", key_string);
+				key_stfl_strings.push_back(key_string);
+			}
 		}
 
-		for (auto& key : keys) {
-			key = strprintf::fmt("<key>%s</>", utils::quote_for_stfl(key));
-		}
-
-		keymap_hint.append(utils::join(keys, "<comma>,</>"));
+		keymap_hint.append(utils::join(key_stfl_strings, "<comma>,</>"));
 		keymap_hint.append("<colon>:</>");
 		keymap_hint.append(strprintf::fmt("<desc>%s</>", utils::quote_for_stfl(hint.text)));
 		keymap_hint.append(" ");
