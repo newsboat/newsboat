@@ -805,30 +805,28 @@ const std::map<KeyCombination, MacroBinding>& KeyMap::get_macro_descriptions()
 KeyMap::~KeyMap() {}
 
 void KeyMap::set_key(Operation op,
-	const std::string& key,
+	const KeyCombination& key,
 	const std::string& context)
 {
-	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key);
-	const auto key_combination = KeyCombination::from_bindkey(key);
+	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key.to_bindkey_string());
 	if (context == "all") {
 		for (const auto& ctx : contexts) {
-			keymap_[ctx.first][key_combination] = op;
+			keymap_[ctx.first][key] = op;
 		}
 	} else {
-		keymap_[context][key_combination] = op;
+		keymap_[context][key] = op;
 	}
 }
 
-void KeyMap::unset_key(const std::string& key, const std::string& context)
+void KeyMap::unset_key(const KeyCombination& key, const std::string& context)
 {
-	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key);
-	const auto key_combination = KeyCombination::from_bindkey(key);
+	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key.to_bindkey_string());
 	if (context == "all") {
 		for (const auto& ctx : contexts) {
-			keymap_[ctx.first][key_combination] = OP_NIL;
+			keymap_[ctx.first][key] = OP_NIL;
 		}
 	} else {
-		keymap_[context][key_combination] = OP_NIL;
+		keymap_[context][key] = OP_NIL;
 	}
 }
 
@@ -961,7 +959,8 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 						"key command"),
 					tokens[1]));
 		}
-		set_key(op, tokens[0], context);
+		const auto key_combination = KeyCombination::from_bindkey(tokens[0]);
+		set_key(op, key_combination, context);
 	} else if (action == "unbind-key") {
 		const auto tokens = utils::tokenize_quoted(params);
 		if (tokens.size() < 1) {
@@ -975,7 +974,8 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (tokens[0] == "-a") {
 			unset_all_keys(context);
 		} else {
-			unset_key(tokens[0], context);
+			const auto key_combination = KeyCombination::from_bindkey(tokens[0]);
+			unset_key(key_combination, context);
 		}
 	} else if (action == "bind") {
 		bool parsing_failed = false;

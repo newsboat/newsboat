@@ -191,9 +191,9 @@ public:
 	explicit KeyMap(unsigned int flags);
 	~KeyMap() override;
 	void set_key(Operation op,
-		const std::string& key,
+		const KeyCombination& key,
 		const std::string& context);
-	void unset_key(const std::string& key, const std::string& context);
+	void unset_key(const KeyCombination& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
 	Operation get_opcode(const std::string& opstr);
 	Operation get_operation(const KeyCombination& key_combination,
