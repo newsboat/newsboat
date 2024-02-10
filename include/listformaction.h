@@ -13,9 +13,10 @@ namespace newsboat {
 
 class ListFormAction : public FormAction {
 public:
-	ListFormAction(View* v, const std::string& context, std::string formstr,
+	ListFormAction(View& v, const std::string& context, std::string formstr,
 		std::string list_name,
 		ConfigContainer* cfg, RegexManager& r);
+	~ListFormAction() override = default;
 
 protected:
 	bool process_operation(Operation op,

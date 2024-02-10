@@ -9,8 +9,8 @@ namespace newsboat {
 
 class DialogsFormAction : public ListFormAction {
 public:
-	DialogsFormAction(View*, std::string formstr, ConfigContainer* cfg, RegexManager& r);
-	~DialogsFormAction() override;
+	DialogsFormAction(View&, std::string formstr, ConfigContainer* cfg, RegexManager& r);
+	~DialogsFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;

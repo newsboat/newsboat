@@ -6,7 +6,7 @@
 
 namespace newsboat {
 
-ListFormAction::ListFormAction(View* v,
+ListFormAction::ListFormAction(View& v,
 	const std::string& context,
 	std::string formstr,
 	std::string list_name,
@@ -70,7 +70,7 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 			cfg->get_configvalue_as_int("max-browser-tabs")) {
 			if (item->unread()) {
 				const bool interactive = true;
-				const auto exit_code = v->open_in_browser(item->link(), item->feedurl(),
+				const auto exit_code = v.open_in_browser(item->link(), item->feedurl(),
 						"article", item->title(), interactive);
 				if (!exit_code.has_value() || *exit_code != 0) {
 					return_value = exit_code;
@@ -89,7 +89,7 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 	}
 
 	if (guids_of_read_articles.size() > 0) {
-		v->get_ctrl()->mark_all_read(guids_of_read_articles);
+		v.get_ctrl()->mark_all_read(guids_of_read_articles);
 	}
 
 	return return_value;

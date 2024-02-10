@@ -16,13 +16,13 @@ typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> FeedPtrPosPair;
 
 class FeedListFormAction : public ListFormAction {
 public:
-	FeedListFormAction(View*,
+	FeedListFormAction(View&,
 		std::string formstr,
 		Cache* cc,
 		FilterContainer& f,
 		ConfigContainer* cfg,
 		RegexManager& r);
-	~FeedListFormAction() override;
+	~FeedListFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>>& feeds);

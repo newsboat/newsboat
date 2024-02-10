@@ -8,9 +8,9 @@ namespace newsboat {
 
 class HelpFormAction : public FormAction {
 public:
-	HelpFormAction(View*, std::string formstr, ConfigContainer* cfg,
+	HelpFormAction(View&, std::string formstr, ConfigContainer* cfg,
 		const std::string& ctx);
-	~HelpFormAction() override;
+	~HelpFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;

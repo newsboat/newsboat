@@ -22,7 +22,7 @@ namespace newsboat {
  * a few places.
  */
 
-SelectFormAction::SelectFormAction(View* vv,
+SelectFormAction::SelectFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
@@ -33,8 +33,6 @@ SelectFormAction::SelectFormAction(View* vv,
 	, tags_list("taglist", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
-
-SelectFormAction::~SelectFormAction() {}
 
 void SelectFormAction::handle_cmdline(const std::string& cmd)
 {
@@ -129,11 +127,11 @@ bool SelectFormAction::process_operation(Operation op,
 	}
 
 	if (hardquit) {
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 	} else if (quit) {
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 	}
 	return true;
 }
@@ -208,7 +206,7 @@ std::string SelectFormAction::format_line(const std::string& selecttag_format,
 {
 	FmtStrFormatter fmt;
 
-	const auto feedcontainer = v->get_ctrl()->get_feedcontainer();
+	const auto feedcontainer = v.get_ctrl()->get_feedcontainer();
 
 	const auto total_feeds = feedcontainer->get_feed_count_per_tag(tag);
 	const auto unread_feeds =

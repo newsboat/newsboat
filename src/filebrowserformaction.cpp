@@ -25,24 +25,16 @@
 
 namespace newsboat {
 
-FileBrowserFormAction::FileBrowserFormAction(View* vv,
+FileBrowserFormAction::FileBrowserFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, file_prompt_line(f, "fileprompt")
 	, quit(false)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
+	, view(vv)
 {
-	// In filebrowser, keyboard focus is at the input field, so user will be
-	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
-	// can't quit with the default `q` bind).
-	KeyMap* keys = vv->get_keymap();
-	keys->set_key(OP_OPEN, "ENTER", id());
-	keys->set_key(OP_QUIT, "ESC", id());
-	vv->set_keymap(keys);
 }
-
-FileBrowserFormAction::~FileBrowserFormAction() {}
 
 bool FileBrowserFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
@@ -119,7 +111,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				 */
 				if (::stat(fn.c_str(), &sbuf) != -1) {
 					f.set_focus("files");
-					if (v->confirm(
+					if (v.confirm(
 							strprintf::fmt(
 								_("Do you really want to overwrite `%s' "
 									"(y:Yes n:No)? "),
@@ -131,7 +123,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				}
 				if (do_pop) {
 					curs_set(0);
-					v->pop_current_formaction();
+					v.pop_current_formaction();
 				}
 			}
 		}
@@ -204,13 +196,13 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	case OP_QUIT:
 		LOG(Level::DEBUG, "view::filebrowser: quitting");
 		curs_set(0);
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 		set_value("filenametext", "");
 		break;
 	case OP_HARDQUIT:
 		LOG(Level::DEBUG, "view::filebrowser: hard quitting");
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 		set_value("filenametext", "");
 		break;
@@ -300,6 +292,14 @@ void FileBrowserFormAction::prepare()
 
 void FileBrowserFormAction::init()
 {
+	// In filebrowser, keyboard focus is at the input field, so user will be
+	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
+	// can't quit with the default `q` bind).
+	KeyMap* keys = view.get_keymap();
+	keys->set_key(OP_OPEN, "ENTER", id());
+	keys->set_key(OP_QUIT, "ESC", id());
+	view.set_keymap(keys);
+
 	set_keymap_hints();
 
 	file_prompt_line.set_text(_("File: "));

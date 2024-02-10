@@ -23,7 +23,7 @@
 
 namespace newsboat {
 
-ItemViewFormAction::ItemViewFormAction(View* vv,
+ItemViewFormAction::ItemViewFormAction(View& vv,
 	std::shared_ptr<ItemListFormAction> il,
 	std::string formstr,
 	Cache* cc,
@@ -42,8 +42,6 @@ ItemViewFormAction::ItemViewFormAction(View* vv,
 	std::sort(valid_cmds.begin(), valid_cmds.end());
 	register_format_styles();
 }
-
-ItemViewFormAction::~ItemViewFormAction() {}
 
 void ItemViewFormAction::init()
 {
@@ -173,10 +171,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 		bool old_unread = item->unread();
 		item->set_unread(false);
 		if (old_unread) {
-			v->get_ctrl()->mark_article_read(item->guid(), true);
+			v.get_ctrl()->mark_article_read(item->guid(), true);
 		}
 	} catch (const DbException& e) {
-		v->get_statusline().show_error(strprintf::fmt(
+		v.get_statusline().show_error(strprintf::fmt(
 				_("Error while marking article as read: %s"),
 				e.what()));
 	}
@@ -189,14 +187,14 @@ bool ItemViewFormAction::process_operation(Operation op,
 		textview.set_scroll_offset(0);
 		break;
 	case OP_ENQUEUE:
-		return enqueue_item_enclosure(item, feed, *v, *rsscache);
+		return enqueue_item_enclosure(item, feed, v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		nonstd::optional<std::string> filename;
 		switch (bindingType) {
 		case BindingType::Bind:
 			if (args.empty()) {
-				filename = v->run_filebrowser( utils::utf8_to_locale(v->get_filename_suggestion(
+				filename = v.run_filebrowser( utils::utf8_to_locale(v.get_filename_suggestion(
 								item->title())));
 			} else {
 				filename = args.front();
@@ -208,19 +206,19 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 			break;
 		case BindingType::BindKey:
-			filename = v->run_filebrowser( utils::utf8_to_locale(v->get_filename_suggestion(
+			filename = v.run_filebrowser( utils::utf8_to_locale(v.get_filename_suggestion(
 							item->title())));
 			break;
 		}
 		if (!filename.has_value()) {
-			v->get_statusline().show_error(_("Aborted saving."));
+			v.get_statusline().show_error(_("Aborted saving."));
 		} else {
 			try {
-				v->get_ctrl()->write_item(item, filename.value());
-				v->get_statusline().show_message(strprintf::fmt(
+				v.get_ctrl()->write_item(item, filename.value());
+				v.get_statusline().show_message(strprintf::fmt(
 						_("Saved article to %s."), filename.value()));
 			} catch (...) {
-				v->get_statusline().show_error(strprintf::fmt(
+				v.get_statusline().show_error(strprintf::fmt(
 						_("Error: couldn't write article to "
 							"file %s"),
 						filename.value()));
@@ -362,9 +360,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
 		if (urlviewer == "") {
 			if (links.size() > 0) {
-				v->push_urlview(links, feed);
+				v.push_urlview(links, feed);
 			} else {
-				v->get_statusline().show_error(_("URL list empty."));
+				v.get_statusline().show_error(_("URL list empty."));
 			}
 		} else {
 			qna_responses.clear();
@@ -382,79 +380,79 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_NEXTUNREAD:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to next unread article");
-		if (v->get_next_unread(*itemlist, this)) {
+		if (v.get_next_unread(*itemlist, this)) {
 			do_redraw = true;
 			textview.set_scroll_offset(0);
 		} else {
-			v->pop_current_formaction();
-			v->get_statusline().show_error(_("No unread items."));
+			v.pop_current_formaction();
+			v.get_statusline().show_error(_("No unread items."));
 		}
 		break;
 	case OP_PREVUNREAD:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to previous unread "
 			"article");
-		if (v->get_previous_unread(*itemlist, this)) {
+		if (v.get_previous_unread(*itemlist, this)) {
 			do_redraw = true;
 			textview.set_scroll_offset(0);
 		} else {
-			v->pop_current_formaction();
-			v->get_statusline().show_error(_("No unread items."));
+			v.pop_current_formaction();
+			v.get_statusline().show_error(_("No unread items."));
 		}
 		break;
 	case OP_NEXT:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to next article");
-		if (v->get_next(*itemlist, this)) {
+		if (v.get_next(*itemlist, this)) {
 			do_redraw = true;
 			textview.set_scroll_offset(0);
 		} else {
-			v->pop_current_formaction();
-			v->get_statusline().show_error(_("Already on last item."));
+			v.pop_current_formaction();
+			v.get_statusline().show_error(_("Already on last item."));
 		}
 		break;
 	case OP_PREV:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to previous article");
-		if (v->get_previous(*itemlist, this)) {
+		if (v.get_previous(*itemlist, this)) {
 			do_redraw = true;
 			textview.set_scroll_offset(0);
 		} else {
-			v->pop_current_formaction();
-			v->get_statusline().show_error(_("Already on first item."));
+			v.pop_current_formaction();
+			v.get_statusline().show_error(_("Already on first item."));
 		}
 		break;
 	case OP_RANDOMUNREAD:
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: jumping to random unread article");
-		if (v->get_random_unread(*itemlist, this)) {
+		if (v.get_random_unread(*itemlist, this)) {
 			do_redraw = true;
 			textview.set_scroll_offset(0);
 		} else {
-			v->pop_current_formaction();
-			v->get_statusline().show_error(_("No unread items."));
+			v.pop_current_formaction();
+			v.get_statusline().show_error(_("No unread items."));
 		}
 		break;
 	case OP_TOGGLEITEMREAD: {
 		LOG(Level::INFO,
 			"ItemViewFormAction::process_operation: setting unread and quitting");
-		const auto message_lifetime = v->get_statusline().show_message_until_finished(
+		const auto message_lifetime = v.get_statusline().show_message_until_finished(
 				_("Toggling read flag for article..."));
 		try {
 			if (args.size() > 0) {
 				if (args.front() == "read") {
 					item->set_unread(false);
-					v->get_ctrl()->mark_article_read(item->guid(), true);
+					v.get_ctrl()->mark_article_read(item->guid(), true);
 				} else if (args.front() == "unread") {
 					item->set_unread(true);
-					v->get_ctrl()->mark_article_read(item->guid(), false);
+					v.get_ctrl()->mark_article_read(item->guid(), false);
 				}
 			} else {
 				item->set_unread(true);
-				v->get_ctrl()->mark_article_read(item->guid(), false);
+				v.get_ctrl()->mark_article_read(item->guid(), false);
 			}
 		} catch (const DbException& e) {
-			v->get_statusline().show_error(strprintf::fmt(
+			v.get_statusline().show_error(strprintf::fmt(
 					_("Error while marking article as unread: %s"),
 					e.what()));
 		}
@@ -470,7 +468,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		hardquit = true;
 		break;
 	case OP_HELP:
-		v->push_help();
+		v.push_help();
 		break;
 	case OP_OPEN_URL_1:
 	case OP_OPEN_URL_2:
@@ -522,7 +520,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_ARTICLEFEED: {
-		auto feeds = v->get_ctrl()->get_feedcontainer()->get_all_feeds();
+		auto feeds = v.get_ctrl()->get_feedcontainer()->get_all_feeds();
 		size_t pos;
 		auto article_feed = item->get_feedptr();
 		for (pos = 0; pos < feeds.size(); pos++) {
@@ -531,7 +529,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 		}
 		if (pos != feeds.size()) {
-			v->push_itemlist(pos);
+			v.push_itemlist(pos);
 		}
 	}
 	break;
@@ -543,11 +541,11 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 
 	if (hardquit) {
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 	} else if (quit) {
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 
 		auto parent_itemlist = std::dynamic_pointer_cast<ItemListFormAction>
 			(get_parent_formaction());
@@ -566,12 +564,12 @@ bool ItemViewFormAction::open_link_in_browser(const std::string& link,
 	const std::string& type, const std::string& title, bool interactive) const
 {
 	const std::string feedurl = item->feedurl();
-	const auto exit_code = v->open_in_browser(link, feedurl, type, title, interactive);
+	const auto exit_code = v.open_in_browser(link, feedurl, type, title, interactive);
 	if (!exit_code.has_value()) {
-		v->get_statusline().show_error(_("Failed to spawn browser"));
+		v.get_statusline().show_error(_("Failed to spawn browser"));
 		return false;
 	} else if (*exit_code != 0) {
-		v->get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
+		v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
 				*exit_code));
 		return false;
 	}
@@ -633,16 +631,16 @@ void ItemViewFormAction::handle_save(const std::string& filename_param)
 {
 	std::string filename = utils::resolve_tilde(filename_param);
 	if (filename == "") {
-		v->get_statusline().show_error(_("Aborted saving."));
+		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v->get_ctrl()->write_item(
+			v.get_ctrl()->write_item(
 				item, filename);
-			v->get_statusline().show_message(strprintf::fmt(
+			v.get_statusline().show_message(strprintf::fmt(
 					_("Saved article to %s"),
 					filename));
 		} catch (...) {
-			v->get_statusline().show_error(strprintf::fmt(
+			v.get_statusline().show_error(strprintf::fmt(
 					_("Error: couldn't save "
 						"article to %s"),
 					filename));
@@ -657,8 +655,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 	switch (op) {
 	case OP_INT_EDITFLAGS_END:
 		item->set_flags(qna_responses[0]);
-		v->get_ctrl()->update_flags(item);
-		v->get_statusline().show_message(_("Flags updated."));
+		v.get_ctrl()->update_flags(item);
+		v.get_statusline().show_message(_("Flags updated."));
 		do_redraw = true;
 		break;
 	case OP_INT_START_SEARCH:
@@ -667,8 +665,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 	case OP_PIPE_TO: {
 		std::string cmd = qna_responses[0];
 		std::ostringstream ostr;
-		v->get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
-		v->push_empty_formaction();
+		v.get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
+		v.push_empty_formaction();
 		Stfl::reset();
 		FILE* f = popen(cmd.c_str(), "w");
 		if (f) {
@@ -676,8 +674,8 @@ void ItemViewFormAction::finished_qna(Operation op)
 			fwrite(data.c_str(), data.length(), 1, f);
 			pclose(f);
 		}
-		v->drop_queued_input();
-		v->pop_current_formaction();
+		v.drop_queued_input();
+		v.pop_current_formaction();
 	}
 	break;
 	case OP_INT_GOTO_URL: {
@@ -794,7 +792,7 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 			"ItemViewFormAction::highlight_text: handle_action "
 			"failed, error = %s",
 			e.what());
-		v->get_statusline().show_error(_("Error: invalid regular expression!"));
+		v.get_statusline().show_error(_("Error: invalid regular expression!"));
 	}
 }
 

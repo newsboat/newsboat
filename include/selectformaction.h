@@ -11,8 +11,8 @@ class SelectFormAction : public FormAction {
 public:
 	enum class SelectionType { TAG, FILTER };
 
-	SelectFormAction(View*, std::string formstr, ConfigContainer* cfg);
-	~SelectFormAction() override;
+	SelectFormAction(View&, std::string formstr, ConfigContainer* cfg);
+	~SelectFormAction() override = default;
 	void prepare() override;
 	void init() override;
 	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;

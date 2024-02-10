@@ -19,7 +19,7 @@ namespace newsboat {
  * in a browser or to bookmark them.
  */
 
-UrlViewFormAction::UrlViewFormAction(View* vv,
+UrlViewFormAction::UrlViewFormAction(View& vv,
 	std::shared_ptr<RssFeed>& feed,
 	std::string formstr,
 	ConfigContainer* cfg)
@@ -29,8 +29,6 @@ UrlViewFormAction::UrlViewFormAction(View* vv,
 	, urls_list("urls", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
 }
-
-UrlViewFormAction::~UrlViewFormAction() {}
 
 bool UrlViewFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
@@ -61,7 +59,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 			const unsigned int pos = urls_list.get_position();
 			this->start_bookmark_qna("", links[pos].url, feed->title());
 		} else {
-			v->get_statusline().show_error(_("No links available!"));
+			v.get_statusline().show_error(_("No links available!"));
 		}
 	}
 	break;
@@ -80,13 +78,13 @@ bool UrlViewFormAction::process_operation(Operation op,
 		if (idx < links.size()) {
 			const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
 			const bool interactive = true;
-			v->open_in_browser(links[idx].url, feedurl, utils::link_type_str(links[idx].type),
+			v.open_in_browser(links[idx].url, feedurl, utils::link_type_str(links[idx].type),
 				feed->title(), interactive);
 		}
 	}
 	break;
 	case OP_HELP:
-		v->push_help();
+		v.push_help();
 		break;
 	case OP_QUIT:
 		quit = true;
@@ -101,11 +99,11 @@ bool UrlViewFormAction::process_operation(Operation op,
 		break;
 	}
 	if (hardquit) {
-		while (v->formaction_stack_size() > 0) {
-			v->pop_current_formaction();
+		while (v.formaction_stack_size() > 0) {
+			v.pop_current_formaction();
 		}
 	} else if (quit) {
-		v->pop_current_formaction();
+		v.pop_current_formaction();
 	}
 	return true;
 }
@@ -115,10 +113,10 @@ void UrlViewFormAction::open_current_position_in_browser(bool interactive)
 	if (!links.empty()) {
 		const unsigned int pos = urls_list.get_position();
 		const std::string feedurl = (feed != nullptr ?  feed->rssurl() : "");
-		v->open_in_browser(links[pos].url, feedurl, utils::link_type_str(links[pos].type),
+		v.open_in_browser(links[pos].url, feedurl, utils::link_type_str(links[pos].type),
 			feed->title(), interactive);
 	} else {
-		v->get_statusline().show_error(_("No links available!"));
+		v.get_statusline().show_error(_("No links available!"));
 	}
 }
 
@@ -172,7 +170,7 @@ void UrlViewFormAction::handle_cmdline(const std::string& cmd)
 	unsigned int idx = 0;
 	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
 		if (idx < 1 || idx > links.size()) {
-			v->get_statusline().show_error(_("Invalid position!"));
+			v.get_statusline().show_error(_("Invalid position!"));
 		} else {
 			urls_list.set_position(idx - 1);
 		}
