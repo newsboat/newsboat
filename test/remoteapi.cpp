@@ -69,6 +69,8 @@ TEST_CASE("get_credentials() returns the users name and password",
 	REQUIRE(api->get_pass("oldreader", "") == "123456");
 	REQUIRE(api->get_user("miniflux", "") == "miniflux-user");
 	REQUIRE(api->get_pass("miniflux", "") == "securepassw0rd");
+	REQUIRE(api->get_user("feedbin", "") == "feedbin-user");
+	REQUIRE(api->get_pass("feedbin", "") == "feedbin-pass");
 	// test cases that would raise a prompt and ask for username or password
 	// can not be covered at the moment and would require a redesign of this
 	// method with a sole purpose to make it testable.

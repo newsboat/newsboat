@@ -35,6 +35,8 @@
 #include "feedhqapi.h"
 #include "feedhqurlreader.h"
 #include "formaction.h"
+#include "feedbinapi.h"
+#include "feedbinurlreader.h"
 #include "freshrssapi.h"
 #include "freshrssurlreader.h"
 #include "fileurlreader.h"
@@ -285,6 +287,23 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "feedhq") {
 		api = new FeedHqApi(cfg);
 		urlcfg = new FeedHqUrlReader(&cfg, configpaths.url_file(), api);
+	} else if (type == "feedbin") {
+		const std::string user = cfg.get_configvalue("feedbin-login");
+		const std::string pass = cfg.get_configvalue("feedbin-password");
+		const std::string pass_file = cfg.get_configvalue("feedbin-passwordfile");
+		const std::string pass_eval = cfg.get_configvalue("feedbin-passwordeval");
+		const bool creds_set = !user.empty() &&
+			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+		if (!creds_set) {
+			std::cerr <<
+				_("ERROR: You must set `feedbin-login` and one of `feedbin-password`, "
+					"`feedbin-passwordfile` or `feedbin-passwordeval` to use "
+					"Feedbin\n");
+			return EXIT_FAILURE;
+		}
+
+		api = new FeedbinApi(cfg);
+		urlcfg = new FeedbinUrlReader(configpaths.url_file(), api);
 	} else if (type == "freshrss") {
 		const auto freshrss_url = cfg.get_configvalue("freshrss-url");
 		if (freshrss_url.empty()) {
@@ -412,6 +431,11 @@ int Controller::run(const CliArgsParser& args)
 			msg = strprintf::fmt(
 					_("It looks like you haven't configured any "
 						"feeds in your Miniflux account. Please do "
+						"so, and try again."));
+		} else if (type == "feedbin") {
+			msg = strprintf::fmt(
+					_("It looks like you haven't configured any "
+						"feeds in your Feedbin account. Please do "
 						"so, and try again."));
 		} else if (type == "ocnews") {
 			msg = strprintf::fmt(
