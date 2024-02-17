@@ -8,9 +8,10 @@
 #include <functional>
 #include <iostream>
 #include <langinfo.h>
+#include <random>
 #include <sstream>
-#include <sys/utsname.h>
 #include <string.h>
+#include <sys/utsname.h>
 #include <time.h>
 
 #include "cache.h"
@@ -335,7 +336,9 @@ void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
 		});
 		break;
 	case ArtSortMethod::RANDOM:
-		std::random_shuffle(items_.begin(), items_.end());
+		std::random_device rd;
+		std::default_random_engine rng(rd());
+		std::shuffle(items_.begin(), items_.end(), rng);
 		break;
 	}
 }
