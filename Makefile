@@ -116,6 +116,7 @@ MSGFMT=msgfmt
 RANLIB?=ranlib
 AR?=ar
 CARGO=cargo
+CLANG_TIDY?=clang-tidy
 
 TEXTCONV=./txt2h
 RM=rm -f
@@ -321,6 +322,18 @@ cppcheck:
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 
+# A config for clang-tidy to explain where to get the headers
+compile_flags.txt: Makefile
+	echo $(INCLUDES) $(DEFINES) | tr ' ' '\n' > $@
+
+# This target has a slash in its name in order to force GNU Make to process the
+# slashes in the "%" pattern. See "How Patterns Match" section in the GNU Make
+# documention.
+PHONY/clang-tidy-%: compile_flags.txt xlicense.h $(STFL_HDRS) $(NEWSBOATLIB_OUTPUT)
+	$(CLANG_TIDY) $(@:PHONY/clang-tidy-%=%)
+
+clang-tidy: $(addprefix PHONY/clang-tidy-,$(LIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS) newsboat.cpp podboat.cpp)
+
 install-newsboat: $(NEWSBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
@@ -376,7 +389,7 @@ uninstall: uninstall-mo
 
 .PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-newsboat \
 	clean-podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
-	clean-test config cppcheck
+	clean-test config cppcheck clang-tidy
 
 # the following targets are i18n/l10n-related:
 

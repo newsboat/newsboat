@@ -456,3 +456,25 @@ task:
       # We need parentheses to prevent YAML parser from eating up the
       # exclamation mark.
       - ( ! grep -Ern '\<dbg!' * )
+
+task:
+    name: clang-tidy (Clang 17, Ubuntu 23.10)
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+
+    container:
+      greedy: true
+      dockerfile: docker/ubuntu_23.10-build-tools.dockerfile
+      docker_arguments:
+          cxx_package: "clang-tidy-17"
+          cc: clang-17
+          cxx: clang++-17
+
+    env:
+      CLANG_TIDY: "clang-tidy-17"
+      JOBS: 2
+
+    cargo_cache: *cargo_cache
+
+    after_cache_script: *after_cache_script
+    test_script: make -j${JOBS} --keep-going clang-tidy
+    before_cache_script: *before_cache_script
