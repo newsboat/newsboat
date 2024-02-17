@@ -609,29 +609,29 @@ Command FormAction::parse_command(const std::string& input,
 {
 	auto tokens = utils::tokenize_quoted(input, delimiters);
 	if (tokens.empty()) {
-		return Command { .type = CommandType::INVALID, .args = {} };
+		return Command(CommandType::INVALID);
 	} else {
 		auto cmd_name = tokens.front();
 		tokens.erase(tokens.begin());
 		if (cmd_name == "set") {
-			return Command { .type = CommandType::SET, .args = std::move(tokens) };
+			return Command(CommandType::SET, std::move(tokens));
 		} else if (cmd_name == "q" || cmd_name == "quit") {
-			return Command { .type = CommandType::QUIT, .args = std::move(tokens) };
+			return Command(CommandType::QUIT, std::move(tokens));
 		} else if (cmd_name == "source") {
-			return Command { .type = CommandType::SOURCE, .args = std::move(tokens) };
+			return Command(CommandType::SOURCE, std::move(tokens));
 		} else if (cmd_name == "dumpconfig") {
-			return Command { .type = CommandType::DUMPCONFIG, .args = std::move(tokens) };
+			return Command(CommandType::DUMPCONFIG, std::move(tokens));
 		} else if (cmd_name == "exec") {
-			return Command { .type = CommandType::EXEC, .args = std::move(tokens) };
+			return Command(CommandType::EXEC, std::move(tokens));
 		} else if (cmd_name == "tag") {
-			return Command { .type = CommandType::TAG, .args = std::move(tokens) };
+			return Command(CommandType::TAG, std::move(tokens));
 		} else if (cmd_name == "goto") {
-			return Command { .type = CommandType::GOTO, .args = std::move(tokens) };
+			return Command(CommandType::GOTO, std::move(tokens));
 		} else if (cmd_name == "save") {
-			return Command { .type = CommandType::SAVE, .args = std::move(tokens) };
+			return Command(CommandType::SAVE, std::move(tokens));
 		} else {
 			tokens.insert(tokens.begin(), std::move(cmd_name));
-			return Command { .type = CommandType::UNKNOWN, .args = std::move(tokens) };
+			return Command(CommandType::UNKNOWN, std::move(tokens));
 		}
 	}
 }
