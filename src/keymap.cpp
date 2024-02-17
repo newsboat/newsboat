@@ -13,6 +13,37 @@
 
 #include "libnewsboat-ffi/src/keymap.rs.h"
 
+namespace {
+using namespace newsboat;
+std::vector<MacroCmd> convert_operations(const
+	rust::Vec<newsboat::keymap::bridged::Operation>& operations)
+{
+	std::vector<MacroCmd> cmds;
+	for (const auto& operation : operations) {
+		const auto& tokens = operation.tokens;
+		if (tokens.empty()) {
+			continue;
+		}
+
+		const auto command_name = std::string(tokens[0]);
+		const auto arguments = std::vector<std::string>(std::next(std::begin(tokens)),
+				std::end(tokens));
+
+		MacroCmd cmd;
+		cmd.op = KeyMap::get_opcode(command_name);
+		if (cmd.op == OP_NIL) {
+			throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
+					command_name));
+		}
+		cmd.args = arguments;
+
+		cmds.push_back(cmd);
+	}
+
+	return cmds;
+}
+}
+
 namespace newsboat {
 
 struct OpDesc {
@@ -981,8 +1012,23 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (parsing_failed) {
 			throw ConfigHandlerException(strprintf::fmt(_("failed to parse binding")));
 		}
-		// TODO: Keep track of bindings
-		(void)binding;
+		auto bind_contexts = std::vector<std::string>(binding.contexts.begin(),
+				binding.contexts.end());
+		if (bind_contexts.size() == 1 && bind_contexts[0] == "everywhere") {
+			bind_contexts.clear();
+			for (const auto& context : contexts) {
+				bind_contexts.push_back(context.first);
+			}
+		}
+		const auto key_sequence = KeyCombination::from_bind(std::string(binding.key_sequence));
+		const auto description = std::string(binding.description);
+		const auto cmds = convert_operations(binding.operations);
+		for (const auto& context : bind_contexts) {
+			if (contexts.count(context) == 0) {
+				throw ConfigHandlerException(strprintf::fmt(_("unknown context: %s"), context));
+			}
+			apply_bind(context_keymaps[context], key_sequence, cmds, description);
+		}
 	} else if (action == "macro") {
 		std::string remaining_params = params;
 		const auto token = utils::extract_token_quoted(remaining_params);
@@ -1002,6 +1048,26 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	}
 }
 
+void KeyMap::apply_bind(Mapping& target, const std::vector<KeyCombination> key_sequence,
+	const std::vector<MacroCmd>& cmds, const std::string& description)
+{
+	if (key_sequence.size() == 0) {
+		target.is_leaf_node = true;
+		target.continuations.clear();
+		target.action = MacroBinding { cmds, description };
+	} else {
+		target.is_leaf_node = false;
+		target.action = {};
+		const auto key_combination = key_sequence.front();
+		const auto remainder_key_sequence = std::vector<KeyCombination>(std::next(
+					key_sequence.begin()), key_sequence.end());
+		apply_bind(
+			target.continuations[key_combination],
+			remainder_key_sequence,
+			cmds,
+			description);
+	}
+}
 
 ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 	const std::string& command_name, bool allow_description)
@@ -1015,27 +1081,7 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 				command_name));
 	}
 
-	std::vector<MacroCmd> cmds;
-	for (const auto& operation : operations) {
-		const auto& tokens = operation.tokens;
-		if (tokens.empty()) {
-			continue;
-		}
-
-		const auto command_name = std::string(tokens[0]);
-		const auto arguments = std::vector<std::string>(std::next(std::begin(tokens)),
-				std::end(tokens));
-
-		MacroCmd cmd;
-		cmd.op = get_opcode(command_name);
-		if (cmd.op == OP_NIL) {
-			throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid operation"),
-					command_name));
-		}
-		cmd.args = arguments;
-
-		cmds.push_back(cmd);
-	}
+	const auto cmds = convert_operations(operations);
 
 	ParsedOperations result;
 	result.operations = cmds;

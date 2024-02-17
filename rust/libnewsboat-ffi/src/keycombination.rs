@@ -10,6 +10,7 @@ mod ffi {
         type KeyCombination;
 
         fn from_bindkey(input: &str) -> Box<KeyCombination>;
+        fn from_bind(input: &str) -> Vec<KeyCombination>;
 
         fn get_key(key_combination: &KeyCombination) -> &str;
         fn has_shift(key_combination: &KeyCombination) -> bool;
@@ -20,6 +21,13 @@ mod ffi {
 
 fn from_bindkey(input: &str) -> Box<KeyCombination> {
     Box::new(KeyCombination(keycombination::bindkey(input)))
+}
+
+fn from_bind(input: &str) -> Vec<KeyCombination> {
+    keycombination::bind(input)
+        .into_iter()
+        .map(KeyCombination)
+        .collect()
 }
 
 fn get_key(key_combination: &KeyCombination) -> &str {

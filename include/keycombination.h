@@ -2,6 +2,7 @@
 #define NEWSBOAT_KEYCOMBINATION_H_
 
 #include <string>
+#include <vector>
 
 namespace newsboat {
 
@@ -28,7 +29,9 @@ public:
 		AltState alt = AltState::NoAlt);
 
 	static KeyCombination from_bindkey(const std::string& input);
+	static std::vector<KeyCombination> from_bind(const std::string& input);
 	std::string to_bindkey_string() const;
+	std::string to_bind_string() const;
 
 	bool operator==(const KeyCombination& other) const;
 	bool operator<(const KeyCombination& rhs) const;
