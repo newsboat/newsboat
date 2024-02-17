@@ -310,7 +310,7 @@ void PbView::run_help()
 
 	for (const auto& desc : descs) {
 		const std::string descline = strprintf::fmt("%-7s %-23s %s",
-				desc.key,
+				desc.key.to_bindkey_string(),
 				desc.cmd,
 				desc.desc);
 

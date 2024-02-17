@@ -17,6 +17,7 @@
 
 #include "config.h"
 #include "fmtstrformatter.h"
+#include "keycombination.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -270,8 +271,8 @@ void DirBrowserFormAction::init()
 	// unable to use alphanumeric keys to confirm or quit the dialog (e.g. they
 	// can't quit with the default `q` bind).
 	KeyMap* keys = view.get_keymap();
-	keys->set_key(OP_OPEN, "ENTER", id());
-	keys->set_key(OP_QUIT, "ESC", id());
+	keys->set_key(OP_OPEN, KeyCombination("ENTER"), id());
+	keys->set_key(OP_QUIT, KeyCombination("ESC"), id());
 	view.set_keymap(keys);
 
 	set_keymap_hints();

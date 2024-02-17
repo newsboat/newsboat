@@ -25,7 +25,7 @@ TEST_CASE("get_operation()", "[KeyMap]")
 	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 
 	SECTION("Returns OP_NIL after unset_key()") {
-		k.unset_key("ENTER", "all");
+		k.unset_key(KeyCombination("ENTER"), "all");
 		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
 	}
 }
@@ -35,16 +35,16 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
-	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
+	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 
 	SECTION("unset_key() removes the mapping") {
-		k.unset_key("ENTER", "all");
+		k.unset_key(KeyCombination("ENTER"), "all");
 		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
 
 		SECTION("set_key() sets the mapping") {
-			k.set_key(OP_OPEN, "ENTER", "all");
+			k.set_key(OP_OPEN, KeyCombination("ENTER"), "all");
 			REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
-			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
+			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 		}
 	}
 }
@@ -84,7 +84,7 @@ TEST_CASE(
 				INFO("Operation: " << i);
 				INFO("used in context: " << context);
 				REQUIRE(k.get_keys(static_cast<Operation>(i),
-						context) == std::vector<std::string>());
+						context) == std::vector<KeyCombination>());
 			}
 		}
 	}
@@ -120,7 +120,7 @@ TEST_CASE(
 
 		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
 			REQUIRE(k.get_keys(static_cast<Operation>(i),
-					"articlelist") == std::vector<std::string>());
+					"articlelist") == std::vector<KeyCombination>());
 		}
 
 		KeyMap default_keys(KM_NEWSBOAT);
@@ -144,22 +144,22 @@ TEST_CASE("get_keys()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	SECTION("Retrieves general bindings") {
-		REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<std::string>({"ENTER"}));
+		REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 		REQUIRE(k.get_keys(OP_TOGGLEITEMREAD,
-				"articlelist") == std::vector<std::string>({"N"}));
+				"articlelist") == std::vector<KeyCombination>({KeyCombination("n", ShiftState::Shift)}));
 	}
 
 	SECTION("Returns context-specific bindings only in that context") {
-		k.unset_key("q", "article");
-		k.set_key(OP_QUIT, "O", "article");
-		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<std::string>({"O"}));
-		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == std::vector<std::string>({"q"}));
+		k.unset_key(KeyCombination("q"), "article");
+		k.set_key(OP_QUIT, KeyCombination("o", ShiftState::Shift), "article");
+		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<KeyCombination>({KeyCombination("o", ShiftState::Shift)}));
+		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == std::vector<KeyCombination>({KeyCombination("q")}));
 	}
 
 	SECTION("Returns all keys bound to an operation (both default and added)") {
-		k.set_key(OP_QUIT, "a", "article");
-		k.set_key(OP_QUIT, "d", "article");
-		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<std::string>({"a", "d", "q"}));
+		k.set_key(OP_QUIT, KeyCombination("a"), "article");
+		k.set_key(OP_QUIT, KeyCombination("d"), "article");
+		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<KeyCombination>({KeyCombination("a"), KeyCombination("d"), KeyCombination("q")}));
 	}
 }
 
@@ -215,7 +215,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE_NOTHROW(k.handle_action("bind-key", "p pageup"));
 
 		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
-			== std::vector<std::string>({"PPAGE", "p", "u"}));
+			== std::vector<KeyCombination>({KeyCombination("PPAGE"), KeyCombination("p"), KeyCombination("u")}));
 	}
 
 	SECTION("macro without commands results in exception") {
@@ -289,8 +289,8 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 
 	GIVEN("that multiple keys are bound to the same operation (\"quit\")") {
 		KeyMap k(KM_NEWSBOAT);
-		k.set_key(OP_QUIT, "a", "feedlist");
-		k.set_key(OP_QUIT, "b", "feedlist");
+		k.set_key(OP_QUIT, KeyCombination("a"), "feedlist");
+		k.set_key(OP_QUIT, KeyCombination("b"), "feedlist");
 
 		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
 			const auto descriptions = k.get_keymap_descriptions("feedlist");
@@ -306,7 +306,7 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 
 	GIVEN("that a key is bound to an operation which by default has no key configured") {
 		KeyMap k(KM_NEWSBOAT);
-		const std::string key = "O";
+		const auto key = KeyCombination("o", ShiftState::Shift);
 		k.set_key(OP_OPENALLUNREADINBROWSER_AND_MARK, key, "feedlist");
 
 		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
@@ -331,7 +331,7 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 			THEN("all entries for the operation have non-empty key") {
 				for (const auto& description : descriptions) {
 					if (description.cmd == "open-all-unread-in-browser-and-mark-read") {
-						REQUIRE(description.key != "");
+						REQUIRE(description.key.get_key() != "");
 					}
 				}
 			}
@@ -346,17 +346,17 @@ TEST_CASE("get_keymap_descriptions() returns at most one entry per key",
 
 	const auto descriptions = k.get_keymap_descriptions("feedlist");
 
-	std::set<std::string> keys;
+	std::set<KeyCombination> keys;
 	for (const auto& description : descriptions) {
 		if (description.cmd == "set-tag" || description.cmd == "select-tag") {
 			// Ignore set-tag/select-tag as these have the same operation-enum value
 			continue;
 		}
 
-		const std::string& key = description.key;
-		INFO("key: \"" << key << "\"");
+		const auto& key = description.key;
+		INFO("key: \"" << key.to_bindkey_string() << "\"");
 
-		if (!key.empty()) {
+		if (!key.get_key().empty()) {
 			REQUIRE(keys.count(key) == 0);
 			keys.insert(key);
 		}
@@ -395,15 +395,15 @@ TEST_CASE("get_keymap_descriptions() includes entries which include different "
 
 	const auto descriptions = k.get_keymap_descriptions("feedlist");
 
-	std::set<std::string> keys;
+	std::set<KeyCombination> keys;
 	for (const auto& description : descriptions) {
 		if (description.cmd == operation) {
-			CHECK(description.key != "");
+			CHECK(description.key.get_key() != "");
 			keys.insert(description.key);
 		}
 	}
 
-	REQUIRE(keys == std::set<std::string>({"a", "b", "c"}));
+	REQUIRE(keys == std::set<KeyCombination>({KeyCombination("a"), KeyCombination("b"), KeyCombination("c")}));
 }
 
 TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
@@ -440,9 +440,9 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 
 	GIVEN("a few keybindings") {
 		k.unset_all_keys("all");
-		k.set_key(OP_OPEN, "ENTER", "feedlist");
-		k.set_key(OP_NEXT, "j", "articlelist");
-		k.set_key(OP_PREV, "k", "articlelist");
+		k.set_key(OP_OPEN, KeyCombination("ENTER"), "feedlist");
+		k.set_key(OP_NEXT, KeyCombination("j"), "articlelist");
+		k.set_key(OP_PREV, KeyCombination("k"), "articlelist");
 
 		WHEN("calling dump_config()") {
 			k.dump_config(dumpOutput);
@@ -460,7 +460,7 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	GIVEN("a few registered macros and one regular keybinding") {
 		k.unset_all_keys("all");
 
-		k.set_key(OP_OPEN, "ENTER", "feedlist");
+		k.set_key(OP_OPEN, KeyCombination("ENTER"), "feedlist");
 		k.handle_action("macro", "1 open");
 		k.handle_action("macro", "2 open ; next");
 		k.handle_action("macro", "3 open ; next ; prev");

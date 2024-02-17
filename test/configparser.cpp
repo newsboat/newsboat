@@ -224,9 +224,9 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"feedlist") == std::vector<std::string>());
+					"feedlist") == std::vector<KeyCombination>());
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"podboat") == std::vector<std::string>());
+					"podboat") == std::vector<KeyCombination>());
 		}
 	}
 
@@ -244,7 +244,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"article") == std::vector<std::string>());
+					"article") == std::vector<KeyCombination>());
 		}
 	}
 }

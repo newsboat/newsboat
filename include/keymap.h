@@ -159,7 +159,7 @@ enum Operation {
 };
 
 struct KeyMapDesc {
-	std::string key;
+	KeyCombination key;
 	std::string cmd;
 	std::string desc;
 	std::string ctx;
@@ -191,16 +191,16 @@ public:
 	explicit KeyMap(unsigned int flags);
 	~KeyMap() override;
 	void set_key(Operation op,
-		const std::string& key,
+		const KeyCombination& key,
 		const std::string& context);
-	void unset_key(const std::string& key, const std::string& context);
+	void unset_key(const KeyCombination& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
 	Operation get_opcode(const std::string& opstr);
 	Operation get_operation(const KeyCombination& key_combination,
 		const std::string& context);
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
 	char get_key(const std::string& keycode);
-	std::vector<std::string> get_keys(Operation op, const std::string& context);
+	std::vector<KeyCombination> get_keys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
