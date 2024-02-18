@@ -529,11 +529,8 @@ void HtmlRenderer::render(std::istream& input,
 				// have a closing tag
 				if (inside_video || inside_audio) {
 					source_count = 0;
-					inside_video = false;
 					inside_audio = false;
-					LOG(Level::WARN,
-						"HtmlRenderer::render: "
-						"media element left unclosed");
+					LOG(Level::WARN, "HtmlRenderer::render: media element left unclosed");
 				}
 				inside_video = true;
 
@@ -580,10 +577,7 @@ void HtmlRenderer::render(std::istream& input,
 				if (inside_video || inside_audio) {
 					source_count = 0;
 					inside_video = false;
-					inside_audio = false;
-					LOG(Level::WARN,
-						"HtmlRenderer::render: "
-						"media element left unclosed");
+					LOG(Level::WARN, "HtmlRenderer::render: media element left unclosed");
 				}
 				inside_audio = true;
 
