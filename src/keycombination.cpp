@@ -2,7 +2,29 @@
 
 #include <tuple>
 
+#include "libnewsboat-ffi/src/keycombination.rs.h"
+
 namespace newsboat {
+
+KeyCombination convert(const keycombination::bridged::KeyCombination& key_combination)
+{
+	ShiftState shift = ShiftState::NoShift;
+	ControlState control = ControlState::NoControl;
+	AltState alt = AltState::NoAlt;
+
+	const auto key = std::string(keycombination::bridged::get_key(key_combination));
+	if (keycombination::bridged::has_shift(key_combination)) {
+		shift = ShiftState::Shift;
+	}
+	if (keycombination::bridged::has_control(key_combination)) {
+		control = ControlState::Control;
+	}
+	if (keycombination::bridged::has_alt(key_combination)) {
+		alt = AltState::Alt;
+	}
+
+	return KeyCombination(key, shift, control, alt);
+}
 
 KeyCombination::KeyCombination(const std::string& key, ShiftState shift,
 	ControlState control, AltState alt)
@@ -15,19 +37,8 @@ KeyCombination::KeyCombination(const std::string& key, ShiftState shift,
 
 KeyCombination KeyCombination::from_bindkey(const std::string& input)
 {
-	std::string key = input;
-	ShiftState shift = ShiftState::NoShift;
-	ControlState control = ControlState::NoControl;
-	AltState alt = AltState::NoAlt;
-
-	if (key.length() == 1 && std::isupper(key[0])) {
-		shift = ShiftState::Shift;
-		key = std::tolower(key[0]);
-	} else if (key.length() == 2 && key[0] == '^') {
-		control = ControlState::Control;
-		key = std::tolower(key[1]);
-	}
-	return KeyCombination(key, shift, control, alt);
+	const auto key_combination = keycombination::bridged::from_bindkey(input);
+	return convert(*key_combination);
 }
 
 std::string KeyCombination::to_bindkey_string() const

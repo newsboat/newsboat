@@ -17,6 +17,7 @@ pub mod fmtstrformatter;
 pub mod fslock;
 pub mod history;
 pub mod human_panic;
+pub mod keycombination;
 pub mod keymap;
 pub mod logger;
 pub mod matchererror;
