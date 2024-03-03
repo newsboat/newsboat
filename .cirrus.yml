@@ -9,6 +9,10 @@ task:
           freebsd_instance:
             image: freebsd-13-2-release-amd64
             << : *freebsd_resource_settings
+        - name: FreeBSD 14.0
+          freebsd_instance:
+            image: freebsd-14-0-release-amd64-ufs
+            <<: *freebsd_resource_settings
 
     cargo_cache: &cargo_cache
         # This works in conjunction with after_cache_script and
@@ -23,6 +27,8 @@ task:
     env:
         HOME: /home/testuser
         RUSTFLAGS: '-D warnings'
+        # Workaround for https://github.com/Koka/gettext-rs/issues/117
+        CFLAGS: '-Wno-error=incompatible-function-pointer-types'
 
     after_cache_script: &after_cache_script
       - mkdir $HOME/.cargo || true
