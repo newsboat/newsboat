@@ -23,8 +23,11 @@ fn from_bindkey(input: &str) -> Box<KeyCombination> {
     Box::new(KeyCombination(keycombination::bindkey(input)))
 }
 
-fn from_bind(_input: &str) -> Vec<KeyCombination> {
-    todo!()
+fn from_bind(input: &str) -> Vec<KeyCombination> {
+    keycombination::bind(input)
+        .into_iter()
+        .map(KeyCombination)
+        .collect()
 }
 
 fn get_key(key_combination: &KeyCombination) -> &str {

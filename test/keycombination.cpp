@@ -201,6 +201,13 @@ TEST_CASE("from_bind parses sequence of key combinations", "[KeyCombination]")
 				}
 			}
 		}
+		SECTION("Special key with modifiers in nonstandard order") {
+			const auto key_combinations = KeyCombination::from_bind("<M-S-C-key>");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("key", ShiftState::Shift,
+					ControlState::Control, AltState::Alt));
+		}
 	}
 
 	SECTION("Sequence of multiple keys") {
