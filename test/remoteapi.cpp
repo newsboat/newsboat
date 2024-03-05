@@ -62,7 +62,7 @@ TEST_CASE("get_credentials() returns the users name and password",
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
 	cfgparser.parse_file("data/test-config-credentials.txt");
-	std::unique_ptr<test_api> api(new test_api(cfg));
+	auto api = std::make_unique<test_api>(cfg);
 	REQUIRE(api->get_user("ttrss", "") == "ttrss-user");
 	REQUIRE(api->get_pass("ttrss", "") == "my-birthday");
 	REQUIRE(api->get_pass("ocnews", "") == "dadada");

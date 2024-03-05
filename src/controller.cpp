@@ -15,6 +15,7 @@
 #include <libxml/tree.h>
 #include <libxml/xmlsave.h>
 #include <libxml/xmlversion.h>
+#include <memory>
 #include <mutex>
 #include <pwd.h>
 #include <signal.h>
@@ -250,8 +251,7 @@ int Controller::run(const CliArgsParser& args)
 		std::cout << _("done.") << std::endl;
 	}
 
-	reloader =
-		std::unique_ptr<Reloader>(new Reloader(this, rsscache, cfg));
+	reloader = std::make_unique<Reloader>(this, rsscache, cfg);
 
 	std::string type = cfg.get_configvalue("urls-source");
 	if (type == "local") {
