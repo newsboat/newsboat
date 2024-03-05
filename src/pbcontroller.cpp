@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <memory>
 #include <thread>
 #include <unistd.h>
 
@@ -253,7 +254,7 @@ void PbController::initialize(int argc, char* argv[])
 			_("Starting %s %s..."), "Podboat", utils::program_version())
 		<< std::endl;
 
-	fslock = std::unique_ptr<FsLock>(new FsLock());
+	fslock = std::make_unique<FsLock>();
 	pid_t pid;
 	std::string error_message;
 	if (!fslock->try_lock(lock_file, pid, error_message)) {
@@ -308,9 +309,9 @@ int PbController::run(PbView& v)
 
 	std::cout << _("done.") << std::endl;
 
-	ql.reset(new QueueLoader(queue_file, cfg, [&]() {
+	ql = std::make_unique<QueueLoader>(queue_file, cfg, [&]() {
 		v.set_view_update_necessary();
-	}));
+	});
 	ql->reload(downloads_);
 
 	v.run(automatic_dl, cfg.get_configvalue_as_bool("wrap-scroll"));
