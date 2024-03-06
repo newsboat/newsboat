@@ -357,7 +357,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = new MinifluxApi(cfg);
-		urlcfg = new MinifluxUrlReader(configpaths.url_file(), api);
+		urlcfg = new MinifluxUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "inoreader") {
 		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
 			&& !cfg.get_configvalue("inoreader-app-key").empty();

@@ -686,6 +686,23 @@ See also <<miniflux-tokenfile,`miniflux-tokenfile`>>, and
 
 Unlike with other backends, Miniflux's starring/bookmarking feature is not
 currently supported in Newsboat.
+In addition, Miniflux provides the ability to "star"
+articles. Starred articles are basically bookmarks. Newsboat allows the
+use of this feature by mapping its powerful "flags" to the "star"/"unstar"
+operations.
+
+In order to use this mapping, all you need to do is to configure the flags
+that shall be used:
+
+	miniflux-flag-star "a"
+
+After that, use these flags when you edit flags for an article, and these
+articles will be starred.
+
+By default a "Starred Items" feed is included in the feed list. This can be
+removed with:
+
+	miniflux-show-special-feeds "no"
 
 Miniflux categories are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
