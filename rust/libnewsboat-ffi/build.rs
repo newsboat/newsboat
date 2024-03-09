@@ -1,6 +1,7 @@
 fn add_cxxbridge(module: &str) {
     cxx_build::bridge(format!("src/{module}.rs"))
-        .flag("-std=c++11")
+        // Keep in sync with c++ version specified in Makefile
+        .std("c++14")
         // Disable warnings in generated code, since we can't affect them directly. We have to do
         // this because these warnings are turned into errors when we pass `-D warnings` to Cargo
         // on CI.
