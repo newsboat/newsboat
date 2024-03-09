@@ -302,7 +302,7 @@ macro_rules! log {
 mod tests {
     use super::*;
 
-    use chrono::{Duration, NaiveDateTime};
+    use chrono::{NaiveDateTime, TimeDelta};
     use std::io::{self, BufRead, BufReader};
     use std::path;
     use tempfile::TempDir;
@@ -499,7 +499,7 @@ mod tests {
                     // `start_time` and `end_time` may have millisecond precision or better,
                     // whereas `timestamp` is limited to seconds. Therefore, we account for
                     // a situation where `start_time` is slightly bigger than `timestamp`.
-                    assert!(timestamp - start_time > Duration::seconds(-1));
+                    assert!(timestamp - start_time > TimeDelta::try_seconds(-1).unwrap());
                     assert!(finish_time >= timestamp);
 
                     assert_eq!(message, expected);
@@ -830,7 +830,7 @@ mod tests {
                     // `start_time` and `end_time` may have millisecond precision or better,
                     // whereas `timestamp` is limited to seconds. Therefore, we account for
                     // a situation where `start_time` is slightly bigger than `timestamp`.
-                    assert!(timestamp - start_time > Duration::seconds(-1));
+                    assert!(timestamp - start_time > TimeDelta::try_seconds(-1).unwrap());
                     assert!(finish_time >= timestamp);
 
                     assert_eq!(message, expected);
