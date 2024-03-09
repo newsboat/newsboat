@@ -39,7 +39,7 @@ task:
         - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf
         - pkg update -f
         - pkg upgrade -y
-        - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl sqlite3 gettext-tools libxml2
+        - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl ca_root_nss sqlite3 gettext-tools libxml2
     setup_script:
         - pw groupadd testgroup
         - pw useradd testuser -g testgroup -w none -m
