@@ -6,7 +6,7 @@
 #   docker build \
 #       --tag=newsboat-i18nspector \
 #       --file=docker/i18nspector.dockerfile \
-#       docker
+#       .
 #
 # Run on your local files:
 #

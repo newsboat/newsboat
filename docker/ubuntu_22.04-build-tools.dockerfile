@@ -15,7 +15,7 @@
 #   docker build \
 #       --tag=newsboat-build-tools \
 #       --file=docker/ubuntu_22.04-build-tools.dockerfile \
-#       docker
+#       .
 #
 # Build with non-default compiler and Rust version:
 #
@@ -26,7 +26,7 @@
 #       --build-arg cc=clang-13 \
 #       --build-arg cxx=clang++-13 \
 #       --build-arg rust_version=1.40.0 \
-#       docker
+#       .
 #
 # Before building in a container, run this to remove any binaries that you
 # might've compiled on your host system (or in another container):
@@ -111,6 +111,6 @@ ENV CC=$cc
 ENV CXX=$cxx
 
 USER root
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

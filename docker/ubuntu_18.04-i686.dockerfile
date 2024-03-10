@@ -5,7 +5,7 @@
 #   docker build \
 #       --tag=newsboat-i686-build-tools \
 #       --file=docker/ubuntu_18.04-i686.dockerfile \
-#       docker
+#       .
 #
 # Before building in a container, run this to remove any binaries that you
 # might've compiled on your host system (or in another container):
@@ -89,6 +89,6 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
 ENV HOME /home/builder
 
 USER root
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
