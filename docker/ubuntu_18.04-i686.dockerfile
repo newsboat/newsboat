@@ -16,7 +16,7 @@
 #
 #   docker run \
 #       --rm \
-#       --mount type=bind,source=$(pwd),target=/home/builder/src \
+#       --mount type=bind,source=$(pwd),target=/src \
 #       -e HOST_UID=$(id -u) \
 #       -e HOST_GID=$(id -g) \
 #       newsboat-i686-build-tools \
@@ -63,7 +63,7 @@ RUN apt-get update \
 RUN addgroup --gid 1000 builder \
     && adduser --home /home/builder --uid 1000 --ingroup builder \
         --disabled-password --shell /bin/bash builder \
-    && mkdir -p /home/builder/src \
+    && mkdir -p /src \
     && chown -R builder:builder /home/builder
 
 RUN apt-get update \
@@ -77,7 +77,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 USER builder
-WORKDIR /home/builder/src
+WORKDIR /src
 
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \

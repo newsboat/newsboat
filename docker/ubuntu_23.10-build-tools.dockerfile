@@ -37,7 +37,7 @@
 #
 #   docker run \
 #       --rm \
-#       --mount type=bind,source=$(pwd),target=/home/builder/src \
+#       --mount type=bind,source=$(pwd),target=/src \
 #       -e HOST_UID=$(id -u) \
 #       -e HOST_GID=$(id -g) \
 #       newsboat-build-tools \
@@ -79,8 +79,8 @@ RUN addgroup builder \
     && deluser ubuntu \
     && adduser --home /home/builder --ingroup builder \
         --disabled-password --shell /bin/bash builder \
-    && mkdir -p /home/builder/src \
-    && chown -R builder:builder /home/builder
+    && mkdir -p /src \
+    && chown -R builder:builder /src
 
 RUN apt-get install locales \
     && echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen \
@@ -92,7 +92,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 USER builder
-WORKDIR /home/builder/src
+WORKDIR /src
 
 ARG rust_version=1.76.0
 
