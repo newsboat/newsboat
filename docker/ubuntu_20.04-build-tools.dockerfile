@@ -38,7 +38,8 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       --user $(id -u):$(id -g) \
+#       -e HOST_UID=$(id -u) \
+#       -e HOST_GID=$(id -g) \
 #       newsboat-build-tools \
 #       make
 #
@@ -69,7 +70,7 @@ RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
         build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
         libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext git \
-        pkg-config zlib1g-dev asciidoctor wget \
+        pkg-config zlib1g-dev asciidoctor wget gosu \
     && apt-get autoremove \
     && apt-get clean
 
@@ -107,3 +108,8 @@ ARG cxx=g++-9
 
 ENV CC=$cc
 ENV CXX=$cxx
+
+USER root
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

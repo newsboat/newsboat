@@ -17,7 +17,8 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       --user $(id -u):$(id -g) \
+#       -e HOST_UID=$(id -u) \
+#       -e HOST_GID=$(id -g) \
 #       newsboat-i686-build-tools \
 #       make
 #
@@ -54,7 +55,7 @@ RUN apt-get update \
         # `curl` would be enough for our needs, but it pulls in amd64 versions
         # of libraries we use, interfering with the build environment. So
         # `wget` it is.
-        wget \
+        wget gosu \
     && apt-get install --assume-yes --no-install-recommends asciidoctor \
     && apt-get autoremove \
     && apt-get clean
@@ -86,3 +87,8 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod a+w $HOME/.cargo
 
 ENV HOME /home/builder
+
+USER root
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
