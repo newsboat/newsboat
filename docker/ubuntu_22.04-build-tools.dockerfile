@@ -38,6 +38,7 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/src \
+#       --user root
 #       -e HOST_UID=$(id -u) \
 #       -e HOST_GID=$(id -g) \
 #       newsboat-build-tools \
@@ -113,4 +114,7 @@ ENV CXX=$cxx
 USER root
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Cirrus doesn't run the entrypoint script so we switch directly to the target user.
+USER builder
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
