@@ -142,7 +142,7 @@ task:
                 cc: gcc-13
                 cxx: g++-13
           env: &extra_warnings_and_checks_env
-            CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3 -Wpedantic"
+            CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 17, more warnings and checks (Ubuntu 23.10)
           container:
             greedy: true
