@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-03-11 22:45+0300\n"
-"PO-Revision-Date: 2023-12-11 20:10+0100\n"
+"PO-Revision-Date: 2024-03-11 23:26+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -77,27 +77,24 @@ msgid "<queuefile>"
 msgstr "<plik kolejki>"
 
 #: newsboat.cpp:72
-#, fuzzy
 msgid "use <queuefile> as podcast queue file"
-msgstr "użyj <plik kolejki> jako pliku kolejki"
+msgstr "użyj <plik kolejki> jako pliku kolejki podkastów"
 
 #: newsboat.cpp:77
-#, fuzzy
 msgid "<searchfile>"
-msgstr "<plik pamięci podręcznej>"
+msgstr "<plik wyszukiwania>"
 
 #: newsboat.cpp:78
 msgid "save the input history of the search to <searchfile>"
-msgstr ""
+msgstr "zapisz historię wyszukiwania do <plik wyszukiwania>"
 
 #: newsboat.cpp:83
-#, fuzzy
 msgid "<cmdlinefile>"
-msgstr "<plik pamięci podręcznej>"
+msgstr "<plik wiersza poleceń>"
 
 #: newsboat.cpp:84
 msgid "save the input history of the command line to <cmdlinefile>"
-msgstr ""
+msgstr "zapisz historię poleceń do <plik wiersza poleceń>"
 
 #: newsboat.cpp:86
 msgid "compact the cache"
@@ -177,18 +174,17 @@ msgstr "plik pamięci podręcznej"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:154
 msgid "podcast queue"
-msgstr ""
+msgstr "kolejka podkastów"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:156
-#, fuzzy
 msgid "search history"
-msgstr "Szukaj: "
+msgstr "historia wyszukiwania"
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:158
 msgid "command line history"
-msgstr ""
+msgstr "historia wiersza poleceń"
 
 #: newsboat.cpp:176 src/pbcontroller.cpp:407
 msgid ""
@@ -432,14 +428,12 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s jest niedostępny i nie może zostać utworzony\n"
 
 #: src/controller.cpp:299
-#, fuzzy
 msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
-"BŁĄD: Musisz ustawić `freshrss-login` oraz jeden z `freshrss-password`, "
-"`freshrss-passwordfile` lub `freshrss-passwordeval` aby korzystać z "
-"FreshRSS\n"
+"BŁĄD: Musisz ustawić `feedbin-login` oraz jeden z `feedbin-password`, "
+"`feedbin-passwordfile` lub `feedbin-passwordeval` aby korzystać z Feedbin\n"
 
 #: src/controller.cpp:311
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
@@ -542,13 +536,12 @@ msgstr ""
 "Miniflux. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:437
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Feedbin account. "
 "Please do so, and try again."
 msgstr ""
 "Wygląda na to, że nie skonfigurowałeś żadnych kanałów na swoim koncie "
-"Miniflux. Wykonaj to proszę i spróbuj ponownie."
+"Feedbin. Wykonaj to proszę i spróbuj ponownie."
 
 #: src/controller.cpp:442
 msgid ""
@@ -1806,14 +1799,12 @@ msgid "use <queuefile> as queue file"
 msgstr "użyj <plik kolejki> jako pliku kolejki"
 
 #: src/pbcontroller.cpp:368
-#, fuzzy
 msgid "<lockfile>"
-msgstr "<plik z logami>"
+msgstr "<plik blokady>"
 
 #: src/pbcontroller.cpp:369
-#, fuzzy
 msgid "use <lockfile> as lock file"
-msgstr "użyj <plik z logami> jako wyjściowy plik z logami"
+msgstr "użyj <plik blokady> jako pliku blokady"
 
 #: src/pbcontroller.cpp:371
 msgid "start download on startup"
