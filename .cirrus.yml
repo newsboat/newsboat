@@ -5,9 +5,9 @@ freebsd_resource_settings: &freebsd_resource_settings
 task:
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     matrix:
-        - name: FreeBSD 13.2
+        - name: FreeBSD 13.3
           freebsd_instance:
-            image: freebsd-13-2-release-amd64
+            image: freebsd-13-3-release-amd64
             << : *freebsd_resource_settings
         - name: FreeBSD 14.0
           freebsd_instance:
