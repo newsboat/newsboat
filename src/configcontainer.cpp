@@ -497,9 +497,9 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 			configline.append(cfg.second.value());
 			if (cfg.second.value() != cfg.second.default_value()) {
 				configline.append(
-					strprintf::fmt(
-						" # default: %s",
-						cfg.second.default_value()));
+						strprintf::fmt(
+							" # default: %s",
+							cfg.second.default_value()));
 			}
 			break;
 		case ConfigDataType::ENUM:
@@ -515,8 +515,8 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 				configline.append(utils::quote(cfg.second.value()));
 				if (cfg.second.value() != cfg.second.default_value()) {
 					configline.append(strprintf::fmt(
-							" # default: %s",
-							cfg.second.default_value()));
+								" # default: %s",
+								cfg.second.default_value()));
 				}
 			}
 			break;

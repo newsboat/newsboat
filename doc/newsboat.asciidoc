@@ -684,8 +684,6 @@ It is also possible to specify an API token instead of the username/password com
 See also <<miniflux-tokenfile,`miniflux-tokenfile`>>, and
 <<miniflux-tokeneval,`miniflux-tokeneval`>>.
 
-Unlike with other backends, Miniflux's starring/bookmarking feature is not
-currently supported in Newsboat.
 In addition, Miniflux provides the ability to "star"
 articles. Starred articles are basically bookmarks. Newsboat allows the
 use of this feature by mapping its powerful "flags" to the "star"/"unstar"

@@ -8,8 +8,8 @@
 
 namespace newsboat {
 
-MinifluxUrlReader::MinifluxUrlReader(ConfigContainer* c, 
-	const std::string& url_file, 
+MinifluxUrlReader::MinifluxUrlReader(ConfigContainer* c,
+	const std::string& url_file,
 	RemoteApi* a)
 	: cfg(c)
 	, file(url_file)

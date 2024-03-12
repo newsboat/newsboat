@@ -144,9 +144,9 @@ bool MinifluxApi::star_article(const std::string& guid, bool star)
 	json args;
 	std::string putcontent;
 	putcontent = strprintf::fmt(
-				"/v1/entries/%s/bookmark",
-				guid);
-	
+			"/v1/entries/%s/bookmark",
+			guid);
+
 	// this function is actually a toggle, so we do not need the star parameter
 	if (star) {
 		const json content = run_op(putcontent, args, HTTPMethod::PUT);
@@ -158,7 +158,7 @@ bool MinifluxApi::star_article(const std::string& guid, bool star)
 }
 
 bool MinifluxApi::update_article_flags(const std::string&  oldflags,
-	const std::string&  newflags ,
+	const std::string&  newflags,
 	const std::string&  guid )
 {
 	std::string star_flag = cfg.get_configvalue("miniflux-flag-star");
@@ -185,9 +185,9 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 	feed.rss_version = rsspp::Feed::MINIFLUX_JSON;
 
 	const std::string query =
-		id == "starred" ? 
-			_("/v1/entries?starred=true")
-			: strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc&limit=%u",
+		id == "starred" ?
+		"/v1/entries?starred=true"
+		: strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc&limit=%u",
 			id,
 			cfg.get_configvalue_as_int("miniflux-min-items"));
 
@@ -296,7 +296,6 @@ json MinifluxApi::run_op(const std::string& path,
 
 	const std::string result = utils::retrieve_url(
 			url, easyhandle, cfg, auth_info, body, method);
-
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",

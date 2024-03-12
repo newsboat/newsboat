@@ -507,7 +507,6 @@ int Controller::run(const CliArgsParser& args)
 		return EXIT_SUCCESS;
 	}
 
-
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.
 	if (cfg.get_configvalue_as_bool("prepopulate-query-feeds")) {
@@ -691,8 +690,8 @@ void Controller::mark_all_read(unsigned int pos)
 		}
 	}
 	m.stopover(
-		"after rsscache->mark_all_read, before iteration over "
-		"items");
+			"after rsscache->mark_all_read, before iteration over "
+			"items");
 
 	feedcontainer.mark_all_feed_items_read(feed);
 }
