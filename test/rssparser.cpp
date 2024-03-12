@@ -174,24 +174,38 @@ TEST_CASE("parse() extracts best enclosure", "[RssParser]")
 	upstream_feed.items.push_back({});
 	rsspp::Item& upstream_item = upstream_feed.items[0];
 
-	rsspp::Enclosure image_enclosure1 = {
-		.url = "http://example.com/enclosure1",
-		.type = "image/png",
-		.description = "description1",
-		.description_mime_type = "text/plain",
+	const auto make_enclosure = [](
+			const std::string& url,
+			const std::string& type,
+			const std::string& description,
+			const std::string& mime
+	) -> rsspp::Enclosure {
+		rsspp::Enclosure result;
+		result.url = url;
+		result.type = type;
+		result.description = description;
+		result.description_mime_type = mime;
+		return result;
 	};
-	rsspp::Enclosure image_enclosure2 = {
-		.url = "http://example.com/enclosure2",
-		.type = "image/jpg",
-		.description = "description2",
-		.description_mime_type = "text/plain",
-	};
-	rsspp::Enclosure audio_enclosure = {
-		.url = "http://example.com/enclosure3",
-		.type = "audio/ogg",
-		.description = "description3",
-		.description_mime_type = "text/plain",
-	};
+
+	const auto image_enclosure1 = make_enclosure(
+			"http://example.com/enclosure1",
+			"image/png",
+			"description1",
+			"text/plain"
+		);
+	const auto image_enclosure2 = make_enclosure(
+			"http://example.com/enclosure2",
+			"image/jpg",
+			"description2",
+			"text/plain"
+		);
+	const auto audio_enclosure = make_enclosure(
+			"http://example.com/enclosure3",
+			"audio/ogg",
+			"description3",
+			"text/plain"
+		);
 
 	SECTION("podcast preferred over non-podcast enclosure") {
 		const auto run_validation = [&]() {

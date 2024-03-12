@@ -1039,10 +1039,10 @@ ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 		cmds.push_back(cmd);
 	}
 
-	return ParsedOperations{
-		.operations = cmds,
-		.description = std::string(description)
-	};
+	ParsedOperations result;
+	result.operations = cmds;
+	result.description = std::string(description);
+	return result;
 }
 
 std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()

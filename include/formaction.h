@@ -42,6 +42,11 @@ enum class BindingType {
 struct Command {
 	CommandType type;
 	std::vector<std::string> args;
+
+	Command(CommandType type, std::vector<std::string> args = {})
+		: type(type)
+		, args(args)
+	{}
 };
 
 class FormAction {

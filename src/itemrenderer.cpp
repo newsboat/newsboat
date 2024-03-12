@@ -51,9 +51,7 @@ void prepare_header(
 {
 	const auto add_line =
 		[&lines]
-		(const std::string& value,
-			const std::string& name,
-	LineType lineType = LineType::wrappable) {
+	(const std::string& value, const std::string& name, LineType lineType) {
 		if (!value.empty()) {
 			const auto line = strprintf::fmt("%s%s", name, value);
 			lines.push_back(std::make_pair(lineType, line));
@@ -71,14 +69,14 @@ void prepare_header(
 	};
 
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
-	add_line(stfl_quote_if_needed(feedtitle), _("Feed: "));
+	add_line(stfl_quote_if_needed(feedtitle), _("Feed: "), LineType::wrappable);
 	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item->title())),
-		_("Title: "));
+		_("Title: "), LineType::wrappable);
 	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item->author())),
-		_("Author: "));
-	add_line(item->pubDate(), _("Date: "));
+		_("Author: "), LineType::wrappable);
+	add_line(item->pubDate(), _("Date: "), LineType::wrappable);
 	add_line(item->link(), _("Link: "), LineType::softwrappable);
-	add_line(item->flags(), _("Flags: "));
+	add_line(item->flags(), _("Flags: "), LineType::wrappable);
 
 	const bool could_be_podcast = item->enclosure_type().empty()
 		|| utils::is_valid_podcast_type(item->enclosure_type());
