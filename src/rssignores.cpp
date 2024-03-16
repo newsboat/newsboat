@@ -105,7 +105,7 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-bool RssIgnores::matches_expr(std::shared_ptr<Matcher> expr, RssItem *item)
+bool RssIgnores::matches_expr(std::shared_ptr<Matcher> expr, RssItem* item)
 {
 	if (expr->matches(item)) {
 		LOG(Level::DEBUG,
@@ -120,14 +120,16 @@ bool RssIgnores::matches(RssItem* item)
 {
 	auto search = ignores.equal_range(item->feedurl());
 	for (auto itr = search.first; itr != search.second; itr++) {
-		if (matches_expr(itr->second, item))
+		if (matches_expr(itr->second, item)) {
 			return true;
+		}
 	}
 
 	search = ignores.equal_range("*");
 	for (auto itr = search.first; itr != search.second; itr++) {
-		if (matches_expr(itr->second, item))
+		if (matches_expr(itr->second, item)) {
 			return true;
+		}
 	}
 
 	const int prefix_len = REGEX_PREFIX.length();
@@ -142,8 +144,9 @@ bool RssIgnores::matches(RssItem* item)
 			std::string errorMessage;
 			const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
 			const auto matches = regex->matches(item->feedurl(), 1, 0);
-			if (!matches.empty() && matches_expr(ign.second, item))
+			if (!matches.empty() && matches_expr(ign.second, item)) {
 				return true;
+			}
 		}
 	}
 
