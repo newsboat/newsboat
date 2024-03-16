@@ -60,7 +60,6 @@ void RssIgnores::handle_action(const std::string& action,
 			}
 		}
 
-		// ignores.push_back(FeedUrlExprPair(ignore_rssurl, m));
 		ignores.insert({ignore_rssurl, m});
 	} else if (action == "always-download") {
 		if (params.empty()) {

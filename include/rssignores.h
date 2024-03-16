@@ -30,7 +30,6 @@ private:
 	std::vector<std::string> resetflag;
 
 	static const std::string REGEX_PREFIX;
-
 };
 
 } // namespace newsboat
