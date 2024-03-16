@@ -11,6 +11,8 @@
 
 namespace newsboat {
 
+typedef std::pair<std::string, std::shared_ptr<Matcher>> FeedUrlExprPair;
+
 class RssIgnores : public ConfigActionHandler {
 public:
 	RssIgnores() {}
@@ -25,7 +27,8 @@ public:
 private:
 	bool matches_expr(std::shared_ptr<Matcher> expr, RssItem* item);
 
-	std::unordered_multimap<std::string, std::shared_ptr<Matcher>> ignores;
+	std::vector<FeedUrlExprPair> regex_ignores;
+	std::unordered_multimap<std::string, std::shared_ptr<Matcher>> non_regex_ignores;
 	std::vector<std::string> ignores_lastmodified;
 	std::vector<std::string> resetflag;
 

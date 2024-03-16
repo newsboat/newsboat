@@ -58,9 +58,11 @@ void RssIgnores::handle_action(const std::string& action,
 						_("`%s' is not a valid regular expression: %s"),
 						pattern, errorMessage));
 			}
-		}
 
-		ignores.insert({ignore_rssurl, m});
+			regex_ignores.push_back(FeedUrlExprPair(pattern, m));
+		} else {
+			non_regex_ignores.insert({ignore_rssurl, m});
+		}
 	} else if (action == "always-download") {
 		if (params.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -84,13 +86,20 @@ void RssIgnores::handle_action(const std::string& action,
 
 void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 {
-	for (const auto& ign : ignores) {
+	for (const auto& ign : non_regex_ignores) {
 		std::string configline = "ignore-article ";
 		if (ign.first == "*") {
 			configline.append("*");
 		} else {
 			configline.append(utils::quote(ign.first));
 		}
+		configline.append(" ");
+		configline.append(utils::quote(ign.second->get_expression()));
+		config_output.push_back(configline);
+	}
+	for (const auto& ign : regex_ignores) {
+		std::string configline = "ignore-article ";
+		configline.append(utils::quote(REGEX_PREFIX + ign.first));
 		configline.append(" ");
 		configline.append(utils::quote(ign.second->get_expression()));
 		config_output.push_back(configline);
@@ -118,35 +127,33 @@ bool RssIgnores::matches_expr(std::shared_ptr<Matcher> expr, RssItem* item)
 
 bool RssIgnores::matches(RssItem* item)
 {
-	auto search = ignores.equal_range(item->feedurl());
+	auto search = non_regex_ignores.equal_range(item->feedurl());
 	for (auto itr = search.first; itr != search.second; itr++) {
 		if (matches_expr(itr->second, item)) {
 			return true;
 		}
 	}
 
-	search = ignores.equal_range("*");
+	search = non_regex_ignores.equal_range("*");
 	for (auto itr = search.first; itr != search.second; itr++) {
 		if (matches_expr(itr->second, item)) {
 			return true;
 		}
 	}
 
-	const int prefix_len = REGEX_PREFIX.length();
-	for (const auto& ign : ignores) {
+	for (const auto& ign : regex_ignores) {
+		const std::string pattern = ign.first;
+
 		LOG(Level::DEBUG,
 			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
-			ign.first,
+			pattern,
 			item->feedurl());
 
-		if (!ign.first.compare(0, prefix_len, REGEX_PREFIX)) {
-			const std::string pattern = ign.first.substr(prefix_len, ign.first.length() - prefix_len);
-			std::string errorMessage;
-			const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
-			const auto matches = regex->matches(item->feedurl(), 1, 0);
-			if (!matches.empty() && matches_expr(ign.second, item)) {
-				return true;
-			}
+		std::string errorMessage;
+		const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
+		const auto matches = regex->matches(item->feedurl(), 1, 0);
+		if (!matches.empty() && matches_expr(ign.second, item)) {
+			return true;
 		}
 	}
 
