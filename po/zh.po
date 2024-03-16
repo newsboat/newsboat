@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-03-11 22:45+0300\n"
-"PO-Revision-Date: 2023-12-28 15:00+0800\n"
+"PO-Revision-Date: 2024-03-12 10:45+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -74,27 +74,24 @@ msgid "<queuefile>"
 msgstr "<队列文件>"
 
 #: newsboat.cpp:72
-#, fuzzy
 msgid "use <queuefile> as podcast queue file"
 msgstr "使用<队列文件>作为保存播客队列的文件"
 
 #: newsboat.cpp:77
-#, fuzzy
 msgid "<searchfile>"
-msgstr "<缓存文件>"
+msgstr "<搜索历史文件>"
 
 #: newsboat.cpp:78
 msgid "save the input history of the search to <searchfile>"
-msgstr ""
+msgstr "将搜索历史保存到<搜索历史文件>"
 
 #: newsboat.cpp:83
-#, fuzzy
 msgid "<cmdlinefile>"
-msgstr "<缓存文件>"
+msgstr "<命令行历史文件>"
 
 #: newsboat.cpp:84
 msgid "save the input history of the command line to <cmdlinefile>"
-msgstr ""
+msgstr "将命令行输入历史保存到<命令行历史文件>"
 
 #: newsboat.cpp:86
 msgid "compact the cache"
@@ -174,18 +171,17 @@ msgstr "缓存文件"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:154
 msgid "podcast queue"
-msgstr ""
+msgstr "播客队列"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:156
-#, fuzzy
 msgid "search history"
-msgstr "查找："
+msgstr "搜索历史"
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:158
 msgid "command line history"
-msgstr ""
+msgstr "命令行输入历史"
 
 #: newsboat.cpp:176 src/pbcontroller.cpp:407
 msgid ""
@@ -423,13 +419,12 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "不能访问或创建 %s\n"
 
 #: src/controller.cpp:299
-#, fuzzy
 msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
-"错误：你必须设置`freshrss-login`和一个`freshrss-password`、`freshrss-"
-"passwordfile`或`freshrss-passwordeval`后才能使用 FreshRSS\n"
+"错误：你必须设置`feedbin-login`和一个`feedbin-password`、`feedbin-"
+"passwordfile`或`feedbin-passwordeval`后才能使用 Feedbin\n"
 
 #: src/controller.cpp:311
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
@@ -525,12 +520,11 @@ msgstr ""
 "看起来你还没有在 Miniflux 账户里配置任何种子。请先配置种子，然后再尝试一下。"
 
 #: src/controller.cpp:437
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Feedbin account. "
 "Please do so, and try again."
 msgstr ""
-"看起来你还没有在 Miniflux 账户里配置任何种子。请先配置种子，然后再尝试一下。"
+"看起来你还没有在 Feedbin 账户里配置任何种子。请先配置种子，然后再尝试一下。"
 
 #: src/controller.cpp:442
 msgid ""
@@ -1773,14 +1767,12 @@ msgid "use <queuefile> as queue file"
 msgstr "使用<队列文件>作为保存播客队列的文件"
 
 #: src/pbcontroller.cpp:368
-#, fuzzy
 msgid "<lockfile>"
-msgstr "<日志文件>"
+msgstr "<锁文件>"
 
 #: src/pbcontroller.cpp:369
-#, fuzzy
 msgid "use <lockfile> as lock file"
-msgstr "使用<日志文件>作为记录日志的文件"
+msgstr "使用<锁文件>作为锁文件"
 
 #: src/pbcontroller.cpp:371
 msgid "start download on startup"
