@@ -2,6 +2,7 @@
 #define NEWSBOAT_RSSIGNORES_H_
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "configactionhandler.h"
@@ -9,8 +10,6 @@
 #include "rssitem.h"
 
 namespace newsboat {
-
-typedef std::pair<std::string, std::shared_ptr<Matcher>> FeedUrlExprPair;
 
 class RssIgnores : public ConfigActionHandler {
 public:
@@ -24,11 +23,14 @@ public:
 	bool matches_resetunread(const std::string& url);
 
 private:
-	std::vector<FeedUrlExprPair> ignores;
+	bool matches_expr(std::shared_ptr<Matcher> expr, RssItem* item);
+
+	std::unordered_multimap<std::string, std::shared_ptr<Matcher>> ignores;
 	std::vector<std::string> ignores_lastmodified;
 	std::vector<std::string> resetflag;
 
 	static const std::string REGEX_PREFIX;
+
 };
 
 } // namespace newsboat

@@ -60,7 +60,8 @@ void RssIgnores::handle_action(const std::string& action,
 			}
 		}
 
-		ignores.push_back(FeedUrlExprPair(ignore_rssurl, m));
+		// ignores.push_back(FeedUrlExprPair(ignore_rssurl, m));
+		ignores.insert({ignore_rssurl, m});
 	} else if (action == "always-download") {
 		if (params.empty()) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
@@ -105,11 +106,33 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
+bool RssIgnores::matches_expr(std::shared_ptr<Matcher> expr, RssItem *item)
+{
+	if (expr->matches(item)) {
+		LOG(Level::DEBUG,
+			"RssIgnores::matches_expr: found match");
+		return true;
+	}
+
+	return false;
+}
+
 bool RssIgnores::matches(RssItem* item)
 {
+	auto search = ignores.equal_range(item->feedurl());
+	for (auto itr = search.first; itr != search.second; itr++) {
+		if (matches_expr(itr->second, item))
+			return true;
+	}
+
+	search = ignores.equal_range("*");
+	for (auto itr = search.first; itr != search.second; itr++) {
+		if (matches_expr(itr->second, item))
+			return true;
+	}
+
 	const int prefix_len = REGEX_PREFIX.length();
 	for (const auto& ign : ignores) {
-		bool matched = false;
 		LOG(Level::DEBUG,
 			"RssIgnores::matches: ign.first = `%s' item->feedurl = `%s'",
 			ign.first,
@@ -120,17 +143,11 @@ bool RssIgnores::matches(RssItem* item)
 			std::string errorMessage;
 			const auto regex = Regex::compile(pattern, REG_EXTENDED | REG_ICASE, errorMessage);
 			const auto matches = regex->matches(item->feedurl(), 1, 0);
-			matched = !matches.empty();
-		} else {
-			matched = ign.first == "*" || item->feedurl() == ign.first;
-		}
-
-		if (matched && ign.second->matches(item)) {
-			LOG(Level::DEBUG,
-				"RssIgnores::matches: found match");
-			return true;
+			if (!matches.empty() && matches_expr(ign.second, item))
+				return true;
 		}
 	}
+
 	return false;
 }
 

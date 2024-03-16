@@ -63,7 +63,7 @@ bool Matcher::matches(Matchable* item)
 	 * you only have to implement the method attribute_value().
 	 *
 	 * The whole matching code is speed-critical, as the matching happens on
-	 * a lot of different occassions, and slow matching can be easily
+	 * a lot of different occasions, and slow matching can be easily
 	 * measured (and felt by the user) on slow computers with a lot of items
 	 * to match.
 	 */
@@ -194,7 +194,7 @@ bool Matcher::matches_r(expression* e, Matchable* item)
 			return matches_r(e->l, item) ||
 				matches_r(e->r, item); // same here
 
-		/* while the other operator connect an attribute with a value */
+		/* while the other operators connect an attribute with a value */
 		case MATCHOP_EQ:
 			return matchop_eq(e, item);
 

@@ -1,5 +1,7 @@
 #include "rssignores.h"
 
+#include <set>
+
 #include "3rd-party/catch.hpp"
 
 #include "cache.h"
@@ -143,13 +145,16 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 
 		ignores.dump_config(config);
 
+		std::set<std::string> config_set(config.begin(), config.end());
+
 		REQUIRE(config.size() == 4); // three actions plus one comment
-		REQUIRE(config[0] == comment);
-		REQUIRE(config[1] ==
-			R"#(ignore-article "https://example.com/feed.xml" "author =~ \"Joe\"")#");
-		REQUIRE(config[2] == R"#(ignore-article * "title # \"interesting\"")#");
-		REQUIRE(config[3] ==
-			R"#(ignore-article "https://blog.example.com/joe/posts.xml" "guid # 123")#");
+		REQUIRE(config_set.count(comment) == 1);
+		REQUIRE(config_set.count(
+			R"#(ignore-article "https://example.com/feed.xml" "author =~ \"Joe\"")#") == 1);
+		REQUIRE(config_set.count(
+			R"#(ignore-article * "title # \"interesting\"")#") == 1);
+		REQUIRE(config_set.count(
+			R"#(ignore-article "https://blog.example.com/joe/posts.xml" "guid # 123")#") == 1);
 	}
 
 	SECTION("`always-download`") {
@@ -209,11 +214,14 @@ TEST_CASE("RssIgnores::dump_config() writes out all configured settings "
 
 		ignores.dump_config(config);
 
+		std::set<std::string> config_set(config.begin(), config.end());
+
 		REQUIRE(config.size() == 10);
 		REQUIRE(config[0] == comment);
-		REQUIRE(config[1] == R"#(ignore-article * "title # \"interesting\"")#");
-		REQUIRE(config[2] ==
-			R"#(ignore-article "https://blog.example.com/joe/posts.xml" "guid # 123")#");
+		REQUIRE(config_set.count(
+			R"#(ignore-article * "title # \"interesting\"")#") == 1);
+		REQUIRE(config_set.count(
+			R"#(ignore-article "https://blog.example.com/joe/posts.xml" "guid # 123")#") == 1);
 		REQUIRE(config[3] == R"#(always-download "url1")#");
 		REQUIRE(config[4] == R"#(always-download "url2")#");
 		REQUIRE(config[5] == R"#(always-download "url3")#");
