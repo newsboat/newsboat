@@ -37,7 +37,8 @@ public:
 		newsboat::RemoteApi* api = 0,
 		const std::string& cookie_cache = "");
 	Feed parse_buffer(const std::string& buffer,
-		const std::string& url = "");
+		const std::string& url = "",
+		const std::string& charset = "");
 	Feed parse_file(const std::string& filename);
 	time_t get_last_modified()
 	{

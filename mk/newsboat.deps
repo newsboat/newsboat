@@ -4,6 +4,7 @@ src/cliargsparser.cpp
 src/configactionhandler.cpp
 src/configpaths.cpp
 src/controller.cpp
+src/curlheadercontainer.cpp
 src/dialogsformaction.cpp
 src/dirbrowserformaction.cpp
 src/emptyformaction.cpp

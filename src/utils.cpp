@@ -48,6 +48,7 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "htmlrenderer.h"
+#include "libnewsboat-ffi/src/utils.rs.h"
 #include "logger.h"
 #include "strprintf.h"
 
@@ -190,6 +191,19 @@ std::string utils::locale_to_utf8(const std::string& text)
 			reinterpret_cast<const unsigned char*>(text.c_str()),
 			text.length());
 	return std::string(utils::bridged::locale_to_utf8(text_slice));
+}
+
+std::string utils::convert_text(const std::string& text, const std::string& tocode,
+	const std::string& fromcode)
+{
+	const auto text_slice =
+		rust::Slice<const unsigned char>(
+			reinterpret_cast<const unsigned char*>(text.c_str()),
+			text.length());
+
+	const auto result = utils::bridged::convert_text(text_slice, tocode, fromcode);
+
+	return std::string(reinterpret_cast<const char*>(result.data()), result.size());
 }
 
 std::string utils::get_command_output(const std::string& cmd)
@@ -380,6 +394,17 @@ std::string utils::replace_all(const std::string& str,
 			output += first_match_pair.second;
 		}
 	}
+	return output;
+}
+
+std::string utils::to_lowercase(const std::string& input)
+{
+	std::string output;
+	std::transform(input.begin(), input.end(), std::back_inserter(output),
+	[](unsigned char c) {
+		return std::tolower(c);
+	});
+
 	return output;
 }
 
