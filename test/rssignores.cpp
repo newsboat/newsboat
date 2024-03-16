@@ -1,6 +1,5 @@
 #include "rssignores.h"
 
-#include <iostream>
 #include <set>
 
 #include "3rd-party/catch.hpp"
