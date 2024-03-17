@@ -23,7 +23,7 @@ Guidelines that could be easily automated, have been. Please install:
 
 You can then run `make fmt` to format both C++ and Rust code.
 
-*Note: If you are running into issues running `make fmt` locally, there is a lightweight Docker container available you can use to format. Instructions are in the [Docker file](../../docker/code-formatting-tools.dockerfile).*
+Note: If you are running into issues running `make fmt` locally, there is a lightweight Docker container available you can use to format. Instructions are in the [Docker file](../../docker/code-formatting-tools.dockerfile).
 
 [editorconfig]: https://editorconfig.org/ "EditorConfig"
 
