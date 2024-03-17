@@ -141,19 +141,22 @@ bool MinifluxApi::mark_article_read(const std::string& guid, bool read)
 
 bool MinifluxApi::star_article(const std::string& guid, bool star)
 {
-	json args;
-	std::string putcontent;
-	putcontent = strprintf::fmt(
-			"/v1/entries/%s/bookmark",
+	std::string getstate;
+	getstate = strprintf::fmt(
+			"/v1/entries/%s",
 			guid);
+	const json status = run_op(getstate, json(), HTTPMethod::GET);
+	bool current_star = status["starred"];
 
-	// this function is actually a toggle, so we do not need the star parameter
-	if (star) {
-		const json content = run_op(putcontent, args, HTTPMethod::PUT);
+	if (star != current_star) {
+		std::string putcontent;
+		putcontent = strprintf::fmt(
+				"/v1/entries/%s/bookmark",
+				guid);
+		const json content = run_op(putcontent, json(), HTTPMethod::PUT);
 		return content.is_null();
 	} else {
-		const json content = run_op(putcontent, args, HTTPMethod::PUT);
-		return content.is_null();
+		return true;
 	}
 }
 
