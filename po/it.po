@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-03-11 22:45+0300\n"
-"PO-Revision-Date: 2023-12-15 08:12+0100\n"
+"PO-Revision-Date: 2024-03-17 09:12+0100\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -76,27 +76,24 @@ msgid "<queuefile>"
 msgstr "<queuefile>"
 
 #: newsboat.cpp:72
-#, fuzzy
 msgid "use <queuefile> as podcast queue file"
-msgstr "usa <queuefile> come file cache"
+msgstr "usa <queuefile> come file per coda podcast"
 
 #: newsboat.cpp:77
-#, fuzzy
 msgid "<searchfile>"
-msgstr "<cachefile>"
+msgstr "<searchfile>"
 
 #: newsboat.cpp:78
 msgid "save the input history of the search to <searchfile>"
-msgstr ""
+msgstr "salva la storia dell'input della ricerca in <searchfile>"
 
 #: newsboat.cpp:83
-#, fuzzy
 msgid "<cmdlinefile>"
-msgstr "<cachefile>"
+msgstr "<cmdlinefile>"
 
 #: newsboat.cpp:84
 msgid "save the input history of the command line to <cmdlinefile>"
-msgstr ""
+msgstr "salva la storia dell'input della linea di comando in <cmdlinefile>"
 
 #: newsboat.cpp:86
 msgid "compact the cache"
@@ -177,18 +174,17 @@ msgstr "cache"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:154
 msgid "podcast queue"
-msgstr ""
+msgstr "coda podcast"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:156
-#, fuzzy
 msgid "search history"
-msgstr "Ricerca: "
+msgstr "storia ricerca"
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:158
 msgid "command line history"
-msgstr ""
+msgstr "storia linea di comando"
 
 #: newsboat.cpp:176 src/pbcontroller.cpp:407
 msgid ""
@@ -432,13 +428,12 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s è inaccessibile e non può essere creato\n"
 
 #: src/controller.cpp:299
-#, fuzzy
 msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
-"ERRORE: Devi impostare `freshrss-login` e una tra `freshrss-password`, "
-"`freshrss-passwordfile` o `freshrss-passwordeval` per usare FreshRSS\n"
+"ERRORE: Devi impostare `feedbin-login` e una tra `feedbin-password`, "
+"`feedbin-passwordfile` o `feedbin-passwordeval` per usare Feedbin\n"
 
 #: src/controller.cpp:311
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
@@ -540,12 +535,11 @@ msgstr ""
 "favore, fallo e riprova."
 
 #: src/controller.cpp:437
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Feedbin account. "
 "Please do so, and try again."
 msgstr ""
-"Sembra che tu non abbia configurato alcun feed nel tuo account Miniflux. Per "
+"Sembra che tu non abbia configurato alcun feed nel tuo account Feedbin. Per "
 "favore, fallo e riprova."
 
 #: src/controller.cpp:442
@@ -1799,14 +1793,12 @@ msgid "use <queuefile> as queue file"
 msgstr "usa <queuefile> come file cache"
 
 #: src/pbcontroller.cpp:368
-#, fuzzy
 msgid "<lockfile>"
-msgstr "<logfile>"
+msgstr "<lockfile>"
 
 #: src/pbcontroller.cpp:369
-#, fuzzy
 msgid "use <lockfile> as lock file"
-msgstr "usa <logfile> come log file di output"
+msgstr "usa <lockfile> come file di blocco"
 
 #: src/pbcontroller.cpp:371
 msgid "start download on startup"
