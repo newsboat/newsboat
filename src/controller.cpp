@@ -357,7 +357,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = new MinifluxApi(cfg);
-		urlcfg = new MinifluxUrlReader(configpaths.url_file(), api);
+		urlcfg = new MinifluxUrlReader(&cfg, configpaths.url_file(), api);
 	} else if (type == "inoreader") {
 		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
 			&& !cfg.get_configvalue("inoreader-app-key").empty();
@@ -506,7 +506,6 @@ int Controller::run(const CliArgsParser& args)
 		std::cout << _("done.") << std::endl;
 		return EXIT_SUCCESS;
 	}
-
 
 	// if configured, we fill all query feeds with some data; no need to
 	// sort it, it will be refilled when actually opening it.

@@ -1,5 +1,6 @@
 #include "minifluxurlreader.h"
 
+#include "configcontainer.h"
 #include "fileurlreader.h"
 #include "logger.h"
 #include "remoteapi.h"
@@ -7,8 +8,11 @@
 
 namespace newsboat {
 
-MinifluxUrlReader::MinifluxUrlReader(const std::string& url_file, RemoteApi* a)
-	: file(url_file)
+MinifluxUrlReader::MinifluxUrlReader(ConfigContainer* c,
+	const std::string& url_file,
+	RemoteApi* a)
+	: cfg(c)
+	, file(url_file)
 	, api(a)
 {
 }
@@ -20,6 +24,16 @@ nonstd::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 	urls.clear();
 	tags.clear();
 	alltags.clear();
+
+	if (cfg->get_configvalue_as_bool("miniflux-show-special-feeds")) {
+		std::vector<std::string> tmptags;
+		const std::string star_url = "starred";
+		urls.push_back(star_url);
+		std::string star_tag = std::string("~") + _("Starred items");
+		tmptags.push_back(star_tag);
+		alltags.insert(star_tag);
+		tags[star_url] = tmptags;
+	}
 
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();

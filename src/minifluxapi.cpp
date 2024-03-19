@@ -139,11 +139,41 @@ bool MinifluxApi::mark_article_read(const std::string& guid, bool read)
 	return true;
 }
 
-bool MinifluxApi::update_article_flags(const std::string& /* oldflags */,
-	const std::string& /* newflags */,
-	const std::string& /* guid */)
+bool MinifluxApi::star_article(const std::string& guid, bool star)
 {
-	return false;
+	std::string getstate;
+	getstate = strprintf::fmt(
+			"/v1/entries/%s",
+			guid);
+	const json status = run_op(getstate, json(), HTTPMethod::GET);
+	bool current_star = status["starred"];
+
+	if (star != current_star) {
+		std::string putcontent;
+		putcontent = strprintf::fmt(
+				"/v1/entries/%s/bookmark",
+				guid);
+		const json content = run_op(putcontent, json(), HTTPMethod::PUT);
+		return content.is_null();
+	} else {
+		return true;
+	}
+}
+
+bool MinifluxApi::update_article_flags(const std::string&  oldflags,
+	const std::string&  newflags,
+	const std::string&  guid )
+{
+	std::string star_flag = cfg.get_configvalue("miniflux-flag-star");
+	bool success = true;
+
+	if (star_flag.length() > 0) {
+		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
+			success = star_article(guid, added);
+		});
+	}
+
+	return success;
 }
 
 rsspp::Feed MinifluxApi::fetch_feed(const std::string& id)
@@ -158,7 +188,9 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 	feed.rss_version = rsspp::Feed::MINIFLUX_JSON;
 
 	const std::string query =
-		strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc&limit=%u",
+		id == "starred" ?
+		"/v1/entries?starred=true"
+		: strprintf::fmt("/v1/feeds/%s/entries?order=published_at&direction=desc&limit=%u",
 			id,
 			cfg.get_configvalue_as_int("miniflux-min-items"));
 
@@ -267,7 +299,6 @@ json MinifluxApi::run_op(const std::string& path,
 
 	const std::string result = utils::retrieve_url(
 			url, easyhandle, cfg, auth_info, body, method);
-
 
 	LOG(Level::DEBUG,
 		"MinifluxApi::run_op(%s %s,...): body=%s reply = %s",
