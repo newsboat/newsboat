@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-03-11 22:45+0300\n"
-"PO-Revision-Date: 2023-12-13 21:14+0300\n"
+"PO-Revision-Date: 2024-03-21 21:46+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Ivan Kovnatsky <sevenfourk@gmail.com>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -78,27 +78,24 @@ msgid "<queuefile>"
 msgstr "<файл черги>"
 
 #: newsboat.cpp:72
-#, fuzzy
 msgid "use <queuefile> as podcast queue file"
-msgstr "використовувати <файл черги> як файл черги"
+msgstr "використовувати <файл черги> як файл черги подкастів"
 
 #: newsboat.cpp:77
-#, fuzzy
 msgid "<searchfile>"
-msgstr "<файлкешу>"
+msgstr "<файл пошуку>"
 
 #: newsboat.cpp:78
 msgid "save the input history of the search to <searchfile>"
-msgstr ""
+msgstr "зберігати історію пошуку до <файлу пошуку>"
 
 #: newsboat.cpp:83
-#, fuzzy
 msgid "<cmdlinefile>"
-msgstr "<файлкешу>"
+msgstr "<файл історії команд>"
 
 #: newsboat.cpp:84
 msgid "save the input history of the command line to <cmdlinefile>"
-msgstr ""
+msgstr "зберігати історію вводу команд до <файлу історії команд>"
 
 #: newsboat.cpp:86
 msgid "compact the cache"
@@ -179,18 +176,17 @@ msgstr "кеш"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:154
 msgid "podcast queue"
-msgstr ""
+msgstr "черга подкастів"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:156
-#, fuzzy
 msgid "search history"
-msgstr "Шукати: "
+msgstr "історія пошку"
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:158
 msgid "command line history"
-msgstr ""
+msgstr "історія команд"
 
 #: newsboat.cpp:176 src/pbcontroller.cpp:407
 msgid ""
@@ -435,13 +431,12 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s недоступний і не може бути створеним\n"
 
 #: src/controller.cpp:299
-#, fuzzy
 msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
-"Помилка: для використання FreshRSS потрібно задати `freshrss-login` та одне "
-"із: `freshrss-password`, `freshrss-passwordfile` чи `freshrss-passwordeval`\n"
+"Помилка: для використання Feedbin потрібно задати `feedbin-login` та одне "
+"із: `feedbin-password`, `feedbin-passwordfile` чи `feedbin-passwordeval`\n"
 
 #: src/controller.cpp:311
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
@@ -509,7 +504,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті The Old Reader."
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті The Old Reader."
 "Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:417
@@ -517,7 +512,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Tiny Tiny RSS."
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті Tiny Tiny RSS."
 "Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:422
@@ -525,7 +520,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті NewsBlur.Будь "
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті NewsBlur.Будь "
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:427
@@ -533,7 +528,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Inoreader.Будь "
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті Inoreader.Будь "
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:432
@@ -541,16 +536,15 @@ msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Miniflux.Будь "
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті Miniflux.Будь "
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:437
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Feedbin account. "
 "Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Miniflux.Будь "
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті Feedbin.Будь "
 "ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:442
@@ -558,7 +552,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Схоже не те, що ви не налаштували ні одної теми у аккаунті Owncloud/"
+"Схоже на те, що ви не налаштували ні одної теми у аккаунті Owncloud/"
 "Nextcloud. Будь ласка, зробіть це і спробуйте знову."
 
 #: src/controller.cpp:455
@@ -1803,14 +1797,12 @@ msgid "use <queuefile> as queue file"
 msgstr "використовувати <файл черги> як файл черги"
 
 #: src/pbcontroller.cpp:368
-#, fuzzy
 msgid "<lockfile>"
-msgstr "<файллогу>"
+msgstr "<блокуючий файл>"
 
 #: src/pbcontroller.cpp:369
-#, fuzzy
 msgid "use <lockfile> as lock file"
-msgstr "використовуйте <файллогу> як вихідний файл логу"
+msgstr "використовувати <блокуючий файл> для блокування кешу"
 
 #: src/pbcontroller.cpp:371
 msgid "start download on startup"
