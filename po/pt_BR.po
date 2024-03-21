@@ -1,14 +1,15 @@
 # Adiel Mittmann <adiel@inf.ufsc.br>, 2007, 2008, 2009, 2010.
 # Alexandre Erwin Ittner <alexandre@ittner.com.br>, 2011.
 # Alexandre Provencio <dev@aleprovencio.net>, 2022.
+# André L. C. Moreira <andrelcmoreira@disroot.org>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-03-11 22:45+0300\n"
-"PO-Revision-Date: 2022-04-26 17:27-0300\n"
-"Last-Translator: Alexandre Provencio <dev@aleprovencio.net>\n"
+"PO-Revision-Date: 2024-03-24 20:48-0300\n"
+"Last-Translator: André L. C. Moreira <andrelcmoreira@disroot.org>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -89,7 +90,7 @@ msgstr "<arquivocache>"
 
 #: newsboat.cpp:78
 msgid "save the input history of the search to <searchfile>"
-msgstr ""
+msgstr "salvar o histórico de busca em <searchfile>"
 
 #: newsboat.cpp:83
 #, fuzzy
@@ -98,7 +99,7 @@ msgstr "<arquivocache>"
 
 #: newsboat.cpp:84
 msgid "save the input history of the command line to <cmdlinefile>"
-msgstr ""
+msgstr "salvar o histórico da linha de comando em <cmdlinefile>"
 
 #: newsboat.cpp:86
 msgid "compact the cache"
@@ -155,7 +156,7 @@ msgstr "esta ajuda"
 
 #: newsboat.cpp:121
 msgid "remove unreferenced items from cache"
-msgstr ""
+msgstr "remover itens não referenciados do cache"
 
 #: newsboat.cpp:146
 msgid "Files:"
@@ -180,7 +181,7 @@ msgstr "<arquivocache>"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:154
 msgid "podcast queue"
-msgstr ""
+msgstr "fila de podcast"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:156
@@ -191,17 +192,19 @@ msgstr "Procurar por: "
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:158
 msgid "command line history"
-msgstr ""
+msgstr "histórico da linha de comando"
 
 #: newsboat.cpp:176 src/pbcontroller.cpp:407
 msgid ""
 "Support at #newsboat at https://libera.chat or on our mailing list https://"
 "groups.google.com/g/newsboat"
 msgstr ""
+"Suporte em #newsboat no https://libera.chat ou na nossa lista de e-mail "
+"https://groups.google.com/g/newsboat"
 
 #: newsboat.cpp:179 src/pbcontroller.cpp:410
 msgid "For more information, check out https://newsboat.org/"
-msgstr ""
+msgstr "Para mais informações, acesse https://newsboat.org/"
 
 #: newsboat.cpp:200
 #, c-format
@@ -214,7 +217,7 @@ msgstr ""
 
 #: newsboat.cpp:205
 msgid "It bundles:"
-msgstr ""
+msgstr "Ele contém:"
 
 #: newsboat.cpp:206
 #, fuzzy
@@ -246,17 +249,17 @@ msgstr ""
 #: newsboat.cpp:288
 #, c-format
 msgid "Caught newsboat::DbException with message: %s"
-msgstr ""
+msgstr "newsboat::DbException capturada com a mensagem: %s"
 
 #: newsboat.cpp:295
 #, c-format
 msgid "Caught newsboat::MatcherException with message: %s"
-msgstr ""
+msgstr "newsboat::MatcherException capturada com a mensagem: %s"
 
 #: newsboat.cpp:301 podboat.cpp:41
 #, c-format
 msgid "Caught newsboat::Exception with message: %s"
-msgstr ""
+msgstr "newsboat::Exception capturada com a mensagem: %s"
 
 #: src/colormanager.cpp:55 src/colormanager.cpp:59 src/regexmanager.cpp:236
 #: src/regexmanager.cpp:250 src/regexmanager.cpp:314 src/regexmanager.cpp:326
@@ -283,7 +286,7 @@ msgstr ""
 
 #: src/configcontainer.cpp:195
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
-msgstr ""
+msgstr "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 
 #: src/configcontainer.cpp:299
 #, fuzzy
@@ -378,7 +381,7 @@ msgstr "o arquivo não pôde ser aberto."
 #: src/configparser.cpp:105
 #, c-format
 msgid "%s line %u"
-msgstr ""
+msgstr "%s linha %u"
 
 #: src/configparser.cpp:132
 #, c-format
@@ -414,7 +417,7 @@ msgstr "Erro: uma instância de %s já está sendo executada (PID: %u)"
 
 #: src/controller.cpp:221 src/pbcontroller.cpp:269
 msgid "Error: "
-msgstr ""
+msgstr "Erro: "
 
 #: src/controller.cpp:227 src/controller.cpp:453
 msgid "Opening cache..."
@@ -427,7 +430,7 @@ msgstr "Erro: falha ao abrir o arquivo de cache '%s': %s"
 
 #: src/controller.cpp:272
 msgid "ERROR: You must set `cookie-cache` to use NewsBlur.\n"
-msgstr ""
+msgstr "ERRO: Você deve definir a opção `cookie-cache` para usar o NewsBlur.\n"
 
 #: src/controller.cpp:280
 #, c-format
@@ -439,37 +442,47 @@ msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
+"ERRO: Você deve definir a opção `feedbin-login` e uma das opções "
+"`feedbin-password`, `feedbin-passwordfile` ou `feedbin-passwordeval` para "
+"usar o Feedbin\n"
 
 #: src/controller.cpp:311
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
-msgstr ""
+msgstr "ERRO: Você deve definir a opção `freshrss-url` para usar o FreshRSS\n"
 
 #: src/controller.cpp:323
 msgid ""
 "ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
 "`freshrss-passwordfile` or `freshrss-passwordeval` to use FreshRSS\n"
 msgstr ""
+"ERRO: Você deve definir a opção `freshrss-login` e uma das opções "
+"`freshrss-password`, `freshrss-passwordfile` ou `freshrss-passwordeval` para "
+"usar o FreshRSS\n"
 
 #: src/controller.cpp:338
 msgid "ERROR: You must set `miniflux-url` to use Miniflux\n"
-msgstr ""
+msgstr "ERRO: Você deve definir a opção `miniflux-url` para usar o Miniflux\n"
 
 #: src/controller.cpp:355
 msgid ""
 "ERROR: You must provide an API token or a login/password pair to use "
 "Miniflux. Please set the appropriate miniflux-* settings\n"
 msgstr ""
+"ERRO: Você deve fornecer um token de API ou um usuário/senha para usar o "
+"Miniflux. Por favor, defina as configurações miniflux-* apropriadas\n"
 
 #: src/controller.cpp:366
 msgid ""
 "ERROR: You must set *both* `inoreader-app-id` and `inoreader-app-key` to use "
 "Inoreader.\n"
 msgstr ""
+"ERRO: Você deve definir *ambas* as opções `inoreader-app-id` e "
+"`inoreader-app-key` para usar o Inoreader.\n"
 
 #: src/controller.cpp:373
 #, c-format
 msgid "ERROR: Unknown urls-source `%s'"
-msgstr ""
+msgstr "ERRO: urls-source `%s' não conhecido"
 
 #: src/controller.cpp:380
 #, c-format
@@ -591,6 +604,8 @@ msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
+"%<PRIu64> feeds não alcancáveis encontrados. Veja `cleanup-on-quit` em "
+"newsboat(1) para detalhes."
 
 #: src/controller.cpp:611
 msgid "failed: "
@@ -604,7 +619,7 @@ msgstr "Erro: não foi possível marcar todos artigos como lidos: %s"
 #: src/controller.cpp:738 src/itemutils.cpp:32
 #, c-format
 msgid "Generated filename (%s) is used already."
-msgstr ""
+msgstr "O nome de arquivo gerado (%s) já está em uso."
 
 #: src/controller.cpp:743 src/itemutils.cpp:37
 #, fuzzy, c-format
@@ -664,7 +679,7 @@ msgstr "Posição inválida!"
 
 #: src/dirbrowserformaction.cpp:280
 msgid "Directory: "
-msgstr ""
+msgstr "Diretório: "
 
 #: src/dirbrowserformaction.cpp:300 src/filebrowserformaction.cpp:325
 #: src/pbview.cpp:385 src/selectformaction.cpp:255 src/selectformaction.cpp:258
@@ -785,7 +800,7 @@ msgstr "Abrir artigo no navegador"
 #: src/itemviewformaction.cpp:572
 #, c-format
 msgid "Browser returned error code %i"
-msgstr ""
+msgstr "Código de erro retornado pelo navegador %i"
 
 #: src/feedlistformaction.cpp:295 src/itemlistformaction.cpp:526
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
@@ -999,7 +1014,7 @@ msgstr "Configuração salva em %s"
 
 #: src/formaction.cpp:306
 msgid "usage: exec <operation>"
-msgstr ""
+msgstr "uso: exec <operation>"
 
 #: src/formaction.cpp:313
 #, fuzzy
@@ -1057,7 +1072,7 @@ msgstr "Funções sem ligações:"
 
 #: src/helpformaction.cpp:163
 msgid "Macros:"
-msgstr ""
+msgstr "Macros:"
 
 #: src/helpformaction.cpp:194
 msgid "Clear"
@@ -1218,7 +1233,7 @@ msgstr "Lista de Artigos - %s"
 
 #: src/itemlistformaction.cpp:1628
 msgid "yanq"
-msgstr ""
+msgstr "yanq"
 
 #: src/itemlistformaction.cpp:1650
 #, c-format
@@ -1226,11 +1241,13 @@ msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
+"Sobrescrever `%s' em `%s'? Existem %d conflitos como esse (y:Sim a:Sim "
+"para todos n:Não q:Não para todos)"
 
 #: src/itemlistformaction.cpp:1657
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
-msgstr ""
+msgstr "Sobrescrever `%s' em `%s'? (y:Sim n:Não)"
 
 #: src/itemrenderer.cpp:74
 msgid "Feed: "
@@ -1287,7 +1304,7 @@ msgstr "%s foi adicionado à fila para ser baixado."
 #: src/itemutils.cpp:27
 #, c-format
 msgid "%s is already queued."
-msgstr ""
+msgstr "%s já está na fila."
 
 #: src/itemviewformaction.cpp:61 src/itemviewformaction.cpp:730
 msgid "Top"
@@ -1335,7 +1352,7 @@ msgstr "Pôr na Fila"
 #: src/itemviewformaction.cpp:736
 #, c-format
 msgid "%3u %% "
-msgstr ""
+msgstr "%3u %% "
 
 #: src/itemviewformaction.cpp:745
 #, c-format
@@ -1352,7 +1369,7 @@ msgstr "Abrir fonte/artigo"
 
 #: src/keymap.cpp:45
 msgid "Switch focus between widgets"
-msgstr ""
+msgstr "Mudar foco entre os widgets"
 
 #: src/keymap.cpp:52
 msgid "Return to previous dialog/Quit"
@@ -1473,7 +1490,7 @@ msgstr "Abrir tela de procura"
 
 #: src/keymap.cpp:256
 msgid "Goto item with title"
-msgstr ""
+msgstr "Ir para item com o título"
 
 #: src/keymap.cpp:263
 msgid "Add download to queue"
@@ -1664,39 +1681,39 @@ msgstr "Abrir URL 10"
 
 #: src/keymap.cpp:588
 msgid "Start cmdline with 1"
-msgstr ""
+msgstr "Iniciar a linha de comando com 1"
 
 #: src/keymap.cpp:595
 msgid "Start cmdline with 2"
-msgstr ""
+msgstr "Iniciar a linha de comando com 2"
 
 #: src/keymap.cpp:602
 msgid "Start cmdline with 3"
-msgstr ""
+msgstr "Iniciar a linha de comando com 3"
 
 #: src/keymap.cpp:609
 msgid "Start cmdline with 4"
-msgstr ""
+msgstr "Iniciar a linha de comando com 4"
 
 #: src/keymap.cpp:616
 msgid "Start cmdline with 5"
-msgstr ""
+msgstr "Iniciar a linha de comando com 5"
 
 #: src/keymap.cpp:623
 msgid "Start cmdline with 6"
-msgstr ""
+msgstr "Iniciar a linha de comando com 6"
 
 #: src/keymap.cpp:630
 msgid "Start cmdline with 7"
-msgstr ""
+msgstr "Iniciar a linha de comando com 7"
 
 #: src/keymap.cpp:637
 msgid "Start cmdline with 8"
-msgstr ""
+msgstr "Iniciar a linha de comando com 8"
 
 #: src/keymap.cpp:644
 msgid "Start cmdline with 9"
-msgstr ""
+msgstr "Iniciar a linha de comando com 9"
 
 #: src/keymap.cpp:652
 msgid "Move to the previous entry"
@@ -1716,11 +1733,11 @@ msgstr "Ir para a próxima página"
 
 #: src/keymap.cpp:680
 msgid "Move half page up"
-msgstr ""
+msgstr "Mover meia página para cima"
 
 #: src/keymap.cpp:687
 msgid "Move half page down"
-msgstr ""
+msgstr "Mover meia página para baixo"
 
 #: src/keymap.cpp:695
 msgid "Move to the start of page/list"
@@ -1854,15 +1871,15 @@ msgstr ""
 
 #: src/pbview.cpp:293
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: src/pbview.cpp:295
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: src/pbview.cpp:297
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: src/pbview.cpp:384
 msgid "Download"
@@ -1895,6 +1912,9 @@ msgid ""
 "exits and comments will be deleted. Press Enter to continue or Ctrl+C to "
 "abort"
 msgstr ""
+"AVISO: Comentário encontrado em %s. A fila de arquivos é gerada novamente "
+"quando o Podboat finaliza e comentários serão deletados. Pressione Enter para "
+"continuar ou Ctrl+C para abortar"
 
 #: src/regexmanager.cpp:220
 #, c-format
@@ -1976,16 +1996,16 @@ msgstr "Erro carregando fonte '%s': %s"
 
 #: src/view.cpp:174
 msgid "Error: failed to execute startup commands"
-msgstr ""
+msgstr "Erro: falha ao executar os comandos de inicialização"
 
 #: src/view.cpp:300
 msgid "Operation ignored in modal dialog"
-msgstr ""
+msgstr "Operação ignorada no modal de diálogo"
 
 #: src/view.cpp:417
 #, c-format
 msgid "Running browser: %s"
-msgstr ""
+msgstr "Executando navegador: %s"
 
 #: src/view.cpp:484 src/view.cpp:510
 msgid "Error: feed contains no items!"
@@ -2057,11 +2077,11 @@ msgstr ""
 
 #: rust/libnewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
-msgstr ""
+msgstr "Migrando configurações e dados dos diretórios XDG do Newsbeuter..."
 
 #: rust/libnewsboat/src/configpaths.rs:202
 msgid "Migrating configs and data from ~/.newsbeuter/..."
-msgstr ""
+msgstr "Migrando configurações e dados de ~/.newsbeuter/..."
 
 #: rust/libnewsboat/src/configpaths.rs:214
 #, fuzzy
@@ -2081,23 +2101,23 @@ msgstr ""
 #. The options ("quoted string" etc.) are not keywords, so please translate them.
 #: rust/libnewsboat/src/filterparser.rs:133
 msgid "one of: quoted string, range, number"
-msgstr ""
+msgstr "um dos: string com aspas, faixa de valores, número"
 
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
 #: rust/libnewsboat/src/filterparser.rs:426
 msgid "Parse error: trailing characters after position %s: %s"
-msgstr ""
+msgstr "Erro de parse: caracteres em branco após a posição %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
 #: rust/libnewsboat/src/filterparser.rs:433
 msgid "Parse error at position %s: expected %s"
-msgstr ""
+msgstr "Erro de parse na posição %s: esperado %s"
 
 #: rust/libnewsboat/src/filterparser.rs:437
 msgid "Internal parse error"
-msgstr ""
+msgstr "Erro interno de parse"
 
 #: rust/libnewsboat/src/fslock.rs:57
 #, fuzzy
@@ -2107,20 +2127,20 @@ msgstr "Erro carregando fonte '%s': %s"
 #: rust/libnewsboat/src/fslock.rs:60 rust/libnewsboat/src/fslock.rs:80
 #: rust/libnewsboat/src/fslock.rs:112
 msgid "<filename containing invalid UTF-8 codepoint>"
-msgstr ""
+msgstr "<nome do arquivo contendo caracteres UTF-8 inválidos>"
 
 #: rust/libnewsboat/src/fslock.rs:77
 msgid "Failed to write PID to lock file '%s': %s"
-msgstr ""
+msgstr "Falha ao escrever o ID do processo no arquivo de trava '%s': %s"
 
 #: rust/libnewsboat/src/fslock.rs:109
 msgid "Failed to lock '%s', already locked by process with PID %s"
-msgstr ""
+msgstr "Falha ao travar '%s', já travado pelo processo com ID %s"
 
 #: rust/regex-rs/src/lib.rs:159 rust/regex-rs/src/lib.rs:164
 msgid "regcomp returned code %i"
-msgstr ""
+msgstr "código retornado pela regcomp %i"
 
 #: rust/regex-rs/src/lib.rs:244 rust/regex-rs/src/lib.rs:248
 msgid "regexec returned code %i"
-msgstr ""
+msgstr "código retornado pela regexec %i"
