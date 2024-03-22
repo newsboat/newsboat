@@ -2,6 +2,7 @@
 #define NEWSBOAT_RSSIGNORES_H_
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "configactionhandler.h"
@@ -24,7 +25,10 @@ public:
 	bool matches_resetunread(const std::string& url);
 
 private:
-	std::vector<FeedUrlExprPair> ignores;
+	bool matches_expr(std::shared_ptr<Matcher> expr, RssItem* item);
+
+	std::vector<FeedUrlExprPair> regex_ignores;
+	std::unordered_multimap<std::string, std::shared_ptr<Matcher>> non_regex_ignores;
 	std::vector<std::string> ignores_lastmodified;
 	std::vector<std::string> resetflag;
 
