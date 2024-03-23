@@ -111,3 +111,126 @@ TEST_CASE("KeyCombination less-than operator", "[KeyCombination]")
 			< KeyCombination("ENTER", ShiftState::Shift, ControlState::Control, AltState::Alt));
 	}
 }
+
+TEST_CASE("to_bind_string", "[KeyCombination]")
+{
+	REQUIRE(KeyCombination("a").to_bind_string() == "a");
+	REQUIRE(KeyCombination("=").to_bind_string() == "=");
+	REQUIRE(KeyCombination("^").to_bind_string() == "^");
+	REQUIRE(KeyCombination(">").to_bind_string() == ">");
+	REQUIRE(KeyCombination("a", ShiftState::Shift).to_bind_string() == "A");
+	REQUIRE(KeyCombination("a", ShiftState::NoShift,
+			ControlState::Control).to_bind_string() == "^A");
+	REQUIRE(KeyCombination("ENTER").to_bind_string() == "<ENTER>");
+
+	REQUIRE(KeyCombination("F1", ShiftState::NoShift, ControlState::NoControl,
+			AltState::NoAlt).to_bind_string() == "<F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::NoShift, ControlState::NoControl,
+			AltState::Alt).to_bind_string() == "<M-F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::NoShift, ControlState::Control,
+			AltState::NoAlt).to_bind_string() == "<C-F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::NoShift, ControlState::Control,
+			AltState::Alt).to_bind_string() == "<C-M-F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::Shift, ControlState::NoControl,
+			AltState::NoAlt).to_bind_string() == "<S-F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::Shift, ControlState::NoControl,
+			AltState::Alt).to_bind_string() == "<S-M-F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::Shift, ControlState::Control,
+			AltState::NoAlt).to_bind_string() == "<C-S-F1>");
+	REQUIRE(KeyCombination("F1", ShiftState::Shift, ControlState::Control,
+			AltState::Alt).to_bind_string() == "<C-S-M-F1>");
+}
+
+TEST_CASE("from_bind parses sequence of key combinations", "[KeyCombination]")
+{
+	SECTION("Empty input") {
+		const auto key_combinations = KeyCombination::from_bind("");
+		REQUIRE(key_combinations.size() == 0);
+	}
+
+	SECTION("Single key") {
+		SECTION("Regular letter key") {
+			const auto key_combinations = KeyCombination::from_bind("g");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("g"));
+		}
+		SECTION("Letter with shift") {
+			const auto key_combinations = KeyCombination::from_bind("G");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::Shift));
+		}
+		SECTION("Letter with control") {
+			const auto key_combinations = KeyCombination::from_bind("^G");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::NoShift,
+					ControlState::Control));
+		}
+		SECTION("Symbol key") {
+			const auto key_combinations = KeyCombination::from_bind("=");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("="));
+		}
+		SECTION("Special key") {
+			const auto key_combinations = KeyCombination::from_bind("<SPACE>");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("SPACE"));
+		}
+		SECTION("Special key with modifiers") {
+			std::vector<std::pair<std::string, KeyCombination>> test_cases = {
+				{ "<SPACE>", KeyCombination("SPACE") },
+				{ "<M-SPACE>", KeyCombination("SPACE", ShiftState::NoShift, ControlState::NoControl, AltState::Alt) },
+				{ "<S-SPACE>", KeyCombination("SPACE", ShiftState::Shift, ControlState::NoControl, AltState::NoAlt) },
+				{ "<S-M-SPACE>", KeyCombination("SPACE", ShiftState::Shift, ControlState::NoControl, AltState::Alt) },
+				{ "<C-SPACE>", KeyCombination("SPACE", ShiftState::NoShift, ControlState::Control, AltState::NoAlt) },
+				{ "<C-M-SPACE>", KeyCombination("SPACE", ShiftState::NoShift, ControlState::Control, AltState::Alt) },
+				{ "<C-S-SPACE>", KeyCombination("SPACE", ShiftState::Shift, ControlState::Control, AltState::NoAlt) },
+				{ "<C-S-M-SPACE>", KeyCombination("SPACE", ShiftState::Shift, ControlState::Control, AltState::Alt) },
+			};
+
+			for (const auto& test_case : test_cases) {
+				DYNAMIC_SECTION("Expected output: " << test_case.second.to_bind_string()) {
+					const auto key_combinations = KeyCombination::from_bind(test_case.first);
+					REQUIRE(key_combinations.size() == 1);
+					INFO(key_combinations[0].to_bind_string());
+					REQUIRE(key_combinations[0] == test_case.second);
+				}
+			}
+		}
+		SECTION("Special key with modifiers in nonstandard order") {
+			const auto key_combinations = KeyCombination::from_bind("<M-S-C-key>");
+			REQUIRE(key_combinations.size() == 1);
+			INFO(key_combinations[0].to_bind_string());
+			REQUIRE(key_combinations[0] == KeyCombination("key", ShiftState::Shift,
+					ControlState::Control, AltState::Alt));
+		}
+	}
+
+	SECTION("Sequence of multiple keys") {
+		SECTION("Regular keys") {
+			const auto key_combinations = KeyCombination::from_bind("abc");
+			REQUIRE(key_combinations.size() == 3);
+			REQUIRE(key_combinations[0] == KeyCombination("a"));
+			REQUIRE(key_combinations[1] == KeyCombination("b"));
+			REQUIRE(key_combinations[2] == KeyCombination("c"));
+		}
+		SECTION("Special keys") {
+			const auto key_combinations = KeyCombination::from_bind("<F1><S-ENTER>");
+			REQUIRE(key_combinations.size() == 2);
+			REQUIRE(key_combinations[0] == KeyCombination("F1"));
+			REQUIRE(key_combinations[1] == KeyCombination("ENTER", ShiftState::Shift));
+		}
+		SECTION("Mixed") {
+			const auto key_combinations = KeyCombination::from_bind("^G<ENTER>p");
+			REQUIRE(key_combinations.size() == 3);
+			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::NoShift,
+					ControlState::Control));
+			REQUIRE(key_combinations[1] == KeyCombination("ENTER"));
+			REQUIRE(key_combinations[2] == KeyCombination("p"));
+		}
+	}
+}
