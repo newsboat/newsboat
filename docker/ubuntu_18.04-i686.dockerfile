@@ -5,7 +5,7 @@
 #   docker build \
 #       --tag=newsboat-i686-build-tools \
 #       --file=docker/ubuntu_18.04-i686.dockerfile \
-#       docker
+#       .
 #
 # Before building in a container, run this to remove any binaries that you
 # might've compiled on your host system (or in another container):
@@ -16,8 +16,10 @@
 #
 #   docker run \
 #       --rm \
-#       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       --user $(id -u):$(id -g) \
+#       --mount type=bind,source=$(pwd),target=/src \
+#       --user root
+#       -e HOST_UID=$(id -u) \
+#       -e HOST_GID=$(id -g) \
 #       newsboat-i686-build-tools \
 #       make
 #
@@ -54,7 +56,7 @@ RUN apt-get update \
         # `curl` would be enough for our needs, but it pulls in amd64 versions
         # of libraries we use, interfering with the build environment. So
         # `wget` it is.
-        wget \
+        wget gosu \
     && apt-get install --assume-yes --no-install-recommends asciidoctor \
     && apt-get autoremove \
     && apt-get clean
@@ -62,7 +64,7 @@ RUN apt-get update \
 RUN addgroup --gid 1000 builder \
     && adduser --home /home/builder --uid 1000 --ingroup builder \
         --disabled-password --shell /bin/bash builder \
-    && mkdir -p /home/builder/src \
+    && mkdir -p /src \
     && chown -R builder:builder /home/builder
 
 RUN apt-get update \
@@ -76,7 +78,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 USER builder
-WORKDIR /home/builder/src
+WORKDIR /src
 
 RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod +x $HOME/rustup.sh \
@@ -86,3 +88,11 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
     && chmod a+w $HOME/.cargo
 
 ENV HOME /home/builder
+
+USER root
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Cirrus doesn't run the entrypoint script so we switch directly to the target user.
+USER builder

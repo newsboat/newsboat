@@ -9,7 +9,7 @@
 #   docker build \
 #       --tag=newsboat-code-formatting-tools \
 #       --file=docker/code-formatting-tools.dockerfile \
-#       docker
+#       .
 #
 # Run on your local files with:
 #

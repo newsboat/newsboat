@@ -10,7 +10,52 @@
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
 #       Default: g++-13
 #
-# For now, this Dockerfile can only be used in our CI.
+# Build with defaults:
+#
+# docker build \
+#     --tag=newsboat-build-tools \
+#     --file=docker/ubuntu_23.10-build-tools.dockerfile \
+#     .
+#
+# Build with non-default compiler and Rust version:
+#
+#   docker build \
+#       --tag=newsboat-build-tools \
+#       --file=docker/ubuntu_23.10-build-tools.dockerfile \
+#       --build-arg cxx_package=clang-16 \
+#       --build-arg cc=clang-16 \
+#       --build-arg cxx=clang++-16 \
+#       --build-arg rust_version=1.76.0 \
+#       .
+#
+# Before building in a container, run this to remove any binaries that you
+# might've compiled on your host system (or in another container):
+#
+#   make distclean
+#
+# Run on your local files:
+#
+#   docker run \
+#       --rm \
+#       --mount type=bind,source=$(pwd),target=/src \
+#       --user root
+#       -e HOST_UID=$(id -u) \
+#       -e HOST_GID=$(id -g) \
+#       newsboat-build-tools \
+#       make
+#
+# To save bandwidth, and speed up the build slightly, share the host's Cargo
+# cache with the container:
+#
+#   mkdir -p ~/.cargo/registry
+#   docker run \
+#       --mount type=bind,source=$HOME/.cargo/registry,target=/home/builder/.cargo/registry \
+#       ... # the rest of the options
+#
+# If you want to build on the host again, run this to remove binary files
+# compiled in the container:
+#
+#   make distclean
 
 FROM ubuntu:23.10
 
@@ -27,15 +72,16 @@ RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
         build-essential $cxx_package libsqlite3-dev libcurl4-openssl-dev libssl-dev \
         libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev gettext git \
-        pkg-config zlib1g-dev asciidoctor \
+        pkg-config zlib1g-dev asciidoctor gosu \
     && apt-get autoremove \
     && apt-get clean
 
 RUN addgroup builder \
+    && deluser ubuntu \
     && adduser --home /home/builder --ingroup builder \
         --disabled-password --shell /bin/bash builder \
-    && mkdir -p /home/builder/src \
-    && chown -R builder:builder /home/builder
+    && mkdir -p /src \
+    && chown -R builder:builder /src
 
 RUN apt-get install locales \
     && echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen \
@@ -47,7 +93,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 USER builder
-WORKDIR /home/builder/src
+WORKDIR /src
 
 ARG rust_version=1.77.0
 
@@ -65,3 +111,11 @@ ARG cxx=g++-13
 
 ENV CC=$cc
 ENV CXX=$cxx
+
+USER root
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Cirrus doesn't run the entrypoint script so we switch directly to the target user.
+USER builder
