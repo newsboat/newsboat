@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-03-11 22:45+0300\n"
-"PO-Revision-Date: 2023-09-21 19:13+0200\n"
+"PO-Revision-Date: 2024-03-23 10:32+0100\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language: sv\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: newsboat.cpp:31
 #, c-format
@@ -37,7 +37,7 @@ msgstr "exportera OPML 2.0-flöde inklusive taggar till stdout"
 
 #: newsboat.cpp:48
 msgid "refresh feeds on start"
-msgstr "uppdatera webbflöden vid uppstart"
+msgstr "uppdatera flöden vid uppstart"
 
 #: newsboat.cpp:49 newsboat.cpp:111 newsboat.cpp:117
 msgid "<file>"
@@ -53,7 +53,7 @@ msgstr "<url-fil>"
 
 #: newsboat.cpp:54
 msgid "read RSS feed URLs from <urlfile>"
-msgstr "läs in URL:er till RSS-webbflöden från <url-fil>"
+msgstr "läs in URL:er till RSS-flöden från <url-fil>"
 
 #: newsboat.cpp:59
 msgid "<cachefile>"
@@ -76,27 +76,24 @@ msgid "<queuefile>"
 msgstr "<köfil>"
 
 #: newsboat.cpp:72
-#, fuzzy
 msgid "use <queuefile> as podcast queue file"
-msgstr "använd <köfil> som köfil"
+msgstr "använd <köfil> som köfil för podcasts"
 
 #: newsboat.cpp:77
-#, fuzzy
 msgid "<searchfile>"
-msgstr "<cache-fil>"
+msgstr "<sökfil>"
 
 #: newsboat.cpp:78
 msgid "save the input history of the search to <searchfile>"
-msgstr ""
+msgstr "spara inmatningshistoriken för sökningen till <sökfil>"
 
 #: newsboat.cpp:83
-#, fuzzy
 msgid "<cmdlinefile>"
-msgstr "<cache-fil>"
+msgstr "<kommandoradfil>"
 
 #: newsboat.cpp:84
 msgid "save the input history of the command line to <cmdlinefile>"
-msgstr ""
+msgstr "spara inmatningshistoriken för kommandoraden till <kommandoradfil>"
 
 #: newsboat.cpp:86
 msgid "compact the cache"
@@ -166,7 +163,7 @@ msgstr "konfiguration"
 #. i18n This is printed out by --help before the path to the urls file
 #: newsboat.cpp:150
 msgid "feed URLs"
-msgstr "webbflödes-URL:er"
+msgstr "flödes-URL:er"
 
 #. i18n This is printed out by --help before the path to the cache file
 #: newsboat.cpp:152
@@ -176,18 +173,17 @@ msgstr "cache"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:154
 msgid "podcast queue"
-msgstr ""
+msgstr "podcast-kö"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:156
-#, fuzzy
 msgid "search history"
-msgstr "Sök efter: "
+msgstr "sökhistorik"
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:158
 msgid "command line history"
-msgstr ""
+msgstr "kommandoradshistorik"
 
 #: newsboat.cpp:176 src/pbcontroller.cpp:407
 msgid ""
@@ -284,8 +280,8 @@ msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
 "'%F'&? - %U"
 msgstr ""
-"%N %V - Artiklar i webbflödet '%T' (%u olästa, %t totalt)%?F? matchande "
-"filter '%F'&? - %U"
+"%N %V - Artiklar i flödet '%T' (%u olästa, %t totalt)%?F? matchande filter "
+"'%F'&? - %U"
 
 #: src/configcontainer.cpp:303
 msgid "%N %V - Dialogs"
@@ -430,14 +426,12 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s är oåtkomlig och kan inte skapas\n"
 
 #: src/controller.cpp:299
-#, fuzzy
 msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
-"FEL: Du måste ställa in `freshrss-login` och en av `freshrss-password`, "
-"`freshrss-passwordfile` eller `freshrss-passwordeval` för att använda "
-"FreshRSS\n"
+"FEL: Du måste ställa in `feedbin-login` och en av `feedbin-password`, "
+"`feedbin-passwordfile` eller `feedbin-passwordeval` för att använda Feedbin\n"
 
 #: src/controller.cpp:311
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
@@ -490,7 +484,7 @@ msgid ""
 "import an OPML file."
 msgstr ""
 "Fel: inga URL:er konfigurerade. Var god fyll filen %s med URL:er till RSS-"
-"kanaler eller importera en OPML-fil."
+"flöden eller importera en OPML-fil."
 
 #: src/controller.cpp:407
 msgid ""
@@ -505,7 +499,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your The Old Reader "
 "account. Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt The Old "
+"Det ser ut som om du inte har konfigurerat några flöden i ditt The Old "
 "Reader-konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:417
@@ -513,15 +507,15 @@ msgid ""
 "It looks like you haven't configured any feeds in your Tiny Tiny RSS "
 "account. Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Tiny Tiny "
-"RSS-konto. Var god gör det och prova igen."
+"Det ser ut som om du inte har konfigurerat några flöden i ditt Tiny Tiny RSS-"
+"konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:422
 msgid ""
 "It looks like you haven't configured any feeds in your NewsBlur account. "
 "Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt NewsBlur-"
+"Det ser ut som om du inte har konfigurerat några flöden i ditt NewsBlur-"
 "konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:427
@@ -529,7 +523,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Inoreader account. "
 "Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Inoreader-"
+"Det ser ut som om du inte har konfigurerat några flöden i ditt Inoreader-"
 "konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:432
@@ -537,16 +531,15 @@ msgid ""
 "It looks like you haven't configured any feeds in your Miniflux account. "
 "Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Miniflux-"
+"Det ser ut som om du inte har konfigurerat några flöden i ditt Miniflux-"
 "konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:437
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Feedbin account. "
 "Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Miniflux-"
+"Det ser ut som om du inte har konfigurerat några flöden i ditt Feedbin-"
 "konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:442
@@ -554,7 +547,7 @@ msgid ""
 "It looks like you haven't configured any feeds in your Owncloud/Nextcloud "
 "account. Please do so, and try again."
 msgstr ""
-"Det ser ut som om du inte har konfigurerat några webbflöden i ditt Owncloud/"
+"Det ser ut som om du inte har konfigurerat några flöden i ditt Owncloud/"
 "Nextcloud-konto. Var god gör det och prova igen."
 
 #: src/controller.cpp:455
@@ -567,12 +560,12 @@ msgstr "Läser in artiklar från cache..."
 
 #: src/controller.cpp:480
 msgid "Error while loading feeds from database: "
-msgstr "Fel vid inläsning av webbflöden från databasen: "
+msgstr "Fel vid inläsning av flöden från databasen: "
 
 #: src/controller.cpp:486
 #, c-format
 msgid "Error while loading feed '%s': %s"
-msgstr "Fel vid inläsning av webbflöde `%s': %s"
+msgstr "Fel vid inläsning av flöde `%s': %s"
 
 #: src/controller.cpp:503 src/controller.cpp:588
 msgid "Cleaning up cache..."
@@ -596,8 +589,8 @@ msgid ""
 "%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
 "details."
 msgstr ""
-"%<PRIu64> oåtkomliga webbflöden hittade. Se `cleanup-on-quit` i newsboat(1) "
-"för detaljer."
+"%<PRIu64> oåtkomliga löden hittade. Se `cleanup-on-quit` i newsboat(1) för "
+"detaljer."
 
 #: src/controller.cpp:611
 msgid "failed: "
@@ -606,7 +599,7 @@ msgstr "misslyckades: "
 #: src/controller.cpp:635
 #, c-format
 msgid "Error: couldn't mark all feeds read: %s"
-msgstr "Fel: kunde inte markera alla webbflödeer som lästa: %s"
+msgstr "Fel: kunde inte markera alla flöden som lästa: %s"
 
 #: src/controller.cpp:738 src/itemutils.cpp:32
 #, c-format
@@ -662,7 +655,7 @@ msgstr "Stäng dialogruta"
 
 #: src/dialogsformaction.cpp:90
 msgid "Error: you can't remove the feed list!"
-msgstr "Fel: du kan inte ta bort listan över webbflöden!"
+msgstr "Fel: du kan inte ta bort listan över flöden!"
 
 #: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1028
 #: src/itemlistformaction.cpp:1418 src/urlviewformaction.cpp:173
@@ -749,7 +742,7 @@ msgstr "Delade poster"
 #: src/feedlistformaction.cpp:242 src/feedlistformaction.cpp:317
 #: src/feedlistformaction.cpp:537 src/feedlistformaction.cpp:544
 msgid "No feed selected!"
-msgstr "Ingen kanal markerad!"
+msgstr "Inget flöde markerat!"
 
 #. i18n: This string is related to the letters in parentheses in the
 #. "Sort by (f)irsttag/..." and "Reverse Sort by
@@ -791,7 +784,7 @@ msgstr "Webbläsare returnerade felkod %i"
 
 #: src/feedlistformaction.cpp:295 src/itemlistformaction.cpp:526
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
-msgstr "Vill du verkligen markera detta webbflöde som läst (j:Ja n:Nej)? "
+msgstr "Vill du verkligen markera detta flöde som läst (j:Ja n:Nej)? "
 
 #: src/feedlistformaction.cpp:296 src/feedlistformaction.cpp:381
 #: src/feedlistformaction.cpp:510 src/filebrowserformaction.cpp:119
@@ -808,21 +801,21 @@ msgstr "j"
 
 #: src/feedlistformaction.cpp:302 src/itemlistformaction.cpp:531
 msgid "Marking feed read..."
-msgstr "Markerar webbflöde som läst..."
+msgstr "Markerar flöde som läst..."
 
 #: src/feedlistformaction.cpp:312 src/itemlistformaction.cpp:577
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
-msgstr "Fel: kunde inte markera webbflöde som läst: %s"
+msgstr "Fel: kunde inte markera flöde som läst: %s"
 
 #: src/feedlistformaction.cpp:338 src/feedlistformaction.cpp:347
 #: src/feedlistformaction.cpp:373
 msgid "No feeds with unread items."
-msgstr "Inga webbflöden med olästa poster."
+msgstr "Inga flöden med olästa poster."
 
 #: src/feedlistformaction.cpp:355 src/itemlistformaction.cpp:515
 msgid "Already on last feed."
-msgstr "Redan på sista webbflödet."
+msgstr "Redan på sista flödet."
 
 #: src/feedlistformaction.cpp:364 src/itemlistformaction.cpp:520
 msgid "Already on first feed."
@@ -1727,9 +1720,8 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' är inte ett giltigt tangentkommando"
 
 #: src/keymap.cpp:984
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "Misslyckades att starta webbläsare"
+msgstr "misslyckades med att parsa bindning"
 
 #: src/keymap.cpp:1016
 #, c-format
@@ -1801,14 +1793,12 @@ msgid "use <queuefile> as queue file"
 msgstr "använd <köfil> som köfil"
 
 #: src/pbcontroller.cpp:368
-#, fuzzy
 msgid "<lockfile>"
-msgstr "<loggfil>"
+msgstr "<låsfil>"
 
 #: src/pbcontroller.cpp:369
-#, fuzzy
 msgid "use <lockfile> as lock file"
-msgstr "använd <loggfil> som loggfil"
+msgstr "använd <låsfil> som låsfil"
 
 #: src/pbcontroller.cpp:371
 msgid "start download on startup"
