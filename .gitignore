@@ -34,3 +34,4 @@ doc/podboat-cmds-linked.asciidoc
 *.dSYM
 /.deps/
 /compile_flags.txt
+log.txt
