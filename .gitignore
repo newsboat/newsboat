@@ -35,3 +35,5 @@ doc/podboat-cmds-linked.asciidoc
 /.deps/
 /compile_flags.txt
 log.txt
+compile_commands.json
+.cache/
