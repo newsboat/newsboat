@@ -120,6 +120,13 @@ branch off the latest release and backport the bugfixes onto it.
         `sudo cp -rv newsboat/* /var/www/newsboat.org/www/ && sudo chmod -R a+r /var/www/newsboat.org/www/`.
     * Remove the staging directory on the server: `rm -rf newsboat`
     * Push the code: `git push && git push --tags`
+8. Save the website to the Wayback machine:
+    1. go to https://web.archive.org/save
+    2. type in "newsboat.org"
+    3. enable "Save outlinks" so the Web Archive downloads the tarballs and
+       whatnot
+    4. click "Save page" and wait for it to finish, making sure there were no
+       errors
 8. Tell the world about it:
     * Send an email to the mailing list
         * newsboat@googlegroups.com
