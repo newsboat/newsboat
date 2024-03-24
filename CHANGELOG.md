@@ -1,19 +1,46 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2024-03-24
+## 2.35 - 2024-03-24
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes: TK
+for this release also includes Daniel Oh and Lucio Sauer.
 
 ## Added
+
+- Support for Feedbin (#716) (James Vaughan)
+- `--queue-file`, `--search-history-file`, and `--cmdline-history-file` options
+    to specify locations of the respective files. This, along with the existing
+    options `--url-file`, `--config-file`, and `--cache-file`, lets the user
+    fully customize the locations instead of relying on XDG or dotfiles (#57)
+    (CookiePieWw)
+- `miniflux-flag-star` setting, so articles flagged in Newsboat appear as
+    starred in Miniflux (#2235) (gilcu3)
+- `miniflux-show-special-feeds` setting (enabled by default) which adds a "Starred
+    Items" feed to the feedlist for those two use Miniflux (gilcu3)
+- Podboat: if `--log-level` is specified but `--log-file` isn't, write the log
+    to a file named after the template `podboat_%Y-%m-%d_%H.%M.%S.log`, i.e. use
+    the current date and time. The same functionality was added to Newsboat
+    proper in 2.31 (Dennis van der Schagt)
+- contrib: a bookmark plugin for Linkding (Mike Hall)
+- contrib: a bookmark plugin for Wallabag (Mike Hall)
+- contrib: a filter to turn twtxt protocol into RSS (Cyril Augier)
+- contrib: a filter to add newlines to Slashdot feed (Dennis van der Schagt)
+
 ## Changed
 
+- Build in C++14 mode. This does *not* increase our requirements for compilers,
+    because the ones we require already provide C++14 support
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Swedish (deob83),
+    Turkish (Emir SARI)
+- Updated vendored library optional-lite to 3.6.0
 - Bumped minimum supported Rust version to 1.72.1
 
-## Deprecated
-## Removed
 ## Fixed
-## Security
+
+- `%>[char]` format not working inside a conditional format
+    (e.g. `%D %?T?%-63t%> %T&%t?`) (#2645) (Juho Eerola)
 
 
 
