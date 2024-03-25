@@ -8,7 +8,7 @@ edition = "2021"
 strprintf = { path="../strprintf" }
 regex-rs = { path="../regex-rs" }
 
-fastrand = "2.0.0"
+fastrand = "2.0.2"
 url = "2.5.0"
 percent-encoding = "2.3.1"
 xdg = "2.5.2"
