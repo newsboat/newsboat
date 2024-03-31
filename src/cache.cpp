@@ -74,17 +74,14 @@ struct HeaderValues {
 	std::string etag;
 };
 
-static int count_callback(void* handler, int argc, char** argv,
+static int single_int_callback(void* output_ptr, int argc, char** argv,
 	char** /* azColName */)
 {
-	CbHandler* cbh = static_cast<CbHandler*>(handler);
+	int* output = static_cast<int*>(output_ptr);
 
-	if (argc > 0) {
-		std::istringstream is(argv[0]);
-		int x;
-		is >> x;
-		cbh->set_count(x);
-	}
+	assert(argc == 1);
+
+	*output = std::stoi(argv[0]);
 
 	return 0;
 }
@@ -513,13 +510,12 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
 	// scope_transaction dbtrans(db);
 
-	CbHandler count_cbh;
+	int count = 0;;
 	auto query = prepare_query(
 			"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",
 			feed->rssurl());
-	run_sql(query, count_callback, &count_cbh);
+	run_sql(query, single_int_callback, &count);
 
-	const int count = count_cbh.count();
 	LOG(Level::DEBUG,
 		"Cache::externalize_rss_feed: rss_feeds with rssurl = '%s': "
 		"found "
@@ -593,10 +589,10 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	/* first, we check whether the feed is there at all */
 	std::string query = prepare_query(
 			"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';", rssurl);
-	CbHandler count_cbh;
-	run_sql(query, count_callback, &count_cbh);
+	int count = 0;
+	run_sql(query, single_int_callback, &count);
 
-	if (count_cbh.count() == 0) {
+	if (count == 0) {
 		return feed;
 	}
 
@@ -856,10 +852,10 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 	std::string query = prepare_query(
 			"SELECT count(*) FROM rss_item WHERE guid = '%q';",
 			item->guid());
-	CbHandler count_cbh;
-	run_sql(query, count_callback, &count_cbh);
+	int count = 0;
+	run_sql(query, single_int_callback, &count);
 	const auto description = item->description();
-	if (count_cbh.count() > 0) {
+	if (count > 0) {
 		if (reset_unread) {
 			std::string content;
 			query = prepare_query(
