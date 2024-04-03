@@ -19,14 +19,14 @@ ListFormatter::~ListFormatter() {}
 
 void ListFormatter::add_line(const StflRichText& text)
 {
-	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text.stfl_quoted_string());
+	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text.stfl_quoted());
 	set_line(UINT_MAX, text);
 }
 
 void ListFormatter::set_line(const unsigned int itempos,
 	const StflRichText& text)
 {
-	const std::wstring wide = utils::str2wstr(text.stfl_quoted_string());
+	const std::wstring wide = utils::str2wstr(text.stfl_quoted());
 	const std::wstring cleaned = utils::clean_nonprintable_characters(wide);
 	const std::string formatted_text = utils::wstr2str(cleaned);
 	const StflRichText stflRichText = StflRichText::from_quoted(formatted_text);
@@ -46,7 +46,7 @@ std::string ListFormatter::format_list() const
 			rxman->quote_and_highlight(str, location);
 		}
 		format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", Stfl::quote(str.stfl_quoted_string())));
+				"{listitem text:%s}", Stfl::quote(str.stfl_quoted())));
 	}
 	format_cache.push_back('}');
 	return format_cache;

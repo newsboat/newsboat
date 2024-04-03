@@ -125,9 +125,9 @@ void HelpFormAction::prepare()
 		}
 
 		if (!syskey_descriptions.empty()) {
-			listfmt.add_line(StflRichText::from_plaintext_string(""));
-			listfmt.add_line(StflRichText::from_plaintext_string(_("Generic bindings:")));
-			listfmt.add_line(StflRichText::from_plaintext_string(""));
+			listfmt.add_line(StflRichText::from_plaintext(""));
+			listfmt.add_line(StflRichText::from_plaintext(_("Generic bindings:")));
+			listfmt.add_line(StflRichText::from_plaintext(""));
 
 			for (const auto& desc : syskey_descriptions) {
 				if (should_be_visible(desc)) {
@@ -143,9 +143,9 @@ void HelpFormAction::prepare()
 		}
 
 		if (!unbound_descriptions.empty()) {
-			listfmt.add_line(StflRichText::from_plaintext_string(""));
-			listfmt.add_line(StflRichText::from_plaintext_string(_("Unbound functions:")));
-			listfmt.add_line(StflRichText::from_plaintext_string(""));
+			listfmt.add_line(StflRichText::from_plaintext(""));
+			listfmt.add_line(StflRichText::from_plaintext(_("Unbound functions:")));
+			listfmt.add_line(StflRichText::from_plaintext(""));
 
 			for (const auto& desc : unbound_descriptions) {
 				if (should_be_visible(desc)) {
@@ -159,9 +159,9 @@ void HelpFormAction::prepare()
 
 		const auto macros = v.get_keymap()->get_macro_descriptions();
 		if (!macros.empty()) {
-			listfmt.add_line(StflRichText::from_plaintext_string(""));
-			listfmt.add_line(StflRichText::from_plaintext_string(_("Macros:")));
-			listfmt.add_line(StflRichText::from_plaintext_string(""));
+			listfmt.add_line(StflRichText::from_plaintext(""));
+			listfmt.add_line(StflRichText::from_plaintext(_("Macros:")));
+			listfmt.add_line(StflRichText::from_plaintext(""));
 
 			for (const auto& macro : macros) {
 				const std::string key = macro.first.to_bindkey_string();

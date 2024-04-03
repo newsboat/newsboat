@@ -330,7 +330,7 @@ void DirBrowserFormAction::add_directory(
 				group,
 				sizestr,
 				formatteddirname);
-		lines.push_back(StflRichText::from_plaintext_string(line));
+		lines.push_back(StflRichText::from_plaintext(line));
 		id_at_position.push_back(file_system::FileSystemEntry{ftype, dirname});
 	}
 }

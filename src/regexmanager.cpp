@@ -84,7 +84,7 @@ void RegexManager::quote_and_highlight(StflRichText& stflString,
 {
 	auto& regexes = locations[location];
 
-	const std::string text = stflString.get_plaintext();
+	const std::string text = stflString.plaintext();
 
 	for (unsigned int i = 0; i < regexes.size(); ++i) {
 		const auto& regex = regexes[i].first;

@@ -23,8 +23,8 @@ TEST_CASE("Constructing StflRichText from plaintext string does not make changes
 
 	for (const auto& input : test_strings) {
 		DYNAMIC_SECTION("plaintext: " << input) {
-			const auto stflString = StflRichText::from_plaintext_string(input);
-			REQUIRE(stflString.get_plaintext() == input);
+			const auto stflString = StflRichText::from_plaintext(input);
+			REQUIRE(stflString.plaintext() == input);
 		}
 	}
 }
@@ -47,7 +47,7 @@ TEST_CASE("Constructing StflRichText from quoted string splits tags from plainte
 		const auto& expected_plaintext = kv.second;
 		DYNAMIC_SECTION("plaintext: " << input) {
 			const auto stflString = StflRichText::from_quoted(input);
-			REQUIRE(stflString.get_plaintext() == expected_plaintext);
+			REQUIRE(stflString.plaintext() == expected_plaintext);
 		}
 	}
 }
@@ -65,43 +65,43 @@ TEST_CASE("Apply overlapping style tags", "[StflRichText]")
 
 	SECTION("complete string overrides all existing tags") {
 		richtext.apply_style_tag(newTag, 0, 24);
-		REQUIRE(richtext.stfl_quoted_string() == "<tag>textabcdef and remainder</>");
+		REQUIRE(richtext.stfl_quoted() == "<tag>textabcdef and remainder</>");
 	}
 
 	SECTION("empty range is ignored") {
 		richtext.apply_style_tag(newTag, 10, 10);
-		REQUIRE(richtext.stfl_quoted_string() == "text<a>abc<b>def</> and remainder");
+		REQUIRE(richtext.stfl_quoted() == "text<a>abc<b>def</> and remainder");
 	}
 
 	SECTION("invalid range is ignored") {
 		richtext.apply_style_tag(newTag, 10, 9);
-		REQUIRE(richtext.stfl_quoted_string() == "text<a>abc<b>def</> and remainder");
+		REQUIRE(richtext.stfl_quoted() == "text<a>abc<b>def</> and remainder");
 	}
 
 	SECTION("exact overlap with existing tag ranges") {
 		SECTION("a") {
 			richtext.apply_style_tag(newTag, 4, 7);
-			REQUIRE(richtext.stfl_quoted_string() == "text<tag>abc<b>def</> and remainder");
+			REQUIRE(richtext.stfl_quoted() == "text<tag>abc<b>def</> and remainder");
 		}
 
 		SECTION("b") {
 			richtext.apply_style_tag(newTag, 7, 10);
-			REQUIRE(richtext.stfl_quoted_string() == "text<a>abc<tag>def</> and remainder");
+			REQUIRE(richtext.stfl_quoted() == "text<a>abc<tag>def</> and remainder");
 		}
 
 		SECTION("a+b") {
 			richtext.apply_style_tag(newTag, 4, 10);
-			REQUIRE(richtext.stfl_quoted_string() == "text<tag>abcdef</> and remainder");
+			REQUIRE(richtext.stfl_quoted() == "text<tag>abcdef</> and remainder");
 		}
 	}
 
 	SECTION("overlap with start of existing range") {
 		richtext.apply_style_tag(newTag, 0, 6);
-		REQUIRE(richtext.stfl_quoted_string() == "<tag>textab<a>c<b>def</> and remainder");
+		REQUIRE(richtext.stfl_quoted() == "<tag>textab<a>c<b>def</> and remainder");
 	}
 
 	SECTION("overlap with end of existing range") {
 		richtext.apply_style_tag(newTag, 8, 14);
-		REQUIRE(richtext.stfl_quoted_string() == "text<a>abc<b>d<tag>ef and</> remainder");
+		REQUIRE(richtext.stfl_quoted() == "text<a>abc<b>d<tag>ef and</> remainder");
 	}
 }

@@ -354,7 +354,7 @@ void FileBrowserFormAction::add_file(
 				group,
 				sizestr,
 				formattedfilename);
-		lines.push_back(StflRichText::from_plaintext_string(line));
+		lines.push_back(StflRichText::from_plaintext(line));
 		id_at_position.push_back(file_system::FileSystemEntry{ftype, filename});
 	}
 }

@@ -38,7 +38,7 @@ void DialogsFormAction::prepare()
 			const auto& fa = formaction_names[line];
 			const bool is_current_formaction =
 			v.get_formaction(fa.first) == get_parent_formaction();
-			return StflRichText::from_plaintext_string(
+			return StflRichText::from_plaintext(
 				strprintf::fmt("%4u %s %s",
 					line + 1,
 					is_current_formaction ? "*" : " ",

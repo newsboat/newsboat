@@ -9,7 +9,7 @@ namespace {
 void add_lines(ListFormatter& listfmt, std::vector<std::string> lines)
 {
 	for (const auto& line : lines) {
-		listfmt.add_line(StflRichText::from_plaintext_string(line));
+		listfmt.add_line(StflRichText::from_plaintext(line));
 	}
 }
 
@@ -54,7 +54,7 @@ TEST_CASE("set_line() replaces the item in a list", "[ListFormatter]")
 		"}";
 	REQUIRE(fmt.format_list() == expected);
 
-	fmt.set_line(1, StflRichText::from_plaintext_string("oh"));
+	fmt.set_line(1, StflRichText::from_plaintext("oh"));
 
 	expected =
 		"{list"

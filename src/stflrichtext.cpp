@@ -24,7 +24,7 @@ StflRichText operator+(StflRichText left, const StflRichText& right)
 	return StflRichText(std::move(text), std::move(tags));
 }
 
-StflRichText StflRichText::from_plaintext_string(std::string text)
+StflRichText StflRichText::from_plaintext(std::string text)
 {
 	text = utils::quote_for_stfl(text);
 
@@ -43,12 +43,12 @@ void StflRichText::apply_style_tag(const std::string& tag, size_t start, size_t 
 	merge_style_tag(style_tags, tag, start, end);
 }
 
-std::string StflRichText::get_plaintext() const
+std::string StflRichText::plaintext() const
 {
 	return text;
 }
 
-std::string StflRichText::stfl_quoted_string() const
+std::string StflRichText::stfl_quoted() const
 {
 	return insert_style_tags(text, style_tags);
 }

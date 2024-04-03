@@ -1075,10 +1075,10 @@ void ItemListFormAction::draw_items()
 	std::uint32_t width) -> StflRichText {
 		if (line >= visible_items.size())
 		{
-			return StflRichText::from_plaintext_string("ERROR");
+			return StflRichText::from_plaintext("ERROR");
 		}
 		auto& item = visible_items[line];
-		return  item2formatted_line(item, width, itemlist_format, datetime_format);
+		return item2formatted_line(item, width, itemlist_format, datetime_format);
 	};
 	list.invalidate_list_content(visible_items.size(), render_line);
 
@@ -1183,7 +1183,7 @@ StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	fmt.register_fmt('L', item.first->length());
 
 	const auto formattedLine = fmt.do_format(itemlist_format, width);
-	auto stflFormattedLine = StflRichText::from_plaintext_string(formattedLine);
+	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
 
 	const int id = rxman.article_matches(item.first.get());
 	if (id != -1) {
@@ -1280,7 +1280,7 @@ void ItemListFormAction::set_head(const std::string& s,
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 {
-	const int itempos =  list.get_position();
+	const int itempos = list.get_position();
 	for (int i = (start_with_last ? itempos : (itempos - 1)); i >= 0; --i) {
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_previous_unread_item: "

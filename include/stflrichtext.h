@@ -8,7 +8,7 @@ namespace newsboat {
 
 class StflRichText {
 public:
-	static StflRichText from_plaintext_string(std::string);
+	static StflRichText from_plaintext(std::string);
 	static StflRichText from_quoted(std::string);
 
 	StflRichText(const StflRichText&) = default;
@@ -21,8 +21,8 @@ public:
 
 	void apply_style_tag(const std::string& tag, size_t start, size_t end);
 
-	std::string get_plaintext() const;
-	std::string stfl_quoted_string() const;
+	std::string plaintext() const;
+	std::string stfl_quoted() const;
 
 private:
 	StflRichText(std::string&&,

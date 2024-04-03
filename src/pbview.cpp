@@ -314,7 +314,7 @@ void PbView::run_help()
 				desc.cmd,
 				desc.desc);
 
-		listfmt.add_line(StflRichText::from_plaintext_string(descline));
+		listfmt.add_line(StflRichText::from_plaintext(descline));
 	}
 
 	help_textview.stfl_replace_lines(listfmt.get_lines_count(),
@@ -419,7 +419,7 @@ StflRichText PbView::format_line(const std::string& podlist_format,
 	fmt.register_fmt('b', strprintf::fmt("%s", dl.basename()));
 
 	auto formattedLine = fmt.do_format(podlist_format, width);
-	return StflRichText::from_plaintext_string(formattedLine);
+	return StflRichText::from_plaintext(formattedLine);
 }
 
 } // namespace podboat

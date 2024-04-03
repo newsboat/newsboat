@@ -164,7 +164,7 @@ std::vector<std::string> format_text_plain_helper(
 			// TODO: Propagate usage of StflRichText
 			auto x = StflRichText::from_quoted(text);
 			rxman->quote_and_highlight(x, location);
-			text = x.stfl_quoted_string();
+			text = x.stfl_quoted();
 		}
 
 		switch (type) {

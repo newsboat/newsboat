@@ -85,7 +85,7 @@ void ListWidgetBackend::render()
 	listfmt.clear();
 	for (std::uint32_t i = 0; i < visible_content_lines; ++i) {
 		const std::uint32_t line = scroll_offset + i;
-		auto formatted_line = StflRichText::from_plaintext_string("NO FORMATTER DEFINED");
+		auto formatted_line = StflRichText::from_plaintext("NO FORMATTER DEFINED");
 		if (line_cache.count(line) >= 1) {
 			formatted_line = line_cache.at(line);
 		} else if (get_formatted_line) {

@@ -23,7 +23,7 @@ const static std::string widgetName = "textview-name";
 void add_lines(ListFormatter& listfmt, std::vector<std::string> lines)
 {
 	for (const auto& line : lines) {
-		listfmt.add_line(StflRichText::from_plaintext_string(line));
+		listfmt.add_line(StflRichText::from_plaintext(line));
 	}
 }
 

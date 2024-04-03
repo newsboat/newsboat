@@ -20,7 +20,7 @@ const static std::string stflListForm =
 
 StflRichText render_empty_line(std::uint32_t, std::uint32_t)
 {
-	return StflRichText::from_plaintext_string("");
+	return StflRichText::from_plaintext("");
 }
 
 
@@ -104,7 +104,7 @@ TEST_CASE("invalidate_list_content() clears internal caches", "[ListWidget]")
 	std::set<std::uint32_t> requested_lines;
 	auto render_line = [&](std::uint32_t line, std::uint32_t) -> StflRichText {
 		requested_lines.insert(line);
-		return StflRichText::from_plaintext_string("");
+		return StflRichText::from_plaintext("");
 	};
 
 	GIVEN("a ListWidget with 3 lines") {

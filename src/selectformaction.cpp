@@ -152,7 +152,7 @@ void SelectFormAction::prepare()
 			render_line = [this, selecttag_format](std::uint32_t line,
 			std::uint32_t width) -> StflRichText {
 				const auto& tag = tags[line];
-				return StflRichText::from_plaintext_string(
+				return StflRichText::from_plaintext(
 					format_line(selecttag_format,
 						tag,
 						line + 1,
@@ -164,7 +164,7 @@ void SelectFormAction::prepare()
 			render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 				(void)width;
 				const auto& filter = filters[line];
-				return StflRichText::from_plaintext_string(
+				return StflRichText::from_plaintext(
 					strprintf::fmt(
 						"%4u  %s",
 						line + 1,

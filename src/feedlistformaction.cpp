@@ -627,7 +627,7 @@ void FeedListFormAction::set_feedlist(
 	std::uint32_t width) -> StflRichText {
 		if (line >= visible_feeds.size())
 		{
-			return StflRichText::from_plaintext_string("ERROR");
+			return StflRichText::from_plaintext("ERROR");
 		}
 		auto& feed = visible_feeds[line];
 		return format_line(feedlist_format, feed.first, feed.second, width);
@@ -1085,7 +1085,7 @@ StflRichText FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('d', utils::utf8_to_locale(feed->description()));
 
 	const auto formattedLine = fmt.do_format(feedlist_format, width);
-	auto stflFormattedLine = StflRichText::from_plaintext_string(formattedLine);
+	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
 
 	if (unread_count > 0) {
 		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());

@@ -129,7 +129,7 @@ void UrlViewFormAction::prepare()
 		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 			(void)width;
 			const auto& link = links[line];
-			return StflRichText::from_plaintext_string(strprintf::fmt("%2u  %s", line + 1, link.url));
+			return StflRichText::from_plaintext(strprintf::fmt("%2u  %s", line + 1, link.url));
 		};
 
 		urls_list.invalidate_list_content(links.size(), render_line);
