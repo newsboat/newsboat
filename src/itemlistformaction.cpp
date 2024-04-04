@@ -1072,10 +1072,10 @@ void ItemListFormAction::draw_items()
 		cfg->get_configvalue("articlelist-format");
 
 	auto render_line = [this, itemlist_format, datetime_format](std::uint32_t line,
-	std::uint32_t width) -> std::string {
+	std::uint32_t width) -> StflRichText {
 		if (line >= visible_items.size())
 		{
-			return "ERROR";
+			return StflRichText::from_plaintext("ERROR");
 		}
 		auto& item = visible_items[line];
 		return item2formatted_line(item, width, itemlist_format, datetime_format);
@@ -1140,7 +1140,7 @@ void ItemListFormAction::prepare()
 	prepare_set_filterpos();
 }
 
-std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
+StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const unsigned int width,
 	const std::string& itemlist_format,
 	const std::string& datetime_format)
@@ -1182,19 +1182,20 @@ std::string ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 
 	fmt.register_fmt('L', item.first->length());
 
-	auto formattedLine = fmt.do_format(itemlist_format, width);
-	formattedLine = utils::quote_for_stfl(formattedLine);
+	const auto formattedLine = fmt.do_format(itemlist_format, width);
+	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
 
 	const int id = rxman.article_matches(item.first.get());
 	if (id != -1) {
-		formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
+		const auto tag = strprintf::fmt("<%d>", id);
+		stflFormattedLine.apply_style_tag(tag, 0, formattedLine.length());
 	}
 
 	if (item.first->unread()) {
-		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
+		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
 	}
 
-	return formattedLine;
+	return stflFormattedLine;
 }
 
 void ItemListFormAction::goto_item(const std::string& title)
@@ -1279,7 +1280,7 @@ void ItemListFormAction::set_head(const std::string& s,
 
 bool ItemListFormAction::jump_to_previous_unread_item(bool start_with_last)
 {
-	const int itempos =  list.get_position();
+	const int itempos = list.get_position();
 	for (int i = (start_with_last ? itempos : (itempos - 1)); i >= 0; --i) {
 		LOG(Level::DEBUG,
 			"ItemListFormAction::jump_to_previous_unread_item: "

@@ -1,10 +1,14 @@
 #include <textviewwidget.h>
 
+#include <vector>
+
 #include "3rd-party/catch.hpp"
 #include "listformatter.h"
 #include "stflpp.h"
 
 using namespace newsboat;
+
+namespace {
 
 const static std::string stflTextviewForm =
 	"vbox\n"
@@ -16,6 +20,15 @@ const static std::string stflTextviewForm =
 
 const static std::string widgetName = "textview-name";
 
+void add_lines(ListFormatter& listfmt, std::vector<std::string> lines)
+{
+	for (const auto& line : lines) {
+		listfmt.add_line(StflRichText::from_plaintext(line));
+	}
+}
+
+}
+
 TEST_CASE("stfl_replace_lines() keeps text in view", "[TextviewWidget]")
 {
 	Stfl::Form form(stflTextviewForm);
@@ -24,9 +37,11 @@ TEST_CASE("stfl_replace_lines() keeps text in view", "[TextviewWidget]")
 	REQUIRE(widget.get_scroll_offset() == 0);
 
 	ListFormatter listfmt;
-	listfmt.add_line("one");
-	listfmt.add_line("two");
-	listfmt.add_line("three");
+	add_lines(listfmt, {
+		"one",
+		"two",
+		"three",
+	});
 	widget.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 	widget.set_scroll_offset(2);
@@ -41,16 +56,20 @@ TEST_CASE("stfl_replace_lines() keeps text in view", "[TextviewWidget]")
 
 	SECTION("widget scrolls upwards if lines are removed") {
 		listfmt.clear();
-		listfmt.add_line("one");
-		listfmt.add_line("two");
+		add_lines(listfmt, {
+			"one",
+			"two",
+		});
 		widget.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 		REQUIRE(widget.get_scroll_offset() == 1);
 	}
 
 	SECTION("no change in scroll location when adding lines") {
-		listfmt.add_line("four");
-		listfmt.add_line("five");
+		add_lines(listfmt, {
+			"four",
+			"five",
+		});
 		widget.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 		REQUIRE(widget.get_scroll_offset() == 2);
@@ -72,16 +91,18 @@ TEST_CASE("Basic movements work as expected", "[TextviewWidget]")
 	REQUIRE(widget.get_scroll_offset() == 0);
 
 	ListFormatter listfmt;
-	listfmt.add_line("one");
-	listfmt.add_line("two");
-	listfmt.add_line("three");
-	listfmt.add_line("four");
-	listfmt.add_line("five");
-	listfmt.add_line("six");
-	listfmt.add_line("seven");
-	listfmt.add_line("eight");
-	listfmt.add_line("nine");
-	listfmt.add_line("ten");
+	add_lines(listfmt, {
+		"one",
+		"two",
+		"three",
+		"four",
+		"five",
+		"six",
+		"seven",
+		"eight",
+		"nine",
+		"ten",
+	});
 	widget.stfl_replace_lines(listfmt.get_lines_count(), listfmt.format_list());
 
 	widget.set_scroll_offset(2);

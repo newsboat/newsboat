@@ -55,7 +55,7 @@ std::uint32_t ListWidgetBackend::get_num_lines()
 }
 
 void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
-	std::function<std::string(std::uint32_t, std::uint32_t)> get_line_method)
+	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_line_method)
 {
 	line_cache.clear();
 	get_formatted_line = get_line_method;
@@ -85,9 +85,9 @@ void ListWidgetBackend::render()
 	listfmt.clear();
 	for (std::uint32_t i = 0; i < visible_content_lines; ++i) {
 		const std::uint32_t line = scroll_offset + i;
-		std::string formatted_line = "NO FORMATTER DEFINED";
+		auto formatted_line = StflRichText::from_plaintext("NO FORMATTER DEFINED");
 		if (line_cache.count(line) >= 1) {
-			formatted_line = line_cache[line];
+			formatted_line = line_cache.at(line);
 		} else if (get_formatted_line) {
 			formatted_line = get_formatted_line(line, viewport_width);
 			line_cache.insert({line, formatted_line});

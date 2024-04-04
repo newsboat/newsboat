@@ -58,6 +58,7 @@ src/rssparser.cpp
 src/searchresultslistformaction.cpp
 src/selectformaction.cpp
 src/statusline.cpp
+src/stflrichtext.cpp
 src/tagsouppullparser.cpp
 src/textformatter.cpp
 src/textviewwidget.cpp

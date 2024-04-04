@@ -9,6 +9,7 @@
 #include "formaction.h"
 #include "listformatter.h"
 #include "listwidget.h"
+#include "stflrichtext.h"
 
 namespace newsboat {
 
@@ -47,7 +48,7 @@ private:
 		std::string filename);
 	std::string get_filename_suggestion(const std::string& s);
 	std::vector<file_system::FileSystemEntry> id_at_position;
-	std::vector<std::string> lines;
+	std::vector<StflRichText> lines;
 
 	std::string get_formatted_filename(std::string filename, mode_t mode);
 

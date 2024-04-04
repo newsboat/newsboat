@@ -624,10 +624,10 @@ void FeedListFormAction::set_feedlist(
 	update_visible_feeds(feeds);
 
 	auto render_line = [this, feedlist_format](std::uint32_t line,
-	std::uint32_t width) -> std::string {
+	std::uint32_t width) -> StflRichText {
 		if (line >= visible_feeds.size())
 		{
-			return "ERROR";
+			return StflRichText::from_plaintext("ERROR");
 		}
 		auto& feed = visible_feeds[line];
 		return format_line(feedlist_format, feed.first, feed.second, width);
@@ -1061,7 +1061,7 @@ std::string FeedListFormAction::get_title(std::shared_ptr<RssFeed> feed)
 	return title;
 }
 
-std::string FeedListFormAction::format_line(const std::string& feedlist_format,
+StflRichText FeedListFormAction::format_line(const std::string& feedlist_format,
 	std::shared_ptr<RssFeed> feed,
 	unsigned int pos,
 	unsigned int width)
@@ -1084,19 +1084,20 @@ std::string FeedListFormAction::format_line(const std::string& feedlist_format,
 	fmt.register_fmt('L', utils::censor_url(feed->rssurl()));
 	fmt.register_fmt('d', utils::utf8_to_locale(feed->description()));
 
-	auto formattedLine = fmt.do_format(feedlist_format, width);
-	formattedLine = utils::quote_for_stfl(formattedLine);
+	const auto formattedLine = fmt.do_format(feedlist_format, width);
+	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
+
+	if (unread_count > 0) {
+		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
+	}
 
 	const int id = rxman.feed_matches(feed.get());
 	if (id != -1) {
-		formattedLine = strprintf::fmt("<%d>%s</>", id, formattedLine);
+		const auto tag = strprintf::fmt("<%d>", id);
+		stflFormattedLine.apply_style_tag(tag, 0, formattedLine.length());
 	}
 
-	if (unread_count > 0) {
-		formattedLine = strprintf::fmt("<unread>%s</>", formattedLine);
-	}
-
-	return formattedLine;
+	return stflFormattedLine;
 }
 
 std::string FeedListFormAction::title()
