@@ -13,6 +13,8 @@
 # Build with defaults:
 #
 #   docker build \
+#       --build-arg UID=$(id -u) \
+#       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
 #       --file=docker/ubuntu_20.04-build-tools.dockerfile \
 #       docker
@@ -20,6 +22,8 @@
 # Build with non-default compiler and Rust version:
 #
 #   docker build \
+#       --build-arg UID=$(id -u) \
+#       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
 #       --file=docker/ubuntu_20.04-build-tools.dockerfile \
 #       --build-arg cxx_package=clang-10 \
@@ -38,7 +42,6 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       --user $(id -u):$(id -g) \
 #       newsboat-build-tools \
 #       make
 #
@@ -73,8 +76,11 @@ RUN apt-get update \
     && apt-get autoremove \
     && apt-get clean
 
-RUN addgroup --gid 1000 builder \
-    && adduser --home /home/builder --uid 1000 --ingroup builder \
+ARG UID=1000
+ARG GID=1000
+
+RUN addgroup --gid $GID builder \
+    && adduser --home /home/builder --uid $UID --ingroup builder \
         --disabled-password --shell /bin/bash builder \
     && mkdir -p /home/builder/src \
     && chown -R builder:builder /home/builder
