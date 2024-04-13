@@ -21,7 +21,7 @@ enable_sections! {
         let input = "Пісня";
 
         let result = utf8_to_locale(input);
-        assert_ne!(result, &[]);
+        assert_ne!(result.len(), 0);
         assert_ne!(result, input.as_bytes());
     }
 
@@ -32,7 +32,7 @@ enable_sections! {
         let input = "日本";
 
         let result = utf8_to_locale(input);
-        assert_ne!(result, &[]);
+        assert_ne!(result.len(), 0);
         assert_ne!(result, input.as_bytes());
     }
     }

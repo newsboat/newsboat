@@ -11,7 +11,7 @@ enable_sections! {
     if section!("UTF-8") {
         locale_helpers::set_locale("en_US.UTF-8");
 
-        assert_eq!(utf8_to_locale(""), &[]);
+        assert_eq!(utf8_to_locale("").len(), 0);
 
         // "Just testing" in Russian.
         let input = "Просто проверяю";
@@ -24,7 +24,7 @@ enable_sections! {
     if section!("KOI8-R") {
         locale_helpers::set_locale("ru_RU.KOI8-R");
 
-        assert_eq!(utf8_to_locale(""), &[]);
+        assert_eq!(utf8_to_locale("").len(), 0);
 
         // "another test" in Russian.
         let input =  "ещё один тест";
@@ -35,7 +35,7 @@ enable_sections! {
     if section!("CP1251") {
         locale_helpers::set_locale("ru_RU.CP1251");
 
-        assert_eq!(utf8_to_locale(""), &[]);
+        assert_eq!(utf8_to_locale("").len(), 0);
 
         // "Greetings!" in Russian.
         let input =  "Приветствую!";

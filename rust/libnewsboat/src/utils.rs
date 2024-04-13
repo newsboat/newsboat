@@ -2179,7 +2179,7 @@ mod tests {
         let result = convert_text(input, "ISO-8859-1", "UTF-8");
         // We can't spell out an expected result because different platforms
         // might follow different transliteration rules.
-        assert_ne!(result, &[]);
+        assert_ne!(result.len(), 0);
         assert_ne!(result, input);
     }
 
