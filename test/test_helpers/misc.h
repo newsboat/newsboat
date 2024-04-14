@@ -1,6 +1,7 @@
 #ifndef NEWSBOAT_TEST_HELPERS_MISC_H_
 #define NEWSBOAT_TEST_HELPERS_MISC_H_
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -28,6 +29,10 @@ void copy_file(const std::string& source, const std::string& destination);
  * the file couldn't be opened.
  */
 std::vector<std::string> file_contents(const std::string& filepath);
+
+/* \brief Returns the contents of the file as a single binary blob
+ */
+std::vector<std::uint8_t> read_binary_file(const std::string& filepath);
 
 /* \brief Returns `true` if `input` starts with `prefix`.
  */
