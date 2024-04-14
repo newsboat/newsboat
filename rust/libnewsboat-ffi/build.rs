@@ -17,6 +17,7 @@ fn main() {
     add_cxxbridge("fmtstrformatter");
     add_cxxbridge("fslock");
     add_cxxbridge("history");
+    add_cxxbridge("http_test_server");
     add_cxxbridge("keymap");
     add_cxxbridge("logger");
     add_cxxbridge("scopemeasure");

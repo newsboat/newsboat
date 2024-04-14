@@ -20,6 +20,7 @@ natord = "1.0.9"
 md5 = "0.7.0"
 lexopt = "0.3.0"
 chrono = "0.4"
+httpmock = "0.7.0"
 
 [dependencies.gettext-rs]
 version = "0.7.0"

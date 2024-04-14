@@ -16,6 +16,7 @@ pub mod configpaths;
 pub mod fmtstrformatter;
 pub mod fslock;
 pub mod history;
+pub mod http_test_server;
 pub mod human_panic;
 pub mod keymap;
 pub mod logger;
