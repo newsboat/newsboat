@@ -250,12 +250,12 @@ The default color configuration of Newsboat looks like this:
 	color background          white   black
 	color listnormal          white   black
 	color listfocus           yellow  blue   bold
-	color listnormal_unread   magenta black
-	color listfocus_unread    magenta blue   bold
+	color listnormal_unread   white   black  bold
+	color listfocus_unread    yellow  blue   bold
 	color title               yellow  blue   bold
 	color info                yellow  blue   bold
 	color hint-key            yellow  blue   bold
-	color hint-keys-delimiter yellow  white
-	color hint-separator      yellow  white  bold
-	color hint-description    yellow  white
+	color hint-keys-delimiter white   blue
+	color hint-separator      white   blue   bold
+	color hint-description    white   blue
 	color article             white   black
