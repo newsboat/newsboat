@@ -3,7 +3,7 @@ freebsd_resource_settings: &freebsd_resource_settings
   memory: 8GB
 
 task:
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', '.github/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     matrix:
         - name: FreeBSD 13.3
           freebsd_instance:

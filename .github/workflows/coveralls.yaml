@@ -5,13 +5,13 @@ on: [push, pull_request]
 jobs:
   gen_coverage:
     name: Calculate test coverage
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     env:
-      # We use Rust Nightly, which builds upon LLVM 12. To ensure best
+      # We use Rust Nightly, which builds upon LLVM 18. To ensure best
       # compatibility, we use a matching C++ compiler.
-      CC: clang-12
-      CXX: clang++-12
+      CC: clang-18
+      CXX: clang++-18
       # Enable test coverage.
       PROFILE: 1
       # These flags are necessary for grcov to correctly calculate coverage.
@@ -28,14 +28,14 @@ jobs:
       RUST_TEST_THREADS: 2
 
     steps:
-      - name: Add Clang 12 repo
+      - name: Add Clang 18 repo
         run: |
-          echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main" | sudo tee -a /etc/apt/sources.list.d/llvm-toolchain-focal-12.list
+          echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main" | sudo tee -a /etc/apt/sources.list.d/llvm-toolchain-jammy-18.list
           curl https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
           sudo apt-get update
 
       - name: Install dependencies
-        run: sudo apt-get install --assume-yes --no-install-suggests clang-12 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
+        run: sudo apt-get install --assume-yes --no-install-suggests clang-18 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
 
       - name: Generate locales
         run: |
@@ -71,8 +71,8 @@ jobs:
         # produces, so we trick grcov into using llvm-cov instead. We can't
         # simply point grcov at llvm-cov, because the latter only behaves like
         # gcc's gcov when invoked by that name.
-      - name: Prepare to use llvm-cov-12 as gcov
-        run: ln -s $(which llvm-cov-12) gcov
+      - name: Prepare to use llvm-cov-18 as gcov
+        run: ln -s $(which llvm-cov-18) gcov
 
       - name: Calculate test coverage
         # Note that we override the path to gcov tool.
