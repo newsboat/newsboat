@@ -4,6 +4,7 @@ po/*.mo
 stfl/*.h
 newsboat
 podboat
+test/http-test-server
 test/test
 test/testlog.txt
 xlicense.h

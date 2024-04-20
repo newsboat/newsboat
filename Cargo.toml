@@ -4,5 +4,6 @@ members = [
     "rust/libnewsboat-ffi",
     "rust/strprintf",
     "rust/regex-rs",
+    "rust/http-test-server",
 ]
 resolver = "2"
