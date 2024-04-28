@@ -94,7 +94,7 @@ TEST_CASE("percents_finished() takes current progress into account",
 		const double total = 7.0;
 		d.set_progress(downloaded, total);
 
-		REQUIRE(d.percents_finished() == Approx(100.0 * (downloaded / total)));
+		REQUIRE(d.percents_finished() == Catch::Approx(100.0 * (downloaded / total)));
 	}
 
 	SECTION("percents_finished() takes offset into account") {
@@ -105,7 +105,7 @@ TEST_CASE("percents_finished() takes current progress into account",
 		d.set_offset(offset);
 		d.set_progress(downloaded, total);
 
-		const auto expected = Approx(100.0 * ((downloaded + offset) /
+		const auto expected = Catch::Approx(100.0 * ((downloaded + offset) /
 					(total + offset)));
 		REQUIRE(d.percents_finished() == expected);
 	}

@@ -301,7 +301,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
 					"Erase urls after first match to fail if "
-					"an item opens twice.")
+					"an item opens twice.");
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -324,7 +324,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
 					"Erase urls after first match to fail if "
-					"an item opens twice.")
+					"an item opens twice.");
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -386,7 +386,7 @@ TEST_CASE(
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
 					"Erase urls after first match to fail if "
-					"an item opens twice.")
+					"an item opens twice.");
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;
@@ -411,7 +411,7 @@ TEST_CASE(
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
 					"Erase urls after first match to fail if "
-					"an item opens twice.")
+					"an item opens twice.");
 				REQUIRE(url_set.count(line) == 1);
 				url_set.erase(url_set.find(line));
 				openedItemsCount += 1;

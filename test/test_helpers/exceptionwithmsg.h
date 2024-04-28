@@ -19,7 +19,7 @@ namespace test_helpers {
  *			ExceptionWithMsg<exception_type>(expected_message));
  */
 template<typename Exception>
-class ExceptionWithMsg : public Catch::MatcherBase<Exception> {
+class ExceptionWithMsg : public Catch::Matchers::MatcherBase<Exception> {
 	std::string expected_msg;
 
 public:

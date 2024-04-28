@@ -20,7 +20,7 @@ CXX?=c++
 CXX_FOR_BUILD?=$(CXX)
 
 # compiler and linker flags
-DEFINES=-DLOCALEDIR='"$(localedir)"'
+DEFINES=-DLOCALEDIR='"$(localedir)"' -DCATCH_AMALGAMATED_CUSTOM_MAIN
 
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(CARGO_TARGET_DIR)/cxxbridge/
@@ -155,8 +155,11 @@ test: test/test rust-test
 rust-test:
 	+$(CARGO) test $(CARGO_TEST_FLAGS) --no-run
 
-test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
+3rd-party/catch.o: 3rd-party/catch.cpp 3rd-party/catch.hpp
+	$(CXX) $(CXXFLAGS) -Wno-double-promotion -o 3rd-party/catch.o -c 3rd-party/catch.cpp
+
+test/test: xlicense.h $(LIB_OUTPUT) $(NEWSBOATLIB_OUTPUT) $(NEWSBOAT_OBJS) $(PODBOAT_OBJS) $(FILTERLIB_OUTPUT) $(RSSPPLIB_OUTPUT) $(TEST_OBJS) 3rd-party/catch.o
+	$(CXX) $(CXXFLAGS) -o test/test $(TEST_OBJS) $(SRC_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS) 3rd-party/catch.o
 
 regenerate-parser:
 	$(RM) filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
@@ -212,7 +215,7 @@ clean-doc:
 		doc/gen-example-config
 
 clean-test:
-	$(RM) test/test test/*.o test/test_helpers/*.o
+	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
 
 clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
 	$(RM) $(STFL_HDRS) xlicense.h
@@ -466,7 +469,7 @@ ci-check: test
 
 config: config.mk
 
-config.mk:
+config.mk: config.sh
 	@./config.sh
 
 xlicense.h: LICENSE
