@@ -2008,7 +2008,7 @@ TEST_CASE("translit() returns the value of `tocode`, maybe with \"//TRANSLIT\" a
 	// tests checks just the bare minimum: the function doesn't crash, doesn't
 	// throw exceptions, and returns something resembling a correct value.
 
-	const auto check = [](std::string fromcode, std::string tocode) {
+	const auto check = [&](std::string fromcode, std::string tocode) {
 		DYNAMIC_SECTION(fromcode << " → " << tocode) {
 			const auto expected1(tocode);
 			const auto expected2(tocode + "//TRANSLIT");
