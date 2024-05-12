@@ -13,6 +13,10 @@ class Pipe {
 public:
 	Pipe();
 	~Pipe();
+
+	Pipe(const Pipe&) = delete;
+	Pipe& operator=(const Pipe&) = delete;
+
 	void close_read_side();
 	void close_write_side();
 	int read_side();
@@ -26,6 +30,9 @@ class InputOutputProcess {
 public:
 	InputOutputProcess(std::vector<std::string>&& args);
 	~InputOutputProcess();
+
+	InputOutputProcess(const InputOutputProcess&) = delete;
+	InputOutputProcess& operator=(const InputOutputProcess&) = delete;
 
 	std::vector<std::uint8_t> read_binary(std::size_t length);
 	std::string read_line();

@@ -1,5 +1,5 @@
-use httpmock::MockServer;
-use std::io::stdin;
+use httpmock::{Method::GET, MockServer};
+use std::io::{stdin, Read};
 
 fn main() {
     let server = MockServer::start();
@@ -23,8 +23,67 @@ fn main() {
         let command = input.trim();
         match command {
             "exit" => break,
+            "add_endpoint" => add_endpoint(&server),
             _ => (),
         };
     }
     eprintln!("shutting down http test server");
+}
+
+fn read_line() -> String {
+    let mut input = String::new();
+    stdin().read_line(&mut input).unwrap();
+    input.trim().to_owned()
+}
+
+fn add_endpoint(server: &MockServer) {
+    let path = read_line();
+
+    let num_expected_headers: usize = read_line().parse().unwrap();
+    let mut expected_headers = vec![];
+    for _ in 0..num_expected_headers {
+        let key = read_line();
+        let value = read_line();
+        expected_headers.push((key, value));
+    }
+
+    let status: u16 = read_line().parse().unwrap();
+
+    let num_response_headers: usize = read_line().parse().unwrap();
+    let mut response_headers = vec![];
+    for _ in 0..num_response_headers {
+        let key = read_line();
+        let value = read_line();
+        response_headers.push((key, value));
+    }
+
+    let body_size: usize = read_line().parse().unwrap();
+    let mut body = vec![];
+    stdin()
+        .take(body_size as u64)
+        .read_to_end(&mut body)
+        .unwrap();
+
+    eprintln!("---------------------------------");
+    eprintln!("Adding endpoint {}", path);
+    eprintln!("Expected Headers: {:?}", expected_headers);
+    eprintln!("Status: {}", status);
+    eprintln!("Response headers: {:?}", response_headers);
+    eprintln!("Body size: {} bytes", body_size);
+    eprintln!("---------------------------------");
+
+    let mock = server.mock(|when, then| {
+        let mut when = when.method(GET).path(path);
+        for header in expected_headers {
+            when = when.header(header.0, header.1)
+        }
+
+        let mut then = then.status(status);
+        for header in response_headers {
+            then = then.header(header.0, header.1)
+        }
+        then.body(body);
+    });
+
+    println!("{}", mock.id);
 }
