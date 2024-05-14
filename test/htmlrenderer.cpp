@@ -1621,8 +1621,17 @@ TEST_CASE("Skips contents of <script> tags", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	Links links;
 
-	std::ifstream input_file("data/1300-minimal-reproducer.html");
-	const auto input = std::string{std::istreambuf_iterator<char>(input_file), std::istreambuf_iterator<char>()};
+	const auto input = std::string(
+			"<script>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</script>"
+			""
+			"<p>Visible text</p>");
 
 	rnd.render(input, lines, links, "");
 
