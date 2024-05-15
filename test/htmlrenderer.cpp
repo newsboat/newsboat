@@ -1621,14 +1621,24 @@ TEST_CASE("Skips contents of <script> tags", "[HtmlRenderer]")
 	std::vector<std::pair<LineType, std::string>> lines;
 	Links links;
 
-	std::ifstream input_file("data/1300-reproducer.html");
-	std::string input;
-	input_file >> input;
+	const auto input = std::string(
+			"<script>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</ul>"
+			"</script>"
+			""
+			"<p>Visible text</p>");
 
 	rnd.render(input, lines, links, "");
 
-	REQUIRE(lines.size() == 0);
+	REQUIRE(lines.size() == 1);
 	REQUIRE(links.size() == 0);
+
+	REQUIRE(lines[0].second == "Visible text");
 }
 
 TEST_CASE("<div> is always rendered on a new line", "[HtmlRenderer]")
