@@ -1,4 +1,4 @@
-use httpmock::{Method::GET, MockServer};
+use httpmock::{Method::GET, Mock, MockServer};
 use std::io::{stdin, Read};
 
 fn main() {
@@ -24,6 +24,7 @@ fn main() {
         match command {
             "exit" => break,
             "add_endpoint" => add_endpoint(&server),
+            "remove_endpoint" => remove_endpoint(&server),
             _ => (),
         };
     }
@@ -86,4 +87,10 @@ fn add_endpoint(server: &MockServer) {
     });
 
     println!("{}", mock.id);
+}
+
+fn remove_endpoint(server: &MockServer) {
+    let mock_id: usize = read_line().parse().unwrap();
+    let mut mock = Mock::new(mock_id, server);
+    mock.delete();
 }

@@ -34,7 +34,7 @@ std::string HttpTestServer::get_address()
 	return address;
 }
 
-void HttpTestServer::add_endpoint(const std::string& path,
+std::shared_ptr<void> HttpTestServer::add_endpoint(const std::string& path,
 	std::vector<std::pair<std::string, std::string>> expectedHeaders,
 	std::uint16_t status,
 	std::vector<std::pair<std::string, std::string>> responseHeaders,
@@ -61,6 +61,18 @@ void HttpTestServer::add_endpoint(const std::string& path,
 	process.write_binary(body.data(), body.size());
 
 	auto mock_id = process.read_line();
+
+	// Use shared_ptr's custom deleter feature to automatically remove endpoint
+	// when the shared_ptr goes out of scope
+	return std::shared_ptr<void>(nullptr, [=](void*) {
+		remove_endpoint(mock_id);
+	});
+}
+
+void HttpTestServer::remove_endpoint(const std::string& mockId)
+{
+	process.write_line("remove_endpoint");
+	process.write_line(mockId);
 }
 
 } // namespace test_helpers

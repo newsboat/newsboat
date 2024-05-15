@@ -20,7 +20,7 @@ TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
 
 	auto& testServer = test_helpers::HttpTestServer::get_instance();
-	testServer.add_endpoint("/feed", {}, 200, {
+	auto endpointLifetime = testServer.add_endpoint("/feed", {}, 200, {
 		{"content-type", "text/xml"},
 	}, feed_xml);
 

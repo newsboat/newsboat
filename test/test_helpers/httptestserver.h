@@ -4,6 +4,7 @@
 #include "inputoutputprocess.h"
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -21,13 +22,17 @@ public:
 	static HttpTestServer& get_instance();
 
 	std::string get_address();
-	void add_endpoint(const std::string& path,
+
+	// Returns a shared_ptr which will remove the endpoint when it goes out of scope
+	std::shared_ptr<void> add_endpoint(const std::string& path,
 		std::vector<std::pair<std::string, std::string>> expectedHeaders,
 		std::uint16_t status,
 		std::vector<std::pair<std::string, std::string>> responseHeaders,
 		std::vector<std::uint8_t> body);
 
 private:
+	void remove_endpoint(const std::string& mockId);
+
 	InputOutputProcess process;
 	std::string address;
 };
