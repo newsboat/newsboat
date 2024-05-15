@@ -25,6 +25,7 @@ fn main() {
             "exit" => break,
             "add_endpoint" => add_endpoint(&server),
             "remove_endpoint" => remove_endpoint(&server),
+            "num_hits" => num_hits(&server),
             _ => (),
         };
     }
@@ -93,4 +94,11 @@ fn remove_endpoint(server: &MockServer) {
     let mock_id: usize = read_line().parse().unwrap();
     let mut mock = Mock::new(mock_id, server);
     mock.delete();
+}
+
+fn num_hits(server: &MockServer) {
+    let mock_id: usize = read_line().parse().unwrap();
+    let mock = Mock::new(mock_id, server);
+
+    println!("{}", mock.hits());
 }

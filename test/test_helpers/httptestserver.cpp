@@ -34,7 +34,7 @@ std::string HttpTestServer::get_address()
 	return address;
 }
 
-std::shared_ptr<void> HttpTestServer::add_endpoint(const std::string& path,
+HttpTestServer::MockRegistration HttpTestServer::add_endpoint(const std::string& path,
 	std::vector<std::pair<std::string, std::string>> expectedHeaders,
 	std::uint16_t status,
 	std::vector<std::pair<std::string, std::string>> responseHeaders,
@@ -60,19 +60,32 @@ std::shared_ptr<void> HttpTestServer::add_endpoint(const std::string& path,
 	process.write_line(std::to_string(body.size()));
 	process.write_binary(body.data(), body.size());
 
-	auto mock_id = process.read_line();
+	const auto mockId = process.read_line();
 
 	// Use shared_ptr's custom deleter feature to automatically remove endpoint
 	// when the shared_ptr goes out of scope
-	return std::shared_ptr<void>(nullptr, [=](void*) {
-		remove_endpoint(mock_id);
+	const auto lifetime = std::shared_ptr<void>(nullptr, [=](void*) {
+		remove_endpoint(mockId);
 	});
+	return MockRegistration {
+		lifetime,
+		mockId,
+	};
 }
 
 void HttpTestServer::remove_endpoint(const std::string& mockId)
 {
 	process.write_line("remove_endpoint");
 	process.write_line(mockId);
+}
+
+std::uint32_t HttpTestServer::num_hits(HttpTestServer::MockRegistration& mockRegistration)
+{
+	process.write_line("num_hits");
+	process.write_line(mockRegistration.mockId);
+
+	const auto numHits = process.read_line();
+	return std::stoul(numHits);
 }
 
 } // namespace test_helpers
