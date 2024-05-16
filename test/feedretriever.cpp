@@ -4,6 +4,7 @@
 #include "cache.h"
 #include "configcontainer.h"
 #include "curlhandle.h"
+#include "rss/exception.h"
 #include "rssfeed.h"
 #include "strprintf.h"
 #include "test/test_helpers/httptestserver.h"
@@ -90,4 +91,30 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
 	// See https://github.com/newsboat/newsboat/issues/2732
 	REQUIRE(testServer.num_hits(mockRegistration) == 5);
 	//REQUIRE(testServer.num_Hits(mockRegistration) == 1);
+}
+
+TEST_CASE("Feed retriever throws on HTTP error status codes", "[FeedRetriever]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	CurlHandle easyHandle;
+	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+
+	auto& testServer = test_helpers::HttpTestServer::get_instance();
+	const auto address = testServer.get_address();
+	const auto url = strprintf::fmt("http://%s/feed", address);
+
+	SECTION("Client errors: HTTP status code 4xx") {
+		auto mockRegistration = testServer.add_endpoint("/feed", {}, 404, {}, {});
+
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::Exception);
+		REQUIRE(testServer.num_hits(mockRegistration) == 1);
+	}
+
+	SECTION("Server errors: HTTP status code 5xx") {
+		auto mockRegistration = testServer.add_endpoint("/feed", {}, 500, {}, {});
+
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::Exception);
+		REQUIRE(testServer.num_hits(mockRegistration) == 1);
+	}
 }

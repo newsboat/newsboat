@@ -114,7 +114,10 @@ std::vector<std::uint8_t> InputOutputProcess::read_binary(std::size_t length)
 {
 	std::vector<std::uint8_t> buffer;
 	buffer.resize(length);
-	fread(buffer.data(), buffer.size(), 1, stdoutStream);
+	const auto bytesRead = fread(buffer.data(), buffer.size(), 1, stdoutStream);
+	if (bytesRead != length) {
+		throw std::runtime_error("Failed to read binary data from pipe");
+	}
 
 	return buffer;
 }
