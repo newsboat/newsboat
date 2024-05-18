@@ -1,8 +1,5 @@
 #include "matcher.h"
 
-#include <cassert>
-#include <cinttypes>
-#include <ctime>
 #include <regex.h>
 #include <sstream>
 #include <vector>

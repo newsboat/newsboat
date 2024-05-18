@@ -1,11 +1,10 @@
-#include <cstring>
-#include <errno.h>
 #include <iostream>
 
 #include "config.h"
 #include "exception.h"
 #include "pbcontroller.h"
 #include "pbview.h"
+#include "strprintf.h"
 #include "utils.h"
 
 extern "C" {

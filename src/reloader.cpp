@@ -1,7 +1,6 @@
 #include "reloader.h"
 
 #include <algorithm>
-#include <cinttypes>
 #include <iostream>
 #include <ncurses.h>
 #include <thread>
@@ -11,6 +10,7 @@
 #include "dbexception.h"
 #include "feedretriever.h"
 #include "fmtstrformatter.h"
+#include "logger.h"
 #include "matcherexception.h"
 #include "reloadthread.h"
 #include "rss/exception.h"

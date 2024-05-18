@@ -1,5 +1,7 @@
 #include "searchresultslistformaction.h"
+
 #include "keymap.h"
+#include "logger.h"
 
 namespace newsboat {
 SearchResultsListFormAction::SearchResultsListFormAction(View& vv,

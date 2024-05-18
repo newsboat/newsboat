@@ -8,7 +8,6 @@
 #include "cache.h"
 #include "configpaths.h"
 #include "controller.h"
-#include "feedlistformaction.h"
 #include "itemlist.h"
 #include "keymap.h"
 #include "regexmanager.h"

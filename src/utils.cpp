@@ -1,31 +1,23 @@
 #include "utils.h"
-#include <iostream>
 
-#include <algorithm>
 #include <cinttypes>
-#include <cmath>
-#include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <curl/curl.h>
 #include <cwchar>
-#include <errno.h>
 #include <fcntl.h>
 #include <iconv.h>
 #include <langinfo.h>
 #include <libxml/uri.h>
-#include <locale>
 #include <mutex>
 #include <pwd.h>
-#include <regex>
 #include <sstream>
 #include <stfl.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/utsname.h>
 #include <unistd.h>
-#include <unordered_set>
 
 #if HAVE_GCRYPT
 #include <gnutls/gnutls.h>
@@ -47,7 +39,7 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include "config.h"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
-#include "htmlrenderer.h"
+#include "links.h"
 #include "logger.h"
 #include "strprintf.h"
 

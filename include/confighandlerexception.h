@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_CONFIGHANDLEREXCEPTION_H_
 #define NEWSBOAT_CONFIGHANDLEREXCEPTION_H_
 
-#include <stdexcept>
 #include <string>
 
 namespace newsboat {

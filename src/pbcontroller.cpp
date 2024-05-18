@@ -1,8 +1,5 @@
 #include "pbcontroller.h"
 
-#include <cinttypes>
-#include <cstdint>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <getopt.h>
@@ -21,7 +18,6 @@
 #include "configexception.h"
 #include "configparser.h"
 #include "logger.h"
-#include "matcherexception.h"
 #include "nullconfigactionhandler.h"
 #include "pbview.h"
 #include "poddlthread.h"

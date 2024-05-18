@@ -5,7 +5,6 @@
 
 #include "config.h"
 #include "fmtstrformatter.h"
-#include "listformatter.h"
 #include "stflrichtext.h"
 #include "strprintf.h"
 #include "utils.h"

@@ -1,7 +1,6 @@
 #include "queueloader.h"
 
 #include <cerrno>
-#include <cstdlib>
 #include <cstdio>
 #include <cstring>
 #include <fstream>
@@ -12,7 +11,6 @@
 #include "config.h"
 #include "configcontainer.h"
 #include "logger.h"
-#include "stflpp.h"
 #include "strprintf.h"
 #include "utils.h"
 

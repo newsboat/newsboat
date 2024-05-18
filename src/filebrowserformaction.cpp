@@ -7,17 +7,13 @@
 #include <ncurses.h>
 #include <dirent.h>
 #include <grp.h>
-#include <iomanip>
-#include <iostream>
 #include <pwd.h>
-#include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include "config.h"
 #include "fmtstrformatter.h"
-#include "listformatter.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"

@@ -2,7 +2,6 @@
 #define NEWSBOAT_DIALOGSFORMACTION_H_
 
 #include "listformaction.h"
-#include "listwidget.h"
 #include "regexmanager.h"
 
 namespace newsboat {

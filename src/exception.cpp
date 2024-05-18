@@ -2,8 +2,6 @@
 
 #include <cstring>
 
-#include "config.h"
-
 namespace newsboat {
 
 Exception::Exception(unsigned int error_code)

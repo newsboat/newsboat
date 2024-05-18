@@ -8,9 +8,7 @@
 #include <iostream>
 #include <istream>
 #include <sstream>
-#include <stdexcept>
 
-#include "config.h"
 #include "logger.h"
 #include "utils.h"
 

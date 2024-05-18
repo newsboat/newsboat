@@ -4,7 +4,6 @@
 
 #include "confighandlerexception.h"
 #include "matchable.h"
-#include "matcherexception.h"
 #include "stflrichtext.h"
 
 using namespace newsboat;

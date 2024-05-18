@@ -1,5 +1,3 @@
-#include <cstring>
-#include <errno.h>
 #include <iostream>
 #include <ncurses.h>
 #include <sstream>

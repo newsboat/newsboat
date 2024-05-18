@@ -4,7 +4,6 @@
 #include <chrono>
 #include <fstream>
 #include <memory>
-#include <thread>
 #include <time.h>
 
 #include "configcontainer.h"

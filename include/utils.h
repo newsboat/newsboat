@@ -4,8 +4,6 @@
 #include <cstdint>
 #include <curl/curl.h>
 #include <libxml/parser.h>
-#include <memory>
-#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -14,7 +12,6 @@
 #include "3rd-party/optional.hpp"
 
 #include "configcontainer.h"
-#include "logger.h"
 
 #include "libnewsboat-ffi/src/utils.rs.h"
 

@@ -7,7 +7,6 @@
 #include <ctime>
 #include <curl/curl.h>
 #include <fstream>
-#include <functional>
 #include <iostream>
 #include <langinfo.h>
 #include <libgen.h>
@@ -16,7 +15,6 @@
 #include <libxml/xmlsave.h>
 #include <libxml/xmlversion.h>
 #include <memory>
-#include <mutex>
 #include <pwd.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -53,6 +51,7 @@
 #include "ocnewsurlreader.h"
 #include "oldreaderapi.h"
 #include "oldreaderurlreader.h"
+#include "opml.h"
 #include "opmlurlreader.h"
 #include "regexmanager.h"
 #include "remoteapi.h"

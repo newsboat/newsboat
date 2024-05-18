@@ -2,6 +2,7 @@
 
 #include <cstring>
 
+#include "logger.h"
 #include "utils.h"
 
 namespace newsboat {

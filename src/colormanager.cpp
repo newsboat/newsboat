@@ -3,17 +3,8 @@
 #include "config.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
-#include "feedlistformaction.h"
-#include "filebrowserformaction.h"
-#include "helpformaction.h"
-#include "itemlistformaction.h"
-#include "itemviewformaction.h"
 #include "logger.h"
-#include "matcherexception.h"
-#include "pbview.h"
-#include "selectformaction.h"
 #include "strprintf.h"
-#include "urlviewformaction.h"
 #include "utils.h"
 
 using namespace podboat;

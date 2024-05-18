@@ -2,7 +2,6 @@
 #define NEWSBOAT_STATUSLINE_H_
 
 #include <cstdint>
-#include <functional>
 #include <memory>
 #include <mutex>
 #include <string>

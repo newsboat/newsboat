@@ -7,7 +7,6 @@
 #include "configcontainer.h"
 #include "file_system.h"
 #include "formaction.h"
-#include "listformatter.h"
 #include "listwidget.h"
 #include "stflrichtext.h"
 

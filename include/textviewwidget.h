@@ -2,7 +2,6 @@
 #define NEWSBOAT_TEXTVIEWWIDGET_H_
 
 #include <cstdint>
-#include <memory>
 #include <string>
 
 #include "stflpp.h"

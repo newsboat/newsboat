@@ -1,24 +1,18 @@
 #include "rssparser.h"
 
 #include <algorithm>
-#include <cerrno>
 #include <cinttypes>
-#include <cstring>
 #include <curl/curl.h>
-#include <sstream>
 
 #include "cache.h"
-#include "config.h"
 #include "configcontainer.h"
 #include "curlhandle.h"
 #include "htmlrenderer.h"
 #include "logger.h"
-#include "rss/exception.h"
 #include "rss/parser.h"
 #include "rss/rssparser.h"
 #include "rssfeed.h"
 #include "rssignores.h"
-#include "strprintf.h"
 #include "utils.h"
 
 namespace newsboat {

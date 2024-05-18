@@ -1,8 +1,6 @@
 #ifndef NEWSBOAT_RELOADTHREAD_H_
 #define NEWSBOAT_RELOADTHREAD_H_
 
-#include <thread>
-
 #include "configcontainer.h"
 #include "controller.h"
 

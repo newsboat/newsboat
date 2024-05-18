@@ -10,7 +10,6 @@
 #include "configcontainer.h"
 #include "rssfeed.h"
 #include "rssitem.h"
-#include "utils.h"
 
 using namespace newsboat;
 

@@ -1,5 +1,6 @@
 #include "links.h"
 #include "utils.h"
+
 namespace newsboat {
 unsigned int Links::add_link(const std::string& url, LinkType type)
 {

@@ -1,9 +1,6 @@
 #include "configparser.h"
 
 #include <algorithm>
-#include <cstdlib>
-#include <cstring>
-#include <fstream>
 #include <pwd.h>
 #include <sys/types.h>
 
@@ -12,7 +9,6 @@
 #include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"
-#include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {

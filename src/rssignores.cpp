@@ -1,29 +1,17 @@
 #include "rssignores.h"
 
 #include <algorithm>
-#include <cerrno>
-#include <cstring>
 #include <curl/curl.h>
-#include <functional>
-#include <iostream>
 #include <langinfo.h>
-#include <sstream>
 #include <sys/utsname.h>
-#include <string.h>
-#include <time.h>
 
 #include "cache.h"
 #include "config.h"
-#include "configcontainer.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
-#include "dbexception.h"
-#include "htmlrenderer.h"
 #include "logger.h"
-#include "rssfeed.h"
 #include "regexowner.h"
 #include "strprintf.h"
-#include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {

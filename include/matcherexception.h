@@ -2,7 +2,6 @@
 #define NEWSBOAT_MATCHEREXCEPTON_H_
 
 #include <cstdint>
-#include <stdexcept>
 #include <string>
 
 namespace newsboat {

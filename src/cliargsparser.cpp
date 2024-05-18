@@ -1,7 +1,5 @@
 #include "cliargsparser.h"
 
-#include <cstdlib>
-
 namespace newsboat {
 
 rust::Vec<cliargsparser::bridged::BytesVec> argv_to_rust_args(int argc, char* argv[])

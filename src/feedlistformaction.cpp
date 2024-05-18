@@ -5,8 +5,6 @@
 #include <cstdint>
 #include <cstring>
 #include <langinfo.h>
-#include <numeric>
-#include <sstream>
 #include <string>
 
 #include "config.h"

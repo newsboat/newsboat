@@ -1,6 +1,5 @@
 #include "feedhqapi.h"
 
-#include <cstring>
 #include <curl/curl.h>
 #include <json.h>
 #include <vector>
@@ -8,6 +7,7 @@
 #include "config.h"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
+#include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
 

@@ -3,6 +3,7 @@
 #include <cstring>
 #include <fstream>
 
+#include "config.h"
 #include "strprintf.h"
 #include "utils.h"
 

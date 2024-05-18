@@ -1,11 +1,8 @@
 #include "pbview.h"
 
 #include <cinttypes>
-#include <cstdio>
 #include <cstring>
 #include <ncurses.h>
-#include <iostream>
-#include <sstream>
 
 #include "config.h"
 #include "configcontainer.h"
@@ -17,7 +14,6 @@
 #include "logger.h"
 #include "pbcontroller.h"
 #include "strprintf.h"
-#include "utils.h"
 
 using namespace newsboat;
 

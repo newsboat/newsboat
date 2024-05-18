@@ -1,13 +1,9 @@
 #include "view.h"
 
 #include <assert.h>
-#include <cerrno>
-#include <cstdio>
 #include <cstring>
 #include <dirent.h>
-#include <fstream>
 #include <grp.h>
-#include <iomanip>
 #include <iostream>
 #include <libgen.h>
 #include <limits.h>
@@ -16,7 +12,6 @@
 #include <string.h>
 #include <sys/param.h>
 #include <sys/types.h>
-#include <time.h>
 #include <unistd.h>
 
 extern "C" {
@@ -35,7 +30,6 @@ extern "C" {
 #include "dirbrowserformaction.h"
 #include "emptyformaction.h"
 #include "empty.h"
-#include "exception.h"
 #include "feedlist.h"
 #include "feedlistformaction.h"
 #include "filebrowser.h"
@@ -44,7 +38,6 @@ extern "C" {
 #include "formaction.h"
 #include "help.h"
 #include "helpformaction.h"
-#include "htmlrenderer.h"
 #include "itemlist.h"
 #include "itemlistformaction.h"
 #include "itemview.h"
@@ -53,8 +46,6 @@ extern "C" {
 #include "keymap.h"
 #include "logger.h"
 #include "matcherexception.h"
-#include "regexmanager.h"
-#include "reloadthread.h"
 #include "rssfeed.h"
 #include "selectformaction.h"
 #include "selecttag.h"

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <glob.h>
 #include <iostream>
+#include "logger.h"
 #include <unistd.h>
 
 #include "configcontainer.h"

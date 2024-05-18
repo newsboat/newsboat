@@ -2,7 +2,6 @@
 #define NEWSBOAT_DBEXCEPTION_H_
 
 #include <sqlite3.h>
-#include <stdexcept>
 #include <string>
 
 namespace newsboat {

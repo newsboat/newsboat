@@ -5,7 +5,9 @@
 
 #include "configcontainer.h"
 #include "htmlrenderer.h"
+#include "logger.h"
 #include "rssfeed.h"
+#include "strprintf.h"
 #include "textformatter.h"
 #include "utils.h"
 

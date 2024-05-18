@@ -3,7 +3,6 @@
 #include <string>
 
 #include "config.h"
-#include "pbcontroller.h"
 
 namespace podboat {
 

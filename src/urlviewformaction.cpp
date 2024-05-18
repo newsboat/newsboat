@@ -1,11 +1,9 @@
 #include "urlviewformaction.h"
 
-#include <sstream>
 #include <string>
 
 #include "config.h"
 #include "fmtstrformatter.h"
-#include "listformatter.h"
 #include "rssfeed.h"
 #include "stflrichtext.h"
 #include "strprintf.h"

@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_CURLDATARECEIVER_H_
 #define NEWSBOAT_CURLDATARECEIVER_H_
 
-#include <cstdint>
 #include <memory>
 #include <string>
 

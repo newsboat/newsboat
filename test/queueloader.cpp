@@ -1,7 +1,5 @@
 #include "queueloader.h"
 
-#include <fstream>
-
 #include "3rd-party/catch.hpp"
 #include "test_helpers/chmod.h"
 #include "test_helpers/misc.h"

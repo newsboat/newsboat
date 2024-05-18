@@ -10,6 +10,7 @@
 
 #include "curldatareceiver.h"
 #include "curlhandle.h"
+#include "logger.h"
 #include "utils.h"
 
 #define OCNEWS_API "/index.php/apps/news/api/v1-2/"

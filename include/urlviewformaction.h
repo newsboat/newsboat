@@ -2,7 +2,7 @@
 #define NEWSBOAT_URLVIEWFORMACTION_H_
 
 #include "formaction.h"
-#include "htmlrenderer.h"
+#include "links.h"
 #include "listwidget.h"
 
 namespace newsboat {

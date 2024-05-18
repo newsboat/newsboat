@@ -7,6 +7,7 @@
 
 #include "3rd-party/json.hpp"
 #include "curlhandle.h"
+#include "logger.h"
 #include "rss/feed.h"
 #include "strprintf.h"
 #include "utils.h"

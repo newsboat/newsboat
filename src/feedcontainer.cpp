@@ -4,8 +4,8 @@
 #include <numeric>   // accumulate
 #include <unordered_set>
 
+#include "logger.h"
 #include "rssfeed.h"
-#include "utils.h"
 
 namespace newsboat {
 

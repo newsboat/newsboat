@@ -3,7 +3,6 @@
 #include <cstring>
 #include <cinttypes>
 #include <curl/curl.h>
-#include <iostream>
 #include <libgen.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -11,7 +10,6 @@
 #include <unistd.h>
 
 #include "curlhandle.h"
-#include "config.h"
 #include "logger.h"
 #include "utils.h"
 

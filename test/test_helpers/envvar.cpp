@@ -1,5 +1,7 @@
 #include "envvar.h"
 
+#include <stdexcept>
+
 #include "3rd-party/catch.hpp"
 
 test_helpers::EnvVar::EnvVar(std::string name_)
