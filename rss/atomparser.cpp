@@ -1,7 +1,5 @@
 #include "atomparser.h"
 
-#include <cstring>
-
 #include "config.h"
 #include "exception.h"
 #include "feed.h"

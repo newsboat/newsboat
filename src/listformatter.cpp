@@ -1,8 +1,8 @@
 #include "listformatter.h"
 
-#include <assert.h>
 #include <limits.h>
 
+#include "logger.h"
 #include "stflpp.h"
 #include "stflrichtext.h"
 #include "strprintf.h"

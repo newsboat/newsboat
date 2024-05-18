@@ -1,20 +1,17 @@
 #include "utils.h"
 
-#include <algorithm>
 #include <chrono>
 #include <condition_variable>
-#include <ctype.h>
 #include <fstream>
 #include <memory>
 #include <mutex>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <thread>
-#include <tuple>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
-#include "htmlrenderer.h"
+#include "links.h"
 #include "test_helpers/chdir.h"
 #include "test_helpers/envvar.h"
 #include "test_helpers/stringmaker/optional.h"

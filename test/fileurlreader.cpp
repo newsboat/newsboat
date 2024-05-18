@@ -1,14 +1,12 @@
 #include "fileurlreader.h"
 
 #include <fstream>
-#include <map>
 #include <unistd.h>
 
 #include "3rd-party/catch.hpp"
 #include "test_helpers/chmod.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
-#include "utils.h"
 
 using namespace newsboat;
 

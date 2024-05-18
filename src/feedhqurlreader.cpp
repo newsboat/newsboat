@@ -1,5 +1,6 @@
 #include "feedhqurlreader.h"
 
+#include "config.h"
 #include "configcontainer.h"
 #include "fileurlreader.h"
 #include "logger.h"

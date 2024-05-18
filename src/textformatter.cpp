@@ -1,11 +1,10 @@
 #include "textformatter.h"
 
 #include <algorithm>
-#include <assert.h>
 #include <cinttypes>
-#include <limits.h>
 
 #include "htmlrenderer.h"
+#include "logger.h"
 #include "regexmanager.h"
 #include "stflpp.h"
 #include "stflrichtext.h"

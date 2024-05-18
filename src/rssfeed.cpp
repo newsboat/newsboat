@@ -1,15 +1,11 @@
 #include "rssfeed.h"
 
 #include <algorithm>
-#include <cerrno>
 #include <cinttypes>
 #include <cstring>
 #include <curl/curl.h>
-#include <functional>
-#include <iostream>
 #include <langinfo.h>
 #include <random>
-#include <sstream>
 #include <string.h>
 #include <sys/utsname.h>
 #include <time.h>
@@ -17,13 +13,9 @@
 #include "cache.h"
 #include "config.h"
 #include "configcontainer.h"
-#include "confighandlerexception.h"
-#include "dbexception.h"
-#include "htmlrenderer.h"
 #include "logger.h"
 #include "scopemeasure.h"
 #include "strprintf.h"
-#include "tagsouppullparser.h"
 #include "utils.h"
 
 namespace newsboat {

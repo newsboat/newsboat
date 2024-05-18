@@ -1,9 +1,8 @@
 #ifndef NEWSBOAT_LINKS_H_
 #define NEWSBOAT_LINKS_H_
 
-#include <vector>
-#include <utility>
 #include <string>
+#include <vector>
 
 #include "config.h"
 

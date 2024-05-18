@@ -3,7 +3,6 @@
 
 #include <libxml/tree.h>
 
-#include "cache.h"
 #include "remoteapi.h"
 
 namespace newsboat {

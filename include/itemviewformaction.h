@@ -2,7 +2,7 @@
 #define NEWSBOAT_ITEMVIEWFORMACTION_H_
 
 #include "formaction.h"
-#include "htmlrenderer.h"
+#include "links.h"
 #include "regexmanager.h"
 #include "textformatter.h"
 #include "textviewwidget.h"

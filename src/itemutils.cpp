@@ -1,5 +1,7 @@
-#include "controller.h"
 #include "itemutils.h"
+
+#include "controller.h"
+#include "strprintf.h"
 
 namespace newsboat {
 

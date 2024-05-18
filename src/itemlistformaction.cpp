@@ -1,6 +1,5 @@
 #include <itemlistformaction.h>
 
-#include <cassert>
 #include <cinttypes>
 #include <cstdio>
 #include <cstring>
@@ -16,6 +15,7 @@
 #include "dbexception.h"
 #include "fmtstrformatter.h"
 #include "formaction.h"
+#include "htmlrenderer.h"
 #include "itemutils.h"
 #include "logger.h"
 #include "matcherexception.h"

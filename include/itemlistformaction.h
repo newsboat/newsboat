@@ -1,8 +1,6 @@
 #ifndef NEWSBOAT_ITEMLISTFORMACTION_H_
 #define NEWSBOAT_ITEMLISTFORMACTION_H_
 
-#include <assert.h>
-
 #include "3rd-party/optional.hpp"
 
 #include "configcontainer.h"

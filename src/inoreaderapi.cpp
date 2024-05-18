@@ -6,9 +6,9 @@
 #include <vector>
 #include <thread>
 
-#include "config.h"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
+#include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
 

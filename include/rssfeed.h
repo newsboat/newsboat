@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "config.h"
 #include "matchable.h"
 #include "rssitem.h"
 #include "utils.h"

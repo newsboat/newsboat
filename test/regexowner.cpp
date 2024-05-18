@@ -1,7 +1,6 @@
 #include "regexowner.h"
 
 #include <regex.h>
-#include <utility>
 
 #include "3rd-party/catch.hpp"
 

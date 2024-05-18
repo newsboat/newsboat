@@ -1,6 +1,5 @@
 #include "htmlrenderer.h"
 
-#include <fstream>
 #include <sstream>
 
 #include "3rd-party/catch.hpp"

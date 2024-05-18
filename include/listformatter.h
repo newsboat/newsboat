@@ -1,9 +1,7 @@
 #ifndef NEWSBOAT_LISTFORMATTER_H_
 #define NEWSBOAT_LISTFORMATTER_H_
 
-#include <climits>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "regexmanager.h"

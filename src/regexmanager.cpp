@@ -1,9 +1,5 @@
 #include "regexmanager.h"
 
-#include <cstring>
-#include <iostream>
-#include <stack>
-
 #include "config.h"
 #include "confighandlerexception.h"
 #include "configparser.h"

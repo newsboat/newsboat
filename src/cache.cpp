@@ -2,21 +2,18 @@
 
 #include <cassert>
 #include <cinttypes>
-#include <cstdlib>
 #include <cstring>
-#include <fstream>
 #include <iostream>
 #include <sqlite3.h>
 #include <sstream>
 #include <time.h>
 
-#include "config.h"
 #include "configcontainer.h"
-#include "controller.h"
 #include "dbexception.h"
 #include "logger.h"
 #include "matcherexception.h"
 #include "rssfeed.h"
+#include "rssignores.h"
 #include "scopemeasure.h"
 #include "strprintf.h"
 #include "utils.h"

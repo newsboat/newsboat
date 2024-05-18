@@ -3,10 +3,8 @@
 
 #include <libxml/tree.h>
 
-#include "cache.h"
 #include "remoteapi.h"
 #include "rss/feed.h"
-#include "3rd-party/json.hpp"
 #include "utils.h"
 
 class CurlHandle;

@@ -3,7 +3,6 @@
 
 #include <map>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "configactionhandler.h"

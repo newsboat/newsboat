@@ -8,7 +8,7 @@
 
 #include "3rd-party/optional.hpp"
 
-#include "htmlrenderer.h"
+#include "links.h"
 #include "statusline.h"
 
 namespace newsboat {

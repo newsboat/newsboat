@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "htmlrenderer.h"
+#include "links.h"
 #include "textformatter.h"
 
 namespace newsboat {

@@ -1,6 +1,5 @@
 #include "keycombination.h"
 
-#include <locale>
 #include <tuple>
 
 namespace newsboat {

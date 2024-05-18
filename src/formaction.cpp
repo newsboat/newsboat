@@ -2,15 +2,12 @@
 
 #include <cassert>
 #include <cinttypes>
-#include <exception>
 #include <ncurses.h>
 
 #include "config.h"
 #include "configexception.h"
 #include "controller.h"
-#include "listmovementcontrol.h"
 #include "logger.h"
-#include "matcherexception.h"
 #include "strprintf.h"
 #include "textviewwidget.h"
 #include "utils.h"

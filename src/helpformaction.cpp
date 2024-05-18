@@ -1,8 +1,6 @@
 #include "helpformaction.h"
 
-#include <algorithm>
 #include <cstring>
-#include <sstream>
 
 #include "config.h"
 #include "fmtstrformatter.h"

@@ -2,7 +2,6 @@
 
 #include "stflpp.h"
 #include "stflrichtext.h"
-#include "utils.h"
 
 #include "3rd-party/catch.hpp"
 #include <cstdint>

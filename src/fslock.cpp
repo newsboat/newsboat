@@ -1,12 +1,8 @@
 #include "fslock.h"
 
-#include <cerrno>
 #include <fcntl.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#include "logger.h"
 
 namespace newsboat {
 

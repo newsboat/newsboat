@@ -1,8 +1,9 @@
 #ifndef NEWSBOAT_TTRSSAPI_H_
 #define NEWSBOAT_TTRSSAPI_H_
 
+#include <mutex>
+
 #include "3rd-party/json.hpp"
-#include "cache.h"
 #include "remoteapi.h"
 
 namespace rsspp {

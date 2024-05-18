@@ -1,11 +1,11 @@
 #include "opml.h"
 
 #include <algorithm>
-#include <cassert>
 #include <cinttypes>
 #include <cstring>
 #include <sstream>
 
+#include "logger.h"
 #include "rssfeed.h"
 
 namespace newsboat {

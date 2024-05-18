@@ -12,7 +12,6 @@
 #include "itemlistformaction.h"
 #include "itemrenderer.h"
 #include "itemutils.h"
-#include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"

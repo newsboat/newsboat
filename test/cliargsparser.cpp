@@ -1,7 +1,5 @@
 #include "3rd-party/catch.hpp"
 
-#include <cstring>
-
 #include "cliargsparser.h"
 #include "test_helpers/envvar.h"
 #include "test_helpers/opts.h"

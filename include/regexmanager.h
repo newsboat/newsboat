@@ -4,7 +4,6 @@
 #include <map>
 #include <memory>
 #include <regex.h>
-#include <regex>
 #include <string>
 #include <sys/types.h>
 #include <utility>

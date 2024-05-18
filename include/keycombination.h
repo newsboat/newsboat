@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_KEYCOMBINATION_H_
 #define NEWSBOAT_KEYCOMBINATION_H_
 
-#include <ostream>
 #include <string>
 
 namespace newsboat {

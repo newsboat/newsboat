@@ -4,6 +4,7 @@
 #include <libxml/uri.h>
 
 #include "fmtstrformatter.h"
+#include "logger.h"
 #include "rssfeed.h"
 #include "utils.h"
 

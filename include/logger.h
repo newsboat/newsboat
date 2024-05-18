@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_LOGGER_H_
 #define NEWSBOAT_LOGGER_H_
 
-#include "config.h"
 #include "strprintf.h"
 
 #include "libnewsboat-ffi/src/logger.rs.h"

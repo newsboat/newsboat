@@ -4,9 +4,6 @@
 #include <ctime>
 #include <libxml/tree.h>
 
-#include "exception.h"
-#include "xmlutilities.h"
-
 #include "utils.h"
 
 namespace rsspp {

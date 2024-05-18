@@ -7,7 +7,6 @@
 #include <iostream>
 #include <libgen.h>
 #include <sstream>
-#include <stdexcept>
 
 #include "config.h"
 #include "logger.h"
