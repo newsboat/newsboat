@@ -95,16 +95,6 @@ static size_t handle_headers(void* ptr, size_t size, size_t nmemb, void* data)
 }
 
 Feed Parser::parse_url(const std::string& url,
-	time_t lastmodified,
-	const std::string& etag,
-	newsboat::RemoteApi* api,
-	const std::string& cookie_cache)
-{
-	CurlHandle handle;
-	return parse_url(url, handle, lastmodified, etag, api, cookie_cache);
-}
-
-Feed Parser::parse_url(const std::string& url,
 	newsboat::CurlHandle& easyhandle,
 	time_t lastmodified,
 	const std::string& etag,

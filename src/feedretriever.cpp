@@ -21,8 +21,8 @@
 
 namespace newsboat {
 
-FeedRetriever::FeedRetriever(ConfigContainer& cfg, Cache& ch, RssIgnores* ign,
-	RemoteApi* api, CurlHandle* easyhandle)
+FeedRetriever::FeedRetriever(ConfigContainer& cfg, Cache& ch, CurlHandle&
+	easyhandle, RssIgnores* ign, RemoteApi* api)
 	: cfg(cfg)
 	, ch(ch)
 	, ign(ign)
@@ -85,13 +85,7 @@ rsspp::Feed FeedRetriever::fetch_ttrss(const std::string& feed_id)
 	rsspp::Feed f;
 	TtRssApi* tapi = dynamic_cast<TtRssApi*>(api);
 	if (tapi) {
-		if (easyhandle) {
-			f = tapi->fetch_feed(
-					feed_id, *easyhandle);
-		} else {
-			f = tapi->fetch_feed(
-					feed_id);
-		}
+		f = tapi->fetch_feed(feed_id, easyhandle);
 	}
 	LOG(Level::DEBUG,
 		"FeedRetriever::fetch_ttrss: f.items.size = %" PRIu64,
@@ -133,11 +127,7 @@ rsspp::Feed FeedRetriever::fetch_miniflux(const std::string& feed_id)
 	rsspp::Feed f;
 	MinifluxApi* mapi = dynamic_cast<MinifluxApi*>(api);
 	if (mapi) {
-		if (easyhandle) {
-			f = mapi->fetch_feed(feed_id, *easyhandle);
-		} else {
-			f = mapi->fetch_feed(feed_id);
-		}
+		f = mapi->fetch_feed(feed_id, easyhandle);
 	}
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_miniflux: f.items.size = %" PRIu64,
@@ -151,12 +141,7 @@ rsspp::Feed FeedRetriever::fetch_feedbin(const std::string& feed_id)
 	rsspp::Feed f;
 	FeedbinApi* fapi = dynamic_cast<FeedbinApi*>(api);
 	if (fapi) {
-		if (easyhandle) {
-			f = fapi->fetch_feed(feed_id, *easyhandle);
-		} else {
-			f = fapi->fetch_feed(feed_id);
-		}
-
+		f = fapi->fetch_feed(feed_id, easyhandle);
 	}
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_feedbin: f.items.size = %" PRIu64,
@@ -170,12 +155,7 @@ rsspp::Feed FeedRetriever::fetch_freshrss(const std::string& feed_id)
 	rsspp::Feed f;
 	FreshRssApi* fapi = dynamic_cast<FreshRssApi*>(api);
 	if (fapi) {
-		if (easyhandle) {
-			f = fapi->fetch_feed(feed_id, *easyhandle);
-		} else {
-			f = fapi->fetch_feed(feed_id);
-		}
-
+		f = fapi->fetch_feed(feed_id, easyhandle);
 	}
 	LOG(Level::INFO,
 		"FeedRetriever::fetch_freshrss: f.items.size = %" PRIu64,
@@ -217,20 +197,12 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 		if (!ign || !ign->matches_lastmodified(uri)) {
 			ch.fetch_lastmodified(uri, lm, etag);
 		}
-		if (easyhandle) {
-			f = p.parse_url(uri,
-					*easyhandle,
-					lm,
-					etag,
-					api,
-					cfg.get_configvalue("cookie-cache"));
-		} else {
-			f = p.parse_url(uri,
-					lm,
-					etag,
-					api,
-					cfg.get_configvalue("cookie-cache"));
-		}
+		f = p.parse_url(uri,
+				easyhandle,
+				lm,
+				etag,
+				api,
+				cfg.get_configvalue("cookie-cache"));
 		LOG(Level::DEBUG,
 			"FeedRetriever::download_http: lm = %" PRId64 " etag = %s",
 			// On GCC, `time_t` is `long int`, which is at least 32 bits

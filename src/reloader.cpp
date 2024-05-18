@@ -114,7 +114,7 @@ void Reloader::reload(unsigned int pos,
 
 			LOG(Level::INFO, "Reloader::reload: retrieving feed");
 			sm.stopover("start retrieving");
-			FeedRetriever feed_retriever(cfg, *rsscache, ign, ctrl->get_api(), &easyhandle);
+			FeedRetriever feed_retriever(cfg, *rsscache, easyhandle, ign, ctrl->get_api());
 			const rsspp::Feed feed = feed_retriever.retrieve(oldfeed->rssurl());
 
 			LOG(Level::INFO, "Reloader::reload: parsing feed");

@@ -15,8 +15,8 @@ class RssIgnores;
 
 class FeedRetriever {
 public:
-	FeedRetriever(ConfigContainer& cfg, Cache& ch, RssIgnores* ign = nullptr,
-		RemoteApi* api = nullptr, CurlHandle* easyhandle = nullptr);
+	FeedRetriever(ConfigContainer& cfg, Cache& ch, CurlHandle& easyhandle,
+		RssIgnores* ign = nullptr, RemoteApi* api = nullptr);
 
 	rsspp::Feed retrieve(const std::string& uri);
 
@@ -36,7 +36,7 @@ private:
 	Cache& ch;
 	RssIgnores* ign;
 	RemoteApi* api;
-	CurlHandle* easyhandle;
+	CurlHandle& easyhandle;
 };
 
 } // namespace newsboat

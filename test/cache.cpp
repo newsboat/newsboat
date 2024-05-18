@@ -5,6 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 #include "configcontainer.h"
+#include "curlhandle.h"
 #include "feedretriever.h"
 #include "rssfeed.h"
 #include "rssignores.h"
@@ -18,7 +19,8 @@ TEST_CASE("items in search result can be marked read", "[Cache]")
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	const std::string uri = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(uri, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(uri));
 	REQUIRE(feed->total_item_count() == 8);
@@ -45,7 +47,8 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 	auto cfg = std::make_unique<ConfigContainer>();
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
 	const std::string uri = "file://data/rss.xml";
-	FeedRetriever feed_retriever(*cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
 	RssParser parser(uri, *rsscache, *cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(uri));
 
@@ -86,7 +89,8 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[Cache]")
 	test_helpers::TempFile dbfile;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(*cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, *cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	rsscache->externalize_rssfeed(feed, false);
@@ -151,7 +155,8 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[Cache]")
 	/* Ensure that the feeds contain expected number of items, then
 	 * externalize them (put into Cache). */
 	for (const auto& feed_data : feeds) {
-		FeedRetriever feed_retriever(cfg, rsscache);
+		CurlHandle easyHandle;
+		FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 		RssParser parser(feed_data.first, rsscache, cfg, nullptr);
 		feed = parser.parse(feed_retriever.retrieve(feed_data.first));
 		REQUIRE(feed->total_item_count() == feed_data.second);
@@ -250,7 +255,8 @@ TEST_CASE(
 	auto cfg = std::make_unique<ConfigContainer>();
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
 	for (const auto& url : feedurls) {
-		FeedRetriever feed_retriever(*cfg, *rsscache);
+		CurlHandle easyHandle;
+		FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
 		RssParser parser(url, *rsscache, *cfg, nullptr);
 		auto feed = parser.parse(feed_retriever.retrieve(url));
 		feeds.push_back(feed);
@@ -358,7 +364,8 @@ TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(feedurl, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 
@@ -385,7 +392,8 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 	// We'll keep our own count of which GUIDs are unread
 	std::unordered_set<std::string> read_guids;
 	const std::string uri1 = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	auto parser = std::make_unique<RssParser>(uri1, *rsscache, cfg, nullptr);
 	auto feed = parser->parse(feed_retriever.retrieve(uri1));
 
@@ -443,7 +451,8 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 
@@ -466,7 +475,8 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 
@@ -504,7 +514,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(feedurl, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 
@@ -559,7 +570,8 @@ TEST_CASE("search_for_items finds all items with matching title or content",
 		"file://data/atom10_1.xml", "file://data/rss20_1.xml"
 	};
 	for (const auto& url : feedurls) {
-		FeedRetriever feed_retriever(cfg, rsscache);
+		CurlHandle easyHandle;
+		FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 		RssParser parser(url, rsscache, cfg, nullptr);
 		auto feed = parser.parse(feed_retriever.retrieve(url));
 
@@ -593,7 +605,8 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	rsscache->externalize_rssfeed(feed, false);
@@ -617,7 +630,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 
@@ -717,7 +731,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto initial_feed = parser.parse(feed_retriever.retrieve(feedurl));
 	initial_feed->load();
@@ -756,7 +771,8 @@ TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 
 	cfg->set_configvalue("max-items", "3");
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(*cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, *cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	REQUIRE(feed->total_item_count() == 8);
@@ -783,7 +799,8 @@ TEST_CASE(
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
 
 	const auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(*cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, *cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	REQUIRE(feed->total_item_count() == 8);
@@ -840,7 +857,8 @@ TEST_CASE("internalize_rssfeed doesn't return items that are ignored",
 	Cache rsscache(":memory:", &cfg);
 
 	const std::string feedurl("file://data/rss092_1.xml");
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(feedurl, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	REQUIRE(feed->total_item_count() == 3);
@@ -864,7 +882,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	feed->items()[0]->set_unread_nowrite(false);
@@ -901,7 +920,8 @@ TEST_CASE(
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	auto feedurl = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(feedurl, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 	feed->items()[0]->set_unread_nowrite(false);
@@ -993,7 +1013,8 @@ TEST_CASE("do_vacuum doesn't throw an exception", "[Cache]")
 	ConfigContainer cfg;
 	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 	const std::string uri = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, *rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
 	RssParser parser(uri, *rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(uri));
 	rsscache->externalize_rssfeed(feed, false);
@@ -1010,7 +1031,8 @@ TEST_CASE("search_in_items returns items that contain given substring",
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	const std::string uri = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(uri, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(uri));
 	REQUIRE(feed->total_item_count() == 8);
@@ -1052,7 +1074,8 @@ TEST_CASE("search_in_items returns empty set if input set is empty", "[Cache]")
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	const std::string uri = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(uri, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(uri));
 	rsscache.externalize_rssfeed(feed, false);
@@ -1069,7 +1092,8 @@ TEST_CASE("Ignoring articles in search", "[Cache]")
 	Cache rsscache(":memory:", &cfg);
 
 	const std::string uri = "file://data/rss.xml";
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	RssParser parser(uri, rsscache, cfg, nullptr);
 	auto feed = parser.parse(feed_retriever.retrieve(uri));
 	REQUIRE(feed->total_item_count() == 8);

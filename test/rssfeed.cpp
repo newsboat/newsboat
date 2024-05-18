@@ -3,6 +3,7 @@
 #include "3rd-party/catch.hpp"
 #include "cache.h"
 #include "configcontainer.h"
+#include "curlhandle.h"
 #include "feedretriever.h"
 #include "rssparser.h"
 
@@ -370,7 +371,8 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 {
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
-	FeedRetriever feed_retriever(cfg, rsscache);
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	const std::string uri = "file://data/items_without_titles.xml";
 	RssParser p(uri,
 		rsscache,
