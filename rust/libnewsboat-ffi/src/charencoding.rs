@@ -8,6 +8,9 @@ mod bridged {
     }
 }
 
+// Temporarily ignore clippy lint until PR is merged:
+// https://github.com/rust-lang/rust-clippy/pull/12756
+#[allow(clippy::assigning_clones)]
 fn charset_from_bom(content: &[u8], output: &mut String) -> bool {
     match charencoding::charset_from_bom(content) {
         Some(charset) => {
@@ -18,6 +21,9 @@ fn charset_from_bom(content: &[u8], output: &mut String) -> bool {
     }
 }
 
+// Temporarily ignore clippy lint until PR is merged:
+// https://github.com/rust-lang/rust-clippy/pull/12756
+#[allow(clippy::assigning_clones)]
 fn charset_from_xml_declaration(content: &[u8], output: &mut String) -> bool {
     match charencoding::charset_from_xml_declaration(content) {
         Some(charset) => {
