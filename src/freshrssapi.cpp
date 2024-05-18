@@ -397,12 +397,6 @@ std::string FreshRssApi::post_content(const std::string& url,
 	return result;
 }
 
-rsspp::Feed FreshRssApi::fetch_feed(const std::string& id)
-{
-	CurlHandle handle;
-	return fetch_feed(id, handle);
-}
-
 rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handle)
 {
 	rsspp::Feed feed;

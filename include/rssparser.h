@@ -15,7 +15,6 @@ namespace newsboat {
 
 class Cache;
 class ConfigContainer;
-class CurlHandle;
 class RssFeed;
 class RssIgnores;
 class RssItem;

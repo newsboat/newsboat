@@ -107,7 +107,8 @@ bool MinifluxApi::mark_all_read(const std::string& id)
 {
 	// TODO create Miniflux PR to add endpoint for marking all entries in feed
 	// as read
-	const rsspp::Feed feed = fetch_feed(id);
+	CurlHandle easyHandle;
+	const rsspp::Feed feed = fetch_feed(id, easyHandle);
 
 	std::vector<std::string> guids;
 	for (const auto& item : feed.items) {
@@ -174,12 +175,6 @@ bool MinifluxApi::update_article_flags(const std::string&  oldflags,
 	}
 
 	return success;
-}
-
-rsspp::Feed MinifluxApi::fetch_feed(const std::string& id)
-{
-	CurlHandle handle;
-	return fetch_feed(id, handle);
 }
 
 rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle& cached_handle)

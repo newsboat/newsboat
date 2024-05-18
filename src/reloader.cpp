@@ -65,14 +65,6 @@ bool Reloader::trylock_reload_mutex()
 }
 
 void Reloader::reload(unsigned int pos,
-	bool show_progress,
-	bool unattended)
-{
-	CurlHandle handle;
-	reload(pos, handle, show_progress, unattended);
-}
-
-void Reloader::reload(unsigned int pos,
 	CurlHandle& easyhandle,
 	bool show_progress,
 	bool unattended)
@@ -243,7 +235,8 @@ void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
 
 	partition_reload_to_threads([&](unsigned int start, unsigned int end) {
 		for (auto i = start; i <= end; ++i) {
-			reload(indexes[i], true, unattended);
+			CurlHandle easyhandle;
+			reload(indexes[i], easyhandle, true, unattended);
 		}
 	}, indexes.size());
 
