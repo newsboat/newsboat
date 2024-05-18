@@ -252,7 +252,7 @@ impl ConfigPaths {
     fn find_dirs(&mut self) {
         self.config_dir = self.env_home.join(NEWSBOAT_CONFIG_SUBDIR);
 
-        self.data_dir = self.config_dir.clone();
+        self.data_dir.clone_from(&self.config_dir);
 
         // Will change config_dir and data_dir to point to XDG if XDG
         // directories are available.
@@ -308,31 +308,31 @@ impl ConfigPaths {
     /// Initializes paths to config, cache etc. from CLI arguments.
     pub fn process_args(&mut self, args: &CliArgsParser) {
         if let Some(ref url_file) = args.url_file {
-            self.url_file = url_file.to_owned();
+            self.url_file.clone_from(url_file);
         }
 
         if let Some(ref cache_file) = args.cache_file {
-            self.cache_file = cache_file.to_owned();
+            self.cache_file.clone_from(cache_file);
         }
 
         if let Some(ref lock_file) = args.lock_file {
-            self.lock_file = lock_file.to_owned();
+            self.lock_file.clone_from(lock_file);
         }
 
         if let Some(ref config_file) = args.config_file {
-            self.config_file = config_file.to_owned();
+            self.config_file.clone_from(config_file);
         }
 
         if let Some(ref queue_file) = args.queue_file {
-            self.queue_file = queue_file.to_owned();
+            self.queue_file.clone_from(queue_file);
         }
 
         if let Some(ref search_history_file) = args.search_history_file {
-            self.search_history_file = search_history_file.to_owned();
+            self.search_history_file.clone_from(search_history_file);
         }
 
         if let Some(ref cmdline_history_file) = args.cmdline_history_file {
-            self.cmdline_history_file = cmdline_history_file.to_owned();
+            self.cmdline_history_file.clone_from(cmdline_history_file);
         }
 
         self.silent = args.silent;
@@ -365,7 +365,7 @@ impl ConfigPaths {
     // midway. That logic should be moved into ConfigPaths, and this method
     // removed.
     pub fn set_cache_file(&mut self, mut path: PathBuf) {
-        self.cache_file = path.clone();
+        path.clone_into(&mut self.cache_file);
         self.lock_file = {
             let current_extension = path
                 .extension()
