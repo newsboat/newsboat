@@ -1,7 +1,12 @@
+#include <algorithm>
+#include <cstddef>
 #include <iostream>
 #include <ncurses.h>
 #include <sstream>
+#include <string>
 #include <sys/utsname.h>
+#include <utility>
+#include <vector>
 
 #include "cache.h"
 #include "cliargsparser.h"
@@ -119,7 +124,8 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 		{'-', "cleanup", "", _s("remove unreferenced items from cache")}
 	};
 
-	std::stringstream ss;
+	std::vector<std::pair<std::string, std::string>> helpLines;
+	std::size_t maxLength = 0;
 	for (const auto& a : args) {
 		std::string longcolumn;
 		if (a.name != '-') {
@@ -131,15 +137,17 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 		}
 		longcolumn += "--" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
-		ss << "\t" << longcolumn;
-		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
-			ss << "\t";
-		}
-		ss << a.desc << std::endl;
-	}
-	std::cout << ss.str();
 
-	std::cout << '\n';
+		maxLength = std::max(maxLength, longcolumn.length());
+		helpLines.push_back({longcolumn, a.desc});
+	}
+	for (const auto& helpLine : helpLines) {
+		std::cout << std::string(8, ' ') << helpLine.first;
+		const auto padding = maxLength - helpLine.first.length();
+		std::cout << std::string(1 + padding, ' ') << helpLine.second;
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 
 	std::cout << _("Files:") << '\n';
 	// i18n: This is printed out by --help before the path to the config file

@@ -646,19 +646,6 @@ pub fn strnaturalcmp(a: &str, b: &str) -> std::cmp::Ordering {
     natord::compare(a, b)
 }
 
-/// Calculate the number of padding tabs when formatting columns
-///
-/// The number of tabs will be adjusted by the width of the given string.  Usually, a column will
-/// consist of 4 tabs, 8 characters each.  Each column will consist of at least one tab.
-pub fn gentabs(string: &str) -> usize {
-    let tabcount = strwidth(string) / 8;
-    if tabcount >= 4 {
-        1
-    } else {
-        4 - tabcount
-    }
-}
-
 /// Recursively create directories if missing and set permissions accordingly.
 pub fn mkdir_parents<R: AsRef<Path>>(p: &R, mode: u32) -> io::Result<()> {
     DirBuilder::new()
@@ -2274,27 +2261,6 @@ mod tests {
             ),
             "https://example.com/misc/everything_at_once".to_owned()
         );
-    }
-
-    #[test]
-    fn t_gentabs() {
-        assert_eq!(gentabs(""), 4);
-        assert_eq!(gentabs("a"), 4);
-        assert_eq!(gentabs("aa"), 4);
-        assert_eq!(gentabs("aaa"), 4);
-        assert_eq!(gentabs("aaaa"), 4);
-        assert_eq!(gentabs("aaaaa"), 4);
-        assert_eq!(gentabs("aaaaaa"), 4);
-        assert_eq!(gentabs("aaaaaaa"), 4);
-        assert_eq!(gentabs("aaaaaaaa"), 3);
-        assert_eq!(gentabs(&"a".repeat(8)), 3);
-        assert_eq!(gentabs(&"a".repeat(9)), 3);
-        assert_eq!(gentabs(&"a".repeat(15)), 3);
-        assert_eq!(gentabs(&"a".repeat(16)), 2);
-        assert_eq!(gentabs(&"a".repeat(20)), 2);
-        assert_eq!(gentabs(&"a".repeat(24)), 1);
-        assert_eq!(gentabs(&"a".repeat(32)), 1);
-        assert_eq!(gentabs(&"a".repeat(100)), 1);
     }
 
     #[test]

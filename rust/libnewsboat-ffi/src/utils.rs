@@ -19,7 +19,6 @@ mod ffi {
         fn is_exec_url(url: &str) -> bool;
         fn is_valid_color(color: &str) -> bool;
         fn is_valid_attribute(attribute: &str) -> bool;
-        fn gentabs(string: &str) -> usize;
         fn run_command(cmd: &str, param: &str);
         fn strnaturalcmp(a: &str, b: &str) -> isize;
         fn strwidth(rs_str: &str) -> usize;

@@ -381,6 +381,8 @@ void PbController::print_usage(const char* argv0)
 		{'h', "help", "", _s("this help")}
 	};
 
+	std::vector<std::pair<std::string, std::string>> helpLines;
+	std::size_t maxLength = 0;
 	for (const auto& a : args) {
 		std::string longcolumn;
 		if (a.name != '-') {
@@ -392,19 +394,24 @@ void PbController::print_usage(const char* argv0)
 		}
 		longcolumn += "--" + a.longname;
 		longcolumn += a.params.size() > 0 ? "=" + a.params : "";
-		std::cout << "\t" << longcolumn;
-		for (unsigned int j = 0; j < utils::gentabs(longcolumn); j++) {
-			std::cout << "\t";
-		}
-		std::cout << a.desc << std::endl;
-	}
 
-	std::cout << std::endl
-		<< _("Support at #newsboat at https://libera.chat or on our mailing "
-			"list https://groups.google.com/g/newsboat")
-		<< std::endl
-		<< _("For more information, check out https://newsboat.org/")
-		<< std::endl;
+		maxLength = std::max(maxLength, longcolumn.length());
+		helpLines.push_back({longcolumn, a.desc});
+	}
+	for (const auto& helpLine : helpLines) {
+		std::cout << std::string(8, ' ') << helpLine.first;
+		const auto padding = maxLength - helpLine.first.length();
+		std::cout << std::string(1 + padding, ' ') << helpLine.second;
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+
+	std::cout
+			<< _("Support at #newsboat at https://libera.chat or on our mailing "
+					"list https://groups.google.com/g/newsboat")
+				<< std::endl
+				<< _("For more information, check out https://newsboat.org/")
+				<< std::endl;
 }
 
 unsigned int PbController::downloads_in_progress()
