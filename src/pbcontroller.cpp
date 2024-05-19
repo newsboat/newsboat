@@ -349,20 +349,20 @@ void PbController::print_usage(const char* argv0)
 		{
 			'C',
 			"config-file",
-			_s("<configfile>"),
-			_s("read configuration from <configfile>")
+			_s("<file>"),
+			_s("read configuration from <file>")
 		},
 		{
 			'q',
 			"queue-file",
-			_s("<queuefile>"),
-			_s("use <queuefile> as queue file")
+			_s("<file>"),
+			_s("use <file> as queue file")
 		},
 		{
 			'-',
 			"lock-file",
-			_s("<lockfile>"),
-			_s("use <lockfile> as lock file")
+			_s("<file>"),
+			_s("use <file> as lock file")
 		},
 		{'a', "autodownload", "", _s("start download on startup")},
 		{
@@ -375,8 +375,8 @@ void PbController::print_usage(const char* argv0)
 		{
 			'd',
 			"log-file",
-			_s("<logfile>"),
-			_s("use <logfile> as output log file")
+			_s("<file>"),
+			_s("use <file> as output log file")
 		},
 		{'h', "help", "", _s("this help")}
 	};

@@ -53,38 +53,38 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 		{
 			'u',
 			"url-file",
-			_s("<urlfile>"),
-			_s("read RSS feed URLs from <urlfile>")
+			_s("<file>"),
+			_s("read RSS feed URLs from <file>")
 		},
 		{
 			'c',
 			"cache-file",
-			_s("<cachefile>"),
-			_s("use <cachefile> as cache file")
+			_s("<file>"),
+			_s("use <file> as cache file")
 		},
 		{
 			'C',
 			"config-file",
-			_s("<configfile>"),
-			_s("read configuration from <configfile>")
+			_s("<file>"),
+			_s("read configuration from <file>")
 		},
 		{
 			'-',
 			"queue-file",
-			_s("<queuefile>"),
-			_s("use <queuefile> as podcast queue file")
+			_s("<file>"),
+			_s("use <file> as podcast queue file")
 		},
 		{
 			'-',
 			"search-history-file",
-			_s("<searchfile>"),
-			_s("save the input history of the search to <searchfile>")
+			_s("<file>"),
+			_s("save the input history of the search to <file>")
 		},
 		{
 			'-',
 			"cmdline-history-file",
-			_s("<cmdlinefile>"),
-			_s("save the input history of the command line to <cmdlinefile>")
+			_s("<file>"),
+			_s("save the input history of the command line to <file>")
 		},
 		{'X', "vacuum", "", _s("compact the cache")},
 		{
@@ -105,8 +105,8 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 		{
 			'd',
 			"log-file",
-			_s("<logfile>"),
-			_s("use <logfile> as output log file")
+			_s("<file>"),
+			_s("use <file> as output log file")
 		},
 		{
 			'E',
