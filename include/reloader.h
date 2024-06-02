@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configcontainer.h"
+#include "curlhandle.h"
 
 namespace newsboat {
 
@@ -34,7 +35,8 @@ public:
 	/// feedscontainer). Only updates status bar if \a unattended is false.
 	void reload(unsigned int pos, bool unattended = false)
 	{
-		reload(pos, false, unattended);
+		CurlHandle easyHandle;
+		reload(pos, easyHandle, false, unattended);
 	}
 
 	/// \brief Reloads all feeds, spawning threads as necessary.
@@ -68,10 +70,6 @@ private:
 	/// if \a unattended is false. All network requests are made through
 	/// \a easyhandle. If the handle is not provided, this method creates
 	/// a temporary handle which is destroyed before returning from it.
-	void reload(unsigned int pos,
-		bool show_progress,
-		bool unattended);
-
 	void reload(unsigned int pos,
 		CurlHandle& easyhandle,
 		bool show_progress,

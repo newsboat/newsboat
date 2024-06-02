@@ -148,12 +148,6 @@ bool FeedbinApi::mark_article_read(const std::string& guid, bool read)
 	return mark_entries_read(entry_ids, read);
 }
 
-rsspp::Feed FeedbinApi::fetch_feed(const std::string& id)
-{
-	CurlHandle handle;
-	return fetch_feed(id, handle);
-}
-
 rsspp::Feed FeedbinApi::fetch_feed(const std::string& id,
 	CurlHandle& cached_handle)
 {

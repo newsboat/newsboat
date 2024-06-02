@@ -31,11 +31,6 @@ public:
 		const std::string& etag = "",
 		newsboat::RemoteApi* api = 0,
 		const std::string& cookie_cache = "");
-	Feed parse_url(const std::string& url,
-		time_t lastmodified = 0,
-		const std::string& etag = "",
-		newsboat::RemoteApi* api = 0,
-		const std::string& cookie_cache = "");
 	Feed parse_buffer(const std::string& buffer,
 		const std::string& url = "");
 	Feed parse_file(const std::string& filename);

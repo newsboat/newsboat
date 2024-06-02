@@ -24,7 +24,6 @@ public:
 		const std::string& newflags,
 		const std::string& guid) override;
 	void add_custom_headers(curl_slist**) override;
-	rsspp::Feed fetch_feed(const std::string& id);
 	rsspp::Feed fetch_feed(const std::string& id, CurlHandle& easyhandle);
 
 private:
