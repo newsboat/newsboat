@@ -406,12 +406,11 @@ void PbController::print_usage(const char* argv0)
 	}
 	std::cout << std::endl;
 
-	std::cout
-			<< _("Support at #newsboat at https://libera.chat or on our mailing "
-					"list https://groups.google.com/g/newsboat")
-				<< std::endl
-				<< _("For more information, check out https://newsboat.org/")
-				<< std::endl;
+	std::cout << _("Support at #newsboat at https://libera.chat or on our mailing "
+			"list https://groups.google.com/g/newsboat")
+		<< std::endl
+		<< _("For more information, check out https://newsboat.org/")
+		<< std::endl;
 }
 
 unsigned int PbController::downloads_in_progress()
