@@ -144,7 +144,7 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 	for (const auto& helpLine : helpLines) {
 		std::cout << std::string(8, ' ') << helpLine.first;
 		const auto padding = maxLength - helpLine.first.length();
-		std::cout << std::string(1 + padding, ' ') << helpLine.second;
+		std::cout << std::string(2 + padding, ' ') << helpLine.second;
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;

@@ -401,7 +401,7 @@ void PbController::print_usage(const char* argv0)
 	for (const auto& helpLine : helpLines) {
 		std::cout << std::string(8, ' ') << helpLine.first;
 		const auto padding = maxLength - helpLine.first.length();
-		std::cout << std::string(1 + padding, ' ') << helpLine.second;
+		std::cout << std::string(2 + padding, ' ') << helpLine.second;
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
