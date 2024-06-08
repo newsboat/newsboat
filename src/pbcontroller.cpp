@@ -356,7 +356,7 @@ void PbController::print_usage(const char* argv0)
 			'q',
 			"queue-file",
 			_s("<file>"),
-			_s("use <file> as queue file")
+			_s("use <file> as podcast queue file")
 		},
 		{
 			'-',
