@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-06-08 14:53+0300\n"
-"PO-Revision-Date: 2024-03-21 21:40+0300\n"
+"PO-Revision-Date: 2024-06-08 14:53+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -54,34 +54,28 @@ msgid "import OPML file"
 msgstr "импортировать файл OPML"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
-msgstr "загрузить список ссылок на ленты RSS из <файла ссылок>"
+msgstr "загрузить список ссылок на ленты RSS из <файла>"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
-msgstr "использовать <файл кэша> как файл для кэша"
+msgstr "использовать <файл> как файл для кэша"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
-msgstr "считать настройки из <файла настроек>"
+msgstr "считать настройки из <файла>"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
-msgstr "использовать <файл очереди> как файл очереди подкастов"
+msgstr "использовать <файл> как файл очереди подкастов"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
-msgstr "сохранять историю поиска в <файл поиска>"
+msgstr "сохранять историю поиска в <файл>"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
-msgstr "сохранять историю ввода командной строки в <файл командной строки>"
+msgstr "сохранять историю ввода командной строки в <файл>"
 
 #: newsboat.cpp:89
 msgid "compact the cache"
@@ -118,9 +112,8 @@ msgstr ""
 "соответственно)"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
-msgstr "использовать <файл журнала> как файл вывода для журнала"
+msgstr "использовать <файл> как файл вывода для журнала"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -1776,9 +1769,8 @@ msgstr ""
 "использование: %s [-C <файл>] [-q <файл>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
-msgstr "использовать <файл блокировки> как файл блокировки доступа к кэшу"
+msgstr "использовать <файл> как файл блокировки доступа к кэшу"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
