@@ -1,5 +1,17 @@
 # Changes for Newsboat
 
+## Unreleased - expected 2024-06-23
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes TK
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
 ## 2.35 - 2024-03-24
 
 Lists below only mention user-visible changes, but the full list of contributors
