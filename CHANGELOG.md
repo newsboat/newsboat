@@ -5,7 +5,7 @@
 Lists below only mention user-visible changes, but the full list of contributors
 for this release also includes Daniel Oh and Lucio Sauer.
 
-## Added
+### Added
 
 - Support for Feedbin (#716) (James Vaughan)
 - `--queue-file`, `--search-history-file`, and `--cmdline-history-file` options
@@ -26,7 +26,7 @@ for this release also includes Daniel Oh and Lucio Sauer.
 - contrib: a filter to turn twtxt protocol into RSS (Cyril Augier)
 - contrib: a filter to add newlines to Slashdot feed (Dennis van der Schagt)
 
-## Changed
+### Changed
 
 - Build in C++14 mode. This does *not* increase our requirements for compilers,
     because the ones we require already provide C++14 support
@@ -37,7 +37,7 @@ for this release also includes Daniel Oh and Lucio Sauer.
 - Updated vendored library optional-lite to 3.6.0
 - Bumped minimum supported Rust version to 1.72.1
 
-## Fixed
+### Fixed
 
 - `%>[char]` format not working inside a conditional format
     (e.g. `%D %?T?%-63t%> %T&%t?`) (#2645) (Juho Eerola)
@@ -50,13 +50,13 @@ Lists below only mention user-visible changes, but the full list of contributors
 for this release also includes bogdasar1985, who made quite a few changes to
 Newsboat internals (and continues work on even more!).
 
-## Added
+### Added
 
 - `latest_article_age` feed attribute; it's similar to the `age` attribute of an
     article, and can be used to e.g. hide feeds which were recently updated
     (#2619) (Dennis van der Schagt)
 
-## Changed
+### Changed
 
 - Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
     German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
@@ -64,7 +64,7 @@ Newsboat internals (and continues work on even more!).
 - Updated vendored library json.hpp to 3.11.3
 - Bumped minimum supported Rust version to 1.70.0
 
-## Fixed
+### Fixed
 
 - Articles in Mastodon feeds having no titles when using Newsboat with NextCloud
     News (#2573) (Dennis van der Schagt)
@@ -73,7 +73,7 @@ Newsboat internals (and continues work on even more!).
 
 ## 2.33 - 2023-09-24
 
-## Added
+### Added
 
 - Support for `0`..`9` keys in dialog overview. If you never used dialog
     overview, it's invoked by `V` key by default and is very useful if you also
@@ -81,7 +81,7 @@ Newsboat internals (and continues work on even more!).
     van der Schagt)
 - Support importing OPML 2.0 with `--import-from-opml` (#2448) (bogdasar1985)
 
-## Changed
+### Changed
 
 - Image enclosures are now displayed at the start of the article. This improves
     support for Mastodon feeds (#2305, #2495) (Dennis van der Schagt)
@@ -95,7 +95,7 @@ Newsboat internals (and continues work on even more!).
     Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.68.2
 
-## Fixed
+### Fixed
 
 - Hanging if scripts used by `filter:`, `bookmark-cmd`, or `html-renderer`
     process their input in a streaming fashion rather than reading it entirely
@@ -109,7 +109,7 @@ Newsboat internals (and continues work on even more!).
 
 ## 2.32 - 2023-06-25
 
-## Added
+### Added
 
 - contrib: a filter to remove Substack's "Subscribe now" prompts from the posts
     (NunoSempere)
@@ -120,7 +120,7 @@ Newsboat internals (and continues work on even more!).
     `--export-to-opml` produces. We intend to make OPML 2.0 the default in some
     future major release of Newsboat (#871) (Gwyneth Morgan)
 
-## Changed
+### Changed
 
 - Enclosures are only enqueued if their MIME type looks like a podcast or is
     empty. This prevents Newsboat from e.g. enqueueing images from Mastodon
@@ -141,7 +141,7 @@ Newsboat internals (and continues work on even more!).
 - Updated vendored library expected-lite to 0.6.3
 - Bumped minimum supported Rust version to 1.66.1
 
-## Fixed
+### Fixed
 
 - Detection of Cargo and Asciidoctor: it succeeded even if these programs were
     missing (Alexander Batischev)
