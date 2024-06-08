@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-06-08 14:53+0300\n"
-"PO-Revision-Date: 2024-03-12 10:45+0800\n"
+"PO-Revision-Date: 2024-06-08 21:30+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -49,32 +49,26 @@ msgid "import OPML file"
 msgstr "导入 OPML 文件"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
 msgstr "从<超链文件>里读取 RSS 种子列表"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
 msgstr "使用<缓存文件>作为保存缓存数据的文件"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
 msgstr "从<配置文件>里读取配置信息"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
 msgstr "使用<队列文件>作为保存播客队列的文件"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
 msgstr "将搜索历史保存到<搜索历史文件>"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
 msgstr "将命令行输入历史保存到<命令行历史文件>"
 
@@ -111,7 +105,6 @@ msgstr ""
 "信息和调试）"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
 msgstr "使用<日志文件>作为记录日志的文件"
 
@@ -538,9 +531,8 @@ msgid "Cleaning up cache..."
 msgstr "清空缓存......"
 
 #: src/controller.cpp:513
-#, fuzzy
 msgid "Prepopulating query feeds..."
-msgstr "更新查询种子......"
+msgstr "更新集合种子（query feed）......"
 
 #: src/controller.cpp:535
 msgid "Importing list of read articles..."
@@ -965,7 +957,7 @@ msgid "Operation not found"
 msgstr "没有找到操作"
 
 #: src/formaction.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Not a command: %s"
 msgstr "未知的命令：%s"
 
@@ -994,9 +986,8 @@ msgid "Feed title: "
 msgstr "种子标题："
 
 #: src/formaction.cpp:582
-#, fuzzy
 msgid "Saving bookmark on autopilot..."
-msgstr "保存书签......"
+msgstr "正在自动保存书签......"
 
 #: src/formaction.cpp:724
 msgid ""
@@ -1746,7 +1737,6 @@ msgstr ""
 "用法：%s [-C <文件>] [-q <文件>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
 msgstr "使用<锁文件>作为锁文件"
 
@@ -1876,9 +1866,8 @@ msgid "Select Filter"
 msgstr "选择过滤器"
 
 #: src/urlviewformaction.cpp:61 src/urlviewformaction.cpp:118
-#, fuzzy
 msgid "No links available!"
-msgstr "没有选择任何链接！"
+msgstr "没有可用的链接！"
 
 #: src/urlviewformaction.cpp:161
 msgid "Save Bookmark"
@@ -1921,12 +1910,12 @@ msgstr "没有定义任何标签"
 
 #: src/view.cpp:980
 msgid "Updating query feed..."
-msgstr "更新查询种子......"
+msgstr "更新集合种子（query feed）......"
 
 #: src/view.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Error: couldn't prepare query feed: %s"
-msgstr "错误：无法将种子标记为已读：%s"
+msgstr "错误：无法更新集合种子（query feed）：%s"
 
 #: rss/atomparser.cpp:17 rss/parser.cpp:364 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
