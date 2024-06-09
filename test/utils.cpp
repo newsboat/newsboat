@@ -954,7 +954,7 @@ TEST_CASE("strwidth()", "[utils]")
 
 	const auto input1 = utils::wstr2str(L"\uF91F");
 	REQUIRE(utils::strwidth(input1) == 2);
-	REQUIRE(utils::strwidth("\07") == 0);
+	REQUIRE(utils::strwidth("\07") == 1);
 }
 
 TEST_CASE("strwidth_stfl()", "[utils]")
@@ -973,7 +973,7 @@ TEST_CASE("strwidth_stfl()", "[utils]")
 
 	const auto input1 = utils::wstr2str(L"\uF91F");
 	REQUIRE(utils::strwidth_stfl(input1) == 2);
-	REQUIRE(utils::strwidth_stfl("\07") == 0);
+	REQUIRE(utils::strwidth_stfl("\07") == 1);
 
 	REQUIRE(utils::strwidth_stfl("<a") == 0); // #415
 	REQUIRE(utils::strwidth_stfl("a") == 1);

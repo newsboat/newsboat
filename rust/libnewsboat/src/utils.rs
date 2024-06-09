@@ -1416,7 +1416,7 @@ mod tests {
         assert_eq!(strwidth(""), 0);
         assert_eq!(strwidth("xx"), 2);
         assert_eq!(strwidth("\u{F91F}"), 2);
-        assert_eq!(strwidth("\u{0007}"), 0);
+        assert_eq!(strwidth("\u{0007}"), 1);
     }
 
     #[test]
@@ -1428,7 +1428,7 @@ mod tests {
         assert_eq!(strwidth_stfl("x<>y<>z"), 5);
         assert_eq!(strwidth_stfl("x<>hi>x"), 6);
         assert_eq!(strwidth_stfl("\u{F91F}"), 2);
-        assert_eq!(strwidth_stfl("\u{0007}"), 0);
+        assert_eq!(strwidth_stfl("\u{0007}"), 1);
         assert_eq!(strwidth_stfl("<a"), 0); // #415
         assert_eq!(strwidth_stfl("a"), 1);
         assert_eq!(strwidth_stfl("abc<tag>def"), 6);
