@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-06-08 14:53+0300\n"
-"PO-Revision-Date: 2024-03-11 23:26+0100\n"
+"PO-Revision-Date: 2024-06-09 22:10+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -52,34 +52,28 @@ msgid "import OPML file"
 msgstr "zaimportuj plik OPML"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
-msgstr "wczytaj adresy URL kanałów z <plik z adresami url>"
+msgstr "wczytaj adresy URL kanałów z <pliku>"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
-msgstr "użyj <plik pamięci podręcznej> jako pliku pamięci podręcznej"
+msgstr "użyj <pliku> jako pliku pamięci podręcznej"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
-msgstr "wczytaj konfiguracje z <plik konfiguracyjny>"
+msgstr "wczytaj konfiguracje z <pliku>"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
-msgstr "użyj <plik kolejki> jako pliku kolejki podkastów"
+msgstr "użyj <pliku> jako pliku kolejki podkastów"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
-msgstr "zapisz historię wyszukiwania do <plik wyszukiwania>"
+msgstr "zapisz historię wyszukiwania do <pliku>"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
-msgstr "zapisz historię poleceń do <plik wiersza poleceń>"
+msgstr "zapisz historię wprowadzanych poleceń do <pliku>"
 
 #: newsboat.cpp:89
 msgid "compact the cache"
@@ -114,9 +108,8 @@ msgstr ""
 "odpowiednio dla user error, critical, error, warning, info i debug)"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
-msgstr "użyj <plik z logami> jako wyjściowy plik z logami"
+msgstr "użyj <pliku> jako wyjściowy plik z logami"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -1778,9 +1771,8 @@ msgstr ""
 "Składnia: %s [-C <plik>] [-q <plik>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
-msgstr "użyj <plik blokady> jako pliku blokady"
+msgstr "użyj <pliku> jako pliku blokady"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
