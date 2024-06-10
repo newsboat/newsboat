@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-06-08 14:53+0300\n"
-"PO-Revision-Date: 2024-03-12 15:00+0300\n"
+"PO-Revision-Date: 2024-06-09 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -51,34 +51,28 @@ msgid "import OPML file"
 msgstr "OPML dosyası içe aktar"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
-msgstr "<url-dosyası>'ndan RSS beslemesi URL'lerini oku"
+msgstr "<dosya>'dan RSS beslemesi URL'lerini oku"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
-msgstr "<önbellek-dosyası>'nı önbellek dosyası olarak kullan"
+msgstr "<dosya>'yı önbellek dosyası olarak kullan"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
-msgstr "yapılandırmayı <yapılandırma-dosyası>'ndan oku"
+msgstr "yapılandırmayı <dosya>'dan oku"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
-msgstr "<kuyruk-dosyası>'nı pod yayını kuyruk dosyası olarak kullan"
+msgstr "<dosya>'yı pod yayını kuyruk dosyası olarak kullan"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
-msgstr "arama girdisi geçmişini <arama-dosyası>'na kaydet"
+msgstr "arama girdisi geçmişini <dosya>'ya kaydet"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
-msgstr "komut satırın girdisi geçmişini <komut-satırı--dosyası>'na kaydet"
+msgstr "komut satırın girdisi geçmişini <dosya>'ya kaydet"
 
 #: newsboat.cpp:89
 msgid "compact the cache"
@@ -113,9 +107,8 @@ msgstr ""
 "sırasıyla kullanıcı hatası, kritik, hata, uyarı, bilgi ve hata ayıklama)"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
-msgstr "<günlük-dosyası>'nı çıktı kaydı için kullan"
+msgstr "<dosya>'yı çıktı kaydı için kullan"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -1771,9 +1764,8 @@ msgstr ""
 "kullanım %s [-C <dosya>] [-q <dosya>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
-msgstr "<kilit-dosyası>'nı kilit dosyası olarak kullan"
+msgstr "<dosya>'yı kilit dosyası olarak kullan"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
