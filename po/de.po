@@ -50,34 +50,28 @@ msgid "import OPML file"
 msgstr "OPML-Datei importieren"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
-msgstr "RSS-Feed-URLs aus <urldatei> lesen"
+msgstr "RSS-Feed-URLs aus <datei> lesen"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
-msgstr "<cachedatei> als Zwischenspeicherdatei verwenden"
+msgstr "<datei> als Zwischenspeicherdatei verwenden"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
-msgstr "Konfiguration aus <configdatei> lesen"
+msgstr "Konfiguration aus <datei> lesen"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
-msgstr "<warteschlangendatei> als Podcast-Warteschlangendatei verwenden"
+msgstr "<datei> als Podcast-Warteschlangendatei verwenden"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
-msgstr "Historie der Sucheingaben in <suchdatei> speichern"
+msgstr "Historie der Sucheingaben in <datei> speichern"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
-msgstr "Historie der Kommandozeileneingaben in <kommandozeilendatei> speichern"
+msgstr "Historie der Kommandozeileneingaben in <datei> speichern"
 
 # Es wird ein SQLite-VACUUM-Befehl ausgeführt.
 #: newsboat.cpp:89
@@ -113,9 +107,8 @@ msgstr ""
 "Benutzerfehler, kritischer Fehler, Fehler, Warnung, Info und Debug)"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
-msgstr "Logs nach <logdatei> schreiben"
+msgstr "Logs nach <datei> schreiben"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -1781,9 +1774,8 @@ msgstr ""
 "Verwendung: %s [-C <configdatei>] [-q <warteschlangendatei>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
-msgstr "<sperrdatei> als Sperrdatei verwenden"
+msgstr "<datei> als Sperrdatei verwenden"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
