@@ -1,6 +1,7 @@
 #include "feedretriever.h"
 
 #include <cinttypes>
+#include <curl/curl.h>
 
 #include "cache.h"
 #include "config.h"
@@ -64,7 +65,7 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 		}
 	} else if (urls_source == "freshrss") {
 		return fetch_freshrss(uri);
-	} else if (utils::is_http_url(uri)) {
+        } else if (CURLUE_OK == curl_url_set(curl_url(), CURLUPART_URL, uri.c_str(), 0)){
 		return download_http(uri);
 	} else if (utils::is_exec_url(uri)) {
 		return get_execplugin(uri.substr(5, uri.length() - 5));
