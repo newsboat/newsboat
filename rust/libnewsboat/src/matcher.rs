@@ -100,8 +100,8 @@ impl Operator {
 
 /// Convert numerical prefix of the string to i32.
 ///
-/// Return 0 if there is no numeric prefix. On underflow, return `std::i32::MIN`. On overflow,
-/// return `std::i32::MAX`.
+/// Return 0 if there is no numeric prefix. On underflow, return `i32::MIN`. On overflow,
+/// return `i32::MAX`.
 fn string_to_num(input: &str) -> i32 {
     let search_start = usize::from(input.starts_with('-'));
 
@@ -119,10 +119,10 @@ fn string_to_num(input: &str) -> i32 {
         number
     } else if search_start == 1 {
         // Number starts with minus and couldn't be parsed => underflow
-        std::i32::MIN
+        i32::MIN
     } else {
         // Number doesn't start with minus and couldn't be parsed => overflow
-        std::i32::MAX
+        i32::MAX
     }
 }
 
