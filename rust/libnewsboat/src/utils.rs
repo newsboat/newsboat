@@ -551,10 +551,7 @@ pub fn make_title(rs_str: String) -> String {
 
     // Un-escape any percent-encoding, e.g. "It%27s%202017%21" -> "It's
     // 2017!"
-    let result = match unescape_url(result) {
-        None => String::new(),
-        Some(f) => f,
-    };
+    let result = unescape_url(result).unwrap_or_default();
 
     // If it contains only digits, assume it's an id, not a proper title
     if result.chars().all(|c| c.is_ascii_digit()) {
