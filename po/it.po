@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-06-08 14:53+0300\n"
-"PO-Revision-Date: 2024-03-17 09:12+0100\n"
+"PO-Revision-Date: 2024-06-18 08:20+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -51,34 +51,28 @@ msgid "import OPML file"
 msgstr "importa file OPML"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
-msgstr "leggi gli URL dei feed RSS da <urlfile>"
+msgstr "leggi gli URL dei feed RSS da <file>"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
-msgstr "usa <cachefile> come file cache"
+msgstr "usa <file> come file cache"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
-msgstr "leggi la configurazione da <configfile>"
+msgstr "leggi la configurazione da <file>"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
-msgstr "usa <queuefile> come file per coda podcast"
+msgstr "usa <file> come file per coda podcast"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
-msgstr "salva la storia dell'input della ricerca in <searchfile>"
+msgstr "salva la storia dell'input della ricerca in <file>"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
-msgstr "salva la storia dell'input della linea di comando in <cmdlinefile>"
+msgstr "salva la storia dell'input della linea di comando in <file>"
 
 #: newsboat.cpp:89
 msgid "compact the cache"
@@ -114,9 +108,8 @@ msgstr ""
 "e debug)"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
-msgstr "usa <logfile> come log file di output"
+msgstr "usa <file> come log file di output"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -1772,9 +1765,8 @@ msgstr ""
 "uso %s [-C <file>] [-q <file>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
-msgstr "usa <lockfile> come file di blocco"
+msgstr "usa <file> come file di blocco"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
