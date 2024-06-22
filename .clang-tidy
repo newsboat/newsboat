@@ -2,7 +2,6 @@
 Checks:          'clang-diagnostic-*,clang-analyzer-*,modernize-make-unique'
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
-AnalyzeTemporaryDtors: false
 FormatStyle:     none
 CheckOptions:
   - key:             llvm-else-after-return.WarnOnConditionVariables
