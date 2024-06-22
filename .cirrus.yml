@@ -394,7 +394,7 @@ task:
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
     after_cache_script: *after_cache_script
-    build_script: make -j${JOBS} test/test
+    build_script: make -j${JOBS} test
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
 
@@ -423,7 +423,7 @@ task:
     # we don't pass --keep-going to the build: failures can be debugged with
     # logs of other jobs.
     after_cache_script: *after_cache_script
-    build_script: make -j${JOBS} test/test
+    build_script: make -j${JOBS} test
     test_script: cd test && ./test --order=rand --rng-seed=time
     before_cache_script: *before_cache_script
 

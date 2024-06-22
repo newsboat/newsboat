@@ -67,6 +67,17 @@ std::vector<std::string> test_helpers::file_contents(const std::string& filepath
 	return lines;
 }
 
+std::vector<std::uint8_t> test_helpers::read_binary_file(const std::string& filepath)
+{
+	std::ifstream file(filepath, std::ios::binary | std::ios::ate);
+	std::streampos length = file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	std::vector<std::uint8_t> buffer(length);
+	file.read(reinterpret_cast<char*>(buffer.data()), length);
+	return buffer;
+}
+
 bool test_helpers::starts_with(const std::string& prefix,
 	const std::string& input)
 {
