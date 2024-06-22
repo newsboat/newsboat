@@ -57,7 +57,7 @@ branch off the latest release and backport the bugfixes onto it.
         for Newsbeuter issues).
     * Mention the name of the contributor.
     * Acknowledge contributions from people whose changes didn't make it into
-        the lists. The full list of contributors can be got with:
+        the lists. The full list of contributors can be obtained with:
         ```
         $ git shortlog -s PREVIOUS_VERSION.. | cut -f2
         ```

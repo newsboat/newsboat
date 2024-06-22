@@ -1,16 +1,24 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2024-06-23
+## 2.36 - 2024-06-22
 
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes TK
-
-### Added
 ### Changed
-### Deprecated
-### Removed
+
+- Improved readability of `--help`: better alignment, replace unreadable ad hoc
+    filenames with `<file>` (Dennis van der Schagt)
+- Updated translations: Brazilian Portuguese (André L. C. Moreira),
+    Chinese (CookiePieWw), Dutch (Dennis van der Schagt), German (Lysander
+    Trischler), Italian (Mauro Scomparin), Polish (Carno), Russian and Ukrainian
+    (Alexander Batischev), Swedish (Dennis Öberg), Turkish (Emir SARI)
+- Updated vendored library Catch2 to 3.5.4 (Nikos Tsipinakis)
+    expected-lite to 0.8.0
+
 ### Fixed
-### Security
+
+- Updated default color configuration in the docs (Xiao Pan)
+- Parts of contrib/ not being installed (Dennis van der Schagt)
+
+
 
 ## 2.35 - 2024-03-24
 
