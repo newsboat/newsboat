@@ -1,14 +1,14 @@
 # All the programs and libraries necessary to build Newsboat with newer
-# compilers. Contains GCC 13 and Rust 1.79.0 by default.
+# compilers. Contains GCC 14 and Rust 1.79.0 by default.
 #
 # Configurable via build-args:
 #
-# - cxx_package -- additional Ubuntu packages to install. Default: g++-13
+# - cxx_package -- additional Ubuntu packages to install. Default: g++-14
 # - rust_version -- Rust version to install. Default: 1.79.0
 # - cc -- C compiler to use. This gets copied into CC environment variable.
-#       Default: gcc-13
+#       Default: gcc-14
 # - cxx -- C++ compiler to use. This gets copied into CXX environment variable.
-#       Default: g++-13
+#       Default: g++-14
 #
 # Build with defaults:
 #
@@ -16,7 +16,7 @@
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_23.10-build-tools.dockerfile \
+#       --file=docker/ubuntu_24.04-build-tools.dockerfile \
 #       docker
 #
 # Build with non-default compiler and Rust version:
@@ -25,7 +25,7 @@
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
 #       --tag=newsboat-build-tools \
-#       --file=docker/ubuntu_23.10-build-tools.dockerfile \
+#       --file=docker/ubuntu_24.04-build-tools.dockerfile \
 #       --build-arg cxx_package=clang-16 \
 #       --build-arg cc=clang-16 \
 #       --build-arg cxx=clang++-16 \
@@ -58,7 +58,7 @@
 #
 #   make distclean
 
-FROM ubuntu:23.10
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PATH /home/builder/.cargo/bin:$PATH
@@ -67,7 +67,7 @@ RUN apt-get update \
     && apt-get upgrade --assume-yes \
     && apt install --assume-yes --no-install-recommends ca-certificates wget gnupg2
 
-ARG cxx_package=g++-13
+ARG cxx_package=g++-14
 
 RUN apt-get update \
     && apt-get install --assume-yes --no-install-recommends \
@@ -110,8 +110,8 @@ RUN wget -O $HOME/rustup.sh --secure-protocol=TLSv1_2 https://sh.rustup.rs \
 
 ENV HOME /home/builder
 
-ARG cc=gcc-13
-ARG cxx=g++-13
+ARG cc=gcc-14
+ARG cxx=g++-14
 
 ENV CC=$cc
 ENV CXX=$cxx

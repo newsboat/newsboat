@@ -545,7 +545,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 		REQUIRE(macros[0].op == OP_INT_SET);
 		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
 		REQUIRE(macros[1].op == OP_OPENINBROWSER);
-		REQUIRE(macros[1].args == std::vector<std::string>({}));
+		REQUIRE(macros[1].args == std::vector<std::string>());
 	}
 
 	SECTION("semicolon following unquoted argument") {
@@ -556,7 +556,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 		REQUIRE(macros[0].op == OP_INT_SET);
 		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
 		REQUIRE(macros[1].op == OP_OPENINBROWSER);
-		REQUIRE(macros[1].args == std::vector<std::string>({}));
+		REQUIRE(macros[1].args == std::vector<std::string>());
 	}
 
 	SECTION("semicolon following unquoted operation") {
@@ -565,9 +565,9 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 		const auto macros = k.get_macro(KeyCombination("c"));
 		REQUIRE(macros.size() == 2);
 		REQUIRE(macros[0].op == OP_OPENINBROWSER);
-		REQUIRE(macros[0].args == std::vector<std::string>({}));
+		REQUIRE(macros[0].args == std::vector<std::string>());
 		REQUIRE(macros[1].op == OP_QUIT);
-		REQUIRE(macros[1].args == std::vector<std::string>({}));
+		REQUIRE(macros[1].args == std::vector<std::string>());
 	}
 }
 
@@ -581,13 +581,13 @@ TEST_CASE("Whitespace around semicolons in macros is optional", "[KeyMap]")
 		REQUIRE(macro.size() == 3);
 
 		REQUIRE(macro[0].op == OP_OPEN);
-		REQUIRE(macro[0].args == std::vector<std::string>({}));
+		REQUIRE(macro[0].args == std::vector<std::string>());
 
 		REQUIRE(macro[1].op == OP_INT_SET);
 		REQUIRE(macro[1].args == std::vector<std::string>({"browser", "firefox --private-window"}));
 
 		REQUIRE(macro[2].op == OP_QUIT);
-		REQUIRE(macro[2].args == std::vector<std::string>({}));
+		REQUIRE(macro[2].args == std::vector<std::string>());
 	};
 
 	SECTION("Whitespace not required before the semicolon") {
@@ -633,7 +633,7 @@ TEST_CASE("It's not an error to have no operations before a semicolon in "
 			const auto macro = k.get_macro(KeyCombination("r"));
 			REQUIRE(macro.size() == 1);
 			REQUIRE(macro[0].op == OP_OPEN);
-			REQUIRE(macro[0].args == std::vector<std::string>({}));
+			REQUIRE(macro[0].args == std::vector<std::string>());
 		}
 	}
 }
@@ -653,7 +653,7 @@ TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
 	REQUIRE(macro[0].op == OP_INT_SET);
 	REQUIRE(macro[0].args == std::vector<std::string>({"browser", "sleep 3; do-something ; echo hi"}));
 	REQUIRE(macro[1].op == OP_OPENINBROWSER);
-	REQUIRE(macro[1].args == std::vector<std::string>({}));
+	REQUIRE(macro[1].args == std::vector<std::string>());
 }
 
 TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given operations are bound",
