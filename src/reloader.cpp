@@ -112,11 +112,14 @@ void Reloader::reload(unsigned int pos,
 					_("Error while retrieving %s: %s"),
 					utils::censor_url(oldfeed->rssurl()),
 					emsg);
-		} catch (rsspp::Exception& e) {
+		} catch (const rsspp::Exception& e) {
 			errmsg = strprintf::fmt(
 					_("Error while retrieving %s: %s"),
 					utils::censor_url(oldfeed->rssurl()),
 					e.what());
+		} catch (const rsspp::NotModifiedException&) {
+			// Nothing to be done, feed was not chaned since last retrieve
+			oldfeed->set_status(DlStatus::SUCCESS);
 		}
 		if (!errmsg.empty()) {
 			oldfeed->set_status(DlStatus::DL_ERROR);
