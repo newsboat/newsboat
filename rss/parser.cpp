@@ -230,6 +230,9 @@ Feed Parser::parse_url(const std::string& url,
 		}
 		throw Exception(msg);
 	}
+	if (infoOk == CURLE_OK && status == 304) {
+		throw NotModifiedException();
+	}
 
 	const std::string buf = curlDataReceiver->get_data();
 	LOG(Level::INFO,
