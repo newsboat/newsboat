@@ -16,6 +16,9 @@ private:
 	std::string emsg;
 };
 
+class NotModifiedException : public std::exception {
+};
+
 } // namespace rsspp
 
 #endif /* NEWSBOAT_RSSPPEXCEPTION_H_ */
