@@ -239,6 +239,9 @@ Feed Parser::parse_url(const std::string& url,
 		}
 		throw Exception(msg);
 	}
+	if (infoOk == CURLE_OK && status == 304) {
+		throw NotModifiedException();
+	}
 
 	LOG(Level::INFO,
 		"Parser::parse_url: retrieved data for %s: %s",
