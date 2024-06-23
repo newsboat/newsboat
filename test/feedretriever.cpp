@@ -55,9 +55,8 @@ TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetrie
 		{"content-type", "text/xml"},
 	}, {});
 
-	const auto feed = feedRetriever.retrieve(url);
+	REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
 	REQUIRE(testServer.num_hits(mockRegistration) == 1);
-	REQUIRE(feed.items.size() == 0);
 }
 
 TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
@@ -84,13 +83,8 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
 
 	cfg.set_configvalue("download-retries", "5");
 
-	const auto feed = feedRetriever.retrieve(url);
-	// TODO: Fix behavior and update this test.
-	// There should only be 1 request.
-	// Added an assertion for the wrong amount to make sure we update this test when fixing the behavior.
-	// See https://github.com/newsboat/newsboat/issues/2732
-	REQUIRE(testServer.num_hits(mockRegistration) == 5);
-	//REQUIRE(testServer.num_Hits(mockRegistration) == 1);
+	REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
+	REQUIRE(testServer.num_hits(mockRegistration) == 1);
 }
 
 TEST_CASE("Feed retriever throws on HTTP error status codes", "[FeedRetriever]")
