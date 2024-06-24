@@ -59,9 +59,10 @@ TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetrie
 	REQUIRE(testServer.num_hits(mockRegistration) == 1);
 }
 
-TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
+TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 429 (Too Many Requests)",
 	"[FeedRetriever]")
 {
+	auto http_status = GENERATE(as<std::uint16_t> {}, 304, 429);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	CurlHandle easyHandle;
@@ -77,13 +78,17 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
 
 	auto mockRegistration = testServer.add_endpoint("/feed", {
 		{"If-None-Match", "some-random-etag"},
-	}, 304, {
+	}, http_status, {
 		{"content-type", "text/xml"},
 	}, {});
 
 	cfg.set_configvalue("download-retries", "5");
 
-	REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
+	if (http_status == 304) {
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
+	} else if (http_status == 429) {
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::Exception);
+	}
 	REQUIRE(testServer.num_hits(mockRegistration) == 1);
 }
 
