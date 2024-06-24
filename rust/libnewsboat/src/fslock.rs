@@ -32,9 +32,6 @@ impl Drop for FsLock {
     }
 }
 
-// Temporarily ignore clippy lint until PR is merged:
-// https://github.com/rust-lang/rust-clippy/pull/12756
-#[allow(clippy::assigning_clones)]
 impl FsLock {
     pub fn try_lock(&mut self, new_lock_path: &Path, pid: &mut libc::pid_t) -> Result<(), String> {
         if self.lock_file.is_some() && self.lock_path == new_lock_path {
