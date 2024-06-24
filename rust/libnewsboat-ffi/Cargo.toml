@@ -15,3 +15,6 @@ cxx-build = "1"
 [lib]
 name = "newsboat"
 crate-type = ["staticlib"]
+
+[lints]
+workspace = true

@@ -7,3 +7,6 @@ members = [
     "rust/http-test-server",
 ]
 resolver = "2"
+
+[workspace.lints.clippy]
+assigning_clones = "allow"

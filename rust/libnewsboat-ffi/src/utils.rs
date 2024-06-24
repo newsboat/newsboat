@@ -167,9 +167,6 @@ fn read_text_file(
     }
 }
 
-// Temporarily ignore clippy lint until PR is merged:
-// https://github.com/rust-lang/rust-clippy/pull/12756
-#[allow(clippy::assigning_clones)]
 fn extract_token_quoted(line: &mut String, delimiters: &str, token: &mut String) -> bool {
     let (token_opt, remainder) = utils::extract_token_quoted(line, delimiters);
     *line = remainder.to_owned();
