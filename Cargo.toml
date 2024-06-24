@@ -6,4 +6,7 @@ members = [
     "rust/regex-rs",
     "rust/http-test-server",
 ]
-resolver = "3"
+resolver = "2"
+
+[workspace.lints.clippy]
+assigning_clones = "allow"
