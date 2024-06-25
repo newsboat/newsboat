@@ -1,3 +1,5 @@
+#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+
 #include "queuemanager.h"
 
 #include "3rd-party/catch.hpp"
