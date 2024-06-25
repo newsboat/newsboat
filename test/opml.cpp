@@ -1,3 +1,5 @@
+#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+
 #include "opml.h"
 
 #include <libxml/xmlsave.h>

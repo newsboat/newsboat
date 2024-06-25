@@ -1,3 +1,5 @@
+#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+
 #include "feedbinurlreader.h"
 
 #include <cinttypes>

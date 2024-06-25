@@ -9,7 +9,7 @@ namespace newsboat {
 
 class FileUrlReader : public UrlReader {
 public:
-	explicit FileUrlReader(const Filepath& file = "");
+	explicit FileUrlReader(const Filepath& file = {});
 
 	/// \brief Load URLs from the urls file.
 	///
