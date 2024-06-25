@@ -83,7 +83,7 @@ public:
 		const std::string& phrase = "");
 	void view_dialogs();
 
-	std::optional<Filepath> run_filebrowser(const Filepath& default_filename = "");
+	std::optional<Filepath> run_filebrowser(const Filepath& default_filename = {});
 	std::optional<Filepath> run_dirbrowser();
 	std::string select_tag(const std::string& current_tag);
 	std::string select_filter(
