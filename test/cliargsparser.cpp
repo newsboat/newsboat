@@ -1,3 +1,5 @@
+#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
+
 // This has to be included before Catch2 in order to provide the comparison
 // operator
 #include "filepath.h"
