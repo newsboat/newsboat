@@ -36,21 +36,21 @@ public:
 	{
 	}
 
-	Filepath(rust::Box<filepath::bridged::PathBuf>&& rs_object)
-		: rs_object(std::move(rs_object))
-	{
-	}
-
 	operator std::string() const
 	{
 		return to_locale_string();
+	}
+#endif
+
+	Filepath(rust::Box<filepath::bridged::PathBuf>&& rs_object)
+		: rs_object(std::move(rs_object))
+	{
 	}
 
 	operator const filepath::bridged::PathBuf& () const
 	{
 		return *rs_object;
 	}
-#endif
 
 	/// Constructs an empty path.
 	Filepath();
