@@ -4,14 +4,8 @@
 #include "libnewsboat-ffi/src/filepath.rs.h"
 #include "3rd-party/optional.hpp"
 
-#include <cstdint>
 #include <ostream>
 #include <string>
-
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
-#endif
 
 namespace newsboat {
 
