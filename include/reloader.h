@@ -46,6 +46,7 @@ public:
 	/// setting.
 	void reload_all(bool unattended = false);
 
+private:
 	/// \brief Reloads all feeds with given indexes in feedlist.
 	///
 	/// Only updates status bar if \a unattended is false.
@@ -60,7 +61,6 @@ public:
 		unsigned int end,
 		bool unattended = false);
 
-private:
 	/// \brief Reloads given feed.
 	///
 	/// Reloads the feed at position \a pos in the feeds list (as kept by
