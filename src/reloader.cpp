@@ -234,8 +234,8 @@ void Reloader::reload_indexes(const std::vector<unsigned int>& indexes, bool una
 		ctrl->get_feedcontainer()->unread_item_count();
 
 	partition_reload_to_threads([&](unsigned int start, unsigned int end) {
+		CurlHandle easyhandle;
 		for (auto i = start; i <= end; ++i) {
-			CurlHandle easyhandle;
 			reload(indexes[i], easyhandle, true, unattended);
 		}
 	}, indexes.size());
