@@ -239,6 +239,10 @@ void Reloader::reload_indexes_impl(std::vector<unsigned int> indexes, bool unatt
 
 	const auto feeds = ctrl->get_feedcontainer()->get_all_feeds();
 
+	// Sort the feeds based on domain, so feeds on the same domain
+	// can share the curl handle.
+	//
+	// See commit: 115cf667485929bbb698ba8051dec7ff6a73739c
 	std::sort(indexes.begin(), indexes.end(), [&](unsigned int a, unsigned int b) {
 		std::string domain1, domain2;
 		extract(domain1, feeds[a]->rssurl());
