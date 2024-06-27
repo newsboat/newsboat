@@ -27,7 +27,7 @@ public:
 	/// indexes.
 	///
 	/// If \a indexes is empty, all feeds will be reloaded.
-	void start_reload_all_thread(const std::vector<int>& indexes = {});
+	void start_reload_all_thread(const std::vector<unsigned int>& indexes = {});
 
 	/// \brief Reloads given feed.
 	///
@@ -49,7 +49,7 @@ public:
 	/// \brief Reloads all feeds with given indexes in feedlist.
 	///
 	/// Only updates status bar if \a unattended is false.
-	void reload_indexes(const std::vector<int>& indexes,
+	void reload_indexes(const std::vector<unsigned int>& indexes,
 		bool unattended = false);
 
 	/// \brief Reloads feeds occupying positions from \a start to \a end in

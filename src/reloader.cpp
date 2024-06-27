@@ -35,7 +35,7 @@ void Reloader::spawn_reloadthread()
 	t.detach();
 }
 
-void Reloader::start_reload_all_thread(const std::vector<int>& indexes)
+void Reloader::start_reload_all_thread(const std::vector<unsigned int>& indexes)
 {
 	LOG(Level::INFO, "starting reload all thread");
 	std::thread t([=]() {
@@ -225,7 +225,7 @@ void Reloader::reload_all(bool unattended)
 	notify_reload_finished(unread_feeds, unread_articles);
 }
 
-void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
+void Reloader::reload_indexes(const std::vector<unsigned int>& indexes, bool unattended)
 {
 	ScopeMeasure m1("Reloader::reload_indexes");
 	const auto unread_feeds =
