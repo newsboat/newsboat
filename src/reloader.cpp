@@ -35,7 +35,7 @@ void Reloader::spawn_reloadthread()
 	t.detach();
 }
 
-void Reloader::start_reload_all_thread(const std::vector<int>& indexes)
+void Reloader::start_reload_all_thread(const std::vector<unsigned int>& indexes)
 {
 	LOG(Level::INFO, "starting reload all thread");
 	std::thread t([=]() {
@@ -201,9 +201,11 @@ void Reloader::reload_all(bool unattended)
 	ctrl->get_feedcontainer()->reset_feeds_status();
 	const auto num_feeds = ctrl->get_feedcontainer()->feeds_size();
 
-	partition_reload_to_threads([=](unsigned int start, unsigned int end) {
-		reload_range(start, end, unattended);
-	}, num_feeds);
+	std::vector<unsigned int> v;
+	for (unsigned int i = 0; i < num_feeds; ++i) {
+		v.push_back(i);
+	}
+	reload_indexes_impl(v, unattended);
 
 	// refresh query feeds (update and sort)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
@@ -225,33 +227,8 @@ void Reloader::reload_all(bool unattended)
 	notify_reload_finished(unread_feeds, unread_articles);
 }
 
-void Reloader::reload_indexes(const std::vector<int>& indexes, bool unattended)
+void Reloader::reload_indexes_impl(std::vector<unsigned int> indexes, bool unattended)
 {
-	ScopeMeasure m1("Reloader::reload_indexes");
-	const auto unread_feeds =
-		ctrl->get_feedcontainer()->unread_feed_count();
-	const auto unread_articles =
-		ctrl->get_feedcontainer()->unread_item_count();
-
-	partition_reload_to_threads([&](unsigned int start, unsigned int end) {
-		for (auto i = start; i <= end; ++i) {
-			CurlHandle easyhandle;
-			reload(indexes[i], easyhandle, true, unattended);
-		}
-	}, indexes.size());
-
-	notify_reload_finished(unread_feeds, unread_articles);
-}
-
-void Reloader::reload_range(unsigned int start,
-	unsigned int end,
-	bool unattended)
-{
-	std::vector<unsigned int> v;
-	for (unsigned int i = start; i <= end; ++i) {
-		v.push_back(i);
-	}
-
 	auto extract = [](std::string& s, const std::string& url) {
 		size_t p = url.find("//");
 		p = (p == std::string::npos) ? 0 : p + 2;
@@ -262,7 +239,11 @@ void Reloader::reload_range(unsigned int start,
 
 	const auto feeds = ctrl->get_feedcontainer()->get_all_feeds();
 
-	std::sort(v.begin(), v.end(), [&](unsigned int a, unsigned int b) {
+	// Sort the feeds based on domain, so feeds on the same domain
+	// can share the curl handle.
+	//
+	// See commit: 115cf667485929bbb698ba8051dec7ff6a73739c
+	std::sort(indexes.begin(), indexes.end(), [&](unsigned int a, unsigned int b) {
 		std::string domain1, domain2;
 		extract(domain1, feeds[a]->rssurl());
 		extract(domain2, feeds[b]->rssurl());
@@ -271,14 +252,31 @@ void Reloader::reload_range(unsigned int start,
 		return domain1 < domain2;
 	});
 
-	CurlHandle easyhandle;
+	partition_reload_to_threads([&](unsigned int start, unsigned int end) {
+		CurlHandle easyhandle;
+		for (auto i = start; i <= end; ++i) {
+			unsigned int feed_index = indexes[i];
+			LOG(Level::DEBUG,
+				"Reloader::reload_indexes_impl: reloading feed #%u",
+				feed_index);
+			reload(feed_index, easyhandle, true, unattended);
+			// Reset any options set on the handle before next reload
+			curl_easy_reset(easyhandle.ptr());
+		}
+	}, indexes.size());
+}
 
-	for (const auto& i : v) {
-		LOG(Level::DEBUG,
-			"Reloader::reload_range: reloading feed #%u",
-			i);
-		reload(i, easyhandle, true, unattended);
-	}
+void Reloader::reload_indexes(const std::vector<unsigned int>& indexes, bool unattended)
+{
+	ScopeMeasure m1("Reloader::reload_indexes");
+	const auto unread_feeds =
+		ctrl->get_feedcontainer()->unread_feed_count();
+	const auto unread_articles =
+		ctrl->get_feedcontainer()->unread_item_count();
+
+	reload_indexes_impl(indexes, unattended);
+
+	notify_reload_finished(unread_feeds, unread_articles);
 }
 
 void Reloader::notify(const std::string& msg)

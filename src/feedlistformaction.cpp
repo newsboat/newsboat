@@ -273,7 +273,7 @@ REDO:
 			bool reload_only_visible_feeds =
 				cfg->get_configvalue_as_bool(
 					"reload-only-visible-feeds");
-			std::vector<int> idxs;
+			std::vector<unsigned int> idxs;
 			if (reload_only_visible_feeds) {
 				if (visible_feeds.empty()) {
 					// Do not reload *all* feeds, when
