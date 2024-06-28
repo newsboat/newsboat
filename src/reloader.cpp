@@ -260,6 +260,8 @@ void Reloader::reload_indexes_impl(std::vector<unsigned int> indexes, bool unatt
 				"Reloader::reload_indexes_impl: reloading feed #%u",
 				feed_index);
 			reload(feed_index, easyhandle, true, unattended);
+			// Reset any options set on the handle before next reload
+			curl_easy_reset(easyhandle.ptr());
 		}
 	}, indexes.size());
 }
