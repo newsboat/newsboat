@@ -1,6 +1,6 @@
 #!/usr/bin/env bb
 
-(ns readeck-bookmark-interactive
+(ns interactive-labels-readeck
   (:require [cheshire.core :as json]
             [babashka.curl :as curl]
             [babashka.tasks :as tasks]
