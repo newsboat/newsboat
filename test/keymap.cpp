@@ -192,13 +192,17 @@ TEST_CASE("handle_action()", "[KeyMap]")
 	SECTION("with one parameter") {
 		REQUIRE_THROWS_AS(k.handle_action("bind-key", "r"),
 			ConfigHandlerException);
+		REQUIRE_THROWS_AS(k.handle_action("bind-key", "rr"),
+			ConfigHandlerException);
 		REQUIRE_NOTHROW(k.handle_action("unbind-key", "r"));
+		REQUIRE_NOTHROW(k.handle_action("unbind-key", "rr"));
 		REQUIRE_THROWS_AS(k.handle_action("macro", "r"),
 			ConfigHandlerException);
 	}
 
 	SECTION("with two parameters") {
 		REQUIRE_NOTHROW(k.handle_action("bind-key", "r open"));
+		REQUIRE_NOTHROW(k.handle_action("bind-key", "rr open"));
 		REQUIRE_THROWS_AS(k.handle_action("an-invalid-action", "r open"),
 			ConfigHandlerException);
 	}

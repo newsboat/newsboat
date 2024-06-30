@@ -146,8 +146,6 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 
 int View::run()
 {
-	bool have_macroprefix = false;
-
 	feedlist_form = std::make_shared<FeedListFormAction>(
 			*this, feedlist_str, rsscache, filters, cfg, rxman);
 	apply_colors(feedlist_form);
@@ -169,6 +167,9 @@ int View::run()
 	/*
 	 * This is the main "event" loop of newsboat.
 	 */
+
+	bool have_macroprefix = false;
+	std::string key_buffer = "";
 
 	while (formaction_stack_size() > 0) {
 		// first, we take the current formaction.
@@ -217,11 +218,29 @@ int View::run()
 				event);
 			run_commands(keys->get_macro(key_combination));
 		} else {
-			const Operation op = keys->get_operation(key_combination, fa->id());
+			Operation op = keys->get_operation(key_combination, fa->id());
+
+			// Handle two-key bindings
+			std::string event_handled = event;
+			if (OP_NIL == op && event.size() == 1) {
+				if (key_buffer.size() == 0) {
+					key_buffer.push_back(event[0]);
+					status_line.show_message(event);
+				} else {
+					key_buffer.push_back(event[0]);
+					event_handled = key_buffer;
+					const auto updated = KeyCombination::from_bindkey(event_handled);
+
+					op = keys->get_operation(updated, fa->id());
+
+					key_buffer.clear();
+					status_line.show_message("");
+				}
+			}
 
 			LOG(Level::DEBUG,
 				"View::run: event = %s op = %u",
-				event,
+				event_handled,
 				op);
 
 			if (OP_MACROPREFIX == op) {

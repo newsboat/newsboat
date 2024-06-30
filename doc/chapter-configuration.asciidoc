@@ -121,8 +121,9 @@ configuration.
 
 === Key Bindings
 
-You can bind a key to an operation with the <<bind-key,`bind-key`>> configuration command.
-You can specify an optional dialog. This is the context in which the key binding is active.
+You can bind a single key or a two key combination to an operation with the
+<<bind-key,`bind-key`>> configuration command. You can specify an optional dialog.
+This is the context in which the key binding is active.
 
 The syntax for a key binding looks like this:
 
@@ -151,6 +152,9 @@ The following identifiers for special keys are supported:
 - `ESC` (Esc key)
 - `TAB` (Tab key)
 - `F1` to `F12` (F1 key to F12 key)
+
+Keep in mind that two key combinations are only supported for keys that can be represented
+with a single character like letters and numbers.
 
 *Operation*
 
