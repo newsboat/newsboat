@@ -9,6 +9,8 @@
 #include "strprintf.h"
 #include "test/test_helpers/httptestserver.h"
 #include "test_helpers/misc.h"
+#include <cstdint>
+#include <vector>
 
 using namespace newsboat;
 
@@ -55,14 +57,36 @@ TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetrie
 		{"content-type", "text/xml"},
 	}, {});
 
-	const auto feed = feedRetriever.retrieve(url);
+	REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
 	REQUIRE(testServer.num_hits(mockRegistration) == 1);
-	REQUIRE(feed.items.size() == 0);
 }
 
-TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
+TEST_CASE("Feed retriever retries download if no data is received",
 	"[FeedRetriever]")
 {
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	CurlHandle easyHandle;
+	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+
+	auto& testServer = test_helpers::HttpTestServer::get_instance();
+	const auto address = testServer.get_address();
+	const auto url = strprintf::fmt("http://%s/feed", address);
+
+	auto mockRegistration = testServer.add_endpoint("/feed", {}, 200, {
+		{"content-type", "text/xml"},
+	}, {});
+
+	cfg.set_configvalue("download-retries", "3");
+
+	feedRetriever.retrieve(url);
+	REQUIRE(testServer.num_hits(mockRegistration) == 3);
+}
+
+TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 429 (Too Many Requests)",
+	"[FeedRetriever]")
+{
+	auto http_status = GENERATE(as<std::uint16_t> {}, 304, 429);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	CurlHandle easyHandle;
@@ -78,19 +102,18 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified)",
 
 	auto mockRegistration = testServer.add_endpoint("/feed", {
 		{"If-None-Match", "some-random-etag"},
-	}, 304, {
+	}, http_status, {
 		{"content-type", "text/xml"},
 	}, {});
 
 	cfg.set_configvalue("download-retries", "5");
 
-	const auto feed = feedRetriever.retrieve(url);
-	// TODO: Fix behavior and update this test.
-	// There should only be 1 request.
-	// Added an assertion for the wrong amount to make sure we update this test when fixing the behavior.
-	// See https://github.com/newsboat/newsboat/issues/2732
-	REQUIRE(testServer.num_hits(mockRegistration) == 5);
-	//REQUIRE(testServer.num_Hits(mockRegistration) == 1);
+	if (http_status == 304) {
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::NotModifiedException);
+	} else if (http_status == 429) {
+		REQUIRE_THROWS_AS(feedRetriever.retrieve(url), rsspp::Exception);
+	}
+	REQUIRE(testServer.num_hits(mockRegistration) == 1);
 }
 
 TEST_CASE("Feed retriever throws on HTTP error status codes", "[FeedRetriever]")
