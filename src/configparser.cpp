@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "configparser.h"
 
 #include <algorithm>
@@ -35,7 +33,8 @@ void ConfigParser::handle_action(const std::string& action,
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		const Filepath tilde_expanded = utils::resolve_tilde(params[0]);
+		const Filepath path = Filepath::from_locale_string(params[0]);
+		const Filepath tilde_expanded = utils::resolve_tilde(path);
 		const Filepath current_fpath = included_files.back();
 		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
 			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
