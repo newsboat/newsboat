@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include <algorithm>
 #include <cstddef>
 #include <iostream>
@@ -168,9 +166,9 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 				tr_search.length(), tr_cmdline.length(), tr_queue.length()});
 
 	const auto print_filepath = [widest](const std::string& name,
-	const std::string& value) {
+	const Filepath& value) {
 		std::cout << "\t- " << name << ":  " << std::string(
-				widest - name.length(), ' ') << value << '\n';
+				widest - name.length(), ' ') << value.to_locale_string() << '\n';
 	};
 
 	print_filepath(tr_config, configpaths.config_file());
