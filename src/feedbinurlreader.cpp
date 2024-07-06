@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "feedbinurlreader.h"
 
 #include <cinttypes>
@@ -10,7 +8,7 @@
 
 namespace newsboat {
 
-FeedbinUrlReader::FeedbinUrlReader(const std::string& url_file, RemoteApi* a)
+FeedbinUrlReader::FeedbinUrlReader(const Filepath& url_file, RemoteApi* a)
 	: file(url_file)
 	, api(a)
 {
