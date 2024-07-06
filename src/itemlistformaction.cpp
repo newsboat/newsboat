@@ -416,12 +416,12 @@ bool ItemListFormAction::process_operation(Operation op,
 					const auto suggestion = v.get_filename_suggestion(title);
 					filename = v.run_filebrowser(suggestion);
 				} else {
-					filename = args.front();
+					filename = Filepath::from_locale_string(args.front());
 				}
 				break;
 			case BindingType::Macro:
 				if (args.size() > 0) {
-					filename = args.front();
+					filename = Filepath::from_locale_string(args.front());
 				}
 				break;
 			case BindingType::BindKey:
@@ -1499,7 +1499,8 @@ void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
 		v.get_statusline().show_error(_("Error: no item selected!"));
 		return;
 	}
-	const Filepath filename = utils::resolve_tilde(cmd_args.front());
+	const auto path = Filepath::from_locale_string(cmd_args.front());
+	const Filepath filename = utils::resolve_tilde(path);
 	const unsigned int itempos = list.get_position();
 	LOG(Level::INFO,
 		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
