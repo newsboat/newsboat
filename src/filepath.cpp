@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "filepath.h"
 
 namespace newsboat {
@@ -99,7 +97,7 @@ nonstd::optional<Filepath> Filepath::file_name() const
 	if (res.empty()) {
 		return nonstd::nullopt;
 	} else {
-		return res;
+		return from_locale_string(res);
 	}
 }
 
