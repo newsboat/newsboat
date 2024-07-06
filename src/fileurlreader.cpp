@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "fileurlreader.h"
 
 #include <cstring>
@@ -18,7 +16,7 @@ FileUrlReader::FileUrlReader(const Filepath& file)
 
 std::string FileUrlReader::get_source()
 {
-	return filename;
+	return filename.to_locale_string();
 }
 
 nonstd::optional<utils::ReadTextFileError> FileUrlReader::reload()
@@ -62,7 +60,7 @@ nonstd::optional<utils::ReadTextFileError> FileUrlReader::reload()
 nonstd::optional<std::string> FileUrlReader::write_config()
 {
 	std::fstream f;
-	f.open(filename, std::fstream::out);
+	f.open(filename.to_locale_string(), std::fstream::out);
 	if (!f.is_open()) {
 		const auto error_message = strerror(errno);
 		return strprintf::fmt(_("Error: failed to open file \"%s\": %s"),
