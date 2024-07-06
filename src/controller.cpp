@@ -174,7 +174,7 @@ int Controller::run(const CliArgsParser& args)
 	cfgparser.register_handler("highlight-feed", rxman);
 
 	try {
-		cfgparser.parse_file("/etc/" PACKAGE "/config");
+		cfgparser.parse_file(Filepath::from_locale_string("/etc/" PACKAGE "/config"));
 		cfgparser.parse_file(configpaths.config_file());
 	} catch (const ConfigException& ex) {
 		LOG(Level::ERROR,
@@ -880,7 +880,7 @@ void Controller::edit_urls_file()
 
 	std::string cmdline = strprintf::fmt("%s \"%s\"",
 			editor,
-			utils::replace_all(configpaths.url_file(), "\"", "\\\""));
+			utils::replace_all(configpaths.url_file().to_locale_string(), "\"", "\\\""));
 
 	v->push_empty_formaction();
 	Stfl::reset();

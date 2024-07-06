@@ -191,24 +191,22 @@ bool ItemViewFormAction::process_operation(Operation op,
 		return enqueue_item_enclosure(*item, *feed, v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
-		std::optional<std::string> filename;
+		std::optional<Filepath> filename;
 		switch (bindingType) {
 		case BindingType::Bind:
 			if (args.empty()) {
-				filename = v.run_filebrowser( utils::utf8_to_locale(v.get_filename_suggestion(
-								item->title())));
+				filename = v.run_filebrowser(v.get_filename_suggestion(item->title()));
 			} else {
-				filename = args.front();
+				filename = Filepath::from_locale_string(args.front());
 			}
 			break;
 		case BindingType::Macro:
 			if (args.size() > 0) {
-				filename = args.front();
+				filename = Filepath::from_locale_string(args.front());
 			}
 			break;
 		case BindingType::BindKey:
-			filename = v.run_filebrowser( utils::utf8_to_locale(v.get_filename_suggestion(
-							item->title())));
+			filename = v.run_filebrowser(v.get_filename_suggestion(item->title()));
 			break;
 		}
 		if (!filename.has_value()) {
@@ -620,7 +618,8 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	switch (command.type) {
 	case CommandType::SAVE:
 		if (!command.args.empty()) {
-			handle_save(command.args.front());
+			const auto path = Filepath::from_locale_string(command.args.front());
+			handle_save(path);
 		}
 		break;
 	default:
