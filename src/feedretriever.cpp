@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "feedretriever.h"
 
 #include <cinttypes>
@@ -76,7 +74,8 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 	} else if (utils::is_query_url(uri)) {
 		return {};
 	} else if (uri.substr(0, 7) == "file://") {
-		return parse_file(uri.substr(7, uri.length() - 7));
+		const auto path = Filepath::from_locale_string(uri.substr(7, uri.length() - 7));
+		return parse_file(path);
 	} else {
 		throw strprintf::fmt(_("Error: unsupported URL: %s"), uri);
 	}

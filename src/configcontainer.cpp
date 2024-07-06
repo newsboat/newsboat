@@ -42,7 +42,7 @@ ConfigContainer::ConfigContainer()
 		ConfigData("false", ConfigDataType::BOOL)},
 	{
 		"browser",
-		ConfigData(utils::get_default_browser(),
+		ConfigData(utils::get_default_browser().to_locale_string(),
 			ConfigDataType::PATH)},
 	{"cache-file", ConfigData("", ConfigDataType::PATH)},
 	{
