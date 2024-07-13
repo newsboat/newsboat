@@ -16,7 +16,7 @@ FileUrlReader::FileUrlReader(const Filepath& file)
 
 std::string FileUrlReader::get_source()
 {
-	return filename.to_locale_string();
+	return filename.display();
 }
 
 std::optional<utils::ReadTextFileError> FileUrlReader::reload()
