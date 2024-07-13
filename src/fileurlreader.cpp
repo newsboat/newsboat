@@ -16,7 +16,7 @@ FileUrlReader::FileUrlReader(const Filepath& file)
 
 std::string FileUrlReader::get_source() const
 {
-	return filename.to_locale_string();
+	return filename.display();
 }
 
 void FileUrlReader::add_url(const std::string& url,
