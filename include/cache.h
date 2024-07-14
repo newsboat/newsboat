@@ -42,7 +42,7 @@ using schema_patches = std::map<SchemaVersion, std::vector<std::string>>;
 
 class Cache {
 public:
-	Cache(const Filepath& cachefile, ConfigContainer* c);
+	Cache(const Filepath& cachefile, ConfigContainer& c);
 	~Cache();
 	void externalize_rssfeed(RssFeed& feed,
 		bool reset_unread);
@@ -111,7 +111,7 @@ private:
 	void close_database();
 
 	sqlite3* db = nullptr;
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 	std::recursive_mutex mtx;
 };
 
