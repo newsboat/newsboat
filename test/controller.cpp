@@ -33,7 +33,7 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 
 	auto cfg = c.get_config();
 	cfg->set_configvalue("save-path", save_path);
-	Cache rsscache(":memory:", cfg);
+	Cache rsscache(":memory:", *cfg);
 
 
 	RssItem item(&rsscache);

@@ -42,7 +42,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	FilterContainer filters;
 	RegexManager rxman;
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	cfg.set_configvalue("pager", "cat %f > " + pagerfile.get_path());
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
@@ -80,7 +80,7 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, "");
@@ -122,7 +122,7 @@ TEST_CASE(
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -160,7 +160,7 @@ TEST_CASE(
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "false %u");
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -194,7 +194,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -229,7 +229,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -266,7 +266,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -352,7 +352,7 @@ TEST_CASE(
 	ConfigContainer cfg;
 	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -429,7 +429,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 	test_helpers::TempFile urlFile;
@@ -495,7 +495,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 	test_helpers::TempFile bookmarkFile;
@@ -558,7 +558,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -617,7 +617,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	newsboat::View v(c);
 	test_helpers::TempFile saveFile;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -679,7 +679,7 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
@@ -704,7 +704,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -736,7 +736,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	ConfigContainer cfg;
 	cfg.set_configvalue(
 		"external-url-viewer", "tee > " + articleFile.get_path());
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	std::string line;
 
 	std::string first_article_title = "First_Article";
@@ -784,7 +784,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 	Controller c(paths);
 	newsboat::View v(c);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	KeyMap k(KM_NEWSBOAT);
 	v.set_keymap(&k);
@@ -823,7 +823,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	newsboat::View v(c);
 	test_helpers::TempFile articleFile;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
@@ -888,7 +888,7 @@ TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
 	newsboat::View v(c);
 	v.set_config_container(&cfg);
 	v.set_keymap(&k);
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	FilterContainer filters;
 	RegexManager rxman;
 
