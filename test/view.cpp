@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "view.h"
 
 #include <string>
@@ -25,7 +23,6 @@ TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", 
 	newsboat::View v(c);
 
 	ConfigContainer cfg{};
-	Cache rsscache(":memory:", cfg);
 
 	v.set_config_container(&cfg);
 	c.set_view(&v);

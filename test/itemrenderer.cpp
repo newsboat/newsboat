@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "itemrenderer.h"
 
 #include "3rd-party/catch.hpp"
@@ -70,11 +68,11 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	// reproducible
 	cfg.set_configvalue("text-width", "80");
 
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	SECTION("Item without an enclosure") {
 		item->set_description(ITEM_DESCRIPTON, "text/html");
@@ -221,11 +219,11 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 
 	ConfigContainer cfg;
 
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	item->set_description(
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
@@ -328,11 +326,11 @@ TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
 
 	ConfigContainer cfg;
 
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	feed->set_title("<" + FEED_TITLE + ">");
 	item->set_title("<" + ITEM_TITLE + ">");
@@ -363,11 +361,11 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	// reproducible
 	cfg.set_configvalue("text-width", "80");
 
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	SECTION("Item without a feed title") {
 		item->get_feedptr()->set_title("");
@@ -477,11 +475,11 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 	ConfigContainer cfg;
 	cfg.set_configvalue("text-width", "80");
 
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	SECTION("Single-paragraph description") {
 		const auto description = std::string() +
@@ -590,11 +588,11 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 	"[item_renderer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	const auto check = [&]() {
 		const auto result = item_renderer::get_feedtitle(*item);
@@ -617,11 +615,11 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
 	"[item_renderer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	const auto feedlink = std::string("https://rss.example.com/~joe/");
 
@@ -637,12 +635,12 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	"[item_renderer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	const auto feedurl = std::string("https://example.com/~joe/entries.rss");
 
-	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, feedurl);
-	auto item = std::make_shared<RssItem>(&rsscache);
+	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(rsscache.get(), feedurl);
+	auto item = std::make_shared<RssItem>(rsscache.get());
 	item->set_feedptr(feed);
 
 
@@ -662,11 +660,11 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 	ConfigContainer cfg;
 	RegexManager rxman;
 
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
-	std::tie(item, feed) = create_test_item(&rsscache);
+	std::tie(item, feed) = create_test_item(rsscache.get());
 
 	feed->set_title("<" + FEED_TITLE + ">");
 	item->set_title("<" + ITEM_TITLE + ">");
