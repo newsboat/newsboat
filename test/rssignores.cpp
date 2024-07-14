@@ -244,7 +244,7 @@ TEST_CASE("RssIgnores::matches() returns true if given RssItem matches any "
 	RssIgnores ignores;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssItem item(&rsscache);
 
 	const auto feedurl = "https://example.com/feed.xml";

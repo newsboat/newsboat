@@ -21,7 +21,7 @@ TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml");
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	CurlHandle easyHandle;
 	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
 
@@ -41,7 +41,7 @@ TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetriever]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	CurlHandle easyHandle;
 	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
 
@@ -67,7 +67,7 @@ TEST_CASE("Feed retriever retries download if no data is received",
 	"[FeedRetriever]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	CurlHandle easyHandle;
 	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
 
@@ -90,7 +90,7 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 42
 {
 	auto http_status = GENERATE(as<std::uint16_t> {}, 304, 429);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	CurlHandle easyHandle;
 	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
 
@@ -121,7 +121,7 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 42
 TEST_CASE("Feed retriever throws on HTTP error status codes", "[FeedRetriever]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	CurlHandle easyHandle;
 	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
 
