@@ -44,8 +44,10 @@ class Cache {
 public:
 	Cache(const Filepath& cachefile, ConfigContainer& c);
 	~Cache();
-	void externalize_rssfeed(RssFeed& feed,
-		bool reset_unread);
+
+	static std::unique_ptr<Cache> in_memory(ConfigContainer& c);
+
+	void externalize_rssfeed(RssFeed& feed, bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
 		RssIgnores* ign);
 	void update_rssitem_unread_and_enqueued(RssItem& item,

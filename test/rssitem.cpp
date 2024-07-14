@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "rssitem.h"
 
 #include <unistd.h>
@@ -17,8 +15,8 @@ using namespace newsboat;
 TEST_CASE("RssItem::sort_flags() cleans up flags", "[RssItem]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
-	RssItem item(&rsscache);
+	auto rsscache = Cache::in_memory(cfg);
+	RssItem item(rsscache.get());
 
 	SECTION("Repeated letters do not erase other letters") {
 		std::string inputflags = "Abcdecf";
@@ -37,8 +35,8 @@ TEST_CASE("RssItem::sort_flags() cleans up flags", "[RssItem]")
 TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
-	RssItem item(&rsscache);
+	auto rsscache = Cache::in_memory(cfg);
+	RssItem item(rsscache.get());
 
 	SECTION("title") {
 		const auto attr = "title";
@@ -232,8 +230,8 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 	}
 
 	SECTION("unknown attributes are forwarded to parent feed") {
-		auto feed = std::make_shared<RssFeed>(&rsscache, "");
-		auto item = std::make_shared<RssItem>(&rsscache);
+		auto feed = std::make_shared<RssFeed>(rsscache.get(), "");
+		auto item = std::make_shared<RssItem>(rsscache.get());
 		feed->add_item(item);
 
 		const auto feedindex = 42;
@@ -256,8 +254,8 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 TEST_CASE("set_title() removes superfluous whitespace", "[RssItem]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
-	RssItem item(&rsscache);
+	auto rsscache = Cache::in_memory(cfg);
+	RssItem item(rsscache.get());
 
 	SECTION("duplicate whitespace") {
 		item.set_title("lorem        ipsum");
