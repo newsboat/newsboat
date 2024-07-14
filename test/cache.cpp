@@ -19,7 +19,7 @@ using namespace newsboat;
 TEST_CASE("items in search result can be marked read", "[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const std::string uri = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
@@ -47,7 +47,7 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 {
 	test_helpers::TempFile dbfile;
 	auto cfg = std::make_unique<ConfigContainer>();
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 	const std::string uri = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
@@ -78,7 +78,7 @@ TEST_CASE("Cleaning old articles works", "[Cache]")
 	 * are dating back to 2006. */
 	cfg = std::make_unique<ConfigContainer>();
 	cfg->set_configvalue("keep-articles-days", "42");
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 	feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
 
 	/* The important part: old articles should be gone, new one remains. */
@@ -89,7 +89,7 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[Cache]")
 {
 	auto cfg = std::make_unique<ConfigContainer>();
 	test_helpers::TempFile dbfile;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 	const auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
@@ -107,7 +107,7 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[Cache]")
 				feedurl, last_modified, etag));
 
 		cfg = std::make_unique<ConfigContainer>();
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 		/* Scrambling the value to make sure the following call changes
 		 * it. */
@@ -140,7 +140,7 @@ TEST_CASE("Last-Modified and ETag values are also stored in DB if feed was not y
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::string feedurl = "http://example.com/feed.xml";
 	const time_t lastmodified = 42;
@@ -160,7 +160,7 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[Cache]")
 	std::shared_ptr<RssFeed> feed, test_feed;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	test_feed = std::make_shared<RssFeed>(&rsscache, "");
 	test_feed->set_title("Test feed");
@@ -274,7 +274,7 @@ TEST_CASE(
 
 	std::vector<std::shared_ptr<RssFeed>> feeds;
 	auto cfg = std::make_unique<ConfigContainer>();
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 	for (const auto& url : feedurls) {
 		CurlHandle easyHandle;
 		FeedRetriever feed_retriever(*cfg, *rsscache, easyHandle);
@@ -289,7 +289,7 @@ TEST_CASE(
 		rsscache->cleanup_cache(feeds);
 
 		cfg = std::make_unique<ConfigContainer>();
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 		for (const auto& url : feedurls) {
 			std::shared_ptr<RssFeed> feed =
@@ -308,7 +308,7 @@ TEST_CASE(
 			rsscache->cleanup_cache(feeds);
 
 			cfg = std::make_unique<ConfigContainer>();
-			rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+			rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 			std::shared_ptr<RssFeed> feed =
 				rsscache->internalize_rssfeed(
@@ -329,7 +329,7 @@ TEST_CASE(
 			rsscache->cleanup_cache(feeds);
 
 			cfg = std::make_unique<ConfigContainer>();
-			rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+			rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 			std::shared_ptr<RssFeed> feed =
 				rsscache->internalize_rssfeed(
@@ -349,7 +349,7 @@ TEST_CASE(
 			rsscache->cleanup_cache(feeds, always_clean);
 
 			cfg = std::make_unique<ConfigContainer>();
-			rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+			rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 			std::shared_ptr<RssFeed> feed =
 				rsscache->internalize_rssfeed(
@@ -370,7 +370,7 @@ TEST_CASE(
 			rsscache->cleanup_cache(feeds, always_clean);
 
 			cfg = std::make_unique<ConfigContainer>();
-			rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+			rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 			std::shared_ptr<RssFeed> feed =
 				rsscache->internalize_rssfeed(
@@ -383,7 +383,7 @@ TEST_CASE(
 TEST_CASE("fetch_descriptions fills out feed item's descriptions", "[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
@@ -408,7 +408,7 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 
 	// We'll keep our own count of which GUIDs are unread
 	std::unordered_set<std::string> read_guids;
@@ -460,7 +460,7 @@ TEST_CASE("get_read_item_guids returns GUIDs of items that are marked read",
 
 	// Lastly, let's make sure the info is indeed retrieved from the
 	// database and isn't just stored in the Cache object
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	INFO("Testing on two feeds with new `Cache` object");
 	check(rsscache->get_read_item_guids());
 }
@@ -470,7 +470,7 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -483,7 +483,7 @@ TEST_CASE("mark_item_deleted changes \"deleted\" flag of item with given GUID ",
 	rsscache->externalize_rssfeed(*feed, false);
 	rsscache->mark_item_deleted(guid, true);
 
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	// One item was deleted, so shouldn't have been loaded
 	REQUIRE(feed->total_item_count() == 7);
@@ -494,7 +494,7 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -508,7 +508,7 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 
 		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid({}));
 
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->unread_item_count() == 8);
 	}
@@ -521,7 +521,7 @@ TEST_CASE("mark_items_read_by_guid marks items with given GUIDs as unread ",
 
 		REQUIRE_NOTHROW(rsscache->mark_items_read_by_guid(guids));
 
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->unread_item_count() == 6);
 	}
@@ -533,7 +533,7 @@ TEST_CASE(
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
@@ -586,7 +586,7 @@ TEST_CASE("search_for_items finds all items with matching title or content",
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	std::vector<std::string> feedurls = {
 		"file://data/atom10_1.xml", "file://data/rss20_1.xml"
 	};
@@ -624,7 +624,7 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	const auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -636,7 +636,7 @@ TEST_CASE("update_rssitem_flags dumps `rss_item` object's flags to DB",
 	item->set_flags("abc");
 	REQUIRE_NOTHROW(rsscache->update_rssitem_flags(item.get()));
 
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	feed = rsscache->internalize_rssfeed("file://data/rss.xml", nullptr);
 
 	REQUIRE(feed->items()[0]->flags() == "abc");
@@ -649,7 +649,7 @@ TEST_CASE(
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	const auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -666,7 +666,7 @@ TEST_CASE(
 
 		REQUIRE_NOTHROW(rsscache->update_rssitem_unread_and_enqueued(
 				*item, feedurl));
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE_FALSE(feed->items()[0]->unread());
@@ -678,7 +678,7 @@ TEST_CASE(
 
 		REQUIRE_NOTHROW(rsscache->update_rssitem_unread_and_enqueued(
 				*item, feedurl));
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE(feed->items()[0]->enqueued());
@@ -692,7 +692,7 @@ TEST_CASE(
 
 		REQUIRE_NOTHROW(rsscache->update_rssitem_unread_and_enqueued(
 				*item, feedurl));
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE_FALSE(feed->items()[0]->unread());
@@ -750,7 +750,7 @@ TEST_CASE(
 
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	const auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -763,7 +763,7 @@ TEST_CASE(
 	SECTION("Simple case") {
 		rsscache->externalize_rssfeed(*initial_feed, false);
 
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		auto new_feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		new_feed->load();
 
@@ -775,7 +775,7 @@ TEST_CASE(
 		rsscache->externalize_rssfeed(*initial_feed, false);
 		rsscache->externalize_rssfeed(*initial_feed, false);
 
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		auto new_feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		new_feed->load();
 
@@ -788,7 +788,7 @@ TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 {
 	test_helpers::TempFile dbfile;
 	auto cfg = std::make_unique<ConfigContainer>();
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 	cfg->set_configvalue("max-items", "3");
 	const auto feedurl = "file://data/rss.xml";
@@ -800,7 +800,7 @@ TEST_CASE("externalize_rssfeed doesn't store more than `max-items` items",
 	rsscache->externalize_rssfeed(*feed, false);
 
 	cfg = std::make_unique<ConfigContainer>();
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	REQUIRE(feed->total_item_count() == 3);
 }
@@ -817,7 +817,7 @@ TEST_CASE(
 {
 	test_helpers::TempFile dbfile;
 	auto cfg = std::make_unique<ConfigContainer>();
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 
 	const auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
@@ -831,7 +831,7 @@ TEST_CASE(
 
 		cfg = std::make_unique<ConfigContainer>();
 		cfg->set_configvalue("max-items", "3");
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->total_item_count() == 3);
 	}
@@ -845,7 +845,7 @@ TEST_CASE(
 
 		cfg = std::make_unique<ConfigContainer>();
 		cfg->set_configvalue("max-items", "1");
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg.get());
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), *cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		// All flagged items should be present no matter what
 		unsigned int flagged_count = 0;
@@ -863,7 +863,7 @@ TEST_CASE(
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	auto feedurl = "query:misc:age between 0:10";
 	auto feed = rsscache.internalize_rssfeed(feedurl, nullptr);
 
@@ -875,7 +875,7 @@ TEST_CASE("internalize_rssfeed doesn't return items that are ignored",
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::string feedurl("file://data/rss092_1.xml");
 	CurlHandle easyHandle;
@@ -901,7 +901,7 @@ TEST_CASE(
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -910,7 +910,7 @@ TEST_CASE(
 	feed->items()[0]->set_unread_nowrite(false);
 	rsscache->externalize_rssfeed(*feed, false);
 
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	feed->load();
 	REQUIRE_FALSE(feed->items()[0]->unread());
@@ -919,14 +919,14 @@ TEST_CASE(
 
 	SECTION("reset_unread = false; item remains read") {
 		rsscache->externalize_rssfeed(*feed, false);
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE_FALSE(feed->items()[0]->unread());
 	}
 
 	SECTION("reset_unread = true; item becomes unread") {
 		rsscache->externalize_rssfeed(*feed, true);
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->items()[0]->unread());
 	}
@@ -939,7 +939,7 @@ TEST_CASE(
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	auto feedurl = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -948,14 +948,14 @@ TEST_CASE(
 	feed->items()[0]->set_unread_nowrite(false);
 	rsscache->externalize_rssfeed(*feed, false);
 
-	rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 	auto item = feed->items()[0];
 	item->set_unread_nowrite(true);
 
 	SECTION("override_unread not set; item remains read") {
 		rsscache->externalize_rssfeed(*feed, false);
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE_FALSE(feed->items()[0]->unread());
 	}
@@ -963,7 +963,7 @@ TEST_CASE(
 	SECTION("override_unread is set; item becomes unread") {
 		item->set_override_unread(true);
 		rsscache->externalize_rssfeed(*feed, false);
-		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+		rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 		REQUIRE(feed->items()[0]->unread());
 	}
@@ -976,7 +976,7 @@ TEST_CASE(
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 
 	auto feed = std::make_shared<RssFeed>(rsscache.get(),
 			"query:All unread:unread = \"yes\"");
@@ -1032,7 +1032,7 @@ TEST_CASE("do_vacuum doesn't throw an exception", "[Cache]")
 {
 	test_helpers::TempFile dbfile;
 	ConfigContainer cfg;
-	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+	auto rsscache = std::make_unique<Cache>(dbfile.get_path(), cfg);
 	const std::string uri = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
@@ -1043,14 +1043,14 @@ TEST_CASE("do_vacuum doesn't throw an exception", "[Cache]")
 	REQUIRE_NOTHROW(rsscache->do_vacuum());
 
 	// Checking that Cache can still be opened
-	REQUIRE_NOTHROW(rsscache.reset(new Cache(dbfile.get_path(), &cfg)));
+	REQUIRE_NOTHROW(rsscache.reset(new Cache(dbfile.get_path(), cfg)));
 }
 
 TEST_CASE("search_in_items returns items that contain given substring",
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const std::string uri = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
@@ -1093,7 +1093,7 @@ TEST_CASE("search_in_items returns items that contain given substring",
 TEST_CASE("search_in_items returns empty set if input set is empty", "[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const std::string uri = "file://data/rss.xml";
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
@@ -1110,7 +1110,7 @@ TEST_CASE("search_in_items returns empty set if input set is empty", "[Cache]")
 TEST_CASE("Ignoring articles in search", "[Cache]")
 {
 	ConfigContainer cfg{};
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::string uri = "file://data/rss.xml";
 	CurlHandle easyHandle;

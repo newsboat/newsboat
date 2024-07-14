@@ -230,7 +230,7 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		rsscache = new Cache(configpaths.cache_file(), &cfg);
+		rsscache = new Cache(configpaths.cache_file(), cfg);
 	} catch (const DbException& e) {
 		std::cerr << strprintf::fmt(
 				_("Error: opening the cache file `%s' "
