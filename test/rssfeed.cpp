@@ -18,7 +18,7 @@ TEST_CASE("RssFeed constructor checks if query feed has a valid query",
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	SECTION("invalid query results in exception") {
 		REQUIRE_THROWS(RssFeed(&rsscache, "query:a title:unread ="));
@@ -37,7 +37,7 @@ TEST_CASE("RssFeed constructor checks if query feed has a valid query",
 TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
@@ -217,7 +217,7 @@ TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
@@ -247,7 +247,7 @@ TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 	const std::vector<std::string> tags = {"One", "Two", "Three", "Four"};
 	f.set_tags(tags);
@@ -263,7 +263,7 @@ TEST_CASE("RssFeed::matches_tag() returns true if article has a specified tag",
 TEST_CASE("RssFeed::get_firsttag() returns first tag", "[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 
 	SECTION("Empty tag array") {
@@ -296,7 +296,7 @@ TEST_CASE(
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 
 	REQUIRE_FALSE(f.hidden());
@@ -319,7 +319,7 @@ TEST_CASE(
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
@@ -337,7 +337,7 @@ TEST_CASE(
 TEST_CASE("RssFeed::set_tags() sets tags for a feed", "[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 
 	std::vector<std::string> tags = {"One", "Two"};
@@ -354,7 +354,7 @@ TEST_CASE(
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 	for (int i = 0; i < 5; ++i) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
@@ -372,7 +372,7 @@ TEST_CASE("If item's <title> is empty, try to deduce it from the URL",
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	CurlHandle easyHandle;
 	FeedRetriever feed_retriever(cfg, rsscache, easyHandle);
 	const std::string uri = "file://data/items_without_titles.xml";
@@ -396,7 +396,7 @@ TEST_CASE(
 	"[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const auto check_if_query_feed = [&](const std::string& rssurl) {
 		RssFeed f(&rsscache, rssurl);
@@ -413,7 +413,7 @@ TEST_CASE(
 TEST_CASE("RssFeed contains a number of matchable attributes", "[RssFeed]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssFeed f(&rsscache, "");
 
 	SECTION("`feedtitle`, containing feed's title") {

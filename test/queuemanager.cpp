@@ -20,7 +20,7 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 	GIVEN("A fresh instance of QueueManager") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto item = std::make_shared<RssItem>(&cache);
 		const std::string enclosure_url("https://example.com/podcast.mp3");
@@ -134,7 +134,7 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 	GIVEN("Pristine QueueManager and two RssItems") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto item1 = std::make_shared<RssItem>(&cache);
 		const std::string enclosure_url1("https://example.com/podcast.mp3");
@@ -210,7 +210,7 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 	GIVEN("Pristine QueueManager, an RssItem, and an uneditable queue file") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto item = std::make_shared<RssItem>(&cache);
 		item->set_enclosure_url("https://example.com/podcast.mp3");
@@ -251,7 +251,7 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 		cfg.set_configvalue("download-path", "/tmp/nonexistent-newsboat");
 	}
 
-	Cache cache(":memory:", &cfg);
+	Cache cache(":memory:", cfg);
 
 	auto item1 = std::make_shared<RssItem>(&cache);
 	const std::string enclosure_url1("https://example.com/podcast.mp3");
@@ -299,7 +299,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 	// *exactly* how the result should look.
 	cfg.set_configvalue("download-path", "/example/");
 
-	Cache cache(":memory:", &cfg);
+	Cache cache(":memory:", cfg);
 
 	auto item = std::make_shared<RssItem>(&cache);
 	item->set_enclosure_url("https://example.com/~adam/podcast.mp3");
@@ -429,7 +429,7 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 	GIVEN("Pristine QueueManager and a feed of three items") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/podcasts.atom");
 
@@ -484,7 +484,7 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 	GIVEN("Pristine QueueManager and a feed of two items") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
@@ -538,7 +538,7 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 	GIVEN("Pristine QueueManager, a single-item feed, and an uneditable queue file") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
@@ -576,7 +576,7 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 	// *exactly* how the result should look.
 	cfg.set_configvalue("download-path", "/example/");
 
-	Cache cache(":memory:", &cfg);
+	Cache cache(":memory:", cfg);
 
 	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
@@ -619,7 +619,7 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 	// *exactly* how the result should look.
 	cfg.set_configvalue("download-path", "/example/");
 
-	Cache cache(":memory:", &cfg);
+	Cache cache(":memory:", cfg);
 
 	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
@@ -659,7 +659,7 @@ TEST_CASE("autoenqueue() does not enqueue items with an invalid podcast type",
 {
 	GIVEN("Pristine QueueManager and a feed of three items with one of them having an image enclosure") {
 		ConfigContainer cfg;
-		Cache cache(":memory:", &cfg);
+		Cache cache(":memory:", cfg);
 
 		auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/news.atom");
 
