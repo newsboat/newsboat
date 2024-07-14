@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "feedretriever.h"
 
 #include "3rd-party/catch.hpp"
@@ -22,9 +20,9 @@ TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml");
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	CurlHandle easyHandle;
-	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 
 	auto& testServer = test_helpers::HttpTestServer::get_instance();
 	auto mockRegistration = testServer.add_endpoint("/feed", {}, 200, {
@@ -42,17 +40,17 @@ TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetriever]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	CurlHandle easyHandle;
-	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 
 	auto& testServer = test_helpers::HttpTestServer::get_instance();
 	const auto address = testServer.get_address();
 	const auto url = strprintf::fmt("http://%s/feed", address);
 
-	RssFeed feed_with_etag(&rsscache, url);
-	rsscache.externalize_rssfeed(feed_with_etag, false);
-	rsscache.update_lastmodified(url, {}, "some-random-etag");
+	RssFeed feed_with_etag(rsscache.get(), url);
+	rsscache->externalize_rssfeed(feed_with_etag, false);
+	rsscache->update_lastmodified(url, {}, "some-random-etag");
 
 	auto mockRegistration = testServer.add_endpoint("/feed", {
 		{"If-None-Match", "some-random-etag"},
@@ -68,9 +66,9 @@ TEST_CASE("Feed retriever retries download if no data is received",
 	"[FeedRetriever]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	CurlHandle easyHandle;
-	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 
 	auto& testServer = test_helpers::HttpTestServer::get_instance();
 	const auto address = testServer.get_address();
@@ -91,17 +89,17 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 42
 {
 	auto http_status = GENERATE(as<std::uint16_t> {}, 304, 429);
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	CurlHandle easyHandle;
-	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 
 	auto& testServer = test_helpers::HttpTestServer::get_instance();
 	const auto address = testServer.get_address();
 	const auto url = strprintf::fmt("http://%s/feed", address);
 
-	RssFeed feed_with_etag(&rsscache, url);
-	rsscache.externalize_rssfeed(feed_with_etag, false);
-	rsscache.update_lastmodified(url, {}, "some-random-etag");
+	RssFeed feed_with_etag(rsscache.get(), url);
+	rsscache->externalize_rssfeed(feed_with_etag, false);
+	rsscache->update_lastmodified(url, {}, "some-random-etag");
 
 	auto mockRegistration = testServer.add_endpoint("/feed", {
 		{"If-None-Match", "some-random-etag"},
@@ -122,9 +120,9 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 42
 TEST_CASE("Feed retriever throws on HTTP error status codes", "[FeedRetriever]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	CurlHandle easyHandle;
-	FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+	FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 
 	auto& testServer = test_helpers::HttpTestServer::get_instance();
 	const auto address = testServer.get_address();
@@ -155,7 +153,7 @@ TEST_CASE("Feed retriever remembers cookie between requests if cookie-cache is s
 	GIVEN("a configured cookie-cache and a test HTTP server") {
 		test_helpers::TempFile cookie_cache_file;
 		cfg.set_configvalue("cookie-cache", cookie_cache_file.get_path());
-		Cache rsscache(":memory:", cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
 		auto& testServer = test_helpers::HttpTestServer::get_instance();
 		const auto address = testServer.get_address();
@@ -170,7 +168,7 @@ TEST_CASE("Feed retriever remembers cookie between requests if cookie-cache is s
 				}, feed_xml);
 
 				CurlHandle easyHandle;
-				FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+				FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 				const auto feed = feedRetriever.retrieve(url);
 				REQUIRE(testServer.num_hits(mockRegistration) == 1);
 			}
@@ -184,7 +182,7 @@ TEST_CASE("Feed retriever remembers cookie between requests if cookie-cache is s
 
 				// Make sure to use a different handle because otherwise Curl keeps cookies alive in memory
 				CurlHandle easyHandle;
-				FeedRetriever feedRetriever(cfg, rsscache, easyHandle);
+				FeedRetriever feedRetriever(cfg, *rsscache, easyHandle);
 				const auto feed = feedRetriever.retrieve(url);
 				REQUIRE(testServer.num_hits(mockRegistration) == 1);
 			}
