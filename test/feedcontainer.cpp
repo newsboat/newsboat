@@ -32,7 +32,7 @@ TEST_CASE("get_feed() returns feed by its position number", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const std::vector<std::shared_ptr<RssFeed>> feeds = {
 		std::make_shared<RssFeed>(&rsscache, "url/0"),
 		std::make_shared<RssFeed>(&rsscache, "url/1"),
@@ -59,7 +59,7 @@ TEST_CASE("get_all_feeds() returns copy of FeedContainer's feed vector",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -71,7 +71,7 @@ TEST_CASE("add_feed() adds specific feed to its \"feeds\" vector",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	feedcontainer.set_feeds({});
 	const auto feed = std::make_shared<RssFeed>(&rsscache, "");
 	feed->set_title("Example feed");
@@ -85,7 +85,7 @@ TEST_CASE("populate_query_feeds() populates query feeds", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	auto feeds = get_five_empty_feeds(&rsscache);
 	for (int j = 0; j < 5; ++j) {
 		const auto item = std::make_shared<RssItem>(&rsscache);
@@ -108,7 +108,7 @@ TEST_CASE("set_feeds() sets FeedContainer's feed vector to the given one",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 
 	feedcontainer.set_feeds(feeds);
@@ -120,7 +120,7 @@ TEST_CASE("get_feed_by_url() returns feed by its URL", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const std::vector<std::shared_ptr<RssFeed>> feeds = {
 		std::make_shared<RssFeed>(&rsscache, "url/0"),
 		std::make_shared<RssFeed>(&rsscache, "url/1"),
@@ -149,7 +149,7 @@ TEST_CASE(
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const std::vector<std::shared_ptr<RssFeed>> feeds = {
 		std::make_shared<RssFeed>(&rsscache, "url/0"),
 		std::make_shared<RssFeed>(&rsscache, "url/1"),
@@ -166,7 +166,7 @@ TEST_CASE("get_feed() returns nullptr if pos is out of range",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	feedcontainer.set_feeds(get_five_empty_feeds(&rsscache));
 
 	REQUIRE_NOTHROW(feedcontainer.get_feed(4));
@@ -179,7 +179,7 @@ TEST_CASE("Returns correct number using get_feed_count_by_tag()",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	feedcontainer.set_feeds(get_five_empty_feeds(&rsscache));
 	feedcontainer.get_feed(0)->set_tags({"Chicken", "Horse"});
 	feedcontainer.get_feed(1)->set_tags({"Horse", "Duck"});
@@ -196,7 +196,7 @@ TEST_CASE("Correctly returns pos of next unread item", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	int i = 0;
 	for (const auto& feed : feeds) {
@@ -220,7 +220,7 @@ TEST_CASE("feeds_size() returns FeedContainer's current feed vector size",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -233,7 +233,7 @@ TEST_CASE("sort_feeds() sorts by position in urls file if `feed-sort-order` "
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -272,7 +272,7 @@ TEST_CASE("sort_feeds() sorts by feed's first tag if `feed-sort-order` "
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -311,7 +311,7 @@ TEST_CASE("sort_feeds() sorts by feed's title if `feed-sort-order` "
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -350,7 +350,7 @@ TEST_CASE("sort_feeds() sorts by number of articles in a feed "
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -389,7 +389,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles"
 	"[FeedContainer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::map<std::string, int> name_to_unreads = {
 		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
@@ -443,7 +443,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by unread articles"
 TEST_CASE("sort_feeds() and keep in-group order when sorting by order", "[FeedContainer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::map<std::string, int> name_to_order = {
 		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
@@ -496,7 +496,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by articles",
 	"[FeedContainer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::map<std::string, int> name_to_articles = {
 		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
@@ -551,7 +551,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by last updated ite
 	"[FeedContainer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::map<std::string, int> name_to_date = {
 		{"a", 3}, {"b", 2}, {"c", 1}, {"d", 1}, {"e", 1}
@@ -606,7 +606,7 @@ TEST_CASE("sort_feeds() and keep in-group order when sorting by title",
 	"[FeedContainer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const std::map<std::string, std::string> url_to_title = {
 		{"1", "c"}, {"2", "b"}, {"3", "a"}, {"4", "a"}, {"5", "a"}
@@ -660,7 +660,7 @@ TEST_CASE("sort_feeds() sorts by number of unread articles if `feed-sort-order` 
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -714,7 +714,7 @@ TEST_CASE("sort_feeds() sorts by publish date of newest item "
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -765,7 +765,7 @@ TEST_CASE("Sorting by firsttag-asc puts empty tags on top", "[FeedContainer]")
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -803,7 +803,7 @@ TEST_CASE("Sorting by lastupdated-asc puts empty feeds on top",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -853,7 +853,7 @@ TEST_CASE("Sorting by firsttag-asc reverses the order of feeds with the same fir
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feedcontainer.set_feeds(feeds);
 
@@ -891,7 +891,7 @@ TEST_CASE("mark_all_feed_items_read() marks all of feed's items as read",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	const auto feed = feeds.at(0);
 	for (int j = 0; j < 5; ++j) {
@@ -913,7 +913,7 @@ TEST_CASE("mark_all_feeds_read() marks all items in all feeds as read",
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 
 	for (const auto& feed : feeds) {
@@ -941,7 +941,7 @@ TEST_CASE(
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	feeds[0]->set_status(DlStatus::SUCCESS);
 	feeds[1]->set_status(DlStatus::TO_BE_DOWNLOADED);
@@ -963,7 +963,7 @@ TEST_CASE(
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 	for (int j = 0; j < 5; ++j) {
 		// Make sure that number of unread items in feed doesn't matter
@@ -987,7 +987,7 @@ TEST_CASE("unread_item_count() returns number of distinct unread items "
 {
 	FeedContainer feedcontainer;
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	SECTION("No query feeds") {
 		const auto feeds = get_five_empty_feeds(&rsscache);
@@ -1106,7 +1106,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 
 	SECTION("Non-empty FeedContainer, but no feeds are tagged") {
 		ConfigContainer cfg;
-		Cache rsscache(":memory:", &cfg);
+		Cache rsscache(":memory:", cfg);
 
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
@@ -1119,7 +1119,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if there are no feeds "
 
 	SECTION("Non-empty FeedContainer, no feeds are tagged with our desired tag") {
 		ConfigContainer cfg;
-		Cache rsscache(":memory:", &cfg);
+		Cache rsscache(":memory:", cfg);
 
 		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"one", "two", "three"});
@@ -1146,7 +1146,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns 0 if feeds with given tag "
 	FeedContainer feedcontainer;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const auto desired_tag = std::string("target");
 	const auto different_tag = std::string("something else entirely");
@@ -1184,7 +1184,7 @@ TEST_CASE("get_unread_feed_count_per_tag returns the number of feeds that have "
 	FeedContainer feedcontainer;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const auto desired_tag = std::string("target");
 	const auto different_tag = std::string("something else entirely");
@@ -1253,7 +1253,7 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 
 	SECTION("Non-empty FeedContainer, but no feeds are tagged") {
 		ConfigContainer cfg;
-		Cache rsscache(":memory:", &cfg);
+		Cache rsscache(":memory:", cfg);
 
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
 		feedcontainer.add_feed(std::make_shared<RssFeed>(&rsscache, ""));
@@ -1266,7 +1266,7 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if there are no feeds "
 
 	SECTION("Non-empty FeedContainer, no feeds are tagged with our desired tag") {
 		ConfigContainer cfg;
-		Cache rsscache(":memory:", &cfg);
+		Cache rsscache(":memory:", cfg);
 
 		auto feed = std::make_shared<RssFeed>(&rsscache, "");
 		feed->set_tags({"one", "two", "three"});
@@ -1293,7 +1293,7 @@ TEST_CASE("get_unread_item_count_per_tag returns 0 if feeds with given tag "
 	FeedContainer feedcontainer;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const auto desired_tag = std::string("target");
 	const auto different_tag = std::string("something else entirely");
@@ -1331,7 +1331,7 @@ TEST_CASE("get_unread_item_count_per_tag returns the number of unread items "
 	FeedContainer feedcontainer;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const auto desired_tag = std::string("target");
 	const auto different_tag = std::string("something else entirely");
@@ -1392,7 +1392,7 @@ TEST_CASE("replace_feed() puts given feed into the specified position",
 	FeedContainer feedcontainer;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	const auto feeds = get_five_empty_feeds(&rsscache);
 
 	const auto first_feed = *feeds.begin();
