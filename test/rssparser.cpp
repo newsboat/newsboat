@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "rssparser.h"
 
 #include "3rd-party/catch.hpp"
@@ -15,9 +13,9 @@ using namespace newsboat;
 TEST_CASE("parse() ignores uninitialized upstream feed", "[RssParser]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	RssIgnores ignores;
-	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+	RssParser parser("http://example.com", *rsscache, cfg, &ignores);
 
 	rsspp::Feed upstream_feed;
 	const auto feed = parser.parse(upstream_feed);
@@ -28,9 +26,9 @@ TEST_CASE("parse() with no item GUID falls back to link+pubdate, link, and title
 	"[RssParser]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	RssIgnores ignores;
-	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+	RssParser parser("http://example.com", *rsscache, cfg, &ignores);
 
 	rsspp::Feed upstream_feed;
 	upstream_feed.rss_version = rsspp::Feed::ATOM_1_0;
@@ -83,9 +81,9 @@ TEST_CASE("parse() renders html titles into plaintext if type indicates html",
 	"[RssParser]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	RssIgnores ignores;
-	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+	RssParser parser("http://example.com", *rsscache, cfg, &ignores);
 
 	rsspp::Feed upstream_feed;
 	upstream_feed.rss_version = rsspp::Feed::ATOM_1_0;
@@ -128,9 +126,9 @@ TEST_CASE("parse() generates a title when title element is missing",
 	"[RssParser]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	RssIgnores ignores;
-	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+	RssParser parser("http://example.com", *rsscache, cfg, &ignores);
 
 	rsspp::Feed upstream_feed;
 	upstream_feed.rss_version = rsspp::Feed::ATOM_1_0;
@@ -167,9 +165,9 @@ TEST_CASE("parse() generates a title when title element is missing",
 TEST_CASE("parse() extracts best enclosure", "[RssParser]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 	RssIgnores ignores;
-	RssParser parser("http://example.com", rsscache, cfg, &ignores);
+	RssParser parser("http://example.com", *rsscache, cfg, &ignores);
 
 	rsspp::Feed upstream_feed;
 	upstream_feed.rss_version = rsspp::Feed::ATOM_1_0;
