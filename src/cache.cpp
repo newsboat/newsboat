@@ -286,6 +286,11 @@ Cache::~Cache()
 	sqlite3_close(db);
 }
 
+std::unique_ptr<Cache> Cache::in_memory(ConfigContainer& c)
+{
+	return std::make_unique<Cache>(Filepath::from_locale_string(":memory:"), c);
+}
+
 void Cache::set_pragmas()
 {
 	std::lock_guard<std::recursive_mutex> lock(mtx);

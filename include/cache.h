@@ -44,6 +44,9 @@ class Cache {
 public:
 	Cache(const Filepath& cachefile, ConfigContainer& c);
 	~Cache();
+
+	static std::unique_ptr<Cache> in_memory(ConfigContainer& c);
+
 	void externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 		bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
