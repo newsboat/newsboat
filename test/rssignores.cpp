@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "rssignores.h"
 
 #include <set>
@@ -244,8 +242,8 @@ TEST_CASE("RssIgnores::matches() returns true if given RssItem matches any "
 	RssIgnores ignores;
 
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
-	RssItem item(&rsscache);
+	auto rsscache = Cache::in_memory(cfg);
+	RssItem item(rsscache.get());
 
 	const auto feedurl = "https://example.com/feed.xml";
 
