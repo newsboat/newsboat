@@ -33,10 +33,10 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 
 	auto cfg = c.get_config();
 	cfg->set_configvalue("save-path", save_path);
-	Cache rsscache(":memory:", *cfg);
+	auto rsscache = Cache::in_memory(*cfg);
 
 
-	auto item = std::make_shared<RssItem>(&rsscache);
+	auto item = std::make_shared<RssItem>(rsscache.get());
 	item->set_title("title");
 	const auto description = "First line.\nSecond one.\nAnd finally the third";
 	item->set_description(description, "text/plain");
