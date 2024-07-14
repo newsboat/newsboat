@@ -70,7 +70,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	// reproducible
 	cfg.set_configvalue("text-width", "80");
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -221,7 +221,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 
 	ConfigContainer cfg;
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -328,7 +328,7 @@ TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
 
 	ConfigContainer cfg;
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -363,7 +363,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	// reproducible
 	cfg.set_configvalue("text-width", "80");
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -477,7 +477,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 	ConfigContainer cfg;
 	cfg.set_configvalue("text-width", "80");
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -590,7 +590,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 	"[item_renderer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -617,7 +617,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
 	"[item_renderer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;
@@ -637,7 +637,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	"[item_renderer]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	const auto feedurl = std::string("https://example.com/~joe/entries.rss");
 
@@ -662,7 +662,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 	ConfigContainer cfg;
 	RegexManager rxman;
 
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 
 	std::shared_ptr<RssItem> item;
 	std::shared_ptr<RssFeed> feed;

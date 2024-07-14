@@ -218,7 +218,7 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		rsscache = std::make_unique<Cache>(configpaths.cache_file(), &cfg);
+		rsscache = std::make_unique<Cache>(configpaths.cache_file(), cfg);
 	} catch (const DbException& e) {
 		std::cerr << strprintf::fmt(
 				_("Error: opening the cache file `%s' "

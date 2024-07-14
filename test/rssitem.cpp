@@ -17,7 +17,7 @@ using namespace newsboat;
 TEST_CASE("RssItem::sort_flags() cleans up flags", "[RssItem]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssItem item(&rsscache);
 
 	SECTION("Repeated letters do not erase other letters") {
@@ -37,7 +37,7 @@ TEST_CASE("RssItem::sort_flags() cleans up flags", "[RssItem]")
 TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssItem item(&rsscache);
 
 	SECTION("title") {
@@ -256,7 +256,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 TEST_CASE("set_title() removes superfluous whitespace", "[RssItem]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", &cfg);
+	Cache rsscache(":memory:", cfg);
 	RssItem item(&rsscache);
 
 	SECTION("duplicate whitespace") {
