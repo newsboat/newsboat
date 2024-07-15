@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "configcontainer.h"
 
 #include <algorithm>
@@ -427,7 +425,7 @@ std::string ConfigContainer::get_configvalue(const std::string& key) const
 		const auto& entry = it->second;
 		std::string value = entry.value();
 		if (entry.type() == ConfigDataType::PATH) {
-			value = utils::resolve_tilde(value);
+			value = utils::resolve_tilde(Filepath::from_locale_string(value)).to_locale_string();
 		}
 		return value;
 	}
