@@ -642,14 +642,14 @@ TEST_CASE("run_command() executes the given command with a given argument",
 		INFO("File shouldn't exist, because TempFile doesn't create it");
 
 		struct stat sb;
-		const int result = ::stat(argument.c_str(), &sb);
+		const int result = ::stat(argument.to_locale_string().c_str(), &sb);
 		const int saved_errno = errno;
 
 		REQUIRE(result == -1);
 		REQUIRE(saved_errno == ENOENT);
 	}
 
-	utils::run_command("touch", argument);
+	utils::run_command("touch", argument.to_locale_string());
 
 	struct stat sb;
 	int result = 0;
@@ -662,7 +662,7 @@ TEST_CASE("run_command() executes the given command with a given argument",
 	while (tries-- > 0) {
 		::usleep(10 * 1000);
 
-		result = ::stat(argument.c_str(), &sb);
+		result = ::stat(argument.to_locale_string().c_str(), &sb);
 		if (result == 0) {
 			break;
 		}
