@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "itemlistformaction.h"
 
 #include <fstream>
@@ -43,7 +41,7 @@ TEST_CASE("OP_OPEN displays article using an external pager",
 	RegexManager rxman;
 
 	auto rsscache = Cache::in_memory(cfg);
-	cfg.set_configvalue("pager", "cat %f > " + pagerfile.get_path());
+	cfg.set_configvalue("pager", "cat %f > " + pagerfile.get_path().to_locale_string());
 
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(rsscache.get(), "");
 
@@ -120,7 +118,7 @@ TEST_CASE(
 	std::string line;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path().to_locale_string());
 
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -139,7 +137,7 @@ TEST_CASE(
 	itemlist.set_feed(feed);
 	const std::vector<std::string> args;
 	itemlist.process_op(OP_OPENBROWSER_AND_MARK, args);
-	std::ifstream browserFileStream(browserfile.get_path());
+	std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
@@ -192,7 +190,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	std::string line;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path().to_locale_string());
 
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -210,7 +208,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 	itemlist.set_feed(feed);
 	const std::vector<std::string> args;
 	itemlist.process_op(OP_OPENINBROWSER, args);
-	std::ifstream browserFileStream(browserfile.get_path());
+	std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
@@ -227,7 +225,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	std::string line;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path().to_locale_string());
 
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -245,7 +243,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	itemlist.set_feed(feed);
 	const std::vector<std::string> args;
 	itemlist.process_op(newsboat::OP_OPENINBROWSER_NONINTERACTIVE, args);
-	std::ifstream browserFileStream(browserfile.get_path());
+	std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 
 	REQUIRE(std::getline(browserFileStream, line));
 	REQUIRE(line == test_url);
@@ -264,7 +262,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 	int itemCount = 6;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path().to_locale_string());
 
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -296,7 +294,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER, args);
 
-		std::ifstream browserFileStream(browserfile.get_path());
+		std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 		openedItemsCount = 0;
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
@@ -320,7 +318,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER, args);
 
-		std::ifstream browserFileStream(browserfile.get_path());
+		std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
@@ -350,7 +348,7 @@ TEST_CASE(
 	const unsigned int itemCount = 6;
 
 	ConfigContainer cfg;
-	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path());
+	cfg.set_configvalue("browser", "echo %u >> " + browserfile.get_path().to_locale_string());
 
 	auto rsscache = Cache::in_memory(cfg);
 	FilterContainer filters;
@@ -382,7 +380,7 @@ TEST_CASE(
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK, args);
 
-		std::ifstream browserFileStream(browserfile.get_path());
+		std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
@@ -407,7 +405,7 @@ TEST_CASE(
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK, args);
 
-		std::ifstream browserFileStream(browserfile.get_path());
+		std::ifstream browserFileStream(browserfile.get_path().to_locale_string());
 		if (browserFileStream.is_open()) {
 			while (std::getline(browserFileStream, line)) {
 				INFO("Each URL should be present exactly once. "
@@ -462,7 +460,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 		feed->add_item(item);
 		itemlist.set_feed(feed);
 		cfg.set_configvalue(
-			"external-url-viewer", "tee > " + urlFile.get_path());
+			"external-url-viewer", "tee > " + urlFile.get_path().to_locale_string());
 
 		const std::vector<std::string> args;
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS, args));
@@ -524,12 +522,12 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	itemlist.set_feed(feed);
 
 	cfg.set_configvalue(
-		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
+		"bookmark-cmd", "echo > " + bookmarkFile.get_path().to_locale_string());
 
 	bookmark_args.push_back(extra_arg);
 
 	auto checkOutput = [&] {
-		std::ifstream browserFileStream(bookmarkFile.get_path());
+		std::ifstream browserFileStream(bookmarkFile.get_path().to_locale_string());
 
 		REQUIRE(std::getline(browserFileStream, line));
 		REQUIRE(line ==
@@ -622,7 +620,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 	RegexManager rxman;
 
 	std::vector<std::string> op_args;
-	op_args.push_back(saveFile.get_path());
+	op_args.push_back(saveFile.get_path().to_locale_string());
 
 	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";
@@ -735,7 +733,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	newsboat::View v(c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
-		"external-url-viewer", "tee > " + articleFile.get_path());
+		"external-url-viewer", "tee > " + articleFile.get_path().to_locale_string());
 	auto rsscache = Cache::in_memory(cfg);
 	std::string line;
 
@@ -765,7 +763,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	REQUIRE_NOTHROW(itemlist->process_op(OP_NEXT, args));
 	itemlist->process_op(OP_SHOWURLS, args);
 
-	std::ifstream fileStream(articleFile.get_path());
+	std::ifstream fileStream(articleFile.get_path().to_locale_string());
 	std::getline(fileStream, line);
 	REQUIRE(line == prefix_title + second_article_title);
 
@@ -828,7 +826,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 	RegexManager rxman;
 
 	std::vector<std::string> op_args;
-	op_args.push_back("tee > " + articleFile.get_path());
+	op_args.push_back("tee > " + articleFile.get_path().to_locale_string());
 
 	const std::string test_url = "http://test_url";
 	std::string test_title = "Article Title";

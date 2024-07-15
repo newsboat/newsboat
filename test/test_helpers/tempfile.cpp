@@ -44,7 +44,7 @@ test_helpers::TempFile::~TempFile()
 	::unlink(filepath_str.c_str());
 }
 
-const std::string test_helpers::TempFile::get_path() const
+newsboat::Filepath test_helpers::TempFile::get_path() const
 {
-	return filepath.to_locale_string();
+	return filepath;
 }
