@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "rssfeed.h"
 
 #include "3rd-party/catch.hpp"
