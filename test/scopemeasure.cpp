@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "scopemeasure.h"
 
 #include "3rd-party/catch.hpp"
@@ -13,10 +11,10 @@
 
 using namespace newsboat;
 
-unsigned int file_lines_count(const std::string& filepath)
+unsigned int file_lines_count(const Filepath& filepath)
 {
 	unsigned int line_count = 0;
-	std::ifstream in(filepath);
+	std::ifstream in(filepath.to_locale_string());
 	std::string line;
 	while (std::getline(in, line)) {
 		line_count++;
@@ -32,7 +30,7 @@ TEST_CASE("Destroying a ScopeMeasure object writes a line to the log",
 
 	{
 		test_helpers::LoggerResetter logReset;
-		const auto filepath = Filepath::from_locale_string(tmp.get_path());
+		const auto filepath = tmp.get_path();
 		logger::set_logfile(filepath);
 		logger::set_loglevel(Level::DEBUG);
 
@@ -53,7 +51,7 @@ TEST_CASE("stopover() adds an extra line to the log upon each call",
 
 	{
 		test_helpers::LoggerResetter logReset;
-		const auto filepath = Filepath::from_locale_string(tmp.get_path());
+		const auto filepath = tmp.get_path();
 		logger::set_logfile(filepath);
 		logger::set_loglevel(Level::DEBUG);
 
