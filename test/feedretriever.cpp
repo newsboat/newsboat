@@ -152,7 +152,7 @@ TEST_CASE("Feed retriever remembers cookie between requests if cookie-cache is s
 
 	GIVEN("a configured cookie-cache and a test HTTP server") {
 		test_helpers::TempFile cookie_cache_file;
-		cfg.set_configvalue("cookie-cache", cookie_cache_file.get_path());
+		cfg.set_configvalue("cookie-cache", cookie_cache_file.get_path().to_locale_string());
 		auto rsscache = Cache::in_memory(cfg);
 
 		auto& testServer = test_helpers::HttpTestServer::get_instance();
