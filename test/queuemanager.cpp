@@ -230,7 +230,7 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == queue_file.get_path());
+				REQUIRE(result.extra_info == queue_file.get_path().to_locale_string());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -558,7 +558,7 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == queue_file.get_path());
+				REQUIRE(result.extra_info == queue_file.get_path().to_locale_string());
 			}
 
 			THEN("the item is NOT marked as enqueued") {

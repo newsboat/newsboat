@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "cache.h"
 
 #include <memory>
@@ -140,16 +138,16 @@ TEST_CASE("Last-Modified and ETag values are also stored in DB if feed was not y
 	"[Cache]")
 {
 	ConfigContainer cfg;
-	Cache rsscache(":memory:", cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
 	const std::string feedurl = "http://example.com/feed.xml";
 	const time_t lastmodified = 42;
 	const std::string etag = "abc";
-	rsscache.update_lastmodified(feedurl, lastmodified, etag);
+	rsscache->update_lastmodified(feedurl, lastmodified, etag);
 
 	time_t output_lastmodified{};
 	std::string output_etag;
-	rsscache.fetch_lastmodified(feedurl, output_lastmodified, output_etag);
+	rsscache->fetch_lastmodified(feedurl, output_lastmodified, output_etag);
 
 	REQUIRE(output_lastmodified == lastmodified);
 	REQUIRE(output_etag == etag);
@@ -1001,7 +999,7 @@ TEST_CASE(
 	// can't be done by direct assignment because sqlite3_open doesn't
 	// return that pointer)
 	sqlite3* dbptr = nullptr;
-	int error = sqlite3_open(dbfile.get_path().c_str(), &dbptr);
+	int error = sqlite3_open(dbfile.get_path().to_locale_string().c_str(), &dbptr);
 	REQUIRE(error == SQLITE_OK);
 	db.reset(dbptr);
 	dbptr = nullptr;
