@@ -1,5 +1,6 @@
 #include "utils.h"
 
+#include <cctype>
 #include <chrono>
 #include <condition_variable>
 #include <fstream>
@@ -2041,4 +2042,209 @@ TEST_CASE("translit() always returns the same value for the same inputs",
 			REQUIRE(utils::translit(tocode, fromcode) == results.at(std::make_pair(fromcode, tocode)));
 		}
 	}
+}
+
+void verify_convert_text(const std::vector<unsigned char>& input,
+	const std::string& tocode, const std::string& fromcode,
+	const std::vector<unsigned char>& expected_output)
+{
+	const std::string input_str = std::string(reinterpret_cast<const char*>(input.data()),
+			input.size());
+	const std::string expected_str = std::string(reinterpret_cast<const char*>
+			(expected_output.data()), expected_output.size());
+
+	REQUIRE(utils::convert_text(input_str, tocode, fromcode) == expected_str);
+}
+
+TEST_CASE("convert_text() returns input string if fromcode and tocode are the same",
+	"[utils]")
+{
+	std::vector<unsigned char> input = {
+		// \x81 is not valid UTF-8
+		0x81, 0x13, 0x41,
+	};
+
+	std::vector<unsigned char> expected = {
+		0x3f, 0x13, 0x41,
+	};
+
+	verify_convert_text(input, "UTF-8", "UTF-8", expected);
+}
+
+TEST_CASE("convert_text() replaces incomplete multibyte sequences with a question mark: utf8 to utf16le",
+	"[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "ой", "oops" in Russian, but the last byte is missing
+		0xd0, 0xbe, 0xd0,
+	};
+
+	std::vector<unsigned char> expected = {
+		0x3e, 0x04, 0x3f, 0x00,
+	};
+
+	verify_convert_text(input, "UTF-16LE", "UTF-8", expected);
+}
+
+TEST_CASE("convert_text() replaces incomplete multibyte sequences with a question mark: utf16le to utf8",
+	"[utils]")
+{
+	SECTION("input includes zero byte") {
+		std::vector<unsigned char> input = {
+			// "hi", but the last byte is missing
+			0x68, 0x00, 0x69,
+		};
+
+		std::vector<unsigned char> expected = {
+			0x68, 0x3f,
+		};
+
+		verify_convert_text(input, "UTF-8", "UTF-16LE", expected);
+	}
+
+	SECTION("input does not include zero byte") {
+		std::vector<unsigned char> input = {
+			// "эй", "hey" in Russian, but the last byte is missing
+			0x4d, 0x04, 0x39,
+		};
+
+		std::vector<unsigned char> expected = {
+			0xd1, 0x8d, 0x3f,
+		};
+
+		verify_convert_text(input, "UTF-8", "UTF-16LE", expected);
+	}
+}
+
+TEST_CASE("convert_text() replaces invalid multibyte sequences with a question mark: utf8 to utf16le",
+	"[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "日本", "Japan", but the third byte of the first character (0xa5) is
+		// missing, making the whole first character an illegal sequence.
+		0xe6, 0x97, 0xe6, 0x9c, 0xac,
+	};
+
+	std::vector<unsigned char> expected = {
+		0x3f, 0x00, 0x3f, 0x00, 0x2c, 0x67,
+	};
+
+	verify_convert_text(input, "UTF-16LE", "UTF-8", expected);
+}
+
+TEST_CASE("convert_text() replaces invalid multibyte sequences with a question mark: utf16le to utf8",
+	"[utils]")
+{
+	std::vector<unsigned char> input = {
+		// The first two bytes here are part of a surrogate pair, i.e. they
+		// imply that the next two bytes encode additional info. However, the
+		// next two bytes are an ordinary character. This breaks the decoding
+		// process, so some things get turned into a question mark while others
+		// are decoded incorrectly.
+		0x01, 0xd8, 0xd7, 0x03,
+	};
+
+	std::vector<unsigned char> expected = {
+		0x3f, 0xed, 0x9f, 0x98, 0x3f,
+	};
+
+	verify_convert_text(input, "UTF-8", "UTF-16LE", expected);
+}
+
+TEST_CASE("convert_text() converts text between encodings: utf8 to utf16le", "[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "Тестирую", "Testing" in Russian.
+		0xd0, 0xa2, 0xd0, 0xb5, 0xd1, 0x81, 0xd1, 0x82, 0xd0, 0xb8, 0xd1, 0x80, 0xd1, 0x83,
+		0xd1, 0x8e,
+	};
+
+	std::vector<unsigned char> expected = {
+		0x22, 0x04, 0x35, 0x04, 0x41, 0x04, 0x42, 0x04, 0x38, 0x04, 0x40, 0x04, 0x43, 0x04,
+		0x4e, 0x04,
+	};
+
+	verify_convert_text(input, "UTF-16LE", "UTF-8", expected);
+}
+
+TEST_CASE("convert_text() converts text between encodings: utf8 to koi8r", "[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "Проверка", "Check" in Russian.
+		0xd0, 0x9f, 0xd1, 0x80, 0xd0, 0xbe, 0xd0, 0xb2, 0xd0, 0xb5, 0xd1, 0x80, 0xd0, 0xba,
+		0xd0, 0xb0,
+	};
+
+	std::vector<unsigned char> expected = {
+		0xf0, 0xd2, 0xcf, 0xd7, 0xc5, 0xd2, 0xcb, 0xc1,
+	};
+
+	verify_convert_text(input, "KOI8-R", "UTF-8", expected);
+}
+
+TEST_CASE("convert_text() converts text between encodings: utf8 to ISO-8859-1", "[utils]")
+{
+	// Some symbols in the result will be transliterated.
+
+	std::vector<unsigned char> input = {
+		// "вау °±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃ": a mix of Cyrillic (unsupported by
+		// ISO-8859-1) and ISO-8859-1 characters.
+		0xd0, 0xb2, 0xd0, 0xb0, 0xd1, 0x83, 0x20, 0xc2, 0xb0, 0xc2, 0xb1, 0xc2, 0xb2, 0xc2,
+		0xb3, 0xc2, 0xb4, 0xc2, 0xb5, 0xc2, 0xb6, 0xc2, 0xb7, 0xc2, 0xb8, 0xc2, 0xb9, 0xc2,
+		0xba, 0xc2, 0xbb, 0xc2, 0xbc, 0xc2, 0xbd, 0xc2, 0xbe, 0xc2, 0xbf, 0xc3, 0x80, 0xc3,
+		0x81, 0xc3, 0x82, 0xc3, 0x83,
+	};
+
+	const std::string input_str = std::string(reinterpret_cast<const char*>(input.data()),
+			input.size());
+
+	const auto result = utils::convert_text(input_str, "ISO-8859-1", "UTF-8");
+
+	// We can't spell out an expected result because different platforms
+	// might follow different transliteration rules.
+	REQUIRE(result != "");
+	REQUIRE(result != input_str);
+}
+
+TEST_CASE("convert_text() converts text between encodings: utf16le to utf8", "[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "Успех", "Success" in Russian.
+		0xff, 0xfe, 0x23, 0x04, 0x41, 0x04, 0x3f, 0x04, 0x35, 0x04, 0x45, 0x04,
+	};
+
+	std::vector<unsigned char> expected = {
+		0xef, 0xbb, 0xbf, 0xd0, 0xa3, 0xd1, 0x81, 0xd0, 0xbf, 0xd0, 0xb5, 0xd1, 0x85,
+	};
+
+	verify_convert_text(input, "UTF-8", "UTF-16LE", expected);
+}
+
+TEST_CASE("convert_text() converts text between encodings: koi8r to utf8", "[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "История", "History" in Russian.
+		0xe9, 0xd3, 0xd4, 0xcf, 0xd2, 0xc9, 0xd1,
+	};
+
+	std::vector<unsigned char> expected = {
+		0xd0, 0x98, 0xd1, 0x81, 0xd1, 0x82, 0xd0, 0xbe, 0xd1, 0x80, 0xd0, 0xb8, 0xd1, 0x8f,
+	};
+
+	verify_convert_text(input, "UTF-8", "KOI8-R", expected);
+}
+
+TEST_CASE("convert_text() converts text between encodings: ISO-8859-1 to utf8", "[utils]")
+{
+	std::vector<unsigned char> input = {
+		// "ÄÅÆÇÈÉÊËÌÍÎÏ": some umlauts and Latin letters.
+		0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf,
+	};
+
+	std::vector<unsigned char> expected = {
+		0xc3, 0x84, 0xc3, 0x85, 0xc3, 0x86, 0xc3, 0x87, 0xc3, 0x88, 0xc3, 0x89, 0xc3, 0x8a,
+		0xc3, 0x8b, 0xc3, 0x8c, 0xc3, 0x8d, 0xc3, 0x8e, 0xc3, 0x8f,
+	};
+
+	verify_convert_text(input, "UTF-8", "ISO-8859-1", expected);
 }

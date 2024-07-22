@@ -7,7 +7,7 @@
 #include "rss/exception.h"
 #include "rssfeed.h"
 #include "strprintf.h"
-#include "test/test_helpers/httptestserver.h"
+#include "test_helpers/httptestserver.h"
 #include "test_helpers/misc.h"
 #include <cstdint>
 #include <vector>
