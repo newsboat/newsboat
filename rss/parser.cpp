@@ -1,11 +1,13 @@
 #include "parser.h"
 
 #include <cinttypes>
+#include <cstdint>
 #include <cstring>
 #include <curl/curl.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include "charencoding.h"
 #include "config.h"
 #include "curldatareceiver.h"
 #include "curlhandle.h"
@@ -153,6 +155,16 @@ Feed Parser::parse_url(const std::string& url,
 		}
 	}
 
+	nonstd::optional<std::string> charset_content_type;
+	const auto content_type_headers = curlHeaderHandler->get_header_lines("Content-Type");
+	if (content_type_headers.size() >= 1) {
+		std::string header_value = content_type_headers.back();
+		utils::trim(header_value);
+		LOG(Level::DEBUG, "parse_url: got content type %s", header_value);
+		const auto input = std::vector<uint8_t>(header_value.begin(), header_value.end());
+		charset_content_type = charencoding::charset_from_content_type_header(input);
+	}
+
 	if (custom_headers) {
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_HTTPHEADER, 0);
 		curl_slist_free_all(custom_headers);
@@ -204,23 +216,48 @@ Feed Parser::parse_url(const std::string& url,
 		url,
 		buf);
 
+	const std::vector<std::uint8_t> data(buf.begin(), buf.end());
+	const auto charset_xml_declaration = charencoding::charset_from_xml_declaration(data);
+	const auto charset_bom = charencoding::charset_from_bom(data);
+
+	nonstd::optional<std::string> charset;
+	if (charset_bom.has_value()) {
+		charset = charset_bom;
+	} else if (charset_xml_declaration.has_value()) {
+		charset = charset_xml_declaration;
+	} else if (charset_content_type.has_value()) {
+		charset = charset_content_type;
+	} else {
+		charset = nonstd::nullopt;
+	}
+
 	if (buf.length() > 0) {
 		LOG(Level::DEBUG,
 			"Parser::parse_url: handing over data to "
 			"parse_buffer()");
-		return parse_buffer(buf, url);
+		return parse_buffer(buf, url, charset);
 	}
 
 	return Feed();
 }
 
-Feed Parser::parse_buffer(const std::string& buffer, const std::string& url)
+Feed Parser::parse_buffer(const std::string& buffer, const std::string& url,
+	nonstd::optional<std::string> charset)
 {
-	doc = xmlReadMemory(buffer.c_str(),
-			buffer.length(),
-			url.c_str(),
-			nullptr,
-			XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+	if (charset.has_value()) {
+		const auto buffer_utf8 = utils::convert_text(buffer, "utf-8", charset.value());
+		doc = xmlReadMemory(buffer_utf8.c_str(),
+				buffer_utf8.length(),
+				url.c_str(),
+				"UTF-8",
+				XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING | XML_PARSE_IGNORE_ENC);
+	} else {
+		doc = xmlReadMemory(buffer.c_str(),
+				buffer.length(),
+				url.c_str(),
+				nullptr,
+				XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
+	}
 	if (doc == nullptr) {
 		throw Exception(_("could not parse buffer"));
 	}

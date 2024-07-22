@@ -1,5 +1,6 @@
 newsboat.cpp
 src/cache.cpp
+src/charencoding.cpp
 src/cliargsparser.cpp
 src/configactionhandler.cpp
 src/configpaths.cpp
