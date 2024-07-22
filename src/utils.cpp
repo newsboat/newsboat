@@ -375,6 +375,17 @@ std::string utils::replace_all(const std::string& str,
 	return output;
 }
 
+std::string utils::to_lowercase(const std::string& input)
+{
+	std::string output;
+	std::transform(input.begin(), input.end(), std::back_inserter(output),
+	[](unsigned char c) {
+		return std::tolower(c);
+	});
+
+	return output;
+}
+
 std::string utils::preserve_quotes(const std::string& str)
 {
 	std::string escaped_string = "";
