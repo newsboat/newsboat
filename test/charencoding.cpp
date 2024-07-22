@@ -52,3 +52,26 @@ TEST_CASE("charset_from_xml_declaration", "[charencoding]")
 		REQUIRE(actual == expected);
 	}
 }
+
+TEST_CASE("charset_from_content_type_header", "[charencoding]")
+{
+	const std::map<std::string, nonstd::optional<std::string>> test_cases {
+		{ "", nonstd::nullopt },
+		{ "application/xml", nonstd::nullopt },
+		{ "multipart/form-data; boundary=something", nonstd::nullopt },
+		{ "application/xml; charset=utf-8", "utf-8" },
+	};
+
+	for (const auto& test_case : test_cases) {
+		std::vector<std::uint8_t> input(test_case.first.begin(), test_case.first.end());
+
+		const auto actual = charencoding::charset_from_content_type_header(input);
+		const auto expected = test_case.second;
+
+		INFO("input: " << test_case.first);
+		INFO("actual: " << (actual.has_value() ? actual.value().c_str() : ""));
+		INFO("expected: " << (expected.has_value() ? expected.value().c_str() : ""));
+
+		REQUIRE(actual == expected);
+	}
+}
