@@ -26,5 +26,16 @@ nonstd::optional<std::string> charset_from_xml_declaration(std::vector<std::uint
 	return {};
 }
 
+nonstd::optional<std::string> charset_from_content_type_header(std::vector<std::uint8_t>
+	header)
+{
+	rust::String charset;
+	const auto input = rust::Slice<const std::uint8_t>(header.data(), header.size());
+	if (charencoding::bridged::charset_from_content_type_header(input, charset)) {
+		return std::string(charset);
+	}
+	return {};
+}
+
 } // namespace charencoding
 } // namespace newsboat

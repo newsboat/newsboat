@@ -1,5 +1,5 @@
 use nom::branch::alt;
-use nom::bytes::complete::tag;
+use nom::bytes::complete::{tag, take_till, take_till1};
 use nom::character::complete::{alpha1, alphanumeric1, digit1, space0};
 use nom::combinator::recognize;
 use nom::multi::many0;
@@ -85,6 +85,60 @@ fn charset_from_ascii_xml_declaration(content: &[u8]) -> Option<String> {
     parse_xml_declaration(content)
         .ok()
         .map(|(_, encoding)| encoding)
+}
+
+pub fn charset_from_content_type_header(input: &[u8]) -> Option<String> {
+    struct Parameter<'a> {
+        key: &'a [u8],
+        value: &'a [u8],
+    }
+
+    fn parse_token(input: &[u8]) -> IResult<&[u8], &[u8]> {
+        take_till1(|c| c == b';' || c == b'=' || c == b'/' || c == b' ' || c == b'\t')(input)
+    }
+
+    fn parse_quoted_string(input: &[u8]) -> IResult<&[u8], &[u8]> {
+        let (input, _) = tag(b"\"")(input)?;
+        let (input, text) = take_till(|c| c == b'"')(input)?;
+        let (input, _) = tag(b"\"")(input)?;
+        Ok((input, text))
+    }
+
+    fn parse_parameter(input: &[u8]) -> IResult<&[u8], Parameter> {
+        let (input, _) = space0(input)?;
+        let (input, _) = tag(b";")(input)?;
+        let (input, _) = space0(input)?;
+        let (input, key) = parse_token(input)?;
+        let (input, _) = tag(b"=")(input)?;
+        let (input, value) = alt((parse_quoted_string, parse_token))(input)?;
+        Ok((input, Parameter { key, value }))
+    }
+
+    fn parse_media_type(input: &[u8]) -> IResult<&[u8], Vec<Parameter>> {
+        let (input, _type) = parse_token(input)?;
+        let (input, _) = tag(b"/")(input)?;
+        let (input, _subtype) = parse_token(input)?;
+        let (input, parameters) = many0(parse_parameter)(input)?;
+        Ok((input, parameters))
+    }
+
+    fn get_parameter(parameters: &[Parameter], name: &str) -> Option<String> {
+        for Parameter { key, value } in parameters {
+            let key = str::from_utf8(key);
+            let value = str::from_utf8(value);
+            let (Ok(key), Ok(value)) = (key, value) else {
+                continue;
+            };
+            if key.to_lowercase() == name.to_lowercase() {
+                return Some(value.to_owned());
+            }
+        }
+        None
+    }
+
+    parse_media_type(input)
+        .ok()
+        .and_then(|(_, parameters)| get_parameter(&parameters, "charset"))
 }
 
 #[cfg(test)]
@@ -184,6 +238,66 @@ mod tests {
         assert_eq!(
             charset_from_xml_declaration(&utf16_bytes_be),
             Some("UTF-16BE".to_owned())
+        );
+    }
+
+    #[test]
+    fn t_charset_from_content_type_header_without_charset_parameter() {
+        assert_eq!(charset_from_content_type_header(b""), None);
+        assert_eq!(charset_from_content_type_header(b"application/xml"), None);
+        assert_eq!(
+            charset_from_content_type_header(b"multipart/form-data; boundary=something"),
+            None
+        );
+    }
+
+    #[test]
+    fn t_charset_from_content_type_header_with_charset_parameter() {
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml; charset=utf-8"),
+            Some("utf-8".to_owned())
+        );
+        assert_eq!(
+            charset_from_content_type_header(
+                b"multipart/form-data; boundary=something; charset=iso-8859-1"
+            ),
+            Some("iso-8859-1".to_owned())
+        );
+    }
+
+    #[test]
+    fn t_charset_from_content_type_header_with_charset_parameter_quoted() {
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml; charset=\"utf-8\""),
+            Some("utf-8".to_owned())
+        );
+    }
+
+    #[test]
+    fn t_charset_from_content_type_header_with_charset_parameter_case_insensitive() {
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml; Charset=utf-8"),
+            Some("utf-8".to_owned())
+        );
+    }
+
+    #[test]
+    fn t_charset_from_content_type_header_with_charset_alternative_whitespace_usage() {
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml;charset=utf-8"),
+            Some("utf-8".to_owned())
+        );
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml\t \t;charset=utf-8"),
+            Some("utf-8".to_owned())
+        );
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml;\t \tcharset=utf-8"),
+            Some("utf-8".to_owned())
+        );
+        assert_eq!(
+            charset_from_content_type_header(b"application/xml\t \t;\t \tcharset=utf-8"),
+            Some("utf-8".to_owned())
         );
     }
 }

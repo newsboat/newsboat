@@ -13,6 +13,8 @@ namespace charencoding {
 nonstd::optional<std::string> charset_from_bom(std::vector<std::uint8_t> content);
 nonstd::optional<std::string> charset_from_xml_declaration(std::vector<std::uint8_t>
 	content);
+nonstd::optional<std::string> charset_from_content_type_header(std::vector<std::uint8_t>
+	header);
 
 } // namespace charencoding
 } // namespace newsboat
