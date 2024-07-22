@@ -23,6 +23,16 @@ public:
 	explicit RssItem(Cache* c);
 	~RssItem() override;
 
+	void set_id(int id)
+	{
+		id_ = id;
+	}
+
+	int id() const
+	{
+		return id_;
+	}
+
 	std::string title() const
 	{
 		return title_;
@@ -175,6 +185,7 @@ public:
 	}
 
 private:
+	int id_;
 	std::string title_;
 	std::string link_;
 	std::string author_;

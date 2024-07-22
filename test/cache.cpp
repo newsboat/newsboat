@@ -636,6 +636,7 @@ TEST_CASE(
 	auto feed = parser.parse(feed_retriever.retrieve(feedurl));
 
 	auto item = feed->items()[0];
+	item->set_enclosure_url("http://example.com/podcast.mp3");
 
 	rsscache->externalize_rssfeed(feed, false);
 
@@ -661,6 +662,19 @@ TEST_CASE(
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
 		REQUIRE(feed->items()[0]->enqueued());
+
+		SECTION("\"enqueued\" field is not overwritten by a next feed reload (externalize)") {
+			RssParser new_parser(feedurl, *rsscache, cfg, nullptr);
+			auto new_reload_feed = new_parser.parse(feed_retriever.retrieve(feedurl));
+			new_reload_feed->items()[0]->set_enclosure_url("http://example.com/podcast.mp3");
+			REQUIRE_FALSE(new_reload_feed->items()[0]->enqueued());
+			rsscache->externalize_rssfeed(new_reload_feed, false);
+
+			rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
+			auto newly_loaded_feed = rsscache->internalize_rssfeed(feedurl, nullptr);
+
+			REQUIRE(newly_loaded_feed->items()[0]->enqueued());
+		}
 	}
 
 	SECTION("both \"unread\" and \"enqueued\" fields are updated") {
