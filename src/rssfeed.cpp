@@ -202,6 +202,8 @@ std::optional<std::string> RssFeed::attribute_value(const std::string&
 			return std::to_string((time(nullptr) - timestamp) / 86400);
 		}
 		return "0";
+	} else if (attribname == "download_status") {
+		return get_status();
 	}
 	return std::nullopt;
 }
@@ -366,7 +368,7 @@ void RssFeed::set_feedptrs(std::shared_ptr<RssFeed> self)
 	}
 }
 
-std::string RssFeed::get_status()
+std::string RssFeed::get_status() const
 {
 	std::lock_guard<std::mutex> guard(status_mutex_);
 
