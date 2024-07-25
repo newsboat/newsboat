@@ -1281,12 +1281,8 @@ TEST_CASE(
 		REQUIRE(utils::substr_with_width("a<>b<>c", 3) == "a<>");
 	}
 
-	SECTION("treat non-printable has zero width") {
-		REQUIRE(utils::substr_with_width("\x01\x02"
-				"abc",
-				1) ==
-			"\x01\x02"
-			"a");
+	SECTION("treats non-printable characters as 1 wide") {
+		REQUIRE(utils::substr_with_width("\x01\x02" "abc", 1) == "\x01");
 	}
 }
 

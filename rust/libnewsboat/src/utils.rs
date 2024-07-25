@@ -13,6 +13,7 @@ use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::ptr;
+use unicode_segmentation::UnicodeSegmentation;
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 use url::Url;
 
@@ -258,14 +259,14 @@ pub fn strwidth_stfl(mut s: &str) -> usize {
 pub fn substr_with_width(string: &str, max_width: usize) -> String {
     let mut result = String::new();
     let mut width = 0;
-    for c in string.chars() {
+    for g in string.graphemes(true) {
         // Control chars count as width 0
-        let w = UnicodeWidthChar::width(c).unwrap_or(0);
+        let w = UnicodeWidthStr::width(g);
         if width + w > max_width {
             break;
         }
         width += w;
-        result.push(c);
+        result.push_str(g);
     }
     result
 }
@@ -1483,7 +1484,16 @@ mod tests {
 
     #[test]
     fn t_substr_with_width_max_width_non_printable() {
-        assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01\x02a");
+        assert_eq!(substr_with_width("\x01\x02abc", 1), "\x01");
+    }
+
+    #[test]
+    fn t_substr_with_width_keeps_graphemes_complete() {
+        let input = "a⚛️b"; // Symbol unicode: "\u{269B}\u{FE0F}"
+        assert_eq!(substr_with_width(input, 1), "a");
+        assert_eq!(substr_with_width(input, 2), "a");
+        assert_eq!(substr_with_width(input, 3), "a⚛️");
+        assert_eq!(substr_with_width(input, 4), "a⚛️b");
     }
 
     #[test]
