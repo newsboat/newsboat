@@ -112,7 +112,6 @@ fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
         "Newsboat version: {}",
         env!("CARGO_PKG_VERSION")
     )?;
-    writeln!(&mut stderr, "{}", get_crash_cause(panic_info))?;
     writeln!(&mut stderr, "{}", get_error_message(panic_info))?;
     writeln!(&mut stderr, "{}", get_location(panic_info))?;
 
@@ -124,19 +123,6 @@ fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
     )?;
 
     Ok(())
-}
-
-#[cfg(feature = "nightly")]
-fn get_crash_cause(panic_info: &PanicInfo) -> String {
-    match panic_info.message() {
-        Some(m) => format!("Crash cause: {m}"),
-        None => "Crash cause unknown".into(),
-    };
-}
-
-#[cfg(not(feature = "nightly"))]
-fn get_crash_cause(_panic_info: &PanicInfo) -> String {
-    String::from("Couldn't determine the crash cause.")
 }
 
 fn get_error_message(panic_info: &PanicInfo) -> String {
