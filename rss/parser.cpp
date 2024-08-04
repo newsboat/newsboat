@@ -210,7 +210,7 @@ Feed Parser::parse_url(const std::string& url,
 		throw NotModifiedException();
 	}
 
-	const std::string buf = curlDataReceiver->get_data();
+	std::string buf = curlDataReceiver->get_data();
 	LOG(Level::DEBUG,
 		"Parser::parse_url: retrieved data for %s: %s",
 		url,
@@ -228,7 +228,8 @@ Feed Parser::parse_url(const std::string& url,
 	} else if (charset_content_type.has_value()) {
 		charset = charset_content_type;
 	} else {
-		charset = nonstd::nullopt;
+		buf = utils::string_from_utf8_lossy(data);
+		charset = "utf-8";
 	}
 
 	if (buf.length() > 0) {

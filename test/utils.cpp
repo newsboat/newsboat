@@ -1501,6 +1501,15 @@ TEST_CASE("podcast_mime_to_link_type() returns HtmlRenderer's LinkType that "
 	}
 }
 
+TEST_CASE("string_from_utf8_lossy() replaces invalid utf-8 code units with replacement characters",
+	"[utils]")
+{
+	const std::string input_str = "abc" "\x81" "def";
+	const std::vector<std::uint8_t> input(input_str.begin(), input_str.end());
+	const auto output = utils::string_from_utf8_lossy(input);
+	REQUIRE(output == "abc�def");
+}
+
 TEST_CASE(
 	"is_valid_color() returns false for things that aren't valid STFL "
 	"colors",

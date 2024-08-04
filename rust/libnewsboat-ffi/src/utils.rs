@@ -89,6 +89,7 @@ mod bridged {
         fn utf8_to_locale(text: &str) -> Vec<u8>;
         fn locale_to_utf8(text: &[u8]) -> String;
         fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8>;
+        fn string_from_utf8_lossy(text: &[u8]) -> String;
     }
 }
 
@@ -241,6 +242,10 @@ fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool {
             false
         }
     }
+}
+
+fn string_from_utf8_lossy(text: &[u8]) -> String {
+    String::from_utf8_lossy(text).to_string()
 }
 
 #[no_mangle]

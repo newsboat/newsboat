@@ -550,3 +550,30 @@ TEST_CASE("parse_url() applies encoding specified in http header if no xml encod
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == title_utf8);
 }
+
+TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces invalid code units",
+	"[rsspp::Parser]")
+{
+	using namespace newsboat;
+
+	constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
+	constexpr auto expected_title = u8"Pr�ve";
+
+	auto feed_xml_utf8 = strprintf::fmt(atom_feed_without_encoding, title_utf8);
+
+	auto feed_xml_iso8859_1 = utils::convert_text(feed_xml_utf8, "iso-8859-1", "utf-8");
+	auto feed_xml = std::vector<std::uint8_t>(feed_xml_iso8859_1.begin(),
+			feed_xml_iso8859_1.end());
+
+	auto& test_server = test_helpers::HttpTestServer::get_instance();
+	auto mock_registration = test_server.add_endpoint("/feed", {}, 200, {}, feed_xml);
+	const auto address = test_server.get_address();
+	const auto url = strprintf::fmt("http://%s/feed", address);
+
+	rsspp::Parser parser;
+	CurlHandle easyhandle;
+	auto parsed_feed = parser.parse_url(url, easyhandle);
+
+	REQUIRE(parsed_feed.items.size() == 1);
+	REQUIRE(parsed_feed.title == expected_title);
+}
