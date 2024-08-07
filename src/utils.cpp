@@ -790,6 +790,13 @@ nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
 	return nonstd::nullopt;
 }
 
+std::string utils::string_from_utf8_lossy(const std::vector<std::uint8_t>& text)
+{
+	auto input = rust::Slice<std::uint8_t const>(text.data(), text.size());
+	auto result = utils::bridged::string_from_utf8_lossy(input);
+	return std::string(result);
+}
+
 /*
  * See
  * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading
