@@ -14,7 +14,7 @@ you can help:
 
 If you happen to stumble upon a security vulnerability, **do not open a GitHub issue**.
 Instead, send an email to security@newsboat.org and encrypt your emails using
-[PGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp).
+[OpenPGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp).
 
 
 ## Feature Requests and Bug Reports

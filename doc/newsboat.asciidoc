@@ -1628,7 +1628,7 @@ include::chapter-environment-variables.asciidoc[]
 == Feedback and security
 
 Please report security vulnerabilities to security@newsboat.org, encrypting your
-emails to https://newsboat.org/newsboat.pgp[PGP key 4ED6CD61932B9EBE] if at all
+emails to https://newsboat.org/newsboat.pgp[OpenPGP key 4ED6CD61932B9EBE] if at all
 possible.
 
 Non-security issues and general questions can be discussed on
