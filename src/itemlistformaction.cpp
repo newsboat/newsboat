@@ -1185,14 +1185,14 @@ StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const auto formattedLine = fmt.do_format(itemlist_format, width);
 	auto stflFormattedLine = StflRichText::from_plaintext(formattedLine);
 
+	if (item.first->unread()) {
+		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
+	}
+
 	const int id = rxman.article_matches(item.first.get());
 	if (id != -1) {
 		const auto tag = strprintf::fmt("<%d>", id);
 		stflFormattedLine.apply_style_tag(tag, 0, formattedLine.length());
-	}
-
-	if (item.first->unread()) {
-		stflFormattedLine.apply_style_tag("<unread>", 0, formattedLine.length());
 	}
 
 	return stflFormattedLine;
