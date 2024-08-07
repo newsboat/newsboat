@@ -29,7 +29,9 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: sudo apt-get install --assume-yes --no-install-suggests clang-18 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install --assume-yes --no-install-suggests clang-18 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
 
       - name: Generate locales
         run: |
