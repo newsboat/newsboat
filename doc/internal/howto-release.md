@@ -171,7 +171,7 @@ branch off the latest release and backport the bugfixes onto it.
         git checkout -b feature/prepare-next-release
         git commit -am'Prepare for next release'
         git push origin -u feature/prepare-next-release
-3. If it's September, bump the expiry date on the GPG key:
+3. If it's September, bump the expiry date on the OpenPGP key:
 
     * edit the key, upload it to keyservers and export it to a file:
 
