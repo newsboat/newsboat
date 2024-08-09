@@ -942,7 +942,7 @@ pub fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8> {
     }
 
     unsafe {
-        let mut outbuf: [u8; 16] = [0; 16];
+        let mut outbuf = vec![0u8; 65536];
         let mut outbufp = outbuf.as_mut_ptr() as *mut c_char;
         let mut outbytesleft = outbuf.len();
 
