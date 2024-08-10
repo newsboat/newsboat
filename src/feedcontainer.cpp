@@ -205,10 +205,11 @@ void FeedContainer::erase_feed_by_order(
 	const unsigned int order)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
-	auto pos = std::find_if(feeds.begin(), feeds.end(), [order](const std::shared_ptr<RssFeed> feed){
-		return (feed->get_order()) == order;
-	});
-	if(pos != feeds.end()) {
+	auto pos = std::find_if(feeds.begin(), feeds.end(),
+		 [order](const std::shared_ptr<RssFeed> feed){
+			 return (feed->get_order()) == order;
+		 });
+	if (pos != feeds.end()) {
 		feeds.erase(pos);
 		return;
 	}
