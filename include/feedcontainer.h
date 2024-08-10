@@ -29,6 +29,7 @@ public:
 	/// Count unread items in feeds tagged with `tag`
 	unsigned int get_unread_item_count_per_tag(const std::string& tag);
 
+	void erase_feed_by_order(const unsigned int order);
 	std::shared_ptr<RssFeed> get_feed_by_url(const std::string& feedurl);
 	void populate_query_feeds();
 	unsigned int get_pos_of_next_unread(unsigned int pos);

@@ -201,6 +201,23 @@ unsigned int FeedContainer::get_unread_item_count_per_tag(
 	return count;
 }
 
+void FeedContainer::erase_feed_by_order(
+	const unsigned int order)
+{
+	std::lock_guard<std::mutex> feedslock(feeds_mutex);
+	auto pos = std::find_if(feeds.begin(), feeds.end(), [order](const std::shared_ptr<RssFeed> feed){
+		return (feed->get_order()) == order;
+	});
+	if(pos != feeds.end()) {
+		feeds.erase(pos);
+		return;
+	}
+	LOG(Level::ERROR,
+		"FeedContainer:erase_feed_by_order failed for %s",
+		order);
+	return;
+}
+
 std::shared_ptr<RssFeed> FeedContainer::get_feed_by_url(
 	const std::string& feedurl)
 {

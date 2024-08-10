@@ -842,6 +842,7 @@ void Controller::reload_urls_file()
 	for (const auto& url : urlcfg->get_urls()) {
 		const auto feed = feedcontainer.get_feed_by_url(url);
 		if (feed) {
+			feedcontainer.erase_feed_by_order(feed->get_order());
 			feed->set_tags(urlcfg->get_tags(url));
 			feed->set_order(i);
 			new_feeds.push_back(feed);
