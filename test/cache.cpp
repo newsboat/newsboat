@@ -134,6 +134,25 @@ TEST_CASE("Last-Modified and ETag values are persisted to DB", "[Cache]")
 	}
 }
 
+TEST_CASE("Last-Modified and ETag values are also stored in DB if feed was not yet present in DB",
+	"[Cache]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+
+	const std::string feedurl = "http://example.com/feed.xml";
+	const time_t lastmodified = 42;
+	const std::string etag = "abc";
+	rsscache.update_lastmodified(feedurl, lastmodified, etag);
+
+	time_t output_lastmodified{};
+	std::string output_etag;
+	rsscache.fetch_lastmodified(feedurl, output_lastmodified, output_etag);
+
+	REQUIRE(output_lastmodified == lastmodified);
+	REQUIRE(output_etag == etag);
+}
+
 TEST_CASE("mark_all_read marks all items in the feed read", "[Cache]")
 {
 	std::shared_ptr<RssFeed> feed, test_feed;
