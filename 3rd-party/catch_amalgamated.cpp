@@ -6,8 +6,8 @@
 
 // SPDX-License-Identifier: BSL-1.0
 
-//  Catch v3.5.4
-//  Generated: 2024-04-10 12:03:46.281848
+//  Catch v3.7.0
+//  Generated: 2024-08-14 12:04:53.604337
 //  ----------------------------------------------------------
 //  This file is an amalgamation of multiple different files.
 //  You probably shouldn't edit it directly.
@@ -128,7 +128,13 @@ namespace Catch {
 namespace Catch {
     namespace Benchmark {
         namespace Detail {
+            struct do_nothing {
+                void operator()() const {}
+            };
+
             BenchmarkFunction::callable::~callable() = default;
+            BenchmarkFunction::BenchmarkFunction():
+                f( new model<do_nothing>{ {} } ){}
         } // namespace Detail
     } // namespace Benchmark
 } // namespace Catch
@@ -1040,6 +1046,7 @@ namespace Catch {
                     m_messages.back().message += " := ";
                     start = pos;
                 }
+                break;
             default:; // noop
             }
         }
@@ -2156,13 +2163,13 @@ std::string StringMaker<unsigned char>::convert(unsigned char value) {
     return ::Catch::Detail::stringify(static_cast<char>(value));
 }
 
-int StringMaker<float>::precision = 5;
+int StringMaker<float>::precision = std::numeric_limits<float>::max_digits10;
 
 std::string StringMaker<float>::convert(float value) {
     return Detail::fpToString(value, precision) + 'f';
 }
 
-int StringMaker<double>::precision = 10;
+int StringMaker<double>::precision = std::numeric_limits<double>::max_digits10;
 
 std::string StringMaker<double>::convert(double value) {
     return Detail::fpToString(value, precision);
@@ -2273,7 +2280,7 @@ namespace Catch {
     }
 
     Version const& libraryVersion() {
-        static Version version( 3, 5, 4, "", 0 );
+        static Version version( 3, 7, 0, "", 0 );
         return version;
     }
 
@@ -4808,138 +4815,328 @@ namespace Catch {
 
 #include <cstdio>
 #include <cstring>
+#include <iosfwd>
 #include <sstream>
 
-#if defined(CATCH_CONFIG_NEW_CAPTURE)
-    #if defined(_MSC_VER)
-    #include <io.h>      //_dup and _dup2
-    #define dup _dup
-    #define dup2 _dup2
-    #define fileno _fileno
-    #else
-    #include <unistd.h>  // dup and dup2
-    #endif
+#if defined( CATCH_CONFIG_NEW_CAPTURE )
+#    if defined( _MSC_VER )
+#        include <io.h> //_dup and _dup2
+#        define dup _dup
+#        define dup2 _dup2
+#        define fileno _fileno
+#    else
+#        include <unistd.h> // dup and dup2
+#    endif
 #endif
-
 
 namespace Catch {
 
-    RedirectedStream::RedirectedStream( std::ostream& originalStream, std::ostream& redirectionStream )
-    :   m_originalStream( originalStream ),
-        m_redirectionStream( redirectionStream ),
-        m_prevBuf( m_originalStream.rdbuf() )
-    {
-        m_originalStream.rdbuf( m_redirectionStream.rdbuf() );
-    }
+    namespace {
+        //! A no-op implementation, used if no reporter wants output
+        //! redirection.
+        class NoopRedirect : public OutputRedirect {
+            void activateImpl() override {}
+            void deactivateImpl() override {}
+            std::string getStdout() override { return {}; }
+            std::string getStderr() override { return {}; }
+            void clearBuffers() override {}
+        };
 
-    RedirectedStream::~RedirectedStream() {
-        m_originalStream.rdbuf( m_prevBuf );
-    }
+        /**
+         * Redirects specific stream's rdbuf with another's.
+         *
+         * Redirection can be stopped and started on-demand, assumes
+         * that the underlying stream's rdbuf aren't changed by other
+         * users.
+         */
+        class RedirectedStreamNew {
+            std::ostream& m_originalStream;
+            std::ostream& m_redirectionStream;
+            std::streambuf* m_prevBuf;
 
-    RedirectedStdOut::RedirectedStdOut() : m_cout( Catch::cout(), m_rss.get() ) {}
-    auto RedirectedStdOut::str() const -> std::string { return m_rss.str(); }
+        public:
+            RedirectedStreamNew( std::ostream& originalStream,
+                                 std::ostream& redirectionStream ):
+                m_originalStream( originalStream ),
+                m_redirectionStream( redirectionStream ),
+                m_prevBuf( m_originalStream.rdbuf() ) {}
 
-    RedirectedStdErr::RedirectedStdErr()
-    :   m_cerr( Catch::cerr(), m_rss.get() ),
-        m_clog( Catch::clog(), m_rss.get() )
-    {}
-    auto RedirectedStdErr::str() const -> std::string { return m_rss.str(); }
-
-    RedirectedStreams::RedirectedStreams(std::string& redirectedCout, std::string& redirectedCerr)
-    :   m_redirectedCout(redirectedCout),
-        m_redirectedCerr(redirectedCerr)
-    {}
-
-    RedirectedStreams::~RedirectedStreams() {
-        m_redirectedCout += m_redirectedStdOut.str();
-        m_redirectedCerr += m_redirectedStdErr.str();
-    }
-
-#if defined(CATCH_CONFIG_NEW_CAPTURE)
-
-#if defined(_MSC_VER)
-    TempFile::TempFile() {
-        if (tmpnam_s(m_buffer)) {
-            CATCH_RUNTIME_ERROR("Could not get a temp filename");
-        }
-        if (fopen_s(&m_file, m_buffer, "w+")) {
-            char buffer[100];
-            if (strerror_s(buffer, errno)) {
-                CATCH_RUNTIME_ERROR("Could not translate errno to a string");
+            void startRedirect() {
+                m_originalStream.rdbuf( m_redirectionStream.rdbuf() );
             }
-            CATCH_RUNTIME_ERROR("Could not open the temp file: '" << m_buffer << "' because: " << buffer);
-        }
-    }
-#else
-    TempFile::TempFile() {
-        m_file = std::tmpfile();
-        if (!m_file) {
-            CATCH_RUNTIME_ERROR("Could not create a temp file.");
-        }
-    }
+            void stopRedirect() { m_originalStream.rdbuf( m_prevBuf ); }
+        };
 
-#endif
+        /**
+         * Redirects the `std::cout`, `std::cerr`, `std::clog` streams,
+         * but does not touch the actual `stdout`/`stderr` file descriptors.
+         */
+        class StreamRedirect : public OutputRedirect {
+            ReusableStringStream m_redirectedOut, m_redirectedErr;
+            RedirectedStreamNew m_cout, m_cerr, m_clog;
 
-    TempFile::~TempFile() {
-         // TBD: What to do about errors here?
-         std::fclose(m_file);
-         // We manually create the file on Windows only, on Linux
-         // it will be autodeleted
-#if defined(_MSC_VER)
-         std::remove(m_buffer);
-#endif
-    }
+        public:
+            StreamRedirect():
+                m_cout( Catch::cout(), m_redirectedOut.get() ),
+                m_cerr( Catch::cerr(), m_redirectedErr.get() ),
+                m_clog( Catch::clog(), m_redirectedErr.get() ) {}
 
+            void activateImpl() override {
+                m_cout.startRedirect();
+                m_cerr.startRedirect();
+                m_clog.startRedirect();
+            }
+            void deactivateImpl() override {
+                m_cout.stopRedirect();
+                m_cerr.stopRedirect();
+                m_clog.stopRedirect();
+            }
+            std::string getStdout() override { return m_redirectedOut.str(); }
+            std::string getStderr() override { return m_redirectedErr.str(); }
+            void clearBuffers() override {
+                m_redirectedOut.str( "" );
+                m_redirectedErr.str( "" );
+            }
+        };
 
-    FILE* TempFile::getFile() {
-        return m_file;
-    }
+#if defined( CATCH_CONFIG_NEW_CAPTURE )
 
-    std::string TempFile::getContents() {
-        std::stringstream sstr;
-        char buffer[100] = {};
-        std::rewind(m_file);
-        while (std::fgets(buffer, sizeof(buffer), m_file)) {
-            sstr << buffer;
-        }
-        return sstr.str();
-    }
+        // Windows's implementation of std::tmpfile is terrible (it tries
+        // to create a file inside system folder, thus requiring elevated
+        // privileges for the binary), so we have to use tmpnam(_s) and
+        // create the file ourselves there.
+        class TempFile {
+        public:
+            TempFile( TempFile const& ) = delete;
+            TempFile& operator=( TempFile const& ) = delete;
+            TempFile( TempFile&& ) = delete;
+            TempFile& operator=( TempFile&& ) = delete;
 
-    OutputRedirect::OutputRedirect(std::string& stdout_dest, std::string& stderr_dest) :
-        m_originalStdout(dup(1)),
-        m_originalStderr(dup(2)),
-        m_stdoutDest(stdout_dest),
-        m_stderrDest(stderr_dest) {
-        dup2(fileno(m_stdoutFile.getFile()), 1);
-        dup2(fileno(m_stderrFile.getFile()), 2);
-    }
+#    if defined( _MSC_VER )
+            TempFile() {
+                if ( tmpnam_s( m_buffer ) ) {
+                    CATCH_RUNTIME_ERROR( "Could not get a temp filename" );
+                }
+                if ( fopen_s( &m_file, m_buffer, "wb+" ) ) {
+                    char buffer[100];
+                    if ( strerror_s( buffer, errno ) ) {
+                        CATCH_RUNTIME_ERROR(
+                            "Could not translate errno to a string" );
+                    }
+                    CATCH_RUNTIME_ERROR( "Could not open the temp file: '"
+                                         << m_buffer
+                                         << "' because: " << buffer );
+                }
+            }
+#    else
+            TempFile() {
+                m_file = std::tmpfile();
+                if ( !m_file ) {
+                    CATCH_RUNTIME_ERROR( "Could not create a temp file." );
+                }
+            }
+#    endif
 
-    OutputRedirect::~OutputRedirect() {
-        Catch::cout() << std::flush;
-        fflush(stdout);
-        // Since we support overriding these streams, we flush cerr
-        // even though std::cerr is unbuffered
-        Catch::cerr() << std::flush;
-        Catch::clog() << std::flush;
-        fflush(stderr);
+            ~TempFile() {
+                // TBD: What to do about errors here?
+                std::fclose( m_file );
+                // We manually create the file on Windows only, on Linux
+                // it will be autodeleted
+#    if defined( _MSC_VER )
+                std::remove( m_buffer );
+#    endif
+            }
 
-        dup2(m_originalStdout, 1);
-        dup2(m_originalStderr, 2);
+            std::FILE* getFile() { return m_file; }
+            std::string getContents() {
+                ReusableStringStream sstr;
+                constexpr long buffer_size = 100;
+                char buffer[buffer_size + 1] = {};
+                long current_pos = ftell( m_file );
+                CATCH_ENFORCE( current_pos >= 0,
+                               "ftell failed, errno: " << errno );
+                std::rewind( m_file );
+                while ( current_pos > 0 ) {
+                    auto read_characters =
+                        std::fread( buffer,
+                                    1,
+                                    std::min( buffer_size, current_pos ),
+                                    m_file );
+                    buffer[read_characters] = '\0';
+                    sstr << buffer;
+                    current_pos -= static_cast<long>( read_characters );
+                }
+                return sstr.str();
+            }
 
-        m_stdoutDest += m_stdoutFile.getContents();
-        m_stderrDest += m_stderrFile.getContents();
-    }
+            void clear() { std::rewind( m_file ); }
+
+        private:
+            std::FILE* m_file = nullptr;
+            char m_buffer[L_tmpnam] = { 0 };
+        };
+
+        /**
+         * Redirects the actual `stdout`/`stderr` file descriptors.
+         *
+         * Works by replacing the file descriptors numbered 1 and 2
+         * with an open temporary file.
+         */
+        class FileRedirect : public OutputRedirect {
+            TempFile m_outFile, m_errFile;
+            int m_originalOut = -1;
+            int m_originalErr = -1;
+
+            // Flushes cout/cerr/clog streams and stdout/stderr FDs
+            void flushEverything() {
+                Catch::cout() << std::flush;
+                fflush( stdout );
+                // Since we support overriding these streams, we flush cerr
+                // even though std::cerr is unbuffered
+                Catch::cerr() << std::flush;
+                Catch::clog() << std::flush;
+                fflush( stderr );
+            }
+
+        public:
+            FileRedirect():
+                m_originalOut( dup( fileno( stdout ) ) ),
+                m_originalErr( dup( fileno( stderr ) ) ) {
+                CATCH_ENFORCE( m_originalOut >= 0, "Could not dup stdout" );
+                CATCH_ENFORCE( m_originalErr >= 0, "Could not dup stderr" );
+            }
+
+            std::string getStdout() override { return m_outFile.getContents(); }
+            std::string getStderr() override { return m_errFile.getContents(); }
+            void clearBuffers() override {
+                m_outFile.clear();
+                m_errFile.clear();
+            }
+
+            void activateImpl() override {
+                // We flush before starting redirect, to ensure that we do
+                // not capture the end of message sent before activation.
+                flushEverything();
+
+                int ret;
+                ret = dup2( fileno( m_outFile.getFile() ), fileno( stdout ) );
+                CATCH_ENFORCE( ret >= 0,
+                               "dup2 to stdout has failed, errno: " << errno );
+                ret = dup2( fileno( m_errFile.getFile() ), fileno( stderr ) );
+                CATCH_ENFORCE( ret >= 0,
+                               "dup2 to stderr has failed, errno: " << errno );
+            }
+            void deactivateImpl() override {
+                // We flush before ending redirect, to ensure that we
+                // capture all messages sent while the redirect was active.
+                flushEverything();
+
+                int ret;
+                ret = dup2( m_originalOut, fileno( stdout ) );
+                CATCH_ENFORCE(
+                    ret >= 0,
+                    "dup2 of original stdout has failed, errno: " << errno );
+                ret = dup2( m_originalErr, fileno( stderr ) );
+                CATCH_ENFORCE(
+                    ret >= 0,
+                    "dup2 of original stderr has failed, errno: " << errno );
+            }
+        };
 
 #endif // CATCH_CONFIG_NEW_CAPTURE
 
+    } // end namespace
+
+    bool isRedirectAvailable( OutputRedirect::Kind kind ) {
+        switch ( kind ) {
+        // These two are always available
+        case OutputRedirect::None:
+        case OutputRedirect::Streams:
+            return true;
+#if defined( CATCH_CONFIG_NEW_CAPTURE )
+        case OutputRedirect::FileDescriptors:
+            return true;
+#endif
+        default:
+            return false;
+        }
+    }
+
+    Detail::unique_ptr<OutputRedirect> makeOutputRedirect( bool actual ) {
+        if ( actual ) {
+            // TODO: Clean this up later
+#if defined( CATCH_CONFIG_NEW_CAPTURE )
+            return Detail::make_unique<FileRedirect>();
+#else
+            return Detail::make_unique<StreamRedirect>();
+#endif
+        } else {
+            return Detail::make_unique<NoopRedirect>();
+        }
+    }
+
+    RedirectGuard scopedActivate( OutputRedirect& redirectImpl ) {
+        return RedirectGuard( true, redirectImpl );
+    }
+
+    RedirectGuard scopedDeactivate( OutputRedirect& redirectImpl ) {
+        return RedirectGuard( false, redirectImpl );
+    }
+
+    OutputRedirect::~OutputRedirect() = default;
+
+    RedirectGuard::RedirectGuard( bool activate, OutputRedirect& redirectImpl ):
+        m_redirect( &redirectImpl ),
+        m_activate( activate ),
+        m_previouslyActive( redirectImpl.isActive() ) {
+
+        // Skip cases where there is no actual state change.
+        if ( m_activate == m_previouslyActive ) { return; }
+
+        if ( m_activate ) {
+            m_redirect->activate();
+        } else {
+            m_redirect->deactivate();
+        }
+    }
+
+    RedirectGuard::~RedirectGuard() noexcept( false ) {
+        if ( m_moved ) { return; }
+        // Skip cases where there is no actual state change.
+        if ( m_activate == m_previouslyActive ) { return; }
+
+        if ( m_activate ) {
+            m_redirect->deactivate();
+        } else {
+            m_redirect->activate();
+        }
+    }
+
+    RedirectGuard::RedirectGuard( RedirectGuard&& rhs ) noexcept:
+        m_redirect( rhs.m_redirect ),
+        m_activate( rhs.m_activate ),
+        m_previouslyActive( rhs.m_previouslyActive ),
+        m_moved( false ) {
+        rhs.m_moved = true;
+    }
+
+    RedirectGuard& RedirectGuard::operator=( RedirectGuard&& rhs ) noexcept {
+        m_redirect = rhs.m_redirect;
+        m_activate = rhs.m_activate;
+        m_previouslyActive = rhs.m_previouslyActive;
+        m_moved = false;
+        rhs.m_moved = true;
+        return *this;
+    }
+
 } // namespace Catch
 
-#if defined(CATCH_CONFIG_NEW_CAPTURE)
-    #if defined(_MSC_VER)
-    #undef dup
-    #undef dup2
-    #undef fileno
-    #endif
+#if defined( CATCH_CONFIG_NEW_CAPTURE )
+#    if defined( _MSC_VER )
+#        undef dup
+#        undef dup2
+#        undef fileno
+#    endif
 #endif
 
 
@@ -5573,6 +5770,7 @@ namespace Catch {
         m_config(_config),
         m_reporter(CATCH_MOVE(reporter)),
         m_lastAssertionInfo{ StringRef(), SourceLineInfo("",0), StringRef(), ResultDisposition::Normal },
+        m_outputRedirect( makeOutputRedirect( m_reporter->getPreferences().shouldRedirectStdOut ) ),
         m_includeSuccessfulResults( m_config->includeSuccessfulResults() || m_reporter->getPreferences().shouldReportAllAssertions )
     {
         getCurrentMutableContext().setResultCapture( this );
@@ -5588,6 +5786,7 @@ namespace Catch {
 
         auto const& testInfo = testCase.getTestCaseInfo();
         m_reporter->testCaseStarting(testInfo);
+        testCase.prepareTestCase();
         m_activeTestCase = &testCase;
 
 
@@ -5638,15 +5837,17 @@ namespace Catch {
             m_reporter->testCasePartialStarting(testInfo, testRuns);
 
             const auto beforeRunTotals = m_totals;
-            std::string oneRunCout, oneRunCerr;
-            runCurrentTest(oneRunCout, oneRunCerr);
+            runCurrentTest();
+            std::string oneRunCout = m_outputRedirect->getStdout();
+            std::string oneRunCerr = m_outputRedirect->getStderr();
+            m_outputRedirect->clearBuffers();
             redirectedCout += oneRunCout;
             redirectedCerr += oneRunCerr;
 
             const auto singleRunTotals = m_totals.delta(beforeRunTotals);
             auto statsForOneRun = TestCaseStats(testInfo, singleRunTotals, CATCH_MOVE(oneRunCout), CATCH_MOVE(oneRunCerr), aborting());
-
             m_reporter->testCasePartialEnded(statsForOneRun, testRuns);
+
             ++testRuns;
         } while (!m_testCaseTracker->isSuccessfullyCompleted() && !aborting());
 
@@ -5657,6 +5858,7 @@ namespace Catch {
             deltaTotals.testCases.failed++;
         }
         m_totals.testCases += deltaTotals.testCases;
+        testCase.tearDownTestCase();
         m_reporter->testCaseEnded(TestCaseStats(testInfo,
                                   deltaTotals,
                                   CATCH_MOVE(redirectedCout),
@@ -5690,7 +5892,10 @@ namespace Catch {
             m_lastAssertionPassed = true;
         }
 
-        m_reporter->assertionEnded(AssertionStats(result, m_messages, m_totals));
+        {
+            auto _ = scopedDeactivate( *m_outputRedirect );
+            m_reporter->assertionEnded( AssertionStats( result, m_messages, m_totals ) );
+        }
 
         if ( result.getResultType() != ResultWas::Warning ) {
             m_messageScopes.clear();
@@ -5707,6 +5912,7 @@ namespace Catch {
     }
 
     void RunContext::notifyAssertionStarted( AssertionInfo const& info ) {
+        auto _ = scopedDeactivate( *m_outputRedirect );
         m_reporter->assertionStarting( info );
     }
 
@@ -5725,7 +5931,10 @@ namespace Catch {
         SectionInfo sectionInfo( sectionLineInfo, static_cast<std::string>(sectionName) );
         m_lastAssertionInfo.lineInfo = sectionInfo.lineInfo;
 
-        m_reporter->sectionStarting(sectionInfo);
+        {
+            auto _ = scopedDeactivate( *m_outputRedirect );
+            m_reporter->sectionStarting( sectionInfo );
+        }
 
         assertions = m_totals.assertions;
 
@@ -5785,7 +5994,15 @@ namespace Catch {
             m_activeSections.pop_back();
         }
 
-        m_reporter->sectionEnded(SectionStats(CATCH_MOVE(endInfo.sectionInfo), assertions, endInfo.durationInSeconds, missingAssertions));
+        {
+            auto _ = scopedDeactivate( *m_outputRedirect );
+            m_reporter->sectionEnded(
+                SectionStats( CATCH_MOVE( endInfo.sectionInfo ),
+                              assertions,
+                              endInfo.durationInSeconds,
+                              missingAssertions ) );
+        }
+
         m_messages.clear();
         m_messageScopes.clear();
     }
@@ -5802,15 +6019,19 @@ namespace Catch {
     }
 
     void RunContext::benchmarkPreparing( StringRef name ) {
-        m_reporter->benchmarkPreparing(name);
+        auto _ = scopedDeactivate( *m_outputRedirect );
+        m_reporter->benchmarkPreparing( name );
     }
     void RunContext::benchmarkStarting( BenchmarkInfo const& info ) {
+        auto _ = scopedDeactivate( *m_outputRedirect );
         m_reporter->benchmarkStarting( info );
     }
     void RunContext::benchmarkEnded( BenchmarkStats<> const& stats ) {
+        auto _ = scopedDeactivate( *m_outputRedirect );
         m_reporter->benchmarkEnded( stats );
     }
     void RunContext::benchmarkFailed( StringRef error ) {
+        auto _ = scopedDeactivate( *m_outputRedirect );
         m_reporter->benchmarkFailed( error );
     }
 
@@ -5841,8 +6062,13 @@ namespace Catch {
     }
 
     void RunContext::handleFatalErrorCondition( StringRef message ) {
+        // TODO: scoped deactivate here? Just give up and do best effort?
+        //       the deactivation can break things further, OTOH so can the
+        //       capture
+        auto _ = scopedDeactivate( *m_outputRedirect );
+
         // First notify reporter that bad things happened
-        m_reporter->fatalErrorEncountered(message);
+        m_reporter->fatalErrorEncountered( message );
 
         // Don't rebuild the result -- the stringification itself can cause more fatal errors
         // Instead, fake a result data.
@@ -5853,6 +6079,13 @@ namespace Catch {
         assertionEnded(CATCH_MOVE(result) );
         resetAssertionInfo();
 
+        // Best effort cleanup for sections that have not been destructed yet
+        // Since this is a fatal error, we have not had and won't have the opportunity to destruct them properly
+        while (!m_activeSections.empty()) {
+            auto nl = m_activeSections.back()->nameAndLocation();
+            SectionEndInfo endInfo{ SectionInfo(CATCH_MOVE(nl.location), CATCH_MOVE(nl.name)), {}, 0.0 };
+            sectionEndedEarly(CATCH_MOVE(endInfo));
+        }
         handleUnfinishedSections();
 
         // Recreate section for test case (as we will lose the one that was in scope)
@@ -5862,7 +6095,7 @@ namespace Catch {
         Counts assertions;
         assertions.failed = 1;
         SectionStats testCaseSectionStats(CATCH_MOVE(testCaseSection), assertions, 0, false);
-        m_reporter->sectionEnded(testCaseSectionStats);
+        m_reporter->sectionEnded( testCaseSectionStats );
 
         auto const& testInfo = m_activeTestCase->getTestCaseInfo();
 
@@ -5893,7 +6126,7 @@ namespace Catch {
         return m_totals.assertions.failed >= static_cast<std::size_t>(m_config->abortAfter());
     }
 
-    void RunContext::runCurrentTest(std::string & redirectedCout, std::string & redirectedCerr) {
+    void RunContext::runCurrentTest() {
         auto const& testCaseInfo = m_activeTestCase->getTestCaseInfo();
         SectionInfo testCaseSection(testCaseInfo.lineInfo, testCaseInfo.name);
         m_reporter->sectionStarting(testCaseSection);
@@ -5904,18 +6137,8 @@ namespace Catch {
 
         Timer timer;
         CATCH_TRY {
-            if (m_reporter->getPreferences().shouldRedirectStdOut) {
-#if !defined(CATCH_CONFIG_EXPERIMENTAL_REDIRECT)
-                RedirectedStreams redirectedStreams(redirectedCout, redirectedCerr);
-
-                timer.start();
-                invokeActiveTestCase();
-#else
-                OutputRedirect r(redirectedCout, redirectedCerr);
-                timer.start();
-                invokeActiveTestCase();
-#endif
-            } else {
+            {
+                auto _ = scopedActivate( *m_outputRedirect );
                 timer.start();
                 invokeActiveTestCase();
             }
@@ -5960,11 +6183,12 @@ namespace Catch {
     void RunContext::handleUnfinishedSections() {
         // If sections ended prematurely due to an exception we stored their
         // infos here so we can tear them down outside the unwind process.
-        for (auto it = m_unfinishedSections.rbegin(),
-             itEnd = m_unfinishedSections.rend();
-             it != itEnd;
-             ++it)
-            sectionEnded(CATCH_MOVE(*it));
+        for ( auto it = m_unfinishedSections.rbegin(),
+                   itEnd = m_unfinishedSections.rend();
+              it != itEnd;
+              ++it ) {
+            sectionEnded( CATCH_MOVE( *it ) );
+        }
         m_unfinishedSections.clear();
     }
 
@@ -6891,6 +7115,8 @@ namespace Catch {
 #include <iterator>
 
 namespace Catch {
+    void ITestInvoker::prepareTestCase() {}
+    void ITestInvoker::tearDownTestCase() {}
     ITestInvoker::~ITestInvoker() = default;
 
     namespace {
@@ -7207,117 +7433,228 @@ namespace {
         return std::memchr( chars, c, sizeof( chars ) - 1 ) != nullptr;
     }
 
-    bool isBoundary( std::string const& line, size_t at ) {
-        assert( at > 0 );
-        assert( at <= line.size() );
-
-        return at == line.size() ||
-               ( isWhitespace( line[at] ) && !isWhitespace( line[at - 1] ) ) ||
-               isBreakableBefore( line[at] ) ||
-               isBreakableAfter( line[at - 1] );
-    }
-
 } // namespace
 
 namespace Catch {
     namespace TextFlow {
+        void AnsiSkippingString::preprocessString() {
+            for ( auto it = m_string.begin(); it != m_string.end(); ) {
+                // try to read through an ansi sequence
+                while ( it != m_string.end() && *it == '\033' &&
+                        it + 1 != m_string.end() && *( it + 1 ) == '[' ) {
+                    auto cursor = it + 2;
+                    while ( cursor != m_string.end() &&
+                            ( isdigit( *cursor ) || *cursor == ';' ) ) {
+                        ++cursor;
+                    }
+                    if ( cursor == m_string.end() || *cursor != 'm' ) {
+                        break;
+                    }
+                    // 'm' -> 0xff
+                    *cursor = AnsiSkippingString::sentinel;
+                    // if we've read an ansi sequence, set the iterator and
+                    // return to the top of the loop
+                    it = cursor + 1;
+                }
+                if ( it != m_string.end() ) {
+                    ++m_size;
+                    ++it;
+                }
+            }
+        }
+
+        AnsiSkippingString::AnsiSkippingString( std::string const& text ):
+            m_string( text ) {
+            preprocessString();
+        }
+
+        AnsiSkippingString::AnsiSkippingString( std::string&& text ):
+            m_string( CATCH_MOVE( text ) ) {
+            preprocessString();
+        }
+
+        AnsiSkippingString::const_iterator AnsiSkippingString::begin() const {
+            return const_iterator( m_string );
+        }
+
+        AnsiSkippingString::const_iterator AnsiSkippingString::end() const {
+            return const_iterator( m_string, const_iterator::EndTag{} );
+        }
+
+        std::string AnsiSkippingString::substring( const_iterator begin,
+                                                   const_iterator end ) const {
+            // There's one caveat here to an otherwise simple substring: when
+            // making a begin iterator we might have skipped ansi sequences at
+            // the start. If `begin` here is a begin iterator, skipped over
+            // initial ansi sequences, we'll use the true beginning of the
+            // string. Lastly: We need to transform any chars we replaced with
+            // 0xff back to 'm'
+            auto str = std::string( begin == this->begin() ? m_string.begin()
+                                                           : begin.m_it,
+                                    end.m_it );
+            std::transform( str.begin(), str.end(), str.begin(), []( char c ) {
+                return c == AnsiSkippingString::sentinel ? 'm' : c;
+            } );
+            return str;
+        }
+
+        void AnsiSkippingString::const_iterator::tryParseAnsiEscapes() {
+            // check if we've landed on an ansi sequence, and if so read through
+            // it
+            while ( m_it != m_string->end() && *m_it == '\033' &&
+                    m_it + 1 != m_string->end() &&  *( m_it + 1 ) == '[' ) {
+                auto cursor = m_it + 2;
+                while ( cursor != m_string->end() &&
+                        ( isdigit( *cursor ) || *cursor == ';' ) ) {
+                    ++cursor;
+                }
+                if ( cursor == m_string->end() ||
+                     *cursor != AnsiSkippingString::sentinel ) {
+                    break;
+                }
+                // if we've read an ansi sequence, set the iterator and
+                // return to the top of the loop
+                m_it = cursor + 1;
+            }
+        }
+
+        void AnsiSkippingString::const_iterator::advance() {
+            assert( m_it != m_string->end() );
+            m_it++;
+            tryParseAnsiEscapes();
+        }
+
+        void AnsiSkippingString::const_iterator::unadvance() {
+            assert( m_it != m_string->begin() );
+            m_it--;
+            // if *m_it is 0xff, scan back to the \033 and then m_it-- once more
+            // (and repeat check)
+            while ( *m_it == AnsiSkippingString::sentinel ) {
+                while ( *m_it != '\033' ) {
+                    assert( m_it != m_string->begin() );
+                    m_it--;
+                }
+                // if this happens, we must have been a begin iterator that had
+                // skipped over ansi sequences at the start of a string
+                assert( m_it != m_string->begin() );
+                assert( *m_it == '\033' );
+                m_it--;
+            }
+        }
+
+        static bool isBoundary( AnsiSkippingString const& line,
+                                AnsiSkippingString::const_iterator it ) {
+            return it == line.end() ||
+                   ( isWhitespace( *it ) &&
+                     !isWhitespace( *it.oneBefore() ) ) ||
+                   isBreakableBefore( *it ) ||
+                   isBreakableAfter( *it.oneBefore() );
+        }
 
         void Column::const_iterator::calcLength() {
             m_addHyphen = false;
             m_parsedTo = m_lineStart;
+            AnsiSkippingString const& current_line = m_column.m_string;
 
-            std::string const& current_line = m_column.m_string;
-            if ( current_line[m_lineStart] == '\n' ) {
-                ++m_parsedTo;
+            if ( m_parsedTo == current_line.end() ) {
+                m_lineEnd = m_parsedTo;
+                return;
             }
 
+            assert( m_lineStart != current_line.end() );
+            if ( *m_lineStart == '\n' ) { ++m_parsedTo; }
+
             const auto maxLineLength = m_column.m_width - indentSize();
-            const auto maxParseTo = std::min(current_line.size(), m_lineStart + maxLineLength);
-            while ( m_parsedTo < maxParseTo &&
-                    current_line[m_parsedTo] != '\n' ) {
+            std::size_t lineLength = 0;
+            while ( m_parsedTo != current_line.end() &&
+                    lineLength < maxLineLength && *m_parsedTo != '\n' ) {
                 ++m_parsedTo;
+                ++lineLength;
             }
 
             // If we encountered a newline before the column is filled,
             // then we linebreak at the newline and consider this line
             // finished.
-            if ( m_parsedTo < m_lineStart + maxLineLength ) {
-                m_lineLength = m_parsedTo - m_lineStart;
+            if ( lineLength < maxLineLength ) {
+                m_lineEnd = m_parsedTo;
             } else {
                 // Look for a natural linebreak boundary in the column
                 // (We look from the end, so that the first found boundary is
                 // the right one)
-                size_t newLineLength = maxLineLength;
-                while ( newLineLength > 0 && !isBoundary( current_line, m_lineStart + newLineLength ) ) {
-                    --newLineLength;
+                m_lineEnd = m_parsedTo;
+                while ( lineLength > 0 &&
+                        !isBoundary( current_line, m_lineEnd ) ) {
+                    --lineLength;
+                    --m_lineEnd;
                 }
-                while ( newLineLength > 0 &&
-                        isWhitespace( current_line[m_lineStart + newLineLength - 1] ) ) {
-                    --newLineLength;
+                while ( lineLength > 0 &&
+                        isWhitespace( *m_lineEnd.oneBefore() ) ) {
+                    --lineLength;
+                    --m_lineEnd;
                 }
 
-                // If we found one, then that is where we linebreak
-                if ( newLineLength > 0 ) {
-                    m_lineLength = newLineLength;
-                } else {
-                    // Otherwise we have to split text with a hyphen
+                // If we found one, then that is where we linebreak, otherwise
+                // we have to split text with a hyphen
+                if ( lineLength == 0 ) {
                     m_addHyphen = true;
-                    m_lineLength = maxLineLength - 1;
+                    m_lineEnd = m_parsedTo.oneBefore();
                 }
             }
         }
 
         size_t Column::const_iterator::indentSize() const {
-            auto initial =
-                m_lineStart == 0 ? m_column.m_initialIndent : std::string::npos;
+            auto initial = m_lineStart == m_column.m_string.begin()
+                               ? m_column.m_initialIndent
+                               : std::string::npos;
             return initial == std::string::npos ? m_column.m_indent : initial;
         }
 
-        std::string
-        Column::const_iterator::addIndentAndSuffix( size_t position,
-                                              size_t length ) const {
+        std::string Column::const_iterator::addIndentAndSuffix(
+            AnsiSkippingString::const_iterator start,
+            AnsiSkippingString::const_iterator end ) const {
             std::string ret;
             const auto desired_indent = indentSize();
-            ret.reserve( desired_indent + length + m_addHyphen );
+            // ret.reserve( desired_indent + (end - start) + m_addHyphen );
             ret.append( desired_indent, ' ' );
-            ret.append( m_column.m_string, position, length );
-            if ( m_addHyphen ) {
-                ret.push_back( '-' );
-            }
+            // ret.append( start, end );
+            ret += m_column.m_string.substring( start, end );
+            if ( m_addHyphen ) { ret.push_back( '-' ); }
 
             return ret;
         }
 
-        Column::const_iterator::const_iterator( Column const& column ): m_column( column ) {
+        Column::const_iterator::const_iterator( Column const& column ):
+            m_column( column ),
+            m_lineStart( column.m_string.begin() ),
+            m_lineEnd( column.m_string.begin() ),
+            m_parsedTo( column.m_string.begin() ) {
             assert( m_column.m_width > m_column.m_indent );
             assert( m_column.m_initialIndent == std::string::npos ||
                     m_column.m_width > m_column.m_initialIndent );
             calcLength();
-            if ( m_lineLength == 0 ) {
-                m_lineStart = m_column.m_string.size();
+            if ( m_lineStart == m_lineEnd ) {
+                m_lineStart = m_column.m_string.end();
             }
         }
 
         std::string Column::const_iterator::operator*() const {
             assert( m_lineStart <= m_parsedTo );
-            return addIndentAndSuffix( m_lineStart, m_lineLength );
+            return addIndentAndSuffix( m_lineStart, m_lineEnd );
         }
 
         Column::const_iterator& Column::const_iterator::operator++() {
-            m_lineStart += m_lineLength;
-            std::string const& current_line = m_column.m_string;
-            if ( m_lineStart < current_line.size() && current_line[m_lineStart] == '\n' ) {
-                m_lineStart += 1;
+            m_lineStart = m_lineEnd;
+            AnsiSkippingString const& current_line = m_column.m_string;
+            if ( m_lineStart != current_line.end() && *m_lineStart == '\n' ) {
+                m_lineStart++;
             } else {
-                while ( m_lineStart < current_line.size() &&
-                        isWhitespace( current_line[m_lineStart] ) ) {
+                while ( m_lineStart != current_line.end() &&
+                        isWhitespace( *m_lineStart ) ) {
                     ++m_lineStart;
                 }
             }
 
-            if ( m_lineStart != current_line.size() ) {
-                calcLength();
-            }
+            if ( m_lineStart != current_line.end() ) { calcLength(); }
             return *this;
         }
 
@@ -7414,25 +7751,25 @@ namespace Catch {
             return os;
         }
 
-        Columns operator+(Column const& lhs, Column const& rhs) {
+        Columns operator+( Column const& lhs, Column const& rhs ) {
             Columns cols;
             cols += lhs;
             cols += rhs;
             return cols;
         }
-        Columns operator+(Column&& lhs, Column&& rhs) {
+        Columns operator+( Column&& lhs, Column&& rhs ) {
             Columns cols;
             cols += CATCH_MOVE( lhs );
             cols += CATCH_MOVE( rhs );
             return cols;
         }
 
-        Columns& operator+=(Columns& lhs, Column const& rhs) {
+        Columns& operator+=( Columns& lhs, Column const& rhs ) {
             lhs.m_columns.push_back( rhs );
             return lhs;
         }
-        Columns& operator+=(Columns& lhs, Column&& rhs) {
-            lhs.m_columns.push_back( CATCH_MOVE(rhs) );
+        Columns& operator+=( Columns& lhs, Column&& rhs ) {
+            lhs.m_columns.push_back( CATCH_MOVE( rhs ) );
             return lhs;
         }
         Columns operator+( Columns const& lhs, Column const& rhs ) {
@@ -8077,7 +8414,7 @@ namespace Detail {
 
     std::string WithinRelMatcher::describe() const {
         Catch::ReusableStringStream sstr;
-        sstr << "and " << m_target << " are within " << m_epsilon * 100. << "% of each other";
+        sstr << "and " << ::Catch::Detail::stringify(m_target) << " are within " << m_epsilon * 100. << "% of each other";
         return sstr.str();
     }
 
@@ -10215,7 +10552,7 @@ namespace Catch {
             xml( m_stream )
         {
             m_preferences.shouldRedirectStdOut = true;
-            m_preferences.shouldReportAllAssertions = true;
+            m_preferences.shouldReportAllAssertions = false;
             m_shouldStoreSuccesfulAssertions = false;
         }
 
@@ -10325,7 +10662,7 @@ namespace Catch {
         if( !rootName.empty() )
             name = rootName + '/' + name;
 
-        if( sectionNode.hasAnyAssertions()
+        if ( sectionNode.stats.assertions.total() > 0
            || !sectionNode.stdOut.empty()
            || !sectionNode.stdErr.empty() ) {
             XmlWriter::ScopedElement e = xml.scopedElement( "testcase" );
