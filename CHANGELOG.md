@@ -11,6 +11,7 @@
 ### Removed
 ### Fixed
 ### Security
+- Fixed clickjacking vulnerability on newsboat.org (reported by Kunal Mhaske)
 
 
 
@@ -31,6 +32,11 @@
 
 - Updated default color configuration in the docs (Xiao Pan)
 - Parts of contrib/ not being installed (Dennis van der Schagt)
+
+### Security
+
+- Added DMARC policy for newsboat.org to better prevent spoofing (we already had
+    an SPF record) (reported by Kunal Mhaske)
 
 
 
