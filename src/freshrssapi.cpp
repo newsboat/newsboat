@@ -4,6 +4,7 @@
 #include <json.h>
 #include <time.h>
 #include <vector>
+#include <thread>
 
 #include "config.h"
 #include "curldatareceiver.h"
@@ -224,7 +225,17 @@ bool FreshRssApi::mark_all_read(const std::string& feedurl)
 bool FreshRssApi::mark_article_read(const std::string& guid, bool read)
 {
 	refresh_token();
-	return mark_article_read_with_token(guid, read, token);
+
+	std::thread t{[=]()
+	{
+		LOG(Level::DEBUG,
+			"FreshRssApi::mark_article_read: inside thread, marking "
+			"article as read...");
+		mark_article_read_with_token(guid, read, token);
+	}};
+
+	t.detach();
+	return true;
 }
 
 bool FreshRssApi::mark_article_read_with_token(const std::string& guid,
