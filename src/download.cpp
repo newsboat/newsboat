@@ -72,8 +72,8 @@ const std::string Download::status_text() const
 		return _s("finished");
 	case DlStatus::FAILED:
 		return _s("failed");
-	case DlStatus::ALREADY_DOWNLOADED:
-		return _s("incomplete");
+	case DlStatus::MISSING:
+		return _s("missing");
 	case DlStatus::READY:
 		return _s("ready");
 	case DlStatus::PLAYED:
