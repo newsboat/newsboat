@@ -27,8 +27,6 @@ task:
     env:
         HOME: /home/testuser
         RUSTFLAGS: '-D warnings'
-        # Workaround for https://github.com/Koka/gettext-rs/issues/117
-        CFLAGS: '-Wno-error=incompatible-function-pointer-types'
 
     after_cache_script: &after_cache_script
       - mkdir $HOME/.cargo || true
