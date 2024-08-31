@@ -64,7 +64,7 @@ nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_down
 		case DlStatus::QUEUED:
 		case DlStatus::CANCELLED:
 		case DlStatus::FAILED:
-		case DlStatus::ALREADY_DOWNLOADED:
+		case DlStatus::MISSING:
 		case DlStatus::READY:
 		case DlStatus::PLAYED:
 		case DlStatus::RENAME_FAILED:
@@ -170,30 +170,39 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			fn = fields[1];
 		}
 		d.set_filename(fn);
+
+		if (fields.size() >= 3) {
+			if (fields[2] == "missing") {
+				d.set_status(DlStatus::MISSING);
+			}
+			if (fields[2] == "downloaded") {
+				d.set_status(DlStatus::READY);
+			}
+			if (fields[2] == "played") {
+				d.set_status(DlStatus::PLAYED);
+			}
+			if (fields[2] == "finished") {
+				d.set_status(DlStatus::FINISHED);
+			}
+		}
+
 		if (access(fn.c_str(), F_OK) == 0) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: found `%s' on file system -> mark as already downloaded",
 				fn);
-			if (fields.size() >= 3) {
-				if (fields[2] == "downloaded") {
-					d.set_status(DlStatus::READY);
-				}
-				if (fields[2] == "played") {
-					d.set_status(DlStatus::PLAYED);
-				}
-				if (fields[2] == "finished") {
-					d.set_status(DlStatus::FINISHED);
-				}
-			} else {
-				// TODO: scrap DlStatus::ALREADY_DOWNLOADED state
-				d.set_status(DlStatus::ALREADY_DOWNLOADED);
+			if (d.status() == DlStatus::QUEUED || d.status() == DlStatus::MISSING) {
+				d.set_status(DlStatus::READY);
 			}
 		} else if (access((fn + ConfigContainer::PARTIAL_FILE_SUFFIX).c_str(),
 				F_OK) == 0) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: found `%s' on file system -> mark as partially downloaded",
 				fn + ConfigContainer::PARTIAL_FILE_SUFFIX);
-			d.set_status(DlStatus::ALREADY_DOWNLOADED);
+			d.set_status(DlStatus::FAILED);
+		} else {
+			if (d.status() != DlStatus::QUEUED) {
+				d.set_status(DlStatus::MISSING);
+			}
 		}
 
 		d.set_url(fields[0]);
@@ -223,13 +232,16 @@ void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 			f << " finished";
 			break;
 
+		case DlStatus::MISSING:
+			f << " missing";
+			break;
+
 		// The following statuses have no marks in the queue file.
 		case DlStatus::QUEUED:
 		case DlStatus::DOWNLOADING:
 		case DlStatus::CANCELLED:
 		case DlStatus::DELETED:
 		case DlStatus::FAILED:
-		case DlStatus::ALREADY_DOWNLOADED:
 		case DlStatus::RENAME_FAILED:
 			break;
 		}

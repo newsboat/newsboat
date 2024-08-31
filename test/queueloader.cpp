@@ -60,7 +60,7 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 		DlStatus::DELETED,
 		DlStatus::FINISHED,
 		DlStatus::FAILED,
-		DlStatus::ALREADY_DOWNLOADED,
+		DlStatus::MISSING,
 		DlStatus::READY,
 		DlStatus::PLAYED,
 		DlStatus::RENAME_FAILED
@@ -208,7 +208,7 @@ TEST_CASE("reload() adds downloads from the queue file to the array",
 	REQUIRE(downloads[5].url() == "https://pods.example.com/partial.ogg");
 	// Note that this file doesn't exist, but data/partial.ogg.part does.
 	REQUIRE(downloads[5].filename() == "data/partial.ogg");
-	REQUIRE(downloads[5].status() == DlStatus::ALREADY_DOWNLOADED);
+	REQUIRE(downloads[5].status() == DlStatus::FAILED);
 }
 
 TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLoader]")
@@ -259,7 +259,7 @@ TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLo
 	REQUIRE(downloads[2].status() == DlStatus::READY);
 }
 
-TEST_CASE("Ignores status in the queue file if the podcast is missing from the filesystem",
+TEST_CASE("Overrides status in the queue with `MISSING` if file if the podcast is missing from the filesystem",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
@@ -273,13 +273,13 @@ TEST_CASE("Ignores status in the queue file if the podcast is missing from the f
 	queue_loader.reload(downloads);
 
 	REQUIRE(downloads.size() == 3);
-	REQUIRE(downloads[0].status() == DlStatus::QUEUED);
-	REQUIRE(downloads[1].status() == DlStatus::QUEUED);
-	REQUIRE(downloads[2].status() == DlStatus::QUEUED);
+	REQUIRE(downloads[0].status() == DlStatus::MISSING);
+	REQUIRE(downloads[1].status() == DlStatus::MISSING);
+	REQUIRE(downloads[2].status() == DlStatus::MISSING);
 }
 
 TEST_CASE(
-	"reload() sets `ALREADY_DOWNLOADED` status if the destination file "
+	"reload() sets `READY` status if the destination file "
 	"is already present in the filesystem",
 	"[QueueFile]")
 {
@@ -296,7 +296,7 @@ TEST_CASE(
 	REQUIRE(downloads.size() == 1);
 	REQUIRE(downloads[0].url() == "https://example.com/this-got-downloaded-earlier.mp3");
 	REQUIRE(downloads[0].filename() == "data/podcast-standin.ogg");
-	REQUIRE(downloads[0].status() == DlStatus::ALREADY_DOWNLOADED);
+	REQUIRE(downloads[0].status() == DlStatus::READY);
 }
 
 TEST_CASE("Generates filename if it's absent from the queue file",
@@ -369,7 +369,7 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 		DlStatus::QUEUED,
 		DlStatus::CANCELLED,
 		DlStatus::FAILED,
-		DlStatus::ALREADY_DOWNLOADED,
+		DlStatus::MISSING,
 		DlStatus::READY,
 		DlStatus::PLAYED,
 		DlStatus::FINISHED,
@@ -429,7 +429,7 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 		DlStatus::QUEUED,
 		DlStatus::CANCELLED,
 		DlStatus::FAILED,
-		DlStatus::ALREADY_DOWNLOADED,
+		DlStatus::MISSING,
 		DlStatus::READY,
 		DlStatus::PLAYED,
 		DlStatus::RENAME_FAILED

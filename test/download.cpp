@@ -161,7 +161,7 @@ TEST_CASE("status_text() does not contain obvious copy-paste errors",
 		DlStatus::DELETED,
 		DlStatus::FINISHED,
 		DlStatus::FAILED,
-		DlStatus::ALREADY_DOWNLOADED,
+		DlStatus::MISSING,
 		DlStatus::READY,
 		DlStatus::PLAYED
 	};
