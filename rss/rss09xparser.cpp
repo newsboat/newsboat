@@ -106,7 +106,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 					start > 0 && authorfield[start] != '(';
 					start--) {
 				}
-				if (start <= 0) {
+				if (start == 0) {
 					it.author_email = authorfield;
 					it.author = authorfield;
 				} else {
