@@ -130,7 +130,8 @@ TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
 		REQUIRE(f.items[1].author == "email@example.com");
 		REQUIRE(f.items[1].guid == "");
 
-		REQUIRE(f.items[2].title == "This one has an author name with a non-email next in brackets");
+		REQUIRE(f.items[2].title ==
+			"This one has an author name with a non-email next in brackets");
 		REQUIRE(f.items[2].link == "http://example.com/test_3.html");
 		REQUIRE(f.items[2].description == "This is empty description (yes (no)).");
 		REQUIRE(f.items[2].author == "name");
