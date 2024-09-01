@@ -1102,7 +1102,7 @@ Identifier:Meaning
 [[podlist-format-p]]<<podlist-format-p,+p+>>:Downloaded precentage, displays one digit of precision
 [[podlist-format-k]]<<podlist-format-k,+k+>>:Download speed, displays two digit of precision, always in KB/s (does not include the "KB/s" text)
 [[podlist-format-K]]<<podlist-format-K,+K+>>:Download speed, displays two digit of precision, human readable (automatically switches between KB/s, MB/s, and GB/s)
-[[podlist-format-S]]<<podlist-format-S,+S+>>:Status of download, displays one of the folowing; "queued", "downloading", "ready", "canceled", "deleted", "incomplete", "played", "finished" or "failed"
+[[podlist-format-S]]<<podlist-format-S,+S+>>:Status of download, displays one of the folowing; "queued", "downloading", "ready", "canceled", "deleted", "missing", "played", "finished" or "failed"
 [[podlist-format-u]]<<podlist-format-u,+u+>>:Url of the download
 [[podlist-format-F]]<<podlist-format-F,+F+>>:Absolute filename of the download from the root directory (e.g. ~/downloads/podcast.mp3 -> /home/name/downloads/podcast.mp3)
 [[podlist-format-b]]<<podlist-format-b,+b+>>:Basename of the download (e.g. /home/name/downloads/podcast.mp3 -> podcast.mp3)
