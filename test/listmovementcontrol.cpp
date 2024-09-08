@@ -71,7 +71,7 @@ TEST_CASE("get_position() returns position of selected item in list",
 	}
 }
 
-TEST_CASE("on_lines_changed() makes sure `position < num_lines`", "[ListMovementControl]")
+TEST_CASE("on_list_changed() makes sure `position < num_lines`", "[ListMovementControl]")
 {
 	auto list_movement = ListMovementControl<ListStub>(dummyFormName, dummyForm, 0);
 	ListStub& list = list_movement;
@@ -97,6 +97,21 @@ TEST_CASE("on_lines_changed() makes sure `position < num_lines`", "[ListMovement
 			THEN("the position is reset to 0") {
 				REQUIRE(list.position == 0);
 				REQUIRE(list.scroll_offset == 0);
+			}
+		}
+	}
+
+	GIVEN("a list of 10 items, where the 10th itemn is selected") {
+		list.num_lines = 10;
+		list_movement.set_position(9);
+
+		WHEN("the height of the viewport is reduced to 7") {
+			list.height = 7;
+			list.on_list_changed();
+
+			THEN("the scroll_offset is updated to keep the same item in view") {
+				REQUIRE(list.position == 9);
+				REQUIRE(list.scroll_offset == 3);
 			}
 		}
 	}
