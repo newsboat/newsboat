@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2024-06-08 14:53+0300\n"
+"POT-Creation-Date: 2024-09-09 19:36+0300\n"
 "PO-Revision-Date: 2024-06-09 15:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
@@ -633,7 +633,7 @@ msgstr "Diyalogu Kapat"
 msgid "Error: you can't remove the feed list!"
 msgstr "Hata: Besleme listesini silemezsiniz!"
 
-#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1026
+#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1027
 #: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:172
 msgid "Invalid position!"
 msgstr "Geçersiz konum!"
@@ -682,8 +682,8 @@ msgid "failed"
 msgstr "tamamlanamadı"
 
 #: src/download.cpp:76
-msgid "incomplete"
-msgstr "eksik"
+msgid "missing"
+msgstr ""
 
 #: src/download.cpp:78
 msgid "ready"
@@ -896,20 +896,20 @@ msgstr "Aranıyor..."
 msgid "Error while searching for `%s': %s"
 msgstr "'%s' aranırken hata: %s"
 
-#: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:999
+#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:999
 msgid "No results."
 msgstr "Sonuç yok."
 
-#: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:1414
+#: src/feedlistformaction.cpp:1022 src/itemlistformaction.cpp:1414
 msgid "Position not visible!"
 msgstr "Konum görünür değil!"
 
-#: src/feedlistformaction.cpp:1103
+#: src/feedlistformaction.cpp:1104
 #, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "Besleme Listesi - %u okunmamış, %u toplam"
 
-#: src/feedlistformaction.cpp:1117 src/itemlistformaction.cpp:1693
+#: src/feedlistformaction.cpp:1118 src/itemlistformaction.cpp:1693
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "Hata: Süzgeç ifadesi '%s' ayrıştırılamadı: %s"
@@ -1860,7 +1860,7 @@ msgstr "%sYükleniyor: %s..."
 msgid "Error while retrieving %s: %s"
 msgstr "%s alınırken hata oluştu: %s"
 
-#: src/reloader.cpp:149
+#: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Hata: Geçersiz besleme!"
 
@@ -1905,12 +1905,12 @@ msgstr "Yer İmlerine Ekle"
 msgid "URLs"
 msgstr "Adresler"
 
-#: src/utils.cpp:733
+#: src/utils.cpp:758
 #, c-format
 msgid "Failed to open file: %s"
 msgstr "Dosya açılamadı: %s"
 
-#: src/utils.cpp:737
+#: src/utils.cpp:762
 #, c-format
 msgid "Failed to read line %u: %s"
 msgstr "%u. satır okunamadı: %s"
@@ -1945,32 +1945,32 @@ msgstr "Sorgu beslemesi güncelleniyor..."
 msgid "Error: couldn't prepare query feed: %s"
 msgstr "Hata: Sorgu beslemesi hazırlanamadı: %s"
 
-#: rss/atomparser.cpp:17 rss/parser.cpp:364 rss/rss09xparser.cpp:21
+#: rss/atomparser.cpp:17 rss/parser.cpp:379 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
 msgid "XML root node is NULL"
 msgstr "XML kök düğümü NULL"
 
-#: rss/parser.cpp:248
+#: rss/parser.cpp:263
 msgid "could not parse buffer"
 msgstr "arabellek ayrıştırılamadı"
 
-#: rss/parser.cpp:272
+#: rss/parser.cpp:287
 msgid "could not parse file"
 msgstr "dosya ayrıştırılamadı"
 
-#: rss/parser.cpp:297
+#: rss/parser.cpp:312
 msgid "no RSS version"
 msgstr "RSS sürümü yok"
 
-#: rss/parser.cpp:313
+#: rss/parser.cpp:328
 msgid "invalid RSS version"
 msgstr "geçersiz RSS sürümü"
 
-#: rss/parser.cpp:334 rss/parser.cpp:345
+#: rss/parser.cpp:349 rss/parser.cpp:360
 msgid "invalid Atom version"
 msgstr "geçersiz Atom sürümü"
 
-#: rss/parser.cpp:350
+#: rss/parser.cpp:365
 msgid "no Atom version"
 msgstr "Atom sürümü yok"
 

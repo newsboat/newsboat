@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.6\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2024-06-08 14:53+0300\n"
+"POT-Creation-Date: 2024-09-09 19:36+0300\n"
 "PO-Revision-Date: 2022-03-04 01:58+0000\n"
 "Last-Translator: Tanguy Kerdoncuff <t.kerdonc@gmail.com>\n"
 "Language-Team: Nicolas Martyanoff <khaelin@gmail.com>, Tanguy Kerdoncuff <t."
@@ -650,7 +650,7 @@ msgstr "Fermer la vue"
 msgid "Error: you can't remove the feed list!"
 msgstr "Erreur : la liste de fils ne peut être supprimée !"
 
-#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1026
+#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1027
 #: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:172
 msgid "Invalid position!"
 msgstr "Position invalide !"
@@ -699,8 +699,8 @@ msgid "failed"
 msgstr "erreur"
 
 #: src/download.cpp:76
-msgid "incomplete"
-msgstr "incomplet"
+msgid "missing"
+msgstr ""
 
 #: src/download.cpp:78
 msgid "ready"
@@ -914,20 +914,20 @@ msgstr "Recherche en cours..."
 msgid "Error while searching for `%s': %s"
 msgstr "Erreur lors de la recherche de `%s' : %s"
 
-#: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:999
+#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:999
 msgid "No results."
 msgstr "Aucun résultat."
 
-#: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:1414
+#: src/feedlistformaction.cpp:1022 src/itemlistformaction.cpp:1414
 msgid "Position not visible!"
 msgstr "Position non visible !"
 
-#: src/feedlistformaction.cpp:1103
+#: src/feedlistformaction.cpp:1104
 #, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "Liste de fils - %u à lire, %u au total"
 
-#: src/feedlistformaction.cpp:1117 src/itemlistformaction.cpp:1693
+#: src/feedlistformaction.cpp:1118 src/itemlistformaction.cpp:1693
 #, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "Erreur : analyse de l'expression de filtrage impossible `%s' : %s"
@@ -1895,7 +1895,7 @@ msgstr "%sChargement de %s..."
 msgid "Error while retrieving %s: %s"
 msgstr "Erreur lors de la récupération de %s : %s"
 
-#: src/reloader.cpp:149
+#: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Erreur : fil invalide !"
 
@@ -1940,12 +1940,12 @@ msgstr "Créer un signet"
 msgid "URLs"
 msgstr "Liens"
 
-#: src/utils.cpp:733
+#: src/utils.cpp:758
 #, c-format
 msgid "Failed to open file: %s"
 msgstr "Echec d'ouverture du fichier : %s"
 
-#: src/utils.cpp:737
+#: src/utils.cpp:762
 #, c-format
 msgid "Failed to read line %u: %s"
 msgstr "Echec de lecture de ligne %u : %s"
@@ -1980,32 +1980,32 @@ msgstr "Mise à jour du fil de requête..."
 msgid "Error: couldn't prepare query feed: %s"
 msgstr "Erreur : impossible de préparer la requête pour le fil : %s"
 
-#: rss/atomparser.cpp:17 rss/parser.cpp:364 rss/rss09xparser.cpp:21
+#: rss/atomparser.cpp:17 rss/parser.cpp:379 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
 msgid "XML root node is NULL"
 msgstr "Le nœud racine XML est NULL"
 
-#: rss/parser.cpp:248
+#: rss/parser.cpp:263
 msgid "could not parse buffer"
 msgstr "l'analyse du contenu a échoué"
 
-#: rss/parser.cpp:272
+#: rss/parser.cpp:287
 msgid "could not parse file"
 msgstr "l'analyse du fichier a échoué"
 
-#: rss/parser.cpp:297
+#: rss/parser.cpp:312
 msgid "no RSS version"
 msgstr "pas de version RSS"
 
-#: rss/parser.cpp:313
+#: rss/parser.cpp:328
 msgid "invalid RSS version"
 msgstr "version RSS incorrecte"
 
-#: rss/parser.cpp:334 rss/parser.cpp:345
+#: rss/parser.cpp:349 rss/parser.cpp:360
 msgid "invalid Atom version"
 msgstr "version Atom incorrecte"
 
-#: rss/parser.cpp:350
+#: rss/parser.cpp:365
 msgid "no Atom version"
 msgstr "pas de version Atom"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2024-06-08 14:53+0300\n"
+"POT-Creation-Date: 2024-09-09 19:36+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: \n"
@@ -623,7 +623,7 @@ msgstr "Zatvoriť na dialóg"
 msgid "Error: you can't remove the feed list!"
 msgstr "Chyba: nemožno odstrániť zoznam informačných kanálov (feed list)!"
 
-#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1026
+#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1027
 #: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:172
 msgid "Invalid position!"
 msgstr "Neplatná pozícia!"
@@ -672,8 +672,8 @@ msgid "failed"
 msgstr "zlyhalo"
 
 #: src/download.cpp:76
-msgid "incomplete"
-msgstr "nekompletné"
+msgid "missing"
+msgstr ""
 
 #: src/download.cpp:78
 msgid "ready"
@@ -891,20 +891,20 @@ msgstr "Vyhľadávanie..."
 msgid "Error while searching for `%s': %s"
 msgstr "Chyba pri vyhľadávaní `%s': %s"
 
-#: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:999
+#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:999
 msgid "No results."
 msgstr "Žiadny výsledok."
 
-#: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:1414
+#: src/feedlistformaction.cpp:1022 src/itemlistformaction.cpp:1414
 msgid "Position not visible!"
 msgstr "Pozícia nie je viditeľná!"
 
-#: src/feedlistformaction.cpp:1103
+#: src/feedlistformaction.cpp:1104
 #, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "Zoznam informačných kanálov - %u neprečítané, %u celkom"
 
-#: src/feedlistformaction.cpp:1117 src/itemlistformaction.cpp:1693
+#: src/feedlistformaction.cpp:1118 src/itemlistformaction.cpp:1693
 #, fuzzy, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "nemožno analyzovať výraz filtra `%s': %s"
@@ -1880,7 +1880,7 @@ msgstr "%sNačítanie %s..."
 msgid "Error while retrieving %s: %s"
 msgstr "Chyba pri načítaní %s: %s"
 
-#: src/reloader.cpp:149
+#: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Chyba: vadný kanál!"
 
@@ -1928,12 +1928,12 @@ msgstr "Uložiť záložku"
 msgid "URLs"
 msgstr "URLs"
 
-#: src/utils.cpp:733
+#: src/utils.cpp:758
 #, fuzzy, c-format
 msgid "Failed to open file: %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 
-#: src/utils.cpp:737
+#: src/utils.cpp:762
 #, fuzzy, c-format
 msgid "Failed to read line %u: %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
@@ -1968,32 +1968,32 @@ msgstr "Aktualizácia dopytu informačného kanála..."
 msgid "Error: couldn't prepare query feed: %s"
 msgstr "Chyba: nemožno označiť čítanie kanála: %s"
 
-#: rss/atomparser.cpp:17 rss/parser.cpp:364 rss/rss09xparser.cpp:21
+#: rss/atomparser.cpp:17 rss/parser.cpp:379 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
 msgid "XML root node is NULL"
 msgstr "Koreňový uzol jazyka XML je NULL"
 
-#: rss/parser.cpp:248
+#: rss/parser.cpp:263
 msgid "could not parse buffer"
 msgstr "nebolo možné analyzovať vyrovnávaciu pamäť (buffer)"
 
-#: rss/parser.cpp:272
+#: rss/parser.cpp:287
 msgid "could not parse file"
 msgstr "nebolo možné analyzovať súbor"
 
-#: rss/parser.cpp:297
+#: rss/parser.cpp:312
 msgid "no RSS version"
 msgstr "verzia pre RSS neexistuje"
 
-#: rss/parser.cpp:313
+#: rss/parser.cpp:328
 msgid "invalid RSS version"
 msgstr "neplatná verzia pre RSS"
 
-#: rss/parser.cpp:334 rss/parser.cpp:345
+#: rss/parser.cpp:349 rss/parser.cpp:360
 msgid "invalid Atom version"
 msgstr "neplatná verzia pre ATOM"
 
-#: rss/parser.cpp:350
+#: rss/parser.cpp:365
 msgid "no Atom version"
 msgstr "verzia pre ATOM neexistuje"
 
