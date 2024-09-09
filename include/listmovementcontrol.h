@@ -190,6 +190,9 @@ private:
 			} else {
 				set_position(0);
 			}
+		} else {
+			// Make sure position and scroll_offset are both correct after list changes/resizes
+			set_position(current_position);
 		}
 	}
 
