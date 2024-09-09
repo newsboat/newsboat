@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2024-06-08 14:53+0300\n"
+"POT-Creation-Date: 2024-09-09 19:36+0300\n"
 "PO-Revision-Date: 2017-07-19 20:19+0300\n"
 "Last-Translator: Alejandro Gallo <aamsgallo@gmail.com>\n"
 "Language-Team: Alejandro Gallo <aamsgallo@gmail.com>, OmeGa <omega@mailoo."
@@ -631,7 +631,7 @@ msgstr "Tancar diàleg"
 msgid "Error: you can't remove the feed list!"
 msgstr "Error: no es pot eliminar la llista de fonts!"
 
-#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1026
+#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1027
 #: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:172
 msgid "Invalid position!"
 msgstr "Posició invàlida!"
@@ -680,8 +680,8 @@ msgid "failed"
 msgstr "fallido"
 
 #: src/download.cpp:76
-msgid "incomplete"
-msgstr "incomplet"
+msgid "missing"
+msgstr ""
 
 #: src/download.cpp:78
 msgid "ready"
@@ -899,20 +899,20 @@ msgstr "Buscant..."
 msgid "Error while searching for `%s': %s"
 msgstr "Error al buscar `%s': %s"
 
-#: src/feedlistformaction.cpp:1010 src/itemlistformaction.cpp:999
+#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:999
 msgid "No results."
 msgstr "No hi ha resultats."
 
-#: src/feedlistformaction.cpp:1021 src/itemlistformaction.cpp:1414
+#: src/feedlistformaction.cpp:1022 src/itemlistformaction.cpp:1414
 msgid "Position not visible!"
 msgstr "La posició no és visible!"
 
-#: src/feedlistformaction.cpp:1103
+#: src/feedlistformaction.cpp:1104
 #, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "Llista de fonts - %u no llegides, %u en total"
 
-#: src/feedlistformaction.cpp:1117 src/itemlistformaction.cpp:1693
+#: src/feedlistformaction.cpp:1118 src/itemlistformaction.cpp:1693
 #, fuzzy, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "no es va poder processar l'expressió de filtre `%s': %s"
@@ -1889,7 +1889,7 @@ msgstr "%sCarregant %s..."
 msgid "Error while retrieving %s: %s"
 msgstr "Error al obtenir %s: %s"
 
-#: src/reloader.cpp:149
+#: src/reloader.cpp:152
 msgid "Error: invalid feed!"
 msgstr "Error: font invàlida!"
 
@@ -1937,12 +1937,12 @@ msgstr "Guardar marcador"
 msgid "URLs"
 msgstr "URLs"
 
-#: src/utils.cpp:733
+#: src/utils.cpp:758
 #, fuzzy, c-format
 msgid "Failed to open file: %s"
 msgstr "Error al carregar la font «%s»: %s"
 
-#: src/utils.cpp:737
+#: src/utils.cpp:762
 #, fuzzy, c-format
 msgid "Failed to read line %u: %s"
 msgstr "Error al carregar la font «%s»: %s"
@@ -1977,32 +1977,32 @@ msgstr "Actualitzant consulta de font..."
 msgid "Error: couldn't prepare query feed: %s"
 msgstr "Error: no es va poder marcar la font com llegida: %s"
 
-#: rss/atomparser.cpp:17 rss/parser.cpp:364 rss/rss09xparser.cpp:21
+#: rss/atomparser.cpp:17 rss/parser.cpp:379 rss/rss09xparser.cpp:21
 #: rss/rss10parser.cpp:18 rss/rss20parser.cpp:17
 msgid "XML root node is NULL"
 msgstr "el node arrel de XML és nul"
 
-#: rss/parser.cpp:248
+#: rss/parser.cpp:263
 msgid "could not parse buffer"
 msgstr "no es va poder processar el búfer"
 
-#: rss/parser.cpp:272
+#: rss/parser.cpp:287
 msgid "could not parse file"
 msgstr "no es va poder processar l'arxiu"
 
-#: rss/parser.cpp:297
+#: rss/parser.cpp:312
 msgid "no RSS version"
 msgstr "sense versió de RSS"
 
-#: rss/parser.cpp:313
+#: rss/parser.cpp:328
 msgid "invalid RSS version"
 msgstr "versió de RSS invàlida"
 
-#: rss/parser.cpp:334 rss/parser.cpp:345
+#: rss/parser.cpp:349 rss/parser.cpp:360
 msgid "invalid Atom version"
 msgstr "versió d'Atom invàlida"
 
-#: rss/parser.cpp:350
+#: rss/parser.cpp:365
 msgid "no Atom version"
 msgstr "sense versió d'Atom"
 
