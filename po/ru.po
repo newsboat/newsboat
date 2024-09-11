@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-09-09 19:36+0300\n"
-"PO-Revision-Date: 2024-06-08 14:53+0300\n"
+"PO-Revision-Date: 2024-09-09 21:22+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -686,7 +686,7 @@ msgstr "неудачно"
 
 #: src/download.cpp:76
 msgid "missing"
-msgstr ""
+msgstr "отсутствует"
 
 #: src/download.cpp:78
 msgid "ready"
