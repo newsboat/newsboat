@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-09-09 19:36+0300\n"
-"PO-Revision-Date: 2024-06-08 21:30+0800\n"
+"PO-Revision-Date: 2024-09-10 09:30+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -664,7 +664,7 @@ msgstr "已失败"
 
 #: src/download.cpp:76
 msgid "missing"
-msgstr ""
+msgstr "丢失"
 
 #: src/download.cpp:78
 msgid "ready"
