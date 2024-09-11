@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-09-09 19:36+0300\n"
-"PO-Revision-Date: 2024-03-12 20:15+0100\n"
+"PO-Revision-Date: 2024-09-11 18:15+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -687,7 +687,7 @@ msgstr "fehlgeschlagen"
 
 #: src/download.cpp:76
 msgid "missing"
-msgstr ""
+msgstr "verschwunden"
 
 #: src/download.cpp:78
 msgid "ready"
