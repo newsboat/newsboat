@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-09-09 19:36+0300\n"
-"PO-Revision-Date: 2024-06-08 14:46+0200\n"
+"PO-Revision-Date: 2024-09-11 19:05+0200\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze <donnut@outlook."
 "com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -691,7 +691,7 @@ msgstr "mislukt"
 
 #: src/download.cpp:76
 msgid "missing"
-msgstr ""
+msgstr "verdwenen"
 
 #: src/download.cpp:78
 msgid "ready"
