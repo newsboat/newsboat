@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-09-09 19:36+0300\n"
-"PO-Revision-Date: 2023-09-16 10:50+0200\n"
+"PO-Revision-Date: 2024-09-15 22:05+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -50,34 +50,28 @@ msgid "import OPML file"
 msgstr "importar archivo OPML"
 
 #: newsboat.cpp:57
-#, fuzzy
 msgid "read RSS feed URLs from <file>"
-msgstr "leer las URL de fuentes RSS desde <archivo>"
+msgstr "leer las URL de fuentes RSS desde <file>"
 
 #: newsboat.cpp:63
-#, fuzzy
 msgid "use <file> as cache file"
-msgstr "usar <archivo> como archivo de caché"
+msgstr "usar <file> como archivo de caché"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
-#, fuzzy
 msgid "read configuration from <file>"
-msgstr "leer configuración desde <archivo>"
+msgstr "leer configuración desde <file>"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
-#, fuzzy
 msgid "use <file> as podcast queue file"
-msgstr "usar <archivo> como archivo de cola"
+msgstr "usar <file> como archivo de cola de podcast"
 
 #: newsboat.cpp:81
-#, fuzzy
 msgid "save the input history of the search to <file>"
-msgstr "exportar lista de artículos leídos a <archivo>"
+msgstr "guardar el historial de búsqueda en <file>"
 
 #: newsboat.cpp:87
-#, fuzzy
 msgid "save the input history of the command line to <file>"
-msgstr "exportar lista de artículos leídos a <archivo>"
+msgstr "guardar el historial de comandos en <archivo>"
 
 #: newsboat.cpp:89
 msgid "compact the cache"
@@ -113,9 +107,8 @@ msgstr ""
 "depuración respectivamente)"
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
-#, fuzzy
 msgid "use <file> as output log file"
-msgstr "usar <archivo> como archivo de salida del registro"
+msgstr "usar <file> como archivo de registro"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -155,18 +148,17 @@ msgstr "caché"
 #. i18n: This is printed out by --help before the path to the queue file
 #: newsboat.cpp:160
 msgid "podcast queue"
-msgstr ""
+msgstr "cola de podcast"
 
 #. i18n: This is printed out by --help before the path to the search history file
 #: newsboat.cpp:162
-#, fuzzy
 msgid "search history"
-msgstr "Buscar: "
+msgstr "historial de búsqueda"
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
 #: newsboat.cpp:164
 msgid "command line history"
-msgstr ""
+msgstr "historial de comandos"
 
 #: newsboat.cpp:182 src/pbcontroller.cpp:409
 msgid ""
@@ -410,13 +402,12 @@ msgid "%s is inaccessible and can't be created\n"
 msgstr "%s es inaccesible y no se puede crear\n"
 
 #: src/controller.cpp:298
-#, fuzzy
 msgid ""
 "ERROR: You must set `feedbin-login` and one of `feedbin-password`, `feedbin-"
 "passwordfile` or `feedbin-passwordeval` to use Feedbin\n"
 msgstr ""
-"ERROR: Debes configurar `freshrss-login` y o bien `freshrss-password`, o "
-"`freshrss-passwordfile` o `freshrss-passwordeval` para usar FreshRSS\n"
+"ERROR: Debes configurar `feedbin-login` y o bien `freshrss-password`, o "
+"`freshrss-passwordfile` o `freshrss-passwordeval` para usar Feedbin\n"
 
 #: src/controller.cpp:310
 msgid "ERROR: You must set `freshrss-url` to use FreshRSS\n"
@@ -518,12 +509,11 @@ msgstr ""
 "hazlo e inténtalo de nuevo."
 
 #: src/controller.cpp:436
-#, fuzzy
 msgid ""
 "It looks like you haven't configured any feeds in your Feedbin account. "
 "Please do so, and try again."
 msgstr ""
-"Parece que no has configurado fuentes en tu cuenta de Miniflux. Por favor, "
+"Parece que no has configurado fuentes en tu cuenta de Feedbin. Por favor, "
 "hazlo e inténtalo de nuevo."
 
 #: src/controller.cpp:441
@@ -691,7 +681,7 @@ msgstr "fallido"
 
 #: src/download.cpp:76
 msgid "missing"
-msgstr ""
+msgstr "falta"
 
 #: src/download.cpp:78
 msgid "ready"
@@ -1707,9 +1697,8 @@ msgid "`%s' is not a valid key command"
 msgstr "`%s' no es un atajo de teclado válido"
 
 #: src/keymap.cpp:982
-#, fuzzy
 msgid "failed to parse binding"
-msgstr "No se pudo abrir el navegador"
+msgstr "fallo al interpretar el enlace"
 
 #: src/keymap.cpp:1014
 #, c-format
@@ -1780,9 +1769,8 @@ msgstr ""
 "uso: %s [-C <file>] [-q <file>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
-#, fuzzy
 msgid "use <file> as lock file"
-msgstr "usar <archivo> como archivo de salida del registro"
+msgstr "usar <file> como archivo de bloqueo"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
