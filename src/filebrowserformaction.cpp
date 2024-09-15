@@ -316,7 +316,7 @@ void FileBrowserFormAction::init()
 	set_value("filenametext_pos", std::to_string(default_filename.length()));
 }
 
-const std::vector<KeyMapHintEntry>& FileBrowserFormAction::get_keymap_hint() const
+std::vector<KeyMapHintEntry> FileBrowserFormAction::get_keymap_hint() const
 {
 	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Save")}

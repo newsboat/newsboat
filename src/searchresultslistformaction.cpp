@@ -12,7 +12,7 @@ SearchResultsListFormAction::SearchResultsListFormAction(View& vv,
 	RegexManager& r)
 	: ItemListFormAction(vv, formstr, cc, f, cfg, r) {};
 
-const std::vector<KeyMapHintEntry>& SearchResultsListFormAction::get_keymap_hint() const
+std::vector<KeyMapHintEntry> SearchResultsListFormAction::get_keymap_hint() const
 {
 	static const std::vector<KeyMapHintEntry> hints = {
 		{OP_QUIT, _("Quit")},

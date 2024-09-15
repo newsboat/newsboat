@@ -60,7 +60,7 @@ public:
 		do_redraw = b;
 	}
 
-	virtual const std::vector<KeyMapHintEntry>& get_keymap_hint() const = 0;
+	virtual std::vector<KeyMapHintEntry> get_keymap_hint() const = 0;
 
 	virtual std::string id() const = 0;
 
@@ -119,7 +119,7 @@ protected:
 	virtual bool process_operation(Operation op,
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey) = 0;
-	virtual void set_keymap_hints();
+	void set_keymap_hints();
 
 	/// The name of the "main" STFL widget, i.e. the one that should be focused
 	/// by default.
