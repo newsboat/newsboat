@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-09-09 19:36+0300\n"
-"PO-Revision-Date: 2024-09-15 22:05+0200\n"
+"PO-Revision-Date: 2024-09-15 22:14+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -51,23 +51,23 @@ msgstr "importar archivo OPML"
 
 #: newsboat.cpp:57
 msgid "read RSS feed URLs from <file>"
-msgstr "leer las URL de fuentes RSS desde <file>"
+msgstr "leer las URL de fuentes RSS desde <archivo>"
 
 #: newsboat.cpp:63
 msgid "use <file> as cache file"
-msgstr "usar <file> como archivo de caché"
+msgstr "usar <archivo> como archivo de caché"
 
 #: newsboat.cpp:69 src/pbcontroller.cpp:353
 msgid "read configuration from <file>"
-msgstr "leer configuración desde <file>"
+msgstr "leer configuración desde <archivo>"
 
 #: newsboat.cpp:75 src/pbcontroller.cpp:359
 msgid "use <file> as podcast queue file"
-msgstr "usar <file> como archivo de cola de podcast"
+msgstr "usar <archivo> como archivo de cola de podcast"
 
 #: newsboat.cpp:81
 msgid "save the input history of the search to <file>"
-msgstr "guardar el historial de búsqueda en <file>"
+msgstr "guardar el historial de búsqueda en <archivo>"
 
 #: newsboat.cpp:87
 msgid "save the input history of the command line to <file>"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: newsboat.cpp:109 src/pbcontroller.cpp:379
 msgid "use <file> as output log file"
-msgstr "usar <file> como archivo de registro"
+msgstr "usar <archivo> como archivo de registro"
 
 #: newsboat.cpp:115
 msgid "export list of read articles to <file>"
@@ -1766,11 +1766,11 @@ msgid ""
 "usage %s [-C <file>] [-q <file>] [-h]\n"
 msgstr ""
 "%s %s\n"
-"uso: %s [-C <file>] [-q <file>] [-h]\n"
+"uso: %s [-C <archivo>] [-q <archivo>] [-h]\n"
 
 #: src/pbcontroller.cpp:365
 msgid "use <file> as lock file"
-msgstr "usar <file> como archivo de bloqueo"
+msgstr "usar <archivo> como archivo de bloqueo"
 
 #: src/pbcontroller.cpp:367
 msgid "start download on startup"
