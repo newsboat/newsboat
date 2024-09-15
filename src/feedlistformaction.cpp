@@ -619,8 +619,6 @@ void FeedListFormAction::set_feedlist(
 
 	ListFormatter listfmt(&rxman, "feedlist");
 
-	update_visible_feeds(feeds);
-
 	auto render_line = [this, feedlist_format](std::uint32_t line,
 	std::uint32_t width) -> StflRichText {
 		if (line >= visible_feeds.size())
@@ -630,6 +628,14 @@ void FeedListFormAction::set_feedlist(
 		auto& feed = visible_feeds[line];
 		return format_line(feedlist_format, feed.first, feed.second, width);
 	};
+
+	try {
+		update_visible_feeds(feeds);
+	} catch (...) {
+		list.invalidate_list_content(visible_feeds.size(), render_line);
+		throw;
+	}
+
 	list.invalidate_list_content(visible_feeds.size(), render_line);
 
 	update_form_title(width);
