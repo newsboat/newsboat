@@ -66,6 +66,7 @@ void HelpFormAction::prepare()
 {
 	if (do_redraw) {
 		recalculate_widget_dimensions();
+		set_keymap_hints();
 
 		const unsigned int width = textview.get_width();
 
@@ -182,15 +183,16 @@ void HelpFormAction::prepare()
 
 void HelpFormAction::init()
 {
-	set_keymap_hints();
 }
 
 std::vector<KeyMapHintEntry> HelpFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_SEARCH, _("Search")},
-		{OP_CLEARFILTER, _("Clear")}
-	};
+	std::vector<KeyMapHintEntry> hints;
+	hints.push_back({OP_QUIT, _("Quit")});
+	hints.push_back({OP_SEARCH, _("Search")});
+	if (apply_search) {
+		hints.push_back({OP_CLEARFILTER, _("Clear")});
+	}
 	return hints;
 }
 
