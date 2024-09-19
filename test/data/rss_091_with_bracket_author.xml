@@ -18,7 +18,7 @@
 		<item>
 			<title>This one has an author name with an email in brackets</title>
 			<link>http://example.com/test_2.html</link>
-            <author>Author (email@example.com)</author>
+            <author>email@example.com (Author)</author>
 			<description>This is empty description (no).</description>
 		</item>
 
