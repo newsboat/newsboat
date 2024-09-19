@@ -1,0 +1,29 @@
+<rss version="0.94" xml:base="http://example.com/feed/rss_testing.html">
+	<channel>
+		<title>A Channel with Authors With Names Containing Brackets</title>
+		<link>http://example.com/</link>
+		<description>an example feed</description>
+		<language>en</language>
+
+		<item>
+			<title>This one has an author name ending with a closing bracket</title>
+			<link>http://example.com/test_1.html</link>
+            <author>Author name)</author>
+			<description>Non-empty description.</description>
+		</item>
+
+		<item>
+			<title>This one has an author name with an email in brackets</title>
+			<link>http://example.com/test_2.html</link>
+            <author>email@example.com (Author)</author>
+			<description>This is empty description (no).</description>
+		</item>
+
+		<item>
+			<title>This one has an author name with a non-email next in brackets</title>
+			<link>http://example.com/test_3.html</link>
+            <author>Author (name)</author>
+			<description>This is empty description (yes (no)).</description>
+		</item>
+	</channel>
+</rss>

@@ -103,6 +103,60 @@ TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
 	}
 }
 
+TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
+	"an author tag which ends with a bracket",
+	"[rsspp::Parser][issue2834]")
+{
+	rsspp::Parser p;
+	rsspp::Feed f;
+
+	const auto check = [&]() {
+		REQUIRE(f.title == "A Channel with Authors With Names Containing Brackets");
+		REQUIRE(f.description == "an example feed");
+		REQUIRE(f.link == "http://example.com/");
+		REQUIRE(f.language == "en");
+
+		REQUIRE(f.items.size() == 3u);
+
+		REQUIRE(f.items[0].title == "This one has an author name ending with a closing bracket");
+		REQUIRE(f.items[0].link == "http://example.com/test_1.html");
+		REQUIRE(f.items[0].description == "Non-empty description.");
+		REQUIRE(f.items[0].author == "Author name)");
+		REQUIRE(f.items[0].guid == "");
+
+		REQUIRE(f.items[1].title == "This one has an author name with an email in brackets");
+		REQUIRE(f.items[1].link == "http://example.com/test_2.html");
+		REQUIRE(f.items[1].description == "This is empty description (no).");
+		REQUIRE(f.items[1].author == "Author");
+		REQUIRE(f.items[1].guid == "");
+
+		REQUIRE(f.items[2].title ==
+			"This one has an author name with a non-email next in brackets");
+		REQUIRE(f.items[2].link == "http://example.com/test_3.html");
+		REQUIRE(f.items[2].description == "This is empty description (yes (no)).");
+		REQUIRE(f.items[2].author == "name");
+		REQUIRE(f.items[2].guid == "");
+	};
+
+	SECTION("RSS 0.91") {
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_091_with_bracket_author.xml"));
+		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_91);
+		check();
+	}
+
+	SECTION("RSS 0.92") {
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_092_with_bracket_author.xml"));
+		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_92);
+		check();
+	}
+
+	SECTION("RSS 0.94") {
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_094_with_bracket_author.xml"));
+		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_94);
+		check();
+	}
+}
+
 TEST_CASE("Extracts data from RSS 0.92", "[rsspp::Parser]")
 {
 	rsspp::Parser p;
