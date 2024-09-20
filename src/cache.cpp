@@ -284,6 +284,12 @@ Cache::Cache(const std::string& cachefile, ConfigContainer* c)
 Cache::~Cache()
 {
 	sqlite3_close(db);
+
+	// Destroying a locked mutex is undefined behaviour, so:
+	// 1. ensure the mutex is locked (either by us or by `cleanup_cache()`)
+	// 2. unlock it
+	mtx.try_lock();
+	mtx.unlock();
 }
 
 void Cache::set_pragmas()
