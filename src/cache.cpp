@@ -260,8 +260,7 @@ static int guid_callback(void* myguids, int argc, char** argv,
 }
 
 Cache::Cache(const std::string& cachefile, ConfigContainer* c)
-	: db(0)
-	, cfg(c)
+	: cfg(c)
 {
 	const int error = sqlite3_open(cachefile.c_str(), &db);
 	if (error != SQLITE_OK) {
@@ -283,13 +282,7 @@ Cache::Cache(const std::string& cachefile, ConfigContainer* c)
 
 Cache::~Cache()
 {
-	sqlite3_close(db);
-
-	// Destroying a locked mutex is undefined behaviour, so:
-	// 1. ensure the mutex is locked (either by us or by `cleanup_cache()`)
-	// 2. unlock it
-	mtx.try_lock();
-	mtx.unlock();
+	close_database();
 }
 
 void Cache::set_pragmas()
@@ -787,8 +780,7 @@ void Cache::do_vacuum()
 std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFeed>> feeds,
 	bool always_clean)
 {
-	// we don't use the std::lock_guard<> here... see comments below
-	mtx.lock();
+	std::lock_guard<std::recursive_mutex> lock(mtx);
 
 	std::vector<std::string> unreachable_feeds{};
 	std::string list = "(";
@@ -853,9 +845,9 @@ std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFee
 		run_sql(query, vectorofstring_callback, &unreachable_feeds);
 	}
 
-	// WARNING: THE MISSING UNLOCK OPERATION IS MISSING FOR A
-	// PURPOSE! It's missing so that no database operation can occur
-	// after the cache cleanup! mtx->unlock();
+	// Ensure that no other operations can occur after the cache cleanup
+	close_database();
+
 	return unreachable_feeds;
 }
 
@@ -1232,6 +1224,14 @@ SchemaVersion Cache::get_schema_version()
 
 	sqlite3_finalize(stmt);
 	return result;
+}
+
+void Cache::close_database()
+{
+	if (db != nullptr) {
+		sqlite3_close(db);
+		db = nullptr;
+	}
 }
 
 } // namespace newsboat

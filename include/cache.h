@@ -109,7 +109,9 @@ private:
 		void* callback_argument,
 		bool do_throw);
 
-	sqlite3* db;
+	void close_database();
+
+	sqlite3* db = nullptr;
 	ConfigContainer* cfg;
 	std::recursive_mutex mtx;
 };
