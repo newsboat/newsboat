@@ -14,6 +14,7 @@
 #include "fmtstrformatter.h"
 #include "listformatter.h"
 #include "logger.h"
+#include "matcherexception.h"
 #include "reloader.h"
 #include "rssfeed.h"
 #include "scopemeasure.h"
@@ -1114,6 +1115,7 @@ std::string FeedListFormAction::title()
 
 void FeedListFormAction::apply_filter(const std::string& filtertext)
 {
+	v.get_statusline().show_message("");
 	if (filtertext.empty()) {
 		return;
 	}
@@ -1125,9 +1127,23 @@ void FeedListFormAction::apply_filter(const std::string& filtertext)
 				filtertext,
 				matcher.get_parse_error()));
 	} else {
-		save_filterpos();
-		filter_active = true;
-		do_redraw = true;
+		try {
+			const auto feeds = v.get_ctrl()->get_feedcontainer()->get_all_feeds();
+			if (!feeds.empty()) {
+				// Execute a trial run to check for uses of non-existent attributes.
+				// Might miss some issues due to short-circuit evaluation.
+				matcher.matches(feeds.front().get());
+			}
+
+			save_filterpos();
+			filter_active = true;
+			do_redraw = true;
+		} catch (MatcherException& ex) {
+			v.get_statusline().show_error(strprintf::fmt(
+					_("Error: couldn't apply filter expression `%s': %s"),
+					filtertext,
+					ex.what()));
+		}
 	}
 }
 
