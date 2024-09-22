@@ -1,5 +1,15 @@
 # Changes for Newsboat
 
+## 2.29.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
 ## 2.29 - 2022-09-25
 
 ### Added
