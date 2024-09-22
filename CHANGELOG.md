@@ -1,17 +1,226 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2024-09-22
+## 2.37 - 2024-09-22
 
 ### Added
+
+- contrib: a bookmark plugin for Readeck (Ada Wildflower)
+- Podboat: podcasts can now be "missing", meaning a file was downloaded by
+    Podboat but removed by some other program (Dennis van der Schagt)
+- contrib: completions file for fish shell (Dennis van der Schagt)
+
 ### Changed
 
+- Sped up `-x reload` a little by grouping feeds on the same domain. Other ways
+    to trigger a reload already had this optimization (Juho Eerola)
+- Sped up FreshRSS integration with regard to marking articles as read
+    (fjebaker)
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Spanish (Roboron3042), Turkish
+    (Emir SARI)
 - Bumped minimum supported Rust version to 1.77.0
+- Updated vendored library Catch2 to 3.7.0 (Alexander Batischev)
 
-### Deprecated
-### Removed
 ### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+- Crash on articles with combining Unicode characters (#2805) (Dennis van der
+    Schagt)
+- Crash on articles where author name ends in a closing parenthesis (Mikhail
+    Yumanov)
+- Cursor highlighting the wrong list entry after the terminal was resized
+    (#2845) (Dennis van der Schagt)
+- `highlight-article` with expressions that contain flags had no effect on
+    unread articles (#2814) (Dennis van der Schagt)
+- "Searching..." message not disappearing when the search is over (#2837)
+    (Dennis van der Schagt)
+
 ### Security
+
 - Fixed clickjacking vulnerability on newsboat.org (reported by Kunal Mhaske)
+
+
+
+## 2.36.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.35.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.34.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.33.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.32.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.31.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.30.2 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.29.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.28.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.27.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.26.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.25.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.24.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.23.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.22.2 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.21.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.20.2 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
+
+
+
+## 2.19.1 - 2024-09-22
+
+### Fixed
+
+- Newsboat spamming sites with requests when `download-retries` is changed from
+    its default of 1 and the site returns HTTP code 304 Not Modified (#2732)
+    (Dennis van der Schagt)
 
 
 
