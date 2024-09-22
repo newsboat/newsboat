@@ -115,8 +115,8 @@ Support
 -------
 
 * Check out our
-  [documentation](https://newsboat.org/releases/2.20.1/docs/newsboat.html) and
-  [FAQ](https://newsboat.org/releases/2.20.1/docs/faq.html)
+  [documentation](https://newsboat.org/releases/2.20.2/docs/newsboat.html) and
+  [FAQ](https://newsboat.org/releases/2.20.2/docs/faq.html)
 * Bugs and whatnot should be reported to the
   [issue tracker](https://github.com/newsboat/newsboat/issues)
 * Drop us a line at
