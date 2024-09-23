@@ -436,9 +436,9 @@ checksum = "7a81dae078cea95a014a339291cec439d2f232ebe854a9d672b796c6afafa9b7"
 
 [[package]]
 name = "curl-sys"
-version = "0.4.75+curl-8.10.0"
+version = "0.4.76+curl-8.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a4fd752d337342e4314717c0d9b6586b059a120c80029ebe4d49b11fec7875e"
+checksum = "00462dbe9cbb9344e1b2be34d9094d74e3b8aac59a883495b335eafd02e25120"
 dependencies = [
  "cc",
  "libc",
