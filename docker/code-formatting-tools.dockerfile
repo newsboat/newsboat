@@ -22,7 +22,7 @@
 
 # Use Alpine 3.18 because 3.19 ships astyle 3.4, which is buggy for us:
 # https://gitlab.com/saalen/astyle/-/issues/45
-FROM rust:1.77.0-alpine3.18
+FROM rust:1.79.0-alpine3.18
 WORKDIR /workspace
 RUN apk add --no-cache astyle==3.1-r4 git make
 RUN rustup component add rustfmt
