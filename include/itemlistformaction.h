@@ -127,7 +127,7 @@ private:
 	void qna_end_editflags();
 	void qna_start_search();
 
-	void handle_cmdline_num(unsigned int idx);
+	void handle_cmdline_num(int idx);
 
 	std::string gen_flags(std::shared_ptr<RssItem> item);
 
