@@ -1019,7 +1019,7 @@ void FeedListFormAction::handle_cmdline_num(int idx)
 		idx = visible_feeds.size() + idx + 1;
 	}
 
-	if (idx <= (int)(visible_feeds[visible_feeds.size() - 1].second + 1)) {
+	if (idx != 0 && idx <= (int)(visible_feeds[visible_feeds.size() - 1].second + 1)) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
 			v.get_statusline().show_error(_("Position not visible!"));
