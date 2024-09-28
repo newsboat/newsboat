@@ -20,9 +20,7 @@
 #       newsboat-code-formatting-tools \
 #       make fmt
 
-# Use Alpine 3.18 because 3.19 ships astyle 3.4, which is buggy for us:
-# https://gitlab.com/saalen/astyle/-/issues/45
-FROM rust:1.79.0-alpine3.18
+FROM rust:1.79.0-alpine3.19
 WORKDIR /workspace
-RUN apk add --no-cache astyle==3.1-r4 git make
+RUN apk add --no-cache astyle==3.4.10-r0 git make
 RUN rustup component add rustfmt

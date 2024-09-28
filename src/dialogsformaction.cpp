@@ -87,7 +87,7 @@ bool DialogsFormAction::process_operation(Operation op,
 			do_redraw = true;
 		} else {
 			v.get_statusline().show_error(
-				_("Error: you can't remove the feed list!"));
+					_("Error: you can't remove the feed list!"));
 		}
 	}
 	break;

@@ -132,8 +132,8 @@ void rec_find_rss_outlines(
 						filtercmd,
 						nurl);
 					nurl.insert(0,
-						strprintf::fmt("filter:%s:",
-							filtercmd));
+							strprintf::fmt("filter:%s:",
+								filtercmd));
 					xmlFree(filtercmd);
 				}
 

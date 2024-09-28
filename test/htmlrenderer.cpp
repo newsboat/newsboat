@@ -84,9 +84,9 @@ TEST_CASE(
 	Links links;
 
 	rnd.render("<a href=\"http://slashdot.org/\">slashdot</a>",
-		lines,
-		links,
-		"");
+			lines,
+			links,
+			"");
 
 	REQUIRE(lines.size() == 1);
 

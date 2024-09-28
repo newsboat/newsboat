@@ -50,7 +50,7 @@ void AtomParser::parse_feed(Feed& f, xmlNode* rootNode)
 			const std::string rel = get_prop(node, "rel");
 			if (rel == "alternate") {
 				f.link = newsboat::utils::absolute_url(
-						globalbase, get_prop(node, "href"));
+							globalbase, get_prop(node, "href"));
 			}
 		} else if (node_is(node, "updated", ns)) {
 			f.pubDate = w3cdtf_to_rfc822(get_content(node));
@@ -129,7 +129,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 			if (rel == "" || rel == "alternate") {
 				if (it.link.empty() || !newsboat::utils::is_http_url(it.link)) {
 					it.link = newsboat::utils::absolute_url(
-							base, get_prop(node, "href"));
+								base, get_prop(node, "href"));
 				}
 			} else if (rel == "enclosure") {
 				it.enclosures.push_back(
@@ -139,7 +139,7 @@ Item AtomParser::parse_entry(xmlNode* entryNode)
 					"",
 					"",
 				}
-				);
+					);
 			}
 		} else if (node_is(node, "summary", ns)) {
 			const std::string mode = get_prop(node, "mode");

@@ -22,7 +22,6 @@ StflRichText render_empty_line(std::uint32_t, std::uint32_t)
 	return StflRichText::from_plaintext("");
 }
 
-
 TEST_CASE("invalidate_list_content() makes sure `position < num_lines`", "[ListWidget]")
 {
 	const std::uint32_t scrolloff = 0;

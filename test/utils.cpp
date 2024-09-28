@@ -131,7 +131,7 @@ TEST_CASE("tokenize_quoted() implicitly closes quotes at the end of the string",
 	REQUIRE(tokens[2] == "some other stuff");
 
 	tokens = utils::tokenize_quoted(R"("abc\)");
-	REQUIRE(tokens.size() == 1);
+		REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "abc");
 }
 
@@ -456,15 +456,15 @@ TEST_CASE("strip_comments ignores # characters inside double quotes",
 		const auto expected2 =
 			std::string(
 				R"#(highlight all "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+" blue default bold)#");
-		const auto input2 = expected2 + "#heresacomment";
-		REQUIRE(utils::strip_comments(input2) == expected2);
+				const auto input2 = expected2 + "#heresacomment";
+				REQUIRE(utils::strip_comments(input2) == expected2);
 	}
 
-	SECTION("Escaped double quote inside double quotes is not treated "
-		"as closing quote") {
+		SECTION("Escaped double quote inside double quotes is not treated "
+	"as closing quote") {
 		const auto expected =
 			std::string(R"#(test "here \"goes # nothing\" etc" hehe)#");
-		const auto input = expected + "# and here is a comment";
+			const auto input = expected + "# and here is a comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 }
@@ -503,7 +503,7 @@ TEST_CASE("strip_comments is not confused by nested double quotes and backticks"
 	{
 		const auto expected =
 			std::string(R"#(option "this `weird " command` for value")#");
-		const auto input = expected + "#and a comment";
+			const auto input = expected + "#and a comment";
 		REQUIRE(utils::strip_comments(input) == expected);
 	}
 }
@@ -1832,8 +1832,7 @@ TEST_CASE("utf8_to_locale() converts text from UTF-8 to the encoding specified "
 {
 	test_helpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
-		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
-		{
+		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr) {
 			WARN("Couldn't set locale " + new_locale + "; test skipped.");
 			return false;
 		}
@@ -1890,8 +1889,7 @@ TEST_CASE("utf8_to_locale() transliterates characters unsupported by the locale'
 {
 	test_helpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
-		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
-		{
+		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr) {
 			WARN("Couldn't set locale " + new_locale + "; test skipped.");
 			return false;
 		}
@@ -1938,8 +1936,7 @@ TEST_CASE("locale_to_utf8() converts text from the encoding specified by locale 
 {
 	test_helpers::LcCtypeEnvVar lc_ctype;
 	const auto set_locale = [&lc_ctype](std::string new_locale) -> bool {
-		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr)
-		{
+		if (::setlocale(LC_CTYPE, new_locale.c_str()) == nullptr) {
 			WARN("Couldn't set locale " + new_locale + "; test skipped.");
 			return false;
 		}

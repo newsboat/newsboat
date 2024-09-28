@@ -1002,7 +1002,6 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	}
 }
 
-
 ParsedOperations KeyMap::parse_operation_sequence(const std::string& line,
 	const std::string& command_name, bool allow_description)
 {
@@ -1101,7 +1100,6 @@ unsigned short KeyMap::get_flag_from_context(const std::string& context)
 
 	return 0; // shouldn't happen
 }
-
 
 std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
 	const std::string& context)

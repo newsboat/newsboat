@@ -209,7 +209,7 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		// output of that command would be empty, so nothing will be inserted
 		// in place of backticks.
 		const auto expected2 = std::string(R"#(a "b  f)#");
-		REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
+			REQUIRE(ConfigParser::evaluate_backticks(input2) == expected2);
 	}
 }
 

@@ -219,8 +219,7 @@ TEST_CASE("dump_config() returns everything we put into ColorManager",
 	// and nothing more.
 	auto equivalent = [&]() -> bool {
 		std::size_t found = 0;
-		for (const auto& line : config)
-		{
+		for (const auto& line : config) {
 			if (expected.find(line) == expected.end()) {
 				return false;
 			}

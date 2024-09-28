@@ -75,8 +75,8 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						fn.append(fnstr);
 					} else {
 						fn.append(fnstr,
-							base + 1,
-							std::string::npos);
+								base + 1,
+								std::string::npos);
 					}
 					set_value("filenametext", fn);
 					do_redraw = true;
@@ -170,13 +170,13 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	case OP_SK_PGUP:
 		if (f.get_focus() == "files") {
 			files_list.move_page_up(
-				cfg->get_configvalue_as_bool("wrap-scroll"));
+					cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_SK_PGDOWN:
 		if (f.get_focus() == "files") {
 			files_list.move_page_down(
-				cfg->get_configvalue_as_bool("wrap-scroll"));
+					cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_SK_HALF_PAGE_UP:
@@ -267,7 +267,6 @@ void FileBrowserFormAction::prepare()
 		for (std::string filename : files) {
 			add_file(id_at_position, filename);
 		}
-
 
 		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 			(void)width;

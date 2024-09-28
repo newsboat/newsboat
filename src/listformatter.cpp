@@ -46,7 +46,7 @@ std::string ListFormatter::format_list() const
 			rxman->quote_and_highlight(str, location);
 		}
 		format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", Stfl::quote(str.stfl_quoted())));
+					"{listitem text:%s}", Stfl::quote(str.stfl_quoted())));
 	}
 	format_cache.push_back('}');
 	return format_cache;

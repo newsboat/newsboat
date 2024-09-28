@@ -28,5 +28,4 @@ void LineView::hide()
 	f.set("show_" + name, "0");
 }
 
-
 } // namespace newsboat

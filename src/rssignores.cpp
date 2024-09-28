@@ -94,11 +94,11 @@ void RssIgnores::dump_config(std::vector<std::string>& config_output) const
 	}
 	for (const auto& ign_lm : ignores_lastmodified) {
 		config_output.push_back(strprintf::fmt(
-				"always-download %s", utils::quote(ign_lm)));
+					"always-download %s", utils::quote(ign_lm)));
 	}
 	for (const auto& rf : resetflag) {
 		config_output.push_back(strprintf::fmt(
-				"reset-unread-on-update %s", utils::quote(rf)));
+					"reset-unread-on-update %s", utils::quote(rf)));
 	}
 }
 

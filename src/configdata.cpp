@@ -86,7 +86,6 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 		break;
 	}
 
-
 	return {};
 }
 

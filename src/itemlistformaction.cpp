@@ -72,11 +72,11 @@ bool ItemListFormAction::process_operation(Operation op,
 			// that
 			old_itempos = itempos;
 			v.push_itemview(feed,
-				visible_items[itempos].first->guid());
+					visible_items[itempos].first->guid());
 			invalidate(itempos);
 		} else {
 			v.get_statusline().show_error(
-				_("No item selected!")); // should not happen
+					_("No item selected!")); // should not happen
 		}
 	}
 	break;
@@ -85,7 +85,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		if (!visible_items.empty()) {
 			// mark as read
 			v.get_ctrl()->mark_article_read(
-				visible_items[itempos].first->guid(), true);
+					visible_items[itempos].first->guid(), true);
 			visible_items[itempos].first->set_unread(false);
 			// mark as deleted
 			visible_items[itempos].first->set_deleted(
@@ -99,7 +99,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			invalidate(itempos);
 		} else {
 			v.get_statusline().show_error(
-				_("No item selected!")); // should not happen
+					_("No item selected!")); // should not happen
 		}
 	}
 	break;
@@ -184,7 +184,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				return false;
 			} else if (*exit_code != 0) {
 				v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-						*exit_code));
+							*exit_code));
 				return false;
 			}
 		}
@@ -207,7 +207,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				return false;
 			} else if (*exit_code != 0) {
 				v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-						*exit_code));
+							*exit_code));
 				return false;
 			}
 			invalidate_list();
@@ -226,17 +226,17 @@ bool ItemListFormAction::process_operation(Operation op,
 						.first->set_unread(
 							false);
 						v.get_ctrl()->mark_article_read(
-							visible_items[itempos]
-							.first->guid(),
-							true);
+								visible_items[itempos]
+								.first->guid(),
+								true);
 					} else if (args.front() == "unread") {
 						visible_items[itempos]
 						.first->set_unread(
 							true);
 						v.get_ctrl()->mark_article_read(
-							visible_items[itempos]
-							.first->guid(),
-							false);
+								visible_items[itempos]
+								.first->guid(),
+								false);
 					}
 				} else {
 					// mark as undeleted
@@ -252,14 +252,14 @@ bool ItemListFormAction::process_operation(Operation op,
 					visible_items[itempos]
 					.first->set_unread(!unread);
 					v.get_ctrl()->mark_article_read(
-						visible_items[itempos]
-						.first->guid(),
-						unread);
+							visible_items[itempos]
+							.first->guid(),
+							unread);
 				}
 			} catch (const DbException& e) {
 				v.get_statusline().show_error(strprintf::fmt(
-						_("Error while toggling read flag: %s"),
-						e.what()));
+							_("Error while toggling read flag: %s"),
+							e.what()));
 			}
 			if (!cfg->get_configvalue_as_bool(
 					"toggleitemread-jumps-to-next-unread")) {
@@ -295,15 +295,15 @@ bool ItemListFormAction::process_operation(Operation op,
 						: visible_items[itempos]
 						.first->feedurl();
 					rnd.render(
-						utils::utf8_to_locale(visible_items[itempos].first->description().text),
-						lines,
-						links,
-						baseurl);
+							utils::utf8_to_locale(visible_items[itempos].first->description().text),
+							lines,
+							links,
+							baseurl);
 					if (!links.empty()) {
 						v.push_urlview(links, feed);
 					} else {
 						v.get_statusline().show_error(
-							_("URL list empty."));
+								_("URL list empty."));
 					}
 				} else {
 					qna_responses.clear();
@@ -313,7 +313,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 		} else {
 			v.get_statusline().show_error(
-				_("No item selected!")); // should not happen
+					_("No item selected!")); // should not happen
 		}
 		break;
 	case OP_BOOKMARK: {
@@ -332,7 +332,7 @@ bool ItemListFormAction::process_operation(Operation op,
 							visible_items[itempos].first->link(),
 							utils::utf8_to_locale(visible_items[itempos].first->title()),
 							args.front(),
-							feed->title(),
+								feed->title(),
 						};
 						this->finished_qna(OP_INT_BM_END);
 					}
@@ -340,13 +340,13 @@ bool ItemListFormAction::process_operation(Operation op,
 				case BindingType::Macro:
 					qna_responses.clear();
 					qna_responses.push_back(
-						visible_items[itempos]
-						.first->link());
+							visible_items[itempos]
+							.first->link());
 					qna_responses.push_back(utils::utf8_to_locale(
-							visible_items[itempos].first->title()));
+								visible_items[itempos].first->title()));
 					qna_responses.push_back(args.size() > 0
-						? args.front()
-						: "");
+							? args.front()
+							: "");
 					qna_responses.push_back(feed->title());
 					this->finished_qna(OP_INT_BM_END);
 					break;
@@ -360,7 +360,7 @@ bool ItemListFormAction::process_operation(Operation op,
 			}
 		} else {
 			v.get_statusline().show_error(
-				_("No item selected!")); // should not happen
+					_("No item selected!")); // should not happen
 		}
 	}
 	break;
@@ -383,7 +383,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					if (args.size() > 0) {
 						qna_responses.clear();
 						qna_responses.push_back(
-							args.front());
+								args.front());
 						finished_qna(
 							OP_INT_EDITFLAGS_END);
 					}
@@ -391,14 +391,14 @@ bool ItemListFormAction::process_operation(Operation op,
 				case BindingType::BindKey:
 					std::vector<QnaPair> qna;
 					qna.push_back(QnaPair(_("Flags: "),
-							visible_items[itempos].first->flags()));
+								visible_items[itempos].first->flags()));
 					this->start_qna(qna, OP_INT_EDITFLAGS_END);
 					break;
 				}
 			}
 		} else {
 			v.get_statusline().show_error(
-				_("No item selected!")); // should not happen
+					_("No item selected!")); // should not happen
 		}
 	}
 	break;
@@ -574,8 +574,8 @@ bool ItemListFormAction::process_operation(Operation op,
 				invalidate_list();
 			} catch (const DbException& e) {
 				v.get_statusline().show_error(strprintf::fmt(
-						_("Error: couldn't mark feed read: %s"),
-						e.what()));
+							_("Error: couldn't mark feed read: %s"),
+							e.what()));
 			}
 		}
 		break;
@@ -590,8 +590,8 @@ bool ItemListFormAction::process_operation(Operation op,
 					visible_items[i].first->set_unread(
 						false);
 					v.get_ctrl()->mark_article_read(
-						visible_items[i].first->guid(),
-						true);
+							visible_items[i].first->guid(),
+							true);
 				}
 			}
 			if (!cfg->get_configvalue_as_bool(
@@ -635,7 +635,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				break;
 			case BindingType::BindKey:
 				qna.push_back(QnaPair(
-						_("Pipe article to command: "), ""));
+							_("Pipe article to command: "), ""));
 				this->start_qna(
 					qna, OP_PIPE_TO, &cmdlinehistory);
 				break;
@@ -711,7 +711,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					apply_filter(filter.value());
 				} else {
 					v.get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
-							filter_name));
+								filter_name));
 				}
 			} else {
 				const std::string filter_text = v.select_filter(filter_container.get_filters());
@@ -891,7 +891,7 @@ bool ItemListFormAction::open_position_in_browser(
 			return false;
 		} else if (*exit_code != 0) {
 			v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-					*exit_code));
+						*exit_code));
 			return false;
 		}
 		return true;
@@ -928,7 +928,7 @@ void ItemListFormAction::finished_qna(Operation op)
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
 			v.get_ctrl()->write_item(
-				visible_items[itempos].first, ostr);
+					visible_items[itempos].first, ostr);
 			v.push_empty_formaction();
 			Stfl::reset();
 			FILE* f = popen(cmd.c_str(), "w");
@@ -989,9 +989,9 @@ void ItemListFormAction::qna_start_search()
 				utf8searchphrase, feed);
 	} catch (const DbException& e) {
 		v.get_statusline().show_error(
-			strprintf::fmt(_("Error while searching for `%s': %s"),
-				searchphrase,
-				e.what()));
+				strprintf::fmt(_("Error while searching for `%s': %s"),
+					searchphrase,
+					e.what()));
 		return;
 	}
 
@@ -1073,8 +1073,7 @@ void ItemListFormAction::draw_items()
 
 	auto render_line = [this, itemlist_format, datetime_format](std::uint32_t line,
 	std::uint32_t width) -> StflRichText {
-		if (line >= visible_items.size())
-		{
+		if (line >= visible_items.size()) {
 			return StflRichText::from_plaintext("ERROR");
 		}
 		auto& item = visible_items[line];
@@ -1101,7 +1100,7 @@ void ItemListFormAction::prepare()
 		do_update_visible_items();
 	} catch (MatcherException& e) {
 		v.get_statusline().show_error(strprintf::fmt(
-				_("Error: applying the filter failed: %s"), e.what()));
+					_("Error: applying the filter failed: %s"), e.what()));
 		return;
 	}
 
@@ -1111,8 +1110,8 @@ void ItemListFormAction::prepare()
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
 				v.get_ctrl()->mark_article_read(
-					visible_items[itempos].first->guid(),
-					true);
+						visible_items[itempos].first->guid(),
+						true);
 				invalidate(itempos);
 			}
 		}
@@ -1163,7 +1162,7 @@ StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 			datetime_format, "%L", strprintf::fmt(
 				ngettext("1 day ago", "%u days ago", article_age), article_age));
 	fmt.register_fmt('D', utils::mt_strf_localtime(new_datetime_format,
-			item.first->pubDate_timestamp()));
+				item.first->pubDate_timestamp()));
 
 	if (feed->rssurl() != item.first->feedurl() &&
 		item.first->get_feedptr() != nullptr) {
@@ -1475,11 +1474,11 @@ void ItemListFormAction::save_article(const nonstd::optional<std::string>& filen
 		try {
 			v.get_ctrl()->write_item(item, filename.value());
 			v.get_statusline().show_message(strprintf::fmt(
-					_("Saved article to %s"), filename.value()));
+						_("Saved article to %s"), filename.value()));
 		} catch (...) {
 			v.get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't save article to %s"),
-					filename.value()));
+						_("Error: couldn't save article to %s"),
+						filename.value()));
 		}
 	}
 }
@@ -1605,7 +1604,7 @@ void ItemListFormAction::handle_op_saveall()
 	std::vector<std::string> filenames;
 	for (const auto& item : visible_items) {
 		filenames.emplace_back( utils::utf8_to_locale(v.get_filename_suggestion(
-					item.first->title())));
+						item.first->title())));
 	}
 
 	const auto unique_filenames = std::set<std::string>(
@@ -1690,9 +1689,9 @@ void ItemListFormAction::apply_filter(const std::string& filtertext)
 	filterhistory.add_line(filtertext);
 	if (!matcher.parse(filtertext)) {
 		v.get_statusline().show_error(strprintf::fmt(
-				_("Error: couldn't parse filter expression `%s': %s"),
-				filtertext,
-				matcher.get_parse_error()));
+					_("Error: couldn't parse filter expression `%s': %s"),
+					filtertext,
+					matcher.get_parse_error()));
 	} else {
 		save_filterpos();
 		filter_active = true;

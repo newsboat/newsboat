@@ -90,9 +90,9 @@ void prepare_header(
 				utils::censor_url(item->enclosure_url()));
 		if (!item->enclosure_type().empty()) {
 			dlurl.append(
-				strprintf::fmt(" (%s%s)",
-					_("type: "),
-					item->enclosure_type()));
+					strprintf::fmt(" (%s%s)",
+						_("type: "),
+						item->enclosure_type()));
 		}
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}

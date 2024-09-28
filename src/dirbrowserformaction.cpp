@@ -137,13 +137,13 @@ bool DirBrowserFormAction::process_operation(Operation op,
 	case OP_SK_PGUP:
 		if (f.get_focus() == "files") {
 			files_list.move_page_up(
-				cfg->get_configvalue_as_bool("wrap-scroll"));
+					cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_SK_PGDOWN:
 		if (f.get_focus() == "files") {
 			files_list.move_page_down(
-				cfg->get_configvalue_as_bool("wrap-scroll"));
+					cfg->get_configvalue_as_bool("wrap-scroll"));
 		}
 		break;
 	case OP_SK_HALF_PAGE_UP:

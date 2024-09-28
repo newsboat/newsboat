@@ -240,7 +240,7 @@ void RssItem::sort_flags()
 
 	// Erase non-alpha characters
 	flags_.erase(std::remove_if(flags_.begin(),
-			flags_.end(),
+				flags_.end(),
 	[](const char c) {
 		return !isalpha(c);
 	}),

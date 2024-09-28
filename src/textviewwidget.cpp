@@ -135,7 +135,6 @@ void TextviewWidget::scroll_halfpage_down()
 	}
 }
 
-
 std::uint32_t TextviewWidget::get_scroll_offset()
 {
 	const std::string offset = form.get(textview_name + "_offset");

@@ -64,7 +64,6 @@ TEST_CASE("filename() returns download's target filename", "[Download]")
 		REQUIRE(d.filename() == "");
 	}
 
-
 	SECTION("filename returns same string which is set via set_filename") {
 		d.set_filename("abc");
 		REQUIRE(d.filename() == "abc");

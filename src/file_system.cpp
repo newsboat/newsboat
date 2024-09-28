@@ -59,7 +59,6 @@ char filetype_to_char(FileType type)
 	return unknown;
 }
 
-
 nonstd::optional<char> mode_suffix(mode_t mode)
 {
 	const auto type = mode_to_filetype(mode);

@@ -76,7 +76,6 @@ test_helpers::LcCtypeEnvVar::LcCtypeEnvVar()
 	});
 }
 
-
 TEST_CASE("EnvVar object restores the environment variable to its original "
 	"state when the object is destroyed",
 	"[test_helpers]")
@@ -364,7 +363,6 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 
 		REQUIRE(checks_ok);
 	}
-
 
 	REQUIRE(::unsetenv(var) == 0);
 }

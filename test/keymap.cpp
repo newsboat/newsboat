@@ -592,19 +592,19 @@ TEST_CASE("Whitespace around semicolons in macros is optional", "[KeyMap]")
 
 	SECTION("Whitespace not required before the semicolon") {
 		k.handle_action("macro",
-			R"(x open; set browser "firefox --private-window"; quit)");
+				R"(x open; set browser "firefox --private-window"; quit)");
 		check();
 	}
 
 	SECTION("Whitespace not required after the semicolon") {
 		k.handle_action("macro",
-			R"(x open ;set browser "firefox --private-window" ;quit)");
+				R"(x open ;set browser "firefox --private-window" ;quit)");
 		check();
 	}
 
 	SECTION("Whitespace not required on either side of the semicolon") {
 		k.handle_action("macro",
-			R"(x open;set browser "firefox --private-window";quit)");
+				R"(x open;set browser "firefox --private-window";quit)");
 		check();
 	}
 }
@@ -646,7 +646,7 @@ TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
 	KeyMap k(KM_NEWSBOAT);
 
 	k.handle_action("macro",
-		R"(x set browser "sleep 3; do-something ; echo hi"; open-in-browser)");
+			R"(x set browser "sleep 3; do-something ; echo hi"; open-in-browser)");
 
 	const auto macro = k.get_macro(KeyCombination("x"));
 	REQUIRE(macro.size() == 2);

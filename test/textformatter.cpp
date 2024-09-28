@@ -12,13 +12,13 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	TextFormatter fmt;
 
 	fmt.add_lines({std::make_pair(LineType::wrappable,
-				"this one is going to be wrapped"),
-			std::make_pair(LineType::softwrappable,
-				"this one is going to be wrapped at the window "
-				"border"),
-			std::make_pair(LineType::nonwrappable,
-				"this one is going to be preserved even though "
-				"it's much longer")});
+					"this one is going to be wrapped"),
+				std::make_pair(LineType::softwrappable,
+					"this one is going to be wrapped at the window "
+					"border"),
+				std::make_pair(LineType::nonwrappable,
+					"this one is going to be preserved even though "
+					"it's much longer")});
 
 	SECTION("formatting to plain text") {
 		const std::string expected =
@@ -61,7 +61,7 @@ TEST_CASE("line wrapping works for non-space-separated text", "[TextFormatter]")
 	TextFormatter fmt;
 
 	fmt.add_lines({std::make_pair(LineType::wrappable,
-				"    つれづれなるままに、ひぐらしすずりにむかいて、")});
+					"    つれづれなるままに、ひぐらしすずりにむかいて、")});
 
 	SECTION("preserve indent and doesn't return broken UTF-8") {
 		const std::string expected =
@@ -97,7 +97,7 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 	// the choice of green text on red background does not reflect my
 	// personal taste (or lack thereof) :)
 	rxmgr.handle_action(
-		"highlight", {"article", "please", "green", "default"});
+			"highlight", {"article", "please", "green", "default"});
 
 	const std::string expected_text =
 		"{list"

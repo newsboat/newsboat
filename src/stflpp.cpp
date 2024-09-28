@@ -88,7 +88,7 @@ void Stfl::Form::modify(const std::string& name,
 	const std::string& mode,
 	const std::string& text)
 {
-	const wchar_t* wname, *wmode, *wtext;
+	const wchar_t* wname, * wmode, * wtext;
 	wname = stfl_ipool_towc(ipool, name.c_str());
 	wmode = stfl_ipool_towc(ipool, mode.c_str());
 	wtext = stfl_ipool_towc(ipool, text.c_str());

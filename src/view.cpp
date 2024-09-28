@@ -419,7 +419,7 @@ void View::update_visible_feeds(std::vector<std::shared_ptr<RssFeed>> feeds)
 		}
 	} catch (const MatcherException& e) {
 		status_line.show_message(strprintf::fmt(
-				_("Error: applying the filter failed: %s"), e.what()));
+					_("Error: applying the filter failed: %s"), e.what()));
 		LOG(Level::DEBUG,
 			"View::update_visible_feeds: inside catch: %s",
 			e.what());
@@ -442,7 +442,7 @@ void View::set_feedlist(std::vector<std::shared_ptr<RssFeed>> feeds)
 		}
 	} catch (const MatcherException& e) {
 		status_line.show_message(strprintf::fmt(
-				_("Error: applying the filter failed: %s"), e.what()));
+					_("Error: applying the filter failed: %s"), e.what()));
 	}
 }
 
@@ -552,8 +552,8 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 			}
 		} catch (const DbException& e) {
 			status_line.show_error(strprintf::fmt(
-					_("Error while marking article as read: %s"),
-					e.what()));
+						_("Error while marking article as read: %s"),
+						e.what()));
 		}
 		::unlink(filename.c_str());
 	}
@@ -1119,8 +1119,8 @@ std::vector<std::pair<unsigned int, std::string>> View::get_formaction_names()
 	for (const auto& form : formaction_stack) {
 		if (form && form->id() != "dialogs") {
 			formaction_names.push_back(
-				std::pair<unsigned int, std::string>(
-					i, form->title()));
+					std::pair<unsigned int, std::string>(
+						i, form->title()));
 		}
 		i++;
 	}

@@ -485,7 +485,7 @@ std::vector<std::pair<unsigned int, unsigned int>> utils::partition_indexes(
 
 	for (unsigned int i = 0; i < parts - 1; i++) {
 		partitions.push_back(std::pair<unsigned int, unsigned int>(
-				start, start + size - 1));
+					start, start + size - 1));
 		start += size;
 	}
 
@@ -517,7 +517,7 @@ std::string utils::join(const std::vector<std::string>& strings,
 
 	if (result.length() > 0)
 		result.erase(
-			result.length() - separator.length(), result.length());
+				result.length() - separator.length(), result.length());
 
 	return result;
 }
@@ -756,11 +756,11 @@ nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read
 		if (error_line_number == 0) {
 			error.kind = ReadTextFileErrorKind::CantOpen;
 			error.message = strprintf::fmt(_("Failed to open file: %s"),
-					std::string(error_reason));
+						std::string(error_reason));
 		} else {
 			error.kind = ReadTextFileErrorKind::LineError;
 			error.message = strprintf::fmt(_("Failed to read line %u: %s"),
-					error_line_number, std::string(error_reason));
+						error_line_number, std::string(error_reason));
 		}
 
 		return nonstd::make_unexpected(error);

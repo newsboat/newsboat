@@ -683,7 +683,7 @@ TEST_CASE("sort_feeds() sorts by number of unread articles if `feed-sort-order` 
 
 	SECTION("`unreadarticlecount-asc` -- feed with most unread items is at the top") {
 		cfg.set_configvalue(
-			"feed-sort-order", "unreadarticlecount-asc");
+				"feed-sort-order", "unreadarticlecount-asc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 3);
@@ -695,7 +695,7 @@ TEST_CASE("sort_feeds() sorts by number of unread articles if `feed-sort-order` 
 
 	SECTION("`unreadarticlecount-desc` -- feed with most unread items is at the bottom") {
 		cfg.set_configvalue(
-			"feed-sort-order", "unreadarticlecount-desc");
+				"feed-sort-order", "unreadarticlecount-desc");
 		feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
 		const auto sorted_feeds = feedcontainer.get_all_feeds();
 		REQUIRE(sorted_feeds[0]->unread_item_count() == 0);

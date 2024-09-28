@@ -318,7 +318,7 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 	}
 	SECTION("`download-path` set with a trailing slash") {
 		cfg.set_configvalue("download-path",
-			"/yet another/fictional path for downloads/");
+				"/yet another/fictional path for downloads/");
 		download_path = "/yet another/fictional path for downloads/";
 	}
 

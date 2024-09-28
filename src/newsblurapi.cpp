@@ -344,8 +344,8 @@ rsspp::Feed NewsBlurApi::fetch_feed(const std::string& id)
 				}
 
 				item.pubDate = utils::mt_strf_localtime(
-						"%a, %d %b %Y %H:%M:%S %z",
-						item.pubDate_ts);
+							"%a, %d %b %Y %H:%M:%S %z",
+							item.pubDate_ts);
 			}
 
 			f.items.push_back(item);

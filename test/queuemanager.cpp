@@ -50,7 +50,7 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 				REQUIRE(test_helpers::starts_with(enclosure_url, lines[0]));
 				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
-				REQUIRE(lines[1] == "");
+					REQUIRE(lines[1] == "");
 			}
 
 			THEN("the item is marked as enqueued") {
@@ -75,7 +75,7 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 				REQUIRE(test_helpers::starts_with(enclosure_url, lines[0]));
 				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
-				REQUIRE(lines[1] == "");
+					REQUIRE(lines[1] == "");
 			}
 
 			THEN("the item is marked as enqueued") {
@@ -165,7 +165,7 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 				REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
 				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
-				REQUIRE(lines[1] == "");
+					REQUIRE(lines[1] == "");
 			}
 
 			THEN("the item is marked as enqueued") {
@@ -190,7 +190,7 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 					REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
 					REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
-					REQUIRE(lines[1] == "");
+						REQUIRE(lines[1] == "");
 				}
 
 				THEN("the item is NOT marked as enqueued") {
@@ -519,7 +519,7 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 				REQUIRE(test_helpers::starts_with(enclosure_url1, lines[0]));
 				REQUIRE(test_helpers::ends_with(R"(/podcast.mp3")", lines[0]));
 
-				REQUIRE(lines[1] == "");
+					REQUIRE(lines[1] == "");
 			}
 
 			THEN("the first item is enqueued, the second one isn't") {

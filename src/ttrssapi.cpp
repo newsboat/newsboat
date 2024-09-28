@@ -417,7 +417,7 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handl
 							"",
 							"",
 						}
-						);
+							);
 						break;
 					}
 				}
@@ -437,8 +437,8 @@ rsspp::Feed TtRssApi::fetch_feed(const std::string& id, CurlHandle& cached_handl
 			time_t updated = static_cast<time_t>(updated_time);
 
 			item.pubDate = utils::mt_strf_localtime(
-					"%a, %d %b %Y %H:%M:%S %z",
-					updated);
+						"%a, %d %b %Y %H:%M:%S %z",
+						updated);
 			item.pubDate_ts = updated;
 
 			f.items.push_back(item);

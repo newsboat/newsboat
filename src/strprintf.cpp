@@ -28,7 +28,6 @@ std::string strprintf::fmt(const std::string& format)
 	return result;
 }
 
-
 /* Splits a printf-like format string into two parts, where first part contains
  * at most one format while the second part contains the rest of the input
  * string:

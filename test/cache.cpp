@@ -1007,8 +1007,7 @@ TEST_CASE(
 	auto count_callback = [](void* data, int argc, char** argv, char**
 	/* azColName */) -> int {
 		int* count = static_cast<int*>(data);
-		if (argc > 0)
-		{
+		if (argc > 0) {
 			std::istringstream is(argv[0]);
 			is >> *count;
 		}

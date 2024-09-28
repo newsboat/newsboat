@@ -485,8 +485,8 @@ void Cache::update_lastmodified(const std::string& feedurl,
 	}
 	if (etag.length() > 0) {
 		query.append(prepare_query("%c etag = %s",
-				(t > 0 ? ',' : ' '),
-				prepare_query("'%q'", etag)));
+					(t > 0 ? ',' : ' '),
+					prepare_query("'%q'", etag)));
 	}
 	query.append(" WHERE rssurl = ");
 	query.append(prepare_query("'%q'", feedurl));
@@ -632,15 +632,13 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	if (ign != nullptr) {
 		auto& items = feed->items();
 		items.erase(
-			std::remove_if(
-				items.begin(),
-				items.end(),
+				std::remove_if(
+					items.begin(),
+					items.end(),
 		[&](std::shared_ptr<RssItem> item) -> bool {
-			try
-			{
+			try {
 				return ign->matches(item.get());
-			} catch (const MatcherException& ex)
-			{
+			} catch (const MatcherException& ex) {
 				LOG(Level::DEBUG,
 					"oops, Matcher exception: %s",
 					ex.what());
@@ -718,15 +716,13 @@ std::vector<std::shared_ptr<RssItem>> Cache::search_for_items(
 		item->set_cache(this);
 	}
 	items.erase(
-		std::remove_if(
-			items.begin(),
-			items.end(),
+			std::remove_if(
+				items.begin(),
+				items.end(),
 	[&](std::shared_ptr<RssItem> item) -> bool {
-		try
-		{
+		try {
 			return ign.matches(item.get());
-		} catch (const MatcherException& ex)
-		{
+		} catch (const MatcherException& ex) {
 			LOG(Level::DEBUG,
 				"Cache::search_for_items: oops, Matcher exception: %s",
 				ex.what());

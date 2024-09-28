@@ -196,12 +196,12 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 					status == DlStatus::PLAYED ||
 					status == DlStatus::READY) {
 					ctrl.play_file(ctrl.downloads()[idx]
-						.filename());
+							.filename());
 					ctrl.downloads()[idx].set_status(
-						DlStatus::PLAYED);
+							DlStatus::PLAYED);
 				} else {
 					msg_line_dllist_form.set_text(_("Error: download needs to be "
-							"finished before the file can be played."));
+								"finished before the file can be played."));
 				}
 			}
 		}
@@ -227,7 +227,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 				if (ctrl.downloads()[idx].status() ==
 					DlStatus::DOWNLOADING) {
 					ctrl.downloads()[idx].set_status(
-						DlStatus::CANCELLED);
+							DlStatus::CANCELLED);
 				}
 			}
 		}
@@ -249,7 +249,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		case OP_PB_PURGE:
 			if (ctrl.downloads_in_progress() > 0) {
 				msg_line_dllist_form.set_text(_("Error: unable to perform operation: "
-						"download(s) in progress."));
+							"download(s) in progress."));
 			} else {
 				ctrl.purge_queue();
 			}
@@ -278,9 +278,9 @@ void PbView::apply_colors_to_all_forms()
 {
 	using namespace std::placeholders;
 	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &dllist_form, _1,
-			_2));
+				_2));
 	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &help_form, _1,
-			_2));
+				_2));
 }
 
 std::pair<double, std::string> PbView::get_speed_human_readable(double kbps)
@@ -314,7 +314,7 @@ void PbView::run_help()
 	}
 
 	help_textview.stfl_replace_lines(listfmt.get_lines_count(),
-		listfmt.format_list());
+			listfmt.format_list());
 
 	bool quit = false;
 
@@ -403,9 +403,9 @@ StflRichText PbView::format_line(const std::string& podlist_format,
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('d',
-		strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
+			strprintf::fmt("%.1f", dl.current_size() / (1024 * 1024)));
 	fmt.register_fmt(
-		't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
+			't', strprintf::fmt("%.1f", dl.total_size() / (1024 * 1024)));
 	fmt.register_fmt('p', strprintf::fmt("%.1f", dl.percents_finished()));
 	fmt.register_fmt('k', strprintf::fmt("%.2f", speed_kbps));
 	fmt.register_fmt('K', strprintf::fmt("%.2f %s", speed.first, speed.second));

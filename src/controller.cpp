@@ -689,8 +689,8 @@ void Controller::mark_all_read(unsigned int pos)
 		}
 	}
 	m.stopover(
-		"after rsscache->mark_all_read, before iteration over "
-		"items");
+			"after rsscache->mark_all_read, before iteration over "
+			"items");
 
 	feedcontainer.mark_all_feed_items_read(feed);
 }

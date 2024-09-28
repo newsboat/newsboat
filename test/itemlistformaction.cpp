@@ -289,7 +289,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		int maxItemsToOpen = 4;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
-			"max-browser-tabs", std::to_string(maxItemsToOpen));
+				"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER, args);
@@ -313,7 +313,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 		int maxItemsToOpen = 9;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
-			"max-browser-tabs", std::to_string(maxItemsToOpen));
+				"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER, args);
@@ -375,7 +375,7 @@ TEST_CASE(
 		const unsigned int maxItemsToOpen = 4;
 		unsigned int openedItemsCount = 0;
 		cfg.set_configvalue(
-			"max-browser-tabs", std::to_string(maxItemsToOpen));
+				"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK, args);
@@ -400,7 +400,7 @@ TEST_CASE(
 		int maxItemsToOpen = 9;
 		int openedItemsCount = 0;
 		cfg.set_configvalue(
-			"max-browser-tabs", std::to_string(maxItemsToOpen));
+				"max-browser-tabs", std::to_string(maxItemsToOpen));
 
 		const std::vector<std::string> args;
 		itemlist.process_op(OP_OPENALLUNREADINBROWSER_AND_MARK, args);
@@ -460,7 +460,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 		feed->add_item(item);
 		itemlist.set_feed(feed);
 		cfg.set_configvalue(
-			"external-url-viewer", "tee > " + urlFile.get_path());
+				"external-url-viewer", "tee > " + urlFile.get_path());
 
 		const std::vector<std::string> args;
 		REQUIRE_NOTHROW(itemlist.process_op(OP_SHOWURLS, args));
@@ -522,7 +522,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 	itemlist.set_feed(feed);
 
 	cfg.set_configvalue(
-		"bookmark-cmd", "echo > " + bookmarkFile.get_path());
+			"bookmark-cmd", "echo > " + bookmarkFile.get_path());
 
 	bookmark_args.push_back(extra_arg);
 
@@ -733,7 +733,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	newsboat::View v(&c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
-		"external-url-viewer", "tee > " + articleFile.get_path());
+			"external-url-viewer", "tee > " + articleFile.get_path());
 	Cache rsscache(":memory:", &cfg);
 	std::string line;
 

@@ -174,8 +174,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 		}
 	} catch (const DbException& e) {
 		v.get_statusline().show_error(strprintf::fmt(
-				_("Error while marking article as read: %s"),
-				e.what()));
+					_("Error while marking article as read: %s"),
+					e.what()));
 	}
 
 	switch (op) {
@@ -215,12 +215,12 @@ bool ItemViewFormAction::process_operation(Operation op,
 			try {
 				v.get_ctrl()->write_item(item, filename.value());
 				v.get_statusline().show_message(strprintf::fmt(
-						_("Saved article to %s."), filename.value()));
+							_("Saved article to %s."), filename.value()));
 			} catch (...) {
 				v.get_statusline().show_error(strprintf::fmt(
-						_("Error: couldn't write article to "
-							"file %s"),
-						filename.value()));
+							_("Error: couldn't write article to "
+								"file %s"),
+							filename.value()));
 			}
 		}
 	}
@@ -251,7 +251,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 					item->link(),
 					utils::utf8_to_locale(item->title()),
 					args.front(),
-					feed->title(),
+						feed->title(),
 				};
 				finished_qna(OP_INT_BM_END);
 			}
@@ -261,7 +261,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			qna_responses.push_back(item->link());
 			qna_responses.push_back(utils::utf8_to_locale(item->title()));
 			qna_responses.push_back(
-				args.size() > 0 ? args.front() : "");
+					args.size() > 0 ? args.front() : "");
 			qna_responses.push_back(feed->title());
 			finished_qna(OP_INT_BM_END);
 			break;
@@ -320,7 +320,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			break;
 		case BindingType::BindKey:
 			qna.push_back(
-				QnaPair(_("Pipe article to command: "), ""));
+					QnaPair(_("Pipe article to command: "), ""));
 			this->start_qna(qna, OP_PIPE_TO, &cmdlinehistory);
 			break;
 		}
@@ -452,8 +452,8 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 		} catch (const DbException& e) {
 			v.get_statusline().show_error(strprintf::fmt(
-					_("Error while marking article as unread: %s"),
-					e.what()));
+						_("Error while marking article as unread: %s"),
+						e.what()));
 		}
 		quit = true;
 		break;
@@ -569,7 +569,7 @@ bool ItemViewFormAction::open_link_in_browser(const std::string& link,
 		return false;
 	} else if (*exit_code != 0) {
 		v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-				*exit_code));
+					*exit_code));
 		return false;
 	}
 	return true;
@@ -634,15 +634,15 @@ void ItemViewFormAction::handle_save(const std::string& filename_param)
 	} else {
 		try {
 			v.get_ctrl()->write_item(
-				item, filename);
+					item, filename);
 			v.get_statusline().show_message(strprintf::fmt(
-					_("Saved article to %s"),
-					filename));
+						_("Saved article to %s"),
+						filename));
 		} catch (...) {
 			v.get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't save "
-						"article to %s"),
-					filename));
+						_("Error: couldn't save "
+							"article to %s"),
+						filename));
 		}
 	}
 }
@@ -696,8 +696,8 @@ void ItemViewFormAction::register_format_styles()
 {
 	std::string attrstr = rxman.get_attrs_stfl_string("article", false);
 	attrstr.append(
-		"@style_b_normal[color_bold]:attr=bold "
-		"@style_u_normal[color_underline]:attr=underline ");
+			"@style_b_normal[color_bold]:attr=bold "
+			"@style_u_normal[color_underline]:attr=underline ");
 	std::string stfl_textview = strprintf::fmt(
 			"{textview[article] style_normal[article]: "
 			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "

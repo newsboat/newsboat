@@ -291,7 +291,7 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 					"",
 					"",
 				}
-				);
+					);
 			}
 		}
 
@@ -304,7 +304,7 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		json_object_object_get_ex(item_j, "guid", &node);
 		const auto guid = json_object_get_string(node);
 		item.guid = std::to_string(id) + ":" + std::to_string(f_id) +
-			"/" + (guid ? std::string(guid) : std::to_string(i));
+				"/" + (guid ? std::string(guid) : std::to_string(i));
 
 		json_object_object_get_ex(item_j, "unread", &node);
 		bool unread = json_object_get_boolean(node);
@@ -318,8 +318,8 @@ rsspp::Feed OcNewsApi::fetch_feed(const std::string& feed_id)
 		time_t updated = (time_t)json_object_get_int(node);
 
 		item.pubDate = utils::mt_strf_localtime(
-				"%a, %d %b %Y %H:%M:%S %z",
-				updated);
+					"%a, %d %b %Y %H:%M:%S %z",
+					updated);
 
 		feed.items.push_back(item);
 	}

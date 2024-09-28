@@ -69,7 +69,6 @@ private:
 	sem_t* sem_stop;
 };
 
-
 TEST_CASE("try_lock() returns an error if lock-file permissions or location are invalid",
 	"[FsLock]")
 {
@@ -159,4 +158,3 @@ TEST_CASE("try_lock() succeeds if lock file location is valid and not locked by 
 		REQUIRE(0 == ::access(new_lock_location.get_path().c_str(), F_OK));
 	}
 }
-

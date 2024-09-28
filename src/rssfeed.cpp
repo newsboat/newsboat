@@ -351,7 +351,7 @@ void RssFeed::purge_deleted_items()
 	}
 
 	items_.erase(std::remove_if(items_.begin(),
-			items_.end(),
+				items_.end(),
 	[](const std::shared_ptr<RssItem> item) {
 		return item->deleted();
 	}),

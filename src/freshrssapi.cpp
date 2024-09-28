@@ -449,7 +449,6 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 		return feed;
 	}
 
-
 	const nlohmann::json entries = content["items"];
 	if (!entries.is_array()) {
 		LOG(Level::ERROR,
@@ -505,8 +504,8 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 				time_t updated = static_cast<time_t>(pub_time);
 
 				item.pubDate = utils::mt_strf_localtime(
-						"%a, %d %b %Y %H:%M:%S %z",
-						updated);
+							"%a, %d %b %Y %H:%M:%S %z",
+							updated);
 				item.pubDate_ts = pub_time;
 			}
 
@@ -522,7 +521,7 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 							"",
 							"",
 						}
-						);
+							);
 						break;
 					}
 				}

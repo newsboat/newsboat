@@ -54,7 +54,7 @@ void StatusLine::mark_finished(std::uint32_t message_id)
 	std::lock_guard<std::mutex> guard(m);
 
 	active_messages.erase(
-		std::remove_if(active_messages.begin(),
+			std::remove_if(active_messages.begin(),
 	active_messages.end(), [&](std::pair<std::uint32_t, std::string> x) {
 		return x.first == message_id;
 	}));

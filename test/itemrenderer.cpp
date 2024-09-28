@@ -23,8 +23,7 @@ std::shared_ptr<RssFeed> create_test_feed(Cache* c)
 static const auto ITEM_TITLE = std::string("A frivolous test item");
 static const auto ITEM_AUTHOR = std::string("Johnny Doe Jr.");
 // Sun Sep 30 19:34:25 UTC 2018
-static const auto ITEM_PUBDATE = time_t
-{
+static const auto ITEM_PUBDATE = time_t {
 	1538336065
 };
 static const auto ITEM_LINK = std::string("https://example.com/see-more");
@@ -529,7 +528,6 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		}
 	}
 
-
 	SECTION("Multi-paragraph description") {
 		const auto description = std::string() +
 			"<p>Hello, world!</p>\n\n"
@@ -642,7 +640,6 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	std::shared_ptr<RssFeed> feed = std::make_shared<RssFeed>(&rsscache, feedurl);
 	auto item = std::make_shared<RssItem>(&rsscache);
 	item->set_feedptr(feed);
-
 
 	feed->set_title("");
 	feed->set_link("");

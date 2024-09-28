@@ -34,7 +34,7 @@ void Rss10Parser::parse_feed(Feed& f, xmlNode* rootNode)
 					f.description = get_content(cnode);
 				} else if (node_is(cnode, "date", DC_URI)) {
 					f.pubDate = w3cdtf_to_rfc822(
-							get_content(cnode));
+								get_content(cnode));
 				} else if (node_is(cnode, "creator", DC_URI)) {
 					f.dc_creator = get_content(cnode);
 				}
@@ -59,7 +59,7 @@ void Rss10Parser::parse_feed(Feed& f, xmlNode* rootNode)
 					it.description_mime_type = "";
 				} else if (node_is(itnode, "date", DC_URI)) {
 					it.pubDate = w3cdtf_to_rfc822(
-							get_content(itnode));
+								get_content(itnode));
 				} else if (node_is(itnode,
 						"encoded",
 						CONTENT_URI)) {

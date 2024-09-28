@@ -49,11 +49,11 @@ bool SearchResultsListFormAction::process_operation(
 			// that
 			old_itempos = itempos;
 			v.push_itemview(feed,
-				visible_items[itempos].first->guid(), search_phrase);
+					visible_items[itempos].first->guid(), search_phrase);
 			invalidate(itempos);
 		} else {
 			v.get_statusline().show_error(
-				_("No item selected!")); // should not happen
+					_("No item selected!")); // should not happen
 		}
 		break;
 	case OP_PREVSEARCHRESULTS:
@@ -101,6 +101,5 @@ FmtStrFormatter SearchResultsListFormAction::setup_head_formatter(
 
 	return fmt;
 };
-
 
 } // namespace newsboat

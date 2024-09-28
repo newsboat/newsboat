@@ -202,9 +202,9 @@ void HtmlRenderer::render(std::istream& input,
 									link),
 								LinkType::EMBED);
 						curline.append(strprintf::fmt(
-								"[%s %u]",
-								_("embedded flash:"),
-								link_num));
+									"[%s %u]",
+									_("embedded flash:"),
+									link_num));
 					}
 				}
 			}
@@ -403,12 +403,12 @@ void HtmlRenderer::render(std::istream& input,
 				}
 				if (inside_ordered_list && ol_counts.size() != 0) {
 					curline.append(strprintf::fmt("%s. ",
-							format_ol_count(
-								ol_counts[ol_counts
-									.size() -
-									1],
-								ol_types[ol_types.size() -
-											1])));
+								format_ol_count(
+									ol_counts[ol_counts
+										.size() -
+										1],
+									ol_types[ol_types.size() -
+										1])));
 					++ol_counts[ol_counts.size() - 1];
 				} else {
 					curline.append("  * ");
@@ -773,7 +773,7 @@ void HtmlRenderer::render(std::istream& input,
 						curline.append("</>");
 					}
 					curline.append(strprintf::fmt(
-							"[%d]", link_num));
+								"[%d]", link_num));
 					link_num = -1;
 				}
 				break;
@@ -838,8 +838,8 @@ void HtmlRenderer::render(std::istream& input,
 							++idx)
 							// add rendered table to current cell
 							tables.back().add_text(
-								table_text[idx]
-								.second);
+									table_text[idx]
+									.second);
 					} else {
 						for (size_t idx = 0;
 							idx < table_text.size();
@@ -1223,7 +1223,7 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 	// render the table
 	if (table.has_border)
 		lines.push_back(
-			std::make_pair(LineType::nonwrappable, separator));
+				std::make_pair(LineType::nonwrappable, separator));
 	for (size_t row = 0; row < rows; row++) {
 		// calc height of this row
 		size_t height = 0;
@@ -1287,11 +1287,11 @@ void HtmlRenderer::render_table(const HtmlRenderer::Table& table,
 				line += vsep;
 			}
 			lines.push_back(
-				std::make_pair(LineType::nonwrappable, line));
+					std::make_pair(LineType::nonwrappable, line));
 		}
 		if (table.has_border)
 			lines.push_back(std::make_pair(
-					LineType::nonwrappable, separator));
+						LineType::nonwrappable, separator));
 	}
 }
 

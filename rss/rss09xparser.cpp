@@ -39,7 +39,7 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 			f.title_type = "text";
 		} else if (node_is(node, "link", ns)) {
 			f.link = utils::absolute_url(
-					globalbase, get_content(node));
+						globalbase, get_content(node));
 		} else if (node_is(node, "description", ns)) {
 			f.description = get_content(node);
 		} else if (node_is(node, "language", ns)) {
@@ -126,7 +126,7 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 				"",
 				"",
 			}
-			);
+				);
 		} else if (is_media_node(node)) {
 			parse_media_node(node, it);
 		}

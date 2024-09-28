@@ -27,7 +27,7 @@ void parse_media_node(xmlNode* node, Item& it, Enclosure* enclosure)
 			"",
 			"",
 		}
-		);
+			);
 		for (xmlNode* mnode = node->children; mnode != nullptr; mnode = mnode->next) {
 			parse_media_node(mnode, it, &it.enclosures.back());
 		}

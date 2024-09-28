@@ -261,12 +261,12 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 		int pos = locations["articlelist"].size();
 		locations["articlelist"].push_back({nullptr, colorstr});
 		matchers_article.push_back(
-			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+				std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else if (action == "highlight-feed") {
 		int pos = locations["feedlist"].size();
 		locations["feedlist"].push_back({nullptr, colorstr});
 		matchers_feed.push_back(
-			std::pair<std::shared_ptr<Matcher>, int>(m, pos));
+				std::pair<std::shared_ptr<Matcher>, int>(m, pos));
 	} else {
 		throw ConfigHandlerException(
 			ActionHandlerStatus::INVALID_COMMAND);

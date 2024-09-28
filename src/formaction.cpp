@@ -245,8 +245,8 @@ void FormAction::handle_set(const std::vector<std::string>& args)
 			return;
 		}
 		v.get_statusline().show_message(strprintf::fmt("  %s=%s",
-				args[0],
-				utils::quote_if_necessary(cfg->get_configvalue(args[0]))));
+					args[0],
+					utils::quote_if_necessary(cfg->get_configvalue(args[0]))));
 	} else if (args.size() == 2) {
 		std::string result = ConfigParser::evaluate_backticks(args[1]);
 		utils::trim_end(result);
@@ -255,7 +255,7 @@ void FormAction::handle_set(const std::vector<std::string>& args)
 		set_redraw(true);
 	} else {
 		v.get_statusline().show_error(
-			_("usage: set <variable>[=<value>]"));
+				_("usage: set <variable>[=<value>]"));
 	}
 }
 
@@ -274,8 +274,8 @@ void FormAction::handle_source(const std::vector<std::string>& args)
 		for (const auto& param : args) {
 			try {
 				v.get_ctrl()->load_configfile(
-					utils::resolve_tilde(
-						param));
+						utils::resolve_tilde(
+							param));
 			} catch (const ConfigException& ex) {
 				v.get_statusline().show_error(ex.what());
 				break;
@@ -290,10 +290,10 @@ void FormAction::handle_dumpconfig(const std::vector<std::string>& args)
 		v.get_statusline().show_error(_("usage: dumpconfig <file>"));
 	} else {
 		v.get_ctrl()->dump_config(
-			utils::resolve_tilde(args[0]));
+				utils::resolve_tilde(args[0]));
 		v.get_statusline().show_message(strprintf::fmt(
-				_("Saved configuration to %s"),
-				args[0]));
+					_("Saved configuration to %s"),
+					args[0]));
 	}
 }
 
@@ -516,7 +516,7 @@ void FormAction::finished_qna(Operation op)
 			v.get_statusline().show_message(_("Saved bookmark."));
 		} else {
 			v.get_statusline().show_message(
-				_s("Error while saving bookmark: ") + retval);
+					_s("Error while saving bookmark: ") + retval);
 			LOG(Level::DEBUG,
 				"FormAction::finished_qna: error while saving "
 				"bookmark, retval = `%s'",
@@ -588,8 +588,8 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 				v.get_statusline().show_message(_("Saved bookmark."));
 			} else {
 				v.get_statusline().show_message(
-					_s("Error while saving bookmark: ") +
-					retval);
+						_s("Error while saving bookmark: ") +
+						retval);
 				LOG(Level::DEBUG,
 					"FormAction::finished_qna: error while "
 					"saving bookmark, retval = `%s'",

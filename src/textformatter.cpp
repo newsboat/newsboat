@@ -220,7 +220,7 @@ std::pair<std::string, std::size_t> TextFormatter::format_text_to_list(
 		if (line != "") {
 			utils::trim_end(line);
 			format_cache.append(strprintf::fmt(
-					"{listitem text:%s}", Stfl::quote(line)));
+						"{listitem text:%s}", Stfl::quote(line)));
 		}
 	}
 	format_cache.push_back('}');

@@ -116,7 +116,7 @@ REDO:
 			v.get_ctrl()->get_reloader()->reload(pos);
 		} else {
 			v.get_statusline().show_error(
-				_("No feed selected!")); // should not happen
+					_("No feed selected!")); // should not happen
 		}
 	}
 	break;
@@ -232,7 +232,7 @@ REDO:
 					return false;
 				} else if (*exit_code != 0) {
 					v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-							*exit_code));
+								*exit_code));
 					return false;
 				}
 			}
@@ -259,7 +259,7 @@ REDO:
 					return false;
 				} else if (*exit_code != 0) {
 					v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-							*exit_code));
+								*exit_code));
 					return false;
 				}
 
@@ -307,12 +307,12 @@ REDO:
 					}
 				} catch (const DbException& e) {
 					v.get_statusline().show_error(strprintf::fmt(
-							_("Error: couldn't mark feed read: %s"),
-							e.what()));
+								_("Error: couldn't mark feed read: %s"),
+								e.what()));
 				}
 			} else {
 				v.get_statusline().show_error(
-					_("No feed selected!")); // should not happen
+						_("No feed selected!")); // should not happen
 			}
 		}
 	}
@@ -423,7 +423,7 @@ REDO:
 					apply_filter(filter.value());
 				} else {
 					v.get_statusline().show_error(strprintf::fmt(_("No filter found with name `%s'."),
-							filter_name));
+								filter_name));
 				}
 			} else {
 				const std::string filter_text = v.select_filter(filter_container.get_filters());
@@ -579,7 +579,7 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 			return false;
 		} else if (*exit_code != 0) {
 			v.get_statusline().show_error(strprintf::fmt(_("Browser returned error code %i"),
-					*exit_code));
+						*exit_code));
 			return false;
 		}
 	}
@@ -623,8 +623,7 @@ void FeedListFormAction::set_feedlist(
 
 	auto render_line = [this, feedlist_format](std::uint32_t line,
 	std::uint32_t width) -> StflRichText {
-		if (line >= visible_feeds.size())
-		{
+		if (line >= visible_feeds.size()) {
 			return StflRichText::from_plaintext("ERROR");
 		}
 		auto& feed = visible_feeds[line];
@@ -996,9 +995,9 @@ void FeedListFormAction::op_start_search()
 					utf8searchphrase, nullptr);
 		} catch (const DbException& e) {
 			v.get_statusline().show_error(strprintf::fmt(
-					_("Error while searching for `%s': %s"),
-					searchphrase,
-					e.what()));
+						_("Error while searching for `%s': %s"),
+						searchphrase,
+						e.what()));
 			return;
 		}
 		message_lifetime.reset();
@@ -1070,9 +1069,9 @@ StflRichText FeedListFormAction::format_line(const std::string& feedlist_format,
 
 	fmt.register_fmt('i', strprintf::fmt("%u", pos + 1));
 	fmt.register_fmt('u',
-		strprintf::fmt("(%u/%u)",
-			unread_count,
-			static_cast<unsigned int>(feed->total_item_count())));
+			strprintf::fmt("(%u/%u)",
+				unread_count,
+				static_cast<unsigned int>(feed->total_item_count())));
 	fmt.register_fmt('U', std::to_string(unread_count));
 	fmt.register_fmt('c', std::to_string(feed->total_item_count()));
 	fmt.register_fmt('n', unread_count > 0 ? "N" : " ");
@@ -1115,9 +1114,9 @@ void FeedListFormAction::apply_filter(const std::string& filtertext)
 	filterhistory.add_line(filtertext);
 	if (!matcher.parse(filtertext)) {
 		v.get_statusline().show_error(strprintf::fmt(
-				_("Error: couldn't parse filter expression `%s': %s"),
-				filtertext,
-				matcher.get_parse_error()));
+					_("Error: couldn't parse filter expression `%s': %s"),
+					filtertext,
+					matcher.get_parse_error()));
 	} else {
 		save_filterpos();
 		filter_active = true;

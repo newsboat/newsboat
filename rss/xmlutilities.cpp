@@ -29,7 +29,7 @@ std::string get_xml_content(xmlNode* node, xmlDocPtr doc)
 			ptr = ptr->next) {
 			if (xmlNodeDump(buf, doc, ptr, 0, 0) >= 0) {
 				result.append(
-					reinterpret_cast<const char*>(xmlBufferContent(buf)));
+						reinterpret_cast<const char*>(xmlBufferContent(buf)));
 				xmlBufferEmpty(buf);
 			} else {
 				result.append(get_content(ptr));

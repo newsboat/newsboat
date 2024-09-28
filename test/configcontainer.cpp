@@ -447,14 +447,14 @@ TEST_CASE(
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 
 		cfg.set_configvalue(
-			"feed-sort-order", "unreadarticlecount-desc");
+				"feed-sort-order", "unreadarticlecount-desc");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm ==
 			FeedSortMethod::UNREAD_ARTICLE_COUNT);
 		REQUIRE(sort_strategy.sd == SortDirection::DESC);
 
 		cfg.set_configvalue(
-			"feed-sort-order", "unreadarticlecount-asc");
+				"feed-sort-order", "unreadarticlecount-asc");
 		sort_strategy = cfg.get_feed_sort_strategy();
 		REQUIRE(sort_strategy.sm ==
 			FeedSortMethod::UNREAD_ARTICLE_COUNT);

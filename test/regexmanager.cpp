@@ -252,7 +252,7 @@ TEST_CASE("RegexManager::dump_config turns each `highlight`, "
 	SECTION("Two rules, one of them a `highlight-article`") {
 		rxman.handle_action("highlight", {"all", "keywords", "red", "blue"});
 		rxman.handle_action(
-			"highlight-article",
+				"highlight-article",
 		{"title==\"\"", "green", "black"});
 		REQUIRE_NOTHROW(rxman.dump_config(result));
 		REQUIRE(result.size() == 2);
@@ -263,10 +263,10 @@ TEST_CASE("RegexManager::dump_config turns each `highlight`, "
 	SECTION("Three rules") {
 		rxman.handle_action("highlight", {"all", "keywords", "red", "blue"});
 		rxman.handle_action(
-			"highlight-article",
+				"highlight-article",
 		{"title==\"\"", "green", "black"});
 		rxman.handle_action(
-			"highlight-feed",
+				"highlight-feed",
 		{"title==\"\"", "red", "black"});
 		REQUIRE_NOTHROW(rxman.dump_config(result));
 		REQUIRE(result.size() == 3);
