@@ -641,6 +641,9 @@ std::vector<KeyMapHintEntry> FeedListFormAction::get_keymap_hint() const
 	if (filter_active) {
 		hints.push_back({OP_CLEARFILTER, _("Clear filter")});
 	}
+	if (!tag.empty()) {
+		hints.push_back({OP_CLEARTAG, _("Clear tag")});
+	}
 	hints.push_back({OP_QUIT, _("Quit")});
 	hints.push_back({OP_OPEN, _("Open")});
 	hints.push_back({OP_NEXTUNREAD, _("Next Unread")});
