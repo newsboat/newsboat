@@ -1,4 +1,4 @@
-# A lightweight container for re-formatting our source code. It contains:
+# A container with tools for re-formatting our source code. It contains:
 #
 # - astyle and rustfmt (code formatters)
 # - GNU make (to run the aforementioned formatters)
@@ -20,9 +20,9 @@
 #       newsboat-code-formatting-tools \
 #       make fmt
 
-# Use Alpine 3.18 because 3.19 ships astyle 3.4, which is buggy for us:
-# https://gitlab.com/saalen/astyle/-/issues/45
-FROM rust:1.79.0-alpine3.18
+FROM rust:1.79.0-bookworm
 WORKDIR /workspace
-RUN apk add --no-cache astyle==3.1-r4 git make
+# Ensure that Astyle 3.1 is used, because later versions are buggy for us:
+# https://gitlab.com/saalen/astyle/-/issues/45
+RUN apt-get update && apt-get install -y astyle=3.1-* && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN rustup component add rustfmt
