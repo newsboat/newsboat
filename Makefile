@@ -361,7 +361,7 @@ install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir)
-	find contrib/ -type d -print0 | xargs -0 -I@ mkdir -p $(DESTDIR)$(docdir)/@
+	find contrib/ -type d -print0 | xargs -0 -I@ $(MKDIR) $(DESTDIR)$(docdir)/@
 	find contrib/ -type f -perm /0111 -print0 | xargs -0 -I@ install -m 755 @ $(DESTDIR)$(docdir)/@
 	find contrib/ -type f ! -perm /0111 -print0 | xargs -0 -I@ install -m 644 @ $(DESTDIR)$(docdir)/@
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
