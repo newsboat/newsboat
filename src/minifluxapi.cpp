@@ -2,9 +2,11 @@
 
 #include <cinttypes>
 #include <curl/curl.h>
+#include <iostream>
 #include <thread>
 
 #include "3rd-party/json.hpp"
+#include "config.h"
 #include "curlhandle.h"
 #include "logger.h"
 #include "remoteapi.h"
@@ -43,10 +45,19 @@ bool MinifluxApi::authenticate()
 
 	CurlHandle handle;
 	long response_code = 0;
-	run_op("/v1/me", json(), handle);
+	const std::string path = "/v1/me";
+	run_op(path, json(), handle);
 	curl_easy_getinfo(handle.ptr(), CURLINFO_RESPONSE_CODE, &response_code);
 
 	if (response_code == 401) {
+		return false;
+	}
+	if (response_code < 200 || response_code > 299) {
+		const auto url = server + path;
+		std::cerr << strprintf::fmt(
+				_("Authentication check using %s failed (HTTP response code: %s)"),
+				url,
+				std::to_string(response_code)) << std::endl;
 		return false;
 	}
 

@@ -381,7 +381,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 	if (api) {
 		if (!api->authenticate()) {
-			std::cout << "Authentication failed." << std::endl;
+			std::cerr << _("Authentication failed.") << std::endl;
 			return EXIT_FAILURE;
 		}
 	}
