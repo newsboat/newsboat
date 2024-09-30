@@ -361,9 +361,9 @@ install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir)
-	find contrib/ -type d -print0 | xargs -0 -I@ $(MKDIR) $(DESTDIR)$(docdir)/@
-	find contrib/ -type f -perm /0111 -print0 | xargs -0 -I@ install -m 755 @ $(DESTDIR)$(docdir)/@
-	find contrib/ -type f ! -perm /0111 -print0 | xargs -0 -I@ install -m 644 @ $(DESTDIR)$(docdir)/@
+	find contrib/ -type d ! -wholename 'contrib/completions' -print0 | xargs -0 -I@ $(MKDIR) $(DESTDIR)$(docdir)/@
+	find contrib/ -type f ! -wholename 'contrib/completions*' -perm /0111 -print0 | xargs -0 -I@ install -m 755 @ $(DESTDIR)$(docdir)/@
+	find contrib/ -type f ! -wholename 'contrib/completions*' ! -perm /0111 -print0 | xargs -0 -I@ install -m 644 @ $(DESTDIR)$(docdir)/@
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1
@@ -378,7 +378,13 @@ install-icon:
 	$(MKDIR) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps
 	$(INSTALL) -m 644 logo.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
 
-install: install-newsboat install-podboat install-docs install-examples install-mo install-icon
+install-completions-fish:
+	$(MKDIR) $(DESTDIR)$(datadir)/fish/vendor_completions.d
+	$(INSTALL) -m 644 contrib/completions/newsboat.fish $(DESTDIR)$(datadir)/fish/vendor_completions.d
+
+install-completions: install-completions-fish
+
+install: install-newsboat install-podboat install-docs install-examples install-mo install-icon install-completions
 
 uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBOAT)
@@ -386,7 +392,7 @@ uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBOAT).1
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBOAT).1
 	$(RM) -rf $(DESTDIR)$(docdir)
-	$(RM) -r $(DESTDIR)$(docdir)
+	$(RM) $(DESTDIR)$(datadir)/fish/vendor_completions.d/newsboat.fish
 	$(RM) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
 
 .PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-newsboat \
