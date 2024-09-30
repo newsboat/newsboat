@@ -382,7 +382,11 @@ install-completions-fish:
 	$(MKDIR) $(DESTDIR)$(datadir)/fish/vendor_completions.d
 	$(INSTALL) -m 644 contrib/completions/newsboat.fish $(DESTDIR)$(datadir)/fish/vendor_completions.d
 
-install-completions: install-completions-fish
+install-completions-zsh:
+	$(MKDIR) $(DESTDIR)$(datadir)/zsh/site-functions
+	$(INSTALL) -m 644 contrib/completions/_newsboat $(DESTDIR)$(datadir)/zsh/site-functions
+
+install-completions: install-completions-fish install-completions-zsh
 
 install: install-newsboat install-podboat install-docs install-examples install-mo install-icon install-completions
 
@@ -393,6 +397,7 @@ uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBOAT).1
 	$(RM) -rf $(DESTDIR)$(docdir)
 	$(RM) $(DESTDIR)$(datadir)/fish/vendor_completions.d/newsboat.fish
+	$(RM) $(DESTDIR)$(datadir)/zsh/site-functions/_newsboat
 	$(RM) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
 
 .PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-newsboat \
