@@ -66,7 +66,6 @@ public:
 	{
 		return formaction_stack.size();
 	}
-	char confirm(const std::string& prompt, const std::string& charset);
 
 	void push_itemlist(unsigned int pos);
 	std::shared_ptr<ItemListFormAction> push_itemlist(std::shared_ptr<RssFeed>

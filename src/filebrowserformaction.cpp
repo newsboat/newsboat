@@ -107,7 +107,7 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				 */
 				if (::stat(fn.c_str(), &sbuf) != -1) {
 					f.set_focus("files");
-					if (v.confirm(
+					if (confirm(
 							strprintf::fmt(
 								_("Do you really want to overwrite `%s' "
 									"(y:Yes n:No)? "),
