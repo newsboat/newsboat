@@ -95,8 +95,9 @@ public:
 
 	// Return `true` if Filepath start with `base`, `false` otherwise.
 	//
-	// \note `ext` is interpreted as bytes in locale encoding.
-	bool starts_with(const std::string& base) const;
+	// Only considers whole path components to match, i.e. "/foo" is **not**
+	// a prefix of "/foobar/baz".
+	bool starts_with(const Filepath& base) const;
 
 	/// Returns the final component of the path, if there is one.
 	std::optional<Filepath> file_name() const;
