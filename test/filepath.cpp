@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "3rd-party/catch.hpp"
 
 #include "filepath.h"
@@ -47,7 +45,10 @@ TEST_CASE("Can be extended with join()", "[Filepath]")
 {
 	const auto tmp = Filepath::from_locale_string("/tmp");
 
-	const auto subdir = tmp.join("newsboat").join("tests");
+	const auto subdir =
+		tmp
+		.join(Filepath::from_locale_string("newsboat"))
+		.join(Filepath::from_locale_string("tests"));
 	REQUIRE(subdir == Filepath::from_locale_string("/tmp/newsboat/tests"));
 }
 
@@ -84,11 +85,11 @@ TEST_CASE("Can't set extension for an empty path", "[Filepath]")
 
 TEST_CASE("Can set extension for non-empty path", "[Filepath]")
 {
-	Filepath path("file");
+	auto path = Filepath::from_locale_string("file");
 
 	SECTION("extension is UTF-8") {
 		REQUIRE(path.set_extension("exe"));
-		REQUIRE(path == "file.exe");
+		REQUIRE(path == Filepath::from_locale_string("file.exe"));
 	}
 
 	SECTION("extension is not a valid UTF-8 string") {
@@ -105,21 +106,21 @@ TEST_CASE("Can check if path is absolute", "[Filepath]")
 	}
 
 	SECTION("path that starts with a slash is absolute") {
-		path.push("/etc");
+		path.push(Filepath::from_locale_string("/etc"));
 		REQUIRE(path.display() == "/etc");
 		REQUIRE(path.is_absolute());
 
-		path.push("ca-certificates");
+		path.push(Filepath::from_locale_string("ca-certificates"));
 		REQUIRE(path.display() == "/etc/ca-certificates");
 		REQUIRE(path.is_absolute());
 	}
 
 	SECTION("path that doesn't start with a slash is not absolute") {
-		path.push("vmlinuz");
+		path.push(Filepath::from_locale_string("vmlinuz"));
 		REQUIRE(path.display() == "vmlinuz");
 		REQUIRE_FALSE(path.is_absolute());
 
-		path.push("undefined");
+		path.push(Filepath::from_locale_string("undefined"));
 		REQUIRE(path.display() == "vmlinuz/undefined");
 		REQUIRE_FALSE(path.is_absolute());
 	}
