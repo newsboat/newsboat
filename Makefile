@@ -350,7 +350,7 @@ PHONY/clang-tidy-%: compile_flags.txt xlicense.h $(STFL_HDRS) $(NEWSBOATLIB_OUTP
 clang-tidy: $(addprefix PHONY/clang-tidy-,$(LIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS) newsboat.cpp podboat.cpp)
 
 install-newsboat: $(NEWSBOAT)
-	$(MKDIR) $(DESTDIR)$(prefix)/bin
+	$(MKDIR) -p $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
 
 install-podboat: $(PODBOAT)
