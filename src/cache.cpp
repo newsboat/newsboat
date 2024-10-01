@@ -931,6 +931,7 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 		}
 		run_sql(update);
 	} else {
+		std::int64_t pubTimestamp = item->pubDate_timestamp();
 		std::string insert = prepare_query(
 				"INSERT INTO rss_item (guid, title, author, url, "
 				"feedurl, "
@@ -938,13 +939,13 @@ void Cache::update_rssitem_unlocked(std::shared_ptr<RssItem> item,
 				"enclosure_type, enclosure_description, enclosure_description_mime_type, "
 				"enqueued, base) "
 				"VALUES "
-				"('%q','%q','%q','%q','%q','%u','%q','%q','%d','%q','%q','%q','%q',%d, '%q')",
+				"('%q','%q','%q','%q','%q','%" PRId64 "','%q','%q','%d','%q','%q','%q','%q',%d, '%q')",
 				item->guid(),
 				item->title(),
 				item->author(),
 				item->link(),
 				feedurl,
-				item->pubDate_timestamp(),
+				pubTimestamp,
 				description.text,
 				description.mime,
 				(item->unread() ? 1 : 0),
