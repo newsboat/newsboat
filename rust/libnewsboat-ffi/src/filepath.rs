@@ -25,7 +25,7 @@ mod bridged {
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
-        fn starts_with(filepath: &PathBuf, str: Vec<u8>) -> bool;
+        fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool;
         fn file_name(filepath: &PathBuf) -> Vec<u8>;
     }
 }
@@ -68,8 +68,8 @@ fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool {
     filepath.0.set_extension(OsStr::from_bytes(&extension))
 }
 
-fn starts_with(filepath: &PathBuf, base: Vec<u8>) -> bool {
-    filepath.0.starts_with(OsStr::from_bytes(&base))
+fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool {
+    filepath.0.starts_with(&base.0)
 }
 
 fn file_name(filepath: &PathBuf) -> Vec<u8> {
