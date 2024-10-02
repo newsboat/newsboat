@@ -63,6 +63,26 @@ bool Filepath::operator!=(const Filepath& other) const
 	return !(*this == other);
 }
 
+bool Filepath::operator<(const Filepath& other) const
+{
+	return filepath::bridged::less_than(*rs_object, *other.rs_object);
+}
+
+bool Filepath::operator<=(const Filepath& other) const
+{
+	return !(*this > other);
+}
+
+bool Filepath::operator>(const Filepath& other) const
+{
+	return !(*this < other) && (*this != other);
+}
+
+bool Filepath::operator>=(const Filepath& other) const
+{
+	return !(*this < other);
+}
+
 void Filepath::push(const Filepath& component)
 {
 	filepath::bridged::push(*rs_object, *component.rs_object);
@@ -85,9 +105,9 @@ bool Filepath::set_extension(const std::string& ext)
 	return filepath::bridged::set_extension(*rs_object, string_to_vec(ext));
 }
 
-bool Filepath::starts_with(const std::string& base) const
+bool Filepath::starts_with(const Filepath& base) const
 {
-	return filepath::bridged::starts_with(*rs_object, string_to_vec(base));
+	return filepath::bridged::starts_with(*rs_object, *base.rs_object);
 }
 
 nonstd::optional<Filepath> Filepath::file_name() const

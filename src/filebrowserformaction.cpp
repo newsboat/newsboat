@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "filebrowserformaction.h"
 
 #include <algorithm>
@@ -61,35 +59,20 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
+					if (fnstr) {
+						fn.push(*fnstr);
 					}
-
-					const std::string fnstr =
-						f.get("filenametext");
-					const std::string::size_type base =
-						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
-					if (base == std::string::npos) {
-						fn.append(fnstr);
-					} else {
-						fn.append(fnstr,
-							base + 1,
-							std::string::npos);
-					}
-					set_value("filenametext", fn);
+					set_value("filenametext", fn.to_locale_string());
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-					fn.append(selection.name);
-					set_value("filenametext", fn);
+					const auto filename = utils::getcwd().join(selection.name);
+					set_value("filenametext", filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
@@ -216,25 +199,25 @@ void FileBrowserFormAction::update_title(const Filepath& working_directory)
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('f', working_directory);
+	fmt.register_fmt('f', working_directory.display());
 
 	set_title(fmt.do_format(
 			cfg->get_configvalue("filebrowser-title-format"), width));
 }
 
-std::vector<std::string> get_sorted_filelist()
+std::vector<Filepath> get_sorted_filelist()
 {
-	std::vector<std::string> ret;
+	std::vector<Filepath> ret;
 
-	const std::string cwdtmp = utils::getcwd();
+	const auto cwdtmp = utils::getcwd();
 
-	DIR* dirp = ::opendir(cwdtmp.c_str());
+	DIR* dirp = ::opendir(cwdtmp.to_locale_string().c_str());
 	if (dirp) {
 		struct dirent* de = ::readdir(dirp);
 		while (de) {
 			if (strcmp(de->d_name, ".") != 0 &&
 				strcmp(de->d_name, "..") != 0) {
-				ret.push_back(de->d_name);
+				ret.push_back(Filepath::from_locale_string(de->d_name));
 			}
 			de = ::readdir(dirp);
 		}
@@ -243,8 +226,8 @@ std::vector<std::string> get_sorted_filelist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != "/") {
-		ret.insert(ret.begin(), "..");
+	if (cwdtmp != Filepath::from_locale_string("/")) {
+		ret.emplace(ret.begin(), Filepath::from_locale_string(".."));
 	}
 
 	return ret;
@@ -258,17 +241,13 @@ void FileBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		const std::string cwdtmp = utils::getcwd();
-		update_title(cwdtmp);
-
-		std::vector<std::string> files = get_sorted_filelist();
+		update_title(utils::getcwd());
 
 		id_at_position.clear();
 		lines.clear();
-		for (std::string filename : files) {
+		for (auto filename : get_sorted_filelist()) {
 			add_file(id_at_position, filename);
 		}
-
 
 		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 			(void)width;
@@ -310,7 +289,7 @@ void FileBrowserFormAction::init()
 	const int status = ::chdir(save_path.c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
-	set_value("filenametext", default_filename);
+	set_value("filenametext", default_filename.to_locale_string());
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
@@ -359,14 +338,15 @@ void FileBrowserFormAction::add_file(
 	}
 }
 
-Filepath FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
+std::string FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
 	mode_t mode)
 {
+	const auto filename_str = filename.to_locale_string();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		return strprintf::fmt("%s%c", filename, suffix.value());
+		return strprintf::fmt("%s%c", filename_str, suffix.value());
 	} else {
-		return filename;
+		return filename_str;
 	}
 }
 

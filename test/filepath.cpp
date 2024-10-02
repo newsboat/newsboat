@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "3rd-party/catch.hpp"
 
 #include "filepath.h"
@@ -43,12 +41,31 @@ TEST_CASE("push() adds a new component to the path", "[Filepath]")
 	REQUIRE(dir == Filepath::from_locale_string("/tmp/newsboat/.local/share/cache/cache.db"));
 }
 
+TEST_CASE("push() still adds a separator to non-empty path if new component is empty",
+	"[Filepath]")
+{
+	auto dir = Filepath::from_locale_string("/root");
+	dir.push(Filepath::from_locale_string(""));
+	REQUIRE(dir.display() == "/root/");
+}
+
 TEST_CASE("Can be extended with join()", "[Filepath]")
 {
 	const auto tmp = Filepath::from_locale_string("/tmp");
 
-	const auto subdir = tmp.join("newsboat").join("tests");
+	const auto subdir =
+		tmp
+		.join(Filepath::from_locale_string("newsboat"))
+		.join(Filepath::from_locale_string("tests"));
 	REQUIRE(subdir == Filepath::from_locale_string("/tmp/newsboat/tests"));
+}
+
+TEST_CASE("join() still adds a separator to non-empty path if new component is empty",
+	"[Filepath]")
+{
+	const auto path = Filepath::from_locale_string("relative path");
+	const auto path_with_trailing_slash = path.join(Filepath{});
+	REQUIRE(path_with_trailing_slash.display() == "relative path/");
 }
 
 TEST_CASE("Can be copied", "[Filepath]")
@@ -84,11 +101,11 @@ TEST_CASE("Can't set extension for an empty path", "[Filepath]")
 
 TEST_CASE("Can set extension for non-empty path", "[Filepath]")
 {
-	Filepath path("file");
+	auto path = Filepath::from_locale_string("file");
 
 	SECTION("extension is UTF-8") {
 		REQUIRE(path.set_extension("exe"));
-		REQUIRE(path == "file.exe");
+		REQUIRE(path == Filepath::from_locale_string("file.exe"));
 	}
 
 	SECTION("extension is not a valid UTF-8 string") {
@@ -105,21 +122,21 @@ TEST_CASE("Can check if path is absolute", "[Filepath]")
 	}
 
 	SECTION("path that starts with a slash is absolute") {
-		path.push("/etc");
+		path.push(Filepath::from_locale_string("/etc"));
 		REQUIRE(path.display() == "/etc");
 		REQUIRE(path.is_absolute());
 
-		path.push("ca-certificates");
+		path.push(Filepath::from_locale_string("ca-certificates"));
 		REQUIRE(path.display() == "/etc/ca-certificates");
 		REQUIRE(path.is_absolute());
 	}
 
 	SECTION("path that doesn't start with a slash is not absolute") {
-		path.push("vmlinuz");
+		path.push(Filepath::from_locale_string("vmlinuz"));
 		REQUIRE(path.display() == "vmlinuz");
 		REQUIRE_FALSE(path.is_absolute());
 
-		path.push("undefined");
+		path.push(Filepath::from_locale_string("undefined"));
 		REQUIRE(path.display() == "vmlinuz/undefined");
 		REQUIRE_FALSE(path.is_absolute());
 	}
@@ -187,5 +204,96 @@ TEST_CASE("Can extract the final component of the path (file or directory name)"
 	SECTION("Final component is not a valid UTF-8 string") {
 		const auto path = Filepath::from_locale_string("/whatever/one\x80two");
 		REQUIRE(path.file_name().value() == Filepath::from_locale_string("one\x80two"));
+	}
+}
+
+TEST_CASE("Can be ordered lexicographically", "[Filepath]")
+{
+	const auto root = Filepath::from_locale_string("/");
+	const auto var_log = Filepath::from_locale_string("/var/log");
+	const auto home_minoru = Filepath::from_locale_string("/home/minoru");
+	const auto home_minoru_src_newsboat =
+		Filepath::from_locale_string("/home/minoru/src/newsboat");
+
+	SECTION("operator<") {
+		SECTION("Path to directory is less than the path to its subdirectory") {
+			REQUIRE(root < var_log);
+			REQUIRE(root < home_minoru);
+			REQUIRE(home_minoru < home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat < root);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(home_minoru < var_log);
+			REQUIRE(home_minoru_src_newsboat < var_log);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat < home_minoru);
+		}
+	}
+
+	SECTION("operator>") {
+		SECTION("Path to subdirectory is greater than the path to its parent directory") {
+			REQUIRE(var_log > root);
+			REQUIRE(home_minoru > root);
+			REQUIRE(home_minoru_src_newsboat > home_minoru);
+
+			REQUIRE_FALSE(root > home_minoru_src_newsboat);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(var_log > home_minoru);
+			REQUIRE(var_log > home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru > home_minoru_src_newsboat);
+		}
+	}
+
+	SECTION("operator<=") {
+		SECTION("Any path is less than or equal to itself") {
+			REQUIRE(root <= root);
+			REQUIRE(var_log <= var_log);
+			REQUIRE(home_minoru <= home_minoru);
+			REQUIRE(home_minoru_src_newsboat <= home_minoru_src_newsboat);
+		}
+
+		SECTION("Path to directory is less than or equal to the path to its subdirectory") {
+			REQUIRE(root <= var_log);
+			REQUIRE(root <= home_minoru);
+			REQUIRE(home_minoru <= home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat <= root);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(home_minoru <= var_log);
+			REQUIRE(home_minoru_src_newsboat <= var_log);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat <= home_minoru);
+		}
+	}
+
+	SECTION("operator>=") {
+		SECTION("Any path is greater than or equal to itself") {
+			REQUIRE(root >= root);
+			REQUIRE(var_log >= var_log);
+			REQUIRE(home_minoru >= home_minoru);
+			REQUIRE(home_minoru_src_newsboat >= home_minoru_src_newsboat);
+		}
+
+		SECTION("Path to subdirectory is greater than or equal to the path to its parent directory") {
+			REQUIRE(var_log >= root);
+			REQUIRE(home_minoru >= root);
+			REQUIRE(home_minoru_src_newsboat >= home_minoru);
+
+			REQUIRE_FALSE(root >= home_minoru_src_newsboat);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(var_log >= home_minoru);
+			REQUIRE(var_log >= home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru >= home_minoru_src_newsboat);
+		}
 	}
 }
