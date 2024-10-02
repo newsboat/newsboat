@@ -335,13 +335,13 @@ void DirBrowserFormAction::add_directory(
 	}
 }
 
-Filepath DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
+std::string DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
 	mode_t mode)
 {
-	Filepath tmp = dirname;
+	std::string tmp = dirname.to_locale_string();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		tmp.set_extension(std::to_string(suffix.value()));
+		tmp += std::to_string(suffix.value());
 	}
 	return tmp;
 }
