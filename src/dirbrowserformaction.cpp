@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "dirbrowserformaction.h"
 
 #include <algorithm>
@@ -178,31 +176,31 @@ void DirBrowserFormAction::update_title(const Filepath& working_directory)
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('f', working_directory);
+	fmt.register_fmt('f', working_directory.display());
 
 	set_title(fmt.do_format(
 			cfg->get_configvalue("dirbrowser-title-format"), width));
 }
 
-std::vector<std::string> get_sorted_dirlist()
+std::vector<Filepath> get_sorted_dirlist()
 {
-	std::vector<std::string> ret;
+	std::vector<Filepath> ret;
 
-	const std::string cwdtmp = utils::getcwd();
+	const auto cwdtmp = utils::getcwd();
 
-	DIR* dirp = ::opendir(cwdtmp.c_str());
+	DIR* dirp = ::opendir(cwdtmp.to_locale_string().c_str());
 	if (dirp) {
 		struct dirent* de = ::readdir(dirp);
 		while (de) {
 			if (strcmp(de->d_name, ".") != 0 &&
 				strcmp(de->d_name, "..") != 0) {
 				struct stat sb;
-				auto dpath = strprintf::fmt(
-						"%s/%s", cwdtmp, de->d_name);
-				if (::lstat(dpath.c_str(), &sb) == 0) {
+				auto entry = Filepath::from_locale_string(de->d_name);
+				const auto dpath = cwdtmp.join(entry);
+				if (::lstat(dpath.to_locale_string().c_str(), &sb) == 0) {
 					const auto ftype = file_system::mode_to_filetype(sb.st_mode);
 					if (ftype == file_system::FileType::Directory) {
-						ret.push_back(de->d_name);
+						ret.emplace_back(std::move(entry));
 					}
 				}
 			}
@@ -214,8 +212,8 @@ std::vector<std::string> get_sorted_dirlist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != "/") {
-		ret.insert(ret.begin(), "..");
+	if (cwdtmp != Filepath::from_locale_string("/")) {
+		ret.emplace(ret.begin(), Filepath::from_locale_string(".."));
 	}
 
 	return ret;
@@ -229,14 +227,11 @@ void DirBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		const std::string cwdtmp = utils::getcwd();
-		update_title(cwdtmp);
-
-		std::vector<std::string> directories = get_sorted_dirlist();
+		update_title(utils::getcwd());
 
 		id_at_position.clear();
 		lines.clear();
-		for (std::string directory : directories) {
+		for (auto directory : get_sorted_dirlist()) {
 			add_directory(id_at_position, directory);
 		}
 

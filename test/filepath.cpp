@@ -206,3 +206,94 @@ TEST_CASE("Can extract the final component of the path (file or directory name)"
 		REQUIRE(path.file_name().value() == Filepath::from_locale_string("one\x80two"));
 	}
 }
+
+TEST_CASE("Can be ordered lexicographically", "[Filepath]")
+{
+	const auto root = Filepath::from_locale_string("/");
+	const auto var_log = Filepath::from_locale_string("/var/log");
+	const auto home_minoru = Filepath::from_locale_string("/home/minoru");
+	const auto home_minoru_src_newsboat =
+		Filepath::from_locale_string("/home/minoru/src/newsboat");
+
+	SECTION("operator<") {
+		SECTION("Path to directory is less than the path to its subdirectory") {
+			REQUIRE(root < var_log);
+			REQUIRE(root < home_minoru);
+			REQUIRE(home_minoru < home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat < root);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(home_minoru < var_log);
+			REQUIRE(home_minoru_src_newsboat < var_log);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat < home_minoru);
+		}
+	}
+
+	SECTION("operator>") {
+		SECTION("Path to subdirectory is greater than the path to its parent directory") {
+			REQUIRE(var_log > root);
+			REQUIRE(home_minoru > root);
+			REQUIRE(home_minoru_src_newsboat > home_minoru);
+
+			REQUIRE_FALSE(root > home_minoru_src_newsboat);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(var_log > home_minoru);
+			REQUIRE(var_log > home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru > home_minoru_src_newsboat);
+		}
+	}
+
+	SECTION("operator<=") {
+		SECTION("Any path is less than or equal to itself") {
+			REQUIRE(root <= root);
+			REQUIRE(var_log <= var_log);
+			REQUIRE(home_minoru <= home_minoru);
+			REQUIRE(home_minoru_src_newsboat <= home_minoru_src_newsboat);
+		}
+
+		SECTION("Path to directory is less than or equal to the path to its subdirectory") {
+			REQUIRE(root <= var_log);
+			REQUIRE(root <= home_minoru);
+			REQUIRE(home_minoru <= home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat <= root);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(home_minoru <= var_log);
+			REQUIRE(home_minoru_src_newsboat <= var_log);
+
+			REQUIRE_FALSE(home_minoru_src_newsboat <= home_minoru);
+		}
+	}
+
+	SECTION("operator>=") {
+		SECTION("Any path is greater than or equal to itself") {
+			REQUIRE(root >= root);
+			REQUIRE(var_log >= var_log);
+			REQUIRE(home_minoru >= home_minoru);
+			REQUIRE(home_minoru_src_newsboat >= home_minoru_src_newsboat);
+		}
+
+		SECTION("Path to subdirectory is greater than or equal to the path to its parent directory") {
+			REQUIRE(var_log >= root);
+			REQUIRE(home_minoru >= root);
+			REQUIRE(home_minoru_src_newsboat >= home_minoru);
+
+			REQUIRE_FALSE(root >= home_minoru_src_newsboat);
+		}
+
+		SECTION("Disparate paths are ordered lexicographically") {
+			REQUIRE(var_log >= home_minoru);
+			REQUIRE(var_log >= home_minoru_src_newsboat);
+
+			REQUIRE_FALSE(home_minoru >= home_minoru_src_newsboat);
+		}
+	}
+}
