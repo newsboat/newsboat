@@ -41,6 +41,14 @@ TEST_CASE("push() adds a new component to the path", "[Filepath]")
 	REQUIRE(dir == Filepath::from_locale_string("/tmp/newsboat/.local/share/cache/cache.db"));
 }
 
+TEST_CASE("push() still adds a separator to non-empty path if new component is empty",
+	"[Filepath]")
+{
+	auto dir = Filepath::from_locale_string("/root");
+	dir.push(Filepath::from_locale_string(""));
+	REQUIRE(dir.display() == "/root/");
+}
+
 TEST_CASE("Can be extended with join()", "[Filepath]")
 {
 	const auto tmp = Filepath::from_locale_string("/tmp");
@@ -50,6 +58,14 @@ TEST_CASE("Can be extended with join()", "[Filepath]")
 		.join(Filepath::from_locale_string("newsboat"))
 		.join(Filepath::from_locale_string("tests"));
 	REQUIRE(subdir == Filepath::from_locale_string("/tmp/newsboat/tests"));
+}
+
+TEST_CASE("join() still adds a separator to non-empty path if new component is empty",
+	"[Filepath]")
+{
+	const auto path = Filepath::from_locale_string("relative path");
+	const auto path_with_trailing_slash = path.join(Filepath{});
+	REQUIRE(path_with_trailing_slash.display() == "relative path/");
 }
 
 TEST_CASE("Can be copied", "[Filepath]")
