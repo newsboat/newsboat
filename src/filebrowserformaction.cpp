@@ -359,14 +359,15 @@ void FileBrowserFormAction::add_file(
 	}
 }
 
-Filepath FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
+std::string FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
 	mode_t mode)
 {
+	const auto filename_str = filename.to_locale_string();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		return strprintf::fmt("%s%c", filename, suffix.value());
+		return strprintf::fmt("%s%c", filename_str, suffix.value());
 	} else {
-		return filename;
+		return filename_str;
 	}
 }
 
