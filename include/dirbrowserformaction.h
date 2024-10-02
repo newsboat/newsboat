@@ -43,7 +43,7 @@ private:
 	std::vector<file_system::FileSystemEntry> id_at_position;
 	std::vector<StflRichText> lines;
 
-	Filepath get_formatted_dirname(const Filepath& dirname, mode_t mode);
+	std::string get_formatted_dirname(const Filepath& dirname, mode_t mode);
 
 	LineView file_prompt_line;
 
