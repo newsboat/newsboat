@@ -62,24 +62,17 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					const auto fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-
-					set_value("filenametext", fn);
+					const auto fn_with_trailing_slash = fn.join(Filepath{});
+					set_value("filenametext", fn_with_trailing_slash.to_locale_string());
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-					fn.append(selection.name);
-					set_value("filenametext", fn);
+					const auto filename = utils::getcwd().join(selection.name);
+					set_value("filenametext", filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
