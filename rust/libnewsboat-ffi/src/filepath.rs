@@ -19,6 +19,7 @@ mod bridged {
         fn create_empty() -> Box<PathBuf>;
         fn create(filepath: Vec<u8>) -> Box<PathBuf>;
         fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool;
+        fn less_than(lhs: &PathBuf, rhs: &PathBuf) -> bool;
         fn into_bytes(filepath: &PathBuf) -> Vec<u8>;
         fn display(filepath: &PathBuf) -> String;
         fn push(filepath: &mut PathBuf, component: &PathBuf);
@@ -42,6 +43,10 @@ fn create(filepath: Vec<u8>) -> Box<PathBuf> {
 
 fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool {
     lhs.0 == rhs.0
+}
+
+fn less_than(lhs: &PathBuf, rhs: &PathBuf) -> bool {
+    lhs.0 < rhs.0
 }
 
 fn into_bytes(filepath: &PathBuf) -> Vec<u8> {

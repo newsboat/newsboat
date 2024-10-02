@@ -64,6 +64,10 @@ public:
 
 	bool operator==(const Filepath&) const;
 	bool operator!=(const Filepath&) const;
+	bool operator<(const Filepath&) const;
+	bool operator<=(const Filepath&) const;
+	bool operator>(const Filepath&) const;
+	bool operator>=(const Filepath&) const;
 
 	/// Returns the filepath as a string in locale encoding.
 	///
