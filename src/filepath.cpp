@@ -63,6 +63,26 @@ bool Filepath::operator!=(const Filepath& other) const
 	return !(*this == other);
 }
 
+bool Filepath::operator<(const Filepath& other) const
+{
+	return filepath::bridged::less_than(*rs_object, *other.rs_object);
+}
+
+bool Filepath::operator<=(const Filepath& other) const
+{
+	return !(*this > other);
+}
+
+bool Filepath::operator>(const Filepath& other) const
+{
+	return !(*this < other) && (*this != other);
+}
+
+bool Filepath::operator>=(const Filepath& other) const
+{
+	return !(*this < other);
+}
+
 void Filepath::push(const Filepath& component)
 {
 	filepath::bridged::push(*rs_object, *component.rs_object);
