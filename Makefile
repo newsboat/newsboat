@@ -361,9 +361,9 @@ install-docs: doc
 	$(MKDIR) $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 doc/xhtml/* $(DESTDIR)$(docdir)
 	$(INSTALL) -m 644 CHANGELOG.md $(DESTDIR)$(docdir)
-	find contrib/ -type d ! -wholename 'contrib/completions' -print0 | xargs -0 -I@ $(MKDIR) $(DESTDIR)$(docdir)/@
-	find contrib/ -type f ! -wholename 'contrib/completions*' -perm /0111 -print0 | xargs -0 -I@ install -m 755 @ $(DESTDIR)$(docdir)/@
-	find contrib/ -type f ! -wholename 'contrib/completions*' ! -perm /0111 -print0 | xargs -0 -I@ install -m 644 @ $(DESTDIR)$(docdir)/@
+	find contrib/ -type d ! -path 'contrib/completions' -print0 | xargs -0 -I@ $(MKDIR) $(DESTDIR)$(docdir)/@
+	find contrib/ -type f ! -path 'contrib/completions*' -perm /0111 -print0 | xargs -0 -I@ install -m 755 @ $(DESTDIR)$(docdir)/@
+	find contrib/ -type f ! -path 'contrib/completions*' ! -perm /0111 -print0 | xargs -0 -I@ install -m 644 @ $(DESTDIR)$(docdir)/@
 	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 644 doc/$(NEWSBOAT).1 $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 644 doc/$(PODBOAT).1 $(DESTDIR)$(mandir)/man1
