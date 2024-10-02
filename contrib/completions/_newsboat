@@ -1,0 +1,27 @@
+#compdef newsboat
+
+_arguments : \
+  '(- *)'{-h,--help}'[display help]' \
+  '(- *)'{-v,-V,--version}'[get version information]' \
+  '(-q --quiet)'{-q,--quiet}'[quiet startup]' \
+  '(-r --refresh-on-start)'{-r,--refresh-on-start}'[refresh feeds on start]' \
+  '(-e --export-to-opml)'{-e,--export-to-opml}'[export feeds as OPML to stdout]' \
+  '--export-to-opml2[export feeds as OPML2 to stdout]' \
+  '(-X --vacuum)'{-X,--vacuum}'[compact the cache]' \
+  '--cleanup[remove unreferenced entries from the cache and quit]' \
+  '(-i --import-from-opml)'{-i,--import-from-opml=}'[import an OPML file]:OPML file:_files' \
+  '(-u --url-file)'{-u,--url-file=}'[use an alternative URL file]:URL file:_files' \
+  '(-c --cache-file)'{-c,--cache-file=}'[use an alternative cache file]:cache file:_files' \
+  '(-C --config-file)'{-C,--config-file=}'[use an alternative configuration file]:config file:_files' \
+  '--queue-file=[use an alternative queue file]:queue file:_files' \
+  '--search-history-file=[use an alternative search history file]:search history file:_files' \
+  '--cmdline-history-file=[use an alternative command line history file]:command line history file:_files' \
+  '(-x --execute)'{-x,--execute}'[execute commands]:commands:'\
+'((reload\:reload\ feed print-unread\:print\ unread\ articles))' \
+  '(-l --log-level)'{-l,--log-level}'[generate a logfile with specified loglevel]:level:(1 2 3 4 5 6)' \
+  '(-d --log-file)'{-d,--log-file=}'[use this logfile]:filename:_files' \
+  '(-E --export-to-file)'{-E,--export-to-file=}'[export a list of read articles]:filename:_files' \
+  '(-I --import-from-file)'{-I,--import-from-file=}'[import a list of read articles]:filename:_files'
+
+
+# vim: ft=zsh sw=2 ts=2 et
