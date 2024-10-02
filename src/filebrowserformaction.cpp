@@ -61,35 +61,20 @@ bool FileBrowserFormAction::process_operation(Operation op,
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
+					if (fnstr) {
+						fn.push(*fnstr);
 					}
-
-					const std::string fnstr =
-						f.get("filenametext");
-					const std::string::size_type base =
-						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
-					if (base == std::string::npos) {
-						fn.append(fnstr);
-					} else {
-						fn.append(fnstr,
-							base + 1,
-							std::string::npos);
-					}
-					set_value("filenametext", fn);
+					set_value("filenametext", fn.to_locale_string());
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-					fn.append(selection.name);
-					set_value("filenametext", fn);
+					const auto filename = utils::getcwd().join(selection.name);
+					set_value("filenametext", filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
