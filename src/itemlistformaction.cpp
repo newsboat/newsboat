@@ -1409,10 +1409,12 @@ std::vector<KeyMapHintEntry> ItemListFormAction::get_keymap_hint() const
 	return hints;
 }
 
-void ItemListFormAction::handle_cmdline_num(unsigned int idx)
+void ItemListFormAction::handle_cmdline_num(int idx)
 {
-	if (idx > 0 &&
-		idx <= visible_items[visible_items.size() - 1].second + 1) {
+	if (idx < 0) {
+		idx = visible_items.size() + idx + 1;
+	}
+	if (idx != 0 && idx <= (int) visible_items[visible_items.size() - 1].second + 1) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
 			v.get_statusline().show_error(_("Position not visible!"));
@@ -1426,8 +1428,8 @@ void ItemListFormAction::handle_cmdline_num(unsigned int idx)
 
 void ItemListFormAction::handle_cmdline(const std::string& cmd)
 {
-	unsigned int idx = 0;
-	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
+	int idx = 0;
+	if (1 == sscanf(cmd.c_str(), "%d", &idx)) {
 		handle_cmdline_num(idx);
 	} else {
 		const auto command = FormAction::parse_command(cmd);

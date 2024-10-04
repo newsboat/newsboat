@@ -823,15 +823,15 @@ int FeedListFormAction::get_pos(unsigned int realidx)
 
 void FeedListFormAction::handle_cmdline(const std::string& cmd)
 {
-	unsigned int idx = 0;
+	int idx = 0;
 	/*
 	 * this handle_cmdline is a bit different than the other ones.
-	 * Since we want to use ":30" to jump to the 30th entry, we first
-	 * need to check whether the command parses as unsigned integer,
-	 * and if so, jump to the entered entry. Otherwise, we try to
-	 * handle it as a normal command.
+	 * Since we want to use ":30" to jump to the 30th entry, ":-1"
+	 * to jump to the last entry we first need to check whether
+	 * the command parses as integer, and if so, jump to the entered
+	 * entry. Otherwise, we try to handle it as a normal command.
 	 */
-	if (1 == sscanf(cmd.c_str(), "%u", &idx)) {
+	if (1 == sscanf(cmd.c_str(), "%d", &idx)) {
 		handle_cmdline_num(idx);
 	} else {
 		// hand over all other commands to formaction
@@ -1019,10 +1019,13 @@ void FeedListFormAction::op_start_search()
 	}
 }
 
-void FeedListFormAction::handle_cmdline_num(unsigned int idx)
+void FeedListFormAction::handle_cmdline_num(int idx)
 {
-	if (idx > 0 &&
-		idx <= (visible_feeds[visible_feeds.size() - 1].second + 1)) {
+	if (idx < 0) {
+		idx = visible_feeds.size() + idx + 1;
+	}
+
+	if (idx != 0 && idx <= (int)(visible_feeds[visible_feeds.size() - 1].second + 1)) {
 		int i = get_pos(idx - 1);
 		if (i == -1) {
 			v.get_statusline().show_error(_("Position not visible!"));
