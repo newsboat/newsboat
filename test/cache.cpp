@@ -663,7 +663,7 @@ TEST_CASE(
 		item->set_unread_nowrite(false);
 
 		REQUIRE_NOTHROW(rsscache->update_rssitem_unread_and_enqueued(
-				item, feedurl));
+				*item, feedurl));
 		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
@@ -675,7 +675,7 @@ TEST_CASE(
 		item->set_enqueued(true);
 
 		REQUIRE_NOTHROW(rsscache->update_rssitem_unread_and_enqueued(
-				item, feedurl));
+				*item, feedurl));
 		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 
@@ -689,7 +689,7 @@ TEST_CASE(
 		item->set_enqueued(true);
 
 		REQUIRE_NOTHROW(rsscache->update_rssitem_unread_and_enqueued(
-				item, feedurl));
+				*item, feedurl));
 		rsscache = std::make_unique<Cache>(dbfile.get_path(), &cfg);
 		feed = rsscache->internalize_rssfeed(feedurl, nullptr);
 

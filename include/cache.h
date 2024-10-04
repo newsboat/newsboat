@@ -47,9 +47,7 @@ public:
 		bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
 		RssIgnores* ign);
-	void update_rssitem_unread_and_enqueued(std::shared_ptr<RssItem> item,
-		const std::string& feedurl);
-	void update_rssitem_unread_and_enqueued(RssItem* item,
+	void update_rssitem_unread_and_enqueued(RssItem& item,
 		const std::string& feedurl);
 	/// If requested, removes unreachable data stored in cache.
 	/// Returns a list of unreachable feeds.

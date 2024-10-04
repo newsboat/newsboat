@@ -998,7 +998,7 @@ void Cache::mark_all_read(const std::string& feedurl)
 	run_sql(query);
 }
 
-void Cache::update_rssitem_unread_and_enqueued(RssItem* item,
+void Cache::update_rssitem_unread_and_enqueued(RssItem& item,
 	const std::string& /* feedurl */)
 {
 	std::lock_guard<std::recursive_mutex> lock(mtx);
@@ -1007,17 +1007,10 @@ void Cache::update_rssitem_unread_and_enqueued(RssItem* item,
 			"UPDATE rss_item "
 			"SET unread = '%d', enqueued = '%d' "
 			"WHERE guid = '%q'",
-			item->unread() ? 1 : 0,
-			item->enqueued() ? 1 : 0,
-			item->guid());
+			item.unread() ? 1 : 0,
+			item.enqueued() ? 1 : 0,
+			item.guid());
 	run_sql(query);
-}
-
-/* this function updates the unread and enqueued flags */
-void Cache::update_rssitem_unread_and_enqueued(std::shared_ptr<RssItem> item,
-	const std::string& feedurl)
-{
-	update_rssitem_unread_and_enqueued(item.get(), feedurl);
 }
 
 /* helper function to wrap std::string around the sqlite3_*mprintf function */

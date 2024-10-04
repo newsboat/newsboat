@@ -186,7 +186,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		textview.set_scroll_offset(0);
 		break;
 	case OP_ENQUEUE:
-		return enqueue_item_enclosure(item, feed, v, *rsscache);
+		return enqueue_item_enclosure(*item, *feed, v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		nonstd::optional<std::string> filename;

@@ -744,7 +744,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	}
 
 	for (const auto& item : feed->items()) {
-		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
+		rsscache->update_rssitem_unread_and_enqueued(*item, feed->rssurl());
 	}
 
 	v->notify_itemlist_change(feed);
@@ -822,10 +822,9 @@ std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
 	return items;
 }
 
-EnqueueResult Controller::enqueue_url(std::shared_ptr<RssItem> item,
-	std::shared_ptr<RssFeed> feed)
+EnqueueResult Controller::enqueue_url(RssItem& item, RssFeed& feed)
 {
-	return queueManager.enqueue_url(*item, *feed);
+	return queueManager.enqueue_url(item, feed);
 }
 
 void Controller::reload_urls_file()
