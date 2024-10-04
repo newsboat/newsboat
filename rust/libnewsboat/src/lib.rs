@@ -16,6 +16,7 @@ pub mod filterparser;
 pub mod fmtstrformatter;
 pub mod fslock;
 pub mod history;
+pub mod keycombination;
 pub mod keymap;
 pub mod links;
 pub mod matchable;
