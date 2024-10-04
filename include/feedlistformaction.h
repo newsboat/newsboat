@@ -28,7 +28,7 @@ public:
 	void init() override;
 	void set_feedlist(std::vector<std::shared_ptr<RssFeed>>& feeds);
 	void update_visible_feeds(std::vector<std::shared_ptr<RssFeed>>& feeds);
-	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
+	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 	std::shared_ptr<RssFeed> get_feed();
 
 	std::string id() const override

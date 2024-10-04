@@ -26,7 +26,7 @@ void EmptyFormAction::prepare()
 {
 }
 
-const std::vector<KeyMapHintEntry>& EmptyFormAction::get_keymap_hint() const
+std::vector<KeyMapHintEntry> EmptyFormAction::get_keymap_hint() const
 {
 	static const std::vector<KeyMapHintEntry> hints;
 	return hints;

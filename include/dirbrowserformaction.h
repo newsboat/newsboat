@@ -18,7 +18,7 @@ public:
 	~DirBrowserFormAction() override = default;
 	void prepare() override;
 	void init() override;
-	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
+	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 
 	std::string id() const override
 	{

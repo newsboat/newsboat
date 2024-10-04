@@ -249,7 +249,7 @@ void SelectFormAction::update_heading()
 	set_title(title);
 }
 
-const std::vector<KeyMapHintEntry>& SelectFormAction::get_keymap_hint() const
+std::vector<KeyMapHintEntry> SelectFormAction::get_keymap_hint() const
 {
 	static const std::vector<KeyMapHintEntry> hints_tag = {{OP_QUIT, _("Cancel")},
 		{OP_OPEN, _("Select Tag")}

@@ -46,8 +46,6 @@ FeedListFormAction::FeedListFormAction(View& vv,
 
 void FeedListFormAction::init()
 {
-	set_keymap_hints();
-
 	recalculate_widget_dimensions();
 
 	if (v.get_ctrl()->get_refresh_on_start()) {
@@ -66,6 +64,8 @@ void FeedListFormAction::init()
 
 void FeedListFormAction::prepare()
 {
+	set_keymap_hints();
+
 	const auto sort_strategy = cfg->get_feed_sort_strategy();
 	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
 		v.get_ctrl()->get_feedcontainer()->sort_feeds(sort_strategy);
@@ -635,18 +635,24 @@ void FeedListFormAction::set_feedlist(
 	update_form_title(width);
 }
 
-const std::vector<KeyMapHintEntry>& FeedListFormAction::get_keymap_hint() const
+std::vector<KeyMapHintEntry> FeedListFormAction::get_keymap_hint() const
 {
-	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")},
-		{OP_OPEN, _("Open")},
-		{OP_NEXTUNREAD, _("Next Unread")},
-		{OP_RELOAD, _("Reload")},
-		{OP_RELOADALL, _("Reload All")},
-		{OP_MARKFEEDREAD, _("Mark Read")},
-		{OP_MARKALLFEEDSREAD, _("Mark All Read")},
-		{OP_SEARCH, _("Search")},
-		{OP_HELP, _("Help")}
-	};
+	std::vector<KeyMapHintEntry> hints;
+	if (filter_active) {
+		hints.push_back({OP_CLEARFILTER, _("Clear filter")});
+	}
+	if (!tag.empty()) {
+		hints.push_back({OP_CLEARTAG, _("Clear tag")});
+	}
+	hints.push_back({OP_QUIT, _("Quit")});
+	hints.push_back({OP_OPEN, _("Open")});
+	hints.push_back({OP_NEXTUNREAD, _("Next Unread")});
+	hints.push_back({OP_RELOAD, _("Reload")});
+	hints.push_back({OP_RELOADALL, _("Reload All")});
+	hints.push_back({OP_MARKFEEDREAD, _("Mark Read")});
+	hints.push_back({OP_MARKALLFEEDSREAD, _("Mark All Read")});
+	hints.push_back({OP_SEARCH, _("Search")});
+	hints.push_back({OP_HELP, _("Help")});
 	return hints;
 }
 

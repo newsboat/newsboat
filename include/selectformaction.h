@@ -15,7 +15,7 @@ public:
 	~SelectFormAction() override = default;
 	void prepare() override;
 	void init() override;
-	const std::vector<KeyMapHintEntry>& get_keymap_hint() const override;
+	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 	void set_selected_value(const std::string& new_value)
 	{
 		value = new_value;
