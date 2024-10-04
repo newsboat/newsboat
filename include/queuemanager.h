@@ -32,15 +32,13 @@ public:
 	QueueManager(ConfigContainer* cfg, std::string queue_file);
 
 	/// Adds the podcast URL to Podboat's queue file
-	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
-		std::shared_ptr<RssFeed> feed);
+	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item, RssFeed& feed);
 
 	/// Add all HTTP and HTTPS enclosures to the queue file
-	EnqueueResult autoenqueue(std::shared_ptr<RssFeed> feed);
+	EnqueueResult autoenqueue(RssFeed& feed);
 
 private:
-	std::string generate_enqueue_filename(std::shared_ptr<RssItem> item,
-		std::shared_ptr<RssFeed> feed);
+	std::string generate_enqueue_filename(std::shared_ptr<RssItem> item, RssFeed& feed);
 };
 
 }

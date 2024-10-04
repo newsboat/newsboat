@@ -15,8 +15,7 @@ QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 	, queue_file(std::move(queue_file))
 {}
 
-EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item,
-	std::shared_ptr<RssFeed> feed)
+EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item, RssFeed& feed)
 {
 	const std::string& url = item->enclosure_url();
 	const std::string filename = generate_enqueue_filename(item, feed);
@@ -65,7 +64,7 @@ std::string get_hostname_from_url(const std::string& url)
 
 std::string QueueManager::generate_enqueue_filename(
 	std::shared_ptr<RssItem> item,
-	std::shared_ptr<RssFeed> feed)
+	RssFeed& feed)
 {
 	const std::string& url = item->enclosure_url();
 	const std::string& title = utils::utf8_to_locale(item->title());
@@ -87,7 +86,7 @@ std::string QueueManager::generate_enqueue_filename(
 	}
 
 	FmtStrFormatter fmt;
-	fmt.register_fmt('n', utils::replace_all(feed->title(), "/", "_"));
+	fmt.register_fmt('n', utils::replace_all(feed.title(), "/", "_"));
 	fmt.register_fmt('h', get_hostname_from_url(url));
 	fmt.register_fmt('u', base);
 	fmt.register_fmt('F', utils::mt_strf_localtime("%F", pubDate));
@@ -102,23 +101,23 @@ std::string QueueManager::generate_enqueue_filename(
 	fmt.register_fmt('t', utils::replace_all(title, "/", "_"));
 	fmt.register_fmt('e', utils::replace_all(extension, "/", "_"));
 
-	if (feed->rssurl() != item->feedurl() &&
+	if (feed.rssurl() != item->feedurl() &&
 		item->get_feedptr() != nullptr) {
 		std::string feedtitle = item->get_feedptr()->title();
 		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('N', utils::replace_all(feedtitle, "/", "_"));
 	} else {
-		fmt.register_fmt('N', utils::replace_all(feed->title(), "/", "_"));
+		fmt.register_fmt('N', utils::replace_all(feed.title(), "/", "_"));
 	}
 
 	const std::string dlpath = fmt.do_format(dlformat);
 	return dlpath;
 }
 
-EnqueueResult QueueManager::autoenqueue(std::shared_ptr<RssFeed> feed)
+EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 {
-	std::lock_guard<std::mutex> lock(feed->item_mutex);
-	for (const auto& item : feed->items()) {
+	std::lock_guard<std::mutex> lock(feed.item_mutex);
+	for (const auto& item : feed.items()) {
 		if (item->enqueued() || item->enclosure_url().empty()) {
 			continue;
 		}
