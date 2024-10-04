@@ -15,9 +15,9 @@ QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 	, queue_file(std::move(queue_file))
 {}
 
-EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item, RssFeed& feed)
+EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 {
-	const std::string& url = item->enclosure_url();
+	const std::string& url = item.enclosure_url();
 	const std::string filename = generate_enqueue_filename(item, feed);
 
 	std::fstream f;
@@ -46,7 +46,7 @@ EnqueueResult QueueManager::enqueue_url(std::shared_ptr<RssItem> item, RssFeed& 
 	f << url << " " << utils::quote(filename) << std::endl;
 	f.close();
 
-	item->set_enqueued(true);
+	item.set_enqueued(true);
 
 	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
 }
@@ -63,12 +63,12 @@ std::string get_hostname_from_url(const std::string& url)
 }
 
 std::string QueueManager::generate_enqueue_filename(
-	std::shared_ptr<RssItem> item,
+	RssItem& item,
 	RssFeed& feed)
 {
-	const std::string& url = item->enclosure_url();
-	const std::string& title = utils::utf8_to_locale(item->title());
-	const time_t pubDate = item->pubDate_timestamp();
+	const std::string& url = item.enclosure_url();
+	const std::string& title = utils::utf8_to_locale(item.title());
+	const time_t pubDate = item.pubDate_timestamp();
 
 	std::string dlformat = cfg->get_configvalue("download-path");
 	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP) {
@@ -101,9 +101,9 @@ std::string QueueManager::generate_enqueue_filename(
 	fmt.register_fmt('t', utils::replace_all(title, "/", "_"));
 	fmt.register_fmt('e', utils::replace_all(extension, "/", "_"));
 
-	if (feed.rssurl() != item->feedurl() &&
-		item->get_feedptr() != nullptr) {
-		std::string feedtitle = item->get_feedptr()->title();
+	if (feed.rssurl() != item.feedurl() &&
+		item.get_feedptr() != nullptr) {
+		std::string feedtitle = item.get_feedptr()->title();
 		utils::remove_soft_hyphens(feedtitle);
 		fmt.register_fmt('N', utils::replace_all(feedtitle, "/", "_"));
 	} else {
@@ -139,7 +139,7 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 			LOG(Level::INFO,
 				"QueueManager::autoenqueue: enqueuing `%s'",
 				item->enclosure_url());
-			const auto result = enqueue_url(item, feed);
+			const auto result = enqueue_url(*item, feed);
 			switch (result.status) {
 			case EnqueueStatus::QUEUED_SUCCESSFULLY:
 			case EnqueueStatus::URL_QUEUED_ALREADY:
