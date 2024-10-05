@@ -62,10 +62,9 @@ public:
 		return &feedcontainer;
 	}
 
-	void write_item(std::shared_ptr<RssItem> item,
-		const std::string& filename);
-	void write_item(std::shared_ptr<RssItem> item, std::ostream& ostr);
-	std::string write_temporary_item(std::shared_ptr<RssItem> item);
+	void write_item(RssItem& item, const std::string& filename);
+	void write_item(RssItem& item, std::ostream& ostr);
+	std::string write_temporary_item(RssItem& item);
 
 	void update_config();
 

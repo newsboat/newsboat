@@ -924,7 +924,7 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 	return EXIT_SUCCESS;
 }
 
-std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
+std::string Controller::write_temporary_item(RssItem& item)
 {
 	char filename[_POSIX_PATH_MAX];
 	char* tmpdir = getenv("TMPDIR");
@@ -948,8 +948,7 @@ std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
 	}
 }
 
-void Controller::write_item(std::shared_ptr<RssItem> item,
-	const std::string& filename)
+void Controller::write_item(RssItem& item, const std::string& filename)
 {
 	const std::string save_path = cfg.get_configvalue("save-path");
 	auto spath = save_path.back() == '/' ? save_path : save_path + "/";
@@ -975,7 +974,7 @@ void Controller::write_item(std::shared_ptr<RssItem> item,
 	write_item(item, f);
 }
 
-void Controller::write_item(std::shared_ptr<RssItem> item, std::ostream& ostr)
+void Controller::write_item(RssItem& item, std::ostream& ostr)
 {
 	ostr << item_renderer::to_plain_text(cfg, item) << std::endl;
 }

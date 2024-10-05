@@ -33,10 +33,10 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	Cache rsscache(":memory:", cfg);
 
 
-	auto item = std::make_shared<RssItem>(&rsscache);
-	item->set_title("title");
+	RssItem item(&rsscache);
+	item.set_title("title");
 	const auto description = "First line.\nSecond one.\nAnd finally the third";
-	item->set_description(description, "text/plain");
+	item.set_description(description, "text/plain");
 
 	c.write_item(item, tmp.get_path() + name);
 	c.write_item(item, "~/" + name);
