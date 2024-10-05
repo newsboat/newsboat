@@ -7,6 +7,7 @@
 #include "textviewwidget.h"
 #include "stflpp.h"
 #include "stflrichtext.h"
+#include "tui.h"
 
 namespace newsboat {
 class KeyMap;
@@ -55,6 +56,8 @@ private:
 
 	ListWidget downloads_list;
 	TextviewWidget help_textview;
+
+	Tui tui;
 };
 
 } // namespace podboat
