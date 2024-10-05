@@ -55,6 +55,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 	set_dllist_keymap_hint();
 
+	std::vector<KeyCombination> key_sequence;
 	do {
 		if (update_view) {
 			const double total_kbps = ctrl.get_total_kbps();
@@ -122,7 +123,30 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 
 		const auto key_combination = KeyCombination::from_bindkey(event);
-		Operation op = keys.get_operation(key_combination, "podboat");
+		if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
+			key_sequence.clear();
+		} else {
+			key_sequence.push_back(key_combination);
+		}
+		auto binding_state = MultiKeyBindingState::NotFound;
+		BindingType type = BindingType::Bind;
+		auto cmds = keys.get_operation(key_sequence, "podboat", binding_state, type);
+
+		if (binding_state == MultiKeyBindingState::MoreInputNeeded) {
+			continue;
+		}
+
+		key_sequence.clear();
+
+		if (cmds.size() != 1) {
+			// TODO: Add support to podboat for running a list of commands
+			continue;
+		}
+		if (cmds.size() != 1) {
+			// TODO: Add support to podboat for running commands with arguments
+			continue;
+		}
+		Operation op = cmds.front().op;
 
 		if (msg_line_dllist_form.get_text().length() > 0) {
 			msg_line_dllist_form.set_text("");
@@ -318,6 +342,7 @@ void PbView::run_help()
 
 	bool quit = false;
 
+	std::vector<KeyCombination> key_sequence;
 	do {
 		const auto event = help_form.run(0);
 		if (event.empty()) {
@@ -330,7 +355,30 @@ void PbView::run_help()
 		}
 
 		const auto key_combination = KeyCombination::from_bindkey(event);
-		Operation op = keys.get_operation(key_combination, "help");
+		if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
+			key_sequence.clear();
+		} else {
+			key_sequence.push_back(key_combination);
+		}
+		auto binding_state = MultiKeyBindingState::NotFound;
+		BindingType type = BindingType::Bind;
+		auto cmds = keys.get_operation(key_sequence, "help", binding_state, type);
+
+		if (binding_state == MultiKeyBindingState::MoreInputNeeded) {
+			continue;
+		}
+
+		key_sequence.clear();
+
+		if (cmds.size() != 1) {
+			// TODO: Add support to podboat for running a list of commands
+			continue;
+		}
+		if (cmds.size() != 1) {
+			// TODO: Add support to podboat for running commands with arguments
+			continue;
+		}
+		Operation op = cmds.front().op;
 
 		switch (op) {
 		case OP_SK_UP:
