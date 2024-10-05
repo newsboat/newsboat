@@ -1,7 +1,6 @@
 #ifndef NEWSBOAT_ITEMRENDERER_H_
 #define NEWSBOAT_ITEMRENDERER_H_
 
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -23,7 +22,7 @@ enum class OutputFormat {
 
 /// \brief Returns feed's title of the item, or some replacement value if
 /// the title isn't available.
-std::string get_feedtitle(std::shared_ptr<RssItem> item);
+std::string get_feedtitle(RssItem& item);
 
 /// \brief Splits text into lines marked as wrappable
 void render_plaintext(const std::string& source,
@@ -35,7 +34,7 @@ void render_plaintext(const std::string& source,
 /// wrapped at the width specified by the `text-width` setting.
 std::string to_plain_text(
 	ConfigContainer& cfg,
-	std::shared_ptr<RssItem> item);
+	RssItem& item);
 
 /// \brief Returns RssItem as STFL list.
 ///
@@ -47,7 +46,7 @@ std::string to_plain_text(
 /// users open the links by their number).
 std::pair<std::string, size_t> to_stfl_list(
 	ConfigContainer& cfg,
-	std::shared_ptr<RssItem> item,
+	RssItem& item,
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
@@ -60,7 +59,7 @@ std::pair<std::string, size_t> to_stfl_list(
 /// where URLs are wrapped. \a rxman rules for \a location are used to
 /// highlight the resulting text.
 std::pair<std::string, size_t> source_to_stfl_list(
-	std::shared_ptr<RssItem> item,
+	RssItem& item,
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,

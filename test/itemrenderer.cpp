@@ -77,7 +77,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 	SECTION("Item without an enclosure") {
 		item->set_description(ITEM_DESCRIPTON, "text/html");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -96,7 +96,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 		item->set_description(ITEM_DESCRIPTON, "text/html");
 		item->set_enclosure_url(ITEM_PODCAST_ENCLOSURE_URL);
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -117,7 +117,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 		item->set_enclosure_url(ITEM_PODCAST_ENCLOSURE_URL);
 		item->set_enclosure_type(ITEM_PODCAST_ENCLOSURE_TYPE);
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -139,7 +139,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 		item->set_enclosure_url(ITEM_IMAGE_ENCLOSURE_URL);
 		item->set_enclosure_type(ITEM_IMAGE_ENCLOSURE_TYPE);
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -164,7 +164,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 			ITEM_DESCRIPTON +
 			"<p>See also <a href='https://example.com'>this site</a>.</p>", "text/html");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -189,7 +189,7 @@ TEST_CASE("item_renderer::to_plain_text() produces a rendered representation "
 		item->set_enclosure_url("https://example.com/test.png");
 		item->set_enclosure_type("image/png");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -241,7 +241,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 		" \n";
 
 	SECTION("If `text-width` is not set, text is rendered in 80 columns") {
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n"
@@ -256,7 +256,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 	SECTION("If `text-width` is set to zero, text is rendered in 80 columns") {
 		cfg.set_configvalue("text-width", "0");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nisl \n"
@@ -271,7 +271,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 	SECTION("Text is rendered in 37 columns") {
 		cfg.set_configvalue("text-width", "37");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, \n"
@@ -288,7 +288,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 	SECTION("Text is rendered in 120 columns") {
 		cfg.set_configvalue("text-width", "120");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = header +
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
@@ -308,7 +308,7 @@ TEST_CASE("item_renderer::to_plain_text() renders text to the width specified "
 			"&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;" // 10 characters
 			"Lorem ipsum dolor sit amet", "text/html");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = header +
 			"<<<<<<<<<<>>>>>>>>>>Lorem ipsum dolor\n"
@@ -347,7 +347,7 @@ TEST_CASE("to_plain_text() does not escape '<' and '>' in header and body",
 		" \n" +
 		"<test>\n";
 
-	const auto result = item_renderer::to_plain_text(cfg, item);
+	const auto result = item_renderer::to_plain_text(cfg, *item);
 	REQUIRE(result == expected);
 }
 
@@ -370,7 +370,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	SECTION("Item without a feed title") {
 		item->get_feedptr()->set_title("");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Title: " + ITEM_TITLE + '\n' +
@@ -386,7 +386,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	SECTION("Item without a title") {
 		item->set_title("");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -402,7 +402,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	SECTION("Item without an author") {
 		item->set_author("");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -418,7 +418,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	SECTION("Item without a link") {
 		item->set_link("");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -434,7 +434,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	SECTION("Item without an enclosure") {
 		item->set_description(ITEM_DESCRIPTON, "text/html");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -452,7 +452,7 @@ TEST_CASE("Empty fields are not rendered", "[item_renderer]")
 	SECTION("Item without flags") {
 		item->set_flags("");
 
-		const auto result = item_renderer::to_plain_text(cfg, item);
+		const auto result = item_renderer::to_plain_text(cfg, *item);
 
 		const auto expected = std::string() +
 			"Feed: " + FEED_TITLE + '\n' +
@@ -490,7 +490,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		SECTION("internal renderer") {
 			cfg.set_configvalue("html-renderer", "internal");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result = item_renderer::to_plain_text(cfg, *item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -513,7 +513,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		SECTION("/bin/cat as a renderer") {
 			cfg.set_configvalue("html-renderer", "/bin/cat");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result = item_renderer::to_plain_text(cfg, *item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -539,7 +539,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		SECTION("internal renderer") {
 			cfg.set_configvalue("html-renderer", "internal");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result = item_renderer::to_plain_text(cfg, *item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -564,7 +564,7 @@ TEST_CASE("item_renderer::to_plain_text honours `html-renderer` setting",
 		SECTION("/bin/cat as a renderer") {
 			cfg.set_configvalue("html-renderer", "/bin/cat");
 
-			const auto result = item_renderer::to_plain_text(cfg, item);
+			const auto result = item_renderer::to_plain_text(cfg, *item);
 
 			const auto expected = std::string() +
 				"Feed: " + FEED_TITLE + '\n' +
@@ -595,7 +595,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed title without "
 	std::tie(item, feed) = create_test_item(&rsscache);
 
 	const auto check = [&]() {
-		const auto result = item_renderer::get_feedtitle(item);
+		const auto result = item_renderer::get_feedtitle(*item);
 		REQUIRE(result == "Welcome, lovely strangers!");
 	};
 
@@ -626,7 +626,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed self-link "
 	feed->set_title("");
 	feed->set_link(feedlink);
 
-	const auto result = item_renderer::get_feedtitle(item);
+	const auto result = item_renderer::get_feedtitle(*item);
 	REQUIRE(result == feedlink);
 }
 
@@ -647,7 +647,7 @@ TEST_CASE("item_renderer::get_feedtitle() returns item's feed URL "
 	feed->set_title("");
 	feed->set_link("");
 
-	const auto result = item_renderer::get_feedtitle(item);
+	const auto result = item_renderer::get_feedtitle(*item);
 	REQUIRE(result == feedurl);
 }
 
@@ -685,7 +685,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 			"}";
 
 		Links links;
-		const auto result = item_renderer::to_stfl_list(cfg, item, 80, 80, &rxman,
+		const auto result = item_renderer::to_stfl_list(cfg, *item, 80, 80, &rxman,
 				"article", links);
 		REQUIRE(result.first == expected);
 	}
@@ -704,7 +704,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 			"}";
 
 		Links links;
-		const auto result = item_renderer::source_to_stfl_list(item, 80, 80, &rxman,
+		const auto result = item_renderer::source_to_stfl_list(*item, 80, 80, &rxman,
 				"article");
 		REQUIRE(result.first == expected);
 	}

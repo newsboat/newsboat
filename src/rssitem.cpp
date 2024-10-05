@@ -111,7 +111,7 @@ void RssItem::set_unread(bool u)
 		try {
 			if (ch) {
 				ch->update_rssitem_unread_and_enqueued(
-					this, feedurl_);
+					*this, feedurl_);
 			}
 		} catch (const DbException& e) {
 			// if the update failed, restore the old unread flag and

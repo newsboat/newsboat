@@ -681,7 +681,7 @@ void Controller::mark_all_read(unsigned int pos)
 			}
 			api->mark_articles_read(item_guids);
 		}
-		rsscache->mark_all_read(feed);
+		rsscache->mark_all_read(*feed);
 	} else {
 		rsscache->mark_all_read(feed->rssurl());
 		if (api) {
@@ -703,29 +703,27 @@ void Controller::mark_all_read(const std::vector<std::string>& item_guids)
 	}
 }
 
-void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
-	std::shared_ptr<RssFeed> newfeed,
-	unsigned int pos,
+void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int pos,
 	bool unattended)
 {
 	LOG(Level::DEBUG, "Controller::replace_feed: saving");
 	rsscache->externalize_rssfeed(
-		newfeed, ign.matches_resetunread(newfeed->rssurl()));
+		newfeed, ign.matches_resetunread(newfeed.rssurl()));
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after externalize_rssfeed");
 
 	bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 	std::shared_ptr<RssFeed> feed = rsscache->internalize_rssfeed(
-			oldfeed->rssurl(), ignore_disp ? &ign : nullptr);
+			oldfeed.rssurl(), ignore_disp ? &ign : nullptr);
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after internalize_rssfeed");
 
-	feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
-	feed->set_order(oldfeed->get_order());
+	feed->set_tags(urlcfg->get_tags(oldfeed.rssurl()));
+	feed->set_order(oldfeed.get_order());
 	feedcontainer.replace_feed(pos, feed);
 
 	if (cfg.get_configvalue_as_bool("podcast-auto-enqueue")) {
-		const auto result = queueManager.autoenqueue(feed);
+		const auto result = queueManager.autoenqueue(*feed);
 		switch (result.status) {
 		case EnqueueStatus::QUEUED_SUCCESSFULLY:
 		case EnqueueStatus::URL_QUEUED_ALREADY:
@@ -744,7 +742,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 	}
 
 	for (const auto& item : feed->items()) {
-		rsscache->update_rssitem_unread_and_enqueued(item, feed->rssurl());
+		rsscache->update_rssitem_unread_and_enqueued(*item, feed->rssurl());
 	}
 
 	v->notify_itemlist_change(feed);
@@ -822,8 +820,7 @@ std::vector<std::shared_ptr<RssItem>> Controller::search_for_items(
 	return items;
 }
 
-EnqueueResult Controller::enqueue_url(std::shared_ptr<RssItem> item,
-	std::shared_ptr<RssFeed> feed)
+EnqueueResult Controller::enqueue_url(RssItem& item, RssFeed& feed)
 {
 	return queueManager.enqueue_url(item, feed);
 }
@@ -927,7 +924,7 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 	return EXIT_SUCCESS;
 }
 
-std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
+std::string Controller::write_temporary_item(RssItem& item)
 {
 	char filename[_POSIX_PATH_MAX];
 	char* tmpdir = getenv("TMPDIR");
@@ -951,8 +948,7 @@ std::string Controller::write_temporary_item(std::shared_ptr<RssItem> item)
 	}
 }
 
-void Controller::write_item(std::shared_ptr<RssItem> item,
-	const std::string& filename)
+void Controller::write_item(RssItem& item, const std::string& filename)
 {
 	const std::string save_path = cfg.get_configvalue("save-path");
 	auto spath = save_path.back() == '/' ? save_path : save_path + "/";
@@ -978,7 +974,7 @@ void Controller::write_item(std::shared_ptr<RssItem> item,
 	write_item(item, f);
 }
 
-void Controller::write_item(std::shared_ptr<RssItem> item, std::ostream& ostr)
+void Controller::write_item(RssItem& item, std::ostream& ostr)
 {
 	ostr << item_renderer::to_plain_text(cfg, item) << std::endl;
 }

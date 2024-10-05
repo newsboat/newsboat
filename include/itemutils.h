@@ -1,8 +1,6 @@
 #ifndef NEWSBOAT_ITEMUTILS_H_
 #define NEWSBOAT_ITEMUTILS_H_
 
-#include <memory>
-
 #include "cache.h"
 #include "rssfeed.h"
 #include "rssitem.h"
@@ -16,7 +14,7 @@ namespace newsboat {
 ///
 /// Returns true if URL was successfully added to queue or was already queued before,
 ///         false otherwise.
-bool enqueue_item_enclosure(std::shared_ptr<RssItem> item, std::shared_ptr<RssFeed> feed,
+bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 	View& v, Cache& cache);
 
 } // namespace newsboat

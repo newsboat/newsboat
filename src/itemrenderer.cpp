@@ -25,9 +25,9 @@ bool should_render_as_html(const std::string mime_type)
 	return (html_mime_types.count(mime_type) >= 1);
 }
 
-std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
+std::string item_renderer::get_feedtitle(RssItem& item)
 {
-	const std::shared_ptr<RssFeed> feedptr = item->get_feedptr();
+	const std::shared_ptr<RssFeed> feedptr = item.get_feedptr();
 
 	if (!feedptr) {
 		return {};
@@ -47,7 +47,7 @@ std::string item_renderer::get_feedtitle(std::shared_ptr<RssItem> item)
 }
 
 void prepare_header(
-	std::shared_ptr<RssItem> item,
+	RssItem& item,
 	std::vector<std::pair<LineType, std::string>>& lines,
 	Links& /*links*/, bool raw = false)
 {
@@ -72,27 +72,27 @@ void prepare_header(
 
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
 	add_line(stfl_quote_if_needed(feedtitle), _("Feed: "), LineType::wrappable);
-	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item->title())),
+	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item.title())),
 		_("Title: "), LineType::wrappable);
-	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item->author())),
+	add_line(stfl_quote_if_needed(utils::utf8_to_locale(item.author())),
 		_("Author: "), LineType::wrappable);
-	add_line(item->pubDate(), _("Date: "), LineType::wrappable);
-	add_line(item->link(), _("Link: "), LineType::softwrappable);
-	add_line(item->flags(), _("Flags: "), LineType::wrappable);
+	add_line(item.pubDate(), _("Date: "), LineType::wrappable);
+	add_line(item.link(), _("Link: "), LineType::softwrappable);
+	add_line(item.flags(), _("Flags: "), LineType::wrappable);
 
-	const bool could_be_podcast = item->enclosure_type().empty()
-		|| utils::is_valid_podcast_type(item->enclosure_type());
+	const bool could_be_podcast = item.enclosure_type().empty()
+		|| utils::is_valid_podcast_type(item.enclosure_type());
 
-	if (!item->enclosure_url().empty() && could_be_podcast) {
+	if (!item.enclosure_url().empty() && could_be_podcast) {
 		auto dlurl = strprintf::fmt(
 				"%s%s",
 				_("Podcast Download URL: "),
-				utils::censor_url(item->enclosure_url()));
-		if (!item->enclosure_type().empty()) {
+				utils::censor_url(item.enclosure_url()));
+		if (!item.enclosure_type().empty()) {
 			dlurl.append(
 				strprintf::fmt(" (%s%s)",
 					_("type: "),
-					item->enclosure_type()));
+					item.enclosure_type()));
 		}
 		lines.push_back(std::make_pair(LineType::softwrappable, dlurl));
 	}
@@ -230,16 +230,16 @@ void render_links_summary(std::vector<std::pair<LineType, std::string>>& lines,
 
 std::string item_renderer::to_plain_text(
 	ConfigContainer& cfg,
-	std::shared_ptr<RssItem> item)
+	RssItem& item)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
 	Links links;
-	const auto item_description = item->description();
+	const auto item_description = item.description();
 
 	prepare_header(item, lines, links, true);
-	prepare_enclosure(*item, lines, links, true);
+	prepare_enclosure(item, lines, links, true);
 
-	const auto base = get_item_base_link(*item);
+	const auto base = get_item_base_link(item);
 	const auto body = utils::utf8_to_locale(item_description.text);
 
 	if (should_render_as_html(item_description.mime)) {
@@ -263,7 +263,7 @@ std::string item_renderer::to_plain_text(
 
 std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	ConfigContainer& cfg,
-	std::shared_ptr<RssItem> item,
+	RssItem& item,
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
@@ -271,12 +271,12 @@ std::pair<std::string, size_t> item_renderer::to_stfl_list(
 	Links& links)
 {
 	std::vector<std::pair<LineType, std::string>> lines;
-	const auto item_description = item->description();
+	const auto item_description = item.description();
 
 	prepare_header(item, lines, links);
-	prepare_enclosure(*item, lines, links, false);
+	prepare_enclosure(item, lines, links, false);
 
-	const std::string baseurl = get_item_base_link(*item);
+	const std::string baseurl = get_item_base_link(item);
 	const auto body = utils::utf8_to_locale(item_description.text);
 
 	if (should_render_as_html(item_description.mime)) {
@@ -316,7 +316,7 @@ void render_source(
 }
 
 std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
-	std::shared_ptr<RssItem> item,
+	RssItem& item,
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
@@ -327,7 +327,7 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 
 	prepare_header(item, lines, links);
 	render_source(lines, utils::quote_for_stfl(utils::utf8_to_locale(
-				item->description().text)));
+				item.description().text)));
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

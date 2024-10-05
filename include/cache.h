@@ -43,13 +43,11 @@ class Cache {
 public:
 	Cache(const std::string& cachefile, ConfigContainer* c);
 	~Cache();
-	void externalize_rssfeed(std::shared_ptr<RssFeed> feed,
+	void externalize_rssfeed(RssFeed& feed,
 		bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
 		RssIgnores* ign);
-	void update_rssitem_unread_and_enqueued(std::shared_ptr<RssItem> item,
-		const std::string& feedurl);
-	void update_rssitem_unread_and_enqueued(RssItem* item,
+	void update_rssitem_unread_and_enqueued(RssItem& item,
 		const std::string& feedurl);
 	/// If requested, removes unreachable data stored in cache.
 	/// Returns a list of unreachable feeds.
@@ -64,7 +62,7 @@ public:
 		const std::string& querystr,
 		const std::unordered_set<std::string>& guids);
 	void mark_all_read(const std::string& feedurl = "");
-	void mark_all_read(std::shared_ptr<RssFeed> feed);
+	void mark_all_read(RssFeed& feed);
 	void update_rssitem_flags(RssItem* item);
 	void fetch_lastmodified(const std::string& uri,
 		time_t& t,
@@ -83,9 +81,9 @@ private:
 	SchemaVersion get_schema_version();
 	void populate_tables();
 	void set_pragmas();
-	void delete_item_unlocked(const std::shared_ptr<RssItem>& item);
+	void delete_item_unlocked(const RssItem& item);
 	void clean_old_articles();
-	void update_rssitem_unlocked(std::shared_ptr<RssItem> item,
+	void update_rssitem_unlocked(RssItem& item,
 		const std::string& feedurl,
 		bool reset_unread);
 

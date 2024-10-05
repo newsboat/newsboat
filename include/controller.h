@@ -43,7 +43,7 @@ public:
 	void mark_all_read(unsigned int pos);
 	void mark_article_read(const std::string& guid, bool read);
 	void mark_all_read(const std::string& feedurl);
-	void mark_all_read(std::shared_ptr<RssFeed> feed)
+	void mark_all_read(RssFeed& feed)
 	{
 		rsscache->mark_all_read(feed);
 	}
@@ -52,8 +52,7 @@ public:
 	{
 		return refresh_on_start;
 	}
-	EnqueueResult enqueue_url(std::shared_ptr<RssItem> item,
-		std::shared_ptr<RssFeed> feed);
+	EnqueueResult enqueue_url(RssItem& item, RssFeed& feed);
 
 	void reload_urls_file();
 	void edit_urls_file();
@@ -63,10 +62,9 @@ public:
 		return &feedcontainer;
 	}
 
-	void write_item(std::shared_ptr<RssItem> item,
-		const std::string& filename);
-	void write_item(std::shared_ptr<RssItem> item, std::ostream& ostr);
-	std::string write_temporary_item(std::shared_ptr<RssItem> item);
+	void write_item(RssItem& item, const std::string& filename);
+	void write_item(RssItem& item, std::ostream& ostr);
+	std::string write_temporary_item(RssItem& item);
 
 	void update_config();
 
@@ -81,10 +79,7 @@ public:
 		return reloader.get();
 	}
 
-	void replace_feed(std::shared_ptr<RssFeed> oldfeed,
-		std::shared_ptr<RssFeed> newfeed,
-		unsigned int pos,
-		bool unattended);
+	void replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int pos, bool unattended);
 
 	ConfigContainer* get_config()
 	{

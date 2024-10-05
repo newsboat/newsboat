@@ -65,17 +65,17 @@ void ItemViewFormAction::init()
 	item = feed->get_item_by_guid(guid);
 }
 
-void ItemViewFormAction::update_head(const std::shared_ptr<RssItem>& item)
+void ItemViewFormAction::update_head(RssItem& item)
 {
 	const std::string feedtitle = item_renderer::get_feedtitle(item);
 
 	unsigned int unread_item_count = feed->unread_item_count();
 	// we need to subtract because the current item isn't yet marked
 	// as read
-	if (item->unread()) {
+	if (item.unread()) {
 		unread_item_count--;
 	}
-	set_head(utils::utf8_to_locale(item->title()),
+	set_head(utils::utf8_to_locale(item.title()),
 		feedtitle,
 		unread_item_count,
 		feed->total_item_count());
@@ -96,7 +96,7 @@ void ItemViewFormAction::prepare()
 			recalculate_widget_dimensions();
 		}
 
-		update_head(item);
+		update_head(*item);
 
 		const unsigned int window_width = textview.get_width();
 
@@ -113,7 +113,7 @@ void ItemViewFormAction::prepare()
 		if (show_source) {
 			std::tie(formatted_text, num_lines) =
 				item_renderer::source_to_stfl_list(
-					item,
+					*item,
 					text_width,
 					window_width,
 					&rxman,
@@ -132,7 +132,7 @@ void ItemViewFormAction::prepare()
 					// cfg can't be nullptr because that's a long-lived object
 					// created at the very start of the program.
 					*cfg,
-					item,
+					*item,
 					text_width,
 					window_width,
 					&rxman,
@@ -186,7 +186,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		textview.set_scroll_offset(0);
 		break;
 	case OP_ENQUEUE:
-		return enqueue_item_enclosure(item, feed, v, *rsscache);
+		return enqueue_item_enclosure(*item, *feed, v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
 		nonstd::optional<std::string> filename;
@@ -213,7 +213,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			v.get_statusline().show_error(_("Aborted saving."));
 		} else {
 			try {
-				v.get_ctrl()->write_item(item, filename.value());
+				v.get_ctrl()->write_item(*item, filename.value());
 				v.get_statusline().show_message(strprintf::fmt(
 						_("Saved article to %s."), filename.value()));
 			} catch (...) {
@@ -634,7 +634,7 @@ void ItemViewFormAction::handle_save(const std::string& filename_param)
 	} else {
 		try {
 			v.get_ctrl()->write_item(
-				item, filename);
+				*item, filename);
 			v.get_statusline().show_message(strprintf::fmt(
 					_("Saved article to %s"),
 					filename));
@@ -664,7 +664,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 	case OP_PIPE_TO: {
 		std::string cmd = qna_responses[0];
 		std::ostringstream ostr;
-		v.get_ctrl()->write_item(feed->get_item_by_guid(guid), ostr);
+		v.get_ctrl()->write_item(*feed->get_item_by_guid(guid), ostr);
 		v.push_empty_formaction();
 		Stfl::reset();
 		FILE* f = popen(cmd.c_str(), "w");

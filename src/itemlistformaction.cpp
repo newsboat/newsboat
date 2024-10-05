@@ -839,7 +839,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_ENQUEUE:
 		if (!visible_items.empty() && itempos < visible_items.size()) {
 			const auto item = visible_items[itempos].first;
-			return enqueue_item_enclosure(item, feed, v, *rsscache);
+			return enqueue_item_enclosure(*item, *feed, v, *rsscache);
 		} else {
 			v.get_statusline().show_error(_("No item selected!"));
 			return false;
@@ -928,7 +928,7 @@ void ItemListFormAction::finished_qna(Operation op)
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
 			v.get_ctrl()->write_item(
-				visible_items[itempos].first, ostr);
+				*visible_items[itempos].first, ostr);
 			v.push_empty_formaction();
 			Stfl::reset();
 			FILE* f = popen(cmd.c_str(), "w");
@@ -1477,7 +1477,7 @@ void ItemListFormAction::save_article(const nonstd::optional<std::string>& filen
 		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v.get_ctrl()->write_item(item, filename.value());
+			v.get_ctrl()->write_item(*item, filename.value());
 			v.get_statusline().show_message(strprintf::fmt(
 					_("Saved article to %s"), filename.value()));
 		} catch (...) {
