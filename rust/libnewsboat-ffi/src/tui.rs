@@ -10,9 +10,15 @@ mod bridged {
         type Tui;
 
         fn create() -> Box<Tui>;
+        fn run(tui: &mut Tui);
     }
 }
 
 fn create() -> Box<Tui> {
     Box::new(Tui(tui::Tui::new()))
+}
+
+fn run(tui: &mut Tui) {
+    // TODO: Handle error?
+    let _ = tui.0.run();
 }
