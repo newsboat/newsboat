@@ -111,14 +111,6 @@ pub fn bindkey(input: &str) -> KeyCombination {
     key_combination
 }
 
-fn control_key_bind(input: &str) -> IResult<&str, KeyCombination> {
-    let (input, _) = tag("^")(input)?;
-    let (input, key) = alphabetic(input)?;
-
-    let key_combination = KeyCombination::new(key.to_lowercase().to_string()).with_control();
-    Ok((input, key_combination))
-}
-
 fn shift_key_bind(input: &str) -> IResult<&str, KeyCombination> {
     let (input, key) = verify(alphabetic, |c: &char| c.is_uppercase())(input)?;
 
@@ -161,12 +153,7 @@ fn single_key_bind(input: &str) -> IResult<&str, KeyCombination> {
 
 pub fn bind(input: &str) -> Vec<KeyCombination> {
     let result = terminated(
-        many0(alt((
-            control_key_bind,
-            shift_key_bind,
-            combination_key_bind,
-            single_key_bind,
-        ))),
+        many0(alt((shift_key_bind, combination_key_bind, single_key_bind))),
         eof,
     )(input);
     // Should be save to unwrap because `single_key_bind` accepts any input
@@ -216,40 +203,11 @@ mod tests {
     }
 
     #[test]
-    fn t_bindkey_with_control() {
-        assert_eq!(
-            bindkey("^A"),
-            KeyCombination::new("a".to_owned()).with_control()
-        );
-        assert_eq!(
-            bindkey("^Z"),
-            KeyCombination::new("z".to_owned()).with_control()
-        );
-
-        assert_eq!(
-            bindkey("^a"),
-            KeyCombination::new("a".to_owned()).with_control()
-        );
-        assert_eq!(
-            bindkey("^z"),
-            KeyCombination::new("z".to_owned()).with_control()
-        );
-    }
-
-    #[test]
     fn t_bind_single_regular_key() {
         assert_eq!(bind("a"), vec![KeyCombination::new("a".to_owned())]);
         assert_eq!(
             bind("A"),
             vec![KeyCombination::new("a".to_owned()).with_shift()]
-        );
-        assert_eq!(
-            bind("^A"),
-            vec![KeyCombination::new("a".to_owned()).with_control()]
-        );
-        assert_eq!(
-            bind("^a"),
-            vec![KeyCombination::new("a".to_owned()).with_control()]
         );
     }
 
@@ -259,6 +217,7 @@ mod tests {
         assert_eq!(bind("<"), vec![KeyCombination::new("LT".to_owned())]);
         assert_eq!(bind(">"), vec![KeyCombination::new("GT".to_owned())]);
         assert_eq!(bind("-"), vec![KeyCombination::new("-".to_owned())]);
+        assert_eq!(bind("^"), vec![KeyCombination::new("^".to_owned())]);
     }
 
     #[test]
@@ -343,9 +302,9 @@ mod tests {
     #[test]
     fn t_bind_multiple_mixed_keys() {
         assert_eq!(
-            bind("^G<ENTER>p"),
+            bind("G<ENTER>p"),
             vec![
-                KeyCombination::new("g".to_owned()).with_control(),
+                KeyCombination::new("g".to_owned()).with_shift(),
                 KeyCombination::new("ENTER".to_owned()),
                 KeyCombination::new("p".to_owned()),
             ]
