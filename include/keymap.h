@@ -2,6 +2,7 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -185,6 +186,12 @@ struct KeyMapHintEntry {
 	std::string text;
 };
 
+struct Mapping {
+	bool is_leaf_node = false;
+	std::map<KeyCombination, Mapping> continuations = {};
+	MacroBinding action = {};
+};
+
 class KeyMap : public ConfigActionHandler {
 public:
 	explicit KeyMap(unsigned int flags);
@@ -194,7 +201,7 @@ public:
 		const std::string& context);
 	void unset_key(const KeyCombination& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
-	Operation get_opcode(const std::string& opstr);
+	static Operation get_opcode(const std::string& opstr);
 	Operation get_operation(const KeyCombination& key_combination,
 		const std::string& context);
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
@@ -214,11 +221,14 @@ public:
 		const std::string& context);
 
 private:
+	void apply_bind(Mapping& target, const std::vector<KeyCombination> key_sequence,
+		const std::vector<MacroCmd>& cmds, const std::string& description);
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
 	std::map<KeyCombination, Operation> get_internal_operations() const;
 	std::string getopname(Operation op) const;
 	std::map<std::string, std::map<KeyCombination, Operation>> keymap_;
+	std::map<std::string, Mapping> context_keymaps;
 	std::map<KeyCombination, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };

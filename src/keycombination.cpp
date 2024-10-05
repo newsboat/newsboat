@@ -1,8 +1,12 @@
 #include "keycombination.h"
 
+#include <algorithm>
+#include <cctype>
+#include <iterator>
 #include <tuple>
 
 #include "libnewsboat-ffi/src/keycombination.rs.h"
+#include "strprintf.h"
 
 namespace newsboat {
 
@@ -41,15 +45,54 @@ KeyCombination KeyCombination::from_bindkey(const std::string& input)
 	return convert(*key_combination);
 }
 
+std::vector<KeyCombination> KeyCombination::from_bind(const std::string& input)
+{
+	const auto key_combinations_rs = keycombination::bridged::from_bind(input);
+
+	std::vector<KeyCombination> key_combinations;
+	for (const auto& key_combination_rs : key_combinations_rs) {
+		key_combinations.push_back(convert(key_combination_rs));
+	}
+
+	return key_combinations;
+}
+
 std::string KeyCombination::to_bindkey_string() const
 {
 	if (control == ControlState::Control && key.length() == 1) {
-		return std::string("^") + static_cast<char>(std::toupper(key[0]));
+		return strprintf::fmt("^%c", static_cast<char>(std::toupper(key[0])));
 	} else if (shift == ShiftState::Shift && key.length() == 1) {
-		return std::string{static_cast<char>(std::toupper(key[0]))};
+		return strprintf::fmt("%c", static_cast<char>(std::toupper(key[0])));
 	} else {
 		return key;
 	}
+}
+
+std::string KeyCombination::to_bind_string() const
+{
+	if (key.size() == 1 && isalpha(key[0])) {
+		if (has_shift() && !has_control() && !has_alt()) {
+			return strprintf::fmt("%c", static_cast<char>(std::toupper(key[0])));
+		}
+		if (!has_shift() && has_control() && !has_alt()) {
+			return strprintf::fmt("^%c", static_cast<char>(std::toupper(key[0])));
+		}
+	}
+	if (key.size() == 1 && !has_shift() && !has_control() && !has_alt()) {
+		return key;
+	}
+
+	std::string modifiers = "";
+	if (has_control()) {
+		modifiers += "C-";
+	}
+	if (has_shift()) {
+		modifiers += "S-";
+	}
+	if (has_alt()) {
+		modifiers += "M-";
+	}
+	return strprintf::fmt("<%s%s>", modifiers, key);
 }
 
 bool KeyCombination::operator==(const KeyCombination& other) const
