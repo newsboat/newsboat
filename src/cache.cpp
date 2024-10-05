@@ -104,17 +104,16 @@ static int single_string_callback(void* handler,
 static int rssfeed_callback(void* myfeed, int argc, char** argv,
 	char** /* azColName */)
 {
-	std::shared_ptr<RssFeed>* feed =
-		static_cast<std::shared_ptr<RssFeed>*>(myfeed);
+	auto feed = static_cast<RssFeed*>(myfeed);
 	// normaly, this shouldn't happen, but we keep the assert()s here
 	// nevertheless
 	assert(argc == 3);
 	assert(argv[0] != nullptr);
 	assert(argv[1] != nullptr);
 	assert(argv[2] != nullptr);
-	(*feed)->set_title(argv[0]);
-	(*feed)->set_link(argv[1]);
-	(*feed)->set_rtl(strcmp(argv[2], "1") == 0);
+	feed->set_title(argv[0]);
+	feed->set_link(argv[1]);
+	feed->set_rtl(strcmp(argv[2], "1") == 0);
 	LOG(Level::INFO,
 		"rssfeed_callback: title = %s link = %s is_rtl = %s",
 		argv[0],
@@ -168,10 +167,9 @@ static int vectorofstring_callback(void* vp, int argc, char** argv,
 static int rssitem_callback(void* myfeed, int argc, char** argv,
 	char** /* azColName */)
 {
-	std::shared_ptr<RssFeed>* feed =
-		static_cast<std::shared_ptr<RssFeed>*>(myfeed);
+	auto feed = static_cast<RssFeed*>(myfeed);
 	assert(argc == 15);
-	std::shared_ptr<RssItem> item(new RssItem(nullptr));
+	auto item = std::make_shared<RssItem>(nullptr);
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
 	item->set_author(argv[2]);
@@ -195,8 +193,7 @@ static int rssitem_callback(void* myfeed, int argc, char** argv,
 	item->set_flags(argv[13] ? argv[13] : "");
 	item->set_base(argv[14] ? argv[14] : "");
 
-	//(*feed)->items().push_back(item);
-	(*feed)->add_item(item);
+	feed->add_item(item);
 	return 0;
 }
 
@@ -223,7 +220,7 @@ static int search_item_callback(void* myfeed,
 	std::vector<std::shared_ptr<RssItem>>* items =
 			static_cast<std::vector<std::shared_ptr<RssItem>>*>(myfeed);
 	assert(argc == 15);
-	std::shared_ptr<RssItem> item(new RssItem(nullptr));
+	auto item = std::make_shared<RssItem>(nullptr);
 	item->set_guid(argv[0]);
 	item->set_title(argv[1]);
 	item->set_author(argv[2]);
@@ -607,7 +604,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	query = prepare_query(
 			"SELECT title, url, is_rtl FROM rss_feed WHERE rssurl = '%q';",
 			rssurl);
-	run_sql(query, rssfeed_callback, &feed);
+	run_sql(query, rssfeed_callback, feed.get());
 
 	/* ...and then the associated items */
 	query = prepare_query(
@@ -620,7 +617,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 			"AND deleted = 0 "
 			"ORDER BY pubDate DESC, id DESC;",
 			rssurl);
-	run_sql(query, rssitem_callback, &feed);
+	run_sql(query, rssitem_callback, feed.get());
 
 	auto feed_weak_ptr = std::weak_ptr<RssFeed>(feed);
 	for (const auto& item : feed->items()) {
