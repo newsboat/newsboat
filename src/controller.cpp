@@ -681,7 +681,7 @@ void Controller::mark_all_read(unsigned int pos)
 			}
 			api->mark_articles_read(item_guids);
 		}
-		rsscache->mark_all_read(feed);
+		rsscache->mark_all_read(*feed);
 	} else {
 		rsscache->mark_all_read(feed->rssurl());
 		if (api) {

@@ -43,7 +43,7 @@ public:
 	void mark_all_read(unsigned int pos);
 	void mark_article_read(const std::string& guid, bool read);
 	void mark_all_read(const std::string& feedurl);
-	void mark_all_read(std::shared_ptr<RssFeed> feed)
+	void mark_all_read(RssFeed& feed)
 	{
 		rsscache->mark_all_read(feed);
 	}

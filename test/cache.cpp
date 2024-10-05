@@ -220,7 +220,7 @@ TEST_CASE("mark_all_read marks all items in the feed read", "[Cache]")
 		INFO("All items that are in the specific feed should be marked "
 			"as read");
 		rsscache.externalize_rssfeed(*test_feed, false);
-		rsscache.mark_all_read(test_feed);
+		rsscache.mark_all_read(*test_feed);
 
 		/* Since test_feed contains the first item of each feed, only
 		 * these two items should be marked read. */
