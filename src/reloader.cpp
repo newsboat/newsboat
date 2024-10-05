@@ -117,7 +117,7 @@ void Reloader::reload(unsigned int pos,
 			sm.stopover("start replacing feed");
 			if (newfeed != nullptr) {
 				ctrl->replace_feed(
-					oldfeed, newfeed, pos, unattended);
+					*oldfeed, *newfeed, pos, unattended);
 				if (newfeed->total_item_count() == 0) {
 					LOG(Level::DEBUG,
 						"Reloader::reload: feed is empty");

@@ -80,10 +80,7 @@ public:
 		return reloader.get();
 	}
 
-	void replace_feed(std::shared_ptr<RssFeed> oldfeed,
-		std::shared_ptr<RssFeed> newfeed,
-		unsigned int pos,
-		bool unattended);
+	void replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int pos, bool unattended);
 
 	ConfigContainer* get_config()
 	{

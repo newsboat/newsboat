@@ -703,25 +703,23 @@ void Controller::mark_all_read(const std::vector<std::string>& item_guids)
 	}
 }
 
-void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
-	std::shared_ptr<RssFeed> newfeed,
-	unsigned int pos,
+void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int pos,
 	bool unattended)
 {
 	LOG(Level::DEBUG, "Controller::replace_feed: saving");
 	rsscache->externalize_rssfeed(
-		*newfeed, ign.matches_resetunread(newfeed->rssurl()));
+		newfeed, ign.matches_resetunread(newfeed.rssurl()));
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after externalize_rssfeed");
 
 	bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
 	std::shared_ptr<RssFeed> feed = rsscache->internalize_rssfeed(
-			oldfeed->rssurl(), ignore_disp ? &ign : nullptr);
+			oldfeed.rssurl(), ignore_disp ? &ign : nullptr);
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after internalize_rssfeed");
 
-	feed->set_tags(urlcfg->get_tags(oldfeed->rssurl()));
-	feed->set_order(oldfeed->get_order());
+	feed->set_tags(urlcfg->get_tags(oldfeed.rssurl()));
+	feed->set_order(oldfeed.get_order());
 	feedcontainer.replace_feed(pos, feed);
 
 	if (cfg.get_configvalue_as_bool("podcast-auto-enqueue")) {
