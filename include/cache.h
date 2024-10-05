@@ -43,7 +43,7 @@ class Cache {
 public:
 	Cache(const std::string& cachefile, ConfigContainer* c);
 	~Cache();
-	void externalize_rssfeed(std::shared_ptr<RssFeed> feed,
+	void externalize_rssfeed(RssFeed& feed,
 		bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
 		RssIgnores* ign);

@@ -501,22 +501,22 @@ void Cache::mark_item_deleted(const std::string& guid, bool b)
 }
 
 // this function writes an RssFeed including all RssItems to the database
-void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
+void Cache::externalize_rssfeed(RssFeed& feed,
 	bool reset_unread)
 {
 	ScopeMeasure m1("Cache::externalize_feed");
-	if (feed->is_query_feed()) {
+	if (feed.is_query_feed()) {
 		return;
 	}
 
 	std::lock_guard<std::recursive_mutex> lock(mtx);
-	std::lock_guard<std::mutex> feedlock(feed->item_mutex);
+	std::lock_guard<std::mutex> feedlock(feed.item_mutex);
 	// scope_transaction dbtrans(db);
 
 	CbHandler count_cbh;
 	auto query = prepare_query(
 			"SELECT count(*) FROM rss_feed WHERE rssurl = '%q';",
-			feed->rssurl());
+			feed.rssurl());
 	run_sql(query, count_callback, &count_cbh);
 
 	const int count = count_cbh.count();
@@ -524,26 +524,26 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 		"Cache::externalize_rss_feed: rss_feeds with rssurl = '%s': "
 		"found "
 		"%d",
-		feed->rssurl(),
+		feed.rssurl(),
 		count);
 	if (count > 0) {
 		const std::string updatequery = prepare_query(
 				"UPDATE rss_feed "
 				"SET title = '%q', url = '%q', is_rtl = %u "
 				"WHERE rssurl = '%q';",
-				feed->title_raw(),
-				feed->link(),
-				feed->is_rtl() ? 1 : 0,
-				feed->rssurl());
+				feed.title_raw(),
+				feed.link(),
+				feed.is_rtl() ? 1 : 0,
+				feed.rssurl());
 		run_sql(updatequery);
 	} else {
 		const std::string insertquery = prepare_query(
 				"INSERT INTO rss_feed (rssurl, url, title, is_rtl) "
 				"VALUES ( '%q', '%q', '%q', %u );",
-				feed->rssurl(),
-				feed->link(),
-				feed->title_raw(),
-				feed->is_rtl() ? 1 : 0);
+				feed.rssurl(),
+				feed.link(),
+				feed.title_raw(),
+				feed.is_rtl() ? 1 : 0);
 		run_sql(insertquery);
 	}
 
@@ -554,11 +554,11 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 		"feed.total_item_count() = "
 		"%u",
 		max_items,
-		feed->total_item_count());
+		feed.total_item_count());
 
-	if (max_items > 0 && feed->total_item_count() > max_items) {
-		feed->erase_items(
-			feed->items().begin() + max_items, feed->items().end());
+	if (max_items > 0 && feed.total_item_count() > max_items) {
+		feed.erase_items(
+			feed.items().begin() + max_items, feed.items().end());
 	}
 
 	const unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
@@ -566,11 +566,11 @@ void Cache::externalize_rssfeed(std::shared_ptr<RssFeed> feed,
 
 	// the reverse iterator is there for the sorting foo below (think about
 	// it)
-	for (auto it = feed->items().rbegin(); it != feed->items().rend();
+	for (auto it = feed.items().rbegin(); it != feed.items().rend();
 		++it) {
 		if (days == 0 || (*it)->pubDate_timestamp() >= old_time)
 			update_rssitem_unlocked(
-				*it, feed->rssurl(), reset_unread);
+				*it, feed.rssurl(), reset_unread);
 	}
 }
 

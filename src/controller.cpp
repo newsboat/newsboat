@@ -710,7 +710,7 @@ void Controller::replace_feed(std::shared_ptr<RssFeed> oldfeed,
 {
 	LOG(Level::DEBUG, "Controller::replace_feed: saving");
 	rsscache->externalize_rssfeed(
-		newfeed, ign.matches_resetunread(newfeed->rssurl()));
+		*newfeed, ign.matches_resetunread(newfeed->rssurl()));
 	LOG(Level::DEBUG,
 		"Controller::replace_feed: after externalize_rssfeed");
 

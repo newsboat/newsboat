@@ -47,7 +47,7 @@ TEST_CASE("Feed retriever adds header with etag info if available", "[FeedRetrie
 	const auto address = testServer.get_address();
 	const auto url = strprintf::fmt("http://%s/feed", address);
 
-	auto feed_with_etag = std::make_shared<RssFeed>(&rsscache, url);
+	RssFeed feed_with_etag(&rsscache, url);
 	rsscache.externalize_rssfeed(feed_with_etag, false);
 	rsscache.update_lastmodified(url, {}, "some-random-etag");
 
@@ -96,7 +96,7 @@ TEST_CASE("Feed retriever does not retry download on HTTP 304 (Not Modified), 42
 	const auto address = testServer.get_address();
 	const auto url = strprintf::fmt("http://%s/feed", address);
 
-	auto feed_with_etag = std::make_shared<RssFeed>(&rsscache, url);
+	RssFeed feed_with_etag(&rsscache, url);
 	rsscache.externalize_rssfeed(feed_with_etag, false);
 	rsscache.update_lastmodified(url, {}, "some-random-etag");
 
