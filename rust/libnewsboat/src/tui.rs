@@ -3,11 +3,15 @@ use std::io;
 
 pub struct Tui {
     terminal: Option<DefaultTerminal>,
+    title: String,
 }
 
 impl Tui {
     pub fn new() -> Self {
-        Tui { terminal: None }
+        Tui {
+            terminal: None,
+            title: String::new(),
+        }
     }
 
     pub fn run(&mut self) -> io::Result<()> {
@@ -18,7 +22,7 @@ impl Tui {
         }
         let terminal = self.terminal.as_mut().unwrap();
         terminal.draw(|frame| {
-            let title = Paragraph::new("Newsboat's title")
+            let title = Paragraph::new(self.title.as_str())
                 .white()
                 .on_blue();
             frame.render_widget(title, frame.area());

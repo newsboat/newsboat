@@ -8,7 +8,9 @@ namespace newsboat {
 class Tui {
 public:
 	Tui();
-	~Tui() = default;
+	~Tui();
+
+	static Tui& get_instance();
 
 	void run();
 

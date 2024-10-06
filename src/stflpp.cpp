@@ -6,6 +6,7 @@
 
 #include "exception.h"
 #include "logger.h"
+#include "tui.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -44,6 +45,8 @@ Stfl::Form::~Form()
 
 const char* Stfl::Form::run(int timeout)
 {
+	// TODO: Change based on specified timeout
+	Tui::get_instance().run();
 	return stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
 }
 
