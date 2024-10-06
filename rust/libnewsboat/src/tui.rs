@@ -1,6 +1,8 @@
 use ratatui::{
     crossterm::event::{self, poll, Event, KeyCode, KeyEventKind},
+    layout::{Constraint, Direction, Layout},
     style::Stylize,
+    text::Line,
     widgets::Paragraph,
     DefaultTerminal,
 };
@@ -9,6 +11,7 @@ use std::{io, time::Duration};
 pub struct Tui {
     terminal: Option<DefaultTerminal>,
     title: String,
+    message: String,
 }
 
 impl Tui {
@@ -16,6 +19,7 @@ impl Tui {
         Tui {
             terminal: None,
             title: String::new(),
+            message: String::new(),
         }
     }
 
@@ -27,8 +31,18 @@ impl Tui {
         }
         let terminal = self.terminal.as_mut().unwrap();
         terminal.draw(|frame| {
+            let chunks = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([
+                    Constraint::Length(1),
+                    Constraint::Fill(1),
+                    Constraint::Length(1),
+                ])
+                .split(frame.area());
             let title = Paragraph::new(self.title.as_str()).white().on_blue();
-            frame.render_widget(title, frame.area());
+            let message = Line::from(self.message.as_str()).white().on_black();
+            frame.render_widget(title, chunks[0]);
+            frame.render_widget(message, chunks[2]);
         })?;
         Ok(())
     }
@@ -81,7 +95,13 @@ impl Tui {
             "head" => {
                 self.title = value.into();
             }
-            _ => {} // TODO: Handle other variables
+            "msg" => {
+                self.message = value.into();
+            }
+            _ => {
+                // TODO: Handle other variables
+                //self.message = key.into();
+            }
         };
     }
 }
