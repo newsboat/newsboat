@@ -2,11 +2,13 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <cstring>
 #include <ncurses.h>
 
 #include "config.h"
 #include "configexception.h"
 #include "controller.h"
+#include "keymap.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "textviewwidget.h"
@@ -89,6 +91,56 @@ std::string FormAction::draw_form_wait_for_event(unsigned int timeout)
 void FormAction::recalculate_widget_dimensions()
 {
 	f.run(-3);
+}
+
+char FormAction::confirm(const std::string& prompt, const std::string& charset)
+{
+	LOG(Level::DEBUG, "View::confirm: charset = %s", charset);
+
+	f.set("qna_value", prompt);
+	qna_prompt_line.show();
+	f.set("show_qna_input", "1");
+	msg_line.hide();
+	f.set_focus("qnainput");
+	v.inside_qna(true);
+
+	draw_form();
+	set_value("qna_value_pos", std::to_string(prompt.size()));
+	set_value("qna_process", "0");
+
+	char result = 0;
+
+	do {
+		const std::string event = draw_form_wait_for_event(0);
+		LOG(Level::DEBUG, "View::confirm: event = %s", event);
+		if (event.empty()) {
+			continue;
+		}
+		if (event == "ESC" || event == "ENTER") {
+			result = 0;
+			LOG(Level::DEBUG,
+				"View::confirm: user pressed ESC or ENTER, we "
+				"cancel confirmation dialog");
+			break;
+		}
+		result = KeyMap::get_key(event);
+		LOG(Level::DEBUG,
+			"View::confirm: key = %c (%u)",
+			result,
+			result);
+	} while (!result || strchr(charset.c_str(), result) == nullptr);
+
+	set_value("qna_process", "1");
+	v.inside_qna(false);
+	f.set_focus(main_widget());
+	qna_prompt_line.hide();
+	f.set("show_qna_input", "0");
+	msg_line.show();
+	msg_line.set_text("");
+
+	draw_form();
+
+	return result;
 }
 
 void FormAction::start_cmdline(std::string default_value)
