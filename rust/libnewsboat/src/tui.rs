@@ -1,4 +1,4 @@
-use ratatui::DefaultTerminal;
+use ratatui::{style::Stylize, widgets::Paragraph, DefaultTerminal};
 use std::io;
 
 pub struct Tui {
@@ -16,6 +16,13 @@ impl Tui {
             terminal.clear()?;
             self.terminal = Some(terminal);
         }
+        let terminal = self.terminal.as_mut().unwrap();
+        terminal.draw(|frame| {
+            let title = Paragraph::new("Newsboat's title")
+                .white()
+                .on_blue();
+            frame.render_widget(title, frame.area());
+        })?;
         Ok(())
     }
 }

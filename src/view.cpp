@@ -1,6 +1,7 @@
 #include "view.h"
 
 #include <assert.h>
+#include <chrono>
 #include <cstring>
 #include <dirent.h>
 #include <grp.h>
@@ -12,6 +13,7 @@
 #include <string.h>
 #include <sys/param.h>
 #include <sys/types.h>
+#include <thread>
 #include <unistd.h>
 
 extern "C" {
@@ -147,6 +149,9 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 int View::run()
 {
 	bool have_macroprefix = false;
+
+	tui.run();
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 
 	feedlist_form = std::make_shared<FeedListFormAction>(
 			*this, feedlist_str, rsscache, filters, cfg, rxman);

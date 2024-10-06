@@ -10,6 +10,8 @@ public:
 	Tui();
 	~Tui() = default;
 
+	void run();
+
 private:
 	rust::Box<tui::bridged::Tui> rs_object;
 };
