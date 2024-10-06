@@ -43,11 +43,11 @@ Stfl::Form::~Form()
 	}
 }
 
-const char* Stfl::Form::run(int timeout)
+std::string Stfl::Form::run(int timeout)
 {
 	// TODO: Change based on specified timeout
-	Tui::get_instance().run();
-	return stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
+	return Tui::get_instance().run(timeout);
+	//return stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
 }
 
 std::string Stfl::Form::get(const std::string& name)

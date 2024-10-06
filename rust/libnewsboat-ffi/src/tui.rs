@@ -10,7 +10,7 @@ mod bridged {
         type Tui;
 
         fn create() -> Box<Tui>;
-        fn run(tui: &mut Tui);
+        fn run(tui: &mut Tui, timeout: i32) -> String;
     }
 }
 
@@ -18,7 +18,8 @@ fn create() -> Box<Tui> {
     Box::new(Tui(tui::Tui::new()))
 }
 
-fn run(tui: &mut Tui) {
+fn run(tui: &mut Tui, timeout: i32) -> String {
     // TODO: Handle error?
-    let _ = tui.0.run();
+    let event = tui.0.run(timeout).unwrap();
+    event.unwrap_or_else(|| String::new())
 }

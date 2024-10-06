@@ -27,9 +27,9 @@ Tui& Tui::get_instance()
 	return *tui_instance;
 }
 
-void Tui::run()
+std::string Tui::run(std::int32_t timeout)
 {
-	tui::bridged::run(*rs_object);
+	return std::string(tui::bridged::run(*rs_object, timeout));
 }
 
 } // namespace newsboat
