@@ -1,4 +1,9 @@
-use ratatui::{crossterm::event::{self, poll, Event, KeyCode, KeyEventKind}, style::Stylize, widgets::Paragraph, DefaultTerminal};
+use ratatui::{
+    crossterm::event::{self, poll, Event, KeyCode, KeyEventKind},
+    style::Stylize,
+    widgets::Paragraph,
+    DefaultTerminal,
+};
 use std::{io, time::Duration};
 
 pub struct Tui {
@@ -14,7 +19,7 @@ impl Tui {
         }
     }
 
-    fn draw(&mut self)  -> io::Result<()> {
+    fn draw(&mut self) -> io::Result<()> {
         if self.terminal.is_none() {
             let mut terminal = ratatui::init();
             terminal.clear()?;
@@ -22,9 +27,7 @@ impl Tui {
         }
         let terminal = self.terminal.as_mut().unwrap();
         terminal.draw(|frame| {
-            let title = Paragraph::new(self.title.as_str())
-                .white()
-                .on_blue();
+            let title = Paragraph::new(self.title.as_str()).white().on_blue();
             frame.render_widget(title, frame.area());
         })?;
         Ok(())
@@ -44,7 +47,7 @@ impl Tui {
                         // TODO: Handle all keys which were handled by ncurses/stfl
                         _ => None,
                     }
-                },
+                }
                 _ => None,
             };
             Ok(event)
@@ -56,21 +59,30 @@ impl Tui {
     // TODO: Get implementation in line with description
     /// Draws UI and waits for next event (keypress, resize, etc.)
     ///
-    /// 
+    ///
     pub fn run(&mut self, timeout: i32) -> io::Result<Option<String>> {
         let event = match timeout {
             -1 => {
                 self.draw()?;
                 None
-            },
+            }
             -2 => Self::get_event(None)?,
             -3 => None, // TODO: Check if any rendering or size-determining is necessary
             timeout => {
                 self.draw()?;
                 Self::get_event(Some(timeout.abs() as u32))?
-            },
+            }
         };
         Ok(event)
+    }
+
+    pub fn set_variable(&mut self, key: &str, value: &str) {
+        match key {
+            "head" => {
+                self.title = value.into();
+            }
+            _ => {} // TODO: Handle other variables
+        };
     }
 }
 

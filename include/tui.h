@@ -16,6 +16,7 @@ public:
 	static Tui& get_instance();
 
 	std::string run(std::int32_t timeout);
+	void set_variable(std::string key, std::string value);
 
 private:
 	rust::Box<tui::bridged::Tui> rs_object;

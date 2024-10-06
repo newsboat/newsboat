@@ -5,7 +5,7 @@
 #include "libnewsboat-ffi/src/tui.rs.h"
 
 namespace {
-	newsboat::Tui* tui_instance = nullptr;
+newsboat::Tui* tui_instance = nullptr;
 }
 
 namespace newsboat {
@@ -30,6 +30,11 @@ Tui& Tui::get_instance()
 std::string Tui::run(std::int32_t timeout)
 {
 	return std::string(tui::bridged::run(*rs_object, timeout));
+}
+
+void Tui::set_variable(std::string key, std::string value)
+{
+	tui::bridged::set_variable(*rs_object, key, value);
 }
 
 } // namespace newsboat

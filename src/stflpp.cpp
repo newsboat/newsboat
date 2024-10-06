@@ -64,10 +64,11 @@ std::string Stfl::Form::get(const std::string& name)
 
 void Stfl::Form::set(const std::string& name, const std::string& value)
 {
-	stfl_set(f,
-		stfl_ipool_towc(ipool, name.c_str()),
-		stfl_ipool_towc(ipool, value.c_str()));
-	stfl_ipool_flush(ipool);
+	Tui::get_instance().set_variable(name, value);
+	//stfl_set(f,
+	//	stfl_ipool_towc(ipool, name.c_str()),
+	//	stfl_ipool_towc(ipool, value.c_str()));
+	//stfl_ipool_flush(ipool);
 }
 
 std::string Stfl::Form::get_focus()
