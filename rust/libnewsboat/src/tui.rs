@@ -11,6 +11,7 @@ use std::{io, time::Duration};
 pub struct Tui {
     terminal: Option<DefaultTerminal>,
     title: String,
+    help: String,
     message: String,
 }
 
@@ -19,6 +20,7 @@ impl Tui {
         Tui {
             terminal: None,
             title: String::new(),
+            help: String::new(),
             message: String::new(),
         }
     }
@@ -37,12 +39,15 @@ impl Tui {
                     Constraint::Length(1),
                     Constraint::Fill(1),
                     Constraint::Length(1),
+                    Constraint::Length(1),
                 ])
                 .split(frame.area());
             let title = Paragraph::new(self.title.as_str()).white().on_blue();
+            let help = Line::from(self.help.as_str()).white().on_black();
             let message = Line::from(self.message.as_str()).white().on_black();
             frame.render_widget(title, chunks[0]);
-            frame.render_widget(message, chunks[2]);
+            frame.render_widget(help, chunks[2]);
+            frame.render_widget(message, chunks[3]);
         })?;
         Ok(())
     }
@@ -94,6 +99,9 @@ impl Tui {
         match key {
             "head" => {
                 self.title = value.into();
+            }
+            "help" => {
+                self.help = value.into();
             }
             "msg" => {
                 self.message = value.into();
