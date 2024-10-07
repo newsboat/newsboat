@@ -1,9 +1,15 @@
+use nom::{
+    bytes::complete::{tag, take_until},
+    combinator::eof,
+    multi::many0,
+    IResult,
+};
 use ratatui::{
     crossterm::event::{self, poll, Event, KeyCode, KeyEventKind},
     layout::{Constraint, Direction, Layout},
     style::Stylize,
     text::Line,
-    widgets::Paragraph,
+    widgets::{List, ListItem, Paragraph},
     DefaultTerminal,
 };
 use std::{io, time::Duration};
@@ -13,6 +19,7 @@ pub struct Tui {
     title: String,
     help: String,
     message: String,
+    list_items: Vec<String>,
 }
 
 impl Tui {
@@ -22,6 +29,7 @@ impl Tui {
             title: String::new(),
             help: String::new(),
             message: String::new(),
+            list_items: vec![],
         }
     }
 
@@ -45,7 +53,16 @@ impl Tui {
             let title = Paragraph::new(self.title.as_str()).white().on_blue();
             let help = Line::from(self.help.as_str()).white().on_black();
             let message = Line::from(self.message.as_str()).white().on_black();
+
+            let items: Vec<_> = self
+                .list_items
+                .iter()
+                .map(|item| ListItem::from(item.as_str()))
+                .collect();
+            let list = List::new(items);
+
             frame.render_widget(title, chunks[0]);
+            frame.render_widget(list, chunks[1]);
             frame.render_widget(help, chunks[2]);
             frame.render_widget(message, chunks[3]);
         })?;
@@ -73,6 +90,28 @@ impl Tui {
         } else {
             Ok(None)
         }
+    }
+
+    fn parse_stfl_listitem(input: &str) -> IResult<&str, &str> {
+        let (input, _) = tag("{listitem text:\"")(input)?;
+        // TODO: Handle escaped double quotes
+        let (input, item) = take_until("\"")(input)?;
+        let (input, _) = tag("\"}")(input)?;
+        Ok((input, item))
+    }
+
+    fn parse_stfl_list(input: &str) -> IResult<&str, Vec<&str>> {
+        let (input, _) = tag("{list")(input)?;
+        let (input, items) = many0(Self::parse_stfl_listitem)(input)?;
+        let (input, _) = tag("}")(input)?;
+        let (input, _) = eof(input)?;
+        Ok((input, items))
+    }
+
+    fn replace_list(&mut self, value: &str) {
+        // TODO: Avoid unwrap
+        let (_remainder, items) = Self::parse_stfl_list(value).unwrap();
+        self.list_items = items.into_iter().map(|s| s.into()).collect();
     }
 
     // TODO: Get implementation in line with description
@@ -131,7 +170,11 @@ impl Tui {
     }
 
     pub fn modify_form(&mut self, name: &str, mode: &str, value: &str) {
-        self.message = format!("unhandled modify_form: {} {} {}", name, mode, value);
+        match (name, mode) {
+            ("feeds", "replace_inner") => self.replace_list(value),
+            ("feeds", "replace") => (), // TODO: Handle (update style?)
+            _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
+        };
     }
 }
 
