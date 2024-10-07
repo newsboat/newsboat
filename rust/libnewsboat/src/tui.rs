@@ -1,9 +1,3 @@
-use nom::{
-    bytes::complete::{tag, take_until},
-    combinator::eof,
-    multi::many0,
-    IResult,
-};
 use ratatui::{
     crossterm::event::{self, poll, Event, KeyCode, KeyEventKind},
     layout::{Constraint, Direction, Layout},
@@ -13,6 +7,8 @@ use ratatui::{
     DefaultTerminal,
 };
 use std::{io, time::Duration};
+
+mod stfl;
 
 pub struct Tui {
     terminal: Option<DefaultTerminal>,
@@ -107,25 +103,9 @@ impl Tui {
         }
     }
 
-    fn parse_stfl_listitem(input: &str) -> IResult<&str, &str> {
-        let (input, _) = tag("{listitem text:\"")(input)?;
-        // TODO: Handle escaped double quotes
-        let (input, item) = take_until("\"")(input)?;
-        let (input, _) = tag("\"}")(input)?;
-        Ok((input, item))
-    }
-
-    fn parse_stfl_list(input: &str) -> IResult<&str, Vec<&str>> {
-        let (input, _) = tag("{list")(input)?;
-        let (input, items) = many0(Self::parse_stfl_listitem)(input)?;
-        let (input, _) = tag("}")(input)?;
-        let (input, _) = eof(input)?;
-        Ok((input, items))
-    }
-
     fn replace_list(&mut self, value: &str) {
         // TODO: Avoid unwrap
-        let (_remainder, items) = Self::parse_stfl_list(value).unwrap();
+        let (_remainder, items) = stfl::parse_list(value).unwrap();
         self.list_items = items.into_iter().map(|s| s.into()).collect();
     }
 
