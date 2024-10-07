@@ -126,11 +126,11 @@ impl Tui {
             "msg" => {
                 self.message = value.into();
             }
-            "feeds_pos" => {
+            "feeds_pos" | "items_pos" => {
                 // TODO: Handle non-numeric value?
                 self.list_state.select(value.parse().ok());
             }
-            "feeds_offset" => {
+            "feeds_offset" | "items_offset" => {
                 // TODO: Handle
             }
             _ => {
@@ -142,10 +142,8 @@ impl Tui {
 
     pub fn modify_form(&mut self, name: &str, mode: &str, value: &str) {
         match (name, mode) {
-            ("feeds", "replace_inner") => self.replace_list(value),
-            ("feeds", "replace") => (), // TODO: Handle (update style?)
-            ("items", "replace_inner") => self.replace_list(value),
-            ("items", "replace") => (), // TODO: Handle (update style?)
+            ("feeds" | "items", "replace_inner") => self.replace_list(value),
+            ("feeds" | "items", "replace") => (), // TODO: Handle (update style?)
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
     }
