@@ -1,4 +1,4 @@
-use ratatui::crossterm::event::{self, poll, Event, KeyCode, KeyEventKind};
+use ratatui::crossterm::event::{self, poll, Event, KeyCode, KeyEventKind, KeyModifiers};
 use std::{io, time::Duration};
 
 pub fn get_event(timeout: Option<u32>) -> io::Result<Option<String>> {
@@ -9,7 +9,10 @@ pub fn get_event(timeout: Option<u32>) -> io::Result<Option<String>> {
     };
     if read_event {
         let event = match event::read()? {
-            Event::Key(key_event) if key_event.kind == KeyEventKind::Press => {
+            Event::Key(key_event)
+                if key_event.kind == KeyEventKind::Press
+                    && !key_event.modifiers.contains(KeyModifiers::CONTROL) =>
+            {
                 match key_event.code {
                     KeyCode::Char(c) => Some(c.to_string()),
                     KeyCode::Enter => Some("ENTER".into()),
@@ -26,6 +29,17 @@ pub fn get_event(timeout: Option<u32>) -> io::Result<Option<String>> {
                     KeyCode::Tab => Some("TAB".into()),
                     KeyCode::F(n) => Some(format!("F{}", n)),
                     // TODO: Handle all keys which were handled by ncurses/stfl
+                    _ => None,
+                }
+            }
+            Event::Key(key_event)
+                if key_event.kind == KeyEventKind::Press
+                    && key_event.modifiers.contains(KeyModifiers::CONTROL) =>
+            {
+                match key_event.code {
+                    KeyCode::Char(c) if c.is_ascii() && c.is_alphabetic() => {
+                        Some(format!("^{}", c.to_ascii_uppercase()))
+                    }
                     _ => None,
                 }
             }
