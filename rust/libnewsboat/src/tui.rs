@@ -103,10 +103,8 @@ impl Tui {
 
     pub fn get_variable(&mut self, key: &str) -> String {
         match key {
-            "feeds:w" => self.list_viewport_dimensions.0.to_string(),
-            "feeds:h" => self.list_viewport_dimensions.1.to_string(),
-            "items:w" => self.list_viewport_dimensions.0.to_string(),
-            "items:h" => self.list_viewport_dimensions.1.to_string(),
+            "feeds:w" | "items:w" | "urls:w" => self.list_viewport_dimensions.0.to_string(),
+            "feeds:h" | "items:h" | "urls:h" => self.list_viewport_dimensions.1.to_string(),
             "title:w" => self.list_viewport_dimensions.0.to_string(),
             _ => {
                 self.message = format!("unhandled get: {}", key);
@@ -126,11 +124,11 @@ impl Tui {
             "msg" => {
                 self.message = value.into();
             }
-            "feeds_pos" | "items_pos" => {
+            "feeds_pos" | "items_pos" | "urls_pos" => {
                 // TODO: Handle non-numeric value?
                 self.list_state.select(value.parse().ok());
             }
-            "feeds_offset" | "items_offset" => {
+            "feeds_offset" | "items_offset" | "urls_offset" => {
                 // TODO: Handle
             }
             _ => {
@@ -142,8 +140,8 @@ impl Tui {
 
     pub fn modify_form(&mut self, name: &str, mode: &str, value: &str) {
         match (name, mode) {
-            ("feeds" | "items", "replace_inner") => self.replace_list(value),
-            ("feeds" | "items", "replace") => (), // TODO: Handle (update style?)
+            ("feeds" | "items" | "urls", "replace_inner") => self.replace_list(value),
+            ("feeds" | "items" | "urls", "replace") => (), // TODO: Handle (update style?)
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
     }
