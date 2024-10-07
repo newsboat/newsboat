@@ -1,13 +1,13 @@
 use ratatui::{
-    crossterm::event::{self, poll, Event, KeyCode, KeyEventKind},
     layout::{Constraint, Direction, Layout},
     style::{Style, Stylize},
     text::Line,
     widgets::{List, ListItem, ListState, Paragraph},
     DefaultTerminal,
 };
-use std::{io, time::Duration};
+use std::io;
 
+mod input;
 mod stfl;
 
 pub struct Tui {
@@ -67,42 +67,6 @@ impl Tui {
         Ok(())
     }
 
-    fn get_event(timeout: Option<u32>) -> io::Result<Option<String>> {
-        let read_event = match timeout {
-            None => poll(Duration::from_secs(0))?,
-            Some(0) => true,
-            Some(timeout) => poll(Duration::from_millis(timeout.into()))?,
-        };
-        if read_event {
-            let event = match event::read()? {
-                Event::Key(key_event) if key_event.kind == KeyEventKind::Press => {
-                    match key_event.code {
-                        KeyCode::Char(c) => Some(c.to_string()),
-                        KeyCode::Enter => Some("ENTER".into()),
-                        KeyCode::Backspace => Some("BACKSPACE".into()),
-                        KeyCode::Left => Some("LEFT".into()),
-                        KeyCode::Right => Some("RIGHT".into()),
-                        KeyCode::Up => Some("UP".into()),
-                        KeyCode::Down => Some("DOWN".into()),
-                        KeyCode::PageUp => Some("PPAGE".into()),
-                        KeyCode::PageDown => Some("NPAGE".into()),
-                        KeyCode::Home => Some("HOME".into()),
-                        KeyCode::End => Some("END".into()),
-                        KeyCode::Esc => Some("ESC".into()),
-                        KeyCode::Tab => Some("TAB".into()),
-                        KeyCode::F(n) => Some(format!("F{}", n)),
-                        // TODO: Handle all keys which were handled by ncurses/stfl
-                        _ => None,
-                    }
-                }
-                _ => None,
-            };
-            Ok(event)
-        } else {
-            Ok(None)
-        }
-    }
-
     fn replace_list(&mut self, value: &str) {
         // TODO: Avoid unwrap
         let (_remainder, items) = stfl::parse_list(value).unwrap();
@@ -119,11 +83,11 @@ impl Tui {
                 self.draw()?;
                 None
             }
-            -2 => Self::get_event(None)?,
+            -2 => input::get_event(None)?,
             -3 => None, // TODO: Check if any rendering or size-determining is necessary
             timeout => {
                 self.draw()?;
-                Self::get_event(Some(timeout.abs() as u32))?
+                input::get_event(Some(timeout.abs() as u32))?
             }
         };
         Ok(event)
