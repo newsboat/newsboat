@@ -129,6 +129,10 @@ impl Tui {
             }
         };
     }
+
+    pub fn modify_form(&mut self, name: &str, mode: &str, value: &str) {
+        self.message = format!("unhandled modify_form: {} {} {}", name, mode, value);
+    }
 }
 
 impl Drop for Tui {

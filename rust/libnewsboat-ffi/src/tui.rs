@@ -13,6 +13,7 @@ mod bridged {
         fn run(tui: &mut Tui, timeout: i32) -> String;
         fn get_variable(tui: &mut Tui, key: &str) -> String;
         fn set_variable(tui: &mut Tui, key: &str, value: &str);
+        fn modify_form(tui: &mut Tui, name: &str, mode: &str, value: &str);
     }
 }
 
@@ -32,4 +33,8 @@ fn get_variable(tui: &mut Tui, key: &str) -> String {
 
 fn set_variable(tui: &mut Tui, key: &str, value: &str) {
     tui.0.set_variable(key, value);
+}
+
+fn modify_form(tui: &mut Tui, name: &str, mode: &str, value: &str) {
+    tui.0.modify_form(name, mode, value);
 }

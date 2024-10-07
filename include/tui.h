@@ -18,6 +18,7 @@ public:
 	std::string run(std::int32_t timeout);
 	std::string get_variable(std::string key);
 	void set_variable(std::string key, std::string value);
+	void modify_form(std::string name, std::string mode, std::string value);
 
 private:
 	rust::Box<tui::bridged::Tui> rs_object;

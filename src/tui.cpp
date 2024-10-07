@@ -42,4 +42,9 @@ void Tui::set_variable(std::string key, std::string value)
 	tui::bridged::set_variable(*rs_object, key, value);
 }
 
+void Tui::modify_form(std::string name, std::string mode, std::string value)
+{
+	tui::bridged::modify_form(*rs_object, name, mode, value);
+}
+
 } // namespace newsboat
