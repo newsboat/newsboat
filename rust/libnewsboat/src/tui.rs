@@ -17,6 +17,7 @@ pub struct Tui {
     message: String,
     list_items: Vec<String>,
     list_state: ListState,
+    list_viewport_dimensions: (u16, u16),
 }
 
 impl Tui {
@@ -28,6 +29,7 @@ impl Tui {
             message: String::new(),
             list_items: vec![],
             list_state: ListState::default(),
+            list_viewport_dimensions: (0, 0),
         }
     }
 
@@ -63,6 +65,8 @@ impl Tui {
             frame.render_stateful_widget(list, chunks[1], &mut self.list_state);
             frame.render_widget(help, chunks[2]);
             frame.render_widget(message, chunks[3]);
+
+            self.list_viewport_dimensions = (chunks[1].width, chunks[1].height);
         })?;
         Ok(())
     }
@@ -84,7 +88,11 @@ impl Tui {
                 None
             }
             -2 => input::get_event(None)?,
-            -3 => None, // TODO: Check if any rendering or size-determining is necessary
+            -3 => {
+                // TODO: Check if we can get rid of this draw (only updating widget dimensions instead)
+                self.draw()?;
+                None
+            }
             timeout => {
                 self.draw()?;
                 input::get_event(Some(timeout.abs() as u32))?
@@ -93,13 +101,13 @@ impl Tui {
         Ok(event)
     }
 
-    pub fn get_variable(&mut self, key: &str) -> &str {
+    pub fn get_variable(&mut self, key: &str) -> String {
         match key {
-            "feeds:w" => "80", // TODO: Return actual width
-            "feeds:h" => "10", // TODO: Return actual height
+            "feeds:w" => self.list_viewport_dimensions.0.to_string(),
+            "feeds:h" => self.list_viewport_dimensions.1.to_string(),
             _ => {
                 self.message = format!("unhandled get: {}", key);
-                ""
+                String::new()
             }
         }
     }

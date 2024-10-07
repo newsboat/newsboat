@@ -28,7 +28,7 @@ fn run(tui: &mut Tui, timeout: i32) -> String {
 }
 
 fn get_variable(tui: &mut Tui, key: &str) -> String {
-    tui.0.get_variable(key).into()
+    tui.0.get_variable(key)
 }
 
 fn set_variable(tui: &mut Tui, key: &str, value: &str) {
