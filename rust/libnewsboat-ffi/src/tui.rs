@@ -11,6 +11,7 @@ mod bridged {
 
         fn create() -> Box<Tui>;
         fn run(tui: &mut Tui, timeout: i32) -> String;
+        fn get_variable(tui: &mut Tui, key: &str) -> String;
         fn set_variable(tui: &mut Tui, key: &str, value: &str);
     }
 }
@@ -23,6 +24,10 @@ fn run(tui: &mut Tui, timeout: i32) -> String {
     // TODO: Handle error?
     let event = tui.0.run(timeout).unwrap();
     event.unwrap_or_else(|| String::new())
+}
+
+fn get_variable(tui: &mut Tui, key: &str) -> String {
+    tui.0.get_variable(key).into()
 }
 
 fn set_variable(tui: &mut Tui, key: &str, value: &str) {

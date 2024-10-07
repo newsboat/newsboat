@@ -32,6 +32,11 @@ std::string Tui::run(std::int32_t timeout)
 	return std::string(tui::bridged::run(*rs_object, timeout));
 }
 
+std::string Tui::get_variable(std::string key)
+{
+	return std::string(tui::bridged::get_variable(*rs_object, key));
+}
+
 void Tui::set_variable(std::string key, std::string value)
 {
 	tui::bridged::set_variable(*rs_object, key, value);

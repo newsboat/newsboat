@@ -95,6 +95,17 @@ impl Tui {
         Ok(event)
     }
 
+    pub fn get_variable(&mut self, key: &str) -> &str {
+        match key {
+            "feeds:w" => "80", // TODO: Return actual width
+            "feeds:h" => "10", // TODO: Return actual height
+            _ => {
+                self.message = format!("unhandled get: {}", key);
+                ""
+            }
+        }
+    }
+
     pub fn set_variable(&mut self, key: &str, value: &str) {
         match key {
             "head" => {
@@ -106,9 +117,15 @@ impl Tui {
             "msg" => {
                 self.message = value.into();
             }
+            "feeds_pos" => {
+                // TODO: Handle
+            }
+            "feeds_offset" => {
+                // TODO: Handle
+            }
             _ => {
                 // TODO: Handle other variables
-                //self.message = key.into();
+                self.message = format!("unhandled set: {}", key);
             }
         };
     }

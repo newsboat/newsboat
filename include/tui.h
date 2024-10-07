@@ -16,6 +16,7 @@ public:
 	static Tui& get_instance();
 
 	std::string run(std::int32_t timeout);
+	std::string get_variable(std::string key);
 	void set_variable(std::string key, std::string value);
 
 private:

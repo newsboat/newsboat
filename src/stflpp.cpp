@@ -52,14 +52,15 @@ std::string Stfl::Form::run(int timeout)
 
 std::string Stfl::Form::get(const std::string& name)
 {
-	const char* text = stfl_ipool_fromwc(
-			ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
-	std::string retval;
-	if (text) {
-		retval = text;
-	}
-	stfl_ipool_flush(ipool);
-	return retval;
+	return Tui::get_instance().get_variable(name);
+	//const char* text = stfl_ipool_fromwc(
+	//		ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
+	//std::string retval;
+	//if (text) {
+	//	retval = text;
+	//}
+	//stfl_ipool_flush(ipool);
+	//return retval;
 }
 
 void Stfl::Form::set(const std::string& name, const std::string& value)
