@@ -82,6 +82,19 @@ impl Tui {
                 Event::Key(key_event) if key_event.kind == KeyEventKind::Press => {
                     match key_event.code {
                         KeyCode::Char(c) => Some(c.to_string()),
+                        KeyCode::Enter => Some("ENTER".into()),
+                        KeyCode::Backspace => Some("BACKSPACE".into()),
+                        KeyCode::Left => Some("LEFT".into()),
+                        KeyCode::Right => Some("RIGHT".into()),
+                        KeyCode::Up => Some("UP".into()),
+                        KeyCode::Down => Some("DOWN".into()),
+                        KeyCode::PageUp => Some("PPAGE".into()),
+                        KeyCode::PageDown => Some("NPAGE".into()),
+                        KeyCode::Home => Some("HOME".into()),
+                        KeyCode::End => Some("END".into()),
+                        KeyCode::Esc => Some("ESC".into()),
+                        KeyCode::Tab => Some("TAB".into()),
+                        KeyCode::F(n) => Some(format!("F{}", n)),
                         // TODO: Handle all keys which were handled by ncurses/stfl
                         _ => None,
                     }
