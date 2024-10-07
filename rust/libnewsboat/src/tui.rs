@@ -7,9 +7,9 @@ use nom::{
 use ratatui::{
     crossterm::event::{self, poll, Event, KeyCode, KeyEventKind},
     layout::{Constraint, Direction, Layout},
-    style::Stylize,
+    style::{Style, Stylize},
     text::Line,
-    widgets::{List, ListItem, Paragraph},
+    widgets::{List, ListItem, ListState, Paragraph},
     DefaultTerminal,
 };
 use std::{io, time::Duration};
@@ -20,6 +20,7 @@ pub struct Tui {
     help: String,
     message: String,
     list_items: Vec<String>,
+    list_state: ListState,
 }
 
 impl Tui {
@@ -30,6 +31,7 @@ impl Tui {
             help: String::new(),
             message: String::new(),
             list_items: vec![],
+            list_state: ListState::default(),
         }
     }
 
@@ -59,10 +61,10 @@ impl Tui {
                 .iter()
                 .map(|item| ListItem::from(item.as_str()))
                 .collect();
-            let list = List::new(items);
+            let list = List::new(items).highlight_style(Style::new().white().on_blue().bold());
 
             frame.render_widget(title, chunks[0]);
-            frame.render_widget(list, chunks[1]);
+            frame.render_stateful_widget(list, chunks[1], &mut self.list_state);
             frame.render_widget(help, chunks[2]);
             frame.render_widget(message, chunks[3]);
         })?;
@@ -157,7 +159,8 @@ impl Tui {
                 self.message = value.into();
             }
             "feeds_pos" => {
-                // TODO: Handle
+                // TODO: Handle non-numeric value?
+                self.list_state.select(value.parse().ok());
             }
             "feeds_offset" => {
                 // TODO: Handle
