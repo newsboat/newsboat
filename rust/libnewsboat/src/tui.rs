@@ -74,7 +74,7 @@ impl Tui {
     fn replace_list(&mut self, value: &str) {
         // TODO: Avoid unwrap
         let (_remainder, items) = stfl::parse_list(value).unwrap();
-        self.list_items = items.into_iter().map(|s| s.into()).collect();
+        self.list_items = items;
     }
 
     // TODO: Get implementation in line with description
@@ -105,6 +105,9 @@ impl Tui {
         match key {
             "feeds:w" => self.list_viewport_dimensions.0.to_string(),
             "feeds:h" => self.list_viewport_dimensions.1.to_string(),
+            "items:w" => self.list_viewport_dimensions.0.to_string(),
+            "items:h" => self.list_viewport_dimensions.1.to_string(),
+            "title:w" => self.list_viewport_dimensions.0.to_string(),
             _ => {
                 self.message = format!("unhandled get: {}", key);
                 String::new()
@@ -141,6 +144,8 @@ impl Tui {
         match (name, mode) {
             ("feeds", "replace_inner") => self.replace_list(value),
             ("feeds", "replace") => (), // TODO: Handle (update style?)
+            ("items", "replace_inner") => self.replace_list(value),
+            ("items", "replace") => (), // TODO: Handle (update style?)
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
     }
