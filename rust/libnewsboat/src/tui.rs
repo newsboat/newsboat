@@ -1,7 +1,7 @@
 use ratatui::{
     layout::{Constraint, Direction, Layout},
     style::{Style, Stylize},
-    text::Line,
+    text::{Line, Span},
     widgets::{List, ListItem, ListState, Paragraph},
     DefaultTerminal,
 };
@@ -17,6 +17,7 @@ pub struct Form {
     list_items: Vec<String>,
     list_state: ListState,
     list_viewport_dimensions: (u16, u16),
+    text_percent: String,
 }
 
 impl Form {
@@ -28,6 +29,7 @@ impl Form {
             list_items: vec![],
             list_state: ListState::default(),
             list_viewport_dimensions: (0, 0),
+            text_percent: String::new(),
         }
     }
 
@@ -66,6 +68,9 @@ impl Form {
             }
             "feeds_offset" | "items_offset" | "urls_offset" => {
                 // TODO: Handle
+            }
+            "percent" => {
+                self.text_percent = value.into();
             }
             _ => {
                 // TODO: Handle other variables
@@ -122,8 +127,21 @@ impl Tui {
 
             frame.render_widget(title, chunks[0]);
             frame.render_stateful_widget(list, chunks[1], &mut form.list_state);
-            frame.render_widget(help, chunks[2]);
             frame.render_widget(message, chunks[3]);
+
+            if form.text_percent.is_empty() {
+                frame.render_widget(help, chunks[2]);
+            } else {
+                let parts = Layout::default()
+                    .direction(Direction::Horizontal)
+                    .constraints([Constraint::Fill(1), Constraint::Length(6)])
+                    .split(chunks[2]);
+
+                let percent_widget = Span::from(form.text_percent.as_str());
+
+                frame.render_widget(help, parts[0]);
+                frame.render_widget(percent_widget, parts[1]);
+            }
 
             form.list_viewport_dimensions = (chunks[1].width, chunks[1].height);
         })?;
