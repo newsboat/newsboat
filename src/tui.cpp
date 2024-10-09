@@ -5,10 +5,31 @@
 #include "libnewsboat-ffi/src/tui.rs.h"
 
 namespace {
+// TODO: Remove
 newsboat::Tui* tui_instance = nullptr;
 }
 
 namespace newsboat {
+
+RustForm::RustForm()
+	: rs_object(tui::bridged::create_form())
+{
+}
+
+std::string RustForm::get_variable(std::string key)
+{
+	return std::string(tui::bridged::get_variable(*rs_object, key));
+}
+
+void RustForm::set_variable(std::string key, std::string value)
+{
+	tui::bridged::set_variable(*rs_object, key, value);
+}
+
+void RustForm::modify_form(std::string name, std::string mode, std::string value)
+{
+	tui::bridged::modify_form(*rs_object, name, mode, value);
+}
 
 Tui::Tui()
 	: rs_object(tui::bridged::create())
@@ -27,24 +48,9 @@ Tui& Tui::get_instance()
 	return *tui_instance;
 }
 
-std::string Tui::run(std::int32_t timeout)
+std::string Tui::run(RustForm& form, std::int32_t timeout)
 {
-	return std::string(tui::bridged::run(*rs_object, timeout));
-}
-
-std::string Tui::get_variable(std::string key)
-{
-	return std::string(tui::bridged::get_variable(*rs_object, key));
-}
-
-void Tui::set_variable(std::string key, std::string value)
-{
-	tui::bridged::set_variable(*rs_object, key, value);
-}
-
-void Tui::modify_form(std::string name, std::string mode, std::string value)
-{
-	tui::bridged::modify_form(*rs_object, name, mode, value);
+	return std::string(tui::bridged::run(*rs_object, *form.rs_object, timeout));
 }
 
 } // namespace newsboat

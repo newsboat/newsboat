@@ -10,8 +10,7 @@ use std::io;
 mod input;
 mod stfl;
 
-pub struct Tui {
-    terminal: Option<DefaultTerminal>,
+pub struct Form {
     title: String,
     help: String,
     message: String,
@@ -20,10 +19,9 @@ pub struct Tui {
     list_viewport_dimensions: (u16, u16),
 }
 
-impl Tui {
+impl Form {
     pub fn new() -> Self {
-        Tui {
-            terminal: None,
+        Self {
             title: String::new(),
             help: String::new(),
             message: String::new(),
@@ -33,72 +31,10 @@ impl Tui {
         }
     }
 
-    fn draw(&mut self) -> io::Result<()> {
-        if self.terminal.is_none() {
-            let mut terminal = ratatui::init();
-            terminal.clear()?;
-            self.terminal = Some(terminal);
-        }
-        let terminal = self.terminal.as_mut().unwrap();
-        terminal.draw(|frame| {
-            let chunks = Layout::default()
-                .direction(Direction::Vertical)
-                .constraints([
-                    Constraint::Length(1),
-                    Constraint::Fill(1),
-                    Constraint::Length(1),
-                    Constraint::Length(1),
-                ])
-                .split(frame.area());
-            let title = Paragraph::new(self.title.as_str()).white().on_blue();
-            let help = Line::from(self.help.as_str()).white().on_black();
-            let message = Line::from(self.message.as_str()).white().on_black();
-
-            let items: Vec<_> = self
-                .list_items
-                .iter()
-                .map(|item| ListItem::from(item.as_str()))
-                .collect();
-            let list = List::new(items).highlight_style(Style::new().white().on_blue().bold());
-
-            frame.render_widget(title, chunks[0]);
-            frame.render_stateful_widget(list, chunks[1], &mut self.list_state);
-            frame.render_widget(help, chunks[2]);
-            frame.render_widget(message, chunks[3]);
-
-            self.list_viewport_dimensions = (chunks[1].width, chunks[1].height);
-        })?;
-        Ok(())
-    }
-
     fn replace_list(&mut self, value: &str) {
         // TODO: Avoid unwrap
         let (_remainder, items) = stfl::parse_list(value).unwrap();
         self.list_items = items;
-    }
-
-    // TODO: Get implementation in line with description
-    /// Draws UI and waits for next event (keypress, resize, etc.)
-    ///
-    ///
-    pub fn run(&mut self, timeout: i32) -> io::Result<Option<String>> {
-        let event = match timeout {
-            -1 => {
-                self.draw()?;
-                None
-            }
-            -2 => input::get_event(None)?,
-            -3 => {
-                // TODO: Check if we can get rid of this draw (only updating widget dimensions instead)
-                self.draw()?;
-                None
-            }
-            timeout => {
-                self.draw()?;
-                input::get_event(Some(timeout.abs() as u32))?
-            }
-        };
-        Ok(event)
     }
 
     pub fn get_variable(&mut self, key: &str) -> String {
@@ -144,6 +80,78 @@ impl Tui {
             ("feeds" | "items" | "urls", "replace") => (), // TODO: Handle (update style?)
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
+    }
+}
+
+pub struct Tui {
+    terminal: Option<DefaultTerminal>,
+}
+
+impl Tui {
+    pub fn new() -> Self {
+        Tui { terminal: None }
+    }
+
+    fn draw(&mut self, form: &mut Form) -> io::Result<()> {
+        if self.terminal.is_none() {
+            let mut terminal = ratatui::init();
+            terminal.clear()?;
+            self.terminal = Some(terminal);
+        }
+        let terminal = self.terminal.as_mut().unwrap();
+        terminal.draw(|frame| {
+            let chunks = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([
+                    Constraint::Length(1),
+                    Constraint::Fill(1),
+                    Constraint::Length(1),
+                    Constraint::Length(1),
+                ])
+                .split(frame.area());
+            let title = Paragraph::new(form.title.as_str()).white().on_blue();
+            let help = Line::from(form.help.as_str()).white().on_black();
+            let message = Line::from(form.message.as_str()).white().on_black();
+
+            let items: Vec<_> = form
+                .list_items
+                .iter()
+                .map(|item| ListItem::from(item.as_str()))
+                .collect();
+            let list = List::new(items).highlight_style(Style::new().white().on_blue().bold());
+
+            frame.render_widget(title, chunks[0]);
+            frame.render_stateful_widget(list, chunks[1], &mut form.list_state);
+            frame.render_widget(help, chunks[2]);
+            frame.render_widget(message, chunks[3]);
+
+            form.list_viewport_dimensions = (chunks[1].width, chunks[1].height);
+        })?;
+        Ok(())
+    }
+
+    // TODO: Get implementation in line with description
+    /// Draws UI and waits for next event (keypress, resize, etc.)
+    ///
+    ///
+    pub fn run(&mut self, form: &mut Form, timeout: i32) -> io::Result<Option<String>> {
+        let event = match timeout {
+            -1 => {
+                self.draw(form)?;
+                None
+            }
+            -2 => input::get_event(None)?,
+            -3 => {
+                // TODO: Check if we can get rid of this draw (only updating widget dimensions instead)
+                self.draw(form)?;
+                None
+            }
+            timeout => {
+                self.draw(form)?;
+                input::get_event(Some(timeout.abs() as u32))?
+            }
+        };
+        Ok(event)
     }
 }
 

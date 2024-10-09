@@ -6,7 +6,6 @@
 
 #include "exception.h"
 #include "logger.h"
-#include "tui.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -46,13 +45,13 @@ Stfl::Form::~Form()
 std::string Stfl::Form::run(int timeout)
 {
 	// TODO: Change based on specified timeout
-	return Tui::get_instance().run(timeout);
+	return Tui::get_instance().run(form, timeout);
 	//return stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
 }
 
 std::string Stfl::Form::get(const std::string& name)
 {
-	return Tui::get_instance().get_variable(name);
+	return form.get_variable(name);
 	//const char* text = stfl_ipool_fromwc(
 	//		ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
 	//std::string retval;
@@ -65,7 +64,7 @@ std::string Stfl::Form::get(const std::string& name)
 
 void Stfl::Form::set(const std::string& name, const std::string& value)
 {
-	Tui::get_instance().set_variable(name, value);
+	form.set_variable(name, value);
 	//stfl_set(f,
 	//	stfl_ipool_towc(ipool, name.c_str()),
 	//	stfl_ipool_towc(ipool, value.c_str()));
@@ -93,7 +92,7 @@ void Stfl::Form::modify(const std::string& name,
 	const std::string& mode,
 	const std::string& text)
 {
-	Tui::get_instance().modify_form(name, mode, text);
+	form.modify_form(name, mode, text);
 	//const wchar_t* wname, *wmode, *wtext;
 	//wname = stfl_ipool_towc(ipool, name.c_str());
 	//wmode = stfl_ipool_towc(ipool, mode.c_str());

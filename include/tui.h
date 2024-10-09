@@ -8,17 +8,26 @@
 
 namespace newsboat {
 
+class RustForm {
+public:
+	RustForm();
+
+	std::string get_variable(std::string key);
+	void set_variable(std::string key, std::string value);
+	void modify_form(std::string name, std::string mode, std::string value);
+
+// TODO: Avoid leaking implementation detail?
+public:
+	rust::Box<tui::bridged::Form> rs_object;
+};
+
 class Tui {
 public:
 	Tui();
 	~Tui();
 
-	static Tui& get_instance();
-
-	std::string run(std::int32_t timeout);
-	std::string get_variable(std::string key);
-	void set_variable(std::string key, std::string value);
-	void modify_form(std::string name, std::string mode, std::string value);
+	static Tui& get_instance(); // TODO: Remove
+	std::string run(RustForm& form, std::int32_t timeout);
 
 private:
 	rust::Box<tui::bridged::Tui> rs_object;
