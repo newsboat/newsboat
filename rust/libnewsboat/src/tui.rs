@@ -18,6 +18,7 @@ pub struct Form {
     list_state: ListState,
     list_viewport_dimensions: (u16, u16),
     text_percent: String,
+    text_percent_width: u16,
 }
 
 impl Form {
@@ -30,6 +31,7 @@ impl Form {
             list_state: ListState::default(),
             list_viewport_dimensions: (0, 0),
             text_percent: String::new(),
+            text_percent_width: 0,
         }
     }
 
@@ -43,7 +45,10 @@ impl Form {
         match key {
             "feeds:w" | "items:w" | "urls:w" => self.list_viewport_dimensions.0.to_string(),
             "feeds:h" | "items:h" | "urls:h" => self.list_viewport_dimensions.1.to_string(),
+            "article:w" => self.list_viewport_dimensions.0.to_string(),
+            "article:h" => self.list_viewport_dimensions.1.to_string(),
             "title:w" => self.list_viewport_dimensions.0.to_string(),
+            "article_offset" => self.list_state.offset().to_string(),
             _ => {
                 self.message = format!("unhandled get: {}", key);
                 String::new()
@@ -72,6 +77,12 @@ impl Form {
             "percent" => {
                 self.text_percent = value.into();
             }
+            "article_offset" => {
+                *self.list_state.offset_mut() = value.parse().unwrap();
+            }
+            "percentwidth" => {
+                self.text_percent_width = value.parse().unwrap();
+            }
             _ => {
                 // TODO: Handle other variables
                 self.message = format!("unhandled set: {}", key);
@@ -83,6 +94,7 @@ impl Form {
         match (name, mode) {
             ("feeds" | "items" | "urls", "replace_inner") => self.replace_list(value),
             ("feeds" | "items" | "urls", "replace") => (), // TODO: Handle (update style?)
+            ("article", "replace_inner") => self.replace_list(value),
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
     }
@@ -134,7 +146,10 @@ impl Tui {
             } else {
                 let parts = Layout::default()
                     .direction(Direction::Horizontal)
-                    .constraints([Constraint::Fill(1), Constraint::Length(6)])
+                    .constraints([
+                        Constraint::Fill(1),
+                        Constraint::Length(form.text_percent_width),
+                    ])
                     .split(chunks[2]);
 
                 let percent_widget = Span::from(form.text_percent.as_str());
