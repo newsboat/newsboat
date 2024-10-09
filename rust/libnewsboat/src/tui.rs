@@ -45,10 +45,10 @@ impl Form {
         match key {
             "feeds:w" | "items:w" | "urls:w" => self.list_viewport_dimensions.0.to_string(),
             "feeds:h" | "items:h" | "urls:h" => self.list_viewport_dimensions.1.to_string(),
-            "article:w" => self.list_viewport_dimensions.0.to_string(),
-            "article:h" => self.list_viewport_dimensions.1.to_string(),
+            "article:w" | "helptext:w" => self.list_viewport_dimensions.0.to_string(),
+            "article:h" | "helptext:h" => self.list_viewport_dimensions.1.to_string(),
             "title:w" => self.list_viewport_dimensions.0.to_string(),
-            "article_offset" => self.list_state.offset().to_string(),
+            "article_offset" | "helptext_offset" => self.list_state.offset().to_string(),
             _ => {
                 self.message = format!("unhandled get: {}", key);
                 String::new()
@@ -77,11 +77,14 @@ impl Form {
             "percent" => {
                 self.text_percent = value.into();
             }
-            "article_offset" => {
+            "article_offset" | "helptext_offset" => {
                 *self.list_state.offset_mut() = value.parse().unwrap();
             }
             "percentwidth" => {
                 self.text_percent_width = value.parse().unwrap();
+            }
+            "highlight" => {
+                // TODO: Handle (seems related to HelpFormAction
             }
             _ => {
                 // TODO: Handle other variables
@@ -94,7 +97,7 @@ impl Form {
         match (name, mode) {
             ("feeds" | "items" | "urls", "replace_inner") => self.replace_list(value),
             ("feeds" | "items" | "urls", "replace") => (), // TODO: Handle (update style?)
-            ("article", "replace_inner") => self.replace_list(value),
+            ("article" | "helptext", "replace_inner") => self.replace_list(value),
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
     }
