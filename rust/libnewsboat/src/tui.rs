@@ -43,8 +43,13 @@ impl Form {
 
     pub fn get_variable(&mut self, key: &str) -> String {
         match key {
-            "feeds:w" | "items:w" | "urls:w" => self.list_viewport_dimensions.0.to_string(),
-            "feeds:h" | "items:h" | "urls:h" => self.list_viewport_dimensions.1.to_string(),
+            "msg" => self.message.to_owned(),
+            "feeds:w" | "items:w" | "urls:w" | "dls:w" => {
+                self.list_viewport_dimensions.0.to_string()
+            }
+            "feeds:h" | "items:h" | "urls:h" | "dls:h" => {
+                self.list_viewport_dimensions.1.to_string()
+            }
             "article:w" | "helptext:w" => self.list_viewport_dimensions.0.to_string(),
             "article:h" | "helptext:h" => self.list_viewport_dimensions.1.to_string(),
             "title:w" => self.list_viewport_dimensions.0.to_string(),
@@ -67,12 +72,12 @@ impl Form {
             "msg" => {
                 self.message = value.into();
             }
-            "feeds_pos" | "items_pos" | "urls_pos" => {
+            "feeds_pos" | "items_pos" | "urls_pos" | "dls_pos" => {
                 // TODO: Handle non-numeric value?
                 self.list_state.select(value.parse().ok());
             }
-            "feeds_offset" | "items_offset" | "urls_offset" => {
-                // TODO: Handle
+            "feeds_offset" | "items_offset" | "urls_offset" | "dls_offset" => {
+                *self.list_state.offset_mut() = value.parse().unwrap();
             }
             "percent" => {
                 self.text_percent = value.into();
@@ -95,8 +100,8 @@ impl Form {
 
     pub fn modify_form(&mut self, name: &str, mode: &str, value: &str) {
         match (name, mode) {
-            ("feeds" | "items" | "urls", "replace_inner") => self.replace_list(value),
-            ("feeds" | "items" | "urls", "replace") => (), // TODO: Handle (update style?)
+            ("feeds" | "items" | "urls" | "dls", "replace_inner") => self.replace_list(value),
+            ("feeds" | "items" | "urls" | "dls", "replace") => (), // TODO: Handle (update style?)
             ("article" | "helptext", "replace_inner") => self.replace_list(value),
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
