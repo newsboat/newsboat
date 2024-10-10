@@ -320,7 +320,7 @@ void PbView::run_help()
 
 	do {
 		const auto event = help_form.run(0);
-		if (!event.empty()) {
+		if (event.empty()) {
 			continue;
 		}
 
