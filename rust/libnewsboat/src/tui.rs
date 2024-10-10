@@ -44,10 +44,10 @@ impl Form {
     pub fn get_variable(&mut self, key: &str) -> String {
         match key {
             "msg" => self.message.to_owned(),
-            "feeds:w" | "items:w" | "urls:w" | "dls:w" => {
+            "feeds:w" | "items:w" | "urls:w" | "dls:w" | "taglist:w" => {
                 self.list_viewport_dimensions.0.to_string()
             }
-            "feeds:h" | "items:h" | "urls:h" | "dls:h" => {
+            "feeds:h" | "items:h" | "urls:h" | "dls:h" | "taglist:h" => {
                 self.list_viewport_dimensions.1.to_string()
             }
             "article:w" | "helptext:w" => self.list_viewport_dimensions.0.to_string(),
@@ -72,11 +72,11 @@ impl Form {
             "msg" => {
                 self.message = value.into();
             }
-            "feeds_pos" | "items_pos" | "urls_pos" | "dls_pos" => {
+            "feeds_pos" | "items_pos" | "urls_pos" | "dls_pos" | "taglist_pos" => {
                 // TODO: Handle non-numeric value?
                 self.list_state.select(value.parse().ok());
             }
-            "feeds_offset" | "items_offset" | "urls_offset" | "dls_offset" => {
+            "feeds_offset" | "items_offset" | "urls_offset" | "dls_offset" | "taglist_offset" => {
                 *self.list_state.offset_mut() = value.parse().unwrap();
             }
             "percent" => {
@@ -91,18 +91,32 @@ impl Form {
             "highlight" => {
                 // TODO: Handle (seems related to HelpFormAction
             }
+            "hint-description"
+            | "hint-separator"
+            | "hint-keys-delimiter"
+            | "hint-key"
+            | "title"
+            | "info"
+            | "color_underline"
+            | "color_bold"
+            | "article" => {
+                // TODO: Handle color change
+            }
             _ => {
                 // TODO: Handle other variables
-                self.message = format!("unhandled set: {}", key);
+                self.message = format!("unhandled set: {} - {}", key, value);
             }
         };
     }
 
     pub fn modify_form(&mut self, name: &str, mode: &str, value: &str) {
         match (name, mode) {
-            ("feeds" | "items" | "urls" | "dls", "replace_inner") => self.replace_list(value),
-            ("feeds" | "items" | "urls" | "dls", "replace") => (), // TODO: Handle (update style?)
+            ("feeds" | "items" | "urls" | "dls" | "taglist", "replace_inner") => {
+                self.replace_list(value)
+            }
+            ("feeds" | "items" | "urls" | "dls" | "taglist", "replace") => (), // TODO: Handle (update style?)
             ("article" | "helptext", "replace_inner") => self.replace_list(value),
+            ("article" | "helptext", "replace") => (), // TODO: Handle (update style?)
             _ => self.message = format!("unhandled modify_form: {} {} {}", name, mode, value),
         };
     }
