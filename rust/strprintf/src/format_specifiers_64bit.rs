@@ -3,7 +3,7 @@
 // 2. the names are copied from C, and should be kept verbatim, capitalization and all.
 #![allow(non_upper_case_globals)]
 
-/// `printf` format specifiers for 64-bit platforms.
+//! `printf` format specifiers for 64-bit platforms.
 
 /// `printf`'s format conversion specifier to output an `i32` (equivalent to `PRIi32`).
 pub const PRId32: &str = "d";
