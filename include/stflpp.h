@@ -25,7 +25,7 @@ public:
 		Form(Form&&) = delete;
 		Form& operator=(Form&&) = delete;
 
-		const char* run(int timeout);
+		std::string run(int timeout);
 
 		std::string get(const std::string& name);
 		void set(const std::string& name, const std::string& value);

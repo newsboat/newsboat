@@ -42,9 +42,14 @@ Stfl::Form::~Form()
 	}
 }
 
-const char* Stfl::Form::run(int timeout)
+std::string Stfl::Form::run(int timeout)
 {
-	return stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
+	const auto event = stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
+	if (event != nullptr) {
+		return std::string(event);
+	} else {
+		return "";
+	}
 }
 
 std::string Stfl::Form::get(const std::string& name)
