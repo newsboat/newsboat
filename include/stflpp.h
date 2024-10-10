@@ -7,6 +7,8 @@ extern "C" {
 
 #include <string>
 
+#include "tui.h"
+
 namespace newsboat {
 
 class Stfl {
@@ -25,7 +27,7 @@ public:
 		Form(Form&&) = delete;
 		Form& operator=(Form&&) = delete;
 
-		const char* run(int timeout);
+		std::string run(int timeout);
 
 		std::string get(const std::string& name);
 		void set(const std::string& name, const std::string& value);
@@ -43,6 +45,7 @@ public:
 	private:
 		stfl_form* f;
 		stfl_ipool* ipool;
+		RustForm form;
 	};
 
 	static void reset();

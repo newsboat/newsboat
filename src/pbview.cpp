@@ -103,7 +103,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			msg_line_dllist_form.set_text(ctrl.downloads()[idx].status_msg());
 		}
 
-		const char* event = dllist_form.run(500);
+		const auto event = dllist_form.run(500);
 
 		if (auto_download) {
 			if (ctrl.get_maxdownloads() >
@@ -112,11 +112,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 			}
 		}
 
-		if (!event || strcmp(event, "TIMEOUT") == 0) {
+		if (event.empty() || event == "TIMEOUT") {
 			continue;
 		}
 
-		if (strcmp(event, "RESIZE") == 0) {
+		if (event == "RESIZE") {
 			handle_resize();
 			continue;
 		}
@@ -319,12 +319,12 @@ void PbView::run_help()
 	bool quit = false;
 
 	do {
-		const char* event = help_form.run(0);
-		if (!event) {
+		const auto event = help_form.run(0);
+		if (event.empty()) {
 			continue;
 		}
 
-		if (strcmp(event, "RESIZE") == 0) {
+		if (event == "RESIZE") {
 			handle_resize();
 			continue;
 		}
