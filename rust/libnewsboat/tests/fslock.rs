@@ -80,6 +80,7 @@ fn t_fails_if_lock_was_already_created() {
     // notify child to exit and drop lock
     let stdin = child.stdin.as_mut().unwrap();
     stdin.write_all(b"\n").unwrap();
+    child.wait().unwrap();
 }
 
 #[test]

@@ -116,9 +116,10 @@ fn binding(input: &str) -> IResult<&str, Binding> {
     ))
 }
 
-/// Split a semicolon-separated list of operations into a vector. Each operation is represented by
-/// a non-empty sub-vector, where the first element is the name of the operation, and the rest of
-/// the elements are operation's arguments.
+/// Split a semicolon-separated list of operations into a vector.
+///
+/// Each operation is represented by a non-empty sub-vector, where the first element is the name of
+/// the operation, and the rest of the elements are operation's arguments.
 ///
 /// Tokens can be double-quoted. Such tokens can contain spaces and C-like escaped sequences: `\n`
 /// for newline, `\r` for carriage return, `\t` for tab, `\"` for double quote, `\\` for backslash.

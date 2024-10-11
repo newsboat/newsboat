@@ -86,14 +86,14 @@ impl Printfable for f64 {
     }
 }
 
-impl<'a> Printfable for &'a str {
+impl Printfable for &str {
     type Holder = CString;
     fn into_c_repr_holder(self) -> Option<<Self as Printfable>::Holder> {
         CString::new(self).ok()
     }
 }
 
-impl<'a> Printfable for &'a String {
+impl Printfable for &String {
     type Holder = CString;
     fn into_c_repr_holder(self) -> Option<<Self as Printfable>::Holder> {
         CString::new(self.as_str()).ok()
