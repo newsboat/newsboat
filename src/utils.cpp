@@ -40,7 +40,6 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include "curldatareceiver.h"
 #include "curlhandle.h"
 #include "links.h"
-#include "libnewsboat-ffi/src/utils.rs.h"
 #include "logger.h"
 #include "strprintf.h"
 

@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_FORMATSTRING_H_
 #define NEWSBOAT_FORMATSTRING_H_
 
-#include "libnewsboat-ffi/src/fmtstrformatter.rs.h"
+#include "libnewsboat-ffi/src/fmtstrformatter.rs.h" // IWYU pragma: export
 
 #include <string>
 

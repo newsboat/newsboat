@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "libnewsboat-ffi/src/stflrichtext.rs.h"
+#include "libnewsboat-ffi/src/stflrichtext.rs.h" // IWYU pragma: export
 
 namespace newsboat {
 

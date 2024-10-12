@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "libnewsboat-ffi/src/scopemeasure.rs.h"
+#include "libnewsboat-ffi/src/scopemeasure.rs.h" // IWYU pragma: export
 
 namespace newsboat {
 
