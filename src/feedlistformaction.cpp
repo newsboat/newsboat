@@ -936,7 +936,7 @@ void FeedListFormAction::register_format_styles()
 	const std::string attrstr = rxman.get_attrs_stfl_string("feedlist", true);
 	const std::string textview = strprintf::fmt(
 			"{!list[feeds] .expand:vh style_normal[listnormal]: "
-			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
+			"style_focus[listfocus]: "
 			"pos[feeds_pos]:0 offset[feeds_offset]:0 %s richtext:1}",
 			attrstr);
 	list.stfl_replace_list(textview);

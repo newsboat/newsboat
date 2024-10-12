@@ -696,11 +696,11 @@ void ItemViewFormAction::register_format_styles()
 {
 	std::string attrstr = rxman.get_attrs_stfl_string("article", false);
 	attrstr.append(
-		"@style_b_normal[color_bold]:attr=bold "
-		"@style_u_normal[color_underline]:attr=underline ");
+		"@style_b_normal[color_bold]: "
+		"@style_u_normal[color_underline]: ");
 	std::string stfl_textview = strprintf::fmt(
 			"{textview[article] style_normal[article]: "
-			"style_end[end-of-text-marker]:fg=blue,attr=bold %s .expand:vh "
+			"style_end[end-of-text-marker]: %s .expand:vh "
 			"offset[article_offset]:0 richtext:1}",
 			attrstr);
 	textview.stfl_replace_textview(0, stfl_textview);
