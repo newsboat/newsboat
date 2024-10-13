@@ -3,7 +3,7 @@
 
 #include "strprintf.h"
 
-#include "libnewsboat-ffi/src/logger.rs.h"
+#include "libnewsboat-ffi/src/logger.rs.h" // IWYU pragma: export
 
 namespace newsboat {
 

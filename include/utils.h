@@ -13,7 +13,7 @@
 
 #include "configcontainer.h"
 
-#include "libnewsboat-ffi/src/utils.rs.h"
+#include "libnewsboat-ffi/src/utils.rs.h" // IWYU pragma: export
 
 namespace newsboat {
 

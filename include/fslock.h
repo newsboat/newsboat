@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_FSLOCK_H_
 #define NEWSBOAT_FSLOCK_H_
 
-#include "libnewsboat-ffi/src/fslock.rs.h"
+#include "libnewsboat-ffi/src/fslock.rs.h" // IWYU pragma: export
 
 #include <string>
 #include <sys/types.h>

@@ -1,8 +1,6 @@
 #include "keycombination.h"
 
-#include <algorithm>
 #include <cctype>
-#include <iterator>
 #include <tuple>
 
 #include "libnewsboat-ffi/src/keycombination.rs.h"
