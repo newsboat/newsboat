@@ -1,8 +1,10 @@
 use libnewsboat::utils;
+use serial_test::serial;
 use std::env;
 use tempfile::TempDir;
 
 #[test]
+#[serial] // Because it changes the current working directory
 fn t_getcwd_value_depends_on_current_directory() {
     let initial_dir = utils::getcwd().unwrap();
 

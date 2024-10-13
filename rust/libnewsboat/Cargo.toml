@@ -51,3 +51,4 @@ default-features = false
 tempfile = "3"
 proptest = "1"
 section_testing = "0.0.5"
+serial_test = { version = "3.1.1", default-features = false }

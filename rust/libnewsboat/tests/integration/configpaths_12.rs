@@ -1,0 +1,28 @@
+use crate::configpaths_helpers;
+use serial_test::serial;
+use std::env;
+use tempfile::TempDir;
+
+use configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
+
+#[test]
+#[serial] // Because it changes environment variables
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_dotdir_couldnt_be_created(
+) {
+    let tmp = TempDir::new().unwrap();
+
+    env::set_var("HOME", tmp.path());
+
+    // ConfigPaths rely on these variables, so let's sanitize them to ensure
+    // that the tests aren't affected
+    env::remove_var("XDG_CONFIG_HOME");
+    env::remove_var("XDG_DATA_HOME");
+
+    configpaths_helpers::mock_newsbeuter_dotdir(&tmp);
+
+    // Making home directory unwriteable makes it impossible to create
+    // a directory there
+    let _dotdir_chmod = configpaths_helpers::Chmod::new(tmp.path(), S_IRUSR | S_IXUSR);
+
+    configpaths_helpers::assert_dotdir_not_migrated(&tmp.path().join(".newsboat"));
+}
