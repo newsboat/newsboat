@@ -7,6 +7,8 @@ extern "C" {
 
 #include <string>
 
+#include "tui.h"
+
 namespace newsboat {
 
 class Stfl {
@@ -43,6 +45,7 @@ public:
 	private:
 		stfl_form* f;
 		stfl_ipool* ipool;
+		RustForm form;
 	};
 
 	static void reset();

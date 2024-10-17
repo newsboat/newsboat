@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::utils;
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct StflRichText {
     text: String,
     style_tags: BTreeMap<usize, String>,
@@ -29,6 +29,11 @@ impl StflRichText {
 
     pub fn apply_style_tag(&mut self, tag: &str, start: usize, end: usize) {
         self.merge_style_tag(tag, start, end);
+    }
+
+    // TODO: Stop leaking implementation details (BTreeMap)
+    pub fn style_switch_points(&self) -> &BTreeMap<usize, String> {
+        &self.style_tags
     }
 
     fn extract_style_tags(text: &str) -> (String, BTreeMap<usize, String>) {
