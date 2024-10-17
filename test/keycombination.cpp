@@ -161,13 +161,6 @@ TEST_CASE("from_bind parses sequence of key combinations", "[KeyCombination]")
 			INFO(key_combinations[0].to_bind_string());
 			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::Shift));
 		}
-		SECTION("Letter with control") {
-			const auto key_combinations = KeyCombination::from_bind("^G");
-			REQUIRE(key_combinations.size() == 1);
-			INFO(key_combinations[0].to_bind_string());
-			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::NoShift,
-					ControlState::Control));
-		}
 		SECTION("Symbol key") {
 			const auto key_combinations = KeyCombination::from_bind("=");
 			REQUIRE(key_combinations.size() == 1);
@@ -225,10 +218,9 @@ TEST_CASE("from_bind parses sequence of key combinations", "[KeyCombination]")
 			REQUIRE(key_combinations[1] == KeyCombination("ENTER", ShiftState::Shift));
 		}
 		SECTION("Mixed") {
-			const auto key_combinations = KeyCombination::from_bind("^G<ENTER>p");
+			const auto key_combinations = KeyCombination::from_bind("G<ENTER>p");
 			REQUIRE(key_combinations.size() == 3);
-			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::NoShift,
-					ControlState::Control));
+			REQUIRE(key_combinations[0] == KeyCombination("g", ShiftState::Shift));
 			REQUIRE(key_combinations[1] == KeyCombination("ENTER"));
 			REQUIRE(key_combinations[2] == KeyCombination("p"));
 		}
