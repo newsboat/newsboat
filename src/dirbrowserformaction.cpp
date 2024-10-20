@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "dirbrowserformaction.h"
 
 #include <algorithm>
@@ -62,24 +60,17 @@ bool DirBrowserFormAction::process_operation(Operation op,
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					const auto fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-
-					set_value("filenametext", fn);
+					const auto fn_with_trailing_slash = fn.join(Filepath{});
+					set_value("filenametext", fn_with_trailing_slash.to_locale_string());
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-					fn.append(selection.name);
-					set_value("filenametext", fn);
+					const auto filename = utils::getcwd().join(selection.name);
+					set_value("filenametext", filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
@@ -184,31 +175,31 @@ void DirBrowserFormAction::update_title(const Filepath& working_directory)
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('f', working_directory);
+	fmt.register_fmt('f', working_directory.display());
 
 	set_title(fmt.do_format(
 			cfg->get_configvalue("dirbrowser-title-format"), width));
 }
 
-std::vector<std::string> get_sorted_dirlist()
+std::vector<Filepath> get_sorted_dirlist()
 {
-	std::vector<std::string> ret;
+	std::vector<Filepath> ret;
 
-	const std::string cwdtmp = utils::getcwd();
+	const auto cwdtmp = utils::getcwd();
 
-	DIR* dirp = ::opendir(cwdtmp.c_str());
+	DIR* dirp = ::opendir(cwdtmp.to_locale_string().c_str());
 	if (dirp) {
 		struct dirent* de = ::readdir(dirp);
 		while (de) {
 			if (strcmp(de->d_name, ".") != 0 &&
 				strcmp(de->d_name, "..") != 0) {
 				struct stat sb;
-				auto dpath = strprintf::fmt(
-						"%s/%s", cwdtmp, de->d_name);
-				if (::lstat(dpath.c_str(), &sb) == 0) {
+				auto entry = Filepath::from_locale_string(de->d_name);
+				const auto dpath = cwdtmp.join(entry);
+				if (::lstat(dpath.to_locale_string().c_str(), &sb) == 0) {
 					const auto ftype = file_system::mode_to_filetype(sb.st_mode);
 					if (ftype == file_system::FileType::Directory) {
-						ret.push_back(de->d_name);
+						ret.emplace_back(std::move(entry));
 					}
 				}
 			}
@@ -220,8 +211,8 @@ std::vector<std::string> get_sorted_dirlist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != "/") {
-		ret.insert(ret.begin(), "..");
+	if (cwdtmp != Filepath::from_locale_string("/")) {
+		ret.emplace(ret.begin(), Filepath::from_locale_string(".."));
 	}
 
 	return ret;
@@ -235,14 +226,11 @@ void DirBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		const std::string cwdtmp = utils::getcwd();
-		update_title(cwdtmp);
-
-		std::vector<std::string> directories = get_sorted_dirlist();
+		update_title(utils::getcwd());
 
 		id_at_position.clear();
 		lines.clear();
-		for (std::string directory : directories) {
+		for (auto directory : get_sorted_dirlist()) {
 			add_directory(id_at_position, directory);
 		}
 
@@ -334,15 +322,16 @@ void DirBrowserFormAction::add_directory(
 	}
 }
 
-Filepath DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
+std::string DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
 	mode_t mode)
 {
-	Filepath tmp = dirname;
+	const auto dirname_str = dirname.display();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		tmp.set_extension(std::to_string(suffix.value()));
+		return strprintf::fmt("%s%c", dirname_str, suffix.value());
+	} else {
+		return dirname_str;
 	}
-	return tmp;
 }
 
 std::string DirBrowserFormAction::title()

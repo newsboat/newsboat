@@ -19,13 +19,14 @@ mod bridged {
         fn create_empty() -> Box<PathBuf>;
         fn create(filepath: Vec<u8>) -> Box<PathBuf>;
         fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool;
+        fn less_than(lhs: &PathBuf, rhs: &PathBuf) -> bool;
         fn into_bytes(filepath: &PathBuf) -> Vec<u8>;
         fn display(filepath: &PathBuf) -> String;
         fn push(filepath: &mut PathBuf, component: &PathBuf);
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
-        fn starts_with(filepath: &PathBuf, str: Vec<u8>) -> bool;
+        fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool;
         fn file_name(filepath: &PathBuf) -> Vec<u8>;
     }
 }
@@ -42,6 +43,10 @@ fn create(filepath: Vec<u8>) -> Box<PathBuf> {
 
 fn equals(lhs: &PathBuf, rhs: &PathBuf) -> bool {
     lhs.0 == rhs.0
+}
+
+fn less_than(lhs: &PathBuf, rhs: &PathBuf) -> bool {
+    lhs.0 < rhs.0
 }
 
 fn into_bytes(filepath: &PathBuf) -> Vec<u8> {
@@ -68,8 +73,8 @@ fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool {
     filepath.0.set_extension(OsStr::from_bytes(&extension))
 }
 
-fn starts_with(filepath: &PathBuf, base: Vec<u8>) -> bool {
-    filepath.0.starts_with(OsStr::from_bytes(&base))
+fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool {
+    filepath.0.starts_with(&base.0)
 }
 
 fn file_name(filepath: &PathBuf) -> Vec<u8> {
