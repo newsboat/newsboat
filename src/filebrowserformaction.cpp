@@ -341,7 +341,7 @@ void FileBrowserFormAction::add_file(
 std::string FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
 	mode_t mode)
 {
-	const auto filename_str = filename.to_locale_string();
+	const auto filename_str = filename.display();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
 		return strprintf::fmt("%s%c", filename_str, suffix.value());

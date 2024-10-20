@@ -325,12 +325,13 @@ void DirBrowserFormAction::add_directory(
 std::string DirBrowserFormAction::get_formatted_dirname(const Filepath& dirname,
 	mode_t mode)
 {
-	std::string tmp = dirname.to_locale_string();
+	const auto dirname_str = dirname.display();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		tmp += std::to_string(suffix.value());
+		return strprintf::fmt("%s%c", dirname_str, suffix.value());
+	} else {
+		return dirname_str;
 	}
-	return tmp;
 }
 
 std::string DirBrowserFormAction::title()
