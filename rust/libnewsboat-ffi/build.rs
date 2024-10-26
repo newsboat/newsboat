@@ -22,5 +22,6 @@ fn main() {
     add_cxxbridge("logger");
     add_cxxbridge("scopemeasure");
     add_cxxbridge("stflrichtext");
+    add_cxxbridge("tui");
     add_cxxbridge("utils");
 }

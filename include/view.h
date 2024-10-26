@@ -10,6 +10,7 @@
 
 #include "links.h"
 #include "statusline.h"
+#include "tui.h"
 
 namespace newsboat {
 
@@ -182,6 +183,8 @@ protected:
 
 private:
 	bool try_prepare_query_feed(std::shared_ptr<RssFeed> feed);
+
+	Tui tui;
 };
 
 } // namespace newsboat

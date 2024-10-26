@@ -44,32 +44,36 @@ Stfl::Form::~Form()
 
 std::string Stfl::Form::run(int timeout)
 {
-	const auto event = stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
-	if (event != nullptr) {
-		return std::string(event);
-	} else {
-		return "";
-	}
+	// TODO: Change based on specified timeout
+	return Tui::get_instance().run(form, timeout);
+	//const auto event = stfl_ipool_fromwc(ipool, stfl_run(f, timeout));
+	//if (event != nullptr) {
+	//	return std::string(event);
+	//} else {
+	//	return "";
+	//}
 }
 
 std::string Stfl::Form::get(const std::string& name)
 {
-	const char* text = stfl_ipool_fromwc(
-			ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
-	std::string retval;
-	if (text) {
-		retval = text;
-	}
-	stfl_ipool_flush(ipool);
-	return retval;
+	return form.get_variable(name);
+	//const char* text = stfl_ipool_fromwc(
+	//		ipool, stfl_get(f, stfl_ipool_towc(ipool, name.c_str())));
+	//std::string retval;
+	//if (text) {
+	//	retval = text;
+	//}
+	//stfl_ipool_flush(ipool);
+	//return retval;
 }
 
 void Stfl::Form::set(const std::string& name, const std::string& value)
 {
-	stfl_set(f,
-		stfl_ipool_towc(ipool, name.c_str()),
-		stfl_ipool_towc(ipool, value.c_str()));
-	stfl_ipool_flush(ipool);
+	form.set_variable(name, value);
+	//stfl_set(f,
+	//	stfl_ipool_towc(ipool, name.c_str()),
+	//	stfl_ipool_towc(ipool, value.c_str()));
+	//stfl_ipool_flush(ipool);
 }
 
 std::string Stfl::Form::get_focus()
@@ -93,17 +97,19 @@ void Stfl::Form::modify(const std::string& name,
 	const std::string& mode,
 	const std::string& text)
 {
-	const wchar_t* wname, *wmode, *wtext;
-	wname = stfl_ipool_towc(ipool, name.c_str());
-	wmode = stfl_ipool_towc(ipool, mode.c_str());
-	wtext = stfl_ipool_towc(ipool, text.c_str());
-	stfl_modify(f, wname, wmode, wtext);
-	stfl_ipool_flush(ipool);
+	form.modify_form(name, mode, text);
+	//const wchar_t* wname, *wmode, *wtext;
+	//wname = stfl_ipool_towc(ipool, name.c_str());
+	//wmode = stfl_ipool_towc(ipool, mode.c_str());
+	//wtext = stfl_ipool_towc(ipool, text.c_str());
+	//stfl_modify(f, wname, wmode, wtext);
+	//stfl_ipool_flush(ipool);
 }
 
 void Stfl::reset()
 {
-	stfl_reset();
+	Tui::get_instance().reset();
+	//stfl_reset();
 }
 
 static std::mutex quote_mtx;
@@ -122,17 +128,23 @@ std::string Stfl::quote(const std::string& text)
 std::string Stfl::Form::dump(const std::string& name, const std::string& prefix,
 	int focus)
 {
-	const char* text = stfl_ipool_fromwc(ipool,
-			stfl_dump(f,
-				stfl_ipool_towc(ipool, name.c_str()),
-				stfl_ipool_towc(ipool, prefix.c_str()),
-				focus));
-	std::string retval;
-	if (text) {
-		retval = text;
-	}
-	stfl_ipool_flush(ipool);
-	return retval;
+	//const char* text = stfl_ipool_fromwc(ipool,
+	//		stfl_dump(f,
+	//			stfl_ipool_towc(ipool, name.c_str()),
+	//			stfl_ipool_towc(ipool, prefix.c_str()),
+	//			focus));
+	//std::string retval;
+	//if (text) {
+	//	retval = text;
+	//}
+	//stfl_ipool_flush(ipool);
+	//return retval;
+
+	// TODO: Make sure any old uses of this method still work (probably requires title/hint swapping to be handled in Rust)
+	(void)name;
+	(void)prefix;
+	(void)focus;
+	return "";
 }
 
 } // namespace newsboat
