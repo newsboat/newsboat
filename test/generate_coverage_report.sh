@@ -1,37 +1,46 @@
 #!/bin/sh
 
+# Run this script on a machine with Clang 18 and Rust 1.81. These versions both
+# use LLVM 18; matching LLVM versions are required for grcov to produce
+# a report across the entire codebase.
+#
+# One can prepare such environment with Docker:
+#
+# docker build \
+#   --build-arg rust_version=1.81 \
+#   --build-arg cxx_package='clang-18 libclang-rt-18-dev' \
+#   --build-arg cxx=clang++-18 \
+#   --build-arg cc=clang-18 \
+#   --tag=newsboat-clang-18-rust-1.82:24.04 \
+#   --file=docker/ubuntu_24.04-build-tools.dockerfile \
+#   docker
+#
+# docker run \
+#   -it --rm \
+#   --mount type=bind,source=$(pwd),target=/workspace -w /workspace \
+#   --user $(id -u):$(id -g) \
+#   newsboat-clang-18-rust-1.81:24.04 \
+#   bash -c 'rustup component add llvm-tools-preview && cargo install grcov && test/generate_coverage_report.sh'
+
 set -e
 
-APPBASE_INFO=appbase.info
-APPTEST_INFO=apptest.info
-APPTOTAL_INFO=apptotal.info
+export CC=clang-18
+export CXX=clang++-18
+export CXXFLAGS='-O0 -fprofile-instr-generate -fcoverage-mapping'
+export RUSTFLAGS='-Clink-dead-code -Cinstrument-coverage'
+export LLVM_PROFILE_FILE='%h_%m.profraw'
+export PROFILE=1
 
-rm -rf $APPBASE_INFO $APPTEST_INFO html
-find -name '*.gcda' -print0 | xargs -0 rm --force
-make -j 5 PROFILE=1 all test
-lcov --capture --initial --base-directory . --directory . --output-file $APPBASE_INFO
-( cd test && ./test "$@" )
-lcov --capture --base-directory . --directory . --output-file $APPTEST_INFO
-lcov --base-directory . --directory . --output-file $APPTOTAL_INFO \
-    --add-tracefile $APPBASE_INFO --add-tracefile $APPTEST_INFO
+OUTDIR=html/coverage
 
-# Removing info about shared libraries
-lcov --remove $APPTOTAL_INFO '/usr/*' --output-file $APPTOTAL_INFO
-# Removing info about shared libraries (on NixOS)
-lcov --remove $APPTOTAL_INFO '/nix/store/*' --output-file $APPTOTAL_INFO
-# Removing info about compiler internals
-lcov --remove $APPTOTAL_INFO '?.?.?/*' --output-file $APPTOTAL_INFO
-lcov --remove $APPTOTAL_INFO '?.?.??/*' --output-file $APPTOTAL_INFO
-lcov --remove $APPTOTAL_INFO '?.??.?/*' --output-file $APPTOTAL_INFO
-lcov --remove $APPTOTAL_INFO '?.??.??/*' --output-file $APPTOTAL_INFO
-# Removing info about Newsboat's tests
-lcov --remove $APPTOTAL_INFO 'newsboat/test/*' --output-file $APPTOTAL_INFO
-lcov --remove $APPTOTAL_INFO '*/newsboat/test/*' --output-file $APPTOTAL_INFO
-# Removing info about Newsboat's docs
-lcov --remove $APPTOTAL_INFO 'newsboat/doc/*' --output-file $APPTOTAL_INFO
-lcov --remove $APPTOTAL_INFO '*/newsboat/doc/*' --output-file $APPTOTAL_INFO
-# Removing info about third-party libraries
-lcov --remove $APPTOTAL_INFO '*/newsboat/3rd-party/*' --output-file $APPTOTAL_INFO
+make --jobs=9 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
 
-genhtml -o html $APPTOTAL_INFO
-echo "The coverage report can be found at file://`pwd`/html/index.html"
+rm -rf html
+grcov . --source-dir . --binary-path . \
+    --ignore-not-existing \
+    --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' \
+    --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' \
+    -t html -o ./$OUTDIR
+
+echo "Coverage reports:"
+find $OUTDIR -name 'index.html'

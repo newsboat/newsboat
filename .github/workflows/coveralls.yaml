@@ -8,24 +8,22 @@ jobs:
     runs-on: ubuntu-24.04
 
     env:
-      # We use Rust Nightly, which builds upon LLVM 18. To ensure best
-      # compatibility, we use a matching C++ compiler.
+      # We use Rust 1.81, which builds upon LLVM 18. We have to use a matching
+      # C++ compiler, otherwise grcov won't be able to produce the coverage
+      # report.
       CC: clang-18
       CXX: clang++-18
       # Enable test coverage.
       PROFILE: 1
-      # These flags are necessary for grcov to correctly calculate coverage.
-      CARGO_INCREMENTAL: 0
-      # We add `-A warnings` because we aren't interested in warnings from Rust
-      # Nightly -- GitHub turns them into annotations, which is annoying.
-      RUSTFLAGS: '-A warnings -Zprofile -Ccodegen-units=1 -Copt-level=0 -Clink-dead-code -Coverflow-checks=off -Zpanic_abort_tests -Cpanic=abort'
-      RUSTDOCFLAGS: '-Cpanic=abort'
+      CXXFLAGS: '-O0 -fprofile-instr-generate -fcoverage-mapping'
+      RUSTFLAGS: '-Clink-dead-code -Cinstrument-coverage'
       # Some of our tests use ncurses, which require a terminal of some sort.
       # We pretend ours is a simple one.
       TERM: 'dumb'
       # This prevents our tests from hogging too much of the CPU and failing
       # due to races.
       RUST_TEST_THREADS: 2
+      LLVM_PROFILE_FILE: '%h_%m.profraw'
 
     steps:
       - name: Install dependencies
@@ -42,7 +40,12 @@ jobs:
           sudo locale-gen
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@nightly
+        # The last version based on LLVM 18. We have to match LLVM versions
+        # used to compile Rust and C++, otherwise they might generate
+        # incompatible coverage reports
+        uses: dtolnay/rust-toolchain@1.81
+        with:
+          components: llvm-tools-preview
 
       - uses: actions/checkout@v4
 
@@ -63,16 +66,8 @@ jobs:
       - name: Run tests
         run: make --jobs=3 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
 
-        # gcov tool from gcc doesn't understand profiling info that LLVM
-        # produces, so we trick grcov into using llvm-cov instead. We can't
-        # simply point grcov at llvm-cov, because the latter only behaves like
-        # gcc's gcov when invoked by that name.
-      - name: Prepare to use llvm-cov-18 as gcov
-        run: ln -s $(which llvm-cov-18) gcov
-
       - name: Calculate test coverage
-        # Note that we override the path to gcov tool.
-        run: GCOV=$(pwd)/gcov grcov . --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
+        run: grcov . --source-dir . --binary-path . --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
 
       - name: Submit coverage to Coveralls
         uses: coverallsapp/github-action@v2
