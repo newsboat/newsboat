@@ -234,6 +234,7 @@ clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clea
 
 profclean:
 	find . -name '*.gc*' -type f -print0 | xargs -0 $(RM) --
+	find . -name '*.profraw' -type f -print0 | xargs -0 $(RM) --
 	$(RM) app*.info
 
 distclean: clean profclean
