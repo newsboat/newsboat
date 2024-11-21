@@ -43,7 +43,7 @@ jobs:
         # The last version based on LLVM 18. We have to match LLVM versions
         # used to compile Rust and C++, otherwise they might generate
         # incompatible coverage reports
-        uses: dtolnay/rust-toolchain@1.81
+        uses: dtolnay/rust-toolchain@1.90
         with:
           components: llvm-tools-preview
 
