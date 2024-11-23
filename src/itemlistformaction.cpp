@@ -279,23 +279,15 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SHOWURLS:
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				std::string urlviewer = cfg->get_configvalue(
-						"external-url-viewer");
-				if (urlviewer == "") {
+				const auto urlviewer = cfg->get_configvalue_as_filepath("external-url-viewer");
+				if (urlviewer == Filepath{}) {
 					Links links;
-					std::vector<std::pair<LineType,
-					    std::string>>
-					    lines;
+					std::vector<std::pair<LineType, std::string>> lines;
 					HtmlRenderer rnd;
 					std::string baseurl =
-						visible_items[itempos]
-						.first
-						->get_base() !=
-						""
-						? visible_items[itempos]
-						.first->get_base()
-						: visible_items[itempos]
-						.first->feedurl();
+						visible_items[itempos].first->get_base() != ""
+						? visible_items[itempos].first->get_base()
+						: visible_items[itempos].first->feedurl();
 					rnd.render(
 						utils::utf8_to_locale(visible_items[itempos].first->description().text),
 						lines,
@@ -309,7 +301,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					}
 				} else {
 					qna_responses.clear();
-					qna_responses.push_back(urlviewer);
+					qna_responses.push_back(urlviewer.to_locale_string());
 					this->finished_qna(QnaFinishAction::PipeItemIntoProgram);
 				}
 			}

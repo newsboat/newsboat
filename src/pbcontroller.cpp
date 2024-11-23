@@ -482,11 +482,11 @@ void PbController::decrease_parallel_downloads()
 void PbController::play_file(const newsboat::Filepath& file)
 {
 	std::string cmdline;
-	std::string player = cfg.get_configvalue("player");
-	if (player == "") {
+	const auto player = cfg.get_configvalue_as_filepath("player");
+	if (player == Filepath{}) {
 		return;
 	}
-	cmdline.append(player);
+	cmdline.append(player.to_locale_string());
 	cmdline.append(" '");
 	cmdline.append(utils::replace_all(file, "'", "'\\''"));
 	cmdline.append("'");
