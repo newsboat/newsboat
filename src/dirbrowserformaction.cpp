@@ -266,20 +266,21 @@ void DirBrowserFormAction::init()
 
 	file_prompt_line.set_text(_("Directory: "));
 
-	const std::string save_path = cfg->get_configvalue("save-path");
+	const auto save_path = cfg->get_configvalue_as_filepath("save-path");
 
-	LOG(Level::DEBUG,
-		"view::dirbrowser: save-path is '%s'",
-		save_path);
+	LOG(Level::DEBUG, "view::dirbrowser: save-path is '%s'", save_path);
 
-	const int status = ::chdir(save_path.c_str());
+	const int status = ::chdir(save_path.to_locale_string().c_str());
 	LOG(Level::DEBUG, "view::dirbrowser: chdir(%s) = %i", save_path, status);
 
-	set_value("filenametext", save_path);
+	set_value("filenametext", save_path.to_locale_string());
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
-	set_value("filenametext_pos", std::to_string(save_path.length()));
+	// TODO: #2326 use length by graphemes
+	// See: https://github.com/newsboat/newsboat/pull/2561#discussion_r1357376071
+	set_value("filenametext_pos",
+		std::to_string(save_path.to_locale_string().length()));
 }
 
 std::vector<KeyMapHintEntry> DirBrowserFormAction::get_keymap_hint() const
