@@ -643,9 +643,6 @@ You can disable these feeds by setting the following configuration variable:
 
 _Supported since Newsboat 2.21._
 
-WARNING: As of 2021-10-06, Miniflux's API doesn't list enclosures, so Newsboat
-won't display podcasts, cover images etc.
-
 https://miniflux.app[Miniflux] is a "minimalist and opinionated feed reader"
 that is self-hostable.
 
