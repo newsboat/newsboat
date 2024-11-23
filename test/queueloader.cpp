@@ -309,19 +309,19 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 
 	ConfigContainer cfg;
 
-	std::string download_path;
+	Filepath download_path;
 	SECTION("No `download-path` set") {
-		download_path = cfg.get_configvalue("download-path");
+		download_path = cfg.get_configvalue_as_filepath("download-path");
 	}
 	SECTION("`download-path` set without a trailing slash") {
 		cfg.set_configvalue("download-path", "/some/bogus value");
 		// QueueLoader should append a slash if a setting doesn't contain it.
-		download_path = "/some/bogus value/";
+		download_path = Filepath::from_locale_string("/some/bogus value/");
 	}
 	SECTION("`download-path` set with a trailing slash") {
 		cfg.set_configvalue("download-path",
 			"/yet another/fictional path for downloads/");
-		download_path = "/yet another/fictional path for downloads/";
+		download_path = Filepath::from_locale_string("/yet another/fictional path for downloads/");
 	}
 
 	auto empty_callback = []() {};
@@ -331,10 +331,9 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 	queue_loader.reload(downloads);
 
 	REQUIRE(downloads.size() == 5);
-	REQUIRE(downloads[0].filename() == download_path + "filename.mp3");
-	REQUIRE(downloads[1].filename() == download_path + "hello_world.ogg");
-	REQUIRE(downloads[2].filename() == download_path +
-		"here%27s_one_with_a_quote.mp4");
+	REQUIRE(downloads[0].filename() == download_path.join("filename.mp3"));
+	REQUIRE(downloads[1].filename() == download_path.join("hello_world.ogg"));
+	REQUIRE(downloads[2].filename() == download_path.join("here%27s_one_with_a_quote.mp4"));
 	// These two downloads should have filenames based on current time, so we
 	// only check their prefixes.
 	REQUIRE(test_helpers::starts_with(download_path, downloads[3].filename()));

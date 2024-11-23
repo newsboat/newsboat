@@ -190,7 +190,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	// create cache object
-	std::string cachefilepath = cfg.get_configvalue("cache-file");
+	std::string cachefilepath = cfg.get_configvalue_as_filepath("cache-file");
 	if (cachefilepath.length() > 0 && !args.cache_file().has_value()) {
 		configpaths.set_cache_file(cachefilepath);
 	}
@@ -255,8 +255,8 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = std::make_unique<RemoteApiUrlReader>("Tiny Tiny RSS", configpaths.url_file(),
 				*api);
 	} else if (type == "newsblur") {
-		const auto cookies = cfg.get_configvalue("cookie-cache");
-		if (cookies.empty()) {
+		const auto cookies = cfg.get_configvalue_as_filepath("cookie-cache");
+		if (cookies == Filepath()) {
 			std::cerr << strprintf::fmt(
 					_("ERROR: You must set `cookie-cache` to use "
 						"NewsBlur.\n"));
@@ -279,7 +279,7 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "feedbin") {
 		const std::string user = cfg.get_configvalue("feedbin-login");
 		const std::string pass = cfg.get_configvalue("feedbin-password");
-		const std::string pass_file = cfg.get_configvalue("feedbin-passwordfile");
+		const std::string pass_file = cfg.get_configvalue_as_filepath("feedbin-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("feedbin-passwordeval");
 		const bool creds_set = !user.empty() &&
 			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
@@ -303,7 +303,7 @@ int Controller::run(const CliArgsParser& args)
 
 		const std::string user = cfg.get_configvalue("freshrss-login");
 		const std::string pass = cfg.get_configvalue("freshrss-password");
-		const std::string pass_file = cfg.get_configvalue("freshrss-passwordfile");
+		const std::string pass_file = cfg.get_configvalue_as_filepath("freshrss-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("freshrss-passwordeval");
 		const bool creds_set = !user.empty() &&
 			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
@@ -331,10 +331,10 @@ int Controller::run(const CliArgsParser& args)
 
 		const std::string user = cfg.get_configvalue("miniflux-login");
 		const std::string pass = cfg.get_configvalue("miniflux-password");
-		const std::string pass_file = cfg.get_configvalue("miniflux-passwordfile");
+		const std::string pass_file = cfg.get_configvalue_as_filepath("miniflux-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("miniflux-passwordeval");
 		const std::string token = cfg.get_configvalue("miniflux-token");
-		const std::string token_file = cfg.get_configvalue("miniflux-tokenfile");
+		const std::string token_file = cfg.get_configvalue_as_filepath("miniflux-tokenfile");
 		const std::string token_eval = cfg.get_configvalue("miniflux-tokeneval");
 		const bool creds_set = !token.empty()
 			|| !token_file.empty()
@@ -943,19 +943,10 @@ Filepath Controller::write_temporary_item(RssItem& item)
 
 void Controller::write_item(RssItem& item, const Filepath& filename)
 {
-	const std::string save_path = cfg.get_configvalue("save-path");
-	Filepath spath = save_path.back() == '/' ? save_path : save_path + "/";
+	Filepath save_path = cfg.get_configvalue_as_filepath("save-path");
+	save_path.push(utils::resolve_tilde(filename));
 
-	Filepath path;
-	if (filename.starts_with("/")) {
-		path.push(filename);
-	} else if (filename.starts_with("~")) {
-		path = utils::resolve_tilde(filename);
-	} else {
-		path = spath.join(filename);
-	}
-
-	std::fstream f(path, std::fstream::out);
+	std::fstream f(save_path, std::fstream::out);
 	if (!f.is_open()) {
 		throw Exception(errno);
 	}
@@ -1001,15 +992,12 @@ void Controller::update_config()
 {
 	v->apply_colors_to_all_formactions();
 
-	if (cfg.get_configvalue("error-log").length() > 0) {
+	const auto error_log_path = cfg.get_configvalue_as_filepath("error-log");
+	if (error_log_path != Filepath{}) {
 		try {
-			const auto filepath = Filepath::from_locale_string(cfg.get_configvalue("error-log"));
-			logger::set_user_error_logfile(filepath);
+			logger::set_user_error_logfile(error_log_path);
 		} catch (const Exception& e) {
-			const std::string msg =
-				strprintf::fmt("Couldn't open %s: %s",
-					cfg.get_configvalue("error-log"),
-					e.what());
+			const std::string msg = strprintf::fmt("Couldn't open %s: %s", error_log_path, e.what());
 			v->get_statusline().show_error(msg);
 			std::cerr << msg << std::endl;
 		}

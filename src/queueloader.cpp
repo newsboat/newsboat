@@ -269,19 +269,16 @@ const
 
 newsboat::Filepath QueueLoader::get_filename(const std::string& str) const
 {
-	std::string fn = cfg.get_configvalue("download-path");
+	auto fn = cfg.get_configvalue_as_filepath("download-path");
 
-	if (fn[fn.length() - 1] != NEWSBEUTER_PATH_SEP) {
-		fn.push_back(NEWSBEUTER_PATH_SEP);
-	}
 	char buf[1024];
 	snprintf(buf, sizeof(buf), "%s", str.c_str());
 	char* base = basename(buf);
 	if (!base || strlen(base) == 0) {
 		time_t t = time(nullptr);
-		fn.append(utils::mt_strf_localtime("%Y-%b-%d-%H%M%S.unknown", t));
+		fn.push(utils::mt_strf_localtime("%Y-%b-%d-%H%M%S.unknown", t));
 	} else {
-		fn.append(utils::replace_all(base, "'", "%27"));
+		fn.push(utils::replace_all(base, "'", "%27"));
 	}
 	return fn;
 }
