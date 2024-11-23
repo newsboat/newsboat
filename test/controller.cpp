@@ -35,7 +35,6 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	cfg->set_configvalue("save-path", save_path);
 	auto rsscache = Cache::in_memory(*cfg);
 
-
 	RssItem item(rsscache.get());
 	item.set_title("title");
 	const auto description = "First line.\nSecond one.\nAnd finally the third";

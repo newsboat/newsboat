@@ -198,12 +198,13 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 		if (!ign || !ign->matches_lastmodified(uri)) {
 			ch.fetch_lastmodified(uri, lm, etag);
 		}
-		f = p.parse_url(uri,
+		f = p.parse_url(
+				uri,
 				easyhandle,
 				lm,
 				etag,
 				api,
-				cfg.get_configvalue("cookie-cache"));
+				cfg.get_configvalue_as_filepath("cookie-cache").to_locale_string());
 		LOG(Level::DEBUG,
 			"FeedRetriever::download_http: lm = %" PRId64 " etag = %s",
 			// On GCC, `time_t` is `long int`, which is at least 32 bits
