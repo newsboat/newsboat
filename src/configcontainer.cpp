@@ -427,11 +427,7 @@ std::string ConfigContainer::get_configvalue(const std::string& key) const
 	auto it = config_data.find(key);
 	if (it != config_data.cend()) {
 		const auto& entry = it->second;
-		std::string value = entry.value();
-		if (entry.type() == ConfigDataType::PATH) {
-			value = utils::resolve_tilde(Filepath::from_locale_string(value)).to_locale_string();
-		}
-		return value;
+		return entry.value();
 	}
 
 	return {};
@@ -450,6 +446,20 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 	}
 
 	return 0;
+}
+
+Filepath ConfigContainer::get_configvalue_as_filepath(const std::string& key) const
+{
+	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
+	auto it = config_data.find(key);
+	if (it != config_data.cend()) {
+		const auto& entry = it->second;
+		if (entry.type() == ConfigDataType::PATH) {
+			return utils::resolve_tilde(Filepath::from_locale_string(entry.value()));
+		}
+	}
+
+	return {};
 }
 
 bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const

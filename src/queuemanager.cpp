@@ -64,21 +64,15 @@ std::string get_hostname_from_url(const std::string& url)
 	return hostname;
 }
 
-Filepath QueueManager::generate_enqueue_filename(
-	RssItem& item,
-	RssFeed& feed)
+Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 {
 	const std::string& url = item.enclosure_url();
 	const std::string& title = utils::utf8_to_locale(item.title());
 	const time_t pubDate = item.pubDate_timestamp();
 
-	std::string dlformat = cfg->get_configvalue("download-path");
-	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP) {
-		dlformat.push_back(NEWSBEUTER_PATH_SEP);
-	}
-
-	const std::string filemask = cfg->get_configvalue("download-filename-format");
-	dlformat.append(filemask);
+	const Filepath dlformat =
+		cfg->get_configvalue_as_filepath("download-path")
+		.join(Filepath::from_locale_string(cfg->get_configvalue("download-filename-format")));
 
 	const std::string base = utils::get_basename(url);
 	std::string extension;

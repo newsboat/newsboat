@@ -374,7 +374,7 @@ void View::drop_queued_input()
 void View::open_in_pager(const Filepath& filename)
 {
 	std::string cmdline;
-	std::string pager = cfg->get_configvalue("pager");
+	const auto pager = cfg->get_configvalue_as_filepath("pager").to_locale_string();
 	if (pager.find("%f") != std::string::npos) {
 		FmtStrFormatter fmt;
 		fmt.register_fmt('f', filename);
@@ -403,7 +403,7 @@ std::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 	bool interactive)
 {
 	std::string cmdline;
-	const std::string browser = cfg->get_configvalue("browser");
+	const std::string browser = cfg->get_configvalue_as_filepath("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
 	const std::string escaped_feedurl = "'" + utils::replace_all(feedurl, "'",
 			"%27") + "'";
@@ -553,7 +553,8 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 	const std::string& guid,
 	const std::string& searchphrase)
 {
-	if (cfg->get_configvalue("pager") == "internal") {
+	if (cfg->get_configvalue_as_filepath("pager") ==
+		Filepath::from_locale_string("internal")) {
 		auto fa = get_current_formaction();
 
 		std::shared_ptr<ItemListFormAction> itemlist =
