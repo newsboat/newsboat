@@ -598,15 +598,14 @@ void utils::set_common_curl_options(CurlHandle& handle, ConfigContainer& cfg)
 		cfg.get_configvalue_as_int("download-timeout");
 	curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, dl_timeout);
 
-	const std::string cookie_cache =
-		cfg.get_configvalue("cookie-cache");
-	if (cookie_cache != "") {
+	const Filepath cookie_cache = cfg.get_configvalue_as_filepath("cookie-cache");
+	if (cookie_cache != Filepath{}) {
 		curl_easy_setopt(handle.ptr(),
 			CURLOPT_COOKIEFILE,
-			cookie_cache.c_str());
+			cookie_cache.to_locale_string().c_str());
 		curl_easy_setopt(handle.ptr(),
 			CURLOPT_COOKIEJAR,
-			cookie_cache.c_str());
+			cookie_cache.to_locale_string().c_str());
 	}
 
 	curl_easy_setopt(handle.ptr(),

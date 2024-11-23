@@ -153,15 +153,16 @@ void render_html(
 	const std::string& url,
 	bool raw)
 {
-	const std::string renderer = cfg.get_configvalue("html-renderer");
-	if (renderer == "internal") {
+	const auto renderer = cfg.get_configvalue_as_filepath("html-renderer");
+	if (renderer == Filepath::from_locale_string("internal")) {
 		HtmlRenderer rnd(raw);
 		rnd.render(source, lines, thelinks, url);
 	} else {
 		const char* argv[4];
 		argv[0] = "/bin/sh";
 		argv[1] = "-c";
-		argv[2] = renderer.c_str();
+		const std::string renderer_locale_string = renderer.to_locale_string();
+		argv[2] = renderer_locale_string.c_str();
 		argv[3] = nullptr;
 		LOG(Level::DEBUG,
 			"item_renderer::render_html: source = %s",

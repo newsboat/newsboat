@@ -354,10 +354,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_SHOWURLS: {
-		std::string urlviewer =
-			cfg->get_configvalue("external-url-viewer");
+		const auto urlviewer = cfg->get_configvalue_as_filepath("external-url-viewer");
 		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
-		if (urlviewer == "") {
+		if (urlviewer == Filepath{}) {
 			if (links.size() > 0) {
 				v.push_urlview(links, feed);
 			} else {
@@ -365,7 +364,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 		} else {
 			qna_responses.clear();
-			qna_responses.push_back(urlviewer);
+			qna_responses.push_back(urlviewer.to_locale_string());
 			this->finished_qna(QnaFinishAction::PipeItemIntoProgram);
 		}
 	}

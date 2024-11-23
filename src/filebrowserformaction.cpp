@@ -281,13 +281,11 @@ void FileBrowserFormAction::init()
 
 	file_prompt_line.set_text(_("File: "));
 
-	const std::string save_path = cfg->get_configvalue("save-path");
+	const auto save_path = cfg->get_configvalue_as_filepath("save-path");
 
-	LOG(Level::DEBUG,
-		"view::filebrowser: save-path is '%s'",
-		save_path);
+	LOG(Level::DEBUG, "view::filebrowser: save-path is '%s'", save_path);
 
-	const int status = ::chdir(save_path.c_str());
+	const int status = ::chdir(save_path.to_locale_string().c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
 	set_value("filenametext", default_filename.to_locale_string());
