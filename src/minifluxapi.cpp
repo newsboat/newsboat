@@ -235,6 +235,17 @@ rsspp::Feed MinifluxApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 				item.content_encoded = entry["content"];
 			}
 
+			if (!entry["enclosures"].is_null() && entry["enclosures"].is_array()) {
+				for (const auto& enclosure : entry["enclosures"]) {
+					if (!enclosure["url"].is_null() && !enclosure["mime_type"].is_null()) {
+						rsspp::Enclosure enc;
+						enc.url = enclosure["url"];
+						enc.type = enclosure["mime_type"];
+						item.enclosures.push_back(enc);
+					}
+				}
+			}
+
 			const int entry_id = entry["id"];
 			item.guid = std::to_string(entry_id);
 
