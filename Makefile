@@ -185,6 +185,9 @@ target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 $(CPP_DEPS_SUBDIRS):
 	$(MKDIR) $@
 
+# Make sure xlicense.h is generated before building newsboat.cpp.
+newsboat.o: xlicense.h
+
 %.o: %.cpp # Cancel default rule for C++ code
 %.o: %.cpp | $(NEWSBOATLIB_OUTPUT) $(STFL_HDRS) $(CPP_DEPS_SUBDIRS)
 	$(CXX) $(CXXFLAGS) -MD -MP -MF $(addprefix .deps/,$<) -o $@ -c $<
