@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "configactionhandler.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -67,6 +68,7 @@ public:
 
 	bool get_configvalue_as_bool(const std::string& key) const;
 	int get_configvalue_as_int(const std::string& key) const;
+	Filepath get_configvalue_as_filepath(const std::string& key) const;
 	std::string get_configvalue(const std::string& key) const;
 	void set_configvalue(const std::string& key, const std::string& value);
 	void reset_to_default(const std::string& key);
