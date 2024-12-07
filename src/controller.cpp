@@ -171,6 +171,7 @@ int Controller::run(const CliArgsParser& args)
 	cfgparser.register_handler("bind-key", keys);
 	cfgparser.register_handler("unbind-key", keys);
 	cfgparser.register_handler("macro", keys);
+	//cfgparser.register_handler("bind", keys);
 	cfgparser.register_handler("run-on-startup", keys);
 
 	cfgparser.register_handler("ignore-article", ign);
