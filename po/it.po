@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-12-08 16:22+0300\n"
-"PO-Revision-Date: 2024-09-11 22:04+0200\n"
+"PO-Revision-Date: 2024-12-08 16:53+0100\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -454,7 +454,7 @@ msgstr "Sto caricando gli URL da %s..."
 
 #: src/controller.cpp:384
 msgid "Authentication failed."
-msgstr ""
+msgstr "Autenticazione fallita."
 
 #: src/controller.cpp:400
 #, c-format
@@ -844,14 +844,12 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "Non posso aprire i query feed nel browser!"
 
 #: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1399
-#, fuzzy
 msgid "Clear filter"
-msgstr "Imposta un filtro"
+msgstr "Pulisci filtro"
 
 #: src/feedlistformaction.cpp:645
-#, fuzzy
 msgid "Clear tag"
-msgstr "Pulisci"
+msgstr "Pulisci tag"
 
 #: src/feedlistformaction.cpp:647 src/helpformaction.cpp:191
 #: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:580
@@ -1716,9 +1714,8 @@ msgid "failed to parse binding"
 msgstr "analisi associazione fallita"
 
 #: src/keymap.cpp:1028
-#, fuzzy, c-format
 msgid "unknown context: %s"
-msgstr "comando sconosciuto `%s'"
+msgstr "contesto sconosciuto: %s"
 
 #: src/keymap.cpp:1080
 #, c-format
@@ -1738,7 +1735,7 @@ msgstr "l'espressione regolare `%s' non è valida: %s"
 #: src/minifluxapi.cpp:58
 #, c-format
 msgid "Authentication check using %s failed (HTTP response code: %s)"
-msgstr ""
+msgstr "Autenticazione usando %s fallita (codice risposta HTTP: %s)"
 
 #: src/opml.cpp:210
 #, c-format
