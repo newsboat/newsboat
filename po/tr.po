@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-12-08 16:22+0300\n"
-"PO-Revision-Date: 2024-09-10 01:00+0300\n"
+"PO-Revision-Date: 2024-12-08 20:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -455,7 +455,7 @@ msgstr "%s kaynağından adresler yükleniyor..."
 
 #: src/controller.cpp:384
 msgid "Authentication failed."
-msgstr ""
+msgstr "Yetkilendirme başarısız."
 
 #: src/controller.cpp:400
 #, c-format
@@ -847,14 +847,12 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "Sorgu beslemeleri tarayıcıda açılamaz!"
 
 #: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1399
-#, fuzzy
 msgid "Clear filter"
-msgstr "Süzgeç ayarla"
+msgstr "Süzgeci temizle"
 
 #: src/feedlistformaction.cpp:645
-#, fuzzy
 msgid "Clear tag"
-msgstr "Temizle"
+msgstr "Etiketi temizle"
 
 #: src/feedlistformaction.cpp:647 src/helpformaction.cpp:191
 #: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:580
@@ -1718,9 +1716,9 @@ msgid "failed to parse binding"
 msgstr "bağıntı ayrıştırılamadı"
 
 #: src/keymap.cpp:1028
-#, fuzzy, c-format
+#, c-format
 msgid "unknown context: %s"
-msgstr "bilinmeyen komut '%s'"
+msgstr "bilinmeyen bağlam: %s"
 
 #: src/keymap.cpp:1080
 #, c-format
@@ -1740,7 +1738,7 @@ msgstr "düzenli ifade '%s', geçersiz: %s"
 #: src/minifluxapi.cpp:58
 #, c-format
 msgid "Authentication check using %s failed (HTTP response code: %s)"
-msgstr ""
+msgstr "%s kullanarak yetkilendirme denetimi başarısız (HTTP yanıtı kodu: %s)"
 
 #: src/opml.cpp:210
 #, c-format
