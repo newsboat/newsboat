@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2024-09-09 19:36+0300\n"
+"POT-Creation-Date: 2024-12-08 16:22+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: \n"
@@ -442,6 +442,10 @@ msgstr ""
 msgid "Loading URLs from %s..."
 msgstr "Načítanie adries URL z %s..."
 
+#: src/controller.cpp:384
+msgid "Authentication failed."
+msgstr ""
+
 #: src/controller.cpp:400
 #, c-format
 msgid ""
@@ -567,42 +571,42 @@ msgstr "zlyhalo: "
 msgid "Error: couldn't mark all feeds read: %s"
 msgstr "Chyba: nemožno označiť všetky prečítané informačné kanály: %s"
 
-#: src/controller.cpp:736 src/itemutils.cpp:34
+#: src/controller.cpp:734 src/itemutils.cpp:34
 #, c-format
 msgid "Generated filename (%s) is used already."
 msgstr ""
 
-#: src/controller.cpp:741 src/itemutils.cpp:39
+#: src/controller.cpp:739 src/itemutils.cpp:39
 #, fuzzy, c-format
 msgid "Failed to open queue file: %s."
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 
-#: src/controller.cpp:763
+#: src/controller.cpp:761
 #, fuzzy, c-format
 msgid "Error importing OPML to urls file %s: %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 
-#: src/controller.cpp:772
+#: src/controller.cpp:770
 #, fuzzy, c-format
 msgid "An error occurred while parsing %s: %s"
 msgstr "Vyskytla sa chyba počas \"parsingu\" %s."
 
-#: src/controller.cpp:779
+#: src/controller.cpp:777
 #, c-format
 msgid "Import of %s finished."
 msgstr "Import %s ukončený."
 
-#: src/controller.cpp:915
+#: src/controller.cpp:912
 #, c-format
 msgid "%u unread articles"
 msgstr "%u neprečítaných článkov"
 
-#: src/controller.cpp:920
+#: src/controller.cpp:917
 #, c-format
 msgid "%s: %s: unknown command"
 msgstr "%s: %s: neznámy príkaz"
 
-#: src/controller.cpp:1039
+#: src/controller.cpp:1035
 #, c-format
 msgid "Error: couldn't open configuration file `%s'!"
 msgstr "Chyba: nemožno otvoriť konfiguračný súbor `%s'!"
@@ -623,8 +627,8 @@ msgstr "Zatvoriť na dialóg"
 msgid "Error: you can't remove the feed list!"
 msgstr "Chyba: nemožno odstrániť zoznam informačných kanálov (feed list)!"
 
-#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1027
-#: src/itemlistformaction.cpp:1419 src/urlviewformaction.cpp:172
+#: src/dialogsformaction.cpp:122 src/feedlistformaction.cpp:1033
+#: src/itemlistformaction.cpp:1423 src/urlviewformaction.cpp:172
 msgid "Invalid position!"
 msgstr "Neplatná pozícia!"
 
@@ -638,7 +642,7 @@ msgid "Cancel"
 msgstr "Zrušiť"
 
 #: src/dirbrowserformaction.cpp:298 src/filebrowserformaction.cpp:322
-#: src/itemlistformaction.cpp:1398 src/itemviewformaction.cpp:581
+#: src/itemlistformaction.cpp:1403 src/itemviewformaction.cpp:581
 msgid "Save"
 msgstr "Uložiť"
 
@@ -819,7 +823,7 @@ msgid "Search for: "
 msgstr "Vyhľadať: "
 
 #: src/feedlistformaction.cpp:457 src/feedlistformaction.cpp:473
-#: src/formaction.cpp:562 src/formaction.cpp:564 src/itemlistformaction.cpp:679
+#: src/formaction.cpp:558 src/formaction.cpp:560 src/itemlistformaction.cpp:679
 #: src/itemlistformaction.cpp:695 src/itemrenderer.cpp:76
 msgid "Title: "
 msgstr "Titulok: "
@@ -837,74 +841,84 @@ msgstr "Skutočne skončiť (a:Áno n:Nie)? "
 msgid "Cannot open query feeds in the browser!"
 msgstr "V prehliadači sa nedajú otvoriť požiadavky z kanálov!"
 
-#: src/feedlistformaction.cpp:640 src/helpformaction.cpp:190
-#: src/itemlistformaction.cpp:1396 src/itemviewformaction.cpp:580
+#: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1399
+#, fuzzy
+msgid "Clear filter"
+msgstr "Nastav fitler"
+
+#: src/feedlistformaction.cpp:645
+#, fuzzy
+msgid "Clear tag"
+msgstr "Vyčistiť"
+
+#: src/feedlistformaction.cpp:647 src/helpformaction.cpp:191
+#: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:580
 #: src/pbview.cpp:372 src/pbview.cpp:379 src/searchresultslistformaction.cpp:18
 #: src/urlviewformaction.cpp:159
 msgid "Quit"
 msgstr "Ukončiť"
 
-#: src/feedlistformaction.cpp:641 src/itemlistformaction.cpp:1397
+#: src/feedlistformaction.cpp:648 src/itemlistformaction.cpp:1402
 #: src/searchresultslistformaction.cpp:19
 msgid "Open"
 msgstr "Otvoriť"
 
-#: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1400
+#: src/feedlistformaction.cpp:649 src/itemlistformaction.cpp:1405
 #: src/itemviewformaction.cpp:582
 msgid "Next Unread"
 msgstr "Ďalší neprečítaný"
 
-#: src/feedlistformaction.cpp:643 src/itemlistformaction.cpp:1399
+#: src/feedlistformaction.cpp:650 src/itemlistformaction.cpp:1404
 msgid "Reload"
 msgstr "Obnoviť"
 
-#: src/feedlistformaction.cpp:644
+#: src/feedlistformaction.cpp:651
 msgid "Reload All"
 msgstr "Obnoviť všetko"
 
-#: src/feedlistformaction.cpp:645
+#: src/feedlistformaction.cpp:652
 msgid "Mark Read"
 msgstr "Označiť ako prečítané"
 
-#: src/feedlistformaction.cpp:646 src/itemlistformaction.cpp:1401
+#: src/feedlistformaction.cpp:653 src/itemlistformaction.cpp:1406
 msgid "Mark All Read"
 msgstr "Označiť všetko ako prečítané"
 
-#: src/feedlistformaction.cpp:647 src/helpformaction.cpp:191
-#: src/itemlistformaction.cpp:1402 src/searchresultslistformaction.cpp:21
+#: src/feedlistformaction.cpp:654 src/helpformaction.cpp:192
+#: src/itemlistformaction.cpp:1407 src/searchresultslistformaction.cpp:21
 msgid "Search"
 msgstr "Hľadať"
 
-#: src/feedlistformaction.cpp:648 src/helpformaction.cpp:214
-#: src/itemlistformaction.cpp:1403 src/itemviewformaction.cpp:585
+#: src/feedlistformaction.cpp:655 src/helpformaction.cpp:216
+#: src/itemlistformaction.cpp:1408 src/itemviewformaction.cpp:585
 #: src/pbview.cpp:301 src/pbview.cpp:387 src/searchresultslistformaction.cpp:22
 #: src/urlviewformaction.cpp:162
 msgid "Help"
 msgstr "Pomocník"
 
-#: src/feedlistformaction.cpp:990 src/itemlistformaction.cpp:986
+#: src/feedlistformaction.cpp:996 src/itemlistformaction.cpp:986
 msgid "Searching..."
 msgstr "Vyhľadávanie..."
 
-#: src/feedlistformaction.cpp:999 src/itemlistformaction.cpp:992
+#: src/feedlistformaction.cpp:1005 src/itemlistformaction.cpp:992
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Chyba pri vyhľadávaní `%s': %s"
 
-#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:999
+#: src/feedlistformaction.cpp:1017 src/itemlistformaction.cpp:999
 msgid "No results."
 msgstr "Žiadny výsledok."
 
-#: src/feedlistformaction.cpp:1022 src/itemlistformaction.cpp:1414
+#: src/feedlistformaction.cpp:1028 src/itemlistformaction.cpp:1418
 msgid "Position not visible!"
 msgstr "Pozícia nie je viditeľná!"
 
-#: src/feedlistformaction.cpp:1104
+#: src/feedlistformaction.cpp:1110
 #, c-format
 msgid "Feed List - %u unread, %u total"
 msgstr "Zoznam informačných kanálov - %u neprečítané, %u celkom"
 
-#: src/feedlistformaction.cpp:1118 src/itemlistformaction.cpp:1693
+#: src/feedlistformaction.cpp:1124 src/itemlistformaction.cpp:1697
 #, fuzzy, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "nemožno analyzovať výraz filtra `%s': %s"
@@ -943,71 +957,71 @@ msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 msgid "couldn't parse filter expression `%s': %s"
 msgstr "nemožno analyzovať výraz filtra `%s': %s"
 
-#: src/formaction.cpp:130
+#: src/formaction.cpp:126
 #, fuzzy
 msgid "usage: set <config-option> <value>"
 msgstr "použitie: set <variable>[=<value>]"
 
-#: src/formaction.cpp:258
+#: src/formaction.cpp:254
 msgid "usage: set <variable>[=<value>]"
 msgstr "použitie: set <variable>[=<value>]"
 
-#: src/formaction.cpp:272
+#: src/formaction.cpp:268
 msgid "usage: source <file> [...]"
 msgstr "použitie: zdrojový súbor <file> [...]"
 
-#: src/formaction.cpp:290
+#: src/formaction.cpp:286
 msgid "usage: dumpconfig <file>"
 msgstr "použítie: dumpconfig <file>"
 
-#: src/formaction.cpp:295
+#: src/formaction.cpp:291
 #, c-format
 msgid "Saved configuration to %s"
 msgstr "Konfigurácia uložená do %s"
 
-#: src/formaction.cpp:303
+#: src/formaction.cpp:299
 msgid "usage: exec <operation>"
 msgstr ""
 
-#: src/formaction.cpp:310
+#: src/formaction.cpp:306
 #, fuzzy
 msgid "Operation not found"
 msgstr "atribút nebol nájdený"
 
-#: src/formaction.cpp:334
+#: src/formaction.cpp:330
 #, c-format
 msgid "Not a command: %s"
 msgstr "Nie je príkaz: %s"
 
-#: src/formaction.cpp:510
+#: src/formaction.cpp:506
 msgid "Saving bookmark..."
 msgstr "Záložka sa ukladá..."
 
-#: src/formaction.cpp:516 src/formaction.cpp:588
+#: src/formaction.cpp:512 src/formaction.cpp:584
 msgid "Saved bookmark."
 msgstr "Záložka uložená."
 
-#: src/formaction.cpp:519 src/formaction.cpp:591
+#: src/formaction.cpp:515 src/formaction.cpp:587
 msgid "Error while saving bookmark: "
 msgstr "Chyba pri ukladaní záložky: "
 
-#: src/formaction.cpp:559
+#: src/formaction.cpp:555
 msgid "URL: "
 msgstr "URL: "
 
-#: src/formaction.cpp:566
+#: src/formaction.cpp:562
 msgid "Description: "
 msgstr "Popis: "
 
-#: src/formaction.cpp:567
+#: src/formaction.cpp:563
 msgid "Feed title: "
 msgstr "Názov titulu: "
 
-#: src/formaction.cpp:582
+#: src/formaction.cpp:578
 msgid "Saving bookmark on autopilot..."
 msgstr "Ukladanie záložiek na \"autopilota\"..."
 
-#: src/formaction.cpp:724
+#: src/formaction.cpp:720
 msgid ""
 "bookmarking support is not configured. Please set the configuration variable "
 "`bookmark-cmd' accordingly."
@@ -1015,19 +1029,19 @@ msgstr ""
 "podpora záložiek nie je nakonfigurovaná. Nastavte prosím adekvátne premennú "
 "`bookmark-cmd' v konfigurácii."
 
-#: src/helpformaction.cpp:127
+#: src/helpformaction.cpp:128
 msgid "Generic bindings:"
 msgstr "Zabudované príkazy:"
 
-#: src/helpformaction.cpp:145
+#: src/helpformaction.cpp:146
 msgid "Unbound functions:"
 msgstr "Neviazané funkcie:"
 
-#: src/helpformaction.cpp:161
+#: src/helpformaction.cpp:162
 msgid "Macros:"
 msgstr ""
 
-#: src/helpformaction.cpp:192
+#: src/helpformaction.cpp:194
 msgid "Clear"
 msgstr "Vyčistiť"
 
@@ -1083,7 +1097,7 @@ msgstr "Zoznam URL je prázdny."
 msgid "Flags: "
 msgstr "Príznaky (flags): "
 
-#: src/itemlistformaction.cpp:433 src/itemlistformaction.cpp:1494
+#: src/itemlistformaction.cpp:433 src/itemlistformaction.cpp:1498
 msgid "Error: no item selected!"
 msgstr "Chyba: žiadna položka nebola vybratá!"
 
@@ -1144,12 +1158,12 @@ msgstr ""
 msgid "Flags updated."
 msgstr "Príznaky aktualizované."
 
-#: src/itemlistformaction.cpp:1104 src/view.cpp:422 src/view.cpp:445
+#: src/itemlistformaction.cpp:1106 src/view.cpp:422 src/view.cpp:445
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Chyba: použitie filtra zlyhalo: %s"
 
-#: src/itemlistformaction.cpp:1164
+#: src/itemlistformaction.cpp:1166
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
@@ -1157,48 +1171,48 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/itemlistformaction.cpp:1473 src/itemviewformaction.cpp:213
+#: src/itemlistformaction.cpp:1477 src/itemviewformaction.cpp:213
 #: src/itemviewformaction.cpp:633
 msgid "Aborted saving."
 msgstr "Ukladanie bolo prerušené."
 
-#: src/itemlistformaction.cpp:1478 src/itemviewformaction.cpp:639
+#: src/itemlistformaction.cpp:1482 src/itemviewformaction.cpp:639
 #, c-format
 msgid "Saved article to %s"
 msgstr "Článok bol uložený do %s"
 
-#: src/itemlistformaction.cpp:1481 src/itemviewformaction.cpp:643
+#: src/itemlistformaction.cpp:1485 src/itemviewformaction.cpp:643
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Chyba: článok nemožno uložiť do %s"
 
-#: src/itemlistformaction.cpp:1490
+#: src/itemlistformaction.cpp:1494
 #, fuzzy
 msgid "Error: no filename provided"
 msgstr "Chyba: žiadna položka nebola vybratá!"
 
-#: src/itemlistformaction.cpp:1575
+#: src/itemlistformaction.cpp:1579
 #, c-format
 msgid "Query Feed - %s"
 msgstr "Dotaz informačného kanála - %s"
 
-#: src/itemlistformaction.cpp:1582
+#: src/itemlistformaction.cpp:1586
 #, c-format
 msgid "Article List - %s"
 msgstr "Zoznam článkov - %s"
 
-#: src/itemlistformaction.cpp:1629
+#: src/itemlistformaction.cpp:1633
 msgid "yanq"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1651
+#: src/itemlistformaction.cpp:1655
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1658
+#: src/itemlistformaction.cpp:1662
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
 msgstr ""
@@ -1289,7 +1303,7 @@ msgid "Error while marking article as unread: %s"
 msgstr "Chyba pri označovaní článku ako neprečítaného: %s"
 
 #: src/itemviewformaction.cpp:500 src/itemviewformaction.cpp:515
-#: src/keymap.cpp:247
+#: src/keymap.cpp:278
 msgid "Goto URL #"
 msgstr "Choď na URL #"
 
@@ -1318,415 +1332,420 @@ msgid "Error: invalid regular expression!"
 msgstr "Chyba: neplatný regulárny výraz!"
 
 #: src/keymap.cpp:35
+#, fuzzy, c-format
+msgid "`%s' is not a valid operation"
+msgstr "`%s' nie je platný kontext"
+
+#: src/keymap.cpp:66
 msgid "Open feed/article"
 msgstr "Otvoriť informačný kanál/článok"
 
-#: src/keymap.cpp:43
+#: src/keymap.cpp:74
 msgid "Switch focus between widgets"
 msgstr ""
 
-#: src/keymap.cpp:50
+#: src/keymap.cpp:81
 msgid "Return to previous dialog/Quit"
 msgstr "Návrat do predchádzajúceho dialógového okna/Ukončiť"
 
-#: src/keymap.cpp:57
+#: src/keymap.cpp:88
 msgid "Quit program, no confirmation"
 msgstr "Ukončiť program, bez potvrdenia"
 
-#: src/keymap.cpp:64
+#: src/keymap.cpp:95
 msgid "Reload currently selected feed"
 msgstr "Aktualizovať aktuálne vybraný informačný kanál (zdroj)"
 
-#: src/keymap.cpp:71
+#: src/keymap.cpp:102
 msgid "Reload all feeds"
 msgstr "Znovu načítať všetky informačné kanály"
 
-#: src/keymap.cpp:78
+#: src/keymap.cpp:109
 msgid "Mark feed read"
 msgstr "Označ informačný kanál ako prečítaný"
 
-#: src/keymap.cpp:85
+#: src/keymap.cpp:116
 msgid "Mark all feeds read"
 msgstr "Označ všetky informačné kanály ako prečítané"
 
-#: src/keymap.cpp:92
+#: src/keymap.cpp:123
 #, fuzzy
 msgid "Mark all above as read"
 msgstr "Označ všetky informačné kanály ako prečítané"
 
-#: src/keymap.cpp:99
+#: src/keymap.cpp:130
 msgid "Save article"
 msgstr "Uložiť článok"
 
-#: src/keymap.cpp:106
+#: src/keymap.cpp:137
 #, fuzzy
 msgid "Save articles"
 msgstr "Uložiť článok"
 
-#: src/keymap.cpp:113
+#: src/keymap.cpp:144
 #, fuzzy
 msgid "Go to next entry"
 msgstr "Prejsť na ďalšiu položku"
 
-#: src/keymap.cpp:120
+#: src/keymap.cpp:151
 #, fuzzy
 msgid "Go to previous entry"
 msgstr "Prejsť na predchádzajúcu položku"
 
-#: src/keymap.cpp:127
+#: src/keymap.cpp:158
 msgid "Go to next unread article"
 msgstr "Choď na nasledujúci neprečítaný článok"
 
-#: src/keymap.cpp:134
+#: src/keymap.cpp:165
 msgid "Go to previous unread article"
 msgstr "Choď na predchádzajúci neprečítaný článok"
 
-#: src/keymap.cpp:141
+#: src/keymap.cpp:172
 msgid "Go to a random unread article"
 msgstr "Choď na náhodný neprečítaný článok"
 
-#: src/keymap.cpp:148
+#: src/keymap.cpp:179
 #, fuzzy
 msgid "Open URL of article, or entry in URL view. Mark read"
 msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
 
-#: src/keymap.cpp:155
+#: src/keymap.cpp:186
 msgid "Open all unread items of selected feed in browser"
 msgstr ""
 "Otvoriť všetky neprečítané položky vybratého informačného kanála v "
 "prehliadači"
 
-#: src/keymap.cpp:162
+#: src/keymap.cpp:193
 msgid "Open all unread items of selected feed in browser and mark read"
 msgstr ""
 "Otvoriť všetky neprečítané položky vybratého informačného kanála v "
 "prehliadači a označ ako prečítané"
 
-#: src/keymap.cpp:170
+#: src/keymap.cpp:201
 #, fuzzy
 msgid "Open URL of article, feed, or entry in URL view"
 msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
 
-#: src/keymap.cpp:177
+#: src/keymap.cpp:208
 #, fuzzy
 msgid "Open URL of article, feed, or entry in a browser, non-interactively"
 msgstr "Otvoriť článok v prehliadači a označ ho ako prečítaný"
 
-#: src/keymap.cpp:184
+#: src/keymap.cpp:215
 msgid "Open help dialog"
 msgstr "Otvor dialóg pomocníka"
 
-#: src/keymap.cpp:191
+#: src/keymap.cpp:222
 msgid "Toggle source view"
 msgstr "Prepnúť zobrazenie zdroja"
 
-#: src/keymap.cpp:198
+#: src/keymap.cpp:229
 msgid "Toggle read status for article"
 msgstr "Prepnúť status čítania článku"
 
-#: src/keymap.cpp:205
+#: src/keymap.cpp:236
 msgid "Toggle show read feeds/articles"
 msgstr "Prepnúť zobrazenie informačných kanálov/článkov"
 
-#: src/keymap.cpp:212
+#: src/keymap.cpp:243
 msgid "Show URLs in current article"
 msgstr "Zobraziť adresy URL v aktuálnom článku"
 
-#: src/keymap.cpp:219
+#: src/keymap.cpp:250
 msgid "Clear current tag"
 msgstr "Vymazať aktuálnu značku (tag)"
 
-#: src/keymap.cpp:226 src/keymap.cpp:233
+#: src/keymap.cpp:257 src/keymap.cpp:264
 msgid "Select tag"
 msgstr "Vybrať značku (tag)"
 
-#: src/keymap.cpp:240
+#: src/keymap.cpp:271
 msgid "Open search dialog"
 msgstr "Otvoriť dialógové okno vyhľadávania"
 
-#: src/keymap.cpp:254
+#: src/keymap.cpp:285
 msgid "Goto item with title"
 msgstr ""
 
-#: src/keymap.cpp:261
+#: src/keymap.cpp:292
 msgid "Add download to queue"
 msgstr "Pridať sťahovanie do fronty"
 
-#: src/keymap.cpp:268
+#: src/keymap.cpp:299
 msgid "Reload the list of URLs from the configuration"
 msgstr "Znova načítať zoznam adries URL z konfigurácie"
 
-#: src/keymap.cpp:275
+#: src/keymap.cpp:306
 msgid "Download file"
 msgstr "Stiahnuť súbor"
 
-#: src/keymap.cpp:282
+#: src/keymap.cpp:313
 msgid "Cancel download"
 msgstr "Zrušiť sťahovanie"
 
-#: src/keymap.cpp:289
+#: src/keymap.cpp:320
 msgid "Mark download as deleted"
 msgstr "Označiť stiahnuté ako odstránené"
 
-#: src/keymap.cpp:296
+#: src/keymap.cpp:327
 msgid "Purge finished and deleted downloads from queue"
 msgstr "Vyčistiť dokončené a odstrániť stiahnuté z fronty"
 
-#: src/keymap.cpp:303
+#: src/keymap.cpp:334
 msgid "Toggle automatic download on/off"
 msgstr "Prepnúť automatické preberanie zapnuté/vypnuté"
 
-#: src/keymap.cpp:310
+#: src/keymap.cpp:341
 msgid "Start player with currently selected download"
 msgstr "Spustiť prehrávač s aktuálne vybratým sťahovaním"
 
-#: src/keymap.cpp:317
+#: src/keymap.cpp:348
 msgid "Mark file as finished (not played)"
 msgstr "Označiť súbor ako dokončený (neprehraný)"
 
-#: src/keymap.cpp:324
+#: src/keymap.cpp:355
 msgid "Increase the number of concurrent downloads"
 msgstr "Zvýšenie počtu paralelných sťahovaní"
 
-#: src/keymap.cpp:331
+#: src/keymap.cpp:362
 msgid "Decrease the number of concurrent downloads"
 msgstr "Znížiť počet paralelných sťahovaní"
 
-#: src/keymap.cpp:338
+#: src/keymap.cpp:369
 msgid "Redraw screen"
 msgstr "Prepísať obrazovku"
 
-#: src/keymap.cpp:345
+#: src/keymap.cpp:376
 msgid "Open the commandline"
 msgstr "Otvoriť príkazový riadok (cli)"
 
-#: src/keymap.cpp:352
+#: src/keymap.cpp:383
 msgid "Set a filter"
 msgstr "Nastav fitler"
 
-#: src/keymap.cpp:359
+#: src/keymap.cpp:390
 msgid "Select a predefined filter"
 msgstr "Vybrať preddefinovaný filter"
 
-#: src/keymap.cpp:366
+#: src/keymap.cpp:397
 msgid "Clear currently set filter"
 msgstr "Vymazať aktuálne nastavený filter"
 
-#: src/keymap.cpp:373
+#: src/keymap.cpp:404
 msgid "Bookmark current link/article"
 msgstr "Záložka aktuálneho odkazu/článku"
 
-#: src/keymap.cpp:380
+#: src/keymap.cpp:411
 msgid "Edit flags"
 msgstr "Upraviť príznaky"
 
-#: src/keymap.cpp:387
+#: src/keymap.cpp:418
 msgid "Go to next feed"
 msgstr "Prejsť na ďalší informačný kanál"
 
-#: src/keymap.cpp:394
+#: src/keymap.cpp:425
 msgid "Go to previous feed"
 msgstr "Prejsť na predchádzajúci informačný kanál"
 
-#: src/keymap.cpp:401
+#: src/keymap.cpp:432
 msgid "Go to next unread feed"
 msgstr "Prejsť na ďalší neprečítaný informačný kanál"
 
-#: src/keymap.cpp:408
+#: src/keymap.cpp:439
 msgid "Go to previous unread feed"
 msgstr "Prejsť na predchádzajúci neprečítaný informačný kanál"
 
-#: src/keymap.cpp:415
+#: src/keymap.cpp:446
 msgid "Call a macro"
 msgstr "Vyvolať makro"
 
-#: src/keymap.cpp:422
+#: src/keymap.cpp:453
 msgid "Delete article"
 msgstr "Zmazať článok"
 
-#: src/keymap.cpp:429
+#: src/keymap.cpp:460
 #, fuzzy
 msgid "Delete all articles"
 msgstr "Zmazať článok"
 
-#: src/keymap.cpp:436
+#: src/keymap.cpp:467
 msgid "Purge deleted articles"
 msgstr "Vyčistiť odstránené články"
 
-#: src/keymap.cpp:443
+#: src/keymap.cpp:474
 msgid "Edit subscribed URLs"
 msgstr "Upraviť vybrané URL adresy"
 
-#: src/keymap.cpp:450
+#: src/keymap.cpp:481
 msgid "Close currently selected dialog"
 msgstr "Zatvoriť aktuálne vybratý dialóg"
 
-#: src/keymap.cpp:457
+#: src/keymap.cpp:488
 msgid "View list of open dialogs"
 msgstr "Zobraziť zoznam otvorených dialógov"
 
-#: src/keymap.cpp:464
+#: src/keymap.cpp:495
 msgid "Go to next dialog"
 msgstr "Prejsť na ďalší dialóg"
 
-#: src/keymap.cpp:471
+#: src/keymap.cpp:502
 msgid "Go to previous dialog"
 msgstr "Prejsť na predchádzajúci dialóg"
 
-#: src/keymap.cpp:478
+#: src/keymap.cpp:509
 msgid "Pipe article to command"
 msgstr "\"Pipe\" článok do príkazu"
 
-#: src/keymap.cpp:485
+#: src/keymap.cpp:516
 msgid "Sort current list"
 msgstr "Zoradiť aktuálny zoznam"
 
-#: src/keymap.cpp:492
+#: src/keymap.cpp:523
 msgid "Sort current list (reverse)"
 msgstr "Zoradiť aktuálny zoznam (spätne)"
 
-#: src/keymap.cpp:500
+#: src/keymap.cpp:531
 #, fuzzy
 msgid "Return to previous search results (if any)"
 msgstr "Návrat do predchádzajúceho dialógového okna/Ukončiť"
 
-#: src/keymap.cpp:507
+#: src/keymap.cpp:538
 #, fuzzy
 msgid "Go to the feed of the article"
 msgstr "Choď na nasledujúci neprečítaný článok"
 
-#: src/keymap.cpp:515
+#: src/keymap.cpp:546
 msgid "Open URL 1"
 msgstr "Otvor URL 1"
 
-#: src/keymap.cpp:522
+#: src/keymap.cpp:553
 msgid "Open URL 2"
 msgstr "Otvor URL 2"
 
-#: src/keymap.cpp:529
+#: src/keymap.cpp:560
 msgid "Open URL 3"
 msgstr "Otvor URL 3"
 
-#: src/keymap.cpp:536
+#: src/keymap.cpp:567
 msgid "Open URL 4"
 msgstr "Otvor URL 4"
 
-#: src/keymap.cpp:543
+#: src/keymap.cpp:574
 msgid "Open URL 5"
 msgstr "Otvor URL 5"
 
-#: src/keymap.cpp:550
+#: src/keymap.cpp:581
 msgid "Open URL 6"
 msgstr "Otvor URL 6"
 
-#: src/keymap.cpp:557
+#: src/keymap.cpp:588
 msgid "Open URL 7"
 msgstr "Otvor URL 7"
 
-#: src/keymap.cpp:564
+#: src/keymap.cpp:595
 msgid "Open URL 8"
 msgstr "Otvor URL 8"
 
-#: src/keymap.cpp:571
+#: src/keymap.cpp:602
 msgid "Open URL 9"
 msgstr "Otvor URL 9"
 
-#: src/keymap.cpp:578
+#: src/keymap.cpp:609
 msgid "Open URL 10"
 msgstr "Otvor URL 10"
 
-#: src/keymap.cpp:586
+#: src/keymap.cpp:617
 msgid "Start cmdline with 1"
 msgstr ""
 
-#: src/keymap.cpp:593
+#: src/keymap.cpp:624
 msgid "Start cmdline with 2"
 msgstr ""
 
-#: src/keymap.cpp:600
+#: src/keymap.cpp:631
 msgid "Start cmdline with 3"
 msgstr ""
 
-#: src/keymap.cpp:607
+#: src/keymap.cpp:638
 msgid "Start cmdline with 4"
 msgstr ""
 
-#: src/keymap.cpp:614
+#: src/keymap.cpp:645
 msgid "Start cmdline with 5"
 msgstr ""
 
-#: src/keymap.cpp:621
+#: src/keymap.cpp:652
 msgid "Start cmdline with 6"
 msgstr ""
 
-#: src/keymap.cpp:628
+#: src/keymap.cpp:659
 msgid "Start cmdline with 7"
 msgstr ""
 
-#: src/keymap.cpp:635
+#: src/keymap.cpp:666
 msgid "Start cmdline with 8"
 msgstr ""
 
-#: src/keymap.cpp:642
+#: src/keymap.cpp:673
 msgid "Start cmdline with 9"
 msgstr ""
 
-#: src/keymap.cpp:650
+#: src/keymap.cpp:681
 msgid "Move to the previous entry"
 msgstr "Prejsť na predchádzajúcu položku"
 
-#: src/keymap.cpp:657
+#: src/keymap.cpp:688
 msgid "Move to the next entry"
 msgstr "Prejsť na ďalšiu položku"
 
-#: src/keymap.cpp:664
+#: src/keymap.cpp:695
 msgid "Move to the previous page"
 msgstr "Prejsť na predchádzajúcu stránku"
 
-#: src/keymap.cpp:671
+#: src/keymap.cpp:702
 msgid "Move to the next page"
 msgstr "Prejsť na ďalšiu stránku"
 
-#: src/keymap.cpp:678
+#: src/keymap.cpp:709
 msgid "Move half page up"
 msgstr ""
 
-#: src/keymap.cpp:685
+#: src/keymap.cpp:716
 msgid "Move half page down"
 msgstr ""
 
-#: src/keymap.cpp:693
+#: src/keymap.cpp:724
 msgid "Move to the start of page/list"
 msgstr "Prejsť na začiatok stránky / zoznamu"
 
-#: src/keymap.cpp:700
+#: src/keymap.cpp:731
 msgid "Move to the end of page/list"
 msgstr "Prejsť na koniec stránky/zoznamu"
 
-#: src/keymap.cpp:951
+#: src/keymap.cpp:982
 #, c-format
 msgid "`%s' is not a valid context"
 msgstr "`%s' nie je platný kontext"
 
-#: src/keymap.cpp:956
+#: src/keymap.cpp:987
 #, c-format
 msgid "`%s' is not a valid key command"
 msgstr "`%s' nie je platný príkaz kľúča"
 
-#: src/keymap.cpp:982
+#: src/keymap.cpp:1013
 #, fuzzy
 msgid "failed to parse binding"
 msgstr "Otvoriť článok v prehliadači"
 
-#: src/keymap.cpp:1014
+#: src/keymap.cpp:1028
+#, fuzzy, c-format
+msgid "unknown context: %s"
+msgstr "neznámy príkaz `%s'"
+
+#: src/keymap.cpp:1080
 #, fuzzy, c-format
 msgid "failed to parse operation sequence for %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
-
-#: src/keymap.cpp:1032
-#, fuzzy, c-format
-msgid "`%s' is not a valid operation"
-msgstr "`%s' nie je platný kontext"
 
 #: src/matcherexception.cpp:15
 #, c-format
@@ -1737,6 +1756,11 @@ msgstr "atribút `%s' nie je k dispozícii."
 #, c-format
 msgid "regular expression '%s' is invalid: %s"
 msgstr "regulárny výraz '%s' je vadný: %s"
+
+#: src/minifluxapi.cpp:58
+#, c-format
+msgid "Authentication check using %s failed (HTTP response code: %s)"
+msgstr ""
 
 #: src/opml.cpp:210
 #, fuzzy, c-format
@@ -1928,12 +1952,12 @@ msgstr "Uložiť záložku"
 msgid "URLs"
 msgstr "URLs"
 
-#: src/utils.cpp:758
+#: src/utils.cpp:757
 #, fuzzy, c-format
 msgid "Failed to open file: %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
 
-#: src/utils.cpp:762
+#: src/utils.cpp:761
 #, fuzzy, c-format
 msgid "Failed to read line %u: %s"
 msgstr "Chyba pri načítaní informačného kanálu '%s': %s"
