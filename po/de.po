@@ -1723,6 +1723,7 @@ msgid "failed to parse binding"
 msgstr "Parsen der Tastenbelegung fehlgeschlagen"
 
 #: src/keymap.cpp:1028
+#, c-format
 msgid "unknown context: %s"
 msgstr "unbekannter Kontext: %s"
 
