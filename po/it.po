@@ -1714,6 +1714,7 @@ msgid "failed to parse binding"
 msgstr "analisi associazione fallita"
 
 #: src/keymap.cpp:1028
+#, c-format
 msgid "unknown context: %s"
 msgstr "contesto sconosciuto: %s"
 
