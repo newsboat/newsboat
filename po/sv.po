@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-12-08 16:22+0300\n"
-"PO-Revision-Date: 2024-06-08 19:03+0200\n"
+"PO-Revision-Date: 2024-12-15 12:03+0100\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language: sv\n"
@@ -454,7 +454,7 @@ msgstr "Läser in URL:er från %s..."
 
 #: src/controller.cpp:384
 msgid "Authentication failed."
-msgstr ""
+msgstr "Autentisering misslyckades."
 
 #: src/controller.cpp:400
 #, c-format
@@ -686,7 +686,7 @@ msgstr "misslyckad"
 
 #: src/download.cpp:76
 msgid "missing"
-msgstr ""
+msgstr "saknas"
 
 #: src/download.cpp:78
 msgid "ready"
@@ -844,14 +844,12 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "Kan inte öppna frågeflöden i webbläsaren!"
 
 #: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1399
-#, fuzzy
 msgid "Clear filter"
-msgstr "Ställ in ett filter"
+msgstr "Nollställ filter"
 
 #: src/feedlistformaction.cpp:645
-#, fuzzy
 msgid "Clear tag"
-msgstr "Töm"
+msgstr "Rensa tagg"
 
 #: src/feedlistformaction.cpp:647 src/helpformaction.cpp:191
 #: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:580
@@ -1438,7 +1436,7 @@ msgstr "Visa URL:er i nuvarande artikel"
 
 #: src/keymap.cpp:250
 msgid "Clear current tag"
-msgstr "Töm nuvarande tagg"
+msgstr "Nollställ nuvarande tagg"
 
 #: src/keymap.cpp:257 src/keymap.cpp:264
 msgid "Select tag"
@@ -1514,7 +1512,7 @@ msgstr "Välj ett förinställt filter"
 
 #: src/keymap.cpp:397
 msgid "Clear currently set filter"
-msgstr "Töm aktuellt inställt filter"
+msgstr "Nollställ nuvarande filter"
 
 #: src/keymap.cpp:404
 msgid "Bookmark current link/article"
@@ -1719,9 +1717,9 @@ msgid "failed to parse binding"
 msgstr "misslyckades med att parsa bindning"
 
 #: src/keymap.cpp:1028
-#, fuzzy, c-format
+#, c-format
 msgid "unknown context: %s"
-msgstr "okänt kommando `%s'"
+msgstr "okänd kontext: %s"
 
 #: src/keymap.cpp:1080
 #, c-format
@@ -1742,6 +1740,8 @@ msgstr "reguljärt uttryck '%s' är ogiltigt: %s"
 #, c-format
 msgid "Authentication check using %s failed (HTTP response code: %s)"
 msgstr ""
+"Autentiseringskontroll genom användning av %s misslyckades (HTTP-svarskod: "
+"%s)"
 
 #: src/opml.cpp:210
 #, c-format
