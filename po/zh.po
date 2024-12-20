@@ -445,7 +445,7 @@ msgstr "从 %s 文件加载链接......"
 
 #: src/controller.cpp:384
 msgid "Authentication failed."
-msgstr "授权失败。"
+msgstr "认证失败。"
 
 #: src/controller.cpp:400
 #, c-format
