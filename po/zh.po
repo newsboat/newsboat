@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2024-12-08 16:22+0300\n"
-"PO-Revision-Date: 2024-09-10 09:30+0800\n"
+"PO-Revision-Date: 2024-12-20 09:30+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -445,7 +445,7 @@ msgstr "从 %s 文件加载链接......"
 
 #: src/controller.cpp:384
 msgid "Authentication failed."
-msgstr ""
+msgstr "认证失败。"
 
 #: src/controller.cpp:400
 #, c-format
@@ -826,14 +826,12 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "不能在浏览器中打开查询的种子！"
 
 #: src/feedlistformaction.cpp:642 src/itemlistformaction.cpp:1399
-#, fuzzy
 msgid "Clear filter"
-msgstr "设置一个过滤器"
+msgstr "清空过滤器"
 
 #: src/feedlistformaction.cpp:645
-#, fuzzy
 msgid "Clear tag"
-msgstr "清空"
+msgstr "清空标签"
 
 #: src/feedlistformaction.cpp:647 src/helpformaction.cpp:191
 #: src/itemlistformaction.cpp:1401 src/itemviewformaction.cpp:580
@@ -1693,9 +1691,9 @@ msgid "failed to parse binding"
 msgstr "解析绑定失败"
 
 #: src/keymap.cpp:1028
-#, fuzzy, c-format
+#, c-format
 msgid "unknown context: %s"
-msgstr "未知的命令`%s'"
+msgstr "未知的上下文 `%s'"
 
 #: src/keymap.cpp:1080
 #, c-format
@@ -1715,7 +1713,7 @@ msgstr "正则表达式'%s'无效：%s"
 #: src/minifluxapi.cpp:58
 #, c-format
 msgid "Authentication check using %s failed (HTTP response code: %s)"
-msgstr ""
+msgstr "使用 %s 进行认证检查失败（HTTP 响应状态码：%s）"
 
 #: src/opml.cpp:210
 #, c-format
