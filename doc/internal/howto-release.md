@@ -186,7 +186,7 @@ branch off the latest release and backport the bugfixes onto it.
 
         gpg> save
     * upload it to the keyserver:
-        `gpg --keyserver pgp.mit.edu --send-keys 4ED6CD61932B9EBE`
+        `gpg --keyserver keys.openpgp.org --send-keys 4ED6CD61932B9EBE`
     * export it to a file:
         `gpg --armour --export 4ED6CD61932B9EBE > newsboat.pgp`
     * upload the file to newsboat.org staging area
