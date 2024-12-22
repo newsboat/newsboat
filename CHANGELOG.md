@@ -1,17 +1,37 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2024-12-22
+## 2.38 - 2024-12-22
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes TK
+for this release also includes Juho Eerola.
 
 ### Added
+
+- Shell completions for ZSH (Ludovico Gerardi)
+- Keymap hint for "Clear filter" when filter is active (Dennis van der Schagt)
+- Better logs when Miniflux authentication fails with something other than
+    401 Unauthorized (Dennis van der Schagt)
+- Support for enclosures with Miniflux (Anshul Gupta)
+
 ### Changed
+
+- Shell completions are now installed into directories where shells are looking
+    for them. Previously, completions were installed into doc/contrib (Ludovico
+    Gerardi)
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Spanish (Roboron3042),
+    Swedish (Dennis Öberg), Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.79.0
-### Deprecated
-### Removed
+
 ### Fixed
-### Security
+
+- `MKDIR` not being used in all the relevant places of the Makefile (Ludovico
+    Gerardi)
+- Dates far in the past or the future not being stored correctly (#2871) (Dennis
+    van der Schagt)
+- `cookie-cache` having not effect on `reload-all` (bound to `R` by default,
+    also activated by `auto-reload`) (#2935) (Dennis van der Schagt)
 
 
 

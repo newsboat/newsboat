@@ -10,7 +10,7 @@ dashboard.
 ## If you're making a minor release (x.Y.z)
 
 0. Pull all the latest changes from the main repo.
-1. Run `git log --reverse PREVIOUS_VERISION..`, search for "^commit".
+1. Run `git log --reverse PREVIOUS_VERISION..`, search for "^Merge".
 2. Proceed to the "Common steps" section.
 
 
