@@ -127,7 +127,7 @@ StatusLine& View::get_statusline()
 	return status_line;
 }
 
-bool View::run_commands(const std::vector<MacroCmd>& commands)
+bool View::run_commands(const std::vector<MacroCmd>& commands, BindingType binding_type)
 {
 	for (auto command : commands) {
 		if (formaction_stack_size() == 0) {
@@ -136,7 +136,7 @@ bool View::run_commands(const std::vector<MacroCmd>& commands)
 		std::shared_ptr<FormAction> fa = get_current_formaction();
 		fa->prepare();
 		fa->draw_form();
-		if (!fa->process_op(command.op, command.args, BindingType::Macro)) {
+		if (!fa->process_op(command.op, command.args, binding_type)) {
 			// Operation failed, abort
 			return false;
 		}
@@ -160,7 +160,7 @@ int View::run()
 
 	curs_set(0);
 
-	if (!run_commands(keys->get_startup_operation_sequence())) {
+	if (!run_commands(keys->get_startup_operation_sequence(), BindingType::Macro)) {
 		Stfl::reset();
 		std::cerr << _("Error: failed to execute startup commands") << std::endl;
 		return EXIT_FAILURE;
@@ -170,6 +170,7 @@ int View::run()
 	 * This is the main "event" loop of newsboat.
 	 */
 
+	std::vector<KeyCombination> key_sequence;
 	while (formaction_stack_size() > 0) {
 		// first, we take the current formaction.
 		std::shared_ptr<FormAction> fa = get_current_formaction();
@@ -215,24 +216,27 @@ int View::run()
 			LOG(Level::DEBUG,
 				"View::run: running macro `%s'",
 				event);
-			run_commands(keys->get_macro(key_combination));
+			run_commands(keys->get_macro(key_combination), BindingType::Macro);
 		} else {
-			const Operation op = keys->get_operation(key_combination, fa->id());
-
-			LOG(Level::DEBUG,
-				"View::run: event = %s op = %u",
-				event,
-				op);
-
-			if (OP_MACROPREFIX == op) {
-				have_macroprefix = true;
-				status_line.show_message("macro-");
+			if (key_combination == KeyCombination("ESC") && !key_sequence.empty()) {
+				key_sequence.clear();
+			} else {
+				key_sequence.push_back(key_combination);
 			}
+			Operation decision = OP_NIL;
+			BindingType type = BindingType::Bind;
+			auto cmds = keys->get_operation(key_sequence, fa->id(), decision, type);
 
-			// now we handle the operation to the
-			// formaction.
-			const std::vector<std::string> args;
-			fa->process_op(op, args);
+			if (decision != OP_INTERNAL_UNFINISHED_KEY_SEQUENCE) {
+				key_sequence.clear();
+
+				run_commands(cmds, type);
+
+				if (cmds.size() >= 1 && cmds.back().op == OP_MACROPREFIX) {
+					have_macroprefix = true;
+					status_line.show_message("macro-");
+				}
+			}
 		}
 	}
 
