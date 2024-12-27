@@ -71,23 +71,20 @@ use backtrace::Backtrace;
 use std::io::{self, stderr, BufWriter, Write};
 use std::panic;
 
-#[allow(deprecated)] // Change to PanicHookInfo when our MSRV has increased to 1.81.0 or later
-use std::panic::PanicInfo;
+use std::panic::PanicHookInfo;
 
 /// Sets up a panic hook with a user-friendly message.
 ///
 /// See module description for details.
 pub fn setup() {
     if ::std::env::var("RUST_BACKTRACE").is_err() {
-        #[allow(deprecated)]
-        panic::set_hook(Box::new(move |panic_info: &PanicInfo| {
+        panic::set_hook(Box::new(move |panic_info: &PanicHookInfo| {
             print_panic_msg(panic_info).expect("An error occurred while preparing a crash report");
         }));
     }
 }
 
-#[allow(deprecated)]
-fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
+fn print_panic_msg(panic_info: &PanicHookInfo) -> io::Result<()> {
     // Locking the handle to make sure all the messages are printed out in one chunk.
     let stderr = stderr();
     let handle = stderr.lock();
@@ -130,8 +127,7 @@ fn print_panic_msg(panic_info: &PanicInfo) -> io::Result<()> {
     Ok(())
 }
 
-#[allow(deprecated)]
-fn get_error_message(panic_info: &PanicInfo) -> String {
+fn get_error_message(panic_info: &PanicHookInfo) -> String {
     let payload = panic_info.payload().downcast_ref::<&str>();
     if let Some(payload) = payload {
         format!("Message: {}", &payload)
@@ -140,8 +136,7 @@ fn get_error_message(panic_info: &PanicInfo) -> String {
     }
 }
 
-#[allow(deprecated)]
-fn get_location(panic_info: &PanicInfo) -> String {
+fn get_location(panic_info: &PanicHookInfo) -> String {
     match panic_info.location() {
         Some(location) => format!("Crash location: {}:{}", location.file(), location.line()),
         None => String::from("Crash location unknown"),
