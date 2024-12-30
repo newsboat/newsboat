@@ -298,8 +298,8 @@ that shall be used:
 	oldreader-flag-share "a"
 	oldreader-flag-star "b"
 
-After that, use these flags when you edit flags for an article, and these
-articles will be starred resp. shared.
+After that, use these flags when you <<#_flagging_articles,edit flags for an
+article>>, and these articles will be starred resp. shared.
 
 By default, Newsboat also shows The Old Reader "special feeds":
 
@@ -440,8 +440,8 @@ used:
 
 	freshrss-flag-star "s"
 
-After that, use this flag when you edit flags for an article, and these
-articles will be starred.
+After that, use this flag when you <<#_flagging_articles,edit flags for an
+article>>, and these articles will be starred.
 
 By default a "Starred Items" feed is included in the feed list. This can be
 removed with:
@@ -507,8 +507,8 @@ In order to use this mapping, you need to configure the flags that shall be used
 	ttrss-flag-star "s"
 	ttrss-flag-publish "p"
 
-After that, use these flags when you edit flags for an article, and these articles
-will be starred resp. published.
+After that, use these flags when you <<#_flagging_articles,edit flags for an
+article>>, and these articles will be starred resp. published.
 
 TT-RSS folders are converted into Newsboat tags. You can select and filter
 feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
@@ -554,6 +554,9 @@ flag to the "star" operation.
 In order to use this mapping, you need to configure the flag that shall be used:
 
 	ocnews-flag-star "s"
+
+After that, use these flags when you <<#_flagging_articles,edit flags for an
+article>>, and these articles will be starred.
 
 OwnCloud News' folders are converted into Newsboat tags. You can select and
 filter feeds by tags; see <<_tagging>> and <<_filter_language>> for details.
@@ -625,8 +628,8 @@ that shall be used:
 	inoreader-flag-share "a"
 	inoreader-flag-star "b"
 
-After that, use these flags when you edit flags for an article, and these
-articles will be starred resp. shared.
+After that, use these flags when you <<#_flagging_articles,edit flags for an
+article>>, and these articles will be starred resp. shared.
 
 By default, Newsboat also shows Inoreader "special feeds":
 
@@ -691,8 +694,8 @@ that shall be used:
 
 	miniflux-flag-star "a"
 
-After that, use these flags when you edit flags for an article, and these
-articles will be starred.
+After that, use these flags when you <<#_flagging_articles,edit flags for an
+article>>, and these articles will be starred.
 
 By default a "Starred Items" feed is included in the feed list. This can be
 removed with:
