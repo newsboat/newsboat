@@ -134,7 +134,7 @@ Lowercase keys, uppercase keys and special characters are written literally.
 
 Key combinations with kbd:[Ctrl] are written using the caret `^`.
 For instance kbd:[Ctrl+R] equals to `^R`.
-Please be aware that all Ctrl-related key combinations need to be written in uppercase.
+Please be aware that all kbd:[Ctrl]-related key combinations need to be written in uppercase.
 
 The following identifiers for special keys are supported:
 
