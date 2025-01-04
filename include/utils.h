@@ -167,6 +167,9 @@ nonstd::optional<LinkType> podcast_mime_to_link_type(const std::string&
 
 std::string string_from_utf8_lossy(const std::vector<std::uint8_t>& text);
 
+void parse_rss_author_email(const std::vector<std::uint8_t>& text, std::string& name,
+	std::string& email);
+
 std::string get_default_browser();
 
 std::string md5hash(const std::string& input);

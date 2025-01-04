@@ -796,6 +796,17 @@ std::string utils::string_from_utf8_lossy(const std::vector<std::uint8_t>& text)
 	return std::string(result);
 }
 
+void utils::parse_rss_author_email(const std::vector<std::uint8_t>& text,
+	std::string& name, std::string& email)
+{
+	auto input = rust::Slice<std::uint8_t const>(text.data(), text.size());
+	rust::String name_rs;
+	rust::String email_rs;
+	utils::bridged::parse_rss_author_email(input, name_rs, email_rs);
+	name = std::string(name_rs);
+	email = std::string(email_rs);
+}
+
 /*
  * See
  * http://curl.haxx.se/libcurl/c/libcurl-tutorial.html#Multi-threading

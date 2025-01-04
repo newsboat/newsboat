@@ -1510,6 +1510,18 @@ TEST_CASE("string_from_utf8_lossy() replaces invalid utf-8 code units with repla
 	REQUIRE(output == "abc�def");
 }
 
+TEST_CASE("parse_rss_author_email() extracts name and email from string",
+	"[utils]")
+{
+	const std::string input_str = "author@example.com (Example Author)";
+	const std::vector<std::uint8_t> input(input_str.begin(), input_str.end());
+	std::string name;
+	std::string email;
+	utils::parse_rss_author_email(input, name, email);
+	REQUIRE(name == "Example Author");
+	REQUIRE(email == "author@example.com");
+}
+
 TEST_CASE(
 	"is_valid_color() returns false for things that aren't valid STFL "
 	"colors",
