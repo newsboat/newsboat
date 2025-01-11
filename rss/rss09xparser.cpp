@@ -97,25 +97,12 @@ Item Rss09xParser::parse_item(xmlNode* itemNode)
 			dc_date = w3cdtf_to_rfc822(get_content(node));
 		} else if (node_is(node, "author", ns)) {
 			const std::string authorfield = get_content(node);
-			if (authorfield.length() > 2 && authorfield.back() == ')') {
-				it.author_email =
-					utils::tokenize(authorfield, " ")[0];
-				unsigned int start, end;
-				end = authorfield.length() - 2;
-				for (start = end;
-					start > 0 && authorfield[start] != '(';
-					start--) {
-				}
-				if (start == 0) {
-					it.author_email = authorfield;
-					it.author = authorfield;
-				} else {
-					it.author = authorfield.substr(start + 1, end - start);
-				}
-			} else {
-				it.author_email = authorfield;
-				it.author = authorfield;
-			}
+			std::string name;
+			std::string email;
+			utils::parse_rss_author_email({authorfield.begin(), authorfield.end()}, name, email);
+
+			it.author = name;
+			it.author_email = email;
 		} else if (node_is(node, "creator", DC_URI)) {
 			author = get_content(node);
 		} else if (node_is(node, "enclosure", ns)) {

@@ -1148,6 +1148,7 @@ dependencies = [
  "nom",
  "percent-encoding",
  "proptest",
+ "regex",
  "regex-rs",
  "section_testing",
  "strprintf",

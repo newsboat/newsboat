@@ -90,6 +90,7 @@ mod bridged {
         fn locale_to_utf8(text: &[u8]) -> String;
         fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8>;
         fn string_from_utf8_lossy(text: &[u8]) -> String;
+        fn parse_rss_author_email(text: &[u8], name: &mut String, email: &mut String);
     }
 }
 
@@ -246,6 +247,10 @@ fn podcast_mime_to_link_type(mime_type: &str, result: &mut i64) -> bool {
 
 fn string_from_utf8_lossy(text: &[u8]) -> String {
     String::from_utf8_lossy(text).to_string()
+}
+
+fn parse_rss_author_email(text: &[u8], name: &mut String, email: &mut String) {
+    (*name, *email) = utils::parse_rss_author_email(text);
 }
 
 #[no_mangle]

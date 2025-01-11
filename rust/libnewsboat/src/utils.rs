@@ -1037,6 +1037,33 @@ pub fn locale_to_utf8(text: &[u8]) -> String {
     String::from_utf8(converted).expect("convert_text() returned a non-UTF-8 string")
 }
 
+/// Parses a string in the form `author@example.com (Example Author)`
+/// into a pair of (author, email).
+/// If the pattern cannot be matched or the name is empty, the input
+/// is returned completely as author with empty email.
+///
+/// Invalid data (outside of utf-8) is replaced with Unicode replacement characters.
+pub fn parse_rss_author_email(text: &[u8]) -> (String, String) {
+    let re = regex::bytes::Regex::new(r#"^([^ ]+@[^ ]+)\s+\((.+)\)$"#)
+        .expect("Programming error in hardcoded regex");
+
+    if let Some(m) = re.captures(text) {
+        let (_, [email, name]) = m.extract();
+
+        // Unwrapping is safe because the regex only matches valid (utf-8) unicode
+        let (name, email) = (
+            String::from_utf8(name.into()).unwrap().trim().to_owned(),
+            String::from_utf8(email.into()).unwrap().trim().to_owned(),
+        );
+
+        if !name.is_empty() {
+            return (name, email);
+        }
+    }
+
+    (String::from_utf8_lossy(text).into_owned(), "".into())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -2374,6 +2401,69 @@ mod tests {
         assert_eq!(
             &censor_url("query:name:age between 1:10"),
             "query:name:age between 1:10"
+        );
+    }
+
+    #[test]
+    fn t_parse_rss_author_email() {
+        assert_eq!(
+            parse_rss_author_email(b"Example Author"),
+            ("Example Author".into(), "".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"author@example.com (Example Author)"),
+            ("Example Author".into(), "author@example.com".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"author@example.com  \t  (Example Author)"),
+            ("Example Author".into(), "author@example.com".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"Wrong Order (author@example.com)"),
+            ("Wrong Order (author@example.com)".into(), "".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"author@example.com (    )"),
+            ("author@example.com (    )".into(), "".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"author@example.com Example Author"),
+            ("author@example.com Example Author".into(), "".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"A Name (with extra info)"),
+            ("A Name (with extra info)".into(), "".into())
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"author@example.com (email) extra info"),
+            ("author@example.com (email) extra info".into(), "".into())
+        );
+    }
+
+    #[test]
+    fn t_parse_rss_author_email_invalid_unicode() {
+        // Inject invalid 0x80 byte to check that invalid unicode is not an issue
+        assert_eq!(
+            parse_rss_author_email(b"author\x80@example.com (Example author)"),
+            (
+                "author\u{fffd}@example.com (Example author)".into(),
+                "".into()
+            )
+        );
+
+        assert_eq!(
+            parse_rss_author_email(b"author@example.com (Example \x80 author)"),
+            (
+                "author@example.com (Example \u{fffd} author)".into(),
+                "".into()
+            )
         );
     }
 }
