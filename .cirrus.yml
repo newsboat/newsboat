@@ -73,7 +73,7 @@ task:
 
 task:
     name: Linux i686 (Ubuntu 18.04)
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     container:
         greedy: true
         dockerfile: docker/ubuntu_18.04-i686.dockerfile
@@ -110,7 +110,7 @@ task:
         - git diff --exit-code
 
 task:
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
     env:
         RUSTFLAGS: '-D warnings'
         JOBS: 8
@@ -369,7 +369,7 @@ task:
 
 task:
     name: AddressSanitizer (Clang 18, Ubuntu 24.04)
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
@@ -398,7 +398,7 @@ task:
 
 task:
     name: UB Sanitizer (Clang 18, Ubuntu 24.04)
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
@@ -479,7 +479,7 @@ task:
 
 task:
     name: clang-tidy (Clang 18, Ubuntu 24.04)
-    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
     container:
       greedy: true
