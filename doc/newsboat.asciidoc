@@ -1307,10 +1307,11 @@ open dialogs by selecting them and pressing kbd:[Ctrl+X].
 
 === Macro Support
 
-Bindings created with <<bind-key,`bind-key`>> can only execute a single operation, like
-<<open,`open`>> or <<quit,`quit`>>. To execute multiple operations, one has to define a so-called
-"macro". To invoke the macro, the user presses the macro prefix (kbd:[,] by
-default) and then the macro's key. It's easier to explain with some examples:
+Bindings created with <<bind-key,`bind-key`>> can only execute a single
+operation, like <<open,`open`>> or <<quit,`quit`>>. To execute multiple
+operations, one has to use the <<macro,`macro`>> command. To invoke the macro,
+the user presses the <<macro-prefix,`macro-prefix`>> (kbd:[,] by default) and
+then the macro's key. It's easier to explain with some examples:
 
   macro k open; reload; quit  -- "enter feed to reload it"
   macro o open-in-browser; toggle-article-read "read"
