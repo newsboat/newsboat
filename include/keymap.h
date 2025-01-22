@@ -2,14 +2,18 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
 #include "configactionhandler.h"
 #include "keycombination.h"
 
-// in configuration: bind-key <key> <operation>
+enum class BindingType {
+	BindKey,
+	Macro,
+	Bind,
+};
+
 
 enum { KM_FEEDLIST = 1 << 0,
 	KM_FILEBROWSER = 1 << 1,
@@ -156,6 +160,9 @@ enum Operation {
 	OP_CMD_START_7,
 	OP_CMD_START_8,
 	OP_CMD_START_9,
+
+	OP_INTERNAL_UNFINISHED_KEY_SEQUENCE,
+	OP_INTERNAL_OPERATION_LIST,
 };
 
 struct KeyMapDesc {
@@ -188,6 +195,7 @@ struct KeyMapHintEntry {
 
 struct Mapping {
 	bool is_leaf_node = false;
+	BindingType binding_type = BindingType::Bind;
 	std::map<KeyCombination, Mapping> continuations = {};
 	MacroBinding action = {};
 };
@@ -203,7 +211,9 @@ public:
 	void unset_all_keys(const std::string& context);
 	static Operation get_opcode(const std::string& opstr);
 	Operation get_operation(const KeyCombination& key_combination,
-		const std::string& context);
+		const std::string& context); // TODO: Remove
+	std::vector<MacroCmd> get_operation(const std::vector<KeyCombination>& key_sequence,
+		const std::string& context, Operation& decision, BindingType& type);
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
 	char get_key(const std::string& keycode);
 	std::vector<KeyCombination> get_keys(Operation op, const std::string& context);
@@ -221,13 +231,15 @@ public:
 		const std::string& context);
 
 private:
+	std::vector<MacroCmd> get_operation(const Mapping& mapping,
+		const std::vector<KeyCombination>& key_sequence, Operation& decision, BindingType& type);
 	void apply_bind(Mapping& target, const std::vector<KeyCombination> key_sequence,
-		const std::vector<MacroCmd>& cmds, const std::string& description);
+		const std::vector<MacroCmd>& cmds, const std::string& description, BindingType type);
+	void apply_bindkey(Mapping& target, const KeyCombination& key_combination, Operation op);
 	bool is_valid_context(const std::string& context);
 	unsigned short get_flag_from_context(const std::string& context);
-	std::map<KeyCombination, Operation> get_internal_operations() const;
+	Mapping get_internal_operations() const;
 	std::string getopname(Operation op) const;
-	std::map<std::string, std::map<KeyCombination, Operation>> keymap_;
 	std::map<std::string, Mapping> context_keymaps;
 	std::map<KeyCombination, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
