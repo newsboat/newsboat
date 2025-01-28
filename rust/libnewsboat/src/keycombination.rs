@@ -1,11 +1,9 @@
+use nom::AsChar;
 use nom::Parser;
 use nom::{
     branch::alt,
     bytes::complete::tag,
-    character::{
-        complete::{anychar, none_of},
-        is_alphabetic,
-    },
+    character::complete::{anychar, none_of},
     combinator::{eof, recognize, verify},
     multi::{many0, many1},
     sequence::terminated,
@@ -81,7 +79,7 @@ impl KeyCombination {
 }
 
 fn alphabetic(input: &str) -> IResult<&str, char> {
-    verify(anychar, |c: &char| is_alphabetic(*c as u8)).parse(input)
+    verify(anychar, |&c| c.is_ascii() && c.is_alpha()).parse(input)
 }
 
 fn regular_bindkey(input: &str) -> IResult<&str, KeyCombination> {

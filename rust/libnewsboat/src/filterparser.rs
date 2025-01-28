@@ -1,13 +1,13 @@
 //! Parses filter expressions.
 
 use gettextrs::gettext;
+use nom::AsChar;
 use nom::{
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
-    character::{is_alphanumeric, is_digit},
     combinator::{complete, map, opt, peek, recognize, value},
     error::{ErrorKind, ParseError},
-    sequence::{delimited, separated_pair, terminated, tuple},
+    sequence::{delimited, separated_pair, terminated},
     IResult, Offset, Parser,
 };
 use regex_rs::Regex;
@@ -248,7 +248,7 @@ fn quoted_string<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str,
 }
 
 fn number<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a str, E> {
-    recognize(tuple((opt(tag("-")), take_while1(|c| is_digit(c as u8))))).parse(input)
+    recognize((opt(tag("-")), take_while1(|c: char| c.is_dec_digit()))).parse(input)
 }
 
 fn range<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Value, E> {
@@ -280,7 +280,9 @@ fn comparison<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     // especific error message when this parser fails.
     let mut attribute_name = expect(
         Expected::AttributeName,
-        take_while1(|c| is_alphanumeric(c as u8) || c == '_' || c == '-' || c == '.'),
+        take_while1(|c: char| {
+            c.is_ascii() && (c.is_alphanum() || c == '_' || c == '-' || c == '.')
+        }),
     );
 
     let (input, attr) = attribute_name(input)?;
@@ -334,7 +336,7 @@ fn parens<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
 /// While this one is invalid:
 /// - "x=1andy=0": no space between operator `and` and attribute name `y`
 fn space_after_logop<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a str, E> {
-    let opt_space_and_paren = recognize(tuple((space0, tag("("))));
+    let opt_space_and_paren = recognize((space0, tag("(")));
     let parser = alt((opt_space_and_paren, space1));
     peek(parser).parse(input)
 }
