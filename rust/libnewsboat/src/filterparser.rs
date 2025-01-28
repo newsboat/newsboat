@@ -198,7 +198,7 @@ fn expect<I: Clone, E: ExpectativeError<I>, F, O>(
     mut f: F,
 ) -> impl FnMut(I) -> IResult<I, O, E>
 where
-    F: Parser<I, O, E>,
+    F: Parser<I, Output = O, Error = E>,
 {
     move |i: I| match f.parse(i.clone()) {
         Ok(o) => Ok(o),
@@ -228,7 +228,8 @@ fn operators<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
             value(Operator::Contains, tag("#")),
             value(Operator::NotContains, tag("!#")),
         )),
-    )(input)
+    )
+    .parse(input)
 }
 
 fn quoted_string<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Value, E> {
@@ -238,19 +239,21 @@ fn quoted_string<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str,
             tag("\""),
             escaped(is_not("\\\""), '\\', take(1usize)),
             tag("\""),
-        )(input)?;
+        )
+        .parse(input)?;
         Ok((leftovers, String::from(chr)))
     };
 
-    map(alt((nonempty_string, empty_string)), Value::new)(input)
+    map(alt((nonempty_string, empty_string)), Value::new).parse(input)
 }
 
 fn number<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a str, E> {
-    recognize(tuple((opt(tag("-")), take_while1(|c| is_digit(c as u8)))))(input)
+    recognize(tuple((opt(tag("-")), take_while1(|c| is_digit(c as u8))))).parse(input)
 }
 
 fn range<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, Value, E> {
-    separated_pair(number, tag(":"), number)(input)
+    separated_pair(number, tag(":"), number)
+        .parse(input)
         .map(|(leftovers, (a, b))| (leftovers, Value::new(format!("{a}:{b}"))))
 }
 
@@ -311,7 +314,7 @@ fn parens<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
 ) -> IResult<&'a str, Expression, E> {
     let (input, _) = tag("(")(input)?;
     let (input, _) = space0(input)?;
-    let (input, result) = alt((expression, parens, comparison))(input)?;
+    let (input, result) = alt((expression, parens, comparison)).parse(input)?;
     let (input, _) = space0(input)?;
     let (leftovers, _) = tag(")")(input)?;
 
@@ -333,7 +336,7 @@ fn parens<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
 fn space_after_logop<'a, E: ParseError<&'a str>>(input: &'a str) -> IResult<&'a str, &'a str, E> {
     let opt_space_and_paren = recognize(tuple((space0, tag("("))));
     let parser = alt((opt_space_and_paren, space1));
-    peek(parser)(input)
+    peek(parser).parse(input)
 }
 
 fn expression<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
@@ -350,14 +353,15 @@ fn expression<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
         Or,
     }
 
-    let (input, left) = alt((parens, comparison))(input)?;
+    let (input, left) = alt((parens, comparison)).parse(input)?;
     let (input, _) = space0(input)?;
     let (input, op) = terminated(
         alt((value(Op::And, tag("and")), value(Op::Or, tag("or")))),
         space_after_logop,
-    )(input)?;
+    )
+    .parse(input)?;
     let (input, _) = space0(input)?;
-    let (leftovers, right) = alt((expression, parens, comparison))(input)?;
+    let (leftovers, right) = alt((expression, parens, comparison)).parse(input)?;
 
     let op = match op {
         Op::And => Expression::And(Box::new(left), Box::new(right)),
@@ -375,7 +379,7 @@ fn parser<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     let parsers = delimited(space0, parsers, space0);
     // Try to parse input. If parser says it needs more data, make that an error, since `input` is
     // all we got.
-    complete(parsers)(input)
+    complete(parsers).parse(input)
 }
 
 fn internal_parse(expr: &str) -> Result<Expression, Error> {

@@ -1,3 +1,4 @@
+use nom::Parser;
 use nom::{
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
@@ -12,7 +13,7 @@ fn unquoted_token(input: &str) -> IResult<&str, String> {
     let parser = map(recognize(is_not("\t\" ;")), String::from);
     let mut parser = verify(parser, |t: &str| t != "--");
 
-    parser(input)
+    parser.parse(input)
 }
 
 fn quoted_token<'a>(input: &'a str) -> IResult<&'a str, String> {
@@ -24,27 +25,28 @@ fn quoted_token<'a>(input: &'a str) -> IResult<&'a str, String> {
             value("\n", tag("n")),
             value("\t", tag("t")),
             take(1usize), // all other escaped characters are passed through, unmodified
-        ))(control_char)
+        ))
+        .parse(control_char)
     });
 
     let double_quote = tag("\"");
     let mut parser = delimited(&double_quote, parser, alt((&double_quote, eof)));
 
-    parser(input)
+    parser.parse(input)
 }
 
 fn token(input: &str) -> IResult<&str, String> {
     let mut parser = alt((quoted_token, unquoted_token));
-    parser(input)
+    parser.parse(input)
 }
 
 fn operation_with_args(input: &str) -> IResult<&str, Vec<String>> {
     let mut parser = separated_list1(space1, token);
-    parser(input)
+    parser.parse(input)
 }
 
 fn semicolon(input: &str) -> IResult<&str, &str> {
-    delimited(space0, tag(";"), space0)(input)
+    delimited(space0, tag(";"), space0).parse(input)
 }
 
 fn operation_description(input: &str) -> IResult<&str, String> {
@@ -65,7 +67,7 @@ fn operation_description(input: &str) -> IResult<&str, String> {
 
     let mut parser = preceded(start_token, parser);
 
-    parser(input)
+    parser.parse(input)
 }
 
 fn operation_sequence(
@@ -73,24 +75,25 @@ fn operation_sequence(
     allow_description: bool,
 ) -> IResult<&str, (Vec<Vec<String>>, Option<String>)> {
     let (input, _) = space0(input)?;
-    let (input, _) = many0(semicolon)(input)?;
-    let (input, operations) = separated_list0(many1(semicolon), operation_with_args)(input)?;
-    let (input, _) = many0(semicolon)(input)?;
+    let (input, _) = many0(semicolon).parse(input)?;
+    let (input, operations) =
+        separated_list0(many1(semicolon), operation_with_args).parse(input)?;
+    let (input, _) = many0(semicolon).parse(input)?;
 
     let (input, optional_description) = if allow_description {
-        opt(operation_description)(input)?
+        opt(operation_description).parse(input)?
     } else {
         (input, None)
     };
 
     let (input, _) = space0(input)?;
-    let (input, _) = complete(eof)(input)?;
+    let (input, _) = complete(eof).parse(input)?;
 
     Ok((input, (operations, optional_description)))
 }
 
 fn contexts(input: &str) -> IResult<&str, Vec<&str>> {
-    separated_list1(tag(","), alpha1)(input)
+    separated_list1(tag(","), alpha1).parse(input)
 }
 
 fn key_sequence(input: &str) -> IResult<&str, String> {
