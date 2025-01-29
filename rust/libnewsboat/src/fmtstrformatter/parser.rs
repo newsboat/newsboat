@@ -2,6 +2,7 @@ use nom::branch::alt;
 use nom::bytes::complete::{tag, take, take_till1, take_while};
 use nom::multi::many0;
 use nom::IResult;
+use nom::Parser;
 use std::cmp::Ordering;
 use std::str;
 
@@ -94,7 +95,7 @@ fn text_inside_conditional(input: &str) -> IResult<&str, Specifier> {
 fn conditional(input: &str) -> IResult<&str, Specifier> {
     // Prepared partial parsers
     let start_tag = tag("%?");
-    let condition = take(1usize);
+    let mut condition = take(1usize);
     let then_tag = tag("?");
     let then_branch = conditional_branch;
     let else_tag = tag("&");
@@ -117,7 +118,7 @@ fn conditional(input: &str) -> IResult<&str, Specifier> {
     let (input, cond) = condition(input)?;
     let (input, _) = then_tag(input)?;
     let (input, then) = then_branch(input)?;
-    let (input, els) = else_branch(input)?;
+    let (input, els) = else_branch.parse(input)?;
 
     // unwrap() won't panic because we're using take!(1) to get exactly one character
     let cond = cond.chars().next().unwrap();
@@ -133,7 +134,7 @@ fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
         padded_format,
         text_inside_conditional,
     );
-    many0(alt(alternatives))(input)
+    many0(alt(alternatives)).parse(input)
 }
 
 fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
@@ -145,7 +146,7 @@ fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
         padded_format,
         text_outside_conditional,
     );
-    many0(alt(alternatives))(input)
+    many0(alt(alternatives)).parse(input)
 }
 
 fn sanitize(mut input: Vec<Specifier>) -> Vec<Specifier> {

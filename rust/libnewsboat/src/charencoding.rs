@@ -5,6 +5,7 @@ use nom::combinator::recognize;
 use nom::multi::many0;
 use nom::sequence::pair;
 use nom::IResult;
+use nom::Parser;
 use std::str;
 
 /// Returns charset if it can be derived from the optional byte-order-mark
@@ -50,9 +51,9 @@ enum EncodingFamily {
 fn charset_from_ascii_xml_declaration(content: &[u8]) -> Option<String> {
     fn parse_version_info(input: &[u8]) -> IResult<&[u8], ()> {
         let (input, _) = space0(input)?;
-        let (input, _) = tag(b"version=")(input)?;
-        let (input, quote) = alt((tag(b"\""), tag(b"'")))(input)?;
-        let (input, _) = tag(b"1.")(input)?;
+        let (input, _) = tag("version=")(input)?;
+        let (input, quote) = alt((tag("\""), tag("'"))).parse(input)?;
+        let (input, _) = tag("1.")(input)?;
         let (input, _) = digit1(input)?;
         let (input, _) = tag(quote)(input)?;
         Ok((input, ()))
@@ -60,12 +61,13 @@ fn charset_from_ascii_xml_declaration(content: &[u8]) -> Option<String> {
 
     fn parse_encoding_declaration(input: &[u8]) -> IResult<&[u8], &str> {
         let (input, _) = space0(input)?;
-        let (input, _) = tag(b"encoding=")(input)?;
-        let (input, quote) = alt((tag(b"\""), tag(b"'")))(input)?;
+        let (input, _) = tag("encoding=")(input)?;
+        let (input, quote) = alt((tag("\""), tag("'"))).parse(input)?;
         let (input, encoding) = recognize(pair(
             alpha1,
             many0(alt((alphanumeric1, tag("_"), tag("-"), tag(".")))),
-        ))(input)?;
+        ))
+        .parse(input)?;
         let (input, _) = tag(quote)(input)?;
 
         // This unwrap should be safe because the encoding can only consists of ASCII characters
@@ -76,7 +78,7 @@ fn charset_from_ascii_xml_declaration(content: &[u8]) -> Option<String> {
     }
 
     fn parse_xml_declaration(input: &[u8]) -> IResult<&[u8], String> {
-        let (input, _) = tag(b"<?xml")(input)?;
+        let (input, _) = tag("<?xml")(input)?;
         let (input, _) = parse_version_info(input)?;
         let (input, encoding) = parse_encoding_declaration(input)?;
         Ok((input, encoding.to_owned()))
@@ -98,27 +100,27 @@ pub fn charset_from_content_type_header(input: &[u8]) -> Option<String> {
     }
 
     fn parse_quoted_string(input: &[u8]) -> IResult<&[u8], &[u8]> {
-        let (input, _) = tag(b"\"")(input)?;
+        let (input, _) = tag("\"")(input)?;
         let (input, text) = take_till(|c| c == b'"')(input)?;
-        let (input, _) = tag(b"\"")(input)?;
+        let (input, _) = tag("\"")(input)?;
         Ok((input, text))
     }
 
     fn parse_parameter(input: &[u8]) -> IResult<&[u8], Parameter> {
         let (input, _) = space0(input)?;
-        let (input, _) = tag(b";")(input)?;
+        let (input, _) = tag(";")(input)?;
         let (input, _) = space0(input)?;
         let (input, key) = parse_token(input)?;
-        let (input, _) = tag(b"=")(input)?;
-        let (input, value) = alt((parse_quoted_string, parse_token))(input)?;
+        let (input, _) = tag("=")(input)?;
+        let (input, value) = alt((parse_quoted_string, parse_token)).parse(input)?;
         Ok((input, Parameter { key, value }))
     }
 
     fn parse_media_type(input: &[u8]) -> IResult<&[u8], Vec<Parameter>> {
         let (input, _type) = parse_token(input)?;
-        let (input, _) = tag(b"/")(input)?;
+        let (input, _) = tag("/")(input)?;
         let (input, _subtype) = parse_token(input)?;
-        let (input, parameters) = many0(parse_parameter)(input)?;
+        let (input, parameters) = many0(parse_parameter).parse(input)?;
         Ok((input, parameters))
     }
 

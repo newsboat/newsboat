@@ -1,10 +1,9 @@
+use nom::AsChar;
+use nom::Parser;
 use nom::{
     branch::alt,
     bytes::complete::tag,
-    character::{
-        complete::{anychar, none_of},
-        is_alphabetic,
-    },
+    character::complete::{anychar, none_of},
     combinator::{eof, recognize, verify},
     multi::{many0, many1},
     sequence::terminated,
@@ -80,7 +79,7 @@ impl KeyCombination {
 }
 
 fn alphabetic(input: &str) -> IResult<&str, char> {
-    verify(anychar, |c: &char| is_alphabetic(*c as u8))(input)
+    verify(anychar, |&c| c.is_ascii() && c.is_alpha()).parse(input)
 }
 
 fn regular_bindkey(input: &str) -> IResult<&str, KeyCombination> {
@@ -97,7 +96,7 @@ fn control_bindkey(input: &str) -> IResult<&str, KeyCombination> {
 }
 
 fn shift_bindkey(input: &str) -> IResult<&str, KeyCombination> {
-    let (input, key) = verify(alphabetic, |c: &char| c.is_uppercase())(input)?;
+    let (input, key) = verify(alphabetic, |c: &char| c.is_uppercase()).parse(input)?;
     eof(input)?;
 
     let key_combination = KeyCombination::new(key.to_lowercase().to_string()).with_shift();
@@ -105,7 +104,7 @@ fn shift_bindkey(input: &str) -> IResult<&str, KeyCombination> {
 }
 
 pub fn bindkey(input: &str) -> KeyCombination {
-    let result = alt((shift_bindkey, control_bindkey, regular_bindkey))(input);
+    let result = alt((shift_bindkey, control_bindkey, regular_bindkey)).parse(input);
     // Should be save to unwrap because `regular_bindkey` accepts any input
     let (_, key_combination) = result.unwrap();
     key_combination
@@ -120,7 +119,7 @@ fn control_key_bind(input: &str) -> IResult<&str, KeyCombination> {
 }
 
 fn shift_key_bind(input: &str) -> IResult<&str, KeyCombination> {
-    let (input, key) = verify(alphabetic, |c: &char| c.is_uppercase())(input)?;
+    let (input, key) = verify(alphabetic, |c: &char| c.is_uppercase()).parse(input)?;
 
     let key_combination = KeyCombination::new(key.to_lowercase().to_string()).with_shift();
     Ok((input, key_combination))
@@ -128,8 +127,8 @@ fn shift_key_bind(input: &str) -> IResult<&str, KeyCombination> {
 
 fn combination_key_bind(input: &str) -> IResult<&str, KeyCombination> {
     let (input, _) = tag("<")(input)?;
-    let (input, modifiers) = many0(alt((tag("C-"), tag("S-"), tag("M-"))))(input)?;
-    let (input, key) = recognize(many1(none_of(">")))(input)?;
+    let (input, modifiers) = many0(alt((tag("C-"), tag("S-"), tag("M-")))).parse(input)?;
+    let (input, key) = recognize(many1(none_of(">"))).parse(input)?;
     let (input, _) = tag(">")(input)?;
 
     let mut key_combination = KeyCombination::new(key.to_owned());
@@ -168,7 +167,8 @@ pub fn bind(input: &str) -> Vec<KeyCombination> {
             single_key_bind,
         ))),
         eof,
-    )(input);
+    )
+    .parse(input);
     // Should be save to unwrap because `single_key_bind` accepts any input
     let (_, key_combinations) = result.unwrap();
 
