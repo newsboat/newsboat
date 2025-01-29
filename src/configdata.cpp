@@ -82,7 +82,7 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 		break;
 
 	case ConfigDataType::INVALID:
-		assert("unreachable");
+		assert(0 && "unreachable");
 		break;
 	}
 
