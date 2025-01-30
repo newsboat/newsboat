@@ -1,5 +1,8 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,modernize-make-unique'
+Checks:
+  - 'clang-analyzer-*'
+  - 'clang-diagnostic-*'
+  - 'modernize-make-unique'
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''
 FormatStyle:     none
