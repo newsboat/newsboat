@@ -274,6 +274,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfg.register_commands(cfgparser);
 	colorman.register_commands(cfgparser);
 
+	cfgparser.register_handler("bind", keys);
 	cfgparser.register_handler("bind-key", keys);
 	cfgparser.register_handler("unbind-key", keys);
 
