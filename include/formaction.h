@@ -33,12 +33,6 @@ enum class CommandType {
 	INVALID, 	/// differs from UNKNOWN in that no input was parsed
 };
 
-enum class BindingType {
-	BindKey,
-	Macro,
-	Bind,
-};
-
 struct Command {
 	CommandType type;
 	std::vector<std::string> args;

@@ -8,6 +8,7 @@
 
 #include "3rd-party/optional.hpp"
 
+#include "formaction.h"
 #include "links.h"
 #include "statusline.h"
 
@@ -141,7 +142,7 @@ public:
 	static void ctrl_c_action(int sig);
 
 protected:
-	bool run_commands(const std::vector<MacroCmd>& commands);
+	bool run_commands(const std::vector<MacroCmd>& commands, BindingType binding_type);
 
 	void apply_colors(std::shared_ptr<FormAction> fa);
 

@@ -183,7 +183,12 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		KeyMap keys(KM_NEWSBOAT);
 		cfgparser.register_handler("bind-key", keys);
 		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-space-backticks"));
-		REQUIRE(keys.get_operation(KeyCombination("s"), "feedlist") == OP_SORT);
+		MultiKeyBindingState binding_state{};
+		BindingType binding_type{};
+		const auto& cmds = keys.get_operation({KeyCombination("s")}, "feedlist", binding_state,
+				binding_type);
+		REQUIRE(cmds.size() == 1);
+		REQUIRE(cmds.at(0).op == OP_SORT);
 	}
 
 	SECTION("Unbalanced backtick does *not* start a command") {
