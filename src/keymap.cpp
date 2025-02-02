@@ -1,5 +1,7 @@
 #include "keymap.h"
 
+#include <algorithm>
+#include <iterator>
 #include <map>
 #include <string>
 #include <vector>
@@ -789,6 +791,126 @@ KeyMap::KeyMap(unsigned flags)
 	apply_bindkey(context_keymaps["article"], KeyCombination("SPACE"), OP_SK_PGDOWN);
 }
 
+HelpInfo KeyMap::get_help_info(std::string context)
+{
+	const auto& bindings = context_keymaps.at(context);
+	std::set<Operation> unused_actions;
+	for (const auto& desc : opdescs) {
+		if (!(desc.flags & get_flag_from_context(context))) {
+			// Ignore operation if it is not valid in this context
+			continue;
+		}
+		unused_actions.insert(desc.op);
+	}
+
+	auto help_info_bindings = get_help_info_bindings(unused_actions, bindings);
+	std::stable_sort(
+		help_info_bindings.begin(),
+		help_info_bindings.end(),
+	[](const HelpBindInfo& a, const HelpBindInfo& b) {
+		return a.op_order_pos < b.op_order_pos;
+	});
+
+	std::vector<UnboundAction> unbound_actions;
+	for (const auto& desc : opdescs) {
+		if (unused_actions.count(desc.op) > 0) {
+			unbound_actions.push_back({
+				desc.opstr,
+				_(desc.help_text.c_str()),
+			});
+		}
+	}
+
+	return HelpInfo {
+		help_info_bindings,
+		unbound_actions,
+		get_help_info_macros(),
+	};
+}
+
+std::vector<HelpBindInfo> KeyMap::get_help_info_bindings(std::set<Operation>&
+	unused_actions, const Mapping& mapping,
+	const std::string& key_sequence_prefix)
+{
+	std::vector<HelpBindInfo> help_info;
+	if (mapping.is_leaf_node) {
+		const auto& action = mapping.action;
+		nonstd::optional<std::string> action_str;
+		std::size_t order_pos = opdescs.size();
+		std::string description;
+		if (action.cmds.size() == 1 && action.cmds.front().args.empty()) {
+			const auto it = std::find_if(opdescs.begin(), opdescs.end(), [&](const OpDesc& desc) {
+				return desc.op == action.cmds.front().op;
+			});
+			if (it != opdescs.end()) {
+				action_str = it->opstr;
+				order_pos = std::distance(opdescs.begin(), it);
+				description = _(it->help_text.c_str());
+			}
+		}
+		if (!action.description.empty()) {
+			description = action.description;
+		}
+		if (description.empty()) {
+			description = describe_actions(action.cmds);
+		}
+		help_info.push_back(HelpBindInfo{ key_sequence_prefix, action_str, order_pos, description});
+
+		for (const auto& cmd : action.cmds) {
+			unused_actions.erase(cmd.op);
+		}
+	} else {
+		for (const auto& continuation : mapping.continuations) {
+			const auto key_combination = continuation.first;
+			const auto recursive_help_info = get_help_info_bindings(unused_actions,
+					continuation.second,
+					key_sequence_prefix + key_combination.to_bind_string());
+			help_info.insert(help_info.end(), recursive_help_info.begin(), recursive_help_info.end());
+		}
+	}
+	return help_info;
+}
+
+std::vector<HelpMacroInfo> KeyMap::get_help_info_macros()
+{
+	std::vector<HelpMacroInfo> help_info;
+	for (const auto& macro : macros_) {
+		// "macro-prefix" is not translated because it refers to an operation name
+		const std::string key_sequence = "<macro-prefix>" + macro.first.to_bind_string();
+		help_info.push_back(HelpMacroInfo {
+			key_sequence,
+			macro.second.description,
+		});
+	}
+	return help_info;
+}
+
+std::string KeyMap::describe_actions(const std::vector<MacroCmd>& cmds)
+{
+	bool first = true;
+	std::string description;
+	for (const auto& cmd : cmds) {
+		if (!first) {
+			description += "; ";
+		}
+		const auto it = std::find_if(opdescs.begin(), opdescs.end(), [&](const OpDesc& desc) {
+			return desc.op == cmd.op;
+		});
+		if (it != opdescs.end()) {
+			description += it->opstr;
+		} else {
+			// Shouldn't be possible given the way we register key bindings
+			description += "<?>";
+		}
+		for (const auto& arg : cmd.args) {
+			description += " ";
+			description += utils::quote_if_necessary(arg);
+		}
+		first = false;
+	}
+	return description;
+}
+
 std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 {
 	std::vector<KeyMapDesc> descs;
@@ -824,11 +946,6 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 		}
 	}
 	return descs;
-}
-
-const std::map<KeyCombination, MacroBinding>& KeyMap::get_macro_descriptions()
-{
-	return macros_;
 }
 
 KeyMap::~KeyMap() {}

@@ -75,32 +75,29 @@ void HelpFormAction::prepare()
 		fmt.register_fmt('V', utils::program_version());
 		set_title(fmt.do_format(cfg->get_configvalue("help-title-format"), width));
 
-		const auto descs = v.get_keymap()->get_keymap_descriptions(context);
+		ListFormatter listfmt;
 
 		std::vector<std::string> colors = utils::tokenize(
 				cfg->get_configvalue("search-highlight-colors"), " ");
 		set_value("highlight", make_colorstring(colors));
-		ListFormatter listfmt;
 
-		std::vector<KeyMapDesc> syskey_descriptions;
-		std::vector<KeyMapDesc> unbound_descriptions;
-		std::vector<KeyMapDesc> bound_descriptions;
-
-		for (const auto& desc : descs) {
-			if (desc.flags & KM_SYSKEYS) {
-				syskey_descriptions.push_back(desc);
-			} else if (desc.key.get_key().empty()) {
-				unbound_descriptions.push_back(desc);
-			} else {
-				bound_descriptions.push_back(desc);
-			}
-		}
-
-		const auto should_be_visible = [&](const KeyMapDesc& desc) {
+		const auto should_bind_be_visible = [&](const HelpBindInfo& bind) {
 			return !apply_search
-				|| strcasestr(desc.key.to_bindkey_string().c_str(), searchphrase.c_str()) != nullptr
-				|| strcasestr(desc.cmd.c_str(), searchphrase.c_str()) != nullptr
-				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
+				|| strcasestr(bind.key_sequence.c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(bind.op_name.value_or("").c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(bind.description.c_str(), searchphrase.c_str()) != nullptr;
+		};
+
+		const auto should_unused_be_visible = [&](const UnboundAction& unbound) {
+			return !apply_search
+				|| strcasestr(unbound.op_name.c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(unbound.description.c_str(), searchphrase.c_str()) != nullptr;
+		};
+
+		const auto should_macro_be_visible = [&](const HelpMacroInfo& macro) {
+			return !apply_search
+				|| strcasestr(macro.key_sequence.c_str(), searchphrase.c_str()) != nullptr
+				|| strcasestr(macro.description.c_str(), searchphrase.c_str()) != nullptr;
 		};
 
 		const auto apply_highlights = [&](const std::string& line) {
@@ -111,58 +108,42 @@ void HelpFormAction::prepare()
 			return text;
 		};
 
-		for (const auto& desc : bound_descriptions) {
-			if (should_be_visible(desc)) {
-				auto line = strprintf::fmt("%-15s %-23s %s",
-						desc.key.to_bindkey_string(),
-						desc.cmd,
-						desc.desc);
+		const auto help_info = v.get_keymap()->get_help_info(context);
+
+		const auto& bindings = help_info.bindings;
+		for (const auto& desc : bindings) {
+			if (should_bind_be_visible(desc)) {
+				const std::string line = strprintf::fmt("%-15s %-23s %s",
+						desc.key_sequence,
+						desc.op_name.value_or(""),
+						desc.description);
 				listfmt.add_line(apply_highlights(line));
 			}
 		}
 
-		if (!syskey_descriptions.empty()) {
-			listfmt.add_line(StflRichText::from_plaintext(""));
-			listfmt.add_line(StflRichText::from_plaintext(_("Generic bindings:")));
-			listfmt.add_line(StflRichText::from_plaintext(""));
-
-			for (const auto& desc : syskey_descriptions) {
-				if (should_be_visible(desc)) {
-					auto line = strprintf::fmt("%-15s %-23s %s",
-							desc.key.to_bindkey_string(),
-							desc.cmd,
-							desc.desc);
-					listfmt.add_line(apply_highlights(line));
-				}
-			}
-		}
-
-		if (!unbound_descriptions.empty()) {
+		const auto& unused_actions = help_info.unused;
+		if (!unused_actions.empty()) {
 			listfmt.add_line(StflRichText::from_plaintext(""));
 			listfmt.add_line(StflRichText::from_plaintext(_("Unbound functions:")));
 			listfmt.add_line(StflRichText::from_plaintext(""));
 
-			for (const auto& desc : unbound_descriptions) {
-				if (should_be_visible(desc)) {
-					std::string line = strprintf::fmt("%-39s %s", desc.cmd, desc.desc);
+			for (const auto& desc : unused_actions) {
+				if (should_unused_be_visible(desc)) {
+					const std::string line = strprintf::fmt("%-39s %s", desc.op_name, desc.description);
 					listfmt.add_line(apply_highlights(line));
 				}
 			}
 		}
 
-		const auto macros = v.get_keymap()->get_macro_descriptions();
+		const auto& macros = help_info.macros;
 		if (!macros.empty()) {
 			listfmt.add_line(StflRichText::from_plaintext(""));
 			listfmt.add_line(StflRichText::from_plaintext(_("Macros:")));
 			listfmt.add_line(StflRichText::from_plaintext(""));
 
 			for (const auto& macro : macros) {
-				const std::string key = macro.first.to_bindkey_string();
-				const std::string description = macro.second.description;
-
-				if (should_be_visible({ macro.first, "", description, "", 0 })) {
-					// "macro-prefix" is not translated because it refers to an operation name
-					std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
+				if (should_macro_be_visible(macro)) {
+					const std::string line = strprintf::fmt("%s  %s", macro.key_sequence, macro.description);
 					listfmt.add_line(apply_highlights(line));
 				}
 			}

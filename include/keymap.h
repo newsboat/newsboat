@@ -2,9 +2,11 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
+#include "3rd-party/optional.hpp"
 #include "configactionhandler.h"
 #include "keycombination.h"
 
@@ -189,6 +191,29 @@ struct Mapping {
 	MacroBinding action = {};
 };
 
+struct HelpBindInfo {
+	std::string key_sequence;
+	nonstd::optional<std::string> op_name;
+	std::size_t op_order_pos;
+	std::string description;
+};
+
+struct HelpMacroInfo {
+	std::string key_sequence;
+	std::string description;
+};
+
+struct UnboundAction {
+	std::string op_name;
+	std::string description;
+};
+
+struct HelpInfo {
+	std::vector<HelpBindInfo> bindings;
+	std::vector<UnboundAction> unused;
+	std::vector<HelpMacroInfo> macros;
+};
+
 class KeyMap : public ConfigActionHandler {
 public:
 	explicit KeyMap(unsigned int flags);
@@ -207,8 +232,8 @@ public:
 	void handle_action(const std::string& action,
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
+	HelpInfo get_help_info(std::string context);
 	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
-	const std::map<KeyCombination, MacroBinding>& get_macro_descriptions();
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
@@ -218,6 +243,11 @@ public:
 		const std::string& context);
 
 private:
+	std::vector<HelpBindInfo> get_help_info_bindings(std::set<Operation>& unused_actions,
+		const Mapping& mapping,
+		const std::string& key_sequence_prefix = "");
+	std::vector<HelpMacroInfo> get_help_info_macros();
+	std::string describe_actions(const std::vector<MacroCmd>& cmds);
 	std::vector<MacroCmd> get_operation(const Mapping& mapping,
 		const std::vector<KeyCombination>& key_sequence, MultiKeyBindingState& state,
 		BindingType& type);
