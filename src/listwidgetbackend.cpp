@@ -30,7 +30,10 @@ void ListWidgetBackend::stfl_replace_list(std::string stfl)
 {
 	num_lines = 0;
 	scroll_offset = 0;
-	line_cache.clear();
+	{
+		std::lock_guard<std::mutex> guard(mutex);
+		line_cache.clear();
+	}
 	get_formatted_line = {};
 
 	form.modify(list_name, "replace", stfl);
@@ -57,7 +60,10 @@ std::uint32_t ListWidgetBackend::get_num_lines()
 void ListWidgetBackend::invalidate_list_content(std::uint32_t line_count,
 	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_line_method)
 {
-	line_cache.clear();
+	{
+		std::lock_guard<std::mutex> guard(mutex);
+		line_cache.clear();
+	}
 	get_formatted_line = get_line_method;
 	num_lines = line_count;
 
@@ -83,6 +89,7 @@ void ListWidgetBackend::render()
 	const auto visible_content_lines = std::min(viewport_height, num_lines - scroll_offset);
 
 	listfmt.clear();
+	std::lock_guard<std::mutex> guard(mutex);
 	for (std::uint32_t i = 0; i < visible_content_lines; ++i) {
 		const std::uint32_t line = scroll_offset + i;
 		auto formatted_line = StflRichText::from_plaintext("NO FORMATTER DEFINED");
