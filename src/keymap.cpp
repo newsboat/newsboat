@@ -49,7 +49,7 @@ namespace newsboat {
 struct OpDesc {
 	const Operation op;
 	const std::string opstr;
-	const KeyCombination default_key;
+	const nonstd::optional<KeyCombination> default_key;
 	const std::string help_text;
 	const unsigned short flags;
 };
@@ -119,7 +119,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_MARKALLABOVEASREAD,
 		"mark-all-above-as-read",
-		KeyCombination(""),
+		{},
 		translatable("Mark all above as read"),
 		KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
@@ -133,7 +133,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_SAVEALL,
 		"save-all",
-		KeyCombination(""),
+		{},
 		translatable("Save articles"),
 		KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
@@ -182,14 +182,14 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_OPENALLUNREADINBROWSER,
 		"open-all-unread-in-browser",
-		KeyCombination(""),
+		{},
 		translatable("Open all unread items of selected feed in browser"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
 	{
 		OP_OPENALLUNREADINBROWSER_AND_MARK,
 		"open-all-unread-in-browser-and-mark-read",
-		KeyCombination(""),
+		{},
 		translatable("Open all unread items of selected feed in browser and mark "
 			"read"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
@@ -204,7 +204,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_OPENINBROWSER_NONINTERACTIVE,
 		"open-in-browser-noninteractively",
-		KeyCombination(""),
+		{},
 		translatable("Open URL of article, feed, or entry in a browser, non-interactively"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST | KM_ARTICLE | KM_URLVIEW
 	},
@@ -281,7 +281,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_GOTO_TITLE,
 		"goto-title",
-		KeyCombination(""),
+		{},
 		translatable("Goto item with title"),
 		KM_FEEDLIST | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
@@ -534,7 +534,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_ARTICLEFEED,
 		"article-feed",
-		KeyCombination(""),
+		{},
 		translatable("Go to the feed of the article"),
 		KM_ARTICLE | KM_ARTICLELIST | KM_SEARCHRESULTSLIST
 	},
@@ -705,14 +705,14 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_SK_HALF_PAGE_UP,
 		"halfpageup",
-		KeyCombination(""),
+		{},
 		translatable("Move half page up"),
 		KM_SYSKEYS
 	},
 	{
 		OP_SK_HALF_PAGE_DOWN,
 		"halfpagedown",
-		KeyCombination(""),
+		{},
 		translatable("Move half page down"),
 		KM_SYSKEYS
 	},
@@ -735,7 +735,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_INT_SET,
 		"set",
-		KeyCombination("internal-set"),
+		{},
 		"",
 		KM_INTERNAL
 	},
@@ -743,7 +743,7 @@ static const std::vector<OpDesc> opdescs = {
 	{
 		OP_INT_GOTO_URL,
 		"gotourl",
-		KeyCombination("internal-goto-url"),
+		{},
 		"",
 		KM_INTERNAL
 	},
@@ -777,7 +777,7 @@ KeyMap::KeyMap(unsigned flags)
 		}
 
 		// Skip operations without a default key
-		if (op_desc.default_key.get_key().empty()) {
+		if (!op_desc.default_key.has_value()) {
 			continue;
 		}
 
@@ -786,7 +786,7 @@ KeyMap::KeyMap(unsigned flags)
 			const std::uint32_t context_flag = ctx.second;
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				const auto& default_key = op_desc.default_key;
-				apply_bindkey(context_keymaps[context], default_key, op_desc.op);
+				apply_bindkey(context_keymaps[context], default_key.value(), op_desc.op);
 			}
 		}
 	}
@@ -1196,7 +1196,10 @@ Mapping KeyMap::get_internal_operations() const
 	Mapping internal_ops;
 	for (const auto& opdesc : opdescs) {
 		if (opdesc.flags & KM_INTERNAL) {
-			const auto& default_key = opdesc.default_key;
+			if (!opdesc.default_key.has_value()) {
+				continue;
+			}
+			const auto& default_key = opdesc.default_key.value();
 			const std::string description = "";
 			const MacroBinding action {
 				{ MacroCmd { opdesc.op, {} } },
