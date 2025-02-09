@@ -441,12 +441,12 @@ REDO:
 			// the finished_qna() by ourselves to simulate a "Q&A"
 			// session that is in fact macro-driven.
 			qna_responses.push_back(args.front());
-			finished_qna(QnaFinishAction::OP_INT_START_SEARCH);
+			finished_qna(QnaFinishAction::Search);
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Search for: "), ""));
 			this->start_qna(
-				qna, QnaFinishAction::OP_INT_START_SEARCH, &searchhistory);
+				qna, QnaFinishAction::Search, &searchhistory);
 		}
 		break;
 	case OP_GOTO_TITLE:
@@ -456,22 +456,22 @@ REDO:
 				std::vector<QnaPair> qna {
 					QnaPair(_("Title: "), "")
 				};
-				this->start_qna(qna, QnaFinishAction::OP_INT_GOTO_TITLE);
+				this->start_qna(qna, QnaFinishAction::GotoTitle);
 			} else {
 				qna_responses = {args[0]};
-				finished_qna(QnaFinishAction::OP_INT_GOTO_TITLE);
+				finished_qna(QnaFinishAction::GotoTitle);
 			}
 			break;
 		case BindingType::Macro:
 			if (args.size() >= 1) {
 				qna_responses = {args[0]};
-				finished_qna(QnaFinishAction::OP_INT_GOTO_TITLE);
+				finished_qna(QnaFinishAction::GotoTitle);
 			}
 			break;
 		case BindingType::BindKey:
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Title: "), ""));
-			this->start_qna(qna, QnaFinishAction::OP_INT_GOTO_TITLE);
+			this->start_qna(qna, QnaFinishAction::GotoTitle);
 			break;
 		}
 		break;
@@ -484,12 +484,12 @@ REDO:
 		if (args.size() > 0) {
 			qna_responses.clear();
 			qna_responses.push_back(args.front());
-			finished_qna(QnaFinishAction::OP_INT_END_SETFILTER);
+			finished_qna(QnaFinishAction::SetFilter);
 		} else {
 			std::vector<QnaPair> qna;
 			qna.push_back(QnaPair(_("Filter: "), ""));
 			this->start_qna(
-				qna, QnaFinishAction::OP_INT_END_SETFILTER, &filterhistory);
+				qna, QnaFinishAction::SetFilter, &filterhistory);
 		}
 		break;
 	case OP_EDIT_URLS:
@@ -875,13 +875,13 @@ void FeedListFormAction::finished_qna(QnaFinishAction op)
 	FormAction::finished_qna(op); // important!
 
 	switch (op) {
-	case QnaFinishAction::OP_INT_END_SETFILTER:
+	case QnaFinishAction::SetFilter:
 		op_end_setfilter();
 		break;
-	case QnaFinishAction::OP_INT_START_SEARCH:
+	case QnaFinishAction::Search:
 		op_start_search();
 		break;
-	case QnaFinishAction::OP_INT_GOTO_TITLE:
+	case QnaFinishAction::GotoTitle:
 		goto_feed(qna_responses[0]);
 		break;
 	default:

@@ -45,14 +45,14 @@ struct Command {
 
 enum class QnaFinishAction {
 	None,
-	OP_INT_BM_END,
-	OP_INT_END_CMDLINE,
-	OP_INT_GOTO_URL,
-	OP_INT_EDITFLAGS_END,
-	OP_INT_START_SEARCH,
-	OP_PIPE_TO,
-	OP_INT_GOTO_TITLE,
-	OP_INT_END_SETFILTER,
+	Bookmark,
+	RunCmdLine,
+	GotoUrlByNumber,
+	UpdateFlags,
+	Search,
+	PipeItemIntoProgram,
+	GotoTitle,
+	SetFilter,
 };
 
 class FormAction {

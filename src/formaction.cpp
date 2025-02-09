@@ -92,7 +92,7 @@ void FormAction::start_cmdline(std::string default_value)
 	std::vector<QnaPair> qna;
 	qna.push_back(QnaPair(":", default_value));
 	v.inside_cmdline(true);
-	this->start_qna(qna, QnaFinishAction::OP_INT_END_CMDLINE, &FormAction::cmdlinehistory);
+	this->start_qna(qna, QnaFinishAction::RunCmdLine, &FormAction::cmdlinehistory);
 }
 
 bool FormAction::process_op(Operation op,
@@ -500,7 +500,7 @@ void FormAction::finished_qna(QnaFinishAction op)
 	 * 	- run operation (in this case, save the bookmark)
 	 * 	- signal success (or failure) to the user
 	 */
-	case QnaFinishAction::OP_INT_BM_END: {
+	case QnaFinishAction::Bookmark: {
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
 		v.get_statusline().show_message(_("Saving bookmark..."));
@@ -520,7 +520,7 @@ void FormAction::finished_qna(QnaFinishAction op)
 		}
 	}
 	break;
-	case QnaFinishAction::OP_INT_END_CMDLINE: {
+	case QnaFinishAction::RunCmdLine: {
 		f.set_focus(main_widget());
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
@@ -573,7 +573,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 
 		// if url or title is missing, abort autopilot and ask user
 		if (default_url.empty() || title.empty()) {
-			start_qna(prompts, QnaFinishAction::OP_INT_BM_END);
+			start_qna(prompts, QnaFinishAction::Bookmark);
 		} else {
 			v.get_statusline().show_message(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
@@ -593,7 +593,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			}
 		}
 	} else {
-		start_qna(prompts, QnaFinishAction::OP_INT_BM_END);
+		start_qna(prompts, QnaFinishAction::Bookmark);
 	}
 }
 

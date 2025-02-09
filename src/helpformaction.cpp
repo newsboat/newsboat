@@ -39,7 +39,7 @@ bool HelpFormAction::process_operation(Operation op,
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
 		qna.push_back(QnaPair(_("Search for: "), ""));
-		this->start_qna(qna, QnaFinishAction::OP_INT_START_SEARCH, &searchhistory);
+		this->start_qna(qna, QnaFinishAction::Search, &searchhistory);
 	}
 	break;
 	case OP_CLEARFILTER:
@@ -200,7 +200,7 @@ void HelpFormAction::finished_qna(QnaFinishAction op)
 {
 	v.inside_qna(false);
 	switch (op) {
-	case QnaFinishAction::OP_INT_START_SEARCH:
+	case QnaFinishAction::Search:
 		searchphrase = qna_responses[0];
 		apply_search = true;
 		do_redraw = true;
