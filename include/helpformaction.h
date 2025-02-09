@@ -20,7 +20,7 @@ public:
 	}
 	std::string title() override;
 
-	void finished_qna(Operation op) override;
+	void finished_qna(QnaFinishAction op) override;
 
 protected:
 	std::string main_widget() const override

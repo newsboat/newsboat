@@ -739,14 +739,6 @@ static const std::vector<OpDesc> opdescs = {
 		"",
 		KM_INTERNAL
 	},
-
-	{
-		OP_INT_GOTO_URL,
-		"gotourl",
-		{},
-		"",
-		KM_INTERNAL
-	},
 };
 
 static const std::map<std::string, std::uint32_t> contexts = {

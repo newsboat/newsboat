@@ -39,7 +39,7 @@ bool HelpFormAction::process_operation(Operation op,
 	case OP_SEARCH: {
 		std::vector<QnaPair> qna;
 		qna.push_back(QnaPair(_("Search for: "), ""));
-		this->start_qna(qna, OP_INT_START_SEARCH, &searchhistory);
+		this->start_qna(qna, QnaFinishAction::OP_INT_START_SEARCH, &searchhistory);
 	}
 	break;
 	case OP_CLEARFILTER:
@@ -196,11 +196,11 @@ std::vector<KeyMapHintEntry> HelpFormAction::get_keymap_hint() const
 	return hints;
 }
 
-void HelpFormAction::finished_qna(Operation op)
+void HelpFormAction::finished_qna(QnaFinishAction op)
 {
 	v.inside_qna(false);
 	switch (op) {
-	case OP_INT_START_SEARCH:
+	case QnaFinishAction::OP_INT_START_SEARCH:
 		searchphrase = qna_responses[0];
 		apply_search = true;
 		do_redraw = true;

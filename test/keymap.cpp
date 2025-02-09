@@ -149,31 +149,6 @@ TEST_CASE(
 		}
 	}
 
-	SECTION("\"all\" context doesn't clear the keymap from internal keybindings") {
-		KeyMap default_keymap(KM_NEWSBOAT);
-		KeyMap unset_keymap(KM_NEWSBOAT);
-		unset_keymap.unset_all_keys("all");
-
-		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist")
-				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist"));
-		}
-	}
-
-	SECTION("Contexts don't have their internal keybindings cleared") {
-		KeyMap default_keymap(KM_NEWSBOAT);
-
-		for (const auto& context : contexts) {
-			KeyMap unset_keymap(KM_NEWSBOAT);
-			unset_keymap.unset_all_keys(context);
-
-			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context)
-					== unset_keymap.get_keys(static_cast<Operation>(i), context));
-			}
-		}
-	}
-
 	SECTION("Clears key bindings just for a given context") {
 		KeyMap k(KM_NEWSBOAT);
 		k.unset_all_keys("articlelist");

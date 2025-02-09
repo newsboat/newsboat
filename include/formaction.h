@@ -43,6 +43,18 @@ struct Command {
 	{}
 };
 
+enum class QnaFinishAction {
+	None,
+	OP_INT_BM_END,
+	OP_INT_END_CMDLINE,
+	OP_INT_GOTO_URL,
+	OP_INT_EDITFLAGS_END,
+	OP_INT_START_SEARCH,
+	OP_PIPE_TO,
+	OP_INT_GOTO_TITLE,
+	OP_INT_END_SETFILTER,
+};
+
 class FormAction {
 public:
 	FormAction(View&, std::string formstr, ConfigContainer* cfg);
@@ -72,12 +84,12 @@ public:
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey);
 
-	virtual void finished_qna(Operation op);
+	virtual void finished_qna(QnaFinishAction op);
 
 	void start_cmdline(std::string default_value = "");
 
 	void start_qna(const std::vector<QnaPair>& prompts,
-		Operation finish_op,
+		QnaFinishAction finish_op,
 		History* h = nullptr);
 	void finish_qna_question();
 	void cancel_qna();
@@ -158,7 +170,7 @@ private:
 	LineView msg_line;
 	LineView qna_prompt_line;
 	std::vector<QnaPair> qna_prompts;
-	Operation finish_operation;
+	QnaFinishAction qna_finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;
 };
