@@ -733,7 +733,7 @@ static const std::vector<OpDesc> opdescs = {
 	},
 
 	{
-		OP_INT_SET,
+		OP_SET,
 		"set",
 		{},
 		"",
@@ -945,15 +945,13 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 				continue;
 			}
 			auto op = cmds.front().op;
-			if (op < OP_INT_MIN) {
-				std::string configline = "bind-key ";
-				configline.append(utils::quote(keymap.first.to_bindkey_string()));
-				configline.append(" ");
-				configline.append(getopname(op));
-				configline.append(" ");
-				configline.append(context);
-				config_output.push_back(configline);
-			}
+			std::string configline = "bind-key ";
+			configline.append(utils::quote(keymap.first.to_bindkey_string()));
+			configline.append(" ");
+			configline.append(getopname(op));
+			configline.append(" ");
+			configline.append(context);
+			config_output.push_back(configline);
 		}
 	}
 	for (const auto& macro : macros_) {

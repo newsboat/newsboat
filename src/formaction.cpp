@@ -107,7 +107,7 @@ bool FormAction::process_op(Operation op,
 	case OP_CMDLINE:
 		start_cmdline();
 		break;
-	case OP_INT_SET:
+	case OP_SET:
 		switch (bindingType) {
 		case BindingType::Bind:
 		case BindingType::Macro:
@@ -127,7 +127,7 @@ bool FormAction::process_op(Operation op,
 			return false;
 		case BindingType::BindKey:
 			LOG(Level::WARN,
-				"FormAction::process_op: got OP_INT_SET, but from a bind-key which does not support arguments");
+				"FormAction::process_op: got OP_SET, but from a bind-key which does not support arguments");
 			break;
 		}
 		break;

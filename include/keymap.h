@@ -105,6 +105,7 @@ enum Operation {
 	OP_NB_MAX,
 	OP_PREVSEARCHRESULTS,
 	OP_ARTICLEFEED,
+	OP_SET,
 
 	// podboat-specific operations:
 	OP_PB_MIN = 1000,
@@ -130,10 +131,6 @@ enum Operation {
 	OP_SK_END,
 
 	OP_SK_MAX,
-
-	OP_INT_MIN = 2000,
-
-	OP_INT_SET,
 
 	OP_OPEN_URL_1 = 3001,
 	OP_OPEN_URL_2,
