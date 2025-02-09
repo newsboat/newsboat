@@ -15,18 +15,78 @@ static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
 	"dialogs", "dirbrowser"
 };
 
+namespace {
+Operation check_single_command_binding(KeyMap& keymap,
+	const KeyCombination& key_combination, const std::string& context)
+{
+	MultiKeyBindingState binding_state{};
+	BindingType binding_type{};
+	const auto& cmds = keymap.get_operation({key_combination}, context, binding_state,
+			binding_type);
+	REQUIRE(binding_state == MultiKeyBindingState::Found);
+	REQUIRE(cmds.size() == 1);
+	return cmds.at(0).op;
+}
+
+void check_unbound(KeyMap& keymap, const KeyCombination& key_combination,
+	const std::string& context)
+{
+	MultiKeyBindingState binding_state{};
+	BindingType binding_type{};
+	keymap.get_operation({key_combination}, context, binding_state,
+		binding_type);
+	REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+}
+}
+
 TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation(KeyCombination("u"), "article") == OP_SHOWURLS);
-	REQUIRE(k.get_operation(KeyCombination("x", ShiftState::Shift), "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation(KeyCombination(""), "feedlist") == OP_NIL);
-	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
+	REQUIRE(check_single_command_binding(k, KeyCombination("u"), "article") == OP_SHOWURLS);
+	check_unbound(k, KeyCombination("x", ShiftState::Shift), "feedlist");
+	check_unbound(k, KeyCombination(""), "feedlist");
+	REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 
 	SECTION("Returns OP_NIL after unset_key()") {
 		k.unset_key(KeyCombination("ENTER"), "all");
-		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
+		check_unbound(k, KeyCombination("ENTER"), "feedlist");
+	}
+
+	GIVEN("A multi-key binding specifying 'a' followed by ENTER") {
+		k.handle_action("bind", "a<ENTER> feedlist open");
+
+		const std::string context = "feedlist";
+		MultiKeyBindingState binding_state{};
+		BindingType type{};
+		WHEN("only 'a' is provided") {
+			const std::vector<KeyCombination> key_sequence = { KeyCombination("a") };
+			k.get_operation(key_sequence, context, binding_state, type);
+
+			THEN("more input is required") {
+				REQUIRE(binding_state == MultiKeyBindingState::MoreInputNeeded);
+			}
+		}
+		WHEN("'a' followed by ENTER is provided") {
+			const std::vector<KeyCombination> key_sequence = { KeyCombination("a"), KeyCombination("ENTER") };
+			const auto cmds = k.get_operation(key_sequence, context, binding_state, type);
+
+			THEN("a binding is found") {
+				REQUIRE(binding_state == MultiKeyBindingState::Found);
+				REQUIRE(type == BindingType::Bind);
+				REQUIRE(cmds.size() == 1);
+				REQUIRE(cmds[0].op == OP_OPEN);
+			}
+		}
+
+		WHEN("'a' followed by a different key is provided") {
+			const std::vector<KeyCombination> key_sequence = { KeyCombination("a"), KeyCombination("b") };
+			k.get_operation(key_sequence, context, binding_state, type);
+
+			THEN("no binding is found") {
+				REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+			}
+		}
 	}
 }
 
@@ -34,16 +94,16 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
+	REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 
 	SECTION("unset_key() removes the mapping") {
 		k.unset_key(KeyCombination("ENTER"), "all");
-		REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_NIL);
+		check_unbound(k, KeyCombination("ENTER"), "feedlist");
 
 		SECTION("set_key() sets the mapping") {
 			k.set_key(OP_OPEN, KeyCombination("ENTER"), "all");
-			REQUIRE(k.get_operation(KeyCombination("ENTER"), "feedlist") == OP_OPEN);
+			REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
 			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 		}
 	}
