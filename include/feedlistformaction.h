@@ -45,7 +45,7 @@ public:
 
 	void handle_cmdline(const std::string& cmd) override;
 
-	void finished_qna(Operation op) override;
+	void finished_qna(QnaFinishAction op) override;
 
 	void mark_pos_if_visible(unsigned int pos);
 

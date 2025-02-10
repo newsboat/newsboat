@@ -26,7 +26,7 @@ FormAction::FormAction(View& vv, std::string formstr, ConfigContainer* cfg)
 	, head_line(f, "head")
 	, msg_line(f, "msg")
 	, qna_prompt_line(f, "qna_prompt")
-	, finish_operation(OP_NIL)
+	, qna_finish_operation(QnaFinishAction::None)
 	, qna_history(nullptr)
 {
 	if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
@@ -92,7 +92,7 @@ void FormAction::start_cmdline(std::string default_value)
 	std::vector<QnaPair> qna;
 	qna.push_back(QnaPair(":", default_value));
 	v.inside_cmdline(true);
-	this->start_qna(qna, OP_INT_END_CMDLINE, &FormAction::cmdlinehistory);
+	this->start_qna(qna, QnaFinishAction::RunCmdLine, &FormAction::cmdlinehistory);
 }
 
 bool FormAction::process_op(Operation op,
@@ -107,7 +107,7 @@ bool FormAction::process_op(Operation op,
 	case OP_CMDLINE:
 		start_cmdline();
 		break;
-	case OP_INT_SET:
+	case OP_SET:
 		switch (bindingType) {
 		case BindingType::Bind:
 		case BindingType::Macro:
@@ -127,7 +127,7 @@ bool FormAction::process_op(Operation op,
 			return false;
 		case BindingType::BindKey:
 			LOG(Level::WARN,
-				"FormAction::process_op: got OP_INT_SET, but from a bind-key which does not support arguments");
+				"FormAction::process_op: got OP_SET, but from a bind-key which does not support arguments");
 			break;
 		}
 		break;
@@ -420,7 +420,7 @@ bool FormAction::handle_single_argument_set(std::string argument)
 }
 
 void FormAction::start_qna(const std::vector<QnaPair>& prompts,
-	Operation finish_op,
+	QnaFinishAction finish_op,
 	History* h)
 {
 	/*
@@ -440,7 +440,7 @@ void FormAction::start_qna(const std::vector<QnaPair>& prompts,
 	 */
 	qna_prompts = prompts;
 	qna_responses.clear();
-	finish_operation = finish_op;
+	qna_finish_operation = finish_op;
 	qna_history = h;
 	v.inside_qna(true);
 	start_next_question();
@@ -485,7 +485,7 @@ void FormAction::qna_previous_history()
 	}
 }
 
-void FormAction::finished_qna(Operation op)
+void FormAction::finished_qna(QnaFinishAction op)
 {
 	v.inside_qna(false);
 	v.inside_cmdline(false);
@@ -500,7 +500,7 @@ void FormAction::finished_qna(Operation op)
 	 * 	- run operation (in this case, save the bookmark)
 	 * 	- signal success (or failure) to the user
 	 */
-	case OP_INT_BM_END: {
+	case QnaFinishAction::Bookmark: {
 		assert(qna_responses.size() == 4 &&
 			qna_prompts.size() == 0); // everything must be answered
 		v.get_statusline().show_message(_("Saving bookmark..."));
@@ -520,7 +520,7 @@ void FormAction::finished_qna(Operation op)
 		}
 	}
 	break;
-	case OP_INT_END_CMDLINE: {
+	case QnaFinishAction::RunCmdLine: {
 		f.set_focus(main_widget());
 		std::string cmdline = qna_responses[0];
 		FormAction::cmdlinehistory.add_line(cmdline);
@@ -573,7 +573,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 
 		// if url or title is missing, abort autopilot and ask user
 		if (default_url.empty() || title.empty()) {
-			start_qna(prompts, OP_INT_BM_END);
+			start_qna(prompts, QnaFinishAction::Bookmark);
 		} else {
 			v.get_statusline().show_message(_("Saving bookmark on autopilot..."));
 			std::string retval = bookmark(default_url,
@@ -593,7 +593,7 @@ void FormAction::start_bookmark_qna(const std::string& default_title,
 			}
 		}
 	} else {
-		start_qna(prompts, OP_INT_BM_END);
+		start_qna(prompts, QnaFinishAction::Bookmark);
 	}
 }
 
@@ -663,7 +663,7 @@ void FormAction::start_next_question()
 
 		f.set_focus(main_widget());
 
-		this->finished_qna(finish_operation);
+		this->finished_qna(qna_finish_operation);
 	}
 }
 

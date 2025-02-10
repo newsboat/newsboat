@@ -59,7 +59,7 @@ public:
 
 	void handle_cmdline(const std::string& cmd) override;
 
-	void finished_qna(Operation op) override;
+	void finished_qna(QnaFinishAction op) override;
 
 	void invalidate_list()
 	{

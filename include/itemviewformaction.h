@@ -42,7 +42,7 @@ public:
 	}
 	std::string title() override;
 
-	void finished_qna(Operation op) override;
+	void finished_qna(QnaFinishAction op) override;
 
 	void render_html(
 		const std::string& source,
