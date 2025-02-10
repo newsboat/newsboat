@@ -455,7 +455,8 @@ bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const
 	return false;
 }
 
-void ConfigContainer::set_configvalue(const std::string& key,
+nonstd::expected<void, std::string> ConfigContainer::set_configvalue(
+	const std::string& key,
 	const std::string& value)
 {
 	LOG(Level::DEBUG,
@@ -463,7 +464,14 @@ void ConfigContainer::set_configvalue(const std::string& key,
 		key,
 		value);
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].set_value(value);
+	auto config_option = config_data.find(key);
+	if (config_option != config_data.end()) {
+		return config_option->second.set_value(value);
+	} else {
+		return nonstd::make_unexpected(strprintf::fmt(
+					_("unknown config option: %s"),
+					key));
+	}
 }
 
 void ConfigContainer::reset_to_default(const std::string& key)
