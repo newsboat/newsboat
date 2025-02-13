@@ -244,9 +244,16 @@ void FormAction::handle_set(const std::vector<std::string>& args)
 				args[0],
 				utils::quote_if_necessary(cfg->get_configvalue(args[0]))));
 	} else if (args.size() == 2) {
-		std::string result = ConfigParser::evaluate_backticks(args[1]);
-		utils::trim_end(result);
-		cfg->set_configvalue(args[0], result);
+		std::string value = ConfigParser::evaluate_backticks(args[1]);
+		utils::trim_end(value);
+		const auto& key = args[0];
+		const auto result = cfg->set_configvalue(key, value);
+		if (!result) {
+			v.get_statusline().show_error(strprintf::fmt(_("error setting '%s' to '%s': %s"),
+					key,
+					value,
+					result.error()));
+		}
 		// because some configuration value might have changed something UI-related
 		set_redraw(true);
 	} else {
