@@ -89,7 +89,7 @@ nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 	}
 
 	if (guids_of_read_articles.size() > 0) {
-		v.get_ctrl()->mark_all_read(guids_of_read_articles);
+		v.get_ctrl().mark_all_read(guids_of_read_articles);
 	}
 
 	return return_value;

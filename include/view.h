@@ -31,7 +31,7 @@ class RssFeed;
 
 class View : public IStatus {
 public:
-	explicit View(Controller*);
+	explicit View(Controller&);
 	~View();
 	int run();
 	std::string run_modal(std::shared_ptr<FormAction> f,
@@ -42,7 +42,7 @@ public:
 	void set_keymap(KeyMap* k);
 	void set_config_container(ConfigContainer* cfgcontainer);
 	StatusLine& get_statusline();
-	Controller* get_ctrl()
+	Controller& get_ctrl()
 	{
 		return ctrl;
 	}
@@ -153,7 +153,7 @@ protected:
 	bool handle_qna_event(const std::string& event, std::shared_ptr<FormAction> fa);
 	void handle_resize();
 
-	Controller* ctrl;
+	Controller& ctrl;
 
 	ConfigContainer* cfg;
 	KeyMap* keys;

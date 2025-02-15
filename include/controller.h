@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_CONTROLLER_H_
 #define NEWSBOAT_CONTROLLER_H_
 
+#include <memory>
+
 #include <libxml/tree.h>
 
 #include "cache.h"
@@ -26,7 +28,7 @@ class View;
 class Controller {
 public:
 	Controller(ConfigPaths& configpaths);
-	~Controller();
+	~Controller() = default;
 	void set_view(View* vv);
 	View* get_view()
 	{
@@ -93,7 +95,7 @@ public:
 
 	RemoteApi* get_api()
 	{
-		return api;
+		return api.get();
 	}
 
 	RegexManager& get_regexmanager()
@@ -121,8 +123,8 @@ private:
 	void export_read_information(const std::string& readinfofile);
 
 	View* v;
-	UrlReader* urlcfg;
-	Cache* rsscache;
+	std::unique_ptr<UrlReader> urlcfg;
+	std::unique_ptr<Cache> rsscache;
 	bool refresh_on_start;
 	ConfigContainer cfg;
 	RssIgnores ign;
@@ -132,7 +134,7 @@ private:
 	ConfigParser cfgparser;
 	ColorManager colorman;
 	RegexManager rxman;
-	RemoteApi* api;
+	std::unique_ptr<RemoteApi> api;
 
 	FsLock fslock;
 

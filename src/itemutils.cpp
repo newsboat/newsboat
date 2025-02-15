@@ -16,7 +16,7 @@ bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 				_("Item's enclosure has non-http link: '%s'"), item.enclosure_url()));
 		return false;
 	} else {
-		const EnqueueResult result = v.get_ctrl()->enqueue_url(item, feed);
+		const EnqueueResult result = v.get_ctrl().enqueue_url(item, feed);
 		cache.update_rssitem_unread_and_enqueued(item, feed.rssurl());
 		switch (result.status) {
 		case EnqueueStatus::QUEUED_SUCCESSFULLY:
