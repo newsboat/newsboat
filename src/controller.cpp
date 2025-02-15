@@ -82,15 +82,9 @@ void ignore_signal(int sig)
 Controller::Controller(ConfigPaths& configpaths)
 	: v(0)
 	, refresh_on_start(false)
-	, api(0)
 	, configpaths(configpaths)
 	, queueManager(&cfg, configpaths.queue_file())
 {
-}
-
-Controller::~Controller()
-{
-	delete api;
 }
 
 void Controller::set_view(View* vv)
@@ -254,12 +248,12 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "opml") {
 		urlcfg = std::make_unique<OpmlUrlReader>(cfg);
 	} else if (type == "oldreader") {
-		api = new OldReaderApi(cfg);
+		api = std::make_unique<OldReaderApi>(cfg);
 		urlcfg = std::make_unique<OldReaderUrlReader>(
-				&cfg, configpaths.url_file(), api);
+				&cfg, configpaths.url_file(), api.get());
 	} else if (type == "ttrss") {
-		api = new TtRssApi(cfg);
-		urlcfg = std::make_unique<TtRssUrlReader>(configpaths.url_file(), api);
+		api = std::make_unique<TtRssApi>(cfg);
+		urlcfg = std::make_unique<TtRssUrlReader>(configpaths.url_file(), api.get());
 	} else if (type == "newsblur") {
 		const auto cookies = cfg.get_configvalue("cookie-cache");
 		if (cookies.empty()) {
@@ -277,11 +271,11 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new NewsBlurApi(cfg);
-		urlcfg = std::make_unique<NewsBlurUrlReader>(configpaths.url_file(), api);
+		api = std::make_unique<NewsBlurApi>(cfg);
+		urlcfg = std::make_unique<NewsBlurUrlReader>(configpaths.url_file(), api.get());
 	} else if (type == "feedhq") {
-		api = new FeedHqApi(cfg);
-		urlcfg = std::make_unique<FeedHqUrlReader>(&cfg, configpaths.url_file(), api);
+		api = std::make_unique<FeedHqApi>(cfg);
+		urlcfg = std::make_unique<FeedHqUrlReader>(&cfg, configpaths.url_file(), api.get());
 	} else if (type == "feedbin") {
 		const std::string user = cfg.get_configvalue("feedbin-login");
 		const std::string pass = cfg.get_configvalue("feedbin-password");
@@ -297,8 +291,8 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new FeedbinApi(cfg);
-		urlcfg = std::make_unique<FeedbinUrlReader>(configpaths.url_file(), api);
+		api = std::make_unique<FeedbinApi>(cfg);
+		urlcfg = std::make_unique<FeedbinUrlReader>(configpaths.url_file(), api.get());
 	} else if (type == "freshrss") {
 		const auto freshrss_url = cfg.get_configvalue("freshrss-url");
 		if (freshrss_url.empty()) {
@@ -321,11 +315,11 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new FreshRssApi(cfg);
-		urlcfg = std::make_unique<FreshRssUrlReader>(&cfg, configpaths.url_file(), api);
+		api = std::make_unique<FreshRssApi>(cfg);
+		urlcfg = std::make_unique<FreshRssUrlReader>(&cfg, configpaths.url_file(), api.get());
 	} else if (type == "ocnews") {
-		api = new OcNewsApi(cfg);
-		urlcfg = std::make_unique<OcNewsUrlReader>(configpaths.url_file(), api);
+		api = std::make_unique<OcNewsApi>(cfg);
+		urlcfg = std::make_unique<OcNewsUrlReader>(configpaths.url_file(), api.get());
 	} else if (type == "miniflux") {
 		const auto miniflux_url = cfg.get_configvalue("miniflux-url");
 		if (miniflux_url.empty()) {
@@ -351,8 +345,8 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new MinifluxApi(cfg);
-		urlcfg = std::make_unique<MinifluxUrlReader>(&cfg, configpaths.url_file(), api);
+		api = std::make_unique<MinifluxApi>(cfg);
+		urlcfg = std::make_unique<MinifluxUrlReader>(&cfg, configpaths.url_file(), api.get());
 	} else if (type == "inoreader") {
 		const auto all_set = !cfg.get_configvalue("inoreader-app-id").empty()
 			&& !cfg.get_configvalue("inoreader-app-key").empty();
@@ -362,8 +356,8 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		api = new InoreaderApi(cfg);
-		urlcfg = std::make_unique<InoreaderUrlReader>(&cfg, configpaths.url_file(), api);
+		api = std::make_unique<InoreaderApi>(cfg);
+		urlcfg = std::make_unique<InoreaderUrlReader>(&cfg, configpaths.url_file(), api.get());
 	} else {
 		std::cerr << strprintf::fmt(_("ERROR: Unknown urls-source `%s'"),
 				type) << std::endl;

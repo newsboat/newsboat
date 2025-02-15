@@ -28,7 +28,7 @@ class View;
 class Controller {
 public:
 	Controller(ConfigPaths& configpaths);
-	~Controller();
+	~Controller() = default;
 	void set_view(View* vv);
 	View* get_view()
 	{
@@ -95,7 +95,7 @@ public:
 
 	RemoteApi* get_api()
 	{
-		return api;
+		return api.get();
 	}
 
 	RegexManager& get_regexmanager()
@@ -134,7 +134,7 @@ private:
 	ConfigParser cfgparser;
 	ColorManager colorman;
 	RegexManager rxman;
-	RemoteApi* api;
+	std::unique_ptr<RemoteApi> api;
 
 	FsLock fslock;
 
