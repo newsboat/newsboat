@@ -19,7 +19,7 @@ TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", 
 
 	ConfigPaths paths{};
 	Controller c(paths);
-	newsboat::View v(&c);
+	newsboat::View v(c);
 
 	ConfigContainer cfg{};
 	Cache rsscache(":memory:", &cfg);

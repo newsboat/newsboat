@@ -61,19 +61,19 @@ bool ctrl_c_hit = false;
 
 namespace newsboat {
 
-View::View(Controller* c)
+View::View(Controller& c)
 	: ctrl(c)
 	, cfg(0)
 	, keys(0)
 	, current_formaction(0)
 	, status_line(*this)
-	, rxman(c->get_regexmanager())
+	, rxman(c.get_regexmanager())
 	, is_inside_qna(false)
 	, is_inside_cmdline(false)
 	, tab_count(0)
 	, rsscache(nullptr)
-	, filters(ctrl->get_filtercontainer())
-	, colorman(ctrl->get_colormanager())
+	, filters(ctrl.get_filtercontainer())
+	, colorman(ctrl.get_colormanager())
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -539,7 +539,7 @@ std::shared_ptr<ItemListFormAction> View::push_itemlist(
 void View::push_itemlist(unsigned int pos)
 {
 	std::shared_ptr<RssFeed> feed =
-		ctrl->get_feedcontainer()->get_feed(pos);
+		ctrl.get_feedcontainer()->get_feed(pos);
 	LOG(Level::DEBUG,
 		"View::push_itemlist: retrieved feed at position %d",
 		pos);
@@ -1011,7 +1011,7 @@ void View::prepare_query_feed(std::shared_ptr<RssFeed> feed)
 
 		const std::shared_ptr<AutoDiscardMessage> message =
 			status_line.show_message_until_finished(_("Updating query feed..."));
-		feed->update_items(ctrl->get_feedcontainer()->get_all_feeds());
+		feed->update_items(ctrl.get_feedcontainer()->get_all_feeds());
 		feed->sort(cfg->get_article_sort_strategy());
 		notify_itemlist_change(feed);
 	}

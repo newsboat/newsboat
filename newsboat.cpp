@@ -269,7 +269,7 @@ int main(int argc, char* argv[])
 	}
 
 	Controller c(configpaths);
-	newsboat::View v(&c);
+	newsboat::View v(c);
 	c.set_view(&v);
 	CliArgsParser args(argc, argv);
 
