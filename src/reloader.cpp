@@ -22,7 +22,7 @@
 
 namespace newsboat {
 
-Reloader::Reloader(Controller* c, Cache* cc, ConfigContainer& cfg)
+Reloader::Reloader(Controller& c, Cache& cc, ConfigContainer& cfg)
 	: ctrl(c)
 	, rsscache(cc)
 	, cfg(cfg)
@@ -71,7 +71,7 @@ void Reloader::reload(unsigned int pos,
 {
 	ScopeMeasure sm("Reloader::reload");
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u", pos);
-	std::shared_ptr<RssFeed> oldfeed = ctrl->get_feedcontainer()->get_feed(pos);
+	std::shared_ptr<RssFeed> oldfeed = ctrl.get_feedcontainer()->get_feed(pos);
 	if (oldfeed) {
 		LOG(Level::INFO, "Reloader::reload: starting reload of %s", oldfeed->rssurl());
 
@@ -88,7 +88,7 @@ void Reloader::reload(unsigned int pos,
 			const std::string progress = show_progress ?
 				strprintf::fmt("(%u/%u) ", ++reload_progress, reload_progress_max) :
 				"";
-			message_lifetime = ctrl->get_view()->get_statusline().show_message_until_finished(
+			message_lifetime = ctrl.get_view()->get_statusline().show_message_until_finished(
 					strprintf::fmt(_("%sLoading %s..."),
 						progress,
 						utils::censor_url(oldfeed->rssurl())));
@@ -102,21 +102,21 @@ void Reloader::reload(unsigned int pos,
 			message_lifetime.reset();
 			oldfeed->set_status(DlStatus::DURING_DOWNLOAD);
 
-			RssIgnores* ign = ignore_dl ? ctrl->get_ignores() : nullptr;
+			RssIgnores* ign = ignore_dl ? ctrl.get_ignores() : nullptr;
 
 			LOG(Level::INFO, "Reloader::reload: retrieving feed");
 			sm.stopover("start retrieving");
-			FeedRetriever feed_retriever(cfg, *rsscache, easyhandle, ign, ctrl->get_api());
+			FeedRetriever feed_retriever(cfg, rsscache, easyhandle, ign, ctrl.get_api());
 			const rsspp::Feed feed = feed_retriever.retrieve(oldfeed->rssurl());
 
 			LOG(Level::INFO, "Reloader::reload: parsing feed");
 			sm.stopover("start parsing");
-			RssParser parser(oldfeed->rssurl(), *rsscache, cfg, ign);
+			RssParser parser(oldfeed->rssurl(), rsscache, cfg, ign);
 
 			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
 			sm.stopover("start replacing feed");
 			if (newfeed != nullptr) {
-				ctrl->replace_feed(
+				ctrl.replace_feed(
 					*oldfeed, *newfeed, pos, unattended);
 				if (newfeed->total_item_count() == 0) {
 					LOG(Level::DEBUG,
@@ -145,11 +145,11 @@ void Reloader::reload(unsigned int pos,
 		}
 		if (!errmsg.empty()) {
 			oldfeed->set_status(DlStatus::DL_ERROR);
-			ctrl->get_view()->get_statusline().show_error(errmsg);
+			ctrl.get_view()->get_statusline().show_error(errmsg);
 			LOG(Level::USERERROR, "%s", errmsg);
 		}
 	} else {
-		ctrl->get_view()->get_statusline().show_error(_("Error: invalid feed!"));
+		ctrl.get_view()->get_statusline().show_error(_("Error: invalid feed!"));
 	}
 }
 
@@ -197,12 +197,12 @@ void Reloader::reload_all(bool unattended)
 	ScopeMeasure sm("Reloader::reload_all");
 
 	const auto unread_feeds =
-		ctrl->get_feedcontainer()->unread_feed_count();
+		ctrl.get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
-		ctrl->get_feedcontainer()->unread_item_count();
+		ctrl.get_feedcontainer()->unread_item_count();
 
-	ctrl->get_feedcontainer()->reset_feeds_status();
-	const auto num_feeds = ctrl->get_feedcontainer()->feeds_size();
+	ctrl.get_feedcontainer()->reset_feeds_status();
+	const auto num_feeds = ctrl.get_feedcontainer()->feeds_size();
 
 	std::vector<unsigned int> v;
 	for (unsigned int i = 0; i < num_feeds; ++i) {
@@ -212,10 +212,10 @@ void Reloader::reload_all(bool unattended)
 
 	// refresh query feeds (update and sort)
 	LOG(Level::DEBUG, "Reloader::reload_all: refresh query feeds");
-	for (const auto& feed : ctrl->get_feedcontainer()->get_all_feeds()) {
+	for (const auto& feed : ctrl.get_feedcontainer()->get_all_feeds()) {
 		if (feed->is_query_feed()) {
 			try {
-				ctrl->get_view()->prepare_query_feed(feed);
+				ctrl.get_view()->prepare_query_feed(feed);
 				feed->set_status(DlStatus::SUCCESS);
 			} catch (const MatcherException& /* e */) {
 				feed->set_status(DlStatus::DL_ERROR);
@@ -223,9 +223,9 @@ void Reloader::reload_all(bool unattended)
 		}
 	}
 
-	ctrl->get_feedcontainer()->sort_feeds(cfg.get_feed_sort_strategy());
-	ctrl->update_feedlist();
-	ctrl->get_view()->force_redraw();
+	ctrl.get_feedcontainer()->sort_feeds(cfg.get_feed_sort_strategy());
+	ctrl.update_feedlist();
+	ctrl.get_view()->force_redraw();
 
 	notify_reload_finished(unread_feeds, unread_articles);
 }
@@ -240,7 +240,7 @@ void Reloader::reload_indexes_impl(std::vector<unsigned int> indexes, bool unatt
 		s = suff.substr(0, p);
 	};
 
-	const auto feeds = ctrl->get_feedcontainer()->get_all_feeds();
+	const auto feeds = ctrl.get_feedcontainer()->get_all_feeds();
 
 	// Sort the feeds based on domain, so feeds on the same domain
 	// can share the curl handle.
@@ -280,9 +280,9 @@ void Reloader::reload_indexes(const std::vector<unsigned int>& indexes, bool una
 {
 	ScopeMeasure m1("Reloader::reload_indexes");
 	const auto unread_feeds =
-		ctrl->get_feedcontainer()->unread_feed_count();
+		ctrl.get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
-		ctrl->get_feedcontainer()->unread_item_count();
+		ctrl.get_feedcontainer()->unread_item_count();
 
 	reload_indexes_impl(indexes, unattended);
 
@@ -318,9 +318,9 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 	unsigned int unread_articles_before)
 {
 	const auto unread_feeds =
-		ctrl->get_feedcontainer()->unread_feed_count();
+		ctrl.get_feedcontainer()->unread_feed_count();
 	const auto unread_articles =
-		ctrl->get_feedcontainer()->unread_item_count();
+		ctrl.get_feedcontainer()->unread_item_count();
 	const bool notify_always = cfg.get_configvalue_as_bool("notify-always");
 
 	if (notify_always || unread_feeds > unread_feeds_before ||

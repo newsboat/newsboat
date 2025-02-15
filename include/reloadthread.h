@@ -8,12 +8,12 @@ namespace newsboat {
 
 class ReloadThread {
 public:
-	ReloadThread(Controller* c, ConfigContainer& cf);
+	ReloadThread(Controller& c, ConfigContainer& cf);
 	virtual ~ReloadThread();
 	void operator()();
 
 private:
-	Controller* ctrl;
+	Controller& ctrl;
 	time_t oldtime;
 	time_t waittime_sec;
 	bool suppressed_first;
