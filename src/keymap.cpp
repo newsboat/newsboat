@@ -1050,6 +1050,10 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 			}
 		}
 		const auto key_sequence = KeyCombination::from_bind(std::string(binding.key_sequence));
+		LOG(Level::DEBUG, "New binding with key sequence:");
+		for (const auto& key : key_sequence) {
+			LOG(Level::DEBUG, "- %s (%s)", key.to_bind_string(), key.get_key());
+		}
 		const auto description = std::string(binding.description);
 		const auto cmds = convert_operations(binding.operations);
 		for (const auto& context : bind_contexts) {
