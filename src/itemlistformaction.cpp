@@ -84,7 +84,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		ScopeMeasure m1("OP_DELETE");
 		if (!visible_items.empty()) {
 			// mark as read
-			v.get_ctrl()->mark_article_read(
+			v.get_ctrl().mark_article_read(
 				visible_items[itempos].first->guid(), true);
 			visible_items[itempos].first->set_unread(false);
 			// mark as deleted
@@ -114,7 +114,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				const auto item = pair.first;
 				item_guids.push_back(item->guid());
 			}
-			v.get_ctrl()->mark_all_read(item_guids);
+			v.get_ctrl().mark_all_read(item_guids);
 
 			for (const auto& pair : visible_items) {
 				const auto item = pair.first;
@@ -144,7 +144,7 @@ bool ItemListFormAction::process_operation(Operation op,
 
 		auto item = visible_items[itempos].first;
 		item->set_unread(false);
-		v.get_ctrl()->mark_article_read(item->guid(), true);
+		v.get_ctrl().mark_article_read(item->guid(), true);
 		if (cfg->get_configvalue_as_bool("openbrowser-and-mark-jumps-to-next-unread")) {
 			std::vector<std::string> args;
 			process_operation(OP_NEXTUNREAD, args);
@@ -225,7 +225,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						visible_items[itempos]
 						.first->set_unread(
 							false);
-						v.get_ctrl()->mark_article_read(
+						v.get_ctrl().mark_article_read(
 							visible_items[itempos]
 							.first->guid(),
 							true);
@@ -233,7 +233,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						visible_items[itempos]
 						.first->set_unread(
 							true);
-						v.get_ctrl()->mark_article_read(
+						v.get_ctrl().mark_article_read(
 							visible_items[itempos]
 							.first->guid(),
 							false);
@@ -251,7 +251,7 @@ bool ItemListFormAction::process_operation(Operation op,
 						.first->unread();
 					visible_items[itempos]
 					.first->set_unread(!unread);
-					v.get_ctrl()->mark_article_read(
+					v.get_ctrl().mark_article_read(
 						visible_items[itempos]
 						.first->guid(),
 						unread);
@@ -442,7 +442,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		break;
 	case OP_RELOAD:
 		LOG(Level::INFO, "ItemListFormAction: reloading current feed");
-		v.get_ctrl()->get_reloader()->reload(pos);
+		v.get_ctrl().get_reloader()->reload(pos);
 		invalidate_list();
 		break;
 	case OP_QUIT:
@@ -539,9 +539,9 @@ bool ItemListFormAction::process_operation(Operation op,
 
 				if (filter_active) {
 					// We're only viewing a subset of items, so mark them off one by one.
-					v.get_ctrl()->mark_all_read(guids);
+					v.get_ctrl().mark_all_read(guids);
 				} else {
-					v.get_ctrl()->mark_all_read(pos);
+					v.get_ctrl().mark_all_read(pos);
 				}
 
 				if (visible_items.size() > 0) {
@@ -589,7 +589,7 @@ bool ItemListFormAction::process_operation(Operation op,
 				if (visible_items[i].first->unread()) {
 					visible_items[i].first->set_unread(
 						false);
-					v.get_ctrl()->mark_article_read(
+					v.get_ctrl().mark_article_read(
 						visible_items[i].first->guid(),
 						true);
 				}
@@ -698,7 +698,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_EDIT_URLS:
-		v.get_ctrl()->edit_urls_file();
+		v.get_ctrl().edit_urls_file();
 		break;
 	case OP_SELECTFILTER:
 		if (filter_container.size() > 0) {
@@ -846,7 +846,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_ARTICLEFEED: {
-		auto feeds = v.get_ctrl()->get_feedcontainer()->get_all_feeds();
+		auto feeds = v.get_ctrl().get_feedcontainer()->get_all_feeds();
 		size_t pos;
 		auto article_feed = visible_items[itempos].first->get_feedptr();
 		for (pos = 0; pos < feeds.size(); pos++) {
@@ -927,7 +927,7 @@ void ItemListFormAction::finished_qna(Operation op)
 			unsigned int itempos = list.get_position();
 			std::string cmd = qna_responses[0];
 			std::ostringstream ostr;
-			v.get_ctrl()->write_item(
+			v.get_ctrl().write_item(
 				*visible_items[itempos].first, ostr);
 			v.push_empty_formaction();
 			Stfl::reset();
@@ -964,7 +964,7 @@ void ItemListFormAction::qna_end_editflags()
 	const unsigned int itempos = list.get_position();
 	if (itempos < visible_items.size()) {
 		visible_items[itempos].first->set_flags(qna_responses[0]);
-		v.get_ctrl()->update_flags(visible_items[itempos].first);
+		v.get_ctrl().update_flags(visible_items[itempos].first);
 		v.get_statusline().show_message(_("Flags updated."));
 		LOG(Level::DEBUG,
 			"ItemListFormAction::finished_qna: updated flags");
@@ -985,7 +985,7 @@ void ItemListFormAction::qna_start_search()
 		const auto message_lifetime = v.get_statusline().show_message_until_finished(
 				_("Searching..."));
 		const auto utf8searchphrase = utils::locale_to_utf8(searchphrase);
-		items = v.get_ctrl()->search_for_items(
+		items = v.get_ctrl().search_for_items(
 				utf8searchphrase, feed);
 	} catch (const DbException& e) {
 		v.get_statusline().show_error(
@@ -1112,7 +1112,7 @@ void ItemListFormAction::prepare()
 			const unsigned int itempos = list.get_position();
 			if (visible_items[itempos].first->unread()) {
 				visible_items[itempos].first->set_unread(false);
-				v.get_ctrl()->mark_article_read(
+				v.get_ctrl().mark_article_read(
 					visible_items[itempos].first->guid(),
 					true);
 				invalidate(itempos);
@@ -1477,7 +1477,7 @@ void ItemListFormAction::save_article(const nonstd::optional<std::string>& filen
 		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v.get_ctrl()->write_item(*item, filename.value());
+			v.get_ctrl().write_item(*item, filename.value());
 			v.get_statusline().show_message(strprintf::fmt(
 					_("Saved article to %s"), filename.value()));
 		} catch (...) {

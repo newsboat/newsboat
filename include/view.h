@@ -42,9 +42,9 @@ public:
 	void set_keymap(KeyMap* k);
 	void set_config_container(ConfigContainer* cfgcontainer);
 	StatusLine& get_statusline();
-	Controller* get_ctrl()
+	Controller& get_ctrl()
 	{
-		return &ctrl;
+		return ctrl;
 	}
 	ConfigContainer* get_cfg()
 	{

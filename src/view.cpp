@@ -574,13 +574,13 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		current_formaction = formaction_stack_size() - 1;
 	} else {
 		std::shared_ptr<RssItem> item = f->get_item_by_guid(guid);
-		std::string filename = get_ctrl()->write_temporary_item(*item);
+		std::string filename = ctrl.write_temporary_item(*item);
 		open_in_pager(filename);
 		try {
 			bool old_unread = item->unread();
 			item->set_unread(false);
 			if (old_unread) {
-				get_ctrl()->mark_article_read(
+				ctrl.mark_article_read(
 					item->guid(), true);
 			}
 		} catch (const DbException& e) {

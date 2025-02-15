@@ -170,7 +170,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		bool old_unread = item->unread();
 		item->set_unread(false);
 		if (old_unread) {
-			v.get_ctrl()->mark_article_read(item->guid(), true);
+			v.get_ctrl().mark_article_read(item->guid(), true);
 		}
 	} catch (const DbException& e) {
 		v.get_statusline().show_error(strprintf::fmt(
@@ -213,7 +213,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			v.get_statusline().show_error(_("Aborted saving."));
 		} else {
 			try {
-				v.get_ctrl()->write_item(*item, filename.value());
+				v.get_ctrl().write_item(*item, filename.value());
 				v.get_statusline().show_message(strprintf::fmt(
 						_("Saved article to %s."), filename.value()));
 			} catch (...) {
@@ -441,14 +441,14 @@ bool ItemViewFormAction::process_operation(Operation op,
 			if (args.size() > 0) {
 				if (args.front() == "read") {
 					item->set_unread(false);
-					v.get_ctrl()->mark_article_read(item->guid(), true);
+					v.get_ctrl().mark_article_read(item->guid(), true);
 				} else if (args.front() == "unread") {
 					item->set_unread(true);
-					v.get_ctrl()->mark_article_read(item->guid(), false);
+					v.get_ctrl().mark_article_read(item->guid(), false);
 				}
 			} else {
 				item->set_unread(true);
-				v.get_ctrl()->mark_article_read(item->guid(), false);
+				v.get_ctrl().mark_article_read(item->guid(), false);
 			}
 		} catch (const DbException& e) {
 			v.get_statusline().show_error(strprintf::fmt(
@@ -519,7 +519,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	case OP_ARTICLEFEED: {
-		auto feeds = v.get_ctrl()->get_feedcontainer()->get_all_feeds();
+		auto feeds = v.get_ctrl().get_feedcontainer()->get_all_feeds();
 		size_t pos;
 		auto article_feed = item->get_feedptr();
 		for (pos = 0; pos < feeds.size(); pos++) {
@@ -633,7 +633,7 @@ void ItemViewFormAction::handle_save(const std::string& filename_param)
 		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v.get_ctrl()->write_item(
+			v.get_ctrl().write_item(
 				*item, filename);
 			v.get_statusline().show_message(strprintf::fmt(
 					_("Saved article to %s"),
@@ -654,7 +654,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 	switch (op) {
 	case OP_INT_EDITFLAGS_END:
 		item->set_flags(qna_responses[0]);
-		v.get_ctrl()->update_flags(item);
+		v.get_ctrl().update_flags(item);
 		v.get_statusline().show_message(_("Flags updated."));
 		do_redraw = true;
 		break;
@@ -664,7 +664,7 @@ void ItemViewFormAction::finished_qna(Operation op)
 	case OP_PIPE_TO: {
 		std::string cmd = qna_responses[0];
 		std::ostringstream ostr;
-		v.get_ctrl()->write_item(*feed->get_item_by_guid(guid), ostr);
+		v.get_ctrl().write_item(*feed->get_item_by_guid(guid), ostr);
 		v.push_empty_formaction();
 		Stfl::reset();
 		FILE* f = popen(cmd.c_str(), "w");
