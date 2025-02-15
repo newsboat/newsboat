@@ -124,7 +124,7 @@ private:
 
 	View* v;
 	std::unique_ptr<UrlReader> urlcfg;
-	Cache* rsscache;
+	std::unique_ptr<Cache> rsscache;
 	bool refresh_on_start;
 	ConfigContainer cfg;
 	RssIgnores ign;

@@ -81,7 +81,6 @@ void ignore_signal(int sig)
 
 Controller::Controller(ConfigPaths& configpaths)
 	: v(0)
-	, rsscache(0)
 	, refresh_on_start(false)
 	, api(0)
 	, configpaths(configpaths)
@@ -91,7 +90,6 @@ Controller::Controller(ConfigPaths& configpaths)
 
 Controller::~Controller()
 {
-	delete rsscache;
 	delete api;
 }
 
@@ -225,7 +223,7 @@ int Controller::run(const CliArgsParser& args)
 		std::cout.flush();
 	}
 	try {
-		rsscache = new Cache(configpaths.cache_file(), &cfg);
+		rsscache = std::make_unique<Cache>(configpaths.cache_file(), &cfg);
 	} catch (const DbException& e) {
 		std::cerr << strprintf::fmt(
 				_("Error: opening the cache file `%s' "
@@ -248,7 +246,7 @@ int Controller::run(const CliArgsParser& args)
 		std::cout << _("done.") << std::endl;
 	}
 
-	reloader = std::make_unique<Reloader>(this, rsscache, cfg);
+	reloader = std::make_unique<Reloader>(this, rsscache.get(), cfg);
 
 	std::string type = cfg.get_configvalue("urls-source");
 	if (type == "local") {
@@ -552,7 +550,7 @@ int Controller::run(const CliArgsParser& args)
 	v->set_config_container(&cfg);
 	v->set_keymap(&keys);
 	v->set_tags(tags);
-	v->set_cache(rsscache);
+	v->set_cache(rsscache.get());
 
 	const auto cmds_to_execute = args.cmds_to_execute();
 	if (cmds_to_execute.size() >= 1) {
