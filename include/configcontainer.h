@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "3rd-party/expected.hpp"
 #include "configactionhandler.h"
 
 namespace newsboat {
@@ -68,7 +69,8 @@ public:
 	bool get_configvalue_as_bool(const std::string& key) const;
 	int get_configvalue_as_int(const std::string& key) const;
 	std::string get_configvalue(const std::string& key) const;
-	void set_configvalue(const std::string& key, const std::string& value);
+	nonstd::expected<void, std::string> set_configvalue(const std::string& key,
+		const std::string& value);
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment) const;
