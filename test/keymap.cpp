@@ -149,31 +149,6 @@ TEST_CASE(
 		}
 	}
 
-	SECTION("\"all\" context doesn't clear the keymap from internal keybindings") {
-		KeyMap default_keymap(KM_NEWSBOAT);
-		KeyMap unset_keymap(KM_NEWSBOAT);
-		unset_keymap.unset_all_keys("all");
-
-		for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-			REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), "feedlist")
-				== unset_keymap.get_keys(static_cast<Operation>(i), "feedlist"));
-		}
-	}
-
-	SECTION("Contexts don't have their internal keybindings cleared") {
-		KeyMap default_keymap(KM_NEWSBOAT);
-
-		for (const auto& context : contexts) {
-			KeyMap unset_keymap(KM_NEWSBOAT);
-			unset_keymap.unset_all_keys(context);
-
-			for (int i = OP_INT_MIN; i < OP_INT_MAX; ++i) {
-				REQUIRE(default_keymap.get_keys(static_cast<Operation>(i), context)
-					== unset_keymap.get_keys(static_cast<Operation>(i), context));
-			}
-		}
-	}
-
 	SECTION("Clears key bindings just for a given context") {
 		KeyMap k(KM_NEWSBOAT);
 		k.unset_all_keys("articlelist");
@@ -602,7 +577,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 
 		const auto macros = k.get_macro(KeyCombination("a"));
 		REQUIRE(macros.size() == 2);
-		REQUIRE(macros[0].op == OP_INT_SET);
+		REQUIRE(macros[0].op == OP_SET);
 		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
 		REQUIRE(macros[1].op == OP_OPENINBROWSER);
 		REQUIRE(macros[1].args == std::vector<std::string>());
@@ -613,7 +588,7 @@ TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
 
 		const auto macros = k.get_macro(KeyCombination("b"));
 		REQUIRE(macros.size() == 2);
-		REQUIRE(macros[0].op == OP_INT_SET);
+		REQUIRE(macros[0].op == OP_SET);
 		REQUIRE(macros[0].args == std::vector<std::string>({"browser", "firefox"}));
 		REQUIRE(macros[1].op == OP_OPENINBROWSER);
 		REQUIRE(macros[1].args == std::vector<std::string>());
@@ -643,7 +618,7 @@ TEST_CASE("Whitespace around semicolons in macros is optional", "[KeyMap]")
 		REQUIRE(macro[0].op == OP_OPEN);
 		REQUIRE(macro[0].args == std::vector<std::string>());
 
-		REQUIRE(macro[1].op == OP_INT_SET);
+		REQUIRE(macro[1].op == OP_SET);
 		REQUIRE(macro[1].args == std::vector<std::string>({"browser", "firefox --private-window"}));
 
 		REQUIRE(macro[2].op == OP_QUIT);
@@ -710,7 +685,7 @@ TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
 
 	const auto macro = k.get_macro(KeyCombination("x"));
 	REQUIRE(macro.size() == 2);
-	REQUIRE(macro[0].op == OP_INT_SET);
+	REQUIRE(macro[0].op == OP_SET);
 	REQUIRE(macro[0].args == std::vector<std::string>({"browser", "sleep 3; do-something ; echo hi"}));
 	REQUIRE(macro[1].op == OP_OPENINBROWSER);
 	REQUIRE(macro[1].args == std::vector<std::string>());
