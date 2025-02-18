@@ -103,9 +103,12 @@ void HelpFormAction::prepare()
 				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
 		};
 
+		// Highlighting need to be applied after escaping the line,
+		// so we also escape the search phrase.
+		auto quoted_searchphrase = utils::quote_for_stfl(searchphrase);
 		const auto apply_highlights = [&](const std::string& line) {
 			if (apply_search && searchphrase.length() > 0) {
-				return utils::stfl_highlight_searchphrase_case_insensitive(line, searchphrase);
+				return utils::stfl_highlight_searchphrase_case_insensitive(line, quoted_searchphrase);
 			}
 			return line;
 		};
