@@ -83,6 +83,9 @@ std::string replace_all(std::string str,
 std::string replace_all(const std::string& str,
 	const std::vector<std::pair<std::string, std::string>> from_to_pairs);
 
+std::string stfl_highlight_searchphrase_case_insensitive(std::string str,
+	const std::string& search);
+
 std::string to_lowercase(const std::string& input);
 
 std::wstring str2wstr(const std::string& str);

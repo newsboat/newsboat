@@ -361,6 +361,13 @@ std::string utils::replace_all(std::string str,
 	return std::string(utils::bridged::replace_all(str, from, to));
 }
 
+std::string utils::stfl_highlight_searchphrase_case_insensitive(std::string str,
+	const std::string& search)
+{
+	return std::string(utils::bridged::stfl_highlight_searchphrase_case_insensitive(str,
+				search));
+}
+
 std::string utils::replace_all(const std::string& str,
 	const std::vector<std::pair<std::string, std::string>> from_to_pairs)
 {

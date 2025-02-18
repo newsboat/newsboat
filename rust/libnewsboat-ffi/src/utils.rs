@@ -51,6 +51,7 @@ mod bridged {
         ) -> bool;
 
         fn replace_all(input: String, from: &str, to: &str) -> String;
+        fn stfl_highlight_searchphrase_case_insensitive(input: String, search: &str) -> String;
         fn consolidate_whitespace(input: String) -> String;
         fn absolute_url(base_url: &str, link: &str) -> String;
         fn censor_url(url: &str) -> String;

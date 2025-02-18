@@ -103,10 +103,9 @@ void HelpFormAction::prepare()
 				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
 		};
 
-		std::string highlighted_searchphrase = strprintf::fmt("<hl>%s</>", searchphrase);
 		const auto apply_highlights = [&](const std::string& line) {
 			if (apply_search && searchphrase.length() > 0) {
-				return utils::replace_all(line, searchphrase, highlighted_searchphrase);
+				return utils::stfl_highlight_searchphrase_case_insensitive(line, searchphrase);
 			}
 			return line;
 		};
