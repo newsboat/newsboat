@@ -715,7 +715,7 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 	REQUIRE(k.prepare_keymap_hint(hints, "feedlist") ==
 		"<key>q</><colon>:</><desc>Get out of <>this> dialog</> "
 		"<key>?</><comma>,</><key>w</><colon>:</><desc>HALP</> "
-		"<key><></><comma>,</><key>ENTER</><comma>,</><key>x</><colon>:</><desc>Open</> "
+		"<key>ENTER</><comma>,</><key><></><comma>,</><key>x</><colon>:</><desc>Open</> "
 		"<key>O</><colon>:</><desc>Reload current entry</> "
 		"<key><>none></><colon>:</><desc>Go find me</> ");
 }

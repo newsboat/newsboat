@@ -83,7 +83,12 @@ fn alphabetic(input: &str) -> IResult<&str, char> {
 }
 
 fn regular_bindkey(input: &str) -> IResult<&str, KeyCombination> {
-    Ok(("", KeyCombination::new(input.to_owned())))
+    let key_combination = match input {
+        "<" => KeyCombination::new("LT".to_owned()),
+        ">" => KeyCombination::new("GT".to_owned()),
+        key => KeyCombination::new(key.to_owned()),
+    };
+    Ok(("", key_combination))
 }
 
 fn control_bindkey(input: &str) -> IResult<&str, KeyCombination> {
@@ -199,8 +204,8 @@ mod tests {
         assert_eq!(bindkey("a"), KeyCombination::new("a".to_owned()));
         assert_eq!(bindkey("ENTER"), KeyCombination::new("ENTER".to_owned()));
         assert_eq!(bindkey("^"), KeyCombination::new("^".to_owned()));
-        assert_eq!(bindkey("<"), KeyCombination::new("<".to_owned()));
-        assert_eq!(bindkey(">"), KeyCombination::new(">".to_owned()));
+        assert_eq!(bindkey("<"), KeyCombination::new("LT".to_owned()));
+        assert_eq!(bindkey(">"), KeyCombination::new("GT".to_owned()));
     }
 
     #[test]
@@ -234,6 +239,14 @@ mod tests {
             bindkey("^z"),
             KeyCombination::new("z".to_owned()).with_control()
         );
+    }
+
+    #[test]
+    fn t_bindkey_single_special_key() {
+        assert_eq!(bindkey("="), KeyCombination::new("=".to_owned()));
+        assert_eq!(bindkey("<"), KeyCombination::new("LT".to_owned()));
+        assert_eq!(bindkey(">"), KeyCombination::new("GT".to_owned()));
+        assert_eq!(bindkey("-"), KeyCombination::new("-".to_owned()));
     }
 
     #[test]

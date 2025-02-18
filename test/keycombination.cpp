@@ -21,8 +21,8 @@ TEST_CASE("KeyCombination parses bind-key key combinations", "[KeyCombination]")
 	check("^a", "a", false, true, false);
 	check("^A", "a", false, true, false);
 
-	check("<", "<", false, false, false);
-	check(">", ">", false, false, false);
+	check("<", "LT", false, false, false);
+	check(">", "GT", false, false, false);
 	check("ENTER", "ENTER", false, false, false);
 }
 
