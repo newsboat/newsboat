@@ -166,11 +166,13 @@ void HelpFormAction::prepare()
 				const std::string key = macro.first.to_bindkey_string();
 				const std::string description = macro.second.description;
 
-				// "macro-prefix" is not translated because it refers to an operation name
-				std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
-				line = utils::quote_for_stfl(line);
-				line = apply_highlights(line);
-				listfmt.add_line(StflRichText::from_quoted(line));
+				if (should_be_visible({ macro.first, "", description, "", 0 })) {
+					// "macro-prefix" is not translated because it refers to an operation name
+					std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
+					line = utils::quote_for_stfl(line);
+					line = apply_highlights(line);
+					listfmt.add_line(StflRichText::from_quoted(line));
+				}
 			}
 		}
 
