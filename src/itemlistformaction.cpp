@@ -1521,7 +1521,7 @@ void ItemListFormAction::register_format_styles()
 	const std::string attrstr = rxman.get_attrs_stfl_string("articlelist", true);
 	const std::string textview = strprintf::fmt(
 			"{!list[items] .expand:vh style_normal[listnormal]: "
-			"style_focus[listfocus]:fg=yellow,bg=blue,attr=bold "
+			"style_focus[listfocus]: "
 			"pos[items_pos]:0 offset[items_offset]:0 %s richtext:1}",
 			attrstr);
 	list.stfl_replace_list(textview);

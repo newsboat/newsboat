@@ -51,11 +51,6 @@ TEST_CASE(
 	ColorManager c;
 	StylesCollector collector;
 
-	SECTION("By default, the list is empty") {
-		c.apply_colors(collector.setter());
-		REQUIRE(collector.styles_count() == 0);
-	}
-
 	SECTION("Each processed action adds corresponding entry to return value") {
 		c.handle_action("color", {"listnormal", "default", "default"});
 		c.handle_action("color", {"listfocus_unread", "cyan", "default", "bold", "underline"});
@@ -67,7 +62,6 @@ TEST_CASE(
 
 		c.apply_colors(collector.setter());
 
-		REQUIRE(collector.styles_count() == 10);
 		REQUIRE(collector.style("listnormal") == "");
 		REQUIRE(collector.style("listfocus_unread") == "fg=cyan,attr=bold,attr=underline");
 		REQUIRE(collector.style("background") == "fg=red,bg=yellow");
@@ -87,7 +81,6 @@ TEST_CASE(
 
 		c.apply_colors(collector.setter());
 
-		REQUIRE(collector.styles_count() == 3);
 		REQUIRE(collector.style("article") == "fg=white,bg=blue,attr=reverse");
 		REQUIRE(collector.style("color_bold") == "fg=white,bg=blue,attr=reverse,attr=bold");
 		REQUIRE(collector.style("color_underline") ==
@@ -105,13 +98,11 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
-	clr.apply_colors(collector.setter());
-	REQUIRE(collector.styles_count() == 0);
-
 	cfg.parse_file("data/config-with-colors");
 
 	clr.apply_colors(collector.setter());
-	REQUIRE(collector.styles_count() == 2);
+	REQUIRE(collector.style("background") == "fg=red,bg=green");
+	REQUIRE(collector.style("listfocus") == "fg=blue,bg=black,attr=bold");
 }
 
 TEST_CASE(
@@ -325,18 +316,24 @@ TEST_CASE("If no colors were specified for the "
 				REQUIRE(collector.style(element) == "fg=red,bg=magenta,attr=reverse");
 				REQUIRE(collector.style("info") == "fg=red,bg=magenta,attr=reverse");
 			}
-
-			SECTION("Element has no style if there is no style for `info` either") {
-				c.handle_action("color", {"listnormal", "black", "white"});
-
-				c.apply_colors(collector.setter());
-
-				REQUIRE(collector.styles_count() >= 1);
-				REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
-
-				REQUIRE(collector.style(element) == "");
-				REQUIRE(collector.style("info") == "");
-			}
 		}
+	}
+
+	SECTION("Element has its default style if there is no style for `info` either") {
+		ColorManager c;
+		StylesCollector collector;
+		c.handle_action("color", {"listnormal", "black", "white"});
+
+		c.apply_colors(collector.setter());
+
+		REQUIRE(collector.styles_count() >= 1);
+		REQUIRE(collector.style("listnormal") == "fg=black,bg=white");
+
+		REQUIRE(collector.style("info") == "fg=yellow,bg=blue,attr=bold");
+		REQUIRE(collector.style("title") == "fg=yellow,bg=blue,attr=bold");
+		REQUIRE(collector.style("hint-key") == "fg=yellow,bg=blue,attr=bold");
+		REQUIRE(collector.style("hint-keys-delimiter") == "fg=white,bg=blue");
+		REQUIRE(collector.style("hint-separator") == "fg=white,bg=blue,attr=bold");
+		REQUIRE(collector.style("hint-description") == "fg=white,bg=blue");
 	}
 }
