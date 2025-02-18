@@ -103,10 +103,12 @@ void HelpFormAction::prepare()
 				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
 		};
 
-		std::string highlighted_searchphrase = strprintf::fmt("<hl>%s</>", searchphrase);
+		// Highlighting need to be applied after escaping the line,
+		// so we also escape the search phrase.
+		auto quoted_searchphrase = utils::quote_for_stfl(searchphrase);
 		const auto apply_highlights = [&](const std::string& line) {
 			if (apply_search && searchphrase.length() > 0) {
-				return utils::replace_all(line, searchphrase, highlighted_searchphrase);
+				return utils::stfl_highlight_searchphrase_case_insensitive(line, quoted_searchphrase);
 			}
 			return line;
 		};
@@ -166,11 +168,13 @@ void HelpFormAction::prepare()
 				const std::string key = macro.first.to_bindkey_string();
 				const std::string description = macro.second.description;
 
-				// "macro-prefix" is not translated because it refers to an operation name
-				std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
-				line = utils::quote_for_stfl(line);
-				line = apply_highlights(line);
-				listfmt.add_line(StflRichText::from_quoted(line));
+				if (should_be_visible({ macro.first, "", description, "", 0 })) {
+					// "macro-prefix" is not translated because it refers to an operation name
+					std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
+					line = utils::quote_for_stfl(line);
+					line = apply_highlights(line);
+					listfmt.add_line(StflRichText::from_quoted(line));
+				}
 			}
 		}
 

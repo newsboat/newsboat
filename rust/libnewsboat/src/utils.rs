@@ -21,6 +21,16 @@ pub fn replace_all(input: String, from: &str, to: &str) -> String {
     input.replace(from, to)
 }
 
+pub fn stfl_highlight_searchphrase_case_insensitive(input: String, search: &str) -> String {
+    let literal_pattern = regex::escape(search);
+
+    regex::RegexBuilder::new(&literal_pattern)
+        .case_insensitive(true)
+        .build()
+        .map(|re| re.replace_all(&input, "<hl>$0</>").to_string())
+        .unwrap_or(input)
+}
+
 pub fn consolidate_whitespace(input: String) -> String {
     let found = input.find(|c: char| !c.is_whitespace());
     let mut result = String::new();
