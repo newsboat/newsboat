@@ -110,7 +110,9 @@ impl StflRichText {
             pos = bracket + 1;
             // Add to strings in the `tags` map so we don't have to shift all the positions in that map
             // (would be necessary if inserting directly into `str`)
-            tags.insert(pos, '>'.into());
+            // NOTE: There can already be a tag at this position (e.i. immediately after the `<`),
+            // so we must not overwrite the entry.
+            tags.entry(pos).or_default().insert(0, '>');
         }
 
         // Insert tags right-to-left (starting at the end of the string)
@@ -126,7 +128,26 @@ impl StflRichText {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
+    use crate::utils;
+
     use super::StflRichText;
+
+    #[test]
+    fn t_left_angle_bracket_immediately_before_a_tag() {
+        // Regression test for https://github.com/newsboat/newsboat/issues/3007
+
+        let plain = "<";
+        let quoted = format!("<hl>{}</>", utils::quote_for_stfl(plain));
+        let tags = BTreeMap::from_iter([(0, "<hl>".to_string()), (1, "</>".to_string())]);
+
+        let actual = StflRichText::from_quoted(&quoted);
+
+        assert_eq!(actual.style_tags, tags);
+        assert_eq!(actual.plaintext(), plain);
+        assert_eq!(actual.quoted(), quoted);
+    }
 
     proptest::proptest! {
         #[test]
