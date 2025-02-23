@@ -14,6 +14,11 @@ mod ffi {
         fn from_quoted(text: &CxxString) -> Box<StflRichText>;
         fn copy(richtext: &StflRichText) -> Box<StflRichText>;
 
+        fn highlight_searchphrase(
+            richtext: &mut StflRichText,
+            search: &str,
+            case_insensitive: bool,
+        );
         fn apply_style_tag(richtext: &mut StflRichText, tag: &str, start: usize, end: usize);
         fn plaintext(richtext: &StflRichText) -> &str;
         fn quoted(richtext: &StflRichText) -> String;
@@ -34,6 +39,10 @@ fn from_quoted(text: &CxxString) -> Box<StflRichText> {
 
 fn copy(richtext: &StflRichText) -> Box<StflRichText> {
     Box::new(StflRichText(richtext.0.clone()))
+}
+
+fn highlight_searchphrase(richtext: &mut StflRichText, search: &str, case_insensitive: bool) {
+    richtext.0.highlight_searchphrase(search, case_insensitive);
 }
 
 fn apply_style_tag(richtext: &mut StflRichText, tag: &str, start: usize, end: usize) {
