@@ -103,12 +103,12 @@ void HelpFormAction::prepare()
 				|| strcasestr(desc.desc.c_str(), searchphrase.c_str()) != nullptr;
 		};
 
-		std::string highlighted_searchphrase = strprintf::fmt("<hl>%s</>", searchphrase);
 		const auto apply_highlights = [&](const std::string& line) {
+			auto text = StflRichText::from_plaintext(line);
 			if (apply_search && searchphrase.length() > 0) {
-				return utils::replace_all(line, searchphrase, highlighted_searchphrase);
+				text.highlight_searchphrase(searchphrase);
 			}
-			return line;
+			return text;
 		};
 
 		for (const auto& desc : bound_descriptions) {
@@ -117,9 +117,7 @@ void HelpFormAction::prepare()
 						desc.key.to_bindkey_string(),
 						desc.cmd,
 						desc.desc);
-				line = utils::quote_for_stfl(line);
-				line = apply_highlights(line);
-				listfmt.add_line(StflRichText::from_quoted(line));
+				listfmt.add_line(apply_highlights(line));
 			}
 		}
 
@@ -134,9 +132,7 @@ void HelpFormAction::prepare()
 							desc.key.to_bindkey_string(),
 							desc.cmd,
 							desc.desc);
-					line = utils::quote_for_stfl(line);
-					line = apply_highlights(line);
-					listfmt.add_line(StflRichText::from_quoted(line));
+					listfmt.add_line(apply_highlights(line));
 				}
 			}
 		}
@@ -149,9 +145,7 @@ void HelpFormAction::prepare()
 			for (const auto& desc : unbound_descriptions) {
 				if (should_be_visible(desc)) {
 					std::string line = strprintf::fmt("%-39s %s", desc.cmd, desc.desc);
-					line = utils::quote_for_stfl(line);
-					line = apply_highlights(line);
-					listfmt.add_line(StflRichText::from_quoted(line));
+					listfmt.add_line(apply_highlights(line));
 				}
 			}
 		}
@@ -169,9 +163,7 @@ void HelpFormAction::prepare()
 				if (should_be_visible({ macro.first, "", description, "", 0 })) {
 					// "macro-prefix" is not translated because it refers to an operation name
 					std::string line = strprintf::fmt("<macro-prefix>%s  %s", key, description);
-					line = utils::quote_for_stfl(line);
-					line = apply_highlights(line);
-					listfmt.add_line(StflRichText::from_quoted(line));
+					listfmt.add_line(apply_highlights(line));
 				}
 			}
 		}
