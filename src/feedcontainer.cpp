@@ -109,6 +109,45 @@ void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 			}
 		});
 		break;
+	case FeedSortMethod::LATEST_UNREAD:
+		std::stable_sort(
+			feeds.begin(), feeds.end(),
+		[&](std::shared_ptr<RssFeed> a, std::shared_ptr<RssFeed> b) {
+			if (a->unread_item_count() == 0 || b->unread_item_count() == 0) {
+				bool result = a->unread_item_count() > b->unread_item_count();
+				if (sort_strategy.sd == SortDirection::ASC) {
+					result = !result;
+				}
+				return result;
+			}
+			std::vector<std::shared_ptr<RssItem>> a_unread;
+			std::copy_if(a->items().begin(), a->items().end(),
+				std::back_inserter(a_unread),
+			[](const std::shared_ptr<RssItem>& item) {
+				return item->unread();
+			});
+			std::vector<std::shared_ptr<RssItem>> b_unread;
+			std::copy_if(b->items().begin(), b->items().end(),
+				std::back_inserter(b_unread),
+			[](const std::shared_ptr<RssItem>& item) {
+				return item->unread();
+			});
+			auto cmp = [](std::shared_ptr<RssItem> a,
+			std::shared_ptr<RssItem> b) {
+				return *a < *b;
+			};
+			auto& a_item = *std::min_element(a_unread.begin(),
+					a_unread.end(), cmp);
+			auto& b_item = *std::min_element(b_unread.begin(),
+					b_unread.end(), cmp);
+
+			if (sort_strategy.sd == SortDirection::DESC) {
+				return *a_item < *b_item;
+			} else {
+				return *b_item < *a_item;
+			}
+		});
+		break;
 	}
 }
 
