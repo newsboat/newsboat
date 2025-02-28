@@ -25,8 +25,7 @@ struct TextStyle {
 
 class ColorManager : public ConfigActionHandler {
 public:
-	ColorManager();
-	~ColorManager() override;
+	~ColorManager() override = default;
 	void register_commands(ConfigParser& cfgparser);
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;

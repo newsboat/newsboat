@@ -1,11 +1,11 @@
 vbox
   @style_normal[background]:
-  @info#style_normal[info]:bg=blue,fg=yellow,attr=bold
-  @info#style_key_normal[hint-key]:bg=blue,fg=yellow,attr=bold
-  @info#style_comma_normal[hint-keys-delimiter]:bg=blue,fg=white
-  @info#style_colon_normal[hint-separator]:bg=blue,fg=white,attr=bold
-  @info#style_desc_normal[hint-description]:bg=blue,fg=white
-  @title#style_normal[title]:bg=blue,fg=yellow,attr=bold
+  @info#style_normal[info]:
+  @info#style_key_normal[hint-key]:
+  @info#style_comma_normal[hint-keys-delimiter]:
+  @info#style_colon_normal[hint-separator]:
+  @info#style_desc_normal[hint-description]:
+  @title#style_normal[title]:
   @bind_up[bind_up]:
   @bind_down[bind_down]:
   @bind_page_up[bind_page_up]:
@@ -19,7 +19,7 @@ vbox
     .display[showtitle]:1
   !list[dialogs]
     style_normal[listnormal]:
-    style_focus[listfocus]:fg=yellow,bg=blue,attr=bold
+    style_focus[listfocus]:
     .expand:vh
     richtext:1
     pos[dialogs_pos]:0

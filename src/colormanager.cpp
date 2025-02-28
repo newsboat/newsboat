@@ -9,13 +9,49 @@
 
 using namespace podboat;
 
-namespace newsboat {
+namespace {
+const std::map<std::string, newsboat::TextStyle> default_styles {
+	{ "listnormal",           {"default", "default", {}} },
+	{ "listfocus",            {"yellow",  "blue",    {"bold"}} },
+	{ "listnormal_unread",    {"default", "default", {"bold"}} },
+	{ "listfocus_unread",     {"yellow",  "blue",    {"bold"}} },
+	{ "info",                 {"yellow",  "blue",    {"bold"}} },
+	{ "background",           {"default", "default", {}} },
+	{ "article",              {"default", "default", {}} },
+	{ "end-of-text-marker",   {"blue",    "default", {"bold"}} },
+	{ "title",                {"yellow",  "blue",    {"bold"}} },
+	{ "hint-key",             {"yellow",  "blue",    {"bold"}} },
+	{ "hint-keys-delimiter",  {"white",   "blue",    {}} },
+	{ "hint-separator",       {"white",   "blue",    {"bold"}} },
+	{ "hint-description",     {"white",   "blue",    {}} },
+};
 
-ColorManager::ColorManager()
-{
+const std::vector<std::string> supported_elements({
+	"listnormal",
+	"listfocus",
+	"listnormal_unread",
+	"listfocus_unread",
+	"info",
+	"background",
+	"article",
+	"end-of-text-marker",
+	"title",
+	"hint-key",
+	"hint-keys-delimiter",
+	"hint-separator",
+	"hint-description",
+});
+
+const std::map<std::string, std::string> element_fallbacks {
+	{ "title", "info" },
+	{ "hint-key", "info" },
+	{ "hint-keys-delimiter", "info" },
+	{ "hint-separator", "info" },
+	{ "hint-description", "info" },
+};
 }
 
-ColorManager::~ColorManager() {}
+namespace newsboat {
 
 void ColorManager::register_commands(ConfigParser& cfgparser)
 {
@@ -63,21 +99,6 @@ void ColorManager::handle_action(const std::string& action,
 
 		/* we only allow certain elements to be configured, also to
 		 * indicate the user possible mis-spellings */
-		const std::vector<std::string> supported_elements({
-			"listnormal",
-			"listfocus",
-			"listnormal_unread",
-			"listfocus_unread",
-			"info",
-			"background",
-			"article",
-			"end-of-text-marker",
-			"title",
-			"hint-key",
-			"hint-keys-delimiter",
-			"hint-separator",
-			"hint-description"
-		});
 		const auto element_is_supported = std::find(supported_elements.cbegin(),
 				supported_elements.cend(), element) != supported_elements.cend();
 
@@ -154,10 +175,28 @@ void ColorManager::apply_colors(
 	std::function<void(const std::string&, const std::string&)> stfl_value_setter)
 const
 {
-	for (const auto& element_style : element_styles) {
-		const std::string& element = element_style.first;
-		const TextStyle& style = element_style.second;
-		const auto colorattr = format_style(style);
+	for (const std::string& element : supported_elements) {
+		const TextStyle* style = nullptr;
+		const auto configured_style = element_styles.find(element);
+		if (configured_style != element_styles.end()) {
+			style = &configured_style->second;
+		}
+
+		if (style == nullptr) {
+			const auto fallback = element_fallbacks.find(element);
+			if (fallback != element_fallbacks.end()) {
+				const auto fallback_style = element_styles.find(fallback->second);
+				if (fallback_style != element_styles.end()) {
+					style = &fallback_style->second;
+				}
+			}
+		}
+
+		if (style == nullptr) {
+			style = &default_styles.at(element);
+		}
+
+		const auto colorattr = format_style(*style);
 
 		LOG(Level::DEBUG,
 			"ColorManager::apply_colors: %s %s\n",
@@ -185,12 +224,6 @@ const
 			stfl_value_setter("color_underline", underline);
 		}
 	}
-
-	emit_fallback_from_to("title", "info", stfl_value_setter);
-	emit_fallback_from_to("hint-key", "info", stfl_value_setter);
-	emit_fallback_from_to("hint-keys-delimiter", "info", stfl_value_setter);
-	emit_fallback_from_to("hint-separator", "info", stfl_value_setter);
-	emit_fallback_from_to("hint-description", "info", stfl_value_setter);
 }
 
 } // namespace newsboat
