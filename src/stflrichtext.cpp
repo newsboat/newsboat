@@ -32,6 +32,11 @@ StflRichText StflRichText::from_quoted(std::string text)
 	return StflRichText(std::move(rs_object));
 }
 
+void StflRichText::highlight_searchphrase(const std::string& search, bool case_insensitive)
+{
+	stflrichtext::bridged::highlight_searchphrase(*rs_object, search, case_insensitive);
+}
+
 void StflRichText::apply_style_tag(const std::string& tag, size_t start, size_t end)
 {
 	stflrichtext::bridged::apply_style_tag(*rs_object, tag, start, end);

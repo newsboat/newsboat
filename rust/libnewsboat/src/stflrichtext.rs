@@ -31,6 +31,20 @@ impl StflRichText {
         self.merge_style_tag(tag, start, end);
     }
 
+    pub fn highlight_searchphrase(&mut self, search: &str, case_insensitive: bool) {
+        let literal_pattern = regex::escape(search);
+
+        if let Ok(re) = regex::RegexBuilder::new(&literal_pattern)
+            .case_insensitive(case_insensitive)
+            .build()
+        {
+            let text = self.text.clone();
+            for found in re.find_iter(&text) {
+                self.apply_style_tag("<hl>", found.start(), found.end());
+            }
+        }
+    }
+
     fn extract_style_tags(text: &str) -> (String, BTreeMap<usize, String>) {
         let mut result = text.to_owned();
         let mut tags = BTreeMap::new();
