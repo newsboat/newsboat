@@ -116,7 +116,7 @@ TEST_CASE("to_bind_string", "[KeyCombination]")
 {
 	REQUIRE(KeyCombination("a").to_bind_string() == "a");
 	REQUIRE(KeyCombination("=").to_bind_string() == "=");
-	REQUIRE(KeyCombination("^").to_bind_string() == "^");
+	REQUIRE(KeyCombination("^").to_bind_string() == "<^>");
 	REQUIRE(KeyCombination(">").to_bind_string() == ">");
 	REQUIRE(KeyCombination("a", ShiftState::Shift).to_bind_string() == "A");
 	REQUIRE(KeyCombination("a", ShiftState::NoShift,
