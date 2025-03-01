@@ -62,7 +62,13 @@ std::string KeyCombination::to_bindkey_string() const
 	} else if (shift == ShiftState::Shift && key.length() == 1) {
 		return strprintf::fmt("%c", static_cast<char>(std::toupper(key[0])));
 	} else {
-		return key;
+		if (key == "LT") {
+			return "<";
+		} else if (key == "GT") {
+			return ">";
+		} else {
+			return key;
+		}
 	}
 }
 
