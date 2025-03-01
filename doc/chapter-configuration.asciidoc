@@ -27,7 +27,7 @@ browser          links
 show-read-feeds  no
 
 unbind-key       R
-bind-key         ^R    reload-all
+bind             ^R feedlist reload-all
 ----
 
 === Splitting long lines into multiple ones
@@ -121,10 +121,114 @@ configuration.
 
 === Key Bindings
 
-You can bind a key to an operation with the <<bind-key,`bind-key`>> configuration command.
+_Supported since Newsboat 2.39._
+
+You can bind a key (or sequence of keys) to an operation (or a list of operations)
+with the <<bind,`bind`>> configuration command.
+
+The syntax for a binding looks like this:
+
+    bind <key-sequence> <dialog>[,<dialog>] <operation-list> [-- "<description>"]
+
+*Key Sequence*
+
+Lowercase keys, uppercase keys and special characters are written literally.
+
+Key combinations with kbd:[Ctrl] are written using the caret `^`.
+For instance kbd:[Ctrl+R] equals to `^R`.
+Please be aware that all kbd:[Ctrl]-related key combinations need to be written in uppercase.
+
+Alternatively, key combinations using kbd:[Shift] or kbd:[Ctrl] can be written like
+`<S-a>` and `<C-a>`, for kbd:[Shift+A] and kbd:[Ctrl+A] respectively.
+Note that this alternative syntax only works with the <<bind,`bind`>> command.
+It is not supported with the older <<bind-key,`bind-key`>> command.
+
+The following identifiers for special keys are supported:
+
+- `<ENTER>` (Enter key)
+- `<BACKSPACE>` (backspace key)
+- `<LEFT>` (left cursor)
+- `<RIGHT>` (right cursor)
+- `<UP>` (up cursor)
+- `<DOWN>` (down cursor)
+- `<PPAGE>` (page up cursor)
+- `<NPAGE>` (page down cursor)
+- `<HOME>` (cursor to beginning of list/article)
+- `<END>` (cursor to end of list/article)
+- `<ESC>` (Esc key)
+- `<TAB>` (Tab key)
+- `<LT>` (`<` key)
+- `<GT>` (`>` key)
+- `<^>` (`^` key, can also be specified as just `^` if it is not followed by a letter)
+- `<F1>` to `<F12>` (F1 key to F12 key)
+
+Multiple keys can be placed in sequence. For example `gg` means pressing
+kbd:[g] twice and `^O<ENTER>` means pressing kbd:[Ctrl+O] followed by
+kbd:[Enter].
+Pressing kbd:[Esc] will cancel a multi-key input.
+
+*Dialog*
+
+A dialog is a context in which the key binding is active.
+Available dialogs are:
+
+* `everywhere`
+* `feedlist`
+* `filebrowser`
+* `help`
+* `articlelist`
+* `article`
+* `tagselection`
+* `filterselection`
+* `urlview`
+* `podboat`
+* `dirbrowser`
+* `searchresultslist`
+
+Multiple dialogs can be specified with a comma in between. For example:
+
+    bind k feedlist,articlelist,urlview up
+    bind j feedlist,articlelist,urlview down
+
+or using `everywhere` to apply the binding in all dialogs:
+
+    bind k everywhere up
+    bind j everywhere down
+
+*Operation List*
+
+Operations get executed when pressing the corresponding sequence of keys.
+For a complete list of available operations see <<_newsboat_operations>> and <<_podboat_operations>>.
+
+Multiple operations can be specified by writing them down separated by a semicolon.
+Some operations allow specifying an argument, e.g. `set <config option> <config value>`
+can be used to change a configuration option.
+
+A sequence with two dashes followed by text between double quotes can be used
+to add a description to a binding (e.g. `-- "some description"`). If present,
+the description is shown in the help dialog.
+
+In combination, this might look like:
+
+    bind of everywhere set browser "firefox" ; open-in-browser -- "Open in Firefox"
+
+The above example means that pressing kbd:[o] followd by kbd:[f] will change
+the configured browser to `firefox` and then run the <<open-in-browser,`open-in-browser`>>
+command to open the feed/article in the configured browser.
+
+`bind` is similar to <<_macro_support,macros>> but is more flexible.
+Macros are configured globally, whereas `bind` can be applied to specific dialogs.
+Additionally, macros always require pressing 2 keys (<<macro-prefix,`macro-prefix`>>
+followed by a key specific to the macro) while `bind` can specify a key-sequence of
+any length.
+
+=== Old Style Key Bindings
+
+You can bind a single key to a single operation with the <<bind-key,`bind-key`>>
+configuration command. This is an older, more limited form of keybinding syntax.
 You can specify an optional dialog. This is the context in which the key binding is active.
 
-The syntax for a key binding looks like this:
+The syntax for an old style key binding looks like this:
 
     bind-key <key> <operation> [<dialog>]
 

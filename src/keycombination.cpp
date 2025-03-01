@@ -87,6 +87,8 @@ std::string KeyCombination::to_bind_string() const
 			return "<";
 		} else if (key == "GT") {
 			return ">";
+		} else if (key == "^") {
+			return "<^>";
 		} else if (key.size() == 1) {
 			return key;
 		}
