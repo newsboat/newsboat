@@ -5,6 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 
+#include "config.h"
 #include "confighandlerexception.h"
 #include "keycombination.h"
 
@@ -718,4 +719,104 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 		"<key>ENTER</><comma>,</><key><></><comma>,</><key>x</><colon>:</><desc>Open</> "
 		"<key>O</><colon>:</><desc>Reload current entry</> "
 		"<key><>none></><colon>:</><desc>Go find me</> ");
+}
+
+TEST_CASE("get_help_info() returns info about macros, bindings, and unbound actions",
+	"[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+
+	GIVEN("all bindings are removed") {
+		k.unset_all_keys("feedlist");
+
+		WHEN("help info is retrieved") {
+			const auto help_info = k.get_help_info("feedlist");
+
+			THEN("the list with info about bindings is empty") {
+				REQUIRE(help_info.bindings.size() == 0);
+			}
+
+			THEN("unused actions list contains the 'open' action with a description") {
+				REQUIRE_FALSE(help_info.unused.empty());
+				const auto open_it = std::find_if(help_info.unused.begin(),
+				help_info.unused.end(), [](const UnboundAction& u) {
+					return u.op_name == "open";
+				});
+				REQUIRE(open_it != help_info.unused.end());
+				REQUIRE(open_it->description != "");
+			}
+		}
+	}
+
+	GIVEN("a registered binding without a description") {
+		k.handle_action("bind", R"(om feedlist set browser "mpv" ; open-in-browser)");
+
+		WHEN("help info is retrieved") {
+			const auto help_info = k.get_help_info("feedlist");
+
+			THEN("a description is generated from the list of actions") {
+				const auto bind_it = std::find_if(help_info.bindings.begin(),
+				help_info.bindings.end(), [](const HelpBindInfo& b) {
+					return b.key_sequence == "om";
+				});
+				REQUIRE(bind_it != help_info.bindings.end());
+				REQUIRE(bind_it->description == R"(set browser mpv; open-in-browser)");
+			}
+		}
+	}
+
+	GIVEN("a registered binding with a description") {
+		k.handle_action("bind",
+			R"(om feedlist set browser "mpv" ; open-in-browser -- "open with mpv")");
+
+		WHEN("help info is retrieved") {
+			const auto help_info = k.get_help_info("feedlist");
+
+			THEN("the provided description is included") {
+				const auto bind_it = std::find_if(help_info.bindings.begin(),
+				help_info.bindings.end(), [](const HelpBindInfo& b) {
+					return b.key_sequence == "om";
+				});
+				REQUIRE(bind_it != help_info.bindings.end());
+				REQUIRE(bind_it->description == "open with mpv");
+			}
+		}
+	}
+
+	GIVEN("a registered binding with only a single action") {
+		k.handle_action("bind", "oo feedlist open");
+
+		WHEN("help info is retrieved") {
+			const auto help_info = k.get_help_info("feedlist");
+
+			THEN("the action name and description are included in the binding info") {
+				const auto bind_it = std::find_if(help_info.bindings.begin(),
+				help_info.bindings.end(), [](const HelpBindInfo& b) {
+					return b.key_sequence == "oo";
+				});
+				REQUIRE(bind_it != help_info.bindings.end());
+				REQUIRE(bind_it->op_name == "open");
+				const char* action_description = _("Open feed/article");
+				REQUIRE(bind_it->description == action_description);
+			}
+		}
+	}
+
+	SECTION("help info with no configured macros") {
+		const auto help_info = k.get_help_info("feedlist");
+		REQUIRE(help_info.macros.size() == 0);
+	}
+
+	SECTION("help info with configured macros") {
+		k.handle_action("macro", "a open");
+		k.handle_action("macro", "b open -- \"some description\"");
+
+		const auto help_info = k.get_help_info("feedlist");
+		REQUIRE(help_info.macros.size() == 2);
+		REQUIRE(help_info.macros[0].key_sequence == "<macro-prefix>a");
+		REQUIRE(help_info.macros[0].description == "");
+		REQUIRE(help_info.macros[1].key_sequence == "<macro-prefix>b");
+		REQUIRE(help_info.macros[1].description == "some description");
+	}
 }
