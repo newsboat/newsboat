@@ -11,6 +11,7 @@
 #include <langinfo.h>
 #include <libxml/uri.h>
 #include <mutex>
+#include <ncurses.h>
 #include <pwd.h>
 #include <sstream>
 #include <stfl.h>
@@ -898,6 +899,16 @@ std::string utils::mt_strf_localtime(const std::string& format, time_t t)
 			localtime(&t));
 
 	return std::string(buffer, written);
+}
+
+void utils::wait_for_keypress()
+{
+	initscr();
+	cbreak(); // Disable line buffering
+	raw(); // Make sure we return from getch on Ctrl+C instead of calling the signal handler
+	timeout(-1); // Make getch wait indefinitely
+	getch();
+	endwin(); // Restore terminal settings
 }
 
 } // namespace newsboat

@@ -592,6 +592,10 @@ int Controller::run(const CliArgsParser& args)
 				std::cout << strprintf::fmt(_("%" PRIu64 " unreachable feeds found. See "
 							"`cleanup-on-quit` in newsboat(1) for details."), num_feeds)
 					<< std::endl;
+				if (cfg.get_configvalue("cleanup-on-quit") == "nudge") {
+					std::cout << _("Press any key to continue") << std::endl;
+					utils::wait_for_keypress();
+				}
 			}
 		}
 	} catch (const DbException& e) {
