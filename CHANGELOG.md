@@ -6,6 +6,7 @@ Lists below only mention user-visible changes, but the full list of contributors
 for this release also includes TK
 
 ### Added
+- Ability to sort feedlist by latest unread (#2492) (Daniel Lublin)
 ### Changed
 - Bumped minimum supported Rust version to 1.81.0
 ### Deprecated
