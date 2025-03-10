@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-03-09 20:05+0300\n"
-"PO-Revision-Date: 2024-12-08 19:57+0100\n"
+"PO-Revision-Date: 2025-03-09 22:39+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -309,9 +309,9 @@ msgid "%N %V - URLs"
 msgstr "%N %V - Odnośniki"
 
 #: src/configcontainer.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "unknown config option: %s"
-msgstr "nieznany kontekst: %s"
+msgstr "nieznana opcja: %s"
 
 #: src/configdata.cpp:54
 #, c-format
@@ -971,9 +971,9 @@ msgid "usage: set <config-option> <value>"
 msgstr "użycie: set <opcja> <wartość>"
 
 #: src/formaction.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "error setting '%s' to '%s': %s"
-msgstr "Błąd podczas wyszukiwania `%s': %s"
+msgstr "błąd ustawienia '%s' na '%s': %s"
 
 #: src/formaction.cpp:261
 msgid "usage: set <variable>[=<value>]"
