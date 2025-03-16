@@ -277,6 +277,50 @@ TEST_CASE("handle_action() for bind", "[KeyMap]")
 	}
 }
 
+TEST_CASE("handle_action() for unbind-key", "[KeyMap]")
+{
+	KeyMap k(KM_NEWSBOAT);
+
+	GIVEN("A multi-key binding specifying 'a' followed by ENTER") {
+		k.handle_action("bind", "a<ENTER> feedlist open");
+
+		const std::string context = "feedlist";
+		MultiKeyBindingState binding_state{};
+		BindingType type{};
+
+		WHEN("'a' key is unbound") {
+			k.handle_action("unbind-key", "a");
+
+			THEN("no binding is found") {
+				const std::vector<KeyCombination> key_sequence = { KeyCombination("a"), KeyCombination("ENTER") };
+				k.get_operation(key_sequence, context, binding_state, type);
+
+				REQUIRE(binding_state == MultiKeyBindingState::NotFound);
+			}
+		}
+
+		WHEN("a different key is unbound") {
+			k.handle_action("unbind-key", "b");
+
+			THEN("the binding is found") {
+				const std::vector<KeyCombination> key_sequence = { KeyCombination("a"), KeyCombination("ENTER") };
+				k.get_operation(key_sequence, context, binding_state, type);
+
+				REQUIRE(binding_state == MultiKeyBindingState::Found);
+			}
+		}
+	}
+
+	SECTION("unbind-key uses 'old style key binding' special key syntax") {
+		REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
+
+		// New style `bind` would specify this as `<ENTER>` instead
+		k.handle_action("unbind-key", "ENTER");
+
+		check_unbound(k, KeyCombination("ENTER"), "feedlist");
+	}
+}
+
 TEST_CASE("verify get_keymap_descriptions() behavior",
 	"[KeyMap]")
 {
