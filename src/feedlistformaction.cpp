@@ -127,11 +127,11 @@ REDO:
 		// i18n: This string is related to the letters in parentheses in the
 		// "Sort by (f)irsttag/..." and "Reverse Sort by
 		// (f)irsttag/..." messages
-		std::string input_options = _("ftauln");
+		std::string input_options = _("ftaulsn");
 		char c = v.confirm(
 				_("Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
-					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
+					"(u)nreadarticlecount/(l)astupdated/late(s)tunread/(n)one?"),
 				input_options);
 		if (!c) {
 			break;
@@ -162,16 +162,19 @@ REDO:
 			cfg->set_configvalue(
 				"feed-sort-order", "lastupdated-desc");
 		} else if (c == input_options.at(5)) {
+			cfg->set_configvalue(
+				"feed-sort-order", "latestunread-desc");
+		} else if (c == input_options.at(6)) {
 			cfg->set_configvalue("feed-sort-order", "none-desc");
 		}
 	}
 	break;
 	case OP_REVSORT: {
-		std::string input_options = _("ftauln");
+		std::string input_options = _("ftaulsn");
 		char c = v.confirm(
 				_("Reverse Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
-					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
+					"(u)nreadarticlecount/(l)astupdated/late(s)tunread/(n)one?"),
 				input_options);
 		if (!c) {
 			break;
@@ -201,6 +204,9 @@ REDO:
 			cfg->set_configvalue(
 				"feed-sort-order", "lastupdated-asc");
 		} else if (c == input_options.at(5)) {
+			cfg->set_configvalue(
+				"feed-sort-order", "latestunread-asc");
+		} else if (c == input_options.at(6)) {
 			cfg->set_configvalue("feed-sort-order", "none-asc");
 		}
 	}
