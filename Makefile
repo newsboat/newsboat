@@ -25,7 +25,7 @@ DEFINES=-DLOCALEDIR='"$(localedir)"' -DCATCH_AMALGAMATED_CUSTOM_MAIN
 WARNFLAGS=-Werror -Wall -Wextra -Wunreachable-code
 INCLUDES=-Iinclude -Istfl -Ifilter -I. -Irss -I$(CARGO_TARGET_DIR)/cxxbridge/
 # Keep in sync with c++ version specified in FFI build.rs
-BARE_CXXFLAGS=-std=c++14 -O2 -ggdb $(INCLUDES)
+BARE_CXXFLAGS=-std=c++17 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
 # Constants
