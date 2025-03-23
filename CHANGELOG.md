@@ -1,17 +1,51 @@
 # Changes for Newsboat
 
-## Unreleased - expected 2025-03-24
-
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes TK
+## 2.39 - 2025-03-23
 
 ### Added
+
+- New `bind` command, which is an improvement on both `bind-key` and `macro`.
+    It allows multi-key bindings (that's new!) which execute one or more actions
+    (similar to macros), and can have a description that'll be displayed in the
+    help dialog (that's new too!). It also offers an additional syntax for
+    specifying keys: instead of `^R`, one can write `<C-r>`. Multi-key bindings
+    are slightly limited in that bindings with same prefix must all be the same
+    length to avoid ambiguity when executing them (if I had bindings `for` and
+    `fork`, and typed `for`, Newsboat wouldn't know if that's it or I'm going to
+    type `k` next) (#1165) (Dennis van der Schagt, Alexander Batischev, Lysander
+    Trischler)
+- contrib/newsboat-idlefeeds.sh: a script to show feeds that weren't updated in
+    a given amount of time (T3SQ8)
+
 ### Changed
+
+- Highlighting in the help form is now case-insensitive (#2998) (Juho Eerola)
+- Updated translations: Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Swedish (Dennis Öberg),
+    Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.81.0
+
 ### Deprecated
+
+- Compilers that don't support C++17. This release compiles with `-std=c++17`,
+    but only for compatibility with header files of libicu 75+; Newsboat itself
+    only uses C++14 for now. The next release might start using C++17 features,
+    so please open an issue if that'll cause problems for you (#3031) (Alexander
+    Batischev)
+
 ### Removed
+
+- Support for Clang 4, because it doesn't accept `-std=c++17` (#3031) (Alexander
+    Batischev)
+
 ### Fixed
-### Security
+
+- Crash when setting a non-existent variable (#2989) (Dennis van der Schagt)
+- Highlights not displayed for searches that contain less-than sign, due to
+    errors in quoting (#3008) (Juho Eerola)
+- Building with libicu 75+, which requires C++17. libicu is an indirect
+    dependency of Newsboat via libxml2 (#3031) (Alexander Batischev)
 
 
 
