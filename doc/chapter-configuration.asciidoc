@@ -121,7 +121,7 @@ configuration.
 
 === Key Bindings
 
-_Supported since Newsboat 2.39._
+_New style key bindings described here are supported since Newsboat 2.39._
 
 You can bind a key (or sequence of keys) to an operation (or a list of operations)
 with the <<bind,`bind`>> configuration command.
@@ -129,6 +129,35 @@ with the <<bind,`bind`>> configuration command.
 The syntax for a binding looks like this:
 
     bind <key-sequence> <dialog>[,<dialog>] <operation-list> [-- "<description>"]
+
+
+[WARNING]
+.Limitations
+====
+Bindings that share a prefix must all have the same length; otherwise, only the
+last binding is created.
+
+For example:
+
+```
+bind ab everywhere …
+bind abc everywhere …
+```
+
+will only create a binding for `abc`. Re-ordering the commands will create
+a binding for `ab`.
+
+This avoids ambiguity when `ab` is typed and Newsboat doesn't know if it should
+run the binding for `ab` already or the user is going to press `c` next,
+triggering the other binding.
+
+To have both bindings, either:
+
+* rename them to have different prefixes (e.g. `ab` and `bcd`), or
+
+* make them the same length (e.g. rename `ab` to `abd` to match the length of
+  `abc`).
+====
 
 *Key Sequence*
 
