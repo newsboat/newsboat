@@ -237,14 +237,6 @@ task:
                 cxx_package: g++-14
                 cc: gcc-14
                 cxx: g++-14
-        - name: Rust stable, Clang 4.0 (Ubuntu 18.04)
-          container:
-            greedy: true
-            dockerfile: docker/ubuntu_18.04-build-tools.dockerfile
-            docker_arguments:
-                cxx_package: clang-4.0
-                cc: clang-4.0
-                cxx: clang++-4.0
         - name: Rust stable, Clang 5.0 (Ubuntu 18.04)
           container:
             greedy: true
