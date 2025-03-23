@@ -202,7 +202,8 @@ bool FileBrowserFormAction::process_operation(Operation op,
 		set_value("filenametext", "");
 		break;
 	default:
-		break;
+		report_unhandled_operation(op);
+		return false;
 	}
 	return true;
 }

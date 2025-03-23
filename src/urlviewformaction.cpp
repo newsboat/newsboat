@@ -92,10 +92,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 		hardquit = true;
 		break;
 	default:
-		if (handle_list_operations(urls_list, op)) {
-			break;
-		}
-		break;
+		return handle_list_operations(urls_list, op);
 	}
 	if (hardquit) {
 		while (v.formaction_stack_size() > 0) {

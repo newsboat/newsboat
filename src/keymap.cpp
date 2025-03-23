@@ -998,6 +998,15 @@ Operation KeyMap::get_opcode(const std::string& opstr)
 	}
 	return OP_NIL;
 }
+std::string KeyMap::get_op_name(Operation op)
+{
+	for (const auto& opdesc : opdescs) {
+		if (opdesc.op == op) {
+			return opdesc.opstr;
+		}
+	}
+	return "";
+}
 
 char KeyMap::get_key(const std::string& keycode)
 {

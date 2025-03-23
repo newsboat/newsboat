@@ -119,10 +119,7 @@ bool SelectFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
-		if (handle_list_operations(tags_list, op)) {
-			break;
-		}
-		break;
+		return handle_list_operations(tags_list, op);
 	}
 
 	if (hardquit) {

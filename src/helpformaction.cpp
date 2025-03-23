@@ -47,10 +47,7 @@ bool HelpFormAction::process_operation(Operation op,
 		do_redraw = true;
 		break;
 	default:
-		if (handle_textview_operations(textview, op)) {
-			break;
-		}
-		break;
+		return handle_textview_operations(textview, op);
 	}
 	if (hardquit) {
 		while (v.formaction_stack_size() > 0) {
