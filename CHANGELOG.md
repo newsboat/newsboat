@@ -1,5 +1,9 @@
 # Changes for Newsboat
 
+## Unreleased
+
+- Ability to sort feedlist by latest unread (#2492) (Daniel Lublin)
+
 ## 2.39 - 2025-03-23
 
 ### Added
