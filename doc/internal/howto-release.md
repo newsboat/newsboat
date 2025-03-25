@@ -168,7 +168,7 @@ branch off the latest release and backport the bugfixes onto it.
         * mention this in "Changed" section of the changelog.
     * Commit and submit a PR:
 
-        git checkout -b feature/prepare-next-release
+        git switch -c feature/prepare-next-release
         git commit -am'Prepare for next release'
         git push origin -u feature/prepare-next-release
 3. If it's September, bump the expiry date on the OpenPGP key:
