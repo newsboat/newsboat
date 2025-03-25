@@ -75,7 +75,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
   headers via libxml2. Newsboat 2.40 (ETA 2025.06.22) is expected to require
   a compiler that _supports_ C{plus}{plus}17
 - Stable https://www.rust-lang.org/en-US/[Rust] and Cargo (Rust's package
-  manager) (1.81.0 or newer; might work with older versions, but we don't check
+  manager) (1.83.0 or newer; might work with older versions, but we don't check
   that)
 - https://github.com/newsboat/stfl[STFL (version 0.21 or newer)] (the link
   points to our own fork because http://www.clifford.at/stfl/[the upstream] is
