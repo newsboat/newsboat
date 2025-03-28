@@ -54,7 +54,7 @@ void FilterContainer::dump_config(std::vector<std::string>& config_output) const
 	}
 }
 
-nonstd::optional<std::string> FilterContainer::get_filter(const std::string& name)
+std::optional<std::string> FilterContainer::get_filter(const std::string& name)
 {
 	const auto filter = std::find_if(filters.begin(),
 	filters.end(), [&](const FilterNameExprPair& pair) {

@@ -4,12 +4,12 @@
 #include <cstdint>
 #include <curl/curl.h>
 #include <libxml/parser.h>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include "3rd-party/expected.hpp"
-#include "3rd-party/optional.hpp"
 
 #include "configcontainer.h"
 
@@ -40,7 +40,7 @@ std::vector<std::string> tokenize_nl(const std::string& str,
 	std::string delimiters = "\r\n");
 std::vector<std::string> tokenize_quoted(const std::string& str,
 	std::string delimiters = " \r\n\t");
-nonstd::optional<std::string> extract_token_quoted(std::string& str,
+std::optional<std::string> extract_token_quoted(std::string& str,
 	std::string delimiters = " \r\n\t");
 
 std::string consolidate_whitespace(const std::string& str);
@@ -139,10 +139,10 @@ int mkdir_parents(const std::string& pathname,
 
 std::string make_title(const std::string& url);
 
-nonstd::optional<std::uint8_t> run_interactively(const std::string& command,
+std::optional<std::uint8_t> run_interactively(const std::string& command,
 	const std::string& caller);
 
-nonstd::optional<std::uint8_t> run_non_interactively(const std::string& command,
+std::optional<std::uint8_t> run_non_interactively(const std::string& command,
 	const std::string& caller);
 
 std::string getcwd();
@@ -162,7 +162,7 @@ void remove_soft_hyphens(std::string& text);
 
 bool is_valid_podcast_type(const std::string& mimetype);
 
-nonstd::optional<LinkType> podcast_mime_to_link_type(const std::string&
+std::optional<LinkType> podcast_mime_to_link_type(const std::string&
 	mimetype);
 
 std::string string_from_utf8_lossy(const std::vector<std::uint8_t>& text);

@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_FEEDLISTFORMACTION_H_
 #define NEWSBOAT_FEEDLISTFORMACTION_H_
 
-#include "3rd-party/optional.hpp"
+#include <optional>
 
 #include "configcontainer.h"
 #include "history.h"
@@ -106,7 +106,7 @@ private:
 
 	FilterContainer& filter_container;
 
-	nonstd::optional<FeedSortStrategy> old_sort_strategy;
+	std::optional<FeedSortStrategy> old_sort_strategy;
 
 	Cache* cache;
 };

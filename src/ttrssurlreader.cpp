@@ -15,7 +15,7 @@ TtRssUrlReader::TtRssUrlReader(const std::string& url_file, RemoteApi* a)
 
 TtRssUrlReader::~TtRssUrlReader() {}
 
-nonstd::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
+std::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

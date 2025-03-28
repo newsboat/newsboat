@@ -2,8 +2,7 @@
 #define NEWSBOAT_LISTFORMACTION_H_
 
 #include <cstdint>
-
-#include "3rd-party/optional.hpp"
+#include <optional>
 
 #include "formaction.h"
 #include "listwidget.h"
@@ -22,7 +21,7 @@ protected:
 	bool process_operation(Operation op,
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey) override;
-	nonstd::optional<std::uint8_t> open_unread_items_in_browser(
+	std::optional<std::uint8_t> open_unread_items_in_browser(
 		std::shared_ptr<RssFeed> feed,
 		bool markread);
 

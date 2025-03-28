@@ -58,12 +58,12 @@ bool ListFormAction::process_operation(Operation op,
 	return true;
 }
 
-nonstd::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
+std::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 	std::shared_ptr<RssFeed> feed,
 	bool markread)
 {
 	int tabcount = 0;
-	nonstd::optional<std::uint8_t> return_value = 0;
+	std::optional<std::uint8_t> return_value = 0;
 	std::vector<std::string> guids_of_read_articles;
 	for (const auto& item : feed->items()) {
 		if (tabcount <

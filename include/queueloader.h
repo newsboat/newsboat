@@ -2,9 +2,8 @@
 #define PODBOAT_QUEUELOADER_H_
 
 #include <functional>
+#include <optional>
 #include <vector>
-
-#include "3rd-party/optional.hpp"
 
 #include "configcontainer.h"
 #include "download.h"
@@ -52,7 +51,7 @@ private:
 	/// Returns:
 	/// - nullopt if one of the downloads is currently being downloaded;
 	/// - otherwise, a struct with categorized downloads.
-	static nonstd::optional<CategorizedDownloads> categorize_downloads(
+	static std::optional<CategorizedDownloads> categorize_downloads(
 		const std::vector<Download>& downloads, bool also_remove_finished);
 
 	/// Adds downloads from the queue file to the "to keep" category.
