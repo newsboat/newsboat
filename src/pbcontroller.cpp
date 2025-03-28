@@ -4,6 +4,7 @@
 #include <cstring>
 #include <getopt.h>
 #include <iostream>
+#include <optional>
 #include <pwd.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -12,7 +13,6 @@
 #include <thread>
 #include <unistd.h>
 
-#include "3rd-party/optional.hpp"
 #include "config.h"
 #include "configcontainer.h"
 #include "configexception.h"
@@ -188,8 +188,8 @@ void PbController::initialize(int argc, char* argv[])
 		{"version", no_argument, 0, 'v'},
 		{0, 0, 0, 0}
 	};
-	nonstd::optional<Level> log_level;
-	nonstd::optional<std::string> log_file;
+	std::optional<Level> log_level;
+	std::optional<std::string> log_file;
 
 	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) !=
 		-1) {

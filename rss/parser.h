@@ -3,9 +3,9 @@
 
 #include <curl/curl.h>
 #include <libxml/parser.h>
+#include <optional>
 #include <string>
 
-#include "3rd-party/optional.hpp"
 #include "remoteapi.h"
 #include "feed.h"
 
@@ -33,7 +33,7 @@ public:
 		newsboat::RemoteApi* api = 0,
 		const std::string& cookie_cache = "");
 	Feed parse_buffer(const std::string& buffer,
-		const std::string& url = "", nonstd::optional<std::string> charset = nonstd::nullopt);
+		const std::string& url = "", std::optional<std::string> charset = std::nullopt);
 	Feed parse_file(const std::string& filename);
 	time_t get_last_modified()
 	{

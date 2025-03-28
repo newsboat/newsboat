@@ -51,7 +51,7 @@ namespace newsboat {
 struct OpDesc {
 	const Operation op;
 	const std::string opstr;
-	const nonstd::optional<KeyCombination> default_key;
+	const std::optional<KeyCombination> default_key;
 	const std::string help_text;
 	const unsigned short flags;
 };
@@ -835,7 +835,7 @@ std::vector<HelpBindInfo> KeyMap::get_help_info_bindings(std::set<Operation>&
 	std::vector<HelpBindInfo> help_info;
 	if (mapping.is_leaf_node) {
 		const auto& action = mapping.action;
-		nonstd::optional<std::string> action_str;
+		std::optional<std::string> action_str;
 		std::size_t order_pos = opdescs.size();
 		std::string description;
 		if (action.cmds.size() == 1 && action.cmds.front().args.empty()) {

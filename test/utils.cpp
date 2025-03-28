@@ -1157,7 +1157,7 @@ TEST_CASE("run_interactively runs a command with inherited I/O", "[utils]")
 	}
 
 	// Unfortunately, there is no easy way to provoke this function to return
-	// `nonstd::nullopt`, nor to test that it returns just the lower 8 bits.
+	// `std::nullopt`, nor to test that it returns just the lower 8 bits.
 }
 
 TEST_CASE("run_non_interactively runs a command without I/O", "[utils]")
@@ -1172,7 +1172,7 @@ TEST_CASE("run_non_interactively runs a command without I/O", "[utils]")
 	}
 
 	// Unfortunately, there is no easy way to provoke this function to return
-	// `nonstd::nullopt`, nor to test that it returns just the lower 8 bits.
+	// `std::nullopt`, nor to test that it returns just the lower 8 bits.
 }
 
 TEST_CASE("run_non_interactively waits for program to finish", "[utils]")
@@ -1491,7 +1491,7 @@ TEST_CASE("podcast_mime_to_link_type() returns HtmlRenderer's LinkType that "
 
 	SECTION("Sets `ok` to `false` if given MIME type is not a podcast type") {
 		const auto check = [](std::string mime) {
-			REQUIRE(utils::podcast_mime_to_link_type(mime) == nonstd::nullopt);
+			REQUIRE(utils::podcast_mime_to_link_type(mime) == std::nullopt);
 		};
 
 		check("image/jpeg");

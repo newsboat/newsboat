@@ -14,7 +14,7 @@ FeedbinUrlReader::FeedbinUrlReader(const std::string& url_file, RemoteApi* a)
 {
 }
 
-nonstd::optional<utils::ReadTextFileError> FeedbinUrlReader::reload()
+std::optional<utils::ReadTextFileError> FeedbinUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

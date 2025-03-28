@@ -53,22 +53,22 @@ std::string CliArgsParser::importfile() const
 	return std::string(newsboat::cliargsparser::bridged::importfile(*rs_object));
 }
 
-nonstd::optional<std::string> CliArgsParser::readinfo_import_file() const
+std::optional<std::string> CliArgsParser::readinfo_import_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::readinfo_import_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::readinfo_export_file() const
+std::optional<std::string> CliArgsParser::readinfo_export_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::readinfo_export_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 std::string CliArgsParser::program_name() const
@@ -91,13 +91,13 @@ bool CliArgsParser::using_nonstandard_configs() const
 	return newsboat::cliargsparser::bridged::using_nonstandard_configs(*rs_object);
 }
 
-nonstd::optional<int> CliArgsParser::return_code() const
+std::optional<int> CliArgsParser::return_code() const
 {
 	rust::isize code = 0;
 	if (newsboat::cliargsparser::bridged::return_code(*rs_object, code)) {
 		return static_cast<int>(code);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 std::string CliArgsParser::display_msg() const
@@ -115,67 +115,67 @@ bool CliArgsParser::refresh_on_start() const
 	return newsboat::cliargsparser::bridged::refresh_on_start(*rs_object);
 }
 
-nonstd::optional<std::string> CliArgsParser::url_file() const
+std::optional<std::string> CliArgsParser::url_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::url_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::lock_file() const
+std::optional<std::string> CliArgsParser::lock_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::lock_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::cache_file() const
+std::optional<std::string> CliArgsParser::cache_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::cache_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::config_file() const
+std::optional<std::string> CliArgsParser::config_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::config_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::queue_file() const
+std::optional<std::string> CliArgsParser::queue_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::queue_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::search_history_file() const
+std::optional<std::string> CliArgsParser::search_history_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::search_history_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::string> CliArgsParser::cmdline_history_file() const
+std::optional<std::string> CliArgsParser::cmdline_history_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::cmdline_history_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 std::vector<std::string> CliArgsParser::cmds_to_execute()
@@ -191,22 +191,22 @@ const
 	return cmds;
 }
 
-nonstd::optional<std::string> CliArgsParser::log_file() const
+std::optional<std::string> CliArgsParser::log_file() const
 {
 	rust::String path;
 	if (newsboat::cliargsparser::bridged::log_file(*rs_object, path)) {
 		return std::string(path);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<Level> CliArgsParser::log_level() const
+std::optional<Level> CliArgsParser::log_level() const
 {
 	std::int8_t level;
 	if (newsboat::cliargsparser::bridged::log_level(*rs_object, level)) {
 		return static_cast<Level>(level);
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 const cliargsparser::bridged::CliArgsParser& CliArgsParser::get_rust_ref() const

@@ -164,7 +164,7 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	return std::shared_ptr<RssItem>(new RssItem(ch));
 }
 
-nonstd::optional<std::string> RssFeed::attribute_value(const std::string&
+std::optional<std::string> RssFeed::attribute_value(const std::string&
 	attribname) const
 {
 	if (attribname == "feedtitle") {
@@ -203,7 +203,7 @@ nonstd::optional<std::string> RssFeed::attribute_value(const std::string&
 		}
 		return "0";
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)

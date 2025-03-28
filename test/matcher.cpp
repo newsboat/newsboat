@@ -20,7 +20,7 @@ public:
 		: m_data(data)
 	{}
 
-	nonstd::optional<std::string> attribute_value(const std::string& attribname)
+	std::optional<std::string> attribute_value(const std::string& attribname)
 	const override
 	{
 		const auto it = m_data.find(attribname);
@@ -28,7 +28,7 @@ public:
 			return it->second;
 		}
 
-		return nonstd::nullopt;
+		return std::nullopt;
 	}
 
 private:

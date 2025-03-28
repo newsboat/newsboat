@@ -64,7 +64,7 @@ std::vector<std::string> utils::tokenize_quoted(const std::string& str,
 	return result;
 }
 
-nonstd::optional<std::string> utils::extract_token_quoted(std::string& str,
+std::optional<std::string> utils::extract_token_quoted(std::string& str,
 	std::string delimiters)
 {
 	rust::String remaining = str;
@@ -705,7 +705,7 @@ std::string utils::make_title(const std::string& const_url)
 	return std::string(utils::bridged::make_title(const_url));
 }
 
-nonstd::optional<std::uint8_t> utils::run_interactively(
+std::optional<std::uint8_t> utils::run_interactively(
 	const std::string& command,
 	const std::string& caller)
 {
@@ -714,10 +714,10 @@ nonstd::optional<std::uint8_t> utils::run_interactively(
 		return exit_code;
 	}
 
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
-nonstd::optional<std::uint8_t> utils::run_non_interactively(
+std::optional<std::uint8_t> utils::run_non_interactively(
 	const std::string& command,
 	const std::string& caller)
 {
@@ -726,7 +726,7 @@ nonstd::optional<std::uint8_t> utils::run_non_interactively(
 		return exit_code;
 	}
 
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 std::string utils::getcwd()
@@ -778,7 +778,7 @@ bool utils::is_valid_podcast_type(const std::string& mimetype)
 	return utils::bridged::is_valid_podcast_type(mimetype);
 }
 
-nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
+std::optional<LinkType> utils::podcast_mime_to_link_type(
 	const std::string& mimetype)
 {
 	std::int64_t result = 0;
@@ -786,7 +786,7 @@ nonstd::optional<LinkType> utils::podcast_mime_to_link_type(
 		return static_cast<LinkType>(result);
 	}
 
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 std::string utils::string_from_utf8_lossy(const std::vector<std::uint8_t>& text)

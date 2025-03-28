@@ -201,7 +201,7 @@ void rec_find_rss_outlines(
 	}
 }
 
-nonstd::optional<std::string> opml::import(
+std::optional<std::string> opml::import(
 	const std::string& filename,
 	FileUrlReader& urlcfg)
 {
@@ -210,7 +210,7 @@ nonstd::optional<std::string> opml::import(
 		return strprintf::fmt(_("Error: failed to parse OPML file \"%s\""), filename);
 	}
 
-	nonstd::optional<std::string> error_message;
+	std::optional<std::string> error_message;
 
 	xmlNode* root = xmlDocGetRootElement(doc);
 	for (xmlNode* node = root->children; node != nullptr;
