@@ -16,7 +16,7 @@ class NewsBlurUrlReader : public UrlReader {
 public:
 	NewsBlurUrlReader(const std::string& url_file, RemoteApi* a);
 	~NewsBlurUrlReader() override;
-	nonstd::optional<utils::ReadTextFileError> reload() override;
+	std::optional<utils::ReadTextFileError> reload() override;
 	std::string get_source() override;
 
 private:

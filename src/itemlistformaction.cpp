@@ -4,11 +4,11 @@
 #include <cstdio>
 #include <cstring>
 #include <langinfo.h>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
 
-#include "3rd-party/optional.hpp"
 
 #include "config.h"
 #include "controller.h"
@@ -176,7 +176,7 @@ bool ItemListFormAction::process_operation(Operation op,
 
 			// We can't just `const auto exit_code = ...` here because this
 			// triggers -Wmaybe-initialized in GCC 9 with -O2.
-			nonstd::optional<std::uint8_t> exit_code;
+			std::optional<std::uint8_t> exit_code;
 			exit_code = open_unread_items_in_browser(feed, false);
 
 			if (!exit_code.has_value()) {
@@ -199,7 +199,7 @@ bool ItemListFormAction::process_operation(Operation op,
 
 			// We can't just `const auto exit_code = ...` here because this
 			// triggers -Wmaybe-initialized in GCC 9 with -O2.
-			nonstd::optional<std::uint8_t> exit_code;
+			std::optional<std::uint8_t> exit_code;
 			exit_code = open_unread_items_in_browser(feed, true);
 
 			if (!exit_code.has_value()) {
@@ -406,7 +406,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
-			nonstd::optional<std::string> filename;
+			std::optional<std::string> filename;
 			switch (bindingType) {
 			case BindingType::Bind:
 				if (args.empty()) {
@@ -1470,7 +1470,7 @@ void ItemListFormAction::restore_selected_position()
 
 }
 
-void ItemListFormAction::save_article(const nonstd::optional<std::string>& filename,
+void ItemListFormAction::save_article(const std::optional<std::string>& filename,
 	std::shared_ptr<RssItem> item)
 {
 	if (!filename.has_value()) {
@@ -1596,7 +1596,7 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	nonstd::optional<std::string> directory = v.run_dirbrowser();
+	std::optional<std::string> directory = v.run_dirbrowser();
 
 	if (!directory.has_value()) {
 		return;

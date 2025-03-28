@@ -480,13 +480,13 @@ TEST_CASE("RegexManager doesn't throw on valid `highlight-feed' definition",
 
 struct RegexManagerMockMatchable : public Matchable {
 public:
-	nonstd::optional<std::string> attribute_value(const std::string& attribname)
+	std::optional<std::string> attribute_value(const std::string& attribname)
 	const override
 	{
 		if (attribname == "attr") {
 			return "val";
 		}
-		return nonstd::nullopt;
+		return std::nullopt;
 	}
 };
 
