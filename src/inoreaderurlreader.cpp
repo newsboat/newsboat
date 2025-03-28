@@ -38,7 +38,7 @@ InoreaderUrlReader::~InoreaderUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-nonstd::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
+std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

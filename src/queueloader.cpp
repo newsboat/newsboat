@@ -45,7 +45,7 @@ void QueueLoader::reload(std::vector<Download>& downloads,
 	downloads = std::move(categorized_downloads.to_keep);
 }
 
-nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloads(
+std::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloads(
 	const std::vector<Download>& downloads,
 	bool also_remove_finished)
 {
@@ -57,7 +57,7 @@ nonstd::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_down
 			LOG(Level::INFO,
 				"QueueLoader::reload: aborting reload due to "
 				"DlStatus::DOWNLOADING status");
-			return nonstd::nullopt;
+			return std::nullopt;
 		}
 		bool keep_entry = false;
 		switch (dl.status()) {

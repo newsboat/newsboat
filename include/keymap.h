@@ -2,11 +2,11 @@
 #define NEWSBOAT_KEYMAP_H_
 
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
 
-#include "3rd-party/optional.hpp"
 #include "configactionhandler.h"
 #include "keycombination.h"
 
@@ -193,7 +193,7 @@ struct Mapping {
 
 struct HelpBindInfo {
 	std::string key_sequence;
-	nonstd::optional<std::string> op_name;
+	std::optional<std::string> op_name;
 	std::size_t op_order_pos;
 	std::string description;
 };

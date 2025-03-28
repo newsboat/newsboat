@@ -3,10 +3,9 @@
 
 #include <cstdint>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <vector>
-
-#include "3rd-party/optional.hpp"
 
 #include "formaction.h"
 #include "links.h"
@@ -83,13 +82,13 @@ public:
 		const std::string& phrase = "");
 	void view_dialogs();
 
-	nonstd::optional<std::string> run_filebrowser(const std::string& default_filename = "");
-	nonstd::optional<std::string> run_dirbrowser();
+	std::optional<std::string> run_filebrowser(const std::string& default_filename = "");
+	std::optional<std::string> run_dirbrowser();
 	std::string select_tag(const std::string& current_tag);
 	std::string select_filter(
 		const std::vector<FilterNameExprPair>& filters);
 
-	nonstd::optional<std::uint8_t> open_in_browser(const std::string& url,
+	std::optional<std::uint8_t> open_in_browser(const std::string& url,
 		const std::string& feedurl, const std::string& type, const std::string& title,
 		bool interactive);
 	void open_in_pager(const std::string& filename);

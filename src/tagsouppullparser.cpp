@@ -28,7 +28,7 @@ TagSoupPullParser::TagSoupPullParser(std::istream& is)
 
 TagSoupPullParser::~TagSoupPullParser() {}
 
-nonstd::optional<std::string> TagSoupPullParser::get_attribute_value(
+std::optional<std::string> TagSoupPullParser::get_attribute_value(
 	const std::string& name) const
 {
 	for (const auto& attr : attributes) {
@@ -36,7 +36,7 @@ nonstd::optional<std::string> TagSoupPullParser::get_attribute_value(
 			return attr.second;
 		}
 	}
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 TagSoupPullParser::Event TagSoupPullParser::get_event_type() const
@@ -113,12 +113,12 @@ void TagSoupPullParser::add_attribute(std::string s)
 	attributes.push_back(Attribute(attribname, attribvalue));
 }
 
-nonstd::optional<std::string> TagSoupPullParser::read_tag()
+std::optional<std::string> TagSoupPullParser::read_tag()
 {
 	std::string s;
 	getline(inputstream, s, '>');
 	if (inputstream.eof()) {
-		return nonstd::nullopt;
+		return std::nullopt;
 	}
 	return s;
 }
