@@ -330,13 +330,13 @@ bool ItemViewFormAction::process_operation(Operation op,
 		switch (bindingType) {
 		case BindingType::Bind:
 			if (args.empty()) {
-				qna_responses = { args.front() };
-				this->finished_qna(QnaFinishAction::UpdateFlags);
-			} else {
 				std::vector<QnaPair> qna {
 					QnaPair(_("Flags: "), item->flags()),
 				};
 				this->start_qna(qna, QnaFinishAction::UpdateFlags);
+			} else {
+				qna_responses = { args.front() };
+				this->finished_qna(QnaFinishAction::UpdateFlags);
 			}
 			break;
 		case BindingType::Macro:
