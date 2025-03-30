@@ -26,7 +26,6 @@ FileBrowserFormAction::FileBrowserFormAction(View& vv,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
 	, file_prompt_line(f, "fileprompt")
-	, quit(false)
 	, files_list("files", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 	, view(vv)
 {
