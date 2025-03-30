@@ -329,7 +329,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 	case OP_EDITFLAGS:
 		switch (bindingType) {
 		case BindingType::Bind:
-			if (args.empty()) {
+			if (!args.empty()) {
 				qna_responses = { args.front() };
 				this->finished_qna(QnaFinishAction::UpdateFlags);
 			} else {
