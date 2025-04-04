@@ -14,7 +14,7 @@ public:
 		const std::string& url_file,
 		RemoteApi* a);
 	virtual ~InoreaderUrlReader();
-	virtual nonstd::optional<utils::ReadTextFileError> reload();
+	virtual std::optional<utils::ReadTextFileError> reload();
 	virtual std::string get_source();
 
 private:

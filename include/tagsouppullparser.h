@@ -1,11 +1,10 @@
 #ifndef NEWSBOAT_TAGSOUPPULLPARSER_H_
 #define NEWSBOAT_TAGSOUPPULLPARSER_H_
 
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include "3rd-party/optional.hpp"
 
 namespace newsboat {
 
@@ -21,7 +20,7 @@ public:
 
 	explicit TagSoupPullParser(std::istream& is);
 	virtual ~TagSoupPullParser();
-	nonstd::optional<std::string> get_attribute_value(const std::string& name) const;
+	std::optional<std::string> get_attribute_value(const std::string& name) const;
 	Event get_event_type() const;
 	std::string get_text() const;
 	Event next();
@@ -35,7 +34,7 @@ private:
 	Event current_event;
 
 	void add_attribute(std::string s);
-	nonstd::optional<std::string> read_tag();
+	std::optional<std::string> read_tag();
 	Event determine_tag_type();
 	std::string decode_attribute(const std::string& s);
 	std::string decode_entities(const std::string& s);

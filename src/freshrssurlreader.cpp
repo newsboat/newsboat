@@ -20,7 +20,7 @@ FreshRssUrlReader::FreshRssUrlReader(ConfigContainer* c,
 
 FreshRssUrlReader::~FreshRssUrlReader() {}
 
-nonstd::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
+std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

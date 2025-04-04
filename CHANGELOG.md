@@ -5,6 +5,7 @@
 ### Added
 ### Changed
 - Bumped minimum supported Rust version to 1.83.0
+- Bumped minimum supported GCC version to GCC 7
 ### Deprecated
 ### Removed
 ### Fixed

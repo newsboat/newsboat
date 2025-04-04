@@ -126,7 +126,7 @@ public:
 	void update_flags();
 	void sort_flags();
 
-	nonstd::optional<std::string> attribute_value(const std::string& attr) const
+	std::optional<std::string> attribute_value(const std::string& attr) const
 	override;
 
 	void set_feedptr(std::shared_ptr<RssFeed> ptr);
@@ -198,7 +198,7 @@ private:
 	bool override_unread_;
 
 	mutable std::mutex description_mutex;
-	nonstd::optional<Description> description_;
+	std::optional<Description> description_;
 };
 
 } // namespace newsboat
