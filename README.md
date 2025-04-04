@@ -64,10 +64,7 @@ Newsboat can be compiled.
     UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
 -->
 - GNU Make 4.0 or newer
-- C++ compiler that accepts `-std=c++17` option: GCC 5.0 or newer, or Clang 5 or
-  newer. If you have libicu 76 or newer, than C++17 support is required as
-  Newsboat indirectly depends on libicu headers via libxml2. Newsboat 2.40 (ETA
-  2025.06.22) is expected to require a compiler that _supports_ C++17
+- C++17 compiler: GCC 7.0 or newer, or Clang 5 or newer
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
     manager) (1.83.0 or newer; might work with older versions, but we don't
     check that)

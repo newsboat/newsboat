@@ -69,11 +69,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 
 // UPDATE README.md IF YOU CHANGE THIS LIST
 - GNU Make 4.0 or newer
-- C{plus}{plus} compiler that accepts `-std=c{plus}{plus}17` option: GCC 5.0 or
-  newer, or Clang 5 or newer. If you have libicu 76 or newer, than
-  C{plus}{plus}17 support is required as Newsboat indirectly depends on libicu
-  headers via libxml2. Newsboat 2.40 (ETA 2025.06.22) is expected to require
-  a compiler that _supports_ C{plus}{plus}17
+- C{plus}{plus}17 compiler: GCC 7.0 or newer, or Clang 5 or newer
 - Stable https://www.rust-lang.org/en-US/[Rust] and Cargo (Rust's package
   manager) (1.83.0 or newer; might work with older versions, but we don't check
   that)
