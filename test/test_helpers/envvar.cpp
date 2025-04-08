@@ -46,12 +46,12 @@ void test_helpers::EnvVar::unset() const
 {
 	::unsetenv(name.c_str());
 	if (on_change_fn) {
-		on_change_fn(nonstd::nullopt);
+		on_change_fn(std::nullopt);
 	}
 }
 
 void test_helpers::EnvVar::on_change(
-	std::function<void(nonstd::optional<std::string>)> fn)
+	std::function<void(std::optional<std::string>)> fn)
 {
 	on_change_fn = std::move(fn);
 }
@@ -59,7 +59,7 @@ void test_helpers::EnvVar::on_change(
 test_helpers::TzEnvVar::TzEnvVar()
 	: EnvVar("TZ", true)
 {
-	on_change([](nonstd::optional<std::string>) {
+	on_change([](std::optional<std::string>) {
 		::tzset();
 	});
 }
@@ -67,7 +67,7 @@ test_helpers::TzEnvVar::TzEnvVar()
 test_helpers::LcCtypeEnvVar::LcCtypeEnvVar()
 	: EnvVar("LC_CTYPE", true)
 {
-	on_change([](nonstd::optional<std::string> new_charset) {
+	on_change([](std::optional<std::string> new_charset) {
 		if (new_charset.has_value()) {
 			::setlocale(LC_CTYPE, new_charset.value().c_str());
 		} else {
@@ -181,7 +181,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 
 		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&valueChanged,
-		&var](nonstd::optional<std::string> new_value) {
+		&var](std::optional<std::string> new_value) {
 			valueChanged = new_value.has_value() && (new_value.value() == ::getenv(var));
 		});
 
@@ -194,7 +194,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 		auto counter = unsigned{};
 
 		test_helpers::EnvVar envVar(var);
-		envVar.on_change([&counter](nonstd::optional<std::string>) {
+		envVar.on_change([&counter](std::optional<std::string>) {
 			counter++;
 		});
 
@@ -215,7 +215,7 @@ TEST_CASE("EnvVar::set() runs a function (set by on_change()) after changing "
 
 		test_helpers::EnvVar envVar(var);
 		envVar.on_change([&expected_new_value,
-		&checks_ok](nonstd::optional<std::string> new_value) {
+		&checks_ok](std::optional<std::string> new_value) {
 			checks_ok = new_value.has_value() && (new_value.value() == expected_new_value);
 		});
 
@@ -326,7 +326,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 		auto value_unset = false;
 
 		test_helpers::EnvVar envVar(var);
-		envVar.on_change([&value_unset, &var](nonstd::optional<std::string> new_value) {
+		envVar.on_change([&value_unset, &var](std::optional<std::string> new_value) {
 			value_unset = !new_value.has_value() && (nullptr == ::getenv(var));
 		});
 
@@ -339,7 +339,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 		auto counter = unsigned{};
 
 		test_helpers::EnvVar envVar(var);
-		envVar.on_change([&counter](nonstd::optional<std::string>) {
+		envVar.on_change([&counter](std::optional<std::string>) {
 			counter++;
 		});
 
@@ -356,7 +356,7 @@ TEST_CASE("EnvVar::unset() runs a function (set by on_change()) after changing "
 		auto checks_ok = false;
 
 		test_helpers::EnvVar envVar(var);
-		envVar.on_change([&checks_ok](nonstd::optional<std::string> new_value) {
+		envVar.on_change([&checks_ok](std::optional<std::string> new_value) {
 			checks_ok = !new_value.has_value();
 		});
 
@@ -386,7 +386,7 @@ TEST_CASE("EnvVar's destructor runs a function (set by on_change()) after "
 
 		{
 			test_helpers::EnvVar envVar(var);
-			envVar.on_change([&counter](nonstd::optional<std::string>) {
+			envVar.on_change([&counter](std::optional<std::string>) {
 				counter++;
 			});
 		}

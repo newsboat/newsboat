@@ -60,13 +60,13 @@ char filetype_to_char(FileType type)
 }
 
 
-nonstd::optional<char> mode_suffix(mode_t mode)
+std::optional<char> mode_suffix(mode_t mode)
 {
 	const auto type = mode_to_filetype(mode);
 
 	switch (type) {
 	case FileType::Unknown:
-		return nonstd::nullopt;
+		return std::nullopt;
 	case FileType::Directory:
 		return '/';
 	case FileType::Symlink:
@@ -84,7 +84,7 @@ nonstd::optional<char> mode_suffix(mode_t mode)
 		}
 	}
 
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 std::string get_user_padded(uid_t uid)

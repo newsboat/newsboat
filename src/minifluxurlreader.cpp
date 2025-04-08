@@ -20,7 +20,7 @@ MinifluxUrlReader::MinifluxUrlReader(ConfigContainer* c,
 
 MinifluxUrlReader::~MinifluxUrlReader() {}
 
-nonstd::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
+std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

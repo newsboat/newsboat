@@ -10,7 +10,7 @@ namespace newsboat {
 
 namespace opml {
 xmlDocPtr generate(const FeedContainer& feedcontainer, bool version2);
-nonstd::optional<std::string> import(
+std::optional<std::string> import(
 	const std::string& filename,
 	FileUrlReader& urlcfg);
 }

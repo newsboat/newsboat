@@ -5,7 +5,7 @@
 namespace newsboat {
 namespace charencoding {
 
-nonstd::optional<std::string> charset_from_bom(std::vector<std::uint8_t> content)
+std::optional<std::string> charset_from_bom(std::vector<std::uint8_t> content)
 {
 	rust::String charset;
 	const auto input = rust::Slice<const std::uint8_t>(content.data(), content.size());
@@ -15,7 +15,7 @@ nonstd::optional<std::string> charset_from_bom(std::vector<std::uint8_t> content
 	return {};
 }
 
-nonstd::optional<std::string> charset_from_xml_declaration(std::vector<std::uint8_t>
+std::optional<std::string> charset_from_xml_declaration(std::vector<std::uint8_t>
 	content)
 {
 	rust::String charset;
@@ -26,7 +26,7 @@ nonstd::optional<std::string> charset_from_xml_declaration(std::vector<std::uint
 	return {};
 }
 
-nonstd::optional<std::string> charset_from_content_type_header(std::vector<std::uint8_t>
+std::optional<std::string> charset_from_content_type_header(std::vector<std::uint8_t>
 	header)
 {
 	rust::String charset;

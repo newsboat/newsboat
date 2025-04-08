@@ -189,7 +189,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 		return enqueue_item_enclosure(*item, *feed, v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
-		nonstd::optional<std::string> filename;
+		std::optional<std::string> filename;
 		switch (bindingType) {
 		case BindingType::Bind:
 			if (args.empty()) {
