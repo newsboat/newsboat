@@ -61,7 +61,7 @@ jobs:
 
       - name: Install grcov
         if: steps.cargo_cache.outputs.cache-hit != 'true'
-        run: cargo install grcov
+        run: cargo install grcov@0.8.24
 
       - name: Run tests
         run: make --jobs=3 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
