@@ -24,8 +24,8 @@
 
 set -e
 
-export CC=clang-18
-export CXX=clang++-18
+export CC=clang-19
+export CXX=clang++-19
 export CXXFLAGS='-O0 -fprofile-instr-generate -fcoverage-mapping'
 export RUSTFLAGS='-Clink-dead-code -Cinstrument-coverage'
 export LLVM_PROFILE_FILE='%h_%m.profraw'
