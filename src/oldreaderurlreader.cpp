@@ -37,7 +37,7 @@ OldReaderUrlReader::~OldReaderUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-nonstd::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
+std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

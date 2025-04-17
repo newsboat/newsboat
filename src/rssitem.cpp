@@ -172,7 +172,7 @@ void RssItem::set_enclosure_description_mime_type(const std::string& type)
 	enclosure_description_mime_type_ = type;
 }
 
-nonstd::optional<std::string> RssItem::attribute_value(const std::string&
+std::optional<std::string> RssItem::attribute_value(const std::string&
 	attribname) const
 {
 	if (attribname == "title") {
@@ -217,7 +217,7 @@ nonstd::optional<std::string> RssItem::attribute_value(const std::string&
 		return feedptr->RssFeed::attribute_value(attribname);
 	}
 
-	return nonstd::nullopt;
+	return std::nullopt;
 }
 
 void RssItem::update_flags()

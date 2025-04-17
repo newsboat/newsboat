@@ -8,6 +8,7 @@
 #include <libgen.h>
 #include <limits.h>
 #include <ncurses.h>
+#include <optional>
 #include <pwd.h>
 #include <string.h>
 #include <sys/param.h>
@@ -17,8 +18,6 @@
 extern "C" {
 #include <stfl.h>
 }
-
-#include "3rd-party/optional.hpp"
 
 #include "config.h"
 #include "colormanager.h"
@@ -398,7 +397,7 @@ void View::open_in_pager(const std::string& filename)
 	pop_current_formaction();
 }
 
-nonstd::optional<std::uint8_t> View::open_in_browser(const std::string& url,
+std::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 	const std::string& feedurl, const std::string& type, const std::string& title,
 	bool interactive)
 {
@@ -644,7 +643,7 @@ void View::push_urlview(const Links& links,
 	current_formaction = formaction_stack_size() - 1;
 }
 
-nonstd::optional<std::string> View::run_filebrowser(const std::string& default_filename)
+std::optional<std::string> View::run_filebrowser(const std::string& default_filename)
 {
 	auto filebrowser = std::make_shared<FileBrowserFormAction>(
 			*this, filebrowser_str, cfg);
@@ -653,12 +652,12 @@ nonstd::optional<std::string> View::run_filebrowser(const std::string& default_f
 	filebrowser->set_parent_formaction(get_current_formaction());
 	std::string res = run_modal(filebrowser, "filenametext");
 	if (res.empty()) {
-		return nonstd::nullopt;
+		return std::nullopt;
 	}
 	return res;
 }
 
-nonstd::optional<std::string> View::run_dirbrowser()
+std::optional<std::string> View::run_dirbrowser()
 {
 	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
 			*this, filebrowser_str, cfg);
@@ -666,7 +665,7 @@ nonstd::optional<std::string> View::run_dirbrowser()
 	dirbrowser->set_parent_formaction(get_current_formaction());
 	std::string res = run_modal(dirbrowser, "filenametext");
 	if (res.empty()) {
-		return nonstd::nullopt;
+		return std::nullopt;
 	}
 	return res;
 }

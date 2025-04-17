@@ -8,9 +8,9 @@ using namespace newsboat;
 
 TEST_CASE("charset_from_bom", "[charencoding]")
 {
-	const std::map<std::string, nonstd::optional<std::string>> test_cases {
-		{ "", nonstd::nullopt },
-		{ "text without BOM", nonstd::nullopt },
+	const std::map<std::string, std::optional<std::string>> test_cases {
+		{ "", std::nullopt },
+		{ "text without BOM", std::nullopt },
 		{ "\xEF\xBB\xBFtext with BOM", "UTF-8" },
 		{ "\xFE\xFFtext with BOM", "UTF-16BE" },
 		{ "\xFF\xFEtext with BOM", "UTF-16LE" },
@@ -31,10 +31,10 @@ TEST_CASE("charset_from_bom", "[charencoding]")
 
 TEST_CASE("charset_from_xml_declaration", "[charencoding]")
 {
-	const std::map<std::string, nonstd::optional<std::string>> test_cases {
-		{ "", nonstd::nullopt },
-		{ "not a declaration", nonstd::nullopt },
-		{ R"(<?xml version="1.0"?>No encoding specified)", nonstd::nullopt },
+	const std::map<std::string, std::optional<std::string>> test_cases {
+		{ "", std::nullopt },
+		{ "not a declaration", std::nullopt },
+		{ R"(<?xml version="1.0"?>No encoding specified)", std::nullopt },
 		{ R"(<?xml version="1.0" encoding="UTF-8"?>Encoding specified)", "UTF-8" },
 		{ R"(<?xml version="1.0" encoding="utf-8"?>Encoding specified)", "utf-8" },
 		{ R"(<?xml version="1.0" encoding="fake.encoding"?>Encoding specified)", "fake.encoding" },
@@ -55,10 +55,10 @@ TEST_CASE("charset_from_xml_declaration", "[charencoding]")
 
 TEST_CASE("charset_from_content_type_header", "[charencoding]")
 {
-	const std::map<std::string, nonstd::optional<std::string>> test_cases {
-		{ "", nonstd::nullopt },
-		{ "application/xml", nonstd::nullopt },
-		{ "multipart/form-data; boundary=something", nonstd::nullopt },
+	const std::map<std::string, std::optional<std::string>> test_cases {
+		{ "", std::nullopt },
+		{ "application/xml", std::nullopt },
+		{ "multipart/form-data; boundary=something", std::nullopt },
 		{ "application/xml; charset=utf-8", "utf-8" },
 	};
 

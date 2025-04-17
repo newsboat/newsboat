@@ -224,7 +224,7 @@ REDO:
 
 				// We can't just `const auto exit_code = ...` here because this
 				// triggers -Wmaybe-initialized in GCC 9 with -O2.
-				nonstd::optional<std::uint8_t> exit_code;
+				std::optional<std::uint8_t> exit_code;
 				exit_code = open_unread_items_in_browser(feed, false);
 
 				if (!exit_code.has_value()) {
@@ -251,7 +251,7 @@ REDO:
 
 				// We can't just `const auto exit_code = ...` here because this
 				// triggers -Wmaybe-initialized in GCC 9 with -O2.
-				nonstd::optional<std::uint8_t> exit_code;
+				std::optional<std::uint8_t> exit_code;
 				exit_code = open_unread_items_in_browser(feed, true);
 
 				if (!exit_code.has_value()) {

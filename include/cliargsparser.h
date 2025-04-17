@@ -3,10 +3,9 @@
 
 #include "libnewsboat-ffi/src/cliargsparser.rs.h" // IWYU pragma: export
 
+#include <optional>
 #include <string>
 #include <vector>
-
-#include "3rd-party/optional.hpp"
 
 #include "logger.h"
 
@@ -30,11 +29,11 @@ public:
 
 	/// If non-null, Newsboat should import read articles info from this
 	/// filepath.
-	nonstd::optional<std::string> readinfo_import_file() const;
+	std::optional<std::string> readinfo_import_file() const;
 
 	/// If non-null, Newsboat should export read articles info to this
 	/// filepath.
-	nonstd::optional<std::string> readinfo_export_file() const;
+	std::optional<std::string> readinfo_export_file() const;
 
 	std::string program_name() const;
 
@@ -46,7 +45,7 @@ public:
 
 	/// If non-null, the creator of `CliArgsParser` object should call `exit()`
 	/// with this code.
-	nonstd::optional<int> return_code() const;
+	std::optional<int> return_code() const;
 
 	/// If `display_msg()` is not empty, the creator of `CliArgsParser` should
 	/// print its contents to stderr.
@@ -64,28 +63,28 @@ public:
 
 	bool refresh_on_start() const;
 
-	nonstd::optional<std::string> url_file() const;
+	std::optional<std::string> url_file() const;
 
-	nonstd::optional<std::string> lock_file() const;
+	std::optional<std::string> lock_file() const;
 
-	nonstd::optional<std::string> cache_file() const;
+	std::optional<std::string> cache_file() const;
 
-	nonstd::optional<std::string> config_file() const;
+	std::optional<std::string> config_file() const;
 
-	nonstd::optional<std::string> queue_file() const;
+	std::optional<std::string> queue_file() const;
 
-	nonstd::optional<std::string> search_history_file() const;
+	std::optional<std::string> search_history_file() const;
 
-	nonstd::optional<std::string> cmdline_history_file() const;
+	std::optional<std::string> cmdline_history_file() const;
 
 	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
 	/// \note The parser does not check if the passed commands are valid.
 	std::vector<std::string> cmds_to_execute() const;
 
-	nonstd::optional<std::string> log_file() const;
+	std::optional<std::string> log_file() const;
 
-	nonstd::optional<Level> log_level() const;
+	std::optional<Level> log_level() const;
 
 	/// Returns the reference to the Rust object.
 	///

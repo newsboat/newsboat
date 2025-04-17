@@ -19,7 +19,7 @@ std::string FileUrlReader::get_source()
 	return filename;
 }
 
-nonstd::optional<utils::ReadTextFileError> FileUrlReader::reload()
+std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
@@ -57,7 +57,7 @@ nonstd::optional<utils::ReadTextFileError> FileUrlReader::reload()
 	return {};
 }
 
-nonstd::optional<std::string> FileUrlReader::write_config()
+std::optional<std::string> FileUrlReader::write_config()
 {
 	std::fstream f;
 	f.open(filename, std::fstream::out);

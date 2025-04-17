@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_ITEMLISTFORMACTION_H_
 #define NEWSBOAT_ITEMLISTFORMACTION_H_
 
-#include "3rd-party/optional.hpp"
+#include <optional>
 
 #include "configcontainer.h"
 #include "fmtstrformatter.h"
@@ -116,7 +116,7 @@ private:
 
 	int get_pos(unsigned int idx);
 
-	void save_article(const nonstd::optional<std::string>& filename,
+	void save_article(const std::optional<std::string>& filename,
 		std::shared_ptr<RssItem> item);
 
 	void handle_save(const std::vector<std::string>& cmd_args);
@@ -154,7 +154,7 @@ private:
 	RegexManager& rxman;
 
 	unsigned int old_width;
-	nonstd::optional<ArticleSortStrategy> old_sort_strategy;
+	std::optional<ArticleSortStrategy> old_sort_strategy;
 
 	InvalidationMode invalidation_mode;
 	std::vector<unsigned int> invalidated_itempos;

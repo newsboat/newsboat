@@ -7,7 +7,7 @@ using namespace newsboat::file_system;
 TEST_CASE("mode_suffix", "[file_system]")
 {
 	SECTION("Basic checks") {
-		REQUIRE(mode_suffix(0644 | S_IFREG) == nonstd::nullopt);
+		REQUIRE(mode_suffix(0644 | S_IFREG) == std::nullopt);
 		REQUIRE(mode_suffix(0644 | S_IFDIR) == '/');
 		REQUIRE(mode_suffix(0644 | S_IFLNK) == '@');
 		REQUIRE(mode_suffix(0644 | S_IFSOCK) == '=');
@@ -38,14 +38,14 @@ TEST_CASE("mode_suffix", "[file_system]")
 		REQUIRE(mode_suffix(0744 | S_IFCHR) == '*');
 
 		// Group executable bit set => no asterisk
-		REQUIRE(mode_suffix(0654 | S_IFREG) == nonstd::nullopt);
-		REQUIRE(mode_suffix(0654 | S_IFBLK) == nonstd::nullopt);
-		REQUIRE(mode_suffix(0654 | S_IFCHR) == nonstd::nullopt);
+		REQUIRE(mode_suffix(0654 | S_IFREG) == std::nullopt);
+		REQUIRE(mode_suffix(0654 | S_IFBLK) == std::nullopt);
+		REQUIRE(mode_suffix(0654 | S_IFCHR) == std::nullopt);
 
 		// Other executable bit set => no asterisk
-		REQUIRE(mode_suffix(0645 | S_IFREG) == nonstd::nullopt);
-		REQUIRE(mode_suffix(0645 | S_IFBLK) == nonstd::nullopt);
-		REQUIRE(mode_suffix(0645 | S_IFCHR) == nonstd::nullopt);
+		REQUIRE(mode_suffix(0645 | S_IFREG) == std::nullopt);
+		REQUIRE(mode_suffix(0645 | S_IFBLK) == std::nullopt);
+		REQUIRE(mode_suffix(0645 | S_IFCHR) == std::nullopt);
 	}
 }
 

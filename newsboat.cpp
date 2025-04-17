@@ -212,9 +212,6 @@ void print_version(const std::string& argv0, unsigned int level)
 		ss << _("- JSON for Modern C++ library, licensed under the MIT License: "
 				"https://github.com/nlohmann/json")
 			<< std::endl;
-		ss << _("- optional-lite library, licensed under the Boost Software "
-				"License: https://github.com/martinmoene/optional-lite")
-			<< std::endl;
 		ss << _("- expected-lite library, licensed under the Boost Software "
 				"License: https://github.com/martinmoene/expected-lite")
 			<< std::endl;

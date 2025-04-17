@@ -36,7 +36,7 @@ FeedHqUrlReader::~FeedHqUrlReader() {}
 		tags[(url)] = tmptags;        \
 	} while (0)
 
-nonstd::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
+std::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

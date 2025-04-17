@@ -15,7 +15,7 @@ OcNewsUrlReader::OcNewsUrlReader(const std::string& url_file, RemoteApi* a)
 
 OcNewsUrlReader::~OcNewsUrlReader() {}
 
-nonstd::optional<utils::ReadTextFileError> OcNewsUrlReader::reload()
+std::optional<utils::ReadTextFileError> OcNewsUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();

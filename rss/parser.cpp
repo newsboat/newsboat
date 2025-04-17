@@ -155,7 +155,7 @@ Feed Parser::parse_url(const std::string& url,
 		}
 	}
 
-	nonstd::optional<std::string> charset_content_type;
+	std::optional<std::string> charset_content_type;
 	const auto content_type_headers = curlHeaderHandler->get_header_lines("Content-Type");
 	if (content_type_headers.size() >= 1) {
 		std::string header_value = content_type_headers.back();
@@ -220,7 +220,7 @@ Feed Parser::parse_url(const std::string& url,
 	const auto charset_xml_declaration = charencoding::charset_from_xml_declaration(data);
 	const auto charset_bom = charencoding::charset_from_bom(data);
 
-	nonstd::optional<std::string> charset;
+	std::optional<std::string> charset;
 	if (charset_bom.has_value()) {
 		charset = charset_bom;
 	} else if (charset_xml_declaration.has_value()) {
@@ -243,7 +243,7 @@ Feed Parser::parse_url(const std::string& url,
 }
 
 Feed Parser::parse_buffer(const std::string& buffer, const std::string& url,
-	nonstd::optional<std::string> charset)
+	std::optional<std::string> charset)
 {
 	if (charset.has_value()) {
 		const auto buffer_utf8 = utils::convert_text(buffer, "utf-8", charset.value());

@@ -240,7 +240,7 @@ TEST_CASE("RssItem contains a number of matchable attributes", "[RssItem]")
 		const auto attr = "feedindex";
 
 		SECTION("no parent feed => attribute unavailable") {
-			REQUIRE(item->attribute_value(attr) == nonstd::nullopt);
+			REQUIRE(item->attribute_value(attr) == std::nullopt);
 		}
 
 		SECTION("request forwarded to parent feed") {

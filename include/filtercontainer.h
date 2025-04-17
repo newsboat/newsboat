@@ -1,9 +1,9 @@
 #ifndef NEWSBOAT_FILTERCONTAINER_H_
 #define NEWSBOAT_FILTERCONTAINER_H_
 
-#include "configactionhandler.h"
+#include <optional>
 
-#include "3rd-party/optional.hpp"
+#include "configactionhandler.h"
 
 namespace newsboat {
 
@@ -33,7 +33,7 @@ public:
 		return filters.size();
 	}
 
-	nonstd::optional<std::string> get_filter(const std::string& name);
+	std::optional<std::string> get_filter(const std::string& name);
 
 private:
 	std::vector<FilterNameExprPair> filters;

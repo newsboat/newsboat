@@ -2,9 +2,8 @@
 #define NEWSBOAT_TEST_HELPERS_ENVVAR_H_
 
 #include <functional>
+#include <optional>
 #include <string>
-
-#include "3rd-party/optional.hpp"
 
 namespace test_helpers {
 
@@ -25,7 +24,7 @@ namespace test_helpers {
  * thread).
  */
 class EnvVar {
-	std::function<void(nonstd::optional<std::string>)> on_change_fn;
+	std::function<void(std::optional<std::string>)> on_change_fn;
 	std::string name;
 	std::string value;
 	bool was_set = false;
@@ -67,10 +66,10 @@ public:
 	/// by this class.
 	///
 	/// The function is passed an argument which can be either:
-	/// - nonstd::nullopt  --  meaning the environment variable is now unset
+	/// - std::nullopt  --  meaning the environment variable is now unset
 	/// - std::string      --  meaning the environment variable is now set to
 	///                        this value
-	void on_change(std::function<void(nonstd::optional<std::string> new_value)> fn);
+	void on_change(std::function<void(std::optional<std::string> new_value)> fn);
 
 protected:
 	// The main constructor throws for some values of `name`; this one doesn't.

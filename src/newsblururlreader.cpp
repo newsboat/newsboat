@@ -16,7 +16,7 @@ NewsBlurUrlReader::NewsBlurUrlReader(const std::string& url_file,
 
 NewsBlurUrlReader::~NewsBlurUrlReader() {}
 
-nonstd::optional<utils::ReadTextFileError> NewsBlurUrlReader::reload()
+std::optional<utils::ReadTextFileError> NewsBlurUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
