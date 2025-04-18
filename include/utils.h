@@ -185,6 +185,8 @@ std::string mt_strf_localtime(const std::string& format, time_t t);
 /// single quotes and replaces "'" with "\'"
 /// (e.g. "it's" -> "'it'\''s'")
 std::string preserve_quotes(const std::string& s);
+
+void wait_for_keypress();
 }
 
 } // namespace newsboat
