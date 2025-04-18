@@ -227,7 +227,7 @@ public:
 	std::vector<MacroCmd> get_operation(const std::vector<KeyCombination>& key_sequence,
 		const std::string& context, MultiKeyBindingState& state, BindingType& type);
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
-	char get_key(const std::string& keycode);
+	static char get_key(const std::string& keycode);
 	std::vector<KeyCombination> get_keys(Operation op, const std::string& context);
 	void handle_action(const std::string& action,
 		const std::string& params) override;
