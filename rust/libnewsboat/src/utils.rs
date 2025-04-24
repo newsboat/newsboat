@@ -142,7 +142,7 @@ pub fn quote_for_stfl(string: &str) -> String {
 pub fn get_basename(input: &str) -> String {
     match Url::parse(input) {
         Ok(url) => match url.path_segments() {
-            Some(segments) => segments.last().unwrap().to_string(),
+            Some(mut segments) => segments.next_back().unwrap().to_string(),
             None => String::from(""),
         },
         Err(_) => String::from(""),
