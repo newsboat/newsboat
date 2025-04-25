@@ -105,7 +105,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	break;
 	case OP_DELETE_ALL: {
 		if (!cfg->get_configvalue_as_bool("confirm-delete-all-articles") ||
-			v.confirm(_("Do you really want to delete all articles (y:Yes n:No)? "),
+			confirm(_("Do you really want to delete all articles (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			ScopeMeasure m1("OP_DELETE_ALL");
 
@@ -523,7 +523,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_MARKFEEDREAD:
 		if (!cfg->get_configvalue_as_bool(
 				"confirm-mark-feed-read") ||
-			v.confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
+			confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "ItemListFormAction: marking feed read");
 			try {
@@ -760,7 +760,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 		// messages
 		std::string input_options = _("dtfalgr");
-		char c = v.confirm(
+		char c = confirm(
 				_("Sort by "
 					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 				input_options);
@@ -798,7 +798,7 @@ bool ItemListFormAction::process_operation(Operation op,
 	break;
 	case OP_REVSORT: {
 		std::string input_options = _("dtfalgr");
-		char c = v.confirm(
+		char c = confirm(
 				_("Reverse Sort by "
 					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
 				input_options);
@@ -1651,14 +1651,14 @@ void ItemListFormAction::handle_op_saveall()
 
 			char c;
 			if (nfiles_exist > 1) {
-				c = v.confirm(strprintf::fmt(
+				c = confirm(strprintf::fmt(
 							_("Overwrite `%s' in `%s'? "
 								"There are %d more conflicts like this "
 								"(y:Yes a:Yes to all n:No q:No to all)"),
 							filename, directory.value(), --nfiles_exist),
 						input_options);
 			} else {
-				c = v.confirm(strprintf::fmt(
+				c = confirm(strprintf::fmt(
 							_("Overwrite `%s' in `%s'? "
 								"(y:Yes n:No)"),
 							filename, directory.value()),

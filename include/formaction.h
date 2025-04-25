@@ -78,6 +78,8 @@ public:
 	std::string draw_form_wait_for_event(unsigned int timeout);
 	void recalculate_widget_dimensions();
 
+	char confirm(const std::string& prompt, const std::string& charset);
+
 	virtual void handle_cmdline(const std::string& cmd);
 
 	bool process_op(Operation op,

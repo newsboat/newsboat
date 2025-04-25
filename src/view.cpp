@@ -10,7 +10,6 @@
 #include <ncurses.h>
 #include <optional>
 #include <pwd.h>
-#include <string.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -185,8 +184,7 @@ int View::run()
 			fa->cancel_qna();
 			if (!get_cfg()->get_configvalue_as_bool(
 					"confirm-exit") ||
-				confirm(_("Do you really want to quit "
-						"(y:Yes n:No)? "),
+				fa->confirm(_("Do you really want to quit (y:Yes n:No)? "),
 					_("yn")) == *_("y")) {
 				Stfl::reset();
 				return EXIT_FAILURE;
@@ -697,45 +695,6 @@ std::string View::select_filter(const std::vector<FilterNameExprPair>& filters)
 	selecttag->set_filters(filters);
 	run_modal(selecttag, "");
 	return selecttag->get_selected_value();
-}
-
-char View::confirm(const std::string& prompt, const std::string& charset)
-{
-	LOG(Level::DEBUG, "View::confirm: charset = %s", charset);
-
-	std::shared_ptr<FormAction> f = get_current_formaction();
-	// Push empty formaction so our status message is not overwritten on form `f`
-	push_empty_formaction();
-	f->set_status(prompt);
-
-	char result = 0;
-
-	do {
-		const std::string event = f->draw_form_wait_for_event(0);
-		LOG(Level::DEBUG, "View::confirm: event = %s", event);
-		if (event.empty()) {
-			continue;
-		}
-		if (event == "ESC" || event == "ENTER") {
-			result = 0;
-			LOG(Level::DEBUG,
-				"View::confirm: user pressed ESC or ENTER, we "
-				"cancel confirmation dialog");
-			break;
-		}
-		result = keys->get_key(event);
-		LOG(Level::DEBUG,
-			"View::confirm: key = %c (%u)",
-			result,
-			result);
-	} while (!result || strchr(charset.c_str(), result) == nullptr);
-
-	f->set_status("");
-	f->draw_form();
-
-	pop_current_formaction();
-
-	return result;
 }
 
 void View::notify_itemlist_change(std::shared_ptr<RssFeed> feed)

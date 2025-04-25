@@ -51,3 +51,4 @@ vbox
       text[qna_value]:""
       pos[qna_value_pos]:0
       .display[show_qna_input]:0
+      process[qna_process]:1

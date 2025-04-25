@@ -128,7 +128,7 @@ REDO:
 		// "Sort by (f)irsttag/..." and "Reverse Sort by
 		// (f)irsttag/..." messages
 		std::string input_options = _("ftauln");
-		char c = v.confirm(
+		char c = confirm(
 				_("Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
 					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
@@ -168,7 +168,7 @@ REDO:
 	break;
 	case OP_REVSORT: {
 		std::string input_options = _("ftauln");
-		char c = v.confirm(
+		char c = confirm(
 				_("Reverse Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
 					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
@@ -290,7 +290,7 @@ REDO:
 	case OP_MARKFEEDREAD: {
 		if (!cfg->get_configvalue_as_bool(
 				"confirm-mark-feed-read") ||
-			v.confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
+			confirm(_("Do you really want to mark this feed as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "FeedListFormAction: marking feed read at position `%d'", pos);
 			if (visible_feeds.size() > 0) {
@@ -375,7 +375,7 @@ REDO:
 	case OP_MARKALLFEEDSREAD:
 		if (!cfg->get_configvalue_as_bool(
 				"confirm-mark-all-feeds-read") ||
-			v.confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
+			confirm(_("Do you really want to mark all feeds as read (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			LOG(Level::INFO, "FeedListFormAction: marking all feeds read");
 			const auto message_lifetime = v.get_statusline().show_message_until_finished(
@@ -503,7 +503,7 @@ REDO:
 		LOG(Level::INFO, "FeedListFormAction: quitting");
 		if (bindingType == BindingType::Macro ||
 			!cfg->get_configvalue_as_bool("confirm-exit") ||
-			v.confirm(
+			confirm(
 				_("Do you really want to quit (y:Yes n:No)? "),
 				_("yn")) == *_("y")) {
 			quit = true;
