@@ -106,7 +106,7 @@ private:
 
 	FilterContainer& filter_container;
 
-	std::optional<FeedSortStrategy> old_sort_strategy;
+	std::optional<std::vector<FeedSortStrategy>> old_sort_strategies;
 
 	Cache* cache;
 };

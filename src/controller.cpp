@@ -512,7 +512,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 	}
 
-	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+	feedcontainer.sort_feeds(cfg.get_feed_sort_strategies());
 
 	if (args.do_export()) {
 		export_opml(args.export_as_opml2());
@@ -858,7 +858,7 @@ void Controller::reload_urls_file()
 	v->set_tags(urlcfg->get_alltags());
 
 	feedcontainer.set_feeds(new_feeds);
-	feedcontainer.sort_feeds(cfg.get_feed_sort_strategy());
+	feedcontainer.sort_feeds(cfg.get_feed_sort_strategies());
 	update_feedlist();
 }
 

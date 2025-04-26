@@ -66,10 +66,10 @@ void FeedListFormAction::prepare()
 {
 	set_keymap_hints();
 
-	const auto sort_strategy = cfg->get_feed_sort_strategy();
-	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
-		v.get_ctrl().get_feedcontainer()->sort_feeds(sort_strategy);
-		old_sort_strategy = sort_strategy;
+	const auto sort_strategies = cfg->get_feed_sort_strategies();
+	if (!old_sort_strategies || sort_strategies != *old_sort_strategies) {
+		v.get_ctrl().get_feedcontainer()->sort_feeds(sort_strategies);
+		old_sort_strategies = sort_strategies;
 		do_redraw = true;
 	}
 
@@ -127,11 +127,11 @@ REDO:
 		// i18n: This string is related to the letters in parentheses in the
 		// "Sort by (f)irsttag/..." and "Reverse Sort by
 		// (f)irsttag/..." messages
-		std::string input_options = _("ftauln");
+		std::string input_options = _("ftaulnr");
 		char c = v.confirm(
 				_("Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
-					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
+					"(u)nreadarticlecount/(l)astupdated/(n)one/un(r)ead?"),
 				input_options);
 		if (!c) {
 			break;
@@ -142,7 +142,7 @@ REDO:
 		// That'll prevent this function from sorting anything, so users will
 		// complain, and we'll ask them to update the translation. A bit lame,
 		// but it's better than mishandling the answer.
-		const auto n_options = ((std::string) "ftaun").length();
+		const auto n_options = ((std::string) "ftaunr").length();
 		if (input_options.length() < n_options) {
 			break;
 		}
@@ -163,15 +163,21 @@ REDO:
 				"feed-sort-order", "lastupdated-desc");
 		} else if (c == input_options.at(5)) {
 			cfg->set_configvalue("feed-sort-order", "none-desc");
+		} else if (c == input_options.at(6)) {
+			std::string current_configvalue = cfg->get_configvalue("feed-sort-order");
+			auto sort_orders = utils::tokenize(current_configvalue, ",");
+			if (std::find(sort_orders.begin(), sort_orders.end(), "unread") == sort_orders.end()) {
+				cfg->set_configvalue("feed-sort-order", current_configvalue + ",unread");
+			}
 		}
 	}
 	break;
 	case OP_REVSORT: {
-		std::string input_options = _("ftauln");
+		std::string input_options = _("ftaulnr");
 		char c = v.confirm(
 				_("Reverse Sort by "
 					"(f)irsttag/(t)itle/(a)rticlecount/"
-					"(u)nreadarticlecount/(l)astupdated/(n)one?"),
+					"(u)nreadarticlecount/(l)astupdated/(n)one/un(r)ead?"),
 				input_options);
 		if (!c) {
 			break;
@@ -182,7 +188,7 @@ REDO:
 		// That'll prevent this function from sorting anything, so users will
 		// complain, and we'll ask them to update the translation. A bit lame,
 		// but it's better than mishandling the answer.
-		const auto n_options = ((std::string) "ftaun").length();
+		const auto n_options = ((std::string) "ftaunr").length();
 		if (input_options.length() < n_options) {
 			break;
 		}
@@ -202,6 +208,12 @@ REDO:
 				"feed-sort-order", "lastupdated-asc");
 		} else if (c == input_options.at(5)) {
 			cfg->set_configvalue("feed-sort-order", "none-asc");
+		} else if (c == input_options.at(6)) {
+			std::string current_configvalue = cfg->get_configvalue("feed-sort-order");
+			auto sort_orders = utils::tokenize(current_configvalue, ",");
+			if (std::find(sort_orders.begin(), sort_orders.end(), "unread") == sort_orders.end()) {
+				cfg->set_configvalue("feed-sort-order", current_configvalue + ",unread");
+			}
 		}
 	}
 	break;

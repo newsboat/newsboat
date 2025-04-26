@@ -223,7 +223,7 @@ void Reloader::reload_all(bool unattended)
 		}
 	}
 
-	ctrl.get_feedcontainer()->sort_feeds(cfg.get_feed_sort_strategy());
+	ctrl.get_feedcontainer()->sort_feeds(cfg.get_feed_sort_strategies());
 	ctrl.update_feedlist();
 	ctrl.get_view()->force_redraw();
 

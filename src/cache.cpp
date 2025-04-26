@@ -668,7 +668,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		// if some flagged articles were saved, append them
 		feed->add_items(flagged_items);
 	}
-	feed->sort_unlocked(cfg->get_article_sort_strategy());
+	feed->sort_unlocked(cfg->get_article_sort_strategies());
 	return feed;
 }
 
