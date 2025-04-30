@@ -20,10 +20,11 @@ enum class FeedSortMethod {
 	TITLE,
 	ARTICLE_COUNT,
 	UNREAD_ARTICLE_COUNT,
-	LAST_UPDATED
+	LAST_UPDATED,
+	UNREAD
 };
 
-enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, RANDOM };
+enum class ArtSortMethod { TITLE, FLAGS, AUTHOR, LINK, GUID, DATE, RANDOM, UNREAD };
 
 enum class SortDirection { ASC, DESC };
 
@@ -74,8 +75,8 @@ public:
 	void reset_to_default(const std::string& key);
 	void toggle(const std::string& key);
 	std::vector<std::string> get_suggestions(const std::string& fragment) const;
-	FeedSortStrategy get_feed_sort_strategy() const;
-	ArticleSortStrategy get_article_sort_strategy() const;
+	std::vector<FeedSortStrategy> get_feed_sort_strategies() const;
+	std::vector<ArticleSortStrategy> get_article_sort_strategies() const;
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 

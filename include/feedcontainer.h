@@ -16,7 +16,7 @@ class FeedContainer {
 public:
 	FeedContainer() = default;
 
-	void sort_feeds(const FeedSortStrategy& sort_strategy);
+	void sort_feeds(const std::vector<FeedSortStrategy>& sort_strategy);
 	std::shared_ptr<RssFeed> get_feed(const unsigned int pos);
 	void add_feed(const std::shared_ptr<RssFeed> feed);
 	void mark_all_feed_items_read(std::shared_ptr<RssFeed> feed);

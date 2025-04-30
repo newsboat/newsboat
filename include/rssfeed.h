@@ -140,8 +140,8 @@ public:
 		search_feed = b;
 	}
 
-	void sort(const ArticleSortStrategy& sort_strategy);
-	void sort_unlocked(const ArticleSortStrategy& sort_strategy);
+	void sort(const std::vector<ArticleSortStrategy>& sort_strategies);
+	void sort_unlocked(const std::vector<ArticleSortStrategy>& sort_strategies);
 
 	void purge_deleted_items();
 

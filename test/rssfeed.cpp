@@ -8,7 +8,7 @@
 #include "rssparser.h"
 
 #include "test_helpers/envvar.h"
-#include "test_helpers/stringmaker/optional.h"
+#include <iostream>
 
 using namespace newsboat;
 
@@ -54,7 +54,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::TITLE;
 		ss.sd = SortDirection::ASC;
-		f.sort(ss);
+		std::vector<ArticleSortStrategy> strategies{ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->title() == "Article 1: A boring article");
 		REQUIRE(articles[1]->title() == "Article 2: Article you must read");
@@ -63,7 +64,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[4]->title() == "Wow tests are great");
 
 		ss.sd = SortDirection::DESC;
-		f.sort(ss);
+		strategies = {ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->title() == "Wow tests are great");
 		REQUIRE(articles[1]->title() == "Read me");
@@ -83,7 +85,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::FLAGS;
 		ss.sd = SortDirection::ASC;
-		f.sort(ss);
+		std::vector<ArticleSortStrategy> strategies{ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Aabde");
 		REQUIRE(articles[1]->flags() == "Ceimu");
@@ -92,7 +95,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[4]->flags() == "Zadel");
 
 		ss.sd = SortDirection::DESC;
-		f.sort(ss);
+		strategies = {ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->flags() == "Zadel");
 		REQUIRE(articles[1]->flags() == "Ksuy");
@@ -112,7 +116,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::AUTHOR;
 		ss.sd = SortDirection::ASC;
-		f.sort(ss);
+		std::vector<ArticleSortStrategy> strategies{ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Anonymous");
 		REQUIRE(articles[1]->author() == "Platon");
@@ -121,7 +126,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[4]->author() == "Spinoza");
 
 		ss.sd = SortDirection::DESC;
-		f.sort(ss);
+		strategies = {ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->author() == "Spinoza");
 		REQUIRE(articles[1]->author() == "Socrates");
@@ -141,7 +147,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::LINK;
 		ss.sd = SortDirection::ASC;
-		f.sort(ss);
+		std::vector<ArticleSortStrategy> strategies{ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "withoutwww.org");
 		REQUIRE(articles[1]->link() == "www.anotherexample.org");
@@ -150,7 +157,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[4]->link() == "www.test.org");
 
 		ss.sd = SortDirection::DESC;
-		f.sort(ss);
+		strategies = {ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->link() == "www.test.org");
 		REQUIRE(articles[1]->link() == "www.example.org");
@@ -163,7 +171,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::GUID;
 		ss.sd = SortDirection::ASC;
-		f.sort(ss);
+		std::vector<ArticleSortStrategy> strategies{ss};
+		f.sort(strategies);
 		auto articles = f.items();
 		REQUIRE(articles[0]->guid() == "0");
 		REQUIRE(articles[1]->guid() == "1");
@@ -172,7 +181,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[4]->guid() == "4");
 
 		ss.sd = SortDirection::DESC;
-		f.sort(ss);
+		strategies = {ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->guid() == "4");
 		REQUIRE(articles[1]->guid() == "3");
@@ -192,7 +202,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		ArticleSortStrategy ss;
 		ss.sm = ArtSortMethod::DATE;
 		ss.sd = SortDirection::DESC;
-		f.sort(ss);
+		std::vector<ArticleSortStrategy> strategies{ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 7);
 		REQUIRE(articles[1]->pubDate_timestamp() == 23);
@@ -201,7 +212,8 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[4]->pubDate_timestamp() == 93);
 
 		ss.sd = SortDirection::ASC;
-		f.sort(ss);
+		strategies = {ss};
+		f.sort(strategies);
 		articles = f.items();
 		REQUIRE(articles[0]->pubDate_timestamp() == 93);
 		REQUIRE(articles[1]->pubDate_timestamp() == 69);
@@ -209,6 +221,60 @@ TEST_CASE("RssFeed::sort() correctly sorts articles", "[RssFeed]")
 		REQUIRE(articles[3]->pubDate_timestamp() == 23);
 		REQUIRE(articles[4]->pubDate_timestamp() == 7);
 	}
+}
+
+TEST_CASE("RssFeed::sort() supports multiple sorting strategies", "[RssFeed]")
+{
+	ConfigContainer cfg;
+	Cache rsscache(":memory:", &cfg);
+	RssFeed f(&rsscache, "");
+	const std::map<int, int> name_to_unreads = {
+		{7, false}, {23, false}, {42, true}, {69, false}, {93, true}
+	};
+
+	for (const auto& entry : name_to_unreads) {
+		const auto item = std::make_shared<RssItem>(&rsscache);
+		item->set_pubDate(entry.first);
+		item->set_unread(entry.second);
+		f.add_item(item);
+	}
+	ArticleSortStrategy date;
+	date.sm = ArtSortMethod::DATE;
+	ArticleSortStrategy unread;
+	unread.sm = ArtSortMethod::UNREAD;
+	auto articles = f.items();
+
+	SECTION("acsending order") {
+		date.sd = SortDirection::ASC;
+		std::vector<ArticleSortStrategy> strategies {date, unread};
+		f.sort(strategies);
+		const auto sorted_articles = f.items();
+
+		std::vector<int> actual;
+		for (const auto& article : sorted_articles) {
+			auto timestamp = article->pubDate_timestamp();
+			actual.push_back(timestamp);
+		}
+
+		const std::vector<int> expected = {93, 42, 69, 23, 7};
+		REQUIRE(expected == actual);
+	}
+	SECTION("descending order") {
+		date.sd = SortDirection::DESC;
+		std::vector<ArticleSortStrategy> strategies {date, unread};
+		f.sort(strategies);
+		const auto sorted_articles = f.items();
+
+		std::vector<int> actual;
+		for (const auto& article : sorted_articles) {
+			auto timestamp = article->pubDate_timestamp();
+			actual.push_back(timestamp);
+		}
+
+		const std::vector<int> expected = {42, 93, 7, 23, 69};
+		REQUIRE(expected == actual);
+	}
+
 }
 
 TEST_CASE("RssFeed::unread_item_count() returns number of unread articles",

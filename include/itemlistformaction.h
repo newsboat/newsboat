@@ -154,7 +154,7 @@ private:
 	RegexManager& rxman;
 
 	unsigned int old_width;
-	std::optional<ArticleSortStrategy> old_sort_strategy;
+	std::optional<std::vector<ArticleSortStrategy>> old_sort_strategies;
 
 	InvalidationMode invalidation_mode;
 	std::vector<unsigned int> invalidated_itempos;

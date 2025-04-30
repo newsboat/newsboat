@@ -557,83 +557,110 @@ std::vector<std::string> ConfigContainer::get_suggestions(
 	return result;
 }
 
-FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
+std::vector<FeedSortStrategy> ConfigContainer::get_feed_sort_strategies() const
 {
-	FeedSortStrategy ss;
+	std::vector<FeedSortStrategy> strategies;
 
 	const auto setting = get_configvalue("feed-sort-order");
 	if (setting.empty()) {
-		return ss;
+		FeedSortStrategy defaultStrategy;
+		strategies.push_back(defaultStrategy);
+		return strategies;
 	}
 
-	const auto sortmethod_info = utils::tokenize(setting, "-");
-	const std::string sortmethod = sortmethod_info[0];
+	const auto sort_strategies = utils::tokenize(setting, ",");
 
-	if (sortmethod == "none") {
-		ss.sm = FeedSortMethod::NONE;
-	} else if (sortmethod == "firsttag") {
-		ss.sm = FeedSortMethod::FIRST_TAG;
-	} else if (sortmethod == "title") {
-		ss.sm = FeedSortMethod::TITLE;
-	} else if (sortmethod == "articlecount") {
-		ss.sm = FeedSortMethod::ARTICLE_COUNT;
-	} else if (sortmethod == "unreadarticlecount") {
-		ss.sm = FeedSortMethod::UNREAD_ARTICLE_COUNT;
-	} else if (sortmethod == "lastupdated") {
-		ss.sm = FeedSortMethod::LAST_UPDATED;
-	}
+	for (auto sort_strategy : sort_strategies) {
+		FeedSortStrategy ss;
 
-	std::string direction = "desc";
-	if (sortmethod_info.size() > 1) {
-		direction = sortmethod_info[1];
-	}
+		const auto sortmethod_info = utils::tokenize(sort_strategy, "-");
+		const std::string sortmethod = sortmethod_info[0];
 
-	if (direction == "asc") {
-		ss.sd = SortDirection::ASC;
-	} else if (direction == "desc") {
-		ss.sd = SortDirection::DESC;
-	}
-
-	return ss;
-}
-
-ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
-{
-	ArticleSortStrategy ss;
-	const auto methods =
-		utils::tokenize(get_configvalue("article-sort-order"), "-");
-
-	if (!methods.empty() &&
-		methods[0] == "date") { // date is descending by default
-		ss.sm = ArtSortMethod::DATE;
-		ss.sd = SortDirection::DESC;
-		if (methods.size() > 1 && methods[1] == "asc") {
-			ss.sd = SortDirection::ASC;
+		if (sortmethod == "none") {
+			ss.sm = FeedSortMethod::NONE;
+		} else if (sortmethod == "firsttag") {
+			ss.sm = FeedSortMethod::FIRST_TAG;
+		} else if (sortmethod == "title") {
+			ss.sm = FeedSortMethod::TITLE;
+		} else if (sortmethod == "articlecount") {
+			ss.sm = FeedSortMethod::ARTICLE_COUNT;
+		} else if (sortmethod == "unreadarticlecount") {
+			ss.sm = FeedSortMethod::UNREAD_ARTICLE_COUNT;
+		} else if (sortmethod == "lastupdated") {
+			ss.sm = FeedSortMethod::LAST_UPDATED;
+		} else if (sortmethod == "unread") {
+			ss.sm = FeedSortMethod::UNREAD;
 		}
-	} else { // all other sort methods are ascending by default
-		ss.sd = SortDirection::ASC;
-		if (methods.size() > 1 && methods[1] == "desc") {
+
+		std::string direction = "desc";
+		if (sortmethod_info.size() > 1) {
+			direction = sortmethod_info[1];
+		}
+
+		if (direction == "asc") {
+			ss.sd = SortDirection::ASC;
+		} else if (direction == "desc") {
 			ss.sd = SortDirection::DESC;
 		}
+		strategies.push_back(ss);
 	}
 
-	if (!methods.empty()) {
-		if (methods[0] == "title") {
-			ss.sm = ArtSortMethod::TITLE;
-		} else if (methods[0] == "flags") {
-			ss.sm = ArtSortMethod::FLAGS;
-		} else if (methods[0] == "author") {
-			ss.sm = ArtSortMethod::AUTHOR;
-		} else if (methods[0] == "link") {
-			ss.sm = ArtSortMethod::LINK;
-		} else if (methods[0] == "guid") {
-			ss.sm = ArtSortMethod::GUID;
-		} else if (methods[0] == "random") {
-			ss.sm = ArtSortMethod::RANDOM;
+	return strategies;
+}
+
+std::vector<ArticleSortStrategy> ConfigContainer::get_article_sort_strategies() const
+{
+	std::vector<ArticleSortStrategy> strategies;
+
+	const auto setting = get_configvalue("article-sort-order");
+	if (setting.empty()) {
+		ArticleSortStrategy defaultStrategy;
+		strategies.push_back(defaultStrategy);
+		return strategies;
+	}
+
+	const auto sort_strategies = utils::tokenize(setting, ",");
+
+	for (auto sort_strategy : sort_strategies) {
+		ArticleSortStrategy ss;
+		const auto methods = utils::tokenize(sort_strategy, "-");
+
+		if (!methods.empty() &&
+			methods[0] == "date") { // date is descending by default
+			ss.sm = ArtSortMethod::DATE;
+			ss.sd = SortDirection::DESC;
+			if (methods.size() > 1 && methods[1] == "asc") {
+				ss.sd = SortDirection::ASC;
+			}
+		} else { // all other sort methods are ascending by default
+			ss.sd = SortDirection::ASC;
+			if (methods.size() > 1 && methods[1] == "desc") {
+				ss.sd = SortDirection::DESC;
+			}
 		}
+
+		if (!methods.empty()) {
+			if (methods[0] == "title") {
+				ss.sm = ArtSortMethod::TITLE;
+			} else if (methods[0] == "flags") {
+				ss.sm = ArtSortMethod::FLAGS;
+			} else if (methods[0] == "author") {
+				ss.sm = ArtSortMethod::AUTHOR;
+			} else if (methods[0] == "link") {
+				ss.sm = ArtSortMethod::LINK;
+			} else if (methods[0] == "guid") {
+				ss.sm = ArtSortMethod::GUID;
+			} else if (methods[0] == "random") {
+				ss.sm = ArtSortMethod::RANDOM;
+			} else if (methods[0] == "unread") {
+				ss.sm = ArtSortMethod::UNREAD;
+			}
+		}
+
+		strategies.push_back(ss);
 	}
 
-	return ss;
+	return strategies;
 }
 
 } // namespace newsboat

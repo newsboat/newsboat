@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <iostream>
 #include <itemlistformaction.h>
 
 #include <cinttypes>
@@ -5,6 +7,7 @@
 #include <cstring>
 #include <langinfo.h>
 #include <optional>
+#include <ostream>
 #include <sstream>
 #include <string>
 #include <sys/stat.h>
@@ -556,7 +559,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					process_operation(OP_NEXTUNREAD, args);
 				} else { // reposition to first/last item
 					std::string sortorder =
-						cfg->get_configvalue("article-sort-order");
+						utils::tokenize(cfg->get_configvalue("article-sort-order"), ",")[0];
 
 					if (sortorder == "date-desc") {
 						LOG(Level::DEBUG,
@@ -759,10 +762,10 @@ bool ItemListFormAction::process_operation(Operation op,
 		// i18n: This string is related to the letters in parentheses in the
 		// "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 		// messages
-		std::string input_options = _("dtfalgr");
+		std::string input_options = _("dtfalgru");
 		char c = v.confirm(
 				_("Sort by "
-					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
+					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom/(u)nread?"),
 				input_options);
 		if (!c) {
 			break;
@@ -793,14 +796,20 @@ bool ItemListFormAction::process_operation(Operation op,
 			cfg->set_configvalue("article-sort-order", "guid-asc");
 		} else if (c == input_options.at(6)) {
 			cfg->set_configvalue("article-sort-order", "random");
+		} else if (c == input_options.at(7)) {
+			std::string current_configvalue = cfg->get_configvalue("article-sort-order");
+			auto sort_orders = utils::tokenize(current_configvalue, ",");
+			if (std::find(sort_orders.begin(), sort_orders.end(), "unread") == sort_orders.end()) {
+				cfg->set_configvalue("article-sort-order", current_configvalue + ",unread");
+			}
 		}
 	}
 	break;
 	case OP_REVSORT: {
-		std::string input_options = _("dtfalgr");
+		std::string input_options = _("dtfalgru");
 		char c = v.confirm(
 				_("Reverse Sort by "
-					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"),
+					"(d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom/(u)nread?"),
 				input_options);
 		if (!c) {
 			break;
@@ -811,7 +820,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		// That'll prevent this function from sorting anything, so users will
 		// complain, and we'll ask them to update the translation. A bit lame,
 		// but it's better than mishandling the answer.
-		const auto n_options = ((std::string) "dtfalgr").length();
+		const auto n_options = ((std::string) "dtfalgru").length();
 		if (input_options.length() < n_options) {
 			break;
 		}
@@ -833,6 +842,12 @@ bool ItemListFormAction::process_operation(Operation op,
 			cfg->set_configvalue("article-sort-order", "guid-desc");
 		} else if (c == input_options.at(6)) {
 			cfg->set_configvalue("article-sort-order", "random");
+		} else if (c == input_options.at(7)) {
+			std::string current_configvalue = cfg->get_configvalue("article-sort-order");
+			auto sort_orders = utils::tokenize(current_configvalue, ",");
+			if (std::find(sort_orders.begin(), sort_orders.end(), "unread") == sort_orders.end()) {
+				cfg->set_configvalue("article-sort-order", current_configvalue + ",unread");
+			}
 		}
 	}
 	break;
@@ -1092,10 +1107,10 @@ void ItemListFormAction::prepare()
 
 	std::lock_guard<std::mutex> mtx(redraw_mtx);
 
-	const auto sort_strategy = cfg->get_article_sort_strategy();
-	if (!old_sort_strategy || sort_strategy != *old_sort_strategy) {
-		feed->sort(sort_strategy);
-		old_sort_strategy = sort_strategy;
+	const auto sort_strategies = cfg->get_article_sort_strategies();
+	if (!old_sort_strategies || sort_strategies != *old_sort_strategies) {
+		feed->sort(sort_strategies);
+		old_sort_strategies = sort_strategies;
 		invalidate_list();
 	}
 

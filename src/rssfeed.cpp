@@ -21,14 +21,8 @@
 namespace newsboat {
 
 RssFeed::RssFeed(Cache* c, const std::string& rssurl)
-	: pubDate_(0)
-	, rssurl_(rssurl)
-	, ch(c)
-	, search_feed(false)
-	, is_rtl_(false)
-	, idx(0)
-	, order(0)
-	, status_(DlStatus::SUCCESS)
+	: pubDate_(0), rssurl_(rssurl), ch(c), search_feed(false), is_rtl_(false),
+	  idx(0), order(0), status_(DlStatus::SUCCESS)
 {
 	if (utils::is_query_url(rssurl_)) {
 		/* Query string looks like this:
@@ -53,30 +47,25 @@ RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 		// Have to check if the result is a valid query, just in case
 		Matcher m;
 		if (!m.parse(query)) {
-			throw strprintf::fmt(
-				_("couldn't parse filter expression `%s': %s"),
+			throw strprintf::fmt(_("couldn't parse filter expression `%s': %s"),
 				query, m.get_parse_error());
 		}
 
-		LOG(Level::DEBUG,
-			"RssFeed constructor: query name = `%s' expr = `%s'",
-			tokens[1],
-			query);
+		LOG(Level::DEBUG, "RssFeed constructor: query name = `%s' expr = `%s'",
+			tokens[1], query);
 
 		set_title(tokens[1]);
 		this->query = query;
 	}
 }
 
-RssFeed::~RssFeed()
-{
-}
+RssFeed::~RssFeed() {}
 
 unsigned int RssFeed::unread_item_count() const
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	return std::count_if(items_.begin(),
-			items_.end(),
+	return std::count_if(
+			items_.begin(), items_.end(),
 	[](const std::shared_ptr<RssItem>& item) {
 		return item->unread();
 	});
@@ -84,8 +73,7 @@ unsigned int RssFeed::unread_item_count() const
 
 bool RssFeed::matches_tag(const std::string& tag)
 {
-	return std::find_if(
-	tags_.begin(), tags_.end(), [&](const std::string& t) {
+	return std::find_if(tags_.begin(), tags_.end(), [&](const std::string &t) {
 		return tag == t;
 	}) != tags_.end();
 }
@@ -127,16 +115,12 @@ std::string RssFeed::title() const
 			break;
 		}
 	}
-	return found_title
-		? alt_title
-		: utils::utf8_to_locale(title_);
+	return found_title ? alt_title : utils::utf8_to_locale(title_);
 }
 
 bool RssFeed::hidden() const
 {
-	return std::any_of(tags_.begin(),
-			tags_.end(),
-	[](const std::string& tag) {
+	return std::any_of(tags_.begin(), tags_.end(), [](const std::string &tag) {
 		return tag.substr(0, 1) == "!";
 	});
 }
@@ -147,15 +131,13 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid(const std::string& guid)
 	return get_item_by_guid_unlocked(guid);
 }
 
-std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
-	const std::string& guid)
+std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(const std::string& guid)
 {
 	auto it = items_guid_map.find(guid);
 	if (it != items_guid_map.end()) {
 		return it->second;
 	}
-	LOG(Level::DEBUG,
-		"RssFeed::get_item_by_guid_unlocked: hit dummy item!");
+	LOG(Level::DEBUG, "RssFeed::get_item_by_guid_unlocked: hit dummy item!");
 	LOG(Level::DEBUG,
 		"RssFeed::get_item_by_guid_unlocked: items_guid_map.size = %" PRIu64,
 		static_cast<uint64_t>(items_guid_map.size()));
@@ -164,8 +146,7 @@ std::shared_ptr<RssItem> RssFeed::get_item_by_guid_unlocked(
 	return std::shared_ptr<RssItem>(new RssItem(ch));
 }
 
-std::optional<std::string> RssFeed::attribute_value(const std::string&
-	attribname) const
+std::optional<std::string> RssFeed::attribute_value(const std::string& attribname) const
 {
 	if (attribname == "feedtitle") {
 		return title();
@@ -192,8 +173,8 @@ std::optional<std::string> RssFeed::attribute_value(const std::string&
 		return std::to_string(idx);
 	} else if (attribname == "latest_article_age") {
 		using ItemType = std::shared_ptr<RssItem>;
-		const auto latest_article_iterator = std::max_element(items_.begin(),
-		items_.end(), [](const ItemType& a, const ItemType& b) {
+		const auto latest_article_iterator = std::max_element(
+		items_.begin(), items_.end(), [](const ItemType &a, const ItemType &b) {
 			return a->pubDate_timestamp() < b->pubDate_timestamp();
 		});
 		if (latest_article_iterator != items_.end()) {
@@ -244,94 +225,95 @@ void RssFeed::update_items(std::vector<std::shared_ptr<RssFeed>> feeds)
 	sm.stopover("sorting");
 }
 
-void RssFeed::sort(const ArticleSortStrategy& sort_strategy)
+void RssFeed::sort(const std::vector<ArticleSortStrategy>& sort_strategies)
 {
 	std::lock_guard<std::mutex> lock(item_mutex);
-	sort_unlocked(sort_strategy);
+	sort_unlocked(sort_strategies);
 }
 
-void RssFeed::sort_unlocked(const ArticleSortStrategy& sort_strategy)
+void RssFeed::sort_unlocked(
+	const std::vector<ArticleSortStrategy>& sort_strategies)
 {
-	switch (sort_strategy.sm) {
-	case ArtSortMethod::TITLE:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			const auto left = utils::utf8_to_locale(a->title());
-			const auto right = utils::utf8_to_locale(b->title());
-			const auto cmp = utils::strnaturalcmp(left, right);
-			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
-		});
-		break;
-	case ArtSortMethod::FLAGS:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->flags().c_str(),
-						b->flags().c_str()) > 0)
-				: (strcmp(a->flags().c_str(),
-						b->flags().c_str()) < 0);
-		});
-		break;
-	case ArtSortMethod::AUTHOR:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			const auto author_a = utils::utf8_to_locale(a->author());
-			const auto author_b = utils::utf8_to_locale(b->author());
-			const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
-			return sort_strategy.sd == SortDirection::DESC ? (cmp > 0) : (cmp < 0);
-		});
-		break;
-	case ArtSortMethod::LINK:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->link().c_str(),
-						b->link().c_str()) > 0)
-				: (strcmp(a->link().c_str(),
-						b->link().c_str()) < 0);
-		});
-		break;
-	case ArtSortMethod::GUID:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			return sort_strategy.sd ==
-				SortDirection::DESC
-				? (strcmp(a->guid().c_str(),
-						b->guid().c_str()) > 0)
-				: (strcmp(a->guid().c_str(),
-						b->guid().c_str()) < 0);
-		});
-		break;
-	case ArtSortMethod::DATE:
-		std::stable_sort(items_.begin(),
-			items_.end(),
-			[&](const std::shared_ptr<RssItem>& a,
-		const std::shared_ptr<RssItem>& b) {
-			// date is descending by default
-			return sort_strategy.sd == SortDirection::ASC
-				? (a->pubDate_timestamp() >
-					b->pubDate_timestamp())
-				: (a->pubDate_timestamp() <
-					b->pubDate_timestamp());
-		});
-		break;
-	case ArtSortMethod::RANDOM:
-		std::random_device rd;
-		std::default_random_engine rng(rd());
-		std::shuffle(items_.begin(), items_.end(), rng);
-		break;
+	for (auto sort_strategy : sort_strategies) {
+		switch (sort_strategy.sm) {
+		case ArtSortMethod::UNREAD:
+			std::stable_sort(items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return !b->unread() && a->unread();
+			});
+			break;
+		case ArtSortMethod::TITLE:
+			std::stable_sort(items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				const auto left = utils::utf8_to_locale(a->title());
+				const auto right = utils::utf8_to_locale(b->title());
+				const auto cmp = utils::strnaturalcmp(left, right);
+				return sort_strategy.sd == SortDirection::DESC
+					? (cmp > 0)
+					: (cmp < 0);
+			});
+			break;
+		case ArtSortMethod::FLAGS:
+			std::stable_sort(
+				items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return sort_strategy.sd == SortDirection::DESC
+					? (strcmp(a->flags().c_str(), b->flags().c_str()) > 0)
+					: (strcmp(a->flags().c_str(), b->flags().c_str()) < 0);
+			});
+			break;
+		case ArtSortMethod::AUTHOR:
+			std::stable_sort(
+				items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				const auto author_a = utils::utf8_to_locale(a->author());
+				const auto author_b = utils::utf8_to_locale(b->author());
+				const auto cmp = strcmp(author_a.c_str(), author_b.c_str());
+				return sort_strategy.sd == SortDirection::DESC ? (cmp > 0)
+					: (cmp < 0);
+			});
+			break;
+		case ArtSortMethod::LINK:
+			std::stable_sort(
+				items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return sort_strategy.sd == SortDirection::DESC
+					? (strcmp(a->link().c_str(), b->link().c_str()) > 0)
+					: (strcmp(a->link().c_str(), b->link().c_str()) < 0);
+			});
+			break;
+		case ArtSortMethod::GUID:
+			std::stable_sort(
+				items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				return sort_strategy.sd == SortDirection::DESC
+					? (strcmp(a->guid().c_str(), b->guid().c_str()) > 0)
+					: (strcmp(a->guid().c_str(), b->guid().c_str()) < 0);
+			});
+			break;
+		case ArtSortMethod::DATE:
+			std::stable_sort(
+				items_.begin(), items_.end(),
+				[&](const std::shared_ptr<RssItem>& a,
+			const std::shared_ptr<RssItem>& b) {
+				// date is descending by default
+				return sort_strategy.sd == SortDirection::ASC
+					? (a->pubDate_timestamp() > b->pubDate_timestamp())
+					: (a->pubDate_timestamp() < b->pubDate_timestamp());
+			});
+			break;
+		case ArtSortMethod::RANDOM:
+			std::random_device rd;
+			std::default_random_engine rng(rd());
+			std::shuffle(items_.begin(), items_.end(), rng);
+			break;
+		}
 	}
 }
 
@@ -350,8 +332,7 @@ void RssFeed::purge_deleted_items()
 		}
 	}
 
-	items_.erase(std::remove_if(items_.begin(),
-			items_.end(),
+	items_.erase(std::remove_if(items_.begin(), items_.end(),
 	[](const std::shared_ptr<RssItem> item) {
 		return item->deleted();
 	}),
