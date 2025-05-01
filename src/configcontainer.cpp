@@ -581,6 +581,8 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
 		ss.sm = FeedSortMethod::UNREAD_ARTICLE_COUNT;
 	} else if (sortmethod == "lastupdated") {
 		ss.sm = FeedSortMethod::LAST_UPDATED;
+	} else if (sortmethod == "latestunread") {
+		ss.sm = FeedSortMethod::LATEST_UNREAD;
 	}
 
 	std::string direction = "desc";
