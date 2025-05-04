@@ -19,7 +19,6 @@ std::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
-	alltags.clear();
 
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
@@ -32,11 +31,7 @@ std::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
-			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
-			for (const auto& tag : file_tags) {
-				alltags.insert(tag);
-			}
 		}
 	}
 
@@ -48,7 +43,6 @@ std::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
-			alltags.insert(tag);
 		}
 	}
 

@@ -483,8 +483,6 @@ int Controller::run(const CliArgsParser& args)
 		i++;
 	}
 
-	std::vector<std::string> tags = urlcfg->get_alltags();
-
 	if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
@@ -544,7 +542,7 @@ int Controller::run(const CliArgsParser& args)
 	// hand over the important objects to the View
 	v->set_config_container(&cfg);
 	v->set_keymap(&keys);
-	v->set_tags(tags);
+	v->set_tags(urlcfg->get_alltags());
 	v->set_cache(rsscache.get());
 
 	const auto cmds_to_execute = args.cmds_to_execute();

@@ -3,7 +3,6 @@
 
 #include <map>
 #include <optional>
-#include <set>
 #include <string>
 #include <vector>
 #include "utils.h"
@@ -18,7 +17,7 @@ public:
 
 	/// \brief Re-read the input file.
 	///
-	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`, so
+	/// \note This overwrites the contents of `urls` and `tags`, so
 	/// make sure to save your modifications with `write_config()`.
 	virtual std::optional<utils::ReadTextFileError> reload() = 0;
 
@@ -41,7 +40,6 @@ public:
 protected:
 	std::vector<std::string> urls;
 	std::map<std::string, std::vector<std::string>> tags;
-	std::set<std::string> alltags;
 };
 
 } // namespace newsboat

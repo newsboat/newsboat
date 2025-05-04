@@ -23,7 +23,6 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
-	alltags.clear();
 
 	auto result = utils::read_text_file(filename);
 	if (!result) {
@@ -48,9 +47,6 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 		tokens.erase(tokens.begin());
 		if (!tokens.empty()) {
 			tags[url] = tokens;
-			for (const auto& token : tokens) {
-				alltags.insert(token);
-			}
 		}
 	};
 

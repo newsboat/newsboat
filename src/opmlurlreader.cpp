@@ -17,7 +17,6 @@ std::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
-	alltags.clear();
 
 	std::vector<std::string> opml_urls =
 		utils::tokenize_quoted(this->get_source(), " ");
@@ -33,11 +32,7 @@ std::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
-			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
-			for (const auto& tag : file_tags) {
-				alltags.insert(tag);
-			}
 		}
 	}
 
@@ -91,7 +86,6 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 				std::vector<std::string> tmptags;
 				tmptags.push_back(tag);
 				tags[theurl] = tmptags;
-				alltags.insert(tag);
 			}
 		}
 		if (rssurl) {

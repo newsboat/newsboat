@@ -24,7 +24,6 @@ std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
-	alltags.clear();
 
 	if (cfg->get_configvalue_as_bool("freshrss-show-special-feeds")) {
 		std::vector<std::string> tmptags;
@@ -48,9 +47,6 @@ std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 
 			auto url_tags = ur.get_tags(url);
 			tags[url] = url_tags;
-			for (const auto& tag : url_tags) {
-				alltags.insert(tag);
-			}
 		}
 	}
 
@@ -64,7 +60,6 @@ std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 		tags[tagged.first] = url_tags;
 		for (const auto& tag : url_tags) {
 			LOG(Level::DEBUG, "%s: added tag %s", url, tag);
-			alltags.insert(tag);
 		}
 	}
 

@@ -42,7 +42,6 @@ std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
-	alltags.clear();
 
 	if (cfg->get_configvalue_as_bool("inoreader-show-special-feeds")) {
 		std::vector<std::string> tmptags;
@@ -66,11 +65,7 @@ std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
-			std::vector<std::string>& file_tags(ur.get_tags(url));
 			tags[url] = ur.get_tags(url);
-			for (const auto& tag : file_tags) {
-				alltags.insert(tag);
-			}
 		}
 	}
 
@@ -81,7 +76,6 @@ std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
-			alltags.insert(tag);
 		}
 	}
 

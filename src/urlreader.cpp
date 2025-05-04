@@ -1,5 +1,7 @@
 #include "urlreader.h"
 
+#include <set>
+
 namespace newsboat {
 
 std::vector<std::string>& UrlReader::get_urls()
@@ -14,15 +16,17 @@ std::vector<std::string>& UrlReader::get_tags(const std::string& url)
 
 std::vector<std::string> UrlReader::get_alltags()
 {
-	std::vector<std::string> tmptags;
-	for (const auto& t : alltags) {
-		if (t.substr(0, 1) != "~") {
-			// std::copy_if would make this code less readable IMHO
-			// cppcheck-suppress useStlAlgorithm
-			tmptags.push_back(t);
+	std::set<std::string> tmptags;
+	for (const auto& url_tags : tags) {
+		for (const auto& tag : url_tags.second) {
+			if (tag.substr(0, 1) != "~") {
+				// std::copy_if would make this code less readable IMHO
+				// cppcheck-suppress useStlAlgorithm
+				tmptags.insert(tag);
+			}
 		}
 	}
-	return tmptags;
+	return std::vector<std::string>(tmptags.begin(), tmptags.end());
 }
 
 } // namespace newsboat

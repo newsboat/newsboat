@@ -20,7 +20,6 @@ std::optional<utils::ReadTextFileError> NewsBlurUrlReader::reload()
 {
 	urls.clear();
 	tags.clear();
-	alltags.clear();
 
 	FileUrlReader ur(file);
 	const auto error_message = ur.reload();
@@ -44,7 +43,6 @@ std::optional<utils::ReadTextFileError> NewsBlurUrlReader::reload()
 		tags[url.first] = url.second;
 		for (const auto& tag : url.second) {
 			LOG(Level::DEBUG, "%s: added tag %s", url.first, tag);
-			alltags.insert(tag);
 		}
 	}
 
