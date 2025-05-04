@@ -38,6 +38,8 @@ public:
 	std::vector<std::string> get_alltags() const;
 
 protected:
+	void load_query_urls_from_file(std::string file);
+
 	std::vector<std::string> urls;
 	std::map<std::string, std::vector<std::string>> tags;
 };

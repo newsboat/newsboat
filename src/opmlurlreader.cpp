@@ -2,7 +2,6 @@
 
 #include <cstring>
 
-#include "fileurlreader.h"
 #include "logger.h"
 #include "utils.h"
 
@@ -21,20 +20,7 @@ std::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 	std::vector<std::string> opml_urls =
 		utils::tokenize_quoted(this->get_source(), " ");
 
-	FileUrlReader ur(file);
-	const auto error_message = ur.reload();
-	if (error_message.has_value()) {
-		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
-		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
-	}
-
-	const auto& file_urls(ur.get_urls());
-	for (const auto& url : file_urls) {
-		if (utils::is_query_url(url)) {
-			urls.push_back(url);
-			tags[url] = ur.get_tags(url);
-		}
-	}
+	load_query_urls_from_file(file);
 
 	for (const auto& url : opml_urls) {
 		LOG(Level::DEBUG,

@@ -2,7 +2,6 @@
 
 #include "config.h"
 #include "configcontainer.h"
-#include "fileurlreader.h"
 #include "logger.h"
 #include "remoteapi.h"
 #include "utils.h"
@@ -34,19 +33,7 @@ std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 		tags[star_url] = tmptags;
 	}
 
-	FileUrlReader ur(file);
-	const auto error_message = ur.reload();
-	if (error_message.has_value()) {
-		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
-		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
-	}
-
-	const std::vector<std::string>& file_urls(ur.get_urls());
-	for (const auto& url : file_urls) {
-		if (utils::is_query_url(url)) {
-			urls.push_back(url);
-		}
-	}
+	load_query_urls_from_file(file);
 
 	const std::vector<TaggedFeedUrl> feedurls = api->get_subscribed_urls();
 
