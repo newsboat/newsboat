@@ -4,7 +4,7 @@
 
 namespace newsboat {
 
-std::vector<std::string>& UrlReader::get_urls()
+const std::vector<std::string>& UrlReader::get_urls() const
 {
 	return urls;
 }
@@ -14,7 +14,7 @@ std::vector<std::string>& UrlReader::get_tags(const std::string& url)
 	return tags[url];
 }
 
-std::vector<std::string> UrlReader::get_alltags()
+std::vector<std::string> UrlReader::get_alltags() const
 {
 	std::set<std::string> tmptags;
 	for (const auto& url_tags : tags) {

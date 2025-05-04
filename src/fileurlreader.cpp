@@ -14,9 +14,16 @@ FileUrlReader::FileUrlReader(const std::string& file)
 {
 }
 
-std::string FileUrlReader::get_source()
+std::string FileUrlReader::get_source() const
 {
 	return filename;
+}
+
+void FileUrlReader::add_url(const std::string& url,
+	const std::vector<std::string>& url_tags)
+{
+	urls.push_back(url);
+	tags[url] = url_tags;
 }
 
 std::optional<utils::ReadTextFileError> FileUrlReader::reload()

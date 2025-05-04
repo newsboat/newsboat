@@ -148,14 +148,15 @@ void rec_find_rss_outlines(
 				auto& urls = urlcfg.get_urls();
 				if (std::find(urls.begin(), urls.end(), quoted_url) == urls.end()) {
 					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
-					urls.push_back(quoted_url);
+					std::vector<std::string> tags;
 					if (tag.length() > 0) {
 						LOG(Level::DEBUG,
 							"opml::import: appending tag %s to url %s",
 							tag,
 							quoted_url);
-						urlcfg.get_tags(quoted_url).push_back(tag);
+						tags.push_back(tag);
 					}
+					urlcfg.add_url(quoted_url, tags);
 				} else {
 					LOG(Level::DEBUG,
 						"opml::import: url = %s is already in list",

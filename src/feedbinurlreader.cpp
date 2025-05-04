@@ -49,7 +49,7 @@ std::optional<utils::ReadTextFileError> FeedbinUrlReader::reload()
 	return {};
 }
 
-std::string FeedbinUrlReader::get_source()
+std::string FeedbinUrlReader::get_source() const
 {
 	return "Feedbin";
 }

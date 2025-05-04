@@ -58,7 +58,7 @@ std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 
-	std::vector<std::string>& file_urls(ur.get_urls());
+	const auto& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
@@ -79,7 +79,7 @@ std::optional<utils::ReadTextFileError> OldReaderUrlReader::reload()
 	return {};
 }
 
-std::string OldReaderUrlReader::get_source()
+std::string OldReaderUrlReader::get_source() const
 {
 	return "The Old Reader";
 }

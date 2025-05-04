@@ -82,7 +82,7 @@ std::optional<utils::ReadTextFileError> FeedHqUrlReader::reload()
 	return {};
 }
 
-std::string FeedHqUrlReader::get_source()
+std::string FeedHqUrlReader::get_source() const
 {
 	return "FeedHQ";
 }

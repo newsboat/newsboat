@@ -28,7 +28,7 @@ std::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 
-	std::vector<std::string>& file_urls(ur.get_urls());
+	const auto& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
@@ -122,7 +122,7 @@ void OpmlUrlReader::rec_find_rss_outlines(xmlNode* node, std::string tag)
 	}
 }
 
-std::string OpmlUrlReader::get_source()
+std::string OpmlUrlReader::get_source() const
 {
 	return cfg.get_configvalue("opml-url");
 }

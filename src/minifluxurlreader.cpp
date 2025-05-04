@@ -62,7 +62,7 @@ std::optional<utils::ReadTextFileError> MinifluxUrlReader::reload()
 	return {};
 }
 
-std::string MinifluxUrlReader::get_source()
+std::string MinifluxUrlReader::get_source() const
 {
 	return "Miniflux";
 }

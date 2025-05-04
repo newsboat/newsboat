@@ -49,7 +49,7 @@ std::optional<utils::ReadTextFileError> TtRssUrlReader::reload()
 	return {};
 }
 
-std::string TtRssUrlReader::get_source()
+std::string TtRssUrlReader::get_source() const
 {
 	return "Tiny Tiny RSS";
 }

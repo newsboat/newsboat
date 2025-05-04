@@ -26,16 +26,16 @@ public:
 	/// This can be a path (e.g. ~/.newsboat/urls), a URL (e.g. the value of
 	/// `opml-url` setting), or a name of the remote API in use (e.g. "Tiny
 	/// Tiny RSS").
-	virtual std::string get_source() = 0;
+	virtual std::string get_source() const = 0;
 
 	/// \brief A list of feed URLs.
-	std::vector<std::string>& get_urls();
+	const std::vector<std::string>& get_urls() const;
 
 	/// \brief Tags of feed that has url `url`.
 	std::vector<std::string>& get_tags(const std::string& url);
 
 	/// \brief List of all extant tags.
-	std::vector<std::string> get_alltags();
+	std::vector<std::string> get_alltags() const;
 
 protected:
 	std::vector<std::string> urls;

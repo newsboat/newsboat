@@ -66,7 +66,7 @@ std::optional<utils::ReadTextFileError> FreshRssUrlReader::reload()
 	return {};
 }
 
-std::string FreshRssUrlReader::get_source()
+std::string FreshRssUrlReader::get_source() const
 {
 	return "FreshRSS";
 }

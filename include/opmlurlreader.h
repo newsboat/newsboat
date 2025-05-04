@@ -13,7 +13,7 @@ class OpmlUrlReader : public UrlReader {
 public:
 	explicit OpmlUrlReader(ConfigContainer& c, const std::string& url_file);
 	std::optional<utils::ReadTextFileError> reload() override;
-	std::string get_source() override;
+	std::string get_source() const override;
 
 protected:
 	virtual void handle_node(xmlNode* node, const std::string& tag);

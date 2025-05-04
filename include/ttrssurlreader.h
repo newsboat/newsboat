@@ -12,7 +12,7 @@ public:
 	TtRssUrlReader(const std::string& url_file, RemoteApi* a);
 	~TtRssUrlReader() override;
 	std::optional<utils::ReadTextFileError> reload() override;
-	std::string get_source() override;
+	std::string get_source() const override;
 
 private:
 	std::string file;

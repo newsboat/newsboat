@@ -61,7 +61,7 @@ std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
 	}
 
-	std::vector<std::string>& file_urls(ur.get_urls());
+	const auto& file_urls(ur.get_urls());
 	for (const auto& url : file_urls) {
 		if (utils::is_query_url(url)) {
 			urls.push_back(url);
@@ -82,7 +82,7 @@ std::optional<utils::ReadTextFileError> InoreaderUrlReader::reload()
 	return {};
 }
 
-std::string InoreaderUrlReader::get_source()
+std::string InoreaderUrlReader::get_source() const
 {
 	return "inoreader";
 }
