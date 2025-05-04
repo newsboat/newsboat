@@ -2,13 +2,14 @@
 
 #include <cstring>
 
+#include "fileurlreader.h"
 #include "logger.h"
 #include "utils.h"
 
 namespace newsboat {
 
-OpmlUrlReader::OpmlUrlReader(ConfigContainer& c)
-	: cfg(c)
+OpmlUrlReader::OpmlUrlReader(ConfigContainer& c, const std::string& url_file)
+	: cfg(c), file(url_file)
 {
 }
 
@@ -18,10 +19,29 @@ std::optional<utils::ReadTextFileError> OpmlUrlReader::reload()
 	tags.clear();
 	alltags.clear();
 
-	std::vector<std::string> urls =
+	std::vector<std::string> opml_urls =
 		utils::tokenize_quoted(this->get_source(), " ");
 
-	for (const auto& url : urls) {
+	FileUrlReader ur(file);
+	const auto error_message = ur.reload();
+	if (error_message.has_value()) {
+		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
+		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
+	}
+
+	std::vector<std::string>& file_urls(ur.get_urls());
+	for (const auto& url : file_urls) {
+		if (utils::is_query_url(url)) {
+			urls.push_back(url);
+			std::vector<std::string>& file_tags(ur.get_tags(url));
+			tags[url] = ur.get_tags(url);
+			for (const auto& tag : file_tags) {
+				alltags.insert(tag);
+			}
+		}
+	}
+
+	for (const auto& url : opml_urls) {
 		LOG(Level::DEBUG,
 			"OpmlUrlReader::reload: downloading `%s'",
 			url);
