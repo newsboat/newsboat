@@ -247,7 +247,7 @@ int Controller::run(const CliArgsParser& args)
 	if (type == "local") {
 		urlcfg = std::make_unique<FileUrlReader>(configpaths.url_file());
 	} else if (type == "opml") {
-		urlcfg = std::make_unique<OpmlUrlReader>(cfg);
+		urlcfg = std::make_unique<OpmlUrlReader>(cfg, configpaths.url_file());
 	} else if (type == "oldreader") {
 		api = std::make_unique<OldReaderApi>(cfg);
 		urlcfg = std::make_unique<OldReaderUrlReader>(
