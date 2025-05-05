@@ -11,7 +11,6 @@ src/dirbrowserformaction.cpp
 src/emptyformaction.cpp
 src/feedcontainer.cpp
 src/feedbinapi.cpp
-src/feedbinurlreader.cpp
 src/feedhqapi.cpp
 src/feedhqurlreader.cpp
 src/feedlistformaction.cpp
@@ -40,9 +39,7 @@ src/listwidgetbackend.cpp
 src/minifluxapi.cpp
 src/minifluxurlreader.cpp
 src/newsblurapi.cpp
-src/newsblururlreader.cpp
 src/ocnewsapi.cpp
-src/ocnewsurlreader.cpp
 src/oldreaderapi.cpp
 src/oldreaderurlreader.cpp
 src/opml.cpp
@@ -53,6 +50,7 @@ src/regexowner.cpp
 src/reloader.cpp
 src/reloadthread.cpp
 src/remoteapi.cpp
+src/remoteapiurlreader.cpp
 src/rssfeed.cpp
 src/rssignores.cpp
 src/rssitem.cpp
@@ -65,7 +63,6 @@ src/tagsouppullparser.cpp
 src/textformatter.cpp
 src/textviewwidget.cpp
 src/ttrssapi.cpp
-src/ttrssurlreader.cpp
 src/urlreader.cpp
 src/urlviewformaction.cpp
 src/view.cpp

@@ -35,7 +35,6 @@
 #include "feedhqurlreader.h"
 #include "formaction.h"
 #include "feedbinapi.h"
-#include "feedbinurlreader.h"
 #include "freshrssapi.h"
 #include "freshrssurlreader.h"
 #include "fileurlreader.h"
@@ -46,22 +45,20 @@
 #include "minifluxapi.h"
 #include "minifluxurlreader.h"
 #include "newsblurapi.h"
-#include "newsblururlreader.h"
 #include "ocnewsapi.h"
-#include "ocnewsurlreader.h"
 #include "oldreaderapi.h"
 #include "oldreaderurlreader.h"
 #include "opml.h"
 #include "opmlurlreader.h"
 #include "regexmanager.h"
 #include "remoteapi.h"
+#include "remoteapiurlreader.h"
 #include "rssfeed.h"
 #include "rssparser.h"
 #include "scopemeasure.h"
 #include "stflpp.h"
 #include "strprintf.h"
 #include "ttrssapi.h"
-#include "ttrssurlreader.h"
 #include "utils.h"
 #include "view.h"
 
@@ -254,7 +251,8 @@ int Controller::run(const CliArgsParser& args)
 				&cfg, configpaths.url_file(), api.get());
 	} else if (type == "ttrss") {
 		api = std::make_unique<TtRssApi>(cfg);
-		urlcfg = std::make_unique<TtRssUrlReader>(configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<RemoteApiUrlReader>("Tiny Tiny RSS", configpaths.url_file(),
+				*api);
 	} else if (type == "newsblur") {
 		const auto cookies = cfg.get_configvalue("cookie-cache");
 		if (cookies.empty()) {
@@ -273,7 +271,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = std::make_unique<NewsBlurApi>(cfg);
-		urlcfg = std::make_unique<NewsBlurUrlReader>(configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<RemoteApiUrlReader>("NewsBlur", configpaths.url_file(), *api);
 	} else if (type == "feedhq") {
 		api = std::make_unique<FeedHqApi>(cfg);
 		urlcfg = std::make_unique<FeedHqUrlReader>(&cfg, configpaths.url_file(), api.get());
@@ -293,7 +291,7 @@ int Controller::run(const CliArgsParser& args)
 		}
 
 		api = std::make_unique<FeedbinApi>(cfg);
-		urlcfg = std::make_unique<FeedbinUrlReader>(configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<RemoteApiUrlReader>("Feedbin", configpaths.url_file(), *api);
 	} else if (type == "freshrss") {
 		const auto freshrss_url = cfg.get_configvalue("freshrss-url");
 		if (freshrss_url.empty()) {
@@ -320,7 +318,8 @@ int Controller::run(const CliArgsParser& args)
 		urlcfg = std::make_unique<FreshRssUrlReader>(&cfg, configpaths.url_file(), api.get());
 	} else if (type == "ocnews") {
 		api = std::make_unique<OcNewsApi>(cfg);
-		urlcfg = std::make_unique<OcNewsUrlReader>(configpaths.url_file(), api.get());
+		urlcfg = std::make_unique<RemoteApiUrlReader>("ownCloud News", configpaths.url_file(),
+				*api);
 	} else if (type == "miniflux") {
 		const auto miniflux_url = cfg.get_configvalue("miniflux-url");
 		if (miniflux_url.empty()) {
