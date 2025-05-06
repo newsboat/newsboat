@@ -69,7 +69,6 @@ View::View(Controller& c)
 	, rxman(c.get_regexmanager())
 	, is_inside_qna(false)
 	, is_inside_cmdline(false)
-	, tab_count(0)
 	, rsscache(nullptr)
 	, filters(ctrl.get_filtercontainer())
 	, colorman(ctrl.get_colormanager())
@@ -1187,76 +1186,16 @@ void View::inside_cmdline(bool f)
 	is_inside_cmdline = f;
 }
 
-void View::clear_line(std::shared_ptr<FormAction> fa)
-{
-	fa->set_value("qna_value", "");
-	fa->set_value("qna_value_pos", "0");
-	LOG(Level::DEBUG, "View::clear_line: cleared line");
-}
-
-void View::clear_eol(std::shared_ptr<FormAction> fa)
-{
-	unsigned int pos = utils::to_u(fa->get_value("qna_value_pos"), 0);
-	std::string val = fa->get_value("qna_value");
-	val.erase(pos, val.length());
-	fa->set_value("qna_value", val);
-	fa->set_value("qna_value_pos", std::to_string(val.length()));
-	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
-}
-
-void View::delete_word(std::shared_ptr<FormAction> fa)
-{
-	std::string::size_type curpos =
-		utils::to_u(fa->get_value("qna_value_pos"), 0);
-	std::string val = fa->get_value("qna_value");
-	std::string::size_type firstpos = curpos;
-	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
-	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
-		if (firstpos != 0 && firstpos >= val.length()) {
-			firstpos = val.length() - 1;
-		}
-		while (firstpos > 0 && ::isspace(val[firstpos])) {
-			--firstpos;
-		}
-	}
-	while (firstpos > 0 && !::isspace(val[firstpos])) {
-		--firstpos;
-	}
-	if (firstpos != 0) {
-		firstpos++;
-	}
-	val.erase(firstpos, curpos - firstpos);
-	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
-	fa->set_value("qna_value", val);
-	fa->set_value("qna_value_pos", std::to_string(firstpos));
-}
-
 bool View::handle_qna_event(const std::string& event,
 	std::shared_ptr<FormAction> fa)
 {
 	if (is_inside_qna) {
 		LOG(Level::DEBUG,
 			"View::handle_qna_event: we're inside QNA input");
-		if (is_inside_cmdline && event == "TAB") {
-			handle_cmdline_completion(fa);
-			return true;
-		}
 		if (event == "ESC") {
 			fa->cancel_qna();
-		} else if (event == "UP") {
-			fa->qna_previous_history();
-		} else if (event == "DOWN") {
-			fa->qna_next_history();
-		} else if (event == "ENTER") {
-			fa->finish_qna_question();
-		} else if (event == "^U") {
-			clear_line(fa);
-		} else if (event == "^K") {
-			clear_eol(fa);
-		} else if (event == "^G") {
-			fa->cancel_qna();
-		} else if (event == "^W") {
-			delete_word(fa);
+		} else {
+			fa->handle_qna_event(event, is_inside_cmdline);
 		}
 
 		return true;
@@ -1273,38 +1212,6 @@ void View::handle_resize()
 			form->set_redraw(true);
 		}
 	}
-}
-
-void View::handle_cmdline_completion(std::shared_ptr<FormAction> fa)
-{
-	std::string fragment = fa->get_value("qna_value");
-	if (fragment != last_fragment || fragment == "") {
-		last_fragment = fragment;
-		suggestions = fa->get_suggestions(fragment);
-		tab_count = 0;
-	}
-	tab_count++;
-	std::string suggestion;
-	switch (suggestions.size()) {
-	case 0:
-		LOG(Level::DEBUG,
-			"View::handle_cmdline_completion: found no suggestion "
-			"for "
-			"`%s'",
-			fragment);
-		// direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
-		::beep();
-		return;
-	case 1:
-		suggestion = suggestions[0];
-		break;
-	default:
-		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
-		break;
-	}
-	fa->set_value("qna_value", suggestion);
-	fa->set_value("qna_value_pos", std::to_string(suggestion.length()));
-	last_fragment = suggestion;
 }
 
 void View::ctrl_c_action(int /* sig */)

@@ -95,6 +95,12 @@ public:
 	void cancel_qna();
 	void qna_next_history();
 	void qna_previous_history();
+	void clear_line();
+	void clear_eol();
+	void delete_word();
+	void handle_cmdline_completion();
+
+	void handle_qna_event(std::string event, bool inside_cmd);
 
 	void set_parent_formaction(std::shared_ptr<FormAction> fa)
 	{
@@ -173,6 +179,11 @@ private:
 	QnaFinishAction qna_finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;
+
+	// cmdline completion
+	std::string last_fragment;
+	std::vector<std::string> suggestions;
+	unsigned int tab_count;
 };
 
 } // namespace newsboat

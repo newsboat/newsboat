@@ -28,6 +28,7 @@ FormAction::FormAction(View& vv, std::string formstr, ConfigContainer* cfg)
 	, qna_prompt_line(f, "qna_prompt")
 	, qna_finish_operation(QnaFinishAction::None)
 	, qna_history(nullptr)
+	, tab_count(0)
 {
 	if (cfg->get_configvalue_as_bool("show-keymap-hint") == false) {
 		set_value("showhint", "0");
@@ -489,6 +490,99 @@ void FormAction::qna_previous_history()
 		std::string entry = qna_history->previous_line();
 		set_value("qna_value", entry);
 		set_value("qna_value_pos", std::to_string(entry.length()));
+	}
+}
+
+void FormAction::clear_line()
+{
+	set_value("qna_value", "");
+	set_value("qna_value_pos", "0");
+}
+
+void FormAction::clear_eol()
+{
+	unsigned int pos = utils::to_u(get_value("qna_value_pos"), 0);
+	std::string val = get_value("qna_value");
+	val.erase(pos, val.length());
+	set_value("qna_value", val);
+	set_value("qna_value_pos", std::to_string(val.length()));
+	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
+}
+
+void FormAction::delete_word()
+{
+	std::string::size_type curpos =
+		utils::to_u(get_value("qna_value_pos"), 0);
+	std::string val = get_value("qna_value");
+	std::string::size_type firstpos = curpos;
+	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
+	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
+		if (firstpos != 0 && firstpos >= val.length()) {
+			firstpos = val.length() - 1;
+		}
+		while (firstpos > 0 && ::isspace(val[firstpos])) {
+			--firstpos;
+		}
+	}
+	while (firstpos > 0 && !::isspace(val[firstpos])) {
+		--firstpos;
+	}
+	if (firstpos != 0) {
+		firstpos++;
+	}
+	val.erase(firstpos, curpos - firstpos);
+	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
+	set_value("qna_value", val);
+	set_value("qna_value_pos", std::to_string(firstpos));
+}
+
+void FormAction::handle_cmdline_completion()
+{
+	std::string fragment = get_value("qna_value");
+	if (fragment != last_fragment || fragment == "") {
+		last_fragment = fragment;
+		suggestions = get_suggestions(fragment);
+		tab_count = 0;
+	}
+	tab_count++;
+	std::string suggestion;
+	switch (suggestions.size()) {
+	case 0:
+		LOG(Level::DEBUG, "FormAction::handle_cmdline_completion: found no suggestion for `%s'",
+			fragment);
+		// direct call to ncurses - we beep to signal that there is no suggestion available, just like vim
+		::beep();
+		return;
+	case 1:
+		suggestion = suggestions[0];
+		break;
+	default:
+		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
+		break;
+	}
+	set_value("qna_value", suggestion);
+	set_value("qna_value_pos", std::to_string(suggestion.length()));
+	last_fragment = suggestion;
+}
+
+void FormAction::handle_qna_event(std::string event, bool inside_cmd)
+{
+	if (inside_cmd && event == "TAB") {
+		handle_cmdline_completion();
+	} else if (event == "UP") {
+		qna_previous_history();
+	} else if (event == "DOWN") {
+		qna_next_history();
+	} else if (event == "ENTER") {
+		finish_qna_question();
+	} else if (event == "^U") {
+		clear_line();
+	} else if (event == "^K") {
+		clear_eol();
+	} else if (event == "^G") {
+		cancel_qna();
+	} else if (event == "^W") {
+		delete_word();
 	}
 }
 
