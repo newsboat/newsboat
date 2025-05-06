@@ -32,6 +32,7 @@ src/itemlistformaction.cpp
 src/itemrenderer.cpp
 src/itemutils.cpp
 src/itemviewformaction.cpp
+src/lineedit.cpp
 src/lineview.cpp
 src/links.cpp
 src/listformaction.cpp

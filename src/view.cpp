@@ -1190,13 +1190,8 @@ bool View::handle_qna_event(const std::string& event,
 	std::shared_ptr<FormAction> fa)
 {
 	if (is_inside_qna) {
-		LOG(Level::DEBUG,
-			"View::handle_qna_event: we're inside QNA input");
-		if (event == "ESC") {
-			fa->cancel_qna();
-		} else {
-			fa->handle_qna_event(event, is_inside_cmdline);
-		}
+		LOG(Level::DEBUG, "View::handle_qna_event: we're inside QNA input");
+		fa->handle_qna_event(event, is_inside_cmdline);
 
 		return true;
 	}

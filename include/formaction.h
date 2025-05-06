@@ -7,6 +7,7 @@
 
 #include "history.h"
 #include "keymap.h"
+#include "lineedit.h"
 #include "lineview.h"
 #include "listwidget.h"
 #include "stflpp.h"
@@ -175,6 +176,7 @@ private:
 	LineView head_line;
 	LineView msg_line;
 	LineView qna_prompt_line;
+	LineEdit qna_input;
 	std::vector<QnaPair> qna_prompts;
 	QnaFinishAction qna_finish_operation;
 	History* qna_history;

@@ -26,6 +26,7 @@ FormAction::FormAction(View& vv, std::string formstr, ConfigContainer* cfg)
 	, head_line(f, "head")
 	, msg_line(f, "msg")
 	, qna_prompt_line(f, "qna_prompt")
+	, qna_input(f, "qna")
 	, qna_finish_operation(QnaFinishAction::None)
 	, qna_history(nullptr)
 	, tab_count(0)
@@ -456,7 +457,7 @@ void FormAction::start_qna(const std::vector<QnaPair>& prompts,
 
 void FormAction::finish_qna_question()
 {
-	qna_responses.push_back(get_value("qna_value"));
+	qna_responses.push_back(qna_input.get_value());
 	start_next_question();
 }
 
@@ -465,7 +466,7 @@ void FormAction::cancel_qna()
 	LOG(Level::DEBUG, "FormAction::cancel_qna");
 
 	qna_prompt_line.hide();
-	f.set("show_qna_input", "0");
+	qna_input.hide();
 	msg_line.show();
 	msg_line.set_text("");
 
@@ -479,8 +480,8 @@ void FormAction::qna_next_history()
 {
 	if (qna_history) {
 		std::string entry = qna_history->next_line();
-		set_value("qna_value", entry);
-		set_value("qna_value_pos", std::to_string(entry.length()));
+		qna_input.set_value(entry);
+		qna_input.set_position(entry.length());
 	}
 }
 
@@ -488,32 +489,31 @@ void FormAction::qna_previous_history()
 {
 	if (qna_history) {
 		std::string entry = qna_history->previous_line();
-		set_value("qna_value", entry);
-		set_value("qna_value_pos", std::to_string(entry.length()));
+		qna_input.set_value(entry);
+		qna_input.set_position(entry.length());
 	}
 }
 
 void FormAction::clear_line()
 {
-	set_value("qna_value", "");
-	set_value("qna_value_pos", "0");
+	qna_input.set_value("");
+	qna_input.set_position(0);
 }
 
 void FormAction::clear_eol()
 {
-	unsigned int pos = utils::to_u(get_value("qna_value_pos"), 0);
-	std::string val = get_value("qna_value");
+	unsigned int pos = qna_input.get_position();
+	std::string val = qna_input.get_value();
 	val.erase(pos, val.length());
-	set_value("qna_value", val);
-	set_value("qna_value_pos", std::to_string(val.length()));
+	qna_input.set_value(val);
+	qna_input.set_position(val.length());
 	LOG(Level::DEBUG, "View::clear_eol: cleared to end of line");
 }
 
 void FormAction::delete_word()
 {
-	std::string::size_type curpos =
-		utils::to_u(get_value("qna_value_pos"), 0);
-	std::string val = get_value("qna_value");
+	std::string::size_type curpos = qna_input.get_position();
+	std::string val = qna_input.get_value();
 	std::string::size_type firstpos = curpos;
 	LOG(Level::DEBUG, "View::delete_word: before val = %s", val);
 	if (firstpos >= val.length() || ::isspace(val[firstpos])) {
@@ -532,13 +532,13 @@ void FormAction::delete_word()
 	}
 	val.erase(firstpos, curpos - firstpos);
 	LOG(Level::DEBUG, "View::delete_word: after val = %s", val);
-	set_value("qna_value", val);
-	set_value("qna_value_pos", std::to_string(firstpos));
+	qna_input.set_value(val);
+	qna_input.set_position(firstpos);
 }
 
 void FormAction::handle_cmdline_completion()
 {
-	std::string fragment = get_value("qna_value");
+	std::string fragment = qna_input.get_value();
 	if (fragment != last_fragment || fragment == "") {
 		last_fragment = fragment;
 		suggestions = get_suggestions(fragment);
@@ -560,14 +560,16 @@ void FormAction::handle_cmdline_completion()
 		suggestion = suggestions[(tab_count - 1) % suggestions.size()];
 		break;
 	}
-	set_value("qna_value", suggestion);
-	set_value("qna_value_pos", std::to_string(suggestion.length()));
+	qna_input.set_value(suggestion);
+	qna_input.set_position(suggestion.length());
 	last_fragment = suggestion;
 }
 
 void FormAction::handle_qna_event(std::string event, bool inside_cmd)
 {
-	if (inside_cmd && event == "TAB") {
+	if (event == "ESC") {
+		cancel_qna();
+	} else if (inside_cmd && event == "TAB") {
 		handle_cmdline_completion();
 	} else if (event == "UP") {
 		qna_previous_history();
@@ -737,18 +739,17 @@ void FormAction::start_next_question()
 	 */
 	if (qna_prompts.size() > 0) {
 		qna_prompt_line.set_text(qna_prompts[0].first);
-		f.set("qna_value", qna_prompts[0].second);
+		qna_input.set_value(qna_prompts[0].second);
 
 		qna_prompt_line.show();
-		f.set("show_qna_input", "1");
+		qna_input.show();
 		msg_line.hide();
 
 		f.set_focus("qnainput");
 
 		// Set position to 0 and back to ensure that the text is visible
 		draw_form();
-		set_value("qna_value_pos",
-			std::to_string(qna_prompts[0].second.length()));
+		qna_input.set_position(qna_prompts[0].second.length());
 
 		qna_prompts.erase(qna_prompts.begin());
 	} else {
@@ -758,7 +759,7 @@ void FormAction::start_next_question()
 		 * finished_qna() method.
 		 */
 		qna_prompt_line.hide();
-		f.set("show_qna_input", "0");
+		qna_input.hide();
 		msg_line.show();
 		msg_line.set_text("");
 
