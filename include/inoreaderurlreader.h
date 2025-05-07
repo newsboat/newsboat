@@ -14,8 +14,8 @@ public:
 		const std::string& url_file,
 		RemoteApi* a);
 	virtual ~InoreaderUrlReader();
-	virtual std::optional<utils::ReadTextFileError> reload();
-	virtual std::string get_source();
+	virtual std::optional<utils::ReadTextFileError> reload() override;
+	virtual std::string get_source() const override;
 
 private:
 	ConfigContainer* cfg;

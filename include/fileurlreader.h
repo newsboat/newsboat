@@ -16,7 +16,9 @@ public:
 	/// \return A non-value on success, a structure with error info otherwise.
 	std::optional<utils::ReadTextFileError> reload() override;
 
-	std::string get_source() override;
+	std::string get_source() const override;
+
+	void add_url(const std::string& url, const std::vector<std::string>& url_tags);
 
 	/// \brief Write URLs back to the urls file.
 	///

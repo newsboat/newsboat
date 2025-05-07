@@ -3,7 +3,6 @@
 
 #include <map>
 #include <optional>
-#include <set>
 #include <string>
 #include <vector>
 #include "utils.h"
@@ -18,7 +17,7 @@ public:
 
 	/// \brief Re-read the input file.
 	///
-	/// \note This overwrites the contents of `urls`, `tags`, and `alltags`, so
+	/// \note This overwrites the contents of `urls` and `tags`, so
 	/// make sure to save your modifications with `write_config()`.
 	virtual std::optional<utils::ReadTextFileError> reload() = 0;
 
@@ -27,21 +26,22 @@ public:
 	/// This can be a path (e.g. ~/.newsboat/urls), a URL (e.g. the value of
 	/// `opml-url` setting), or a name of the remote API in use (e.g. "Tiny
 	/// Tiny RSS").
-	virtual std::string get_source() = 0;
+	virtual std::string get_source() const = 0;
 
 	/// \brief A list of feed URLs.
-	std::vector<std::string>& get_urls();
+	const std::vector<std::string>& get_urls() const;
 
 	/// \brief Tags of feed that has url `url`.
 	std::vector<std::string>& get_tags(const std::string& url);
 
 	/// \brief List of all extant tags.
-	std::vector<std::string> get_alltags();
+	std::vector<std::string> get_alltags() const;
 
 protected:
+	void load_query_urls_from_file(std::string file);
+
 	std::vector<std::string> urls;
 	std::map<std::string, std::vector<std::string>> tags;
-	std::set<std::string> alltags;
 };
 
 } // namespace newsboat

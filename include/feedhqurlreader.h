@@ -15,7 +15,7 @@ public:
 		RemoteApi* a);
 	~FeedHqUrlReader() override;
 	std::optional<utils::ReadTextFileError> reload() override;
-	std::string get_source() override;
+	std::string get_source() const override;
 
 private:
 	ConfigContainer* cfg;
