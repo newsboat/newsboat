@@ -137,14 +137,14 @@ task:
                 cxx: g++-14
                 rust_version: 1.83.0
 
-        - name: GCC 14, more warnings and checks (Ubuntu 24.04)
+        - name: GCC 15, more warnings and checks (Ubuntu 25.04)
           container:
             greedy: true
-            dockerfile: docker/ubuntu_24.04-build-tools.dockerfile
+            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
             docker_arguments:
-                cxx_package: g++-14
-                cc: gcc-14
-                cxx: g++-14
+                cxx_package: g++-15
+                cc: gcc-15
+                cxx: g++-15
           env: &extra_warnings_and_checks_env
             CXXFLAGS: "-D_GLIBCXX_ASSERTIONS -Wformat -Wformat-security -fstack-protector-all -Wstack-protector -D_FORTIFY_SOURCE=2 -Wnull-dereference -Wdouble-promotion -O3"
         - name: Clang 18, more warnings and checks (Ubuntu 24.04)
@@ -221,6 +221,14 @@ task:
                 cxx_package: g++-14
                 cc: gcc-14
                 cxx: g++-14
+        - name: Rust stable, GCC 15 (Ubuntu 25.04)
+          container:
+            greedy: true
+            dockerfile: docker/ubuntu_25.04-build-tools.dockerfile
+            docker_arguments:
+                cxx_package: g++-15
+                cc: gcc-15
+                cxx: g++-15
         - name: Rust stable, Clang 5.0 (Ubuntu 18.04)
           container:
             greedy: true
