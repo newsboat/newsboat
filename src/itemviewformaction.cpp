@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "itemviewformaction.h"
 
 #include <algorithm>
@@ -628,20 +626,15 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 
 void ItemViewFormAction::handle_save(const Filepath& filename_param)
 {
-	Filepath filename = utils::resolve_tilde(filename_param);
-	if (filename == "") {
+	const Filepath filename = utils::resolve_tilde(filename_param);
+	if (filename == Filepath()) {
 		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v.get_ctrl().write_item(
-				*item, filename);
-			v.get_statusline().show_message(strprintf::fmt(
-					_("Saved article to %s"),
-					filename));
+			v.get_ctrl().write_item(*item, filename);
+			v.get_statusline().show_message(strprintf::fmt(_("Saved article to %s"), filename));
 		} catch (...) {
-			v.get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't save "
-						"article to %s"),
+			v.get_statusline().show_error(strprintf::fmt(_("Error: couldn't save article to %s"),
 					filename));
 		}
 	}
