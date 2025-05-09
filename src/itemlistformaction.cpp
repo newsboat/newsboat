@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include <itemlistformaction.h>
 
 #include <cinttypes>
@@ -1597,11 +1595,10 @@ void ItemListFormAction::handle_op_saveall()
 
 	std::vector<Filepath> filenames;
 	for (const auto& item : visible_items) {
-		filenames.emplace_back( utils::utf8_to_locale(v.get_filename_suggestion(
-					item.first->title())));
+		filenames.emplace_back(v.get_filename_suggestion(item.first->title()));
 	}
 
-	const auto unique_filenames = std::set<std::string>(
+	const auto unique_filenames = std::set<Filepath>(
 			std::begin(filenames),
 			std::end(filenames));
 
