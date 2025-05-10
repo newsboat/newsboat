@@ -7,6 +7,7 @@
 
 #include "history.h"
 #include "keymap.h"
+#include "lineedit.h"
 #include "lineview.h"
 #include "listwidget.h"
 #include "stflpp.h"
@@ -95,6 +96,12 @@ public:
 	void cancel_qna();
 	void qna_next_history();
 	void qna_previous_history();
+	void clear_line();
+	void clear_eol();
+	void delete_word();
+	void handle_cmdline_completion();
+
+	void handle_qna_event(std::string event, bool inside_cmd);
 
 	void set_parent_formaction(std::shared_ptr<FormAction> fa)
 	{
@@ -169,10 +176,16 @@ private:
 	LineView head_line;
 	LineView msg_line;
 	LineView qna_prompt_line;
+	LineEdit qna_input;
 	std::vector<QnaPair> qna_prompts;
 	QnaFinishAction qna_finish_operation;
 	History* qna_history;
 	std::shared_ptr<FormAction> parent_formaction;
+
+	// cmdline completion
+	std::string last_fragment;
+	std::vector<std::string> suggestions;
+	unsigned int tab_count;
 };
 
 } // namespace newsboat
