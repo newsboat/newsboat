@@ -94,8 +94,21 @@ public:
 	// Return `false` and do nothing if Filepath is empty, set extension and
 	// return `true` otherwise.
 	//
+	// See also `add_extension()`.
+	//
 	// \note `ext` is interpreted as bytes in locale encoding.
 	bool set_extension(const std::string& ext);
+
+	// Return `false` and do nothing if Filepath is empty, append extension and
+	// return `true` otherwise.
+	//
+	// The difference from `set_extension()` is that `set_extension()` replaces
+	// the existing extension while `add_extension()` appends to it. For the
+	// path `foo.tar`, `set_extension("gz")` will turn the path into "tar.gz",
+	// while `add_extension("gz")` will turn the path into "foo.tar.gz".
+	//
+	// \note `ext` is interpreted as bytes in locale string.
+	bool add_extension(const std::string& ext);
 
 	// Return `true` if Filepath start with `base`, `false` otherwise.
 	//
