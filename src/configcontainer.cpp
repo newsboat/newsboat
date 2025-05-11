@@ -17,7 +17,7 @@
 
 namespace newsboat {
 
-const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
+const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = "part";
 
 ConfigContainer::ConfigContainer()
 // create the config options and set their resp. default value and type

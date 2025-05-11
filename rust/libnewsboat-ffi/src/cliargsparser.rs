@@ -53,9 +53,9 @@ mod bridged {
         fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool;
 
         fn readinfo_import_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>)
-            -> bool;
+        -> bool;
         fn readinfo_export_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>)
-            -> bool;
+        -> bool;
         fn url_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
         fn lock_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
         fn cache_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
@@ -63,7 +63,7 @@ mod bridged {
         fn queue_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
         fn search_history_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
         fn cmdline_history_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>)
-            -> bool;
+        -> bool;
         fn log_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
 
         fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String>;
