@@ -725,11 +725,11 @@ void Controller::replace_feed(RssFeed& oldfeed, RssFeed& newfeed, unsigned int p
 		case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
 			v->get_statusline().show_error(
 				strprintf::fmt(_("Generated filename (%s) is used already."),
-					result.extra_info));
+					result.extra_filename));
 			break;
 		case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
 			v->get_statusline().show_error(
-				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
+				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_filename));
 			break;
 		}
 	}

@@ -13,14 +13,15 @@ class RssItem;
 
 enum class EnqueueStatus {
 	QUEUED_SUCCESSFULLY,
-	URL_QUEUED_ALREADY, // `extra_info` should specify the concerning URL
-	OUTPUT_FILENAME_USED_ALREADY, // `extra_info` should specify the generated filename
-	QUEUE_FILE_OPEN_ERROR, // `extra_info` should specify the location of the queue file
+	URL_QUEUED_ALREADY, // `extra_string` should specify the concerning URL
+	OUTPUT_FILENAME_USED_ALREADY, // `extra_filename` should specify the generated filename
+	QUEUE_FILE_OPEN_ERROR, // `extra_filename` should specify the location of the queue file
 };
 
 struct EnqueueResult {
 	EnqueueStatus status;
-	std::string extra_info;
+	std::string extra_string;
+	Filepath extra_filename;
 };
 
 class QueueManager {

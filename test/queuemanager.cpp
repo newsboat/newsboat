@@ -41,7 +41,8 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains an entry") {
@@ -66,7 +67,8 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 			THEN("the second call indicates that the enclosure is already in the queue") {
 				REQUIRE(result.status == EnqueueStatus::URL_QUEUED_ALREADY);
-				REQUIRE(result.extra_info == enclosure_url);
+				REQUIRE(result.extra_string == enclosure_url);
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains a single entry") {
@@ -100,13 +102,16 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 			THEN("return values indicate success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 
 				REQUIRE(result2.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result2.extra_info == "");
+				REQUIRE(result2.extra_string == "");
+				REQUIRE(result2.extra_filename == Filepath());
 
 				REQUIRE(result3.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result3.extra_info == "");
+				REQUIRE(result3.extra_string == "");
+				REQUIRE(result3.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains three entries") {
@@ -156,7 +161,8 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains a corresponding entry") {
@@ -179,9 +185,10 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 				THEN("the return value indicates that the filename is already used") {
 					REQUIRE(result.status == EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY);
+					REQUIRE(result.extra_string == "");
 					// That field contains a path to the temporary directory,
 					// so we simply check that it's not empty.
-					REQUIRE(result.extra_info != "");
+					REQUIRE(result.extra_filename != Filepath());
 				}
 
 				THEN("the queue file still contains a single entry") {
@@ -230,7 +237,8 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == queue_file.get_path().to_locale_string());
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == queue_file.get_path().to_locale_string());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -270,13 +278,15 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 
 	const auto result1 = manager.enqueue_url(item1, feed);
 	REQUIRE(result1.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result1.extra_info == "");
+	REQUIRE(result1.extra_string == "");
+	REQUIRE(result1.extra_filename == "");
 
 	REQUIRE(item1.enqueued());
 
 	const auto result2 = manager.enqueue_url(item2, feed);
 	REQUIRE(result2.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result2.extra_info == "");
+	REQUIRE(result2.extra_string == "");
+	REQUIRE(result2.extra_filename == "");
 
 	REQUIRE(item2.enqueued());
 
@@ -455,7 +465,8 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == "");
 			}
 
 			THEN("the queue file contains three entries") {
@@ -507,9 +518,10 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 
 			THEN("the return value indicates that the filename is already used") {
 				REQUIRE(result.status == EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY);
+				REQUIRE(result.extra_string == "");
 				// That field contains a path to the temporary directory,
 				// so we simply check that it's not empty.
-				REQUIRE(result.extra_info != "");
+				REQUIRE(result.extra_filename != Filepath());
 			}
 
 			THEN("the queue file still contains a single entry") {
@@ -558,7 +570,8 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == queue_file.get_path().to_locale_string());
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == queue_file.get_path().to_locale_string());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -600,7 +613,8 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result.extra_info == "");
+	REQUIRE(result.extra_string == "");
+	REQUIRE(result.extra_filename == Filepath());
 
 	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
@@ -642,7 +656,8 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result.extra_info == "");
+	REQUIRE(result.extra_string == "");
+	REQUIRE(result.extra_filename == Filepath());
 
 	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
@@ -690,7 +705,8 @@ TEST_CASE("autoenqueue() does not enqueue items with an invalid podcast type",
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains two entries") {
