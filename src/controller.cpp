@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "controller.h"
 
 #include <cassert>
@@ -190,8 +188,8 @@ int Controller::run(const CliArgsParser& args)
 	}
 
 	// create cache object
-	std::string cachefilepath = cfg.get_configvalue_as_filepath("cache-file");
-	if (cachefilepath.length() > 0 && !args.cache_file().has_value()) {
+	const auto cachefilepath = cfg.get_configvalue_as_filepath("cache-file");
+	if (cachefilepath != Filepath() && !args.cache_file().has_value()) {
 		configpaths.set_cache_file(cachefilepath);
 	}
 
@@ -263,7 +261,7 @@ int Controller::run(const CliArgsParser& args)
 			return EXIT_FAILURE;
 		}
 
-		std::ofstream check(cookies);
+		std::ofstream check(cookies.to_locale_string());
 		if (!check.is_open()) {
 			std::cerr << strprintf::fmt(
 					_("%s is inaccessible and can't be created\n"),
@@ -279,10 +277,10 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "feedbin") {
 		const std::string user = cfg.get_configvalue("feedbin-login");
 		const std::string pass = cfg.get_configvalue("feedbin-password");
-		const std::string pass_file = cfg.get_configvalue_as_filepath("feedbin-passwordfile");
+		const auto pass_file = cfg.get_configvalue_as_filepath("feedbin-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("feedbin-passwordeval");
 		const bool creds_set = !user.empty() &&
-			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+			(!pass.empty() || pass_file != Filepath() || !pass_eval.empty());
 		if (!creds_set) {
 			std::cerr <<
 				_("ERROR: You must set `feedbin-login` and one of `feedbin-password`, "
@@ -303,10 +301,10 @@ int Controller::run(const CliArgsParser& args)
 
 		const std::string user = cfg.get_configvalue("freshrss-login");
 		const std::string pass = cfg.get_configvalue("freshrss-password");
-		const std::string pass_file = cfg.get_configvalue_as_filepath("freshrss-passwordfile");
+		const auto pass_file = cfg.get_configvalue_as_filepath("freshrss-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("freshrss-passwordeval");
 		const bool creds_set = !user.empty() &&
-			(!pass.empty() || !pass_file.empty() || !pass_eval.empty());
+			(!pass.empty() || pass_file != Filepath() || !pass_eval.empty());
 		if (!creds_set) {
 			std::cerr <<
 				_("ERROR: You must set `freshrss-login` and one of `freshrss-password`, "
@@ -331,15 +329,15 @@ int Controller::run(const CliArgsParser& args)
 
 		const std::string user = cfg.get_configvalue("miniflux-login");
 		const std::string pass = cfg.get_configvalue("miniflux-password");
-		const std::string pass_file = cfg.get_configvalue_as_filepath("miniflux-passwordfile");
+		const auto pass_file = cfg.get_configvalue_as_filepath("miniflux-passwordfile");
 		const std::string pass_eval = cfg.get_configvalue("miniflux-passwordeval");
 		const std::string token = cfg.get_configvalue("miniflux-token");
-		const std::string token_file = cfg.get_configvalue_as_filepath("miniflux-tokenfile");
+		const auto token_file = cfg.get_configvalue_as_filepath("miniflux-tokenfile");
 		const std::string token_eval = cfg.get_configvalue("miniflux-tokeneval");
 		const bool creds_set = !token.empty()
-			|| !token_file.empty()
+			|| token_file != Filepath()
 			|| !token_eval.empty()
-			|| (!user.empty() && (!pass.empty() || !pass_file.empty() || !pass_eval.empty()));
+			|| (!user.empty() && (!pass.empty() || pass_file != Filepath() || !pass_eval.empty()));
 		if (!creds_set) {
 			std::cerr <<
 				_("ERROR: You must provide an API token or a login/password pair to use Miniflux. Please set the appropriate miniflux-* settings\n");
@@ -919,25 +917,25 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 
 Filepath Controller::write_temporary_item(RssItem& item)
 {
-	char filename[_POSIX_PATH_MAX];
+	Filepath filename_template;
 	char* tmpdir = getenv("TMPDIR");
 	if (tmpdir != nullptr) {
-		snprintf(filename,
-			sizeof(filename),
-			"%s/newsboat-article.XXXXXX",
-			tmpdir);
+		filename_template = Filepath::from_locale_string(tmpdir);
+		filename_template.push(Filepath::from_locale_string("newsboat-article.XXXXXX"));
 	} else {
-		snprintf(filename,
-			sizeof(filename),
-			"/tmp/newsboat-article.XXXXXX");
+		filename_template = Filepath::from_locale_string("/tmp/newsboat-article.XXXXXX");
 	}
-	int fd = mkstemp(filename);
+
+	auto template_string = filename_template.to_locale_string();
+
+	int fd = mkstemp(template_string.data());
 	if (fd != -1) {
+		const auto filename = Filepath::from_locale_string(template_string);
 		write_item(item, filename);
 		close(fd);
-		return std::string(filename);
+		return filename;
 	} else {
-		return "";
+		return {};
 	}
 }
 
@@ -946,7 +944,7 @@ void Controller::write_item(RssItem& item, const Filepath& filename)
 	Filepath save_path = cfg.get_configvalue_as_filepath("save-path");
 	save_path.push(utils::resolve_tilde(filename));
 
-	std::fstream f(save_path, std::fstream::out);
+	std::fstream f(save_path.to_locale_string(), std::fstream::out);
 	if (!f.is_open()) {
 		throw Exception(errno);
 	}
@@ -963,7 +961,7 @@ void Controller::import_read_information(const Filepath& readinfofile)
 {
 	std::vector<std::string> guids;
 
-	std::ifstream f(readinfofile);
+	std::ifstream f(readinfofile.to_locale_string());
 	std::string line;
 	getline(f, line);
 	if (!f.is_open()) {
@@ -980,7 +978,7 @@ void Controller::export_read_information(const Filepath& readinfofile)
 {
 	std::vector<std::string> guids = rsscache->get_read_item_guids();
 
-	std::fstream f(readinfofile, std::fstream::out);
+	std::fstream f(readinfofile.to_locale_string(), std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& guid : guids) {
 			f << guid << std::endl;
@@ -1026,7 +1024,7 @@ void Controller::dump_config(const Filepath& filename) const
 	filters.dump_config(configlines);
 	colorman.dump_config(configlines);
 	rxman.dump_config(configlines);
-	std::fstream f(filename, std::fstream::out);
+	std::fstream f(filename.to_locale_string(), std::fstream::out);
 	if (f.is_open()) {
 		for (const auto& line : configlines) {
 			f << line << std::endl;
