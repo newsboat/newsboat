@@ -20,7 +20,8 @@ enum class EnqueueStatus {
 
 struct EnqueueResult {
 	EnqueueStatus status;
-	std::string extra_info;
+	std::string extra_string;
+	Filepath extra_filename;
 };
 
 class QueueManager {
