@@ -1,4 +1,5 @@
 use cxx::{type_id, ExternType};
+use libnewsboat::filepath;
 use std::ffi::OsStr;
 use std::os::unix::ffi::OsStrExt;
 
@@ -26,6 +27,7 @@ mod bridged {
         fn clone(filepath: &PathBuf) -> Box<PathBuf>;
         fn is_absolute(filepath: &PathBuf) -> bool;
         fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
+        fn add_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
         fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool;
         fn file_name(filepath: &PathBuf) -> Vec<u8>;
     }
@@ -71,6 +73,10 @@ fn is_absolute(filepath: &PathBuf) -> bool {
 
 fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool {
     filepath.0.set_extension(OsStr::from_bytes(&extension))
+}
+
+fn add_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool {
+    filepath::add_extension(&mut filepath.0, extension)
 }
 
 fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool {

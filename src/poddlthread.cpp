@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "poddlthread.h"
 
 #include <cstring>
@@ -74,8 +72,8 @@ void PodDlThread::run()
 	}
 
 	struct stat sb;
-	Filepath filename =
-		dl->filename().join(newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX);
+	Filepath filename = dl->filename();
+	filename.add_extension(newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX);
 
 	if (stat(filename.to_locale_string().c_str(), &sb) == -1) {
 		LOG(Level::INFO,
@@ -88,9 +86,9 @@ void PodDlThread::run()
 		std::vector<char> directory(filename.to_locale_string().begin(),
 			filename.to_locale_string().end());
 		directory.push_back('\0');
-		utils::mkdir_parents(dirname(&directory[0]));
+		utils::mkdir_parents(Filepath::from_locale_string(dirname(&directory[0])));
 
-		f->open(filename, std::fstream::out);
+		f->open(filename.to_locale_string(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
 	} else {
@@ -102,7 +100,7 @@ void PodDlThread::run()
 			static_cast<int64_t>(sb.st_size));
 		curl_easy_setopt(handle.ptr(), CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
-		f->open(filename, std::fstream::out | std::fstream::app);
+		f->open(filename.to_locale_string(), std::fstream::out | std::fstream::app);
 		resumed_download = true;
 	}
 
