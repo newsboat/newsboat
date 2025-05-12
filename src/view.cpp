@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "view.h"
 
 #include <assert.h>
@@ -342,25 +340,25 @@ Filepath View::get_filename_suggestion(const std::string& s)
 	 * With this function, we generate normalized filenames for saving
 	 * articles to files if the setting `restrict-filename` is enabled.
 	 */
-	std::string retval;
-
+	std::string suggestion;
 	if (cfg->get_configvalue_as_bool("restrict-filename")) {
 		for (unsigned int i = 0; i < s.length(); ++i) {
 			if (isalnum(s[i])) {
-				retval.push_back(s[i]);
-			} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
-				s[i] == '\n') {
-				retval.push_back('_');
+				suggestion.push_back(s[i]);
+			} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n') {
+				suggestion.push_back('_');
 			}
 		}
 	} else {
-		retval = s;
+		suggestion = s;
 	}
 
-	if (retval.length() == 0) {
-		retval = "article.txt";
+	Filepath retval;
+	if (suggestion.empty()) {
+		retval = Filepath::from_locale_string("article.txt");
 	} else {
-		retval.append(".txt");
+		retval = Filepath::from_locale_string(suggestion);
+		retval.add_extension("txt");
 	}
 	LOG(Level::DEBUG, "View::get_filename_suggestion: %s -> %s", s, retval);
 	return retval;
@@ -377,7 +375,7 @@ void View::open_in_pager(const Filepath& filename)
 	const auto pager = cfg->get_configvalue_as_filepath("pager").to_locale_string();
 	if (pager.find("%f") != std::string::npos) {
 		FmtStrFormatter fmt;
-		fmt.register_fmt('f', filename);
+		fmt.register_fmt('f', filename.to_locale_string());
 		cmdline = fmt.do_format(pager, 0);
 	} else {
 		const char* env_pager = nullptr;
@@ -389,7 +387,7 @@ void View::open_in_pager(const Filepath& filename)
 			cmdline.append("more");
 		}
 		cmdline.append(" ");
-		cmdline.append(filename);
+		cmdline.append(filename.to_locale_string());
 	}
 	push_empty_formaction();
 	Stfl::reset();
@@ -403,26 +401,27 @@ std::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 	bool interactive)
 {
 	std::string cmdline;
-	const std::string browser = cfg->get_configvalue_as_filepath("browser");
+	const auto browser = cfg->get_configvalue_as_filepath("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
 	const std::string escaped_feedurl = "'" + utils::replace_all(feedurl, "'",
 			"%27") + "'";
 	const std::string quoted_type = "'" + type + "'";
 	const std::string escaped_title = utils::preserve_quotes(title);
 
-	if (browser.find("%u") != std::string::npos
-		|| browser.find("%F") != std::string::npos
-		|| browser.find("%t") != std::string::npos
-		|| browser.find("%T") != std::string::npos) {
-		cmdline = utils::replace_all(browser, {
+	const auto browser_str = browser.to_locale_string();
+	if (browser_str.find("%u") != std::string::npos
+		|| browser_str.find("%F") != std::string::npos
+		|| browser_str.find("%t") != std::string::npos
+		|| browser_str.find("%T") != std::string::npos) {
+		cmdline = utils::replace_all(browser_str, {
 			{"%u", escaped_url},
 			{"%F", escaped_feedurl},
 			{"%t", quoted_type},
 			{"%T", escaped_title}
 		});
 	} else {
-		if (browser != "") {
-			cmdline = browser;
+		if (browser != Filepath()) {
+			cmdline = browser_str;
 		} else {
 			cmdline = "lynx";
 		}
@@ -652,11 +651,11 @@ std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	std::string res = run_modal(filebrowser, "filenametext");
+	const std::string res = run_modal(filebrowser, "filenametext");
 	if (res.empty()) {
 		return std::nullopt;
 	}
-	return res;
+	return Filepath::from_locale_string(res);
 }
 
 std::optional<Filepath> View::run_dirbrowser()
@@ -669,7 +668,7 @@ std::optional<Filepath> View::run_dirbrowser()
 	if (res.empty()) {
 		return std::nullopt;
 	}
-	return res;
+	return Filepath::from_locale_string(res);
 }
 
 std::string View::select_tag(const std::string& current_tag)
