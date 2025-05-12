@@ -7,7 +7,7 @@
 namespace newsboat {
 
 RemoteApiUrlReader::RemoteApiUrlReader(const std::string& source_name,
-	const std::string& url_file, RemoteApi& api)
+	const Filepath& url_file, RemoteApi& api)
 	: source_name(source_name)
 	, file(url_file)
 	, api(api)
