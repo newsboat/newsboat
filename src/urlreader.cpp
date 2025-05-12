@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "urlreader.h"
 
 #include <set>
@@ -34,7 +32,7 @@ std::vector<std::string> UrlReader::get_alltags() const
 	return std::vector<std::string>(tmptags.begin(), tmptags.end());
 }
 
-void UrlReader::load_query_urls_from_file(std::string file)
+void UrlReader::load_query_urls_from_file(Filepath file)
 {
 	FileUrlReader file_url_reader(file);
 	const auto error_message = file_url_reader.reload();

@@ -12,7 +12,7 @@ TEST_CASE("OPML URL reader gets the path to input file from \"opml-url\" "
 	"setting", "[OpmlUrlReader]")
 {
 	ConfigContainer cfg;
-	OpmlUrlReader reader(cfg, "");
+	OpmlUrlReader reader(cfg, Filepath());
 
 	const std::string setting("opml-url");
 	const std::string url1("https://example.com/feeds.opml");
@@ -33,7 +33,7 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 		"opml-url",
 		"file://" + utils::getcwd().to_locale_string() + "/data/example.opml");
 
-	OpmlUrlReader reader(cfg, "");
+	OpmlUrlReader reader(cfg, Filepath());
 
 	REQUIRE_NOTHROW(reader.reload());
 
@@ -85,7 +85,7 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 		+ " "
 		+ "file://" + cwd.to_locale_string() + "/data/example2.opml");
 
-	OpmlUrlReader reader(cfg, "");
+	OpmlUrlReader reader(cfg, Filepath());
 
 	REQUIRE_NOTHROW(reader.reload());
 
@@ -148,7 +148,7 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 		+ " "
 		+ "file://" + cwd.to_locale_string() + "/data/example2.opml");
 
-	OpmlUrlReader reader(cfg, "");
+	OpmlUrlReader reader(cfg, Filepath());
 
 	REQUIRE_NOTHROW(reader.reload());
 
