@@ -29,8 +29,8 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 		xmlFreeDoc(opml);
 
 		const std::string opmlText(
-			reinterpret_cast<char*>(buffer->content),
-			buffer->use);
+			reinterpret_cast<const char*>(xmlBufferContent(buffer)),
+			xmlBufferLength(buffer));
 
 		xmlBufferFree(buffer);
 		buffer = nullptr;
