@@ -61,7 +61,11 @@ jobs:
 
       - name: Install grcov
         if: steps.cargo_cache.outputs.cache-hit != 'true'
-        run: cargo install grcov@0.8.24
+        run: cargo install grcov
+
+      - name: Remove .gitignore
+        # Workaround for https://github.com/mozilla/grcov/issues/1333
+        run: rm .gitignore
 
       - name: Run tests
         run: make --jobs=3 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
