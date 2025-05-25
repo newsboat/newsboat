@@ -1,0 +1,11 @@
+color listnormal         default default dim
+color listnormal_unread  default default
+color listfocus_unread   default default reverse
+color listfocus          default default reverse
+color background         default default
+color article            default default
+color end-of-text-marker default default
+color info               default default
+color hint-separator     default default
+color hint-description   default default underline
+color title              default default bold reverse
