@@ -1,5 +1,5 @@
 color listnormal         default default dim
-color listnormal_unread  default default 
+color listnormal_unread  default default
 color listfocus_unread   default default reverse
 color listfocus          default default reverse
 color background         default default
