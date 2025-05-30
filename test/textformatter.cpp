@@ -49,7 +49,7 @@ TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 		const std::size_t expected_count = 7;
 
 		const auto result =
-			fmt.format_text_to_list(nullptr, "", 10, 40);
+			fmt.format_text_to_list(nullptr, std::nullopt, 10, 40);
 
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);
@@ -105,7 +105,7 @@ TEST_CASE("regex manager is used by format_text_to_list if one is passed",
 		"}";
 	const std::size_t expected_count = 1;
 
-	const auto result = fmt.format_text_to_list(&rxmgr, "article", 100);
+	const auto result = fmt.format_text_to_list(&rxmgr, Dialog::Article, 100);
 
 	REQUIRE(result.first == expected_text);
 	REQUIRE(result.second == expected_count);
@@ -217,7 +217,6 @@ TEST_CASE(
 	fmt.add_line(LineType::softwrappable, "just a test");
 	const size_t wrap_width = 100;
 	RegexManager* rxman = nullptr;
-	const std::string location = "";
 
 	SECTION("total_width == 4") {
 		const std::string expected_text =
@@ -229,7 +228,7 @@ TEST_CASE(
 		const std::size_t expected_count = 3;
 
 		const auto result =
-			fmt.format_text_to_list(rxman, location, wrap_width, 4);
+			fmt.format_text_to_list(rxman, std::nullopt, wrap_width, 4);
 
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);
@@ -243,7 +242,7 @@ TEST_CASE(
 		const std::size_t expected_count = 1;
 
 		const auto result =
-			fmt.format_text_to_list(rxman, location, wrap_width, 0);
+			fmt.format_text_to_list(rxman, std::nullopt, wrap_width, 0);
 
 		REQUIRE(result.first == expected_text);
 		REQUIRE(result.second == expected_count);
@@ -277,8 +276,7 @@ TEST_CASE("Lines consisting entirely of spaces are replaced "
 	const std::size_t expected_count = 4;
 
 	RegexManager* rxman = nullptr;
-	const std::string location = "";
-	const auto result = fmt.format_text_to_list(rxman, location, wrap_width,
+	const auto result = fmt.format_text_to_list(rxman, std::nullopt, wrap_width,
 			total_width);
 
 	REQUIRE(result.first == expected_text);

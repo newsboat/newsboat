@@ -29,7 +29,7 @@ FeedListFormAction::FeedListFormAction(View& vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ListFormAction(vv, "feedlist", formstr, "feeds", cfg, r)
+	: ListFormAction(vv, Dialog::FeedList, formstr, "feeds", cfg, r)
 	, zero_feedpos(false)
 	, filter_active(false)
 	, filterpos(0)
@@ -632,7 +632,7 @@ void FeedListFormAction::set_feedlist(
 
 	std::string feedlist_format = cfg->get_configvalue("feedlist-format");
 
-	ListFormatter listfmt(&rxman, "feedlist");
+	ListFormatter listfmt(&rxman, Dialog::FeedList);
 
 	update_visible_feeds(feeds);
 
@@ -948,7 +948,7 @@ void FeedListFormAction::save_filterpos()
 
 void FeedListFormAction::register_format_styles()
 {
-	const std::string attrstr = rxman.get_attrs_stfl_string("feedlist", true);
+	const std::string attrstr = rxman.get_attrs_stfl_string(Dialog::FeedList, true);
 	const std::string textview = strprintf::fmt(
 			"{!list[feeds] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]: "

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "dialog.h"
 #include "links.h"
 #include "textformatter.h"
 
@@ -50,7 +51,7 @@ std::pair<std::string, size_t> to_stfl_list(
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
-	const std::string& location,
+	Dialog location,
 	Links& links);
 
 /// \brief Returns RssItem's text source as STFL list.
@@ -63,7 +64,7 @@ std::pair<std::string, size_t> source_to_stfl_list(
 	unsigned int text_width,
 	unsigned int window_width,
 	RegexManager* rxman,
-	const std::string& location);
+	Dialog location);
 };
 
 } // namespace newsboat
