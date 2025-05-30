@@ -117,7 +117,7 @@ void ItemViewFormAction::prepare()
 					text_width,
 					window_width,
 					&rxman,
-					"article");
+					Dialog::Article);
 		} else {
 			links.clear();
 			if (!item->enclosure_url().empty()) {
@@ -136,7 +136,7 @@ void ItemViewFormAction::prepare()
 					text_width,
 					window_width,
 					&rxman,
-					"article",
+					Dialog::Article,
 					links);
 		}
 
@@ -144,7 +144,7 @@ void ItemViewFormAction::prepare()
 		update_percent();
 
 		if (in_search) {
-			rxman.remove_last_regex("article");
+			rxman.remove_last_regex(Dialog::Article);
 			in_search = false;
 		}
 
@@ -687,7 +687,7 @@ void ItemViewFormAction::finished_qna(QnaFinishAction op)
 
 void ItemViewFormAction::register_format_styles()
 {
-	std::string attrstr = rxman.get_attrs_stfl_string("article", false);
+	std::string attrstr = rxman.get_attrs_stfl_string(Dialog::Article, false);
 	attrstr.append(
 		"@style_b_normal[color_bold]: "
 		"@style_u_normal[color_underline]: ");

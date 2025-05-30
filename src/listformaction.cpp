@@ -7,7 +7,7 @@
 namespace newsboat {
 
 ListFormAction::ListFormAction(View& v,
-	const std::string& context,
+	Dialog context,
 	std::string formstr,
 	std::string list_name,
 	ConfigContainer* cfg, RegexManager& r)

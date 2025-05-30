@@ -15,7 +15,7 @@ namespace newsboat {
 HelpFormAction::HelpFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg,
-	const std::string& ctx)
+	Dialog ctx)
 	: FormAction(vv, formstr, cfg)
 	, apply_search(false)
 	, context(ctx)

@@ -489,7 +489,7 @@ void View::push_searchresult(std::shared_ptr<RssFeed> feed,
 	assert(feed != nullptr);
 	LOG(Level::DEBUG, "View::push_searchresult: pushing search result");
 	if (feed->total_item_count() > 0) {
-		if (this->get_current_formaction()->id() != "searchresultslist") {
+		if (this->get_current_formaction()->id() != Dialog::SearchResultsList) {
 			auto searchresult = std::make_shared<SearchResultsListFormAction>(
 					*this, itemlist_str, rsscache, filters, cfg, rxman);
 			apply_colors(searchresult);
@@ -594,7 +594,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 void View::view_dialogs()
 {
 	auto fa = get_current_formaction();
-	if (fa != nullptr && fa->id() != "dialogs") {
+	if (fa != nullptr && fa->id() != Dialog::DialogList) {
 		auto dialogs = std::make_shared<DialogsFormAction>(
 				*this, dialogs_str, cfg, rxman);
 		dialogs->set_parent_formaction(fa);
@@ -741,7 +741,7 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 void View::notify_itemlist_change(std::shared_ptr<RssFeed> feed)
 {
 	for (const auto& form : formaction_stack) {
-		if (form != nullptr && form->id() == "articlelist") {
+		if (form != nullptr && form->id() == Dialog::ArticleList) {
 			std::shared_ptr<ItemListFormAction> itemlist =
 				std::dynamic_pointer_cast<ItemListFormAction,
 				FormAction>(form);
@@ -1123,7 +1123,7 @@ void View::apply_colors_to_all_formactions()
 
 void View::apply_colors(std::shared_ptr<FormAction> fa)
 {
-	LOG(Level::DEBUG, "View::apply_colors: fa = %s", fa->id());
+	LOG(Level::DEBUG, "View::apply_colors: fa = %s", dialog_name(fa->id()));
 
 	const auto stfl_value_setter = [&](const std::string& name,
 	const std::string& value) {
@@ -1149,7 +1149,7 @@ std::vector<std::pair<unsigned int, std::string>> View::get_formaction_names()
 	std::vector<std::pair<unsigned int, std::string>> formaction_names;
 	unsigned int i = 0;
 	for (const auto& form : formaction_stack) {
-		if (form && form->id() != "dialogs") {
+		if (form && form->id() != Dialog::DialogList) {
 			formaction_names.push_back(
 				std::pair<unsigned int, std::string>(
 					i, form->title()));

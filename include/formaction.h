@@ -69,7 +69,7 @@ public:
 
 	virtual std::vector<KeyMapHintEntry> get_keymap_hint() const = 0;
 
-	virtual std::string id() const = 0;
+	virtual Dialog id() const = 0;
 
 	std::string get_value(const std::string& name);
 	void set_value(const std::string& name, const std::string& value);

@@ -20,9 +20,9 @@ public:
 	void init() override;
 	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "dirbrowser";
+		return Dialog::DirBrowser;
 	}
 	std::string title() override;
 

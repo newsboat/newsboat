@@ -37,9 +37,9 @@ public:
 	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 	void handle_cmdline(const std::string& cmd) override;
 
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "article";
+		return Dialog::Article;
 	}
 	std::string title() override;
 

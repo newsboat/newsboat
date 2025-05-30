@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 
+#include "dialog.h"
 #include "listformatter.h"
 #include "regexmanager.h"
 #include "stflpp.h"
@@ -15,7 +16,7 @@ namespace newsboat {
 
 class ListWidgetBackend {
 public:
-	ListWidgetBackend(const std::string& list_name, const std::string& context,
+	ListWidgetBackend(const std::string& list_name, Dialog context,
 		Stfl::Form& form, RegexManager& rxman);
 	ListWidgetBackend(const std::string& list_name, Stfl::Form& form);
 	virtual ~ListWidgetBackend() = default;
