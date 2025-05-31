@@ -566,6 +566,16 @@ bool FeedListFormAction::open_position_in_browser(unsigned int pos,
 	} else if (!feed->rssurl().empty()) {
 		url = feed->rssurl();
 		type = "rssfeed";
+
+		if (utils::is_exec_url(url)) {
+			v.get_statusline().show_error(_("Cannot open exec feeds in the browser!"));
+			return false;
+		}
+
+		if (utils::is_filter_url(url)) {
+			auto parts = utils::extract_filter(url);
+			url = std::string(parts.url);
+		}
 	} else {
 		// rssurl can't be empty, so if we got to this branch,
 		// something is clearly wrong with Newsboat internals.
