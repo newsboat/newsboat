@@ -53,6 +53,12 @@ FormAction::FormAction(View& vv, std::string formstr, ConfigContainer* cfg)
 	valid_cmds.push_back("exec");
 }
 
+void FormAction::report_unhandled_operation(Operation op)
+{
+	set_status(strprintf::fmt(_("Operation %s not handled in %s"), KeyMap::get_op_name(op),
+			id()));
+}
+
 void FormAction::set_keymap_hints()
 {
 	set_value("help", v.get_keymap()->prepare_keymap_hint(this->get_keymap_hint(),
@@ -373,9 +379,10 @@ bool FormAction::handle_list_operations(ListWidget& list, Operation op)
 		list.scroll_halfpage_down(cfg->get_configvalue_as_bool("wrap-scroll"));
 		break;
 	default:
+		report_unhandled_operation(op);
 		return false;
 	}
-	return false;
+	return true;
 }
 
 bool FormAction::handle_textview_operations(TextviewWidget& textview, Operation op)
@@ -406,6 +413,7 @@ bool FormAction::handle_textview_operations(TextviewWidget& textview, Operation 
 		textview.scroll_halfpage_down();
 		break;
 	default:
+		report_unhandled_operation(op);
 		return false;
 	}
 	return true;

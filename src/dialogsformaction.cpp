@@ -101,8 +101,7 @@ bool DialogsFormAction::process_operation(Operation op,
 		v.pop_current_formaction();
 		break;
 	default:
-		ListFormAction::process_operation(op, args, bindingType);
-		break;
+		return ListFormAction::process_operation(op, args, bindingType);
 	}
 	return true;
 }

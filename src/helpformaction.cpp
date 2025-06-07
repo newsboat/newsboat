@@ -17,7 +17,6 @@ HelpFormAction::HelpFormAction(View& vv,
 	ConfigContainer* cfg,
 	const std::string& ctx)
 	: FormAction(vv, formstr, cfg)
-	, quit(false)
 	, apply_search(false)
 	, context(ctx)
 	, textview("helptext", FormAction::f)
@@ -28,6 +27,7 @@ bool HelpFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
 	BindingType /*bindingType*/)
 {
+	bool quit = false;
 	bool hardquit = false;
 	switch (op) {
 	case OP_QUIT:
@@ -47,10 +47,7 @@ bool HelpFormAction::process_operation(Operation op,
 		do_redraw = true;
 		break;
 	default:
-		if (handle_textview_operations(textview, op)) {
-			break;
-		}
-		break;
+		return handle_textview_operations(textview, op);
 	}
 	if (hardquit) {
 		while (v.formaction_stack_size() > 0) {
@@ -153,7 +150,6 @@ void HelpFormAction::prepare()
 
 		do_redraw = false;
 	}
-	quit = false;
 }
 
 void HelpFormAction::init()

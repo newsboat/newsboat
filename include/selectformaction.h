@@ -54,7 +54,6 @@ private:
 	bool process_operation(Operation op,
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey) override;
-	bool quit;
 	bool is_first_draw;
 	SelectionType type;
 	std::string value;

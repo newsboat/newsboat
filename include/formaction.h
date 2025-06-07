@@ -132,6 +132,7 @@ protected:
 	virtual bool process_operation(Operation op,
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey) = 0;
+	void report_unhandled_operation(Operation op);
 	void set_keymap_hints();
 
 	/// The name of the "main" STFL widget, i.e. the one that should be focused
