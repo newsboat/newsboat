@@ -97,14 +97,15 @@ CARGO_BUILD_FLAGS+=--release
 endif
 
 ifdef CARGO_BUILD_TARGET
-NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)/libnewsboat.a
-HTTPTESTSEVER_OUTPUT=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)/http-test-server
-LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)
+CARGO_OUTPUT_DIR=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)
 else
-NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/libnewsboat.a
-HTTPTESTSEVER_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/http-test-server
-LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
+CARGO_OUTPUT_DIR=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
 endif
+
+NEWSBOATLIB_OUTPUT=$(CARGO_OUTPUT_DIR)/libnewsboat.a
+HTTPTESTSEVER_OUTPUT=$(CARGO_OUTPUT_DIR)/http-test-server
+GENERATE_BINARY=$(CARGO_OUTPUT_DIR)/generate
+LDFLAGS+=-L$(CARGO_OUTPUT_DIR)
 
 ifeq (, $(filter Linux GNU GNU/%, $(shell uname -s)))
 NEWSBOAT_LIBS+=-liconv -lintl
@@ -134,6 +135,9 @@ $(NEWSBOATLIB_OUTPUT): $(RUST_SRCS) Cargo.lock
 
 $(HTTPTESTSEVER_OUTPUT): $(RUST_SRCS) Cargo.lock
 	+$(CARGO) build --package http-test-server $(CARGO_BUILD_FLAGS)
+
+$(GENERATE_BINARY): $(RUST_SRCS) Cargo.lock
+	+$(CARGO) build --package generate $(CARGO_BUILD_FLAGS)
 
 $(NEWSBOAT): $(NB_DEPS)
 	$(CXX) $(CXXFLAGS) -o $(NEWSBOAT) $(NEWSBOAT_OBJS) $(NEWSBOAT_LIBS) $(LDFLAGS)
@@ -224,8 +228,7 @@ clean-doc:
 	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
-		doc/example-config doc/generate doc/generate2 \
-		doc/gen-example-config
+		doc/example-config doc/generate2 doc/gen-example-config
 
 clean-test:
 	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
@@ -278,11 +281,8 @@ doc/xhtml/newsboat.html: doc/cmdline-commands-linked.asciidoc
 doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=html5 -a webfonts! --destination-dir=doc/xhtml $<
 
-doc/generate: doc/generate.cpp doc/split.h
-	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
-
-doc/newsboat-cfgcmds.asciidoc: doc/generate doc/configcommands.dsv
-	doc/generate doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
+doc/newsboat-cfgcmds.asciidoc: $(GENERATE_BINARY) doc/configcommands.dsv
+	$(GENERATE_BINARY) doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
 
 doc/generate2: doc/generate2.cpp
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate2 doc/generate2.cpp
@@ -298,8 +298,8 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-files.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
 
-doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
-	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
+doc/podboat-cfgcmds.asciidoc: $(GENERATE_BINARY) doc/podboat-cmds.dsv
+	$(GENERATE_BINARY) doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
 
 doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
 		doc/chapter-podcasts.asciidoc doc/chapter-podboat.asciidoc \
