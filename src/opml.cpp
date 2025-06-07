@@ -149,6 +149,18 @@ void rec_find_rss_outlines(
 				if (std::find(urls.begin(), urls.end(), quoted_url) == urls.end()) {
 					LOG(Level::DEBUG, "opml::import: added url = %s", quoted_url);
 					std::vector<std::string> tags;
+
+					char* text_p = (char*)xmlGetProp(node, (const xmlChar*)"text");
+					if (!text_p) {
+						text_p = (char*)xmlGetProp(node, (const xmlChar*)"title");
+					}
+					if (text_p) {
+						if (text_p[0] != '\0') {
+							tags.push_back(std::string{"~"} + text_p);
+						}
+						xmlFree(text_p);
+					}
+
 					if (tag.length() > 0) {
 						LOG(Level::DEBUG,
 							"opml::import: appending tag %s to url %s",
@@ -156,6 +168,7 @@ void rec_find_rss_outlines(
 							quoted_url);
 						tags.push_back(tag);
 					}
+
 					urlcfg.add_url(quoted_url, tags);
 				} else {
 					LOG(Level::DEBUG,
