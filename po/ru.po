@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
-"PO-Revision-Date: 2025-03-09 20:08+0300\n"
+"PO-Revision-Date: 2025-06-09 21:52+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -574,7 +574,7 @@ msgstr ""
 
 #: src/controller.cpp:593
 msgid "Press any key to continue"
-msgstr ""
+msgstr "Для продолжения нажмите любую клавишу"
 
 #: src/controller.cpp:601
 msgid "failed: "
@@ -733,27 +733,26 @@ msgstr "Не выбрано ни одной ленты!"
 #. "Sort by (f)irsttag/..." and "Reverse Sort by
 #. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:130 src/feedlistformaction.cpp:173
-#, fuzzy
 msgid "ftaulsn"
-msgstr "ftauln"
+msgstr "ftaulsn"
 
 #: src/feedlistformaction.cpp:132
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "late(s)tunread/(n)one?"
 msgstr ""
 "Сортировать по первой метке (f)/заголовку (t)/количеству записей (a)/"
-"непрочитанным (u)/времени последнего обновления (l)/никак (n)?"
+"непрочитанным (u)/времени последнего обновления (l)/времени последнего "
+"непрочитанного(s)/никак (n)?"
 
 #: src/feedlistformaction.cpp:175
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/late(s)tunread/(n)one?"
 msgstr ""
 "Сортировать в обратном порядке по первой метке (f)/заголовку (t)/количеству "
-"записей (a)/непрочитанным (u)/времени последнего обновления (l)/никак (n)?"
+"записей (a)/непрочитанным (u)/времени последнего обновления (l)/времени "
+"последнего непрочитанного(s)/никак (n)?"
 
 #: src/feedlistformaction.cpp:237 src/feedlistformaction.cpp:264
 #: src/feedlistformaction.cpp:594 src/itemlistformaction.cpp:183
@@ -852,9 +851,8 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "Динамические ленты нельзя открывать в браузере!"
 
 #: src/feedlistformaction.cpp:571
-#, fuzzy
 msgid "Cannot open exec feeds in the browser!"
-msgstr "Динамические ленты нельзя открывать в браузере!"
+msgstr "Exec-ленты нельзя открывать в браузере!"
 
 #: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1399
 msgid "Clear filter"
