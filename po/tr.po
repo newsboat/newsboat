@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
-"PO-Revision-Date: 2025-03-09 14:00+0300\n"
+"PO-Revision-Date: 2025-06-09 14:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -571,7 +571,7 @@ msgstr ""
 
 #: src/controller.cpp:593
 msgid "Press any key to continue"
-msgstr ""
+msgstr "Sürdürmek için bir düğmeye basın"
 
 #: src/controller.cpp:601
 msgid "failed: "
@@ -730,27 +730,24 @@ msgstr "Hiçbir besleme seçilmedi!"
 #. "Sort by (f)irsttag/..." and "Reverse Sort by
 #. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:130 src/feedlistformaction.cpp:173
-#, fuzzy
 msgid "ftaulsn"
-msgstr "ibyosh"
+msgstr "ibyoskh"
 
 #: src/feedlistformaction.cpp:132
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "late(s)tunread/(n)one?"
 msgstr ""
-"Sırala: (i)lketiket/(b)aşlıksayısı/(y)azısayısı/(o)kunmamışyazısayısı/"
-"(s)ongüncelleme/(h)içbiri?"
+"Sırala: (i)lketiket/(b)aşlık/(y)azısayısı/(o)kunmamışyazısayısı/"
+"(s)ongüncelleme/sono(k)unmayan)/(h)içbiri?"
 
 #: src/feedlistformaction.cpp:175
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/late(s)tunread/(n)one?"
 msgstr ""
-"Ters Sırala: (i)lketiket/(b)aşlıksayısı/(y)azısayısı/(o)kunmamışyazısayısı/"
-"(s)ongüncelleme/(h)içbiri?"
+"Ters Sırala: (i)lketiket/(b)aşlık/(y)azısayısı/(o)kunmamışyazısayısı/"
+"(s)ongüncelleme/sono(k)unmayan/(h)içbiri?"
 
 #: src/feedlistformaction.cpp:237 src/feedlistformaction.cpp:264
 #: src/feedlistformaction.cpp:594 src/itemlistformaction.cpp:183
@@ -851,9 +848,8 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "Sorgu beslemeleri tarayıcıda açılamaz!"
 
 #: src/feedlistformaction.cpp:571
-#, fuzzy
 msgid "Cannot open exec feeds in the browser!"
-msgstr "Sorgu beslemeleri tarayıcıda açılamaz!"
+msgstr "Exec beslemeleri tarayıcıda açılamaz!"
 
 #: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1399
 msgid "Clear filter"
