@@ -30,7 +30,7 @@ version = "0.7.2"
 features = [ "gettext-system" ]
 
 [dependencies.curl-sys]
-version = "0.4.80"
+version = "0.4.82"
 # This disables the only default feature, "ssl". It doesn't affect the
 # functionality, since it can't affect the libcurl.so available on the host.
 #
