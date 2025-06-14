@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.3\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
-"PO-Revision-Date: 2025-03-10 09:10+0100\n"
+"PO-Revision-Date: 2025-06-11 22:22+0200\n"
 "Last-Translator: Lysander Trischler <github@lyse.isobeef.org>\n"
 "Language-Team: Andreas Krennmair <ak@newsbeuter.org>, Simon Nagl "
 "<simonnagl@aim.com>, Lysander Trischler <github@lyse.isobeef.org>\n"
@@ -575,7 +575,7 @@ msgstr ""
 
 #: src/controller.cpp:593
 msgid "Press any key to continue"
-msgstr ""
+msgstr "Beliebige Taste drücken, um fortzufahren"
 
 #: src/controller.cpp:601
 msgid "failed: "
@@ -734,27 +734,25 @@ msgstr "Kein Feed ausgewählt!"
 #. "Sort by (f)irsttag/..." and "Reverse Sort by
 #. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:130 src/feedlistformaction.cpp:173
-#, fuzzy
 msgid "ftaulsn"
-msgstr "etauzn"
+msgstr "etauzsn"
 
 #: src/feedlistformaction.cpp:132
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "late(s)tunread/(n)one?"
 msgstr ""
-"Sortieren nach (e)rstemtag/(t)itel/(a)rtikelzahl/(u)ngeleseneartikel/"
-"(z)uletztaktualisiert/(n)ichts?"
+"Sortieren nach (e)rstem Tag/(t)itel/Artikel(a)nzahl/Anzahl (u)ngelesener Artikel/"
+"(z)uletzt aktualisierte Artikel/neue(s)te ungelesene Artikel/(n)ichts?"
 
 #: src/feedlistformaction.cpp:175
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/late(s)tunread/(n)one?"
 msgstr ""
-"Umgekehrt sortieren nach (e)rstemtag/(t)itel/(a)rtikelzahl/"
-"(u)ngeleseneartikel/(z)uletztaktualisiert/(n)ichts?"
+"Umgekehrt sortieren nach (e)rstem Tag/(t)itel/Artikel(a)nzahl/"
+"Anzahl (u)ngelesener Artikel/(z)uletzt aktualisierte Artikel/"
+"neue(s)te ungelesene Artikel/(n)ichts?"
 
 #: src/feedlistformaction.cpp:237 src/feedlistformaction.cpp:264
 #: src/feedlistformaction.cpp:594 src/itemlistformaction.cpp:183
@@ -853,9 +851,8 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "Query-Feeds können nicht im Browser geöffnet werden!"
 
 #: src/feedlistformaction.cpp:571
-#, fuzzy
 msgid "Cannot open exec feeds in the browser!"
-msgstr "Query-Feeds können nicht im Browser geöffnet werden!"
+msgstr "Exec-Feeds können nicht im Browser geöffnet werden!"
 
 #: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1399
 msgid "Clear filter"

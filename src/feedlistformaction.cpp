@@ -142,7 +142,7 @@ REDO:
 		// That'll prevent this function from sorting anything, so users will
 		// complain, and we'll ask them to update the translation. A bit lame,
 		// but it's better than mishandling the answer.
-		const auto n_options = ((std::string) "ftaun").length();
+		const auto n_options = ((std::string) "ftaulsn").length();
 		if (input_options.length() < n_options) {
 			break;
 		}
@@ -185,7 +185,7 @@ REDO:
 		// That'll prevent this function from sorting anything, so users will
 		// complain, and we'll ask them to update the translation. A bit lame,
 		// but it's better than mishandling the answer.
-		const auto n_options = ((std::string) "ftaun").length();
+		const auto n_options = ((std::string) "ftaulsn").length();
 		if (input_options.length() < n_options) {
 			break;
 		}
