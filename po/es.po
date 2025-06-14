@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
-"PO-Revision-Date: 2025-06-14 23:07+0200\n"
+"PO-Revision-Date: 2025-06-14 23:10+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -969,7 +969,7 @@ msgstr "uso: set <opcion> <valor>"
 #: src/formaction.cpp:254
 #, c-format
 msgid "error setting '%s' to '%s': %s"
-msgstr "error configurando '%s' a `%s': %s"
+msgstr "error configurando '%s' a '%s': %s"
 
 #: src/formaction.cpp:263
 msgid "usage: set <variable>[=<value>]"
