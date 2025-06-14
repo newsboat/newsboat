@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
-"PO-Revision-Date: 2024-12-15 18:53+0100\n"
+"PO-Revision-Date: 2025-06-14 23:07+0200\n"
 "Last-Translator: Roberto Michán Sánchez <robertoms258@gmail.com>\n"
 "Language-Team: ROOT <epsilon@correoe.no-ip.org>, OmeGa <omega@mailoo.org>, "
 "José Manuel García-Patos <josemanuel@gesaku.es>, Marcos Cruz "
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -300,9 +300,9 @@ msgid "%N %V - URLs"
 msgstr "%N %V - URL"
 
 #: src/configcontainer.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "unknown config option: %s"
-msgstr "contexto desconocido `%s'"
+msgstr "opción de configuración desconocida: %s"
 
 #: src/configdata.cpp:54
 #, c-format
@@ -569,7 +569,7 @@ msgstr ""
 
 #: src/controller.cpp:593
 msgid "Press any key to continue"
-msgstr ""
+msgstr "Presiona cualquier tecla para continuar"
 
 #: src/controller.cpp:601
 msgid "failed: "
@@ -728,27 +728,25 @@ msgstr "¡No hay fuentes seleccionadas!"
 #. "Sort by (f)irsttag/..." and "Reverse Sort by
 #. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:130 src/feedlistformaction.cpp:173
-#, fuzzy
 msgid "ftaulsn"
-msgstr "ptasln"
+msgstr "ptnsaln"
 
 #: src/feedlistformaction.cpp:132
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "late(s)tunread/(n)one?"
 msgstr ""
-"¿Ordenar por (p)rimera etiqueta/(t)ítulo/número de (a)rtículos/número de "
-"artículos (s)in leer/ú(l)timo actualizado/(n)ada?"
+"¿Ordenar por (p)rimera etiqueta/(t)ítulo/(n)úmero de artículos/número de "
+"artículos (s)in leer/último (a)ctualizado/último (l)eído/(n)ada?"
 
 #: src/feedlistformaction.cpp:175
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/late(s)tunread/(n)one?"
 msgstr ""
-"¿Ordenar decrecientemente por (p)rimera etiqueta/(t)ítulo/número de "
-"(a)rtículos/número de artículos (s)in leer/ú(l)timo actualizado/(n)ada?"
+"¿Ordenar decrecientemente por (p)rimera etiqueta/(t)ítulo/(n)úmero de "
+"artículos/número de artículos (s)in leer/último (a)ctualizado/último (l)eído/"
+"(n)ada?"
 
 #: src/feedlistformaction.cpp:237 src/feedlistformaction.cpp:264
 #: src/feedlistformaction.cpp:594 src/itemlistformaction.cpp:183
@@ -847,9 +845,8 @@ msgid "Cannot open query feeds in the browser!"
 msgstr "¡No se pueden abrir las fuentes de consulta en el navegador!"
 
 #: src/feedlistformaction.cpp:571
-#, fuzzy
 msgid "Cannot open exec feeds in the browser!"
-msgstr "¡No se pueden abrir las fuentes de consulta en el navegador!"
+msgstr "¡No se pueden abrir las fuentes de ejecución en el navegador!"
 
 #: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1399
 msgid "Clear filter"
@@ -970,9 +967,9 @@ msgid "usage: set <config-option> <value>"
 msgstr "uso: set <opcion> <valor>"
 
 #: src/formaction.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "error setting '%s' to '%s': %s"
-msgstr "Error al buscar `%s': %s"
+msgstr "error configurando '%s' a `%s': %s"
 
 #: src/formaction.cpp:263
 msgid "usage: set <variable>[=<value>]"
