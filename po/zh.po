@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
-"PO-Revision-Date: 2024-12-20 09:30+0800\n"
+"PO-Revision-Date: 2025-06-19 01:30+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -292,9 +292,9 @@ msgid "%N %V - URLs"
 msgstr "%N %V - 链接"
 
 #: src/configcontainer.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "unknown config option: %s"
-msgstr "未知的上下文 `%s'"
+msgstr "未知的配置选项 `%s'"
 
 #: src/configdata.cpp:54
 #, c-format
@@ -552,7 +552,7 @@ msgstr ""
 
 #: src/controller.cpp:593
 msgid "Press any key to continue"
-msgstr ""
+msgstr "请按任意键继续"
 
 #: src/controller.cpp:601
 msgid "failed: "
@@ -711,27 +711,24 @@ msgstr "没有选择种子！"
 #. "Sort by (f)irsttag/..." and "Reverse Sort by
 #. (f)irsttag/..." messages
 #: src/feedlistformaction.cpp:130 src/feedlistformaction.cpp:173
-#, fuzzy
 msgid "ftaulsn"
-msgstr "ftauln"
+msgstr "ftaulsn"
 
 #: src/feedlistformaction.cpp:132
-#, fuzzy
 msgid ""
 "Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/(l)astupdated/"
 "late(s)tunread/(n)one?"
 msgstr ""
 "使用以下方法排序？(f)第一个标签/(t)标题/(a)文章总数/(u)未读文章总数/(l)最后更"
-"新时间/(n)无"
+"新时间/(s)最新未读/(n)无"
 
 #: src/feedlistformaction.cpp:175
-#, fuzzy
 msgid ""
 "Reverse Sort by (f)irsttag/(t)itle/(a)rticlecount/(u)nreadarticlecount/"
 "(l)astupdated/late(s)tunread/(n)one?"
 msgstr ""
 "使用以下方法逆序排序？(f)第一个标签/(t)标题/(a)文章总数/(u)未读文章总数/(l)最"
-"后更新时间/(n)无"
+"后更新时间/(s)最新未读/(n)无"
 
 #: src/feedlistformaction.cpp:237 src/feedlistformaction.cpp:264
 #: src/feedlistformaction.cpp:594 src/itemlistformaction.cpp:183
@@ -832,7 +829,7 @@ msgstr "不能在浏览器中打开查询的种子！"
 #: src/feedlistformaction.cpp:571
 #, fuzzy
 msgid "Cannot open exec feeds in the browser!"
-msgstr "不能在浏览器中打开查询的种子！"
+msgstr "不能在浏览器中打开可执行的种子！"
 
 #: src/feedlistformaction.cpp:658 src/itemlistformaction.cpp:1399
 msgid "Clear filter"
@@ -953,9 +950,9 @@ msgid "usage: set <config-option> <value>"
 msgstr "用法：set <配置选项> <值>"
 
 #: src/formaction.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "error setting '%s' to '%s': %s"
-msgstr "当查找`%s'的时候出错：%s"
+msgstr "当设置 '%s' 为 '%s' 时出错：%s"
 
 #: src/formaction.cpp:263
 msgid "usage: set <variable>[=<value>]"
