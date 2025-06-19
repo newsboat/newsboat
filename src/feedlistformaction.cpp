@@ -523,8 +523,7 @@ REDO:
 		v.push_help();
 		break;
 	default:
-		ListFormAction::process_operation(op, args, bindingType);
-		break;
+		return ListFormAction::process_operation(op, args, bindingType);
 	}
 	if (quit) {
 		while (v.formaction_stack_size() > 0) {

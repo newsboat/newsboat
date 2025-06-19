@@ -23,7 +23,6 @@ UrlViewFormAction::UrlViewFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, quit(false)
 	, feed(feed)
 	, urls_list("urls", FormAction::f, cfg->get_configvalue_as_int("scrolloff"))
 {
@@ -33,6 +32,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
 	BindingType /*bindingType*/)
 {
+	bool quit = false;
 	bool hardquit = false;
 	switch (op) {
 	case OP_PREV:
@@ -92,10 +92,7 @@ bool UrlViewFormAction::process_operation(Operation op,
 		hardquit = true;
 		break;
 	default:
-		if (handle_list_operations(urls_list, op)) {
-			break;
-		}
-		break;
+		return handle_list_operations(urls_list, op);
 	}
 	if (hardquit) {
 		while (v.formaction_stack_size() > 0) {
@@ -139,7 +136,6 @@ void UrlViewFormAction::init()
 	recalculate_widget_dimensions();
 
 	do_redraw = true;
-	quit = false;
 	set_keymap_hints();
 }
 
