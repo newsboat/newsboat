@@ -115,7 +115,7 @@ branch off the latest release and backport the bugfixes onto it.
                 `newsboat.html`.
             * `<title>`: "Newsboat VERSION is out".
             * Gzip the result: `gzip --best --keep --force www/news.atom`.
-            * Commit the result: `git commit -m'Release VERISON'`
+            * Commit the result: `git add www/releases/VERSION && git commit -m'Release VERISON'`
             * Publish it: `git push`
 8. Save the website to the Wayback machine:
     1. go to https://web.archive.org/save
