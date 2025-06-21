@@ -1,6 +1,6 @@
 [package]
 name = "libnewsboat-ffi"
-version = "2.39.0"
+version = "2.40.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 edition = "2021"
 

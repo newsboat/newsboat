@@ -1,15 +1,40 @@
 # Changes for Newsboat
 
-# Unreleased - expected 2025-06-22
+# 2.40 - 2025-06-21
 
 ### Added
+
+- `latestunread` feed sort order, which sorts feeds by their most recent unread
+    article (#2492) (Daniel Lublin)
+- contrib: "monochrome" colorscheme (Halano)
+
 ### Changed
-- Bumped minimum supported Rust version to 1.83.0
+
 - Bumped minimum supported GCC version to GCC 7
-### Deprecated
+- Default `cleanup-on-quit` changed from `yes` to the new option `nudge`, which
+    shows a message and waits for a keypress when unreachable items are found in
+    the cache. This avoids accidental data loss (#1183) (Dennis van der Schagt)
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Spanish (Roboron3042),
+    Swedish (Dennis Öberg), Turkish (Emir SARI)
+- Bumped minimum supported Rust version to 1.83.0
+- Updated vendored library json.hpp to 3.12.0
+
 ### Removed
+
+- Support for GCC 5 and 6, in line with previous deprecation of compilers that
+    don't support C++17
+
 ### Fixed
-### Security
+
+- Crash when invoking `edit-flags` from a new-style binding (i.e. `bind`)
+    (Dennis van der Schagt)
+- Query feed configs not being read from the urls file when `urls-source` is set
+    to `opml` (#3057) (Jorenar)
+- Some remote APIs not reading tags from the urls file (Dennis van der Schagt)
+- `exec:` and `filter:` feeds could be opened in the browser even though they
+    don't have a URL (Juho Eerola)
 
 
 
