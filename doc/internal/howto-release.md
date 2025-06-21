@@ -80,10 +80,8 @@ branch off the latest release and backport the bugfixes onto it.
     * `git archive --format=tar --prefix="newsboat-VERSION/" rVERSION | pixz > newsboat-VERSION.tar.xz`.
     * Sign the tarball:
         `gpg2 --sign-with 'newsboat@googlegroups.com' --detach-sign --armour newsboat-VERSION.tar.xz`.
-    * Upload both files to newsboat.org staging area.
 6. Prepare the docs:
     * In your local clone: `make -j5 doc`.
-    * Upload contents of `doc/xhtml/` to newsboat.org staging area.
 7. *If you're making a patch release*, merge the tag into the master branch:
 
         $ git checkout master
@@ -92,34 +90,33 @@ branch off the latest release and backport the bugfixes onto it.
     This merges our changes to CHANGELOG.
 
 8. Publish the release:
-    * Prepare the directory on the server:
-        * `cp -rfv /var/www/newsboat.org/www/ newsboat`.
-        * Prepare directories: `mkdir -p newsboat/releases/VERSION/docs`.
+    * Push the code: `git push && git push --tags`
+    * Update the site:
+        * Navigate to your local clone of https://github.com/newsboat/newsboat.org
+        * Prepare directories: `mkdir -p www/releases/VERSION/docs`.
         * Move tarball and its signature:
-            `mv newsboat-VERSION* newsboat/releases/VERSION/`.
-        * Prepare docs:
-            `gzip --keep --best faq.html newsboat.html`.
+            `mv newsboat-VERSION* www/releases/VERSION/`.
         * Move docs:
-            `mv faq.html* newsboat.html* newsboat/releases/VERSION/docs/`.
-        * Edit `newsboat/index.html`:
+            `mv NEWSBOAT/doc/xhtml/faq.html NEWSBOAT/doc/xhtml/newsboat.html www/releases/VERSION/docs/`.
+        * Compress docs:
+            `gzip --keep --best www/releases/VERSION/docs/*`.
+        * Edit `www/index.html`:
             * Move current release to the list of previous releases.
             * Update current release version.
             * Update current release date.
             * Update current release links.
             * Update the year in the page copyright if necessary.
-            * Gzip the result: `gzip --best --keep --force newsboat/index.html`.
-        * Edit `newsboat/news.atom`:
+            * Gzip the result: `gzip --best --keep --force www/index.html`.
+        * Edit `www/news.atom`:
             * Update `<updated>` field of the channel.
             * Use the same date-time for `<published>` and `<updated>` in new
                 `<entry>`.
             * Update entry's `<link>` and `<id>` to point to new docs'
                 `newsboat.html`.
             * `<title>`: "Newsboat VERSION is out".
-            * Gzip the result: `gzip --best --keep --force newsboat/news.atom`.
-    * Deploy the directory on the server:
-        `sudo cp -rv newsboat/* /var/www/newsboat.org/www/ && sudo chmod -R a+r /var/www/newsboat.org/www/`.
-    * Remove the staging directory on the server: `rm -rf newsboat`
-    * Push the code: `git push && git push --tags`
+            * Gzip the result: `gzip --best --keep --force www/news.atom`.
+            * Commit the result: `git commit -m'Release VERISON'`
+            * Publish it: `git push`
 8. Save the website to the Wayback machine:
     1. go to https://web.archive.org/save
     2. type in "newsboat.org"
