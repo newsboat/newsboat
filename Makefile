@@ -224,8 +224,7 @@ clean-doc:
 	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
-		doc/example-config doc/generate doc/generate2 \
-		doc/gen-example-config
+		doc/example-config doc/generate2 doc/gen-example-config
 
 clean-test:
 	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
@@ -278,11 +277,8 @@ doc/xhtml/newsboat.html: doc/cmdline-commands-linked.asciidoc
 doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=html5 -a webfonts! --destination-dir=doc/xhtml $<
 
-doc/generate: doc/generate.cpp doc/split.h
-	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
-
-doc/newsboat-cfgcmds.asciidoc: doc/generate doc/configcommands.dsv
-	doc/generate doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
+doc/newsboat-cfgcmds.asciidoc: doc/configcommands.dsv
+	awk -f doc/createConfigCommandsListView.awk doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
 
 doc/generate2: doc/generate2.cpp
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate2 doc/generate2.cpp
@@ -298,8 +294,8 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-files.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
 
-doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
-	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
+doc/podboat-cfgcmds.asciidoc: doc/podboat-cmds.dsv
+	awk -v "link_prefix=pb-" -f doc/createConfigCommandsListView.awk doc/podboat-cmds.dsv > doc/podboat-cfgcmds.asciidoc
 
 doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
 		doc/chapter-podcasts.asciidoc doc/chapter-podboat.asciidoc \
