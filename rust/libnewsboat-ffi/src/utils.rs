@@ -253,9 +253,9 @@ fn parse_rss_author_email(text: &[u8], name: &mut String, email: &mut String) {
     (*name, *email) = utils::parse_rss_author_email(text);
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn rs_get_string(line: *const c_char) -> *mut c_char {
-    let line = CStr::from_ptr(line);
+    let line = unsafe { CStr::from_ptr(line) };
     let result = CString::from(line);
     result.into_raw()
 }

@@ -6,9 +6,9 @@ use std::path::Path;
 fn t_configpaths_process_args_replaces_paths_with_the_ones_supplied_by_cliargsparser() {
     // ConfigPaths rely on these variables, so let's sanitize them to ensure
     // that the tests aren't affected
-    env::remove_var("HOME");
-    env::remove_var("XDG_CONFIG_HOME");
-    env::remove_var("XDG_DATA_HOME");
+    unsafe { env::remove_var("HOME") };
+    unsafe { env::remove_var("XDG_CONFIG_HOME") };
+    unsafe { env::remove_var("XDG_DATA_HOME") };
 
     let url_file = Path::new("my urls file");
     let cache_file = Path::new("/path/to/cache file.db");

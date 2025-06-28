@@ -112,7 +112,7 @@ pub struct Match {
 }
 
 /// A wrapper around `libc::regerror()`.
-unsafe fn regex_error_to_str(errcode: libc::c_int, regex: &regex_t) -> Option<String> {
+unsafe fn regex_error_to_str(errcode: libc::c_int, regex: &regex_t) -> Option<String> { unsafe {
     // Find out the size of the buffer needed to hold the error message
     let errmsg_length = regerror(errcode, regex, ptr::null_mut(), 0);
 
@@ -131,7 +131,7 @@ unsafe fn regex_error_to_str(errcode: libc::c_int, regex: &regex_t) -> Option<St
     errmsg.pop();
 
     OsString::from_vec(errmsg).into_string().ok()
-}
+}}
 
 impl Regex {
     /// Compiles pattern as a regular expression.
