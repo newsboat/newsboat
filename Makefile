@@ -224,7 +224,7 @@ clean-doc:
 	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
-		doc/example-config doc/generate2 doc/gen-example-config
+		doc/example-config doc/gen-example-config
 
 clean-test:
 	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
@@ -280,11 +280,8 @@ doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
 doc/newsboat-cfgcmds.asciidoc: doc/configcommands.dsv
 	awk -f doc/createConfigCommandsListView.awk doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
 
-doc/generate2: doc/generate2.cpp
-	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate2 doc/generate2.cpp
-
-doc/newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
-	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
+doc/newsboat-keycmds.asciidoc: doc/keycmds.dsv
+	awk -f doc/createKeyCommandsListView.awk doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
 
 doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/newsboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
