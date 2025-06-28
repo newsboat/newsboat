@@ -248,16 +248,16 @@ doc/xhtml:
 	$(MKDIR) doc/xhtml
 
 doc/configcommands-linked.asciidoc: doc/configcommands.dsv
-	sed 's/||/\t/g' doc/configcommands.dsv | awk -f doc/createConfigurationCommandsListView.awk > doc/configcommands-linked.asciidoc
+	awk -f doc/createConfigurationCommandsListView.awk doc/configcommands.dsv > doc/configcommands-linked.asciidoc
 
 doc/availableoperations-linked.asciidoc: doc/keycmds.dsv
-	sed 's/||/\t/g' doc/keycmds.dsv | awk -f doc/createAvailableOperationsListView.awk > doc/availableoperations-linked.asciidoc
+	awk -f doc/createAvailableOperationsListView.awk doc/keycmds.dsv > doc/availableoperations-linked.asciidoc
 
 doc/podboat-cmds-linked.asciidoc: doc/podboat-cmds.dsv
-	sed 's/||/\t/g' doc/podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/podboat-cmds-linked.asciidoc
+	awk -f doc/createPodboatConfigurationCommandsListView.awk doc/podboat-cmds.dsv > doc/podboat-cmds-linked.asciidoc
 
 doc/cmdline-commands-linked.asciidoc: doc/cmdline-commands.dsv
-	sed 's/||/\t/g' doc/cmdline-commands.dsv | awk -f doc/createAvailableCommandlineCommandsListView.awk > doc/cmdline-commands-linked.asciidoc
+	awk -f doc/createAvailableCommandlineCommandsListView.awk doc/cmdline-commands.dsv > doc/cmdline-commands-linked.asciidoc
 
 doc/xhtml/newsboat.html: doc/chapter-tagging.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-snownews.asciidoc
