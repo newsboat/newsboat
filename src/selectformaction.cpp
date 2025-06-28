@@ -25,7 +25,6 @@ SelectFormAction::SelectFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg)
 	: FormAction(vv, formstr, cfg)
-	, quit(false)
 	, is_first_draw(true)
 	, type(SelectionType::TAG)
 	, value("")
@@ -52,6 +51,7 @@ bool SelectFormAction::process_operation(Operation op,
 	const std::vector<std::string>& /* args */,
 	BindingType /*bindingType*/)
 {
+	bool quit = false;
 	bool hardquit = false;
 	switch (op) {
 	case OP_PREV:
@@ -119,10 +119,7 @@ bool SelectFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
-		if (handle_list_operations(tags_list, op)) {
-			break;
-		}
-		break;
+		return handle_list_operations(tags_list, op);
 	}
 
 	if (hardquit) {
@@ -191,7 +188,6 @@ void SelectFormAction::prepare()
 void SelectFormAction::init()
 {
 	do_redraw = true;
-	quit = false;
 
 	recalculate_widget_dimensions();
 

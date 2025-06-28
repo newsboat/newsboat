@@ -33,7 +33,6 @@ private:
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey) override;
 	std::string make_colorstring(const std::vector<std::string>& colors);
-	bool quit;
 	bool apply_search;
 	std::string searchphrase;
 	const std::string context;

@@ -42,7 +42,6 @@ private:
 	void update_heading();
 
 	Links links;
-	bool quit;
 	std::shared_ptr<RssFeed> feed;
 	ListWidget urls_list;
 };

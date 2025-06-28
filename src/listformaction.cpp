@@ -50,10 +50,7 @@ bool ListFormAction::process_operation(Operation op,
 		break;
 
 	default:
-		if (handle_list_operations(list, op)) {
-			break;
-		}
-		break;
+		return handle_list_operations(list, op);
 	}
 	return true;
 }

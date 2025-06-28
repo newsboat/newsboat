@@ -224,6 +224,7 @@ public:
 	void unset_key(const KeyCombination& key, const std::string& context);
 	void unset_all_keys(const std::string& context);
 	static Operation get_opcode(const std::string& opstr);
+	static std::string get_op_name(Operation op);
 	std::vector<MacroCmd> get_operation(const std::vector<KeyCombination>& key_sequence,
 		const std::string& context, MultiKeyBindingState& state, BindingType& type);
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
