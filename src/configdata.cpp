@@ -80,10 +80,6 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 	case ConfigDataType::PATH:
 		value_ = std::move(new_value);
 		break;
-
-	case ConfigDataType::INVALID:
-		assert(0 && "unreachable");
-		break;
 	}
 
 

@@ -8,7 +8,7 @@
 
 namespace newsboat {
 
-enum class ConfigDataType { INVALID, BOOL, INT, STR, PATH, ENUM };
+enum class ConfigDataType { BOOL, INT, STR, PATH, ENUM };
 
 /// Data about a setting: its default and current values, its type, and its
 /// allowed values if it's an enum.
@@ -17,8 +17,7 @@ public:
 	/// Construct a value of type `t` and equal to `v`. If `multi_option` is
 	/// true and config file contains this option multiple times, the values
 	/// will be combined instead of rewritten.
-	ConfigData(const std::string& v = "",
-		ConfigDataType t = ConfigDataType::INVALID, bool multi_option = false);
+	ConfigData(const std::string& v, ConfigDataType t, bool multi_option = false);
 
 	/// Construct a value that can take any of given `values`, and currently
 	/// equal to `v` (which *must* be one of `values`).
