@@ -3,12 +3,12 @@
 use gettextrs::gettext;
 use nom::AsChar;
 use nom::{
+    IResult, Offset, Parser,
     branch::alt,
     bytes::complete::{escaped, is_not, tag, take, take_while, take_while1},
     combinator::{complete, map, opt, peek, recognize, value},
     error::{ErrorKind, ParseError},
     sequence::{delimited, separated_pair, terminated},
-    IResult, Offset, Parser,
 };
 use regex_rs::Regex;
 use std::cell::OnceCell;
@@ -399,7 +399,7 @@ fn internal_parse(expr: &str) -> Result<Expression, Error> {
                     let pos = expr.offset(chunk);
                     match err {
                         FilterParserErrorKind::Unexpected(expected) => {
-                            return Error::AtPos(pos, expected)
+                            return Error::AtPos(pos, expected);
                         }
                         _ => continue,
                     }

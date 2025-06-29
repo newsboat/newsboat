@@ -7,7 +7,7 @@
 
 use libc::c_char;
 use std::ffi::CString;
-use std::panic::{catch_unwind, UnwindSafe};
+use std::panic::{UnwindSafe, catch_unwind};
 use std::process::abort;
 
 pub mod charencoding;

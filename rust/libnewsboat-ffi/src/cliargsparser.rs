@@ -1,4 +1,4 @@
-use cxx::{type_id, ExternType};
+use cxx::{ExternType, type_id};
 
 use libnewsboat::cliargsparser;
 use std::ffi::OsString;

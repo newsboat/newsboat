@@ -1,6 +1,6 @@
 use libnewsboat::{
     log,
-    logger::{self, get_instance, Level},
+    logger::{self, Level, get_instance},
 };
 use std::fs::File;
 use std::io::{BufRead, BufReader, Result};

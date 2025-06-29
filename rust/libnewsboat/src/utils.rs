@@ -1,8 +1,8 @@
 use crate::links;
 use crate::logger::{self, Level};
 use libc::{
-    c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t, waitpid, E2BIG, EILSEQ,
-    EINVAL,
+    E2BIG, EILSEQ, EINVAL, c_char, c_int, c_ulong, c_void, close, execvp, exit, fork, size_t,
+    waitpid,
 };
 use md5;
 use percent_encoding::*;
@@ -1004,7 +1004,7 @@ pub fn convert_text(text: &[u8], tocode: &str, fromcode: &str) -> Vec<u8> {
 
 fn get_locale_encoding() -> String {
     unsafe {
-        use libc::{nl_langinfo, CODESET};
+        use libc::{CODESET, nl_langinfo};
         use std::ffi::CStr;
 
         let codeset = CStr::from_ptr(nl_langinfo(CODESET));

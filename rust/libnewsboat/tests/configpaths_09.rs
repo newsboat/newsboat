@@ -4,8 +4,8 @@ use tempfile::TempDir;
 mod configpaths_helpers;
 
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_dotdir_already_exists(
-) {
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_dotdir_already_exists()
+ {
     let tmp = TempDir::new().unwrap();
 
     unsafe { env::set_var("HOME", tmp.path()) };

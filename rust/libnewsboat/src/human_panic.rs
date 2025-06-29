@@ -68,7 +68,7 @@
 //! All you (the programmer) need to do is run this module's `setup()` somewhere towards the
 //! beginning of the program.
 use backtrace::Backtrace;
-use std::io::{self, stderr, BufWriter, Write};
+use std::io::{self, BufWriter, Write, stderr};
 use std::panic;
 
 use std::panic::PanicHookInfo;

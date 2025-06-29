@@ -112,26 +112,28 @@ pub struct Match {
 }
 
 /// A wrapper around `libc::regerror()`.
-unsafe fn regex_error_to_str(errcode: libc::c_int, regex: &regex_t) -> Option<String> { unsafe {
-    // Find out the size of the buffer needed to hold the error message
-    let errmsg_length = regerror(errcode, regex, ptr::null_mut(), 0);
+unsafe fn regex_error_to_str(errcode: libc::c_int, regex: &regex_t) -> Option<String> {
+    unsafe {
+        // Find out the size of the buffer needed to hold the error message
+        let errmsg_length = regerror(errcode, regex, ptr::null_mut(), 0);
 
-    // Allocate the buffer and get the message.
-    let mut errmsg: Vec<u8> = vec![0; errmsg_length];
-    // Casting `*mut u8` to `*mut c_char` should be safe since C doesn't really care:
-    // it can store any ASCII symbol in a `char`, disregarding signedness.
-    regerror(
-        errcode,
-        regex,
-        errmsg.as_mut_ptr() as *mut std::os::raw::c_char,
-        errmsg_length,
-    );
+        // Allocate the buffer and get the message.
+        let mut errmsg: Vec<u8> = vec![0; errmsg_length];
+        // Casting `*mut u8` to `*mut c_char` should be safe since C doesn't really care:
+        // it can store any ASCII symbol in a `char`, disregarding signedness.
+        regerror(
+            errcode,
+            regex,
+            errmsg.as_mut_ptr() as *mut std::os::raw::c_char,
+            errmsg_length,
+        );
 
-    // Drop the trailing NUL byte that C uses to terminate strings
-    errmsg.pop();
+        // Drop the trailing NUL byte that C uses to terminate strings
+        errmsg.pop();
 
-    OsString::from_vec(errmsg).into_string().ok()
-}}
+        OsString::from_vec(errmsg).into_string().ok()
+    }
+}
 
 impl Regex {
     /// Compiles pattern as a regular expression.

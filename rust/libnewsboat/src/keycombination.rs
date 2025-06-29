@@ -1,13 +1,13 @@
 use nom::AsChar;
 use nom::Parser;
 use nom::{
+    IResult,
     branch::alt,
     bytes::complete::tag,
     character::complete::{anychar, none_of},
     combinator::{eof, recognize, verify},
     multi::{many0, many1},
     sequence::terminated,
-    IResult,
 };
 
 #[derive(Debug, PartialEq)]
@@ -182,9 +182,9 @@ pub fn bind(input: &str) -> Vec<KeyCombination> {
 
 #[cfg(test)]
 mod tests {
+    use super::KeyCombination;
     use super::bind;
     use super::bindkey;
-    use super::KeyCombination;
 
     proptest::proptest! {
         #[test]
@@ -290,9 +290,11 @@ mod tests {
         );
         assert_eq!(
             bind("<S-M-SPACE>"),
-            vec![KeyCombination::new("SPACE".to_owned())
-                .with_shift()
-                .with_alt()]
+            vec![
+                KeyCombination::new("SPACE".to_owned())
+                    .with_shift()
+                    .with_alt()
+            ]
         );
         assert_eq!(
             bind("<C-SPACE>"),
@@ -300,22 +302,28 @@ mod tests {
         );
         assert_eq!(
             bind("<C-M-SPACE>"),
-            vec![KeyCombination::new("SPACE".to_owned())
-                .with_control()
-                .with_alt()]
+            vec![
+                KeyCombination::new("SPACE".to_owned())
+                    .with_control()
+                    .with_alt()
+            ]
         );
         assert_eq!(
             bind("<C-S-SPACE>"),
-            vec![KeyCombination::new("SPACE".to_owned())
-                .with_control()
-                .with_shift()]
+            vec![
+                KeyCombination::new("SPACE".to_owned())
+                    .with_control()
+                    .with_shift()
+            ]
         );
         assert_eq!(
             bind("<C-S-M-SPACE>"),
-            vec![KeyCombination::new("SPACE".to_owned())
-                .with_control()
-                .with_shift()
-                .with_alt()]
+            vec![
+                KeyCombination::new("SPACE".to_owned())
+                    .with_control()
+                    .with_shift()
+                    .with_alt()
+            ]
         );
     }
 
@@ -323,10 +331,12 @@ mod tests {
     fn t_bind_single_key_with_modifiers_in_nonstandard_order() {
         assert_eq!(
             bind("<M-S-C-SPACE>"),
-            vec![KeyCombination::new("SPACE".to_owned())
-                .with_control()
-                .with_shift()
-                .with_alt()]
+            vec![
+                KeyCombination::new("SPACE".to_owned())
+                    .with_control()
+                    .with_shift()
+                    .with_alt()
+            ]
         );
     }
 

@@ -1,11 +1,11 @@
+use nom::IResult;
+use nom::Parser;
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take_till, take_till1};
 use nom::character::complete::{alpha1, alphanumeric1, digit1, space0};
 use nom::combinator::recognize;
 use nom::multi::many0;
 use nom::sequence::pair;
-use nom::IResult;
-use nom::Parser;
 use std::str;
 
 /// Returns charset if it can be derived from the optional byte-order-mark

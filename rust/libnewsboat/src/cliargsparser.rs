@@ -842,8 +842,8 @@ mod tests {
     }
 
     #[test]
-    fn t_sets_display_msg_and_asks_to_exit_with_failure_if_argument_to_dash_l_is_outside_1_to_6_range(
-    ) {
+    fn t_sets_display_msg_and_asks_to_exit_with_failure_if_argument_to_dash_l_is_outside_1_to_6_range()
+     {
         let check = |opts| {
             let args = CliArgsParser::new(opts);
 
