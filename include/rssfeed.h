@@ -170,7 +170,7 @@ public:
 
 	void set_feedptrs(std::shared_ptr<RssFeed> self);
 
-	std::string get_status();
+	std::string get_status() const;
 
 	void reset_status()
 	{
@@ -212,7 +212,7 @@ private:
 	std::mutex items_guid_map_mutex;
 
 	DlStatus status_;
-	std::mutex status_mutex_;
+	mutable std::mutex status_mutex_;
 };
 
 } // namespace newsboat
