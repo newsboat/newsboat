@@ -291,6 +291,24 @@ TEST_CASE(
 	}
 }
 
+// Added for https://github.com/newsboat/newsboat/issues/3104
+TEST_CASE("Resetting or toggling invalid config option does cause crash dump_config()",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+	std::vector<std::string> dummy_output;
+
+	SECTION("reset_to_default()") {
+		cfg.reset_to_default("non-existent");
+		cfg.dump_config(dummy_output);
+	}
+
+	SECTION("toggle()") {
+		cfg.toggle("non-existent");
+		cfg.dump_config(dummy_output);
+	}
+}
+
 TEST_CASE(
 	"get_suggestions() returns all settings whose names begin "
 	"with a given string",

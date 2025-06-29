@@ -373,16 +373,16 @@ void ConfigContainer::handle_action(const std::string& action,
 	const std::vector<std::string>& params)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	ConfigData& cfgdata = config_data[action];
+	auto entry = config_data.find(action);
 
-	// ConfigDataType::INVALID indicates that the action didn't exist, and
-	// that the returned object was created ad-hoc.
-	if (cfgdata.type() == ConfigDataType::INVALID) {
+	if (entry == config_data.end()) {
 		LOG(Level::WARN,
 			"ConfigContainer::handle_action: unknown action %s",
 			action);
 		throw ConfigHandlerException(ActionHandlerStatus::INVALID_COMMAND);
 	}
+
+	auto& cfgdata = entry->second;
 
 	LOG(Level::DEBUG,
 		"ConfigContainer::handle_action: action = %s, type = %u",
@@ -413,10 +413,6 @@ void ConfigContainer::handle_action(const std::string& action,
 		} else {
 			cfgdata.set_value(params[0]);
 		}
-		break;
-
-	case ConfigDataType::INVALID:
-		// we already handled this at the beginning of the function
 		break;
 	}
 }
@@ -486,13 +482,17 @@ nonstd::expected<void, std::string> ConfigContainer::set_configvalue(
 void ConfigContainer::reset_to_default(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	config_data[key].reset_to_default();
+	auto entry = config_data.find(key);
+	if (entry != config_data.end()) {
+		entry->second.reset_to_default();
+	}
 }
 
 void ConfigContainer::toggle(const std::string& key)
 {
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
-	if (config_data[key].type() == ConfigDataType::BOOL) {
+	auto entry = config_data.find(key);
+	if (entry != config_data.end() && entry->second.type() == ConfigDataType::BOOL) {
 		set_configvalue(key,
 			std::string(get_configvalue_as_bool(key) ? "false"
 				: "true"));
@@ -504,7 +504,6 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 	std::lock_guard<std::recursive_mutex> guard(config_data_mtx);
 	for (const auto& cfg : config_data) {
 		std::string configline = cfg.first + " ";
-		assert(cfg.second.type() != ConfigDataType::INVALID);
 		switch (cfg.second.type()) {
 		case ConfigDataType::BOOL:
 		case ConfigDataType::INT:
@@ -533,10 +532,6 @@ void ConfigContainer::dump_config(std::vector<std::string>& config_output) const
 							cfg.second.default_value()));
 				}
 			}
-			break;
-		case ConfigDataType::INVALID:
-			// can't happen because we already checked this case
-			// before the `switch`
 			break;
 		}
 		config_output.push_back(configline);
