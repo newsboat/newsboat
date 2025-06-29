@@ -15,7 +15,7 @@ pub struct MatcherErrorFfi {
     info2: *mut c_char,
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub fn matcher_error_to_ffi(error: MatcherError) -> MatcherErrorFfi {
     abort_on_panic(|| {
         match error {
@@ -48,14 +48,14 @@ pub fn matcher_error_to_ffi(error: MatcherError) -> MatcherErrorFfi {
     })
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn rs_get_test_attr_unavail_error() -> MatcherErrorFfi {
     matcher_error_to_ffi(MatcherError::AttributeUnavailable {
         attr: String::from("test_attribute"),
     })
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn rs_get_test_invalid_regex_error() -> MatcherErrorFfi {
     matcher_error_to_ffi(MatcherError::InvalidRegex {
         regex: String::from("?!"),

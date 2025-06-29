@@ -6,4 +6,4 @@ members = [
     "rust/regex-rs",
     "rust/http-test-server",
 ]
-resolver = "2"
+resolver = "3"

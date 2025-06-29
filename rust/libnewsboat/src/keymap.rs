@@ -1,12 +1,12 @@
 use nom::Parser;
 use nom::{
+    IResult,
     branch::alt,
     bytes::complete::{escaped_transform, is_not, tag, take},
     character::complete::{alpha1, space0, space1},
     combinator::{complete, eof, map, opt, recognize, value, verify},
     multi::{many0, many1, separated_list0, separated_list1},
     sequence::{delimited, preceded},
-    IResult,
 };
 
 fn unquoted_token(input: &str) -> IResult<&str, String> {

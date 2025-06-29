@@ -1,12 +1,12 @@
 //! Keeps a record of what the program did.
 
-use chrono::{offset::Local, Datelike, Timelike};
+use chrono::{Datelike, Timelike, offset::Local};
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::sync::atomic::{AtomicIsize, Ordering};
 use std::sync::Mutex;
 use std::sync::OnceLock;
+use std::sync::atomic::{AtomicIsize, Ordering};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 /// "Importance levels" for log messages.

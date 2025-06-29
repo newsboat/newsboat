@@ -29,32 +29,32 @@ fn t_configpaths_returns_paths_to_newsboat_xdg_dirs_if_they_exist_and_dotdir_doe
     let data_dir = tmp.path().join(".local").join("share").join("newsboat");
     fs::create_dir_all(&data_dir).ok();
 
-    env::set_var("HOME", tmp.path());
+    unsafe { env::set_var("HOME", tmp.path()) };
 
     if section!("XDG_CONFIG_HOME is set") {
-        env::set_var("XDG_CONFIG_HOME", tmp.path().join(".config"));
+        unsafe { env::set_var("XDG_CONFIG_HOME", tmp.path().join(".config")) };
 
         if section!("XDG_DATA_HOME is set") {
-            env::set_var("XDG_DATA_HOME", tmp.path().join(".local").join("share"));
+            unsafe { env::set_var("XDG_DATA_HOME", tmp.path().join(".local").join("share")) };
             assert_paths_are_inside_dirs(&config_dir, &data_dir);
         }
 
         if section!("XDG_DATA_HOME is not set") {
-            env::remove_var("XDG_DATA_HOME");
+            unsafe { env::remove_var("XDG_DATA_HOME") };
             assert_paths_are_inside_dirs(&config_dir, &data_dir);
         }
     }
 
     if section!("XDG_CONFIG_HOME is not set") {
-        env::remove_var("XDG_CONFIG_HOME");
+        unsafe { env::remove_var("XDG_CONFIG_HOME") };
 
         if section!("XDG_DATA_HOME is set") {
-            env::set_var("XDG_DATA_HOME", tmp.path().join(".local").join("share"));
+            unsafe { env::set_var("XDG_DATA_HOME", tmp.path().join(".local").join("share")) };
             assert_paths_are_inside_dirs(&config_dir, &data_dir);
         }
 
         if section!("XDG_DATA_HOME is not set") {
-            env::remove_var("XDG_DATA_HOME");
+            unsafe { env::remove_var("XDG_DATA_HOME") };
             assert_paths_are_inside_dirs(&config_dir, &data_dir);
         }
     }
