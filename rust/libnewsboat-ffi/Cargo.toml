@@ -2,7 +2,7 @@
 name = "libnewsboat-ffi"
 version = "2.40.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 libnewsboat = { path="../libnewsboat" }

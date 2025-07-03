@@ -1,4 +1,4 @@
-use libc::{setlocale, LC_CTYPE};
+use libc::{LC_CTYPE, setlocale};
 use std::env;
 use std::ffi::CString;
 

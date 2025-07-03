@@ -27,12 +27,12 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
 ) {
     let tmp = TempDir::new().unwrap();
 
-    env::set_var("HOME", tmp.path());
+    unsafe { env::set_var("HOME", tmp.path()) };
 
     // ConfigPaths rely on these variables, so let's sanitize them to ensure
     // that the tests aren't affected
-    env::remove_var("XDG_CONFIG_HOME");
-    env::remove_var("XDG_DATA_HOME");
+    unsafe { env::remove_var("XDG_CONFIG_HOME") };
+    unsafe { env::remove_var("XDG_DATA_HOME") };
 
     if section!("Newsbeuter dotdir exists") {
         let _beuter_sentries = configpaths_helpers::mock_newsbeuter_dotdir(&tmp);
@@ -55,7 +55,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
             if section!("XDG_CONFIG_HOME redefined") {
                 let config_dir = tmp.path().join("xdg-conf");
                 assert!(fs::create_dir(&config_dir).is_ok());
-                env::set_var("XDG_CONFIG_HOME", &config_dir);
+                unsafe { env::set_var("XDG_CONFIG_HOME", &config_dir) };
 
                 let newsboat_config_dir = config_dir.join("newsboat");
                 let newsboat_data_dir = tmp.path().join(".local").join("share").join("newsboat");
@@ -71,7 +71,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
             if section!("XDG_DATA_HOME redefined") {
                 let data_dir = tmp.path().join("xdg-data");
                 assert!(fs::create_dir(&data_dir).is_ok());
-                env::set_var("XDG_DATA_HOME", &data_dir);
+                unsafe { env::set_var("XDG_DATA_HOME", &data_dir) };
 
                 let newsboat_config_dir =
                     tmp.path().join(".config").join("newsboat");
@@ -88,11 +88,11 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
             if section!("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
                 let config_dir = tmp.path().join("xdg-conf");
                 assert!(fs::create_dir(&config_dir).is_ok());
-                env::set_var("XDG_CONFIG_HOME", &config_dir);
+                unsafe { env::set_var("XDG_CONFIG_HOME", &config_dir) };
 
                 let data_dir = tmp.path().join("xdg-data");
                 assert!(fs::create_dir(&data_dir).is_ok());
-                env::set_var("XDG_DATA_HOME", &data_dir);
+                unsafe { env::set_var("XDG_DATA_HOME", &data_dir) };
 
                 let newsboat_config_dir = config_dir.join("newsboat");
                 let newsboat_data_dir = data_dir.join("newsboat");
@@ -129,7 +129,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
         if section!("XDG_CONFIG_HOME redefined") {
             let config_dir = tmp.path().join("xdg-conf");
             assert!(fs::create_dir(&config_dir).is_ok());
-            env::set_var("XDG_CONFIG_HOME", &config_dir);
+            unsafe { env::set_var("XDG_CONFIG_HOME", &config_dir) };
 
             let _beuter_sentries = configpaths_helpers::mock_xdg_dirs(
                 &config_dir.join("newsbeuter"),
@@ -157,7 +157,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
         if section!("XDG_DATA_HOME redefined") {
             let data_dir = tmp.path().join("xdg-data");
             assert!(fs::create_dir(&data_dir).is_ok());
-            env::set_var("XDG_DATA_HOME", &data_dir);
+            unsafe { env::set_var("XDG_DATA_HOME", &data_dir) };
 
             let _beuter_sentries = configpaths_helpers::mock_xdg_dirs(
                 &tmp.path().join(".config").join("newsbeuter"),
@@ -186,11 +186,11 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
         if section!("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
             let config_dir = tmp.path().join("xdg-conf");
             assert!(fs::create_dir(&config_dir).is_ok());
-            env::set_var("XDG_CONFIG_HOME", &config_dir);
+            unsafe { env::set_var("XDG_CONFIG_HOME", &config_dir) };
 
             let data_dir = tmp.path().join("xdg-data");
             assert!(fs::create_dir(&data_dir).is_ok());
-            env::set_var("XDG_DATA_HOME", &data_dir);
+            unsafe { env::set_var("XDG_DATA_HOME", &data_dir) };
 
             let _beuter_sentries = configpaths_helpers::mock_xdg_dirs(
                 &config_dir.join("newsbeuter"),

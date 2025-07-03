@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 
 #[test]
 fn t_resolve_tilde() {
-    env::set_var("HOME", "test");
+    unsafe { env::set_var("HOME", "test") };
     assert_eq!(&utils::resolve_tilde(PathBuf::from("~")), Path::new("test"));
     assert_eq!(
         &utils::resolve_tilde(PathBuf::from("~/")),

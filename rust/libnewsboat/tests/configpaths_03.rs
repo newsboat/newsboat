@@ -28,13 +28,13 @@ enable_sections! {
 #[test]
 fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now() {
     let tmp = TempDir::new().unwrap();
-    env::set_var("HOME", tmp.path());
+    unsafe { env::set_var("HOME", tmp.path()) };
 
     let dotdir = tmp.path().join(".newsboat");
 
     if section!("Using dotdir") {
-        env::remove_var("XDG_CONFIG_HOME");
-        env::remove_var("XDG_DATA_HOME");
+        unsafe { env::remove_var("XDG_CONFIG_HOME") };
+        unsafe { env::remove_var("XDG_DATA_HOME") };
 
         if section!("Dotdir didn't exist") {
             assert_dirs_exist_after_create_dirs(&[&dotdir], &tmp);
@@ -49,8 +49,8 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
 
     if section!("Using XDG dirs") {
         if section!("No XDG environment variables") {
-            env::remove_var("XDG_CONFIG_HOME");
-            env::remove_var("XDG_DATA_HOME");
+            unsafe { env::remove_var("XDG_CONFIG_HOME") };
+            unsafe { env::remove_var("XDG_DATA_HOME") };
 
             let config_dir = tmp.path().join(".config").join("newsboat");
             let data_dir = tmp.path().join(".local").join("share").join("newsboat");
@@ -84,9 +84,9 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
                 .path()
                 .join("config")
                 .join(fastrand::u32(..).to_string());
-            env::set_var("XDG_CONFIG_HOME", &config_home);
+            unsafe { env::set_var("XDG_CONFIG_HOME", &config_home) };
 
-            env::remove_var("XDG_DATA_HOME");
+            unsafe { env::remove_var("XDG_DATA_HOME") };
 
             let config_dir = config_home.join("newsboat");
             let data_dir = tmp.path().join(".local").join("share").join("newsboat");
@@ -116,13 +116,13 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
         }
 
         if section!("XDG_DATA_HOME redefined") {
-            env::remove_var("XDG_CONFIG_HOME");
+            unsafe { env::remove_var("XDG_CONFIG_HOME") };
 
             let data_home = tmp
                 .path()
                 .join("data")
                 .join(fastrand::u32(..).to_string());
-            env::set_var("XDG_DATA_HOME", &data_home);
+            unsafe { env::set_var("XDG_DATA_HOME", &data_home) };
 
             let config_dir = tmp.path().join(".config").join("newsboat");
             let data_dir = data_home.join("newsboat");
@@ -156,13 +156,13 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
                 .path()
                 .join("config")
                 .join(fastrand::u32(..).to_string());
-            env::set_var("XDG_CONFIG_HOME", &config_home);
+            unsafe { env::set_var("XDG_CONFIG_HOME", &config_home) };
 
             let data_home = tmp
                 .path()
                 .join("data")
                 .join(fastrand::u32(..).to_string());
-            env::set_var("XDG_DATA_HOME", &data_home);
+            unsafe { env::set_var("XDG_DATA_HOME", &data_home) };
 
             let config_dir = config_home.join("newsboat");
             let data_dir = data_home.join("newsboat");
