@@ -224,8 +224,7 @@ clean-doc:
 	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
-		doc/example-config doc/generate doc/generate2 \
-		doc/gen-example-config
+		doc/example-config doc/gen-example-config
 
 clean-test:
 	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
@@ -249,16 +248,16 @@ doc/xhtml:
 	$(MKDIR) doc/xhtml
 
 doc/configcommands-linked.asciidoc: doc/configcommands.dsv
-	sed 's/||/\t/g' doc/configcommands.dsv | awk -f doc/createConfigurationCommandsListView.awk > doc/configcommands-linked.asciidoc
+	awk -f doc/createConfigurationCommandsListView.awk doc/configcommands.dsv > doc/configcommands-linked.asciidoc
 
 doc/availableoperations-linked.asciidoc: doc/keycmds.dsv
-	sed 's/||/\t/g' doc/keycmds.dsv | awk -f doc/createAvailableOperationsListView.awk > doc/availableoperations-linked.asciidoc
+	awk -f doc/createAvailableOperationsListView.awk doc/keycmds.dsv > doc/availableoperations-linked.asciidoc
 
 doc/podboat-cmds-linked.asciidoc: doc/podboat-cmds.dsv
-	sed 's/||/\t/g' doc/podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/podboat-cmds-linked.asciidoc
+	awk -f doc/createPodboatConfigurationCommandsListView.awk doc/podboat-cmds.dsv > doc/podboat-cmds-linked.asciidoc
 
 doc/cmdline-commands-linked.asciidoc: doc/cmdline-commands.dsv
-	sed 's/||/\t/g' doc/cmdline-commands.dsv | awk -f doc/createAvailableCommandlineCommandsListView.awk > doc/cmdline-commands-linked.asciidoc
+	awk -f doc/createAvailableCommandlineCommandsListView.awk doc/cmdline-commands.dsv > doc/cmdline-commands-linked.asciidoc
 
 doc/xhtml/newsboat.html: doc/chapter-tagging.asciidoc
 doc/xhtml/newsboat.html: doc/chapter-snownews.asciidoc
@@ -278,17 +277,11 @@ doc/xhtml/newsboat.html: doc/cmdline-commands-linked.asciidoc
 doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=html5 -a webfonts! --destination-dir=doc/xhtml $<
 
-doc/generate: doc/generate.cpp doc/split.h
-	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
+doc/newsboat-cfgcmds.asciidoc: doc/configcommands.dsv
+	awk -f doc/createConfigCommandsListView.awk doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
 
-doc/newsboat-cfgcmds.asciidoc: doc/generate doc/configcommands.dsv
-	doc/generate doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
-
-doc/generate2: doc/generate2.cpp
-	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate2 doc/generate2.cpp
-
-doc/newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
-	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
+doc/newsboat-keycmds.asciidoc: doc/keycmds.dsv
+	awk -f doc/createKeyCommandsListView.awk doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
 
 doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
 		doc/newsboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
@@ -298,8 +291,8 @@ doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc
 		doc/chapter-files.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
 
-doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
-	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
+doc/podboat-cfgcmds.asciidoc: doc/podboat-cmds.dsv
+	awk -v "link_prefix=pb-" -f doc/createConfigCommandsListView.awk doc/podboat-cmds.dsv > doc/podboat-cfgcmds.asciidoc
 
 doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
 		doc/chapter-podcasts.asciidoc doc/chapter-podboat.asciidoc \
