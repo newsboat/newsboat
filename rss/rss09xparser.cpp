@@ -24,11 +24,11 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 	globalbase = get_prop(rootNode, "base", XML_URI);
 
 	xmlNode* channel = rootNode->children;
-	while (channel && strcmp((const char*)channel->name, "channel") != 0) {
+	while (channel && channel->name && strcmp((const char*)channel->name, "channel") != 0) {
 		channel = channel->next;
 	}
 
-	if (!channel) {
+	if (!channel || channel->name) {
 		throw Exception(_("no RSS channel found"));
 	}
 
