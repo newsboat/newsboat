@@ -633,7 +633,7 @@ TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces inval
 }
 
 TEST_CASE("Exit with abort (fixtures)",
-	"[rsspp::Parser][issueXXXX]")
+	"[rsspp::Parser][issue3108]")
 {
 	using test_helpers::ExceptionWithMsg;
 
