@@ -7,7 +7,7 @@
 
 use libc::c_char;
 use std::ffi::CString;
-use std::panic::{catch_unwind, UnwindSafe};
+use std::panic::{UnwindSafe, catch_unwind};
 use std::process::abort;
 
 pub mod charencoding;
@@ -34,12 +34,12 @@ fn abort_on_panic<F: FnOnce() -> R + UnwindSafe, R>(function: F) -> R {
     }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn rs_cstring_free(string: *mut c_char) {
     abort_on_panic(|| {
         if string.is_null() {
             return;
         }
-        drop(CString::from_raw(string));
+        drop(unsafe { CString::from_raw(string) });
     })
 }

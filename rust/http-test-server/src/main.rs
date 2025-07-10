@@ -1,5 +1,5 @@
 use httpmock::{Method::GET, Mock, MockServer};
-use std::io::{stdin, Read};
+use std::io::{Read, stdin};
 
 fn main() {
     let server = MockServer::start();

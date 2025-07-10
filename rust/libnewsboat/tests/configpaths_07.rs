@@ -6,12 +6,12 @@ fn t_configpaths_set_cache_file_changes_paths_to_cache_and_lock_files() {
     let test_dir = path::Path::new("some/dir/we/use/as/home");
     let newsboat_dir = test_dir.join(".newsboat");
 
-    env::set_var("HOME", test_dir);
+    unsafe { env::set_var("HOME", test_dir) };
 
     // ConfigPaths rely on these variables, so let's sanitize them to ensure
     // that the tests aren't affected
-    env::remove_var("XDG_CONFIG_HOME");
-    env::remove_var("XDG_DATA_HOME");
+    unsafe { env::remove_var("XDG_CONFIG_HOME") };
+    unsafe { env::remove_var("XDG_DATA_HOME") };
 
     let mut paths = ConfigPaths::new();
     assert!(paths.initialized());

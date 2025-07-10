@@ -62,7 +62,7 @@ impl FsLock {
                         .to_str()
                         .unwrap_or(&gettext("<filename containing invalid UTF-8 codepoint>")),
                     reason.to_string()
-                ))
+                ));
             }
         };
 

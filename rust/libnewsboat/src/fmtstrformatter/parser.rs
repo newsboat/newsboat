@@ -1,8 +1,8 @@
+use nom::IResult;
+use nom::Parser;
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take, take_till1, take_while};
 use nom::multi::many0;
-use nom::IResult;
-use nom::Parser;
 use std::cmp::Ordering;
 use std::str;
 
