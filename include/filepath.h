@@ -104,7 +104,7 @@ public:
 	//
 	// The difference from `set_extension()` is that `set_extension()` replaces
 	// the existing extension while `add_extension()` appends to it. For the
-	// path `foo.tar`, `set_extension("gz")` will turn the path into "tar.gz",
+	// path "foo.tar", `set_extension("gz")` will turn the path into "foo.gz",
 	// while `add_extension("gz")` will turn the path into "foo.tar.gz".
 	//
 	// \note `ext` is interpreted as bytes in locale string.
