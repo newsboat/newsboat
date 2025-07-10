@@ -28,7 +28,7 @@ void Rss09xParser::parse_feed(Feed& f, xmlNode* rootNode)
 		channel = channel->next;
 	}
 
-	if (!channel || channel->name) {
+	if (!channel || !channel->name) {
 		throw Exception(_("no RSS channel found"));
 	}
 
