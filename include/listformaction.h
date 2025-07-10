@@ -8,7 +8,7 @@
 #include "listwidget.h"
 #include "regexmanager.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ListFormAction : public FormAction {
 public:
@@ -28,6 +28,6 @@ protected:
 	ListWidget list;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LISTFORMACTION_H_ */

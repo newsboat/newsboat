@@ -5,9 +5,9 @@ BEGIN {
 
 {
 	print "'''"
-	print "[[podboat-" $1 "]]"
+	print "[[Podboat-" $1 "]]"
 	print "****"
-	print "*Syntax:* <<podboat-" $1 "," $1 ">>", $2, "+"
+	print "*Syntax:* <<Podboat-" $1 "," $1 ">>", $2, "+"
 	sub("\"\"", "n/a", $3)
 	print "*Default:*", $3, "+"
 	print "*Example:*", $5, "+"

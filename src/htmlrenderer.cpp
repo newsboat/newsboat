@@ -14,7 +14,7 @@
 #include "tagsouppullparser.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 HtmlRenderer::HtmlRenderer(bool raw)
 	: raw_(raw)
@@ -1361,4 +1361,4 @@ std::string HtmlRenderer::format_ol_count(unsigned int count, char type)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

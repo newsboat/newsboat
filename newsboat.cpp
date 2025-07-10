@@ -26,7 +26,7 @@ extern "C" {
 	void rs_setup_human_panic(void);
 }
 
-using namespace newsboat;
+using namespace Newsboat;
 
 void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 {
@@ -179,10 +179,10 @@ void print_usage(const std::string& argv0, const ConfigPaths& configpaths)
 	print_filepath(tr_cmdline, configpaths.cmdline_history_file());
 
 	std::cout << std::endl
-		<< _("Support at #newsboat at https://libera.chat or on our mailing "
-			"list https://groups.google.com/g/newsboat")
+		<< _("Support at #Newsboat at https://libera.chat or on our mailing "
+			"list https://groups.google.com/g/Newsboat")
 		<< std::endl
-		<< _("For more information, check out https://newsboat.org/")
+		<< _("For more information, check out https://Newsboat.org/")
 		<< std::endl;
 }
 
@@ -266,7 +266,7 @@ int main(int argc, char* argv[])
 	}
 
 	Controller c(configpaths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	c.set_view(&v);
 	CliArgsParser args(argc, argv);
 
@@ -285,23 +285,23 @@ int main(int argc, char* argv[])
 	int ret;
 	try {
 		ret = c.run(args);
-	} catch (const newsboat::DbException& e) {
+	} catch (const Newsboat::DbException& e) {
 		Stfl::reset();
 		std::cerr << strprintf::fmt(
-				_("Caught newsboat::DbException with message: %s"),
+				_("Caught Newsboat::DbException with message: %s"),
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
-	} catch (const newsboat::MatcherException& e) {
+	} catch (const Newsboat::MatcherException& e) {
 		Stfl::reset();
 		std::cerr << strprintf::fmt(
-				_("Caught newsboat::MatcherException with message: %s"),
+				_("Caught Newsboat::MatcherException with message: %s"),
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);
-	} catch (const newsboat::Exception& e) {
+	} catch (const Newsboat::Exception& e) {
 		Stfl::reset();
-		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with message: %s"),
+		std::cerr << strprintf::fmt(_("Caught Newsboat::Exception with message: %s"),
 				e.what())
 			<< std::endl;
 		::exit(EXIT_FAILURE);

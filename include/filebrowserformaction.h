@@ -10,7 +10,7 @@
 #include "listwidget.h"
 #include "stflrichtext.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class FileBrowserFormAction : public FormAction {
 public:
@@ -60,6 +60,6 @@ private:
 	View& view;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FILEBROWSERFORMACTION_H_ */

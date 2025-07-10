@@ -9,7 +9,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FilterContainer::~FilterContainer() {}
 
@@ -68,4 +68,4 @@ std::optional<std::string> FilterContainer::get_filter(const std::string& name)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -5,7 +5,7 @@
 #include "config.h"
 #include "configparser.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ConfigHandlerException::ConfigHandlerException(ActionHandlerStatus e)
 {
@@ -30,4 +30,4 @@ const char* ConfigHandlerException::get_errmsg(ActionHandlerStatus status)
 	assert(0 && "unreachable, because the switch() above handles everything");
 }
 
-} // namespace newsboat
+} // namespace Newsboat

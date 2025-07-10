@@ -4,7 +4,7 @@
 #include "listformaction.h"
 #include "regexmanager.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class DialogsFormAction : public ListFormAction {
 public:
@@ -33,6 +33,6 @@ private:
 	void update_heading();
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_DIALOGSFORMACTION_H_ */

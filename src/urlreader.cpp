@@ -5,7 +5,7 @@
 #include "fileurlreader.h"
 #include "logger.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 const std::vector<std::string>& UrlReader::get_urls() const
 {
@@ -38,7 +38,7 @@ void UrlReader::load_query_urls_from_file(std::string file)
 	const auto error_message = file_url_reader.reload();
 	if (error_message.has_value()) {
 		LOG(Level::DEBUG, "Reloading failed: %s", error_message.value().message);
-		// Ignore errors for now: https://github.com/newsboat/newsboat/issues/1273
+		// Ignore errors for now: https://github.com/Newsboat/Newsboat/issues/1273
 	}
 
 	const auto& other_urls = file_url_reader.get_urls();
@@ -50,4 +50,4 @@ void UrlReader::load_query_urls_from_file(std::string file)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -18,7 +18,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 inline void Cache::run_sql_impl(const std::string& query,
 	int (*callback)(void*, int, char**, char**),
@@ -403,7 +403,7 @@ void Cache::populate_tables()
 		version.major,
 		version.minor);
 
-	if (version.major > utils::newsboat_major_version()) {
+	if (version.major > utils::Newsboat_major_version()) {
 		const std::string msg =
 			"Database schema isn't supported because it's too new";
 		LOG(Level::ERROR, msg);
@@ -1226,4 +1226,4 @@ void Cache::close_database()
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

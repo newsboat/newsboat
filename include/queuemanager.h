@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigContainer;
 class RssFeed;

@@ -15,12 +15,12 @@ one that we use for Continuous Integration:
 
     # In the root of Newsboat's repository
     $ docker build \
-        --tag=newsboat-build-tools \
+        --tag=Newsboat-build-tools \
         --file=docker/ubuntu_22.04-build-tools.dockerfile \
         docker
 
 This will use the description from "docker/ubuntu_22.04-build-tools.dockerfile"
-to build an image named "newsboat-build-tools". That image contains all the
+to build an image named "Newsboat-build-tools". That image contains all the
 compilers and libraries that one needs to build Newsboat from source.
 
 You can now create a container from that image, and run commands inside it. But
@@ -32,7 +32,7 @@ using your favourite tools to edit the files. Let's build Newsboat this way:
         --rm \
         --mount type=bind,source=$(pwd),target=/home/builder/src \
         --user $(id -u):$(id -g) \
-        newsboat-build-tools \
+        Newsboat-build-tools \
         make -j9
 
 `--rm` deletes the container once it finished, by default it is kept and will
@@ -40,7 +40,7 @@ just litter up your system. `--mount` links your current directory to
 "/home/builder/src" inside the container. `--user` specifies the user and the
 group that will own the newly created files (object files, docs, and the final
 executable); `id` determines your current user and group IDs.
-"newsboat-build-tools" is the image from which we're creating the container, and
+"Newsboat-build-tools" is the image from which we're creating the container, and
 `make -j9` is the command we're running inside of it.
 
 Newsboat depends on a number of Rust packages ("crates"), which it downloads on

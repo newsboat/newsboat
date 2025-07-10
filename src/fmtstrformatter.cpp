@@ -1,6 +1,6 @@
 #include "fmtstrformatter.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FmtStrFormatter::FmtStrFormatter()
 	: rs_object(fmtstrformatter::bridged::create())
@@ -19,4 +19,4 @@ std::string FmtStrFormatter::do_format(const std::string& fmt,
 	return std::string(formatted);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

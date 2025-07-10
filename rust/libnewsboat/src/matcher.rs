@@ -931,7 +931,7 @@ mod tests {
 
     #[test]
     fn t_regexes_matched_case_insensitively() {
-        // Inspired by https://github.com/newsboat/newsboat/issues/642
+        // Inspired by https://github.com/Newsboat/Newsboat/issues/642
 
         let mock = MockMatchable::new(&[("abcd", "xyz")]);
 

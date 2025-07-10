@@ -8,7 +8,7 @@
 #include "rssfeed.h"
 #include "rssignores.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("parse() ignores uninitialized upstream feed", "[RssParser]")
 {

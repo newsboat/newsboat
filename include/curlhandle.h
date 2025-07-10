@@ -4,7 +4,7 @@
 #include <curl/curl.h>
 #include <stdexcept>
 
-namespace newsboat {
+namespace Newsboat {
 
 // wrapped curl handle for exception safety and so on
 // see also: https://github.com/gsauthof/ccurl
@@ -52,7 +52,7 @@ public:
 	}
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CURLHANDLE_H_ */
 

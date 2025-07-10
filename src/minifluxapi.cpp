@@ -15,9 +15,9 @@
 #include "utils.h"
 
 using json = nlohmann::json;
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 MinifluxApi::MinifluxApi(ConfigContainer& c)
 	: RemoteApi(c)
 {
@@ -362,4 +362,4 @@ bool MinifluxApi::update_article(const std::string& guid,
 	return update_articles(guids, args);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

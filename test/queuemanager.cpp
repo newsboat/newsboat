@@ -11,7 +11,7 @@
 #include "rssfeed.h"
 #include "rssitem.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 {
@@ -243,10 +243,10 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 {
 	ConfigContainer cfg;
 	SECTION("path with a slash at the end") {
-		cfg.set_configvalue("download-path", "/tmp/nonexistent-newsboat/");
+		cfg.set_configvalue("download-path", "/tmp/nonexistent-Newsboat/");
 	}
 	SECTION("path without a slash at the end") {
-		cfg.set_configvalue("download-path", "/tmp/nonexistent-newsboat");
+		cfg.set_configvalue("download-path", "/tmp/nonexistent-Newsboat");
 	}
 
 	Cache cache(":memory:", &cfg);
@@ -283,9 +283,9 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 	const auto lines = test_helpers::file_contents(queue_file.get_path());
 	REQUIRE(lines.size() == 3);
 	REQUIRE(lines[0] ==
-		R"(https://example.com/podcast.mp3 "/tmp/nonexistent-newsboat/podcast.mp3")");
+		R"(https://example.com/podcast.mp3 "/tmp/nonexistent-Newsboat/podcast.mp3")");
 	REQUIRE(lines[1] ==
-		R"(https://example.com/~joe/podcast.ogg "/tmp/nonexistent-newsboat/podcast.ogg")");
+		R"(https://example.com/~joe/podcast.ogg "/tmp/nonexistent-Newsboat/podcast.ogg")");
 	REQUIRE(lines[2] == "");
 }
 

@@ -4,7 +4,7 @@ What the user can do is to add the podcast download URL to a download queue.
 Alternatively, Newsboat can be configured to automatically do that. This
 queue is stored in the _queue_ file next to the _cache.db_ file.
 
-The user can then use the download manager `podboat` to download these files
+The user can then use the download manager `Podboat` to download these files
 to a directory on the local filesystem. Podboat comes with the Newsboat
 package, and features a look and feel very close to the one of Newsboat. It
 also shares the same configuration file.

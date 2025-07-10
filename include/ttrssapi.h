@@ -10,7 +10,7 @@ namespace rsspp {
 class Feed;
 }
 
-namespace newsboat {
+namespace Newsboat {
 
 class CurlHandle;
 
@@ -54,6 +54,6 @@ private:
 	int api_level = -1;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_TTRSSAPI_H_ */

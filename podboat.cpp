@@ -11,7 +11,7 @@ extern "C" {
 	void rs_setup_human_panic(void);
 }
 
-using namespace podboat;
+using namespace Podboat;
 
 int main(int argc, char* argv[])
 {
@@ -32,12 +32,12 @@ int main(int argc, char* argv[])
 	try {
 		c.initialize(argc, argv);
 
-		podboat::PbView v(c);
+		Podboat::PbView v(c);
 
 		return c.run(v);
-	} catch (const newsboat::Exception& e) {
+	} catch (const Newsboat::Exception& e) {
 		Stfl::reset();
-		std::cerr << strprintf::fmt(_("Caught newsboat::Exception with "
+		std::cerr << strprintf::fmt(_("Caught Newsboat::Exception with "
 					"message: %s"),
 				e.what())
 			<< std::endl;

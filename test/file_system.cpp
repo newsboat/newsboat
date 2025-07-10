@@ -2,7 +2,7 @@
 
 #include "file_system.h"
 
-using namespace newsboat::file_system;
+using namespace Newsboat::file_system;
 
 TEST_CASE("mode_suffix", "[file_system]")
 {

@@ -9,7 +9,7 @@
 #include "remoteapi.h"
 #include "feed.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class CurlHandle;
 
@@ -27,10 +27,10 @@ public:
 		const bool ssl_verify = true);
 	~Parser();
 	Feed parse_url(const std::string& url,
-		newsboat::CurlHandle& easyhandle,
+		Newsboat::CurlHandle& easyhandle,
 		time_t lastmodified = 0,
 		const std::string& etag = "",
-		newsboat::RemoteApi* api = 0,
+		Newsboat::RemoteApi* api = 0,
 		const std::string& cookie_cache = "");
 	Feed parse_buffer(const std::string& buffer,
 		const std::string& url = "", std::optional<std::string> charset = std::nullopt);

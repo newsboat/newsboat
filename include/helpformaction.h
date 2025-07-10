@@ -4,7 +4,7 @@
 #include "formaction.h"
 #include "textviewwidget.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class HelpFormAction : public FormAction {
 public:
@@ -39,6 +39,6 @@ private:
 	TextviewWidget textview;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_HELPFORMACTION_H_ */

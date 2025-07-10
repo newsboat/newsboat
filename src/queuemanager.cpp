@@ -8,7 +8,7 @@
 #include "rssfeed.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 	: cfg(cfg_)
@@ -156,4 +156,4 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
 }
 
-} // namespace newsboat
+} // namespace Newsboat

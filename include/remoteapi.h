@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigContainer;
 
@@ -45,6 +45,6 @@ protected:
 		const std::string& name);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_REMOTEAPI_H_ */

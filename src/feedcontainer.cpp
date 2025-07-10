@@ -7,7 +7,7 @@
 #include "logger.h"
 #include "rssfeed.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 void FeedContainer::sort_feeds(const FeedSortStrategy& sort_strategy)
 {
@@ -342,4 +342,4 @@ void FeedContainer::replace_feed(unsigned int pos,
 	feeds[pos] = feed;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

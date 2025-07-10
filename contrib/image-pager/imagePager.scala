@@ -19,12 +19,12 @@ def isImage(url: String): Boolean = {
 }
 
 @main
-def imagePager(kittyString: String, newsboatArticle: String) = {
+def imagePager(kittyString: String, NewsboatArticle: String) = {
     val kitty = kittyString.toBoolean
 
     val urlPattern = """https?://\S+""".r
 
-    val images = Source.fromFile(newsboatArticle)
+    val images = Source.fromFile(NewsboatArticle)
         .getLines
         .flatMap(urlPattern.findAllIn(_))
         .map(url => Future { (url, isImage(url)) })
@@ -41,7 +41,7 @@ def imagePager(kittyString: String, newsboatArticle: String) = {
                 //val dimensions = s"${cols}x${lines}@0x0".replaceAll("\n", "")
 
                 // This code is mostly from @heussd's kitty-imager-pager.sh bash script
-                // for rendering images with kitty (pull request #1956 on newsboat)
+                // for rendering images with kitty (pull request #1956 on Newsboat)
                 val kittyImages = filteredImages
                     .map(image => s"kitty +kitten icat --hold --scale-up --place \"$$dims\" $image")
                     .toSeq

@@ -11,7 +11,7 @@ namespace rsspp {
 class Item;
 }
 
-namespace newsboat {
+namespace Newsboat {
 
 class Cache;
 class ConfigContainer;
@@ -65,6 +65,6 @@ private:
 	RssIgnores* ign;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RSSPARSER_H_ */

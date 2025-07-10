@@ -10,7 +10,7 @@
 #include "test_helpers/envvar.h"
 #include "test_helpers/stringmaker/optional.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("RssFeed constructor checks if query feed has a valid query",
 	"[RssFeed]")

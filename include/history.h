@@ -1,11 +1,11 @@
 #ifndef NEWSBOAT_HISTORY_H_
 #define NEWSBOAT_HISTORY_H_
 
-#include "libnewsboat-ffi/src/history.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/history.rs.h" // IWYU pragma: export
 
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class History {
 public:
@@ -21,6 +21,6 @@ private:
 	rust::Box<history::bridged::History> rs_object;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_HISTORY_H_ */

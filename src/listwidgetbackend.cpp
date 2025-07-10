@@ -3,7 +3,7 @@
 #include "listformatter.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ListWidgetBackend::ListWidgetBackend(const std::string& list_name,
 	const std::string& context, Stfl::Form& form, RegexManager& rxman)
@@ -98,4 +98,4 @@ void ListWidgetBackend::render()
 	form.modify(list_name, "replace_inner", listfmt.format_list());
 }
 
-} // namespace newsboat
+} // namespace Newsboat

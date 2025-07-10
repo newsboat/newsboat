@@ -4,7 +4,7 @@
 #include "remoteapi.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 RemoteApiUrlReader::RemoteApiUrlReader(const std::string& source_name,
 	const std::string& url_file, RemoteApi& api)
@@ -40,4 +40,4 @@ std::string RemoteApiUrlReader::get_source() const
 	return source_name;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

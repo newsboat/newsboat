@@ -11,7 +11,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 RssItem::RssItem(Cache* c)
 	: ch(c)
@@ -260,4 +260,4 @@ void RssItem::set_feedptr(const std::weak_ptr<RssFeed>& ptr)
 	feedptr_ = ptr;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

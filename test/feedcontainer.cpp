@@ -10,7 +10,7 @@
 
 #include "3rd-party/catch.hpp"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 namespace {
 
@@ -1007,7 +1007,7 @@ TEST_CASE("unread_item_count() returns number of distinct unread items "
 	}
 
 	SECTION("Query feeds do not affect the total count") {
-		// This is a regression test for https://github.com/newsboat/newsboat/issues/1120
+		// This is a regression test for https://github.com/Newsboat/Newsboat/issues/1120
 
 		auto feeds = get_five_empty_feeds(&rsscache);
 
@@ -1043,7 +1043,7 @@ TEST_CASE("unread_item_count() returns number of distinct unread items "
 	}
 
 	SECTION("Items in hidden feeds are not counted") {
-		// This is a regression test for https://github.com/newsboat/newsboat/issues/444
+		// This is a regression test for https://github.com/Newsboat/Newsboat/issues/444
 
 		auto feeds = get_five_empty_feeds(&rsscache);
 

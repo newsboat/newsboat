@@ -25,7 +25,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 static void ctrl_c_action(int sig)
 {
@@ -34,7 +34,7 @@ static void ctrl_c_action(int sig)
 	::exit(EXIT_FAILURE);
 }
 
-namespace podboat {
+namespace Podboat {
 
 /**
  * \brief Try to setup XDG style dirs.
@@ -242,7 +242,7 @@ void PbController::initialize(int argc, char* argv[])
 	if (!log_file.has_value() && log_level.has_value()) {
 		const std::string date_time_string = utils::mt_strf_localtime("%Y-%m-%d_%H.%M.%S",
 				std::time(nullptr));
-		const std::string filename = "podboat_" + date_time_string + ".log";
+		const std::string filename = "Podboat_" + date_time_string + ".log";
 		logger::set_logfile(filename);
 	}
 
@@ -290,7 +290,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("run-on-startup", null_cah);
 
 	try {
-		cfgparser.parse_file("/etc/newsboat/config");
+		cfgparser.parse_file("/etc/Newsboat/config");
 		cfgparser.parse_file(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
@@ -325,7 +325,7 @@ int PbController::run(PbView& v)
 	return EXIT_SUCCESS;
 }
 
-newsboat::KeyMap& PbController::get_keymap()
+Newsboat::KeyMap& PbController::get_keymap()
 {
 	return keys;
 }
@@ -407,10 +407,10 @@ void PbController::print_usage(const char* argv0)
 	}
 	std::cout << std::endl;
 
-	std::cout << _("Support at #newsboat at https://libera.chat or on our mailing "
-			"list https://groups.google.com/g/newsboat")
+	std::cout << _("Support at #Newsboat at https://libera.chat or on our mailing "
+			"list https://groups.google.com/g/Newsboat")
 		<< std::endl
-		<< _("For more information, check out https://newsboat.org/")
+		<< _("For more information, check out https://Newsboat.org/")
 		<< std::endl;
 }
 
@@ -496,4 +496,4 @@ void PbController::play_file(const std::string& file)
 	utils::run_interactively(cmdline, "PbController::play_file");
 }
 
-} // namespace podboat
+} // namespace Podboat

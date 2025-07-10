@@ -16,7 +16,7 @@ elif [[ $lines = 27 ]]; then # my half height
     img_height=20
     img_y=8
 else
-    notify-send "newsboat: unsupported size"
+    notify-send "Newsboat: unsupported size"
 fi
 
 cd /tmp

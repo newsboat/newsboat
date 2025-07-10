@@ -12,7 +12,7 @@ far as the end of line.
 ****
 *User contrib* Newsboat also comes with user contributed content like scripts and color
 themes. The user contributed content can be found in
-`/usr/share/doc/newsboat/contrib/`. End users are encouraged to take a look as
+`/usr/share/doc/Newsboat/contrib/`. End users are encouraged to take a look as
 they may find something useful.
 ****
 
@@ -43,7 +43,7 @@ otherwise the `{backslash}` character is treated "as is". For example:
 macro p open; \
 reload; quit; \
 quit;         \
-quit -- "Opens, reloads then makes sure to quit newsboat"
+quit -- "Opens, reloads then makes sure to quit Newsboat"
 ----
 
 Please note that a backslash only makes Newsboat ignore the following newline.
@@ -210,7 +210,7 @@ Available dialogs are:
 * `tagselection`
 * `filterselection`
 * `urlview`
-* `podboat`
+* `Podboat`
 * `dirbrowser`
 * `searchresultslist`
 
@@ -227,7 +227,7 @@ or using `everywhere` to apply the binding in all dialogs:
 *Operation List*
 
 Operations get executed when pressing the corresponding sequence of keys.
-For a complete list of available operations see <<_newsboat_operations>> and <<_podboat_operations>>.
+For a complete list of available operations see <<_Newsboat_operations>> and <<_Podboat_operations>>.
 
 Multiple operations can be specified by writing them down separated by a semicolon.
 Some operations allow specifying an argument, e.g. `set <config option> <config value>`
@@ -288,7 +288,7 @@ The following identifiers for special keys are supported:
 *Operation*
 
 An operation gets executed when pressing the corresponding key.
-For a complete list of available operations see <<_newsboat_operations>> and <<_podboat_operations>>.
+For a complete list of available operations see <<_Newsboat_operations>> and <<_Podboat_operations>>.
 
 *Dialog*
 
@@ -304,7 +304,7 @@ Available dialogs are:
 * `tagselection`
 * `filterselection`
 * `urlview`
-* `podboat`
+* `Podboat`
 * `dirbrowser`
 * `searchresultslist`
 

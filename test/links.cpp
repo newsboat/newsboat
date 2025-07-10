@@ -2,14 +2,14 @@
 
 #include "3rd-party/catch.hpp"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("Each URL is unique", "[Links]")
 {
 	Links links;
 
-	links.add_link("https://newsboat.org/news.atom", LinkType::HREF);
-	links.add_link("https://newsboat.org/news.atom", LinkType::HREF);
+	links.add_link("https://Newsboat.org/news.atom", LinkType::HREF);
+	links.add_link("https://Newsboat.org/news.atom", LinkType::HREF);
 	REQUIRE(links.size() == 1);
 }
 

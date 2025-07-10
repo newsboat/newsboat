@@ -21,7 +21,7 @@ line to your _urls_ file:
 
 	"query:Unread Articles:unread = \"yes\""
 
-For details, refer to the link:newsboat.html#_query_feeds[documentation on
+For details, refer to the link:Newsboat.html#_query_feeds[documentation on
 query feeds].
 
 == After I open a link in the browser, Newsboat stays unresponsive until the browser is closed
@@ -37,18 +37,18 @@ If you're using a GUI browser like Firefox, you can do one of two things:
 
 2. Wrap your browser in a script and use the script as Newsboat's browser.
 +
-Put this in `~/bin/newsboat-browser.sh`:
+Put this in `~/bin/Newsboat-browser.sh`:
 +
     #/bin/sh
     /usr/bin/firefox "$@" &
 +
 Make it executable:
 +
-    $ chmod +x ~/bin/newsboat-browser.sh
+    $ chmod +x ~/bin/Newsboat-browser.sh
 +
 Then add the following line to your Newsboat's config:
 +
-    browser "~/bin/newsboat-browser.sh"
+    browser "~/bin/Newsboat-browser.sh"
 
 == I can't connect to TT-RSS, Newsboat says: "Loading URLs from Tiny Tiny RSS...Authentication failed."
 
@@ -75,7 +75,7 @@ understood by cURL, save it somewhere, and set the `CURL_CA_BUNDLE` environment
 variable with the path to the bundle.
 +
 Finally, if you understand what a "MITM attack" is, and are certain that it
-can't happen in your setup, check out <<newsboat#_first_steps,a list of
+can't happen in your setup, check out <<Newsboat#_first_steps,a list of
 Newsboat's configuration options>> for ways to entirely disable SSL
 verification.
 
@@ -87,7 +87,7 @@ Newsboat 2.19 or newer.
 If upgrading is not an option, wrap the browser in a script to hide its exit
 code from Newsboat:
 
-1. Put this in `~/bin/newsboat-browser.sh`:
+1. Put this in `~/bin/Newsboat-browser.sh`:
 +
     #/bin/sh
     /usr/bin/firefox "$@"
@@ -98,11 +98,11 @@ important bit.
 
 2. Make it executable:
 +
-    $ chmod +x ~/bin/newsboat-browser.sh
+    $ chmod +x ~/bin/Newsboat-browser.sh
 
 3. Add the following to your Newsboat's config:
 +
-    browser "~/bin/newsboat-browser.sh"
+    browser "~/bin/Newsboat-browser.sh"
 
 == With Snap, I can't start browser/bookmarking script/exec:/filter:/run program from macro
 
@@ -125,7 +125,7 @@ And no, `max-items` setting has nothing to do with this.
 
 (Technically, this answer is a lie: https://www.ietf.org/rfc/rfc5005.txt[RFC
 5005] describes a solution, but Newsboat doesn't implement it, and neither do
-most publishers. https://github.com/newsboat/newsboat/issues/628[Get in touch]
+most publishers. https://github.com/Newsboat/Newsboat/issues/628[Get in touch]
 if you'd like to add support to Newsboat.)
 
 == How can I include tags when exporting to OPML?
@@ -140,5 +140,5 @@ relationships between them. Since each feed can have multiple tags, it's not
 always possible to represent the _urls_ file as a hierarchy.
 
 However, if your feeds have one tag each, you can use
-https://github.com/newsboat/newsboat/blob/master/contrib/exportOPMLWithTags.py[_contrib/exportOPMLWithTags.py_
+https://github.com/Newsboat/Newsboat/blob/master/contrib/exportOPMLWithTags.py[_contrib/exportOPMLWithTags.py_
 script] which will export in a hierarchy your feed reader should understand.

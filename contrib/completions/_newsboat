@@ -1,4 +1,4 @@
-#compdef newsboat
+#compdef Newsboat
 
 _arguments : \
   '(- *)'{-h,--help}'[display help]' \

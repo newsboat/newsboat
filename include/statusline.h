@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 // StatusLine manages the array of messages, IStatus abstracts how messages are
 // actually displayed, and AutoDiscardMessage is a RAII helper that removes its
@@ -52,6 +52,6 @@ private:
 	const std::uint32_t message_id;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_STATUSLINE_H_ */

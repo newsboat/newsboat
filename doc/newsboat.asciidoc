@@ -25,7 +25,7 @@ implementation.
 
 "Newsboat" is a play on the name of its ancestor, "Newsbeuter". They're spelled
 quite differently, but sound similar. ("Newsbeuter" is a pun on German word
-"wildbeuter"; "newsboat" is an English word.)
+"wildbeuter"; "Newsboat" is an English word.)
 
 Newsboats were the vessels that collected and delivered news shuffling between
 boats in the port. Newsboat the program will collect the news for you, just
@@ -40,12 +40,12 @@ Newsboat binaries are available in a number of repositories:
 // UPDATE README.md IF YOU CHANGE THIS LIST
 
 - various Linux and BSD distributions, Homebrew etc.;
-  https://repology.org/project/newsboat[here's a non-exclusive list];
+  https://repology.org/project/Newsboat[here's a non-exclusive list];
 
 - distribution-independent https://snapcraft.io/docs/installing-snapd[Snap]
   store:
 
-        $ sudo snap install newsboat
+        $ sudo snap install Newsboat
 
 // UPDATE README.md IF YOU CHANGE THIS LIST
 
@@ -56,9 +56,9 @@ Newsboat binaries are available in a number of repositories:
 The most up-to-date source code can always be downloaded from the Git
 repository:
 
-	$ git clone https://github.com/newsboat/newsboat.git
+	$ git clone https://github.com/Newsboat/Newsboat.git
 
-There are also signed release tarballs available from https://newsboat.org/[our
+There are also signed release tarballs available from https://Newsboat.org/[our
 website].
 
 ==== Install dependencies
@@ -73,7 +73,7 @@ Debian and derivatives, headers are in `-dev` packages, e.g. `libsqlite3-dev`.)
 - Stable https://www.rust-lang.org/en-US/[Rust] and Cargo (Rust's package
   manager) (1.85.0 or newer; might work with older versions, but we don't check
   that)
-- https://github.com/newsboat/stfl[STFL (version 0.21 or newer)] (the link
+- https://github.com/Newsboat/stfl[STFL (version 0.21 or newer)] (the link
   points to our own fork because http://www.clifford.at/stfl/[the upstream] is
   dead)
 - https://www.sqlite.org/download.html[SQLite3 (version 3.5 or newer)]
@@ -120,7 +120,7 @@ There are a few different ways:
   $ sudo make install      #  install everything under /usr/local
 +
 To install to a different directory, pass `prefix` like so: `sudo make
-prefix=/opt/newsboat install`. If you're cross-compiling, set
+prefix=/opt/Newsboat install`. If you're cross-compiling, set
 `CARGO_BUILD_TARGET`; see
 https://doc.rust-lang.org/cargo/reference/config.html#environment-variables[cargo
 documentation] for details.
@@ -163,8 +163,8 @@ are met:
 
 * none of `-u`, `-c`, `-C` options were specified; and
 
-* the urls file doesn't exist (neither _~/.newsboat/urls_ nor
-  _$XDG_CONFIG_HOME/newsboat/urls_).
+* the urls file doesn't exist (neither _~/.Newsboat/urls_ nor
+  _$XDG_CONFIG_HOME/Newsboat/urls_).
 
 Newsboat first tries to migrate an XDG configuration, and if that fails, it
 tries the dotdir one. If that fails as well, Newsboat proceeds with the startup
@@ -174,19 +174,19 @@ XDG migration checks that:
 
 * _$XDG_CONFIG_HOME/newsbeuter/_ is readable and executable; and
 
-* neither _$XDG_CONFIG_HOME/newsboat/_ nor _$XDG_DATA_HOME/newsboat/_ exist.
+* neither _$XDG_CONFIG_HOME/Newsboat/_ nor _$XDG_DATA_HOME/Newsboat/_ exist.
 
 If both conditions are met, Newsboat tries to create its XDG dirs (aborting the
 migration if that fails), then copies the following files: _urls_ and _config_ from
 config dir; _cache.db_, _queue_, _history.search_, _history.cmdline_ from data dir.
 
 Dotdir migration checks that _~/.newsbeuter/_ is readable and executable, and
-_~/.newsboat/_ doesn't exist. If those conditions are met, it tries to create
-_~/.newsboat/_ (aborting the migration if that fails), then copies the following
+_~/.Newsboat/_ doesn't exist. If those conditions are met, it tries to create
+_~/.Newsboat/_ (aborting the migration if that fails), then copies the following
 files: _urls_, _cache.db_, _config_, _queue_, _history.search_, _history.cmdline_.
 
 There's one scenario where the process breaks: if you have an XDG configuration
-for Newsbeuter, _~/.newsboat/_ exists and _~/.newsboat/urls_ doesn't exist, then
+for Newsbeuter, _~/.Newsboat/_ exists and _~/.Newsboat/urls_ doesn't exist, then
 Newsboat will migrate XDG files and proceed, ignoring the dotdir. Please don't
 confuse the poor program like that!
 
@@ -213,7 +213,7 @@ necessary:
 
 You can then import subscriptions into Newsboat:
 
-	newsboat -i ~/blogroll.opml
+	Newsboat -i ~/blogroll.opml
 
 Don't worry, Newsboat won't destroy your existing configuration, or add
 subscriptions more than once: every URL that is added to the subscription list
@@ -335,7 +335,7 @@ See also <<newsblur-passwordfile,`newsblur-passwordfile`>>,
 
 Finally, set a path to the file where Newsboat can store the HTTP cookies:
 
-    cookie-cache "~/.newsboat/cookies.txt"
+    cookie-cache "~/.Newsboat/cookies.txt"
 
 When you start Newsboat, it will download the feeds that you configured
 in NewsBlur. Please take a closer look at the
@@ -576,7 +576,7 @@ https://inoreader.com/[Inoreader] is a successor to Google Reader.
 To use Newsboat with Inoreader, you should first get an Inoreader Pro subscription
 and https://www.inoreader.com/developers/register-app[register your own
 application]. This is needed because app credentials have to be kept secret,
-and https://github.com/newsboat/newsboat/issues/35[Newsboat developers don't
+and https://github.com/Newsboat/Newsboat/issues/35[Newsboat developers don't
 want to operate a proxy] needed to achieve that.
 
 Please note that API requests to Inoreader are rate-limited, so you might have
@@ -883,7 +883,7 @@ In Newsboat, such a "killfile" can be implemented on a per-article basis via
 the configuration file. The most important configuration command for this
 is <<ignore-article,`ignore-article`>>:
 
-	ignore-article "https://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
+	ignore-article "https://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"Newsboat\""
 	ignore-article "regex:https?://nitter.net/.*" "title =~ \"^RT by\""
 	ignore-article "*" "title =~ \"Gentoo\""
 
@@ -1251,7 +1251,7 @@ attributes in the <<_configuring_colors>>.
 
 Examples for possible highlighting configurations are:
 
-	highlight all "newsboat" red
+	highlight all "Newsboat" red
 	highlight article "^(Feed|Title|Author|Link|Date):" default default underline
 	highlight feedlist "https?://[^ ]+" yellow red bold
 
@@ -1327,7 +1327,7 @@ kbd:[,]kbd:[O], Newsboat will open current article in the external browser, and 
 it read. Note that macros can have a description which will be displayed in the
 help dialog when the user presses kbd:[?].
 
-Macros can invoke any of <<_newsboat_operations,Newsboat's operations>>. Keep
+Macros can invoke any of <<_Newsboat_operations,Newsboat's operations>>. Keep
 in mind that some operations only make sense in certain situations, e.g.
 `reload` doesn't make sense while viewing an article. If you try to execute an
 operation that is not supported by the current dialog, it will be ignored.
@@ -1483,12 +1483,12 @@ Newsboat.
 
 ==== Managing Audio Files with Podboat
 
-include::chapter-podboat.asciidoc[]
+include::chapter-Podboat.asciidoc[]
 
 A macro can also be used to enqueue any of the URLs from the URLs view to
 Podboat's download queue:
 
-  macro E set browser "echo %u >> ~/.newsboat/queue"; open-in-browser; set browser elinks
+  macro E set browser "echo %u >> ~/.Newsboat/queue"; open-in-browser; set browser elinks
 
 ==== Streaming Audio Content with a Media Player
 
@@ -1541,21 +1541,21 @@ beautiful, but it works.
 First of all, you will need to create a directory to store the data. Let's call
 it _test_:
 
-	$ mkdir -p test/newsboat
+	$ mkdir -p test/Newsboat
 
-Note that we also create a subdirectory called _newsboat_; this is required
+Note that we also create a subdirectory called _Newsboat_; this is required
 to satisfy XDG specification. **ATTENTION**: if this subdirectory is absent,
 Newsboat will attempt to run on your live data!
 
-You can now create _config_ and _urls_ files inside _test/newsboat_; you can
+You can now create _config_ and _urls_ files inside _test/Newsboat_; you can
 also copy _cache.db_ if you don't want to start with a fresh one.
 
 When the files are ready, you can invoke Newsboat as follows:
 
-	$ XDG_CONFIG_HOME=test XDG_DATA_HOME=test newsboat
+	$ XDG_CONFIG_HOME=test XDG_DATA_HOME=test Newsboat
 
-(This will look +newsboat+ binary up in your +PATH+; if you've just built
-your own, use +./newsboat+ instead, or provide a full path.)
+(This will look +Newsboat+ binary up in your +PATH+; if you've just built
+your own, use +./Newsboat+ instead, or provide a full path.)
 
 By modifying the environment in which Newsboat runs you also modify
 environments of all the programs that Newsboat starts; that includes filters
@@ -1607,7 +1607,7 @@ changes the subject and then let itself mark the article again as unread.
 
 2. Start `sqlite3` with the Newsboat db:
 
-	 Rivendell:~/.newsboat% sqlite3 cache.db
+	 Rivendell:~/.Newsboat% sqlite3 cache.db
 	 SQLite version 3.4.2
 	 Enter ".help" for instructions
 	 sqlite>
@@ -1633,18 +1633,18 @@ include::chapter-environment-variables.asciidoc[]
 
 == Feedback and security
 
-Please report security vulnerabilities to security@newsboat.org, encrypting your
-emails to https://newsboat.org/newsboat.pgp[OpenPGP key 4ED6CD61932B9EBE] if at all
+Please report security vulnerabilities to security@Newsboat.org, encrypting your
+emails to https://Newsboat.org/Newsboat.pgp[OpenPGP key 4ED6CD61932B9EBE] if at all
 possible.
 
 Non-security issues and general questions can be discussed on
-https://github.com/newsboat/newsboat/issues/[the issue tracker] and
-mailto:newsboat@googlegroups.com[the mailing list].
+https://github.com/Newsboat/Newsboat/issues/[the issue tracker] and
+mailto:Newsboat@googlegroups.com[the mailing list].
 
-You can chat with developers and fellow users on \#newsboat at
+You can chat with developers and fellow users on \#Newsboat at
 https://libera.chat/[irc.libera.chat] (also accessible
 https://web.libera.chat/[via webchat] and
-https://matrix.to/#/#newsboat:libera.chat[via Matrix]). We _do not_ have
+https://matrix.to/#/#Newsboat:libera.chat[via Matrix]). We _do not_ have
 a channel on Freenode anymore.
 
 [appendix]
@@ -1660,7 +1660,7 @@ include::availableoperations-linked.asciidoc[]
 [appendix]
 == Podboat Configuration Commands
 
-include::podboat-cmds-linked.asciidoc[]
+include::Podboat-cmds-linked.asciidoc[]
 
 [appendix]
 == Podboat Operations

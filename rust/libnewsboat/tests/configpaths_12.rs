@@ -5,7 +5,7 @@ mod configpaths_helpers;
 use crate::configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
 
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_dotdir_couldnt_be_created(
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_Newsboat_dotdir_couldnt_be_created(
 ) {
     let tmp = TempDir::new().unwrap();
 
@@ -22,5 +22,5 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_dotdir
     // a directory there
     let _dotdir_chmod = configpaths_helpers::Chmod::new(tmp.path(), S_IRUSR | S_IXUSR);
 
-    configpaths_helpers::assert_dotdir_not_migrated(&tmp.path().join(".newsboat"));
+    configpaths_helpers::assert_dotdir_not_migrated(&tmp.path().join(".Newsboat"));
 }

@@ -27,7 +27,7 @@ even thumbnails and whatnot, and images that are not obviously images from the U
 ## Dependencies
 1. feh or kitty
 2. scala and scalac
-3. newsboat
+3. Newsboat
 
 ### Notes
 - This script internally uses some code from another image pager written for only kitty

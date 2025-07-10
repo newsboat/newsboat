@@ -8,8 +8,8 @@ use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use strprintf::fmt;
 
-pub const NEWSBOAT_SUBDIR_XDG: &str = "newsboat";
-pub const NEWSBOAT_CONFIG_SUBDIR: &str = ".newsboat";
+pub const NEWSBOAT_SUBDIR_XDG: &str = "Newsboat";
+pub const NEWSBOAT_CONFIG_SUBDIR: &str = ".Newsboat";
 pub const NEWSBEUTER_SUBDIR_XDG: &str = "newsbeuter";
 pub const NEWSBEUTER_CONFIG_SUBDIR: &str = ".newsbeuter";
 pub const LOCK_SUFFIX: &str = ".lock";
@@ -33,13 +33,13 @@ pub struct ConfigPaths {
 
     /// Path to Newsboat's data directory.
     ///
-    /// This can be ~/.newsboat, or ~/.local/share/newsboat, or something else entirely if user
+    /// This can be ~/.Newsboat, or ~/.local/share/Newsboat, or something else entirely if user
     /// changed it through the command line parameter.
     data_dir: PathBuf,
 
     /// Path to Newsboat's configuration directory.
     ///
-    /// This can be ~/.newsboat, or ~/.config/newsboat, or something else entirely if user changed
+    /// This can be ~/.Newsboat, or ~/.config/Newsboat, or something else entirely if user changed
     /// it through the command line parameter.
     config_dir: PathBuf,
 
@@ -110,8 +110,8 @@ impl ConfigPaths {
         let newsbeuter_config_dir = xdg_config_dir.join(NEWSBEUTER_SUBDIR_XDG);
         let newsbeuter_data_dir = xdg_data_dir.join(NEWSBEUTER_SUBDIR_XDG);
 
-        let newsboat_config_dir = xdg_config_dir.join(NEWSBOAT_SUBDIR_XDG);
-        let newsboat_data_dir = xdg_data_dir.join(NEWSBOAT_SUBDIR_XDG);
+        let Newsboat_config_dir = xdg_config_dir.join(NEWSBOAT_SUBDIR_XDG);
+        let Newsboat_data_dir = xdg_data_dir.join(NEWSBOAT_SUBDIR_XDG);
 
         if !newsbeuter_config_dir.is_dir() {
             return false;
@@ -129,16 +129,16 @@ impl ConfigPaths {
             exists
         }
 
-        if exists(&newsboat_config_dir) {
+        if exists(&Newsboat_config_dir) {
             return false;
         }
 
-        if exists(&newsboat_data_dir) {
+        if exists(&Newsboat_data_dir) {
             return false;
         }
 
-        self.config_dir = newsboat_config_dir;
-        self.data_dir = newsboat_data_dir;
+        self.config_dir = Newsboat_config_dir;
+        self.data_dir = Newsboat_data_dir;
 
         if !self.silent {
             eprintln!(
@@ -185,13 +185,13 @@ impl ConfigPaths {
             return false;
         }
 
-        let newsboat_dir = self.env_home.join(NEWSBOAT_CONFIG_SUBDIR);
+        let Newsboat_dir = self.env_home.join(NEWSBOAT_CONFIG_SUBDIR);
 
-        if newsboat_dir.exists() {
+        if Newsboat_dir.exists() {
             log!(
                 Level::Debug,
                 "{:?} already exists, aborting migration.",
-                newsboat_dir
+                Newsboat_dir
             );
             return false;
         }
@@ -203,7 +203,7 @@ impl ConfigPaths {
             );
         }
 
-        match mkdir(&newsboat_dir, 0o700) {
+        match mkdir(&Newsboat_dir, 0o700) {
             Ok(_) => (),
             Err(ref e) if e.kind() == io::ErrorKind::AlreadyExists => (),
             Err(err) => {
@@ -212,7 +212,7 @@ impl ConfigPaths {
                         "{}",
                         &fmt!(
                             &gettext("Aborting migration because mkdir on `%s' failed: %s"),
-                            &newsboat_dir.to_string_lossy().into_owned(),
+                            &Newsboat_dir.to_string_lossy().into_owned(),
                             err.to_string()
                         )
                     );
@@ -222,12 +222,12 @@ impl ConfigPaths {
         };
 
         // We ignore the return codes because it's okay if some files are missing.
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, URLS_FILENAME);
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CACHE_FILENAME);
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CONFIG_FILENAME);
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, QUEUE_FILENAME);
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, SEARCH_HISTORY_FILENAME);
-        let _ = migrate_file(&newsbeuter_dir, &newsboat_dir, CMDLINE_HISTORY_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &Newsboat_dir, URLS_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &Newsboat_dir, CACHE_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &Newsboat_dir, CONFIG_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &Newsboat_dir, QUEUE_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &Newsboat_dir, SEARCH_HISTORY_FILENAME);
+        let _ = migrate_file(&newsbeuter_dir, &Newsboat_dir, CMDLINE_HISTORY_FILENAME);
 
         true
     }
@@ -417,9 +417,9 @@ fn mkdir<R: AsRef<Path>>(path: R, mode: u32) -> io::Result<()> {
     DirBuilder::new().mode(mode).create(path.as_ref())
 }
 
-fn migrate_file<R: AsRef<Path>>(newsbeuter_dir: R, newsboat_dir: R, file: &str) -> io::Result<()> {
+fn migrate_file<R: AsRef<Path>>(newsbeuter_dir: R, Newsboat_dir: R, file: &str) -> io::Result<()> {
     let input_filepath = newsbeuter_dir.as_ref().join(file);
-    let output_filepath = newsboat_dir.as_ref().join(file);
+    let output_filepath = Newsboat_dir.as_ref().join(file);
     eprintln!("{input_filepath:?} -> {output_filepath:?}");
     fs::copy(input_filepath, output_filepath).map(|_| ())
 }

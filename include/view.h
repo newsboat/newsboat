@@ -11,7 +11,7 @@
 #include "links.h"
 #include "statusline.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class Cache;
 class ColorManager;
@@ -177,6 +177,6 @@ private:
 	bool try_prepare_query_feed(std::shared_ptr<RssFeed> feed);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_VIEW_H_ */

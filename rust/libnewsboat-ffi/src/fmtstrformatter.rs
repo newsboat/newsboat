@@ -1,10 +1,10 @@
-use libnewsboat::fmtstrformatter;
+use libNewsboat::fmtstrformatter;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
 struct FmtStrFormatter(fmtstrformatter::FmtStrFormatter);
 
-#[cxx::bridge(namespace = "newsboat::fmtstrformatter::bridged")]
+#[cxx::bridge(namespace = "Newsboat::fmtstrformatter::bridged")]
 mod bridged {
     extern "Rust" {
         type FmtStrFormatter;

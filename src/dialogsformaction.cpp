@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 DialogsFormAction::DialogsFormAction(View& vv,
 	std::string formstr,
@@ -125,4 +125,4 @@ void DialogsFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

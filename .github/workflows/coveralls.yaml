@@ -23,7 +23,7 @@ jobs:
       # This prevents our tests from hogging too much of the CPU and failing
       # due to races.
       RUST_TEST_THREADS: 2
-      LLVM_PROFILE_FILE: '/tmp/newsboat-profiles/%h_%m.profraw'
+      LLVM_PROFILE_FILE: '/tmp/Newsboat-profiles/%h_%m.profraw'
 
     steps:
       - name: Install dependencies
@@ -71,7 +71,7 @@ jobs:
         run: make --jobs=3 NEWSBOAT_RUN_IGNORED_TESTS=1 ci-check
 
       - name: Calculate test coverage
-        run: grcov /tmp/newsboat-profiles/ --source-dir . --binary-path . --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' -t lcov -o coverage.lcov
+        run: grcov /tmp/Newsboat-profiles/ --source-dir . --binary-path . --ignore-not-existing --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' --ignore='target/*' --ignore='Newsboat.cpp' --ignore='Podboat.cpp' -t lcov -o coverage.lcov
 
       - name: Submit coverage to Coveralls
         uses: coverallsapp/github-action@v2

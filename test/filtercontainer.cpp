@@ -3,7 +3,7 @@
 #include "3rd-party/catch.hpp"
 #include "confighandlerexception.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("FilterContainer::handle_action handles `define-filter`",
 	"[FilterContainer]")

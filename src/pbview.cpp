@@ -15,9 +15,9 @@
 #include "pbcontroller.h"
 #include "strprintf.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
-namespace podboat {
+namespace Podboat {
 
 PbView::PbView(PbController& c)
 	: update_view(true)
@@ -130,7 +130,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		}
 		auto binding_state = MultiKeyBindingState::NotFound;
 		BindingType type = BindingType::Bind;
-		auto cmds = keys.get_operation(key_sequence, "podboat", binding_state, type);
+		auto cmds = keys.get_operation(key_sequence, "Podboat", binding_state, type);
 
 		if (binding_state == MultiKeyBindingState::MoreInputNeeded) {
 			continue;
@@ -139,11 +139,11 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 		key_sequence.clear();
 
 		if (cmds.size() != 1) {
-			// TODO: Add support to podboat for running a list of commands
+			// TODO: Add support to Podboat for running a list of commands
 			continue;
 		}
 		if (cmds.size() != 1) {
-			// TODO: Add support to podboat for running commands with arguments
+			// TODO: Add support to Podboat for running commands with arguments
 			continue;
 		}
 		Operation op = cmds.front().op;
@@ -291,7 +291,7 @@ void PbView::run(bool auto_download, bool wrap_scroll)
 
 void PbView::handle_resize()
 {
-	std::vector<std::reference_wrapper<newsboat::Stfl::Form>> forms = {dllist_form, help_form};
+	std::vector<std::reference_wrapper<Newsboat::Stfl::Form>> forms = {dllist_form, help_form};
 	for (const auto& form : forms) {
 		form.get().run(-3);
 	}
@@ -301,9 +301,9 @@ void PbView::handle_resize()
 void PbView::apply_colors_to_all_forms()
 {
 	using namespace std::placeholders;
-	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &dllist_form, _1,
+	colorman.apply_colors(std::bind(&Newsboat::Stfl::Form::set, &dllist_form, _1,
 			_2));
-	colorman.apply_colors(std::bind(&newsboat::Stfl::Form::set, &help_form, _1,
+	colorman.apply_colors(std::bind(&Newsboat::Stfl::Form::set, &help_form, _1,
 			_2));
 }
 
@@ -324,7 +324,7 @@ void PbView::run_help()
 
 	title_line_help_form.set_text(_("Help"));
 
-	const auto descs = keys.get_keymap_descriptions("podboat");
+	const auto descs = keys.get_keymap_descriptions("Podboat");
 
 	ListFormatter listfmt;
 
@@ -371,11 +371,11 @@ void PbView::run_help()
 		key_sequence.clear();
 
 		if (cmds.size() != 1) {
-			// TODO: Add support to podboat for running a list of commands
+			// TODO: Add support to Podboat for running a list of commands
 			continue;
 		}
 		if (cmds.size() != 1) {
-			// TODO: Add support to podboat for running commands with arguments
+			// TODO: Add support to Podboat for running commands with arguments
 			continue;
 		}
 		Operation op = cmds.front().op;
@@ -418,7 +418,7 @@ void PbView::run_help()
 void PbView::set_help_keymap_hint()
 {
 	static const std::vector<KeyMapHintEntry> hints = {{OP_QUIT, _("Quit")}};
-	const auto keymap_hint = keys.prepare_keymap_hint(hints, "podboat");
+	const auto keymap_hint = keys.prepare_keymap_hint(hints, "Podboat");
 	help_form.set("help", keymap_hint);
 }
 
@@ -435,7 +435,7 @@ void PbView::set_dllist_keymap_hint()
 		{OP_HELP, _("Help")}
 	};
 
-	const auto keymap_hint = keys.prepare_keymap_hint(hints, "podboat");
+	const auto keymap_hint = keys.prepare_keymap_hint(hints, "Podboat");
 	dllist_form.set("help", keymap_hint);
 }
 
@@ -466,4 +466,4 @@ StflRichText PbView::format_line(const std::string& podlist_format,
 	return StflRichText::from_plaintext(formattedLine);
 }
 
-} // namespace podboat
+} // namespace Podboat

@@ -6,7 +6,7 @@
 #include "test_helpers/tempfile.h"
 #include <fstream>
 
-using namespace newsboat;
+using namespace Newsboat;
 
 class DummyRemoteApi : public RemoteApi {
 public:

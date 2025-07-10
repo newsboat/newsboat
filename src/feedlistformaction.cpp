@@ -21,7 +21,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FeedListFormAction::FeedListFormAction(View& vv,
 	std::string formstr,
@@ -1146,4 +1146,4 @@ void FeedListFormAction::apply_filter(const std::string& filtertext)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

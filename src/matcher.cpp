@@ -10,7 +10,7 @@
 #include "scopemeasure.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 Matcher::Matcher() {}
 
@@ -243,4 +243,4 @@ int Matcher::string_to_num(const std::string& number)
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

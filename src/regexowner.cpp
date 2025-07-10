@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 Regex::Regex(const regex_t& r)
 	: regex(r)
@@ -48,4 +48,4 @@ std::vector<std::pair<int, int>> Regex::matches(const std::string& input,
 	return {};
 }
 
-} // namespace newsboat
+} // namespace Newsboat

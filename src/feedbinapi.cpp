@@ -20,7 +20,7 @@
 
 using json = nlohmann::json;
 
-namespace newsboat {
+namespace Newsboat {
 
 FeedbinApi::FeedbinApi(ConfigContainer& c) : RemoteApi(c)
 {
@@ -312,4 +312,4 @@ json FeedbinApi::run_op(const std::string& path, const json& args,
 	return content;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

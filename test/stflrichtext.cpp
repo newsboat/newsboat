@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("Constructing StflRichText from plaintext string does not make changes",
 	"[StflRichText]")

@@ -14,7 +14,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 const std::string RssIgnores::REGEX_PREFIX = "regex:";
 
@@ -168,4 +168,4 @@ bool RssIgnores::matches_resetunread(const std::string& url)
 	resetflag.end();
 }
 
-} // namespace newsboat
+} // namespace Newsboat

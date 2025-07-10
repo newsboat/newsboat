@@ -27,7 +27,7 @@
 #define FRESHRSS_API_EDIT_TAG_URL FRESHRSS_API_PREFIX "edit-tag"
 #define FRESHRSS_API_TOKEN_URL FRESHRSS_API_PREFIX "token"
 
-namespace newsboat {
+namespace Newsboat {
 
 FreshRssApi::FreshRssApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -553,4 +553,4 @@ rsspp::Feed FreshRssApi::fetch_feed(const std::string& id, CurlHandle& cached_ha
 	return feed;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

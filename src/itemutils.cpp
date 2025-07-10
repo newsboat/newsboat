@@ -3,7 +3,7 @@
 #include "controller.h"
 #include "strprintf.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 	View& v, Cache& cache)
@@ -46,4 +46,4 @@ bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

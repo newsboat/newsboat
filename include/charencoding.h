@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 namespace charencoding {
 
 std::optional<std::string> charset_from_bom(std::vector<std::uint8_t> content);
@@ -16,6 +16,6 @@ std::optional<std::string> charset_from_content_type_header(std::vector<std::uin
 	header);
 
 } // namespace charencoding
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CHARENCODING_H_ */

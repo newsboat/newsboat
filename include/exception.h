@@ -3,7 +3,7 @@
 
 #include <exception>
 
-namespace newsboat {
+namespace Newsboat {
 
 class Exception : public std::exception {
 public:
@@ -15,6 +15,6 @@ private:
 	unsigned int ecode;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_EXCEPTION_H_ */

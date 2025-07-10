@@ -22,7 +22,7 @@ use std::collections::BTreeMap;
 /// an object to encapsulate the common part: the act of formatting. That way, the above example
 /// with titles and authors can be implemented very easily:
 /// ```no_run
-/// use libnewsboat::fmtstrformatter::*;
+/// use libNewsboat::fmtstrformatter::*;
 ///
 /// let format = "%t (%a)";
 /// let mut fmt = FmtStrFormatter::new();

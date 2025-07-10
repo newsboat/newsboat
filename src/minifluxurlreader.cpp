@@ -6,7 +6,7 @@
 #include "remoteapi.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 MinifluxUrlReader::MinifluxUrlReader(ConfigContainer* c,
 	const std::string& url_file,
@@ -54,4 +54,4 @@ std::string MinifluxUrlReader::get_source() const
 	return "Miniflux";
 }
 
-} // namespace newsboat
+} // namespace Newsboat

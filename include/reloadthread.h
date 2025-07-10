@@ -4,7 +4,7 @@
 #include "configcontainer.h"
 #include "controller.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ReloadThread {
 public:
@@ -20,6 +20,6 @@ private:
 	ConfigContainer& cfg;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RELOADTHREAD_H_ */

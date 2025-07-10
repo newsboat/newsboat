@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 DirBrowserFormAction::DirBrowserFormAction(View& vv,
 	std::string formstr,
@@ -349,4 +349,4 @@ std::string DirBrowserFormAction::title()
 	return strprintf::fmt(_("Save Files - %s"), utils::getcwd());
 }
 
-} // namespace newsboat
+} // namespace Newsboat

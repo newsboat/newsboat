@@ -12,7 +12,7 @@
 #include "rssparser.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("items in search result can be marked read", "[Cache]")
 {

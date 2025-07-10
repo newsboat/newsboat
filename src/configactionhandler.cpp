@@ -2,7 +2,7 @@
 
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 void ConfigActionHandler::handle_action(const std::string& action,
 	const std::string& params)
@@ -16,4 +16,4 @@ void ConfigActionHandler::handle_action(const std::string&,
 {
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -19,7 +19,7 @@
 #include "test_helpers/tempdir.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("tokenize() extracts tokens separated by given delimiters", "[utils]")
 {
@@ -178,12 +178,12 @@ TEST_CASE(
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == "\\\\\\");
 
-	// https://github.com/newsboat/newsboat/issues/642
+	// https://github.com/Newsboat/Newsboat/issues/642
 	tokens = utils::tokenize_quoted(R"("\\bgit\\b")");
 	REQUIRE(tokens.size() == 1);
 	REQUIRE(tokens[0] == R"(\bgit\b)");
 
-	// https://github.com/newsboat/newsboat/issues/536
+	// https://github.com/Newsboat/Newsboat/issues/536
 	tokens = utils::tokenize_quoted(
 			R"(browser "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --app %u")");
 	REQUIRE(tokens.size() == 2);
@@ -545,21 +545,21 @@ TEST_CASE("extract_filter()", "[utils]")
 {
 	{
 		const auto parts =
-			utils::extract_filter("filter:~/bin/script.sh:https://newsboat.org");
+			utils::extract_filter("filter:~/bin/script.sh:https://Newsboat.org");
 		REQUIRE(std::string(parts.script_name) == "~/bin/script.sh");
-		REQUIRE(std::string(parts.url) == "https://newsboat.org");
+		REQUIRE(std::string(parts.url) == "https://Newsboat.org");
 	}
 
 	{
-		const auto parts = utils::extract_filter("filter::https://newsboat.org");
+		const auto parts = utils::extract_filter("filter::https://Newsboat.org");
 		REQUIRE(std::string(parts.script_name) == "");
-		REQUIRE(std::string(parts.url) == "https://newsboat.org");
+		REQUIRE(std::string(parts.url) == "https://Newsboat.org");
 	}
 
 	{
-		const auto parts = utils::extract_filter("filter:https://newsboat.org");
+		const auto parts = utils::extract_filter("filter:https://Newsboat.org");
 		REQUIRE(std::string(parts.script_name) == "https");
-		REQUIRE(std::string(parts.url) == "//newsboat.org");
+		REQUIRE(std::string(parts.url) == "//Newsboat.org");
 	}
 
 	{

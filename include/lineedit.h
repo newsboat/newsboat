@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace newsboat {
+namespace Newsboat {
 
 class LineEdit {
 public:
@@ -25,6 +25,6 @@ private:
 	const std::string name;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LINEEDIT_H_ */

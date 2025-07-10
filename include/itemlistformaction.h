@@ -12,7 +12,7 @@
 #include "stflrichtext.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class RssItem;
 
@@ -164,6 +164,6 @@ private:
 	FilterContainer& filter_container;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_ITEMLISTFORMACTION_H_ */

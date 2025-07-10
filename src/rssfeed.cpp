@@ -18,7 +18,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 	: pubDate_(0)
@@ -405,4 +405,4 @@ void RssFeed::mark_all_items_read()
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

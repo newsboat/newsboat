@@ -12,7 +12,7 @@
 #include "listwidget.h"
 #include "stflpp.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigContainer;
 class RssFeed;
@@ -189,6 +189,6 @@ private:
 	unsigned int tab_count;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FORMACTION_H_ */

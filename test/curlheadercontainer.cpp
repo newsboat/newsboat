@@ -3,7 +3,7 @@
 #include "3rd-party/catch.hpp"
 #include "curlhandle.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 class CurlHeaderContainerForTesting : public CurlHeaderContainer {
 public:

@@ -7,7 +7,7 @@ extern "C" {
 
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class Stfl {
 public:
@@ -49,6 +49,6 @@ public:
 	static std::string quote(const std::string& text);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_STFLPP_H_ */

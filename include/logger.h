@@ -3,9 +3,9 @@
 
 #include "strprintf.h"
 
-#include "libnewsboat-ffi/src/logger.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/logger.rs.h" // IWYU pragma: export
 
-namespace newsboat {
+namespace Newsboat {
 
 using Level = logger::Level;
 
@@ -20,7 +20,7 @@ void log(Level l, const std::string& format, Args... args)
 }
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 // see https://kernelnewbies.org/FAQ/DoWhile0
 #ifdef NDEBUG
@@ -30,7 +30,7 @@ void log(Level l, const std::string& format, Args... args)
 #else
 #define LOG(x, ...)                                        \
 	do {                                               \
-		newsboat::logger::log(x, __VA_ARGS__); \
+		Newsboat::logger::log(x, __VA_ARGS__); \
 	} while (0)
 #endif
 

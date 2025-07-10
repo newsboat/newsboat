@@ -27,7 +27,7 @@ test_helpers::MainTempDir::MainTempDir()
 		tempdir = "/tmp/";
 	}
 
-	tempdir += "/newsboat-tests/";
+	tempdir += "/Newsboat-tests/";
 
 	int status = mkdir(tempdir.c_str(), S_IRWXU);
 	if (status != 0) {

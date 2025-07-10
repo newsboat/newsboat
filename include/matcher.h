@@ -3,7 +3,7 @@
 
 #include "FilterParser.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class Matchable;
 
@@ -38,6 +38,6 @@ private:
 	std::string exp;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_MATCHER_H_ */

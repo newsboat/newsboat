@@ -4,7 +4,7 @@
 #include "Parser.h"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 FilterParser::FilterParser() : root(0), curpos(0), next_must_descend_right(false) { }
 

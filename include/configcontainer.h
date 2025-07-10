@@ -9,7 +9,7 @@
 #include "3rd-party/expected.hpp"
 #include "configactionhandler.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigData;
 class ConfigParser;
@@ -85,6 +85,6 @@ private:
 	mutable std::recursive_mutex config_data_mtx;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGCONTAINER_H_ */

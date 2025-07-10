@@ -1,4 +1,4 @@
-#[cxx::bridge(namespace = "newsboat::keymap::bridged")]
+#[cxx::bridge(namespace = "Newsboat::keymap::bridged")]
 mod ffi {
     #[derive(Default)]
     struct Operation {
@@ -39,7 +39,7 @@ fn tokenize_operation_sequence(
     allow_description: bool,
     parsing_failed: &mut bool,
 ) -> Vec<ffi::Operation> {
-    match libnewsboat::keymap::tokenize_operation_sequence(input, allow_description) {
+    match libNewsboat::keymap::tokenize_operation_sequence(input, allow_description) {
         Some((operations, opt_description)) => {
             *parsing_failed = false;
             *description = opt_description.unwrap_or_default();
@@ -56,7 +56,7 @@ fn tokenize_operation_sequence(
 }
 
 fn tokenize_binding(input: &str, parsing_failed: &mut bool) -> ffi::Binding {
-    match libnewsboat::keymap::tokenize_binding(input) {
+    match libNewsboat::keymap::tokenize_binding(input) {
         Some(binding) => {
             let operations = binding
                 .operations

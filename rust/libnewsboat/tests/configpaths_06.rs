@@ -1,4 +1,4 @@
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use section_testing::{enable_sections, section};
 use std::{env, fs, path};
 use tempfile::TempDir;
@@ -21,12 +21,12 @@ fn assert_paths_are_inside_dirs(config_dir: &path::Path, data_dir: &path::Path) 
 
 enable_sections! {
 #[test]
-fn t_configpaths_returns_paths_to_newsboat_xdg_dirs_if_they_exist_and_dotdir_doesnt()
+fn t_configpaths_returns_paths_to_Newsboat_xdg_dirs_if_they_exist_and_dotdir_doesnt()
 {
     let tmp = TempDir::new().unwrap();
-    let config_dir = tmp.path().join(".config").join("newsboat");
+    let config_dir = tmp.path().join(".config").join("Newsboat");
     fs::create_dir_all(&config_dir).ok();
-    let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+    let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
     fs::create_dir_all(&data_dir).ok();
 
     env::set_var("HOME", tmp.path());

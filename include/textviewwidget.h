@@ -6,7 +6,7 @@
 
 #include "stflpp.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class TextviewWidget {
 public:
@@ -35,6 +35,6 @@ private:
 	std::uint32_t num_lines;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_TEXTVIEWWIDGET_H_ */

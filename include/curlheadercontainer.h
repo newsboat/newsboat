@@ -7,7 +7,7 @@
 
 #include "curlhandle.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class CurlHeaderContainer {
 public:
@@ -35,6 +35,6 @@ private:
 	std::vector<std::string> mHeaderLines;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CURLHEADERCONTAINER_H_ */

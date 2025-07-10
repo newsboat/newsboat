@@ -4,7 +4,7 @@
 
 #include "3rd-party/catch.hpp"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("Tagsoup pull parser turns document into a stream of events",
 	"[TagSoupPullParser]")

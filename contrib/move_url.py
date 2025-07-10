@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Script for moving feed URLs in newsboat's database/cache file while
+Script for moving feed URLs in Newsboat's database/cache file while
 preserving articles. The script does not modify the urls file nor does
 it modify any other field (links in articles and feed titles are unmodified)
 
@@ -23,9 +23,9 @@ def move_url(cursor: sqlite3.Cursor, oldurl: str, newurl: str):
 def _get_cache_path() -> typing.Optional[str]:
     if "XDG_DATA_HOME" in os.environ:
         return os.path.join(os.environ["XDG_DATA_HOME"],
-            "newsboat", "cache.db")
+            "Newsboat", "cache.db")
 
-    unexpanded_path = os.path.join("~", ".newsboat", "cache.db")
+    unexpanded_path = os.path.join("~", ".Newsboat", "cache.db")
     expanded_path = os.path.expanduser(unexpanded_path)
     if expanded_path != unexpanded_path:
         return expanded_path

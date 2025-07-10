@@ -442,7 +442,7 @@ TEST_CASE("Feed authors and source authors in atom feed", "[rsspp::Parser]")
 
 TEST_CASE("parse_url() extracts etag and lastmodified data", "[rsspp::Parser]")
 {
-	using namespace newsboat;
+	using namespace Newsboat;
 
 	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml");
 
@@ -482,7 +482,7 @@ constexpr auto atom_feed_with_encoding =
 TEST_CASE("parse_url() converts data if specified in xml encoding attribute",
 	"[rsspp::Parser]")
 {
-	using namespace newsboat;
+	using namespace Newsboat;
 
 	constexpr auto title_utf8 = u8"タイトル"; // Japanese for "title"
 
@@ -509,7 +509,7 @@ TEST_CASE("parse_url() converts data if specified in xml encoding attribute",
 TEST_CASE("parse_url() only converts once even when encoding specified twice (xml encoding and http header)",
 	"[rsspp::Parser]")
 {
-	using namespace newsboat;
+	using namespace Newsboat;
 
 	constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
 
@@ -537,7 +537,7 @@ TEST_CASE("parse_url() only converts once even when encoding specified twice (xm
 TEST_CASE("parse_url() uses xml encoding if specified encodings conflict (xml encoding vs http header)",
 	"[rsspp::Parser]")
 {
-	using namespace newsboat;
+	using namespace Newsboat;
 
 	constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
 
@@ -580,7 +580,7 @@ constexpr auto atom_feed_without_encoding =
 TEST_CASE("parse_url() applies encoding specified in http header if no xml encoding specified",
 	"[rsspp::Parser]")
 {
-	using namespace newsboat;
+	using namespace Newsboat;
 
 	constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
 
@@ -608,7 +608,7 @@ TEST_CASE("parse_url() applies encoding specified in http header if no xml encod
 TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces invalid code units",
 	"[rsspp::Parser]")
 {
-	using namespace newsboat;
+	using namespace Newsboat;
 
 	constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
 	constexpr auto expected_title = u8"Pr�ve";

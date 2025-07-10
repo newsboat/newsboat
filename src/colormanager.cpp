@@ -7,10 +7,10 @@
 #include "strprintf.h"
 #include "utils.h"
 
-using namespace podboat;
+using namespace Podboat;
 
 namespace {
-const std::map<std::string, newsboat::TextStyle> default_styles {
+const std::map<std::string, Newsboat::TextStyle> default_styles {
 	{ "listnormal",           {"default", "default", {}} },
 	{ "listfocus",            {"yellow",  "blue",    {"bold"}} },
 	{ "listnormal_unread",    {"default", "default", {"bold"}} },
@@ -51,7 +51,7 @@ const std::map<std::string, std::string> element_fallbacks {
 };
 }
 
-namespace newsboat {
+namespace Newsboat {
 
 void ColorManager::register_commands(ConfigParser& cfgparser)
 {
@@ -226,4 +226,4 @@ const
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -15,7 +15,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 const std::string ConfigContainer::PARTIAL_FILE_SUFFIX = ".part";
 
@@ -633,4 +633,4 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 	return ss;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

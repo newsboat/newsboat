@@ -11,7 +11,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ConfigParser::ConfigParser()
 {
@@ -194,4 +194,4 @@ std::string ConfigParser::evaluate_backticks(std::string token)
 	return token;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

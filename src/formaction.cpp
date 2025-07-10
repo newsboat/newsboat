@@ -13,7 +13,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 History FormAction::searchhistory;
 History FormAction::cmdlinehistory;
@@ -832,4 +832,4 @@ std::string FormAction::bookmark(const std::string& url,
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

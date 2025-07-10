@@ -1,10 +1,10 @@
-use libnewsboat::scopemeasure;
+use libNewsboat::scopemeasure;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
 struct ScopeMeasure(scopemeasure::ScopeMeasure);
 
-#[cxx::bridge(namespace = "newsboat::scopemeasure::bridged")]
+#[cxx::bridge(namespace = "Newsboat::scopemeasure::bridged")]
 mod bridged {
     extern "Rust" {
         type ScopeMeasure;

@@ -6,8 +6,8 @@
 
 namespace Catch {
 template<>
-struct StringMaker<newsboat::KeyCombination> {
-	static std::string convert(const newsboat::KeyCombination& key_combination)
+struct StringMaker<Newsboat::KeyCombination> {
+	static std::string convert(const Newsboat::KeyCombination& key_combination)
 	{
 		return std::string("<")
 			+ (key_combination.has_control() ? "C-" : "")

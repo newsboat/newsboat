@@ -11,7 +11,7 @@
 #include "test_helpers/tempdir.h"
 #include "test_helpers/envvar.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("write_item correctly parses path", "[Controller]")
 {

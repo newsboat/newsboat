@@ -1,6 +1,6 @@
 #include "ruststring.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 extern "C" void rs_cstring_free(char* str);
 
@@ -23,4 +23,4 @@ RustString::~RustString()
 	rs_cstring_free(str);
 }
 
-} /* newsboat */
+} /* Newsboat */

@@ -4,7 +4,7 @@
 
 #usage: ./exportOPMLWithTags.py urls > urls.opml
 
-#requeriments (just to get the title from a rss feed if it isn't cached in newsboat):
+#requeriments (just to get the title from a rss feed if it isn't cached in Newsboat):
 # pip install feedparser
 
 #input-output example:
@@ -53,9 +53,9 @@ try:
 
     try:
         # get titles from cache.db
-        cache_path = f"{os.environ['HOME']}/.local/share/newsboat/cache.db"
+        cache_path = f"{os.environ['HOME']}/.local/share/Newsboat/cache.db"
         if not os.path.exists(cache_path):
-            cache_path = f"{os.environ['HOME']}/.newsboat/cache.db"
+            cache_path = f"{os.environ['HOME']}/.Newsboat/cache.db"
 
         with sqlite3.connect(cache_path) as conn:
             conn.row_factory = sqlite3.Row
@@ -90,7 +90,7 @@ try:
                     if row['rssurl']==line[0]:
                         feed.set('title', row['title'])
                 if 'title' not in feed.attrib:
-                # that is, this feed's title isn't in ~/.newsboat/cache.db
+                # that is, this feed's title isn't in ~/.Newsboat/cache.db
                     try:
                         import feedparser
                         print(f"getting title from {line[0]}", file=sys.stderr)

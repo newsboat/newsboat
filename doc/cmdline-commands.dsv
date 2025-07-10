@@ -4,7 +4,7 @@ save||<filename>||Export the currently selected article to a plain text file. Th
 set||<variable>[=<value>|&|!]||Set configuration variable <variable> to <value>. If no value is specified, the current value is printed out. Specifying a _!_ after the name of boolean configuration variables toggles their values, a _&_ directly after the name of a configuration variable of any type resets its value to the documented default value.||set reload-time=15
 tag||<tagname>||Only display feeds with the tag <tagname>.||tag news
 goto||<case-insensitive substring>||Search for a feed whose name contains the case-insensitive substring.||goto foo
-source||<filename> [...]||Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.||source ~/.newsboat/colors
-dumpconfig||<filename>||Save current internal state of configuration to file, so that it can be instantly reused as configuration file.||dumpconfig ~/.newsboat/config.saved
+source||<filename> [...]||Load the specified configuration files. This allows it to load alternative configuration files or reload already loaded configuration files on-the-fly from the filesystem.||source ~/.Newsboat/colors
+dumpconfig||<filename>||Save current internal state of configuration to file, so that it can be instantly reused as configuration file.||dumpconfig ~/.Newsboat/config.saved
 exec||<operation>||Run a keybind operation in the current context.||exec open-all-unread-in-browser-and-mark-read
 number||||Jump to the entry with the index <number> (usually seen at the left side of the list). This currently works for the feed list, article list, tag selection, filter selection, and dialog selection forms.||30

@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 class RegexManager;
 
@@ -51,6 +51,6 @@ private:
 	std::vector<std::pair<LineType, std::string>> lines;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_TEXTFORMATTER_H_ */

@@ -9,7 +9,7 @@
 #include "textformatter.h"
 #include "links.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class TagSoupPullParser;
 
@@ -139,6 +139,6 @@ private:
 	bool raw_;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_HTMLRENDERER_H_ */

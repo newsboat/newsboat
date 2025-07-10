@@ -9,7 +9,7 @@
 #include "test_helpers/loggerresetter.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 unsigned int file_lines_count(const std::string& filepath)
 {

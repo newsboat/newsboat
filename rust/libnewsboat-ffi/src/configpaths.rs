@@ -1,16 +1,16 @@
 use crate::cliargsparser::CliArgsParser;
-use libnewsboat::configpaths;
+use libNewsboat::configpaths;
 use std::path::Path;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
 pub struct ConfigPaths(configpaths::ConfigPaths);
 
-#[cxx::bridge(namespace = "newsboat::configpaths::bridged")]
+#[cxx::bridge(namespace = "Newsboat::configpaths::bridged")]
 mod bridged {
-    #[namespace = "newsboat::cliargsparser::bridged"]
+    #[namespace = "Newsboat::cliargsparser::bridged"]
     extern "C++" {
-        include!("libnewsboat-ffi/src/cliargsparser.rs.h");
+        include!("libNewsboat-ffi/src/cliargsparser.rs.h");
         type CliArgsParser = crate::cliargsparser::CliArgsParser;
     }
 

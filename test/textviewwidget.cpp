@@ -6,7 +6,7 @@
 #include "listformatter.h"
 #include "stflpp.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 namespace {
 

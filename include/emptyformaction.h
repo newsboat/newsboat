@@ -3,7 +3,7 @@
 
 #include "formaction.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class EmptyFormAction : public FormAction {
 public:
@@ -28,6 +28,6 @@ protected:
 	}
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_EMPTYFORMACTION_H_ */

@@ -58,7 +58,7 @@ namespace {
 bool ctrl_c_hit = false;
 }
 
-namespace newsboat {
+namespace Newsboat {
 
 View::View(Controller& c)
 	: ctrl(c)
@@ -165,7 +165,7 @@ int View::run()
 	}
 
 	/*
-	 * This is the main "event" loop of newsboat.
+	 * This is the main "event" loop of Newsboat.
 	 */
 
 	std::vector<KeyCombination> key_sequence;
@@ -1215,4 +1215,4 @@ void View::ctrl_c_action(int /* sig */)
 	ctrl_c_hit = true;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

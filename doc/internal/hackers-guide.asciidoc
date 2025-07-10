@@ -197,8 +197,8 @@ code, so it's only helpful for developers.
 C++ tests are in the _test_ subdirectory. They're using
 https://github.com/catchorg/Catch2/tree/devel/docs[the Catch2 framework]. Rust
 tests are split: unit tests are in `mod tests` sub-modules under
-_rust/libnewsboat/src_, while integration tests are under
-_rust/libnewsboat/tests_. Rust's test runner is multi-threaded, so we use
+_rust/libNewsboat/src_, while integration tests are under
+_rust/libNewsboat/tests_. Rust's test runner is multi-threaded, so we use
 integration testing when we want to do the checks in a separate process.
 
 In addition to `TMPDIR=/dev/shm make -j5 PROFILE=1 check` incantation that's

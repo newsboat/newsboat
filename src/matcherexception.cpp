@@ -4,7 +4,7 @@
 #include "ruststring.h"
 #include "strprintf.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 const char* MatcherException::what() const throw()
 {
@@ -31,4 +31,4 @@ MatcherException MatcherException::from_rust_error(MatcherErrorFfi error)
 	return MatcherException(error.type, info_, info2_);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

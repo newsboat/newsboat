@@ -5,7 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 
-using namespace podboat;
+using namespace Podboat;
 
 TEST_CASE("Require-view-update callback gets called when download progress or status changes",
 	"[Download]")

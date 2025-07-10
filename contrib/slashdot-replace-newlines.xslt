@@ -3,7 +3,7 @@ Replaces newline characters in description field of Slashdot's RDF/RSS feed with
 Uses xsltproc (part of libxslt)
 
 Can be used with a filter url, for example:
-"filter:xsltproc /usr/share/doc/newsboat/contrib/slashdot-replace-newlines.xslt -:https://rss.slashdot.org/Slashdot/slashdotMain"
+"filter:xsltproc /usr/share/doc/Newsboat/contrib/slashdot-replace-newlines.xslt -:https://rss.slashdot.org/Slashdot/slashdotMain"
 -->
 <xsl:stylesheet version="1.0"
  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

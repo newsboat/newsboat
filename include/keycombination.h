@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 enum class ShiftState {
 	Shift,
@@ -48,6 +48,6 @@ private:
 	AltState alt;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_KEYCOMBINATION_H_ */

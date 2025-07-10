@@ -21,7 +21,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 namespace rsspp {
 
@@ -50,10 +50,10 @@ Parser::~Parser()
 }
 
 Feed Parser::parse_url(const std::string& url,
-	newsboat::CurlHandle& easyhandle,
+	Newsboat::CurlHandle& easyhandle,
 	time_t lastmodified,
 	const std::string& etag,
-	newsboat::RemoteApi* api,
+	Newsboat::RemoteApi* api,
 	const std::string& cookie_cache)
 {
 	CURLcode ret;

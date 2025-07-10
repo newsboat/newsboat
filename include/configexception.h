@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigException : public std::exception {
 public:
@@ -21,7 +21,7 @@ private:
 	std::string msg;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGEXCEPTION_H_ */
 

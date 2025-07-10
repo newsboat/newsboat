@@ -5,7 +5,7 @@
 
 #include "stflpp.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class LineView {
 public:
@@ -22,6 +22,6 @@ private:
 	const std::string name;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LINEVIEW_H_ */

@@ -1,4 +1,4 @@
-podboat.cpp
+Podboat.cpp
 src/configactionhandler.cpp
 src/download.cpp
 src/lineview.cpp

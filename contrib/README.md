@@ -12,6 +12,6 @@ Important things to note about `contrib/`:
 * Any fixes to scripts should be sent to the original author if available.  If
   the original author is not available, or you would like to contribute a
   script, send a pull request on GitHub or a patch on the [mailing
-  list](https://groups.google.com/group/newsboat) (newsboat@googlegroups.com).
+  list](https://groups.google.com/group/Newsboat) (Newsboat@googlegroups.com).
 * Old and obsolete scripts may be removed from time to time.
 

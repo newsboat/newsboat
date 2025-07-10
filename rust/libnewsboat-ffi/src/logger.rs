@@ -1,9 +1,9 @@
 use cxx::CxxString;
-use libnewsboat::logger;
+use libNewsboat::logger;
 
-#[cxx::bridge(namespace = "newsboat::logger")]
+#[cxx::bridge(namespace = "Newsboat::logger")]
 mod ffi {
-    // This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
+    // This has to be in sync with logger::Level in rust/libNewsboat/src/logger.rs
     enum Level {
         USERERROR = 1,
         CRITICAL,

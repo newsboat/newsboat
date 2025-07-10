@@ -7,7 +7,7 @@
 #include "links.h"
 #include "textformatter.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigContainer;
 class RssItem;
@@ -66,6 +66,6 @@ std::pair<std::string, size_t> source_to_stfl_list(
 	const std::string& location);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_ITEMRENDERER_H_ */

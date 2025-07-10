@@ -4,7 +4,7 @@
 #include "rssfeed.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ListFormAction::ListFormAction(View& v,
 	const std::string& context,
@@ -92,4 +92,4 @@ std::optional<std::uint8_t> ListFormAction::open_unread_items_in_browser(
 	return return_value;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

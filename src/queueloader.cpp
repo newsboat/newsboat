@@ -14,9 +14,9 @@
 #include "strprintf.h"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
-namespace podboat {
+namespace Podboat {
 
 QueueLoader::QueueLoader(const std::string& filepath,
 	const ConfigContainer& cfg_,
@@ -284,4 +284,4 @@ std::string QueueLoader::get_filename(const std::string& str) const
 	return fn;
 }
 
-} // namespace podboat
+} // namespace Podboat

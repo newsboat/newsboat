@@ -1,4 +1,4 @@
-use libnewsboat::cliargsparser::CliArgsParser;
+use libNewsboat::cliargsparser::CliArgsParser;
 use std::env;
 use tempfile::TempDir;
 
@@ -8,7 +8,7 @@ fn t_cliargsparser_dash_capital_c_resolves_tilde_to_homedir() {
 
     env::set_var("HOME", tmp.path());
 
-    let filename = "newsboat-config";
+    let filename = "Newsboat-config";
     let arg = format!("~/{filename}");
 
     let check = |opts| {
@@ -16,10 +16,10 @@ fn t_cliargsparser_dash_capital_c_resolves_tilde_to_homedir() {
         assert_eq!(args.config_file, Some(tmp.path().join(filename)));
     };
 
-    check(vec!["newsboat".into(), "-C".into(), arg.clone().into()]);
+    check(vec!["Newsboat".into(), "-C".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".into(),
+        "Newsboat".into(),
         format!("--config-file={}", &arg).into(),
     ]);
 }

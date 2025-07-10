@@ -4,7 +4,7 @@
 
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 std::unique_ptr<CurlHeaderContainer> CurlHeaderContainer::register_header_handler(
 	CurlHandle& curlHandle)
@@ -68,4 +68,4 @@ void CurlHeaderContainer::handle_header(const std::string& line)
 	mHeaderLines.push_back(line);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

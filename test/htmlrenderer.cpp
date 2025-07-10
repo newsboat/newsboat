@@ -6,7 +6,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 const std::string url = "http://example.com/feed.rss";
 
@@ -18,14 +18,14 @@ const std::string url = "http://example.com/feed.rss";
  * we don't have to wrap string literals in std::string() calls (we don't
  * support C++14 yet so can't use their fancy string literal operators.)
  */
-std::pair<newsboat::LineType, std::string> p(newsboat::LineType type,
+std::pair<Newsboat::LineType, std::string> p(Newsboat::LineType type,
 	const char* str)
 {
 	return std::make_pair(type, std::string(str));
 }
 
 namespace Catch {
-/* Catch doesn't know how to print out newsboat::LineType values, so
+/* Catch doesn't know how to print out Newsboat::LineType values, so
  * let's teach it!
  *
  * Technically, any one of the following two definitions shouls be enough,
@@ -33,7 +33,7 @@ namespace Catch {
  * StringMaker is required for simple things like REQUIRE(LineType::hr ==
  * LineType::hr). Weird, but at least this works.
  */
-std::string toString(newsboat::LineType const& value)
+std::string toString(Newsboat::LineType const& value)
 {
 	switch (value) {
 	case LineType::wrappable:
@@ -50,8 +50,8 @@ std::string toString(newsboat::LineType const& value)
 }
 
 template<>
-struct StringMaker<newsboat::LineType> {
-	static std::string convert(newsboat::LineType const& value)
+struct StringMaker<Newsboat::LineType> {
+	static std::string convert(Newsboat::LineType const& value)
 	{
 		return toString(value);
 	}
@@ -59,9 +59,9 @@ struct StringMaker<newsboat::LineType> {
 
 // Catch also doesn't know about std::pair
 template<>
-struct StringMaker<std::pair<newsboat::LineType, std::string>> {
+struct StringMaker<std::pair<Newsboat::LineType, std::string>> {
 	static std::string convert(
-		std::pair<newsboat::LineType, std::string> const& value)
+		std::pair<Newsboat::LineType, std::string> const& value)
 	{
 		std::ostringstream o;
 		o << "(";
@@ -1614,7 +1614,7 @@ TEST_CASE("Ordered list can contain unordered list in its items",
 
 TEST_CASE("Skips contents of <script> tags", "[HtmlRenderer]")
 {
-	// This is a regression test for https://github.com/newsboat/newsboat/issues/1300
+	// This is a regression test for https://github.com/Newsboat/Newsboat/issues/1300
 
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;
@@ -1674,7 +1674,7 @@ TEST_CASE("<div> is always rendered on a new line", "[HtmlRenderer]")
 
 TEST_CASE("HtmlRenderer does not crash on extra closing OL/UL tags", "[HtmlRenderer]")
 {
-	// This is a regression test for https://github.com/newsboat/newsboat/issues/1974
+	// This is a regression test for https://github.com/Newsboat/Newsboat/issues/1974
 
 	HtmlRenderer rnd;
 	std::vector<std::pair<LineType, std::string>> lines;

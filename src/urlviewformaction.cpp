@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /*
  * The UrlViewFormAction is probably the simplest dialog of all. It
@@ -179,4 +179,4 @@ std::string UrlViewFormAction::title()
 	return _("URLs");
 }
 
-} // namespace newsboat
+} // namespace Newsboat

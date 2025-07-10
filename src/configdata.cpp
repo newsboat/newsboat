@@ -20,7 +20,7 @@ bool is_int(const std::string& s)
 	return std::all_of(s.begin(), s.end(), ::isdigit);
 }
 
-namespace newsboat {
+namespace Newsboat {
 
 ConfigData::ConfigData(const std::string& v, ConfigDataType t,
 	bool multi_option)
@@ -86,4 +86,4 @@ nonstd::expected<void, std::string> ConfigData::set_value(
 	return {};
 }
 
-} // namespace newsboat
+} // namespace Newsboat

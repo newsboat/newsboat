@@ -1,4 +1,4 @@
-name: newsboat
+name: Newsboat
 version: git
 base: core20
 summary: An RSS/Atom feed reader for text terminals
@@ -9,8 +9,8 @@ grade: stable
 confinement: strict
 
 apps:
-  newsboat:
-    command: usr/local/bin/newsboat
+  Newsboat:
+    command: usr/local/bin/Newsboat
     environment:
       LOCPATH: "$SNAP/usr/lib/locale"
       TERMINFO_DIRS: "$SNAP/lib/terminfo:$SNAP/usr/share/terminfo"
@@ -18,8 +18,8 @@ apps:
       - network
       - home
       - desktop
-  podboat:
-    command: usr/local/bin/podboat
+  Podboat:
+    command: usr/local/bin/Podboat
     environment:
       LOCPATH: "$SNAP/usr/lib/locale"
       TERMINFO_DIRS: "$SNAP/lib/terminfo:$SNAP/usr/share/terminfo"
@@ -35,7 +35,7 @@ parts:
       - rustup
     override-build: |
       rustup install stable
-  newsboat:
+  Newsboat:
     after:
       - rust
     plugin: make

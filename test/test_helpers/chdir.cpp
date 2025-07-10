@@ -7,7 +7,7 @@
 
 test_helpers::Chdir::Chdir(const std::string& path)
 {
-	m_old_path = newsboat::utils::getcwd();
+	m_old_path = Newsboat::utils::getcwd();
 	const int result = ::chdir(path.c_str());
 	if (result != 0) {
 		const auto saved_errno = errno;

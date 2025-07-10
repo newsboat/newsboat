@@ -62,7 +62,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 void sighup_action(int /* sig */)
 {
@@ -108,7 +108,7 @@ int Controller::run(const CliArgsParser& args)
 	if (!args.log_file().has_value() && args.log_level().has_value()) {
 		const std::string date_time_string = utils::mt_strf_localtime("%Y-%m-%d_%H.%M.%S",
 				std::time(nullptr));
-		const std::string filename = "newsboat_" + date_time_string + ".log";
+		const std::string filename = "Newsboat_" + date_time_string + ".log";
 		logger::set_logfile(filename);
 	}
 
@@ -587,7 +587,7 @@ int Controller::run(const CliArgsParser& args)
 				// Workaround for missing overload of strprintf::fmt for size_type on macOS.
 				std::uint64_t num_feeds = unreachable_feeds.size();
 				std::cout << strprintf::fmt(_("%" PRIu64 " unreachable feeds found. See "
-							"`cleanup-on-quit` in newsboat(1) for details."), num_feeds)
+							"`cleanup-on-quit` in Newsboat(1) for details."), num_feeds)
 					<< std::endl;
 				if (cfg.get_configvalue("cleanup-on-quit") == "nudge") {
 					std::cout << _("Press any key to continue") << std::endl;
@@ -907,7 +907,7 @@ int Controller::execute_commands(const std::vector<std::string>& cmds)
 		} else {
 			std::cerr
 					<< strprintf::fmt(_("%s: %s: unknown command"),
-							"newsboat",
+							"Newsboat",
 							cmd)
 						<< std::endl;
 			return EXIT_FAILURE;
@@ -923,12 +923,12 @@ std::string Controller::write_temporary_item(RssItem& item)
 	if (tmpdir != nullptr) {
 		snprintf(filename,
 			sizeof(filename),
-			"%s/newsboat-article.XXXXXX",
+			"%s/Newsboat-article.XXXXXX",
 			tmpdir);
 	} else {
 		snprintf(filename,
 			sizeof(filename),
-			"/tmp/newsboat-article.XXXXXX");
+			"/tmp/Newsboat-article.XXXXXX");
 	}
 	int fd = mkstemp(filename);
 	if (fd != -1) {
@@ -1057,4 +1057,4 @@ void Controller::update_flags(std::shared_ptr<RssItem> item)
 	item->update_flags();
 }
 
-} // namespace newsboat
+} // namespace Newsboat

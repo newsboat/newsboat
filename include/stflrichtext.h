@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "libnewsboat-ffi/src/stflrichtext.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/stflrichtext.rs.h" // IWYU pragma: export
 
-namespace newsboat {
+namespace Newsboat {
 
 class StflRichText {
 public:
@@ -32,6 +32,6 @@ private:
 	StflRichText(rust::Box<stflrichtext::bridged::StflRichText>&&);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_STFLSTRING_H_ */

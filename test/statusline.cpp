@@ -2,7 +2,7 @@
 
 #include "3rd-party/catch.hpp"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 class StatusTester : public IStatus {
 public:

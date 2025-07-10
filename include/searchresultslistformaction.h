@@ -11,7 +11,7 @@
 #include "keymap.h"
 #include "fmtstrformatter.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 struct SearchResult {
 	std::shared_ptr<RssFeed> search_result_feed;
@@ -64,7 +64,7 @@ private:
 	std::string search_phrase;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_SEARCHRESULTSLISTFORMACTION_H_ */
 

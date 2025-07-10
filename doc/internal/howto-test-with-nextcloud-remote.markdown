@@ -10,7 +10,7 @@ docker run -d -p 8080:80 nextcloud
 
 3. Add the "News" app (top-right icon -> "+ apps" -> "News" -> "Enable")
 
-4. Navigate to "News" tab and subscribe to a few feeds (e.g. "+ Subscribe" -> Enter "https://newsboat.org/news.atom" -> "Subscribe")
+4. Navigate to "News" tab and subscribe to a few feeds (e.g. "+ Subscribe" -> Enter "https://Newsboat.org/news.atom" -> "Subscribe")
 
 5. Configure the nextcloud instance as remote in Newsboat config:
 ```

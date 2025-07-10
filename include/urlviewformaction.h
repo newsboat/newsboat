@@ -5,7 +5,7 @@
 #include "links.h"
 #include "listwidget.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class UrlViewFormAction : public FormAction {
 public:
@@ -46,6 +46,6 @@ private:
 	ListWidget urls_list;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_URLVIEWFORMACTION_H_ */

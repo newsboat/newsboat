@@ -18,7 +18,7 @@ fn t_configpaths_create_dirs_returns_false_if_xdg_config_dir_exists_but_data_dir
     env::remove_var("XDG_DATA_HOME");
 
     if section!("Default XDG locations") {
-        let config_dir = tmp.path().join(".config").join("newsboat");
+        let config_dir = tmp.path().join(".config").join("Newsboat");
         assert!(fs::create_dir_all(config_dir).is_ok());
 
         configpaths_helpers::assert_create_dirs_returns_false(&tmp);
@@ -28,14 +28,14 @@ fn t_configpaths_create_dirs_returns_false_if_xdg_config_dir_exists_but_data_dir
         let config_home = tmp.path().join("xdg-cfg");
         env::set_var("XDG_CONFIG_HOME", &config_home);
 
-        let config_dir = config_home.join("newsboat");
+        let config_dir = config_home.join("Newsboat");
         assert!(fs::create_dir_all(config_dir).is_ok());
 
         configpaths_helpers::assert_create_dirs_returns_false(&tmp);
     }
 
     if section!("XDG_DATA_HOME redefined") {
-        let config_dir = tmp.path().join(".config").join("newsboat");
+        let config_dir = tmp.path().join(".config").join("Newsboat");
         assert!(fs::create_dir_all(config_dir).is_ok());
 
         let data_home = tmp.path().join("xdg-data");
@@ -50,7 +50,7 @@ fn t_configpaths_create_dirs_returns_false_if_xdg_config_dir_exists_but_data_dir
         let config_home = tmp.path().join("xdg-cfg");
         env::set_var("XDG_CONFIG_HOME", &config_home);
 
-        let config_dir = config_home.join("newsboat");
+        let config_dir = config_home.join("Newsboat");
         assert!(fs::create_dir_all(config_dir).is_ok());
 
         let data_home = tmp.path().join("xdg-data");

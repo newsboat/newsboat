@@ -6,7 +6,7 @@
 
 #include "strprintf.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 namespace file_system {
 
@@ -123,4 +123,4 @@ std::string permissions_string(mode_t mode)
 
 } // namespace file_system
 
-} // namespace newsboat
+} // namespace Newsboat

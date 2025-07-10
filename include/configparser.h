@@ -6,7 +6,7 @@
 
 #include "configactionhandler.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 enum class ActionHandlerStatus {
 	INVALID_PARAMS,
@@ -50,6 +50,6 @@ private:
 	std::vector<std::string> included_files;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGPARSER_H_ */

@@ -1,16 +1,16 @@
 #ifndef NEWSBOAT_CONFIG_H_
 #define NEWSBOAT_CONFIG_H_
 
-#define PACKAGE				"newsboat"
+#define PACKAGE				"Newsboat"
 #define PROGRAM_NAME			"Newsboat"
 
-#define PROGRAM_URL			"https://newsboat.org/"
+#define PROGRAM_URL			"https://Newsboat.org/"
 
 #define NEWSBEUTER_PATH_SEP			'/'
 #define NEWSBEUTER_CONFIG_SUBDIR	".newsbeuter"
 #define NEWSBEUTER_SUBDIR_XDG		"newsbeuter"
-#define NEWSBOAT_CONFIG_SUBDIR	".newsboat"
-#define NEWSBOAT_SUBDIR_XDG		"newsboat"
+#define NEWSBOAT_CONFIG_SUBDIR	".Newsboat"
+#define NEWSBOAT_SUBDIR_XDG		"Newsboat"
 
 #include <libintl.h>
 #include <locale.h>

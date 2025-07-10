@@ -9,7 +9,7 @@
 #include "matcher.h"
 #include "rssitem.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 typedef std::pair<std::string, std::shared_ptr<Matcher>> FeedUrlExprPair;
 
@@ -35,6 +35,6 @@ private:
 	static const std::string REGEX_PREFIX;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RSSIGNORES_H_ */

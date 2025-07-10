@@ -1,8 +1,8 @@
-* Collection of scripts to enable image previews within newsboat
+* Collection of scripts to enable image previews within Newsboat
 These scripts are based on image-previews within the terminal file manager vifm (https://vifm.info/). So far, the parser implements images for twitter, YouTube thumbnails, xkcd comics (https://xkcd.com) and NASA's astronomy picture of the day (https://apod.nasa.gov). These scripts are a bodge and therefore not necessarily pretty. If you improve them, submit a pull request or send me an email (sermak .at. sermak .dot. xyz)
 I decided against using a Makefile, since you probably want to modify some (installation) paths.
 ** Caution
-Using these scripts forces you to replace the internal newsboat pager. This might not be an issue in most circumstances. If you frequently listen to podcasts using newsboat or require its internal shortcuts for another reason, this method may not be suited to you.
+Using these scripts forces you to replace the internal Newsboat pager. This might not be an issue in most circumstances. If you frequently listen to podcasts using Newsboat or require its internal shortcuts for another reason, this method may not be suited to you.
 ** Prerequisites
 This script needs the following programs. Install them if they are not already on your system
 - tput (optional)
@@ -13,18 +13,18 @@ This script needs the following programs. Install them if they are not already o
 - curl
 - w3m
 - überzug (https://github.com/seebye/ueberzug)
-- newsboat (obviously)
+- Newsboat (obviously)
 
 Should you decide not to use optional programs, you may need to adapt the parser script
 ** Installation
 You need to copy a number of scripts onto your system:
-1. A script by seebye (of überzug fame), called =nbrun=. Instead of starting newsboat as usual, if you want previews, you need to start newsboat using this script. It may be sensible to alias this script to newboat in your shell rc file (e.g. .bashrc).
+1. A script by seebye (of überzug fame), called =nbrun=. Instead of starting Newsboat as usual, if you want previews, you need to start Newsboat using this script. It may be sensible to alias this script to newboat in your shell rc file (e.g. .bashrc).
 2. Another script by seebye, called =vifmimg=, to be saved under ~/.config/vifm/scripts/vifmimg (else you need to edit the parser script)
-3. Then, you want the script called =nbparser=. Save it as ~/bin/nbparser. Its purpose is to scan all lines for URLs of images, download them into /tmp and display them via überzug. It uses less as its pager. Further note that the sizes of the terminal are hard-coded. I tried to make the size of the image a function of the size of the terminal, but got better results by hard-coding them, since I only use newsboat in full or half height. You may need to adapt these numbers based on your preferences and terminal emulator. Simply determine its size via =tput lines=.
-4. Last, edit your newsboat config (under ~/.newsboat/config) and add the following two lines.
+3. Then, you want the script called =nbparser=. Save it as ~/bin/nbparser. Its purpose is to scan all lines for URLs of images, download them into /tmp and display them via überzug. It uses less as its pager. Further note that the sizes of the terminal are hard-coded. I tried to make the size of the image a function of the size of the terminal, but got better results by hard-coding them, since I only use Newsboat in full or half height. You may need to adapt these numbers based on your preferences and terminal emulator. Simply determine its size via =tput lines=.
+4. Last, edit your Newsboat config (under ~/.Newsboat/config) and add the following two lines.
 #+BEGIN_SRC shell
 pager "~/bin/nbparser"
 html-renderer "/bin/cat"
 #+END_SRC
 ** Usage
-You should be good to go. Depending on your internet connection, downloading the images might take some time, so be patient if they don't immediately pop up. Again, remember to start newsboat by executing the =nbrun= script.
+You should be good to go. Depending on your internet connection, downloading the images might take some time, so be patient if they don't immediately pop up. Again, remember to start Newsboat by executing the =nbrun= script.

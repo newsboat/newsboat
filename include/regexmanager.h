@@ -14,7 +14,7 @@
 #include "regexowner.h"
 #include "stflrichtext.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class RegexManager : public ConfigActionHandler {
 public:
@@ -41,6 +41,6 @@ private:
 		const std::vector<std::string>& params);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_REGEXMANAGER_H_ */

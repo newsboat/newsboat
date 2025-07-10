@@ -3,7 +3,7 @@
 #include "keymap.h"
 #include "logger.h"
 
-namespace newsboat {
+namespace Newsboat {
 SearchResultsListFormAction::SearchResultsListFormAction(View& vv,
 	std::string formstr,
 	Cache* cc,
@@ -103,4 +103,4 @@ FmtStrFormatter SearchResultsListFormAction::setup_head_formatter(
 };
 
 
-} // namespace newsboat
+} // namespace Newsboat

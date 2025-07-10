@@ -1,4 +1,4 @@
-use libnewsboat::utils::run_program;
+use libNewsboat::utils::run_program;
 use std::thread::{sleep, spawn};
 
 #[test]

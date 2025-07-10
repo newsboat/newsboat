@@ -11,7 +11,7 @@
 #include "test_helpers/tempdir.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 // Forks and calls FsLock::try_lock() in the child process.
 class LockProcess {
@@ -61,8 +61,8 @@ public:
 	}
 
 private:
-	const char* sem_start_name = "/newsboat-test-fslock-start";
-	const char* sem_stop_name = "/newsboat-test-fslock-stop";
+	const char* sem_start_name = "/Newsboat-test-fslock-start";
+	const char* sem_stop_name = "/Newsboat-test-fslock-stop";
 
 	pid_t pid;
 	sem_t* sem_start;

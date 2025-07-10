@@ -1,4 +1,4 @@
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use section_testing::{enable_sections, section};
 use std::{env, fs, path};
 use tempfile::TempDir;
@@ -45,7 +45,7 @@ fn assert_files_migrated_to(
 
 enable_sections! {
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dirs_to_default_newsboat_xdg_dirs(
+fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dirs_to_default_Newsboat_xdg_dirs(
 ) {
     let tmp = TempDir::new().unwrap();
 
@@ -60,8 +60,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
     {
         let beuter_sentries = configpaths_helpers::mock_newsbeuter_xdg_dirs(&tmp);
 
-        let config_dir = tmp.path().join(".config").join("newsboat");
-        let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+        let config_dir = tmp.path().join(".config").join("Newsboat");
+        let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
         assert_files_migrated_to(&config_dir, &data_dir, &beuter_sentries);
     }
 
@@ -74,8 +74,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
         let beuter_data_dir = tmp.path().join(".local").join("share").join("newsbeuter");
         let beuter_sentries = configpaths_helpers::mock_xdg_dirs(beuter_config_dir, &beuter_data_dir);
 
-        let boat_config_dir = config_dir.join("newsboat");
-        let boat_data_dir = tmp.path().join(".local").join("share").join("newsboat");
+        let boat_config_dir = config_dir.join("Newsboat");
+        let boat_data_dir = tmp.path().join(".local").join("share").join("Newsboat");
         assert_files_migrated_to(&boat_config_dir, &boat_data_dir, &beuter_sentries);
     }
 
@@ -88,8 +88,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
         let beuter_data_dir = &data_dir.join("newsbeuter");
         let beuter_sentries = configpaths_helpers::mock_xdg_dirs(&beuter_config_dir, beuter_data_dir);
 
-        let boat_config_dir = tmp.path().join(".config").join("newsboat");
-        let boat_data_dir = data_dir.join("newsboat");
+        let boat_config_dir = tmp.path().join(".config").join("Newsboat");
+        let boat_data_dir = data_dir.join("Newsboat");
         assert_files_migrated_to(&boat_config_dir, &boat_data_dir, &beuter_sentries);
     }
 
@@ -106,8 +106,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_xdg_dir
         let beuter_data_dir = &data_dir.join("newsbeuter");
         let beuter_sentries = configpaths_helpers::mock_xdg_dirs(beuter_config_dir, beuter_data_dir);
 
-        let boat_config_dir = config_dir.join("newsboat");
-        let boat_data_dir = data_dir.join("newsboat");
+        let boat_config_dir = config_dir.join("Newsboat");
+        let boat_data_dir = data_dir.join("Newsboat");
         assert_files_migrated_to(&boat_config_dir, &boat_data_dir, &beuter_sentries);
     }
 }

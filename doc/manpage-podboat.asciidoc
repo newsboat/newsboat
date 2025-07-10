@@ -4,12 +4,12 @@ Alexander Batischev <eual.jp@gmail.com>
 
 == NAME
 
-podboat - a podcast download manager for text terminals
+Podboat - a podcast download manager for text terminals
 
 
 == SYNOPSIS
 
-*podboat* [*-C* _configfile_] [*-q* _queuefile_] [*-a*] [*-h*]
+*Podboat* [*-C* _configfile_] [*-q* _queuefile_] [*-a*] [*-h*]
 
 
 == DESCRIPTION
@@ -40,7 +40,7 @@ can then be download with _Podboat_.
        Generate a logfile with a certain _loglevel_ (valid values: 1 to 6, for user error,
        critical, error, warning, info, and debug respectively).
        Filename can be specified using the *--log-file* option. If not specified,
-       a filename is generated of the form podboat_<date-time>.log
+       a filename is generated of the form Podboat_<date-time>.log
 
 *-d* _logfile_, *--log-file*=_logfile_::
        Use this _logfile_ as output when logging debug messages. Please note that this
@@ -54,12 +54,12 @@ include::chapter-podcasts.asciidoc[]
 
 == MANAGING AUDIO FILES WITH PODBOAT
 
-include::chapter-podboat.asciidoc[]
+include::chapter-Podboat.asciidoc[]
 
 
 == CONFIGURATION COMMANDS
 
-include::podboat-cfgcmds.asciidoc[]
+include::Podboat-cfgcmds.asciidoc[]
 
 
 == FILES
@@ -67,14 +67,14 @@ include::podboat-cfgcmds.asciidoc[]
 include::chapter-files.asciidoc[]
 
 dotfiles::
-        _~/.newsboat/config_
+        _~/.Newsboat/config_
 +
-_~/.newsboat/queue_
+_~/.Newsboat/queue_
 
 XDG::
-        _$XDG_CONFIG_HOME/newsboat/config_
+        _$XDG_CONFIG_HOME/Newsboat/config_
 +
-_$XDG_DATA_HOME/newsboat/queue_
+_$XDG_DATA_HOME/Newsboat/queue_
 +
 Note: if the `XDG_CONFIG_HOME` environment variable is not set, Podboat behaves as
 if it was set to _~/.config_. Similarly, `XDG_DATA_HOME` defaults to
@@ -88,4 +88,4 @@ include::chapter-environment-variables.asciidoc[]
 
 == SEE ALSO
 
-newsboat(1)
+Newsboat(1)

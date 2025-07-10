@@ -8,9 +8,9 @@
 
 class CurlHandle;
 
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 
 class FeedbinApi : public RemoteApi {
 public:
@@ -41,6 +41,6 @@ private:
 	std::string auth_info;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FEEDBINAPI_H_ */

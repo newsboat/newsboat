@@ -42,11 +42,11 @@ enum { KM_FEEDLIST = 1 << 0,
 	KM_BOTH = KM_NEWSBOAT | KM_PODBOAT
 };
 
-namespace newsboat {
+namespace Newsboat {
 
 enum Operation {
 	OP_NIL = 0,
-	// general and newsboat-specific operations:
+	// general and Newsboat-specific operations:
 	OP_NB_MIN,
 	OP_QUIT,
 	OP_HARDQUIT,
@@ -109,7 +109,7 @@ enum Operation {
 	OP_ARTICLEFEED,
 	OP_SET,
 
-	// podboat-specific operations:
+	// Podboat-specific operations:
 	OP_PB_MIN = 1000,
 	OP_PB_DOWNLOAD,
 	OP_PB_CANCEL,
@@ -264,6 +264,6 @@ private:
 	std::vector<MacroCmd> startup_operations_sequence;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_KEYMAP_H_ */

@@ -8,7 +8,7 @@
 #include "confighandlerexception.h"
 #include "rssitem.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE(
 	"RssIgnores::matches_lastmodified() returns true if given url "
@@ -17,13 +17,13 @@ TEST_CASE(
 {
 	RssIgnores ignores;
 	ignores.handle_action("always-download", {
-		"http://newsboat.org",
+		"http://Newsboat.org",
 		"www.cool-website.com",
 		"www.example.com"
 	});
 
 	REQUIRE(ignores.matches_lastmodified("www.example.com"));
-	REQUIRE(ignores.matches_lastmodified("http://newsboat.org"));
+	REQUIRE(ignores.matches_lastmodified("http://Newsboat.org"));
 	REQUIRE(ignores.matches_lastmodified("www.cool-website.com"));
 	REQUIRE_FALSE(ignores.matches_lastmodified("www.smth.com"));
 }
@@ -35,13 +35,13 @@ TEST_CASE(
 {
 	RssIgnores ignores;
 	ignores.handle_action("reset-unread-on-update", {
-		"http://newsboat.org",
+		"http://Newsboat.org",
 		"www.cool-website.com",
 		"www.example.com"
 	});
 
 	REQUIRE(ignores.matches_resetunread("www.example.com"));
-	REQUIRE(ignores.matches_resetunread("http://newsboat.org"));
+	REQUIRE(ignores.matches_resetunread("http://Newsboat.org"));
 	REQUIRE(ignores.matches_resetunread("www.cool-website.com"));
 	REQUIRE_FALSE(ignores.matches_resetunread("www.smth.com"));
 }

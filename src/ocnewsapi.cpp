@@ -15,7 +15,7 @@
 
 #define OCNEWS_API "/index.php/apps/news/api/v1-2/"
 
-namespace newsboat {
+namespace Newsboat {
 
 typedef std::unique_ptr<json_object, decltype(*json_object_put)> JsonUptr;
 
@@ -391,4 +391,4 @@ bool OcNewsApi::query(const std::string& query,
 	return true;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

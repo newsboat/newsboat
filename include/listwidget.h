@@ -4,10 +4,10 @@
 #include "listmovementcontrol.h"
 #include "listwidgetbackend.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 using ListWidget = ListMovementControl<ListWidgetBackend>;
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LISTWIDGET_H_ */

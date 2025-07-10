@@ -6,7 +6,7 @@
 #include "remoteapi.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FreshRssUrlReader::FreshRssUrlReader(ConfigContainer* c,
 	const std::string& url_file,
@@ -56,4 +56,4 @@ std::string FreshRssUrlReader::get_source() const
 	return "FreshRSS";
 }
 
-} // namespace newsboat
+} // namespace Newsboat

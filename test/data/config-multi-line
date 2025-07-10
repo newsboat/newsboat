@@ -1,7 +1,7 @@
 macro p open;\
 reload;\
 quit;\
-quit -- "opens, reloads, quits, then quits newsboat"
+quit -- "opens, reloads, quits, then quits Newsboat"
 
 macro j qui\
 t;\

@@ -5,7 +5,7 @@
 #include "formaction.h"
 #include "listwidget.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class SelectFormAction : public FormAction {
 public:
@@ -69,6 +69,6 @@ private:
 	ListWidget tags_list;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_SELECTFORMACTION_H_ */

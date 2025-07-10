@@ -399,7 +399,7 @@ pub fn get_command_output(cmd: &str) -> String {
         .arg("-c")
         .arg(cmd)
         // Inherit stdin so that the program can ask something of the user (see
-        // https://github.com/newsboat/newsboat/issues/455 for an example).
+        // https://github.com/Newsboat/Newsboat/issues/455 for an example).
         .stdin(Stdio::inherit())
         .output();
     // from_utf8_lossy will convert any bad bytes to U+FFFD
@@ -660,7 +660,7 @@ pub fn program_version() -> String {
 }
 
 /// Newsboat's major version number.
-pub fn newsboat_major_version() -> u32 {
+pub fn Newsboat_major_version() -> u32 {
     // This will panic if the version couldn't be parsed, which is virtually impossible as Cargo
     // won't even start compilation if it couldn't parse the version.
     env!("CARGO_PKG_VERSION_MAJOR").parse::<u32>().unwrap()
@@ -2012,23 +2012,23 @@ mod tests {
 
     #[test]
     fn t_extract_filter() {
-        let input = "filter:~/bin/script.sh:https://newsboat.org";
+        let input = "filter:~/bin/script.sh:https://Newsboat.org";
         let expected_script_name = "~/bin/script.sh";
-        let expected_url = "https://newsboat.org";
+        let expected_url = "https://Newsboat.org";
         let actual = extract_filter(input);
         assert_eq!(actual.script_name, expected_script_name);
         assert_eq!(actual.url, expected_url);
 
-        let input = "filter::https://newsboat.org";
+        let input = "filter::https://Newsboat.org";
         let expected_script_name = "";
-        let expected_url = "https://newsboat.org";
+        let expected_url = "https://Newsboat.org";
         let actual = extract_filter(input);
         assert_eq!(actual.script_name, expected_script_name);
         assert_eq!(actual.url, expected_url);
 
-        let input = "filter:https://newsboat.org";
+        let input = "filter:https://Newsboat.org";
         let expected_script_name = "https";
-        let expected_url = "//newsboat.org";
+        let expected_url = "//Newsboat.org";
         let actual = extract_filter(input);
         assert_eq!(actual.script_name, expected_script_name);
         assert_eq!(actual.url, expected_url);

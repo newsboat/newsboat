@@ -7,7 +7,7 @@
 #include <vector>
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /// \brief Base class for classes that supply Newsboat with feed URLs.
 class UrlReader {
@@ -23,7 +23,7 @@ public:
 
 	/// \brief User-visible description of where URLs come from.
 	///
-	/// This can be a path (e.g. ~/.newsboat/urls), a URL (e.g. the value of
+	/// This can be a path (e.g. ~/.Newsboat/urls), a URL (e.g. the value of
 	/// `opml-url` setting), or a name of the remote API in use (e.g. "Tiny
 	/// Tiny RSS").
 	virtual std::string get_source() const = 0;
@@ -44,6 +44,6 @@ protected:
 	std::map<std::string, std::vector<std::string>> tags;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_URLREADER_H_ */

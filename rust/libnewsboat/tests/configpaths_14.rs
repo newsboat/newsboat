@@ -7,7 +7,7 @@ use crate::configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
 
 enable_sections! {
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_data_dir_couldnt_be_created(
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_Newsboat_xdg_data_dir_couldnt_be_created(
 ) {
     let tmp = TempDir::new().unwrap();
 
@@ -26,8 +26,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_da
         let data_home = tmp.path().join(".local").join("share");
         let _data_home_chmod = configpaths_helpers::Chmod::new(&data_home, S_IRUSR | S_IXUSR);
 
-        let config_dir = tmp.path().join(".config").join("newsboat");
-        let data_dir = data_home.join("newsboat");
+        let config_dir = tmp.path().join(".config").join("Newsboat");
+        let data_dir = data_home.join("Newsboat");
         configpaths_helpers::assert_xdg_not_migrated(&config_dir, &data_dir);
     }
 
@@ -46,8 +46,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_da
         let _data_home_chmod = configpaths_helpers::Chmod::new(&data_home, S_IRUSR | S_IXUSR);
 
         configpaths_helpers::assert_xdg_not_migrated(
-            &config_home.join("newsboat"),
-            &data_home.join("newsboat"));
+            &config_home.join("Newsboat"),
+            &data_home.join("Newsboat"));
     }
 
     if section!("XDG_DATA_HOME redefined") {
@@ -64,8 +64,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_da
         let _data_home_chmod = configpaths_helpers::Chmod::new(&data_home, S_IRUSR | S_IXUSR);
 
         configpaths_helpers::assert_xdg_not_migrated(
-            &tmp.path().join(".config").join("newsboat"),
-            &data_home.join("newsboat"));
+            &tmp.path().join(".config").join("Newsboat"),
+            &data_home.join("Newsboat"));
     }
 
     if section!("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -86,8 +86,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_da
         let _data_home_chmod = configpaths_helpers::Chmod::new(&data_home, S_IRUSR | S_IXUSR);
 
         configpaths_helpers::assert_xdg_not_migrated(
-            &config_home.join("newsboat"),
-            &data_home.join("newsboat"));
+            &config_home.join("Newsboat"),
+            &data_home.join("Newsboat"));
     }
 }
 }

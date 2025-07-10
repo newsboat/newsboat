@@ -7,7 +7,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FileUrlReader::FileUrlReader(const std::string& file)
 	: filename(file)

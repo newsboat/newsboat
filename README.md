@@ -1,9 +1,9 @@
-Newsboat [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/newsboat/newsboat.svg)](https://cirrus-ci.com/github/newsboat/newsboat) [![GitHub Actions: Coveralls status](https://github.com/newsboat/newsboat/workflows/Coveralls/badge.svg)](https://github.com/newsboat/newsboat/actions?query=workflow%3ACoveralls) [![Coverage Status](https://coveralls.io/repos/github/newsboat/newsboat/badge.svg?branch=master)](https://coveralls.io/github/newsboat/newsboat?branch=master) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3328/badge)](https://bestpractices.coreinfrastructure.org/projects/3328)
+Newsboat [![Cirrus CI Build Status](https://api.cirrus-ci.com/github/Newsboat/Newsboat.svg)](https://cirrus-ci.com/github/Newsboat/Newsboat) [![GitHub Actions: Coveralls status](https://github.com/Newsboat/Newsboat/workflows/Coveralls/badge.svg)](https://github.com/Newsboat/Newsboat/actions?query=workflow%3ACoveralls) [![Coverage Status](https://coveralls.io/repos/github/Newsboat/Newsboat/badge.svg?branch=master)](https://coveralls.io/github/Newsboat/Newsboat?branch=master) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3328/badge)](https://bestpractices.coreinfrastructure.org/projects/3328)
 ========
 
-<a href="https://newsboat.org">
+<a href="https://Newsboat.org">
 <img
-    src="https://newsboat.org/logo.svg"
+    src="https://Newsboat.org/logo.svg"
     alt="Newsboat logo"
     align="left"
     height="60"
@@ -21,7 +21,7 @@ Wikipedia](https://en.wikipedia.org/wiki/News_aggregator).
 
 <img
     style="display: block; margin-left: auto; margin-right: auto;"
-    src="https://newsboat.org/images/2.25-screenshot_2x-33f26153.png"
+    src="https://Newsboat.org/images/2.25-screenshot_2x-33f26153.png"
     alt="Viewing an article in Newsboat"
     />
 
@@ -31,28 +31,28 @@ Notable features
 * Powerful built-in HTML renderer — no need to start the web browser to view
     text-only entries
 * Send links and whole articles to third-party services using [bookmarking
-    scripts](https://newsboat.org/releases/2.40/docs/newsboat.html#_bookmarking)
-* [Filter articles out](https://newsboat.org/releases/2.40/docs/newsboat.html#_killfiles)
+    scripts](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_bookmarking)
+* [Filter articles out](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_killfiles)
     based on title, author, contents etc.
-* [Aggregate articles](https://newsboat.org/releases/2.40/docs/newsboat.html#_query_feeds)
+* [Aggregate articles](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_query_feeds)
     into meta-feeds by arbitrary criteria
-* [Apply transformations](https://newsboat.org/releases/2.40/docs/newsboat.html#_scripts_and_filters_snownews_extensions)
+* [Apply transformations](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_scripts_and_filters_snownews_extensions)
     to feeds before passing them into Newsboat
 * Integrates with services like The Old Reader, NewsBlur, FeedHQ
-    and [many more](https://newsboat.org/releases/2.40/docs/newsboat.html#_newsboat_as_a_client_for_newsreading_services)
-* [Macros](https://newsboat.org/releases/2.40/docs/newsboat.html#_macro_support)
+    and [many more](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_Newsboat_as_a_client_for_newsreading_services)
+* [Macros](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_macro_support)
     to execute sequences of actions with just two keystrokes
-* Rudimentary [podcast support](https://newsboat.org/releases/2.40/docs/newsboat.html#_podcast_support)
+* Rudimentary [podcast support](https://Newsboat.org/releases/2.40/docs/Newsboat.html#_podcast_support)
 
 Downloading
 -----------
 
 You can download the latest version of Newsboat from the official site:
-https://newsboat.org/
+https://Newsboat.org/
 
 Alternatively, you can check out the latest version from the Git repository:
 
-	$ git clone https://github.com/newsboat/newsboat.git
+	$ git clone https://github.com/Newsboat/Newsboat.git
 
 Dependencies
 ------------
@@ -61,14 +61,14 @@ Newsboat depends on a number of libraries, which need to be installed before
 Newsboat can be compiled.
 
 <!--
-    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+    UPDATE doc/Newsboat.asciidoc IF YOU CHANGE THIS LIST
 -->
 - GNU Make 4.0 or newer
 - C++17 compiler: GCC 7.0 or newer, or Clang 5 or newer
 - Stable [Rust](https://www.rust-lang.org/en-US/) and Cargo (Rust's package
     manager) (1.85.0 or newer; might work with older versions, but we don't
     check that)
-- [STFL (version 0.21 or newer)](https://github.com/newsboat/stfl) (the link
+- [STFL (version 0.21 or newer)](https://github.com/Newsboat/stfl) (the link
     points to our own fork because [the upstream](http://www.clifford.at/stfl/)
     is dead)
 - [SQLite3 (version 3.5 or newer)](https://www.sqlite.org/download.html)
@@ -91,31 +91,31 @@ Developers will also need:
 - [Coco/R for C++](http://www.ssw.uni-linz.ac.at/coco/), needed to re-generate
     filter language parser using `regenerate-parser` target.
 <!--
-    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+    UPDATE doc/Newsboat.asciidoc IF YOU CHANGE THIS LIST
 -->
 
 Installation
 ------------
 
 <!--
-    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+    UPDATE doc/Newsboat.asciidoc IF YOU CHANGE THIS LIST
 -->
 
 There are numerous ways:
 
 - install from your distribution's repository ([a lot of distros have
-    a package](https://repology.org/project/newsboat));
+    a package](https://repology.org/project/Newsboat));
 
 - install via [Snap](https://snapcraft.io/docs/installing-snapd):
 
-      $ sudo snap install newsboat
+      $ sudo snap install Newsboat
 
   Our snap [only supports `xdg-open` as the browser][snap-browser], and you
   can't run arbitrary scripts for rendering and bookmarking. The reason is
   strict confinement; if we disabled it, the snap would be no better than
   a distribution's package;
 
-  [snap-browser]: https://newsboat.org/releases/2.40/docs/faq.html#_with_snap_i_cant_start_browserbookmarking_scriptexecfilterrun_program_from_macro
+  [snap-browser]: https://Newsboat.org/releases/2.40/docs/faq.html#_with_snap_i_cant_start_browserbookmarking_scriptexecfilterrun_program_from_macro
 
 - [build from source with Docker](doc/docker.md). Note that the resulting binary
     might not run outside of that same Docker container if your system doesn't
@@ -142,30 +142,30 @@ There are numerous ways:
       $ sudo make install      #  install everything under /usr/local
 
     To install to a different directory, pass `prefix` like so: `sudo make
-    prefix=/opt/newsboat install`.
+    prefix=/opt/Newsboat install`.
 
     To uninstall, run `sudo make uninstall`.
 
 <!--
-    UPDATE doc/newsboat.asciidoc IF YOU CHANGE THIS LIST
+    UPDATE doc/Newsboat.asciidoc IF YOU CHANGE THIS LIST
 -->
 
 Support
 -------
 
 * Check out our
-  [documentation](https://newsboat.org/releases/2.40/docs/newsboat.html) and
-  [FAQ](https://newsboat.org/releases/2.40/docs/faq.html)
-* Report security vulnerabilities to security@newsboat.org. Please encrypt your emails to
-  [OpenPGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp) if you can.
+  [documentation](https://Newsboat.org/releases/2.40/docs/Newsboat.html) and
+  [FAQ](https://Newsboat.org/releases/2.40/docs/faq.html)
+* Report security vulnerabilities to security@Newsboat.org. Please encrypt your emails to
+  [OpenPGP key 4ED6CD61932B9EBE](https://Newsboat.org/Newsboat.pgp) if you can.
 * Report bugs and ask questions on
-  [the issue tracker](https://github.com/newsboat/newsboat/issues) and
-  [the mailing list](https://groups.google.com/group/newsboat)
-  (newsboat@googlegroups.com)
-* Chat with developers and fellow users on #newsboat at
+  [the issue tracker](https://github.com/Newsboat/Newsboat/issues) and
+  [the mailing list](https://groups.google.com/group/Newsboat)
+  (Newsboat@googlegroups.com)
+* Chat with developers and fellow users on #Newsboat at
   [irc.libera.chat](https://libera.chat) (also accessible [via
   webchat](https://web.libera.chat/) and [via
-  Matrix](https://matrix.to/#/#newsboat:libera.chat)). We *do not* have
+  Matrix](https://matrix.to/#/#Newsboat:libera.chat)). We *do not* have
   a channel on Freenode anymore.
 
 Contributing
@@ -178,5 +178,5 @@ License
 
 Newsboat is licensed under [the MIT
 license](https://opensource.org/licenses/MIT); see the LICENSE file. Logo [by
-noobilanderi](https://groups.google.com/forum/#!topic/newsboat/Xm5pTsbeMEk),
+noobilanderi](https://groups.google.com/forum/#!topic/Newsboat/Xm5pTsbeMEk),
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

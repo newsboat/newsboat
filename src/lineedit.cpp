@@ -2,7 +2,7 @@
 
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 LineEdit::LineEdit(Stfl::Form& form, const std::string& name)
 	: f(form)
@@ -41,4 +41,4 @@ std::uint32_t LineEdit::get_position()
 	return utils::to_u(pos, 0);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

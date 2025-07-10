@@ -8,7 +8,7 @@
 #include "rssfeed.h"
 #include "test_helpers/envvar.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 static const auto FEED_TITLE = std::string("Funniest jokes ever");
 std::shared_ptr<RssFeed> create_test_feed(Cache* c)
@@ -712,7 +712,7 @@ TEST_CASE("Functions used for rendering articles escape '<' into `<>` for use wi
 
 TEST_CASE("item_renderer::render_plaintext() splits text on newlines", "[item_renderer]")
 {
-	using newsboat::item_renderer::OutputFormat;
+	using Newsboat::item_renderer::OutputFormat;
 	// Verifies that render_plaintext creates the expected lines, all marked as wrappable
 	const auto check = [](const std::string input,
 	const std::vector<std::string>& expected_lines, OutputFormat format) {

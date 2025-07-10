@@ -12,7 +12,7 @@
 #include "logger.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /*
  * This method implements an "XML" pull parser. In reality, it's more liberal
@@ -674,4 +674,4 @@ void TagSoupPullParser::handle_text(char c)
 	current_event = Event::TEXT;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

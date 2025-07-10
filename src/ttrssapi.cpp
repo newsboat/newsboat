@@ -15,7 +15,7 @@
 
 using json = nlohmann::json;
 
-namespace newsboat {
+namespace Newsboat {
 
 TtRssApi::TtRssApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -544,4 +544,4 @@ std::string TtRssApi::url_to_id(const std::string& url)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

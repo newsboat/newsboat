@@ -7,7 +7,7 @@
 #include "remoteapi.h"
 #include "rss/feed.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class OcNewsApi : public RemoteApi {
 public:
@@ -35,6 +35,6 @@ private:
 	FeedMap known_feeds;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_OCNEWSAPI_H_ */

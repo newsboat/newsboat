@@ -67,7 +67,7 @@ for this release also includes TK
     `fork`, and typed `for`, Newsboat wouldn't know if that's it or I'm going to
     type `k` next) (#1165) (Dennis van der Schagt, Alexander Batischev, Lysander
     Trischler)
-- contrib/newsboat-idlefeeds.sh: a script to show feeds that weren't updated in
+- contrib/Newsboat-idlefeeds.sh: a script to show feeds that weren't updated in
     a given amount of time (T3SQ8)
 
 ### Changed
@@ -177,7 +177,7 @@ for this release also includes Juho Eerola.
 
 ### Security
 
-- Fixed clickjacking vulnerability on newsboat.org (reported by Kunal Mhaske)
+- Fixed clickjacking vulnerability on Newsboat.org (reported by Kunal Mhaske)
 
 
 
@@ -381,7 +381,7 @@ for this release also includes Juho Eerola.
 
 ### Security
 
-- Added DMARC policy for newsboat.org to better prevent spoofing (we already had
+- Added DMARC policy for Newsboat.org to better prevent spoofing (we already had
     an SPF record) (reported by Kunal Mhaske)
 
 
@@ -404,7 +404,7 @@ for this release also includes Daniel Oh and Lucio Sauer.
 - `miniflux-show-special-feeds` setting (enabled by default) which adds a "Starred
     Items" feed to the feedlist for those two use Miniflux (gilcu3)
 - Podboat: if `--log-level` is specified but `--log-file` isn't, write the log
-    to a file named after the template `podboat_%Y-%m-%d_%H.%M.%S.log`, i.e. use
+    to a file named after the template `Podboat_%Y-%m-%d_%H.%M.%S.log`, i.e. use
     the current date and time. The same functionality was added to Newsboat
     proper in 2.31 (Dennis van der Schagt)
 - contrib: a bookmark plugin for Linkding (Mike Hall)
@@ -512,7 +512,7 @@ Newsboat internals (and continues work on even more!).
     empty. This prevents Newsboat from e.g. enqueueing images from Mastodon
     feeds (#2367) (Dennis van der Schagt)
 - Asciidoctor is a truly optional dependency now. `make all` still builds docs,
-    but at least one can `make newsboat` and such without installing Asciidoctor
+    but at least one can `make Newsboat` and such without installing Asciidoctor
     (#2353) (Alexander Batischev)
 - Newlines are now removed from the author's name (#2434) (blankie)
 - If the same URL is used in `<a>` and/or `<img>`/`<iframe>`, it's marked as
@@ -544,7 +544,7 @@ for this release also includes: Sergei Trofimovich and giuliano.
 - Operations for scrolling by half a page (`halfpageup`, `halfpagedown`) (#36)
     (Dennis van der Schagt)
 - If `--log-level` is specified but `--log-file` isn't, write the log to a file
-    named after the template `newsboat_%Y-%m-%d_%H.%M.%S.log`, i.e. use the
+    named after the template `Newsboat_%Y-%m-%d_%H.%M.%S.log`, i.e. use the
     current date and time (Dennis van der Schagt)
 - _contrib/move_url.py_ for moving feeds in Newsboat's database while keeping
     articles (blankie)
@@ -750,7 +750,7 @@ for this release also includes: Jan Staněk, blank X, and sebashwa.
 ### Changed
 
 - Bumped minimum supported Rust version to 1.55.0
-- We now link to our own STFL fork: https://github.com/newsboat/stfl. The
+- We now link to our own STFL fork: https://github.com/Newsboat/stfl. The
     upstream's SVN is down, and we never managed to get any of our bugfixes in
     there anyway. Since we seem to be the last remaining STFL user, we advise
     downstream maintainers to rely on our repo instead. Our fork is maintained to
@@ -1091,7 +1091,7 @@ for this release also includes David Brito and panvicka.
 - Failing to parse macros which contain semicolons in operations' arguments
     (#1200) (Alexander Batischev)
 - Not installing some of the contrib scripts (Alexander Batischev)
-- `newsboat -x` not reporting that another instance is already running (#483)
+- `Newsboat -x` not reporting that another instance is already running (#483)
     (Dennis van der Schagt)
 - Itemlist refreshing while a macro is executing, causing the macro to operate
     on the wrong items (#70) (Dennis van der Schagt)
@@ -1107,7 +1107,7 @@ for this release also includes Ivan Tham.
 
 - Build dependency on AWK
 - A note that security vulnerability should be reported to
-    security@newsboat.org, preferably encrypted to PGP key 4ED6CD61932B9EBE
+    security@Newsboat.org, preferably encrypted to PGP key 4ED6CD61932B9EBE
 - Confirmation before marking all feeds as read (#1006) (Dennis van der Schagt)
 - `scrolloff` setting which keeps the specified number of lines above and below
     the selected list item (#1103) (Dennis van der Schagt)
@@ -1267,8 +1267,8 @@ Chen, and Tobias Kortkamp.
     keys (#903) (Dennis van der Schagt)
 - Generate example config as part of `doc` target, so `install-examples` can
     simply copy it instead of generating (Alexander Batischev)
-- Install manpages via `install-docs` target, not `install-newsboat` and
-    `install-podboat` (#829) (Alexander Batischev)
+- Install manpages via `install-docs` target, not `install-Newsboat` and
+    `install-Podboat` (#829) (Alexander Batischev)
 - The wrong feed being opened (#72) turned out to be caused by a bug in libstfl.
     A patch for that library is available at
     https://github.com/dennisschagt/stfl/pull/4#issuecomment-613640246 (Dennis
@@ -1286,7 +1286,7 @@ This is the last release to support Rust 1.26.0. Starting with Newsboat 2.20,
 we will be supporting only the last five stable Rust compilers (at the time of
 the release), e.g. Newsboat 2.20 will only support Rust 1.40, 1.41, 1.42, 1.43,
 1.44 (which should be the current stable at the time of Newsboat 2.20 release).
-Please see https://github.com/newsboat/newsboat/issues/709 for more details on
+Please see https://github.com/Newsboat/Newsboat/issues/709 for more details on
 this decision.
 
 ### Added
@@ -1318,12 +1318,12 @@ this decision.
   (Dennis van der Schagt)
 
 ### Fixed
-- **Breaking change**: `bind-key` context `podbeuter` renamed to `podboat`
+- **Breaking change**: `bind-key` context `podbeuter` renamed to `Podboat`
     (Alexander Batischev) (Kudos to Marcos Cruz)
 - Garbage displayed in empty lines turned out to be a bug in libstfl. Dennis van
     der Schagt created a patch and submitted it upstream on 7 March 2020, but
     the upstream maintainer haven't responded. Please apply the patch yourself:
-    https://github.com/newsboat/newsboat/issues/506#issuecomment-596091556
+    https://github.com/Newsboat/Newsboat/issues/506#issuecomment-596091556
     (#273, #506) (Dennis van der Schagt)
 - Podboat now saves and restores "finished" state of the podcast (#714) (Dennis
     van der Schagt)
@@ -1450,7 +1450,7 @@ and seanBE.
     (Alexander Batischev)
 
 ### Fixed
-- `newsboat --version` not displaying the version (Alexander Batischev) (#579)
+- `Newsboat --version` not displaying the version (Alexander Batischev) (#579)
 - Processing backticks inside comments (Jan Staněk)
 - Use-after-free crash when opening an article (Juho Pohjala) (#189)
 - Crash on `toggle-item-read` in an empty feed (Nikos Tsipinakis)
