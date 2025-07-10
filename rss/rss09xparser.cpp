@@ -11,7 +11,7 @@
 #include "utils.h"
 #include "xmlutilities.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 namespace rsspp {
 

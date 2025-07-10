@@ -1,11 +1,11 @@
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use std::env;
 use tempfile::TempDir;
 
 mod configpaths_helpers;
 
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_dotdir_to_default_newsboat_dotdir(
+fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_dotdir_to_default_Newsboat_dotdir(
 ) {
     let tmp = TempDir::new().unwrap();
 
@@ -24,7 +24,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_migrates_default_newsbeuter_dotdir_
     // Files should be migrated, so should return true.
     assert!(paths.try_migrate_from_newsbeuter());
 
-    let dotdir = tmp.path().join(".newsboat");
+    let dotdir = tmp.path().join(".Newsboat");
     assert_eq!(
         &configpaths_helpers::file_contents(&dotdir.join("config")),
         &sentries.config

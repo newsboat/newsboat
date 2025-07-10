@@ -1,11 +1,11 @@
 use cxx::CxxString;
-use libnewsboat::stflrichtext;
+use libNewsboat::stflrichtext;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
 struct StflRichText(stflrichtext::StflRichText);
 
-#[cxx::bridge(namespace = "newsboat::stflrichtext::bridged")]
+#[cxx::bridge(namespace = "Newsboat::stflrichtext::bridged")]
 mod ffi {
     extern "Rust" {
         type StflRichText;

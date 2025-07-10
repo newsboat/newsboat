@@ -1,8 +1,8 @@
 #include "charencoding.h"
 
-#include "libnewsboat-ffi/src/charencoding.rs.h"
+#include "libNewsboat-ffi/src/charencoding.rs.h"
 
-namespace newsboat {
+namespace Newsboat {
 namespace charencoding {
 
 std::optional<std::string> charset_from_bom(std::vector<std::uint8_t> content)
@@ -38,4 +38,4 @@ std::optional<std::string> charset_from_content_type_header(std::vector<std::uin
 }
 
 } // namespace charencoding
-} // namespace newsboat
+} // namespace Newsboat

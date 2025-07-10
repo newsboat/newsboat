@@ -1,10 +1,10 @@
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use std::{env, path};
 
 #[test]
 fn t_configpaths_set_cache_file_changes_paths_to_cache_and_lock_files() {
     let test_dir = path::Path::new("some/dir/we/use/as/home");
-    let newsboat_dir = test_dir.join(".newsboat");
+    let Newsboat_dir = test_dir.join(".Newsboat");
 
     env::set_var("HOME", test_dir);
 
@@ -16,8 +16,8 @@ fn t_configpaths_set_cache_file_changes_paths_to_cache_and_lock_files() {
     let mut paths = ConfigPaths::new();
     assert!(paths.initialized());
 
-    assert_eq!(paths.cache_file(), newsboat_dir.join("cache.db"));
-    assert_eq!(paths.lock_file(), newsboat_dir.join("cache.db.lock"));
+    assert_eq!(paths.cache_file(), Newsboat_dir.join("cache.db"));
+    assert_eq!(paths.lock_file(), Newsboat_dir.join("cache.db.lock"));
 
     let new_cache = path::Path::new("something/entirely different.sqlite3");
     paths.set_cache_file(new_cache.to_path_buf());

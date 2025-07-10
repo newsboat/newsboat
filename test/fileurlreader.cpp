@@ -8,7 +8,7 @@
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("URL reader remembers the file name from which it read the URLs",
 	"[FileUrlReader]")

@@ -19,7 +19,7 @@
 #include "ttrssapi.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FeedRetriever::FeedRetriever(ConfigContainer& cfg, Cache& ch, CurlHandle&
 	easyhandle, RssIgnores* ign, RemoteApi* api)
@@ -296,4 +296,4 @@ rsspp::Feed FeedRetriever::parse_file(const std::string& file)
 }
 
 
-} // namespace newsboat
+} // namespace Newsboat

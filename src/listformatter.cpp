@@ -8,7 +8,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
 	: rxman(r)
@@ -52,4 +52,4 @@ std::string ListFormatter::format_list() const
 	return format_cache;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

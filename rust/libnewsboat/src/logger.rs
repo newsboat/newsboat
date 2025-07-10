@@ -90,7 +90,7 @@ struct LogFiles {
 /// Users would call its `log` method to add messages to the log file, like this:
 ///
 /// ```no_run
-/// use libnewsboat::logger::{Logger, Level};
+/// use libNewsboat::logger::{Logger, Level};
 ///
 /// // Create and configure the logger
 /// let logger = Logger::new();
@@ -282,7 +282,7 @@ pub fn get_instance() -> &'static Logger {
 ///
 /// Most of the time, you should just use this. For example:
 /// ```no_run
-/// use libnewsboat::{log, logger::{self, Level}};
+/// use libNewsboat::{log, logger::{self, Level}};
 ///
 /// fn super_cool_function(value: u32) {
 ///     log!(Level::Debug, "super_cool_function(): value = {}", value);

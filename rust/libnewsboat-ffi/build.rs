@@ -6,7 +6,7 @@ fn add_cxxbridge(module: &str) {
         // this because these warnings are turned into errors when we pass `-D warnings` to Cargo
         // on CI.
         .flag("-w")
-        .compile(&format!("libnewsboat-ffi-{module}"));
+        .compile(&format!("libNewsboat-ffi-{module}"));
     println!("cargo:rerun-if-changed=src/{module}.rs");
 }
 

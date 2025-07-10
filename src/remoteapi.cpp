@@ -9,7 +9,7 @@
 #include "configcontainer.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 RemoteApi::RemoteApi(ConfigContainer& c)
 	: cfg(c)
@@ -134,4 +134,4 @@ void RemoteApi::update_flag(const std::string& oldflags,
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -5,7 +5,7 @@
 
 #include "rss/feed.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class Cache;
 class ConfigContainer;
@@ -39,6 +39,6 @@ private:
 	CurlHandle& easyhandle;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RSSPARSER_H_ */

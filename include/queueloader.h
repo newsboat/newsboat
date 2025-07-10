@@ -8,7 +8,7 @@
 #include "configcontainer.h"
 #include "download.h"
 
-namespace podboat {
+namespace Podboat {
 
 /// Synchronizes Podboat's array of downloads with the queue file on the
 /// filesystem.
@@ -17,7 +17,7 @@ public:
 	/// Create a loader that will work with the queue file at \a filepath.
 	/// `Download` objects will be given \a cb_require_view_update as an
 	/// argument.
-	QueueLoader(const std::string& filepath, const newsboat::ConfigContainer& cfg,
+	QueueLoader(const std::string& filepath, const Newsboat::ConfigContainer& cfg,
 		std::function<void()> cb_require_view_update);
 
 	/// Synchronize the queue file with \a downloads. Downloads with `DELETED`
@@ -30,7 +30,7 @@ private:
 	std::string get_filename(const std::string& str) const;
 
 	const std::string queuefile;
-	const newsboat::ConfigContainer& cfg;
+	const Newsboat::ConfigContainer& cfg;
 	std::function<void()> cb_require_view_update;
 
 	/// A helper type for methods that process the queue file.
@@ -65,6 +65,6 @@ private:
 	void delete_played_files(const CategorizedDownloads& downloads) const;
 };
 
-} // namespace podboat
+} // namespace Podboat
 
 #endif /* PODBOAT_QUEUELOADER_H_ */

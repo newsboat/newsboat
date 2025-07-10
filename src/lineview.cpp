@@ -1,6 +1,6 @@
 #include "lineview.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 LineView::LineView(Stfl::Form& form, const std::string& name)
 	: f(form)
@@ -29,4 +29,4 @@ void LineView::hide()
 }
 
 
-} // namespace newsboat
+} // namespace Newsboat

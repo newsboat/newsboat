@@ -150,7 +150,7 @@ mod tests {
 
     #[test]
     fn t_left_angle_bracket_immediately_before_a_tag() {
-        // Regression test for https://github.com/newsboat/newsboat/issues/3007
+        // Regression test for https://github.com/Newsboat/Newsboat/issues/3007
 
         let plain = "<";
         let quoted = format!("<hl>{}</>", utils::quote_for_stfl(plain));

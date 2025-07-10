@@ -6,7 +6,7 @@
 #include <tuple>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 namespace strprintf {
 namespace detail {
@@ -130,6 +130,6 @@ std::string fmt_impl(const std::string& format, const T& argument, Args... args)
 }
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_STRPRINTF_H_ */

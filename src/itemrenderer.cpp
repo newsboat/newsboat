@@ -11,7 +11,7 @@
 #include "textformatter.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 bool should_render_as_html(const std::string mime_type)
 {

@@ -8,7 +8,7 @@
 #include "matchable.h"
 #include "matcher.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class Cache;
 class RssFeed;
@@ -201,6 +201,6 @@ private:
 	std::optional<Description> description_;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RSSITEM_H_ */

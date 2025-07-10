@@ -1,5 +1,5 @@
 #!/bin/sh
-# operates various maintenance tasks on urls and cache.db for newsboat:
+# operates various maintenance tasks on urls and cache.db for Newsboat:
 # - first pass: convert http to https in urls file when https feed is available
 # - second pass: convert feeds urls to their new forwarded urls for 3xx http codes
 # feeds urls not returning xml content are tagged "_fail"
@@ -7,7 +7,7 @@
 # urls file and cache.db are automatically backed up with timestamp before proceeding
 
 # TODO
-# address remaining feedback from https://github.com/newsboat/newsboat/pull/647
+# address remaining feedback from https://github.com/Newsboat/Newsboat/pull/647
 # implement additional checks on active feeds:
 # 	https://www.linuxjournal.com/content/parsing-rss-news-feed-bash-script
 #	is it returning valid rss?
@@ -16,19 +16,19 @@
 #	tag feed "abandoned" when most recent pubdate is more 1 year old
 
 
-#newsboat urls file and cache locations
-u="$HOME/.config/newsboat/urls"
-db="$HOME/.config/newsboat/cache.db"
+#Newsboat urls file and cache locations
+u="$HOME/.config/Newsboat/urls"
+db="$HOME/.config/Newsboat/cache.db"
 #curl timeout for URLs probing
 timeout=20
 tagfail="_fail"
 useragent="Lynx/2.8.5rel.1 libwww-FM/2.14"
 #where to dump headers
-rss="/tmp/newsboat-rss.tmp"
-headers="/tmp/newsboat-headers.tmp"
+rss="/tmp/Newsboat-rss.tmp"
+headers="/tmp/Newsboat-headers.tmp"
 
 # shuf (GNU coreutils) randomises the urls list, this avoids querying the same domains too fast, assuming urls are grouped by domains or alphasorted in the urls file
-requirements="newsboat curl sqlite3 sed grep awk head shuf"
+requirements="Newsboat curl sqlite3 sed grep awk head shuf"
 for app in $requirements
 do
 	command -v "$app" >/dev/null 2>&1 || { echo >&2 "$app is required but it's not installed or it's not in your PATH. Aborting."; exit 1; }
@@ -41,7 +41,7 @@ if [ ! -f "$db" ]; then
 	echo "$db not found. edit the path/filename for cache.db"; exit
 fi
 if [ -f "$db.lock" ]; then
-	echo "newsboat is still running. Stop it first then try again"; exit
+	echo "Newsboat is still running. Stop it first then try again"; exit
 fi
 
 cp "$db" "$db.bak-$(date +%FT%T)"

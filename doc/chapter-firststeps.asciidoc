@@ -1,13 +1,13 @@
 :experimental:
 
 After you've installed Newsboat, you can run it for the first time by typing
-`newsboat` on your command prompt. This will bring you the following message:
+`Newsboat` on your command prompt. This will bring you the following message:
 
 ----
-Error: no URLs configured. Please fill the file /home/ak/.newsboat/urls with RSS feed URLs or import an OPML file.
+Error: no URLs configured. Please fill the file /home/ak/.Newsboat/urls with RSS feed URLs or import an OPML file.
 
 Newsboat 2.22
-usage: ./newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
+usage: ./Newsboat [-i <file>|-e] [-u <urlfile>] [-c <cachefile>] [-x <command> ...] [-h]
     -e, --export-to-opml            export OPML feed to stdout
     -r, --refresh-on-start          refresh feeds on start
     -i, --import-from-opml=<file>   import OPML file
@@ -30,13 +30,13 @@ This means that Newsboat can't start without any configured feeds.
 
 === Adding Feeds
 
-To add feeds to Newsboat, you can simply add one feed URL per line to the _~/.newsboat/urls_
+To add feeds to Newsboat, you can simply add one feed URL per line to the _~/.Newsboat/urls_
 configuration file:
 
 	http://rss.cnn.com/rss/cnn_topstories.rss
 	http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml
 
-You can also import an OPML file by running `newsboat -i blogroll.opml`
+You can also import an OPML file by running `Newsboat -i blogroll.opml`
 
 
 ****
@@ -57,9 +57,9 @@ provide username/password:
 In case there is a _@_ in the username, you need to write it as _%40_.
 
 In order to protect usernames and passwords, make sure to restrict read access
-for _~/.newsboat/urls_ to you and optionally your group:
+for _~/.Newsboat/urls_ to you and optionally your group:
 
-    $ chmod u=rw,g=r,o= ~/.newsboat/urls
+    $ chmod u=rw,g=r,o= ~/.Newsboat/urls
 
 Newsboat makes sure to not display usernames and passwords in its user interface.
 

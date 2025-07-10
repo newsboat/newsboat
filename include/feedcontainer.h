@@ -8,7 +8,7 @@
 
 #include "configcontainer.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class RssFeed;
 
@@ -45,6 +45,6 @@ private:
 	std::vector<std::shared_ptr<RssFeed>> feeds;
 	mutable std::mutex feeds_mutex;
 };
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FEEDCONTAINER_H_ */

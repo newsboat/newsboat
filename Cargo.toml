@@ -1,7 +1,7 @@
 [workspace]
 members = [
-    "rust/libnewsboat",
-    "rust/libnewsboat-ffi",
+    "rust/libNewsboat",
+    "rust/libNewsboat-ffi",
     "rust/strprintf",
     "rust/regex-rs",
     "rust/http-test-server",

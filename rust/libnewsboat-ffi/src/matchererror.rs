@@ -1,6 +1,6 @@
 use crate::abort_on_panic;
 use libc::c_char;
-use libnewsboat::matchererror::MatcherError;
+use libNewsboat::matchererror::MatcherError;
 use std::ffi::CString;
 use std::ptr;
 

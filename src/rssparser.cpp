@@ -15,7 +15,7 @@
 #include "rssignores.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 RssParser::RssParser(const std::string& uri,
 	Cache& c,
@@ -502,4 +502,4 @@ bool RssParser::is_html_type(const std::string& type)
 			type == "application/xhtml+xml");
 }
 
-} // namespace newsboat
+} // namespace Newsboat

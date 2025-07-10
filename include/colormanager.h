@@ -7,13 +7,13 @@
 
 #include "configactionhandler.h"
 
-namespace podboat {
+namespace Podboat {
 class PbView;
 }
 
 class View;
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigParser;
 
@@ -41,6 +41,6 @@ private:
 	std::map<std::string, TextStyle> element_styles;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_COLORMANAGER_H_ */

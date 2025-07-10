@@ -5,8 +5,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: newsboat 2.8\n"
-"Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
+"Project-Id-Version: Newsboat 2.8\n"
+"Report-Msgid-Bugs-To: https://github.com/Newsboat/Newsboat/issues\n"
 "POT-Creation-Date: 2025-06-08 22:37+0300\n"
 "PO-Revision-Date: 2024-03-24 20:48-0300\n"
 "Last-Translator: André L. C. Moreira <andrelcmoreira@disroot.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: newsboat.cpp:34
+#: Newsboat.cpp:34
 #, c-format
 msgid ""
 "%s %s\n"
@@ -29,85 +29,85 @@ msgstr ""
 "uso: %s [-i <arquivo>|-e] [-u <arquivourl>] [-c <arquivocache>] [-x "
 "<comando> ...] [-h]\n"
 
-#: newsboat.cpp:49
+#: Newsboat.cpp:49
 msgid "export OPML feed to stdout"
 msgstr "exportar fonte OPML para a saída padrão"
 
-#: newsboat.cpp:50
+#: Newsboat.cpp:50
 #, fuzzy
 msgid "export OPML 2.0 feed including tags to stdout"
 msgstr "exportar fonte OPML para a saída padrão"
 
-#: newsboat.cpp:51
+#: Newsboat.cpp:51
 msgid "refresh feeds on start"
 msgstr "recarregar fontes ao iniciar"
 
-#: newsboat.cpp:52 newsboat.cpp:56 newsboat.cpp:62 newsboat.cpp:68
-#: newsboat.cpp:74 newsboat.cpp:80 newsboat.cpp:86 newsboat.cpp:108
-#: newsboat.cpp:114 newsboat.cpp:120 src/pbcontroller.cpp:353
+#: Newsboat.cpp:52 Newsboat.cpp:56 Newsboat.cpp:62 Newsboat.cpp:68
+#: Newsboat.cpp:74 Newsboat.cpp:80 Newsboat.cpp:86 Newsboat.cpp:108
+#: Newsboat.cpp:114 Newsboat.cpp:120 src/pbcontroller.cpp:353
 #: src/pbcontroller.cpp:359 src/pbcontroller.cpp:365 src/pbcontroller.cpp:379
 msgid "<file>"
 msgstr "<arquivo>"
 
-#: newsboat.cpp:52
+#: Newsboat.cpp:52
 msgid "import OPML file"
 msgstr "importar arquivo OPML"
 
-#: newsboat.cpp:57
+#: Newsboat.cpp:57
 #, fuzzy
 msgid "read RSS feed URLs from <file>"
 msgstr "ler URLs de fontes RSS de <arquivourl>"
 
-#: newsboat.cpp:63
+#: Newsboat.cpp:63
 #, fuzzy
 msgid "use <file> as cache file"
 msgstr "usar <arquivocache> como arquivo de cache"
 
-#: newsboat.cpp:69 src/pbcontroller.cpp:354
+#: Newsboat.cpp:69 src/pbcontroller.cpp:354
 #, fuzzy
 msgid "read configuration from <file>"
 msgstr "ler configurações de <arquivoconfig>"
 
-#: newsboat.cpp:75 src/pbcontroller.cpp:360
+#: Newsboat.cpp:75 src/pbcontroller.cpp:360
 #, fuzzy
 msgid "use <file> as podcast queue file"
 msgstr "usar <arquivofila> como arquivo de fila"
 
-#: newsboat.cpp:81
+#: Newsboat.cpp:81
 #, fuzzy
 msgid "save the input history of the search to <file>"
 msgstr "salvar o histórico de busca em <searchfile>"
 
-#: newsboat.cpp:87
+#: Newsboat.cpp:87
 #, fuzzy
 msgid "save the input history of the command line to <file>"
 msgstr "salvar o histórico da linha de comando em <cmdlinefile>"
 
-#: newsboat.cpp:89
+#: Newsboat.cpp:89
 msgid "compact the cache"
 msgstr "compactar o cache"
 
-#: newsboat.cpp:93
+#: Newsboat.cpp:93
 msgid "<command>..."
 msgstr "<comando>..."
 
-#: newsboat.cpp:94
+#: Newsboat.cpp:94
 msgid "execute list of commands"
 msgstr "executar lista de comandos"
 
-#: newsboat.cpp:96
+#: Newsboat.cpp:96
 msgid "quiet startup"
 msgstr "início silencioso"
 
-#: newsboat.cpp:97
+#: Newsboat.cpp:97
 msgid "get version information"
 msgstr "obter informações sobre a versão"
 
-#: newsboat.cpp:101 src/pbcontroller.cpp:372
+#: Newsboat.cpp:101 src/pbcontroller.cpp:372
 msgid "<loglevel>"
 msgstr "<nívellog>"
 
-#: newsboat.cpp:102 src/pbcontroller.cpp:373
+#: Newsboat.cpp:102 src/pbcontroller.cpp:373
 #, fuzzy
 msgid ""
 "write a log with a certain log level (valid values: 1 to 6, for user error, "
@@ -116,76 +116,76 @@ msgstr ""
 "escrever arquivo de log com um determinado nível de log (valores válidos: 1 "
 "a 6)"
 
-#: newsboat.cpp:109 src/pbcontroller.cpp:380
+#: Newsboat.cpp:109 src/pbcontroller.cpp:380
 #, fuzzy
 msgid "use <file> as output log file"
 msgstr "usar <arquivolog> como arquivo de log"
 
-#: newsboat.cpp:115
+#: Newsboat.cpp:115
 msgid "export list of read articles to <file>"
 msgstr "exportar lista de artigos lidos para <arquivo>"
 
-#: newsboat.cpp:121
+#: Newsboat.cpp:121
 msgid "import list of read articles from <file>"
 msgstr "importar lista de artigos lidos de <arquivo>"
 
-#: newsboat.cpp:123 src/pbcontroller.cpp:382
+#: Newsboat.cpp:123 src/pbcontroller.cpp:382
 msgid "this help"
 msgstr "esta ajuda"
 
-#: newsboat.cpp:124
+#: Newsboat.cpp:124
 msgid "remove unreferenced items from cache"
 msgstr "remover itens não referenciados do cache"
 
-#: newsboat.cpp:152
+#: Newsboat.cpp:152
 msgid "Files:"
 msgstr "Arquivo:"
 
 #. i18n: This is printed out by --help before the path to the config file
-#: newsboat.cpp:154
+#: Newsboat.cpp:154
 msgid "configuration"
 msgstr "configuração"
 
 #. i18n This is printed out by --help before the path to the urls file
-#: newsboat.cpp:156
+#: Newsboat.cpp:156
 msgid "feed URLs"
 msgstr "URLs da fonte"
 
 #. i18n This is printed out by --help before the path to the cache file
-#: newsboat.cpp:158
+#: Newsboat.cpp:158
 #, fuzzy
 msgid "cache"
 msgstr "<arquivocache>"
 
 #. i18n: This is printed out by --help before the path to the queue file
-#: newsboat.cpp:160
+#: Newsboat.cpp:160
 msgid "podcast queue"
 msgstr "fila de podcast"
 
 #. i18n: This is printed out by --help before the path to the search history file
-#: newsboat.cpp:162
+#: Newsboat.cpp:162
 #, fuzzy
 msgid "search history"
 msgstr "Procurar por: "
 
 #. i18n: This is printed out by --help before the path to the cmdline history file
-#: newsboat.cpp:164
+#: Newsboat.cpp:164
 msgid "command line history"
 msgstr "histórico da linha de comando"
 
-#: newsboat.cpp:182 src/pbcontroller.cpp:410
+#: Newsboat.cpp:182 src/pbcontroller.cpp:410
 msgid ""
-"Support at #newsboat at https://libera.chat or on our mailing list https://"
-"groups.google.com/g/newsboat"
+"Support at #Newsboat at https://libera.chat or on our mailing list https://"
+"groups.google.com/g/Newsboat"
 msgstr ""
-"Suporte em #newsboat no https://libera.chat ou na nossa lista de e-mail "
-"https://groups.google.com/g/newsboat"
+"Suporte em #Newsboat no https://libera.chat ou na nossa lista de e-mail "
+"https://groups.google.com/g/Newsboat"
 
-#: newsboat.cpp:185 src/pbcontroller.cpp:413
-msgid "For more information, check out https://newsboat.org/"
-msgstr "Para mais informações, acesse https://newsboat.org/"
+#: Newsboat.cpp:185 src/pbcontroller.cpp:413
+msgid "For more information, check out https://Newsboat.org/"
+msgstr "Para mais informações, acesse https://Newsboat.org/"
 
-#: newsboat.cpp:206
+#: Newsboat.cpp:206
 #, c-format
 msgid ""
 "Newsboat is free software licensed under the MIT License. (Type `%s -vv' to "
@@ -194,11 +194,11 @@ msgstr ""
 "O Newsboat é um software livre e está licenciado sob a MIT/X Consortium "
 "License. (Digite `%s -vv' para ver o texto completo.)"
 
-#: newsboat.cpp:211
+#: Newsboat.cpp:211
 msgid "It bundles:"
 msgstr "Ele contém:"
 
-#: newsboat.cpp:212
+#: Newsboat.cpp:212
 #, fuzzy
 msgid ""
 "- JSON for Modern C++ library, licensed under the MIT License: https://"
@@ -207,7 +207,7 @@ msgstr ""
 "Ele inclui a biblioteca JSON for Modern C++, licenciada sob a MIT License: "
 "https://github.com/nlohmann/json"
 
-#: newsboat.cpp:215
+#: Newsboat.cpp:215
 #, fuzzy
 msgid ""
 "- expected-lite library, licensed under the Boost Software License: https://"
@@ -216,20 +216,20 @@ msgstr ""
 "Ele inclui a biblioteca JSON for Modern C++, licenciada sob a MIT License: "
 "https://github.com/nlohmann/json"
 
-#: newsboat.cpp:291
+#: Newsboat.cpp:291
 #, c-format
-msgid "Caught newsboat::DbException with message: %s"
-msgstr "newsboat::DbException capturada com a mensagem: %s"
+msgid "Caught Newsboat::DbException with message: %s"
+msgstr "Newsboat::DbException capturada com a mensagem: %s"
 
-#: newsboat.cpp:298
+#: Newsboat.cpp:298
 #, c-format
-msgid "Caught newsboat::MatcherException with message: %s"
-msgstr "newsboat::MatcherException capturada com a mensagem: %s"
+msgid "Caught Newsboat::MatcherException with message: %s"
+msgstr "Newsboat::MatcherException capturada com a mensagem: %s"
 
-#: newsboat.cpp:304 podboat.cpp:40
+#: Newsboat.cpp:304 Podboat.cpp:40
 #, c-format
-msgid "Caught newsboat::Exception with message: %s"
-msgstr "newsboat::Exception capturada com a mensagem: %s"
+msgid "Caught Newsboat::Exception with message: %s"
+msgstr "Newsboat::Exception capturada com a mensagem: %s"
 
 #: src/colormanager.cpp:82 src/colormanager.cpp:86 src/regexmanager.cpp:139
 #: src/regexmanager.cpp:153 src/regexmanager.cpp:217 src/regexmanager.cpp:229
@@ -251,7 +251,7 @@ msgstr "'%s' não é um elemento de configuração válido"
 #, fuzzy, c-format
 msgid "Newsboat: finished reload, %f unread feeds (%n unread articles total)"
 msgstr ""
-"newsboat: recarregamento terminado, %f fontes não lidos (%n artigos não "
+"Newsboat: recarregamento terminado, %f fontes não lidos (%n artigos não "
 "lidos no total)"
 
 #: src/configcontainer.cpp:204
@@ -580,11 +580,11 @@ msgstr "Exportando lista de artigos lidos..."
 #: src/controller.cpp:589
 #, c-format
 msgid ""
-"%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in newsboat(1) for "
+"%<PRIu64> unreachable feeds found. See `cleanup-on-quit` in Newsboat(1) for "
 "details."
 msgstr ""
 "%<PRIu64> feeds não alcancáveis encontrados. Veja `cleanup-on-quit` em "
-"newsboat(1) para detalhes."
+"Newsboat(1) para detalhes."
 
 #: src/controller.cpp:593
 msgid "Press any key to continue"
@@ -2062,12 +2062,12 @@ msgstr "nenhum canal RSS encontrado"
 msgid "unsupported feed format"
 msgstr "formato de fonte não suportado"
 
-#: rust/libnewsboat/src/cliargsparser.rs:236
+#: rust/libNewsboat/src/cliargsparser.rs:236
 #, fuzzy
 msgid "%s: %s: invalid loglevel value"
 msgstr "%s: %d: nível de log inválido"
 
-#: rust/libnewsboat/src/configpaths.rs:85
+#: rust/libNewsboat/src/configpaths.rs:85
 #, fuzzy
 msgid ""
 "Fatal error: couldn't determine home directory!\n"
@@ -2076,65 +2076,65 @@ msgstr ""
 "Por favor defina a variável de ambiente HOME ou adicione um usuário válido "
 "para o UID %u!"
 
-#: rust/libnewsboat/src/configpaths.rs:146
+#: rust/libNewsboat/src/configpaths.rs:146
 msgid "Migrating configs and data from Newsbeuter's XDG dirs..."
 msgstr "Migrando configurações e dados dos diretórios XDG do Newsbeuter..."
 
-#: rust/libnewsboat/src/configpaths.rs:202
+#: rust/libNewsboat/src/configpaths.rs:202
 msgid "Migrating configs and data from ~/.newsbeuter/..."
 msgstr "Migrando configurações e dados de ~/.newsbeuter/..."
 
-#: rust/libnewsboat/src/configpaths.rs:214
+#: rust/libNewsboat/src/configpaths.rs:214
 #, fuzzy
 msgid "Aborting migration because mkdir on `%s' failed: %s"
 msgstr "Erro: falha ao abrir o arquivo de cache '%s': %s"
 
-#: rust/libnewsboat/src/filterparser.rs:129
+#: rust/libNewsboat/src/filterparser.rs:129
 #, fuzzy
 msgid "attribute name"
 msgstr "atributo não encontrado"
 
 #. Don't translate "between" -- it's a keyword, not an English word.
-#: rust/libnewsboat/src/filterparser.rs:131
+#: rust/libNewsboat/src/filterparser.rs:131
 msgid "one of: =~, ==, =, !~, !=, <=, >=, <, >, between, #, !#"
 msgstr ""
 
 #. The options ("quoted string" etc.) are not keywords, so please translate them.
-#: rust/libnewsboat/src/filterparser.rs:133
+#: rust/libNewsboat/src/filterparser.rs:133
 msgid "one of: quoted string, range, number"
 msgstr "um dos: string com aspas, faixa de valores, número"
 
 #. The first %s is an integer offset at which trailing characters start, the
 #. second %s is the tail itself.
-#: rust/libnewsboat/src/filterparser.rs:432
+#: rust/libNewsboat/src/filterparser.rs:432
 msgid "Parse error: trailing characters after position %s: %s"
 msgstr "Erro de parse: caracteres em branco após a posição %s: %s"
 
 #. The first %s is a zero-based offset into the string, the second %s is the
 #. description of what the program expected at that point.
-#: rust/libnewsboat/src/filterparser.rs:439
+#: rust/libNewsboat/src/filterparser.rs:439
 msgid "Parse error at position %s: expected %s"
 msgstr "Erro de parse na posição %s: esperado %s"
 
-#: rust/libnewsboat/src/filterparser.rs:443
+#: rust/libNewsboat/src/filterparser.rs:443
 msgid "Internal parse error"
 msgstr "Erro interno de parse"
 
-#: rust/libnewsboat/src/fslock.rs:60
+#: rust/libNewsboat/src/fslock.rs:60
 #, fuzzy
 msgid "Failed to open lock file '%s': %s"
 msgstr "Erro carregando fonte '%s': %s"
 
-#: rust/libnewsboat/src/fslock.rs:63 rust/libnewsboat/src/fslock.rs:83
-#: rust/libnewsboat/src/fslock.rs:115
+#: rust/libNewsboat/src/fslock.rs:63 rust/libNewsboat/src/fslock.rs:83
+#: rust/libNewsboat/src/fslock.rs:115
 msgid "<filename containing invalid UTF-8 codepoint>"
 msgstr "<nome do arquivo contendo caracteres UTF-8 inválidos>"
 
-#: rust/libnewsboat/src/fslock.rs:80
+#: rust/libNewsboat/src/fslock.rs:80
 msgid "Failed to write PID to lock file '%s': %s"
 msgstr "Falha ao escrever o ID do processo no arquivo de trava '%s': %s"
 
-#: rust/libnewsboat/src/fslock.rs:112
+#: rust/libNewsboat/src/fslock.rs:112
 msgid "Failed to lock '%s', already locked by process with PID %s"
 msgstr "Falha ao travar '%s', já travado pelo processo com ID %s"
 

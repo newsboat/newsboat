@@ -25,7 +25,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ItemListFormAction::ItemListFormAction(View& vv,
 	std::string formstr,
@@ -1237,7 +1237,7 @@ void ItemListFormAction::init()
 	// This is a hack to make `prepare()` do all the work it's required to do
 	// on the first run. Yes, we have a call to `invalidate_list() ` just a few
 	// lines prior, but `draw_items()` above resets the mode back to `NONE`,
-	// leading to https://github.com/newsboat/newsboat/issues/1385
+	// leading to https://github.com/Newsboat/Newsboat/issues/1385
 	invalidate_list();
 }
 
@@ -1703,4 +1703,4 @@ void ItemListFormAction::apply_filter(const std::string& filtertext)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

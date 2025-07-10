@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 {

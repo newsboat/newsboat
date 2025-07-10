@@ -6,7 +6,7 @@
 
 #include "curlhandle.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class CurlDataReceiver {
 public:
@@ -31,6 +31,6 @@ private:
 	std::string accumulated_data;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CURLDATARECEIVER_H_ */

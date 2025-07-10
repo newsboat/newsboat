@@ -1,4 +1,4 @@
-use libnewsboat::{
+use libNewsboat::{
     log,
     logger::{self, get_instance, Level},
 };

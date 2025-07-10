@@ -22,7 +22,7 @@
 
 // for reference, see https://inoreader.com/developers
 
-namespace newsboat {
+namespace Newsboat {
 
 InoreaderApi::InoreaderApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -346,4 +346,4 @@ curl_slist* InoreaderApi::add_app_headers(curl_slist* headers)
 	return headers;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

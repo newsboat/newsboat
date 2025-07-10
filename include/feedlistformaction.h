@@ -11,7 +11,7 @@
 #include "stflrichtext.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 typedef std::pair<std::shared_ptr<RssFeed>, unsigned int> FeedPtrPosPair;
 
@@ -111,6 +111,6 @@ private:
 	Cache* cache;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FEEDLISTFORMACTION_H_ */

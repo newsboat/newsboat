@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ItemViewFormAction::ItemViewFormAction(View& vv,
 	std::shared_ptr<ItemListFormAction> il,
@@ -792,4 +792,4 @@ void ItemViewFormAction::highlight_text(const std::string& searchphrase)
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -1,4 +1,4 @@
-use libnewsboat::utils;
+use libNewsboat::utils;
 use std::path::Path;
 
 #[test]

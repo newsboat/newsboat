@@ -7,7 +7,7 @@
 #include "textformatter.h"
 #include "textviewwidget.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class Cache;
 class ItemListFormAction;
@@ -94,6 +94,6 @@ private:
 	TextviewWidget textview;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_ITEMVIEWFORMACTION_H_ */

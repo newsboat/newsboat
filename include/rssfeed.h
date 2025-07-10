@@ -12,7 +12,7 @@
 #include "rssitem.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 enum class DlStatus { SUCCESS, TO_BE_DOWNLOADED, DURING_DOWNLOAD, DL_ERROR };
 
@@ -215,6 +215,6 @@ private:
 	std::mutex status_mutex_;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RSSFEED_H_ */

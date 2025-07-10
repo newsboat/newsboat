@@ -7,7 +7,7 @@
 #include "regexmanager.h"
 #include "stflrichtext.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ListFormatter {
 public:
@@ -31,6 +31,6 @@ private:
 	std::string location;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LISTFORMATTER_H_ */

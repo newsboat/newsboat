@@ -1,7 +1,7 @@
 #ifndef NEWSBOAT_CLIARGSPARSER_H_
 #define NEWSBOAT_CLIARGSPARSER_H_
 
-#include "libnewsboat-ffi/src/cliargsparser.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/cliargsparser.rs.h" // IWYU pragma: export
 
 #include <optional>
 #include <string>
@@ -9,7 +9,7 @@
 
 #include "logger.h"
 
-namespace newsboat {
+namespace Newsboat {
 class CliArgsParser {
 public:
 	CliArgsParser(int argc, char* argv[]);
@@ -95,6 +95,6 @@ public:
 private:
 	rust::Box<cliargsparser::bridged::CliArgsParser> rs_object;
 };
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CLIARGSPARSER_H_ */

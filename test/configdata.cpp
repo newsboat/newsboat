@@ -2,7 +2,7 @@
 
 #include "configdata.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("set_value() doesn't return errors if new value is aligned "
 	"with the setting's type",
@@ -48,7 +48,7 @@ TEST_CASE("set_value() doesn't return errors if new value is aligned "
 
 		REQUIRE(setting.set_value("/tmp/whatever.txt"));
 		REQUIRE(setting.set_value("C:\\Users\\Minoru\\urls.txt"));
-		REQUIRE(setting.set_value("/usr/local/home/minoru/.newsboat/urls"));
+		REQUIRE(setting.set_value("/usr/local/home/minoru/.Newsboat/urls"));
 	}
 }
 

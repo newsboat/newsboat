@@ -124,10 +124,10 @@ check_cmd "cargo" || fail "cargo"
 if [ `uname -s` = "Darwin" ]; then
 	check_custom "ncurses5.4" "ncurses5.4-config" || fail "ncurses5.4"
     # rand crate needs Security framework, and rustc doesn't (can't) link it
-    # into libnewsboat.a
+    # into libNewsboat.a
     echo 'LDFLAGS+=-framework Security' >> config.mk
     # gettext-sys crate needs CoreFoundation framework, and rustc doesn't
-    # (can't) link it into libnewsboat.a
+    # (can't) link it into libNewsboat.a
     echo 'LDFLAGS+=-framework CoreFoundation' >> config.mk
 elif [ `uname -s` != "OpenBSD" ]; then
 	check_pkg "ncursesw" || \

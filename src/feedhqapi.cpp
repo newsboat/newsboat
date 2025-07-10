@@ -23,7 +23,7 @@
 #define FEEDHQ_API_EDIT_TAG_URL FEEDHQ_API_PREFIX "edit-tag"
 #define FEEDHQ_API_TOKEN_URL FEEDHQ_API_PREFIX "token"
 
-namespace newsboat {
+namespace Newsboat {
 
 FeedHqApi::FeedHqApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -365,4 +365,4 @@ std::string FeedHqApi::post_content(const std::string& url,
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

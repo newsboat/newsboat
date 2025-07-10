@@ -4,7 +4,7 @@
 # Build:
 #
 #   docker build \
-#       --tag=newsboat-i18nspector \
+#       --tag=Newsboat-i18nspector \
 #       --file=docker/i18nspector.dockerfile \
 #       docker
 #
@@ -13,7 +13,7 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/workdir \
-#       newsboat-i18nspector \
+#       Newsboat-i18nspector \
 #       make run-i18nspector
 #
 # On continuous integration, we fail a build if i18nspector prints out any

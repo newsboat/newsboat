@@ -1,12 +1,12 @@
 #ifndef NEWSBOAT_FSLOCK_H_
 #define NEWSBOAT_FSLOCK_H_
 
-#include "libnewsboat-ffi/src/fslock.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/fslock.rs.h" // IWYU pragma: export
 
 #include <string>
 #include <sys/types.h>
 
-namespace newsboat {
+namespace Newsboat {
 
 class FsLock {
 public:
@@ -20,6 +20,6 @@ private:
 	rust::Box<fslock::bridged::FsLock> rs_object;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FSLOCK_H_ */

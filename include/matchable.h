@@ -4,7 +4,7 @@
 #include <optional>
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class Matchable {
 public:
@@ -15,7 +15,7 @@ public:
 		0;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_MATCHABLE_H_ */
 

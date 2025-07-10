@@ -6,7 +6,7 @@
 // makes sense to re-export the crate.
 pub use libc;
 
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use std::io::{Read, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::{fs, path};
@@ -68,10 +68,10 @@ pub fn mock_newsbeuter_dotdir(tmp: &TempDir) -> FileSentries {
     sentries
 }
 
-pub fn mock_newsboat_dotdir(tmp: &TempDir) -> FileSentries {
+pub fn mock_Newsboat_dotdir(tmp: &TempDir) -> FileSentries {
     let sentries = FileSentries::new();
 
-    let dotdir_path = tmp.path().join(".newsboat");
+    let dotdir_path = tmp.path().join(".Newsboat");
     mock_dotdir(&dotdir_path, &sentries);
 
     sentries
@@ -105,9 +105,9 @@ pub fn mock_newsbeuter_xdg_dirs(tmp: &TempDir) -> FileSentries {
     mock_xdg_dirs(&config_dir_path, &data_dir_path)
 }
 
-pub fn mock_newsboat_xdg_dirs(tmp: &TempDir) -> FileSentries {
-    let config_dir_path = tmp.path().join(".config").join("newsboat");
-    let data_dir_path = tmp.path().join(".local").join("share").join("newsboat");
+pub fn mock_Newsboat_xdg_dirs(tmp: &TempDir) -> FileSentries {
+    let config_dir_path = tmp.path().join(".config").join("Newsboat");
+    let data_dir_path = tmp.path().join(".local").join("share").join("Newsboat");
     mock_xdg_dirs(&config_dir_path, &data_dir_path)
 }
 

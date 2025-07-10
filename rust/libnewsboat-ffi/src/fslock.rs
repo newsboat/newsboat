@@ -1,4 +1,4 @@
-use libnewsboat::fslock;
+use libNewsboat::fslock;
 
 use std::path::Path;
 
@@ -6,7 +6,7 @@ use std::path::Path;
 // cf. https://github.com/dtolnay/cxx/issues/496
 struct FsLock(fslock::FsLock);
 
-#[cxx::bridge(namespace = "newsboat::fslock::bridged")]
+#[cxx::bridge(namespace = "Newsboat::fslock::bridged")]
 mod bridged {
     extern "Rust" {
         type FsLock;

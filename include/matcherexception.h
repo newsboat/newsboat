@@ -4,13 +4,13 @@
 #include <cstdint>
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 struct MatcherErrorFfi;
 
 class MatcherException : public std::exception {
 public:
-	// Numbers here MUST match constants in rust/libnewsboat-ffi/src/matchererror.rs
+	// Numbers here MUST match constants in rust/libNewsboat-ffi/src/matchererror.rs
 	enum class Type : std::uint8_t { ATTRIB_UNAVAIL = 0, INVALID_REGEX = 1 };
 
 	MatcherException(Type et,
@@ -57,6 +57,6 @@ struct MatcherErrorFfi {
 	char* info2;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_MATCHEREXCEPTON_H_ */

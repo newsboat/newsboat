@@ -7,7 +7,7 @@
 #include "configcontainer.h"
 #include "configparser.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 /*
  * Mock class to be able to access `user` and `pass` after running

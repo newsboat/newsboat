@@ -2,7 +2,7 @@
 
 ## About
 
-Filter annoying Substack subscription prompts using a [newsboat filter](https://newsboat.org/releases/2.30.1/docs/newsboat.html#_scripts_and_filters_snownews_extensions).
+Filter annoying Substack subscription prompts using a [Newsboat filter](https://Newsboat.org/releases/2.30.1/docs/Newsboat.html#_scripts_and_filters_snownews_extensions).
 
 ## Requirements
 
@@ -19,10 +19,10 @@ Download the `fltr-substack.sh`, and optionally the `make-fltr-substack.sh` scri
 e.g.,
 
 ```
-mkdir -p "~/.config/newsboat"
-cd "~/.config/newsboat"
-wget https://raw.githubusercontent.com/newsboat/newsboat/master/contrib/fltr-substack/fltr-substack.sh
-wget https://raw.githubusercontent.com/newsboat/newsboat/master/contrib/fltr-substack/make-fltr-substack.sh
+mkdir -p "~/.config/Newsboat"
+cd "~/.config/Newsboat"
+wget https://raw.githubusercontent.com/Newsboat/Newsboat/master/contrib/fltr-substack/fltr-substack.sh
+wget https://raw.githubusercontent.com/Newsboat/Newsboat/master/contrib/fltr-substack/make-fltr-substack.sh
 ```
 
 ### Add filters
@@ -47,11 +47,11 @@ with
 
 ```
 https://example.com/feed
-filter:~/.config/newsboat/fltr-substack.sh:https://forecasting.substack.com/feed
+filter:~/.config/Newsboat/fltr-substack.sh:https://forecasting.substack.com/feed
 https://blahblah.com/feed
 ```
 
-(where `~/.config/newsboat/fltr-substack.sh` is the location of the script you downloaded )
+(where `~/.config/Newsboat/fltr-substack.sh` is the location of the script you downloaded )
 
 ## Roadmap, guarantees
 

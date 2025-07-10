@@ -4,7 +4,7 @@
 #include <functional>
 #include <string>
 
-namespace podboat {
+namespace Podboat {
 
 enum class DlStatus {
 	QUEUED = 0,
@@ -65,6 +65,6 @@ private:
 	std::function<void()> cb_require_view_update;
 };
 
-} // namespace podboat
+} // namespace Podboat
 
 #endif /* PODBOAT_DOWNLOAD_H_ */

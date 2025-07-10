@@ -1113,7 +1113,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1171693293099992e19cddea4e8b849964e9846f4acee11b3948bcc337be8776"
 
 [[package]]
-name = "libnewsboat"
+name = "libNewsboat"
 version = "2.40.0"
 dependencies = [
  "backtrace",
@@ -1140,13 +1140,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "libnewsboat-ffi"
+name = "libNewsboat-ffi"
 version = "2.40.0"
 dependencies = [
  "cxx",
  "cxx-build",
  "libc",
- "libnewsboat",
+ "libNewsboat",
 ]
 
 [[package]]

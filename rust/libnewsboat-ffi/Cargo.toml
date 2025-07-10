@@ -1,11 +1,11 @@
 [package]
-name = "libnewsboat-ffi"
+name = "libNewsboat-ffi"
 version = "2.40.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-libnewsboat = { path="../libnewsboat" }
+libNewsboat = { path="../libNewsboat" }
 libc = "0.2"
 cxx = "1"
 
@@ -13,5 +13,5 @@ cxx = "1"
 cxx-build = "1"
 
 [lib]
-name = "newsboat"
+name = "Newsboat"
 crate-type = ["staticlib"]

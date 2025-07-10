@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 Reloader::Reloader(Controller& c, Cache& cc, ConfigContainer& cfg)
 	: ctrl(c)
@@ -345,4 +345,4 @@ void Reloader::notify_reload_finished(unsigned int unread_feeds_before,
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

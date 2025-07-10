@@ -29,10 +29,10 @@ BARE_CXXFLAGS=-std=c++17 -O2 -ggdb $(INCLUDES)
 LDFLAGS+=-L.
 
 # Constants
-PACKAGE=newsboat
-## Do not include libnewsboat-ffi into the test executable, as it doesn't link
+PACKAGE=Newsboat
+## Do not include libNewsboat-ffi into the test executable, as it doesn't link
 ## and can't contain any tests anyway.
-CARGO_TEST_FLAGS=--workspace --exclude libnewsboat-ffi
+CARGO_TEST_FLAGS=--workspace --exclude libNewsboat-ffi
 
 ifeq (, $(filter $(MAKECMDGOALS),distclean run-i18nspector fmt))
 include config.mk
@@ -54,19 +54,19 @@ FILTERLIB_SRCS=filter/Scanner.cpp filter/Parser.cpp filter/FilterParser.cpp
 FILTERLIB_OBJS:=$(patsubst %.cpp,%.o,$(FILTERLIB_SRCS))
 FILTERLIB_OUTPUT=libfilter.a
 
-NEWSBOAT=newsboat
-NEWSBOAT_SRCS:=$(shell cat mk/newsboat.deps)
+NEWSBOAT=Newsboat
+NEWSBOAT_SRCS:=$(shell cat mk/Newsboat.deps)
 NEWSBOAT_OBJS:=$(patsubst %.cpp,%.o,$(NEWSBOAT_SRCS))
-NEWSBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -lrsspp -ldl
+NEWSBOAT_LIBS=-lboat -lNewsboat -lfilter -lpthread -lrsspp -ldl
 
 RSSPPLIB_SRCS=$(sort $(wildcard rss/*.cpp))
 RSSPPLIB_OBJS=$(patsubst rss/%.cpp,rss/%.o,$(RSSPPLIB_SRCS))
 RSSPPLIB_OUTPUT=librsspp.a
 
-PODBOAT=podboat
-PODBOAT_SRCS:=$(shell cat mk/podboat.deps)
+PODBOAT=Podboat
+PODBOAT_SRCS:=$(shell cat mk/Podboat.deps)
 PODBOAT_OBJS:=$(patsubst %.cpp,%.o,$(PODBOAT_SRCS))
-PODBOAT_LIBS=-lboat -lnewsboat -lfilter -lpthread -ldl
+PODBOAT_LIBS=-lboat -lNewsboat -lfilter -lpthread -ldl
 
 TEST_SRCS:=$(wildcard test/*.cpp test/test_helpers/*.cpp)
 TEST_OBJS:=$(patsubst %.cpp,%.o,$(TEST_SRCS))
@@ -83,7 +83,7 @@ STFL_HDRS:=$(patsubst %.stfl,%.h,$(wildcard stfl/*.stfl))
 
 POFILES:=$(wildcard po/*.po)
 MOFILES:=$(patsubst %.po,%.mo,$(POFILES))
-POTFILE=po/newsboat.pot
+POTFILE=po/Newsboat.pot
 
 RUST_SRCS:=Cargo.toml $(shell find rust -type f)
 
@@ -97,11 +97,11 @@ CARGO_BUILD_FLAGS+=--release
 endif
 
 ifdef CARGO_BUILD_TARGET
-NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)/libnewsboat.a
+NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)/libNewsboat.a
 HTTPTESTSEVER_OUTPUT=$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)/http-test-server
 LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(CARGO_BUILD_TARGET)/$(BUILD_TYPE)
 else
-NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/libnewsboat.a
+NEWSBOATLIB_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/libNewsboat.a
 HTTPTESTSEVER_OUTPUT=$(CARGO_TARGET_DIR)/$(BUILD_TYPE)/http-test-server
 LDFLAGS+=-L$(CARGO_TARGET_DIR)/$(BUILD_TYPE)
 endif
@@ -130,7 +130,7 @@ all: doc $(NEWSBOAT) $(PODBOAT) mo-files
 NB_DEPS=xlicense.h $(LIB_OUTPUT) $(FILTERLIB_OUTPUT) $(NEWSBOAT_OBJS) $(RSSPPLIB_OUTPUT) $(NEWSBOATLIB_OUTPUT)
 
 $(NEWSBOATLIB_OUTPUT): $(RUST_SRCS) Cargo.lock
-	+$(CARGO) build --package libnewsboat-ffi $(CARGO_BUILD_FLAGS)
+	+$(CARGO) build --package libNewsboat-ffi $(CARGO_BUILD_FLAGS)
 
 $(HTTPTESTSEVER_OUTPUT): $(RUST_SRCS) Cargo.lock
 	+$(CARGO) build --package http-test-server $(CARGO_BUILD_FLAGS)
@@ -176,7 +176,7 @@ regenerate-parser:
 	cococpp -frames filter filter/filter.atg
 	sed -i 's/\s\+$$//' filter/Scanner.cpp filter/Parser.cpp filter/Scanner.h filter/Parser.h
 
-target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
+target/cxxbridge/libNewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 	@# This rule declares a dependency and doesn't need to run any
 	@# commands, but we can't leave the recipe empty because GNU Make
 	@# requires a recipe for pattern rules. So here you go, Make, have
@@ -185,8 +185,8 @@ target/cxxbridge/libnewsboat-ffi/src/%.rs.h: $(NEWSBOATLIB_OUTPUT)
 $(CPP_DEPS_SUBDIRS):
 	$(MKDIR) $@
 
-# Make sure xlicense.h is generated before building newsboat.cpp.
-newsboat.o: xlicense.h
+# Make sure xlicense.h is generated before building Newsboat.cpp.
+Newsboat.o: xlicense.h
 
 %.o: %.cpp # Cancel default rule for C++ code
 %.o: %.cpp | $(NEWSBOATLIB_OUTPUT) $(STFL_HDRS) $(CPP_DEPS_SUBDIRS)
@@ -202,10 +202,10 @@ $(STFL_HDRS):
 %.h: %.stfl
 	$(TEXTCONV) $< .stfl > $@
 
-clean-newsboat:
+clean-Newsboat:
 	$(RM) $(NEWSBOAT) $(NEWSBOAT_OBJS)
 
-clean-podboat:
+clean-Podboat:
 	$(RM) $(PODBOAT) $(PODBOAT_OBJS)
 
 clean-libboat:
@@ -217,20 +217,20 @@ clean-librsspp:
 clean-libfilter:
 	$(RM) $(FILTERLIB_OUTPUT) $(FILTERLIB_OBJS)
 
-clean-libnewsboat:
+clean-libNewsboat:
 	$(CARGO) clean
 
 clean-doc:
 	$(RM) -r doc/xhtml
-	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
-		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
+	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/Newsboat-cfgcmds.asciidoc \
+		doc/Podboat-cfgcmds.asciidoc doc/Newsboat-keycmds.asciidoc \
 		doc/example-config doc/generate doc/generate2 \
 		doc/gen-example-config
 
 clean-test:
 	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
 
-clean: clean-newsboat clean-podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libnewsboat clean-test
+clean: clean-Newsboat clean-Podboat clean-libboat clean-libfilter clean-doc clean-mo clean-librsspp clean-libNewsboat clean-test
 	$(RM) $(STFL_HDRS) xlicense.h
 	$(RM) -r .deps
 	$(RM) $(HTTPTESTSERVER_RUN_LOCATION)
@@ -243,7 +243,7 @@ profclean:
 distclean: clean profclean
 	$(RM) core *.core core.* config.mk
 
-doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/newsboat.html doc/xhtml/faq.html doc/example-config
+doc: doc/$(NEWSBOAT).1 doc/$(PODBOAT).1 doc/xhtml/Newsboat.html doc/xhtml/faq.html doc/example-config
 
 doc/xhtml:
 	$(MKDIR) doc/xhtml
@@ -254,26 +254,26 @@ doc/configcommands-linked.asciidoc: doc/configcommands.dsv
 doc/availableoperations-linked.asciidoc: doc/keycmds.dsv
 	sed 's/||/\t/g' doc/keycmds.dsv | awk -f doc/createAvailableOperationsListView.awk > doc/availableoperations-linked.asciidoc
 
-doc/podboat-cmds-linked.asciidoc: doc/podboat-cmds.dsv
-	sed 's/||/\t/g' doc/podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/podboat-cmds-linked.asciidoc
+doc/Podboat-cmds-linked.asciidoc: doc/Podboat-cmds.dsv
+	sed 's/||/\t/g' doc/Podboat-cmds.dsv | awk -f doc/createPodboatConfigurationCommandsListView.awk > doc/Podboat-cmds-linked.asciidoc
 
 doc/cmdline-commands-linked.asciidoc: doc/cmdline-commands.dsv
 	sed 's/||/\t/g' doc/cmdline-commands.dsv | awk -f doc/createAvailableCommandlineCommandsListView.awk > doc/cmdline-commands-linked.asciidoc
 
-doc/xhtml/newsboat.html: doc/chapter-tagging.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-snownews.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-firststeps.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-cmdline.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-configuration.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-podcasts.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-podboat.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-files.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-password.asciidoc
-doc/xhtml/newsboat.html: doc/chapter-environment-variables.asciidoc
-doc/xhtml/newsboat.html: doc/configcommands-linked.asciidoc
-doc/xhtml/newsboat.html: doc/availableoperations-linked.asciidoc
-doc/xhtml/newsboat.html: doc/podboat-cmds-linked.asciidoc
-doc/xhtml/newsboat.html: doc/cmdline-commands-linked.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-tagging.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-snownews.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-firststeps.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-cmdline.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-configuration.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-podcasts.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-Podboat.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-files.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-password.asciidoc
+doc/xhtml/Newsboat.html: doc/chapter-environment-variables.asciidoc
+doc/xhtml/Newsboat.html: doc/configcommands-linked.asciidoc
+doc/xhtml/Newsboat.html: doc/availableoperations-linked.asciidoc
+doc/xhtml/Newsboat.html: doc/Podboat-cmds-linked.asciidoc
+doc/xhtml/Newsboat.html: doc/cmdline-commands-linked.asciidoc
 
 doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --backend=html5 -a webfonts! --destination-dir=doc/xhtml $<
@@ -281,32 +281,32 @@ doc/xhtml/%.html: doc/%.asciidoc | doc/xhtml
 doc/generate: doc/generate.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate doc/generate.cpp
 
-doc/newsboat-cfgcmds.asciidoc: doc/generate doc/configcommands.dsv
-	doc/generate doc/configcommands.dsv > doc/newsboat-cfgcmds.asciidoc
+doc/Newsboat-cfgcmds.asciidoc: doc/generate doc/configcommands.dsv
+	doc/generate doc/configcommands.dsv > doc/Newsboat-cfgcmds.asciidoc
 
 doc/generate2: doc/generate2.cpp
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/generate2 doc/generate2.cpp
 
-doc/newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
-	doc/generate2 doc/keycmds.dsv > doc/newsboat-keycmds.asciidoc
+doc/Newsboat-keycmds.asciidoc: doc/generate2 doc/keycmds.dsv
+	doc/generate2 doc/keycmds.dsv > doc/Newsboat-keycmds.asciidoc
 
-doc/$(NEWSBOAT).1: doc/manpage-newsboat.asciidoc doc/chapter-firststeps.asciidoc \
-		doc/newsboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
+doc/$(NEWSBOAT).1: doc/manpage-Newsboat.asciidoc doc/chapter-firststeps.asciidoc \
+		doc/Newsboat-cfgcmds.asciidoc doc/Newsboat-keycmds.asciidoc \
 		doc/chapter-tagging.asciidoc doc/chapter-snownews.asciidoc \
 		doc/chapter-cmdline.asciidoc doc/chapter-configuration.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc doc/man.rb
-	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-newsboat.asciidoc
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-Newsboat.asciidoc
 
-doc/podboat-cfgcmds.asciidoc: doc/generate doc/podboat-cmds.dsv
-	doc/generate doc/podboat-cmds.dsv 'pb-' > doc/podboat-cfgcmds.asciidoc
+doc/Podboat-cfgcmds.asciidoc: doc/generate doc/Podboat-cmds.dsv
+	doc/generate doc/Podboat-cmds.dsv 'pb-' > doc/Podboat-cfgcmds.asciidoc
 
-doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
-		doc/chapter-podcasts.asciidoc doc/chapter-podboat.asciidoc \
-		doc/podboat-cfgcmds.asciidoc \
+doc/$(PODBOAT).1: doc/manpage-Podboat.asciidoc \
+		doc/chapter-podcasts.asciidoc doc/chapter-Podboat.asciidoc \
+		doc/Podboat-cfgcmds.asciidoc \
 		doc/chapter-environment-variables.asciidoc \
 		doc/chapter-files.asciidoc doc/man.rb
-	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-podboat.asciidoc
+	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-Podboat.asciidoc
 
 doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
 	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/gen-example-config doc/gen-example-config.cpp
@@ -337,7 +337,7 @@ cppcheck:
 		--suppress=*:3rd-party/* --suppress=*:$(CARGO_TARGET_DIR)/* --suppress=*:/usr/include/* \
 		--inline-suppr -DDEBUG=1 -U__VERSION__ \
 		$(INCLUDES) $(DEFINES) \
-		include newsboat.cpp podboat.cpp rss src stfl test \
+		include Newsboat.cpp Podboat.cpp rss src stfl test \
 		2>cppcheck.log
 	@echo "Done! See cppcheck.log for details."
 
@@ -354,15 +354,15 @@ PHONY/clang-tidy-%: compile_flags.txt xlicense.h $(STFL_HDRS) $(NEWSBOATLIB_OUTP
 PHONY/fix-clang-tidy-%: compile_flags.txt xlicense.h $(STFL_HDRS) $(NEWSBOATLIB_OUTPUT)
 	-$(CLANG_TIDY) --fix $(@:PHONY/fix-clang-tidy-%=%)
 
-clang-tidy: $(addprefix PHONY/clang-tidy-,$(LIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS) newsboat.cpp podboat.cpp)
+clang-tidy: $(addprefix PHONY/clang-tidy-,$(LIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS) Newsboat.cpp Podboat.cpp)
 
-fix-clang-tidy: $(addprefix PHONY/fix-clang-tidy-,$(LIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS) newsboat.cpp podboat.cpp)
+fix-clang-tidy: $(addprefix PHONY/fix-clang-tidy-,$(LIB_SRCS) $(NEWSBOAT_SRCS) $(RSSPPLIB_SRCS) $(PODBOAT_SRCS) $(TEST_SRCS) Newsboat.cpp Podboat.cpp)
 
-install-newsboat: $(NEWSBOAT)
+install-Newsboat: $(NEWSBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(NEWSBOAT) $(DESTDIR)$(prefix)/bin
 
-install-podboat: $(PODBOAT)
+install-Podboat: $(PODBOAT)
 	$(MKDIR) $(DESTDIR)$(prefix)/bin
 	$(INSTALL) $(PODBOAT) $(DESTDIR)$(prefix)/bin
 
@@ -385,19 +385,19 @@ install-examples: doc/example-config
 
 install-icon:
 	$(MKDIR) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps
-	$(INSTALL) -m 644 logo.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
+	$(INSTALL) -m 644 logo.svg $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/Newsboat.svg
 
 install-completions-fish:
 	$(MKDIR) $(DESTDIR)$(datadir)/fish/vendor_completions.d
-	$(INSTALL) -m 644 contrib/completions/newsboat.fish $(DESTDIR)$(datadir)/fish/vendor_completions.d
+	$(INSTALL) -m 644 contrib/completions/Newsboat.fish $(DESTDIR)$(datadir)/fish/vendor_completions.d
 
 install-completions-zsh:
 	$(MKDIR) $(DESTDIR)$(datadir)/zsh/site-functions
-	$(INSTALL) -m 644 contrib/completions/_newsboat $(DESTDIR)$(datadir)/zsh/site-functions
+	$(INSTALL) -m 644 contrib/completions/_Newsboat $(DESTDIR)$(datadir)/zsh/site-functions
 
 install-completions: install-completions-fish install-completions-zsh
 
-install: install-newsboat install-podboat install-docs install-examples install-mo install-icon install-completions
+install: install-Newsboat install-Podboat install-docs install-examples install-mo install-icon install-completions
 
 uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(prefix)/bin/$(NEWSBOAT)
@@ -405,12 +405,12 @@ uninstall: uninstall-mo
 	$(RM) $(DESTDIR)$(mandir)/man1/$(NEWSBOAT).1
 	$(RM) $(DESTDIR)$(mandir)/man1/$(PODBOAT).1
 	$(RM) -rf $(DESTDIR)$(docdir)
-	$(RM) $(DESTDIR)$(datadir)/fish/vendor_completions.d/newsboat.fish
-	$(RM) $(DESTDIR)$(datadir)/zsh/site-functions/_newsboat
-	$(RM) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/newsboat.svg
+	$(RM) $(DESTDIR)$(datadir)/fish/vendor_completions.d/Newsboat.fish
+	$(RM) $(DESTDIR)$(datadir)/zsh/site-functions/_Newsboat
+	$(RM) $(DESTDIR)$(datadir)/icons/hicolor/scalable/apps/Newsboat.svg
 
-.PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-newsboat \
-	clean-podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
+.PHONY: doc clean distclean all test extract install uninstall regenerate-parser clean-Newsboat \
+	clean-Podboat clean-libboat clean-librsspp clean-libfilter clean-doc install-mo msgmerge clean-mo \
 	clean-test config cppcheck clang-tidy
 
 # the following targets are i18n/l10n-related:
@@ -423,10 +423,10 @@ mo-files: $(MOFILES)
 extract:
 	$(RM) $(POTFILE)
 	xgettext --add-comments=i18n -k_ -k_s -ktranslatable --language=C++ -o po/cpp.pot *.cpp src/*.cpp rss/*.cpp
-	xtr rust/libnewsboat/src/lib.rs rust/regex-rs/src/lib.rs --omit-header -o po/rust.pot
+	xtr rust/libNewsboat/src/lib.rs rust/regex-rs/src/lib.rs --omit-header -o po/rust.pot
 	cat po/cpp.pot po/rust.pot > $(POTFILE)
 	$(RM) -f po/cpp.pot po/rust.pot
-	sed -i 's#Report-Msgid-Bugs-To: \\n#Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\\n#' $(POTFILE)
+	sed -i 's#Report-Msgid-Bugs-To: \\n#Report-Msgid-Bugs-To: https://github.com/Newsboat/Newsboat/issues\\n#' $(POTFILE)
 
 
 msgmerge:

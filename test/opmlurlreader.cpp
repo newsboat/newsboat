@@ -6,7 +6,7 @@
 #include "3rd-party/catch.hpp"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("OPML URL reader gets the path to input file from \"opml-url\" "
 	"setting", "[OpmlUrlReader]")

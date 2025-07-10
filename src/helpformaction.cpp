@@ -10,7 +10,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 HelpFormAction::HelpFormAction(View& vv,
 	std::string formstr,
@@ -216,4 +216,4 @@ std::string HelpFormAction::make_colorstring(
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

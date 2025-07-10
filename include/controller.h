@@ -19,7 +19,7 @@
 #include "rssignores.h"
 #include "urlreader.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class CliArgsParser;
 class ConfigPaths;
@@ -145,6 +145,6 @@ private:
 	QueueManager queueManager;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONTROLLER_H_ */

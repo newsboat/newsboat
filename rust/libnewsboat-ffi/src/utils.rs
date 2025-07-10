@@ -1,9 +1,9 @@
 use libc::{c_char, c_ulong};
-use libnewsboat::utils::{self, *};
+use libNewsboat::utils::{self, *};
 use std::ffi::{CStr, CString};
 use std::path::{Path, PathBuf};
 
-#[cxx::bridge(namespace = "newsboat::utils")]
+#[cxx::bridge(namespace = "Newsboat::utils")]
 mod ffi {
     struct FilterUrlParts {
         script_name: String,
@@ -24,7 +24,7 @@ mod ffi {
         fn strwidth(rs_str: &str) -> usize;
         fn strwidth_stfl(rs_str: &str) -> usize;
         fn extract_filter(line: &str) -> FilterUrlParts;
-        fn newsboat_major_version() -> u32;
+        fn Newsboat_major_version() -> u32;
 
         // This function is wrapped on the Rust side to convert its output type from
         // a platform-specific `c_ulong`/`unsigned long` to platform-agnostic `u64`. Since we don't
@@ -35,7 +35,7 @@ mod ffi {
 }
 
 // Functions that should be wrapped on the C++ side for ease of use.
-#[cxx::bridge(namespace = "newsboat::utils::bridged")]
+#[cxx::bridge(namespace = "Newsboat::utils::bridged")]
 mod bridged {
     extern "Rust" {
         fn to_u(input: String, default_value: u32) -> u32;

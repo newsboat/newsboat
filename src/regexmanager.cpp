@@ -8,7 +8,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 RegexManager::RegexManager()
 {
@@ -288,4 +288,4 @@ std::string RegexManager::get_attrs_stfl_string(const std::string& location,
 	return attrstr;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

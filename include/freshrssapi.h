@@ -9,9 +9,9 @@
 
 class CurlHandle;
 
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 
 class FreshRssApi : public RemoteApi {
 public:
@@ -45,6 +45,6 @@ private:
 	std::string token;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FRESHRSSAPI_H_ */

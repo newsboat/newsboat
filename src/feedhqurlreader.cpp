@@ -6,7 +6,7 @@
 #include "remoteapi.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 FeedHqUrlReader::FeedHqUrlReader(ConfigContainer* c,
 	const std::string& url_file,
@@ -72,4 +72,4 @@ std::string FeedHqUrlReader::get_source() const
 	return "FeedHQ";
 }
 
-} // namespace newsboat
+} // namespace Newsboat

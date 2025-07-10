@@ -9,7 +9,7 @@
 #include "configcontainer.h"
 #include "curlhandle.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class Cache;
 class Controller;
@@ -102,6 +102,6 @@ private:
 	unsigned int reload_progress_max;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_RELOADER_H_ */

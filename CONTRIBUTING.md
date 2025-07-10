@@ -13,14 +13,14 @@ you can help:
 ## Security Vulnerabilities
 
 If you happen to stumble upon a security vulnerability, **do not open a GitHub issue**.
-Instead, send an email to security@newsboat.org and encrypt your emails using
-[OpenPGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp).
+Instead, send an email to security@Newsboat.org and encrypt your emails using
+[OpenPGP key 4ED6CD61932B9EBE](https://Newsboat.org/Newsboat.pgp).
 
 
 ## Feature Requests and Bug Reports
 
 Bug reports and feature requests should be reported in the
-[issue tracker](https://github.com/newsboat/newsboat/issues). Look through the
+[issue tracker](https://github.com/Newsboat/Newsboat/issues). Look through the
 issue tracker to see if your bug report/feature request was not already
 reported. Don't forget to look through the closed issues, as your request might
 have been already fulfilled. But if in doubt, please file an issue anyway!
@@ -29,8 +29,8 @@ have been already fulfilled. But if in doubt, please file an issue anyway!
 ## Patches/Pull Requests
 
 If you are looking for a place to start contributing, take a look at the issues labeled
-[good first issue](https://github.com/newsboat/newsboat/labels/good%20first%20issue)
-and [docs](https://github.com/newsboat/newsboat/labels/docs) on the issue tracker.
+[good first issue](https://github.com/Newsboat/Newsboat/labels/good%20first%20issue)
+and [docs](https://github.com/Newsboat/Newsboat/labels/docs) on the issue tracker.
 Contributions that modernize the C++ and clean up the codebase are also great places
 to start.
 
@@ -43,9 +43,9 @@ contributing code. See also [the Newsboat hacker's
 guide](doc/internal/hackers-guide.asciidoc).
 
 Patches can be submitted by sending a
-[GitHub Pull Request](https://github.com/newsboat/newsboat/pull/new/master) or
+[GitHub Pull Request](https://github.com/Newsboat/Newsboat/pull/new/master) or
 emailing a patch to the Newsboat
-[mailing list](https://groups.google.com/group/newsboat) (newsboat@googlegroups.com).
+[mailing list](https://groups.google.com/group/Newsboat) (Newsboat@googlegroups.com).
 To learn more about patches, see
 [here](https://www.kernel.org/doc/html/latest/process/submitting-patches.html) and
 [here](https://github.com/git/git/blob/master/Documentation/SubmittingPatches). To
@@ -82,7 +82,7 @@ even better than an SSD.
 Fixing and/or adding documentation is an easy way to get involved. The Newsboat
 documentation can be found in `doc/` and related issues can be found under the
 `docs` label in the
-[issue tracker](https://github.com/newsboat/newsboat/labels/docs). New features
+[issue tracker](https://github.com/Newsboat/Newsboat/labels/docs). New features
 that are added should also be documented.
 
 
@@ -91,4 +91,4 @@ that are added should also be documented.
 Fixing and/or adding translations helps localize Newsboat to different regions
 around the globe. Translations for the Newsboat interface can be found in `po/`
 and related issues can be found under the `i18n` tag in the
-[issue tracker](https://github.com/newsboat/newsboat/labels/i18n).
+[issue tracker](https://github.com/Newsboat/Newsboat/labels/i18n).

@@ -3,12 +3,12 @@
 
 USAGE="
 Displays feeds that havent been updated for a certain ammount of time
-    $ newsboat-idlefeeds.sh # default 6 months
-    $ newsboat-idlefeeds.sh -c ./cache.db # specify cache file
-    $ newsboat-idlefeeds.sh -t '1 year' # specify other duration
+    $ Newsboat-idlefeeds.sh # default 6 months
+    $ Newsboat-idlefeeds.sh -c ./cache.db # specify cache file
+    $ Newsboat-idlefeeds.sh -t '1 year' # specify other duration
 "
 
-cache="${XDG_DATA_HOME:-$HOME/.local/share}/newsboat/cache.db"
+cache="${XDG_DATA_HOME:-$HOME/.local/share}/Newsboat/cache.db"
 time="6 month"
 
 while getopts hc:t: flag; do

@@ -1,4 +1,4 @@
-use libnewsboat::cliargsparser::CliArgsParser;
+use libNewsboat::cliargsparser::CliArgsParser;
 use std::env;
 use tempfile::TempDir;
 
@@ -16,10 +16,10 @@ fn t_cliargsparser_dash_capital_e_resolves_tilde_to_homedir() {
         assert_eq!(args.readinfo_export_file, Some(tmp.path().join(filename)));
     };
 
-    check(vec!["newsboat".into(), "-E".into(), arg.clone().into()]);
+    check(vec!["Newsboat".into(), "-E".into(), arg.clone().into()]);
 
     check(vec![
-        "newsboat".into(),
+        "Newsboat".into(),
         format!("--export-to-file={}", &arg).into(),
     ]);
 }

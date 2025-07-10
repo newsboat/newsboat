@@ -3,7 +3,7 @@
 
 #include "urlreader.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class RemoteApi;
 
@@ -20,6 +20,6 @@ private:
 	RemoteApi* api;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_MINIFLUXURLREADER_H_ */

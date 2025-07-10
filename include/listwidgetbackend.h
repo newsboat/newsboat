@@ -11,7 +11,7 @@
 #include "stflpp.h"
 #include "stflrichtext.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ListWidgetBackend {
 public:
@@ -45,6 +45,6 @@ private:
 	std::function<StflRichText(std::uint32_t, std::uint32_t)> get_formatted_line;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LISTWIDGETBACKEND_H_ */

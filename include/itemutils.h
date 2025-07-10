@@ -6,7 +6,7 @@
 #include "rssitem.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /// Adds enclosure URL of item to queue.
 ///
@@ -17,6 +17,6 @@ namespace newsboat {
 bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 	View& v, Cache& cache);
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_ITEMUTILS_H_ */

@@ -1,8 +1,8 @@
 #include "curldatareceiver.h"
 
-namespace newsboat {
+namespace Newsboat {
 
-std::unique_ptr<newsboat::CurlDataReceiver> CurlDataReceiver::register_data_handler(
+std::unique_ptr<Newsboat::CurlDataReceiver> CurlDataReceiver::register_data_handler(
 	CurlHandle& curlHandle)
 {
 	return std::unique_ptr<CurlDataReceiver>(new CurlDataReceiver(curlHandle));
@@ -43,4 +43,4 @@ void CurlDataReceiver::handle_data(const std::string& data)
 	accumulated_data += data;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -8,7 +8,7 @@
 #include "logger.h"
 #include "rssfeed.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 xmlDocPtr opml::generate(const FeedContainer& feedcontainer, bool version2)
 {
@@ -232,4 +232,4 @@ std::optional<std::string> opml::import(
 	return error_message;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

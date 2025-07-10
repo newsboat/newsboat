@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 class Regex {
 private:
@@ -26,6 +26,6 @@ private:
 	regex_t regex;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_REGEXOWNER_H_ */

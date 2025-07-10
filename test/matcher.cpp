@@ -8,7 +8,7 @@
 #include "matcherexception.h"
 #include "test_helpers/stringmaker/optional.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 class MatcherMockMatchable : public Matchable {
 public:
@@ -658,7 +658,7 @@ TEST_CASE("get_expression() returns previously parsed expression", "[Matcher]")
 
 TEST_CASE("Regexes are matched case-insensitively", "[Matcher]")
 {
-	// Inspired by https://github.com/newsboat/newsboat/issues/642
+	// Inspired by https://github.com/Newsboat/Newsboat/issues/642
 
 	const auto require_matches = [](const std::string& regex) {
 		MatcherMockMatchable mock({{"abcd", "xyz"}});

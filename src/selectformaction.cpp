@@ -12,7 +12,7 @@
 #include "utils.h"
 #include "view.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /*
  * The SelectFormAction is used both for the "select tag" dialog
@@ -279,4 +279,4 @@ std::string SelectFormAction::title()
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

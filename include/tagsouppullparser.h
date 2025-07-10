@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 class TagSoupPullParser {
 public:
@@ -44,6 +44,6 @@ private:
 	void handle_text(char c);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_TAGSOUPPULLPARSER_H_ */

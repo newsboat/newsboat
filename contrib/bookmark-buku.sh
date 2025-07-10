@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# newsboat bookmarking plugin for buku
+# Newsboat bookmarking plugin for buku
 # (c) 2021 Greg Fitzgerald <gregf@beastie.tech>
 #
 # Heavily inspired by bookmark-pinboard.sh
 #
-# Add the following to your newsboat config, and adjust the path as needed.
+# Add the following to your Newsboat config, and adjust the path as needed.
 # bookmark-cmd ~/bin/bookmark-buku.sh
 # bookmark-interactive yes
 
@@ -21,7 +21,7 @@ read tags
 
 if [ ! "$tags" ]; then
   # You can set default tags here
-  tags="newsboat"
+  tags="Newsboat"
 fi
 
 if [ "$buku" ]; then

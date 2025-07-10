@@ -5,7 +5,7 @@
 
 #include "logger.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 ReloadThread::ReloadThread(Controller& c, ConfigContainer& cf)
 	: ctrl(c)
@@ -61,4 +61,4 @@ void ReloadThread::operator()()
 	}
 }
 
-} // namespace newsboat
+} // namespace Newsboat

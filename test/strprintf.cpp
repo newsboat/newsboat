@@ -5,7 +5,7 @@
 
 #include "3rd-party/catch.hpp"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("strprintf::fmt()", "[strprintf]")
 {

@@ -1,6 +1,6 @@
-use libnewsboat::charencoding;
+use libNewsboat::charencoding;
 
-#[cxx::bridge(namespace = "newsboat::charencoding::bridged")]
+#[cxx::bridge(namespace = "Newsboat::charencoding::bridged")]
 mod bridged {
     extern "Rust" {
         fn charset_from_bom(content: &[u8], output: &mut String) -> bool;

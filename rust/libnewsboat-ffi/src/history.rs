@@ -1,10 +1,10 @@
-use libnewsboat::history;
+use libNewsboat::history;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
 struct History(history::History);
 
-#[cxx::bridge(namespace = "newsboat::history::bridged")]
+#[cxx::bridge(namespace = "Newsboat::history::bridged")]
 mod bridged {
     extern "Rust" {
         type History;

@@ -5,7 +5,7 @@
 
 #include "urlreader.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class FileUrlReader : public UrlReader {
 public:

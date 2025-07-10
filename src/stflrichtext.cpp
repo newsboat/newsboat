@@ -1,6 +1,6 @@
 #include "stflrichtext.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 StflRichText::StflRichText(rust::Box<stflrichtext::bridged::StflRichText>&& rs_object)
 	: rs_object(std::move(rs_object))

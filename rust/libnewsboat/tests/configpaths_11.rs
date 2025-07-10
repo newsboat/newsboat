@@ -6,7 +6,7 @@ mod configpaths_helpers;
 
 enable_sections! {
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_xdg_data_dir_already_exists(
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_Newsboat_xdg_data_dir_already_exists(
 ) {
     let tmp = TempDir::new().unwrap();
 
@@ -20,8 +20,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_
     if section!("Default XDG locations") {
         configpaths_helpers::mock_newsbeuter_xdg_dirs(&tmp);
 
-        let config_dir = tmp.path().join(".config").join("newsboat");
-        let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+        let config_dir = tmp.path().join(".config").join("Newsboat");
+        let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
         assert!(fs::create_dir(&data_dir).is_ok());
 
         configpaths_helpers::assert_xdg_not_migrated(&config_dir, &data_dir);
@@ -36,10 +36,10 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_
             &config_home.join("newsbeuter"),
             &tmp.path().join(".local").join("share").join("newsbeuter"));
 
-        let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+        let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
         assert!(fs::create_dir(&data_dir).is_ok());
         configpaths_helpers::assert_xdg_not_migrated(
-            &config_home.join("newsboat"),
+            &config_home.join("Newsboat"),
             &data_dir);
     }
 
@@ -52,9 +52,9 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_
             &tmp.path().join(".config").join("newsbeuter"),
             &data_home.join("newsbeuter"));
 
-        let data_dir = data_home.join("newsboat");
+        let data_dir = data_home.join("Newsboat");
         assert!(fs::create_dir(&data_dir).is_ok());
-        configpaths_helpers::assert_xdg_not_migrated(&tmp.path().join(".config").join("newsboat"), &data_dir);
+        configpaths_helpers::assert_xdg_not_migrated(&tmp.path().join(".config").join("Newsboat"), &data_dir);
     }
 
     if section!("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -70,9 +70,9 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_empty_newsboat_
             &config_home.join("newsbeuter"),
             &data_home.join("newsbeuter"));
 
-        let data_dir = data_home.join("newsboat");
+        let data_dir = data_home.join("Newsboat");
         assert!(fs::create_dir(&data_dir).is_ok());
-        configpaths_helpers::assert_xdg_not_migrated(&config_home.join("newsboat"), &data_dir);
+        configpaths_helpers::assert_xdg_not_migrated(&config_home.join("Newsboat"), &data_dir);
     }
 }
 }

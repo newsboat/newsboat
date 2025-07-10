@@ -1,11 +1,11 @@
 #ifndef NEWSBOAT_FORMATSTRING_H_
 #define NEWSBOAT_FORMATSTRING_H_
 
-#include "libnewsboat-ffi/src/fmtstrformatter.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/fmtstrformatter.rs.h" // IWYU pragma: export
 
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class FmtStrFormatter {
 public:
@@ -20,6 +20,6 @@ private:
 	rust::Box<fmtstrformatter::bridged::FmtStrFormatter> rs_object;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FORMATSTRING_H_ */

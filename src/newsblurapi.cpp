@@ -24,9 +24,9 @@
 
 #define NEWSBLUR_ITEMS_PER_PAGE 6
 
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 
 NewsBlurApi::NewsBlurApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -376,4 +376,4 @@ json_object* NewsBlurApi::query_api(const std::string& endpoint,
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -7,9 +7,9 @@ assignees: ''
 
 ---
 
-**Newsboat version (copy the output of `newsboat -v` or the first line of `git show`)**:
+**Newsboat version (copy the output of `Newsboat -v` or the first line of `git show`)**:
 
-Config file (copy from ~/.newsboat/config or ~/.config/newsboat/config):
+Config file (copy from ~/.Newsboat/config or ~/.config/Newsboat/config):
 
 ```
 INSERT COPY HERE

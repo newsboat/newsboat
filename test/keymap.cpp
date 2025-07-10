@@ -9,10 +9,10 @@
 #include "confighandlerexception.h"
 #include "keycombination.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
-	"article", "tagselection", "filterselection", "urlview", "podboat",
+	"article", "tagselection", "filterselection", "urlview", "Podboat",
 	"dialogs", "dirbrowser"
 };
 
@@ -328,10 +328,10 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 		KeyMap k(KM_NEWSBOAT);
 		const auto descriptions = k.get_keymap_descriptions("feedlist");
 
-		THEN("the descriptions do not include any entries with context \"podboat\"") {
+		THEN("the descriptions do not include any entries with context \"Podboat\"") {
 			REQUIRE(descriptions.size() > 0);
 			for (const auto& description : descriptions) {
-				REQUIRE(description.ctx != "podboat");
+				REQUIRE(description.ctx != "Podboat");
 			}
 		}
 
@@ -345,12 +345,12 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 
 	WHEN("calling get_keymap_descriptions(KM_PODBOAT)") {
 		KeyMap k(KM_PODBOAT);
-		const auto descriptions = k.get_keymap_descriptions("podboat");
+		const auto descriptions = k.get_keymap_descriptions("Podboat");
 
-		THEN("the descriptions only include entries with context \"podboat\"") {
+		THEN("the descriptions only include entries with context \"Podboat\"") {
 			REQUIRE(descriptions.size() > 0);
 			for (const auto& description : descriptions) {
-				REQUIRE(description.ctx == "podboat");
+				REQUIRE(description.ctx == "Podboat");
 			}
 		}
 	}
@@ -612,7 +612,7 @@ TEST_CASE("dump_config() stores a description if it is present", "[KeyMap]")
 	}
 }
 
-TEST_CASE("Regression test for https://github.com/newsboat/newsboat/issues/702",
+TEST_CASE("Regression test for https://github.com/Newsboat/Newsboat/issues/702",
 	"[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
@@ -721,7 +721,7 @@ TEST_CASE("It's not an error to have no operations before a semicolon in "
 TEST_CASE("Semicolons in operation's arguments don't break parsing of a macro",
 	"[KeyMap]")
 {
-	// This is a regression test for https://github.com/newsboat/newsboat/issues/1200
+	// This is a regression test for https://github.com/Newsboat/Newsboat/issues/1200
 
 	KeyMap k(KM_NEWSBOAT);
 

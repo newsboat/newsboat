@@ -44,9 +44,9 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #include "logger.h"
 #include "strprintf.h"
 
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 
 std::string utils::strip_comments(const std::string& line)
 {
@@ -911,4 +911,4 @@ void utils::wait_for_keypress()
 	endwin(); // Restore terminal settings
 }
 
-} // namespace newsboat
+} // namespace Newsboat

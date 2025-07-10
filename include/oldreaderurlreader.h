@@ -3,7 +3,7 @@
 
 #include "urlreader.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigContainer;
 class RemoteApi;
@@ -23,7 +23,7 @@ private:
 	RemoteApi* api;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_OLDREADERURLREADER_H_ */
 

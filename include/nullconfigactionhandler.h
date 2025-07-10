@@ -3,7 +3,7 @@
 
 #include "configactionhandler.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class NullConfigActionHandler : public ConfigActionHandler {
 public:
@@ -16,7 +16,7 @@ public:
 	void dump_config(std::vector<std::string>&) const override {}
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_NULLCONFIGACTIONHANDLER_H_ */
 

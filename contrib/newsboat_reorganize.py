@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Script for organizing newsboats `urls` file. Opens up the file in a text
+Script for organizing Newsboats `urls` file. Opens up the file in a text
 editor with the feeds titles added for easy organization. (Be sure to leave in
 the added markers)
 
@@ -16,12 +16,12 @@ import re
 import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 
-def get_newsboat_urls_path():
+def get_Newsboat_urls_path():
     try:
-        newsboat_urls_path = os.environ['XDG_CONFIG_HOME'] + '/newsboat/urls'
+        Newsboat_urls_path = os.environ['XDG_CONFIG_HOME'] + '/Newsboat/urls'
     except KeyError:
-        newsboat_urls_path = os.environ['HOME'] + '/.config/newsboat/urls'
-    return newsboat_urls_path
+        Newsboat_urls_path = os.environ['HOME'] + '/.config/Newsboat/urls'
+    return Newsboat_urls_path
 
 def get_xml_title(url):
     title = None
@@ -60,23 +60,23 @@ def remove_titles(titled_urls):
     return titled_urls
 
 def main():
-    newsboat_urls_path = get_newsboat_urls_path()
-    if not os.path.exists(newsboat_urls_path):
-        print('Could not find newsboat urls file')
+    Newsboat_urls_path = get_Newsboat_urls_path()
+    if not os.path.exists(Newsboat_urls_path):
+        print('Could not find Newsboat urls file')
         sys.exit(1)
 
-    with open(newsboat_urls_path, encoding='utf-8') as newsboat_urls:
-        newsboat_urls_data = newsboat_urls.readlines()
+    with open(Newsboat_urls_path, encoding='utf-8') as Newsboat_urls:
+        Newsboat_urls_data = Newsboat_urls.readlines()
 
     print('Please wait...')
-    titled_urls = add_titles(newsboat_urls_data)
+    titled_urls = add_titles(Newsboat_urls_data)
     edited_urls = open_in_editor(titled_urls)
 
-    proceed = input(f'Do you want to write the changes to \'{newsboat_urls_path}\'? [y/N] ')
+    proceed = input(f'Do you want to write the changes to \'{Newsboat_urls_path}\'? [y/N] ')
     if proceed.lower() in ['y', 'yes']:
-        with open(newsboat_urls_path, 'w', encoding='utf-8') as newsboat_urls:
-            new_newsboat_urls = remove_titles(edited_urls)
-            newsboat_urls.writelines(new_newsboat_urls)
+        with open(Newsboat_urls_path, 'w', encoding='utf-8') as Newsboat_urls:
+            new_Newsboat_urls = remove_titles(edited_urls)
+            Newsboat_urls.writelines(new_Newsboat_urls)
 
 if __name__ == '__main__':
     main()

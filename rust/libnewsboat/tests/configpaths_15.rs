@@ -1,4 +1,4 @@
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use section_testing::{enable_sections, section};
 use std::{env, fs, path};
 use tempfile::TempDir;
@@ -38,17 +38,17 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
         let _beuter_sentries = configpaths_helpers::mock_newsbeuter_dotdir(&tmp);
 
         if section!("Newsboat uses dotdir") {
-            let boat_sentries = configpaths_helpers::mock_newsboat_dotdir(&tmp);
+            let boat_sentries = configpaths_helpers::mock_Newsboat_dotdir(&tmp);
 
-            let urls_filepath = tmp.path().join(".newsboat/").join("urls");
+            let urls_filepath = tmp.path().join(".Newsboat/").join("urls");
             assert_not_migrated(&urls_filepath, &boat_sentries);
         }
 
         if section!("Newsboat uses XDG") {
             if section!("Default XDG locations") {
-                let boat_sentries = configpaths_helpers::mock_newsboat_xdg_dirs(&tmp);
+                let boat_sentries = configpaths_helpers::mock_Newsboat_xdg_dirs(&tmp);
 
-                let urls_filepath = tmp.path().join(".config").join("newsboat").join("urls");
+                let urls_filepath = tmp.path().join(".config").join("Newsboat").join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
@@ -57,14 +57,14 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
                 assert!(fs::create_dir(&config_dir).is_ok());
                 env::set_var("XDG_CONFIG_HOME", &config_dir);
 
-                let newsboat_config_dir = config_dir.join("newsboat");
-                let newsboat_data_dir = tmp.path().join(".local").join("share").join("newsboat");
+                let Newsboat_config_dir = config_dir.join("Newsboat");
+                let Newsboat_data_dir = tmp.path().join(".local").join("share").join("Newsboat");
 
                 let boat_sentries = configpaths_helpers::mock_xdg_dirs(
-                    &newsboat_config_dir,
-                    &newsboat_data_dir);
+                    &Newsboat_config_dir,
+                    &Newsboat_data_dir);
 
-                let urls_filepath = newsboat_config_dir.join("urls");
+                let urls_filepath = Newsboat_config_dir.join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
@@ -73,15 +73,15 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
                 assert!(fs::create_dir(&data_dir).is_ok());
                 env::set_var("XDG_DATA_HOME", &data_dir);
 
-                let newsboat_config_dir =
-                    tmp.path().join(".config").join("newsboat");
-                let newsboat_data_dir = data_dir.join("newsboat");
+                let Newsboat_config_dir =
+                    tmp.path().join(".config").join("Newsboat");
+                let Newsboat_data_dir = data_dir.join("Newsboat");
 
                 let boat_sentries = configpaths_helpers::mock_xdg_dirs(
-                    &newsboat_config_dir,
-                    &newsboat_data_dir);
+                    &Newsboat_config_dir,
+                    &Newsboat_data_dir);
 
-                let urls_filepath = newsboat_config_dir.join("urls");
+                let urls_filepath = Newsboat_config_dir.join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
@@ -94,14 +94,14 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
                 assert!(fs::create_dir(&data_dir).is_ok());
                 env::set_var("XDG_DATA_HOME", &data_dir);
 
-                let newsboat_config_dir = config_dir.join("newsboat");
-                let newsboat_data_dir = data_dir.join("newsboat");
+                let Newsboat_config_dir = config_dir.join("Newsboat");
+                let Newsboat_data_dir = data_dir.join("Newsboat");
 
                 let boat_sentries = configpaths_helpers::mock_xdg_dirs(
-                    &newsboat_config_dir,
-                    &newsboat_data_dir);
+                    &Newsboat_config_dir,
+                    &Newsboat_data_dir);
 
-                let urls_filepath = newsboat_config_dir.join("urls");
+                let urls_filepath = Newsboat_config_dir.join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
         }
@@ -112,16 +112,16 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
             let _beuter_sentries = configpaths_helpers::mock_newsbeuter_xdg_dirs(&tmp);
 
             if section!("Newsboat uses dotdir") {
-                let boat_sentries = configpaths_helpers::mock_newsboat_dotdir(&tmp);
+                let boat_sentries = configpaths_helpers::mock_Newsboat_dotdir(&tmp);
 
-                let urls_filepath = tmp.path().join(".newsboat").join("urls");
+                let urls_filepath = tmp.path().join(".Newsboat").join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
             if section!("Newsboat uses XDG") {
-                let boat_sentries = configpaths_helpers::mock_newsboat_xdg_dirs(&tmp);
+                let boat_sentries = configpaths_helpers::mock_Newsboat_xdg_dirs(&tmp);
 
-                let urls_filepath = tmp.path().join(".config").join("newsboat").join("urls");
+                let urls_filepath = tmp.path().join(".config").join("Newsboat").join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
         }
@@ -136,20 +136,20 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
                 &tmp.path().join(".local").join("share").join("newsbeuter"));
 
             if section!("Newsboat uses dotdir") {
-                let boat_sentries = configpaths_helpers::mock_newsboat_dotdir(&tmp);
+                let boat_sentries = configpaths_helpers::mock_Newsboat_dotdir(&tmp);
 
-                let urls_filepath = tmp.path().join(".newsboat").join("urls");
+                let urls_filepath = tmp.path().join(".Newsboat").join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
             if section!("Newsboat uses XDG") {
-                let newsboat_config_dir = config_dir.join("newsboat");
+                let Newsboat_config_dir = config_dir.join("Newsboat");
 
                 let boat_sentries = configpaths_helpers::mock_xdg_dirs(
-                    &newsboat_config_dir,
-                    &tmp.path().join(".local").join("share").join("newsboat"));
+                    &Newsboat_config_dir,
+                    &tmp.path().join(".local").join("share").join("Newsboat"));
 
-                let urls_filepath = newsboat_config_dir.join("urls");
+                let urls_filepath = Newsboat_config_dir.join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
         }
@@ -164,21 +164,21 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
                 &data_dir);
 
             if section!("Newsboat uses dotdir") {
-                let boat_sentries = configpaths_helpers::mock_newsboat_dotdir(&tmp);
+                let boat_sentries = configpaths_helpers::mock_Newsboat_dotdir(&tmp);
 
-                let urls_filepath = tmp.path().join(".newsboat").join("urls");
+                let urls_filepath = tmp.path().join(".Newsboat").join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
             if section!("Newsboat uses XDG") {
-                let newsboat_config_dir = tmp.path().join(".config").join("newsboat");
+                let Newsboat_config_dir = tmp.path().join(".config").join("Newsboat");
 
                 let boat_sentries = configpaths_helpers::mock_xdg_dirs(
-                    &newsboat_config_dir,
-                    &data_dir.join("newsboat")
+                    &Newsboat_config_dir,
+                    &data_dir.join("Newsboat")
                     );
 
-                let urls_filepath = newsboat_config_dir.join("urls");
+                let urls_filepath = Newsboat_config_dir.join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
         }
@@ -197,20 +197,20 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_urls_file_alrea
                 &data_dir.join("newsbeuter"));
 
             if section!("Newsboat uses dotdir") {
-                let boat_sentries = configpaths_helpers::mock_newsboat_dotdir(&tmp);
+                let boat_sentries = configpaths_helpers::mock_Newsboat_dotdir(&tmp);
 
-                let urls_filepath = tmp.path().join(".newsboat").join("urls");
+                let urls_filepath = tmp.path().join(".Newsboat").join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
 
             if section!("Newsboat uses XDG") {
-                let newsboat_config_dir = config_dir.join("newsboat");
+                let Newsboat_config_dir = config_dir.join("Newsboat");
 
                 let boat_sentries = configpaths_helpers::mock_xdg_dirs(
-                    &newsboat_config_dir,
-                    &data_dir.join("newsboat"));
+                    &Newsboat_config_dir,
+                    &data_dir.join("Newsboat"));
 
-                let urls_filepath = newsboat_config_dir.join("urls");
+                let urls_filepath = Newsboat_config_dir.join("urls");
                 assert_not_migrated(&urls_filepath, &boat_sentries);
             }
         }

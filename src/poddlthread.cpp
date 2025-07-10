@@ -13,9 +13,9 @@
 #include "logger.h"
 #include "utils.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
-namespace podboat {
+namespace Podboat {
 
 static size_t my_write_data(void* buffer, size_t size, size_t nmemb,
 	void* userp);
@@ -25,7 +25,7 @@ static int progress_callback(void* clientp,
 	curl_off_t ultotal,
 	curl_off_t ulnow);
 
-PodDlThread::PodDlThread(Download* dl_, newsboat::ConfigContainer& c)
+PodDlThread::PodDlThread(Download* dl_, Newsboat::ConfigContainer& c)
 	: dl(dl_)
 	, f(new std::ofstream())
 	, bytecount(0)
@@ -73,7 +73,7 @@ void PodDlThread::run()
 
 	struct stat sb;
 	std::string filename =
-		dl->filename() + newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX;
+		dl->filename() + Newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX;
 
 	if (stat(filename.c_str(), &sb) == -1) {
 		LOG(Level::INFO,
@@ -192,4 +192,4 @@ double PodDlThread::compute_kbps()
 	return result;
 }
 
-} // namespace podboat
+} // namespace Podboat

@@ -4,7 +4,7 @@
 
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 TextviewWidget::TextviewWidget(const std::string& textview_name,
 	Stfl::Form& form)
@@ -160,4 +160,4 @@ std::uint32_t TextviewWidget::get_height()
 	return utils::to_u(form.get(textview_name + ":h"));
 }
 
-} // namespace newsboat
+} // namespace Newsboat

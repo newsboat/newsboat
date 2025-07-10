@@ -8,7 +8,7 @@
 #include "configparser.h"
 #include "keymap.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 {
@@ -291,7 +291,7 @@ TEST_CASE(
 	}
 }
 
-// Added for https://github.com/newsboat/newsboat/issues/3104
+// Added for https://github.com/Newsboat/Newsboat/issues/3104
 TEST_CASE("Resetting or toggling invalid config option does cause crash dump_config()",
 	"[ConfigContainer]")
 {

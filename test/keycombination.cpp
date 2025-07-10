@@ -3,7 +3,7 @@
 #include "3rd-party/catch.hpp"
 #include "test_helpers/stringmaker/keycombination.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("KeyCombination parses bind-key key combinations", "[KeyCombination]")
 {

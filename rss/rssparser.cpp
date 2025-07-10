@@ -66,7 +66,7 @@ std::string RssParser::w3cdtf_to_rfc822(const std::string& w3cdtf)
 	}
 
 	const time_t gmttime = local_time + offs;
-	return newsboat::utils::mt_strf_localtime("%a, %d %b %Y %H:%M:%S +0000",
+	return Newsboat::utils::mt_strf_localtime("%a, %d %b %Y %H:%M:%S +0000",
 			gmttime);
 }
 

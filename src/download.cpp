@@ -4,10 +4,10 @@
 
 #include "config.h"
 
-namespace podboat {
+namespace Podboat {
 
 /*
- * the Download class represents a single download entry in podboat.
+ * the Download class represents a single download entry in Podboat.
  * It manages the filename, the URL, the current state, the progress, etc.
  */
 
@@ -123,4 +123,4 @@ void Download::set_offset(unsigned long offset)
 	offs = offset;
 }
 
-} // namespace podboat
+} // namespace Podboat

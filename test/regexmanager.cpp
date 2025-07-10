@@ -6,7 +6,7 @@
 #include "matchable.h"
 #include "stflrichtext.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("RegexManager throws on invalid command", "[RegexManager]")
 {

@@ -5,7 +5,7 @@
 
 #include "configactionhandler.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /// Stores the name of the filter and the filter expression that user added via
 /// `define-filter` configuration option
@@ -39,6 +39,6 @@ private:
 	std::vector<FilterNameExprPair> filters;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_FILTERCONTAINER_H_ */

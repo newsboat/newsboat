@@ -1,4 +1,4 @@
-# filter/ is auto-generated code that we're replacing rather than fixing: https://github.com/newsboat/newsboat/issues/631
+# filter/ is auto-generated code that we're replacing rather than fixing: https://github.com/Newsboat/Newsboat/issues/631
 alignment:filter/Scanner.cpp
 alignment:filter/Parser.cpp
 signed-integer-overflow:filter/Scanner.cpp

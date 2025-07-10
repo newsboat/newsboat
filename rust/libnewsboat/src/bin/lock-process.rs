@@ -1,5 +1,5 @@
 //! Helper binary to help lock process for testing.
-use libnewsboat::fslock::FsLock;
+use libNewsboat::fslock::FsLock;
 
 fn main() {
     let lock_location = std::env::args().nth(1).unwrap();

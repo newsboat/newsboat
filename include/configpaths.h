@@ -1,13 +1,13 @@
 #ifndef NEWSBOAT_CONFIGPATHS_H_
 #define NEWSBOAT_CONFIGPATHS_H_
 
-#include "libnewsboat-ffi/src/configpaths.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/configpaths.rs.h" // IWYU pragma: export
 
 #include <string>
 
 #include "cliargsparser.h"
 
-namespace newsboat {
+namespace Newsboat {
 class ConfigPaths {
 public:
 	ConfigPaths();
@@ -73,6 +73,6 @@ public:
 private:
 	rust::Box<configpaths::bridged::ConfigPaths> rs_object;
 };
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGPATHS_H_ */

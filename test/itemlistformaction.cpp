@@ -15,14 +15,14 @@
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("OP_OPEN displays article using an external pager",
 	"[ItemListFormAction]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile pagerfile;
 
 	const std::string test_url = "http://test_url";
@@ -76,7 +76,7 @@ TEST_CASE("OP_PURGE_DELETED purges previously deleted items",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -111,7 +111,7 @@ TEST_CASE(
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 
 	const std::string test_url = "http://test_url";
@@ -151,7 +151,7 @@ TEST_CASE(
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 
 	const std::string test_url = "http://test_url";
 
@@ -184,7 +184,7 @@ TEST_CASE("OP_OPENINBROWSER passes the url to the browser",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -219,7 +219,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	const std::string test_url = "http://test_url";
 	std::string line;
@@ -242,7 +242,7 @@ TEST_CASE("OP_OPENINBROWSER_NONINTERACTIVE passes the url to the browser",
 	ItemListFormAction itemlist(v, itemlist_str, &rsscache, filters, &cfg, rxman);
 	itemlist.set_feed(feed);
 	const std::vector<std::string> args;
-	itemlist.process_op(newsboat::OP_OPENINBROWSER_NONINTERACTIVE, args);
+	itemlist.process_op(Newsboat::OP_OPENINBROWSER_NONINTERACTIVE, args);
 	std::ifstream browserFileStream(browserfile.get_path());
 
 	REQUIRE(std::getline(browserFileStream, line));
@@ -254,7 +254,7 @@ TEST_CASE("OP_OPENALLUNREADINBROWSER passes the url list to the browser",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	const std::string test_url = "http://test_url";
@@ -340,7 +340,7 @@ TEST_CASE(
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile browserfile;
 	std::unordered_set<std::string> url_set;
 	const std::string test_url = "http://test_url";
@@ -425,7 +425,7 @@ TEST_CASE("OP_SHOWURLS shows the article's properties", "[ItemListFormAction]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -491,7 +491,7 @@ TEST_CASE("OP_BOOKMARK pipes articles url and title to bookmark-command",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -554,7 +554,7 @@ TEST_CASE("OP_EDITFLAGS arguments are added to an item's flags",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -612,7 +612,7 @@ TEST_CASE("OP_SAVE writes an article's attributes to the specified file",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile saveFile;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -675,7 +675,7 @@ TEST_CASE("OP_HELP command is processed", "[ItemListFormAction]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 
@@ -700,7 +700,7 @@ TEST_CASE("OP_HARDQUIT command is processed", "[ItemListFormAction]")
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 	FilterContainer filters;
@@ -730,7 +730,7 @@ TEST_CASE("Navigate back and forth using OP_NEXT and OP_PREV",
 	ConfigPaths paths;
 	Controller c(paths);
 	test_helpers::TempFile articleFile;
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	cfg.set_configvalue(
 		"external-url-viewer", "tee > " + articleFile.get_path());
@@ -780,7 +780,7 @@ TEST_CASE("OP_TOGGLESHOWREAD switches the value of show-read-articles",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
 
@@ -818,7 +818,7 @@ TEST_CASE("OP_PIPE_TO pipes an article's content to an external command",
 {
 	ConfigPaths paths;
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	test_helpers::TempFile articleFile;
 	ConfigContainer cfg;
 	Cache rsscache(":memory:", &cfg);
@@ -883,7 +883,7 @@ TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
 	Controller c(paths);
 	ConfigContainer cfg;
 	KeyMap k(KM_NEWSBOAT);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 	v.set_config_container(&cfg);
 	v.set_keymap(&k);
 	Cache rsscache(":memory:", &cfg);
@@ -944,7 +944,7 @@ TEST_CASE("OP_OPENINBROWSER does not result in itemlist invalidation",
 		Stfl::reset();
 
 		// Verify that following regression is fixed:
-		// https://github.com/newsboat/newsboat/issues/1292
+		// https://github.com/Newsboat/Newsboat/issues/1292
 		REQUIRE_FALSE(item1->unread());
 		REQUIRE(item2->unread());
 		REQUIRE(item3->unread());

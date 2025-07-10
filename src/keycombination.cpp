@@ -3,10 +3,10 @@
 #include <cctype>
 #include <tuple>
 
-#include "libnewsboat-ffi/src/keycombination.rs.h"
+#include "libNewsboat-ffi/src/keycombination.rs.h"
 #include "strprintf.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 KeyCombination convert(const keycombination::bridged::KeyCombination& key_combination)
 {
@@ -141,4 +141,4 @@ bool KeyCombination::has_alt() const
 	return alt == AltState::Alt;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

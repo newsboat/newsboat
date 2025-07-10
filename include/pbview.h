@@ -8,13 +8,13 @@
 #include "stflpp.h"
 #include "stflrichtext.h"
 
-namespace newsboat {
+namespace Newsboat {
 class KeyMap;
 }
 
-using namespace newsboat;
+using namespace Newsboat;
 
-namespace podboat {
+namespace Podboat {
 
 class PbController;
 class Download;
@@ -44,19 +44,19 @@ private:
 
 	bool update_view;
 	PbController& ctrl;
-	newsboat::Stfl::Form dllist_form;
-	newsboat::Stfl::Form help_form;
+	Newsboat::Stfl::Form dllist_form;
+	Newsboat::Stfl::Form help_form;
 	LineView title_line_dllist_form;
 	LineView title_line_help_form;
 	LineView msg_line_dllist_form;
 	LineView msg_line_help_form;
-	newsboat::KeyMap& keys;
-	const newsboat::ColorManager& colorman;
+	Newsboat::KeyMap& keys;
+	const Newsboat::ColorManager& colorman;
 
 	ListWidget downloads_list;
 	TextviewWidget help_textview;
 };
 
-} // namespace podboat
+} // namespace Podboat
 
 #endif /* PODBOAT_VIEW_H_ */

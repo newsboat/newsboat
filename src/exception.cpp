@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-namespace newsboat {
+namespace Newsboat {
 
 Exception::Exception(unsigned int error_code)
 	: ecode(error_code)
@@ -16,4 +16,4 @@ const char* Exception::what() const throw()
 	return ::strerror(ecode);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

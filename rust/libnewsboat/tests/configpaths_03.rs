@@ -1,4 +1,4 @@
-use libnewsboat::configpaths::ConfigPaths;
+use libNewsboat::configpaths::ConfigPaths;
 use section_testing::{enable_sections, section};
 use std::{env, fs, path};
 use tempfile::TempDir;
@@ -30,7 +30,7 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
     let tmp = TempDir::new().unwrap();
     env::set_var("HOME", tmp.path());
 
-    let dotdir = tmp.path().join(".newsboat");
+    let dotdir = tmp.path().join(".Newsboat");
 
     if section!("Using dotdir") {
         env::remove_var("XDG_CONFIG_HOME");
@@ -52,8 +52,8 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
             env::remove_var("XDG_CONFIG_HOME");
             env::remove_var("XDG_DATA_HOME");
 
-            let config_dir = tmp.path().join(".config").join("newsboat");
-            let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+            let config_dir = tmp.path().join(".config").join("Newsboat");
+            let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
 
             if section!("No dirs existed => dotdir created") {
                 assert_dirs_exist_after_create_dirs(&[&dotdir], &tmp);
@@ -88,8 +88,8 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
 
             env::remove_var("XDG_DATA_HOME");
 
-            let config_dir = config_home.join("newsboat");
-            let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+            let config_dir = config_home.join("Newsboat");
+            let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
 
             if section!("No dirs existed => dotdir created") {
                 assert_dirs_exist_after_create_dirs(&[&dotdir], &tmp);
@@ -124,8 +124,8 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
                 .join(fastrand::u32(..).to_string());
             env::set_var("XDG_DATA_HOME", &data_home);
 
-            let config_dir = tmp.path().join(".config").join("newsboat");
-            let data_dir = data_home.join("newsboat");
+            let config_dir = tmp.path().join(".config").join("Newsboat");
+            let data_dir = data_home.join("Newsboat");
 
             if section!("No dirs existed => dotdir created") {
                 assert_dirs_exist_after_create_dirs(&[&dotdir], &tmp);
@@ -164,8 +164,8 @@ fn t_configpaths_create_dirs_returns_true_if_both_config_and_data_dirs_exist_now
                 .join(fastrand::u32(..).to_string());
             env::set_var("XDG_DATA_HOME", &data_home);
 
-            let config_dir = config_home.join("newsboat");
-            let data_dir = data_home.join("newsboat");
+            let config_dir = config_home.join("Newsboat");
+            let data_dir = data_home.join("Newsboat");
 
             if section!("No dirs existed => dotdir created") {
                 assert_dirs_exist_after_create_dirs(&[&dotdir], &tmp);

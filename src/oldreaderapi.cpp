@@ -26,7 +26,7 @@
 
 // for reference, see https://github.com/theoldreader/api
 
-namespace newsboat {
+namespace Newsboat {
 
 OldReaderApi::OldReaderApi(ConfigContainer& c)
 	: RemoteApi(c)
@@ -385,4 +385,4 @@ std::string OldReaderApi::post_content(const std::string& url,
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

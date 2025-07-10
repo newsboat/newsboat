@@ -8,7 +8,7 @@
 
 #include "configcontainer.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class RssFeed;
 class RssIgnores;
@@ -114,6 +114,6 @@ private:
 	std::recursive_mutex mtx;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CACHE_H_ */

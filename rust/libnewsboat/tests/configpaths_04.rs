@@ -1,4 +1,4 @@
-use libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
+use libNewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use std::env;
 use std::path::Path;
 
@@ -16,7 +16,7 @@ fn t_configpaths_process_args_replaces_paths_with_the_ones_supplied_by_cliargspa
     let config_file = Path::new("this is a/config");
 
     let parser = CliArgsParser::new(vec![
-        "newsboat".into(),
+        "Newsboat".into(),
         "-u".into(),
         url_file.into(),
         "-c".into(),

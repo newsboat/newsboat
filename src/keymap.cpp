@@ -13,12 +13,12 @@
 #include "strprintf.h"
 #include "utils.h"
 
-#include "libnewsboat-ffi/src/keymap.rs.h"
+#include "libNewsboat-ffi/src/keymap.rs.h"
 
 namespace {
-using namespace newsboat;
+using namespace Newsboat;
 std::vector<MacroCmd> convert_operations(const
-	rust::Vec<newsboat::keymap::bridged::Operation>& operations)
+	rust::Vec<Newsboat::keymap::bridged::Operation>& operations)
 {
 	std::vector<MacroCmd> cmds;
 	for (const auto& operation : operations) {
@@ -46,7 +46,7 @@ std::vector<MacroCmd> convert_operations(const
 }
 }
 
-namespace newsboat {
+namespace Newsboat {
 
 struct OpDesc {
 	const Operation op;
@@ -752,7 +752,7 @@ static const std::map<std::string, std::uint32_t> contexts = {
 	{"tagselection", KM_TAGSELECT},
 	{"filterselection", KM_FILTERSELECT},
 	{"urlview", KM_URLVIEW},
-	{"podboat", KM_PODBOAT},
+	{"Podboat", KM_PODBOAT},
 	{"dialogs", KM_DIALOGS},
 	{"dirbrowser", KM_DIRBROWSER},
 	{"searchresultslist", KM_SEARCHRESULTSLIST},
@@ -1371,4 +1371,4 @@ std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hint
 	return keymap_hint;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

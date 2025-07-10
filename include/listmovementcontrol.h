@@ -6,7 +6,7 @@
 
 #include "stflpp.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class RegexManager;
 
@@ -267,6 +267,6 @@ private:
 	std::uint32_t current_scroll_offset {};
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_LISTWIDGETBACKEND_H_ */

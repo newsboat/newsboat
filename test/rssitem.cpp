@@ -10,7 +10,7 @@
 #include "test_helpers/envvar.h"
 #include "test_helpers/stringmaker/optional.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("RssItem::sort_flags() cleans up flags", "[RssItem]")
 {

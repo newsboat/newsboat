@@ -13,9 +13,9 @@
 
 #include "configcontainer.h"
 
-#include "libnewsboat-ffi/src/utils.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/utils.rs.h" // IWYU pragma: export
 
-namespace newsboat {
+namespace Newsboat {
 
 class CurlHandle;
 
@@ -189,6 +189,6 @@ std::string preserve_quotes(const std::string& s);
 void wait_for_keypress();
 }
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_UTIL_H_ */

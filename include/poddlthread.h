@@ -9,11 +9,11 @@
 #include "configcontainer.h"
 #include "download.h"
 
-namespace podboat {
+namespace Podboat {
 
 class PodDlThread {
 public:
-	PodDlThread(Download* dl_, newsboat::ConfigContainer& c);
+	PodDlThread(Download* dl_, Newsboat::ConfigContainer& c);
 	virtual ~PodDlThread();
 	size_t write_data(void* buffer, size_t size, size_t nmemb);
 	int progress(double dlnow, double dltotal);
@@ -29,9 +29,9 @@ private:
 	std::chrono::time_point<std::chrono::steady_clock> tv1;
 	std::chrono::time_point<std::chrono::steady_clock> tv2;
 	size_t bytecount;
-	newsboat::ConfigContainer& cfg;
+	Newsboat::ConfigContainer& cfg;
 };
 
-} // namespace podboat
+} // namespace Podboat
 
 #endif /* PODBOAT_PODDLTHREAD_H_ */

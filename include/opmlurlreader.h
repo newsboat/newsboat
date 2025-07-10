@@ -7,7 +7,7 @@
 #include "configcontainer.h"
 #include "urlreader.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class OpmlUrlReader : public UrlReader {
 public:

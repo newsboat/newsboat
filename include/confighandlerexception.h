@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 enum class ActionHandlerStatus;
 
@@ -29,7 +29,7 @@ private:
 	std::string msg;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGHANDLEREXCEPTION_H_ */
 

@@ -6,7 +6,7 @@
 #include "feedcontainer.h"
 #include "fileurlreader.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 namespace opml {
 xmlDocPtr generate(const FeedContainer& feedcontainer, bool version2);
@@ -15,6 +15,6 @@ std::optional<std::string> import(
 	FileUrlReader& urlcfg);
 }
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_OPML_H_ */

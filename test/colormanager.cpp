@@ -9,7 +9,7 @@
 #include "confighandlerexception.h"
 #include "configparser.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 class StylesCollector {
 	std::map<std::string, std::string> styles;

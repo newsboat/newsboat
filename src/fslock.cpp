@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-namespace newsboat {
+namespace Newsboat {
 
 FsLock::FsLock()
 	: rs_object(fslock::bridged::create())
@@ -16,7 +16,7 @@ bool FsLock::try_lock(const std::string& new_lock_filepath, pid_t& pid,
 {
 	std::int64_t p;
 	rust::String message;
-	const bool result = newsboat::fslock::bridged::try_lock(*rs_object,
+	const bool result = Newsboat::fslock::bridged::try_lock(*rs_object,
 			new_lock_filepath, p, message);
 
 	// We use `libc::pid_t` on the rust side so we can guarantee this will fit
@@ -26,4 +26,4 @@ bool FsLock::try_lock(const std::string& new_lock_filepath, pid_t& pid,
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

@@ -15,7 +15,7 @@
 #   docker build \
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
-#       --tag=newsboat-build-tools \
+#       --tag=Newsboat-build-tools \
 #       --file=docker/ubuntu_18.04-build-tools.dockerfile \
 #       docker
 #
@@ -24,7 +24,7 @@
 #   docker build \
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
-#       --tag=newsboat-build-tools \
+#       --tag=Newsboat-build-tools \
 #       --file=docker/ubuntu_18.04-build-tools.dockerfile \
 #       --build-arg cxx_package=clang-7 \
 #       --build-arg cc=clang-7 \
@@ -42,7 +42,7 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       newsboat-build-tools \
+#       Newsboat-build-tools \
 #       make
 #
 # To save bandwidth, and speed up the build slightly, share the host's Cargo

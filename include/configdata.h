@@ -6,7 +6,7 @@
 
 #include "3rd-party/expected.hpp"
 
-namespace newsboat {
+namespace Newsboat {
 
 enum class ConfigDataType { BOOL, INT, STR, PATH, ENUM };
 
@@ -73,7 +73,7 @@ private:
 	bool multi_option_;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGDATA_H_ */
 

@@ -6,9 +6,9 @@
 #include "rss/feed.h"
 #include "utils.h"
 
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 
 class CurlHandle;
 
@@ -48,6 +48,6 @@ private:
 	std::string server;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_MINIFLUXAPI_H_ */

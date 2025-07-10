@@ -12,7 +12,7 @@
 #include "keymap.h"
 #include "queueloader.h"
 
-namespace podboat {
+namespace Podboat {
 
 class PbView;
 
@@ -24,7 +24,7 @@ public:
 	void initialize(int argc, char* argv[]);
 	int run(PbView& v);
 
-	newsboat::KeyMap& get_keymap();
+	Newsboat::KeyMap& get_keymap();
 
 	std::vector<Download>& downloads()
 	{
@@ -45,12 +45,12 @@ public:
 
 	void play_file(const std::string& str);
 
-	newsboat::ConfigContainer* get_cfgcont()
+	Newsboat::ConfigContainer* get_cfgcont()
 	{
 		return &cfg;
 	}
 
-	const newsboat::ColorManager& get_colormanager()
+	const Newsboat::ColorManager& get_colormanager()
 	{
 		return colorman;
 	}
@@ -61,7 +61,7 @@ private:
 
 	std::string config_file;
 	std::string queue_file;
-	newsboat::ConfigContainer cfg;
+	Newsboat::ConfigContainer cfg;
 	std::vector<Download> downloads_;
 
 	std::string config_dir;
@@ -71,13 +71,13 @@ private:
 	std::unique_ptr<QueueLoader> ql;
 
 	std::string lock_file;
-	std::unique_ptr<newsboat::FsLock> fslock;
+	std::unique_ptr<Newsboat::FsLock> fslock;
 
 	bool automatic_dl = false;
-	newsboat::ColorManager colorman;
-	newsboat::KeyMap keys;
+	Newsboat::ColorManager colorman;
+	Newsboat::KeyMap keys;
 };
 
-} // namespace podboat
+} // namespace Podboat
 
 #endif /* PODBOAT_CONTROLLER_H_ */

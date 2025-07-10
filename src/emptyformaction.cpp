@@ -1,6 +1,6 @@
 #include "emptyformaction.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 EmptyFormAction::EmptyFormAction(View& v, const std::string& formstr,
 	ConfigContainer* cfg)
@@ -39,4 +39,4 @@ bool EmptyFormAction::process_operation(Operation /*op*/,
 	return false;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

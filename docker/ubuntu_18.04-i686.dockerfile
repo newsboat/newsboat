@@ -5,7 +5,7 @@
 #   docker build \
 #       --build-arg UID=$(id -u) \
 #       --build-arg GID=$(id -g) \
-#       --tag=newsboat-i686-build-tools \
+#       --tag=Newsboat-i686-build-tools \
 #       --file=docker/ubuntu_18.04-i686.dockerfile \
 #       docker
 #
@@ -19,7 +19,7 @@
 #   docker run \
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/home/builder/src \
-#       newsboat-i686-build-tools \
+#       Newsboat-i686-build-tools \
 #       make
 #
 # To save on bandwidth, and speed up the build slightly, share the host's Cargo

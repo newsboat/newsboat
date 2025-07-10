@@ -1,6 +1,6 @@
 use section_testing::{enable_sections, section};
 
-use libnewsboat::utils::utf8_to_locale;
+use libNewsboat::utils::utf8_to_locale;
 
 mod locale_helpers;
 

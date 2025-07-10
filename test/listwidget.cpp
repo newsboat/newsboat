@@ -8,7 +8,7 @@
 #include <set>
 #include <string>
 
-using namespace newsboat;
+using namespace Newsboat;
 
 const static std::string stflListForm =
 	"vbox\n"

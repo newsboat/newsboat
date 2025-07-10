@@ -68,7 +68,7 @@ Put your `#include` statements in the following order:
 
 ### Namespaces
 
-Use snake case, e.g. "newsboat_utils".
+Use snake case, e.g. "Newsboat_utils".
 
 
 ### Struct and class names

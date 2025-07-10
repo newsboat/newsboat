@@ -1,6 +1,6 @@
 use cxx::{type_id, ExternType};
 
-use libnewsboat::cliargsparser;
+use libNewsboat::cliargsparser;
 use std::ffi::OsString;
 use std::os::unix::ffi::OsStringExt;
 
@@ -9,11 +9,11 @@ use std::os::unix::ffi::OsStringExt;
 pub struct CliArgsParser(pub cliargsparser::CliArgsParser);
 
 unsafe impl ExternType for CliArgsParser {
-    type Id = type_id!("newsboat::cliargsparser::bridged::CliArgsParser");
+    type Id = type_id!("Newsboat::cliargsparser::bridged::CliArgsParser");
     type Kind = cxx::kind::Opaque;
 }
 
-#[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
+#[cxx::bridge(namespace = "Newsboat::cliargsparser::bridged")]
 mod bridged {
     /// Shared data structure between C++/Rust. We need to do this, because
     /// Vec<Vec<T>> is an unsupported CXX type.

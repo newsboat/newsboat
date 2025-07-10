@@ -4,7 +4,7 @@
 
 #include "regexmanager.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("lines marked as `wrappable` are wrapped to fit width",
 	"[TextFormatter]")

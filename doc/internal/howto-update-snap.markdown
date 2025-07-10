@@ -4,7 +4,7 @@ How to re-build snap against up-to-date packages
 The snap's owner (currently Alexander Batischev) might receive an email from
 the Snap Store saying:
 
-> Subject: newsboat contains outdated Ubuntu packages
+> Subject: Newsboat contains outdated Ubuntu packages
 >
 > A scan of this snap shows that it was built with packages from the Ubuntu
 > archive that have since received security updates. The following lists new
@@ -43,4 +43,4 @@ You'll need:
 
     $ for i in *.snap; do snapcraft upload --release=beta,candidate,stable $i ; done
 
-6. Remove built snaps: `rm -f *.snap newsboat*txt`.
+6. Remove built snaps: `rm -f *.snap Newsboat*txt`.

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace newsboat {
+namespace Newsboat {
 
 StatusLine::StatusLine(IStatus& s)
 	: next_message_id(0)
@@ -80,4 +80,4 @@ AutoDiscardMessage::~AutoDiscardMessage()
 	status_line.mark_finished(message_id);
 }
 
-} // namespace newsboat
+} // namespace Newsboat

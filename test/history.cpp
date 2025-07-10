@@ -5,7 +5,7 @@
 #include "3rd-party/catch.hpp"
 #include "test_helpers/tempdir.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("History can be iterated on in any direction", "[History]")
 {

@@ -1,4 +1,4 @@
-newsboat.cpp
+Newsboat.cpp
 src/cache.cpp
 src/charencoding.cpp
 src/cliargsparser.cpp

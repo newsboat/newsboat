@@ -1,4 +1,4 @@
-use libnewsboat::logger::get_instance;
+use libNewsboat::logger::get_instance;
 use tempfile::TempDir;
 
 #[test]

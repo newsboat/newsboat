@@ -11,7 +11,7 @@
 #   --build-arg cxx_package='clang-18 libclang-rt-18-dev' \
 #   --build-arg cxx=clang++-18 \
 #   --build-arg cc=clang-18 \
-#   --tag=newsboat-clang-18-rust-1.82:24.04 \
+#   --tag=Newsboat-clang-18-rust-1.82:24.04 \
 #   --file=docker/ubuntu_24.04-build-tools.dockerfile \
 #   docker
 #
@@ -19,7 +19,7 @@
 #   -it --rm \
 #   --mount type=bind,source=$(pwd),target=/workspace -w /workspace \
 #   --user $(id -u):$(id -g) \
-#   newsboat-clang-18-rust-1.81:24.04 \
+#   Newsboat-clang-18-rust-1.81:24.04 \
 #   bash -c 'rustup component add llvm-tools-preview && cargo install grcov && test/generate_coverage_report.sh'
 
 set -e
@@ -39,7 +39,7 @@ rm -rf html
 grcov . --source-dir . --binary-path . \
     --ignore-not-existing \
     --ignore='/*' --ignore='3rd-party/*' --ignore='doc/*' --ignore='test/*' \
-    --ignore='target/*' --ignore='newsboat.cpp' --ignore='podboat.cpp' \
+    --ignore='target/*' --ignore='Newsboat.cpp' --ignore='Podboat.cpp' \
     -t html -o ./$OUTDIR
 
 echo "Coverage reports:"

@@ -6,9 +6,9 @@
 
 #include "config.h"
 
-namespace newsboat {
+namespace Newsboat {
 
-// This enum has to be kept in sync with enum LinkType in rust/libnewsboat/src/links.rs
+// This enum has to be kept in sync with enum LinkType in rust/libNewsboat/src/links.rs
 enum class LinkType { HREF, IMG, EMBED, IFRAME, VIDEO, AUDIO };
 
 struct LinkPair {

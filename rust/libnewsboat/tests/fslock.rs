@@ -1,4 +1,4 @@
-use libnewsboat::fslock::FsLock;
+use libNewsboat::fslock::FsLock;
 use std::env;
 use std::io::{Error, ErrorKind};
 use std::io::{Read, Write};

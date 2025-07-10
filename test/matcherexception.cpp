@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-using namespace newsboat;
+using namespace Newsboat;
 
 extern "C" {
 	MatcherErrorFfi rs_get_test_attr_unavail_error();

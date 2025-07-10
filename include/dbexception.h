@@ -4,7 +4,7 @@
 #include <sqlite3.h>
 #include <string>
 
-namespace newsboat {
+namespace Newsboat {
 
 class DbException : public std::exception {
 public:
@@ -22,7 +22,7 @@ private:
 	std::string msg;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_DBEXCEPTION_H_ */
 

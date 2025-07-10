@@ -5,7 +5,7 @@
 #include "logger.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 OpmlUrlReader::OpmlUrlReader(ConfigContainer& c, const std::string& url_file)
 	: cfg(c), file(url_file)

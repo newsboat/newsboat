@@ -1,6 +1,6 @@
 #include "strprintf.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 std::string strprintf::fmt(const std::string& format)
 {

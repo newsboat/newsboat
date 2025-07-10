@@ -1,24 +1,24 @@
 By default, Newsboat stores all the files in a traditional Unix fashion, i.e.
-in a "dotdir" located at _~/.newsboat_. However, it also supports a modern
+in a "dotdir" located at _~/.Newsboat_. However, it also supports a modern
 way,
 https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html[XDG Base Directory Specification],
 which splits the files between the following locations:
 
-1. _$XDG_CONFIG_HOME/newsboat/_ (`XDG_CONFIG_HOME` defaults to _~/.config_)
-2. _$XDG_DATA_HOME/newsboat/_ (`XDG_DATA_HOME` defaults to _~/.local/share_)
+1. _$XDG_CONFIG_HOME/Newsboat/_ (`XDG_CONFIG_HOME` defaults to _~/.config_)
+2. _$XDG_DATA_HOME/Newsboat/_ (`XDG_DATA_HOME` defaults to _~/.local/share_)
 
-If the _newsboat_ directory exists under `XDG_CONFIG_HOME`, then Newsboat will
+If the _Newsboat_ directory exists under `XDG_CONFIG_HOME`, then Newsboat will
 use XDG directories (creating the data directory if necessary). Otherwise,
-Newsboat will default to _~/.newsboat_.
+Newsboat will default to _~/.Newsboat_.
 
-If you're currently using _~/.newsboat/_ but wish to migrate to XDG
+If you're currently using _~/.Newsboat/_ but wish to migrate to XDG
 directories, you should move the files as follows:
 
 _config_, _urls_::
-        to _$XDG_CONFIG_HOME/newsboat/_
+        to _$XDG_CONFIG_HOME/Newsboat/_
 
 _cache.db_, _history.search_, _history.cmdline_, _queue_::
-        to _$XDG_DATA_HOME/newsboat/_
+        to _$XDG_DATA_HOME/Newsboat/_
 
 Newsboat and Podboat also create "lock files". These prevent you from starting
 two instances of the same program, and thus from corrupting your data. Newsboat
@@ -30,12 +30,12 @@ work with _cache.db_ or _queue_. By default, lock files are located as follows:
 ||dotdir|XDG
 
 |Newsboat
-|_~/.newsboat/cache.db.lock_
-|_$XDG_DATA_HOME/newsboat/cache.db.lock_
+|_~/.Newsboat/cache.db.lock_
+|_$XDG_DATA_HOME/Newsboat/cache.db.lock_
 
 |Podboat
-|_~/.newsboat/pb-lock.pid_
-|_$XDG_DATA_HOME/newsboat/.lock_
+|_~/.Newsboat/pb-lock.pid_
+|_$XDG_DATA_HOME/Newsboat/.lock_
 |===
 
 Newsboat places the lock file next to the cache file, so if you specify

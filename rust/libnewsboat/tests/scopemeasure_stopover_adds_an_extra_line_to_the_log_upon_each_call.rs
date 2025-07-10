@@ -1,4 +1,4 @@
-use libnewsboat::{
+use libNewsboat::{
     logger::{self, Level},
     scopemeasure::ScopeMeasure,
 };

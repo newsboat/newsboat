@@ -1,5 +1,5 @@
 #!/bin/bash
-#basic newsboat bookmark plugin for evernote using geeknote: https://github.com/pipakin/geeknote
+#basic Newsboat bookmark plugin for evernote using geeknote: https://github.com/pipakin/geeknote
 
 url="$1"
 title="$2"

@@ -8,8 +8,8 @@
 #include "configcontainer.h"
 #include "download.h"
 
-using namespace newsboat;
-using namespace podboat;
+using namespace Newsboat;
+using namespace Podboat;
 
 bool contains_download_with_status(const std::vector<Download>& downloads,
 	DlStatus status)
@@ -49,7 +49,7 @@ TEST_CASE("reload() removes downloads iff they are marked as finished or deleted
 	"[QueueLoader]")
 {
 	auto empty_callback = []() {};
-	newsboat::ConfigContainer cfg;
+	Newsboat::ConfigContainer cfg;
 	test_helpers::TempFile queueFile;
 
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);

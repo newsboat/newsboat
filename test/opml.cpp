@@ -9,7 +9,7 @@
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format",
 	"[Opml]")

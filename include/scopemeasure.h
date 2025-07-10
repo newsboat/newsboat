@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "libnewsboat-ffi/src/scopemeasure.rs.h" // IWYU pragma: export
+#include "libNewsboat-ffi/src/scopemeasure.rs.h" // IWYU pragma: export
 
-namespace newsboat {
+namespace Newsboat {
 
 class ScopeMeasure {
 public:
@@ -17,6 +17,6 @@ private:
 	rust::Box<scopemeasure::bridged::ScopeMeasure> rs_object;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_SCOPEMEASURE_H_ */

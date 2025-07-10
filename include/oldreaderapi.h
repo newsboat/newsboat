@@ -5,7 +5,7 @@
 
 #include "remoteapi.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 class OldReaderApi : public RemoteApi {
 public:
@@ -35,6 +35,6 @@ private:
 	std::string auth_header;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_OLDREADERAPI_H_ */

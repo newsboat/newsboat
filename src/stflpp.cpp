@@ -8,7 +8,7 @@
 #include "logger.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 /*
  * This is a wrapper around the low-level C functions of STFL.
@@ -135,4 +135,4 @@ std::string Stfl::Form::dump(const std::string& name, const std::string& prefix,
 	return retval;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

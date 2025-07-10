@@ -1,4 +1,4 @@
-use libnewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
+use libNewsboat::{cliargsparser::CliArgsParser, configpaths::ConfigPaths};
 use section_testing::{enable_sections, section};
 use std::env;
 use tempfile::TempDir;
@@ -49,7 +49,7 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_config_paths_we
     ));
 
     let parser = CliArgsParser::new(vec![
-        "newsboat".into(),
+        "Newsboat".into(),
         "-u".into(),
         url_file.clone().into(),
         "-c".into(),

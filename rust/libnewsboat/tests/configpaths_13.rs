@@ -7,7 +7,7 @@ use crate::configpaths_helpers::libc::{S_IRUSR, S_IXUSR};
 
 enable_sections! {
 #[test]
-fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_config_dir_couldnt_be_created(
+fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_Newsboat_xdg_config_dir_couldnt_be_created(
 ) {
     let tmp = TempDir::new().unwrap();
 
@@ -26,8 +26,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_co
         let config_home = tmp.path().join(".config");
         let _config_home_chmod = configpaths_helpers::Chmod::new(&config_home, S_IRUSR | S_IXUSR);
 
-        let config_dir = config_home.join("newsboat");
-        let data_dir = tmp.path().join(".local").join("share").join("newsboat");
+        let config_dir = config_home.join("Newsboat");
+        let data_dir = tmp.path().join(".local").join("share").join("Newsboat");
         configpaths_helpers::assert_xdg_not_migrated(&config_dir, &data_dir);
     }
 
@@ -45,8 +45,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_co
         let _config_home_chmod = configpaths_helpers::Chmod::new(&config_home, S_IRUSR | S_IXUSR);
 
         configpaths_helpers::assert_xdg_not_migrated(
-            &config_home.join("newsboat"),
-            &tmp.path().join(".local").join("share").join("newsboat"));
+            &config_home.join("Newsboat"),
+            &tmp.path().join(".local").join("share").join("Newsboat"));
     }
 
     if section!("XDG_DATA_HOME redefined") {
@@ -64,8 +64,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_co
         let _config_home_chmod = configpaths_helpers::Chmod::new(&config_home, S_IRUSR | S_IXUSR);
 
         configpaths_helpers::assert_xdg_not_migrated(
-            &config_home.join("newsboat"),
-            &data_dir.join("newsboat"));
+            &config_home.join("Newsboat"),
+            &data_dir.join("Newsboat"));
     }
 
     if section!("Both XDG_CONFIG_HOME and XDG_DATA_HOME redefined") {
@@ -86,8 +86,8 @@ fn t_configpaths_try_migrate_from_newsbeuter_does_not_migrate_if_newsboat_xdg_co
         let _config_home_chmod = configpaths_helpers::Chmod::new(&config_home, S_IRUSR | S_IXUSR);
 
         configpaths_helpers::assert_xdg_not_migrated(
-            &config_home.join("newsboat"),
-            &data_dir.join("newsboat"));
+            &config_home.join("Newsboat"),
+            &data_dir.join("Newsboat"));
     }
 }
 }

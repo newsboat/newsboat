@@ -6,7 +6,7 @@
 #include "test_helpers/stringmaker/optional.h"
 #include "test_helpers/tempdir.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE(
 	"Asks to print usage info and exit with failure if unknown option is "
@@ -21,19 +21,19 @@ TEST_CASE(
 	};
 
 	SECTION("Example No.1") {
-		check({"newsboat", "--some-unknown-option"});
+		check({"Newsboat", "--some-unknown-option"});
 	}
 
 	SECTION("Example No.2") {
-		check({"newsboat", "-s"});
+		check({"Newsboat", "-s"});
 	}
 
 	SECTION("Example No.3") {
-		check({"newsboat", "-m ix"});
+		check({"Newsboat", "-m ix"});
 	}
 
 	SECTION("Example No.4") {
-		check({"newsboat", "-wtf"});
+		check({"Newsboat", "-wtf"});
 	}
 }
 
@@ -52,11 +52,11 @@ TEST_CASE(
 	};
 
 	SECTION("-i") {
-		check({"newsboat", "-i", filename});
+		check({"Newsboat", "-i", filename});
 	}
 
 	SECTION("--import-from-opml") {
-		check({"newsboat", "--import-from-opml=" + filename});
+		check({"Newsboat", "--import-from-opml=" + filename});
 	}
 }
 
@@ -79,11 +79,11 @@ TEST_CASE("Resolves tilde to homedir in -i/--import-from-opml",
 	};
 
 	SECTION("-i") {
-		check({"newsboat", "-i", arg});
+		check({"Newsboat", "-i", arg});
 	}
 
 	SECTION("--import-from-opml") {
-		check({"newsboat", "--import-from-opml", arg});
+		check({"Newsboat", "--import-from-opml", arg});
 	}
 }
 
@@ -103,11 +103,11 @@ TEST_CASE(
 	};
 
 	SECTION("-i first") {
-		check({"newsboat", "-i", importf, "-e", exportf});
+		check({"Newsboat", "-i", importf, "-e", exportf});
 	}
 
 	SECTION("-e first") {
-		check({"newsboat", "-e", exportf, "-i", importf});
+		check({"Newsboat", "-e", exportf, "-i", importf});
 	}
 }
 
@@ -121,18 +121,18 @@ TEST_CASE("Sets `refresh_on_start` if -r/--refresh-on-start is provided",
 	};
 
 	SECTION("-r") {
-		check({"newsboat", "-r"});
+		check({"Newsboat", "-r"});
 	}
 
 	SECTION("--refresh-on-start") {
-		check({"newsboat", "--refresh-on-start"});
+		check({"Newsboat", "--refresh-on-start"});
 	}
 }
 
 TEST_CASE("Requests silent mode if -e/--export-to-opml is provided",
 	"[CliArgsParser]")
 {
-	const test_helpers::Opts opts{"newsboat", "-e"};
+	const test_helpers::Opts opts{"Newsboat", "-e"};
 
 	CliArgsParser args(opts.argc(), opts.argv());
 
@@ -149,11 +149,11 @@ TEST_CASE("Sets `do_export` if -e/--export-to-opml is provided",
 	};
 
 	SECTION("-e") {
-		check({"newsboat", "-e"});
+		check({"Newsboat", "-e"});
 	}
 
 	SECTION("--export-to-opml") {
-		check({"newsboat", "--export-to-opml"});
+		check({"Newsboat", "--export-to-opml"});
 	}
 }
 
@@ -168,11 +168,11 @@ TEST_CASE("Asks to print usage and exit with success if -h/--help is provided",
 	};
 
 	SECTION("-h") {
-		check({"newsboat", "-h"});
+		check({"Newsboat", "-h"});
 	}
 
 	SECTION("--help") {
-		check({"newsboat", "--help"});
+		check({"Newsboat", "--help"});
 	}
 }
 
@@ -191,11 +191,11 @@ TEST_CASE(
 	};
 
 	SECTION("-u") {
-		check({"newsboat", "-u", filename});
+		check({"Newsboat", "-u", filename});
 	}
 
 	SECTION("--url-file") {
-		check({"newsboat", "--url-file=" + filename});
+		check({"Newsboat", "--url-file=" + filename});
 	}
 }
 
@@ -216,11 +216,11 @@ TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 	};
 
 	SECTION("-u") {
-		check({"newsboat", "-u", arg});
+		check({"Newsboat", "-u", arg});
 	}
 
 	SECTION("--url-file") {
-		check({"newsboat", "--url-file", arg});
+		check({"Newsboat", "--url-file", arg});
 	}
 }
 
@@ -240,11 +240,11 @@ TEST_CASE(
 	};
 
 	SECTION("-c") {
-		check({"newsboat", "-c", filename});
+		check({"Newsboat", "-c", filename});
 	}
 
 	SECTION("--cache-file") {
-		check({"newsboat", "--cache-file=" + filename});
+		check({"Newsboat", "--cache-file=" + filename});
 	}
 }
 
@@ -252,7 +252,7 @@ TEST_CASE("Supports combined short options", "[CliArgsParser]")
 {
 	const std::string filename("cache.db");
 
-	test_helpers::Opts opts = {"newsboat", "-vc", filename};
+	test_helpers::Opts opts = {"Newsboat", "-vc", filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -265,7 +265,7 @@ TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 {
 	const std::string filename("cache.db");
 
-	test_helpers::Opts opts = {"newsboat", "-c" + filename};
+	test_helpers::Opts opts = {"Newsboat", "-c" + filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -278,7 +278,7 @@ TEST_CASE("Supports `=` between short option and value",
 {
 	const std::string filename("cache.db");
 
-	test_helpers::Opts opts = {"newsboat", "-c=" + filename};
+	test_helpers::Opts opts = {"Newsboat", "-c=" + filename};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
@@ -304,11 +304,11 @@ TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 	};
 
 	SECTION("-c") {
-		check({"newsboat", "-c", arg});
+		check({"Newsboat", "-c", arg});
 	}
 
 	SECTION("--cache-file") {
-		check({"newsboat", "--cache-file", arg});
+		check({"Newsboat", "--cache-file", arg});
 	}
 }
 
@@ -327,11 +327,11 @@ TEST_CASE(
 	};
 
 	SECTION("-C") {
-		check({"newsboat", "-C", filename});
+		check({"Newsboat", "-C", filename});
 	}
 
 	SECTION("--config-file") {
-		check({"newsboat", "--config-file=" + filename});
+		check({"Newsboat", "--config-file=" + filename});
 	}
 }
 
@@ -342,7 +342,7 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
-	const std::string filename("newsboat-config");
+	const std::string filename("Newsboat-config");
 	const std::string arg = std::string("~/") + filename;
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -353,11 +353,11 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	};
 
 	SECTION("-C") {
-		check({"newsboat", "-C", arg});
+		check({"Newsboat", "-C", arg});
 	}
 
 	SECTION("--config-file") {
-		check({"newsboat", "--config-file", arg});
+		check({"Newsboat", "--config-file", arg});
 	}
 }
 
@@ -376,7 +376,7 @@ TEST_CASE(
 	};
 
 	SECTION("--queue-file") {
-		check({"newsboat", "--queue-file=" + filename});
+		check({"Newsboat", "--queue-file=" + filename});
 	}
 }
 
@@ -397,7 +397,7 @@ TEST_CASE("Resolves tilde to homedir in --queue-file", "[CliArgsParser]")
 	};
 
 	SECTION("--queue-file") {
-		check({"newsboat", "--queue-file", arg});
+		check({"Newsboat", "--queue-file", arg});
 	}
 }
 
@@ -416,7 +416,7 @@ TEST_CASE(
 	};
 
 	SECTION("--search-history-file") {
-		check({"newsboat", "--search-history-file=" + filename});
+		check({"Newsboat", "--search-history-file=" + filename});
 	}
 }
 
@@ -437,7 +437,7 @@ TEST_CASE("Resolves tilde to homedir in --search-history-file", "[CliArgsParser]
 	};
 
 	SECTION("--search-history-file") {
-		check({"newsboat", "--search-history-file", arg});
+		check({"Newsboat", "--search-history-file", arg});
 	}
 }
 
@@ -456,7 +456,7 @@ TEST_CASE(
 	};
 
 	SECTION("--cmdline-history-file") {
-		check({"newsboat", "--cmdline-history-file=" + filename});
+		check({"Newsboat", "--cmdline-history-file=" + filename});
 	}
 }
 
@@ -477,7 +477,7 @@ TEST_CASE("Resolves tilde to homedir in --cmdline-history-file", "[CliArgsParser
 	};
 
 	SECTION("--cmdline-history-file") {
-		check({"newsboat", "--cmdline-history-file", arg});
+		check({"Newsboat", "--cmdline-history-file", arg});
 	}
 }
 
@@ -490,11 +490,11 @@ TEST_CASE("Sets `do_vacuum` if -X/--vacuum is provided", "[CliArgsParser]")
 	};
 
 	SECTION("-X") {
-		check({"newsboat", "-X"});
+		check({"Newsboat", "-X"});
 	}
 
 	SECTION("--vacuum") {
-		check({"newsboat", "--vacuum"});
+		check({"Newsboat", "--vacuum"});
 	}
 }
 
@@ -507,7 +507,7 @@ TEST_CASE("Sets `do_cleanup` if --cleanup is provided", "[CliArgsParser]")
 	};
 
 	SECTION("--cleanup") {
-		check({"newsboat", "--cleanup"});
+		check({"Newsboat", "--cleanup"});
 	}
 }
 
@@ -521,31 +521,31 @@ TEST_CASE("Increases `show_version` with each -v/-V/--version provided",
 	};
 
 	SECTION("-v => 1") {
-		check({"newsboat", "-v"}, 1);
+		check({"Newsboat", "-v"}, 1);
 	}
 
 	SECTION("-V => 1") {
-		check({"newsboat", "-V"}, 1);
+		check({"Newsboat", "-V"}, 1);
 	}
 
 	SECTION("--version => 1") {
-		check({"newsboat", "--version"}, 1);
+		check({"Newsboat", "--version"}, 1);
 	}
 
 	SECTION("-vV => 2") {
-		check({"newsboat", "-vV"}, 2);
+		check({"Newsboat", "-vV"}, 2);
 	}
 
 	SECTION("--version -v => 2") {
-		check({"newsboat", "--version", "-v"}, 2);
+		check({"Newsboat", "--version", "-v"}, 2);
 	}
 
 	SECTION("-V --version -v => 3") {
-		check({"newsboat", "-V", "--version", "-v"}, 3);
+		check({"Newsboat", "-V", "--version", "-v"}, 3);
 	}
 
 	SECTION("-VvVVvvvvV => 9") {
-		check({"newsboat", "-VvVVvvvvV"}, 9);
+		check({"Newsboat", "-VvVVvvvvV"}, 9);
 	}
 }
 
@@ -558,11 +558,11 @@ TEST_CASE("Requests silent mode if -x/--execute is provided", "[CliArgsParser]")
 	};
 
 	SECTION("-x") {
-		check({"newsboat", "-x", "reload"});
+		check({"Newsboat", "-x", "reload"});
 	}
 
 	SECTION("--execute") {
-		check({"newsboat", "--execute", "reload"});
+		check({"Newsboat", "--execute", "reload"});
 	}
 }
 
@@ -575,11 +575,11 @@ TEST_CASE("Sets `execute_cmds` if -x/--execute is provided", "[CliArgsParser]")
 	};
 
 	SECTION("-x") {
-		check({"newsboat", "-x", "reload"});
+		check({"Newsboat", "-x", "reload"});
 	}
 
 	SECTION("--execute") {
-		check({"newsboat", "--execute", "reload"});
+		check({"Newsboat", "--execute", "reload"});
 	}
 }
 
@@ -593,25 +593,25 @@ TEST_CASE("Inserts commands to cmds_to_execute if -x/--execute is provided",
 	};
 
 	SECTION("-x reload") {
-		check({"newsboat", "-x", "reload"}, {"reload"});
+		check({"Newsboat", "-x", "reload"}, {"reload"});
 	}
 
 	SECTION("--execute reload") {
-		check({"newsboat", "--execute", "reload"}, {"reload"});
+		check({"Newsboat", "--execute", "reload"}, {"reload"});
 	}
 
 	SECTION("-x reload print-unread") {
-		check({"newsboat", "-x", "reload", "print-unread"},
+		check({"Newsboat", "-x", "reload", "print-unread"},
 		{"reload", "print-unread"});
 	}
 
 	SECTION("--execute reload print-unread") {
-		check({"newsboat", "--execute", "reload", "print-unread"},
+		check({"Newsboat", "--execute", "reload", "print-unread"},
 		{"reload", "print-unread"});
 	}
 
 	SECTION("Multiple occurrences of the option") {
-		check({"newsboat", "-x", "print-unread", "--execute", "reload"},
+		check({"Newsboat", "-x", "print-unread", "--execute", "reload"},
 		{"print-unread", "reload"});
 	}
 }
@@ -625,11 +625,11 @@ TEST_CASE("Requests silent mode if -q/--quiet is provided", "[CliArgsParser]")
 	};
 
 	SECTION("-q") {
-		check({"newsboat", "-q"});
+		check({"Newsboat", "-q"});
 	}
 
 	SECTION("--quiet") {
-		check({"newsboat", "--quiet"});
+		check({"Newsboat", "--quiet"});
 	}
 }
 
@@ -646,11 +646,11 @@ TEST_CASE(
 	};
 
 	SECTION("-I") {
-		check({"newsboat", "-I", filename});
+		check({"Newsboat", "-I", filename});
 	}
 
 	SECTION("--import-from-file") {
-		check({"newsboat", "--import-from-file=" + filename});
+		check({"Newsboat", "--import-from-file=" + filename});
 	}
 }
 
@@ -672,11 +672,11 @@ TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 	};
 
 	SECTION("-I") {
-		check({"newsboat", "-I", arg});
+		check({"Newsboat", "-I", arg});
 	}
 
 	SECTION("--import-from-file") {
-		check({"newsboat", "--import-from-file", arg});
+		check({"Newsboat", "--import-from-file", arg});
 	}
 }
 
@@ -693,11 +693,11 @@ TEST_CASE(
 	};
 
 	SECTION("-E") {
-		check({"newsboat", "-E", filename});
+		check({"Newsboat", "-E", filename});
 	}
 
 	SECTION("--export-from-file") {
-		check({"newsboat", "--export-to-file=" + filename});
+		check({"Newsboat", "--export-to-file=" + filename});
 	}
 }
 
@@ -718,11 +718,11 @@ TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
 	};
 
 	SECTION("-E") {
-		check({"newsboat", "-E", arg});
+		check({"Newsboat", "-E", arg});
 	}
 
 	SECTION("--export-to-file") {
-		check({"newsboat", "--export-to-file", arg});
+		check({"Newsboat", "--export-to-file", arg});
 	}
 }
 
@@ -742,11 +742,11 @@ TEST_CASE(
 	};
 
 	SECTION("-I first") {
-		check({"newsboat", "-I", importf, "-E", exportf});
+		check({"Newsboat", "-I", importf, "-E", exportf});
 	}
 
 	SECTION("-E first") {
-		check({"newsboat", "-E", exportf, "-I", importf});
+		check({"Newsboat", "-E", exportf, "-I", importf});
 	}
 }
 
@@ -762,11 +762,11 @@ TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 	};
 
 	SECTION("-d") {
-		check({"newsboat", "-d", filename});
+		check({"Newsboat", "-d", filename});
 	}
 
 	SECTION("--log-file") {
-		check({"newsboat", "--log-file=" + filename});
+		check({"Newsboat", "--log-file=" + filename});
 	}
 }
 
@@ -777,7 +777,7 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path());
 
-	const std::string filename("newsboat.log");
+	const std::string filename("Newsboat.log");
 	const std::string arg = std::string("~/") + filename;
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -787,11 +787,11 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 	};
 
 	SECTION("-d") {
-		check({"newsboat", "-d", arg});
+		check({"Newsboat", "-d", arg});
 	}
 
 	SECTION("--log-file") {
-		check({"newsboat", "--log-file", arg});
+		check({"Newsboat", "--log-file", arg});
 	}
 }
 
@@ -806,27 +806,27 @@ TEST_CASE(
 	};
 
 	SECTION("--log-level=1 means USERERROR") {
-		check({"newsboat", "--log-level=1"}, Level::USERERROR);
+		check({"Newsboat", "--log-level=1"}, Level::USERERROR);
 	}
 
 	SECTION("--log-level=2 means CRITICAL") {
-		check({"newsboat", "--log-level=2"}, Level::CRITICAL);
+		check({"Newsboat", "--log-level=2"}, Level::CRITICAL);
 	}
 
 	SECTION("-l3 means ERROR") {
-		check({"newsboat", "-l3"}, Level::ERROR);
+		check({"Newsboat", "-l3"}, Level::ERROR);
 	}
 
 	SECTION("--log-level=4 means WARN") {
-		check({"newsboat", "--log-level=4"}, Level::WARN);
+		check({"Newsboat", "--log-level=4"}, Level::WARN);
 	}
 
 	SECTION("-l5 means INFO") {
-		check({"newsboat", "-l5"}, Level::INFO);
+		check({"Newsboat", "-l5"}, Level::INFO);
 	}
 
 	SECTION("-l6 means DEBUG") {
-		check({"newsboat", "-l6"}, Level::DEBUG);
+		check({"Newsboat", "-l6"}, Level::DEBUG);
 	}
 }
 
@@ -843,15 +843,15 @@ TEST_CASE(
 	};
 
 	SECTION("-l0") {
-		check({"newsboat", "-l0"});
+		check({"Newsboat", "-l0"});
 	}
 
 	SECTION("--log-level=7") {
-		check({"newsboat", "--log-level=7"});
+		check({"Newsboat", "--log-level=7"});
 	}
 
 	SECTION("--log-level=9001") {
-		check({"newsboat", "--log-level=90001"});
+		check({"Newsboat", "--log-level=90001"});
 	}
 }
 
@@ -864,8 +864,8 @@ TEST_CASE("Sets `program_name` to the first string of the options list",
 		REQUIRE(args.program_name() == expected);
 	};
 
-	check({"newsboat"}, "newsboat");
-	check({"podboat", "-h"}, "podboat");
+	check({"Newsboat"}, "Newsboat");
+	check({"Podboat", "-h"}, "Podboat");
 	check({"something else entirely", "--foo", "--bar", "--baz"},
 		"something else entirely");
 	check({"/usr/local/bin/app-with-a-path"},
@@ -881,15 +881,15 @@ TEST_CASE("Test should fail on equal sign with multiple values",
 		REQUIRE(args.cmds_to_execute() != cmds);
 	};
 
-	check({"newsboat", "-x=reload", "print-unread" }, { "reload", "print-unread" });
-	check({"newsboat", "--execute=reload", "print-unread" }, { "reload", "print-unread" });
+	check({"Newsboat", "-x=reload", "print-unread" }, { "reload", "print-unread" });
+	check({"Newsboat", "--execute=reload", "print-unread" }, { "reload", "print-unread" });
 
 }
 
 TEST_CASE("Supports combined short options where last has equal sign",
 	"[CliArgsParser]")
 {
-	test_helpers::Opts opts = {"newsboat", "-rx=reload"};
+	test_helpers::Opts opts = {"Newsboat", "-rx=reload"};
 	CliArgsParser args(opts.argc(), opts.argv());
 	std::vector<std::string> commands{"reload"};
 	REQUIRE(args.cmds_to_execute() == commands);

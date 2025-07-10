@@ -11,7 +11,7 @@
 #include "strprintf.h"
 #include "utils.h"
 
-namespace newsboat {
+namespace Newsboat {
 
 void TextFormatter::add_line(LineType type, std::string line)
 {
@@ -243,4 +243,4 @@ std::string TextFormatter::format_text_plain(const size_t width,
 	return result;
 }
 
-} // namespace newsboat
+} // namespace Newsboat

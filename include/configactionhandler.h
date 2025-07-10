@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace newsboat {
+namespace Newsboat {
 
 class ConfigActionHandler {
 public:
@@ -22,7 +22,7 @@ private:
 		const std::vector<std::string>& params);
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_CONFIGACTIONHANDLER_H_ */
 

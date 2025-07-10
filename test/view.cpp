@@ -7,7 +7,7 @@
 #include "configpaths.h"
 #include "cache.h"
 
-using namespace newsboat;
+using namespace Newsboat;
 
 TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", "[View]")
 {
@@ -19,7 +19,7 @@ TEST_CASE("get_filename_suggestion() normalizes filenames for saving articles", 
 
 	ConfigPaths paths{};
 	Controller c(paths);
-	newsboat::View v(c);
+	Newsboat::View v(c);
 
 	ConfigContainer cfg{};
 	Cache rsscache(":memory:", &cfg);

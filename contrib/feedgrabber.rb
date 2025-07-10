@@ -25,7 +25,7 @@ require 'gdbm'
     # create a FeedGrabber instance
     def initialize(uniqueName, path = nil, retries = 4, depth = 5, timeout = 15)
       path = File.expand_path("~") if path.nil?
-      @dbCacheName = "#{path}/.newsboat/#{uniqueName}.db"       # generate db cache filename
+      @dbCacheName = "#{path}/.Newsboat/#{uniqueName}.db"       # generate db cache filename
       @maxRetries = retries
       @maxDepth = depth
       @timeout = timeout

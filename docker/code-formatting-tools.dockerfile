@@ -7,7 +7,7 @@
 # Build with:
 #
 #   docker build \
-#       --tag=newsboat-code-formatting-tools \
+#       --tag=Newsboat-code-formatting-tools \
 #       --file=docker/code-formatting-tools.dockerfile \
 #       docker
 #
@@ -17,7 +17,7 @@
 #       --rm \
 #       --mount type=bind,source=$(pwd),target=/workspace \
 #       --user $(id -u):$(id -g) \
-#       newsboat-code-formatting-tools \
+#       Newsboat-code-formatting-tools \
 #       make fmt
 
 FROM rust:1.85.0-bookworm

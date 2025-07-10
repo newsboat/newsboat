@@ -9,9 +9,9 @@
 
 #define ID_SEPARATOR "/////"
 
-using HTTPMethod = newsboat::utils::HTTPMethod;
+using HTTPMethod = Newsboat::utils::HTTPMethod;
 
-namespace newsboat {
+namespace Newsboat {
 
 typedef std::map<std::string, rsspp::Feed> FeedMap;
 
@@ -41,6 +41,6 @@ private:
 	unsigned int min_pages;
 };
 
-} // namespace newsboat
+} // namespace Newsboat
 
 #endif /* NEWSBOAT_NEWSBLURAPI_H_ */

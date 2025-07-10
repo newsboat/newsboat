@@ -1,10 +1,10 @@
-use libnewsboat::keycombination;
+use libNewsboat::keycombination;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
 struct KeyCombination(keycombination::KeyCombination);
 
-#[cxx::bridge(namespace = "newsboat::keycombination::bridged")]
+#[cxx::bridge(namespace = "Newsboat::keycombination::bridged")]
 mod ffi {
     extern "Rust" {
         type KeyCombination;
