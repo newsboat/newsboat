@@ -1,6 +1,6 @@
 BEGIN {
-	# Switch field separator from space to tabulator.
-	FS="\t"
+	# Use two pipe symbols as input field separator
+	FS="\\|\\|"
     print ":experimental:"
     print ""
 }

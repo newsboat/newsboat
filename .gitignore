@@ -18,8 +18,6 @@ doc/podboat.1
 doc/xhtml/*
 doc/example-config
 doc/gen-example-config
-doc/generate
-doc/generate2
 doc/configcommands-linked.asciidoc
 doc/availableoperations-linked.asciidoc
 doc/cmdline-commands-linked.asciidoc
