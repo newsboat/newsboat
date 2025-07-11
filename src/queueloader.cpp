@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "queueloader.h"
 
 #include <cerrno>
@@ -104,7 +102,7 @@ std::optional<QueueLoader::CategorizedDownloads> QueueLoader::categorize_downloa
 
 void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 {
-	std::fstream f(queuefile, std::fstream::in);
+	std::fstream f(queuefile.to_locale_string(), std::fstream::in);
 	if (!f.is_open()) {
 		return;
 	}
@@ -165,11 +163,11 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			"QueueLoader::reload: found `%s' nowhere -> storing to new vector",
 			line);
 		Download d(cb_require_view_update);
-		std::string fn;
+		Filepath fn;
 		if (fields.size() == 1) {
 			fn = get_filename(fields[0]);
 		} else {
-			fn = fields[1];
+			fn = Filepath::from_locale_string(fields[1]);
 		}
 		d.set_filename(fn);
 
@@ -188,18 +186,20 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 			}
 		}
 
-		if (access(fn.c_str(), F_OK) == 0) {
+		auto partial_fn = fn;
+		partial_fn.add_extension(ConfigContainer::PARTIAL_FILE_SUFFIX);
+
+		if (access(fn.to_locale_string().c_str(), F_OK) == 0) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: found `%s' on file system -> mark as already downloaded",
 				fn);
 			if (d.status() == DlStatus::QUEUED || d.status() == DlStatus::MISSING) {
 				d.set_status(DlStatus::READY);
 			}
-		} else if (access((fn + ConfigContainer::PARTIAL_FILE_SUFFIX).c_str(),
-				F_OK) == 0) {
+		} else if (access(partial_fn.to_locale_string().c_str(), F_OK) == 0) {
 			LOG(Level::INFO,
 				"QueueLoader::reload: found `%s' on file system -> mark as partially downloaded",
-				fn + ConfigContainer::PARTIAL_FILE_SUFFIX);
+				partial_fn);
 			d.set_status(DlStatus::FAILED);
 		} else {
 			if (d.status() != DlStatus::QUEUED) {
@@ -214,13 +214,13 @@ void QueueLoader::update_from_queue_file(CategorizedDownloads& downloads) const
 
 void QueueLoader::write_queue_file(const CategorizedDownloads& downloads) const
 {
-	std::fstream f(queuefile, std::fstream::out);
+	std::fstream f(queuefile.to_locale_string(), std::fstream::out);
 	if (!f.is_open()) {
 		return;
 	}
 
 	for (const auto& dl : downloads.to_keep) {
-		f << dl.url() << " " << utils::quote(dl.filename());
+		f << dl.url() << " " << utils::quote(dl.filename().to_locale_string());
 		switch (dl.status()) {
 		case DlStatus::READY:
 			f << " downloaded";
@@ -276,9 +276,11 @@ newsboat::Filepath QueueLoader::get_filename(const std::string& str) const
 	char* base = basename(buf);
 	if (!base || strlen(base) == 0) {
 		time_t t = time(nullptr);
-		fn.push(utils::mt_strf_localtime("%Y-%b-%d-%H%M%S.unknown", t));
+		const auto filename = utils::mt_strf_localtime("%Y-%b-%d-%H%M%S.unknown", t);
+		fn.push(Filepath::from_locale_string(filename));
 	} else {
-		fn.push(utils::replace_all(base, "'", "%27"));
+		const auto filename = utils::replace_all(base, "'", "%27");
+		fn.push(Filepath::from_locale_string(filename));
 	}
 	return fn;
 }

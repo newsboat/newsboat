@@ -114,6 +114,28 @@ TEST_CASE("Can set extension for non-empty path", "[Filepath]")
 	}
 }
 
+TEST_CASE("add_extension passes tests from Rust docs", "[Filepath]")
+{
+	// Copied from https://doc.rust-lang.org/std/path/struct.PathBuf.html#method.add_extension
+
+	auto path = Filepath::from_locale_string("/feel/the");
+
+	REQUIRE(path.add_extension("formatted"));
+	REQUIRE(Filepath::from_locale_string("/feel/the.formatted") == path);
+
+	REQUIRE(path.add_extension("dark.side"));
+	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark.side") == path);
+
+	REQUIRE(path.set_extension("cookie"));
+	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark.cookie") == path);
+
+	REQUIRE(path.set_extension(""));
+	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark") == path);
+
+	REQUIRE(path.add_extension(""));
+	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark") == path);
+}
+
 TEST_CASE("Can check if path is absolute", "[Filepath]")
 {
 	Filepath path;
