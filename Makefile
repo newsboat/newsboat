@@ -224,7 +224,7 @@ clean-doc:
 	$(RM) -r doc/xhtml
 	$(RM) doc/*.xml doc/*.1 doc/*-linked.asciidoc doc/newsboat-cfgcmds.asciidoc \
 		doc/podboat-cfgcmds.asciidoc doc/newsboat-keycmds.asciidoc \
-		doc/example-config doc/gen-example-config
+		doc/example-config
 
 clean-test:
 	$(RM) test/test test/*.o test/test_helpers/*.o 3rd-party/catch.o
@@ -301,15 +301,12 @@ doc/$(PODBOAT).1: doc/manpage-podboat.asciidoc \
 		doc/chapter-files.asciidoc doc/man.rb
 	$(ASCIIDOCTOR) $(ASCIIDOCTOR_OPTS) --require=./doc/man.rb --backend=manpage doc/manpage-podboat.asciidoc
 
-doc/gen-example-config: doc/gen-example-config.cpp doc/split.h
-	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) -o doc/gen-example-config doc/gen-example-config.cpp
-
-doc/example-config: doc/gen-example-config doc/configcommands.dsv
-	sed 's/+{backslash}"+/`\\"`/g' doc/configcommands.dsv | doc/gen-example-config > doc/example-config
+doc/example-config: doc/createExampleConfig.awk doc/configcommands.dsv
+	awk -f doc/createExampleConfig.awk doc/configcommands.dsv > doc/example-config
 
 fmt:
 	astyle --project \
-		*.cpp doc/*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp \
+		*.cpp include/*.h rss/*.h rss/*.cpp src/*.cpp \
 		test/*.cpp test/test_helpers/*.h test/test_helpers/*.cpp \
 		test/test_helpers/stringmaker/*.h
 	$(CARGO) fmt
