@@ -6,6 +6,7 @@
 #include "cache.h"
 #include "fileurlreader.h"
 #include "rssfeed.h"
+#include "test_helpers/envvar.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
 
@@ -310,6 +311,20 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urlcfg.get_tags(urls[0]) == tags);
 }
+
+TEST_CASE("import() returns error when <opml> tag missing", "[Opml]")
+{
+	test_helpers::LcCtypeEnvVar lc_ctype;
+	lc_ctype.set("C"); // we want to check the original English error message
+
+	FileUrlReader urlcfg;
+	const std::string filepath = "file://" + utils::getcwd() + "/data/opml-tag-missing.opml";
+	const auto error_message = opml::import(filepath, urlcfg);
+
+	REQUIRE(error_message.has_value());
+	REQUIRE(error_message.value() == "Error: OPML file \"" + filepath + "\" is missing the <opml> root element");
+}
+
 // falls back to "url" if "xmlUrl" is absent
 
 // skips an entry if xmlUrl/url is absent

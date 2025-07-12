@@ -214,6 +214,10 @@ std::optional<std::string> opml::import(
 	std::optional<std::string> error_message;
 
 	xmlNode* root = xmlDocGetRootElement(doc);
+	if (strcmp((const char*)root->name, "opml") != 0) {
+		return strprintf::fmt(_("Error: OPML file \"%s\" is missing the <opml> root element"), filename);
+	}
+
 	for (xmlNode* node = root->children; node != nullptr;
 		node = node->next) {
 		if (strcmp((const char*)node->name, "body") == 0) {
