@@ -310,9 +310,32 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urlcfg.get_tags(urls[0]) == tags);
 }
-// falls back to "url" if "xmlUrl" is absent
 
-// skips an entry if xmlUrl/url is absent
+TEST_CASE("import() falls back to 'url' if 'xmlUrl' is absent", "[Opml]")
+{
+	FileUrlReader urlcfg;
+	REQUIRE_NOTHROW(
+		opml::import(
+		"file://" + utils::getcwd() + "/data/xmlurl-missing-but-url-exists.opml",
+		urlcfg));
+
+	const auto& urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0] == "https://example.com/feed.xml");
+}
+
+TEST_CASE("import() skips an entry if 'xmlUrl' and 'url' are absent", "[Opml]")
+{
+	FileUrlReader urlcfg;
+	REQUIRE_NOTHROW(
+		opml::import(
+		"file://" + utils::getcwd() + "/data/xmlurl-and-url-missing.opml",
+		urlcfg));
+
+	const auto& urls = urlcfg.get_urls();
+	REQUIRE(urls.size() == 1);
+	REQUIRE(urls[0] == "https://example.com/feed.xml");
+}
 
 // in tags, falls back to "title" if "text" is not available
 

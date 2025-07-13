@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>xmlUrl and url attributes are missing</title>
+    </head>
+
+    <body>
+        <outline type="rss" xmlUrl="https://example.com/feed.xml" title="example.com website" />
+        <outline type="rss" title="This one is skipped" />
+    </body>
+</opml>
