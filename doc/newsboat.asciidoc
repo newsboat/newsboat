@@ -953,7 +953,7 @@ This feature is often used to create a feed that contains all unread articles:
 	"query:Unread Articles:unread = \"yes\""
 
 Note the <<_using_double_quotes,use of double quotes>> to preserve spaces in
-the filter expression.
+the query feed name or filter expression.
 
 If you want to combine several feeds to one single feed, a good solution is to
 tag the feeds that you want to combine with one certain tag, and then create a
