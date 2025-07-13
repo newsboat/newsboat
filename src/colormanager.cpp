@@ -165,7 +165,7 @@ void ColorManager::emit_fallback_from_to(const std::string& from_element,
 	const auto to_style = element_styles.find(to_element);
 	if (from_style == element_styles.cend() && to_style != element_styles.cend()) {
 		const auto style = format_style(to_style->second);
-		LOG(Level::DEBUG, "ColorManager::apply_colors: %s inherited from %s %s\n", from_element,
+		LOG(Level::DEBUG, "ColorManager::apply_colors: %s inherited from %s %s", from_element,
 			to_element, style);
 		stfl_value_setter(from_element, style);
 	}
@@ -199,7 +199,7 @@ const
 		const auto colorattr = format_style(*style);
 
 		LOG(Level::DEBUG,
-			"ColorManager::apply_colors: %s %s\n",
+			"ColorManager::apply_colors: %s %s",
 			element,
 			colorattr);
 
@@ -218,9 +218,9 @@ const
 			underline.append("attr=underline");
 			// STFL will just ignore those in forms which don't have the
 			// `color_bold` and `color_underline` variables.
-			LOG(Level::DEBUG, "ColorManager::apply_colors: color_bold %s\n", bold);
+			LOG(Level::DEBUG, "ColorManager::apply_colors: color_bold %s", bold);
 			stfl_value_setter("color_bold", bold);
-			LOG(Level::DEBUG, "ColorManager::apply_colors: color_underline %s\n", underline);
+			LOG(Level::DEBUG, "ColorManager::apply_colors: color_underline %s", underline);
 			stfl_value_setter("color_underline", underline);
 		}
 	}
