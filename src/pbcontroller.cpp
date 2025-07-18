@@ -41,10 +41,8 @@ namespace podboat {
  *
  * returns false, if that fails
  */
-bool PbController::setup_dirs_xdg(const char* env_home)
+bool PbController::setup_dirs_xdg(const newsboat::Filepath& home)
 {
-	const Filepath env_home_filepath = Filepath::from_locale_string(env_home);
-
 	newsboat::Filepath xdg_config_dir;
 	newsboat::Filepath xdg_data_dir;
 
@@ -52,7 +50,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	if (env_xdg_config) {
 		xdg_config_dir = Filepath::from_locale_string(env_xdg_config);
 	} else {
-		xdg_config_dir = env_home_filepath;
+		xdg_config_dir = home;
 		xdg_config_dir.push(Filepath::from_locale_string(".config"));
 	}
 
@@ -60,7 +58,7 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	if (env_xdg_data) {
 		xdg_data_dir = Filepath::from_locale_string(env_xdg_data);
 	} else {
-		xdg_data_dir = env_home_filepath;
+		xdg_data_dir = home;
 		xdg_data_dir.push(Filepath::from_locale_string(".local"));
 		xdg_data_dir.push(Filepath::from_locale_string("share"));
 	}
@@ -133,7 +131,7 @@ PbController::PbController()
 	}
 	config_dir = Filepath::from_locale_string(cfgdir);
 
-	if (setup_dirs_xdg(cfgdir)) {
+	if (setup_dirs_xdg(config_dir)) {
 		return;
 	}
 
