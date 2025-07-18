@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "queuemanager.h"
 
 #include "3rd-party/catch.hpp"
@@ -228,7 +226,8 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		test_helpers::copy_file("data/empty-file", queue_file.get_path());
+		test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+			queue_file.get_path());
 		// The file is read-only
 		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
@@ -238,7 +237,7 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
 				REQUIRE(result.extra_string == "");
-				REQUIRE(result.extra_filename == queue_file.get_path().to_locale_string());
+				REQUIRE(result.extra_filename == queue_file.get_path());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -279,14 +278,14 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 	const auto result1 = manager.enqueue_url(item1, feed);
 	REQUIRE(result1.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(result1.extra_string == "");
-	REQUIRE(result1.extra_filename == "");
+	REQUIRE(result1.extra_filename == Filepath());
 
 	REQUIRE(item1.enqueued());
 
 	const auto result2 = manager.enqueue_url(item2, feed);
 	REQUIRE(result2.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 	REQUIRE(result2.extra_string == "");
-	REQUIRE(result2.extra_filename == "");
+	REQUIRE(result2.extra_filename == Filepath());
 
 	REQUIRE(item2.enqueued());
 
@@ -466,7 +465,7 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
 				REQUIRE(result.extra_string == "");
-				REQUIRE(result.extra_filename == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains three entries") {
@@ -561,7 +560,8 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		test_helpers::copy_file("data/empty-file", queue_file.get_path());
+		test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+			queue_file.get_path());
 		// The file is read-only
 		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
@@ -571,7 +571,7 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
 				REQUIRE(result.extra_string == "");
-				REQUIRE(result.extra_filename == queue_file.get_path().to_locale_string());
+				REQUIRE(result.extra_filename == queue_file.get_path());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
