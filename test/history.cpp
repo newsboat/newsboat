@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "history.h"
 
 #include <unistd.h>
@@ -50,7 +48,7 @@ TEST_CASE("History can be iterated on in any direction", "[History]")
 TEST_CASE("History can be saved and loaded from file", "[History]")
 {
 	test_helpers::TempDir tmp;
-	const auto filepath = tmp.get_path().join("history.cmdline");
+	const auto filepath = tmp.get_path().join(Filepath::from_locale_string("history.cmdline"));
 
 	History h;
 	h.add_line("testline");
@@ -81,7 +79,7 @@ TEST_CASE("Only the most recent lines are saved when limiting history",
 	"[History]")
 {
 	test_helpers::TempDir tmp;
-	const auto filepath = tmp.get_path().join("history.cmdline");
+	const auto filepath = tmp.get_path().join(Filepath::from_locale_string("history.cmdline"));
 	const int max_lines = 3;
 
 	History h;
