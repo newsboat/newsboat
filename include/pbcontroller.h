@@ -58,7 +58,7 @@ public:
 
 private:
 	void print_usage(const char* argv0);
-	bool setup_dirs_xdg(const char* env_home);
+	bool setup_dirs_xdg(const newsboat::Filepath& home);
 
 	newsboat::Filepath config_file;
 	newsboat::Filepath queue_file;

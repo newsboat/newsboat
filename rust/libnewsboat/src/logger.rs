@@ -507,7 +507,7 @@ mod tests {
 
                     assert_eq!(message, expected);
                 }
-                Err(e) => panic!("Error reading a line from the log: {:?}", e),
+                Err(e) => panic!("Error reading a line from the log: {e:?}"),
             }
         }
     }
@@ -548,7 +548,7 @@ mod tests {
 
                     assert_eq!(level, expected);
                 }
-                Err(e) => panic!("Error reading a line from the log: {:?}", e),
+                Err(e) => panic!("Error reading a line from the log: {e:?}"),
             }
         }
     }
@@ -838,7 +838,7 @@ mod tests {
 
                     assert_eq!(message, expected);
                 }
-                Err(e) => panic!("Error reading a line from the log: {:?}", e),
+                Err(e) => panic!("Error reading a line from the log: {e:?}"),
             }
         }
     }

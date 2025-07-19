@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "queuemanager.h"
 
 #include <fstream>
@@ -23,7 +21,7 @@ EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 	const Filepath filename = generate_enqueue_filename(item, feed);
 
 	std::fstream f;
-	f.open(queue_file, std::fstream::in);
+	f.open(queue_file.to_locale_string(), std::fstream::in);
 	if (f.is_open()) {
 		do {
 			std::string line;
@@ -31,26 +29,37 @@ EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 			if (!f.eof() && !line.empty()) {
 				const auto fields = utils::tokenize_quoted(line);
 				if (fields.size() >= 1 && fields[0] == url) {
-					return {EnqueueStatus::URL_QUEUED_ALREADY, url};
+					EnqueueResult result;
+					result.status = EnqueueStatus::URL_QUEUED_ALREADY;
+					result.extra_string = url;
+					return result;
 				}
-				if (fields.size() >= 2 && fields[1] == filename) {
-					return {EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY, filename};
+				if (fields.size() >= 2 && Filepath::from_locale_string(fields[1]) == filename) {
+					EnqueueResult result;
+					result.status = EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY;
+					result.extra_filename = filename;
+					return result;
 				}
 			}
 		} while (!f.eof());
 		f.close();
 	}
 
-	f.open(queue_file, std::fstream::app | std::fstream::out);
+	f.open(queue_file.to_locale_string(), std::fstream::app | std::fstream::out);
 	if (!f.is_open()) {
-		return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, queue_file};
+		EnqueueResult result;
+		result.status = EnqueueStatus::QUEUE_FILE_OPEN_ERROR;
+		result.extra_filename = queue_file;
+		return result;
 	}
-	f << url << " " << utils::quote(filename) << std::endl;
+	f << url << " " << utils::quote(filename.to_locale_string()) << std::endl;
 	f.close();
 
 	item.set_enqueued(true);
 
-	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
+	EnqueueResult result;
+	result.status = EnqueueStatus::QUEUED_SUCCESSFULLY;
+	return result;
 }
 
 std::string get_hostname_from_url(const std::string& url)
@@ -106,8 +115,7 @@ Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 		fmt.register_fmt('N', utils::replace_all(feed.title(), "/", "_"));
 	}
 
-	const std::string dlpath = fmt.do_format(dlformat);
-	return dlpath;
+	return Filepath::from_locale_string(fmt.do_format(dlformat.to_locale_string()));
 }
 
 EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
@@ -149,7 +157,9 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 		}
 	}
 
-	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
+	EnqueueResult result;
+	result.status = EnqueueStatus::QUEUED_SUCCESSFULLY;
+	return result;
 }
 
 } // namespace newsboat

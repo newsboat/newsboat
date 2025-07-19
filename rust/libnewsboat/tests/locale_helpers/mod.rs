@@ -8,7 +8,7 @@ pub fn set_locale(new_locale: &str) {
         let locale_set = setlocale(LC_CTYPE, c_new_locale.as_ptr());
 
         if locale_set.is_null() {
-            panic!("Couldn't set locale {}; test skipped.", new_locale);
+            panic!("Couldn't set locale {new_locale}; test skipped.");
         }
 
         env::set_var("LC_CTYPE", new_locale);
