@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "utils.h"
 
 #include <cctype>
@@ -695,27 +693,47 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the home directory",
 {
 	test_helpers::EnvVar envVar("HOME");
 	envVar.set("test");
-	REQUIRE(utils::resolve_tilde("~") == "test/");
-	REQUIRE(utils::resolve_tilde("~/") == "test/");
-	REQUIRE(utils::resolve_tilde("~/dir") == "test/dir");
-	REQUIRE(utils::resolve_tilde("/home/~") == "/home/~");
+	REQUIRE(utils::resolve_tilde(Filepath::from_locale_string("~")) ==
+		Filepath::from_locale_string("test/"));
+	REQUIRE(utils::resolve_tilde(Filepath::from_locale_string("~/")) ==
+		Filepath::from_locale_string("test/"));
+	REQUIRE(utils::resolve_tilde(Filepath::from_locale_string("~/dir")) ==
+		Filepath::from_locale_string("test/dir"));
+	const auto path_with_tilde_at_the_end = Filepath::from_locale_string("/home/~");
+	REQUIRE(utils::resolve_tilde(path_with_tilde_at_the_end) == path_with_tilde_at_the_end);
 	REQUIRE(
-		utils::resolve_tilde("~/foo/bar") ==
-		"test/foo/bar"
+		utils::resolve_tilde(Filepath::from_locale_string("~/foo/bar")) ==
+		Filepath::from_locale_string("test/foo/bar")
 	);
-	REQUIRE(utils::resolve_tilde("/foo/bar") == "/foo/bar");
+	const auto path_without_tilde = Filepath::from_locale_string("/foo/bar");
+	REQUIRE(utils::resolve_tilde(path_without_tilde) == path_without_tilde);
 }
 
 TEST_CASE("resolve_relative() returns an absolute file path relative to another",
 	"[utils]")
 {
+	const auto foobar = Filepath::from_locale_string("/foo/bar");
+	const auto config = Filepath::from_locale_string("/config");
+
 	SECTION("Nothing - absolute path") {
-		REQUIRE(utils::resolve_relative("/foo/bar", "/baz") == "/baz");
-		REQUIRE(utils::resolve_relative("/config", "/config/baz") == "/config/baz");
+		REQUIRE(
+			utils::resolve_relative(foobar, Filepath::from_locale_string("/baz"))
+			==
+			Filepath::from_locale_string("/baz"));
+		REQUIRE(
+			utils::resolve_relative(config, Filepath::from_locale_string("/config/baz"))
+			==
+			Filepath::from_locale_string("/config/baz"));
 	}
 	SECTION("Reference path") {
-		REQUIRE(utils::resolve_relative("/foo/bar", "baz") == "/foo/baz");
-		REQUIRE(utils::resolve_relative("/config", "baz") == "/baz");
+		REQUIRE(
+			utils::resolve_relative(foobar, Filepath::from_locale_string("baz"))
+			==
+			Filepath::from_locale_string("/foo/baz"));
+		REQUIRE(
+			utils::resolve_relative(config, Filepath::from_locale_string("baz"))
+			==
+			Filepath::from_locale_string("/baz"));
 	}
 }
 
@@ -1353,15 +1371,15 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 	}
 
 	SECTION("Value depends on current directory") {
-		const std::string maindir = utils::getcwd();
-		// Other tests already rely on the presense of "data" directory
+		const auto maindir = utils::getcwd();
+		// Other tests already rely on the presence of "data" directory
 		// next to the executable, so it's okay to use that dependency
 		// here, too
 		const std::string subdir = "data";
 		REQUIRE(0 == ::chdir(subdir.c_str()));
-		const std::string datadir = utils::getcwd();
+		const auto datadir = utils::getcwd();
 		REQUIRE(0 == ::chdir(".."));
-		const std::string backdir = utils::getcwd();
+		const auto backdir = utils::getcwd();
 
 		INFO("maindir = " << maindir);
 		INFO("backdir = " << backdir);
@@ -1369,11 +1387,7 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 		REQUIRE(maindir == backdir);
 		REQUIRE_FALSE(maindir == datadir);
 
-		// Datadir path starts with path to maindir
-		REQUIRE(datadir.find(maindir) == 0);
-		// Datadir path ends with "data" string
-		REQUIRE(datadir.substr(datadir.length() - subdir.length()) ==
-			subdir);
+		REQUIRE(datadir == maindir.join(Filepath::from_locale_string(subdir)));
 	}
 
 	SECTION("Returns empty string if current directory doesn't exist") {
@@ -1381,12 +1395,13 @@ TEST_CASE("getcwd() returns current directory of the process", "[utils]")
 		// getcwd to fail.
 		test_helpers::TempDir tempdir;
 
-		const std::string tempdir_path = tempdir.get_path();
+		const auto tempdir_path = tempdir.get_path();
 		INFO("tempdir = " << tempdir_path);
 
 		test_helpers::Chdir chdir(tempdir_path);
 
-		REQUIRE(0 == ::rmdir(tempdir_path.c_str()));
+		const auto tempdir_path_as_string = tempdir_path.to_locale_string();
+		REQUIRE(0 == ::rmdir(tempdir_path_as_string.c_str()));
 
 		REQUIRE(Filepath() == utils::getcwd());
 	}
@@ -1398,7 +1413,7 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 
 	SECTION("succesful if test file contains only valid UTF-8") {
 		{
-			std::ofstream f(tempfile.get_path());
+			std::ofstream f(tempfile.get_path().to_locale_string());
 			f << "lorem ipsum\ntest1\ntest2";
 		}
 
@@ -1413,7 +1428,7 @@ TEST_CASE("read_text_file() returns file contents line by line", "[utils]")
 
 	SECTION("fails with error message if file contains invalid UTF-8") {
 		{
-			std::ofstream f(tempfile.get_path());
+			std::ofstream f(tempfile.get_path().to_locale_string());
 			f << "test1\nt\xffst2"; // \xff is an invalid UTF-8 codepoint
 		}
 		std::vector<std::string> content;
@@ -1739,9 +1754,10 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 {
 	test_helpers::TempDir tmp;
 
-	const auto require_return_zero = [](const std::string& path) {
+	const auto require_return_zero = [](const Filepath& path) {
 		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
-		REQUIRE(::access(path.c_str(), R_OK | X_OK) == 0);
+		const auto path_as_string = path.to_locale_string();
+		REQUIRE(::access(path_as_string.c_str(), R_OK | X_OK) == 0);
 	};
 
 	SECTION("Simple test on temporary dir itself") {
@@ -1751,7 +1767,8 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	}
 
 	SECTION("Zero intermediate directories") {
-		const auto path = tmp.get_path().join(std::to_string(rand()));
+		const auto path = tmp.get_path().join(Filepath::from_locale_string(std::to_string(
+						rand())));
 		INFO("Path is " << path);
 
 		SECTION("Target doesn't yet exist") {
@@ -1765,8 +1782,10 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	}
 
 	SECTION("One intermediate directory") {
-		const auto intermediate_path = tmp.get_path().join(std::to_string(rand()));
-		const auto path = intermediate_path.join(std::to_string(rand()));
+		const auto intermediate_path =
+			tmp.get_path().join(Filepath::from_locale_string(std::to_string(rand())));
+		const auto path =
+			intermediate_path.join(Filepath::from_locale_string(std::to_string(rand())));
 		INFO("Path is " << path);
 
 		SECTION("Which doesn't exist") {
@@ -1788,9 +1807,12 @@ TEST_CASE("mkdir_parents() creates all paths components and returns 0 if "
 	}
 
 	SECTION("Two intermediate directories") {
-		const auto intermediate_path1 = tmp.get_path().join(std::to_string(rand()));
-		const auto intermediate_path2 = intermediate_path1.join(std::to_string(rand()));
-		const auto path = intermediate_path2.join(std::to_string(rand()));
+		const auto intermediate_path1 =
+			tmp.get_path().join(Filepath::from_locale_string(std::to_string(rand())));
+		const auto intermediate_path2 =
+			intermediate_path1.join(Filepath::from_locale_string(std::to_string(rand())));
+		const auto path =
+			intermediate_path2.join(Filepath::from_locale_string(std::to_string(rand())));
 		INFO("Path is " << path);
 
 		SECTION("Which don't exist") {
@@ -1825,7 +1847,8 @@ TEST_CASE("mkdir_parents() doesn't care if the path ends in a slash or not",
 {
 	test_helpers::TempDir tmp;
 
-	const auto path = tmp.get_path().join(std::to_string(rand()));
+	const auto random_filename = Filepath::from_locale_string(std::to_string(rand()));
+	const auto path = tmp.get_path().join(random_filename);
 
 	const auto check = [](const Filepath& path) {
 		REQUIRE(utils::mkdir_parents(path, 0700) == 0);
