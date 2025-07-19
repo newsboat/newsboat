@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "controller.h"
 
 #include <string>
@@ -18,21 +16,21 @@ using namespace newsboat;
 
 TEST_CASE("write_item correctly parses path", "[Controller]")
 {
-	std::string name = "myitem";
+	const auto name = Filepath::from_locale_string("myitem");
 	test_helpers::TempDir tmp;
-	const auto home_dir = tmp.get_path().join("home");
+	const auto home_dir = tmp.get_path().join(Filepath::from_locale_string("home"));
 	REQUIRE(0 == utils::mkdir_parents(home_dir, 0700));
-	const auto save_path = tmp.get_path().join("save");
+	const auto save_path = tmp.get_path().join(Filepath::from_locale_string("save"));
 	REQUIRE(0 == utils::mkdir_parents(save_path, 0700));
 
 	test_helpers::EnvVar home("HOME");
-	home.set(home_dir);
+	home.set(home_dir.to_locale_string());
 
 	ConfigPaths paths{};
 	Controller c(paths);
 
 	auto cfg = c.get_config();
-	cfg->set_configvalue("save-path", save_path);
+	cfg->set_configvalue("save-path", save_path.to_locale_string());
 	auto rsscache = Cache::in_memory(*cfg);
 
 	RssItem item(rsscache.get());
@@ -41,7 +39,7 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	item.set_description(description, "text/plain");
 
 	c.write_item(item, tmp.get_path().join(name));
-	c.write_item(item, "~/" + name);
+	c.write_item(item, Filepath::from_locale_string("~").join(name));
 	c.write_item(item, name);
 
 	REQUIRE(test_helpers::file_available_for_reading(tmp.get_path().join(name)));
