@@ -1906,7 +1906,7 @@ mod tests {
             // Expected result.
             Err(ReadTextFileError::CantOpen { .. }) => {}
 
-            other => panic!("Expected a result different from {:?}", other),
+            other => panic!("Expected a result different from {other:?}"),
         }
     }
 
@@ -1925,7 +1925,7 @@ mod tests {
             // Expected result.
             Err(ReadTextFileError::LineError { .. }) => {}
 
-            other => panic!("Expected a result different from {:?}", other),
+            other => panic!("Expected a result different from {other:?}"),
         }
     }
 

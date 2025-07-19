@@ -5,8 +5,8 @@ fn main() {
     let server = MockServer::start();
     let address = server.address().to_string();
 
-    eprintln!("listening on {}", address);
-    println!("{}", address);
+    eprintln!("listening on {address}");
+    println!("{address}");
 
     let mut input = String::new();
     loop {
@@ -17,7 +17,7 @@ fn main() {
             break;
         }
         if let Err(e) = read_result {
-            eprintln!("reading failed: {:?}", e);
+            eprintln!("reading failed: {e:?}");
             break;
         }
         let command = input.trim();
@@ -67,11 +67,11 @@ fn add_endpoint(server: &MockServer) {
         .unwrap();
 
     eprintln!("---------------------------------");
-    eprintln!("Adding endpoint {}", path);
-    eprintln!("Expected Headers: {:?}", expected_headers);
-    eprintln!("Status: {}", status);
-    eprintln!("Response headers: {:?}", response_headers);
-    eprintln!("Body size: {} bytes", body_size);
+    eprintln!("Adding endpoint {path}");
+    eprintln!("Expected Headers: {expected_headers:?}");
+    eprintln!("Status: {status}");
+    eprintln!("Response headers: {response_headers:?}");
+    eprintln!("Body size: {body_size} bytes");
     eprintln!("---------------------------------");
 
     let mock = server.mock(|when, then| {
