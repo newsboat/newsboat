@@ -176,7 +176,7 @@ int Controller::run(const CliArgsParser& args)
 			"an exception occurred while parsing the configuration "
 			"file: %s",
 			ex.what());
-		std::cout << ex.what() << std::endl;
+		std::cerr << ex.what() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -196,14 +196,14 @@ int Controller::run(const CliArgsParser& args)
 	std::string error;
 	if (!fslock.try_lock(configpaths.lock_file(), pid, error)) {
 		if (pid != 0) {
-			std::cout << strprintf::fmt(
+			std::cerr << strprintf::fmt(
 					_("Error: an instance of %s is "
 						"already running (PID: %s)"),
 					PROGRAM_NAME,
 					std::to_string(pid))
 				<< std::endl;
 		} else {
-			std::cout << _("Error: ") << error << std::endl;
+			std::cerr << _("Error: ") << error << std::endl;
 		}
 		return EXIT_FAILURE;
 	}
@@ -254,7 +254,7 @@ int Controller::run(const CliArgsParser& args)
 	} else if (type == "newsblur") {
 		const auto cookies = cfg.get_configvalue("cookie-cache");
 		if (cookies.empty()) {
-			std::cout << strprintf::fmt(
+			std::cerr << strprintf::fmt(
 					_("ERROR: You must set `cookie-cache` to use "
 						"NewsBlur.\n"));
 			return EXIT_FAILURE;
@@ -262,7 +262,7 @@ int Controller::run(const CliArgsParser& args)
 
 		std::ofstream check(cookies);
 		if (!check.is_open()) {
-			std::cout << strprintf::fmt(
+			std::cerr << strprintf::fmt(
 					_("%s is inaccessible and can't be created\n"),
 					cookies);
 			return EXIT_FAILURE;
@@ -375,7 +375,7 @@ int Controller::run(const CliArgsParser& args)
 	}
 	const auto error_message = urlcfg->reload();
 	if (error_message.has_value()) {
-		std::cout << error_message.value().message << std::endl << std::endl;
+		std::cerr << error_message.value().message << std::endl << std::endl;
 	} else if (!args.do_export() && !args.silent()) {
 		std::cout << _("done.") << std::endl;
 	}
@@ -432,7 +432,7 @@ int Controller::run(const CliArgsParser& args)
 		} else {
 			assert(0); // shouldn't happen
 		}
-		std::cout << msg << std::endl << std::endl;
+		std::cerr << msg << std::endl << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -464,12 +464,12 @@ int Controller::run(const CliArgsParser& args)
 			feed->set_order(i);
 			feedcontainer.add_feed(feed);
 		} catch (const DbException& e) {
-			std::cout << _("Error while loading feeds from "
+			std::cerr << _("Error while loading feeds from "
 					"database: ")
 				<< e.what() << std::endl;
 			return EXIT_FAILURE;
 		} catch (const std::string& str) {
-			std::cout << strprintf::fmt(
+			std::cerr << strprintf::fmt(
 					_("Error while loading feed '%s': "
 						"%s"),
 					url,
@@ -596,7 +596,7 @@ int Controller::run(const CliArgsParser& args)
 	} catch (const DbException& e) {
 		LOG(Level::USERERROR, "Cleaning up cache failed: %s", e.what());
 		if (!args.silent()) {
-			std::cout << _("failed: ") << e.what() << std::endl;
+			std::cerr << _("failed: ") << e.what() << std::endl;
 			ret = EXIT_FAILURE;
 		}
 	}
@@ -747,7 +747,7 @@ int Controller::import_opml(const std::string& opmlFile,
 	auto urlReader = FileUrlReader(urlFile);
 	const auto error_message = urlReader.reload(); // Load existing URLs
 	if (error_message.has_value()) {
-		std::cout << strprintf::fmt(
+		std::cerr << strprintf::fmt(
 				_("Error importing OPML to urls file %s: %s"),
 				urlFile, error_message.value().message)
 			<< std::endl;
@@ -756,7 +756,7 @@ int Controller::import_opml(const std::string& opmlFile,
 
 	const auto import_error = opml::import(opmlFile, urlReader);
 	if (import_error.has_value()) {
-		std::cout << strprintf::fmt(
+		std::cerr << strprintf::fmt(
 				_("An error occurred while parsing %s: %s"),
 				opmlFile,
 				import_error.value())
