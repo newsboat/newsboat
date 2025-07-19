@@ -68,9 +68,10 @@ std::vector<std::string> test_helpers::file_contents(const newsboat::Filepath& f
 	return lines;
 }
 
-std::vector<std::uint8_t> test_helpers::read_binary_file(const std::string& filepath)
+std::vector<std::uint8_t> test_helpers::read_binary_file(const newsboat::Filepath&
+	filepath)
 {
-	std::ifstream file(filepath, std::ios::binary | std::ios::ate);
+	std::ifstream file(filepath.to_locale_string(), std::ios::binary | std::ios::ate);
 	std::streampos length = file.tellg();
 	file.seekg(0, std::ios::beg);
 
