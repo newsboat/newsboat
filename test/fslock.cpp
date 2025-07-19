@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "fslock.h"
 
 #include <fcntl.h>
@@ -18,7 +16,7 @@ using namespace newsboat;
 // Forks and calls FsLock::try_lock() in the child process.
 class LockProcess {
 public:
-	explicit LockProcess(const std::string& lock_location)
+	explicit LockProcess(const Filepath& lock_location)
 	{
 		sem_start = sem_open(sem_start_name, O_CREAT, 0644, 0);
 		sem_stop = sem_open(sem_stop_name, O_CREAT, 0644, 0);
@@ -78,8 +76,9 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 
 	GIVEN("An invalid lock location") {
 		const test_helpers::TempDir test_directory;
-		const auto non_existing_dir = test_directory.get_path().join("does-not-exist");
-		const auto lock_location = non_existing_dir.join("lockfile");
+		const auto non_existing_dir = test_directory.get_path().join(
+				Filepath::from_locale_string("does-not-exist"));
+		const auto lock_location = non_existing_dir.join(Filepath::from_locale_string("lockfile"));
 
 		THEN("try_lock() will fail and return pid == 0") {
 			FsLock lock;
