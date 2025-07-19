@@ -16,26 +16,6 @@ namespace newsboat {
 /// https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html
 class Filepath {
 public:
-#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-	// FIXME: remove these once the codebase is fully migrated from std::string
-	// to Filepath
-
-	Filepath(const char* input)
-		: rs_object(std::move(Filepath::from_locale_string(std::string(input)).rs_object))
-	{
-	}
-
-	Filepath(const std::string& input)
-		: rs_object(std::move(Filepath::from_locale_string(input).rs_object))
-	{
-	}
-
-	operator std::string() const
-	{
-		return to_locale_string();
-	}
-#endif
-
 	Filepath(rust::Box<filepath::bridged::PathBuf>&& rs_object)
 		: rs_object(std::move(rs_object))
 	{
@@ -131,18 +111,5 @@ inline std::ostream& operator<<(std::ostream& out, const newsboat::Filepath& p)
 	out << p.display();
 	return out;
 }
-
-#ifdef ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-inline bool operator==(const std::string& lhs, const newsboat::Filepath& rhs)
-{
-	return lhs == rhs.to_locale_string();
-}
-
-inline bool operator==(const std::optional<std::string>& lhs,
-	const newsboat::Filepath& rhs)
-{
-	return lhs && lhs.value() == rhs;
-}
-#endif
 
 #endif /* NEWSBOAT_FILEPATH_H_ */
