@@ -632,7 +632,7 @@ TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces inval
 	REQUIRE(parsed_feed.title == expected_title);
 }
 
-TEST_CASE("Exit with abort (fixtures)",
+TEST_CASE("Throws if no \"channel\" element is found",
 	"[rsspp::Parser][issue3108]")
 {
 	using test_helpers::ExceptionWithMsg;
