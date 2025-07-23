@@ -631,3 +631,14 @@ TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces inval
 	REQUIRE(parsed_feed.items.size() == 1);
 	REQUIRE(parsed_feed.title == expected_title);
 }
+
+TEST_CASE("Throws if no \"channel\" element is found",
+	"[rsspp::Parser][issue3108]")
+{
+	using test_helpers::ExceptionWithMsg;
+
+	rsspp::Parser p;
+	REQUIRE_THROWS_MATCHES(p.parse_buffer("<rss version=\"0.92\"><![CDATA[]]>"),
+		rsspp::Exception,
+		ExceptionWithMsg<rsspp::Exception>("no RSS channel found"));
+}
