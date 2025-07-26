@@ -632,6 +632,32 @@ TEST_CASE("parse_url() assumes utf-8 if no encoding specified and replaces inval
 	REQUIRE(parsed_feed.title == expected_title);
 }
 
+TEST_CASE("parse_url() with unsupported encoding falls back to libxml auto-detection",
+	"[rsspp::Parser]")
+{
+	using namespace newsboat;
+
+	constexpr auto title_utf8 = u8"Prøve"; // Danish for "test"
+
+	auto feed_xml_utf8 = strprintf::fmt(atom_feed_without_encoding, title_utf8);
+
+	auto feed_xml = std::vector<std::uint8_t>(feed_xml_utf8.begin(), feed_xml_utf8.end());
+
+	auto& test_server = test_helpers::HttpTestServer::get_instance();
+	auto mock_registration = test_server.add_endpoint("/feed", {}, 200, {
+		{"content-type", "text/xml; charset=non-existent-encoding"},
+	}, feed_xml);
+	const auto address = test_server.get_address();
+	const auto url = strprintf::fmt("http://%s/feed", address);
+
+	rsspp::Parser parser;
+	CurlHandle easyhandle;
+	auto parsed_feed = parser.parse_url(url, easyhandle);
+
+	REQUIRE(parsed_feed.items.size() == 1);
+	REQUIRE(parsed_feed.title == title_utf8);
+}
+
 TEST_CASE("Throws if no \"channel\" element is found",
 	"[rsspp::Parser][issue3108]")
 {
