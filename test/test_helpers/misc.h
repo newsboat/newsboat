@@ -34,7 +34,7 @@ std::vector<std::string> file_contents(const newsboat::Filepath& filepath);
 
 /* \brief Returns the contents of the file as a single binary blob
  */
-std::vector<std::uint8_t> read_binary_file(const std::string& filepath);
+std::vector<std::uint8_t> read_binary_file(const newsboat::Filepath& filepath);
 
 /* \brief Returns `true` if `input` starts with `prefix`.
  */

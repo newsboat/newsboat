@@ -1,5 +1,3 @@
-#define ENABLE_IMPLICIT_FILEPATH_CONVERSIONS
-
 #include "misc.h"
 
 #include <fstream>
@@ -21,7 +19,7 @@ void test_helpers::assert_article_file_content(const newsboat::Filepath& path,
 	std::string prefix_link = "Link: ";
 
 	std::string line;
-	std::ifstream articleFileStream(path);
+	std::ifstream articleFileStream(path.to_locale_string());
 	REQUIRE(std::getline(articleFileStream, line));
 	REQUIRE(line == prefix_title + title);
 
@@ -47,8 +45,8 @@ void test_helpers::assert_article_file_content(const newsboat::Filepath& path,
 void test_helpers::copy_file(const newsboat::Filepath& source,
 	const newsboat::Filepath& destination)
 {
-	std::ifstream  src(source, std::ios::binary);
-	std::ofstream  dst(destination, std::ios::binary);
+	std::ifstream src(source.to_locale_string(), std::ios::binary);
+	std::ofstream dst(destination.to_locale_string(), std::ios::binary);
 
 	REQUIRE(src.is_open());
 	REQUIRE(dst.is_open());
@@ -60,7 +58,7 @@ std::vector<std::string> test_helpers::file_contents(const newsboat::Filepath& f
 {
 	std::vector<std::string> lines;
 
-	std::ifstream in(filepath);
+	std::ifstream in(filepath.to_locale_string());
 	while (in.is_open() && !in.eof()) {
 		std::string line;
 		std::getline(in, line);
@@ -70,9 +68,10 @@ std::vector<std::string> test_helpers::file_contents(const newsboat::Filepath& f
 	return lines;
 }
 
-std::vector<std::uint8_t> test_helpers::read_binary_file(const std::string& filepath)
+std::vector<std::uint8_t> test_helpers::read_binary_file(const newsboat::Filepath&
+	filepath)
 {
-	std::ifstream file(filepath, std::ios::binary | std::ios::ate);
+	std::ifstream file(filepath.to_locale_string(), std::ios::binary | std::ios::ate);
 	std::streampos length = file.tellg();
 	file.seekg(0, std::ios::beg);
 
