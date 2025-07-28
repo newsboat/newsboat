@@ -17,8 +17,7 @@ using namespace newsboat;
 
 TEST_CASE("Feed retriever retrieves feed successfully", "[FeedRetriever]")
 {
-	auto feed_xml = test_helpers::read_binary_file(
-			Filepath::from_locale_string("data/atom10_1.xml"));
+	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml"_path);
 
 	ConfigContainer cfg;
 	auto rsscache = Cache::in_memory(cfg);
@@ -147,8 +146,7 @@ TEST_CASE("Feed retriever throws on HTTP error status codes", "[FeedRetriever]")
 TEST_CASE("Feed retriever remembers cookie between requests if cookie-cache is set",
 	"[FeedRetriever]")
 {
-	auto feed_xml = test_helpers::read_binary_file(
-			Filepath::from_locale_string("data/atom10_1.xml"));
+	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml"_path);
 
 	ConfigContainer cfg;
 

@@ -693,47 +693,29 @@ TEST_CASE("resolve_tilde() replaces ~ with the path to the home directory",
 {
 	test_helpers::EnvVar envVar("HOME");
 	envVar.set("test");
-	REQUIRE(utils::resolve_tilde(Filepath::from_locale_string("~")) ==
-		Filepath::from_locale_string("test/"));
-	REQUIRE(utils::resolve_tilde(Filepath::from_locale_string("~/")) ==
-		Filepath::from_locale_string("test/"));
-	REQUIRE(utils::resolve_tilde(Filepath::from_locale_string("~/dir")) ==
-		Filepath::from_locale_string("test/dir"));
-	const auto path_with_tilde_at_the_end = Filepath::from_locale_string("/home/~");
+	REQUIRE(utils::resolve_tilde("~"_path) == "test/"_path);
+	REQUIRE(utils::resolve_tilde("~/"_path) == "test/"_path);
+	REQUIRE(utils::resolve_tilde("~/dir"_path) == "test/dir"_path);
+	const auto path_with_tilde_at_the_end = "/home/~"_path;
 	REQUIRE(utils::resolve_tilde(path_with_tilde_at_the_end) == path_with_tilde_at_the_end);
-	REQUIRE(
-		utils::resolve_tilde(Filepath::from_locale_string("~/foo/bar")) ==
-		Filepath::from_locale_string("test/foo/bar")
-	);
-	const auto path_without_tilde = Filepath::from_locale_string("/foo/bar");
+	REQUIRE(utils::resolve_tilde("~/foo/bar"_path) == "test/foo/bar"_path);
+	const auto path_without_tilde = "/foo/bar"_path;
 	REQUIRE(utils::resolve_tilde(path_without_tilde) == path_without_tilde);
 }
 
 TEST_CASE("resolve_relative() returns an absolute file path relative to another",
 	"[utils]")
 {
-	const auto foobar = Filepath::from_locale_string("/foo/bar");
-	const auto config = Filepath::from_locale_string("/config");
+	const auto foobar = "/foo/bar"_path;
+	const auto config = "/config"_path;
 
 	SECTION("Nothing - absolute path") {
-		REQUIRE(
-			utils::resolve_relative(foobar, Filepath::from_locale_string("/baz"))
-			==
-			Filepath::from_locale_string("/baz"));
-		REQUIRE(
-			utils::resolve_relative(config, Filepath::from_locale_string("/config/baz"))
-			==
-			Filepath::from_locale_string("/config/baz"));
+		REQUIRE(utils::resolve_relative(foobar, "/baz"_path) == "/baz"_path);
+		REQUIRE(utils::resolve_relative(config, "/config/baz"_path) == "/config/baz"_path);
 	}
 	SECTION("Reference path") {
-		REQUIRE(
-			utils::resolve_relative(foobar, Filepath::from_locale_string("baz"))
-			==
-			Filepath::from_locale_string("/foo/baz"));
-		REQUIRE(
-			utils::resolve_relative(config, Filepath::from_locale_string("baz"))
-			==
-			Filepath::from_locale_string("/baz"));
+		REQUIRE(utils::resolve_relative(foobar, "baz"_path) == "/foo/baz"_path);
+		REQUIRE(utils::resolve_relative(config, "baz"_path) == "/baz"_path);
 	}
 }
 
@@ -1617,13 +1599,13 @@ TEST_CASE(
 
 	// If BROWSER is not set, default browser is lynx(1)
 	browserEnv.unset();
-	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("lynx"));
+	REQUIRE(utils::get_default_browser() == "lynx"_path);
 
 	browserEnv.set("firefox");
-	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("firefox"));
+	REQUIRE(utils::get_default_browser() == "firefox"_path);
 
 	browserEnv.set("opera");
-	REQUIRE(utils::get_default_browser() == Filepath::from_locale_string("opera"));
+	REQUIRE(utils::get_default_browser() == "opera"_path);
 }
 
 TEST_CASE(

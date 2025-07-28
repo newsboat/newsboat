@@ -76,9 +76,8 @@ TEST_CASE("try_lock() returns an error if lock-file permissions or location are 
 
 	GIVEN("An invalid lock location") {
 		const test_helpers::TempDir test_directory;
-		const auto non_existing_dir = test_directory.get_path().join(
-				Filepath::from_locale_string("does-not-exist"));
-		const auto lock_location = non_existing_dir.join(Filepath::from_locale_string("lockfile"));
+		const auto non_existing_dir = test_directory.get_path().join("does-not-exist"_path);
+		const auto lock_location = non_existing_dir.join("lockfile"_path);
 
 		THEN("try_lock() will fail and return pid == 0") {
 			FsLock lock;

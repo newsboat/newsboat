@@ -46,7 +46,7 @@ TEST_CASE(
 	"provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("blogroll.opml");
+	const auto filename = "blogroll.opml"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -72,7 +72,7 @@ TEST_CASE("Resolves tilde to homedir in -i/--import-from-opml",
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("feedlist.opml");
+	const auto filename = "feedlist.opml"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -185,7 +185,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("urlfile");
+	const auto filename = "urlfile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -210,7 +210,7 @@ TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("urlfile");
+	const auto filename = "urlfile"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -233,7 +233,7 @@ TEST_CASE(
 	"if -c/--cache-file is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("cache.db");
+	const auto filename = "cache.db"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -256,7 +256,7 @@ TEST_CASE(
 
 TEST_CASE("Supports combined short options", "[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("cache.db");
+	const auto filename = "cache.db"_path;
 
 	test_helpers::Opts opts = {"newsboat", "-vc", filename.to_locale_string()};
 	CliArgsParser args(opts.argc(), opts.argv());
@@ -271,7 +271,7 @@ TEST_CASE("Supports combined short options", "[CliArgsParser]")
 
 TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("cache.db");
+	const auto filename = "cache.db"_path;
 
 	test_helpers::Opts opts = {"newsboat", "-c" + filename.to_locale_string()};
 	CliArgsParser args(opts.argc(), opts.argv());
@@ -286,7 +286,7 @@ TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 TEST_CASE("Supports `=` between short option and value",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("cache.db");
+	const auto filename = "cache.db"_path;
 
 	test_helpers::Opts opts = {"newsboat", "-c=" + filename.to_locale_string()};
 	CliArgsParser args(opts.argc(), opts.argv());
@@ -305,7 +305,7 @@ TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("mycache.db");
+	const auto filename = "mycache.db"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -331,7 +331,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("config file");
+	const auto filename = "config file"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -356,7 +356,7 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("newsboat-config");
+	const auto filename = "newsboat-config"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -380,7 +380,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("queuefile");
+	const auto filename = "queuefile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -401,7 +401,7 @@ TEST_CASE("Resolves tilde to homedir in --queue-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("queuefile");
+	const auto filename = "queuefile"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -420,7 +420,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("searchfile");
+	const auto filename = "searchfile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -441,7 +441,7 @@ TEST_CASE("Resolves tilde to homedir in --search-history-file", "[CliArgsParser]
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("searchfile");
+	const auto filename = "searchfile"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -460,7 +460,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("cmdlinefile");
+	const auto filename = "cmdlinefile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -481,7 +481,7 @@ TEST_CASE("Resolves tilde to homedir in --cmdline-history-file", "[CliArgsParser
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("cmdlinefile");
+	const auto filename = "cmdlinefile"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -651,7 +651,7 @@ TEST_CASE(
 	"Sets `readinfofile` if -I/--import-from-file is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("filename");
+	const auto filename = "filename"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -676,7 +676,7 @@ TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("read.txt");
+	const auto filename = "read.txt"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -698,7 +698,7 @@ TEST_CASE(
 	"Sets `readinfofile` if -E/--export-to-file is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("filename");
+	const auto filename = "filename"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -722,7 +722,7 @@ TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("read.txt");
+	const auto filename = "read.txt"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
@@ -745,8 +745,8 @@ TEST_CASE(
 	"-I/--import-from-file and -E/--export-to-file are provided",
 	"[CliArgsParser]")
 {
-	const auto importf = Filepath::from_locale_string("import.opml");
-	const auto exportf = Filepath::from_locale_string("export.opml");
+	const auto importf = "import.opml"_path;
+	const auto exportf = "export.opml"_path;
 
 	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -767,7 +767,7 @@ TEST_CASE(
 TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 	"[CliArgsParser]")
 {
-	const auto filename = Filepath::from_locale_string("log file.txt");
+	const auto filename = "log file.txt"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -791,7 +791,7 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 	test_helpers::EnvVar home("HOME");
 	home.set(tmp.get_path().to_locale_string());
 
-	const auto filename = Filepath::from_locale_string("newsboat.log");
+	const auto filename = "newsboat.log"_path;
 	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {

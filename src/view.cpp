@@ -355,7 +355,7 @@ Filepath View::get_filename_suggestion(const std::string& s)
 
 	Filepath retval;
 	if (suggestion.empty()) {
-		retval = Filepath::from_locale_string("article.txt");
+		retval = "article.txt"_path;
 	} else {
 		retval = Filepath::from_locale_string(suggestion);
 		retval.add_extension("txt");
@@ -552,8 +552,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 	const std::string& guid,
 	const std::string& searchphrase)
 {
-	if (cfg->get_configvalue_as_filepath("pager") ==
-		Filepath::from_locale_string("internal")) {
+	if (cfg->get_configvalue_as_filepath("pager") == "internal"_path) {
 		auto fa = get_current_formaction();
 
 		std::shared_ptr<ItemListFormAction> itemlist =

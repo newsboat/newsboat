@@ -236,6 +236,6 @@ TEST_CASE("strprintf::fmt() works fine with 2MB format string", "[strprintf]")
 
 TEST_CASE("strprintf::fmt() formats Filepath", "[strprintf]")
 {
-	const auto input = Filepath::from_locale_string("/run/shm/");
+	const auto input = "/run/shm/"_path;
 	REQUIRE(strprintf::fmt("%s", input) == "/run/shm/");
 }

@@ -18,8 +18,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	KeyMap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", k);
 
-	REQUIRE_NOTHROW(cfgparser.parse_file(
-			Filepath::from_locale_string("data/test-config.txt")));
+	REQUIRE_NOTHROW(cfgparser.parse_file("data/test-config.txt"_path));
 
 	SECTION("bool value") {
 		REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
@@ -51,16 +50,15 @@ TEST_CASE(
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
 
-	REQUIRE_NOTHROW(cfgparser.parse_file(
-			Filepath::from_locale_string("data/test-config-without-newline-at-the-end.txt")));
+	REQUIRE_NOTHROW(
+		cfgparser.parse_file("data/test-config-without-newline-at-the-end.txt"_path));
 
 	SECTION("first line") {
 		REQUIRE(cfg.get_configvalue("article-sort-order") == "date-asc");
 	}
 
 	SECTION("last line") {
-		REQUIRE(cfg.get_configvalue_as_filepath("download-path") ==
-			Filepath::from_locale_string("whatever"));
+		REQUIRE(cfg.get_configvalue_as_filepath("download-path") == "whatever"_path);
 	}
 }
 

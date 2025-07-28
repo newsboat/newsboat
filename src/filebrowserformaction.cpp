@@ -227,8 +227,8 @@ std::vector<Filepath> get_sorted_filelist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != Filepath::from_locale_string("/")) {
-		ret.emplace(ret.begin(), Filepath::from_locale_string(".."));
+	if (cwdtmp != "/"_path) {
+		ret.emplace(ret.begin(), ".."_path);
 	}
 
 	return ret;

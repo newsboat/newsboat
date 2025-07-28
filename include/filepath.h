@@ -103,6 +103,11 @@ private:
 	rust::Box<filepath::bridged::PathBuf> rs_object;
 };
 
+inline Filepath operator""_path(const char* filepath, size_t filepath_length)
+{
+	return newsboat::Filepath::from_locale_string(std::string(filepath, filepath_length));
+}
+
 } // namespace newsboat
 
 // Used in Catch2's INFO macro.

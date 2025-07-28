@@ -284,7 +284,7 @@ Cache::~Cache()
 
 std::unique_ptr<Cache> Cache::in_memory(ConfigContainer& c)
 {
-	return std::make_unique<Cache>(Filepath::from_locale_string(":memory:"), c);
+	return std::make_unique<Cache>(":memory:"_path, c);
 }
 
 void Cache::set_pragmas()
