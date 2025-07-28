@@ -919,9 +919,9 @@ Filepath Controller::write_temporary_item(RssItem& item)
 	char* tmpdir = getenv("TMPDIR");
 	if (tmpdir != nullptr) {
 		filename_template = Filepath::from_locale_string(tmpdir);
-		filename_template.push(Filepath::from_locale_string("newsboat-article.XXXXXX"));
+		filename_template.push("newsboat-article.XXXXXX"_path);
 	} else {
-		filename_template = Filepath::from_locale_string("/tmp/newsboat-article.XXXXXX");
+		filename_template = "/tmp/newsboat-article.XXXXXX"_path;
 	}
 
 	auto template_string = filename_template.to_locale_string();

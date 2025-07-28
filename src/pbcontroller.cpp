@@ -51,7 +51,7 @@ bool PbController::setup_dirs_xdg(const newsboat::Filepath& home)
 		xdg_config_dir = Filepath::from_locale_string(env_xdg_config);
 	} else {
 		xdg_config_dir = home;
-		xdg_config_dir.push(Filepath::from_locale_string(".config"));
+		xdg_config_dir.push(".config"_path);
 	}
 
 	const char* env_xdg_data = ::getenv("XDG_DATA_HOME");
@@ -59,8 +59,8 @@ bool PbController::setup_dirs_xdg(const newsboat::Filepath& home)
 		xdg_data_dir = Filepath::from_locale_string(env_xdg_data);
 	} else {
 		xdg_data_dir = home;
-		xdg_data_dir.push(Filepath::from_locale_string(".local"));
-		xdg_data_dir.push(Filepath::from_locale_string("share"));
+		xdg_data_dir.push(".local"_path);
+		xdg_data_dir.push("share"_path);
 	}
 
 	xdg_config_dir.push(NEWSBOAT_SUBDIR_XDG);
@@ -100,7 +100,7 @@ bool PbController::setup_dirs_xdg(const newsboat::Filepath& home)
 	config_file = config_dir.join(config_file);
 
 	/* in data */
-	const Filepath LOCK_SUFFIX = Filepath::from_locale_string(".lock");
+	const Filepath LOCK_SUFFIX = ".lock"_path;
 	lock_file = xdg_data_dir.join(LOCK_SUFFIX);
 	queue_file = xdg_data_dir.join(queue_file);
 
@@ -108,10 +108,10 @@ bool PbController::setup_dirs_xdg(const newsboat::Filepath& home)
 }
 
 PbController::PbController()
-	: config_file(Filepath::from_locale_string("config"))
-	, queue_file(Filepath::from_locale_string("queue"))
+	: config_file("config"_path)
+	, queue_file("queue"_path)
 	, max_dls(1)
-	, lock_file(Filepath::from_locale_string("pb-lock.pid"))
+	, lock_file("pb-lock.pid"_path)
 	, keys(KM_PODBOAT)
 {
 	char* cfgdir;
@@ -275,7 +275,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("run-on-startup", null_cah);
 
 	try {
-		cfgparser.parse_file(Filepath::from_locale_string("/etc/newsboat/config"));
+		cfgparser.parse_file("/etc/newsboat/config"_path);
 		cfgparser.parse_file(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;

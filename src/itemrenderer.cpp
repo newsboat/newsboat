@@ -154,7 +154,7 @@ void render_html(
 	bool raw)
 {
 	const auto renderer = cfg.get_configvalue_as_filepath("html-renderer");
-	if (renderer == Filepath::from_locale_string("internal")) {
+	if (renderer == "internal"_path) {
 		HtmlRenderer rnd(raw);
 		rnd.render(source, lines, thelinks, url);
 	} else {

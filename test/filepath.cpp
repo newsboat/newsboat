@@ -7,7 +7,7 @@ using namespace newsboat;
 TEST_CASE("Can be constructed from a string and converted back into a string",
 	"[Filepath]")
 {
-	const auto example = Filepath::from_locale_string("/etc/hosts");
+	const auto example = "/etc/hosts"_path;
 	REQUIRE(example.to_locale_string() == "/etc/hosts");
 }
 
@@ -32,52 +32,52 @@ TEST_CASE("Can be displayed even if it contains non-Unicode characters", "[Filep
 
 TEST_CASE("push() adds a new component to the path", "[Filepath]")
 {
-	auto dir = Filepath::from_locale_string("/tmp");
+	auto dir = "/tmp"_path;
 
-	dir.push(Filepath::from_locale_string("newsboat"));
-	REQUIRE(dir == Filepath::from_locale_string("/tmp/newsboat"));
+	dir.push("newsboat"_path);
+	REQUIRE(dir == "/tmp/newsboat"_path);
 
-	dir.push(Filepath::from_locale_string(".local/share/cache/cache.db"));
-	REQUIRE(dir == Filepath::from_locale_string("/tmp/newsboat/.local/share/cache/cache.db"));
+	dir.push(".local/share/cache/cache.db"_path);
+	REQUIRE(dir == "/tmp/newsboat/.local/share/cache/cache.db"_path);
 }
 
 TEST_CASE("push() still adds a separator to non-empty path if new component is empty",
 	"[Filepath]")
 {
-	auto dir = Filepath::from_locale_string("/root");
-	dir.push(Filepath::from_locale_string(""));
+	auto dir = "/root"_path;
+	dir.push(""_path);
 	REQUIRE(dir.display() == "/root/");
 }
 
 TEST_CASE("Can be extended with join()", "[Filepath]")
 {
-	const auto tmp = Filepath::from_locale_string("/tmp");
+	const auto tmp = "/tmp"_path;
 
 	const auto subdir =
 		tmp
-		.join(Filepath::from_locale_string("newsboat"))
-		.join(Filepath::from_locale_string("tests"));
-	REQUIRE(subdir == Filepath::from_locale_string("/tmp/newsboat/tests"));
+		.join("newsboat"_path)
+		.join("tests"_path);
+	REQUIRE(subdir == "/tmp/newsboat/tests"_path);
 }
 
 TEST_CASE("join() still adds a separator to non-empty path if new component is empty",
 	"[Filepath]")
 {
-	const auto path = Filepath::from_locale_string("relative path");
+	const auto path = "relative path"_path;
 	const auto path_with_trailing_slash = path.join(Filepath{});
 	REQUIRE(path_with_trailing_slash.display() == "relative path/");
 }
 
 TEST_CASE("Can be copied", "[Filepath]")
 {
-	auto original = Filepath::from_locale_string("/etc/hosts");
+	auto original = "/etc/hosts"_path;
 
 	const auto check = [&original](const Filepath& copy) {
 		REQUIRE(original == copy);
 		REQUIRE(original.display() == "/etc/hosts");
 
 		// Demonstrate that changing the original object doesn't modify the copy
-		original.push(Filepath::from_locale_string(" a bit more"));
+		original.push(" a bit more"_path);
 		REQUIRE(original.display() == "/etc/hosts/ a bit more");
 		REQUIRE(copy.display() == "/etc/hosts");
 	};
@@ -101,16 +101,16 @@ TEST_CASE("Can't set extension for an empty path", "[Filepath]")
 
 TEST_CASE("Can set extension for non-empty path", "[Filepath]")
 {
-	auto path = Filepath::from_locale_string("file");
+	auto path = "file"_path;
 
 	SECTION("extension is UTF-8") {
 		REQUIRE(path.set_extension("exe"));
-		REQUIRE(path == Filepath::from_locale_string("file.exe"));
+		REQUIRE(path == "file.exe"_path);
 	}
 
 	SECTION("extension is not a valid UTF-8 string") {
 		REQUIRE(path.set_extension("\x80"));
-		REQUIRE(path == Filepath::from_locale_string("file.\x80"));
+		REQUIRE(path == "file.\x80"_path);
 	}
 }
 
@@ -118,22 +118,22 @@ TEST_CASE("add_extension passes tests from Rust docs", "[Filepath]")
 {
 	// Copied from https://doc.rust-lang.org/std/path/struct.PathBuf.html#method.add_extension
 
-	auto path = Filepath::from_locale_string("/feel/the");
+	auto path = "/feel/the"_path;
 
 	REQUIRE(path.add_extension("formatted"));
-	REQUIRE(Filepath::from_locale_string("/feel/the.formatted") == path);
+	REQUIRE("/feel/the.formatted"_path == path);
 
 	REQUIRE(path.add_extension("dark.side"));
-	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark.side") == path);
+	REQUIRE("/feel/the.formatted.dark.side"_path == path);
 
 	REQUIRE(path.set_extension("cookie"));
-	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark.cookie") == path);
+	REQUIRE("/feel/the.formatted.dark.cookie"_path == path);
 
 	REQUIRE(path.set_extension(""));
-	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark") == path);
+	REQUIRE("/feel/the.formatted.dark"_path == path);
 
 	REQUIRE(path.add_extension(""));
-	REQUIRE(Filepath::from_locale_string("/feel/the.formatted.dark") == path);
+	REQUIRE("/feel/the.formatted.dark"_path == path);
 }
 
 TEST_CASE("Can check if path is absolute", "[Filepath]")
@@ -144,21 +144,21 @@ TEST_CASE("Can check if path is absolute", "[Filepath]")
 	}
 
 	SECTION("path that starts with a slash is absolute") {
-		path.push(Filepath::from_locale_string("/etc"));
+		path.push("/etc"_path);
 		REQUIRE(path.display() == "/etc");
 		REQUIRE(path.is_absolute());
 
-		path.push(Filepath::from_locale_string("ca-certificates"));
+		path.push("ca-certificates"_path);
 		REQUIRE(path.display() == "/etc/ca-certificates");
 		REQUIRE(path.is_absolute());
 	}
 
 	SECTION("path that doesn't start with a slash is not absolute") {
-		path.push(Filepath::from_locale_string("vmlinuz"));
+		path.push("vmlinuz"_path);
 		REQUIRE(path.display() == "vmlinuz");
 		REQUIRE_FALSE(path.is_absolute());
 
-		path.push(Filepath::from_locale_string("undefined"));
+		path.push("undefined"_path);
 		REQUIRE(path.display() == "vmlinuz/undefined");
 		REQUIRE_FALSE(path.is_absolute());
 	}
@@ -174,32 +174,32 @@ TEST_CASE("Can check if path starts with a given base path", "[Filepath]")
 		}
 
 		SECTION("Base path is not empty") {
-			REQUIRE_FALSE(path.starts_with(Filepath::from_locale_string("/etc")));
+			REQUIRE_FALSE(path.starts_with("/etc"_path));
 		}
 	}
 
 	SECTION("Non-empty path that doesn't start with the base") {
-		const auto path = Filepath::from_locale_string("/etcetera");
-		const auto base = Filepath::from_locale_string("/etc");
+		const auto path = "/etcetera"_path;
+		const auto base = "/etc"_path;
 		REQUIRE_FALSE(path.starts_with(base));
 	}
 
 	SECTION("Non-empty path that starts with the base") {
-		const auto path = Filepath::from_locale_string("/usr/local/bin/newsboat");
-		const auto base = Filepath::from_locale_string("/usr/local");
+		const auto path = "/usr/local/bin/newsboat"_path;
+		const auto base = "/usr/local"_path;
 		REQUIRE(path.starts_with(base));
 	}
 
 	SECTION("Base is not a valid UTF-8 string") {
-		const auto path = Filepath::from_locale_string("/test\x81\x82/foobar");
+		const auto path = "/test\x81\x82/foobar"_path;
 
 		SECTION("Path doesn't start with base") {
-			const auto base = Filepath::from_locale_string("baz\x80quux");
+			const auto base = "baz\x80quux"_path;
 			REQUIRE_FALSE(path.starts_with(base));
 		}
 
 		SECTION("Path starts with base") {
-			const auto base = Filepath::from_locale_string("/test\x81\x82/");
+			const auto base = "/test\x81\x82/"_path;
 			REQUIRE(path.starts_with(base));
 		}
 	}
@@ -214,28 +214,27 @@ TEST_CASE("Can extract the final component of the path (file or directory name)"
 	}
 
 	SECTION("The final component of a path with single level is the path itself") {
-		const auto path = Filepath::from_locale_string("hello");
+		const auto path = "hello"_path;
 		REQUIRE(path.file_name().value() == path);
 	}
 
 	SECTION("Multi-level path") {
-		const auto path = Filepath::from_locale_string("/dev/pts/0");
-		REQUIRE(path.file_name().value() == Filepath::from_locale_string("0"));
+		const auto path = "/dev/pts/0"_path;
+		REQUIRE(path.file_name().value() == "0"_path);
 	}
 
 	SECTION("Final component is not a valid UTF-8 string") {
-		const auto path = Filepath::from_locale_string("/whatever/one\x80two");
-		REQUIRE(path.file_name().value() == Filepath::from_locale_string("one\x80two"));
+		const auto path = "/whatever/one\x80two"_path;
+		REQUIRE(path.file_name().value() == "one\x80two"_path);
 	}
 }
 
 TEST_CASE("Can be ordered lexicographically", "[Filepath]")
 {
-	const auto root = Filepath::from_locale_string("/");
-	const auto var_log = Filepath::from_locale_string("/var/log");
-	const auto home_minoru = Filepath::from_locale_string("/home/minoru");
-	const auto home_minoru_src_newsboat =
-		Filepath::from_locale_string("/home/minoru/src/newsboat");
+	const auto root = "/"_path;
+	const auto var_log = "/var/log"_path;
+	const auto home_minoru = "/home/minoru"_path;
+	const auto home_minoru_src_newsboat = "/home/minoru/src/newsboat"_path;
 
 	SECTION("operator<") {
 		SECTION("Path to directory is less than the path to its subdirectory") {
@@ -318,4 +317,11 @@ TEST_CASE("Can be ordered lexicographically", "[Filepath]")
 			REQUIRE_FALSE(home_minoru >= home_minoru_src_newsboat);
 		}
 	}
+}
+
+TEST_CASE("Can be constructed from a literal with user-defined literal syntax",
+	"[Filepath]")
+{
+	const auto example = "/etc/hosts"_path;
+	REQUIRE(example.to_locale_string() == "/etc/hosts");
 }

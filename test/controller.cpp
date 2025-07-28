@@ -16,11 +16,11 @@ using namespace newsboat;
 
 TEST_CASE("write_item correctly parses path", "[Controller]")
 {
-	const auto name = Filepath::from_locale_string("myitem");
+	const auto name = "myitem"_path;
 	test_helpers::TempDir tmp;
-	const auto home_dir = tmp.get_path().join(Filepath::from_locale_string("home"));
+	const auto home_dir = tmp.get_path().join("home"_path);
 	REQUIRE(0 == utils::mkdir_parents(home_dir, 0700));
-	const auto save_path = tmp.get_path().join(Filepath::from_locale_string("save"));
+	const auto save_path = tmp.get_path().join("save"_path);
 	REQUIRE(0 == utils::mkdir_parents(save_path, 0700));
 
 	test_helpers::EnvVar home("HOME");
@@ -39,7 +39,7 @@ TEST_CASE("write_item correctly parses path", "[Controller]")
 	item.set_description(description, "text/plain");
 
 	c.write_item(item, tmp.get_path().join(name));
-	c.write_item(item, Filepath::from_locale_string("~").join(name));
+	c.write_item(item, "~"_path.join(name));
 	c.write_item(item, name);
 
 	REQUIRE(test_helpers::file_available_for_reading(tmp.get_path().join(name)));

@@ -226,7 +226,7 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+		test_helpers::copy_file("data/empty-file"_path,
 			queue_file.get_path());
 		// The file is read-only
 		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
@@ -560,7 +560,7 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+		test_helpers::copy_file("data/empty-file"_path,
 			queue_file.get_path());
 		// The file is read-only
 		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);

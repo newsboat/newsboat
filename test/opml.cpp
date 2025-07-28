@@ -114,7 +114,7 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
 	test_helpers::TempFile urlsFile;
 
-	test_helpers::copy_file(Filepath::from_locale_string("data/test-urls.txt"),
+	test_helpers::copy_file("data/test-urls.txt"_path,
 		urlsFile.get_path());
 
 	using URL = std::string;
@@ -142,9 +142,9 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 	}
 
 	const auto path =
-		Filepath::from_locale_string("file:/") // `Filepath` will append an extra slash
+		"file:/"_path // `Filepath` will append an extra slash
 		.join(utils::getcwd())
-		.join(Filepath::from_locale_string("data/example.opml"));
+		.join("data/example.opml"_path);
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
@@ -183,9 +183,9 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	urlcfg.reload();
 
 	const auto path =
-		Filepath::from_locale_string("file:/") // `Filepath` will append an extra slash
+		"file:/"_path // `Filepath` will append an extra slash
 		.join(utils::getcwd())
-		.join(Filepath::from_locale_string("data/piped.opml"));
+		.join("data/piped.opml"_path);
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	using URL = std::string;
@@ -219,9 +219,9 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	urlcfg.reload();
 
 	const auto path =
-		Filepath::from_locale_string("file:/") // `Filepath` will append an extra slash
+		"file:/"_path // `Filepath` will append an extra slash
 		.join(utils::getcwd())
-		.join(Filepath::from_locale_string("data/filtered.opml"));
+		.join("data/filtered.opml"_path);
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	using URL = std::string;
@@ -250,7 +250,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 {
 	test_helpers::TempFile urlsFile;
 
-	test_helpers::copy_file(Filepath::from_locale_string("data/test-urls.txt"),
+	test_helpers::copy_file("data/test-urls.txt"_path,
 		urlsFile.get_path());
 
 	using URL = std::string;
@@ -278,9 +278,9 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 	}
 
 	const auto path =
-		Filepath::from_locale_string("file:/") // `Filepath` will append an extra slash
+		"file:/"_path // `Filepath` will append an extra slash
 		.join(utils::getcwd())
-		.join(Filepath::from_locale_string("data/test-urls+.opml"));
+		.join("data/test-urls+.opml"_path);
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
@@ -308,9 +308,9 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 {
 	FileUrlReader urlcfg;
 	const auto path =
-		Filepath::from_locale_string("file:/") // `Filepath` will append an extra slash
+		"file:/"_path // `Filepath` will append an extra slash
 		.join(utils::getcwd())
-		.join(Filepath::from_locale_string("data/category.opml"));
+		.join("data/category.opml"_path);
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};

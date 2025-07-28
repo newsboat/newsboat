@@ -98,7 +98,7 @@ TEST_CASE("register_commands() registers ColorManager with ConfigParser",
 
 	REQUIRE_NOTHROW(clr.register_commands(cfg));
 
-	cfg.parse_file(Filepath::from_locale_string("data/config-with-colors"));
+	cfg.parse_file("data/config-with-colors"_path);
 
 	clr.apply_colors(collector.setter());
 	REQUIRE(collector.style("background") == "fg=red,bg=green");

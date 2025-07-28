@@ -28,7 +28,7 @@ TEST_CASE("Passes the callback to Download objects", "[QueueLoader]")
 	};
 
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/nonempty-queue-file"),
+	test_helpers::copy_file("data/nonempty-queue-file"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -111,7 +111,7 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/sentry-queue-file"),
+	test_helpers::copy_file("data/sentry-queue-file"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -129,11 +129,11 @@ TEST_CASE("reload() appends downloads from the array to the queue file",
 		"https://example.com/sample"
 	};
 	const auto filenames = std::vector<Filepath> {
-		Filepath::from_locale_string("first.mp4"),
-		Filepath::from_locale_string("another.mp3"),
-		Filepath::from_locale_string("a different one.ogg"),
-		Filepath::from_locale_string("episode 0024.ogg"),
-		Filepath::from_locale_string("another one.mp3")
+		"first.mp4"_path,
+		"another.mp3"_path,
+		"a different one.ogg"_path,
+		"episode 0024.ogg"_path,
+		"another one.mp3"_path
 	};
 	const auto statuses = std::vector<DlStatus> {
 		DlStatus::QUEUED,
@@ -174,7 +174,7 @@ TEST_CASE("reload() adds downloads from the queue file to the array",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/nonempty-queue-file"),
+	test_helpers::copy_file("data/nonempty-queue-file"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -192,35 +192,32 @@ TEST_CASE("reload() adds downloads from the queue file to the array",
 	REQUIRE(downloads.size() == 6);
 
 	REQUIRE(downloads[1].url() == "https://example.com/podcast/episode-001.ogg");
-	REQUIRE(downloads[1].filename() == Filepath::from_locale_string("nonexistent-file.ogg"));
+	REQUIRE(downloads[1].filename() == "nonexistent-file.ogg"_path);
 	REQUIRE(downloads[1].status() == DlStatus::QUEUED);
 
 	REQUIRE(downloads[2].url() ==
 		"https://wwww.example.com/another-podcast/episode-421.mp3");
-	REQUIRE(downloads[2].filename() ==
-		Filepath::from_locale_string("data/podcast-standin.mp3"));
+	REQUIRE(downloads[2].filename() == "data/podcast-standin.mp3"_path);
 	REQUIRE(downloads[2].status() == DlStatus::READY);
 
 	REQUIRE(downloads[3].url() == "https://pods.example.com/that_one/");
-	REQUIRE(downloads[3].filename() ==
-		Filepath::from_locale_string("data/podcast-standin.mp4"));
+	REQUIRE(downloads[3].filename() == "data/podcast-standin.mp4"_path);
 	REQUIRE(downloads[3].status() == DlStatus::PLAYED);
 
 	REQUIRE(downloads[4].url() == "https://pods.example.com/this%20one/audio.ogg");
-	REQUIRE(downloads[4].filename() ==
-		Filepath::from_locale_string("data/podcast-standin.ogg"));
+	REQUIRE(downloads[4].filename() == "data/podcast-standin.ogg"_path);
 	REQUIRE(downloads[4].status() == DlStatus::FINISHED);
 
 	REQUIRE(downloads[5].url() == "https://pods.example.com/partial.ogg");
 	// Note that this file doesn't exist, but data/partial.ogg.part does.
-	REQUIRE(downloads[5].filename() == Filepath::from_locale_string("data/partial.ogg"));
+	REQUIRE(downloads[5].filename() == "data/partial.ogg"_path);
 	REQUIRE(downloads[5].status() == DlStatus::FAILED);
 }
 
 TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/queue-file-for-merging"),
+	test_helpers::copy_file("data/queue-file-for-merging"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -233,18 +230,18 @@ TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLo
 	// because of its status.
 	downloads.emplace_back(empty_callback);
 	downloads.back().set_url("https://example.com/podcast/episode-001.ogg");
-	downloads.back().set_filename(Filepath::from_locale_string("nonexistent-file.ogg"));
+	downloads.back().set_filename("nonexistent-file.ogg"_path);
 	downloads.back().set_status(DlStatus::DELETED);
 	// This download exists in the queue file already, and it will be kept in
 	// the array.
 	downloads.emplace_back(empty_callback);
 	downloads.back().set_url("https://example.com/podcast/episode-002.ogg");
-	downloads.back().set_filename(Filepath::from_locale_string("a different episode.ogg"));
+	downloads.back().set_filename("a different episode.ogg"_path);
 	downloads.back().set_status(DlStatus::QUEUED);
 	// This download doesn't exist in the queue file.
 	downloads.emplace_back(empty_callback);
 	downloads.back().set_url("https://example.com/another.mp3");
-	downloads.back().set_filename(Filepath::from_locale_string("another.mp3"));
+	downloads.back().set_filename("another.mp3"_path);
 	downloads.back().set_status(DlStatus::QUEUED);
 
 	queue_loader.reload(downloads);
@@ -253,18 +250,16 @@ TEST_CASE("reload() merges downloads in the queue file and the array", "[QueueLo
 
 	// This download was present in both the file and the array, and was kept.
 	REQUIRE(downloads[0].url() == "https://example.com/podcast/episode-002.ogg");
-	REQUIRE(downloads[0].filename() ==
-		Filepath::from_locale_string("a different episode.ogg"));
+	REQUIRE(downloads[0].filename() == "a different episode.ogg"_path);
 	REQUIRE(downloads[0].status() == DlStatus::QUEUED);
 
 	REQUIRE(downloads[1].url() == "https://example.com/another.mp3");
-	REQUIRE(downloads[1].filename() == Filepath::from_locale_string("another.mp3"));
+	REQUIRE(downloads[1].filename() == "another.mp3"_path);
 	REQUIRE(downloads[1].status() == DlStatus::QUEUED);
 
 	// This download was read from the queue file
 	REQUIRE(downloads[2].url() == "https://example.com/this_doesnt_exist_in_code.mp3");
-	REQUIRE(downloads[2].filename() ==
-		Filepath::from_locale_string("data/podcast-standin.mp3"));
+	REQUIRE(downloads[2].filename() == "data/podcast-standin.mp3"_path);
 	REQUIRE(downloads[2].status() == DlStatus::READY);
 }
 
@@ -272,7 +267,7 @@ TEST_CASE("Overrides status in the queue with `MISSING` if file if the podcast i
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/queue-with-missing-files"),
+	test_helpers::copy_file("data/queue-with-missing-files"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -294,8 +289,7 @@ TEST_CASE(
 	"[QueueFile]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(
-		Filepath::from_locale_string("data/queue-with-unmarked-downloaded-file"),
+	test_helpers::copy_file("data/queue-with-unmarked-downloaded-file"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -307,8 +301,7 @@ TEST_CASE(
 
 	REQUIRE(downloads.size() == 1);
 	REQUIRE(downloads[0].url() == "https://example.com/this-got-downloaded-earlier.mp3");
-	REQUIRE(downloads[0].filename() ==
-		Filepath::from_locale_string("data/podcast-standin.ogg"));
+	REQUIRE(downloads[0].filename() == "data/podcast-standin.ogg"_path);
 	REQUIRE(downloads[0].status() == DlStatus::READY);
 }
 
@@ -316,7 +309,7 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/queue-without-filenames"),
+	test_helpers::copy_file("data/queue-without-filenames"_path,
 		queueFile.get_path());
 
 	ConfigContainer cfg;
@@ -328,12 +321,12 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 	SECTION("`download-path` set without a trailing slash") {
 		cfg.set_configvalue("download-path", "/some/bogus value");
 		// QueueLoader should append a slash if a setting doesn't contain it.
-		download_path = Filepath::from_locale_string("/some/bogus value/");
+		download_path = "/some/bogus value/"_path;
 	}
 	SECTION("`download-path` set with a trailing slash") {
 		cfg.set_configvalue("download-path",
 			"/yet another/fictional path for downloads/");
-		download_path = Filepath::from_locale_string("/yet another/fictional path for downloads/");
+		download_path = "/yet another/fictional path for downloads/"_path;
 	}
 
 	auto empty_callback = []() {};
@@ -343,12 +336,10 @@ TEST_CASE("Generates filename if it's absent from the queue file",
 	queue_loader.reload(downloads);
 
 	REQUIRE(downloads.size() == 5);
-	REQUIRE(downloads[0].filename() == download_path.join(
-			Filepath::from_locale_string("filename.mp3")));
-	REQUIRE(downloads[1].filename() == download_path.join(
-			Filepath::from_locale_string("hello_world.ogg")));
-	REQUIRE(downloads[2].filename() == download_path.join(
-			Filepath::from_locale_string("here%27s_one_with_a_quote.mp4")));
+	REQUIRE(downloads[0].filename() == download_path.join("filename.mp3"_path));
+	REQUIRE(downloads[1].filename() == download_path.join("hello_world.ogg"_path));
+	REQUIRE(downloads[2].filename() ==
+		download_path.join("here%27s_one_with_a_quote.mp4"_path));
 	// These two downloads should have filenames based on current time, so we
 	// only check their prefixes.
 	downloads[3].filename().starts_with(download_path);
@@ -368,11 +359,11 @@ TEST_CASE("reload() removes files corresponding to \"DELETED\" downloads "
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
 	test_helpers::TempFile fileToBeDeleted;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		fileToBeDeleted.get_path());
 
 	test_helpers::TempFile fileToBePreserved;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		fileToBePreserved.get_path());
 
 	std::vector<Download> downloads;
@@ -422,15 +413,15 @@ TEST_CASE("reload() removes files corresponding to \"FINISHED\" downloads "
 	QueueLoader queue_loader(queueFile.get_path(), cfg, empty_callback);
 
 	test_helpers::TempFile fileInDeletedStatte;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		fileInDeletedStatte.get_path());
 
 	test_helpers::TempFile fileInFinishedState;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		fileInFinishedState.get_path());
 
 	test_helpers::TempFile fileToBePreserved;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		fileToBePreserved.get_path());
 
 	std::vector<Download> downloads;
@@ -478,7 +469,7 @@ TEST_CASE("reload() does nothing if one of the downloads in the vector "
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/nonempty-queue-file"),
+	test_helpers::copy_file("data/nonempty-queue-file"_path,
 		queueFile.get_path());
 
 	auto empty_callback = []() {};
@@ -487,12 +478,12 @@ TEST_CASE("reload() does nothing if one of the downloads in the vector "
 
 	std::vector<Download> downloads;
 	downloads.emplace_back(empty_callback);
-	downloads.back().set_filename(Filepath::from_locale_string("whatever1"));
+	downloads.back().set_filename("whatever1"_path);
 	downloads.back().set_url("https://nonempty.example.com/1");
 	downloads.back().set_status(DlStatus::DOWNLOADING);
 
 	downloads.emplace_back(empty_callback);
-	downloads.back().set_filename(Filepath::from_locale_string("whatever2"));
+	downloads.back().set_filename("whatever2"_path);
 	downloads.back().set_url("https://nonempty.example.com/2");
 	downloads.back().set_status(DlStatus::FINISHED);
 
@@ -505,12 +496,12 @@ TEST_CASE("reload() does nothing if one of the downloads in the vector "
 	}
 
 	REQUIRE(test_helpers::file_contents(queueFile.get_path()) ==
-		test_helpers::file_contents(Filepath::from_locale_string("data/nonempty-queue-file")));
+		test_helpers::file_contents("data/nonempty-queue-file"_path));
 	REQUIRE(downloads.size() == 2);
-	REQUIRE(downloads[0].filename() == Filepath::from_locale_string("whatever1"));
+	REQUIRE(downloads[0].filename() == "whatever1"_path);
 	REQUIRE(downloads[0].url() == "https://nonempty.example.com/1");
 	REQUIRE(downloads[0].status() == DlStatus::DOWNLOADING);
-	REQUIRE(downloads[1].filename() == Filepath::from_locale_string("whatever2"));
+	REQUIRE(downloads[1].filename() == "whatever2"_path);
 	REQUIRE(downloads[1].url() == "https://nonempty.example.com/2");
 	REQUIRE(downloads[1].status() == DlStatus::FINISHED);
 }
@@ -518,7 +509,7 @@ TEST_CASE("reload() does nothing if one of the downloads in the vector "
 TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/queue-file-with-empty-lines"),
+	test_helpers::copy_file("data/queue-file-with-empty-lines"_path,
 		queueFile.get_path());
 
 	auto empty_callback = []() {};
@@ -527,7 +518,7 @@ TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 
 	std::vector<Download> downloads;
 	downloads.emplace_back(empty_callback);
-	downloads.back().set_filename(Filepath::from_locale_string("newest.mp3"));
+	downloads.back().set_filename("newest.mp3"_path);
 	downloads.back().set_url("https://example.com/newest_episode.mp3");
 	downloads.back().set_status(DlStatus::READY);
 
@@ -541,27 +532,27 @@ TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 
 	REQUIRE(downloads.size() == 6);
 
-	REQUIRE(downloads[0].filename() == Filepath::from_locale_string("newest.mp3"));
+	REQUIRE(downloads[0].filename() == "newest.mp3"_path);
 	REQUIRE(downloads[0].url() == "https://example.com/newest_episode.mp3");
 	REQUIRE(downloads[0].status() == DlStatus::READY);
 
-	REQUIRE(downloads[1].filename() == Filepath::from_locale_string("first.mp3"));
+	REQUIRE(downloads[1].filename() == "first.mp3"_path);
 	REQUIRE(downloads[1].url() == "https://example.com/episode01.mp3");
 	REQUIRE(downloads[1].status() == DlStatus::QUEUED);
 
-	REQUIRE(downloads[2].filename() == Filepath::from_locale_string("second.mp3"));
+	REQUIRE(downloads[2].filename() == "second.mp3"_path);
 	REQUIRE(downloads[2].url() == "https://example.com/episode02.mp3");
 	REQUIRE(downloads[2].status() == DlStatus::QUEUED);
 
-	REQUIRE(downloads[3].filename() == Filepath::from_locale_string("third.mp3"));
+	REQUIRE(downloads[3].filename() == "third.mp3"_path);
 	REQUIRE(downloads[3].url() == "https://example.com/episode03.mp3");
 	REQUIRE(downloads[3].status() == DlStatus::QUEUED);
 
-	REQUIRE(downloads[4].filename() == Filepath::from_locale_string("fourth.mp3"));
+	REQUIRE(downloads[4].filename() == "fourth.mp3"_path);
 	REQUIRE(downloads[4].url() == "https://example.com/episode04.mp3");
 	REQUIRE(downloads[4].status() == DlStatus::QUEUED);
 
-	REQUIRE(downloads[5].filename() == Filepath::from_locale_string("fifth.mp3"));
+	REQUIRE(downloads[5].filename() == "fifth.mp3"_path);
 	REQUIRE(downloads[5].url() == "https://example.com/episode05.mp3");
 	REQUIRE(downloads[5].status() == DlStatus::QUEUED);
 }
@@ -569,7 +560,7 @@ TEST_CASE("reload() skips empty lines in the queue file", "[QueueLoader]")
 TEST_CASE("reload() removes empty lines from the queue file", "[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/queue-file-with-empty-lines"),
+	test_helpers::copy_file("data/queue-file-with-empty-lines"_path,
 		queueFile.get_path());
 
 	auto empty_callback = []() {};
@@ -588,14 +579,14 @@ TEST_CASE("reload() removes empty lines from the queue file", "[QueueLoader]")
 
 	REQUIRE(test_helpers::file_contents(queueFile.get_path()) ==
 		test_helpers::file_contents(
-			Filepath::from_locale_string("data/queue-file-with-empty-lines-removed")));
+			"data/queue-file-with-empty-lines-removed"_path));
 }
 
 TEST_CASE("No exceptions are thrown if reload() can't read the queue file",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		queueFile.get_path());
 	// Make the file write-only.
 	test_helpers::Chmod queueFileMode(queueFile.get_path(), 0200);
@@ -613,7 +604,7 @@ TEST_CASE("No exceptions are thrown if reload() can't write the queue file",
 	"[QueueLoader]")
 {
 	test_helpers::TempFile queueFile;
-	test_helpers::copy_file(Filepath::from_locale_string("data/empty-file"),
+	test_helpers::copy_file("data/empty-file"_path,
 		queueFile.get_path());
 	// Make the file read-only.
 	test_helpers::Chmod queueFileMode(queueFile.get_path(), 0400);
