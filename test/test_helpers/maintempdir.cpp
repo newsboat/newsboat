@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+using newsboat::operator""_path;
+
 test_helpers::MainTempDir::tempfileexception::tempfileexception(
 	const newsboat::Filepath& filepath,
 	const std::string& error)
@@ -25,10 +27,10 @@ test_helpers::MainTempDir::MainTempDir()
 	if (tmpdir_p) {
 		tempdir = newsboat::Filepath::from_locale_string(tmpdir_p);
 	} else {
-		tempdir = newsboat::Filepath::from_locale_string("/tmp");
+		tempdir = "/tmp"_path;
 	}
 
-	tempdir.push(newsboat::Filepath::from_locale_string("newsboat-tests"));
+	tempdir.push("newsboat-tests"_path);
 
 	const auto tempdir_str = tempdir.to_locale_string();
 	int status = mkdir(tempdir_str.c_str(), S_IRWXU);
