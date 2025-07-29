@@ -3,15 +3,17 @@
 
 #include "filepath.h"
 
+using newsboat::operator""_path;
+
 #define PACKAGE				"newsboat"
 #define PROGRAM_NAME			"Newsboat"
 
 #define PROGRAM_URL			"https://newsboat.org/"
 
-const newsboat::Filepath NEWSBEUTER_CONFIG_SUBDIR = newsboat::Filepath::from_locale_string(".newsbeuter");
-const newsboat::Filepath NEWSBEUTER_SUBDIR_XDG = newsboat::Filepath::from_locale_string("newsbeuter");
-const newsboat::Filepath NEWSBOAT_CONFIG_SUBDIR = newsboat::Filepath::from_locale_string(".newsboat");
-const newsboat::Filepath NEWSBOAT_SUBDIR_XDG = newsboat::Filepath::from_locale_string("newsboat");
+const newsboat::Filepath NEWSBEUTER_CONFIG_SUBDIR = ".newsbeuter"_path;
+const newsboat::Filepath NEWSBEUTER_SUBDIR_XDG = "newsbeuter"_path;
+const newsboat::Filepath NEWSBOAT_CONFIG_SUBDIR = ".newsboat"_path;
+const newsboat::Filepath NEWSBOAT_SUBDIR_XDG = "newsboat"_path;
 
 #include <libintl.h>
 #include <locale.h>
