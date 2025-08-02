@@ -29,7 +29,7 @@ private:
 	rust::Box<stflrichtext::bridged::StflRichText> rs_object;
 
 	// Only constructable using the public static functions
-	StflRichText(rust::Box<stflrichtext::bridged::StflRichText>&&);
+	explicit StflRichText(rust::Box<stflrichtext::bridged::StflRichText>&&);
 };
 
 } // namespace newsboat

@@ -24,7 +24,7 @@ public:
 	ConfigData(const std::string& v, const std::unordered_set<std::string>& values);
 
 	/// Current value of the setting.
-	std::string value() const
+	const std::string& value() const
 	{
 		return value_;
 	}
@@ -35,7 +35,7 @@ public:
 	nonstd::expected<void, std::string> set_value(std::string new_value);
 
 	/// Default value of the setting.
-	std::string default_value() const
+	const std::string& default_value() const
 	{
 		return default_value_;
 	}

@@ -363,7 +363,7 @@ std::string utils::replace_all(std::string str,
 }
 
 std::string utils::replace_all(const std::string& str,
-	const std::vector<std::pair<std::string, std::string>> from_to_pairs)
+	const std::vector<std::pair<std::string, std::string>>& from_to_pairs)
 {
 	std::size_t cur_index = 0;
 	std::string output;

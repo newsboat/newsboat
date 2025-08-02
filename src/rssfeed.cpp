@@ -68,10 +68,6 @@ RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 	}
 }
 
-RssFeed::~RssFeed()
-{
-}
-
 unsigned int RssFeed::unread_item_count() const
 {
 	std::lock_guard<std::mutex> lock(item_mutex);

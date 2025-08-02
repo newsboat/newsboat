@@ -33,12 +33,12 @@ public:
 		return type_;
 	}
 
-	std::string info() const
+	const std::string& info() const
 	{
 		return addinfo;
 	}
 
-	std::string info2() const
+	const std::string& info2() const
 	{
 		return addinfo2;
 	}

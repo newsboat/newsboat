@@ -4,7 +4,7 @@
 
 namespace rsspp {
 
-std::string get_content(xmlNode* node)
+std::string get_content(const xmlNode* node)
 {
 	std::string retval;
 	if (node) {
@@ -73,7 +73,7 @@ std::string get_prop(xmlNode* node, const std::string& prop,
 	return retval;
 }
 
-bool has_namespace(xmlNode* node, const char* ns_uri)
+bool has_namespace(const xmlNode* node, const char* ns_uri)
 {
 	if (!ns_uri && !node->ns) {
 		return true;

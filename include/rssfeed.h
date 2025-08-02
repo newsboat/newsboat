@@ -21,8 +21,8 @@ class Cache;
 class RssFeed : public Matchable {
 public:
 	explicit RssFeed(Cache* c, const std::string& rssurl);
-	~RssFeed() override;
-	std::string title_raw() const
+	~RssFeed() override = default;
+	const std::string& title_raw() const
 	{
 		return title_;
 	}
@@ -33,7 +33,7 @@ public:
 		utils::trim(title_);
 	}
 
-	std::string description() const
+	const std::string& description() const
 	{
 		return description_;
 	}
@@ -79,7 +79,7 @@ public:
 			items_guid_map[item->guid()] = item;
 		}
 	}
-	void set_items(std::vector<std::shared_ptr<RssItem>>& items)
+	void set_items(const std::vector<std::shared_ptr<RssItem>>& items)
 	{
 		erase_items(items_.begin(), items_.end());
 		add_items(items);

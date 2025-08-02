@@ -11,8 +11,7 @@ namespace newsboat {
 
 class ListFormatter {
 public:
-	ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
-	~ListFormatter();
+	explicit ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
 	void add_line(const StflRichText& text);
 	void set_line(const unsigned int itempos, const StflRichText& text);
 	void clear()

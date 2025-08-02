@@ -36,7 +36,7 @@ public:
 	bool operator==(const KeyCombination& other) const;
 	bool operator<(const KeyCombination& rhs) const;
 
-	std::string get_key() const;
+	const std::string& get_key() const;
 	bool has_shift() const;
 	bool has_control() const;
 	bool has_alt() const;

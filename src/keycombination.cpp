@@ -121,7 +121,7 @@ bool KeyCombination::operator<(const KeyCombination& rhs) const
 		< std::tie(rhs.key, rhs.shift, rhs.control, rhs.alt);
 }
 
-std::string KeyCombination::get_key() const
+const std::string& KeyCombination::get_key() const
 {
 	return key;
 }
