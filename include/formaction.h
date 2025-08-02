@@ -38,7 +38,7 @@ struct Command {
 	CommandType type;
 	std::vector<std::string> args;
 
-	Command(CommandType type, std::vector<std::string> args = {})
+	explicit Command(CommandType type, std::vector<std::string> args = {})
 		: type(type)
 		, args(args)
 	{}

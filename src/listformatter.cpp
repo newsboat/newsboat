@@ -15,8 +15,6 @@ ListFormatter::ListFormatter(RegexManager* r, const std::string& loc)
 	, location(loc)
 {}
 
-ListFormatter::~ListFormatter() {}
-
 void ListFormatter::add_line(const StflRichText& text)
 {
 	LOG(Level::DEBUG, "ListFormatter::add_line: `%s'", text.stfl_quoted());

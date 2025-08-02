@@ -20,7 +20,7 @@ public:
 	{
 		value = new_value;
 	}
-	std::string get_selected_value()
+	const std::string& get_selected_value()
 	{
 		return value;
 	}

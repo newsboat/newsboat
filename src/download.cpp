@@ -21,9 +21,7 @@ Download::Download(std::function<void()> cb_require_view_update_)
 {
 }
 
-Download::~Download() {}
-
-const std::string Download::filename() const
+const std::string& Download::filename() const
 {
 	return fn;
 }
@@ -38,7 +36,7 @@ const std::string Download::basename() const
 	return fn;
 }
 
-const std::string Download::url() const
+const std::string& Download::url() const
 {
 	return url_;
 }

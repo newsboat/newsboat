@@ -81,7 +81,7 @@ std::string replace_all(std::string str,
 	const std::string& from,
 	const std::string& to);
 std::string replace_all(const std::string& str,
-	const std::vector<std::pair<std::string, std::string>> from_to_pairs);
+	const std::vector<std::pair<std::string, std::string>>& from_to_pairs);
 
 std::string to_lowercase(const std::string& input);
 

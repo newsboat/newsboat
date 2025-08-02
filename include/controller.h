@@ -27,8 +27,7 @@ class View;
 
 class Controller {
 public:
-	Controller(ConfigPaths& configpaths);
-	~Controller() = default;
+	explicit Controller(ConfigPaths& configpaths);
 	void set_view(View* vv);
 	View* get_view()
 	{

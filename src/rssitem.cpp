@@ -25,8 +25,6 @@ RssItem::RssItem(Cache* c)
 {
 }
 
-RssItem::~RssItem() {}
-
 // RssItem setters
 
 void RssItem::set_title(const std::string& t)

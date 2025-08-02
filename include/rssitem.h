@@ -21,9 +21,9 @@ struct Description {
 class RssItem : public Matchable {
 public:
 	explicit RssItem(Cache* c);
-	~RssItem() override;
+	~RssItem() override = default;
 
-	std::string title() const
+	const std::string& title() const
 	{
 		return title_;
 	}
@@ -35,7 +35,7 @@ public:
 	}
 	void set_link(const std::string& l);
 
-	std::string author() const
+	const std::string& author() const
 	{
 		return author_;
 	}

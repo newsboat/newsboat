@@ -281,7 +281,7 @@ void FeedContainer::reset_feeds_status()
 }
 
 void FeedContainer::set_feeds(
-	const std::vector<std::shared_ptr<RssFeed>> new_feeds)
+	const std::vector<std::shared_ptr<RssFeed>>& new_feeds)
 {
 	std::lock_guard<std::mutex> feedslock(feeds_mutex);
 	feeds = new_feeds;

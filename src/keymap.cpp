@@ -1207,7 +1207,7 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 	}
 }
 
-void KeyMap::apply_bind(Mapping& target, const std::vector<KeyCombination> key_sequence,
+void KeyMap::apply_bind(Mapping& target, const std::vector<KeyCombination>& key_sequence,
 	const std::vector<MacroCmd>& cmds, const std::string& description, BindingType type)
 {
 	if (key_sequence.size() == 0) {
