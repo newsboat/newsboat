@@ -245,20 +245,30 @@ Feed Parser::parse_url(const std::string& url,
 Feed Parser::parse_buffer(const std::string& buffer, const std::string& url,
 	std::optional<std::string> charset)
 {
+	doc = nullptr;
 	if (charset.has_value()) {
+		LOG(Level::DEBUG, "Parser::parse_buffer: convert from %s to utf-8", charset.value());
 		const auto buffer_utf8 = utils::convert_text(buffer, "utf-8", charset.value());
+		LOG(Level::DEBUG, "Parser::parse_buffer: parse xml in utf-8 encoding (length: %zu)",
+			buffer_utf8.length());
 		doc = xmlReadMemory(buffer_utf8.c_str(),
 				buffer_utf8.length(),
 				url.c_str(),
 				"UTF-8",
 				XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING | XML_PARSE_IGNORE_ENC);
-	} else {
+	}
+
+	if (doc == nullptr) {
+		LOG(Level::DEBUG,
+			"Parser::parse_buffer: parse xml with encoding auto-detection (length: %zu)",
+			buffer.length());
 		doc = xmlReadMemory(buffer.c_str(),
 				buffer.length(),
 				url.c_str(),
 				nullptr,
 				XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	}
+
 	if (doc == nullptr) {
 		throw Exception(_("could not parse buffer"));
 	}
