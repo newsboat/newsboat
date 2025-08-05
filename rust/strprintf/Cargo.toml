@@ -6,6 +6,3 @@ edition = "2024"
 
 [dependencies]
 libc = "0.2"
-
-[lints]
-workspace = true

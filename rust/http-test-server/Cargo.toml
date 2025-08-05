@@ -7,6 +7,3 @@ edition = "2024"
 
 [dependencies]
 httpmock = "0.7.0"
-
-[lints]
-workspace = true
