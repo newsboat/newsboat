@@ -39,12 +39,18 @@ void ListFormatter::set_line(const unsigned int itempos,
 std::string ListFormatter::format_list() const
 {
 	std::string format_cache = "{list";
-	for (auto str : lines) {
-		if (rxman) {
-			rxman->quote_and_highlight(str, location);
+	if (lines.empty()) {
+		// Stfl does not allow changing the focus to an empty list.
+		// Add an empty item to work around this.
+		format_cache.append("{listitem text:''}");
+	} else {
+		for (auto str : lines) {
+			if (rxman) {
+				rxman->quote_and_highlight(str, location);
+			}
+			format_cache.append(strprintf::fmt(
+					"{listitem text:%s}", Stfl::quote(str.stfl_quoted())));
 		}
-		format_cache.append(strprintf::fmt(
-				"{listitem text:%s}", Stfl::quote(str.stfl_quoted())));
 	}
 	format_cache.push_back('}');
 	return format_cache;
