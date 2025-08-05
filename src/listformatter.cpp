@@ -29,6 +29,7 @@ void ListFormatter::set_line(const unsigned int itempos,
 	const std::string formatted_text = utils::wstr2str(cleaned);
 	const StflRichText stflRichText = StflRichText::from_quoted(formatted_text);
 
+	std::lock_guard<std::mutex> guard(mutex);
 	if (itempos == UINT_MAX) {
 		lines.push_back(stflRichText);
 	} else {
@@ -36,9 +37,10 @@ void ListFormatter::set_line(const unsigned int itempos,
 	}
 }
 
-std::string ListFormatter::format_list() const
+std::string ListFormatter::format_list()
 {
 	std::string format_cache = "{list";
+	std::lock_guard<std::mutex> guard(mutex);
 	for (auto str : lines) {
 		if (rxman) {
 			rxman->quote_and_highlight(str, location);
