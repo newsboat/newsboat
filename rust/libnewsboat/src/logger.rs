@@ -220,6 +220,7 @@ impl Logger {
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
+        #[allow(clippy::collapsible_if)] // Necessary until MSRV is Rust 1.88.0 or higher
         if level as isize <= self.get_loglevel() {
             if let Some(ref mut logfile) = files.logfile {
                 let level = format!("{level}: ");
@@ -232,6 +233,7 @@ impl Logger {
             }
         }
 
+        #[allow(clippy::collapsible_if)] // Necessary until MSRV is Rust 1.88.0 or higher
         if level == Level::UserError {
             if let Some(ref mut user_error_logfile) = files.user_error_logfile {
                 // Ignoring the error since checking every log() call will be too bothersome.
