@@ -149,9 +149,10 @@ pub fn get_basename(input: &str) -> String {
     }
 }
 
-pub fn get_default_browser() -> String {
-    use std::env;
-    env::var("BROWSER").unwrap_or_else(|_| "lynx".to_string())
+pub fn get_default_browser() -> PathBuf {
+    std::env::var_os("BROWSER")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| Path::new("lynx").to_path_buf())
 }
 
 pub fn md5hash(input: &str) -> String {

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "rss/feed.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -30,7 +31,7 @@ private:
 	rsspp::Feed download_http(const std::string& uri);
 	rsspp::Feed get_execplugin(const std::string& plugin);
 	rsspp::Feed download_filterplugin(const std::string& filter, const std::string& uri);
-	rsspp::Feed parse_file(const std::string& file);
+	rsspp::Feed parse_file(const newsboat::Filepath& file);
 
 	ConfigContainer& cfg;
 	Cache& ch;

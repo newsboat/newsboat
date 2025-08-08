@@ -6,6 +6,8 @@
 #include <string>
 #include <sys/types.h>
 
+#include "filepath.h"
+
 namespace newsboat {
 
 class FsLock {
@@ -13,7 +15,7 @@ public:
 	FsLock();
 	~FsLock() = default;
 
-	bool try_lock(const std::string& lock_file, pid_t& pid,
+	bool try_lock(const Filepath& lock_file, pid_t& pid,
 		std::string& error_message);
 
 private:

@@ -11,7 +11,7 @@ namespace newsboat {
 
 class OpmlUrlReader : public UrlReader {
 public:
-	explicit OpmlUrlReader(ConfigContainer& c, const std::string& url_file);
+	explicit OpmlUrlReader(ConfigContainer& c, const Filepath& url_file);
 	std::optional<utils::ReadTextFileError> reload() override;
 	std::string get_source() const override;
 
@@ -21,7 +21,7 @@ protected:
 
 private:
 	void rec_find_rss_outlines(xmlNode* node, std::string tag);
-	std::string file;
+	Filepath file;
 };
 
 }

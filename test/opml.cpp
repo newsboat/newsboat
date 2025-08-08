@@ -52,16 +52,16 @@ TEST_CASE("opml::generate creates an XML document with feed URLs in OPML format"
 
 	SECTION("A few feeds") {
 		ConfigContainer cfg;
-		Cache rsscache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 		FeedContainer feeds;
 
 		std::shared_ptr<RssFeed> feed =
-			std::make_shared<RssFeed>(&rsscache, "https://example.com/feed1.xml");
+			std::make_shared<RssFeed>(rsscache.get(), "https://example.com/feed1.xml");
 		feed->set_title("Feed 1");
 		feed->set_link("https://example.com/feed1/");
 		feeds.add_feed(std::move(feed));
 
-		feed = std::make_shared<RssFeed>(&rsscache, "https://example.com/feed2.xml");
+		feed = std::make_shared<RssFeed>(rsscache.get(), "https://example.com/feed2.xml");
 		feed->set_title("Feed 2");
 		feed->set_link("https://example.com/feed2/");
 		feed->set_tags({"tag", "tag,with,commas", "tag/with/slashes", "tag with spaces"});
@@ -114,7 +114,8 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 {
 	test_helpers::TempFile urlsFile;
 
-	test_helpers::copy_file("data/test-urls.txt", urlsFile.get_path());
+	test_helpers::copy_file("data/test-urls.txt"_path,
+		urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -140,10 +141,11 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 		REQUIRE(tags == entry->second);
 	}
 
-	REQUIRE_NOTHROW(
-		opml::import(
-			"file://" + utils::getcwd() + "/data/example.opml",
-			urlcfg));
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/example.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
 		{"https://example.com/feed.xml", {}},
@@ -180,10 +182,11 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
-	REQUIRE_NOTHROW(
-		opml::import(
-			"file://" + utils::getcwd() + "/data/piped.opml",
-			urlcfg));
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/piped.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -215,10 +218,11 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	FileUrlReader urlcfg(urlsFile.get_path());
 	urlcfg.reload();
 
-	REQUIRE_NOTHROW(
-		opml::import(
-			"file://" + utils::getcwd() + "/data/filtered.opml",
-			urlcfg));
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/filtered.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -246,7 +250,8 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 {
 	test_helpers::TempFile urlsFile;
 
-	test_helpers::copy_file("data/test-urls.txt", urlsFile.get_path());
+	test_helpers::copy_file("data/test-urls.txt"_path,
+		urlsFile.get_path());
 
 	using URL = std::string;
 	using Tag = std::string;
@@ -272,10 +277,11 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 		REQUIRE(tags == entry->second);
 	}
 
-	REQUIRE_NOTHROW(
-		opml::import(
-			"file://" + utils::getcwd() + "/data/test-urls+.opml",
-			urlcfg));
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/test-urls+.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
 		{"https://example.com/another_feed.atom", {}},
@@ -301,9 +307,11 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 TEST_CASE("import() tags from category attribute", "[Opml]")
 {
 	FileUrlReader urlcfg;
-	REQUIRE_NOTHROW(
-		opml::import("file://" + utils::getcwd() + "/data/category.opml", urlcfg)
-	);
+	const auto path =
+		"file:/"_path // `Filepath` will append an extra slash
+		.join(utils::getcwd())
+		.join("data/category.opml"_path);
+	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::vector<std::string> tags{"tag one", "tag_two", "tag/three"};
 	const auto& urls = urlcfg.get_urls();

@@ -1,8 +1,16 @@
-use cxx::CxxString;
 use libnewsboat::logger;
+
+use crate::filepath::PathBuf;
+use cxx::CxxString;
 
 #[cxx::bridge(namespace = "newsboat::logger")]
 mod ffi {
+    #[namespace = "newsboat::filepath::bridged"]
+    extern "C++" {
+        include!("libnewsboat-ffi/src/filepath.rs.h");
+        type PathBuf = crate::filepath::PathBuf;
+    }
+
     // This has to be in sync with logger::Level in rust/libnewsboat/src/logger.rs
     enum Level {
         USERERROR = 1,
@@ -15,11 +23,11 @@ mod ffi {
 
     extern "Rust" {
         fn unset_loglevel();
-        fn set_logfile(logfile: &str);
+        fn set_logfile(logfile: &PathBuf);
         fn get_loglevel() -> i64;
         fn set_loglevel(level: Level);
         fn log_internal(level: Level, message: &CxxString);
-        fn set_user_error_logfile(user_error_logfile: &str);
+        fn set_user_error_logfile(user_error_logfile: &PathBuf);
     }
 }
 
@@ -39,8 +47,8 @@ fn unset_loglevel() {
     logger::get_instance().unset_loglevel();
 }
 
-fn set_logfile(logfile: &str) {
-    logger::get_instance().set_logfile(logfile);
+fn set_logfile(logfile: &PathBuf) {
+    logger::get_instance().set_logfile(&logfile.0);
 }
 
 fn get_loglevel() -> i64 {
@@ -57,6 +65,6 @@ fn log_internal(level: ffi::Level, message: &CxxString) {
     logger::get_instance().log_raw(level, message.as_bytes());
 }
 
-fn set_user_error_logfile(user_error_logfile: &str) {
-    logger::get_instance().set_user_error_logfile(user_error_logfile);
+fn set_user_error_logfile(user_error_logfile: &PathBuf) {
+    logger::get_instance().set_user_error_logfile(&user_error_logfile.0);
 }

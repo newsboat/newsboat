@@ -277,23 +277,15 @@ bool ItemListFormAction::process_operation(Operation op,
 	case OP_SHOWURLS:
 		if (!visible_items.empty()) {
 			if (itempos < visible_items.size()) {
-				std::string urlviewer = cfg->get_configvalue(
-						"external-url-viewer");
-				if (urlviewer == "") {
+				const auto urlviewer = cfg->get_configvalue_as_filepath("external-url-viewer");
+				if (urlviewer == Filepath{}) {
 					Links links;
-					std::vector<std::pair<LineType,
-					    std::string>>
-					    lines;
+					std::vector<std::pair<LineType, std::string>> lines;
 					HtmlRenderer rnd;
 					std::string baseurl =
-						visible_items[itempos]
-						.first
-						->get_base() !=
-						""
-						? visible_items[itempos]
-						.first->get_base()
-						: visible_items[itempos]
-						.first->feedurl();
+						visible_items[itempos].first->get_base() != ""
+						? visible_items[itempos].first->get_base()
+						: visible_items[itempos].first->feedurl();
 					rnd.render(
 						utils::utf8_to_locale(visible_items[itempos].first->description().text),
 						lines,
@@ -307,7 +299,7 @@ bool ItemListFormAction::process_operation(Operation op,
 					}
 				} else {
 					qna_responses.clear();
-					qna_responses.push_back(urlviewer);
+					qna_responses.push_back(urlviewer.to_locale_string());
 					this->finished_qna(QnaFinishAction::PipeItemIntoProgram);
 				}
 			}
@@ -406,7 +398,7 @@ bool ItemListFormAction::process_operation(Operation op,
 		LOG(Level::INFO, "ItemListFormAction: saving item at pos `%u'", itempos);
 		if (!visible_items.empty()) {
 			std::shared_ptr<RssItem> item = visible_items[itempos].first;
-			std::optional<std::string> filename;
+			std::optional<Filepath> filename;
 			switch (bindingType) {
 			case BindingType::Bind:
 				if (args.empty()) {
@@ -414,12 +406,12 @@ bool ItemListFormAction::process_operation(Operation op,
 					const auto suggestion = v.get_filename_suggestion(title);
 					filename = v.run_filebrowser(suggestion);
 				} else {
-					filename = args.front();
+					filename = Filepath::from_locale_string(args.front());
 				}
 				break;
 			case BindingType::Macro:
 				if (args.size() > 0) {
-					filename = args.front();
+					filename = Filepath::from_locale_string(args.front());
 				}
 				break;
 			case BindingType::BindKey:
@@ -1469,7 +1461,7 @@ void ItemListFormAction::restore_selected_position()
 
 }
 
-void ItemListFormAction::save_article(const std::optional<std::string>& filename,
+void ItemListFormAction::save_article(const std::optional<Filepath>& filename,
 	std::shared_ptr<RssItem> item)
 {
 	if (!filename.has_value()) {
@@ -1497,7 +1489,8 @@ void ItemListFormAction::handle_save(const std::vector<std::string>& cmd_args)
 		v.get_statusline().show_error(_("Error: no item selected!"));
 		return;
 	}
-	const std::string filename = utils::resolve_tilde(cmd_args.front());
+	const auto path = Filepath::from_locale_string(cmd_args.front());
+	const Filepath filename = utils::resolve_tilde(path);
 	const unsigned int itempos = list.get_position();
 	LOG(Level::INFO,
 		"ItemListFormAction::handle_cmdline: saving item at pos `%u' to `%s'",
@@ -1595,31 +1588,25 @@ void ItemListFormAction::handle_op_saveall()
 		return;
 	}
 
-	std::optional<std::string> directory = v.run_dirbrowser();
-
+	const std::optional<Filepath> directory = v.run_dirbrowser();
 	if (!directory.has_value()) {
 		return;
 	}
 
-	if (directory.value().back() != NEWSBEUTER_PATH_SEP) {
-		directory.value().push_back(NEWSBEUTER_PATH_SEP);
-	}
-
-	std::vector<std::string> filenames;
+	std::vector<Filepath> filenames;
 	for (const auto& item : visible_items) {
-		filenames.emplace_back( utils::utf8_to_locale(v.get_filename_suggestion(
-					item.first->title())));
+		filenames.emplace_back(v.get_filename_suggestion(item.first->title()));
 	}
 
-	const auto unique_filenames = std::set<std::string>(
+	const auto unique_filenames = std::set<Filepath>(
 			std::begin(filenames),
 			std::end(filenames));
 
 	int nfiles_exist = filenames.size() - unique_filenames.size();
 	for (const auto& filename : unique_filenames) {
-		const auto filepath = directory.value() + filename;
+		const auto filepath = directory.value().join(filename);
 		struct stat sbuf;
-		if (::stat(filepath.c_str(), &sbuf) != -1) {
+		if (::stat(filepath.to_locale_string().c_str(), &sbuf) != -1) {
 			nfiles_exist++;
 		}
 	}
@@ -1638,11 +1625,11 @@ void ItemListFormAction::handle_op_saveall()
 	bool overwrite_all = false;
 	for (size_t item_idx = 0; item_idx < filenames.size(); ++item_idx) {
 		const auto filename = filenames[item_idx];
-		const auto filepath = directory.value() + filename;
+		const auto filepath = directory.value().join(filename);
 		auto item = visible_items[item_idx].first;
 
 		struct stat sbuf;
-		if (::stat(filepath.c_str(), &sbuf) != -1) {
+		if (::stat(filepath.to_locale_string().c_str(), &sbuf) != -1) {
 			if (overwrite_all) {
 				save_article(filepath, item);
 				continue;

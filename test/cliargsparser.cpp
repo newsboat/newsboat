@@ -1,3 +1,7 @@
+// This has to be included before Catch2 in order to provide the comparison
+// operator
+#include "filepath.h"
+
 #include "3rd-party/catch.hpp"
 
 #include "cliargsparser.h"
@@ -42,7 +46,7 @@ TEST_CASE(
 	"provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("blogroll.opml");
+	const auto filename = "blogroll.opml"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -52,11 +56,11 @@ TEST_CASE(
 	};
 
 	SECTION("-i") {
-		check({"newsboat", "-i", filename});
+		check({"newsboat", "-i", filename.to_locale_string()});
 	}
 
 	SECTION("--import-from-opml") {
-		check({"newsboat", "--import-from-opml=" + filename});
+		check({"newsboat", "--import-from-opml=" + filename.to_locale_string()});
 	}
 }
 
@@ -66,16 +70,16 @@ TEST_CASE("Resolves tilde to homedir in -i/--import-from-opml",
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("feedlist.opml");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "feedlist.opml"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.do_import());
-		REQUIRE(args.importfile() == tmp.get_path() + filename);
+		REQUIRE(args.importfile() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-i") {
@@ -181,7 +185,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("urlfile");
+	const auto filename = "urlfile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -191,11 +195,11 @@ TEST_CASE(
 	};
 
 	SECTION("-u") {
-		check({"newsboat", "-u", filename});
+		check({"newsboat", "-u", filename.to_locale_string()});
 	}
 
 	SECTION("--url-file") {
-		check({"newsboat", "--url-file=" + filename});
+		check({"newsboat", "--url-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -204,15 +208,15 @@ TEST_CASE("Resolves tilde to homedir in -u/--url-file", "[CliArgsParser]")
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("urlfile");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "urlfile"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.url_file() == tmp.get_path() + filename);
+		REQUIRE(args.url_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-u") {
@@ -229,60 +233,68 @@ TEST_CASE(
 	"if -c/--cache-file is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("cache.db");
+	const auto filename = "cache.db"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
 		REQUIRE(args.cache_file() == filename);
-		REQUIRE(args.lock_file() == filename + ".lock");
+		auto lock_file_name = filename;
+		lock_file_name.add_extension("lock");
+		REQUIRE(args.lock_file() == lock_file_name);
 		REQUIRE(args.using_nonstandard_configs());
 	};
 
 	SECTION("-c") {
-		check({"newsboat", "-c", filename});
+		check({"newsboat", "-c", filename.to_locale_string()});
 	}
 
 	SECTION("--cache-file") {
-		check({"newsboat", "--cache-file=" + filename});
+		check({"newsboat", "--cache-file=" + filename.to_locale_string()});
 	}
 }
 
 TEST_CASE("Supports combined short options", "[CliArgsParser]")
 {
-	const std::string filename("cache.db");
+	const auto filename = "cache.db"_path;
 
-	test_helpers::Opts opts = {"newsboat", "-vc", filename};
+	test_helpers::Opts opts = {"newsboat", "-vc", filename.to_locale_string()};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
-	REQUIRE(args.lock_file() == filename + ".lock");
+	auto lock_file_name = filename;
+	lock_file_name.add_extension("lock");
+	REQUIRE(args.lock_file() == lock_file_name);
 	REQUIRE(args.using_nonstandard_configs());
 	REQUIRE(args.show_version() == 1);
 }
 
 TEST_CASE("Supports combined short option and value", "[CliArgsParser]")
 {
-	const std::string filename("cache.db");
+	const auto filename = "cache.db"_path;
 
-	test_helpers::Opts opts = {"newsboat", "-c" + filename};
+	test_helpers::Opts opts = {"newsboat", "-c" + filename.to_locale_string()};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
-	REQUIRE(args.lock_file() == filename + ".lock");
+	auto lock_file_name = filename;
+	lock_file_name.add_extension("lock");
+	REQUIRE(args.lock_file() == lock_file_name);
 	REQUIRE(args.using_nonstandard_configs());
 }
 
 TEST_CASE("Supports `=` between short option and value",
 	"[CliArgsParser]")
 {
-	const std::string filename("cache.db");
+	const auto filename = "cache.db"_path;
 
-	test_helpers::Opts opts = {"newsboat", "-c=" + filename};
+	test_helpers::Opts opts = {"newsboat", "-c=" + filename.to_locale_string()};
 	CliArgsParser args(opts.argc(), opts.argv());
 
 	REQUIRE(args.cache_file() == filename);
-	REQUIRE(args.lock_file() == filename + ".lock");
+	auto lock_file_name = filename;
+	lock_file_name.add_extension("lock");
+	REQUIRE(args.lock_file() == lock_file_name);
 	REQUIRE(args.using_nonstandard_configs());
 }
 
@@ -291,16 +303,18 @@ TEST_CASE("Resolves tilde to homedir in -c/--cache-file", "[CliArgsParser]")
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("mycache.db");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "mycache.db"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cache_file() == tmp.get_path() + filename);
-		REQUIRE(args.lock_file() == tmp.get_path() + filename + ".lock");
+		REQUIRE(args.cache_file().value() == tmp.get_path().join(filename));
+		auto lock_file_name = filename;
+		lock_file_name.add_extension("lock");
+		REQUIRE(args.lock_file().value() == tmp.get_path().join(lock_file_name));
 	};
 
 	SECTION("-c") {
@@ -317,7 +331,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("config file");
+	const auto filename = "config file"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -327,11 +341,11 @@ TEST_CASE(
 	};
 
 	SECTION("-C") {
-		check({"newsboat", "-C", filename});
+		check({"newsboat", "-C", filename.to_locale_string()});
 	}
 
 	SECTION("--config-file") {
-		check({"newsboat", "--config-file=" + filename});
+		check({"newsboat", "--config-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -340,15 +354,15 @@ TEST_CASE("Resolves tilde to homedir in -C/--config-file", "[CliArgsParser]")
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("newsboat-config");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "newsboat-config"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.config_file() == tmp.get_path() + filename);
+		REQUIRE(args.config_file().value() == tmp.get_path().join(filename));
 		REQUIRE(args.using_nonstandard_configs());
 	};
 
@@ -366,7 +380,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("queuefile");
+	const auto filename = "queuefile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -376,7 +390,7 @@ TEST_CASE(
 	};
 
 	SECTION("--queue-file") {
-		check({"newsboat", "--queue-file=" + filename});
+		check({"newsboat", "--queue-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -385,15 +399,15 @@ TEST_CASE("Resolves tilde to homedir in --queue-file", "[CliArgsParser]")
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("queuefile");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "queuefile"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.queue_file() == tmp.get_path() + filename);
+		REQUIRE(args.queue_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("--queue-file") {
@@ -406,7 +420,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("searchfile");
+	const auto filename = "searchfile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -416,7 +430,7 @@ TEST_CASE(
 	};
 
 	SECTION("--search-history-file") {
-		check({"newsboat", "--search-history-file=" + filename});
+		check({"newsboat", "--search-history-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -425,15 +439,15 @@ TEST_CASE("Resolves tilde to homedir in --search-history-file", "[CliArgsParser]
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("searchfile");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "searchfile"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.search_history_file() == tmp.get_path() + filename);
+		REQUIRE(args.search_history_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("--search-history-file") {
@@ -446,7 +460,7 @@ TEST_CASE(
 	"is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("cmdlinefile");
+	const auto filename = "cmdlinefile"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -456,7 +470,7 @@ TEST_CASE(
 	};
 
 	SECTION("--cmdline-history-file") {
-		check({"newsboat", "--cmdline-history-file=" + filename});
+		check({"newsboat", "--cmdline-history-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -465,15 +479,15 @@ TEST_CASE("Resolves tilde to homedir in --cmdline-history-file", "[CliArgsParser
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("cmdlinefile");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "cmdlinefile"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.cmdline_history_file() == tmp.get_path() + filename);
+		REQUIRE(args.cmdline_history_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("--cmdline-history-file") {
@@ -637,7 +651,7 @@ TEST_CASE(
 	"Sets `readinfofile` if -I/--import-from-file is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("filename");
+	const auto filename = "filename"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -646,11 +660,11 @@ TEST_CASE(
 	};
 
 	SECTION("-I") {
-		check({"newsboat", "-I", filename});
+		check({"newsboat", "-I", filename.to_locale_string()});
 	}
 
 	SECTION("--import-from-file") {
-		check({"newsboat", "--import-from-file=" + filename});
+		check({"newsboat", "--import-from-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -660,15 +674,15 @@ TEST_CASE("Resolves tilde to homedir in -I/--import-from-file",
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("read.txt");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "read.txt"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.readinfo_import_file() == tmp.get_path() + filename);
+		REQUIRE(args.readinfo_import_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-I") {
@@ -684,7 +698,7 @@ TEST_CASE(
 	"Sets `readinfofile` if -E/--export-to-file is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("filename");
+	const auto filename = "filename"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -693,11 +707,11 @@ TEST_CASE(
 	};
 
 	SECTION("-E") {
-		check({"newsboat", "-E", filename});
+		check({"newsboat", "-E", filename.to_locale_string()});
 	}
 
 	SECTION("--export-from-file") {
-		check({"newsboat", "--export-to-file=" + filename});
+		check({"newsboat", "--export-to-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -706,15 +720,15 @@ TEST_CASE("Resolves tilde to homedir in -E/--export-to-file", "[CliArgsParser]")
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("read.txt");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "read.txt"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.readinfo_export_file() == tmp.get_path() + filename);
+		REQUIRE(args.readinfo_export_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-E") {
@@ -731,8 +745,8 @@ TEST_CASE(
 	"-I/--import-from-file and -E/--export-to-file are provided",
 	"[CliArgsParser]")
 {
-	const std::string importf("import.opml");
-	const std::string exportf("export.opml");
+	const auto importf = "import.opml"_path;
+	const auto exportf = "export.opml"_path;
 
 	auto check = [](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -742,18 +756,18 @@ TEST_CASE(
 	};
 
 	SECTION("-I first") {
-		check({"newsboat", "-I", importf, "-E", exportf});
+		check({"newsboat", "-I", importf.to_locale_string(), "-E", exportf.to_locale_string()});
 	}
 
 	SECTION("-E first") {
-		check({"newsboat", "-E", exportf, "-I", importf});
+		check({"newsboat", "-E", exportf.to_locale_string(), "-I", importf.to_locale_string()});
 	}
 }
 
 TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 	"[CliArgsParser]")
 {
-	const std::string filename("log file.txt");
+	const auto filename = "log file.txt"_path;
 
 	auto check = [&filename](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
@@ -762,11 +776,11 @@ TEST_CASE("Sets `log_file` if -d/--log-file is provided",
 	};
 
 	SECTION("-d") {
-		check({"newsboat", "-d", filename});
+		check({"newsboat", "-d", filename.to_locale_string()});
 	}
 
 	SECTION("--log-file") {
-		check({"newsboat", "--log-file=" + filename});
+		check({"newsboat", "--log-file=" + filename.to_locale_string()});
 	}
 }
 
@@ -775,15 +789,15 @@ TEST_CASE("Resolves tilde to homedir in -d/--log-file", "[CliArgsParser]")
 	test_helpers::TempDir tmp;
 
 	test_helpers::EnvVar home("HOME");
-	home.set(tmp.get_path());
+	home.set(tmp.get_path().to_locale_string());
 
-	const std::string filename("newsboat.log");
-	const std::string arg = std::string("~/") + filename;
+	const auto filename = "newsboat.log"_path;
+	const std::string arg = std::string("~/") + filename.to_locale_string();
 
 	auto check = [&filename, &tmp](test_helpers::Opts opts) {
 		CliArgsParser args(opts.argc(), opts.argv());
 
-		REQUIRE(args.log_file() == tmp.get_path() + filename);
+		REQUIRE(args.log_file().value() == tmp.get_path().join(filename));
 	};
 
 	SECTION("-d") {

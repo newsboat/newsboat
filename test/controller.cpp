@@ -10,39 +10,39 @@
 #include "3rd-party/catch.hpp"
 #include "test_helpers/tempdir.h"
 #include "test_helpers/envvar.h"
+#include "test_helpers/misc.h"
 
 using namespace newsboat;
 
 TEST_CASE("write_item correctly parses path", "[Controller]")
 {
-	std::string name = "myitem";
+	const auto name = "myitem"_path;
 	test_helpers::TempDir tmp;
-	const auto home_dir = tmp.get_path() + "home/";
+	const auto home_dir = tmp.get_path().join("home"_path);
 	REQUIRE(0 == utils::mkdir_parents(home_dir, 0700));
-	const auto save_path = tmp.get_path() + "save/";
+	const auto save_path = tmp.get_path().join("save"_path);
 	REQUIRE(0 == utils::mkdir_parents(save_path, 0700));
 
 	test_helpers::EnvVar home("HOME");
-	home.set(home_dir);
+	home.set(home_dir.to_locale_string());
 
 	ConfigPaths paths{};
 	Controller c(paths);
 
 	auto cfg = c.get_config();
-	cfg->set_configvalue("save-path", save_path);
-	Cache rsscache(":memory:", cfg);
+	cfg->set_configvalue("save-path", save_path.to_locale_string());
+	auto rsscache = Cache::in_memory(*cfg);
 
-
-	RssItem item(&rsscache);
+	RssItem item(rsscache.get());
 	item.set_title("title");
 	const auto description = "First line.\nSecond one.\nAnd finally the third";
 	item.set_description(description, "text/plain");
 
-	c.write_item(item, tmp.get_path() + name);
-	c.write_item(item, "~/" + name);
+	c.write_item(item, tmp.get_path().join(name));
+	c.write_item(item, "~"_path.join(name));
 	c.write_item(item, name);
 
-	REQUIRE(::access(std::string(tmp.get_path() + name).c_str(), R_OK) == 0);
-	REQUIRE(::access(std::string(home_dir + name).c_str(), R_OK) == 0);
-	REQUIRE(::access(std::string(save_path + name).c_str(), R_OK) == 0);
+	REQUIRE(test_helpers::file_available_for_reading(tmp.get_path().join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(home_dir.join(name)));
+	REQUIRE(test_helpers::file_available_for_reading(save_path.join(name)));
 }

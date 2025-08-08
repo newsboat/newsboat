@@ -36,7 +36,7 @@ NewsBlurApi::NewsBlurApi(ConfigContainer& c)
 			(NEWSBLUR_ITEMS_PER_PAGE + 1)) /
 		NEWSBLUR_ITEMS_PER_PAGE;
 
-	if (cfg.get_configvalue("cookie-cache").empty()) {
+	if (cfg.get_configvalue_as_filepath("cookie-cache") == Filepath{}) {
 		LOG(Level::CRITICAL,
 			"NewsBlurApi::NewsBlurApi: No cookie-cache has been "
 			"configured the login won't work.");
@@ -58,11 +58,9 @@ bool NewsBlurApi::authenticate()
 	bool result = json_object_get_boolean(status);
 
 	LOG(Level::INFO,
-		"NewsBlurApi::authenticate: authentication resulted in %u, "
-		"cached "
-		"in %s",
+		"NewsBlurApi::authenticate: authentication resulted in %u, cached in %s",
 		result,
-		cfg.get_configvalue("cookie-cache"));
+		cfg.get_configvalue_as_filepath("cookie-cache"));
 
 	return result;
 }

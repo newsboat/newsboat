@@ -286,9 +286,9 @@ Feed Parser::parse_buffer(const std::string& buffer, const std::string& url,
 	return f;
 }
 
-Feed Parser::parse_file(const std::string& filename)
+Feed Parser::parse_file(const Filepath& filename)
 {
-	doc = xmlReadFile(filename.c_str(),
+	doc = xmlReadFile(filename.to_locale_string().c_str(),
 			nullptr,
 			XML_PARSE_RECOVER | XML_PARSE_NOERROR | XML_PARSE_NOWARNING);
 	xmlNode* root_element = xmlDocGetRootElement(doc);

@@ -7,6 +7,7 @@
 #include <unordered_set>
 
 #include "configcontainer.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -41,10 +42,12 @@ using schema_patches = std::map<SchemaVersion, std::vector<std::string>>;
 
 class Cache {
 public:
-	Cache(const std::string& cachefile, ConfigContainer* c);
+	Cache(const Filepath& cachefile, ConfigContainer& c);
 	~Cache();
-	void externalize_rssfeed(RssFeed& feed,
-		bool reset_unread);
+
+	static std::unique_ptr<Cache> in_memory(ConfigContainer& c);
+
+	void externalize_rssfeed(RssFeed& feed, bool reset_unread);
 	std::shared_ptr<RssFeed> internalize_rssfeed(std::string rssurl,
 		RssIgnores* ign);
 	void update_rssitem_unread_and_enqueued(RssItem& item,
@@ -110,7 +113,7 @@ private:
 	void close_database();
 
 	sqlite3* db = nullptr;
-	ConfigContainer* cfg;
+	ConfigContainer& cfg;
 	std::recursive_mutex mtx;
 };
 

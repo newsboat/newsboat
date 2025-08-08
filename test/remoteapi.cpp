@@ -61,7 +61,7 @@ TEST_CASE("get_credentials() returns the users name and password",
 	ConfigContainer cfg;
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
-	cfgparser.parse_file("data/test-config-credentials.txt");
+	cfgparser.parse_file("data/test-config-credentials.txt"_path);
 	auto api = std::make_unique<test_api>(cfg);
 	REQUIRE(api->get_user("ttrss", "") == "ttrss-user");
 	REQUIRE(api->get_pass("ttrss", "") == "my-birthday");
@@ -84,15 +84,14 @@ TEST_CASE("get_credentials() returns the users name and password",
 
 TEST_CASE("read_password() returns the first line of the file", "[RemoteApi]")
 {
-	REQUIRE(RemoteApi::read_password("/dev/null") == "");
-	REQUIRE_NOTHROW(RemoteApi::read_password(
-			"a-passwordfile-that-is-guaranteed-to-not-exist.txt"));
-	REQUIRE(RemoteApi::read_password(
-			"a-passwordfile-that-is-guaranteed-to-not-exist.txt") ==
-		"");
-	REQUIRE(RemoteApi::read_password("data/single-line-string.txt") ==
+	REQUIRE(RemoteApi::read_password("/dev/null"_path) == "");
+	REQUIRE_NOTHROW(
+		RemoteApi::read_password("a-passwordfile-that-is-guaranteed-to-not-exist.txt"_path));
+	REQUIRE(RemoteApi::read_password("a-passwordfile-that-is-guaranteed-to-not-exist.txt"_path)
+		== "");
+	REQUIRE(RemoteApi::read_password("data/single-line-string.txt"_path) ==
 		"single line with spaces");
-	REQUIRE(RemoteApi::read_password("data/multi-line-string.txt") ==
+	REQUIRE(RemoteApi::read_password("data/multi-line-string.txt"_path) ==
 		"string with spaces");
 }
 

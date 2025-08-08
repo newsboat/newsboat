@@ -4,6 +4,7 @@ use chrono::{Datelike, Timelike, offset::Local};
 use std::fmt;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
+use std::path::Path;
 use std::sync::Mutex;
 use std::sync::OnceLock;
 use std::sync::atomic::{AtomicIsize, Ordering};
@@ -139,15 +140,15 @@ impl Logger {
     ///
     /// This can't fail, but if the file couldn't be created or opened, an error message will be
     /// printed to stderr.
-    pub fn set_logfile(&self, filename: &str) {
-        let file = OpenOptions::new().create(true).append(true).open(filename);
+    pub fn set_logfile<P: AsRef<Path> + fmt::Debug>(&self, filename: P) {
+        let file = OpenOptions::new().create(true).append(true).open(&filename);
 
         match file {
             Ok(file) => {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
                 files.logfile = Some(file);
             }
-            Err(error) => eprintln!("Couldn't open `{filename}' as a logfile: {error}"),
+            Err(error) => eprintln!("Couldn't open `{filename:?}' as a logfile: {error}"),
         }
     }
 
@@ -162,15 +163,17 @@ impl Logger {
     ///
     /// This can't fail, but if the file couldn't be created or opened, an error message will be
     /// printed to stderr.
-    pub fn set_user_error_logfile(&self, filename: &str) {
-        let file = OpenOptions::new().create(true).append(true).open(filename);
+    pub fn set_user_error_logfile<P: AsRef<Path> + fmt::Debug>(&self, filename: P) {
+        let file = OpenOptions::new().create(true).append(true).open(&filename);
 
         match file {
             Ok(file) => {
                 let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
                 files.user_error_logfile = Some(file)
             }
-            Err(error) => eprintln!("Couldn't open `{filename}' as a user error logfile: {error}"),
+            Err(error) => {
+                eprintln!("Couldn't open `{filename:?}' as a user error logfile: {error}")
+            }
         }
     }
 

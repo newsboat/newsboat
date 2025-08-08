@@ -74,7 +74,8 @@ rsspp::Feed FeedRetriever::retrieve(const std::string& uri)
 	} else if (utils::is_query_url(uri)) {
 		return {};
 	} else if (uri.substr(0, 7) == "file://") {
-		return parse_file(uri.substr(7, uri.length() - 7));
+		const auto path = Filepath::from_locale_string(uri.substr(7, uri.length() - 7));
+		return parse_file(path);
 	} else {
 		throw strprintf::fmt(_("Error: unsupported URL: %s"), uri);
 	}
@@ -197,12 +198,13 @@ rsspp::Feed FeedRetriever::download_http(const std::string& uri)
 		if (!ign || !ign->matches_lastmodified(uri)) {
 			ch.fetch_lastmodified(uri, lm, etag);
 		}
-		f = p.parse_url(uri,
+		f = p.parse_url(
+				uri,
 				easyhandle,
 				lm,
 				etag,
 				api,
-				cfg.get_configvalue("cookie-cache"));
+				cfg.get_configvalue_as_filepath("cookie-cache").to_locale_string());
 		LOG(Level::DEBUG,
 			"FeedRetriever::download_http: lm = %" PRId64 " etag = %s",
 			// On GCC, `time_t` is `long int`, which is at least 32 bits
@@ -283,7 +285,7 @@ rsspp::Feed FeedRetriever::download_filterplugin(const std::string& filter,
 	return f;
 }
 
-rsspp::Feed FeedRetriever::parse_file(const std::string& file)
+rsspp::Feed FeedRetriever::parse_file(const newsboat::Filepath& file)
 {
 	rsspp::Parser p;
 	const rsspp::Feed f = p.parse_file(file);
