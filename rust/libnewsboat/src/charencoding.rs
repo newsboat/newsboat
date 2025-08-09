@@ -106,7 +106,7 @@ pub fn charset_from_content_type_header(input: &[u8]) -> Option<String> {
         Ok((input, text))
     }
 
-    fn parse_parameter(input: &[u8]) -> IResult<&[u8], Parameter> {
+    fn parse_parameter(input: &[u8]) -> IResult<&[u8], Parameter<'_>> {
         let (input, _) = space0(input)?;
         let (input, _) = tag(";")(input)?;
         let (input, _) = space0(input)?;
@@ -116,7 +116,7 @@ pub fn charset_from_content_type_header(input: &[u8]) -> Option<String> {
         Ok((input, Parameter { key, value }))
     }
 
-    fn parse_media_type(input: &[u8]) -> IResult<&[u8], Vec<Parameter>> {
+    fn parse_media_type(input: &[u8]) -> IResult<&[u8], Vec<Parameter<'_>>> {
         let (input, _type) = parse_token(input)?;
         let (input, _) = tag("/")(input)?;
         let (input, _subtype) = parse_token(input)?;

@@ -35,11 +35,11 @@ pub enum Specifier<'a> {
     Conditional(char, Vec<Specifier<'a>>, Option<Vec<Specifier<'a>>>),
 }
 
-fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier> {
+fn escaped_percent_sign(input: &str) -> IResult<&str, Specifier<'_>> {
     tag("%%")(input).map(|result| (result.0, Specifier::Text(&result.1[0..1])))
 }
 
-fn spacing(input: &str) -> IResult<&str, Specifier> {
+fn spacing(input: &str) -> IResult<&str, Specifier<'_>> {
     let (input, _) = tag("%>")(input)?;
     let (input, c) = take(1usize)(input)?;
 
@@ -49,7 +49,7 @@ fn spacing(input: &str) -> IResult<&str, Specifier> {
     Ok((input, Specifier::Spacing(chr)))
 }
 
-fn center_format(input: &str) -> IResult<&str, Specifier> {
+fn center_format(input: &str) -> IResult<&str, Specifier<'_>> {
     let (input, _) = tag("%=")(input)?;
     let (input, width) = take_while(|chr: char| chr.is_ascii() && (chr.is_numeric()))(input)?;
     let (input, format) = take(1usize)(input)?;
@@ -61,7 +61,7 @@ fn center_format(input: &str) -> IResult<&str, Specifier> {
     Ok((input, Specifier::Format(format, Padding::Center(width))))
 }
 
-fn padded_format(input: &str) -> IResult<&str, Specifier> {
+fn padded_format(input: &str) -> IResult<&str, Specifier<'_>> {
     let (input, _) = tag("%")(input)?;
     let (input, width) =
         take_while(|chr: char| chr.is_ascii() && (chr.is_numeric() || chr == '-'))(input)?;
@@ -80,19 +80,19 @@ fn padded_format(input: &str) -> IResult<&str, Specifier> {
     Ok((input, Specifier::Format(format, padding)))
 }
 
-fn text_outside_conditional(input: &str) -> IResult<&str, Specifier> {
+fn text_outside_conditional(input: &str) -> IResult<&str, Specifier<'_>> {
     let (input, text) = take_till1(|chr: char| chr == '%')(input)?;
 
     Ok((input, Specifier::Text(text)))
 }
 
-fn text_inside_conditional(input: &str) -> IResult<&str, Specifier> {
+fn text_inside_conditional(input: &str) -> IResult<&str, Specifier<'_>> {
     let (input, text) = take_till1(|chr: char| chr == '%' || chr == '&' || chr == '?')(input)?;
 
     Ok((input, Specifier::Text(text)))
 }
 
-fn conditional(input: &str) -> IResult<&str, Specifier> {
+fn conditional(input: &str) -> IResult<&str, Specifier<'_>> {
     // Prepared partial parsers
     let start_tag = tag("%?");
     let mut condition = take(1usize);
@@ -126,7 +126,7 @@ fn conditional(input: &str) -> IResult<&str, Specifier> {
     Ok((input, Specifier::Conditional(cond, then, els)))
 }
 
-fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
+fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier<'_>>> {
     let alternatives = (
         escaped_percent_sign,
         spacing,
@@ -137,7 +137,7 @@ fn conditional_branch(input: &str) -> IResult<&str, Vec<Specifier>> {
     many0(alt(alternatives)).parse(input)
 }
 
-fn parser(input: &str) -> IResult<&str, Vec<Specifier>> {
+fn parser(input: &str) -> IResult<&str, Vec<Specifier<'_>>> {
     let alternatives = (
         conditional,
         escaped_percent_sign,
@@ -160,7 +160,7 @@ fn sanitize(mut input: Vec<Specifier>) -> Vec<Specifier> {
     input
 }
 
-pub fn parse(input: &str) -> Vec<Specifier> {
+pub fn parse(input: &str) -> Vec<Specifier<'_>> {
     match parser(input) {
         Ok((_leftovers, ast)) => sanitize(ast),
         Err(_) => vec![Specifier::Text("")],
