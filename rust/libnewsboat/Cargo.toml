@@ -10,7 +10,7 @@ regex-rs = { path="../regex-rs" }
 
 fastrand = "2.3.0"
 url = "2.5.4"
-percent-encoding = "2.3.1"
+percent-encoding = "2.3.2"
 xdg = "3.0.0"
 backtrace = "= 0.3"
 unicode-width = "0.2.1"
