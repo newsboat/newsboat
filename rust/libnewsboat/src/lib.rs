@@ -12,6 +12,7 @@ pub mod utils;
 pub mod charencoding;
 pub mod cliargsparser;
 pub mod configpaths;
+pub mod filepath;
 pub mod filterparser;
 pub mod fmtstrformatter;
 pub mod fslock;

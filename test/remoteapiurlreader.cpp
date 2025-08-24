@@ -73,7 +73,7 @@ TEST_CASE("RemoteApiUrlReader reload includes query urls and urls from the Remot
 
 	GIVEN("A remote API with configured URLs and a urls file with a query URL") {
 		{
-			std::ofstream urls_file(urls.get_path());
+			std::ofstream urls_file(urls.get_path().to_locale_string());
 			urls_file << "https://example.com/non-query.xml" << std::endl;
 			urls_file << R"("query:Unread Articles:unread = \"yes\"" querytag ~querytitlerename)" <<
 				std::endl;

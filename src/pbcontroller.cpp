@@ -41,47 +41,38 @@ namespace podboat {
  *
  * returns false, if that fails
  */
-bool PbController::setup_dirs_xdg(const char* env_home)
+bool PbController::setup_dirs_xdg(const newsboat::Filepath& home)
 {
-	const char* env_xdg_config;
-	const char* env_xdg_data;
-	std::string xdg_config_dir;
-	std::string xdg_data_dir;
+	newsboat::Filepath xdg_config_dir;
+	newsboat::Filepath xdg_data_dir;
 
-	env_xdg_config = ::getenv("XDG_CONFIG_HOME");
+	const char* env_xdg_config = ::getenv("XDG_CONFIG_HOME");
 	if (env_xdg_config) {
-		xdg_config_dir = env_xdg_config;
+		xdg_config_dir = Filepath::from_locale_string(env_xdg_config);
 	} else {
-		xdg_config_dir = env_home;
-		xdg_config_dir.push_back(NEWSBEUTER_PATH_SEP);
-		xdg_config_dir.append(".config");
+		xdg_config_dir = home;
+		xdg_config_dir.push(".config"_path);
 	}
 
-	env_xdg_data = ::getenv("XDG_DATA_HOME");
+	const char* env_xdg_data = ::getenv("XDG_DATA_HOME");
 	if (env_xdg_data) {
-		xdg_data_dir = env_xdg_data;
+		xdg_data_dir = Filepath::from_locale_string(env_xdg_data);
 	} else {
-		xdg_data_dir = env_home;
-		xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
-		xdg_data_dir.append(".local");
-		xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
-		xdg_data_dir.append("share");
+		xdg_data_dir = home;
+		xdg_data_dir.push(".local"_path);
+		xdg_data_dir.push("share"_path);
 	}
 
-	xdg_config_dir.push_back(NEWSBEUTER_PATH_SEP);
-	xdg_config_dir.append(NEWSBOAT_SUBDIR_XDG);
+	xdg_config_dir.push(NEWSBOAT_SUBDIR_XDG);
 
-	xdg_data_dir.push_back(NEWSBEUTER_PATH_SEP);
-	xdg_data_dir.append(NEWSBOAT_SUBDIR_XDG);
+	xdg_data_dir.push(NEWSBOAT_SUBDIR_XDG);
 
 	bool config_dir_exists =
-		0 == access(xdg_config_dir.c_str(), R_OK | X_OK);
+		0 == access(xdg_config_dir.to_locale_string().c_str(), R_OK | X_OK);
 
 	if (!config_dir_exists) {
 		std::cerr << strprintf::fmt(
-				_("XDG: configuration directory '%s' not "
-					"accessible, "
-					"using '%s' instead."),
+				_("XDG: configuration directory '%s' not accessible, using '%s' instead."),
 				xdg_config_dir,
 				config_dir)
 			<< std::endl;
@@ -106,23 +97,21 @@ bool PbController::setup_dirs_xdg(const char* env_home)
 	}
 
 	/* in config */
-	config_file =
-		config_dir + NEWSBEUTER_PATH_SEP + config_file;
+	config_file = config_dir.join(config_file);
 
 	/* in data */
-	const std::string LOCK_SUFFIX(".lock");
-	lock_file = xdg_data_dir + NEWSBEUTER_PATH_SEP + LOCK_SUFFIX;
-	queue_file =
-		xdg_data_dir + NEWSBEUTER_PATH_SEP + queue_file;
+	const Filepath LOCK_SUFFIX = ".lock"_path;
+	lock_file = xdg_data_dir.join(LOCK_SUFFIX);
+	queue_file = xdg_data_dir.join(queue_file);
 
 	return true;
 }
 
 PbController::PbController()
-	: config_file("config")
-	, queue_file("queue")
+	: config_file("config"_path)
+	, queue_file("queue"_path)
 	, max_dls(1)
-	, lock_file("pb-lock.pid")
+	, lock_file("pb-lock.pid"_path)
 	, keys(KM_PODBOAT)
 {
 	char* cfgdir;
@@ -131,29 +120,25 @@ PbController::PbController()
 		if (spw) {
 			cfgdir = spw->pw_dir;
 		} else {
-			std::cout << _("Fatal error: couldn't determine home "
-					"directory!")
+			std::cout << _("Fatal error: couldn't determine home directory!")
 				<< std::endl;
 			std::cout << strprintf::fmt(
-					_("Please set the HOME "
-						"environment variable or add a "
-						"valid user for UID %u!"),
+					_("Please set the HOME environment variable or add a valid user for UID %u!"),
 					::getuid())
 				<< std::endl;
 			::exit(EXIT_FAILURE);
 		}
 	}
-	config_dir = cfgdir;
+	config_dir = Filepath::from_locale_string(cfgdir);
 
-	if (setup_dirs_xdg(cfgdir)) {
+	if (setup_dirs_xdg(config_dir)) {
 		return;
 	}
 
-	config_dir.push_back(NEWSBEUTER_PATH_SEP);
-	config_dir.append(NEWSBOAT_CONFIG_SUBDIR);
+	config_dir.push(NEWSBOAT_CONFIG_SUBDIR);
 
 	// create configuration directory if it doesn't exist
-	int ret = ::mkdir(config_dir.c_str(), 0700);
+	int ret = ::mkdir(config_dir.to_locale_string().c_str(), 0700);
 	if (ret && errno != EEXIST) {
 		std::cerr << strprintf::fmt(
 				_("Fatal error: couldn't create "
@@ -165,9 +150,9 @@ PbController::PbController()
 		::exit(EXIT_FAILURE);
 	}
 
-	config_file = config_dir + NEWSBEUTER_PATH_SEP + config_file;
-	queue_file = config_dir + NEWSBEUTER_PATH_SEP + queue_file;
-	lock_file = config_dir + NEWSBEUTER_PATH_SEP + lock_file;
+	config_file = config_dir.join(config_file);
+	queue_file = config_dir.join(queue_file);
+	lock_file = config_dir.join(lock_file);
 }
 
 void PbController::initialize(int argc, char* argv[])
@@ -189,7 +174,7 @@ void PbController::initialize(int argc, char* argv[])
 		{0, 0, 0, 0}
 	};
 	std::optional<Level> log_level;
-	std::optional<std::string> log_file;
+	std::optional<newsboat::Filepath> log_file;
 
 	while ((c = ::getopt_long(argc, argv, getopt_str, longopts, nullptr)) !=
 		-1) {
@@ -199,25 +184,24 @@ void PbController::initialize(int argc, char* argv[])
 			print_usage(argv[0]);
 			exit(EXIT_FAILURE);
 		case 'C':
-			config_file = optarg;
+			config_file = Filepath::from_locale_string(optarg);
 			break;
 		case 'q':
-			queue_file = optarg;
+			queue_file = Filepath::from_locale_string(optarg);
 			break;
 		case 256:
-			lock_file = optarg;
+			lock_file = Filepath::from_locale_string(optarg);
 			break;
 		case 'a':
 			automatic_dl = true;
 			break;
 		case 'd':
-			log_file = optarg;
+			log_file = Filepath::from_locale_string(optarg);
 			break;
 		case 'l': {
 			log_level = static_cast<Level>(atoi(optarg));
 			if (log_level < Level::USERERROR || log_level > Level::DEBUG) {
-				std::cerr << strprintf::fmt(_("%s: %d: invalid "
-							"loglevel value"),
+				std::cerr << strprintf::fmt(_("%s: %d: invalid loglevel value"),
 						argv[0],
 						static_cast<int>(log_level.value()))
 					<< std::endl;
@@ -243,7 +227,8 @@ void PbController::initialize(int argc, char* argv[])
 		const std::string date_time_string = utils::mt_strf_localtime("%Y-%m-%d_%H.%M.%S",
 				std::time(nullptr));
 		const std::string filename = "podboat_" + date_time_string + ".log";
-		logger::set_logfile(filename);
+		const auto filepath = Filepath::from_locale_string(filename);
+		logger::set_logfile(filepath);
 	}
 
 	std::cout << strprintf::fmt(
@@ -290,7 +275,7 @@ void PbController::initialize(int argc, char* argv[])
 	cfgparser.register_handler("run-on-startup", null_cah);
 
 	try {
-		cfgparser.parse_file("/etc/newsboat/config");
+		cfgparser.parse_file("/etc/newsboat/config"_path);
 		cfgparser.parse_file(config_file);
 	} catch (const ConfigException& ex) {
 		std::cout << ex.what() << std::endl;
@@ -481,16 +466,16 @@ void PbController::decrease_parallel_downloads()
 	}
 }
 
-void PbController::play_file(const std::string& file)
+void PbController::play_file(const newsboat::Filepath& file)
 {
 	std::string cmdline;
-	std::string player = cfg.get_configvalue("player");
-	if (player == "") {
+	const auto player = cfg.get_configvalue_as_filepath("player");
+	if (player == Filepath{}) {
 		return;
 	}
-	cmdline.append(player);
+	cmdline.append(player.to_locale_string());
 	cmdline.append(" '");
-	cmdline.append(utils::replace_all(file, "'", "'\\''"));
+	cmdline.append(utils::replace_all(file.to_locale_string(), "'", "'\\''"));
 	cmdline.append("'");
 	Stfl::reset();
 	utils::run_interactively(cmdline, "PbController::play_file");

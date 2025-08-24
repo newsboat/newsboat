@@ -6,6 +6,7 @@
 #include <optional>
 #include <string>
 
+#include "filepath.h"
 #include "remoteapi.h"
 #include "feed.h"
 
@@ -34,7 +35,7 @@ public:
 		const std::string& cookie_cache = "");
 	Feed parse_buffer(const std::string& buffer,
 		const std::string& url = "", std::optional<std::string> charset = std::nullopt);
-	Feed parse_file(const std::string& filename);
+	Feed parse_file(const newsboat::Filepath& filename);
 	time_t get_last_modified()
 	{
 		return lm;

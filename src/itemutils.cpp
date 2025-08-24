@@ -32,11 +32,11 @@ bool enqueue_item_enclosure(RssItem& item, RssFeed& feed,
 		case EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY:
 			v.get_statusline().show_error(
 				strprintf::fmt(_("Generated filename (%s) is used already."),
-					result.extra_info));
+					result.extra_filename));
 			return false;
 		case EnqueueStatus::QUEUE_FILE_OPEN_ERROR:
 			v.get_statusline().show_error(
-				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_info));
+				strprintf::fmt(_("Failed to open queue file: %s."), result.extra_filename));
 			return false;
 		}
 

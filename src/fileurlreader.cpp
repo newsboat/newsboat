@@ -9,14 +9,14 @@
 
 namespace newsboat {
 
-FileUrlReader::FileUrlReader(const std::string& file)
+FileUrlReader::FileUrlReader(const Filepath& file)
 	: filename(file)
 {
 }
 
 std::string FileUrlReader::get_source() const
 {
-	return filename;
+	return filename.display();
 }
 
 void FileUrlReader::add_url(const std::string& url,
@@ -63,7 +63,7 @@ std::optional<utils::ReadTextFileError> FileUrlReader::reload()
 std::optional<std::string> FileUrlReader::write_config()
 {
 	std::fstream f;
-	f.open(filename, std::fstream::out);
+	f.open(filename.to_locale_string(), std::fstream::out);
 	if (!f.is_open()) {
 		const auto error_message = strerror(errno);
 		return strprintf::fmt(_("Error: failed to open file \"%s\": %s"),

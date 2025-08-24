@@ -9,7 +9,7 @@
 namespace newsboat {
 
 InoreaderUrlReader::InoreaderUrlReader(ConfigContainer* c,
-	const std::string& url_file,
+	const Filepath& url_file,
 	RemoteApi* a)
 	: cfg(c)
 	, file(url_file)

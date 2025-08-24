@@ -284,9 +284,8 @@ void FormAction::handle_source(const std::vector<std::string>& args)
 	} else {
 		for (const auto& param : args) {
 			try {
-				v.get_ctrl().load_configfile(
-					utils::resolve_tilde(
-						param));
+				const auto path = Filepath::from_locale_string(param);
+				v.get_ctrl().load_configfile(utils::resolve_tilde(path));
 			} catch (const ConfigException& ex) {
 				v.get_statusline().show_error(ex.what());
 				break;
@@ -300,8 +299,8 @@ void FormAction::handle_dumpconfig(const std::vector<std::string>& args)
 	if (args.size() != 1) {
 		v.get_statusline().show_error(_("usage: dumpconfig <file>"));
 	} else {
-		v.get_ctrl().dump_config(
-			utils::resolve_tilde(args[0]));
+		const auto path = Filepath::from_locale_string(args[0]);
+		v.get_ctrl().dump_config(utils::resolve_tilde(path));
 		v.get_statusline().show_message(strprintf::fmt(
 				_("Saved configuration to %s"),
 				args[0]));
@@ -777,15 +776,15 @@ void FormAction::start_next_question()
 	}
 }
 
-void FormAction::load_histories(const std::string& searchfile,
-	const std::string& cmdlinefile)
+void FormAction::load_histories(const Filepath& searchfile,
+	const Filepath& cmdlinefile)
 {
 	searchhistory.load_from_file(searchfile);
 	cmdlinehistory.load_from_file(cmdlinefile);
 }
 
-void FormAction::save_histories(const std::string& searchfile,
-	const std::string& cmdlinefile,
+void FormAction::save_histories(const Filepath& searchfile,
+	const Filepath& cmdlinefile,
 	unsigned int limit)
 {
 	searchhistory.save_to_file(searchfile, limit);

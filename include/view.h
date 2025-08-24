@@ -10,6 +10,7 @@
 #include "formaction.h"
 #include "links.h"
 #include "statusline.h"
+#include "filepath.h"
 
 namespace newsboat {
 
@@ -82,8 +83,8 @@ public:
 		const std::string& phrase = "");
 	void view_dialogs();
 
-	std::optional<std::string> run_filebrowser(const std::string& default_filename = "");
-	std::optional<std::string> run_dirbrowser();
+	std::optional<Filepath> run_filebrowser(const Filepath& default_filename = {});
+	std::optional<Filepath> run_dirbrowser();
 	std::string select_tag(const std::string& current_tag);
 	std::string select_filter(
 		const std::vector<FilterNameExprPair>& filters);
@@ -91,9 +92,9 @@ public:
 	std::optional<std::uint8_t> open_in_browser(const std::string& url,
 		const std::string& feedurl, const std::string& type, const std::string& title,
 		bool interactive);
-	void open_in_pager(const std::string& filename);
+	void open_in_pager(const Filepath& filename);
 
-	std::string get_filename_suggestion(const std::string& s);
+	Filepath get_filename_suggestion(const std::string& s);
 
 	bool get_next_unread(ItemListFormAction& itemlist,
 		ItemViewFormAction* itemview = nullptr);

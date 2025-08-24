@@ -72,22 +72,23 @@ void PodDlThread::run()
 	}
 
 	struct stat sb;
-	std::string filename =
-		dl->filename() + newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX;
+	Filepath filename = dl->filename();
+	filename.add_extension(newsboat::ConfigContainer::PARTIAL_FILE_SUFFIX);
 
-	if (stat(filename.c_str(), &sb) == -1) {
+	if (stat(filename.to_locale_string().c_str(), &sb) == -1) {
 		LOG(Level::INFO,
 			"PodDlThread::run: stat failed: starting normal "
 			"download");
 
+		const auto filename_str = filename.to_locale_string();
 		// Have to copy the string into a vector in order to be able to
 		// get a char* pointer. std::string::c_str() won't do because it
 		// returns const char*, whereas ::dirname() needs non-const.
-		std::vector<char> directory(filename.begin(), filename.end());
+		std::vector<char> directory(filename_str.begin(), filename_str.end());
 		directory.push_back('\0');
-		utils::mkdir_parents(dirname(&directory[0]));
+		utils::mkdir_parents(Filepath::from_locale_string(dirname(&directory[0])));
 
-		f->open(filename, std::fstream::out);
+		f->open(filename.to_locale_string(), std::fstream::out);
 		dl->set_offset(0);
 		resumed_download = false;
 	} else {
@@ -99,7 +100,7 @@ void PodDlThread::run()
 			static_cast<int64_t>(sb.st_size));
 		curl_easy_setopt(handle.ptr(), CURLOPT_RESUME_FROM, sb.st_size);
 		dl->set_offset(sb.st_size);
-		f->open(filename, std::fstream::out | std::fstream::app);
+		f->open(filename.to_locale_string(), std::fstream::out | std::fstream::app);
 		resumed_download = true;
 	}
 
@@ -119,7 +120,8 @@ void PodDlThread::run()
 			LOG(Level::DEBUG,
 				"PodDlThread::run: download complete, deleting "
 				"temporary suffix");
-			if (rename(filename.c_str(), dl->filename().c_str()) == 0) {
+			if (rename(filename.to_locale_string().c_str(),
+					dl->filename().to_locale_string().c_str()) == 0) {
 				dl->set_status(DlStatus::READY);
 			} else {
 				dl->set_status(DlStatus::RENAME_FAILED, strerror(errno));
@@ -127,11 +129,11 @@ void PodDlThread::run()
 		} else if (dl->status() != DlStatus::CANCELLED) {
 			// attempt complete re-download
 			if (resumed_download) {
-				::unlink(filename.c_str());
+				::unlink(filename.to_locale_string().c_str());
 				this->run();
 			} else {
 				dl->set_status(DlStatus::FAILED, curl_easy_strerror(success));
-				::unlink(filename.c_str());
+				::unlink(filename.to_locale_string().c_str());
 			}
 		}
 	} else {

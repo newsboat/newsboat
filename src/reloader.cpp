@@ -305,12 +305,12 @@ void Reloader::notify(const std::string& msg)
 		LOG(Level::DEBUG, "reloader:notify: notifying beep");
 		::beep();
 	}
-	if (cfg.get_configvalue("notify-program").length() > 0) {
-		std::string prog = cfg.get_configvalue("notify-program");
+	const auto notify_program = cfg.get_configvalue_as_filepath("notify-program");
+	if (notify_program != Filepath{}) {
 		LOG(Level::DEBUG,
 			"reloader:notify: notifying external program `%s'",
-			prog);
-		utils::run_command(prog, msg);
+			notify_program);
+		utils::run_command(notify_program.to_locale_string(), msg);
 	}
 }
 

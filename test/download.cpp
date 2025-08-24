@@ -7,6 +7,8 @@
 
 using namespace podboat;
 
+using newsboat::operator""_path;
+
 TEST_CASE("Require-view-update callback gets called when download progress or status changes",
 	"[Download]")
 {
@@ -61,20 +63,22 @@ TEST_CASE("filename() returns download's target filename", "[Download]")
 	Download d(emptyCallback);
 
 	SECTION("filename returns empty string by default") {
-		REQUIRE(d.filename() == "");
+		REQUIRE(d.filename() == newsboat::Filepath{});
 	}
 
 
 	SECTION("filename returns same string which is set via set_filename") {
-		d.set_filename("abc");
-		REQUIRE(d.filename() == "abc");
+		const auto path = "abc"_path;
+		d.set_filename(path);
+		REQUIRE(d.filename() == path);
 	}
 
 	SECTION("filename will return the latest configured filename") {
-		d.set_filename("abc");
-		d.set_filename("def");
+		d.set_filename("abc"_path);
+		const auto path = "def"_path;
+		d.set_filename(path);
 
-		REQUIRE(d.filename() == "def");
+		REQUIRE(d.filename() == path);
 	}
 }
 
@@ -127,20 +131,20 @@ TEST_CASE("basename() returns all text after last slash in the filename",
 	Download d(emptyCallback);
 
 	SECTION("basename() returns empty string by default") {
-		REQUIRE(d.basename() == "");
+		REQUIRE(d.basename() == newsboat::Filepath{});
 	}
 
 	SECTION("basename() returns full filename if it does not contain slashes") {
-		const std::string filename = "lorem_ipsum.txt";
+		const auto filename = "lorem_ipsum.txt"_path;
 		d.set_filename(filename);
 
 		REQUIRE(d.basename() == filename);
 	}
 
 	SECTION("basename() returns only text after the last slash in the filename") {
-		const std::string basename = "lorem_ipsum.txt";
-		const std::string path = "/test/path/";
-		const std::string filename = path + basename;
+		const auto basename = "lorem_ipsum.txt"_path;
+		const auto path = "/test/path/"_path;
+		const auto filename = path.join(basename);
 		d.set_filename(filename);
 
 		REQUIRE(d.basename() == basename);

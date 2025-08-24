@@ -20,7 +20,7 @@ public:
 	void init() override;
 	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
 
-	void set_default_filename(const std::string& fn)
+	void set_default_filename(const Filepath& fn)
 	{
 		default_filename = fn;
 	}
@@ -41,19 +41,17 @@ private:
 	bool process_operation(Operation op,
 		const std::vector<std::string>& args,
 		BindingType bindingType = BindingType::BindKey) override;
-	void update_title(const std::string& working_directory);
+	void update_title(const Filepath& working_directory);
 
 	void add_file(std::vector<file_system::FileSystemEntry>& id_at_position,
-		std::string filename);
-	std::string get_filename_suggestion(const std::string& s);
+		const Filepath& filename);
 	std::vector<file_system::FileSystemEntry> id_at_position;
 	std::vector<StflRichText> lines;
 
-	std::string get_formatted_filename(std::string filename, mode_t mode);
+	std::string get_formatted_filename(const Filepath& filename, mode_t mode);
 
 	LineView file_prompt_line;
-	std::string cwd;
-	std::string default_filename;
+	Filepath default_filename;
 
 	ListWidget files_list;
 
