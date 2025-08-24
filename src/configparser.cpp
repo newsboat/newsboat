@@ -61,11 +61,9 @@ bool ConfigParser::parse_file(const Filepath& tmp_filename)
 	 *   - if an error happens, react accordingly.
 	 */
 
-	// It would be nice if this function was only give absolute paths, but the
+	// It would be nice if this function was only given absolute paths, but the
 	// tests are easier as relative paths
-	const Filepath filename = tmp_filename.is_absolute() ?
-		tmp_filename :
-		utils::getcwd().join(tmp_filename);
+	const Filepath filename = utils::getcwd().join(tmp_filename);
 
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {
