@@ -28,7 +28,7 @@ test_helpers::TempDir::TempDir()
 		throw MainTempDir::tempfileexception(newsboat::Filepath(), msg);
 	}
 
-	// cned()-1 so we don't copy terminating null byte - std::string
+	// cend()-1 so we don't copy terminating null byte - std::string
 	// doesn't need it
 	const std::string dirpath_str(
 		dirpath_template.cbegin(), dirpath_template.cend() - 1);
