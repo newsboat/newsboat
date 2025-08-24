@@ -80,11 +80,11 @@ void PodDlThread::run()
 			"PodDlThread::run: stat failed: starting normal "
 			"download");
 
+		const auto filename_str = filename.to_locale_string();
 		// Have to copy the string into a vector in order to be able to
 		// get a char* pointer. std::string::c_str() won't do because it
 		// returns const char*, whereas ::dirname() needs non-const.
-		std::vector<char> directory(filename.to_locale_string().begin(),
-			filename.to_locale_string().end());
+		std::vector<char> directory(filename_str.begin(), filename_str.end());
 		directory.push_back('\0');
 		utils::mkdir_parents(Filepath::from_locale_string(dirname(&directory[0])));
 
