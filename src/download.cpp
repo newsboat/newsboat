@@ -28,7 +28,8 @@ newsboat::Filepath Download::filename() const
 
 newsboat::Filepath Download::basename() const
 {
-	return fn.file_name().has_value() ? fn.file_name().value() : newsboat::Filepath();
+	const auto file_name = fn.file_name();
+	return file_name.has_value() ? file_name.value() : newsboat::Filepath();
 }
 
 const std::string& Download::url() const
