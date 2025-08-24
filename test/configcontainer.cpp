@@ -37,7 +37,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	SECTION("Tilde got expanded into path to user's home directory") {
 		char* home = ::getenv("HOME");
 		REQUIRE(home != nullptr);
-		const Filepath expected = Filepath::from_locale_string(std::string(home) + "/foo");
+		const Filepath expected = Filepath::from_locale_string(std::string(home)).join("foo"_path);
 		REQUIRE(cfg.get_configvalue_as_filepath("cache-file") == expected);
 	}
 }
