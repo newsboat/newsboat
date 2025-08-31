@@ -5,6 +5,8 @@
 #include <optional>
 #include <string>
 #include <vector>
+
+#include "filepath.h"
 #include "utils.h"
 
 namespace newsboat {
@@ -38,7 +40,7 @@ public:
 	std::vector<std::string> get_alltags() const;
 
 protected:
-	void load_query_urls_from_file(std::string file);
+	void load_query_urls_from_file(Filepath file);
 
 	std::vector<std::string> urls;
 	std::map<std::string, std::vector<std::string>> tags;

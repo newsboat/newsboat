@@ -182,7 +182,7 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		ConfigParser cfgparser;
 		KeyMap keys(KM_NEWSBOAT);
 		cfgparser.register_handler("bind-key", keys);
-		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-space-backticks"));
+		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-space-backticks"_path));
 		MultiKeyBindingState binding_state{};
 		BindingType binding_type{};
 		const auto& cmds = keys.get_operation({KeyCombination("s")}, "feedlist", binding_state,
@@ -225,7 +225,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 	SECTION("In all contexts by default") {
 		KeyMap keys(KM_NEWSBOAT);
 		cfgparser.register_handler("unbind-key", keys);
-		cfgparser.parse_file("data/config-unbind-all");
+		cfgparser.parse_file("data/config-unbind-all"_path);
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
@@ -238,7 +238,7 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 	SECTION("For a specific context") {
 		KeyMap keys(KM_NEWSBOAT);
 		cfgparser.register_handler("unbind-key", keys);
-		cfgparser.parse_file("data/config-unbind-all-context");
+		cfgparser.parse_file("data/config-unbind-all-context"_path);
 
 		INFO("it doesn't affect the help dialog");
 		KeyMap default_keys(KM_NEWSBOAT);
@@ -259,7 +259,7 @@ TEST_CASE("Concatenates lines that end with a backslash", "[ConfigParser]")
 	ConfigParser cfgparser;
 	KeyMap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", k);
-	REQUIRE_NOTHROW(cfgparser.parse_file("data/config-multi-line"));
+	REQUIRE_NOTHROW(cfgparser.parse_file("data/config-multi-line"_path));
 	auto p_macro = k.get_macro(KeyCombination("p"));
 	REQUIRE(!p_macro.empty());
 	REQUIRE(p_macro[0].op == newsboat::OP_OPEN);
@@ -280,40 +280,39 @@ TEST_CASE("`include` directive includes other config files", "[ConfigParser]")
 	// TODO: error messages should be more descriptive than "file couldn't be opened"
 	ConfigParser cfgparser;
 	SECTION("Errors if file is not found") {
-		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-missing-include"),
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-missing-include"_path),
 			ConfigException);
 	}
 	SECTION("Errors on invalid UTF-8 in file") {
-		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-invalid-utf-8"),
-			ConfigException);
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-invalid-utf-8"_path), ConfigException);
 	}
 	SECTION("Terminates on recursive include") {
-		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-recursive-include"),
+		REQUIRE_THROWS_AS(cfgparser.parse_file("data/config-recursive-include"_path),
 			ConfigException);
 	}
 	SECTION("Successfully includes existing file") {
-		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-absolute-include"));
+		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-absolute-include"_path));
 	}
 	SECTION("Success on relative includes") {
-		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-relative-include"));
+		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-relative-include"_path));
 	}
 	SECTION("Diamond of death includes pass") {
-		REQUIRE_NOTHROW(cfgparser.parse_file("data/diamond-of-death/A"));
+		REQUIRE_NOTHROW(cfgparser.parse_file("data/diamond-of-death/A"_path));
 	}
 	SECTION("File including itself only gets evaluated once") {
 		test_helpers::TempFile testfile;
 		test_helpers::EnvVar tmpfile("TMPFILE"); // $TMPFILE used in conf file
-		tmpfile.set(testfile.get_path());
+		tmpfile.set(testfile.get_path().to_locale_string());
 
 		// recursive includes don't fail
 		REQUIRE_NOTHROW(
-			cfgparser.parse_file("data/recursive-include-side-effect"));
+			cfgparser.parse_file("data/recursive-include-side-effect"_path));
 		// I think it will never get below here and fail? If it recurses, the above fails
 
 		int line_count = 0;
 		{
 			// from https://stackoverflow.com/a/19140230
-			std::ifstream in(testfile.get_path());
+			std::ifstream in(testfile.get_path().to_locale_string());
 			std::string line;
 			while (std::getline(in, line)) {
 				line_count++;

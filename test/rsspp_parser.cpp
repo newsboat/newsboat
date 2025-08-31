@@ -11,13 +11,15 @@
 #include "test_helpers/misc.h"
 #include "utils.h"
 
+using newsboat::operator""_path;
+
 TEST_CASE("Throws exception if file doesn't exist", "[rsspp::Parser]")
 {
 	using test_helpers::ExceptionWithMsg;
 
 	rsspp::Parser p;
 
-	REQUIRE_THROWS_MATCHES(p.parse_file("data/non-existent.xml"),
+	REQUIRE_THROWS_MATCHES(p.parse_file("data/non-existent.xml"_path),
 		rsspp::Exception,
 		ExceptionWithMsg<rsspp::Exception>("could not parse file"));
 }
@@ -28,7 +30,7 @@ TEST_CASE("Throws exception if file can't be parsed", "[rsspp::Parser]")
 
 	rsspp::Parser p;
 
-	REQUIRE_THROWS_MATCHES(p.parse_file("data/empty.xml"),
+	REQUIRE_THROWS_MATCHES(p.parse_file("data/empty.xml"_path),
 		rsspp::Exception,
 		ExceptionWithMsg<rsspp::Exception>("could not parse file"));
 }
@@ -38,7 +40,7 @@ TEST_CASE("Extracts data from RSS 0.91", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/rss091_1.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/rss091_1.xml"_path));
 
 	REQUIRE(f.rss_version == rsspp::Feed::RSS_0_91);
 	REQUIRE(f.title == "Example Channel");
@@ -85,19 +87,19 @@ TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
 	};
 
 	SECTION("RSS 0.91") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_091_with_empty_author.xml"));
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_091_with_empty_author.xml"_path));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_91);
 		check();
 	}
 
 	SECTION("RSS 0.92") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_092_with_empty_author.xml"));
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_092_with_empty_author.xml"_path));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_92);
 		check();
 	}
 
 	SECTION("RSS 0.94") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_094_with_empty_author.xml"));
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_094_with_empty_author.xml"_path));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_94);
 		check();
 	}
@@ -139,19 +141,19 @@ TEST_CASE("Doesn't crash or garble data if an item in RSS 0.9x contains "
 	};
 
 	SECTION("RSS 0.91") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_091_with_bracket_author.xml"));
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_091_with_bracket_author.xml"_path));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_91);
 		check();
 	}
 
 	SECTION("RSS 0.92") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_092_with_bracket_author.xml"));
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_092_with_bracket_author.xml"_path));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_92);
 		check();
 	}
 
 	SECTION("RSS 0.94") {
-		REQUIRE_NOTHROW(f = p.parse_file("data/rss_094_with_bracket_author.xml"));
+		REQUIRE_NOTHROW(f = p.parse_file("data/rss_094_with_bracket_author.xml"_path));
 		REQUIRE(f.rss_version == rsspp::Feed::RSS_0_94);
 		check();
 	}
@@ -162,7 +164,7 @@ TEST_CASE("Extracts data from RSS 0.92", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/rss092_1.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/rss092_1.xml"_path));
 
 	REQUIRE(f.rss_version == rsspp::Feed::RSS_0_92);
 	REQUIRE(f.title == "Example Channel");
@@ -194,7 +196,7 @@ TEST_CASE("Extracts data fro RSS 2.0", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/rss20_1.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/rss20_1.xml"_path));
 
 	REQUIRE(f.title == "my weblog");
 	REQUIRE(f.link == "http://example.com/blog/");
@@ -219,7 +221,7 @@ TEST_CASE("Extracts data from RSS 1.0", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/rss10_1.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/rss10_1.xml"_path));
 
 	REQUIRE(f.rss_version == rsspp::Feed::RSS_1_0);
 
@@ -241,7 +243,7 @@ TEST_CASE("Extracts data from Atom 1.0", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_1.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_1.xml"_path));
 
 	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
 
@@ -284,7 +286,7 @@ TEST_CASE("Extracts data from media:... tags in atom feed", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_2.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_2.xml"_path));
 
 	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
 
@@ -345,7 +347,7 @@ TEST_CASE("Extracts data from media:... tags in  RSS 2.0 feeds",
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/rss20_2.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/rss20_2.xml"_path));
 
 	REQUIRE(f.title == "my weblog");
 	REQUIRE(f.link == "http://example.com/blog/");
@@ -379,7 +381,7 @@ TEST_CASE("Multiple links in item", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/multiple_item_links.atom"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/multiple_item_links.atom"_path));
 
 	REQUIRE(f.items.size() == 1u);
 
@@ -392,7 +394,7 @@ TEST_CASE("Feed authors and source authors in atom feed", "[rsspp::Parser]")
 	rsspp::Parser p;
 	rsspp::Feed f;
 
-	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_feed_authors.xml"));
+	REQUIRE_NOTHROW(f = p.parse_file("data/atom10_feed_authors.xml"_path));
 
 	REQUIRE(f.rss_version == rsspp::Feed::ATOM_1_0);
 
@@ -444,7 +446,7 @@ TEST_CASE("parse_url() extracts etag and lastmodified data", "[rsspp::Parser]")
 {
 	using namespace newsboat;
 
-	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml");
+	auto feed_xml = test_helpers::read_binary_file("data/atom10_1.xml"_path);
 
 	auto& test_server = test_helpers::HttpTestServer::get_instance();
 	auto mock_registration = test_server.add_endpoint("/feed", {}, 200, {

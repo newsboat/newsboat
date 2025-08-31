@@ -48,25 +48,27 @@ bool CliArgsParser::do_cleanup() const
 	return newsboat::cliargsparser::bridged::do_cleanup(*rs_object);
 }
 
-std::string CliArgsParser::importfile() const
+Filepath CliArgsParser::importfile() const
 {
-	return std::string(newsboat::cliargsparser::bridged::importfile(*rs_object));
+	auto output = filepath::bridged::create_empty();
+	newsboat::cliargsparser::bridged::importfile(*rs_object, *output);
+	return output;
 }
 
-std::optional<std::string> CliArgsParser::readinfo_import_file() const
+std::optional<Filepath> CliArgsParser::readinfo_import_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::readinfo_import_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::readinfo_import_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::readinfo_export_file() const
+std::optional<Filepath> CliArgsParser::readinfo_export_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::readinfo_export_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::readinfo_export_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
@@ -115,65 +117,65 @@ bool CliArgsParser::refresh_on_start() const
 	return newsboat::cliargsparser::bridged::refresh_on_start(*rs_object);
 }
 
-std::optional<std::string> CliArgsParser::url_file() const
+std::optional<Filepath> CliArgsParser::url_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::url_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::url_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::lock_file() const
+std::optional<Filepath> CliArgsParser::lock_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::lock_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::lock_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::cache_file() const
+std::optional<Filepath> CliArgsParser::cache_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::cache_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::cache_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::config_file() const
+std::optional<Filepath> CliArgsParser::config_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::config_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::config_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::queue_file() const
+std::optional<Filepath> CliArgsParser::queue_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::queue_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::queue_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::search_history_file() const
+std::optional<Filepath> CliArgsParser::search_history_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::search_history_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::search_history_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
 
-std::optional<std::string> CliArgsParser::cmdline_history_file() const
+std::optional<Filepath> CliArgsParser::cmdline_history_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::cmdline_history_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::cmdline_history_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }
@@ -191,11 +193,11 @@ const
 	return cmds;
 }
 
-std::optional<std::string> CliArgsParser::log_file() const
+std::optional<Filepath> CliArgsParser::log_file() const
 {
-	rust::String path;
-	if (newsboat::cliargsparser::bridged::log_file(*rs_object, path)) {
-		return std::string(path);
+	auto path = filepath::bridged::create_empty();
+	if (newsboat::cliargsparser::bridged::log_file(*rs_object, *path)) {
+		return Filepath(std::move(path));
 	}
 	return std::nullopt;
 }

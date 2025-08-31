@@ -4,6 +4,8 @@
 #include <functional>
 #include <string>
 
+#include "filepath.h"
+
 namespace podboat {
 
 enum class DlStatus {
@@ -32,10 +34,10 @@ public:
 	{
 		return msg;
 	}
-	const std::string& filename() const;
-	const std::string basename() const;
+	newsboat::Filepath filename() const;
+	newsboat::Filepath basename() const;
 	const std::string& url() const;
-	void set_filename(const std::string& str);
+	void set_filename(const newsboat::Filepath& str);
 	void set_url(const std::string& url);
 	void set_progress(double downloaded, double total);
 	void set_status(DlStatus dls, const std::string& msg_ = {});
@@ -53,7 +55,7 @@ public:
 	}
 
 private:
-	std::string fn;
+	newsboat::Filepath fn;
 	std::string url_;
 	DlStatus download_status;
 	std::string msg;

@@ -344,15 +344,19 @@ std::string utils::run_program(const char* argv[], const std::string& input)
 	return std::string(utils::bridged::run_program(rs_argv, input));
 }
 
-std::string utils::resolve_tilde(const std::string& str)
+Filepath utils::resolve_tilde(const Filepath& path)
 {
-	return std::string(utils::bridged::resolve_tilde(str));
+	auto output = filepath::bridged::create_empty();
+	utils::bridged::resolve_tilde(path, *output);
+	return output;
 }
 
-std::string utils::resolve_relative(const std::string& reference,
-	const std::string& fname)
+Filepath utils::resolve_relative(const Filepath& reference,
+	const Filepath& fname)
 {
-	return std::string(utils::bridged::resolve_relative(reference, fname));
+	auto output = filepath::bridged::create_empty();
+	utils::bridged::resolve_relative(reference, fname, *output);
+	return output;
 }
 
 std::string utils::replace_all(std::string str,
@@ -594,15 +598,14 @@ void utils::set_common_curl_options(CurlHandle& handle, ConfigContainer& cfg)
 		cfg.get_configvalue_as_int("download-timeout");
 	curl_easy_setopt(handle.ptr(), CURLOPT_TIMEOUT, dl_timeout);
 
-	const std::string cookie_cache =
-		cfg.get_configvalue("cookie-cache");
-	if (cookie_cache != "") {
+	const Filepath cookie_cache = cfg.get_configvalue_as_filepath("cookie-cache");
+	if (cookie_cache != Filepath{}) {
 		curl_easy_setopt(handle.ptr(),
 			CURLOPT_COOKIEFILE,
-			cookie_cache.c_str());
+			cookie_cache.to_locale_string().c_str());
 		curl_easy_setopt(handle.ptr(),
 			CURLOPT_COOKIEJAR,
-			cookie_cache.c_str());
+			cookie_cache.to_locale_string().c_str());
 	}
 
 	curl_easy_setopt(handle.ptr(),
@@ -696,7 +699,7 @@ std::wstring utils::clean_nonprintable_characters(std::wstring text)
 
 /* Like mkdir(), but creates ancestors (parent directories) if they don't
  * exist. */
-int utils::mkdir_parents(const std::string& p, mode_t mode)
+int utils::mkdir_parents(const Filepath& p, mode_t mode)
 {
 	return utils::bridged::mkdir_parents(p, static_cast<std::uint32_t>(mode));
 }
@@ -730,18 +733,23 @@ std::optional<std::uint8_t> utils::run_non_interactively(
 	return std::nullopt;
 }
 
-std::string utils::getcwd()
+Filepath utils::getcwd()
 {
-	return std::string(utils::bridged::getcwd());
+	auto path = filepath::bridged::create_empty();
+	utils::bridged::getcwd(*path);
+	return path;
 }
 
 nonstd::expected<std::vector<std::string>, utils::ReadTextFileError> utils::read_text_file(
-	const std::string& filename)
+	const Filepath& filename)
 {
 	rust::Vec<rust::String> c;
 	std::uint64_t error_line_number{};
 	rust::String error_reason;
-	const bool result = bridged::read_text_file(filename, c, error_line_number,
+	const bool result = bridged::read_text_file(
+			filename,
+			c,
+			error_line_number,
 			error_reason);
 
 	if (result) {
@@ -866,9 +874,11 @@ void utils::initialize_ssl_implementation(void)
 #endif
 }
 
-std::string utils::get_default_browser()
+Filepath utils::get_default_browser()
 {
-	return std::string(utils::bridged::get_default_browser());
+	auto path = filepath::bridged::create_empty();
+	utils::bridged::get_default_browser(*path);
+	return path;
 }
 
 std::string utils::md5hash(const std::string& input)

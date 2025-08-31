@@ -7,7 +7,7 @@
 
 namespace newsboat {
 
-OpmlUrlReader::OpmlUrlReader(ConfigContainer& c, const std::string& url_file)
+OpmlUrlReader::OpmlUrlReader(ConfigContainer& c, const Filepath& url_file)
 	: cfg(c), file(url_file)
 {
 }

@@ -256,10 +256,10 @@ static int guid_callback(void* myguids, int argc, char** argv,
 	return 0;
 }
 
-Cache::Cache(const std::string& cachefile, ConfigContainer* c)
+Cache::Cache(const Filepath& cachefile, ConfigContainer& c)
 	: cfg(c)
 {
-	const int error = sqlite3_open(cachefile.c_str(), &db);
+	const int error = sqlite3_open(cachefile.to_locale_string().c_str(), &db);
 	if (error != SQLITE_OK) {
 		LOG(Level::ERROR,
 			"couldn't sqlite3_open(%s): error = %d",
@@ -280,6 +280,11 @@ Cache::Cache(const std::string& cachefile, ConfigContainer* c)
 Cache::~Cache()
 {
 	close_database();
+}
+
+std::unique_ptr<Cache> Cache::in_memory(ConfigContainer& c)
+{
+	return std::make_unique<Cache>(":memory:"_path, c);
 }
 
 void Cache::set_pragmas()
@@ -547,7 +552,7 @@ void Cache::externalize_rssfeed(RssFeed& feed,
 		run_sql(insertquery);
 	}
 
-	const unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+	const unsigned int max_items = cfg.get_configvalue_as_int("max-items");
 
 	LOG(Level::INFO,
 		"Cache::externalize_feed: max_items = %u "
@@ -561,7 +566,7 @@ void Cache::externalize_rssfeed(RssFeed& feed,
 			feed.items().begin() + max_items, feed.items().end());
 	}
 
-	const unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
+	const unsigned int days = cfg.get_configvalue_as_int("keep-articles-days");
 	const time_t old_time = time(nullptr) - days * 24 * 60 * 60;
 
 	// the reverse iterator is there for the sorting foo below (think about
@@ -648,7 +653,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		items.end());
 	}
 
-	const unsigned int max_items = cfg->get_configvalue_as_int("max-items");
+	const unsigned int max_items = cfg.get_configvalue_as_int("max-items");
 
 	if (max_items > 0 && feed->total_item_count() > max_items) {
 		std::vector<std::shared_ptr<RssItem>> flagged_items;
@@ -668,7 +673,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 		// if some flagged articles were saved, append them
 		feed->add_items(flagged_items);
 	}
-	feed->sort_unlocked(cfg->get_article_sort_strategy());
+	feed->sort_unlocked(cfg.get_article_sort_strategy());
 	return feed;
 }
 
@@ -802,7 +807,7 @@ std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFee
 	 * The behaviour whether the cleanup is done or not is configurable via
 	 * the configuration file.
 	 */
-	if (always_clean || cfg->get_configvalue_as_bool("cleanup-on-quit")) {
+	if (always_clean || cfg.get_configvalue_as_bool("cleanup-on-quit")) {
 		LOG(Level::DEBUG, "Cache::cleanup_cache: cleaning up cache...");
 
 		std::string cleanup_rss_feeds_statement(
@@ -820,7 +825,7 @@ std::vector<std::string> Cache::cleanup_cache(std::vector<std::shared_ptr<RssFee
 
 		run_sql(cleanup_rss_feeds_statement);
 		run_sql(cleanup_rss_items_statement);
-		if (cfg->get_configvalue_as_bool(
+		if (cfg.get_configvalue_as_bool(
 				"delete-read-articles-on-quit")) {
 			run_sql(cleanup_read_items_statement);
 		}
@@ -1122,7 +1127,7 @@ void Cache::clean_old_articles()
 {
 	std::lock_guard<std::recursive_mutex> lock(mtx);
 
-	const unsigned int days = cfg->get_configvalue_as_int("keep-articles-days");
+	const unsigned int days = cfg.get_configvalue_as_int("keep-articles-days");
 	if (days > 0) {
 		const time_t old_date = time(nullptr) - days * 24 * 60 * 60;
 

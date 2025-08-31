@@ -9,26 +9,30 @@
 
 test_helpers::TempDir::TempDir()
 {
-	const auto dirpath_template = tempdir.get_path() + "tmp.XXXXXX";
-	std::vector<char> dirpath_template_c(
-		dirpath_template.cbegin(), dirpath_template.cend());
-	dirpath_template_c.push_back('\0');
+	const auto tempdir_path = tempdir.get_path().to_locale_string();
+	std::vector<char> dirpath_template(
+		std::begin(tempdir_path), std::end(tempdir_path));
+	dirpath_template.push_back('/');
+	const std::string dirname_template("tmp.XXXXXX");
+	std::copy(dirname_template.begin(), dirname_template.end(),
+		std::back_inserter(dirpath_template));
+	dirpath_template.push_back('\0');
 
-	const auto result = ::mkdtemp(dirpath_template_c.data());
+	const auto result = ::mkdtemp(dirpath_template.data());
 	if (result == nullptr) {
 		const auto saved_errno = errno;
 		std::string msg("TempDir: failed to generate unique directory: (");
 		msg += std::to_string(saved_errno);
 		msg += ") ";
 		msg += ::strerror(saved_errno);
-		throw MainTempDir::tempfileexception(msg);
+		throw MainTempDir::tempfileexception(newsboat::Filepath(), msg);
 	}
 
-	// cned()-1 so we don't copy terminating null byte - std::string
+	// cend()-1 so we don't copy terminating null byte - std::string
 	// doesn't need it
-	dirpath = std::string(
-			dirpath_template_c.cbegin(), dirpath_template_c.cend() - 1);
-	dirpath.push_back('/');
+	const std::string dirpath_str(
+		dirpath_template.cbegin(), dirpath_template.cend() - 1);
+	dirpath = newsboat::Filepath::from_locale_string(dirpath_str);
 }
 
 test_helpers::TempDir::~TempDir()
@@ -46,11 +50,12 @@ test_helpers::TempDir::~TempDir()
 		// In child
 		// Ignore the return value, because even if the call failed, we
 		// can't do anything useful.
-		::execlp("rm", "rm", "-rf", dirpath.c_str(), (char*)nullptr);
+		const auto dirpath_str = dirpath.to_locale_string();
+		::execlp("rm", "rm", "-rf", dirpath_str.c_str(), (char*)nullptr);
 	}
 }
 
-const std::string test_helpers::TempDir::get_path() const
+newsboat::Filepath test_helpers::TempDir::get_path() const
 {
 	return dirpath;
 }

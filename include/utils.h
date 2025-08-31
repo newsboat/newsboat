@@ -12,6 +12,7 @@
 #include "3rd-party/expected.hpp"
 
 #include "configcontainer.h"
+#include "filepath.h"
 
 #include "libnewsboat-ffi/src/utils.rs.h" // IWYU pragma: export
 
@@ -75,8 +76,8 @@ std::string retrieve_url(const std::string& url,
 	const HTTPMethod method = HTTPMethod::GET);
 std::string run_program(const char* argv[], const std::string& input);
 
-std::string resolve_tilde(const std::string&);
-std::string resolve_relative(const std::string&, const std::string&);
+Filepath resolve_tilde(const Filepath&);
+Filepath resolve_relative(const Filepath&, const Filepath&);
 std::string replace_all(std::string str,
 	const std::string& from,
 	const std::string& to);
@@ -134,7 +135,7 @@ std::string get_basename(const std::string& url);
 std::string unescape_url(const std::string& url);
 void initialize_ssl_implementation(void);
 
-int mkdir_parents(const std::string& pathname,
+int mkdir_parents(const Filepath& pathname,
 	mode_t mode = 0755);
 
 std::string make_title(const std::string& url);
@@ -145,7 +146,7 @@ std::optional<std::uint8_t> run_interactively(const std::string& command,
 std::optional<std::uint8_t> run_non_interactively(const std::string& command,
 	const std::string& caller);
 
-std::string getcwd();
+Filepath getcwd();
 
 enum class ReadTextFileErrorKind {
 	CantOpen,
@@ -156,7 +157,7 @@ struct ReadTextFileError {
 	std::string message;
 };
 nonstd::expected<std::vector<std::string>, ReadTextFileError> read_text_file(
-	const std::string& filename);
+	const Filepath& filename);
 
 void remove_soft_hyphens(std::string& text);
 
@@ -170,7 +171,7 @@ std::string string_from_utf8_lossy(const std::vector<std::uint8_t>& text);
 void parse_rss_author_email(const std::vector<std::uint8_t>& text, std::string& name,
 	std::string& email);
 
-std::string get_default_browser();
+Filepath get_default_browser();
 
 std::string md5hash(const std::string& input);
 

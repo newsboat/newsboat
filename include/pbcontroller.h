@@ -8,6 +8,7 @@
 #include "colormanager.h"
 #include "configcontainer.h"
 #include "download.h"
+#include "filepath.h"
 #include "fslock.h"
 #include "keymap.h"
 #include "queueloader.h"
@@ -43,7 +44,7 @@ public:
 
 	double get_total_kbps();
 
-	void play_file(const std::string& str);
+	void play_file(const newsboat::Filepath& str);
 
 	newsboat::ConfigContainer* get_cfgcont()
 	{
@@ -57,20 +58,20 @@ public:
 
 private:
 	void print_usage(const char* argv0);
-	bool setup_dirs_xdg(const char* env_home);
+	bool setup_dirs_xdg(const newsboat::Filepath& home);
 
-	std::string config_file;
-	std::string queue_file;
+	newsboat::Filepath config_file;
+	newsboat::Filepath queue_file;
 	newsboat::ConfigContainer cfg;
 	std::vector<Download> downloads_;
 
-	std::string config_dir;
+	newsboat::Filepath config_dir;
 
 	unsigned int max_dls;
 
 	std::unique_ptr<QueueLoader> ql;
 
-	std::string lock_file;
+	newsboat::Filepath lock_file;
 	std::unique_ptr<newsboat::FsLock> fslock;
 
 	bool automatic_dl = false;

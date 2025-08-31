@@ -7,6 +7,7 @@
 #include "config.h"
 #include "configexception.h"
 #include "confighandlerexception.h"
+#include "filepath.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -32,8 +33,9 @@ void ConfigParser::handle_action(const std::string& action,
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
 
-		const std::string tilde_expanded = utils::resolve_tilde(params[0]);
-		const std::string current_fpath = included_files.back();
+		const Filepath path = Filepath::from_locale_string(params[0]);
+		const Filepath tilde_expanded = utils::resolve_tilde(path);
+		const Filepath current_fpath = included_files.back();
 		if (!this->parse_file(utils::resolve_relative(current_fpath, tilde_expanded))) {
 			throw ConfigHandlerException(ActionHandlerStatus::FILENOTFOUND);
 		}
@@ -42,7 +44,7 @@ void ConfigParser::handle_action(const std::string& action,
 	}
 }
 
-bool ConfigParser::parse_file(const std::string& tmp_filename)
+bool ConfigParser::parse_file(const Filepath& tmp_filename)
 {
 	/*
 	 * this function parses a config file.
@@ -59,11 +61,9 @@ bool ConfigParser::parse_file(const std::string& tmp_filename)
 	 *   - if an error happens, react accordingly.
 	 */
 
-	// It would be nice if this function was only give absolute paths, but the
+	// It would be nice if this function was only given absolute paths, but the
 	// tests are easier as relative paths
-	const std::string filename = (tmp_filename.front() == NEWSBEUTER_PATH_SEP) ?
-		tmp_filename :
-		utils::getcwd() + NEWSBEUTER_PATH_SEP + tmp_filename;
+	const Filepath filename = utils::getcwd().join(tmp_filename);
 
 	if (std::find(included_files.begin(), included_files.end(),
 			filename) != included_files.end()) {

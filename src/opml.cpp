@@ -203,10 +203,10 @@ void rec_find_rss_outlines(
 }
 
 std::optional<std::string> opml::import(
-	const std::string& filename,
+	const Filepath& filename,
 	FileUrlReader& urlcfg)
 {
-	xmlDoc* doc = xmlReadFile(filename.c_str(), nullptr, 0);
+	xmlDoc* doc = xmlReadFile(filename.to_locale_string().c_str(), nullptr, 0);
 	if (doc == nullptr) {
 		return strprintf::fmt(_("Error: failed to parse OPML file \"%s\""), filename);
 	}

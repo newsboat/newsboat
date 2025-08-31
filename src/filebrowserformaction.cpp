@@ -53,41 +53,26 @@ bool FileBrowserFormAction::process_operation(Operation op,
 				const auto selection = id_at_position[selected_position];
 				switch (selection.filetype) {
 				case file_system::FileType::Directory: {
-					const int status = ::chdir(selection.name.c_str());
+					const int status = ::chdir(selection.name.to_locale_string().c_str());
 					LOG(Level::DEBUG,
 						"FileBrowserFormAction:OP_OPEN: chdir(%s) = %i",
 						selection.name,
 						status);
 					files_list.set_position(0);
-					std::string fn = utils::getcwd();
+					auto fn = utils::getcwd();
 					update_title(fn);
 
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
+					const auto fnstr = Filepath::from_locale_string(f.get("filenametext")).file_name();
+					if (fnstr) {
+						fn.push(*fnstr);
 					}
-
-					const std::string fnstr =
-						f.get("filenametext");
-					const std::string::size_type base =
-						fnstr.find_last_of(NEWSBEUTER_PATH_SEP);
-					if (base == std::string::npos) {
-						fn.append(fnstr);
-					} else {
-						fn.append(fnstr,
-							base + 1,
-							std::string::npos);
-					}
-					set_value("filenametext", fn);
+					set_value("filenametext", fn.to_locale_string());
 					do_redraw = true;
 				}
 				break;
 				case file_system::FileType::RegularFile: {
-					std::string fn = utils::getcwd();
-					if (fn.back() != NEWSBEUTER_PATH_SEP) {
-						fn.push_back(NEWSBEUTER_PATH_SEP);
-					}
-					fn.append(selection.name);
-					set_value("filenametext", fn);
+					const auto filename = utils::getcwd().join(selection.name);
+					set_value("filenametext", filename.to_locale_string());
 					f.set_focus("filename");
 				}
 				break;
@@ -208,32 +193,32 @@ bool FileBrowserFormAction::process_operation(Operation op,
 	return true;
 }
 
-void FileBrowserFormAction::update_title(const std::string& working_directory)
+void FileBrowserFormAction::update_title(const Filepath& working_directory)
 {
 	const unsigned int width = files_list.get_width();
 
 	FmtStrFormatter fmt;
 	fmt.register_fmt('N', PROGRAM_NAME);
 	fmt.register_fmt('V', utils::program_version());
-	fmt.register_fmt('f', working_directory);
+	fmt.register_fmt('f', working_directory.display());
 
 	set_title(fmt.do_format(
 			cfg->get_configvalue("filebrowser-title-format"), width));
 }
 
-std::vector<std::string> get_sorted_filelist()
+std::vector<Filepath> get_sorted_filelist()
 {
-	std::vector<std::string> ret;
+	std::vector<Filepath> ret;
 
-	const std::string cwdtmp = utils::getcwd();
+	const auto cwdtmp = utils::getcwd();
 
-	DIR* dirp = ::opendir(cwdtmp.c_str());
+	DIR* dirp = ::opendir(cwdtmp.to_locale_string().c_str());
 	if (dirp) {
 		struct dirent* de = ::readdir(dirp);
 		while (de) {
 			if (strcmp(de->d_name, ".") != 0 &&
 				strcmp(de->d_name, "..") != 0) {
-				ret.push_back(de->d_name);
+				ret.push_back(Filepath::from_locale_string(de->d_name));
 			}
 			de = ::readdir(dirp);
 		}
@@ -242,8 +227,8 @@ std::vector<std::string> get_sorted_filelist()
 
 	std::sort(ret.begin(), ret.end());
 
-	if (cwdtmp != "/") {
-		ret.insert(ret.begin(), "..");
+	if (cwdtmp != "/"_path) {
+		ret.emplace(ret.begin(), ".."_path);
 	}
 
 	return ret;
@@ -257,17 +242,13 @@ void FileBrowserFormAction::prepare()
 	 * in the current directory.
 	 */
 	if (do_redraw) {
-		const std::string cwdtmp = utils::getcwd();
-		update_title(cwdtmp);
-
-		std::vector<std::string> files = get_sorted_filelist();
+		update_title(utils::getcwd());
 
 		id_at_position.clear();
 		lines.clear();
-		for (std::string filename : files) {
+		for (auto filename : get_sorted_filelist()) {
 			add_file(id_at_position, filename);
 		}
-
 
 		auto render_line = [this](std::uint32_t line, std::uint32_t width) -> StflRichText {
 			(void)width;
@@ -300,20 +281,21 @@ void FileBrowserFormAction::init()
 
 	file_prompt_line.set_text(_("File: "));
 
-	const std::string save_path = cfg->get_configvalue("save-path");
+	const auto save_path = cfg->get_configvalue_as_filepath("save-path");
 
-	LOG(Level::DEBUG,
-		"view::filebrowser: save-path is '%s'",
-		save_path);
+	LOG(Level::DEBUG, "view::filebrowser: save-path is '%s'", save_path);
 
-	const int status = ::chdir(save_path.c_str());
+	const int status = ::chdir(save_path.to_locale_string().c_str());
 	LOG(Level::DEBUG, "view::filebrowser: chdir(%s) = %i", save_path, status);
 
-	set_value("filenametext", default_filename);
+	set_value("filenametext", default_filename.to_locale_string());
 
 	// Set position to 0 and back to ensure that the text is visible
 	draw_form();
-	set_value("filenametext_pos", std::to_string(default_filename.length()));
+	// TODO: #2326 use length by graphemes
+	// See: https://github.com/newsboat/newsboat/pull/2561#discussion_r1357376071
+	set_value("filenametext_pos",
+		std::to_string(default_filename.to_locale_string().length()));
 }
 
 std::vector<KeyMapHintEntry> FileBrowserFormAction::get_keymap_hint() const
@@ -326,10 +308,10 @@ std::vector<KeyMapHintEntry> FileBrowserFormAction::get_keymap_hint() const
 
 void FileBrowserFormAction::add_file(
 	std::vector<file_system::FileSystemEntry>& id_at_position,
-	std::string filename)
+	const Filepath& filename)
 {
 	struct stat sb;
-	if (::lstat(filename.c_str(), &sb) == 0) {
+	if (::lstat(filename.to_locale_string().c_str(), &sb) == 0) {
 		const auto ftype = file_system::mode_to_filetype(sb.st_mode);
 
 		const auto rwxbits = file_system::permissions_string(sb.st_mode);
@@ -355,14 +337,15 @@ void FileBrowserFormAction::add_file(
 	}
 }
 
-std::string FileBrowserFormAction::get_formatted_filename(std::string filename,
+std::string FileBrowserFormAction::get_formatted_filename(const Filepath& filename,
 	mode_t mode)
 {
+	const auto filename_str = filename.display();
 	const auto suffix = file_system::mode_suffix(mode);
 	if (suffix.has_value()) {
-		return strprintf::fmt("%s%c", filename, suffix.value());
+		return strprintf::fmt("%s%c", filename_str, suffix.value());
 	} else {
-		return filename;
+		return filename_str;
 	}
 }
 

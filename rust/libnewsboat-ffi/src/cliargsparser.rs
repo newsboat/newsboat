@@ -1,8 +1,10 @@
 use cxx::{ExternType, type_id};
 
+use crate::filepath::PathBuf;
 use libnewsboat::cliargsparser;
 use std::ffi::OsString;
 use std::os::unix::ffi::OsStringExt;
+use std::pin::Pin;
 
 // cxx doesn't allow to share types from other crates, so we have to wrap it
 // cf. https://github.com/dtolnay/cxx/issues/496
@@ -15,6 +17,13 @@ unsafe impl ExternType for CliArgsParser {
 
 #[cxx::bridge(namespace = "newsboat::cliargsparser::bridged")]
 mod bridged {
+    #[namespace = "newsboat::filepath::bridged"]
+    extern "C++" {
+        include!("libnewsboat-ffi/src/filepath.rs.h");
+
+        type PathBuf = crate::filepath::PathBuf;
+    }
+
     /// Shared data structure between C++/Rust. We need to do this, because
     /// Vec<Vec<T>> is an unsupported CXX type.
     struct BytesVec {
@@ -37,22 +46,25 @@ mod bridged {
         fn should_print_usage(cliargsparser: &CliArgsParser) -> bool;
         fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool;
 
-        fn importfile(cliargsparser: &CliArgsParser) -> String;
+        fn importfile(cliargsparser: &CliArgsParser, mut file: Pin<&mut PathBuf>);
         fn program_name(cliargsparser: &CliArgsParser) -> String;
         fn display_msg(cliargsparser: &CliArgsParser) -> String;
 
         fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool;
 
-        fn readinfo_import_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn readinfo_export_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn url_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn lock_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn queue_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn search_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn cmdline_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
-        fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool;
+        fn readinfo_import_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>)
+        -> bool;
+        fn readinfo_export_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>)
+        -> bool;
+        fn url_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
+        fn lock_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
+        fn cache_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
+        fn config_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
+        fn queue_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
+        fn search_history_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
+        fn cmdline_history_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>)
+        -> bool;
+        fn log_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool;
 
         fn cmds_to_execute(cliargsparser: &CliArgsParser) -> Vec<String>;
 
@@ -110,10 +122,10 @@ fn refresh_on_start(cliargsparser: &CliArgsParser) -> bool {
     cliargsparser.0.refresh_on_start
 }
 
-fn importfile(cliargsparser: &CliArgsParser) -> String {
+fn importfile(cliargsparser: &CliArgsParser, mut output: Pin<&mut PathBuf>) {
     match &cliargsparser.0.importfile {
-        Some(path) => path.to_string_lossy().to_string(),
-        None => String::new(),
+        Some(path) => output.0 = path.to_owned(),
+        None => output.0.clear(),
     }
 }
 
@@ -135,100 +147,100 @@ fn return_code(cliargsparser: &CliArgsParser, value: &mut isize) -> bool {
     }
 }
 
-fn readinfo_import_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn readinfo_import_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.readinfo_import_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn readinfo_export_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn readinfo_export_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.readinfo_export_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn url_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn url_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.url_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn lock_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn lock_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.lock_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn cache_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn cache_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.cache_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn config_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn config_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.config_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn queue_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn queue_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.queue_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn search_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn search_history_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.search_history_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn cmdline_history_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn cmdline_history_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.cmdline_history_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,
     }
 }
 
-fn log_file(cliargsparser: &CliArgsParser, path: &mut String) -> bool {
+fn log_file(cliargsparser: &CliArgsParser, mut path: Pin<&mut PathBuf>) -> bool {
     match &cliargsparser.0.log_file {
         Some(p) => {
-            *path = p.to_string_lossy().to_string();
+            path.0 = p.to_owned();
             true
         }
         None => false,

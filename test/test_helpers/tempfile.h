@@ -1,8 +1,7 @@
 #ifndef NEWSBOAT_TEST_HELPERS_TEMPFILE_H_
 #define NEWSBOAT_TEST_HELPERS_TEMPFILE_H_
 
-#include <string>
-
+#include "filepath.h"
 #include "maintempdir.h"
 
 namespace test_helpers {
@@ -18,11 +17,11 @@ public:
 
 	~TempFile();
 
-	const std::string get_path() const;
+	newsboat::Filepath get_path() const;
 
 private:
 	MainTempDir tempdir;
-	std::string filepath;
+	newsboat::Filepath filepath;
 };
 
 } // namespace test_helpers

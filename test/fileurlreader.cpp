@@ -13,17 +13,17 @@ using namespace newsboat;
 TEST_CASE("URL reader remembers the file name from which it read the URLs",
 	"[FileUrlReader]")
 {
-	const std::string url("data/test-urls.txt");
+	const auto url = "data/test-urls.txt"_path;
 
 	FileUrlReader u(url);
-	REQUIRE(u.get_source() == url);
+	REQUIRE(u.get_source() == url.display());
 	u.reload();
-	REQUIRE(u.get_source() == url);
+	REQUIRE(u.get_source() == url.display());
 }
 
 TEST_CASE("URL reader extracts all URLs from the file", "[FileUrlReader]")
 {
-	FileUrlReader u("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt"_path);
 	u.reload();
 
 	REQUIRE(u.get_urls().size() == 3);
@@ -34,7 +34,7 @@ TEST_CASE("URL reader extracts all URLs from the file", "[FileUrlReader]")
 
 TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 {
-	FileUrlReader u("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt"_path);
 	u.reload();
 
 	REQUIRE(u.get_tags("http://test1.url.cc/feed.xml").size() == 3);
@@ -52,7 +52,7 @@ TEST_CASE("URL reader extracts feeds' tags", "[FileUrlReader]")
 
 TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
 {
-	FileUrlReader u("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt"_path);
 	u.reload();
 
 	REQUIRE(u.get_alltags().size() == 3);
@@ -61,7 +61,7 @@ TEST_CASE("URL reader keeps track of unique tags", "[FileUrlReader]")
 TEST_CASE("URL reader writes files that it can understand later",
 	"[FileUrlReader]")
 {
-	const std::string testDataPath("data/test-urls.txt");
+	const auto testDataPath = "data/test-urls.txt"_path;
 	test_helpers::TempFile urlsFile;
 
 	test_helpers::copy_file(testDataPath, urlsFile.get_path());
@@ -71,7 +71,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 	REQUIRE_FALSE(u.get_urls().empty());
 	REQUIRE_FALSE(u.get_alltags().empty());
 
-	std::ofstream urlsFileStream(urlsFile.get_path());
+	std::ofstream urlsFileStream(urlsFile.get_path().to_locale_string());
 	REQUIRE(urlsFileStream.is_open());
 	urlsFileStream << std::string();
 	urlsFileStream.close();
@@ -91,7 +91,7 @@ TEST_CASE("URL reader writes files that it can understand later",
 
 TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 {
-	const std::string testDataPath("data/926-urls");
+	const auto testDataPath = "data/926-urls"_path;
 
 	FileUrlReader u(testDataPath);
 	u.reload();
@@ -104,7 +104,7 @@ TEST_CASE("Preserves URLs as-is", "[FileUrlReader][issue926]")
 TEST_CASE("URL reader returns error structure if file cannot be opened",
 	"[FileUrlReader]")
 {
-	const std::string testDataPath("data/test-urls.txt");
+	const auto testDataPath = "data/test-urls.txt"_path;
 
 	test_helpers::TempFile urlsFile;
 	FileUrlReader u(urlsFile.get_path());
@@ -158,7 +158,8 @@ TEST_CASE("URL reader returns error structure if file cannot be opened",
 
 			SECTION("the error message contains the filename") {
 				INFO("error_message: " + error_message.value());
-				REQUIRE(error_message.value().find(urlsFile.get_path()) != std::string::npos);
+				REQUIRE(error_message.value().find(urlsFile.get_path().to_locale_string()) !=
+					std::string::npos);
 			}
 		}
 
@@ -175,7 +176,7 @@ TEST_CASE("URL reader returns error message if file contains invalid UTF-8 codep
 	test_helpers::TempFile urlsFile;
 
 	{
-		std::ofstream f(urlsFile.get_path());
+		std::ofstream f(urlsFile.get_path().to_locale_string());
 		f << "http://exmample.com/atom.xml" << std::endl;
 		f << "http://invalid.com/\xff.xml" << std::endl;
 	}
@@ -190,7 +191,7 @@ TEST_CASE("FileUrlReader::get_alltags() returns all unique tags across all feeds
 	"excluding the title tags",
 	"[FileUrlReader]")
 {
-	FileUrlReader u("data/test-urls.txt");
+	FileUrlReader u("data/test-urls.txt"_path);
 	u.reload();
 
 	const auto tags = u.get_alltags();

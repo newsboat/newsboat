@@ -18,14 +18,14 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 	GIVEN("A fresh instance of QueueManager") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssItem item(&cache);
+		RssItem item(rsscache.get());
 		const std::string enclosure_url("https://example.com/podcast.mp3");
 		item.set_enclosure_url(enclosure_url);
 		item.set_enclosure_type("audio/mpeg");
 
-		RssFeed feed(&cache, "https://example.com/news.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
@@ -39,7 +39,8 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains an entry") {
@@ -64,7 +65,8 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 
 			THEN("the second call indicates that the enclosure is already in the queue") {
 				REQUIRE(result.status == EnqueueStatus::URL_QUEUED_ALREADY);
-				REQUIRE(result.extra_info == enclosure_url);
+				REQUIRE(result.extra_string == enclosure_url);
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains a single entry") {
@@ -86,25 +88,28 @@ SCENARIO("Smoke test for QueueManager", "[QueueManager]")
 		WHEN("enqueue_url() is called for multiple different items") {
 			const auto result = manager.enqueue_url(item, feed);
 
-			RssItem item2(&cache);
+			RssItem item2(rsscache.get());
 			item2.set_enclosure_url("https://www.example.com/another.mp3");
 			item2.set_enclosure_type("audio/mpeg");
 			const auto result2 = manager.enqueue_url(item2, feed);
 
-			RssItem item3(&cache);
+			RssItem item3(rsscache.get());
 			item3.set_enclosure_url("https://joe.example.com/vacation.jpg");
 			item3.set_enclosure_type("image/jpeg");
 			const auto result3 = manager.enqueue_url(item3, feed);
 
 			THEN("return values indicate success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 
 				REQUIRE(result2.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result2.extra_info == "");
+				REQUIRE(result2.extra_string == "");
+				REQUIRE(result2.extra_filename == Filepath());
 
 				REQUIRE(result3.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result3.extra_info == "");
+				REQUIRE(result3.extra_string == "");
+				REQUIRE(result3.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains three entries") {
@@ -132,19 +137,19 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 	GIVEN("Pristine QueueManager and two RssItems") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssItem item1(&cache);
+		RssItem item1(rsscache.get());
 		const std::string enclosure_url1("https://example.com/podcast.mp3");
 		item1.set_enclosure_url(enclosure_url1);
 		item1.set_enclosure_type("audio/mpeg");
 
-		RssItem item2(&cache);
+		RssItem item2(rsscache.get());
 		const std::string enclosure_url2("https://example.com/~joe/podcast.mp3");
 		item2.set_enclosure_url(enclosure_url2);
 		item2.set_enclosure_type("audio/mpeg");
 
-		RssFeed feed(&cache, "https://example.com/news.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
@@ -154,7 +159,8 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains a corresponding entry") {
@@ -177,9 +183,10 @@ SCENARIO("enqueue_url() errors if the filename is already used", "[QueueManager]
 
 				THEN("the return value indicates that the filename is already used") {
 					REQUIRE(result.status == EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY);
+					REQUIRE(result.extra_string == "");
 					// That field contains a path to the temporary directory,
 					// so we simply check that it's not empty.
-					REQUIRE(result.extra_info != "");
+					REQUIRE(result.extra_filename != Filepath());
 				}
 
 				THEN("the queue file still contains a single entry") {
@@ -208,18 +215,19 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 	GIVEN("Pristine QueueManager, an RssItem, and an uneditable queue file") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssItem item(&cache);
+		RssItem item(rsscache.get());
 		item.set_enclosure_url("https://example.com/podcast.mp3");
 		item.set_enclosure_type("audio/mpeg");
 
-		RssFeed feed(&cache, "https://example.com/news.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		test_helpers::copy_file("data/empty-file", queue_file.get_path());
+		test_helpers::copy_file("data/empty-file"_path,
+			queue_file.get_path());
 		// The file is read-only
 		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
@@ -228,7 +236,8 @@ SCENARIO("enqueue_url() errors if the queue file can't be opened for writing",
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == queue_file.get_path());
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == queue_file.get_path());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -249,32 +258,34 @@ TEST_CASE("QueueManager puts files into a location configured by `download-path`
 		cfg.set_configvalue("download-path", "/tmp/nonexistent-newsboat");
 	}
 
-	Cache cache(":memory:", &cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
-	RssItem item1(&cache);
+	RssItem item1(rsscache.get());
 	const std::string enclosure_url1("https://example.com/podcast.mp3");
 	item1.set_enclosure_url(enclosure_url1);
 	item1.set_enclosure_type("audio/mpeg");
 
-	RssItem item2(&cache);
+	RssItem item2(rsscache.get());
 	const std::string enclosure_url2("https://example.com/~joe/podcast.ogg");
 	item2.set_enclosure_url(enclosure_url2);
 	item2.set_enclosure_type("audio/vorbis");
 
-	RssFeed feed(&cache, "https://example.com/podcasts.atom");
+	RssFeed feed(rsscache.get(), "https://example.com/podcasts.atom");
 
 	test_helpers::TempFile queue_file;
 	QueueManager manager(&cfg, queue_file.get_path());
 
 	const auto result1 = manager.enqueue_url(item1, feed);
 	REQUIRE(result1.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result1.extra_info == "");
+	REQUIRE(result1.extra_string == "");
+	REQUIRE(result1.extra_filename == Filepath());
 
 	REQUIRE(item1.enqueued());
 
 	const auto result2 = manager.enqueue_url(item2, feed);
 	REQUIRE(result2.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result2.extra_info == "");
+	REQUIRE(result2.extra_string == "");
+	REQUIRE(result2.extra_filename == Filepath());
 
 	REQUIRE(item2.enqueued());
 
@@ -297,13 +308,13 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 	// *exactly* how the result should look.
 	cfg.set_configvalue("download-path", "/example/");
 
-	Cache cache(":memory:", &cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
-	RssItem item(&cache);
+	RssItem item(rsscache.get());
 	item.set_enclosure_url("https://example.com/~adam/podcast.mp3");
 	item.set_enclosure_type("audio/mpeg");
 
-	auto feed = std::make_shared<RssFeed>(&cache, "https://example.com/podcasts.atom");
+	auto feed = std::make_shared<RssFeed>(rsscache.get(), "https://example.com/podcasts.atom");
 
 	test_helpers::TempFile queue_file;
 	QueueManager manager(&cfg, queue_file.get_path());
@@ -394,7 +405,7 @@ TEST_CASE("QueueManager names files according to the `download-filename-format` 
 
 			item.set_feedptr(feed);
 
-			RssFeed irrelevant_feed(&cache, "https://example.com/podcasts.atom");
+			RssFeed irrelevant_feed(rsscache.get(), "https://example.com/podcasts.atom");
 			irrelevant_feed.set_title("Irrelevant");
 
 			manager.enqueue_url(item, irrelevant_feed);
@@ -426,21 +437,21 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 	GIVEN("Pristine QueueManager and a feed of three items") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssFeed feed(&cache, "https://example.com/podcasts.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/podcasts.atom");
 
-		auto item1 = std::make_shared<RssItem>(&cache);
+		auto item1 = std::make_shared<RssItem>(rsscache.get());
 		item1->set_enclosure_url("https://example.com/~adam/podcast.mp3");
 		item1->set_enclosure_type("audio/mpeg");
 		feed.add_item(item1);
 
-		auto item2 = std::make_shared<RssItem>(&cache);
+		auto item2 = std::make_shared<RssItem>(rsscache.get());
 		item2->set_enclosure_url("https://example.com/episode.ogg");
 		item2->set_enclosure_type("audio/vorbis");
 		feed.add_item(item2);
 
-		auto item3 = std::make_shared<RssItem>(&cache);
+		auto item3 = std::make_shared<RssItem>(rsscache.get());
 		item3->set_enclosure_url("https://example.com/~fae/painting.jpg");
 		item3->set_enclosure_type("");
 		feed.add_item(item3);
@@ -453,7 +464,8 @@ TEST_CASE("autoenqueue() adds all enclosures of all items to the queue", "[Queue
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains three entries") {
@@ -481,17 +493,17 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 	GIVEN("Pristine QueueManager and a feed of two items") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssFeed feed(&cache, "https://example.com/news.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
-		auto item1 = std::make_shared<RssItem>(&cache);
+		auto item1 = std::make_shared<RssItem>(rsscache.get());
 		const std::string enclosure_url1("https://example.com/podcast.mp3");
 		item1->set_enclosure_url(enclosure_url1);
 		item1->set_enclosure_type("audio/mpeg");
 		feed.add_item(item1);
 
-		auto item2 = std::make_shared<RssItem>(&cache);
+		auto item2 = std::make_shared<RssItem>(rsscache.get());
 		const std::string enclosure_url2("https://example.com/~joe/podcast.mp3");
 		item2->set_enclosure_url(enclosure_url2);
 		item2->set_enclosure_type("audio/mpeg");
@@ -505,9 +517,10 @@ SCENARIO("autoenqueue() errors if the filename is already used", "[QueueManager]
 
 			THEN("the return value indicates that the filename is already used") {
 				REQUIRE(result.status == EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY);
+				REQUIRE(result.extra_string == "");
 				// That field contains a path to the temporary directory,
 				// so we simply check that it's not empty.
-				REQUIRE(result.extra_info != "");
+				REQUIRE(result.extra_filename != Filepath());
 			}
 
 			THEN("the queue file still contains a single entry") {
@@ -535,11 +548,11 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 	GIVEN("Pristine QueueManager, a single-item feed, and an uneditable queue file") {
 		ConfigContainer cfg;
 
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssFeed feed(&cache, "https://example.com/news.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
-		auto item = std::make_shared<RssItem>(&cache);
+		auto item = std::make_shared<RssItem>(rsscache.get());
 		item->set_enclosure_url("https://example.com/podcast.mp3");
 		item->set_enclosure_type("audio/mpeg");
 		feed.add_item(item);
@@ -547,7 +560,8 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 		test_helpers::TempFile queue_file;
 		QueueManager manager(&cfg, queue_file.get_path());
 
-		test_helpers::copy_file("data/empty-file", queue_file.get_path());
+		test_helpers::copy_file("data/empty-file"_path,
+			queue_file.get_path());
 		// The file is read-only
 		test_helpers::Chmod uneditable_queue_file(queue_file.get_path(), 0444);
 
@@ -556,7 +570,8 @@ SCENARIO("autoenqueue() errors if the queue file can't be opened for writing",
 
 			THEN("the return value indicates the file couldn't be written to") {
 				REQUIRE(result.status == EnqueueStatus::QUEUE_FILE_OPEN_ERROR);
-				REQUIRE(result.extra_info == queue_file.get_path());
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == queue_file.get_path());
 			}
 
 			THEN("the item is NOT marked as enqueued") {
@@ -573,22 +588,22 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 	// *exactly* how the result should look.
 	cfg.set_configvalue("download-path", "/example/");
 
-	Cache cache(":memory:", &cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
-	RssFeed feed(&cache, "https://example.com/news.atom");
+	RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
-	auto item1 = std::make_shared<RssItem>(&cache);
+	auto item1 = std::make_shared<RssItem>(rsscache.get());
 	item1->set_enclosure_url("https://example.com/podcast.mp3");
 	item1->set_enclosure_type("audio/mpeg");
 	feed.add_item(item1);
 
-	auto item2 = std::make_shared<RssItem>(&cache);
+	auto item2 = std::make_shared<RssItem>(rsscache.get());
 	item2->set_enclosure_url("https://example.com/podcast2.mp3");
 	item2->set_enclosure_type("audio/mpeg");
 	item2->set_enqueued(true);
 	feed.add_item(item2);
 
-	auto item3 = std::make_shared<RssItem>(&cache);
+	auto item3 = std::make_shared<RssItem>(rsscache.get());
 	item3->set_enclosure_url("https://example.com/podcast3.mp3");
 	item3->set_enclosure_type("audio/mpeg");
 	feed.add_item(item3);
@@ -598,7 +613,8 @@ TEST_CASE("autoenqueue() skips already-enqueued items", "[QueueManager]")
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result.extra_info == "");
+	REQUIRE(result.extra_string == "");
+	REQUIRE(result.extra_filename == Filepath());
 
 	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
@@ -616,21 +632,21 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 	// *exactly* how the result should look.
 	cfg.set_configvalue("download-path", "/example/");
 
-	Cache cache(":memory:", &cfg);
+	auto rsscache = Cache::in_memory(cfg);
 
-	RssFeed feed(&cache, "https://example.com/news.atom");
+	RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
-	auto item1 = std::make_shared<RssItem>(&cache);
+	auto item1 = std::make_shared<RssItem>(rsscache.get());
 	item1->set_enclosure_url("https://example.com/podcast.mp3");
 	item1->set_enclosure_type("audio/mpeg");
 	feed.add_item(item1);
 
-	auto item2 = std::make_shared<RssItem>(&cache);
+	auto item2 = std::make_shared<RssItem>(rsscache.get());
 	item2->set_enclosure_url("http://example.com/podcast2.mp3");
 	item2->set_enclosure_type("audio/mpeg");
 	feed.add_item(item2);
 
-	auto item3 = std::make_shared<RssItem>(&cache);
+	auto item3 = std::make_shared<RssItem>(rsscache.get());
 	item3->set_enclosure_url("ftp://user@example.com/podcast3.mp3");
 	item3->set_enclosure_type("audio/mpeg");
 	feed.add_item(item3);
@@ -640,7 +656,8 @@ TEST_CASE("autoenqueue() only enqueues HTTP and HTTPS URLs", "[QueueManager]")
 
 	const auto result = manager.autoenqueue(feed);
 	REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-	REQUIRE(result.extra_info == "");
+	REQUIRE(result.extra_string == "");
+	REQUIRE(result.extra_filename == Filepath());
 
 	REQUIRE(test_helpers::file_exists(queue_file.get_path()));
 
@@ -656,26 +673,26 @@ TEST_CASE("autoenqueue() does not enqueue items with an invalid podcast type",
 {
 	GIVEN("Pristine QueueManager and a feed of three items with one of them having an image enclosure") {
 		ConfigContainer cfg;
-		Cache cache(":memory:", &cfg);
+		auto rsscache = Cache::in_memory(cfg);
 
-		RssFeed feed(&cache, "https://example.com/news.atom");
+		RssFeed feed(rsscache.get(), "https://example.com/news.atom");
 
-		auto item1 = std::make_shared<RssItem>(&cache);
+		auto item1 = std::make_shared<RssItem>(rsscache.get());
 		item1->set_enclosure_url("https://example.com/podcast1.mp3");
 		item1->set_enclosure_type("audio/mpeg");
 		feed.add_item(item1);
 
-		auto item2 = std::make_shared<RssItem>(&cache);
+		auto item2 = std::make_shared<RssItem>(rsscache.get());
 		item2->set_enclosure_url("http://example.com/not-a-podcast.jpg");
 		item2->set_enclosure_type("image/jpeg");
 		feed.add_item(item2);
 
-		auto item3 = std::make_shared<RssItem>(&cache);
+		auto item3 = std::make_shared<RssItem>(rsscache.get());
 		item3->set_enclosure_url("https://example.com/podcast2.mp3");
 		item3->set_enclosure_type("audio/mpeg");
 		feed.add_item(item3);
 
-		auto item4 = std::make_shared<RssItem>(&cache);
+		auto item4 = std::make_shared<RssItem>(rsscache.get());
 		item4->set_enclosure_url("https://example.com/podcast3.mp3");
 		item4->set_enclosure_type("");
 		feed.add_item(item4);
@@ -688,7 +705,8 @@ TEST_CASE("autoenqueue() does not enqueue items with an invalid podcast type",
 
 			THEN("the return value indicates success") {
 				REQUIRE(result.status == EnqueueStatus::QUEUED_SUCCESSFULLY);
-				REQUIRE(result.extra_info == "");
+				REQUIRE(result.extra_string == "");
+				REQUIRE(result.extra_filename == Filepath());
 			}
 
 			THEN("the queue file contains two entries") {

@@ -334,31 +334,31 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 	}
 }
 
-std::string View::get_filename_suggestion(const std::string& s)
+Filepath View::get_filename_suggestion(const std::string& s)
 {
 	/*
 	 * With this function, we generate normalized filenames for saving
 	 * articles to files if the setting `restrict-filename` is enabled.
 	 */
-	std::string retval;
-
+	std::string suggestion;
 	if (cfg->get_configvalue_as_bool("restrict-filename")) {
 		for (unsigned int i = 0; i < s.length(); ++i) {
 			if (isalnum(s[i])) {
-				retval.push_back(s[i]);
-			} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' ||
-				s[i] == '\n') {
-				retval.push_back('_');
+				suggestion.push_back(s[i]);
+			} else if (s[i] == '/' || s[i] == ' ' || s[i] == '\r' || s[i] == '\n') {
+				suggestion.push_back('_');
 			}
 		}
 	} else {
-		retval = s;
+		suggestion = s;
 	}
 
-	if (retval.length() == 0) {
-		retval = "article.txt";
+	Filepath retval;
+	if (suggestion.empty()) {
+		retval = "article.txt"_path;
 	} else {
-		retval.append(".txt");
+		retval = Filepath::from_locale_string(suggestion);
+		retval.add_extension("txt");
 	}
 	LOG(Level::DEBUG, "View::get_filename_suggestion: %s -> %s", s, retval);
 	return retval;
@@ -369,13 +369,13 @@ void View::drop_queued_input()
 	flushinp();
 }
 
-void View::open_in_pager(const std::string& filename)
+void View::open_in_pager(const Filepath& filename)
 {
 	std::string cmdline;
-	std::string pager = cfg->get_configvalue("pager");
+	const auto pager = cfg->get_configvalue_as_filepath("pager").to_locale_string();
 	if (pager.find("%f") != std::string::npos) {
 		FmtStrFormatter fmt;
-		fmt.register_fmt('f', filename);
+		fmt.register_fmt('f', filename.to_locale_string());
 		cmdline = fmt.do_format(pager, 0);
 	} else {
 		const char* env_pager = nullptr;
@@ -387,7 +387,7 @@ void View::open_in_pager(const std::string& filename)
 			cmdline.append("more");
 		}
 		cmdline.append(" ");
-		cmdline.append(filename);
+		cmdline.append(filename.to_locale_string());
 	}
 	push_empty_formaction();
 	Stfl::reset();
@@ -401,26 +401,27 @@ std::optional<std::uint8_t> View::open_in_browser(const std::string& url,
 	bool interactive)
 {
 	std::string cmdline;
-	const std::string browser = cfg->get_configvalue("browser");
+	const auto browser = cfg->get_configvalue_as_filepath("browser");
 	const std::string escaped_url = "'" + utils::replace_all(url, "'", "%27") + "'";
 	const std::string escaped_feedurl = "'" + utils::replace_all(feedurl, "'",
 			"%27") + "'";
 	const std::string quoted_type = "'" + type + "'";
 	const std::string escaped_title = utils::preserve_quotes(title);
 
-	if (browser.find("%u") != std::string::npos
-		|| browser.find("%F") != std::string::npos
-		|| browser.find("%t") != std::string::npos
-		|| browser.find("%T") != std::string::npos) {
-		cmdline = utils::replace_all(browser, {
+	const auto browser_str = browser.to_locale_string();
+	if (browser_str.find("%u") != std::string::npos
+		|| browser_str.find("%F") != std::string::npos
+		|| browser_str.find("%t") != std::string::npos
+		|| browser_str.find("%T") != std::string::npos) {
+		cmdline = utils::replace_all(browser_str, {
 			{"%u", escaped_url},
 			{"%F", escaped_feedurl},
 			{"%t", quoted_type},
 			{"%T", escaped_title}
 		});
 	} else {
-		if (browser != "") {
-			cmdline = browser;
+		if (browser != Filepath()) {
+			cmdline = browser_str;
 		} else {
 			cmdline = "lynx";
 		}
@@ -551,7 +552,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 	const std::string& guid,
 	const std::string& searchphrase)
 {
-	if (cfg->get_configvalue("pager") == "internal") {
+	if (cfg->get_configvalue_as_filepath("pager") == "internal"_path) {
 		auto fa = get_current_formaction();
 
 		std::shared_ptr<ItemListFormAction> itemlist =
@@ -572,7 +573,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 		current_formaction = formaction_stack_size() - 1;
 	} else {
 		std::shared_ptr<RssItem> item = f->get_item_by_guid(guid);
-		std::string filename = ctrl.write_temporary_item(*item);
+		Filepath filename = ctrl.write_temporary_item(*item);
 		open_in_pager(filename);
 		try {
 			bool old_unread = item->unread();
@@ -586,7 +587,7 @@ void View::push_itemview(std::shared_ptr<RssFeed> f,
 					_("Error while marking article as read: %s"),
 					e.what()));
 		}
-		::unlink(filename.c_str());
+		::unlink(filename.to_locale_string().c_str());
 	}
 }
 
@@ -642,21 +643,21 @@ void View::push_urlview(const Links& links,
 	current_formaction = formaction_stack_size() - 1;
 }
 
-std::optional<std::string> View::run_filebrowser(const std::string& default_filename)
+std::optional<Filepath> View::run_filebrowser(const Filepath& default_filename)
 {
 	auto filebrowser = std::make_shared<FileBrowserFormAction>(
 			*this, filebrowser_str, cfg);
 	apply_colors(filebrowser);
 	filebrowser->set_default_filename(default_filename);
 	filebrowser->set_parent_formaction(get_current_formaction());
-	std::string res = run_modal(filebrowser, "filenametext");
+	const std::string res = run_modal(filebrowser, "filenametext");
 	if (res.empty()) {
 		return std::nullopt;
 	}
-	return res;
+	return Filepath::from_locale_string(res);
 }
 
-std::optional<std::string> View::run_dirbrowser()
+std::optional<Filepath> View::run_dirbrowser()
 {
 	auto dirbrowser = std::make_shared<DirBrowserFormAction>(
 			*this, filebrowser_str, cfg);
@@ -666,7 +667,7 @@ std::optional<std::string> View::run_dirbrowser()
 	if (res.empty()) {
 		return std::nullopt;
 	}
-	return res;
+	return Filepath::from_locale_string(res);
 }
 
 std::string View::select_tag(const std::string& current_tag)

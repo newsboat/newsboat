@@ -12,6 +12,7 @@ fn add_cxxbridge(module: &str) {
 
 fn main() {
     add_cxxbridge("charencoding");
+    add_cxxbridge("filepath");
     add_cxxbridge("cliargsparser");
     add_cxxbridge("configpaths");
     add_cxxbridge("fmtstrformatter");

@@ -21,19 +21,15 @@ Download::Download(std::function<void()> cb_require_view_update_)
 {
 }
 
-const std::string& Download::filename() const
+newsboat::Filepath Download::filename() const
 {
 	return fn;
 }
 
-const std::string Download::basename() const
+newsboat::Filepath Download::basename() const
 {
-	std::string::size_type start = fn.rfind(NEWSBEUTER_PATH_SEP);
-
-	if (start != std::string::npos) {
-		return fn.substr(start+1);
-	}
-	return fn;
+	const auto file_name = fn.file_name();
+	return file_name.has_value() ? file_name.value() : newsboat::Filepath();
 }
 
 const std::string& Download::url() const
@@ -41,7 +37,7 @@ const std::string& Download::url() const
 	return url_;
 }
 
-void Download::set_filename(const std::string& str)
+void Download::set_filename(const newsboat::Filepath& str)
 {
 	fn = str;
 }

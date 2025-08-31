@@ -10,7 +10,7 @@
 
 namespace newsboat {
 
-QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
+QueueManager::QueueManager(ConfigContainer* cfg_, Filepath queue_file)
 	: cfg(cfg_)
 	, queue_file(std::move(queue_file))
 {}
@@ -18,10 +18,10 @@ QueueManager::QueueManager(ConfigContainer* cfg_, std::string queue_file)
 EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 {
 	const std::string& url = item.enclosure_url();
-	const std::string filename = generate_enqueue_filename(item, feed);
+	const Filepath filename = generate_enqueue_filename(item, feed);
 
 	std::fstream f;
-	f.open(queue_file, std::fstream::in);
+	f.open(queue_file.to_locale_string(), std::fstream::in);
 	if (f.is_open()) {
 		do {
 			std::string line;
@@ -29,26 +29,37 @@ EnqueueResult QueueManager::enqueue_url(RssItem& item, RssFeed& feed)
 			if (!f.eof() && !line.empty()) {
 				const auto fields = utils::tokenize_quoted(line);
 				if (fields.size() >= 1 && fields[0] == url) {
-					return {EnqueueStatus::URL_QUEUED_ALREADY, url};
+					EnqueueResult result;
+					result.status = EnqueueStatus::URL_QUEUED_ALREADY;
+					result.extra_string = url;
+					return result;
 				}
-				if (fields.size() >= 2 && fields[1] == filename) {
-					return {EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY, filename};
+				if (fields.size() >= 2 && Filepath::from_locale_string(fields[1]) == filename) {
+					EnqueueResult result;
+					result.status = EnqueueStatus::OUTPUT_FILENAME_USED_ALREADY;
+					result.extra_filename = filename;
+					return result;
 				}
 			}
 		} while (!f.eof());
 		f.close();
 	}
 
-	f.open(queue_file, std::fstream::app | std::fstream::out);
+	f.open(queue_file.to_locale_string(), std::fstream::app | std::fstream::out);
 	if (!f.is_open()) {
-		return {EnqueueStatus::QUEUE_FILE_OPEN_ERROR, queue_file};
+		EnqueueResult result;
+		result.status = EnqueueStatus::QUEUE_FILE_OPEN_ERROR;
+		result.extra_filename = queue_file;
+		return result;
 	}
-	f << url << " " << utils::quote(filename) << std::endl;
+	f << url << " " << utils::quote(filename.to_locale_string()) << std::endl;
 	f.close();
 
 	item.set_enqueued(true);
 
-	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
+	EnqueueResult result;
+	result.status = EnqueueStatus::QUEUED_SUCCESSFULLY;
+	return result;
 }
 
 std::string get_hostname_from_url(const std::string& url)
@@ -62,21 +73,15 @@ std::string get_hostname_from_url(const std::string& url)
 	return hostname;
 }
 
-std::string QueueManager::generate_enqueue_filename(
-	RssItem& item,
-	RssFeed& feed)
+Filepath QueueManager::generate_enqueue_filename(RssItem& item, RssFeed& feed)
 {
 	const std::string& url = item.enclosure_url();
 	const std::string& title = utils::utf8_to_locale(item.title());
 	const time_t pubDate = item.pubDate_timestamp();
 
-	std::string dlformat = cfg->get_configvalue("download-path");
-	if (dlformat[dlformat.length() - 1] != NEWSBEUTER_PATH_SEP) {
-		dlformat.push_back(NEWSBEUTER_PATH_SEP);
-	}
-
-	const std::string filemask = cfg->get_configvalue("download-filename-format");
-	dlformat.append(filemask);
+	const Filepath dlformat =
+		cfg->get_configvalue_as_filepath("download-path")
+		.join(Filepath::from_locale_string(cfg->get_configvalue("download-filename-format")));
 
 	const std::string base = utils::get_basename(url);
 	std::string extension;
@@ -110,8 +115,7 @@ std::string QueueManager::generate_enqueue_filename(
 		fmt.register_fmt('N', utils::replace_all(feed.title(), "/", "_"));
 	}
 
-	const std::string dlpath = fmt.do_format(dlformat);
-	return dlpath;
+	return Filepath::from_locale_string(fmt.do_format(dlformat.to_locale_string()));
 }
 
 EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
@@ -153,7 +157,9 @@ EnqueueResult QueueManager::autoenqueue(RssFeed& feed)
 		}
 	}
 
-	return {EnqueueStatus::QUEUED_SUCCESSFULLY, ""};
+	EnqueueResult result;
+	result.status = EnqueueStatus::QUEUED_SUCCESSFULLY;
+	return result;
 }
 
 } // namespace newsboat

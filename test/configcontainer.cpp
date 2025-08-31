@@ -18,7 +18,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	KeyMap k(KM_NEWSBOAT);
 	cfgparser.register_handler("macro", k);
 
-	REQUIRE_NOTHROW(cfgparser.parse_file("data/test-config.txt"));
+	REQUIRE_NOTHROW(cfgparser.parse_file("data/test-config.txt"_path));
 
 	SECTION("bool value") {
 		REQUIRE(cfg.get_configvalue("show-read-feeds") == "no");
@@ -26,7 +26,7 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	}
 
 	SECTION("string value") {
-		REQUIRE(cfg.get_configvalue("browser") == "firefox");
+		REQUIRE(cfg.get_configvalue("article-sort-order") == "date-asc");
 	}
 
 	SECTION("integer value") {
@@ -37,9 +37,8 @@ TEST_CASE("Parses test config without exceptions", "[ConfigContainer]")
 	SECTION("Tilde got expanded into path to user's home directory") {
 		char* home = ::getenv("HOME");
 		REQUIRE(home != nullptr);
-		std::string cachefilecomp = home;
-		cachefilecomp.append("/foo");
-		REQUIRE(cfg.get_configvalue("cache-file") == cachefilecomp);
+		const Filepath expected = Filepath::from_locale_string(std::string(home)).join("foo"_path);
+		REQUIRE(cfg.get_configvalue_as_filepath("cache-file") == expected);
 	}
 }
 
@@ -51,15 +50,15 @@ TEST_CASE(
 	ConfigParser cfgparser;
 	cfg.register_commands(cfgparser);
 
-	REQUIRE_NOTHROW(cfgparser.parse_file(
-			"data/test-config-without-newline-at-the-end.txt"));
+	REQUIRE_NOTHROW(
+		cfgparser.parse_file("data/test-config-without-newline-at-the-end.txt"_path));
 
 	SECTION("first line") {
-		REQUIRE(cfg.get_configvalue("browser") == "firefox");
+		REQUIRE(cfg.get_configvalue("article-sort-order") == "date-asc");
 	}
 
 	SECTION("last line") {
-		REQUIRE(cfg.get_configvalue("download-path") == "whatever");
+		REQUIRE(cfg.get_configvalue_as_filepath("download-path") == "whatever"_path);
 	}
 }
 
@@ -196,6 +195,14 @@ TEST_CASE("get_configvalue_as_int() returns zero if value can't be parsed as int
 	REQUIRE(cfg.get_configvalue_as_int(key) == 0);
 }
 
+TEST_CASE("get_configvalue_as_filepath() returns null path if setting doesn't exist",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	REQUIRE(cfg.get_configvalue_as_filepath("foobar") == Filepath{});
+}
+
 TEST_CASE("toggle() inverts the value of a boolean setting",
 	"[ConfigContainer]")
 {
@@ -238,7 +245,7 @@ TEST_CASE("toggle() does nothing if setting is non-boolean",
 
 TEST_CASE(
 	"dump_config turns current state into text and saves it "
-	"into the supplyed vector",
+	"into the supplied vector",
 	"[ConfigContainer]")
 {
 	ConfigContainer cfg;

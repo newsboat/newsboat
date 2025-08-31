@@ -25,15 +25,15 @@ public:
 
 	bool do_cleanup() const;
 
-	std::string importfile() const;
+	Filepath importfile() const;
 
 	/// If non-null, Newsboat should import read articles info from this
 	/// filepath.
-	std::optional<std::string> readinfo_import_file() const;
+	std::optional<Filepath> readinfo_import_file() const;
 
 	/// If non-null, Newsboat should export read articles info to this
 	/// filepath.
-	std::optional<std::string> readinfo_export_file() const;
+	std::optional<Filepath> readinfo_export_file() const;
 
 	std::string program_name() const;
 
@@ -63,26 +63,26 @@ public:
 
 	bool refresh_on_start() const;
 
-	std::optional<std::string> url_file() const;
+	std::optional<Filepath> url_file() const;
 
-	std::optional<std::string> lock_file() const;
+	std::optional<Filepath> lock_file() const;
 
-	std::optional<std::string> cache_file() const;
+	std::optional<Filepath> cache_file() const;
 
-	std::optional<std::string> config_file() const;
+	std::optional<Filepath> config_file() const;
 
-	std::optional<std::string> queue_file() const;
+	std::optional<Filepath> queue_file() const;
 
-	std::optional<std::string> search_history_file() const;
+	std::optional<Filepath> search_history_file() const;
 
-	std::optional<std::string> cmdline_history_file() const;
+	std::optional<Filepath> cmdline_history_file() const;
 
 	/// If non-empty, Newsboat should execute these commands and then quit.
 	///
 	/// \note The parser does not check if the passed commands are valid.
 	std::vector<std::string> cmds_to_execute() const;
 
-	std::optional<std::string> log_file() const;
+	std::optional<Filepath> log_file() const;
 
 	std::optional<Level> log_level() const;
 

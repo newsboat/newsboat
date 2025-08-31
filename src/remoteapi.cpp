@@ -27,13 +27,13 @@ bool RemoteApi::mark_articles_read(const std::vector<std::string>& guids)
 	return success;
 }
 
-const std::string RemoteApi::read_password(const std::string& file)
+const std::string RemoteApi::read_password(const Filepath& file)
 {
 	glob_t exp;
 	std::ifstream ifs;
 	std::string pass = "";
 
-	int res = glob(file.c_str(), GLOB_ERR, nullptr, &exp);
+	int res = glob(file.to_locale_string().c_str(), GLOB_ERR, nullptr, &exp);
 	if (!res && exp.gl_pathc == 1 && exp.gl_pathv) {
 		ifs.open(exp.gl_pathv[0]);
 	}
@@ -65,17 +65,17 @@ Credentials RemoteApi::get_credentials(const std::string& scope,
 {
 	std::string user = cfg.get_configvalue(scope + "-login");
 	std::string pass = cfg.get_configvalue(scope + "-password");
-	std::string pass_file = cfg.get_configvalue(scope + "-passwordfile");
+	const auto pass_file = cfg.get_configvalue_as_filepath(scope + "-passwordfile");
 	std::string pass_eval = cfg.get_configvalue(scope + "-passwordeval");
 	std::string token = cfg.get_configvalue(scope + "-token");
-	std::string token_file = cfg.get_configvalue(scope + "-tokenfile");
+	const auto token_file = cfg.get_configvalue_as_filepath(scope + "-tokenfile");
 	std::string token_eval = cfg.get_configvalue(scope + "-tokeneval");
 
 	if (!token.empty()) {
 		return {"", "", token};
 	}
 
-	if (!token_file.empty()) {
+	if (token_file != Filepath()) {
 		token = read_password(token_file);
 		return {"", "", token};
 	}
@@ -99,7 +99,7 @@ Credentials RemoteApi::get_credentials(const std::string& scope,
 	}
 
 	if (pass.empty()) {
-		if (!pass_file.empty()) {
+		if (pass_file != Filepath()) {
 			pass = read_password(pass_file);
 		} else if (!pass_eval.empty()) {
 			pass = eval_password(pass_eval);

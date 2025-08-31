@@ -2,10 +2,11 @@
 
 #include <fstream>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include "3rd-party/catch.hpp"
 
-void test_helpers::assert_article_file_content(const std::string& path,
+void test_helpers::assert_article_file_content(const newsboat::Filepath& path,
 	const std::string& title,
 	const std::string& author,
 	const std::string& date,
@@ -18,7 +19,7 @@ void test_helpers::assert_article_file_content(const std::string& path,
 	std::string prefix_link = "Link: ";
 
 	std::string line;
-	std::ifstream articleFileStream(path);
+	std::ifstream articleFileStream(path.to_locale_string());
 	REQUIRE(std::getline(articleFileStream, line));
 	REQUIRE(line == prefix_title + title);
 
@@ -41,11 +42,11 @@ void test_helpers::assert_article_file_content(const std::string& path,
 	REQUIRE(line == "");
 };
 
-void test_helpers::copy_file(const std::string& source,
-	const std::string& destination)
+void test_helpers::copy_file(const newsboat::Filepath& source,
+	const newsboat::Filepath& destination)
 {
-	std::ifstream  src(source, std::ios::binary);
-	std::ofstream  dst(destination, std::ios::binary);
+	std::ifstream src(source.to_locale_string(), std::ios::binary);
+	std::ofstream dst(destination.to_locale_string(), std::ios::binary);
 
 	REQUIRE(src.is_open());
 	REQUIRE(dst.is_open());
@@ -53,11 +54,11 @@ void test_helpers::copy_file(const std::string& source,
 	dst << src.rdbuf();
 }
 
-std::vector<std::string> test_helpers::file_contents(const std::string& filepath)
+std::vector<std::string> test_helpers::file_contents(const newsboat::Filepath& filepath)
 {
 	std::vector<std::string> lines;
 
-	std::ifstream in(filepath);
+	std::ifstream in(filepath.to_locale_string());
 	while (in.is_open() && !in.eof()) {
 		std::string line;
 		std::getline(in, line);
@@ -67,9 +68,10 @@ std::vector<std::string> test_helpers::file_contents(const std::string& filepath
 	return lines;
 }
 
-std::vector<std::uint8_t> test_helpers::read_binary_file(const std::string& filepath)
+std::vector<std::uint8_t> test_helpers::read_binary_file(const newsboat::Filepath&
+	filepath)
 {
-	std::ifstream file(filepath, std::ios::binary | std::ios::ate);
+	std::ifstream file(filepath.to_locale_string(), std::ios::binary | std::ios::ate);
 	std::streampos length = file.tellg();
 	file.seekg(0, std::ios::beg);
 
@@ -94,9 +96,21 @@ bool test_helpers::ends_with(const std::string& suffix,
 	}
 }
 
-bool test_helpers::file_exists(const std::string& filepath)
+bool test_helpers::file_exists(const newsboat::Filepath& filepath)
 {
-	return access(filepath.c_str(), F_OK) == 0;
+	return access(filepath.to_locale_string().c_str(), F_OK) == 0;
+}
+
+int test_helpers::mkdir(const newsboat::Filepath& dirpath, mode_t mode)
+{
+	const auto dirpath_str = dirpath.to_locale_string();
+	return ::mkdir(dirpath_str.c_str(), mode);
+}
+
+bool test_helpers::file_available_for_reading(const newsboat::Filepath& filepath)
+{
+	const auto filepath_str = filepath.to_locale_string();
+	return (0 == ::access(filepath_str.c_str(), R_OK));
 }
 
 TEST_CASE("ends_with", "[test_helpers]")

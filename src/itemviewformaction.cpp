@@ -189,24 +189,22 @@ bool ItemViewFormAction::process_operation(Operation op,
 		return enqueue_item_enclosure(*item, *feed, v, *rsscache);
 	case OP_SAVE: {
 		LOG(Level::INFO, "ItemViewFormAction::process_operation: saving article");
-		std::optional<std::string> filename;
+		std::optional<Filepath> filename;
 		switch (bindingType) {
 		case BindingType::Bind:
 			if (args.empty()) {
-				filename = v.run_filebrowser( utils::utf8_to_locale(v.get_filename_suggestion(
-								item->title())));
+				filename = v.run_filebrowser(v.get_filename_suggestion(item->title()));
 			} else {
-				filename = args.front();
+				filename = Filepath::from_locale_string(args.front());
 			}
 			break;
 		case BindingType::Macro:
 			if (args.size() > 0) {
-				filename = args.front();
+				filename = Filepath::from_locale_string(args.front());
 			}
 			break;
 		case BindingType::BindKey:
-			filename = v.run_filebrowser( utils::utf8_to_locale(v.get_filename_suggestion(
-							item->title())));
+			filename = v.run_filebrowser(v.get_filename_suggestion(item->title()));
 			break;
 		}
 		if (!filename.has_value()) {
@@ -354,10 +352,9 @@ bool ItemViewFormAction::process_operation(Operation op,
 		}
 		break;
 	case OP_SHOWURLS: {
-		std::string urlviewer =
-			cfg->get_configvalue("external-url-viewer");
+		const auto urlviewer = cfg->get_configvalue_as_filepath("external-url-viewer");
 		LOG(Level::DEBUG, "ItemViewFormAction::process_operation: showing URLs");
-		if (urlviewer == "") {
+		if (urlviewer == Filepath{}) {
 			if (links.size() > 0) {
 				v.push_urlview(links, feed);
 			} else {
@@ -365,7 +362,7 @@ bool ItemViewFormAction::process_operation(Operation op,
 			}
 		} else {
 			qna_responses.clear();
-			qna_responses.push_back(urlviewer);
+			qna_responses.push_back(urlviewer.to_locale_string());
 			this->finished_qna(QnaFinishAction::PipeItemIntoProgram);
 		}
 	}
@@ -615,7 +612,8 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	switch (command.type) {
 	case CommandType::SAVE:
 		if (!command.args.empty()) {
-			handle_save(command.args.front());
+			const auto path = Filepath::from_locale_string(command.args.front());
+			handle_save(path);
 		}
 		break;
 	default:
@@ -623,22 +621,17 @@ void ItemViewFormAction::handle_cmdline(const std::string& cmd)
 	}
 }
 
-void ItemViewFormAction::handle_save(const std::string& filename_param)
+void ItemViewFormAction::handle_save(const Filepath& filename_param)
 {
-	std::string filename = utils::resolve_tilde(filename_param);
-	if (filename == "") {
+	const Filepath filename = utils::resolve_tilde(filename_param);
+	if (filename == Filepath()) {
 		v.get_statusline().show_error(_("Aborted saving."));
 	} else {
 		try {
-			v.get_ctrl().write_item(
-				*item, filename);
-			v.get_statusline().show_message(strprintf::fmt(
-					_("Saved article to %s"),
-					filename));
+			v.get_ctrl().write_item(*item, filename);
+			v.get_statusline().show_message(strprintf::fmt(_("Saved article to %s"), filename));
 		} catch (...) {
-			v.get_statusline().show_error(strprintf::fmt(
-					_("Error: couldn't save "
-						"article to %s"),
+			v.get_statusline().show_error(strprintf::fmt(_("Error: couldn't save article to %s"),
 					filename));
 		}
 	}

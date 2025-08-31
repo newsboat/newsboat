@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "filepath.h"
+
 namespace newsboat {
 
 class ConfigContainer;
@@ -11,24 +13,25 @@ class RssItem;
 
 enum class EnqueueStatus {
 	QUEUED_SUCCESSFULLY,
-	URL_QUEUED_ALREADY, // `extra_info` should specify the concerning URL
-	OUTPUT_FILENAME_USED_ALREADY, // `extra_info` should specify the generated filename
-	QUEUE_FILE_OPEN_ERROR, // `extra_info` should specify the location of the queue file
+	URL_QUEUED_ALREADY, // `extra_string` should specify the concerning URL
+	OUTPUT_FILENAME_USED_ALREADY, // `extra_filename` should specify the generated filename
+	QUEUE_FILE_OPEN_ERROR, // `extra_filename` should specify the location of the queue file
 };
 
 struct EnqueueResult {
 	EnqueueStatus status;
-	std::string extra_info;
+	std::string extra_string;
+	Filepath extra_filename;
 };
 
 class QueueManager {
 	ConfigContainer* cfg = nullptr;
-	std::string queue_file;
+	Filepath queue_file;
 
 public:
 	/// Construct `QueueManager` instance out of a config container and a path
 	/// to the queue file.
-	QueueManager(ConfigContainer* cfg, std::string queue_file);
+	QueueManager(ConfigContainer* cfg, Filepath queue_file);
 
 	/// Adds the podcast URL to Podboat's queue file
 	EnqueueResult enqueue_url(RssItem& item, RssFeed& feed);
@@ -37,7 +40,7 @@ public:
 	EnqueueResult autoenqueue(RssFeed& feed);
 
 private:
-	std::string generate_enqueue_filename(RssItem& item, RssFeed& feed);
+	Filepath generate_enqueue_filename(RssItem& item, RssFeed& feed);
 };
 
 }
