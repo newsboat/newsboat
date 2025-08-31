@@ -29,7 +29,7 @@ mod bridged {
         fn set_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
         fn add_extension(filepath: &mut PathBuf, extension: Vec<u8>) -> bool;
         fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool;
-        fn file_name(filepath: &PathBuf) -> Vec<u8>;
+        fn file_name(filepath: &PathBuf, has_result: &mut bool) -> Box<PathBuf>;
     }
 }
 
@@ -83,10 +83,12 @@ fn starts_with(filepath: &PathBuf, base: &PathBuf) -> bool {
     filepath.0.starts_with(&base.0)
 }
 
-fn file_name(filepath: &PathBuf) -> Vec<u8> {
+fn file_name(filepath: &PathBuf, has_result: &mut bool) -> Box<PathBuf> {
     if let Some(res) = filepath.0.file_name() {
-        res.as_bytes().to_vec()
+        *has_result = true;
+        Box::new(PathBuf(std::path::PathBuf::from(res)))
     } else {
-        Vec::new()
+        *has_result = false;
+        Box::new(PathBuf(std::path::PathBuf::new()))
     }
 }

@@ -117,12 +117,12 @@ bool Filepath::starts_with(const Filepath& base) const
 
 std::optional<Filepath> Filepath::file_name() const
 {
-	auto str = filepath::bridged::file_name(*rs_object);
-	auto res = std::string(str.begin(), str.end());
-	if (res.empty()) {
-		return std::nullopt;
+	bool has_result = false;
+	auto pathbuf = filepath::bridged::file_name(*rs_object, has_result);
+	if (has_result) {
+		return Filepath(std::move(pathbuf));
 	} else {
-		return from_locale_string(res);
+		return std::nullopt;
 	}
 }
 
