@@ -384,7 +384,7 @@ fn parser<'a, E: ParseError<&'a str> + ExpectativeError<&'a str>>(
     complete(parsers).parse(input)
 }
 
-fn internal_parse(expr: &str) -> Result<Expression, Error> {
+fn internal_parse(expr: &str) -> Result<Expression, Error<'_>> {
     match parser::<FilterParserError>(expr) {
         Ok((leftovers, expression)) => {
             if leftovers.is_empty() {
