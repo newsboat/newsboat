@@ -25,9 +25,9 @@ public:
 		default_filename = fn;
 	}
 
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "filebrowser";
+		return Dialog::FileBrowser;
 	}
 	std::string title() override;
 

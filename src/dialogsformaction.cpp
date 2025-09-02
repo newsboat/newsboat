@@ -15,7 +15,7 @@ namespace newsboat {
 DialogsFormAction::DialogsFormAction(View& vv,
 	std::string formstr,
 	ConfigContainer* cfg, RegexManager& r)
-	: ListFormAction(vv, "dialoglist", formstr, "dialogs", cfg, r)
+	: ListFormAction(vv, Dialog::DialogList, formstr, "dialogs", cfg, r)
 {
 }
 
