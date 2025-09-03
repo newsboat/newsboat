@@ -6,6 +6,7 @@
 #include "cache.h"
 #include "fileurlreader.h"
 #include "rssfeed.h"
+#include "test_helpers/envvar.h"
 #include "test_helpers/misc.h"
 #include "test_helpers/tempfile.h"
 
@@ -318,6 +319,38 @@ TEST_CASE("import() tags from category attribute", "[Opml]")
 	REQUIRE(urls.size() == 1);
 	REQUIRE(urlcfg.get_tags(urls[0]) == tags);
 }
+
+TEST_CASE("import() returns an error when the <opml> root element is missing", "[Opml]")
+{
+	// we want to check the original English error message, not a localized one
+	test_helpers::LcCtypeEnvVar lc_ctype;
+	lc_ctype.set("C");
+
+	FileUrlReader urlcfg;
+	const auto error_message = opml::import(
+			"file://" + utils::getcwd() + "/data/opml-element-missing.opml",
+			urlcfg);
+
+	REQUIRE(error_message.has_value());
+	REQUIRE(error_message.value() == "the <opml> root element is missing");
+}
+
+TEST_CASE("import() returns an error when the <body> element is missing", "[Opml]")
+{
+	// we want to check the original English error message, not a localized one
+	test_helpers::LcCtypeEnvVar lc_ctype;
+	lc_ctype.set("C");
+
+	FileUrlReader urlcfg;
+	const auto error_message = opml::import(
+			"file://" + utils::getcwd() + "/data/body-element-missing.opml",
+			urlcfg);
+
+	REQUIRE(error_message.has_value());
+	REQUIRE(error_message.value() ==
+		"the <body> element in the <opml> root element is missing");
+}
+
 // falls back to "url" if "xmlUrl" is absent
 
 // skips an entry if xmlUrl/url is absent
