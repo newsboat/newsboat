@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-09-07 19:15+0300\n"
-"PO-Revision-Date: 2025-06-09 22:30+0200\n"
+"PO-Revision-Date: 2025-09-08 12:08+0200\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -969,9 +969,9 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "błąd składniowy komendy filtra `%s': %s"
 
 #: src/formaction.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Operation %s not handled in %s"
-msgstr "Nie znaleziono polecenia"
+msgstr "Operacja %s nieobsługiwana przez %s"
 
 #: src/formaction.cpp:134
 msgid "usage: set <config-option> <value>"
