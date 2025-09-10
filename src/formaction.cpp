@@ -56,7 +56,7 @@ FormAction::FormAction(View& vv, std::string formstr, ConfigContainer* cfg)
 void FormAction::report_unhandled_operation(Operation op)
 {
 	set_status(strprintf::fmt(_("Operation %s not handled in %s"), KeyMap::get_op_name(op),
-			id()));
+			dialog_name(id())));
 }
 
 void FormAction::set_keymap_hints()
