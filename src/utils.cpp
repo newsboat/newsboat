@@ -650,20 +650,20 @@ std::string utils::get_basename(const std::string& url)
 curl_proxytype utils::get_proxy_type(const std::string& type)
 {
 	if (type == "http") {
-		return CURLPROXY_HTTP;
+		return static_cast<curl_proxytype>(CURLPROXY_HTTP);
 	}
 	if (type == "socks4") {
-		return CURLPROXY_SOCKS4;
+		return static_cast<curl_proxytype>(CURLPROXY_SOCKS4);
 	}
 	if (type == "socks5") {
-		return CURLPROXY_SOCKS5;
+		return static_cast<curl_proxytype>(CURLPROXY_SOCKS5);
 	}
 	if (type == "socks5h") {
-		return CURLPROXY_SOCKS5_HOSTNAME;
+		return static_cast<curl_proxytype>(CURLPROXY_SOCKS5_HOSTNAME);
 	}
 #ifdef CURLPROXY_SOCKS4A
 	if (type == "socks4a") {
-		return CURLPROXY_SOCKS4A;
+		return static_cast<curl_proxytype>(CURLPROXY_SOCKS4A);
 	}
 #endif
 
@@ -672,7 +672,7 @@ curl_proxytype utils::get_proxy_type(const std::string& type)
 			"you configured an invalid proxy type: %s",
 			type);
 	}
-	return CURLPROXY_HTTP;
+	return static_cast<curl_proxytype>(CURLPROXY_HTTP);
 }
 
 std::string utils::unescape_url(const std::string& url)
