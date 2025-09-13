@@ -24,7 +24,7 @@ public:
 		const std::string& user_agent = "",
 		const std::string& proxy = "",
 		const std::string& proxy_auth = "",
-		curl_proxytype proxy_type = CURLPROXY_HTTP,
+		curl_proxytype proxy_type = static_cast<curl_proxytype>(CURLPROXY_HTTP),
 		const bool ssl_verify = true);
 	~Parser();
 	Feed parse_url(const std::string& url,
