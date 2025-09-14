@@ -1,12 +1,12 @@
 # H. Gökhan SARI <hsa2@difuzyon.net>, 2008
-# Emir SARI <emir_sari@icloud.com>, 2020-2024
+# Emir SARI <emir_sari@icloud.com>, 2020-2025
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: newsboat\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-09-07 19:15+0300\n"
-"PO-Revision-Date: 2025-06-09 14:00+0300\n"
+"PO-Revision-Date: 2025-09-07 23:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: https://github.com/bitigchi/newsboat\n"
 "Language: tr\n"
@@ -966,9 +966,9 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "süzgeç ifadesi '%s', ayrıştırılamadı: %s"
 
 #: src/formaction.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Operation %s not handled in %s"
-msgstr "İşlem bulunamadı"
+msgstr "%s işlemi %s içinde halledilmedi"
 
 #: src/formaction.cpp:134
 msgid "usage: set <config-option> <value>"
