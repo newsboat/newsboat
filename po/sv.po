@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat-2.12\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-09-07 19:15+0300\n"
-"PO-Revision-Date: 2025-06-20 06:26+0200\n"
+"PO-Revision-Date: 2025-09-20 08:58+0200\n"
 "Last-Translator: Dennis Öberg <contact@dennisoberg.se>\n"
 "Language-Team: Niklas Grahn <terra.unknown@yahoo.com>\n"
 "Language: sv\n"
@@ -963,9 +963,9 @@ msgid "couldn't parse filter expression `%s': %s"
 msgstr "kunde inte tolka filteruttryck `%s': %s"
 
 #: src/formaction.cpp:58
-#, fuzzy, c-format
+#, c-format
 msgid "Operation %s not handled in %s"
-msgstr "Operation hittades inte"
+msgstr "Operation %s inte hanterad i %s"
 
 #: src/formaction.cpp:134
 msgid "usage: set <config-option> <value>"
