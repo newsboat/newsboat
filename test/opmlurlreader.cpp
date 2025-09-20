@@ -41,13 +41,13 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> expected {
-		{"https://example.com/feed.xml", {}},
-		{"https://example.com/mirrors/distrowatch.rss", {}},
-		{"https://example.com/feed.atom", {}},
-		{"https://example.com/feed.rss09", {}},
-		{"https://blogs.example.com/~john/posts.rss", {"Blogs"}},
-		{"https://fred.example.com/writing/index.php?type=rss", {"eloquent"}},
-		{"https://blogs.example.com/~mike/.rss", {"Blogs/friends"}},
+		{"https://example.com/feed.xml", {"~example.com website"}},
+		{"https://example.com/mirrors/distrowatch.rss", {"~Distrowatch mirror"}},
+		{"https://example.com/feed.atom", {"~example.com website (Atom feed)"}},
+		{"https://example.com/feed.rss09", {"~example.com website (RSS 0.9 feed)"}},
+		{"https://blogs.example.com/~john/posts.rss", {"~John's musings", "Blogs"}},
+		{"https://fred.example.com/writing/index.php?type=rss", {"~Fred on everything", "eloquent"}},
+		{"https://blogs.example.com/~mike/.rss", {"~Notes by Mike", "Blogs/friends"}},
 	};
 
 	REQUIRE(reader.get_urls().size() == expected.size());
@@ -64,9 +64,11 @@ TEST_CASE("OpmlUrlReader::reload() reads URLs and tags from an OPML file",
 
 	std::set<Tag> expected_tags;
 	for (const auto& entry : expected) {
-		expected_tags.insert(
-			entry.second.cbegin(),
-			entry.second.cend());
+		for (const auto& tag : entry.second) {
+			if (tag[0] != '~') {
+				expected_tags.insert(tag);
+			}
+		}
 	}
 	std::set<Tag> tags;
 	const auto alltags = reader.get_alltags();
@@ -93,20 +95,20 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> expected {
-		{"https://example.com/feed.xml", {}},
-		{"https://example.com/mirrors/distrowatch.rss", {}},
-		{"https://example.com/feed.atom", {}},
-		{"https://example.com/feed.rss09", {}},
-		{"https://blogs.example.com/~john/posts.rss", {"Blogs"}},
-		{"https://fred.example.com/writing/index.php?type=rss", {"eloquent"}},
-		{"https://blogs.example.com/~mike/.rss", {"Blogs/friends"}},
-		{"https://one.example.com/file.xml", {}},
-		{"https://to.example.com/elves/tidings.rss", {}},
-		{"https://third.example.com/~of/internet.rss", {"Rant boards/humans"}},
-		{"https://four.example.com/~john/posts.rss", {"Rant boards"}},
-		{"https://example.com/five.atom", {}},
-		{"https://freddie.example.com/ritin/index.pl?format=rss", {"eloquent"}},
-		{"https://example.com/feed2.rss09", {}},
+		{"https://example.com/feed.xml", {"~example.com website"}},
+		{"https://example.com/mirrors/distrowatch.rss", {"~Distrowatch mirror"}},
+		{"https://example.com/feed.atom", {"~example.com website (Atom feed)"}},
+		{"https://example.com/feed.rss09", {"~example.com website (RSS 0.9 feed)"}},
+		{"https://blogs.example.com/~john/posts.rss", {"~John's musings", "Blogs"}},
+		{"https://fred.example.com/writing/index.php?type=rss", {"~Fred on everything", "eloquent"}},
+		{"https://blogs.example.com/~mike/.rss", {"~Notes by Mike", "Blogs/friends"}},
+		{"https://one.example.com/file.xml", {"~To rule them all"}},
+		{"https://to.example.com/elves/tidings.rss", {"~Another file"}},
+		{"https://third.example.com/~of/internet.rss", {"~Really?", "Rant boards/humans"}},
+		{"https://four.example.com/~john/posts.rss", {"~and another", "Rant boards"}},
+		{"https://example.com/five.atom", {"~another title"}},
+		{"https://freddie.example.com/ritin/index.pl?format=rss", {"~freddie rite about fings", "eloquent"}},
+		{"https://example.com/feed2.rss09", {"~an outdated feed"}},
 	};
 
 	REQUIRE(reader.get_urls().size() == expected.size());
@@ -123,9 +125,11 @@ TEST_CASE("OpmlUrlReader::reload() loads URLs from multiple sources",
 
 	std::set<Tag> expected_tags;
 	for (const auto& entry : expected) {
-		expected_tags.insert(
-			entry.second.cbegin(),
-			entry.second.cend());
+		for (const auto& tag : entry.second) {
+			if (tag[0] != '~') {
+				expected_tags.insert(tag);
+			}
+		}
 	}
 	std::set<Tag> tags;
 	const auto alltags = reader.get_alltags();
@@ -156,20 +160,20 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> expected {
-		{"https://example.com/feed.xml", {}},
-		{"https://example.com/mirrors/distrowatch.rss", {}},
-		{"https://example.com/feed.atom", {}},
-		{"https://example.com/feed.rss09", {}},
-		{"https://blogs.example.com/~john/posts.rss", {"Blogs"}},
-		{"https://fred.example.com/writing/index.php?type=rss", {"eloquent"}},
-		{"https://blogs.example.com/~mike/.rss", {"Blogs/friends"}},
-		{"https://one.example.com/file.xml", {}},
-		{"https://to.example.com/elves/tidings.rss", {}},
-		{"https://third.example.com/~of/internet.rss", {"Rant boards/humans"}},
-		{"https://four.example.com/~john/posts.rss", {"Rant boards"}},
-		{"https://example.com/five.atom", {}},
-		{"https://freddie.example.com/ritin/index.pl?format=rss", {"eloquent"}},
-		{"https://example.com/feed2.rss09", {}},
+		{"https://example.com/feed.xml", {"~example.com website"}},
+		{"https://example.com/mirrors/distrowatch.rss", {"~Distrowatch mirror"}},
+		{"https://example.com/feed.atom", {"~example.com website (Atom feed)"}},
+		{"https://example.com/feed.rss09", {"~example.com website (RSS 0.9 feed)"}},
+		{"https://blogs.example.com/~john/posts.rss", {"~John's musings", "Blogs"}},
+		{"https://fred.example.com/writing/index.php?type=rss", {"~Fred on everything", "eloquent"}},
+		{"https://blogs.example.com/~mike/.rss", {"~Notes by Mike", "Blogs/friends"}},
+		{"https://one.example.com/file.xml", {"~To rule them all"}},
+		{"https://to.example.com/elves/tidings.rss", {"~Another file"}},
+		{"https://third.example.com/~of/internet.rss", {"~Really?", "Rant boards/humans"}},
+		{"https://four.example.com/~john/posts.rss", {"~and another", "Rant boards"}},
+		{"https://example.com/five.atom", {"~another title"}},
+		{"https://freddie.example.com/ritin/index.pl?format=rss", {"~freddie rite about fings", "eloquent"}},
+		{"https://example.com/feed2.rss09", {"~an outdated feed"}},
 	};
 
 	REQUIRE(reader.get_urls().size() == expected.size());
@@ -186,9 +190,11 @@ TEST_CASE("OpmlUrlReader::reload() skips things that can't be parsed",
 
 	std::set<Tag> expected_tags;
 	for (const auto& entry : expected) {
-		expected_tags.insert(
-			entry.second.cbegin(),
-			entry.second.cend());
+		for (const auto& tag : entry.second) {
+			if (tag[0] != '~') {
+				expected_tags.insert(tag);
+			}
+		}
 	}
 	std::set<Tag> tags;
 	const auto alltags = reader.get_alltags();
