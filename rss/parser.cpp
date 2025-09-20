@@ -29,7 +29,7 @@ Parser::Parser(unsigned int timeout,
 	const std::string& user_agent,
 	const std::string& proxy,
 	const std::string& proxy_auth,
-	curl_proxytype proxy_type,
+	long int proxy_type,
 	const bool ssl_verify)
 	: to(timeout)
 	, ua(user_agent)

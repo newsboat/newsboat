@@ -647,7 +647,7 @@ std::string utils::get_basename(const std::string& url)
 	return std::string(utils::bridged::get_basename(url));
 }
 
-curl_proxytype utils::get_proxy_type(const std::string& type)
+long int utils::get_proxy_type(const std::string& type)
 {
 	if (type == "http") {
 		return CURLPROXY_HTTP;
