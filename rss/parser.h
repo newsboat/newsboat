@@ -24,7 +24,7 @@ public:
 		const std::string& user_agent = "",
 		const std::string& proxy = "",
 		const std::string& proxy_auth = "",
-		curl_proxytype proxy_type = CURLPROXY_HTTP,
+		long int proxy_type = CURLPROXY_HTTP,
 		const bool ssl_verify = true);
 	~Parser();
 	Feed parse_url(const std::string& url,
@@ -54,7 +54,7 @@ private:
 	const std::string ua;
 	const std::string prx;
 	const std::string prxauth;
-	curl_proxytype prxtype;
+	long int prxtype;
 	const bool verify_ssl;
 	xmlDocPtr doc;
 	time_t lm;
