@@ -462,9 +462,9 @@ dependencies = [
 
 [[package]]
 name = "cxx"
-version = "1.0.169"
+version = "1.0.180"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df881e2764e20d320c9c8ddd8670018b1abaa2557e73811f03d5b2643da671d7"
+checksum = "6ecd70e33fb57b5fec1608d572bf8dc382f5385a19529056b32307a29ac329be"
 dependencies = [
  "cc",
  "cxxbridge-cmd",
@@ -476,9 +476,9 @@ dependencies = [
 
 [[package]]
 name = "cxx-build"
-version = "1.0.169"
+version = "1.0.185"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "acef58f684c0c9b7bffc111657c9f1364e4fa47af46fd7f03b71b7a4066ac372"
+checksum = "5edd58bf75c3fdfc80d79806403af626570662f7b6cc782a7fabe156166bd6d6"
 dependencies = [
  "cc",
  "codespan-reporting",
@@ -491,9 +491,9 @@ dependencies = [
 
 [[package]]
 name = "cxxbridge-cmd"
-version = "1.0.169"
+version = "1.0.180"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "669616995d33251cb7215f96820d78a810ee218573246830fb96f29961e1712a"
+checksum = "64320fd0856fdf2421f8404b67d41e91291cbcfa3d57457b390f0a2618ee9a68"
 dependencies = [
  "clap",
  "codespan-reporting",
@@ -505,15 +505,15 @@ dependencies = [
 
 [[package]]
 name = "cxxbridge-flags"
-version = "1.0.169"
+version = "1.0.180"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9aebcb754a24722d34e7f4e021376862179194cc5ec83ded2dd84b9db36be106"
+checksum = "77e40964f209961217b972415a8e3a0c23299076a0b2dfe79fa8366b5e5c833e"
 
 [[package]]
 name = "cxxbridge-macro"
-version = "1.0.169"
+version = "1.0.180"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ea9594efbebf2f822925b6368eea741dd2677bb411313e50c2de8ba8c3d3a62"
+checksum = "51afdec15d8072d1b69f54f645edaf54250088a7e54c4fe493016781278136bd"
 dependencies = [
  "indexmap",
  "proc-macro2",
@@ -1166,9 +1166,9 @@ dependencies = [
 
 [[package]]
 name = "link-cplusplus"
-version = "1.0.10"
+version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a6f6da007f968f9def0d65a05b187e2960183de70c160204ecfccf0ee330212"
+checksum = "7f78c730aaa7d0b9336a299029ea49f9ee53b0ed06e9202e8cb7db9bae7b8c82"
 dependencies = [
  "cc",
 ]
