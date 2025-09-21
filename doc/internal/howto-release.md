@@ -184,14 +184,11 @@ branch off the latest release and backport the bugfixes onto it.
         gpg> save
     * upload it to the keyserver:
         `gpg --keyserver keys.openpgp.org --send-keys 4ED6CD61932B9EBE`
-    * export it to a file:
-        `gpg --armour --export 4ED6CD61932B9EBE > newsboat.pgp`
-    * upload the file to newsboat.org staging area
-    * on newsboat.org, put the key into the www directory
-
-        sudo chown www-data:www-data newsboat.pgp
-        sudo chmod u=rw,go=r newsboat.pgp
-        sudo mv newsboat.pgp /var/www/newsboat.org/www/newsboat.pgp
+    * update the key on the site:
+        * Navigate to your local clone of https://github.com/newsboat/newsboat.org
+        * Update the file: `gpg --armour --export 4ED6CD61932B9EBE > www/newsboat.pgp`
+        * `git ci -am'Update expiry date on the OpenPGP key'`
+        * `git push`
 
 
 ## If you're making a patch release (x.y.Z)
