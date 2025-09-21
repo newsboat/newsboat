@@ -220,27 +220,25 @@ impl Logger {
 
         let mut files = self.files.lock().expect("Someone poisoned logger's mutex");
 
-        #[allow(clippy::collapsible_if)] // Necessary until MSRV is Rust 1.88.0 or higher
-        if level as isize <= self.get_loglevel() {
-            if let Some(ref mut logfile) = files.logfile {
-                let level = format!("{level}: ");
+        if level as isize <= self.get_loglevel()
+            && let Some(ref mut logfile) = files.logfile
+        {
+            let level = format!("{level}: ");
 
-                // Ignoring the error since checking every log() call will be too bothersome.
-                let _ = logfile.write_all(timestamp.as_bytes());
-                let _ = logfile.write_all(level.as_bytes());
-                let _ = logfile.write_all(data);
-                let _ = logfile.write_all(b"\n");
-            }
+            // Ignoring the error since checking every log() call will be too bothersome.
+            let _ = logfile.write_all(timestamp.as_bytes());
+            let _ = logfile.write_all(level.as_bytes());
+            let _ = logfile.write_all(data);
+            let _ = logfile.write_all(b"\n");
         }
 
-        #[allow(clippy::collapsible_if)] // Necessary until MSRV is Rust 1.88.0 or higher
-        if level == Level::UserError {
-            if let Some(ref mut user_error_logfile) = files.user_error_logfile {
-                // Ignoring the error since checking every log() call will be too bothersome.
-                let _ = user_error_logfile.write_all(timestamp.as_bytes());
-                let _ = user_error_logfile.write_all(data);
-                let _ = user_error_logfile.write_all(b"\n");
-            }
+        if level == Level::UserError
+            && let Some(ref mut user_error_logfile) = files.user_error_logfile
+        {
+            // Ignoring the error since checking every log() call will be too bothersome.
+            let _ = user_error_logfile.write_all(timestamp.as_bytes());
+            let _ = user_error_logfile.write_all(data);
+            let _ = user_error_logfile.write_all(b"\n");
         }
     }
 
