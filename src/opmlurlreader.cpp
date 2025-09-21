@@ -68,9 +68,25 @@ void OpmlUrlReader::handle_node(xmlNode* node, const std::string& tag)
 		if (rssurl && strlen(rssurl) > 0) {
 			std::string theurl(rssurl);
 			urls.push_back(theurl);
+
+			std::vector<std::string> tmptags;
+
+			char* rsstext = (char*)xmlGetProp(node, (const xmlChar*)"text");
+			if (!rsstext) {
+				rsstext = (char*)xmlGetProp(node, (const xmlChar*)"title");
+			}
+			if (rsstext) {
+				if (rsstext[0] != '\0') {
+					tmptags.push_back(std::string{"~"} + rsstext);
+				}
+				xmlFree(rsstext);
+			}
+
 			if (tag.length() > 0) {
-				std::vector<std::string> tmptags;
 				tmptags.push_back(tag);
+			}
+
+			if (tmptags.size() > 0) {
 				tags[theurl] = tmptags;
 			}
 		}

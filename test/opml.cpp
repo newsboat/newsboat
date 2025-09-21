@@ -148,13 +148,13 @@ TEST_CASE("import() populates UrlReader with URLs from the OPML file", "[Opml]")
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
-		{"https://example.com/feed.xml", {}},
-		{"https://example.com/mirrors/distrowatch.rss", {}},
-		{"https://example.com/feed.atom", {}},
-		{"https://example.com/feed.rss09", {}},
-		{"https://blogs.example.com/~john/posts.rss", {"Blogs"}},
-		{"https://blogs.example.com/~mike/.rss", {"Blogs/friends"}},
-		{"https://fred.example.com/writing/index.php?type=rss", {"eloquent"}},
+		{"https://example.com/feed.xml", {"~example.com website"}},
+		{"https://example.com/mirrors/distrowatch.rss", {"~Distrowatch mirror"}},
+		{"https://example.com/feed.atom", {"~example.com website (Atom feed)"}},
+		{"https://example.com/feed.rss09", {"~example.com website (RSS 0.9 feed)"}},
+		{"https://blogs.example.com/~john/posts.rss", {"~John's musings", "Blogs"}},
+		{"https://blogs.example.com/~mike/.rss", {"~Notes by Mike", "Blogs/friends"}},
+		{"https://fred.example.com/writing/index.php?type=rss", {"~Fred on everything", "eloquent"}},
 	};
 
 	std::map<URL, Tags> combinedUrls;
@@ -192,8 +192,8 @@ TEST_CASE("import() turns URLs that start with a pipe symbol (\"|\") "
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> opmlUrls {
-		{"exec:~/fetch_tweets.py", {}},
-		{"https://example.com/feed.atom", {"tagged"}},
+		{"exec:~/fetch_tweets.py", {"~Birdsite search"}},
+		{"https://example.com/feed.atom", {"~example.com website (Atom feed)", "tagged"}},
 	};
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
@@ -228,8 +228,8 @@ TEST_CASE("import() turns \"filtercmd\" attribute into a `filter:` URL "
 	using Tag = std::string;
 	using Tags = std::vector<Tag>;
 	const std::map<URL, Tags> opmlUrls {
-		{"https://example.com/another_feed.atom", {"misc"}},
-		{"filter:~/.bin/keep_interesting.pl:https://example.com/firehose", {}},
+		{"https://example.com/another_feed.atom", {"~example.com website (Atom feed)", "misc"}},
+		{"filter:~/.bin/keep_interesting.pl:https://example.com/firehose", {"~Firehose"}},
 	};
 
 	REQUIRE(urlcfg.get_urls().size() == opmlUrls.size());
@@ -284,7 +284,7 @@ TEST_CASE("import() skips URLs that are already present in UrlReader",
 	REQUIRE_NOTHROW(opml::import(path, urlcfg));
 
 	const std::map<URL, Tags> opmlUrls {
-		{"https://example.com/another_feed.atom", {}},
+		{"https://example.com/another_feed.atom", {"~example.com website (Atom feed)"}},
 	};
 
 	std::map<URL, Tags> combinedUrls;
