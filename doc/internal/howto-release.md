@@ -48,7 +48,7 @@ branch off the latest release and backport the bugfixes onto it.
 ## Common steps
 
 0. Update copyright years:
-    * `git grep -- -2023` to find potentially outdated copyrights
+    * `git grep -- -2024` to find potentially outdated copyrights
     * fix them
     * `git commit -am'Bump copyright notices'`
 0. Update CHANGELOG:

@@ -31,18 +31,18 @@ Notable features
 * Powerful built-in HTML renderer — no need to start the web browser to view
     text-only entries
 * Send links and whole articles to third-party services using [bookmarking
-    scripts](https://newsboat.org/releases/2.40/docs/newsboat.html#_bookmarking)
-* [Filter articles out](https://newsboat.org/releases/2.40/docs/newsboat.html#_killfiles)
+    scripts](https://newsboat.org/releases/2.41/docs/newsboat.html#_bookmarking)
+* [Filter articles out](https://newsboat.org/releases/2.41/docs/newsboat.html#_killfiles)
     based on title, author, contents etc.
-* [Aggregate articles](https://newsboat.org/releases/2.40/docs/newsboat.html#_query_feeds)
+* [Aggregate articles](https://newsboat.org/releases/2.41/docs/newsboat.html#_query_feeds)
     into meta-feeds by arbitrary criteria
-* [Apply transformations](https://newsboat.org/releases/2.40/docs/newsboat.html#_scripts_and_filters_snownews_extensions)
+* [Apply transformations](https://newsboat.org/releases/2.41/docs/newsboat.html#_scripts_and_filters_snownews_extensions)
     to feeds before passing them into Newsboat
 * Integrates with services like The Old Reader, NewsBlur, FeedHQ
-    and [many more](https://newsboat.org/releases/2.40/docs/newsboat.html#_newsboat_as_a_client_for_newsreading_services)
-* [Macros](https://newsboat.org/releases/2.40/docs/newsboat.html#_macro_support)
+    and [many more](https://newsboat.org/releases/2.41/docs/newsboat.html#_newsboat_as_a_client_for_newsreading_services)
+* [Macros](https://newsboat.org/releases/2.41/docs/newsboat.html#_macro_support)
     to execute sequences of actions with just two keystrokes
-* Rudimentary [podcast support](https://newsboat.org/releases/2.40/docs/newsboat.html#_podcast_support)
+* Rudimentary [podcast support](https://newsboat.org/releases/2.41/docs/newsboat.html#_podcast_support)
 
 Downloading
 -----------
@@ -115,7 +115,7 @@ There are numerous ways:
   strict confinement; if we disabled it, the snap would be no better than
   a distribution's package;
 
-  [snap-browser]: https://newsboat.org/releases/2.40/docs/faq.html#_with_snap_i_cant_start_browserbookmarking_scriptexecfilterrun_program_from_macro
+  [snap-browser]: https://newsboat.org/releases/2.41/docs/faq.html#_with_snap_i_cant_start_browserbookmarking_scriptexecfilterrun_program_from_macro
 
 - [build from source with Docker](doc/docker.md). Note that the resulting binary
     might not run outside of that same Docker container if your system doesn't
@@ -154,8 +154,8 @@ Support
 -------
 
 * Check out our
-  [documentation](https://newsboat.org/releases/2.40/docs/newsboat.html) and
-  [FAQ](https://newsboat.org/releases/2.40/docs/faq.html)
+  [documentation](https://newsboat.org/releases/2.41/docs/newsboat.html) and
+  [FAQ](https://newsboat.org/releases/2.41/docs/faq.html)
 * Report security vulnerabilities to security@newsboat.org. Please encrypt your emails to
   [OpenPGP key 4ED6CD61932B9EBE](https://newsboat.org/newsboat.pgp) if you can.
 * Report bugs and ask questions on

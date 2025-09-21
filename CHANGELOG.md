@@ -1,17 +1,38 @@
 # Changes for Newsboat
 
-# Unreleased - expected 2025-09-21
+# 2.41 - 2025-09-21
 
 Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes TK
+for this release also includes bogdasar1985.
 
 ### Added
+
+- Error message for when operation is not supported in the current view (Dennis
+    van der Schagt)
+- Fallback to libxml2's encoding autodetection when Newsboat's fails (#3070)
+    (Dennis van der Schagt)
+- Import feed titles from OPML (#3063) (Jorenar)
+
 ### Changed
+
+- Ported some helper programs that generate parts of the documentation from C++ to
+    AWK, which was already used for some other helper scripts (Dennis van der
+    Schagt, Juho Eerola)
+- Switched from `curl_proxytype` to `long int` for compatibility with curl
+    8.16.0+ (Carno)
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Swedish (Dennis Öberg),
+    Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.85.0
-### Deprecated
-### Removed
+- Updated vendored library expected-lite to 0.9.0 (Alexander Batischev)
+
 ### Fixed
-### Security
+
+- Crash in `:dumpconfig` after `:set` was used to toggle or reset a non-existent
+    option (#3104) (Dennis van der Schagt)
+- Crash in RSS parsers if there is no "channel" element (Burkov Egor)
+- Error messages being written to stdout rather than stderr (Lysander Trischler)
 
 
 
