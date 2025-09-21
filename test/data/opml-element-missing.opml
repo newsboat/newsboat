@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<not-opml version="1.0">
+    <head>
+        <title>Invalid OPML</title>
+    </head>
+
+    <body>
+        <outline title="misc">
+            <outline xmlUrl="https://example.com/another_feed.atom" type="rss" title="example.com website (Atom feed)" />
+        </outline>
+        <outline type="rss" title="Firehose" xmlUrl="https://example.com/firehose" filtercmd="~/.bin/keep_interesting.pl" />
+    </body>
+</not-opml>

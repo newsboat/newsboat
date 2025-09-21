@@ -227,9 +227,16 @@ std::optional<std::string> opml::import(
 	std::optional<std::string> error_message;
 
 	xmlNode* root = xmlDocGetRootElement(doc);
+	if (strcmp((const char*)root->name, "opml") != 0) {
+		xmlFreeDoc(doc);
+		return _("the <opml> root element is missing");
+	}
+
+	bool foundBody = false;
 	for (xmlNode* node = root->children; node != nullptr;
 		node = node->next) {
 		if (strcmp((const char*)node->name, "body") == 0) {
+			foundBody = true;
 			LOG(Level::DEBUG, "opml::import: found body");
 			rec_find_rss_outlines(urlcfg, node->children, "");
 
@@ -241,6 +248,10 @@ std::optional<std::string> opml::import(
 	}
 
 	xmlFreeDoc(doc);
+
+	if (!foundBody) {
+		return _("the <body> element in the <opml> root element is missing");
+	}
 
 	return error_message;
 }
