@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-24.04
 
     env:
-      # We use Rust 1.86, which builds upon LLVM 19. We have to use a matching
+      # We use Rust 1.88, which builds upon LLVM 20. We have to use a matching
       # C++ compiler, otherwise grcov won't be able to produce the coverage
       # report.
-      CC: clang-19
-      CXX: clang++-19
+      CC: clang-20
+      CXX: clang++-20
       # Enable test coverage.
       PROFILE: 1
       CXXFLAGS: '-O0 -fprofile-instr-generate -fcoverage-mapping'
@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --assume-yes --no-install-suggests clang-19 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
+          sudo apt-get install --assume-yes --no-install-suggests clang-20 libsqlite3-dev libcurl4-openssl-dev libxml2-dev libstfl-dev libjson-c-dev libncursesw5-dev
 
       - name: Generate locales
         run: |
@@ -40,10 +40,10 @@ jobs:
           sudo locale-gen
 
       - name: Install Rust
-        # The last version based on LLVM 19. We have to match LLVM versions
+        # The last version based on LLVM 20. We have to match LLVM versions
         # used to compile Rust and C++, otherwise they might generate
         # incompatible coverage reports
-        uses: dtolnay/rust-toolchain@1.86
+        uses: dtolnay/rust-toolchain@1.88
         with:
           components: llvm-tools-preview
 

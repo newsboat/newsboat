@@ -89,34 +89,34 @@ branch off the latest release and backport the bugfixes onto it.
 
     This merges our changes to CHANGELOG.
 
+8. Update the site:
+    * Navigate to your local clone of https://github.com/newsboat/newsboat.org
+    * Prepare directories: `mkdir -p www/releases/VERSION/docs`.
+    * Move tarball and its signature:
+        `mv newsboat-VERSION* www/releases/VERSION/`.
+    * Move docs:
+        `mv NEWSBOAT/doc/xhtml/faq.html NEWSBOAT/doc/xhtml/newsboat.html www/releases/VERSION/docs/`.
+    * Compress docs:
+        `gzip --keep --best www/releases/VERSION/docs/*`.
+    * Edit `www/index.html`:
+        * Move current release to the list of previous releases.
+        * Update current release version.
+        * Update current release date.
+        * Update current release links.
+        * Update the year in the page copyright if necessary.
+        * Gzip the result: `gzip --best --keep --force www/index.html`.
+    * Edit `www/news.atom`:
+        * Update `<updated>` field of the channel.
+        * Use the same date-time for `<published>` and `<updated>` in new
+            `<entry>`.
+        * Update entry's `<link>` and `<id>` to point to new docs'
+            `newsboat.html`.
+        * `<title>`: "Newsboat VERSION is out".
+        * Gzip the result: `gzip --best --keep --force www/news.atom`.
+        * Commit the result: `git add www/releases/VERSION && git commit -m'Release VERISON'`
 8. Publish the release:
-    * Push the code: `git push && git push --tags`
-    * Update the site:
-        * Navigate to your local clone of https://github.com/newsboat/newsboat.org
-        * Prepare directories: `mkdir -p www/releases/VERSION/docs`.
-        * Move tarball and its signature:
-            `mv newsboat-VERSION* www/releases/VERSION/`.
-        * Move docs:
-            `mv NEWSBOAT/doc/xhtml/faq.html NEWSBOAT/doc/xhtml/newsboat.html www/releases/VERSION/docs/`.
-        * Compress docs:
-            `gzip --keep --best www/releases/VERSION/docs/*`.
-        * Edit `www/index.html`:
-            * Move current release to the list of previous releases.
-            * Update current release version.
-            * Update current release date.
-            * Update current release links.
-            * Update the year in the page copyright if necessary.
-            * Gzip the result: `gzip --best --keep --force www/index.html`.
-        * Edit `www/news.atom`:
-            * Update `<updated>` field of the channel.
-            * Use the same date-time for `<published>` and `<updated>` in new
-                `<entry>`.
-            * Update entry's `<link>` and `<id>` to point to new docs'
-                `newsboat.html`.
-            * `<title>`: "Newsboat VERSION is out".
-            * Gzip the result: `gzip --best --keep --force www/news.atom`.
-            * Commit the result: `git add www/releases/VERSION && git commit -m'Release VERISON'`
-            * Publish it: `git push`
+    * In Newsboat's repo: `git push && git push --tags`
+    * In newsboat.org's repo: `git push`
 8. Save the website to the Wayback machine:
     1. go to https://web.archive.org/save
     2. type in "newsboat.org"
@@ -184,14 +184,11 @@ branch off the latest release and backport the bugfixes onto it.
         gpg> save
     * upload it to the keyserver:
         `gpg --keyserver keys.openpgp.org --send-keys 4ED6CD61932B9EBE`
-    * export it to a file:
-        `gpg --armour --export 4ED6CD61932B9EBE > newsboat.pgp`
-    * upload the file to newsboat.org staging area
-    * on newsboat.org, put the key into the www directory
-
-        sudo chown www-data:www-data newsboat.pgp
-        sudo chmod u=rw,go=r newsboat.pgp
-        sudo mv newsboat.pgp /var/www/newsboat.org/www/newsboat.pgp
+    * update the key on the site:
+        * Navigate to your local clone of https://github.com/newsboat/newsboat.org
+        * Update the file: `gpg --armour --export 4ED6CD61932B9EBE > www/newsboat.pgp`
+        * `git ci -am'Update expiry date on the OpenPGP key'`
+        * `git push`
 
 
 ## If you're making a patch release (x.y.Z)

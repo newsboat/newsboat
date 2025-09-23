@@ -20,7 +20,7 @@
 #       newsboat-code-formatting-tools \
 #       make fmt
 
-FROM rust:1.85.0-bookworm
+FROM rust:1.88.0-bookworm
 WORKDIR /workspace
 # Ensure that Astyle 3.1 is used, because later versions are buggy for us:
 # https://gitlab.com/saalen/astyle/-/issues/45
