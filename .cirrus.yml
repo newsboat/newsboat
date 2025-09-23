@@ -34,7 +34,9 @@ task:
     install_script:
         # Make sure we use the same package repository for all images. Snapshots
         # (like 11.3-STABLE) default to latest, while releases default to quarterly.
-        - sed -i.bak -e 's,pkg+http://pkg.FreeBSD.org/\${ABI}/quarterly,pkg+http://pkg.FreeBSD.org/\${ABI}/latest,' /etc/pkg/FreeBSD.conf
+        - mkdir -p /usr/local/etc/pkg/repos
+        # This command is wrapped in double quotes to avoid YAML parser getting confused by the colons and curly braces
+        - "echo 'FreeBSD: { url: \"pkg+http://pkg.FreeBSD.org/${ABI}/latest\" }' > /usr/local/etc/pkg/repos/FreeBSD.conf"
         - pkg update -f
         - pkg upgrade -y
         - pkg install -y rust gmake rubygem-asciidoctor pkgconf stfl curl json-c ncurses openssl ca_root_nss sqlite3 gettext-tools libxml2
