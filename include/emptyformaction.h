@@ -10,7 +10,7 @@ public:
 	EmptyFormAction(View& v, const std::string& formstr, ConfigContainer* cfg);
 	~EmptyFormAction() override = default;
 
-	std::string id() const override;
+	Dialog id() const override;
 	std::string title() override;
 
 	void init() override;
