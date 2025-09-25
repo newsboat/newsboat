@@ -256,6 +256,9 @@ ConfigContainer::ConfigContainer()
 		ConfigData("no", ConfigDataType::BOOL)},
 	{"text-width", ConfigData("0", ConfigDataType::INT)},
 	{
+		"toggleitemread-jumps-to-next",
+		ConfigData("true", ConfigDataType::BOOL)},
+	{
 		"toggleitemread-jumps-to-next-unread",
 		ConfigData("false", ConfigDataType::BOOL)},
 	{"ttrss-flag-publish", ConfigData("", ConfigDataType::STR)},
