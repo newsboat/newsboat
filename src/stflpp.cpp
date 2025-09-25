@@ -106,9 +106,19 @@ std::string Stfl::Form::function_key_to_string(wint_t wch)
 	}
 }
 
+Event Stfl::Form::get_event_non_blocking()
+{
+	return get_input(0);
+}
+
 Event Stfl::Form::wait_for_event(int timeout)
 {
-	wtimeout(stdscr, timeout == 0 ? -1 : timeout);
+	return get_input(timeout == 0 ? -1 : timeout);
+}
+
+Event Stfl::Form::get_input(int timeout)
+{
+	wtimeout(stdscr, timeout);
 
 	wint_t wch{};
 	const auto rc = wget_wch(stdscr, &wch);
