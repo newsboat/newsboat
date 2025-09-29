@@ -56,6 +56,13 @@ std::string fmt(const std::string& format, const uint64_t argument,
 }
 
 template<typename... Args>
+std::string fmt(const std::string& format, const std::size_t argument,
+	Args&& ... args)
+{
+	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
+}
+
+template<typename... Args>
 std::string fmt(const std::string& format, const void* argument, Args&& ... args)
 {
 	return detail::fmt_impl(format, argument, std::forward<Args>(args)...);
