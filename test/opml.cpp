@@ -328,7 +328,9 @@ TEST_CASE("import() returns an error when the <opml> root element is missing", "
 
 	FileUrlReader urlcfg;
 	const auto error_message = opml::import(
-			"file://" + utils::getcwd() + "/data/opml-element-missing.opml",
+			"file:/"_path // `Filepath` will append an extra slash
+			.join(utils::getcwd())
+			.join("data/opml-element-missing.opml"_path),
 			urlcfg);
 
 	REQUIRE(error_message.has_value());
@@ -343,7 +345,9 @@ TEST_CASE("import() returns an error when the <body> element is missing", "[Opml
 
 	FileUrlReader urlcfg;
 	const auto error_message = opml::import(
-			"file://" + utils::getcwd() + "/data/body-element-missing.opml",
+			"file:/"_path // `Filepath` will append an extra slash
+			.join(utils::getcwd())
+			.join("data/body-element-missing.opml"_path),
 			urlcfg);
 
 	REQUIRE(error_message.has_value());
