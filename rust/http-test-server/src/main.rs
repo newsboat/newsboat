@@ -100,5 +100,5 @@ fn num_hits(server: &MockServer) {
     let mock_id: usize = read_line().parse().unwrap();
     let mock = Mock::new(mock_id, server);
 
-    println!("{}", mock.hits());
+    println!("{}", mock.calls());
 }
