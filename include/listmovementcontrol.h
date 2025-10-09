@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 
+#include "dialog.h"
 #include "stflpp.h"
 
 namespace newsboat {
@@ -27,7 +28,7 @@ public:
 		set_position(current_position);
 	}
 
-	ListMovementControl(const std::string& list_name, const std::string& context,
+	ListMovementControl(const std::string& list_name, Dialog context,
 		Stfl::Form& form, RegexManager& rxman, std::uint32_t scrolloff)
 		: Backend(list_name, context, form, rxman)
 	{

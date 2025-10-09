@@ -185,7 +185,8 @@ TEST_CASE("evaluate_backticks replaces command in backticks with its output",
 		REQUIRE_NOTHROW(cfgparser.parse_file("data/config-space-backticks"_path));
 		MultiKeyBindingState binding_state{};
 		BindingType binding_type{};
-		const auto& cmds = keys.get_operation({KeyCombination("s")}, "feedlist", binding_state,
+		const auto& cmds = keys.get_operation({KeyCombination("s")}, Dialog::FeedList,
+				binding_state,
 				binding_type);
 		REQUIRE(cmds.size() == 1);
 		REQUIRE(cmds.at(0).op == OP_SORT);
@@ -229,9 +230,9 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"feedlist") == std::vector<KeyCombination>());
+					Dialog::FeedList) == std::vector<KeyCombination>());
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"podboat") == std::vector<KeyCombination>());
+					Dialog::Podboat) == std::vector<KeyCombination>());
 		}
 	}
 
@@ -244,12 +245,12 @@ TEST_CASE("\"unbind-key -a\" removes all key bindings", "[ConfigParser]")
 		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			const auto op = static_cast<Operation>(i);
-			REQUIRE(keys.get_keys(op, "help") == default_keys.get_keys(op, "help"));
+			REQUIRE(keys.get_keys(op, Dialog::Help) == default_keys.get_keys(op, Dialog::Help));
 		}
 
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			REQUIRE(keys.get_keys(static_cast<Operation>(i),
-					"article") == std::vector<KeyCombination>());
+					Dialog::Article) == std::vector<KeyCombination>());
 		}
 	}
 }
