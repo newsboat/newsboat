@@ -12,4 +12,4 @@ strprintf = { path="../strprintf" }
 
 bitflags = "2.9"
 libc = ">=0.2.69"
-gettext-rs = "0.7.2"
+gettext-rs = "0.7.7"
