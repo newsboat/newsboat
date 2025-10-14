@@ -383,6 +383,42 @@ task:
     before_cache_script: *before_cache_script
 
 task:
+    skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/*', 'docker/**/*', '.github/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
+    name: macOS Sonoma
+    macos_instance:
+        image: ghcr.io/cirruslabs/macos-runner:sonoma
+    cargo_cache: *cargo_cache
+    env:
+        HOMEBREW_PREFIX: /opt/homebrew
+        PATH: /opt/homebrew/opt/make/libexec/gnubin:/opt/homebrew/opt/gettext/bin:$PATH
+        PKG_CONFIG_PATH: /opt/homebrew/opt/libxml2/lib/pkgconfig:/opt/homebrew/lib/pkgconfig
+        DYLD_LIBRARY_PATH: /opt/homebrew/lib
+        LDFLAGS: -L/opt/homebrew/opt/gettext/lib -L/opt/homebrew/lib
+        CFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
+        CXXFLAGS: -I/opt/homebrew/opt/gettext/include -I/opt/homebrew/include
+        GETTEXT_DIR: /opt/homebrew/opt/gettext
+        RUSTFLAGS: '-D warnings'
+        JOBS: 5
+    after_cache_script: *after_cache_script
+    install_deps_script:
+        - brew install make rust sqlite libxml2 curl json-c ncurses openssl gettext asciidoctor pkg-config
+        - sudo ln -sf /opt/homebrew/opt/ncurses/bin/ncurses6-config /usr/local/bin/ncurses5.4-config
+    install_stfl_script: |
+        git clone https://github.com/newsboat/stfl.git /tmp/stfl
+        cd /tmp/stfl
+        sed -i '' 's/ncursesw/ncurses/g' Makefile stfl_internals.h
+        sed -i '' 's|<ncurses/ncurses.h>|<ncurses.h>|g' stfl_internals.h
+        sed -i '' 's/-Wl,-soname,$(SONAME)/-Wl/g' Makefile
+        CFLAGS="-I/opt/homebrew/opt/ncurses/include -D_XOPEN_SOURCE_EXTENDED=1" LDFLAGS="-L/opt/homebrew/opt/ncurses/lib" LDLIBS="-lncurses -liconv" make
+        sudo make prefix=/opt/homebrew install
+    build_script: *build_script
+    test_script: *test_script
+    fake_install_script: *fake_install_script
+    clippy_script: *clippy_script
+    before_cache_script: *before_cache_script
+
+
+task:
     name: UB Sanitizer (Clang 18, Ubuntu 24.04)
     skip: "changesIncludeOnly('contrib/*', 'contrib/**/*', 'doc/*', 'doc/**/*', 'docker/remote-testing/*', 'docker/remote-testing/**/*', 'po/*', 'po/**/*', 'snap/*', 'snap/**/*')"
 
