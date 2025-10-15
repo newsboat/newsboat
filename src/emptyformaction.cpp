@@ -8,9 +8,9 @@ EmptyFormAction::EmptyFormAction(View& v, const std::string& formstr,
 {
 }
 
-std::string EmptyFormAction::id() const
+Dialog EmptyFormAction::id() const
 {
-	return "empty";
+	return Dialog::Empty;
 }
 
 std::string EmptyFormAction::title()
