@@ -61,6 +61,9 @@ include::chapter-podboat.asciidoc[]
 
 include::podboat-cfgcmds.asciidoc[]
 
+== FORMAT STRINGS
+
+include::chapter-format-strings.asciidoc[]
 
 == FILES
 
