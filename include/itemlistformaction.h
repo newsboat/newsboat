@@ -34,9 +34,9 @@ public:
 
 	void set_feed(std::shared_ptr<RssFeed> fd);
 
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "articlelist";
+		return Dialog::ArticleList;
 	}
 	std::string title() override;
 

@@ -13,9 +13,9 @@ public:
 	void prepare() override;
 	void init() override;
 	std::vector<KeyMapHintEntry> get_keymap_hint() const override;
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "dialogs";
+		return Dialog::DialogList;
 	}
 	std::string title() override;
 	void handle_cmdline(const std::string& cmd) override;
