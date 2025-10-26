@@ -530,7 +530,10 @@ bool ItemViewFormAction::process_operation(Operation op,
 	}
 	break;
 	default:
-		return handle_textview_operations(textview, op);
+		if (!handle_textview_operations(textview, op)) {
+			return false;
+		}
+		break;
 	}
 
 	if (hardquit) {
