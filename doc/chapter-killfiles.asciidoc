@@ -1,0 +1,50 @@
+Sometimes, a user is confronted with certain content they don't want to read,
+e.g. on topics the user is not interested in or articles written by certain people.
+In Usenet, such functionality within software is traditionally called a "killfile",
+i.e. based on the content of this "killfile", articles that match certain conditions
+do not get displayed and are not presented to the user at all.
+
+In Newsboat, such a "killfile" can be implemented on a per-article basis via
+the configuration file. The most important configuration command for this
+is <<ignore-article,`ignore-article`>>:
+
+	ignore-article "https://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
+	ignore-article "regex:https?://nitter.net/.*" "title =~ \"^RT by\""
+	ignore-article "*" "title =~ \"Gentoo\""
+
+It takes two parameters. The first one is either:
+
+ - The URL of a feed.
+ - A pattern prefixed with `regex:`. The pattern must be
+ a https://pubs.opengroup.org/onlinepubs/9699919799.2008edition/basedefs/V1_chap09.html[POSIX
+ extended regular expression], which will be matched case-insensitive.
+ - `"*"` to match any feed (asterisk is _not_ a pattern, glob or regex—we simply
+ reserve it to mean "all feeds").
+
+The second argument is <<_filter_language,a filter expression>> for an article,
+probably <<_using_double_quotes,in double quotes to preserve spaces inside>>. If
+Newsboat hits an article in the specified RSS feed that matches the specified
+filter expression, then this article is ignored and never presented to the user.
+The configuration itself can contain as many <<ignore-article,`ignore-article`>>
+commands as desired.
+
+You can also specify the way an article is ignored. There are
+two ways available:
+
+ - During download: articles are ignored when a feed is downloaded and parsed,
+   and thus won't be written to the local cache.
+ - During display: articles are downloaded and written to the local cache, but
+   are ignored when a feed is displayed.
+
+Both modes have their advantages and disadvantages: while the download ignore
+mode saves some storage, you cannot simply "undo" the ignore by removing it
+from the configuration file: if an ignored article has already vanished from a
+feed, it won't reappear. On the other hand, the display ignore mode requires
+some more space, but has the advantage that an ignore can be "undone" by
+removing the ignore-article configuration command from the configuration.
+
+The default ignore mode is `"download"`. You can set the <<ignore-mode,`ignore-mode`>> in the
+configuration file:
+
+	ignore-mode "display"
+

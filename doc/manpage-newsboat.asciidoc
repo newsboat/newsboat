@@ -113,6 +113,10 @@ include::newsboat-cfgcmds.asciidoc[]
 
 include::newsboat-keycmds.asciidoc[]
 
+== FORMAT STRINGS
+
+include::chapter-format-strings.asciidoc[]
+
 == TAGGING
 
 include::chapter-tagging.asciidoc[]
@@ -120,6 +124,14 @@ include::chapter-tagging.asciidoc[]
 == SCRIPTS AND FILTERS
 
 include::chapter-snownews.asciidoc[]
+
+== KILLFILES
+
+include::chapter-killfiles.asciidoc[]
+
+== PODCAST SUPPORT
+
+include::chapter-podcasts.asciidoc[]
 
 == COMMAND LINE
 
