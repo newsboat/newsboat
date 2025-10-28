@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <mutex>
 #include <ncurses.h>
 #include <thread>
 
@@ -69,6 +70,7 @@ void Reloader::reload(unsigned int pos,
 	bool show_progress,
 	bool unattended)
 {
+	auto lock = std::unique_lock(ctrl.get_view()->general_state_mutex, std::defer_lock);
 	ScopeMeasure sm("Reloader::reload");
 	LOG(Level::DEBUG, "Reloader::reload: pos = %u", pos);
 	std::shared_ptr<RssFeed> oldfeed = ctrl.get_feedcontainer()->get_feed(pos);
@@ -114,6 +116,8 @@ void Reloader::reload(unsigned int pos,
 			RssParser parser(oldfeed->rssurl(), rsscache, cfg, ign);
 
 			std::shared_ptr<RssFeed> newfeed = parser.parse(feed);
+			sm.stopover("lock mutex");
+			lock.lock();
 			sm.stopover("start replacing feed");
 			if (newfeed != nullptr) {
 				ctrl.replace_feed(
