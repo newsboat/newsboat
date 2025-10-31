@@ -30,6 +30,8 @@ RssFeed::RssFeed(Cache* c, const std::string& rssurl)
 	, order(0)
 	, status_(DlStatus::SUCCESS)
 {
+	RssFeedRegistry::get_instance()->register_rss_feed(this);
+
 	if (utils::is_query_url(rssurl_)) {
 		/* Query string looks like this:
 		 *

@@ -37,6 +37,7 @@ std::shared_ptr<RssFeed> RssParser::parse(const rsspp::Feed& upstream_feed)
 	}
 
 	std::shared_ptr<RssFeed> feed(new RssFeed(&ch, my_uri));
+	RssFeedRegistry::get_instance()->register_shared_ptr(feed);
 
 	/*
 	 * After parsing is done, we fill our feed object with title,

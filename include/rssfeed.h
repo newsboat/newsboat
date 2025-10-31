@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "matchable.h"
+#include "rssfeedregistry.h"
 #include "rssitem.h"
 #include "utils.h"
 
@@ -21,7 +22,9 @@ class Cache;
 class RssFeed : public Matchable {
 public:
 	explicit RssFeed(Cache* c, const std::string& rssurl);
-	~RssFeed() override = default;
+	~RssFeed() override {
+		RssFeedRegistry::get_instance()->unregister_rss_feed(this);
+	}
 	const std::string& title_raw() const
 	{
 		return title_;

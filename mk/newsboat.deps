@@ -9,8 +9,8 @@ src/curlheadercontainer.cpp
 src/dialogsformaction.cpp
 src/dirbrowserformaction.cpp
 src/emptyformaction.cpp
-src/feedcontainer.cpp
 src/feedbinapi.cpp
+src/feedcontainer.cpp
 src/feedhqapi.cpp
 src/feedhqurlreader.cpp
 src/feedlistformaction.cpp
@@ -53,6 +53,7 @@ src/reloadthread.cpp
 src/remoteapi.cpp
 src/remoteapiurlreader.cpp
 src/rssfeed.cpp
+src/rssfeedregistry.cpp
 src/rssignores.cpp
 src/rssitem.cpp
 src/rssparser.cpp

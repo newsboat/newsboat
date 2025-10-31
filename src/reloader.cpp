@@ -43,12 +43,16 @@ void Reloader::start_reload_all_thread(const std::vector<unsigned int>& indexes)
 			"Reloader::start_reload_all_thread: inside thread, reloading all "
 			"feeds...");
 		if (trylock_reload_mutex()) {
+			RssFeedRegistry::get_instance()->start_new_generation();
+
 			if (indexes.empty()) {
 				reload_all();
 			} else {
 				reload_indexes(indexes);
 			}
 			unlock_reload_mutex();
+
+			RssFeedRegistry::get_instance()->print_report();
 		}
 	});
 	t.detach();

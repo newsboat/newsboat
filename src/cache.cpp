@@ -588,6 +588,7 @@ std::shared_ptr<RssFeed> Cache::internalize_rssfeed(std::string rssurl,
 	ScopeMeasure m1("Cache::internalize_rssfeed");
 
 	std::shared_ptr<RssFeed> feed(new RssFeed(this, rssurl));
+	RssFeedRegistry::get_instance()->register_shared_ptr(feed);
 
 	if (utils::is_query_url(rssurl)) {
 		return feed;

@@ -993,6 +993,7 @@ void ItemListFormAction::qna_start_search()
 	}
 
 	std::shared_ptr<RssFeed> search_dummy_feed(new RssFeed(rsscache, ""));
+	RssFeedRegistry::get_instance()->register_shared_ptr(feed);
 	search_dummy_feed->set_search_feed(true);
 	search_dummy_feed->add_items(items);
 	v.push_searchresult(search_dummy_feed, searchphrase);
