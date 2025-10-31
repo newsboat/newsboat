@@ -7,6 +7,7 @@
 
 #include "matchable.h"
 #include "matcher.h"
+#include "rssitemregistry.h"
 
 namespace newsboat {
 
@@ -21,7 +22,9 @@ struct Description {
 class RssItem : public Matchable {
 public:
 	explicit RssItem(Cache* c);
-	~RssItem() override = default;
+	~RssItem() override {
+		RssItemRegistry::get_instance()->unregister_rss_item(this);
+	}
 
 	const std::string& title() const
 	{

@@ -23,6 +23,7 @@ RssItem::RssItem(Cache* c)
 	, deleted_(0)
 	, override_unread_(false)
 {
+	RssItemRegistry::get_instance()->register_rss_item(this);
 }
 
 // RssItem setters

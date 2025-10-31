@@ -56,6 +56,7 @@ src/rssfeed.cpp
 src/rssfeedregistry.cpp
 src/rssignores.cpp
 src/rssitem.cpp
+src/rssitemregistry.cpp
 src/rssparser.cpp
 src/searchresultslistformaction.cpp
 src/selectformaction.cpp

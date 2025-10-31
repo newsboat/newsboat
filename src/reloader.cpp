@@ -44,6 +44,7 @@ void Reloader::start_reload_all_thread(const std::vector<unsigned int>& indexes)
 			"feeds...");
 		if (trylock_reload_mutex()) {
 			RssFeedRegistry::get_instance()->start_new_generation();
+			RssItemRegistry::get_instance()->start_new_generation();
 
 			if (indexes.empty()) {
 				reload_all();
@@ -53,6 +54,7 @@ void Reloader::start_reload_all_thread(const std::vector<unsigned int>& indexes)
 			unlock_reload_mutex();
 
 			RssFeedRegistry::get_instance()->print_report();
+			RssItemRegistry::get_instance()->print_report();
 		}
 	});
 	t.detach();
