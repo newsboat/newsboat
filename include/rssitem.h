@@ -23,52 +23,48 @@ public:
 	explicit RssItem(Cache* c);
 	~RssItem() override = default;
 
-	const std::string& title() const
+	std::string title() const
 	{
-		return title_;
+		return "Item title";
 	}
-	void set_title(const std::string& t);
+	void set_title(const std::string& /*t*/) {}
 
-	const std::string& link() const
+	std::string link() const
 	{
-		return link_;
+		return "https://example.com/item";
 	}
-	void set_link(const std::string& l);
+	void set_link(const std::string& /*l*/) {}
 
-	const std::string& author() const
+	std::string author() const
 	{
-		return author_;
+		return "Charles Dickens";
 	}
-	void set_author(const std::string& a);
+	void set_author(const std::string& /*a*/) {}
 
 	Description description() const
 	{
-		std::lock_guard<std::mutex> guard(description_mutex);
-		if (description_.has_value()) {
-			return description_.value();
-		}
 		return {"", ""};
 	}
-	void set_description(const std::string& content, const std::string& mime_type);
+	void set_description(const std::string& /*content*/, const std::string& /*mime_type*/) {}
 
 	unsigned int size() const
 	{
-		return size_;
+		return 1024;
 	}
-	void set_size(unsigned int size);
+	void set_size(unsigned int /*size*/) {}
 
-	std::string length() const;
-	std::string pubDate() const;
+	std::string length() const {return "1K"; }
+	std::string pubDate() const {return "Mon, 01 Jan 2025 11:12:13 +03:00"; }
 
 	time_t pubDate_timestamp() const
 	{
-		return pubDate_;
+		return 0;
 	}
-	void set_pubDate(time_t t);
+	void set_pubDate(time_t /*t*/) {}
 
 	bool operator<(const RssItem& item) const
 	{
-		return item.pubDate_ < this->pubDate_; // new items come first
+		return this < &item;
 	}
 
 	const std::string& guid() const
@@ -79,10 +75,10 @@ public:
 
 	bool unread() const
 	{
-		return unread_;
+		return true;
 	}
 	void set_unread(bool u);
-	void set_unread_nowrite(bool u);
+	void set_unread_nowrite(bool /*u*/) {}
 	void set_unread_nowrite_notify(bool u, bool notify);
 
 	void set_cache(Cache* c)
@@ -95,36 +91,35 @@ public:
 	}
 
 	const std::string& feedurl() const;
-	const std::string& enclosure_url() const;
-	const std::string& enclosure_type() const;
-	const std::string& enclosure_description() const;
-	const std::string& enclosure_description_mime_type() const;
+	std::string enclosure_url() const {return "";}
+	std::string enclosure_type() const {return "";}
+	std::string enclosure_description() const {return "";}
+	std::string enclosure_description_mime_type() const {return "";}
 
-	void set_enclosure_url(const std::string& url);
-	void set_enclosure_type(const std::string& type);
-	void set_enclosure_description(const std::string& description);
-	void set_enclosure_description_mime_type(const std::string& type);
+	void set_enclosure_url(const std::string& /*url*/) {}
+	void set_enclosure_type(const std::string& /*type*/) {}
+	void set_enclosure_description(const std::string& /*description*/) {}
+	void set_enclosure_description_mime_type(const std::string& /*type*/) {}
 
 	bool enqueued()
 	{
-		return enqueued_;
+		return false;
 	}
-	void set_enqueued(bool v)
+	void set_enqueued(bool /*v*/)
 	{
-		enqueued_ = v;
 	}
 
-	const std::string& flags() const
+	std::string flags() const
 	{
-		return flags_;
+		return "";
 	}
-	const std::string& oldflags() const
+	std::string oldflags() const
 	{
-		return oldflags_;
+		return "";
 	}
-	void set_flags(const std::string& ff);
-	void update_flags();
-	void sort_flags();
+	void set_flags(const std::string& /*ff*/) {}
+	void update_flags() {}
+	void sort_flags() {}
 
 	std::optional<std::string> attribute_value(const std::string& attr) const
 	override;
@@ -138,11 +133,10 @@ public:
 
 	bool deleted() const
 	{
-		return deleted_;
+		return false;
 	}
-	void set_deleted(bool b)
+	void set_deleted(bool /*b*/)
 	{
-		deleted_ = b;
 	}
 
 	void set_index(unsigned int i)
@@ -150,55 +144,30 @@ public:
 		idx = i;
 	}
 
-	void set_base(const std::string& b)
+	void set_base(const std::string& /*b*/) {}
+	std::string get_base() const
 	{
-		base = b;
-	}
-	const std::string& get_base() const
-	{
-		return base;
+		return "base";
 	}
 
-	void set_override_unread(bool b)
+	void set_override_unread(bool /*b*/)
 	{
-		override_unread_ = b;
 	}
 	bool override_unread()
 	{
-		return override_unread_;
+		return false;
 	}
 
 	void unload()
 	{
-		std::lock_guard<std::mutex> guard(description_mutex);
-		description_.reset();
 	}
 
 private:
-	std::string title_;
-	std::string link_;
-	std::string author_;
 	std::string guid_;
 	std::string feedurl_;
 	Cache* ch;
-	std::string enclosure_url_;
-	std::string enclosure_type_;
-	std::string enclosure_description_;
-	std::string enclosure_description_mime_type_;
-	std::string flags_;
-	std::string oldflags_;
 	std::weak_ptr<RssFeed> feedptr_;
-	std::string base;
 	unsigned int idx;
-	unsigned int size_;
-	time_t pubDate_;
-	bool unread_;
-	bool enqueued_;
-	bool deleted_;
-	bool override_unread_;
-
-	mutable std::mutex description_mutex;
-	std::optional<Description> description_;
 };
 
 } // namespace newsboat
