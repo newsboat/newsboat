@@ -47,7 +47,7 @@ jobs:
         with:
           components: llvm-tools-preview
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Cache ~/.cargo
         uses: actions/cache@v4
