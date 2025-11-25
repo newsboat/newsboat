@@ -1,6 +1,8 @@
 #ifndef NEWSBOAT_CONFIGCONTAINER_H_
 #define NEWSBOAT_CONFIGCONTAINER_H_
 
+#include "libnewsboat-ffi/src/configcontainer.rs.h" // IWYU pragma: export
+
 #include <map>
 #include <mutex>
 #include <string>
@@ -82,9 +84,11 @@ public:
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 
+	/// Returns the reference to the Rust object.
+	const configcontainer::bridged::ConfigContainer& get_rust_ref() const;
+
 private:
-	std::map<std::string, ConfigData> config_data;
-	mutable std::recursive_mutex config_data_mtx;
+	rust::Box<configcontainer::bridged::ConfigContainer> rs_object;
 };
 
 } // namespace newsboat
