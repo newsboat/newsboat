@@ -94,7 +94,7 @@ impl ConfigData {
                     self.value = new_val;
                     Ok(())
                 } else {
-                    Err(format!("invalid boolean value: {}", new_val))
+                    Err(format!("invalid boolean value: {new_val}"))
                 }
             }
             ConfigDataType::Int => {
@@ -102,7 +102,7 @@ impl ConfigData {
                     self.value = new_val;
                     Ok(())
                 } else {
-                    Err(format!("invalid integer value: {}", new_val))
+                    Err(format!("invalid integer value: {new_val}"))
                 }
             }
             ConfigDataType::Enum => {
@@ -110,7 +110,7 @@ impl ConfigData {
                     self.value = new_val;
                     Ok(())
                 } else {
-                    Err(format!("invalid enum value: {}", new_val))
+                    Err(format!("invalid enum value: {new_val}"))
                 }
             }
             _ => {
@@ -1055,7 +1055,7 @@ impl ConfigContainer {
         let mut data = self.config_data.lock().unwrap();
         match data.get_mut(key) {
             Some(entry) => entry.set_value(value.to_string()),
-            None => Err(format!("unknown config option: {}", key)),
+            None => Err(format!("unknown config option: {key}")),
         }
     }
 
@@ -1068,15 +1068,15 @@ impl ConfigContainer {
 
     pub fn toggle(&self, key: &str) {
         let mut data = self.config_data.lock().unwrap();
-        if let Some(entry) = data.get_mut(key) {
-            if let ConfigDataType::Bool = entry.data_type {
-                let current = entry.value == "true" || entry.value == "yes";
-                entry.value = if current {
-                    "false".to_string()
-                } else {
-                    "true".to_string()
-                };
-            }
+        if let Some(entry) = data.get_mut(key)
+            && let ConfigDataType::Bool = entry.data_type
+        {
+            let current = entry.value == "true" || entry.value == "yes";
+            entry.value = if current {
+                "false".to_string()
+            } else {
+                "true".to_string()
+            };
         }
     }
 
@@ -1094,7 +1094,7 @@ impl ConfigContainer {
                     _ => format!("\"{}\"", entry.value.replace("\"", "\\\"")),
                 };
 
-                let mut line = format!("{} {}", key, formatted_value);
+                let mut line = format!("{key} {formatted_value}");
                 if entry.value != entry.default_value {
                     line.push_str(&format!(" # default: {}", entry.default_value));
                 }
@@ -1119,7 +1119,7 @@ impl ConfigContainer {
         let val = self.get_configvalue("feed-sort-order");
         let parts: Vec<&str> = val.split('-').collect();
 
-        let method = match parts.get(0).copied().unwrap_or("") {
+        let method = match parts.first().copied().unwrap_or("") {
             "none" => FeedSortMethod::None,
             "firsttag" => FeedSortMethod::FirstTag,
             "title" => FeedSortMethod::Title,
@@ -1143,7 +1143,7 @@ impl ConfigContainer {
         let val = self.get_configvalue("article-sort-order");
         let parts: Vec<&str> = val.split('-').collect();
 
-        let method_str = parts.get(0).copied().unwrap_or("date");
+        let method_str = parts.first().copied().unwrap_or("date");
 
         let mut direction = SortDirection::Asc;
         let mut method = ArtSortMethod::Date;
@@ -1153,10 +1153,8 @@ impl ConfigContainer {
             if parts.get(1).copied() == Some("asc") {
                 direction = SortDirection::Asc;
             }
-        } else {
-            if parts.get(1).copied() == Some("desc") {
-                direction = SortDirection::Desc;
-            }
+        } else if parts.get(1).copied() == Some("desc") {
+            direction = SortDirection::Desc;
         }
 
         match method_str {
