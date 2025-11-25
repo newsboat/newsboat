@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "configparser.h"
-#include "configdata.h"
 #include "confighandlerexception.h"
 #include "logger.h"
 #include "strprintf.h"

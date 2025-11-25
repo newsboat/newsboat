@@ -4,48 +4,145 @@ use libnewsboat::configcontainer::{
 };
 
 #[test]
-fn t_config_data_int_validation() {
-    let mut cd = ConfigData::new("0", ConfigDataType::Int);
+fn t_config_data_set_value_aligned_types() {
+    // boolean
+    let mut cd = ConfigData::new("yes", ConfigDataType::Bool);
+    assert!(cd.set_value("no".into()).is_ok());
+    assert!(cd.set_value("yes".into()).is_ok());
+    assert!(cd.set_value("true".into()).is_ok());
+    assert!(cd.set_value("false".into()).is_ok());
 
-    // Valid integers
-    assert!(cd.set_value("42".into()).is_ok());
-    assert_eq!(cd.value, "42");
-    assert!(cd.set_value("-10".into()).is_ok());
-    assert_eq!(cd.value, "-10");
+    // unsigned integer
+    let mut cd = ConfigData::new("42", ConfigDataType::Int);
+    assert!(cd.set_value("13".into()).is_ok());
+    assert!(cd.set_value("100500".into()).is_ok());
+    assert!(cd.set_value("65535".into()).is_ok());
 
-    // Invalid integers
-    assert!(cd.set_value("foo".into()).is_err());
-    assert_eq!(cd.value, "-10"); // Value should remain unchanged
-    assert!(cd.set_value("12.5".into()).is_err());
+    // enum
+    let mut cd = ConfigData::new_enum("charlie", vec!["alpha", "bravo", "charlie", "delta"]);
+    assert!(cd.set_value("alpha".into()).is_ok());
+    assert!(cd.set_value("bravo".into()).is_ok());
+    assert!(cd.set_value("charlie".into()).is_ok());
+    assert!(cd.set_value("delta".into()).is_ok());
+
+    // string
+    let mut cd = ConfigData::new("johndoe", ConfigDataType::Str);
+    assert!(cd.set_value("minoru".into()).is_ok());
+    assert!(cd.set_value("noname".into()).is_ok());
+    assert!(cd.set_value("username".into()).is_ok());
+    assert!(cd.set_value("nobody".into()).is_ok());
+
+    // path
+    let mut cd = ConfigData::new("~/urls", ConfigDataType::Path);
+    assert!(cd.set_value("/tmp/whatever.txt".into()).is_ok());
+    assert!(cd.set_value("C:\\Users\\Minoru\\urls.txt".into()).is_ok());
+    assert!(
+        cd.set_value("/usr/local/home/minoru/.newsboat/urls".into())
+            .is_ok()
+    );
 }
 
 #[test]
-fn t_config_data_bool_validation() {
-    let mut cd = ConfigData::new("false", ConfigDataType::Bool);
+fn t_config_data_set_value_invalid_boolean() {
+    let mut cd = ConfigData::new("yes", ConfigDataType::Bool);
+    assert!(cd.set_value("enable".into()).is_err());
+    assert!(cd.set_value("disabled".into()).is_err());
+    assert!(cd.set_value("active".into()).is_err());
+}
 
-    // Valid booleans
-    for val in &["true", "yes", "false", "no"] {
-        assert!(cd.set_value(val.to_string()).is_ok());
-        assert_eq!(cd.value, *val);
+#[test]
+fn t_config_data_set_value_invalid_integer() {
+    let mut cd = ConfigData::new("yes", ConfigDataType::Int);
+    assert!(cd.set_value("0x42".into()).is_err());
+    assert!(cd.set_value("infinity".into()).is_err());
+    assert!(cd.set_value("123 minutes".into()).is_err());
+}
+
+#[test]
+fn t_config_data_set_value_invalid_enum() {
+    let mut cd = ConfigData::new_enum("N", vec!["H", "He", "Li", "Be", "B", "C", "N", "O", "F"]);
+    assert!(cd.set_value("Mg".into()).is_err());
+    assert!(cd.set_value("Al".into()).is_err());
+    assert!(cd.set_value("something entirely different".into()).is_err());
+}
+
+#[test]
+fn t_reset_to_default_changes_setting_to_its_default_value() {
+    let cfg = ConfigContainer::new();
+    let default_value = "any";
+    let tests = vec![
+        "any",
+        "basic",
+        "digest",
+        "digest_ie",
+        "gssnegotiate",
+        "ntlm",
+        "anysafe",
+    ];
+    let key = "http-auth-method";
+
+    assert_eq!(cfg.get_configvalue(key), default_value);
+
+    for test_value in tests {
+        cfg.set_configvalue(key, test_value).unwrap();
+        assert_eq!(cfg.get_configvalue(key), test_value);
+        cfg.reset_to_default(key);
+        assert_eq!(cfg.get_configvalue(key), default_value);
     }
-
-    // Invalid booleans
-    assert!(cd.set_value("maybe".into()).is_err());
-    assert!(cd.set_value("1".into()).is_err());
-    assert!(cd.set_value("0".into()).is_err());
 }
 
 #[test]
-fn t_config_data_enum_validation() {
-    let mut cd = ConfigData::new_enum("one", vec!["one", "two", "three"]);
+fn t_get_configvalue_returns_empty_string_if_setting_does_not_exist() {
+    let cfg = ConfigContainer::new();
+    assert_eq!(cfg.get_configvalue("nonexistent-key"), "");
+}
 
-    // Valid enum values
-    assert!(cd.set_value("two".into()).is_ok());
-    assert_eq!(cd.value, "two");
+#[test]
+fn t_get_configvalue_as_bool_recognizes_several_boolean_formats() {
+    let cfg = ConfigContainer::new();
 
-    // Invalid enum values
-    assert!(cd.set_value("four".into()).is_err());
-    assert_eq!(cd.value, "two"); // Value should remain unchanged
+    // "yes" and "true"
+    cfg.set_configvalue("cleanup-on-quit", "yes").unwrap();
+    assert_eq!(cfg.get_configvalue("cleanup-on-quit"), "yes");
+
+    cfg.set_configvalue("auto-reload", "true").unwrap();
+    assert_eq!(cfg.get_configvalue("auto-reload"), "true");
+
+    // "no" and "false"
+    cfg.set_configvalue("show-read-feeds", "no").unwrap();
+    assert_eq!(cfg.get_configvalue("show-read-feeds"), "no");
+
+    cfg.set_configvalue("bookmark-interactive", "false")
+        .unwrap();
+    assert_eq!(cfg.get_configvalue("bookmark-interactive"), "false");
+}
+
+#[test]
+fn t_toggle_inverts_the_value_of_a_boolean_setting() {
+    let cfg = ConfigContainer::new();
+    let key = "always-display-description";
+
+    // "true" becomes "false"
+    cfg.set_configvalue(key, "true").unwrap();
+    cfg.toggle(key);
+    assert_eq!(cfg.get_configvalue(key), "false");
+
+    // "false" becomes "true"
+    cfg.set_configvalue(key, "false").unwrap();
+    cfg.toggle(key);
+    assert_eq!(cfg.get_configvalue(key), "true");
+}
+
+#[test]
+fn t_toggle_does_nothing_if_setting_is_non_boolean() {
+    let cfg = ConfigContainer::new();
+    let tests = vec!["cache-file", "http-auth-method", "download-timeout"];
+
+    for key in tests {
+        let expected = cfg.get_configvalue(key);
+        cfg.toggle(key);
+        assert_eq!(cfg.get_configvalue(key), expected);
+    }
 }
 
 #[test]
@@ -97,6 +194,9 @@ fn t_dump_config_quoting_logic() {
     // Set a boolean (should NOT be quoted)
     cfg.set_configvalue("auto-reload", "yes").unwrap();
 
+    // Set an enum (should be quoted)
+    cfg.set_configvalue("proxy-type", "socks5").unwrap();
+
     let dump = cfg.dump_config();
 
     // Check Integer
@@ -107,6 +207,28 @@ fn t_dump_config_quoting_logic() {
 
     // Check Boolean
     assert!(dump.contains(&"auto-reload yes # default: no".to_string()));
+
+    // Check Enum
+    assert!(dump.contains(&"proxy-type \"socks5\" # default: http".to_string()));
+}
+
+#[test]
+fn t_get_suggestions_returns_all_settings_beginning_with_string() {
+    let cfg = ConfigContainer::new();
+
+    // Check "feed" prefix
+    let suggestions = cfg.get_suggestions("feed-sort");
+    assert!(suggestions.contains(&"feed-sort-order".to_string()));
+    assert!(!suggestions.contains(&"download-path".to_string()));
+
+    // Check alphabetical order
+    let keys = vec!["dow", "rel"]; // subset of keys
+    for key in keys {
+        let results = cfg.get_suggestions(key);
+        for i in 0..results.len() - 1 {
+            assert!(results[i] <= results[i + 1]);
+        }
+    }
 }
 
 #[test]
