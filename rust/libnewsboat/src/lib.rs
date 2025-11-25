@@ -11,6 +11,7 @@ pub mod utils;
 
 pub mod charencoding;
 pub mod cliargsparser;
+pub mod configcontainer;
 pub mod configpaths;
 pub mod filepath;
 pub mod filterparser;
