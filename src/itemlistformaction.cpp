@@ -33,7 +33,7 @@ ItemListFormAction::ItemListFormAction(View& vv,
 	FilterContainer& f,
 	ConfigContainer* cfg,
 	RegexManager& r)
-	: ListFormAction(vv, "articlelist", formstr, "items", cfg, r)
+	: ListFormAction(vv, Dialog::ArticleList, formstr, "items", cfg, r)
 	, old_itempos(-1)
 	, filter_active(false)
 	, pos(0)
@@ -42,7 +42,7 @@ ItemListFormAction::ItemListFormAction(View& vv,
 	, rxman(r)
 	, old_width(0)
 	, invalidation_mode(InvalidationMode::NONE)
-	, listfmt(&rxman, "articlelist")
+	, listfmt(&rxman, Dialog::ArticleList)
 	, rsscache(cc)
 	, filter_container(f)
 {
@@ -1511,7 +1511,7 @@ void ItemListFormAction::save_filterpos()
 
 void ItemListFormAction::register_format_styles()
 {
-	const std::string attrstr = rxman.get_attrs_stfl_string("articlelist", true);
+	const std::string attrstr = rxman.get_attrs_stfl_string(Dialog::ArticleList, true);
 	const std::string textview = strprintf::fmt(
 			"{!list[items] .expand:vh style_normal[listnormal]: "
 			"style_focus[listfocus]: "
