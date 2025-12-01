@@ -1043,6 +1043,24 @@ impl ConfigContainer {
         }
     }
 
+    pub fn get_configvalue_as_int(&self, key: &str) -> i32 {
+        self.get_configvalue(key).parse().unwrap_or(0)
+    }
+
+    pub fn get_configvalue_as_bool(&self, key: &str) -> bool {
+        let val = self.get_configvalue(key);
+        val == "true" || val == "yes"
+    }
+
+    pub fn get_configvalue_as_filepath(&self, key: &str, path: &mut std::path::PathBuf) -> bool {
+        let val = self.get_configvalue(key);
+        if !val.is_empty() {
+            *path = std::path::PathBuf::from(val);
+            return true;
+        }
+        false
+    }
+
     pub fn get_configvalue(&self, key: &str) -> String {
         let data = self.config_data.lock().unwrap();
         match data.get(key) {

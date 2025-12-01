@@ -96,13 +96,11 @@ fn get_configvalue(cc: &ConfigContainer, key: &str) -> String {
 }
 
 fn get_configvalue_as_int(cc: &ConfigContainer, key: &str) -> i32 {
-    let val = cc.0.get_configvalue(key);
-    val.parse::<i32>().unwrap_or(0)
+    cc.0.get_configvalue_as_int(key)
 }
 
 fn get_configvalue_as_bool(cc: &ConfigContainer, key: &str) -> bool {
-    let val = cc.0.get_configvalue(key);
-    val == "true" || val == "yes"
+    cc.0.get_configvalue_as_bool(key)
 }
 
 fn get_configvalue_as_filepath(
@@ -110,12 +108,7 @@ fn get_configvalue_as_filepath(
     key: &str,
     mut path: Pin<&mut PathBuf>,
 ) -> bool {
-    let val = cc.0.get_configvalue(key);
-    if !val.is_empty() {
-        path.0 = std::path::PathBuf::from(val);
-        return true;
-    }
-    false
+    cc.0.get_configvalue_as_filepath(key, &mut path.get_mut().0)
 }
 
 fn set_configvalue(cc: &ConfigContainer, key: &str, value: &str, error_msg: &mut String) -> bool {
