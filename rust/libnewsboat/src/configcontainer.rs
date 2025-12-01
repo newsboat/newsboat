@@ -1,5 +1,5 @@
 use gettextrs::gettext;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 use std::sync::{Arc, Mutex};
 
 #[derive(Clone, Debug, PartialEq)]
@@ -122,7 +122,7 @@ impl ConfigData {
 }
 
 pub struct ConfigContainer {
-    config_data: Arc<Mutex<HashMap<String, ConfigData>>>,
+    config_data: Arc<Mutex<BTreeMap<String, ConfigData>>>,
 }
 
 impl Default for ConfigContainer {
@@ -133,7 +133,7 @@ impl Default for ConfigContainer {
 
 impl ConfigContainer {
     pub fn new() -> Self {
-        let mut config_data = HashMap::new();
+        let mut config_data = BTreeMap::new();
 
         config_data.insert(
             "always-display-description".to_string(),
@@ -1106,23 +1106,18 @@ impl ConfigContainer {
     pub fn dump_config(&self) -> Vec<String> {
         let data = self.config_data.lock().unwrap();
         let mut output = Vec::new();
-        // Sorting keys for consistent output
-        let mut keys: Vec<String> = data.keys().cloned().collect();
-        keys.sort();
 
-        for key in keys {
-            if let Some(entry) = data.get(&key) {
-                let formatted_value = match entry.data_type {
-                    ConfigDataType::Bool | ConfigDataType::Int => entry.value.clone(),
-                    _ => format!("\"{}\"", entry.value.replace("\"", "\\\"")),
-                };
+        for (key, entry) in data.iter() {
+            let formatted_value = match entry.data_type {
+                ConfigDataType::Bool | ConfigDataType::Int => entry.value.clone(),
+                _ => format!("\"{}\"", entry.value.replace("\"", "\\\"")),
+            };
 
-                let mut line = format!("{key} {formatted_value}");
-                if entry.value != entry.default_value {
-                    line.push_str(&format!(" # default: {}", entry.default_value));
-                }
-                output.push(line);
+            let mut line = format!("{key} {formatted_value}");
+            if entry.value != entry.default_value {
+                line.push_str(&format!(" # default: {}", entry.default_value));
             }
+            output.push(line);
         }
         output
     }
