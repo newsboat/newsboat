@@ -1,3 +1,4 @@
+use gettextrs::gettext;
 use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, Mutex};
 
@@ -559,7 +560,7 @@ impl ConfigContainer {
         config_data.insert(
             "notify-format".to_string(),
             ConfigData::new(
-                "Newsboat: finished reload, %f unread feeds (%n unread articles total)",
+                &gettext("Newsboat: finished reload, %f unread feeds (%n unread articles total)"),
                 ConfigDataType::Str,
             ),
         );
@@ -647,7 +648,7 @@ impl ConfigContainer {
         config_data.insert(
             "podlist-format".to_string(),
             ConfigData::new(
-                "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F",
+                &gettext("%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"),
                 ConfigDataType::Str,
             ),
         );
@@ -947,38 +948,41 @@ impl ConfigContainer {
         );
 
         config_data.insert("articlelist-title-format".to_string(),
-            ConfigData::new("%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter '%F'&? - %U", ConfigDataType::Str));
+            ConfigData::new(&gettext("%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter '%F'&? - %U"), ConfigDataType::Str));
 
         config_data.insert(
             "dialogs-title-format".to_string(),
-            ConfigData::new("%N %V - Dialogs", ConfigDataType::Str),
+            ConfigData::new(&gettext("%N %V - Dialogs"), ConfigDataType::Str),
         );
 
         config_data.insert("feedlist-title-format".to_string(),
-            ConfigData::new("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?%?T? - tag '%T'&?", ConfigDataType::Str));
+            ConfigData::new(&gettext("%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter '%F'&?%?T? - tag '%T'&?"), ConfigDataType::Str));
 
         config_data.insert(
             "filebrowser-title-format".to_string(),
-            ConfigData::new("%N %V - %?O?Open File&Save File? - %f", ConfigDataType::Str),
+            ConfigData::new(
+                &gettext("%N %V - %?O?Open File&Save File? - %f"),
+                ConfigDataType::Str,
+            ),
         );
 
         config_data.insert(
             "dirbrowser-title-format".to_string(),
             ConfigData::new(
-                "%N %V - %?O?Open Directory&Save File? - %f",
+                &gettext("%N %V - %?O?Open Directory&Save File? - %f"),
                 ConfigDataType::Str,
             ),
         );
 
         config_data.insert(
             "help-title-format".to_string(),
-            ConfigData::new("%N %V - Help", ConfigDataType::Str),
+            ConfigData::new(&gettext("%N %V - Help"), ConfigDataType::Str),
         );
 
         config_data.insert(
             "itemview-title-format".to_string(),
             ConfigData::new(
-                "%N %V - Article '%T' (%u unread, %t total)",
+                &gettext("%N %V - Article '%T' (%u unread, %t total)"),
                 ConfigDataType::Str,
             ),
         );
@@ -986,24 +990,26 @@ impl ConfigContainer {
         config_data.insert(
             "searchresult-title-format".to_string(),
             ConfigData::new(
-                "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter '%F'&?",
+                &gettext(
+                    "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter '%F'&?",
+                ),
                 ConfigDataType::Str,
             ),
         );
 
         config_data.insert(
             "selectfilter-title-format".to_string(),
-            ConfigData::new("%N %V - Select Filter", ConfigDataType::Str),
+            ConfigData::new(&gettext("%N %V - Select Filter"), ConfigDataType::Str),
         );
 
         config_data.insert(
             "selecttag-title-format".to_string(),
-            ConfigData::new("%N %V - Select Tag", ConfigDataType::Str),
+            ConfigData::new(&gettext("%N %V - Select Tag"), ConfigDataType::Str),
         );
 
         config_data.insert(
             "urlview-title-format".to_string(),
-            ConfigData::new("%N %V - URLs", ConfigDataType::Str),
+            ConfigData::new(&gettext("%N %V - URLs"), ConfigDataType::Str),
         );
 
         config_data.insert(
@@ -1072,7 +1078,7 @@ impl ConfigContainer {
         let mut data = self.config_data.lock().unwrap();
         match data.get_mut(key) {
             Some(entry) => entry.set_value(value.to_string()),
-            None => Err(format!("unknown config option: {key}")),
+            None => Err(gettext("unknown config option: %s").replace("%s", key)),
         }
     }
 
