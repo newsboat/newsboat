@@ -84,9 +84,6 @@ public:
 
 	static const std::string PARTIAL_FILE_SUFFIX;
 
-	/// Returns the reference to the Rust object.
-	const configcontainer::bridged::ConfigContainer& get_rust_ref() const;
-
 private:
 	rust::Box<configcontainer::bridged::ConfigContainer> rs_object;
 };

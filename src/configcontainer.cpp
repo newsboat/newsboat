@@ -155,9 +155,4 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 	return ss;
 }
 
-const configcontainer::bridged::ConfigContainer& ConfigContainer::get_rust_ref() const
-{
-	return *rs_object;
-}
-
 } // namespace newsboat
