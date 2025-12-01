@@ -69,25 +69,27 @@ fn handle_action(
     params: Vec<String>,
 ) -> bridged::CfgHandlerResult {
     match cc.0.handle_action(action, &params) {
-        configcontainer::ConfigHandlerStatus::Success => bridged::CfgHandlerResult {
+        Ok(_) => bridged::CfgHandlerResult {
             status: 0,
             msg: String::new(),
         },
-        configcontainer::ConfigHandlerStatus::InvalidCommand => bridged::CfgHandlerResult {
-            status: 1,
-            msg: String::new(),
+        Err(e) => match e {
+            configcontainer::ConfigHandlerError::InvalidCommand => bridged::CfgHandlerResult {
+                status: 1,
+                msg: String::new(),
+            },
+            configcontainer::ConfigHandlerError::TooFewParams => bridged::CfgHandlerResult {
+                status: 2,
+                msg: String::new(),
+            },
+            configcontainer::ConfigHandlerError::TooManyParams => bridged::CfgHandlerResult {
+                status: 3,
+                msg: String::new(),
+            },
+            configcontainer::ConfigHandlerError::InvalidParams(m) => {
+                bridged::CfgHandlerResult { status: 4, msg: m }
+            }
         },
-        configcontainer::ConfigHandlerStatus::TooFewParams => bridged::CfgHandlerResult {
-            status: 2,
-            msg: String::new(),
-        },
-        configcontainer::ConfigHandlerStatus::TooManyParams => bridged::CfgHandlerResult {
-            status: 3,
-            msg: String::new(),
-        },
-        configcontainer::ConfigHandlerStatus::InvalidParams(m) => {
-            bridged::CfgHandlerResult { status: 4, msg: m }
-        }
     }
 }
 

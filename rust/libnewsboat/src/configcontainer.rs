@@ -39,8 +39,7 @@ pub enum SortDirection {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum ConfigHandlerStatus {
-    Success,
+pub enum ConfigHandlerError {
     InvalidCommand,
     TooFewParams,
     TooManyParams,
@@ -1017,15 +1016,15 @@ impl ConfigContainer {
         }
     }
 
-    pub fn handle_action(&self, action: &str, params: &[String]) -> ConfigHandlerStatus {
+    pub fn handle_action(&self, action: &str, params: &[String]) -> Result<(), ConfigHandlerError> {
         let mut data = self.config_data.lock().unwrap();
         if let Some(entry) = data.get_mut(action) {
             if params.is_empty() {
-                return ConfigHandlerStatus::TooFewParams;
+                return Err(ConfigHandlerError::TooFewParams);
             }
 
             if !entry.multi_option && params.len() > 1 {
-                return ConfigHandlerStatus::TooManyParams;
+                return Err(ConfigHandlerError::TooManyParams);
             }
 
             let value = if entry.multi_option {
@@ -1035,11 +1034,11 @@ impl ConfigContainer {
             };
 
             match entry.set_value(value) {
-                Ok(_) => ConfigHandlerStatus::Success,
-                Err(msg) => ConfigHandlerStatus::InvalidParams(msg),
+                Ok(_) => Ok(()),
+                Err(msg) => Err(ConfigHandlerError::InvalidParams(msg)),
             }
         } else {
-            ConfigHandlerStatus::InvalidCommand
+            Err(ConfigHandlerError::InvalidCommand)
         }
     }
 
@@ -1249,13 +1248,14 @@ mod tests {
             "search-highlight-colors",
             &["red".to_string(), "blue".to_string()],
         );
-        assert_eq!(result, ConfigHandlerStatus::Success);
+
+        assert_eq!(result, Ok(()));
         assert_eq!(cfg.get_configvalue("search-highlight-colors"), "red blue");
 
         // "browser" is a single-option config
         // It should reject multiple parameters
         let result = cfg.handle_action("browser", &["firefox".to_string(), "%u".to_string()]);
-        assert_eq!(result, ConfigHandlerStatus::TooManyParams);
+        assert_eq!(result, Err(ConfigHandlerError::TooManyParams));
     }
 
     #[test]
@@ -1265,13 +1265,13 @@ mod tests {
         // Invalid command
         assert_eq!(
             cfg.handle_action("non-existent-command", &["val".to_string()]),
-            ConfigHandlerStatus::InvalidCommand
+            Err(ConfigHandlerError::InvalidCommand)
         );
 
         // Too few parameters (empty)
         assert_eq!(
             cfg.handle_action("browser", &[]),
-            ConfigHandlerStatus::TooFewParams
+            Err(ConfigHandlerError::TooFewParams)
         );
     }
 
