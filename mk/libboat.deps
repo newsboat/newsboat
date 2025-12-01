@@ -1,5 +1,6 @@
 src/colormanager.cpp
 src/configcontainer.cpp
+src/configdata.cpp
 src/confighandlerexception.cpp
 src/configparser.cpp
 src/curldatareceiver.cpp
