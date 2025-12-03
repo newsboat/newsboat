@@ -1126,3 +1126,132 @@ TEST_CASE("Ignoring articles in search", "[Cache]")
 	REQUIRE(search_items.size() == 0 );
 	REQUIRE(no_ignore_items.size() == 1);
 }
+
+TEST_CASE("internalize_all_feeds loads multiple feeds correctly", "[Cache]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+
+	std::vector<std::string> feed_urls = { "file://data/rss.xml", "file://data/atom10_1.xml" };
+
+	for (const auto& url : feed_urls) {
+		CurlHandle easyHandle;
+		FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
+		RssParser parser(url, *rsscache, cfg, nullptr);
+		auto feed = parser.parse(feed_retriever.retrieve(url));
+		rsscache->externalize_rssfeed(*feed, false);
+	}
+
+	SECTION("Basic Bulk Load") {
+		auto feeds = rsscache->internalize_all_feeds(feed_urls, nullptr);
+
+		REQUIRE(feeds.size() == 2);
+		REQUIRE(feeds[0]->rssurl() == feed_urls[0]);
+		REQUIRE(feeds[0]->total_item_count() == 8);
+		REQUIRE(feeds[1]->rssurl() == feed_urls[1]);
+		REQUIRE(feeds[1]->total_item_count() == 3);
+	}
+
+	SECTION("Graceful handling of unknown URLs") {
+		std::vector<std::string> mixed_urls = {
+			"file://data/rss.xml",
+			"http://unknown.com/feed.xml"
+		};
+
+		auto feeds = rsscache->internalize_all_feeds(mixed_urls, nullptr);
+
+		REQUIRE(feeds.size() == 2);
+
+		REQUIRE(feeds[0]->rssurl() == mixed_urls[0]);
+		REQUIRE(feeds[0]->total_item_count() == 8);
+		REQUIRE(feeds[1]->rssurl() == mixed_urls[1]);
+		REQUIRE(feeds[1]->total_item_count() == 0);
+	}
+
+	SECTION("Graceful handling of Query Feeds") {
+		std::vector<std::string> query_urls = {
+			"query:Test:age > 1",
+			"file://data/rss.xml"
+		};
+
+		auto feeds = rsscache->internalize_all_feeds(query_urls, nullptr);
+
+		REQUIRE(feeds.size() == 2);
+
+		REQUIRE(feeds[0]->is_query_feed());
+		REQUIRE(feeds[0]->rssurl() == query_urls[0]);
+		REQUIRE(feeds[1]->total_item_count() == 8);
+		REQUIRE(feeds[1]->rssurl() == query_urls[1]);
+	}
+}
+
+TEST_CASE("internalize_all_feeds respects max-items configuration", "[Cache]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+
+	const std::string url = "file://data/rss.xml"; // 8 items
+
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
+	RssParser parser(url, *rsscache, cfg, nullptr);
+	auto feed = parser.parse(feed_retriever.retrieve(url));
+
+	// Ensure items have different dates to verify sorting/truncation
+	// Make item 0 the newest, item 7 the oldest
+	time_t now = time(nullptr);
+	for (unsigned int i=0; i < feed->items().size(); ++i) {
+		feed->items()[i]->set_pubDate(now - (i * 100));
+	}
+
+	rsscache->externalize_rssfeed(*feed, false);
+
+	SECTION("With max-items set to 3") {
+		cfg.set_configvalue("max-items", "3");
+
+		std::vector<std::string> urls = { url };
+		auto feeds = rsscache->internalize_all_feeds(urls, nullptr);
+
+		REQUIRE(feeds.size() == 1);
+		REQUIRE(feeds[0]->items().size() == 3);
+
+		// Verify we kept the newest items
+		REQUIRE(feeds[0]->items()[0]->pubDate_timestamp() == now);
+		REQUIRE(feeds[0]->items()[1]->pubDate_timestamp() == now - 100);
+		REQUIRE(feeds[0]->items()[2]->pubDate_timestamp() == now - 200);
+	}
+
+	SECTION("With max-items set to 0 (unlimited)") {
+		cfg.set_configvalue("max-items", "0");
+
+		std::vector<std::string> urls = { url };
+		auto feeds = rsscache->internalize_all_feeds(urls, nullptr);
+
+		REQUIRE(feeds.size() == 1);
+		REQUIRE(feeds[0]->items().size() == 8);
+	}
+}
+
+TEST_CASE("internalize_all_feeds applies ignore rules", "[Cache]")
+{
+	ConfigContainer cfg;
+	auto rsscache = Cache::in_memory(cfg);
+	const std::string url = "file://data/rss.xml";
+
+	CurlHandle easyHandle;
+	FeedRetriever feed_retriever(cfg, *rsscache, easyHandle);
+	RssParser parser(url, *rsscache, cfg, nullptr);
+	auto feed = parser.parse(feed_retriever.retrieve(url));
+
+	rsscache->externalize_rssfeed(*feed, false);
+	REQUIRE(feed->items().size() == 8);
+
+	RssIgnores ign;
+	ign.handle_action("ignore-article", {"*", "title = \"Das Geburtstagskind\""});
+
+	std::vector<std::string> urls = { url };
+	auto feeds = rsscache->internalize_all_feeds(urls, &ign);
+
+	REQUIRE(feeds.size() == 1);
+	REQUIRE(feeds[0]->items().size() == 7);
+}

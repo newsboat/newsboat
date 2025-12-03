@@ -455,17 +455,18 @@ int Controller::run(const CliArgsParser& args)
 	{
 		ScopeMeasure m1("Load articles from cache");
 
+		bool ignore_disp = (cfg.get_configvalue("ignore-mode") == "display");
+		const auto& urls = urlcfg->get_urls();
+		auto loaded_feeds = rsscache->internalize_all_feeds(urls, ignore_disp ? &ign : nullptr);
+
 		unsigned int i = 0;
-		for (const auto& url : urlcfg->get_urls()) {
+		for (size_t idx = 0; idx < loaded_feeds.size(); ++idx) {
+			auto feed = loaded_feeds[idx];
+			const auto& url = urls[idx];
+
 			try {
-				bool ignore_disp =
-					(cfg.get_configvalue("ignore-mode") ==
-					 "display");
-				std::shared_ptr<RssFeed> feed =
-					rsscache->internalize_rssfeed(
-							url, ignore_disp ? &ign : nullptr);
 				feed->set_tags(urlcfg->get_tags(url));
-				feed->set_order(i);
+				feed->set_order(i++);
 				feedcontainer.add_feed(feed);
 			} catch (const DbException& e) {
 				std::cerr << _("Error while loading feeds from "
@@ -481,7 +482,6 @@ int Controller::run(const CliArgsParser& args)
 					<< std::endl;
 				return EXIT_FAILURE;
 			}
-			i++;
 		}
 	}
 
