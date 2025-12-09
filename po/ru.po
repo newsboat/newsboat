@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.11\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-12-09 18:25+0300\n"
-"PO-Revision-Date: 2025-09-07 19:17+0300\n"
+"PO-Revision-Date: 2025-12-09 18:29+0300\n"
 "Last-Translator: Alexander Batischev <eual.jp@gmail.com>\n"
 "Language-Team: Konstantin Shakhnov <kastian@mail.ru>, Alexander Batischev "
 "<eual.jp@gmail.com>\n"
@@ -1765,11 +1765,11 @@ msgstr "Ошибка: не удалось разобрать OPML-файл \"%s\
 
 #: src/opml.cpp:232
 msgid "the <opml> root element is missing"
-msgstr ""
+msgstr "отсутствует корневой элемент <opml>"
 
 #: src/opml.cpp:253
 msgid "the <body> element in the <opml> root element is missing"
-msgstr ""
+msgstr "в корневом элементе <opml> отсутствует элемент <body>"
 
 #: src/pbcontroller.cpp:75
 #, c-format
