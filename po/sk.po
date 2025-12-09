@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: newsboat 2.10.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
-"POT-Creation-Date: 2025-09-07 19:15+0300\n"
+"POT-Creation-Date: 2025-12-09 18:25+0300\n"
 "PO-Revision-Date: 2017-12-25 00:38+0100\n"
 "Last-Translator: František Hájik <ferko.hajik@gmail.com>\n"
 "Language-Team: \n"
@@ -244,7 +244,7 @@ msgstr ""
 msgid "%4i [%6dMB/%6tMB] [%5p %%] [%12K] %-20S %u -> %F"
 msgstr ""
 
-#: src/configcontainer.cpp:312
+#: src/configcontainer.cpp:315
 #, fuzzy
 msgid ""
 "%N %V - Articles in feed '%T' (%u unread, %t total)%?F? matching filter "
@@ -252,54 +252,54 @@ msgid ""
 msgstr ""
 "%N %V - Články v informačných kanáloch (%u neprečítané, %t celkom) - %U"
 
-#: src/configcontainer.cpp:316
+#: src/configcontainer.cpp:319
 msgid "%N %V - Dialogs"
 msgstr "%N %V - Dialógy"
 
-#: src/configcontainer.cpp:319
+#: src/configcontainer.cpp:322
 #, fuzzy
 msgid ""
 "%N %V - %?F?Feeds&Your feeds? (%u unread, %t total)%?F? matching filter "
 "'%F'&?%?T? - tag '%T'&?"
 msgstr "%N %V - Tvoje zdroje (%u neprečítané, %t celkom)%?T? - tag `%T'&?"
 
-#: src/configcontainer.cpp:323
+#: src/configcontainer.cpp:326
 msgid "%N %V - %?O?Open File&Save File? - %f"
 msgstr "%N %V - %?O?Otvoriť Súbor&Uložiť Súbor? - %f"
 
-#: src/configcontainer.cpp:327
+#: src/configcontainer.cpp:330
 #, fuzzy
 msgid "%N %V - %?O?Open Directory&Save File? - %f"
 msgstr "%N %V - %?O?Otvoriť Súbor&Uložiť Súbor? - %f"
 
-#: src/configcontainer.cpp:331
+#: src/configcontainer.cpp:334
 msgid "%N %V - Help"
 msgstr "%N %V - Pomoc"
 
-#: src/configcontainer.cpp:334
+#: src/configcontainer.cpp:337
 msgid "%N %V - Article '%T' (%u unread, %t total)"
 msgstr "%N %V - Article '%T' (%u neprečítané, %t celkom)"
 
-#: src/configcontainer.cpp:338
+#: src/configcontainer.cpp:341
 #, fuzzy
 msgid ""
 "%N %V - Search results for '%s' (%u unread, %t total)%?F? matching filter "
 "'%F'&?"
 msgstr "%N %V - Výsledok vyhľadávanie (%u nečítané, %t celkom)"
 
-#: src/configcontainer.cpp:342
+#: src/configcontainer.cpp:345
 msgid "%N %V - Select Filter"
 msgstr "%N %V - Vyber Filter"
 
-#: src/configcontainer.cpp:346
+#: src/configcontainer.cpp:349
 msgid "%N %V - Select Tag"
 msgstr "%N %V - Vybraný Tag"
 
-#: src/configcontainer.cpp:350
+#: src/configcontainer.cpp:353
 msgid "%N %V - URLs"
 msgstr "%N %V - URLs"
 
-#: src/configcontainer.cpp:487
+#: src/configcontainer.cpp:490
 #, fuzzy, c-format
 msgid "unknown config option: %s"
 msgstr "neznámy príkaz `%s'"
@@ -631,7 +631,7 @@ msgid "Error: you can't remove the feed list!"
 msgstr "Chyba: nemožno odstrániť zoznam informačných kanálov (feed list)!"
 
 #: src/dialogsformaction.cpp:121 src/feedlistformaction.cpp:1048
-#: src/itemlistformaction.cpp:1414 src/urlviewformaction.cpp:168
+#: src/itemlistformaction.cpp:1415 src/urlviewformaction.cpp:168
 msgid "Invalid position!"
 msgstr "Neplatná pozícia!"
 
@@ -645,7 +645,7 @@ msgid "Cancel"
 msgstr "Zrušiť"
 
 #: src/dirbrowserformaction.cpp:288 src/filebrowserformaction.cpp:304
-#: src/itemlistformaction.cpp:1394 src/itemviewformaction.cpp:575
+#: src/itemlistformaction.cpp:1395 src/itemviewformaction.cpp:578
 msgid "Save"
 msgstr "Uložiť"
 
@@ -747,43 +747,43 @@ msgstr ""
 
 #: src/feedlistformaction.cpp:237 src/feedlistformaction.cpp:264
 #: src/feedlistformaction.cpp:593 src/itemlistformaction.cpp:183
-#: src/itemlistformaction.cpp:206 src/itemlistformaction.cpp:881
-#: src/itemviewformaction.cpp:562
+#: src/itemlistformaction.cpp:206 src/itemlistformaction.cpp:882
+#: src/itemviewformaction.cpp:565
 #, fuzzy
 msgid "Failed to spawn browser"
 msgstr "Otvoriť článok v prehliadači"
 
 #: src/feedlistformaction.cpp:240 src/feedlistformaction.cpp:267
 #: src/feedlistformaction.cpp:596 src/itemlistformaction.cpp:186
-#: src/itemlistformaction.cpp:209 src/itemlistformaction.cpp:884
-#: src/itemviewformaction.cpp:565
+#: src/itemlistformaction.cpp:209 src/itemlistformaction.cpp:885
+#: src/itemviewformaction.cpp:568
 #, c-format
 msgid "Browser returned error code %i"
 msgstr ""
 
-#: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:518
+#: src/feedlistformaction.cpp:299 src/itemlistformaction.cpp:519
 #, fuzzy
 msgid "Do you really want to mark this feed as read (y:Yes n:No)? "
 msgstr "Naozaj chcete prepísať `%s' (a:Áno n:Nie)? "
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:385
 #: src/feedlistformaction.cpp:514 src/filebrowserformaction.cpp:99
-#: src/itemlistformaction.cpp:109 src/itemlistformaction.cpp:519
+#: src/itemlistformaction.cpp:109 src/itemlistformaction.cpp:520
 #: src/view.cpp:189
 msgid "yn"
 msgstr "an"
 
 #: src/feedlistformaction.cpp:300 src/feedlistformaction.cpp:385
 #: src/feedlistformaction.cpp:514 src/itemlistformaction.cpp:109
-#: src/itemlistformaction.cpp:519 src/view.cpp:189
+#: src/itemlistformaction.cpp:520 src/view.cpp:189
 msgid "y"
 msgstr "a"
 
-#: src/feedlistformaction.cpp:306 src/itemlistformaction.cpp:523
+#: src/feedlistformaction.cpp:306 src/itemlistformaction.cpp:524
 msgid "Marking feed read..."
 msgstr "Označiť kanál za prečítaný..."
 
-#: src/feedlistformaction.cpp:316 src/itemlistformaction.cpp:569
+#: src/feedlistformaction.cpp:316 src/itemlistformaction.cpp:570
 #, c-format
 msgid "Error: couldn't mark feed read: %s"
 msgstr "Chyba: nemožno označiť čítanie kanála: %s"
@@ -793,11 +793,11 @@ msgstr "Chyba: nemožno označiť čítanie kanála: %s"
 msgid "No feeds with unread items."
 msgstr "Žiaden kanál s neprečítanými položkami."
 
-#: src/feedlistformaction.cpp:359 src/itemlistformaction.cpp:507
+#: src/feedlistformaction.cpp:359 src/itemlistformaction.cpp:508
 msgid "Already on last feed."
 msgstr "Celkom posledný kanál."
 
-#: src/feedlistformaction.cpp:368 src/itemlistformaction.cpp:512
+#: src/feedlistformaction.cpp:368 src/itemlistformaction.cpp:513
 msgid "Already on first feed."
 msgstr "Celkom prvý kanál."
 
@@ -810,29 +810,29 @@ msgstr "Naozaj chcete prepísať `%s' (a:Áno n:Nie)? "
 msgid "Marking all feeds read..."
 msgstr "Označenie všetkých kanálov za prečítané..."
 
-#: src/feedlistformaction.cpp:431 src/itemlistformaction.cpp:705
+#: src/feedlistformaction.cpp:431 src/itemlistformaction.cpp:706
 #, fuzzy, c-format
 msgid "No filter found with name `%s'."
 msgstr "Neboli definované žiadne filtre."
 
-#: src/feedlistformaction.cpp:439 src/itemlistformaction.cpp:713
+#: src/feedlistformaction.cpp:439 src/itemlistformaction.cpp:714
 msgid "No filters defined."
 msgstr "Neboli definované žiadne filtre."
 
 #: src/feedlistformaction.cpp:453 src/helpformaction.cpp:41
-#: src/itemlistformaction.cpp:644 src/itemlistformaction.cpp:659
+#: src/itemlistformaction.cpp:645 src/itemlistformaction.cpp:660
 #: src/itemviewformaction.cpp:278 src/itemviewformaction.cpp:293
 msgid "Search for: "
 msgstr "Vyhľadať: "
 
 #: src/feedlistformaction.cpp:463 src/feedlistformaction.cpp:479
-#: src/formaction.cpp:668 src/formaction.cpp:670 src/itemlistformaction.cpp:671
-#: src/itemlistformaction.cpp:687 src/itemrenderer.cpp:76
+#: src/formaction.cpp:668 src/formaction.cpp:670 src/itemlistformaction.cpp:672
+#: src/itemlistformaction.cpp:688 src/itemrenderer.cpp:76
 msgid "Title: "
 msgstr "Titulok: "
 
-#: src/feedlistformaction.cpp:496 src/itemlistformaction.cpp:722
-#: src/itemlistformaction.cpp:739
+#: src/feedlistformaction.cpp:496 src/itemlistformaction.cpp:723
+#: src/itemlistformaction.cpp:740
 msgid "Filter: "
 msgstr "Filter: "
 
@@ -849,7 +849,7 @@ msgstr "V prehliadači sa nedajú otvoriť požiadavky z kanálov!"
 msgid "Cannot open exec feeds in the browser!"
 msgstr "V prehliadači sa nedajú otvoriť požiadavky z kanálov!"
 
-#: src/feedlistformaction.cpp:657 src/itemlistformaction.cpp:1390
+#: src/feedlistformaction.cpp:657 src/itemlistformaction.cpp:1391
 #, fuzzy
 msgid "Clear filter"
 msgstr "Nastav fitler"
@@ -860,23 +860,23 @@ msgid "Clear tag"
 msgstr "Vyčistiť"
 
 #: src/feedlistformaction.cpp:662 src/helpformaction.cpp:162
-#: src/itemlistformaction.cpp:1392 src/itemviewformaction.cpp:574
+#: src/itemlistformaction.cpp:1393 src/itemviewformaction.cpp:577
 #: src/pbview.cpp:420 src/pbview.cpp:427 src/searchresultslistformaction.cpp:18
 #: src/urlviewformaction.cpp:155
 msgid "Quit"
 msgstr "Ukončiť"
 
-#: src/feedlistformaction.cpp:663 src/itemlistformaction.cpp:1393
+#: src/feedlistformaction.cpp:663 src/itemlistformaction.cpp:1394
 #: src/searchresultslistformaction.cpp:19
 msgid "Open"
 msgstr "Otvoriť"
 
-#: src/feedlistformaction.cpp:664 src/itemlistformaction.cpp:1396
-#: src/itemviewformaction.cpp:576
+#: src/feedlistformaction.cpp:664 src/itemlistformaction.cpp:1397
+#: src/itemviewformaction.cpp:579
 msgid "Next Unread"
 msgstr "Ďalší neprečítaný"
 
-#: src/feedlistformaction.cpp:665 src/itemlistformaction.cpp:1395
+#: src/feedlistformaction.cpp:665 src/itemlistformaction.cpp:1396
 msgid "Reload"
 msgstr "Obnoviť"
 
@@ -888,36 +888,36 @@ msgstr "Obnoviť všetko"
 msgid "Mark Read"
 msgstr "Označiť ako prečítané"
 
-#: src/feedlistformaction.cpp:668 src/itemlistformaction.cpp:1397
+#: src/feedlistformaction.cpp:668 src/itemlistformaction.cpp:1398
 msgid "Mark All Read"
 msgstr "Označiť všetko ako prečítané"
 
 #: src/feedlistformaction.cpp:669 src/helpformaction.cpp:163
-#: src/itemlistformaction.cpp:1398 src/searchresultslistformaction.cpp:21
+#: src/itemlistformaction.cpp:1399 src/searchresultslistformaction.cpp:21
 msgid "Search"
 msgstr "Hľadať"
 
 #: src/feedlistformaction.cpp:670 src/helpformaction.cpp:187
-#: src/itemlistformaction.cpp:1399 src/itemviewformaction.cpp:579
+#: src/itemlistformaction.cpp:1400 src/itemviewformaction.cpp:582
 #: src/pbview.cpp:325 src/pbview.cpp:435 src/searchresultslistformaction.cpp:22
 #: src/urlviewformaction.cpp:158
 msgid "Help"
 msgstr "Pomocník"
 
-#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:977
+#: src/feedlistformaction.cpp:1011 src/itemlistformaction.cpp:978
 msgid "Searching..."
 msgstr "Vyhľadávanie..."
 
-#: src/feedlistformaction.cpp:1020 src/itemlistformaction.cpp:983
+#: src/feedlistformaction.cpp:1020 src/itemlistformaction.cpp:984
 #, c-format
 msgid "Error while searching for `%s': %s"
 msgstr "Chyba pri vyhľadávaní `%s': %s"
 
-#: src/feedlistformaction.cpp:1032 src/itemlistformaction.cpp:990
+#: src/feedlistformaction.cpp:1032 src/itemlistformaction.cpp:991
 msgid "No results."
 msgstr "Žiadny výsledok."
 
-#: src/feedlistformaction.cpp:1043 src/itemlistformaction.cpp:1409
+#: src/feedlistformaction.cpp:1043 src/itemlistformaction.cpp:1410
 msgid "Position not visible!"
 msgstr "Pozícia nie je viditeľná!"
 
@@ -926,7 +926,7 @@ msgstr "Pozícia nie je viditeľná!"
 msgid "Feed List - %u unread, %u total"
 msgstr "Zoznam informačných kanálov - %u neprečítané, %u celkom"
 
-#: src/feedlistformaction.cpp:1139 src/itemlistformaction.cpp:1683
+#: src/feedlistformaction.cpp:1139 src/itemlistformaction.cpp:1684
 #, fuzzy, c-format
 msgid "Error: couldn't parse filter expression `%s': %s"
 msgstr "nemožno analyzovať výraz filtra `%s': %s"
@@ -1080,10 +1080,10 @@ msgid "Saved web pages"
 msgstr "Web stránka uložená"
 
 #: src/itemlistformaction.cpp:79 src/itemlistformaction.cpp:102
-#: src/itemlistformaction.cpp:308 src/itemlistformaction.cpp:355
-#: src/itemlistformaction.cpp:393 src/itemlistformaction.cpp:636
-#: src/itemlistformaction.cpp:836 src/itemlistformaction.cpp:890
-#: src/itemlistformaction.cpp:951 src/searchresultslistformaction.cpp:56
+#: src/itemlistformaction.cpp:309 src/itemlistformaction.cpp:356
+#: src/itemlistformaction.cpp:394 src/itemlistformaction.cpp:637
+#: src/itemlistformaction.cpp:837 src/itemlistformaction.cpp:891
+#: src/itemlistformaction.cpp:952 src/searchresultslistformaction.cpp:56
 msgid "No item selected!"
 msgstr "Žiadna položka nebola označená!"
 
@@ -1101,47 +1101,47 @@ msgstr "Prepínanie príznaku čítania článku..."
 msgid "Error while toggling read flag: %s"
 msgstr "Chyba pri prepínaní príznaku čítania: %s"
 
-#: src/itemlistformaction.cpp:298 src/itemviewformaction.cpp:361
+#: src/itemlistformaction.cpp:299 src/itemviewformaction.cpp:361
 msgid "URL list empty."
 msgstr "Zoznam URL je prázdny."
 
-#: src/itemlistformaction.cpp:366 src/itemlistformaction.cpp:385
+#: src/itemlistformaction.cpp:367 src/itemlistformaction.cpp:386
 #: src/itemrenderer.cpp:81 src/itemviewformaction.cpp:332
 #: src/itemviewformaction.cpp:349
 msgid "Flags: "
 msgstr "Príznaky (flags): "
 
-#: src/itemlistformaction.cpp:425 src/itemlistformaction.cpp:1489
+#: src/itemlistformaction.cpp:426 src/itemlistformaction.cpp:1490
 msgid "Error: no item selected!"
 msgstr "Chyba: žiadna položka nebola vybratá!"
 
-#: src/itemlistformaction.cpp:458 src/itemlistformaction.cpp:467
-#: src/itemlistformaction.cpp:491 src/itemviewformaction.cpp:384
+#: src/itemlistformaction.cpp:459 src/itemlistformaction.cpp:468
+#: src/itemlistformaction.cpp:492 src/itemviewformaction.cpp:384
 #: src/itemviewformaction.cpp:396 src/itemviewformaction.cpp:429
 #: src/view.cpp:811 src/view.cpp:882
 msgid "No unread items."
 msgstr "Všetky položky prečítané."
 
-#: src/itemlistformaction.cpp:475 src/itemviewformaction.cpp:407
+#: src/itemlistformaction.cpp:476 src/itemviewformaction.cpp:407
 #: src/view.cpp:953
 msgid "Already on last item."
 msgstr "Celkom posledná položka."
 
-#: src/itemlistformaction.cpp:484 src/itemviewformaction.cpp:418
+#: src/itemlistformaction.cpp:485 src/itemviewformaction.cpp:418
 #: src/view.cpp:919
 msgid "Already on first item."
 msgstr "Celkom prvá položka."
 
-#: src/itemlistformaction.cpp:497 src/itemlistformaction.cpp:502
+#: src/itemlistformaction.cpp:498 src/itemlistformaction.cpp:503
 msgid "No unread feeds."
 msgstr "Všetko prečítané."
 
-#: src/itemlistformaction.cpp:578
+#: src/itemlistformaction.cpp:579
 #, fuzzy
 msgid "Marking all above as read..."
 msgstr "Označenie všetkých kanálov za prečítané..."
 
-#: src/itemlistformaction.cpp:614 src/itemlistformaction.cpp:630
+#: src/itemlistformaction.cpp:615 src/itemlistformaction.cpp:631
 #: src/itemviewformaction.cpp:305 src/itemviewformaction.cpp:321
 msgid "Pipe article to command: "
 msgstr "Odoslať (Pipe) článok do príkazu: "
@@ -1149,35 +1149,35 @@ msgstr "Odoslať (Pipe) článok do príkazu: "
 #. i18n: This string is related to the letters in parentheses in the
 #. "Sort by (d)ate/..." and "Reverse Sort by (d)ate/..."
 #. messages
-#: src/itemlistformaction.cpp:754 src/itemlistformaction.cpp:792
+#: src/itemlistformaction.cpp:755 src/itemlistformaction.cpp:793
 #, fuzzy
 msgid "dtfalgr"
 msgstr "dnpaoi"
 
-#: src/itemlistformaction.cpp:756
+#: src/itemlistformaction.cpp:757
 #, fuzzy
 msgid "Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Zotriedenie podľa (d)átumu/(n)ázvu/(p)ríznaku/(a)utora/(o)dkazu/"
 "(i)dentifikátora?"
 
-#: src/itemlistformaction.cpp:794
+#: src/itemlistformaction.cpp:795
 #, fuzzy
 msgid "Reverse Sort by (d)ate/(t)itle/(f)lags/(a)uthor/(l)ink/(g)uid/(r)andom?"
 msgstr ""
 "Zotriediť spätne podľa (d)átumu/(n)ázvu/(p)ríznaku/(a)utora/(o)dkazu/"
 "(i)dentifikátora?"
 
-#: src/itemlistformaction.cpp:959 src/itemviewformaction.cpp:648
+#: src/itemlistformaction.cpp:960 src/itemviewformaction.cpp:651
 msgid "Flags updated."
 msgstr "Príznaky aktualizované."
 
-#: src/itemlistformaction.cpp:1097 src/view.cpp:454 src/view.cpp:477
+#: src/itemlistformaction.cpp:1098 src/view.cpp:454 src/view.cpp:477
 #, c-format
 msgid "Error: applying the filter failed: %s"
 msgstr "Chyba: použitie filtra zlyhalo: %s"
 
-#: src/itemlistformaction.cpp:1157
+#: src/itemlistformaction.cpp:1158
 #, c-format
 msgid "1 day ago"
 msgid_plural "%u days ago"
@@ -1185,48 +1185,48 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/itemlistformaction.cpp:1468 src/itemviewformaction.cpp:211
-#: src/itemviewformaction.cpp:628
+#: src/itemlistformaction.cpp:1469 src/itemviewformaction.cpp:211
+#: src/itemviewformaction.cpp:631
 msgid "Aborted saving."
 msgstr "Ukladanie bolo prerušené."
 
-#: src/itemlistformaction.cpp:1473 src/itemviewformaction.cpp:632
+#: src/itemlistformaction.cpp:1474 src/itemviewformaction.cpp:635
 #, c-format
 msgid "Saved article to %s"
 msgstr "Článok bol uložený do %s"
 
-#: src/itemlistformaction.cpp:1476 src/itemviewformaction.cpp:634
+#: src/itemlistformaction.cpp:1477 src/itemviewformaction.cpp:637
 #, c-format
 msgid "Error: couldn't save article to %s"
 msgstr "Chyba: článok nemožno uložiť do %s"
 
-#: src/itemlistformaction.cpp:1485
+#: src/itemlistformaction.cpp:1486
 #, fuzzy
 msgid "Error: no filename provided"
 msgstr "Chyba: žiadna položka nebola vybratá!"
 
-#: src/itemlistformaction.cpp:1571
+#: src/itemlistformaction.cpp:1572
 #, c-format
 msgid "Query Feed - %s"
 msgstr "Dotaz informačného kanála - %s"
 
-#: src/itemlistformaction.cpp:1578
+#: src/itemlistformaction.cpp:1579
 #, c-format
 msgid "Article List - %s"
 msgstr "Zoznam článkov - %s"
 
-#: src/itemlistformaction.cpp:1619
+#: src/itemlistformaction.cpp:1620
 msgid "yanq"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1641
+#: src/itemlistformaction.cpp:1642
 #, c-format
 msgid ""
 "Overwrite `%s' in `%s'? There are %d more conflicts like this (y:Yes a:Yes "
 "to all n:No q:No to all)"
 msgstr ""
 
-#: src/itemlistformaction.cpp:1648
+#: src/itemlistformaction.cpp:1649
 #, c-format
 msgid "Overwrite `%s' in `%s'? (y:Yes n:No)"
 msgstr ""
@@ -1288,11 +1288,11 @@ msgstr "%s pridaný do fronty sťahovania."
 msgid "%s is already queued."
 msgstr ""
 
-#: src/itemviewformaction.cpp:60 src/itemviewformaction.cpp:719
+#: src/itemviewformaction.cpp:60 src/itemviewformaction.cpp:722
 msgid "Top"
 msgstr "Vrch"
 
-#: src/itemviewformaction.cpp:61 src/itemviewformaction.cpp:721
+#: src/itemviewformaction.cpp:61 src/itemviewformaction.cpp:724
 msgid "Bottom"
 msgstr "Spodok"
 
@@ -1321,27 +1321,27 @@ msgstr "Chyba pri označovaní článku ako neprečítaného: %s"
 msgid "Goto URL #"
 msgstr "Choď na URL #"
 
-#: src/itemviewformaction.cpp:577 src/urlviewformaction.cpp:156
+#: src/itemviewformaction.cpp:580 src/urlviewformaction.cpp:156
 msgid "Open in Browser"
 msgstr "Otvoriť v prehliadači"
 
-#: src/itemviewformaction.cpp:578
+#: src/itemviewformaction.cpp:581
 msgid "Enqueue"
 msgstr "Do fronty"
 
 #. i18n: `%3u` gets replaced by a number between 0 and 100.
 #. The `%%` is replaced by a single percent sign.
-#: src/itemviewformaction.cpp:725
+#: src/itemviewformaction.cpp:728
 #, c-format
 msgid "%3u %% "
 msgstr ""
 
-#: src/itemviewformaction.cpp:734
+#: src/itemviewformaction.cpp:737
 #, c-format
 msgid "Article - %s"
 msgstr "Článok - %s"
 
-#: src/itemviewformaction.cpp:784
+#: src/itemviewformaction.cpp:787
 msgid "Error: invalid regular expression!"
 msgstr "Chyba: neplatný regulárny výraz!"
 
@@ -1776,10 +1776,18 @@ msgstr "regulárny výraz '%s' je vadný: %s"
 msgid "Authentication check using %s failed (HTTP response code: %s)"
 msgstr ""
 
-#: src/opml.cpp:211
+#: src/opml.cpp:224
 #, fuzzy, c-format
 msgid "Error: failed to parse OPML file \"%s\""
 msgstr "Chyba: nemožno zapísať článok do súboru %s"
+
+#: src/opml.cpp:232
+msgid "the <opml> root element is missing"
+msgstr ""
+
+#: src/opml.cpp:253
+msgid "the <body> element in the <opml> root element is missing"
+msgstr ""
 
 #: src/pbcontroller.cpp:75
 #, c-format
