@@ -241,7 +241,7 @@ In combination, this might look like:
 
     bind of everywhere set browser "firefox" ; open-in-browser -- "Open in Firefox"
 
-The above example means that pressing kbd:[o] followd by kbd:[f] will change
+The above example means that pressing kbd:[o] followed by kbd:[f] will change
 the configured browser to `firefox` and then run the <<open-in-browser,`open-in-browser`>>
 command to open the feed/article in the configured browser.
 
