@@ -1040,10 +1040,7 @@ impl ConfigContainer {
                 params[0].clone()
             };
 
-            match entry.set_value(value) {
-                Ok(_) => Ok(()),
-                Err(msg) => Err(ConfigHandlerError::InvalidParams(msg)),
-            }
+            entry.set_value(value).map_err(ConfigHandlerError::InvalidParams)
         } else {
             Err(ConfigHandlerError::InvalidCommand)
         }
