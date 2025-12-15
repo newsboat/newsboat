@@ -74,7 +74,8 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 
 Filepath ConfigContainer::get_configvalue_as_filepath(const std::string& key) const
 {
-	return Filepath(newsboat::configcontainer::bridged::get_configvalue_as_filepath(*rs_object, key));
+	return Filepath(newsboat::configcontainer::bridged::get_configvalue_as_filepath(*rs_object,
+				key));
 }
 
 bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const

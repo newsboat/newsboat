@@ -1,7 +1,7 @@
+use crate::utils;
 use gettextrs::gettext;
 use std::collections::{BTreeMap, HashSet};
 use std::sync::{Arc, Mutex};
-use crate::utils;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum ConfigDataType {
@@ -697,10 +697,7 @@ impl ConfigContainer {
 
         config_data.insert(
             "proxy-type".to_string(),
-            ConfigData::new_enum(
-                "http",
-                &["http", "socks4", "socks4a", "socks5", "socks5h"],
-            ),
+            ConfigData::new_enum("http", &["http", "socks4", "socks4a", "socks5", "socks5h"]),
         );
 
         config_data.insert(
@@ -1040,7 +1037,9 @@ impl ConfigContainer {
                 params[0].clone()
             };
 
-            entry.set_value(value).map_err(ConfigHandlerError::InvalidParams)
+            entry
+                .set_value(value)
+                .map_err(ConfigHandlerError::InvalidParams)
         } else {
             Err(ConfigHandlerError::InvalidCommand)
         }
