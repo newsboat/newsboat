@@ -78,7 +78,7 @@ impl ConfigData {
         }
     }
 
-    pub fn new_enum(val: &str, values: Vec<&str>) -> Self {
+    pub fn new_enum(val: &str, values: &[&str]) -> Self {
         ConfigData {
             value: val.to_string(),
             default_value: val.to_string(),
@@ -184,7 +184,7 @@ impl ConfigContainer {
 
         config_data.insert(
             "cleanup-on-quit".to_string(),
-            ConfigData::new_enum("nudge", vec!["yes", "no", "nudge", "true", "false"]),
+            ConfigData::new_enum("nudge", &["yes", "no", "nudge", "true", "false"]),
         );
 
         config_data.insert(
@@ -416,7 +416,7 @@ impl ConfigContainer {
             "http-auth-method".to_string(),
             ConfigData::new_enum(
                 "any",
-                vec![
+                &[
                     "any",
                     "basic",
                     "digest",
@@ -430,7 +430,7 @@ impl ConfigContainer {
 
         config_data.insert(
             "ignore-mode".to_string(),
-            ConfigData::new_enum("download", vec!["download", "display"]),
+            ConfigData::new_enum("download", &["download", "display"]),
         );
 
         config_data.insert(
@@ -683,7 +683,7 @@ impl ConfigContainer {
             "proxy-auth-method".to_string(),
             ConfigData::new_enum(
                 "any",
-                vec![
+                &[
                     "any",
                     "basic",
                     "digest",
@@ -699,7 +699,7 @@ impl ConfigContainer {
             "proxy-type".to_string(),
             ConfigData::new_enum(
                 "http",
-                vec!["http", "socks4", "socks4a", "socks5", "socks5h"],
+                &["http", "socks4", "socks4a", "socks5", "socks5h"],
             ),
         );
 
@@ -810,7 +810,7 @@ impl ConfigContainer {
 
         config_data.insert(
             "ttrss-mode".to_string(),
-            ConfigData::new_enum("multi", vec!["single", "multi"]),
+            ConfigData::new_enum("multi", &["single", "multi"]),
         );
 
         config_data.insert(
@@ -922,7 +922,7 @@ impl ConfigContainer {
             "urls-source".to_string(),
             ConfigData::new_enum(
                 "local",
-                vec![
+                &[
                     "local",
                     "opml",
                     "oldreader",
@@ -1224,7 +1224,7 @@ mod tests {
 
     #[test]
     fn t_config_data_enum_validation() {
-        let mut cd = ConfigData::new_enum("one", vec!["one", "two", "three"]);
+        let mut cd = ConfigData::new_enum("one", &["one", "two", "three"]);
 
         // Valid enum values
         assert!(cd.set_value("two".into()).is_ok());
