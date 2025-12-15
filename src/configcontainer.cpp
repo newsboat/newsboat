@@ -130,11 +130,9 @@ FeedSortStrategy ConfigContainer::get_feed_sort_strategy() const
 	FeedSortStrategy ss;
 	const auto values = newsboat::configcontainer::bridged::get_feed_sort_strategy_values(
 			*rs_object);
-
-	if (values.size() >= 2) {
-		ss.sm = static_cast<FeedSortMethod>(values[0]);
-		ss.sd = static_cast<SortDirection>(values[1]);
-	}
+	assert(values.size() >= 2);
+	ss.sm = static_cast<FeedSortMethod>(values[0]);
+	ss.sd = static_cast<SortDirection>(values[1]);
 	return ss;
 }
 
@@ -143,11 +141,9 @@ ArticleSortStrategy ConfigContainer::get_article_sort_strategy() const
 	ArticleSortStrategy ss;
 	const auto values = newsboat::configcontainer::bridged::get_article_sort_strategy_values(
 			*rs_object);
-
-	if (values.size() >= 2) {
-		ss.sm = static_cast<ArtSortMethod>(values[0]);
-		ss.sd = static_cast<SortDirection>(values[1]);
-	}
+	assert(values.size() >= 2);
+	ss.sm = static_cast<ArtSortMethod>(values[0]);
+	ss.sd = static_cast<SortDirection>(values[1]);
 	return ss;
 }
 
