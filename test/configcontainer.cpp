@@ -783,3 +783,13 @@ TEST_CASE("dump_config parity check for specific types and multi-options",
 		REQUIRE(line.find("# default: black yellow bold") != std::string::npos);
 	}
 }
+
+
+TEST_CASE("handle_action() joins arguments for multi-option settings", "[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	std::vector<std::string> args{"red", "blue"};
+	REQUIRE_NOTHROW(cfg.handle_action("search-highlight-colors", args));
+	REQUIRE(cfg.get_configvalue("search-highlight-colors") == "red blue");
+}
