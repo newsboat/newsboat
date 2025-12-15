@@ -27,6 +27,7 @@ ConfigContainer::~ConfigContainer() = default;
 
 void ConfigContainer::register_commands(ConfigParser& cfgparser)
 {
+	// Empty string in get_suggestions() returns all available keys which we need to register
 	const auto keys = newsboat::configcontainer::bridged::get_suggestions(*rs_object, "");
 	for (const auto& key : keys) {
 		cfgparser.register_handler(std::string(key), *this);
