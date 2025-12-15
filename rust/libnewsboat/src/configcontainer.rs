@@ -1196,6 +1196,245 @@ mod tests {
     use super::*;
 
     #[test]
+    fn t_handle_action_invalid_type() {
+        let cfg = ConfigContainer::new();
+
+        let result = cfg.handle_action("always-display-description", &["whatever".to_string()]);
+        assert!(matches!(result, Err(ConfigHandlerError::InvalidParams(_))));
+
+        let result = cfg.handle_action("download-retries", &["whatever".to_string()]);
+        assert!(matches!(result, Err(ConfigHandlerError::InvalidParams(_))));
+
+        let result = cfg.handle_action("proxy-type", &["whatever".to_string()]);
+        assert!(matches!(result, Err(ConfigHandlerError::InvalidParams(_))));
+    }
+
+    #[test]
+    fn t_reset_to_default() {
+        let cfg = ConfigContainer::new();
+        let default_value = "any";
+        let tests = vec![
+            "any",
+            "basic",
+            "digest",
+            "digest_ie",
+            "gssnegotiate",
+            "ntlm",
+            "anysafe",
+        ];
+        let key = "http-auth-method";
+
+        assert_eq!(cfg.get_configvalue(key), default_value);
+
+        for test_value in tests {
+            cfg.set_configvalue(key, test_value).unwrap();
+            assert_eq!(cfg.get_configvalue(key), test_value);
+            cfg.reset_to_default(key);
+            assert_eq!(cfg.get_configvalue(key), default_value);
+        }
+    }
+
+    #[test]
+    fn t_get_configvalue_nonexistent() {
+        let cfg = ConfigContainer::new();
+        assert_eq!(cfg.get_configvalue("nonexistent-key"), "");
+    }
+
+    #[test]
+    fn t_get_configvalue_as_bool() {
+        let cfg = ConfigContainer::new();
+        cfg.set_configvalue("cleanup-on-quit", "yes").unwrap();
+        cfg.set_configvalue("auto-reload", "true").unwrap();
+        cfg.set_configvalue("show-read-feeds", "no").unwrap();
+        cfg.set_configvalue("bookmark-interactive", "false")
+            .unwrap();
+
+        assert_eq!(cfg.get_configvalue("cleanup-on-quit"), "yes");
+        assert!(cfg.get_configvalue_as_bool("cleanup-on-quit"));
+
+        assert_eq!(cfg.get_configvalue("auto-reload"), "true");
+        assert!(cfg.get_configvalue_as_bool("auto-reload"));
+
+        assert_eq!(cfg.get_configvalue("show-read-feeds"), "no");
+        assert!(!cfg.get_configvalue_as_bool("show-read-feeds"));
+
+        assert_eq!(cfg.get_configvalue("bookmark-interactive"), "false");
+        assert!(!cfg.get_configvalue_as_bool("bookmark-interactive"));
+    }
+    #[test]
+
+    fn t_get_configvalue_as_int_nonexistent() {
+        let cfg = ConfigContainer::new();
+        assert_eq!(cfg.get_configvalue_as_int("setting-name"), 0);
+    }
+
+    #[test]
+    fn t_get_configvalue_as_int_parse_error() {
+        let key = "auto-reload";
+        let value = "true";
+
+        let cfg = ConfigContainer::new();
+        cfg.set_configvalue(key, value).unwrap();
+
+        assert_eq!(cfg.get_configvalue(key), value);
+        assert_eq!(cfg.get_configvalue_as_int(key), 0);
+    }
+
+    #[test]
+    fn t_get_configvalue_as_filepath_nonexistent() {
+        let cfg = ConfigContainer::new();
+        let path = cfg.get_configvalue_as_filepath("foobar");
+        assert_eq!(*path, std::path::PathBuf::new());
+    }
+
+    #[test]
+    fn t_toggle() {
+        let cfg = ConfigContainer::new();
+        let key = "always-display-description";
+
+        cfg.set_configvalue(key, "true").unwrap();
+        cfg.toggle(key);
+        assert!(!cfg.get_configvalue_as_bool(key));
+
+        cfg.set_configvalue(key, "false").unwrap();
+        cfg.toggle(key);
+        assert!(cfg.get_configvalue_as_bool(key));
+    }
+
+    #[test]
+    fn t_toggle_non_boolean() {
+        let cfg = ConfigContainer::new();
+        let tests = vec![
+            "articlelist-title-format",
+            "cache-file",
+            "http-auth-method",
+            "inoreader-passwordeval",
+            "notify-program",
+            "ocnews-passwordfile",
+            "oldreader-min-items",
+            "save-path",
+        ];
+
+        for key in tests {
+            let expected = cfg.get_configvalue(key);
+            cfg.toggle(key);
+            assert_eq!(cfg.get_configvalue(key), expected);
+        }
+    }
+
+    #[test]
+    fn t_dump_config_enumerates_all_settings() {
+        let cfg = ConfigContainer::new();
+        let result = cfg.dump_config();
+
+        let expected = vec![
+            "always-display-description false",
+            "download-timeout 30",
+            "ignore-mode \"download\"",
+            "newsblur-min-items 20",
+            "oldreader-password \"\"",
+            "proxy-type \"http\"",
+            "ttrss-mode \"multi\"",
+        ];
+
+        for exp in expected {
+            assert!(
+                result.contains(&exp.to_string()),
+                "Expected dump to contain: '{}'",
+                exp
+            );
+        }
+
+        cfg.set_configvalue("download-timeout", "100").unwrap();
+        cfg.set_configvalue("http-auth-method", "digest").unwrap();
+
+        let result = cfg.dump_config();
+        let expected_changed = vec![
+            "download-timeout 100 # default: 30",
+            "http-auth-method \"digest\" # default: any",
+        ];
+
+        for exp in expected_changed {
+            assert!(
+                result.contains(&exp.to_string()),
+                "Expected dump to contain: '{}'",
+                exp
+            );
+        }
+    }
+
+    #[test]
+    fn t_reset_or_toggle_invalid_config_does_not_crash() {
+        let cfg = ConfigContainer::new();
+
+        cfg.reset_to_default("non-existent");
+        let _ = cfg.dump_config();
+
+        // SECTION("toggle()")
+        cfg.toggle("non-existent");
+        let _ = cfg.dump_config();
+    }
+
+    #[test]
+    fn t_get_suggestions() {
+        let cfg = ConfigContainer::new();
+
+        let key1 = "d";
+        let expected1 = vec![
+            "datetime-format",
+            "delete-played-files",
+            "delete-read-articles-on-quit",
+            "dialogs-title-format",
+            "dirbrowser-title-format",
+            "display-article-progress",
+            "download-filename-format",
+            "download-full-page",
+            "download-path",
+            "download-retries",
+            "download-timeout",
+        ];
+        let results = cfg.get_suggestions(key1);
+        assert_eq!(results, expected1);
+
+        let key2 = "feed";
+        let expected2 = vec![
+            "feed-sort-order",
+            "feedbin-flag-star",
+            "feedbin-login",
+            "feedbin-password",
+            "feedbin-passwordeval",
+            "feedbin-passwordfile",
+            "feedbin-url",
+            "feedhq-flag-share",
+            "feedhq-flag-star",
+            "feedhq-login",
+            "feedhq-min-items",
+            "feedhq-password",
+            "feedhq-passwordeval",
+            "feedhq-passwordfile",
+            "feedhq-show-special-feeds",
+            "feedhq-url",
+            "feedlist-format",
+            "feedlist-title-format",
+        ];
+        let results = cfg.get_suggestions(key2);
+        assert_eq!(results, expected2);
+    }
+
+    #[test]
+    fn t_get_suggestions_alphabetical() {
+        let cfg = ConfigContainer::new();
+        let keys = vec!["dow", "rel", "us", "d"];
+
+        for key in keys {
+            let results = cfg.get_suggestions(key);
+            for window in results.windows(2) {
+                assert!(window[0] <= window[1]);
+            }
+        }
+    }
+
+    #[test]
     fn t_config_data_int_validation() {
         let mut cd = ConfigData::new("0", ConfigDataType::Int);
 
