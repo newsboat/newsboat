@@ -1,7 +1,6 @@
 use crate::filepath::PathBuf;
 use cxx::{ExternType, type_id};
 use libnewsboat::configcontainer;
-use std::pin::Pin;
 
 pub struct ConfigContainer(pub configcontainer::ConfigContainer);
 
@@ -37,11 +36,7 @@ mod bridged {
         fn get_configvalue(cc: &ConfigContainer, key: &str) -> String;
         fn get_configvalue_as_int(cc: &ConfigContainer, key: &str) -> i32;
         fn get_configvalue_as_bool(cc: &ConfigContainer, key: &str) -> bool;
-        fn get_configvalue_as_filepath(
-            cc: &ConfigContainer,
-            key: &str,
-            path: Pin<&mut PathBuf>,
-        ) -> bool;
+        fn get_configvalue_as_filepath(cc: &ConfigContainer, key: &str) -> Box<PathBuf>;
 
         fn set_configvalue(
             cc: &ConfigContainer,
@@ -105,12 +100,8 @@ fn get_configvalue_as_bool(cc: &ConfigContainer, key: &str) -> bool {
     cc.0.get_configvalue_as_bool(key)
 }
 
-fn get_configvalue_as_filepath(
-    cc: &ConfigContainer,
-    key: &str,
-    mut path: Pin<&mut PathBuf>,
-) -> bool {
-    cc.0.get_configvalue_as_filepath(key, &mut path.get_mut().0)
+fn get_configvalue_as_filepath(cc: &ConfigContainer, key: &str) -> Box<PathBuf> {
+    Box::new(PathBuf(*cc.0.get_configvalue_as_filepath(key)))
 }
 
 fn set_configvalue(cc: &ConfigContainer, key: &str, value: &str, error_msg: &mut String) -> bool {

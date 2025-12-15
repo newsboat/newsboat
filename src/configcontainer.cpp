@@ -74,12 +74,7 @@ int ConfigContainer::get_configvalue_as_int(const std::string& key) const
 
 Filepath ConfigContainer::get_configvalue_as_filepath(const std::string& key) const
 {
-	auto output = filepath::bridged::create_empty();
-	if (newsboat::configcontainer::bridged::get_configvalue_as_filepath(*rs_object, key,
-			*output)) {
-		return utils::resolve_tilde(Filepath(std::move(output)));
-	}
-	return {};
+	return Filepath(newsboat::configcontainer::bridged::get_configvalue_as_filepath(*rs_object, key));
 }
 
 bool ConfigContainer::get_configvalue_as_bool(const std::string& key) const

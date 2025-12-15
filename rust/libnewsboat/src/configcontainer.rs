@@ -1,6 +1,7 @@
 use gettextrs::gettext;
 use std::collections::{BTreeMap, HashSet};
 use std::sync::{Arc, Mutex};
+use crate::utils;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum ConfigDataType {
@@ -1057,13 +1058,8 @@ impl ConfigContainer {
         val == "true" || val == "yes"
     }
 
-    pub fn get_configvalue_as_filepath(&self, key: &str, path: &mut std::path::PathBuf) -> bool {
-        let val = self.get_configvalue(key);
-        if !val.is_empty() {
-            *path = std::path::PathBuf::from(val);
-            return true;
-        }
-        false
+    pub fn get_configvalue_as_filepath(&self, key: &str) -> Box<std::path::PathBuf> {
+        Box::new(utils::resolve_tilde(self.get_configvalue(key).into()))
     }
 
     pub fn get_configvalue(&self, key: &str) -> String {
