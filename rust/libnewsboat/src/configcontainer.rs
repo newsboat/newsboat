@@ -1101,12 +1101,21 @@ impl ConfigContainer {
         let mut output = Vec::new();
 
         for (key, entry) in data.iter() {
-            let formatted_value = match entry.data_type {
-                ConfigDataType::Bool | ConfigDataType::Int => entry.value.clone(),
-                _ => format!("\"{}\"", entry.value.replace("\"", "\\\"")),
-            };
+            let formatted_value =
+                if matches!(entry.data_type, ConfigDataType::Bool | ConfigDataType::Int) {
+                    entry.value.clone()
+                } else if entry.multi_option {
+                    utils::tokenize_quoted(&entry.value, " ")
+                        .iter()
+                        .map(|token| utils::quote(token.clone()))
+                        .collect::<Vec<_>>()
+                        .join(" ")
+                } else {
+                    utils::quote(entry.value.clone())
+                };
 
             let mut line = format!("{key} {formatted_value}");
+
             if entry.value != entry.default_value {
                 line.push_str(&format!(" # default: {}", entry.default_value));
             }
@@ -1292,6 +1301,36 @@ mod tests {
 
         // Check Boolean
         assert!(dump.contains(&"auto-reload yes # default: no".to_string()));
+    }
+
+    #[test]
+    fn t_dump_config_parity() {
+        let cfg = ConfigContainer::new();
+
+        cfg.set_configvalue("download-retries", "5").unwrap();
+        cfg.set_configvalue("auto-reload", "no").unwrap();
+        cfg.set_configvalue("bookmark-cmd", "echo 'hello world'")
+            .unwrap();
+        cfg.set_configvalue("search-highlight-colors", "red \"dark blue\"")
+            .unwrap();
+
+        let dumped = cfg.dump_config();
+
+        let find_line = |key: &str| dumped.iter().find(|line| line.starts_with(key)).cloned();
+
+        let line_int = find_line("download-retries").expect("download-retries not found");
+        assert_eq!(line_int, "download-retries 5 # default: 1");
+
+        let line_bool = find_line("auto-reload").expect("auto-reload not found");
+        assert_eq!(line_bool, "auto-reload no"); // Value matches default, so no comment
+
+        let line_str = find_line("bookmark-cmd").expect("bookmark-cmd not found");
+        assert_eq!(line_str, "bookmark-cmd \"echo 'hello world'\" # default: ");
+
+        let line_multi =
+            find_line("search-highlight-colors").expect("search-highlight-colors not found");
+        assert!(line_multi.starts_with("search-highlight-colors \"red\" \"dark blue\""));
+        assert!(line_multi.contains("# default: black yellow bold"));
     }
 
     #[test]

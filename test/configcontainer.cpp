@@ -738,3 +738,48 @@ TEST_CASE("get_article_sort_strategy() returns ascending direction "
 		REQUIRE(cfg.get_article_sort_strategy().sd == SortDirection::ASC);
 	}
 }
+
+TEST_CASE("dump_config parity check for specific types and multi-options",
+	"[ConfigContainer]")
+{
+	ConfigContainer cfg;
+
+	cfg.set_configvalue("download-retries", "5");
+	cfg.set_configvalue("auto-reload", "no");
+	cfg.set_configvalue("bookmark-cmd", "echo 'hello world'");
+	cfg.set_configvalue("search-highlight-colors", "red \"dark blue\"");
+
+	std::vector<std::string> config_output;
+	REQUIRE_NOTHROW(cfg.dump_config(config_output));
+
+	auto find_line = [&](const std::string& key) -> std::string {
+		for (const auto& line : config_output)
+		{
+			if (line.find(key) == 0) {
+				return line;
+			}
+		}
+		return "";
+	};
+
+	SECTION("Integer values are not quoted and show default comment") {
+		std::string line = find_line("download-retries");
+		REQUIRE(line == "download-retries 5 # default: 1");
+	}
+
+	SECTION("Boolean values matching default do not show comment") {
+		std::string line = find_line("auto-reload");
+		REQUIRE(line == "auto-reload no");
+	}
+
+	SECTION("Strings with spaces are correctly quoted") {
+		std::string line = find_line("bookmark-cmd");
+		REQUIRE(line == "bookmark-cmd \"echo 'hello world'\" # default: ");
+	}
+
+	SECTION("Multi-options are tokenized and individually quoted") {
+		std::string line = find_line("search-highlight-colors");
+		REQUIRE(line.find("search-highlight-colors \"red\" \"dark blue\"") == 0);
+		REQUIRE(line.find("# default: black yellow bold") != std::string::npos);
+	}
+}
