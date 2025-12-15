@@ -94,7 +94,7 @@ impl ConfigData {
                     self.value = new_val;
                     Ok(())
                 } else {
-                    Err(format!("invalid boolean value: {new_val}"))
+                    Err(gettext("invalid boolean value: %s").replace("%s", &new_val))
                 }
             }
             ConfigDataType::Int => {
@@ -102,7 +102,7 @@ impl ConfigData {
                     self.value = new_val;
                     Ok(())
                 } else {
-                    Err(format!("invalid integer value: {new_val}"))
+                    Err(gettext("invalid integer value: %s").replace("%s", &new_val))
                 }
             }
             ConfigDataType::Enum => {
@@ -110,7 +110,7 @@ impl ConfigData {
                     self.value = new_val;
                     Ok(())
                 } else {
-                    Err(format!("invalid enum value: {new_val}"))
+                    Err(gettext("invalid enum value: %s").replace("%s", &new_val))
                 }
             }
             _ => {
