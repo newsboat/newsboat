@@ -1340,8 +1340,7 @@ mod tests {
         for exp in expected {
             assert!(
                 result.contains(&exp.to_string()),
-                "Expected dump to contain: '{}'",
-                exp
+                "Expected dump to contain: '{exp}'"
             );
         }
 
@@ -1357,8 +1356,7 @@ mod tests {
         for exp in expected_changed {
             assert!(
                 result.contains(&exp.to_string()),
-                "Expected dump to contain: '{}'",
-                exp
+                "Expected dump to contain: '{exp}'"
             );
         }
     }
