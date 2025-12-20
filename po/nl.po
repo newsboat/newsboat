@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-12-09 18:25+0300\n"
-"PO-Revision-Date: 2025-09-07 19:27+0200\n"
+"PO-Revision-Date: 2025-12-23 22:34+0100\n"
 "Last-Translator: Dennis van der Schagt <dennisschagt@gmail.com>\n"
 "Language-Team: Dutch <vertalen@vrijschrift.org>, Erwin Poeze "
 "<donnut@outlook.com>, Dennis van der Schagt <dennisschagt@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -1767,11 +1767,11 @@ msgstr "Fout: Het ontleden van OPML-bestand \"%s\" is mislukt"
 
 #: src/opml.cpp:232
 msgid "the <opml> root element is missing"
-msgstr ""
+msgstr "het <opml>-hoofdelement ontbreekt"
 
 #: src/opml.cpp:253
 msgid "the <body> element in the <opml> root element is missing"
-msgstr ""
+msgstr "het <body>-element in het <opml>-hoofdelement ontbreekt"
 
 #: src/pbcontroller.cpp:75
 #, c-format
