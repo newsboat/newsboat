@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.5\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-12-09 18:25+0300\n"
-"PO-Revision-Date: 2025-09-08 12:08+0200\n"
+"PO-Revision-Date: 2025-12-12 21:26+0100\n"
 "Last-Translator: Michal Siemek <carnophage@dobramama.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 #: newsboat.cpp:34
 #, c-format
@@ -1766,11 +1766,11 @@ msgstr "Błąd: nie udało się przetworzyć pliku OPML \"%s\""
 
 #: src/opml.cpp:232
 msgid "the <opml> root element is missing"
-msgstr ""
+msgstr "brakuje głównego elementu <opml>"
 
 #: src/opml.cpp:253
 msgid "the <body> element in the <opml> root element is missing"
-msgstr ""
+msgstr "brakuje elementu <body> w głównym elemencie <opml>"
 
 #: src/pbcontroller.cpp:75
 #, c-format
