@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: newsboat 0.7\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-12-09 18:25+0300\n"
-"PO-Revision-Date: 2025-09-15 23:30+0800\n"
+"PO-Revision-Date: 2025-12-21 22:30+0800\n"
 "Last-Translator: Yuhan Wang <cookiepieqaq@gmail.com>\n"
 "Language-Team: josh yu <joshyupeng@gmail.com>, Yuhan Wang "
 "<cookiepieqaq@gmail.com>\n"
@@ -1734,11 +1734,11 @@ msgstr "错误：无法解析OPML文件\"%s\""
 
 #: src/opml.cpp:232
 msgid "the <opml> root element is missing"
-msgstr ""
+msgstr "未找到 <opml> 根元素"
 
 #: src/opml.cpp:253
 msgid "the <body> element in the <opml> root element is missing"
-msgstr ""
+msgstr "在 <opml> 根元素中未找到 <body> 元素"
 
 #: src/pbcontroller.cpp:75
 #, c-format
