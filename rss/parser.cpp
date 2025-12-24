@@ -59,6 +59,8 @@ Feed Parser::parse_url(const std::string& url,
 	CURLcode ret;
 	curl_slist* custom_headers{};
 
+	curl_easy_reset(easyhandle.ptr());
+
 	if (!ua.empty()) {
 		curl_easy_setopt(easyhandle.ptr(), CURLOPT_USERAGENT, ua.c_str());
 	}
@@ -178,12 +180,6 @@ Feed Parser::parse_url(const std::string& url,
 	long status;
 	CURLcode infoOk =
 		curl_easy_getinfo(easyhandle.ptr(), CURLINFO_RESPONSE_CODE, &status);
-
-	curl_easy_reset(easyhandle.ptr());
-	if (cookie_cache != "") {
-		curl_easy_setopt(
-			easyhandle.ptr(), CURLOPT_COOKIEJAR, cookie_cache.c_str());
-	}
 
 	if (ret != 0) {
 		LOG(Level::ERROR,
