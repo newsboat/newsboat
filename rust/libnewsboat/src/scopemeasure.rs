@@ -2,10 +2,7 @@
 
 use std::time::Instant;
 
-use crate::{
-    log,
-    logger::{self, Level},
-};
+use crate::logger::{self, Level};
 
 /// Measures time spent in an enclosing scope, and writes it to the log.
 ///
