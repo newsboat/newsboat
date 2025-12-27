@@ -23,15 +23,14 @@ public:
 	void handle_action(const std::string& action,
 		const std::vector<std::string>& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
-	void quote_and_highlight(StflRichText& stflString, Dialog location);
+	void quote_and_highlight(StflRichText& stflString, Dialog location) const;
 	void remove_last_regex(Dialog location);
-	int article_matches(Matchable* item);
-	int feed_matches(Matchable* feed);
-	std::string get_attrs_stfl_string(Dialog location, bool hasFocus);
+	int article_matches(Matchable* item) const;
+	int feed_matches(Matchable* feed) const;
+	std::string get_attrs_stfl_string(Dialog location, bool hasFocus) const;
 
 private:
-	typedef std::vector<std::pair<std::shared_ptr<Regex>, std::string>>
-		RegexStyleVector;
+	using RegexStyleVector = std::vector<std::pair<std::shared_ptr<Regex>, std::string>>;
 	std::map<Dialog, RegexStyleVector> locations;
 	std::vector<std::string> cheat_store_for_dump_config;
 	std::vector<std::pair<std::shared_ptr<Matcher>, int>> matchers_article;

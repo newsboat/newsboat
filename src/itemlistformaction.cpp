@@ -1137,7 +1137,7 @@ void ItemListFormAction::prepare()
 StflRichText ItemListFormAction::item2formatted_line(const ItemPtrPosPair& item,
 	const unsigned int width,
 	const std::string& itemlist_format,
-	const std::string& datetime_format)
+	const std::string& datetime_format) const
 {
 	FmtStrFormatter fmt;
 	fmt.register_fmt('i', strprintf::fmt("%u", item.second + 1));
@@ -1520,7 +1520,7 @@ void ItemListFormAction::register_format_styles()
 	list.stfl_replace_list(textview);
 }
 
-std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item)
+std::string ItemListFormAction::gen_flags(std::shared_ptr<RssItem> item) const
 {
 	std::string flags;
 	if (item->deleted()) {

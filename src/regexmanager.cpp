@@ -45,7 +45,7 @@ void RegexManager::handle_action(const std::string& action,
 	cheat_store_for_dump_config.push_back(line);
 }
 
-int RegexManager::article_matches(Matchable* item)
+int RegexManager::article_matches(Matchable* item) const
 {
 	for (const auto& Matcher : matchers_article) {
 		if (Matcher.first->matches(item)) {
@@ -55,7 +55,7 @@ int RegexManager::article_matches(Matchable* item)
 	return -1;
 }
 
-int RegexManager::feed_matches(Matchable* feed)
+int RegexManager::feed_matches(Matchable* feed) const
 {
 	for (const auto& Matcher : matchers_feed) {
 		if (Matcher.first->matches(feed)) {
@@ -67,7 +67,12 @@ int RegexManager::feed_matches(Matchable* feed)
 
 void RegexManager::remove_last_regex(Dialog location)
 {
-	auto& regexes = locations[location];
+	const auto location_regexes = locations.find(location);
+	if (location_regexes == locations.end()) {
+		return;
+	}
+
+	auto& regexes = location_regexes->second;
 	if (regexes.empty()) {
 		return;
 	}
@@ -75,9 +80,14 @@ void RegexManager::remove_last_regex(Dialog location)
 	regexes.pop_back();
 }
 
-void RegexManager::quote_and_highlight(StflRichText& stflString, Dialog location)
+void RegexManager::quote_and_highlight(StflRichText& stflString, Dialog location) const
 {
-	auto& regexes = locations[location];
+	const auto location_regexes = locations.find(location);
+	if (location_regexes == locations.end()) {
+		return;
+	}
+
+	const auto& regexes = location_regexes->second;
 
 	const std::string text = stflString.plaintext();
 
@@ -116,20 +126,22 @@ void RegexManager::handle_highlight_action(const std::vector<std::string>&
 	}
 
 	std::string location_str = params[0];
-	const auto location = dialog_from_name(location_str);
 
 	std::vector<Dialog> applicable_locations;
 	if (location_str == "all") {
 		for (const auto& l : locations) {
 			applicable_locations.push_back(l.first);
 		}
-	} else if (location.has_value() &&
-		(location.value() == Dialog::FeedList || location.value() == Dialog::ArticleList
-			|| location.value() == Dialog::Article)) {
-		applicable_locations.push_back(location.value());
 	} else {
-		throw ConfigHandlerException(strprintf::fmt(
-				_("`%s' is not a valid context"), location_str));
+		const auto location = dialog_from_name(location_str);
+		if (location.has_value() &&
+			(location.value() == Dialog::FeedList || location.value() == Dialog::ArticleList
+				|| location.value() == Dialog::Article)) {
+			applicable_locations.push_back(location.value());
+		} else {
+			throw ConfigHandlerException(strprintf::fmt(
+					_("`%s' is not a valid context"), location_str));
+		}
 	}
 
 	std::string errorMessage;
@@ -271,9 +283,14 @@ void RegexManager::handle_highlight_item_action(const std::string& action,
 }
 
 std::string RegexManager::get_attrs_stfl_string(Dialog location,
-	bool hasFocus)
+	bool hasFocus) const
 {
-	const auto& attributes = locations[location];
+	const auto location_regexes = locations.find(location);
+	if (location_regexes == locations.end()) {
+		return "";
+	}
+
+	const auto& attributes = location_regexes->second;
 	std::string attrstr;
 	for (unsigned int i = 0; i < attributes.size(); ++i) {
 		const std::string& attribute = attributes[i].second;
