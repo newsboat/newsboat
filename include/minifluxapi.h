@@ -43,6 +43,7 @@ private:
 		nlohmann::json& args);
 	bool update_article(const std::string& guid, nlohmann::json& args);
 	bool star_article(const std::string& guid, bool star);
+	bool save_article(const std::string& guid, bool save);
 	std::string auth_info;
 	std::string auth_token;
 	std::string server;
