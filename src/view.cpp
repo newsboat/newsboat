@@ -72,6 +72,7 @@ View::View(Controller& c)
 	, rsscache(nullptr)
 	, filters(ctrl.get_filtercontainer())
 	, colorman(ctrl.get_colormanager())
+	, general_state_lock(general_state_mutex)
 {
 	if (getenv("ESCDELAY") == nullptr) {
 		set_escdelay(25);
@@ -177,7 +178,9 @@ int View::run()
 		fa->prepare();
 
 		// we then receive the event and ignore timeouts.
+		general_state_lock.unlock();
 		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
+		general_state_lock.lock();
 
 		if (ctrl_c_hit) {
 			ctrl_c_hit = false;
@@ -267,7 +270,9 @@ std::string View::run_modal(std::shared_ptr<FormAction> f,
 
 		fa->prepare();
 
+		general_state_lock.unlock();
 		const std::string event = fa->draw_form_wait_for_event(INT_MAX);
+		general_state_lock.lock();
 		LOG(Level::DEBUG, "View::run: event = %s", event);
 		if (event.empty() || event == "TIMEOUT") {
 			continue;
@@ -711,7 +716,9 @@ char View::confirm(const std::string& prompt, const std::string& charset)
 	char result = 0;
 
 	do {
+		general_state_lock.unlock();
 		const std::string event = f->draw_form_wait_for_event(0);
+		general_state_lock.lock();
 		LOG(Level::DEBUG, "View::confirm: event = %s", event);
 		if (event.empty()) {
 			continue;
