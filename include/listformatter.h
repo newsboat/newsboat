@@ -1,9 +1,11 @@
 #ifndef NEWSBOAT_LISTFORMATTER_H_
 #define NEWSBOAT_LISTFORMATTER_H_
 
+#include <optional>
 #include <string>
 #include <vector>
 
+#include "dialog.h"
 #include "regexmanager.h"
 #include "stflrichtext.h"
 
@@ -11,7 +13,7 @@ namespace newsboat {
 
 class ListFormatter {
 public:
-	explicit ListFormatter(RegexManager* r = nullptr, const std::string& loc = "");
+	explicit ListFormatter(RegexManager* r = nullptr, std::optional<Dialog> loc = {});
 	void add_line(const StflRichText& text);
 	void set_line(const unsigned int itempos, const StflRichText& text);
 	void clear()
@@ -27,7 +29,7 @@ public:
 private:
 	std::vector<StflRichText> lines;
 	RegexManager* rxman;
-	std::string location;
+	std::optional<Dialog> location;
 };
 
 } // namespace newsboat

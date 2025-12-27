@@ -7,18 +7,19 @@
 
 #include "config.h"
 #include "confighandlerexception.h"
+#include "dialog.h"
 #include "keycombination.h"
 
 using namespace newsboat;
 
-static const auto contexts = { "feedlist", "filebrowser", "help", "articlelist",
-	"article", "tagselection", "filterselection", "urlview", "podboat",
-	"dialogs", "dirbrowser"
+static const auto contexts = { Dialog::FeedList, Dialog::FileBrowser, Dialog::Help, Dialog::ArticleList,
+	       Dialog::Article, Dialog::TagSelection, Dialog::FilterSelection, Dialog::UrlView, Dialog::Podboat,
+	       Dialog::DialogList, Dialog::DirBrowser
 };
 
 namespace {
 Operation check_single_command_binding(KeyMap& keymap,
-	const KeyCombination& key_combination, const std::string& context)
+	const KeyCombination& key_combination, Dialog context)
 {
 	MultiKeyBindingState binding_state{};
 	BindingType binding_type{};
@@ -29,8 +30,7 @@ Operation check_single_command_binding(KeyMap& keymap,
 	return cmds.at(0).op;
 }
 
-void check_unbound(KeyMap& keymap, const KeyCombination& key_combination,
-	const std::string& context)
+void check_unbound(KeyMap& keymap, const KeyCombination& key_combination, Dialog context)
 {
 	MultiKeyBindingState binding_state{};
 	BindingType binding_type{};
@@ -44,20 +44,22 @@ TEST_CASE("get_operation()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(check_single_command_binding(k, KeyCombination("u"), "article") == OP_SHOWURLS);
-	check_unbound(k, KeyCombination("x", ShiftState::Shift), "feedlist");
-	check_unbound(k, KeyCombination(""), "feedlist");
-	REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
+	REQUIRE(check_single_command_binding(k, KeyCombination("u"),
+			Dialog::Article) == OP_SHOWURLS);
+	check_unbound(k, KeyCombination("x", ShiftState::Shift), Dialog::FeedList);
+	check_unbound(k, KeyCombination(""), Dialog::FeedList);
+	REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"),
+			Dialog::FeedList) == OP_OPEN);
 
 	SECTION("Returns OP_NIL after unset_key()") {
-		k.unset_key(KeyCombination("ENTER"), "all");
-		check_unbound(k, KeyCombination("ENTER"), "feedlist");
+		k.unset_key(KeyCombination("ENTER"), AllDialogs());
+		check_unbound(k, KeyCombination("ENTER"), Dialog::FeedList);
 	}
 
 	GIVEN("A multi-key binding specifying 'a' followed by ENTER") {
 		k.handle_action("bind", "a<ENTER> feedlist open");
 
-		const std::string context = "feedlist";
+		const Dialog context = Dialog::FeedList;
 		MultiKeyBindingState binding_state{};
 		BindingType type{};
 		WHEN("only 'a' is provided") {
@@ -95,17 +97,19 @@ TEST_CASE("unset_key() and set_key()", "[KeyMap]")
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
-	REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
+	REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"),
+			Dialog::FeedList) == OP_OPEN);
+	REQUIRE(k.get_keys(OP_OPEN, Dialog::FeedList) == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 
 	SECTION("unset_key() removes the mapping") {
-		k.unset_key(KeyCombination("ENTER"), "all");
-		check_unbound(k, KeyCombination("ENTER"), "feedlist");
+		k.unset_key(KeyCombination("ENTER"), AllDialogs());
+		check_unbound(k, KeyCombination("ENTER"), Dialog::FeedList);
 
 		SECTION("set_key() sets the mapping") {
-			k.set_key(OP_OPEN, KeyCombination("ENTER"), "all");
-			REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
-			REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
+			k.set_key(OP_OPEN, KeyCombination("ENTER"), AllDialogs());
+			REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"),
+					Dialog::FeedList) == OP_OPEN);
+			REQUIRE(k.get_keys(OP_OPEN, Dialog::FeedList) == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 		}
 	}
 }
@@ -138,12 +142,12 @@ TEST_CASE(
 
 	SECTION("\"all\" context clears the keymap from all defined keybindings") {
 		KeyMap k(KM_NEWSBOAT);
-		k.unset_all_keys("all");
+		k.unset_all_keys(AllDialogs());
 
 		for (int i = OP_NB_MIN; i < OP_SK_MAX; ++i) {
 			for (const auto& context : contexts) {
 				INFO("Operation: " << i);
-				INFO("used in context: " << context);
+				INFO("used in context: " << dialog_name(context));
 				REQUIRE(k.get_keys(static_cast<Operation>(i),
 						context) == std::vector<KeyCombination>());
 			}
@@ -152,17 +156,17 @@ TEST_CASE(
 
 	SECTION("Clears key bindings just for a given context") {
 		KeyMap k(KM_NEWSBOAT);
-		k.unset_all_keys("articlelist");
+		k.unset_all_keys(Dialog::ArticleList);
 
 		for (int i = OP_NB_MIN; i < OP_NB_MAX; ++i) {
 			REQUIRE(k.get_keys(static_cast<Operation>(i),
-					"articlelist") == std::vector<KeyCombination>());
+					Dialog::ArticleList) == std::vector<KeyCombination>());
 		}
 
 		KeyMap default_keys(KM_NEWSBOAT);
 		for (int i = OP_QUIT; i < OP_NB_MAX; ++i) {
 			const auto op = static_cast<Operation>(i);
-			REQUIRE(k.get_keys(op, "feedlist") == default_keys.get_keys(op, "feedlist"));
+			REQUIRE(k.get_keys(op, Dialog::FeedList) == default_keys.get_keys(op, Dialog::FeedList));
 		}
 	}
 }
@@ -180,22 +184,22 @@ TEST_CASE("get_keys()", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	SECTION("Retrieves general bindings") {
-		REQUIRE(k.get_keys(OP_OPEN, "feedlist") == std::vector<KeyCombination>({KeyCombination("ENTER")}));
+		REQUIRE(k.get_keys(OP_OPEN, Dialog::FeedList) == std::vector<KeyCombination>({KeyCombination("ENTER")}));
 		REQUIRE(k.get_keys(OP_TOGGLEITEMREAD,
-				"articlelist") == std::vector<KeyCombination>({KeyCombination("n", ShiftState::Shift)}));
+				Dialog::ArticleList) == std::vector<KeyCombination>({KeyCombination("n", ShiftState::Shift)}));
 	}
 
 	SECTION("Returns context-specific bindings only in that context") {
-		k.unset_key(KeyCombination("q"), "article");
-		k.set_key(OP_QUIT, KeyCombination("o", ShiftState::Shift), "article");
-		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<KeyCombination>({KeyCombination("o", ShiftState::Shift)}));
-		REQUIRE(k.get_keys(OP_QUIT, "feedlist") == std::vector<KeyCombination>({KeyCombination("q")}));
+		k.unset_key(KeyCombination("q"), Dialog::Article);
+		k.set_key(OP_QUIT, KeyCombination("o", ShiftState::Shift), Dialog::Article);
+		REQUIRE(k.get_keys(OP_QUIT, Dialog::Article) == std::vector<KeyCombination>({KeyCombination("o", ShiftState::Shift)}));
+		REQUIRE(k.get_keys(OP_QUIT, Dialog::FeedList) == std::vector<KeyCombination>({KeyCombination("q")}));
 	}
 
 	SECTION("Returns all keys bound to an operation (both default and added)") {
-		k.set_key(OP_QUIT, KeyCombination("a"), "article");
-		k.set_key(OP_QUIT, KeyCombination("d"), "article");
-		REQUIRE(k.get_keys(OP_QUIT, "article") == std::vector<KeyCombination>({KeyCombination("a"), KeyCombination("d"), KeyCombination("q")}));
+		k.set_key(OP_QUIT, KeyCombination("a"), Dialog::Article);
+		k.set_key(OP_QUIT, KeyCombination("d"), Dialog::Article);
+		REQUIRE(k.get_keys(OP_QUIT, Dialog::Article) == std::vector<KeyCombination>({KeyCombination("a"), KeyCombination("d"), KeyCombination("q")}));
 	}
 }
 
@@ -250,7 +254,7 @@ TEST_CASE("handle_action()", "[KeyMap]")
 		REQUIRE_NOTHROW(k.handle_action("bind-key", "u pageup"));
 		REQUIRE_NOTHROW(k.handle_action("bind-key", "p pageup"));
 
-		REQUIRE(k.get_keys(OP_SK_PGUP, "feedlist")
+		REQUIRE(k.get_keys(OP_SK_PGUP, Dialog::FeedList)
 			== std::vector<KeyCombination>({KeyCombination("PPAGE"), KeyCombination("p"), KeyCombination("u")}));
 	}
 
@@ -275,6 +279,11 @@ TEST_CASE("handle_action() for bind", "[KeyMap]")
 		REQUIRE_THROWS_AS(k.handle_action("bind", "a everywhere"), ConfigHandlerException);
 		REQUIRE_THROWS_AS(k.handle_action("bind", "a"), ConfigHandlerException);
 	}
+
+	SECTION("throws on invalid dialog name") {
+		REQUIRE_THROWS_AS(k.handle_action("bind", R"(a feedlist,notavalidname,itemlist open)"),
+			ConfigHandlerException);
+	}
 }
 
 TEST_CASE("handle_action() for unbind-key", "[KeyMap]")
@@ -284,7 +293,7 @@ TEST_CASE("handle_action() for unbind-key", "[KeyMap]")
 	GIVEN("A multi-key binding specifying 'a' followed by ENTER") {
 		k.handle_action("bind", "a<ENTER> feedlist open");
 
-		const std::string context = "feedlist";
+		const Dialog context = Dialog::FeedList;
 		MultiKeyBindingState binding_state{};
 		BindingType type{};
 
@@ -312,12 +321,13 @@ TEST_CASE("handle_action() for unbind-key", "[KeyMap]")
 	}
 
 	SECTION("unbind-key uses 'old style key binding' special key syntax") {
-		REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"), "feedlist") == OP_OPEN);
+		REQUIRE(check_single_command_binding(k, KeyCombination("ENTER"),
+				Dialog::FeedList) == OP_OPEN);
 
 		// New style `bind` would specify this as `<ENTER>` instead
 		k.handle_action("unbind-key", "ENTER");
 
-		check_unbound(k, KeyCombination("ENTER"), "feedlist");
+		check_unbound(k, KeyCombination("ENTER"), Dialog::FeedList);
 	}
 }
 
@@ -326,38 +336,38 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 {
 	WHEN("calling get_keymap_descriptions(\"feedlist\")") {
 		KeyMap k(KM_NEWSBOAT);
-		const auto descriptions = k.get_keymap_descriptions("feedlist");
+		const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 
 		THEN("the descriptions do not include any entries with context \"podboat\"") {
 			REQUIRE(descriptions.size() > 0);
 			for (const auto& description : descriptions) {
-				REQUIRE(description.ctx != "podboat");
+				REQUIRE(description.ctx != Dialog::Podboat);
 			}
 		}
 
 		THEN("the descriptions include only entries with the specified context") {
 			REQUIRE(std::all_of(descriptions.begin(), descriptions.end(),
 			[](const KeyMapDesc& x) {
-				return x.ctx == "feedlist";
+				return x.ctx == Dialog::FeedList;
 			}));
 		}
 	}
 
 	WHEN("calling get_keymap_descriptions(KM_PODBOAT)") {
 		KeyMap k(KM_PODBOAT);
-		const auto descriptions = k.get_keymap_descriptions("podboat");
+		const auto descriptions = k.get_keymap_descriptions(Dialog::Podboat);
 
 		THEN("the descriptions only include entries with context \"podboat\"") {
 			REQUIRE(descriptions.size() > 0);
 			for (const auto& description : descriptions) {
-				REQUIRE(description.ctx == "podboat");
+				REQUIRE(description.ctx == Dialog::Podboat);
 			}
 		}
 	}
 
 	WHEN("calling get_keymap_descriptions(\"feedlist\")") {
 		KeyMap k(KM_NEWSBOAT);
-		const auto descriptions = k.get_keymap_descriptions("feedlist");
+		const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 
 		THEN("by default it does always set .cmd (command) and .desc (command description)") {
 			for (const auto& description : descriptions) {
@@ -369,11 +379,11 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 
 	GIVEN("that multiple keys are bound to the same operation (\"quit\")") {
 		KeyMap k(KM_NEWSBOAT);
-		k.set_key(OP_QUIT, KeyCombination("a"), "feedlist");
-		k.set_key(OP_QUIT, KeyCombination("b"), "feedlist");
+		k.set_key(OP_QUIT, KeyCombination("a"), Dialog::FeedList);
+		k.set_key(OP_QUIT, KeyCombination("b"), Dialog::FeedList);
 
 		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
-			const auto descriptions = k.get_keymap_descriptions("feedlist");
+			const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 
 			THEN("all entries have both description and command configured") {
 				REQUIRE(std::all_of(descriptions.begin(), descriptions.end(),
@@ -387,10 +397,10 @@ TEST_CASE("verify get_keymap_descriptions() behavior",
 	GIVEN("that a key is bound to an operation which by default has no key configured") {
 		KeyMap k(KM_NEWSBOAT);
 		const auto key = KeyCombination("o", ShiftState::Shift);
-		k.set_key(OP_OPENALLUNREADINBROWSER_AND_MARK, key, "feedlist");
+		k.set_key(OP_OPENALLUNREADINBROWSER_AND_MARK, key, Dialog::FeedList);
 
 		WHEN("calling get_keymap_descriptions(\"feedlist\")") {
-			const auto descriptions = k.get_keymap_descriptions("feedlist");
+			const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 
 			THEN("there is an entry with the configured key") {
 				REQUIRE(std::any_of(descriptions.begin(), descriptions.end(),
@@ -424,7 +434,7 @@ TEST_CASE("get_keymap_descriptions() returns at most one entry per key",
 {
 	KeyMap k(KM_NEWSBOAT);
 
-	const auto descriptions = k.get_keymap_descriptions("feedlist");
+	const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 
 	std::set<KeyCombination> keys;
 	for (const auto& description : descriptions) {
@@ -454,7 +464,7 @@ TEST_CASE("get_keymap_descriptions() does not return empty commands or descripti
 	REQUIRE_NOTHROW(k.handle_action("bind-key", "b " +  operation));
 	REQUIRE_NOTHROW(k.handle_action("bind-key", "c " +  operation));
 
-	const auto descriptions = k.get_keymap_descriptions("feedlist");
+	const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 	for (const auto& description : descriptions) {
 		REQUIRE(description.cmd != "");
 		REQUIRE(description.desc != "");
@@ -473,7 +483,7 @@ TEST_CASE("get_keymap_descriptions() includes entries which include different "
 	REQUIRE_NOTHROW(k.handle_action("bind-key", "b " +  operation));
 	REQUIRE_NOTHROW(k.handle_action("bind-key", "c " +  operation));
 
-	const auto descriptions = k.get_keymap_descriptions("feedlist");
+	const auto descriptions = k.get_keymap_descriptions(Dialog::FeedList);
 
 	std::set<KeyCombination> keys;
 	for (const auto& description : descriptions) {
@@ -493,7 +503,7 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	std::vector<std::string> dumpOutput;
 
 	GIVEN("that all keybindings are removed") {
-		k.unset_all_keys("all");
+		k.unset_all_keys(AllDialogs());
 
 		WHEN("calling dump_config()") {
 			k.dump_config(dumpOutput);
@@ -519,10 +529,10 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	}
 
 	GIVEN("a few keybindings") {
-		k.unset_all_keys("all");
-		k.set_key(OP_OPEN, KeyCombination("ENTER"), "feedlist");
-		k.set_key(OP_NEXT, KeyCombination("j"), "articlelist");
-		k.set_key(OP_PREV, KeyCombination("k"), "articlelist");
+		k.unset_all_keys(AllDialogs());
+		k.set_key(OP_OPEN, KeyCombination("ENTER"), Dialog::FeedList);
+		k.set_key(OP_NEXT, KeyCombination("j"), Dialog::ArticleList);
+		k.set_key(OP_PREV, KeyCombination("k"), Dialog::ArticleList);
 
 		WHEN("calling dump_config()") {
 			k.dump_config(dumpOutput);
@@ -538,9 +548,9 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	}
 
 	GIVEN("a few registered macros and one regular keybinding") {
-		k.unset_all_keys("all");
+		k.unset_all_keys(AllDialogs());
 
-		k.set_key(OP_OPEN, KeyCombination("ENTER"), "feedlist");
+		k.set_key(OP_OPEN, KeyCombination("ENTER"), Dialog::FeedList);
 		k.handle_action("macro", "1 open");
 		k.handle_action("macro", "2 open ; next");
 		k.handle_action("macro", "3 open ; next ; prev");
@@ -562,7 +572,7 @@ TEST_CASE("dump_config() returns a line for each keybind and macro", "[KeyMap]")
 	}
 
 	GIVEN("a few registered macros with arguments") {
-		k.unset_all_keys("all");
+		k.unset_all_keys(AllDialogs());
 
 		k.handle_action("macro", "1 set \"arg 1\"");
 		k.handle_action("macro", "2 set \"arg 1\" ; set \"arg 2\" \"arg 3\"");
@@ -591,7 +601,7 @@ TEST_CASE("dump_config() stores a description if it is present", "[KeyMap]")
 	KeyMap k(KM_NEWSBOAT);
 
 	GIVEN("a few macros, some with a description") {
-		k.unset_all_keys("all");
+		k.unset_all_keys(AllDialogs());
 
 		k.handle_action("macro", R"(x open -- "first description")");
 		k.handle_action("macro", R"(y set m n -- "configure \"m\" \\ ")");
@@ -757,7 +767,7 @@ TEST_CASE("prepare_keymap_hint() returns a string describing keys to which given
 		{OP_SEARCH, "Go find me"}
 	};
 
-	REQUIRE(k.prepare_keymap_hint(hints, "feedlist") ==
+	REQUIRE(k.prepare_keymap_hint(hints, Dialog::FeedList) ==
 		"<key>q</><colon>:</><desc>Get out of <>this> dialog</> "
 		"<key>?</><comma>,</><key>w</><colon>:</><desc>HALP</> "
 		"<key>ENTER</><comma>,</><key><></><comma>,</><key>x</><colon>:</><desc>Open</> "
@@ -772,10 +782,10 @@ TEST_CASE("get_help_info() returns info about macros, bindings, and unbound acti
 
 
 	GIVEN("all bindings are removed") {
-		k.unset_all_keys("feedlist");
+		k.unset_all_keys(Dialog::FeedList);
 
 		WHEN("help info is retrieved") {
-			const auto help_info = k.get_help_info("feedlist");
+			const auto help_info = k.get_help_info(Dialog::FeedList);
 
 			THEN("the list with info about bindings is empty") {
 				REQUIRE(help_info.bindings.size() == 0);
@@ -797,7 +807,7 @@ TEST_CASE("get_help_info() returns info about macros, bindings, and unbound acti
 		k.handle_action("bind", R"(om feedlist set browser "mpv" ; open-in-browser)");
 
 		WHEN("help info is retrieved") {
-			const auto help_info = k.get_help_info("feedlist");
+			const auto help_info = k.get_help_info(Dialog::FeedList);
 
 			THEN("a description is generated from the list of actions") {
 				const auto bind_it = std::find_if(help_info.bindings.begin(),
@@ -815,7 +825,7 @@ TEST_CASE("get_help_info() returns info about macros, bindings, and unbound acti
 			R"(om feedlist set browser "mpv" ; open-in-browser -- "open with mpv")");
 
 		WHEN("help info is retrieved") {
-			const auto help_info = k.get_help_info("feedlist");
+			const auto help_info = k.get_help_info(Dialog::FeedList);
 
 			THEN("the provided description is included") {
 				const auto bind_it = std::find_if(help_info.bindings.begin(),
@@ -832,7 +842,7 @@ TEST_CASE("get_help_info() returns info about macros, bindings, and unbound acti
 		k.handle_action("bind", "oo feedlist open");
 
 		WHEN("help info is retrieved") {
-			const auto help_info = k.get_help_info("feedlist");
+			const auto help_info = k.get_help_info(Dialog::FeedList);
 
 			THEN("the action name and description are included in the binding info") {
 				const auto bind_it = std::find_if(help_info.bindings.begin(),
@@ -848,7 +858,7 @@ TEST_CASE("get_help_info() returns info about macros, bindings, and unbound acti
 	}
 
 	SECTION("help info with no configured macros") {
-		const auto help_info = k.get_help_info("feedlist");
+		const auto help_info = k.get_help_info(Dialog::FeedList);
 		REQUIRE(help_info.macros.size() == 0);
 	}
 
@@ -856,7 +866,7 @@ TEST_CASE("get_help_info() returns info about macros, bindings, and unbound acti
 		k.handle_action("macro", "a open");
 		k.handle_action("macro", "b open -- \"some description\"");
 
-		const auto help_info = k.get_help_info("feedlist");
+		const auto help_info = k.get_help_info(Dialog::FeedList);
 		REQUIRE(help_info.macros.size() == 2);
 		REQUIRE(help_info.macros[0].key_sequence == "<macro-prefix>a");
 		REQUIRE(help_info.macros[0].description == "");

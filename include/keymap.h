@@ -5,9 +5,11 @@
 #include <optional>
 #include <set>
 #include <string>
+#include <variant>
 #include <vector>
 
 #include "configactionhandler.h"
+#include "dialog.h"
 #include "keycombination.h"
 
 enum class BindingType {
@@ -160,7 +162,7 @@ struct KeyMapDesc {
 	KeyCombination key;
 	std::string cmd;
 	std::string desc;
-	std::string ctx;
+	Dialog ctx;
 	unsigned short flags;
 };
 
@@ -218,30 +220,32 @@ class KeyMap : public ConfigActionHandler {
 public:
 	explicit KeyMap(unsigned int flags);
 	~KeyMap() override;
+	// Specify std::nullopt to apply to all contexts
 	void set_key(Operation op,
 		const KeyCombination& key,
-		const std::string& context);
-	void unset_key(const KeyCombination& key, const std::string& context);
-	void unset_all_keys(const std::string& context);
+		std::variant<Dialog, AllDialogs> context);
+	// Specify std::nullopt to apply to all contexts
+	void unset_key(const KeyCombination& key, std::variant<Dialog, AllDialogs> context);
+	// Specify std::nullopt to apply to all contexts
+	void unset_all_keys(std::variant<Dialog, AllDialogs> context);
 	static Operation get_opcode(const std::string& opstr);
 	static std::string get_op_name(Operation op);
 	std::vector<MacroCmd> get_operation(const std::vector<KeyCombination>& key_sequence,
-		const std::string& context, MultiKeyBindingState& state, BindingType& type);
+		Dialog context, MultiKeyBindingState& state, BindingType& type);
 	std::vector<MacroCmd> get_macro(const KeyCombination& key_combination);
 	char get_key(const std::string& keycode);
-	std::vector<KeyCombination> get_keys(Operation op, const std::string& context);
+	std::vector<KeyCombination> get_keys(Operation op, Dialog context);
 	void handle_action(const std::string& action,
 		const std::string& params) override;
 	void dump_config(std::vector<std::string>& config_output) const override;
-	HelpInfo get_help_info(std::string context);
-	std::vector<KeyMapDesc> get_keymap_descriptions(std::string context);
+	HelpInfo get_help_info(Dialog context);
+	std::vector<KeyMapDesc> get_keymap_descriptions(Dialog context);
 
 	ParsedOperations parse_operation_sequence(const std::string& line,
 		const std::string& command_name, bool allow_description = true);
 	std::vector<MacroCmd> get_startup_operation_sequence();
 
-	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
-		const std::string& context);
+	std::string prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints, Dialog context);
 
 private:
 	std::vector<HelpBindInfo> get_help_info_bindings(std::set<Operation>& unused_actions,
@@ -255,11 +259,10 @@ private:
 	void apply_bind(Mapping& target, const std::vector<KeyCombination>& key_sequence,
 		const std::vector<MacroCmd>& cmds, const std::string& description, BindingType type);
 	void apply_bindkey(Mapping& target, const KeyCombination& key_combination, Operation op);
-	bool is_valid_context(const std::string& context);
-	unsigned short get_flag_from_context(const std::string& context);
+	unsigned short get_flag_from_context(Dialog context);
 	Mapping get_internal_operations() const;
 	std::string getopname(Operation op) const;
-	std::map<std::string, Mapping> context_keymaps;
+	std::map<Dialog, Mapping> context_keymaps;
 	std::map<KeyCombination, MacroBinding> macros_;
 	std::vector<MacroCmd> startup_operations_sequence;
 };

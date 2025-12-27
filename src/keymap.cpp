@@ -9,6 +9,7 @@
 #include "config.h"
 #include "confighandlerexception.h"
 #include "configparser.h"
+#include "dialog.h"
 #include "logger.h"
 #include "strprintf.h"
 #include "utils.h"
@@ -743,19 +744,19 @@ static const std::vector<OpDesc> opdescs = {
 	},
 };
 
-static const std::map<std::string, std::uint32_t> contexts = {
-	{"feedlist", KM_FEEDLIST},
-	{"filebrowser", KM_FILEBROWSER},
-	{"help", KM_HELP},
-	{"articlelist", KM_ARTICLELIST},
-	{"article", KM_ARTICLE},
-	{"tagselection", KM_TAGSELECT},
-	{"filterselection", KM_FILTERSELECT},
-	{"urlview", KM_URLVIEW},
-	{"podboat", KM_PODBOAT},
-	{"dialogs", KM_DIALOGS},
-	{"dirbrowser", KM_DIRBROWSER},
-	{"searchresultslist", KM_SEARCHRESULTSLIST},
+static const std::map<Dialog, std::uint32_t> contexts = {
+	{Dialog::FeedList, KM_FEEDLIST},
+	{Dialog::FileBrowser, KM_FILEBROWSER},
+	{Dialog::Help, KM_HELP},
+	{Dialog::ArticleList, KM_ARTICLELIST},
+	{Dialog::Article, KM_ARTICLE},
+	{Dialog::TagSelection, KM_TAGSELECT},
+	{Dialog::FilterSelection, KM_FILTERSELECT},
+	{Dialog::UrlView, KM_URLVIEW},
+	{Dialog::Podboat, KM_PODBOAT},
+	{Dialog::DialogList, KM_DIALOGS},
+	{Dialog::DirBrowser, KM_DIRBROWSER},
+	{Dialog::SearchResultsList, KM_SEARCHRESULTSLIST},
 };
 
 KeyMap::KeyMap(unsigned flags)
@@ -776,7 +777,7 @@ KeyMap::KeyMap(unsigned flags)
 		}
 
 		for (const auto& ctx : contexts) {
-			const std::string& context = ctx.first;
+			Dialog context = ctx.first;
 			const std::uint32_t context_flag = ctx.second;
 			if ((op_desc.flags & (context_flag | KM_INTERNAL | KM_SYSKEYS))) {
 				const auto& default_key = op_desc.default_key;
@@ -785,13 +786,13 @@ KeyMap::KeyMap(unsigned flags)
 		}
 	}
 
-	apply_bindkey(context_keymaps["help"], KeyCombination("b"), OP_SK_PGUP);
-	apply_bindkey(context_keymaps["help"], KeyCombination("SPACE"), OP_SK_PGDOWN);
-	apply_bindkey(context_keymaps["article"], KeyCombination("b"), OP_SK_PGUP);
-	apply_bindkey(context_keymaps["article"], KeyCombination("SPACE"), OP_SK_PGDOWN);
+	apply_bindkey(context_keymaps[Dialog::Help], KeyCombination("b"), OP_SK_PGUP);
+	apply_bindkey(context_keymaps[Dialog::Help], KeyCombination("SPACE"), OP_SK_PGDOWN);
+	apply_bindkey(context_keymaps[Dialog::Article], KeyCombination("b"), OP_SK_PGUP);
+	apply_bindkey(context_keymaps[Dialog::Article], KeyCombination("SPACE"), OP_SK_PGDOWN);
 }
 
-HelpInfo KeyMap::get_help_info(std::string context)
+HelpInfo KeyMap::get_help_info(Dialog context)
 {
 	const auto& bindings = context_keymaps.at(context);
 	std::set<Operation> unused_actions;
@@ -911,7 +912,7 @@ std::string KeyMap::describe_actions(const std::vector<MacroCmd>& cmds)
 	return description;
 }
 
-std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
+std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(Dialog context)
 {
 	std::vector<KeyMapDesc> descs;
 	for (const auto& opdesc : opdescs) {
@@ -941,7 +942,7 @@ std::vector<KeyMapDesc> KeyMap::get_keymap_descriptions(std::string context)
 			LOG(Level::DEBUG,
 				"KeyMap::get_keymap_descriptions: found unbound function: %s context = %s",
 				opdesc.opstr,
-				context);
+				dialog_name(context));
 			descs.push_back({KeyCombination(""), opdesc.opstr, _(opdesc.help_text.c_str()), context, opdesc.flags});
 		}
 	}
@@ -952,40 +953,41 @@ KeyMap::~KeyMap() {}
 
 void KeyMap::set_key(Operation op,
 	const KeyCombination& key,
-	const std::string& context)
+	std::variant<Dialog, AllDialogs> context)
 {
 	LOG(Level::DEBUG, "KeyMap::set_key(%d,%s) called", op, key.to_bindkey_string());
-	if (context == "all") {
+	if (std::holds_alternative<Dialog>(context)) {
+		apply_bindkey(context_keymaps[std::get<Dialog>(context)], key, op);
+	} else {
 		for (const auto& ctx : contexts) {
 			apply_bindkey(context_keymaps[ctx.first], key, op);
 		}
-	} else {
-		apply_bindkey(context_keymaps[context], key, op);
 	}
 }
 
-void KeyMap::unset_key(const KeyCombination& key, const std::string& context)
+void KeyMap::unset_key(const KeyCombination& key, std::variant<Dialog, AllDialogs> context)
 {
 	LOG(Level::DEBUG, "KeyMap::unset_key(%s) called", key.to_bindkey_string());
-	if (context == "all") {
+	if (std::holds_alternative<Dialog>(context)) {
+		context_keymaps[std::get<Dialog>(context)].continuations.erase(key);
+	} else {
 		for (const auto& ctx : contexts) {
 			context_keymaps[ctx.first].continuations.erase(key);
 		}
-	} else {
-		context_keymaps[context].continuations.erase(key);
 	}
 }
 
-void KeyMap::unset_all_keys(const std::string& context)
+void KeyMap::unset_all_keys(std::variant<Dialog, AllDialogs> context)
 {
-	LOG(Level::DEBUG, "KeyMap::unset_all_keys(%s) called", context);
+	LOG(Level::DEBUG, "KeyMap::unset_all_keys(%s) called",
+		std::holds_alternative<Dialog>(context) ? dialog_name(std::get<Dialog>(context)) : "");
 	auto internal_ops_only = get_internal_operations();
-	if (context == "all") {
+	if (std::holds_alternative<Dialog>(context)) {
+		context_keymaps[std::get<Dialog>(context)] = std::move(internal_ops_only);
+	} else {
 		for (const auto& ctx : contexts) {
 			context_keymaps[ctx.first] = internal_ops_only;
 		}
-	} else {
-		context_keymaps[context] = std::move(internal_ops_only);
 	}
 }
 
@@ -1024,7 +1026,7 @@ char KeyMap::get_key(const std::string& keycode)
 }
 
 std::vector<MacroCmd> KeyMap::get_operation(const std::vector<KeyCombination>&
-	key_sequence, const std::string& context, MultiKeyBindingState& state, BindingType& type)
+	key_sequence, Dialog context, MultiKeyBindingState& state, BindingType& type)
 {
 	return get_operation(context_keymaps[context], key_sequence, state, type);
 }
@@ -1059,7 +1061,7 @@ std::vector<MacroCmd> KeyMap::get_operation(const Mapping& mapping,
 void KeyMap::dump_config(std::vector<std::string>& config_output) const
 {
 	for (const auto& ctx : contexts) {
-		const std::string& context = ctx.first;
+		const Dialog context = ctx.first;
 		const auto& x = context_keymaps.at(context);
 		for (const auto& keymap : x.continuations) {
 			const auto& mapping = keymap.second;
@@ -1076,7 +1078,7 @@ void KeyMap::dump_config(std::vector<std::string>& config_output) const
 			configline.append(" ");
 			configline.append(getopname(op));
 			configline.append(" ");
-			configline.append(context);
+			configline.append(dialog_name(context));
 			config_output.push_back(configline);
 		}
 	}
@@ -1128,13 +1130,16 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (tokens.size() < 2) {
 			throw ConfigHandlerException(ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		std::string context = "all";
-		if (tokens.size() >= 3) {
-			context = tokens[2];
-		}
-		if (!is_valid_context(context)) {
-			throw ConfigHandlerException(strprintf::fmt(
-					_("`%s' is not a valid context"), context));
+		// None -> apply to all contexts
+		std::variant<Dialog, AllDialogs> context = AllDialogs();
+		if (tokens.size() >= 3 && tokens[2] != "all") {
+			const auto dialog = dialog_from_name(tokens[2]);
+			if (dialog.has_value()) {
+				context = dialog.value();
+			} else {
+				throw ConfigHandlerException(strprintf::fmt(
+						_("`%s' is not a valid context"), tokens[2]));
+			}
 		}
 		const Operation op = get_opcode(tokens[1]);
 		if (op == OP_NIL) {
@@ -1151,9 +1156,16 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 			throw ConfigHandlerException(
 				ActionHandlerStatus::TOO_FEW_PARAMS);
 		}
-		std::string context = "all";
-		if (tokens.size() >= 2) {
-			context = tokens[1];
+
+		std::variant<Dialog, AllDialogs> context = AllDialogs();
+		if (tokens.size() >= 2 && tokens[1] != "all") {
+			const auto dialog = dialog_from_name(tokens[1]);
+			if (dialog.has_value()) {
+				context = dialog.value();
+			} else {
+				throw ConfigHandlerException(strprintf::fmt(
+						_("`%s' is not a valid context"), tokens[1]));
+			}
 		}
 		if (tokens[0] == "-a") {
 			unset_all_keys(context);
@@ -1167,12 +1179,21 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		if (parsing_failed) {
 			throw ConfigHandlerException(strprintf::fmt(_("failed to parse binding")));
 		}
-		auto bind_contexts = std::vector<std::string>(binding.contexts.begin(),
-				binding.contexts.end());
-		if (bind_contexts.size() == 1 && bind_contexts[0] == "everywhere") {
+		std::vector<Dialog> bind_contexts;
+		if (binding.contexts.size() == 1 && binding.contexts[0] == "everywhere") {
 			bind_contexts.clear();
 			for (const auto& context : contexts) {
 				bind_contexts.push_back(context.first);
+			}
+		} else {
+			for (const auto& context : binding.contexts) {
+				const auto dialog = dialog_from_name(std::string(context));
+				if (dialog.has_value()) {
+					bind_contexts.push_back(dialog.value());
+				} else {
+					throw ConfigHandlerException(strprintf::fmt(_("`%s' is not a valid context"),
+							std::string(context)));
+				}
 			}
 		}
 		const auto key_sequence = KeyCombination::from_bind(std::string(binding.key_sequence));
@@ -1184,7 +1205,8 @@ void KeyMap::handle_action(const std::string& action, const std::string& params)
 		const auto cmds = convert_operations(binding.operations);
 		for (const auto& context : bind_contexts) {
 			if (contexts.count(context) == 0) {
-				throw ConfigHandlerException(strprintf::fmt(_("unknown context: %s"), context));
+				throw ConfigHandlerException(strprintf::fmt(_("unknown context: %s"),
+						dialog_name(context)));
 			}
 			apply_bind(context_keymaps[context], key_sequence, cmds, description, BindingType::Bind);
 		}
@@ -1270,8 +1292,7 @@ std::vector<MacroCmd> KeyMap::get_startup_operation_sequence()
 	return startup_operations_sequence;
 }
 
-std::vector<KeyCombination> KeyMap::get_keys(Operation op,
-	const std::string& context)
+std::vector<KeyCombination> KeyMap::get_keys(Operation op, Dialog context)
 {
 	std::vector<KeyCombination> keys;
 	for (const auto& keymap : context_keymaps[context].continuations) {
@@ -1298,19 +1319,6 @@ std::vector<MacroCmd> KeyMap::get_macro(const KeyCombination& key_combination)
 	return {};
 }
 
-bool KeyMap::is_valid_context(const std::string& context)
-{
-	if (context == "all") {
-		return true;
-	}
-
-	if (contexts.count(context) >= 1) {
-		return true;
-	}
-
-	return false;
-}
-
 Mapping KeyMap::get_internal_operations() const
 {
 	Mapping internal_ops;
@@ -1333,7 +1341,7 @@ Mapping KeyMap::get_internal_operations() const
 	return internal_ops;
 }
 
-unsigned short KeyMap::get_flag_from_context(const std::string& context)
+unsigned short KeyMap::get_flag_from_context(Dialog context)
 {
 	if (contexts.count(context) >= 1) {
 		return contexts.at(context) | KM_SYSKEYS;
@@ -1344,7 +1352,7 @@ unsigned short KeyMap::get_flag_from_context(const std::string& context)
 
 
 std::string KeyMap::prepare_keymap_hint(const std::vector<KeyMapHintEntry>& hints,
-	const std::string& context)
+	Dialog context)
 {
 	std::string keymap_hint;
 	for (const auto& hint : hints) {

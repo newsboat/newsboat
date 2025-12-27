@@ -28,9 +28,9 @@ public:
 		RegexManager& r);
 	~SearchResultsListFormAction() override = default;
 
-	std::string id() const override
+	Dialog id() const override
 	{
-		return "searchresultslist";
+		return Dialog::SearchResultsList;
 	}
 
 	void set_searchphrase(const std::string& s)

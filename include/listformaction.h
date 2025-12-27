@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <optional>
 
+#include "dialog.h"
 #include "formaction.h"
 #include "listwidget.h"
 #include "regexmanager.h"
@@ -12,7 +13,7 @@ namespace newsboat {
 
 class ListFormAction : public FormAction {
 public:
-	ListFormAction(View& v, const std::string& context, std::string formstr,
+	ListFormAction(View& v, Dialog context, std::string formstr,
 		std::string list_name,
 		ConfigContainer* cfg, RegexManager& r);
 	~ListFormAction() override = default;
