@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: newsboat 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/newsboat/newsboat/issues\n"
 "POT-Creation-Date: 2025-12-09 18:25+0300\n"
-"PO-Revision-Date: 2025-09-10 22:15+0200\n"
+"PO-Revision-Date: 2025-12-26 19:17+0200\n"
 "Last-Translator: Mauro Scomparin <scompo@gmail.com>\n"
 "Language-Team: Claudio M. Alessi <somppy@gmail.com>, Leandro Noferini "
 "<leandro@noferini.org>, Mauro Scomparin <scompo@gmail.com>\n"
@@ -1756,11 +1756,11 @@ msgstr "Errore: impossibile analizzare il file OPML \"%s\""
 
 #: src/opml.cpp:232
 msgid "the <opml> root element is missing"
-msgstr ""
+msgstr "elemento radice <opml> mancante"
 
 #: src/opml.cpp:253
 msgid "the <body> element in the <opml> root element is missing"
-msgstr ""
+msgstr "elemento <body> nell'elemento radice <opml> mancante"
 
 #: src/pbcontroller.cpp:75
 #, c-format
