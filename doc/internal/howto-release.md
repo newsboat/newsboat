@@ -113,7 +113,7 @@ branch off the latest release and backport the bugfixes onto it.
             `newsboat.html`.
         * `<title>`: "Newsboat VERSION is out".
         * Gzip the result: `gzip --best --keep --force www/news.atom`.
-        * Commit the result: `git add www/releases/VERSION && git commit -m'Release VERISON'`
+    * Commit the result: `git add www/releases/VERSION && git commit -am'Release VERISON'`
 8. Publish the release:
     * In Newsboat's repo: `git push && git push --tags`
     * In newsboat.org's repo: `git push`
