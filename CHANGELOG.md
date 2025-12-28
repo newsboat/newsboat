@@ -1,6 +1,23 @@
 # Changes for Newsboat
 
-# 2.42 - 2025-12-28
+## Unreleased - expected 2026-03-21
+
+Lists below only mention user-visible changes, but the full list of contributors
+for this release also includes: TK
+
+### Added
+### Changed
+
+- Bumped minimum supported Rust version to 1.90.0
+
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+
+
+## 2.42 - 2025-12-28
 
 ### Added
 
@@ -27,7 +44,7 @@
 
 
 
-# 2.41 - 2025-09-21
+## 2.41 - 2025-09-21
 
 Lists below only mention user-visible changes, but the full list of contributors
 for this release also includes bogdasar1985.
@@ -63,7 +80,7 @@ for this release also includes bogdasar1985.
 
 
 
-# 2.40 - 2025-06-21
+## 2.40 - 2025-06-21
 
 ### Added
 
