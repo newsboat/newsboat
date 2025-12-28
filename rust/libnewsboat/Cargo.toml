@@ -1,6 +1,6 @@
 [package]
 name = "libnewsboat"
-version = "2.41.0"
+version = "2.42.0"
 authors = ["Alexander Batischev <eual.jp@gmail.com>"]
 edition = "2024"
 

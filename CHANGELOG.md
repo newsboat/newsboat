@@ -1,17 +1,29 @@
 # Changes for Newsboat
 
-# Unreleased - expected 2025-12-21
-
-Lists below only mention user-visible changes, but the full list of contributors
-for this release also includes TK.
+# 2.42 - 2025-12-28
 
 ### Added
+
+- Option `toggleitemread-jumps-to-next` (#2271) (Jorenar)
+
 ### Changed
+
+- In documentation, references to other sections turned into hyperlinks for
+    easier navigation (Dennis van der Schagt)
+- Updated translations: Chinese (CookiePieWw), Dutch (Dennis van der Schagt),
+    German (Lysander Trischler), Italian (Mauro Scomparin), Polish (Carno),
+    Russian and Ukrainian (Alexander Batischev), Swedish (Dennis Öberg),
+    Turkish (Emir SARI)
 - Bumped minimum supported Rust version to 1.88.0
-### Deprecated
-### Removed
+
 ### Fixed
-### Security
+
+- No error messages when OPML import fails (Lysander Trischler)
+- Build failure on macOS (Forketyfork)
+- Position in article not updated unless the window is resized (#3204)
+    (Juho Eerola)
+- Typo in documentation (M0RP43U588)
+- Cookies not written with curl 8.17 (#3221) (Alexander Batischev)
 
 
 
