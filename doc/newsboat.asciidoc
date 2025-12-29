@@ -689,7 +689,7 @@ articles. Starred articles are basically bookmarks, but saved articles
 are sent to your external read-it-later service configured on Miniflux,
 e.g. Wallabag, Shiori, Linkwarden and others.
 
-Newsboat allows the use of this feature by mapping its powerful "flags" 
+Newsboat allows the use of this feature by mapping its powerful "flags"
 to the "star"/"unstar" or save operations.
 
 In order to use this mapping, all you need to do is to configure the flags

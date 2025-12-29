@@ -85,8 +85,8 @@ mark-as-read-on-hover||[yes/no]||no||If set to `yes`, then all articles that get
 max-browser-tabs||<number>||10||Set the maximum number of articles to open in a browser when using the <<open-all-unread-in-browser,`open-all-unread-in-browser`>> or <<open-all-unread-in-browser-and-mark-read,`open-all-unread-in-browser-and-mark-read`>> commands.||max-browser-tabs 4
 max-download-speed||<number>||0||If set to a number greater than 0, the download speed per download is set to that limit (in KB/s).||max-download-speed 50
 max-items||<number>||0||Set the maximum number of articles a feed can contain. When the threshold is crossed, old articles are dropped. If the number is set to 0, then all articles are kept.||max-items 100
-miniflux-flag-star||<flag>||""||If set and Miniflux support is used, then all articles that are <<#_flagging_articles,flagged with the specified flag>> are being "starred" in Miniflux and appear in the list of "Starred items".||miniflux-flag-star "b"
 miniflux-flag-save||<flag>||""||If set and Miniflux support is used, then all articles that are <<#_flagging_articles,flagged with the specified flag>> are being saved to external service configured on Miniflux instance.||miniflux-flag-save "b"
+miniflux-flag-star||<flag>||""||If set and Miniflux support is used, then all articles that are <<#_flagging_articles,flagged with the specified flag>> are being "starred" in Miniflux and appear in the list of "Starred items".||miniflux-flag-star "b"
 miniflux-login||<username>||""||Sets the username for use with Miniflux.||miniflux-login "admin"
 miniflux-min-items||<number>||100||This variable sets the number of articles that are loaded from Miniflux per feed.||miniflux-min-items 20
 miniflux-password||<password>||""||Configures the password for use with Miniflux. Double quotes and backslashes within it <<#_using_double_quotes,should be escaped>>.||miniflux-password "here_goesAquote:\""

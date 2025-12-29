@@ -198,8 +198,11 @@ bool MinifluxApi::update_article_flags(const std::string&  oldflags,
 		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
 			success = star_article(guid, added);
 		});
+	}
+
+	if (save_flag.length() > 0) {
 		update_flag(oldflags, newflags, save_flag[0], [&](bool added) {
-			success = save_article(guid, added);
+			success &= save_article(guid, added);
 		});
 	}
 
