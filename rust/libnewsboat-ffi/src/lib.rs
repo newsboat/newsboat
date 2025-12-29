@@ -12,6 +12,7 @@ use std::process::abort;
 
 pub mod charencoding;
 pub mod cliargsparser;
+pub mod configcontainer;
 pub mod configpaths;
 pub mod filepath;
 pub mod fmtstrformatter;

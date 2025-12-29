@@ -14,6 +14,7 @@ fn main() {
     add_cxxbridge("charencoding");
     add_cxxbridge("filepath");
     add_cxxbridge("cliargsparser");
+    add_cxxbridge("configcontainer");
     add_cxxbridge("configpaths");
     add_cxxbridge("fmtstrformatter");
     add_cxxbridge("fslock");
