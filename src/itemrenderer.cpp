@@ -7,6 +7,7 @@
 #include "htmlrenderer.h"
 #include "logger.h"
 #include "rssfeed.h"
+#include "stflrichtext.h"
 #include "strprintf.h"
 #include "textformatter.h"
 #include "utils.h"
@@ -66,7 +67,7 @@ void prepare_header(
 		if (raw) {
 			return str;
 		} else {
-			return utils::quote_for_stfl(str);
+			return StflRichText::from_plaintext(str).stfl_quoted();
 		};
 	};
 
@@ -136,7 +137,8 @@ void prepare_enclosure(RssItem& item,
 		if (raw) {
 			text.append(strprintf::fmt("%s", description));
 		} else {
-			text.append(strprintf::fmt("<u>%s</>", utils::quote_for_stfl(description)));
+			text.append(strprintf::fmt("<u>%s</>",
+					StflRichText::from_plaintext(description).stfl_quoted()));
 		}
 		text.append(strprintf::fmt("[%d]", link_number));
 
@@ -177,7 +179,7 @@ void render_html(
 		while (!is.eof()) {
 			getline(is, line);
 			if (!raw) {
-				line = utils::quote_for_stfl(line);
+				line = StflRichText::from_plaintext(line).stfl_quoted();
 			}
 			lines.push_back(std::make_pair(LineType::softwrappable, line));
 		}
@@ -201,7 +203,7 @@ void item_renderer::render_plaintext(
 			lines.push_back(std::make_pair(LineType::wrappable, line));
 			break;
 		case OutputFormat::StflRichText:
-			const std::string stfl_quoted_line = utils::quote_for_stfl(line);
+			const std::string stfl_quoted_line = StflRichText::from_plaintext(line).stfl_quoted();
 			lines.push_back(std::make_pair(LineType::wrappable, stfl_quoted_line));
 			break;
 		}
@@ -327,8 +329,8 @@ std::pair<std::string, size_t> item_renderer::source_to_stfl_list(
 	Links links;
 
 	prepare_header(item, lines, links);
-	render_source(lines, utils::quote_for_stfl(utils::utf8_to_locale(
-				item.description().text)));
+	render_source(lines, StflRichText::from_plaintext(utils::utf8_to_locale(
+				item.description().text)).stfl_quoted());
 
 	TextFormatter txtfmt;
 	txtfmt.add_lines(lines);

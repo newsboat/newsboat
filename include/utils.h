@@ -115,8 +115,6 @@ std::string join(const std::vector<std::string>& strings,
 
 std::string censor_url(const std::string& url);
 
-std::string quote_for_stfl(std::string str);
-
 void trim_end(std::string& str);
 
 void trim(std::string& str);

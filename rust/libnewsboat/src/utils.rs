@@ -133,11 +133,6 @@ pub fn censor_url(url: &str) -> String {
     }
 }
 
-/// Quote a string for use with stfl by replacing all occurences of "<" with "<>"
-pub fn quote_for_stfl(string: &str) -> String {
-    string.replace('<', "<>")
-}
-
 /// Get basename from a URL if available else return an empty string
 pub fn get_basename(input: &str) -> String {
     match Url::parse(input) {
@@ -2338,13 +2333,6 @@ mod tests {
             get_basename("https://example.org/path/to/file.mp3?param=value#fragment"),
             "file.mp3"
         );
-    }
-
-    #[test]
-    fn t_quote_for_stfl() {
-        assert_eq!(&quote_for_stfl("<"), "<>");
-        assert_eq!(&quote_for_stfl("<<><><><"), "<><>><>><>><>");
-        assert_eq!(&quote_for_stfl("test"), "test");
     }
 
     #[test]
