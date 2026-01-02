@@ -684,18 +684,23 @@ It is also possible to specify an API token instead of the username/password com
 See also <<miniflux-tokenfile,`miniflux-tokenfile`>>, and
 <<miniflux-tokeneval,`miniflux-tokeneval`>>.
 
-In addition, Miniflux provides the ability to "star"
-articles. Starred articles are basically bookmarks. Newsboat allows the
-use of this feature by mapping its powerful "flags" to the "star"/"unstar"
-operations.
+In addition, Miniflux provides the ability to "star" or save
+articles. Starred articles are basically bookmarks, but saved articles
+are sent to your external read-it-later service configured on Miniflux,
+e.g. Wallabag, Shiori, Linkwarden and others.
+
+Newsboat allows the use of this feature by mapping its powerful "flags"
+to the "star"/"unstar" or save operations.
 
 In order to use this mapping, all you need to do is to configure the flags
 that shall be used:
 
 	miniflux-flag-star "a"
+	miniflux-flag-save "b"
 
 After that, use these flags when you <<#_flagging_articles,edit flags for an
-article>>, and these articles will be starred.
+article>>, and these articles will be "starred" or saved. Both options can
+use the same flag if you want to bookmark and save at once.
 
 By default a "Starred Items" feed is included in the feed list. This can be
 removed with:

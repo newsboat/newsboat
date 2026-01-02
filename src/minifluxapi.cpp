@@ -151,6 +151,20 @@ bool MinifluxApi::mark_article_read(const std::string& guid, bool read)
 	return true;
 }
 
+bool MinifluxApi::save_article(const std::string& guid, bool save)
+{
+	if (!save) {
+		return true;
+	}
+
+	std::string postcontent;
+	postcontent = strprintf::fmt(
+			"/v1/entries/%s/save",
+			guid);
+	const json content = run_op(postcontent, json(""), HTTPMethod::POST);
+	return content.is_null();
+}
+
 bool MinifluxApi::star_article(const std::string& guid, bool star)
 {
 	std::string getstate;
@@ -177,11 +191,18 @@ bool MinifluxApi::update_article_flags(const std::string&  oldflags,
 	const std::string&  guid )
 {
 	std::string star_flag = cfg.get_configvalue("miniflux-flag-star");
+	std::string save_flag = cfg.get_configvalue("miniflux-flag-save");
 	bool success = true;
 
 	if (star_flag.length() > 0) {
 		update_flag(oldflags, newflags, star_flag[0], [&](bool added) {
 			success = star_article(guid, added);
+		});
+	}
+
+	if (save_flag.length() > 0) {
+		update_flag(oldflags, newflags, save_flag[0], [&](bool added) {
+			success &= save_article(guid, added);
 		});
 	}
 
